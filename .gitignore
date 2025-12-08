@@ -1,0 +1,73 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments - CRITICAL
+.venv/
+venv/
+ENV/
+env/
+qa_venv/
+codex_on_QA/.venv/
+qa_lab/qa_venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data directories (large datasets)
+data/
+*.h5
+*.hdf5
+*.mat
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.xdv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts - Rust
+**/target/
+Cargo.lock
+
+# Archives
+*.zip
+*.tar.gz
+*.tgz
+
+# Large generated files
+*.png
+*.pdf
+*.dat
+
+# Embedded git repos
+ARC-AGI/
+qa_lab/.git/
+
+# Temporary files
+*.tmp
+*.bak
+*.odt

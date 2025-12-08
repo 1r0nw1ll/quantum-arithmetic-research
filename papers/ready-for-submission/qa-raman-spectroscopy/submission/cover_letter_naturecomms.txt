@@ -1,0 +1,40 @@
+Subject: Submission to Nature Communications — “Quantum Arithmetic for Raman Spectroscopy: A Discrete Harmonic Geometry for Material Classification”
+
+Dear Editors of Nature Communications,
+
+I am pleased to submit our manuscript entitled “Quantum Arithmetic for Raman Spectroscopy: A Discrete Harmonic Geometry for Material Classification” for consideration as an Article in Nature Communications.
+
+This work introduces an interpretable, discrete harmonic representation for Raman spectroscopy grounded in Quantum Arithmetic (QA). We show that QA invariants and modular residue families (mod-24/mod-9) structure real Raman spectra into stable harmonic groups that align with phonon symmetry families. Using a Rust-backed invariant kernel and a reproducible pipeline, we achieve 95.2% leave-one-out accuracy across a ten-class corpus of 965 spectra (diamond, quartz, silicon, hematite, graphite, graphene, MoS2, corundum, anatase, rutile) with a simple weighted kNN classifier—no deep learning required.
+
+Significance and novelty
+- Introduces a rigorous, discrete harmonic geometry for spectroscopy that is transparent and physically interpretable.
+- Demonstrates that QA residues (Cmod24, Fmod24) define robust “harmonic families” with extreme chi-squared dependence (χ² = 1950), empirically matching spectroscopic structure.
+- Achieves high accuracy across diverse materials using QA-derived features plus peak geometry, highlighting a practical alternative to black-box models.
+- Provides a complete mathematical appendix (triangle and ellipse invariants; modular projections), a native TikZ geometry figure (Figure 0), extensive ablations/sweeps, and a fully reproducible pipeline.
+
+Why Nature Communications
+Nature Communications is ideally positioned for this cross-disciplinary advance connecting mathematical invariants, vibrational physics, and practical spectroscopy. The contribution will interest readers across optics/spectroscopy, materials science, applied mathematics, and interpretable machine learning. The method complements, rather than replaces, standard physics and computational tools, offering an interpretable coordinate system for real spectra with strong empirical support.
+
+Data and code availability
+All Raman spectra are from publicly accessible sources (RRUFF for minerals; Zenodo for graphene/MoS2). The full Rust-backed invariant engine, feature generation, ablations/sweeps, and figure scripts produce all reported tables and plots. We include a complete Overleaf package (manuscript/SI, references, figures, artifacts) and provide reproducible CLI instructions in the SI. We are prepared to mirror the code and artifacts on a public repository (e.g., Zenodo/GitHub) at the journal’s request.
+
+Compliance statements
+- The manuscript is original, not published elsewhere, and not under consideration by another journal.
+- All authors approve the submission and are accountable for the work.
+- We declare no competing interests.
+
+Corresponding author
+Will Dale
+[Affiliation]
+[City, Country]
+Email: [your.email@example.com]
+ORCID: [0000-0000-0000-0000]
+
+Thank you for your consideration. We believe this study will be of broad interest to Nature Communications readers and offers a new, interpretable harmonic geometry for spectroscopy with immediate practical value. We welcome the opportunity to revise in response to reviewer feedback.
+
+Sincerely,
+
+Will Dale
+[Affiliation]
+Email: [your.email@example.com]
+ORCID: [0000-0000-0000-0000]

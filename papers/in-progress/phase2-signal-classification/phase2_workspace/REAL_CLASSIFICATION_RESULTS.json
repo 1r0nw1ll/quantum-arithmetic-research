@@ -1,0 +1,23 @@
+{
+  "dataset": "CHB-MIT chb01 (REAL labeled data)",
+  "baseline_file": "chb01_01.edf",
+  "seizure_file": "chb01_03.edf",
+  "seizure_annotation": "2996-3036 seconds",
+  "total_samples": 3598,
+  "baseline_samples": 3575,
+  "seizure_samples": 23,
+  "accuracy": 0.9944444444444445,
+  "precision": 1.0,
+  "recall": 0.2,
+  "f1": 0.3333333333333333,
+  "confusion_matrix": [
+    [
+      715,
+      0
+    ],
+    [
+      4,
+      1
+    ]
+  ]
+}

@@ -1,0 +1,82 @@
+
+================================================================================
+ICLR 2027 SUBMISSION CHECKLIST
+================================================================================
+
+Paper Preparation:
+  [ ] Title is concise and descriptive
+  [ ] Abstract ≤250 words, summarizes key contributions
+  [ ] Introduction clearly states problem and contributions
+  [ ] Related work cites relevant prior art (PAC-Bayes, signal processing, interpretable AI)
+  [ ] Methods section is clear and reproducible
+  [ ] Experiments include proper baselines (CNNs, LSTMs)
+  [ ] Results section has tables + figures with captions
+  [ ] Discussion addresses limitations honestly
+  [ ] Conclusion summarizes impact
+  [ ] References formatted correctly (25 references added)
+
+Figures (6 total):
+  [ ] Figure 1: Confusion matrices (high-res PDF + PNG)
+  [ ] Figure 2: Learning curves (sample efficiency)
+  [ ] Figure 3: P/S wave feature distributions
+  [ ] Figure 4: QA state space visualization
+  [ ] Figure 5: PAC bounds vs empirical risk
+  [ ] Figure 6: Computational efficiency comparison
+
+Experimental Rigor:
+  [ ] Cross-validation with ≥5 folds
+  [ ] Multiple random seeds (≥3)
+  [ ] Statistical significance tests (t-tests, Wilcoxon)
+  [ ] Effect sizes reported (Cohen's d)
+  [ ] Confidence intervals on all metrics
+  [ ] Error bars on plots
+
+Reproducibility:
+  [ ] Code released on GitHub (or anonymous repo)
+  [ ] Hyperparameters documented (Appendix B)
+  [ ] Dataset sources clearly cited
+  [ ] Random seeds specified
+  [ ] Hardware/runtime reported
+  [ ] Dependencies listed (requirements.txt)
+
+Ethics & Broader Impact:
+  [ ] Broader impact statement included (Section 6.3)
+  [ ] Dual-use concerns addressed (seismic discrimination)
+  [ ] Medical safety discussed (seizure detection)
+  [ ] No unfair bias in datasets
+  [ ] Privacy considerations addressed
+
+Formatting:
+  [ ] 8 pages max (main paper) + unlimited appendix
+  [ ] ICLR LaTeX template used
+  [ ] Anonymous submission (no author names)
+  [ ] References formatted per ICLR style
+  [ ] Supplementary materials prepared (code, data)
+
+Final Checks:
+  [ ] Proofread for typos and grammar
+  [ ] All TBD sections filled in
+  [ ] Equations numbered and referenced correctly
+  [ ] Tables and figures referenced in text
+  [ ] Code tested and runs without errors
+  [ ] Supplementary materials match paper claims
+
+Submission Details (ICLR 2027):
+  - Abstract deadline: ~September 15, 2026
+  - Paper deadline: ~September 22, 2026
+  - Reviews: ~October-November 2026
+  - Rebuttal: ~December 2026
+  - Decisions: ~January 2027
+  - Conference: ~April/May 2027 (Vienna or hybrid)
+
+Track: Applications / Interpretable AI / Theory
+
+Keywords:
+  - PAC-Bayesian learning
+  - Signal processing
+  - Interpretable AI
+  - Geometric deep learning
+  - Sample efficiency
+  - Modular arithmetic
+
+================================================================================

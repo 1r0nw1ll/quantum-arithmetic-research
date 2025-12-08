@@ -1,0 +1,20 @@
+{
+  "accuracy": 1.0,
+  "precision": 1.0,
+  "recall": 1.0,
+  "specificity": 0.0,
+  "f1": 1.0,
+  "auc": 1.0,
+  "confusion_matrix": [
+    [
+      80,
+      0
+    ],
+    [
+      0,
+      40
+    ]
+  ],
+  "dataset": "CHB-MIT chb05_06.edf (real baseline) + synthetic seizure patterns",
+  "note": "Demonstrates infrastructure works; awaiting complete real seizure data"
+}

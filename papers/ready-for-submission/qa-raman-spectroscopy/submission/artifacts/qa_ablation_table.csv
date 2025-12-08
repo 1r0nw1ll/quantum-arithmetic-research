@@ -1,0 +1,7 @@
+config,centroid_acc,knn_acc
+positions,0.425907,0.835233
+intensities,0.020725,0.020725
+qa_invariants,0.227979,0.227979
+residues,0.435233,0.721244
+positions+intensities,0.425907,0.835233
+full,0.415544,0.837306

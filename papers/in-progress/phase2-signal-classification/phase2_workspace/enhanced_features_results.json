@@ -1,0 +1,23 @@
+{
+  "comparison": [
+    {
+      "method": "7D Baseline",
+      "recall": 0.2,
+      "precision": 1.0,
+      "f1": 0.3333333333333333
+    },
+    {
+      "method": "7D + Class Weights",
+      "recall": 0.4,
+      "precision": 0.4,
+      "f1": 0.4
+    },
+    {
+      "method": "13D Enhanced + Weights",
+      "recall": 0.4,
+      "precision": 0.5,
+      "f1": 0.4444444444444444
+    }
+  ],
+  "final_recall": 0.4
+}

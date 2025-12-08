@@ -1,0 +1,17 @@
+{
+  "file": "chb05_06.edf",
+  "duration": 3600.0,
+  "n_segments": 1799,
+  "features_shape": [
+    1799,
+    7
+  ],
+  "qa_state_means": [
+    1.0,
+    1.0
+  ],
+  "qa_state_stds": [
+    0.0,
+    0.0
+  ]
+}

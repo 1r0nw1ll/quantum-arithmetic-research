@@ -1,0 +1,41 @@
+% Unified Results Section (Graphs, Manifolds, Raman, Adversarial)
+
+\section{Results}
+
+We evaluate QA as a universal one–shot coordinate across four domains: graphs, manifolds, tabular/spectra (Raman), and deliberately adversarial synthetic datasets. In every domain where a meaningful 2–DOF harmonic encoding \((b,e)\) exists, QA invariants (QA–21/27/83) substantially improve linear/semi–linear learners, often with modest or positive effects on unsupervised structure. Where no such encoding exists (by construction), QA is limited by its tuple capacity, as expected.
+
+\subsection{Graphs: QA as a Structural Prior}
+
+On football, unweighted spectral clustering yields \(Q\,\approx\,0.60\); QA–X (\(X=e\cdot d\)) raises modularity to \(\approx\,0.70\) while preserving label alignment (Purity/ARI/NMI). On the QA knowledge graph, baseline \(Q\,\approx\,\)0.0004 indicates no discernible structure; QA weighting exposes strong communities (QA–X \(\approx\,0.50\), full kernel \(\approx\,0.72\)). Karate and dolphins confirm the pattern: QA–X improves modularity with reasonable partitions, while QA–J/mix/full act as a resolution dial, revealing multi–scale structure. See \input{Documents/results_graphs_addendum.tex} for details.
+
+\subsection{Manifolds: Linearization via QA}
+
+On circles and moons with simple encodings (first two coordinates), QA–21/27 consistently increases linear separability (e.g., LogReg on circles from \(\approx\,0.48\) to \(\approx\,0.89\)). For swiss roll, naive encodings underperform; QA–friendly encodings (e.g., radius–angle or derivative variants) restore linearization (e.g., LogReg \(\approx\,0.95\to0.98\)) and yield non–trivial ARI, illustrating that QA’s benefit appears when the 2–DOF map matches manifold geometry.
+
+\subsection{Raman Spectroscopy: QA–Friendly Encodings}
+
+We apply a lightweight, physics–aware preprocessing pipeline (baseline removal, clamping/area–norm on a common grid, data–driven windows) and evaluate several \((b,e)\) encodings. Three encodings form the core evidence:
+\begin{itemize}
+  \item \textbf{FO v2 (fundamental–overtone):} Raw LogReg \(\approx 0.24\) \(\to\) QA–21 \(\approx 0.55\); MLP \(\approx 0.32\) \(\to\) \(\approx 0.58\). ARI small but non–zero. QA turns Raman into a near one–shot coordinate for linear models.
+  \item \textbf{Fingerprint centroid+sharpness (windowed):} ARI \(0.03\to0.056\); LogReg \(0.30\to0.43\); MLP \(0.29\to0.44\). Simple 2D fingerprint map where QA helps across unsupervised/supervised.
+  \item \textbf{Fingerprint multi–segment (3 subbands):} LogReg \(0.48\to0.61\); MLP \(0.59\to0.64\); ARI remains high (\(0.265\to0.238\)). Balanced high performance via three local QA tuples.
+\end{itemize}
+Full Raman details are provided in \input{Documents/results_raman.tex}.
+
+\subsection{Adversarial QA Tests (Limits of Single–Tuple QA)}
+
+We designed two QA–hostile synthetic datasets to delineate scope.
+\paragraph{Three–Factor Parity (XOR).} Labels depend on the parity of three independent latent factors. With one QA tuple \((b,e)\) (2–DOF) built from only two latents, neither raw \((b,e)\) nor QA invariants can fully recover the label—performance remains limited. With multi–tuple QA (two \((b,e)\) pairs), shallow models learn parity well, demonstrating that QA’s capacity scales with tuple count.
+\paragraph{Symmetry–Breaking (Translation).} Labels depend solely on absolute position (left/right). A QA–hostile encoding \((b,e)=(r,\sin 2\phi)\) intentionally removes translation/orientation, making QA blind by design; raw coordinates solve the task, QA does not. This confirms QA’s focus on harmonic/shape structure rather than broken symmetries discarded by \((b,e)\).
+
+\subsection{Flagship Improvements}
+
+Table~\ref{tab:flagship} collects representative improvements across domains. QA consistently reduces the nonlinearity of classification in QA–embeddable settings and preserves or modestly improves clustering where appropriate.
+\input{Documents/table_flagship_results.tex}
+
+% Raman graph comparison (single vs multi‑tuple)
+\subsection{Raman as a QA Graph}
+
+We cast Raman samples as nodes in a k\-NN graph built in QA space and apply spectral clustering. On a single\-tuple FO v2 graph, baseline is already highly modular (Q\,$\approx$\,0.86) but only moderately label\-aligned. Moving to a multi\-tuple graph (FO v2 $+$ fingerprint multiseg) improves label alignment (Purity and NMI), while QA kernels modestly lift Q without collapsing clusters. Table~\ref{tab:raman-graph} summarizes the single vs multi\-tuple comparison (see codex\_on\_QA/out/raman\_comparison\_single.json and codex\_on\_QA/out/raman\_comparison\_multi.json).
+
+\input{Documents/table_raman_graph.tex}

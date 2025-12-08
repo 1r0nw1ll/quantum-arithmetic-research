@@ -1,0 +1,30 @@
+{
+  "phase_2_1_seismic": {
+    "dataset_size": 60,
+    "accuracy": 0.4666666666666667,
+    "dqa": 0.628790238130811,
+    "pac_bound": 9.051244073645911,
+    "empirical_risk": 0.5333333333333333,
+    "pisano_earthquake": {
+      "lucas": 9,
+      "fibonacci": 11,
+      "ninbonacci": 3,
+      "tribonacci": 3,
+      "phibonacci": 4
+    },
+    "pisano_explosion": {
+      "fibonacci": 11,
+      "phibonacci": 9,
+      "ninbonacci": 2,
+      "lucas": 6,
+      "tribonacci": 2
+    }
+  },
+  "phase_2_2_eeg": {
+    "dataset_size": 80,
+    "accuracy": 1.0,
+    "sensitivity": 1.0,
+    "specificity": 1.0,
+    "ictal_sector": 23
+  }
+}

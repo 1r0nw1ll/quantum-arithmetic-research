@@ -1,0 +1,1122 @@
+{
+  "configuration": {
+    "num_nodes": 16,
+    "modulus": 24,
+    "timesteps": 1000,
+    "prior_type": "informed",
+    "dqa_method": "optimal",
+    "pisano_enabled": true
+  },
+  "results": {
+    "Pure Tone": {
+      "classification": {
+        "Harmonic Index (HI)": 0.004911943833377516,
+        "E8 Alignment": 0.8074575916089612,
+        "Harmonic Loss": 51.022207793798835,
+        "Convergence Time": "N/A"
+      },
+      "pac_bayes": {
+        "D_QA": 57.25771721420551,
+        "Empirical Risk": 1.0,
+        "Generalization Bound": 17.2435668623185,
+        "Generalization Gap": 16.2435668623185
+      },
+      "pisano_analysis": {
+        "family_distribution": {
+          "fibonacci": 16
+        },
+        "avg_period": 24.0,
+        "residue_histogram": {
+          "1": 16,
+          "0": 16,
+          "2": 16,
+          "6": 16
+        },
+        "detailed_classifications": [
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 0
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 1
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 2
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 3
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 4
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 5
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 6
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 7
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 8
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 9
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 10
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 11
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 12
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 13
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 14
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              0,
+              2,
+              6
+            ],
+            "confidence": 0.5,
+            "node_id": 15
+          }
+        ],
+        "dominant_family": "fibonacci",
+        "signal_name": "Pure Tone"
+      }
+    },
+    "Major Chord": {
+      "classification": {
+        "Harmonic Index (HI)": 0.8100809904484534,
+        "E8 Alignment": 0.8100809904484534,
+        "Harmonic Loss": 6.866245319043687e-27,
+        "Convergence Time": 4
+      },
+      "pac_bayes": {
+        "D_QA": 70.37608732946883,
+        "Empirical Risk": 0.0,
+        "Generalization Bound": 18.008412309299924,
+        "Generalization Gap": 18.008412309299924
+      },
+      "pisano_analysis": {
+        "family_distribution": {
+          "lucas": 16
+        },
+        "avg_period": 24.0,
+        "residue_histogram": {
+          "2": 16,
+          "5": 16,
+          "1": 16,
+          "6": 16
+        },
+        "detailed_classifications": [
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 0
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 1
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 2
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 3
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 4
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 5
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 6
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 7
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 8
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 9
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 10
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 11
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 12
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 13
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 14
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              2,
+              5,
+              1,
+              6
+            ],
+            "confidence": 0.25,
+            "node_id": 15
+          }
+        ],
+        "dominant_family": "lucas",
+        "signal_name": "Major Chord"
+      }
+    },
+    "Minor Chord": {
+      "classification": {
+        "Harmonic Index (HI)": 0.3365027865666314,
+        "E8 Alignment": 0.8482909057451191,
+        "Harmonic Loss": 9.24617196111102,
+        "Convergence Time": "N/A"
+      },
+      "pac_bayes": {
+        "D_QA": 77.33199987224855,
+        "Empirical Risk": 1.0,
+        "Generalization Bound": 19.87738750195254,
+        "Generalization Gap": 18.87738750195254
+      },
+      "pisano_analysis": {
+        "family_distribution": {
+          "fibonacci": 16
+        },
+        "avg_period": 24.0,
+        "residue_histogram": {
+          "1": 16,
+          "2": 16,
+          "3": 16,
+          "0": 15,
+          "8": 1
+        },
+        "detailed_classifications": [
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 0
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 1
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 2
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 3
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              8
+            ],
+            "confidence": 0.25,
+            "node_id": 4
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 5
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 6
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 7
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 8
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 9
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 10
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 11
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 12
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 13
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 14
+          },
+          {
+            "family": "fibonacci",
+            "period": 24,
+            "residues": [
+              1,
+              2,
+              3,
+              0
+            ],
+            "confidence": 0.25,
+            "node_id": 15
+          }
+        ],
+        "dominant_family": "fibonacci",
+        "signal_name": "Minor Chord"
+      }
+    },
+    "Tritone": {
+      "classification": {
+        "Harmonic Index (HI)": 0.8431159177469638,
+        "E8 Alignment": 0.8431159177469638,
+        "Harmonic Loss": 6.866245319043687e-27,
+        "Convergence Time": 6
+      },
+      "pac_bayes": {
+        "D_QA": 82.2567995464669,
+        "Empirical Risk": 1.0,
+        "Generalization Bound": 20.46918682938946,
+        "Generalization Gap": 19.46918682938946
+      },
+      "pisano_analysis": {
+        "family_distribution": {
+          "lucas": 16
+        },
+        "avg_period": 24.0,
+        "residue_histogram": {
+          "4": 32,
+          "3": 16,
+          "7": 16
+        },
+        "detailed_classifications": [
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 0
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 1
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 2
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 3
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 4
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 5
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 6
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 7
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 8
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 9
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 10
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 11
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 12
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 13
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 14
+          },
+          {
+            "family": "lucas",
+            "period": 24,
+            "residues": [
+              4,
+              4,
+              3,
+              7
+            ],
+            "confidence": 0.25,
+            "node_id": 15
+          }
+        ],
+        "dominant_family": "lucas",
+        "signal_name": "Tritone"
+      }
+    },
+    "White Noise": {
+      "classification": {
+        "Harmonic Index (HI)": 0.30981157641812085,
+        "E8 Alignment": 0.5820075980621484,
+        "Harmonic Loss": 6.305192080589424,
+        "Convergence Time": 9
+      },
+      "pac_bayes": {
+        "D_QA": 68.85734157903913,
+        "Empirical Risk": 0.0,
+        "Generalization Bound": 17.813043914046943,
+        "Generalization Gap": 17.813043914046943
+      },
+      "pisano_analysis": {
+        "family_distribution": {
+          "unknown": 16
+        },
+        "avg_period": 0,
+        "residue_histogram": {
+          "5": 16,
+          "8": 32,
+          "2": 15,
+          "1": 1
+        },
+        "detailed_classifications": [
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 0
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 1
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 2
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 3
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 4
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 5
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 6
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 7
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 8
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 9
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 10
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 11
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 12
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 13
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              1
+            ],
+            "confidence": 0.0,
+            "node_id": 14
+          },
+          {
+            "family": "unknown",
+            "period": "unknown",
+            "residues": [
+              5,
+              8,
+              8,
+              2
+            ],
+            "confidence": 0.0,
+            "node_id": 15
+          }
+        ],
+        "dominant_family": "unknown",
+        "signal_name": "White Noise"
+      }
+    }
+  }
+}

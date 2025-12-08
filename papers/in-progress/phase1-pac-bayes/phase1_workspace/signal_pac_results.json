@@ -1,0 +1,92 @@
+{
+  "configuration": {
+    "num_nodes": 16,
+    "modulus": 24,
+    "coupling": 0.2,
+    "timesteps": 150,
+    "confidence": 0.95
+  },
+  "pac_constants": {
+    "K1": 4608.000000000001,
+    "K2": 2.995732273553991,
+    "N": 16,
+    "modulus": 24
+  },
+  "results": {
+    "Pure Tone": {
+      "classification": {
+        "Harmonic Index (HI)": 0.0015913343710010758,
+        "E8 Alignment": 0.7902597285529015,
+        "Harmonic Loss": 62.07788770425351,
+        "Convergence Time": "N/A"
+      },
+      "pac_bayes": {
+        "D_QA": 98.6706322492014,
+        "Empirical Risk": 1.0,
+        "Generalization Bound": 56.056472811825245,
+        "Generalization Gap": 55.056472811825245,
+        "Training Size (m)": 150
+      }
+    },
+    "Major Chord": {
+      "classification": {
+        "Harmonic Index (HI)": 0.7767396121549879,
+        "E8 Alignment": 0.7767396121549879,
+        "Harmonic Loss": 5.351632381019344e-27,
+        "Convergence Time": 15
+      },
+      "pac_bayes": {
+        "D_QA": 93.08009025249463,
+        "Empirical Risk": 0.0,
+        "Generalization Bound": 53.47404742807879,
+        "Generalization Gap": 53.47404742807879,
+        "Training Size (m)": 150
+      }
+    },
+    "Minor Chord": {
+      "classification": {
+        "Harmonic Index (HI)": 0.8198989097487781,
+        "E8 Alignment": 0.8198989097487781,
+        "Harmonic Loss": 4.897248499612041e-27,
+        "Convergence Time": 8
+      },
+      "pac_bayes": {
+        "D_QA": 97.0933233964119,
+        "Empirical Risk": 0.0,
+        "Generalization Bound": 54.61465252587037,
+        "Generalization Gap": 54.61465252587037,
+        "Training Size (m)": 150
+      }
+    },
+    "Tritone": {
+      "classification": {
+        "Harmonic Index (HI)": 0.8148240280511705,
+        "E8 Alignment": 0.8148240280511705,
+        "Harmonic Loss": 4.947735597546186e-27,
+        "Convergence Time": 10
+      },
+      "pac_bayes": {
+        "D_QA": 103.92950506894043,
+        "Empirical Risk": 0.0,
+        "Generalization Bound": 56.50458186290413,
+        "Generalization Gap": 56.50458186290413,
+        "Training Size (m)": 150
+      }
+    },
+    "White Noise": {
+      "classification": {
+        "Harmonic Index (HI)": 0.8475502863946061,
+        "E8 Alignment": 0.8475502863946061,
+        "Harmonic Loss": 8.885729236409477e-27,
+        "Convergence Time": 10
+      },
+      "pac_bayes": {
+        "D_QA": 107.9036414700724,
+        "Empirical Risk": 1.0,
+        "Generalization Bound": 58.57476219442343,
+        "Generalization Gap": 57.57476219442343,
+        "Training Size (m)": 150
+      }
+    }
+  }
+}

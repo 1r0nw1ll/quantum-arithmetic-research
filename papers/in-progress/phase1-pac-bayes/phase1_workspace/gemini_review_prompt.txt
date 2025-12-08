@@ -1,0 +1,34 @@
+Review the qa_pac_bayes.py implementation for mathematical correctness.
+
+Please verify:
+
+1. MODULAR DISTANCE FORMULA:
+   - Is d_m(a,b) = min(|a-b|, modulus - |a-b|) correct for toroidal topology?
+   - Does it satisfy metric axioms (identity, symmetry, triangle inequality)?
+
+2. D_QA DIVERGENCE COMPUTATION:
+   - Does D_QA(Q||P) = E_Q[d_m(θ_Q, θ_P)²] match the definition?
+   - Is the empirical estimation method statistically valid?
+   - Is the equivalence to Wasserstein-2 distance correct?
+
+3. PAC-BAYES CONSTANTS:
+   - Is K₁ = C * N * diam(T²)² geometrically correct?
+   - Is diam(T²) = (modulus/2) * sqrt(2) the right diameter formula?
+   - For N=24, modulus=24, C=1.0, does K₁ = 6912 match predictions?
+
+4. GENERALIZATION BOUND:
+   - Is the formula R(Q) ≤ R̂(Q) + sqrt([K₁*D_QA + K₂*ln(m/δ)]/m) correctly implemented?
+   - Are all edge cases handled (m=0, negative complexity, etc.)?
+
+5. HARMONIC CHANGE-OF-MEASURE LEMMA:
+   - Is E_Q[cos(f)] ≤ E_P[cos(f)] + C*D_QA the correct formulation?
+
+Please provide:
+- List of any mathematical errors found
+- Suggestions for improvements
+- Approval if everything is correct
+
+Key test results from demo:
+- D_QA(Q, Q) = 0.0 ✓
+- K₁ for 24-node system = 6912.0 ✓ (matches prediction)
+- Modular distance d_m(1, 23, mod 24) = 2.0 ✓ (wraps correctly)

@@ -1,0 +1,14 @@
+[package]
+name = "qa-alphageometry-bindings"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[lib]
+name = "qa_geo"
+crate-type = ["cdylib"]
+
+[dependencies]
+qa-alphageometry-core = { path = "../core" }
+pyo3 = { version = "0.20", features = ["extension-module"] }

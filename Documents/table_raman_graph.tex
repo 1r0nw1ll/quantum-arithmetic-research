@@ -1,0 +1,22 @@
+% Raman graph comparison (single vs multi‑tuple)
+\begin{table}[t]
+\centering
+\caption{Raman as a QA graph: single‑tuple (FO v2) vs multi‑tuple (FO v2 + fingerprint multiseg). k selected per mode by spectral sweep.}
+\label{tab:raman-graph}
+\begin{tabular}{lcccc}
+\toprule
+Mode & Q & Purity & ARI & NMI \\
+\midrule
+\multicolumn{5}{c}{Single‑tuple (FO v2)} \\
+baseline        & 0.8614 & 0.4368 & 0.1458 & 0.2684 \\
+QA‑X            & 0.8687 & 0.3875 & 0.0918 & 0.1975 \\
+QA‑full         & 0.8524 & 0.4019 & 0.0842 & 0.2333 \\
+\midrule
+\multicolumn{5}{c}{Multi‑tuple (FO v2 + fingerprint multiseg)} \\
+baseline        & 0.7841 & 0.4753 & 0.1398 & 0.3294 \\
+QA‑X (multi)    & 0.8107 & 0.4585 & 0.1393 & 0.3057 \\
+QA‑full (multi) & 0.8117 & 0.4248 & 0.1434 & 0.3059 \\
+\bottomrule
+\end{tabular}
+\end{table}
+

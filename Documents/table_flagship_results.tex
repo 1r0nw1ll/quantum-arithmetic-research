@@ -1,0 +1,20 @@
+\begin{table}[t]
+  \centering
+  \caption{Flagship QA improvements across domains. QA invariants are applied to the same 2D inputs \((b,e)\) as the raw baseline unless noted. Values are representative of final runs (see JSON summaries).}
+  \label{tab:flagship}
+  \begin{tabular}{llllrrr}
+    \toprule
+    Domain & Dataset & Encoding & Metric & Raw & QA--21 & $\Delta$ \\
+    \midrule
+    Graphs & Football & QA--X & $Q$ & 0.6005 & \textbf{0.6972} & +0.0967 \\
+    Graphs & QA--KG    & Full  & $Q$ & 0.0004 & \textbf{0.7397} & +0.7393 \\
+    Manifolds & Circles & first2 & LogReg & 0.48 & \textbf{0.89} & +0.41 \\
+    Manifolds & Moons   & first2 & LogReg & 0.893 & \textbf{0.967} & +0.074 \\
+    Manifolds & Swiss   & radangle & LogReg & 0.953 & \textbf{0.976} & +0.023 \\
+    Raman & FO v2 (bcwin) & FO ratio & LogReg & 0.244 & \textbf{0.552} & +0.308 \\
+    Raman & FP (bcwin) & centroid+width & ARI & 0.030 & \textbf{0.056} & +0.026 \\
+    Raman & Multiseg (3x) & FP subbands & LogReg & 0.480 & \textbf{0.608} & +0.128 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+

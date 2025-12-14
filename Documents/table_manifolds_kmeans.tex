@@ -1,0 +1,16 @@
+% Manifold clustering (KMeans) on synthetic datasets
+% Source: codex_on_QA/out/moons_kmeans_scores.txt, codex_on_QA/out/swiss_kmeans_scores.txt
+\begin{table}[t]
+  \centering
+  \caption{KMeans clustering on synthetic manifolds. ARI/NMI (higher is better). QA per-feature mapping is designed for linearization and margin discovery; clustering gains may depend on the downstream algorithm.}
+  \label{tab:manifolds-kmeans}
+  \begin{tabular}{lrrrr}
+    \toprule
+    Dataset & ARI (raw) & NMI (raw) & ARI (QA) & NMI (QA) \\
+    \midrule
+    Two Moons & 0.255 & 0.193 & $-0.0005$ & 0.00004 \\
+    Swiss Roll (5 bins) & 0.415 & 0.519 & 0.303 & 0.414 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+

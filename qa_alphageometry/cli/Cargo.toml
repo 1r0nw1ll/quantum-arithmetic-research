@@ -1,0 +1,14 @@
+[package]
+name = "qa-geo-cli"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[[bin]]
+name = "qa-geo-solve"
+path = "src/main.rs"
+
+[dependencies]
+qa-alphageometry-core = { path = "../core" }
+clap = { version = "4.4", features = ["derive"] }

@@ -1,0 +1,17 @@
+[package]
+name = "qa-alphageometry-core"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+license.workspace = true
+
+[dependencies]
+serde.workspace = true
+serde_json.workspace = true
+thiserror.workspace = true
+anyhow.workspace = true
+
+# Additional core dependencies
+rustc-hash = "1.1"  # Fast hashing
+smallvec = "1.11"   # Stack-allocated vectors
+num-integer = "0.1" # GCD computation

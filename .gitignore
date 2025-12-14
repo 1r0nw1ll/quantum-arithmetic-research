@@ -1,0 +1,101 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+*.egg-info/
+dist/
+build/
+
+# Virtual environments - CRITICAL
+.venv/
+venv/
+ENV/
+env/
+qa_venv/
+codex_on_QA/.venv/
+qa_lab/qa_venv/
+
+# Jupyter Notebook
+.ipynb_checkpoints
+
+# Data directories (large datasets)
+data/
+*.h5
+*.hdf5
+*.mat
+
+# LaTeX auxiliary files
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+*.fdb_latexmk
+*.fls
+*.xdv
+
+# IDEs
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Build artifacts - Rust
+**/target/
+Cargo.lock
+
+# Archives
+*.zip
+*.tar.gz
+*.tgz
+
+# Large generated files (but allow paper PDFs/figures)
+# *.png  # Commented - selectively add needed figures
+# *.pdf  # Commented - allow paper PDFs
+*.dat
+*.csv
+*.json
+*.npy
+*.npz
+
+# BUT exclude experiment output
+/*_results*.png
+/*_visualization*.png
+coprocessor_test_results.png
+classification_grid.png
+
+# Embedded git repos
+ARC-AGI/
+qa_lab/.git/
+
+# Temporary files
+*.tmp
+*.bak
+# *.odt  # Commented - these have ingestion candidates
+
+# Exclude Python experiment scripts (selectively add key ones)
+/*.py
+
+# Exclude large chat exports
+chat_data_extracted/
+data_export/
+
+# Exclude old session summaries
+SESSION_SUMMARY_*.md
+SESSION_CLOSEOUT_*.md
+HANDOFF_*.md
+
+# Large files excluded
+chat_data_extracted/
+vault_audit_cache/
+multi_ai_workspace/*.pt
+multi_ai_workspace/*.pth

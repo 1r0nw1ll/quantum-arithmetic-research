@@ -1,0 +1,17 @@
+% QA knowledge graph comparison table (Rust spectral)
+% Source: codex_on_QA/out/qa_knowledge_graph_comparison.json
+\begin{table}[t]
+  \centering
+  \caption{QA Knowledge Graph: spectral clustering results. QA weighting reveals strong communities where baseline has none.}
+  \label{tab:qakg}
+  \begin{tabular}{lrr}
+    \toprule
+    Mode & Q & \#Clusters \\
+    \midrule
+    Baseline (spectral) & 0.0004 & 6 \\
+    QA-X (X=e\,$\cdot$\,d) & 0.5050 & 10 \\
+    QA-Full (kernel, selected $\tau$) & \textbf{0.7200} & 10 \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+

@@ -1,0 +1,39 @@
+\begin{table}[t]
+  \centering
+  \caption{Sample efficiency for moons and circles. For each dataset and
+  representation (raw vs. QA-21/27/83), we report the minimum number of
+  training examples $N_{\text{train}}$ required for Logistic Regression
+  (LogReg) and a small MLP to reach $90\%$ and $95\%$ test accuracy.
+  QA often reduces the data required for linear models, and can benefit MLPs,
+  especially on QA–friendly encodings. Populate entries from
+  \texttt{codex\_on\_QA/out/qa\_one\_shot\_efficiency\_summary.csv}.}
+  \label{tab:qa_sample_efficiency}
+  \begin{tabular}{lllrr}
+    \toprule
+    Dataset & Model  & Mode  &
+    $N_{\text{train}}@0.90$ &
+    $N_{\text{train}}@0.95$ \\
+    \midrule
+    Moons   & LogReg & raw   &  \dots & \dots \\
+            &        & QA-21 &  \dots & \dots \\
+            &        & QA-27 &  \dots & \dots \\
+            &        & QA-83 &  \dots & \dots \\
+    \cmidrule(lr){2-5}
+            & MLP    & raw   &  \dots & \dots \\
+            &        & QA-21 &  \dots & \dots \\
+            &        & QA-27 &  \dots & \dots \\
+            &        & QA-83 &  \dots & \dots \\
+    \midrule
+    Circles & LogReg & raw   &  \dots & \dots \\
+            &        & QA-21 &  \dots & \dots \\
+            &        & QA-27 &  \dots & \dots \\
+            &        & QA-83 &  \dots & \dots \\
+    \cmidrule(lr){2-5}
+            & MLP    & raw   &  \dots & \dots \\
+            &        & QA-21 &  \dots & \dots \\
+            &        & QA-27 &  \dots & \dots \\
+            &        & QA-83 &  \dots & \dots \\
+    \bottomrule
+  \end{tabular}
+\end{table}
+

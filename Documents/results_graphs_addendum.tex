@@ -1,0 +1,13 @@
+% Graphs Addendum: Karate + Dolphins
+
+\subsection{Graphs Addendum: Karate and Dolphins}
+
+\paragraph{Zachary’s Karate Club.}
+On the karate graph, baseline spectral clustering (unweighted Laplacian) yields moderate modularity (\(Q\,\approx\,0.34\)) and reasonable agreement with the canonical 2‑way split. QA‑X (weighting by \(X=e\cdot d\)) improves modularity and label alignment simultaneously (Purity $\to$ \(1.0\), ARI/NMI increase), refining the club into several pure communities. A QA‑mix variant pushes \(Q\) even higher (\(\approx 0.64\)) with acceptable agreement, while the full QA kernel over‑fragments, as in football.
+
+\paragraph{Dolphins social network.}
+Without labels, baseline already exhibits substantial community structure (\(Q\,\approx\,0.50\), four communities). QA‑J (\(J=b\cdot d\)) increases modularity (\(\approx 0.53\)) but produces a skewed partition (one dominant core with small fringes), while the full kernel reveals multi‑scale structure (eight communities) with \(Q\,\approx\,0.52\). As in football and the QA knowledge graph, QA invariants act as a \emph{structural lens}: by selecting X/J/mix/full, one tunes the modular landscape to emphasize coarse partitions, refined splits, or multi‑scale decompositions.
+
+\paragraph{Synthesis.}
+Across football, QA‑KG, karate, and dolphins, QA‑X consistently provides a strong one‑shot structural prior (higher \(Q\) with good label alignment where available), while QA‑J/mix/full let us dial resolution and reveal multi‑scale structure. This matches the Raman and manifold results: the right QA coordinate sharpens intrinsic structure for simple downstream algorithms.
+

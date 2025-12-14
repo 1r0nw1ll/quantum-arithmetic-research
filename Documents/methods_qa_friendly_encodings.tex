@@ -1,0 +1,42 @@
+% Methods: QA‑Friendly Encodings and Pipelines
+
+\section{Methods}
+
+\subsection{Preprocessing: Baseline‑Corrected, Windowed (bcwin)}
+Raman spectra are uniformly resampled to a common grid (2048 points). We subtract a moving‑average baseline (window \(\approx\) 0.5–2\% of grid), clamp negatives to zero, and area‑normalize. We derive dynamic band windows from the mean corrected spectrum: lattice (\(W_L\)), fingerprint (\(W_F\)), and stretch (\(W_S\)) via minima and expected boundary ranges. Optional smoothing and slack (\(\pm\)5–15 cm\(^{-1}\)) calibrate robustness.
+
+\subsection{Raman Encodings \((b,e)\)}
+All encodings map a spectrum to 2D coordinates \((b,e)\), then compute QA invariants (QA‑21/27/83):
+\begin{itemize}
+  \item \textbf{FO ratio (FO v2).} Let \((\nu_f, I_f)\) be the dominant fingerprint peak, \((\nu_s, I_s)\) the dominant stretch peak. We set \(b=\frac{\nu_f-\nu_{\min}}{\nu_{\max}-\nu_{\min}}\), \(e=\log\frac{I_s+\epsilon}{I_f+\epsilon}\). Peak indices use light smoothing + prominence filtering within \(W_F\)/\(W_S\). A small grid search over baseline/smoothing/slack selects FO v2 defaults by maximizing LogReg + 0.2·ARI.
+  \item \textbf{FO frequency shift.} \(b\) as above, \(e=\frac{\nu_s-\nu_f}{\nu_{\max}-\nu_{\min}}\). Emphasizes spectral spacing rather than energy.
+  \item \textbf{Fingerprint centroid/shape.} Within \(W_F\), \(b\) is normalized centroid, \(e=\log\sigma\) (width). Stabilizes ARI and yields consistent supervised gains.
+  \item \textbf{Fingerprint PCA2.} PCA on standardized fingerprint subgrid; \((b,e)\) are the first two components.
+  \item \textbf{Fingerprint multi‑segment.} Split \(W_F\) into three equal‑energy subbands; for each subband, compute \((b_k,e_k)\) (centroid/log width) and concatenate QA features across segments.
+  \item \textbf{Cluster‑aware windows.} KMeans on coarse band integrals clusters spectra; windows \(W_L,W_F,W_S\) are derived per cluster mean, then encodings above are recomputed per spectrum using its cluster’s windows.
+\end{itemize}
+
+\subsection{Manifold Encodings}
+We evaluate several 2D encodings that preserve manifold geometry: first2 (raw \(x,y\)), PCA2, and geometry‑aligned coordinates (e.g., radius/angle for swiss). QA invariants on these maps consistently increase linear separability while keeping clustering signal where feasible.
+
+\subsection{Graph QA Weighting and Kernel}
+For graphs with adjacency \(A\), we consider QA‑weighted similarities per edge using node‑wise invariants (X=\(e\cdot d\), J=\(b\cdot d\), mixes), and a QA kernel over node vectors \(\Phi\) (QA‑features or attributes):
+\[
+  W_{ij} = \exp\Big( -\frac{\lVert \Phi_i - \Phi_j \rVert^2}{\tau} \Big) \ \text{ for } (i,j) \in E,
+\]
+with \(\tau\) chosen by a small sweep (e.g., [0.01–0.5]·median pairwise distance). We perform normalized Laplacian spectral clustering across \(k\) and report modularity \(Q\); where ground truth exists, we also report Purity/ARI/NMI.
+
+\subsection{QA Invariants}
+For any \((b,e)\), we form \(d=b+e\), \(a=d+e\) and compute canonical QA invariants (C=2\(ed\), F=\(ba\), G=\(d^2+e^2\), J=\(bd\), K=\(da\), W=\(X+K\), Y=\(A-D\), Z=\(E+K\), etc.), plus expanded ratios/phase features (see qa\_feature\_map\_v3.py). QA‑21/27/83 refer to subsets/supersets of these coordinates.
+
+\subsection{Multi‑Tuple, Patch, and QA‑GNN Extensions}
+Single‑tuple QA is bounded by 2 DOF. To model multi‑factor structure:
+\begin{itemize}
+  \item \textbf{Multi‑tuple QA.} Represent a sample by \(k\) tuples \((b_j,e_j)\); compute QA features per tuple and concatenate. This breaks the 2‑DOF ceiling (e.g., three‑factor parity).
+  \item \textbf{QA‑patch.} Partition a signal into P patches; compute QA tuples per patch and concatenate features. Captures local harmonic structure.
+  \item \textbf{QA‑GNN.} Build a graph whose nodes are QA tuples (e.g., peaks, subbands), edges reflect proximity/order; apply message passing and global readout. This fuses many tuples into a high‑rank harmonic representation.
+\end{itemize}
+
+\subsection{Metrics}
+We report KMeans ARI (adjusted Rand index), NMI, Logistic Regression accuracy, MLP accuracy, and graph modularity \(Q\). For Raman FO v2, we select preprocessing hyperparameters by maximizing LogReg + 0.2·ARI on QA‑21 to favor QA‑friendly linearization without overfitting ARI.
+

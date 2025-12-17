@@ -1,0 +1,1237 @@
+{
+  "total_problems": 30,
+  "families": {
+    "S": {
+      "total": 10,
+      "solved_all_weights": 10,
+      "divergence_detected": 14,
+      "avg_states_qa0": 1.8,
+      "avg_states_qa07": 1.8,
+      "efficiency_gain": 0.0
+    },
+    "T": {
+      "total": 10,
+      "solved_all_weights": 10,
+      "divergence_detected": 14,
+      "avg_states_qa0": 10.1,
+      "avg_states_qa07": 7.7,
+      "efficiency_gain": 23.76237623762376
+    },
+    "C": {
+      "total": 10,
+      "solved_all_weights": 10,
+      "divergence_detected": 14,
+      "avg_states_qa0": 8.9,
+      "avg_states_qa07": 6.9,
+      "efficiency_gain": 22.47191011235955
+    }
+  },
+  "qa_weights": [
+    0.0,
+    0.3,
+    0.7,
+    1.0
+  ],
+  "results": [
+    {
+      "problem_id": "s01_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s01_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s01_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s01_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s02_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s02_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s02_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s02_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s03_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 7,
+      "successors_generated": 28,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s03_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 7,
+      "successors_generated": 28,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s03_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 7,
+      "successors_generated": 29,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s03_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 7,
+      "successors_generated": 29,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s04_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s04_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s04_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s04_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s05_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s05_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s05_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s05_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s06_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 6,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s06_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 6,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s06_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 7,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s06_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 7,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s07_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 6,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s07_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 6,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s07_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 6,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s07_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 7,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s08_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s08_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s08_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s08_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 1,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s09_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s09_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s09_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s09_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s10_lattice",
+      "family": "S",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s10_lattice",
+      "family": "S",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s10_lattice",
+      "family": "S",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "s10_lattice",
+      "family": "S",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t01_dual_route_reference",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 8,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t01_dual_route_reference",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 8,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t01_dual_route_reference",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 8,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t01_dual_route_reference",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 8,
+      "depth_reached": 2,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t02_scaled_multisurface",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 122,
+      "depth_reached": 4,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t02_scaled_multisurface",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t02_scaled_multisurface",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t02_scaled_multisurface",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t03_mega_discrimination",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 3,
+      "successors_generated": 16,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t03_mega_discrimination",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 24,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t03_mega_discrimination",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 24,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t03_mega_discrimination",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 24,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t04_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 12,
+      "successors_generated": 83,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t04_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t04_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t04_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t05_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 122,
+      "depth_reached": 4,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t05_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 11,
+      "successors_generated": 79,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t05_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 11,
+      "successors_generated": 79,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t05_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 11,
+      "successors_generated": 79,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t06_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 23,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t06_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t06_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t06_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t07_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 122,
+      "depth_reached": 4,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t07_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t07_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t07_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t08_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 70,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t08_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t08_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t08_multisurface_5h_6c",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "t09_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 23,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t09_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t09_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t09_multisurface_3h_4c",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t10_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 12,
+      "successors_generated": 83,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t10_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t10_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "t10_multisurface_4h_5c",
+      "family": "T",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c01_pythagorean_3_4_5",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 122,
+      "depth_reached": 4,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c01_pythagorean_3_4_5",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c01_pythagorean_3_4_5",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c01_pythagorean_3_4_5",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c02_pythagorean_5_12_13",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c02_pythagorean_5_12_13",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c02_pythagorean_5_12_13",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c02_pythagorean_5_12_13",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c03_pythagorean_8_15_17",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 121,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c03_pythagorean_8_15_17",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 129,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c03_pythagorean_8_15_17",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 129,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c03_pythagorean_8_15_17",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 129,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c04_pythagorean_7_24_25",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 23,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c04_pythagorean_7_24_25",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c04_pythagorean_7_24_25",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c04_pythagorean_7_24_25",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c05_pythagorean_20_21_29",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 3,
+      "successors_generated": 16,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c05_pythagorean_20_21_29",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c05_pythagorean_20_21_29",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c05_pythagorean_20_21_29",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c06_pythagorean_9_40_41",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 23,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c06_pythagorean_9_40_41",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c06_pythagorean_9_40_41",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c06_pythagorean_9_40_41",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 5,
+      "successors_generated": 31,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c07_pythagorean_12_35_37",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 122,
+      "depth_reached": 4,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c07_pythagorean_12_35_37",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c07_pythagorean_12_35_37",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c07_pythagorean_12_35_37",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 10,
+      "successors_generated": 71,
+      "depth_reached": 3,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c08_pythagorean_11_60_61",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c08_pythagorean_11_60_61",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c08_pythagorean_11_60_61",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c08_pythagorean_11_60_61",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 1,
+      "successors_generated": 2,
+      "depth_reached": 1,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c09_pythagorean_13_84_85",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 121,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c09_pythagorean_13_84_85",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 129,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c09_pythagorean_13_84_85",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 129,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c09_pythagorean_13_84_85",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 18,
+      "successors_generated": 129,
+      "depth_reached": 4,
+      "first_divergence": null
+    },
+    {
+      "problem_id": "c10_pythagorean_36_77_85",
+      "family": "C",
+      "qa_weight": 0.0,
+      "solved": true,
+      "states_expanded": 4,
+      "successors_generated": 23,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c10_pythagorean_36_77_85",
+      "family": "C",
+      "qa_weight": 0.3,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c10_pythagorean_36_77_85",
+      "family": "C",
+      "qa_weight": 0.7,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    },
+    {
+      "problem_id": "c10_pythagorean_36_77_85",
+      "family": "C",
+      "qa_weight": 1.0,
+      "solved": true,
+      "states_expanded": 2,
+      "successors_generated": 10,
+      "depth_reached": 2,
+      "first_divergence": 0
+    }
+  ]
+}

@@ -29,6 +29,7 @@ data/
 # LaTeX auxiliary files
 *.aux
 *.log
+!qa_alphageometry/core/results/**/*.log
 *.out
 *.toc
 *.bbl
@@ -64,6 +65,7 @@ Cargo.lock
 *.dat
 *.csv
 *.json
+!qa_alphageometry/core/results/**/*.json
 *.npy
 *.npz
 
@@ -99,3 +101,15 @@ chat_data_extracted/
 vault_audit_cache/
 multi_ai_workspace/*.pt
 multi_ai_workspace/*.pth
+# Large files to exclude
+chat_data_extracted/
+vault_audit_cache/
+multi_ai_workspace/*.pt
+multi_ai_workspace/*.pth
+qa_discovery_workspace/*.pt
+qa_discovery_workspace/*.pth
+*.pt
+*.pth
+*.zip
+**/target/
+Cargo.lock

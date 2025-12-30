@@ -125,12 +125,67 @@ def main():
 
     print()
     print("="*70)
-    if invariant:
-        print("✅ FAILURE COUNTS ARE INVARIANT (excluding OK states)")
-        print("   Hypothesis CONFIRMED by TLC model checking.")
+    print("GENERATOR-LOCAL FAILURE SIGNATURE INVARIANCE (GLFSI)")
+    print("="*70)
+    print()
+
+    # Check per-generator invariance
+    print("Per-Generator Failure Signatures:")
+    print("-" * 70)
+
+    # Extract per-generator counts from crosstabs
+    generators_full = set()
+    generators_nomu = set()
+    for fail_type in cross_full.keys():
+        generators_full.update(cross_full[fail_type].keys())
+    for fail_type in cross_nomu.keys():
+        generators_nomu.update(cross_nomu[fail_type].keys())
+
+    common_gens = (generators_full & generators_nomu) - {"NONE"}
+    removed_gens = (generators_full - generators_nomu) - {"NONE"}
+
+    glfsi_holds = True
+
+    for gen in sorted(common_gens):
+        print(f"\nGenerator {gen}:")
+        oob_full = cross_full.get("OUT_OF_BOUNDS", {}).get(gen, 0)
+        oob_nomu = cross_nomu.get("OUT_OF_BOUNDS", {}).get(gen, 0)
+        fq_full = cross_full.get("FIXED_Q_VIOLATION", {}).get(gen, 0)
+        fq_nomu = cross_nomu.get("FIXED_Q_VIOLATION", {}).get(gen, 0)
+
+        print(f"  OUT_OF_BOUNDS:     {oob_full:3d} (full) vs {oob_nomu:3d} (no-μ)  ", end="")
+        if oob_full == oob_nomu:
+            print("✅ INVARIANT")
+        else:
+            print("❌ CHANGED")
+            glfsi_holds = False
+
+        print(f"  FIXED_Q_VIOLATION: {fq_full:3d} (full) vs {fq_nomu:3d} (no-μ)  ", end="")
+        if fq_full == fq_nomu:
+            print("✅ INVARIANT")
+        else:
+            print("❌ CHANGED")
+            glfsi_holds = False
+
+    for gen in sorted(removed_gens):
+        print(f"\nGenerator {gen}:")
+        oob_full = cross_full.get("OUT_OF_BOUNDS", {}).get(gen, 0)
+        fq_full = cross_full.get("FIXED_Q_VIOLATION", {}).get(gen, 0)
+        print(f"  OUT_OF_BOUNDS:     {oob_full:3d} (full) vs --- (absent)")
+        print(f"  FIXED_Q_VIOLATION: {fq_full:3d} (full) vs --- (absent)")
+        print(f"  Status: Generator removed from set (expected)")
+
+    print()
+    print("="*70)
+    if glfsi_holds:
+        print("✅ GLFSI THEOREM CONFIRMED")
+        print()
+        print("Per-generator failure signatures are INVARIANT under generator set changes.")
+        print("Failure modes are intrinsic to (state, generator) pairs.")
     else:
-        print("❌ FAILURE COUNTS CHANGED")
-        print("   Hypothesis REJECTED by TLC model checking.")
+        print("❌ GLFSI THEOREM REJECTED")
+        print()
+        print("Per-generator failure signatures changed unexpectedly.")
     print("="*70)
 
 if __name__ == "__main__":

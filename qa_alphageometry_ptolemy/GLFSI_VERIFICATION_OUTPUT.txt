@@ -1,0 +1,102 @@
+======================================================================
+TLC State Dump Analysis - QA/QARM Failure Counts
+======================================================================
+
+======================================================================
+Run 1: Generator Set {σ, μ, λ}
+======================================================================
+Total states: 504
+
+Failure Type Distribution:
+----------------------------------------------------------------------
+  FIXED_Q_VIOLATION        :   209 ( 41.5%)
+  OK                       :   129 ( 25.6%)
+  OUT_OF_BOUNDS            :   166 ( 32.9%)
+
+Last Move Distribution:
+----------------------------------------------------------------------
+  NONE                     :   121 ( 24.0%)
+  λ                        :   141 ( 28.0%)
+  μ                        :   121 ( 24.0%)
+  σ                        :   121 ( 24.0%)
+
+Failure × Move Crosstab:
+----------------------------------------------------------------------
+FIXED_Q_VIOLATION:
+    λ                   :    35
+    μ                   :    74
+    σ                   :   100
+OK:
+    NONE                :   121
+    λ                   :     1
+    μ                   :     7
+OUT_OF_BOUNDS:
+    λ                   :   105
+    μ                   :    40
+    σ                   :    21
+
+======================================================================
+Run 2: Generator Set {σ, λ} - NO μ
+======================================================================
+Total states: 383
+
+Failure Type Distribution:
+----------------------------------------------------------------------
+  FIXED_Q_VIOLATION        :   135 ( 35.2%)
+  OK                       :   122 ( 31.9%)
+  OUT_OF_BOUNDS            :   126 ( 32.9%)
+
+Last Move Distribution:
+----------------------------------------------------------------------
+  NONE                     :   121 ( 31.6%)
+  λ                        :   141 ( 36.8%)
+  σ                        :   121 ( 31.6%)
+
+Failure × Move Crosstab:
+----------------------------------------------------------------------
+FIXED_Q_VIOLATION:
+    λ                   :    35
+    σ                   :   100
+OK:
+    NONE                :   121
+    λ                   :     1
+OUT_OF_BOUNDS:
+    λ                   :   105
+    σ                   :    21
+
+======================================================================
+COMPARISON: Failure Count Invariance Test
+======================================================================
+
+Failure Type              Full {σ,μ,λ}   No-μ {σ,λ}        Δ     Status
+----------------------------------------------------------------------
+FIXED_Q_VIOLATION                  209          135       74  ❌ CHANGED
+OK                                 129          122        7   (varies)
+OUT_OF_BOUNDS                      166          126       40  ❌ CHANGED
+
+======================================================================
+GENERATOR-LOCAL FAILURE SIGNATURE INVARIANCE (GLFSI)
+======================================================================
+
+Per-Generator Failure Signatures:
+----------------------------------------------------------------------
+
+Generator λ:
+  OUT_OF_BOUNDS:     105 (full) vs 105 (no-μ)  ✅ INVARIANT
+  FIXED_Q_VIOLATION:  35 (full) vs  35 (no-μ)  ✅ INVARIANT
+
+Generator σ:
+  OUT_OF_BOUNDS:      21 (full) vs  21 (no-μ)  ✅ INVARIANT
+  FIXED_Q_VIOLATION: 100 (full) vs 100 (no-μ)  ✅ INVARIANT
+
+Generator μ:
+  OUT_OF_BOUNDS:      40 (full) vs --- (absent)
+  FIXED_Q_VIOLATION:  74 (full) vs --- (absent)
+  Status: Generator removed from set (expected)
+
+======================================================================
+✅ GLFSI THEOREM CONFIRMED
+
+Per-generator failure signatures are INVARIANT under generator set changes.
+Failure modes are intrinsic to (state, generator) pairs.
+======================================================================

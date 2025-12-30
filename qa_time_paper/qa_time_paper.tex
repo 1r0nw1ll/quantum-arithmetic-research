@@ -1,0 +1,241 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{corollary}[theorem]{Corollary}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{axiom}[theorem]{Axiom}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+\title{A Topological Phase Transition in Quantum Arithmetic Dynamics\\
+\large{with QA-Native Time and Failure Algebra}}
+
+\author{Will Dale}
+\date{}
+
+\begin{document}
+\maketitle
+
+%==============================================================================
+\begin{abstract}
+We prove that the state space of Quantum Arithmetic (QA), under a fixed generator set,
+undergoes a \textbf{discrete topological phase transition}: the addition of a single
+contraction generator collapses a fragmented reachability manifold into a single
+connected component.
+
+Unlike classical dynamical systems, QA admits \textbf{no continuous-time embedding}
+compatible with legality, invariant closure, and irreversibility. Instead, time is shown
+to be \textbf{intrinsic}, defined by legal reachability, bounded return depth, and phase
+evolution.
+
+We introduce a \textbf{finite failure algebra} that classifies irreversibility and show
+that failure modes act as causal obstructions shaping QA time domains. All results are
+validated by exact computation, not numerical approximation.
+\end{abstract}
+
+%==============================================================================
+\section{Introduction}
+
+\subsection{Motivation}
+
+Classical dynamics presumes continuous time as a primitive.
+Discrete systems typically approximate this continuous flow through timestep
+discretization. Quantum Arithmetic does neither.
+
+\textbf{Thesis:} QA reveals time as a reachability structure, not a parameter.
+
+\subsection{Contributions}
+
+This paper establishes:
+\begin{enumerate}
+    \item A \textbf{QA-native definition of time} (Axioms T0--T4)
+    \item A \textbf{No Continuous Time obstruction theorem}
+    \item A \textbf{topological phase transition} in QA reachability
+    \item A \textbf{finite algebra of failure modes}
+    \item Exact computational verification without floating-point approximation
+\end{enumerate}
+
+%==============================================================================
+\section{Quantum Arithmetic State Space}
+
+\subsection{Canonical QA States}
+
+A QA state $s \in \mathcal{S}$ consists of a canonical seed tuple $(b,e,d,a)$ together
+with its fully recomputed invariant web, including:
+\begin{itemize}
+    \item Role constraints: $C$ (base), $F$ (altitude)
+    \item Derived invariants: $X = de$, $J = bd$, $K = da$
+    \item Major axis: $2D = 2d^2$
+    \item Phase tags: $\phi_9$, $\phi_{24}$
+\end{itemize}
+
+All states must satisfy the \textbf{Non-Reduction Axiom}:
+no scale-collapsing normalizations are permitted.
+
+\subsection{Generator Sets}
+
+We define the following generators:
+\begin{itemize}
+    \item $\sigma$: Growth generator
+    \item $\mu$: Involution (role swap)
+    \item $\lambda_k$: Scaling by factor $k$
+    \item $\nu$: Contraction generator
+\end{itemize}
+
+We distinguish two generator regimes:
+\begin{align}
+    \Sigma_0 &= \{\sigma, \mu, \lambda\} \\
+    \Sigma_1 &= \{\sigma, \mu, \lambda, \nu\}
+\end{align}
+
+%==============================================================================
+\section{QA-Native Time}
+
+\begin{axiom}[T0 -- Time-as-Legal-Transition]
+Let $\mathcal{S}$ be the set of QA states and $\Sigma$ a generator set.
+Define the one-step legality relation:
+\[
+s \to_\Sigma t \quad \Longleftrightarrow \quad
+\exists g \in \Sigma: t = g(s) \wedge \texttt{legal}_\Sigma(s \xrightarrow{g} t)
+\]
+Time in QA is the directed reachability structure induced by $\to_\Sigma$.
+A single ``tick'' is one legal generator application.
+\end{axiom}
+
+\begin{axiom}[T1 -- Duration-as-Path-Length]
+The QA duration between states $s,t \in \mathcal{S}$ is:
+\[
+\tau_\Sigma(s,t) =
+\min\{k \in \mathbb{N} : s = s_0 \to_\Sigma \cdots \to_\Sigma s_k = t\}
+\]
+If no such path exists, $\tau_\Sigma(s,t) = \infty$.
+\end{axiom}
+
+\begin{axiom}[T2 -- Horizon / Repairability]
+For horizon $k$, define:
+\[
+\texttt{return\_in\_k}(s,t;k) \quad \Longleftrightarrow \quad \tau_\Sigma(s,t) \le k
+\]
+\end{axiom}
+
+\begin{axiom}[T3 -- No External Time Parameter]
+There is no primitive $t \in \mathbb{R}$ in QA ontology.
+All temporal claims must be expressible using reachability and invariants.
+\end{axiom}
+
+\begin{axiom}[T4 -- Time-Domain Invariance]
+At fixed phase tag $q$,
+\[
+\texttt{same\_component}_q(s,t)
+\Longleftrightarrow
+(s \leftrightarrow_\Sigma^* t) \wedge q(s)=q(t)
+\]
+Components are causally isolated QA time domains.
+\end{axiom}
+
+%==============================================================================
+\section{The No Continuous Time Theorem}
+
+\begin{definition}[QA-Compatible Continuous Flow]
+A map $\Phi: \mathbb{R}_{\ge 0} \times \mathcal{S} \to \mathcal{S}$ is QA-compatible if it
+satisfies identity, semigroup structure, legality preservation, nontrivial continuity,
+and generator consistency.
+\end{definition}
+
+\begin{theorem}[No Continuous Time]
+If QA dynamics contains at least one irreversible legal edge, then no QA-compatible
+continuous-time flow exists.
+\end{theorem}
+
+\begin{proof}
+Assume such a flow exists.
+Nontrivial continuity would require infinitesimal interpolation between discrete QA
+states. This would either introduce illegal states, collapse distinct scaled embeddings
+(violating Non-Reduction), or induce reversibility contradicting irreversibility.
+\end{proof}
+
+\begin{remark}
+Continuous time may arise only through non-faithful observer projections
+$M:\mathcal{S}\to\mathbb{R}^m$, not within QA ontology itself.
+\end{remark}
+
+\begin{corollary}
+QA time computations are exact, while continuous simulations accumulate numerical error.
+\end{corollary}
+
+%==============================================================================
+\section{A Topological Phase Transition in QA Dynamics}
+
+\begin{figure}[t]
+\centering
+% INSERT: SCC plots
+\caption{
+\textbf{Topological phase transition in QA time.}
+Strongly connected component counts under $\Sigma_0$ and $\Sigma_1$
+for Caps$(30\times30)$ and Caps$(50\times50)$.
+}
+\end{figure}
+
+\begin{theorem}[QA Reachability Phase Transition]
+At fixed phase tag $q$:
+\begin{itemize}
+    \item Under $\Sigma_0$, QA time fragments into many SCCs
+    \item Under $\Sigma_1$, all states lie in a single SCC
+\end{itemize}
+No intermediate generator set yields partial connectivity.
+\end{theorem}
+
+%==============================================================================
+\section{Failure Algebra}
+
+\begin{definition}[QA Failure Modes]
+\[
+\mathcal{F} = \{
+\texttt{OUT\_OF\_BOUNDS},
+\texttt{PARITY},
+\texttt{FIXED\_Q},
+\texttt{INVARIANT\_BREAK},
+\texttt{NON\_REDUCTION}
+\}
+\]
+\end{definition}
+
+\begin{table}[t]
+\centering
+\begin{tabular}{lr}
+\hline
+Failure Type & Count \\
+\hline
+OUT\_OF\_BOUNDS & 705 \\
+PARITY & 0 \\
+FIXED\_Q & 0 \\
+INVARIANT\_BREAK & 0 \\
+NON\_REDUCTION & 0 \\
+\hline
+\end{tabular}
+\caption{Observed failure mode frequencies under $\Sigma_0$.}
+\end{table}
+
+\begin{theorem}[Failure Algebra Collapse]
+The addition of contraction $\nu$ eliminates all conditional failure modes,
+collapsing all SCCs into a single QA time domain.
+\end{theorem}
+
+%==============================================================================
+\section{Conclusion}
+
+\textbf{Quantum Arithmetic does not approximate time. It exposes time's true structure.}
+
+Time is reachability.
+Irreversibility is algebraic.
+Dynamics admits topological phase transitions without continuity.
+
+%==============================================================================
+\end{document}

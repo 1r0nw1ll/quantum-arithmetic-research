@@ -1,0 +1,4536 @@
+State 1:
+/\ lastMove = "NONE"
+/\ a = 0
+/\ b = 0
+/\ d = 0
+/\ e = 0
+/\ qtag = 0
+/\ fail = "OK"
+
+State 2:
+/\ lastMove = "NONE"
+/\ a = 2
+/\ b = 0
+/\ d = 1
+/\ e = 1
+/\ qtag = 50
+/\ fail = "OK"
+
+State 3:
+/\ lastMove = "NONE"
+/\ a = 4
+/\ b = 0
+/\ d = 2
+/\ e = 2
+/\ qtag = 100
+/\ fail = "OK"
+
+State 4:
+/\ lastMove = "NONE"
+/\ a = 6
+/\ b = 0
+/\ d = 3
+/\ e = 3
+/\ qtag = 150
+/\ fail = "OK"
+
+State 5:
+/\ lastMove = "NONE"
+/\ a = 8
+/\ b = 0
+/\ d = 4
+/\ e = 4
+/\ qtag = 200
+/\ fail = "OK"
+
+State 6:
+/\ lastMove = "NONE"
+/\ a = 10
+/\ b = 0
+/\ d = 5
+/\ e = 5
+/\ qtag = 34
+/\ fail = "OK"
+
+State 7:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 0
+/\ d = 6
+/\ e = 6
+/\ qtag = 84
+/\ fail = "OK"
+
+State 8:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 0
+/\ d = 7
+/\ e = 7
+/\ qtag = 134
+/\ fail = "OK"
+
+State 9:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 0
+/\ d = 8
+/\ e = 8
+/\ qtag = 184
+/\ fail = "OK"
+
+State 10:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 0
+/\ d = 9
+/\ e = 9
+/\ qtag = 234
+/\ fail = "OK"
+
+State 11:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 0
+/\ d = 10
+/\ e = 10
+/\ qtag = 68
+/\ fail = "OK"
+
+State 12:
+/\ lastMove = "NONE"
+/\ a = 1
+/\ b = 1
+/\ d = 1
+/\ e = 0
+/\ qtag = 25
+/\ fail = "OK"
+
+State 13:
+/\ lastMove = "NONE"
+/\ a = 3
+/\ b = 1
+/\ d = 2
+/\ e = 1
+/\ qtag = 75
+/\ fail = "OK"
+
+State 14:
+/\ lastMove = "NONE"
+/\ a = 5
+/\ b = 1
+/\ d = 3
+/\ e = 2
+/\ qtag = 125
+/\ fail = "OK"
+
+State 15:
+/\ lastMove = "NONE"
+/\ a = 7
+/\ b = 1
+/\ d = 4
+/\ e = 3
+/\ qtag = 175
+/\ fail = "OK"
+
+State 16:
+/\ lastMove = "NONE"
+/\ a = 9
+/\ b = 1
+/\ d = 5
+/\ e = 4
+/\ qtag = 225
+/\ fail = "OK"
+
+State 17:
+/\ lastMove = "NONE"
+/\ a = 11
+/\ b = 1
+/\ d = 6
+/\ e = 5
+/\ qtag = 59
+/\ fail = "OK"
+
+State 18:
+/\ lastMove = "NONE"
+/\ a = 13
+/\ b = 1
+/\ d = 7
+/\ e = 6
+/\ qtag = 109
+/\ fail = "OK"
+
+State 19:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 1
+/\ d = 8
+/\ e = 7
+/\ qtag = 159
+/\ fail = "OK"
+
+State 20:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 1
+/\ d = 9
+/\ e = 8
+/\ qtag = 209
+/\ fail = "OK"
+
+State 21:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 1
+/\ d = 10
+/\ e = 9
+/\ qtag = 43
+/\ fail = "OK"
+
+State 22:
+/\ lastMove = "NONE"
+/\ a = 2
+/\ b = 2
+/\ d = 2
+/\ e = 0
+/\ qtag = 50
+/\ fail = "OK"
+
+State 23:
+/\ lastMove = "NONE"
+/\ a = 4
+/\ b = 2
+/\ d = 3
+/\ e = 1
+/\ qtag = 100
+/\ fail = "OK"
+
+State 24:
+/\ lastMove = "NONE"
+/\ a = 6
+/\ b = 2
+/\ d = 4
+/\ e = 2
+/\ qtag = 150
+/\ fail = "OK"
+
+State 25:
+/\ lastMove = "NONE"
+/\ a = 8
+/\ b = 2
+/\ d = 5
+/\ e = 3
+/\ qtag = 200
+/\ fail = "OK"
+
+State 26:
+/\ lastMove = "NONE"
+/\ a = 10
+/\ b = 2
+/\ d = 6
+/\ e = 4
+/\ qtag = 34
+/\ fail = "OK"
+
+State 27:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 2
+/\ d = 7
+/\ e = 5
+/\ qtag = 84
+/\ fail = "OK"
+
+State 28:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 2
+/\ d = 8
+/\ e = 6
+/\ qtag = 134
+/\ fail = "OK"
+
+State 29:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 2
+/\ d = 9
+/\ e = 7
+/\ qtag = 184
+/\ fail = "OK"
+
+State 30:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 2
+/\ d = 10
+/\ e = 8
+/\ qtag = 234
+/\ fail = "OK"
+
+State 31:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 2
+/\ d = 11
+/\ e = 9
+/\ qtag = 68
+/\ fail = "OK"
+
+State 32:
+/\ lastMove = "NONE"
+/\ a = 3
+/\ b = 3
+/\ d = 3
+/\ e = 0
+/\ qtag = 75
+/\ fail = "OK"
+
+State 33:
+/\ lastMove = "NONE"
+/\ a = 5
+/\ b = 3
+/\ d = 4
+/\ e = 1
+/\ qtag = 125
+/\ fail = "OK"
+
+State 34:
+/\ lastMove = "NONE"
+/\ a = 7
+/\ b = 3
+/\ d = 5
+/\ e = 2
+/\ qtag = 175
+/\ fail = "OK"
+
+State 35:
+/\ lastMove = "NONE"
+/\ a = 9
+/\ b = 3
+/\ d = 6
+/\ e = 3
+/\ qtag = 225
+/\ fail = "OK"
+
+State 36:
+/\ lastMove = "NONE"
+/\ a = 11
+/\ b = 3
+/\ d = 7
+/\ e = 4
+/\ qtag = 59
+/\ fail = "OK"
+
+State 37:
+/\ lastMove = "NONE"
+/\ a = 13
+/\ b = 3
+/\ d = 8
+/\ e = 5
+/\ qtag = 109
+/\ fail = "OK"
+
+State 38:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 3
+/\ d = 9
+/\ e = 6
+/\ qtag = 159
+/\ fail = "OK"
+
+State 39:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 3
+/\ d = 10
+/\ e = 7
+/\ qtag = 209
+/\ fail = "OK"
+
+State 40:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 3
+/\ d = 11
+/\ e = 8
+/\ qtag = 43
+/\ fail = "OK"
+
+State 41:
+/\ lastMove = "NONE"
+/\ a = 4
+/\ b = 4
+/\ d = 4
+/\ e = 0
+/\ qtag = 100
+/\ fail = "OK"
+
+State 42:
+/\ lastMove = "NONE"
+/\ a = 6
+/\ b = 4
+/\ d = 5
+/\ e = 1
+/\ qtag = 150
+/\ fail = "OK"
+
+State 43:
+/\ lastMove = "NONE"
+/\ a = 8
+/\ b = 4
+/\ d = 6
+/\ e = 2
+/\ qtag = 200
+/\ fail = "OK"
+
+State 44:
+/\ lastMove = "NONE"
+/\ a = 10
+/\ b = 4
+/\ d = 7
+/\ e = 3
+/\ qtag = 34
+/\ fail = "OK"
+
+State 45:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 4
+/\ d = 8
+/\ e = 4
+/\ qtag = 84
+/\ fail = "OK"
+
+State 46:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 4
+/\ d = 9
+/\ e = 5
+/\ qtag = 134
+/\ fail = "OK"
+
+State 47:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 4
+/\ d = 10
+/\ e = 6
+/\ qtag = 184
+/\ fail = "OK"
+
+State 48:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 4
+/\ d = 11
+/\ e = 7
+/\ qtag = 234
+/\ fail = "OK"
+
+State 49:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 4
+/\ d = 12
+/\ e = 8
+/\ qtag = 68
+/\ fail = "OK"
+
+State 50:
+/\ lastMove = "NONE"
+/\ a = 5
+/\ b = 5
+/\ d = 5
+/\ e = 0
+/\ qtag = 125
+/\ fail = "OK"
+
+State 51:
+/\ lastMove = "NONE"
+/\ a = 7
+/\ b = 5
+/\ d = 6
+/\ e = 1
+/\ qtag = 175
+/\ fail = "OK"
+
+State 52:
+/\ lastMove = "NONE"
+/\ a = 9
+/\ b = 5
+/\ d = 7
+/\ e = 2
+/\ qtag = 225
+/\ fail = "OK"
+
+State 53:
+/\ lastMove = "NONE"
+/\ a = 11
+/\ b = 5
+/\ d = 8
+/\ e = 3
+/\ qtag = 59
+/\ fail = "OK"
+
+State 54:
+/\ lastMove = "NONE"
+/\ a = 13
+/\ b = 5
+/\ d = 9
+/\ e = 4
+/\ qtag = 109
+/\ fail = "OK"
+
+State 55:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 5
+/\ d = 10
+/\ e = 5
+/\ qtag = 159
+/\ fail = "OK"
+
+State 56:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 5
+/\ d = 11
+/\ e = 6
+/\ qtag = 209
+/\ fail = "OK"
+
+State 57:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 5
+/\ d = 12
+/\ e = 7
+/\ qtag = 43
+/\ fail = "OK"
+
+State 58:
+/\ lastMove = "NONE"
+/\ a = 6
+/\ b = 6
+/\ d = 6
+/\ e = 0
+/\ qtag = 150
+/\ fail = "OK"
+
+State 59:
+/\ lastMove = "NONE"
+/\ a = 8
+/\ b = 6
+/\ d = 7
+/\ e = 1
+/\ qtag = 200
+/\ fail = "OK"
+
+State 60:
+/\ lastMove = "NONE"
+/\ a = 10
+/\ b = 6
+/\ d = 8
+/\ e = 2
+/\ qtag = 34
+/\ fail = "OK"
+
+State 61:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 6
+/\ d = 9
+/\ e = 3
+/\ qtag = 84
+/\ fail = "OK"
+
+State 62:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 6
+/\ d = 10
+/\ e = 4
+/\ qtag = 134
+/\ fail = "OK"
+
+State 63:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 6
+/\ d = 11
+/\ e = 5
+/\ qtag = 184
+/\ fail = "OK"
+
+State 64:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 6
+/\ d = 12
+/\ e = 6
+/\ qtag = 234
+/\ fail = "OK"
+
+State 65:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 6
+/\ d = 13
+/\ e = 7
+/\ qtag = 68
+/\ fail = "OK"
+
+State 66:
+/\ lastMove = "NONE"
+/\ a = 7
+/\ b = 7
+/\ d = 7
+/\ e = 0
+/\ qtag = 175
+/\ fail = "OK"
+
+State 67:
+/\ lastMove = "NONE"
+/\ a = 9
+/\ b = 7
+/\ d = 8
+/\ e = 1
+/\ qtag = 225
+/\ fail = "OK"
+
+State 68:
+/\ lastMove = "NONE"
+/\ a = 11
+/\ b = 7
+/\ d = 9
+/\ e = 2
+/\ qtag = 59
+/\ fail = "OK"
+
+State 69:
+/\ lastMove = "NONE"
+/\ a = 13
+/\ b = 7
+/\ d = 10
+/\ e = 3
+/\ qtag = 109
+/\ fail = "OK"
+
+State 70:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 7
+/\ d = 11
+/\ e = 4
+/\ qtag = 159
+/\ fail = "OK"
+
+State 71:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 7
+/\ d = 12
+/\ e = 5
+/\ qtag = 209
+/\ fail = "OK"
+
+State 72:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 7
+/\ d = 13
+/\ e = 6
+/\ qtag = 43
+/\ fail = "OK"
+
+State 73:
+/\ lastMove = "NONE"
+/\ a = 8
+/\ b = 8
+/\ d = 8
+/\ e = 0
+/\ qtag = 200
+/\ fail = "OK"
+
+State 74:
+/\ lastMove = "NONE"
+/\ a = 10
+/\ b = 8
+/\ d = 9
+/\ e = 1
+/\ qtag = 34
+/\ fail = "OK"
+
+State 75:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 8
+/\ d = 10
+/\ e = 2
+/\ qtag = 84
+/\ fail = "OK"
+
+State 76:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 8
+/\ d = 11
+/\ e = 3
+/\ qtag = 134
+/\ fail = "OK"
+
+State 77:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 8
+/\ d = 12
+/\ e = 4
+/\ qtag = 184
+/\ fail = "OK"
+
+State 78:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 8
+/\ d = 13
+/\ e = 5
+/\ qtag = 234
+/\ fail = "OK"
+
+State 79:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 8
+/\ d = 14
+/\ e = 6
+/\ qtag = 68
+/\ fail = "OK"
+
+State 80:
+/\ lastMove = "NONE"
+/\ a = 9
+/\ b = 9
+/\ d = 9
+/\ e = 0
+/\ qtag = 225
+/\ fail = "OK"
+
+State 81:
+/\ lastMove = "NONE"
+/\ a = 11
+/\ b = 9
+/\ d = 10
+/\ e = 1
+/\ qtag = 59
+/\ fail = "OK"
+
+State 82:
+/\ lastMove = "NONE"
+/\ a = 13
+/\ b = 9
+/\ d = 11
+/\ e = 2
+/\ qtag = 109
+/\ fail = "OK"
+
+State 83:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 9
+/\ d = 12
+/\ e = 3
+/\ qtag = 159
+/\ fail = "OK"
+
+State 84:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 9
+/\ d = 13
+/\ e = 4
+/\ qtag = 209
+/\ fail = "OK"
+
+State 85:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 9
+/\ d = 14
+/\ e = 5
+/\ qtag = 43
+/\ fail = "OK"
+
+State 86:
+/\ lastMove = "NONE"
+/\ a = 10
+/\ b = 10
+/\ d = 10
+/\ e = 0
+/\ qtag = 34
+/\ fail = "OK"
+
+State 87:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 10
+/\ d = 11
+/\ e = 1
+/\ qtag = 84
+/\ fail = "OK"
+
+State 88:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 10
+/\ d = 12
+/\ e = 2
+/\ qtag = 134
+/\ fail = "OK"
+
+State 89:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 10
+/\ d = 13
+/\ e = 3
+/\ qtag = 184
+/\ fail = "OK"
+
+State 90:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 10
+/\ d = 14
+/\ e = 4
+/\ qtag = 234
+/\ fail = "OK"
+
+State 91:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 10
+/\ d = 15
+/\ e = 5
+/\ qtag = 68
+/\ fail = "OK"
+
+State 92:
+/\ lastMove = "NONE"
+/\ a = 11
+/\ b = 11
+/\ d = 11
+/\ e = 0
+/\ qtag = 59
+/\ fail = "OK"
+
+State 93:
+/\ lastMove = "NONE"
+/\ a = 13
+/\ b = 11
+/\ d = 12
+/\ e = 1
+/\ qtag = 109
+/\ fail = "OK"
+
+State 94:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 11
+/\ d = 13
+/\ e = 2
+/\ qtag = 159
+/\ fail = "OK"
+
+State 95:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 11
+/\ d = 14
+/\ e = 3
+/\ qtag = 209
+/\ fail = "OK"
+
+State 96:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 11
+/\ d = 15
+/\ e = 4
+/\ qtag = 43
+/\ fail = "OK"
+
+State 97:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 12
+/\ d = 12
+/\ e = 0
+/\ qtag = 84
+/\ fail = "OK"
+
+State 98:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 12
+/\ d = 13
+/\ e = 1
+/\ qtag = 134
+/\ fail = "OK"
+
+State 99:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 12
+/\ d = 14
+/\ e = 2
+/\ qtag = 184
+/\ fail = "OK"
+
+State 100:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 12
+/\ d = 15
+/\ e = 3
+/\ qtag = 234
+/\ fail = "OK"
+
+State 101:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 12
+/\ d = 16
+/\ e = 4
+/\ qtag = 68
+/\ fail = "OK"
+
+State 102:
+/\ lastMove = "NONE"
+/\ a = 13
+/\ b = 13
+/\ d = 13
+/\ e = 0
+/\ qtag = 109
+/\ fail = "OK"
+
+State 103:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 13
+/\ d = 14
+/\ e = 1
+/\ qtag = 159
+/\ fail = "OK"
+
+State 104:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 13
+/\ d = 15
+/\ e = 2
+/\ qtag = 209
+/\ fail = "OK"
+
+State 105:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 13
+/\ d = 16
+/\ e = 3
+/\ qtag = 43
+/\ fail = "OK"
+
+State 106:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 14
+/\ d = 14
+/\ e = 0
+/\ qtag = 134
+/\ fail = "OK"
+
+State 107:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 14
+/\ d = 15
+/\ e = 1
+/\ qtag = 184
+/\ fail = "OK"
+
+State 108:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 14
+/\ d = 16
+/\ e = 2
+/\ qtag = 234
+/\ fail = "OK"
+
+State 109:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 14
+/\ d = 17
+/\ e = 3
+/\ qtag = 68
+/\ fail = "OK"
+
+State 110:
+/\ lastMove = "NONE"
+/\ a = 15
+/\ b = 15
+/\ d = 15
+/\ e = 0
+/\ qtag = 159
+/\ fail = "OK"
+
+State 111:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 15
+/\ d = 16
+/\ e = 1
+/\ qtag = 209
+/\ fail = "OK"
+
+State 112:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 15
+/\ d = 17
+/\ e = 2
+/\ qtag = 43
+/\ fail = "OK"
+
+State 113:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 16
+/\ d = 16
+/\ e = 0
+/\ qtag = 184
+/\ fail = "OK"
+
+State 114:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 16
+/\ d = 17
+/\ e = 1
+/\ qtag = 234
+/\ fail = "OK"
+
+State 115:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 16
+/\ d = 18
+/\ e = 2
+/\ qtag = 68
+/\ fail = "OK"
+
+State 116:
+/\ lastMove = "NONE"
+/\ a = 17
+/\ b = 17
+/\ d = 17
+/\ e = 0
+/\ qtag = 209
+/\ fail = "OK"
+
+State 117:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 17
+/\ d = 18
+/\ e = 1
+/\ qtag = 43
+/\ fail = "OK"
+
+State 118:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 18
+/\ d = 18
+/\ e = 0
+/\ qtag = 234
+/\ fail = "OK"
+
+State 119:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 18
+/\ d = 19
+/\ e = 1
+/\ qtag = 68
+/\ fail = "OK"
+
+State 120:
+/\ lastMove = "NONE"
+/\ a = 19
+/\ b = 19
+/\ d = 19
+/\ e = 0
+/\ qtag = 43
+/\ fail = "OK"
+
+State 121:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 20
+/\ d = 20
+/\ e = 0
+/\ qtag = 68
+/\ fail = "OK"
+
+State 122:
+/\ lastMove = "σ"
+/\ a = 0
+/\ b = 0
+/\ d = 0
+/\ e = 0
+/\ qtag = 0
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 123:
+/\ lastMove = "μ"
+/\ a = 0
+/\ b = 0
+/\ d = 0
+/\ e = 0
+/\ qtag = 0
+/\ fail = "OK"
+
+State 124:
+/\ lastMove = "λ"
+/\ a = 0
+/\ b = 0
+/\ d = 0
+/\ e = 0
+/\ qtag = 0
+/\ fail = "OK"
+
+State 125:
+/\ lastMove = "σ"
+/\ a = 2
+/\ b = 0
+/\ d = 1
+/\ e = 1
+/\ qtag = 50
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 126:
+/\ lastMove = "μ"
+/\ a = 2
+/\ b = 0
+/\ d = 1
+/\ e = 1
+/\ qtag = 50
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 127:
+/\ lastMove = "λ"
+/\ a = 2
+/\ b = 0
+/\ d = 1
+/\ e = 1
+/\ qtag = 50
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 128:
+/\ lastMove = "σ"
+/\ a = 4
+/\ b = 0
+/\ d = 2
+/\ e = 2
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 129:
+/\ lastMove = "μ"
+/\ a = 4
+/\ b = 0
+/\ d = 2
+/\ e = 2
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 130:
+/\ lastMove = "λ"
+/\ a = 4
+/\ b = 0
+/\ d = 2
+/\ e = 2
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 131:
+/\ lastMove = "σ"
+/\ a = 6
+/\ b = 0
+/\ d = 3
+/\ e = 3
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 132:
+/\ lastMove = "μ"
+/\ a = 6
+/\ b = 0
+/\ d = 3
+/\ e = 3
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 133:
+/\ lastMove = "λ"
+/\ a = 6
+/\ b = 0
+/\ d = 3
+/\ e = 3
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 134:
+/\ lastMove = "σ"
+/\ a = 8
+/\ b = 0
+/\ d = 4
+/\ e = 4
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 135:
+/\ lastMove = "μ"
+/\ a = 8
+/\ b = 0
+/\ d = 4
+/\ e = 4
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 136:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 0
+/\ d = 4
+/\ e = 4
+/\ qtag = 200
+/\ fail = "OUT_OF_BOUNDS"
+
+State 137:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 0
+/\ d = 4
+/\ e = 4
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 138:
+/\ lastMove = "σ"
+/\ a = 10
+/\ b = 0
+/\ d = 5
+/\ e = 5
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 139:
+/\ lastMove = "μ"
+/\ a = 10
+/\ b = 0
+/\ d = 5
+/\ e = 5
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 140:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 0
+/\ d = 5
+/\ e = 5
+/\ qtag = 34
+/\ fail = "OUT_OF_BOUNDS"
+
+State 141:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 0
+/\ d = 5
+/\ e = 5
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 142:
+/\ lastMove = "σ"
+/\ a = 12
+/\ b = 0
+/\ d = 6
+/\ e = 6
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 143:
+/\ lastMove = "μ"
+/\ a = 12
+/\ b = 0
+/\ d = 6
+/\ e = 6
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 144:
+/\ lastMove = "λ"
+/\ a = 12
+/\ b = 0
+/\ d = 6
+/\ e = 6
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 145:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 0
+/\ d = 7
+/\ e = 7
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 146:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 0
+/\ d = 7
+/\ e = 7
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 147:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 0
+/\ d = 7
+/\ e = 7
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 148:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 0
+/\ d = 8
+/\ e = 8
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 149:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 0
+/\ d = 8
+/\ e = 8
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 150:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 0
+/\ d = 8
+/\ e = 8
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 151:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 0
+/\ d = 9
+/\ e = 9
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 152:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 0
+/\ d = 9
+/\ e = 9
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 153:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 0
+/\ d = 9
+/\ e = 9
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 154:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 0
+/\ d = 10
+/\ e = 10
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 155:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 0
+/\ d = 10
+/\ e = 10
+/\ qtag = 68
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 156:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 0
+/\ d = 10
+/\ e = 10
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 157:
+/\ lastMove = "σ"
+/\ a = 1
+/\ b = 1
+/\ d = 1
+/\ e = 0
+/\ qtag = 25
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 158:
+/\ lastMove = "μ"
+/\ a = 1
+/\ b = 1
+/\ d = 1
+/\ e = 0
+/\ qtag = 25
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 159:
+/\ lastMove = "λ"
+/\ a = 1
+/\ b = 1
+/\ d = 1
+/\ e = 0
+/\ qtag = 25
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 160:
+/\ lastMove = "σ"
+/\ a = 3
+/\ b = 1
+/\ d = 2
+/\ e = 1
+/\ qtag = 75
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 161:
+/\ lastMove = "μ"
+/\ a = 3
+/\ b = 1
+/\ d = 2
+/\ e = 1
+/\ qtag = 75
+/\ fail = "OK"
+
+State 162:
+/\ lastMove = "λ"
+/\ a = 3
+/\ b = 1
+/\ d = 2
+/\ e = 1
+/\ qtag = 75
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 163:
+/\ lastMove = "σ"
+/\ a = 5
+/\ b = 1
+/\ d = 3
+/\ e = 2
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 164:
+/\ lastMove = "μ"
+/\ a = 5
+/\ b = 1
+/\ d = 3
+/\ e = 2
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 165:
+/\ lastMove = "λ"
+/\ a = 5
+/\ b = 1
+/\ d = 3
+/\ e = 2
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 166:
+/\ lastMove = "σ"
+/\ a = 7
+/\ b = 1
+/\ d = 4
+/\ e = 3
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 167:
+/\ lastMove = "μ"
+/\ a = 7
+/\ b = 1
+/\ d = 4
+/\ e = 3
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 168:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 1
+/\ d = 4
+/\ e = 3
+/\ qtag = 175
+/\ fail = "OUT_OF_BOUNDS"
+
+State 169:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 1
+/\ d = 4
+/\ e = 3
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 170:
+/\ lastMove = "σ"
+/\ a = 9
+/\ b = 1
+/\ d = 5
+/\ e = 4
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 171:
+/\ lastMove = "μ"
+/\ a = 9
+/\ b = 1
+/\ d = 5
+/\ e = 4
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 172:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 1
+/\ d = 5
+/\ e = 4
+/\ qtag = 225
+/\ fail = "OUT_OF_BOUNDS"
+
+State 173:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 1
+/\ d = 5
+/\ e = 4
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 174:
+/\ lastMove = "σ"
+/\ a = 11
+/\ b = 1
+/\ d = 6
+/\ e = 5
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 175:
+/\ lastMove = "μ"
+/\ a = 11
+/\ b = 1
+/\ d = 6
+/\ e = 5
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 176:
+/\ lastMove = "λ"
+/\ a = 11
+/\ b = 1
+/\ d = 6
+/\ e = 5
+/\ qtag = 59
+/\ fail = "OUT_OF_BOUNDS"
+
+State 177:
+/\ lastMove = "σ"
+/\ a = 13
+/\ b = 1
+/\ d = 7
+/\ e = 6
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 178:
+/\ lastMove = "μ"
+/\ a = 13
+/\ b = 1
+/\ d = 7
+/\ e = 6
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 179:
+/\ lastMove = "λ"
+/\ a = 13
+/\ b = 1
+/\ d = 7
+/\ e = 6
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 180:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 1
+/\ d = 8
+/\ e = 7
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 181:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 1
+/\ d = 8
+/\ e = 7
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 182:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 1
+/\ d = 8
+/\ e = 7
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 183:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 1
+/\ d = 9
+/\ e = 8
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 184:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 1
+/\ d = 9
+/\ e = 8
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 185:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 1
+/\ d = 9
+/\ e = 8
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 186:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 1
+/\ d = 10
+/\ e = 9
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 187:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 1
+/\ d = 10
+/\ e = 9
+/\ qtag = 43
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 188:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 1
+/\ d = 10
+/\ e = 9
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 189:
+/\ lastMove = "σ"
+/\ a = 2
+/\ b = 2
+/\ d = 2
+/\ e = 0
+/\ qtag = 50
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 190:
+/\ lastMove = "μ"
+/\ a = 2
+/\ b = 2
+/\ d = 2
+/\ e = 0
+/\ qtag = 50
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 191:
+/\ lastMove = "λ"
+/\ a = 2
+/\ b = 2
+/\ d = 2
+/\ e = 0
+/\ qtag = 50
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 192:
+/\ lastMove = "σ"
+/\ a = 4
+/\ b = 2
+/\ d = 3
+/\ e = 1
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 193:
+/\ lastMove = "μ"
+/\ a = 4
+/\ b = 2
+/\ d = 3
+/\ e = 1
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 194:
+/\ lastMove = "λ"
+/\ a = 4
+/\ b = 2
+/\ d = 3
+/\ e = 1
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 195:
+/\ lastMove = "σ"
+/\ a = 6
+/\ b = 2
+/\ d = 4
+/\ e = 2
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 196:
+/\ lastMove = "μ"
+/\ a = 6
+/\ b = 2
+/\ d = 4
+/\ e = 2
+/\ qtag = 150
+/\ fail = "OK"
+
+State 197:
+/\ lastMove = "λ"
+/\ a = 6
+/\ b = 2
+/\ d = 4
+/\ e = 2
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 198:
+/\ lastMove = "σ"
+/\ a = 8
+/\ b = 2
+/\ d = 5
+/\ e = 3
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 199:
+/\ lastMove = "μ"
+/\ a = 8
+/\ b = 2
+/\ d = 5
+/\ e = 3
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 200:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 2
+/\ d = 5
+/\ e = 3
+/\ qtag = 200
+/\ fail = "OUT_OF_BOUNDS"
+
+State 201:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 2
+/\ d = 5
+/\ e = 3
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 202:
+/\ lastMove = "σ"
+/\ a = 10
+/\ b = 2
+/\ d = 6
+/\ e = 4
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 203:
+/\ lastMove = "μ"
+/\ a = 10
+/\ b = 2
+/\ d = 6
+/\ e = 4
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 204:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 2
+/\ d = 6
+/\ e = 4
+/\ qtag = 34
+/\ fail = "OUT_OF_BOUNDS"
+
+State 205:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 2
+/\ d = 6
+/\ e = 4
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 206:
+/\ lastMove = "σ"
+/\ a = 12
+/\ b = 2
+/\ d = 7
+/\ e = 5
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 207:
+/\ lastMove = "μ"
+/\ a = 12
+/\ b = 2
+/\ d = 7
+/\ e = 5
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 208:
+/\ lastMove = "λ"
+/\ a = 12
+/\ b = 2
+/\ d = 7
+/\ e = 5
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 209:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 2
+/\ d = 8
+/\ e = 6
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 210:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 2
+/\ d = 8
+/\ e = 6
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 211:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 2
+/\ d = 8
+/\ e = 6
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 212:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 2
+/\ d = 9
+/\ e = 7
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 213:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 2
+/\ d = 9
+/\ e = 7
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 214:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 2
+/\ d = 9
+/\ e = 7
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 215:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 2
+/\ d = 10
+/\ e = 8
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 216:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 2
+/\ d = 10
+/\ e = 8
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 217:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 2
+/\ d = 10
+/\ e = 8
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 218:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 2
+/\ d = 11
+/\ e = 9
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 219:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 2
+/\ d = 11
+/\ e = 9
+/\ qtag = 68
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 220:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 2
+/\ d = 11
+/\ e = 9
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 221:
+/\ lastMove = "σ"
+/\ a = 3
+/\ b = 3
+/\ d = 3
+/\ e = 0
+/\ qtag = 75
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 222:
+/\ lastMove = "μ"
+/\ a = 3
+/\ b = 3
+/\ d = 3
+/\ e = 0
+/\ qtag = 75
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 223:
+/\ lastMove = "λ"
+/\ a = 3
+/\ b = 3
+/\ d = 3
+/\ e = 0
+/\ qtag = 75
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 224:
+/\ lastMove = "σ"
+/\ a = 5
+/\ b = 3
+/\ d = 4
+/\ e = 1
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 225:
+/\ lastMove = "μ"
+/\ a = 5
+/\ b = 3
+/\ d = 4
+/\ e = 1
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 226:
+/\ lastMove = "λ"
+/\ a = 5
+/\ b = 3
+/\ d = 4
+/\ e = 1
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 227:
+/\ lastMove = "σ"
+/\ a = 7
+/\ b = 3
+/\ d = 5
+/\ e = 2
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 228:
+/\ lastMove = "μ"
+/\ a = 7
+/\ b = 3
+/\ d = 5
+/\ e = 2
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 229:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 3
+/\ d = 5
+/\ e = 2
+/\ qtag = 175
+/\ fail = "OUT_OF_BOUNDS"
+
+State 230:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 3
+/\ d = 5
+/\ e = 2
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 231:
+/\ lastMove = "σ"
+/\ a = 9
+/\ b = 3
+/\ d = 6
+/\ e = 3
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 232:
+/\ lastMove = "μ"
+/\ a = 9
+/\ b = 3
+/\ d = 6
+/\ e = 3
+/\ qtag = 225
+/\ fail = "OK"
+
+State 233:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 3
+/\ d = 6
+/\ e = 3
+/\ qtag = 225
+/\ fail = "OUT_OF_BOUNDS"
+
+State 234:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 3
+/\ d = 6
+/\ e = 3
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 235:
+/\ lastMove = "σ"
+/\ a = 11
+/\ b = 3
+/\ d = 7
+/\ e = 4
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 236:
+/\ lastMove = "μ"
+/\ a = 11
+/\ b = 3
+/\ d = 7
+/\ e = 4
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 237:
+/\ lastMove = "λ"
+/\ a = 11
+/\ b = 3
+/\ d = 7
+/\ e = 4
+/\ qtag = 59
+/\ fail = "OUT_OF_BOUNDS"
+
+State 238:
+/\ lastMove = "σ"
+/\ a = 13
+/\ b = 3
+/\ d = 8
+/\ e = 5
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 239:
+/\ lastMove = "μ"
+/\ a = 13
+/\ b = 3
+/\ d = 8
+/\ e = 5
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 240:
+/\ lastMove = "λ"
+/\ a = 13
+/\ b = 3
+/\ d = 8
+/\ e = 5
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 241:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 3
+/\ d = 9
+/\ e = 6
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 242:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 3
+/\ d = 9
+/\ e = 6
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 243:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 3
+/\ d = 9
+/\ e = 6
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 244:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 3
+/\ d = 10
+/\ e = 7
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 245:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 3
+/\ d = 10
+/\ e = 7
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 246:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 3
+/\ d = 10
+/\ e = 7
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 247:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 3
+/\ d = 11
+/\ e = 8
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 248:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 3
+/\ d = 11
+/\ e = 8
+/\ qtag = 43
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 249:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 3
+/\ d = 11
+/\ e = 8
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 250:
+/\ lastMove = "σ"
+/\ a = 4
+/\ b = 4
+/\ d = 4
+/\ e = 0
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 251:
+/\ lastMove = "μ"
+/\ a = 4
+/\ b = 4
+/\ d = 4
+/\ e = 0
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 252:
+/\ lastMove = "λ"
+/\ a = 4
+/\ b = 4
+/\ d = 4
+/\ e = 0
+/\ qtag = 100
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 253:
+/\ lastMove = "σ"
+/\ a = 6
+/\ b = 4
+/\ d = 5
+/\ e = 1
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 254:
+/\ lastMove = "μ"
+/\ a = 6
+/\ b = 4
+/\ d = 5
+/\ e = 1
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 255:
+/\ lastMove = "λ"
+/\ a = 6
+/\ b = 4
+/\ d = 5
+/\ e = 1
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 256:
+/\ lastMove = "σ"
+/\ a = 8
+/\ b = 4
+/\ d = 6
+/\ e = 2
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 257:
+/\ lastMove = "μ"
+/\ a = 8
+/\ b = 4
+/\ d = 6
+/\ e = 2
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 258:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 4
+/\ d = 6
+/\ e = 2
+/\ qtag = 200
+/\ fail = "OUT_OF_BOUNDS"
+
+State 259:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 4
+/\ d = 6
+/\ e = 2
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 260:
+/\ lastMove = "σ"
+/\ a = 10
+/\ b = 4
+/\ d = 7
+/\ e = 3
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 261:
+/\ lastMove = "μ"
+/\ a = 10
+/\ b = 4
+/\ d = 7
+/\ e = 3
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 262:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 4
+/\ d = 7
+/\ e = 3
+/\ qtag = 34
+/\ fail = "OUT_OF_BOUNDS"
+
+State 263:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 4
+/\ d = 7
+/\ e = 3
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 264:
+/\ lastMove = "σ"
+/\ a = 12
+/\ b = 4
+/\ d = 8
+/\ e = 4
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 265:
+/\ lastMove = "μ"
+/\ a = 12
+/\ b = 4
+/\ d = 8
+/\ e = 4
+/\ qtag = 84
+/\ fail = "OK"
+
+State 266:
+/\ lastMove = "λ"
+/\ a = 12
+/\ b = 4
+/\ d = 8
+/\ e = 4
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 267:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 4
+/\ d = 9
+/\ e = 5
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 268:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 4
+/\ d = 9
+/\ e = 5
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 269:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 4
+/\ d = 9
+/\ e = 5
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 270:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 4
+/\ d = 10
+/\ e = 6
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 271:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 4
+/\ d = 10
+/\ e = 6
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 272:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 4
+/\ d = 10
+/\ e = 6
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 273:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 4
+/\ d = 11
+/\ e = 7
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 274:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 4
+/\ d = 11
+/\ e = 7
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 275:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 4
+/\ d = 11
+/\ e = 7
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 276:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 4
+/\ d = 12
+/\ e = 8
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 277:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 4
+/\ d = 12
+/\ e = 8
+/\ qtag = 68
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 278:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 4
+/\ d = 12
+/\ e = 8
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 279:
+/\ lastMove = "σ"
+/\ a = 5
+/\ b = 5
+/\ d = 5
+/\ e = 0
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 280:
+/\ lastMove = "μ"
+/\ a = 5
+/\ b = 5
+/\ d = 5
+/\ e = 0
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 281:
+/\ lastMove = "λ"
+/\ a = 5
+/\ b = 5
+/\ d = 5
+/\ e = 0
+/\ qtag = 125
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 282:
+/\ lastMove = "σ"
+/\ a = 7
+/\ b = 5
+/\ d = 6
+/\ e = 1
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 283:
+/\ lastMove = "μ"
+/\ a = 7
+/\ b = 5
+/\ d = 6
+/\ e = 1
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 284:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 5
+/\ d = 6
+/\ e = 1
+/\ qtag = 175
+/\ fail = "OUT_OF_BOUNDS"
+
+State 285:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 5
+/\ d = 6
+/\ e = 1
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 286:
+/\ lastMove = "σ"
+/\ a = 9
+/\ b = 5
+/\ d = 7
+/\ e = 2
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 287:
+/\ lastMove = "μ"
+/\ a = 9
+/\ b = 5
+/\ d = 7
+/\ e = 2
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 288:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 5
+/\ d = 7
+/\ e = 2
+/\ qtag = 225
+/\ fail = "OUT_OF_BOUNDS"
+
+State 289:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 5
+/\ d = 7
+/\ e = 2
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 290:
+/\ lastMove = "σ"
+/\ a = 11
+/\ b = 5
+/\ d = 8
+/\ e = 3
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 291:
+/\ lastMove = "μ"
+/\ a = 11
+/\ b = 5
+/\ d = 8
+/\ e = 3
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 292:
+/\ lastMove = "λ"
+/\ a = 11
+/\ b = 5
+/\ d = 8
+/\ e = 3
+/\ qtag = 59
+/\ fail = "OUT_OF_BOUNDS"
+
+State 293:
+/\ lastMove = "σ"
+/\ a = 13
+/\ b = 5
+/\ d = 9
+/\ e = 4
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 294:
+/\ lastMove = "μ"
+/\ a = 13
+/\ b = 5
+/\ d = 9
+/\ e = 4
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 295:
+/\ lastMove = "λ"
+/\ a = 13
+/\ b = 5
+/\ d = 9
+/\ e = 4
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 296:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 5
+/\ d = 10
+/\ e = 5
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 297:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 5
+/\ d = 10
+/\ e = 5
+/\ qtag = 159
+/\ fail = "OK"
+
+State 298:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 5
+/\ d = 10
+/\ e = 5
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 299:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 5
+/\ d = 11
+/\ e = 6
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 300:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 5
+/\ d = 11
+/\ e = 6
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 301:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 5
+/\ d = 11
+/\ e = 6
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 302:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 5
+/\ d = 12
+/\ e = 7
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 303:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 5
+/\ d = 12
+/\ e = 7
+/\ qtag = 43
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 304:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 5
+/\ d = 12
+/\ e = 7
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 305:
+/\ lastMove = "σ"
+/\ a = 6
+/\ b = 6
+/\ d = 6
+/\ e = 0
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 306:
+/\ lastMove = "μ"
+/\ a = 6
+/\ b = 6
+/\ d = 6
+/\ e = 0
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 307:
+/\ lastMove = "λ"
+/\ a = 6
+/\ b = 6
+/\ d = 6
+/\ e = 0
+/\ qtag = 150
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 308:
+/\ lastMove = "σ"
+/\ a = 8
+/\ b = 6
+/\ d = 7
+/\ e = 1
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 309:
+/\ lastMove = "μ"
+/\ a = 8
+/\ b = 6
+/\ d = 7
+/\ e = 1
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 310:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 6
+/\ d = 7
+/\ e = 1
+/\ qtag = 200
+/\ fail = "OUT_OF_BOUNDS"
+
+State 311:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 6
+/\ d = 7
+/\ e = 1
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 312:
+/\ lastMove = "σ"
+/\ a = 10
+/\ b = 6
+/\ d = 8
+/\ e = 2
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 313:
+/\ lastMove = "μ"
+/\ a = 10
+/\ b = 6
+/\ d = 8
+/\ e = 2
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 314:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 6
+/\ d = 8
+/\ e = 2
+/\ qtag = 34
+/\ fail = "OUT_OF_BOUNDS"
+
+State 315:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 6
+/\ d = 8
+/\ e = 2
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 316:
+/\ lastMove = "σ"
+/\ a = 12
+/\ b = 6
+/\ d = 9
+/\ e = 3
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 317:
+/\ lastMove = "μ"
+/\ a = 12
+/\ b = 6
+/\ d = 9
+/\ e = 3
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 318:
+/\ lastMove = "λ"
+/\ a = 12
+/\ b = 6
+/\ d = 9
+/\ e = 3
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 319:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 6
+/\ d = 10
+/\ e = 4
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 320:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 6
+/\ d = 10
+/\ e = 4
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 321:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 6
+/\ d = 10
+/\ e = 4
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 322:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 6
+/\ d = 11
+/\ e = 5
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 323:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 6
+/\ d = 11
+/\ e = 5
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 324:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 6
+/\ d = 11
+/\ e = 5
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 325:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 6
+/\ d = 12
+/\ e = 6
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 326:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 6
+/\ d = 12
+/\ e = 6
+/\ qtag = 234
+/\ fail = "OK"
+
+State 327:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 6
+/\ d = 12
+/\ e = 6
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 328:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 6
+/\ d = 13
+/\ e = 7
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 329:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 6
+/\ d = 13
+/\ e = 7
+/\ qtag = 68
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 330:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 6
+/\ d = 13
+/\ e = 7
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 331:
+/\ lastMove = "σ"
+/\ a = 7
+/\ b = 7
+/\ d = 7
+/\ e = 0
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 332:
+/\ lastMove = "μ"
+/\ a = 7
+/\ b = 7
+/\ d = 7
+/\ e = 0
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 333:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 7
+/\ d = 7
+/\ e = 0
+/\ qtag = 175
+/\ fail = "OUT_OF_BOUNDS"
+
+State 334:
+/\ lastMove = "λ"
+/\ a = 7
+/\ b = 7
+/\ d = 7
+/\ e = 0
+/\ qtag = 175
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 335:
+/\ lastMove = "σ"
+/\ a = 9
+/\ b = 7
+/\ d = 8
+/\ e = 1
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 336:
+/\ lastMove = "μ"
+/\ a = 9
+/\ b = 7
+/\ d = 8
+/\ e = 1
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 337:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 7
+/\ d = 8
+/\ e = 1
+/\ qtag = 225
+/\ fail = "OUT_OF_BOUNDS"
+
+State 338:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 7
+/\ d = 8
+/\ e = 1
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 339:
+/\ lastMove = "σ"
+/\ a = 11
+/\ b = 7
+/\ d = 9
+/\ e = 2
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 340:
+/\ lastMove = "μ"
+/\ a = 11
+/\ b = 7
+/\ d = 9
+/\ e = 2
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 341:
+/\ lastMove = "λ"
+/\ a = 11
+/\ b = 7
+/\ d = 9
+/\ e = 2
+/\ qtag = 59
+/\ fail = "OUT_OF_BOUNDS"
+
+State 342:
+/\ lastMove = "σ"
+/\ a = 13
+/\ b = 7
+/\ d = 10
+/\ e = 3
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 343:
+/\ lastMove = "μ"
+/\ a = 13
+/\ b = 7
+/\ d = 10
+/\ e = 3
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 344:
+/\ lastMove = "λ"
+/\ a = 13
+/\ b = 7
+/\ d = 10
+/\ e = 3
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 345:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 7
+/\ d = 11
+/\ e = 4
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 346:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 7
+/\ d = 11
+/\ e = 4
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 347:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 7
+/\ d = 11
+/\ e = 4
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 348:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 7
+/\ d = 12
+/\ e = 5
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 349:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 7
+/\ d = 12
+/\ e = 5
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 350:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 7
+/\ d = 12
+/\ e = 5
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 351:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 7
+/\ d = 13
+/\ e = 6
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 352:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 7
+/\ d = 13
+/\ e = 6
+/\ qtag = 43
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 353:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 7
+/\ d = 13
+/\ e = 6
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 354:
+/\ lastMove = "σ"
+/\ a = 8
+/\ b = 8
+/\ d = 8
+/\ e = 0
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 355:
+/\ lastMove = "μ"
+/\ a = 8
+/\ b = 8
+/\ d = 8
+/\ e = 0
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 356:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 8
+/\ d = 8
+/\ e = 0
+/\ qtag = 200
+/\ fail = "OUT_OF_BOUNDS"
+
+State 357:
+/\ lastMove = "λ"
+/\ a = 8
+/\ b = 8
+/\ d = 8
+/\ e = 0
+/\ qtag = 200
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 358:
+/\ lastMove = "σ"
+/\ a = 10
+/\ b = 8
+/\ d = 9
+/\ e = 1
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 359:
+/\ lastMove = "μ"
+/\ a = 10
+/\ b = 8
+/\ d = 9
+/\ e = 1
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 360:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 8
+/\ d = 9
+/\ e = 1
+/\ qtag = 34
+/\ fail = "OUT_OF_BOUNDS"
+
+State 361:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 8
+/\ d = 9
+/\ e = 1
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 362:
+/\ lastMove = "σ"
+/\ a = 12
+/\ b = 8
+/\ d = 10
+/\ e = 2
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 363:
+/\ lastMove = "μ"
+/\ a = 12
+/\ b = 8
+/\ d = 10
+/\ e = 2
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 364:
+/\ lastMove = "λ"
+/\ a = 12
+/\ b = 8
+/\ d = 10
+/\ e = 2
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 365:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 8
+/\ d = 11
+/\ e = 3
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 366:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 8
+/\ d = 11
+/\ e = 3
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 367:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 8
+/\ d = 11
+/\ e = 3
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 368:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 8
+/\ d = 12
+/\ e = 4
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 369:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 8
+/\ d = 12
+/\ e = 4
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 370:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 8
+/\ d = 12
+/\ e = 4
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 371:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 8
+/\ d = 13
+/\ e = 5
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 372:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 8
+/\ d = 13
+/\ e = 5
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 373:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 8
+/\ d = 13
+/\ e = 5
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 374:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 8
+/\ d = 14
+/\ e = 6
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 375:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 8
+/\ d = 14
+/\ e = 6
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 376:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 8
+/\ d = 14
+/\ e = 6
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 377:
+/\ lastMove = "σ"
+/\ a = 9
+/\ b = 9
+/\ d = 9
+/\ e = 0
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 378:
+/\ lastMove = "μ"
+/\ a = 9
+/\ b = 9
+/\ d = 9
+/\ e = 0
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 379:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 9
+/\ d = 9
+/\ e = 0
+/\ qtag = 225
+/\ fail = "OUT_OF_BOUNDS"
+
+State 380:
+/\ lastMove = "λ"
+/\ a = 9
+/\ b = 9
+/\ d = 9
+/\ e = 0
+/\ qtag = 225
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 381:
+/\ lastMove = "σ"
+/\ a = 11
+/\ b = 9
+/\ d = 10
+/\ e = 1
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 382:
+/\ lastMove = "μ"
+/\ a = 11
+/\ b = 9
+/\ d = 10
+/\ e = 1
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 383:
+/\ lastMove = "λ"
+/\ a = 11
+/\ b = 9
+/\ d = 10
+/\ e = 1
+/\ qtag = 59
+/\ fail = "OUT_OF_BOUNDS"
+
+State 384:
+/\ lastMove = "σ"
+/\ a = 13
+/\ b = 9
+/\ d = 11
+/\ e = 2
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 385:
+/\ lastMove = "μ"
+/\ a = 13
+/\ b = 9
+/\ d = 11
+/\ e = 2
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 386:
+/\ lastMove = "λ"
+/\ a = 13
+/\ b = 9
+/\ d = 11
+/\ e = 2
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 387:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 9
+/\ d = 12
+/\ e = 3
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 388:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 9
+/\ d = 12
+/\ e = 3
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 389:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 9
+/\ d = 12
+/\ e = 3
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 390:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 9
+/\ d = 13
+/\ e = 4
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 391:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 9
+/\ d = 13
+/\ e = 4
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 392:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 9
+/\ d = 13
+/\ e = 4
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 393:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 9
+/\ d = 14
+/\ e = 5
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 394:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 9
+/\ d = 14
+/\ e = 5
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 395:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 9
+/\ d = 14
+/\ e = 5
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 396:
+/\ lastMove = "σ"
+/\ a = 10
+/\ b = 10
+/\ d = 10
+/\ e = 0
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 397:
+/\ lastMove = "μ"
+/\ a = 10
+/\ b = 10
+/\ d = 10
+/\ e = 0
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 398:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 10
+/\ d = 10
+/\ e = 0
+/\ qtag = 34
+/\ fail = "OUT_OF_BOUNDS"
+
+State 399:
+/\ lastMove = "λ"
+/\ a = 10
+/\ b = 10
+/\ d = 10
+/\ e = 0
+/\ qtag = 34
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 400:
+/\ lastMove = "σ"
+/\ a = 12
+/\ b = 10
+/\ d = 11
+/\ e = 1
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 401:
+/\ lastMove = "μ"
+/\ a = 12
+/\ b = 10
+/\ d = 11
+/\ e = 1
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 402:
+/\ lastMove = "λ"
+/\ a = 12
+/\ b = 10
+/\ d = 11
+/\ e = 1
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 403:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 10
+/\ d = 12
+/\ e = 2
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 404:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 10
+/\ d = 12
+/\ e = 2
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 405:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 10
+/\ d = 12
+/\ e = 2
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 406:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 10
+/\ d = 13
+/\ e = 3
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 407:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 10
+/\ d = 13
+/\ e = 3
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 408:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 10
+/\ d = 13
+/\ e = 3
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 409:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 10
+/\ d = 14
+/\ e = 4
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 410:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 10
+/\ d = 14
+/\ e = 4
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 411:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 10
+/\ d = 14
+/\ e = 4
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 412:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 10
+/\ d = 15
+/\ e = 5
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 413:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 10
+/\ d = 15
+/\ e = 5
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 414:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 10
+/\ d = 15
+/\ e = 5
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 415:
+/\ lastMove = "σ"
+/\ a = 11
+/\ b = 11
+/\ d = 11
+/\ e = 0
+/\ qtag = 59
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 416:
+/\ lastMove = "μ"
+/\ a = 11
+/\ b = 11
+/\ d = 11
+/\ e = 0
+/\ qtag = 59
+/\ fail = "OUT_OF_BOUNDS"
+
+State 417:
+/\ lastMove = "λ"
+/\ a = 11
+/\ b = 11
+/\ d = 11
+/\ e = 0
+/\ qtag = 59
+/\ fail = "OUT_OF_BOUNDS"
+
+State 418:
+/\ lastMove = "σ"
+/\ a = 13
+/\ b = 11
+/\ d = 12
+/\ e = 1
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 419:
+/\ lastMove = "μ"
+/\ a = 13
+/\ b = 11
+/\ d = 12
+/\ e = 1
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 420:
+/\ lastMove = "λ"
+/\ a = 13
+/\ b = 11
+/\ d = 12
+/\ e = 1
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 421:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 11
+/\ d = 13
+/\ e = 2
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 422:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 11
+/\ d = 13
+/\ e = 2
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 423:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 11
+/\ d = 13
+/\ e = 2
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 424:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 11
+/\ d = 14
+/\ e = 3
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 425:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 11
+/\ d = 14
+/\ e = 3
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 426:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 11
+/\ d = 14
+/\ e = 3
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 427:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 11
+/\ d = 15
+/\ e = 4
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 428:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 11
+/\ d = 15
+/\ e = 4
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 429:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 11
+/\ d = 15
+/\ e = 4
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 430:
+/\ lastMove = "σ"
+/\ a = 12
+/\ b = 12
+/\ d = 12
+/\ e = 0
+/\ qtag = 84
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 431:
+/\ lastMove = "μ"
+/\ a = 12
+/\ b = 12
+/\ d = 12
+/\ e = 0
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 432:
+/\ lastMove = "λ"
+/\ a = 12
+/\ b = 12
+/\ d = 12
+/\ e = 0
+/\ qtag = 84
+/\ fail = "OUT_OF_BOUNDS"
+
+State 433:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 12
+/\ d = 13
+/\ e = 1
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 434:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 12
+/\ d = 13
+/\ e = 1
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 435:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 12
+/\ d = 13
+/\ e = 1
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 436:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 12
+/\ d = 14
+/\ e = 2
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 437:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 12
+/\ d = 14
+/\ e = 2
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 438:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 12
+/\ d = 14
+/\ e = 2
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 439:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 12
+/\ d = 15
+/\ e = 3
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 440:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 12
+/\ d = 15
+/\ e = 3
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 441:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 12
+/\ d = 15
+/\ e = 3
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 442:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 12
+/\ d = 16
+/\ e = 4
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 443:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 12
+/\ d = 16
+/\ e = 4
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 444:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 12
+/\ d = 16
+/\ e = 4
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 445:
+/\ lastMove = "σ"
+/\ a = 13
+/\ b = 13
+/\ d = 13
+/\ e = 0
+/\ qtag = 109
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 446:
+/\ lastMove = "μ"
+/\ a = 13
+/\ b = 13
+/\ d = 13
+/\ e = 0
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 447:
+/\ lastMove = "λ"
+/\ a = 13
+/\ b = 13
+/\ d = 13
+/\ e = 0
+/\ qtag = 109
+/\ fail = "OUT_OF_BOUNDS"
+
+State 448:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 13
+/\ d = 14
+/\ e = 1
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 449:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 13
+/\ d = 14
+/\ e = 1
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 450:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 13
+/\ d = 14
+/\ e = 1
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 451:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 13
+/\ d = 15
+/\ e = 2
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 452:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 13
+/\ d = 15
+/\ e = 2
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 453:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 13
+/\ d = 15
+/\ e = 2
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 454:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 13
+/\ d = 16
+/\ e = 3
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 455:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 13
+/\ d = 16
+/\ e = 3
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 456:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 13
+/\ d = 16
+/\ e = 3
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 457:
+/\ lastMove = "σ"
+/\ a = 14
+/\ b = 14
+/\ d = 14
+/\ e = 0
+/\ qtag = 134
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 458:
+/\ lastMove = "μ"
+/\ a = 14
+/\ b = 14
+/\ d = 14
+/\ e = 0
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 459:
+/\ lastMove = "λ"
+/\ a = 14
+/\ b = 14
+/\ d = 14
+/\ e = 0
+/\ qtag = 134
+/\ fail = "OUT_OF_BOUNDS"
+
+State 460:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 14
+/\ d = 15
+/\ e = 1
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 461:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 14
+/\ d = 15
+/\ e = 1
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 462:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 14
+/\ d = 15
+/\ e = 1
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 463:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 14
+/\ d = 16
+/\ e = 2
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 464:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 14
+/\ d = 16
+/\ e = 2
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 465:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 14
+/\ d = 16
+/\ e = 2
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 466:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 14
+/\ d = 17
+/\ e = 3
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 467:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 14
+/\ d = 17
+/\ e = 3
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 468:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 14
+/\ d = 17
+/\ e = 3
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 469:
+/\ lastMove = "σ"
+/\ a = 15
+/\ b = 15
+/\ d = 15
+/\ e = 0
+/\ qtag = 159
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 470:
+/\ lastMove = "μ"
+/\ a = 15
+/\ b = 15
+/\ d = 15
+/\ e = 0
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 471:
+/\ lastMove = "λ"
+/\ a = 15
+/\ b = 15
+/\ d = 15
+/\ e = 0
+/\ qtag = 159
+/\ fail = "OUT_OF_BOUNDS"
+
+State 472:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 15
+/\ d = 16
+/\ e = 1
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 473:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 15
+/\ d = 16
+/\ e = 1
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 474:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 15
+/\ d = 16
+/\ e = 1
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 475:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 15
+/\ d = 17
+/\ e = 2
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 476:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 15
+/\ d = 17
+/\ e = 2
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 477:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 15
+/\ d = 17
+/\ e = 2
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 478:
+/\ lastMove = "σ"
+/\ a = 16
+/\ b = 16
+/\ d = 16
+/\ e = 0
+/\ qtag = 184
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 479:
+/\ lastMove = "μ"
+/\ a = 16
+/\ b = 16
+/\ d = 16
+/\ e = 0
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 480:
+/\ lastMove = "λ"
+/\ a = 16
+/\ b = 16
+/\ d = 16
+/\ e = 0
+/\ qtag = 184
+/\ fail = "OUT_OF_BOUNDS"
+
+State 481:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 16
+/\ d = 17
+/\ e = 1
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 482:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 16
+/\ d = 17
+/\ e = 1
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 483:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 16
+/\ d = 17
+/\ e = 1
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 484:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 16
+/\ d = 18
+/\ e = 2
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 485:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 16
+/\ d = 18
+/\ e = 2
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 486:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 16
+/\ d = 18
+/\ e = 2
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 487:
+/\ lastMove = "σ"
+/\ a = 17
+/\ b = 17
+/\ d = 17
+/\ e = 0
+/\ qtag = 209
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 488:
+/\ lastMove = "μ"
+/\ a = 17
+/\ b = 17
+/\ d = 17
+/\ e = 0
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 489:
+/\ lastMove = "λ"
+/\ a = 17
+/\ b = 17
+/\ d = 17
+/\ e = 0
+/\ qtag = 209
+/\ fail = "OUT_OF_BOUNDS"
+
+State 490:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 17
+/\ d = 18
+/\ e = 1
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 491:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 17
+/\ d = 18
+/\ e = 1
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 492:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 17
+/\ d = 18
+/\ e = 1
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 493:
+/\ lastMove = "σ"
+/\ a = 18
+/\ b = 18
+/\ d = 18
+/\ e = 0
+/\ qtag = 234
+/\ fail = "FIXED_Q_VIOLATION"
+
+State 494:
+/\ lastMove = "μ"
+/\ a = 18
+/\ b = 18
+/\ d = 18
+/\ e = 0
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 495:
+/\ lastMove = "λ"
+/\ a = 18
+/\ b = 18
+/\ d = 18
+/\ e = 0
+/\ qtag = 234
+/\ fail = "OUT_OF_BOUNDS"
+
+State 496:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 18
+/\ d = 19
+/\ e = 1
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 497:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 18
+/\ d = 19
+/\ e = 1
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 498:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 18
+/\ d = 19
+/\ e = 1
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 499:
+/\ lastMove = "σ"
+/\ a = 19
+/\ b = 19
+/\ d = 19
+/\ e = 0
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 500:
+/\ lastMove = "μ"
+/\ a = 19
+/\ b = 19
+/\ d = 19
+/\ e = 0
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 501:
+/\ lastMove = "λ"
+/\ a = 19
+/\ b = 19
+/\ d = 19
+/\ e = 0
+/\ qtag = 43
+/\ fail = "OUT_OF_BOUNDS"
+
+State 502:
+/\ lastMove = "σ"
+/\ a = 20
+/\ b = 20
+/\ d = 20
+/\ e = 0
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 503:
+/\ lastMove = "μ"
+/\ a = 20
+/\ b = 20
+/\ d = 20
+/\ e = 0
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+
+State 504:
+/\ lastMove = "λ"
+/\ a = 20
+/\ b = 20
+/\ d = 20
+/\ e = 0
+/\ qtag = 68
+/\ fail = "OUT_OF_BOUNDS"
+

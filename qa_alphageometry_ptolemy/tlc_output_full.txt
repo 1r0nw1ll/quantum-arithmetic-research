@@ -1,0 +1,38 @@
+TLC2 Version 2.20 of Day Month 20?? (rev: bb62e53)
+Running breadth-first search Model-Checking with fp 108 and seed 5933634303326933741 with 1 worker on 4 cores with 1735MB heap and 64MB offheap memory [pid: 44746] (Linux 6.16.8+kali-amd64 amd64, Debian 21.0.9-ea x86_64, MSBDiskFPSet, DiskStateQueue).
+Parsing file /home/player2/signal_experiments/qa_alphageometry_ptolemy/QARM_v02_Failures.tla
+Parsing file /tmp/tlc-7306374602791091469/Naturals.tla (jar:file:/home/player2/signal_experiments/qa_alphageometry_ptolemy/tla2tools.jar!/tla2sany/StandardModules/Naturals.tla)
+Parsing file /tmp/tlc-7306374602791091469/Integers.tla (jar:file:/home/player2/signal_experiments/qa_alphageometry_ptolemy/tla2tools.jar!/tla2sany/StandardModules/Integers.tla)
+Parsing file /tmp/tlc-7306374602791091469/TLC.tla (jar:file:/home/player2/signal_experiments/qa_alphageometry_ptolemy/tla2tools.jar!/tla2sany/StandardModules/TLC.tla)
+Parsing file /tmp/tlc-7306374602791091469/_TLCTrace.tla (jar:file:/home/player2/signal_experiments/qa_alphageometry_ptolemy/tla2tools.jar!/tla2sany/StandardModules/_TLCTrace.tla)
+Parsing file /tmp/tlc-7306374602791091469/Sequences.tla (jar:file:/home/player2/signal_experiments/qa_alphageometry_ptolemy/tla2tools.jar!/tla2sany/StandardModules/Sequences.tla)
+Parsing file /tmp/tlc-7306374602791091469/FiniteSets.tla (jar:file:/home/player2/signal_experiments/qa_alphageometry_ptolemy/tla2tools.jar!/tla2sany/StandardModules/FiniteSets.tla)
+Parsing file /tmp/tlc-7306374602791091469/TLCExt.tla (jar:file:/home/player2/signal_experiments/qa_alphageometry_ptolemy/tla2tools.jar!/tla2sany/StandardModules/TLCExt.tla)
+Semantic processing of module Naturals
+Semantic processing of module Integers
+Semantic processing of module Sequences
+Semantic processing of module FiniteSets
+Semantic processing of module TLC
+Semantic processing of module TLCExt
+Semantic processing of module _TLCTrace
+Semantic processing of module QARM_v02_Failures
+Linting of module TLCExt
+Linting of module _TLCTrace
+Linting of module QARM_v02_Failures
+Starting... (2025-12-30 17:12:17)
+Computing initial states...
+Computed 2 initial states...
+Computed 4 initial states...
+Computed 8 initial states...
+Computed 16 initial states...
+Computed 32 initial states...
+Computed 64 initial states...
+Finished computing initial states: 121 distinct states generated at 2025-12-30 17:12:17.
+Model checking completed. No error has been found.
+  Estimates of the probability that TLC did not check all reachable states
+  because two distinct states had the same fingerprint:
+  calculated (optimistic):  val = 1.4E-14
+1012 states generated, 504 distinct states found, 0 states left on queue.
+The depth of the complete state graph search is 2.
+The average outdegree of the complete state graph is 1 (minimum is 0, the maximum 4 and the 95th percentile is 3).
+Finished in 01s at (2025-12-30 17:12:17)

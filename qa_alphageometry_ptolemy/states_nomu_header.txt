@@ -1,0 +1,100 @@
+State 1:
+/\ lastMove = "NONE"
+/\ a = 0
+/\ b = 0
+/\ d = 0
+/\ e = 0
+/\ qtag = 0
+/\ fail = "OK"
+
+State 2:
+/\ lastMove = "NONE"
+/\ a = 2
+/\ b = 0
+/\ d = 1
+/\ e = 1
+/\ qtag = 50
+/\ fail = "OK"
+
+State 3:
+/\ lastMove = "NONE"
+/\ a = 4
+/\ b = 0
+/\ d = 2
+/\ e = 2
+/\ qtag = 100
+/\ fail = "OK"
+
+State 4:
+/\ lastMove = "NONE"
+/\ a = 6
+/\ b = 0
+/\ d = 3
+/\ e = 3
+/\ qtag = 150
+/\ fail = "OK"
+
+State 5:
+/\ lastMove = "NONE"
+/\ a = 8
+/\ b = 0
+/\ d = 4
+/\ e = 4
+/\ qtag = 200
+/\ fail = "OK"
+
+State 6:
+/\ lastMove = "NONE"
+/\ a = 10
+/\ b = 0
+/\ d = 5
+/\ e = 5
+/\ qtag = 34
+/\ fail = "OK"
+
+State 7:
+/\ lastMove = "NONE"
+/\ a = 12
+/\ b = 0
+/\ d = 6
+/\ e = 6
+/\ qtag = 84
+/\ fail = "OK"
+
+State 8:
+/\ lastMove = "NONE"
+/\ a = 14
+/\ b = 0
+/\ d = 7
+/\ e = 7
+/\ qtag = 134
+/\ fail = "OK"
+
+State 9:
+/\ lastMove = "NONE"
+/\ a = 16
+/\ b = 0
+/\ d = 8
+/\ e = 8
+/\ qtag = 184
+/\ fail = "OK"
+
+State 10:
+/\ lastMove = "NONE"
+/\ a = 18
+/\ b = 0
+/\ d = 9
+/\ e = 9
+/\ qtag = 234
+/\ fail = "OK"
+
+State 11:
+/\ lastMove = "NONE"
+/\ a = 20
+/\ b = 0
+/\ d = 10
+/\ e = 10
+/\ qtag = 68
+/\ fail = "OK"
+
+State 12:

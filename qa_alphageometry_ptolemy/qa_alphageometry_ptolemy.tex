@@ -2,6 +2,12 @@
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[margin=1in]{geometry}
 \usepackage{hyperref}
+\usepackage{microtype}
+\usepackage{enumitem}
+
+\setlist{nosep}
+\setlength{\parskip}{0.25em}
+\setlength{\parindent}{0pt}
 
 \newtheorem{theorem}{Theorem}
 \newtheorem{definition}[theorem]{Definition}
@@ -20,61 +26,36 @@ A QA-Native Proof of Ptolemy's Theorem\\
 
 %------------------------------------------------------------------------------
 \begin{abstract}
-We present a QA-native proof of Ptolemy's Theorem for cyclic quadrilaterals using
-integer quadrance arithmetic, reachability-based time, and a deterministic failure
-algebra. Unlike classical geometric proofs or heuristic solvers, the proof requires
-no continuous deformation, floating-point arithmetic, or backtracking. A proof is
-realized as a finite path in a QA time graph, while impossibility is certified by
-explicit obstruction types. This demonstrates QA-AlphaGeometry as an ontology-level
-alternative to continuous and probabilistic geometry solvers.
+We present a QA-native proof of Ptolemy's Theorem using integer quadrance arithmetic, reachability-based time, and deterministic failure algebra. The proof requires no continuous deformation, floating-point arithmetic, or backtracking. Proofs are finite paths in a QA time graph, while impossibility is certified by explicit obstruction types.
 \end{abstract}
 
 %------------------------------------------------------------------------------
 \section{Introduction}
 
 Ptolemy's Theorem states that for a cyclic quadrilateral with sides
-$a,b,c,d$ and diagonals $p,q$,
-\[
-ac + bd = pq.
-\]
-Classical proofs rely on continuous geometry, trigonometry, or real analysis.
-Modern automated solvers often depend on heuristic search or machine learning.
-
-\textbf{Claim.}
-In QA-AlphaGeometry, a geometric proof is not discovered by search or approximation;
-it is \emph{reached} as a finite path in a discrete, invariant-closed state space.
+$a,b,c,d$ and diagonals $p,q$, $ac + bd = pq$.
+Classical proofs rely on continuous geometry, while automated solvers use heuristic search.
+In QA-AlphaGeometry, a proof is \emph{reached} as a finite path in a discrete state space.
 
 %------------------------------------------------------------------------------
 \section{QA Encoding of a Cyclic Quadrilateral}
 
 \subsection{Quadrance-Based State}
 
-All geometry is encoded using \emph{quadrances} (squared lengths).
-A QA-Ptolemy state is
+All geometry is encoded using \emph{quadrances} (squared lengths). A QA-Ptolemy state is
 \[
 s = (Q_{AB}, Q_{BC}, Q_{CD}, Q_{DA};\; Q_{AC}, Q_{BD};\; q\_\text{tags},\; \text{scale\_token}),
 \]
-where all quantities are integers.
-The scale token enforces the QA Non-Reduction Axiom: no scale-collapsing
-normalization is permitted.
+where all quantities are integers. The scale token enforces the Non-Reduction Axiom.
 
 \subsection{Cyclicity as an Integer Predicate}
 
-Cyclicity is enforced via the exact Ptolemy discriminant condition:
+Cyclicity is enforced via the Ptolemy discriminant condition:
 \begin{equation}
 \label{eq:ptolemy-disc}
-\bigl(
-Q_{AC}Q_{BD}
-- Q_{AB}Q_{CD}
-- Q_{BC}Q_{DA}
-\bigr)^2
-=
-4\,Q_{AB}Q_{BC}Q_{CD}Q_{DA}.
+\bigl(Q_{AC}Q_{BD} - Q_{AB}Q_{CD} - Q_{BC}Q_{DA}\bigr)^2 = 4\,Q_{AB}Q_{BC}Q_{CD}Q_{DA}.
 \end{equation}
-
-This replaces the geometric notion ``points lie on a circle'' with a single
-integer equality. No square roots or floating-point arithmetic appear anywhere
-in the legality predicate.
+This replaces ``points lie on a circle'' with an integer equality using no square roots or floating-point arithmetic.
 
 %------------------------------------------------------------------------------
 \section{QA-AlphaGeometry v0.1 Move Set}
@@ -105,75 +86,31 @@ Every illegal move produces an explicit obstruction; no branch fails silently.
 %------------------------------------------------------------------------------
 \section{Worked Example: The Square}
 
-\subsection{Initial State}
+\subsection{Initial State and Verification}
 
-For the unit square,
-\[
-Q_{AB}=Q_{BC}=Q_{CD}=Q_{DA}=1,
-\qquad
-Q_{AC}=Q_{BD}=2.
-\]
+For the unit square, $Q_{AB}=Q_{BC}=Q_{CD}=Q_{DA}=1$ and $Q_{AC}=Q_{BD}=2$.
+Computing: $(2\cdot 2 - 1\cdot 1 - 1\cdot 1)^2 = 4 = 4\cdot 1\cdot 1\cdot 1\cdot 1$.
+The discriminant condition holds exactly.
 
-\subsection{Verification}
+\subsection{Reachability Graph and Proof}
 
-Compute:
-\[
-(2\cdot 2 - 1\cdot 1 - 1\cdot 1)^2 = 4,
-\qquad
-4\cdot 1\cdot 1\cdot 1\cdot 1 = 4.
-\]
-Thus the discriminant condition holds exactly.
-
-\subsection{Reachability Graph}
-
-\begin{center}
-\begin{tabular}{l}
-$s_0$ (sides only) \\
-$\;\;\xrightarrow{\text{CONSTRUCT}}\; s_{\square}$ \\
-$\;\;\xrightarrow{\text{VERIFY}}\; \texttt{SUCCESS}$
-\end{tabular}
-\end{center}
-
-Alternative diagonal choices fail deterministically with
-\texttt{INVARIANT\_BREAK(PTOLEMY\_DISC)} and are pruned.
-
-\subsection{Proof Path}
-
-\[
-[\text{CONSTRUCT},\; \text{VERIFY\_PTOLEMY}]
-\]
-
-Time complexity is exactly two QA moves. The proof \emph{is} the path.
+The proof path is $s_0 \xrightarrow{\text{CONSTRUCT}} s_{\square} \xrightarrow{\text{VERIFY}} \texttt{SUCCESS}$.
+Alternative diagonal choices fail with \texttt{INVARIANT\_BREAK(PTOLEMY\_DISC)} and are pruned.
+Time complexity: two QA moves.
 
 %------------------------------------------------------------------------------
 \section{Failure Algebra as Proof-Theoretic Signal}
 
-In QA-AlphaGeometry, failure is not an error state.
-Each failure type is a certificate of impossibility within the fixed ontology.
-For Ptolemy's Theorem, \texttt{PTOLEMY\_DISC} precisely identifies non-cyclic
-configurations.
-
-\begin{remark}
-Failure modes act as causal obstructions in QA time, not as heuristics to be bypassed.
-\end{remark}
+In QA-AlphaGeometry, each failure type certifies impossibility. For Ptolemy's Theorem, \texttt{PTOLEMY\_DISC} identifies non-cyclic configurations. Failure modes act as causal obstructions, not heuristics.
 
 %------------------------------------------------------------------------------
 \section{Comparison}
 
-Classical geometry relies on continuous deformation.
-Heuristic solvers rely on search and probabilistic guidance.
-QA-AlphaGeometry relies on exact reachability and algebraic obstruction.
-
-No approximation is involved, and no backtracking is required.
+Classical geometry uses continuous deformation, heuristic solvers use search and probabilistic guidance, while QA-AlphaGeometry uses exact reachability without approximation or backtracking.
 
 %------------------------------------------------------------------------------
 \section{Conclusion}
 
-Ptolemy's Theorem emerges as a two-step reachability path in QA time.
-The proof requires no continuous reasoning, no numerical approximation,
-and no heuristic search.
-
-This example demonstrates how QA replaces continuous deformation with
-discrete causality and exact obstruction algebra.
+Ptolemy's Theorem emerges as a two-step reachability path in QA time with no continuous reasoning, approximation, or heuristic search. This demonstrates QA's replacement of continuous deformation with discrete causality.
 
 \end{document}

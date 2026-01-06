@@ -1,0 +1,57 @@
+{
+  "schema_version": "1.0",
+  "theorem_id": "law_of_reflection",
+  "generator_set": [
+    {
+      "name": "PHYS:reflection_probe",
+      "params": []
+    }
+  ],
+  "contracts": {
+    "tracked_invariants": [],
+    "non_reduction_enforced": true,
+    "fixed_q_mode": {}
+  },
+  "witness_type": "obstruction",
+  "observer_id": "NullObserver",
+  "projection_contract": {
+    "observer_id": "NullObserver",
+    "time_projection": "discrete: t = k (path length)",
+    "preserves_topology": true,
+    "preserves_symmetry": true,
+    "continuous_observables": [
+      "theta_incident_deg",
+      "theta_reflected_deg"
+    ],
+    "repo_tag": "qa-physics-projection-v0.1",
+    "commit_hash": "4aa2af4",
+    "determinism_hash": "02c64262b1944d1e"
+  },
+  "context": {
+    "reason": "NullObserver does not compute angles",
+    "raw_observation": {
+      "law_holds": false,
+      "reason": "NullObserver does not compute angles"
+    }
+  },
+  "obstruction": {
+    "fail_type": "observer_undefined",
+    "generator_set": [
+      {
+        "name": "PHYS:reflection_probe",
+        "params": []
+      }
+    ]
+  },
+  "attempt_log": {
+    "records": [],
+    "truncated": false,
+    "total_count": 0
+  },
+  "search": {
+    "max_depth": 10,
+    "states_explored": 41,
+    "frontier_policy": "BFS",
+    "time_elapsed_ms": null
+  }
+}

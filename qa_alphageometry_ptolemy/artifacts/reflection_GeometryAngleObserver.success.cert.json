@@ -1,0 +1,71 @@
+{
+  "schema_version": "1.0",
+  "theorem_id": "law_of_reflection",
+  "generator_set": [
+    {
+      "name": "PHYS:reflection_probe",
+      "params": []
+    }
+  ],
+  "contracts": {
+    "tracked_invariants": [],
+    "non_reduction_enforced": true,
+    "fixed_q_mode": {}
+  },
+  "witness_type": "success",
+  "observer_id": "GeometryAngleObserver",
+  "projection_contract": {
+    "observer_id": "GeometryAngleObserver",
+    "time_projection": "discrete: t = k (path length)",
+    "preserves_topology": true,
+    "preserves_symmetry": true,
+    "continuous_observables": [
+      "theta_incident_deg",
+      "theta_reflected_deg"
+    ],
+    "repo_tag": "qa-physics-projection-v0.1",
+    "commit_hash": "4aa2af4",
+    "determinism_hash": "4acd2bc35614ca53"
+  },
+  "context": {
+    "measured_angles_deg": {
+      "incident": "63.43",
+      "reflected": "63.43"
+    },
+    "angle_difference_deg": "0",
+    "tolerance_deg": "0.000001",
+    "raw_observation": {
+      "law_holds": true,
+      "measured_angles": {
+        "incident": "63.43",
+        "reflected": "63.43"
+      },
+      "angle_difference": "0",
+      "tolerance": "0.000001"
+    }
+  },
+  "success_path": [
+    {
+      "gen": {
+        "name": "PHYS:observe",
+        "params": []
+      },
+      "src_id": "0000000000000000",
+      "dst_id": "1111111111111111",
+      "src_coords": [],
+      "dst_coords": [],
+      "packet_delta": {}
+    }
+  ],
+  "attempt_log": {
+    "records": [],
+    "truncated": false,
+    "total_count": 0
+  },
+  "search": {
+    "max_depth": 10,
+    "states_explored": 41,
+    "frontier_policy": "BFS",
+    "time_elapsed_ms": null
+  }
+}

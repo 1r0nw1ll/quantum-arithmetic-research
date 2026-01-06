@@ -1,0 +1,94 @@
+
+% qa_certificate_paper_skeleton.tex
+% Skeleton: Failure-Aware Reachability Certificates for QA-AlphaGeometry + Physics Projection
+
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb}
+\usepackage{hyperref}
+\usepackage{geometry}
+\geometry{margin=1in}
+
+\title{Failure-Aware Reachability Certificates for QA: \\ Unified Proof and Projection Artifacts}
+\author{Will Dale}
+\date{January 2026}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We introduce a \emph{proof certificate} schema for Quantum Arithmetic (QA) that treats both
+successful derivations and certified obstructions as first-class mathematical objects.
+Unlike standard proof traces which only show success, our certificates always emit a
+reviewable obstruction witness when search fails (e.g., depth exhaustion, invariant violation,
+component disconnection).
+We further extend the same certificate machinery to projection-dependent physics
+experiments, where classical laws emerge only under specific observers.
+All claims are packaged as deterministic JSON artifacts.
+\end{abstract}
+
+\section{Motivation}
+Two failures repeatedly block reproducible claims in symbolic / geometric proof search:
+(i) successes are traceable, but failures are not, and (ii) ``physics-like'' behavior in QA
+is often asserted without a falsifiable projection contract.
+We address both by standardizing \emph{certificates}.
+
+\section{Certificate Objects}
+Define a certificate as a tuple:
+\[
+\mathcal{C} = (\texttt{generator\_set}, \texttt{contracts}, \texttt{witness\_type}, \texttt{witness})
+\]
+where all reachability statements are relative to a generator universe.
+
+\subsection{Generators and Namespaces}
+QA substrate generators use the canonical set $\{\sigma,\lambda,\mu,\nu\}$ (and optional inverses).
+External engines are namespaced:
+\[
+\texttt{AG:rule\_id},\quad \texttt{PHYS:probe}.
+\]
+
+\subsection{Invariants and Non-Reduction}
+Certificates optionally track a list of invariants that must be preserved.
+QA's Non-Reduction Axiom is represented as a contract flag; violations are certified
+as \texttt{NON\_REDUCTION\_VIOLATION}.
+
+\subsection{Failure Taxonomy}
+We treat failure modes as a finite algebra of obstructions (not bugs), including:
+\texttt{DEPTH\_EXHAUSTED}, \texttt{GENERATOR\_INSUFFICIENT}, \texttt{SCC\_UNREACHABLE}, etc.
+
+\section{QA-AlphaGeometry Integration}
+We define an adapter from AlphaGeometry's beam-search \texttt{SearchResult} to certificates.
+A solved result yields a legal step trace \texttt{success\_path}.
+An unsolved result yields an \texttt{obstruction} certificate (conservatively \texttt{DEPTH\_EXHAUSTED})
+with frontier hash and search metadata.
+
+\paragraph{Artifacts.}
+\begin{itemize}
+  \item \texttt{ptolemy\_success.cert.json}
+  \item \texttt{ptolemy\_ablated.obstruction.cert.json}
+\end{itemize}
+
+\section{Physics as Projection}
+We add an explicit \texttt{ProjectionContract} recording:
+observer id, time projection, topology/symmetry preservation, and projected observables.
+A classical law is then stated as: \emph{the law holds under observer $O$}.
+
+\paragraph{Artifacts.}
+\begin{itemize}
+  \item \texttt{reflection\_GeometryAngleObserver.success.cert.json}
+  \item \texttt{reflection\_NullObserver.obstruction.cert.json}
+\end{itemize}
+
+\section{Discussion}
+Certificates shift evaluation from narrative claims to artifact inspection:
+success witnesses are checkable, and failures become reviewable mathematical statements.
+The same mechanism unifies formal proof, reachability, and projection-dependent physical laws.
+
+\section{Conclusion}
+QA can support a certificate-first scientific workflow:
+every claim ships as deterministic JSON, with a canonical schema and adapters
+for multiple domains.
+
+\bibliographystyle{plain}
+\bibliography{refs}
+
+\end{document}

@@ -393,6 +393,16 @@ class ProofCertificate:
                     raise ValueError("Success path contains illegal move")
                 self.contracts.validate_packet_delta(move.packet_delta)
 
+            # Validate generator closure: all generators in path must be in generator_set
+            path_generators = {move.gen for move in self.success_path}
+            if not path_generators.issubset(self.generator_set):
+                missing = path_generators - self.generator_set
+                raise ValueError(
+                    f"Generators used in success_path but not in generator_set: "
+                    f"{sorted(g.name for g in missing)}. "
+                    f"generator_set must include all generators that appear in witness steps."
+                )
+
         elif self.witness_type == "obstruction":
             assert self.obstruction is not None, "Obstruction requires evidence"
         else:

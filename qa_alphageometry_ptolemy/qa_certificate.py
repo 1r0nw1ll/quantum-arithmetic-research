@@ -93,6 +93,7 @@ class Generator:
       - QA core: "σ", "λ", "μ", "ν", "σ_inv", "λ_inv"
       - AlphaGeometry rule: "AG:<rule_id>"
       - Physics/projection: "PHYS:<thing>"
+      - Observer/measurement: "OBS:<observer_id>"
     """
     name: str
     params: Tuple[Scalar, ...] = field(default_factory=tuple)
@@ -103,10 +104,12 @@ class Generator:
             pass
         elif self.name.startswith("PHYS:"):
             pass
+        elif self.name.startswith("OBS:"):
+            pass
         elif self.name not in ALLOWED_GENERATORS:
             raise ValueError(
                 f"Unknown generator '{self.name}'. "
-                f"Allowed: {sorted(ALLOWED_GENERATORS)} or namespaced (AG:*, PHYS:*)"
+                f"Allowed: {sorted(ALLOWED_GENERATORS)} or namespaced (AG:*, PHYS:*, OBS:*)"
             )
         object.__setattr__(self, "params", tuple(to_scalar(p) for p in self.params))
 

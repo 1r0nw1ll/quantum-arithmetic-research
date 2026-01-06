@@ -71,7 +71,7 @@ def wrap_searchresult_to_certificate(
 
     contracts = InvariantContract(
         tracked_invariants=tracked_invariants or [],
-        non_reduction_enforced=True,  # informational for AG
+        non_reduction_enforced=False,  # AG uses its own algebra (not QA non-reduction axiom)
         fixed_q_mode=None
     )
 

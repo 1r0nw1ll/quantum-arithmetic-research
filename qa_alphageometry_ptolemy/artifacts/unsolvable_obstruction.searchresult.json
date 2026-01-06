@@ -1,0 +1,10 @@
+{
+  "solved": false,
+  "proof": null,
+  "states_expanded": 1,
+  "successors_generated": 0,
+  "successors_kept": 0,
+  "depth_reached": 0,
+  "best_score": 0.0,
+  "beam_signatures": []
+}

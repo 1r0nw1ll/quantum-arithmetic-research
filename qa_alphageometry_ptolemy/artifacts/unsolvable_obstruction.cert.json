@@ -1,0 +1,51 @@
+{
+  "schema_version": "1.0",
+  "theorem_id": "unsolvable_obstruction",
+  "generator_set": [
+    {
+      "name": "AG:UNKNOWN",
+      "params": []
+    }
+  ],
+  "contracts": {
+    "tracked_invariants": [],
+    "non_reduction_enforced": false,
+    "fixed_q_mode": null
+  },
+  "witness_type": "obstruction",
+  "context": {
+    "source": "qa-alphageometry",
+    "repo_tag": "qa-alphageometry-v0.1",
+    "commit": "auto-generated",
+    "searchresult_hash": "5291a1001ecfa660",
+    "inferred_stop_reason": "no_successors_generated",
+    "depth_reached": 0,
+    "best_score": 0.0,
+    "successors_generated": 0,
+    "successors_kept": 0,
+    "partial_steps": 0,
+    "partial_rule_ids": []
+  },
+  "obstruction": {
+    "fail_type": "depth_exhausted",
+    "generator_set": [
+      {
+        "name": "AG:UNKNOWN",
+        "params": []
+      }
+    ],
+    "max_depth_reached": 0,
+    "states_explored": 1
+  },
+  "attempt_log": {
+    "records": [],
+    "truncated": false,
+    "total_count": 0
+  },
+  "search": {
+    "max_depth": 50,
+    "states_explored": 1,
+    "frontier_policy": "beam_search",
+    "time_elapsed_ms": null
+  }
+}

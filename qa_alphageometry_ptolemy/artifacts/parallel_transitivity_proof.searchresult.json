@@ -1,0 +1,30 @@
+{
+  "solved": true,
+  "proof": {
+    "steps": [
+      {
+        "id": 0,
+        "rule_id": "parallel_transitivity",
+        "premises": [],
+        "conclusions": [
+          {
+            "Parallel": [
+              1,
+              3
+            ]
+          }
+        ],
+        "score": 1.0
+      }
+    ],
+    "solved": false,
+    "final_state_hash": 0,
+    "metadata": {}
+  },
+  "states_expanded": 1,
+  "successors_generated": 1,
+  "successors_kept": 0,
+  "depth_reached": 1,
+  "best_score": 10.0,
+  "beam_signatures": []
+}

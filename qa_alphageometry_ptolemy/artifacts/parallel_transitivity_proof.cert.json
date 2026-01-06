@@ -1,0 +1,53 @@
+{
+  "schema_version": "1.0",
+  "theorem_id": "parallel_transitivity_proof",
+  "generator_set": [
+    {
+      "name": "AG:parallel_transitivity",
+      "params": []
+    }
+  ],
+  "contracts": {
+    "tracked_invariants": [],
+    "non_reduction_enforced": false,
+    "fixed_q_mode": null
+  },
+  "witness_type": "success",
+  "context": {
+    "source": "qa-alphageometry",
+    "repo_tag": "qa-alphageometry-v0.1",
+    "commit": "auto-generated",
+    "searchresult_hash": "638da82076d9beb9",
+    "rule_ids": [
+      "parallel_transitivity"
+    ],
+    "proof_length": 1,
+    "final_state_hash": 0,
+    "successors_kept": 0,
+    "best_score": 10.0
+  },
+  "success_path": [
+    {
+      "gen": {
+        "name": "AG:parallel_transitivity",
+        "params": []
+      },
+      "src_id": "d4b9726d33b8fb8c",
+      "dst_id": "90150821d5272972",
+      "src_coords": [],
+      "dst_coords": [],
+      "packet_delta": {}
+    }
+  ],
+  "attempt_log": {
+    "records": [],
+    "truncated": false,
+    "total_count": 0
+  },
+  "search": {
+    "max_depth": 50,
+    "states_explored": 1,
+    "frontier_policy": "beam_search",
+    "time_elapsed_ms": null
+  }
+}

@@ -55,19 +55,119 @@ as \texttt{NON\_REDUCTION\_VIOLATION}.
 We treat failure modes as a finite algebra of obstructions (not bugs), including:
 \texttt{DEPTH\_EXHAUSTED}, \texttt{GENERATOR\_INSUFFICIENT}, \texttt{SCC\_UNREACHABLE}, etc.
 
-\section{QA-AlphaGeometry Integration}
-We define an adapter from AlphaGeometry's beam-search \texttt{SearchResult} to certificates.
-A solved result yields a legal step trace \texttt{success\_path}.
-An unsolved result yields an \texttt{obstruction} certificate (conservatively \texttt{DEPTH\_EXHAUSTED})
-with frontier hash and search metadata.
+\section{Results: Integration with AlphaGeometry}
+\label{sec:alphageometry-results}
 
-\paragraph{Artifacts.}
+We demonstrate the certificate framework by integrating it with
+\emph{AlphaGeometry}, a state-of-the-art automated geometry prover.
+Our goal is not to modify AlphaGeometry's proof search, but to
+\emph{externalize its outcomes}—both successes and failures—into a
+uniform, first-class certificate object.
+
+\subsection{Adapter Overview}
+
+AlphaGeometry produces a \texttt{SearchResult} object containing:
+(i) a Boolean solved flag, (ii) an optional proof trace, and
+(iii) search statistics (depth, expansions, policy).
+We implement a deterministic adapter that maps each \texttt{SearchResult}
+into a \texttt{ProofCertificate} without altering search behavior.
+
+Key design choices are:
+
 \begin{itemize}
-  \item \texttt{ptolemy\_success.cert.json}
-  \item \texttt{ptolemy\_ablated.obstruction.cert.json}
+  \item \textbf{Namespaced generators.}
+  Each AlphaGeometry rule is represented as a generator
+  \texttt{AG:<rule\_id>}, ensuring disjointness from QA-native
+  generators (\(\sigma,\lambda,\mu,\nu\)) and physics observers.
+  \item \textbf{Exact, minimal state references.}
+  AlphaGeometry states lack numeric QA coordinates; we therefore use
+  stable hash-based identifiers to reference states without inventing
+  geometry.
+  \item \textbf{Conservative failure classification.}
+  When a search terminates without proof, the adapter produces an
+  obstruction certificate but does not claim strong properties
+  (e.g., unreachable SCCs) unless explicitly justified by evidence.
 \end{itemize}
 
+The adapter produces either a \emph{success certificate} with a witness
+path, or an \emph{obstruction certificate} with explicit failure
+evidence, using the same schema in both cases.
+
+\subsection{Success Certificate: Parallel Transitivity}
+
+Our first example is a successful AlphaGeometry proof of the
+\emph{parallel transitivity} theorem.
+The exported certificate
+(\texttt{parallel\_transitivity\_proof.cert.json})
+contains:
+
+\begin{itemize}
+  \item A single-step witness path using generator
+  \texttt{AG:parallel\_transitivity}.
+  \item Deterministic source and destination state identifiers.
+  \item An invariant contract with
+  \texttt{non\_reduction\_enforced = false},
+  reflecting AlphaGeometry's independent algebraic semantics.
+\end{itemize}
+
+Formally, this certificate is a reachability witness:
+\[
+  s_0 \xrightarrow{\texttt{AG:parallel\_transitivity}} s_1,
+\]
+where the generator set explicitly records the rule required for the
+proof. No additional invariants or observers are assumed.
+
+This artifact demonstrates that trivial and non-trivial AlphaGeometry
+proofs can be embedded into the certificate framework without loss of
+semantic fidelity.
+
+\subsection{Obstruction Certificate: Unsolvable Configuration}
+
+To demonstrate failure handling, we consider an intentionally unsolvable
+geometry configuration.
+AlphaGeometry terminates immediately, generating no successors and
+producing no proof trace.
+
+The corresponding certificate
+(\texttt{unsolvable\_obstruction.cert.json}) is an
+\emph{obstruction certificate} with:
+
+\begin{itemize}
+  \item \texttt{witness\_type = obstruction},
+  \item \texttt{fail\_type = depth\_exhausted},
+  \item Explicit evidence: zero successors generated at depth zero.
+\end{itemize}
+
+Crucially, the certificate does \emph{not} claim that the target state is
+globally unreachable under all generators; it certifies only what is
+known:
+that under the given generator set and search policy, no progress was
+possible.
+
+This conservative classification avoids overclaiming while still
+producing a reusable, inspectable artifact.
+
+\subsection{Unified Interpretation}
+
+These two results illustrate the central claim of the framework:
+
+\begin{quote}
+\emph{Success and failure are objects of the same type, differing only
+in witness content.}
+\end{quote}
+
+Both certificates:
+(i) use the same schema,
+(ii) explicitly record their generator assumptions, and
+(iii) are reproducible and machine-checkable.
+
+In §\ref{sec:physics-projection}, we show that the same certificate
+structure extends beyond theorem proving, capturing physical laws and
+their failures as projection-dependent reachability phenomena.
+
 \section{Physics as Projection}
+\label{sec:physics-projection}
+
 We add an explicit \texttt{ProjectionContract} recording:
 observer id, time projection, topology/symmetry preservation, and projected observables.
 A classical law is then stated as: \emph{the law holds under observer $O$}.

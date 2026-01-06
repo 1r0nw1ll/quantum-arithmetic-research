@@ -3,6 +3,10 @@
   "theorem_id": "law_of_reflection",
   "generator_set": [
     {
+      "name": "PHYS:observe",
+      "params": []
+    },
+    {
       "name": "PHYS:reflection_probe",
       "params": []
     }
@@ -10,7 +14,7 @@
   "contracts": {
     "tracked_invariants": [],
     "non_reduction_enforced": true,
-    "fixed_q_mode": {}
+    "fixed_q_mode": null
   },
   "witness_type": "obstruction",
   "observer_id": "NullObserver",
@@ -25,18 +29,23 @@
     ],
     "repo_tag": "qa-physics-projection-v0.1",
     "commit_hash": "4aa2af4",
-    "determinism_hash": "02c64262b1944d1e"
+    "determinism_hash": "48c7ddce774a88dc"
   },
   "context": {
-    "reason": "NullObserver does not compute angles",
+    "reason": "Observer cannot compute angles",
     "raw_observation": {
       "law_holds": false,
-      "reason": "NullObserver does not compute angles"
+      "reason": "Observer cannot compute angles",
+      "measured_angles": {}
     }
   },
   "obstruction": {
     "fail_type": "observer_undefined",
     "generator_set": [
+      {
+        "name": "PHYS:observe",
+        "params": []
+      },
       {
         "name": "PHYS:reflection_probe",
         "params": []

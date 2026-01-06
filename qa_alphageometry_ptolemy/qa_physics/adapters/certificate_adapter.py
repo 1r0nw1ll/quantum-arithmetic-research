@@ -65,8 +65,10 @@ def wrap_reflection_result_to_certificate(
         fixed_q_mode=None
     )
 
+    # Generator set: include all generators that may appear in witness path
     generator_set: Set[Generator] = {
-        Generator("PHYS:reflection_probe", ()),
+        Generator("PHYS:reflection_probe", ()),  # Theorem context
+        Generator("PHYS:observe", ()),           # Actual operation in success_path
     }
 
     search = SearchMetadata(

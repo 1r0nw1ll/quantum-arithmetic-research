@@ -327,7 +327,8 @@ class InvariantContract:
         return {
             "tracked_invariants": self.tracked_invariants,
             "non_reduction_enforced": self.non_reduction_enforced,
-            "fixed_q_mode": {k: str(to_scalar(v)) for k, v in (self.fixed_q_mode or {}).items()},
+            "fixed_q_mode": ({k: str(to_scalar(v)) for k, v in self.fixed_q_mode.items()}
+                            if self.fixed_q_mode is not None else None),
         }
 
     def validate_packet_delta(self, packet_delta: Dict[str, Scalar]) -> None:

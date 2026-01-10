@@ -1,0 +1,124 @@
+   Compiling qarm_constitutional v0.2.0 (/home/player2/signal_experiments/qa_alphageometry_ptolemy/qarm_constitutional)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.94s
+     Running unittests src/lib.rs (target/debug/deps/qarm_constitutional-4aba62a2c76d0b03)
+
+running 27 tests
+test integration_tests::test_all_initial_states_satisfy_invariants ... ok
+test integration_tests::test_constitutional_parameters ... ok
+test integration_tests::test_initial_state_count_matches_tlc ... ok
+test qarm_glfsi::tests::test_initial_state_count ... ok
+test qarm_glfsi::tests::test_exploration_produces_states ... ok
+test qarm_glfsi::tests::test_signature_extraction ... ok
+test qarm_invariants::tests::test_domain_invariants ... ok
+test qarm_invariants::tests::test_bounds_invariant ... FAILED
+test qarm_invariants::tests::test_qdef_invariant ... ok
+test qarm_invariants::tests::test_tuple_closed_invariant ... ok
+test qarm_invariants::tests::test_invariants_on_initial_states ... ok
+test qarm_moves::tests::test_absorbing_failure ... ok
+test qarm_moves::tests::test_lambda_out_of_bounds ... ok
+test qarm_moves::tests::test_mu_success ... FAILED
+test qarm_moves::tests::test_lambda_success ... FAILED
+test qarm_moves::tests::test_sigma_fixed_q_violation ... ok
+test qarm_moves::tests::test_sigma_out_of_bounds ... ok
+test qarm_glfsi::tests::test_glfsi_theorem ... FAILED
+test qarm_moves::tests::test_sigma_success ... FAILED
+test qarm_state::tests::test_digital_root ... ok
+test qarm_state::tests::test_in_bounds ... FAILED
+test qarm_state::tests::test_initial_states_all_ok ... ok
+test qarm_state::tests::test_initial_states_count ... ok
+test qarm_state::tests::test_phi9_phi24 ... ok
+test qarm_state::tests::test_qdef_matches_spec ... ok
+test qarm_state::tests::test_qdef_range ... ok
+test qarm_state::tests::test_tuple_closed ... ok
+
+failures:
+
+---- qarm_invariants::tests::test_bounds_invariant stdout ----
+
+thread 'qarm_invariants::tests::test_bounds_invariant' (124855) panicked at src/qarm_invariants.rs:148:9:
+assertion failed: inv_in_bounds(&good)
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+
+---- qarm_moves::tests::test_mu_success stdout ----
+
+thread 'qarm_moves::tests::test_mu_success' (124863) panicked at src/qarm_moves.rs:258:9:
+assertion `left == right` failed
+  left: 1
+ right: 2
+
+---- qarm_moves::tests::test_lambda_success stdout ----
+
+thread 'qarm_moves::tests::test_lambda_success' (124862) panicked at src/qarm_moves.rs:281:9:
+assertion `left == right` failed
+  left: 1
+ right: 2
+
+---- qarm_glfsi::tests::test_glfsi_theorem stdout ----
+======================================================================
+GLFSI Theorem Verification (Rust)
+======================================================================
+
+Run 1: Exploring with full generator set {σ, μ, λ}...
+  Distinct states: 129
+  ✅ All invariants hold
+
+Run 2: Exploring with reduced generator set {σ, λ} (no μ)...
+  Distinct states: 122
+  ✅ All invariants hold
+
+======================================================================
+Per-Generator Failure Signatures
+======================================================================
+
+Generator σ:
+  OUT_OF_BOUNDS:      21 (full) vs  21 (no-μ)  ✅ INVARIANT
+  FIXED_Q_VIOLATION: 108 (full) vs 101 (no-μ)  ❌ CHANGED
+
+Generator λ:
+  OUT_OF_BOUNDS:     197 (full) vs 190 (no-μ)  ❌ CHANGED
+  FIXED_Q_VIOLATION:  55 (full) vs  50 (no-μ)  ❌ CHANGED
+
+Generator μ:
+  OUT_OF_BOUNDS:      40 (full) vs --- (absent)
+  FIXED_Q_VIOLATION:  74 (full) vs --- (absent)
+  Status: Generator removed from set (expected)
+
+======================================================================
+TLC Verification
+======================================================================
+
+❌ TLC verification FAILED:
+  - State count mismatch (full): expected 504, got 129
+  - State count mismatch (no-μ): expected 383, got 122
+  - σ FIXED_Q_VIOLATION mismatch: expected 100, got 108
+  - λ OUT_OF_BOUNDS mismatch: expected 105, got 197
+  - λ FIXED_Q_VIOLATION mismatch: expected 35, got 55
+
+
+thread 'qarm_glfsi::tests::test_glfsi_theorem' (124852) panicked at src/qarm_glfsi.rs:281:24:
+GLFSI theorem must hold: "TLC verification failed: 5 errors"
+
+---- qarm_moves::tests::test_sigma_success stdout ----
+
+thread 'qarm_moves::tests::test_sigma_success' (124866) panicked at src/qarm_moves.rs:188:9:
+assertion `left == right` failed
+  left: 0
+ right: 1
+
+---- qarm_state::tests::test_in_bounds stdout ----
+
+thread 'qarm_state::tests::test_in_bounds' (124868) panicked at src/qarm_state.rs:178:9:
+assertion failed: in_bounds(10, 10, 20, 30)
+
+
+failures:
+    qarm_glfsi::tests::test_glfsi_theorem
+    qarm_invariants::tests::test_bounds_invariant
+    qarm_moves::tests::test_lambda_success
+    qarm_moves::tests::test_mu_success
+    qarm_moves::tests::test_sigma_success
+    qarm_state::tests::test_in_bounds
+
+test result: FAILED. 21 passed; 6 failed; 0 ignored; 0 measured; 0 filtered out; finished in 0.00s
+
+error: test failed, to rerun pass `--lib`

@@ -1,0 +1,22 @@
+============================================================
+RULE 30 CENTER COLUMN WITNESS COMPUTATION SUMMARY
+============================================================
+
+PARAMETERS:
+  Rule: 30
+  Initial condition: single 1 at position 0
+  Time horizon: T_END = 16384
+  Period search: P_MAX = 1024
+  Window: [-16384, +16384]
+
+FILE HASHES:
+  witness_rule30_center_P1024_T16384.csv: 47c99fcc3edc45ac28ef3b15a296572a3e07a79c16c905fc1217d33783aef95b
+  witness_rule30_center_P1024_T16384.json: 572de7f23251f93bff6634b53f39fd1d795629ef3bef6bd17a4f60c6b9e54c21
+
+RESULTS:
+  Verified periods: 1024 / 1024
+  Failures: []
+
+SUCCESS: All periods verified as non-periodic.
+
+============================================================

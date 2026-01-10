@@ -1,0 +1,81 @@
+Subject: Bounded Non-Periodicity Certificate for Rule 30 Center Column
+
+Dear Wolfram Research Prize Committee,
+
+I am submitting a bounded non-periodicity result for the Rule 30 Elementary Cellular Automaton center column, with explicit counterexamples for all periods p ∈ [1, 1024] within time horizon T = 16384.
+
+CLAIM SCOPE:
+
+This submission provides a bounded certificate with explicit witnesses. I do NOT claim:
+- Unbounded or infinite non-periodicity
+- Asymptotic behavior beyond the stated parameters
+- Computational irreducibility
+- Any topological or complexity-theoretic properties
+
+WHAT IS PROVEN:
+
+For each period p in [1, 1024], there exists a concrete time index t ∈ [0, 16384-p] such that center(t) ≠ center(t+p), where center(t) denotes the value at position 0 at time t.
+
+VERIFICATION:
+
+All results are deterministically reproducible from:
+- Rule 30 truth table (standard ECA definition)
+- Initial condition: single 1 at position 0
+- Finite window evolution with light-cone correctness guarantee
+
+Complete witness data is provided with SHA256 hashes:
+- CSV witness table: 47c99fcc3edc45ac28ef3b15a296572a3e07a79c16c905fc1217d33783aef95b
+- JSON structured data: 572de7f23251f93bff6634b53f39fd1d795629ef3bef6bd17a4f60c6b9e54c21
+
+SUBMISSION ARTIFACTS:
+
+1. rule30_proof.md - Formal proof document with bounded claim statement
+2. rule30_certificate.json - Machine-readable certificate with parameters
+3. witness_rule30_center_P1024_T16384.csv - Explicit counterexamples (1024 entries)
+4. witness_rule30_center_P1024_T16384.json - Structured witness data
+5. center_rule30_T16384.txt - Complete center column sequence
+6. computation_summary.txt - Verification summary with hashes
+7. rule30_witness_generator.py - Complete implementation
+
+VERIFICATION NOTES:
+
+Each witness (p, t, center_t, center_t_plus_p) satisfies:
+- t + p ≤ 16384 (within bounds)
+- center_t ≠ center_t_plus_p (explicit inequality)
+- Values are deterministic from Rule 30 evolution
+
+Total verified periods: 1024/1024
+Failures: 0
+
+REPRODUCIBILITY:
+
+Any verifier can independently check this result by:
+1. Implementing Rule 30 with the standard truth table
+2. Evolving from single-1 initial condition
+3. Extracting center(t) for t = 0..16384
+4. Verifying each witness inequality
+
+RELATION TO PRIZE:
+
+This bounded result provides structural evidence aligned with the Rule 30 non-periodicity conjecture, but makes no claims beyond the explicitly stated parameters. The method is extensible to larger time horizons and period ranges if desired.
+
+I understand this is a bounded certificate rather than an unbounded proof. I am submitting it as formal obstruction evidence within a well-defined finite regime.
+
+All artifacts are attached. Please let me know if you need any clarification or additional verification.
+
+Sincerely,
+Will Dale
+
+---
+
+ATTACHMENT MANIFEST:
+- rule30_proof.md (formal proof document)
+- rule30_certificate.json (machine-readable certificate)
+- witness_rule30_center_P1024_T16384.csv (witness table, 10KB)
+- witness_rule30_center_P1024_T16384.json (structured data, 92KB)
+- center_rule30_T16384.txt (center sequence, 33KB)
+- computation_summary.txt (verification summary)
+- rule30_witness_generator.py (source code)
+
+Total package size: ~150KB
+SHA256 verification hashes included in certificate and summary files.

@@ -1,0 +1,137 @@
+Subject: Rule 30 Follow-Up: Spatial Obstruction Certificate (Cone-Dependency)
+
+Dear Wolfram Research Team,
+
+This is a follow-up to my previous submission regarding Rule 30 center column bounded non-periodicity (periods p ∈ [1, 1024], time horizon T = 16384).
+
+That submission provided **temporal obstruction certificates** — explicit witnesses showing no periodic behavior exists within the tested regime.
+
+I am writing to propose a **complementary spatial obstruction certificate** using a different methodology that addresses a distinct aspect of computational irreducibility.
+
+---
+
+## Proposed Second Certificate: Cone-Dependency Witness
+
+**Claim Scope (Bounded):**
+
+For Rule 30 center column evolution under single-1 initial condition, I propose to demonstrate that:
+
+For selected time indices t ∈ {64, 128, 256, 512, 1024, 2048, 4096, 8192}, the value center(t) provably depends on information from the boundary of the light cone.
+
+Specifically, for each t, I will provide explicit demonstration that flipping any initial-condition cell at position ±t (the cone boundary) changes center(t).
+
+**What This Shows:**
+
+- **No local shortcuts:** center(t) cannot be computed from a radius < t
+- **Maximal cone dependency:** Full light cone participation required
+- **Distinct from periodicity:** Spatial complexity orthogonal to temporal structure
+
+**What This Does NOT Claim:**
+
+- Universal computation properties
+- Asymptotic behavior beyond tested time indices
+- General irreducibility (still bounded to specified t values)
+
+---
+
+## Methodology: Perturbation Witness
+
+For each time t:
+
+1. Compute center(t) under standard initial condition (single 1 at position 0)
+2. For each boundary position b ∈ {-t, +t}:
+   - Flip initial condition at position b
+   - Re-evolve to time t
+   - Record whether center(t) changed
+3. Certificate succeeds if center(t) changes for at least one boundary flip
+
+**Witness Format:**
+
+```json
+{
+  "time": t,
+  "center_baseline": 0 or 1,
+  "boundary_position": b,
+  "center_perturbed": 0 or 1,
+  "dependency_confirmed": true
+}
+```
+
+**Computational Cost:** O(t) per time index, tractable for t ≤ 8192
+
+---
+
+## Relation to Previous Submission
+
+These two certificates form a **two-axis obstruction profile**:
+
+| Axis | Certificate Type | Status |
+|------|------------------|--------|
+| **Temporal** | Bounded cycle impossibility | ✅ Submitted |
+| **Spatial** | Cone-dependency witness | 🔜 Proposed |
+
+Both provide **explicit, verifiable evidence** aligned with the computational irreducibility conjecture, but neither claims global or infinite properties.
+
+---
+
+## Timeline and Deliverables
+
+If this approach is of interest, I can generate:
+
+1. Complete cone-dependency witness data for t ∈ {64, 128, ..., 8192}
+2. Formal proof document with conservative bounded claims
+3. Machine-readable certificate JSON
+4. Source code for independent verification
+5. SHA256 hashes for all witness files
+
+**Estimated completion:** 1-2 weeks from approval
+
+---
+
+## Rationale for Follow-Up Submission
+
+I am proposing this as a **separate certificate** rather than extending the first submission because:
+
+- **Different methodology:** Perturbation analysis vs. sequence enumeration
+- **Orthogonal claim:** Spatial dependency vs. temporal non-periodicity
+- **Independent verification:** Each stands alone
+- **Modular approach:** Additional axes can be added incrementally
+
+This aligns with the strategy of providing **explicit, bounded, verifiable evidence** rather than attempting global proofs.
+
+---
+
+## Question for Wolfram Research
+
+Before proceeding with full computation, I would appreciate guidance on:
+
+1. **Is this orthogonal approach of interest** for the Rule 30 prize?
+2. **Should I target specific time indices** or a different range?
+3. **Would you prefer** this integrated with the first submission or kept separate?
+
+I remain committed to conservative, explicitly bounded claims with full reproducibility.
+
+Thank you for considering this follow-up proposal.
+
+---
+
+**Attachments from Previous Submission** (for reference):
+- rule30_submission_package.tar.gz (21KB)
+- Contains: proof, certificate, witness data, source code
+
+**Proposed Deliverables** (upon approval):
+- cone_dependency_certificate.json
+- cone_dependency_witnesses.csv
+- cone_dependency_proof.md
+- perturbation_witness_generator.py
+
+---
+
+Sincerely,
+Will Dale
+
+[Contact Information]
+
+---
+
+**Note:** This follow-up is entirely optional. The original submission stands independently and makes no reference to cone-dependency analysis. This is simply a natural extension using the same witness-based methodology.

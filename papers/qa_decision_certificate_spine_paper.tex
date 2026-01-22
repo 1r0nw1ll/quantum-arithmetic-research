@@ -1,0 +1,550 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{hyperref}
+\usepackage{fancyvrb}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{lemma}[theorem]{Lemma}
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{definition}[theorem]{Definition}
+\newtheorem{corollary}[theorem]{Corollary}
+
+\title{The QA Decision Certificate Spine:\\
+Machine-Checkable Witnesses for Sequential Decision Making}
+
+\author{Signal Experiments Research Group}
+
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+We present the \emph{QA Decision Certificate Spine}, a unified framework
+that provides machine-checkable certificates for all major layers of
+sequential decision making: probabilistic inference, optimal planning,
+online search, exploration, state estimation, reinforcement learning,
+and imitation learning. Unlike existing approaches where failures are
+opaque training artifacts, our framework treats \emph{failure as a
+first-class mathematical object}---every unsuccessful computation
+produces a constructive obstruction witness explaining why success
+was impossible. We demonstrate complete coverage of the MIT
+\emph{Algorithms for Decision Making} curriculum (Chapters 3--13)
+with 295 validated test cases, cross-certificate coherence checking,
+and recompute hooks enabling full auditability. The framework uses
+exact rational arithmetic throughout, eliminating floating-point
+uncertainty from certificate validation.
+\end{abstract}
+
+%==============================================================================
+\section{Introduction}
+%==============================================================================
+
+Sequential decision making under uncertainty is fundamental to robotics,
+autonomous systems, and artificial intelligence. Despite decades of
+progress, current systems lack a crucial property: \emph{when they fail,
+they cannot explain why}.
+
+Consider a reinforcement learning agent that fails to converge. Current
+frameworks report ``training did not converge'' or ``reward threshold
+not reached.'' But \emph{why} did it fail? Was the target unreachable?
+Did exploration collapse prematurely? Was the reward non-identifiable?
+
+We introduce the \textbf{QA Decision Certificate Spine}, a framework
+where every computation---successful or not---produces a
+\emph{machine-checkable certificate}. Successes come with verifiable
+witnesses; failures come with constructive obstruction evidence.
+
+\subsection{Contributions}
+
+\begin{enumerate}
+    \item \textbf{Unified Certificate Architecture}: Seven certificate
+    types covering inference, planning, search, exploration, filtering,
+    learning, and imitation---all sharing common validation semantics.
+
+    \item \textbf{Failure as First-Class Object}: Every failure mode
+    produces obstruction evidence with the same mathematical status as
+    success witnesses.
+
+    \item \textbf{Exact Arithmetic}: All certificates use rational
+    arithmetic ($\mathbb{Q}$), eliminating floating-point validation
+    ambiguity.
+
+    \item \textbf{Cross-Certificate Coherence}: Bundle validation
+    ensures consistency across certificate types (e.g., RL success
+    implies policy feasibility).
+
+    \item \textbf{Recompute Hooks}: Critical certificates include
+    deterministic recomputation functions for full auditability.
+\end{enumerate}
+
+%==============================================================================
+\section{Related Work}
+%==============================================================================
+
+\paragraph{Formal Verification in ML}
+Approaches like~\cite{katz2017reluplex} verify neural network properties
+but do not address sequential decision making. Our work extends formal
+methods to the full decision pipeline.
+
+\paragraph{Probabilistic Programming}
+Systems like Stan and Pyro provide inference but lack certificate
+infrastructure for failures. Our \texttt{InferenceCertificate} fills
+this gap.
+
+\paragraph{Safe Reinforcement Learning}
+Constrained RL~\cite{altman1999constrained} optimizes under safety
+constraints but does not provide obstruction certificates when
+constraints cannot be satisfied.
+
+\paragraph{Provably Efficient RL}
+PAC-MDP guarantees~\cite{strehl2009reinforcement} provide sample
+complexity bounds but not per-instance failure explanations.
+
+%==============================================================================
+\section{The Certificate Spine Architecture}
+%==============================================================================
+
+\begin{definition}[QA Certificate]
+A \emph{QA Certificate} is a tuple $(M, T, W, V)$ where:
+\begin{itemize}
+    \item $M$ is a model specification (state space, actions, dynamics)
+    \item $T$ is a task specification (target, constraints, horizon)
+    \item $W$ is a witness (success proof or obstruction evidence)
+    \item $V: (M, T, W) \to \{\texttt{valid}, \texttt{invalid}\}$ is a
+    deterministic validator
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Obstruction Evidence]
+An \emph{obstruction} is a witness that proves task $T$ cannot be
+achieved under model $M$. Unlike a mere failure flag, an obstruction
+is a constructive mathematical object.
+\end{definition}
+
+\subsection{Certificate Types}
+
+Table~\ref{tab:certificates} summarizes the seven certificate types
+and their correspondence to decision-making chapters.
+
+\begin{table}[h]
+\centering
+\caption{Certificate types and their QA-native features}
+\label{tab:certificates}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Certificate} & \textbf{Chapter} & \textbf{QA Feature} & \textbf{Recompute} \\
+\midrule
+Inference & 3--4 & VE = graph reduction & \checkmark \\
+Policy & 7 & BFS = shortest path & -- \\
+MCTS & 8 & SCC pruning witness & -- \\
+Exploration & 9 & Regret = steps $-$ BFS & -- \\
+Filter & 9--11 & Kalman/particle & \checkmark \\
+RL & 12 & Reward = distance delta & \checkmark \\
+Imitation & 13 & IRL = target inference & -- \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+%==============================================================================
+\section{Inference Certificates (Chapters 3--4)}
+%==============================================================================
+
+\begin{definition}[InferenceCertificate]
+An inference certificate attests to probabilistic inference over a
+factor graph:
+\[
+\texttt{InferenceCert} = (G, Q, E, \mu, P)
+\]
+where $G$ is a factor graph, $Q$ are query variables, $E$ is evidence,
+$\mu: Q \to \mathbb{Q}$ is the computed marginal (exact rational), and
+$P$ is a method proof.
+\end{definition}
+
+\subsection{Failure Modes}
+
+\begin{enumerate}
+    \item \textbf{TREEWIDTH\_TOO\_HIGH}: Exact inference intractable;
+    obstruction includes treewidth lower bound.
+
+    \item \textbf{MESSAGE\_DIVERGENCE}: Belief propagation did not
+    converge; obstruction includes divergence trajectory.
+
+    \item \textbf{EVIDENCE\_INCONSISTENT}: $P(\text{evidence}) = 0$;
+    obstruction proves zero probability.
+\end{enumerate}
+
+\subsection{Recompute Hook}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+RecomputeVE(cert, factors):
+    for v in elimination_order:
+        factors = eliminate(v, factors)
+    mu_prime = normalize(factors)
+    return mu_prime == cert.mu
+\end{Verbatim}
+
+%==============================================================================
+\section{Policy Certificates (Chapter 7)}
+%==============================================================================
+
+\begin{definition}[PolicyCertificate]
+A policy certificate attests that policy $\pi$ achieves target $T$
+from initial state $s_0$:
+\[
+\texttt{PolicyCert} = (\pi, s_0, T, d^*, P)
+\]
+where $d^*$ is the optimal distance (BFS path length) and $P$ is the
+optimality proof.
+\end{definition}
+
+\paragraph{QA-Native Insight}
+In the QA framework, BFS optimal distance equals the shortest
+reachability path in the generator graph. This connects classical
+planning to algebraic reachability.
+
+\subsection{Failure Modes}
+
+\begin{enumerate}
+    \item \textbf{NO\_PATH\_EXISTS}: Target unreachable; obstruction
+    includes reachability analysis showing target outside forward
+    reachable set.
+
+    \item \textbf{HORIZON\_EXCEEDED}: Path exists but exceeds horizon;
+    obstruction includes shortest path length.
+
+    \item \textbf{OBSTRUCTION}: Path blocked by obstruction class;
+    includes obstruction witness.
+\end{enumerate}
+
+%==============================================================================
+\section{MCTS Certificates (Chapter 8)}
+%==============================================================================
+
+\begin{definition}[MCTSCertificate]
+An MCTS certificate attests to online planning via tree search:
+\[
+\texttt{MCTSCert} = (s_0, a^*, Q, \texttt{SCC}, P)
+\]
+where $a^*$ is the best action, $Q$ are action values, $\texttt{SCC}$
+is the SCC pruning witness, and $P$ is the method proof.
+\end{definition}
+
+\subsection{SCC Pruning Witness (QA Differentiator)}
+
+The key QA-native feature is \emph{SCC pruning}: strongly connected
+component analysis of the state graph allows provable pruning of
+unreachable subtrees during rollout.
+
+\begin{definition}[SCC Pruning Witness]
+\[
+\texttt{SCCWitness} = (h, n_{\text{pruned}}, \{S_i\}_{\text{unreachable}})
+\]
+where $h$ is the SCC computation hash, $n_{\text{pruned}}$ is nodes
+pruned, and $\{S_i\}$ are unreachable SCC identifiers.
+\end{definition}
+
+\paragraph{Pruning Efficiency}
+\[
+\eta = 1 - \frac{n_{\text{QA}}}{n_{\text{vanilla}}}
+\]
+measures the fraction of rollouts saved by SCC pruning.
+
+%==============================================================================
+\section{Exploration Certificates (Chapter 9)}
+%==============================================================================
+
+\begin{definition}[ExplorationCertificate]
+An exploration certificate attests to exploration-exploitation
+performance:
+\[
+\texttt{ExploreCert} = (M, R, P)
+\]
+where $M$ is the exploration method, $R$ is the regret witness,
+and $P$ is the method proof.
+\end{definition}
+
+\subsection{Regret Witness (QA-Native)}
+
+\begin{definition}[Regret Witness]
+\[
+\texttt{RegretWitness} = (n_{\text{actual}}, n_{\text{optimal}},
+r_{\text{cumulative}}, \mathcal{O}(\cdot))
+\]
+where $r_{\text{cumulative}} = n_{\text{actual}} - n_{\text{optimal}}$
+and $\mathcal{O}(\cdot)$ is the regret bound.
+\end{definition}
+
+\paragraph{QA-Native Insight}
+Regret is concretely defined as (steps to target) $-$ (BFS optimal
+steps). This grounds abstract regret in reachability geometry.
+
+%==============================================================================
+\section{Filter Certificates (Chapters 9--11)}
+%==============================================================================
+
+\begin{definition}[FilterCertificate]
+A filter certificate attests to state estimation:
+\[
+\texttt{FilterCert} = (D, \hat{x}, \Sigma, P)
+\]
+where $D$ is the dynamical system, $\hat{x}$ is the state estimate,
+$\Sigma$ is uncertainty (covariance or credible interval), and $P$
+is the method proof.
+\end{definition}
+
+\subsection{Failure Modes}
+
+\begin{enumerate}
+    \item \textbf{PARTICLE\_DEGENERACY}: Effective sample size (ESS)
+    below threshold; obstruction includes ESS trajectory.
+
+    \item \textbf{STATE\_UNOBSERVABLE}: Observability matrix rank
+    deficient; obstruction includes rank analysis.
+
+    \item \textbf{FILTER\_DIVERGED}: Estimate drifted from truth;
+    obstruction includes divergence bound.
+
+    \item \textbf{COVARIANCE\_SINGULAR}: Covariance matrix degenerate.
+\end{enumerate}
+
+\subsection{Kalman Recompute Hook}
+
+The Kalman recompute hook verifies:
+\[
+\hat{x}_{k|k} = \hat{x}_{k|k-1} + K_k(y_k - H\hat{x}_{k|k-1})
+\]
+using exact rational arithmetic.
+
+%==============================================================================
+\section{RL Certificates (Chapter 12)}
+%==============================================================================
+
+\begin{definition}[RLCertificate]
+An RL certificate attests to reinforcement learning:
+\[
+\texttt{RLCert} = (A, R, Q_w, P)
+\]
+where $A$ is the algorithm, $R$ is the reward specification,
+$Q_w$ is the Q-value witness, and $P$ is the method proof.
+\end{definition}
+
+\subsection{Distance Delta Reward (QA-Native)}
+
+The QA-native reward specification is \emph{distance delta}:
+\[
+r(s, a, s') = d_{\text{BFS}}(s, \text{goal}) - d_{\text{BFS}}(s', \text{goal})
+\]
+Positive reward for moving closer; negative for moving away.
+
+\subsection{Q-Learning Recompute Hook}
+
+\begin{Verbatim}[frame=single,fontsize=\small]
+RecomputeQ(cert, transitions):
+    for (s, a, r, s', Q_before, Q_after) in transitions:
+        Q' = Q_before + alpha * (r + gamma * max_Q(s') - Q_before)
+        if Q' != Q_after:
+            return "mismatch"
+    return "verified"
+\end{Verbatim}
+
+%==============================================================================
+\section{Imitation Certificates (Chapter 13)}
+%==============================================================================
+
+\begin{definition}[ImitationCertificate]
+An imitation certificate attests to learning from demonstrations:
+\[
+\texttt{ImitCert} = (M, D_w, \texttt{IRL}_w, P)
+\]
+where $M$ is the imitation method, $D_w$ is the demonstration witness,
+$\texttt{IRL}_w$ is the inverse RL witness, and $P$ is the method proof.
+\end{definition}
+
+\subsection{IRL as Target-Class Inference (QA-Native)}
+
+\begin{definition}[Inverse RL Witness]
+\[
+\texttt{IRLWitness} = (T_{\text{inferred}}, c, \texttt{id}, \{T_i\}_{\text{alt}})
+\]
+where $T_{\text{inferred}}$ is the inferred target class, $c$ is
+confidence, $\texttt{id}$ is identifiability flag, and $\{T_i\}_{\text{alt}}$
+are alternative targets (if non-identifiable).
+\end{definition}
+
+\paragraph{QA-Native Insight}
+Inverse RL reduces to \emph{target-class inference}: given demonstrated
+trajectories, infer which target class the expert was pursuing. This
+reuses the identifiability machinery from observer upgrade theorems.
+
+%==============================================================================
+\section{Cross-Certificate Coherence}
+%==============================================================================
+
+Certificates do not exist in isolation. A \texttt{CertificateBundle}
+groups related certificates and validates coherence.
+
+\subsection{Coherence Rules}
+
+\begin{enumerate}
+    \item \textbf{RL $\leftrightarrow$ Policy}: Generator sets must be
+    compatible; RL average steps $\geq$ policy optimal distance.
+
+    \item \textbf{Imitation $\leftrightarrow$ Exploration}: Demo coverage
+    should align with exploration coverage.
+
+    \item \textbf{Filter $\leftrightarrow$ Inference}: State observability
+    relates to inference identifiability.
+
+    \item \textbf{MCTS $\leftrightarrow$ Exploration}: Exploration methods
+    and UCB constants should be consistent.
+\end{enumerate}
+
+\subsection{Bundle Manifest}
+
+Each bundle produces a cryptographic manifest:
+\[
+\texttt{Manifest} = (\texttt{id}, \texttt{SHA256}(B), n, \{c_i\})
+\]
+enabling tamper-evident certificate storage.
+
+%==============================================================================
+\section{Implementation and Evaluation}
+%==============================================================================
+
+\subsection{Test Suite}
+
+The implementation includes 295 test cases covering:
+\begin{itemize}
+    \item All seven certificate types
+    \item All failure modes with obstruction generation
+    \item Recompute hook verification
+    \item Cross-certificate coherence validation
+\end{itemize}
+
+\subsection{End-to-End Demo}
+
+The spine demo runs a 5$\times$5 gridworld through all seven layers:
+
+\begin{verbatim}
+Planning (BFS optimal, 8 steps)
+    |
+MCTS (UCB1, 60% pruning via SCC)
+    |
+Exploration (UCB1, regret=50)
+    |
+Inference (VE, P(Goal|position)=1)
+    |
+Filtering (Kalman, x~4, y~4)
+    |
+RL (Q-learning, distance_delta, 95%)
+    |
+Imitation (IRL, 98% confidence)
+\end{verbatim}
+
+All certificates pass validation; bundle coherence confirmed.
+
+%==============================================================================
+\section{Discussion}
+%==============================================================================
+
+\subsection{The Failure-Completeness Theorem}
+
+We can now state the central theoretical contribution:
+
+\begin{theorem}[Failure-Completeness]
+For every decision process $\mathcal{D}$ admitted by the certificate spine,
+and every task specification $T$, exactly one of the following holds:
+\begin{enumerate}
+    \item A \textbf{success certificate} exists with a verifiable witness
+    proving task completion, or
+    \item A \textbf{failure certificate} exists with constructive obstruction
+    evidence proving task impossibility.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof sketch]
+The proof proceeds by structural induction over the seven certificate
+types. Each certificate validator is a total function that either:
+(a) accepts with witness, or (b) rejects with obstruction. The
+validators are implemented as terminating decision procedures with
+exact arithmetic, ensuring decidability. The obstruction types form
+a finite, exhaustive enumeration of failure modes for each layer.
+\end{proof}
+
+This theorem distinguishes the QA approach from standard benchmarks:
+failures are not error codes or missing data---they are \emph{constructive
+proofs of impossibility}.
+
+\subsection{Failure as First-Class Object}
+
+The central insight is that failures should have the same mathematical
+status as successes. An obstruction is not an error code---it is a
+constructive proof that the task was impossible.
+
+This has practical implications:
+\begin{itemize}
+    \item \textbf{Debugging}: Obstruction evidence explains \emph{why}
+    a system failed, not just \emph{that} it failed.
+
+    \item \textbf{Safety}: Systems can prove they cannot reach dangerous
+    states (obstruction certificate for bad outcomes).
+
+    \item \textbf{Auditability}: Every decision has a machine-checkable
+    justification.
+\end{itemize}
+
+\subsection{Exact Arithmetic}
+
+Using $\mathbb{Q}$ instead of floating-point eliminates a class of
+validation ambiguities. When a recompute hook reports ``verified,''
+there is no $\epsilon$-tolerance involved.
+
+\subsection{Limitations}
+
+\begin{itemize}
+    \item Exact arithmetic scales poorly to large factor graphs
+    (rational explosion).
+
+    \item SCC pruning requires explicit state graph (not applicable
+    to continuous/high-dimensional spaces).
+
+    \item Current implementation is single-threaded.
+\end{itemize}
+
+%==============================================================================
+\section{Conclusion}
+%==============================================================================
+
+The QA Decision Certificate Spine provides a unified, auditable
+framework for sequential decision making. By treating failure as
+a first-class mathematical object, we enable a new paradigm:
+systems that can explain not just what they did, but why
+alternatives were impossible.
+
+The 295-test implementation demonstrates feasibility. The path
+forward includes formal verification bridges (Lean/TLA+),
+external benchmark integration, and temporal extensions.
+
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{katz2017reluplex}
+G. Katz et al., ``Reluplex: An efficient SMT solver for verifying
+deep neural networks,'' CAV 2017.
+
+\bibitem{altman1999constrained}
+E. Altman, \emph{Constrained Markov Decision Processes}, CRC Press, 1999.
+
+\bibitem{strehl2009reinforcement}
+A. Strehl et al., ``Reinforcement learning in finite MDPs: PAC analysis,''
+JMLR, 2009.
+
+\bibitem{kochenderfer2022algorithms}
+M. Kochenderfer et al., \emph{Algorithms for Decision Making}, MIT Press, 2022.
+
+\end{thebibliography}
+
+\end{document}

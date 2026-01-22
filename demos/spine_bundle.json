@@ -1,0 +1,367 @@
+{
+  "manifest": {
+    "bundle_id": "gridworld_5x5_full_spine",
+    "description": "End-to-end QA decision stack for 5x5 gridworld",
+    "environment_id": "gridworld_5x5",
+    "target_class": "goal_cell_(4,4)",
+    "bundle_hash": "sha256:7279dca318aa1fa2",
+    "certificate_counts": {
+      "policy": 1,
+      "exploration": 1,
+      "rl": 1,
+      "imitation": 1,
+      "mcts": 1,
+      "filter": 1,
+      "inference": 1
+    },
+    "total_certificates": 7
+  },
+  "coherence": {
+    "valid": true,
+    "checks": 7,
+    "violations": [],
+    "warnings": [
+      "COHERENCE_CHECKED: 7 cross-reference checks performed"
+    ]
+  },
+  "certificates": {
+    "policy": [
+      {
+        "schema": "qa_policy_cert/v1",
+        "policy_id": "bfs_optimal_5x5",
+        "policy_type": "bfs_optimal",
+        "valid": true,
+        "policy_description": "BFS-optimal policy for 5x5 gridworld",
+        "task": {
+          "target_class": "goal_cell_(4,4)",
+          "start_class": "start_cell_(0,0)",
+          "horizon": 50,
+          "generators": [
+            "GRID:up",
+            "GRID:down",
+            "GRID:left",
+            "GRID:right"
+          ]
+        },
+        "evaluation": {
+          "n_episodes": 100,
+          "successes": 100,
+          "success_rate": "1",
+          "avg_steps": "8",
+          "avg_oracle_calls": "0"
+        },
+        "guarantees": {
+          "reachability": true,
+          "optimality": true
+        },
+        "training_witness": {
+          "invariant_name": "bfs_shortest_path",
+          "derivation_operator": "bfs_search",
+          "input_data": {
+            "grid_size": 5,
+            "start": "(0,0)",
+            "goal": "(4,4)"
+          },
+          "output_value": "1",
+          "verifiable": true
+        }
+      }
+    ],
+    "mcts": [
+      {
+        "schema": "qa_mcts_cert/v1",
+        "model_id": "gridworld_5x5_with_trap",
+        "valid": true,
+        "root_state": "(0,0)",
+        "target_class": "SCC_1",
+        "planning": {
+          "success": true,
+          "best_action": "right",
+          "expected_return": "23/25",
+          "action_values": {
+            "up": "9/20",
+            "down": "3/10",
+            "left": "0",
+            "right": "23/25"
+          }
+        },
+        "method_proof": {
+          "exploration_rule": "ucb1",
+          "backup_operator": "mean",
+          "rollout_policy": "uniform_random",
+          "n_rollouts": 200,
+          "max_depth": 20,
+          "nodes_expanded": 150,
+          "verifiable": true,
+          "exploration_constant": "7071/5000",
+          "random_seed": 42
+        },
+        "scc_pruning_witness": {
+          "scc_computation_hash": "sha256:scc_5x5_trap",
+          "nodes_pruned": 75,
+          "unreachable_scc_ids": [
+            2
+          ],
+          "verifiable": true,
+          "target_scc_id": 1
+        },
+        "comparison": {
+          "vanilla_mcts_rollouts": 500,
+          "qa_mcts_rollouts": 200,
+          "pruning_efficiency": "3/5"
+        }
+      }
+    ],
+    "exploration": [
+      {
+        "schema": "qa_exploration_cert/v1",
+        "model_id": "gridworld_5x5_ucb",
+        "valid": true,
+        "target_class": "goal_cell_(4,4)",
+        "exploration": {
+          "success": true,
+          "target_reached": true
+        },
+        "regret": {
+          "actual_steps": 850,
+          "optimal_steps": 800,
+          "cumulative_regret": 50,
+          "verifiable": true,
+          "bound": "O(sqrt(T * log(T)))"
+        },
+        "method_proof": {
+          "method": "ucb1",
+          "uncertainty_measure": "visit_count",
+          "total_episodes": 100,
+          "total_steps": 850,
+          "unique_states_visited": 25,
+          "verifiable": true,
+          "exploration_constant": "7071/5000"
+        }
+      }
+    ],
+    "inference": [
+      {
+        "schema": "qa_inference_cert/v1",
+        "model_id": "gridworld_position_belief",
+        "valid": true,
+        "model": {
+          "variables": [
+            "X",
+            "Y",
+            "Goal"
+          ],
+          "variable_domains": {
+            "X": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "Y": [
+              "0",
+              "1",
+              "2",
+              "3",
+              "4"
+            ],
+            "Goal": [
+              "reached",
+              "not_reached"
+            ]
+          },
+          "factors": [
+            {
+              "factor_id": "P_X",
+              "scope": [
+                "X"
+              ],
+              "factor_type": "prior"
+            },
+            {
+              "factor_id": "P_Y",
+              "scope": [
+                "Y"
+              ],
+              "factor_type": "prior"
+            },
+            {
+              "factor_id": "P_Goal_XY",
+              "scope": [
+                "Goal",
+                "X",
+                "Y"
+              ],
+              "factor_type": "conditional"
+            }
+          ],
+          "is_tree": false
+        },
+        "query": {
+          "variables": [
+            "Goal"
+          ],
+          "evidence": {
+            "X": "4",
+            "Y": "4"
+          }
+        },
+        "inference": {
+          "success": true,
+          "exact": true,
+          "marginal": {
+            "reached": "1",
+            "not_reached": "0"
+          }
+        },
+        "method_proof": {
+          "method": "variable_elimination",
+          "verifiable": true,
+          "elimination_order": [
+            "X",
+            "Y"
+          ]
+        },
+        "inference_witness": {
+          "invariant_name": "marginal_probability",
+          "derivation_operator": "variable_elimination",
+          "input_data": {
+            "query": [
+              "Goal"
+            ],
+            "evidence": {
+              "X": "4",
+              "Y": "4"
+            },
+            "elimination_order": [
+              "X",
+              "Y"
+            ]
+          },
+          "output_value": "1",
+          "verifiable": true
+        }
+      }
+    ],
+    "filter": [
+      {
+        "schema": "qa_filter_cert/v1",
+        "model_id": "gridworld_position_tracker",
+        "valid": true,
+        "model": {
+          "state_dimension": 4,
+          "observation_dimension": 2,
+          "linear_system": true,
+          "gaussian_noise": true,
+          "state_names": [
+            "x",
+            "y",
+            "vx",
+            "vy"
+          ]
+        },
+        "task": {
+          "n_observations": 50
+        },
+        "estimation": {
+          "success": true,
+          "state": {
+            "x": "39/10",
+            "y": "41/10",
+            "vx": "1/10",
+            "vy": "1/10"
+          },
+          "uncertainty": {
+            "covariance_trace": "1/5"
+          }
+        },
+        "method_proof": {
+          "method": "kalman",
+          "verifiable": true,
+          "n_timesteps": 50,
+          "covariance_trace": "1/5"
+        },
+        "estimation_witness": {
+          "invariant_name": "kalman_estimate",
+          "derivation_operator": "kalman_filter",
+          "input_data": {
+            "n_observations": 50,
+            "state_dimension": 4
+          },
+          "output_value": "1",
+          "verifiable": true
+        }
+      }
+    ],
+    "rl": [
+      {
+        "schema": "qa_rl_cert/v1",
+        "model_id": "gridworld_5x5_qlearning",
+        "valid": true,
+        "target_class": "goal_cell_(4,4)",
+        "generator_set": [
+          "up",
+          "down",
+          "left",
+          "right"
+        ],
+        "training": {
+          "success": true,
+          "final_performance": "19/20"
+        },
+        "method_proof": {
+          "algorithm": "q_learning",
+          "reward_spec": "distance_delta",
+          "total_episodes": 500,
+          "total_steps": 4500,
+          "converged": true,
+          "verifiable": true,
+          "learning_rate": "1/10",
+          "discount_factor": "99/100",
+          "exploration_method": "epsilon_greedy"
+        },
+        "q_value_witness": {
+          "n_sample_transitions": 2,
+          "verifiable": true
+        }
+      }
+    ],
+    "imitation": [
+      {
+        "schema": "qa_imitation_cert/v1",
+        "model_id": "gridworld_5x5_irl",
+        "valid": true,
+        "learning": {
+          "success": true,
+          "inferred_target_class": "goal_cell_(4,4)"
+        },
+        "method_proof": {
+          "method": "inverse_rl",
+          "total_epochs": 100,
+          "verifiable": true
+        },
+        "demonstration_witness": {
+          "n_trajectories": 50,
+          "n_state_action_pairs": 400,
+          "dataset_hash": "sha256:expert_demos_5x5"
+        },
+        "inverse_rl_witness": {
+          "inferred_target_class": "goal_cell_(4,4)",
+          "confidence": "49/50",
+          "identifiable": true
+        }
+      }
+    ]
+  },
+  "key_insights": [
+    "PolicyCertificate: BFS-optimal = shortest reachability path",
+    "MCTSCertificate: SCC pruning = certified topological obstruction",
+    "ExplorationCertificate: Regret = steps - BFS optimal (reachability)",
+    "InferenceCertificate: VE = graph reduction operators",
+    "FilterCertificate: Kalman = optimal linear Gaussian estimation",
+    "RLCertificate: Q-learning with distance_delta = reachability learning",
+    "ImitationCertificate: IRL = target-class inference (identifiable)",
+    "All certificates are exact (Fraction arithmetic), deterministic, serializable"
+  ]
+}

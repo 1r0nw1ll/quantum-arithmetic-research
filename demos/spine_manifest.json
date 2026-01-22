@@ -1,0 +1,17 @@
+{
+  "bundle_id": "gridworld_5x5_full_spine",
+  "description": "End-to-end QA decision stack for 5x5 gridworld",
+  "environment_id": "gridworld_5x5",
+  "target_class": "goal_cell_(4,4)",
+  "bundle_hash": "sha256:7279dca318aa1fa2",
+  "certificate_counts": {
+    "policy": 1,
+    "exploration": 1,
+    "rl": 1,
+    "imitation": 1,
+    "mcts": 1,
+    "filter": 1,
+    "inference": 1
+  },
+  "total_certificates": 7
+}

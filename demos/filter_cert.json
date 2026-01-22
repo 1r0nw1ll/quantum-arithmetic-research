@@ -1,0 +1,254 @@
+{
+  "demo": "filter_demo",
+  "description": "QA-native state estimation certificates",
+  "reference": "MIT Algorithms for Decision Making, Chapters 9-11",
+  "scenarios": {
+    "kalman_tracking": {
+      "schema": "qa_filter_cert/v1",
+      "model_id": "constant_velocity_1d",
+      "valid": true,
+      "model": {
+        "state_dimension": 2,
+        "observation_dimension": 1,
+        "linear_system": true,
+        "gaussian_noise": true,
+        "state_names": [
+          "position",
+          "velocity"
+        ]
+      },
+      "task": {
+        "n_observations": 100
+      },
+      "estimation": {
+        "success": true,
+        "state": {
+          "position": "105",
+          "velocity": "21/10"
+        },
+        "uncertainty": {
+          "covariance_trace": "3/2"
+        }
+      },
+      "method_proof": {
+        "method": "kalman",
+        "verifiable": true,
+        "n_timesteps": 100,
+        "covariance_trace": "3/2"
+      },
+      "estimation_witness": {
+        "invariant_name": "kalman_estimate",
+        "derivation_operator": "kalman_filter",
+        "input_data": {
+          "n_observations": 100,
+          "state_dimension": 2
+        },
+        "output_value": "1",
+        "verifiable": true
+      }
+    },
+    "particle_localization": {
+      "schema": "qa_filter_cert/v1",
+      "model_id": "robot_localization",
+      "valid": true,
+      "model": {
+        "state_dimension": 3,
+        "observation_dimension": 2,
+        "linear_system": false,
+        "gaussian_noise": false,
+        "state_names": [
+          "x",
+          "y",
+          "theta"
+        ]
+      },
+      "task": {
+        "n_observations": 50
+      },
+      "estimation": {
+        "success": true,
+        "state": {
+          "x": "49/2",
+          "y": "183/10",
+          "theta": "157/100"
+        },
+        "uncertainty": {
+          "credible_interval_width": "3/2"
+        }
+      },
+      "method_proof": {
+        "method": "particle",
+        "verifiable": true,
+        "n_timesteps": 50,
+        "n_particles": 1000,
+        "resampling_method": "systematic",
+        "effective_sample_size": "750",
+        "n_resamples": 8
+      },
+      "estimation_witness": {
+        "invariant_name": "particle_estimate",
+        "derivation_operator": "particle_filter",
+        "input_data": {
+          "n_observations": 50,
+          "n_particles": 1000,
+          "n_resamples": 8
+        },
+        "output_value": "1",
+        "verifiable": true
+      }
+    },
+    "particle_degeneracy_failure": {
+      "schema": "qa_filter_cert/v1",
+      "model_id": "high_noise_tracking",
+      "valid": true,
+      "model_description": "Tracking with severe observation noise",
+      "model": {
+        "state_dimension": 3,
+        "observation_dimension": 1,
+        "linear_system": false,
+        "gaussian_noise": false,
+        "state_names": [
+          "x",
+          "y",
+          "z"
+        ]
+      },
+      "task": {
+        "n_observations": 30
+      },
+      "estimation": {
+        "success": false
+      },
+      "method_proof": {
+        "method": "particle",
+        "verifiable": true,
+        "n_timesteps": 30,
+        "n_particles": 500,
+        "resampling_method": "multinomial",
+        "effective_sample_size": "8",
+        "n_resamples": 25
+      },
+      "failure_mode": "particle_degeneracy",
+      "obstruction": {
+        "fail_type": "particle_degeneracy",
+        "ess": "8",
+        "n_particles": 500
+      }
+    },
+    "state_unobservable_failure": {
+      "schema": "qa_filter_cert/v1",
+      "model_id": "partial_observability",
+      "valid": true,
+      "model_description": "4D state with only position measurements",
+      "model": {
+        "state_dimension": 4,
+        "observation_dimension": 2,
+        "linear_system": true,
+        "gaussian_noise": true,
+        "state_names": [
+          "x",
+          "vx",
+          "y",
+          "vy"
+        ]
+      },
+      "task": {
+        "n_observations": 50
+      },
+      "estimation": {
+        "success": false
+      },
+      "failure_mode": "state_unobservable",
+      "obstruction": {
+        "fail_type": "state_unobservable",
+        "observability_rank": 2,
+        "state_dimension": 4
+      }
+    },
+    "filter_diverged_failure": {
+      "schema": "qa_filter_cert/v1",
+      "model_id": "misspecified_dynamics",
+      "valid": true,
+      "model_description": "Filter with incorrect process model",
+      "model": {
+        "state_dimension": 2,
+        "observation_dimension": 1,
+        "linear_system": true,
+        "gaussian_noise": true,
+        "state_names": [
+          "x",
+          "v"
+        ]
+      },
+      "task": {
+        "n_observations": 100
+      },
+      "estimation": {
+        "success": false
+      },
+      "method_proof": {
+        "method": "kalman",
+        "verifiable": true,
+        "n_timesteps": 85
+      },
+      "failure_mode": "filter_diverged",
+      "obstruction": {
+        "fail_type": "filter_diverged",
+        "error": "150"
+      }
+    },
+    "histogram_grid": {
+      "schema": "qa_filter_cert/v1",
+      "model_id": "grid_localization",
+      "valid": true,
+      "model_description": "Robot on 10x10 discrete grid",
+      "model": {
+        "state_dimension": 1,
+        "observation_dimension": 4,
+        "linear_system": false,
+        "gaussian_noise": false,
+        "state_names": [
+          "cell"
+        ]
+      },
+      "task": {
+        "n_observations": 20
+      },
+      "estimation": {
+        "success": true,
+        "state": {
+          "cell": "47"
+        },
+        "uncertainty": {
+          "entropy": "2"
+        }
+      },
+      "method_proof": {
+        "method": "histogram",
+        "verifiable": true,
+        "n_timesteps": 20,
+        "n_bins": 100
+      },
+      "estimation_witness": {
+        "invariant_name": "grid_belief",
+        "derivation_operator": "histogram_filter",
+        "input_data": {
+          "grid_size": 100,
+          "n_observations": 20
+        },
+        "output_value": "1",
+        "verifiable": true
+      }
+    }
+  },
+  "key_insights": [
+    "State estimation = tracking belief distribution over state space.",
+    "Kalman filter = optimal for linear Gaussian (exact inference).",
+    "Particle filter = handles nonlinearity via sampling.",
+    "PARTICLE_DEGENERACY = ESS too low (sample impoverishment).",
+    "STATE_UNOBSERVABLE = structural failure (observability rank deficient).",
+    "FILTER_DIVERGED = estimate drifts from truth (model mismatch).",
+    "Histogram filter = exact for discrete state spaces.",
+    "All failures are first-class objects with machine-checkable witnesses."
+  ]
+}

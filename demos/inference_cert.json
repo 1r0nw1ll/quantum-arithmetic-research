@@ -1,0 +1,644 @@
+{
+  "demo": "inference_demo",
+  "description": "QA-native probabilistic inference certificates",
+  "reference": "MIT Algorithms for Decision Making, Chapters 3-4",
+  "scenarios": {
+    "student_bn_variable_elimination": {
+      "schema": "qa_inference_cert/v1",
+      "model_id": "student_bn",
+      "valid": true,
+      "model": {
+        "variables": [
+          "D",
+          "I",
+          "G"
+        ],
+        "variable_domains": {
+          "D": [
+            "hard",
+            "easy"
+          ],
+          "I": [
+            "high",
+            "low"
+          ],
+          "G": [
+            "A",
+            "B",
+            "C"
+          ]
+        },
+        "factors": [
+          {
+            "factor_id": "P_D",
+            "scope": [
+              "D"
+            ],
+            "factor_type": "prior"
+          },
+          {
+            "factor_id": "P_I",
+            "scope": [
+              "I"
+            ],
+            "factor_type": "prior"
+          },
+          {
+            "factor_id": "P_G_DI",
+            "scope": [
+              "G",
+              "D",
+              "I"
+            ],
+            "factor_type": "conditional"
+          }
+        ],
+        "is_tree": false
+      },
+      "query": {
+        "variables": [
+          "I"
+        ],
+        "evidence": {
+          "G": "A"
+        }
+      },
+      "inference": {
+        "success": true,
+        "exact": true,
+        "marginal": {
+          "high": "7/10",
+          "low": "3/10"
+        }
+      },
+      "method_proof": {
+        "method": "variable_elimination",
+        "verifiable": true,
+        "elimination_order": [
+          "D"
+        ]
+      },
+      "inference_witness": {
+        "invariant_name": "marginal_probability",
+        "derivation_operator": "variable_elimination",
+        "input_data": {
+          "query": [
+            "I"
+          ],
+          "evidence": {
+            "G": "A"
+          },
+          "elimination_order": [
+            "D"
+          ]
+        },
+        "output_value": "1",
+        "verifiable": true
+      }
+    },
+    "chain_bn_bp_exact": {
+      "schema": "qa_inference_cert/v1",
+      "model_id": "chain_bn",
+      "valid": true,
+      "model": {
+        "variables": [
+          "A",
+          "B",
+          "C",
+          "D"
+        ],
+        "variable_domains": {
+          "A": [
+            "true",
+            "false"
+          ],
+          "B": [
+            "true",
+            "false"
+          ],
+          "C": [
+            "true",
+            "false"
+          ],
+          "D": [
+            "true",
+            "false"
+          ]
+        },
+        "factors": [
+          {
+            "factor_id": "P_A",
+            "scope": [
+              "A"
+            ],
+            "factor_type": "prior"
+          },
+          {
+            "factor_id": "P_B_A",
+            "scope": [
+              "B",
+              "A"
+            ],
+            "factor_type": "conditional"
+          },
+          {
+            "factor_id": "P_C_B",
+            "scope": [
+              "C",
+              "B"
+            ],
+            "factor_type": "conditional"
+          },
+          {
+            "factor_id": "P_D_C",
+            "scope": [
+              "D",
+              "C"
+            ],
+            "factor_type": "conditional"
+          }
+        ],
+        "is_tree": true
+      },
+      "query": {
+        "variables": [
+          "D"
+        ],
+        "evidence": {
+          "A": "true"
+        }
+      },
+      "inference": {
+        "success": true,
+        "exact": true,
+        "marginal": {
+          "true": "13/20",
+          "false": "7/20"
+        }
+      },
+      "method_proof": {
+        "method": "belief_propagation",
+        "verifiable": true,
+        "message_schedule": "parallel",
+        "iterations": 3,
+        "converged": true
+      },
+      "inference_witness": {
+        "invariant_name": "belief_marginal",
+        "derivation_operator": "belief_propagation",
+        "input_data": {
+          "query": [
+            "D"
+          ],
+          "evidence": {
+            "A": "true"
+          },
+          "iterations": 3,
+          "is_tree": true
+        },
+        "output_value": "1",
+        "verifiable": true
+      }
+    },
+    "triangle_bp_divergence": {
+      "schema": "qa_inference_cert/v1",
+      "model_id": "triangle_mrf",
+      "valid": true,
+      "model_description": "Triangular MRF with strong coupling",
+      "model": {
+        "variables": [
+          "A",
+          "B",
+          "C"
+        ],
+        "variable_domains": {
+          "A": [
+            "0",
+            "1"
+          ],
+          "B": [
+            "0",
+            "1"
+          ],
+          "C": [
+            "0",
+            "1"
+          ]
+        },
+        "factors": [
+          {
+            "factor_id": "psi_AB",
+            "scope": [
+              "A",
+              "B"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_BC",
+            "scope": [
+              "B",
+              "C"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_CA",
+            "scope": [
+              "C",
+              "A"
+            ],
+            "factor_type": "potential"
+          }
+        ],
+        "is_tree": false
+      },
+      "query": {
+        "variables": [
+          "A"
+        ],
+        "evidence": {}
+      },
+      "inference": {
+        "success": false,
+        "exact": false
+      },
+      "method_proof": {
+        "method": "belief_propagation",
+        "verifiable": true,
+        "message_schedule": "parallel",
+        "iterations": 100,
+        "converged": false,
+        "final_residual": "3/20"
+      },
+      "failure_mode": "message_divergence",
+      "obstruction": {
+        "fail_type": "message_divergence",
+        "iterations": 100,
+        "max_iterations": 100
+      }
+    },
+    "dense_treewidth_intractable": {
+      "schema": "qa_inference_cert/v1",
+      "model_id": "dense_mrf",
+      "valid": true,
+      "model_description": "Near-complete graph on 8 variables",
+      "model": {
+        "variables": [
+          "X0",
+          "X1",
+          "X2",
+          "X3",
+          "X4",
+          "X5",
+          "X6",
+          "X7"
+        ],
+        "variable_domains": {
+          "X0": [
+            "0",
+            "1"
+          ],
+          "X1": [
+            "0",
+            "1"
+          ],
+          "X2": [
+            "0",
+            "1"
+          ],
+          "X3": [
+            "0",
+            "1"
+          ],
+          "X4": [
+            "0",
+            "1"
+          ],
+          "X5": [
+            "0",
+            "1"
+          ],
+          "X6": [
+            "0",
+            "1"
+          ],
+          "X7": [
+            "0",
+            "1"
+          ]
+        },
+        "factors": [
+          {
+            "factor_id": "psi_0_1",
+            "scope": [
+              "X0",
+              "X1"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_0_2",
+            "scope": [
+              "X0",
+              "X2"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_0_3",
+            "scope": [
+              "X0",
+              "X3"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_0_4",
+            "scope": [
+              "X0",
+              "X4"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_0_5",
+            "scope": [
+              "X0",
+              "X5"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_0_6",
+            "scope": [
+              "X0",
+              "X6"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_0_7",
+            "scope": [
+              "X0",
+              "X7"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_1_2",
+            "scope": [
+              "X1",
+              "X2"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_1_3",
+            "scope": [
+              "X1",
+              "X3"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_1_4",
+            "scope": [
+              "X1",
+              "X4"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_1_5",
+            "scope": [
+              "X1",
+              "X5"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_1_6",
+            "scope": [
+              "X1",
+              "X6"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_1_7",
+            "scope": [
+              "X1",
+              "X7"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_2_3",
+            "scope": [
+              "X2",
+              "X3"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_2_4",
+            "scope": [
+              "X2",
+              "X4"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_2_5",
+            "scope": [
+              "X2",
+              "X5"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_2_6",
+            "scope": [
+              "X2",
+              "X6"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_2_7",
+            "scope": [
+              "X2",
+              "X7"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_3_4",
+            "scope": [
+              "X3",
+              "X4"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_3_5",
+            "scope": [
+              "X3",
+              "X5"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_3_6",
+            "scope": [
+              "X3",
+              "X6"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_3_7",
+            "scope": [
+              "X3",
+              "X7"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_4_5",
+            "scope": [
+              "X4",
+              "X5"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_4_6",
+            "scope": [
+              "X4",
+              "X6"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_4_7",
+            "scope": [
+              "X4",
+              "X7"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_5_6",
+            "scope": [
+              "X5",
+              "X6"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_5_7",
+            "scope": [
+              "X5",
+              "X7"
+            ],
+            "factor_type": "potential"
+          },
+          {
+            "factor_id": "psi_6_7",
+            "scope": [
+              "X6",
+              "X7"
+            ],
+            "factor_type": "potential"
+          }
+        ],
+        "is_tree": false,
+        "treewidth": 7
+      },
+      "query": {
+        "variables": [
+          "X0"
+        ],
+        "evidence": {}
+      },
+      "inference": {
+        "success": false,
+        "exact": false
+      },
+      "failure_mode": "treewidth_too_high",
+      "obstruction": {
+        "fail_type": "treewidth_too_high",
+        "treewidth": 7,
+        "threshold": 3
+      }
+    },
+    "medical_evidence_inconsistent": {
+      "schema": "qa_inference_cert/v1",
+      "model_id": "medical_diagnosis",
+      "valid": true,
+      "model_description": "Simple medical diagnosis BN",
+      "model": {
+        "variables": [
+          "Disease",
+          "Symptom"
+        ],
+        "variable_domains": {
+          "Disease": [
+            "A",
+            "B",
+            "none"
+          ],
+          "Symptom": [
+            "fever",
+            "cough",
+            "none"
+          ]
+        },
+        "factors": [
+          {
+            "factor_id": "P_Disease",
+            "scope": [
+              "Disease"
+            ],
+            "factor_type": "prior"
+          },
+          {
+            "factor_id": "P_Symptom_Disease",
+            "scope": [
+              "Symptom",
+              "Disease"
+            ],
+            "factor_type": "conditional"
+          }
+        ],
+        "is_tree": false
+      },
+      "query": {
+        "variables": [
+          "Disease"
+        ],
+        "evidence": {
+          "Symptom": "fever"
+        }
+      },
+      "inference": {
+        "success": false,
+        "exact": false
+      },
+      "failure_mode": "evidence_inconsistent",
+      "obstruction": {
+        "fail_type": "evidence_inconsistent"
+      }
+    }
+  },
+  "key_insights": [
+    "Variable elimination = graph reduction operators.",
+    "BP on trees = exact inference (message passing converges).",
+    "BP on loops = approximate (may diverge - FAILURE certificate).",
+    "Treewidth bounds tractability (intractability = FAILURE certificate).",
+    "P(E)=0 = EVIDENCE_INCONSISTENT (undefined conditional).",
+    "All failures are first-class objects with machine-checkable witnesses."
+  ]
+}

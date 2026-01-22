@@ -1,0 +1,433 @@
+{
+  "scenario_1": {
+    "rl": {
+      "model_id": "gym_gridworld_qlearning",
+      "model_description": null,
+      "state_space_size": 25,
+      "action_space_size": 4,
+      "target_class": "goal",
+      "generator_set": [
+        "up",
+        "down",
+        "left",
+        "right"
+      ],
+      "training_success": true,
+      "final_policy_id": null,
+      "final_performance": "1",
+      "q_value_witness": {
+        "sample_transitions": [
+          {
+            "s": "(0, 0)",
+            "a": "right",
+            "r": "-1/100",
+            "s_next": "(1, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(1, 0)",
+            "a": "left",
+            "r": "-1/100",
+            "s_next": "(0, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(0, 0)",
+            "a": "down",
+            "r": "-1/100",
+            "s_next": "(0, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(0, 0)",
+            "a": "right",
+            "r": "-1/100",
+            "s_next": "(1, 0)",
+            "q_before": "57/100",
+            "q_after": "581/1000"
+          },
+          {
+            "s": "(1, 0)",
+            "a": "up",
+            "r": "-1/100",
+            "s_next": "(1, 1)",
+            "q_before": "349/500",
+            "q_after": "707/1000"
+          }
+        ],
+        "q_table_hash": null,
+        "final_q_values": null,
+        "verifiable": true
+      },
+      "failure_mode": null,
+      "obstruction_if_fail": null,
+      "method_proof": {
+        "algorithm": "q_learning",
+        "reward_spec": "distance_delta",
+        "total_episodes": 500,
+        "total_steps": 0,
+        "learning_rate": "1/10",
+        "discount_factor": "99/100",
+        "lr_schedule": null,
+        "exploration_method": null,
+        "exploration_certificate_id": null,
+        "final_loss": null,
+        "converged": true,
+        "convergence_episode": null,
+        "verifiable": true
+      },
+      "random_policy_return": null,
+      "optimal_policy_return": null,
+      "improvement_ratio": null,
+      "training_witness": null,
+      "strict_mode": false
+    },
+    "exploration": {
+      "model_id": "gym_gridworld_exploration",
+      "model_description": null,
+      "state_space_size": 25,
+      "action_space_size": 4,
+      "target_class": "goal",
+      "exploration_success": true,
+      "target_reached": true,
+      "final_policy_id": null,
+      "regret_witness": {
+        "actual_steps": 882,
+        "optimal_steps": 800,
+        "cumulative_regret": 82,
+        "regret_per_episode": null,
+        "regret_bound": "O(sqrt(T * log(T)))",
+        "verifiable": true
+      },
+      "failure_mode": null,
+      "obstruction_if_fail": null,
+      "method_proof": {
+        "method": "epsilon_greedy",
+        "uncertainty_measure": "visit_count",
+        "total_episodes": 100,
+        "total_steps": 882,
+        "oracle_calls": 0,
+        "epsilon": "1/10",
+        "exploration_constant": null,
+        "temperature": null,
+        "prior_strength": null,
+        "decay_schedule": null,
+        "exploration_rate": null,
+        "unique_states_visited": 0,
+        "verifiable": true
+      },
+      "random_baseline_steps": null,
+      "greedy_baseline_steps": null,
+      "exploration_improvement": null,
+      "exploration_witness": null,
+      "strict_mode": true
+    }
+  },
+  "scenario_2": {
+    "random_exploration": {
+      "model_id": "gym_gridworld_exploration",
+      "model_description": null,
+      "state_space_size": 100,
+      "action_space_size": 4,
+      "target_class": "goal",
+      "exploration_success": false,
+      "target_reached": true,
+      "final_policy_id": null,
+      "regret_witness": {
+        "actual_steps": 4919,
+        "optimal_steps": 900,
+        "cumulative_regret": 4019,
+        "regret_per_episode": null,
+        "regret_bound": "O(sqrt(T * log(T)))",
+        "verifiable": true
+      },
+      "failure_mode": "high_regret",
+      "obstruction_if_fail": {
+        "fail_type": "high_regret",
+        "episodes_used": null,
+        "episode_budget": null,
+        "local_optimum_state": null,
+        "escape_attempts": null,
+        "final_exploration_rate": null,
+        "min_exploration_threshold": null,
+        "cumulative_regret": 4019,
+        "regret_threshold": 1800
+      },
+      "method_proof": {
+        "method": "epsilon_greedy",
+        "uncertainty_measure": "visit_count",
+        "total_episodes": 50,
+        "total_steps": 4919,
+        "oracle_calls": 0,
+        "epsilon": "1/10",
+        "exploration_constant": null,
+        "temperature": null,
+        "prior_strength": null,
+        "decay_schedule": null,
+        "exploration_rate": null,
+        "unique_states_visited": 0,
+        "verifiable": true
+      },
+      "random_baseline_steps": null,
+      "greedy_baseline_steps": null,
+      "exploration_improvement": null,
+      "exploration_witness": null,
+      "strict_mode": true
+    },
+    "ql_rl": {
+      "model_id": "gym_gridworld_qlearning",
+      "model_description": null,
+      "state_space_size": 100,
+      "action_space_size": 4,
+      "target_class": "goal",
+      "generator_set": [
+        "up",
+        "down",
+        "left",
+        "right"
+      ],
+      "training_success": true,
+      "final_policy_id": null,
+      "final_performance": "1",
+      "q_value_witness": {
+        "sample_transitions": [
+          {
+            "s": "(0, 0)",
+            "a": "right",
+            "r": "-1/100",
+            "s_next": "(1, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(1, 0)",
+            "a": "right",
+            "r": "-1/100",
+            "s_next": "(2, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(2, 0)",
+            "a": "up",
+            "r": "-1/100",
+            "s_next": "(2, 1)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(0, 0)",
+            "a": "right",
+            "r": "-1/100",
+            "s_next": "(1, 0)",
+            "q_before": "-43/1000",
+            "q_after": "-43/1000"
+          },
+          {
+            "s": "(1, 0)",
+            "a": "up",
+            "r": "-1/100",
+            "s_next": "(1, 1)",
+            "q_before": "-19/500",
+            "q_after": "-19/500"
+          }
+        ],
+        "q_table_hash": null,
+        "final_q_values": null,
+        "verifiable": true
+      },
+      "failure_mode": null,
+      "obstruction_if_fail": null,
+      "method_proof": {
+        "algorithm": "q_learning",
+        "reward_spec": "distance_delta",
+        "total_episodes": 1000,
+        "total_steps": 0,
+        "learning_rate": "1/10",
+        "discount_factor": "99/100",
+        "lr_schedule": null,
+        "exploration_method": null,
+        "exploration_certificate_id": null,
+        "final_loss": null,
+        "converged": true,
+        "convergence_episode": null,
+        "verifiable": true
+      },
+      "random_policy_return": null,
+      "optimal_policy_return": null,
+      "improvement_ratio": null,
+      "training_witness": null,
+      "strict_mode": false
+    },
+    "ql_exploration": {
+      "model_id": "gym_gridworld_exploration",
+      "model_description": null,
+      "state_space_size": 100,
+      "action_space_size": 4,
+      "target_class": "goal",
+      "exploration_success": true,
+      "target_reached": true,
+      "final_policy_id": null,
+      "regret_witness": {
+        "actual_steps": 1117,
+        "optimal_steps": 900,
+        "cumulative_regret": 217,
+        "regret_per_episode": null,
+        "regret_bound": "O(sqrt(T * log(T)))",
+        "verifiable": true
+      },
+      "failure_mode": null,
+      "obstruction_if_fail": null,
+      "method_proof": {
+        "method": "epsilon_greedy",
+        "uncertainty_measure": "visit_count",
+        "total_episodes": 50,
+        "total_steps": 1117,
+        "oracle_calls": 0,
+        "epsilon": "1/10",
+        "exploration_constant": null,
+        "temperature": null,
+        "prior_strength": null,
+        "decay_schedule": null,
+        "exploration_rate": null,
+        "unique_states_visited": 0,
+        "verifiable": true
+      },
+      "random_baseline_steps": null,
+      "greedy_baseline_steps": null,
+      "exploration_improvement": null,
+      "exploration_witness": null,
+      "strict_mode": true
+    }
+  },
+  "scenario_3": {
+    "rl": {
+      "model_id": "gym_gridworld_qlearning",
+      "model_description": null,
+      "state_space_size": 22,
+      "action_space_size": 4,
+      "target_class": "goal",
+      "generator_set": [
+        "up",
+        "down",
+        "left",
+        "right"
+      ],
+      "training_success": true,
+      "final_policy_id": null,
+      "final_performance": "1",
+      "q_value_witness": {
+        "sample_transitions": [
+          {
+            "s": "(0, 0)",
+            "a": "down",
+            "r": "-1/100",
+            "s_next": "(0, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(0, 0)",
+            "a": "right",
+            "r": "-1/100",
+            "s_next": "(1, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(1, 0)",
+            "a": "left",
+            "r": "-1/100",
+            "s_next": "(0, 0)",
+            "q_before": "0",
+            "q_after": "-1/1000"
+          },
+          {
+            "s": "(0, 0)",
+            "a": "up",
+            "r": "-1/100",
+            "s_next": "(0, 1)",
+            "q_before": "543/1000",
+            "q_after": "111/200"
+          },
+          {
+            "s": "(0, 1)",
+            "a": "up",
+            "r": "-1/100",
+            "s_next": "(0, 2)",
+            "q_before": "341/500",
+            "q_after": "173/250"
+          }
+        ],
+        "q_table_hash": null,
+        "final_q_values": null,
+        "verifiable": true
+      },
+      "failure_mode": null,
+      "obstruction_if_fail": null,
+      "method_proof": {
+        "algorithm": "q_learning",
+        "reward_spec": "distance_delta",
+        "total_episodes": 800,
+        "total_steps": 0,
+        "learning_rate": "1/10",
+        "discount_factor": "99/100",
+        "lr_schedule": null,
+        "exploration_method": null,
+        "exploration_certificate_id": null,
+        "final_loss": null,
+        "converged": true,
+        "convergence_episode": null,
+        "verifiable": true
+      },
+      "random_policy_return": null,
+      "optimal_policy_return": null,
+      "improvement_ratio": null,
+      "training_witness": null,
+      "strict_mode": false
+    },
+    "exploration": {
+      "model_id": "gym_gridworld_exploration",
+      "model_description": null,
+      "state_space_size": 22,
+      "action_space_size": 4,
+      "target_class": "goal",
+      "exploration_success": true,
+      "target_reached": true,
+      "final_policy_id": null,
+      "regret_witness": {
+        "actual_steps": 976,
+        "optimal_steps": 800,
+        "cumulative_regret": 176,
+        "regret_per_episode": null,
+        "regret_bound": "O(sqrt(T * log(T)))",
+        "verifiable": true
+      },
+      "failure_mode": null,
+      "obstruction_if_fail": null,
+      "method_proof": {
+        "method": "epsilon_greedy",
+        "uncertainty_measure": "visit_count",
+        "total_episodes": 100,
+        "total_steps": 976,
+        "oracle_calls": 0,
+        "epsilon": "1/10",
+        "exploration_constant": null,
+        "temperature": null,
+        "prior_strength": null,
+        "decay_schedule": null,
+        "exploration_rate": null,
+        "unique_states_visited": 0,
+        "verifiable": true
+      },
+      "random_baseline_steps": null,
+      "greedy_baseline_steps": null,
+      "exploration_improvement": null,
+      "exploration_witness": null,
+      "strict_mode": true
+    }
+  }
+}

@@ -66,6 +66,7 @@ Cargo.lock
 *.csv
 *.json
 !qa_alphageometry/core/results/**/*.json
+!qa_alphageometry_ptolemy/qa_ledger/**/*.json
 *.npy
 *.npz
 

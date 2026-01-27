@@ -1,0 +1,269 @@
+# QA_MAP__GENERATOR_INJECTION.yaml
+# Generator Injection Certificate Schema
+#
+# Source Papers:
+#   - LLM-in-Sandbox (arXiv:2601.16206)
+#   - Axiom Putnam 2025
+#
+# Core Principle: Capability is generator-relative
+# Agentic emergence = barrier crossing under generator injection
+
+module_id: QA_MAP_GENERATOR_INJECTION
+title: "Generator Injection and Agentic Emergence"
+version: 1.0
+date: 2026-01-25
+
+# ============================================================================
+# THEORETICAL FOUNDATION
+# ============================================================================
+
+principle:
+  statement: >
+    Capability is NOT intrinsic to the agent.
+    Capability = Reachability(State Space, Generator Set, Invariants).
+    Adding generators crosses barriers and enables emergent behavior.
+
+  formal: |
+    Given:
+      - State space S
+      - Invariants I
+      - Generator sets G₁ ⊂ G₂
+
+    Then:
+      Reach(S, G₁, I) ⊆ Reach(S, G₂, I)
+
+    And there may exist states s* such that:
+      s* ∈ Reach(S, G₂, I) AND s* ∉ Reach(S, G₁, I)
+
+    This is "barrier crossing" - the formal explanation of emergent capability.
+
+# ============================================================================
+# PATTERN SPACE
+# ============================================================================
+
+pattern_space:
+  name: GeneratorInjectionSpace
+
+  state:
+    - state_hash: str           # SHA-256 of state content
+    - generator_set: str        # Name of active generator set
+    - invariants_held: List[str] # Currently valid invariants
+    - path_history: List[str]   # Generators used to reach this state
+    - depth: int                # Steps from initial state
+
+  generators:
+    categories:
+      - external_access         # curl, pip, web fetch
+      - file_system             # read, write, grep, sed
+      - code_execution          # run scripts, interpreters
+      - tactic                  # proof tactics
+      - lemma_apply             # apply existing results
+      - rewrite                 # term rewriting
+      - decision_procedure      # ring, linarith, omega
+      - observation             # read-only inspection
+      - mutation                # state modification
+      - composition             # combine sub-generators
+
+  invariants:
+    hard:
+      - well_typed              # Type system satisfied
+      - invariant_preserved     # All declared invariants hold
+      - resource_bounded        # Within budget
+    soft:
+      - path_optimal            # Minimal steps
+      - cost_optimal            # Minimal compute
+
+# ============================================================================
+# BARRIER TYPES (OBSTRUCTION ALGEBRA)
+# ============================================================================
+
+obstruction_types:
+  # From Axiom / Formal Proof
+  - id: MISSING_LEMMA
+    description: "Required intermediate result not in library"
+    required_generator: lemma_apply
+
+  - id: TYPE_MISMATCH
+    description: "Move doesn't preserve type constraints"
+    required_generator: rewrite
+
+  - id: REWRITE_BLOCKED
+    description: "Equality not in required form for substitution"
+    required_generator: decision_procedure
+
+  - id: CASE_EXPLOSION
+    description: "Combinatorial blowup in case analysis"
+    required_generator: decision_procedure
+
+  - id: FORMALISM_OVERHEAD
+    description: "Mathematically obvious but tedious to formalize"
+    required_generator: decision_procedure
+
+  # From LLM-in-Sandbox / Agentic
+  - id: CONTEXT_LENGTH
+    description: "Input exceeds model context window"
+    required_generator: file_system
+
+  - id: TOOL_UNAWARE
+    description: "Agent doesn't recognize available generator"
+    required_generator: null  # Training issue
+
+  - id: ENVIRONMENT_MISMATCH
+    description: "Wrong dependencies or configurations"
+    required_generator: external_access
+
+  - id: MULTI_STEP_PLANNING
+    description: "Cannot structure multi-step action sequence"
+    required_generator: composition
+
+  # Generic
+  - id: INVARIANT_VIOLATION
+    description: "Proposed move would break constraint"
+    required_generator: null  # Fundamental
+
+  - id: BUDGET_EXHAUSTED
+    description: "Out of compute/time/memory"
+    required_generator: null  # Fundamental
+
+  - id: UNREACHABLE
+    description: "Provably impossible under any generator extension"
+    required_generator: null  # Theoretical limit
+
+# ============================================================================
+# CERTIFICATE SCHEMA
+# ============================================================================
+
+certificate_schema:
+  type: GENERATOR_INJECTION_CERTIFICATE
+
+  required_fields:
+    - certificate_id: str
+    - timestamp: str
+    - before_generators: GeneratorSet
+    - after_generators: GeneratorSet
+    - injected_generators: List[Generator]
+    - barrier_crossed: Barrier
+    - before_witness: UnreachabilityWitness
+    - after_witness: ReachabilityWitness
+    - invariants_preserved: List[str]
+    - invariant_verification_method: str
+    - result: enum[BARRIER_CROSSED, NO_NEW_REACH, INVARIANT_BROKEN]
+
+  optional_fields:
+    - source_paper: str
+    - domain: str
+
+  validator_contract:
+    - verify_subset_relation        # G₁ ⊂ G₂
+    - verify_injected_difference    # injected = G₂ - G₁
+    - verify_path_uses_generators   # path only uses G₂
+    - verify_barrier_consistency    # barrier types match
+    - verify_invariant_preservation # all invariants checked
+    - emit_fail_algebra_on_error    # structured failure if invalid
+
+# ============================================================================
+# CROSS-DOMAIN INSTANTIATIONS
+# ============================================================================
+
+instantiations:
+
+  agentic_ai:
+    source_paper: "arXiv:2601.16206"
+    base_generators:
+      - text_generation
+    extended_generators:
+      - text_generation
+      - execute_bash
+      - file_read
+      - file_write
+    typical_barriers:
+      - CONTEXT_LENGTH
+      - MULTI_STEP_PLANNING
+    invariant_oracle: "execution_feedback"
+    key_finding: >
+      8x token reduction via file externalization.
+      Agentic behavior emerges from generator injection, not special training.
+
+  formal_proof:
+    source_paper: "Axiom Putnam 2025"
+    base_generators:
+      - intro
+      - apply
+      - exact
+      - rewrite
+    extended_generators:
+      - intro
+      - apply
+      - exact
+      - rewrite
+      - ring
+      - linarith
+      - omega
+    typical_barriers:
+      - FORMALISM_OVERHEAD
+      - CASE_EXPLOSION
+    invariant_oracle: "lean_kernel"
+    key_finding: >
+      Decision procedures collapse proof complexity.
+      "Difficulty is generator-relative" - human intuition vs machine grind.
+
+  biology_morphogenesis:
+    source_paper: "Levin Platonic Space"
+    base_generators:
+      - gene_expression
+      - cell_division
+    extended_generators:
+      - gene_expression
+      - cell_division
+      - bioelectric_edit
+      - mechanical_constraint
+    typical_barriers:
+      - ATTRACTOR_TRAPPED
+      - INTERFACE_MISMATCH
+    invariant_oracle: "pattern_stability"
+    key_finding: >
+      Bioelectric control = generator injection into morphospace.
+      Same genes + different bioelectric = different anatomy.
+
+# ============================================================================
+# QA INTEGRATION
+# ============================================================================
+
+qa_integration:
+
+  links_to:
+    - qa_generalization_certificate.py    # Bounds are generator-relative
+    - qa_neuralgcm_certificate.py         # Weather as reachability
+    - qa_sparse_attention_certificate.py  # Attention patterns as generators
+
+  extends:
+    - failure_algebra      # Barriers are obstruction types
+    - reachability_theory  # Capability = reachability
+    - invariant_system     # Preserved under injection
+
+  enables:
+    - agentic_emergence_explanation  # Why sandbox helps
+    - proof_automation_theory        # Why tactics matter
+    - morphogenesis_control          # Why bioelectricity works
+
+# ============================================================================
+# VALIDATION CRITERIA
+# ============================================================================
+
+validation:
+
+  structural:
+    - G₁ ⊂ G₂ (strict or non-strict)
+    - injected = G₂ \ G₁
+    - before_witness.target ∈ unreachable(G₁)
+    - after_witness.path ⊆ G₂
+
+  semantic:
+    - barrier_type explains unreachability
+    - injected_generator crosses barrier
+    - invariants preserved along path
+
+  empirical:
+    - path is reproducible
+    - metrics improve after injection
+    - no regression in baseline cases

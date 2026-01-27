@@ -1,0 +1,349 @@
+# QA_MAP__FIELD_COMPUTATION.yaml
+# Field Computation Certificate Schema
+#
+# Source Paper:
+#   - WISE: Disaggregated ML via In-Physics Computing at RF
+#     (doi:10.1126/sciadv.adz0817)
+#
+# Core Principle (Third leg of the QA certificate triad):
+#   Injection:  G₁ ⊂ G₂  →  Reach EXPANDS     (agents, proofs)
+#   Collapse:   I_div violated →  Reach CONTRACTS (search, RL)
+#   Field:      G = physical operators →  Reach REALIZED BY PHYSICS
+
+module_id: QA_MAP_FIELD_COMPUTATION
+title: "Field Computation and In-Physics Computing"
+version: 1.0
+date: 2026-01-27
+triad_position: 3  # Injection=1, Collapse=2, Field=3
+
+# ============================================================================
+# THEORETICAL FOUNDATION
+# ============================================================================
+
+principle:
+  statement: >
+    Computation can be realized by physical field dynamics.
+    Arithmetic operations are wave transformations.
+    The medium IS the computer.
+    The same obstruction algebra (barriers, invariants, generators)
+    governs physical computation as it governs symbolic computation.
+
+  formal: |
+    Given:
+      - Physical field state space S_field
+      - Field generators G_field = {propagate, mix, phase_shift, gain, measure, sync, calibrate, encode}
+      - Field invariants I_field = {power_budget, bandwidth, sync_lock, linearity}
+      - Target operator L: R^n -> R^m
+
+    Then:
+      ∃ trajectory τ = (g₁, g₂, ..., gₖ) ∈ G_field* such that
+      || realized(τ) - L || <= ε
+      AND all I_field preserved along τ
+
+    IF AND ONLY IF:
+      G_field contains the generators required to cross all barriers
+      between initial state and operator realization.
+
+  geometric_action_principle: |
+    In WISE: matrix-vector multiply is realized by RF superposition.
+    The channel matrix H IS the computation.
+    Phase shifts and gains at transmitters configure H.
+    Receivers measure y = Hx + noise.
+    No silicon multiplier needed. The air does the math.
+
+# ============================================================================
+# PHYSICAL DOMAINS
+# ============================================================================
+
+domains:
+  - id: rf_inphysics
+    name: "RF In-Physics Computing (WISE)"
+    medium: "Electromagnetic fields in free space"
+    what_computes: "Wave superposition, multipath mixing"
+    where_intelligence_lives: "In the wireless network itself"
+    reference: "doi:10.1126/sciadv.adz0817"
+
+  - id: photonic
+    name: "Photonic Neural Networks"
+    medium: "Light propagation in optical circuits"
+    what_computes: "Interference, diffraction"
+    where_intelligence_lives: "In specialized optical hardware"
+
+  - id: analog_cim
+    name: "Coherent Ising Machines"
+    medium: "Optical parametric oscillator networks"
+    what_computes: "Phase dynamics minimize Ising Hamiltonians"
+    where_intelligence_lives: "In coupled oscillator dynamics"
+
+  - id: neuromorphic
+    name: "Neuromorphic Computing"
+    medium: "Spiking dynamics in analog circuits"
+    what_computes: "Spike timing, membrane potential integration"
+    where_intelligence_lives: "In the device physics"
+
+  - id: acoustic
+    name: "Acoustic Wave Computing"
+    medium: "Sound waves in structured media"
+    what_computes: "Acoustic scattering, resonance"
+    where_intelligence_lives: "In the physical structure"
+
+# ============================================================================
+# GENERATOR CATEGORIES
+# ============================================================================
+
+generator_categories:
+  - id: field_dynamics
+    description: "Natural physical processes: propagation, superposition, scattering"
+    examples: ["propagate", "mix", "scatter", "interfere"]
+    cost_model: "Free (physics does the work)"
+
+  - id: control
+    description: "Hardware-controlled parameters: phase, gain, frequency"
+    examples: ["phase_shift", "gain", "attenuate", "frequency_tune"]
+    cost_model: "Low power (electronic control)"
+
+  - id: measurement
+    description: "Observation/readout: ADC sampling, photodetection"
+    examples: ["measure", "sample", "photodetect", "threshold"]
+    cost_model: "Fixed per-sample cost"
+
+  - id: synchronization
+    description: "Alignment of timing, phase, frequency between nodes"
+    examples: ["sync_align", "pilot_insert", "clock_recovery"]
+    cost_model: "Overhead percentage of total symbols"
+
+  - id: calibration
+    description: "Channel estimation and correction"
+    examples: ["channel_estimate", "equalize", "calibrate"]
+    cost_model: "Periodic overhead"
+
+  - id: encoding
+    description: "Map abstract data to physical representation"
+    examples: ["encode", "modulate", "map_to_constellation"]
+    cost_model: "Digital preprocessing cost"
+
+# ============================================================================
+# FIELD INVARIANTS
+# ============================================================================
+
+invariants:
+  hard:
+    - name: power_budget
+      predicate: "Total transmit power <= P_max"
+      violation_barrier: POWER_EXCEEDED
+
+    - name: bandwidth_limit
+      predicate: "Signal bandwidth <= B_max"
+      violation_barrier: BANDWIDTH_EXCEEDED
+
+    - name: sync_lock
+      predicate: "Receiver timing/phase offset within tolerance"
+      violation_barrier: DESYNC
+
+    - name: linearity
+      predicate: "Operating within linear region of amplifier/medium"
+      violation_barrier: NONLINEARITY
+
+  soft:
+    - name: decode_fidelity
+      predicate: "Bit error rate < target threshold"
+      degradation: "Output quality drops but computation still meaningful"
+
+    - name: energy_efficiency
+      predicate: "Energy per operation < threshold"
+      degradation: "Computation works but not worth the cost"
+
+# ============================================================================
+# BARRIER TYPES (OBSTRUCTION ALGEBRA)
+# ============================================================================
+
+obstruction_types:
+  - id: DESYNC
+    description: "Synchronization lost; receiver cannot coherently combine signals"
+    required_generator: sync_align
+    required_invariant: sync_lock
+    physical_cause: "Multipath propagation introduces unknown phase/timing offsets"
+
+  - id: NOISE_FLOOR
+    description: "SNR below minimum for reliable decoding"
+    required_generator: gain or calibrate
+    physical_cause: "Thermal noise, interference, path loss"
+
+  - id: NONLINEARITY
+    description: "Amplifier or medium operating outside linear region"
+    required_generator: attenuate or power_control
+    required_invariant: linearity
+    physical_cause: "Saturation, clipping, intermodulation"
+
+  - id: CHANNEL_MISMATCH
+    description: "Estimated channel differs from actual channel"
+    required_generator: calibrate
+    physical_cause: "Channel changed since last estimation (mobility, weather)"
+
+  - id: BANDWIDTH_EXCEEDED
+    description: "Signal exceeds allocated bandwidth"
+    required_generator: null
+    physical_cause: "Fundamental resource limit"
+
+  - id: POWER_EXCEEDED
+    description: "Transmit power exceeds budget/regulation"
+    required_generator: attenuate
+    physical_cause: "Regulatory or hardware limit"
+
+  - id: DECODE_FAILURE
+    description: "Cannot recover data from received signal"
+    required_generator: sync_align and calibrate
+    physical_cause: "Accumulated errors exceed correction capability"
+
+  - id: NO_CALIBRATION
+    description: "Channel state unknown; cannot configure computation"
+    required_generator: calibrate
+    physical_cause: "No pilot symbols or estimation procedure"
+
+  - id: NO_MEASUREMENT
+    description: "Cannot observe field output"
+    required_generator: measure
+    physical_cause: "No receiver or ADC available"
+
+  - id: BUDGET_EXHAUSTED
+    description: "Energy/time/bandwidth budget depleted"
+    required_generator: null
+    physical_cause: "Fundamental resource limit"
+
+# ============================================================================
+# CERTIFICATE SCHEMA
+# ============================================================================
+
+certificate_schema:
+  type: FIELD_COMPUTATION_CERT
+
+  required_fields:
+    - certificate_id: str
+    - timestamp: str
+    - claim: str
+    - task_class: str            # matvec, conv1d, classifier_inference, beamforming
+    - target_operator: OperatorSpec
+    - domain: FieldDomain
+    - baseline_generators: FieldGeneratorSet
+    - extended_generators: FieldGeneratorSet
+    - injected_generators: List[FieldGenerator]
+    - invariants: FieldInvariantSet
+    - barrier: FieldBarrier
+    - before_witness: FieldUnreachabilityWitness
+    - after_witness: FieldReachabilityWitness
+    - result: enum[BARRIER_CROSSED, NO_NEW_REACH, INVARIANT_BROKEN, PENDING]
+
+  optional_fields:
+    - source_refs: List[SourceRef]
+
+  witness_fields:
+    reachability_witness:
+      - start_state_hash: str
+      - end_state_hash: str
+      - trajectory: List[TraceStep]
+      - path_length: int
+      - operator_error: Scalar
+      - epsilon: Scalar
+      - snr: Optional[Scalar]
+      - energy: Optional[Scalar]
+      - latency: Optional[Scalar]
+      - invariants_checked: List[str]
+
+  validator_contract:
+    - verify_generator_subset       # baseline ⊆ extended
+    - verify_injection_difference   # injected = extended - baseline
+    - verify_trajectory_generators  # all steps use extended generators
+    - verify_operator_realization   # operator_error <= epsilon
+    - verify_invariant_preservation # hard invariants held
+    - verify_domain_consistency     # generators match domain
+    - emit_fail_algebra_on_error    # structured failure
+
+# ============================================================================
+# PARADIGM COMPARISON
+# ============================================================================
+
+paradigm_comparison:
+  - paradigm: "RF In-Physics (WISE)"
+    what_computes: "EM fields"
+    where_intelligence_lives: "In the wireless network"
+    qa_generators: [propagate, mix, phase_shift, gain, sync_align, measure]
+    key_insight: "The air becomes part of the computer"
+
+  - paradigm: "Digital Silicon"
+    what_computes: "Transistor switching"
+    where_intelligence_lives: "In the chip"
+    qa_generators: [fetch, decode, execute, store]
+    key_insight: "Fast but energy-expensive per operation"
+
+  - paradigm: "Neuromorphic"
+    what_computes: "Spiking dynamics"
+    where_intelligence_lives: "In the device"
+    qa_generators: [spike, integrate, decay, threshold]
+    key_insight: "Event-driven, ultra-low power"
+
+  - paradigm: "Photonic"
+    what_computes: "Light propagation"
+    where_intelligence_lives: "In specialized optical hardware"
+    qa_generators: [interfere, diffract, modulate, detect]
+    key_insight: "Speed of light, massive parallelism"
+
+  qa_unification: >
+    All four paradigms are instances of the same structure:
+    State space + Generator set + Invariants = Reachability.
+    The physics is different. The algebra is the same.
+
+# ============================================================================
+# QA INTEGRATION
+# ============================================================================
+
+qa_integration:
+  triad:
+    - QA_MAP__GENERATOR_INJECTION.yaml    # Leg 1: Reach expands
+    - QA_MAP__DIVERSITY_COLLAPSE.yaml     # Leg 2: Reach contracts
+    - QA_MAP__FIELD_COMPUTATION.yaml      # Leg 3: Reach realized by physics
+
+  links_to:
+    - qa_generator_injection_certificate.py
+    - qa_diversity_collapse_certificate.py
+    - qa_cert_core.py
+
+  extends:
+    - failure_algebra        # Field barriers = obstruction types
+    - reachability_theory    # Physical reachability
+    - invariant_system       # Power, sync, linearity = field invariants
+    - generator_algebra      # Physical operators as generators
+
+  enables:
+    - physics_native_computation_theory   # QA for analog/RF/photonic
+    - cross_paradigm_comparison           # Unified framework
+    - edge_ai_architecture                # WISE-style deployment
+    - physical_barrier_analysis           # Why field computation fails
+
+# ============================================================================
+# GENERAL THEOREM (TRIAD COMPLETE)
+# ============================================================================
+
+theorem:
+  name: "QA Reachability-Invariant Triad"
+  statement: |
+    Capability = Reachability(S, G, I)
+
+    This holds whether G operates on:
+      1. Bits and tools     (Generator Injection)
+      2. Populations        (Diversity Collapse)
+      3. Physical fields    (Field Computation)
+
+    The algebra is the same:
+      - Generators determine what states are reachable
+      - Invariants determine what states are valid
+      - Barriers are the obstruction objects
+      - Certificates are the constructive proofs
+
+    Adding generators crosses barriers.
+    Violating invariants erects barriers.
+    Physics realizes generators in the medium itself.
+
+  certificates:
+    - GENERATOR_INJECTION            # Direction 1: expand
+    - DIVERSITY_COLLAPSE_OBSTRUCTION # Direction 2: contract
+    - FIELD_COMPUTATION_CERT         # Direction 3: physical realization

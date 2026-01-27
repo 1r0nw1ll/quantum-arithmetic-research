@@ -1,0 +1,480 @@
+# QA_MAP__BEYOND_NEURONS.yaml
+# Beyond Neurons Intelligence Certificate Schema
+#
+# Source Paper:
+#   - Levin & Chis-Ciure: Intelligence Beyond Neurons
+#     (Biological Journal of the Linnean Society, blae076, 2024)
+#
+# Core Principle (Fourth leg of the QA certificate architecture):
+#   Injection:  G1 subset G2  ->  Reach EXPANDS     (agents, proofs)
+#   Collapse:   I_div violated ->  Reach CONTRACTS   (search, RL)
+#   Field:      G = physical ops ->  Reach REALIZED  (RF, photonic)
+#   Beyond:     P = <S,O,C,E,H>  ->  Intelligence is SUBSTRATE-NEUTRAL
+
+module_id: QA_MAP_BEYOND_NEURONS
+title: "Intelligence Beyond Neurons: Substrate-Neutral, Scale-Free"
+version: 1.0
+date: 2026-01-27
+tetrad_position: 4  # Injection=1, Collapse=2, Field=3, Beyond=4
+
+# ============================================================================
+# THEORETICAL FOUNDATION
+# ============================================================================
+
+principle:
+  statement: >
+    Intelligence is not a property of neurons.
+    Intelligence is search efficiency in problem spaces.
+    The same obstruction algebra (barriers, invariants, generators)
+    governs intelligence at every scale and on every substrate.
+
+  formal: |
+    Given:
+      - Problem space P = <S, O, C, E, H>
+        S: state space
+        O: operators (generators)
+        C: constraints (invariants)
+        E: evaluation function (fitness/goal)
+        H: planning horizon
+      - Blind search baseline: tau_blind
+      - Agent's search time: tau_agent
+
+    Search efficiency:
+      K = log10(tau_blind / tau_agent)
+
+    Then:
+      K > 0  iff  the system exhibits non-trivial intelligence.
+      K is substrate-neutral: it applies to cells, brains, and silicon.
+
+    New reachability mechanisms (beyond generator injection):
+      1. Constraint editing:  Same O, modified C -> new states reachable
+      2. Goal decoupling:     Component E_i diverges from collective E
+      3. Horizon expansion:   Increase H -> multi-step strategies accessible
+
+  levin_thesis: |
+    "The space of possible minds is larger than the space of possible brains."
+
+    Intelligence is defined by:
+    1. What problem space P the system operates in
+    2. How efficiently it searches that space (K)
+    3. Not by the substrate or architecture
+
+    Neurons are ONE implementation. Not the definition.
+
+# ============================================================================
+# PROBLEM SPACE FORMALISM
+# ============================================================================
+
+problem_space_schema:
+  components:
+    - id: S
+      name: "State Space"
+      description: "All possible configurations the system can be in"
+      examples:
+        - "Morphological states (cell positions, types)"
+        - "Proof states (goals, hypotheses)"
+        - "Task states (problem, partial solution, answer)"
+
+    - id: O
+      name: "Operators"
+      description: "Available actions/generators that transform states"
+      maps_to_qa: "Generator set G"
+      examples:
+        - "Cell division, migration, apoptosis, differentiation"
+        - "Proof tactics: intro, apply, ring, omega"
+        - "LLM: text_generation, code_execution, retrieval"
+
+    - id: C
+      name: "Constraints"
+      description: "Rules that partition states into valid/invalid"
+      maps_to_qa: "Invariant set I"
+      key_insight: "Constraints can be EDITED, not just preserved or violated"
+      examples:
+        - "Anterior-posterior polarity (editable via bioelectrics)"
+        - "Type safety (preserved by kernel)"
+        - "Token budget (hard limit)"
+
+    - id: E
+      name: "Evaluation Function"
+      description: "What counts as success / fitness / goal achievement"
+      key_insight: "In multi-scale systems, each scale has its own E"
+      examples:
+        - "Morphological target (species-typical body plan)"
+        - "QED (proof complete)"
+        - "Task accuracy (correct answer)"
+
+    - id: H
+      name: "Planning Horizon"
+      description: "How far ahead the system can plan (discrete steps)"
+      key_insight: "Increasing H enables multi-step strategies"
+      examples:
+        - "H=1: Reactive (cancer cells)"
+        - "H=2: Tool use (use tool THEN solve)"
+        - "H=10: Multi-step reasoning (LLM chain-of-thought)"
+        - "H=365: Long-term planning (organism development)"
+
+# ============================================================================
+# SUBSTRATES
+# ============================================================================
+
+substrates:
+  - id: biological_neural
+    name: "Biological Neural"
+    examples: ["brains", "nervous systems", "C. elegans"]
+    K_range: "3-12"
+
+  - id: biological_non_neural
+    name: "Biological Non-Neural"
+    examples: ["cells", "tissues", "planaria", "slime molds"]
+    K_range: "2-9"
+    key_insight: "Intelligence without neurons -- same algebra applies"
+
+  - id: silicon_digital
+    name: "Silicon Digital"
+    examples: ["LLMs", "RL agents", "theorem provers"]
+    K_range: "5-20"
+    key_insight: "Highest K values achieved on narrow problem spaces"
+
+  - id: collective
+    name: "Collective"
+    examples: ["ant colonies", "immune systems", "markets"]
+    K_range: "2-8"
+
+  - id: hybrid
+    name: "Hybrid"
+    examples: ["brain-computer interfaces", "human-AI teams"]
+    K_range: "variable"
+
+# ============================================================================
+# COMPETENCY SCALES
+# ============================================================================
+
+competency_scales:
+  - id: molecular
+    name: "Molecular"
+    examples: ["protein folding", "gene regulatory networks"]
+    typical_H: 1-3
+    typical_operators: ["fold", "bind", "catalyze", "regulate"]
+
+  - id: cellular
+    name: "Cellular"
+    examples: ["chemotaxis", "cell division", "differentiation"]
+    typical_H: 1-5
+    typical_operators: ["divide", "migrate", "differentiate", "signal", "apoptose"]
+
+  - id: tissue
+    name: "Tissue"
+    examples: ["morphogenesis", "wound healing", "regeneration"]
+    typical_H: 5-30
+    typical_operators: ["pattern", "sculpt", "vascularize", "innervate"]
+
+  - id: organism
+    name: "Organism"
+    examples: ["navigation", "foraging", "mate selection"]
+    typical_H: 10-1000
+    typical_operators: ["move", "grasp", "plan", "communicate"]
+
+  - id: social
+    name: "Social"
+    examples: ["swarm behavior", "cultural evolution", "markets"]
+    typical_H: 100-10000
+    typical_operators: ["coordinate", "compete", "cooperate", "signal"]
+
+# ============================================================================
+# BARRIER TYPES (BEYOND NEURONS SPECIFIC)
+# ============================================================================
+
+obstruction_types:
+  - id: GOAL_DECOUPLING
+    description: "Component evaluation diverges from collective evaluation"
+    required_mechanism: "goal_realignment"
+    example: "Cancer cells maximize proliferation, ignoring organism homeostasis"
+    qa_dual: "Diversity Collapse is a special case (RL E diverges from exploration E)"
+
+  - id: CONSTRAINT_LOCK
+    description: "Constraints prevent needed state transitions"
+    required_mechanism: "constraint_editing"
+    example: "Anterior-posterior polarity locks tail regeneration at posterior"
+    qa_dual: "Analogous to invariant in Field Computation, but here C is editable"
+
+  - id: HORIZON_LIMIT
+    description: "Planning depth insufficient for multi-step strategy"
+    required_mechanism: "horizon_expansion"
+    example: "H=1 agent cannot use tools (requires plan: use_tool -> solve)"
+
+  - id: LOCAL_OPTIMA_CAPTURE
+    description: "System trapped in local optimum of evaluation landscape"
+    required_mechanism: "exploration_operator"
+    example: "Gradient descent stuck at saddle point"
+    qa_dual: "Related to Diversity Collapse mode collapse"
+
+  - id: COMPONENT_FRAGMENTATION
+    description: "Multi-scale architecture breaks; levels stop communicating"
+    required_mechanism: "interface_restoration"
+    example: "Metastatic cancer: cells ignore tissue-level signals"
+
+  - id: SUBSTRATE_MISMATCH
+    description: "Operators designed for one substrate fail on another"
+    required_mechanism: "substrate_adaptation"
+    example: "Neural algorithm assumes spike timing; fails on digital clock"
+
+  - id: SCALE_BOUNDARY
+    description: "Information cannot cross between competency scales"
+    required_mechanism: "scale_bridge"
+    example: "Cell-level signal too weak to influence tissue-level pattern"
+
+  - id: EVALUATION_MISALIGNMENT
+    description: "Evaluation function does not capture true objective"
+    required_mechanism: "evaluation_redesign"
+    example: "Reward hacking: agent optimizes proxy, not true goal"
+    qa_dual: "Generalizes Diversity Collapse reward hacking subtype"
+
+# ============================================================================
+# NEW MECHANISMS
+# ============================================================================
+
+mechanisms:
+  constraint_editing:
+    description: >
+      Changing the constraint set C to expand reachability.
+      Unlike generator injection (add O) or collapse (violate I),
+      constraint editing deliberately MODIFIES what counts as valid.
+    qa_relation: >
+      Generator Injection: change O, preserve C -> Reach expands
+      Constraint Editing:  preserve O, change C -> Reach expands
+      These are DUAL mechanisms. Both expand Reach. Different axis.
+    canonical_example: "Planaria bioelectric manipulation"
+    formalization: |
+      Given P = <S, O, C1, E, H> and P' = <S, O, C2, E, H>
+      where C2 = edit(C1) via an editing operator in O:
+      Reach(S, O, C2) may contain states not in Reach(S, O, C1)
+
+  goal_decoupling:
+    description: >
+      Component's evaluation function E_i diverges from collective
+      evaluation E_collective. This is NOT random failure -- it is
+      the component reverting to a different (often simpler) fitness
+      landscape.
+    qa_relation: >
+      Diversity Collapse is a special case of goal decoupling:
+      RL agent's E (mean reward) decouples from exploration E (diversity).
+    canonical_example: "Cancer cells"
+    formalization: |
+      In multi-scale architecture with levels L1, ..., Ln:
+      GOAL_DECOUPLING at level i iff E_i diverges from E_{i+1}
+      This erects a barrier at level i+1.
+
+  horizon_expansion:
+    description: >
+      Increasing the planning horizon H enables multi-step strategies
+      that are inaccessible at shorter horizons.
+    qa_relation: >
+      Generator Injection adds new operators.
+      Horizon Expansion allows EXISTING operators to be COMPOSED
+      into longer sequences.
+    canonical_example: "Tool use requires H >= 2"
+    formalization: |
+      Given P_H1 = <S, O, C, E, H1> and P_H2 = <S, O, C, E, H2>
+      where H2 > H1:
+      Reach(S, O, C, H2) may contain states not in Reach(S, O, C, H1)
+
+# ============================================================================
+# CERTIFICATE SCHEMA
+# ============================================================================
+
+certificate_schema:
+  type: BEYOND_NEURONS_INTELLIGENCE_CERT
+
+  required_fields:
+    - certificate_id: str
+    - certificate_type: str  # "BEYOND_NEURONS_INTELLIGENCE_CERT"
+    - timestamp: str
+    - claim: str
+    - substrate: Substrate
+    - scale: CompetencyScale
+    - problem_space: ProblemSpace
+    - search_efficiency: SearchEfficiency
+    - result: IntelligenceResult
+
+  optional_fields:
+    - competency_architecture: CompetencyArchitecture
+    - baseline_operators: OperatorSet
+    - extended_operators: OperatorSet
+    - injected_operators: List[Operator]
+    - baseline_constraints: ConstraintSet
+    - edited_constraints: ConstraintSet
+    - barrier: BeyondNeuronsBarrier
+    - before_witness: UnreachabilityWitness
+    - after_witness: IntelligenceWitness
+    - source_refs: List[SourceRef]
+
+  results:
+    - BARRIER_CROSSED: "Intelligence demonstrated, barrier overcome"
+    - GOAL_DECOUPLED: "Component diverged from collective"
+    - CONSTRAINT_EDITED: "Constraints modified to expand reach"
+    - HORIZON_EXPANDED: "Deeper planning enabled new reach"
+    - NO_INTELLIGENCE: "K <= 0, no better than random"
+    - SUBSTRATE_NEUTRAL_CONFIRMED: "Same K on different substrates"
+
+  validator_contract:
+    - verify_certificate_type           # Must be BEYOND_NEURONS_INTELLIGENCE_CERT
+    - verify_search_efficiency          # K > 0 when tau_blind > tau_agent
+    - verify_problem_space_complete     # All P components present
+    - verify_operator_injection         # If present, baseline subset extended
+    - verify_constraint_editing         # If present, same names different predicates
+    - verify_competency_architecture    # If present, levels ordered
+    - verify_result_consistency         # Result matches evidence
+    - emit_fail_algebra_on_error        # Structured failure
+
+# ============================================================================
+# CANONICAL EXAMPLES
+# ============================================================================
+
+canonical_examples:
+  - name: "Planaria Regeneration"
+    certificate_type: BEYOND_NEURONS_INTELLIGENCE_CERT
+    result: CONSTRAINT_EDITED
+    substrate: biological_non_neural
+    scale: organism
+    K: 9
+    mechanism: constraint_editing
+    summary: >
+      Same cellular operators, edited bioelectric constraints.
+      Two-headed morphology unreachable under original constraints.
+      Constraint editing (gap junction manipulation) expands Reach.
+      K=9: regeneration is 10^9x faster than blind morphospace search.
+
+  - name: "Cancer Goal Decoupling"
+    certificate_type: BEYOND_NEURONS_INTELLIGENCE_CERT
+    result: GOAL_DECOUPLED
+    substrate: biological_non_neural
+    scale: cellular
+    K: 4
+    mechanism: goal_decoupling
+    summary: >
+      Cancer cells are intelligent (K=4 at cellular scale).
+      Problem is misalignment: E_cell diverges from E_organism.
+      GOAL_DECOUPLING barrier erected at organism scale.
+      Same obstruction algebra: barrier = missing goal_realignment generator.
+
+  - name: "Non-Neural AI"
+    certificate_type: BEYOND_NEURONS_INTELLIGENCE_CERT
+    result: SUBSTRATE_NEUTRAL_CONFIRMED
+    substrate: silicon_digital
+    scale: artificial
+    K: 17
+    mechanism: operator_application
+    summary: >
+      LLM achieves K=17 on math problems without neurons.
+      Same operators as ROI #1 (text_generation, code_execution).
+      Substrate neutrality confirmed: intelligence = search efficiency.
+      Links directly to Generator Injection certificate.
+
+# ============================================================================
+# QA CONJECTURES
+# ============================================================================
+
+conjectures:
+  - id: CONJ_SUBSTRATE_INVARIANCE
+    statement: >
+      For any problem space P, search efficiency K is invariant
+      under substrate substitution, up to constant factors in tau_agent.
+    testable: true
+    test_method: "Compare K across substrates on matched problem spaces"
+
+  - id: CONJ_CONSTRAINT_INJECTION_DUALITY
+    statement: >
+      Constraint editing and generator injection are dual:
+      edit(C) can be simulated by inject(O) with a constraint-editing operator,
+      and vice versa.
+    testable: true
+    test_method: "Show bijection between constraint edits and generator injections"
+
+  - id: CONJ_HORIZON_HIERARCHY
+    statement: >
+      Intelligence scales with planning horizon:
+      K(H2) >= K(H1) when H2 > H1, all else equal.
+      Strict inequality when multi-step strategies exist.
+    testable: true
+    test_method: "Measure K at varying H on fixed (S, O, C, E)"
+
+  - id: CONJ_GOAL_COLLAPSE_EQUIVALENCE
+    statement: >
+      Goal decoupling (Beyond Neurons) and diversity collapse (ROI #2)
+      are instances of the same obstruction: evaluation misalignment
+      across scales.
+    testable: true
+    test_method: "Show formal isomorphism between collapse certificate and goal decoupling"
+
+  - id: CONJ_COMPETENCY_DEPTH_BOUND
+    statement: >
+      Maximum achievable K at scale n is bounded by the sum of
+      K values at scales 1 through n-1:
+      K_n <= sum(K_i for i in 1..n-1) + K_intrinsic_n
+    testable: false
+    test_method: "Requires formal model of inter-scale information transfer"
+
+# ============================================================================
+# QA INTEGRATION
+# ============================================================================
+
+qa_integration:
+  tetrad:
+    - QA_MAP__GENERATOR_INJECTION.yaml    # Leg 1: Reach expands
+    - QA_MAP__DIVERSITY_COLLAPSE.yaml     # Leg 2: Reach contracts
+    - QA_MAP__FIELD_COMPUTATION.yaml      # Leg 3: Reach realized by physics
+    - QA_MAP__BEYOND_NEURONS.yaml         # Leg 4: Intelligence substrate-neutral
+
+  links_to:
+    - qa_generator_injection_certificate.py   # O = generators
+    - qa_diversity_collapse_certificate.py    # Goal decoupling generalizes collapse
+    - qa_field_computation_certificate.py     # Physical substrates
+    - qa_cert_core.py                         # Shared plumbing
+
+  extends:
+    - failure_algebra           # New barrier types (goal decoupling, constraint lock)
+    - reachability_theory       # Constraint editing as new axis
+    - invariant_system          # Constraints as editable invariants
+    - generator_algebra         # Operators at multiple scales
+
+  enables:
+    - substrate_neutral_ai_theory     # QA for any intelligence
+    - multi_scale_architecture        # Nested problem spaces
+    - constraint_editing_framework    # New reachability mechanism
+    - goal_alignment_analysis         # Cancer = misalignment = goal decoupling
+    - horizon_scaling_theory          # Planning depth as intelligence axis
+
+# ============================================================================
+# GENERAL THEOREM (TETRAD COMPLETE)
+# ============================================================================
+
+theorem:
+  name: "QA Reachability-Intelligence Tetrad"
+  statement: |
+    Capability = Reachability(S, G, I)
+    Intelligence = K = log10(tau_blind / tau_agent) in problem space P = <S, O, C, E, H>
+
+    This holds whether the system is:
+      1. An agent with tools      (Generator Injection, K from O expansion)
+      2. A search process         (Diversity Collapse, K lost to mode collapse)
+      3. A physical field          (Field Computation, K realized in physics)
+      4. Any substrate at any scale (Beyond Neurons, K substrate-neutral)
+
+    The algebra is the same:
+      - Operators determine what states are reachable
+      - Constraints determine what states are valid
+      - Barriers are the obstruction objects
+      - Certificates are the constructive proofs
+      - K measures how efficiently the system navigates the space
+
+    New axes in the tetrad:
+      - Constraint editing: change C to expand Reach (dual to generator injection)
+      - Goal decoupling: E_component diverges from E_collective (erects barriers)
+      - Horizon expansion: increase H to unlock multi-step strategies
+      - Substrate neutrality: K is invariant under substrate substitution
+
+  certificates:
+    - GENERATOR_INJECTION              # Direction 1: expand reach via O
+    - DIVERSITY_COLLAPSE_OBSTRUCTION   # Direction 2: contract reach via I violation
+    - FIELD_COMPUTATION_CERT           # Direction 3: physical realization
+    - BEYOND_NEURONS_INTELLIGENCE_CERT # Direction 4: substrate-neutral, scale-free

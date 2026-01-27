@@ -1,0 +1,309 @@
+# QA_MAP__DIVERSITY_COLLAPSE.yaml
+# Diversity Collapse Obstruction Certificate Schema
+#
+# Source Paper:
+#   - Execution-Grounded Automated AI Research (arXiv:2601.14525)
+#
+# Core Principle (DUAL of Generator Injection):
+#   Injection:  G₁ ⊂ G₂  →  Reach EXPANDS  →  barrier crossed
+#   Collapse:   I_div violated  →  Reach CONTRACTS  →  barrier erected
+#
+# Collapse is not an accident. It is what happens when the generator set
+# lacks a diversity-preserving operator.
+
+module_id: QA_MAP_DIVERSITY_COLLAPSE
+title: "Diversity Collapse Obstruction"
+version: 1.0
+date: 2026-01-27
+dual_of: QA_MAP_GENERATOR_INJECTION
+
+# ============================================================================
+# THEORETICAL FOUNDATION
+# ============================================================================
+
+principle:
+  statement: >
+    Under reward-maximizing updates without diversity pressure,
+    the reachable set contracts to a strict subset of the original.
+    Mean performance improves while the upper envelope stagnates.
+    This is MODE COLLAPSE: a structural property, not a bug.
+
+  formal: |
+    Given:
+      - Search process P over state space S
+      - Diversity invariant I_div: diversity(pop_t) >= threshold for all t
+      - Generator set G without diversity-preserving operator
+
+    Then:
+      I_div is violated at some step t*
+      AND Reach(S, G, t* + k) ⊂ Reach(S, G, t*)   (strictly smaller)
+      AND mean(pop_t) increases monotonically
+      AND max(pop_t) plateaus after t*
+
+    The canonical mode-collapse signature:
+      mean_improved ∧ ¬best_improved ∧ diversity_collapsed
+
+  dual_relationship: |
+    GENERATOR INJECTION:   Add generators → Reach expands → Barrier crossed
+    DIVERSITY COLLAPSE:    Violate invariant → Reach contracts → Barrier erected
+
+    Both are controlled by the pair (G, I).
+    They are the two directions of the same theorem.
+
+# ============================================================================
+# STATE SPACE
+# ============================================================================
+
+state_space:
+  name: PopulationSearchSpace
+
+  state:
+    - step: int                        # Search iteration
+    - mean_reward: Scalar              # Population mean
+    - max_reward: Scalar               # Upper envelope
+    - min_reward: Scalar               # Lower bound
+    - reward_std: Scalar               # Spread
+    - diversity_value: Scalar          # Measured diversity
+    - diversity_metric: DiversityMetric
+    - population_size: int
+    - distinct_phenotypes: Optional[int]
+
+  trace:
+    - strategy: SearchStrategy         # rl_policy_gradient | evolutionary | random | beam
+    - snapshots: List[PopulationSnapshot]
+    - total_steps: int
+    - budget_gpu_hours: Optional[Scalar]
+
+# ============================================================================
+# DIVERSITY METRICS
+# ============================================================================
+
+diversity_metrics:
+  - id: token_entropy
+    description: "Shannon entropy of token distributions across population"
+    collapse_signature: "Entropy drops to near-zero as outputs converge"
+
+  - id: embedding_dispersion
+    description: "Mean pairwise distance in embedding space"
+    collapse_signature: "Cluster radius shrinks, population occupies single basin"
+
+  - id: edit_distance
+    description: "Mean pairwise edit distance of proposals"
+    collapse_signature: "Proposals become near-identical strings"
+
+  - id: operator_histogram
+    description: "Entropy of technique/operator usage distribution"
+    collapse_signature: "Single technique dominates"
+
+  - id: phenotype_coverage
+    description: "Fraction of distinct behavioral clusters occupied"
+    collapse_signature: "Only 1-2 clusters remain populated"
+
+# ============================================================================
+# INVARIANT DEFINITION
+# ============================================================================
+
+invariant:
+  name: I_diversity
+  parameters:
+    metric: DiversityMetric            # Which diversity measure
+    threshold: Scalar                  # Must stay above this
+    collapse_window: int               # Consecutive steps below = violation
+    plateau_epsilon: Scalar            # Improvement must exceed this
+    plateau_window: int                # Consecutive flat steps = plateau
+
+  violation_condition: |
+    ∃ consecutive interval [t, t+collapse_window] such that
+    diversity_value(t') < threshold for all t' in interval
+
+  plateau_condition: |
+    ∃ consecutive interval [t, t+plateau_window] such that
+    max_reward(t') <= max_reward(t) + plateau_epsilon for all t' in interval
+
+# ============================================================================
+# OBSTRUCTION TYPES
+# ============================================================================
+
+obstruction_types:
+  - id: MODE_COLLAPSE
+    description: "Mean improves, best stagnates, diversity drops"
+    signature: "mean_improved ∧ ¬best_improved ∧ diversity_collapsed"
+    susceptible_strategies: [rl_policy_gradient, beam_search]
+    resistant_strategies: [evolutionary, random_search]
+
+  - id: GREEDY_COLLAPSE
+    description: "Selection pressure eliminates exploration"
+    signature: "diversity → 0 monotonically, reward variance → 0"
+    missing_generator: archive_elitism
+
+  - id: REWARD_HACKING_COLLAPSE
+    description: "Mean rises via exploit, diversity drops, best stagnates"
+    signature: "mean_improved ∧ ¬best_improved ∧ variance_anomalous"
+    missing_generator: reward_model_diversity_check
+
+  - id: BUDGET_PRESSURE_COLLAPSE
+    description: "Exploration stops because resources exhausted"
+    signature: "diversity_drops_at_budget_boundary"
+    missing_generator: adaptive_budget_allocation
+
+# ============================================================================
+# CERTIFICATE SCHEMA
+# ============================================================================
+
+certificate_schema:
+  type: DIVERSITY_COLLAPSE_OBSTRUCTION
+
+  required_fields:
+    - certificate_id: str
+    - timestamp: str
+    - diversity_invariant: DiversityInvariant
+    - collapsed_trace: SearchTrace
+    - collapse_witness: CollapseWitness
+    - missing_generator: str
+    - verdict: enum[COLLAPSE_DETECTED, NO_COLLAPSE, INCONCLUSIVE, INVARIANT_PRESERVED]
+
+  optional_fields:
+    - preserved_trace: SearchTrace        # Evolutionary comparison
+    - preservation_witness: PreservationWitness
+    - source_paper: str
+    - domain: str
+
+  witness_fields:
+    collapse_witness:
+      - collapse_step: int               # When I_div first violated
+      - plateau_start: int               # When max_reward stagnated
+      - plateau_end: int
+      - mean_improved: bool              # delta_mean > 0
+      - best_improved: bool              # delta_best > plateau_epsilon
+      - diversity_collapsed: bool        # I_div violated
+      - is_mode_collapse: bool           # The canonical triple
+      - delta_mean: Scalar
+      - delta_best: Scalar
+      - delta_diversity: Scalar
+
+    preservation_witness:
+      - min_diversity_observed: Scalar
+      - min_diversity_step: int
+      - diversity_above_threshold: bool
+      - best_improved: bool
+      - delta_best: Scalar
+
+  validator_contract:
+    - check_strategy_susceptibility    # Collapsed trace uses RL/beam
+    - check_mode_collapse_signature    # The canonical triple holds
+    - verify_collapse_step_in_range    # Within trace bounds
+    - verify_deltas_match_trace        # Computed from actual data
+    - check_preservation_consistency   # If comparison provided
+    - emit_fail_algebra_on_error       # Structured failure
+
+# ============================================================================
+# SEARCH STRATEGY COMPARISON
+# ============================================================================
+
+strategy_comparison:
+  rl_policy_gradient:
+    diversity_behavior: "Collapses without explicit diversity pressure"
+    mean_behavior: "Improves reliably"
+    best_behavior: "Plateaus after initial improvement"
+    failure_mode: MODE_COLLAPSE
+    key_finding: >
+      RL improves the mean but loses the upper bound because diversity
+      collapses into 'simple ideas.' (Si et al. 2026)
+
+  evolutionary:
+    diversity_behavior: "Maintained by archive + elitism + mutation"
+    mean_behavior: "Improves more slowly than RL"
+    best_behavior: "Continues improving throughout"
+    failure_mode: null
+    key_finding: >
+      In 10 rounds, evolutionary search found post-training improvements
+      exceeding strong baselines and pre-training recipes cutting time
+      nearly in half. (Si et al. 2026)
+
+  key_contrast: >
+    RL is better at mean optimization.
+    Evolution is better at frontier discovery.
+    The difference is diversity preservation, not intelligence.
+
+# ============================================================================
+# CROSS-DOMAIN INSTANTIATIONS
+# ============================================================================
+
+instantiations:
+  automated_research:
+    source_paper: "arXiv:2601.14525"
+    collapsed_strategy: rl_policy_gradient
+    preserved_strategy: evolutionary
+    diversity_metric: embedding_dispersion
+    missing_generator: entropy_bonus_regularizer
+    finding: >
+      RL from execution feedback improves average idea quality but
+      collapses diversity, preventing frontier discoveries.
+
+  neural_architecture_search:
+    collapsed_strategy: rl_policy_gradient
+    preserved_strategy: evolutionary
+    diversity_metric: operator_histogram
+    missing_generator: architecture_novelty_bonus
+    finding: >
+      RL-based NAS converges to a small family of architectures.
+      Evolutionary NAS with novelty search explores more of the design space.
+
+  language_model_alignment:
+    collapsed_strategy: rl_policy_gradient  # RLHF
+    preserved_strategy: null  # No comparison available
+    diversity_metric: token_entropy
+    missing_generator: output_diversity_reward
+    finding: >
+      RLHF can collapse model outputs to narrow "safe" patterns,
+      reducing capability breadth. This is diversity collapse.
+
+# ============================================================================
+# QA INTEGRATION
+# ============================================================================
+
+qa_integration:
+  dual_of:
+    - QA_MAP__GENERATOR_INJECTION.yaml
+
+  links_to:
+    - qa_generator_injection_certificate.py   # The dual certificate
+    - qa_generalization_certificate.py        # Bounds + collapse
+    - qa_sparse_attention_certificate.py      # Attention collapse
+
+  extends:
+    - failure_algebra         # MODE_COLLAPSE is an obstruction type
+    - reachability_theory     # Contraction = inverse reachability
+    - invariant_system        # I_diversity is a first-class invariant
+
+  enables:
+    - rl_vs_evolution_theory         # Formal comparison
+    - alignment_failure_prediction   # RLHF collapse detection
+    - search_strategy_selection      # When to use which approach
+
+# ============================================================================
+# GENERAL THEOREM
+# ============================================================================
+
+theorem:
+  name: "Reachability-Invariant Duality"
+  statement: |
+    Reachability is controlled by the GENERATOR-INVARIANT pair (G, I).
+
+    Direction 1 (Generator Injection):
+      G₁ ⊂ G₂, I preserved ⟹ Reach(S, G₂, I) ⊇ Reach(S, G₁, I)
+      Witness: GeneratorInjectionCertificate
+
+    Direction 2 (Diversity Collapse):
+      G fixed, I_div violated ⟹ Reach contracts
+      Witness: DiversityCollapseObstruction
+
+    Corollary:
+      To prevent collapse, the generator set G must include
+      a diversity-preserving operator (entropy bonus, archive, elitism).
+      Collapse is generator-relative: it is what happens when G
+      lacks the required operator.
+
+  certificates:
+    - GENERATOR_INJECTION       # Direction 1
+    - DIVERSITY_COLLAPSE_OBSTRUCTION  # Direction 2

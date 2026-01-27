@@ -1,0 +1,76 @@
+{
+  "certificate_id": "QA_CONJ__GOAL_COLLAPSE_EQUIVALENCE__v1",
+  "certificate_type": "QA_CONJECTURE",
+  "claim": {
+    "falsification_condition": "No isomorphism exists under any consistent declaration of P",
+    "scope": "oncology, morphogenesis, RL/search",
+    "statement": "There exists a witness isomorphism between (E_local != E_global) goal-decoupling failures and diversity-collapse failures, i.e., both are evaluation-misalignment obstructions.",
+    "success_condition": "Construct isomorphism map between witness structures"
+  },
+  "conjecture_type": "CONJ_GOAL_COLLAPSE_EQUIVALENCE",
+  "failure_taxonomy": [
+    {
+      "fail_type": "NO_MISALIGNMENT_WITNESS",
+      "invariant_diff_schema": {
+        "reason": "str"
+      }
+    },
+    {
+      "fail_type": "NONISOMORPHIC_WITNESS",
+      "invariant_diff_schema": {
+        "mismatch": "str"
+      }
+    },
+    {
+      "fail_type": "BARRIER_TYPE_MISMATCH",
+      "invariant_diff_schema": {
+        "barrier_A": "str",
+        "barrier_B": "str"
+      }
+    }
+  ],
+  "status": "open",
+  "timestamp": "2026-01-27T00:00:00Z",
+  "title": "Goal decoupling across scales is the same obstruction family as diversity/mode collapse",
+  "validator_contract": {
+    "deterministic": true,
+    "inputs": [
+      "system_A_goal_decoupling",
+      "system_B_collapse",
+      "P_A",
+      "P_B"
+    ],
+    "outputs": [
+      "iso_map",
+      "pass_fail",
+      "fail_type",
+      "invariant_diff"
+    ],
+    "replay": {
+      "canonical_json": true,
+      "hash": "sha256"
+    },
+    "steps": [
+      {
+        "notes": "Define E_local and E_global",
+        "op": "DECLARE_TWO_LEVEL_E"
+      },
+      {
+        "notes": "Show optimizing E_local degrades E_global",
+        "op": "EXTRACT_MISALIGNMENT_WITNESS"
+      },
+      {
+        "notes": "Obtain collapse signature under fixed constraints",
+        "op": "EXTRACT_COLLAPSE_WITNESS"
+      },
+      {
+        "notes": "Map witness structures",
+        "op": "CONSTRUCT_ISOMORPHISM"
+      },
+      {
+        "notes": "Same obstruction family",
+        "op": "VERIFY_BARRIER_EQUIVALENCE"
+      }
+    ]
+  }
+}

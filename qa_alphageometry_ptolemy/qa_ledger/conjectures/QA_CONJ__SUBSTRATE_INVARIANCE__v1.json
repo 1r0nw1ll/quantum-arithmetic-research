@@ -1,0 +1,82 @@
+{
+  "certificate_id": "QA_CONJ__SUBSTRATE_INVARIANCE__v1",
+  "certificate_type": "QA_CONJECTURE",
+  "claim": {
+    "falsification_condition": "Reproducible K divergence beyond tolerance under isomorphic P and matched budgets",
+    "scope": "substrate-neutral cognition (cells, glia, silicon, collectives)",
+    "statement": "For matched problem spaces P=<S,O,C,E,H>, K=log10(tau_blind/tau_agent) is invariant across substrates up to declared tolerance.",
+    "success_condition": "|K_X - K_Y| <= epsilon (or within declared constant-factor window)"
+  },
+  "conjecture_type": "CONJ_SUBSTRATE_INVARIANCE",
+  "failure_taxonomy": [
+    {
+      "fail_type": "P_MISMATCH",
+      "invariant_diff_schema": {
+        "missing_constraints": "list[str]",
+        "missing_ops": "list[str]"
+      }
+    },
+    {
+      "fail_type": "BASELINE_NONDETERMINISTIC",
+      "invariant_diff_schema": {
+        "delta": "float",
+        "seed": "str"
+      }
+    },
+    {
+      "fail_type": "K_DIVERGENCE",
+      "invariant_diff_schema": {
+        "K_X": "float",
+        "K_Y": "float",
+        "epsilon": "float"
+      }
+    }
+  ],
+  "status": "open",
+  "timestamp": "2026-01-27T00:00:00Z",
+  "title": "K is approximately invariant under substrate substitution for isomorphic problem spaces",
+  "validator_contract": {
+    "deterministic": true,
+    "inputs": [
+      "P_X",
+      "P_Y",
+      "task_suite",
+      "budgets",
+      "seeds",
+      "epsilon"
+    ],
+    "outputs": [
+      "K_X",
+      "K_Y",
+      "pass_fail",
+      "fail_type",
+      "invariant_diff"
+    ],
+    "replay": {
+      "canonical_json": true,
+      "hash": "sha256"
+    },
+    "steps": [
+      {
+        "notes": "Verify operator + constraint name isomorphism",
+        "op": "DECLARE_ISOMORPHIC_P"
+      },
+      {
+        "notes": "Fixed baseline sampler (seeded)",
+        "op": "ESTIMATE_TAU_BLIND"
+      },
+      {
+        "notes": "Fixed policy class + evaluation",
+        "op": "MEASURE_TAU_AGENT"
+      },
+      {
+        "notes": "K = log10(tau_blind/tau_agent)",
+        "op": "COMPUTE_K"
+      },
+      {
+        "notes": "Check tolerance window",
+        "op": "COMPARE_K"
+      }
+    ]
+  }
+}

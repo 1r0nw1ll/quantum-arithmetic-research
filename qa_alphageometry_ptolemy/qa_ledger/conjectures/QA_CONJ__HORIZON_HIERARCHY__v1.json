@@ -1,0 +1,80 @@
+{
+  "certificate_id": "QA_CONJ__HORIZON_HIERARCHY__v1",
+  "certificate_type": "QA_CONJECTURE",
+  "claim": {
+    "falsification_condition": "Reproducible K monotonicity violation under matched regimes",
+    "scope": "morphogenesis + tool-using agents",
+    "statement": "With S,O,C,E fixed, K(H2) >= K(H1) for H2>H1; strict increase when a multi-step witness exists.",
+    "success_condition": "K(H2) >= K(H1)"
+  },
+  "conjecture_type": "CONJ_HORIZON_HIERARCHY",
+  "failure_taxonomy": [
+    {
+      "fail_type": "H_NOT_APPLIED",
+      "invariant_diff_schema": {
+        "H_declared": "int",
+        "H_effective": "int"
+      }
+    },
+    {
+      "fail_type": "POLICY_CLASS_CHANGED",
+      "invariant_diff_schema": {
+        "policy_after": "str",
+        "policy_before": "str"
+      }
+    },
+    {
+      "fail_type": "K_MONOTONICITY_VIOLATION",
+      "invariant_diff_schema": {
+        "K_H1": "float",
+        "K_H2": "float"
+      }
+    }
+  ],
+  "status": "open",
+  "timestamp": "2026-01-27T00:00:00Z",
+  "title": "Increasing horizon H (holding S,O,C,E fixed) does not decrease K",
+  "validator_contract": {
+    "deterministic": true,
+    "inputs": [
+      "P",
+      "H1",
+      "H2",
+      "budgets",
+      "seeds"
+    ],
+    "outputs": [
+      "K_H1",
+      "K_H2",
+      "pass_fail",
+      "fail_type",
+      "invariant_diff"
+    ],
+    "replay": {
+      "canonical_json": true,
+      "hash": "sha256"
+    },
+    "steps": [
+      {
+        "notes": "Fix S,O,C,E",
+        "op": "FREEZE_SOCE"
+      },
+      {
+        "notes": "Execute under horizon H1",
+        "op": "RUN_AGENT"
+      },
+      {
+        "notes": "Execute under horizon H2",
+        "op": "RUN_AGENT"
+      },
+      {
+        "notes": "Compute K for each horizon",
+        "op": "COMPUTE_K"
+      },
+      {
+        "notes": "Assert K(H2) >= K(H1)",
+        "op": "CHECK_MONOTONICITY"
+      }
+    ]
+  }
+}

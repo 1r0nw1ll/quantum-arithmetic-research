@@ -462,6 +462,7 @@ def execute_http_fetch(
                         "url_hostname": witness_hostname,
                         "enforcement_env": env_val,
                         "enforcement_effective": REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH,
+                        "env_parse": "truthy in {true, 1, yes}",
                     },
                 }],
             ))
@@ -471,6 +472,32 @@ def execute_http_fetch(
             cert_id=cert["cert_id"],
             obstruction_id=None,
             error="Capability token required: CAP_TOKEN_REQUIRED",
+            trace_summary=trace.summary() if trace else None,
+        )
+
+    # --- Step 1c: Runner-side token TTL check (defense-in-depth) ---
+    # Re-validate token expiry at execution time to catch "kernel bypass + stale token".
+    if capability_token is not None and capability_token.is_expired():
+        if trace is not None:
+            trace.append(MerkleLeaf(
+                move="TOOL_CALL:http_fetch",
+                fail_type="CAPABILITY_TOKEN_EXPIRED",
+                invariant_diff=[{
+                    "inv": "CAP_TOKEN_TTL_RUNNER",
+                    "expected": "token not expired",
+                    "got": f"expired (expires_at={capability_token.expires_at})",
+                    "witness": {
+                        "tool": "http_fetch",
+                        "expires_at": capability_token.expires_at,
+                        "checked_at": now_rfc3339(),
+                    },
+                }],
+            ))
+        return ToolResult(
+            success=False,
+            tool="http_fetch",
+            cert_id=cert["cert_id"],
+            error=f"Capability token expired: CAP_TOKEN_TTL_RUNNER — expires_at={capability_token.expires_at}",
             trace_summary=trace.summary() if trace else None,
         )
 

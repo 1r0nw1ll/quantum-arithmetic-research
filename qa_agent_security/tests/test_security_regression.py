@@ -696,6 +696,73 @@ class TestRunnerConstraintRecheck:
         finally:
             kernel_module._check_constraints = original_check_constraints
 
+    def test_runner_ttl_check_blocks_expired_token(self):
+        """
+        Runner-side TTL check should block expired tokens even if kernel passed.
+        This is defense-in-depth for "kernel bypass + stale token" scenarios.
+        """
+        import qa_agent_security.qa_agent_security as kernel_module
+
+        # Save original function and patch to skip TTL check in kernel
+        original_enforce = kernel_module.enforce_policy
+
+        def patched_enforce(*args, **kwargs):
+            # Patch the token's is_expired to return False during kernel check
+            token = kwargs.get("capability_token")
+            if token is not None:
+                original_is_expired = token.is_expired
+                token.is_expired = lambda *a: False
+                try:
+                    result = original_enforce(*args, **kwargs)
+                finally:
+                    token.is_expired = original_is_expired
+                return result
+            return original_enforce(*args, **kwargs)
+
+        try:
+            kernel_module.enforce_policy = patched_enforce
+
+            # Create an expired token
+            expired_token = CapabilityToken(
+                agent_id="test",
+                session_id="s1",
+                expires_at="2020-01-01T00:00:00Z",  # Clearly expired
+                capabilities=[
+                    CapabilityEntry(
+                        tool="http_fetch",
+                        scope="network",
+                        args_schema="SCHEMA.HTTP_FETCH.v1",
+                        constraints={},
+                    ),
+                ],
+            )
+            trace = MerkleTrace()
+
+            # Import the runner's enforce_policy reference
+            import qa_agent_security.tool_runner as runner_module
+            original_runner_enforce = runner_module.enforce_policy
+            runner_module.enforce_policy = patched_enforce
+
+            try:
+                r = execute_http_fetch(
+                    url="https://example.com/page",
+                    intent_source="policy_kernel",
+                    intent_ref="test",
+                    url_trusted=True,
+                    requires_human_approval=False,
+                    capability_token=expired_token,
+                    trace=trace,
+                )
+
+                # Should be blocked by runner-side TTL check
+                assert not r.success
+                assert "CAP_TOKEN_TTL_RUNNER" in (r.error or "") or "expired" in (r.error or "").lower()
+            finally:
+                runner_module.enforce_policy = original_runner_enforce
+
+        finally:
+            kernel_module.enforce_policy = original_enforce
+
 
 class TestRedirectErrorPropagation:
     """

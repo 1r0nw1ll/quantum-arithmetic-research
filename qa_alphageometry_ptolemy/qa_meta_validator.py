@@ -666,3 +666,25 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         print("\n[13] FST module: SKIPPED (qa_fst/qa_fst_validate.py not found)")
+
+    # --- Test 14: Agent Security Kernel (subprocess) ---
+    agent_sec_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        "..", "qa_agent_security", "qa_agent_security.py")
+    agent_sec_validator = os.path.normpath(agent_sec_validator)
+    if os.path.exists(agent_sec_validator):
+        print("\n--- AGENT SECURITY KERNEL (subprocess) ---")
+        sec_result = subprocess.run(
+            [sys.executable, agent_sec_validator, "--validate"],
+            capture_output=True, text=True)
+        if sec_result.returncode == 0:
+            sec_json = json.loads(sec_result.stdout)
+            sec_status = sec_json.get("result", "UNKNOWN")
+            sec_tests = sec_json.get("tests_run", 0)
+            print(f"[14] Agent Security Kernel: {sec_status} "
+                  f"({sec_tests} tests) -> PASS")
+        else:
+            print(f"[14] Agent Security Kernel: FAIL (exit code {sec_result.returncode})")
+            print(f"     stderr: {sec_result.stderr[:200]}")
+            sys.exit(1)
+    else:
+        print("\n[14] Agent Security Kernel: SKIPPED (qa_agent_security.py not found)")

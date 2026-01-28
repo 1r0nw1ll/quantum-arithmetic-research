@@ -32,3 +32,11 @@ jobs:
 
       - name: Run FST validator checks
         run: python qa_fst/qa_fst_validate.py
+
+      - name: Run Agent Security Kernel self-tests
+        working-directory: .
+        run: python qa_agent_security/qa_agent_security.py
+
+      - name: Run Agent Security Kernel pytest suite
+        working-directory: .
+        run: python -m pytest qa_agent_security/tests/ -q --override-ini="testpaths=qa_agent_security/tests" --override-ini="python_files=test_*.py"

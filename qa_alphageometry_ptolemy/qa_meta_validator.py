@@ -644,3 +644,25 @@ if __name__ == "__main__":
     assert valid_count == 9, f"Expected 9 valid, got {valid_count}"
     assert invalid_count == 3, f"Expected 3 invalid, got {invalid_count}"
     print("\nAll meta-validator self-tests PASSED (TETRAD + CONJECTURES)")
+
+    # --- Test 13: FST module (spine + bundle validator, subprocess) ---
+    import subprocess
+    fst_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                 "qa_fst", "qa_fst_validate.py")
+    if os.path.exists(fst_validator):
+        print("\n--- FST MODULE (subprocess) ---")
+        fst_result = subprocess.run(
+            [sys.executable, fst_validator, "--validate"],
+            capture_output=True, text=True)
+        if fst_result.returncode == 0:
+            fst_json = json.loads(fst_result.stdout)
+            fst_status = fst_json.get("result", "UNKNOWN")
+            fst_warns = len(fst_json.get("warnings", []))
+            print(f"[13] FST module: {fst_status} "
+                  f"(warnings={fst_warns}) -> PASS")
+        else:
+            print(f"[13] FST module: FAIL (exit code {fst_result.returncode})")
+            print(f"     stderr: {fst_result.stderr[:200]}")
+            sys.exit(1)
+    else:
+        print("\n[13] FST module: SKIPPED (qa_fst/qa_fst_validate.py not found)")

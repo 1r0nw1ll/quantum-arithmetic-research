@@ -1,0 +1,110 @@
+{
+  "schema_version": "QA_CERT_BUNDLE.v1",
+  "certificate_id": "qa.cert.fst.proton_stability_and_loop_mev_homomorphism.v1",
+  "module_id": "qa.map.fst.plenum_to_particle.v1",
+  "created_utc": "2026-01-27T00:00:00Z",
+  "claims": [
+    {
+      "type": "FST_PROTON_STABILITY_DELTA_SYM_WITNESS.v1",
+      "subject": {
+        "particle": "proton",
+        "loop_count_loves": 1836
+      },
+      "evidence_refs": [
+        {
+          "ref": "Paper Summary: proton structurally composed of 3 anti-matter quarks (Rspin) + 3 real-matter quarks (Aspin)",
+          "note": "Only electron and proton stable due to superimposability requirement."
+        },
+        {
+          "ref": "FST mapping: hexagon_side_imbalance model",
+          "note": "Proton quasi-symmetric: +2 triangles on 3 of 6 hexagon sides."
+        },
+        {
+          "ref": "FST mapping: anti-proton balance",
+          "note": "Balance provided when entangled anti-proton included."
+        }
+      ],
+      "symmetry_witness": {
+        "model": "hexagon_side_imbalance",
+        "side_excess_triangles": [2, 2, 2, 0, 0, 0],
+        "total_triangles": 1836,
+        "metric": "L1_norm(excess)/total",
+        "computed": {
+          "l1": 6,
+          "delta_sym": 0.0032679738562091504
+        },
+        "thresholds": {
+          "stable_if_delta_sym_le": 0.01
+        }
+      },
+      "validator_expectation": {
+        "result": "PASS",
+        "fail_type_if_not": "SYMMETRY_DEFECT"
+      },
+      "metrics": {
+        "delta_sym": 0.0032679738562091504
+      }
+    },
+    {
+      "type": "LOOP_TO_MEV_HOMOMORPHISM_LAMBDA_BOOKKEEPING_AND_RATIO_TEST.v1",
+      "evidence_refs": [
+        {
+          "ref": "FST mapping: u/d quark ratio comparison",
+          "note": "Up/Down quark ratio matches between MeV and loops."
+        },
+        {
+          "ref": "FST mapping: lambda 2187 loops decay bookkeeping",
+          "note": "Lambda 2187 loops decay bookkeeping; compare to proton loop count."
+        },
+        {
+          "ref": "Paper Summary: loop counts corresponding directly to measured particle masses",
+          "note": "Claim: measuring in electron masses (MeV) and in loops have identical outcomes for proton 1836."
+        }
+      ],
+      "tests": [
+        {
+          "name": "u_d_ratio",
+          "mev": {
+            "u": 2.552,
+            "d": 4.925,
+            "ratio": 0.5181725888324873
+          },
+          "loops": {
+            "u": 378,
+            "d": 729,
+            "ratio": 0.5185185185185185
+          },
+          "residuals": {
+            "abs_delta": 0.00034592968603119516
+          }
+        },
+        {
+          "name": "lambda_decay_to_proton_loop_bookkeeping",
+          "loops": {
+            "lambda": 2187,
+            "minus": [243, 81, 27],
+            "result": 1836
+          },
+          "mev": {
+            "lambda": 1115.683,
+            "minus": [124.173, 41.391, 13.797],
+            "result": 936.322
+          },
+          "proton_mev_reference": {
+            "value": 938.272,
+            "source": "PDG 2024 proton mass"
+          },
+          "notes": "Source provides the lambda bookkeeping numbers. Loop bookkeeping is exact (2187-243-81-27=1836). MeV bookkeeping result (936.322) compared to known proton mass (938.272 MeV); difference logged as SOURCE_NUMERIC_DRIFT warning."
+        }
+      ],
+      "tolerances": {
+        "ratio_abs_tol": 0.001,
+        "decay_mev_abs_tol": 5.0
+      },
+      "validator_expectation": {
+        "result": "PASS_WITH_WARNINGS",
+        "warnings": ["SOURCE_NUMERIC_DRIFT"]
+      }
+    }
+  ]
+}

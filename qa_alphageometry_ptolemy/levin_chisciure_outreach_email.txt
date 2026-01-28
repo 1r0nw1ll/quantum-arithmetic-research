@@ -1,0 +1,57 @@
+Subject: QA as a certificate-backed completion layer for Diverse Intelligence
+
+Dear Dr. Levin and Dr. Chis-Ciure,
+
+I'm writing to share a technical follow-on that was directly motivated by
+your paper "Intelligence Beyond Neurons" (Biological Journal of the Linnean
+Society, blae076, 2024).
+
+Your deflationary, scale-free framing of cognition strongly resonated with
+my work on Quantum Arithmetic (QA) -- a modular arithmetic framework with
+applications in signal processing, optimization, and automated theorem
+generation. Rather than proposing an alternative theory of mind, I've been
+exploring QA as a *completion layer*: turning problem-space definitions of
+intelligence into certificate-backed, reproducible measurements.
+
+Concretely, we formalize cognition as search efficiency in a declared
+problem space P = <S, O, C, E, H>, with a substrate-neutral metric
+
+    K = log_10(tau_blind / tau_agent)
+
+and introduce validator contracts that classify successes and structured
+failures (constraint editing, goal decoupling, horizon limits, etc.)
+across biological and synthetic systems.
+
+The runnable artifact set includes:
+
+  - A "Beyond Neurons" certificate module with three worked exemplars:
+    planaria regeneration (K=9, constraint editing),
+    cancer as goal decoupling (K=4, evaluation misalignment),
+    and non-neural AI intelligence (K=17, substrate neutrality confirmed).
+
+  - A conjecture ledger with explicit, deterministic validator contracts
+    (substrate invariance, horizon hierarchy, goal-collapse equivalence).
+
+  - A meta-validator enforcing failure-complete classification across all
+    certificate types: every validation produces either success or a
+    structured failure record {fail_type, invariant_diff, barrier}.
+
+GitHub (certificate spine, all tests passing):
+https://github.com/1r0nw1ll/quantum-arithmetic-research/tree/main/qa_alphageometry_ptolemy
+
+The entry point is TRIAD_INDEX.md (now a tetrad), and the Beyond Neurons
+direction maps directly onto your problem-space formalism. The self-tests
+can be run with:
+
+    python qa_meta_validator.py
+    python qa_conjecture_core.py
+
+This is offered in the spirit of completion, not competition -- you define
+*what* cognition is; QA proposes *how to measure, validate, and falsify
+claims* about it. I'd value any critique on whether certificate-backed
+measurement usefully sharpens the operational program you outline, or
+where it misses the mark.
+
+With thanks for the paper and the broader research direction,
+
+Will

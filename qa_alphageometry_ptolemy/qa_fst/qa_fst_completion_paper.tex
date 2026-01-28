@@ -1,0 +1,694 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{listings}
+\usepackage{xcolor}
+
+\geometry{margin=1in}
+
+\lstset{
+  basicstyle=\ttfamily\small,
+  backgroundcolor=\color{gray!10},
+  frame=single,
+  breaklines=true,
+  columns=fullflexible,
+}
+
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+
+\title{A Quantum Arithmetic Completion Layer\\for Field Structure Theory\\[6pt]
+\large Machine-Checkable Verification of Loop-Based Structural Physics}
+
+\author{Will\\[4pt]
+\small In collaboration with Don Briddell (Field Structure Theory)\\
+\small Quantum Arithmetic Research Group}
+
+\date{January 2026}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================================
+% ABSTRACT
+% ============================================================================
+
+\begin{abstract}
+Many non-standard physical frameworks propose geometric or structural
+explanations for particle formation and mass hierarchies but lack formal,
+machine-checkable verification mechanisms.  We present \textbf{Quantum
+Arithmetic (QA)} as a \emph{completion layer}: a framework that formalizes
+state spaces, generators, invariants, and failure modes without introducing
+new physical assumptions.  We apply this framework to \textbf{Field Structure
+Theory (FST)} and its applied formulation \textbf{Structural Physics (SP)},
+due to Briddell, as a case study.  Key FST assertions---proton stability via
+geometric superimposability and particle mass-ratio correspondence via loop
+counting---are encoded as deterministic certificates with explicit failure
+taxonomies.  The proton symmetry witness yields $\delta_{\mathrm{sym}}
+\approx 0.00327$, well within the declared stability threshold of $0.01$.
+The up/down quark ratio test shows agreement between loop and MeV
+representations to within $3.5 \times 10^{-4}$.  Lambda decay bookkeeping
+reproduces the proton loop count exactly ($2187 - 243 - 81 - 27 = 1836$),
+while a $1.95\;\mathrm{MeV}$ discrepancy against the PDG proton mass is
+logged as a structured warning rather than silently adjusted.  All
+validation is reproducible from published artifacts via a single command.
+\end{abstract}
+
+% ============================================================================
+% 1. INTRODUCTION
+% ============================================================================
+
+\section{Introduction: The Verification Gap in Structural Physics}
+
+\subsection{Structural theories and the reproducibility problem}
+
+A growing body of work in theoretical physics proposes that particles,
+forces, and spacetime itself emerge from geometric or topological
+organization rather than point-particle interactions.  Loop-based models,
+field-structure approaches, and fractal hierarchies offer intuitive
+structural explanations for phenomena that the Standard Model addresses
+through symmetry groups and renormalization.  However, many such frameworks
+remain \emph{qualitative}---their claims are stated in prose, illustrated
+with diagrams, and supported by suggestive numerical coincidences, but they
+are not expressed in a form that permits independent, automated
+verification.
+
+This gap is not unique to structural physics.  Across the sciences,
+reproducibility depends on claims being stated precisely enough that a third
+party can check them without recourse to the original author's
+interpretation.  When claims involve specific numerical relationships---mass
+ratios, symmetry thresholds, decay bookkeeping---the standard of
+verification should be \emph{deterministic replay}: given the same inputs
+and declared invariants, any validator must reach the same conclusion.
+
+\subsection{Why verification matters more than agreement}
+
+Disagreement about physical theories is scientifically healthy.  What is not
+healthy is the inability to determine \emph{what exactly} a theory claims,
+\emph{which of those claims are numerically testable}, and \emph{what
+constitutes failure}.  A theory can be internally plausible yet externally
+unverifiable if its claims are embedded in narrative rather than formal
+structure.
+
+We distinguish three levels of engagement with a structural theory:
+\begin{enumerate}[nosep]
+  \item \textbf{Acceptance}: believing the theory is physically true.
+  \item \textbf{Verification}: confirming that stated claims are internally
+        consistent and reproducible.
+  \item \textbf{Falsification}: identifying specific, bounded conditions
+        under which a claim fails.
+\end{enumerate}
+Quantum Arithmetic operates at levels (2) and (3).  It does not address
+level (1)---physical truth is outside its scope.  Its purpose is to make
+structural theories \emph{auditable}.
+
+\subsection{Contribution of this paper}
+
+This paper does not propose new physics.  It demonstrates how an existing
+structural theory---Field Structure Theory (FST) and its applied formulation
+Structural Physics (SP), due to Briddell---can be:
+\begin{itemize}[nosep]
+  \item \emph{formalized} via explicit state spaces, generators, invariants,
+        and obstruction types;
+  \item \emph{validated deterministically} via certificates with recomputable
+        witnesses;
+  \item \emph{audited for numeric drift} via a structured warning taxonomy
+        that logs discrepancies without silently adjusting them.
+\end{itemize}
+The relationship is explicit: Briddell's paper presents the theory; this
+paper completes it computationally.
+
+% ============================================================================
+% 2. OVERVIEW OF FST
+% ============================================================================
+
+\section{Overview of Field Structure Theory}
+
+We provide a brief, non-competitive summary of FST/SP sufficient for the
+formalization that follows.  For the full treatment, we refer the reader to
+Briddell's companion manuscript \emph{The Plenum-to-Particle Loop Sequence
+of Field Structure Theory}~\cite{briddell2026}.
+
+\subsection{Core elements}
+
+FST posits a non-local, space-filling structural potential called the
+\textbf{Plenum}, composed of continuous action loops.  Particles form when
+these loops organize into stable structures through entanglement, rotation,
+and condensation.  Two complementary loop types operate simultaneously:
+\textbf{Rspin} (counter-clockwise, anti-matter) and \textbf{Aspin}
+(clockwise, real-matter).  Rspin loops remain deployed and dynamically
+rotating; Aspin loops may condense to form interaction boundaries.
+
+\textbf{Cloaking} occurs when condensed Aspin loopage fully encloses
+deployed Rspin loopage such that no Rspin segment intersects the interaction
+boundary.  In this state, Rspin is structurally present but unobservable.
+The minimal space-defining unit is the \textbf{Structor}: a six-loop nucleus
+formed from three deployed Rspin loops enclosed by three condensed Aspin
+loops.
+
+The framework maps loop counts onto the \textbf{Sierpinski Triangle Fractal
+(STF)}, whose iteration hierarchy $\{3, 9, 27, 81, 243, 729, 2187\}$
+produces ratios claimed to correspond to experimentally measured particle
+mass ratios in electron volts.  FST asserts that mass, charge, and particle
+stability arise from geometry and loop organization.
+
+\subsection{Claims selected for completion}
+
+We restrict our verification to the following explicit, numerically testable
+claims from the source texts:
+\begin{enumerate}[nosep]
+  \item \textbf{Proton stability}: The proton (1836 loops) is stable because
+        its hexagonal loop architecture satisfies a superimposability
+        condition, quantified by a symmetry defect $\delta_{\mathrm{sym}}$
+        below a declared threshold.
+  \item \textbf{Quark ratio preservation}: The ratio of up to down quark
+        masses measured in MeV matches the ratio of their loop counts.
+  \item \textbf{Lambda decay bookkeeping}: The lambda particle (2187 loops)
+        decomposes as $2187 - 243 - 81 - 27 = 1836$, recovering the proton
+        loop count via exact integer arithmetic.
+\end{enumerate}
+Only these claims are addressed.  We make no judgment on the broader
+physical program of FST/SP.
+
+% ============================================================================
+% 3. QA AS A COMPLETION FRAMEWORK
+% ============================================================================
+
+\section{Quantum Arithmetic as a Completion Framework}
+
+\subsection{Philosophy: verification without reinterpretation}
+
+Quantum Arithmetic treats numbers as \emph{geometric objects with intrinsic
+structure} rather than abstract quantities.  Its foundational axiom is
+\emph{non-reduction}: arithmetic operations preserve scale-bearing
+information rather than collapsing it.  In the context of this paper, QA
+serves as a \emph{verification layer}---it encodes the concepts of a target
+theory (here, FST) into a formal structure that can be validated
+deterministically, without reinterpreting or replacing the theory's own
+ontology.
+
+The core theorem of the QA certificate framework is:
+\begin{equation}
+  \mathrm{Capability} = \mathrm{Reachability}(S, G, I)
+\end{equation}
+where $S$ is a state space, $G$ is a generator set (permitted operations),
+and $I$ is an invariant set (constraints that must hold).  A claim is
+\emph{verified} if a witness path exists from an initial state to a target
+state using only generators in $G$ while preserving all invariants in $I$.
+A claim \emph{fails} if an explicit obstruction prevents such a path, and
+the failure is classified by type.
+
+\subsection{Formal objects}
+
+For any target theory, QA introduces five formal objects:
+
+\begin{definition}[Module Spine]
+A \textbf{QA module spine} is a tuple
+$\langle \Omega, \Sigma, \mathcal{G}, \mathcal{I}, \mathcal{F} \rangle$
+where:
+\begin{itemize}[nosep]
+  \item $\Omega$ is the \textbf{pattern space} (configuration space of the
+        target theory);
+  \item $\Sigma$ is a \textbf{state packet} (typed fields describing any
+        configuration);
+  \item $\mathcal{G}$ is a \textbf{generator set} (permitted transformations);
+  \item $\mathcal{I}$ is an \textbf{invariant set} (quantities preserved or
+        bounded);
+  \item $\mathcal{F}$ is an \textbf{obstruction taxonomy} (classified failure
+        modes).
+\end{itemize}
+\end{definition}
+
+For FST, these are instantiated as shown in Table~\ref{tab:spine}.
+
+\begin{table}[h]
+\centering
+\caption{QA module spine for Field Structure Theory.}
+\label{tab:spine}
+\begin{tabular}{@{}lll@{}}
+\toprule
+\textbf{Object} & \textbf{Name} & \textbf{Description} \\
+\midrule
+\multicolumn{3}{@{}l}{\emph{Pattern Space}} \\
+& Plenum $\Omega$ & Non-local configuration space of loop structures \\
+\midrule
+\multicolumn{3}{@{}l}{\emph{Generators}} \\
+& $\sigma$ & Add one loop quantum: $\ell \to \ell + 1$ \\
+& $\lambda_3$ & STF scale step: $\ell \to 3\ell$ \\
+& $\mu$ & Chirality swap: Rspin $\leftrightarrow$ Aspin \\
+& $\kappa$ & Condensation toggle: deploy $\leftrightarrow$ condense \\
+& $\chi$ & Cloaking operator: modify observability \\
+\midrule
+\multicolumn{3}{@{}l}{\emph{Invariants}} \\
+& $\ell_{\mathrm{total}}$ & Total loop count (mass proxy) \\
+& $\varphi_{\mathrm{STF}}$ & STF basis decomposition coefficients \\
+& $\delta_{\mathrm{sym}}$ & Symmetry defect (superimposability) \\
+& $\mathrm{obs}$ & Observer-relative visibility (visible / cloaked) \\
+\midrule
+\multicolumn{3}{@{}l}{\emph{Obstruction Types}} \\
+& \texttt{NOT\_IN\_STF\_BASIS} & Loop count not representable in STF basis \\
+& \texttt{SYMMETRY\_DEFECT} & $\delta_{\mathrm{sym}}$ exceeds threshold \\
+& \texttt{CLOAKED\_FROM\_OBSERVER} & Boundary intersection blocked \\
+& \texttt{SOURCE\_NUMERIC\_DRIFT} & Source text internally inconsistent \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Deterministic replay and auditability}
+
+All QA certificates satisfy a \emph{deterministic replay} contract:
+\begin{enumerate}[nosep]
+  \item All data is serialized as canonical JSON (UTF-8, sorted keys, no
+        whitespace).
+  \item Hashes are computed as SHA-256 of the canonical representation.
+  \item A manifest records the hash of every artifact required for replay.
+  \item Re-execution of the validator on the same artifacts must produce
+        identical output.
+\end{enumerate}
+This is enforced by draft-07 JSON schemas and a validator whose source code
+is itself included in the manifest.
+
+% ============================================================================
+% 4. FORMALIZATION
+% ============================================================================
+
+\section{Formalization of FST in QA}
+
+\subsection{The module spine as declarative contract}
+
+The QA module spine for FST (artifact \texttt{qa\_fst\_module\_spine.json})
+encodes the pattern space, state packet, generators, invariants, and
+obstruction types described in the previous section.  It also records:
+\begin{itemize}[nosep]
+  \item \textbf{Source artifacts}: explicit references to Briddell's draft,
+        paper summary, and cover letter;
+  \item \textbf{External references}: the PDG~2024 proton mass
+        ($938.272\;\mathrm{MeV}$), used as an independent reference for
+        drift classification;
+  \item \textbf{Submission context}: target journal, cover letter claims,
+        and alignment with the companion manuscript.
+\end{itemize}
+The spine is \emph{declarative}: it states what must hold, not how to compute
+it.  Validation logic resides in the validator, which is a separate artifact.
+
+\subsection{Failure algebra as first-class structure}
+
+A distinguishing feature of QA verification is that \emph{failure is
+structured}.  Every validation produces either:
+\begin{itemize}[nosep]
+  \item a success witness (with computed metrics), or
+  \item one or more \textbf{fail records}, each of the form:
+\end{itemize}
+\begin{equation}
+  \{\texttt{move},\; \texttt{fail\_type},\; \texttt{invariant\_diff}\}
+\end{equation}
+where \texttt{move} identifies the validation step, \texttt{fail\_type}
+classifies the failure, and \texttt{invariant\_diff} records the specific
+numerical discrepancy.  This structure is enforced by a JSON schema
+(\texttt{FAIL\_RECORD.v1.schema.json}).
+
+The distinction between \emph{hard failures} and \emph{warnings} is
+critical.  A hard failure (e.g., \texttt{SYMMETRY\_DEFECT}) means a declared
+invariant is violated.  A warning (e.g., \texttt{SOURCE\_NUMERIC\_DRIFT})
+means a downstream comparison to an external reference shows drift, but no
+declared invariant of the source theory is broken.  The completion layer
+\emph{logs} drift rather than \emph{correcting} it.
+
+% ============================================================================
+% 5. CERTIFICATE I: PROTON STABILITY
+% ============================================================================
+
+\section{Worked Certificate I: Proton Stability via $\delta_{\mathrm{sym}}$}
+
+\subsection{Structural claim and formal witness}
+
+FST asserts that the proton (1836 loops) is stable because its hexagonal
+loop architecture is quasi-superimposable with the Plenum's tetrahedral
+isometry template.  Specifically, the proton hexagon has two excess triangles
+on three of its six sides, yielding a small but non-zero asymmetry.
+
+We formalize this as a \textbf{symmetry witness}:
+\begin{align}
+  \text{side excess} &= [2, 2, 2, 0, 0, 0] \\
+  L_1 &= \sum_i |\text{excess}_i| = 6 \\
+  \delta_{\mathrm{sym}} &= \frac{L_1}{\ell_{\mathrm{total}}}
+    = \frac{6}{1836} \approx 0.00327
+\end{align}
+
+The declared stability threshold is $\delta_{\mathrm{sym}} \leq 0.01$.
+Since $0.00327 \leq 0.01$, the certificate result is \textbf{PASS}.
+
+\subsection{Interpretation}
+
+This is not a proof of physical stability.  It is verification that:
+\begin{enumerate}[nosep]
+  \item the declared symmetry defect is \emph{recomputable} from the stated
+        witness data;
+  \item the recomputed value matches the declared value to machine precision;
+  \item the value satisfies the declared threshold.
+\end{enumerate}
+The certificate can be replayed independently by any party with access to
+the published artifacts.  If the witness data or threshold were changed, the
+validator would detect the discrepancy via hash mismatch.
+
+% ============================================================================
+% 6. CERTIFICATE II: HOMOMORPHISM
+% ============================================================================
+
+\section{Worked Certificate II: Loop-to-MeV Homomorphism}
+
+\subsection{Ratio preservation (hard check)}
+
+FST claims that the ratio of quark masses measured in MeV corresponds to
+the ratio of their loop counts.  For the up and down quarks:
+
+\begin{table}[h]
+\centering
+\caption{Up/down quark ratio test.}
+\label{tab:ratio}
+\begin{tabular}{@{}lccc@{}}
+\toprule
+\textbf{System} & \textbf{Up} & \textbf{Down} & \textbf{Ratio} \\
+\midrule
+MeV & 2.552 & 4.925 & 0.51817 \\
+Loops & 378 & 729 & 0.51852 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The absolute difference between ratios is $|\Delta| \approx 3.46 \times
+10^{-4}$, well within the declared tolerance of $10^{-3}$.  The certificate
+result for this test is \textbf{PASS}.
+
+\subsection{Lambda decay bookkeeping}
+
+FST decomposes the lambda particle (2187 loops) via subtraction of STF basis
+elements:
+\begin{equation}
+  2187 - 243 - 81 - 27 = 1836
+\end{equation}
+This is exact integer arithmetic.  The validator recomputes the sum and
+confirms identity with the declared result.  Certificate result:
+\textbf{PASS}.
+
+The corresponding MeV bookkeeping produces:
+\begin{equation}
+  1115.683 - 124.173 - 41.391 - 13.797 = 936.322\;\mathrm{MeV}
+\end{equation}
+This recomputation also matches the declared value exactly.
+
+\subsection{Numeric drift as logged evidence}
+
+The source texts claim that ``measuring in electron masses (MeV) and in
+loops have identical outcomes for proton 1836.''  However, the MeV
+bookkeeping result ($936.322\;\mathrm{MeV}$) differs from the PDG~2024
+proton mass ($938.272\;\mathrm{MeV}$) by approximately $1.95\;\mathrm{MeV}$.
+
+The QA validator classifies this as:
+\begin{lstlisting}
+{
+  "move": "ENFORCE_HOMOMORPHISM",
+  "fail_type": "SOURCE_NUMERIC_DRIFT",
+  "invariant_diff": {
+    "bookkeeping_mev": 936.322,
+    "proton_mev_reference": 938.272,
+    "drift": 1.95,
+    "within_tolerance": true
+  },
+  "severity": "warning"
+}
+\end{lstlisting}
+
+This is the central epistemological point of the completion layer.  The drift
+is:
+\begin{itemize}[nosep]
+  \item \textbf{not ignored}: it is explicitly recorded with its magnitude;
+  \item \textbf{not promoted to failure}: the source theory's own internal
+        arithmetic is consistent (the bookkeeping subtraction is correct);
+  \item \textbf{not silently adjusted}: neither the loop count nor the MeV
+        values are modified to produce agreement;
+  \item \textbf{bounded}: the drift ($1.95\;\mathrm{MeV}$) is within the
+        declared tolerance ($5.0\;\mathrm{MeV}$) and is classified as
+        \texttt{within\_tolerance: true}.
+\end{itemize}
+
+This approach is superior to three common alternatives:
+\begin{enumerate}[nosep]
+  \item \emph{Silent omission}: presenting only the loop bookkeeping and
+        ignoring the MeV comparison.
+  \item \emph{Post-hoc correction}: adjusting values to force agreement.
+  \item \emph{Blanket rejection}: dismissing the entire ratio correspondence
+        because one downstream comparison drifts.
+\end{enumerate}
+By logging drift as structured data, the completion layer allows any reader
+to assess the discrepancy on its own terms.
+
+% ============================================================================
+% 7. REPRODUCIBILITY
+% ============================================================================
+
+\section{Reproducibility and Tooling}
+
+\subsection{Artifact set}
+
+The complete set of artifacts required for replay is published at a version-
+controlled repository and consists of:
+
+\begin{table}[h]
+\centering
+\caption{Published artifact set.}
+\label{tab:artifacts}
+\begin{tabular}{@{}ll@{}}
+\toprule
+\textbf{Artifact} & \textbf{Role} \\
+\midrule
+\texttt{qa\_fst\_module\_spine.json} & Module spine (declarative contract) \\
+\texttt{qa\_fst\_cert\_bundle.json} & Worked certificates (witnesses + tests) \\
+\texttt{qa\_fst\_submission\_packet\_spine.json} & Companion paper posture lock \\
+\texttt{qa\_fst\_manifest.json} & SHA-256 manifest over all artifacts \\
+\texttt{qa\_fst\_validate.py} & Deterministic validator + self-test \\
+\texttt{schemas/*.schema.json} & Draft-07 JSON schemas (5 types) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The manifest covers nine artifacts (three data files, five schemas, and the
+validator source), each hashed independently.  The manifest itself records a
+composite hash of all entries.
+
+\subsection{One-command verification}
+
+The entire validation can be executed with:
+\begin{lstlisting}
+python qa_fst_validate.py --validate
+\end{lstlisting}
+This produces a JSON report containing all computed metrics, hash values,
+and any warnings or failures.  The validator also supports self-test mode
+(eight internal checks) and manifest regeneration.
+
+At the repository level, a single command validates the full QA certificate
+stack---including the tetrad (four certificate directions), conjecture
+ledger, and the FST module:
+\begin{lstlisting}
+python qa_meta_validator.py
+\end{lstlisting}
+The FST module is invoked as a subprocess, and its JSON output is checked
+for structural conformance.  Any third party with access to the repository
+can reproduce the result.
+
+% ============================================================================
+% 8. COMPLETION LAYER POSTURE
+% ============================================================================
+
+\section{Why This Is a Completion Layer, Not a Competing Theory}
+
+\subsection{What QA does not do}
+
+It is important to state explicitly what the QA completion layer does
+\emph{not} claim:
+\begin{itemize}[nosep]
+  \item It does not propose alternative physics.  The Plenum, loops, STF
+        hierarchy, Rspin/Aspin sectors, and cloaking mechanism are all
+        Briddell's constructs, used here exactly as stated.
+  \item It does not reinterpret FST concepts.  The generators
+        ($\sigma, \lambda_3, \mu, \kappa, \chi$) are named translations of
+        operations described in the source texts, not new formalisms.
+  \item It does not ``correct'' the theory.  Where numeric drift exists
+        (Section~6.3), it is logged, not adjusted.
+\end{itemize}
+
+\subsection{What QA adds}
+
+The completion layer adds three capabilities that did not previously exist
+for FST:
+\begin{enumerate}[nosep]
+  \item \textbf{Explicitness}: Claims are encoded as typed fields with
+        declared thresholds, making it unambiguous what constitutes success
+        or failure.
+  \item \textbf{Replayability}: Any third party can recompute every metric
+        from the published artifacts and verify hash integrity.
+  \item \textbf{Structured failure}: When something does not match---whether
+        an internal inconsistency or an external reference mismatch---the
+        discrepancy is classified by type, bounded by magnitude, and
+        recorded for inspection.
+\end{enumerate}
+
+This posture converts ambiguity into data.  It allows disagreement to be
+\emph{precise} rather than rhetorical.  A critic can point to a specific
+fail record; a supporter can point to a specific pass.  Neither needs to
+argue about what the theory ``really means,'' because the formal encoding
+makes the meaning explicit.
+
+% ============================================================================
+% 9. GENERALIZATION
+% ============================================================================
+
+\section{Generalization and Future Work}
+
+The QA completion-layer approach is not specific to FST.  Any structural
+theory that makes numerically testable claims can be formalized via the same
+pattern:
+\begin{enumerate}[nosep]
+  \item Identify the theory's state space, permitted operations, and
+        conserved quantities.
+  \item Encode these as a QA module spine.
+  \item Select explicit, bounded claims and construct certificates with
+        recomputable witnesses.
+  \item Classify failures by type and log drift against external references.
+\end{enumerate}
+
+For FST specifically, natural extensions include:
+\begin{itemize}[nosep]
+  \item Additional particle certificates (electron, neutron, pion) using the
+        same $\delta_{\mathrm{sym}}$ metric.
+  \item Extended decay-path bookkeeping for particles beyond the lambda.
+  \item Formal cloaking certificates that test the observability obstruction
+        (\texttt{CLOAKED\_FROM\_OBSERVER}) against specific
+        sector/cloak-state configurations.
+\end{itemize}
+
+The broader program is community-driven verification via published
+manifests: any researcher can fork the artifact set, modify a claim or
+threshold, and observe whether the validator still passes.  This makes
+scientific engagement with structural theories \emph{constructive} rather
+than purely critical.
+
+% ============================================================================
+% 10. CONCLUSION
+% ============================================================================
+
+\section{Conclusion}
+
+Structural theories of physics deserve rigorous verification mechanisms
+commensurate with the specificity of their claims.  Quantum Arithmetic
+provides a neutral, formal completion layer that encodes claims as typed
+certificates, validates them deterministically, and classifies failures as
+structured data.
+
+Applied to Field Structure Theory, this approach demonstrates that:
+\begin{itemize}[nosep]
+  \item the proton stability claim is internally consistent
+        ($\delta_{\mathrm{sym}} \approx 0.00327 \leq 0.01$);
+  \item the loop-to-MeV ratio correspondence holds within declared
+        tolerances ($|\Delta| \approx 3.5 \times 10^{-4} \leq 10^{-3}$);
+  \item lambda decay bookkeeping is exact in loop space
+        ($2187 - 243 - 81 - 27 = 1836$);
+  \item and a $1.95\;\mathrm{MeV}$ drift against the PDG proton mass is
+        logged as a bounded warning, not hidden.
+\end{itemize}
+
+The completion layer neither endorses nor disputes FST's physical claims.
+It makes them \emph{auditable}.  We invite independent verification,
+extension, and---where warranted---precise, structured disagreement.
+
+% ============================================================================
+% REFERENCES
+% ============================================================================
+
+\begin{thebibliography}{9}
+
+\bibitem{briddell2026}
+D.~Briddell,
+``The Plenum-to-Particle Loop Sequence of Field Structure Theory (FST),''
+manuscript submitted to \emph{Frontiers of Physics}, 2026.
+
+\bibitem{pdg2024}
+R.~L.~Workman \emph{et al.} (Particle Data Group),
+``Review of Particle Physics,''
+\emph{Phys.\ Rev.\ D} \textbf{110}, 030001 (2024).
+
+\bibitem{qa2026}
+W.~(1r0nw1ll),
+``Quantum Arithmetic Research: Certificate Spine and Completion Layer,''
+\url{https://github.com/1r0nw1ll/quantum-arithmetic-research}, 2026.
+
+\end{thebibliography}
+
+% ============================================================================
+% APPENDIX
+% ============================================================================
+
+\appendix
+
+\section{Validator Output}
+
+The complete JSON output of \texttt{qa\_fst\_validate.py --validate} is
+reproduced below for reference:
+
+\begin{lstlisting}
+{
+  "result": "PASS_WITH_WARNINGS",
+  "ok": true,
+  "hashes": {
+    "spine": "cf488a5d...eb67bf7f",
+    "cert_bundle": "ea2a3fcd...147f2f22"
+  },
+  "metrics": {
+    "delta_sym_recomputed": 0.0032679738562091504,
+    "l1_recomputed": 6,
+    "lambda_loops_recomputed": 1836,
+    "lambda_mev_recomputed": 936.322,
+    "proton_mev_drift": 1.95,
+    "u_d_loop_ratio_recomputed": 0.5185185185185185,
+    "u_d_mev_ratio_recomputed": 0.5181725888324873,
+    "u_d_ratio_abs_delta": 0.0003459296860311989
+  },
+  "warnings": [
+    {
+      "move": "ENFORCE_HOMOMORPHISM",
+      "fail_type": "SOURCE_NUMERIC_DRIFT",
+      "severity": "warning",
+      "invariant_diff": {
+        "bookkeeping_mev": 936.322,
+        "proton_mev_reference": 938.272,
+        "drift": 1.95,
+        "within_tolerance": true
+      }
+    }
+  ]
+}
+\end{lstlisting}
+
+\section{SHA-256 Manifest}
+
+The manifest covers nine artifacts.  A representative excerpt:
+
+\begin{lstlisting}
+Module spine:      cf488a5d8309feaf...
+Cert bundle:       ea2a3fcd2747b0c6...
+Submission packet: e31afb0970baefdd...
+Validator source:  7cae088dcd7daabf...
+Manifest hash:     9a3f68f071293b9f...
+\end{lstlisting}
+
+Full hashes and all schema entries are recorded in
+\texttt{qa\_fst\_manifest.json}.
+
+\end{document}

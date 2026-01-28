@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_CERT_BUNDLE.v1.schema.json",
+  "title": "QA_CERT_BUNDLE.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "certificate_id", "module_id", "created_utc", "claims"],
+  "properties": {
+    "schema_version": { "const": "QA_CERT_BUNDLE.v1" },
+    "certificate_id": { "type": "string", "minLength": 1 },
+    "module_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9._-]+$",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "claims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": true,
+        "required": ["type", "evidence_refs"],
+        "properties": {
+          "type": { "type": "string", "minLength": 1 },
+          "subject": {
+            "type": "object",
+            "properties": {
+              "particle": { "type": "string", "minLength": 1 },
+              "loop_count_loves": { "type": "integer", "minimum": 0 }
+            }
+          },
+          "evidence_refs": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["ref", "note"],
+              "properties": {
+                "ref": { "type": "string", "minLength": 1 },
+                "note": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "symmetry_witness": {
+            "type": "object",
+            "required": ["model", "metric", "computed", "thresholds"],
+            "properties": {
+              "model": { "type": "string", "minLength": 1 },
+              "side_excess_triangles": {
+                "type": "array",
+                "items": { "type": "integer" }
+              },
+              "total_triangles": { "type": "integer", "minimum": 1 },
+              "metric": { "type": "string", "minLength": 1 },
+              "computed": {
+                "type": "object",
+                "required": ["delta_sym"],
+                "properties": {
+                  "l1": { "type": "number" },
+                  "delta_sym": { "type": "number", "minimum": 0 }
+                }
+              },
+              "thresholds": {
+                "type": "object",
+                "required": ["stable_if_delta_sym_le"],
+                "properties": {
+                  "stable_if_delta_sym_le": { "type": "number", "minimum": 0 }
+                }
+              }
+            }
+          },
+          "tests": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": true,
+              "required": ["name"],
+              "properties": {
+                "name": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "tolerances": {
+            "type": "object",
+            "properties": {
+              "ratio_abs_tol": { "type": "number", "minimum": 0 },
+              "decay_mev_abs_tol": { "type": "number", "minimum": 0 }
+            }
+          },
+          "validator_expectation": {
+            "type": "object",
+            "required": ["result"],
+            "properties": {
+              "result": {
+                "type": "string",
+                "enum": ["PASS", "FAIL", "PASS_WITH_WARNINGS"]
+              },
+              "fail_type_if_not": { "type": "string" },
+              "warnings": {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 }
+              }
+            }
+          },
+          "metrics": {
+            "type": "object",
+            "additionalProperties": true
+          }
+        }
+      }
+    }
+  }
+}

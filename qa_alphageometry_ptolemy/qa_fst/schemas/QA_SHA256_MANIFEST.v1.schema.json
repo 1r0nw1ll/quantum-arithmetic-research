@@ -1,0 +1,39 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_SHA256_MANIFEST.v1.schema.json",
+  "title": "QA_SHA256_MANIFEST.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_utc", "entries", "manifest_sha256"],
+  "properties": {
+    "schema_version": { "const": "QA_SHA256_MANIFEST.v1" },
+    "generated_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "sha256", "canonicalization"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "canonicalization": {
+            "type": "string",
+            "enum": ["json_sorted_no_ws", "raw_bytes"]
+          }
+        }
+      }
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

@@ -1,0 +1,87 @@
+{
+  "schema_version": "QA_SUBMISSION_PACKET_SPINE.v1",
+  "packet_id": "qa.submission.fst_companion.frontiers_of_physics.v1",
+  "created_utc": "2026-01-27T00:00:00Z",
+  "target_journal": "Frontiers of Physics",
+  "relationship_to_primary": {
+    "primary_manuscript_title": "The Plenum-to-Particle Loop Sequence of Field Structure Theory (FST)",
+    "primary_author": "Don Briddell",
+    "relationship": "companion_or_complement",
+    "non_drift_rule": "Companion must preserve the same core narrative: non-local plenum -> loop condensation -> STF mapping -> ratio correspondence to measured particle mass ratios; avoid introducing new ontologies that contradict this framing."
+  },
+  "mirrored_claims_lock": [
+    {
+      "claim": "Particle formation as condensation of action from a non-local, isometric plenum into loop structures.",
+      "refs": [
+        "Paper Summary: foundational medium—the Plenum—consists of continuous action loops",
+        "Cover Letter: action condenses from non-local background isometric looped Plenum"
+      ]
+    },
+    {
+      "claim": "Mapping loop counts onto the Sierpinski Triangle Fractal (STF) yields ratio correspondence to experimentally measured particle mass ratios in electron volts.",
+      "refs": [
+        "Paper Summary: loop counts corresponding directly to measured particle masses and ratios",
+        "Cover Letter: ratios between iterations of the STF are the same ratios as those found between particles measured in electron volts"
+      ]
+    },
+    {
+      "claim": "Two complementary loop types (Rspin/Aspin) coexist; observability requires boundary intersection; cloaking occurs when condensed loopage encloses deployed loopage.",
+      "refs": [
+        "Paper Summary: CCW Rspin loops (anti-matter) and CW Aspin loops (real-matter) always coexist",
+        "Paper Summary: Cloaking occurs when condensed Aspin loopage fully encloses deployed Rspin"
+      ]
+    },
+    {
+      "claim": "Scale invariance and quantitative consistency; macroscale loop models reveal principles persisting across scales.",
+      "refs": [
+        "Paper Summary: Structural Physics is shown to be scale-invariant and quantitatively consistent"
+      ]
+    },
+    {
+      "claim": "Original/unpublished and not under consideration elsewhere (submission posture).",
+      "refs": [
+        "Cover Letter: original manuscript not published elsewhere and is not being considered by another publisher"
+      ]
+    }
+  ],
+  "companion_paper_scope": {
+    "what_we_add": [
+      "QA formalization layer: explicit state packet, generator set, invariants, obstruction types, and deterministic validator contracts.",
+      "Machine-checkable certificates for key quantitative claims (ratio test, lambda bookkeeping, stability delta_sym witness).",
+      "Failure algebra: when/why a claim fails (SOURCE_NUMERIC_DRIFT, SYMMETRY_DEFECT, NOT_IN_STF_BASIS, CLOAKED_FROM_OBSERVER)."
+    ],
+    "what_we_do_not_add": [
+      "New physical claims that compete with or contradict SP/FST's narrative.",
+      "Speculative additions (e.g., unrelated cosmology) not implied by the submission framing."
+    ]
+  },
+  "certificate_plan": [
+    {
+      "certificate_type": "FST_PROTON_STABILITY_DELTA_SYM_WITNESS.v1",
+      "basis": "Quasi-superimposability witness: proton hexagon has two extra triangles on three of six sides; stability tied to superimposability.",
+      "refs": [
+        "FST mapping: hexagon_side_imbalance model",
+        "FST mapping: anti-proton balance"
+      ]
+    },
+    {
+      "certificate_type": "LOOP_TO_MEV_HOMOMORPHISM_LAMBDA_BOOKKEEPING_AND_RATIO_TEST.v1",
+      "basis": "Up/Down ratio equality (MeV vs loops) + lambda decay bookkeeping (2187-243-81-27=1836).",
+      "refs": [
+        "FST mapping: u/d quark ratio comparison",
+        "FST mapping: lambda 2187 loops decay bookkeeping"
+      ]
+    }
+  ],
+  "submission_assets": {
+    "cover_letter_alignment_points": [
+      "Frontiers of Physics address + 12-page framing.",
+      "STF mapping and ratio correspondence line.",
+      "Original/not under review statement."
+    ],
+    "refs": [
+      "ingestion candidates/AI letter 25 Jan 26.docx",
+      "ingestion candidates/Paper Summary 18 Jan 2026.docx"
+    ]
+  }
+}

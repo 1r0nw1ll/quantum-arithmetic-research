@@ -1,0 +1,204 @@
+{
+  "schema_version": "QA_MAP_MODULE_SPINE.v1",
+  "module_id": "qa.map.fst.plenum_to_particle.v1",
+  "title": "QA Mapping Spine: Field Structure Theory (FST) / Structural Physics (SP) — Plenum-to-Particle Loop Sequence",
+  "authors": [
+    "Will (QA mapping)",
+    "Don Briddell (source theory)"
+  ],
+  "created_utc": "2026-01-27T00:00:00Z",
+  "source_artifacts": [
+    {
+      "artifact_id": "fst_journal_2026-01-27",
+      "kind": "odt",
+      "title": "QA-native mapping of FST Plenum-to-Particle Loop Sequence",
+      "citation": "ingestion candidates/fst_journal.odt"
+    },
+    {
+      "artifact_id": "fst_paper_summary_2026-01-18",
+      "kind": "docx",
+      "title": "Paper Summary 18 Jan 2026",
+      "citation": "ingestion candidates/Paper Summary 18 Jan 2026.docx"
+    },
+    {
+      "artifact_id": "fst_submission_letter_2026-01-25",
+      "kind": "docx",
+      "title": "AI letter 25 Jan 26",
+      "citation": "ingestion candidates/AI letter 25 Jan 26.docx"
+    }
+  ],
+  "qa_interpretation": {
+    "pattern_space": {
+      "name": "Plenum configuration space Ω",
+      "description": "Non-local, isometric loop potential from which space/time and matter emerge via condensation and interaction. QA translation: pre-geometry layer — a state space of admissible discrete configurations where space/time are derived observables.",
+      "primary_claim_refs": [
+        "Paper Summary: Plenum consists of continuous action loops",
+        "Cover Letter: action condenses from non-local background isometric looped Plenum"
+      ]
+    },
+    "state_packet": {
+      "name": "FST_STATE",
+      "fields": [
+        {
+          "name": "loop_count_total_loves",
+          "type": "int",
+          "semantics": "Total loop quanta (Loves) in structure; mass proxy."
+        },
+        {
+          "name": "sector",
+          "type": "enum",
+          "values": ["Rspin", "Aspin"],
+          "semantics": "Chiral sector / observer-relative visibility. Rspin = anti-matter (deployed, rotating), Aspin = real-matter (may condense)."
+        },
+        {
+          "name": "deployment",
+          "type": "enum",
+          "values": ["deployed", "condensed", "mixed"],
+          "semantics": "Whether loopage is deployed vs condensed into interaction boundary."
+        },
+        {
+          "name": "cloak_state",
+          "type": "enum",
+          "values": ["none", "A_cloaks_R", "R_cloaks_A"],
+          "semantics": "Which sector is cloaked by the other (observability obstruction). Cloaking occurs when condensed Aspin fully encloses deployed Rspin."
+        },
+        {
+          "name": "stf_basis_decomposition",
+          "type": "object",
+          "semantics": "Representation in STF basis {3, 9, 27, 81, 243, 729, 2187} and/or combinations."
+        },
+        {
+          "name": "symmetry_witness",
+          "type": "object",
+          "semantics": "Structural superimposability / quasi-symmetry evidence (delta_sym etc.)."
+        }
+      ]
+    },
+    "generators": [
+      {
+        "name": "sigma",
+        "signature": "(l) -> (l+1)",
+        "semantics": "Add one loop quantum (Loves). Adding more loopage increases the energy."
+      },
+      {
+        "name": "lambda_3",
+        "signature": "(l) -> (3*l)",
+        "semantics": "STF iteration scale step. Hierarchy uses 3^n: {3, 9, 27, 81, 243, 729, 2187}."
+      },
+      {
+        "name": "mu",
+        "signature": "sector swap",
+        "semantics": "Rspin <-> Aspin involution / chirality swap. Same structure, opposite handedness."
+      },
+      {
+        "name": "kappa",
+        "signature": "deploy <-> condense",
+        "semantics": "Boundary formation / condensation operator. Deployed loopage can condense to nucleus."
+      },
+      {
+        "name": "chi",
+        "signature": "cloak transform",
+        "semantics": "Cloaking operator controlling observability by boundary intersection. Produces CLOAKED_FROM_OBSERVER obstruction depending on observer sector."
+      }
+    ],
+    "invariants": [
+      {
+        "name": "l_total",
+        "type": "int",
+        "description": "Total loop count in Loves."
+      },
+      {
+        "name": "phi_stf",
+        "type": "vector<int>",
+        "description": "STF basis coefficients for {3, 9, 27, 81, 243, 729, 2187}."
+      },
+      {
+        "name": "delta_sym",
+        "type": "rational",
+        "description": "Normalized symmetry defect relative to Plenum template (superimposability). Stable particles have delta_sym <= threshold."
+      },
+      {
+        "name": "obs_projector",
+        "type": "enum",
+        "values": ["visible", "cloaked"],
+        "description": "Observer-relative visibility given sector and cloak state."
+      }
+    ],
+    "obstruction_types": [
+      {
+        "fail_type": "NOT_IN_STF_BASIS",
+        "rule": "If decomposition in STF basis is absent or invalid for claimed particle class."
+      },
+      {
+        "fail_type": "SYMMETRY_DEFECT",
+        "rule": "If delta_sym exceeds threshold for stability claim."
+      },
+      {
+        "fail_type": "CLOAKED_FROM_OBSERVER",
+        "rule": "If cloak_state blocks boundary intersection for observer sector."
+      },
+      {
+        "fail_type": "SOURCE_NUMERIC_DRIFT",
+        "rule": "If arithmetic or figures inside the source text are self-inconsistent; record invariant_diff and continue with warning."
+      }
+    ]
+  },
+  "validator_contract": {
+    "name": "replay_trace -> enforce_invariants -> classify_fail -> emit_metrics",
+    "determinism": {
+      "canonical_json": "UTF-8, keys sorted, separators=(',',':'), no NaN/Infinity, numbers as JSON numbers.",
+      "hash": "sha256(canonical_json)"
+    },
+    "steps": [
+      {
+        "step": "LOAD",
+        "action": "Load spine + certificate JSON; verify schema_version matches expected."
+      },
+      {
+        "step": "CANONICALIZE",
+        "action": "Compute canonical_json and sha256; compare with sha256_manifest."
+      },
+      {
+        "step": "ENFORCE_STF_BASIS",
+        "action": "Validate STF basis coefficients and recompute l_total from basis; compare."
+      },
+      {
+        "step": "ENFORCE_SYMMETRY",
+        "action": "Compute delta_sym from symmetry_witness using declared metric; threshold-check for stability claims."
+      },
+      {
+        "step": "ENFORCE_HOMOMORPHISM",
+        "action": "For each ratio/decay test: recompute ratios and residuals; classify SOURCE_NUMERIC_DRIFT if internal inconsistencies exceed tolerance."
+      },
+      {
+        "step": "CLASSIFY",
+        "action": "Emit {move, fail_type, invariant_diff} records for any violated check."
+      },
+      {
+        "step": "EMIT_METRICS",
+        "action": "Return pass/fail plus metrics bundle (residuals, delta_sym, ratio deltas)."
+      }
+    ]
+  },
+  "external_reference_sources": [
+    {
+      "id": "pdg_proton_mass",
+      "label": "PDG",
+      "value": 938.272,
+      "units": "MeV",
+      "version": "2024",
+      "note": "Particle Data Group proton mass. Used as independent reference for SOURCE_NUMERIC_DRIFT classification."
+    }
+  ],
+  "submission_context": {
+    "target_journal": "Frontiers of Physics",
+    "cover_letter_claims": [
+      "Manuscript is 12 pages; introduces SP/FST; maps STF loop counts to particle mass ratios in eV; claims quantitative consistency.",
+      "Original and not under consideration elsewhere."
+    ],
+    "refs": [
+      "ingestion candidates/AI letter 25 Jan 26.docx",
+      "ingestion candidates/Paper Summary 18 Jan 2026.docx"
+    ]
+  }
+}

@@ -1,0 +1,52 @@
+{
+  "entries": [
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "module_spine",
+      "sha256": "cf488a5d8309feaf19e392954d4d9aa1912b450588836baea51b5bee87c9ec8a"
+    },
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "cert_bundle",
+      "sha256": "ea2a3fcd2747b0c6da30f4299b2f9e40fa4a7d76d8367553ed5ecf4d147f2f22"
+    },
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "submission_packet",
+      "sha256": "e31afb0970baefddf3488c4d9c7b9efc1b0a669119a80324ef83807f12823ead"
+    },
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "schema:module_spine",
+      "sha256": "14064b1d3f7a1862b1dfd0fc2e4bdccbb289991669a9383f78785f486d79dc47"
+    },
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "schema:cert_bundle",
+      "sha256": "fe0c8aa1f8d55d7f1d48eb41eb32b97af9ec5707479283f8bc77b491f69d94bd"
+    },
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "schema:manifest",
+      "sha256": "e9e0175e9d8bd4e23ff9f5c6cd466c3ae3255893b0bf69b33e247f375150b4ad"
+    },
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "schema:fail_record",
+      "sha256": "fa80add26bb48d1104caf9ce343465398f677d520a12d75fc3104eb00688dba7"
+    },
+    {
+      "canonicalization": "json_sorted_no_ws",
+      "id": "schema:submission_packet",
+      "sha256": "aeeed7dda47a1808acff78da0c0f5729085ea5b7d5830f309ac8d11e841187d1"
+    },
+    {
+      "canonicalization": "raw_bytes",
+      "id": "validator_source",
+      "sha256": "7cae088dcd7daabfd904c6fbdc9ec4ab5a53b1c60dc748732468394d5ce89bdd"
+    }
+  ],
+  "generated_utc": "2026-01-27T21:38:53Z",
+  "manifest_sha256": "9a3f68f071293b9f2a65d4417b7606fd4890928b8f04bdcfcbfb620f0bc4de04",
+  "schema_version": "QA_SHA256_MANIFEST.v1"
+}

@@ -1,5 +1,6 @@
 # Quantum Arithmetic Research
 
+[![QA CI](https://github.com/1r0nw1ll/quantum-arithmetic-research/actions/workflows/qa-ci.yml/badge.svg)](https://github.com/1r0nw1ll/quantum-arithmetic-research/actions/workflows/qa-ci.yml)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.13+](https://img.shields.io/badge/python-3.13+-blue.svg)](https://www.python.org/downloads/)
 [![Open Source](https://img.shields.io/badge/Open%20Source-❤-green.svg)](https://github.com/player2/signal_experiments)
@@ -10,6 +11,24 @@
 📖 **Wiki**: [https://github.com/player2/signal_experiments/wiki](https://github.com/player2/signal_experiments/wiki)
 
 ---
+
+## VERIFY OR BREAK
+
+This is a closed-world, executable challenge with a binary outcome.
+
+- G0 -> NONREACH
+- G1 -> REACH
+
+How to run:
+
+```
+make test
+```
+
+Links:
+- Appendix A: [APPENDIX_A_GENERATOR_BARRIER.md](APPENDIX_A_GENERATOR_BARRIER.md)
+- [REBUTTAL.md](REBUTTAL.md)
+- [TESTING.md](TESTING.md)
 
 ## What is Quantum Arithmetic?
 

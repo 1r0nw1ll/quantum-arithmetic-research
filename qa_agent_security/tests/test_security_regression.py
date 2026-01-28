@@ -174,6 +174,21 @@ class TestHTTPFetchBypassRegression:
             ],
         )
 
+    def _make_permissive_token(self):
+        """Token with no domain restrictions for testing other bypass classes."""
+        return CapabilityToken(
+            agent_id="test",
+            session_id="s1",
+            capabilities=[
+                CapabilityEntry(
+                    tool="http_fetch",
+                    scope="network",
+                    args_schema="SCHEMA.HTTP_FETCH.v1",
+                    constraints={},  # No domain restriction
+                ),
+            ],
+        )
+
     def test_credential_url_blocked(self):
         trace = MerkleTrace()
         r = execute_http_fetch(
@@ -198,6 +213,7 @@ class TestHTTPFetchBypassRegression:
             intent_ref="test",
             url_trusted=True,
             requires_human_approval=False,
+            capability_token=self._make_permissive_token(),
             trace=trace,
         )
         assert not r.success
@@ -211,6 +227,7 @@ class TestHTTPFetchBypassRegression:
             intent_ref="test",
             url_trusted=True,
             requires_human_approval=False,
+            capability_token=self._make_permissive_token(),
             trace=trace,
         )
         assert not r.success
@@ -224,6 +241,7 @@ class TestHTTPFetchBypassRegression:
             intent_ref="test",
             url_trusted=True,
             requires_human_approval=False,
+            capability_token=self._make_permissive_token(),
             trace=trace,
         )
         assert not r.success
@@ -283,6 +301,7 @@ class TestHTTPFetchBypassRegression:
             intent_ref="test",
             url_trusted=True,
             requires_human_approval=False,
+            capability_token=self._make_permissive_token(),
             trace=trace,
         )
         # Schema validation should reject non-http URL pattern
@@ -291,6 +310,7 @@ class TestHTTPFetchBypassRegression:
     def test_trace_records_all_bypass_attempts(self):
         """Run multiple bypasses and verify trace integrity."""
         trace = MerkleTrace()
+        token = self._make_permissive_token()
         urls = [
             "https://user:pass@example.com/",
             "https://192.168.1.1/",
@@ -303,6 +323,7 @@ class TestHTTPFetchBypassRegression:
                 intent_ref="test",
                 url_trusted=True,
                 requires_human_approval=False,
+                capability_token=token,
                 trace=trace,
             )
         s = trace.summary()
@@ -454,6 +475,78 @@ class TestSafeRedirectHandler:
                 headers={}, newurl="file:///etc/passwd"
             )
         assert exc.value.invariant == "URL_SCHEME_HTTP_ONLY"
+
+
+class TestCapabilityTokenEnforcement:
+    """
+    Tests for mandatory capability token enforcement.
+    """
+
+    def test_missing_token_blocked_when_enforced(self):
+        """With enforcement on, missing token should block even trusted URLs."""
+        import qa_agent_security.tool_runner as runner
+        old_val = runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH
+        try:
+            runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = True
+            trace = MerkleTrace()
+            r = execute_http_fetch(
+                url="https://example.com/page",
+                intent_source="policy_kernel",
+                intent_ref="test",
+                url_trusted=True,
+                requires_human_approval=False,
+                capability_token=None,
+                trace=trace,
+            )
+            assert not r.success
+            assert "CAP_TOKEN_REQUIRED" in (r.error or "")
+            # Cert was minted (policy passed) but token enforcement blocked
+            assert r.cert_id is not None
+        finally:
+            runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = old_val
+
+    def test_missing_token_allowed_when_not_enforced(self):
+        """With enforcement off, missing token should allow execution."""
+        import qa_agent_security.tool_runner as runner
+        old_val = runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH
+        try:
+            runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = False
+            trace = MerkleTrace()
+            r = execute_http_fetch(
+                url="https://example.com/page",
+                intent_source="policy_kernel",
+                intent_ref="test",
+                url_trusted=True,
+                requires_human_approval=False,
+                capability_token=None,
+                trace=trace,
+            )
+            # Should proceed to execution (will fail network, but cert minted)
+            assert r.cert_id is not None
+            assert "CAP_TOKEN_REQUIRED" not in (r.error or "")
+        finally:
+            runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = old_val
+
+    def test_trace_records_token_enforcement_block(self):
+        """Verify trace records token enforcement as obstruction."""
+        import qa_agent_security.tool_runner as runner
+        old_val = runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH
+        try:
+            runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = True
+            trace = MerkleTrace()
+            execute_http_fetch(
+                url="https://example.com/page",
+                intent_source="policy_kernel",
+                intent_ref="test",
+                url_trusted=True,
+                requires_human_approval=False,
+                capability_token=None,
+                trace=trace,
+            )
+            s = trace.summary()
+            assert s["blocked"] >= 1
+        finally:
+            runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = old_val
 
 
 class TestRedirectErrorPropagation:

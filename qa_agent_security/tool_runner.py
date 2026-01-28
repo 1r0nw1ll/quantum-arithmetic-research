@@ -42,6 +42,19 @@ TOOL_HTTP_FETCH = ToolSpec(
 
 
 # ---------------------------------------------------------------------------
+# Enforcement configuration
+# ---------------------------------------------------------------------------
+
+# When True, HTTP_FETCH requires a valid capability token even for trusted URLs.
+# This makes capability tokens mandatory rather than advisory.
+# Set via environment variable or directly for testing.
+import os
+REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = os.environ.get(
+    "QA_REQUIRE_CAP_TOKEN_HTTP_FETCH", "true"
+).lower() in ("true", "1", "yes")
+
+
+# ---------------------------------------------------------------------------
 # URL sanitization (blocks bypass classes)
 # ---------------------------------------------------------------------------
 
@@ -424,6 +437,27 @@ def execute_http_fetch(
             trace_summary=trace.summary() if trace else None,
         )
 
+    # --- Step 1b: Mandatory capability token enforcement ---
+    if REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH and capability_token is None:
+        if trace is not None:
+            trace.append(MerkleLeaf(
+                move="TOOL_CALL:http_fetch",
+                fail_type="CAPABILITY_NOT_FOUND",
+                invariant_diff=[{
+                    "inv": "CAP_TOKEN_REQUIRED",
+                    "expected": "valid capability token",
+                    "got": "no token provided",
+                }],
+            ))
+        return ToolResult(
+            success=False,
+            tool="http_fetch",
+            cert_id=cert["cert_id"],
+            obstruction_id=None,
+            error="Capability token required: CAP_TOKEN_REQUIRED",
+            trace_summary=trace.summary() if trace else None,
+        )
+
     # --- Step 2: URL sanitization (pre-execution hardening) ---
     try:
         _scheme, _hostname = sanitize_url(url)
@@ -488,13 +522,14 @@ def execute_http_fetch(
                     "inv": e.invariant,
                     "expected": "pass",
                     "got": f"fail ({e.detail})",
+                    "witness": {"redirect_url": e.redirect_url},
                 }],
             ))
         return ToolResult(
             success=False,
             tool="http_fetch",
             cert_id=cert["cert_id"],
-            error=f"Redirect blocked: {e.invariant} — {e.detail}",
+            error=f"URL sanitization failed: {e.invariant} — {e.detail}",
             trace_summary=trace.summary() if trace else None,
         )
 
@@ -536,6 +571,20 @@ def _run_self_tests() -> int:
 
     ts = now_rfc3339()
     trace = MerkleTrace()
+
+    # Helper: permissive token for testing bypass classes (allows any domain)
+    permissive_token = CapabilityToken(
+        agent_id="test",
+        session_id="self-test",
+        capabilities=[
+            CapabilityEntry(
+                tool="http_fetch",
+                scope="network",
+                args_schema="SCHEMA.HTTP_FETCH.v1",
+                constraints={},  # No domain restriction
+            ),
+        ],
+    )
 
     # --- Test 1: Blocked — tainted URL without approval ---
     r1 = execute_http_fetch(
@@ -619,6 +668,7 @@ def _run_self_tests() -> int:
         intent_ref="page:1",
         url_trusted=False,
         requires_human_approval=True,
+        capability_token=permissive_token,
         trace=trace,
     )
     check("Tainted URL with approval -> cert minted",
@@ -640,6 +690,7 @@ def _run_self_tests() -> int:
         intent_ref="test:2",
         url_trusted=True,
         requires_human_approval=False,
+        capability_token=permissive_token,
         trace=trace,
     )
     check("Schema blocks invalid method",
@@ -653,6 +704,7 @@ def _run_self_tests() -> int:
         intent_ref="test:3",
         url_trusted=True,
         requires_human_approval=False,
+        capability_token=permissive_token,
         trace=trace,
     )
     check("Blocks credential-in-URL",
@@ -666,6 +718,7 @@ def _run_self_tests() -> int:
         intent_ref="test:4",
         url_trusted=True,
         requires_human_approval=False,
+        capability_token=permissive_token,
         trace=trace,
     )
     check("Blocks raw IPv4 literal",
@@ -679,6 +732,7 @@ def _run_self_tests() -> int:
         intent_ref="test:5",
         url_trusted=True,
         requires_human_approval=False,
+        capability_token=permissive_token,
         trace=trace,
     )
     check("Blocks punycode hostname",
@@ -693,11 +747,31 @@ def _run_self_tests() -> int:
         intent_ref="test:6",
         url_trusted=True,
         requires_human_approval=False,
+        capability_token=permissive_token,
         trace=trace,
     )
     check("Blocks Host header injection",
           not r10.success and "HEADER_INJECTION_BLOCKED" in (r10.error or "")
           and r10.cert_id is not None)  # cert minted, but execution blocked by sanitizer
+
+    # --- Test 11: Mandatory capability token enforcement ---
+    # Temporarily ensure enforcement is on for this test
+    global REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH
+    old_enforce = REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH
+    REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = True
+    r11 = execute_http_fetch(
+        url="https://example.com/page",
+        intent_description="fetch without token",
+        intent_source="policy_kernel",
+        intent_ref="test:7",
+        url_trusted=True,
+        requires_human_approval=False,
+        capability_token=None,  # No token!
+        trace=trace,
+    )
+    REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = old_enforce
+    check("Blocks fetch without capability token",
+          not r11.success and "CAP_TOKEN_REQUIRED" in (r11.error or ""))
 
     # --- Summary ---
     print("=" * 60)

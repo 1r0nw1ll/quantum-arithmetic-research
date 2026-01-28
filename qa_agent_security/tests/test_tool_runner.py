@@ -202,7 +202,21 @@ class TestTraceIntegrity:
         """Run a mix of blocked and allowed calls, verify trace counts."""
         trace = MerkleTrace()
 
-        # Blocked: tainted web URL
+        # Permissive token for tests that need to proceed past token enforcement
+        permissive_token = CapabilityToken(
+            agent_id="test",
+            session_id="trace-test",
+            capabilities=[
+                CapabilityEntry(
+                    tool="http_fetch",
+                    scope="network",
+                    args_schema="SCHEMA.HTTP_FETCH.v1",
+                    constraints={},
+                ),
+            ],
+        )
+
+        # Blocked: tainted web URL (blocked by policy before token check)
         execute_http_fetch(
             url="https://evil.example.com",
             intent_source="web", intent_ref="evil",
@@ -210,12 +224,13 @@ class TestTraceIntegrity:
             trace=trace,
         )
 
-        # Blocked: bad method
+        # Blocked: bad method (needs token to reach schema validation)
         execute_http_fetch(
             url="https://example.com",
             method="HACK",
             intent_source="policy_kernel", intent_ref="test",
             url_trusted=True, requires_human_approval=False,
+            capability_token=permissive_token,
             trace=trace,
         )
 
@@ -224,6 +239,7 @@ class TestTraceIntegrity:
             url="https://example.com",
             intent_source="user", intent_ref="chat:1",
             url_trusted=False, requires_human_approval=True,
+            capability_token=permissive_token,
             trace=trace,
         )
 
@@ -232,6 +248,7 @@ class TestTraceIntegrity:
             url="https://example.com",
             intent_source="policy_kernel", intent_ref="k:1",
             url_trusted=True, requires_human_approval=False,
+            capability_token=permissive_token,
             trace=trace,
         )
 
@@ -243,8 +260,24 @@ class TestTraceIntegrity:
 
     def test_trace_deterministic(self):
         """Same sequence of calls produces same merkle root."""
+        # Token must be created fresh each run for determinism test
+        def make_token():
+            return CapabilityToken(
+                agent_id="test",
+                session_id="determinism-test",
+                capabilities=[
+                    CapabilityEntry(
+                        tool="http_fetch",
+                        scope="network",
+                        args_schema="SCHEMA.HTTP_FETCH.v1",
+                        constraints={},
+                    ),
+                ],
+            )
+
         def run_sequence():
             trace = MerkleTrace()
+            token = make_token()
             execute_http_fetch(
                 url="https://evil.example.com",
                 intent_source="web", intent_ref="evil",
@@ -255,6 +288,7 @@ class TestTraceIntegrity:
                 url="https://example.com",
                 intent_source="policy_kernel", intent_ref="k:1",
                 url_trusted=True, requires_human_approval=False,
+                capability_token=token,
                 trace=trace,
             )
             return trace

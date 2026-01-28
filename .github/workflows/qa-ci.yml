@@ -24,6 +24,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install pytest
+        run: pip install pytest
+
       - name: Run QA meta-validator (tetrad + conjectures + FST)
         run: python qa_meta_validator.py
 

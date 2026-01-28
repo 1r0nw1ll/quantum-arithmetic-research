@@ -700,27 +700,25 @@ class TestRunnerConstraintRecheck:
         """
         Runner-side TTL check should block expired tokens even if kernel passed.
         This is defense-in-depth for "kernel bypass + stale token" scenarios.
+
+        We stub enforce_policy to return a minted cert unconditionally,
+        then verify the runner's Step 1c blocks on token expiry.
         """
-        import qa_agent_security.qa_agent_security as kernel_module
+        import qa_agent_security.tool_runner as runner
 
-        # Save original function and patch to skip TTL check in kernel
-        original_enforce = kernel_module.enforce_policy
+        # Save original
+        original_enforce = runner.enforce_policy
 
-        def patched_enforce(*args, **kwargs):
-            # Patch the token's is_expired to return False during kernel check
-            token = kwargs.get("capability_token")
-            if token is not None:
-                original_is_expired = token.is_expired
-                token.is_expired = lambda *a: False
-                try:
-                    result = original_enforce(*args, **kwargs)
-                finally:
-                    token.is_expired = original_is_expired
-                return result
-            return original_enforce(*args, **kwargs)
+        # Stub: kernel "passes" and mints a cert regardless of token expiry
+        def stub_enforce_policy(*args, **kwargs):
+            return {
+                "cert_id": "sha256:STUB_CERT_FOR_TTL_TEST",
+                "tool": "http_fetch",
+                "args": {"url": kwargs.get("args_pv", {}).get("url", {}).get("value", "")},
+            }
 
         try:
-            kernel_module.enforce_policy = patched_enforce
+            runner.enforce_policy = stub_enforce_policy
 
             # Create an expired token
             expired_token = CapabilityToken(
@@ -738,30 +736,27 @@ class TestRunnerConstraintRecheck:
             )
             trace = MerkleTrace()
 
-            # Import the runner's enforce_policy reference
-            import qa_agent_security.tool_runner as runner_module
-            original_runner_enforce = runner_module.enforce_policy
-            runner_module.enforce_policy = patched_enforce
+            r = runner.execute_http_fetch(
+                url="https://example.com/page",
+                intent_source="policy_kernel",
+                intent_ref="test",
+                url_trusted=True,
+                requires_human_approval=False,
+                capability_token=expired_token,
+                trace=trace,
+            )
 
-            try:
-                r = execute_http_fetch(
-                    url="https://example.com/page",
-                    intent_source="policy_kernel",
-                    intent_ref="test",
-                    url_trusted=True,
-                    requires_human_approval=False,
-                    capability_token=expired_token,
-                    trace=trace,
-                )
+            # Should be blocked by runner-side TTL check (Step 1c)
+            assert not r.success
+            assert "CAP_TOKEN_TTL_RUNNER" in (r.error or "")
+            assert r.cert_id is not None  # Cert was "minted" by stub
 
-                # Should be blocked by runner-side TTL check
-                assert not r.success
-                assert "CAP_TOKEN_TTL_RUNNER" in (r.error or "") or "expired" in (r.error or "").lower()
-            finally:
-                runner_module.enforce_policy = original_runner_enforce
+            # Verify trace recorded the block
+            s = trace.summary()
+            assert s["blocked"] >= 1
 
         finally:
-            kernel_module.enforce_policy = original_enforce
+            runner.enforce_policy = original_enforce
 
 
 class TestRedirectErrorPropagation:

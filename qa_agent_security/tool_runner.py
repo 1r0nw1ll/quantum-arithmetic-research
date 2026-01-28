@@ -471,13 +471,14 @@ def execute_http_fetch(
             tool="http_fetch",
             cert_id=cert["cert_id"],
             obstruction_id=None,
-            error="Capability token required: CAP_TOKEN_REQUIRED",
+            error="Capability check failed: CAP_TOKEN_REQUIRED — no token provided",
             trace_summary=trace.summary() if trace else None,
         )
 
     # --- Step 1c: Runner-side token TTL check (defense-in-depth) ---
     # Re-validate token expiry at execution time to catch "kernel bypass + stale token".
     if capability_token is not None and capability_token.is_expired():
+        checked_at = now_rfc3339()
         if trace is not None:
             trace.append(MerkleLeaf(
                 move="TOOL_CALL:http_fetch",
@@ -489,7 +490,8 @@ def execute_http_fetch(
                     "witness": {
                         "tool": "http_fetch",
                         "expires_at": capability_token.expires_at,
-                        "checked_at": now_rfc3339(),
+                        "checked_at": checked_at,
+                        "clock": "system",
                     },
                 }],
             ))
@@ -497,7 +499,7 @@ def execute_http_fetch(
             success=False,
             tool="http_fetch",
             cert_id=cert["cert_id"],
-            error=f"Capability token expired: CAP_TOKEN_TTL_RUNNER — expires_at={capability_token.expires_at}",
+            error=f"Capability check failed: CAP_TOKEN_TTL_RUNNER — expires_at={capability_token.expires_at}",
             trace_summary=trace.summary() if trace else None,
         )
 
@@ -571,7 +573,7 @@ def execute_http_fetch(
                 success=False,
                 tool="http_fetch",
                 cert_id=cert["cert_id"],
-                error=f"Capability constraint failed: CAP_TOKEN_CONSTRAINT_MISMATCH — {_hostname!r} not in allowlist",
+                error=f"Capability check failed: CAP_TOKEN_CONSTRAINT_MISMATCH — {_hostname!r} not in allowlist",
                 trace_summary=trace.summary() if trace else None,
             )
 

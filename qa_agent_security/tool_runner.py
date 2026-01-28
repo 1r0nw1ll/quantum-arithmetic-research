@@ -446,6 +446,9 @@ def execute_http_fetch(
         except Exception:
             witness_hostname = "<parse-failed>"
 
+        # Reflect actual runtime flag in witness for truthful ledgers
+        env_val = os.environ.get("QA_REQUIRE_CAP_TOKEN_HTTP_FETCH", "<unset>")
+
         if trace is not None:
             trace.append(MerkleLeaf(
                 move="TOOL_CALL:http_fetch",
@@ -457,7 +460,8 @@ def execute_http_fetch(
                     "witness": {
                         "tool": "http_fetch",
                         "url_hostname": witness_hostname,
-                        "enforcement": "QA_REQUIRE_CAP_TOKEN_HTTP_FETCH=true",
+                        "enforcement_env": env_val,
+                        "enforcement_effective": REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH,
                     },
                 }],
             ))
@@ -517,15 +521,10 @@ def execute_http_fetch(
     # --- Step 3b: Runner-side constraint recheck (defense-in-depth) ---
     # Re-validate initial URL hostname against token constraints.
     # This catches any case where kernel validation was bypassed or URL changed.
+    # Reuse _hostname from Step 2's sanitize_url() for consistency.
     if domain_allowlist is not None:
-        try:
-            parsed = urlparse(url)
-            hostname = (parsed.hostname or "").lower()
-        except Exception:
-            hostname = ""
-
         allow_lower = [d.lower() for d in domain_allowlist]
-        if hostname not in allow_lower:
+        if _hostname not in allow_lower:
             if trace is not None:
                 trace.append(MerkleLeaf(
                     move="TOOL_CALL:http_fetch",
@@ -533,10 +532,10 @@ def execute_http_fetch(
                     invariant_diff=[{
                         "inv": "CAP_TOKEN_CONSTRAINT_MISMATCH",
                         "expected": f"hostname in {allow_lower}",
-                        "got": f"hostname={hostname!r}",
+                        "got": f"hostname={_hostname!r}",
                         "witness": {
                             "tool": "http_fetch",
-                            "url_hostname": hostname,
+                            "url_hostname": _hostname,
                             "domain_allowlist": domain_allowlist,
                         },
                     }],
@@ -545,7 +544,7 @@ def execute_http_fetch(
                 success=False,
                 tool="http_fetch",
                 cert_id=cert["cert_id"],
-                error=f"Runner constraint check failed: CAP_TOKEN_CONSTRAINT_MISMATCH — {hostname!r} not in allowlist",
+                error=f"Capability constraint failed: CAP_TOKEN_CONSTRAINT_MISMATCH — {_hostname!r} not in allowlist",
                 trace_summary=trace.summary() if trace else None,
             )
 

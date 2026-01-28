@@ -1,0 +1,47 @@
+{
+  "$id": "CAPABILITY_TOKEN.v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Agent Capability Token",
+  "description": "Scoped, time-limited authorization token.  Tool runner refuses any action unless a valid TOOL_CALL_CERT + matching CAPABILITY_TOKEN exist.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "issued_at", "expires_at",
+    "issuer", "subject", "capabilities"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "CAPABILITY_TOKEN.v1" },
+    "issued_at": { "type": "string", "format": "date-time" },
+    "expires_at": { "type": "string" },
+    "issuer": {
+      "type": "object",
+      "required": ["type", "instance_id"],
+      "properties": {
+        "type": { "type": "string", "const": "policy_kernel" },
+        "instance_id": { "type": "string" }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "required": ["agent_id", "session_id"],
+      "properties": {
+        "agent_id": { "type": "string" },
+        "session_id": { "type": "string" }
+      }
+    },
+    "capabilities": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["tool", "scope", "args_schema"],
+        "properties": {
+          "tool": { "type": "string" },
+          "scope": { "type": "string", "enum": ["read_only", "write_limited", "network", "exec"] },
+          "args_schema": { "type": "string" },
+          "constraints": { "type": "object" }
+        }
+      }
+    }
+  }
+}

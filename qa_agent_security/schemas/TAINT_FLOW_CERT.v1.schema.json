@@ -1,0 +1,39 @@
+{
+  "$id": "TAINT_FLOW_CERT.v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Agent Taint Flow Certificate",
+  "description": "Tracks how taint moves through transforms.  Key invariant: transforms may reduce content but NEVER upgrade TAINTED -> TRUSTED.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "cert_id", "created_at",
+    "inputs", "transform", "outputs", "invariants_checked"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "TAINT_FLOW_CERT.v1" },
+    "cert_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "object" }
+    },
+    "transform": {
+      "type": "object",
+      "required": ["name", "parameters"],
+      "properties": {
+        "name": { "type": "string" },
+        "parameters": { "type": "object" }
+      }
+    },
+    "outputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "object" }
+    },
+    "invariants_checked": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  }
+}

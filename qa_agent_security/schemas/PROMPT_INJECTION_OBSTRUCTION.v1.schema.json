@@ -1,0 +1,56 @@
+{
+  "$id": "PROMPT_INJECTION_OBSTRUCTION.v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Agent Prompt Injection Obstruction",
+  "description": "Deterministic failure artifact emitted when the policy kernel blocks a tool invocation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "cert_id", "created_at",
+    "attempted_tool", "attempted_args",
+    "fail_type", "invariant_diff", "witness"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "PROMPT_INJECTION_OBSTRUCTION.v1" },
+    "cert_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "attempted_tool": { "type": "string" },
+    "attempted_args": { "type": "object" },
+    "fail_type": {
+      "type": "string",
+      "enum": [
+        "UNTRUSTED_INSTRUCTION",
+        "CAPABILITY_ESCALATION_ATTEMPT",
+        "SCHEMA_BREAKOUT",
+        "CONFUSED_DEPUTY",
+        "PROVENANCE_LOSS",
+        "TAINT_UPGRADE_VIOLATION",
+        "CAPABILITY_TOKEN_MISSING",
+        "CAPABILITY_TOKEN_EXPIRED",
+        "CAPABILITY_NOT_FOUND",
+        "CONSTRAINT_VIOLATION"
+      ]
+    },
+    "invariant_diff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["inv", "expected", "got"],
+        "properties": {
+          "inv": { "type": "string" },
+          "expected": { "type": "string" },
+          "got": { "type": "string" }
+        }
+      }
+    },
+    "witness": {
+      "type": "object",
+      "required": ["snippet", "source_ref", "notes"],
+      "properties": {
+        "snippet": { "type": "string" },
+        "source_ref": { "type": "string" },
+        "notes": { "type": "string" }
+      }
+    }
+  }
+}

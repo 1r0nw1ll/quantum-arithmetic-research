@@ -1,0 +1,31 @@
+{
+  "$id": "MERKLE_TRACE.v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Agent Merkle Trace Leaf",
+  "description": "1:1 with QARM log rows: {move, fail_type, invariant_diff}.  Leaf hash = sha256(canonical_json(leaf)).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["move", "fail_type", "invariant_diff"],
+  "properties": {
+    "move": {
+      "type": "string",
+      "description": "Tool name (TOOL_CALL:<name>) or generator symbol"
+    },
+    "fail_type": {
+      "type": "string",
+      "description": "OK on success, or one of the canonical obstruction fail_types"
+    },
+    "invariant_diff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["inv", "expected", "got"],
+        "properties": {
+          "inv": { "type": "string" },
+          "expected": { "type": "string" },
+          "got": { "type": "string" }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "$id": "TOOL_CALL_CERT.v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Agent Tool Call Certificate",
+  "description": "Certificate minted by the policy kernel to authorize a single tool invocation.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version", "cert_id", "created_at", "tool", "intent", "args",
+    "policy_rule_id", "risk", "requires_human_approval",
+    "invariants_checked", "rollback_plan", "trace"
+  ],
+  "properties": {
+    "schema_version": { "type": "string", "const": "TOOL_CALL_CERT.v1" },
+    "cert_id": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+    "created_at": { "type": "string", "format": "date-time" },
+    "tool": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "capability_scope", "schema"],
+      "properties": {
+        "name": { "type": "string" },
+        "capability_scope": { "type": "string", "enum": ["read_only", "write_limited", "network", "exec"] },
+        "schema": { "type": "string" }
+      }
+    },
+    "intent": { "type": "object" },
+    "args": { "type": "object" },
+    "policy_rule_id": { "type": "string" },
+    "risk": {
+      "type": "object",
+      "required": ["level", "reasons"],
+      "properties": {
+        "level": { "type": "string", "enum": ["low", "med", "high"] },
+        "reasons": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "requires_human_approval": { "type": "boolean" },
+    "invariants_checked": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "rollback_plan": {
+      "type": "object",
+      "required": ["type"],
+      "properties": {
+        "type": { "type": "string", "enum": ["none", "compensate", "revert"] },
+        "details": { "type": "string" }
+      }
+    },
+    "trace": {
+      "type": "object",
+      "required": ["merkle_root", "steps"],
+      "properties": {
+        "merkle_root": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "steps": { "type": "integer", "minimum": 0 }
+      }
+    }
+  }
+}

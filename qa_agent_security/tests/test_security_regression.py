@@ -549,6 +549,45 @@ class TestCapabilityTokenEnforcement:
             runner.REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH = old_val
 
 
+class TestRunnerConstraintRecheck:
+    """
+    Tests for runner-side constraint recheck (defense-in-depth).
+    """
+
+    def test_runner_rechecks_domain_allowlist(self):
+        """Runner should recheck URL hostname against token constraints."""
+        # Create a token that allows only api.github.com
+        token = CapabilityToken(
+            agent_id="test",
+            session_id="s1",
+            capabilities=[
+                CapabilityEntry(
+                    tool="http_fetch",
+                    scope="network",
+                    args_schema="SCHEMA.HTTP_FETCH.v1",
+                    constraints={
+                        "domain_allowlist": ["api.github.com"],
+                    },
+                ),
+            ],
+        )
+        trace = MerkleTrace()
+        # Try to fetch a URL that's NOT in the allowlist
+        # This should be caught by both kernel and runner
+        r = execute_http_fetch(
+            url="https://evil.com/steal",
+            intent_source="policy_kernel",
+            intent_ref="test",
+            url_trusted=True,
+            requires_human_approval=False,
+            capability_token=token,
+            trace=trace,
+        )
+        assert not r.success
+        # Should be blocked (by kernel's DOMAIN_ALLOWLIST check)
+        assert r.obstruction_id is not None
+
+
 class TestRedirectErrorPropagation:
     """
     Tests that verify RedirectError is properly converted to ToolResult obstruction.

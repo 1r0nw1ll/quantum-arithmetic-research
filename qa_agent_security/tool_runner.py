@@ -507,12 +507,47 @@ def execute_http_fetch(
                 trace_summary=trace.summary() if trace else None,
             )
 
-    # --- Step 3: Extract domain allowlist from capability token for redirect validation ---
+    # --- Step 3: Extract domain allowlist from capability token ---
     domain_allowlist = None
     if capability_token is not None:
         cap = capability_token.find_capability("http_fetch", "network")
         if cap is not None:
             domain_allowlist = cap.constraints.get("domain_allowlist")
+
+    # --- Step 3b: Runner-side constraint recheck (defense-in-depth) ---
+    # Re-validate initial URL hostname against token constraints.
+    # This catches any case where kernel validation was bypassed or URL changed.
+    if domain_allowlist is not None:
+        try:
+            parsed = urlparse(url)
+            hostname = (parsed.hostname or "").lower()
+        except Exception:
+            hostname = ""
+
+        allow_lower = [d.lower() for d in domain_allowlist]
+        if hostname not in allow_lower:
+            if trace is not None:
+                trace.append(MerkleLeaf(
+                    move="TOOL_CALL:http_fetch",
+                    fail_type="CONSTRAINT_VIOLATION",
+                    invariant_diff=[{
+                        "inv": "CAP_TOKEN_CONSTRAINT_MISMATCH",
+                        "expected": f"hostname in {allow_lower}",
+                        "got": f"hostname={hostname!r}",
+                        "witness": {
+                            "tool": "http_fetch",
+                            "url_hostname": hostname,
+                            "domain_allowlist": domain_allowlist,
+                        },
+                    }],
+                ))
+            return ToolResult(
+                success=False,
+                tool="http_fetch",
+                cert_id=cert["cert_id"],
+                error=f"Runner constraint check failed: CAP_TOKEN_CONSTRAINT_MISMATCH — {hostname!r} not in allowlist",
+                trace_summary=trace.summary() if trace else None,
+            )
 
     # --- Step 4: Execute (only if cert was minted + URL is clean) ---
     try:

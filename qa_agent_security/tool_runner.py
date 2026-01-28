@@ -175,7 +175,72 @@ class ToolResult:
 
 
 # ---------------------------------------------------------------------------
-# HTTP_FETCH implementation (read-only, stdlib only)
+# Redirect handling (validates each hop against constraints)
+# ---------------------------------------------------------------------------
+
+MAX_REDIRECTS = 5
+
+
+class RedirectError(Exception):
+    """Raised when a redirect violates security constraints."""
+    def __init__(self, invariant: str, detail: str, redirect_url: str):
+        super().__init__(f"{invariant}: {detail}")
+        self.invariant = invariant
+        self.detail = detail
+        self.redirect_url = redirect_url
+
+
+class SafeRedirectHandler(urllib.request.HTTPRedirectHandler):
+    """
+    Custom redirect handler that:
+    1. Sanitizes each redirect URL (same checks as initial URL)
+    2. Re-validates domain against an optional allowlist
+    3. Enforces redirect count limit
+    """
+
+    def __init__(self, domain_allowlist: Optional[List[str]] = None):
+        super().__init__()
+        self.domain_allowlist = domain_allowlist
+        self.redirect_count = 0
+
+    def redirect_request(self, req, fp, code, msg, headers, newurl):
+        self.redirect_count += 1
+
+        # Redirect count limit
+        if self.redirect_count > MAX_REDIRECTS:
+            raise RedirectError(
+                "REDIRECT_COUNT_MAX",
+                f"Exceeded max redirects ({MAX_REDIRECTS})",
+                newurl)
+
+        # Sanitize the new URL
+        try:
+            scheme, hostname = sanitize_url(newurl)
+        except URLSanitizationError as e:
+            raise RedirectError(e.invariant, e.detail, newurl) from e
+
+        # Re-check domain allowlist
+        if self.domain_allowlist is not None:
+            allow_lower = [d.lower() for d in self.domain_allowlist]
+            if hostname not in allow_lower:
+                raise RedirectError(
+                    "REDIRECT_TARGET_ALLOWLIST",
+                    f"Redirect target {hostname!r} not in allowlist",
+                    newurl)
+
+        # Delegate to parent (which builds the new Request)
+        return super().redirect_request(req, fp, code, msg, headers, newurl)
+
+
+def build_safe_opener(domain_allowlist: Optional[List[str]] = None) -> urllib.request.OpenerDirector:
+    """Build an opener with safe redirect handling."""
+    handler = SafeRedirectHandler(domain_allowlist=domain_allowlist)
+    opener = urllib.request.build_opener(handler)
+    return opener
+
+
+# ---------------------------------------------------------------------------
+# HTTP_FETCH implementation (read-only, stdlib only, redirect-safe)
 # ---------------------------------------------------------------------------
 
 def _execute_http_fetch(
@@ -184,10 +249,13 @@ def _execute_http_fetch(
     headers: Optional[Dict[str, str]] = None,
     timeout_ms: int = 10000,
     max_bytes: int = 1_000_000,
+    domain_allowlist: Optional[List[str]] = None,
 ) -> Dict[str, Any]:
     """
     Execute an HTTP fetch using only stdlib (urllib).
     Returns {status_code, headers, body, content_type, bytes_read}.
+
+    Uses a safe redirect handler that re-validates each redirect target.
     """
     req = urllib.request.Request(url, method=method)
     if headers:
@@ -195,8 +263,10 @@ def _execute_http_fetch(
             req.add_header(k, v)
 
     timeout_s = max(1, timeout_ms // 1000)
+    opener = build_safe_opener(domain_allowlist=domain_allowlist)
+
     try:
-        with urllib.request.urlopen(req, timeout=timeout_s) as resp:
+        with opener.open(req, timeout=timeout_s) as resp:
             status = resp.status
             resp_headers = dict(resp.getheaders())
             body_bytes = resp.read(max_bytes)
@@ -233,6 +303,9 @@ def _execute_http_fetch(
             "bytes_read": 0,
             "error": str(e.reason),
         }
+    except RedirectError:
+        # Re-raise to caller for proper obstruction handling
+        raise
     except Exception as e:
         return {
             "status_code": 0,
@@ -388,16 +461,44 @@ def execute_http_fetch(
                 trace_summary=trace.summary() if trace else None,
             )
 
-    # --- Step 3: Execute (only if cert was minted + URL is clean) ---
-    result = _execute_http_fetch(
-        url=url,
-        method=method,
-        headers=headers,
-        timeout_ms=timeout_ms,
-        max_bytes=max_bytes,
-    )
+    # --- Step 3: Extract domain allowlist from capability token for redirect validation ---
+    domain_allowlist = None
+    if capability_token is not None:
+        cap = capability_token.find_capability("http_fetch", "network")
+        if cap is not None:
+            domain_allowlist = cap.constraints.get("domain_allowlist")
 
-    # --- Step 4: Return result ---
+    # --- Step 4: Execute (only if cert was minted + URL is clean) ---
+    try:
+        result = _execute_http_fetch(
+            url=url,
+            method=method,
+            headers=headers,
+            timeout_ms=timeout_ms,
+            max_bytes=max_bytes,
+            domain_allowlist=domain_allowlist,
+        )
+    except RedirectError as e:
+        # Redirect violated security constraints
+        if trace is not None:
+            trace.append(MerkleLeaf(
+                move="TOOL_CALL:http_fetch",
+                fail_type="CONSTRAINT_VIOLATION",
+                invariant_diff=[{
+                    "inv": e.invariant,
+                    "expected": "pass",
+                    "got": f"fail ({e.detail})",
+                }],
+            ))
+        return ToolResult(
+            success=False,
+            tool="http_fetch",
+            cert_id=cert["cert_id"],
+            error=f"Redirect blocked: {e.invariant} — {e.detail}",
+            trace_summary=trace.summary() if trace else None,
+        )
+
+    # --- Step 5: Return result ---
     return ToolResult(
         success=result.get("error") is None,
         tool="http_fetch",

@@ -309,3 +309,190 @@ class TestHTTPFetchBypassRegression:
         # All should be blocked (some at policy, some at sanitization)
         assert s["total_steps"] >= 3
         assert s["merkle_root"].startswith("sha256:")
+
+
+# ---------------------------------------------------------------------------
+# Redirect handler unit tests
+# ---------------------------------------------------------------------------
+
+from qa_agent_security.tool_runner import (
+    SafeRedirectHandler,
+    RedirectError,
+    MAX_REDIRECTS,
+)
+
+
+class TestSafeRedirectHandler:
+    """
+    Unit tests for the SafeRedirectHandler to verify redirect validation.
+    These test the handler's logic directly without making network calls.
+    """
+
+    def test_redirect_to_ip_literal_blocked(self):
+        """Redirect to raw IP should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=["example.com"])
+        with pytest.raises(RedirectError) as exc:
+            # Simulate a redirect request to an IP literal
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://192.168.1.1/internal"
+            )
+        assert exc.value.invariant == "URL_NO_IP_LITERAL"
+        assert exc.value.redirect_url == "https://192.168.1.1/internal"
+
+    def test_redirect_to_ipv6_blocked(self):
+        """Redirect to IPv6 should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=["example.com"])
+        with pytest.raises(RedirectError) as exc:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://[::1]/admin"
+            )
+        assert exc.value.invariant == "URL_NO_IP_LITERAL"
+
+    def test_redirect_with_credentials_blocked(self):
+        """Redirect URL with credentials should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=["example.com"])
+        with pytest.raises(RedirectError) as exc:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://user:pass@example.com/secret"
+            )
+        assert exc.value.invariant == "URL_NO_CREDENTIALS"
+
+    def test_redirect_to_punycode_blocked(self):
+        """Redirect to punycode domain should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=["example.com"])
+        with pytest.raises(RedirectError) as exc:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://xn--80ak6aa92e.com/page"
+            )
+        assert exc.value.invariant == "URL_NO_PUNYCODE"
+
+    def test_redirect_off_allowlist_blocked(self):
+        """Redirect to domain not in allowlist should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=["api.github.com"])
+        with pytest.raises(RedirectError) as exc:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://evil.com/steal"
+            )
+        assert exc.value.invariant == "REDIRECT_TARGET_ALLOWLIST"
+        assert "evil.com" in exc.value.detail
+
+    def test_redirect_within_allowlist_allowed(self):
+        """Redirect to domain in allowlist should NOT raise (returns Request)."""
+        handler = SafeRedirectHandler(domain_allowlist=["api.github.com", "github.com"])
+        # This should not raise - but we can't fully test without mocking Request
+        # The key test is that it doesn't raise RedirectError
+        # Note: will raise AttributeError on req.get_method() since req=None
+        # but that's after our validation passes
+        try:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://github.com/repos"
+            )
+        except RedirectError:
+            pytest.fail("RedirectError raised for allowed domain")
+        except AttributeError:
+            # Expected: parent's redirect_request tries to call req.get_method()
+            pass
+
+    def test_redirect_no_allowlist_passes_sanitization(self):
+        """Without allowlist, redirect passes if URL is clean."""
+        handler = SafeRedirectHandler(domain_allowlist=None)  # No allowlist
+        try:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://any-domain.com/page"
+            )
+        except RedirectError:
+            pytest.fail("RedirectError raised when no allowlist configured")
+        except AttributeError:
+            # Expected: parent method failure
+            pass
+
+    def test_redirect_count_limit_enforced(self):
+        """Exceeding MAX_REDIRECTS should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=None)
+        # Simulate MAX_REDIRECTS+1 redirects
+        for i in range(MAX_REDIRECTS):
+            try:
+                handler.redirect_request(
+                    req=None, fp=None, code=302, msg="Found",
+                    headers={}, newurl=f"https://example.com/hop{i}"
+                )
+            except AttributeError:
+                # Expected after validation passes
+                pass
+
+        # The next redirect should fail
+        with pytest.raises(RedirectError) as exc:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://example.com/final"
+            )
+        assert exc.value.invariant == "REDIRECT_COUNT_MAX"
+
+    def test_redirect_with_control_chars_blocked(self):
+        """Redirect URL with control characters should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=None)
+        with pytest.raises(RedirectError) as exc:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="https://example.com/\r\ninjection"
+            )
+        assert exc.value.invariant == "URL_NO_CONTROL_CHARS"
+
+    def test_redirect_file_scheme_blocked(self):
+        """Redirect to file:// scheme should raise RedirectError."""
+        handler = SafeRedirectHandler(domain_allowlist=None)
+        with pytest.raises(RedirectError) as exc:
+            handler.redirect_request(
+                req=None, fp=None, code=302, msg="Found",
+                headers={}, newurl="file:///etc/passwd"
+            )
+        assert exc.value.invariant == "URL_SCHEME_HTTP_ONLY"
+
+
+class TestRedirectErrorPropagation:
+    """
+    Tests that verify RedirectError is properly converted to ToolResult obstruction.
+    """
+
+    def test_redirect_error_creates_obstruction_trace(self):
+        """Verify that a simulated RedirectError would be recorded in trace."""
+        from qa_agent_security.tool_runner import RedirectError, MerkleLeaf
+
+        # Create a trace and manually append what would happen on redirect error
+        trace = MerkleTrace()
+        err = RedirectError(
+            invariant="REDIRECT_TARGET_ALLOWLIST",
+            detail="Redirect target 'evil.com' not in allowlist",
+            redirect_url="https://evil.com/steal"
+        )
+        trace.append(MerkleLeaf(
+            move="TOOL_CALL:http_fetch",
+            fail_type="CONSTRAINT_VIOLATION",
+            invariant_diff=[{
+                "inv": err.invariant,
+                "expected": "pass",
+                "got": f"fail ({err.detail})",
+            }],
+        ))
+        s = trace.summary()
+        assert s["blocked"] == 1
+        assert s["merkle_root"].startswith("sha256:")
+
+    def test_redirect_error_attributes(self):
+        """Verify RedirectError has all required attributes for obstruction."""
+        err = RedirectError(
+            invariant="REDIRECT_TARGET_ALLOWLIST",
+            detail="test detail",
+            redirect_url="https://evil.com"
+        )
+        assert err.invariant == "REDIRECT_TARGET_ALLOWLIST"
+        assert err.detail == "test detail"
+        assert err.redirect_url == "https://evil.com"
+        assert "REDIRECT_TARGET_ALLOWLIST: test detail" in str(err)

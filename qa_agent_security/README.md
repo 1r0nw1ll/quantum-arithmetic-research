@@ -47,6 +47,7 @@ The tool runner enforces additional URL-level invariants on both initial request
 | `REDIRECT_TARGET_ALLOWLIST` | Redirect to off-allowlist domain |
 | `REDIRECT_COUNT_MAX` | Redirect chain > 5 hops |
 | `CAP_TOKEN_REQUIRED` | Missing capability token |
+| `CAP_TOKEN_TTL_RUNNER` | Runner-side token expiry check |
 | `CAP_TOKEN_CONSTRAINT_MISMATCH` | Runner-side allowlist recheck failed |
 
 ## Mandatory capability tokens
@@ -77,7 +78,7 @@ python qa_agent_security/qa_agent_security.py
 # Tool runner self-test (11 checks, no network needed)
 python -m qa_agent_security.tool_runner
 
-# Full pytest suite (102 tests)
+# Full pytest suite (103 tests)
 python -m pytest qa_agent_security/tests/ -v \
   --override-ini="testpaths=qa_agent_security/tests" \
   --override-ini="python_files=test_*.py"
@@ -101,7 +102,7 @@ qa_agent_security/
   tests/
     test_agent_security.py          # 27 pytest tests (kernel + trace + tokens)
     test_schemas.py                 # 17 pytest tests (schema registry + validation)
-    test_security_regression.py     # 48 pytest tests (bypass regression)
+    test_security_regression.py     # 49 pytest tests (bypass regression)
     test_tool_runner.py             # 10 pytest tests (end-to-end pipeline)
 ```
 

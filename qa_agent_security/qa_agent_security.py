@@ -310,14 +310,15 @@ def _check_constraints(cap: CapabilityEntry, args_pv: Dict[str, Dict[str, Any]])
                     "got": f"fail (matched {pattern!r})",
                 })
 
-    # domain allowlist (http_fetch)
+    # domain allowlist (http_fetch) — uses normalized (lowercase) hostname
     if cap.tool == "http_fetch" and "url" in args_pv:
         url_val = args_pv["url"].get("value", "")
         allow = constraints.get("domain_allowlist")
         if allow is not None:
             from urllib.parse import urlparse
-            domain = urlparse(url_val).hostname or ""
-            if domain not in allow:
+            domain = (urlparse(url_val).hostname or "").lower()
+            allow_lower = [d.lower() for d in allow]
+            if domain not in allow_lower:
                 diffs.append({
                     "inv": "DOMAIN_ALLOWLIST",
                     "expected": "pass",

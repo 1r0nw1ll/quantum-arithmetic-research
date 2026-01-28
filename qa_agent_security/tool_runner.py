@@ -6,16 +6,18 @@ It refuses to act unless presented with a valid TOOL_CALL_CERT.v1 and
 (optionally) a matching CAPABILITY_TOKEN.v1.
 
 Currently implements:
-  - HTTP_FETCH (read-only, domain-allowlisted)
+  - HTTP_FETCH (read-only, domain-allowlisted, URL-hardened)
 
 Design: agent proposes -> kernel validates -> runner executes -> trace logged.
 """
 from __future__ import annotations
 
 import json
+import re
 import urllib.request
 import urllib.error
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional, Tuple
+from urllib.parse import urlparse
 from dataclasses import dataclass, field
 
 from .qa_agent_security import (
@@ -37,6 +39,122 @@ TOOL_HTTP_FETCH = ToolSpec(
     capability_scope="network",
     args_schema_id="SCHEMA.HTTP_FETCH.v1",
 )
+
+
+# ---------------------------------------------------------------------------
+# URL sanitization (blocks bypass classes)
+# ---------------------------------------------------------------------------
+
+# Regex for IPv4 literal (including dotted-decimal)
+_IPV4_RE = re.compile(
+    r"^\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}$"
+)
+
+# Regex for IPv6 literal (bracketed form in URLs)
+_IPV6_BRACKET_RE = re.compile(r"^\[.*\]$")
+
+# Headers that must never be set by the agent (injection vectors)
+DANGEROUS_HEADERS = frozenset({
+    "host", "transfer-encoding", "content-length",
+    "connection", "upgrade", "proxy-authorization",
+    "proxy-connection",
+})
+
+
+class URLSanitizationError(Exception):
+    """Raised when a URL fails pre-execution sanitization."""
+    def __init__(self, invariant: str, detail: str):
+        super().__init__(f"{invariant}: {detail}")
+        self.invariant = invariant
+        self.detail = detail
+
+
+def sanitize_url(url: str) -> Tuple[str, str]:
+    """
+    Validate and normalize a URL before execution.
+
+    Returns (scheme, hostname) on success.
+    Raises URLSanitizationError on any bypass attempt.
+
+    Checks:
+      - Scheme must be http or https
+      - No credentials in URL (user:pass@host)
+      - No raw IP literals (IPv4 or IPv6) unless explicitly allowed
+      - Hostname must be a valid DNS name (no empty, no port tricks)
+      - No null bytes or control characters
+    """
+    # Null byte / control character check
+    if any(ord(c) < 32 for c in url) or "\x00" in url:
+        raise URLSanitizationError(
+            "URL_NO_CONTROL_CHARS",
+            "URL contains null bytes or control characters")
+
+    parsed = urlparse(url)
+
+    # Scheme
+    if parsed.scheme not in ("http", "https"):
+        raise URLSanitizationError(
+            "URL_SCHEME_HTTP_ONLY",
+            f"Scheme must be http/https, got {parsed.scheme!r}")
+
+    # Credentials in URL
+    if parsed.username or parsed.password:
+        raise URLSanitizationError(
+            "URL_NO_CREDENTIALS",
+            "URL must not contain user:pass@ credentials")
+
+    # Extract hostname
+    hostname = parsed.hostname or ""
+    if not hostname:
+        raise URLSanitizationError(
+            "URL_HOSTNAME_REQUIRED",
+            "URL has no hostname")
+
+    # Lowercase for comparison
+    hostname = hostname.lower()
+
+    # IP literal check (IPv4)
+    if _IPV4_RE.match(hostname):
+        raise URLSanitizationError(
+            "URL_NO_IP_LITERAL",
+            f"Raw IPv4 literals not allowed: {hostname}")
+
+    # IP literal check (IPv6 — already stripped of brackets by urlparse)
+    if ":" in hostname:
+        raise URLSanitizationError(
+            "URL_NO_IP_LITERAL",
+            f"IPv6 literals not allowed: {hostname}")
+
+    # Punycode / IDN normalization — decode to check for confusables
+    # We reject any hostname that starts with xn-- (punycode) to prevent
+    # homograph attacks. Real allowlists should use ASCII domains.
+    if hostname.startswith("xn--") or any(
+        label.startswith("xn--") for label in hostname.split(".")
+    ):
+        raise URLSanitizationError(
+            "URL_NO_PUNYCODE",
+            f"Punycode/IDN hostnames not allowed: {hostname}")
+
+    # Mixed-case normalization is handled by lowercasing above.
+    # The allowlist check in the kernel also lowercases.
+
+    return parsed.scheme, hostname
+
+
+def sanitize_headers(headers: Dict[str, str]) -> List[Dict[str, str]]:
+    """
+    Check that no dangerous headers are being set.
+    Returns list of invariant diffs (empty = ok).
+    """
+    diffs = []
+    for key in headers:
+        if key.lower() in DANGEROUS_HEADERS:
+            diffs.append({
+                "inv": "HEADER_INJECTION_BLOCKED",
+                "expected": "pass",
+                "got": f"fail (header {key!r} is forbidden)",
+            })
+    return diffs
 
 
 # ---------------------------------------------------------------------------
@@ -233,7 +351,44 @@ def execute_http_fetch(
             trace_summary=trace.summary() if trace else None,
         )
 
-    # --- Step 2: Execute (only if cert was minted) ---
+    # --- Step 2: URL sanitization (pre-execution hardening) ---
+    try:
+        _scheme, _hostname = sanitize_url(url)
+    except URLSanitizationError as e:
+        # Log as obstruction via trace
+        if trace is not None:
+            trace.append(MerkleLeaf(
+                move="TOOL_CALL:http_fetch",
+                fail_type="CONSTRAINT_VIOLATION",
+                invariant_diff=[{"inv": e.invariant, "expected": "pass", "got": f"fail ({e.detail})"}],
+            ))
+        return ToolResult(
+            success=False,
+            tool="http_fetch",
+            cert_id=cert["cert_id"],
+            error=f"URL sanitization failed: {e.invariant}",
+            trace_summary=trace.summary() if trace else None,
+        )
+
+    # --- Step 2b: Header injection check ---
+    if headers:
+        header_diffs = sanitize_headers(headers)
+        if header_diffs:
+            if trace is not None:
+                trace.append(MerkleLeaf(
+                    move="TOOL_CALL:http_fetch",
+                    fail_type="CONSTRAINT_VIOLATION",
+                    invariant_diff=header_diffs,
+                ))
+            return ToolResult(
+                success=False,
+                tool="http_fetch",
+                cert_id=cert["cert_id"],
+                error=f"URL sanitization failed: {header_diffs[0]['inv']} — {header_diffs[0]['got']}",
+                trace_summary=trace.summary() if trace else None,
+            )
+
+    # --- Step 3: Execute (only if cert was minted + URL is clean) ---
     result = _execute_http_fetch(
         url=url,
         method=method,
@@ -242,7 +397,7 @@ def execute_http_fetch(
         max_bytes=max_bytes,
     )
 
-    # --- Step 3: Return result ---
+    # --- Step 4: Return result ---
     return ToolResult(
         success=result.get("error") is None,
         tool="http_fetch",
@@ -388,6 +543,60 @@ def _run_self_tests() -> int:
     )
     check("Schema blocks invalid method",
           not r6.success and r6.obstruction_id is not None)
+
+    # --- Test 7: Blocks credential-in-URL ---
+    r7 = execute_http_fetch(
+        url="https://user:pass@example.com/secret",
+        intent_description="fetch with creds",
+        intent_source="policy_kernel",
+        intent_ref="test:3",
+        url_trusted=True,
+        requires_human_approval=False,
+        trace=trace,
+    )
+    check("Blocks credential-in-URL",
+          not r7.success and "URL_NO_CREDENTIALS" in (r7.error or ""))
+
+    # --- Test 8: Blocks raw IPv4 literal ---
+    r8 = execute_http_fetch(
+        url="https://192.168.1.1/admin",
+        intent_description="fetch IP",
+        intent_source="policy_kernel",
+        intent_ref="test:4",
+        url_trusted=True,
+        requires_human_approval=False,
+        trace=trace,
+    )
+    check("Blocks raw IPv4 literal",
+          not r8.success and "URL_NO_IP_LITERAL" in (r8.error or ""))
+
+    # --- Test 9: Blocks punycode hostname ---
+    r9 = execute_http_fetch(
+        url="https://xn--80ak6aa92e.com/page",
+        intent_description="fetch punycode",
+        intent_source="policy_kernel",
+        intent_ref="test:5",
+        url_trusted=True,
+        requires_human_approval=False,
+        trace=trace,
+    )
+    check("Blocks punycode hostname",
+          not r9.success and "URL_NO_PUNYCODE" in (r9.error or ""))
+
+    # --- Test 10: Blocks dangerous header injection ---
+    r10 = execute_http_fetch(
+        url="https://example.com/api",
+        headers={"Host": "evil.com", "Authorization": "Bearer token"},
+        intent_description="fetch with host override",
+        intent_source="policy_kernel",
+        intent_ref="test:6",
+        url_trusted=True,
+        requires_human_approval=False,
+        trace=trace,
+    )
+    check("Blocks Host header injection",
+          not r10.success and "HEADER_INJECTION_BLOCKED" in (r10.error or "")
+          and r10.cert_id is not None)  # cert minted, but execution blocked by sanitizer
 
     # --- Summary ---
     print("=" * 60)

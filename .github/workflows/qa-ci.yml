@@ -24,8 +24,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install pytest
-        run: pip install pytest
+      - name: Install pytest (pinned)
+        run: pip install "pytest==8.4.2"
 
       - name: Run QA meta-validator (tetrad + conjectures + FST)
         run: python qa_meta_validator.py
@@ -39,6 +39,10 @@ jobs:
       - name: Run Agent Security Kernel self-tests
         working-directory: .
         run: python qa_agent_security/qa_agent_security.py
+
+      - name: Run Tool Runner self-tests
+        working-directory: .
+        run: python -m qa_agent_security.tool_runner
 
       - name: Run Agent Security Kernel pytest suite
         working-directory: .

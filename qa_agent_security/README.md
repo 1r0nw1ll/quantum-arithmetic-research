@@ -31,6 +31,32 @@ In QA terms, prompt injection is an attempt to add unauthorized generators via a
 | `CAPABILITY_NOT_FOUND` | No capability entry for requested tool+scope |
 | `TAINT_UPGRADE_VIOLATION` | Transform attempted TAINTED->TRUSTED upgrade |
 
+## URL sanitization invariants (HTTP_FETCH)
+
+The tool runner enforces additional URL-level invariants on both initial requests and redirect hops:
+
+| Invariant | Bypass Class Blocked |
+|-----------|---------------------|
+| `URL_SCHEME_HTTP_ONLY` | file://, ftp://, etc. |
+| `URL_NO_CREDENTIALS` | user:pass@host |
+| `URL_NO_IP_LITERAL` | Raw IPv4/IPv6 addresses |
+| `URL_NO_PUNYCODE` | IDN homograph attacks |
+| `URL_NO_CONTROL_CHARS` | Null bytes, CRLF injection |
+| `URL_HOSTNAME_REQUIRED` | Empty hostname |
+| `HEADER_INJECTION_BLOCKED` | Host, Transfer-Encoding override |
+| `REDIRECT_TARGET_ALLOWLIST` | Redirect to off-allowlist domain |
+| `REDIRECT_COUNT_MAX` | Redirect chain > 5 hops |
+| `CAP_TOKEN_REQUIRED` | Missing capability token |
+
+## Mandatory capability tokens
+
+**HTTP_FETCH requires a capability token by default.** This makes capability tokens mandatory rather than advisory.
+
+To disable in local experiments:
+```bash
+export QA_REQUIRE_CAP_TOKEN_HTTP_FETCH=false
+```
+
 ## Certificate types
 
 | Certificate | Purpose |
@@ -47,10 +73,10 @@ In QA terms, prompt injection is an attempt to add unauthorized generators via a
 # Policy kernel self-test (14 checks, stdlib-only, no pip install)
 python qa_agent_security/qa_agent_security.py
 
-# Tool runner self-test (6 checks, no network needed)
+# Tool runner self-test (11 checks, no network needed)
 python -m qa_agent_security.tool_runner
 
-# Full pytest suite (54 tests)
+# Full pytest suite (99 tests)
 python -m pytest qa_agent_security/tests/ -v \
   --override-ini="testpaths=qa_agent_security/tests" \
   --override-ini="python_files=test_*.py"
@@ -63,7 +89,7 @@ qa_agent_security/
   __init__.py                       # Re-exports all public API
   qa_agent_security.py              # Policy kernel + self-test (14 checks)
   schemas.py                        # Embedded tool schemas + validate_args()
-  tool_runner.py                    # Certificate-gated tool execution + self-test (6 checks)
+  tool_runner.py                    # Certificate-gated tool execution + self-test (11 checks)
   README.md                         # This file
   schemas/
     TOOL_CALL_CERT.v1.schema.json
@@ -74,6 +100,7 @@ qa_agent_security/
   tests/
     test_agent_security.py          # 27 pytest tests (kernel + trace + tokens)
     test_schemas.py                 # 17 pytest tests (schema registry + validation)
+    test_security_regression.py     # 45 pytest tests (bypass regression)
     test_tool_runner.py             # 10 pytest tests (end-to-end pipeline)
 ```
 
@@ -84,7 +111,7 @@ Route everything through the kernel:
 1. Ingest message/web/email -> TAINTED provenance
 2. Model proposes a tool call as a draft
 3. Kernel validates -> mints `TOOL_CALL_CERT.v1` or emits `PROMPT_INJECTION_OBSTRUCTION.v1`
-4. Tool executes only if cert exists
+4. Tool executes only if cert exists **and** capability token is present
 5. Every move logged to Merkle trace
 
 This turns prompt injection from "security whack-a-mole" into "most attempts cannot even become legal moves."

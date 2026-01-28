@@ -439,6 +439,13 @@ def execute_http_fetch(
 
     # --- Step 1b: Mandatory capability token enforcement ---
     if REQUIRE_CAPABILITY_TOKEN_FOR_HTTP_FETCH and capability_token is None:
+        # Extract hostname for witness (best-effort, may fail on malformed URL)
+        try:
+            parsed = urlparse(url)
+            witness_hostname = (parsed.hostname or "").lower()
+        except Exception:
+            witness_hostname = "<parse-failed>"
+
         if trace is not None:
             trace.append(MerkleLeaf(
                 move="TOOL_CALL:http_fetch",
@@ -447,6 +454,11 @@ def execute_http_fetch(
                     "inv": "CAP_TOKEN_REQUIRED",
                     "expected": "valid capability token",
                     "got": "no token provided",
+                    "witness": {
+                        "tool": "http_fetch",
+                        "url_hostname": witness_hostname,
+                        "enforcement": "QA_REQUIRE_CAP_TOKEN_HTTP_FETCH=true",
+                    },
                 }],
             ))
         return ToolResult(

@@ -47,3 +47,7 @@ jobs:
       - name: Run Agent Security Kernel pytest suite
         working-directory: .
         run: python -m pytest qa_agent_security/tests/ -q --override-ini="testpaths=qa_agent_security/tests" --override-ini="python_files=test_*.py"
+
+      - name: Run QA Probes (certified obstruction theorems)
+        working-directory: .
+        run: python -m pytest qa_probes/ -v --override-ini="testpaths=qa_probes" --override-ini="python_files=test_*.py"

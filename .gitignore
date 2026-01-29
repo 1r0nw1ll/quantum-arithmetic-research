@@ -88,8 +88,9 @@ qa_lab/.git/
 *.bak
 # *.odt  # Commented - these have ingestion candidates
 
-# Exclude Python experiment scripts (selectively add key ones)
-/*.py
+# NOTE: Previously excluded all root /*.py but this blocks core QA files
+# like qa_harmonicity_v2.py. Use selective git add instead.
+# /*.py
 
 # Exclude large chat exports
 chat_data_extracted/

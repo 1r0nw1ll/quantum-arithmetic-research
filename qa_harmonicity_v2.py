@@ -12,9 +12,16 @@ Author: QA Research Team
 Date: December 10, 2025
 """
 
-import numpy as np
 from typing import Tuple, Dict, Optional
 import math
+
+# NumPy is optional - only needed for vectorized operations
+try:
+    import numpy as np
+    HAS_NUMPY = True
+except ImportError:
+    np = None  # type: ignore
+    HAS_NUMPY = False
 
 # ============================================================================
 # CORE QA TUPLE OPERATIONS

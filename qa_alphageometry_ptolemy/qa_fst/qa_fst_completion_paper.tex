@@ -2,6 +2,7 @@
 
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
+\usepackage{lmodern}  % Fix ligature rendering (fi, fl, etc.)
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage{geometry}
 \usepackage{booktabs}
@@ -152,6 +153,34 @@ boundary.  In this state, Rspin is structurally present but unobservable.
 The minimal space-defining unit is the \textbf{Structor}: a six-loop nucleus
 formed from three deployed Rspin loops enclosed by three condensed Aspin
 loops.
+
+Table~\ref{tab:states} summarizes the sector and deployment state space.
+Crucially, \emph{condensation is a deployment state change within a fixed
+sector}---an Aspin loop that condenses remains Aspin; it does not transform
+into Rspin.  Sector identity (chirality) is preserved; only observability
+and boundary-forming role change.
+
+\begin{table}[h]
+\centering
+\caption{FST loop state space: sector and deployment are independent.}
+\label{tab:states}
+\begin{tabular}{@{}llccc@{}}
+\toprule
+\textbf{State} & \textbf{Sector} & \textbf{Deployment} & \textbf{Observable?} & \textbf{Structor Role} \\
+\midrule
+Rspin (deployed) & Anti-matter & Deployed & Yes & Inner core (3 loops) \\
+Aspin (deployed) & Real-matter & Deployed & Yes & --- \\
+Aspin (condensed) & Real-matter & Condensed & No (boundary) & Outer shell (3 loops) \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\noindent
+\textbf{Key rule}: Condensation $\neq$ sector transformation.  When Aspin
+condenses, it forms the interaction boundary but remains in the real-matter
+sector.  Cloaking occurs because the condensed Aspin boundary fully encloses
+the deployed Rspin core, blocking observer intersection---not because of any
+sector flip.
 
 The framework maps loop counts onto the \textbf{Sierpinski Triangle Fractal
 (STF)}, whose iteration hierarchy $\{3, 9, 27, 81, 243, 729, 2187\}$

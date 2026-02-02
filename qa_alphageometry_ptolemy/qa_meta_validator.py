@@ -688,3 +688,30 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         print("\n[14] Agent Security Kernel: SKIPPED (qa_agent_security.py not found)")
+
+    # --- Test 15: Kayser Harmonic Correspondence Module (subprocess) ---
+    kayser_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                    "qa_kayser", "qa_kayser_validate.py")
+    if os.path.exists(kayser_validator):
+        print("\n--- KAYSER HARMONIC CORRESPONDENCE MODULE (subprocess) ---")
+        kayser_result = subprocess.run(
+            [sys.executable, kayser_validator, "--all", "--json"],
+            capture_output=True, text=True)
+        if kayser_result.returncode == 0:
+            kayser_json = json.loads(kayser_result.stdout)
+            kayser_passed = kayser_json.get("all_passed", False)
+            kayser_merkle = kayser_json.get("merkle_root", "")[:16]
+            kayser_verified = sum(c.get("verified", 0) for c in kayser_json.get("certificates", {}).values())
+            kayser_total = sum(c.get("total", 0) for c in kayser_json.get("certificates", {}).values())
+            if kayser_passed:
+                print(f"[15] Kayser module: PASS "
+                      f"({kayser_verified}/{kayser_total} verified, merkle={kayser_merkle}...)")
+            else:
+                print(f"[15] Kayser module: FAIL (all_passed=False)")
+                sys.exit(1)
+        else:
+            print(f"[15] Kayser module: FAIL (exit code {kayser_result.returncode})")
+            print(f"     stderr: {kayser_result.stderr[:200]}")
+            sys.exit(1)
+    else:
+        print("\n[15] Kayser module: SKIPPED (qa_kayser/qa_kayser_validate.py not found)")

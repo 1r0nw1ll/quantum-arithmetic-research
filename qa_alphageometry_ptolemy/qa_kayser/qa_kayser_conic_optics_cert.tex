@@ -1,0 +1,239 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{amsmath,amssymb}
+\usepackage{geometry}
+\usepackage{booktabs}
+\usepackage{enumitem}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+\geometry{margin=1in}
+
+\definecolor{pass}{RGB}{0,128,0}
+\definecolor{partial}{RGB}{180,100,0}
+\definecolor{caveat}{RGB}{128,128,128}
+
+\title{QA-Kayser Conic Optics Certificate\\[6pt]
+\large JWST Three-Mirror Anastigmat Validation\\[4pt]
+\normalsize Certificate ID: qa.cert.kayser.conic\_optics.v1}
+
+\author{Will\\[4pt]
+\small Quantum Arithmetic Research Group}
+
+\date{February 2026}
+
+\begin{document}
+
+\maketitle
+
+% ============================================================================
+% ABSTRACT
+% ============================================================================
+
+\begin{abstract}
+This certificate formalizes the engineering validation of Kayser's conic section
+harmonics via the James Webb Space Telescope's three-mirror anastigmat (TMA)
+optical design.  JWST uses an ellipsoid--hyperboloid--ellipsoid configuration
+where each mirror surface is a conic section with specific geometric parameters.
+The secondary mirror conic constant ($K = -1.6598$) is confirmed from public
+specifications; primary and tertiary are inferred from TMA design class.  We
+document the validated specifications and propose a mapping between conic types
+and QA orbit classes.
+\end{abstract}
+
+% ============================================================================
+% CONIC SECTION THEORY
+% ============================================================================
+
+\section{Conic Section Classification}
+
+A conic section surface is defined by its conic constant $K$:
+\begin{equation}
+  z = \frac{r^2/R}{1 + \sqrt{1 - (1+K)(r/R)^2}}
+\end{equation}
+where $R$ is the radius of curvature and $r$ is the radial distance from the
+optical axis.
+
+\begin{table}[h]
+\centering
+\caption{Conic section classification by conic constant.}
+\label{tab:conic}
+\begin{tabular}{@{}lcl@{}}
+\toprule
+\textbf{Conic Constant $K$} & \textbf{Surface Type} & \textbf{Eccentricity $e$} \\
+\midrule
+$K = 0$      & Sphere           & $e = 0$ \\
+$-1 < K < 0$ & Oblate ellipsoid & $0 < e < 1$ \\
+$K = -1$     & Paraboloid       & $e = 1$ \\
+$K < -1$     & Hyperboloid      & $e > 1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Kayser reference:} These conic types appear in Kayser's ``Parabel,
+Hyperbel, Ellipse'' diagrams (kayser4.png), where they arise from harmonic
+projections.
+
+% ============================================================================
+% JWST SPECIFICATIONS
+% ============================================================================
+
+\section{JWST Optical Telescope Element Specifications}
+
+\subsection{System Overview}
+
+\begin{itemize}[nosep]
+  \item \textbf{Configuration:} Three-Mirror Anastigmat (TMA)
+  \item \textbf{Effective focal length:} 131.4\,m
+  \item \textbf{f-ratio:} f/20
+  \item \textbf{Operating temperature:} 22.5\,K
+  \item \textbf{Purpose:} Aberration-free imaging (zero spherical aberration,
+        coma, astigmatism)
+\end{itemize}
+
+\subsection{Mirror Specifications}
+
+\begin{table}[h]
+\centering
+\caption{JWST mirror conic specifications.}
+\label{tab:jwst}
+\begin{tabular}{@{}lcccc@{}}
+\toprule
+\textbf{Mirror} & \textbf{Surface} & \textbf{Conic $K$} & \textbf{Diameter} & \textbf{Evidence} \\
+\midrule
+Primary   & Ellipsoid    & (not public)     & 6.5\,m  & Inferred \\
+Secondary & Hyperboloid  & $-1.6598 \pm 0.0005$ & 0.74\,m & \textcolor{pass}{Confirmed} \\
+Tertiary  & Ellipsoid    & (not public)     & 0.73$\times$0.52\,m & Inferred \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Secondary mirror confirmed specifications:}
+\begin{itemize}[nosep]
+  \item Conic constant: $K = -1.6598 \pm 0.0005$
+  \item Radius of curvature: $R = 1778.913 \pm 0.45$\,mm
+  \item Surface figure error: $< 23.5$\,nm RMS
+\end{itemize}
+
+Since $K = -1.6598 < -1$, this confirms a \textbf{hyperboloid} surface.
+
+% ============================================================================
+% VALIDATION TESTS
+% ============================================================================
+
+\section{Validation Tests}
+
+\subsection{T1: Secondary Mirror Conic Classification}
+
+\begin{tabular}{@{}ll@{}}
+\textbf{Claim:} & JWST secondary mirror is hyperboloid \\
+\textbf{Criterion:} & $K < -1$ \\
+\textbf{Measured:} & $K = -1.6598$ \\
+\textbf{Margin:} & $0.6598$ below threshold \\
+\textbf{Result:} & \textcolor{pass}{\textbf{PASS}} \\
+\end{tabular}
+
+\subsection{T2: TMA Configuration Match}
+
+\begin{tabular}{@{}ll@{}}
+\textbf{Claim:} & JWST uses ellipsoid--hyperboloid--ellipsoid configuration \\
+\textbf{Primary:} & Ellipsoid (inferred from TMA class) \\
+\textbf{Secondary:} & Hyperboloid (confirmed: $K = -1.6598$) \\
+\textbf{Tertiary:} & Ellipsoid (inferred from TMA class) \\
+\textbf{Result:} & \textcolor{pass}{\textbf{PASS}} (with inference) \\
+\end{tabular}
+
+\subsection{T3: Kayser Diagram Correspondence}
+
+\begin{tabular}{@{}ll@{}}
+\textbf{Claim:} & JWST mirrors instantiate conics from Kayser's diagrams \\
+\textbf{Kayser conics:} & Parabola, Hyperbola, Ellipse \\
+\textbf{JWST conics:} & Ellipse, Hyperbola, Ellipse \\
+\textbf{Overlap:} & Hyperbola, Ellipse \\
+\textbf{Missing:} & Parabola \\
+\textbf{Result:} & \textcolor{partial}{\textbf{PARTIAL MATCH}} \\
+\end{tabular}
+
+\textbf{Note:} The LinkedIn comment (kayser7.jpeg) stated JWST uses ``parabola
+primary.''  This is incorrect---JWST uses ellipse primary.  Paul-Baker TMA
+designs do use parabola primary, which may have caused the confusion.
+
+% ============================================================================
+% QA ORBIT MAPPING
+% ============================================================================
+
+\section{Proposed QA Orbit Mapping}
+
+We hypothesize a correspondence between conic section types and QA orbit classes:
+
+\begin{table}[h]
+\centering
+\caption{Proposed conic--orbit correspondence (hypothesis).}
+\label{tab:mapping}
+\begin{tabular}{@{}llll@{}}
+\toprule
+\textbf{Conic} & \textbf{Property} & \textbf{QA Orbit} & \textbf{Status} \\
+\midrule
+Ellipse   & Bounded, closed      & Cosmos (24-cycle)     & Structural analogy \\
+Hyperbola & Unbounded, two branches & Satellite (8-cycle) & Conjectural \\
+Parabola  & Boundary case        & Singularity (1-cycle) & Conjectural \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Status:} This mapping is a \emph{hypothesis}, not a validated
+correspondence.  Upgrade requires deriving conic equations from QA basin
+boundaries and comparing eccentricities to orbit period ratios.
+
+% ============================================================================
+% CERTIFICATE SUMMARY
+% ============================================================================
+
+\section{Certificate Summary}
+
+\begin{tabular}{@{}ll@{}}
+\textbf{Primary claim:} & JWST TMA validates Kayser's conic geometry \\
+\textbf{Evidence strength:} & Engineering-validated (secondary), inferred (primary/tertiary) \\
+\textbf{QA correspondence:} & Hypothesis proposed, not yet validated \\
+\textbf{Overall result:} & \textcolor{pass}{\textbf{PASS WITH CAVEATS}} \\
+\end{tabular}
+
+\subsection{Limitations}
+
+\begin{enumerate}[nosep]
+  \item Primary and tertiary conic constants not publicly available
+  \item QA orbit-to-conic mapping is structural analogy, not proven isomorphism
+  \item LinkedIn comment misidentified primary mirror type (said parabola,
+        actually ellipse)
+\end{enumerate}
+
+\subsection{Engineering Significance}
+
+TMAs achieve anastigmatic imaging by balancing Seidel aberration coefficients
+across three mirror surfaces with complementary conic geometries.  Kayser's
+claim that conic sections arise from harmonic projections is validated by their
+appearance in precision optical systems optimized for aberration-free imaging.
+
+% ============================================================================
+% SOURCES
+% ============================================================================
+
+\begin{thebibliography}{9}
+
+\bibitem{jwst}
+STScI, ``JWST Telescope,''
+\url{https://jwst-docs.stsci.edu/jwst-observatory-hardware/jwst-telescope},
+accessed 2026-02-01.
+
+\bibitem{tma}
+``Three-mirror anastigmat,'' Wikipedia / Grokipedia.
+
+\bibitem{kayser}
+H.~Kayser, \emph{Lehrbuch der Harmonik}, 1950.
+
+\end{thebibliography}
+
+\end{document}

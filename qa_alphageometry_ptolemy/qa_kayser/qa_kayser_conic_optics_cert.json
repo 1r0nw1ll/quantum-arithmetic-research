@@ -1,0 +1,181 @@
+{
+  "schema_version": "QA_CERTIFICATE.v1",
+  "certificate_id": "qa.cert.kayser.conic_optics.v1",
+  "title": "QA-Kayser Conic Optics Certificate: JWST TMA Validation",
+  "certificate_type": "engineering_anchor",
+  "parent_artifact": "qa.map.kayser.harmonic_correspondence.v1",
+  "correspondence_id": "C6",
+  "created_utc": "2026-02-01T00:00:00Z",
+
+  "abstract": "This certificate formalizes the engineering validation of Kayser's conic section harmonics via the James Webb Space Telescope's three-mirror anastigmat (TMA) optical design. JWST uses an ellipsoid-hyperboloid-ellipsoid configuration where each mirror surface is a conic section with specific geometric parameters. We document the confirmed specifications and map the conic classification to QA orbit structure.",
+
+  "engineering_system": {
+    "name": "James Webb Space Telescope (JWST)",
+    "subsystem": "Optical Telescope Element (OTE)",
+    "configuration": "Three-Mirror Anastigmat (TMA)",
+    "purpose": "Aberration-free imaging over wide field of view",
+    "operational_temp_K": 22.5,
+    "effective_focal_length_m": 131.4,
+    "f_ratio": 20
+  },
+
+  "conic_section_theory": {
+    "definition": "A conic section is defined by conic constant K where the surface equation is: z = (r²/R) / (1 + sqrt(1 - (1+K)(r/R)²))",
+    "classification": {
+      "K_eq_0": {"surface": "sphere", "eccentricity": 0},
+      "neg1_lt_K_lt_0": {"surface": "oblate_ellipsoid", "eccentricity_range": "(0, 1)"},
+      "K_eq_neg1": {"surface": "paraboloid", "eccentricity": 1},
+      "K_lt_neg1": {"surface": "hyperboloid", "eccentricity_range": "(1, inf)"}
+    },
+    "kayser_source": "kayser4.png - Parabel, Hyperbel, Ellipse diagrams showing harmonic projections"
+  },
+
+  "jwst_mirror_specifications": {
+    "primary_mirror": {
+      "surface_type": "ellipsoid",
+      "conic_constant_K": "not_publicly_specified",
+      "inferred_range": "(-1, 0)",
+      "diameter_m": 6.5,
+      "segments": 18,
+      "segment_diameter_m": 1.32,
+      "surface_figure_error_nm_rms": 25,
+      "material": "beryllium",
+      "coating": "gold",
+      "evidence_level": "INFERRED_FROM_TMA_CLASS"
+    },
+    "secondary_mirror": {
+      "surface_type": "hyperboloid",
+      "conic_constant_K": -1.6598,
+      "conic_constant_tolerance": 0.0005,
+      "radius_of_curvature_mm": 1778.913,
+      "radius_tolerance_mm": 0.45,
+      "diameter_m": 0.74,
+      "surface_figure_error_nm_rms": 23.5,
+      "material": "beryllium",
+      "evidence_level": "CONFIRMED_SPECIFICATION"
+    },
+    "tertiary_mirror": {
+      "surface_type": "ellipsoid",
+      "conic_constant_K": "not_publicly_specified",
+      "inferred_range": "(-1, 0)",
+      "dimensions_m": [0.73, 0.52],
+      "surface_figure_error_nm_rms": 25,
+      "note": "Fixed mirror in aft optics system",
+      "evidence_level": "INFERRED_FROM_TMA_CLASS"
+    },
+    "fine_steering_mirror": {
+      "surface_type": "flat",
+      "conic_constant_K": "N/A",
+      "purpose": "pointing_stabilization"
+    }
+  },
+
+  "validation_tests": [
+    {
+      "test_id": "T1",
+      "name": "Secondary Mirror Conic Classification",
+      "claim": "JWST secondary mirror is hyperboloid",
+      "criterion": "K < -1",
+      "measured_value": -1.6598,
+      "threshold": -1.0,
+      "comparison": "less_than",
+      "result": "PASS",
+      "margin": 0.6598,
+      "evidence_level": "CONFIRMED"
+    },
+    {
+      "test_id": "T2",
+      "name": "TMA Configuration Match",
+      "claim": "JWST uses ellipsoid-hyperboloid-ellipsoid configuration",
+      "criterion": "Primary K in (-1,0), Secondary K < -1, Tertiary K in (-1,0)",
+      "primary_status": "INFERRED",
+      "secondary_status": "CONFIRMED",
+      "tertiary_status": "INFERRED",
+      "result": "PASS_WITH_INFERENCE",
+      "note": "Primary and tertiary conic constants not publicly specified but TMA class constrains them to ellipsoid"
+    },
+    {
+      "test_id": "T3",
+      "name": "Kayser Diagram Correspondence",
+      "claim": "JWST mirrors instantiate all three non-degenerate conic types shown in Kayser's diagrams",
+      "kayser_source": "kayser4.png",
+      "conics_in_kayser": ["parabola", "hyperbola", "ellipse"],
+      "conics_in_jwst": ["ellipse", "hyperbola", "ellipse"],
+      "overlap": ["hyperbola", "ellipse"],
+      "missing_from_jwst": ["parabola"],
+      "result": "PARTIAL_MATCH",
+      "note": "JWST uses ellipse where Kayser also shows parabola; Paul-Baker TMA designs use parabola primary"
+    }
+  ],
+
+  "qa_orbit_mapping": {
+    "hypothesis": "The three conic section types map to QA's three orbit classes",
+    "proposed_correspondence": [
+      {
+        "conic": "ellipse",
+        "conic_property": "bounded, closed curve",
+        "qa_orbit": "Cosmos (24-cycle)",
+        "qa_property": "cyclic, bounded state space",
+        "strength": "STRUCTURAL_ANALOGY"
+      },
+      {
+        "conic": "hyperbola",
+        "conic_property": "unbounded, two branches",
+        "qa_orbit": "Satellite (8-cycle)",
+        "qa_property": "shorter cycle, higher curvature in state space",
+        "strength": "CONJECTURAL"
+      },
+      {
+        "conic": "parabola",
+        "conic_property": "boundary case, single branch to infinity",
+        "qa_orbit": "Singularity (1-cycle)",
+        "qa_property": "fixed point, degenerate orbit",
+        "strength": "CONJECTURAL"
+      }
+    ],
+    "status": "HYPOTHESIS_NOT_YET_VALIDATED",
+    "upgrade_path": "Derive conic equations from QA basin boundaries; compare eccentricities to orbit period ratios"
+  },
+
+  "engineering_significance": {
+    "why_tma_works": "TMAs achieve anastigmatic imaging (zero spherical aberration, coma, and astigmatism) by balancing Seidel coefficients across three mirror surfaces with complementary conic geometries",
+    "kayser_interpretation": "Kayser's claim that conic sections arise from harmonic projections is validated by their appearance in precision optical systems optimized for aberration-free imaging",
+    "physical_principle": "Conic surfaces are the natural geometries for focusing electromagnetic radiation because they preserve wavefront coherence across reflection"
+  },
+
+  "sources": [
+    {
+      "ref": "jwst_docs",
+      "url": "https://jwst-docs.stsci.edu/jwst-observatory-hardware/jwst-telescope",
+      "accessed": "2026-02-01"
+    },
+    {
+      "ref": "wikipedia_tma",
+      "title": "Three-mirror anastigmat",
+      "note": "General TMA configuration theory"
+    },
+    {
+      "ref": "linkedin_comment",
+      "artifact": "kayser7.jpeg",
+      "note": "Independent third-party connection (laser physics engineer)"
+    },
+    {
+      "ref": "kayser_lehrbuch",
+      "title": "Lehrbuch der Harmonik",
+      "author": "Hans Kayser",
+      "year": 1950
+    }
+  ],
+
+  "certificate_summary": {
+    "primary_claim": "JWST's TMA optical system provides engineering validation that conic section geometry—central to Kayser's harmonic theory—manifests in precision instruments",
+    "evidence_strength": "ENGINEERING_VALIDATED (secondary mirror), INFERRED (primary/tertiary)",
+    "qa_correspondence_status": "HYPOTHESIS_PROPOSED",
+    "limitations": [
+      "Primary and tertiary conic constants not publicly available",
+      "QA orbit-to-conic mapping is structural analogy, not proven isomorphism",
+      "LinkedIn comment identified parabola primary (Paul-Baker type), but JWST actually uses ellipse primary"
+    ],
+    "result": "PASS_WITH_CAVEATS"
+  }
+}

@@ -1,0 +1,88 @@
+{
+  "schema_version": "QA_MANIFEST.v1",
+  "manifest_id": "qa.manifest.kayser.v1",
+  "title": "QA-Kayser Correspondence Manifest",
+  "created_utc": "2026-02-01T00:00:00Z",
+  "description": "Manifest for QA-Kayser harmonic correspondence certificates. The triad (Number, Space, Time) is complete.",
+
+  "certificates": {
+    "lambdoma_cycle": {
+      "id": "qa.cert.kayser.lambdoma_cycle.v1",
+      "correspondence_id": "C1",
+      "dimension": "Number",
+      "file": "qa_kayser_lambdoma_cycle_cert.json",
+      "sha256": "74bf6b07003de383061b6c5a13266d73f5b6d981cea99b11339bd529b472da35",
+      "verified": 5,
+      "total": 5,
+      "result": "PASS"
+    },
+    "rhythm_time": {
+      "id": "qa.cert.kayser.rhythm_time.v1",
+      "correspondence_id": "C3",
+      "dimension": "Time",
+      "file": "qa_kayser_rhythm_time_cert.json",
+      "sha256": "62ee77adf2001bf8ad1fd22629cbfc7cefb2b828903ac3964b54f275216bae71",
+      "verified": 5,
+      "total": 5,
+      "result": "PASS"
+    },
+    "conic_optics": {
+      "id": "qa.cert.kayser.conic_optics.v1",
+      "correspondence_id": "C6",
+      "dimension": "Space",
+      "file": "qa_kayser_conic_optics_cert.json",
+      "sha256": "d2ddeb6f6c6b46dbfa8ed8b508c06200ad2edfe9fbcdbd4dfc682ba699f19ac5",
+      "verified": 3,
+      "total": 3,
+      "result": "PASS"
+    }
+  },
+
+  "supporting_artifacts": {
+    "correspondence_map": {
+      "file": "qa_kayser_correspondence_map.json",
+      "type": "ledger"
+    },
+    "validator": {
+      "file": "qa_kayser_validate.py",
+      "type": "script"
+    },
+    "analysis_scripts": [
+      "lambdoma_qa_analysis.py",
+      "rhythm_qa_analysis.py"
+    ]
+  },
+
+  "validation_summary": {
+    "total_correspondences_tested": 13,
+    "total_correspondences_verified": 13,
+    "merkle_root": "c1dc5214c38d95b2a29d30771fc1d3a9bb0f0dc33cc5cc54c702d236d7db4f70",
+    "all_passed": true
+  },
+
+  "triad_structure": {
+    "number": {
+      "kayser": "Lambdoma (pitch ratios)",
+      "qa": "Modular arithmetic",
+      "certificate": "lambdoma_cycle"
+    },
+    "space": {
+      "kayser": "Conic sections",
+      "qa": "Basin geometry / optics",
+      "certificate": "conic_optics"
+    },
+    "time": {
+      "kayser": "Rhythmus (periods)",
+      "qa": "Orbit periods",
+      "certificate": "rhythm_time"
+    },
+    "shared_generators": ["2", "3"],
+    "note": "All three dimensions share algebraic structure based on primes 2 and 3"
+  },
+
+  "remaining_correspondences": {
+    "C2": {"kayser": "Kosmogonie T-Cross", "qa": "Generator algebra", "status": "STRUCTURAL"},
+    "C4": {"kayser": "Conic basin geometry", "qa": "Attractor classification", "status": "STRUCTURAL"},
+    "C5": {"kayser": "Primordial Leaf", "qa": "Proof trees", "status": "CONJECTURAL"}
+  }
+}

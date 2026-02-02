@@ -1,0 +1,150 @@
+{
+  "schema_version": "QA_CORRESPONDENCE_MAP.v1",
+  "artifact_id": "qa.map.kayser.harmonic_correspondence.v1",
+  "title": "QA Correspondence Map: Hans Kayser Harmonik",
+  "artifact_type": "correspondence_ledger",
+  "epistemology_note": "This is a MAPPING artifact, not a VALIDATION certificate. Correspondences are structural and interpretive unless tagged otherwise. Numerical certificates may be derived in future phases.",
+  "authors": [
+    "Will (QA mapping)",
+    "Claude (independent verification)",
+    "ChatGPT (synthesis review)"
+  ],
+  "created_utc": "2026-02-01T00:00:00Z",
+  "source_artifacts": [
+    {
+      "artifact_id": "kayser_lehrbuch",
+      "kind": "book",
+      "title": "Lehrbuch der Harmonik",
+      "author": "Hans Kayser",
+      "year": 1950,
+      "note": "Primary source for harmonic theory diagrams"
+    },
+    {
+      "artifact_id": "kayser_images_1-6",
+      "kind": "png",
+      "location": "ingestion candidates/kayser1-6.png",
+      "note": "Scanned pages: Proportionen, Kosmogonie, Rhythmus, Conics, Projection, Primordial Leaf"
+    },
+    {
+      "artifact_id": "linkedin_optics_comment",
+      "kind": "screenshot",
+      "location": "ingestion candidates/kayser7.jpeg",
+      "note": "Third-party engineering connection: laser physicist linking Kayser diagrams to JWST anastigmat and dye laser cavities"
+    }
+  ],
+  "evidence_levels": {
+    "PROVEN": "Mathematical isomorphism demonstrated with explicit mapping",
+    "ENGINEERING_VALIDATED": "Independent third-party connection to physical/engineering systems",
+    "STRUCTURAL_ANALOGY": "Corresponding organizational patterns; not yet numerically verified",
+    "CONJECTURAL": "Suggestive resemblance; requires further formalization"
+  },
+  "correspondences": [
+    {
+      "id": "C1",
+      "kayser_concept": "Lambdoma (Pythagorean Table)",
+      "kayser_source": "kayser1.png - Die Proportionen",
+      "qa_concept": "Modular arithmetic grid / state space lattice",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "The Lambdoma is a ratio matrix where rows/columns represent harmonic intervals (1/1, 1/2, 2/1, etc.). QA's mod-N state space similarly organizes states by arithmetic relationships. Both exhibit diagonal symmetries and generate hierarchical substructures.",
+      "upgrade_path": "Map Lambdoma ratios to mod-24 cycle periods; check if harmonic series 1:2:3:4:... corresponds to QA orbit structure",
+      "potential_cert": "QA_KAYSER_LAMBDOMA_PERIOD_CERT.v1"
+    },
+    {
+      "id": "C2",
+      "kayser_concept": "Harmonikale Kosmogonie (T-Cross / Tetraktys)",
+      "kayser_source": "kayser2.png - section 54",
+      "qa_concept": "Generator algebra / APEIRON as pattern space",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Kayser's T-shaped cosmogonic diagram with APEIRON (unlimited) at the origin maps conceptually to QA's pattern space Omega from which finite structures emerge via generators. The Greek distinction APEIRON/PERAS (unlimited/limited) parallels deployed/condensed states.",
+      "upgrade_path": "Formalize APEIRON as QA pattern space; map T-cross branches to generator classes",
+      "potential_cert": null
+    },
+    {
+      "id": "C3",
+      "kayser_concept": "Rhythmus und Periodizitat (Rhythm/Periodicity)",
+      "kayser_source": "kayser3.png - section on rhythm",
+      "qa_concept": "Mod-N cycles / orbit periodicity",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Kayser's rhythmic notation patterns and circular tone diagrams directly parallel QA's cyclic orbit structure. Musical meter (3/4, 4/4, etc.) corresponds to mod-3, mod-4 arithmetic. The radial diagram resembles QA's 24-cycle Cosmos orbit visualization.",
+      "upgrade_path": "Compare Kayser's tone circle intervals to QA orbit transition frequencies",
+      "potential_cert": "QA_KAYSER_RHYTHM_CYCLE_CERT.v1"
+    },
+    {
+      "id": "C4",
+      "kayser_concept": "Conic Sections (Parabel, Hyperbel, Ellipse)",
+      "kayser_source": "kayser4.png, kayser5.png",
+      "qa_concept": "Basin/attractor geometry in state space",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "description": "Kayser shows conic sections arising from harmonic projections. QA's three-orbit structure (Cosmos, Satellite, Singularity) may correspond to elliptical, hyperbolic, and parabolic basin types. The nested ellipses in kayser4 visually resemble QA orbit nesting.",
+      "upgrade_path": "Classify QA orbits by conic section type; check if basin boundaries follow conic equations",
+      "potential_cert": "QA_KAYSER_CONIC_BASIN_CERT.v1"
+    },
+    {
+      "id": "C5",
+      "kayser_concept": "The Primordial Leaf",
+      "kayser_source": "kayser6.png",
+      "qa_concept": "Proof trees / resonance hierarchies",
+      "evidence_level": "CONJECTURAL",
+      "description": "Kayser's leaf diagram shows harmonic ratios branching from a monochord string. This resembles QA proof tree structures where theorems branch from axioms. The organic leaf shape suggests self-similar growth patterns.",
+      "upgrade_path": "Map leaf branch points to QA state transitions; check for fractal dimension correspondence",
+      "potential_cert": null
+    },
+    {
+      "id": "C6",
+      "kayser_concept": "Conic sections in optics",
+      "kayser_source": "kayser7.jpeg (LinkedIn comment)",
+      "qa_concept": "Physical/engineering anchor",
+      "evidence_level": "ENGINEERING_VALIDATED",
+      "description": "Independent third-party (laser physics engineer) connected Kayser's conic diagrams to: (1) JWST's 3-mirror anastigmat (parabola primary, hyperbola secondary, ellipse tertiary), (2) Dye laser elliptical pump cavities. This provides real-world engineering validation that Kayser's harmonic geometry manifests in precision optical systems.",
+      "engineering_refs": [
+        "James Webb Space Telescope optical design",
+        "Dye laser elliptical cavity pumping"
+      ],
+      "upgrade_path": "Document JWST mirror equations; compare to Kayser's harmonic ratios",
+      "potential_cert": "QA_KAYSER_OPTICS_ANCHOR_CERT.v1"
+    }
+  ],
+  "meta_correspondence": {
+    "kayser_program": "Harmonic ratios underlie natural phenomena from crystals to cosmos",
+    "qa_program": "Modular arithmetic with geometric invariants underlies signal processing, neural networks, and theorem generation",
+    "synthesis": "Both frameworks assert that discrete ratio/proportion structures generate continuous phenomena. Kayser approached this through acoustics and music theory; QA approaches through computational invariants and E8 alignment."
+  },
+  "historical_context": {
+    "hans_kayser": {
+      "dates": "1891-1964",
+      "nationality": "German",
+      "field": "Musicology, philosophy of science",
+      "key_work": "Lehrbuch der Harmonik (1950)",
+      "intellectual_lineage": "Pythagoras -> Kepler -> Kayser"
+    },
+    "relevance_to_qa": "Kayser represents the 20th century's most systematic attempt to formalize Pythagorean harmonic theory. His work was largely ignored by mainstream physics but anticipated modern interests in geometric unity and ratio-based physics. QA can be seen as a computational completion of Kayser's program."
+  },
+  "upgrade_roadmap": [
+    {
+      "phase": 1,
+      "status": "CURRENT",
+      "artifact": "QA_KAYSER_CORRESPONDENCE_MAP.v1",
+      "type": "correspondence_ledger"
+    },
+    {
+      "phase": 2,
+      "status": "FUTURE",
+      "artifacts": [
+        "QA_KAYSER_LAMBDOMA_PERIOD_CERT.v1",
+        "QA_KAYSER_RHYTHM_CYCLE_CERT.v1"
+      ],
+      "type": "numerical_certificates",
+      "condition": "When explicit numerical mappings are established"
+    },
+    {
+      "phase": 3,
+      "status": "FUTURE",
+      "artifacts": [
+        "QA_KAYSER_CONIC_BASIN_CERT.v1",
+        "QA_KAYSER_OPTICS_ANCHOR_CERT.v1"
+      ],
+      "type": "engineering_certificates",
+      "condition": "When physical correspondences are formalized"
+    }
+  ]
+}

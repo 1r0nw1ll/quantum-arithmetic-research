@@ -40,6 +40,13 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 | `qa_kayser_conic_optics_cert.tex` | LaTeX documentation |
 | `qa_kayser_conic_optics_cert.pdf` | Compiled certificate |
 
+### Phase 2d: Basin Separation Certificate (C4')
+| File | Purpose |
+|------|---------|
+| `qa_kayser_basin_separation_cert.json` | Mod-3 theorem certificate (supersedes C4) |
+| `qa_kayser_basin_separation_cert.tex` | LaTeX documentation |
+| `basin_geometry_analysis.py` | Analysis script with visualization |
+
 ### Validation Infrastructure
 | File | Purpose |
 |------|---------|
@@ -66,7 +73,8 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 | C1 | Lambdoma | Modular grid | **PROVEN** | `lambdoma_cycle_cert` |
 | C2 | Kosmogonie T-Cross | Generator algebra | STRUCTURAL | - |
 | C3 | Rhythmus | Mod-N cycles | **PROVEN** | `rhythm_time_cert` |
-| C4 | Conic sections | Basin geometry | STRUCTURAL | - |
+| ~~C4~~ | ~~Conic sections~~ | ~~Basin geometry~~ | ~~REJECTED~~ | superseded by C4' |
+| C4' | Mod-3 structure | Basin separation | **PROVEN** | `basin_separation_cert` |
 | C5 | Primordial Leaf | Proof trees | CONJECTURAL | - |
 | C6 | Optics applications | Physical anchor | **ENG_VALIDATED** | `conic_optics_cert` |
 
@@ -76,7 +84,8 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 2. **Phase 2a** (Complete): Lambdoma numerical certificate (C1)
 3. **Phase 2b** (Complete): Rhythm/Time certificate (C3)
 4. **Phase 2c** (Complete): Conic optics engineering certificate (C6)
-5. **Phase 3** (Future): Remaining correspondences (C2, C4, C5)
+5. **Phase 2d** (Complete): Basin separation theorem (C4' - supersedes C4)
+6. **Phase 3** (Future): Remaining correspondences (C2, C5)
 
 ## The Harmonic Triad (Complete)
 
@@ -153,6 +162,38 @@ The primes **2** and **3** (first two Lambdoma generators) completely determine 
 ### Correction
 The LinkedIn comment (kayser7.jpeg) incorrectly stated JWST uses "parabola primary." JWST actually uses ellipse primary. Paul-Baker TMA designs use parabola primary.
 
+---
+
+## Basin Separation Certificate Summary (C4')
+
+**Certificate ID:** `qa.cert.kayser.basin_separation.v1`
+
+### Hypothesis Tested
+The C6 certificate proposed conic→orbit mapping: ellipse→Cosmos, hyperbola→Satellite, parabola→Singularity.
+
+### Result: REJECTED + ALTERNATIVE PROVEN
+
+Basin boundaries in digital root space are **LINEAR**, not conic. The actual mechanism:
+
+**Mod-3 Basin Separation Theorem:** Under Fibonacci-type generators, orbit basins are determined by mod-3 residue structure.
+
+| Basin | Criterion | Pairs |
+|-------|-----------|-------|
+| Tribonacci (8-cycle) | dr_b ≡ 0 (mod 3) AND dr_e ≡ 0 (mod 3), except (9,9) | 8 |
+| Ninbonacci (1-cycle) | (dr_b, dr_e) = (9, 9) | 1 |
+| Cosmos (24-cycle) | Everything else | 72 |
+
+### Key Finding
+The orbit separation is **number-theoretic**, not geometric. The mod-3 class (0,0) is invariant under Fibonacci step, making it unreachable from other classes.
+
+### Corollary: Quadrance Separation
+Quadrance Q = dr_b² + dr_e² completely separates Tribonacci from 24-cycle:
+- Tribonacci Q ∈ {18, 45, 72, 90, 117} (all ≡ 0 mod 9)
+- 24-cycle Q ∈ {2, 5, 8, 10, ...} (none ≡ 0 mod 9)
+- Overlap: **none**
+
+---
+
 ## Running Validation
 
 ```bash
@@ -171,11 +212,11 @@ python qa_kayser_validate.py --cert lambdoma
 
 ### Current Validation Status
 ```
-Total verified: 13/13
-Merkle root: c1dc5214c38d95b2...
+Total verified: 18/18
+Merkle root: 679603dc416f4346...
 Overall: PASS
 ```
 
 ## Version
 
-v1.0 - February 2026
+v2.0 - February 2026 (added C4' Basin Separation certificate)

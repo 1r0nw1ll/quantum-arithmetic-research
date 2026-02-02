@@ -1,9 +1,9 @@
 {
   "schema_version": "QA_MANIFEST.v1",
-  "manifest_id": "qa.manifest.kayser.v1",
+  "manifest_id": "qa.manifest.kayser.v2",
   "title": "QA-Kayser Correspondence Manifest",
-  "created_utc": "2026-02-01T00:00:00Z",
-  "description": "Manifest for QA-Kayser harmonic correspondence certificates. The triad (Number, Space, Time) is complete.",
+  "created_utc": "2026-02-02T00:00:00Z",
+  "description": "Manifest for QA-Kayser harmonic correspondence certificates. The triad (Number, Space, Time) is complete. C4 hypothesis tested and replaced with proven mod-3 theorem.",
 
   "certificates": {
     "lambdoma_cycle": {
@@ -35,6 +35,17 @@
       "verified": 3,
       "total": 3,
       "result": "PASS"
+    },
+    "basin_separation": {
+      "id": "qa.cert.kayser.basin_separation.v1",
+      "correspondence_id": "C4_prime",
+      "supersedes": "C4",
+      "dimension": "Structure",
+      "file": "qa_kayser_basin_separation_cert.json",
+      "verified": 5,
+      "total": 5,
+      "result": "PASS",
+      "note": "Conic hypothesis rejected; mod-3 theorem proven instead"
     }
   },
 
@@ -49,14 +60,15 @@
     },
     "analysis_scripts": [
       "lambdoma_qa_analysis.py",
-      "rhythm_qa_analysis.py"
+      "rhythm_qa_analysis.py",
+      "basin_geometry_analysis.py"
     ]
   },
 
   "validation_summary": {
-    "total_correspondences_tested": 13,
-    "total_correspondences_verified": 13,
-    "merkle_root": "c1dc5214c38d95b2a29d30771fc1d3a9bb0f0dc33cc5cc54c702d236d7db4f70",
+    "total_correspondences_tested": 18,
+    "total_correspondences_verified": 18,
+    "merkle_root": "679603dc416f4346",
     "all_passed": true
   },
 
@@ -80,9 +92,25 @@
     "note": "All three dimensions share algebraic structure based on primes 2 and 3"
   },
 
+  "hypothesis_tests": {
+    "C4_conic_basin": {
+      "original_claim": "Conic sections determine QA orbit basins",
+      "test_result": "REJECTED",
+      "actual_mechanism": "Mod-3 fixed point isolation theorem",
+      "replacement": "C4_prime (basin_separation)",
+      "evidence_level": "PROVEN"
+    }
+  },
+
   "remaining_correspondences": {
     "C2": {"kayser": "Kosmogonie T-Cross", "qa": "Generator algebra", "status": "STRUCTURAL"},
-    "C4": {"kayser": "Conic basin geometry", "qa": "Attractor classification", "status": "STRUCTURAL"},
     "C5": {"kayser": "Primordial Leaf", "qa": "Proof trees", "status": "CONJECTURAL"}
+  },
+
+  "completed_correspondences": {
+    "C1": {"status": "PROVEN", "certificate": "lambdoma_cycle"},
+    "C3": {"status": "PROVEN", "certificate": "rhythm_time"},
+    "C4_prime": {"status": "PROVEN", "certificate": "basin_separation", "note": "Supersedes C4"},
+    "C6": {"status": "ENGINEERING_VALIDATED", "certificate": "conic_optics"}
   }
 }

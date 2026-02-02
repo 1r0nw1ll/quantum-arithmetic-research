@@ -11,7 +11,7 @@ cd qa_alphageometry_ptolemy
 python qa_meta_validator.py           # 15 tests: tetrad + conjectures + FST + agent security + Kayser
 python qa_conjecture_core.py          # 5 checks: factories, ledger, guards
 python qa_fst/qa_fst_validate.py      # 8 checks: spine, certs, manifest
-python qa_kayser/qa_kayser_validate.py --all  # 13 checks: Lambdoma + Rhythm + Conic (merkle-rooted)
+python qa_kayser/qa_kayser_validate.py --all  # 18 checks: Lambdoma + Rhythm + Conic + Basin (merkle-rooted)
 ```
 
 ## Reporting a failure (as an obstruction)

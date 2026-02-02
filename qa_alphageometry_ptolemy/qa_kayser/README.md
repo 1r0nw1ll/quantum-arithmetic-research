@@ -286,6 +286,9 @@ python qa_kayser_validate.py --summary
 
 # Single certificate
 python qa_kayser_validate.py --cert lambdoma
+
+# Manifest integrity check (SHA256s + merkle root)
+python qa_kayser_validate.py --check-manifest
 ```
 
 ### Current Validation Status

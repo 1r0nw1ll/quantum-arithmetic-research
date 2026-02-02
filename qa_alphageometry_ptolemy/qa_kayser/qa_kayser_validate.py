@@ -36,6 +36,21 @@ from typing import Any, Dict, List, Optional, Tuple
 
 
 # ============================================================================
+# LIMITATION CLASS REGISTRY
+# ============================================================================
+
+# Allowed limitation_class values - prevents typo-forks
+LIMITATION_CLASS_REGISTRY = frozenset([
+    "GEOMETRY_MODEL_MISMATCH",   # Curved vs linear, different manifolds
+    "DOMAIN_MISMATCH",           # Different input/output domains
+    "PARAMETER_RANGE_LIMIT",     # Works in subset of parameter space
+    "SYMMETRY_BREAK",            # Symmetry present in one, not other
+    "CARDINALITY_MISMATCH",      # Different set sizes
+    "TOPOLOGY_MISMATCH",         # Different topological structure
+])
+
+
+# ============================================================================
 # CANONICAL JSON + HASHING
 # ============================================================================
 
@@ -46,7 +61,14 @@ def canonical_json(obj: Any) -> str:
 
 
 def sha256_hex(s: str) -> str:
+    """SHA256 of string (used for canonical JSON hashing)."""
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    """SHA256 of file bytes (used for file integrity)."""
+    with open(path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()
 
 
 # ============================================================================
@@ -562,6 +584,8 @@ def validate_leaf_cert(cert: Dict[str, Any]) -> KayserValidationResult:
 
     Uses expected_outcome agreement pattern: each test declares what outcome
     is expected, and the validator checks that result matches expected_outcome.
+
+    For structural_analogy certs, expected_outcome is REQUIRED (not defaulted).
     """
     out = KayserValidationResult(cert.get("certificate_id", "unknown"))
     out.hash = sha256_hex(canonical_json(cert))
@@ -579,12 +603,32 @@ def validate_leaf_cert(cert: Dict[str, Any]) -> KayserValidationResult:
     # Check for limitation_class (machine-searchable obstruction token)
     limitation_class = cert.get("limitation_class")
     if limitation_class:
+        if limitation_class not in LIMITATION_CLASS_REGISTRY:
+            out.add_fail("LOAD", "INVALID_LIMITATION_CLASS",
+                         {"got": limitation_class,
+                          "allowed": list(LIMITATION_CLASS_REGISTRY)})
+            return out
         out.metrics["limitation_class"] = limitation_class
+
+    # For structural_analogy certs, limitation_class SHOULD be present
+    cert_type = cert.get("certificate_type", "")
+    if cert_type == "structural_analogy" and not limitation_class:
+        out.add_warning("LOAD", "MISSING_LIMITATION_CLASS",
+                        {"note": "structural_analogy certs should declare limitation_class"})
 
     for corr in correspondences:
         cid = corr.get("id", "?")
         result = corr.get("result", "")
-        expected = corr.get("expected_outcome", "PASS")  # Default to PASS if not specified
+
+        # For structural_analogy certs, expected_outcome is REQUIRED
+        if cert_type == "structural_analogy":
+            if "expected_outcome" not in corr:
+                out.add_fail(f"VERIFY_{cid}", "MISSING_EXPECTED_OUTCOME",
+                             {"note": "structural_analogy certs require expected_outcome"})
+                continue
+            expected = corr["expected_outcome"]
+        else:
+            expected = corr.get("expected_outcome", "PASS")
 
         if cid == "L1":  # Branching structure
             if outcome_matches(result, expected):
@@ -718,6 +762,81 @@ def generate_merkle_root(results: Dict[str, KayserValidationResult]) -> str:
     return leaves[0] if leaves else ""
 
 
+def check_manifest(cert_dir: Path) -> Dict[str, Any]:
+    """Verify manifest integrity against actual certificate files.
+
+    Checks:
+    1. Each certificate file exists
+    2. File SHA256 matches manifest sha256 (file bytes basis)
+    3. Computed merkle root matches manifest merkle_root
+    """
+    manifest_path = cert_dir / "qa_kayser_manifest.json"
+    if not manifest_path.exists():
+        return {"ok": False, "error": "Manifest not found"}
+
+    with open(manifest_path) as f:
+        manifest = json.load(f)
+
+    results = {"ok": True, "checks": [], "errors": []}
+
+    # Map of cert names to files
+    cert_files = {
+        "lambdoma_cycle": "qa_kayser_lambdoma_cycle_cert.json",
+        "tcross_generator": "qa_kayser_tcross_generator_cert.json",
+        "rhythm_time": "qa_kayser_rhythm_time_cert.json",
+        "basin_separation": "qa_kayser_basin_separation_cert.json",
+        "primordial_leaf": "qa_kayser_primordial_leaf_cert.json",
+        "conic_optics": "qa_kayser_conic_optics_cert.json",
+    }
+
+    # Check each certificate SHA256
+    for name, entry in manifest.get("certificates", {}).items():
+        cert_file = entry.get("file")
+        if not cert_file:
+            results["errors"].append(f"{name}: missing 'file' in manifest")
+            results["ok"] = False
+            continue
+
+        cert_path = cert_dir / cert_file
+        if not cert_path.exists():
+            results["errors"].append(f"{name}: file not found: {cert_file}")
+            results["ok"] = False
+            continue
+
+        manifest_sha = entry.get("sha256")
+        if not manifest_sha:
+            results["checks"].append(f"{name}: WARN - no sha256 in manifest")
+            continue
+
+        actual_sha = sha256_file(cert_path)
+        if actual_sha == manifest_sha:
+            results["checks"].append(f"{name}: OK (sha256 match)")
+        else:
+            results["errors"].append(
+                f"{name}: SHA256 MISMATCH\n"
+                f"  manifest: {manifest_sha[:16]}...\n"
+                f"  actual:   {actual_sha[:16]}..."
+            )
+            results["ok"] = False
+
+    # Check merkle root
+    validation_results = validate_all_kayser_certs(cert_dir)
+    computed_merkle = generate_merkle_root(validation_results)
+    manifest_merkle = manifest.get("validation_summary", {}).get("merkle_root", "")
+
+    if computed_merkle == manifest_merkle:
+        results["checks"].append(f"merkle_root: OK ({computed_merkle[:16]}...)")
+    else:
+        results["errors"].append(
+            f"merkle_root: MISMATCH\n"
+            f"  manifest: {manifest_merkle[:16]}...\n"
+            f"  computed: {computed_merkle[:16]}..."
+        )
+        results["ok"] = False
+
+    return results
+
+
 # ============================================================================
 # MAIN
 # ============================================================================
@@ -735,9 +854,27 @@ def main():
                         help="Show summary only")
     parser.add_argument("--json", action="store_true",
                         help="Output as JSON")
+    parser.add_argument("--check-manifest", action="store_true",
+                        help="Verify manifest integrity (SHA256s + merkle root)")
     args = parser.parse_args()
 
     cert_dir = Path(__file__).parent
+
+    if args.check_manifest:
+        # Manifest self-check mode
+        result = check_manifest(cert_dir)
+        if args.json:
+            print(json.dumps(result, indent=2))
+        else:
+            print("QA-KAYSER MANIFEST INTEGRITY CHECK")
+            print("=" * 50)
+            for check in result.get("checks", []):
+                print(f"  ✓ {check}")
+            for error in result.get("errors", []):
+                print(f"  ✗ {error}")
+            print("=" * 50)
+            print(f"Overall: {'PASS' if result['ok'] else 'FAIL'}")
+        sys.exit(0 if result["ok"] else 1)
 
     if args.cert:
         # Single cert

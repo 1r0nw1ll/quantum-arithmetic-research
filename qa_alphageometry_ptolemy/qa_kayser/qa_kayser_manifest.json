@@ -4,6 +4,7 @@
   "title": "QA-Kayser Correspondence Manifest",
   "created_utc": "2026-02-02T00:00:00Z",
   "description": "Manifest for QA-Kayser harmonic correspondence certificates. All six correspondences certified (C1-C3, C4', C5, C6). C5 is STRUCTURAL_ANALOGY with documented limitations.",
+  "sha256_basis": "file_bytes",
 
   "certificates": {
     "lambdoma_cycle": {

@@ -291,9 +291,9 @@ python qa_kayser_validate.py --cert lambdoma
 ### Current Validation Status
 ```
 Total verified: 28/28
-Merkle root: a5bbe23452334cd5...
+Merkle root: 03a686456b2349cf...
 Overall: PASS (with 1 warning)
-Warning: C5 envelope geometry mismatch (documented limitation)
+Warning: C5 envelope geometry mismatch (limitation_class: GEOMETRY_MODEL_MISMATCH)
 ```
 
 ## Version

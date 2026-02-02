@@ -13,6 +13,9 @@
   "upgrade_status": "NOT_UPGRADED",
   "reason": "Envelope geometry mismatch prevents full structural proof",
 
+  "limitation_class": "GEOMETRY_MODEL_MISMATCH",
+  "limitation": "Leaf envelope is curved; QA separation is linear mod-3 grid",
+
   "kayser_source": {
     "image": "kayser6.png",
     "title": "The Primordial Leaf",
@@ -41,6 +44,7 @@
       "test": "Compare tree characteristics",
       "finding": "Both have non-trivial tree structure, but mechanisms differ",
       "result": "PARTIAL_MATCH",
+      "expected_outcome": "PARTIAL_MATCH",
       "details": {
         "kayser": "Variable branching based on harmonic ratios",
         "qa": "Deterministic per-path but variable convergence"
@@ -54,6 +58,7 @@
       "test": "Count overlapping ratios",
       "finding": "7/8 Kayser ratios exist in QA's 55 dr_b/dr_e ratios",
       "result": "PASS",
+      "expected_outcome": "PASS",
       "details": {
         "overlapping": ["1/1", "1/2", "2/3", "3/4", "4/5", "5/6", "8/9"],
         "missing": ["15/16 (semitone - requires dr > 9)"]
@@ -67,6 +72,7 @@
       "test": "Compare scaling factors",
       "finding": "Factor 3 appears in both systems",
       "result": "PASS",
+      "expected_outcome": "PASS",
       "details": {
         "kayser_scaling": "3:2 (perfect fifth)",
         "qa_scaling": "24/8 = 3 (Cosmos/Satellite ratio)"
@@ -80,6 +86,7 @@
       "test": "Compare envelope geometry",
       "finding": "Geometries differ significantly",
       "result": "FAIL",
+      "expected_outcome": "FAIL_EXPECTED",
       "details": {
         "kayser": "Curved/elliptical envelope",
         "qa": "Linear mod-3 grid boundaries",
@@ -94,6 +101,7 @@
       "test": "Compare derivation structure",
       "finding": "Conceptual parallel, but state space is cyclic not divergent",
       "result": "PARTIAL_MATCH",
+      "expected_outcome": "PARTIAL_MATCH",
       "details": {
         "kayser": "Divergent branching",
         "qa_states": "Convergent/cyclic",

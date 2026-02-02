@@ -11,6 +11,7 @@
       "correspondence_id": "C1",
       "dimension": "Number",
       "file": "qa_kayser_lambdoma_cycle_cert.json",
+      "sha256": "7abc2561ebbbae75e8e695980662a71a54d3f00e103acc5ce0f33489dc4748f2",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -21,6 +22,7 @@
       "correspondence_id": "C2",
       "dimension": "Generator",
       "file": "qa_kayser_tcross_generator_cert.json",
+      "sha256": "2473e88faa64cf9fb92c1af70de19aa2dc89868d47bcc9f29d4371f06fd6ca46",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -31,6 +33,7 @@
       "correspondence_id": "C3",
       "dimension": "Time",
       "file": "qa_kayser_rhythm_time_cert.json",
+      "sha256": "b2414831fe0e28d8fee546dd4ef94d490db10f6d2d8e4804a8aafc3f9100da1a",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -42,6 +45,7 @@
       "supersedes": "C4",
       "dimension": "Structure",
       "file": "qa_kayser_basin_separation_cert.json",
+      "sha256": "dfea84c78da7efb37028507f96db9ca6b97fec93619c081e771eb3a31cc75d9d",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -53,10 +57,12 @@
       "correspondence_id": "C5",
       "dimension": "Derivation",
       "file": "qa_kayser_primordial_leaf_cert.json",
+      "sha256": "07242bdcf1fc30e6bb637eebb47a99a1f1e6459d6b39468d55ffee8eea347776",
       "verified": 5,
       "total": 5,
       "result": "PASS_WITH_WARNINGS",
       "evidence_level": "STRUCTURAL_ANALOGY",
+      "limitation_class": "GEOMETRY_MODEL_MISMATCH",
       "note": "Partial correspondence; envelope geometry mismatch documented"
     },
     "conic_optics": {
@@ -64,6 +70,7 @@
       "correspondence_id": "C6",
       "dimension": "Space",
       "file": "qa_kayser_conic_optics_cert.json",
+      "sha256": "003baa1c09bc0772200100a1a7ebbf8ee8de32b673ce84555898f1dfd2b8c26a",
       "verified": 3,
       "total": 3,
       "result": "PASS",
@@ -92,7 +99,7 @@
   "validation_summary": {
     "total_correspondences_tested": 28,
     "total_correspondences_verified": 28,
-    "merkle_root": "a5bbe23452334cd5",
+    "merkle_root": "03a686456b2349cf4cc9b503f76ace4b48759e6c10556bdaf9a03a8168dd4441",
     "all_passed": true,
     "warnings": 1,
     "warning_reason": "C5 envelope geometry mismatch (documented limitation)"
@@ -103,7 +110,7 @@
     "C2": {"status": "STRUCTURAL_PROVEN", "certificate": "tcross_generator"},
     "C3": {"status": "PROVEN", "certificate": "rhythm_time"},
     "C4_prime": {"status": "PROVEN", "certificate": "basin_separation", "note": "Supersedes C4"},
-    "C5": {"status": "STRUCTURAL_ANALOGY", "certificate": "primordial_leaf", "note": "Partial match"},
+    "C5": {"status": "STRUCTURAL_ANALOGY", "certificate": "primordial_leaf", "limitation_class": "GEOMETRY_MODEL_MISMATCH", "note": "Partial match"},
     "C6": {"status": "ENGINEERING_VALIDATED", "certificate": "conic_optics"}
   },
 

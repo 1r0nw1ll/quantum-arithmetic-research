@@ -536,8 +536,33 @@ def validate_basin_separation_cert(cert: Dict[str, Any]) -> KayserValidationResu
 # PRIMORDIAL LEAF VALIDATOR (C5)
 # ============================================================================
 
+def outcome_matches(result: str, expected: str) -> bool:
+    """Check if actual result matches expected outcome.
+
+    Agreement rules:
+    - PASS matches PASS
+    - PARTIAL_MATCH matches PARTIAL_MATCH
+    - FAIL matches FAIL_EXPECTED (documented limitation)
+    """
+    result_upper = result.upper()
+    expected_upper = expected.upper()
+
+    if expected_upper == "PASS":
+        return "PASS" in result_upper and "PARTIAL" not in result_upper
+    elif expected_upper == "PARTIAL_MATCH":
+        return "PARTIAL" in result_upper
+    elif expected_upper == "FAIL_EXPECTED":
+        return "FAIL" in result_upper
+    else:
+        return result_upper == expected_upper
+
+
 def validate_leaf_cert(cert: Dict[str, Any]) -> KayserValidationResult:
-    """Validate qa.cert.kayser.primordial_leaf.v1"""
+    """Validate qa.cert.kayser.primordial_leaf.v1
+
+    Uses expected_outcome agreement pattern: each test declares what outcome
+    is expected, and the validator checks that result matches expected_outcome.
+    """
     out = KayserValidationResult(cert.get("certificate_id", "unknown"))
     out.hash = sha256_hex(canonical_json(cert))
 
@@ -551,60 +576,70 @@ def validate_leaf_cert(cert: Dict[str, Any]) -> KayserValidationResult:
     correspondences = cert.get("validated_correspondences", [])
     out.total_correspondences = len(correspondences)
 
+    # Check for limitation_class (machine-searchable obstruction token)
+    limitation_class = cert.get("limitation_class")
+    if limitation_class:
+        out.metrics["limitation_class"] = limitation_class
+
     for corr in correspondences:
         cid = corr.get("id", "?")
         result = corr.get("result", "")
+        expected = corr.get("expected_outcome", "PASS")  # Default to PASS if not specified
 
         if cid == "L1":  # Branching structure
-            # Accept PASS or PARTIAL_MATCH
-            if "PASS" in result.upper() or "PARTIAL" in result.upper():
+            if outcome_matches(result, expected):
                 out.verified_correspondences += 1
-                out.metrics["L1_branching"] = "partial_match"
+                out.metrics["L1_branching"] = result.lower()
             else:
-                out.add_fail("VERIFY_L1", "BRANCHING_FAIL", {})
+                out.add_fail("VERIFY_L1", "OUTCOME_MISMATCH",
+                             {"result": result, "expected_outcome": expected})
 
         elif cid == "L2":  # Ratio overlap
             # Verify: at least 6 of 8 harmonic ratios exist in QA space
-            # QA has ratios a/b for a,b in {1..9}, so 1/2, 2/3, 3/4, 4/5, 5/6, 8/9 exist
             harmonic_in_qa = [
                 (1, 2), (2, 3), (3, 4), (4, 5), (5, 6), (8, 9), (1, 1)
             ]
             all_exist = all(1 <= a <= 9 and 1 <= b <= 9 for (a, b) in harmonic_in_qa)
-            if all_exist and "PASS" in result.upper():
+            if all_exist and outcome_matches(result, expected):
                 out.verified_correspondences += 1
                 out.metrics["L2_ratio_overlap"] = len(harmonic_in_qa)
             else:
-                out.add_fail("VERIFY_L2", "RATIO_OVERLAP_FAIL", {})
+                out.add_fail("VERIFY_L2", "OUTCOME_MISMATCH",
+                             {"result": result, "expected_outcome": expected,
+                              "ratios_valid": all_exist})
 
         elif cid == "L3":  # Self-similar nesting
-            # Verify: factor 3 appears in both systems
-            # QA: 24/8 = 3
+            # Verify: factor 3 appears in both systems (QA: 24/8 = 3)
             qa_factor = 24 // 8
-            if qa_factor == 3 and "PASS" in result.upper():
+            if qa_factor == 3 and outcome_matches(result, expected):
                 out.verified_correspondences += 1
                 out.metrics["L3_scaling_factor"] = 3
             else:
-                out.add_fail("VERIFY_L3", "NESTING_FAIL", {})
+                out.add_fail("VERIFY_L3", "OUTCOME_MISMATCH",
+                             {"result": result, "expected_outcome": expected,
+                              "qa_factor": qa_factor})
 
-        elif cid == "L4":  # Envelope geometry
-            # This is expected to FAIL - honest acknowledgment
-            if "FAIL" in result.upper():
-                # This is the expected result - envelope mismatch is documented
+        elif cid == "L4":  # Envelope geometry (documented limitation)
+            if outcome_matches(result, expected):
                 out.verified_correspondences += 1
-                out.metrics["L4_envelope"] = "mismatch_documented"
-                out.add_warning("VERIFY_L4", "ENVELOPE_MISMATCH",
-                                {"note": "Kayser curved, QA linear - documented limitation"})
-            elif "PASS" in result.upper():
-                out.verified_correspondences += 1
-                out.metrics["L4_envelope"] = "pass"
+                if expected.upper() == "FAIL_EXPECTED":
+                    out.metrics["L4_envelope"] = "mismatch_documented"
+                    out.add_warning("VERIFY_L4", "ENVELOPE_MISMATCH",
+                                    {"limitation_class": limitation_class,
+                                     "note": "Kayser curved, QA linear - documented limitation"})
+                else:
+                    out.metrics["L4_envelope"] = result.lower()
+            else:
+                out.add_fail("VERIFY_L4", "OUTCOME_MISMATCH",
+                             {"result": result, "expected_outcome": expected})
 
         elif cid == "L5":  # Proof tree analogy
-            # Accept PASS or PARTIAL_MATCH
-            if "PASS" in result.upper() or "PARTIAL" in result.upper():
+            if outcome_matches(result, expected):
                 out.verified_correspondences += 1
-                out.metrics["L5_proof_trees"] = "partial_match"
+                out.metrics["L5_proof_trees"] = result.lower()
             else:
-                out.add_fail("VERIFY_L5", "PROOF_TREE_FAIL", {})
+                out.add_fail("VERIFY_L5", "OUTCOME_MISMATCH",
+                             {"result": result, "expected_outcome": expected})
 
     return out
 

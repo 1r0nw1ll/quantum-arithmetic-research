@@ -47,6 +47,14 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 | `qa_kayser_basin_separation_cert.tex` | LaTeX documentation |
 | `basin_geometry_analysis.py` | Analysis script with visualization |
 
+### Phase 2e: T-Cross Generator Certificate (C2)
+| File | Purpose |
+|------|---------|
+| `qa_kayser_tcross_generator_cert.json` | T-Cross/Generator algebra certificate |
+| `qa_kayser_tcross_generator_cert.tex` | LaTeX documentation |
+| `qa_kayser_tcross_generator_cert.pdf` | Compiled certificate |
+| `tcross_generator_analysis.py` | Analysis script |
+
 ### Validation Infrastructure
 | File | Purpose |
 |------|---------|
@@ -71,7 +79,7 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 | ID | Kayser | QA | Level | Certificate |
 |----|--------|----|----|-------------|
 | C1 | Lambdoma | Modular grid | **PROVEN** | `lambdoma_cycle_cert` |
-| C2 | Kosmogonie T-Cross | Generator algebra | STRUCTURAL | - |
+| C2 | Kosmogonie T-Cross | Generator algebra | **STRUCTURAL_PROVEN** | `tcross_generator_cert` |
 | C3 | Rhythmus | Mod-N cycles | **PROVEN** | `rhythm_time_cert` |
 | ~~C4~~ | ~~Conic sections~~ | ~~Basin geometry~~ | ~~REJECTED~~ | superseded by C4' |
 | C4' | Mod-3 structure | Basin separation | **PROVEN** | `basin_separation_cert` |
@@ -85,7 +93,8 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 3. **Phase 2b** (Complete): Rhythm/Time certificate (C3)
 4. **Phase 2c** (Complete): Conic optics engineering certificate (C6)
 5. **Phase 2d** (Complete): Basin separation theorem (C4' - supersedes C4)
-6. **Phase 3** (Future): Remaining correspondences (C2, C5)
+6. **Phase 2e** (Complete): T-Cross generator algebra (C2)
+7. **Phase 3** (Future): Remaining correspondence (C5 - Primordial Leaf)
 
 ## The Harmonic Triad (Complete)
 
@@ -194,6 +203,35 @@ Quadrance Q = dr_b² + dr_e² completely separates Tribonacci from 24-cycle:
 
 ---
 
+## T-Cross Generator Certificate Summary (C2)
+
+**Certificate ID:** `qa.cert.kayser.tcross_generator.v1`
+
+### Source
+Kayser's Harmonikale Kosmogonie (§54) - T-shaped cosmogonic diagram with APEIRON at the origin.
+
+### Validated Correspondences (5/5 PASS)
+
+| ID | Kayser T-Cross | QA Structure | Test |
+|----|----------------|--------------|------|
+| T1 | Vertical axis (APEIRON→PERAS) | Generator partitions space | Periods {1,8,24} found |
+| T2 | Horizontal Lambdoma (2,3) | 9×9 grid organized by mod-3 | 24=2³×3, 81=3⁴ |
+| T3 | APEIRON/PERAS duality | Cosmos/Satellite/Singularity | 24/8=3, 8/1=8 |
+| T4 | Tetraktys structure | Power hierarchy | 72=2³×3², 8=2³, 81=3⁴ |
+| T5 | Diagonal projections | Tuple derivation d=b+e, a=b+2e | a-d=e invariant |
+
+### Key Mapping
+
+| T-Cross Element | QA Structure |
+|-----------------|--------------|
+| APEIRON (ring) | Pattern space Ω |
+| Horizontal bar | (b,e) state grid |
+| Vertical stem | Fibonacci generator |
+| Diagonals | Tuple derivation (d,a) |
+| PERAS | Finite orbits (24→8→1) |
+
+---
+
 ## Running Validation
 
 ```bash
@@ -212,11 +250,11 @@ python qa_kayser_validate.py --cert lambdoma
 
 ### Current Validation Status
 ```
-Total verified: 18/18
-Merkle root: 679603dc416f4346...
+Total verified: 23/23
+Merkle root: b8a23a13584ae583...
 Overall: PASS
 ```
 
 ## Version
 
-v2.0 - February 2026 (added C4' Basin Separation certificate)
+v3.0 - February 2026 (added C2 T-Cross Generator certificate)

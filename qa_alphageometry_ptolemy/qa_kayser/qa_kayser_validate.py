@@ -768,7 +768,8 @@ def check_manifest(cert_dir: Path) -> Dict[str, Any]:
     Checks:
     1. Each certificate file exists
     2. File SHA256 matches manifest sha256 (file bytes basis)
-    3. Computed merkle root matches manifest merkle_root
+    3. Canonical SHA256 matches manifest canonical_sha256 (semantic identity)
+    4. Computed merkle root matches manifest merkle_root
     """
     manifest_path = cert_dir / "qa_kayser_manifest.json"
     if not manifest_path.exists():
@@ -779,17 +780,7 @@ def check_manifest(cert_dir: Path) -> Dict[str, Any]:
 
     results = {"ok": True, "checks": [], "errors": []}
 
-    # Map of cert names to files
-    cert_files = {
-        "lambdoma_cycle": "qa_kayser_lambdoma_cycle_cert.json",
-        "tcross_generator": "qa_kayser_tcross_generator_cert.json",
-        "rhythm_time": "qa_kayser_rhythm_time_cert.json",
-        "basin_separation": "qa_kayser_basin_separation_cert.json",
-        "primordial_leaf": "qa_kayser_primordial_leaf_cert.json",
-        "conic_optics": "qa_kayser_conic_optics_cert.json",
-    }
-
-    # Check each certificate SHA256
+    # Check each certificate: file sha256 + canonical sha256
     for name, entry in manifest.get("certificates", {}).items():
         cert_file = entry.get("file")
         if not cert_file:
@@ -803,21 +794,39 @@ def check_manifest(cert_dir: Path) -> Dict[str, Any]:
             results["ok"] = False
             continue
 
+        # Check file bytes SHA256
         manifest_sha = entry.get("sha256")
-        if not manifest_sha:
-            results["checks"].append(f"{name}: WARN - no sha256 in manifest")
-            continue
-
-        actual_sha = sha256_file(cert_path)
-        if actual_sha == manifest_sha:
-            results["checks"].append(f"{name}: OK (sha256 match)")
+        if manifest_sha:
+            actual_sha = sha256_file(cert_path)
+            if actual_sha == manifest_sha:
+                results["checks"].append(f"{name}: OK (file sha256)")
+            else:
+                results["errors"].append(
+                    f"{name}: FILE SHA256 MISMATCH\n"
+                    f"  manifest: {manifest_sha[:16]}...\n"
+                    f"  actual:   {actual_sha[:16]}..."
+                )
+                results["ok"] = False
         else:
-            results["errors"].append(
-                f"{name}: SHA256 MISMATCH\n"
-                f"  manifest: {manifest_sha[:16]}...\n"
-                f"  actual:   {actual_sha[:16]}..."
-            )
-            results["ok"] = False
+            results["checks"].append(f"{name}: WARN - no sha256 in manifest")
+
+        # Check canonical JSON SHA256
+        manifest_canonical = entry.get("canonical_sha256")
+        if manifest_canonical:
+            with open(cert_path) as f:
+                cert = json.load(f)
+            actual_canonical = sha256_hex(canonical_json(cert))
+            if actual_canonical == manifest_canonical:
+                results["checks"].append(f"{name}: OK (canonical sha256)")
+            else:
+                results["errors"].append(
+                    f"{name}: CANONICAL SHA256 MISMATCH\n"
+                    f"  manifest: {manifest_canonical[:16]}...\n"
+                    f"  actual:   {actual_canonical[:16]}..."
+                )
+                results["ok"] = False
+        else:
+            results["checks"].append(f"{name}: WARN - no canonical_sha256 in manifest")
 
     # Check merkle root
     validation_results = validate_all_kayser_certs(cert_dir)

@@ -4,7 +4,10 @@
   "title": "QA-Kayser Correspondence Manifest",
   "created_utc": "2026-02-02T00:00:00Z",
   "description": "Manifest for QA-Kayser harmonic correspondence certificates. All six correspondences certified (C1-C3, C4', C5, C6). C5 is STRUCTURAL_ANALOGY with documented limitations.",
-  "sha256_basis": "file_bytes",
+  "hash_spec": {
+    "sha256": "file_bytes (exact file content integrity)",
+    "canonical_sha256": "canonical_json (semantic identity, sorted keys, no whitespace)"
+  },
 
   "certificates": {
     "lambdoma_cycle": {
@@ -13,6 +16,7 @@
       "dimension": "Number",
       "file": "qa_kayser_lambdoma_cycle_cert.json",
       "sha256": "7abc2561ebbbae75e8e695980662a71a54d3f00e103acc5ce0f33489dc4748f2",
+      "canonical_sha256": "74bf6b07003de383061b6c5a13266d73f5b6d981cea99b11339bd529b472da35",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -24,6 +28,7 @@
       "dimension": "Generator",
       "file": "qa_kayser_tcross_generator_cert.json",
       "sha256": "2473e88faa64cf9fb92c1af70de19aa2dc89868d47bcc9f29d4371f06fd6ca46",
+      "canonical_sha256": "0687c91440a7d3e858acb410dbe511b09fe1c53207265a277748249d9a0ec610",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -35,6 +40,7 @@
       "dimension": "Time",
       "file": "qa_kayser_rhythm_time_cert.json",
       "sha256": "b2414831fe0e28d8fee546dd4ef94d490db10f6d2d8e4804a8aafc3f9100da1a",
+      "canonical_sha256": "62ee77adf2001bf8ad1fd22629cbfc7cefb2b828903ac3964b54f275216bae71",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -47,6 +53,7 @@
       "dimension": "Structure",
       "file": "qa_kayser_basin_separation_cert.json",
       "sha256": "dfea84c78da7efb37028507f96db9ca6b97fec93619c081e771eb3a31cc75d9d",
+      "canonical_sha256": "097384ec26005595c634f461ab583c5d0cc35833b63bbec03671228968369615",
       "verified": 5,
       "total": 5,
       "result": "PASS",
@@ -59,6 +66,7 @@
       "dimension": "Derivation",
       "file": "qa_kayser_primordial_leaf_cert.json",
       "sha256": "07242bdcf1fc30e6bb637eebb47a99a1f1e6459d6b39468d55ffee8eea347776",
+      "canonical_sha256": "dacd2cc39a8d04bc6f2f085d6c6948fabf1e3f27db3a4e2c8342b1c67ecdf648",
       "verified": 5,
       "total": 5,
       "result": "PASS_WITH_WARNINGS",
@@ -72,6 +80,7 @@
       "dimension": "Space",
       "file": "qa_kayser_conic_optics_cert.json",
       "sha256": "003baa1c09bc0772200100a1a7ebbf8ee8de32b673ce84555898f1dfd2b8c26a",
+      "canonical_sha256": "d2ddeb6f6c6b46dbfa8ed8b508c06200ad2edfe9fbcdbd4dfc682ba699f19ac5",
       "verified": 3,
       "total": 3,
       "result": "PASS",

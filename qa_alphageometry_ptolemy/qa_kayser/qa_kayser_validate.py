@@ -49,6 +49,20 @@ LIMITATION_CLASS_REGISTRY = frozenset([
     "TOPOLOGY_MISMATCH",         # Different topological structure
 ])
 
+# Allowed expected_outcome values for structural_analogy certs
+EXPECTED_OUTCOME_ENUM = frozenset([
+    "PASS",              # Full correspondence expected
+    "PARTIAL_MATCH",     # Partial correspondence expected
+    "FAIL_EXPECTED",     # Documented limitation, mismatch expected
+])
+
+# Allowed result values in correspondence tests
+RESULT_ENUM = frozenset([
+    "PASS",              # Full correspondence achieved
+    "PARTIAL_MATCH",     # Partial correspondence
+    "FAIL",              # Mismatch (may be expected or unexpected)
+])
+
 
 # ============================================================================
 # CANONICAL JSON + HASHING
@@ -620,6 +634,12 @@ def validate_leaf_cert(cert: Dict[str, Any]) -> KayserValidationResult:
         cid = corr.get("id", "?")
         result = corr.get("result", "")
 
+        # Validate result enum
+        if result.upper() not in RESULT_ENUM:
+            out.add_fail(f"VERIFY_{cid}", "INVALID_RESULT_VALUE",
+                         {"got": result, "allowed": list(RESULT_ENUM)})
+            continue
+
         # For structural_analogy certs, expected_outcome is REQUIRED
         if cert_type == "structural_analogy":
             if "expected_outcome" not in corr:
@@ -627,6 +647,12 @@ def validate_leaf_cert(cert: Dict[str, Any]) -> KayserValidationResult:
                              {"note": "structural_analogy certs require expected_outcome"})
                 continue
             expected = corr["expected_outcome"]
+
+            # Validate expected_outcome enum
+            if expected not in EXPECTED_OUTCOME_ENUM:
+                out.add_fail(f"VERIFY_{cid}", "INVALID_EXPECTED_OUTCOME",
+                             {"got": expected, "allowed": list(EXPECTED_OUTCOME_ENUM)})
+                continue
         else:
             expected = corr.get("expected_outcome", "PASS")
 

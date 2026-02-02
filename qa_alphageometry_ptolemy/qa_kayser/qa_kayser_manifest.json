@@ -5,8 +5,10 @@
   "created_utc": "2026-02-02T00:00:00Z",
   "description": "Manifest for QA-Kayser harmonic correspondence certificates. All six correspondences certified (C1-C3, C4', C5, C6). C5 is STRUCTURAL_ANALOGY with documented limitations.",
   "hash_spec": {
+    "version": "1.0",
     "sha256": "file_bytes (exact file content integrity)",
-    "canonical_sha256": "canonical_json (semantic identity, sorted keys, no whitespace)"
+    "canonical_sha256": "canonical_json (semantic identity, sorted keys, no whitespace)",
+    "canonical_spec": "json.dumps(obj, sort_keys=True, separators=(',',':'), ensure_ascii=False)"
   },
 
   "certificates": {

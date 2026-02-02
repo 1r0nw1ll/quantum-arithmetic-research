@@ -23,6 +23,7 @@ Usage:
 
 from __future__ import annotations
 
+import ast
 import hashlib
 import json
 import math
@@ -458,7 +459,7 @@ def validate_basin_separation_cert(cert: Dict[str, Any]) -> KayserValidationResu
             if actual:
                 # Parse the actual string to list of tuples
                 try:
-                    parsed = eval(actual) if isinstance(actual, str) else actual
+                    parsed = ast.literal_eval(actual) if isinstance(actual, str) else actual
                     if sorted(parsed) == sorted(expected_pairs):
                         out.verified_correspondences += 1
                         out.metrics["B1_tribonacci_pairs"] = len(expected_pairs)
@@ -480,7 +481,7 @@ def validate_basin_separation_cert(cert: Dict[str, Any]) -> KayserValidationResu
             actual = test.get("actual")
             if actual:
                 try:
-                    parsed = eval(actual) if isinstance(actual, str) else actual
+                    parsed = ast.literal_eval(actual) if isinstance(actual, str) else actual
                     if parsed == expected:
                         out.verified_correspondences += 1
                         out.metrics["B2_ninbonacci"] = (9, 9)

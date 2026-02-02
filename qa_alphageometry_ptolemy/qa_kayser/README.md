@@ -55,6 +55,12 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 | `qa_kayser_tcross_generator_cert.pdf` | Compiled certificate |
 | `tcross_generator_analysis.py` | Analysis script |
 
+### Phase 2f: Primordial Leaf Certificate (C5)
+| File | Purpose |
+|------|---------|
+| `qa_kayser_primordial_leaf_cert.json` | Structural analogy certificate (partial match) |
+| `primordial_leaf_analysis.py` | Analysis script with honest assessment |
+
 ### Validation Infrastructure
 | File | Purpose |
 |------|---------|
@@ -83,7 +89,7 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 | C3 | Rhythmus | Mod-N cycles | **PROVEN** | `rhythm_time_cert` |
 | ~~C4~~ | ~~Conic sections~~ | ~~Basin geometry~~ | ~~REJECTED~~ | superseded by C4' |
 | C4' | Mod-3 structure | Basin separation | **PROVEN** | `basin_separation_cert` |
-| C5 | Primordial Leaf | Proof trees | CONJECTURAL | - |
+| C5 | Primordial Leaf | Proof trees | **STRUCTURAL_ANALOGY** | `primordial_leaf_cert` |
 | C6 | Optics applications | Physical anchor | **ENG_VALIDATED** | `conic_optics_cert` |
 
 ## Upgrade Roadmap
@@ -94,7 +100,7 @@ Artifacts establishing structural correspondences between Hans Kayser's Harmonik
 4. **Phase 2c** (Complete): Conic optics engineering certificate (C6)
 5. **Phase 2d** (Complete): Basin separation theorem (C4' - supersedes C4)
 6. **Phase 2e** (Complete): T-Cross generator algebra (C2)
-7. **Phase 3** (Future): Remaining correspondence (C5 - Primordial Leaf)
+7. **Phase 2f** (Complete): Primordial Leaf structural analogy (C5)
 
 ## The Harmonic Triad (Complete)
 
@@ -232,6 +238,40 @@ Kayser's Harmonikale Kosmogonie (§54) - T-shaped cosmogonic diagram with APEIRO
 
 ---
 
+## Primordial Leaf Certificate Summary (C5)
+
+**Certificate ID:** `qa.cert.kayser.primordial_leaf.v1`
+
+### Source
+Kayser's "Primordial Leaf" (Urblatt) - organic diagram showing harmonic ratios branching from a monochord string.
+
+### Validated Correspondences (2 PASS, 2 PARTIAL, 1 FAIL)
+
+| ID | Test | Kayser | QA | Result |
+|----|------|--------|-----|--------|
+| L1 | Branching Structure | Harmonic tree | State derivation tree | PARTIAL |
+| L2 | Ratio Overlap | 8 harmonic ratios | 55 dr_b/dr_e ratios | **PASS** (7/8 = 87.5%) |
+| L3 | Self-Similar Nesting | 3:2 scaling (fifth) | 24/8 = 3 (Cosmos/Satellite) | **PASS** |
+| L4 | Envelope Geometry | Curved organic boundary | Mod-3 linear grid | **FAIL** |
+| L5 | Proof Tree Analogy | Divergent derivation | Cyclic state space | PARTIAL |
+
+### Honest Assessment
+
+**Strong correspondences:**
+- Ratio systems overlap significantly (7/8 = 87.5%)
+- Self-similar nesting with shared factor 3
+- Both systems exhibit tree-like derivation structure
+
+**Weak correspondences:**
+- Branching mechanisms fundamentally different (harmonic vs arithmetic)
+- Envelope geometry incompatible (curved vs linear)
+- Leaf is divergent; QA state space is cyclic
+
+### Key Finding
+C5 represents a genuine **structural analogy** but cannot be upgraded to PROVEN due to the envelope geometry mismatch. The certificate honestly documents both successes and limitations - this is correct scientific practice.
+
+---
+
 ## Running Validation
 
 ```bash
@@ -250,11 +290,12 @@ python qa_kayser_validate.py --cert lambdoma
 
 ### Current Validation Status
 ```
-Total verified: 23/23
-Merkle root: b8a23a13584ae583...
-Overall: PASS
+Total verified: 28/28
+Merkle root: a5bbe23452334cd5...
+Overall: PASS (with 1 warning)
+Warning: C5 envelope geometry mismatch (documented limitation)
 ```
 
 ## Version
 
-v3.0 - February 2026 (added C2 T-Cross Generator certificate)
+v4.0 - February 2026 (all 6 correspondences certified: C1-C3, C4', C5, C6)

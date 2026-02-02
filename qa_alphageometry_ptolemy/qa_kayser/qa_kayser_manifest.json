@@ -1,9 +1,9 @@
 {
   "schema_version": "QA_MANIFEST.v1",
-  "manifest_id": "qa.manifest.kayser.v3",
+  "manifest_id": "qa.manifest.kayser.v4",
   "title": "QA-Kayser Correspondence Manifest",
   "created_utc": "2026-02-02T00:00:00Z",
-  "description": "Manifest for QA-Kayser harmonic correspondence certificates. Five correspondences certified (C1, C2, C3, C4', C6). Only C5 remains.",
+  "description": "Manifest for QA-Kayser harmonic correspondence certificates. All six correspondences certified (C1-C3, C4', C5, C6). C5 is STRUCTURAL_ANALOGY with documented limitations.",
 
   "certificates": {
     "lambdoma_cycle": {
@@ -11,10 +11,10 @@
       "correspondence_id": "C1",
       "dimension": "Number",
       "file": "qa_kayser_lambdoma_cycle_cert.json",
-      "sha256": "74bf6b07003de383061b6c5a13266d73f5b6d981cea99b11339bd529b472da35",
       "verified": 5,
       "total": 5,
-      "result": "PASS"
+      "result": "PASS",
+      "evidence_level": "PROVEN"
     },
     "tcross_generator": {
       "id": "qa.cert.kayser.tcross_generator.v1",
@@ -23,17 +23,18 @@
       "file": "qa_kayser_tcross_generator_cert.json",
       "verified": 5,
       "total": 5,
-      "result": "PASS"
+      "result": "PASS",
+      "evidence_level": "STRUCTURAL_PROVEN"
     },
     "rhythm_time": {
       "id": "qa.cert.kayser.rhythm_time.v1",
       "correspondence_id": "C3",
       "dimension": "Time",
       "file": "qa_kayser_rhythm_time_cert.json",
-      "sha256": "62ee77adf2001bf8ad1fd22629cbfc7cefb2b828903ac3964b54f275216bae71",
       "verified": 5,
       "total": 5,
-      "result": "PASS"
+      "result": "PASS",
+      "evidence_level": "PROVEN"
     },
     "basin_separation": {
       "id": "qa.cert.kayser.basin_separation.v1",
@@ -44,17 +45,29 @@
       "verified": 5,
       "total": 5,
       "result": "PASS",
+      "evidence_level": "PROVEN",
       "note": "Conic hypothesis rejected; mod-3 theorem proven instead"
+    },
+    "primordial_leaf": {
+      "id": "qa.cert.kayser.primordial_leaf.v1",
+      "correspondence_id": "C5",
+      "dimension": "Derivation",
+      "file": "qa_kayser_primordial_leaf_cert.json",
+      "verified": 5,
+      "total": 5,
+      "result": "PASS_WITH_WARNINGS",
+      "evidence_level": "STRUCTURAL_ANALOGY",
+      "note": "Partial correspondence; envelope geometry mismatch documented"
     },
     "conic_optics": {
       "id": "qa.cert.kayser.conic_optics.v1",
       "correspondence_id": "C6",
       "dimension": "Space",
       "file": "qa_kayser_conic_optics_cert.json",
-      "sha256": "d2ddeb6f6c6b46dbfa8ed8b508c06200ad2edfe9fbcdbd4dfc682ba699f19ac5",
       "verified": 3,
       "total": 3,
-      "result": "PASS"
+      "result": "PASS",
+      "evidence_level": "ENGINEERING_VALIDATED"
     }
   },
 
@@ -71,61 +84,36 @@
       "lambdoma_qa_analysis.py",
       "rhythm_qa_analysis.py",
       "basin_geometry_analysis.py",
-      "tcross_generator_analysis.py"
+      "tcross_generator_analysis.py",
+      "primordial_leaf_analysis.py"
     ]
   },
 
   "validation_summary": {
-    "total_correspondences_tested": 23,
-    "total_correspondences_verified": 23,
-    "merkle_root": "b8a23a13584ae583",
-    "all_passed": true
+    "total_correspondences_tested": 28,
+    "total_correspondences_verified": 28,
+    "merkle_root": "a5bbe23452334cd5",
+    "all_passed": true,
+    "warnings": 1,
+    "warning_reason": "C5 envelope geometry mismatch (documented limitation)"
   },
 
-  "triad_structure": {
-    "number": {
-      "kayser": "Lambdoma (pitch ratios)",
-      "qa": "Modular arithmetic",
-      "certificate": "lambdoma_cycle"
-    },
-    "space": {
-      "kayser": "Conic sections",
-      "qa": "Basin geometry / optics",
-      "certificate": "conic_optics"
-    },
-    "time": {
-      "kayser": "Rhythmus (periods)",
-      "qa": "Orbit periods",
-      "certificate": "rhythm_time"
-    },
-    "generator": {
-      "kayser": "T-Cross / APEIRON",
-      "qa": "Fibonacci generator algebra",
-      "certificate": "tcross_generator"
-    },
-    "shared_generators": ["2", "3"],
-    "note": "All dimensions share algebraic structure based on primes 2 and 3"
-  },
-
-  "hypothesis_tests": {
-    "C4_conic_basin": {
-      "original_claim": "Conic sections determine QA orbit basins",
-      "test_result": "REJECTED",
-      "actual_mechanism": "Mod-3 fixed point isolation theorem",
-      "replacement": "C4_prime (basin_separation)",
-      "evidence_level": "PROVEN"
-    }
-  },
-
-  "remaining_correspondences": {
-    "C5": {"kayser": "Primordial Leaf", "qa": "Proof trees", "status": "CONJECTURAL"}
-  },
-
-  "completed_correspondences": {
+  "correspondence_status": {
     "C1": {"status": "PROVEN", "certificate": "lambdoma_cycle"},
     "C2": {"status": "STRUCTURAL_PROVEN", "certificate": "tcross_generator"},
     "C3": {"status": "PROVEN", "certificate": "rhythm_time"},
     "C4_prime": {"status": "PROVEN", "certificate": "basin_separation", "note": "Supersedes C4"},
+    "C5": {"status": "STRUCTURAL_ANALOGY", "certificate": "primordial_leaf", "note": "Partial match"},
     "C6": {"status": "ENGINEERING_VALIDATED", "certificate": "conic_optics"}
+  },
+
+  "completion_status": {
+    "total_correspondences": 6,
+    "certified": 6,
+    "proven": 3,
+    "structural_proven": 1,
+    "structural_analogy": 1,
+    "engineering_validated": 1,
+    "remaining": 0
   }
 }

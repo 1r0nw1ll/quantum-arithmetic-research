@@ -1,0 +1,139 @@
+{
+  "schema_version": "QA_CERTIFICATE.v1",
+  "certificate_id": "qa.cert.kayser.primordial_leaf.v1",
+  "title": "QA-Kayser Primordial Leaf Certificate: Partial Correspondence",
+  "certificate_type": "structural_analogy",
+  "parent_artifact": "qa.map.kayser.harmonic_correspondence.v1",
+  "correspondence_id": "C5",
+  "created_utc": "2026-02-02T00:00:00Z",
+
+  "abstract": "This certificate documents the partial structural correspondence between Kayser's Primordial Leaf diagram and QA proof tree structures. Unlike C1-C4, this correspondence is WEAKER - some aspects map well (ratio overlap, self-similarity), while others do not (envelope geometry). The certificate honestly records both the successes and limitations.",
+
+  "evidence_level": "STRUCTURAL_ANALOGY",
+  "upgrade_status": "NOT_UPGRADED",
+  "reason": "Envelope geometry mismatch prevents full structural proof",
+
+  "kayser_source": {
+    "image": "kayser6.png",
+    "title": "The Primordial Leaf",
+    "description": "Diagram showing harmonic ratios branching from a monochord string, forming an organic leaf-shaped envelope",
+    "elements": {
+      "central_axis": "Monochord string (fundamental frequency)",
+      "branches": "Harmonic divisions labeled with ratios",
+      "envelope": "Curved organic leaf shape",
+      "symmetry": "Bilateral around central axis"
+    }
+  },
+
+  "qa_mapping": {
+    "central_axis": "Fibonacci generator sequence",
+    "branches": "State transitions / tuple derivations",
+    "envelope": "Orbit basin boundaries (mod-3 grid)",
+    "ratios": "Digital root pair relationships"
+  },
+
+  "validated_correspondences": [
+    {
+      "id": "L1",
+      "name": "Branching Structure",
+      "kayser_claim": "Harmonic divisions create branching tree",
+      "qa_claim": "Generator applications create state tree",
+      "test": "Compare tree characteristics",
+      "finding": "Both have non-trivial tree structure, but mechanisms differ",
+      "result": "PARTIAL_MATCH",
+      "details": {
+        "kayser": "Variable branching based on harmonic ratios",
+        "qa": "Deterministic per-path but variable convergence"
+      }
+    },
+    {
+      "id": "L2",
+      "name": "Ratio Overlap",
+      "kayser_claim": "Leaf uses harmonic ratios (1/2, 2/3, 3/4, etc.)",
+      "qa_claim": "QA digital root space contains these ratios",
+      "test": "Count overlapping ratios",
+      "finding": "7/8 Kayser ratios exist in QA's 55 dr_b/dr_e ratios",
+      "result": "PASS",
+      "details": {
+        "overlapping": ["1/1", "1/2", "2/3", "3/4", "4/5", "5/6", "8/9"],
+        "missing": ["15/16 (semitone - requires dr > 9)"]
+      }
+    },
+    {
+      "id": "L3",
+      "name": "Self-Similar Nesting",
+      "kayser_claim": "Branches contain self-similar sub-branches",
+      "qa_claim": "Orbits nest: 24 ⊃ 8 ⊃ 1",
+      "test": "Compare scaling factors",
+      "finding": "Factor 3 appears in both systems",
+      "result": "PASS",
+      "details": {
+        "kayser_scaling": "3:2 (perfect fifth)",
+        "qa_scaling": "24/8 = 3 (Cosmos/Satellite ratio)"
+      }
+    },
+    {
+      "id": "L4",
+      "name": "Envelope Geometry",
+      "kayser_claim": "Curved organic leaf boundary",
+      "qa_claim": "Basin boundaries in state space",
+      "test": "Compare envelope geometry",
+      "finding": "Geometries differ significantly",
+      "result": "FAIL",
+      "details": {
+        "kayser": "Curved/elliptical envelope",
+        "qa": "Linear mod-3 grid boundaries",
+        "mismatch": "Fundamental geometric difference"
+      }
+    },
+    {
+      "id": "L5",
+      "name": "Proof Tree Analogy",
+      "kayser_claim": "Root → branches → leaves = derivation tree",
+      "qa_claim": "Axiom → transitions → theorems = derivation tree",
+      "test": "Compare derivation structure",
+      "finding": "Conceptual parallel, but state space is cyclic not divergent",
+      "result": "PARTIAL_MATCH",
+      "details": {
+        "kayser": "Divergent branching",
+        "qa_states": "Convergent/cyclic",
+        "qa_theorems": "Potentially divergent (better match)"
+      }
+    }
+  ],
+
+  "numerical_evidence": {
+    "kayser_ratios": ["1/1", "1/2", "2/3", "3/4", "4/5", "5/6", "8/9", "15/16"],
+    "qa_ratio_count": 55,
+    "overlap_count": 7,
+    "overlap_percentage": 87.5,
+    "shared_scaling_factor": 3,
+    "envelope_match": false
+  },
+
+  "honest_assessment": {
+    "strong_correspondences": [
+      "Ratio systems overlap significantly (7/8 = 87.5%)",
+      "Self-similar nesting with shared factor 3",
+      "Both systems exhibit tree-like derivation structure"
+    ],
+    "weak_correspondences": [
+      "Branching mechanisms fundamentally different (harmonic vs arithmetic)",
+      "Envelope geometry incompatible (curved vs linear)",
+      "Leaf is divergent; QA state space is cyclic"
+    ],
+    "conclusion": "C5 is a genuine structural analogy but cannot be upgraded to PROVEN due to envelope geometry mismatch"
+  },
+
+  "certificate_summary": {
+    "kayser_concept": "Primordial Leaf (harmonic derivation tree)",
+    "qa_concept": "Proof trees / resonance hierarchies",
+    "tests_passed": 2,
+    "tests_partial": 2,
+    "tests_failed": 1,
+    "total_tests": 5,
+    "evidence_level": "STRUCTURAL_ANALOGY",
+    "upgrade_recommendation": "NOT_RECOMMENDED",
+    "reason": "Envelope geometry mismatch; honest science requires acknowledging limitations"
+  }
+}

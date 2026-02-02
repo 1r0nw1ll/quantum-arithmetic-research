@@ -11,7 +11,7 @@ cd qa_alphageometry_ptolemy
 python qa_meta_validator.py           # 15 tests: tetrad + conjectures + FST + agent security + Kayser
 python qa_conjecture_core.py          # 5 checks: factories, ledger, guards
 python qa_fst/qa_fst_validate.py      # 8 checks: spine, certs, manifest
-python qa_kayser/qa_kayser_validate.py --all  # 23 checks: C1-C6 correspondence suite (merkle-rooted)
+python qa_kayser/qa_kayser_validate.py --all  # 28 checks: C1-C6 correspondence suite (merkle-rooted)
 ```
 
 ## Reporting a failure (as an obstruction)

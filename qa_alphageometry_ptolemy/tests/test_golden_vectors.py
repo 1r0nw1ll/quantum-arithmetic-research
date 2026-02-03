@@ -22,15 +22,19 @@ import sys
 from pathlib import Path
 from typing import Any, Dict, List, Tuple
 
-# Add parent directory to path for imports
+# Support both module and direct execution
 TESTS_DIR = Path(__file__).parent
-PACKAGE_DIR = TESTS_DIR.parent
-sys.path.insert(0, str(PACKAGE_DIR.parent))
 
-from qa_alphageometry_ptolemy.qa_cert_core import (
-    canonical_json_compact,
-    sha256_canonical,
-)
+try:
+    # When run as module: python -m qa_alphageometry_ptolemy.tests.test_golden_vectors
+    from ..qa_cert_core import canonical_json_compact, sha256_canonical
+except ImportError:
+    # When run directly: python tests/test_golden_vectors.py
+    sys.path.insert(0, str(TESTS_DIR.parent.parent))
+    from qa_alphageometry_ptolemy.qa_cert_core import (
+        canonical_json_compact,
+        sha256_canonical,
+    )
 
 # Directory containing golden fixtures
 GOLDEN_DIR = TESTS_DIR / "golden"

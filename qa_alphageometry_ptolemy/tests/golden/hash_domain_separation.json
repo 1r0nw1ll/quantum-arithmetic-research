@@ -1,0 +1,17 @@
+{
+  "fixture_id": "qa.fixture.hash_domain.separation.v1",
+  "description": "Hash domain separation: certificate_hash vs sha256_canonical are DIFFERENT by design",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "object": {"a": 1, "b": "hello", "c": [1, 2, 3]}
+  },
+
+  "expected": {
+    "certificate_hash": "4da3862736e9e7fe",
+    "sha256_canonical": "813d15574f1ce311772e71a037f89ff8989b833f6337bc9ed0fdbcee184d6308",
+    "different_by_design": true
+  },
+
+  "notes": "These hashes are DIFFERENT because they use different canonicalization. certificate_hash: indent=None (has spaces after colons), ensure_ascii=True. sha256_canonical: compact separators (',',':'), ensure_ascii=False. Do NOT 'fix' this - it's intentional domain separation for different purposes."
+}

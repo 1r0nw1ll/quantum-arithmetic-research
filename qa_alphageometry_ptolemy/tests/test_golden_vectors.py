@@ -27,13 +27,14 @@ TESTS_DIR = Path(__file__).parent
 
 try:
     # When run as module: python -m qa_alphageometry_ptolemy.tests.test_golden_vectors
-    from ..qa_cert_core import canonical_json_compact, sha256_canonical
+    from ..qa_cert_core import canonical_json_compact, sha256_canonical, certificate_hash
 except ImportError:
     # When run directly: python tests/test_golden_vectors.py
     sys.path.insert(0, str(TESTS_DIR.parent.parent))
     from qa_alphageometry_ptolemy.qa_cert_core import (
         canonical_json_compact,
         sha256_canonical,
+        certificate_hash,
     )
 
 # Directory containing golden fixtures
@@ -260,6 +261,56 @@ def check_failure_algebra(fixture: Dict[str, Any]) -> List[str]:
     return errors
 
 
+def check_hash_domain_separation(fixture: Dict[str, Any]) -> List[str]:
+    """Check that hash domains are properly separated (prevents 'helpful' unification)."""
+    errors = []
+
+    inp = fixture.get("input", {})
+    expected = fixture.get("expected", {})
+
+    # Only run if this is a hash domain test
+    if "certificate_hash" not in expected or "sha256_canonical" not in expected:
+        return errors
+
+    if "object" not in inp:
+        return errors
+
+    obj = inp["object"]
+
+    # Check certificate_hash (uses canonical_json with indent=None, ensure_ascii=True)
+    actual_cert_hash = certificate_hash(obj)
+    expected_cert_hash = expected["certificate_hash"]
+
+    if actual_cert_hash != expected_cert_hash:
+        errors.append(
+            f"certificate_hash mismatch:\n"
+            f"  expected: {expected_cert_hash}\n"
+            f"  actual:   {actual_cert_hash}"
+        )
+
+    # Check sha256_canonical (uses canonical_json_compact, ensure_ascii=False)
+    actual_semantic_hash = sha256_canonical(obj)
+    expected_semantic_hash = expected["sha256_canonical"]
+
+    if actual_semantic_hash != expected_semantic_hash:
+        errors.append(
+            f"sha256_canonical mismatch:\n"
+            f"  expected: {expected_semantic_hash}\n"
+            f"  actual:   {actual_semantic_hash}"
+        )
+
+    # Verify they ARE different (by design)
+    if expected.get("different_by_design", False):
+        if actual_cert_hash == actual_semantic_hash[:16]:
+            errors.append(
+                "HASH DOMAIN COLLISION: certificate_hash equals sha256_canonical prefix!\n"
+                "  This should NOT happen - they use different canonicalization.\n"
+                "  Someone may have 'unified' the hash functions incorrectly."
+            )
+
+    return errors
+
+
 def run_fixture(name: str, fixture: Dict[str, Any]) -> Tuple[bool, List[str]]:
     """Run all applicable tests for a fixture."""
     all_errors = []
@@ -277,6 +328,7 @@ def run_fixture(name: str, fixture: Dict[str, Any]) -> Tuple[bool, List[str]]:
     all_errors.extend(check_merkle_leaf(fixture))
     all_errors.extend(check_merkle_root(fixture))
     all_errors.extend(check_failure_algebra(fixture))
+    all_errors.extend(check_hash_domain_separation(fixture))
 
     return len(all_errors) == 0, all_errors
 

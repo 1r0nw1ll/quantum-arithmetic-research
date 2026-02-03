@@ -34,6 +34,10 @@ from fractions import Fraction
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
+# Import shared canonicalization from qa_cert_core
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from qa_cert_core import canonical_json_compact, sha256_canonical, sha256_file
+
 
 # ============================================================================
 # LIMITATION CLASS REGISTRY
@@ -65,24 +69,21 @@ RESULT_ENUM = frozenset([
 
 
 # ============================================================================
-# CANONICAL JSON + HASHING
+# CANONICAL JSON + HASHING (imported from qa_cert_core)
 # ============================================================================
 
+# canonical_json_compact, sha256_canonical, sha256_file imported from qa_cert_core
+# This ensures consistent canonicalization across all QA modules.
+
+# Alias for backward compatibility in this module
 def canonical_json(obj: Any) -> str:
-    """Deterministic JSON: sorted keys, no whitespace, UTF-8."""
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"),
-                      ensure_ascii=False)
+    """Alias for canonical_json_compact from qa_cert_core."""
+    return canonical_json_compact(obj)
 
 
 def sha256_hex(s: str) -> str:
     """SHA256 of string (used for canonical JSON hashing)."""
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
-
-
-def sha256_file(path: Path) -> str:
-    """SHA256 of file bytes (used for file integrity)."""
-    with open(path, "rb") as f:
-        return hashlib.sha256(f.read()).hexdigest()
 
 
 # ============================================================================

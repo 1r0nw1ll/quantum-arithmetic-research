@@ -71,12 +71,32 @@ def scalar_to_str(x: Scalar) -> str:
 
 def canonical_json(obj: Dict[str, Any], indent: int = 2) -> str:
     """
-    Produce deterministic JSON with sorted keys.
+    Produce deterministic JSON with sorted keys (human-readable).
 
     This is the canonical serialization for all certificates.
     Hashing this output yields the certificate hash.
     """
     return json.dumps(obj, sort_keys=True, indent=indent, ensure_ascii=True)
+
+
+def canonical_json_compact(obj: Any) -> str:
+    """
+    Produce deterministic compact JSON for hashing/manifest purposes.
+
+    Spec (hash_spec.version 1.0):
+    - sort_keys=True (deterministic key ordering)
+    - separators=(',', ':') (no whitespace)
+    - ensure_ascii=False (UTF-8 friendly, stable across systems)
+
+    This is the canonical serialization for:
+    - canonical_sha256 in manifests
+    - Merkle root computation
+    - Semantic identity hashing
+
+    Do NOT use for human-readable output - use canonical_json() instead.
+    """
+    return json.dumps(obj, sort_keys=True, separators=(",", ":"),
+                      ensure_ascii=False)
 
 
 def certificate_hash(cert_dict: Dict[str, Any]) -> str:
@@ -93,6 +113,22 @@ def full_hash(cert_dict: Dict[str, Any]) -> str:
     """Compute full SHA-256 hash of a certificate's canonical JSON."""
     content = canonical_json(cert_dict, indent=None)
     return hashlib.sha256(content.encode("utf-8")).hexdigest()
+
+
+def sha256_canonical(obj: Any) -> str:
+    """
+    Compute SHA-256 hash of an object's compact canonical JSON.
+
+    Uses canonical_json_compact() for consistent hashing across modules.
+    This is the basis for canonical_sha256 in manifests.
+    """
+    return hashlib.sha256(canonical_json_compact(obj).encode("utf-8")).hexdigest()
+
+
+def sha256_file(path: str) -> str:
+    """Compute SHA-256 hash of file bytes."""
+    with open(path, "rb") as f:
+        return hashlib.sha256(f.read()).hexdigest()
 
 
 def state_hash(label: str) -> str:
@@ -182,6 +218,15 @@ if __name__ == "__main__":
     h2 = certificate_hash(d)
     assert h1 == h2, "Deterministic hash failed"
     assert len(h1) == 16
+
+    # Test canonical_json_compact
+    compact = canonical_json_compact(d)
+    assert compact == '{"a":1,"b":"hello"}', f"Expected compact, got: {compact}"
+    assert " " not in compact, "Compact JSON should have no spaces"
+
+    # Test sha256_canonical
+    h_canon = sha256_canonical(d)
+    assert len(h_canon) == 64, "Full hash should be 64 hex chars"
 
     # Test validation
     v = ValidationResult()

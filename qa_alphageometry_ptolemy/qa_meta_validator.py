@@ -694,6 +694,27 @@ if __name__ == "__main__":
                                     "qa_kayser", "qa_kayser_validate.py")
     if os.path.exists(kayser_validator):
         print("\n--- KAYSER HARMONIC CORRESPONDENCE MODULE (subprocess) ---")
+
+        # Test 15a: Manifest integrity check (fast gate)
+        kayser_manifest_result = subprocess.run(
+            [sys.executable, kayser_validator, "--check-manifest", "--json"],
+            capture_output=True, text=True)
+        if kayser_manifest_result.returncode == 0:
+            manifest_json = json.loads(kayser_manifest_result.stdout)
+            manifest_ok = manifest_json.get("ok", False)
+            if manifest_ok:
+                print(f"[15a] Kayser manifest integrity: PASS "
+                      f"({len(manifest_json.get('checks', []))} checks)")
+            else:
+                print(f"[15a] Kayser manifest integrity: FAIL")
+                for err in manifest_json.get("errors", []):
+                    print(f"      {err}")
+                sys.exit(1)
+        else:
+            print(f"[15a] Kayser manifest: FAIL (exit code {kayser_manifest_result.returncode})")
+            sys.exit(1)
+
+        # Test 15b: Full behavioral validation
         kayser_result = subprocess.run(
             [sys.executable, kayser_validator, "--all", "--json"],
             capture_output=True, text=True)
@@ -704,14 +725,14 @@ if __name__ == "__main__":
             kayser_verified = sum(c.get("verified", 0) for c in kayser_json.get("certificates", {}).values())
             kayser_total = sum(c.get("total", 0) for c in kayser_json.get("certificates", {}).values())
             if kayser_passed:
-                print(f"[15] Kayser module: PASS "
+                print(f"[15b] Kayser behavioral: PASS "
                       f"({kayser_verified}/{kayser_total} verified, merkle={kayser_merkle}...)")
             else:
-                print(f"[15] Kayser module: FAIL (all_passed=False)")
+                print(f"[15b] Kayser behavioral: FAIL (all_passed=False)")
                 sys.exit(1)
         else:
-            print(f"[15] Kayser module: FAIL (exit code {kayser_result.returncode})")
-            print(f"     stderr: {kayser_result.stderr[:200]}")
+            print(f"[15b] Kayser behavioral: FAIL (exit code {kayser_result.returncode})")
+            print(f"      stderr: {kayser_result.stderr[:200]}")
             sys.exit(1)
     else:
         print("\n[15] Kayser module: SKIPPED (qa_kayser/qa_kayser_validate.py not found)")

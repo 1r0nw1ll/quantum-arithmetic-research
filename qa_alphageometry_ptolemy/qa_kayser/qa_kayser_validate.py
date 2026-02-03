@@ -769,7 +769,13 @@ def validate_all_kayser_certs(cert_dir: Path) -> Dict[str, KayserValidationResul
 
 
 def generate_merkle_root(results: Dict[str, KayserValidationResult]) -> str:
-    """Generate Merkle root from all validation results."""
+    """Generate Merkle root from all validation results.
+
+    Leaf ordering: sorted(results.keys()) - lexicographic by cert name.
+    Leaf format: sha256("{name}:{canonical_hash}:{result_label}")
+
+    This ordering is SPECIFIED and must not change without manifest migration.
+    """
     leaves = []
     for name, result in sorted(results.items()):
         leaf = sha256_hex(f"{name}:{result.hash}:{result.result_label}")

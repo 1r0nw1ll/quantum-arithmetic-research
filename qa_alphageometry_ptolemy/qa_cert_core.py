@@ -68,6 +68,21 @@ def scalar_to_str(x: Scalar) -> str:
 # ============================================================================
 # DETERMINISTIC SERIALIZATION
 # ============================================================================
+#
+# HASH DOMAINS (intentional separation - do not "fix"):
+#
+# 1. certificate_hash() / full_hash():
+#    - Uses canonical_json(indent=None, ensure_ascii=True)
+#    - Purpose: Certificate ID hash for tetrad/conjecture certs
+#    - Domain: Pretty-canonical with ASCII escaping
+#
+# 2. sha256_canonical():
+#    - Uses canonical_json_compact(separators=(',',':'), ensure_ascii=False)
+#    - Purpose: Manifest semantic identity + merkle root inputs
+#    - Domain: Compact canonical with UTF-8
+#
+# These are DIFFERENT by design. Changing one will invalidate existing hashes.
+# ============================================================================
 
 def canonical_json(obj: Dict[str, Any], indent: int = 2) -> str:
     """
@@ -75,6 +90,8 @@ def canonical_json(obj: Dict[str, Any], indent: int = 2) -> str:
 
     This is the canonical serialization for all certificates.
     Hashing this output yields the certificate hash.
+
+    Hash domain: certificate_hash(), full_hash()
     """
     return json.dumps(obj, sort_keys=True, indent=indent, ensure_ascii=True)
 
@@ -143,7 +160,8 @@ def state_hash(label: str) -> str:
 def check_manifest_integrity(
     manifest: Dict[str, Any],
     cert_dir: str,
-    load_cert_fn=None
+    load_cert_fn=None,
+    schema_path: str = None
 ) -> Dict[str, Any]:
     """
     Generic manifest integrity checker for certificate modules.
@@ -152,11 +170,13 @@ def check_manifest_integrity(
     1. Each certificate file exists
     2. File SHA256 matches manifest sha256 (file bytes)
     3. Canonical SHA256 matches manifest canonical_sha256 (semantic identity)
+    4. (Optional) Manifest matches JSON Schema if schema_path provided
 
     Args:
         manifest: Loaded manifest dict with 'certificates' section
         cert_dir: Directory containing certificate files
         load_cert_fn: Optional function to load cert JSON (default: json.load)
+        schema_path: Optional path to JSON Schema for manifest validation
 
     Returns:
         Dict with 'ok', 'checks', 'errors' fields
@@ -169,6 +189,20 @@ def check_manifest_integrity(
                 return json.load(f)
 
     results = {"ok": True, "checks": [], "errors": []}
+
+    # Optional JSON Schema validation
+    if schema_path:
+        try:
+            import jsonschema
+            with open(schema_path) as f:
+                schema = json.load(f)
+            jsonschema.validate(manifest, schema)
+            results["checks"].append("schema: OK (manifest validates)")
+        except ImportError:
+            results["checks"].append("schema: WARN - jsonschema not installed, skipping")
+        except Exception as e:
+            results["errors"].append(f"schema: FAIL - {e}")
+            results["ok"] = False
 
     # Check hash_spec is present
     hash_spec = manifest.get("hash_spec", {})

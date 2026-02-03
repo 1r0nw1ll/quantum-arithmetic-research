@@ -18,7 +18,13 @@ This script tests whether the T-Cross structure maps to QA generator algebra.
 """
 
 import sys
-sys.path.insert(0, '/home/player2/signal_experiments')
+import os
+from pathlib import Path
+
+# Add signal_experiments to path if needed for future imports
+_SCRIPT_DIR = Path(__file__).parent
+_REPO_ROOT = _SCRIPT_DIR.parent.parent
+sys.path.insert(0, str(_REPO_ROOT))
 
 from typing import Dict, List, Tuple, Set
 from collections import defaultdict

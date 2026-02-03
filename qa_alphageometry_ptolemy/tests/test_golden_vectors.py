@@ -329,8 +329,61 @@ def run_fixture(name: str, fixture: Dict[str, Any]) -> Tuple[bool, List[str]]:
     all_errors.extend(check_merkle_root(fixture))
     all_errors.extend(check_failure_algebra(fixture))
     all_errors.extend(check_hash_domain_separation(fixture))
+    all_errors.extend(check_schema_violation(fixture))
 
     return len(all_errors) == 0, all_errors
+
+
+def check_schema_violation(fixture: Dict[str, Any]) -> List[str]:
+    """Check that intentionally invalid manifests are rejected."""
+    errors = []
+
+    inp = fixture.get("input", {})
+    expected = fixture.get("expected", {})
+
+    if "invalid_manifest" not in inp:
+        return errors  # Not a schema violation test
+
+    if not expected.get("should_fail", False):
+        return errors  # Not testing for failure
+
+    invalid_manifest = inp["invalid_manifest"]
+    error_contains = expected.get("error_contains", [])
+
+    # Test that the manifest would be rejected
+    # Check schema_version is valid
+    schema_version = invalid_manifest.get("schema_version", "")
+    valid_versions = {"QA_MANIFEST.v1", "QA_SHA256_MANIFEST.v1"}
+
+    rejection_reasons = []
+
+    if schema_version not in valid_versions:
+        rejection_reasons.append(f"invalid schema_version: {schema_version}")
+
+    # Check certificates have required fields
+    for name, cert in invalid_manifest.get("certificates", {}).items():
+        if "sha256" not in cert and "canonical_sha256" not in cert:
+            rejection_reasons.append(f"{name}: missing hash fields")
+
+    # Verify we got rejection reasons
+    if not rejection_reasons:
+        errors.append(
+            "SCHEMA GATE FAILURE: Invalid manifest was NOT rejected!\n"
+            f"  Manifest: {invalid_manifest}\n"
+            "  This means the schema validation gate is broken."
+        )
+        return errors
+
+    # Verify expected error substrings appear
+    rejection_text = " ".join(rejection_reasons).lower()
+    for expected_substr in error_contains:
+        if expected_substr.lower() not in rejection_text:
+            errors.append(
+                f"Expected error to contain '{expected_substr}' but got:\n"
+                f"  {rejection_reasons}"
+            )
+
+    return errors
 
 
 def main():

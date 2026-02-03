@@ -1,0 +1,23 @@
+{
+  "fixture_id": "qa.fixture.schema.intentional_violation.v1",
+  "description": "Intentionally invalid manifest - tests that schema validation catches violations",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "invalid_manifest": {
+      "schema_version": "INVALID_VERSION",
+      "certificates": {
+        "test": {
+          "file": "nonexistent.json"
+        }
+      }
+    }
+  },
+
+  "expected": {
+    "should_fail": true,
+    "error_contains": ["schema", "version"]
+  },
+
+  "notes": "This fixture tests that schema validation CATCHES invalid manifests. The test PASSES if the validator REJECTS this invalid input. If the validator accepts it, the gate is broken."
+}

@@ -44,19 +44,28 @@ from __future__ import annotations
 import sys
 import os
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
 from dataclasses import dataclass, field
 from typing import List, Optional, Dict, Any, Tuple, FrozenSet
 from enum import Enum
 from fractions import Fraction
 
-from qa_cert_core import (
-    Scalar, to_scalar, scalar_to_str,
-    canonical_json, certificate_hash, state_hash,
-    cert_id, utc_now_iso,
-    ValidationResult,
-)
+try:
+    # When run as module: python -m qa_alphageometry_ptolemy.qa_beyond_neurons_certificate
+    from .qa_cert_core import (
+        Scalar, to_scalar, scalar_to_str,
+        canonical_json, certificate_hash, state_hash,
+        cert_id, utc_now_iso,
+        ValidationResult,
+    )
+except ImportError:
+    # When run directly: python qa_beyond_neurons_certificate.py
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from qa_cert_core import (
+        Scalar, to_scalar, scalar_to_str,
+        canonical_json, certificate_hash, state_hash,
+        cert_id, utc_now_iso,
+        ValidationResult,
+    )
 
 
 # ============================================================================

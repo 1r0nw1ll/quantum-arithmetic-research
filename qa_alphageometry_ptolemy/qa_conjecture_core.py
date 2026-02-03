@@ -21,15 +21,21 @@ import sys
 from dataclasses import dataclass, field
 from typing import Dict, Any, List, Optional
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from qa_cert_core import (
-    canonical_json, certificate_hash, full_hash,
-    cert_id, utc_now_iso, ValidationResult,
-)
-
-# Import from the single source of truth (qa_meta_validator owns the registry)
-from qa_meta_validator import KNOWN_CONJECTURE_TYPES
+try:
+    # When run as module: python -m qa_alphageometry_ptolemy.qa_conjecture_core
+    from .qa_cert_core import (
+        canonical_json, certificate_hash, full_hash,
+        cert_id, utc_now_iso, ValidationResult,
+    )
+    from .qa_meta_validator import KNOWN_CONJECTURE_TYPES
+except ImportError:
+    # When run directly: python qa_conjecture_core.py
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from qa_cert_core import (
+        canonical_json, certificate_hash, full_hash,
+        cert_id, utc_now_iso, ValidationResult,
+    )
+    from qa_meta_validator import KNOWN_CONJECTURE_TYPES
 
 VALID_STATUSES = {"open", "supported", "refuted"}
 

@@ -27,8 +27,13 @@ import sys
 from typing import Any, Dict, List, Optional
 
 # Import canonical functions from shared core to prevent drift
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
-from qa_cert_core import canonical_json_compact, sha256_canonical, sha256_file
+try:
+    # When run as module: python -m qa_alphageometry_ptolemy.qa_fst.qa_fst_validate
+    from ..qa_cert_core import canonical_json_compact, sha256_canonical, sha256_file
+except ImportError:
+    # When run directly: python qa_fst_validate.py
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from qa_cert_core import canonical_json_compact, sha256_canonical, sha256_file
 
 
 # ============================================================================

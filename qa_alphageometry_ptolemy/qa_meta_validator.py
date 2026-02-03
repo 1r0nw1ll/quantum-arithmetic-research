@@ -24,12 +24,19 @@ from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
 
-sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-
-from qa_cert_core import (
-    canonical_json, certificate_hash, full_hash,
-    ValidationResult, utc_now_iso, cert_id,
-)
+try:
+    # When run as module: python -m qa_alphageometry_ptolemy.qa_meta_validator
+    from .qa_cert_core import (
+        canonical_json, certificate_hash, full_hash,
+        ValidationResult, utc_now_iso, cert_id,
+    )
+except ImportError:
+    # When run directly: python qa_meta_validator.py
+    sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+    from qa_cert_core import (
+        canonical_json, certificate_hash, full_hash,
+        ValidationResult, utc_now_iso, cert_id,
+    )
 
 
 # ============================================================================

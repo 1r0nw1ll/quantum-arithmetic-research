@@ -369,8 +369,9 @@ def generate_manifest(base_dir: str) -> Dict[str, Any]:
     validated with the same artifacts.
 
     Hardening (per CERT_FAMILY_HARDENING_PLAYBOOK.md):
+    - Uses dict-based format (unified with Kayser pattern)
     - Includes hash_spec for canonicalization documentation
-    - Dual hashes for JSON files (file bytes + canonical JSON)
+    - Dual hashes: sha256 (file bytes) + canonical_sha256 (semantic identity)
     """
     from datetime import datetime, timezone
 
@@ -396,63 +397,59 @@ def generate_manifest(base_dir: str) -> Dict[str, Any]:
         ("qa_fst_validate.py", "validator_source"),
     ]
 
-    entries: List[Dict[str, Any]] = []
+    # Use dict-based format (unified with Kayser pattern)
+    certificates: Dict[str, Any] = {}
 
     for fname, entry_id in json_artifacts:
         path = os.path.join(base_dir, fname)
         obj = load_json(path)
+        # File bytes hash (exact file integrity) - named 'sha256' for Kayser compat
+        file_hash = sha256_file(path)
         # Canonical hash (semantic identity)
         canonical_hash = sha256_canonical(obj)
-        # File bytes hash (exact file integrity)
-        file_hash = sha256_file(path)
-        entries.append({
-            "id": entry_id,
+        certificates[entry_id] = {
             "file": fname,
-            "sha256": canonical_hash,  # Primary hash for validation
-            "sha256_file": file_hash,  # File bytes for exact match
-            "canonicalization": "json_sorted_no_ws",
-        })
+            "sha256": file_hash,
+            "canonical_sha256": canonical_hash,
+        }
 
     for fname, entry_id in schema_artifacts:
         path = os.path.join(base_dir, fname)
         obj = load_json(path)
-        canonical_hash = sha256_canonical(obj)
         file_hash = sha256_file(path)
-        entries.append({
-            "id": entry_id,
+        canonical_hash = sha256_canonical(obj)
+        certificates[entry_id] = {
             "file": fname,
-            "sha256": canonical_hash,
-            "sha256_file": file_hash,
-            "canonicalization": "json_sorted_no_ws",
-        })
+            "sha256": file_hash,
+            "canonical_sha256": canonical_hash,
+        }
 
     for fname, entry_id in source_artifacts:
         path = os.path.join(base_dir, fname)
         file_hash = sha256_file(path)
-        entries.append({
-            "id": entry_id,
+        certificates[entry_id] = {
             "file": fname,
             "sha256": file_hash,
-            "canonicalization": "raw_bytes",
-        })
+            # No canonical_sha256 for raw source files
+        }
 
-    entries_canonical = canonical_json(entries)
-    manifest_hash = sha256_hex(entries_canonical)
+    certificates_canonical = canonical_json(certificates)
+    manifest_hash = sha256_hex(certificates_canonical)
 
     return {
-        "schema_version": "QA_SHA256_MANIFEST.v1",
-        "manifest_id": "qa.manifest.fst.v2",
+        "schema_version": "QA_MANIFEST.v1",  # Unified with Kayser format
+        "manifest_id": "qa.manifest.fst.v3",
         "hash_spec": {
             "id": "qa.hash_spec.v1",
             "version": "1.0",
-            "sha256": "canonical_json (semantic identity) for JSON, file_bytes for source",
-            "sha256_file": "file_bytes (exact file content integrity)",
+            "sha256": "file_bytes (exact file content integrity)",
+            "canonical_sha256": "canonical_json (semantic identity, sorted keys, no whitespace)",
             "canonical_spec": "json.dumps(obj, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
             "source": "qa_cert_core.canonical_json_compact"
         },
         "generated_utc": datetime.now(timezone.utc).strftime(
             "%Y-%m-%dT%H:%M:%SZ"),
-        "entries": entries,
+        "certificates": certificates,  # Dict-based format (unified)
         "manifest_sha256": manifest_hash,
     }
 
@@ -465,10 +462,9 @@ def check_manifest_integrity_fst(here: str, manifest: Dict[str, Any]) -> Dict[st
     """
     Fast manifest integrity check for CI gates.
 
-    Verifies:
-    1. Each artifact file exists
-    2. File SHA256 matches (for raw_bytes entries)
-    3. Canonical SHA256 matches (for json_sorted_no_ws entries)
+    Uses unified dict-based format (same as Kayser):
+    - manifest["certificates"][name]["sha256"] = file bytes
+    - manifest["certificates"][name]["canonical_sha256"] = semantic identity
 
     Returns dict with 'ok', 'checks', 'errors' fields.
     """
@@ -479,63 +475,107 @@ def check_manifest_integrity_fst(here: str, manifest: Dict[str, Any]) -> Dict[st
     hash_spec_id = hash_spec.get("id", "missing")
     results["hash_spec_id"] = hash_spec_id
 
-    # Build file path mapping
-    file_mapping = {
-        "module_spine": "qa_fst_module_spine.json",
-        "cert_bundle": "qa_fst_cert_bundle.json",
-        "submission_packet": "qa_fst_submission_packet_spine.json",
-        "schema:module_spine": "schemas/QA_MAP_MODULE_SPINE.v1.schema.json",
-        "schema:cert_bundle": "schemas/QA_CERT_BUNDLE.v1.schema.json",
-        "schema:manifest": "schemas/QA_SHA256_MANIFEST.v1.schema.json",
-        "schema:fail_record": "schemas/FAIL_RECORD.v1.schema.json",
-        "schema:submission_packet": "schemas/QA_SUBMISSION_PACKET_SPINE.v1.schema.json",
-        "validator_source": "qa_fst_validate.py",
-    }
-
-    for entry in manifest.get("entries", []):
-        entry_id = entry.get("id", "unknown")
-        expected_sha = entry.get("sha256", "")
-        canon_type = entry.get("canonicalization", "")
-
-        fname = file_mapping.get(entry_id)
-        if not fname:
-            results["checks"].append(f"{entry_id}: SKIP - unknown entry")
-            continue
-
-        path = os.path.join(here, fname)
-        if not os.path.exists(path):
-            results["errors"].append(f"{entry_id}: file not found: {fname}")
-            results["ok"] = False
-            continue
-
-        if canon_type == "raw_bytes":
-            # Check file bytes hash
-            actual_sha = sha256_file(path)
-            if actual_sha == expected_sha:
-                results["checks"].append(f"{entry_id}: OK (file sha256)")
-            else:
-                results["errors"].append(
-                    f"{entry_id}: FILE SHA256 MISMATCH\n"
-                    f"  manifest: {expected_sha[:16]}...\n"
-                    f"  actual:   {actual_sha[:16]}..."
-                )
+    # Support both old (entries array) and new (certificates dict) formats
+    if "certificates" in manifest:
+        # New unified dict format
+        for name, entry in manifest.get("certificates", {}).items():
+            cert_file = entry.get("file")
+            if not cert_file:
+                results["errors"].append(f"{name}: missing 'file' in manifest")
                 results["ok"] = False
-        elif canon_type == "json_sorted_no_ws":
-            # Check canonical JSON hash
-            with open(path) as f:
-                obj = json.load(f)
-            actual_sha = sha256_canonical(obj)
-            if actual_sha == expected_sha:
-                results["checks"].append(f"{entry_id}: OK (canonical sha256)")
-            else:
-                results["errors"].append(
-                    f"{entry_id}: CANONICAL SHA256 MISMATCH\n"
-                    f"  manifest: {expected_sha[:16]}...\n"
-                    f"  actual:   {actual_sha[:16]}..."
-                )
+                continue
+
+            cert_path = os.path.join(here, cert_file)
+            if not os.path.exists(cert_path):
+                results["errors"].append(f"{name}: file not found: {cert_file}")
                 results["ok"] = False
-        else:
-            results["checks"].append(f"{entry_id}: SKIP - unknown canonicalization")
+                continue
+
+            # Check file bytes SHA256
+            manifest_sha = entry.get("sha256")
+            if manifest_sha:
+                actual_sha = sha256_file(cert_path)
+                if actual_sha == manifest_sha:
+                    results["checks"].append(f"{name}: OK (file sha256)")
+                else:
+                    results["errors"].append(
+                        f"{name}: FILE SHA256 MISMATCH\n"
+                        f"  manifest: {manifest_sha[:16]}...\n"
+                        f"  actual:   {actual_sha[:16]}..."
+                    )
+                    results["ok"] = False
+
+            # Check canonical SHA256 (skip for raw source files)
+            manifest_canonical = entry.get("canonical_sha256")
+            if manifest_canonical:
+                with open(cert_path) as f:
+                    obj = json.load(f)
+                actual_canonical = sha256_canonical(obj)
+                if actual_canonical == manifest_canonical:
+                    results["checks"].append(f"{name}: OK (canonical sha256)")
+                else:
+                    results["errors"].append(
+                        f"{name}: CANONICAL SHA256 MISMATCH\n"
+                        f"  manifest: {manifest_canonical[:16]}...\n"
+                        f"  actual:   {actual_canonical[:16]}..."
+                    )
+                    results["ok"] = False
+    else:
+        # Legacy entries array format (backward compat)
+        file_mapping = {
+            "module_spine": "qa_fst_module_spine.json",
+            "cert_bundle": "qa_fst_cert_bundle.json",
+            "submission_packet": "qa_fst_submission_packet_spine.json",
+            "schema:module_spine": "schemas/QA_MAP_MODULE_SPINE.v1.schema.json",
+            "schema:cert_bundle": "schemas/QA_CERT_BUNDLE.v1.schema.json",
+            "schema:manifest": "schemas/QA_SHA256_MANIFEST.v1.schema.json",
+            "schema:fail_record": "schemas/FAIL_RECORD.v1.schema.json",
+            "schema:submission_packet": "schemas/QA_SUBMISSION_PACKET_SPINE.v1.schema.json",
+            "validator_source": "qa_fst_validate.py",
+        }
+
+        for entry in manifest.get("entries", []):
+            entry_id = entry.get("id", "unknown")
+            expected_sha = entry.get("sha256", "")
+            canon_type = entry.get("canonicalization", "")
+
+            fname = file_mapping.get(entry_id)
+            if not fname:
+                results["checks"].append(f"{entry_id}: SKIP - unknown entry")
+                continue
+
+            path = os.path.join(here, fname)
+            if not os.path.exists(path):
+                results["errors"].append(f"{entry_id}: file not found: {fname}")
+                results["ok"] = False
+                continue
+
+            if canon_type == "raw_bytes":
+                actual_sha = sha256_file(path)
+                if actual_sha == expected_sha:
+                    results["checks"].append(f"{entry_id}: OK (file sha256)")
+                else:
+                    results["errors"].append(
+                        f"{entry_id}: FILE SHA256 MISMATCH\n"
+                        f"  manifest: {expected_sha[:16]}...\n"
+                        f"  actual:   {actual_sha[:16]}..."
+                    )
+                    results["ok"] = False
+            elif canon_type == "json_sorted_no_ws":
+                with open(path) as f:
+                    obj = json.load(f)
+                actual_sha = sha256_canonical(obj)
+                if actual_sha == expected_sha:
+                    results["checks"].append(f"{entry_id}: OK (canonical sha256)")
+                else:
+                    results["errors"].append(
+                        f"{entry_id}: CANONICAL SHA256 MISMATCH\n"
+                        f"  manifest: {expected_sha[:16]}...\n"
+                        f"  actual:   {actual_sha[:16]}..."
+                    )
+                    results["ok"] = False
+            else:
+                results["checks"].append(f"{entry_id}: SKIP - unknown canonicalization")
 
     return results
 
@@ -628,9 +668,9 @@ if __name__ == "__main__":
         with open(out_path, "w") as f:
             json.dump(manifest, f, indent=2, sort_keys=True)
         print(f"Manifest written to {out_path}")
-        print(f"  {len(manifest['entries'])} artifact(s) covered:")
-        for entry in manifest["entries"]:
-            print(f"    {entry['id']}: {entry['sha256'][:16]}...")
+        print(f"  {len(manifest['certificates'])} artifact(s) covered:")
+        for name, entry in manifest["certificates"].items():
+            print(f"    {name}: {entry['sha256'][:16]}...")
         print(f"  manifest hash: {manifest['manifest_sha256']}")
         sys.exit(0)
 

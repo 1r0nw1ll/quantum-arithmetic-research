@@ -1,0 +1,33 @@
+{
+  "fixture_id": "qa.fixture.failure_algebra.canonical_set.v1",
+  "description": "Failure algebra: canonical set of fail_type tokens (prevents silent drift)",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "fail_type_enum": [
+      "FORMALIZATION_GAP",
+      "CASE_EXPLOSION",
+      "REWRITE_BLOCKED",
+      "BUDGET_EXHAUSTION",
+      "KERNEL_VIOLATION",
+      "OUT_OF_BOUNDS",
+      "FIXED_Q",
+      "PARITY",
+      "INVARIANT_MISMATCH",
+      "GENERATOR_MISSING",
+      "REPRESENTATION_MISMATCH",
+      "COMPONENT_ISOLATION",
+      "BARRIER_UNCROSSABLE"
+    ],
+    "failure_class_enum": ["F1", "F2", "F3", "F4", "F5", "F6"]
+  },
+
+  "expected": {
+    "fail_type_count": 13,
+    "failure_class_count": 6,
+    "fail_type_sha256": "8432580d2c8178efd486c4781c9aa2b503b4b85cd27bae53fe0e4467b0b4561f",
+    "failure_class_sha256": "fbf711fe2c0e417a1c29b46b0a5c6045f1a6af28d4a40634189c1209c58cf3da"
+  },
+
+  "notes": "Adding a new fail_type or failure_class requires updating this fixture. This prevents silent enum drift that could break downstream tooling."
+}

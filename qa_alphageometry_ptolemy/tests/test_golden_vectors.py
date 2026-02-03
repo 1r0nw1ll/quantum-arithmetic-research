@@ -199,6 +199,63 @@ def check_merkle_root(fixture: Dict[str, Any]) -> List[str]:
     return errors
 
 
+def check_failure_algebra(fixture: Dict[str, Any]) -> List[str]:
+    """Check failure algebra enum consistency (prevents silent token drift)."""
+    errors = []
+
+    inp = fixture.get("input", {})
+    if "fail_type_enum" not in inp:
+        return errors  # Not a failure algebra test
+
+    expected = fixture.get("expected", {})
+
+    # Check fail_type_enum
+    fail_types = inp.get("fail_type_enum", [])
+    expected_count = expected.get("fail_type_count")
+    if expected_count is not None and len(fail_types) != expected_count:
+        errors.append(
+            f"fail_type_count mismatch:\n"
+            f"  expected: {expected_count}\n"
+            f"  actual:   {len(fail_types)}"
+        )
+
+    # Check hash of sorted fail_type_enum
+    expected_hash = expected.get("fail_type_sha256")
+    if expected_hash:
+        fail_type_canonical = json.dumps(sorted(fail_types), separators=(",", ":"))
+        actual_hash = hashlib.sha256(fail_type_canonical.encode("utf-8")).hexdigest()
+        if actual_hash != expected_hash:
+            errors.append(
+                f"fail_type_sha256 mismatch (enum drift detected):\n"
+                f"  expected: {expected_hash}\n"
+                f"  actual:   {actual_hash}"
+            )
+
+    # Check failure_class_enum
+    failure_classes = inp.get("failure_class_enum", [])
+    expected_class_count = expected.get("failure_class_count")
+    if expected_class_count is not None and len(failure_classes) != expected_class_count:
+        errors.append(
+            f"failure_class_count mismatch:\n"
+            f"  expected: {expected_class_count}\n"
+            f"  actual:   {len(failure_classes)}"
+        )
+
+    # Check hash of sorted failure_class_enum
+    expected_class_hash = expected.get("failure_class_sha256")
+    if expected_class_hash:
+        class_canonical = json.dumps(sorted(failure_classes), separators=(",", ":"))
+        actual_class_hash = hashlib.sha256(class_canonical.encode("utf-8")).hexdigest()
+        if actual_class_hash != expected_class_hash:
+            errors.append(
+                f"failure_class_sha256 mismatch (enum drift detected):\n"
+                f"  expected: {expected_class_hash}\n"
+                f"  actual:   {actual_class_hash}"
+            )
+
+    return errors
+
+
 def run_fixture(name: str, fixture: Dict[str, Any]) -> Tuple[bool, List[str]]:
     """Run all applicable tests for a fixture."""
     all_errors = []
@@ -215,6 +272,7 @@ def run_fixture(name: str, fixture: Dict[str, Any]) -> Tuple[bool, List[str]]:
     all_errors.extend(check_sha256_canonical(fixture))
     all_errors.extend(check_merkle_leaf(fixture))
     all_errors.extend(check_merkle_root(fixture))
+    all_errors.extend(check_failure_algebra(fixture))
 
     return len(all_errors) == 0, all_errors
 

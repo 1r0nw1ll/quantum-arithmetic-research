@@ -1,0 +1,36 @@
+{
+  "fixture_id": "qa.fixture.merkle.odd_leaves.v1",
+  "description": "Merkle tree with odd leaf count - tests carry rule (duplicate last hash)",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "certificates": [
+      {
+        "name": "alpha",
+        "canonical_hash": "813d15574f1ce311772e71a037f89ff8989b833f6337bc9ed0fdbcee184d6308",
+        "result_label": "PASS"
+      },
+      {
+        "name": "beta",
+        "canonical_hash": "c591e1023cc4a056d2461fdb0e55468fd519f7484a9caa57e5fbec7abc83a3c6",
+        "result_label": "PASS"
+      },
+      {
+        "name": "gamma",
+        "canonical_hash": "ebba85cfdc0a724b6cc327ecc545faeb38b9fe02eca603b430eb872f5cf75370",
+        "result_label": "PARTIAL_MATCH"
+      }
+    ]
+  },
+
+  "expected": {
+    "leaves": {
+      "alpha": "4e2a3203dbcfed3aeeada019f957ec9095fe3e87dba4f552007936d11058bbc7",
+      "beta": "aa0c831137d40fdb8fa105c925c1abc5f4c311b6999cbb8cbd8b74486664a12f",
+      "gamma": "ea33c8c2dcb3e632cd1201d4f22c45210a0628a92412738abbe4a46bc09d7212"
+    },
+    "merkle_root": "aa9955b3f0901dd95728dd0a895ef043100b18842cebb52687219c72348af559"
+  },
+
+  "notes": "Odd leaf count carry rule: when leaf count is odd, duplicate the last hash before pairing. Tree structure: level0=[alpha,beta,gamma] -> level1=[hash(alpha+beta), hash(gamma+gamma)] -> root=hash(level1[0]+level1[1])"
+}

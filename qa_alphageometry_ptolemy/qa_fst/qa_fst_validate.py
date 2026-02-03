@@ -11,6 +11,11 @@ Replay contract:
 Fail records use strict {move, fail_type, invariant_diff} contract.
 SOURCE_NUMERIC_DRIFT is a warning (not a hard fail) unless it breaks
 an explicit test.
+
+Hardened per CERT_FAMILY_HARDENING_PLAYBOOK.md:
+- Imports canonicalization from qa_cert_core (single source of truth)
+- Supports --check-manifest for fast CI gates
+- Dual hash verification (file bytes + canonical JSON)
 """
 
 from __future__ import annotations
@@ -21,18 +26,26 @@ import os
 import sys
 from typing import Any, Dict, List, Optional
 
+# Import canonical functions from shared core to prevent drift
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from qa_cert_core import canonical_json_compact, sha256_canonical, sha256_file
+
 
 # ============================================================================
-# CANONICAL JSON + HASHING
+# CANONICAL JSON + HASHING (wrappers for backward compatibility)
 # ============================================================================
 
 def canonical_json(obj: Any) -> str:
-    """Deterministic JSON: sorted keys, no whitespace, UTF-8."""
-    return json.dumps(obj, sort_keys=True, separators=(",", ":"),
-                      ensure_ascii=False)
+    """Deterministic JSON: sorted keys, no whitespace, UTF-8.
+
+    NOTE: This is a wrapper around qa_cert_core.canonical_json_compact()
+    to maintain backward compatibility. All new code should import directly.
+    """
+    return canonical_json_compact(obj)
 
 
 def sha256_hex(s: str) -> str:
+    """SHA256 of a string. For canonical JSON, prefer sha256_canonical()."""
     return hashlib.sha256(s.encode("utf-8")).hexdigest()
 
 
@@ -349,17 +362,21 @@ def generate_manifest(base_dir: str) -> Dict[str, Any]:
     Covers: spine, cert bundle, submission packet, validator source,
     and all schema files. This ensures anyone replaying can prove they
     validated with the same artifacts.
+
+    Hardening (per CERT_FAMILY_HARDENING_PLAYBOOK.md):
+    - Includes hash_spec for canonicalization documentation
+    - Dual hashes for JSON files (file bytes + canonical JSON)
     """
     from datetime import datetime, timezone
 
-    # JSON artifacts (canonical hash of parsed content)
+    # JSON artifacts (both file bytes and canonical hash)
     json_artifacts = [
         ("qa_fst_module_spine.json", "module_spine"),
         ("qa_fst_cert_bundle.json", "cert_bundle"),
         ("qa_fst_submission_packet_spine.json", "submission_packet"),
     ]
 
-    # Schema files (canonical hash of parsed content)
+    # Schema files (both file bytes and canonical hash)
     schema_artifacts = [
         ("schemas/QA_MAP_MODULE_SPINE.v1.schema.json", "schema:module_spine"),
         ("schemas/QA_CERT_BUNDLE.v1.schema.json", "schema:cert_bundle"),
@@ -379,30 +396,38 @@ def generate_manifest(base_dir: str) -> Dict[str, Any]:
     for fname, entry_id in json_artifacts:
         path = os.path.join(base_dir, fname)
         obj = load_json(path)
-        h = sha256_hex(canonical_json(obj))
+        # Canonical hash (semantic identity)
+        canonical_hash = sha256_canonical(obj)
+        # File bytes hash (exact file integrity)
+        file_hash = sha256_file(path)
         entries.append({
             "id": entry_id,
-            "sha256": h,
+            "file": fname,
+            "sha256": canonical_hash,  # Primary hash for validation
+            "sha256_file": file_hash,  # File bytes for exact match
             "canonicalization": "json_sorted_no_ws",
         })
 
     for fname, entry_id in schema_artifacts:
         path = os.path.join(base_dir, fname)
         obj = load_json(path)
-        h = sha256_hex(canonical_json(obj))
+        canonical_hash = sha256_canonical(obj)
+        file_hash = sha256_file(path)
         entries.append({
             "id": entry_id,
-            "sha256": h,
+            "file": fname,
+            "sha256": canonical_hash,
+            "sha256_file": file_hash,
             "canonicalization": "json_sorted_no_ws",
         })
 
     for fname, entry_id in source_artifacts:
         path = os.path.join(base_dir, fname)
-        with open(path, "rb") as f:
-            h = hashlib.sha256(f.read()).hexdigest()
+        file_hash = sha256_file(path)
         entries.append({
             "id": entry_id,
-            "sha256": h,
+            "file": fname,
+            "sha256": file_hash,
             "canonicalization": "raw_bytes",
         })
 
@@ -411,6 +436,15 @@ def generate_manifest(base_dir: str) -> Dict[str, Any]:
 
     return {
         "schema_version": "QA_SHA256_MANIFEST.v1",
+        "manifest_id": "qa.manifest.fst.v2",
+        "hash_spec": {
+            "id": "qa.hash_spec.v1",
+            "version": "1.0",
+            "sha256": "canonical_json (semantic identity) for JSON, file_bytes for source",
+            "sha256_file": "file_bytes (exact file content integrity)",
+            "canonical_spec": "json.dumps(obj, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
+            "source": "qa_cert_core.canonical_json_compact"
+        },
         "generated_utc": datetime.now(timezone.utc).strftime(
             "%Y-%m-%dT%H:%M:%SZ"),
         "entries": entries,
@@ -419,8 +453,104 @@ def generate_manifest(base_dir: str) -> Dict[str, Any]:
 
 
 # ============================================================================
+# MANIFEST INTEGRITY CHECK (fast gate for CI)
+# ============================================================================
+
+def check_manifest_integrity_fst(here: str, manifest: Dict[str, Any]) -> Dict[str, Any]:
+    """
+    Fast manifest integrity check for CI gates.
+
+    Verifies:
+    1. Each artifact file exists
+    2. File SHA256 matches (for raw_bytes entries)
+    3. Canonical SHA256 matches (for json_sorted_no_ws entries)
+
+    Returns dict with 'ok', 'checks', 'errors' fields.
+    """
+    results = {"ok": True, "checks": [], "errors": []}
+
+    # Check hash_spec is present
+    hash_spec = manifest.get("hash_spec", {})
+    hash_spec_id = hash_spec.get("id", "missing")
+    results["hash_spec_id"] = hash_spec_id
+
+    # Build file path mapping
+    file_mapping = {
+        "module_spine": "qa_fst_module_spine.json",
+        "cert_bundle": "qa_fst_cert_bundle.json",
+        "submission_packet": "qa_fst_submission_packet_spine.json",
+        "schema:module_spine": "schemas/QA_MAP_MODULE_SPINE.v1.schema.json",
+        "schema:cert_bundle": "schemas/QA_CERT_BUNDLE.v1.schema.json",
+        "schema:manifest": "schemas/QA_SHA256_MANIFEST.v1.schema.json",
+        "schema:fail_record": "schemas/FAIL_RECORD.v1.schema.json",
+        "schema:submission_packet": "schemas/QA_SUBMISSION_PACKET_SPINE.v1.schema.json",
+        "validator_source": "qa_fst_validate.py",
+    }
+
+    for entry in manifest.get("entries", []):
+        entry_id = entry.get("id", "unknown")
+        expected_sha = entry.get("sha256", "")
+        canon_type = entry.get("canonicalization", "")
+
+        fname = file_mapping.get(entry_id)
+        if not fname:
+            results["checks"].append(f"{entry_id}: SKIP - unknown entry")
+            continue
+
+        path = os.path.join(here, fname)
+        if not os.path.exists(path):
+            results["errors"].append(f"{entry_id}: file not found: {fname}")
+            results["ok"] = False
+            continue
+
+        if canon_type == "raw_bytes":
+            # Check file bytes hash
+            actual_sha = sha256_file(path)
+            if actual_sha == expected_sha:
+                results["checks"].append(f"{entry_id}: OK (file sha256)")
+            else:
+                results["errors"].append(
+                    f"{entry_id}: FILE SHA256 MISMATCH\n"
+                    f"  manifest: {expected_sha[:16]}...\n"
+                    f"  actual:   {actual_sha[:16]}..."
+                )
+                results["ok"] = False
+        elif canon_type == "json_sorted_no_ws":
+            # Check canonical JSON hash
+            with open(path) as f:
+                obj = json.load(f)
+            actual_sha = sha256_canonical(obj)
+            if actual_sha == expected_sha:
+                results["checks"].append(f"{entry_id}: OK (canonical sha256)")
+            else:
+                results["errors"].append(
+                    f"{entry_id}: CANONICAL SHA256 MISMATCH\n"
+                    f"  manifest: {expected_sha[:16]}...\n"
+                    f"  actual:   {actual_sha[:16]}..."
+                )
+                results["ok"] = False
+        else:
+            results["checks"].append(f"{entry_id}: SKIP - unknown canonicalization")
+
+    return results
+
+
+# ============================================================================
 # CLI + SELF-TEST
 # ============================================================================
+
+def print_usage():
+    print("Usage: python qa_fst_validate.py [OPTIONS]")
+    print()
+    print("Options:")
+    print("  --all              Full behavioral validation")
+    print("  --check-manifest   Fast manifest integrity check (for CI)")
+    print("  --validate         Legacy: run validation with JSON output")
+    print("  --generate-manifest Generate manifest from artifacts")
+    print("  --json             Output results as JSON")
+    print("  --summary          Print summary of checks")
+    print("  (no args)          Run self-test suite")
+
 
 if __name__ == "__main__":
     here = os.path.dirname(os.path.abspath(__file__))
@@ -429,7 +559,65 @@ if __name__ == "__main__":
     bundle_path = os.path.join(here, "qa_fst_cert_bundle.json")
     manifest_path = os.path.join(here, "qa_fst_manifest.json")
 
-    if len(sys.argv) > 1 and sys.argv[1] == "--generate-manifest":
+    args = sys.argv[1:]
+    json_output = "--json" in args
+
+    if "--help" in args or "-h" in args:
+        print_usage()
+        sys.exit(0)
+
+    if "--check-manifest" in args:
+        # Fast manifest integrity check
+        if not os.path.exists(manifest_path):
+            if json_output:
+                print(json.dumps({"ok": False, "error": "manifest not found"}))
+            else:
+                print("ERROR: Manifest not found:", manifest_path)
+            sys.exit(1)
+
+        manifest = load_json(manifest_path)
+        result = check_manifest_integrity_fst(here, manifest)
+
+        if json_output:
+            print(json.dumps(result, indent=2))
+        else:
+            print(f"Manifest integrity check: {'PASS' if result['ok'] else 'FAIL'}")
+            print(f"  hash_spec_id: {result.get('hash_spec_id', 'missing')}")
+            for check in result["checks"]:
+                print(f"  {check}")
+            for err in result["errors"]:
+                print(f"  ERROR: {err}")
+
+        sys.exit(0 if result["ok"] else 1)
+
+    if "--all" in args:
+        # Full behavioral validation
+        mp = manifest_path if os.path.exists(manifest_path) else None
+        result = validate_from_files(spine_path, bundle_path, mp)
+
+        if json_output:
+            print(result.to_json())
+        else:
+            print(f"FST Validation: {result.result_label}")
+            print(f"  delta_sym = {result.metrics.get('delta_sym_recomputed')}")
+            print(f"  u/d ratio delta = {result.metrics.get('u_d_ratio_abs_delta')}")
+            print(f"  warnings: {len(result.warnings)}")
+            print(f"  fails:    {len(result.fail_records)}")
+            if result.fail_records:
+                for fr in result.fail_records:
+                    print(f"    FAIL: {fr}")
+
+        sys.exit(0 if result.ok else 1)
+
+    if "--summary" in args:
+        # Summary mode
+        mp = manifest_path if os.path.exists(manifest_path) else None
+        result = validate_from_files(spine_path, bundle_path, mp)
+        print(f"FST: {result.result_label} "
+              f"(fails={len(result.fail_records)}, warns={len(result.warnings)})")
+        sys.exit(0 if result.ok else 1)
+
+    if "--generate-manifest" in args:
         manifest = generate_manifest(here)
         out_path = manifest_path
         with open(out_path, "w") as f:
@@ -441,7 +629,8 @@ if __name__ == "__main__":
         print(f"  manifest hash: {manifest['manifest_sha256']}")
         sys.exit(0)
 
-    if len(sys.argv) > 1 and sys.argv[1] == "--validate":
+    if "--validate" in args:
+        # Legacy mode
         mp = manifest_path if os.path.exists(manifest_path) else None
         result = validate_from_files(spine_path, bundle_path, mp)
         print(result.to_json())

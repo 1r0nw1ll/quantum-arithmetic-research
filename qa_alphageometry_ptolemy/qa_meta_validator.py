@@ -511,15 +511,71 @@ def validate_json(json_str: str) -> MetaValidationResult:
 # ============================================================================
 
 if __name__ == "__main__":
+    import argparse
+
+    parser = argparse.ArgumentParser(description="QA Meta-Validator")
+    parser.add_argument("file", nargs="?", help="Certificate file to validate")
+    parser.add_argument("--fast", action="store_true",
+                        help="Run only fast integrity gates (manifest checks)")
+    parser.add_argument("--json", action="store_true",
+                        help="Output as JSON")
+    args = parser.parse_args()
+
     # If a file path is provided, validate that file
-    if len(sys.argv) > 1:
-        path = sys.argv[1]
-        with open(path) as f:
+    if args.file:
+        with open(args.file) as f:
             result = validate_json(f.read())
         print(result.to_json())
         sys.exit(0 if result.is_valid else 1)
 
-    # Otherwise run self-tests against all four certificate types
+    # Fast mode: only run manifest integrity checks
+    if args.fast:
+        print("=== META-VALIDATOR FAST MODE (manifest integrity only) ===\n")
+        import subprocess
+
+        fast_results = {"ok": True, "modules": {}}
+
+        # FST manifest check (if available)
+        fst_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "qa_fst", "qa_fst_validate.py")
+        if os.path.exists(fst_validator):
+            fst_result = subprocess.run(
+                [sys.executable, fst_validator, "--validate"],
+                capture_output=True, text=True)
+            fst_ok = fst_result.returncode == 0
+            fast_results["modules"]["fst"] = {"ok": fst_ok}
+            print(f"[FST] {'PASS' if fst_ok else 'FAIL'}")
+            if not fst_ok:
+                fast_results["ok"] = False
+
+        # Kayser manifest check
+        kayser_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                        "qa_kayser", "qa_kayser_validate.py")
+        if os.path.exists(kayser_validator):
+            kayser_result = subprocess.run(
+                [sys.executable, kayser_validator, "--check-manifest", "--json"],
+                capture_output=True, text=True)
+            if kayser_result.returncode == 0:
+                kayser_json = json.loads(kayser_result.stdout)
+                kayser_ok = kayser_json.get("ok", False)
+                fast_results["modules"]["kayser"] = kayser_json
+                print(f"[Kayser] {'PASS' if kayser_ok else 'FAIL'} ({len(kayser_json.get('checks', []))} checks)")
+                if not kayser_ok:
+                    fast_results["ok"] = False
+            else:
+                fast_results["modules"]["kayser"] = {"ok": False, "error": "subprocess failed"}
+                fast_results["ok"] = False
+                print(f"[Kayser] FAIL (subprocess error)")
+
+        print()
+        print(f"Fast mode result: {'PASS' if fast_results['ok'] else 'FAIL'}")
+
+        if args.json:
+            print(json.dumps(fast_results, indent=2))
+
+        sys.exit(0 if fast_results["ok"] else 1)
+
+    # Otherwise run full self-tests against all certificate types
     print("=== META-VALIDATOR SELF-TEST (TETRAD + CONJECTURES) ===\n")
 
     # Import all four certificate modules

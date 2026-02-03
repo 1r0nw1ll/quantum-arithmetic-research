@@ -1,0 +1,138 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "qa.schema.manifest.v1",
+  "title": "QA Certificate Manifest",
+  "description": "Schema for certificate module manifests with integrity verification",
+  "type": "object",
+  "required": ["schema_version", "manifest_id", "hash_spec", "certificates"],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "QA_MANIFEST.v1"
+    },
+    "manifest_id": {
+      "type": "string",
+      "description": "Unique manifest identifier"
+    },
+    "title": {
+      "type": "string"
+    },
+    "created_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "description": {
+      "type": "string"
+    },
+    "hash_spec": {
+      "type": "object",
+      "required": ["id", "version", "canonical_spec"],
+      "properties": {
+        "id": {
+          "type": "string",
+          "description": "Hash spec identifier for migration safety",
+          "pattern": "^qa\\.hash_spec\\.v[0-9]+$"
+        },
+        "version": {
+          "type": "string"
+        },
+        "sha256": {
+          "type": "string",
+          "description": "Basis for file sha256 (e.g., 'file_bytes')"
+        },
+        "canonical_sha256": {
+          "type": "string",
+          "description": "Basis for canonical sha256 (e.g., 'canonical_json')"
+        },
+        "canonical_spec": {
+          "type": "string",
+          "description": "Exact canonicalization spec used"
+        },
+        "source": {
+          "type": "string",
+          "description": "Source function (e.g., 'qa_cert_core.canonical_json_compact')"
+        }
+      }
+    },
+    "certificates": {
+      "type": "object",
+      "additionalProperties": {
+        "type": "object",
+        "required": ["id", "file", "sha256", "canonical_sha256"],
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "Certificate ID"
+          },
+          "correspondence_id": {
+            "type": "string"
+          },
+          "dimension": {
+            "type": "string"
+          },
+          "file": {
+            "type": "string",
+            "description": "Relative path to certificate file"
+          },
+          "sha256": {
+            "type": "string",
+            "description": "SHA256 of file bytes",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "canonical_sha256": {
+            "type": "string",
+            "description": "SHA256 of canonical JSON",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "verified": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "total": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "result": {
+            "type": "string",
+            "enum": ["PASS", "PASS_WITH_WARNINGS", "FAIL"]
+          },
+          "evidence_level": {
+            "type": "string",
+            "enum": ["PROVEN", "STRUCTURAL_PROVEN", "STRUCTURAL_ANALOGY", "ENGINEERING_VALIDATED", "CONJECTURAL"]
+          },
+          "limitation_class": {
+            "type": "string",
+            "description": "Required for STRUCTURAL_ANALOGY evidence level"
+          },
+          "note": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "validation_summary": {
+      "type": "object",
+      "properties": {
+        "total_correspondences_tested": {
+          "type": "integer"
+        },
+        "total_correspondences_verified": {
+          "type": "integer"
+        },
+        "merkle_root": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "all_passed": {
+          "type": "boolean"
+        },
+        "warnings": {
+          "type": "integer"
+        },
+        "warning_reason": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

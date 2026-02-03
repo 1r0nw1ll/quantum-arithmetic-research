@@ -1,0 +1,51 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "qa.schema.structural_analogy_test.v1",
+  "title": "QA Structural Analogy Test Row",
+  "description": "Schema for correspondence test items in structural_analogy certificates",
+  "type": "object",
+  "required": ["id", "name", "test", "result", "expected_outcome"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "description": "Unique test identifier (e.g., L1, L2, T1)",
+      "pattern": "^[A-Z][0-9]+$"
+    },
+    "name": {
+      "type": "string",
+      "description": "Human-readable test name"
+    },
+    "kayser_claim": {
+      "type": "string",
+      "description": "The Kayser-side claim being tested"
+    },
+    "qa_claim": {
+      "type": "string",
+      "description": "The QA-side claim being tested"
+    },
+    "test": {
+      "type": "string",
+      "description": "Description of the test performed"
+    },
+    "finding": {
+      "type": "string",
+      "description": "What was found during the test"
+    },
+    "result": {
+      "type": "string",
+      "enum": ["PASS", "PARTIAL_MATCH", "FAIL"],
+      "description": "Actual test result"
+    },
+    "expected_outcome": {
+      "type": "string",
+      "enum": ["PASS", "PARTIAL_MATCH", "FAIL_EXPECTED"],
+      "description": "Expected outcome (required for structural_analogy certs)"
+    },
+    "details": {
+      "type": "object",
+      "description": "Additional test-specific details",
+      "additionalProperties": true
+    }
+  },
+  "additionalProperties": false
+}

@@ -137,6 +137,99 @@ def state_hash(label: str) -> str:
 
 
 # ============================================================================
+# MANIFEST INTEGRITY CHECK (shared across modules)
+# ============================================================================
+
+def check_manifest_integrity(
+    manifest: Dict[str, Any],
+    cert_dir: str,
+    load_cert_fn=None
+) -> Dict[str, Any]:
+    """
+    Generic manifest integrity checker for certificate modules.
+
+    Verifies:
+    1. Each certificate file exists
+    2. File SHA256 matches manifest sha256 (file bytes)
+    3. Canonical SHA256 matches manifest canonical_sha256 (semantic identity)
+
+    Args:
+        manifest: Loaded manifest dict with 'certificates' section
+        cert_dir: Directory containing certificate files
+        load_cert_fn: Optional function to load cert JSON (default: json.load)
+
+    Returns:
+        Dict with 'ok', 'checks', 'errors' fields
+    """
+    import os
+
+    if load_cert_fn is None:
+        def load_cert_fn(path):
+            with open(path) as f:
+                return json.load(f)
+
+    results = {"ok": True, "checks": [], "errors": []}
+
+    # Check hash_spec is present
+    hash_spec = manifest.get("hash_spec", {})
+    hash_spec_id = hash_spec.get("id", "unknown")
+    results["hash_spec_id"] = hash_spec_id
+
+    # Check each certificate
+    for name, entry in manifest.get("certificates", {}).items():
+        cert_file = entry.get("file")
+        if not cert_file:
+            results["errors"].append(f"{name}: missing 'file' in manifest")
+            results["ok"] = False
+            continue
+
+        cert_path = os.path.join(cert_dir, cert_file)
+        if not os.path.exists(cert_path):
+            results["errors"].append(f"{name}: file not found: {cert_file}")
+            results["ok"] = False
+            continue
+
+        # Check file bytes SHA256
+        manifest_sha = entry.get("sha256")
+        if manifest_sha:
+            actual_sha = sha256_file(cert_path)
+            if actual_sha == manifest_sha:
+                results["checks"].append(f"{name}: OK (file sha256)")
+            else:
+                results["errors"].append(
+                    f"{name}: FILE SHA256 MISMATCH\n"
+                    f"  manifest: {manifest_sha[:16]}...\n"
+                    f"  actual:   {actual_sha[:16]}..."
+                )
+                results["ok"] = False
+        else:
+            results["checks"].append(f"{name}: WARN - no sha256 in manifest")
+
+        # Check canonical JSON SHA256
+        manifest_canonical = entry.get("canonical_sha256")
+        if manifest_canonical:
+            try:
+                cert = load_cert_fn(cert_path)
+                actual_canonical = sha256_canonical(cert)
+                if actual_canonical == manifest_canonical:
+                    results["checks"].append(f"{name}: OK (canonical sha256)")
+                else:
+                    results["errors"].append(
+                        f"{name}: CANONICAL SHA256 MISMATCH\n"
+                        f"  manifest: {manifest_canonical[:16]}...\n"
+                        f"  actual:   {actual_canonical[:16]}..."
+                    )
+                    results["ok"] = False
+            except Exception as e:
+                results["errors"].append(f"{name}: failed to load cert: {e}")
+                results["ok"] = False
+        else:
+            results["checks"].append(f"{name}: WARN - no canonical_sha256 in manifest")
+
+    return results
+
+
+# ============================================================================
 # TIMESTAMP
 # ============================================================================
 

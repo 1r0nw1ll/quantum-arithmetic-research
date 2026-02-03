@@ -535,18 +535,25 @@ if __name__ == "__main__":
 
         fast_results = {"ok": True, "modules": {}}
 
-        # FST manifest check (if available)
+        # FST manifest check (hardened: uses --check-manifest mode)
         fst_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                      "qa_fst", "qa_fst_validate.py")
         if os.path.exists(fst_validator):
             fst_result = subprocess.run(
-                [sys.executable, fst_validator, "--validate"],
+                [sys.executable, fst_validator, "--check-manifest", "--json"],
                 capture_output=True, text=True)
-            fst_ok = fst_result.returncode == 0
-            fast_results["modules"]["fst"] = {"ok": fst_ok}
-            print(f"[FST] {'PASS' if fst_ok else 'FAIL'}")
-            if not fst_ok:
+            if fst_result.returncode == 0:
+                fst_json = json.loads(fst_result.stdout)
+                fst_ok = fst_json.get("ok", False)
+                fast_results["modules"]["fst"] = fst_json
+                print(f"[FST] {'PASS' if fst_ok else 'FAIL'} "
+                      f"(hash_spec={fst_json.get('hash_spec_id', 'missing')})")
+                if not fst_ok:
+                    fast_results["ok"] = False
+            else:
+                fast_results["modules"]["fst"] = {"ok": False, "error": "subprocess failed"}
                 fast_results["ok"] = False
+                print(f"[FST] FAIL (subprocess error)")
 
         # Kayser manifest check
         kayser_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
@@ -701,24 +708,45 @@ if __name__ == "__main__":
     assert invalid_count == 3, f"Expected 3 invalid, got {invalid_count}"
     print("\nAll meta-validator self-tests PASSED (TETRAD + CONJECTURES)")
 
-    # --- Test 13: FST module (spine + bundle validator, subprocess) ---
+    # --- Test 13: FST module (two-phase: manifest integrity + behavioral) ---
     import subprocess
     fst_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                                  "qa_fst", "qa_fst_validate.py")
     if os.path.exists(fst_validator):
-        print("\n--- FST MODULE (subprocess) ---")
+        print("\n--- FST MODULE (subprocess, two-phase) ---")
+
+        # Phase A: Manifest integrity check
+        fst_manifest_result = subprocess.run(
+            [sys.executable, fst_validator, "--check-manifest", "--json"],
+            capture_output=True, text=True)
+        if fst_manifest_result.returncode == 0:
+            manifest_json = json.loads(fst_manifest_result.stdout)
+            manifest_ok = manifest_json.get("ok", False)
+            if manifest_ok:
+                print(f"[13a] FST manifest integrity: PASS "
+                      f"(hash_spec={manifest_json.get('hash_spec_id', 'missing')})")
+            else:
+                print(f"[13a] FST manifest integrity: FAIL")
+                for err in manifest_json.get("errors", []):
+                    print(f"      {err}")
+                sys.exit(1)
+        else:
+            print(f"[13a] FST manifest: FAIL (exit code {fst_manifest_result.returncode})")
+            sys.exit(1)
+
+        # Phase B: Full behavioral validation
         fst_result = subprocess.run(
-            [sys.executable, fst_validator, "--validate"],
+            [sys.executable, fst_validator, "--all", "--json"],
             capture_output=True, text=True)
         if fst_result.returncode == 0:
             fst_json = json.loads(fst_result.stdout)
             fst_status = fst_json.get("result", "UNKNOWN")
             fst_warns = len(fst_json.get("warnings", []))
-            print(f"[13] FST module: {fst_status} "
+            print(f"[13b] FST behavioral: {fst_status} "
                   f"(warnings={fst_warns}) -> PASS")
         else:
-            print(f"[13] FST module: FAIL (exit code {fst_result.returncode})")
-            print(f"     stderr: {fst_result.stderr[:200]}")
+            print(f"[13b] FST behavioral: FAIL (exit code {fst_result.returncode})")
+            print(f"      stderr: {fst_result.stderr[:200]}")
             sys.exit(1)
     else:
         print("\n[13] FST module: SKIPPED (qa_fst/qa_fst_validate.py not found)")

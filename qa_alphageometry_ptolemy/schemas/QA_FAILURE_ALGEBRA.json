@@ -1,0 +1,230 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "schema_id": "QA_FAILURE_ALGEBRA_V1",
+  "version": "1.0.0",
+  "title": "QA Failure Algebra Schema",
+  "description": "Unified failure classification schema for QA certificate systems",
+
+  "definitions": {
+    "fail_type": {
+      "type": "string",
+      "enum": [
+        "FORMALIZATION_GAP",
+        "CASE_EXPLOSION",
+        "REWRITE_BLOCKED",
+        "BUDGET_EXHAUSTION",
+        "KERNEL_VIOLATION",
+        "OUT_OF_BOUNDS",
+        "FIXED_Q",
+        "PARITY",
+        "INVARIANT_MISMATCH",
+        "GENERATOR_MISSING",
+        "REPRESENTATION_MISMATCH",
+        "COMPONENT_ISOLATION",
+        "BARRIER_UNCROSSABLE"
+      ],
+      "description": "Canonical failure type enumeration"
+    },
+
+    "failure_class": {
+      "type": "object",
+      "properties": {
+        "class_id": {
+          "type": "string",
+          "enum": ["F1", "F2", "F3", "F4", "F5", "F6"]
+        },
+        "name": {
+          "type": "string"
+        },
+        "description": {
+          "type": "string"
+        },
+        "symptoms": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "qa_interpretation": {
+          "type": "string"
+        },
+        "remediation": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "required": ["class_id", "name", "description"]
+    }
+  },
+
+  "failure_classes": [
+    {
+      "class_id": "F1",
+      "name": "Formalization Gap",
+      "description": "Obvious step cannot be expressed directly",
+      "symptoms": [
+        "Trivial inequalities require extensive machinery",
+        "Clearly positive arguments need elaborate proofs",
+        "Human-obvious steps missing generators"
+      ],
+      "qa_interpretation": "Missing generator or lemma; state space too fine-grained",
+      "remediation": [
+        "Add intermediate lemma as generator",
+        "Coarsen state space representation",
+        "Use decision procedure"
+      ]
+    },
+    {
+      "class_id": "F2",
+      "name": "Case Explosion",
+      "description": "Proof or search devolves into massive branching",
+      "symptoms": [
+        "Exponential case splits",
+        "Combinatorial blowup",
+        "Breadth-first explosion"
+      ],
+      "qa_interpretation": "Generator induces exponential fan-out; poor phase geometry",
+      "remediation": [
+        "Add structural lemma to collapse cases",
+        "Use symmetry-breaking generator",
+        "Apply abstraction to reduce branching"
+      ]
+    },
+    {
+      "class_id": "F3",
+      "name": "Rewrite Blocked",
+      "description": "Equalities exist but not in usable form",
+      "symptoms": [
+        "Can't apply known equality",
+        "Representation mismatch",
+        "Coordinate system incompatibility"
+      ],
+      "qa_interpretation": "Invariant satisfied but representation misaligned",
+      "remediation": [
+        "Add conversion generator",
+        "Normalize representation",
+        "Change coordinate system"
+      ]
+    },
+    {
+      "class_id": "F4",
+      "name": "Budget Exhaustion",
+      "description": "Solution exists but not found within budget",
+      "symptoms": [
+        "Timeout",
+        "Token limit reached",
+        "Step count exceeded"
+      ],
+      "qa_interpretation": "Reachable but outside bounded-return horizon; QA-Time obstruction",
+      "remediation": [
+        "Increase budget",
+        "Improve search heuristics",
+        "Add shortcut generator"
+      ]
+    },
+    {
+      "class_id": "F5",
+      "name": "Kernel Violation",
+      "description": "Completed trace rejected by invariant oracle",
+      "symptoms": [
+        "Type error",
+        "Invariant check fails",
+        "Proof term invalid"
+      ],
+      "qa_interpretation": "Illegal move in trace; analogous to QARM invalid move",
+      "remediation": [
+        "Fix the violating step",
+        "Use different approach",
+        "Check preconditions"
+      ]
+    },
+    {
+      "class_id": "F6",
+      "name": "Component Isolation",
+      "description": "Target unreachable from current component",
+      "symptoms": [
+        "No path exists under current generators",
+        "Structural barrier",
+        "Fundamental unreachability"
+      ],
+      "qa_interpretation": "Different connected component; needs generator injection",
+      "remediation": [
+        "Add barrier-crossing generator",
+        "Reformulate problem",
+        "Accept impossibility under current setup"
+      ]
+    }
+  ],
+
+  "failure_record_schema": {
+    "type": "object",
+    "properties": {
+      "failure_id": {
+        "type": "string",
+        "description": "Unique identifier for this failure instance"
+      },
+      "timestamp": {
+        "type": "string",
+        "format": "date-time"
+      },
+      "move": {
+        "type": "string",
+        "description": "The attempted generator/move that failed"
+      },
+      "fail_type": {
+        "$ref": "#/definitions/fail_type"
+      },
+      "fail_class": {
+        "type": "string",
+        "enum": ["F1", "F2", "F3", "F4", "F5", "F6"]
+      },
+      "state_before": {
+        "type": "string",
+        "description": "State hash or ID before failure"
+      },
+      "invariant_diff": {
+        "type": "object",
+        "description": "Delta between expected and observed invariant values",
+        "additionalProperties": true
+      },
+      "generator_set": {
+        "type": "array",
+        "items": { "type": "string" },
+        "description": "Active generators at time of failure"
+      },
+      "budget": {
+        "type": "object",
+        "properties": {
+          "time_ms": { "type": "integer" },
+          "steps": { "type": "integer" },
+          "tokens": { "type": "integer" }
+        }
+      },
+      "context": {
+        "type": "object",
+        "description": "Domain-specific failure context",
+        "additionalProperties": true
+      }
+    },
+    "required": ["fail_type", "move"]
+  },
+
+  "domain_mappings": {
+    "axiom_ai": {
+      "FORMALIZATION_GAP": "Obvious step missing in Lean",
+      "CASE_EXPLOSION": "Proof blows up with cases",
+      "REWRITE_BLOCKED": "Equality unusable",
+      "BUDGET_EXHAUSTION": "Timeout (wall-clock or tokens)",
+      "KERNEL_VIOLATION": "Lean kernel rejection"
+    },
+    "qarm": {
+      "OUT_OF_BOUNDS": "State outside valid region",
+      "FIXED_Q": "Attempted move on fixed coordinate",
+      "PARITY": "Parity invariant violated",
+      "INVARIANT_MISMATCH": "General invariant violation"
+    },
+    "ml_training": {
+      "BUDGET_EXHAUSTION": "Training timeout",
+      "KERNEL_VIOLATION": "Loss explosion / NaN",
+      "COMPONENT_ISOLATION": "Mode collapse"
+    }
+  }
+}

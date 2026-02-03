@@ -1,0 +1,18 @@
+{
+  "fixture_id": "qa.fixture.merkle.leaf_format.v1",
+  "description": "Merkle leaf format: sha256('{name}:{canonical_hash}:{result_label}')",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "name": "test_cert",
+    "canonical_hash": "813d15574f1ce311772e71a037f89ff8989b833f6337bc9ed0fdbcee184d6308",
+    "result_label": "PASS"
+  },
+
+  "expected": {
+    "merkle_leaf_input": "test_cert:813d15574f1ce311772e71a037f89ff8989b833f6337bc9ed0fdbcee184d6308:PASS",
+    "merkle_leaf": "be8ad5161a5eeefd4d7bd9e91cf1de9de3f246244a3411b12112343cf3363db4"
+  },
+
+  "notes": "Leaf format is protocol-specified. Changes require hash_spec version bump."
+}

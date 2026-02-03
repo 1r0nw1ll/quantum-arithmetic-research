@@ -1,0 +1,16 @@
+{
+  "fixture_id": "qa.fixture.canonical.key_ordering.v1",
+  "description": "Key ordering: sort_keys=True ensures deterministic ordering regardless of insertion order",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "object": {"z": 1, "a": 2, "m": 3}
+  },
+
+  "expected": {
+    "canonical_json_compact": "{\"a\":2,\"m\":3,\"z\":1}",
+    "sha256_canonical": "ebba85cfdc0a724b6cc327ecc545faeb38b9fe02eca603b430eb872f5cf75370"
+  },
+
+  "notes": "Keys appear in lexicographic order (a < m < z), not insertion order (z, a, m)"
+}

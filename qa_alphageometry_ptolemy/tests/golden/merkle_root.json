@@ -1,0 +1,30 @@
+{
+  "fixture_id": "qa.fixture.merkle.root_computation.v1",
+  "description": "Merkle root: pairwise hashing of sorted leaf hashes",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "certificates": [
+      {
+        "name": "alpha",
+        "canonical_hash": "813d15574f1ce311772e71a037f89ff8989b833f6337bc9ed0fdbcee184d6308",
+        "result_label": "PASS"
+      },
+      {
+        "name": "beta",
+        "canonical_hash": "c591e1023cc4a056d2461fdb0e55468fd519f7484a9caa57e5fbec7abc83a3c6",
+        "result_label": "PASS"
+      }
+    ]
+  },
+
+  "expected": {
+    "leaves": {
+      "alpha": "4e2a3203dbcfed3aeeada019f957ec9095fe3e87dba4f552007936d11058bbc7",
+      "beta": "aa0c831137d40fdb8fa105c925c1abc5f4c311b6999cbb8cbd8b74486664a12f"
+    },
+    "merkle_root": "85a19b50a70385006f799c02792acbf4891be8f55a0610a93b844a1dc1317b67"
+  },
+
+  "notes": "Leaf ordering is lexicographic by name. Tree is built pairwise: root = sha256(leaf_alpha + leaf_beta)."
+}

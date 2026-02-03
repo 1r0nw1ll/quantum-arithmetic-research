@@ -1,0 +1,14 @@
+{
+  "fixture_id": "qa.fixture.canonical.unicode.v1",
+  "description": "Unicode handling: ensure_ascii=False preserves UTF-8 characters",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "object": {"metadata": {"author": "test"}, "values": [1, 2], "name": "café"}
+  },
+
+  "expected": {
+    "canonical_json_compact": "{\"metadata\":{\"author\":\"test\"},\"name\":\"café\",\"values\":[1,2]}",
+    "sha256_canonical": "c591e1023cc4a056d2461fdb0e55468fd519f7484a9caa57e5fbec7abc83a3c6"
+  }
+}

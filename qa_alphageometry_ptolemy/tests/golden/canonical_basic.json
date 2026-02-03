@@ -1,0 +1,14 @@
+{
+  "fixture_id": "qa.fixture.canonical.basic.v1",
+  "description": "Basic canonicalization: sorted keys, no whitespace, compact separators",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "object": {"a": 1, "b": "hello", "c": [1, 2, 3]}
+  },
+
+  "expected": {
+    "canonical_json_compact": "{\"a\":1,\"b\":\"hello\",\"c\":[1,2,3]}",
+    "sha256_canonical": "813d15574f1ce311772e71a037f89ff8989b833f6337bc9ed0fdbcee184d6308"
+  }
+}

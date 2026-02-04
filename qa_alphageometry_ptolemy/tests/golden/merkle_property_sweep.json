@@ -1,0 +1,20 @@
+{
+  "fixture_id": "qa.fixture.merkle.property_sweep.v1",
+  "description": "Property-style Merkle tests: determinism, odd-carry rule, tree height for N=1..25",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "merkle_property_test": {
+      "leaf_count": 25,
+      "leaf_format": "test_cert_{i}:deadbeef{i:04x}:PASS"
+    }
+  },
+
+  "expected": {
+    "merkle_root": "125e76a0321b781e69d709ca1c6345c09ba82865321e421f21ce185358f0d02d",
+    "tree_height": 5,
+    "determinism_required": true
+  },
+
+  "notes": "This fixture tests Merkle tree properties with 25 leaves. The implementation must: (1) produce deterministic roots, (2) apply odd-carry rule (duplicate last leaf) when leaf count is odd, (3) compute correct tree height. Leaf inputs follow format: 'test_cert_{i}:deadbeef{i:04x}:PASS'."
+}

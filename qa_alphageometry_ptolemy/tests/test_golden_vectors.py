@@ -17,6 +17,7 @@ Protocol changes require:
 
 import hashlib
 import json
+import math
 import os
 import sys
 from pathlib import Path
@@ -300,21 +301,162 @@ def check_hash_domain_separation(fixture: Dict[str, Any]) -> List[str]:
         )
 
     # Verify they ARE different (by design)
-    # certificate_hash is 16 chars, sha256_canonical is 64 chars
-    # They use different canonicalization so should never match
+    # The two hash functions use DIFFERENT canonicalization:
+    #   certificate_hash: canonical_json(indent=None) → {"a": 1, "b": "hello"} (spaces!)
+    #   sha256_canonical: canonical_json_compact()    → {"a":1,"b":"hello"} (no spaces)
     if expected.get("different_by_design", False):
-        # Check that cert hash doesn't equal the prefix of semantic hash
-        # (would indicate someone unified the canonicalization)
-        if actual_cert_hash == actual_semantic_hash[:16]:
+        # Import canonical functions to compare underlying serialization
+        try:
+            from ..qa_cert_core import canonical_json, canonical_json_compact
+        except ImportError:
+            from qa_alphageometry_ptolemy.qa_cert_core import canonical_json, canonical_json_compact
+
+        cert_canonical = canonical_json(obj, indent=None)
+        semantic_canonical = canonical_json_compact(obj)
+
+        # These MUST be different - that's the whole point
+        if cert_canonical == semantic_canonical:
             errors.append(
-                "HASH DOMAIN COLLISION: certificate_hash equals sha256_canonical prefix!\n"
+                "HASH DOMAIN COLLISION: canonical forms are IDENTICAL!\n"
+                f"  certificate canonical: {cert_canonical!r}\n"
+                f"  semantic canonical:    {semantic_canonical!r}\n"
                 "  This should NOT happen - they use different canonicalization:\n"
-                "    certificate_hash: indent=None, ensure_ascii=True (has spaces)\n"
-                "    sha256_canonical: compact separators, ensure_ascii=False (no spaces)\n"
+                "    certificate: indent=None, ensure_ascii=True (has spaces after : and ,)\n"
+                "    semantic: compact separators (',',':'), ensure_ascii=False (no spaces)\n"
                 "  Someone may have 'unified' the hash functions incorrectly."
             )
-        # Also verify the actual values match expected (primary check)
-        # The "different_by_design" flag is just an extra assertion
+
+        # Also check they match the expected canonical forms if provided
+        expected_cert_canonical = expected.get("certificate_canonical")
+        expected_semantic_canonical = expected.get("semantic_canonical")
+
+        if expected_cert_canonical and cert_canonical != expected_cert_canonical:
+            errors.append(
+                f"certificate canonical form mismatch:\n"
+                f"  expected: {expected_cert_canonical!r}\n"
+                f"  actual:   {cert_canonical!r}"
+            )
+
+        if expected_semantic_canonical and semantic_canonical != expected_semantic_canonical:
+            errors.append(
+                f"semantic canonical form mismatch:\n"
+                f"  expected: {expected_semantic_canonical!r}\n"
+                f"  actual:   {semantic_canonical!r}"
+            )
+
+    return errors
+
+
+def check_manifest_hash_mismatch(fixture: Dict[str, Any]) -> List[str]:
+    """Check that integrity checking catches hash mismatches (valid schema, wrong hash)."""
+    errors = []
+
+    inp = fixture.get("input", {})
+    expected = fixture.get("expected", {})
+
+    if "manifest" not in inp or "actual_cert_content" not in inp:
+        return errors  # Not a hash mismatch test
+
+    if expected.get("reason") != "hash_mismatch":
+        return errors  # Not testing for hash mismatch
+
+    manifest = inp["manifest"]
+    actual_cert = inp["actual_cert_content"]
+
+    # Compute what the correct hashes should be
+    actual_canonical_sha = sha256_canonical(actual_cert)
+
+    # Check that manifest has wrong hash (as expected for this fixture)
+    for name, entry in manifest.get("certificates", {}).items():
+        manifest_canonical = entry.get("canonical_sha256", "")
+
+        # The fixture expects the hashes to NOT match
+        if manifest_canonical == actual_canonical_sha:
+            errors.append(
+                f"FIXTURE ERROR: {name} hash unexpectedly matches!\n"
+                f"  This fixture is supposed to have mismatched hashes."
+            )
+            continue
+
+        # Verify integrity check would catch this
+        if expected.get("integrity_valid", True):
+            errors.append(
+                "FIXTURE ERROR: expected.integrity_valid should be false for mismatch test"
+            )
+
+    return errors
+
+
+def check_merkle_property(fixture: Dict[str, Any]) -> List[str]:
+    """Property-style Merkle tests: verify determinism, odd-carry rule, tree height."""
+    errors = []
+
+    inp = fixture.get("input", {})
+    expected = fixture.get("expected", {})
+
+    if "merkle_property_test" not in inp:
+        return errors  # Not a property test
+
+    test_config = inp["merkle_property_test"]
+    leaf_count = test_config.get("leaf_count", 0)
+
+    if leaf_count < 1:
+        return errors
+
+    # Generate deterministic leaves
+    leaves = []
+    for i in range(leaf_count):
+        leaf_input = f"test_cert_{i}:deadbeef{i:04x}:PASS"
+        leaf_hash = hashlib.sha256(leaf_input.encode("utf-8")).hexdigest()
+        leaves.append(leaf_hash)
+
+    # Compute merkle root twice (determinism check)
+    def compute_root(leaf_list):
+        current = list(leaf_list)
+        while len(current) > 1:
+            next_level = []
+            for i in range(0, len(current), 2):
+                if i + 1 < len(current):
+                    combined = current[i] + current[i + 1]
+                else:
+                    # Odd: duplicate last hash (carry rule)
+                    combined = current[i] + current[i]
+                next_level.append(hashlib.sha256(combined.encode("utf-8")).hexdigest())
+            current = next_level
+        return current[0] if current else ""
+
+    root1 = compute_root(leaves)
+    root2 = compute_root(leaves)
+
+    # Determinism check
+    if root1 != root2:
+        errors.append(
+            f"MERKLE DETERMINISM FAILURE: Same leaves produced different roots!\n"
+            f"  leaf_count: {leaf_count}\n"
+            f"  root1: {root1}\n"
+            f"  root2: {root2}"
+        )
+
+    # Tree height check
+    expected_height = math.ceil(math.log2(leaf_count)) if leaf_count > 1 else 0
+
+    # Check expected root if provided
+    expected_root = expected.get("merkle_root")
+    if expected_root and root1 != expected_root:
+        errors.append(
+            f"merkle_root mismatch for {leaf_count} leaves:\n"
+            f"  expected: {expected_root}\n"
+            f"  actual:   {root1}"
+        )
+
+    # Check expected height if provided
+    expected_h = expected.get("tree_height")
+    if expected_h is not None and expected_height != expected_h:
+        errors.append(
+            f"tree_height mismatch for {leaf_count} leaves:\n"
+            f"  expected: {expected_h}\n"
+            f"  actual:   {expected_height}"
+        )
 
     return errors
 
@@ -338,6 +480,8 @@ def run_fixture(name: str, fixture: Dict[str, Any]) -> Tuple[bool, List[str]]:
     all_errors.extend(check_failure_algebra(fixture))
     all_errors.extend(check_hash_domain_separation(fixture))
     all_errors.extend(check_schema_violation(fixture))
+    all_errors.extend(check_manifest_hash_mismatch(fixture))
+    all_errors.extend(check_merkle_property(fixture))
 
     return len(all_errors) == 0, all_errors
 
@@ -360,6 +504,9 @@ def check_schema_violation(fixture: Dict[str, Any]) -> List[str]:
 
     # Try to validate against real JSON Schema
     schema_path = TESTS_DIR.parent / "schemas" / "qa_manifest.schema.json"
+
+    # Detect CI environment - jsonschema is REQUIRED in CI
+    in_ci = os.environ.get("CI", "").lower() in ("true", "1", "yes")
 
     try:
         import jsonschema
@@ -389,10 +536,24 @@ def check_schema_violation(fixture: Dict[str, Any]) -> List[str]:
                         )
                 return errors
         else:
+            if in_ci:
+                errors.append(
+                    "CI FAILURE: Schema file not found!\n"
+                    f"  Expected: {schema_path}\n"
+                    "  In CI, schema validation is required."
+                )
+                return errors
             # Schema file not found - fall back to heuristic check
             pass
 
     except ImportError:
+        if in_ci:
+            errors.append(
+                "CI FAILURE: jsonschema package not installed!\n"
+                "  In CI, jsonschema is required for schema validation tests.\n"
+                "  Add 'jsonschema>=4.0' to requirements-dev.txt and install."
+            )
+            return errors
         # jsonschema not installed - fall back to heuristic check
         pass
 

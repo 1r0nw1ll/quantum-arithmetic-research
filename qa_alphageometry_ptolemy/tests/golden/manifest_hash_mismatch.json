@@ -1,0 +1,33 @@
+{
+  "fixture_id": "qa.fixture.manifest.hash_mismatch.v1",
+  "description": "Valid manifest schema but wrong hash - should fail integrity check",
+  "hash_spec_id": "qa.hash_spec.v1",
+
+  "input": {
+    "manifest": {
+      "schema_version": "QA_MANIFEST.v1",
+      "manifest_id": "qa.manifest.test.v1",
+      "hash_spec": {
+        "id": "qa.hash_spec.v1",
+        "version": "1.0"
+      },
+      "certificates": {
+        "test_cert": {
+          "id": "qa.cert.test.v1",
+          "file": "test_cert.json",
+          "sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+          "canonical_sha256": "1111111111111111111111111111111111111111111111111111111111111111"
+        }
+      }
+    },
+    "actual_cert_content": {"id": "qa.cert.test.v1", "data": "real content"}
+  },
+
+  "expected": {
+    "schema_valid": true,
+    "integrity_valid": false,
+    "reason": "hash_mismatch"
+  },
+
+  "notes": "This fixture tests that manifest integrity checking catches hash mismatches even when the manifest structure is perfectly valid JSON Schema. The manifest has a valid schema but the hashes don't match the actual certificate content."
+}

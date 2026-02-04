@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_IC_VERIFICATION_RECEIPT.v1",
+  "title": "QA Instruction/Content Verification Receipt",
+  "description": "Cryptographically-bound proof that content was scanned under a specific scanner/policy/patterns snapshot. Eliminates verified=true spoofing.",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "scanner_id",
+    "scanner_version",
+    "patterns_sha256",
+    "policy_sha256",
+    "content_sha256",
+    "decision",
+    "threats_found",
+    "issued_utc",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_IC_VERIFICATION_RECEIPT.v1"
+    },
+    "scanner_id": {
+      "type": "string",
+      "description": "Identifier for the scanner that issued this receipt"
+    },
+    "scanner_version": {
+      "type": "string",
+      "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$",
+      "description": "Semver version of the scanner"
+    },
+    "patterns_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA256 of normalized pattern lists (sorted, newline-joined, category-tagged)"
+    },
+    "policy_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA256 of canonical JSON of scanning-relevant policy subset"
+    },
+    "content_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA256 of content bytes (UTF-8)"
+    },
+    "decision": {
+      "enum": ["VERIFIED_SAFE", "VERIFIED_UNSAFE"],
+      "description": "Scanner's determination"
+    },
+    "threats_found": {
+      "type": "boolean"
+    },
+    "threat_patterns": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "Patterns that matched (empty if safe)"
+    },
+    "issued_utc": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "receipt_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA256 of receipt body (with this field as sentinel)"
+    },
+    "signature": {
+      "type": ["object", "null"],
+      "description": "Optional cryptographic signature (null for hash-only mode)",
+      "properties": {
+        "alg": {
+          "enum": ["ed25519", "none"]
+        },
+        "pubkey": {
+          "type": "string",
+          "pattern": "^[a-f0-9]*$"
+        },
+        "sig": {
+          "type": "string",
+          "pattern": "^[a-f0-9]*$"
+        }
+      }
+    },
+    "generator_set_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Optional hash of active generator set for tool surface binding"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "description": "ALLOW: auto-verify IC cert with safe content passes verification",
+  "planned_move": "mu()",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "instruction_content_cert": {
+      "schema_id": "QA_INSTRUCTION_CONTENT_SEPARATION_CERT.v1",
+      "instruction_domain": ["sigma", "mu", "lambda", "nu"],
+      "content_domain": ["user_input"]
+    },
+    "content": "Please help me prove this geometry theorem about triangles",
+    "policy": {
+      "auto_verify_ic_cert": true,
+      "require_verified_ic_cert": true
+    }
+  },
+  "expected_result": "ALLOW"
+}

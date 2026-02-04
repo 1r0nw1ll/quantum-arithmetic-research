@@ -4,6 +4,7 @@ qa_guardrail - QA Guardrail MVP for Agent Security
 Provides:
 - guard(planned_move, ctx) -> GuardrailResult
 - GuardrailContext for specifying active generators, policy, capabilities
+- Threat scanning via Gemini patterns (scan_for_threats, verify_ic_cert)
 - Golden fixtures for regression testing
 """
 
@@ -20,7 +21,18 @@ from .qa_guardrail import (
     AUTHORIZED_GENERATORS,
 )
 
+from .threat_scanner import (
+    ThreatScanner,
+    scan_for_threats,
+    is_content_safe,
+    verify_ic_cert,
+    MALICIOUS_PATTERNS,
+    MALFORMED_PATTERNS,
+    ADVERSARIAL_PATTERNS,
+)
+
 __all__ = [
+    # Guardrail core
     "guard",
     "guard_batch",
     "GuardrailContext",
@@ -31,4 +43,12 @@ __all__ = [
     "FAIL_TYPES",
     "GUARDRAIL_FAIL_TYPES",
     "AUTHORIZED_GENERATORS",
+    # Threat scanner (Gemini integration)
+    "ThreatScanner",
+    "scan_for_threats",
+    "is_content_safe",
+    "verify_ic_cert",
+    "MALICIOUS_PATTERNS",
+    "MALFORMED_PATTERNS",
+    "ADVERSARIAL_PATTERNS",
 ]

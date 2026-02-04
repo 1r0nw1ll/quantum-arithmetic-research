@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "GUARDRAIL_RESULT.v1.schema.json",
+  "title": "QA Guardrail Result",
+  "description": "Schema for guardrail evaluation results (ALLOW/DENY) with FAIL_RECORD-compatible fail_record on DENY.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["ok", "result", "checks"],
+  "properties": {
+    "ok": { "type": "boolean" },
+    "result": { "enum": ["ALLOW", "DENY"] },
+    "checks": {
+      "type": "array",
+      "items": { "type": "string" }
+    },
+    "fail_record": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["move", "fail_type", "invariant_diff"],
+      "properties": {
+        "move": { "type": "string" },
+        "fail_type": { "type": "string" },
+        "invariant_diff": { "type": "object" }
+      }
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "result": { "const": "DENY" } } },
+      "then": { "required": ["fail_record"] }
+    }
+  ]
+}

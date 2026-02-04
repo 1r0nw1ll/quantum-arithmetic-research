@@ -1,0 +1,16 @@
+{
+  "description": "DENY: policy requires verified instruction/content cert but verified=false",
+  "planned_move": "lambda(2)",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "policy": { "require_verified_ic_cert": true },
+    "instruction_content_cert": {
+      "schema_id": "QA_INSTRUCTION_CONTENT_SEPARATION_CERT.v1",
+      "verified": false,
+      "instruction_domain": ["mu", "lambda", "nu"],
+      "content_domain": ["sigma", "user_input"]
+    }
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "INSTRUCTION_CONTENT_BOUNDARY_VIOLATION"
+}

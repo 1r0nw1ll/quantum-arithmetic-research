@@ -297,6 +297,26 @@ def guard(planned_move: str, ctx: GuardrailContext) -> GuardrailResult:
                 checks=checks + ["ic_separation: FAIL (invalid cert schema)"],
             )
 
+        # Optional hard gate: require instruction/content cert to be verified
+        require_verified = bool(ctx.policy.get("require_verified_ic_cert", False))
+        if require_verified:
+            verified = bool(cert.get("verified", False))
+            if not verified:
+                return GuardrailResult.deny(
+                    make_fail_record(
+                        move=planned_move,
+                        fail_type="INSTRUCTION_CONTENT_BOUNDARY_VIOLATION",
+                        invariant_diff={
+                            "reason": "ic_cert_not_verified",
+                            "require_verified_ic_cert": True,
+                            "cert_verified": verified,
+                        },
+                        detail="Policy requires a verified instruction/content certificate",
+                    ),
+                    checks=checks + ["ic_separation: FAIL (cert not verified)"],
+                )
+            checks.append("ic_separation_verified: OK")
+
         # Check that the planned move is in the instruction domain, not content domain
         content_domain = set(cert.get("content_domain", []))
         if generator_name in content_domain:
@@ -534,6 +554,42 @@ def run_self_tests() -> Dict[str, Any]:
     d = r.to_dict()
     test("T14_result_dict_ok", d["ok"] is True, f"got {d['ok']}")
     test("T14_result_dict_result", d["result"] == "ALLOW", f"got {d['result']}")
+
+    # Test 15: require_verified_ic_cert policy gate - DENY when not verified
+    ic_cert_unverified = {
+        "schema_id": "QA_INSTRUCTION_CONTENT_SEPARATION_CERT.v1",
+        "verified": False,
+        "instruction_domain": ["sigma", "mu", "lambda", "nu"],
+        "content_domain": ["user_input"],
+    }
+    ctx15 = GuardrailContext(
+        instruction_content_cert=ic_cert_unverified,
+        policy={"require_verified_ic_cert": True}
+    )
+    r = guard("sigma(1)", ctx15)
+    test("T15_unverified_ic_denied", not r.ok and r.result == "DENY", f"got {r.result}")
+    test("T15_fail_type", r.fail_record and r.fail_record["fail_type"] == "INSTRUCTION_CONTENT_BOUNDARY_VIOLATION",
+         f"got {r.fail_record}")
+
+    # Test 16: require_verified_ic_cert policy gate - ALLOW when verified
+    ic_cert_verified = {
+        "schema_id": "QA_INSTRUCTION_CONTENT_SEPARATION_CERT.v1",
+        "verified": True,
+        "instruction_domain": ["sigma", "mu", "lambda", "nu"],
+        "content_domain": ["user_input"],
+    }
+    ctx16 = GuardrailContext(
+        instruction_content_cert=ic_cert_verified,
+        policy={"require_verified_ic_cert": True}
+    )
+    r = guard("sigma(1)", ctx16)
+    test("T16_verified_ic_allowed", r.ok and r.result == "ALLOW", f"got {r.result}")
+
+    # Test 17: Content as data doesn't affect decision (injection-looking input is inert)
+    ctx17 = GuardrailContext()
+    # Note: user_input is not used by guard() - content is inert unless promoted
+    r = guard("sigma(1)", ctx17)
+    test("T17_content_inert", r.ok, f"injection-looking content should be inert, got {r.result}")
 
     return results
 

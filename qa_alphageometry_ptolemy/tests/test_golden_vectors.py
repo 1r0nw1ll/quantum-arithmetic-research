@@ -300,13 +300,21 @@ def check_hash_domain_separation(fixture: Dict[str, Any]) -> List[str]:
         )
 
     # Verify they ARE different (by design)
+    # certificate_hash is 16 chars, sha256_canonical is 64 chars
+    # They use different canonicalization so should never match
     if expected.get("different_by_design", False):
+        # Check that cert hash doesn't equal the prefix of semantic hash
+        # (would indicate someone unified the canonicalization)
         if actual_cert_hash == actual_semantic_hash[:16]:
             errors.append(
                 "HASH DOMAIN COLLISION: certificate_hash equals sha256_canonical prefix!\n"
-                "  This should NOT happen - they use different canonicalization.\n"
+                "  This should NOT happen - they use different canonicalization:\n"
+                "    certificate_hash: indent=None, ensure_ascii=True (has spaces)\n"
+                "    sha256_canonical: compact separators, ensure_ascii=False (no spaces)\n"
                 "  Someone may have 'unified' the hash functions incorrectly."
             )
+        # Also verify the actual values match expected (primary check)
+        # The "different_by_design" flag is just an extra assertion
 
     return errors
 
@@ -335,7 +343,7 @@ def run_fixture(name: str, fixture: Dict[str, Any]) -> Tuple[bool, List[str]]:
 
 
 def check_schema_violation(fixture: Dict[str, Any]) -> List[str]:
-    """Check that intentionally invalid manifests are rejected."""
+    """Check that intentionally invalid manifests are rejected by real JSON Schema."""
     errors = []
 
     inp = fixture.get("input", {})
@@ -350,8 +358,45 @@ def check_schema_violation(fixture: Dict[str, Any]) -> List[str]:
     invalid_manifest = inp["invalid_manifest"]
     error_contains = expected.get("error_contains", [])
 
-    # Test that the manifest would be rejected
-    # Check schema_version is valid
+    # Try to validate against real JSON Schema
+    schema_path = TESTS_DIR.parent / "schemas" / "qa_manifest.schema.json"
+
+    try:
+        import jsonschema
+
+        if schema_path.exists():
+            with open(schema_path) as f:
+                schema = json.load(f)
+
+            # This SHOULD raise ValidationError for invalid manifest
+            try:
+                jsonschema.validate(invalid_manifest, schema)
+                # If we get here, validation passed - that's a problem!
+                errors.append(
+                    "SCHEMA GATE FAILURE: Invalid manifest was NOT rejected!\n"
+                    f"  Manifest: {invalid_manifest}\n"
+                    "  The shipped schema did not catch this invalid input."
+                )
+                return errors
+            except jsonschema.ValidationError as e:
+                # Good - schema rejected it. Check error contains expected substrings
+                error_msg = str(e).lower()
+                for expected_substr in error_contains:
+                    if expected_substr.lower() not in error_msg:
+                        errors.append(
+                            f"Schema error doesn't contain '{expected_substr}':\n"
+                            f"  Got: {str(e)[:200]}..."
+                        )
+                return errors
+        else:
+            # Schema file not found - fall back to heuristic check
+            pass
+
+    except ImportError:
+        # jsonschema not installed - fall back to heuristic check
+        pass
+
+    # Fallback: hand-rolled rejection heuristic (less rigorous)
     schema_version = invalid_manifest.get("schema_version", "")
     valid_versions = {"QA_MANIFEST.v1", "QA_SHA256_MANIFEST.v1"}
 
@@ -360,21 +405,18 @@ def check_schema_violation(fixture: Dict[str, Any]) -> List[str]:
     if schema_version not in valid_versions:
         rejection_reasons.append(f"invalid schema_version: {schema_version}")
 
-    # Check certificates have required fields
     for name, cert in invalid_manifest.get("certificates", {}).items():
         if "sha256" not in cert and "canonical_sha256" not in cert:
             rejection_reasons.append(f"{name}: missing hash fields")
 
-    # Verify we got rejection reasons
     if not rejection_reasons:
         errors.append(
             "SCHEMA GATE FAILURE: Invalid manifest was NOT rejected!\n"
             f"  Manifest: {invalid_manifest}\n"
-            "  This means the schema validation gate is broken."
+            "  (Note: jsonschema not available, using heuristic check)"
         )
         return errors
 
-    # Verify expected error substrings appear
     rejection_text = " ".join(rejection_reasons).lower()
     for expected_substr in error_contains:
         if expected_substr.lower() not in rejection_text:

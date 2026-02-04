@@ -47,32 +47,51 @@ Every module must have a manifest with:
 
 ### 2. Validator (`qa_{module}_validate.py`)
 
-Required CLI interface:
+**Canonical execution mode** (preferred for CI and production):
 
 ```bash
 # Full validation
-python qa_{module}_validate.py --all
-
-# JSON output
-python qa_{module}_validate.py --all --json
+python -m qa_alphageometry_ptolemy.qa_{module}.qa_{module}_validate --all
 
 # Manifest integrity check (fast gate)
-python qa_{module}_validate.py --check-manifest
+python -m qa_alphageometry_ptolemy.qa_{module}.qa_{module}_validate --check-manifest
 
-# Summary
-python qa_{module}_validate.py --summary
+# JSON output
+python -m qa_alphageometry_ptolemy.qa_{module}.qa_{module}_validate --all --json
+```
+
+**Direct execution** (supported for development):
+
+```bash
+python qa_{module}_validate.py --all
+python qa_{module}_validate.py --check-manifest
 ```
 
 Required imports from `qa_cert_core`:
 
 ```python
-from qa_cert_core import (
-    canonical_json_compact,
-    sha256_canonical,
-    sha256_file,
-    check_manifest_integrity,  # optional, for standardized manifest check
-)
+# Preferred: relative import (works when run as module)
+try:
+    from ..qa_cert_core import (
+        canonical_json_compact,
+        sha256_canonical,
+        sha256_file,
+        check_manifest_integrity,
+    )
+except ImportError:
+    # Fallback for direct execution (development only)
+    import sys, os
+    sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+    from qa_cert_core import (
+        canonical_json_compact,
+        sha256_canonical,
+        sha256_file,
+        check_manifest_integrity,
+    )
 ```
+
+**Note**: The `-m` execution mode uses relative imports directly. The fallback
+is for development convenience but should not be relied upon in CI.
 
 ### 3. Schemas (optional but recommended)
 

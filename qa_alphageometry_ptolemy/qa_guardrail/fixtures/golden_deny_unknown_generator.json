@@ -1,0 +1,9 @@
+{
+  "description": "DENY: unknown generator not in authorized set",
+  "planned_move": "malicious_exec()",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"]
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "UNAUTHORIZED_GENERATOR"
+}

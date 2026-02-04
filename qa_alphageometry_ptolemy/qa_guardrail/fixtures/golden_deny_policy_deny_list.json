@@ -1,0 +1,12 @@
+{
+  "description": "DENY: move is explicitly in policy deny list",
+  "planned_move": "sigma(evil_payload)",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "policy": {
+      "deny": ["sigma(evil_payload)", "mu(bad)"]
+    }
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "POLICY_CONSTRAINT_VIOLATION"
+}

@@ -1,0 +1,8 @@
+{
+  "description": "Basic ALLOW: sigma is an authorized generator with default context",
+  "planned_move": "sigma(1)",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"]
+  },
+  "expected_result": "ALLOW"
+}

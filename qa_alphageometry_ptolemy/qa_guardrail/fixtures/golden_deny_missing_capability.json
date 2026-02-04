@@ -1,0 +1,13 @@
+{
+  "description": "DENY: required ADMIN capability is not granted",
+  "planned_move": "nu(1)",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "policy": {
+      "required_capability": "ADMIN"
+    },
+    "capabilities": ["READ"]
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "MISSING_CAPABILITY"
+}

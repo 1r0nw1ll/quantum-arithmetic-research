@@ -1,0 +1,14 @@
+{
+  "description": "DENY: content domain item cannot be promoted to instruction",
+  "planned_move": "sigma(1)",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "instruction_content_cert": {
+      "schema_id": "QA_INSTRUCTION_CONTENT_SEPARATION_CERT.v1",
+      "instruction_domain": ["mu", "lambda", "nu"],
+      "content_domain": ["sigma", "user_input"]
+    }
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "PROMOTION_FORBIDDEN"
+}

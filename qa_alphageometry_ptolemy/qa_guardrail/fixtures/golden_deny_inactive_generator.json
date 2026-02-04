@@ -1,0 +1,9 @@
+{
+  "description": "DENY: lambda is authorized but not active in this context",
+  "planned_move": "lambda(2)",
+  "context": {
+    "active_generators": ["sigma", "mu"]
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "UNAUTHORIZED_GENERATOR"
+}

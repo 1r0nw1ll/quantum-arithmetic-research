@@ -853,3 +853,49 @@ if __name__ == "__main__":
             sys.exit(1)
     else:
         print("\n[16] Kayser module: SKIPPED (qa_kayser/qa_kayser_validate.py not found)")
+
+    # --- Test 17: QA Guardrail MVP (subprocess) ---
+    guardrail_validator = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       "qa_guardrail", "qa_guardrail.py")
+    if os.path.exists(guardrail_validator):
+        print("\n--- QA GUARDRAIL MVP ---")
+
+        # Test 17a: Self-tests
+        guardrail_result = subprocess.run(
+            [sys.executable, guardrail_validator, "--validate"],
+            capture_output=True, text=True)
+        if guardrail_result.returncode == 0:
+            guardrail_json = json.loads(guardrail_result.stdout)
+            guardrail_ok = guardrail_json.get("ok", False)
+            guardrail_tests = len(guardrail_json.get("tests", []))
+            if guardrail_ok:
+                print(f"[17a] Guardrail self-tests: PASS ({guardrail_tests} tests)")
+            else:
+                print(f"[17a] Guardrail self-tests: FAIL")
+                for err in guardrail_json.get("errors", []):
+                    print(f"      {err}")
+                sys.exit(1)
+        else:
+            print(f"[17a] Guardrail self-tests: FAIL (exit code {guardrail_result.returncode})")
+            sys.exit(1)
+
+        # Test 17b: Golden fixtures
+        fixtures_result = subprocess.run(
+            [sys.executable, guardrail_validator, "--fixtures"],
+            capture_output=True, text=True)
+        if fixtures_result.returncode == 0:
+            fixtures_json = json.loads(fixtures_result.stdout)
+            fixtures_ok = fixtures_json.get("ok", False)
+            fixtures_passed = fixtures_json.get("passed", 0)
+            if fixtures_ok:
+                print(f"[17b] Guardrail golden fixtures: PASS ({fixtures_passed} fixtures)")
+            else:
+                print(f"[17b] Guardrail golden fixtures: FAIL")
+                for err in fixtures_json.get("errors", []):
+                    print(f"      {err}")
+                sys.exit(1)
+        else:
+            print(f"[17b] Guardrail golden fixtures: FAIL (exit code {fixtures_result.returncode})")
+            sys.exit(1)
+    else:
+        print("\n[17] Guardrail module: SKIPPED (qa_guardrail/qa_guardrail.py not found)")

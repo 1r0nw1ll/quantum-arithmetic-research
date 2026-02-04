@@ -1,0 +1,12 @@
+{
+  "description": "ALLOW: move requires ADMIN capability which is granted",
+  "planned_move": "lambda(5)",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "policy": {
+      "required_capability": "ADMIN"
+    },
+    "capabilities": ["ADMIN", "WRITE"]
+  },
+  "expected_result": "ALLOW"
+}

@@ -1,0 +1,17 @@
+{
+  "description": "DENY: previous trace entry shows failure, cannot continue without handling",
+  "planned_move": "sigma(2)",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "trace_tail": [
+      {
+        "move": "sigma(1)",
+        "fail_type": "OUT_OF_BOUNDS",
+        "invariant_diff": {"b": 25, "e": 30}
+      }
+    ],
+    "policy": {}
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "TRACE_INVARIANT_BROKEN"
+}

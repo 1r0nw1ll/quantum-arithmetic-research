@@ -897,5 +897,30 @@ if __name__ == "__main__":
         else:
             print(f"[17b] Guardrail golden fixtures: FAIL (exit code {fixtures_result.returncode})")
             sys.exit(1)
+
+        # Test 17c: End-to-end tests (subprocess invocation like OpenClaw)
+        e2e_test = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                "qa_guardrail", "e2e_test.py")
+        if os.path.exists(e2e_test):
+            e2e_result = subprocess.run(
+                [sys.executable, e2e_test, "--json"],
+                capture_output=True, text=True)
+            if e2e_result.returncode == 0:
+                e2e_json = json.loads(e2e_result.stdout)
+                e2e_ok = e2e_json.get("ok", False)
+                e2e_passed = e2e_json.get("passed", 0)
+                allow_count = sum(1 for e in e2e_json.get("audit_log", []) if e.get("result") == "ALLOW")
+                deny_count = sum(1 for e in e2e_json.get("audit_log", []) if e.get("result") == "DENY")
+                if e2e_ok:
+                    print(f"[17c] Guardrail E2E tests: PASS ({e2e_passed} tests, {allow_count} ALLOW, {deny_count} DENY)")
+                else:
+                    print(f"[17c] Guardrail E2E tests: FAIL")
+                    for test in e2e_json.get("tests", []):
+                        if not test.get("passed"):
+                            print(f"      {test['name']}: {test.get('details', {})}")
+                    sys.exit(1)
+            else:
+                print(f"[17c] Guardrail E2E tests: FAIL (exit code {e2e_result.returncode})")
+                sys.exit(1)
     else:
         print("\n[17] Guardrail module: SKIPPED (qa_guardrail/qa_guardrail.py not found)")

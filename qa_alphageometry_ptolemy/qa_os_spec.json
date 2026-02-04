@@ -1,0 +1,260 @@
+{
+  "schema_id": "QA_OS_SPEC.v1",
+  "spec_id": "qa_os_spec.v1",
+  "issued_utc": "2026-02-04T00:00:00Z",
+  "version": 1,
+  "title": "Quantum Arithmetic Operating System Specification",
+  "description": "Unification artifact declaring QA as a mathematical operating system for trustworthy intelligence. Binds kernel (state space + generators + reachability), runtime (validators + trace contract), filesystem (certs + schemas + hashing), security (threats + failure algebra), and network (multi-agent cert exchange) into a single machine-checkable spec.",
+
+  "principles": [
+    {
+      "id": "QA_GEOMETRIC_ACTION_PRINCIPLE",
+      "statement": "An arithmetic move is a geometric move."
+    },
+    {
+      "id": "QA_NON_REDUCTION_AXIOM",
+      "statement": "Arbitrary reduction of fractions is not scale-invariant under QA embeddings."
+    },
+    {
+      "id": "QA_TIME_AXIOM",
+      "statement": "Time is legal reachability and path length under fixed generators; continuous time is observer projection."
+    },
+    {
+      "id": "QA_FAILURE_FIRST_CLASS",
+      "statement": "Failures are deterministic, reproducible, and an integral part of the QA system, not noise."
+    },
+    {
+      "id": "QA_CAPABILITY_EQUALS_REACHABILITY",
+      "statement": "Capability = Reachability(S, G, I) where S is state space, G is generator set, I is invariant set."
+    }
+  ],
+
+  "kernel": {
+    "state_space": {
+      "canonical_tuple": "(b, e, d, a)",
+      "derivation_rules": [
+        "d = b + e",
+        "a = b + 2*e"
+      ],
+      "primitive_coordinates": ["b", "e"],
+      "derived_coordinates": ["d", "a"],
+      "canonical_invariants": [
+        "b", "e", "d", "a",
+        "B", "E", "D", "A",
+        "C", "F", "G", "L",
+        "H", "I", "J", "K",
+        "W", "X", "Y", "Z"
+      ],
+      "no_redefinition_constraints": [
+        "J=b*d",
+        "K=d*a",
+        "X=d*e",
+        "C is base leg (2*e*d)",
+        "F is altitude leg (b*a)",
+        "G is hypotenuse squared (D + E = d*d + e*e)",
+        "Quantum ellipse major axis = 2D = 2*(d*d)"
+      ],
+      "orbit_structure": {
+        "description": "State space partitions into strongly connected components",
+        "orbits": [
+          {"name": "Cosmos", "cycle_length": 24, "dimension": "1D linear"},
+          {"name": "Satellite", "cycle_length": 8, "dimension": "3D symmetric"},
+          {"name": "Singularity", "cycle_length": 1, "description": "Fixed point"}
+        ]
+      }
+    },
+    "generators": {
+      "declared": ["sigma", "mu", "lambda", "nu"],
+      "semantics": [
+        {"name": "sigma", "signature": "(b, e) -> (b, e+1)", "role": "Growth / forward evolution"},
+        {"name": "mu", "signature": "(b, e) -> (e, b)", "role": "Swap / involution symmetry"},
+        {"name": "lambda", "signature": "(b, e) -> (k*b, k*e)", "role": "Scaling family"},
+        {"name": "nu", "signature": "(b, e) -> (b/2, e/2)", "role": "Even contraction / component bridge", "precondition": "b and e both even"}
+      ],
+      "reachability": {
+        "bounded_return_in_k": true,
+        "connected_components_are_first_class": true,
+        "failure_modes_are_first_class": true,
+        "control_theorems": [
+          "SCC_MONOTONICITY: Adding generators can only decrease or maintain the number of SCCs",
+          "MU_PAIRING: The mu generator creates 2-cycles for off-diagonal states"
+        ]
+      }
+    }
+  },
+
+  "runtime": {
+    "validators": [
+      {"name": "qa_meta_validator", "path": "qa_alphageometry_ptolemy/qa_meta_validator.py", "role": "Cross-certificate meta-validator"},
+      {"name": "qa_fst_validate", "path": "qa_alphageometry_ptolemy/qa_fst/qa_fst_validate.py", "role": "FST module validator"},
+      {"name": "qa_kayser_validate", "path": "qa_alphageometry_ptolemy/qa_kayser/qa_kayser_validate.py", "role": "Kayser correspondence validator"},
+      {"name": "qa_cert_core", "path": "qa_alphageometry_ptolemy/qa_cert_core.py", "role": "Shared primitives (hashing, serialization, validation)"}
+    ],
+    "trace_contract": {
+      "description": "Every execution step produces a structured record",
+      "leaf_fields": ["move", "fail_type", "invariant_diff"],
+      "required": true,
+      "schema_ref": "schemas/FAIL_RECORD.v1.schema.json"
+    },
+    "determinism_contract": {
+      "description": "All validation is deterministic and reproducible",
+      "requirements": [
+        "Canonical JSON serialization with sorted keys",
+        "SHA-256 hashing of canonical form",
+        "No floating point in core computations (Fraction only)",
+        "Timestamps in UTC ISO 8601"
+      ]
+    }
+  },
+
+  "filesystem": {
+    "cert_roots": [
+      "qa_alphageometry_ptolemy/",
+      "qa_alphageometry_ptolemy/qa_fst/",
+      "qa_alphageometry_ptolemy/qa_kayser/",
+      "qa_alphageometry_ptolemy/qa_ledger/"
+    ],
+    "schema_roots": [
+      "qa_alphageometry_ptolemy/schemas/",
+      "qa_alphageometry_ptolemy/qa_fst/schemas/"
+    ],
+    "hashing": {
+      "algorithm": "sha256",
+      "canonical_json_spec": "json.dumps(obj, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
+      "domains": {
+        "file_bytes": "sha256(raw file content) for file integrity",
+        "canonical_json": "sha256(canonical_json_compact(obj)) for semantic identity",
+        "certificate_hash": "sha256(canonical_json(obj, indent=None))[:16] for cert IDs"
+      },
+      "self_hash_paradox_avoided": true
+    },
+    "manifest_pattern": {
+      "description": "Each module maintains a manifest with hashes of all certificates",
+      "examples": [
+        "qa_fst/qa_fst_manifest.json",
+        "qa_kayser/qa_kayser_manifest.json"
+      ]
+    }
+  },
+
+  "security": {
+    "threat_model": {
+      "scope": "Agent-level threat surface given trust assumptions",
+      "covered_threats": [
+        "instruction_content_confusion",
+        "prompt_injection_privilege_escalation",
+        "tool_escalation_without_certification",
+        "confused_deputy_attacks",
+        "unauthorized_generator_execution"
+      ],
+      "out_of_scope": [
+        "OS/host compromise",
+        "Supply chain attacks (handled by signed bundles)",
+        "Credential theft (handled by secure enclave)",
+        "Backend misconfiguration"
+      ]
+    },
+    "instruction_content_separation": {
+      "description": "Hard boundary between instruction (generators) and content (payload)",
+      "principle": "Payload cannot become instruction without certified generator injection witness",
+      "cert_type": "QA_INSTRUCTION_CONTENT_SEPARATION_CERT.v1",
+      "invariants": [
+        "Instruction domain hashes depend only on instruction_layer",
+        "Content domain hashes depend only on content_layer",
+        "No cross-domain contamination without proof"
+      ]
+    },
+    "failure_algebra": {
+      "description": "Structured failure types for all validation",
+      "core_fail_types": [
+        "OUT_OF_BOUNDS",
+        "PARITY",
+        "FIXED_Q",
+        "INVARIANT_VIOLATION",
+        "UNAUTHORIZED_GENERATOR",
+        "DOMAIN_MISMATCH",
+        "PROMOTION_FORBIDDEN",
+        "SOURCE_NUMERIC_DRIFT",
+        "SYMMETRY_DEFECT"
+      ],
+      "schema_ref": "schemas/QA_FAILURE_ALGEBRA.json"
+    },
+    "golden_fixtures_required": true
+  },
+
+  "network": {
+    "multi_agent": {
+      "description": "QA enables multi-AI collaboration with cert-based trust",
+      "agents": ["claude_cli", "gemini", "codex", "chatgpt"],
+      "rule": "Agents may propose artifacts, but only QA validators decide acceptance",
+      "collaboration_pattern": {
+        "proposal": "Agent generates cert/artifact",
+        "validation": "qa_meta_validator.py runs structural + type-specific checks",
+        "acceptance": "Only valid certs enter the canonical ledger",
+        "exchange_format": "QA_CERT_BUNDLE.v1 with manifest + witness pack"
+      }
+    },
+    "exchange_format": {
+      "artifact_bundle": "QA_CERT_BUNDLE.v1",
+      "minimum_fields": ["schema_version", "certificate_id", "module_id", "claims"],
+      "optional_fields": ["manifest", "witness_pack", "trace"]
+    }
+  },
+
+  "modules": {
+    "description": "Registered QA modules with their certificate types",
+    "fst": {
+      "id": "qa.map.fst.plenum_to_particle.v1",
+      "description": "Field Structure Theory completion layer",
+      "cert_types": ["FST_PROTON_STABILITY_DELTA_SYM_WITNESS.v1", "LOOP_TO_MEV_HOMOMORPHISM_LAMBDA_BOOKKEEPING_AND_RATIO_TEST.v1"],
+      "validator": "qa_fst/qa_fst_validate.py"
+    },
+    "kayser": {
+      "id": "qa.manifest.kayser.v4",
+      "description": "QA-Kayser harmonic correspondence",
+      "correspondences": ["C1_lambdoma_cycle", "C2_tcross_generator", "C3_rhythm_time", "C4_basin_separation", "C5_primordial_leaf", "C6_conic_optics"],
+      "validator": "qa_kayser/qa_kayser_validate.py"
+    },
+    "tetrad": {
+      "id": "qa.tetrad.v1",
+      "description": "Core certificate tetrad",
+      "cert_types": ["GENERATOR_INJECTION", "DIVERSITY_COLLAPSE_OBSTRUCTION", "FIELD_COMPUTATION_CERT", "BEYOND_NEURONS_INTELLIGENCE_CERT"],
+      "validator": "qa_meta_validator.py"
+    },
+    "conjectures": {
+      "id": "qa.conjectures.v1",
+      "description": "QA conjecture ledger",
+      "conjecture_types": ["CONJ_SUBSTRATE_INVARIANCE", "CONJ_HORIZON_HIERARCHY", "CONJ_GOAL_COLLAPSE_EQUIVALENCE"],
+      "location": "qa_ledger/conjectures/"
+    }
+  },
+
+  "roadmap_alignment": {
+    "description": "Maps this spec to the 90-day implementation roadmap",
+    "month_1_consolidation": {
+      "status": "IN_PROGRESS",
+      "deliverables": [
+        "QA_OS_SPEC.v1 (this document)",
+        "Unified schema inheritance across FST/Kayser/Tetrad",
+        "Frozen 20 canonical invariants"
+      ]
+    },
+    "month_2_guardrail_mvp": {
+      "status": "PLANNED",
+      "deliverables": [
+        "qa-guardrail module with allow/deny gate",
+        "Integration with agent runtime (OpenClaw or similar)",
+        "Golden fixtures for prompt injection test vectors"
+      ]
+    },
+    "month_3_paper_and_revenue": {
+      "status": "PLANNED",
+      "deliverables": [
+        "Paper A: QA Canonical (theory)",
+        "Paper B: QA Completion Layer (FST companion)",
+        "Paper C: Certified Reasoning (AI Safety)",
+        "Consulting page with portfolio"
+      ]
+    }
+  }
+}

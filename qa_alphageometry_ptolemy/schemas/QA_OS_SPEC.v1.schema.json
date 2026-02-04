@@ -1,0 +1,332 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_OS_SPEC.v1.schema.json",
+  "title": "QA_OS_SPEC.v1",
+  "description": "Schema for QA Operating System Specification - the unification artifact",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "spec_id",
+    "issued_utc",
+    "version",
+    "principles",
+    "kernel",
+    "runtime",
+    "filesystem",
+    "security",
+    "network"
+  ],
+  "properties": {
+    "schema_id": { "const": "QA_OS_SPEC.v1" },
+    "spec_id": { "type": "string", "minLength": 1 },
+    "issued_utc": { "type": "string", "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$" },
+    "version": { "type": "integer", "minimum": 1 },
+    "title": { "type": "string", "minLength": 1 },
+    "description": { "type": "string", "minLength": 1 },
+
+    "principles": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "statement"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^QA_[A-Z_]+$" },
+          "statement": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+
+    "kernel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state_space", "generators"],
+      "properties": {
+        "state_space": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["canonical_tuple", "canonical_invariants", "no_redefinition_constraints"],
+          "properties": {
+            "canonical_tuple": { "type": "string", "minLength": 1 },
+            "derivation_rules": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "primitive_coordinates": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "derived_coordinates": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "canonical_invariants": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "no_redefinition_constraints": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "orbit_structure": {
+              "type": "object",
+              "additionalProperties": true,
+              "properties": {
+                "description": { "type": "string" },
+                "orbits": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "required": ["name"],
+                    "properties": {
+                      "name": { "type": "string" },
+                      "cycle_length": { "type": "integer" },
+                      "dimension": { "type": "string" },
+                      "description": { "type": "string" }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "generators": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["declared", "semantics", "reachability"],
+          "properties": {
+            "declared": {
+              "type": "array",
+              "minItems": 4,
+              "items": { "type": "string", "minLength": 1 },
+              "contains": { "const": "sigma" },
+              "description": "Must include sigma, mu, lambda, nu"
+            },
+            "semantics": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "role"],
+                "properties": {
+                  "name": { "type": "string", "minLength": 1 },
+                  "signature": { "type": "string" },
+                  "role": { "type": "string", "minLength": 1 },
+                  "precondition": { "type": "string" }
+                }
+              }
+            },
+            "reachability": {
+              "type": "object",
+              "additionalProperties": true,
+              "required": ["bounded_return_in_k", "connected_components_are_first_class", "failure_modes_are_first_class"],
+              "properties": {
+                "bounded_return_in_k": { "type": "boolean" },
+                "connected_components_are_first_class": { "type": "boolean" },
+                "failure_modes_are_first_class": { "type": "boolean" },
+                "control_theorems": {
+                  "type": "array",
+                  "items": { "type": "string" }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "runtime": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validators", "trace_contract"],
+      "properties": {
+        "validators": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "path"],
+            "properties": {
+              "name": { "type": "string", "minLength": 1 },
+              "path": { "type": "string", "minLength": 1 },
+              "role": { "type": "string" }
+            }
+          }
+        },
+        "trace_contract": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["leaf_fields", "required"],
+          "properties": {
+            "description": { "type": "string" },
+            "leaf_fields": {
+              "type": "array",
+              "minItems": 3,
+              "items": { "type": "string", "minLength": 1 },
+              "contains": { "const": "move" }
+            },
+            "required": { "type": "boolean", "const": true },
+            "schema_ref": { "type": "string" }
+          }
+        },
+        "determinism_contract": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "description": { "type": "string" },
+            "requirements": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "filesystem": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cert_roots", "schema_roots", "hashing"],
+      "properties": {
+        "cert_roots": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "schema_roots": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "hashing": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["algorithm"],
+          "properties": {
+            "algorithm": { "const": "sha256" },
+            "canonical_json_spec": { "type": "string" },
+            "domains": { "type": "object" },
+            "self_hash_paradox_avoided": { "type": "boolean", "const": true }
+          }
+        },
+        "manifest_pattern": {
+          "type": "object",
+          "additionalProperties": true
+        }
+      }
+    },
+
+    "security": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": ["threat_model", "failure_algebra", "golden_fixtures_required"],
+      "properties": {
+        "threat_model": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["covered_threats"],
+          "properties": {
+            "scope": { "type": "string" },
+            "covered_threats": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "out_of_scope": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "instruction_content_separation": {
+          "type": "object",
+          "additionalProperties": true,
+          "properties": {
+            "description": { "type": "string" },
+            "principle": { "type": "string" },
+            "cert_type": { "type": "string" },
+            "invariants": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        },
+        "failure_algebra": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["core_fail_types"],
+          "properties": {
+            "description": { "type": "string" },
+            "core_fail_types": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "schema_ref": { "type": "string" }
+          }
+        },
+        "golden_fixtures_required": { "type": "boolean", "const": true }
+      }
+    },
+
+    "network": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["multi_agent", "exchange_format"],
+      "properties": {
+        "multi_agent": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["agents", "rule"],
+          "properties": {
+            "description": { "type": "string" },
+            "agents": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "rule": { "type": "string", "minLength": 1 },
+            "collaboration_pattern": { "type": "object" }
+          }
+        },
+        "exchange_format": {
+          "type": "object",
+          "additionalProperties": true,
+          "required": ["artifact_bundle", "minimum_fields"],
+          "properties": {
+            "artifact_bundle": { "type": "string", "minLength": 1 },
+            "minimum_fields": {
+              "type": "array",
+              "minItems": 1,
+              "items": { "type": "string", "minLength": 1 }
+            },
+            "optional_fields": {
+              "type": "array",
+              "items": { "type": "string" }
+            }
+          }
+        }
+      }
+    },
+
+    "modules": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "description": { "type": "string" }
+      }
+    },
+
+    "roadmap_alignment": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Optional: maps spec to implementation roadmap"
+    }
+  }
+}

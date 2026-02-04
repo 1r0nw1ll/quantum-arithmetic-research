@@ -203,6 +203,128 @@ class GuardrailResult:
 
 
 # ============================================================================
+# AUDIT LOGGER (QA_GUARDRAIL_AUDIT_LOG.v1)
+# ============================================================================
+
+class AuditLogger:
+    """
+    Produces canonical, hash-chained audit log entries for guard() decisions.
+
+    Each entry includes:
+    - Monotonic sequence number
+    - SHA256 content hash for verification
+    - Optional prev_hash for chain integrity
+    - Context snapshot for forensics
+
+    Usage:
+        logger = AuditLogger(session_id="agent-run-123")
+        result = guard(move, ctx)
+        entry = logger.log(move, ctx, result)
+        # entry is a dict conforming to QA_GUARDRAIL_AUDIT_LOG.v1
+    """
+
+    def __init__(self, session_id: Optional[str] = None):
+        self.session_id = session_id or f"session-{utc_now_iso().replace(':', '-')}"
+        self.sequence = 0
+        self.prev_hash: Optional[str] = None
+        self.entries: List[Dict[str, Any]] = []
+
+    def log(
+        self,
+        planned_move: str,
+        ctx: GuardrailContext,
+        result: GuardrailResult,
+    ) -> Dict[str, Any]:
+        """Create and record an audit log entry."""
+        entry = {
+            "schema_id": "QA_GUARDRAIL_AUDIT_LOG.v1",
+            "timestamp": utc_now_iso(),
+            "sequence": self.sequence,
+            "session_id": self.session_id,
+            "planned_move": planned_move,
+            "result": result.result,
+            "ok": result.ok,
+            "checks": result.checks,
+        }
+
+        if result.fail_record:
+            entry["fail_record"] = result.fail_record
+
+        # Context snapshot for forensics
+        entry["context_snapshot"] = {
+            "active_generators": sorted(ctx.active_generators)[:10],  # Truncate for size
+            "capabilities": sorted(ctx.capabilities),
+            "policy_flags": {
+                k: ctx.policy.get(k) for k in [
+                    "scan_content", "deny_on_threats",
+                    "auto_verify_ic_cert", "require_verified_ic_cert"
+                ] if k in ctx.policy
+            },
+            "content_present": ctx.content is not None,
+            "ic_cert_present": ctx.instruction_content_cert is not None,
+            "ic_cert_verified": (
+                ctx.instruction_content_cert.get("verified", False)
+                if ctx.instruction_content_cert else False
+            ),
+        }
+
+        # Chain integrity
+        if self.prev_hash:
+            entry["prev_hash"] = self.prev_hash
+
+        # Compute content hash (excluding the content_hash field itself)
+        entry["content_hash"] = sha256_canonical(entry)
+
+        # Update state
+        self.prev_hash = entry["content_hash"]
+        self.sequence += 1
+        self.entries.append(entry)
+
+        return entry
+
+    def to_jsonl(self) -> str:
+        """Export all entries as JSONL (one JSON object per line)."""
+        return "\n".join(canonical_json_compact(e) for e in self.entries)
+
+    def merkle_root(self) -> Optional[str]:
+        """Compute Merkle root of all entry hashes (simple binary tree)."""
+        if not self.entries:
+            return None
+
+        hashes = [e["content_hash"] for e in self.entries]
+
+        # Pad to power of 2
+        while len(hashes) & (len(hashes) - 1):
+            hashes.append(hashes[-1])
+
+        # Build tree
+        while len(hashes) > 1:
+            next_level = []
+            for i in range(0, len(hashes), 2):
+                combined = hashes[i] + hashes[i + 1]
+                import hashlib
+                next_level.append(hashlib.sha256(combined.encode()).hexdigest())
+            hashes = next_level
+
+        return hashes[0]
+
+    def summary(self) -> Dict[str, Any]:
+        """Return audit session summary."""
+        allow_count = sum(1 for e in self.entries if e["ok"])
+        deny_count = len(self.entries) - allow_count
+
+        return {
+            "session_id": self.session_id,
+            "total_decisions": len(self.entries),
+            "allow_count": allow_count,
+            "deny_count": deny_count,
+            "merkle_root": self.merkle_root(),
+            "first_timestamp": self.entries[0]["timestamp"] if self.entries else None,
+            "last_timestamp": self.entries[-1]["timestamp"] if self.entries else None,
+        }
+
+
+# ============================================================================
 # CORE GUARD FUNCTION
 # ============================================================================
 
@@ -696,6 +818,45 @@ def run_self_tests() -> Dict[str, Any]:
     )
     r = guard("sigma(1)", ctx22)
     test("T22_scan_clean", r.ok and r.result == "ALLOW", f"got {r.result}")
+
+    # Test 23: AuditLogger basic functionality
+    logger = AuditLogger(session_id="test-session-001")
+    ctx23 = GuardrailContext()
+    r1 = guard("sigma(1)", ctx23)
+    entry1 = logger.log("sigma(1)", ctx23, r1)
+    test("T23_audit_schema_id", entry1["schema_id"] == "QA_GUARDRAIL_AUDIT_LOG.v1",
+         f"got {entry1.get('schema_id')}")
+    test("T23_audit_sequence", entry1["sequence"] == 0, f"got {entry1['sequence']}")
+    test("T23_audit_content_hash", len(entry1["content_hash"]) == 64, "bad hash length")
+    test("T23_audit_no_prev_hash", "prev_hash" not in entry1, "first entry should have no prev_hash")
+
+    # Test 24: AuditLogger chain integrity
+    r2 = guard("mu()", ctx23)
+    entry2 = logger.log("mu()", ctx23, r2)
+    test("T24_audit_sequence_incr", entry2["sequence"] == 1, f"got {entry2['sequence']}")
+    test("T24_audit_prev_hash", entry2["prev_hash"] == entry1["content_hash"],
+         "prev_hash should match first entry's content_hash")
+
+    # Test 25: AuditLogger captures DENY with fail_record
+    r3 = guard("unknown_gen()", ctx23)
+    entry3 = logger.log("unknown_gen()", ctx23, r3)
+    test("T25_audit_deny_result", entry3["result"] == "DENY", f"got {entry3['result']}")
+    test("T25_audit_fail_record", "fail_record" in entry3, "DENY should have fail_record")
+
+    # Test 26: AuditLogger merkle root
+    root = logger.merkle_root()
+    test("T26_merkle_root", root is not None and len(root) == 64, f"got {root}")
+
+    # Test 27: AuditLogger summary
+    summary = logger.summary()
+    test("T27_summary_total", summary["total_decisions"] == 3, f"got {summary['total_decisions']}")
+    test("T27_summary_allow", summary["allow_count"] == 2, f"got {summary['allow_count']}")
+    test("T27_summary_deny", summary["deny_count"] == 1, f"got {summary['deny_count']}")
+
+    # Test 28: AuditLogger JSONL export
+    jsonl = logger.to_jsonl()
+    lines = jsonl.strip().split("\n")
+    test("T28_jsonl_lines", len(lines) == 3, f"got {len(lines)} lines")
 
     return results
 

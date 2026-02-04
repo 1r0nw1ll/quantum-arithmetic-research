@@ -1,0 +1,135 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_GUARDRAIL_AUDIT_LOG.v1",
+  "title": "QA Guardrail Audit Log Entry",
+  "description": "Canonical audit log entry for guard() decisions. Each entry is independently verifiable via content_hash.",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "timestamp",
+    "sequence",
+    "planned_move",
+    "result",
+    "ok",
+    "checks",
+    "content_hash"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_GUARDRAIL_AUDIT_LOG.v1",
+      "description": "Schema identifier for audit log entries"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO8601 timestamp when decision was made"
+    },
+    "sequence": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Monotonic sequence number within the audit session"
+    },
+    "session_id": {
+      "type": "string",
+      "description": "Unique identifier for the agent session/run"
+    },
+    "planned_move": {
+      "type": "string",
+      "description": "The generator invocation that was evaluated"
+    },
+    "result": {
+      "enum": ["ALLOW", "DENY"],
+      "description": "Guard decision"
+    },
+    "ok": {
+      "type": "boolean",
+      "description": "True if ALLOW, false if DENY"
+    },
+    "checks": {
+      "type": "array",
+      "items": {"type": "string"},
+      "description": "List of checks performed with pass/fail status"
+    },
+    "fail_record": {
+      "type": "object",
+      "description": "Present only on DENY, contains failure details",
+      "properties": {
+        "fail_type": {
+          "enum": [
+            "UNAUTHORIZED_GENERATOR",
+            "POLICY_CONSTRAINT_VIOLATION",
+            "MISSING_CAPABILITY",
+            "PROMOTION_FORBIDDEN",
+            "INSTRUCTION_CONTENT_BOUNDARY_VIOLATION",
+            "TRACE_INVARIANT_BROKEN"
+          ]
+        },
+        "invariant_diff": {
+          "type": "object",
+          "properties": {
+            "expected": {"type": "string"},
+            "observed": {"type": "string"},
+            "reason": {"type": "string"}
+          }
+        },
+        "barrier": {
+          "type": "object",
+          "properties": {
+            "boundary_type": {"type": "string"},
+            "violated_by": {"type": "string"}
+          }
+        }
+      },
+      "required": ["fail_type"]
+    },
+    "context_snapshot": {
+      "type": "object",
+      "description": "Snapshot of relevant context at decision time",
+      "properties": {
+        "active_generators": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "policy_flags": {
+          "type": "object"
+        },
+        "content_present": {
+          "type": "boolean",
+          "description": "True if content was provided for scanning"
+        },
+        "ic_cert_present": {
+          "type": "boolean",
+          "description": "True if instruction/content cert was provided"
+        },
+        "ic_cert_verified": {
+          "type": "boolean",
+          "description": "True if IC cert passed auto-verification"
+        }
+      }
+    },
+    "content_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA256 hash of the canonical JSON of this entry (excluding this field)"
+    },
+    "prev_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "Hash of previous entry for chain integrity (optional for first entry)"
+    }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {"result": {"const": "DENY"}}
+      },
+      "then": {
+        "required": ["fail_record"]
+      }
+    }
+  ]
+}

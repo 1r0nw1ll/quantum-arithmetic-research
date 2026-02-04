@@ -1,0 +1,13 @@
+{
+  "description": "DENY: tool.bash requires EXEC capability which is not granted",
+  "planned_move": "tool.bash({\"command\": \"ls\"})",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu", "tool.bash"],
+    "policy": {
+      "required_capability": "EXEC"
+    },
+    "capabilities": ["READ", "WRITE"]
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "MISSING_CAPABILITY"
+}

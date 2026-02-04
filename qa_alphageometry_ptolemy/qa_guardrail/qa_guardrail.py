@@ -598,6 +598,55 @@ def run_self_tests() -> Dict[str, Any]:
 # CLI
 # ============================================================================
 
+def guard_from_stdin() -> Dict[str, Any]:
+    """
+    Read GUARDRAIL_REQUEST.v1 from stdin, run guard(), output GUARDRAIL_RESULT.v1.
+
+    Used for subprocess invocation from OpenClaw/TypeScript plugins.
+
+    Input format (stdin JSON):
+        {
+            "planned_move": "tool.exec({...})",
+            "context": { ... GuardrailContext fields ... }
+        }
+
+    Output format (stdout JSON):
+        GUARDRAIL_RESULT.v1 schema
+    """
+    try:
+        request = json.load(sys.stdin)
+    except json.JSONDecodeError as e:
+        return {
+            "ok": False,
+            "result": "DENY",
+            "checks": [],
+            "fail_record": {
+                "move": "UNKNOWN",
+                "fail_type": "INVALID_JSON",
+                "invariant_diff": {"error": str(e)},
+            },
+            "error": f"Failed to parse request JSON: {e}",
+        }
+
+    planned_move = request.get("planned_move")
+    if not planned_move:
+        return {
+            "ok": False,
+            "result": "DENY",
+            "checks": [],
+            "fail_record": {
+                "move": "UNKNOWN",
+                "fail_type": "MISSING_FIELD",
+                "invariant_diff": {"missing": "planned_move"},
+            },
+            "error": "Request missing required field: planned_move",
+        }
+
+    ctx = GuardrailContext.from_dict(request.get("context", {}))
+    result = guard(planned_move, ctx)
+    return result.to_dict()
+
+
 if __name__ == "__main__":
     import argparse
 
@@ -605,9 +654,17 @@ if __name__ == "__main__":
     parser.add_argument("--validate", action="store_true", help="Output self-test results as JSON")
     parser.add_argument("--fixtures", action="store_true", help="Validate golden fixtures")
     parser.add_argument("--fixtures-dir", default=None, help="Directory containing fixtures")
+    parser.add_argument("--guard", action="store_true",
+                        help="Run guard on stdin JSON (GUARDRAIL_REQUEST.v1 -> GUARDRAIL_RESULT.v1)")
     args = parser.parse_args()
 
     base_dir = os.path.dirname(os.path.abspath(__file__))
+
+    # Guard mode: read request from stdin, output result to stdout
+    if args.guard:
+        result = guard_from_stdin()
+        print(json.dumps(result, indent=2))
+        sys.exit(0)  # Always exit 0 (result carries allow/deny); exit 1 only on internal errors
 
     if args.fixtures:
         fixtures_dir = args.fixtures_dir or os.path.join(base_dir, "fixtures")

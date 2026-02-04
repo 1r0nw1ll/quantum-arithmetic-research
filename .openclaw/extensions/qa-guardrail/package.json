@@ -1,0 +1,19 @@
+{
+  "name": "qa-guardrail",
+  "version": "1.0.0",
+  "description": "QA Guardrail OpenClaw Plugin - agents propose, validators decide",
+  "main": "index.ts",
+  "types": "index.ts",
+  "scripts": {
+    "build": "tsc",
+    "test": "echo 'Use Python tests: python qa_guardrail.py --validate'"
+  },
+  "keywords": ["openclaw", "plugin", "guardrail", "security", "qa"],
+  "author": "QA Team",
+  "license": "MIT",
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "typescript": "^5.0.0"
+  }
+}

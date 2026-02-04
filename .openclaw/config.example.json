@@ -1,0 +1,30 @@
+{
+  "$schema": "https://openclaw.ai/schemas/config.v1.json",
+  "version": "1.0",
+  "extensions": {
+    "qa-guardrail": {
+      "enabled": true,
+      "pythonPath": "python",
+      "guardrailPath": "qa_alphageometry_ptolemy/qa_guardrail/qa_guardrail.py",
+      "policy": {
+        "deny": [
+          "tool.exec",
+          "tool.bash",
+          "tool.shell",
+          "tool.gmail.*",
+          "tool.browser.*"
+        ],
+        "allow": null,
+        "require_verified_ic_cert": false,
+        "required_capability": null
+      },
+      "capabilities": ["READ", "WRITE", "NET"],
+      "activeGenerators": ["sigma", "mu", "lambda", "nu"],
+      "logDenials": true
+    }
+  },
+  "security": {
+    "defaultDeny": false,
+    "auditLog": ".openclaw/audit.jsonl"
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "description": "DENY: tool.exec is not an authorized QA generator (simulates OpenClaw tool call)",
+  "planned_move": "tool.exec({\"command\": \"rm -rf /\"})",
+  "context": {
+    "active_generators": ["sigma", "mu", "lambda", "nu"],
+    "policy": {
+      "deny": ["tool.exec"]
+    }
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "UNAUTHORIZED_GENERATOR"
+}

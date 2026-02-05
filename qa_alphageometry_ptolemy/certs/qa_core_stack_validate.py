@@ -66,6 +66,8 @@ def validate_witnesses(cert: Dict) -> Tuple[bool, List[str]]:
             "WITNESS__CLARA__v1": "clara.witness.json",
             "WITNESS__STAT_MECH_NN__v1": "stat_mech.witness.json",
             "WITNESS__QUANTUM_MEMORY__v1": "quantum_memory.witness.json",
+            "WITNESS__QAWM_PAPER2__v1": "qawm_paper2.witness.json",
+            "WITNESS__RML_PAPER3__v1": "rml_paper3.witness.json",
         }
 
         filename = name_map.get(witness_id)

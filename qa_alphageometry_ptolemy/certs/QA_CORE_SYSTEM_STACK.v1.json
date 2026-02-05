@@ -92,6 +92,16 @@
       "witness_id": "WITNESS__QUANTUM_MEMORY__v1",
       "layer": "PHYSICAL_SUBSTRATE",
       "source": "PRL 10.1103/kbwj-md9n"
+    },
+    {
+      "witness_id": "WITNESS__QAWM_PAPER2__v1",
+      "layer": "MODEL_SUBSTRATE",
+      "source": "internal/PAPER2_COMPLETE_SUMMARY.md"
+    },
+    {
+      "witness_id": "WITNESS__RML_PAPER3__v1",
+      "layer": "AGENT_OS",
+      "source": "internal/PAPER3_COMPLETE.md"
     }
   ],
 

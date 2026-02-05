@@ -1,0 +1,69 @@
+{
+  "witness_id": "WITNESS__RML_PAPER3__v1",
+  "schema_version": "QA_WITNESS.v1",
+  "source": {
+    "type": "internal_paper",
+    "title": "RML: Reachability Meta-Learning",
+    "file": "Formalizing tuple drift in quantum-native learning/PAPER3_COMPLETE.md",
+    "status": "writing_complete"
+  },
+  "claim": "Structure-aware control via pre-trained topological predicates achieves superior oracle efficiency compared to ground-truth simulation",
+  "qa_mapping": {
+    "layer": "AGENT_OS",
+    "concepts": {
+      "control_task": "Navigate from (b,e) to diagonal target within k steps",
+      "oracle_efficiency": "Success rate per oracle call",
+      "structure_aware": "Query learned predicates instead of simulate",
+      "topology_over_constraints": "Global reachability dominates local feasibility"
+    },
+    "implementation": {
+      "baselines": ["random_legal", "oracle_greedy", "qawm_greedy"],
+      "scoring_modes": ["return_only", "legality_only", "product", "weighted_sum"],
+      "evaluation": "100 episodes on Caps(30,30)"
+    }
+  },
+  "generators": ["sigma", "mu", "lambda2"],
+  "invariants": [
+    "QAWM predicates computed without additional oracle calls",
+    "Generator selection based on learned topology, not simulation",
+    "Deterministic scoring function produces replayable traces",
+    "Cross-task transfer: same QAWM model for arbitrary targets"
+  ],
+  "results": {
+    "primary": {
+      "qawm_greedy_success": 0.32,
+      "oracle_greedy_success": 0.60,
+      "qawm_oracle_calls": 7.6,
+      "oracle_oracle_calls": 20.2,
+      "normalized_success_qawm": 4.20,
+      "normalized_success_oracle": 2.97,
+      "efficiency_advantage": "1.41x"
+    },
+    "ablation": {
+      "return_only": 0.28,
+      "legality_only": 0.10,
+      "product": 0.20,
+      "weighted_sum": 0.11,
+      "conclusion": "Topology over constraints principle validated"
+    }
+  },
+  "failure_modes": [
+    {
+      "type": "ABSOLUTE_SUCCESS_LOWER",
+      "description": "QAWM-Greedy has lower raw success (32% vs 60%)",
+      "mitigation": "Normalized by oracle calls - efficiency metric is primary"
+    },
+    {
+      "type": "LOCAL_OPTIMA",
+      "description": "Greedy selection may miss multi-step optimal paths",
+      "mitigation": "Future work: beam search, lookahead"
+    }
+  ],
+  "qa_theoretical_contribution": "Establishes structure-aware control as distinct paradigm from RL and symbolic planning",
+  "separation_from_rl": {
+    "learns": "Topology predicates (not dynamics p(s'|s,a))",
+    "predicts": "Legal/illegal, reachable/unreachable (not next state)",
+    "objective": "Predict structure (not maximize reward)",
+    "failures": "Deterministic theorems (not negative reward)"
+  }
+}

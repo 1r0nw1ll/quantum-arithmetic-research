@@ -1,7 +1,7 @@
 {
   "description": "Expected SHA256 hashes for drift detection",
-  "version": "qa-core-stack-v1.0.0",
-  "QA_CORE_SYSTEM_STACK.v1.json": "93306c55675f2ed6655ae3a1c4380d0768f32766eee401ba428d8da78c2c91e0",
+  "version": "qa-core-stack-v1.1.0",
+  "QA_CORE_SYSTEM_STACK.v1.json": "c3dfec132295126af9ba2b244fdc340930cd922c9aca9510b3b4315efab5a03f",
   "schema": "ad3b322e00d503a7a3684fa3f46b82d429d5ae5f140ae9b5361af6a1261b8f01",
   "witnesses": {
     "clara.witness.json": "b53d477726a8e158872bbef2f1a33e420da7e2e317328f594e26b5ecfaa4db05",
@@ -9,7 +9,9 @@
     "context_geometry.witness.json": "1e364977f729889a3d9c2fd2be1c8883e0ee74b0f31f17c2d843dc70f47c488e",
     "kimi_k2.witness.json": "ca0fb60ec334bc092eb832b812ab239558edec0a0248b8e281aa5a951b24be5d",
     "kosmos.witness.json": "96c13855c053e4592e120f377f6dce9e2622cf80633f646fed348141648da346",
+    "qawm_paper2.witness.json": "8ac895751b9a85c9d771f20556a06e1ec2e949a4983dc70ed311bd00272c9dc8",
     "quantum_memory.witness.json": "b5d0518e0bf1ea366ec9e55dce1bfc9cc40086bc8380d75756a1b4be774aca5b",
+    "rml_paper3.witness.json": "ae23fa6729295caeacb840ab2dcc0833d75bccfe7fef2fd6e9f3e8326b59d7d5",
     "stat_mech.witness.json": "6b589286326c47a481ad5cfc15f76fa134e5853e8d5c54675c84acc63672968c"
   }
 }

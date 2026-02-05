@@ -1,0 +1,67 @@
+{
+  "witness_id": "WITNESS__QAWM_PAPER2__v1",
+  "schema_version": "QA_WITNESS.v1",
+  "source": {
+    "type": "internal_paper",
+    "title": "QAWM: QA World Model Learning",
+    "file": "Formalizing tuple drift in quantum-native learning/PAPER2_COMPLETE_SUMMARY.md",
+    "status": "publication_ready"
+  },
+  "claim": "QAWM demonstrates that topological structure on QA manifolds can be learned from sparse oracle samples with strong generalization",
+  "qa_mapping": {
+    "layer": "MODEL_SUBSTRATE",
+    "concepts": {
+      "state_space": "Caps(N,N) = {(b,e) : 1 <= b,e <= N}",
+      "invariant_packet": "21-element QA invariants (B,E,D,A,X,C,F,G,L,H,I,...)",
+      "generators": "sigma, mu, lambda2, nu",
+      "learned_predicates": ["legality", "fail_type", "return_in_k"]
+    },
+    "implementation": {
+      "feature_extraction": "26 core features from QA invariants",
+      "model": "MLPClassifier (256x256) via sklearn",
+      "oracle": "Exact integer + Fraction arithmetic"
+    }
+  },
+  "generators": ["sigma", "mu", "lambda2", "nu"],
+  "invariants": [
+    "All 21 QA invariants preserved in oracle computation",
+    "Feature extraction preserves exact arithmetic until f64 boundary",
+    "Learned predicates generalize across manifold sizes (Cross-Caps)",
+    "Learned predicates generalize across SCC structure (SCC-Holdout)"
+  ],
+  "results": {
+    "core_training": {
+      "dataset": "Caps(30,30), 5K samples",
+      "return_in_k_auroc": 0.836,
+      "legality_accuracy": 0.952,
+      "fail_type_accuracy": 1.0
+    },
+    "cross_caps_generalization": {
+      "train": "Caps(30,30)",
+      "test": "Caps(50,50)",
+      "return_in_k_auroc": 0.816,
+      "degradation": "-2.4%"
+    },
+    "scc_holdout": {
+      "legality_accuracy": 1.0,
+      "fail_type_accuracy": 1.0
+    },
+    "calibration": {
+      "ece": 0.106,
+      "status": "acceptable"
+    }
+  },
+  "failure_modes": [
+    {
+      "type": "SPATIAL_MEMORIZATION",
+      "description": "Model memorizes positions instead of learning topology",
+      "mitigation": "SCC-Holdout experiment proves algebraic learning"
+    },
+    {
+      "type": "ORACLE_APPROXIMATION_ERROR",
+      "description": "f64 conversion introduces numerical drift",
+      "mitigation": "Exact arithmetic until feature boundary"
+    }
+  ],
+  "qa_theoretical_contribution": "Demonstrates Unknown→Known transformation: sparse samples reveal manifold topology"
+}

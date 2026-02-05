@@ -1,0 +1,34 @@
+{
+  "description": "DENY: content changed after receipt issued (content_hash_mismatch)",
+  "planned_move": "sigma(1)",
+  "context": {
+    "active_generators": [
+      "sigma",
+      "mu",
+      "lambda",
+      "nu"
+    ],
+    "verification_receipt": {
+      "schema_id": "QA_IC_VERIFICATION_RECEIPT.v1",
+      "scanner_id": "qa_guardrail.threat_scanner",
+      "scanner_version": "1.0.0",
+      "patterns_sha256": "2c8bea03df72f6f3ef8f9934907ee024ac3cf6d303bd444a296265d010f58dc7",
+      "policy_sha256": "e73118d027118883ae6896c2da9cd0fb98e755e97219ac341528a709ab828c14",
+      "content_sha256": "677561f398bebb0edb97b071ec65b7546e8bc53222ebee232a45128e1bc4bcb4",
+      "decision": "VERIFIED_SAFE",
+      "threats_found": false,
+      "threat_patterns": [],
+      "issued_utc": "2026-02-05T00:37:46.055354Z",
+      "signature": {
+        "alg": "none"
+      },
+      "receipt_sha256": "38f81f93ff43d0d11b16ab7858f5071671ca8b5b0088e63e5150912331116476"
+    },
+    "content": "Different content that doesn't match receipt",
+    "policy": {
+      "require_verification_receipt": true
+    }
+  },
+  "expected_result": "DENY",
+  "expected_fail_type": "INSTRUCTION_CONTENT_BOUNDARY_VIOLATION"
+}

@@ -66,19 +66,23 @@
       "description": "SHA256 of receipt body (with this field as sentinel)"
     },
     "signature": {
-      "type": ["object", "null"],
-      "description": "Optional cryptographic signature (null for hash-only mode)",
+      "type": "object",
+      "description": "Cryptographic signature. Use {\"alg\":\"none\"} for hash-only mode, future Ed25519 upgrade preserves shape.",
+      "required": ["alg"],
       "properties": {
         "alg": {
-          "enum": ["ed25519", "none"]
+          "enum": ["ed25519", "none"],
+          "description": "Algorithm: 'none' for hash-only, 'ed25519' for signed"
         },
         "pubkey": {
           "type": "string",
-          "pattern": "^[a-f0-9]*$"
+          "pattern": "^[a-f0-9]*$",
+          "description": "Hex-encoded public key (required if alg=ed25519)"
         },
         "sig": {
           "type": "string",
-          "pattern": "^[a-f0-9]*$"
+          "pattern": "^[a-f0-9]*$",
+          "description": "Hex-encoded signature (required if alg=ed25519)"
         }
       }
     },

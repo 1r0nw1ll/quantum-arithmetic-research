@@ -357,7 +357,7 @@ def create_verification_receipt(
         "threats_found": scan_result["threats_found"],
         "threat_patterns": scan_result["all_patterns"],
         "issued_utc": datetime.now(timezone.utc).isoformat().replace("+00:00", "Z"),
-        "signature": None,  # Hash-only mode for now
+        "signature": {"alg": "none"},  # Future-proof: fixed shape avoids type-flip on Ed25519 upgrade
     }
 
     # Optional generator set binding
@@ -404,6 +404,12 @@ def verify_receipt(
     if receipt.get("schema_id") != "QA_IC_VERIFICATION_RECEIPT.v1":
         return False, "invalid_schema_id"
 
+    # Check scanner identity/version (prevents "other scanner emits receipt" ambiguity)
+    if receipt.get("scanner_id") != SCANNER_ID:
+        return False, "scanner_id_mismatch"
+    if receipt.get("scanner_version") != SCANNER_VERSION:
+        return False, "scanner_version_mismatch"
+
     # Check content hash
     if receipt.get("content_sha256") != content_sha256(content):
         return False, "content_hash_mismatch"
@@ -434,8 +440,10 @@ def verify_receipt(
         except (KeyError, ValueError):
             return False, "invalid_timestamp"
 
-    # Check generator set if provided
-    if generators is not None and "generator_set_sha256" in receipt:
+    # Check generator set binding if requested (mandatory if generators specified)
+    if generators is not None:
+        if "generator_set_sha256" not in receipt:
+            return False, "missing_generator_set_hash"
         if receipt["generator_set_sha256"] != generator_set_sha256(generators):
             return False, "generator_set_mismatch"
 
@@ -588,6 +596,40 @@ def run_self_tests() -> Dict[str, Any]:
     valid, reason = verify_receipt(receipt_with_gens, "safe content", policy, generators={"sigma", "nu"})
     test("T19_gen_set_mismatch", not valid and reason == "generator_set_mismatch",
          f"got valid={valid}, reason={reason}")
+
+    # Test 20: verify_receipt - scanner_id mismatch
+    tampered_scanner = dict(receipt)
+    tampered_scanner["scanner_id"] = "evil_scanner"
+    # Recompute hash to pass integrity check but fail scanner_id check
+    tampered_scanner["receipt_sha256"] = "__SENTINEL__"
+    tampered_scanner["receipt_sha256"] = _sha256(_canonical_json(tampered_scanner))
+    valid, reason = verify_receipt(tampered_scanner, "Please help with math", policy)
+    test("T20_scanner_id_mismatch", not valid and reason == "scanner_id_mismatch",
+         f"got valid={valid}, reason={reason}")
+
+    # Test 21: verify_receipt - scanner_version mismatch
+    tampered_version = dict(receipt)
+    tampered_version["scanner_version"] = "9.9.9"
+    tampered_version["receipt_sha256"] = "__SENTINEL__"
+    tampered_version["receipt_sha256"] = _sha256(_canonical_json(tampered_version))
+    valid, reason = verify_receipt(tampered_version, "Please help with math", policy)
+    test("T21_scanner_version_mismatch", not valid and reason == "scanner_version_mismatch",
+         f"got valid={valid}, reason={reason}")
+
+    # Test 22: verify_receipt - missing generator_set_hash when binding requested
+    # Receipt without generator hash, but verification requests binding
+    receipt_no_gen = create_verification_receipt("safe content", policy, generators=None)
+    test("T22_no_gen_hash_in_receipt", "generator_set_sha256" not in receipt_no_gen,
+         "should not have generator_set_sha256")
+    valid, reason = verify_receipt(receipt_no_gen, "safe content", policy, generators={"sigma"})
+    test("T22_missing_gen_hash", not valid and reason == "missing_generator_set_hash",
+         f"got valid={valid}, reason={reason}")
+
+    # Test 23: signature field is future-proof object
+    test("T23_signature_object", isinstance(receipt["signature"], dict),
+         f"signature should be dict, got {type(receipt['signature'])}")
+    test("T23_signature_alg", receipt["signature"].get("alg") == "none",
+         f"signature.alg should be 'none', got {receipt['signature']}")
 
     return results
 

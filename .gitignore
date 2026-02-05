@@ -126,7 +126,7 @@ qa_discovery_workspace/*.pth
 Cargo.lock
 gemini_qa_project/zio_schema_migration/zio-schema
 
-# Local working directories (not for repo)
-ingestion candidates/
-gemini_qa_project/
-gemini_project_assesment1.md
+# Local working directories (not for repo) - anchored to root
+/ingestion candidates/
+/gemini_qa_project/
+/gemini_project_assesment1.md

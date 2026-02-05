@@ -124,3 +124,7 @@ qa_discovery_workspace/*.pth
 *.zip
 **/target/
 Cargo.lock
+gemini_qa_project/zio_schema_migration/zio-schema
+
+# Local ingestion artifacts (not for repo)
+ingestion candidates/

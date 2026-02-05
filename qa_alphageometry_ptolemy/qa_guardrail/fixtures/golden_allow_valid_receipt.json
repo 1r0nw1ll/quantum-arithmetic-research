@@ -18,11 +18,11 @@
       "decision": "VERIFIED_SAFE",
       "threats_found": false,
       "threat_patterns": [],
-      "issued_utc": "2026-02-05T00:37:46.055354Z",
+      "issued_utc": "2026-02-05T00:51:04.915415Z",
       "signature": {
         "alg": "none"
       },
-      "receipt_sha256": "38f81f93ff43d0d11b16ab7858f5071671ca8b5b0088e63e5150912331116476"
+      "receipt_sha256": "2c016a9d50ecd1da0fe979c075cf4944282d8fe1b8d8a8aa33d146e9f8f59a22"
     },
     "content": "Please help me prove the Pythagorean theorem",
     "policy": {

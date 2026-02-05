@@ -1,5 +1,5 @@
 {
-  "description": "DENY: content changed after receipt issued (content_hash_mismatch)",
+  "description": "DENY: missing generator_set_hash when bind_receipt_to_generators=true",
   "planned_move": "sigma(1)",
   "context": {
     "active_generators": [
@@ -14,19 +14,20 @@
       "scanner_version": "1.0.0",
       "patterns_sha256": "2c8bea03df72f6f3ef8f9934907ee024ac3cf6d303bd444a296265d010f58dc7",
       "policy_sha256": "e73118d027118883ae6896c2da9cd0fb98e755e97219ac341528a709ab828c14",
-      "content_sha256": "677561f398bebb0edb97b071ec65b7546e8bc53222ebee232a45128e1bc4bcb4",
+      "content_sha256": "99d5e9e0dc50e56ad7c9ecd0a0feea56fcb81d0ba7a27b7fa1e971c5dadd452b",
       "decision": "VERIFIED_SAFE",
       "threats_found": false,
       "threat_patterns": [],
-      "issued_utc": "2026-02-05T00:51:04.915415Z",
+      "issued_utc": "2026-02-05T00:51:04.915735Z",
       "signature": {
         "alg": "none"
       },
-      "receipt_sha256": "2c016a9d50ecd1da0fe979c075cf4944282d8fe1b8d8a8aa33d146e9f8f59a22"
+      "receipt_sha256": "bef2e0e1317c44dd0cd681a7a80d02b68a8a6d253c8708b72bbd55901e9b2bf4"
     },
-    "content": "Different content that doesn't match receipt",
+    "content": "safe content",
     "policy": {
-      "require_verification_receipt": true
+      "require_verification_receipt": true,
+      "bind_receipt_to_generators": true
     }
   },
   "expected_result": "DENY",

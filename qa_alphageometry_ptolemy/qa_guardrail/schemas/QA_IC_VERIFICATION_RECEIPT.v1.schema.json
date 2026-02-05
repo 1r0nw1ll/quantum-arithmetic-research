@@ -14,7 +14,8 @@
     "decision",
     "threats_found",
     "issued_utc",
-    "receipt_sha256"
+    "receipt_sha256",
+    "signature"
   ],
   "properties": {
     "schema_id": {
@@ -63,11 +64,11 @@
     "receipt_sha256": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$",
-      "description": "SHA256 of receipt body (with this field as sentinel)"
+      "description": "SHA256 of domain-tagged receipt body: sha256('QA_IC_VERIFICATION_RECEIPT.v1\\n' + canonical_json)"
     },
     "signature": {
       "type": "object",
-      "description": "Cryptographic signature. Use {\"alg\":\"none\"} for hash-only mode, future Ed25519 upgrade preserves shape.",
+      "description": "Cryptographic signature. Use {\"alg\":\"none\"} for hash-only mode.",
       "required": ["alg"],
       "properties": {
         "alg": {
@@ -76,20 +77,52 @@
         },
         "pubkey": {
           "type": "string",
-          "pattern": "^[a-f0-9]*$",
-          "description": "Hex-encoded public key (required if alg=ed25519)"
+          "pattern": "^[a-f0-9]+$",
+          "minLength": 64,
+          "description": "Hex-encoded Ed25519 public key (32 bytes = 64 hex chars)"
         },
         "sig": {
           "type": "string",
-          "pattern": "^[a-f0-9]*$",
-          "description": "Hex-encoded signature (required if alg=ed25519)"
+          "pattern": "^[a-f0-9]+$",
+          "minLength": 128,
+          "description": "Hex-encoded Ed25519 signature (64 bytes = 128 hex chars)"
         }
-      }
+      },
+      "additionalProperties": false
     },
     "generator_set_sha256": {
       "type": "string",
       "pattern": "^[a-f0-9]{64}$",
       "description": "Optional hash of active generator set for tool surface binding"
     }
-  }
+  },
+  "allOf": [
+    {
+      "if": {
+        "properties": {
+          "signature": {
+            "properties": { "alg": { "const": "ed25519" } },
+            "required": ["alg"]
+          }
+        }
+      },
+      "then": {
+        "properties": {
+          "signature": {
+            "required": ["alg", "pubkey", "sig"]
+          }
+        }
+      },
+      "else": {
+        "properties": {
+          "signature": {
+            "properties": {
+              "pubkey": false,
+              "sig": false
+            }
+          }
+        }
+      }
+    }
+  ]
 }

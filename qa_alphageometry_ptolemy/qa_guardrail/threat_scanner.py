@@ -36,6 +36,9 @@ from typing import Any, Dict, List, Set, Optional, Tuple
 SCANNER_ID = "qa_guardrail.threat_scanner"
 SCANNER_VERSION = "1.0.0"
 
+# Domain tag for receipt hash (prevents collision with other sha256-of-json objects)
+RECEIPT_HASH_DOMAIN = "QA_IC_VERIFICATION_RECEIPT.v1\n"
+
 
 # ============================================================================
 # THREAT PATTERNS (from Gemini's qa_osint_security/threat_modeling.py)
@@ -364,9 +367,9 @@ def create_verification_receipt(
     if generators:
         receipt["generator_set_sha256"] = generator_set_sha256(generators)
 
-    # Compute receipt hash (with sentinel)
+    # Compute receipt hash with domain separation (prevents collision with other sha256-of-json)
     receipt["receipt_sha256"] = "__SENTINEL__"
-    receipt["receipt_sha256"] = _sha256(_canonical_json(receipt))
+    receipt["receipt_sha256"] = _sha256(RECEIPT_HASH_DOMAIN + _canonical_json(receipt))
 
     return receipt
 
@@ -422,11 +425,11 @@ def verify_receipt(
     if receipt.get("patterns_sha256") != patterns_sha256():
         return False, "patterns_hash_mismatch"
 
-    # Check receipt integrity
+    # Check receipt integrity (with domain separation)
     receipt_copy = dict(receipt)
     stored_hash = receipt_copy.get("receipt_sha256")
     receipt_copy["receipt_sha256"] = "__SENTINEL__"
-    computed_hash = _sha256(_canonical_json(receipt_copy))
+    computed_hash = _sha256(RECEIPT_HASH_DOMAIN + _canonical_json(receipt_copy))
     if stored_hash != computed_hash:
         return False, "receipt_integrity_failure"
 
@@ -602,7 +605,7 @@ def run_self_tests() -> Dict[str, Any]:
     tampered_scanner["scanner_id"] = "evil_scanner"
     # Recompute hash to pass integrity check but fail scanner_id check
     tampered_scanner["receipt_sha256"] = "__SENTINEL__"
-    tampered_scanner["receipt_sha256"] = _sha256(_canonical_json(tampered_scanner))
+    tampered_scanner["receipt_sha256"] = _sha256(RECEIPT_HASH_DOMAIN + _canonical_json(tampered_scanner))
     valid, reason = verify_receipt(tampered_scanner, "Please help with math", policy)
     test("T20_scanner_id_mismatch", not valid and reason == "scanner_id_mismatch",
          f"got valid={valid}, reason={reason}")
@@ -611,7 +614,7 @@ def run_self_tests() -> Dict[str, Any]:
     tampered_version = dict(receipt)
     tampered_version["scanner_version"] = "9.9.9"
     tampered_version["receipt_sha256"] = "__SENTINEL__"
-    tampered_version["receipt_sha256"] = _sha256(_canonical_json(tampered_version))
+    tampered_version["receipt_sha256"] = _sha256(RECEIPT_HASH_DOMAIN + _canonical_json(tampered_version))
     valid, reason = verify_receipt(tampered_version, "Please help with math", policy)
     test("T21_scanner_version_mismatch", not valid and reason == "scanner_version_mismatch",
          f"got valid={valid}, reason={reason}")

@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft-07/schema#",
+  "$id": "QA_CORE_SYSTEM_STACK.v1.schema.json",
+  "title": "QA Core System Stack Certificate",
+  "description": "Certificate for the three-pillar QA system stack: Agent OS, Model Substrate, Physical Substrate",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "version",
+    "timestamp",
+    "agent_layer",
+    "model_layer",
+    "physics_layer",
+    "witnesses",
+    "cross_invariants"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_CORE_SYSTEM_STACK.v1"
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+$"
+    },
+    "timestamp": {
+      "type": "string",
+      "format": "date-time"
+    },
+    "agent_layer": {
+      "type": "object",
+      "required": ["description", "components", "generators"],
+      "properties": {
+        "description": {"type": "string"},
+        "components": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "generators": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "capabilities": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "model_layer": {
+      "type": "object",
+      "required": ["description", "components", "invariants"],
+      "properties": {
+        "description": {"type": "string"},
+        "components": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "invariants": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "physics_layer": {
+      "type": "object",
+      "required": ["description", "components", "invariants"],
+      "properties": {
+        "description": {"type": "string"},
+        "components": {
+          "type": "array",
+          "items": {"type": "string"}
+        },
+        "invariants": {
+          "type": "array",
+          "items": {"type": "string"}
+        }
+      }
+    },
+    "witnesses": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["witness_id", "layer", "source"],
+        "properties": {
+          "witness_id": {"type": "string"},
+          "layer": {"enum": ["AGENT_OS", "MODEL_SUBSTRATE", "PHYSICAL_SUBSTRATE"]},
+          "source": {"type": "string"}
+        }
+      }
+    },
+    "cross_invariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "statement", "layers"],
+        "properties": {
+          "id": {"type": "string"},
+          "statement": {"type": "string"},
+          "layers": {
+            "type": "array",
+            "items": {"enum": ["AGENT_OS", "MODEL_SUBSTRATE", "PHYSICAL_SUBSTRATE"]}
+          }
+        }
+      }
+    },
+    "obstructions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fail_type", "description"],
+        "properties": {
+          "fail_type": {"type": "string"},
+          "description": {"type": "string"},
+          "layers_affected": {
+            "type": "array",
+            "items": {"type": "string"}
+          }
+        }
+      }
+    }
+  }
+}

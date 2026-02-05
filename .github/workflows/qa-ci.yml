@@ -51,3 +51,6 @@ jobs:
       - name: Run QA Probes (certified obstruction theorems)
         working-directory: .
         run: python -m pytest qa_probes/ -v --override-ini="testpaths=qa_probes" --override-ini="python_files=test_*.py"
+
+      - name: Run Core System Stack validator
+        run: python certs/qa_core_stack_validate.py

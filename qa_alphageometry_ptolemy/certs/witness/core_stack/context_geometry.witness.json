@@ -1,0 +1,52 @@
+{
+  "witness_id": "WITNESS__CONTEXT_GEOMETRY__v1",
+  "source": {
+    "type": "arxiv_paper",
+    "arxiv_id": "2601.22364",
+    "title": "Context Structure Reshapes the Representational Geometry of Language Models",
+    "file": "ingestion candidates/context_structure_geometry_of_language_models.odt"
+  },
+  "claim": "Straightening (lower curvature trajectories) is regime-specific, not a universal ICL invariant; context structure selects generator regimes",
+  "qa_mapping": {
+    "layer": "AGENT_OS",
+    "concepts": {
+      "context_structure": "generator selector",
+      "straightening": "witness function W(s) -> R on states",
+      "swiss_army_knife": "generator regime selection",
+      "phase_label": "context-derived mode variable (like discrete control mode)"
+    },
+    "regimes": {
+      "R1_continual_prediction": {
+        "applies_to": ["natural language continuation", "grid-world random walks"],
+        "signature": "context_length_up implies straightening_up",
+        "interpretation": "Active generators prioritize trajectory linearization"
+      },
+      "R2_structured_mapping": {
+        "applies_to": ["few-shot Q/A mappings", "riddles"],
+        "signature": "straightening in format/template phases only",
+        "interpretation": "Different computational tool, not captured by curvature metric"
+      }
+    },
+    "instruction_content_separation": {
+      "format_tokens": "predictable manifold (instruction scaffold channel)",
+      "answer_computation": "content-binding/reasoning channel"
+    }
+  },
+  "generators": ["sigma", "mu"],
+  "invariants": [
+    "Context induces generator regime",
+    "Straightening witness is regime-specific",
+    "Phase label partitions task into format vs solution"
+  ],
+  "failure_modes": [
+    {
+      "fail_type": "NONUNIVERSAL_WITNESS",
+      "description": "Proposed witness W does not monotonically track capability across regimes"
+    },
+    {
+      "fail_type": "REGIME_MISMATCH",
+      "description": "Applied wrong generator regime for task structure"
+    }
+  ],
+  "proposed_cert_type": "QA_CONTEXT_GEOMETRY_TOOLKIT_CERT.v1"
+}

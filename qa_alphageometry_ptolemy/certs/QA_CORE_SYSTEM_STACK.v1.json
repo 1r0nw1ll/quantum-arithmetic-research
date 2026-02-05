@@ -1,0 +1,143 @@
+{
+  "schema_id": "QA_CORE_SYSTEM_STACK.v1",
+  "version": "v1.0.0",
+  "timestamp": "2026-02-04T22:30:00Z",
+  "title": "QA Core System Stack: Agent OS + Model Substrate + Physical Substrate",
+  "abstract": "Unified certification of QA as a cross-domain coordination language spanning agent tooling, model architectures, and physical systems",
+
+  "agent_layer": {
+    "description": "QA as Agent Operating System - deterministic skills, generator regimes, certified geometry, society-of-minds governance",
+    "components": [
+      "Deterministic skill invocations (emit_cert, validate_cert, sweep_repo)",
+      "Generator regime selection based on context structure",
+      "Hash-chained audit trails with {move, fail_type, invariant_diff}",
+      "Multi-agent constitution with Planner/Builder/Verifier/Red-Team roles"
+    ],
+    "generators": ["sigma", "mu", "lambda", "nu"],
+    "capabilities": [
+      "cert_emission",
+      "trace_replay",
+      "counterexample_minimization",
+      "regime_selection"
+    ]
+  },
+
+  "model_layer": {
+    "description": "QA as Model Substrate - MoE resonance blocks, ellipse embeddings, tuple memory lattices",
+    "components": [
+      "MoE experts as QA resonance families (mod-24 harmonic blocks)",
+      "Multimodal embeddings as (b,e,d,a,J,X,K) unified ellipse codes",
+      "Document compression as QA memory lattice",
+      "Query reasoning as tuple-space resonance walk"
+    ],
+    "invariants": [
+      "b + e = d",
+      "e + d = a",
+      "J = b*d, X = e*d, K = d*a",
+      "C = 2*e*d (long leg)",
+      "F = b*a (short leg)",
+      "G = e^2 + d^2 (hypotenuse)",
+      "H = C + F (harmonic binding)"
+    ]
+  },
+
+  "physics_layer": {
+    "description": "QA as Physical Interface - MaxEnt energetics, RG scaling, quantum memory cells",
+    "components": [
+      "Neural energy as E ~ -J(field) - X(pairwise) - K(global)",
+      "RG coarse-graining as inner-ellipse scaling",
+      "Optical/spinwave modes as QA ellipse states",
+      "Hankel transform as QA rotor on torus"
+    ],
+    "invariants": [
+      "Energy partitions into J,X,K channels",
+      "RG fixed point preserves inner-ellipse structure",
+      "Mode matching = QA ellipse alignment",
+      "Modular resonance under mod-24/mod-9"
+    ]
+  },
+
+  "witnesses": [
+    {
+      "witness_id": "WITNESS__CLAUDE_SKILLS__v1",
+      "layer": "AGENT_OS",
+      "source": "claude_skills.odt"
+    },
+    {
+      "witness_id": "WITNESS__CONTEXT_GEOMETRY__v1",
+      "layer": "AGENT_OS",
+      "source": "arXiv:2601.22364"
+    },
+    {
+      "witness_id": "WITNESS__KIMI_K2__v1",
+      "layer": "MODEL_SUBSTRATE",
+      "source": "arXiv:2507.20534"
+    },
+    {
+      "witness_id": "WITNESS__KOSMOS__v1",
+      "layer": "MODEL_SUBSTRATE",
+      "source": "Microsoft Kosmos family"
+    },
+    {
+      "witness_id": "WITNESS__CLARA__v1",
+      "layer": "MODEL_SUBSTRATE",
+      "source": "arXiv:2511.18659"
+    },
+    {
+      "witness_id": "WITNESS__STAT_MECH_NN__v1",
+      "layer": "PHYSICAL_SUBSTRATE",
+      "source": "Rev. Mod. Phys. 10.1103/jcrn-3nrc"
+    },
+    {
+      "witness_id": "WITNESS__QUANTUM_MEMORY__v1",
+      "layer": "PHYSICAL_SUBSTRATE",
+      "source": "PRL 10.1103/kbwj-md9n"
+    }
+  ],
+
+  "cross_invariants": [
+    {
+      "id": "CI_TUPLE_CLOSURE",
+      "statement": "All layers preserve (b,e,d,a) closure: b+e=d, e+d=a",
+      "layers": ["AGENT_OS", "MODEL_SUBSTRATE", "PHYSICAL_SUBSTRATE"]
+    },
+    {
+      "id": "CI_ELLIPSE_OPERATORS",
+      "statement": "J,X,K operators maintain consistent semantics across layers",
+      "layers": ["MODEL_SUBSTRATE", "PHYSICAL_SUBSTRATE"]
+    },
+    {
+      "id": "CI_GENERATOR_DETERMINISM",
+      "statement": "Generator invocations produce deterministic, replayable traces",
+      "layers": ["AGENT_OS", "MODEL_SUBSTRATE"]
+    },
+    {
+      "id": "CI_MODULAR_RESONANCE",
+      "statement": "Mod-24 and mod-9 cycles govern state evolution at all scales",
+      "layers": ["AGENT_OS", "MODEL_SUBSTRATE", "PHYSICAL_SUBSTRATE"]
+    }
+  ],
+
+  "obstructions": [
+    {
+      "fail_type": "LAYER_INVARIANT_VIOLATION",
+      "description": "Change in one layer breaks invariants in another",
+      "layers_affected": ["all"]
+    },
+    {
+      "fail_type": "GENERATOR_NONDETERMINISM",
+      "description": "Same generator invocation produces different outputs",
+      "layers_affected": ["AGENT_OS"]
+    },
+    {
+      "fail_type": "TUPLE_CLOSURE_BREAK",
+      "description": "Arithmetic operation violates b+e=d or e+d=a",
+      "layers_affected": ["MODEL_SUBSTRATE", "PHYSICAL_SUBSTRATE"]
+    },
+    {
+      "fail_type": "CROSS_LAYER_DRIFT",
+      "description": "Semantic meaning of J,X,K diverges between layers",
+      "layers_affected": ["MODEL_SUBSTRATE", "PHYSICAL_SUBSTRATE"]
+    }
+  ]
+}

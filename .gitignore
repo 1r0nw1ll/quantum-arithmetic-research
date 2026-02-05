@@ -75,6 +75,7 @@ Cargo.lock
 !qa_alphageometry_ptolemy/schemas/*.json
 !qa_alphageometry_ptolemy/*.json
 !qa_alphageometry_ptolemy/qa_guardrail/**/*.json
+!qa_alphageometry_ptolemy/certs/**/*.json
 !.openclaw/**/*.json
 *.npy
 *.npz

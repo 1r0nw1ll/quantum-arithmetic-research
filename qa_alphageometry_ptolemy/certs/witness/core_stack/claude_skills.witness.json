@@ -1,0 +1,59 @@
+{
+  "witness_id": "WITNESS__CLAUDE_SKILLS__v1",
+  "source": {
+    "type": "conversation_transcript",
+    "title": "QA Skills Blueprint for Claude Code CLI",
+    "date": "2026-02-04",
+    "file": "ingestion candidates/claude_skills.odt"
+  },
+  "claim": "Claude Code becomes genuinely useful for QA only when given a small set of deterministic local skills that speak the cert/trace language",
+  "qa_mapping": {
+    "layer": "AGENT_OS",
+    "concepts": {
+      "tool_plugins": "deterministic generators",
+      "skill_invocation": "move in reachability graph",
+      "audit_trail": "hash-chained trace with {move, fail_type, invariant_diff}",
+      "society_of_minds": "multi-agent reachability machine with QA constitution"
+    },
+    "proposed_skills": [
+      "qa.skill.emit_cert",
+      "qa.skill.validate_cert",
+      "qa.skill.new_cert_type",
+      "qa.skill.emit_generator_injection",
+      "qa.skill.sweep_repo",
+      "qa.skill.trace_replay",
+      "qa.skill.minimize_counterexample",
+      "qa.skill.emit_mapping_bundle"
+    ],
+    "role_decomposition": {
+      "planner": "Converts intent to contract (inputs, outputs, invariants)",
+      "builder": "Writes code, emits certs",
+      "verifier": "Runs schema validation, hash checks, sweep",
+      "red_team": "Finds minimal counterexamples",
+      "archivist": "Enforces naming, versioning, manifest attachment"
+    }
+  },
+  "generators": ["sigma", "mu", "lambda", "nu"],
+  "invariants": [
+    "No writes outside repo root",
+    "Atomic writes only (temp -> validate -> rename)",
+    "Deterministic serialization (canonical JSON)",
+    "Golden fixtures required for new cert types",
+    "Repo sweep must pass after any change",
+    "Every trace move logged as {move, fail_type, invariant_diff}"
+  ],
+  "failure_modes": [
+    {
+      "fail_type": "NONDETERMINISTIC_EMISSION",
+      "description": "Skill produces different output for same input"
+    },
+    {
+      "fail_type": "MISSING_FIXTURE",
+      "description": "New cert type without golden test vectors"
+    },
+    {
+      "fail_type": "SWEEP_FAILURE",
+      "description": "Repo-wide validation fails after change"
+    }
+  ]
+}

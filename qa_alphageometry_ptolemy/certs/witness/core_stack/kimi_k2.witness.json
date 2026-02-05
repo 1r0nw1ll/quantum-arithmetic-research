@@ -1,0 +1,49 @@
+{
+  "witness_id": "WITNESS__KIMI_K2__v1",
+  "source": {
+    "type": "arxiv_paper",
+    "arxiv_id": "2507.20534",
+    "title": "Kimi K2: Trillion-Parameter Agentic MoE",
+    "file": "ingestion candidates/kimi_k2.odt"
+  },
+  "claim": "MoE architecture maps to QA resonance blocks; MuonClip optimizer maps to QA Harmonic Gradient Descent",
+  "qa_mapping": {
+    "layer": "MODEL_SUBSTRATE",
+    "concepts": {
+      "moe_expert": "QA resonance block (one family of 24 tuples)",
+      "expert_routing": "QA-router selecting harmonic family",
+      "muonclip": "QA-HGD with manifold projection",
+      "sparsity_scaling": "QA modular resonance scaling",
+      "token_efficiency": "QA harmonic compression"
+    },
+    "architecture_mapping": {
+      "total_params": "1.04T",
+      "active_params": "32B per token",
+      "experts": 384,
+      "active_experts": 8,
+      "layers": 61
+    },
+    "qa_interpretation": {
+      "expert_i": "QA family (Fibonacci, Lucas, Tribonacci, etc.) under mod-24",
+      "sparsity_E_over_k": "harmonic diversity vs phase interference tradeoff",
+      "muon_step": "w_t+1 = Pi_QA_manifold(w_t - eta * g_t)"
+    }
+  },
+  "generators": ["sigma", "mu", "lambda"],
+  "invariants": [
+    "Per-tuple identities: d = b+e, a = d+e",
+    "Triangle identities: C^2 + F^2 = G^2",
+    "Ellipse identities: quantum vs inner ellipse",
+    "Modular resonance: mod-24 attractor pattern"
+  ],
+  "failure_modes": [
+    {
+      "fail_type": "ROUTER_PHASE_INTERFERENCE",
+      "description": "Too many experts causes harmonic fragmentation"
+    },
+    {
+      "fail_type": "MANIFOLD_PROJECTION_DRIFT",
+      "description": "Gradient step violates QA constraints"
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "witness_id": "WITNESS__QUANTUM_MEMORY__v1",
+  "source": {
+    "type": "journal_paper",
+    "doi": "10.1103/kbwj-md9n",
+    "title": "Raman quantum memory demonstrates near-unity performance",
+    "journal": "Physical Review Letters",
+    "file": "ingestion candidates/ramen_quantum_memory.odt"
+  },
+  "claim": "High-efficiency Raman quantum memory in rubidium vapor implements a physical QA memory cell; Hankel transform maps to QA rotor on torus",
+  "qa_mapping": {
+    "layer": "PHYSICAL_SUBSTRATE",
+    "concepts": {
+      "optical_mode": "QA ellipse in (t, omega) phase space",
+      "spinwave_mode": "QA ellipse in (z, k_z)",
+      "hankel_transform": "QA rotor on torus (radial/Bessel decomposition)",
+      "spinwave_compaction": "QA ellipse optimization for mode matching"
+    },
+    "optical_mode_mapping": {
+      "duration_delta_t": "d^2 ~ (delta_t)^2 (semi-major axis)",
+      "focus_separation_C": "2*e*d (effective detuning/dispersion)",
+      "intensity_envelope_F": "b*a (height of right triangle)"
+    },
+    "experimental_performance": {
+      "efficiency": "94.6%",
+      "noise": "0.026 photons/pulse",
+      "fidelity": "98.91%",
+      "pulse_length": "~17 ns broadband"
+    }
+  },
+  "generators": ["sigma", "mu"],
+  "invariants": [
+    "b + e = d, e + d = a",
+    "Optical and spinwave modes share QA ellipse structure",
+    "Hankel transform preserves modular resonance",
+    "Near-unity storage = QA mode matching"
+  ],
+  "failure_modes": [
+    {
+      "fail_type": "MODE_MISMATCH",
+      "description": "QA ellipse of spinwave doesn't match optical mode"
+    },
+    {
+      "fail_type": "FWM_NOISE_INJECTION",
+      "description": "Four-wave mixing corrupts QA cell"
+    }
+  ]
+}

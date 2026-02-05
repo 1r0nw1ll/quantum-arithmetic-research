@@ -1,0 +1,44 @@
+{
+  "witness_id": "WITNESS__CLARA__v1",
+  "source": {
+    "type": "arxiv_paper",
+    "arxiv_id": "2511.18659",
+    "title": "CLaRa: Bridging Retrieval and Generation with Continuous Latent Reasoning",
+    "authors": ["Apple", "University of Edinburgh"],
+    "file": "ingestion candidates/clara.odt"
+  },
+  "claim": "CLaRa is QA-RAG over continuous tuples instead of raw text; document compressor creates QA memory lattice, query reasoner performs QA state evolution",
+  "qa_mapping": {
+    "layer": "MODEL_SUBSTRATE",
+    "concepts": {
+      "document": "cloud of QA tuples with invariants",
+      "memory_tokens": "aggregated QA cells encoding tuple spectrum",
+      "query_reasoner": "QA state-evolution operator",
+      "differentiable_topk": "soft attention over document tuple lattice",
+      "hankel_compression": "harmonic tesseract cell"
+    },
+    "scp_pretraining": {
+      "simple_qa": "preserve local tuple invariants (single facts)",
+      "complex_qa": "preserve multi-tuple chains (resonance paths)",
+      "paraphrase": "modular invariance under syntax permutation"
+    },
+    "mse_loss_interpretation": "QA barycenter alignment - average point in embedding equals average in compressed memory"
+  },
+  "generators": ["sigma", "mu"],
+  "invariants": [
+    "Memory tokens preserve QA tuple spectrum",
+    "Query state evolves via resonance walk",
+    "Retrieval = excitation of QA wells",
+    "Compression maintains (C,F,G) ratios"
+  ],
+  "failure_modes": [
+    {
+      "fail_type": "TUPLE_SPECTRUM_LOSS",
+      "description": "Compression loses key QA invariants"
+    },
+    {
+      "fail_type": "BARYCENTER_DRIFT",
+      "description": "Average embedding deviates from average memory"
+    }
+  ]
+}

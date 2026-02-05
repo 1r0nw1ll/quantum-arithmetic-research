@@ -1,0 +1,44 @@
+{
+  "witness_id": "WITNESS__KOSMOS__v1",
+  "source": {
+    "type": "microsoft_research",
+    "title": "Microsoft Kosmos: Vision-Language-Action Family",
+    "file": "ingestion candidates/microsoft_kosmos.odt"
+  },
+  "claim": "Multimodal embeddings, grounding tokens, and world models map directly to QA tuple geometry (b,e,d,a,J,X,K)",
+  "qa_mapping": {
+    "layer": "MODEL_SUBSTRATE",
+    "concepts": {
+      "multimodal_embeddings": "(b,e,d,a,J,X,K) unified ellipse code",
+      "grounding_tokens": "J,X,K operators (perigee/foci/apogee)",
+      "cross_modal_attention": "H = C+F harmonic binding",
+      "world_model": "mod-24 toroidal circulation",
+      "action_generation": "rotor increments (discrete GA analogue)"
+    },
+    "grounding_operators": {
+      "J_perigee": "b*d = grounded spatial integration",
+      "X_foci": "e*d = semantic-visual alignment (half-distance between foci)",
+      "K_apogee": "d*a = abstract region/intent"
+    },
+    "modalities": ["vision", "language", "audio", "grounding", "embodied_action", "symbolic_reasoning"],
+    "kosmos_variants": ["Kosmos-1", "Kosmos-2", "Kosmos-G", "Kosmos-XL", "Kosmos-Unified"]
+  },
+  "generators": ["sigma", "mu", "lambda", "nu"],
+  "invariants": [
+    "b + e = d",
+    "e + d = a",
+    "J = b*d, X = e*d, K = d*a",
+    "H = C + F (harmonic binding law)",
+    "Rotor increment: delta_theta = arctan(F/C)"
+  ],
+  "failure_modes": [
+    {
+      "fail_type": "MODALITY_BINDING_VIOLATION",
+      "description": "Cross-modal attention breaks H = C+F constraint"
+    },
+    {
+      "fail_type": "GROUNDING_OPERATOR_MISMATCH",
+      "description": "J,X,K values inconsistent with tuple geometry"
+    }
+  ]
+}

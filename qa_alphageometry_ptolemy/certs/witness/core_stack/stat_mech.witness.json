@@ -1,0 +1,49 @@
+{
+  "witness_id": "WITNESS__STAT_MECH_NN__v1",
+  "source": {
+    "type": "journal_paper",
+    "doi": "10.1103/jcrn-3nrc",
+    "title": "Statistical mechanics for real neural networks",
+    "journal": "Reviews of Modern Physics",
+    "file": "ingestion candidates/statistical_mechanics.odt"
+  },
+  "claim": "Maximum entropy (pairwise Ising) and RG coarse-graining map directly to QA constrained tuple energetics with J,X,K channels",
+  "qa_mapping": {
+    "layer": "PHYSICAL_SUBSTRATE",
+    "concepts": {
+      "maxent_ising": "QA constrained energetics",
+      "pairwise_coupling": "X = e*d channel",
+      "local_field": "J = b*d channel",
+      "global_drive": "K = d*a channel",
+      "rg_coarsegraining": "inner-ellipse scaling with modular rotors"
+    },
+    "energy_decomposition": {
+      "E": "~ -J(field) - X(pairwise) - K(global_drive)",
+      "J_channel": "single-neuron bias load",
+      "X_channel": "pairwise correlation mass",
+      "K_channel": "population drive (mean rate + shared gain)"
+    },
+    "maxent_to_qa": {
+      "leading_eigenvalue_lambda1": "d := sqrt(lambda1)",
+      "avg_coupling": "e := alpha * avg(|C_ij|) / sqrt(lambda1)",
+      "closure": "b = d-e, a = d+e"
+    }
+  },
+  "generators": ["sigma", "mu", "lambda"],
+  "invariants": [
+    "J = b*d, X = e*d, K = d*a",
+    "b + e = d, e + d = a",
+    "Energy partitions into three QA channels",
+    "RG fixed point = inner ellipse attractor"
+  ],
+  "failure_modes": [
+    {
+      "fail_type": "CHANNEL_IMBALANCE",
+      "description": "J,X,K ratios violate physical constraints"
+    },
+    {
+      "fail_type": "RG_FLOW_DIVERGENCE",
+      "description": "Coarse-graining breaks inner-ellipse structure"
+    }
+  ]
+}

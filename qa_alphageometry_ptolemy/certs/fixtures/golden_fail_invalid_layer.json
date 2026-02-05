@@ -1,0 +1,18 @@
+{
+  "description": "FAIL: witness with invalid layer value",
+  "witness_id": "WITNESS__INVALID__v1",
+  "source": {
+    "type": "test_fixture",
+    "title": "Invalid Layer Test",
+    "file": "fixtures/golden_fail_invalid_layer.json"
+  },
+  "claim": "This witness should fail validation due to invalid layer",
+  "qa_mapping": {
+    "layer": "INVALID_LAYER",
+    "concepts": {}
+  },
+  "generators": ["sigma"],
+  "invariants": [],
+  "failure_modes": [],
+  "expected_error": "invalid layer"
+}

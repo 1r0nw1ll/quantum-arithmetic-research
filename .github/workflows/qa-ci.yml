@@ -24,8 +24,8 @@ jobs:
         with:
           python-version: "3.11"
 
-      - name: Install pytest (pinned)
-        run: pip install "pytest==8.4.2"
+      - name: Install dependencies
+        run: pip install "pytest==8.4.2" "jsonschema>=4.0.0"
 
       - name: Run QA meta-validator (tetrad + conjectures + FST)
         run: python qa_meta_validator.py

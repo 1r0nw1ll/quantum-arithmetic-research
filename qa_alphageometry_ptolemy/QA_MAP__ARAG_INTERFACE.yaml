@@ -1,0 +1,92 @@
+# QA_MAP__ARAG_INTERFACE.yaml
+#
+# QA Module Specification for Agentic RAG Interface Certificates
+#
+# Anchors hierarchical retrieval control to certified datastore + view families.
+
+module:
+  name: "QA_ARAG_INTERFACE"
+  version: "1.0.0"
+  source_paper: "A-RAG framing from ingestion candidates/qa_agentic_rag.odt"
+  title: "QA Agentic Retrieval Interface Mapping"
+  schema_prefix: "QA_ARAG"
+  status: "COMPLETE - Scaffold"
+
+concept_mapping:
+  retrieval_generators:
+    paper_name: "Hierarchical retrieval tools"
+    paper_definition: "keyword_search, semantic_search, chunk_read"
+    qa_interpretation: "Generator set over epistemic retrieval state"
+    qa_structure: "Generators"
+    key_insight: "Interfaces expose controllability over the knowledge manifold"
+
+  tool_view_typing:
+    paper_name: "Hierarchical retrieval interfaces"
+    paper_definition: "Each retrieval tool binds to its intended retrieval layer"
+    qa_interpretation: "Tool-to-view-kind typing contract"
+    qa_structure: "Generator typing"
+    key_insight: "Prevents tool spoofing across lexical/semantic/chunk interfaces"
+
+  epistemic_state:
+    paper_name: "Retrieval trajectory"
+    paper_definition: "Question, memory trace, retrieved evidence, budget"
+    qa_interpretation: "Bounded reachability state"
+    qa_structure: "State"
+    key_insight: "Agentic RAG is a control loop with certified transitions"
+
+  dual_root_binding:
+    paper_name: "Evidence grounding"
+    paper_definition: "Retrieval outputs tied to datastore/view roots"
+    qa_interpretation: "Proof-carrying observation operator"
+    qa_structure: "Witness"
+    key_insight: "Every retrieval step is replayable and auditable"
+
+  typed_root_provenance:
+    paper_name: "Interface-grounded retrieval"
+    paper_definition: "Tool outputs must be grounded in the correct retrieval layer roots"
+    qa_interpretation: "view_root_snapshots by kind + per-step view_snapshot_id binding"
+    qa_structure: "Root provenance"
+    key_insight: "Typed generators are root-bound, not just label-bound"
+    note: "view_root_snapshot is retained as default alias and mirrors KEYWORD_VIEW when typed roots are present"
+
+  scaling_budget:
+    paper_name: "Test-time scaling"
+    paper_definition: "More steps/reasoning can improve outcomes"
+    qa_interpretation: "Time/energy constrained reachability"
+    qa_structure: "Budget model"
+    key_insight: "Steps = time, retrieved tokens = energy"
+
+failure_completeness:
+  theorem: |
+    For any A-RAG trace, exactly one outcome is valid:
+    1. SUCCESS: all retrieval steps are root-bound and proof-verified under budget, OR
+    2. FAILURE: deterministic fail_type with invariant_diff explains obstruction.
+
+certificate_family:
+  semantics:
+    schema_id: "QA_ARAG_INTERFACE_CERT.v1"
+    file: "certs/QA_ARAG_INTERFACE_CERT.v1.json"
+    role: "Declares tool set, tool-view typing, budgets, trace contract, and fail taxonomy"
+
+  witness_pack:
+    schema_id: "QA_ARAG_WITNESS_PACK.v1"
+    file: "certs/witness/QA_ARAG_WITNESS_PACK.v1.json"
+    role: "Successful retrieval trace with dual-root proof bundles"
+
+  counterexamples_pack:
+    schema_id: "QA_ARAG_COUNTEREXAMPLES_PACK.v1"
+    file: "certs/counterexamples/QA_ARAG_COUNTEREXAMPLES_PACK.v1.json"
+    role: "Tamper traces that must fail with deterministic fail_type"
+
+implementation:
+  validator: "qa_arag_validator.py"
+  dependencies:
+    - "QA_DATASTORE_SEMANTICS_CERT.v1"
+    - "QA_DATASTORE_VIEW_CERT.v1"
+  schemas:
+    - "schemas/QA_ARAG_INTERFACE_CERT.v1.schema.json"
+    - "schemas/QA_ARAG_WITNESS_PACK.v1.schema.json"
+    - "schemas/QA_ARAG_COUNTEREXAMPLES_PACK.v1.schema.json"
+
+  quick_commands:
+    - "python qa_arag_validator.py --demo"

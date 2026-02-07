@@ -1,0 +1,115 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1.schema.json",
+  "title": "QA Datastore View Counterexamples Pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "view_semantics_schema_id",
+    "store_semantics_schema_id",
+    "store_root_snapshot",
+    "view_root_snapshot",
+    "cases",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1" },
+    "view_semantics_schema_id": { "type": "string", "const": "QA_DATASTORE_VIEW_CERT.v1" },
+    "store_semantics_schema_id": { "type": "string", "const": "QA_DATASTORE_SEMANTICS_CERT.v1" },
+
+    "store_root_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_hash", "hash_alg"],
+      "properties": {
+        "root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "snapshot_id": { "type": "string" },
+        "keys": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "keys_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+
+    "view_root_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_hash", "hash_alg"],
+      "properties": {
+        "root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "snapshot_id": { "type": "string" },
+        "keys": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "keys_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "op",
+          "view_key",
+          "tamper_mode",
+          "expected_fail_type",
+          "expected_posting",
+          "view_proof",
+          "store_proofs_by_base_key"
+        ],
+        "properties": {
+          "case_id": { "type": "string", "minLength": 1 },
+          "op": { "type": "string", "enum": ["VIEW_GET"] },
+          "view_key": { "type": "string", "minLength": 1 },
+          "tamper_mode": {
+            "description": "Diagnostic subtype only. Do not extend semantics fail_types from tamper_mode.",
+            "type": "string",
+            "minLength": 1
+          },
+          "expected_fail_type": { "type": "string", "minLength": 1 },
+          "expected_posting": {
+            "anyOf": [
+              { "type": "null" },
+              {
+                "type": "array",
+                "items": { "type": "string", "minLength": 1 }
+              }
+            ]
+          },
+          "view_proof": { "$ref": "QA_VIEW_PROOF.v1.schema.json" },
+          "store_proofs_by_base_key": {
+            "type": "object",
+            "additionalProperties": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["record_hash", "proof"],
+              "properties": {
+                "record_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                "proof": { "$ref": "QA_MERKLE_PROOF.v1.schema.json" }
+              }
+            }
+          }
+        }
+      }
+    },
+
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

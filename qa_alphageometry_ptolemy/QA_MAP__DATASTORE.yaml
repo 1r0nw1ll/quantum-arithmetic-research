@@ -1,0 +1,159 @@
+# QA_MAP__DATASTORE.yaml
+#
+# QA Module Specification for Datastore Semantics + Retrieval Correctness
+#
+# Maps storage/retrieval operations to QA reachability with explicit invariants,
+# failure algebra, and deterministic certificates.
+
+module:
+  name: "QA_DATASTORE"
+  version: "1.0.0"
+  source_paper: "Internal QA Datastore Control Formalization"
+  title: "QA Datastore Control Theorem Mapping"
+  schema_prefix: "QA_DATASTORE"
+  status: "COMPLETE - Gold Standard mapping"
+
+# ============================================================================
+# CORE MAPPING: Datastore Concepts -> QA Framework
+# ============================================================================
+
+concept_mapping:
+  store_state:
+    paper_name: "Datastore state"
+    paper_definition: "Finite map key -> record with append-only operation history"
+    qa_interpretation: "Reachability manifold over states under legal generators"
+    qa_structure: "State"
+    key_insight: "Storage is a controlled transition system, not passive memory"
+
+  generator_set:
+    paper_name: "CRUD + migration + compaction"
+    paper_definition: "put/get/del/migrate/scale/compact operations"
+    qa_interpretation: "Generator set over datastore states"
+    qa_structure: "Generators"
+    key_insight: "Retrieval is an observation operator over generated states"
+
+  key_geometry:
+    paper_name: "Composite key"
+    paper_definition: "family_id + phase_24 + phase_9 + tuple_id + field_path"
+    qa_interpretation: "Coordinate chart on a mod-24 x mod-9 tuple manifold"
+    qa_structure: "Address geometry"
+    key_insight: "Keys are geometric coordinates tied to QA phase annotations"
+
+  retrieval_witness:
+    paper_name: "Lookup proof"
+    paper_definition: "Merkle inclusion or non-inclusion witness"
+    qa_interpretation: "Observation witness O(S,k) with deterministic replay"
+    qa_structure: "Witness"
+    key_insight: "Every retrieval is auditable against a root invariant"
+
+  migration_legality:
+    paper_name: "Schema transform"
+    paper_definition: "Projection/migration over record schema"
+    qa_interpretation: "Scale-preserving isomorphism or explicit observer projection"
+    qa_structure: "Non-reduction contract"
+    key_insight: "Silent scale collapse is illegal and must emit obstruction"
+
+# ============================================================================
+# FAILURE-COMPLETENESS MAPPING
+# ============================================================================
+
+failure_completeness:
+  theorem: |
+    For any datastore retrieval attempt, exactly one outcome is valid:
+    1. SUCCESS: witness verifies against invariant-preserving root, OR
+    2. FAILURE: deterministic fail_type with invariant_diff explains obstruction.
+
+  failure_modes:
+    - mode: "KEY_NOT_FOUND"
+      description: "Requested key absent with valid non-membership witness"
+      obstruction_witness: "Range proof boundaries"
+
+    - mode: "HASH_MISMATCH"
+      description: "Record hash or keyed leaf hash mismatch"
+      obstruction_witness: "Expected vs observed hash diff"
+
+    - mode: "SCHEMA_MISMATCH"
+      description: "Malformed pack/proof/field types"
+      obstruction_witness: "Field-level structural mismatch"
+
+    - mode: "DOMAIN_SEP_VIOLATION"
+      description: "Domain separation prefixes are missing or collide"
+      obstruction_witness: "Domain registry diff"
+
+    - mode: "NON_CANONICAL_JSON"
+      description: "Record serialization is not canonical"
+      obstruction_witness: "Canonical roundtrip mismatch"
+
+    - mode: "UNVERIFIABLE_PROOF"
+      description: "Inclusion/non-inclusion proof fails against declared root"
+      obstruction_witness: "Computed root/path inconsistency"
+
+    - mode: "FORK_DETECTED"
+      description: "Counterexample expected failure type disagrees with actual failure"
+      obstruction_witness: "Expected vs actual fail_type divergence"
+
+# ============================================================================
+# CERTIFICATE FAMILY
+# ============================================================================
+
+certificate_family:
+  semantics:
+    schema_id: "QA_DATASTORE_SEMANTICS_CERT.v1"
+    file: "certs/QA_DATASTORE_SEMANTICS_CERT.v1.json"
+    role: "Declares generators, invariants, domains, and failure taxonomy"
+
+  witness_pack:
+    schema_id: "QA_DATASTORE_WITNESS_PACK.v1"
+    file: "certs/witness/QA_DATASTORE_WITNESS_PACK.v1.json"
+    role: "Batch retrieval witnesses (inclusion + non-inclusion)"
+
+  counterexamples_pack:
+    schema_id: "QA_DATASTORE_COUNTEREXAMPLES_PACK.v1"
+    file: "certs/counterexamples/QA_DATASTORE_COUNTEREXAMPLES_PACK.v1.json"
+    role: "Tamper cases that must fail with deterministic fail_type"
+
+  view_semantics:
+    schema_id: "QA_DATASTORE_VIEW_CERT.v1"
+    file: "certs/QA_DATASTORE_VIEW_CERT.v1.json"
+    role: "Declares dual-root view semantics, projection legality, and view hash domains"
+
+  view_witness_pack:
+    schema_id: "QA_DATASTORE_VIEW_WITNESS_PACK.v1"
+    file: "certs/witness/QA_DATASTORE_VIEW_WITNESS_PACK.v1.json"
+    role: "Dual-root witnesses: view membership/non-membership + store soundness proofs"
+
+  view_counterexamples_pack:
+    schema_id: "QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1"
+    file: "certs/counterexamples/QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1.json"
+    role: "Tamper cases for view roots/proofs/store-soundness links"
+
+# ============================================================================
+# IMPLEMENTATION NOTES
+# ============================================================================
+
+implementation:
+  validator: "qa_datastore_validator.py"
+  view_validator: "qa_datastore_view_validator.py"
+  snapshot_builder: "qa_datastore_build_snapshot.py"
+  schemas:
+    - "schemas/QA_DATASTORE_SEMANTICS_CERT.v1.schema.json"
+    - "schemas/QA_DATASTORE_WITNESS_PACK.v1.schema.json"
+    - "schemas/QA_DATASTORE_COUNTEREXAMPLES_PACK.v1.schema.json"
+    - "schemas/QA_MERKLE_PROOF.v1.schema.json"
+    - "schemas/QA_DATASTORE_VIEW_CERT.v1.schema.json"
+    - "schemas/QA_DATASTORE_VIEW_WITNESS_PACK.v1.schema.json"
+    - "schemas/QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1.schema.json"
+    - "schemas/QA_VIEW_PROOF.v1.schema.json"
+
+  deterministic_rules:
+    - "Canonical JSON uses qa_cert_core.canonical_json_compact"
+    - "All hashes are SHA-256 with domain separation"
+    - "Merkle path sides are explicit (L/R)"
+    - "Manifest self-hash uses zeroed canonical_json_sha256 field"
+    - "When root_snapshot.keys is present, validator enforces keys_hash binding and non-inclusion adjacency"
+    - "tamper_mode is diagnostic-only; expected_fail_type must remain in semantics fail_types"
+
+  quick_commands:
+    - "python qa_datastore_validator.py --demo"
+    - "python qa_datastore_view_validator.py --demo"
+    - "python qa_datastore_build_snapshot.py --input <items.json> --out_snapshot <snapshot.json> --out_witness_pack <witness.json>"

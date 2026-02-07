@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_VIEW_PROOF.v1.schema.json",
+  "title": "QA View Proof v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["proof_type", "hash_alg", "leaf_hash", "root_hash", "path"],
+  "properties": {
+    "proof_type": {
+      "type": "string",
+      "enum": ["INCLUSION", "NON_INCLUSION_RANGE"]
+    },
+    "hash_alg": {
+      "type": "string",
+      "enum": ["sha256"]
+    },
+    "leaf_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "root_hash": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "path": {
+      "description": "Merkle sibling list from leaf to root.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["side", "sibling_hash"],
+        "properties": {
+          "side": { "type": "string", "enum": ["L", "R"] },
+          "sibling_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "range": {
+      "description": "Only for NON_INCLUSION_RANGE proofs.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["query_key", "predecessor", "successor"],
+      "properties": {
+        "query_key": { "type": "string", "minLength": 1 },
+        "predecessor": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["leaf_key", "leaf_hash", "proof"],
+              "properties": {
+                "leaf_key": { "type": "string", "minLength": 1 },
+                "leaf_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                "proof": { "$ref": "QA_VIEW_PROOF.v1.schema.json" }
+              }
+            }
+          ]
+        },
+        "successor": {
+          "anyOf": [
+            { "type": "null" },
+            {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["leaf_key", "leaf_hash", "proof"],
+              "properties": {
+                "leaf_key": { "type": "string", "minLength": 1 },
+                "leaf_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                "proof": { "$ref": "QA_VIEW_PROOF.v1.schema.json" }
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+}

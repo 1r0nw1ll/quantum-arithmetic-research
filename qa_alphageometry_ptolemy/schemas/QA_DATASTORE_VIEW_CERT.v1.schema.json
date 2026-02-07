@@ -1,0 +1,123 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_DATASTORE_VIEW_CERT.v1.schema.json",
+  "title": "QA Datastore View Semantics Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "version",
+    "store_semantics_schema_id",
+    "view_kind",
+    "projection",
+    "fail_types",
+    "hash_domains",
+    "merkle",
+    "invariants",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_DATASTORE_VIEW_CERT.v1"
+    },
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "store_semantics_schema_id": {
+      "type": "string",
+      "const": "QA_DATASTORE_SEMANTICS_CERT.v1"
+    },
+    "view_kind": {
+      "type": "string",
+      "enum": ["POSTING_LIST"]
+    },
+    "projection": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "mode",
+        "params_canonical_json_sha256"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "mode": {
+          "type": "string",
+          "enum": ["SCALE_PRESERVING", "OBSERVER_PROJECTION"]
+        },
+        "params": {
+          "type": ["object", "null"],
+          "default": null
+        },
+        "params_canonical_json_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "fail_types": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "hash_domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "posting",
+        "view_leaf",
+        "merkle_node",
+        "cert"
+      ],
+      "properties": {
+        "posting": {
+          "type": "string",
+          "minLength": 1
+        },
+        "view_leaf": {
+          "type": "string",
+          "minLength": 1
+        },
+        "merkle_node": {
+          "type": "string",
+          "minLength": 1
+        },
+        "cert": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "merkle": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "pair_order", "path_sides", "odd_leaf_padding"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "pair_order": { "type": "string", "enum": ["LEFT_RIGHT_CONCAT"] },
+        "path_sides": { "type": "string", "enum": ["EXPLICIT_LR"] },
+        "odd_leaf_padding": { "type": "string", "enum": ["DUPLICATE_LAST"] }
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 4,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

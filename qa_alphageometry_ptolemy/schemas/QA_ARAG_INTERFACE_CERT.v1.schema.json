@@ -1,0 +1,88 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_ARAG_INTERFACE_CERT.v1.schema.json",
+  "title": "QA A-RAG Interface Semantics Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "version",
+    "store_semantics_schema_id",
+    "view_semantics_schema_id",
+    "tool_set",
+    "tool_to_view_kind",
+    "fail_types",
+    "budget_model",
+    "trace_contract",
+    "hash_domains",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_ARAG_INTERFACE_CERT.v1" },
+    "version": { "type": "integer", "const": 1 },
+    "store_semantics_schema_id": { "type": "string", "const": "QA_DATASTORE_SEMANTICS_CERT.v1" },
+    "view_semantics_schema_id": { "type": "string", "const": "QA_DATASTORE_VIEW_CERT.v1" },
+    "tool_set": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "uniqueItems": true,
+      "items": { "type": "string", "enum": ["keyword_search", "semantic_search", "chunk_read"] }
+    },
+    "tool_to_view_kind": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["keyword_search", "semantic_search", "chunk_read"],
+      "properties": {
+        "keyword_search": { "type": "string", "const": "KEYWORD_VIEW" },
+        "semantic_search": { "type": "string", "const": "SEMANTIC_VIEW" },
+        "chunk_read": { "type": "string", "const": "CHUNK_STORE" }
+      }
+    },
+    "fail_types": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": { "type": "string", "minLength": 1 }
+    },
+    "budget_model": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_steps", "max_retrieved_tokens", "enforce_on_validation"],
+      "properties": {
+        "max_steps": { "type": "integer", "minimum": 1 },
+        "max_retrieved_tokens": { "type": "integer", "minimum": 1 },
+        "enforce_on_validation": { "type": "boolean" }
+      }
+    },
+    "trace_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["step_index_monotone", "root_binding_required", "proof_per_retrieval_step", "view_root_provenance_by_kind"],
+      "properties": {
+        "step_index_monotone": { "type": "boolean" },
+        "root_binding_required": { "type": "boolean" },
+        "proof_per_retrieval_step": { "type": "boolean" },
+        "view_root_provenance_by_kind": { "type": "boolean" }
+      }
+    },
+    "hash_domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trace_step", "cert"],
+      "properties": {
+        "trace_step": { "type": "string", "minLength": 1 },
+        "cert": { "type": "string", "minLength": 1 }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

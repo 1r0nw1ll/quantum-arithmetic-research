@@ -1,10 +1,10 @@
 """
 qa_meta_validator.py
 
-Cross-certificate meta-validator for the QA Certificate Tetrad + Conjectures.
+Cross-certificate meta-validator for the QA Certificate Tetrad + extensions.
 
 Accepts any certificate JSON (Injection, Collapse, Field, Beyond Neurons,
-or Conjecture),
+Topology Resonance, or Conjecture),
 dispatches to the correct validator, and enforces the shared
 failure-complete contract:
 
@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import sys
 import os
+from fractions import Fraction
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
 from enum import Enum
@@ -44,6 +45,7 @@ KNOWN_CERT_TYPES = {
     "DIVERSITY_COLLAPSE_OBSTRUCTION",
     "FIELD_COMPUTATION_CERT",
     "BEYOND_NEURONS_INTELLIGENCE_CERT",
+    "TOPOLOGY_RESONANCE_CERT",
     "QA_CONJECTURE",
 }
 
@@ -85,6 +87,10 @@ REQUIRED_BY_TYPE = {
     "BEYOND_NEURONS_INTELLIGENCE_CERT": {
         "claim", "substrate", "scale", "problem_space",
         "search_efficiency", "result",
+    },
+    "TOPOLOGY_RESONANCE_CERT": {
+        "generator_set",
+        "success",
     },
     "QA_CONJECTURE": {
         "conjecture_type", "title", "claim",
@@ -356,6 +362,106 @@ def validate_beyond_neurons(cert_dict: Dict[str, Any]) -> ValidationResult:
     return v
 
 
+def _parse_fraction_like(value: Any) -> Fraction:
+    """Parse exact scalar-like values used in lightweight validators."""
+    if isinstance(value, bool):
+        raise ValueError("bool is not a numeric scalar")
+    if isinstance(value, Fraction):
+        return value
+    if isinstance(value, int):
+        return Fraction(value)
+    if isinstance(value, str):
+        return Fraction(value)
+    raise ValueError(f"unsupported scalar type: {type(value)}")
+
+
+def validate_topology_resonance(cert_dict: Dict[str, Any]) -> ValidationResult:
+    """Validate TOPOLOGY_RESONANCE_CERT-specific semantics."""
+    v = ValidationResult()
+
+    valid_generators = {"sigma", "mu", "lambda2", "nu"}
+    generators = cert_dict.get("generator_set", [])
+    v.check(isinstance(generators, list) and len(generators) > 0,
+            "generator_set must be a non-empty list")
+    if isinstance(generators, list):
+        for i, g in enumerate(generators):
+            v.check(isinstance(g, str) and bool(g), f"generator_set[{i}] must be a non-empty string")
+        unknown = [g for g in generators if isinstance(g, str) and g not in valid_generators]
+        v.check(len(unknown) == 0, f"Unknown topology generators: {unknown}")
+
+    schema = cert_dict.get("schema")
+    v.check(schema == "QA_TOPOLOGY_RESONANCE_CERT.v1",
+            f"schema must be QA_TOPOLOGY_RESONANCE_CERT.v1, got: {schema}")
+
+    success = cert_dict.get("success")
+    v.check(isinstance(success, bool), "success must be boolean")
+    if success is False:
+        v.check(bool(cert_dict.get("failure_mode")), "failure certificate missing failure_mode")
+        v.check(isinstance(cert_dict.get("failure_witness"), dict), "failure certificate missing failure_witness")
+        return v
+
+    topo = cert_dict.get("topology_witness")
+    phase = cert_dict.get("phase_witness")
+    inv = cert_dict.get("invariants")
+
+    v.check(isinstance(topo, dict), "success certificate missing topology_witness")
+    v.check(isinstance(phase, dict), "success certificate missing phase_witness")
+    v.check(isinstance(inv, dict), "success certificate missing invariants")
+    if not (isinstance(topo, dict) and isinstance(phase, dict) and isinstance(inv, dict)):
+        return v
+
+    try:
+        scc_before = int(topo.get("scc_count_before"))
+        scc_after = int(topo.get("scc_count_after"))
+    except Exception:
+        v.check(False, "topology_witness.scc_count_before/after must be integers")
+        return v
+
+    scc_monotone_flag = inv.get("scc_monotone_non_decreasing")
+    v.check(isinstance(scc_monotone_flag, bool), "invariants.scc_monotone_non_decreasing must be boolean")
+    should_be_monotone = scc_after >= scc_before
+    v.check(should_be_monotone == scc_monotone_flag,
+            f"SCC monotonic flag mismatch: {scc_after} >= {scc_before} is {should_be_monotone}, "
+            f"claimed {scc_monotone_flag}")
+
+    try:
+        p24_before = int(phase.get("phase_24_before"))
+        p24_after = int(phase.get("phase_24_after"))
+        p9_before = int(phase.get("phase_9_before"))
+        p9_after = int(phase.get("phase_9_after"))
+    except Exception:
+        v.check(False, "phase_witness phase fields must be integers")
+        return v
+
+    v.check(0 <= p24_before < 24 and 0 <= p24_after < 24,
+            "phase_24 values must satisfy 0 <= phase < 24")
+    v.check(0 <= p9_before < 9 and 0 <= p9_after < 9,
+            "phase_9 values must satisfy 0 <= phase < 9")
+
+    phase_preserved_flag = phase.get("phase_preserved")
+    v.check(isinstance(phase_preserved_flag, bool), "phase_witness.phase_preserved must be boolean")
+    should_preserve = (p24_before == p24_after) and (p9_before == p9_after)
+    v.check(should_preserve == phase_preserved_flag,
+            f"Phase preservation mismatch: expected {should_preserve}, claimed {phase_preserved_flag}")
+
+    resonance_certified = topo.get("resonance_certified")
+    v.check(isinstance(resonance_certified, bool), "topology_witness.resonance_certified must be boolean")
+    try:
+        resonance_score = _parse_fraction_like(topo.get("resonance_score"))
+        resonance_threshold = _parse_fraction_like(topo.get("resonance_threshold"))
+        should_certify = resonance_score >= resonance_threshold
+        v.check(should_certify == resonance_certified,
+                f"Resonance certification mismatch: {resonance_score} >= {resonance_threshold} "
+                f"is {should_certify}, claimed {resonance_certified}")
+    except Exception as e:
+        v.check(False, f"Invalid resonance scalar(s): {e}")
+
+    for k in ("packet_conservation", "no_reduction_axiom", "connected_component_first_class"):
+        v.check(inv.get(k) is True, f"invariants.{k} must be true for success certificates")
+
+    return v
+
+
 def validate_conjecture(cert_dict: Dict[str, Any]) -> ValidationResult:
     """Validate QA_CONJECTURE-specific semantics."""
     v = ValidationResult()
@@ -405,8 +511,157 @@ TYPE_VALIDATORS = {
     "DIVERSITY_COLLAPSE_OBSTRUCTION": validate_collapse,
     "FIELD_COMPUTATION_CERT": validate_field,
     "BEYOND_NEURONS_INTELLIGENCE_CERT": validate_beyond_neurons,
+    "TOPOLOGY_RESONANCE_CERT": validate_topology_resonance,
     "QA_CONJECTURE": validate_conjecture,
 }
+
+
+# Datastore family paths (optional sweep hook).
+DATASTORE_CERT_PATHS = {
+    "QA_DATASTORE_SEMANTICS_CERT.v1": "certs/QA_DATASTORE_SEMANTICS_CERT.v1.json",
+    "QA_DATASTORE_WITNESS_PACK.v1": "certs/witness/QA_DATASTORE_WITNESS_PACK.v1.json",
+    "QA_DATASTORE_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_DATASTORE_COUNTEREXAMPLES_PACK.v1.json",
+}
+
+DATASTORE_VIEW_CERT_PATHS = {
+    "QA_DATASTORE_VIEW_CERT.v1": "certs/QA_DATASTORE_VIEW_CERT.v1.json",
+    "QA_DATASTORE_VIEW_WITNESS_PACK.v1": "certs/witness/QA_DATASTORE_VIEW_WITNESS_PACK.v1.json",
+    "QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1.json",
+}
+
+ARAG_CERT_PATHS = {
+    "QA_ARAG_INTERFACE_CERT.v1": "certs/QA_ARAG_INTERFACE_CERT.v1.json",
+    "QA_ARAG_WITNESS_PACK.v1": "certs/witness/QA_ARAG_WITNESS_PACK.v1.json",
+    "QA_ARAG_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_ARAG_COUNTEREXAMPLES_PACK.v1.json",
+}
+
+
+def _validate_datastore_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run datastore family validator if all required cert files are present.
+
+    Returns:
+        None on success,
+        skip reason string if files are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    semantics = os.path.join(base_dir, DATASTORE_CERT_PATHS["QA_DATASTORE_SEMANTICS_CERT.v1"])
+    witness = os.path.join(base_dir, DATASTORE_CERT_PATHS["QA_DATASTORE_WITNESS_PACK.v1"])
+    counterexamples = os.path.join(base_dir, DATASTORE_CERT_PATHS["QA_DATASTORE_COUNTEREXAMPLES_PACK.v1"])
+
+    required = [semantics, witness, counterexamples]
+    missing = [p for p in required if not os.path.exists(p)]
+    if missing:
+        return f"missing files: {', '.join(os.path.basename(m) for m in missing)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_datastore_validator import validate_all as validate_datastore_all
+    validate_datastore_all(
+        semantics_path=semantics,
+        witness_path=witness,
+        counterexamples_path=counterexamples,
+    )
+    return None
+
+
+def _validate_datastore_view_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run datastore view family validator if all required cert files are present.
+
+    Returns:
+        None on success,
+        skip reason string if files are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    store_semantics = os.path.join(base_dir, DATASTORE_CERT_PATHS["QA_DATASTORE_SEMANTICS_CERT.v1"])
+    view_semantics = os.path.join(base_dir, DATASTORE_VIEW_CERT_PATHS["QA_DATASTORE_VIEW_CERT.v1"])
+    witness = os.path.join(base_dir, DATASTORE_VIEW_CERT_PATHS["QA_DATASTORE_VIEW_WITNESS_PACK.v1"])
+    counterexamples = os.path.join(base_dir, DATASTORE_VIEW_CERT_PATHS["QA_DATASTORE_VIEW_COUNTEREXAMPLES_PACK.v1"])
+
+    required = [store_semantics, view_semantics, witness, counterexamples]
+    missing = [p for p in required if not os.path.exists(p)]
+    if missing:
+        return f"missing files: {', '.join(os.path.basename(m) for m in missing)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_datastore_view_validator import validate_all as validate_datastore_view_all
+    validate_datastore_view_all(
+        store_semantics_path=store_semantics,
+        view_semantics_path=view_semantics,
+        witness_path=witness,
+        counterexamples_path=counterexamples,
+    )
+    return None
+
+
+def _validate_arag_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run A-RAG family validator if all required cert files are present.
+
+    Returns:
+        None on success,
+        skip reason string if files are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    store_semantics = os.path.join(base_dir, DATASTORE_CERT_PATHS["QA_DATASTORE_SEMANTICS_CERT.v1"])
+    view_semantics = os.path.join(base_dir, DATASTORE_VIEW_CERT_PATHS["QA_DATASTORE_VIEW_CERT.v1"])
+    arag_semantics = os.path.join(base_dir, ARAG_CERT_PATHS["QA_ARAG_INTERFACE_CERT.v1"])
+    witness = os.path.join(base_dir, ARAG_CERT_PATHS["QA_ARAG_WITNESS_PACK.v1"])
+    counterexamples = os.path.join(base_dir, ARAG_CERT_PATHS["QA_ARAG_COUNTEREXAMPLES_PACK.v1"])
+
+    required = [store_semantics, view_semantics, arag_semantics, witness, counterexamples]
+    missing = [p for p in required if not os.path.exists(p)]
+    if missing:
+        return f"missing files: {', '.join(os.path.basename(m) for m in missing)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_arag_validator import validate_all as validate_arag_all
+    validate_arag_all(
+        store_semantics_path=store_semantics,
+        view_semantics_path=view_semantics,
+        arag_semantics_path=arag_semantics,
+        witness_path=witness,
+        counterexamples_path=counterexamples,
+    )
+    return None
+
+
+TOPOLOGY_BUNDLE_PATH = "certs/QA_TOPOLOGY_RESONANCE_BUNDLE.v1.json"
+
+
+def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run topology bundle validator if the bundle file exists.
+
+    Returns:
+        None on success,
+        skip reason string if bundle is missing.
+    Raises:
+        Exception on validation failure.
+    """
+    bundle_path = os.path.join(base_dir, TOPOLOGY_BUNDLE_PATH)
+    if not os.path.exists(bundle_path):
+        return f"missing file: {os.path.basename(bundle_path)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_topology_resonance_bundle_v1 import validate_bundle_manifest
+    result = validate_bundle_manifest(bundle_path=bundle_path, base_dir=base_dir)
+    if not result.get("ok", False):
+        errors = result.get("errors", [])
+        head = "; ".join(errors[:3]) if errors else "unknown topology bundle validation error"
+        raise RuntimeError(head)
+    return None
 
 
 # ============================================================================
@@ -576,6 +831,31 @@ if __name__ == "__main__":
                 fast_results["modules"]["kayser"] = {"ok": False, "error": "subprocess failed"}
                 fast_results["ok"] = False
                 print(f"[Kayser] FAIL (subprocess error)")
+
+        # Topology Resonance bundle check
+        topology_bundle = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                       TOPOLOGY_BUNDLE_PATH)
+        if os.path.exists(topology_bundle):
+            if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
+                sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
+            from qa_topology_resonance_bundle_v1 import validate_bundle_manifest
+            topology_result = validate_bundle_manifest(
+                bundle_path=topology_bundle,
+                base_dir=os.path.dirname(os.path.abspath(__file__)),
+            )
+            topology_ok = topology_result.get("ok", False)
+            fast_results["modules"]["topology_bundle"] = topology_result
+            print(f"[Topology Bundle] {'PASS' if topology_ok else 'FAIL'} "
+                  f"({topology_result.get('artifact_count', 0)} artifacts)")
+            if not topology_ok:
+                fast_results["ok"] = False
+        else:
+            fast_results["modules"]["topology_bundle"] = {
+                "ok": True,
+                "skipped": True,
+                "reason": "bundle not found",
+            }
+            print("[Topology Bundle] SKIP (bundle not found)")
 
         print()
         print(f"Fast mode result: {'PASS' if fast_results['ok'] else 'FAIL'}")
@@ -920,3 +1200,55 @@ if __name__ == "__main__":
                 sys.exit(1)
     else:
         print("\n[17] Guardrail module: SKIPPED (qa_guardrail/qa_guardrail.py not found)")
+
+    # --- Test 18: QA Datastore Family (optional sweep hook) ---
+    print("\n--- QA DATASTORE FAMILY ---")
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        skip_reason = _validate_datastore_family_if_present(base_dir)
+        if skip_reason is None:
+            print("[18] QA Datastore family: PASS (semantics + witness + counterexamples)")
+        else:
+            print(f"[18] QA Datastore family: SKIPPED ({skip_reason})")
+    except Exception as e:
+        print(f"[18] QA Datastore family: FAIL ({e})")
+        sys.exit(1)
+
+    # --- Test 19: Topology Resonance Bundle (optional sweep hook) ---
+    print("\n--- QA TOPOLOGY RESONANCE BUNDLE ---")
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        skip_reason = _validate_topology_bundle_if_present(base_dir)
+        if skip_reason is None:
+            print("[19] QA Topology Resonance bundle: PASS")
+        else:
+            print(f"[19] QA Topology Resonance bundle: SKIPPED ({skip_reason})")
+    except Exception as e:
+        print(f"[19] QA Topology Resonance bundle: FAIL ({e})")
+        sys.exit(1)
+
+    # --- Test 20: QA Datastore View Family (optional sweep hook) ---
+    print("\n--- QA DATASTORE VIEW FAMILY ---")
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        skip_reason = _validate_datastore_view_family_if_present(base_dir)
+        if skip_reason is None:
+            print("[20] QA Datastore view family: PASS (semantics + witness + counterexamples)")
+        else:
+            print(f"[20] QA Datastore view family: SKIPPED ({skip_reason})")
+    except Exception as e:
+        print(f"[20] QA Datastore view family: FAIL ({e})")
+        sys.exit(1)
+
+    # --- Test 21: QA A-RAG Interface Family (optional sweep hook) ---
+    print("\n--- QA A-RAG INTERFACE FAMILY ---")
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        skip_reason = _validate_arag_family_if_present(base_dir)
+        if skip_reason is None:
+            print("[21] QA A-RAG interface family: PASS (semantics + witness + counterexamples)")
+        else:
+            print(f"[21] QA A-RAG interface family: SKIPPED ({skip_reason})")
+    except Exception as e:
+        print(f"[21] QA A-RAG interface family: FAIL ({e})")
+        sys.exit(1)

@@ -1,0 +1,120 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_INGEST_SEMANTICS_CERT.v1.schema.json",
+  "title": "QA Ingestion Semantics Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "manifest",
+    "hash_alg",
+    "canonical_json",
+    "cert_domain",
+    "doc_root_domain",
+    "chunk_domain",
+    "ingest_contract",
+    "fail_types"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_INGEST_SEMANTICS_CERT.v1" },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "hash_alg": { "type": "string", "enum": ["sha256"] },
+    "canonical_json": { "type": "boolean", "const": true },
+    "cert_domain": { "type": "string", "minLength": 1 },
+    "doc_root_domain": { "type": "string", "minLength": 1 },
+    "chunk_domain": { "type": "string", "minLength": 1 },
+    "ingest_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "accepted_container_types",
+        "text_extraction",
+        "normalization",
+        "chunking",
+        "budgets",
+        "provenance"
+      ],
+      "properties": {
+        "accepted_container_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "text_extraction": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["method", "preserve_order", "strip_markup", "allow_ocr"],
+          "properties": {
+            "method": { "type": "string", "minLength": 1 },
+            "preserve_order": { "type": "boolean" },
+            "strip_markup": { "type": "boolean" },
+            "allow_ocr": { "type": "boolean" }
+          }
+        },
+        "normalization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "unicode_nfkc",
+            "whitespace_collapse",
+            "line_endings",
+            "lowercase",
+            "remove_control_chars"
+          ],
+          "properties": {
+            "unicode_nfkc": { "type": "boolean" },
+            "whitespace_collapse": { "type": "boolean" },
+            "line_endings": { "type": "string", "enum": ["LF"] },
+            "lowercase": { "type": "boolean" },
+            "remove_control_chars": { "type": "boolean" }
+          }
+        },
+        "chunking": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["strategy", "max_chars", "overlap_chars", "min_chars"],
+          "properties": {
+            "strategy": { "type": "string", "enum": ["fixed_chars", "paragraph"] },
+            "max_chars": { "type": "integer", "minimum": 1 },
+            "overlap_chars": { "type": "integer", "minimum": 0 },
+            "min_chars": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "budgets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_docs", "max_total_chars", "max_total_chunks"],
+          "properties": {
+            "max_docs": { "type": "integer", "minimum": 1 },
+            "max_total_chars": { "type": "integer", "minimum": 1 },
+            "max_total_chunks": { "type": "integer", "minimum": 1 }
+          }
+        },
+        "provenance": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["require_source_path", "require_file_hash", "require_container_sig"],
+          "properties": {
+            "require_source_path": { "type": "boolean" },
+            "require_file_hash": { "type": "boolean" },
+            "require_container_sig": { "type": "boolean" }
+          }
+        }
+      }
+    },
+    "fail_types": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 },
+      "uniqueItems": true
+    }
+  }
+}

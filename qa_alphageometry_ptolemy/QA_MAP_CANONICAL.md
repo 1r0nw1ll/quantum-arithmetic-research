@@ -565,6 +565,46 @@ python qa_ingest_view_bridge_validator.py --demo
 
 ---
 
+### 9. Ingestion Semantics — Certified Source Pipeline
+
+**Source**: QA ingestion semantics formalization (feeds [22] ingest->view bridge)
+
+**Status**: ✅ Complete Scaffold (2026-02-08)
+
+**Key Insight**: Ingestion is a certified transform from source bytes to normalized/chunked artifacts with deterministic hashes, budgets, and failure-complete diagnostics.
+
+#### Artifacts
+
+| Artifact | Path |
+|----------|------|
+| Module spec (YAML) | `QA_MAP__INGEST_SEMANTICS.yaml` |
+| Validator | `qa_ingest_validator.py` |
+| Semantics cert | `certs/QA_INGEST_SEMANTICS_CERT.v1.json` |
+| Witness pack | `certs/witness/QA_INGEST_WITNESS_PACK.v1.json` |
+| Counterexamples pack | `certs/counterexamples/QA_INGEST_COUNTEREXAMPLES_PACK.v1.json` |
+| Semantics schema | `schemas/QA_INGEST_SEMANTICS_CERT.v1.schema.json` |
+| Witness schema | `schemas/QA_INGEST_WITNESS_PACK.v1.schema.json` |
+| Counterexamples schema | `schemas/QA_INGEST_COUNTEREXAMPLES_PACK.v1.schema.json` |
+
+#### Validation Commands
+
+```bash
+# Validate ingestion family
+python qa_ingest_validator.py --demo
+```
+
+#### Core Invariants
+
+| Invariant | Meaning |
+|-----------|---------|
+| Source provenance | `source_ref`, raw file hash, and container signature stay bound |
+| Extraction determinism | extracted text hash matches deterministic parser output |
+| Normalization determinism | normalized text hash matches declared normalization contract |
+| Chunk geometry | chunk hashes + chunk root + counts/chars remain reproducible |
+| Budget control | docs/chunks/total chars remain bounded |
+
+---
+
 ## Stub Mappings (In Progress)
 
 *No current stub mappings. All planned mappings have been completed to Gold Standard.*

@@ -541,6 +541,12 @@ INGEST_VIEW_BRIDGE_CERT_PATHS = {
     "QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1.json",
 }
 
+INGEST_CERT_PATHS = {
+    "QA_INGEST_SEMANTICS_CERT.v1": "certs/QA_INGEST_SEMANTICS_CERT.v1.json",
+    "QA_INGEST_WITNESS_PACK.v1": "certs/witness/QA_INGEST_WITNESS_PACK.v1.json",
+    "QA_INGEST_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_INGEST_COUNTEREXAMPLES_PACK.v1.json",
+}
+
 
 def _validate_datastore_family_if_present(base_dir: str) -> Optional[str]:
     """
@@ -670,6 +676,37 @@ def _validate_ingest_view_bridge_family_if_present(base_dir: str) -> Optional[st
         store_semantics_path=store_semantics,
         view_semantics_path=view_semantics,
         bridge_semantics_path=bridge_semantics,
+        witness_path=witness,
+        counterexamples_path=counterexamples,
+    )
+    return None
+
+
+def _validate_ingest_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run ingestion family validator if all required cert files are present.
+
+    Returns:
+        None on success,
+        skip reason string if files are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    semantics = os.path.join(base_dir, INGEST_CERT_PATHS["QA_INGEST_SEMANTICS_CERT.v1"])
+    witness = os.path.join(base_dir, INGEST_CERT_PATHS["QA_INGEST_WITNESS_PACK.v1"])
+    counterexamples = os.path.join(base_dir, INGEST_CERT_PATHS["QA_INGEST_COUNTEREXAMPLES_PACK.v1"])
+
+    required = [semantics, witness, counterexamples]
+    missing = [p for p in required if not os.path.exists(p)]
+    if missing:
+        return f"missing files: {', '.join(os.path.basename(m) for m in missing)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_ingest_validator import validate_all as validate_ingest_all
+    validate_ingest_all(
+        semantics_path=semantics,
         witness_path=witness,
         counterexamples_path=counterexamples,
     )
@@ -1318,4 +1355,17 @@ if __name__ == "__main__":
             print(f"[22] QA ingest->view bridge family: SKIPPED ({skip_reason})")
     except Exception as e:
         print(f"[22] QA ingest->view bridge family: FAIL ({e})")
+        sys.exit(1)
+
+    # --- Test 23: QA Ingestion Family (optional sweep hook) ---
+    print("\n--- QA INGESTION FAMILY ---")
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        skip_reason = _validate_ingest_family_if_present(base_dir)
+        if skip_reason is None:
+            print("[23] QA ingestion family: PASS (semantics + witness + counterexamples)")
+        else:
+            print(f"[23] QA ingestion family: SKIPPED ({skip_reason})")
+    except Exception as e:
+        print(f"[23] QA ingestion family: FAIL ({e})")
         sys.exit(1)

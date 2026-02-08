@@ -1,0 +1,66 @@
+# QA_MAP__INGEST_SEMANTICS.yaml
+#
+# QA module specification for certified ingestion semantics.
+
+module:
+  name: "QA_INGEST_SEMANTICS"
+  version: "1.0.0"
+  source_paper: "QA ingestion formalization"
+  title: "QA Ingestion Semantics Mapping"
+  schema_prefix: "QA_INGEST"
+  status: "COMPLETE - Scaffold"
+
+concept_mapping:
+  source_provenance:
+    paper_name: "Source provenance"
+    paper_definition: "Each ingested doc is bound to source bytes and container signature"
+    qa_interpretation: "source_ref + file_sha256 + container_sig_sha256"
+    qa_structure: "Witness"
+    key_insight: "No ingestion without byte-level provenance"
+
+  extraction_normalization:
+    paper_name: "Text pipeline invariance"
+    paper_definition: "Extraction and normalization are deterministic transforms"
+    qa_interpretation: "extracted_text_sha256 + normalized_text_sha256 invariants"
+    qa_structure: "Invariants"
+    key_insight: "Pipeline drift is detected as certificate failure"
+
+  chunk_geometry:
+    paper_name: "Chunking policy"
+    paper_definition: "Chunking strategy and bounds define retrieval granularity"
+    qa_interpretation: "chunk_hashes + chunk_root_hash + budget bounds"
+    qa_structure: "State geometry"
+    key_insight: "Chunk-level structure is certified and replayable"
+
+failure_completeness:
+  theorem: |
+    For each ingestion claim, exactly one outcome is valid:
+    1. SUCCESS: source, extraction, normalization, chunking, and doc-root invariants hold under budget, OR
+    2. FAILURE: deterministic fail_type with invariant_diff explains obstruction.
+
+certificate_family:
+  semantics:
+    schema_id: "QA_INGEST_SEMANTICS_CERT.v1"
+    file: "certs/QA_INGEST_SEMANTICS_CERT.v1.json"
+    role: "Declares ingestion contract, domains, budgets, and failure algebra"
+
+  witness_pack:
+    schema_id: "QA_INGEST_WITNESS_PACK.v1"
+    file: "certs/witness/QA_INGEST_WITNESS_PACK.v1.json"
+    role: "Positive ingestion witness with doc-root and chunk invariants"
+
+  counterexamples_pack:
+    schema_id: "QA_INGEST_COUNTEREXAMPLES_PACK.v1"
+    file: "certs/counterexamples/QA_INGEST_COUNTEREXAMPLES_PACK.v1.json"
+    role: "Negative ingestion cases that must fail deterministically"
+
+implementation:
+  validator: "qa_ingest_validator.py"
+  dependencies: []
+  schemas:
+    - "schemas/QA_INGEST_SEMANTICS_CERT.v1.schema.json"
+    - "schemas/QA_INGEST_WITNESS_PACK.v1.schema.json"
+    - "schemas/QA_INGEST_COUNTEREXAMPLES_PACK.v1.schema.json"
+
+  quick_commands:
+    - "python qa_ingest_validator.py --demo"

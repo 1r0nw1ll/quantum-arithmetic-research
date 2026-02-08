@@ -1,0 +1,78 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_INGEST_WITNESS_PACK.v1.schema.json",
+  "title": "QA Ingestion Witness Pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "ingest_semantics_schema_id",
+    "doc_root_snapshot",
+    "docs",
+    "claimed_success",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_INGEST_WITNESS_PACK.v1" },
+    "ingest_semantics_schema_id": { "type": "string", "const": "QA_INGEST_SEMANTICS_CERT.v1" },
+    "doc_root_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_hash", "hash_alg", "snapshot_id"],
+      "properties": {
+        "root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "snapshot_id": { "type": "string", "minLength": 1 },
+        "keys": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "keys_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "docs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "doc_id",
+          "source_ref",
+          "container_type",
+          "file_sha256",
+          "container_sig_sha256",
+          "extracted_text_sha256",
+          "normalized_text_sha256",
+          "chunk_hashes",
+          "chunk_root_hash",
+          "chunk_count",
+          "total_chars"
+        ],
+        "properties": {
+          "doc_id": { "type": "string", "minLength": 1 },
+          "source_ref": { "type": "string", "minLength": 1 },
+          "container_type": { "type": "string", "minLength": 1 },
+          "file_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "container_sig_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "extracted_text_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "normalized_text_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "chunk_hashes": {
+            "type": "array",
+            "items": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          },
+          "chunk_root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "chunk_count": { "type": "integer", "minimum": 0 },
+          "total_chars": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "claimed_success": { "type": "boolean" },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_INGEST_COUNTEREXAMPLES_PACK.v1.schema.json",
+  "title": "QA Ingestion Counterexamples Pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "ingest_semantics_schema_id",
+    "doc_root_snapshot",
+    "cases",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_INGEST_COUNTEREXAMPLES_PACK.v1" },
+    "ingest_semantics_schema_id": { "type": "string", "const": "QA_INGEST_SEMANTICS_CERT.v1" },
+    "doc_root_snapshot": { "$ref": "QA_INGEST_WITNESS_PACK.v1.schema.json#/properties/doc_root_snapshot" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["case_id", "expected_fail_type", "tamper_mode", "docs"],
+        "properties": {
+          "case_id": { "type": "string", "minLength": 1 },
+          "expected_fail_type": { "type": "string", "minLength": 1 },
+          "tamper_mode": { "type": "string", "minLength": 1 },
+          "docs": { "$ref": "QA_INGEST_WITNESS_PACK.v1.schema.json#/properties/docs" }
+        }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

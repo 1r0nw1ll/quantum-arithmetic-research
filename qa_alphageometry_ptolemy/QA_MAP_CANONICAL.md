@@ -508,6 +508,45 @@ python qa_arag_validator.py --demo
 
 ---
 
+### 8. Ingest->View Bridge — Provenance-Grounded Views
+
+**Source**: QA ingestion provenance bridge (composes [18]/[20]/[21])
+
+**Status**: ✅ Complete Scaffold (2026-02-08)
+
+**Key Insight**: A certified view entry is valid only if it is rooted to store/view snapshots and grounded in ingested document proofs.
+
+#### Artifacts
+
+| Artifact | Path |
+|----------|------|
+| Module spec (YAML) | `QA_MAP__INGEST_VIEW_BRIDGE.yaml` |
+| Validator | `qa_ingest_view_bridge_validator.py` |
+| Semantics cert | `certs/QA_INGEST_VIEW_BRIDGE_CERT.v1.json` |
+| Witness pack | `certs/witness/QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1.json` |
+| Counterexamples pack | `certs/counterexamples/QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1.json` |
+| Semantics schema | `schemas/QA_INGEST_VIEW_BRIDGE_CERT.v1.schema.json` |
+| Witness schema | `schemas/QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1.schema.json` |
+| Counterexamples schema | `schemas/QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1.schema.json` |
+
+#### Validation Commands
+
+```bash
+# Validate ingest->view bridge family
+python qa_ingest_view_bridge_validator.py --demo
+```
+
+#### Core Invariants
+
+| Invariant | Meaning |
+|-----------|---------|
+| Document grounding required | Every bridge entry cites doc refs with ingest inclusion proofs |
+| Root binding | proof bundle store/view roots must match certified snapshots |
+| Typed view provenance | KEYWORD_VIEW / SEMANTIC_VIEW bind to typed snapshot ids |
+| Budget control | Entry count and token budget remain bounded |
+
+---
+
 ## Stub Mappings (In Progress)
 
 *No current stub mappings. All planned mappings have been completed to Gold Standard.*

@@ -1,0 +1,89 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_INGEST_VIEW_BRIDGE_CERT.v1.schema.json",
+  "title": "QA Ingest View Bridge Semantics Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "manifest",
+    "domains",
+    "fail_types",
+    "bridge_contract"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_INGEST_VIEW_BRIDGE_CERT.v1" },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "domains": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cert_domain", "record_domain", "ingest_leaf_domain", "ingest_node_domain", "view_node_domain"],
+      "properties": {
+        "cert_domain": { "type": "string", "minLength": 1 },
+        "record_domain": { "type": "string", "minLength": 1 },
+        "ingest_leaf_domain": { "type": "string", "minLength": 1 },
+        "ingest_node_domain": { "type": "string", "minLength": 1 },
+        "view_node_domain": { "type": "string", "minLength": 1 }
+      }
+    },
+    "fail_types": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {
+        "type": "string",
+        "enum": [
+          "SCHEMA_MISMATCH",
+          "NON_CANONICAL_JSON",
+          "DOMAIN_SEP_VIOLATION",
+          "HASH_MISMATCH",
+          "UNVERIFIABLE_PROOF",
+          "FORK_DETECTED",
+          "INGEST_DOC_MISSING",
+          "INGEST_DOC_HASH_MISMATCH",
+          "VIEW_ENTRY_UNGROUNDED",
+          "VIEW_DERIVATION_UNSOUND",
+          "VIEW_DERIVATION_INCOMPLETE",
+          "BUDGET_EXCEEDED"
+        ]
+      }
+    },
+    "bridge_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "requires_store_family",
+        "requires_view_family",
+        "requires_doc_inclusion_proofs",
+        "requires_view_to_doc_links",
+        "require_typed_view_roots",
+        "budget_model"
+      ],
+      "properties": {
+        "requires_store_family": { "type": "boolean", "const": true },
+        "requires_view_family": { "type": "boolean", "const": true },
+        "requires_doc_inclusion_proofs": { "type": "boolean" },
+        "requires_view_to_doc_links": { "type": "boolean" },
+        "require_typed_view_roots": { "type": "boolean" },
+        "budget_model": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["enforce_on_validation", "max_entries", "max_total_tokens"],
+          "properties": {
+            "enforce_on_validation": { "type": "boolean" },
+            "max_entries": { "type": "integer", "minimum": 1 },
+            "max_total_tokens": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    }
+  }
+}

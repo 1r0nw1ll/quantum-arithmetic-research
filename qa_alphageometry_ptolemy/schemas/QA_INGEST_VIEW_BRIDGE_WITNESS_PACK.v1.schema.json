@@ -1,0 +1,148 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1.schema.json",
+  "title": "QA Ingest View Bridge Witness Pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "manifest",
+    "store_semantics_schema_id",
+    "view_semantics_schema_id",
+    "bridge_semantics_schema_id",
+    "store_root_snapshot",
+    "view_root_snapshot",
+    "ingest_root_snapshot",
+    "entries",
+    "claimed_success"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1" },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "store_semantics_schema_id": { "type": "string", "const": "QA_DATASTORE_SEMANTICS_CERT.v1" },
+    "view_semantics_schema_id": { "type": "string", "const": "QA_DATASTORE_VIEW_CERT.v1" },
+    "bridge_semantics_schema_id": { "type": "string", "const": "QA_INGEST_VIEW_BRIDGE_CERT.v1" },
+    "store_root_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_hash", "hash_alg"],
+      "properties": {
+        "root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "snapshot_id": { "type": "string" },
+        "keys": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "keys_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "view_root_snapshot": {
+      "description": "Default view root alias. When view_root_snapshots is present, this must mirror KEYWORD_VIEW.",
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_hash", "hash_alg"],
+      "properties": {
+        "root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "snapshot_id": { "type": "string" },
+        "keys": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "keys_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "view_root_snapshots": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["KEYWORD_VIEW", "SEMANTIC_VIEW"],
+      "properties": {
+        "KEYWORD_VIEW": { "$ref": "#/properties/view_root_snapshot" },
+        "SEMANTIC_VIEW": { "$ref": "#/properties/view_root_snapshot" }
+      }
+    },
+    "ingest_root_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["root_hash", "hash_alg", "snapshot_id"],
+      "properties": {
+        "root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "snapshot_id": { "type": "string", "minLength": 1 },
+        "doc_ids": { "type": "array", "items": { "type": "string", "minLength": 1 } },
+        "doc_ids_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["entry_id", "view_kind", "view_key", "doc_refs", "token_cost", "proof_bundle"],
+        "properties": {
+          "entry_id": { "type": "string", "minLength": 1 },
+          "view_kind": { "type": "string", "enum": ["KEYWORD_VIEW", "SEMANTIC_VIEW"] },
+          "view_key": { "type": "string", "minLength": 1 },
+          "token_cost": { "type": "integer", "minimum": 0 },
+          "doc_refs": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["doc_id", "doc_record_hash", "ingest_inclusion_proof"],
+              "properties": {
+                "doc_id": { "type": "string", "minLength": 1 },
+                "doc_record_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                "doc_record": { "type": "object" },
+                "ingest_inclusion_proof": { "$ref": "QA_MERKLE_PROOF.v1.schema.json" }
+              }
+            }
+          },
+          "proof_bundle": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["store_root_hash", "view_root_hash", "view_lookup"],
+            "properties": {
+              "store_root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "view_root_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+              "view_snapshot_id": { "type": "string", "minLength": 1 },
+              "view_lookup": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["view_key", "expected_posting", "view_proof", "store_proofs_by_base_key"],
+                "properties": {
+                  "view_key": { "type": "string", "minLength": 1 },
+                  "expected_posting": {
+                    "anyOf": [
+                      { "type": "null" },
+                      { "type": "array", "items": { "type": "string", "minLength": 1 } }
+                    ]
+                  },
+                  "view_proof": { "$ref": "QA_VIEW_PROOF.v1.schema.json" },
+                  "store_proofs_by_base_key": {
+                    "type": "object",
+                    "additionalProperties": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": ["record_hash", "proof"],
+                      "properties": {
+                        "record_hash": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+                        "proof": { "$ref": "QA_MERKLE_PROOF.v1.schema.json" }
+                      }
+                    }
+                  }
+                }
+              },
+              "store_lookup": { "type": "object" }
+            }
+          }
+        }
+      }
+    },
+    "claimed_success": { "type": "boolean" }
+  }
+}

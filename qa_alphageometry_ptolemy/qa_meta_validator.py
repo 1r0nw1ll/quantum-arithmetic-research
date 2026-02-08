@@ -535,6 +535,12 @@ ARAG_CERT_PATHS = {
     "QA_ARAG_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_ARAG_COUNTEREXAMPLES_PACK.v1.json",
 }
 
+INGEST_VIEW_BRIDGE_CERT_PATHS = {
+    "QA_INGEST_VIEW_BRIDGE_CERT.v1": "certs/QA_INGEST_VIEW_BRIDGE_CERT.v1.json",
+    "QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1": "certs/witness/QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1.json",
+    "QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1.json",
+}
+
 
 def _validate_datastore_family_if_present(base_dir: str) -> Optional[str]:
     """
@@ -635,7 +641,74 @@ def _validate_arag_family_if_present(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_ingest_view_bridge_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run ingest->view bridge family validator if all required cert files are present.
+
+    Returns:
+        None on success,
+        skip reason string if files are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    store_semantics = os.path.join(base_dir, DATASTORE_CERT_PATHS["QA_DATASTORE_SEMANTICS_CERT.v1"])
+    view_semantics = os.path.join(base_dir, DATASTORE_VIEW_CERT_PATHS["QA_DATASTORE_VIEW_CERT.v1"])
+    bridge_semantics = os.path.join(base_dir, INGEST_VIEW_BRIDGE_CERT_PATHS["QA_INGEST_VIEW_BRIDGE_CERT.v1"])
+    witness = os.path.join(base_dir, INGEST_VIEW_BRIDGE_CERT_PATHS["QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1"])
+    counterexamples = os.path.join(base_dir, INGEST_VIEW_BRIDGE_CERT_PATHS["QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1"])
+
+    required = [store_semantics, view_semantics, bridge_semantics, witness, counterexamples]
+    missing = [p for p in required if not os.path.exists(p)]
+    if missing:
+        return f"missing files: {', '.join(os.path.basename(m) for m in missing)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_ingest_view_bridge_validator import validate_all as validate_bridge_all
+    validate_bridge_all(
+        store_semantics_path=store_semantics,
+        view_semantics_path=view_semantics,
+        bridge_semantics_path=bridge_semantics,
+        witness_path=witness,
+        counterexamples_path=counterexamples,
+    )
+    return None
+
+
 TOPOLOGY_BUNDLE_PATH = "certs/QA_TOPOLOGY_RESONANCE_BUNDLE.v1.json"
+
+
+def _topology_bundle_status(base_dir: str) -> Dict[str, Any]:
+    """
+    Validate topology bundle and return normalized status payload.
+
+    Shape:
+      {
+        "ok": bool,
+        "skipped": bool,
+        "reason": str?,
+        "artifact_count": int?,
+        "errors": list[str]?,
+        ... (validator passthrough fields)
+      }
+    """
+    bundle_path = os.path.join(base_dir, TOPOLOGY_BUNDLE_PATH)
+    if not os.path.exists(bundle_path):
+        return {
+            "ok": True,
+            "skipped": True,
+            "reason": "bundle not found",
+            "bundle_path": bundle_path,
+        }
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_topology_resonance_bundle_v1 import validate_bundle_manifest
+    result = validate_bundle_manifest(bundle_path=bundle_path, base_dir=base_dir)
+    result.setdefault("skipped", False)
+    return result
 
 
 def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
@@ -648,15 +721,9 @@ def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
     Raises:
         Exception on validation failure.
     """
-    bundle_path = os.path.join(base_dir, TOPOLOGY_BUNDLE_PATH)
-    if not os.path.exists(bundle_path):
-        return f"missing file: {os.path.basename(bundle_path)}"
-
-    if base_dir not in sys.path:
-        sys.path.insert(0, base_dir)
-
-    from qa_topology_resonance_bundle_v1 import validate_bundle_manifest
-    result = validate_bundle_manifest(bundle_path=bundle_path, base_dir=base_dir)
+    result = _topology_bundle_status(base_dir)
+    if result.get("skipped"):
+        return f"missing file: {os.path.basename(TOPOLOGY_BUNDLE_PATH)}"
     if not result.get("ok", False):
         errors = result.get("errors", [])
         head = "; ".join(errors[:3]) if errors else "unknown topology bundle validation error"
@@ -833,29 +900,16 @@ if __name__ == "__main__":
                 print(f"[Kayser] FAIL (subprocess error)")
 
         # Topology Resonance bundle check
-        topology_bundle = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                       TOPOLOGY_BUNDLE_PATH)
-        if os.path.exists(topology_bundle):
-            if os.path.dirname(os.path.abspath(__file__)) not in sys.path:
-                sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-            from qa_topology_resonance_bundle_v1 import validate_bundle_manifest
-            topology_result = validate_bundle_manifest(
-                bundle_path=topology_bundle,
-                base_dir=os.path.dirname(os.path.abspath(__file__)),
-            )
+        topology_result = _topology_bundle_status(os.path.dirname(os.path.abspath(__file__)))
+        fast_results["modules"]["topology_bundle"] = topology_result
+        if topology_result.get("skipped"):
+            print("[Topology Bundle] SKIP (bundle not found)")
+        else:
             topology_ok = topology_result.get("ok", False)
-            fast_results["modules"]["topology_bundle"] = topology_result
             print(f"[Topology Bundle] {'PASS' if topology_ok else 'FAIL'} "
                   f"({topology_result.get('artifact_count', 0)} artifacts)")
             if not topology_ok:
                 fast_results["ok"] = False
-        else:
-            fast_results["modules"]["topology_bundle"] = {
-                "ok": True,
-                "skipped": True,
-                "reason": "bundle not found",
-            }
-            print("[Topology Bundle] SKIP (bundle not found)")
 
         print()
         print(f"Fast mode result: {'PASS' if fast_results['ok'] else 'FAIL'}")
@@ -1251,4 +1305,17 @@ if __name__ == "__main__":
             print(f"[21] QA A-RAG interface family: SKIPPED ({skip_reason})")
     except Exception as e:
         print(f"[21] QA A-RAG interface family: FAIL ({e})")
+        sys.exit(1)
+
+    # --- Test 22: QA Ingest->View Bridge Family (optional sweep hook) ---
+    print("\n--- QA INGEST->VIEW BRIDGE FAMILY ---")
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        skip_reason = _validate_ingest_view_bridge_family_if_present(base_dir)
+        if skip_reason is None:
+            print("[22] QA ingest->view bridge family: PASS (semantics + witness + counterexamples)")
+        else:
+            print(f"[22] QA ingest->view bridge family: SKIPPED ({skip_reason})")
+    except Exception as e:
+        print(f"[22] QA ingest->view bridge family: FAIL ({e})")
         sys.exit(1)

@@ -1,0 +1,75 @@
+# QA_MAP__INGEST_VIEW_BRIDGE.yaml
+#
+# QA module specification for certified ingestion -> certified view grounding.
+
+module:
+  name: "QA_INGEST_VIEW_BRIDGE"
+  version: "1.0.0"
+  source_paper: "A-RAG framing + ingestion provenance bridge"
+  title: "QA Ingestion-to-View Bridge Mapping"
+  schema_prefix: "QA_INGEST_VIEW_BRIDGE"
+  status: "COMPLETE - Scaffold"
+
+concept_mapping:
+  ingestion_grounding:
+    paper_name: "Ingestion provenance"
+    paper_definition: "View/index entries are derived from ingested documents"
+    qa_interpretation: "Each view entry carries explicit doc grounding + ingest inclusion proofs"
+    qa_structure: "Witness"
+    key_insight: "No view entry without certified document lineage"
+
+  dual_root_binding:
+    paper_name: "Store/view consistency"
+    paper_definition: "View evidence must bind to store and view roots"
+    qa_interpretation: "Root-bound derivation with typed view roots"
+    qa_structure: "Invariants"
+    key_insight: "Derivation remains replayable under certified roots"
+
+  typed_root_provenance:
+    paper_name: "Interface typing"
+    paper_definition: "KEYWORD_VIEW and SEMANTIC_VIEW provenance are distinct"
+    qa_interpretation: "view_root_snapshots by kind + per-entry view_snapshot_id"
+    qa_structure: "Root provenance"
+    key_insight: "Grounding is tied to the correct retrieval layer"
+
+  budget_control:
+    paper_name: "Retrieval/ingestion budget"
+    paper_definition: "Bridge validation must be bounded"
+    qa_interpretation: "max_entries + max_total_tokens"
+    qa_structure: "Control budget"
+    key_insight: "Grounding remains reachability-under-budget"
+
+failure_completeness:
+  theorem: |
+    For each ingest->view bridge claim, exactly one outcome is valid:
+    1. SUCCESS: entries are rooted, typed, and document-grounded under budget, OR
+    2. FAILURE: deterministic fail_type with invariant_diff explains obstruction.
+
+certificate_family:
+  semantics:
+    schema_id: "QA_INGEST_VIEW_BRIDGE_CERT.v1"
+    file: "certs/QA_INGEST_VIEW_BRIDGE_CERT.v1.json"
+    role: "Declares domains, fail taxonomy, and bridge contract"
+
+  witness_pack:
+    schema_id: "QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1"
+    file: "certs/witness/QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1.json"
+    role: "Positive grounding claims with ingest/store/view proof bindings"
+
+  counterexamples_pack:
+    schema_id: "QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1"
+    file: "certs/counterexamples/QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1.json"
+    role: "Negative grounding/tamper cases that must fail deterministically"
+
+implementation:
+  validator: "qa_ingest_view_bridge_validator.py"
+  dependencies:
+    - "QA_DATASTORE_SEMANTICS_CERT.v1"
+    - "QA_DATASTORE_VIEW_CERT.v1"
+  schemas:
+    - "schemas/QA_INGEST_VIEW_BRIDGE_CERT.v1.schema.json"
+    - "schemas/QA_INGEST_VIEW_BRIDGE_WITNESS_PACK.v1.schema.json"
+    - "schemas/QA_INGEST_VIEW_BRIDGE_COUNTEREXAMPLES_PACK.v1.schema.json"
+
+  quick_commands:
+    - "python qa_ingest_view_bridge_validator.py --demo"

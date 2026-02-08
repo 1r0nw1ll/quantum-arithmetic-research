@@ -10,6 +10,24 @@ This document tracks **Gold Standard** QA mappings—papers/theories that have b
 6. End-to-end validation passing
 
 ---
+## Release: qa-core-stack-v1.3.0 (2026-02-08)
+
+### Highlights
+- Added certified ingest->view bridge family ([22])
+- Completed end-to-end provenance chain: ingestion -> datastore -> view -> A-RAG
+- Enforced typed generator and typed root provenance contracts across retrieval stack
+- Expanded counterexample coverage across integrity, provenance, and budget classes
+
+### Included Families
+- [18] QA Datastore
+- [20] QA Datastore View
+- [21] QA A-RAG Interface
+- [22] QA Ingest->View Bridge
+
+### Significance
+First fully provenance-grounded QA retrieval pipeline with sweep-verified family composition.
+
+---
 
 ## Gold Standard Mappings
 

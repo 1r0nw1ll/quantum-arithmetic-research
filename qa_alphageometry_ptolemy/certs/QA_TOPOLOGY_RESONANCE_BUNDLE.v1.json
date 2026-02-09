@@ -1,0 +1,85 @@
+{
+  "artifacts": {
+    "bundle_emitter": {
+      "file": "qa_topology_resonance_bundle_v1.py",
+      "id": "bundle_emitter",
+      "kind": "source_py",
+      "sha256": "670810f827ffef1cc3dcdeafe8a4b09c38adb423f243aabf081cd38933fe1efc"
+    },
+    "bundle_schema": {
+      "canonical_sha256": "fd6c94bf9430261d240e7aa483f6b71080a4f9e419c65b761a9e88370a2afbb0",
+      "file": "schemas/QA_TOPOLOGY_RESONANCE_BUNDLE.v1.schema.json",
+      "id": "bundle_schema",
+      "kind": "json_schema",
+      "sha256": "db596eb51369917a0126718d3ce5e48e569fa17679419929adc6503e88ea99f8"
+    },
+    "topology_cert": {
+      "canonical_sha256": "25d6997c7dc019e5fade9f73e031787d07617a32954d2e39f7be2397d0d8c852",
+      "file": "certs/QA_TOPOLOGY_RESONANCE_CERT.v1.json",
+      "id": "topology_cert",
+      "kind": "json_cert",
+      "sha256": "f7b9216a26c3147d60d691384450879b438a47899f8523a8b1240614a4a9a58d"
+    },
+    "topology_cert_sha256": {
+      "file": "certs/QA_TOPOLOGY_RESONANCE_CERT.v1.sha256",
+      "id": "topology_cert_sha256",
+      "kind": "hash_sidecar",
+      "sha256": "0b81c3fbda100e5a6db06e63ab83efd45018d8f1b3bd8afe128e3bb9ccf92509"
+    },
+    "topology_failure_example": {
+      "canonical_sha256": "7e0c47a1ed37f19791eb3a78d807674c489433806143d21123d5f93418a6ca3f",
+      "file": "examples/topology/topology_phase_break_failure.json",
+      "id": "topology_failure_example",
+      "kind": "json_example",
+      "sha256": "b856492628cc031e659f9130e453bd657251462a3b4e524f8741dffebb2972f1"
+    },
+    "topology_mapping": {
+      "file": "QA_MAP__TOPOLOGY_RESONANCE.yaml",
+      "id": "topology_mapping",
+      "kind": "source_yaml",
+      "sha256": "fda0f568b15d165a89c12d472b10072fa6987c8cc398f3352ddb6f8963bf4a0c"
+    },
+    "topology_schema": {
+      "canonical_sha256": "ef6603240627a50098b357d57485eaf595ff964b2f0e8eda135f2dceec831aaa",
+      "file": "schemas/QA_TOPOLOGY_RESONANCE_CERT.v1.schema.json",
+      "id": "topology_schema",
+      "kind": "json_schema",
+      "sha256": "7c34a85c7835a8d2a7e162c20cb1c061c82a7d4c3a8903950a6ca9168dc334be"
+    },
+    "topology_success_example": {
+      "canonical_sha256": "25d6997c7dc019e5fade9f73e031787d07617a32954d2e39f7be2397d0d8c852",
+      "file": "examples/topology/topology_resonance_success.json",
+      "id": "topology_success_example",
+      "kind": "json_example",
+      "sha256": "f7b9216a26c3147d60d691384450879b438a47899f8523a8b1240614a4a9a58d"
+    },
+    "topology_validator": {
+      "file": "qa_topology_resonance_validator_v1.py",
+      "id": "topology_validator",
+      "kind": "source_py",
+      "sha256": "f3f22b48dcdabb1c63767f80e74bd212bf4df0e952b9133626fdda3e51c0f984"
+    }
+  },
+  "bundle_id": "qa.bundle.topology_resonance.v1",
+  "emitted_cert": {
+    "cert_id": "topology_resonance_caps24_001",
+    "cert_path": "certs/QA_TOPOLOGY_RESONANCE_CERT.v1.json",
+    "cert_sha256": "f7b9216a26c3147d60d691384450879b438a47899f8523a8b1240614a4a9a58d",
+    "sha256_sidecar_path": "certs/QA_TOPOLOGY_RESONANCE_CERT.v1.sha256"
+  },
+  "generated_utc": "2026-02-07T07:12:35Z",
+  "hash_spec": {
+    "canonical_sha256": "canonical_json (semantic identity, sorted keys, no whitespace)",
+    "canonical_spec": "json.dumps(obj, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
+    "id": "qa.hash_spec.v1",
+    "sha256": "file_bytes (exact file content integrity)",
+    "source": "qa_cert_core.canonical_json_compact",
+    "version": "1.0"
+  },
+  "manifest": {
+    "hash_alg": "sha256",
+    "manifest_sha256": "b0b85a3974e7f0e2cdedd53d1aeeee5f2245d5e251fd7cd202ea0c2f1d1142f4"
+  },
+  "schema_id": "QA_TOPOLOGY_RESONANCE_BUNDLE.v1",
+  "version": 1
+}

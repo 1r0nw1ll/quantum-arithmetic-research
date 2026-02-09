@@ -1,0 +1,126 @@
+# QA_MAP__TOPOLOGY_RESONANCE.yaml
+#
+# QA Module Specification for Topology Resonance Certificates
+# (Caps(N,N) reachability + SCC/phase contracts)
+
+module:
+  name: "QA_TOPOLOGY_RESONANCE"
+  version: "1.0.0"
+  source_paper: "QA topology reachability notes (Caps(N,N) program)"
+  title: "Generator-Induced Topology Resonance Mapping"
+  schema_prefix: "QA_TOPOLOGY_RESONANCE"
+  status: "COMPLETE - First cert vertical slice"
+
+# ============================================================================
+# CORE MAPPING: Topology Concepts -> QA Framework
+# ============================================================================
+
+concept_mapping:
+  state_complex:
+    paper_name: "Reachability graph/complex"
+    paper_definition: "Directed graph induced by legal generator applications"
+    qa_interpretation: "State manifold with connected components and cycles"
+    qa_structure: "State"
+    certificate_field: "topology_witness"
+    key_insight: "Topological shape is a first-class witness, not post-hoc visualization"
+
+  generator_set:
+    paper_name: "Sigma set"
+    paper_definition: "Canonical generators {sigma, mu, lambda2, nu}"
+    qa_interpretation: "Legal transitions over topology states"
+    qa_structure: "Generators"
+    certificate_field: "generator_set"
+    key_insight: "Phase/topology changes are generator-relative"
+
+  scc_monotonicity:
+    paper_name: "SCC expansion theorem"
+    paper_definition: "Strongly connected component count cannot decrease in legal resonance regime"
+    qa_interpretation: "Invariant over transitions"
+    qa_structure: "InvariantPacket"
+    certificate_field: "invariants.scc_monotone_non_decreasing"
+    key_insight: "Connectivity growth is certifiable as a hard contract"
+
+  phase_lock:
+    paper_name: "Phase preservation"
+    paper_definition: "mod-24 and mod-9 phase classes are preserved on certified paths"
+    qa_interpretation: "Tuple packet coherence invariant"
+    qa_structure: "InvariantPacket"
+    certificate_field: "phase_witness"
+    key_insight: "Topological reachability is constrained by arithmetic phase geometry"
+
+  resonance_score:
+    paper_name: "Resonance statistic"
+    paper_definition: "Scalar witness for topological resonance quality"
+    qa_interpretation: "Thresholded success witness in certificate lattice"
+    qa_structure: "Witness"
+    certificate_field: "topology_witness.resonance_score"
+    key_insight: "Resonance is adjudicated by deterministic threshold checks"
+
+# ============================================================================
+# FAILURE-COMPLETENESS MAPPING
+# ============================================================================
+
+failure_completeness:
+  theorem: |
+    For each topology transition campaign, exactly one outcome is valid:
+    1. SUCCESS: topology/phase invariants and resonance threshold all hold, OR
+    2. FAILURE: deterministic failure_mode + witness identifies obstruction.
+
+  failure_modes:
+    - mode: "phase_break"
+      description: "Phase class (mod-24/mod-9) drifted on a transition"
+      obstruction_witness: "Expected phase vs observed phase at first violating step"
+
+    - mode: "scc_drop"
+      description: "SCC monotonicity contract violated"
+      obstruction_witness: "scc_before > scc_after with transition trace"
+
+    - mode: "resonance_below_threshold"
+      description: "Resonance score fails threshold contract"
+      obstruction_witness: "score, threshold, and transition-local context"
+
+    - mode: "packet_drift"
+      description: "Tuple packet conservation contract violated"
+      obstruction_witness: "Invariant diff in tuple packet values"
+
+    - mode: "invalid_generator"
+      description: "Path contains non-canonical generator"
+      obstruction_witness: "Generator symbol and offending step index"
+
+# ============================================================================
+# CERTIFICATE FAMILY
+# ============================================================================
+
+certificate_family:
+  topology_resonance:
+    schema_id: "QA_TOPOLOGY_RESONANCE_CERT.v1"
+    success_example: "examples/topology/topology_resonance_success.json"
+    failure_example: "examples/topology/topology_phase_break_failure.json"
+    role: "Certifies SCC/phase resonance contracts or emits deterministic obstruction"
+  topology_bundle:
+    schema_id: "QA_TOPOLOGY_RESONANCE_BUNDLE.v1"
+    bundle_file: "certs/QA_TOPOLOGY_RESONANCE_BUNDLE.v1.json"
+    role: "Pins cert/schema/validator/examples via deterministic hash manifest"
+
+# ============================================================================
+# IMPLEMENTATION NOTES
+# ============================================================================
+
+implementation:
+  validator: "qa_topology_resonance_validator_v1.py"
+  bundle_emitter: "qa_topology_resonance_bundle_v1.py"
+  schemas:
+    - "schemas/QA_TOPOLOGY_RESONANCE_CERT.v1.schema.json"
+    - "schemas/QA_TOPOLOGY_RESONANCE_BUNDLE.v1.schema.json"
+  deterministic_rules:
+    - "All arithmetic witnesses are integers or rational strings"
+    - "No floating-point arithmetic in strict validator mode"
+    - "Generator set is restricted to canonical sigma family"
+    - "Recompute replay uses QA_TOPOLOGY_TRACE.v1 with contiguous step indices"
+    - "trace_digest = sha256(canonical_json(transition_trace))"
+  quick_commands:
+    - "python qa_topology_resonance_validator_v1.py --demo"
+    - "python qa_topology_resonance_validator_v1.py examples/topology/topology_resonance_success.json"
+    - "python qa_topology_resonance_validator_v1.py --level recompute examples/topology/topology_resonance_success.json"
+    - "python qa_topology_resonance_validator_v1.py examples/topology/topology_phase_break_failure.json"
+    - "python qa_topology_resonance_bundle_v1.py --emit --check"

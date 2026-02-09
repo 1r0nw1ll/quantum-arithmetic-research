@@ -203,7 +203,8 @@ New theoretical framework for helium-doped quartz self-oscillating energy genera
 
 - **Digital Garden**: [https://player2.github.io/signal_experiments/](https://player2.github.io/signal_experiments/)
 - **Wiki**: [Full documentation](https://github.com/player2/signal_experiments/wiki)
-- **Certificate Families**: [`docs/families/README.md`](docs/families/README.md) — per-family docs for [18]-[24], enforced by meta-validator test [25]
+- **Certificate Families**: [`docs/families/README.md`](docs/families/README.md) — per-family docs for [18]-[28], enforced by meta-validator doc gate
+- **External Validation**: [`docs/external_validation/`](docs/external_validation/) — Level-3 recompute gate reproduces certificate witnesses from raw MNIST + trained weights; enforced as meta-validator test [29]
 - **Formal Report**: `qa_formal_report.tex` (mathematical foundations)
 - **Research Notes**: `QAnotes/` (100+ markdown files)
 

@@ -811,6 +811,30 @@ def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_competency_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run QA Competency Detection family validator if bundle is present.
+
+    Returns:
+        None on success,
+        skip reason string if bundle is missing.
+    Raises:
+        Exception on validation failure.
+    """
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    bundle = os.path.join(repo_root, "qa_competency", "certs",
+                          "QA_COMPETENCY_CERT_BUNDLE.v1.json")
+    if not os.path.exists(bundle):
+        return "missing bundle: qa_competency/certs/QA_COMPETENCY_CERT_BUNDLE.v1.json"
+
+    if repo_root not in sys.path:
+        sys.path.insert(0, repo_root)
+
+    from qa_competency.qa_competency_validator import validate_all
+    validate_all(bundle_path=bundle)
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug)
@@ -836,6 +860,9 @@ FAMILY_SWEEPS = [
     (24, "QA SVP-CMC family",
      _validate_svp_cmc_family_if_present,
      "ledger sanity + validator demo", "24_svp_cmc"),
+    (26, "QA Competency Detection family",
+     _validate_competency_family_if_present,
+     "bundle + metrics recompute + fixtures", "26_competency_detection"),
 ]
 
 

@@ -1,0 +1,56 @@
+{
+  "_expected_fail_type": "METRIC_MISMATCH",
+  "schema_id": "QA_COMPETENCY_DETECTION_FRAMEWORK.v1",
+  "system_metadata": {
+    "domain": "test",
+    "substrate": "fixture",
+    "description": "Invalid cert: agency_index declared as 0.99 but inputs give 0.71"
+  },
+  "state_space": {
+    "dimension": 1,
+    "coordinates": ["position"],
+    "constraints": []
+  },
+  "generators": [
+    {"id": "step", "description": "Single step", "action": "move_forward"}
+  ],
+  "invariants": [],
+  "reachability": {
+    "components": 1,
+    "diameter": 3,
+    "obstructions": []
+  },
+  "graph_snapshot": {
+    "hash_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "time_window": {
+      "start_utc": "2026-02-09T00:00:00Z",
+      "end_utc": "2026-02-09T00:00:00Z"
+    },
+    "edge_semantics": "generator-edges: step moves to adjacent state"
+  },
+  "metric_inputs": {
+    "reachable_states": 710,
+    "total_states": 1000,
+    "attractor_basins": 120,
+    "move_probabilities": {"step": 1.0},
+    "delta_reachability": 83.0,
+    "delta_perturbation": 100.0
+  },
+  "competency_metrics": {
+    "agency_index": 0.99,
+    "plasticity_index": 0.83,
+    "goal_density": 0.12,
+    "control_entropy": 0.0
+  },
+  "validation": {
+    "validator": "qa_competency_validator.py",
+    "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "reproducibility_seed": 1
+  },
+  "examples": ["fixture_invalid_mismatch"],
+  "manifest": {
+    "manifest_version": 1,
+    "hash_alg": "sha256_canonical",
+    "canonical_json_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

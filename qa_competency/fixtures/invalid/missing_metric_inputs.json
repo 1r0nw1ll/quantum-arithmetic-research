@@ -1,0 +1,48 @@
+{
+  "_expected_fail_type": "SCHEMA_VALIDATION_FAILED",
+  "schema_id": "QA_COMPETENCY_DETECTION_FRAMEWORK.v1",
+  "system_metadata": {
+    "domain": "test",
+    "substrate": "fixture",
+    "description": "Invalid cert: missing metric_inputs block"
+  },
+  "state_space": {
+    "dimension": 1,
+    "coordinates": ["position"],
+    "constraints": []
+  },
+  "generators": [
+    {"id": "step", "description": "Single step", "action": "move_forward"}
+  ],
+  "invariants": [],
+  "reachability": {
+    "components": 1,
+    "diameter": 3,
+    "obstructions": []
+  },
+  "graph_snapshot": {
+    "hash_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "time_window": {
+      "start_utc": "2026-02-09T00:00:00Z",
+      "end_utc": "2026-02-09T00:00:00Z"
+    },
+    "edge_semantics": "generator-edges: step moves to adjacent state"
+  },
+  "competency_metrics": {
+    "agency_index": 1.0,
+    "plasticity_index": 0.0,
+    "goal_density": 0.25,
+    "control_entropy": 0.0
+  },
+  "validation": {
+    "validator": "qa_competency_validator.py",
+    "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "reproducibility_seed": 1
+  },
+  "examples": ["fixture_invalid_missing"],
+  "manifest": {
+    "manifest_version": 1,
+    "hash_alg": "sha256_canonical",
+    "canonical_json_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

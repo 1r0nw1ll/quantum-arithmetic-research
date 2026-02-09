@@ -20,11 +20,12 @@ A family **does not count as shipped** unless both tracts are present.
 | [22] | [QA Ingest->View Bridge](22_ingest_view_bridge.md) | Triplet | PASS |
 | [23] | [QA Ingestion](23_ingestion.md) | Triplet | PASS |
 | [24] | [QA SVP-CMC](24_svp_cmc.md) | Triplet + Ledger | PASS |
+| [26] | [QA Competency Detection](26_competency_detection.md) | Bundle + Metrics | PASS |
 
 ## Quick validation
 
 ```bash
-# Run all families [1]-[24]
+# Run all families [1]-[26]
 cd qa_alphageometry_ptolemy
 python qa_meta_validator.py
 
@@ -43,6 +44,9 @@ Families [18]-[23] form a certified provenance pipeline:
 ```
 
 [24] SVP-CMC is an independent domain family (cause-first physics).
+
+[26] Competency Detection is a standalone portable module (`qa_competency/`)
+aligned with Michael Levin's Platonic Space competency-detection programme.
 
 ## Two-tract checklist (for contributors)
 

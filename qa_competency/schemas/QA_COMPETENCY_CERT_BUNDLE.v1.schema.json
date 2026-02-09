@@ -1,0 +1,206 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_COMPETENCY_CERT_BUNDLE.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_id", "manifest", "certs"],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_COMPETENCY_CERT_BUNDLE.v1"
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_version", "hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "manifest_version": { "type": "integer", "const": 1 },
+        "hash_alg": { "type": "string", "const": "sha256_canonical" },
+        "canonical_json_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    },
+    "certs": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/competency_framework_cert" }
+    }
+  },
+  "definitions": {
+    "time_window": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["start_utc", "end_utc"],
+      "properties": {
+        "start_utc": { "type": "string", "format": "date-time" },
+        "end_utc": { "type": "string", "format": "date-time" }
+      }
+    },
+    "graph_snapshot": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_sha256", "time_window", "edge_semantics"],
+      "properties": {
+        "hash_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "time_window": { "$ref": "#/definitions/time_window" },
+        "edge_semantics": { "type": "string", "minLength": 1 }
+      }
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "description", "action"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "action": { "type": "string", "minLength": 1 }
+      }
+    },
+    "invariant": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "expression", "tolerance"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "expression": { "type": "string", "minLength": 1 },
+        "tolerance": { "type": "number", "minimum": 0 }
+      }
+    },
+    "reachability": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["components", "diameter", "obstructions"],
+      "properties": {
+        "components": { "type": "integer", "minimum": 0 },
+        "diameter": { "type": "integer", "minimum": 0 },
+        "obstructions": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "metric_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reachable_states", "total_states", "attractor_basins"],
+      "properties": {
+        "reachable_states": { "type": "integer", "minimum": 0 },
+        "total_states": { "type": "integer", "minimum": 0 },
+        "attractor_basins": { "type": "integer", "minimum": 0 },
+        "move_probabilities": {
+          "type": "object",
+          "additionalProperties": { "type": "number" }
+        },
+        "delta_reachability": { "type": "number" },
+        "delta_perturbation": { "type": "number" }
+      }
+    },
+    "competency_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["agency_index", "plasticity_index", "goal_density", "control_entropy"],
+      "properties": {
+        "agency_index": { "type": "number" },
+        "plasticity_index": { "type": "number" },
+        "goal_density": { "type": "number" },
+        "control_entropy": { "type": "number", "minimum": 0 }
+      }
+    },
+    "system_metadata": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["domain", "substrate", "description"],
+      "properties": {
+        "domain": { "type": "string", "minLength": 1 },
+        "substrate": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 }
+      }
+    },
+    "state_space": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["dimension", "coordinates", "constraints"],
+      "properties": {
+        "dimension": { "type": "integer", "minimum": 1 },
+        "coordinates": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "constraints": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      }
+    },
+    "validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["validator", "hash", "reproducibility_seed"],
+      "properties": {
+        "validator": { "type": "string", "minLength": 1 },
+        "hash": { "type": "string", "minLength": 1 },
+        "reproducibility_seed": { "type": "integer" }
+      }
+    },
+    "competency_framework_cert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema_id",
+        "system_metadata",
+        "state_space",
+        "generators",
+        "invariants",
+        "reachability",
+        "graph_snapshot",
+        "metric_inputs",
+        "competency_metrics",
+        "validation",
+        "examples",
+        "manifest"
+      ],
+      "properties": {
+        "schema_id": {
+          "type": "string",
+          "const": "QA_COMPETENCY_DETECTION_FRAMEWORK.v1"
+        },
+        "system_metadata": { "$ref": "#/definitions/system_metadata" },
+        "state_space": { "$ref": "#/definitions/state_space" },
+        "generators": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/generator" }
+        },
+        "invariants": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/invariant" }
+        },
+        "reachability": { "$ref": "#/definitions/reachability" },
+        "graph_snapshot": { "$ref": "#/definitions/graph_snapshot" },
+        "metric_inputs": { "$ref": "#/definitions/metric_inputs" },
+        "competency_metrics": { "$ref": "#/definitions/competency_metrics" },
+        "validation": { "$ref": "#/definitions/validation" },
+        "examples": {
+          "type": "array",
+          "items": { "type": "string" }
+        },
+        "manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["manifest_version", "hash_alg", "canonical_json_sha256"],
+          "properties": {
+            "manifest_version": { "type": "integer", "const": 1 },
+            "hash_alg": { "type": "string", "const": "sha256_canonical" },
+            "canonical_json_sha256": {
+              "type": "string",
+              "pattern": "^[0-9a-f]{64}$"
+            }
+          }
+        }
+      }
+    }
+  }
+}

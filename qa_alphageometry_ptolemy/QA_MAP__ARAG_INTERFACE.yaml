@@ -7,7 +7,7 @@
 module:
   name: "QA_ARAG_INTERFACE"
   version: "1.0.0"
-  source_paper: "A-RAG framing from ingestion candidates/qa_agentic_rag.odt"
+  source_paper: "A-RAG framing from qa_ingestion_sources/qa_agentic_rag.odt"
   title: "QA Agentic Retrieval Interface Mapping"
   schema_prefix: "QA_ARAG"
   status: "COMPLETE - Scaffold"

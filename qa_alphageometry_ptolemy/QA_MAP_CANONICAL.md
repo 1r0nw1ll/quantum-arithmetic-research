@@ -507,7 +507,7 @@ python qa_topology_resonance_bundle_v1.py --emit --check
 
 ### 7. Agentic RAG Interface — Retrieval as Control
 
-**Source**: `ingestion candidates/qa_agentic_rag.odt`
+**Source**: `qa_ingestion_sources/qa_agentic_rag.odt`
 
 **Status**: ✅ Complete Scaffold (2026-02-07)
 

@@ -1,0 +1,102 @@
+# QA_MAP__GRAPH_STRUCTURE.yaml
+#
+# QA Module Specification for Graph Structure Certificates
+# (QA tuple structural features -> community detection + paired baseline deltas)
+
+module:
+  name: "QA_GRAPH_STRUCTURE"
+  version: "1.0.0"
+  source_paper: "qastructure features.odt"
+  title: "Graph Learning Certification Layer"
+  schema_prefix: "QA_GRAPH_STRUCTURE"
+  status: "COMPLETE - First cert vertical slice"
+
+concept_mapping:
+  graph_state:
+    paper_name: "Graph learning state"
+    paper_definition: "graph + node features + clustering output + evaluation metrics"
+    qa_interpretation: "State manifold with deterministic feature packet evolution"
+    qa_structure: "State"
+    certificate_field: "graph_context"
+    key_insight: "Graph runs are certifiable as state transitions, not ad-hoc experiments"
+
+  structural_generators:
+    paper_name: "Feature/cluster/eval pipeline"
+    paper_definition: "sigma_feat_extract, sigma_qa_embed, sigma_cluster, sigma_eval, sigma_phase_analyze"
+    qa_interpretation: "Canonical graph-control generator family"
+    qa_structure: "Generators"
+    certificate_field: "generator_set"
+    key_insight: "QA feature extraction and clustering are modeled as legal operators"
+
+  baseline_pairing:
+    paper_name: "QA vs non-QA paired benchmark"
+    paper_definition: "matched splits/seeds/config between baseline and QA run"
+    qa_interpretation: "Parity invariant for causal attribution of metric deltas"
+    qa_structure: "InvariantPacket"
+    certificate_field: "invariants.baseline_pairing"
+    key_insight: "Any delta claim without matched pairing is invalid"
+
+  phase_diagnostics:
+    paper_name: "Phase-24 community diagnostics"
+    paper_definition: "community-level phase behavior under fixed configuration"
+    qa_interpretation: "Phase coherence witness over paired runs"
+    qa_structure: "Witness"
+    certificate_field: "phase_witness"
+    key_insight: "Phase drift is a first-class obstruction for graph claims"
+
+failure_completeness:
+  theorem: |
+    Each graph structure decision must emit exactly one of:
+    1. SUCCESS: paired metrics + phase + invariants satisfy contract, OR
+    2. FAILURE: deterministic failure_mode + witness identifies the obstruction.
+
+  failure_modes:
+    - mode: "out_of_bounds"
+      description: "Invalid graph bounds (node/edge/community counts or requested cluster count)"
+      obstruction_witness: "bad field, expected bounds, observed value"
+
+    - mode: "invariant"
+      description: "Tuple/invariant contract violated (determinism, reproducibility, trace, etc.)"
+      obstruction_witness: "invariant key + diff payload"
+
+    - mode: "phase_violation"
+      description: "Declared phase-preservation contract broken"
+      obstruction_witness: "phase baseline/qa mismatch at first violating stage"
+
+    - mode: "parity"
+      description: "Baseline/QA pairing mismatch (seed/split/config drift)"
+      obstruction_witness: "paired config mismatch details"
+
+    - mode: "reduction"
+      description: "Claim reported without required baseline evidence"
+      obstruction_witness: "missing baseline fields or unresolved metric delta provenance"
+
+certificate_family:
+  graph_structure:
+    schema_id: "QA_GRAPH_STRUCTURE_CERT.v1"
+    success_example: "examples/graph_structure/graph_structure_success.json"
+    failure_example: "examples/graph_structure/graph_structure_parity_failure.json"
+    role: "Certifies paired graph structure runs and deterministic metric deltas"
+  graph_structure_bundle:
+    schema_id: "QA_GRAPH_STRUCTURE_BUNDLE.v1"
+    bundle_file: "certs/QA_GRAPH_STRUCTURE_BUNDLE.v1.json"
+    role: "Pins cert/schema/validator/examples/mapping via deterministic hash manifest"
+
+implementation:
+  validator: "qa_graph_structure_validator_v1.py"
+  bundle_emitter: "qa_graph_structure_bundle_v1.py"
+  schemas:
+    - "schemas/QA_GRAPH_STRUCTURE_CERT.v1.schema.json"
+    - "schemas/QA_GRAPH_STRUCTURE_BUNDLE.v1.schema.json"
+  deterministic_rules:
+    - "All scalar metrics are integers or rational strings"
+    - "No float arithmetic in strict mode"
+    - "QA and baseline traces use matched step count and contiguous indices"
+    - "trace_digest = sha256(canonical_json({baseline_trace, qa_trace}))"
+    - "Any metric delta must equal qa_metric - baseline_metric"
+  quick_commands:
+    - "python qa_graph_structure_validator_v1.py --demo"
+    - "python qa_graph_structure_validator_v1.py examples/graph_structure/graph_structure_success.json"
+    - "python qa_graph_structure_validator_v1.py --level recompute examples/graph_structure/graph_structure_success.json"
+    - "python qa_graph_structure_validator_v1.py examples/graph_structure/graph_structure_parity_failure.json"
+    - "python qa_graph_structure_bundle_v1.py --emit --check"

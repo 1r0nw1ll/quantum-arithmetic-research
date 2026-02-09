@@ -702,6 +702,61 @@ python qa_radionics_ledger_sanity.py --ledger qa_ledger__radionics_obstructions.
 
 ---
 
+### 11. Graph Structure — QA Feature-Certified Community Learning
+
+**Source**: `qastructure features.odt` (QA structural feature engineering lineage)
+
+**Status**: ✅ Complete (2026-02-09, first cert emission)
+
+**Key Insight**: Graph learning claims are valid only with **paired QA vs baseline parity**, deterministic feature traces, and replay-checked metric deltas.
+
+#### Concept Mapping
+
+| Graph Structure Concept | QA Interpretation |
+|-------------------------|-------------------|
+| Graph run state | State manifold `(graph, features, clustering, metrics)` |
+| Structural pipeline generators | Canonical generator family `{sigma_feat_extract, sigma_qa_embed, sigma_cluster, sigma_eval, sigma_phase_analyze}` |
+| QA vs baseline pairing | Invariant packet for attribution validity |
+| Phase diagnostics | Phase coherence witness over paired runs |
+| Metric deltas | Deterministic success witness (`qa - baseline`) |
+
+#### Artifacts
+
+| Artifact | Path |
+|----------|------|
+| Module spec (YAML) | `QA_MAP__GRAPH_STRUCTURE.yaml` |
+| Validator | `qa_graph_structure_validator_v1.py` |
+| JSON Schema | `schemas/QA_GRAPH_STRUCTURE_CERT.v1.schema.json` |
+| Success example | `examples/graph_structure/graph_structure_success.json` |
+| Failure example | `examples/graph_structure/graph_structure_parity_failure.json` |
+| Reference emitted cert | `certs/QA_GRAPH_STRUCTURE_CERT.v1.json` |
+| Cert hash sidecar | `certs/QA_GRAPH_STRUCTURE_CERT.v1.sha256` |
+| Bundle manifest | `certs/QA_GRAPH_STRUCTURE_BUNDLE.v1.json` |
+| Bundle schema | `schemas/QA_GRAPH_STRUCTURE_BUNDLE.v1.schema.json` |
+| Bundle emitter/validator | `qa_graph_structure_bundle_v1.py` |
+
+#### Validation Commands
+
+```bash
+python qa_graph_structure_validator_v1.py --demo
+python qa_graph_structure_validator_v1.py examples/graph_structure/graph_structure_success.json
+python qa_graph_structure_validator_v1.py --level recompute examples/graph_structure/graph_structure_success.json
+python qa_graph_structure_validator_v1.py examples/graph_structure/graph_structure_parity_failure.json
+python qa_graph_structure_bundle_v1.py --emit --check
+```
+
+#### Failure Modes
+
+| Category | Modes |
+|----------|-------|
+| Input bounds | `out_of_bounds` |
+| Invariant contract | `invariant` |
+| Phase coherence | `phase_violation` |
+| Baseline parity | `parity` |
+| Evidence completeness | `reduction` |
+
+---
+
 ## Stub Mappings (In Progress)
 
 *No current stub mappings. All planned mappings have been completed to Gold Standard.*

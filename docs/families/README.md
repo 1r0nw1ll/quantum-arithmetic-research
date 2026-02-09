@@ -21,11 +21,12 @@ A family **does not count as shipped** unless both tracts are present.
 | [23] | [QA Ingestion](23_ingestion.md) | Triplet | PASS |
 | [24] | [QA SVP-CMC](24_svp_cmc.md) | Triplet + Ledger | PASS |
 | [26] | [QA Competency Detection](26_competency_detection.md) | Bundle + Metrics | PASS |
+| [28] | [QA Graph Structure](28_graph_structure.md) | Bundle + Paired Deltas | PASS |
 
 ## Quick validation
 
 ```bash
-# Run all families [1]-[26]
+# Run all families [1]-[28]
 cd qa_alphageometry_ptolemy
 python qa_meta_validator.py
 

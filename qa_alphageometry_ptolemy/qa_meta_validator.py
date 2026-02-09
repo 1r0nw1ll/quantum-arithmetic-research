@@ -4,7 +4,7 @@ qa_meta_validator.py
 Cross-certificate meta-validator for the QA Certificate Tetrad + extensions.
 
 Accepts any certificate JSON (Injection, Collapse, Field, Beyond Neurons,
-Topology Resonance, or Conjecture),
+Topology Resonance, Graph Structure, or Conjecture),
 dispatches to the correct validator, and enforces the shared
 failure-complete contract:
 
@@ -20,6 +20,7 @@ from __future__ import annotations
 import json
 import sys
 import os
+import hashlib
 from fractions import Fraction
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
@@ -46,6 +47,7 @@ KNOWN_CERT_TYPES = {
     "FIELD_COMPUTATION_CERT",
     "BEYOND_NEURONS_INTELLIGENCE_CERT",
     "TOPOLOGY_RESONANCE_CERT",
+    "GRAPH_STRUCTURE_CERT",
     "QA_CONJECTURE",
 }
 
@@ -89,6 +91,10 @@ REQUIRED_BY_TYPE = {
         "search_efficiency", "result",
     },
     "TOPOLOGY_RESONANCE_CERT": {
+        "generator_set",
+        "success",
+    },
+    "GRAPH_STRUCTURE_CERT": {
         "generator_set",
         "success",
     },
@@ -462,6 +468,216 @@ def validate_topology_resonance(cert_dict: Dict[str, Any]) -> ValidationResult:
     return v
 
 
+def validate_graph_structure(cert_dict: Dict[str, Any]) -> ValidationResult:
+    """Validate GRAPH_STRUCTURE_CERT-specific semantics."""
+    v = ValidationResult()
+
+    valid_generators = {
+        "sigma_feat_extract",
+        "sigma_qa_embed",
+        "sigma_cluster",
+        "sigma_eval",
+        "sigma_phase_analyze",
+    }
+    generators = cert_dict.get("generator_set", [])
+    v.check(isinstance(generators, list) and len(generators) > 0, "generator_set must be a non-empty list")
+    if isinstance(generators, list):
+        unknown = [g for g in generators if isinstance(g, str) and g not in valid_generators]
+        v.check(len(unknown) == 0, f"Unknown graph generators: {unknown}")
+
+    schema = cert_dict.get("schema")
+    v.check(schema == "QA_GRAPH_STRUCTURE_CERT.v1", f"schema must be QA_GRAPH_STRUCTURE_CERT.v1, got: {schema}")
+
+    success = cert_dict.get("success")
+    v.check(isinstance(success, bool), "success must be boolean")
+    if success is False:
+        v.check(bool(cert_dict.get("failure_mode")), "failure certificate missing failure_mode")
+        v.check(isinstance(cert_dict.get("failure_witness"), dict), "failure certificate missing failure_witness")
+        return v
+
+    graph_ctx = cert_dict.get("graph_context")
+    metric_witness = cert_dict.get("metric_witness")
+    phase = cert_dict.get("phase_witness")
+    inv = cert_dict.get("invariants")
+    recompute = cert_dict.get("recompute_inputs")
+    for name, obj in (
+        ("graph_context", graph_ctx),
+        ("metric_witness", metric_witness),
+        ("phase_witness", phase),
+        ("invariants", inv),
+        ("recompute_inputs", recompute),
+    ):
+        v.check(isinstance(obj, dict), f"success certificate missing {name}")
+    if not all(isinstance(x, dict) for x in (graph_ctx, metric_witness, phase, inv, recompute)):
+        return v
+
+    try:
+        node_count = int(graph_ctx.get("node_count"))
+        edge_count = int(graph_ctx.get("edge_count"))
+        community_count = int(graph_ctx.get("community_count"))
+        split_seed = int(graph_ctx.get("split_seed"))
+        clustering_seed = int(graph_ctx.get("clustering_seed"))
+    except Exception:
+        v.check(False, "graph_context parse failed for integer bounds fields")
+        return v
+    v.check(node_count > 0, "graph_context.node_count must be > 0")
+    v.check(edge_count >= 0, "graph_context.edge_count must be >= 0")
+    v.check(1 <= community_count <= node_count, "graph_context.community_count must satisfy 1 <= communities <= nodes")
+    v.check(split_seed >= 0, "graph_context.split_seed must be >= 0")
+    v.check(clustering_seed >= 0, "graph_context.clustering_seed must be >= 0")
+
+    qa_metrics = metric_witness.get("qa_metrics", {})
+    baseline_metrics = metric_witness.get("baseline_metrics", {})
+    delta_metrics = metric_witness.get("delta_metrics", {})
+    metric_keys = ("ari", "nmi", "modularity", "purity")
+    deltas: Dict[str, Fraction] = {}
+    for metric_key in metric_keys:
+        try:
+            qa_val = _parse_fraction_like(qa_metrics.get(metric_key))
+            base_val = _parse_fraction_like(baseline_metrics.get(metric_key))
+            declared_delta = _parse_fraction_like(delta_metrics.get(metric_key))
+            expected_delta = qa_val - base_val
+            deltas[metric_key] = expected_delta
+            v.check(
+                declared_delta == expected_delta,
+                f"delta mismatch for {metric_key}: declared {declared_delta}, expected {expected_delta}",
+            )
+        except Exception as e:
+            v.check(False, f"metric parse failed for {metric_key}: {e}")
+
+    delta_non_negative_any = metric_witness.get("delta_non_negative_any")
+    v.check(isinstance(delta_non_negative_any, bool), "metric_witness.delta_non_negative_any must be boolean")
+    if isinstance(delta_non_negative_any, bool) and all(k in deltas for k in ("ari", "modularity")):
+        computed_any = (deltas["ari"] >= 0) or (deltas["modularity"] >= 0)
+        v.check(
+            computed_any == delta_non_negative_any,
+            f"delta_non_negative_any mismatch: declared={delta_non_negative_any}, computed={computed_any}",
+        )
+
+    try:
+        p24_base = int(phase.get("phase_24_baseline"))
+        p24_qa = int(phase.get("phase_24_qa"))
+        p9_base = int(phase.get("phase_9_baseline"))
+        p9_qa = int(phase.get("phase_9_qa"))
+        phase_preserved = bool(phase.get("phase_preserved"))
+    except Exception:
+        v.check(False, "phase_witness phase fields must be integers/boolean")
+        return v
+    v.check(0 <= p24_base < 24 and 0 <= p24_qa < 24, "phase_24 values must satisfy 0 <= phase < 24")
+    v.check(0 <= p9_base < 9 and 0 <= p9_qa < 9, "phase_9 values must satisfy 0 <= phase < 9")
+    expected_phase_preserved = (p24_base == p24_qa) and (p9_base == p9_qa)
+    v.check(
+        phase_preserved == expected_phase_preserved,
+        f"phase_preserved mismatch: declared {phase_preserved}, expected {expected_phase_preserved}",
+    )
+
+    for k in ("tuple_consistency", "feature_determinism", "eval_repro", "trace", "baseline_pairing"):
+        v.check(inv.get(k) is True, f"invariants.{k} must be true for success certificates")
+
+    paired_cfg = recompute.get("paired_config")
+    v.check(isinstance(paired_cfg, dict), "recompute_inputs.paired_config must be object")
+    if isinstance(paired_cfg, dict):
+        v.check(
+            paired_cfg.get("dataset_id") == graph_ctx.get("dataset_id"),
+            "paired_config.dataset_id must match graph_context.dataset_id",
+        )
+        v.check(
+            paired_cfg.get("algorithm") == graph_ctx.get("algorithm"),
+            "paired_config.algorithm must match graph_context.algorithm",
+        )
+        v.check(
+            paired_cfg.get("split_seed") == graph_ctx.get("split_seed"),
+            "paired_config.split_seed must match graph_context.split_seed",
+        )
+        v.check(
+            paired_cfg.get("clustering_seed") == graph_ctx.get("clustering_seed"),
+            "paired_config.clustering_seed must match graph_context.clustering_seed",
+        )
+
+    baseline_trace = recompute.get("baseline_trace")
+    qa_trace = recompute.get("qa_trace")
+    v.check(isinstance(baseline_trace, list) and len(baseline_trace) > 0, "recompute_inputs.baseline_trace must be non-empty list")
+    v.check(isinstance(qa_trace, list) and len(qa_trace) > 0, "recompute_inputs.qa_trace must be non-empty list")
+    if not (isinstance(baseline_trace, list) and isinstance(qa_trace, list) and baseline_trace and qa_trace):
+        return v
+
+    trace_schema = recompute.get("trace_schema")
+    v.check(trace_schema == "QA_GRAPH_STRUCTURE_TRACE.v1", "recompute_inputs.trace_schema must be QA_GRAPH_STRUCTURE_TRACE.v1")
+
+    canonical_payload = json.dumps(
+        {"baseline_trace": baseline_trace, "qa_trace": qa_trace},
+        sort_keys=True,
+        separators=(",", ":"),
+        ensure_ascii=False,
+    )
+    expected_digest = "sha256:" + hashlib.sha256(canonical_payload.encode("utf-8")).hexdigest()
+    v.check(
+        recompute.get("trace_digest") == expected_digest,
+        f"recompute_inputs.trace_digest mismatch: expected {expected_digest}",
+    )
+
+    def _validate_trace(trace: List[Dict[str, Any]], trace_name: str) -> Optional[Dict[str, Any]]:
+        prev = 0
+        terminal: Optional[Dict[str, Any]] = None
+        for i, step in enumerate(trace):
+            if not isinstance(step, dict):
+                v.check(False, f"{trace_name}[{i}] must be object")
+                return None
+            try:
+                step_index = int(step.get("step_index"))
+                generator = step.get("generator")
+                p24 = int(step.get("phase_24"))
+                p9 = int(step.get("phase_9"))
+                metrics = step.get("metrics", {})
+            except Exception:
+                v.check(False, f"{trace_name}[{i}] parse failed")
+                return None
+            v.check(step_index == prev + 1, f"{trace_name}[{i}] step_index must be contiguous")
+            v.check(generator in generators, f"{trace_name}[{i}] generator not in generator_set: {generator}")
+            v.check(0 <= p24 < 24 and 0 <= p9 < 9, f"{trace_name}[{i}] phase out of range")
+            if not isinstance(metrics, dict):
+                v.check(False, f"{trace_name}[{i}].metrics must be object")
+                return None
+            for metric_key in metric_keys:
+                try:
+                    _parse_fraction_like(metrics.get(metric_key))
+                except Exception as e:
+                    v.check(False, f"{trace_name}[{i}].metrics.{metric_key} invalid: {e}")
+            prev = step_index
+            terminal = step
+        return terminal
+
+    baseline_terminal = _validate_trace(baseline_trace, "baseline_trace")
+    qa_terminal = _validate_trace(qa_trace, "qa_trace")
+    v.check(len(baseline_trace) == len(qa_trace), "baseline_trace and qa_trace must have equal length")
+    if not (isinstance(baseline_terminal, dict) and isinstance(qa_terminal, dict)):
+        return v
+
+    baseline_terminal_metrics = baseline_terminal.get("metrics", {})
+    qa_terminal_metrics = qa_terminal.get("metrics", {})
+    for metric_key in metric_keys:
+        try:
+            v.check(
+                _parse_fraction_like(baseline_terminal_metrics.get(metric_key))
+                == _parse_fraction_like(baseline_metrics.get(metric_key)),
+                f"baseline terminal metric mismatch: {metric_key}",
+            )
+            v.check(
+                _parse_fraction_like(qa_terminal_metrics.get(metric_key))
+                == _parse_fraction_like(qa_metrics.get(metric_key)),
+                f"qa terminal metric mismatch: {metric_key}",
+            )
+        except Exception as e:
+            v.check(False, f"terminal metric parse failed for {metric_key}: {e}")
+
+    v.check(int(baseline_terminal.get("phase_24")) == p24_base, "baseline terminal phase_24 mismatch")
+    v.check(int(baseline_terminal.get("phase_9")) == p9_base, "baseline terminal phase_9 mismatch")
+    v.check(int(qa_terminal.get("phase_24")) == p24_qa, "qa terminal phase_24 mismatch")
+    v.check(int(qa_terminal.get("phase_9")) == p9_qa, "qa terminal phase_9 mismatch")
+
+    return v
+
+
 def validate_conjecture(cert_dict: Dict[str, Any]) -> ValidationResult:
     """Validate QA_CONJECTURE-specific semantics."""
     v = ValidationResult()
@@ -512,6 +728,7 @@ TYPE_VALIDATORS = {
     "FIELD_COMPUTATION_CERT": validate_field,
     "BEYOND_NEURONS_INTELLIGENCE_CERT": validate_beyond_neurons,
     "TOPOLOGY_RESONANCE_CERT": validate_topology_resonance,
+    "GRAPH_STRUCTURE_CERT": validate_graph_structure,
     "QA_CONJECTURE": validate_conjecture,
 }
 
@@ -757,6 +974,7 @@ def _validate_ingest_family_if_present(base_dir: str) -> Optional[str]:
 
 
 TOPOLOGY_BUNDLE_PATH = "certs/QA_TOPOLOGY_RESONANCE_BUNDLE.v1.json"
+GRAPH_STRUCTURE_BUNDLE_PATH = "certs/QA_GRAPH_STRUCTURE_BUNDLE.v1.json"
 
 
 def _topology_bundle_status(base_dir: str) -> Dict[str, Any]:
@@ -791,6 +1009,28 @@ def _topology_bundle_status(base_dir: str) -> Dict[str, Any]:
     return result
 
 
+def _graph_structure_bundle_status(base_dir: str) -> Dict[str, Any]:
+    """
+    Validate graph-structure bundle and return normalized status payload.
+    """
+    bundle_path = os.path.join(base_dir, GRAPH_STRUCTURE_BUNDLE_PATH)
+    if not os.path.exists(bundle_path):
+        return {
+            "ok": True,
+            "skipped": True,
+            "reason": "bundle not found",
+            "bundle_path": bundle_path,
+        }
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_graph_structure_bundle_v1 import validate_bundle_manifest
+    result = validate_bundle_manifest(bundle_path=bundle_path, base_dir=base_dir)
+    result.setdefault("skipped", False)
+    return result
+
+
 def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
     """
     Run topology bundle validator if the bundle file exists.
@@ -807,6 +1047,26 @@ def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
     if not result.get("ok", False):
         errors = result.get("errors", [])
         head = "; ".join(errors[:3]) if errors else "unknown topology bundle validation error"
+        raise RuntimeError(head)
+    return None
+
+
+def _validate_graph_structure_bundle_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run graph-structure bundle validator if the bundle file exists.
+
+    Returns:
+        None on success,
+        skip reason string if bundle is missing.
+    Raises:
+        Exception on validation failure.
+    """
+    result = _graph_structure_bundle_status(base_dir)
+    if result.get("skipped"):
+        return f"missing file: {os.path.basename(GRAPH_STRUCTURE_BUNDLE_PATH)}"
+    if not result.get("ok", False):
+        errors = result.get("errors", [])
+        head = "; ".join(errors[:3]) if errors else "unknown graph structure bundle validation error"
         raise RuntimeError(head)
     return None
 
@@ -863,6 +1123,9 @@ FAMILY_SWEEPS = [
     (26, "QA Competency Detection family",
      _validate_competency_family_if_present,
      "bundle + metrics recompute + fixtures", "26_competency_detection"),
+    (28, "QA Graph Structure bundle",
+     _validate_graph_structure_bundle_if_present,
+     "bundle manifest verified", "28_graph_structure"),
 ]
 
 
@@ -1044,6 +1307,18 @@ if __name__ == "__main__":
             print(f"[Topology Bundle] {'PASS' if topology_ok else 'FAIL'} "
                   f"({topology_result.get('artifact_count', 0)} artifacts)")
             if not topology_ok:
+                fast_results["ok"] = False
+
+        # Graph Structure bundle check
+        graph_result = _graph_structure_bundle_status(os.path.dirname(os.path.abspath(__file__)))
+        fast_results["modules"]["graph_structure_bundle"] = graph_result
+        if graph_result.get("skipped"):
+            print("[Graph Bundle] SKIP (bundle not found)")
+        else:
+            graph_ok = graph_result.get("ok", False)
+            print(f"[Graph Bundle] {'PASS' if graph_ok else 'FAIL'} "
+                  f"({graph_result.get('artifact_count', 0)} artifacts)")
+            if not graph_ok:
                 fast_results["ok"] = False
 
         print()

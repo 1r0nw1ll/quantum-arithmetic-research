@@ -1,0 +1,85 @@
+{
+  "artifacts": {
+    "bundle_emitter": {
+      "file": "qa_graph_structure_bundle_v1.py",
+      "id": "bundle_emitter",
+      "kind": "source_py",
+      "sha256": "ea4f630275b824daebd2cc56d4a3659735eac3fa31bb59f102187a26caf9587a"
+    },
+    "bundle_schema": {
+      "canonical_sha256": "eda982884cc4e9e652fea72bb1966b5ed3e0e26744ff2fdc6f3da551e7f75677",
+      "file": "schemas/QA_GRAPH_STRUCTURE_BUNDLE.v1.schema.json",
+      "id": "bundle_schema",
+      "kind": "json_schema",
+      "sha256": "9a4e52be22d9a88414739e566fe2c563c4e834e6678a3f11db55f954647fb04d"
+    },
+    "graph_cert": {
+      "canonical_sha256": "9c7e2f4abc388654cf07bb5ca4615eee5616afabd213d1a337097f4f4e82fe90",
+      "file": "certs/QA_GRAPH_STRUCTURE_CERT.v1.json",
+      "id": "graph_cert",
+      "kind": "json_cert",
+      "sha256": "f01652997934e13b95a427fd10971d46815c051f2f2d9a683c130c706573faeb"
+    },
+    "graph_cert_sha256": {
+      "file": "certs/QA_GRAPH_STRUCTURE_CERT.v1.sha256",
+      "id": "graph_cert_sha256",
+      "kind": "hash_sidecar",
+      "sha256": "1499c88558d70abe64029034c9056f715c354c84b0029d87012df5c62350db95"
+    },
+    "graph_failure_example": {
+      "canonical_sha256": "4fb4df010b3cdc470ef53bd9048e561f156413f63e65bb24f0c9f1a963520fa6",
+      "file": "examples/graph_structure/graph_structure_parity_failure.json",
+      "id": "graph_failure_example",
+      "kind": "json_example",
+      "sha256": "c3e3c0c81169b08d49b602f4fdcc28d56e25a33030184f470c86bbb958db0179"
+    },
+    "graph_mapping": {
+      "file": "QA_MAP__GRAPH_STRUCTURE.yaml",
+      "id": "graph_mapping",
+      "kind": "source_yaml",
+      "sha256": "7a592670998d794b97428d0ab7aa577dd7372afc66a2609252d886fdd01a5c6b"
+    },
+    "graph_schema": {
+      "canonical_sha256": "64ddf66ab311c1d73684ed8352c83603f15f41460768f61d770b06e94f3e80ce",
+      "file": "schemas/QA_GRAPH_STRUCTURE_CERT.v1.schema.json",
+      "id": "graph_schema",
+      "kind": "json_schema",
+      "sha256": "85c2a9d0de8de922e64126c0313c1f9ec00512007b984efe6f631c410b0c51e7"
+    },
+    "graph_success_example": {
+      "canonical_sha256": "9c7e2f4abc388654cf07bb5ca4615eee5616afabd213d1a337097f4f4e82fe90",
+      "file": "examples/graph_structure/graph_structure_success.json",
+      "id": "graph_success_example",
+      "kind": "json_example",
+      "sha256": "f01652997934e13b95a427fd10971d46815c051f2f2d9a683c130c706573faeb"
+    },
+    "graph_validator": {
+      "file": "qa_graph_structure_validator_v1.py",
+      "id": "graph_validator",
+      "kind": "source_py",
+      "sha256": "444cde91831366664f6dc1d09a5db82db771d483b33612591d9a836931779bd5"
+    }
+  },
+  "bundle_id": "qa.bundle.graph_structure.v1",
+  "emitted_cert": {
+    "cert_id": "graph_structure_karate_001",
+    "cert_path": "certs/QA_GRAPH_STRUCTURE_CERT.v1.json",
+    "cert_sha256": "f01652997934e13b95a427fd10971d46815c051f2f2d9a683c130c706573faeb",
+    "sha256_sidecar_path": "certs/QA_GRAPH_STRUCTURE_CERT.v1.sha256"
+  },
+  "generated_utc": "2026-02-09T16:44:21Z",
+  "hash_spec": {
+    "canonical_sha256": "canonical_json (semantic identity, sorted keys, no whitespace)",
+    "canonical_spec": "json.dumps(obj, sort_keys=True, separators=(',',':'), ensure_ascii=False)",
+    "id": "qa.hash_spec.v1",
+    "sha256": "file_bytes (exact file content integrity)",
+    "source": "qa_cert_core.canonical_json_compact",
+    "version": "1.0"
+  },
+  "manifest": {
+    "hash_alg": "sha256",
+    "manifest_sha256": "cf78b5cc798ad42fc7a48c5a65dd9c534d606e1f3878a581e2582498f9f63db6"
+  },
+  "schema_id": "QA_GRAPH_STRUCTURE_BUNDLE.v1",
+  "version": 1
+}

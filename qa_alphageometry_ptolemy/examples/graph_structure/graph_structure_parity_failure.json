@@ -1,0 +1,36 @@
+{
+  "certificate_id": "demo_graph_structure_parity_failure_001",
+  "certificate_type": "GRAPH_STRUCTURE_CERT",
+  "timestamp": "2026-02-09T00:00:00Z",
+  "version": "1.0.0",
+  "schema": "QA_GRAPH_STRUCTURE_CERT.v1",
+  "success": false,
+  "generator_set": [
+    "sigma_feat_extract",
+    "sigma_qa_embed",
+    "sigma_cluster",
+    "sigma_eval",
+    "sigma_phase_analyze"
+  ],
+  "failure_mode": "parity",
+  "failure_witness": {
+    "reason": "paired baseline mismatch: clustering_seed drift",
+    "expected": {
+      "split_seed": 17,
+      "clustering_seed": 17
+    },
+    "observed": {
+      "split_seed": 17,
+      "clustering_seed": 23
+    },
+    "remediation": [
+      "Lock baseline and QA runs to identical split/clustering seeds",
+      "Re-emit certificate only after paired config parity is restored"
+    ]
+  },
+  "qa_interpretation": {
+    "failure_class": "PARITY",
+    "obstruction_type": "paired_baseline_mismatch",
+    "note": "delta claims are invalid without strict pairing invariants"
+  }
+}

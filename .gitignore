@@ -131,6 +131,10 @@ Cargo.lock
 gemini_qa_project/zio_schema_migration/zio-schema
 
 # Local working directories (not for repo) - anchored to root
-/ingestion candidates/
+/ingestion candidates/*
+!/ingestion candidates/
+!/ingestion candidates/INGESTION_AUDIT.md
+!/ingestion candidates/INGESTION_AUDIT.json
+!/ingestion candidates/INGESTION_INDEX.md
 /gemini_qa_project/
 /gemini_project_assesment1.md

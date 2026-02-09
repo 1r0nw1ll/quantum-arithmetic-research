@@ -1,0 +1,1422 @@
+{
+  "generated_at": "2026-02-09T17:59:57.579000+00:00",
+  "repo_root": "/home/player2/signal_experiments",
+  "candidate_dir": "/home/player2/signal_experiments/ingestion candidates",
+  "total_files": 112,
+  "processed_files": 32,
+  "pending_files": 80,
+  "by_extension": {
+    "doc": 1,
+    "docx": 2,
+    "jpeg": 1,
+    "md": 2,
+    "odt": 79,
+    "pdf": 21,
+    "png": 6
+  },
+  "largest_files": [
+    {
+      "name": "jit.pdf",
+      "relative_path": "ingestion candidates/jit.pdf",
+      "size_bytes": 44592205,
+      "size_human": "42.53 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "arc_is_a_vision_problem.pdf",
+      "relative_path": "ingestion candidates/arc_is_a_vision_problem.pdf",
+      "size_bytes": 37375312,
+      "size_human": "35.64 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "entangled_schrodinger_bridge_mapping.pdf",
+      "relative_path": "ingestion candidates/entangled_schrodinger_bridge_mapping.pdf",
+      "size_bytes": 34098755,
+      "size_human": "32.52 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "code foundations.pdf",
+      "relative_path": "ingestion candidates/code foundations.pdf",
+      "size_bytes": 11347314,
+      "size_human": "10.82 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "clara.pdf",
+      "relative_path": "ingestion candidates/clara.pdf",
+      "size_bytes": 6020364,
+      "size_human": "5.74 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "hive_mind.pdf",
+      "relative_path": "ingestion candidates/hive_mind.pdf",
+      "size_bytes": 5940674,
+      "size_human": "5.67 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "eddyformer.pdf",
+      "relative_path": "ingestion candidates/eddyformer.pdf",
+      "size_bytes": 4588478,
+      "size_human": "4.38 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "fact_mlps.pdf",
+      "relative_path": "ingestion candidates/fact_mlps.pdf",
+      "size_bytes": 4249421,
+      "size_human": "4.05 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "diffusiontut.pdf",
+      "relative_path": "ingestion candidates/diffusiontut.pdf",
+      "size_bytes": 3778019,
+      "size_human": "3.60 MB",
+      "reference_count": 0
+    },
+    {
+      "name": "s11229-025-05319-6.pdf",
+      "relative_path": "ingestion candidates/s11229-025-05319-6.pdf",
+      "size_bytes": 3220597,
+      "size_human": "3.07 MB",
+      "reference_count": 0
+    }
+  ],
+  "duplicates": [
+    {
+      "sha256": "6bbcf23497baf14ef3b826fd1d63167ca780cedcc6b27fbf39a05b39cfac10bd",
+      "files": [
+        "ingestion candidates/sheaf_cohomology.pdf",
+        "ingestion candidates/sheafcohomology.pdf"
+      ]
+    }
+  ],
+  "files": [
+    {
+      "name": "algebraic_geometry.odt",
+      "relative_path": "ingestion candidates/algebraic_geometry.odt",
+      "extension": "odt",
+      "size_bytes": 65340,
+      "size_human": "63.81 KB",
+      "sha256": "2caaa98dd6926099e37b2ba8445dd8cb5d30b114ffaa06d41ec72f64871839c3",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "arc_is_a_vision+problem.odt",
+      "relative_path": "ingestion candidates/arc_is_a_vision+problem.odt",
+      "extension": "odt",
+      "size_bytes": 77824,
+      "size_human": "76.00 KB",
+      "sha256": "8c8093333cd950bb684ed6c843a996df5ffd665d988895400ca65b0239c6223e",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "arc_is_a_vision_problem.pdf",
+      "relative_path": "ingestion candidates/arc_is_a_vision_problem.pdf",
+      "extension": "pdf",
+      "size_bytes": 37375312,
+      "size_human": "35.64 MB",
+      "sha256": "0f7c95b5243039fb95827b1f440fd548a96431fb79db551dadf9ebb53e9cb1e0",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "axiom_ai.odt",
+      "relative_path": "ingestion candidates/axiom_ai.odt",
+      "extension": "odt",
+      "size_bytes": 56308,
+      "size_human": "54.99 KB",
+      "sha256": "7088585805d1ad826fb9aaaa946cfbf81d42a2c5792f71e5547ef2fc27cba6a8",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "clara.pdf",
+      "relative_path": "ingestion candidates/clara.pdf",
+      "extension": "pdf",
+      "size_bytes": 6020364,
+      "size_human": "5.74 MB",
+      "sha256": "75f482dfb14d83068c6a77a81930b3b95efb9e88bd3a696e05f5f369cdfeefde",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "code foundations.odt",
+      "relative_path": "ingestion candidates/code foundations.odt",
+      "extension": "odt",
+      "size_bytes": 45443,
+      "size_human": "44.38 KB",
+      "sha256": "4397679d42a1e13bea4c093bb144828da8e6364f0dd5a01fab0efcc9521a525a",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "code foundations.pdf",
+      "relative_path": "ingestion candidates/code foundations.pdf",
+      "extension": "pdf",
+      "size_bytes": 11347314,
+      "size_human": "10.82 MB",
+      "sha256": "4cc440231cbd4dcd431ccb20e24326a115c559615a828dda5b15f39d6a4a57e3",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "dft_core.odt",
+      "relative_path": "ingestion candidates/dft_core.odt",
+      "extension": "odt",
+      "size_bytes": 51630,
+      "size_human": "50.42 KB",
+      "sha256": "0203752352ffc1e20dbd648522c22ae50a46b0afeba7923bf2effcd5ca79e4c7",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "diffusion_tutorial.odt",
+      "relative_path": "ingestion candidates/diffusion_tutorial.odt",
+      "extension": "odt",
+      "size_bytes": 42104,
+      "size_human": "41.12 KB",
+      "sha256": "baf49822f03fc84c0bcf5897fe7af7466d87747f74d24c03e3e56168de12096f",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "diffusiontut.pdf",
+      "relative_path": "ingestion candidates/diffusiontut.pdf",
+      "extension": "pdf",
+      "size_bytes": 3778019,
+      "size_human": "3.60 MB",
+      "sha256": "dbe691ba686abc29612f2c737c7472eded285b373f56005690fedc1669d953c8",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "dstar_agent.odt",
+      "relative_path": "ingestion candidates/dstar_agent.odt",
+      "extension": "odt",
+      "size_bytes": 41055,
+      "size_human": "40.09 KB",
+      "sha256": "f88eeae64c67a386b7d8c7329104a9affe9101857e1eed80fe911bf0299179ad",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "eddyformer.odt",
+      "relative_path": "ingestion candidates/eddyformer.odt",
+      "extension": "odt",
+      "size_bytes": 66958,
+      "size_human": "65.39 KB",
+      "sha256": "810782e4a1500b8eb3613b3eb02eb7c25e7029347b87d6dd1d654f675b30a9b3",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "eddyformer.pdf",
+      "relative_path": "ingestion candidates/eddyformer.pdf",
+      "extension": "pdf",
+      "size_bytes": 4588478,
+      "size_human": "4.38 MB",
+      "sha256": "37b4f81cbb2343c333baa13e95794398a2a751f00a1a3951d9213c6973e099de",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "emotional.odt",
+      "relative_path": "ingestion candidates/emotional.odt",
+      "extension": "odt",
+      "size_bytes": 45100,
+      "size_human": "44.04 KB",
+      "sha256": "94eae308d1b7c8ad2ae963cd783de790e6440fbb27350587250b449c7b58ee73",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "emotional.pdf",
+      "relative_path": "ingestion candidates/emotional.pdf",
+      "extension": "pdf",
+      "size_bytes": 1293990,
+      "size_human": "1.23 MB",
+      "sha256": "a0c08b7720a4c0978093d1dee574bbfdeec4595c690e856bebdef6714ba2b357",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "entangled_schrodinger_bridge+matching.odt",
+      "relative_path": "ingestion candidates/entangled_schrodinger_bridge+matching.odt",
+      "extension": "odt",
+      "size_bytes": 63994,
+      "size_human": "62.49 KB",
+      "sha256": "c66432576eb12046ce59d8b91888443b126dafc0b2775e6edcb217ed458f9461",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "entangled_schrodinger_bridge_mapping.pdf",
+      "relative_path": "ingestion candidates/entangled_schrodinger_bridge_mapping.pdf",
+      "extension": "pdf",
+      "size_bytes": 34098755,
+      "size_human": "32.52 MB",
+      "sha256": "60666c6e75c9a8ecc58444822423b17e4861a7979ef18494827ac1eb79078884",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "exchangecorrelation.pdf",
+      "relative_path": "ingestion candidates/exchangecorrelation.pdf",
+      "extension": "pdf",
+      "size_bytes": 530221,
+      "size_human": "517.79 KB",
+      "sha256": "99685aebe6c51a23ffe4288394f8b8fa5dfe9fd33956348851d1a0354155c83b",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "fact_mlps.pdf",
+      "relative_path": "ingestion candidates/fact_mlps.pdf",
+      "extension": "pdf",
+      "size_bytes": 4249421,
+      "size_human": "4.05 MB",
+      "sha256": "04a4e4e0d788cb22514110626637da34931481875a27248c3bbbae432b78eafc",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "fact_storing_mlps.odt",
+      "relative_path": "ingestion candidates/fact_storing_mlps.odt",
+      "extension": "odt",
+      "size_bytes": 76323,
+      "size_human": "74.53 KB",
+      "sha256": "e9953144562577dda5bb9f5ad8a9a31e7e681880f8c4ebf89d61462c84962a9c",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "flowmap_distillation.odt",
+      "relative_path": "ingestion candidates/flowmap_distillation.odt",
+      "extension": "odt",
+      "size_bytes": 58162,
+      "size_human": "56.80 KB",
+      "sha256": "6e789752dad249c0c24bedf5cb00d431cf75fd364f603b33eb9d0824e02c9912",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "fundamental physiscsUntitled 1.odt",
+      "relative_path": "ingestion candidates/fundamental physiscsUntitled 1.odt",
+      "extension": "odt",
+      "size_bytes": 43245,
+      "size_human": "42.23 KB",
+      "sha256": "f90c5fe837ba954b20c79feb45273bb38acd37156b2f35cee883708db8e88d2a",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "gated attention.odt",
+      "relative_path": "ingestion candidates/gated attention.odt",
+      "extension": "odt",
+      "size_bytes": 54463,
+      "size_human": "53.19 KB",
+      "sha256": "b889e65be8739041094a247675b746b9ae88018f730e0a76d05bf084ec41a911",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "gi-cann.odt",
+      "relative_path": "ingestion candidates/gi-cann.odt",
+      "extension": "odt",
+      "size_bytes": 85958,
+      "size_human": "83.94 KB",
+      "sha256": "b69d362775d0d15b1c41f5ec01cb2b140f0c0bc64d5794d348d04bf64b169e0e",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "glioblastoma.odt",
+      "relative_path": "ingestion candidates/glioblastoma.odt",
+      "extension": "odt",
+      "size_bytes": 49034,
+      "size_human": "47.88 KB",
+      "sha256": "31158e31b7e5c0f38f51544d485b6b45ddb71d2664fd762a4722851cd375954b",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "gTED ATTENTION.pdf",
+      "relative_path": "ingestion candidates/gTED ATTENTION.pdf",
+      "extension": "pdf",
+      "size_bytes": 1503818,
+      "size_human": "1.43 MB",
+      "sha256": "949c7ed67dea3ddc6b88854cf72631ed2e1f466ad4c824c8aa1286739bcf2359",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "hakan-time_series.odt",
+      "relative_path": "ingestion candidates/hakan-time_series.odt",
+      "extension": "odt",
+      "size_bytes": 70124,
+      "size_human": "68.48 KB",
+      "sha256": "0f3e9ea1f66016e0ebdc993e4996ec55811e175b25f93b77947cbe89a2849868",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "high_roi_paper_maps.odt",
+      "relative_path": "ingestion candidates/high_roi_paper_maps.odt",
+      "extension": "odt",
+      "size_bytes": 154115,
+      "size_human": "150.50 KB",
+      "sha256": "92e01d17c47771af719a28938c3e6ae8ef187fd9896fbfc2e4e455026274891f",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "hive_mind.odt",
+      "relative_path": "ingestion candidates/hive_mind.odt",
+      "extension": "odt",
+      "size_bytes": 58711,
+      "size_human": "57.33 KB",
+      "sha256": "ea390ca0725e05a1363870c92c1f61c4425d0764e0834b6055d16db69e2655bb",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "hive_mind.pdf",
+      "relative_path": "ingestion candidates/hive_mind.pdf",
+      "extension": "pdf",
+      "size_bytes": 5940674,
+      "size_human": "5.67 MB",
+      "sha256": "4368e15cef43e243114418069b9583a1df73a160f1ef39329f937a63a3582bb5",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "INGESTION_JAN24_2026.md",
+      "relative_path": "ingestion candidates/INGESTION_JAN24_2026.md",
+      "extension": "md",
+      "size_bytes": 8255,
+      "size_human": "8.06 KB",
+      "sha256": "68fb20642708ef93d0e589b2f26e5fcc451fdcc8fddbe71a0ce8751aa0b6e727",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "inhomoelectrongas.pdf",
+      "relative_path": "ingestion candidates/inhomoelectrongas.pdf",
+      "extension": "pdf",
+      "size_bytes": 838879,
+      "size_human": "819.22 KB",
+      "sha256": "d241218df9578242dd461101f369c4a7d3ed58388567897a53f2e885a1be8a97",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "instruction_vs_content.odt",
+      "relative_path": "ingestion candidates/instruction_vs_content.odt",
+      "extension": "odt",
+      "size_bytes": 49386,
+      "size_human": "48.23 KB",
+      "sha256": "aa9bf3ea0be58761f522b26582052561b9fe0f49dd6a8f37a3de128a02c37011",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "intelligence_beyond_neurons.odt",
+      "relative_path": "ingestion candidates/intelligence_beyond_neurons.odt",
+      "extension": "odt",
+      "size_bytes": 129806,
+      "size_human": "126.76 KB",
+      "sha256": "94f93f7819725444d4d23306890c9dd6a1f3ceeaefadaaaed875ad96a1d1f3bc",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "jit.odt",
+      "relative_path": "ingestion candidates/jit.odt",
+      "extension": "odt",
+      "size_bytes": 64552,
+      "size_human": "63.04 KB",
+      "sha256": "e071d6775812670954b1e1b2b4b854a8cf0db13f79ceff41080300172bc27a3a",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "jit.pdf",
+      "relative_path": "ingestion candidates/jit.pdf",
+      "extension": "pdf",
+      "size_bytes": 44592205,
+      "size_human": "42.53 MB",
+      "sha256": "bb507507d5df89ad369c6180d122b1082f6464d981e1cb7a8018d33a0fe7f80d",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "kayser2.png",
+      "relative_path": "ingestion candidates/kayser2.png",
+      "extension": "png",
+      "size_bytes": 124971,
+      "size_human": "122.04 KB",
+      "sha256": "2c1d84e1c54c1e6dce516b349a1f2c5e6314f3d8afcf211a2e3ab9886c62d86b",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "kayser4.png",
+      "relative_path": "ingestion candidates/kayser4.png",
+      "extension": "png",
+      "size_bytes": 226655,
+      "size_human": "221.34 KB",
+      "sha256": "77a35d8e32939402b66ac0cb2ef4ed2cc9cfa6f56d9fb03fd3480f55ecd27f61",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "kayser5.png",
+      "relative_path": "ingestion candidates/kayser5.png",
+      "extension": "png",
+      "size_bytes": 317168,
+      "size_human": "309.73 KB",
+      "sha256": "5d17b2e9a7f46214156bd50da0bea621473cc1a65886af03fedc3e2d6d766b2d",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "kayser6.png",
+      "relative_path": "ingestion candidates/kayser6.png",
+      "extension": "png",
+      "size_bytes": 82453,
+      "size_human": "80.52 KB",
+      "sha256": "ebb30234e9078cc7a875342dea2f8e9b99487c4482bc6e3a8fb3af8409e60ba0",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "learning new preproceesing invarints.odt",
+      "relative_path": "ingestion candidates/learning new preproceesing invarints.odt",
+      "extension": "odt",
+      "size_bytes": 71010,
+      "size_human": "69.35 KB",
+      "sha256": "172cc72b7dd082692ea88ca11104470387bb0f980285bc41f464023569e7845b",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "levin_platonic_space.odt",
+      "relative_path": "ingestion candidates/levin_platonic_space.odt",
+      "extension": "odt",
+      "size_bytes": 123061,
+      "size_human": "120.18 KB",
+      "sha256": "e5b1561fc8c26aeec840098fb5f962ba8643559acb36f98eeea66c9bb892c762",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "llm_in_a_sandbox.odt",
+      "relative_path": "ingestion candidates/llm_in_a_sandbox.odt",
+      "extension": "odt",
+      "size_bytes": 67810,
+      "size_human": "66.22 KB",
+      "sha256": "d42f73ffae62574c1023debff3755fbf373ea1eb3e93613bd0df0142e2bd1440",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "mean field dynamics.pdf",
+      "relative_path": "ingestion candidates/mean field dynamics.pdf",
+      "extension": "pdf",
+      "size_bytes": 1064152,
+      "size_human": "1.01 MB",
+      "sha256": "3cc05682e5afe04f66149bf48207d0a1eb54ca373e50f488338355674d365588",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "mean_dynamics.odt",
+      "relative_path": "ingestion candidates/mean_dynamics.odt",
+      "extension": "odt",
+      "size_bytes": 57930,
+      "size_human": "56.57 KB",
+      "sha256": "07251a28ee9fe2bc2951e85b495fdfcccccbc218dec7602058adfdbc8b4909f3",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "medsam3.odt",
+      "relative_path": "ingestion candidates/medsam3.odt",
+      "extension": "odt",
+      "size_bytes": 58177,
+      "size_human": "56.81 KB",
+      "sha256": "6b31b52fa25ba7d3d338fdb5022d5c004720c3b919c01af4e29e5e18ff1ac848",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "moltbook_ai_comunity.odt",
+      "relative_path": "ingestion candidates/moltbook_ai_comunity.odt",
+      "extension": "odt",
+      "size_bytes": 64707,
+      "size_human": "63.19 KB",
+      "sha256": "ba121f39aac4a266dcd9de061fcb1d92f26da6bd191d7749e3b65743164220bf",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "muemuration_function.odt",
+      "relative_path": "ingestion candidates/muemuration_function.odt",
+      "extension": "odt",
+      "size_bytes": 41764,
+      "size_human": "40.79 KB",
+      "sha256": "726bb0c82f8789ed139b19970c9ce6787d505728bffdccf2a979b30a672be79a",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "neural_memory.odt",
+      "relative_path": "ingestion candidates/neural_memory.odt",
+      "extension": "odt",
+      "size_bytes": 52631,
+      "size_human": "51.40 KB",
+      "sha256": "c05accc24e6db8a79d7bf999576125d9d8d85569c9c6dd4340d6a6c8326d78ac",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "neuroscience.odt",
+      "relative_path": "ingestion candidates/neuroscience.odt",
+      "extension": "odt",
+      "size_bytes": 59869,
+      "size_human": "58.47 KB",
+      "sha256": "c450e322d62bc688495f921759c98f9b7527f2f19153a917cb86974c6abdc96b",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "non_coop_games.odt",
+      "relative_path": "ingestion candidates/non_coop_games.odt",
+      "extension": "odt",
+      "size_bytes": 42608,
+      "size_human": "41.61 KB",
+      "sha256": "c688c9b0a54a538d500477ba04ab18aa4334e8abb2eb1b1bb2e7968ea00b6522",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "p_vs_NP_qa_wolfram.odt",
+      "relative_path": "ingestion candidates/p_vs_NP_qa_wolfram.odt",
+      "extension": "odt",
+      "size_bytes": 67400,
+      "size_human": "65.82 KB",
+      "sha256": "c01d38b1931a270bc66713e3e87e84656f08e44a1457921a024bb424901635a4",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "pythagorean triangle families.odt",
+      "relative_path": "ingestion candidates/pythagorean triangle families.odt",
+      "extension": "odt",
+      "size_bytes": 68361,
+      "size_human": "66.76 KB",
+      "sha256": "59739d3aeff3981567522279f35cd167ba7c03431f9785a075145fe73280be82",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "qa_and_ml.odt",
+      "relative_path": "ingestion candidates/qa_and_ml.odt",
+      "extension": "odt",
+      "size_bytes": 41990,
+      "size_human": "41.01 KB",
+      "sha256": "75f30b2406c508d0980cce99027a2bc26564c2aeaa8206f80be5aa1b382aed18",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "qa_and_physics.odt",
+      "relative_path": "ingestion candidates/qa_and_physics.odt",
+      "extension": "odt",
+      "size_bytes": 43218,
+      "size_human": "42.21 KB",
+      "sha256": "66e82b6e63d3dbabf46ae55e7ae0d146fcd8fef63c483ce4258e3b709daf8c3d",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "qa_fractal_dna.odt",
+      "relative_path": "ingestion candidates/qa_fractal_dna.odt",
+      "extension": "odt",
+      "size_bytes": 49300,
+      "size_human": "48.14 KB",
+      "sha256": "0346ae382b6f8414c005eaf4446285048f185740f10a5090021ffdcdaca771d5",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "qa_fst_completion_paper.odt",
+      "relative_path": "ingestion candidates/qa_fst_completion_paper.odt",
+      "extension": "odt",
+      "size_bytes": 69824,
+      "size_human": "68.19 KB",
+      "sha256": "6a3a2222c41695a312800dc6becb62f67a1a468564f423ef76739a36197264be",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "quantum chaos.odt",
+      "relative_path": "ingestion candidates/quantum chaos.odt",
+      "extension": "odt",
+      "size_bytes": 60641,
+      "size_human": "59.22 KB",
+      "sha256": "987e3562f42cf7f5b565579e5e1364156cc0d73a93c4b21edb5229b0f8157e0d",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "quantum_tunneling.odt",
+      "relative_path": "ingestion candidates/quantum_tunneling.odt",
+      "extension": "odt",
+      "size_bytes": 68599,
+      "size_human": "66.99 KB",
+      "sha256": "2065ea46eb6a8593ed6e51450f40e24ec54fde115f84483c4400df4ca5dab4de",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "ramanugen.odt",
+      "relative_path": "ingestion candidates/ramanugen.odt",
+      "extension": "odt",
+      "size_bytes": 145190,
+      "size_human": "141.79 KB",
+      "sha256": "0457fdf323c41ef170db3b39a0d0f0d6a0b339b088070f9ae75c7a2bc8dc2256",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "rotation reset.odt",
+      "relative_path": "ingestion candidates/rotation reset.odt",
+      "extension": "odt",
+      "size_bytes": 50718,
+      "size_human": "49.53 KB",
+      "sha256": "51df879011bd2f726d65b460127855931dd1af512c00745310eacc205822f145",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "s11229-025-05319-6.pdf",
+      "relative_path": "ingestion candidates/s11229-025-05319-6.pdf",
+      "extension": "pdf",
+      "size_bytes": 3220597,
+      "size_human": "3.07 MB",
+      "sha256": "bb3481cdb411f935afec0d2a04ab4ace56b6f966c8a30bbda6107708b79d45b4",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "sheaf_cohomology.odt",
+      "relative_path": "ingestion candidates/sheaf_cohomology.odt",
+      "extension": "odt",
+      "size_bytes": 64875,
+      "size_human": "63.35 KB",
+      "sha256": "e52415fc1049255cc84226da0d52a01892228666f01d1464077c76124fa906ee",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "sheaf_cohomology.pdf",
+      "relative_path": "ingestion candidates/sheaf_cohomology.pdf",
+      "extension": "pdf",
+      "size_bytes": 2833330,
+      "size_human": "2.70 MB",
+      "sha256": "6bbcf23497baf14ef3b826fd1d63167ca780cedcc6b27fbf39a05b39cfac10bd",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "sheafcohomology.pdf",
+      "relative_path": "ingestion candidates/sheafcohomology.pdf",
+      "extension": "pdf",
+      "size_bytes": 2833330,
+      "size_human": "2.70 MB",
+      "sha256": "6bbcf23497baf14ef3b826fd1d63167ca780cedcc6b27fbf39a05b39cfac10bd",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "ssa.odt",
+      "relative_path": "ingestion candidates/ssa.odt",
+      "extension": "odt",
+      "size_bytes": 53691,
+      "size_human": "52.43 KB",
+      "sha256": "02a0913d603233e6e77648676d7d7494d5b94e067a5cd93bdcfa4135cba177f7",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "stone duality.odt",
+      "relative_path": "ingestion candidates/stone duality.odt",
+      "extension": "odt",
+      "size_bytes": 201717,
+      "size_human": "196.99 KB",
+      "sha256": "d7466a763e56225ea550e4bb8e8daa50b457d9692e387f40a6cc0c15af9b8434",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "SVP-CMC.odt",
+      "relative_path": "ingestion candidates/SVP-CMC.odt",
+      "extension": "odt",
+      "size_bytes": 91488,
+      "size_human": "89.34 KB",
+      "sha256": "437fa8069d2b191754c99ff366d6f2a17b3123ace6d426e610efb9d14a490f22",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "tidar.odt",
+      "relative_path": "ingestion candidates/tidar.odt",
+      "extension": "odt",
+      "size_bytes": 51816,
+      "size_human": "50.60 KB",
+      "sha256": "500aba46f5eaa59023ff3c222697e2461f24eeef888a0bf60cda700390a6f255",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "tidar.pdf",
+      "relative_path": "ingestion candidates/tidar.pdf",
+      "extension": "pdf",
+      "size_bytes": 1120274,
+      "size_human": "1.07 MB",
+      "sha256": "988eb15cf3db3d1389a8635572da7ad6a6f0f174e1febd9fbde0517252990e31",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "tool orchestra.pdf",
+      "relative_path": "ingestion candidates/tool orchestra.pdf",
+      "extension": "pdf",
+      "size_bytes": 2774913,
+      "size_human": "2.65 MB",
+      "sha256": "26700ad59305912dd8ab65f43ec8ba9a27e66bbe32b4529f022b26134b4a4a46",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "tool_orchestrator.odt",
+      "relative_path": "ingestion candidates/tool_orchestrator.odt",
+      "extension": "odt",
+      "size_bytes": 75689,
+      "size_human": "73.92 KB",
+      "sha256": "31a6e820f51c397b0f09986ea583f85eb807b6658283a92e326983f0762790f4",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "Toroids, Vortices, Knots, Topology and Quanta, Part 2.doc",
+      "relative_path": "ingestion candidates/Toroids, Vortices, Knots, Topology and Quanta, Part 2.doc",
+      "extension": "doc",
+      "size_bytes": 909824,
+      "size_human": "888.50 KB",
+      "sha256": "6cca9dd1e7f734f1a85a2bd37025a6c8f0cd42160b6b0b97a5f45eb762f50b82",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "universal mathematics.odt",
+      "relative_path": "ingestion candidates/universal mathematics.odt",
+      "extension": "odt",
+      "size_bytes": 75603,
+      "size_human": "73.83 KB",
+      "sha256": "5642f0ea8c04f9507a3e59b8efd357dcbff80628cc04bb2ca9092614090e7209",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "USPA One Page.pdf",
+      "relative_path": "ingestion candidates/USPA One Page.pdf",
+      "extension": "pdf",
+      "size_bytes": 55193,
+      "size_human": "53.90 KB",
+      "sha256": "376ae6fceb7171289003fdcdf97d20bf70f664f73b7804e0bc845dac32c1a898",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "volk_grant_qa.odt",
+      "relative_path": "ingestion candidates/volk_grant_qa.odt",
+      "extension": "odt",
+      "size_bytes": 50877,
+      "size_human": "49.68 KB",
+      "sha256": "55dbe67766643e09fa7d961fd55546993b1d84091e64c89c2b774d6f55181cc8",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "volk_grant_qa_ext.odt",
+      "relative_path": "ingestion candidates/volk_grant_qa_ext.odt",
+      "extension": "odt",
+      "size_bytes": 39615,
+      "size_human": "38.69 KB",
+      "sha256": "f38f1cb6857160865aa3865ec39c6ca77ddb70b36b0756492e65f3f4b7031ad5",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "wiki _right_triangle.odt",
+      "relative_path": "ingestion candidates/wiki _right_triangle.odt",
+      "extension": "odt",
+      "size_bytes": 37838,
+      "size_human": "36.95 KB",
+      "sha256": "d22c72ab9abbefbe5d71195f5b646790bfee098163b611a63b3644ab9ee3cb1c",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "wise.odt",
+      "relative_path": "ingestion candidates/wise.odt",
+      "extension": "odt",
+      "size_bytes": 73172,
+      "size_human": "71.46 KB",
+      "sha256": "85b0102d28938e7f5ad618d3cdb292542f1a6aaff23e124e2953dcc606e6176e",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "wow_model.odt",
+      "relative_path": "ingestion candidates/wow_model.odt",
+      "extension": "odt",
+      "size_bytes": 51806,
+      "size_human": "50.59 KB",
+      "sha256": "3608aecc2576dcde47a9869fe9985744b329529dbe8e1287636aceeba0af89df",
+      "reference_count": 0,
+      "referenced_by": [],
+      "status": "pending"
+    },
+    {
+      "name": "AI letter 25 Jan 26.docx",
+      "relative_path": "ingestion candidates/AI letter 25 Jan 26.docx",
+      "extension": "docx",
+      "size_bytes": 18733,
+      "size_human": "18.29 KB",
+      "sha256": "b235fa746f07b9bcf7e58fe3bab2cd545c9008f2ec348008e616c9740483bc75",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/qa_fst/qa_fst_module_spine.json",
+        "qa_alphageometry_ptolemy/qa_fst/qa_fst_submission_packet_spine.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "ai_coscientist.odt",
+      "relative_path": "ingestion candidates/ai_coscientist.odt",
+      "extension": "odt",
+      "size_bytes": 43272,
+      "size_human": "42.26 KB",
+      "sha256": "7b659ffc0b81373d31d17c31a4d19bb75194c49705547f6b1eed206598bb3e6e",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/ai_coscientist_ANALYSIS.md",
+        "qa_lab/tasks/active/ingest-ai_coscientist-11261806.yaml"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "alpharesearch_ai_scientist.odt",
+      "relative_path": "ingestion candidates/alpharesearch_ai_scientist.odt",
+      "extension": "odt",
+      "size_bytes": 65457,
+      "size_human": "63.92 KB",
+      "sha256": "65b3f089fa212279b9b82540c9a8e2954e501473ba98016747154aa4dfdb4384",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/alpharesearch_ai_scientist_ANALYSIS.md",
+        "qa_lab/artifacts/ingestion/alpharesearch_ai_scientist_QA_MAPPING.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "clara.odt",
+      "relative_path": "ingestion candidates/clara.odt",
+      "extension": "odt",
+      "size_bytes": 48511,
+      "size_human": "47.37 KB",
+      "sha256": "8e11e31ab8aa450ddff04b9ca0cd802c78d93d29f20f3bd009b0f13b05fa5431",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/certs/witness/core_stack/clara.witness.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "claude_skills.odt",
+      "relative_path": "ingestion candidates/claude_skills.odt",
+      "extension": "odt",
+      "size_bytes": 66559,
+      "size_human": "65.00 KB",
+      "sha256": "1d2c25da55ac22bdd44f87447499dd061982255c50f57f9e9dfa76181a4f45af",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/certs/witness/core_stack/claude_skills.witness.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "context_structure_geometry_of_language_models.odt",
+      "relative_path": "ingestion candidates/context_structure_geometry_of_language_models.odt",
+      "extension": "odt",
+      "size_bytes": 51307,
+      "size_human": "50.10 KB",
+      "sha256": "5e62a7fc87a3672bf98045f6a1a38a236ce9935fbc64cd481d4413e3e3c9b1f2",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/certs/witness/core_stack/context_geometry.witness.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "evaluation12_13.odt",
+      "relative_path": "ingestion candidates/evaluation12_13.odt",
+      "extension": "odt",
+      "size_bytes": 49804,
+      "size_human": "48.64 KB",
+      "sha256": "915560cbf28f9c7d127aa15dbdcef12d2b6e7bf86d7e4c26941a5ed34c1d5da1",
+      "reference_count": 3,
+      "referenced_by": [
+        "CHATGPT_ASSESSMENT_ANALYSIS.md",
+        "GITHUB_UPLOAD_STATUS.md",
+        "QA_ALPHAGEOMETRY_SESSION_SUMMARY.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "execution_grounded_automated_ai_research.odt",
+      "relative_path": "ingestion candidates/execution_grounded_automated_ai_research.odt",
+      "extension": "odt",
+      "size_bytes": 69694,
+      "size_human": "68.06 KB",
+      "sha256": "232b8aae85dd77b98cbfe1143307961d65bd410eb73b6a00acf695c99a9cd4f0",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/execution_grounded_automated_ai_research_ANALYSIS.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "fst_journal.odt",
+      "relative_path": "ingestion candidates/fst_journal.odt",
+      "extension": "odt",
+      "size_bytes": 63968,
+      "size_human": "62.47 KB",
+      "sha256": "15d664db6e5f265367e55e70069b95eaad85221082af1293d985b4c33556b4c9",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/qa_fst/qa_fst_module_spine.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "impact of proprocessing.odt",
+      "relative_path": "ingestion candidates/impact of proprocessing.odt",
+      "extension": "odt",
+      "size_bytes": 65634,
+      "size_human": "64.10 KB",
+      "sha256": "93e7a9c8220adc9143fed43f2c2d9ab2025b978299fe68c62e3a6691216b47dc",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/impact of proprocessing_ANALYSIS.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "INGESTION_INDEX.md",
+      "relative_path": "ingestion candidates/INGESTION_INDEX.md",
+      "extension": "md",
+      "size_bytes": 16032,
+      "size_human": "15.66 KB",
+      "sha256": "18b0fc366d36e3b3ce60214b73dda4e895547efa2abc5462f87dd6f5dff6863b",
+      "reference_count": 1,
+      "referenced_by": [
+        "PAPERS_ORGANIZATION_SUMMARY.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "kayser1.png",
+      "relative_path": "ingestion candidates/kayser1.png",
+      "extension": "png",
+      "size_bytes": 162257,
+      "size_human": "158.45 KB",
+      "sha256": "176d678d412110f2797a6f516f2f908be48278efe3a9093670adb2d8189d2033",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/qa_kayser/qa_kayser_lambdoma_cycle_cert.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "kayser3.png",
+      "relative_path": "ingestion candidates/kayser3.png",
+      "extension": "png",
+      "size_bytes": 204198,
+      "size_human": "199.41 KB",
+      "sha256": "2809728ec85ad9c91ce84140f67b364060cb714a3634b138f85bf86686cded5c",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/qa_kayser/qa_kayser_rhythm_time_cert.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "kayser7.jpeg",
+      "relative_path": "ingestion candidates/kayser7.jpeg",
+      "extension": "jpeg",
+      "size_bytes": 445370,
+      "size_human": "434.93 KB",
+      "sha256": "e5756183a979cdd4cc607308d8cc5c486b6dda4c920e339956d5202d2c52d471",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/qa_kayser/qa_kayser_correspondence_map.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "kimi_k2.odt",
+      "relative_path": "ingestion candidates/kimi_k2.odt",
+      "extension": "odt",
+      "size_bytes": 52588,
+      "size_human": "51.36 KB",
+      "sha256": "128eb1ed5b59b8a3ef830ea33d328418982a5740065eddec8d03e0dd0bc1e055",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/certs/witness/core_stack/kimi_k2.witness.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "microsoft_kosmos.odt",
+      "relative_path": "ingestion candidates/microsoft_kosmos.odt",
+      "extension": "odt",
+      "size_bytes": 54040,
+      "size_human": "52.77 KB",
+      "sha256": "cb57bc6690c44d843ef9e5a7ef208f87329b91b22cde2e2dfbc1a6c13d214dab",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/certs/witness/core_stack/kosmos.witness.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "Paper Summary 18 Jan 2026.docx",
+      "relative_path": "ingestion candidates/Paper Summary 18 Jan 2026.docx",
+      "extension": "docx",
+      "size_bytes": 15161,
+      "size_human": "14.81 KB",
+      "sha256": "ec8623008fdc34fcfbd827a386c4bb2b3a1b20ae3b8eaeaaf84ea1431b8c2512",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/qa_fst/qa_fst_module_spine.json",
+        "qa_alphageometry_ptolemy/qa_fst/qa_fst_submission_packet_spine.json"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "polynomial_ellipse.odt",
+      "relative_path": "ingestion candidates/polynomial_ellipse.odt",
+      "extension": "odt",
+      "size_bytes": 701616,
+      "size_human": "685.17 KB",
+      "sha256": "39da35a3f4968509693ace37c7b946aa0249a3b2d466bf3cbc39840d97b98f94",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/polynomial_ellipse_ANALYSIS.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "qa_agentic_rag.odt",
+      "relative_path": "ingestion candidates/qa_agentic_rag.odt",
+      "extension": "odt",
+      "size_bytes": 51532,
+      "size_human": "50.32 KB",
+      "sha256": "57d47252f0bec766d219bdf07e802935bf6cba883b00f851a7e1d3f61e33f71f",
+      "reference_count": 1,
+      "referenced_by": [
+        "docs/families/23_ingestion.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "qa_alpha_zero.odt",
+      "relative_path": "ingestion candidates/qa_alpha_zero.odt",
+      "extension": "odt",
+      "size_bytes": 1188568,
+      "size_human": "1.13 MB",
+      "sha256": "1c046d7496fa681b6a91d0be256033402b82ab67e3f27c4772a0faf19e98e6cf",
+      "reference_count": 1,
+      "referenced_by": [
+        "GITHUB_UPLOAD_STATUS.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "qa_jepa.odt",
+      "relative_path": "ingestion candidates/qa_jepa.odt",
+      "extension": "odt",
+      "size_bytes": 48156,
+      "size_human": "47.03 KB",
+      "sha256": "c8dba2ca97d590acab789416221e5a2507bc56baf8191349b5d4058de30cda81",
+      "reference_count": 10,
+      "referenced_by": [
+        "qa_lab/certs/run_artifact/20260207-044516-73d27289-26c6a6344860/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-044535-73d27289-b84c88504aae/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-045607-73d27289-02d754e33512/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-045637-73d27289-b857274c60ca/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-052240-73d27289-244d0399b497/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-054150-73d27289-5cdc507d4ee5/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-054608-73d27289-2d3a25437d9e/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-054902-73d27289-1d4aba7a2602/witness/INGESTION_INDEX.md",
+        "qa_lab/certs/run_artifact/20260207-060016-73d27289-5e380949d9f3/witness/INGESTION_INDEX.md",
+        "qa_lab/ingestion_workflow.sh"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "qa_jit.odt",
+      "relative_path": "ingestion candidates/qa_jit.odt",
+      "extension": "odt",
+      "size_bytes": 64476,
+      "size_human": "62.96 KB",
+      "sha256": "d0efaa564a32e74f4680315ce3d6a9cd5523a01f64289009459a1c0b605b0f74",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/qa_jit_ANALYSIS.md",
+        "qa_lab/tasks/active/ingest-qa_jit-11261806.yaml"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "qa_schrodinger.odt",
+      "relative_path": "ingestion candidates/qa_schrodinger.odt",
+      "extension": "odt",
+      "size_bytes": 235989,
+      "size_human": "230.46 KB",
+      "sha256": "d2751055be2b754518c5c18e553663b240afccab90ed0546c67ea5e8ef9cfd8a",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/qa_schrodinger_ANALYSIS.md",
+        "qa_lab/artifacts/ingestion/qa_schrodinger_QA_MAPPING.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "QA_topology.odt",
+      "relative_path": "ingestion candidates/QA_topology.odt",
+      "extension": "odt",
+      "size_bytes": 59714,
+      "size_human": "58.31 KB",
+      "sha256": "947e15a72a7d9bf0c9bf54b611d1919b1b97e7c0fa2992c6c6974800b44a9db7",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/QA_topology_ANALYSIS.md",
+        "qa_lab/artifacts/ingestion/QA_topology_QA_MAPPING.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "qastructure features.odt",
+      "relative_path": "ingestion candidates/qastructure features.odt",
+      "extension": "odt",
+      "size_bytes": 112783,
+      "size_human": "110.14 KB",
+      "sha256": "7cc68dc02a2e35cedb0d5b6160291360826692c280e9cac58160aa23f89d282a",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/qastructure features_ANALYSIS.md",
+        "qa_lab/artifacts/ingestion/qastructure features_QA_MAPPING.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "ramen_quantum_memory.odt",
+      "relative_path": "ingestion candidates/ramen_quantum_memory.odt",
+      "extension": "odt",
+      "size_bytes": 64235,
+      "size_human": "62.73 KB",
+      "sha256": "69e39a7f8c805424d309aa605eccca72381f8f74098e6b8d0670a54ed0e3a689",
+      "reference_count": 3,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/certs/witness/core_stack/quantum_memory.witness.json",
+        "qa_lab/artifacts/ingestion/ramen_quantum_memory_ANALYSIS.md",
+        "qa_lab/tasks/active/ingest-ramen_quantum_memory-11261806.yaml"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "rectified_lpjepa.odt",
+      "relative_path": "ingestion candidates/rectified_lpjepa.odt",
+      "extension": "odt",
+      "size_bytes": 80711,
+      "size_human": "78.82 KB",
+      "sha256": "8d71afec684422a5499d7cd7cdcde0492cc8c80becfa11e5cc02d98085b63be9",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/rectified_lpjepa_ANALYSIS.md",
+        "qa_lab/artifacts/ingestion/rectified_lpjepa_QA_MAPPING.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "sheafcohomologyUntitled 1.odt",
+      "relative_path": "ingestion candidates/sheafcohomologyUntitled 1.odt",
+      "extension": "odt",
+      "size_bytes": 59060,
+      "size_human": "57.68 KB",
+      "sha256": "ad5bd04b647664bf195b59949f8211ba38d8a8fc7de11709eb64a69bda39e91c",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/sheafcohomologyUntitled 1_ANALYSIS.md",
+        "qa_lab/docs/NEXT_STEPS_PRIORITIES.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "similar_right_triangles.odt",
+      "relative_path": "ingestion candidates/similar_right_triangles.odt",
+      "extension": "odt",
+      "size_bytes": 37774,
+      "size_human": "36.89 KB",
+      "sha256": "309e21a9c1da15a84bbbdbd6a5a68ee675ef0874be2e045c3927b0d6603757f5",
+      "reference_count": 1,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/similar_right_triangles_ANALYSIS.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "statistical_mechanics.odt",
+      "relative_path": "ingestion candidates/statistical_mechanics.odt",
+      "extension": "odt",
+      "size_bytes": 54243,
+      "size_human": "52.97 KB",
+      "sha256": "4b9ca1a3b66de0d6cd846d47494389a2ea5c45356117e7841fe7160d95653247",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_alphageometry_ptolemy/certs/witness/core_stack/stat_mech.witness.json",
+        "qa_lab/artifacts/ingestion/statistical_mechanics_ANALYSIS.md"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "statistical_mechanics_for_real_brains.odt",
+      "relative_path": "ingestion candidates/statistical_mechanics_for_real_brains.odt",
+      "extension": "odt",
+      "size_bytes": 59663,
+      "size_human": "58.26 KB",
+      "sha256": "cb495943561fbc36141eb923b2b392b6f997a167337f217811d5326a3a6ba94f",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/artifacts/ingestion/statistical_mechanics_for_real_brains_ANALYSIS.md",
+        "qa_lab/tasks/active/ingest-statistical_mechanic-11261806.yaml"
+      ],
+      "status": "processed"
+    },
+    {
+      "name": "sum_product_conjecture.pdf",
+      "relative_path": "ingestion candidates/sum_product_conjecture.pdf",
+      "extension": "pdf",
+      "size_bytes": 1216885,
+      "size_human": "1.16 MB",
+      "sha256": "0564f1d35f552ecf19d7598a5402f8d8ae3d502fea722b3121c76ba693bb9cc8",
+      "reference_count": 2,
+      "referenced_by": [
+        "qa_lab/TASK_GEMINI_SUMPRODUCT.md",
+        "qa_lab/ingestion_workflow.sh"
+      ],
+      "status": "processed"
+    }
+  ]
+}

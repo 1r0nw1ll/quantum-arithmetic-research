@@ -13,8 +13,8 @@ This document tracks **Gold Standard** QA mappings—papers/theories that have b
 ## Release: qa-core-stack-v1.3.1 (2026-02-08)
 
 ### Highlights
-- Added SVP-CMC cause-first physics family ([24])
 - Added certified ingest->view bridge family ([22])
+- Added ingestion semantics family ([23])
 - Completed end-to-end provenance chain: ingestion -> datastore -> view -> A-RAG
 - Enforced typed generator and typed root provenance contracts across retrieval stack
 - Expanded counterexample coverage across integrity, provenance, and budget classes
@@ -25,10 +25,24 @@ This document tracks **Gold Standard** QA mappings—papers/theories that have b
 - [21] QA A-RAG Interface
 - [22] QA Ingest->View Bridge
 - [23] QA Ingestion Semantics
-- [24] SVP-CMC (Cause Mechanics)
 
 ### Significance
-First cause-first physics framework formalized as QA certificate ecosystem. Radionics now has obstruction ledger.
+First fully provenance-grounded QA retrieval pipeline with sweep-verified family composition.
+
+---
+
+## Release: qa-core-stack-v1.4.0 (2026-02-08)
+
+### Highlights
+- Added SVP-CMC cause-first physics family ([24])
+- First non-ML domain formalization (vibratory physics / radionics)
+- 18-entry obstruction ledger for causal-language validation
+
+### Included Families
+- [24] SVP-CMC (Cause Mechanics Core)
+
+### Significance
+Expands QA certificate ecosystem beyond ML into cause-first physics domains. Radionics analysis now has certified obstruction taxonomy.
 
 ---
 

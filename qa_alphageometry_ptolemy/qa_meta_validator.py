@@ -547,6 +547,44 @@ INGEST_CERT_PATHS = {
     "QA_INGEST_COUNTEREXAMPLES_PACK.v1": "certs/counterexamples/QA_INGEST_COUNTEREXAMPLES_PACK.v1.json",
 }
 
+SVP_CMC_LEDGER_PATH = "qa_ledger__radionics_obstructions.v1.yaml"
+
+
+def _validate_svp_cmc_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run SVP-CMC family validator if ledger is present.
+
+    Returns:
+        None on success,
+        skip reason string if ledger is missing.
+    Raises:
+        Exception on validation failure.
+    """
+    ledger_path = os.path.join(base_dir, SVP_CMC_LEDGER_PATH)
+    if not os.path.exists(ledger_path):
+        return f"missing ledger: {SVP_CMC_LEDGER_PATH}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    # Run ledger sanity check
+    from qa_radionics_ledger_sanity import sanity_check
+    with open(ledger_path, "r", encoding="utf-8") as f:
+        ledger_text = f.read()
+    ok, errors, warnings = sanity_check(ledger_text)
+    if not ok:
+        raise RuntimeError(f"Ledger sanity failed: {'; '.join(errors[:3])}")
+
+    # Run validator demo
+    from qa_svp_cmc_validator import validate_cert, parse_ledger_obstruction_ids, make_demo_cert
+    ledger_ids = parse_ledger_obstruction_ids(ledger_text)
+    demo_cert = make_demo_cert()
+    result = validate_cert(demo_cert, ledger_obs_ids=ledger_ids)
+    if not result.ok:
+        raise RuntimeError(f"Demo cert validation failed: {result.summary()}")
+
+    return None
+
 
 def _validate_datastore_family_if_present(base_dir: str) -> Optional[str]:
     """
@@ -1368,4 +1406,17 @@ if __name__ == "__main__":
             print(f"[23] QA ingestion family: SKIPPED ({skip_reason})")
     except Exception as e:
         print(f"[23] QA ingestion family: FAIL ({e})")
+        sys.exit(1)
+
+    # --- Test 24: QA SVP-CMC Family (optional sweep hook) ---
+    print("\n--- QA SVP-CMC FAMILY ---")
+    try:
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        skip_reason = _validate_svp_cmc_family_if_present(base_dir)
+        if skip_reason is None:
+            print("[24] QA SVP-CMC family: PASS (ledger sanity + validator demo)")
+        else:
+            print(f"[24] QA SVP-CMC family: SKIPPED ({skip_reason})")
+    except Exception as e:
+        print(f"[24] QA SVP-CMC family: FAIL ({e})")
         sys.exit(1)

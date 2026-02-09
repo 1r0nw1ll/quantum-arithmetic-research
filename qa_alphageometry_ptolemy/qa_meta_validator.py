@@ -1679,13 +1679,63 @@ if __name__ == "__main__":
             print(f"[{fam_id}] {label}: FAIL ({e})")
             sys.exit(1)
 
+    # --- External validation: Level 3 recompute (real data + real weights) ---
+    print("\n--- EXTERNAL VALIDATION ---")
+    import subprocess
+    _l3_script = os.path.join(base_dir, "level3_recompute_validation.py")
+    _l3_id = FAMILY_SWEEPS[-1][0] + 1  # next after last family
+    _l3_env = {
+        k: os.environ[k]
+        for k in ("QA_L3_NTRAIN", "QA_L3_NTEST", "QA_L3_EPOCHS")
+        if k in os.environ
+    }
+
+    def _l3_fail(fail_type: str, returncode: int = -1,
+                 stdout_head: str = "", stderr_head: str = ""):
+        diff = json.dumps({
+            "check": "level3_recompute_validation",
+            "fail_type": fail_type,
+            "script": _l3_script,
+            "mode": "ci",
+            "env_overrides": _l3_env or None,
+            "returncode": returncode,
+            "stdout_head": stdout_head[:200],
+            "stderr_head": stderr_head[:200],
+        }, sort_keys=True)
+        print(f"[{_l3_id}] Level 3 recompute (external): FAIL ({fail_type})")
+        print(f"      invariant_diff={diff}")
+        sys.exit(1)
+
+    if not os.path.exists(_l3_script):
+        _l3_fail("EXTERNAL_VALIDATION_MISSING")
+
+    try:
+        _l3_result = subprocess.run(
+            [sys.executable, _l3_script, "--ci"],
+            capture_output=True, text=True, timeout=60,
+            cwd=base_dir,
+        )
+        _l3_stdout = _l3_result.stdout.strip()
+        _l3_ok = _l3_result.returncode == 0 and "[PASS]" in _l3_stdout
+
+        if _l3_ok:
+            print(f"[{_l3_id}] Level 3 recompute (external): PASS")
+            print(f"      {_l3_stdout}")
+        else:
+            _l3_fail("EXTERNAL_VALIDATION_FAIL",
+                     returncode=_l3_result.returncode,
+                     stdout_head=_l3_stdout,
+                     stderr_head=_l3_result.stderr.strip())
+    except subprocess.TimeoutExpired:
+        _l3_fail("EXTERNAL_VALIDATION_TIMEOUT")
+
     # --- Doc gate (derived from FAMILY_SWEEPS — no second list to maintain) ---
     print("\n--- HUMAN-TRACT DOC GATE ---")
     _doc_gate_pass = True
     _docs_dir = os.path.normpath(os.path.join(base_dir, "..", "docs", "families"))
     _readme_path = os.path.join(_docs_dir, "README.md")
     if not os.path.isdir(_docs_dir):
-        print(f"[{FAMILY_SWEEPS[-1][0] + 1}] Doc gate: FAIL (docs/families/ directory missing)")
+        print(f"[{FAMILY_SWEEPS[-1][0] + 2}] Doc gate: FAIL (docs/families/ directory missing)")
         _doc_gate_pass = False
     else:
         for fam_id, _label, _fn, _desc, doc_slug in FAMILY_SWEEPS:
@@ -1704,7 +1754,7 @@ if __name__ == "__main__":
         else:
             print(f"  FAIL: docs/families/README.md missing")
             _doc_gate_pass = False
-    _gate_id = FAMILY_SWEEPS[-1][0] + 1
+    _gate_id = FAMILY_SWEEPS[-1][0] + 2
     if _doc_gate_pass:
         print(f"[{_gate_id}] Human-tract doc gate: PASS ({len(FAMILY_SWEEPS)} families documented)")
     else:

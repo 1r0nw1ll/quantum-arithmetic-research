@@ -1,0 +1,89 @@
+{
+  "certificate_id": "topology_resonance_caps24_001",
+  "certificate_type": "TOPOLOGY_RESONANCE_CERT",
+  "timestamp": "2026-02-07T00:00:00Z",
+  "version": "1.0.0",
+  "schema": "QA_TOPOLOGY_RESONANCE_CERT.v1",
+  "success": true,
+  "generator_set": ["sigma", "mu", "lambda2", "nu"],
+  "state_descriptor": {
+    "state_family": "caps_n_n",
+    "n": 24,
+    "seed": 17
+  },
+  "topology_witness": {
+    "scc_count_before": 3,
+    "scc_count_after": 5,
+    "betti_0_before": 3,
+    "betti_0_after": 5,
+    "betti_1_before": 2,
+    "betti_1_after": 4,
+    "resonance_score": "7/10",
+    "resonance_threshold": "3/5",
+    "resonance_certified": true
+  },
+  "phase_witness": {
+    "phase_24_before": 11,
+    "phase_24_after": 11,
+    "phase_9_before": 4,
+    "phase_9_after": 4,
+    "phase_preserved": true
+  },
+  "invariants": {
+    "scc_monotone_non_decreasing": true,
+    "phase_lock": true,
+    "packet_conservation": true,
+    "no_reduction_axiom": true,
+    "connected_component_first_class": true
+  },
+  "recompute_inputs": {
+    "trace_schema": "QA_TOPOLOGY_TRACE.v1",
+    "trace_digest": "sha256:9a7814595e9712c6f197bf0d3559db170256b0ea4fee8851ea362b75d589ae3c",
+    "scc_algorithm": "tarjan_v1",
+    "initial_state": {
+      "scc_count": 3,
+      "phase_24": 11,
+      "phase_9": 4,
+      "resonance_score": "1/2"
+    },
+    "transition_trace": [
+      {
+        "step_index": 1,
+        "generator": "sigma",
+        "scc_count": 3,
+        "phase_24": 11,
+        "phase_9": 4,
+        "resonance_delta": "1/20"
+      },
+      {
+        "step_index": 2,
+        "generator": "mu",
+        "scc_count": 4,
+        "phase_24": 11,
+        "phase_9": 4,
+        "resonance_delta": "1/20"
+      },
+      {
+        "step_index": 3,
+        "generator": "lambda2",
+        "scc_count": 4,
+        "phase_24": 11,
+        "phase_9": 4,
+        "resonance_delta": "1/20"
+      },
+      {
+        "step_index": 4,
+        "generator": "nu",
+        "scc_count": 5,
+        "phase_24": 11,
+        "phase_9": 4,
+        "resonance_delta": "1/20"
+      }
+    ]
+  },
+  "qa_interpretation": {
+    "success_type": "TOPOLOGY_RESONANCE_CERTIFIED",
+    "lattice_position": "scc_monotone ∧ phase_lock ∧ resonance_certified",
+    "note": "Caps(N,N) transition preserves phase and improves component reachability"
+  }
+}

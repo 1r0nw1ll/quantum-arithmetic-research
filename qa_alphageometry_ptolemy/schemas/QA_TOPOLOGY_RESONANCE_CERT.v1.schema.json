@@ -1,0 +1,176 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_TOPOLOGY_RESONANCE_CERT.v1.schema.json",
+  "title": "QA Topology Resonance Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["certificate_id", "certificate_type", "timestamp", "version", "schema", "success", "generator_set"],
+  "properties": {
+    "certificate_id": { "type": "string", "minLength": 1 },
+    "certificate_type": { "type": "string", "const": "TOPOLOGY_RESONANCE_CERT" },
+    "timestamp": { "type": "string", "minLength": 1 },
+    "version": { "type": "string", "minLength": 1 },
+    "schema": { "type": "string", "const": "QA_TOPOLOGY_RESONANCE_CERT.v1" },
+    "success": { "type": "boolean" },
+    "generator_set": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "enum": ["sigma", "mu", "lambda2", "nu"]
+      },
+      "uniqueItems": true
+    },
+    "state_descriptor": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "topology_witness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scc_count_before",
+        "scc_count_after",
+        "betti_0_before",
+        "betti_0_after",
+        "resonance_score",
+        "resonance_threshold",
+        "resonance_certified"
+      ],
+      "properties": {
+        "scc_count_before": { "type": "integer", "minimum": 0 },
+        "scc_count_after": { "type": "integer", "minimum": 0 },
+        "betti_0_before": { "type": "integer", "minimum": 0 },
+        "betti_0_after": { "type": "integer", "minimum": 0 },
+        "betti_1_before": { "type": "integer", "minimum": 0 },
+        "betti_1_after": { "type": "integer", "minimum": 0 },
+        "resonance_score": {
+          "anyOf": [
+            { "type": "integer" },
+            { "type": "string", "pattern": "^-?[0-9]+(/[0-9]+)?$" }
+          ]
+        },
+        "resonance_threshold": {
+          "anyOf": [
+            { "type": "integer" },
+            { "type": "string", "pattern": "^-?[0-9]+(/[0-9]+)?$" }
+          ]
+        },
+        "resonance_certified": { "type": "boolean" }
+      }
+    },
+    "phase_witness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "phase_24_before",
+        "phase_24_after",
+        "phase_9_before",
+        "phase_9_after",
+        "phase_preserved"
+      ],
+      "properties": {
+        "phase_24_before": { "type": "integer", "minimum": 0, "maximum": 23 },
+        "phase_24_after": { "type": "integer", "minimum": 0, "maximum": 23 },
+        "phase_9_before": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "phase_9_after": { "type": "integer", "minimum": 0, "maximum": 8 },
+        "phase_preserved": { "type": "boolean" }
+      }
+    },
+    "invariants": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "scc_monotone_non_decreasing",
+        "phase_lock",
+        "packet_conservation",
+        "no_reduction_axiom",
+        "connected_component_first_class"
+      ],
+      "properties": {
+        "scc_monotone_non_decreasing": { "type": "boolean" },
+        "phase_lock": { "type": "boolean" },
+        "packet_conservation": { "type": "boolean" },
+        "no_reduction_axiom": { "type": "boolean" },
+        "connected_component_first_class": { "type": "boolean" }
+      }
+    },
+    "recompute_inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trace_schema", "trace_digest", "scc_algorithm", "initial_state", "transition_trace"],
+      "properties": {
+        "trace_schema": { "type": "string", "const": "QA_TOPOLOGY_TRACE.v1" },
+        "trace_digest": { "type": "string", "pattern": "^sha256:[0-9a-f]{64}$" },
+        "scc_algorithm": { "type": "string", "minLength": 1 },
+        "initial_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scc_count", "phase_24", "phase_9", "resonance_score"],
+          "properties": {
+            "scc_count": { "type": "integer", "minimum": 0 },
+            "phase_24": { "type": "integer", "minimum": 0, "maximum": 23 },
+            "phase_9": { "type": "integer", "minimum": 0, "maximum": 8 },
+            "resonance_score": {
+              "anyOf": [
+                { "type": "integer" },
+                { "type": "string", "pattern": "^-?[0-9]+(/[0-9]+)?$" }
+              ]
+            }
+          }
+        },
+        "transition_trace": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "step_index",
+              "generator",
+              "scc_count",
+              "phase_24",
+              "phase_9",
+              "resonance_delta"
+            ],
+            "properties": {
+              "step_index": { "type": "integer", "minimum": 1 },
+              "generator": { "type": "string", "enum": ["sigma", "mu", "lambda2", "nu"] },
+              "scc_count": { "type": "integer", "minimum": 0 },
+              "phase_24": { "type": "integer", "minimum": 0, "maximum": 23 },
+              "phase_9": { "type": "integer", "minimum": 0, "maximum": 8 },
+              "resonance_delta": {
+                "anyOf": [
+                  { "type": "integer" },
+                  { "type": "string", "pattern": "^-?[0-9]+(/[0-9]+)?$" }
+                ]
+              }
+            }
+          }
+        }
+      }
+    },
+    "failure_mode": {
+      "type": "string",
+      "enum": ["phase_break", "scc_drop", "resonance_below_threshold", "packet_drift", "invalid_generator"]
+    },
+    "failure_witness": {
+      "type": "object",
+      "additionalProperties": true
+    },
+    "qa_interpretation": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  },
+  "allOf": [
+    {
+      "if": { "properties": { "success": { "const": true } } },
+      "then": { "required": ["topology_witness", "phase_witness", "invariants", "recompute_inputs"] }
+    },
+    {
+      "if": { "properties": { "success": { "const": false } } },
+      "then": { "required": ["failure_mode", "failure_witness"] }
+    }
+  ]
+}

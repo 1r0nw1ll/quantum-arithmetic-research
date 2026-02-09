@@ -1,0 +1,31 @@
+{
+  "certificate_id": "topology_phase_break_failure_001",
+  "certificate_type": "TOPOLOGY_RESONANCE_CERT",
+  "timestamp": "2026-02-07T00:00:00Z",
+  "version": "1.0.0",
+  "schema": "QA_TOPOLOGY_RESONANCE_CERT.v1",
+  "success": false,
+  "generator_set": ["sigma", "mu", "lambda2", "nu"],
+  "failure_mode": "phase_break",
+  "failure_witness": {
+    "reason": "phase lock broken after lambda2 transition",
+    "expected": {
+      "phase_24": 11,
+      "phase_9": 4
+    },
+    "observed": {
+      "phase_24": 12,
+      "phase_9": 4
+    },
+    "first_bad_step": 3,
+    "remediation": [
+      "Constrain lambda2 operator to preserve residue class",
+      "Re-run path search with sigma-mu-only prefix"
+    ]
+  },
+  "qa_interpretation": {
+    "failure_class": "PHASE_BREAK",
+    "obstruction_type": "invariant_violation",
+    "note": "Witness demonstrates phase non-preservation"
+  }
+}

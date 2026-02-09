@@ -1,28 +1,33 @@
-# QA Repo Audit Script
+# Deterministic Audit Script
 
 import os
-import sys
-import logging
+import hashlib
+import json
 
-# Set up logging
-def setup_logging():
-    logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
+class QARepoAudit:
+    def __init__(self, repo_path):
+        self.repo_path = repo_path
+        self.audit_results = {}
 
-# Function to audit files in the repository
-def audit_repo(repo_path):
-    logging.info(f'Auditing repository at {repo_path}')
-    for root, dirs, files in os.walk(repo_path):
-        for file in files:
-            file_path = os.path.join(root, file)
-            logging.info(f'Found file: {file_path}')
-            # Add more audit logic here if needed
+    def calculate_file_hash(self, file_path):
+        hasher = hashlib.sha256()
+        with open(file_path, 'rb') as f:
+            while chunk := f.read(8192):
+                hasher.update(chunk)
+        return hasher.hexdigest()
 
-# Main function
+    def audit_files(self):
+        for root, dirs, files in os.walk(self.repo_path):
+            for file in files:
+                file_path = os.path.join(root, file)
+                file_hash = self.calculate_file_hash(file_path)
+                self.audit_results[file_path] = file_hash
+
+    def save_audit_results(self, output_file):
+        with open(output_file, 'w') as f:
+            json.dump(self.audit_results, f, indent=4)
+
 if __name__ == '__main__':
-    setup_logging()
-    if len(sys.argv) != 2:
-        logging.error('Usage: python qa_repo_audit.py <repo_path>')
-        sys.exit(1)
-    repo_path = sys.argv[1]
-    audit_repo(repo_path)
-    logging.info('Audit completed successfully.')
+    audit = QARepoAudit(repo_path='path/to/your/repo')  # Change this to your repo path
+    audit.audit_files()
+    audit.save_audit_results(output_file='audit_results.json')  # Change this to your desired output file path

@@ -550,22 +550,9 @@ INGEST_CERT_PATHS = {
 SVP_CMC_LEDGER_PATH = "qa_ledger__radionics_obstructions.v1.yaml"
 
 
-# ============================================================================
-# FAMILY REGISTRY — single source of truth for doc gate + sweep hooks
-# ============================================================================
-# When you add a new family sweep hook, add it here too.
-# The doc gate ([25]) reads this registry to enforce the two-tract rule.
-# Key: family ID (int), Value: doc slug (used as docs/families/{slug}.md)
-
-FAMILY_REGISTRY: Dict[int, str] = {
-    18: "18_datastore",
-    19: "19_topology_resonance",
-    20: "20_datastore_view",
-    21: "21_arag_interface",
-    22: "22_ingest_view_bridge",
-    23: "23_ingestion",
-    24: "24_svp_cmc",
-}
+# FAMILY_SWEEPS is defined after all validator functions (see below).
+# It is THE canonical list: one entry per family, used by both the sweep
+# runner and the doc gate. Adding a family = adding one tuple there.
 
 
 def _validate_svp_cmc_family_if_present(base_dir: str) -> Optional[str]:
@@ -822,6 +809,34 @@ def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
         head = "; ".join(errors[:3]) if errors else "unknown topology bundle validation error"
         raise RuntimeError(head)
     return None
+
+
+# Populate FAMILY_SWEEPS now that all validator functions are defined.
+# To add a new family: add ONE entry here. That's it.
+# Format: (id, label, validator_fn, pass_description, doc_slug)
+FAMILY_SWEEPS = [
+    (18, "QA Datastore family",
+     _validate_datastore_family_if_present,
+     "semantics + witness + counterexamples", "18_datastore"),
+    (19, "QA Topology Resonance bundle",
+     _validate_topology_bundle_if_present,
+     "bundle manifest verified", "19_topology_resonance"),
+    (20, "QA Datastore view family",
+     _validate_datastore_view_family_if_present,
+     "semantics + witness + counterexamples", "20_datastore_view"),
+    (21, "QA A-RAG interface family",
+     _validate_arag_family_if_present,
+     "semantics + witness + counterexamples", "21_arag_interface"),
+    (22, "QA ingest->view bridge family",
+     _validate_ingest_view_bridge_family_if_present,
+     "semantics + witness + counterexamples", "22_ingest_view_bridge"),
+    (23, "QA ingestion family",
+     _validate_ingest_family_if_present,
+     "semantics + witness + counterexamples", "23_ingestion"),
+    (24, "QA SVP-CMC family",
+     _validate_svp_cmc_family_if_present,
+     "ledger sanity + validator demo", "24_svp_cmc"),
+]
 
 
 # ============================================================================
@@ -1348,126 +1363,48 @@ if __name__ == "__main__":
     else:
         print("\n[17] Guardrail module: SKIPPED (qa_guardrail/qa_guardrail.py not found)")
 
-    # --- Test 18: QA Datastore Family (optional sweep hook) ---
-    print("\n--- QA DATASTORE FAMILY ---")
-    try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        skip_reason = _validate_datastore_family_if_present(base_dir)
-        if skip_reason is None:
-            print("[18] QA Datastore family: PASS (semantics + witness + counterexamples)")
-        else:
-            print(f"[18] QA Datastore family: SKIPPED ({skip_reason})")
-    except Exception as e:
-        print(f"[18] QA Datastore family: FAIL ({e})")
-        sys.exit(1)
+    # --- Family sweep loop (driven by FAMILY_SWEEPS) ---
+    base_dir = os.path.dirname(os.path.abspath(__file__))
+    for fam_id, label, validator_fn, pass_desc, _doc_slug in FAMILY_SWEEPS:
+        print(f"\n--- {label.upper()} ---")
+        try:
+            skip_reason = validator_fn(base_dir)
+            if skip_reason is None:
+                print(f"[{fam_id}] {label}: PASS ({pass_desc})")
+            else:
+                print(f"[{fam_id}] {label}: SKIPPED ({skip_reason})")
+        except Exception as e:
+            print(f"[{fam_id}] {label}: FAIL ({e})")
+            sys.exit(1)
 
-    # --- Test 19: Topology Resonance Bundle (optional sweep hook) ---
-    print("\n--- QA TOPOLOGY RESONANCE BUNDLE ---")
-    try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        skip_reason = _validate_topology_bundle_if_present(base_dir)
-        if skip_reason is None:
-            print("[19] QA Topology Resonance bundle: PASS")
-        else:
-            print(f"[19] QA Topology Resonance bundle: SKIPPED ({skip_reason})")
-    except Exception as e:
-        print(f"[19] QA Topology Resonance bundle: FAIL ({e})")
-        sys.exit(1)
-
-    # --- Test 20: QA Datastore View Family (optional sweep hook) ---
-    print("\n--- QA DATASTORE VIEW FAMILY ---")
-    try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        skip_reason = _validate_datastore_view_family_if_present(base_dir)
-        if skip_reason is None:
-            print("[20] QA Datastore view family: PASS (semantics + witness + counterexamples)")
-        else:
-            print(f"[20] QA Datastore view family: SKIPPED ({skip_reason})")
-    except Exception as e:
-        print(f"[20] QA Datastore view family: FAIL ({e})")
-        sys.exit(1)
-
-    # --- Test 21: QA A-RAG Interface Family (optional sweep hook) ---
-    print("\n--- QA A-RAG INTERFACE FAMILY ---")
-    try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        skip_reason = _validate_arag_family_if_present(base_dir)
-        if skip_reason is None:
-            print("[21] QA A-RAG interface family: PASS (semantics + witness + counterexamples)")
-        else:
-            print(f"[21] QA A-RAG interface family: SKIPPED ({skip_reason})")
-    except Exception as e:
-        print(f"[21] QA A-RAG interface family: FAIL ({e})")
-        sys.exit(1)
-
-    # --- Test 22: QA Ingest->View Bridge Family (optional sweep hook) ---
-    print("\n--- QA INGEST->VIEW BRIDGE FAMILY ---")
-    try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        skip_reason = _validate_ingest_view_bridge_family_if_present(base_dir)
-        if skip_reason is None:
-            print("[22] QA ingest->view bridge family: PASS (semantics + witness + counterexamples)")
-        else:
-            print(f"[22] QA ingest->view bridge family: SKIPPED ({skip_reason})")
-    except Exception as e:
-        print(f"[22] QA ingest->view bridge family: FAIL ({e})")
-        sys.exit(1)
-
-    # --- Test 23: QA Ingestion Family (optional sweep hook) ---
-    print("\n--- QA INGESTION FAMILY ---")
-    try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        skip_reason = _validate_ingest_family_if_present(base_dir)
-        if skip_reason is None:
-            print("[23] QA ingestion family: PASS (semantics + witness + counterexamples)")
-        else:
-            print(f"[23] QA ingestion family: SKIPPED ({skip_reason})")
-    except Exception as e:
-        print(f"[23] QA ingestion family: FAIL ({e})")
-        sys.exit(1)
-
-    # --- Test 24: QA SVP-CMC Family (optional sweep hook) ---
-    print("\n--- QA SVP-CMC FAMILY ---")
-    try:
-        base_dir = os.path.dirname(os.path.abspath(__file__))
-        skip_reason = _validate_svp_cmc_family_if_present(base_dir)
-        if skip_reason is None:
-            print("[24] QA SVP-CMC family: PASS (ledger sanity + validator demo)")
-        else:
-            print(f"[24] QA SVP-CMC family: SKIPPED ({skip_reason})")
-    except Exception as e:
-        print(f"[24] QA SVP-CMC family: FAIL ({e})")
-        sys.exit(1)
-
-    # --- Test 25: Human-tract documentation gate (registry-derived) ---
+    # --- Doc gate (derived from FAMILY_SWEEPS — no second list to maintain) ---
     print("\n--- HUMAN-TRACT DOC GATE ---")
     _doc_gate_pass = True
-    _docs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                              "..", "docs", "families")
-    _docs_dir = os.path.normpath(_docs_dir)
+    _docs_dir = os.path.normpath(os.path.join(base_dir, "..", "docs", "families"))
     _readme_path = os.path.join(_docs_dir, "README.md")
     if not os.path.isdir(_docs_dir):
-        print(f"[25] Doc gate: FAIL (docs/families/ directory missing)")
+        print(f"[{FAMILY_SWEEPS[-1][0] + 1}] Doc gate: FAIL (docs/families/ directory missing)")
         _doc_gate_pass = False
     else:
-        for fam_id, slug in sorted(FAMILY_REGISTRY.items()):
-            doc_file = f"{slug}.md"
-            doc_path = os.path.join(_docs_dir, doc_file)
-            if not os.path.exists(doc_path):
-                print(f"[25] Doc gate: FAIL (missing docs/families/{doc_file} for family [{fam_id}])")
+        for fam_id, _label, _fn, _desc, doc_slug in FAMILY_SWEEPS:
+            doc_file = f"{doc_slug}.md"
+            if not os.path.exists(os.path.join(_docs_dir, doc_file)):
+                print(f"  FAIL: missing docs/families/{doc_file} for family [{fam_id}]")
                 _doc_gate_pass = False
         if os.path.exists(_readme_path):
             with open(_readme_path, "r", encoding="utf-8") as _rf:
                 _readme_text = _rf.read()
-            for fam_id, slug in sorted(FAMILY_REGISTRY.items()):
-                doc_file = f"{slug}.md"
+            for fam_id, _label, _fn, _desc, doc_slug in FAMILY_SWEEPS:
+                doc_file = f"{doc_slug}.md"
                 if doc_file not in _readme_text:
-                    print(f"[25] Doc gate: FAIL (docs/families/README.md missing link to {doc_file})")
+                    print(f"  FAIL: docs/families/README.md missing link to {doc_file}")
                     _doc_gate_pass = False
         else:
-            print(f"[25] Doc gate: FAIL (docs/families/README.md missing)")
+            print(f"  FAIL: docs/families/README.md missing")
             _doc_gate_pass = False
+    _gate_id = FAMILY_SWEEPS[-1][0] + 1
     if _doc_gate_pass:
-        print(f"[25] Human-tract doc gate: PASS ({len(FAMILY_REGISTRY)} families documented)")
+        print(f"[{_gate_id}] Human-tract doc gate: PASS ({len(FAMILY_SWEEPS)} families documented)")
     else:
+        print(f"[{_gate_id}] Human-tract doc gate: FAIL")
         sys.exit(1)

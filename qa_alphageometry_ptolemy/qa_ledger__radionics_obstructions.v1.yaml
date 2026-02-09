@@ -1,0 +1,284 @@
+schema_version: "qa_ledger.v1"
+ledger_id: "QA_LEDGER__RADIONICS_OBSTRUCTIONS.v1"
+ledger_version: "1.0.0"
+title: "Radionics Obstruction Ledger for SVP-CMC Analysis"
+description: |
+  Catalogue of common causal-model violations when analyzing systems
+  under SVP-CMC (Sympathetic Vibratory Physics - Cause Mechanics Core).
+  Each entry defines an obstruction class with triggers, formal incompatibilities,
+  and suggested fixes to restore cause-first compliance.
+
+entries:
+  # --- Core SVP-CMC obstructions ---
+  - obstruction_id: "RADIONICS_OBS__TRANSMISSION_MODEL_FORBIDDEN__v1"
+    class: "CAUSAL_MODEL_VIOLATION"
+    description: "Treating radionics as signal transmission rather than sympathetic correlation."
+    triggers:
+      - "claims of EM-like propagation as primary cause"
+      - "distance attenuation modeled as signal loss"
+    formal_incompatibility:
+      - "violates scalar-first cause"
+      - "introduces kinetic-as-cause"
+    fail_type: "CAUSAL_MODEL_FORBIDDEN"
+    invariant_diff_template:
+      requires: ["scalar_configuration_precedes_motion"]
+      forbids: ["transmission_as_cause"]
+    suggested_fix:
+      - "reframe as shared configuration class; instrument mediates coupling, not energy output"
+
+  - obstruction_id: "SVP_CMC_OBS__NO_INSTANT_ACTION__v1"
+    class: "LATENCY_AXIOM_VIOLATION"
+    description: "Claims of instantaneous effect without response latency."
+    triggers:
+      - "zero-lag remote change"
+      - "immediate readout causation claim"
+    formal_incompatibility:
+      - "violates SVP no-instant-action"
+      - "violates QA positive path-length"
+    fail_type: "SVP_NO_INSTANT_ACTION"
+    invariant_diff_template:
+      requires: ["positive_path_length", "staged_subdivision"]
+      forbids: ["instant_effect"]
+    suggested_fix:
+      - "require staged response ordering; record min_steps/return_in_k"
+
+  - obstruction_id: "RADIONICS_OBS__RATE_AS_FREQUENCY_ERROR__v1"
+    class: "PARAMETER_CATEGORY_ERROR"
+    description: "Treating radionic rates as literal frequencies rather than identifiers."
+    triggers:
+      - "Hz assignment to rate codes"
+      - "frequency sweep explanations as causes"
+    formal_incompatibility:
+      - "category error: identifier vs physical frequency"
+    fail_type: "RATE_CATEGORY_ERROR"
+    invariant_diff_template:
+      requires: ["rate_as_identifier"]
+      forbids: ["rate_as_physical_frequency_cause"]
+    suggested_fix:
+      - "treat rates as harmonic identifiers enabling lock-in; keep frequency as subdivision band only"
+
+  - obstruction_id: "RADIONICS_OBS__OPERATOR_COHERENCE_IGNORED__v1"
+    class: "MISSING_SCALAR_COMPONENT"
+    description: "Omitting operator coherence/conditioning from scalar configuration."
+    triggers:
+      - "fully device-centric causal explanation"
+      - "operator treated as irrelevant"
+    formal_incompatibility:
+      - "incomplete scalar architecture"
+    fail_type: "MISSING_OPERATOR_SCALAR"
+    invariant_diff_template:
+      requires: ["operator_as_scalar_architecture"]
+      forbids: ["device_only_cause"]
+    suggested_fix:
+      - "include operator state as scalar config; add coherence parameters and stability metrics"
+
+  # --- Expanded set ---
+  - obstruction_id: "RADIONICS_OBS__DISTANCE_ATTENUATION_IMPORTED__v1"
+    class: "MODEL_IMPORT_ERROR"
+    description: "Importing distance-based attenuation (inverse-square) into a nonlocal sympathetic model."
+    triggers:
+      - "effect predicted to decay with miles/meters"
+      - "range limits explained as propagation loss"
+    formal_incompatibility:
+      - "distance is not a causal axis in sympathetic coupling"
+    fail_type: "DISTANCE_ATTENUATION_MODEL_FORBIDDEN"
+    invariant_diff_template:
+      requires: ["nonlocal_correlation_not_transmission"]
+      forbids: ["distance_as_cause"]
+    suggested_fix:
+      - "treat distance as irrelevant; if failure occurs, attribute to mismatch of configuration/coherence"
+
+  - obstruction_id: "RADIONICS_OBS__INSTRUMENT_AS_SOURCE__v1"
+    class: "CAUSAL_ROLE_MISASSIGNMENT"
+    description: "Treating the instrument as an energy source rather than a stabilizer/mediator."
+    triggers:
+      - "device generates the effect"
+      - "output power claimed to drive outcome"
+    formal_incompatibility:
+      - "instrument mediates coupling; it does not create kinetic cause"
+    fail_type: "INSTRUMENT_SOURCE_ERROR"
+    invariant_diff_template:
+      requires: ["instrument_as_mediator"]
+      forbids: ["instrument_as_energy_source"]
+    suggested_fix:
+      - "move device role into scalar architecture + boundary conditions; relocate 'output' into observed kinetics only"
+
+  - obstruction_id: "RADIONICS_OBS__TARGET_IDENTITY_UNDER_SPECIFIED__v1"
+    class: "MISSING_SCALAR_COMPONENT"
+    description: "Target scalar identity is underspecified (no boundary/neutral center/polarity)."
+    triggers:
+      - "target described only by name/label"
+      - "no boundary conditions or neutral center definition"
+    formal_incompatibility:
+      - "cannot determine permitted kinetics without target configuration"
+    fail_type: "MISSING_TARGET_SCALAR"
+    invariant_diff_template:
+      requires: ["target_boundary_conditions", "target_neutral_center"]
+      forbids: ["label_only_target"]
+    suggested_fix:
+      - "add target architecture: boundaries, polarity, persistence, neutral center, relevant subdivision band"
+
+  - obstruction_id: "RADIONICS_OBS__NEUTRAL_CENTER_MISPLACED__v1"
+    class: "GEOMETRY_CONFIGURATION_ERROR"
+    description: "Neutral center placement incompatible with claimed symmetry/coupling."
+    triggers:
+      - "symmetry asserted but no valid center"
+      - "center placed outside the coupling manifold"
+    formal_incompatibility:
+      - "symmetry relationships require a coherent neutral center"
+    fail_type: "NEUTRAL_CENTER_INVALID"
+    invariant_diff_template:
+      requires: ["neutral_center_consistent_with_symmetry"]
+      forbids: ["center_symmetry_mismatch"]
+    suggested_fix:
+      - "redefine neutral center(s) and update symmetry statement; re-evaluate response ordering"
+
+  - obstruction_id: "RADIONICS_OBS__BOUNDARY_LEAKAGE_UNMODELED__v1"
+    class: "BOUNDARY_CONDITION_ERROR"
+    description: "Ignoring cavity/shell/interface boundaries that dominate scalar configuration."
+    triggers:
+      - "effects claimed without specifying enclosure/interface"
+      - "shielding changes outcome but not modeled"
+    formal_incompatibility:
+      - "SVP requires boundary conditions as primary configuration"
+    fail_type: "MISSING_BOUNDARY_CONDITIONS"
+    invariant_diff_template:
+      requires: ["boundary_conditions_primary"]
+      forbids: ["boundary_ignored"]
+    suggested_fix:
+      - "encode cavities/shells/interfaces; treat shielding as architecture change, not 'blocking energy'"
+
+  - obstruction_id: "RADIONICS_OBS__PHASE_COHERENCE_IGNORED__v1"
+    class: "COHERENCE_ERROR"
+    description: "Phase relationships not specified even though coherence is required."
+    triggers:
+      - "lock-in claimed without phase/coherence conditions"
+      - "random operator state treated as irrelevant"
+    formal_incompatibility:
+      - "coherence determines stability/clarity; omission breaks scalar completeness"
+    fail_type: "MISSING_PHASE_COHERENCE"
+    invariant_diff_template:
+      requires: ["phase_relationships_specified"]
+      forbids: ["coherence_unspecified"]
+    suggested_fix:
+      - "add phase/coherence parameterization; record stability measures; update latency ordering"
+
+  - obstruction_id: "RADIONICS_OBS__AMPLITUDE_AS_TYPE_ERROR__v1"
+    class: "CATEGORY_ERROR"
+    description: "Treating amplitude (degree) as changing the type of effect."
+    triggers:
+      - "higher amplitude claimed to change the kind of phenomenon"
+      - "power dial explained as switching mechanism class"
+    formal_incompatibility:
+      - "SVP: amplitude is degree, not type; type is configuration"
+    fail_type: "AMPLITUDE_CATEGORY_ERROR"
+    invariant_diff_template:
+      requires: ["configuration_determines_type"]
+      forbids: ["amplitude_changes_type"]
+    suggested_fix:
+      - "move effect-type determination into scalar architecture; keep amplitude as degree of expression only"
+
+  - obstruction_id: "RADIONICS_OBS__WRONG_SUBDIVISION_TARGETED__v1"
+    class: "SUBDIVISION_MISMATCH"
+    description: "Disturbance subdivision band incompatible with the claimed outcome domain."
+    triggers:
+      - "biological outcome claimed with no subdivision targeting rationale"
+      - "thermal/light effects claimed while addressing unrelated subdivision"
+    formal_incompatibility:
+      - "effects correspond to specific subdivision levels"
+    fail_type: "SUBDIVISION_MISMATCH"
+    invariant_diff_template:
+      requires: ["subdivision_frequency_band_specified"]
+      forbids: ["domain_without_subdivision"]
+    suggested_fix:
+      - "specify subdivision band and why it matches the target domain; revise permitted kinetics list"
+
+  - obstruction_id: "RADIONICS_OBS__POLARITY_CONTRADICTION__v1"
+    class: "POLARITY_CONFIGURATION_ERROR"
+    description: "Polarity arrangement contradicts claimed coupling directionality."
+    triggers:
+      - "polarity unspecified but directionality asserted"
+      - "opposed polarity claimed to strengthen coupling without symmetry change"
+    formal_incompatibility:
+      - "polarity is a primary scalar constraint"
+    fail_type: "POLARITY_CONTRADICTION"
+    invariant_diff_template:
+      requires: ["polarity_arrangement_consistent"]
+      forbids: ["polarity_direction_mismatch"]
+    suggested_fix:
+      - "explicitly encode polarity arrangement; re-check neutral centers and symmetry"
+
+  - obstruction_id: "RADIONICS_OBS__CONSERVATION_AS_CAUSE__v1"
+    class: "INTERPRETIVE_CONSTRAINT_VIOLATION"
+    description: "Using conservation laws as causal explanation rather than downstream description."
+    triggers:
+      - "energy conservation invoked as the reason outcome occurs"
+      - "force balance used as causal driver"
+    formal_incompatibility:
+      - "SVP: conservation is descriptive of effects, not causal"
+    fail_type: "CONSERVATION_USED_AS_CAUSE"
+    invariant_diff_template:
+      requires: ["scalar_first_explanation"]
+      forbids: ["conservation_as_cause"]
+    suggested_fix:
+      - "rewrite: scalar configuration causes; conservation only describes observed kinetic bookkeeping"
+
+  - obstruction_id: "RADIONICS_OBS__INTENTION_AS_MAGIC_UNCONSTRAINED__v1"
+    class: "UNCONSTRAINED_DISTURBANCE"
+    description: "Treating intention as unconstrained magic rather than a disturbance constrained by configuration."
+    triggers:
+      - "any intention can cause any effect"
+      - "no configuration prerequisites for cognitive disturbance"
+    formal_incompatibility:
+      - "disturbance reveals permitted kinetics; it cannot override configuration"
+    fail_type: "UNCONSTRAINED_INTENTION"
+    invariant_diff_template:
+      requires: ["disturbance_constrained_by_configuration"]
+      forbids: ["intention_overrides_configuration"]
+    suggested_fix:
+      - "encode operator coherence + target configuration; list impossibles; produce obstruction where unreachable"
+
+  - obstruction_id: "RADIONICS_OBS__SYMMETRY_ASSERTED_NO_WITNESS__v1"
+    class: "MISSING_WITNESS"
+    description: "Symmetry relationship asserted without a concrete witness (center/geometry/boundary)."
+    triggers:
+      - "symmetry used as explanation but not specified"
+      - "no geometry statement"
+    formal_incompatibility:
+      - "symmetry must be grounded in architecture"
+    fail_type: "SYMMETRY_NO_WITNESS"
+    invariant_diff_template:
+      requires: ["geometry_and_center_witness"]
+      forbids: ["symmetry_claim_only"]
+    suggested_fix:
+      - "provide explicit geometry + neutral center witness; update persistence/invariants accordingly"
+
+  - obstruction_id: "RADIONICS_OBS__LATENCY_NOT_RECORDED__v1"
+    class: "PROCEDURE_INCOMPLETE"
+    description: "Claimed effects without recording response ordering / lag rationale."
+    triggers:
+      - "outcome reported but no latency section"
+      - "no 'what responds first' statement"
+    formal_incompatibility:
+      - "SVP requires latency; QA requires path-length staging"
+    fail_type: "LATENCY_SECTION_MISSING"
+    invariant_diff_template:
+      requires: ["latency.response_order", "latency.lags_and_causes"]
+      forbids: ["latency_omitted"]
+    suggested_fix:
+      - "add response ordering; include min_steps/return_in_k if known"
+
+  - obstruction_id: "RADIONICS_OBS__KINETICS_AS_CAUSE_LANGUAGE__v1"
+    class: "SCALAR_KINETIC_CONFUSION"
+    description: "Using kinetic phenomena (heat/light/emission) as causes rather than effects."
+    triggers:
+      - "heat caused the coupling"
+      - "radiation created the relationship"
+    formal_incompatibility:
+      - "SVP scalar is cause; kinetics are records"
+    fail_type: "KINETIC_AS_CAUSE"
+    invariant_diff_template:
+      requires: ["scalar_cause_kinetic_effect_separation"]
+      forbids: ["kinetic_as_cause_language"]
+    suggested_fix:
+      - "move causal claims into scalar configuration; rewrite kinetics as observed outcomes only"

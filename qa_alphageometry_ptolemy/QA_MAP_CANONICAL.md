@@ -10,9 +10,10 @@ This document tracks **Gold Standard** QA mappings—papers/theories that have b
 6. End-to-end validation passing
 
 ---
-## Release: qa-core-stack-v1.3.0 (2026-02-08)
+## Release: qa-core-stack-v1.3.1 (2026-02-08)
 
 ### Highlights
+- Added SVP-CMC cause-first physics family ([24])
 - Added certified ingest->view bridge family ([22])
 - Completed end-to-end provenance chain: ingestion -> datastore -> view -> A-RAG
 - Enforced typed generator and typed root provenance contracts across retrieval stack
@@ -23,9 +24,11 @@ This document tracks **Gold Standard** QA mappings—papers/theories that have b
 - [20] QA Datastore View
 - [21] QA A-RAG Interface
 - [22] QA Ingest->View Bridge
+- [23] QA Ingestion Semantics
+- [24] SVP-CMC (Cause Mechanics)
 
 ### Significance
-First fully provenance-grounded QA retrieval pipeline with sweep-verified family composition.
+First cause-first physics framework formalized as QA certificate ecosystem. Radionics now has obstruction ledger.
 
 ---
 
@@ -605,6 +608,86 @@ python qa_ingest_validator.py --demo
 
 ---
 
+### 10. SVP-CMC — Sympathetic Vibratory Physics Cause Mechanics
+
+**Source**: SVP-CMC (https://svpwiki.com/SVP-CMC) + radionics formalization
+
+**Status**: ✅ Complete Scaffold (2026-02-08)
+
+**Key Insight**: Cause-first physics is **generator-controlled invariant reachability** where scalar configuration precedes all kinetic effects.
+
+#### Concept Mapping
+
+| SVP-CMC Concept | QA Interpretation |
+|-----------------|-------------------|
+| Scalar configuration | QA invariant packet (pre-motion state) |
+| Disturbance | Generator application (probes, doesn't create) |
+| No instantaneous action | Positive path-length / latency requirement |
+| Neutral center | QA fixed point / attractor |
+| Sympathetic coupling | Shared invariant class |
+| Forbidden effects | Reachability obstructions |
+| Rates (radionics) | Harmonic identifiers, not physical frequencies |
+| Kinetic outcomes | Observable traces of permitted transitions |
+
+#### Why This Mapping Matters
+
+1. **Scalar-first ontology**: Configuration precedes motion — exactly QA's invariant-preservation principle
+2. **No energy causation**: Energy is effect, not cause — matches QA's trace-as-observation model
+3. **Radionics formalized**: Instruments mediate coupling, rates are identifiers — now certifiable
+4. **Operator coherence**: Intention is constrained disturbance, not unconstrained magic
+
+#### Artifacts
+
+| Artifact | Path |
+|----------|------|
+| Module spec (YAML) | `QA_MAP__SVP_CMC.yaml` |
+| Certificate schema | `schemas/QA_SVP_CMC_ANALYSIS_CERT.v1.schema.json` |
+| Validator | `qa_svp_cmc_validator.py` |
+| Obstruction ledger | `qa_ledger__radionics_obstructions.v1.yaml` |
+| Ledger sanity checker | `qa_radionics_ledger_sanity.py` |
+
+#### Validation Commands
+
+```bash
+# Validate demo certificate
+python qa_svp_cmc_validator.py --demo
+
+# Validate custom certificate with ledger
+python qa_svp_cmc_validator.py --cert path/to/cert.json --ledger qa_ledger__radionics_obstructions.v1.yaml
+
+# Check ledger sanity
+python qa_radionics_ledger_sanity.py --ledger qa_ledger__radionics_obstructions.v1.yaml
+```
+
+#### Validation Results (2026-02-08)
+
+```
+✔ Ledger sanity:   18 entries, 0 errors
+✔ Demo cert:       valid (tuning_fork_resonance)
+```
+
+#### Obstruction Classes (18 total)
+
+| Category | Examples |
+|----------|----------|
+| Causal model | `TRANSMISSION_MODEL_FORBIDDEN`, `INSTRUMENT_AS_SOURCE` |
+| Latency | `NO_INSTANT_ACTION`, `LATENCY_NOT_RECORDED` |
+| Scalar components | `OPERATOR_COHERENCE_IGNORED`, `TARGET_IDENTITY_UNDER_SPECIFIED` |
+| Category errors | `RATE_AS_FREQUENCY_ERROR`, `AMPLITUDE_AS_TYPE_ERROR` |
+| Geometry | `NEUTRAL_CENTER_MISPLACED`, `SYMMETRY_NO_WITNESS` |
+| Policy | `CONSERVATION_AS_CAUSE`, `KINETICS_AS_CAUSE_LANGUAGE` |
+
+#### Unification with Other Mappings
+
+| Concept | Generalization | NeuralGCM | SVP-CMC |
+|---------|---------------|-----------|---------|
+| **Domain** | Statistics | Physics-ML | Cause-first physics |
+| **Invariants** | Operator norms | Conservation laws | Scalar configuration |
+| **Gauge freedom** | Overparametrization | Neural params | Operator coherence choices |
+| **Failure modes** | Vacuous bounds | Conservation violation | Causal language violation |
+
+---
+
 ## Stub Mappings (In Progress)
 
 *No current stub mappings. All planned mappings have been completed to Gold Standard.*
@@ -619,12 +702,12 @@ All Gold Standard mappings demonstrate the unified QA thesis:
 
 > **ML/AI theory is invariant-controlled reachability with gauge freedom.**
 
-| Concept | Generalization | NeuralGCM | Sparse Attention | Axiom/Execution | Topology Resonance |
-|---------|---------------|-----------|------------------|-----------------|--------------------|
-| **Domain** | Statistics | Physics-ML | Efficiency | Formal reasoning | Topological reachability |
-| **Invariants** | Operator norms | Conservation laws | Entropy/rank bounds | Kernel acceptance | SCC monotonicity + phase lock |
-| **Gauge freedom** | Overparametrization | Neural params | Redundant heads | Tactic choice | Generator sequence choices |
-| **Failure modes** | Vacuous bounds | Conservation violation | Rank collapse | Formalization gap | Phase break / SCC drop |
+| Concept | Generalization | NeuralGCM | Sparse Attention | Axiom/Execution | Topology Resonance | SVP-CMC |
+|---------|---------------|-----------|------------------|-----------------|--------------------| --------|
+| **Domain** | Statistics | Physics-ML | Efficiency | Formal reasoning | Topological reachability | Cause-first physics |
+| **Invariants** | Operator norms | Conservation laws | Entropy/rank bounds | Kernel acceptance | SCC monotonicity + phase lock | Scalar configuration |
+| **Gauge freedom** | Overparametrization | Neural params | Redundant heads | Tactic choice | Generator sequence choices | Operator coherence |
+| **Failure modes** | Vacuous bounds | Conservation violation | Rank collapse | Formalization gap | Phase break / SCC drop | Causal language violation |
 
 ---
 

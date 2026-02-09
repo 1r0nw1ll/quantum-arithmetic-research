@@ -1,0 +1,115 @@
+schema_version: "qa_module_spine.v1"
+module_id: "QA_MODULE__SVP_CMC"
+module_version: "1.0.0"
+title: "SVP-CMC (Cause Mechanics Core) as QA Cause-First Analysis Module"
+
+authority:
+  primary_framework: "SVP-CMC"
+  authoritative_url: "https://svpwiki.com/SVP-CMC"
+  interpretation_mode: "authoritative_cause_first"  # not metaphor/speculative
+
+qa_alignment:
+  principle_bindings:
+    - name: "Geometric Action Principle"
+      qa_statement: "An arithmetic move is a geometric move."
+      svp_binding: "Configuration precedes motion."
+    - name: "No Instantaneous Action"
+      qa_statement: "All effects require positive path-length under admissible generators."
+      svp_binding: "All effects exhibit response latency determined by configuration and subdivision."
+    - name: "Scalar-Kinetic Distinction"
+      qa_statement: "Invariants are causal; observables are effects/traces."
+      svp_binding: "Scalar states are causal; kinetic states are effects."
+
+core_objects:
+  scalar_configuration:
+    description: "Pre-motion configuration that constrains all permitted kinetics."
+    qa_representation:
+      - "state_packet"      # (b,e,d,a) + derived invariants where applicable
+      - "architecture"      # geometry/material/symmetry/polarity/boundaries/centers
+      - "constraints"       # explicit prohibitions and invariants
+
+  disturbance:
+    description: "A generator application that probes configuration; it does not create behavior."
+    qa_representation:
+      - "generator_id"      # sigma, mu, lambda, nu, custom
+      - "parameters"        # rate/direction/magnitude equivalents
+
+  latency:
+    description: "Response ordering and lag as path-length / staged reachability."
+    qa_representation:
+      - "response_layers"   # what responds first/last
+      - "path_metrics"      # min_steps, return_in_k, bounded reachability
+
+  kinetic_outcomes:
+    description: "Observable effects permitted by scalar configuration under admissible disturbance."
+    qa_representation:
+      - "effect_taxonomy"   # motion/heat/light/electrical/magnetic/biological/cognitive
+      - "trace"             # measurement/event log
+
+analysis_procedure:
+  ordered_steps:
+    - step_id: "S1"
+      name: "Identify pre-motion scalar configuration"
+      required_fields:
+        - "architecture.geometry"
+        - "architecture.materials"
+        - "architecture.symmetry"
+        - "architecture.polarity"
+        - "architecture.boundary_conditions"
+    - step_id: "S2"
+      name: "Identify neutral center(s) and symmetry relationships"
+      required_fields:
+        - "architecture.neutral_centers"
+        - "architecture.symmetry_relationships"
+    - step_id: "S3"
+      name: "Identify persistence / inertia of state"
+      required_fields:
+        - "persistence.resists"
+        - "persistence.invariants"
+    - step_id: "S4"
+      name: "Identify the disturbance"
+      required_fields:
+        - "disturbance.generator_id"
+        - "disturbance.parameters.rate"
+        - "disturbance.parameters.direction"
+        - "disturbance.parameters.magnitude"
+    - step_id: "S5"
+      name: "Evaluate response latency"
+      required_fields:
+        - "latency.response_order"
+        - "latency.lags_and_causes"
+    - step_id: "S6"
+      name: "Determine permitted kinetic outcomes only"
+      required_fields:
+        - "kinetics.permitted"
+        - "kinetics.observed"
+    - step_id: "S7"
+      name: "State impossible effects due to incompatible configuration"
+      required_fields:
+        - "impossibles"
+
+interpretive_constraints:
+  prohibitions:
+    - "Do not treat energy/force/motion as primary causes."
+    - "Do not default to Newtonian or signal-transmission explanations."
+    - "Conservation laws allowed only as downstream descriptions."
+  enforcement_mode: "certificate_must_separate_scalar_vs_kinetic"
+
+parameterization:
+  scalar_parameters:
+    - "subdivision_frequency_band"
+    - "phase_relationships"
+    - "angle_orientation"
+    - "amplitude_degree"
+    - "polarity_arrangement"
+    - "boundary_conditions"
+    - "neutral_center_placement"
+    - "disturbance_rate"
+
+outputs:
+  certificate_type: "QA_CERT__SVP_CMC_ANALYSIS.v1"
+  ledger_types:
+    - "QA_LEDGER__RADIONICS_OBSTRUCTIONS.v1"
+
+notes:
+  lineage_hint: "Radionics framing: devices mediate coupling; rates as identifiers not frequencies."

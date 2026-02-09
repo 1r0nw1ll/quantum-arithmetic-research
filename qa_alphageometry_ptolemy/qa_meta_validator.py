@@ -550,6 +550,24 @@ INGEST_CERT_PATHS = {
 SVP_CMC_LEDGER_PATH = "qa_ledger__radionics_obstructions.v1.yaml"
 
 
+# ============================================================================
+# FAMILY REGISTRY — single source of truth for doc gate + sweep hooks
+# ============================================================================
+# When you add a new family sweep hook, add it here too.
+# The doc gate ([25]) reads this registry to enforce the two-tract rule.
+# Key: family ID (int), Value: doc slug (used as docs/families/{slug}.md)
+
+FAMILY_REGISTRY: Dict[int, str] = {
+    18: "18_datastore",
+    19: "19_topology_resonance",
+    20: "20_datastore_view",
+    21: "21_arag_interface",
+    22: "22_ingest_view_bridge",
+    23: "23_ingestion",
+    24: "24_svp_cmc",
+}
+
+
 def _validate_svp_cmc_family_if_present(base_dir: str) -> Optional[str]:
     """
     Run SVP-CMC family validator if ledger is present.
@@ -1421,27 +1439,19 @@ if __name__ == "__main__":
         print(f"[24] QA SVP-CMC family: FAIL ({e})")
         sys.exit(1)
 
-    # --- Test 25: Human-tract documentation gate ---
+    # --- Test 25: Human-tract documentation gate (registry-derived) ---
     print("\n--- HUMAN-TRACT DOC GATE ---")
     _doc_gate_pass = True
     _docs_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
                               "..", "docs", "families")
     _docs_dir = os.path.normpath(_docs_dir)
-    _REQUIRED_FAMILY_DOCS = {
-        18: "18_datastore.md",
-        19: "19_topology_resonance.md",
-        20: "20_datastore_view.md",
-        21: "21_arag_interface.md",
-        22: "22_ingest_view_bridge.md",
-        23: "23_ingestion.md",
-        24: "24_svp_cmc.md",
-    }
     _readme_path = os.path.join(_docs_dir, "README.md")
     if not os.path.isdir(_docs_dir):
         print(f"[25] Doc gate: FAIL (docs/families/ directory missing)")
         _doc_gate_pass = False
     else:
-        for fam_id, doc_file in sorted(_REQUIRED_FAMILY_DOCS.items()):
+        for fam_id, slug in sorted(FAMILY_REGISTRY.items()):
+            doc_file = f"{slug}.md"
             doc_path = os.path.join(_docs_dir, doc_file)
             if not os.path.exists(doc_path):
                 print(f"[25] Doc gate: FAIL (missing docs/families/{doc_file} for family [{fam_id}])")
@@ -1449,7 +1459,8 @@ if __name__ == "__main__":
         if os.path.exists(_readme_path):
             with open(_readme_path, "r", encoding="utf-8") as _rf:
                 _readme_text = _rf.read()
-            for fam_id, doc_file in sorted(_REQUIRED_FAMILY_DOCS.items()):
+            for fam_id, slug in sorted(FAMILY_REGISTRY.items()):
+                doc_file = f"{slug}.md"
                 if doc_file not in _readme_text:
                     print(f"[25] Doc gate: FAIL (docs/families/README.md missing link to {doc_file})")
                     _doc_gate_pass = False
@@ -1457,6 +1468,6 @@ if __name__ == "__main__":
             print(f"[25] Doc gate: FAIL (docs/families/README.md missing)")
             _doc_gate_pass = False
     if _doc_gate_pass:
-        print(f"[25] Human-tract doc gate: PASS ({len(_REQUIRED_FAMILY_DOCS)} families documented)")
+        print(f"[25] Human-tract doc gate: PASS ({len(FAMILY_REGISTRY)} families documented)")
     else:
         sys.exit(1)

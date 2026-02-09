@@ -1,0 +1,66 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_COMPETENCY_INTAKE.v0",
+  "description": "Provenance envelope linking raw agent logs to a certified competency bundle.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "input_file",
+    "input_sha256",
+    "adapter",
+    "event_count",
+    "output_bundle_sha256",
+    "timestamp_utc",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_COMPETENCY_INTAKE.v0"
+    },
+    "input_file": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Path or name of the raw input file consumed."
+    },
+    "input_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA256 hash of the raw input file bytes."
+    },
+    "adapter": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Adapter identifier used for ingestion (e.g. llm_tool_agent)."
+    },
+    "event_count": {
+      "type": "integer",
+      "minimum": 0,
+      "description": "Number of events parsed from the input file."
+    },
+    "output_bundle_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$",
+      "description": "SHA256 hash of the serialised output bundle file."
+    },
+    "timestamp_utc": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of intake execution."
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["manifest_version", "hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "manifest_version": { "type": "integer", "const": 1 },
+        "hash_alg": { "type": "string", "const": "sha256_canonical" },
+        "canonical_json_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$"
+        }
+      }
+    }
+  }
+}

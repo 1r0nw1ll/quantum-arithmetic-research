@@ -1,0 +1,20 @@
+{"episode_id":"ep_typeerror","step":0,"tool":"read_file","state":{"files_open":[],"error":null,"hypothesis":null},"result":"ok"}
+{"episode_id":"ep_typeerror","step":1,"tool":"run_test","state":{"files_open":["main.py"],"error":null,"hypothesis":null},"result":"fail"}
+{"episode_id":"ep_typeerror","step":2,"tool":"read_file","state":{"files_open":["main.py"],"error":"TypeError: expected str got int","hypothesis":null},"result":"ok"}
+{"episode_id":"ep_typeerror","step":3,"tool":"search_docs","state":{"files_open":["main.py","utils.py"],"error":"TypeError: expected str got int","hypothesis":null},"result":"ok"}
+{"episode_id":"ep_typeerror","step":4,"tool":"write_patch","state":{"files_open":["main.py","utils.py"],"error":"TypeError: expected str got int","hypothesis":"wrong_arg_type"},"result":"ok"}
+{"episode_id":"ep_typeerror","step":5,"tool":"run_test","state":{"files_open":["main.py","utils.py"],"error":"TypeError: expected str got int","hypothesis":"wrong_arg_type","patch_applied":true},"result":"pass"}
+{"episode_id":"ep_typeerror","step":6,"tool":"read_file","state":{"files_open":["main.py","utils.py"],"error":null,"hypothesis":"confirmed","patch_applied":true,"tests":"pass"},"result":"ok"}
+{"episode_id":"ep_importerr","step":0,"tool":"run_test","state":{"module":"api","error":null,"files_open":[]},"result":"fail"}
+{"episode_id":"ep_importerr","step":1,"tool":"read_file","state":{"module":"api","error":"ImportError: no module named requests","files_open":[]},"result":"ok"}
+{"episode_id":"ep_importerr","step":2,"tool":"search_docs","state":{"module":"api","error":"ImportError: no module named requests","files_open":["api.py"]},"result":"ok"}
+{"episode_id":"ep_importerr","step":3,"tool":"read_file","state":{"module":"api","error":"ImportError: no module named requests","files_open":["api.py","requirements.txt"]},"result":"ok"}
+{"episode_id":"ep_importerr","step":4,"tool":"write_patch","state":{"module":"api","error":"ImportError: no module named requests","files_open":["api.py","requirements.txt"],"fix":"add_dependency"},"result":"ok"}
+{"episode_id":"ep_importerr","step":5,"tool":"run_test","state":{"module":"api","error":"ImportError: no module named requests","files_open":["api.py","requirements.txt"],"fix":"add_dependency","patch_applied":true},"result":"pass"}
+{"episode_id":"ep_importerr","step":6,"tool":"read_file","state":{"module":"api","error":null,"files_open":["api.py","requirements.txt"],"fix":"add_dependency","tests":"pass"},"result":"ok"}
+{"episode_id":"ep_perf","step":0,"tool":"read_file","state":{"task":"perf_optimization","profile":null,"files_open":[]},"result":"ok"}
+{"episode_id":"ep_perf","step":1,"tool":"run_test","state":{"task":"perf_optimization","profile":null,"files_open":["query.py"]},"result":"slow"}
+{"episode_id":"ep_perf","step":2,"tool":"search_docs","state":{"task":"perf_optimization","profile":"slow_query_3200ms","files_open":["query.py"]},"result":"ok"}
+{"episode_id":"ep_perf","step":3,"tool":"read_file","state":{"task":"perf_optimization","profile":"slow_query_3200ms","files_open":["query.py","schema.sql"]},"result":"ok"}
+{"episode_id":"ep_perf","step":4,"tool":"write_patch","state":{"task":"perf_optimization","profile":"slow_query_3200ms","files_open":["query.py","schema.sql"],"fix":"add_index"},"result":"ok"}
+{"episode_id":"ep_perf","step":5,"tool":"run_test","state":{"task":"perf_optimization","profile":"fast_query_45ms","files_open":["query.py","schema.sql"],"fix":"add_index","patch_applied":true},"result":"pass"}

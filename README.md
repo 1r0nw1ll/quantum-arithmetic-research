@@ -201,10 +201,11 @@ New theoretical framework for helium-doped quartz self-oscillating energy genera
 
 ## Documentation
 
-- **📖 Digital Garden**: [https://player2.github.io/signal_experiments/](https://player2.github.io/signal_experiments/)
-- **📚 Wiki**: [Full documentation](https://github.com/player2/signal_experiments/wiki)
-- **📝 Formal Report**: `qa_formal_report.tex` (mathematical foundations)
-- **🗒️ Research Notes**: `QAnotes/` (100+ markdown files)
+- **Digital Garden**: [https://player2.github.io/signal_experiments/](https://player2.github.io/signal_experiments/)
+- **Wiki**: [Full documentation](https://github.com/player2/signal_experiments/wiki)
+- **Certificate Families**: [`docs/families/README.md`](docs/families/README.md) — per-family docs for [18]-[24], enforced by meta-validator test [25]
+- **Formal Report**: `qa_formal_report.tex` (mathematical foundations)
+- **Research Notes**: `QAnotes/` (100+ markdown files)
 
 ---
 
@@ -240,7 +241,9 @@ We welcome contributions! Areas of interest:
 - **Visualization**: Interactive web demos, 3D displays
 - **Documentation**: Tutorials, videos, blog posts
 
-See [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon) for guidelines.
+**Two-tract rule**: Every certificate family must ship with both a machine tract (schema/validator/certs) and a human tract (`docs/families/[NN]_*.md`). The meta-validator test [25] enforces this — CI fails if docs are missing. See [`docs/families/README.md`](docs/families/README.md) for the checklist.
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) (coming soon) for full guidelines.
 
 ---
 

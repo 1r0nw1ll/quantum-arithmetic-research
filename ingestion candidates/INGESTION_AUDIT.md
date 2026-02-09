@@ -140,7 +140,7 @@
 | ✅ processed | `ingestion candidates/kimi_k2.odt` | 51.36 KB | 1 |
 | ✅ processed | `ingestion candidates/microsoft_kosmos.odt` | 52.77 KB | 1 |
 | ✅ processed | `ingestion candidates/Paper Summary 18 Jan 2026.docx` | 14.81 KB | 2 |
-| ✅ processed | `ingestion candidates/polynomial_ellipse.odt` | 685.17 KB | 1 |
+| ✅ processed | `ingestion candidates/polynomial_ellipse.odt` | 685.17 KB | 2 |
 | ✅ processed | `ingestion candidates/qa_agentic_rag.odt` | 50.32 KB | 1 |
 | ✅ processed | `ingestion candidates/qa_alpha_zero.odt` | 1.13 MB | 1 |
 | ✅ processed | `ingestion candidates/qa_jepa.odt` | 47.03 KB | 10 |

@@ -33,13 +33,13 @@
 
 ---
 
-## Latest Batch: February 09, 2026 (Single ODT Ingestion)
+## Latest Batch: February 09, 2026 (Single ODT Ingestion + Second-Pass QA Mapping)
 
 Selection method: requested immediate ingest for pending candidate `polynomial_ellipse.odt`.
 
-| Document | Output Text | Output Analysis |
-|----------|-------------|-----------------|
-| `polynomial_ellipse.odt` | `qa_lab/tmp/polynomial_ellipse.txt` | `qa_lab/artifacts/ingestion/polynomial_ellipse_ANALYSIS.md` |
+| Document | Output Text | Output Analysis | Output QA Mapping |
+|----------|-------------|-----------------|-------------------|
+| `polynomial_ellipse.odt` | `qa_lab/tmp/polynomial_ellipse.txt` | `qa_lab/artifacts/ingestion/polynomial_ellipse_ANALYSIS.md` | `qa_lab/artifacts/ingestion/polynomial_ellipse_QA_MAPPING.md` |
 
 ---
 

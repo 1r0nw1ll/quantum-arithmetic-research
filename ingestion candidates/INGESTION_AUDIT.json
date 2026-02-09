@@ -1210,9 +1210,10 @@
       "size_bytes": 701616,
       "size_human": "685.17 KB",
       "sha256": "39da35a3f4968509693ace37c7b946aa0249a3b2d466bf3cbc39840d97b98f94",
-      "reference_count": 1,
+      "reference_count": 2,
       "referenced_by": [
-        "qa_lab/artifacts/ingestion/polynomial_ellipse_ANALYSIS.md"
+        "qa_lab/artifacts/ingestion/polynomial_ellipse_ANALYSIS.md",
+        "qa_lab/artifacts/ingestion/polynomial_ellipse_QA_MAPPING.md"
       ],
       "status": "processed"
     },

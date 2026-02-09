@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_SVP_CMC_SEMANTICS_CERT.v1",
+  "title": "QA SVP-CMC Semantics Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "canonical_json",
+    "hash_alg",
+    "cert_domain",
+    "authority",
+    "principle_bindings",
+    "analysis_procedure",
+    "interpretive_constraints",
+    "scalar_parameters",
+    "subject_types",
+    "forbidden_causal_patterns",
+    "fail_types",
+    "ledger_ref",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_SVP_CMC_SEMANTICS_CERT.v1" },
+    "canonical_json": { "type": "boolean", "const": true },
+    "hash_alg": { "type": "string", "const": "sha256" },
+    "cert_domain": { "type": "string" },
+    "authority": {
+      "type": "object",
+      "required": ["primary_framework", "authoritative_url", "interpretation_mode"],
+      "properties": {
+        "primary_framework": { "type": "string" },
+        "authoritative_url": { "type": "string", "format": "uri" },
+        "interpretation_mode": { "type": "string" }
+      }
+    },
+    "principle_bindings": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "qa_statement", "svp_binding"],
+        "properties": {
+          "name": { "type": "string" },
+          "qa_statement": { "type": "string" },
+          "svp_binding": { "type": "string" }
+        }
+      }
+    },
+    "analysis_procedure": {
+      "type": "object",
+      "required": ["ordered_steps"],
+      "properties": {
+        "ordered_steps": { "type": "array", "items": { "type": "string" } }
+      }
+    },
+    "interpretive_constraints": {
+      "type": "object",
+      "required": ["prohibitions", "enforcement_mode"],
+      "properties": {
+        "prohibitions": { "type": "array", "items": { "type": "string" } },
+        "enforcement_mode": { "type": "string" }
+      }
+    },
+    "scalar_parameters": { "type": "array", "items": { "type": "string" } },
+    "subject_types": { "type": "array", "items": { "type": "string" } },
+    "forbidden_causal_patterns": { "type": "array", "items": { "type": "string" } },
+    "fail_types": { "type": "array", "items": { "type": "string" } },
+    "ledger_ref": { "type": "string" },
+    "manifest": {
+      "type": "object",
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "const": "sha256" },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  }
+}

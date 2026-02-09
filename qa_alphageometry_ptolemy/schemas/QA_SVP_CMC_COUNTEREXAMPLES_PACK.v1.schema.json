@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_SVP_CMC_COUNTEREXAMPLES_PACK.v1",
+  "title": "QA SVP-CMC Counterexamples Pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "semantics_schema_id",
+    "cases",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_SVP_CMC_COUNTEREXAMPLES_PACK.v1" },
+    "semantics_schema_id": { "type": "string", "const": "QA_SVP_CMC_SEMANTICS_CERT.v1" },
+    "cases": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["case_id", "expected_fail_type", "tamper_mode", "tampered_field"],
+        "properties": {
+          "case_id": { "type": "string" },
+          "expected_fail_type": { "type": "string" },
+          "obstruction_id": { "type": ["string", "null"] },
+          "tamper_mode": { "type": "string" },
+          "tampered_field": { "type": "string" },
+          "tampered_value": {}
+        }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "const": "sha256" },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  }
+}

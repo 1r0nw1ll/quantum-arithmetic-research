@@ -2,23 +2,41 @@
 """
 qa_svp_cmc_validator.py
 
-Strict validator for QA_CERT__SVP_CMC_ANALYSIS.v1 certificates.
+Strict validator for QA SVP-CMC family:
+  - QA_SVP_CMC_SEMANTICS_CERT.v1
+  - QA_SVP_CMC_WITNESS_PACK.v1
+  - QA_SVP_CMC_COUNTEREXAMPLES_PACK.v1
+
 Validates against SVP-CMC cause-first semantics and radionics obstruction ledger.
 
 Usage:
-    python qa_svp_cmc_validator.py --cert path/to/cert.json --ledger qa_ledger__radionics_obstructions.v1.yaml
     python qa_svp_cmc_validator.py --demo
+    python qa_svp_cmc_validator.py --cert path/to/cert.json --ledger qa_ledger__radionics_obstructions.v1.yaml
+    python qa_svp_cmc_validator.py --rehash   # Recompute and update manifest hashes
 """
 from __future__ import annotations
 
 import argparse
+import copy
 import hashlib
 import json
 import re
 import sys
 from dataclasses import dataclass, field
 from pathlib import Path
-from typing import Any, Dict, List, Optional, Set
+from typing import Any, Dict, List, Optional, Set, Tuple
+
+
+# --- Canonical JSON ---
+def canonical_json_compact(obj: Any) -> str:
+    """Canonical JSON: sorted keys, no whitespace."""
+    return json.dumps(obj, sort_keys=True, separators=(',', ':'), ensure_ascii=False)
+
+
+def sha256_canonical(obj: Any) -> str:
+    """SHA256 of canonical JSON representation."""
+    return hashlib.sha256(canonical_json_compact(obj).encode("utf-8")).hexdigest()
+
 
 # --- YAML-lite parser (stdlib only) ---
 RE_OBS_ID = re.compile(
@@ -26,6 +44,7 @@ RE_OBS_ID = re.compile(
     r"^\s*-?\s*obstruction_id:\s*'([^']+)'\s*$|"
     r'^\s*-?\s*obstruction_id:\s*([A-Za-z0-9_\-\.]+)\s*$'
 )
+
 
 def parse_ledger_obstruction_ids(text: str) -> Set[str]:
     """Extract obstruction_id values from YAML ledger (line-based, no deps)."""
@@ -48,6 +67,7 @@ class Issue:
     message: str
     path: str = ""
     severity: str = "error"  # error | warning
+
 
 @dataclass
 class ValidationResult:
@@ -74,7 +94,36 @@ FORBIDDEN_CAUSAL_PATTERNS = [
 ]
 
 
-# --- Core validator ---
+# --- Manifest helpers ---
+def _manifest_hashable_copy(obj: Dict[str, Any]) -> Dict[str, Any]:
+    """Return copy with manifest.canonical_json_sha256 set to placeholder."""
+    out = copy.deepcopy(obj)
+    if "manifest" in out and isinstance(out["manifest"], dict):
+        out["manifest"]["canonical_json_sha256"] = "placeholder"
+    return out
+
+
+def _enforce_manifest(obj: Dict[str, Any], label: str) -> None:
+    """Verify manifest hash matches canonical JSON of content."""
+    manifest = obj.get("manifest", {})
+    claimed = manifest.get("canonical_json_sha256", "")
+    hashable = _manifest_hashable_copy(obj)
+    computed = sha256_canonical(hashable)
+    if claimed != computed:
+        raise ValueError(f"{label}: manifest hash mismatch (claimed={claimed[:16]}..., computed={computed[:16]}...)")
+
+
+def _update_manifest(obj: Dict[str, Any]) -> str:
+    """Update manifest hash in place and return the new hash."""
+    hashable = _manifest_hashable_copy(obj)
+    computed = sha256_canonical(hashable)
+    if "manifest" not in obj:
+        obj["manifest"] = {"hash_alg": "sha256"}
+    obj["manifest"]["canonical_json_sha256"] = computed
+    return computed
+
+
+# --- Core certificate validator ---
 def validate_cert(
     cert: Dict[str, Any],
     ledger_obs_ids: Optional[Set[str]] = None,
@@ -159,7 +208,6 @@ def validate_cert(
                 issues.append(Issue("MISSING_TRACE_KEY", f"Move {i} missing 'invariant_diff'", path=f"trace.moves[{i}].invariant_diff"))
 
     # --- Level 2: Consistency checks ---
-    # Observed kinetics must be subset of permitted
     permitted = set(kinetics.get("permitted", []))
     observed = set(kinetics.get("observed", []))
     if not observed.issubset(permitted):
@@ -167,7 +215,6 @@ def validate_cert(
         issues.append(Issue("KINETICS_MISMATCH", f"Observed kinetics not in permitted: {extra}", path="kinetics"))
 
     # --- Level 3: Policy checks (SVP-CMC cause-first) ---
-    # Scan all string fields for forbidden causal language
     def scan_for_forbidden(obj: Any, path: str = ""):
         if isinstance(obj, str):
             for pattern, desc in FORBIDDEN_CAUSAL_PATTERNS:
@@ -190,7 +237,6 @@ def validate_cert(
             if obs_id and obs_id not in ledger_obs_ids:
                 issues.append(Issue("UNKNOWN_OBSTRUCTION_ID", f"obstruction_id '{obs_id}' not in ledger", path=f"impossibles[{i}].obstruction_id"))
 
-    # Determine overall result
     errors = [i for i in issues if i.severity == "error"]
     return ValidationResult(ok=len(errors) == 0, issues=issues)
 
@@ -278,24 +324,145 @@ def make_demo_cert() -> Dict[str, Any]:
         },
         "sha256_manifest": ""
     }
-    # Compute manifest hash
     cert_json = json.dumps(cert, sort_keys=True, separators=(',', ':'))
     cert["sha256_manifest"] = hashlib.sha256(cert_json.encode()).hexdigest()
     return cert
 
 
+# --- Triplet validation ---
+def validate_all(
+    semantics_path: str,
+    witness_path: str,
+    counterexamples_path: str,
+    ledger_path: Optional[str] = None,
+) -> None:
+    """
+    Validate the full SVP-CMC triplet (semantics + witness + counterexamples).
+    Raises on validation failure.
+    """
+    base_dir = Path(__file__).parent
+
+    # Load ledger
+    if ledger_path is None:
+        ledger_path = str(base_dir / "qa_ledger__radionics_obstructions.v1.yaml")
+    ledger_text = Path(ledger_path).read_text(encoding="utf-8")
+    ledger_ids = parse_ledger_obstruction_ids(ledger_text)
+    if not ledger_ids:
+        raise ValueError("Ledger contains no obstruction IDs")
+
+    # Load and validate semantics
+    with open(semantics_path, "r", encoding="utf-8") as f:
+        semantics = json.load(f)
+    _enforce_manifest(semantics, "semantics")
+    if semantics.get("schema_id") != "QA_SVP_CMC_SEMANTICS_CERT.v1":
+        raise ValueError(f"Unexpected semantics schema_id: {semantics.get('schema_id')}")
+
+    # Note: fail_types in semantics cert should align with ledger obstruction classes
+    # We don't enforce strict 1:1 mapping - semantics may define additional fail types
+    sem_fail_types = set(semantics.get("fail_types", []))
+
+    # Load and validate witness
+    with open(witness_path, "r", encoding="utf-8") as f:
+        witness = json.load(f)
+    _enforce_manifest(witness, "witness")
+    if witness.get("schema_id") != "QA_SVP_CMC_WITNESS_PACK.v1":
+        raise ValueError(f"Unexpected witness schema_id: {witness.get('schema_id')}")
+    if not witness.get("claimed_success"):
+        raise ValueError("Witness pack must have claimed_success=true")
+    if not witness.get("ledger_sanity_passed"):
+        raise ValueError("Witness pack ledger_sanity_passed must be true")
+    if not witness.get("validator_demo_passed"):
+        raise ValueError("Witness pack validator_demo_passed must be true")
+
+    # Validate the embedded demo cert
+    demo_cert = witness.get("demo_cert", {})
+    res = validate_cert(demo_cert, ledger_obs_ids=ledger_ids)
+    if not res.ok:
+        raise ValueError(f"Witness demo cert validation failed:\n{res.summary()}")
+
+    # Load and validate counterexamples
+    with open(counterexamples_path, "r", encoding="utf-8") as f:
+        counterexamples = json.load(f)
+    _enforce_manifest(counterexamples, "counterexamples")
+    if counterexamples.get("schema_id") != "QA_SVP_CMC_COUNTEREXAMPLES_PACK.v1":
+        raise ValueError(f"Unexpected counterexamples schema_id: {counterexamples.get('schema_id')}")
+
+    # Validate each counterexample case
+    cases = counterexamples.get("cases", [])
+    if len(cases) == 0:
+        raise ValueError("Counterexamples pack must have at least one case")
+
+    for case in cases:
+        case_id = case.get("case_id")
+        expected_fail = case.get("expected_fail_type")
+        if not case_id or not expected_fail:
+            raise ValueError(f"Counterexample case missing case_id or expected_fail_type")
+        if expected_fail not in sem_fail_types:
+            raise ValueError(f"Case {case_id}: expected_fail_type '{expected_fail}' not in semantics fail_types")
+
+    print(f"[SVP-CMC] Validated triplet: semantics + witness + {len(cases)} counterexamples")
+
+
+# --- Rehash function ---
+def rehash_all(base_dir: Path) -> None:
+    """Recompute and update manifest hashes for all SVP-CMC family certs."""
+    paths = [
+        base_dir / "certs" / "QA_SVP_CMC_SEMANTICS_CERT.v1.json",
+        base_dir / "certs" / "witness" / "QA_SVP_CMC_WITNESS_PACK.v1.json",
+        base_dir / "certs" / "counterexamples" / "QA_SVP_CMC_COUNTEREXAMPLES_PACK.v1.json",
+    ]
+
+    for p in paths:
+        if not p.exists():
+            print(f"[SKIP] {p.name} not found")
+            continue
+
+        with open(p, "r", encoding="utf-8") as f:
+            obj = json.load(f)
+
+        new_hash = _update_manifest(obj)
+
+        with open(p, "w", encoding="utf-8") as f:
+            f.write(canonical_json_compact(obj))
+            f.write("\n")
+
+        print(f"[REHASH] {p.name}: {new_hash[:16]}...")
+
+
 def main(argv: Optional[List[str]] = None) -> int:
-    ap = argparse.ArgumentParser(description="Validate SVP-CMC analysis certificates")
+    ap = argparse.ArgumentParser(description="Validate SVP-CMC family certificates")
     ap.add_argument("--cert", help="Path to certificate JSON")
     ap.add_argument("--ledger", help="Path to obstruction ledger YAML")
     ap.add_argument("--demo", action="store_true", help="Run demo validation")
+    ap.add_argument("--rehash", action="store_true", help="Recompute manifest hashes")
+    ap.add_argument("--validate-triplet", action="store_true", help="Validate full triplet")
     args = ap.parse_args(argv)
+
+    base_dir = Path(__file__).parent
+
+    if args.rehash:
+        print("[SVP-CMC] Rehashing manifest hashes...")
+        rehash_all(base_dir)
+        return 0
+
+    if args.validate_triplet:
+        print("[SVP-CMC] Validating full triplet...")
+        try:
+            validate_all(
+                semantics_path=str(base_dir / "certs" / "QA_SVP_CMC_SEMANTICS_CERT.v1.json"),
+                witness_path=str(base_dir / "certs" / "witness" / "QA_SVP_CMC_WITNESS_PACK.v1.json"),
+                counterexamples_path=str(base_dir / "certs" / "counterexamples" / "QA_SVP_CMC_COUNTEREXAMPLES_PACK.v1.json"),
+            )
+            print("[SVP-CMC] PASS: Full triplet validation")
+            return 0
+        except Exception as e:
+            print(f"[SVP-CMC] FAIL: {e}")
+            return 1
 
     if args.demo:
         print("[SVP-CMC] Running demo validation...")
         cert = make_demo_cert()
-        # Load default ledger if exists
-        default_ledger = Path(__file__).parent / "qa_ledger__radionics_obstructions.v1.yaml"
+        default_ledger = base_dir / "qa_ledger__radionics_obstructions.v1.yaml"
         ledger_ids = None
         if default_ledger.exists():
             ledger_ids = parse_ledger_obstruction_ids(default_ledger.read_text())
@@ -313,10 +480,9 @@ def main(argv: Optional[List[str]] = None) -> int:
             return 1
 
     if not args.cert:
-        print("ERROR: --cert required (or use --demo)")
+        print("ERROR: --cert required (or use --demo, --rehash, --validate-triplet)")
         return 2
 
-    # Load certificate
     try:
         with open(args.cert, "r", encoding="utf-8") as f:
             cert = json.load(f)
@@ -324,7 +490,6 @@ def main(argv: Optional[List[str]] = None) -> int:
         print(f"ERROR: Cannot load certificate: {e}")
         return 2
 
-    # Load ledger if provided
     ledger_ids = None
     if args.ledger:
         try:

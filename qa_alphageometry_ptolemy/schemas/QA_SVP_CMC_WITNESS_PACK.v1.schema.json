@@ -1,0 +1,48 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_SVP_CMC_WITNESS_PACK.v1",
+  "title": "QA SVP-CMC Witness Pack v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "semantics_schema_id",
+    "claimed_success",
+    "ledger_sanity_passed",
+    "validator_demo_passed",
+    "ledger_entry_count",
+    "demo_cert",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_SVP_CMC_WITNESS_PACK.v1" },
+    "semantics_schema_id": { "type": "string", "const": "QA_SVP_CMC_SEMANTICS_CERT.v1" },
+    "claimed_success": { "type": "boolean", "const": true },
+    "ledger_sanity_passed": { "type": "boolean" },
+    "validator_demo_passed": { "type": "boolean" },
+    "ledger_entry_count": { "type": "integer", "minimum": 1 },
+    "demo_cert": {
+      "type": "object",
+      "required": ["cert_type", "cert_id", "subject", "scalar", "disturbance", "latency", "kinetics", "trace"],
+      "properties": {
+        "cert_type": { "type": "string", "const": "QA_CERT__SVP_CMC_ANALYSIS.v1" },
+        "cert_id": { "type": "string" },
+        "subject": { "type": "object" },
+        "scalar": { "type": "object" },
+        "disturbance": { "type": "object" },
+        "latency": { "type": "object" },
+        "kinetics": { "type": "object" },
+        "impossibles": { "type": "array" },
+        "trace": { "type": "object" }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "required": ["hash_alg", "canonical_json_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "const": "sha256" },
+        "canonical_json_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    }
+  }
+}

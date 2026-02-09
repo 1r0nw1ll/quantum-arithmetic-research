@@ -1,5 +1,7 @@
 # Level 3 Recompute Validation: Generalization Certificates
 
+Reference tag: `qa-external-validation-v1`
+
 ## What this is
 
 Level 3 recompute validation proves that a third party can reproduce every

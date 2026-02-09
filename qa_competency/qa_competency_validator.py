@@ -13,6 +13,7 @@ Usage:
     python qa_competency_validator.py --rehash
     python qa_competency_validator.py --fixtures
     python qa_competency_validator.py --validate-bundle path/to/bundle.json
+    python qa_competency_validator.py --reference-sets
 """
 from __future__ import annotations
 
@@ -342,9 +343,49 @@ def validate_bundle(
 # validate_all — entry point for family sweep
 # ---------------------------------------------------------------------------
 
-def validate_all(*, bundle_path: str) -> None:
+def _reference_set_paths() -> List[Path]:
+    """Return sorted list of reference-set bundle files."""
+    ref_dir = Path(__file__).parent / "reference_sets" / "v1"
+    if not ref_dir.is_dir():
+        return []
+    return sorted(ref_dir.glob("**/*.bundle.json"))
+
+
+def validate_reference_sets() -> Dict[str, Any]:
+    """Validate all reference-set bundles. Returns {ok, passed, failed, details}."""
+    base = Path(__file__).parent
+    bundle_schema = str(base / "schemas" / "QA_COMPETENCY_CERT_BUNDLE.v1.schema.json")
+
+    paths = _reference_set_paths()
+    results: List[Dict[str, Any]] = []
+    for p in paths:
+        bundle = _load_json(str(p))
+        r = validate_bundle(
+            bundle,
+            bundle_schema_path=bundle_schema if os.path.exists(bundle_schema) else None,
+        )
+        rel = str(p.relative_to(base))
+        results.append({
+            "file": rel,
+            "ok": r.ok,
+            "fail_type": r.fail_type,
+            "details": r.to_dict(),
+        })
+
+    passed = sum(1 for r in results if r["ok"])
+    failed = sum(1 for r in results if not r["ok"])
+    return {
+        "ok": failed == 0 and len(results) > 0,
+        "passed": passed,
+        "failed": failed,
+        "tests": results,
+    }
+
+
+def validate_all(*, bundle_path: str, reference_sets: bool = True) -> None:
     """
     Validate the competency bundle end-to-end.
+    When reference_sets=True (default), also validates all reference-set bundles.
     Raises on any failure (family sweep contract).
     """
     bundle = _load_json(bundle_path)
@@ -365,6 +406,15 @@ def validate_all(*, bundle_path: str) -> None:
 
     n_certs = len(bundle.get("certs", []))
     print(f"[Competency] Validated bundle: {n_certs} cert(s), metrics recomputed, manifest ok")
+
+    if reference_sets:
+        ref_result = validate_reference_sets()
+        if ref_result["passed"] > 0:
+            if not ref_result["ok"]:
+                failures = [t for t in ref_result["tests"] if not t["ok"]]
+                msg = "; ".join(f'{t["file"]}: {t["fail_type"]}' for t in failures)
+                raise RuntimeError(f"Reference set validation failed: {msg}")
+            print(f"[Competency] Reference sets: {ref_result['passed']} bundle(s) validated")
 
 
 # ---------------------------------------------------------------------------
@@ -427,25 +477,35 @@ def run_fixtures() -> Dict[str, Any]:
 # Rehash
 # ---------------------------------------------------------------------------
 
+def _rehash_bundle_file(p: Path) -> None:
+    """Rehash a single bundle/cert file in place."""
+    obj = _load_json(str(p))
+
+    # If bundle, rehash embedded certs first
+    if isinstance(obj.get("certs"), list):
+        for cert in obj["certs"]:
+            if isinstance(cert, dict) and "manifest" in cert:
+                h = _update_manifest(cert)
+                print(f"  [REHASH] embedded cert: {h[:16]}...")
+
+    h = _update_manifest(obj)
+    with open(p, "w", encoding="utf-8") as f:
+        f.write(canonical_json_compact(obj))
+        f.write("\n")
+    print(f"[REHASH] {p.name}: {h[:16]}...")
+
+
 def rehash_all() -> None:
-    """Recompute manifest hashes for all cert files."""
+    """Recompute manifest hashes for all cert files and reference-set bundles."""
     base = Path(__file__).parent
-    cert_files = list((base / "certs").glob("*.json"))
-    for p in sorted(cert_files):
-        obj = _load_json(str(p))
 
-        # If bundle, rehash embedded certs first
-        if isinstance(obj.get("certs"), list):
-            for cert in obj["certs"]:
-                if isinstance(cert, dict) and "manifest" in cert:
-                    h = _update_manifest(cert)
-                    print(f"  [REHASH] embedded cert: {h[:16]}...")
+    # Core certs
+    for p in sorted((base / "certs").glob("*.json")):
+        _rehash_bundle_file(p)
 
-        h = _update_manifest(obj)
-        with open(p, "w", encoding="utf-8") as f:
-            f.write(canonical_json_compact(obj))
-            f.write("\n")
-        print(f"[REHASH] {p.name}: {h[:16]}...")
+    # Reference-set bundles
+    for p in _reference_set_paths():
+        _rehash_bundle_file(p)
 
 
 # ---------------------------------------------------------------------------
@@ -521,6 +581,8 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--rehash", action="store_true", help="Recompute manifest hashes")
     ap.add_argument("--fixtures", action="store_true", help="Run fixture assertions")
     ap.add_argument("--validate-bundle", metavar="PATH", help="Validate a bundle file")
+    ap.add_argument("--reference-sets", action="store_true",
+                    help="Validate all reference-set bundles")
     ap.add_argument("--json", action="store_true", help="Output as JSON")
     args = ap.parse_args(argv)
 
@@ -566,7 +628,22 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(f"[Competency] FAIL: {e}")
             return 1
 
-    print("Usage: qa_competency_validator.py --demo | --rehash | --fixtures | --validate-bundle PATH")
+    if args.reference_sets:
+        print("[Competency] Validating reference sets...")
+        result = validate_reference_sets()
+        if result["ok"]:
+            print(f"[Competency] Reference sets: PASS ({result['passed']} bundles)")
+        else:
+            print(f"[Competency] Reference sets: FAIL ({result['failed']} failed)")
+            for t in result["tests"]:
+                if not t["ok"]:
+                    print(f"  {t['file']}: {t['fail_type']}")
+        if args.json:
+            print(json.dumps(result, indent=2))
+        return 0 if result["ok"] else 1
+
+    print("Usage: qa_competency_validator.py --demo | --rehash | --fixtures "
+          "| --validate-bundle PATH | --reference-sets")
     return 2
 
 

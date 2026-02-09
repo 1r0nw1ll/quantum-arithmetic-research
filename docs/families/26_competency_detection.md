@@ -134,6 +134,35 @@ python qa_meta_validator.py
 ```
 Declared agency_index 0.99 but inputs give 710/1000 = 0.71.
 
+## Reference sets
+
+Curated exemplar bundles in `qa_competency/reference_sets/v1/` across three
+domains (bio, AI, hybrid). Nine bundles total, each a valid
+`QA_COMPETENCY_CERT_BUNDLE.v1` with 1-2 certs.
+
+> **Disclaimer:** Reference sets are curated exemplars; they are not claims
+> about specific wet-lab experiments, deployed AI systems, or clinical protocols.
+
+| Domain | Bundle | Highlights |
+|--------|--------|------------|
+| bio | `planarian_regen` | 2 certs, regeneration + memory retention |
+| bio | `xenopus_patterning` | High agency (0.88), low goal density (0.04) |
+| bio | `organoid_self_repair` | 7 generators, high entropy (~1.94) |
+| ai | `tool_agent_debugger` | Low plasticity (0.30), brittle agent |
+| ai | `retrieval_agent_arag` | Citation-fidelity invariant |
+| ai | `multi_agent_coordination` | 7 generators, 3 components, distributed |
+| hybrid | `bioelectric_controller_with_llm` | Two-substrate bio+digital |
+| hybrid | `lab_robot_closed_loop` | Low entropy deterministic protocol |
+| hybrid | `human_in_the_loop_protocol` | Highest agency (0.91) |
+
+Validate with:
+```bash
+python qa_competency/qa_competency_validator.py --reference-sets
+```
+
+Reference sets are also validated during the family sweep (`validate_all`).
+
 ## Changelog
 
+- **v1.1.0** (2026-02-09): Add reference pack v1 (9 bundles across bio/AI/hybrid).
 - **v1.0.0** (2026-02-09): Initial release. Levin-aligned competency framework.

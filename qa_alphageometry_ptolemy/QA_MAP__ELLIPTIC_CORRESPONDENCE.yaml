@@ -1,0 +1,130 @@
+# QA_MAP__ELLIPTIC_CORRESPONDENCE.yaml
+#
+# QA Module Specification for Elliptic Correspondence Certificates
+# (6-valued algebraic correspondence induced by v^2 = u^3 + u and v -> v^2 + v)
+
+module:
+  name: "QA_ELLIPTIC_CORRESPONDENCE"
+  version: "1.0.0"
+  source_paper: "polynomial_ellipse.odt"
+  title: "Elliptic Curve Correspondence Certification Layer"
+  schema_prefix: "QA_ELLIPTIC_CORRESPONDENCE"
+  status: "COMPLETE - First cert vertical slice"
+
+canonical_reference:
+  qa_canonical: "Formalizing tuple drift in quantum-native learning/files/files(1)/qa_canonical.md"
+  imported_definitions:
+    - "State S"
+    - "Generator set Sigma"
+    - "Invariant set I"
+    - "Failure algebra Fail(s,g)"
+
+concept_mapping:
+  state_space:
+    paper_name: "6-valued elliptic correspondence state"
+    paper_definition: "(u, sheet, branch_index, cut_state) with v^2 = P(u), P(u)=u^3+u"
+    qa_interpretation: "State packet with branch bookkeeping"
+    qa_structure: "State"
+    certificate_field: "state_descriptor"
+    key_insight: "The system is a deterministic correspondence only when cut/branch state is explicit"
+
+  generators:
+    paper_name: "Sheet-sign and cubic-root selection"
+    paper_definition: "2 sheet choices x 3 cubic root choices = 6 generators"
+    qa_interpretation: "Generator-restricted reachability over correspondence branches"
+    qa_structure: "Generators"
+    certificate_field: "generator_set"
+    key_insight: "Capability is relative to available branch generators"
+
+  invariants:
+    paper_name: "Curve + branch consistency contracts"
+    paper_definition: "On-manifold constraint plus deterministic branch policy"
+    qa_interpretation: "Hard invariant packet"
+    qa_structure: "InvariantPacket"
+    certificate_field: "invariants"
+    key_insight: "Fractal structure claims are valid only if branch determinism is preserved"
+
+  trace_replay:
+    paper_name: "Escape-time and ramification traces"
+    paper_definition: "Stepwise transitions with cut and monodromy events"
+    qa_interpretation: "Replayable witness trace"
+    qa_structure: "Witness"
+    certificate_field: "recompute_inputs"
+    key_insight: "Deterministic replay separates geometric obstruction from implementation noise"
+
+failure_completeness:
+  theorem: |
+    For each elliptic correspondence run, exactly one outcome is valid:
+    1. SUCCESS: invariants hold and replay hash matches, OR
+    2. FAILURE: deterministic failure_mode + witness identifies first obstruction.
+
+  failure_modes:
+    - mode: "NONFINITE_INPUT"
+      description: "Input state has non-finite coordinate or polynomial value"
+      obstruction_witness: "State snapshot and non-finite field"
+
+    - mode: "SQRT_BRANCH_UNDEFINED"
+      description: "Square-root branch cannot be evaluated under declared policy"
+      obstruction_witness: "Polynomial value and branch convention"
+
+    - mode: "SQRT_CUT_CROSS_DISALLOWED"
+      description: "Step attempts a forbidden cut crossing"
+      obstruction_witness: "Cut-state transition and policy"
+
+    - mode: "CUBIC_SOLVE_FAILED"
+      description: "No valid cubic inverse root found under ordering policy"
+      obstruction_witness: "Driver output and root solver metadata"
+
+    - mode: "RAMIFICATION_HIT"
+      description: "Transition hits or enters epsilon-neighborhood of ramification locus"
+      obstruction_witness: "u value, |P'(u)| metric, epsilon"
+
+    - mode: "MULTIROOT_DEGENERATE"
+      description: "Cubic roots collide (discriminant degeneracy)"
+      obstruction_witness: "Root set and discriminant evidence"
+
+    - mode: "CUTSTATE_UPDATE_FAILED"
+      description: "cut_state transition is not deterministic"
+      obstruction_witness: "Old state, attempted update, ambiguity"
+
+    - mode: "MONODROMY_EVENT_DETECTED"
+      description: "Unexpected branch permutation in continuation policy"
+      obstruction_witness: "Permutation witness and step index"
+
+    - mode: "ESCAPE"
+      description: "State exceeds declared escape radius"
+      obstruction_witness: "Observed norm and configured bound"
+
+    - mode: "MAX_ITER_REACHED"
+      description: "Run ended without success/failure certificate before budget"
+      obstruction_witness: "Budget and final trace prefix"
+
+certificate_family:
+  elliptic_correspondence:
+    schema_id: "QA_ELLIPTIC_CORRESPONDENCE_CERT.v1"
+    success_example: "examples/elliptic_correspondence/elliptic_correspondence_success.json"
+    failure_example: "examples/elliptic_correspondence/elliptic_correspondence_ramification_failure.json"
+    role: "Certifies deterministic 6-way branch dynamics or emits structured obstruction"
+  elliptic_bundle:
+    schema_id: "QA_ELLIPTIC_CORRESPONDENCE_BUNDLE.v1"
+    bundle_file: "certs/QA_ELLIPTIC_CORRESPONDENCE_BUNDLE.v1.json"
+    role: "Pins cert/schema/validator/examples/mapping via deterministic hash manifest"
+
+implementation:
+  certificate_module: "qa_elliptic_correspondence_certificate.py"
+  validator: "qa_elliptic_correspondence_validator_v3.py"
+  bundle_emitter: "qa_elliptic_correspondence_bundle_v1.py"
+  schemas:
+    - "schemas/QA_ELLIPTIC_CORRESPONDENCE_CERT.v1.schema.json"
+    - "schemas/QA_ELLIPTIC_CORRESPONDENCE_BUNDLE.v1.schema.json"
+  deterministic_rules:
+    - "State updates are deterministic under fixed sqrt branch and cubic root ordering"
+    - "Scalars are int or rational strings in strict mode"
+    - "trace_digest = sha256(canonical_json(transition_trace))"
+    - "Repeated (state, generator) pairs must replay identical outcomes"
+  quick_commands:
+    - "python qa_elliptic_correspondence_validator_v3.py --demo"
+    - "python qa_elliptic_correspondence_validator_v3.py examples/elliptic_correspondence/elliptic_correspondence_success.json"
+    - "python qa_elliptic_correspondence_validator_v3.py --level recompute examples/elliptic_correspondence/elliptic_correspondence_success.json"
+    - "python qa_elliptic_correspondence_validator_v3.py examples/elliptic_correspondence/elliptic_correspondence_ramification_failure.json"
+    - "python qa_elliptic_correspondence_bundle_v1.py --emit --check"

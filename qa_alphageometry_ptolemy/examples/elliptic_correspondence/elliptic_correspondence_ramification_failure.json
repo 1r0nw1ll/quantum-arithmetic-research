@@ -1,0 +1,40 @@
+{
+  "certificate_id": "elliptic_correspondence_ramification_failure_001",
+  "certificate_type": "ELLIPTIC_CORRESPONDENCE_CERT",
+  "timestamp": "2026-02-10T00:00:00Z",
+  "version": "1.0.0",
+  "schema": "QA_ELLIPTIC_CORRESPONDENCE_CERT.v1",
+  "success": false,
+  "generator_set": [
+    "g_plus_r0",
+    "g_plus_r1",
+    "g_plus_r2",
+    "g_minus_r0",
+    "g_minus_r1",
+    "g_minus_r2"
+  ],
+  "failure_mode": "RAMIFICATION_HIT",
+  "failure_witness": {
+    "reason": "|P'(u)| dropped below epsilon near critical locus",
+    "critical_points": [
+      "0+0.577350269i",
+      "0-0.577350269i"
+    ],
+    "u_value": {
+      "re": "0",
+      "im": "433/750"
+    },
+    "p_prime_abs": "1/5000",
+    "epsilon": "1/1000",
+    "first_bad_step": 3,
+    "recommended_action": [
+      "Increase ramification exclusion radius",
+      "Switch generator from g_minus_r2 to g_plus_r1 before step 3"
+    ]
+  },
+  "qa_interpretation": {
+    "failure_class": "RAMIFICATION_HIT",
+    "obstruction_type": "branch_degeneracy",
+    "note": "The correspondence hit cubic branch collision neighborhood"
+  }
+}

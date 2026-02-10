@@ -1,0 +1,82 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_ELLIPTIC_CORRESPONDENCE_BUNDLE.v1.schema.json",
+  "title": "QA Elliptic Correspondence Bundle v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "version",
+    "bundle_id",
+    "generated_utc",
+    "hash_spec",
+    "emitted_cert",
+    "artifacts",
+    "manifest"
+  ],
+  "properties": {
+    "schema_id": { "type": "string", "const": "QA_ELLIPTIC_CORRESPONDENCE_BUNDLE.v1" },
+    "version": { "type": "integer", "const": 1 },
+    "bundle_id": { "type": "string", "minLength": 1 },
+    "generated_utc": { "type": "string", "minLength": 1 },
+    "hash_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "sha256", "canonical_sha256", "canonical_spec", "source"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1 },
+        "version": { "type": "string", "minLength": 1 },
+        "sha256": { "type": "string", "minLength": 1 },
+        "canonical_sha256": { "type": "string", "minLength": 1 },
+        "canonical_spec": { "type": "string", "minLength": 1 },
+        "source": { "type": "string", "minLength": 1 }
+      }
+    },
+    "emitted_cert": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["cert_id", "cert_path", "cert_sha256", "sha256_sidecar_path"],
+      "properties": {
+        "cert_id": { "type": "string", "minLength": 1 },
+        "cert_path": { "type": "string", "minLength": 1 },
+        "cert_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "sha256_sidecar_path": { "type": "string", "minLength": 1 }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "file", "kind", "sha256"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1 },
+          "file": { "type": "string", "minLength": 1 },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "json_cert",
+              "hash_sidecar",
+              "json_schema",
+              "source_py",
+              "source_yaml",
+              "json_example"
+            ]
+          },
+          "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+          "canonical_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+        }
+      }
+    },
+    "manifest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hash_alg", "manifest_sha256"],
+      "properties": {
+        "hash_alg": { "type": "string", "enum": ["sha256"] },
+        "manifest_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

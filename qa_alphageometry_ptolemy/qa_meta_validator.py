@@ -47,6 +47,7 @@ KNOWN_CERT_TYPES = {
     "FIELD_COMPUTATION_CERT",
     "BEYOND_NEURONS_INTELLIGENCE_CERT",
     "TOPOLOGY_RESONANCE_CERT",
+    "ELLIPTIC_CORRESPONDENCE_CERT",
     "GRAPH_STRUCTURE_CERT",
     "QA_CONJECTURE",
 }
@@ -91,6 +92,10 @@ REQUIRED_BY_TYPE = {
         "search_efficiency", "result",
     },
     "TOPOLOGY_RESONANCE_CERT": {
+        "generator_set",
+        "success",
+    },
+    "ELLIPTIC_CORRESPONDENCE_CERT": {
         "generator_set",
         "success",
     },
@@ -678,6 +683,168 @@ def validate_graph_structure(cert_dict: Dict[str, Any]) -> ValidationResult:
     return v
 
 
+def validate_elliptic_correspondence(cert_dict: Dict[str, Any]) -> ValidationResult:
+    """Validate ELLIPTIC_CORRESPONDENCE_CERT-specific semantics."""
+    v = ValidationResult()
+
+    valid_generators = {
+        "g_plus_r0",
+        "g_plus_r1",
+        "g_plus_r2",
+        "g_minus_r0",
+        "g_minus_r1",
+        "g_minus_r2",
+    }
+    valid_failure_modes = {
+        "NONFINITE_INPUT",
+        "SQRT_BRANCH_UNDEFINED",
+        "SQRT_CUT_CROSS_DISALLOWED",
+        "CUBIC_SOLVE_FAILED",
+        "RAMIFICATION_HIT",
+        "MULTIROOT_DEGENERATE",
+        "CUTSTATE_UPDATE_FAILED",
+        "MONODROMY_EVENT_DETECTED",
+        "ESCAPE",
+        "MAX_ITER_REACHED",
+    }
+
+    generators = cert_dict.get("generator_set", [])
+    v.check(isinstance(generators, list) and len(generators) > 0, "generator_set must be a non-empty list")
+    if isinstance(generators, list):
+        unknown = [g for g in generators if isinstance(g, str) and g not in valid_generators]
+        v.check(len(unknown) == 0, f"Unknown elliptic generators: {unknown}")
+
+    schema = cert_dict.get("schema")
+    v.check(schema == "QA_ELLIPTIC_CORRESPONDENCE_CERT.v1",
+            f"schema must be QA_ELLIPTIC_CORRESPONDENCE_CERT.v1, got: {schema}")
+
+    success = cert_dict.get("success")
+    v.check(isinstance(success, bool), "success must be boolean")
+    if success is False:
+        mode = cert_dict.get("failure_mode")
+        witness = cert_dict.get("failure_witness")
+        v.check(mode in valid_failure_modes, f"unknown failure_mode: {mode}")
+        v.check(isinstance(witness, dict), "failure_witness must be object")
+        return v
+
+    state_desc = cert_dict.get("state_descriptor")
+    topo = cert_dict.get("topology_witness")
+    inv = cert_dict.get("invariants")
+    recomp = cert_dict.get("recompute_inputs")
+    for name, obj in (
+        ("state_descriptor", state_desc),
+        ("topology_witness", topo),
+        ("invariants", inv),
+        ("recompute_inputs", recomp),
+    ):
+        v.check(isinstance(obj, dict), f"success certificate missing {name}")
+    if not all(isinstance(x, dict) for x in (state_desc, topo, inv, recomp)):
+        return v
+
+    branch_declared = topo.get("branching_factor_declared")
+    try:
+        branch_declared_int = int(branch_declared)
+        v.check(branch_declared_int == len(set(generators)),
+                f"branching_factor_declared={branch_declared_int} does not match generator_set size={len(set(generators))}")
+        v.check(branch_declared_int == 6, f"elliptic correspondence branch factor must be 6, got {branch_declared_int}")
+    except Exception:
+        v.check(False, "topology_witness.branching_factor_declared must be integer")
+
+    for key in ("curve_constraint", "determinism", "cut_consistency", "trace_complete"):
+        v.check(inv.get(key) is True, f"invariants.{key} must be true for success certificates")
+
+    try:
+        _ = _parse_fraction_like(topo.get("max_norm_u"))
+        _ = _parse_fraction_like(topo.get("max_norm_v"))
+    except Exception as e:
+        v.check(False, f"failed to parse topology max norms: {e}")
+
+    trace_schema = recomp.get("trace_schema")
+    v.check(trace_schema == "QA_ELLIPTIC_CORRESPONDENCE_TRACE.v1",
+            "recompute_inputs.trace_schema must be QA_ELLIPTIC_CORRESPONDENCE_TRACE.v1")
+
+    initial = recomp.get("initial_state")
+    trace = recomp.get("transition_trace")
+    v.check(isinstance(initial, dict), "recompute_inputs.initial_state must be object")
+    v.check(isinstance(trace, list) and len(trace) > 0, "recompute_inputs.transition_trace must be non-empty list")
+    if not (isinstance(initial, dict) and isinstance(trace, list) and trace):
+        return v
+
+    canonical_payload = json.dumps(trace, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
+    expected_digest = "sha256:" + hashlib.sha256(canonical_payload.encode("utf-8")).hexdigest()
+    v.check(recomp.get("trace_digest") == expected_digest,
+            f"recompute_inputs.trace_digest mismatch: expected {expected_digest}")
+
+    seen: Dict[Tuple[Any, ...], Tuple[Any, ...]] = {}
+    prev_out: Optional[Tuple[str, str, str, int]] = None
+    for i, step in enumerate(trace):
+        if not isinstance(step, dict):
+            v.check(False, f"transition_trace[{i}] must be object")
+            return v
+
+        try:
+            step_index = int(step.get("step_index"))
+            generator = step.get("generator")
+            in_tuple = (
+                str(step.get("u_in_re")),
+                str(step.get("u_in_im")),
+                str(step.get("sheet_in")),
+                int(step.get("branch_index_in")),
+            )
+            out_tuple = (
+                str(step.get("u_out_re")),
+                str(step.get("u_out_im")),
+                str(step.get("sheet_out")),
+                int(step.get("branch_index_out")),
+            )
+            status = step.get("status")
+            fail_type = step.get("fail_type", "")
+            _ = _parse_fraction_like(step.get("curve_residual_abs"))
+        except Exception as e:
+            v.check(False, f"transition_trace[{i}] parse failed: {e}")
+            return v
+
+        v.check(step_index == i + 1, f"transition_trace[{i}] step_index must be contiguous")
+        v.check(generator in generators, f"transition_trace[{i}] generator not in generator_set: {generator}")
+
+        if status == "ok":
+            v.check(fail_type in ("", None), f"transition_trace[{i}] ok step must not carry fail_type")
+        elif status == "fail":
+            v.check(fail_type in valid_failure_modes,
+                    f"transition_trace[{i}] fail step has unknown fail_type: {fail_type}")
+        else:
+            v.check(False, f"transition_trace[{i}] status must be ok|fail, got: {status}")
+
+        if i == 0:
+            try:
+                init_tuple = (
+                    str(initial.get("u_re")),
+                    str(initial.get("u_im")),
+                    str(initial.get("sheet")),
+                    int(initial.get("branch_index")),
+                )
+            except Exception:
+                v.check(False, "recompute_inputs.initial_state parse failed")
+                return v
+            v.check(in_tuple == init_tuple,
+                    f"transition_trace[0] input {in_tuple} does not match initial_state {init_tuple}")
+        elif prev_out is not None:
+            v.check(in_tuple == prev_out,
+                    f"transition_trace[{i}] input {in_tuple} does not match previous output {prev_out}")
+        prev_out = out_tuple
+
+        det_key = (in_tuple[0], in_tuple[1], in_tuple[2], in_tuple[3], generator)
+        det_val = (out_tuple[0], out_tuple[1], out_tuple[2], out_tuple[3], status, str(fail_type))
+        old = seen.get(det_key)
+        if old is None:
+            seen[det_key] = det_val
+        else:
+            v.check(old == det_val,
+                    f"determinism mismatch for key={det_key}: first={old}, second={det_val}")
+
+    return v
+
+
 def validate_conjecture(cert_dict: Dict[str, Any]) -> ValidationResult:
     """Validate QA_CONJECTURE-specific semantics."""
     v = ValidationResult()
@@ -728,6 +895,7 @@ TYPE_VALIDATORS = {
     "FIELD_COMPUTATION_CERT": validate_field,
     "BEYOND_NEURONS_INTELLIGENCE_CERT": validate_beyond_neurons,
     "TOPOLOGY_RESONANCE_CERT": validate_topology_resonance,
+    "ELLIPTIC_CORRESPONDENCE_CERT": validate_elliptic_correspondence,
     "GRAPH_STRUCTURE_CERT": validate_graph_structure,
     "QA_CONJECTURE": validate_conjecture,
 }
@@ -974,6 +1142,7 @@ def _validate_ingest_family_if_present(base_dir: str) -> Optional[str]:
 
 
 TOPOLOGY_BUNDLE_PATH = "certs/QA_TOPOLOGY_RESONANCE_BUNDLE.v1.json"
+ELLIPTIC_BUNDLE_PATH = "certs/QA_ELLIPTIC_CORRESPONDENCE_BUNDLE.v1.json"
 GRAPH_STRUCTURE_BUNDLE_PATH = "certs/QA_GRAPH_STRUCTURE_BUNDLE.v1.json"
 
 
@@ -1031,6 +1200,28 @@ def _graph_structure_bundle_status(base_dir: str) -> Dict[str, Any]:
     return result
 
 
+def _elliptic_bundle_status(base_dir: str) -> Dict[str, Any]:
+    """
+    Validate elliptic correspondence bundle and return normalized status payload.
+    """
+    bundle_path = os.path.join(base_dir, ELLIPTIC_BUNDLE_PATH)
+    if not os.path.exists(bundle_path):
+        return {
+            "ok": True,
+            "skipped": True,
+            "reason": "bundle not found",
+            "bundle_path": bundle_path,
+        }
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+
+    from qa_elliptic_correspondence_bundle_v1 import validate_bundle_manifest
+    result = validate_bundle_manifest(bundle_path=bundle_path, base_dir=base_dir)
+    result.setdefault("skipped", False)
+    return result
+
+
 def _validate_topology_bundle_if_present(base_dir: str) -> Optional[str]:
     """
     Run topology bundle validator if the bundle file exists.
@@ -1067,6 +1258,26 @@ def _validate_graph_structure_bundle_if_present(base_dir: str) -> Optional[str]:
     if not result.get("ok", False):
         errors = result.get("errors", [])
         head = "; ".join(errors[:3]) if errors else "unknown graph structure bundle validation error"
+        raise RuntimeError(head)
+    return None
+
+
+def _validate_elliptic_bundle_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run elliptic-correspondence bundle validator if the bundle file exists.
+
+    Returns:
+        None on success,
+        skip reason string if bundle is missing.
+    Raises:
+        Exception on validation failure.
+    """
+    result = _elliptic_bundle_status(base_dir)
+    if result.get("skipped"):
+        return f"missing file: {os.path.basename(ELLIPTIC_BUNDLE_PATH)}"
+    if not result.get("ok", False):
+        errors = result.get("errors", [])
+        head = "; ".join(errors[:3]) if errors else "unknown elliptic correspondence bundle validation error"
         raise RuntimeError(head)
     return None
 
@@ -1123,6 +1334,9 @@ FAMILY_SWEEPS = [
     (26, "QA Competency Detection family",
      _validate_competency_family_if_present,
      "bundle + metrics recompute + fixtures", "26_competency_detection"),
+    (27, "QA Elliptic Correspondence bundle",
+     _validate_elliptic_bundle_if_present,
+     "bundle manifest verified", "27_elliptic_correspondence"),
     (28, "QA Graph Structure bundle",
      _validate_graph_structure_bundle_if_present,
      "bundle manifest verified", "28_graph_structure"),
@@ -1319,6 +1533,18 @@ if __name__ == "__main__":
             print(f"[Graph Bundle] {'PASS' if graph_ok else 'FAIL'} "
                   f"({graph_result.get('artifact_count', 0)} artifacts)")
             if not graph_ok:
+                fast_results["ok"] = False
+
+        # Elliptic Correspondence bundle check
+        elliptic_result = _elliptic_bundle_status(os.path.dirname(os.path.abspath(__file__)))
+        fast_results["modules"]["elliptic_correspondence_bundle"] = elliptic_result
+        if elliptic_result.get("skipped"):
+            print("[Elliptic Bundle] SKIP (bundle not found)")
+        else:
+            elliptic_ok = elliptic_result.get("ok", False)
+            print(f"[Elliptic Bundle] {'PASS' if elliptic_ok else 'FAIL'} "
+                  f"({elliptic_result.get('artifact_count', 0)} artifacts)")
+            if not elliptic_ok:
                 fast_results["ok"] = False
 
         print()

@@ -1,0 +1,127 @@
+{
+  "certificate_id": "elliptic_correspondence_demo_001",
+  "certificate_type": "ELLIPTIC_CORRESPONDENCE_CERT",
+  "timestamp": "2026-02-10T00:00:00Z",
+  "version": "1.0.0",
+  "schema": "QA_ELLIPTIC_CORRESPONDENCE_CERT.v1",
+  "success": true,
+  "generator_set": [
+    "g_plus_r0",
+    "g_plus_r1",
+    "g_plus_r2",
+    "g_minus_r0",
+    "g_minus_r1",
+    "g_minus_r2"
+  ],
+  "state_descriptor": {
+    "state_space": "S=(u,sheet,branch_index,cut_state)",
+    "sqrt_branch": "principal",
+    "cubic_root_order": "lex_re_im_abs_arg",
+    "radius_bound_u": "4",
+    "radius_bound_v": "4",
+    "cut_state": {
+      "sqrt_cut": "negative_real_axis",
+      "cubic_label": "principal"
+    }
+  },
+  "topology_witness": {
+    "branching_factor_declared": 6,
+    "steps_executed": 4,
+    "ramification_hit_count": 0,
+    "monodromy_event_count": 0,
+    "cut_cross_count": 0,
+    "escape_observed": false,
+    "max_norm_u": "1/3",
+    "max_norm_v": "11/20"
+  },
+  "invariants": {
+    "curve_constraint": true,
+    "determinism": true,
+    "cut_consistency": true,
+    "trace_complete": true
+  },
+  "recompute_inputs": {
+    "trace_schema": "QA_ELLIPTIC_CORRESPONDENCE_TRACE.v1",
+    "trace_digest": "sha256:34e1b5984a3f56f2c0e08b325fc812d08d2a43257251f48a05dbc1eee2ba329a",
+    "initial_state": {
+      "u_re": "1/2",
+      "u_im": "0",
+      "sheet": "plus",
+      "branch_index": 0
+    },
+    "transition_trace": [
+      {
+        "step_index": 1,
+        "generator": "g_plus_r0",
+        "u_in_re": "1/2",
+        "u_in_im": "0",
+        "sheet_in": "plus",
+        "branch_index_in": 0,
+        "u_out_re": "2/5",
+        "u_out_im": "1/10",
+        "sheet_out": "plus",
+        "branch_index_out": 0,
+        "curve_residual_abs": "0",
+        "status": "ok",
+        "fail_type": "",
+        "monodromy_event": false,
+        "cut_crossed": false
+      },
+      {
+        "step_index": 2,
+        "generator": "g_plus_r0",
+        "u_in_re": "2/5",
+        "u_in_im": "1/10",
+        "sheet_in": "plus",
+        "branch_index_in": 0,
+        "u_out_re": "7/20",
+        "u_out_im": "3/20",
+        "sheet_out": "plus",
+        "branch_index_out": 0,
+        "curve_residual_abs": "0",
+        "status": "ok",
+        "fail_type": "",
+        "monodromy_event": false,
+        "cut_crossed": false
+      },
+      {
+        "step_index": 3,
+        "generator": "g_minus_r2",
+        "u_in_re": "7/20",
+        "u_in_im": "3/20",
+        "sheet_in": "plus",
+        "branch_index_in": 0,
+        "u_out_re": "1/4",
+        "u_out_im": "1/5",
+        "sheet_out": "minus",
+        "branch_index_out": 2,
+        "curve_residual_abs": "0",
+        "status": "ok",
+        "fail_type": "",
+        "monodromy_event": false,
+        "cut_crossed": false
+      },
+      {
+        "step_index": 4,
+        "generator": "g_minus_r2",
+        "u_in_re": "1/4",
+        "u_in_im": "1/5",
+        "sheet_in": "minus",
+        "branch_index_in": 2,
+        "u_out_re": "1/6",
+        "u_out_im": "1/4",
+        "sheet_out": "minus",
+        "branch_index_out": 2,
+        "curve_residual_abs": "0",
+        "status": "ok",
+        "fail_type": "",
+        "monodromy_event": false,
+        "cut_crossed": false
+      }
+    ]
+  },
+  "qa_interpretation": {
+    "success_type": "ELLIPTIC_CORRESPONDENCE_CERTIFIED",
+    "note": "Deterministic branch replay holds under fixed cut conventions"
+  }
+}

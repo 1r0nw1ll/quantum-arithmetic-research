@@ -91,3 +91,9 @@ This is a deterministic CI-scale subset, not the full dataset. It is intended
 as an external regression sentinel over frozen external data, with explicit
 obstruction artifacts for missed attacks; broader benchmark coverage can be run
 outside CI using larger slices.
+
+## QA policy rule
+
+External validation gates must not introduce row-specific detector patterns.
+Detector logic must correspond to semantic classes (`attack_class`), and
+`informational` evidence must not be promoted into deny rules.

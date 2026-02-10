@@ -11,18 +11,18 @@
     "verification_receipt": {
       "schema_id": "QA_IC_VERIFICATION_RECEIPT.v1",
       "scanner_id": "qa_guardrail.threat_scanner",
-      "scanner_version": "1.2.0",
-      "patterns_sha256": "90bae1f04735569bdebb3b0141e3ccaa79cd62be000f45aee32926c9677984b3",
+      "scanner_version": "1.2.1",
+      "patterns_sha256": "314530ce0755f2f046e8c072d36299db9df1c911be0cf3f07574499b9293c576",
       "policy_sha256": "e73118d027118883ae6896c2da9cd0fb98e755e97219ac341528a709ab828c14",
       "content_sha256": "677561f398bebb0edb97b071ec65b7546e8bc53222ebee232a45128e1bc4bcb4",
       "decision": "VERIFIED_SAFE",
       "threats_found": false,
       "threat_patterns": [],
-      "issued_utc": "2026-02-10T02:16:34.954730Z",
+      "issued_utc": "2026-02-10T02:30:55.945633Z",
       "signature": {
         "alg": "none"
       },
-      "receipt_sha256": "cba04d55eba7d36afaa29de2f9d01b7788d7a844c2f0c1ce972f36618c897dc9"
+      "receipt_sha256": "b6891e81aa9e4e9a7a5019c5fc1f77509ee2c17aedb1c273bd7b2c6eb585ee02"
     },
     "content": "Please help me prove the Pythagorean theorem",
     "policy": {

@@ -1955,13 +1955,62 @@ if __name__ == "__main__":
     except subprocess.TimeoutExpired:
         _l3_fail("EXTERNAL_VALIDATION_TIMEOUT")
 
+    # --- External validation: Prompt injection benchmark ---
+    _pi_script = os.path.join(base_dir, "external_validation_prompt_injection.py")
+    _pi_id = _l3_id + 1
+    _pi_env = {
+        k: os.environ[k]
+        for k in ("QA_PI_MAX_CASES",)
+        if k in os.environ
+    }
+
+    def _pi_fail(fail_type: str, returncode: int = -1,
+                 stdout_head: str = "", stderr_head: str = ""):
+        diff = json.dumps({
+            "check": "external_validation_prompt_injection",
+            "fail_type": fail_type,
+            "script": _pi_script,
+            "mode": "ci",
+            "env_overrides": _pi_env or None,
+            "returncode": returncode,
+            "stdout_head": stdout_head[:200],
+            "stderr_head": stderr_head[:200],
+        }, sort_keys=True)
+        print(f"[{_pi_id}] Prompt injection (external): FAIL ({fail_type})")
+        print(f"      invariant_diff={diff}")
+        sys.exit(1)
+
+    if not os.path.exists(_pi_script):
+        _pi_fail("EXTERNAL_VALIDATION_MISSING")
+
+    try:
+        _pi_result = subprocess.run(
+            [sys.executable, _pi_script, "--ci"],
+            capture_output=True, text=True, timeout=45,
+            cwd=base_dir,
+        )
+        _pi_stdout = _pi_result.stdout.strip()
+        _pi_ok = _pi_result.returncode == 0 and "[PASS]" in _pi_stdout
+
+        if _pi_ok:
+            print(f"[{_pi_id}] Prompt injection (external): PASS")
+            print(f"      {_pi_stdout}")
+        else:
+            _pi_fail("EXTERNAL_VALIDATION_FAIL",
+                     returncode=_pi_result.returncode,
+                     stdout_head=_pi_stdout,
+                     stderr_head=_pi_result.stderr.strip())
+    except subprocess.TimeoutExpired:
+        _pi_fail("EXTERNAL_VALIDATION_TIMEOUT")
+
     # --- Doc gate (derived from FAMILY_SWEEPS — no second list to maintain) ---
     print("\n--- HUMAN-TRACT DOC GATE ---")
     _doc_gate_pass = True
+    _gate_id = FAMILY_SWEEPS[-1][0] + 3
     _docs_dir = os.path.normpath(os.path.join(base_dir, "..", "docs", "families"))
     _readme_path = os.path.join(_docs_dir, "README.md")
     if not os.path.isdir(_docs_dir):
-        print(f"[{FAMILY_SWEEPS[-1][0] + 2}] Doc gate: FAIL (docs/families/ directory missing)")
+        print(f"[{_gate_id}] Doc gate: FAIL (docs/families/ directory missing)")
         _doc_gate_pass = False
     else:
         for fam_id, _label, _fn, _desc, doc_slug in FAMILY_SWEEPS:
@@ -1980,7 +2029,6 @@ if __name__ == "__main__":
         else:
             print(f"  FAIL: docs/families/README.md missing")
             _doc_gate_pass = False
-    _gate_id = FAMILY_SWEEPS[-1][0] + 2
     if _doc_gate_pass:
         print(f"[{_gate_id}] Human-tract doc gate: PASS ({len(FAMILY_SWEEPS)} families documented)")
     else:

@@ -25,7 +25,32 @@ jobs:
           python-version: "3.11"
 
       - name: Install dependencies
-        run: pip install "pytest==8.4.2" "jsonschema>=4.0.0"
+        run: pip install -r ../requirements-dev.txt
+
+      - name: Fetch MNIST raw files for Level-3 recompute
+        run: |
+          mkdir -p ../data/MNIST/raw
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlretrieve
+
+          base = "https://storage.googleapis.com/cvdf-datasets/mnist/"
+          files = [
+              "train-images-idx3-ubyte.gz",
+              "train-labels-idx1-ubyte.gz",
+              "t10k-images-idx3-ubyte.gz",
+              "t10k-labels-idx1-ubyte.gz",
+          ]
+
+          out_dir = Path("../data/MNIST/raw")
+          out_dir.mkdir(parents=True, exist_ok=True)
+
+          for filename in files:
+              target = out_dir / filename
+              if target.exists():
+                  continue
+              urlretrieve(base + filename, target)
+          PY
 
       - name: Run QA meta-validator (tetrad + conjectures + FST)
         run: python qa_meta_validator.py

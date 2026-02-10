@@ -101,3 +101,7 @@ Detector logic must correspond to semantic classes (`attack_class`), and
 This rule is machine-enforced by the harness via a detector-policy invariant
 check. Violations fail with:
 `EXTERNAL_VALIDATION_DETECTOR_POLICY_VIOLATION`.
+
+The invariant is manifest-driven: forbidden dataset-specific entities are
+declared in `row_specific_terms` (and optional `row_specific_patterns`) in the
+frozen subset manifest, not hardcoded in the harness.

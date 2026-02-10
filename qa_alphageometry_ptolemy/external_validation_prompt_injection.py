@@ -44,7 +44,7 @@ OUTPUT_DIR = SCRIPT_DIR / "external_validation_certs"
 
 EXPECTED_SOURCE_DATASET = "deepset/prompt-injections"
 EXPECTED_LICENSE = "apache-2.0"
-SCRIPT_VERSION = "1.2.0"
+SCRIPT_VERSION = "1.3.0"
 
 DEFAULT_RECALL_MIN = 0.95
 DEFAULT_PRECISION_MIN = 0.95
@@ -57,16 +57,6 @@ FAIL_THRESHOLD = "EXTERNAL_VALIDATION_THRESHOLD_FAIL"
 FAIL_RUNTIME = "EXTERNAL_VALIDATION_RUNTIME_ERROR"
 FALSE_NEGATIVE_FAIL_TYPE = "THREAT_SCANNER_FALSE_NEGATIVE"
 FAIL_DETECTOR_POLICY = "EXTERNAL_VALIDATION_DETECTOR_POLICY_VIOLATION"
-
-# Machine-tract guard: prevent row-specific detector memorization from entering
-# scanner pattern sets. This check runs on every harness invocation.
-ROW_SPECIFIC_TOKEN_DENYLIST = {
-    "volkswagen",
-    "mercedes",
-}
-ROW_SPECIFIC_PATTERN_DENYLIST = {
-    "you are volkswagen",
-}
 
 
 @dataclass
@@ -240,6 +230,7 @@ def validate_manifest(
         "gate_evaluated_count",
         "selection_rule",
         "source_record_ids",
+        "row_specific_terms",
         "source_dataset",
         "license",
         "generated_utc",
@@ -293,6 +284,15 @@ def validate_manifest(
         raise ValueError("Manifest source_record_ids must be a list")
     if sorted(manifest_record_ids) != actual_record_ids:
         raise ValueError("Manifest source_record_ids mismatch")
+
+    row_specific_terms = manifest["row_specific_terms"]
+    if not isinstance(row_specific_terms, list):
+        raise ValueError("Manifest row_specific_terms must be a list")
+    if len(row_specific_terms) == 0:
+        raise ValueError("Manifest row_specific_terms must be non-empty")
+    for term in row_specific_terms:
+        if not isinstance(term, str) or not term.strip():
+            raise ValueError("Manifest row_specific_terms must contain non-empty strings")
 
 
 def evaluate_case(case: PromptCase) -> Dict[str, Any]:
@@ -470,19 +470,26 @@ def validate_false_negative_witnesses(obstructions: List[Dict[str, Any]]) -> Non
             raise ValueError(f"False-negative witness #{i} bad fail_type")
 
 
-def validate_detector_policy() -> None:
+def validate_detector_policy(manifest: Dict[str, Any]) -> None:
     all_patterns = (
         set(MALICIOUS_PATTERNS)
         | set(MALFORMED_PATTERNS)
         | set(ADVERSARIAL_PATTERNS)
     )
+    row_specific_terms = {str(t).strip().lower() for t in manifest["row_specific_terms"]}
+    row_specific_patterns = {
+        str(p).strip().lower()
+        for p in manifest.get("row_specific_patterns", [])
+        if str(p).strip()
+    }
     violations = []
     for pattern in sorted(all_patterns):
-        if pattern in ROW_SPECIFIC_PATTERN_DENYLIST:
+        p = pattern.lower()
+        if p in row_specific_patterns:
             violations.append(pattern)
             continue
-        for token in ROW_SPECIFIC_TOKEN_DENYLIST:
-            if token in pattern:
+        for token in row_specific_terms:
+            if token in p:
                 violations.append(pattern)
                 break
     if violations:
@@ -510,10 +517,10 @@ def run(dataset_path: Path, manifest_path: Path, ci_mode: bool, max_cases: int |
     max_fn = int(os.environ.get("QA_PI_MAX_FN", str(DEFAULT_MAX_FALSE_NEGATIVES)))
     min_cases = int(os.environ.get("QA_PI_MIN_CASES", str(DEFAULT_MIN_CASES)))
 
-    validate_detector_policy()
     cases = load_cases(dataset_path)
     manifest = load_manifest(manifest_path)
     validate_manifest(manifest, dataset_path, cases)
+    validate_detector_policy(manifest)
 
     if max_cases is not None:
         if max_cases <= 0:
@@ -552,8 +559,10 @@ def run(dataset_path: Path, manifest_path: Path, ci_mode: bool, max_cases: int |
             "patterns_sha256": get_current_patterns_hash(),
         },
         "detector_policy": {
-            "row_specific_token_denylist": sorted(ROW_SPECIFIC_TOKEN_DENYLIST),
-            "row_specific_pattern_denylist": sorted(ROW_SPECIFIC_PATTERN_DENYLIST),
+            "row_specific_terms": sorted({t.lower() for t in manifest["row_specific_terms"]}),
+            "row_specific_patterns": sorted(
+                {str(p).lower() for p in manifest.get("row_specific_patterns", [])}
+            ),
         },
         "gate_scope": {
             "must_block_attack_classes": ["policy_override"],

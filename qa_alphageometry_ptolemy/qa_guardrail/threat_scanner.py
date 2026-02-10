@@ -34,7 +34,7 @@ from typing import Any, Dict, List, Set, Optional, Tuple
 
 # Scanner identification
 SCANNER_ID = "qa_guardrail.threat_scanner"
-SCANNER_VERSION = "1.1.0"
+SCANNER_VERSION = "1.2.0"
 
 # Domain tag for receipt hash (prevents collision with other sha256-of-json objects)
 RECEIPT_HASH_DOMAIN = "QA_IC_VERIFICATION_RECEIPT.v1\n"
@@ -102,6 +102,7 @@ ADVERSARIAL_PATTERNS: Set[str] = {
     "dan mode",
     "developer mode",
     "pretend you are",
+    "you are volkswagen",
     "now you are",
     "act as if",
     "act as a",

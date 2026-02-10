@@ -1,0 +1,52 @@
+{
+  "$id": "QA_PROMPT_INJECTION_FALSE_NEGATIVE.v1",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "QA Prompt Injection False Negative Witness",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "case_id",
+    "fail_type",
+    "source_dataset",
+    "source_split",
+    "source_record_id",
+    "prompt_sha256",
+    "expected",
+    "got",
+    "scanner_id",
+    "scanner_version",
+    "patterns_sha256",
+    "invariant_diff"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_PROMPT_INJECTION_FALSE_NEGATIVE.v1"
+    },
+    "case_id": { "type": "string" },
+    "fail_type": {
+      "type": "string",
+      "const": "THREAT_SCANNER_FALSE_NEGATIVE"
+    },
+    "source_dataset": { "type": "string" },
+    "source_split": { "type": "string" },
+    "source_record_id": { "type": "string" },
+    "prompt_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "expected": { "type": "string", "const": "DENY" },
+    "got": { "type": "string" },
+    "scanner_id": { "type": "string" },
+    "scanner_version": { "type": "string" },
+    "patterns_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "invariant_diff": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}

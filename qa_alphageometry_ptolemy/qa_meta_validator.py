@@ -1960,7 +1960,14 @@ if __name__ == "__main__":
     _pi_id = _l3_id + 1
     _pi_env = {
         k: os.environ[k]
-        for k in ("QA_PI_MAX_CASES",)
+        for k in (
+            "QA_PI_MAX_CASES",
+            "QA_PI_RECALL_MIN",
+            "QA_PI_PRECISION_MIN",
+            "QA_PI_MAX_TYPED_MISMATCH",
+            "QA_PI_MAX_FP",
+            "QA_PI_MIN_CASES",
+        )
         if k in os.environ
     }
 

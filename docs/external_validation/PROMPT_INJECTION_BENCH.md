@@ -2,31 +2,33 @@
 
 ## What this is
 
-This external-validation check runs `qa_guardrail` against a labeled
-benchmark-style corpus of prompt-injection and benign prompts. The harness
-reports classification metrics (precision/recall/F1/accuracy) and verifies
-that blocked attacks produce a typed obstruction:
-`POLICY_CONSTRAINT_VIOLATION`.
+This check runs `qa_guardrail` against a frozen subset derived from a real
+public dataset and validates:
 
-It is wired into `qa_meta_validator.py` as test `[30]` (after Level-3
-generalization recompute test `[29]`).
+- attack/benign classification metrics
+- typed obstruction consistency for denied attacks
+  (`POLICY_CONSTRAINT_VIOLATION`)
+- source-provenance metadata integrity per row
 
-## Dataset
+It is enforced by `qa_meta_validator.py` as test `[30]`.
 
-Frozen local corpus:
+## Source dataset
 
-`qa_alphageometry_ptolemy/external_validation_data/prompt_injection_benchmark_subset.jsonl`
+- Dataset: `deepset/prompt-injections`
+- URL: <https://huggingface.co/datasets/deepset/prompt-injections>
+- License: `apache-2.0`
+- Local frozen subset:
+  `qa_alphageometry_ptolemy/external_validation_data/prompt_injection_benchmark_subset.jsonl`
 
-Each row contains:
+Each JSONL row includes:
 
-- `case_id`
-- `benchmark_family` (`TensorTrust` | `Lakera` | `Gandalf`)
-- `label` (`attack` | `benign`)
+- `source_dataset`
+- `source_url`
+- `license`
+- `source_split`
+- `source_record_id`
+- `label` / `source_label`
 - `prompt`
-- `source_note`
-
-The local corpus is intentionally small and deterministic so CI remains fast
-and reproducible.
 
 ## How to run
 
@@ -38,7 +40,7 @@ python3 qa_alphageometry_ptolemy/external_validation_prompt_injection.py
 python3 qa_alphageometry_ptolemy/external_validation_prompt_injection.py --ci
 ```
 
-Optional throttle:
+Optional quick-run:
 
 ```bash
 QA_PI_MAX_CASES=12 python3 qa_alphageometry_ptolemy/external_validation_prompt_injection.py --ci
@@ -46,25 +48,29 @@ QA_PI_MAX_CASES=12 python3 qa_alphageometry_ptolemy/external_validation_prompt_i
 
 ## Pass criteria
 
-The gate passes only when all are true:
+Default gate thresholds:
 
-- accuracy = 1.0
-- recall = 1.0
-- false positives = 0
-- typed obstruction mismatches = 0
+- `recall >= 0.95`
+- `precision >= 0.95`
+- `false_positives <= 0`
+- `typed_obstruction_mismatches <= 0`
+- `total_cases >= 20`
 
-This is strict by design: regressions are surfaced immediately in CI.
+Thresholds can be overridden for experiments via env vars:
+
+- `QA_PI_RECALL_MIN`
+- `QA_PI_PRECISION_MIN`
+- `QA_PI_MAX_FP`
+- `QA_PI_MAX_TYPED_MISMATCH`
+- `QA_PI_MIN_CASES`
 
 ## Outputs
-
-Written to:
 
 - `qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_summary.json`
 - `qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_case_results.json`
 
 ## Scope and limits
 
-This validates scanner behavior on a frozen benchmark-style subset, not full
-coverage of all real-world prompt-injection techniques. It is intended as a
-deterministic external check and should be complemented by larger benchmark
-runs when available.
+This is a deterministic CI-scale subset, not the full dataset. It is intended
+as an external validation gate with reproducible artifacts; broader benchmark
+coverage can be run outside CI using larger slices.

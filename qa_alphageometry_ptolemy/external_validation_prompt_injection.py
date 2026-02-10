@@ -17,6 +17,7 @@ import argparse
 import hashlib
 import json
 import os
+import re
 import sys
 from dataclasses import dataclass
 from pathlib import Path
@@ -44,7 +45,7 @@ OUTPUT_DIR = SCRIPT_DIR / "external_validation_certs"
 
 EXPECTED_SOURCE_DATASET = "deepset/prompt-injections"
 EXPECTED_LICENSE = "apache-2.0"
-SCRIPT_VERSION = "1.3.0"
+SCRIPT_VERSION = "1.4.0"
 
 DEFAULT_RECALL_MIN = 0.95
 DEFAULT_PRECISION_MIN = 0.95
@@ -57,6 +58,33 @@ FAIL_THRESHOLD = "EXTERNAL_VALIDATION_THRESHOLD_FAIL"
 FAIL_RUNTIME = "EXTERNAL_VALIDATION_RUNTIME_ERROR"
 FALSE_NEGATIVE_FAIL_TYPE = "THREAT_SCANNER_FALSE_NEGATIVE"
 FAIL_DETECTOR_POLICY = "EXTERNAL_VALIDATION_DETECTOR_POLICY_VIOLATION"
+
+MIN_ROW_SPECIFIC_TERM_LEN = 4
+ROW_SPECIFIC_TERM_RE = re.compile(r"^[a-z0-9][a-z0-9 _-]*$")
+GENERIC_TERM_BLOCKLIST = {
+    "ignore",
+    "previous",
+    "instructions",
+    "instruction",
+    "system",
+    "assistant",
+    "user",
+    "prompt",
+    "task",
+    "tasks",
+}
+
+
+def _normalize_space(text: str) -> str:
+    return " ".join(text.strip().split())
+
+
+def _normalize_row_specific_term(term: str) -> str:
+    return _normalize_space(term).lower()
+
+
+def _tokenize(text: str) -> List[str]:
+    return re.findall(r"[a-z0-9]+", text.lower())
 
 
 @dataclass
@@ -235,6 +263,9 @@ def validate_manifest(
         "license",
         "generated_utc",
         "script_version",
+        "expected_scanner_id",
+        "expected_scanner_version",
+        "expected_patterns_sha256",
     ]
     missing = [k for k in required if k not in manifest]
     if missing:
@@ -290,9 +321,59 @@ def validate_manifest(
         raise ValueError("Manifest row_specific_terms must be a list")
     if len(row_specific_terms) == 0:
         raise ValueError("Manifest row_specific_terms must be non-empty")
+    normalized_terms = []
     for term in row_specific_terms:
         if not isinstance(term, str) or not term.strip():
             raise ValueError("Manifest row_specific_terms must contain non-empty strings")
+        nterm = _normalize_row_specific_term(term)
+        if len(nterm) < MIN_ROW_SPECIFIC_TERM_LEN:
+            raise ValueError(
+                f"Manifest row_specific_terms contains short term '{nterm}' "
+                f"(min length {MIN_ROW_SPECIFIC_TERM_LEN})"
+            )
+        if nterm in GENERIC_TERM_BLOCKLIST:
+            raise ValueError(
+                f"Manifest row_specific_terms contains generic term '{nterm}'"
+            )
+        if not ROW_SPECIFIC_TERM_RE.match(nterm):
+            raise ValueError(
+                f"Manifest row_specific_terms contains invalid term '{nterm}'"
+            )
+        normalized_terms.append(nterm)
+
+    if len(set(normalized_terms)) != len(normalized_terms):
+        raise ValueError("Manifest row_specific_terms must be unique after normalization")
+
+    row_specific_patterns = manifest.get("row_specific_patterns", [])
+    if not isinstance(row_specific_patterns, list):
+        raise ValueError("Manifest row_specific_patterns must be a list")
+    for pattern in row_specific_patterns:
+        if not isinstance(pattern, str) or not pattern.strip():
+            raise ValueError("Manifest row_specific_patterns must contain non-empty strings")
+        if len(_normalize_space(pattern)) < MIN_ROW_SPECIFIC_TERM_LEN:
+            raise ValueError(
+                f"Manifest row_specific_patterns contains overly short pattern '{pattern}'"
+            )
+
+    expected_scanner_id = str(manifest["expected_scanner_id"])
+    expected_scanner_version = str(manifest["expected_scanner_version"])
+    expected_patterns_sha256 = str(manifest["expected_patterns_sha256"]).lower()
+
+    if expected_scanner_id != SCANNER_ID:
+        raise ValueError(
+            f"Manifest expected_scanner_id mismatch: {expected_scanner_id} != {SCANNER_ID}"
+        )
+    if expected_scanner_version != SCANNER_VERSION:
+        raise ValueError(
+            f"Manifest expected_scanner_version mismatch: "
+            f"{expected_scanner_version} != {SCANNER_VERSION}"
+        )
+    current_patterns = get_current_patterns_hash()
+    if expected_patterns_sha256 != current_patterns:
+        raise ValueError(
+            "Manifest expected_patterns_sha256 mismatch "
+            f"(manifest={expected_patterns_sha256}, current={current_patterns})"
+        )
 
 
 def evaluate_case(case: PromptCase) -> Dict[str, Any]:
@@ -476,26 +557,56 @@ def validate_detector_policy(manifest: Dict[str, Any]) -> None:
         | set(MALFORMED_PATTERNS)
         | set(ADVERSARIAL_PATTERNS)
     )
-    row_specific_terms = {str(t).strip().lower() for t in manifest["row_specific_terms"]}
+    row_specific_terms = {
+        _normalize_row_specific_term(str(t))
+        for t in manifest["row_specific_terms"]
+    }
     row_specific_patterns = {
-        str(p).strip().lower()
+        _normalize_space(str(p)).lower()
         for p in manifest.get("row_specific_patterns", [])
         if str(p).strip()
     }
-    violations = []
+    row_specific_term_tokens = {
+        term: _tokenize(term) for term in sorted(row_specific_terms)
+    }
+
+    def _contains_term(pattern_tokens: List[str], term_tokens: List[str]) -> bool:
+        if not term_tokens:
+            return False
+        if len(term_tokens) == 1:
+            return term_tokens[0] in set(pattern_tokens)
+        n = len(term_tokens)
+        for i in range(len(pattern_tokens) - n + 1):
+            if pattern_tokens[i:i+n] == term_tokens:
+                return True
+        return False
+
+    violations: List[Dict[str, Any]] = []
     for pattern in sorted(all_patterns):
-        p = pattern.lower()
-        if p in row_specific_patterns:
-            violations.append(pattern)
-            continue
-        for token in row_specific_terms:
-            if token in p:
-                violations.append(pattern)
-                break
+        p_norm = _normalize_space(pattern).lower()
+        p_tokens = _tokenize(p_norm)
+        matched_terms = []
+        matched_patterns = []
+        if p_norm in row_specific_patterns:
+            matched_patterns.append(p_norm)
+        for term, term_tokens in row_specific_term_tokens.items():
+            if _contains_term(p_tokens, term_tokens):
+                matched_terms.append(term)
+        if matched_terms or matched_patterns:
+            violations.append({
+                "pattern": pattern,
+                "matched_terms": sorted(set(matched_terms)),
+                "matched_patterns": sorted(set(matched_patterns)),
+            })
     if violations:
+        report = {
+            "terms_used": sorted(row_specific_terms),
+            "patterns_used": sorted(row_specific_patterns),
+            "violations": violations,
+        }
         raise ValueError(
-            "Row-specific detector patterns are forbidden; violations="
-            + ",".join(sorted(set(violations)))
+            "Row-specific detector patterns are forbidden; report="
+            + json.dumps(report, sort_keys=True)
         )
 
 
@@ -559,9 +670,11 @@ def run(dataset_path: Path, manifest_path: Path, ci_mode: bool, max_cases: int |
             "patterns_sha256": get_current_patterns_hash(),
         },
         "detector_policy": {
-            "row_specific_terms": sorted({t.lower() for t in manifest["row_specific_terms"]}),
+            "row_specific_terms": sorted(
+                {_normalize_row_specific_term(str(t)) for t in manifest["row_specific_terms"]}
+            ),
             "row_specific_patterns": sorted(
-                {str(p).lower() for p in manifest.get("row_specific_patterns", [])}
+                {_normalize_space(str(p)).lower() for p in manifest.get("row_specific_patterns", [])}
             ),
         },
         "gate_scope": {

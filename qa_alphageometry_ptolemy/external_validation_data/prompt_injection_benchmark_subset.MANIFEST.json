@@ -3,6 +3,9 @@
   "dataset_sha256": "eb0875eab02385c450854415be81feb26a8eef507694d24dc5d8d68e51386c6e",
   "gate_evaluated_count": 29,
   "generated_utc": "2026-02-10T02:04:44Z",
+  "expected_patterns_sha256": "314530ce0755f2f046e8c072d36299db9df1c911be0cf3f07574499b9293c576",
+  "expected_scanner_id": "qa_guardrail.threat_scanner",
+  "expected_scanner_version": "1.2.1",
   "license": "apache-2.0",
   "row_count": 30,
   "row_specific_patterns": [],
@@ -10,7 +13,7 @@
     "mercedes",
     "volkswagen"
   ],
-  "script_version": "1.3.0",
+  "script_version": "1.4.0",
   "selection_rule": "Frozen subset from deepset/prompt-injections preview rows 1-30; gate excludes informational persona_shift cases.",
   "source_dataset": "deepset/prompt-injections",
   "source_record_ids": [

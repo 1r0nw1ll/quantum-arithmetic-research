@@ -105,3 +105,7 @@ check. Violations fail with:
 The invariant is manifest-driven: forbidden dataset-specific entities are
 declared in `row_specific_terms` (and optional `row_specific_patterns`) in the
 frozen subset manifest, not hardcoded in the harness.
+
+`row_specific_terms` are validated (normalized, minimum length, non-generic)
+and matched token-wise against scanner patterns to avoid substring false
+positives.

@@ -21,6 +21,7 @@ import json
 import sys
 import os
 import hashlib
+import re
 from fractions import Fraction
 from typing import Dict, Any, List, Optional, Tuple
 from dataclasses import dataclass
@@ -1966,6 +1967,7 @@ if __name__ == "__main__":
             "QA_PI_PRECISION_MIN",
             "QA_PI_MAX_TYPED_MISMATCH",
             "QA_PI_MAX_FP",
+            "QA_PI_MAX_FN",
             "QA_PI_MIN_CASES",
         )
         if k in os.environ
@@ -2003,7 +2005,11 @@ if __name__ == "__main__":
             print(f"[{_pi_id}] Prompt injection (external): PASS")
             print(f"      {_pi_stdout}")
         else:
-            _pi_fail("EXTERNAL_VALIDATION_FAIL",
+            _pi_fail_type = "EXTERNAL_VALIDATION_FAIL"
+            _m = re.search(r"fail_type=([A-Z0-9_]+)", _pi_stdout)
+            if _m:
+                _pi_fail_type = _m.group(1)
+            _pi_fail(_pi_fail_type,
                      returncode=_pi_result.returncode,
                      stdout_head=_pi_stdout,
                      stderr_head=_pi_result.stderr.strip())

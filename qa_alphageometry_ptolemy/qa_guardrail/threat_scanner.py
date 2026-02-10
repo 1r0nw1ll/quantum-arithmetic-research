@@ -34,7 +34,7 @@ from typing import Any, Dict, List, Set, Optional, Tuple
 
 # Scanner identification
 SCANNER_ID = "qa_guardrail.threat_scanner"
-SCANNER_VERSION = "1.0.0"
+SCANNER_VERSION = "1.1.0"
 
 # Domain tag for receipt hash (prevents collision with other sha256-of-json objects)
 RECEIPT_HASH_DOMAIN = "QA_IC_VERIFICATION_RECEIPT.v1\n"
@@ -226,23 +226,28 @@ class ThreatScanner:
         }
 
         # Check malicious patterns
-        for pattern in self.malicious_patterns:
+        for pattern in sorted(self.malicious_patterns):
             if self._match_pattern(pattern, content_lower):
                 result["malicious"].append(pattern)
                 result["all_patterns"].append(pattern)
 
         # Check malformed patterns
-        for pattern in self.malformed_patterns:
+        for pattern in sorted(self.malformed_patterns):
             if self._match_pattern(pattern, content_lower):
                 result["malformed"].append(pattern)
                 result["all_patterns"].append(pattern)
 
         # Check adversarial patterns
-        for pattern in self.adversarial_patterns:
+        for pattern in sorted(self.adversarial_patterns):
             if self._match_pattern(pattern, content_lower):
                 result["adversarial"].append(pattern)
                 result["all_patterns"].append(pattern)
 
+        # Enforce deterministic ordering and uniqueness in outputs.
+        result["malicious"] = sorted(set(result["malicious"]))
+        result["malformed"] = sorted(set(result["malformed"]))
+        result["adversarial"] = sorted(set(result["adversarial"]))
+        result["all_patterns"] = sorted(set(result["all_patterns"]))
         result["threats_found"] = len(result["all_patterns"]) > 0
         return result
 

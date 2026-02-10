@@ -1,0 +1,10 @@
+{
+  "dataset_file": "prompt_injection_benchmark_subset.jsonl",
+  "dataset_sha256": "3bc9c98fca144076f847fce04039558482271242518da514e021e349c7b20db2",
+  "row_count": 30,
+  "source_dataset": "deepset/prompt-injections",
+  "source_url": "https://huggingface.co/datasets/deepset/prompt-injections",
+  "license": "apache-2.0",
+  "generated_utc": "2026-02-10T02:04:44Z",
+  "script_version": "1.1.0"
+}

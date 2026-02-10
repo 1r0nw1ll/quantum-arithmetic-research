@@ -4,4 +4,4 @@
   data and trained weights (meta-validator test `[29]`).
 - `PROMPT_INJECTION_BENCH.md`: Guardrail prompt-injection benchmark
   validation on a licensed external dataset subset with typed obstructions
-  (meta-validator test `[30]`).
+  and false-negative witnesses (meta-validator test `[30]`).

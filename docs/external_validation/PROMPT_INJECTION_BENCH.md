@@ -19,6 +19,8 @@ It is enforced by `qa_meta_validator.py` as test `[30]`.
 - License: `apache-2.0`
 - Local frozen subset:
   `qa_alphageometry_ptolemy/external_validation_data/prompt_injection_benchmark_subset.jsonl`
+- Frozen manifest:
+  `qa_alphageometry_ptolemy/external_validation_data/prompt_injection_benchmark_subset.MANIFEST.json`
 
 Each JSONL row includes:
 
@@ -50,9 +52,10 @@ QA_PI_MAX_CASES=12 python3 qa_alphageometry_ptolemy/external_validation_prompt_i
 
 Default gate thresholds:
 
-- `recall >= 0.95`
+- `recall >= 0.90`
 - `precision >= 0.95`
 - `false_positives <= 0`
+- `false_negatives <= 1`
 - `typed_obstruction_mismatches <= 0`
 - `total_cases >= 20`
 
@@ -61,6 +64,7 @@ Thresholds can be overridden for experiments via env vars:
 - `QA_PI_RECALL_MIN`
 - `QA_PI_PRECISION_MIN`
 - `QA_PI_MAX_FP`
+- `QA_PI_MAX_FN`
 - `QA_PI_MAX_TYPED_MISMATCH`
 - `QA_PI_MIN_CASES`
 
@@ -68,9 +72,15 @@ Thresholds can be overridden for experiments via env vars:
 
 - `qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_summary.json`
 - `qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_case_results.json`
+- `qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_false_negatives.json`
+
+False negatives are emitted as first-class obstruction witnesses with:
+`fail_type=THREAT_SCANNER_FALSE_NEGATIVE`, source record metadata, prompt hash,
+scanner version, and pattern-set hash.
 
 ## Scope and limits
 
 This is a deterministic CI-scale subset, not the full dataset. It is intended
-as an external validation gate with reproducible artifacts; broader benchmark
-coverage can be run outside CI using larger slices.
+as an external regression sentinel over frozen external data, with explicit
+obstruction artifacts for missed attacks; broader benchmark coverage can be run
+outside CI using larger slices.

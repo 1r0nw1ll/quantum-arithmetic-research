@@ -97,3 +97,7 @@ outside CI using larger slices.
 External validation gates must not introduce row-specific detector patterns.
 Detector logic must correspond to semantic classes (`attack_class`), and
 `informational` evidence must not be promoted into deny rules.
+
+This rule is machine-enforced by the harness via a detector-policy invariant
+check. Violations fail with:
+`EXTERNAL_VALIDATION_DETECTOR_POLICY_VIOLATION`.

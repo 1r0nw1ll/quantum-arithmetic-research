@@ -32,6 +32,9 @@ from qa_guardrail.threat_scanner import (  # noqa: E402
     SCANNER_ID,
     SCANNER_VERSION,
     get_current_patterns_hash,
+    MALICIOUS_PATTERNS,
+    MALFORMED_PATTERNS,
+    ADVERSARIAL_PATTERNS,
 )
 
 
@@ -53,6 +56,17 @@ FAIL_INVARIANT = "EXTERNAL_VALIDATION_INVARIANT_VIOLATION"
 FAIL_THRESHOLD = "EXTERNAL_VALIDATION_THRESHOLD_FAIL"
 FAIL_RUNTIME = "EXTERNAL_VALIDATION_RUNTIME_ERROR"
 FALSE_NEGATIVE_FAIL_TYPE = "THREAT_SCANNER_FALSE_NEGATIVE"
+FAIL_DETECTOR_POLICY = "EXTERNAL_VALIDATION_DETECTOR_POLICY_VIOLATION"
+
+# Machine-tract guard: prevent row-specific detector memorization from entering
+# scanner pattern sets. This check runs on every harness invocation.
+ROW_SPECIFIC_TOKEN_DENYLIST = {
+    "volkswagen",
+    "mercedes",
+}
+ROW_SPECIFIC_PATTERN_DENYLIST = {
+    "you are volkswagen",
+}
 
 
 @dataclass
@@ -456,6 +470,28 @@ def validate_false_negative_witnesses(obstructions: List[Dict[str, Any]]) -> Non
             raise ValueError(f"False-negative witness #{i} bad fail_type")
 
 
+def validate_detector_policy() -> None:
+    all_patterns = (
+        set(MALICIOUS_PATTERNS)
+        | set(MALFORMED_PATTERNS)
+        | set(ADVERSARIAL_PATTERNS)
+    )
+    violations = []
+    for pattern in sorted(all_patterns):
+        if pattern in ROW_SPECIFIC_PATTERN_DENYLIST:
+            violations.append(pattern)
+            continue
+        for token in ROW_SPECIFIC_TOKEN_DENYLIST:
+            if token in pattern:
+                violations.append(pattern)
+                break
+    if violations:
+        raise ValueError(
+            "Row-specific detector patterns are forbidden; violations="
+            + ",".join(sorted(set(violations)))
+        )
+
+
 def _fail_result(fail_type: str, message: str, ci_mode: bool) -> int:
     if ci_mode:
         print(f"[FAIL] Prompt injection external validation fail_type={fail_type} reason={message}")
@@ -474,6 +510,7 @@ def run(dataset_path: Path, manifest_path: Path, ci_mode: bool, max_cases: int |
     max_fn = int(os.environ.get("QA_PI_MAX_FN", str(DEFAULT_MAX_FALSE_NEGATIVES)))
     min_cases = int(os.environ.get("QA_PI_MIN_CASES", str(DEFAULT_MIN_CASES)))
 
+    validate_detector_policy()
     cases = load_cases(dataset_path)
     manifest = load_manifest(manifest_path)
     validate_manifest(manifest, dataset_path, cases)
@@ -513,6 +550,10 @@ def run(dataset_path: Path, manifest_path: Path, ci_mode: bool, max_cases: int |
             "id": SCANNER_ID,
             "version": SCANNER_VERSION,
             "patterns_sha256": get_current_patterns_hash(),
+        },
+        "detector_policy": {
+            "row_specific_token_denylist": sorted(ROW_SPECIFIC_TOKEN_DENYLIST),
+            "row_specific_pattern_denylist": sorted(ROW_SPECIFIC_PATTERN_DENYLIST),
         },
         "gate_scope": {
             "must_block_attack_classes": ["policy_override"],
@@ -628,7 +669,11 @@ def main() -> int:
             max_cases=max_cases,
         )
     except (FileNotFoundError, ValueError, json.JSONDecodeError) as e:
-        return _fail_result(FAIL_INVARIANT, str(e), ci_mode=args.ci)
+        msg = str(e)
+        fail_type = FAIL_INVARIANT
+        if "Row-specific detector patterns are forbidden" in msg:
+            fail_type = FAIL_DETECTOR_POLICY
+        return _fail_result(fail_type, msg, ci_mode=args.ci)
     except Exception as e:
         return _fail_result(FAIL_RUNTIME, str(e), ci_mode=args.ci)
 

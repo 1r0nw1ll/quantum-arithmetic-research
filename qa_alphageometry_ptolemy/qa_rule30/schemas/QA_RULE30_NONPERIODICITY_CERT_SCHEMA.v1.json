@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_RULE30_NONPERIODICITY_CERT_SCHEMA.v1",
+  "title": "QA_RULE30_NONPERIODICITY_CERT_SCHEMA.v1",
+  "description": "Certificate attesting bounded nonperiodicity of Rule 30 center column. References witness manifests, discovery pipeline bundles, and aggregate results.",
+  "type": "object",
+  "required": [
+    "schema_id", "cert_id", "created_utc", "agent_id",
+    "scope", "witness_refs", "bundle_refs",
+    "aggregate", "hash_chain", "invariant_diff"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_id": { "const": "QA_RULE30_NONPERIODICITY_CERT_SCHEMA.v1" },
+    "cert_id": { "type": "string", "minLength": 8, "maxLength": 128 },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "agent_id": { "type": "string", "minLength": 1 },
+    "scope": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule", "initial_condition", "P_min", "P_max", "T_max", "k_range"],
+      "properties": {
+        "rule": { "const": 30 },
+        "initial_condition": { "const": "single_1_at_origin" },
+        "P_min": { "type": "integer", "minimum": 1 },
+        "P_max": { "type": "integer", "minimum": 1 },
+        "T_max": { "type": "integer", "minimum": 1 },
+        "k_range": {
+          "type": "object",
+          "required": ["min", "max"],
+          "properties": {
+            "min": { "type": "integer", "minimum": 1 },
+            "max": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "witness_refs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["T", "P_min", "P_max", "manifest_path", "manifest_sha256", "verified_periods", "failure_count"],
+        "properties": {
+          "T": { "type": "integer", "minimum": 1 },
+          "P_min": { "type": "integer", "minimum": 1 },
+          "P_max": { "type": "integer", "minimum": 1 },
+          "manifest_path": { "type": "string", "minLength": 1 },
+          "manifest_sha256": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+          "verified_periods": { "type": "integer", "minimum": 0 },
+          "failure_count": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "bundle_refs": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["family", "path_or_hash"],
+        "properties": {
+          "family": { "type": "string" },
+          "path_or_hash": { "type": "string" }
+        }
+      }
+    },
+    "aggregate": {
+      "type": "object",
+      "required": ["total_periods_checked", "total_verified", "total_failures", "T_values", "claim"],
+      "properties": {
+        "total_periods_checked": { "type": "integer", "minimum": 0 },
+        "total_verified": { "type": "integer", "minimum": 0 },
+        "total_failures": { "type": "integer", "minimum": 0 },
+        "T_values": { "type": "array", "items": { "type": "integer" } },
+        "claim": { "type": "string", "minLength": 1 }
+      }
+    },
+    "hash_chain": {
+      "type": "object",
+      "required": ["prev_cert_hash", "this_cert_hash"],
+      "properties": {
+        "prev_cert_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" },
+        "this_cert_hash": { "type": "string", "pattern": "^[a-f0-9]{64}$" }
+      }
+    },
+    "invariant_diff": { "type": "object" }
+  }
+}

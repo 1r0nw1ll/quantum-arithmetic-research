@@ -1,0 +1,1 @@
+{"P_max":4,"P_min":1,"T":256,"failures":[],"initial_condition":"single_1_at_origin","rule":30,"witnesses":[{"center_t":1,"center_t_plus_p":0,"p":1,"t":0},{"center_t":1,"center_t_plus_p":0,"p":2,"t":0},{"center_t":1,"center_t_plus_p":0,"p":3,"t":0},{"center_t":1,"center_t_plus_p":0,"p":4,"t":0}]}

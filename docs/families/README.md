@@ -23,11 +23,17 @@ A family **does not count as shipped** unless both tracts are present.
 | [26] | [QA Competency Detection](26_competency_detection.md) | Bundle + Metrics | PASS |
 | [27] | [QA Elliptic Correspondence](27_elliptic_correspondence.md) | Bundle + Deterministic Replay | PASS |
 | [28] | [QA Graph Structure](28_graph_structure.md) | Bundle + Paired Deltas | PASS |
+| [29] | [QA Agent Traces](29_agent_traces.md) | Schema + Validator + Fixtures | PASS |
+| [30] | [QA Agent Trace Competency Cert](30_agent_trace_competency_cert.md) | Schema + Validator + Fixtures | PASS |
+| [31] | [QA Math Compiler Stack](31_math_compiler_stack.md) | Validator + Fixtures (trace + pair) | PASS |
+| [32] | [QA Conjecture-Prove Control Loop](32_conjecture_prove_loop.md) | Validator + Fixtures (episode + frontier + receipt) | PASS |
+| [33] | [QA Discovery Pipeline](33_discovery_pipeline.md) | Validator + Fixtures (run + plan + bundle) + Batch Runner | PASS |
+| [34] | [QA Rule 30 Certified Discovery](34_rule30_cert.md) | Cert Pack + Witness Manifests + File-Hash Verified | PASS |
 
 ## Quick validation
 
 ```bash
-# Run all families [1]-[28]
+# Run all families [1]-[34] + external validation + doc gate
 cd qa_alphageometry_ptolemy
 python qa_meta_validator.py
 

@@ -1,0 +1,36 @@
+{
+  "title": "Rule 30 Center Column Bounded Nonperiodicity Certificate",
+  "version": "v2",
+  "scope": {
+    "rule": 30,
+    "initial_condition": "single 1 at position 0",
+    "period_range": "p in [1, 1024]",
+    "time_horizons": [
+      4096,
+      8192,
+      16384,
+      32768,
+      65536
+    ]
+  },
+  "result": {
+    "total_periods_checked": 5120,
+    "total_verified": 5120,
+    "failures": 0,
+    "claim": "No period p in [1,1024] detected for Rule 30 center column at any T in [4096, 8192, 16384, 32768, 65536], up to T_max=65536. Verified: 5120/5120, failures: 0."
+  },
+  "cert_hash": "05775f6a412afdf9bf961eda6b7a1f5d89953e28d17c0058e1fb4f9266c0c675",
+  "witness_manifest_hashes": {
+    "T=4096": "20d26659d498b4030a6849e6cb8e6e1decae831b3f5aac6fc8d7b05a0da8411e",
+    "T=8192": "90e3504c5c58f0b1a5a4db1e3f88789b5e9f987308f637f562ce2d37fea71717",
+    "T=16384": "74835bc15a7cffffc283e24c89cf5fb35b639e5f7ac1d5b05e28a06eff3798ae",
+    "T=32768": "2aa1ec430f8a06bea102ba99a8e4652feb5d6680076837c7c24d00c55d9d1e6c",
+    "T=65536": "95567cf0535d668a5cd82f4e4b740fd81ae7e87a6f8e0b04c0f8d3f99282dbbc"
+  },
+  "verification": {
+    "command": "python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v2",
+    "full_check": "python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v2 --full",
+    "time_estimate": "~7 seconds on commodity hardware",
+    "dependencies": "Python 3.8+, numpy"
+  }
+}

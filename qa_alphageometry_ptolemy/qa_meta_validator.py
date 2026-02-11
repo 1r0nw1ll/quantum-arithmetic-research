@@ -1307,6 +1307,715 @@ def _validate_competency_family_if_present(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_agent_trace_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run QA Agent Trace schema + validator against fixtures.
+
+    Checks:
+      - valid_trace.json must PASS
+      - invalid_trace_missing_invariant_diff.json must FAIL with SCHEMA_INVALID
+      - invalid_trace_nondeterministic_order.json must FAIL with NONDETERMINISTIC_EVENT_ORDER
+      - Validator self-test must pass
+
+    Returns:
+        None on success,
+        skip reason string if fixtures are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    traces_dir = os.path.join(base_dir, "qa_agent_traces")
+    fixtures_dir = os.path.join(traces_dir, "fixtures")
+    schema_path = os.path.join(traces_dir, "schemas", "QA_AGENT_TRACE_SCHEMA.v1.json")
+
+    if not os.path.isdir(traces_dir):
+        return "missing qa_agent_traces/ directory"
+    if not os.path.exists(schema_path):
+        return "missing QA_AGENT_TRACE_SCHEMA.v1.json"
+
+    # Check fixtures exist
+    valid_fix = os.path.join(fixtures_dir, "valid_trace.json")
+    neg_inv = os.path.join(fixtures_dir, "invalid_trace_missing_invariant_diff.json")
+    neg_ord = os.path.join(fixtures_dir, "invalid_trace_nondeterministic_order.json")
+    for fp in [valid_fix, neg_inv, neg_ord]:
+        if not os.path.exists(fp):
+            return f"missing fixture: {os.path.basename(fp)}"
+
+    # Import the validator (package-style import via base_dir)
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_agent_traces.qa_agent_trace_validator import validate_trace, _self_test
+
+    # Self-test first
+    if not _self_test():
+        raise RuntimeError("Agent trace validator self-test failed")
+
+    # Valid fixture must pass
+    with open(valid_fix, "r", encoding="utf-8") as f:
+        trace = json.load(f)
+    result = validate_trace(trace)
+    if not result.ok:
+        raise RuntimeError(
+            f"valid_trace.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative: missing invariant_diff must fail with SCHEMA_INVALID
+    with open(neg_inv, "r", encoding="utf-8") as f:
+        trace = json.load(f)
+    result = validate_trace(trace)
+    if result.ok:
+        raise RuntimeError("invalid_trace_missing_invariant_diff.json should FAIL but passed")
+    if result.fail_type not in ("SCHEMA_INVALID", "MISSING_INVARIANT_DIFF"):
+        raise RuntimeError(
+            f"invalid_trace_missing_invariant_diff.json: expected SCHEMA_INVALID or "
+            f"MISSING_INVARIANT_DIFF, got {result.fail_type}"
+        )
+
+    # Negative: nondeterministic order must fail with NONDETERMINISTIC_EVENT_ORDER
+    with open(neg_ord, "r", encoding="utf-8") as f:
+        trace = json.load(f)
+    result = validate_trace(trace)
+    if result.ok:
+        raise RuntimeError("invalid_trace_nondeterministic_order.json should FAIL but passed")
+    if result.fail_type != "NONDETERMINISTIC_EVENT_ORDER":
+        raise RuntimeError(
+            f"invalid_trace_nondeterministic_order.json: expected "
+            f"NONDETERMINISTIC_EVENT_ORDER, got {result.fail_type}"
+        )
+
+    return None
+
+
+def _validate_agent_trace_competency_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run QA Agent Trace Competency Cert validator against fixtures.
+
+    Checks:
+      - Validator self-test (8 built-in checks)
+      - competency_cert_valid.json must PASS
+      - competency_cert_invalid_bad_trace_hash.json must FAIL with TRACE_REF_HASH_MISMATCH
+      - competency_cert_invalid_missing_invariant_diff.json must FAIL with MISSING_INVARIANT_DIFF
+      - competency_cert_invalid_bad_dominance.json must FAIL with NONDETERMINISTIC_DERIVATION
+
+    Returns:
+        None on success,
+        skip reason string if fixtures are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    traces_dir = os.path.join(base_dir, "qa_agent_traces")
+    fixtures_dir = os.path.join(traces_dir, "fixtures")
+    schema_path = os.path.join(traces_dir, "schemas",
+                               "QA_AGENT_TRACE_COMPETENCY_CERT_SCHEMA.v1.json")
+
+    if not os.path.exists(schema_path):
+        return "missing QA_AGENT_TRACE_COMPETENCY_CERT_SCHEMA.v1.json"
+
+    valid_fix = os.path.join(fixtures_dir, "competency_cert_valid.json")
+    neg_hash = os.path.join(fixtures_dir, "competency_cert_invalid_bad_trace_hash.json")
+    neg_inv = os.path.join(fixtures_dir, "competency_cert_invalid_missing_invariant_diff.json")
+    neg_dom = os.path.join(fixtures_dir, "competency_cert_invalid_bad_dominance.json")
+    for fp in [valid_fix, neg_hash, neg_inv, neg_dom]:
+        if not os.path.exists(fp):
+            return f"missing fixture: {os.path.basename(fp)}"
+
+    # Import the validator (package-style)
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_agent_traces.qa_agent_trace_competency_cert_validator import (
+        validate_cert, _self_test, _canonical,
+    )
+
+    # Self-test first
+    if not _self_test():
+        raise RuntimeError("Agent trace competency cert validator self-test failed")
+
+    # Valid fixture must pass (wrapper format: trace + cert with end-to-end hash binding)
+    with open(valid_fix, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    if "cert" in data and "trace" in data:
+        cert_obj = data["cert"]
+        trace_canonical = _canonical(data["trace"])
+        result = validate_cert(cert_obj, trace_canonical=trace_canonical)
+    else:
+        result = validate_cert(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"competency_cert_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative: bad trace hash
+    with open(neg_hash, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    cert_obj = data["cert"]
+    trace_canonical = _canonical(data["trace"])
+    result = validate_cert(cert_obj, trace_canonical=trace_canonical)
+    if result.ok:
+        raise RuntimeError(
+            "competency_cert_invalid_bad_trace_hash.json should FAIL but passed"
+        )
+    if result.fail_type != "TRACE_REF_HASH_MISMATCH":
+        raise RuntimeError(
+            f"competency_cert_invalid_bad_trace_hash.json: expected "
+            f"TRACE_REF_HASH_MISMATCH, got {result.fail_type}"
+        )
+
+    # Negative: missing invariant_diff
+    with open(neg_inv, "r", encoding="utf-8") as f:
+        cert = json.load(f)
+    result = validate_cert(cert)
+    if result.ok:
+        raise RuntimeError(
+            "competency_cert_invalid_missing_invariant_diff.json should FAIL but passed"
+        )
+    if result.fail_type != "MISSING_INVARIANT_DIFF":
+        raise RuntimeError(
+            f"competency_cert_invalid_missing_invariant_diff.json: expected "
+            f"MISSING_INVARIANT_DIFF, got {result.fail_type}"
+        )
+
+    # Negative: bad dominance (recomputation mismatch)
+    with open(neg_dom, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    cert_obj = data["cert"]
+    trace_canonical = _canonical(data["trace"])
+    result = validate_cert(cert_obj, trace_canonical=trace_canonical)
+    if result.ok:
+        raise RuntimeError(
+            "competency_cert_invalid_bad_dominance.json should FAIL but passed"
+        )
+    if result.fail_type != "NONDETERMINISTIC_DERIVATION":
+        raise RuntimeError(
+            f"competency_cert_invalid_bad_dominance.json: expected "
+            f"NONDETERMINISTIC_DERIVATION, got {result.fail_type}"
+        )
+
+    return None
+
+
+def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run QA Math Compiler Stack validator against fixtures.
+
+    Checks:
+      - Validator self-test (9 built-in checks)
+      - trace_valid.json must PASS
+      - trace_invalid_missing_invariant_diff.json must FAIL with RESULT_INCOMPLETE
+      - pair_valid.json must PASS
+      - pair_invalid_hash_mismatch.json must FAIL with HASH_SELF_BINDING
+
+    Returns:
+        None on success,
+        skip reason string if fixtures are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    mc_dir = os.path.join(base_dir, "qa_math_compiler")
+    fixtures_dir = os.path.join(mc_dir, "fixtures")
+
+    if not os.path.isdir(mc_dir):
+        return "missing qa_math_compiler/ directory"
+
+    trace_valid = os.path.join(fixtures_dir, "trace_valid.json")
+    trace_neg = os.path.join(fixtures_dir, "trace_invalid_missing_invariant_diff.json")
+    pair_valid = os.path.join(fixtures_dir, "pair_valid.json")
+    pair_neg = os.path.join(fixtures_dir, "pair_invalid_hash_mismatch.json")
+    for fp in [trace_valid, trace_neg, pair_valid, pair_neg]:
+        if not os.path.exists(fp):
+            return f"missing fixture: {os.path.basename(fp)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_math_compiler.qa_math_compiler_validator import (
+        validate_trace, validate_pair, _self_test,
+    )
+
+    # Self-test first
+    if not _self_test():
+        raise RuntimeError("Math compiler validator self-test failed")
+
+    # Valid trace fixture must pass
+    with open(trace_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_trace(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"trace_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative trace: FAIL result missing invariant_diff -> RESULT_INCOMPLETE
+    with open(trace_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_trace(data)
+    if result.ok:
+        raise RuntimeError("trace_invalid_missing_invariant_diff.json should FAIL but passed")
+    if result.fail_type != "RESULT_INCOMPLETE":
+        raise RuntimeError(
+            f"trace_invalid_missing_invariant_diff.json: expected "
+            f"RESULT_INCOMPLETE, got {result.fail_type}"
+        )
+
+    # Valid pair fixture must pass
+    with open(pair_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_pair(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"pair_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative pair: human_hash == formal_hash -> HASH_SELF_BINDING
+    with open(pair_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_pair(data)
+    if result.ok:
+        raise RuntimeError("pair_invalid_hash_mismatch.json should FAIL but passed")
+    if result.fail_type != "HASH_SELF_BINDING":
+        raise RuntimeError(
+            f"pair_invalid_hash_mismatch.json: expected "
+            f"HASH_SELF_BINDING, got {result.fail_type}"
+        )
+
+    return None
+
+
+def _validate_conjecture_prove_loop_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run QA Conjecture-Prove Control Loop validator against fixtures.
+
+    Checks:
+      - Validator self-test (11 built-in checks)
+      - episode_valid.json must PASS
+      - episode_invalid_missing_invariant_diff.json must FAIL with RESULT_INCOMPLETE
+      - frontier_valid.json must PASS
+      - frontier_invalid_bad_hash_chain.json must FAIL with HASH_CHAIN_INVALID
+      - bounded_return_valid.json must PASS
+      - bounded_return_invalid_missing_fail.json must FAIL with RESULT_INCOMPLETE
+
+    Returns:
+        None on success,
+        skip reason string if fixtures are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    cp_dir = os.path.join(base_dir, "qa_conjecture_prove")
+    fixtures_dir = os.path.join(cp_dir, "fixtures")
+
+    if not os.path.isdir(cp_dir):
+        return "missing qa_conjecture_prove/ directory"
+
+    ep_valid = os.path.join(fixtures_dir, "episode_valid.json")
+    ep_neg = os.path.join(fixtures_dir, "episode_invalid_missing_invariant_diff.json")
+    fr_valid = os.path.join(fixtures_dir, "frontier_valid.json")
+    fr_neg = os.path.join(fixtures_dir, "frontier_invalid_bad_hash_chain.json")
+    br_valid = os.path.join(fixtures_dir, "bounded_return_valid.json")
+    br_neg = os.path.join(fixtures_dir, "bounded_return_invalid_missing_fail.json")
+    for fp in [ep_valid, ep_neg, fr_valid, fr_neg, br_valid, br_neg]:
+        if not os.path.exists(fp):
+            return f"missing fixture: {os.path.basename(fp)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_conjecture_prove.qa_conjecture_prove_validator import (
+        validate_episode, validate_frontier, validate_receipt, _self_test,
+    )
+
+    # Self-test first
+    if not _self_test():
+        raise RuntimeError("Conjecture-prove validator self-test failed")
+
+    # Valid episode fixture must pass
+    with open(ep_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_episode(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"episode_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative episode: FAIL step missing invariant_diff -> RESULT_INCOMPLETE
+    with open(ep_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_episode(data)
+    if result.ok:
+        raise RuntimeError("episode_invalid_missing_invariant_diff.json should FAIL but passed")
+    if result.fail_type != "RESULT_INCOMPLETE":
+        raise RuntimeError(
+            f"episode_invalid_missing_invariant_diff.json: expected "
+            f"RESULT_INCOMPLETE, got {result.fail_type}"
+        )
+
+    # Valid frontier fixture must pass
+    with open(fr_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_frontier(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"frontier_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative frontier: empty this_snapshot_hash -> HASH_CHAIN_INVALID
+    with open(fr_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_frontier(data)
+    if result.ok:
+        raise RuntimeError("frontier_invalid_bad_hash_chain.json should FAIL but passed")
+    if result.fail_type != "HASH_CHAIN_INVALID":
+        raise RuntimeError(
+            f"frontier_invalid_bad_hash_chain.json: expected "
+            f"HASH_CHAIN_INVALID, got {result.fail_type}"
+        )
+
+    # Valid bounded return receipt must pass
+    with open(br_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_receipt(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"bounded_return_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative receipt: NO_RETURN without fail_type -> RESULT_INCOMPLETE
+    with open(br_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_receipt(data)
+    if result.ok:
+        raise RuntimeError("bounded_return_invalid_missing_fail.json should FAIL but passed")
+    if result.fail_type != "RESULT_INCOMPLETE":
+        raise RuntimeError(
+            f"bounded_return_invalid_missing_fail.json: expected "
+            f"RESULT_INCOMPLETE, got {result.fail_type}"
+        )
+
+    return None
+
+
+def _validate_discovery_pipeline_if_present(base_dir: str) -> Optional[str]:
+    """
+    Run QA Discovery Pipeline validator against fixtures.
+
+    Checks:
+      - Validator self-test (12 built-in checks)
+      - run_valid.json must PASS
+      - run_invalid_missing_invariant_diff.json must FAIL with RESULT_INCOMPLETE
+      - plan_valid.json must PASS
+      - plan_invalid_nondeterministic.json must FAIL with NONDETERMINISTIC_PLAN
+      - bundle_valid.json must PASS
+      - bundle_invalid_bad_chain.json must FAIL with HASH_CHAIN_INVALID
+      - E2E: ci_check.py --allow_fail must reject e2e_neg_no_receipt/ with RUN_FAIL_NO_RECEIPT
+
+    Returns:
+        None on success,
+        skip reason string if fixtures are missing.
+    Raises:
+        Exception on validation failure.
+    """
+    dp_dir = os.path.join(base_dir, "qa_discovery_pipeline")
+    fixtures_dir = os.path.join(dp_dir, "fixtures")
+
+    if not os.path.isdir(dp_dir):
+        return "missing qa_discovery_pipeline/ directory"
+
+    run_v = os.path.join(fixtures_dir, "run_valid.json")
+    run_n = os.path.join(fixtures_dir, "run_invalid_missing_invariant_diff.json")
+    plan_v = os.path.join(fixtures_dir, "plan_valid.json")
+    plan_n = os.path.join(fixtures_dir, "plan_invalid_nondeterministic.json")
+    bundle_v = os.path.join(fixtures_dir, "bundle_valid.json")
+    bundle_n = os.path.join(fixtures_dir, "bundle_invalid_bad_chain.json")
+    for fp in [run_v, run_n, plan_v, plan_n, bundle_v, bundle_n]:
+        if not os.path.exists(fp):
+            return f"missing fixture: {os.path.basename(fp)}"
+
+    if base_dir not in sys.path:
+        sys.path.insert(0, base_dir)
+    from qa_discovery_pipeline.qa_discovery_pipeline_validator import (
+        validate_run, validate_plan, validate_bundle, _self_test,
+    )
+
+    # Self-test first
+    if not _self_test():
+        raise RuntimeError("Discovery pipeline validator self-test failed")
+
+    # Valid run
+    with open(run_v, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_run(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"run_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative run: FAIL step missing invariant_diff -> RESULT_INCOMPLETE
+    with open(run_n, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_run(data)
+    if result.ok:
+        raise RuntimeError("run_invalid_missing_invariant_diff.json should FAIL but passed")
+    if result.fail_type != "RESULT_INCOMPLETE":
+        raise RuntimeError(
+            f"run_invalid_missing_invariant_diff.json: expected "
+            f"RESULT_INCOMPLETE, got {result.fail_type}"
+        )
+
+    # Valid plan
+    with open(plan_v, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_plan(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"plan_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative plan: canonical_json=false -> NONDETERMINISTIC_PLAN
+    with open(plan_n, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_plan(data)
+    if result.ok:
+        raise RuntimeError("plan_invalid_nondeterministic.json should FAIL but passed")
+    if result.fail_type != "NONDETERMINISTIC_PLAN":
+        raise RuntimeError(
+            f"plan_invalid_nondeterministic.json: expected "
+            f"NONDETERMINISTIC_PLAN, got {result.fail_type}"
+        )
+
+    # Valid bundle
+    with open(bundle_v, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_bundle(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"bundle_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative bundle: empty this_bundle_hash -> HASH_CHAIN_INVALID
+    with open(bundle_n, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_bundle(data)
+    if result.ok:
+        raise RuntimeError("bundle_invalid_bad_chain.json should FAIL but passed")
+    if result.fail_type != "HASH_CHAIN_INVALID":
+        raise RuntimeError(
+            f"bundle_invalid_bad_chain.json: expected "
+            f"HASH_CHAIN_INVALID, got {result.fail_type}"
+        )
+
+    # E2E negative: ci_check.py --allow_fail must reject FAIL runs without receipt.
+    # This proves permissive mode is real.
+    e2e_dir = os.path.join(fixtures_dir, "e2e_neg_no_receipt")
+    if not os.path.isdir(e2e_dir):
+        return "missing fixture dir: e2e_neg_no_receipt"
+
+    ci_check = os.path.join(dp_dir, "ci_check.py")
+    if not os.path.exists(ci_check):
+        return "missing ci_check.py"
+
+    import subprocess
+    proc = subprocess.run(
+        [sys.executable, ci_check, "--out_dir", e2e_dir, "--allow_fail"],
+        cwd=base_dir,
+        capture_output=True,
+        text=True,
+        timeout=15,
+    )
+    combined = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    if proc.returncode != 1:
+        raise RuntimeError(
+            f"ci_check.py --allow_fail expected exit code 1 (policy fail) "
+            f"but got {proc.returncode}\n" + combined.strip()
+        )
+    if "RUN_FAIL_NO_RECEIPT" not in combined:
+        raise RuntimeError(
+            "ci_check.py --allow_fail failed for unexpected reason; "
+            "expected RUN_FAIL_NO_RECEIPT marker.\n"
+            + combined.strip()
+        )
+    if "FAIL run must reference receipt" not in combined:
+        raise RuntimeError(
+            "Expected receipt policy reason missing.\n" + combined.strip()
+        )
+
+    return None
+
+
+# ===================================================================
+# Family [34]: QA Rule 30 Certified Discovery
+# ===================================================================
+
+def _validate_rule30_cert_if_present(base_dir: str) -> Optional[str]:
+    """Validate Rule 30 cert pack: schema, validator self-tests, cert validation."""
+    r30_dir = os.path.join(base_dir, "qa_rule30")
+    if not os.path.isdir(r30_dir):
+        return "qa_rule30 directory not found"
+
+    validator = os.path.join(r30_dir, "qa_rule30_cert_validator.py")
+    if not os.path.isfile(validator):
+        return "qa_rule30_cert_validator.py not found"
+
+    # 1. Self-tests
+    import subprocess
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=15)
+    if proc.returncode != 0:
+        raise RuntimeError(f"Rule 30 cert validator self-tests failed:\n{proc.stdout}\n{proc.stderr}")
+    # Print self-test output
+    for line in proc.stdout.strip().split("\n"):
+        print(line)
+
+    # 2. Cert pack validation (v1 and v2 if present)
+    cert_data = None  # will hold latest validated cert for verifier gate
+    certpack_dir = None
+    for version_slug in ["rule30_nonperiodicity_v1", "rule30_nonperiodicity_v2"]:
+        cp_dir = os.path.join(r30_dir, "certpacks", version_slug)
+        cp_cert = os.path.join(cp_dir, "QA_RULE30_NONPERIODICITY_CERT.v1.json")
+        if not os.path.isfile(cp_cert):
+            continue
+
+        proc = subprocess.run(
+            [sys.executable, validator, "cert", cp_cert, "--ci"],
+            capture_output=True, text=True, timeout=15)
+        if proc.returncode != 0:
+            raise RuntimeError(f"Cert validation failed ({version_slug}):\n{proc.stdout}\n{proc.stderr}")
+        print(f"  {proc.stdout.strip()}")
+
+        # 3. Validate each witness manifest with file hashes
+        with open(cp_cert, "r", encoding="utf-8") as f:
+            cert_data = json.load(f)
+        certpack_dir = cp_dir
+        for ref in cert_data.get("witness_refs", []):
+            man_path = os.path.join(cp_dir, ref["manifest_path"])
+            if not os.path.isfile(man_path):
+                raise RuntimeError(f"Missing manifest: {man_path}")
+            proc = subprocess.run(
+                [sys.executable, validator, "manifest", man_path,
+                 "--verify-files", "--ci"],
+                capture_output=True, text=True, timeout=30)
+            if proc.returncode != 0:
+                raise RuntimeError(
+                    f"Manifest validation failed for {man_path}:\n"
+                    f"{proc.stdout}\n{proc.stderr}")
+
+        n_witnesses = len(cert_data.get("witness_refs", []))
+        agg = cert_data.get("aggregate", {})
+        print(f"  Cert pack {version_slug}: {agg.get('total_verified', '?')} periods verified "
+              f"across {n_witnesses} T values, {agg.get('total_failures', '?')} failures")
+
+    # 4. Negative fixtures — four-guard proof
+    #    (exit code + filename echo + fail marker + invariant_diff anchor)
+    fixtures_dir = os.path.join(r30_dir, "fixtures")
+    neg_fixtures = [
+        # (filename, expected_fail_type, invariant_diff_anchor)
+        ("cert_neg_missing_invariant_diff.json", "MISSING_INVARIANT_DIFF", "$.invariant_diff"),
+        ("cert_neg_scope_invalid.json", "SCOPE_INVALID", "P_min"),
+        ("cert_neg_aggregate_mismatch.json", "AGGREGATE_MISMATCH", "total_verified"),
+    ]
+    for fname, expected_fail, diff_anchor in neg_fixtures:
+        fpath = os.path.join(fixtures_dir, fname)
+        if not os.path.isfile(fpath):
+            return f"missing Rule 30 negative fixture: {fname}"
+        proc = subprocess.run(
+            [sys.executable, validator, "cert", fpath, "--ci"],
+            capture_output=True, text=True, timeout=15)
+        combined = (proc.stdout or "") + "\n" + (proc.stderr or "")
+        if proc.returncode != 1:
+            raise RuntimeError(
+                f"Rule30 negative fixture {fname} expected exit code 1 "
+                f"but got {proc.returncode}\n{combined.strip()}")
+        if fname not in combined:
+            raise RuntimeError(
+                f"Rule30 negative fixture output does not echo filename "
+                f"{fname}\n{combined.strip()}")
+        if expected_fail not in combined:
+            raise RuntimeError(
+                f"Rule30 negative fixture {fname} missing expected marker "
+                f"{expected_fail}\n{combined.strip()}")
+        if diff_anchor not in combined:
+            raise RuntimeError(
+                f"Rule30 negative fixture {fname} missing invariant_diff "
+                f"anchor ({diff_anchor})\n{combined.strip()}")
+
+    # 5. File-hash binding proof: manifest with wrong witness hash
+    hash_neg_dir = os.path.join(fixtures_dir, "manifest_neg_hash_mismatch")
+    hash_neg_manifest = os.path.join(hash_neg_dir, "MANIFEST.json")
+    if not os.path.isfile(hash_neg_manifest):
+        return "missing manifest_neg_hash_mismatch fixture"
+    proc = subprocess.run(
+        [sys.executable, validator, "manifest", hash_neg_manifest,
+         "--verify-files", "--ci"],
+        capture_output=True, text=True, timeout=15)
+    combined = (proc.stdout or "") + "\n" + (proc.stderr or "")
+    if proc.returncode != 1:
+        raise RuntimeError(
+            f"Hash-mismatch manifest expected exit code 1 "
+            f"but got {proc.returncode}\n{combined.strip()}")
+    if "HASH_MISMATCH" not in combined:
+        raise RuntimeError(
+            f"Hash-mismatch manifest missing HASH_MISMATCH marker\n"
+            f"{combined.strip()}")
+    if "expected" not in combined or "actual" not in combined:
+        raise RuntimeError(
+            f"Hash-mismatch manifest missing expected/actual diff\n"
+            f"{combined.strip()}")
+
+    # 6. Independent verifier must pass on shipped cert pack
+    verifier = os.path.join(r30_dir, "verify_certpack.py")
+    if os.path.isfile(verifier) and certpack_dir and cert_data:
+        proc = subprocess.run(
+            [sys.executable, verifier, certpack_dir],
+            capture_output=True, text=True, timeout=60)
+        combined = (proc.stdout or "") + "\n" + (proc.stderr or "")
+        if proc.returncode != 0:
+            raise RuntimeError(
+                f"Independent verifier failed on cert pack\n{combined.strip()}")
+        if "ALL WITNESSES INDEPENDENTLY VERIFIED" not in combined:
+            raise RuntimeError(
+                f"Independent verifier missing success marker\n{combined.strip()}")
+        # Extract verified count from output
+        agg = cert_data.get("aggregate", {})
+        expected_count = agg.get("total_verified", 0)
+        expected_str = f"{expected_count}/{expected_count}"
+        if expected_str not in combined:
+            raise RuntimeError(
+                f"Independent verifier did not report expected count "
+                f"{expected_str}\n{combined.strip()}")
+
+    # 7. Verifier negative fixture: false witness must be caught
+    verifier_neg = os.path.join(fixtures_dir, "verifier_neg_bad_witness")
+    if os.path.isdir(verifier_neg) and os.path.isfile(verifier):
+        proc = subprocess.run(
+            [sys.executable, verifier, verifier_neg],
+            capture_output=True, text=True, timeout=30)
+        combined = (proc.stdout or "") + "\n" + (proc.stderr or "")
+        if proc.returncode != 1:
+            raise RuntimeError(
+                f"Verifier negative fixture expected exit code 1 "
+                f"but got {proc.returncode}\n{combined.strip()}")
+        if "VERIFICATION FAILED" not in combined:
+            raise RuntimeError(
+                f"Verifier negative fixture missing VERIFICATION FAILED "
+                f"marker\n{combined.strip()}")
+        if "center_t_plus_p mismatch" not in combined:
+            raise RuntimeError(
+                f"Verifier negative fixture missing 'center_t_plus_p mismatch' "
+                f"detail\n{combined.strip()}")
+        # Assert it identifies the specific false witness (p=1)
+        if "'p': 1" not in combined and '"p": 1' not in combined:
+            raise RuntimeError(
+                f"Verifier negative fixture did not identify p=1 as failing\n"
+                f"{combined.strip()}")
+
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug)
@@ -1341,6 +2050,24 @@ FAMILY_SWEEPS = [
     (28, "QA Graph Structure bundle",
      _validate_graph_structure_bundle_if_present,
      "bundle manifest verified", "28_graph_structure"),
+    (29, "QA Agent Trace family",
+     _validate_agent_trace_family_if_present,
+     "schema + validator + fixtures (1 valid, 2 negative)", "29_agent_traces"),
+    (30, "QA Agent Trace Competency Cert family",
+     _validate_agent_trace_competency_cert_family_if_present,
+     "schema + validator + fixtures (1 valid, 3 negative)", "30_agent_trace_competency_cert"),
+    (31, "QA Math Compiler Stack family",
+     _validate_math_compiler_stack_if_present,
+     "validator + fixtures (2 valid, 2 negative)", "31_math_compiler_stack"),
+    (32, "QA Conjecture-Prove Control Loop family",
+     _validate_conjecture_prove_loop_if_present,
+     "validator + fixtures (3 valid, 3 negative)", "32_conjecture_prove_loop"),
+    (33, "QA Discovery Pipeline family",
+     _validate_discovery_pipeline_if_present,
+     "validator + fixtures (3 valid, 3 negative) + E2E ci_check", "33_discovery_pipeline"),
+    (34, "QA Rule 30 Certified Discovery",
+     _validate_rule30_cert_if_present,
+     "self-tests + cert pack + manifests + cert negatives + hash-mismatch + independent verifier + verifier negative", "34_rule30_cert"),
 ]
 
 
@@ -2016,10 +2743,62 @@ if __name__ == "__main__":
     except subprocess.TimeoutExpired:
         _pi_fail("EXTERNAL_VALIDATION_TIMEOUT")
 
+    # --- External validation: SWE-bench competency (real vendored data) ---
+    _swe_script = os.path.join(base_dir, "external_validation_swe_bench_competency.py")
+    _swe_id = _pi_id + 1
+    _swe_env = {
+        k: os.environ[k]
+        for k in ("QA_SWE_MAX_TASKS", "QA_SWE_MIN_TASKS", "QA_SWE_MIN_REPOS")
+        if k in os.environ
+    }
+
+    def _swe_fail(fail_type: str, returncode: int = -1,
+                  stdout_head: str = "", stderr_head: str = ""):
+        diff = json.dumps({
+            "check": "external_validation_swe_bench_competency",
+            "fail_type": fail_type,
+            "script": _swe_script,
+            "mode": "ci",
+            "env_overrides": _swe_env or None,
+            "returncode": returncode,
+            "stdout_head": stdout_head[:200],
+            "stderr_head": stderr_head[:200],
+        }, sort_keys=True)
+        print(f"[{_swe_id}] SWE-bench competency (external): FAIL ({fail_type})")
+        print(f"      invariant_diff={diff}")
+        sys.exit(1)
+
+    if not os.path.exists(_swe_script):
+        _swe_fail("EXTERNAL_VALIDATION_MISSING")
+
+    try:
+        _swe_result = subprocess.run(
+            [sys.executable, _swe_script, "--ci"],
+            capture_output=True, text=True, timeout=45,
+            cwd=base_dir,
+        )
+        _swe_stdout = _swe_result.stdout.strip()
+        _swe_ok = _swe_result.returncode == 0 and "[PASS]" in _swe_stdout
+
+        if _swe_ok:
+            print(f"[{_swe_id}] SWE-bench competency (external): PASS")
+            print(f"      {_swe_stdout}")
+        else:
+            _swe_fail_type = "EXTERNAL_VALIDATION_FAIL"
+            _m = re.search(r"fail_type=([A-Z0-9_]+)", _swe_stdout)
+            if _m:
+                _swe_fail_type = _m.group(1)
+            _swe_fail(_swe_fail_type,
+                      returncode=_swe_result.returncode,
+                      stdout_head=_swe_stdout,
+                      stderr_head=_swe_result.stderr.strip())
+    except subprocess.TimeoutExpired:
+        _swe_fail("EXTERNAL_VALIDATION_TIMEOUT")
+
     # --- Doc gate (derived from FAMILY_SWEEPS — no second list to maintain) ---
     print("\n--- HUMAN-TRACT DOC GATE ---")
     _doc_gate_pass = True
-    _gate_id = FAMILY_SWEEPS[-1][0] + 3
+    _gate_id = FAMILY_SWEEPS[-1][0] + 4
     _docs_dir = os.path.normpath(os.path.join(base_dir, "..", "docs", "families"))
     _readme_path = os.path.join(_docs_dir, "README.md")
     if not os.path.isdir(_docs_dir):

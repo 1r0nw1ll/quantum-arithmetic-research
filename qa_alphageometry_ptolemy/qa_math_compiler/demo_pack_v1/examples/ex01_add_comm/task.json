@@ -1,0 +1,23 @@
+{
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "DEMO_EX01_TASK",
+  "created_utc": "2026-02-12T00:00:00Z",
+  "nl_statement": "For naturals a and b, addition is commutative.",
+  "formal_goal": "theorem ex01_add_comm (a b : Nat) : a + b = b + a",
+  "imports": [
+    "Mathlib.Data.Nat.Basic"
+  ],
+  "context": [
+    "open Nat"
+  ],
+  "constraints": {
+    "max_seconds": 30,
+    "max_memory_mb": 1024,
+    "allowed_tactics": [
+      "exact"
+    ]
+  },
+  "invariant_diff": {
+    "demo_example": "ex01_add_comm"
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "DEMO_EX03_TASK",
+  "created_utc": "2026-02-12T00:20:00Z",
+  "nl_statement": "The sum of first n naturals satisfies 2*sum = n*(n+1).",
+  "formal_goal": "theorem ex03_sum_first_n (n : Nat) : 2 * (Nat.sum (List.range (n + 1))) = n * (n + 1)",
+  "imports": [
+    "Mathlib.Data.Nat.Basic"
+  ],
+  "context": [
+    "open Nat"
+  ],
+  "constraints": {
+    "max_seconds": 60,
+    "max_memory_mb": 2048,
+    "allowed_tactics": [
+      "induction",
+      "rw",
+      "simp"
+    ]
+  },
+  "invariant_diff": {
+    "demo_example": "ex03_sum_first_n"
+  }
+}

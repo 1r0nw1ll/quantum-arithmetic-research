@@ -1,0 +1,30 @@
+{
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "pair_id": "DEMO_EX02_PAIR",
+  "created_utc": "2026-02-12T00:13:00Z",
+  "natural_language_claim": "Multiplication distributes over addition on the right.",
+  "formal_statement": "theorem ex02_add_mul (a b c : Nat) : (a + b) * c = a * c + b * c",
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Nat.add_mul"
+    ],
+    "span_mappings": [
+      {
+        "nl_span": "distributes over addition",
+        "formal_identifiers": [
+          "Nat.add_mul"
+        ]
+      }
+    ]
+  },
+  "trace_ref": {
+    "trace_id": "2121212121212121212121212121212121212121212121212121212121212121",
+    "result_status": "SUCCESS",
+    "replay_status": "SUCCESS"
+  },
+  "status": "PROVED",
+  "objections": [],
+  "invariant_diff": {
+    "demo_example": "ex02_mul_add_distrib"
+  }
+}

@@ -1,0 +1,1 @@
+For n : Nat, the sum of the first n natural numbers satisfies 2 * (sum) = n * (n + 1).

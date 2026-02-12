@@ -1,0 +1,21 @@
+{
+  "schema_id": "QA_MATH_COMPILER_TRACE_SCHEMA.v1",
+  "trace_id": "1111111111111111111111111111111111111111111111111111111111111111",
+  "created_utc": "2026-02-12T00:01:00Z",
+  "agent_id": "qa-demo-agent",
+  "source_layer": "human",
+  "target_layer": "formal",
+  "generator": "sigma_autoformalize",
+  "input_hash": "1212121212121212121212121212121212121212121212121212121212121212",
+  "output_hash": "1313131313131313131313131313131313131313131313131313131313131313",
+  "toolchain_id": "lean4.12.0",
+  "result": {
+    "status": "SUCCESS",
+    "witness_hash": "1414141414141414141414141414141414141414141414141414141414141414"
+  },
+  "merkle_parent": "1515151515151515151515151515151515151515151515151515151515151515",
+  "invariant_diff": {
+    "demo_example": "ex01_add_comm",
+    "proof_method": "Nat.add_comm"
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "pair_id": "DEMO_EX03_PAIR",
+  "created_utc": "2026-02-12T00:23:00Z",
+  "natural_language_claim": "For n, 2 times the sum of first n naturals equals n times (n + 1).",
+  "formal_statement": "theorem ex03_sum_first_n (n : Nat) : 2 * (Nat.sum (List.range (n + 1))) = n * (n + 1)",
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Nat.rec",
+      "Nat.add_assoc"
+    ],
+    "span_mappings": [
+      {
+        "nl_span": "sum of first n naturals",
+        "formal_identifiers": [
+          "List.range",
+          "Nat.sum"
+        ]
+      },
+      {
+        "nl_span": "proof by induction",
+        "formal_identifiers": [
+          "Nat.rec"
+        ]
+      }
+    ]
+  },
+  "trace_ref": {
+    "trace_id": "3131313131313131313131313131313131313131313131313131313131313131",
+    "result_status": "SUCCESS",
+    "replay_status": "SUCCESS"
+  },
+  "status": "PROVED",
+  "objections": [],
+  "invariant_diff": {
+    "demo_example": "ex03_sum_first_n"
+  }
+}

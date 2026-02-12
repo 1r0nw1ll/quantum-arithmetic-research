@@ -1512,6 +1512,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
       - pair_v1_invalid_unproved_replay.json must FAIL with PROVED_PAIR_REPLAY_MISMATCH
       - lemma_mining_valid.json must PASS
       - lemma_mining_invalid_low_compression.json must FAIL with COMPRESSION_BELOW_TARGET
+      - optional demo_pack_v1 (if present) must PASS demo_pack validator
 
     Returns:
         None on success,
@@ -1533,6 +1534,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     schema_replay = os.path.join(schema_dir, "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1.json")
     schema_pair_v1 = os.path.join(schema_dir, "QA_HUMAN_FORMAL_PAIR_CERT.v1.json")
     schema_lemma = os.path.join(schema_dir, "QA_LEMMA_MINING_SCHEMA.v1.json")
+    schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
 
     trace_valid = os.path.join(fixtures_dir, "trace_valid.json")
     trace_neg = os.path.join(fixtures_dir, "trace_invalid_missing_invariant_diff.json")
@@ -1547,7 +1549,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     lemma_valid = os.path.join(fixtures_dir, "lemma_mining_valid.json")
     lemma_neg = os.path.join(fixtures_dir, "lemma_mining_invalid_low_compression.json")
     required_artifacts = [
-        schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
+        schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma, schema_demo_pack,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg,
@@ -1579,7 +1581,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         sys.path.insert(0, base_dir)
     from qa_math_compiler.qa_math_compiler_validator import (
         validate_trace, validate_pair, validate_task, validate_replay_bundle,
-        validate_pair_v1, validate_lemma_mining, _self_test,
+        validate_pair_v1, validate_lemma_mining, validate_demo_pack_v1, _self_test,
     )
 
     # Self-test first
@@ -1717,6 +1719,36 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
             f"lemma_mining_invalid_low_compression.json: expected "
             f"COMPRESSION_BELOW_TARGET, got {result.fail_type}"
         )
+
+    # Optional demo pack validation (if present in repo)
+    demo_pack_dir = os.path.join(mc_dir, "demo_pack_v1")
+    if os.path.isdir(demo_pack_dir):
+        # Enforce tracked artifacts for demo pack as well.
+        if os.path.exists(os.path.join(repo_root, ".git")):
+            import subprocess
+
+            demo_files = []
+            for root, _, files in os.walk(demo_pack_dir):
+                for name in files:
+                    demo_files.append(os.path.join(root, name))
+            for fp in sorted(demo_files):
+                rel = os.path.relpath(fp, repo_root)
+                proc = subprocess.run(
+                    ["git", "-C", repo_root, "ls-files", "--error-unmatch", rel],
+                    capture_output=True,
+                    text=True,
+                )
+                if proc.returncode != 0:
+                    raise RuntimeError(
+                        f"UNTRACKED_REQUIRED_ARTIFACT: {rel}"
+                    )
+
+        result = validate_demo_pack_v1(demo_pack_dir)
+        if not result.ok:
+            raise RuntimeError(
+                f"demo_pack_v1 should PASS but got {result.fail_type}: "
+                f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+            )
 
     return None
 
@@ -2205,7 +2237,7 @@ FAMILY_SWEEPS = [
      "schema + validator + fixtures (1 valid, 3 negative)", "30_agent_trace_competency_cert"),
     (31, "QA Math Compiler Stack family",
      _validate_math_compiler_stack_if_present,
-     "validator + fixtures (6 valid, 6 negative)", "31_math_compiler_stack"),
+     "validator + fixtures (6 valid, 6 negative) + optional demo_pack_v1", "31_math_compiler_stack"),
     (32, "QA Conjecture-Prove Control Loop family",
      _validate_conjecture_prove_loop_if_present,
      "validator + fixtures (3 valid, 3 negative)", "32_conjecture_prove_loop"),

@@ -17,6 +17,7 @@ Usage:
   python qa_math_compiler_validator.py replay  <replay_bundle.json> [--ci]
   python qa_math_compiler_validator.py pair_v1 <pair_v1.json> [--ci]
   python qa_math_compiler_validator.py lemma   <lemma_pack.json> [--ci]
+  python qa_math_compiler_validator.py demo_pack <demo_pack_dir> [--ci]
   python qa_math_compiler_validator.py --self-test
 
 Returns 0 on PASS, 1 on FAIL, 2 on usage error.
@@ -27,6 +28,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import os
 import re
 import statistics
 import sys
@@ -43,6 +45,7 @@ TASK_SCHEMA_ID = "QA_FORMAL_TASK_SCHEMA.v1"
 REPLAY_SCHEMA_ID = "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1"
 PAIR_V1_SCHEMA_ID = "QA_HUMAN_FORMAL_PAIR_CERT.v1"
 LEMMA_SCHEMA_ID = "QA_LEMMA_MINING_SCHEMA.v1"
+DEMO_PACK_SCHEMA_ID = "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1"
 
 VALID_LAYERS = frozenset(["human", "formal"])
 VALID_STATUSES = frozenset(["SUCCESS", "FAIL"])
@@ -73,8 +76,16 @@ PROVED_PAIR_REPLAY_MISMATCH = "PROVED_PAIR_REPLAY_MISMATCH"
 COMPRESSION_METRIC_MISMATCH = "COMPRESSION_METRIC_MISMATCH"
 COMPRESSION_BELOW_TARGET = "COMPRESSION_BELOW_TARGET"
 NEEDS_PROOF_UNACCOUNTED = "NEEDS_PROOF_UNACCOUNTED"
+DEMO_PACK_MISSING_ARTIFACT = "DEMO_PACK_MISSING_ARTIFACT"
+DEMO_PACK_INDEX_MISMATCH = "DEMO_PACK_INDEX_MISMATCH"
+DEMO_PACK_EXAMPLE_INVALID = "DEMO_PACK_EXAMPLE_INVALID"
+DEMO_PACK_LINKAGE_INVALID = "DEMO_PACK_LINKAGE_INVALID"
+DEMO_PACK_BELOW_THRESHOLD = "DEMO_PACK_BELOW_THRESHOLD"
 
 MIN_COVERAGE_RATIO = 0.5
+DEMO_PACK_MIN_EXAMPLES = 3
+DEMO_PACK_MIN_PROVED_RATE = 1.0
+DEMO_PACK_MIN_REPLAY_RATE = 1.0
 
 # ---------------------------------------------------------------------------
 # Helpers
@@ -1072,6 +1083,455 @@ def validate_lemma_mining(pack: Dict[str, Any]) -> ValidationResult:
     return ValidationResult(True, obj_id=obj_id)
 
 
+# ===================================================================
+# DEMO PACK v1 VALIDATION
+# ===================================================================
+
+
+def _load_json(path: str) -> Tuple[Optional[Dict[str, Any]], Optional[ValidationResult]]:
+    try:
+        with open(path, "r", encoding="utf-8") as handle:
+            return json.load(handle), None
+    except FileNotFoundError:
+        return None, ValidationResult(
+            False,
+            DEMO_PACK_MISSING_ARTIFACT,
+            {"path": path, "reason": "file not found"},
+            "demo_pack_v1",
+        )
+    except json.JSONDecodeError as exc:
+        return None, ValidationResult(
+            False,
+            SCHEMA_INVALID,
+            {"path": path, "reason": f"json decode error: {exc}"},
+            "demo_pack_v1",
+        )
+
+
+def validate_demo_pack_v1(pack_dir: str) -> ValidationResult:
+    obj_id = "demo_pack_v1"
+    examples_dir = os.path.join(pack_dir, "examples")
+    index_path = os.path.join(pack_dir, "index.json")
+    required_root = [os.path.join(pack_dir, "README.md"), index_path, examples_dir]
+
+    for path in required_root:
+        if not os.path.exists(path):
+            return ValidationResult(
+                False,
+                DEMO_PACK_MISSING_ARTIFACT,
+                {"path": path, "reason": "required demo-pack artifact missing"},
+                obj_id,
+            )
+
+    index_data, err = _load_json(index_path)
+    if err is not None:
+        return err
+    assert index_data is not None
+
+    for field in ["schema_id", "version", "example_count", "examples"]:
+        if field not in index_data:
+            return ValidationResult(
+                False,
+                DEMO_PACK_INDEX_MISMATCH,
+                {"path": "$.index", "missing_field": field},
+                obj_id,
+            )
+    if index_data["schema_id"] != DEMO_PACK_SCHEMA_ID:
+        return ValidationResult(
+            False,
+            DEMO_PACK_INDEX_MISMATCH,
+            {
+                "path": "$.index.schema_id",
+                "expected": DEMO_PACK_SCHEMA_ID,
+                "got": index_data["schema_id"],
+            },
+            obj_id,
+        )
+    if not isinstance(index_data["examples"], list):
+        return ValidationResult(
+            False,
+            DEMO_PACK_INDEX_MISMATCH,
+            {"path": "$.index.examples", "reason": "must be list"},
+            obj_id,
+        )
+
+    discovered_examples = sorted(
+        d
+        for d in os.listdir(examples_dir)
+        if os.path.isdir(os.path.join(examples_dir, d))
+    )
+    index_examples = []
+    for idx, example in enumerate(index_data["examples"]):
+        if not isinstance(example, dict) or "id" not in example:
+            return ValidationResult(
+                False,
+                DEMO_PACK_INDEX_MISMATCH,
+                {"path": f"$.index.examples[{idx}]", "reason": "must contain id"},
+                obj_id,
+            )
+        index_examples.append(example["id"])
+
+    if len(set(index_examples)) != len(index_examples):
+        return ValidationResult(
+            False,
+            DEMO_PACK_INDEX_MISMATCH,
+            {"path": "$.index.examples", "reason": "duplicate example ids"},
+            obj_id,
+        )
+
+    if sorted(index_examples) != discovered_examples:
+        return ValidationResult(
+            False,
+            DEMO_PACK_INDEX_MISMATCH,
+            {
+                "path": "$.index.examples",
+                "index_example_ids": sorted(index_examples),
+                "discovered_example_ids": discovered_examples,
+            },
+            obj_id,
+        )
+
+    if index_data["example_count"] != len(discovered_examples):
+        return ValidationResult(
+            False,
+            DEMO_PACK_INDEX_MISMATCH,
+            {
+                "path": "$.index.example_count",
+                "declared": index_data["example_count"],
+                "computed": len(discovered_examples),
+            },
+            obj_id,
+        )
+
+    required_example_files = [
+        "claim.txt",
+        "task.json",
+        "trace.json",
+        "replay.json",
+        "pair.json",
+        "README.md",
+    ]
+
+    proved_count = 0
+    replay_success_count = 0
+
+    for example_id in discovered_examples:
+        ex_dir = os.path.join(examples_dir, example_id)
+
+        for fname in required_example_files:
+            fpath = os.path.join(ex_dir, fname)
+            if not os.path.exists(fpath):
+                return ValidationResult(
+                    False,
+                    DEMO_PACK_MISSING_ARTIFACT,
+                    {
+                        "example_id": example_id,
+                        "path": fpath,
+                        "reason": "required example artifact missing",
+                    },
+                    obj_id,
+                )
+
+        task_data, err = _load_json(os.path.join(ex_dir, "task.json"))
+        if err is not None:
+            return err
+        trace_data, err = _load_json(os.path.join(ex_dir, "trace.json"))
+        if err is not None:
+            return err
+        replay_data, err = _load_json(os.path.join(ex_dir, "replay.json"))
+        if err is not None:
+            return err
+        pair_data, err = _load_json(os.path.join(ex_dir, "pair.json"))
+        if err is not None:
+            return err
+
+        assert task_data is not None and trace_data is not None
+        assert replay_data is not None and pair_data is not None
+
+        artifact_validations = [
+            ("task.json", validate_task(task_data)),
+            ("trace.json", validate_trace(trace_data)),
+            ("replay.json", validate_replay_bundle(replay_data)),
+            ("pair.json", validate_pair_v1(pair_data)),
+        ]
+
+        lemma_path = os.path.join(ex_dir, "lemma.json")
+        if os.path.exists(lemma_path):
+            lemma_data, err = _load_json(lemma_path)
+            if err is not None:
+                return err
+            assert lemma_data is not None
+            artifact_validations.append(("lemma.json", validate_lemma_mining(lemma_data)))
+
+        for artifact, result in artifact_validations:
+            if not result.ok:
+                return ValidationResult(
+                    False,
+                    DEMO_PACK_EXAMPLE_INVALID,
+                    {
+                        "example_id": example_id,
+                        "artifact": artifact,
+                        "validator_fail_type": result.fail_type,
+                        "validator_invariant_diff": result.invariant_diff,
+                    },
+                    obj_id,
+                )
+
+        trace_id = trace_data.get("trace_id")
+        if not _is_hex64(trace_id):
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "trace.json missing valid trace_id",
+                    "missing_key": "trace_id",
+                },
+                obj_id,
+            )
+
+        pair_trace_ref = pair_data.get("trace_ref")
+        if not isinstance(pair_trace_ref, dict):
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "pair.json missing trace_ref object",
+                    "missing_key": "trace_ref",
+                },
+                obj_id,
+            )
+
+        pair_trace_id = pair_trace_ref.get("trace_id")
+        if not _is_hex64(pair_trace_id):
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "pair trace_ref.trace_id missing or malformed",
+                    "missing_key": "trace_ref.trace_id",
+                },
+                obj_id,
+            )
+
+        pair_result_status = pair_trace_ref.get("result_status")
+        if pair_result_status not in VALID_STATUSES:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "pair trace_ref.result_status missing or invalid",
+                    "missing_key": "trace_ref.result_status",
+                    "got": pair_result_status,
+                },
+                obj_id,
+            )
+
+        pair_replay_status = pair_trace_ref.get("replay_status")
+        if pair_replay_status not in VALID_REPLAY_STATUSES:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "pair trace_ref.replay_status missing or invalid",
+                    "missing_key": "trace_ref.replay_status",
+                    "got": pair_replay_status,
+                },
+                obj_id,
+            )
+
+        if pair_trace_id != trace_id:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "pair trace_ref.trace_id does not match trace.trace_id",
+                    "pair_trace_id": pair_trace_id,
+                    "trace_id": trace_id,
+                },
+                obj_id,
+            )
+
+        replay_traces = replay_data.get("traces")
+        if not isinstance(replay_traces, list):
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "replay.json missing traces array",
+                    "missing_key": "traces",
+                },
+                obj_id,
+            )
+
+        replay_rows = [row for row in replay_traces if isinstance(row, dict) and row.get("trace_id") == trace_id]
+        if len(replay_rows) != 1:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "replay.json must contain exactly one row for trace.trace_id",
+                    "trace_id": trace_id,
+                    "match_count": len(replay_rows),
+                },
+                obj_id,
+            )
+        replay_row = replay_rows[0]
+        replay_result_status = replay_row.get("result_status")
+        replay_replay_status = replay_row.get("replay_status")
+        if replay_result_status not in VALID_STATUSES:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "replay row missing/invalid result_status",
+                    "missing_key": "replay.traces[].result_status",
+                    "got": replay_result_status,
+                },
+                obj_id,
+            )
+        if replay_replay_status not in VALID_REPLAY_STATUSES:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "replay row missing/invalid replay_status",
+                    "missing_key": "replay.traces[].replay_status",
+                    "got": replay_replay_status,
+                },
+                obj_id,
+            )
+
+        if pair_result_status != replay_result_status or pair_replay_status != replay_replay_status:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "pair trace_ref statuses do not match replay row statuses",
+                    "pair_trace_ref": pair_trace_ref,
+                    "replay_row": replay_row,
+                },
+                obj_id,
+            )
+
+        # Optional task <-> pair consistency checks (best effort).
+        task_problem_id = task_data.get("problem_id")
+        pair_problem_id = pair_data.get("problem_id")
+        if task_problem_id is not None and pair_problem_id is not None and task_problem_id != pair_problem_id:
+            return ValidationResult(
+                False,
+                DEMO_PACK_LINKAGE_INVALID,
+                {
+                    "example_id": example_id,
+                    "reason": "pair.problem_id != task.problem_id",
+                    "task_problem_id": task_problem_id,
+                    "pair_problem_id": pair_problem_id,
+                },
+                obj_id,
+            )
+        pair_task_ref = pair_data.get("task_ref")
+        if isinstance(pair_task_ref, dict) and task_problem_id is not None:
+            pair_task_problem_id = pair_task_ref.get("problem_id")
+            if pair_task_problem_id is not None and pair_task_problem_id != task_problem_id:
+                return ValidationResult(
+                    False,
+                    DEMO_PACK_LINKAGE_INVALID,
+                    {
+                        "example_id": example_id,
+                        "reason": "pair.task_ref.problem_id != task.problem_id",
+                        "task_problem_id": task_problem_id,
+                        "pair_task_problem_id": pair_task_problem_id,
+                    },
+                    obj_id,
+                )
+
+        task_formal_goal = task_data.get("formal_goal")
+        pair_formal_statement = pair_data.get("formal_statement")
+        if _is_nonempty_str(task_formal_goal) and _is_nonempty_str(pair_formal_statement):
+            if task_formal_goal.strip() != pair_formal_statement.strip():
+                return ValidationResult(
+                    False,
+                    DEMO_PACK_LINKAGE_INVALID,
+                    {
+                        "example_id": example_id,
+                        "reason": "pair formal_statement does not match task formal_goal",
+                        "task_formal_goal": task_formal_goal,
+                        "pair_formal_statement": pair_formal_statement,
+                    },
+                    obj_id,
+                )
+
+        if pair_data["status"] == "PROVED":
+            proved_count += 1
+            if replay_replay_status != "SUCCESS":
+                return ValidationResult(
+                    False,
+                    DEMO_PACK_LINKAGE_INVALID,
+                    {
+                        "example_id": example_id,
+                        "reason": "PROVED example must replay with SUCCESS status",
+                        "replay_status": replay_replay_status,
+                    },
+                    obj_id,
+                )
+
+        if replay_replay_status == "SUCCESS":
+            replay_success_count += 1
+
+    total_examples = len(discovered_examples)
+    proved_rate = (proved_count / total_examples) if total_examples > 0 else 0.0
+    replay_rate = (replay_success_count / total_examples) if total_examples > 0 else 0.0
+
+    if total_examples < DEMO_PACK_MIN_EXAMPLES:
+        return ValidationResult(
+            False,
+            DEMO_PACK_BELOW_THRESHOLD,
+            {
+                "threshold": "min_examples",
+                "required": DEMO_PACK_MIN_EXAMPLES,
+                "observed": total_examples,
+            },
+            obj_id,
+        )
+    if proved_rate < DEMO_PACK_MIN_PROVED_RATE:
+        return ValidationResult(
+            False,
+            DEMO_PACK_BELOW_THRESHOLD,
+            {
+                "threshold": "min_proved_rate",
+                "required": DEMO_PACK_MIN_PROVED_RATE,
+                "observed": proved_rate,
+            },
+            obj_id,
+        )
+    if replay_rate < DEMO_PACK_MIN_REPLAY_RATE:
+        return ValidationResult(
+            False,
+            DEMO_PACK_BELOW_THRESHOLD,
+            {
+                "threshold": "min_replay_rate",
+                "required": DEMO_PACK_MIN_REPLAY_RATE,
+                "observed": replay_rate,
+            },
+            obj_id,
+        )
+
+    return ValidationResult(
+        True,
+        obj_id=obj_id,
+    )
+
+
 # ---------------------------------------------------------------------------
 # Self-test
 # ---------------------------------------------------------------------------
@@ -1450,7 +1910,7 @@ def main() -> None:
         ok = _self_test()
         sys.exit(0 if ok else 1)
 
-    valid_modes = ("trace", "pair", "task", "replay", "pair_v1", "lemma")
+    valid_modes = ("trace", "pair", "task", "replay", "pair_v1", "lemma", "demo_pack")
     if len(args) < 2 or args[0] not in valid_modes:
         print(
             f"Usage: {sys.argv[0]} trace   <file.json> [--ci]", file=sys.stderr
@@ -1470,12 +1930,34 @@ def main() -> None:
         print(
             f"       {sys.argv[0]} lemma   <file.json> [--ci]", file=sys.stderr
         )
+        print(
+            f"       {sys.argv[0]} demo_pack <demo_pack_dir> [--ci]", file=sys.stderr
+        )
         print(f"       {sys.argv[0]} --self-test", file=sys.stderr)
         sys.exit(2)
 
     mode = args[0]
     file_path = Path(args[1])
     ci_mode = "--ci" in args
+
+    if mode == "demo_pack":
+        if not file_path.exists() or not file_path.is_dir():
+            print(f"ERROR: {file_path} is not a directory", file=sys.stderr)
+            sys.exit(2)
+        result = validate_demo_pack_v1(str(file_path))
+        if ci_mode:
+            if result.ok:
+                print(f"[PASS] {file_path.name}: valid ({result.obj_id})")
+            else:
+                diff_str = json.dumps(result.invariant_diff, sort_keys=True)
+                print(f"[FAIL] {file_path.name}: {result.fail_type} {diff_str}")
+        else:
+            if result.ok:
+                print(f"PASS: {file_path.name} ({result.obj_id})")
+            else:
+                print(f"FAIL: {file_path.name}")
+                print(json.dumps(result.to_dict(), indent=2, sort_keys=True))
+        sys.exit(0 if result.ok else 1)
 
     if not file_path.exists():
         print(f"ERROR: {file_path} not found", file=sys.stderr)

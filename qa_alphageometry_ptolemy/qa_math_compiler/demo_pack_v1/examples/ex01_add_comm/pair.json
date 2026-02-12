@@ -1,0 +1,30 @@
+{
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "pair_id": "DEMO_EX01_PAIR",
+  "created_utc": "2026-02-12T00:03:00Z",
+  "natural_language_claim": "For natural numbers, addition is commutative.",
+  "formal_statement": "theorem ex01_add_comm (a b : Nat) : a + b = b + a",
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Nat.add_comm"
+    ],
+    "span_mappings": [
+      {
+        "nl_span": "addition is commutative",
+        "formal_identifiers": [
+          "Nat.add_comm"
+        ]
+      }
+    ]
+  },
+  "trace_ref": {
+    "trace_id": "1111111111111111111111111111111111111111111111111111111111111111",
+    "result_status": "SUCCESS",
+    "replay_status": "SUCCESS"
+  },
+  "status": "PROVED",
+  "objections": [],
+  "invariant_diff": {
+    "demo_example": "ex01_add_comm"
+  }
+}

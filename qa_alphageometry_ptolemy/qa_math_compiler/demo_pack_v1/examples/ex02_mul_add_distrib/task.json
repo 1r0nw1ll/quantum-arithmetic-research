@@ -1,0 +1,24 @@
+{
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "DEMO_EX02_TASK",
+  "created_utc": "2026-02-12T00:10:00Z",
+  "nl_statement": "Multiplication distributes over addition on the right.",
+  "formal_goal": "theorem ex02_add_mul (a b c : Nat) : (a + b) * c = a * c + b * c",
+  "imports": [
+    "Mathlib.Data.Nat.Basic"
+  ],
+  "context": [
+    "open Nat"
+  ],
+  "constraints": {
+    "max_seconds": 30,
+    "max_memory_mb": 1024,
+    "allowed_tactics": [
+      "exact",
+      "rw"
+    ]
+  },
+  "invariant_diff": {
+    "demo_example": "ex02_mul_add_distrib"
+  }
+}

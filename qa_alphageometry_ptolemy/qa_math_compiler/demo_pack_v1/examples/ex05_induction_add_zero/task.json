@@ -1,0 +1,32 @@
+{
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "demo_pack_v1_ex05_induction_add_zero",
+  "created_utc": "2026-02-12T00:40:00Z",
+  "nl_statement": "For every n : Nat, n + 0 = n.",
+  "formal_goal": "forall n : Nat, n + 0 = n",
+  "imports": [
+    "Mathlib.Data.Nat.Basic"
+  ],
+  "context": [
+    "open Nat"
+  ],
+  "constraints": {
+    "max_seconds": 45,
+    "max_memory_mb": 1024,
+    "allowed_tactics": [
+      "induction",
+      "rw",
+      "simp"
+    ]
+  },
+  "invariant_diff": {
+    "demo_example": "ex05_induction_add_zero",
+    "problem_id": "demo_pack_v1_ex05_induction_add_zero",
+    "difficulty": "intro",
+    "domain_tags": [
+      "nat",
+      "induction",
+      "equality"
+    ]
+  }
+}

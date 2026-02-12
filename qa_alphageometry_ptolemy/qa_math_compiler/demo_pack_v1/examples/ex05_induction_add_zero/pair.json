@@ -1,0 +1,37 @@
+{
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "pair_id": "DEMO_EX05_PAIR",
+  "created_utc": "2026-02-12T00:43:00Z",
+  "natural_language_claim": "For every natural number n, n + 0 equals n.",
+  "formal_statement": "forall n : Nat, n + 0 = n",
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Nat.rec",
+      "Nat.add_zero"
+    ],
+    "span_mappings": [
+      {
+        "nl_span": "for every natural number n",
+        "formal_identifiers": [
+          "Nat.rec"
+        ]
+      },
+      {
+        "nl_span": "n + 0 equals n",
+        "formal_identifiers": [
+          "Nat.add_zero"
+        ]
+      }
+    ]
+  },
+  "trace_ref": {
+    "trace_id": "5151515151515151515151515151515151515151515151515151515151515151",
+    "result_status": "SUCCESS",
+    "replay_status": "SUCCESS"
+  },
+  "status": "PROVED",
+  "objections": [],
+  "invariant_diff": {
+    "demo_example": "ex05_induction_add_zero"
+  }
+}

@@ -1,0 +1,23 @@
+{
+  "schema_id": "QA_MATH_COMPILER_TRACE_SCHEMA.v1",
+  "trace_id": "5151515151515151515151515151515151515151515151515151515151515151",
+  "created_utc": "2026-02-12T00:41:00Z",
+  "agent_id": "qa-demo-agent",
+  "source_layer": "human",
+  "target_layer": "formal",
+  "generator": "sigma_autoformalize",
+  "input_hash": "5252525252525252525252525252525252525252525252525252525252525252",
+  "output_hash": "5353535353535353535353535353535353535353535353535353535353535353",
+  "toolchain_id": "lean4.12.0",
+  "result": {
+    "status": "SUCCESS",
+    "witness_hash": "5454545454545454545454545454545454545454545454545454545454545454"
+  },
+  "merkle_parent": "5555555555555555555555555555555555555555555555555555555555555555",
+  "invariant_diff": {
+    "demo_example": "ex05_induction_add_zero",
+    "proof_method": "induction",
+    "induction_variable": "n",
+    "step_count": 6
+  }
+}

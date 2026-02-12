@@ -1,0 +1,2 @@
+For natural numbers a and b, a is less than or equal to a + b.
+Lean: forall a b : Nat, a <= a + b

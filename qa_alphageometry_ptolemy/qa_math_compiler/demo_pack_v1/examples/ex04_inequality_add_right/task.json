@@ -1,0 +1,31 @@
+{
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "demo_pack_v1_ex04_inequality_add_right",
+  "created_utc": "2026-02-12T00:30:00Z",
+  "nl_statement": "For all naturals a b, a <= a + b.",
+  "formal_goal": "forall a b : Nat, a <= a + b",
+  "imports": [
+    "Mathlib.Data.Nat.Basic"
+  ],
+  "context": [
+    "open Nat"
+  ],
+  "constraints": {
+    "max_seconds": 30,
+    "max_memory_mb": 1024,
+    "allowed_tactics": [
+      "exact",
+      "apply"
+    ]
+  },
+  "invariant_diff": {
+    "demo_example": "ex04_inequality_add_right",
+    "problem_id": "demo_pack_v1_ex04_inequality_add_right",
+    "difficulty": "intro",
+    "domain_tags": [
+      "nat",
+      "inequality",
+      "order"
+    ]
+  }
+}

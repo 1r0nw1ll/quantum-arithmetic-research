@@ -1,0 +1,30 @@
+{
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "pair_id": "DEMO_EX04_PAIR",
+  "created_utc": "2026-02-12T00:33:00Z",
+  "natural_language_claim": "For all naturals a and b, a is less than or equal to a + b.",
+  "formal_statement": "forall a b : Nat, a <= a + b",
+  "alignment_evidence": {
+    "key_lemmas": [
+      "(Mathlib Nat inequality lemma)"
+    ],
+    "span_mappings": [
+      {
+        "nl_span": "less than or equal to a + b",
+        "formal_identifiers": [
+          "(Mathlib Nat inequality lemma)"
+        ]
+      }
+    ]
+  },
+  "trace_ref": {
+    "trace_id": "4141414141414141414141414141414141414141414141414141414141414141",
+    "result_status": "SUCCESS",
+    "replay_status": "SUCCESS"
+  },
+  "status": "PROVED",
+  "objections": [],
+  "invariant_diff": {
+    "demo_example": "ex04_inequality_add_right"
+  }
+}

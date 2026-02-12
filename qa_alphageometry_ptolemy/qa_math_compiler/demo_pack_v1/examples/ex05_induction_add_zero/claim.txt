@@ -1,0 +1,2 @@
+For every natural number n, adding zero on the right leaves n unchanged.
+Lean: forall n : Nat, n + 0 = n

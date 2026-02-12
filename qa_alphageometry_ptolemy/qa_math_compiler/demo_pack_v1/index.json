@@ -1,7 +1,7 @@
 {
   "schema_id": "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1",
   "version": "v1",
-  "example_count": 3,
+  "example_count": 5,
   "examples": [
     {
       "id": "ex01_add_comm",
@@ -19,6 +19,18 @@
       "id": "ex03_sum_first_n",
       "topic": "induction",
       "difficulty": "core",
+      "status": "PROVED"
+    },
+    {
+      "id": "ex04_inequality_add_right",
+      "topic": "inequality",
+      "difficulty": "intro",
+      "status": "PROVED"
+    },
+    {
+      "id": "ex05_induction_add_zero",
+      "topic": "induction",
+      "difficulty": "intro",
       "status": "PROVED"
     }
   ]

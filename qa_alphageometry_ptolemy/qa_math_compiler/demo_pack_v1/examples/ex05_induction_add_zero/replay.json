@@ -1,0 +1,34 @@
+{
+  "schema_id": "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1",
+  "bundle_id": "DEMO_EX05_REPLAY",
+  "created_utc": "2026-02-12T00:42:00Z",
+  "toolchain": {
+    "lean_version": "4.12.0",
+    "lake_lock_hash": "5656565656565656565656565656565656565656565656565656565656565656",
+    "toolchain_hash": "5757575757575757575757575757575757575757575757575757575757575757"
+  },
+  "benchmark": {
+    "trace_count": 1,
+    "min_replay_rate": 1.0
+  },
+  "traces": [
+    {
+      "trace_id": "5151515151515151515151515151515151515151515151515151515151515151",
+      "seed": 5,
+      "trace_hash": "5858585858585858585858585858585858585858585858585858585858585858",
+      "replay_hash": "5858585858585858585858585858585858585858585858585858585858585858",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    }
+  ],
+  "metrics": {
+    "deterministic_replays": 1,
+    "total_replays": 1,
+    "replay_successes": 1,
+    "replay_rate": 1.0,
+    "infra_flake_count": 0
+  },
+  "invariant_diff": {
+    "demo_example": "ex05_induction_add_zero"
+  }
+}

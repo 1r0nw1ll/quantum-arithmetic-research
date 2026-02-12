@@ -8,7 +8,56 @@ on:
   workflow_dispatch:
 
 jobs:
+  qa-clean-tree-meta-validator:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
+      - name: Fetch MNIST raw files for Level-3 recompute
+        run: |
+          mkdir -p data/MNIST/raw
+          python - <<'PY'
+          from pathlib import Path
+          from urllib.request import urlretrieve
+
+          base = "https://storage.googleapis.com/cvdf-datasets/mnist/"
+          files = [
+              "train-images-idx3-ubyte.gz",
+              "train-labels-idx1-ubyte.gz",
+              "t10k-images-idx3-ubyte.gz",
+              "t10k-labels-idx1-ubyte.gz",
+          ]
+
+          out_dir = Path("data/MNIST/raw")
+          out_dir.mkdir(parents=True, exist_ok=True)
+
+          for filename in files:
+              target = out_dir / filename
+              if target.exists():
+                  continue
+              urlretrieve(base + filename, target)
+          PY
+
+      - name: Run QA meta-validator in clean archive tree
+        run: |
+          tmp_dir="$(mktemp -d)"
+          git archive HEAD | tar -x -C "$tmp_dir"
+          cd "$tmp_dir/qa_alphageometry_ptolemy"
+          python qa_meta_validator.py
+
   qa-validators:
+    needs: qa-clean-tree-meta-validator
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:

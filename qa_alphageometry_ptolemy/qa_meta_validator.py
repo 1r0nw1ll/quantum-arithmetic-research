@@ -1499,11 +1499,19 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     Run QA Math Compiler Stack validator against fixtures.
 
     Checks:
-      - Validator self-test (9 built-in checks)
+      - Validator self-test (17 built-in checks)
       - trace_valid.json must PASS
       - trace_invalid_missing_invariant_diff.json must FAIL with RESULT_INCOMPLETE
       - pair_valid.json must PASS
       - pair_invalid_hash_mismatch.json must FAIL with HASH_SELF_BINDING
+      - task_valid.json must PASS
+      - task_invalid_missing_formal_goal.json must FAIL with SCHEMA_INVALID
+      - replay_valid.json must PASS
+      - replay_invalid_bad_determinism.json must FAIL with DETERMINISM_MISMATCH
+      - pair_v1_valid_proved.json must PASS
+      - pair_v1_invalid_unproved_replay.json must FAIL with PROVED_PAIR_REPLAY_MISMATCH
+      - lemma_mining_valid.json must PASS
+      - lemma_mining_invalid_low_compression.json must FAIL with COMPRESSION_BELOW_TARGET
 
     Returns:
         None on success,
@@ -1521,14 +1529,27 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     trace_neg = os.path.join(fixtures_dir, "trace_invalid_missing_invariant_diff.json")
     pair_valid = os.path.join(fixtures_dir, "pair_valid.json")
     pair_neg = os.path.join(fixtures_dir, "pair_invalid_hash_mismatch.json")
-    for fp in [trace_valid, trace_neg, pair_valid, pair_neg]:
+    task_valid = os.path.join(fixtures_dir, "task_valid.json")
+    task_neg = os.path.join(fixtures_dir, "task_invalid_missing_formal_goal.json")
+    replay_valid = os.path.join(fixtures_dir, "replay_valid.json")
+    replay_neg = os.path.join(fixtures_dir, "replay_invalid_bad_determinism.json")
+    pair_v1_valid = os.path.join(fixtures_dir, "pair_v1_valid_proved.json")
+    pair_v1_neg = os.path.join(fixtures_dir, "pair_v1_invalid_unproved_replay.json")
+    lemma_valid = os.path.join(fixtures_dir, "lemma_mining_valid.json")
+    lemma_neg = os.path.join(fixtures_dir, "lemma_mining_invalid_low_compression.json")
+    for fp in [
+        trace_valid, trace_neg, pair_valid, pair_neg,
+        task_valid, task_neg, replay_valid, replay_neg,
+        pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg,
+    ]:
         if not os.path.exists(fp):
             return f"missing fixture: {os.path.basename(fp)}"
 
     if base_dir not in sys.path:
         sys.path.insert(0, base_dir)
     from qa_math_compiler.qa_math_compiler_validator import (
-        validate_trace, validate_pair, _self_test,
+        validate_trace, validate_pair, validate_task, validate_replay_bundle,
+        validate_pair_v1, validate_lemma_mining, _self_test,
     )
 
     # Self-test first
@@ -1577,6 +1598,94 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             f"pair_invalid_hash_mismatch.json: expected "
             f"HASH_SELF_BINDING, got {result.fail_type}"
+        )
+
+    # Valid formal task fixture must pass
+    with open(task_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_task(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"task_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative task: empty formal_goal -> SCHEMA_INVALID
+    with open(task_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_task(data)
+    if result.ok:
+        raise RuntimeError("task_invalid_missing_formal_goal.json should FAIL but passed")
+    if result.fail_type != "SCHEMA_INVALID":
+        raise RuntimeError(
+            f"task_invalid_missing_formal_goal.json: expected "
+            f"SCHEMA_INVALID, got {result.fail_type}"
+        )
+
+    # Valid replay fixture must pass
+    with open(replay_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_replay_bundle(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"replay_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative replay: trace_hash != replay_hash -> DETERMINISM_MISMATCH
+    with open(replay_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_replay_bundle(data)
+    if result.ok:
+        raise RuntimeError("replay_invalid_bad_determinism.json should FAIL but passed")
+    if result.fail_type != "DETERMINISM_MISMATCH":
+        raise RuntimeError(
+            f"replay_invalid_bad_determinism.json: expected "
+            f"DETERMINISM_MISMATCH, got {result.fail_type}"
+        )
+
+    # Valid Pair v1 fixture must pass
+    with open(pair_v1_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_pair_v1(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"pair_v1_valid_proved.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative Pair v1: PROVED with replay FAIL -> PROVED_PAIR_REPLAY_MISMATCH
+    with open(pair_v1_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_pair_v1(data)
+    if result.ok:
+        raise RuntimeError("pair_v1_invalid_unproved_replay.json should FAIL but passed")
+    if result.fail_type != "PROVED_PAIR_REPLAY_MISMATCH":
+        raise RuntimeError(
+            f"pair_v1_invalid_unproved_replay.json: expected "
+            f"PROVED_PAIR_REPLAY_MISMATCH, got {result.fail_type}"
+        )
+
+    # Valid lemma mining fixture must pass
+    with open(lemma_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_lemma_mining(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"lemma_mining_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    # Negative lemma mining: median reduction below target
+    with open(lemma_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_lemma_mining(data)
+    if result.ok:
+        raise RuntimeError("lemma_mining_invalid_low_compression.json should FAIL but passed")
+    if result.fail_type != "COMPRESSION_BELOW_TARGET":
+        raise RuntimeError(
+            f"lemma_mining_invalid_low_compression.json: expected "
+            f"COMPRESSION_BELOW_TARGET, got {result.fail_type}"
         )
 
     return None
@@ -1871,10 +1980,16 @@ def _validate_rule30_cert_if_present(base_dir: str) -> Optional[str]:
     for line in proc.stdout.strip().split("\n"):
         print(line)
 
-    # 2. Cert pack validation (v1 and v2 if present)
+    # 2. Cert pack validation (v1-v4 if present)
     cert_data = None  # will hold latest validated cert for verifier gate
+    latest_cert_slug = None
     certpack_dir = None
-    for version_slug in ["rule30_nonperiodicity_v1", "rule30_nonperiodicity_v2"]:
+    for version_slug in [
+        "rule30_nonperiodicity_v1",
+        "rule30_nonperiodicity_v2",
+        "rule30_nonperiodicity_v3",
+        "rule30_nonperiodicity_v4",
+    ]:
         cp_dir = os.path.join(r30_dir, "certpacks", version_slug)
         cp_cert = os.path.join(cp_dir, "QA_RULE30_NONPERIODICITY_CERT.v1.json")
         if not os.path.isfile(cp_cert):
@@ -1890,6 +2005,7 @@ def _validate_rule30_cert_if_present(base_dir: str) -> Optional[str]:
         # 3. Validate each witness manifest with file hashes
         with open(cp_cert, "r", encoding="utf-8") as f:
             cert_data = json.load(f)
+        latest_cert_slug = version_slug
         certpack_dir = cp_dir
         for ref in cert_data.get("witness_refs", []):
             man_path = os.path.join(cp_dir, ref["manifest_path"])
@@ -1975,7 +2091,8 @@ def _validate_rule30_cert_if_present(base_dir: str) -> Optional[str]:
         combined = (proc.stdout or "") + "\n" + (proc.stderr or "")
         if proc.returncode != 0:
             raise RuntimeError(
-                f"Independent verifier failed on cert pack\n{combined.strip()}")
+                f"Independent verifier failed on cert pack {latest_cert_slug}\n"
+                f"{combined.strip()}")
         if "ALL WITNESSES INDEPENDENTLY VERIFIED" not in combined:
             raise RuntimeError(
                 f"Independent verifier missing success marker\n{combined.strip()}")
@@ -2058,7 +2175,7 @@ FAMILY_SWEEPS = [
      "schema + validator + fixtures (1 valid, 3 negative)", "30_agent_trace_competency_cert"),
     (31, "QA Math Compiler Stack family",
      _validate_math_compiler_stack_if_present,
-     "validator + fixtures (2 valid, 2 negative)", "31_math_compiler_stack"),
+     "validator + fixtures (6 valid, 6 negative)", "31_math_compiler_stack"),
     (32, "QA Conjecture-Prove Control Loop family",
      _validate_conjecture_prove_loop_if_present,
      "validator + fixtures (3 valid, 3 negative)", "32_conjecture_prove_loop"),

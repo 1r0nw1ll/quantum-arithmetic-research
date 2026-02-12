@@ -68,6 +68,26 @@ def main():
     outdir.mkdir(parents=True, exist_ok=True)
 
     t_values = args.T or DEFAULT_T_VALUES
+    t_values = sorted(set(t_values))
+    if not t_values:
+        print("FATAL: no T values provided", file=sys.stderr)
+        sys.exit(2)
+
+    min_t = min(t_values)
+    safe_p_max = min_t // 2
+    if P_MAX >= min_t:
+        print(
+            f"FATAL: invalid scope P_max={P_MAX} with min(T)={min_t}. "
+            "Require P_max < min(T).",
+            file=sys.stderr,
+        )
+        sys.exit(2)
+    if P_MAX > safe_p_max:
+        print(
+            f"WARNING: P_max={P_MAX} exceeds recommended safe margin "
+            f"min(T)//2={safe_p_max}.",
+            file=sys.stderr,
+        )
     witness_dir = outdir / "witnesses"
 
     t0 = time.time()

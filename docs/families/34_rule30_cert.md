@@ -11,9 +11,9 @@ machine-verifiable witness data with hash-locked manifests.
 |-----------|-------|
 | Rule | 30 (ECA) |
 | Initial condition | single 1 at position 0 |
-| Period range | p in [1, 1024] |
-| Time horizons | T in {4096, 8192, 16384, 32768, 65536} |
-| Claim | No period p in [1,1024] detected at any T value |
+| Period range | up to p in [1, 8192] (v4) |
+| Time horizons | v1/v2: {4096, 8192, 16384, 32768, 65536}; v3: {8192, 16384, 32768, 65536}; v4: {16384, 32768, 65536} |
+| Claim | No period detected across each cert pack's declared `(P_min, P_max, T_values)` scope |
 
 ## Schemas
 
@@ -32,6 +32,9 @@ machine-verifiable witness data with hash-locked manifests.
 | Plan generator | `qa_rule30/generate_rule30_plan.py` (batch plan factory) |
 | Certpack assembler | `qa_rule30/assemble_certpack.py` (end-to-end) |
 | Cert pack v1 | `qa_rule30/certpacks/rule30_nonperiodicity_v1/` |
+| Cert pack v2 | `qa_rule30/certpacks/rule30_nonperiodicity_v2/` |
+| Cert pack v3 | `qa_rule30/certpacks/rule30_nonperiodicity_v3/` |
+| Cert pack v4 | `qa_rule30/certpacks/rule30_nonperiodicity_v4/` |
 
 ## Validator Gates
 
@@ -61,6 +64,10 @@ not periodic with period p within [0, T].
 
 Performance: T=65536 completes in ~5 seconds on commodity hardware.
 
+Assembler scope guard:
+- hard fail if `P_max >= min(T_values)`
+- warning if `P_max > min(T_values)//2`
+
 ## Cert Packs
 
 ### v1 (P_max=256)
@@ -73,7 +80,17 @@ Performance: T=65536 completes in ~5 seconds on commodity hardware.
 - 0 failures
 - Cert self-hash: `05775f6a412afdf9bf961eda6b7a1f5d89953e28d17c0058e1fb4f9266c0c675`
 
-Both cert packs are witness-manifest file-hash verified and independently
+### v3 (P_max=4096)
+- 16384 / 16384 periods verified (4 T values x 4096 periods)
+- 0 failures
+- Cert self-hash: `a01bd61865278500ff367c2a7121730473bf8efd832bf67bd3a5c4fd1d29979b`
+
+### v4 (P_max=8192)
+- 24576 / 24576 periods verified (3 T values x 8192 periods)
+- 0 failures
+- Cert self-hash: `d9b991176d12d660d8033c7eb99d277ce45add5c7346fa463e97809844038d5e`
+
+All cert packs are witness-manifest file-hash verified and independently
 verified by `verify_certpack.py` (zero-trust recomputation).
 
 ## Negative Fixtures
@@ -91,13 +108,13 @@ Independent verifier — trusts nothing except the Rule 30 truth table:
 
 ```bash
 # Full verification (~7 seconds)
-python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v1
+python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v4
 
 # With center sequence byte-for-byte check
-python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v1 --full
+python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v4 --full
 
 # Spot-check a single T value
-python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v1 --T 4096
+python qa_rule30/verify_certpack.py qa_rule30/certpacks/rule30_nonperiodicity_v4 --T 16384
 ```
 
 The verifier:
@@ -106,4 +123,8 @@ The verifier:
 3. Verifies manifest file hashes match on disk
 4. Optionally verifies center sequence files byte-for-byte
 
-Public digest: `qa_rule30/certpacks/rule30_nonperiodicity_v1/DIGEST.json`
+Public digests:
+- `qa_rule30/certpacks/rule30_nonperiodicity_v1/DIGEST.json`
+- `qa_rule30/certpacks/rule30_nonperiodicity_v2/DIGEST.json`
+- `qa_rule30/certpacks/rule30_nonperiodicity_v3/DIGEST.json`
+- `qa_rule30/certpacks/rule30_nonperiodicity_v4/DIGEST.json`

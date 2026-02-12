@@ -1525,6 +1525,15 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     if not os.path.isdir(mc_dir):
         return "missing qa_math_compiler/ directory"
 
+    schema_dir = os.path.join(mc_dir, "schemas")
+
+    schema_trace = os.path.join(schema_dir, "QA_MATH_COMPILER_TRACE_SCHEMA.v1.json")
+    schema_pair = os.path.join(schema_dir, "QA_COMPILER_PAIR_CERT_SCHEMA.v1.json")
+    schema_task = os.path.join(schema_dir, "QA_FORMAL_TASK_SCHEMA.v1.json")
+    schema_replay = os.path.join(schema_dir, "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1.json")
+    schema_pair_v1 = os.path.join(schema_dir, "QA_HUMAN_FORMAL_PAIR_CERT.v1.json")
+    schema_lemma = os.path.join(schema_dir, "QA_LEMMA_MINING_SCHEMA.v1.json")
+
     trace_valid = os.path.join(fixtures_dir, "trace_valid.json")
     trace_neg = os.path.join(fixtures_dir, "trace_invalid_missing_invariant_diff.json")
     pair_valid = os.path.join(fixtures_dir, "pair_valid.json")
@@ -1537,13 +1546,34 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     pair_v1_neg = os.path.join(fixtures_dir, "pair_v1_invalid_unproved_replay.json")
     lemma_valid = os.path.join(fixtures_dir, "lemma_mining_valid.json")
     lemma_neg = os.path.join(fixtures_dir, "lemma_mining_invalid_low_compression.json")
-    for fp in [
+    required_artifacts = [
+        schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg,
-    ]:
+    ]
+    for fp in required_artifacts:
         if not os.path.exists(fp):
-            return f"missing fixture: {os.path.basename(fp)}"
+            return f"missing artifact: {os.path.basename(fp)}"
+
+    # Enforce that required schema/fixture artifacts are tracked (not only
+    # present in a dirty workspace). Skip this check when .git metadata is
+    # unavailable (e.g., clean archive CI preflight tree).
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    if os.path.exists(os.path.join(repo_root, ".git")):
+        import subprocess
+
+        for fp in required_artifacts:
+            rel = os.path.relpath(fp, repo_root)
+            proc = subprocess.run(
+                ["git", "-C", repo_root, "ls-files", "--error-unmatch", rel],
+                capture_output=True,
+                text=True,
+            )
+            if proc.returncode != 0:
+                raise RuntimeError(
+                    f"UNTRACKED_REQUIRED_ARTIFACT: {rel}"
+                )
 
     if base_dir not in sys.path:
         sys.path.insert(0, base_dir)

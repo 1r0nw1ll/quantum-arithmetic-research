@@ -1,0 +1,27 @@
+{
+  "schema_id": "QA_MATH_COMPILER_TRACE_SCHEMA.v1",
+  "trace_id": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+  "created_utc": "2026-02-10T23:15:00Z",
+  "agent_id": "qa-compiler-agent-1",
+  "source_layer": "human",
+  "target_layer": "formal",
+  "generator": "sigma_autoformalize",
+  "input_hash": "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+  "output_hash": "c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+  "toolchain_id": "lean4.12.0",
+  "result": {
+    "status": "FAIL",
+    "fail_type": "TYPE_MISMATCH",
+    "invariant_diff": {
+      "expected_type": "Nat",
+      "found_type": "Int",
+      "location": "Theorem.statement.arg[1]"
+    }
+  },
+  "merkle_parent": "e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
+  "invariant_diff": {
+    "generator": "sigma_autoformalize",
+    "direction": "human_to_formal",
+    "result": "FAIL/TYPE_MISMATCH"
+  }
+}

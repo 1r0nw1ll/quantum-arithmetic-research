@@ -1,0 +1,140 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "title": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "description": "Natural-language to formal theorem pairing certificate with replay-backed status.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "pair_id",
+    "created_utc",
+    "natural_language_claim",
+    "formal_statement",
+    "alignment_evidence",
+    "trace_ref",
+    "status",
+    "objections",
+    "invariant_diff"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_HUMAN_FORMAL_PAIR_CERT.v1"
+    },
+    "pair_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "natural_language_claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "formal_statement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "alignment_evidence": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "key_lemmas",
+        "span_mappings"
+      ],
+      "properties": {
+        "key_lemmas": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "span_mappings": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "nl_span",
+              "formal_identifiers"
+            ],
+            "properties": {
+              "nl_span": {
+                "type": "string",
+                "minLength": 1
+              },
+              "formal_identifiers": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "string",
+                  "minLength": 1
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "trace_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "trace_id",
+        "result_status",
+        "replay_status"
+      ],
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "result_status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAIL"]
+        },
+        "replay_status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAIL", "INFRA_FLAKE"]
+        }
+      }
+    },
+    "status": {
+      "type": "string",
+      "enum": ["PROVED", "UNPROVED", "AMBIGUOUS"]
+    },
+    "objections": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "type",
+          "message",
+          "pointer"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "message": {
+            "type": "string",
+            "minLength": 1
+          },
+          "pointer": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "invariant_diff": {
+      "type": "object"
+    }
+  }
+}

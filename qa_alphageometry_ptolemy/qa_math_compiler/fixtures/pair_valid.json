@@ -1,0 +1,18 @@
+{
+  "schema_id": "QA_COMPILER_PAIR_CERT_SCHEMA.v1",
+  "pair_id": "PAIR-FIXTURE0001",
+  "created_utc": "2026-02-10T23:20:00Z",
+  "human_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "formal_hash": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3",
+  "alignment_metrics": {
+    "coverage_ratio": 0.87,
+    "definition_overlap": 12,
+    "lemma_overlap": 9
+  },
+  "binding_signature": "f33279b9da05c37880af3e8bda9d8b0819959253e0f014c8df98eccecb2d45cd",
+  "invariant_diff": {
+    "coverage_ratio": 0.87,
+    "definitions_shared": 12,
+    "lemmas_shared": 9
+  }
+}

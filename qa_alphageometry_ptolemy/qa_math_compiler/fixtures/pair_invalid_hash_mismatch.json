@@ -1,0 +1,18 @@
+{
+  "_comment": "Negative fixture: human_hash == formal_hash (self-binding). Expected: HASH_SELF_BINDING.",
+  "schema_id": "QA_COMPILER_PAIR_CERT_SCHEMA.v1",
+  "pair_id": "PAIR-NEGFIX0001",
+  "created_utc": "2026-02-10T23:20:00Z",
+  "human_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "formal_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2",
+  "alignment_metrics": {
+    "coverage_ratio": 0.91,
+    "definition_overlap": 15,
+    "lemma_overlap": 11
+  },
+  "binding_signature": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+  "invariant_diff": {
+    "fixture": true,
+    "note": "human_hash == formal_hash"
+  }
+}

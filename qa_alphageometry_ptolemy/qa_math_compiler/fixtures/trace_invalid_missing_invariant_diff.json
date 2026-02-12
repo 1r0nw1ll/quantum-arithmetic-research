@@ -1,0 +1,22 @@
+{
+  "_comment": "Negative fixture: FAIL result has fail_type but no invariant_diff in result block. Expected: RESULT_INCOMPLETE.",
+  "schema_id": "QA_MATH_COMPILER_TRACE_SCHEMA.v1",
+  "trace_id": "a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2",
+  "created_utc": "2026-02-10T23:15:00Z",
+  "agent_id": "qa-compiler-agent-2",
+  "source_layer": "human",
+  "target_layer": "formal",
+  "generator": "sigma_autoformalize",
+  "input_hash": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+  "output_hash": "c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2",
+  "toolchain_id": "lean4.12.0",
+  "result": {
+    "status": "FAIL",
+    "fail_type": "GOAL_STUCK"
+  },
+  "merkle_parent": "e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2e2",
+  "invariant_diff": {
+    "fixture": true,
+    "note": "result.invariant_diff missing on FAIL"
+  }
+}

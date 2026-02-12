@@ -1,0 +1,67 @@
+{
+  "schema_id": "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1",
+  "bundle_id": "REPLAY-FIXTURE-0001",
+  "created_utc": "2026-02-11T01:10:00Z",
+  "toolchain": {
+    "lean_version": "4.12.0",
+    "lake_lock_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+    "toolchain_hash": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "benchmark": {
+    "trace_count": 5,
+    "min_replay_rate": 0.99
+  },
+  "traces": [
+    {
+      "trace_id": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "seed": 10,
+      "trace_hash": "1010101010101010101010101010101010101010101010101010101010101010",
+      "replay_hash": "1010101010101010101010101010101010101010101010101010101010101010",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    },
+    {
+      "trace_id": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "seed": 11,
+      "trace_hash": "2020202020202020202020202020202020202020202020202020202020202020",
+      "replay_hash": "2020202020202020202020202020202020202020202020202020202020202020",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    },
+    {
+      "trace_id": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "seed": 12,
+      "trace_hash": "3030303030303030303030303030303030303030303030303030303030303030",
+      "replay_hash": "3030303030303030303030303030303030303030303030303030303030303030",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    },
+    {
+      "trace_id": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "seed": 13,
+      "trace_hash": "4040404040404040404040404040404040404040404040404040404040404040",
+      "replay_hash": "4040404040404040404040404040404040404040404040404040404040404040",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    },
+    {
+      "trace_id": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "seed": 14,
+      "trace_hash": "5050505050505050505050505050505050505050505050505050505050505050",
+      "replay_hash": "5050505050505050505050505050505050505050505050505050505050505050",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    }
+  ],
+  "metrics": {
+    "deterministic_replays": 5,
+    "total_replays": 5,
+    "replay_successes": 5,
+    "replay_rate": 1.0,
+    "infra_flake_count": 0
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "layer": "replay"
+  }
+}

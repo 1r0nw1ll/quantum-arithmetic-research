@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_COMPILER_PAIR_CERT_SCHEMA.v1",
+  "title": "QA_COMPILER_PAIR_CERT_SCHEMA.v1",
+  "description": "Binds a human mathematical object to a formal object as a paired meaning unit with alignment metrics and cryptographic binding.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "pair_id",
+    "created_utc",
+    "human_hash",
+    "formal_hash",
+    "alignment_metrics",
+    "binding_signature",
+    "invariant_diff"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_COMPILER_PAIR_CERT_SCHEMA.v1"
+    },
+    "pair_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "human_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of the canonical human-layer object"
+    },
+    "formal_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of the canonical formal-layer object"
+    },
+    "alignment_metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["coverage_ratio", "definition_overlap", "lemma_overlap"],
+      "properties": {
+        "coverage_ratio": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Fraction of formal proof structure covered by human explanation"
+        },
+        "definition_overlap": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of shared definitions referenced by both layers"
+        },
+        "lemma_overlap": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Count of shared lemmas referenced by both layers"
+        }
+      }
+    },
+    "binding_signature": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "SHA-256 of canonical({human_hash, formal_hash}) — cryptographic binding"
+    },
+    "invariant_diff": {
+      "type": "object",
+      "description": "Typed explanation of pass/fail for CI logs"
+    }
+  }
+}

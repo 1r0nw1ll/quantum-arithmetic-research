@@ -1,0 +1,26 @@
+{
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "TASK-FIXTURE-0001",
+  "created_utc": "2026-02-11T01:00:00Z",
+  "nl_statement": "If n is even, then n + n is even.",
+  "formal_goal": "theorem even_double (n : Nat) (h : Even n) : Even (n + n)",
+  "imports": [
+    "Mathlib.Data.Nat.Parity"
+  ],
+  "context": [
+    "open Nat"
+  ],
+  "constraints": {
+    "max_seconds": 60,
+    "max_memory_mb": 2048,
+    "allowed_tactics": [
+      "simp",
+      "exact",
+      "constructor"
+    ]
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "layer": "task"
+  }
+}

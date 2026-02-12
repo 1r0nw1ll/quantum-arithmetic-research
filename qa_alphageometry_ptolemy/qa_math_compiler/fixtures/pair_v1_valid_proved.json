@@ -1,0 +1,33 @@
+{
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "pair_id": "PAIR-V1-FIXTURE-0001",
+  "created_utc": "2026-02-11T01:20:00Z",
+  "natural_language_claim": "The sum of two even natural numbers is even.",
+  "formal_statement": "theorem even_add_even (n m : Nat) : Even n -> Even m -> Even (n + m)",
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Nat.even_add"
+    ],
+    "span_mappings": [
+      {
+        "nl_span": "sum of two even natural numbers",
+        "formal_identifiers": [
+          "Even",
+          "Nat",
+          "Nat.even_add"
+        ]
+      }
+    ]
+  },
+  "trace_ref": {
+    "trace_id": "1212121212121212121212121212121212121212121212121212121212121212",
+    "result_status": "SUCCESS",
+    "replay_status": "SUCCESS"
+  },
+  "status": "PROVED",
+  "objections": [],
+  "invariant_diff": {
+    "fixture": true,
+    "layer": "pair_v1"
+  }
+}

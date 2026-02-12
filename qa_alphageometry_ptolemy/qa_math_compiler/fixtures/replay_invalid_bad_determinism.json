@@ -1,0 +1,49 @@
+{
+  "_comment": "Negative fixture: replay hash mismatch on one non-flake trace. Expected: DETERMINISM_MISMATCH.",
+  "schema_id": "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1",
+  "bundle_id": "REPLAY-NEGFIX-0001",
+  "created_utc": "2026-02-11T01:12:00Z",
+  "toolchain": {
+    "lean_version": "4.12.0",
+    "lake_lock_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+    "toolchain_hash": "2222222222222222222222222222222222222222222222222222222222222222"
+  },
+  "benchmark": {
+    "trace_count": 2,
+    "min_replay_rate": 0.5
+  },
+  "traces": [
+    {
+      "trace_id": "abababababababababababababababababababababababababababababababab",
+      "seed": 22,
+      "trace_hash": "111122223333444455556666777788889999aaaabbbbccccddddeeeeffff0000",
+      "replay_hash": "111122223333444455556666777788889999aaaabbbbccccddddeeeeffff0000",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    },
+    {
+      "trace_id": "cdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcdcd",
+      "seed": 23,
+      "trace_hash": "9999888877776666555544443333222211110000aaaabbbbccccddddeeeeffff",
+      "replay_hash": "9999888877776666555544443333222211110000aaaabbbbccccddddeeee0000",
+      "result_status": "SUCCESS",
+      "replay_status": "SUCCESS"
+    }
+  ],
+  "metrics": {
+    "deterministic_replays": 2,
+    "total_replays": 2,
+    "replay_successes": 2,
+    "replay_rate": 1.0,
+    "infra_flake_count": 0
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "expected_failure": {
+      "fail_type": "DETERMINISM_MISMATCH",
+      "invariant_diff": {
+        "path": "$.traces[1].replay_hash"
+      }
+    }
+  }
+}

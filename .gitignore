@@ -80,6 +80,8 @@ Cargo.lock
 !qa_alphageometry_ptolemy/qa_guardrail/**/*.json
 !qa_alphageometry_ptolemy/certs/**/*.json
 !qa_alphageometry_ptolemy/external_validation_data/*.json
+!qa_alphageometry_ptolemy/qa_math_compiler/schemas/*.json
+!qa_alphageometry_ptolemy/qa_math_compiler/fixtures/*.json
 !qa_competency/**/*.json
 !.openclaw/**/*.json
 *.npy

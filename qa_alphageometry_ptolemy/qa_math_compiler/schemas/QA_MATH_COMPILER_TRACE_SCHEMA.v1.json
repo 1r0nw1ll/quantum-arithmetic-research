@@ -1,0 +1,113 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_MATH_COMPILER_TRACE_SCHEMA.v1",
+  "title": "QA_MATH_COMPILER_TRACE_SCHEMA.v1",
+  "description": "Records a single cross-layer compilation move (human <-> formal) with deterministic hashing, typed failures, and Merkle linking.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "trace_id",
+    "created_utc",
+    "agent_id",
+    "source_layer",
+    "target_layer",
+    "generator",
+    "input_hash",
+    "output_hash",
+    "toolchain_id",
+    "result",
+    "merkle_parent",
+    "invariant_diff"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_MATH_COMPILER_TRACE_SCHEMA.v1"
+    },
+    "trace_id": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "agent_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "source_layer": {
+      "type": "string",
+      "enum": ["human", "formal"]
+    },
+    "target_layer": {
+      "type": "string",
+      "enum": ["human", "formal"]
+    },
+    "generator": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Generator name, e.g. sigma_autoformalize, sigma_autoinformalize, sigma_repair"
+    },
+    "input_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "output_hash": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "toolchain_id": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Pinned toolchain identifier, e.g. lean4.12.0"
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["status"],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": ["SUCCESS", "FAIL"]
+        },
+        "witness_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "Hash of proof term / kernel acceptance on SUCCESS"
+        },
+        "fail_type": {
+          "type": "string",
+          "enum": [
+            "PARSE_AMBIGUITY",
+            "MISSING_DEPENDENCY",
+            "TYPE_MISMATCH",
+            "NON_CANONICAL_NORMALIZATION",
+            "UNSUPPORTED_IDIOM",
+            "SPEC_DRIFT",
+            "GOAL_STUCK",
+            "SEARCH_BUDGET_EXCEEDED",
+            "LIBRARY_GAP",
+            "NONDETERMINISTIC_TACTIC",
+            "COUNTEREXAMPLE_FOUND",
+            "INVARIANT_BREAK",
+            "EXPLANATION_COVERAGE_LOW",
+            "LOSSY_MAP_UNDECLARED"
+          ]
+        },
+        "invariant_diff": {
+          "type": "object",
+          "description": "Typed explanation of the failure"
+        }
+      }
+    },
+    "merkle_parent": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "invariant_diff": {
+      "type": "object",
+      "description": "Top-level typed explanation, always required"
+    }
+  }
+}

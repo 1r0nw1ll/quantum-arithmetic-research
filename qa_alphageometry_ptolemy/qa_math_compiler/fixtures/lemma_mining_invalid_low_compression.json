@@ -1,0 +1,73 @@
+{
+  "_comment": "Negative fixture: median reduction is below target. Expected: COMPRESSION_BELOW_TARGET.",
+  "schema_id": "QA_LEMMA_MINING_SCHEMA.v1",
+  "mining_id": "LEMMA-NEGFIX-0001",
+  "created_utc": "2026-02-11T01:32:00Z",
+  "source_traces": [
+    "5656565656565656565656565656565656565656565656565656565656565656",
+    "6767676767676767676767676767676767676767676767676767676767676767",
+    "7878787878787878787878787878787878787878787878787878787878787878",
+    "8989898989898989898989898989898989898989898989898989898989898989",
+    "9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a9a"
+  ],
+  "baseline_trace_lengths": [
+    100,
+    120,
+    80,
+    60,
+    50
+  ],
+  "compressed_trace_lengths": [
+    80,
+    90,
+    60,
+    45,
+    40
+  ],
+  "target_median_reduction": 0.3,
+  "lemma_candidates": [
+    {
+      "lemma_id": "LEMMA_EVEN_ADD",
+      "statement": "Even n -> Even m -> Even (n + m)",
+      "usage_count": 18,
+      "compression_gain_steps": 42,
+      "proof_status": "FOUND",
+      "dependency_imports": [
+        "Mathlib.Data.Nat.Parity"
+      ]
+    },
+    {
+      "lemma_id": "LEMMA_RING_NORM",
+      "statement": "a + (b + c) = (a + b) + c",
+      "usage_count": 3,
+      "compression_gain_steps": 4,
+      "proof_status": "NEEDS_PROOF",
+      "dependency_imports": [
+        "Mathlib.Algebra.Ring.Basic"
+      ]
+    }
+  ],
+  "failure_records": [
+    {
+      "lemma_id": "LEMMA_RING_NORM",
+      "fail_type": "NEEDS_PROOF",
+      "invariant_diff": {
+        "reason": "search_budget_exhausted",
+        "budget_seconds": 30
+      }
+    }
+  ],
+  "metrics": {
+    "median_reduction": 0.25,
+    "total_candidates": 2
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "expected_failure": {
+      "fail_type": "COMPRESSION_BELOW_TARGET",
+      "invariant_diff": {
+        "path": "$.target_median_reduction"
+      }
+    }
+  }
+}

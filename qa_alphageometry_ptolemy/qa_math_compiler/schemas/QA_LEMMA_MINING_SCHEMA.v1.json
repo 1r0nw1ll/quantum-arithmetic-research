@@ -1,0 +1,156 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_LEMMA_MINING_SCHEMA.v1",
+  "title": "QA_LEMMA_MINING_SCHEMA.v1",
+  "description": "Lemma mining output with compression accounting and typed unresolved proofs.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "mining_id",
+    "created_utc",
+    "source_traces",
+    "baseline_trace_lengths",
+    "compressed_trace_lengths",
+    "target_median_reduction",
+    "lemma_candidates",
+    "failure_records",
+    "metrics",
+    "invariant_diff"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_LEMMA_MINING_SCHEMA.v1"
+    },
+    "mining_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "source_traces": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "pattern": "^[a-f0-9]{64}$"
+      }
+    },
+    "baseline_trace_lengths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "compressed_trace_lengths": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "target_median_reduction": {
+      "type": "number",
+      "minimum": 0,
+      "maximum": 1
+    },
+    "lemma_candidates": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lemma_id",
+          "statement",
+          "usage_count",
+          "compression_gain_steps",
+          "proof_status",
+          "dependency_imports"
+        ],
+        "properties": {
+          "lemma_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "statement": {
+            "type": "string",
+            "minLength": 1
+          },
+          "usage_count": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "compression_gain_steps": {
+            "type": "integer",
+            "minimum": 0
+          },
+          "proof_status": {
+            "type": "string",
+            "enum": ["FOUND", "NEEDS_PROOF"]
+          },
+          "dependency_imports": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "string",
+              "minLength": 1
+            }
+          }
+        }
+      }
+    },
+    "failure_records": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "lemma_id",
+          "fail_type",
+          "invariant_diff"
+        ],
+        "properties": {
+          "lemma_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "fail_type": {
+            "type": "string",
+            "minLength": 1
+          },
+          "invariant_diff": {
+            "type": "object"
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "median_reduction",
+        "total_candidates"
+      ],
+      "properties": {
+        "median_reduction": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "total_candidates": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "invariant_diff": {
+      "type": "object"
+    }
+  }
+}

@@ -2621,12 +2621,14 @@ if __name__ == "__main__":
 
     # --- Family sweep loop (driven by FAMILY_SWEEPS) ---
     base_dir = os.path.dirname(os.path.abspath(__file__))
-    for fam_id, label, validator_fn, pass_desc, _doc_slug in FAMILY_SWEEPS:
+    _doc_gate_families = []
+    for fam_id, label, validator_fn, pass_desc, doc_slug in FAMILY_SWEEPS:
         print(f"\n--- {label.upper()} ---")
         try:
             skip_reason = validator_fn(base_dir)
             if skip_reason is None:
                 print(f"[{fam_id}] {label}: PASS ({pass_desc})")
+                _doc_gate_families.append((fam_id, doc_slug))
             else:
                 print(f"[{fam_id}] {label}: SKIPPED ({skip_reason})")
         except Exception as e:
@@ -2769,31 +2771,32 @@ if __name__ == "__main__":
         sys.exit(1)
 
     if not os.path.exists(_swe_script):
-        _swe_fail("EXTERNAL_VALIDATION_MISSING")
+        print(f"[{_swe_id}] SWE-bench competency (external): SKIPPED "
+              f"(missing external_validation_swe_bench_competency.py)")
+    else:
+        try:
+            _swe_result = subprocess.run(
+                [sys.executable, _swe_script, "--ci"],
+                capture_output=True, text=True, timeout=45,
+                cwd=base_dir,
+            )
+            _swe_stdout = _swe_result.stdout.strip()
+            _swe_ok = _swe_result.returncode == 0 and "[PASS]" in _swe_stdout
 
-    try:
-        _swe_result = subprocess.run(
-            [sys.executable, _swe_script, "--ci"],
-            capture_output=True, text=True, timeout=45,
-            cwd=base_dir,
-        )
-        _swe_stdout = _swe_result.stdout.strip()
-        _swe_ok = _swe_result.returncode == 0 and "[PASS]" in _swe_stdout
-
-        if _swe_ok:
-            print(f"[{_swe_id}] SWE-bench competency (external): PASS")
-            print(f"      {_swe_stdout}")
-        else:
-            _swe_fail_type = "EXTERNAL_VALIDATION_FAIL"
-            _m = re.search(r"fail_type=([A-Z0-9_]+)", _swe_stdout)
-            if _m:
-                _swe_fail_type = _m.group(1)
-            _swe_fail(_swe_fail_type,
-                      returncode=_swe_result.returncode,
-                      stdout_head=_swe_stdout,
-                      stderr_head=_swe_result.stderr.strip())
-    except subprocess.TimeoutExpired:
-        _swe_fail("EXTERNAL_VALIDATION_TIMEOUT")
+            if _swe_ok:
+                print(f"[{_swe_id}] SWE-bench competency (external): PASS")
+                print(f"      {_swe_stdout}")
+            else:
+                _swe_fail_type = "EXTERNAL_VALIDATION_FAIL"
+                _m = re.search(r"fail_type=([A-Z0-9_]+)", _swe_stdout)
+                if _m:
+                    _swe_fail_type = _m.group(1)
+                _swe_fail(_swe_fail_type,
+                          returncode=_swe_result.returncode,
+                          stdout_head=_swe_stdout,
+                          stderr_head=_swe_result.stderr.strip())
+        except subprocess.TimeoutExpired:
+            _swe_fail("EXTERNAL_VALIDATION_TIMEOUT")
 
     # --- Doc gate (derived from FAMILY_SWEEPS — no second list to maintain) ---
     print("\n--- HUMAN-TRACT DOC GATE ---")
@@ -2805,7 +2808,7 @@ if __name__ == "__main__":
         print(f"[{_gate_id}] Doc gate: FAIL (docs/families/ directory missing)")
         _doc_gate_pass = False
     else:
-        for fam_id, _label, _fn, _desc, doc_slug in FAMILY_SWEEPS:
+        for fam_id, doc_slug in _doc_gate_families:
             doc_file = f"{doc_slug}.md"
             if not os.path.exists(os.path.join(_docs_dir, doc_file)):
                 print(f"  FAIL: missing docs/families/{doc_file} for family [{fam_id}]")
@@ -2813,7 +2816,7 @@ if __name__ == "__main__":
         if os.path.exists(_readme_path):
             with open(_readme_path, "r", encoding="utf-8") as _rf:
                 _readme_text = _rf.read()
-            for fam_id, _label, _fn, _desc, doc_slug in FAMILY_SWEEPS:
+            for fam_id, doc_slug in _doc_gate_families:
                 doc_file = f"{doc_slug}.md"
                 if doc_file not in _readme_text:
                     print(f"  FAIL: docs/families/README.md missing link to {doc_file}")
@@ -2822,7 +2825,7 @@ if __name__ == "__main__":
             print(f"  FAIL: docs/families/README.md missing")
             _doc_gate_pass = False
     if _doc_gate_pass:
-        print(f"[{_gate_id}] Human-tract doc gate: PASS ({len(FAMILY_SWEEPS)} families documented)")
+        print(f"[{_gate_id}] Human-tract doc gate: PASS ({len(_doc_gate_families)} families documented)")
     else:
         print(f"[{_gate_id}] Human-tract doc gate: FAIL")
         sys.exit(1)

@@ -53,6 +53,8 @@ jobs:
         run: |
           tmp_dir="$(mktemp -d)"
           git archive HEAD | tar -x -C "$tmp_dir"
+          mkdir -p "$tmp_dir/data/MNIST/raw"
+          cp data/MNIST/raw/*.gz "$tmp_dir/data/MNIST/raw/"
           cd "$tmp_dir/qa_alphageometry_ptolemy"
           python qa_meta_validator.py
 

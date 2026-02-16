@@ -97,6 +97,7 @@ Cargo.lock
 !qa_mapping_protocol/*.json
 !qa_mapping_protocol_ref/**/*.json
 !qa_mapping_protocol_ref/*.json
+!Documents/QA_MAPPING_PROTOCOL__*.json
 *.npy
 *.npz
 

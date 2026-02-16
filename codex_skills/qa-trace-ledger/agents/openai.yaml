@@ -1,0 +1,6 @@
+interface:
+  display_name: "QA Trace Ledger"
+  short_description: "Standardize run trace + manifests"
+  default_prompt: "Use $qa-trace-ledger to wrap a command so it produces a run_id folder under trace/runs/ with logs + RUN_MANIFEST.json, and an optional ledger entry."
+policy:
+  allow_implicit_invocation: true

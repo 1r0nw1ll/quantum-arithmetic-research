@@ -1,0 +1,362 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_EBM_NAVIGATION_CERT.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cert_type",
+    "schema_version",
+    "cert_id",
+    "issued_utc",
+    "navigation",
+    "trace",
+    "determinism_contract",
+    "digests"
+  ],
+  "properties": {
+    "cert_type": {
+      "type": "string",
+      "const": "QA_EBM_NAVIGATION_CERT.v1"
+    },
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 200,
+      "pattern": "^[a-zA-Z0-9._-]+$"
+    },
+    "issued_utc": {
+      "type": "string",
+      "minLength": 20,
+      "maxLength": 40
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["problem_ref", "constraints_ref"],
+      "properties": {
+        "problem_ref": { "$ref": "#/definitions/ref_digest" },
+        "constraints_ref": { "$ref": "#/definitions/ref_digest" },
+        "ontology_ref": { "$ref": "#/definitions/ref_digest" },
+        "mapping_protocol_ref": { "$ref": "#/definitions/ref_digest" }
+      }
+    },
+    "navigation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state_space", "generators", "energy", "policy", "budgets"],
+      "properties": {
+        "state_space": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["state_type"],
+          "properties": {
+            "state_type": { "type": "string", "minLength": 3 },
+            "caps": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["N"],
+              "properties": {
+                "N": { "type": "integer", "minimum": 1 }
+              }
+            }
+          }
+        },
+        "generators": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/generator_spec" }
+        },
+        "energy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["scalar_type", "definition", "minimize"],
+          "properties": {
+            "scalar_type": {
+              "type": "string",
+              "enum": ["int", "rational"]
+            },
+            "definition": { "type": "string", "minLength": 8 },
+            "minimize": { "type": "boolean", "const": true },
+            "components": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": ["name", "weight", "unit"],
+                "properties": {
+                  "name": { "type": "string", "minLength": 1 },
+                  "weight": { "$ref": "#/definitions/exact_scalar" },
+                  "unit": { "type": "string", "minLength": 1 }
+                }
+              }
+            }
+          }
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["selection", "tie_break", "declared_deterministic"],
+          "properties": {
+            "selection": { "type": "string", "enum": ["min_energy_legal"] },
+            "tie_break": { "type": "string", "enum": ["lex_generator_then_state_after"] },
+            "declared_deterministic": { "type": "boolean", "const": true }
+          }
+        },
+        "budgets": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["max_steps"],
+          "properties": {
+            "max_steps": { "type": "integer", "minimum": 1 },
+            "max_millis": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    },
+    "trace": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["steps", "outcome"],
+      "properties": {
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/trace_step" }
+        },
+        "outcome": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["status"],
+          "properties": {
+            "status": {
+              "type": "string",
+              "enum": ["REACHED_TARGET", "FAILED_TYPED", "BUDGET_EXHAUSTED"]
+            },
+            "target_ref": { "$ref": "#/definitions/ref_digest" },
+            "accepted_by_verifier": { "type": "boolean" },
+            "verifier_bridge_ref": { "$ref": "#/definitions/ref_digest" },
+            "failure": { "$ref": "#/definitions/failure_obj" }
+          },
+          "allOf": [
+            {
+              "if": { "properties": { "status": { "const": "FAILED_TYPED" } } },
+              "then": { "required": ["failure"] }
+            },
+            {
+              "if": {
+                "required": ["accepted_by_verifier"],
+                "properties": { "accepted_by_verifier": { "const": true } }
+              },
+              "then": {
+                "required": ["verifier_bridge_ref"],
+                "properties": { "status": { "const": "REACHED_TARGET" } }
+              }
+            }
+          ]
+        }
+      }
+    },
+    "determinism_contract": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "invariant_diff_defined",
+        "failure_complete",
+        "tie_break_total",
+        "exact_energy_required"
+      ],
+      "properties": {
+        "invariant_diff_defined": { "type": "boolean", "const": true },
+        "failure_complete": { "type": "boolean", "const": true },
+        "tie_break_total": { "type": "boolean", "const": true },
+        "exact_energy_required": { "type": "boolean", "const": true }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_sha256"],
+      "properties": {
+        "canonical_sha256": { "$ref": "#/definitions/sha256" },
+        "refs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ref_digest" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "ref_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_name", "sha256"],
+      "properties": {
+        "ref_name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "sha256": { "$ref": "#/definitions/sha256" }
+      }
+    },
+    "exact_scalar": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "type": "string", "enum": ["int", "rational"] },
+        "value": {
+          "type": "string",
+          "pattern": "^-?[0-9]+(\\/[0-9]+)?$"
+        }
+      }
+    },
+    "generator_spec": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "kind", "transition_rule", "invariant_effect"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "kind": {
+          "type": "string",
+          "enum": ["qa_generator", "ebm_meta_policy", "codec_boundary", "verifier_gate"]
+        },
+        "transition_rule": { "type": "string", "minLength": 3 },
+        "invariant_effect": { "type": "string", "minLength": 3 }
+      }
+    },
+    "candidate_move": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generator", "legal"],
+      "properties": {
+        "generator": { "type": "string", "minLength": 1 },
+        "legal": { "type": "boolean" },
+        "state_after": { "type": "string", "minLength": 1 },
+        "energy_after": { "$ref": "#/definitions/exact_scalar" },
+        "violations_after": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        },
+        "fail_type": {
+          "type": "string",
+          "enum": [
+            "OUT_OF_BOUNDS",
+            "PARITY",
+            "PHASE_VIOLATION",
+            "INVARIANT",
+            "REDUCTION",
+            "INTERFACE_LOSS",
+            "VERIFIER_REJECTED",
+            "BUDGET_EXHAUSTED",
+            "NONDETERMINISM"
+          ]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "legal": { "const": true } } },
+          "then": { "required": ["state_after", "energy_after", "violations_after"] }
+        },
+        {
+          "if": { "properties": { "legal": { "const": false } } },
+          "then": { "required": ["fail_type"] }
+        }
+      ]
+    },
+    "failure_obj": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["fail_type", "move", "invariant_diff"],
+      "properties": {
+        "fail_type": {
+          "type": "string",
+          "enum": [
+            "OUT_OF_BOUNDS",
+            "PARITY",
+            "PHASE_VIOLATION",
+            "INVARIANT",
+            "REDUCTION",
+            "INTERFACE_LOSS",
+            "VERIFIER_REJECTED",
+            "BUDGET_EXHAUSTED",
+            "NONDETERMINISM"
+          ]
+        },
+        "move": { "type": "string", "minLength": 1 },
+        "invariant_diff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["witness"],
+          "properties": {
+            "witness": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    },
+    "trace_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "t",
+        "state_before",
+        "energy_before",
+        "violations_before",
+        "candidates",
+        "chosen_idx",
+        "result",
+        "invariant_diff"
+      ],
+      "properties": {
+        "t": { "type": "integer", "minimum": 0 },
+        "state_before": { "type": "string", "minLength": 1 },
+        "energy_before": { "$ref": "#/definitions/exact_scalar" },
+        "violations_before": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/candidate_move" }
+        },
+        "chosen_idx": { "type": "integer", "minimum": 0 },
+        "result": { "type": "string", "enum": ["OK", "FAIL"] },
+        "state_after": { "type": "string", "minLength": 1 },
+        "energy_after": { "$ref": "#/definitions/exact_scalar" },
+        "violations_after": {
+          "type": "object",
+          "additionalProperties": { "type": "integer" }
+        },
+        "failure": { "$ref": "#/definitions/failure_obj" },
+        "invariant_diff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["delta_energy", "delta_violations", "witness"],
+          "properties": {
+            "delta_energy": { "$ref": "#/definitions/exact_scalar" },
+            "delta_violations": {
+              "type": "object",
+              "additionalProperties": { "type": "integer" }
+            },
+            "witness": { "type": "string", "minLength": 1 }
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "result": { "const": "OK" } } },
+          "then": { "required": ["state_after", "energy_after", "violations_after"] }
+        },
+        {
+          "if": { "properties": { "result": { "const": "FAIL" } } },
+          "then": { "required": ["failure"] }
+        }
+      ]
+    }
+  }
+}

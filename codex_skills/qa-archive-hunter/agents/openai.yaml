@@ -1,0 +1,6 @@
+interface:
+  display_name: "QA Archive Hunter"
+  short_description: "Find missing work in archives"
+  default_prompt: "Use $qa-archive-hunter to locate chat-referenced missing files in repo zip snapshots."
+policy:
+  allow_implicit_invocation: true

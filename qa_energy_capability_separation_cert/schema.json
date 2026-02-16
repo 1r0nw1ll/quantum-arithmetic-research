@@ -1,0 +1,236 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_ENERGY_CAPABILITY_SEPARATION_CERT.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cert_type",
+    "schema_version",
+    "cert_id",
+    "issued_utc",
+    "state_space",
+    "generator_set",
+    "energy_function",
+    "policy",
+    "start_state",
+    "target_state",
+    "reachability_witness",
+    "policy_run",
+    "claim",
+    "invariant_diff",
+    "digests"
+  ],
+  "properties": {
+    "cert_type": { "type": "string", "const": "QA_ENERGY_CAPABILITY_SEPARATION_CERT.v1" },
+    "schema_version": { "type": "integer", "const": 1 },
+    "cert_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 200,
+      "pattern": "^[a-zA-Z0-9._-]+$"
+    },
+    "issued_utc": { "type": "string", "minLength": 20, "maxLength": 40 },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mapping_protocol_ref": { "$ref": "#/definitions/ref_digest" }
+      }
+    },
+    "state_space": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "N"],
+      "properties": {
+        "kind": { "type": "string", "const": "Caps(N,N)" },
+        "N": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "generator_set": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generators"],
+      "properties": {
+        "generators": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "string", "enum": ["sigma", "mu"] }
+        }
+      }
+    },
+    "energy_function": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["form", "scalar_type"],
+      "properties": {
+        "form": { "type": "string", "enum": ["e_coordinate"] },
+        "scalar_type": { "type": "string", "enum": ["int"] },
+        "definition": { "type": "string" }
+      }
+    },
+    "policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["selection", "tie_break", "declared_deterministic"],
+      "properties": {
+        "selection": { "type": "string", "enum": ["min_energy_legal"] },
+        "tie_break": { "type": "string", "enum": ["lex_generator_then_state_after"] },
+        "declared_deterministic": { "type": "boolean", "const": true }
+      }
+    },
+    "start_state": { "$ref": "#/definitions/state" },
+    "target_state": { "$ref": "#/definitions/state" },
+    "reachability_witness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_k", "path_generators"],
+      "properties": {
+        "max_k": { "type": "integer", "minimum": 0 },
+        "path_generators": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "type": "string", "enum": ["sigma", "mu"] }
+        },
+        "states": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/state" }
+        }
+      }
+    },
+    "policy_run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["max_steps", "steps"],
+      "properties": {
+        "max_steps": { "type": "integer", "minimum": 0 },
+        "steps": {
+          "type": "array",
+          "minItems": 0,
+          "items": { "$ref": "#/definitions/policy_step" }
+        },
+        "cycle_detected": { "type": "boolean" },
+        "cycle_state": { "$ref": "#/definitions/state" }
+      }
+    },
+    "claim": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["target_reachable_under_generators", "target_reached_under_policy"],
+      "properties": {
+        "target_reachable_under_generators": { "type": "boolean" },
+        "target_reached_under_policy": { "type": "boolean" }
+      }
+    },
+    "invariant_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["witness", "separation_mode"],
+      "properties": {
+        "witness": { "type": "string", "minLength": 1 },
+        "separation_mode": {
+          "type": "string",
+          "enum": ["reachable_but_not_reached_by_policy"]
+        },
+        "cycle_state": { "$ref": "#/definitions/state" },
+        "witness_path_length": { "type": "integer", "minimum": 0 },
+        "policy_steps_executed": { "type": "integer", "minimum": 0 }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_sha256"],
+      "properties": {
+        "canonical_sha256": { "$ref": "#/definitions/sha256" }
+      }
+    }
+  },
+  "definitions": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "ref_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_name", "sha256"],
+      "properties": {
+        "ref_name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "sha256": { "$ref": "#/definitions/sha256" }
+      }
+    },
+    "state": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["b", "e"],
+      "properties": {
+        "b": { "type": "integer", "minimum": 1 },
+        "e": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "exact_int_scalar": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["type", "value"],
+      "properties": {
+        "type": { "type": "string", "const": "int" },
+        "value": { "type": "string", "pattern": "^-?[0-9]+$" }
+      }
+    },
+    "candidate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generator", "legal"],
+      "properties": {
+        "generator": { "type": "string", "enum": ["sigma", "mu"] },
+        "legal": { "type": "boolean" },
+        "state_after": { "$ref": "#/definitions/state" },
+        "energy_after": { "$ref": "#/definitions/exact_int_scalar" },
+        "fail_type": {
+          "type": "string",
+          "enum": ["OUT_OF_BOUNDS", "PARITY", "PHASE_VIOLATION", "INVARIANT", "REDUCTION"]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "legal": { "const": true } } },
+          "then": { "required": ["state_after", "energy_after"] }
+        },
+        {
+          "if": { "properties": { "legal": { "const": false } } },
+          "then": { "required": ["fail_type"] }
+        }
+      ]
+    },
+    "policy_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "t",
+        "state_before",
+        "candidates",
+        "chosen_idx",
+        "state_after",
+        "invariant_diff"
+      ],
+      "properties": {
+        "t": { "type": "integer", "minimum": 0 },
+        "state_before": { "$ref": "#/definitions/state" },
+        "candidates": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/definitions/candidate" }
+        },
+        "chosen_idx": { "type": "integer", "minimum": 0 },
+        "state_after": { "$ref": "#/definitions/state" },
+        "invariant_diff": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["delta_energy", "witness"],
+          "properties": {
+            "delta_energy": { "$ref": "#/definitions/exact_int_scalar" },
+            "witness": { "type": "string", "minLength": 1 }
+          }
+        }
+      }
+    }
+  }
+}
+

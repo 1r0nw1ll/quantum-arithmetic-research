@@ -1,0 +1,40 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "example_qa_minimal_mapping",
+  "state_manifold": {
+    "state_type": "(b,e)",
+    "embedding_function": "Canonical QA primitives with derived coordinates (d=b+e, a=b+2e).",
+    "constraints": [
+      "d = b+e",
+      "a = b+2e"
+    ]
+  },
+  "generators": [
+    {
+      "name": "sigma",
+      "transition_rule": "σ(b,e)=(b,e+1) with caps legality.",
+      "invariant_effect": "Preserves integer manifold; may emit OUT_OF_BOUNDS."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "derived_coordinates",
+      "definition": "d and a are derived from (b,e) (no independent 4-tuple)."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "OUT_OF_BOUNDS",
+      "trigger_condition": "Attempted σ step exceeds Caps(N,N) boundary."
+    }
+  ],
+  "reachability": {
+    "graph_type": "directed",
+    "component_analysis": "DAG under sigma-only; return_in_k decidable via bounded BFS."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "σ produces exactly one successor state when legal; otherwise a typed FAIL."
+  }
+}
+

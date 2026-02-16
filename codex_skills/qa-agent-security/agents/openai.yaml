@@ -1,0 +1,6 @@
+interface:
+  display_name: "QA Agent Security"
+  short_description: "QA agent security guardrails"
+  default_prompt: "Use $qa-agent-security to apply QA agent security before running commands."
+policy:
+  allow_implicit_invocation: true

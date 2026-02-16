@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_MAPPING_PROTOCOL.v1",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "mapping_id",
+    "state_manifold",
+    "generators",
+    "invariants",
+    "failure_taxonomy",
+    "reachability",
+    "determinism_contract"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "const": "QA_MAPPING_PROTOCOL.v1"
+    },
+    "mapping_id": {
+      "type": "string"
+    },
+    "state_manifold": {
+      "type": "object",
+      "required": ["state_type", "embedding_function"],
+      "properties": {
+        "state_type": { "type": "string" },
+        "embedding_function": { "type": "string" },
+        "constraints": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "generators": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "transition_rule"],
+        "properties": {
+          "name": { "type": "string" },
+          "transition_rule": { "type": "string" },
+          "invariant_effect": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "invariants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["name", "definition"],
+        "properties": {
+          "name": { "type": "string" },
+          "definition": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "failure_taxonomy": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["fail_type", "trigger_condition"],
+        "properties": {
+          "fail_type": { "type": "string" },
+          "trigger_condition": { "type": "string" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "reachability": {
+      "type": "object",
+      "required": ["graph_type", "component_analysis"],
+      "properties": {
+        "graph_type": { "type": "string" },
+        "component_analysis": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "determinism_contract": {
+      "type": "object",
+      "required": ["invariant_diff_defined", "nondeterminism_proof"],
+      "properties": {
+        "invariant_diff_defined": { "type": "boolean" },
+        "nondeterminism_proof": { "type": "string" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

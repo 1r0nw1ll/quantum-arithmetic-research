@@ -1,0 +1,32 @@
+{
+  "cert_type": "QA_ENERGY_CAPABILITY_SEPARATION_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "energy_capability_sep_bad_digest",
+  "issued_utc": "2026-02-15T18:00:00Z",
+  "state_space": { "kind": "Caps(N,N)", "N": 3 },
+  "generator_set": { "generators": ["sigma", "mu"] },
+  "energy_function": { "form": "e_coordinate", "scalar_type": "int" },
+  "policy": {
+    "selection": "min_energy_legal",
+    "tie_break": "lex_generator_then_state_after",
+    "declared_deterministic": true
+  },
+  "start_state": { "b": 1, "e": 1 },
+  "target_state": { "b": 3, "e": 1 },
+  "reachability_witness": { "max_k": 3, "path_generators": ["sigma", "sigma", "mu"] },
+  "policy_run": { "max_steps": 0, "steps": [] },
+  "claim": {
+    "target_reachable_under_generators": true,
+    "target_reached_under_policy": false
+  },
+  "invariant_diff": {
+    "witness": "Digest mismatch negative fixture.",
+    "separation_mode": "reachable_but_not_reached_by_policy",
+    "witness_path_length": 3,
+    "policy_steps_executed": 0
+  },
+  "digests": {
+    "canonical_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+  }
+}
+

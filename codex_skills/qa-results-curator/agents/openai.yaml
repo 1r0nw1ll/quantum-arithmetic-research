@@ -1,0 +1,6 @@
+interface:
+  display_name: "QA Results Curator"
+  short_description: "Curate reproducible results"
+  default_prompt: "Use $qa-results-curator to turn hotspots into curated, reproducible results entries."
+policy:
+  allow_implicit_invocation: true

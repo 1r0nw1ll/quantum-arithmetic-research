@@ -87,6 +87,16 @@ Cargo.lock
 !qa_alphageometry_ptolemy/qa_math_compiler/demo_pack_v1/**/*.md
 !qa_competency/**/*.json
 !.openclaw/**/*.json
+!qa_ebm_navigation_cert/**/*.json
+!qa_ebm_navigation_cert/*.json
+!qa_ebm_verifier_bridge_cert/**/*.json
+!qa_ebm_verifier_bridge_cert/*.json
+!qa_energy_capability_separation_cert/**/*.json
+!qa_energy_capability_separation_cert/*.json
+!qa_mapping_protocol/**/*.json
+!qa_mapping_protocol/*.json
+!qa_mapping_protocol_ref/**/*.json
+!qa_mapping_protocol_ref/*.json
 *.npy
 *.npz
 

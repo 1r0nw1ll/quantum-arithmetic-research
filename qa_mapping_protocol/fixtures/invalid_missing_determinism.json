@@ -1,0 +1,21 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "bad_mapping",
+  "state_manifold": {
+    "state_type": "(b,e)",
+    "embedding_function": "none",
+    "constraints": []
+  },
+  "generators": [],
+  "invariants": [],
+  "failure_taxonomy": [],
+  "reachability": {
+    "graph_type": "unknown",
+    "component_analysis": ""
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": false,
+    "nondeterminism_proof": ""
+  }
+}
+

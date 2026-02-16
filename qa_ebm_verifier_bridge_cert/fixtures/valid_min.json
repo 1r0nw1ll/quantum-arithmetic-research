@@ -1,0 +1,44 @@
+{
+  "cert_type": "QA_EBM_VERIFIER_BRIDGE_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "ebm_verifier_bridge_valid_min_0001",
+  "issued_utc": "2026-02-15T19:00:00Z",
+  "inputs": {
+    "mapping_protocol_ref": {
+      "ref_name": "Documents/QA_MAPPING_PROTOCOL__EBM_REASONING_KONA_PODCAST.v1.json",
+      "sha256": "55cc98814e6b7a12b7e7ffa2598dc86dac9367182a12f7f1f77d1e348f203c09"
+    }
+  },
+  "verifier": {
+    "verifier_id": "lean4",
+    "verifier_version": "4.x",
+    "mode": "proof",
+    "deterministic": true
+  },
+  "subject": {
+    "navigation_cert_ref": {
+      "ref_name": "qa_ebm_navigation_cert/fixtures/valid_min.json",
+      "sha256": "e72b7933ae73dbb2a64c0a665682697d391ef7f3c8f62418f33d29ea6301c3cc"
+    },
+    "state_after": "(b=2,e=1)",
+    "state_sha256": "68717588aa1fbc7206fe025c2a17475b6c848d884f3253c10aee6fa4c8145920",
+    "target_ref": {
+      "ref_name": "target_stub.json",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    },
+    "note": "Minimal demo: verifier approves that terminal state satisfies target constraints."
+  },
+  "verdict": {
+    "passed": true,
+    "fail_type": "OK",
+    "witness": "Verifier accepted: proof hash stub (demo)."
+  },
+  "invariant_diff": {
+    "witness": "Binding witness: sha256(state_after) matches subject.state_sha256; verdict coherent.",
+    "state_sha256": "68717588aa1fbc7206fe025c2a17475b6c848d884f3253c10aee6fa4c8145920",
+    "verdict_fail_type": "OK"
+  },
+  "digests": {
+    "canonical_sha256": "a6c7b4d46d2e25c9ee09c3418f52dfafd647ad505a60bf9d90c21d1f48f24888"
+  }
+}

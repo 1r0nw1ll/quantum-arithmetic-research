@@ -1,0 +1,23 @@
+{
+  "cert_type": "QA_EBM_VERIFIER_BRIDGE_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "ebm_verifier_bridge_invalid_missing_invariant_diff",
+  "issued_utc": "2026-02-15T19:00:00Z",
+  "verifier": {
+    "verifier_id": "lean4",
+    "verifier_version": "4.x",
+    "mode": "proof",
+    "deterministic": true
+  },
+  "subject": {
+    "state_after": "(b=2,e=1)",
+    "state_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "target_ref": {
+      "ref_name": "target_stub.json",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "verdict": { "passed": true, "fail_type": "OK", "witness": "ok" },
+  "digests": { "canonical_sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff" }
+}
+

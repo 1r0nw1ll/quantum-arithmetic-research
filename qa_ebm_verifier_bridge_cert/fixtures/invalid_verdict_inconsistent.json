@@ -1,0 +1,31 @@
+{
+  "cert_type": "QA_EBM_VERIFIER_BRIDGE_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "ebm_verifier_bridge_invalid_verdict_inconsistent",
+  "issued_utc": "2026-02-15T19:00:00Z",
+  "verifier": {
+    "verifier_id": "lean4",
+    "verifier_version": "4.x",
+    "mode": "proof",
+    "deterministic": true
+  },
+  "subject": {
+    "state_after": "(b=2,e=1)",
+    "state_sha256": "68717588aa1fbc7206fe025c2a17475b6c848d884f3253c10aee6fa4c8145920",
+    "target_ref": {
+      "ref_name": "target_stub.json",
+      "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+    }
+  },
+  "verdict": {
+    "passed": true,
+    "fail_type": "VERIFIER_REJECTED",
+    "witness": "inconsistent"
+  },
+  "invariant_diff": {
+    "witness": "inconsistent verdict",
+    "state_sha256": "68717588aa1fbc7206fe025c2a17475b6c848d884f3253c10aee6fa4c8145920",
+    "verdict_fail_type": "VERIFIER_REJECTED"
+  },
+  "digests": { "canonical_sha256": "0c43472056996f35e14b04feb095f5548ccfc8bd3b801e13fbf97540f459af6d" }
+}

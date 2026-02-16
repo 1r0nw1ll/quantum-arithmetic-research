@@ -1,0 +1,6 @@
+interface:
+  display_name: "QA Cartography"
+  short_description: "QA cartography & search indices"
+  default_prompt: "Use $qa-cartography to build/query QA forensics indices and locate evidence."
+policy:
+  allow_implicit_invocation: true

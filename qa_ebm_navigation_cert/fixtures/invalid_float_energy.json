@@ -1,0 +1,64 @@
+{
+  "cert_type": "QA_EBM_NAVIGATION_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "ebm_nav_bad_float_energy",
+  "issued_utc": "2026-02-15T17:30:00Z",
+  "navigation": {
+    "state_space": { "state_type": "Caps(N,N) QA core state (b,e)", "caps": { "N": 30 } },
+    "generators": [
+      {
+        "name": "sigma",
+        "kind": "qa_generator",
+        "transition_rule": "σ(b,e)=(b,e+1)",
+        "invariant_effect": "Preserves integer manifold"
+      }
+    ],
+    "energy": { "scalar_type": "rational", "definition": "E_task(s)=...", "minimize": true },
+    "policy": {
+      "selection": "min_energy_legal",
+      "tie_break": "lex_generator_then_state_after",
+      "declared_deterministic": true
+    },
+    "budgets": { "max_steps": 1, "max_millis": 10 }
+  },
+  "trace": {
+    "steps": [
+      {
+        "t": 0,
+        "state_before": "s0",
+        "energy_before": { "type": "rational", "value": "1.0" },
+        "violations_before": {},
+        "candidates": [
+          {
+            "generator": "sigma",
+            "legal": true,
+            "state_after": "s1",
+            "energy_after": { "type": "rational", "value": "0.5" },
+            "violations_after": {}
+          }
+        ],
+        "chosen_idx": 0,
+        "result": "OK",
+        "state_after": "s1",
+        "energy_after": { "type": "rational", "value": "0.5" },
+        "violations_after": {},
+        "invariant_diff": {
+          "delta_energy": { "type": "rational", "value": "-0.5" },
+          "delta_violations": {},
+          "witness": "Float energy is forbidden (schema should fail)."
+        }
+      }
+    ],
+    "outcome": { "status": "REACHED_TARGET" }
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "failure_complete": true,
+    "tie_break_total": true,
+    "exact_energy_required": true
+  },
+  "digests": {
+    "canonical_sha256": "3333333333333333333333333333333333333333333333333333333333333333"
+  }
+}
+

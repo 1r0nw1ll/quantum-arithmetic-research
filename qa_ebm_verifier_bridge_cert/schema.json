@@ -1,0 +1,114 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_EBM_VERIFIER_BRIDGE_CERT.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cert_type",
+    "schema_version",
+    "cert_id",
+    "issued_utc",
+    "verifier",
+    "subject",
+    "verdict",
+    "invariant_diff",
+    "digests"
+  ],
+  "properties": {
+    "cert_type": { "type": "string", "const": "QA_EBM_VERIFIER_BRIDGE_CERT.v1" },
+    "schema_version": { "type": "integer", "const": 1 },
+    "cert_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 200,
+      "pattern": "^[a-zA-Z0-9._-]+$"
+    },
+    "issued_utc": { "type": "string", "minLength": 20, "maxLength": 40 },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "mapping_protocol_ref": { "$ref": "#/definitions/ref_digest" }
+      }
+    },
+    "verifier": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["verifier_id", "mode", "deterministic"],
+      "properties": {
+        "verifier_id": { "type": "string", "minLength": 3, "maxLength": 200 },
+        "verifier_version": { "type": "string", "maxLength": 200 },
+        "mode": { "type": "string", "enum": ["proof", "constraint_check", "typecheck"] },
+        "deterministic": { "type": "boolean", "const": true }
+      }
+    },
+    "subject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["state_after", "state_sha256", "target_ref"],
+      "properties": {
+        "navigation_cert_ref": { "$ref": "#/definitions/ref_digest" },
+        "state_after": { "type": "string", "minLength": 1, "maxLength": 5000 },
+        "state_sha256": { "$ref": "#/definitions/sha256" },
+        "target_ref": { "$ref": "#/definitions/ref_digest" },
+        "note": { "type": "string", "maxLength": 2000 }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "fail_type", "witness"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "fail_type": {
+          "type": "string",
+          "enum": [
+            "OK",
+            "VERIFIER_REJECTED",
+            "INVARIANT",
+            "REDUCTION",
+            "INTERFACE_LOSS",
+            "NONDETERMINISM",
+            "SCHEMA_INVALID"
+          ]
+        },
+        "witness": { "type": "string", "minLength": 1, "maxLength": 20000 }
+      }
+    },
+    "invariant_diff": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["witness", "state_sha256", "verdict_fail_type"],
+      "properties": {
+        "witness": { "type": "string", "minLength": 1, "maxLength": 20000 },
+        "state_sha256": { "$ref": "#/definitions/sha256" },
+        "verdict_fail_type": { "type": "string", "minLength": 1, "maxLength": 100 }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_sha256"],
+      "properties": {
+        "canonical_sha256": { "$ref": "#/definitions/sha256" },
+        "refs": {
+          "type": "array",
+          "items": { "$ref": "#/definitions/ref_digest" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "ref_digest": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ref_name", "sha256"],
+      "properties": {
+        "ref_name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "sha256": { "$ref": "#/definitions/sha256" }
+      }
+    }
+  }
+}
+

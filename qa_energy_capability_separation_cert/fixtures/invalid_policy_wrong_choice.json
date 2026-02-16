@@ -1,0 +1,59 @@
+{
+  "cert_type": "QA_ENERGY_CAPABILITY_SEPARATION_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "energy_capability_sep_bad_policy_choice",
+  "issued_utc": "2026-02-15T18:00:00Z",
+  "state_space": { "kind": "Caps(N,N)", "N": 3 },
+  "generator_set": { "generators": ["sigma", "mu"] },
+  "energy_function": { "form": "e_coordinate", "scalar_type": "int" },
+  "policy": {
+    "selection": "min_energy_legal",
+    "tie_break": "lex_generator_then_state_after",
+    "declared_deterministic": true
+  },
+  "start_state": { "b": 1, "e": 1 },
+  "target_state": { "b": 3, "e": 1 },
+  "reachability_witness": { "max_k": 3, "path_generators": ["sigma", "sigma", "mu"] },
+  "policy_run": {
+    "max_steps": 1,
+    "steps": [
+      {
+        "t": 0,
+        "state_before": { "b": 1, "e": 1 },
+        "candidates": [
+          {
+            "generator": "sigma",
+            "legal": true,
+            "state_after": { "b": 1, "e": 2 },
+            "energy_after": { "type": "int", "value": "2" }
+          },
+          {
+            "generator": "mu",
+            "legal": true,
+            "state_after": { "b": 1, "e": 1 },
+            "energy_after": { "type": "int", "value": "1" }
+          }
+        ],
+        "chosen_idx": 0,
+        "state_after": { "b": 1, "e": 2 },
+        "invariant_diff": {
+          "delta_energy": { "type": "int", "value": "1" },
+          "witness": "Intentional negative: chose sigma despite mu having lower energy."
+        }
+      }
+    ]
+  },
+  "claim": {
+    "target_reachable_under_generators": true,
+    "target_reached_under_policy": false
+  },
+  "invariant_diff": {
+    "witness": "bad",
+    "separation_mode": "reachable_but_not_reached_by_policy",
+    "witness_path_length": 3,
+    "policy_steps_executed": 1
+  },
+  "digests": {
+    "canonical_sha256": "2fbb64f5d037b064666f3a7f7fbb6bcdec0b48c1f55880f2d213805148684e7d"
+  }
+}

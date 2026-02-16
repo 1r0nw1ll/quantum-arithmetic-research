@@ -1,0 +1,105 @@
+{
+  "cert_type": "QA_ENERGY_CAPABILITY_SEPARATION_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "energy_capability_sep_valid_min_0001",
+  "issued_utc": "2026-02-15T18:00:00Z",
+  "inputs": {
+    "mapping_protocol_ref": {
+      "ref_name": "Documents/QA_MAPPING_PROTOCOL__EBM_REASONING_KONA_PODCAST.v1.json",
+      "sha256": "55cc98814e6b7a12b7e7ffa2598dc86dac9367182a12f7f1f77d1e348f203c09"
+    }
+  },
+  "state_space": { "kind": "Caps(N,N)", "N": 3 },
+  "generator_set": { "generators": ["sigma", "mu"] },
+  "energy_function": {
+    "form": "e_coordinate",
+    "scalar_type": "int",
+    "definition": "E(b,e)=e (exact int)"
+  },
+  "policy": {
+    "selection": "min_energy_legal",
+    "tie_break": "lex_generator_then_state_after",
+    "declared_deterministic": true
+  },
+  "start_state": { "b": 1, "e": 1 },
+  "target_state": { "b": 3, "e": 1 },
+  "reachability_witness": {
+    "max_k": 3,
+    "path_generators": ["sigma", "sigma", "mu"],
+    "states": [
+      { "b": 1, "e": 1 },
+      { "b": 1, "e": 2 },
+      { "b": 1, "e": 3 },
+      { "b": 3, "e": 1 }
+    ]
+  },
+  "policy_run": {
+    "max_steps": 4,
+    "steps": [
+      {
+        "t": 0,
+        "state_before": { "b": 1, "e": 1 },
+        "candidates": [
+          {
+            "generator": "sigma",
+            "legal": true,
+            "state_after": { "b": 1, "e": 2 },
+            "energy_after": { "type": "int", "value": "2" }
+          },
+          {
+            "generator": "mu",
+            "legal": true,
+            "state_after": { "b": 1, "e": 1 },
+            "energy_after": { "type": "int", "value": "1" }
+          }
+        ],
+        "chosen_idx": 1,
+        "state_after": { "b": 1, "e": 1 },
+        "invariant_diff": {
+          "delta_energy": { "type": "int", "value": "0" },
+          "witness": "Greedy min-energy chooses mu; fixed point at diagonal state."
+        }
+      },
+      {
+        "t": 1,
+        "state_before": { "b": 1, "e": 1 },
+        "candidates": [
+          {
+            "generator": "sigma",
+            "legal": true,
+            "state_after": { "b": 1, "e": 2 },
+            "energy_after": { "type": "int", "value": "2" }
+          },
+          {
+            "generator": "mu",
+            "legal": true,
+            "state_after": { "b": 1, "e": 1 },
+            "energy_after": { "type": "int", "value": "1" }
+          }
+        ],
+        "chosen_idx": 1,
+        "state_after": { "b": 1, "e": 1 },
+        "invariant_diff": {
+          "delta_energy": { "type": "int", "value": "0" },
+          "witness": "Cycle persists under deterministic greedy policy."
+        }
+      }
+    ],
+    "cycle_detected": true,
+    "cycle_state": { "b": 1, "e": 1 }
+  },
+  "claim": {
+    "target_reachable_under_generators": true,
+    "target_reached_under_policy": false
+  },
+  "invariant_diff": {
+    "witness": "Target (3,1) is reachable by sigma,sigma,mu but deterministic greedy policy cycles at (1,1).",
+    "separation_mode": "reachable_but_not_reached_by_policy",
+    "cycle_state": { "b": 1, "e": 1 },
+    "witness_path_length": 3,
+    "policy_steps_executed": 2
+  },
+  "digests": {
+    "canonical_sha256": "3cc41e332517e50d02e6b543efbde163c04c9be614c3dc26b0532de6e3cd28c7"
+  }
+}

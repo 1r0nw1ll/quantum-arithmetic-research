@@ -1,0 +1,40 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "qa_mapping_protocol_canonical_v1",
+  "state_manifold": {
+    "state_type": "(b,e)",
+    "embedding_function": "QA primitive coordinates (b,e) with derived d=b+e and a=b+2e; invariant packet derived per qa_canonical.md.",
+    "constraints": [
+      "d = b+e (derived, not independent)",
+      "a = b+2e (derived, not independent)"
+    ]
+  },
+  "generators": [
+    {
+      "name": "sigma",
+      "transition_rule": "σ(b,e)=(b,e+1) if within Caps(N,N); otherwise OUT_OF_BOUNDS.",
+      "invariant_effect": "Preserves integer manifold; may emit typed FAIL at caps boundary."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "derived_coordinates",
+      "definition": "d and a are derived from (b,e): d=b+e, a=b+2e; never treated as independent degrees of freedom."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "OUT_OF_BOUNDS",
+      "trigger_condition": "Generator application violates Caps(N,N) legality constraints."
+    }
+  ],
+  "reachability": {
+    "graph_type": "directed",
+    "component_analysis": "Reachability decidable by bounded BFS; SCC structure via standard graph algorithms."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "Each generator is a partial function: given a state, it returns a unique successor state or a typed FAIL; no branching successors under v1."
+  }
+}
+

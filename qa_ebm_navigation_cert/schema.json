@@ -152,7 +152,7 @@
                 "properties": { "accepted_by_verifier": { "const": true } }
               },
               "then": {
-                "required": ["verifier_bridge_ref"],
+                "required": ["verifier_bridge_ref", "target_ref"],
                 "properties": { "status": { "const": "REACHED_TARGET" } }
               }
             }

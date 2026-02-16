@@ -1,7 +1,7 @@
 {
   "cert_type": "QA_EBM_NAVIGATION_CERT.v1",
   "schema_version": 1,
-  "cert_id": "ebm_nav_invalid_accepted_missing_digest_ref",
+  "cert_id": "ebm_nav_invalid_accepted_bridge_cert_invalid",
   "issued_utc": "2026-02-15T19:10:00Z",
   "navigation": {
     "state_space": { "state_type": "Caps(N,N) QA core state (b,e)", "caps": { "N": 30 } },
@@ -53,8 +53,8 @@
       },
       "accepted_by_verifier": true,
       "verifier_bridge_ref": {
-        "ref_name": "qa_ebm_verifier_bridge_cert/fixtures/valid_min.json",
-        "sha256": "a6c7b4d46d2e25c9ee09c3418f52dfafd647ad505a60bf9d90c21d1f48f24888"
+        "ref_name": "qa_ebm_verifier_bridge_cert/fixtures/invalid_digest_mismatch.json",
+        "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
       }
     }
   },
@@ -65,6 +65,12 @@
     "exact_energy_required": true
   },
   "digests": {
-    "canonical_sha256": "a9e138da7b6cb1fe8319ecd0d8378bbfe739bf2bbfbef43c73aa261484984158"
+    "canonical_sha256": "174369e85f80750f0acb20ce5a453cf22fd9875fa0e384d96b45df83bc0b7c1b",
+    "refs": [
+      {
+        "ref_name": "qa_ebm_verifier_bridge_cert/fixtures/invalid_digest_mismatch.json",
+        "sha256": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff"
+      }
+    ]
   }
 }

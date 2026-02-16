@@ -1,0 +1,121 @@
+{
+  "cert_type": "QA_EBM_NAVIGATION_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "ebm_nav_invalid_accepted_bridge_state_mismatch_0001",
+  "issued_utc": "2026-02-15T19:12:00Z",
+  "inputs": {
+    "problem_ref": {
+      "ref_name": "problem_stub.json",
+      "sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+    },
+    "constraints_ref": {
+      "ref_name": "constraints_stub.json",
+      "sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+    },
+    "mapping_protocol_ref": {
+      "ref_name": "Documents/QA_MAPPING_PROTOCOL__EBM_REASONING_KONA_PODCAST.v1.json",
+      "sha256": "55cc98814e6b7a12b7e7ffa2598dc86dac9367182a12f7f1f77d1e348f203c09"
+    }
+  },
+  "navigation": {
+    "state_space": {
+      "state_type": "Caps(N,N) QA core state (b,e)",
+      "caps": { "N": 30 }
+    },
+    "generators": [
+      {
+        "name": "sigma",
+        "kind": "qa_generator",
+        "transition_rule": "σ(b,e)=(b,e+1) if e+1≤N else FAIL OUT_OF_BOUNDS",
+        "invariant_effect": "Preserves integer manifold; typed FAIL at caps boundary"
+      },
+      {
+        "name": "mu",
+        "kind": "qa_generator",
+        "transition_rule": "μ(b,e)=(e,b) (always legal on Caps(N,N))",
+        "invariant_effect": "Preserves integer manifold; may merge SCCs under generator expansion"
+      }
+    ],
+    "energy": {
+      "scalar_type": "int",
+      "definition": "E_task(s)=integer penalty sum over hard constraint violations (exact)",
+      "minimize": true,
+      "components": [
+        {
+          "name": "violations_total",
+          "weight": { "type": "int", "value": "1" },
+          "unit": "count"
+        }
+      ]
+    },
+    "policy": {
+      "selection": "min_energy_legal",
+      "tie_break": "lex_generator_then_state_after",
+      "declared_deterministic": true
+    },
+    "budgets": { "max_steps": 3, "max_millis": 50 }
+  },
+  "trace": {
+    "steps": [
+      {
+        "t": 0,
+        "state_before": "(b=1,e=2)",
+        "energy_before": { "type": "int", "value": "3" },
+        "violations_before": { "violations_total": 3 },
+        "candidates": [
+          {
+            "generator": "sigma",
+            "legal": true,
+            "state_after": "(b=1,e=3)",
+            "energy_after": { "type": "int", "value": "2" },
+            "violations_after": { "violations_total": 2 }
+          },
+          {
+            "generator": "mu",
+            "legal": true,
+            "state_after": "(b=9,e=9)",
+            "energy_after": { "type": "int", "value": "2" },
+            "violations_after": { "violations_total": 2 }
+          }
+        ],
+        "chosen_idx": 1,
+        "result": "OK",
+        "state_after": "(b=9,e=9)",
+        "energy_after": { "type": "int", "value": "2" },
+        "violations_after": { "violations_total": 2 },
+        "invariant_diff": {
+          "delta_energy": { "type": "int", "value": "-1" },
+          "delta_violations": { "violations_total": -1 },
+          "witness": "Min-energy legal successor chosen; tie-break selects lex(generator,state_after) among energy ties."
+        }
+      }
+    ],
+    "outcome": {
+      "status": "REACHED_TARGET",
+      "target_ref": {
+        "ref_name": "target_stub.json",
+        "sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc"
+      },
+      "accepted_by_verifier": true,
+      "verifier_bridge_ref": {
+        "ref_name": "qa_ebm_verifier_bridge_cert/fixtures/valid_min.json",
+        "sha256": "a6c7b4d46d2e25c9ee09c3418f52dfafd647ad505a60bf9d90c21d1f48f24888"
+      }
+    }
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "failure_complete": true,
+    "tie_break_total": true,
+    "exact_energy_required": true
+  },
+  "digests": {
+    "canonical_sha256": "6d560384eb3388443d49023159ca97048347a70d037f8431433d2d0468f70b4a",
+    "refs": [
+      {
+        "ref_name": "qa_ebm_verifier_bridge_cert/fixtures/valid_min.json",
+        "sha256": "a6c7b4d46d2e25c9ee09c3418f52dfafd647ad505a60bf9d90c21d1f48f24888"
+      }
+    ]
+  }
+}

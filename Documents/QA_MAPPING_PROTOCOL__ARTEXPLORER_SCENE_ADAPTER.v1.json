@@ -1,0 +1,97 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "artexplorer_scene_adapter_v1",
+  "state_manifold": {
+    "state_type": "Typed geometry objects parsed from ARTexplorer scene JSON: Point3(R)/Point4(R), Edge, Triangle, Mesh/Polyhedron. Coordinate systems: XYZ (Cartesian 3D) or WXYZ (Quadray/4D tetrahedral axes). Observables: quadrances Q, spreads s.",
+    "embedding_function": "Parse upstream ARTexplorer scene JSON into typed objects with stable IDs. Compute RT invariants (quadrance via dx^2+dy^2+dz^2, spread via 1-(dot^2)/(Q1*Q2)) algebraically. WXYZ zero-sum normalization is an explicit projection move that must be recorded. Defer sqrt until GPU render boundary (ARTexplorer design).",
+    "constraints": [
+      "Objects are typed: Point3/Point4, Edge, Triangle, Mesh with formation rules.",
+      "Triangle formation requires non-collinearity (cross product magnitude != 0 in XYZ).",
+      "WXYZ zero-sum normalization must be recorded as an explicit generator move if applied.",
+      "All RT computations use algebraic (rational/integer) arithmetic; sqrt deferred to render boundary.",
+      "Base algebra must be adequate for spread computation (requires no_zero_divisors)."
+    ]
+  },
+  "generators": [
+    {
+      "name": "ART_PARSE_SCENE",
+      "transition_rule": "Parse upstream ARTexplorer scene JSON into typed objects with stable object IDs. If JSON is malformed or unsupported: FAIL SCENE_PARSE_ERROR.",
+      "invariant_effect": "Creates typed object manifold from upstream data; emits SCENE_PARSE_ERROR on invalid input."
+    },
+    {
+      "name": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+      "transition_rule": "For each Triangle, compute Q1,Q2,Q3 (quadrances of sides) and s1,s2,s3 (spreads at vertices) using algebraic formulas. Requires non-degenerate triangle and no-zero-divisors base algebra.",
+      "invariant_effect": "Adds RT invariants to typed state; emits ZERO_DIVISOR_OBSTRUCTION if Q=0 in spread denominator."
+    },
+    {
+      "name": "ART_NORMALIZE_WXYZ_ZERO_SUM",
+      "transition_rule": "Project WXYZ quadray coordinates to zero-sum form (W+X+Y+Z=0). Must be explicitly recorded when zero_sum_normalized flag is set.",
+      "invariant_effect": "Normalizes coordinates; emits ILLEGAL_NORMALIZATION if flag set but move not recorded."
+    },
+    {
+      "name": "RT_VALIDATE_LAW_EQUATION",
+      "transition_rule": "Validate a claimed RT law equation (cross law, spread law, etc.) by recomputing LHS and RHS. If mismatch: FAIL LAW_EQUATION_MISMATCH.",
+      "invariant_effect": "Adds verified law constraint; emits LAW_EQUATION_MISMATCH on numeric disagreement."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "object_digest_sha256",
+      "definition": "sha256 of canonical JSON of parsed typed objects (stable ordering)."
+    },
+    {
+      "name": "rt_invariants_digest_sha256",
+      "definition": "sha256 of canonical JSON of computed quadrances/spreads."
+    },
+    {
+      "name": "step_hash_sha256",
+      "definition": "sha256 of canonical JSON of each derivation step payload ({move_id, inputs, outputs})."
+    },
+    {
+      "name": "invariant_diff",
+      "definition": "Typed diff of invariants across derivation steps. Must be present in result."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "MISSING_INVARIANT_DIFF",
+      "trigger_condition": "Result contract violated: invariant_diff missing or malformed in result."
+    },
+    {
+      "fail_type": "NONDETERMINISM_CONTRACT_VIOLATION",
+      "trigger_condition": "Canonical JSON, stable sorting, or step hash requirements not satisfied."
+    },
+    {
+      "fail_type": "SCENE_PARSE_ERROR",
+      "trigger_condition": "Scene JSON cannot be parsed into supported typed object shapes."
+    },
+    {
+      "fail_type": "DEGENERATE_TRIANGLE_COLLINEAR",
+      "trigger_condition": "Triangle formation rule fails: cross product magnitude is zero (collinear points)."
+    },
+    {
+      "fail_type": "ILLEGAL_NORMALIZATION",
+      "trigger_condition": "Zero-sum normalization applied without explicit recorded generator move, or vertex sums not zero when claimed."
+    },
+    {
+      "fail_type": "BASE_ALGEBRA_TOO_WEAK",
+      "trigger_condition": "Requested operation requires no_zero_divisors but base algebra declaration lacks it."
+    },
+    {
+      "fail_type": "ZERO_DIVISOR_OBSTRUCTION",
+      "trigger_condition": "Division by zero in spread computation (Q=0 in denominator)."
+    },
+    {
+      "fail_type": "LAW_EQUATION_MISMATCH",
+      "trigger_condition": "Claimed RT law equation check fails: LHS != RHS under declared evaluation."
+    }
+  ],
+  "reachability": {
+    "graph_type": "Directed derivation graph: nodes are typed scene states (parsed objects + accumulated RT invariants), edges are adapter/RT moves.",
+    "component_analysis": "Derivation is acyclic (each step adds invariants or constraints). Parse -> compute -> validate is the canonical progression. Failure states are typed obstructions."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "Per QA canonical: generators (scene parse, RT computation, normalization) are partial functions with deterministic outputs. Each step emits step_hash_sha256 over canonical JSON. No RNG permitted. Invariant_diff must be present in result."
+  }
+}

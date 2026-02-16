@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "Documents/QA_MAPPING_PROTOCOL__ARTEXPLORER_SCENE_ADAPTER.v1.json",
+  "ref_sha256": "fc9635491599231f9bf45dc59401f190709a90098d165a821d9c407dd0a82288",
+  "scope_note": "ARTexplorer scene JSON adapter: typed objects (Point3/Triangle/Mesh) with RT invariant computation (quadrance/spread), deterministic trace, and typed obstruction taxonomy."
+}

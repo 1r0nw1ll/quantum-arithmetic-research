@@ -2563,6 +2563,54 @@ def _validate_ebm_verifier_bridge_cert_family_if_present(base_dir: str) -> Optio
     return None
 
 
+def _validate_artexplorer_scene_adapter_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_ARTEXPLORER_SCENE_ADAPTER.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_artexplorer_scene_adapter_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_artexplorer_scene_adapter_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_artexplorer_scene_adapter_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_rational_trig_type_system_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_RATIONAL_TRIG_TYPE_SYSTEM.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_rational_trig_type_system_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_rational_trig_type_system_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_rational_trig_type_system_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -2637,6 +2685,12 @@ FAMILY_SWEEPS = [
     (39, "QA EBM Verifier Bridge Cert family",
      _validate_ebm_verifier_bridge_cert_family_if_present,
      "schema + validator + fixtures", "39_ebm_verifier_bridge_cert", "../qa_ebm_verifier_bridge_cert", True),
+    (44, "QA Rational Trig Type System family",
+     _validate_rational_trig_type_system_family_if_present,
+     "schema + validator + fixtures", "44_rational_trig_type_system", "../qa_rational_trig_type_system_v1", True),
+    (45, "QA ARTexplorer Scene Adapter family",
+     _validate_artexplorer_scene_adapter_family_if_present,
+     "schema + validator + fixtures", "45_artexplorer_scene_adapter", "../qa_artexplorer_scene_adapter_v1", True),
 ]
 
 

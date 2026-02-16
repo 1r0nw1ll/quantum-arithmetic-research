@@ -34,11 +34,13 @@ A family **does not count as shipped** unless both tracts are present.
 | [37] | [QA EBM Navigation Cert](37_ebm_navigation_cert.md) | Schema + Validator + Fixtures | PASS |
 | [38] | [QA Energy–Capability Separation Cert](38_energy_capability_separation.md) | Schema + Validator + Fixtures | PASS |
 | [39] | [QA EBM Verifier Bridge Cert](39_ebm_verifier_bridge_cert.md) | Schema + Validator + Fixtures | PASS |
+| [44] | [QA Rational Trig Type System](44_rational_trig_type_system.md) | Schema + Validator + Fixtures | PASS |
+| [45] | [QA ARTexplorer Scene Adapter](45_artexplorer_scene_adapter.md) | Schema + Validator + Fixtures | PASS |
 
 ## Quick validation
 
 ```bash
-# Run all families [18]-[39] + external validation + doc gate
+# Run all families [18]-[45] + external validation + doc gate
 cd qa_alphageometry_ptolemy
 python qa_meta_validator.py
 

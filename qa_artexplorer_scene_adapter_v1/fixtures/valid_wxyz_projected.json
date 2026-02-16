@@ -1,0 +1,105 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v1",
+  "cert_id": "qa_artexplorer_wxyz_projected_0001",
+  "created_utc": "2026-02-16T18:45:00Z",
+  "source_semantics": {
+    "upstream": {
+      "name": "ARTexplorer (Algebraic Rational Trigonometry Explorer)",
+      "repo_url": "https://github.com/arossti/ARTexplorer",
+      "app_url": "https://arossti.github.io/ARTexplorer/"
+    },
+    "export": {
+      "format": "artexplorer_scene_json",
+      "exported_by": "ARTexplorer v1.0 quadray mode"
+    }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": { "integral_domain": true, "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "coordinate_system": "WXYZ",
+    "zero_sum_normalized": true,
+    "scene_raw": {
+      "note": "Tetrahedron face in quadray coordinates (zero-sum normalized)",
+      "quadray_basis": {
+        "QX_A": [1, 1, 1],
+        "QZ_B": [1, -1, -1],
+        "QY_C": [-1, 1, -1],
+        "QW_D": [-1, -1, 1]
+      }
+    }
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tetra_face_wxyz",
+        "object_type": "TRIANGLE",
+        "label": "Regular tetrahedron face (WXYZ zero-sum normalized)",
+        "vertices": [
+          { "id": "A", "coord": [-0.25, 0.75, -0.25, -0.25] },
+          { "id": "B", "coord": [-0.25, -0.25, -0.25, 0.75] },
+          { "id": "C", "coord": [-0.25, -0.25, 0.75, -0.25] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "ART_NORMALIZE_WXYZ_ZERO_SUM",
+        "inputs": {
+          "vertices_raw": [[0, 1, 0, 0], [0, 0, 0, 1], [0, 0, 1, 0]]
+        },
+        "outputs": {
+          "vertices_normalized": [[-0.25, 0.75, -0.25, -0.25], [-0.25, -0.25, -0.25, 0.75], [-0.25, -0.25, 0.75, -0.25]]
+        },
+        "step_hash_sha256": "1294c37bd64e0d2a779325ab776927b1883f63bccc46e7263e4c46b4e3cf6c1a"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "ART_PROJECT_WXYZ_TO_XYZ",
+        "inputs": {
+          "vertices_wxyz": [[-0.25, 0.75, -0.25, -0.25], [-0.25, -0.25, -0.25, 0.75], [-0.25, -0.25, 0.75, -0.25]]
+        },
+        "outputs": {
+          "vertices_xyz": [[1.0, 1.0, 1.0], [1.0, -1.0, -1.0], [-1.0, 1.0, -1.0]]
+        },
+        "step_hash_sha256": "9a10b220f08645183f6c3cbec254bf65402e84d1e7d17cdcb47e2c1f44110907"
+      },
+      {
+        "step_id": "s3",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tetra_face_wxyz" },
+        "outputs": { "Q": [8.0, 8.0, 8.0], "s": [0.75, 0.75, 0.75] },
+        "step_hash_sha256": "11c1ccc43bb47fafcc0c7cc98f786e56fe767bf77a4e64556a814dd33995c83f"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        { "triangle_object_id": "tetra_face_wxyz", "Q": [8.0, 8.0, 8.0], "s": [0.75, 0.75, 0.75] }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["vertices_normalized (WXYZ zero-sum)"] },
+        { "step_id": "s2", "adds": ["vertices_xyz (projected from WXYZ)"] },
+        { "step_id": "s3", "adds": ["rt_invariants.triangles[tetra_face_wxyz].Q", "rt_invariants.triangles[tetra_face_wxyz].s"] }
+      ],
+      "provenance": {
+        "coordinate_pipeline": "WXYZ raw → zero-sum normalize → project to XYZ → compute RT invariants",
+        "quadray_basis": "QX=(1,1,1) QZ=(1,-1,-1) QY=(-1,1,-1) QW=(-1,-1,1)",
+        "normalization": "subtract mean from each component (zero-sum constraint W+X+Y+Z=0)"
+      }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

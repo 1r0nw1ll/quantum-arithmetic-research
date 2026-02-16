@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "Documents/QA_MAPPING_PROTOCOL__RATIONAL_TRIG_TYPE_SYSTEM.v1.json",
+  "ref_sha256": "923e2c527ee74a4dc483ea38b31954bf072fb2319d444e9a908dc446cdd77ac1",
+  "scope_note": "Rational Trigonometry (Wildberger) + Type Theory (Types vs Sets) mapped into QA; this family certifies typed geometric derivations where RT objects are typed state manifolds, RT theorems are generator moves, and failures are typed obstructions."
+}

@@ -1,0 +1,97 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "rational_trig_type_system_v1",
+  "state_manifold": {
+    "state_type": "Typed geometric state: Triangle(A,B,C) formed from Point2(R) over a base algebra R with well-formedness (non-collinearity) enforced as a formation rule. Observables: quadrances Q1,Q2,Q3 and spreads s1,s2,s3.",
+    "embedding_function": "Points are coordinate pairs in R^2. Lines are determined by point pairs. Triangles require non-collinearity (det([B-A,C-A]) != 0). Quadrance Q(A,B) = (x2-x1)^2 + (y2-y1)^2. Spread s(l1,l2) is the algebraic separation of lines (sin^2 of angle in Euclidean case, but defined without transcendentals).",
+    "constraints": [
+      "Objects are typed: Point2, Line2, Triangle with formation rules (not set membership).",
+      "Triangle formation requires non-collinearity proof (typed obstruction if violated).",
+      "Base algebra must be adequate for chosen laws (field/integral_domain for division steps).",
+      "All computations use algebraic (rational/integer) arithmetic only; no transcendentals."
+    ]
+  },
+  "generators": [
+    {
+      "name": "cross_law_derive",
+      "transition_rule": "Given Triangle(A,B,C) with Q1,Q2,Q3,s1: derive constraint (Q1-Q2-Q3)^2 = 4*Q2*Q3*(1-s1). Preconditions: Triangle well-formed, Q2 and Q3 defined.",
+      "invariant_effect": "Adds cross_law constraint to typed state; emits LAW_PRECONDITION_FAILED if triangle malformed."
+    },
+    {
+      "name": "spread_law_derive",
+      "transition_rule": "Given Triangle(A,B,C) with Q1,Q2,Q3,s1,s2,s3: derive ratio invariant s1/Q1 = s2/Q2 = s3/Q3. Requires integral_domain or field (division).",
+      "invariant_effect": "Adds spread_law ratio constraint; emits BASE_ALGEBRA_TOO_WEAK if base ring lacks no-zero-divisors."
+    },
+    {
+      "name": "triple_quad_derive",
+      "transition_rule": "Given Triangle(A,B,C) with Q1,Q2,Q3: check (Q1+Q2+Q3)^2 = 2(Q1^2+Q2^2+Q3^2). Preconditions: collinearity test (holds iff collinear).",
+      "invariant_effect": "Verifies collinearity invariant from quadrances alone; emits LAW_EQUATION_MISMATCH on numeric violation."
+    },
+    {
+      "name": "triple_spread_derive",
+      "transition_rule": "Given spreads s1,s2,s3 of a triangle: derive (s1+s2+s3)^2 = 2(s1^2+s2^2+s3^2) + 4*s1*s2*s3.",
+      "invariant_effect": "Adds triple_spread constraint; emits LAW_EQUATION_MISMATCH if equation fails."
+    },
+    {
+      "name": "pythagoras_derive",
+      "transition_rule": "Given right triangle (s_k = 1 for some k) with Q1,Q2,Q3: derive Q_k = Q_i + Q_j (quadrance Pythagoras). Preconditions: spread = 1 at vertex k.",
+      "invariant_effect": "Adds right-triangle quadrance constraint; emits LAW_PRECONDITION_FAILED if no spread equals 1."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "typed_formation",
+      "definition": "Objects exist only if their formation rules are satisfied: Triangle requires non-collinear points, not mere set membership."
+    },
+    {
+      "name": "algebraic_closure",
+      "definition": "All RT primitives (quadrance, spread) and laws use polynomial/rational relations over the base algebra; no transcendental functions."
+    },
+    {
+      "name": "base_algebra_adequacy",
+      "definition": "Laws requiring division (spread law) need at least integral_domain+no_zero_divisors; laws using only polynomial relations work over any commutative ring."
+    },
+    {
+      "name": "determinism_contract",
+      "definition": "Each derivation step has deterministic_hash = sha256(canonical_json({uses_law_id, inputs, outputs})). No RNG, canonical JSON, stable sorting."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "DEGENERATE_TRIANGLE_COLLINEAR",
+      "trigger_condition": "Triangle formation rule violated: det([B-A,C-A]) = 0 (points are collinear)."
+    },
+    {
+      "fail_type": "BASE_ALGEBRA_TOO_WEAK",
+      "trigger_condition": "Law requires division but base algebra is not an integral domain or field."
+    },
+    {
+      "fail_type": "ZERO_DIVISOR_OBSTRUCTION",
+      "trigger_condition": "Division by zero encountered in a derivation step (denominator is zero divisor in the base ring)."
+    },
+    {
+      "fail_type": "LAW_PRECONDITION_FAILED",
+      "trigger_condition": "A generator move's preconditions are not met by the current typed state."
+    },
+    {
+      "fail_type": "LAW_EQUATION_MISMATCH",
+      "trigger_condition": "A derivation step claims equation satisfaction but LHS != RHS under the base algebra."
+    },
+    {
+      "fail_type": "MISSING_INVARIANT_DIFF",
+      "trigger_condition": "Certificate missing required invariant_diff section."
+    },
+    {
+      "fail_type": "NONDETERMINISM_CONTRACT_VIOLATION",
+      "trigger_condition": "Determinism contract flags not strict, or step hash does not match canonical recomputation."
+    }
+  ],
+  "reachability": {
+    "graph_type": "Directed derivation graph: nodes are typed states (Triangle + observables + accumulated constraints), edges are RT law applications.",
+    "component_analysis": "Derivation is acyclic (each step adds constraints, never removes). Terminal states are fully constrained typed objects. Failure states are typed obstructions."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "Per QA canonical: generators (RT law applications) are partial functions with deterministic outputs. Each step emits invariant_diff (constraints added/modified). Step hashes enforce canonical serialization. No RNG permitted."
+  }
+}

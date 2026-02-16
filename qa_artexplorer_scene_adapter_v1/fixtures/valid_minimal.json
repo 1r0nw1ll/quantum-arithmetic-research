@@ -1,0 +1,69 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v1",
+  "cert_id": "qa_artexplorer_adapter_valid_0001",
+  "created_utc": "2026-02-16T18:00:00Z",
+  "source_semantics": {
+    "upstream": {
+      "name": "ARTexplorer (Algebraic Rational Trigonometry Explorer)",
+      "repo_url": "https://github.com/arossti/ARTexplorer",
+      "app_url": "https://arossti.github.io/ARTexplorer/"
+    },
+    "export": {
+      "format": "artexplorer_scene_json",
+      "exported_by": "manual_fixture"
+    }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": { "integral_domain": true, "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "coordinate_system": "XYZ",
+    "scene_raw": { "note": "Minimal stand-in for ARTexplorer scene export" }
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_001",
+        "object_type": "TRIANGLE",
+        "label": "A(0,0,0)-B(1,0,0)-C(0,1,0)",
+        "vertices": [
+          { "id": "A", "coord": [0, 0, 0] },
+          { "id": "B", "coord": [1, 0, 0] },
+          { "id": "C", "coord": [0, 1, 0] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tri_001" },
+        "outputs": { "Q": [2, 1, 1], "s": [1.0, 0.5, 0.5] },
+        "step_hash_sha256": "d3b7bb772e40ee57002de1260a5efc000f950a7e7fd52ec6782f6f62aa2cb809"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        { "triangle_object_id": "tri_001", "Q": [2, 1, 1], "s": [1.0, 0.5, 0.5] }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["rt_invariants.triangles[tri_001].Q", "rt_invariants.triangles[tri_001].s"] }
+      ]
+    },
+    "object_digest_sha256": "4e8a2396502f4e5df138dbd6eeae9f6e2d3c1a502745b05f08f52ad63aa73300",
+    "rt_invariants_digest_sha256": "8486461228b09e23555bb3411efec352c9851694e52a9eb9b46c8db24cddf16a"
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

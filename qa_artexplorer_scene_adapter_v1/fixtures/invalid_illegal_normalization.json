@@ -1,0 +1,56 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v1",
+  "cert_id": "qa_artexplorer_adapter_invalid_illegal_norm_0001",
+  "created_utc": "2026-02-16T18:00:00Z",
+  "source_semantics": {
+    "upstream": {
+      "name": "ARTexplorer",
+      "repo_url": "https://github.com/arossti/ARTexplorer",
+      "app_url": "https://arossti.github.io/ARTexplorer/"
+    },
+    "export": { "format": "artexplorer_scene_json" }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": { "integral_domain": true, "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "coordinate_system": "WXYZ",
+    "zero_sum_normalized": true,
+    "scene_raw": {}
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_wxyz",
+        "object_type": "TRIANGLE",
+        "vertices": [
+          { "id": "A", "coord": [1, 0, 0, 0] },
+          { "id": "B", "coord": [0, 1, 0, 0] },
+          { "id": "C", "coord": [0, 0, 1, 0] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tri_wxyz" },
+        "outputs": {},
+        "step_hash_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": { "triangles": [] },
+    "invariant_diff": { "steps": [] }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

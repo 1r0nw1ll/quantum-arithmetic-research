@@ -1,0 +1,56 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_RATIONAL_TRIG_TYPE_SYSTEM.v1",
+  "cert_id": "qa_rt_types_invalid_missing_invdiff_0001",
+  "created_utc": "2026-02-16T17:00:00Z",
+  "source_semantics": {
+    "video_ref": {
+      "url": "https://www.youtube.com/watch?v=x6rb-qOEXtQ",
+      "timestamp_seconds": 335,
+      "claim_summary": "Types vs sets mapping."
+    },
+    "rt_refs": [
+      {
+        "title": "A Rational Approach to Trigonometry (Wildberger, 2007)",
+        "url_or_citation": "https://web.maths.unsw.edu.au/~norman/papers/RationalTrig.pdf"
+      }
+    ]
+  },
+  "type_system": {
+    "base_algebra": { "kind": "field", "assumptions": [] },
+    "types": { "Point2": {}, "Line2": {}, "Triangle": {} },
+    "formation_rules": [
+      {
+        "rule_id": "FR_TRIANGLE_NONCOLLINEAR",
+        "inputs": ["Point2", "Point2", "Point2"],
+        "outputs": ["Triangle"],
+        "side_conditions": ["det([B-A, C-A]) != 0"]
+      }
+    ]
+  },
+  "rt_core": {
+    "primitives": {
+      "quadrance": { "definition": "Q(A,B) = (x2-x1)^2 + (y2-y1)^2" },
+      "spread": { "definition": "s(l1,l2) = algebraic line separation" }
+    },
+    "laws": []
+  },
+  "derivation": {
+    "typed_state": {
+      "triangle": {
+        "A": [0, 0],
+        "B": [1, 0],
+        "C": [0, 1],
+        "non_collinear_proof": "det != 0"
+      },
+      "observables": { "Q1": 2, "Q2": 1, "Q3": 1, "s1": 1, "s2": 0.5, "s3": 0.5 }
+    },
+    "steps": []
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "no_rng": true,
+    "stable_sorting": true,
+    "hash_rule": "sha256(canonical_json({uses_law_id, inputs, outputs}))"
+  }
+}

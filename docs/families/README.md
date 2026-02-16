@@ -29,13 +29,21 @@ A family **does not count as shipped** unless both tracts are present.
 | [32] | [QA Conjecture-Prove Control Loop](32_conjecture_prove_loop.md) | Validator + Fixtures (episode + frontier + receipt) | PASS |
 | [33] | [QA Discovery Pipeline](33_discovery_pipeline.md) | Validator + Fixtures (run + plan + bundle) + Batch Runner | PASS |
 | [34] | [QA Rule 30 Certified Discovery](34_rule30_cert.md) | Cert Pack + Witness Manifests + File-Hash Verified | PASS |
+| [35] | [QA Mapping Protocol](35_mapping_protocol.md) | Schema + Validator + Fixtures | PASS |
+| [36] | [QA Mapping Protocol REF](36_mapping_protocol_ref.md) | Schema + Validator + Fixtures | PASS |
+| [37] | [QA EBM Navigation Cert](37_ebm_navigation_cert.md) | Schema + Validator + Fixtures | PASS |
+| [38] | [QA Energy–Capability Separation Cert](38_energy_capability_separation.md) | Schema + Validator + Fixtures | PASS |
+| [39] | [QA EBM Verifier Bridge Cert](39_ebm_verifier_bridge_cert.md) | Schema + Validator + Fixtures | PASS |
 
 ## Quick validation
 
 ```bash
-# Run all families [1]-[34] + external validation + doc gate
+# Run all families [18]-[39] + external validation + doc gate
 cd qa_alphageometry_ptolemy
 python qa_meta_validator.py
+
+# Policy guard (fails if any `must_have_dedicated_root=True` family shares a family root)
+python qa_meta_validator.py --strict
 
 # Fast mode (manifest integrity only)
 python qa_meta_validator.py --fast

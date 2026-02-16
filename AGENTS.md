@@ -41,6 +41,26 @@ cd qa_alphageometry_ptolemy
 python qa_verify.py --demo  # Should output: ✔ ALL CHECKS PASSED
 ```
 
+### Mapping Protocol Gate (Gate 0)
+
+The meta-validator enforces an **intake constitution**: every certificate family root must include **exactly one** of:
+
+- `mapping_protocol.json` (inline `QA_MAPPING_PROTOCOL.v1`), or
+- `mapping_protocol_ref.json` (reference `QA_MAPPING_PROTOCOL_REF.v1` → pinned mapping object)
+
+`qa_alphageometry_ptolemy/qa_meta_validator.py` controls the **family root** via `family_root_rel` in `FAMILY_SWEEPS`.
+Legacy families may share `"."` (a single root mapping); new families should prefer dedicated roots.
+
+**Repo law (Policy B, going forward)**:
+- One family = one root (for new families).
+- That root must ship exactly one of `mapping_protocol.json` or `mapping_protocol_ref.json`.
+- `python qa_alphageometry_ptolemy/qa_meta_validator.py --strict` enforces that `must_have_dedicated_root=True` families do not share a `family_root_rel` (and do not use `family_root_rel="."`).
+
+Protocol families live at repo root:
+
+- `qa_mapping_protocol/` (schema + validator + fixtures)
+- `qa_mapping_protocol_ref/` (schema + validator + fixtures)
+
 ### Core Certificate Files
 | File | Description |
 |------|-------------|
@@ -122,6 +142,10 @@ The **tetrad** formalizes `Capability = Reachability(S, G, I)` across four direc
 # Certificate Tetrad + Conjectures (run from qa_alphageometry_ptolemy/)
 python qa_meta_validator.py          # 12 tests: 9 valid, 3 invalid
 python qa_conjecture_core.py         # 5 checks: factories, ledger, guards
+
+# Mapping Protocol families (run from repo root)
+python qa_mapping_protocol/validator.py --self-test
+python qa_mapping_protocol_ref/validator.py --self-test
 
 # Decision certificate spine
 python qa_verify.py --demo

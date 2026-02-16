@@ -47,6 +47,7 @@ KNOWN_CERT_TYPES = {
     "DIVERSITY_COLLAPSE_OBSTRUCTION",
     "FIELD_COMPUTATION_CERT",
     "BEYOND_NEURONS_INTELLIGENCE_CERT",
+    "HOT_MESS_INCOHERENCE_CERT",
     "TOPOLOGY_RESONANCE_CERT",
     "ELLIPTIC_CORRESPONDENCE_CERT",
     "GRAPH_STRUCTURE_CERT",
@@ -91,6 +92,12 @@ REQUIRED_BY_TYPE = {
     "BEYOND_NEURONS_INTELLIGENCE_CERT": {
         "claim", "substrate", "scale", "problem_space",
         "search_efficiency", "result",
+    },
+    "HOT_MESS_INCOHERENCE_CERT": {
+        "version", "schema", "success",
+        "model_id", "task_family", "eval_metric_id",
+        "num_runs", "run_outcomes",
+        "decomposition_witness", "coherence_invariant",
     },
     "TOPOLOGY_RESONANCE_CERT": {
         "generator_set",
@@ -385,6 +392,240 @@ def _parse_fraction_like(value: Any) -> Fraction:
     if isinstance(value, str):
         return Fraction(value)
     raise ValueError(f"unsupported scalar type: {type(value)}")
+
+
+# ============================================================================
+# MAPPING PROTOCOL GATE (Gate 0 for certificate families)
+# ============================================================================
+
+class MetaValidationError(Exception):
+    """Deterministic meta-validation error with structured fail_type + detail."""
+
+    def __init__(self, fail_type: str, detail: Dict[str, Any]):
+        super().__init__(fail_type)
+        self.fail_type = fail_type
+        self.detail = detail
+
+
+def _sha256_file_bytes(path: str) -> str:
+    h = hashlib.sha256()
+    with open(path, "rb") as f:
+        for chunk in iter(lambda: f.read(8192), b""):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def _load_json_file(path: str) -> Dict[str, Any]:
+    with open(path, "r", encoding="utf-8") as f:
+        return json.load(f)
+
+
+def _validate_json_against_schema(obj: Dict[str, Any], schema_path: str) -> None:
+    try:
+        import jsonschema
+    except ImportError as e:
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_SCHEMA_FAIL",
+            {"schema_path": schema_path, "error": f"jsonschema import failed: {e}"},
+        )
+
+    schema = _load_json_file(schema_path)
+    try:
+        jsonschema.validate(instance=obj, schema=schema)
+    except Exception as e:
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_SCHEMA_FAIL",
+            {"schema_path": schema_path, "error": str(e)},
+        )
+
+
+def require_mapping_protocol(family_root: str, repo_root: str) -> Tuple[str, str]:
+    """
+    Enforces the intake constitution for certificate families:
+    - Exactly one of mapping_protocol.json or mapping_protocol_ref.json exists in family_root.
+    - Inline must validate as QA_MAPPING_PROTOCOL.v1 and include determinism_contract essentials.
+    - Ref must validate as QA_MAPPING_PROTOCOL_REF.v1 and resolve to a valid QA_MAPPING_PROTOCOL.v1 target.
+
+    Returns:
+        (mode, resolved_mapping_path) where mode in {"inline","ref"}.
+    """
+    inline_path = os.path.join(family_root, "mapping_protocol.json")
+    ref_path = os.path.join(family_root, "mapping_protocol_ref.json")
+
+    inline_exists = os.path.exists(inline_path)
+    ref_exists = os.path.exists(ref_path)
+
+    if inline_exists and ref_exists:
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_AMBIGUOUS",
+            {"family_root": family_root, "found": ["mapping_protocol.json", "mapping_protocol_ref.json"]},
+        )
+    if not inline_exists and not ref_exists:
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_MISSING",
+            {"family_root": family_root, "required_one_of": ["mapping_protocol.json", "mapping_protocol_ref.json"]},
+        )
+
+    mapping_schema = os.path.join(repo_root, "qa_mapping_protocol", "schema.json")
+    ref_schema = os.path.join(repo_root, "qa_mapping_protocol_ref", "schema.json")
+
+    if inline_exists:
+        obj = _load_json_file(inline_path)
+        _validate_json_against_schema(obj, mapping_schema)
+        dc = obj.get("determinism_contract", {})
+        if dc.get("invariant_diff_defined") is not True or not str(dc.get("nondeterminism_proof", "")).strip():
+            raise MetaValidationError(
+                "MAPPING_PROTOCOL_DETERMINISM_CONTRACT_MISSING",
+                {
+                    "family_root": family_root,
+                    "path": inline_path,
+                    "required": [
+                        "determinism_contract.invariant_diff_defined==true",
+                        "determinism_contract.nondeterminism_proof non-empty",
+                    ],
+                },
+            )
+        return "inline", inline_path
+
+    # ref mode
+    ref_obj = _load_json_file(ref_path)
+    _validate_json_against_schema(ref_obj, ref_schema)
+    rel = ref_obj.get("ref_path")
+    if not isinstance(rel, str) or not rel.strip():
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_REF_INVALID",
+            {"family_root": family_root, "path": ref_path, "missing": ["ref_path"]},
+        )
+
+    repo_root_abs = os.path.normpath(os.path.abspath(repo_root))
+    resolved_abs = os.path.normpath(os.path.abspath(os.path.join(repo_root_abs, rel)))
+    if os.path.commonpath([repo_root_abs, resolved_abs]) != repo_root_abs:
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_REF_ESCAPE",
+            {"family_root": family_root, "ref_path": rel, "resolved": resolved_abs},
+        )
+    if not os.path.exists(resolved_abs):
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_REF_UNRESOLVED",
+            {"family_root": family_root, "ref_path": rel, "resolved": resolved_abs},
+        )
+
+    if "ref_sha256" in ref_obj:
+        want = str(ref_obj.get("ref_sha256", "")).lower().strip()
+        got = _sha256_file_bytes(resolved_abs)
+        if want != got:
+            raise MetaValidationError(
+                "MAPPING_PROTOCOL_REF_SHA_MISMATCH",
+                {"family_root": family_root, "ref_path": rel, "expected": want, "got": got},
+            )
+
+    mapping_obj = _load_json_file(resolved_abs)
+    _validate_json_against_schema(mapping_obj, mapping_schema)
+    dc = mapping_obj.get("determinism_contract", {})
+    if dc.get("invariant_diff_defined") is not True or not str(dc.get("nondeterminism_proof", "")).strip():
+        raise MetaValidationError(
+            "MAPPING_PROTOCOL_DETERMINISM_CONTRACT_MISSING",
+            {"family_root": family_root, "resolved": resolved_abs},
+        )
+    return "ref", resolved_abs
+
+
+def validate_hot_mess_incoherence(cert_dict: Dict[str, Any]) -> ValidationResult:
+    """Validate HOT_MESS_INCOHERENCE_CERT semantics (lightweight meta-validator checks)."""
+    v = ValidationResult()
+
+    schema = cert_dict.get("schema")
+    v.check(schema == "QA_HOT_MESS_INCOHERENCE_CERT.v1",
+            f"schema must be QA_HOT_MESS_INCOHERENCE_CERT.v1, got: {schema}")
+
+    success = cert_dict.get("success")
+    v.check(isinstance(success, bool), "success must be boolean")
+
+    for key in ("model_id", "task_family", "eval_metric_id"):
+        val = cert_dict.get(key)
+        v.check(isinstance(val, str) and bool(val), f"{key} must be a non-empty string")
+
+    num_runs = cert_dict.get("num_runs")
+    v.check(isinstance(num_runs, int) and num_runs >= 0, "num_runs must be a non-negative int")
+
+    outcomes = cert_dict.get("run_outcomes")
+    v.check(isinstance(outcomes, list), "run_outcomes must be a list")
+    if isinstance(outcomes, list) and isinstance(num_runs, int):
+        v.check(len(outcomes) == num_runs,
+                f"run_outcomes length mismatch: len={len(outcomes)} num_runs={num_runs}")
+
+    # Agreement rate (mode frequency over output_hash)
+    agreement_rate = Fraction(0)
+    if isinstance(outcomes, list) and len(outcomes) > 0:
+        counts: Dict[str, int] = {}
+        for i, o in enumerate(outcomes[:500]):
+            v.check(isinstance(o, dict), f"run_outcomes[{i}] must be a dict")
+            if not isinstance(o, dict):
+                continue
+            for f in ("run_id", "rng_seed", "step_count", "output_hash", "score", "success"):
+                v.check(f in o, f"run_outcomes[{i}] missing field: {f}")
+            h = o.get("output_hash")
+            if isinstance(h, str) and h:
+                counts[h] = counts.get(h, 0) + 1
+            v.check(isinstance(o.get("success"), bool), f"run_outcomes[{i}].success must be boolean")
+        if counts:
+            agreement_rate = Fraction(max(counts.values()), len(outcomes))
+
+    provided_agree = cert_dict.get("agreement_rate")
+    if provided_agree is not None:
+        try:
+            prov = _parse_fraction_like(provided_agree)
+            v.check(prov == agreement_rate,
+                    f"agreement_rate mismatch: provided={prov} recomputed={agreement_rate}")
+        except Exception as e:
+            v.check(False, f"agreement_rate invalid scalar: {e}")
+
+    # Decomposition witness arithmetic
+    dec = cert_dict.get("decomposition_witness")
+    v.check(isinstance(dec, dict), "decomposition_witness must be dict")
+    incoherence_ratio = None
+    if isinstance(dec, dict):
+        for f in ("metric_id", "total_error", "bias_component", "variance_component", "incoherence_ratio"):
+            v.check(f in dec, f"decomposition_witness missing field: {f}")
+        try:
+            total = _parse_fraction_like(dec.get("total_error"))
+            bias = _parse_fraction_like(dec.get("bias_component"))
+            var = _parse_fraction_like(dec.get("variance_component"))
+            ratio = _parse_fraction_like(dec.get("incoherence_ratio"))
+            v.check(total == bias + var,
+                    f"decomposition total_error mismatch: total={total} bias+var={bias+var}")
+            expected_ratio = Fraction(0) if total == 0 else (var / total)
+            v.check(ratio == expected_ratio,
+                    f"incoherence_ratio mismatch: ratio={ratio} expected={expected_ratio}")
+            incoherence_ratio = ratio
+        except Exception as e:
+            v.check(False, f"decomposition_witness scalar parse error: {e}")
+
+    inv = cert_dict.get("coherence_invariant")
+    v.check(isinstance(inv, dict), "coherence_invariant must be dict")
+    if isinstance(inv, dict):
+        for f in ("metric_id", "max_incoherence_ratio"):
+            v.check(f in inv, f"coherence_invariant missing field: {f}")
+        if incoherence_ratio is not None and success is True:
+            try:
+                max_incoh = _parse_fraction_like(inv.get("max_incoherence_ratio"))
+                v.check(incoherence_ratio <= max_incoh,
+                        f"I_coh violation: incoherence_ratio={incoherence_ratio} > max={max_incoh}")
+            except Exception as e:
+                v.check(False, f"coherence_invariant.max_incoherence_ratio parse error: {e}")
+        if inv.get("min_agreement_rate") is not None and success is True:
+            try:
+                min_agree = _parse_fraction_like(inv.get("min_agreement_rate"))
+                v.check(agreement_rate >= min_agree,
+                        f"I_coh violation: agreement_rate={agreement_rate} < min={min_agree}")
+            except Exception as e:
+                v.check(False, f"coherence_invariant.min_agreement_rate parse error: {e}")
+
+    if success is False:
+        v.check(bool(cert_dict.get("failure_mode")), "failure certificate missing failure_mode")
+        v.check(isinstance(cert_dict.get("failure_witness"), dict), "failure certificate missing failure_witness")
+
+    return v
 
 
 def validate_topology_resonance(cert_dict: Dict[str, Any]) -> ValidationResult:
@@ -895,6 +1136,7 @@ TYPE_VALIDATORS = {
     "DIVERSITY_COLLAPSE_OBSTRUCTION": validate_collapse,
     "FIELD_COMPUTATION_CERT": validate_field,
     "BEYOND_NEURONS_INTELLIGENCE_CERT": validate_beyond_neurons,
+    "HOT_MESS_INCOHERENCE_CERT": validate_hot_mess_incoherence,
     "TOPOLOGY_RESONANCE_CERT": validate_topology_resonance,
     "ELLIPTIC_CORRESPONDENCE_CERT": validate_elliptic_correspondence,
     "GRAPH_STRUCTURE_CERT": validate_graph_structure,
@@ -2195,58 +2437,206 @@ def _validate_rule30_cert_if_present(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_mapping_protocol_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_MAPPING_PROTOCOL.v1 family (schema + validator + fixtures).
+
+    Returns:
+        None on success,
+        skip reason string if family not present.
+    Raises:
+        Exception on validation failure.
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_mapping_protocol", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_mapping_protocol/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_mapping_protocol self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_mapping_protocol_ref_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_MAPPING_PROTOCOL_REF.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_mapping_protocol_ref", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_mapping_protocol_ref/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_mapping_protocol_ref self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_ebm_navigation_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_EBM_NAVIGATION_CERT.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_ebm_navigation_cert", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_ebm_navigation_cert/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_ebm_navigation_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_energy_capability_separation_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_ENERGY_CAPABILITY_SEPARATION_CERT.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_energy_capability_separation_cert", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_energy_capability_separation_cert/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_energy_capability_separation_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_ebm_verifier_bridge_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_EBM_VERIFIER_BRIDGE_CERT.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_ebm_verifier_bridge_cert", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_ebm_verifier_bridge_cert/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_ebm_verifier_bridge_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
-# Format: (id, label, validator_fn, pass_description, doc_slug)
+# Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
+#
+# Gate 0 (mapping protocol intake) is enforced per `family_root_rel`.
+# Using "." shares a single mapping protocol for multiple families (cached).
+#
+# Policy B (recommended going forward):
+# - New families should set must_have_dedicated_root=True and use a dedicated directory root
+#   (i.e., do not use family_root_rel="." for new families).
 FAMILY_SWEEPS = [
     (18, "QA Datastore family",
      _validate_datastore_family_if_present,
-     "semantics + witness + counterexamples", "18_datastore"),
+     "semantics + witness + counterexamples", "18_datastore", ".", False),
     (19, "QA Topology Resonance bundle",
      _validate_topology_bundle_if_present,
-     "bundle manifest verified", "19_topology_resonance"),
+     "bundle manifest verified", "19_topology_resonance", ".", False),
     (20, "QA Datastore view family",
      _validate_datastore_view_family_if_present,
-     "semantics + witness + counterexamples", "20_datastore_view"),
+     "semantics + witness + counterexamples", "20_datastore_view", ".", False),
     (21, "QA A-RAG interface family",
      _validate_arag_family_if_present,
-     "semantics + witness + counterexamples", "21_arag_interface"),
+     "semantics + witness + counterexamples", "21_arag_interface", ".", False),
     (22, "QA ingest->view bridge family",
      _validate_ingest_view_bridge_family_if_present,
-     "semantics + witness + counterexamples", "22_ingest_view_bridge"),
+     "semantics + witness + counterexamples", "22_ingest_view_bridge", ".", False),
     (23, "QA ingestion family",
      _validate_ingest_family_if_present,
-     "semantics + witness + counterexamples", "23_ingestion"),
+     "semantics + witness + counterexamples", "23_ingestion", ".", False),
     (24, "QA SVP-CMC family",
      _validate_svp_cmc_family_if_present,
-     "ledger sanity + validator demo", "24_svp_cmc"),
+     "ledger sanity + validator demo", "24_svp_cmc", ".", False),
     (26, "QA Competency Detection family",
      _validate_competency_family_if_present,
-     "bundle + metrics recompute + fixtures", "26_competency_detection"),
+     "bundle + metrics recompute + fixtures", "26_competency_detection", ".", False),
     (27, "QA Elliptic Correspondence bundle",
      _validate_elliptic_bundle_if_present,
-     "bundle manifest verified", "27_elliptic_correspondence"),
+     "bundle manifest verified", "27_elliptic_correspondence", ".", False),
     (28, "QA Graph Structure bundle",
      _validate_graph_structure_bundle_if_present,
-     "bundle manifest verified", "28_graph_structure"),
+     "bundle manifest verified", "28_graph_structure", ".", False),
     (29, "QA Agent Trace family",
      _validate_agent_trace_family_if_present,
-     "schema + validator + fixtures (1 valid, 2 negative)", "29_agent_traces"),
+     "schema + validator + fixtures (1 valid, 2 negative)", "29_agent_traces", ".", False),
     (30, "QA Agent Trace Competency Cert family",
      _validate_agent_trace_competency_cert_family_if_present,
-     "schema + validator + fixtures (1 valid, 3 negative)", "30_agent_trace_competency_cert"),
+     "schema + validator + fixtures (1 valid, 3 negative)", "30_agent_trace_competency_cert", ".", False),
     (31, "QA Math Compiler Stack family",
      _validate_math_compiler_stack_if_present,
-     "validator + fixtures (6 valid, 6 negative) + optional demo_pack_v1", "31_math_compiler_stack"),
+     "validator + fixtures (6 valid, 6 negative) + optional demo_pack_v1", "31_math_compiler_stack", ".", False),
     (32, "QA Conjecture-Prove Control Loop family",
      _validate_conjecture_prove_loop_if_present,
-     "validator + fixtures (3 valid, 3 negative)", "32_conjecture_prove_loop"),
+     "validator + fixtures (3 valid, 3 negative)", "32_conjecture_prove_loop", ".", False),
     (33, "QA Discovery Pipeline family",
      _validate_discovery_pipeline_if_present,
-     "validator + fixtures (3 valid, 3 negative) + E2E ci_check", "33_discovery_pipeline"),
+     "validator + fixtures (3 valid, 3 negative) + E2E ci_check", "33_discovery_pipeline", ".", False),
     (34, "QA Rule 30 Certified Discovery",
      _validate_rule30_cert_if_present,
-     "self-tests + cert pack + manifests + cert negatives + hash-mismatch + independent verifier + verifier negative", "34_rule30_cert"),
+     "self-tests + cert pack + manifests + cert negatives + hash-mismatch + independent verifier + verifier negative", "34_rule30_cert", ".", False),
+    (35, "QA Mapping Protocol family",
+     _validate_mapping_protocol_family_if_present,
+     "schema + validator + fixtures", "35_mapping_protocol", "../qa_mapping_protocol", True),
+    (36, "QA Mapping Protocol REF family",
+     _validate_mapping_protocol_ref_family_if_present,
+     "schema + validator + fixtures", "36_mapping_protocol_ref", "../qa_mapping_protocol_ref", True),
+    (37, "QA EBM Navigation Cert family",
+     _validate_ebm_navigation_cert_family_if_present,
+     "schema + validator + fixtures", "37_ebm_navigation_cert", "../qa_ebm_navigation_cert", True),
+    (38, "QA Energy-Capability Separation Cert family",
+     _validate_energy_capability_separation_cert_family_if_present,
+     "schema + validator + fixtures", "38_energy_capability_separation", "../qa_energy_capability_separation_cert", True),
+    (39, "QA EBM Verifier Bridge Cert family",
+     _validate_ebm_verifier_bridge_cert_family_if_present,
+     "schema + validator + fixtures", "39_ebm_verifier_bridge_cert", "../qa_ebm_verifier_bridge_cert", True),
 ]
 
 
@@ -2361,6 +2751,14 @@ if __name__ == "__main__":
     parser.add_argument("file", nargs="?", help="Certificate file to validate")
     parser.add_argument("--fast", action="store_true",
                         help="Run only fast integrity gates (manifest checks)")
+    parser.add_argument(
+        "--strict",
+        action="store_true",
+        help=(
+            "Enable strict repo policy guards (e.g., forbid must_have_dedicated_root "
+            "families from sharing a family_root_rel)."
+        ),
+    )
     parser.add_argument("--json", action="store_true",
                         help="Output as JSON")
     args = parser.parse_args()
@@ -2801,15 +3199,107 @@ if __name__ == "__main__":
     # --- Family sweep loop (driven by FAMILY_SWEEPS) ---
     base_dir = os.path.dirname(os.path.abspath(__file__))
     _doc_gate_families = []
-    for fam_id, label, validator_fn, pass_desc, doc_slug in FAMILY_SWEEPS:
+    _repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+
+    # --- Policy guard: shared family roots (warn; fail for must-have-dedicated-root families in --strict) ---
+    root_to_families: Dict[str, List[Tuple[int, str, str, bool]]] = {}
+    for fam_id, label, _validator_fn, _pass_desc, _doc_slug, family_root_rel, must_have_dedicated_root in FAMILY_SWEEPS:
+        family_root_abs = os.path.normpath(os.path.join(base_dir, family_root_rel))
+        root_to_families.setdefault(family_root_abs, []).append(
+            (fam_id, label, family_root_rel, must_have_dedicated_root)
+        )
+
+    shared_roots = {
+        root: fams
+        for root, fams in root_to_families.items()
+        if len(fams) > 1
+    }
+    if shared_roots:
+        print("\n--- POLICY GUARD: SHARED FAMILY ROOTS ---")
+        for root, fams in sorted(shared_roots.items(), key=lambda kv: kv[0]):
+            rel_root = os.path.relpath(root, base_dir)
+            fam_list = ", ".join(
+                f"[{fid}] {lbl}" for fid, lbl, _rel, _must in sorted(fams, key=lambda x: x[0])
+            )
+            print(f"[WARN] family_root_rel={rel_root}: {fam_list}")
+
+        if args.strict:
+            offenders_shared = []
+            for root, fams in shared_roots.items():
+                must_fams = [(fid, lbl) for fid, lbl, _rel, must in fams if must]
+                if must_fams:
+                    offenders_shared.append((root, fams, must_fams))
+
+            offenders_non_dedicated = []
+            for root, fams in root_to_families.items():
+                for fid, lbl, rel, must in fams:
+                    if must and os.path.normpath(rel) == ".":
+                        offenders_non_dedicated.append((fid, lbl, rel))
+
+            if offenders_shared or offenders_non_dedicated:
+                diff = json.dumps({
+                    "check": "policy_guard_family_root_policy_b",
+                    "fail_type": "POLICY_FAMILY_ROOT_VIOLATION",
+                    "offenders_shared_root": [
+                        {
+                            "family_root_rel": os.path.relpath(root, base_dir),
+                            "families": [
+                                {
+                                    "id": fid,
+                                    "label": lbl,
+                                    "family_root_rel": rel,
+                                    "must_have_dedicated_root": must,
+                                }
+                                for fid, lbl, rel, must in sorted(fams, key=lambda x: x[0])
+                            ],
+                            "must_have_dedicated_root_families": [
+                                {"id": fid, "label": lbl} for fid, lbl in sorted(must_fams, key=lambda x: x[0])
+                            ],
+                        }
+                        for root, fams, must_fams in sorted(offenders_shared, key=lambda x: x[0])
+                    ],
+                    "offenders_non_dedicated_root": [
+                        {"id": fid, "label": lbl, "family_root_rel": rel}
+                        for fid, lbl, rel in sorted(offenders_non_dedicated, key=lambda x: x[0])
+                    ],
+                }, sort_keys=True)
+                print(f"[POLICY] Policy B violation in --strict mode (dedicated roots required)")
+                print(f"      invariant_diff={diff}")
+                sys.exit(1)
+
+    _mapping_protocol_cache: Dict[str, Tuple[str, str]] = {}
+    for fam_id, label, validator_fn, pass_desc, doc_slug, family_root_rel, _must_have_dedicated_root in FAMILY_SWEEPS:
         print(f"\n--- {label.upper()} ---")
         try:
+            # Gate 0: Mapping Protocol intake constitution
+            family_root = os.path.normpath(os.path.join(base_dir, family_root_rel))
+            if family_root not in _mapping_protocol_cache:
+                mode, resolved = require_mapping_protocol(
+                    family_root=family_root,
+                    repo_root=_repo_root,
+                )
+                _mapping_protocol_cache[family_root] = (mode, resolved)
+                print(f"[{fam_id}] Gate 0 mapping protocol: PASS (mode={mode}, resolved={resolved})")
+            else:
+                mode, resolved = _mapping_protocol_cache[family_root]
+                print(f"[{fam_id}] Gate 0 mapping protocol: PASS (cached mode={mode})")
+
             skip_reason = validator_fn(base_dir)
             if skip_reason is None:
                 print(f"[{fam_id}] {label}: PASS ({pass_desc})")
                 _doc_gate_families.append((fam_id, doc_slug))
             else:
                 print(f"[{fam_id}] {label}: SKIPPED ({skip_reason})")
+        except MetaValidationError as e:
+            diff = json.dumps({
+                "check": "gate_0_mapping_protocol",
+                "fail_type": e.fail_type,
+                "family_root": os.path.normpath(os.path.join(base_dir, family_root_rel)),
+                "detail": e.detail,
+            }, sort_keys=True)
+            print(f"[{fam_id}] Gate 0 mapping protocol: FAIL ({e.fail_type})")
+            print(f"      invariant_diff={diff}")
+            sys.exit(1)
         except Exception as e:
             print(f"[{fam_id}] {label}: FAIL ({e})")
             sys.exit(1)

@@ -6,6 +6,15 @@ This directory contains a multi-faceted research project centered around a novel
 
 The research is highly computational, with a strong emphasis on Python for simulation, analysis, and visualization. The project is well-documented, with a formal LaTeX report detailing the mathematical properties of the QA system.
 
+## QA Mapping Protocol (Gate 0)
+
+The QA certificate spine meta-validator enforces an **intake constitution**: every certificate family root must ship **exactly one** of:
+
+- `mapping_protocol.json` (inline `QA_MAPPING_PROTOCOL.v1`), or
+- `mapping_protocol_ref.json` (reference `QA_MAPPING_PROTOCOL_REF.v1` → pinned mapping object)
+
+Protocol families live at repo root: `qa_mapping_protocol/` and `qa_mapping_protocol_ref/`.
+
 ## Key Files
 
 *   `qa_formal_report.tex`: A LaTeX document that provides a formal description of the Quantum Arithmetic (QA) system. It details the mathematical and geometric properties of the system, including its multi-orbit structure and its alignment with the E8 exceptional Lie algebra.

@@ -6,6 +6,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a mathematical research project exploring the **Quantum Arithmetic (QA) System** - a novel modular arithmetic framework with applications in signal processing, finance, neural network optimization, and automated theorem generation. The research is computational and experimental, not a traditional software project.
 
+## QA Mapping Protocol (Gate 0)
+
+The `qa_alphageometry_ptolemy/qa_meta_validator.py` family sweep enforces an **intake constitution**:
+
+- Every certificate family root must contain **exactly one** of `mapping_protocol.json` (inline) or `mapping_protocol_ref.json` (reference).
+- Protocol schemas + validators live at repo root: `qa_mapping_protocol/` and `qa_mapping_protocol_ref/`.
+
+Quick checks:
+```bash
+python qa_mapping_protocol/validator.py --self-test
+python qa_mapping_protocol_ref/validator.py --self-test
+cd qa_alphageometry_ptolemy && python qa_meta_validator.py
+```
+
 ## Core Mathematical Framework
 
 ### The QA System Architecture

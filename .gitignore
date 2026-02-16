@@ -103,6 +103,8 @@ qa_lab/.git/
 # Temporary files
 *.tmp
 *.bak
+# Forensic mining outputs (local)
+_forensics/
 # *.odt  # Commented - these have ingestion candidates
 
 # NOTE: Previously excluded all root /*.py but this blocks core QA files
@@ -143,5 +145,11 @@ gemini_qa_project/zio_schema_migration/zio-schema
 !/ingestion candidates/INGESTION_AUDIT.md
 !/ingestion candidates/INGESTION_AUDIT.json
 !/ingestion candidates/INGESTION_INDEX.md
+
+# Trace layer (local runs/logs/artifacts) - keep ledger docs only
+trace/*
+!trace/
+!trace/README.md
+!trace/TRACE_INDEX.md
 /gemini_qa_project/
 /gemini_project_assesment1.md

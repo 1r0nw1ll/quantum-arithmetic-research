@@ -28,7 +28,8 @@ Files:
 - **Gate 4 — Deterministic tie-break**: choose min-energy legal move, tie-break by lex `(generator, state_after)`
 - **Gate 5 — Failure completeness**: typed failures require non-empty witnesses
 - **Gate 6 — Verifier acceptance (optional)**: if `accepted_by_verifier=true`, require `verifier_bridge_ref` and
-  digest-link it via `digests.refs`
+  digest-link it via `digests.refs`, enforce transitive validity by running the referenced bridge cert’s validator,
+  and require the bridge cert to attest the navigation terminal `state_after` and `outcome.target_ref`
 
 ### Run
 

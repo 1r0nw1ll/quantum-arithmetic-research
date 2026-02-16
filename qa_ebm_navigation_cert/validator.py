@@ -22,6 +22,8 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
+import sys
 from dataclasses import dataclass
 from enum import Enum
 from fractions import Fraction
@@ -115,6 +117,31 @@ def _compute_canonical_sha256(obj: Dict[str, Any]) -> str:
     copy.setdefault("digests", {})
     copy["digests"]["canonical_sha256"] = "0" * 64
     return _sha256_hex(_canonical_json_compact(copy))
+
+
+def _repo_root() -> str:
+    # qa_ebm_navigation_cert/ lives at repo root; repo_root is its parent.
+    return os.path.normpath(os.path.join(os.path.dirname(os.path.abspath(__file__)), ".."))
+
+
+def _resolve_repo_rel_path(repo_root: str, rel_path: str) -> Tuple[bool, str, str]:
+    """
+    Resolve rel_path against repo_root and enforce that it stays within repo_root.
+    Returns (ok, abs_path, error_message).
+    """
+    if not isinstance(rel_path, str) or not rel_path.strip():
+        return False, "", "ref_name missing/empty"
+    if os.path.isabs(rel_path):
+        return False, "", "absolute ref_name forbidden"
+    if "\x00" in rel_path:
+        return False, "", "NUL byte forbidden in ref_name"
+    abs_path = os.path.normpath(os.path.join(repo_root, rel_path))
+    try:
+        if os.path.commonpath([repo_root, abs_path]) != repo_root:
+            return False, "", "ref_name escapes repo_root"
+    except Exception:
+        return False, "", "ref_name path check failed"
+    return True, abs_path, ""
 
 
 def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
@@ -368,10 +395,186 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
                 {"verifier_bridge_ref": vr, "digests_refs": refs},
             ))
             return results
+
+        # Transitive trust: referenced bridge cert must be repo-local and validator-clean,
+        # and the ref sha256 must match bridge digests.canonical_sha256.
+        repo_root = _repo_root()
+        ok_path, abs_bridge_path, msg_path = _resolve_repo_rel_path(repo_root, str(vr.get("ref_name", "")))
+        if not ok_path:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "verifier_bridge_ref.ref_name must be repo-relative and stay within repo_root",
+                {"error": msg_path, "ref_name": vr.get("ref_name")},
+            ))
+            return results
+        if not os.path.isfile(abs_bridge_path):
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "referenced verifier bridge cert not found",
+                {"abs_path": abs_bridge_path},
+            ))
+            return results
+
+        try:
+            bridge_obj = _load_json(abs_bridge_path)
+        except Exception as e:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "failed to load referenced verifier bridge cert JSON",
+                {"abs_path": abs_bridge_path, "error": str(e)},
+            ))
+            return results
+
+        bridge_sha = bridge_obj.get("digests", {}).get("canonical_sha256", "")
+        if not isinstance(bridge_sha, str) or len(bridge_sha) != 64:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "referenced verifier bridge cert missing digests.canonical_sha256",
+                {"abs_path": abs_bridge_path},
+            ))
+            return results
+        if bridge_sha != vr.get("sha256"):
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "verifier_bridge_ref.sha256 must equal referenced bridge digests.canonical_sha256",
+                {"expected": bridge_sha, "got": vr.get("sha256")},
+            ))
+            return results
+
+        bridge_validator = os.path.join(repo_root, "qa_ebm_verifier_bridge_cert", "validator.py")
+        if not os.path.isfile(bridge_validator):
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "verifier bridge validator missing",
+                {"validator_path": bridge_validator},
+            ))
+            return results
+        try:
+            proc = subprocess.run(
+                [sys.executable, bridge_validator, abs_bridge_path, "--json"],
+                capture_output=True,
+                text=True,
+                timeout=10,
+                cwd=repo_root,
+            )
+        except subprocess.TimeoutExpired:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "verifier bridge validator timed out",
+                {"validator_path": bridge_validator, "abs_path": abs_bridge_path},
+            ))
+            return results
+        if proc.returncode != 0:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "referenced verifier bridge cert failed its own validator",
+                {
+                    "validator_path": bridge_validator,
+                    "abs_path": abs_bridge_path,
+                    "stdout_head": (proc.stdout or "").strip()[:400],
+                    "stderr_head": (proc.stderr or "").strip()[:200],
+                },
+            ))
+            return results
+
+        # Additional binding: the bridge cert must attest the specific terminal state + target
+        # that this navigation cert claims was verifier-accepted.
+        nav_target_ref = outcome.get("target_ref")
+        if not isinstance(nav_target_ref, dict) or "ref_name" not in nav_target_ref or "sha256" not in nav_target_ref:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "accepted_by_verifier=true requires outcome.target_ref for bridge binding",
+                {"target_ref": nav_target_ref},
+            ))
+            return results
+
+        terminal_state: Optional[str] = None
+        for step in reversed(obj.get("trace", {}).get("steps", [])):
+            if step.get("result") == "OK":
+                sa = step.get("state_after")
+                if isinstance(sa, str) and sa:
+                    terminal_state = sa
+                    break
+        if terminal_state is None:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "accepted_by_verifier=true requires at least one OK step with state_after to bind",
+            ))
+            return results
+
+        terminal_state_sha256 = _sha256_hex(terminal_state)
+
+        subject = bridge_obj.get("subject")
+        verdict = bridge_obj.get("verdict")
+        if not isinstance(subject, dict) or not isinstance(verdict, dict):
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "bridge cert missing subject/verdict objects for binding",
+            ))
+            return results
+
+        if verdict.get("passed") is not True or verdict.get("fail_type") != "OK":
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "bridge cert verdict must be passed=true and fail_type=OK when accepted_by_verifier=true",
+                {"passed": verdict.get("passed"), "fail_type": verdict.get("fail_type")},
+            ))
+            return results
+
+        if subject.get("state_after") != terminal_state:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "bridge cert subject.state_after does not match navigation terminal state_after",
+                {"nav_terminal_state": terminal_state, "bridge_state_after": subject.get("state_after")},
+            ))
+            return results
+
+        if subject.get("state_sha256") != terminal_state_sha256:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "bridge cert subject.state_sha256 does not match sha256(navigation terminal state_after)",
+                {"expected": terminal_state_sha256, "got": subject.get("state_sha256")},
+            ))
+            return results
+
+        if subject.get("target_ref") != nav_target_ref:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "bridge cert subject.target_ref does not match navigation outcome.target_ref",
+                {"nav_target_ref": nav_target_ref, "bridge_target_ref": subject.get("target_ref")},
+            ))
+            return results
+
+        # Optional: mapping protocol consistency across nav/bridge when both declare it.
+        nav_mp = obj.get("inputs", {}).get("mapping_protocol_ref") if isinstance(obj.get("inputs"), dict) else None
+        bridge_mp = bridge_obj.get("inputs", {}).get("mapping_protocol_ref") if isinstance(bridge_obj.get("inputs"), dict) else None
+        if nav_mp is not None and bridge_mp is not None and nav_mp != bridge_mp:
+            results.append(GateResult(
+                "gate_6_verifier_acceptance_binding",
+                GateStatus.FAIL,
+                "bridge inputs.mapping_protocol_ref must match navigation inputs.mapping_protocol_ref when both present",
+                {"nav_mapping_protocol_ref": nav_mp, "bridge_mapping_protocol_ref": bridge_mp},
+            ))
+            return results
         results.append(GateResult(
             "gate_6_verifier_acceptance_binding",
             GateStatus.PASS,
-            "Verifier bridge ref present and digest-linked",
+            "Verifier bridge ref present, digest-linked, validator-clean, and terminal-state/target bound",
         ))
     else:
         results.append(GateResult(
@@ -407,6 +610,8 @@ def self_test(as_json: bool) -> int:
         ("invalid_missing_invariant_diff.json", False, "gate_1_schema_validity"),
         ("invalid_accepted_missing_bridge_ref.json", False, "gate_1_schema_validity"),
         ("invalid_accepted_missing_digest_ref.json", False, "gate_6_verifier_acceptance_binding"),
+        ("invalid_accepted_bridge_cert_invalid.json", False, "gate_6_verifier_acceptance_binding"),
+        ("invalid_accepted_bridge_state_mismatch.json", False, "gate_6_verifier_acceptance_binding"),
         ("invalid_invariant_diff_mismatch.json", False, "gate_3_exact_energy_and_invariant_diff"),
         ("invalid_wrong_tiebreak.json", False, "gate_4_deterministic_tiebreak"),
         ("invalid_float_energy.json", False, "gate_1_schema_validity"),

@@ -7,7 +7,8 @@ Machine-tract certificate family that hardens “energy-based reasoning” into 
 - **invariant_diff required** per step: `delta_energy`, `delta_violations`, and a non-empty witness string
 - **Failure completeness**: typed failures must include obstruction witness (failure-as-theorem)
 - **Verifier coupling (optional)**: if `trace.outcome.accepted_by_verifier=true`, require `verifier_bridge_ref`
-  and digest-link it via `digests.refs`
+  and digest-link it via `digests.refs`, validate the referenced bridge cert, and bind acceptance to the navigation
+  terminal `state_after` + `outcome.target_ref`
 
 This family is designed to sit between:
 

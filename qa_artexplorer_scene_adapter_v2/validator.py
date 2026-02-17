@@ -660,6 +660,7 @@ def self_test(as_json: bool) -> int:
     fixtures = [
         ("valid_exact_345_triangle.json", True, None),
         ("invalid_illegal_reduction.json", False, "gate_5_step_hash_and_rt"),
+        ("invalid_wrong_unreduced_pair.json", False, "gate_5_step_hash_and_rt"),
     ]
 
     ok = True

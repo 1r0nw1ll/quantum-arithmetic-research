@@ -101,6 +101,8 @@ Cargo.lock
 !qa_rational_trig_type_system_v1/*.json
 !qa_artexplorer_scene_adapter_v1/**/*.json
 !qa_artexplorer_scene_adapter_v1/*.json
+!qa_artexplorer_scene_adapter_v2/**/*.json
+!qa_artexplorer_scene_adapter_v2/*.json
 !Documents/QA_MAPPING_PROTOCOL__*.json
 *.npy
 *.npz

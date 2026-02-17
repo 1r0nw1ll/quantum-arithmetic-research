@@ -1,0 +1,116 @@
+{
+  "schema_version": "v2",
+  "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v2",
+  "cert_id": "qa_artexplorer_v2_invalid_wrong_pair_0001",
+  "created_utc": "2026-02-17T12:00:00Z",
+  "compute_substrate": "qa_rational_pair_noreduce",
+  "source_semantics": {
+    "upstream": {
+      "name": "ARTexplorer (Algebraic Rational Trigonometry Explorer)",
+      "repo_url": "https://github.com/arossti/ARTexplorer",
+      "app_url": "https://arossti.github.io/ARTexplorer/"
+    },
+    "export": {
+      "format": "artexplorer_scene_json",
+      "exported_by": "ARTexplorer v1.0 scene export (rt-filehandler.js exportState)"
+    }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": { "integral_domain": true, "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "coordinate_system": "XYZ",
+    "scene_raw": {
+      "version": "1.0",
+      "timestamp": "2026-02-17T12:00:00.000Z",
+      "instances": [
+        {
+          "id": "tri-345",
+          "type": "Triangle",
+          "parameters": {},
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "appearance": { "opacity": 1.0, "visible": true },
+          "metadata": { "label": "Right_Triangle_345_WrongPair" }
+        }
+      ],
+      "metadata": { "instanceCount": 1 }
+    },
+    "scene_raw_sha256": "af50d16c83133e00f59ab1bec0f4c9c7708f94d4568cf2c0fcad7f19c5744eaf"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_345_face",
+        "object_type": "TRIANGLE",
+        "label": "3-4-5 right triangle (WRONG UNREDUCED PAIR for sA)",
+        "vertices": [
+          { "id": "A", "coord": [0, 0, 0] },
+          { "id": "B", "coord": [3, 0, 0] },
+          { "id": "C", "coord": [0, 4, 0] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "ART_PARSE_SCENE",
+        "inputs": { "scene_raw_sha256": "af50d16c83133e00f59ab1bec0f4c9c7708f94d4568cf2c0fcad7f19c5744eaf" },
+        "outputs": { "parsed_object_ids": ["tri_345_face"] },
+        "step_hash_sha256": "3f87662a489e773e55cce7ad5fb5a50acf094e1a4251d85faf36151c69a7fec7"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tri_345_face" },
+        "outputs": {
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 288, "n": 288 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ]
+        },
+        "step_hash_sha256": "075d8e0f05cc0192cd3bcfc5ee07fa1deb59102b15dfaaef07443e2b41f423e3"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        {
+          "triangle_object_id": "tri_345_face",
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 288, "n": 288 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ]
+        }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["parsed_objects[tri_345_face]"] },
+        { "step_id": "s2", "adds": ["rt_invariants.triangles[tri_345_face].Q", "rt_invariants.triangles[tri_345_face].s"] }
+      ],
+      "provenance": {
+        "upstream_tool": "ARTexplorer v1.0",
+        "upstream_format": "scene JSON (rt-filehandler.js exportState)",
+        "scene_raw_sha256": "af50d16c83133e00f59ab1bec0f4c9c7708f94d4568cf2c0fcad7f19c5744eaf",
+        "geometry_source": "3-4-5 right triangle, WRONG unreduced pair: sA={288,288} should be {144,144}"
+      }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

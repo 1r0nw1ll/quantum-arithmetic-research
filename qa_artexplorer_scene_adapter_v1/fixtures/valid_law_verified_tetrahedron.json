@@ -1,0 +1,108 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v1",
+  "cert_id": "qa_artexplorer_law_verified_tetrahedron_0001",
+  "created_utc": "2026-02-16T20:00:00Z",
+  "source_semantics": {
+    "upstream": {
+      "name": "ARTexplorer (Algebraic Rational Trigonometry Explorer)",
+      "repo_url": "https://github.com/arossti/ARTexplorer",
+      "app_url": "https://arossti.github.io/ARTexplorer/"
+    },
+    "export": {
+      "format": "artexplorer_scene_json",
+      "exported_by": "ARTexplorer v1.0 scene export (rt-filehandler.js exportState)"
+    }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": { "integral_domain": true, "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "coordinate_system": "XYZ",
+    "scene_raw": {
+      "version": "1.0",
+      "timestamp": "2026-02-16T20:00:00.000Z",
+      "instances": [
+        {
+          "id": "tetra-001",
+          "type": "Tetrahedron",
+          "parameters": { "halfSize": 1 },
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "appearance": { "opacity": 1.0, "visible": true },
+          "metadata": { "label": "Unit_Tetrahedron_LawVerified" }
+        }
+      ],
+      "metadata": { "instanceCount": 1 }
+    },
+    "scene_raw_sha256": "46d5ef7da1fdc3f8525a83e42c6c93c7eff550517347273d03fa1d1fd2fedd78"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tetra_face_0",
+        "object_type": "TRIANGLE",
+        "label": "Regular tetrahedron face 0 (A-B-C)",
+        "vertices": [
+          { "id": "A", "coord": [1, 1, 1] },
+          { "id": "B", "coord": [1, -1, -1] },
+          { "id": "C", "coord": [-1, 1, -1] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "ART_PARSE_SCENE",
+        "inputs": { "scene_raw_sha256": "46d5ef7da1fdc3f8525a83e42c6c93c7eff550517347273d03fa1d1fd2fedd78" },
+        "outputs": { "parsed_object_ids": ["tetra_face_0"] },
+        "step_hash_sha256": "181a562714b61b1b5f86330ee309ad5a35197708e94f9dc4f02b9081c66ab4f1"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tetra_face_0" },
+        "outputs": { "Q": [8, 8, 8], "s": [0.75, 0.75, 0.75] },
+        "step_hash_sha256": "678e183b3c57354a6bb0f8fddcd89d272ad9185d5469657c16b8822191a81022"
+      },
+      {
+        "step_id": "s3",
+        "move_id": "RT_VALIDATE_LAW_EQUATION",
+        "inputs": { "law_id": "RT_LAW_04", "Q": [8, 8, 8], "s": [0.75, 0.75, 0.75], "triangle_object_id": "tetra_face_0" },
+        "outputs": { "verified": true, "residual": 0.0, "lhs": 64.0, "rhs": 64.0 },
+        "step_hash_sha256": "62c150409fa0e6f57055560c9b69ea3ff213f3f6ba5318c384716a9937403991"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        { "triangle_object_id": "tetra_face_0", "Q": [8, 8, 8], "s": [0.75, 0.75, 0.75] }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["parsed_objects[tetra_face_0]"] },
+        { "step_id": "s2", "adds": ["rt_invariants.triangles[tetra_face_0].Q", "rt_invariants.triangles[tetra_face_0].s"] },
+        { "step_id": "s3", "adds": ["law_verification[RT_LAW_04].verified"] }
+      ],
+      "provenance": {
+        "upstream_tool": "ARTexplorer v1.0",
+        "upstream_format": "scene JSON (rt-filehandler.js exportState)",
+        "scene_raw_sha256": "46d5ef7da1fdc3f8525a83e42c6c93c7eff550517347273d03fa1d1fd2fedd78",
+        "geometry_source": "Regular tetrahedron face, Cross Law verified"
+      }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

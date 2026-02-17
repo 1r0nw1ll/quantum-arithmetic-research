@@ -117,6 +117,99 @@ def _is_zero_sum(coord: List[float]) -> bool:
     return len(coord) == 4 and abs(sum(coord)) < 1e-12
 
 
+# ---------------------------------------------------------------------------
+# RT law equation helpers
+# ---------------------------------------------------------------------------
+
+def _cross_law_residual(Q: List[float], s: List[float]) -> Tuple[float, float, float]:
+    """Cross Law (RT_LAW_04): (Q1+Q2-Q3)^2 = 4*Q1*Q2*(1-s3).
+    Returns (lhs, rhs, residual)."""
+    Q1, Q2, Q3 = Q
+    s3 = s[2]
+    lhs = (Q1 + Q2 - Q3) ** 2
+    rhs = 4.0 * Q1 * Q2 * (1.0 - s3)
+    return lhs, rhs, abs(lhs - rhs)
+
+
+def _triple_spread_residual(s: List[float]) -> Tuple[float, float, float]:
+    """Triple Spread Formula (RT_LAW_05):
+    (s1+s2+s3)^2 = 2*(s1^2+s2^2+s3^2) + 4*s1*s2*s3.
+    Returns (lhs, rhs, residual)."""
+    s1, s2, s3 = s
+    lhs = (s1 + s2 + s3) ** 2
+    rhs = 2.0 * (s1 * s1 + s2 * s2 + s3 * s3) + 4.0 * s1 * s2 * s3
+    return lhs, rhs, abs(lhs - rhs)
+
+
+def _pythagoras_residual(Q: List[float], s: List[float]) -> Tuple[float, float, float]:
+    """Pythagoras' theorem (RT_LAW_01): Q3 = Q1 + Q2  when s3 = 1.
+    Returns (lhs, rhs, residual)."""
+    Q1, Q2, Q3 = Q
+    lhs = Q3
+    rhs = Q1 + Q2
+    return float(lhs), float(rhs), abs(lhs - rhs)
+
+
+_LAW_DISPATCH = {
+    "RT_LAW_04": _cross_law_residual,
+    "RT_LAW_05": _triple_spread_residual,
+    "RT_LAW_01": _pythagoras_residual,
+}
+
+
+def _verify_law_step(step: Dict[str, Any]) -> Optional[GateResult]:
+    """Verify an RT_VALIDATE_LAW_EQUATION step. Returns GateResult on failure, None on pass."""
+    inp = step.get("inputs", {})
+    out = step.get("outputs", {})
+    law_id = inp.get("law_id", "")
+    Q = inp.get("Q")
+    s = inp.get("s")
+
+    if law_id not in _LAW_DISPATCH:
+        return GateResult(
+            "gate_5_step_hash_and_rt", GateStatus.FAIL,
+            f"Unknown law_id: {law_id}",
+            {"fail_type": "LAW_EQUATION_MISMATCH", "step_id": step.get("step_id")})
+
+    compute_fn = _LAW_DISPATCH[law_id]
+    if law_id == "RT_LAW_05":
+        lhs, rhs, residual = compute_fn(s)
+    elif law_id == "RT_LAW_01":
+        lhs, rhs, residual = compute_fn(Q, s)
+    else:
+        lhs, rhs, residual = compute_fn(Q, s)
+
+    REL_TOL = 1e-9
+    denom = max(abs(lhs), abs(rhs), 1.0)
+    if residual / denom > REL_TOL:
+        return GateResult(
+            "gate_5_step_hash_and_rt", GateStatus.FAIL,
+            f"{law_id} equation not satisfied (residual={residual:.2e})",
+            {"fail_type": "LAW_EQUATION_MISMATCH", "step_id": step.get("step_id"),
+             "law_id": law_id, "lhs": lhs, "rhs": rhs, "residual": residual})
+
+    if out.get("verified") is not True:
+        return GateResult(
+            "gate_5_step_hash_and_rt", GateStatus.FAIL,
+            f"{law_id} satisfied but outputs.verified != true",
+            {"fail_type": "LAW_EQUATION_MISMATCH", "step_id": step.get("step_id")})
+
+    claimed_lhs = out.get("lhs")
+    claimed_rhs = out.get("rhs")
+    if claimed_lhs is not None and abs(claimed_lhs - lhs) / max(abs(lhs), 1.0) > REL_TOL:
+        return GateResult(
+            "gate_5_step_hash_and_rt", GateStatus.FAIL,
+            f"{law_id} claimed lhs mismatch",
+            {"fail_type": "LAW_EQUATION_MISMATCH", "step_id": step.get("step_id")})
+    if claimed_rhs is not None and abs(claimed_rhs - rhs) / max(abs(rhs), 1.0) > REL_TOL:
+        return GateResult(
+            "gate_5_step_hash_and_rt", GateStatus.FAIL,
+            f"{law_id} claimed rhs mismatch",
+            {"fail_type": "LAW_EQUATION_MISMATCH", "step_id": step.get("step_id")})
+
+    return None
+
+
 def _get_triangle_verts(obj: Dict[str, Any]) -> Tuple[Optional[List[List[float]]], Optional[str]]:
     """Extract 3 vertex coords for a TRIANGLE object. Returns ([a,b,c], None) or (None, error)."""
     verts = obj.get("vertices", [])
@@ -298,6 +391,14 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
                  "expected": expected, "got": got}))
             return results
 
+    # Verify RT_VALIDATE_LAW_EQUATION steps
+    for st in steps:
+        if st.get("move_id") == "RT_VALIDATE_LAW_EQUATION":
+            law_fail = _verify_law_step(st)
+            if law_fail is not None:
+                results.append(law_fail)
+                return results
+
     # Recompute RT invariants and compare
     # For WXYZ scenes with a projection step, use projected XYZ coordinates.
     xyz_coords_override = None
@@ -372,9 +473,11 @@ def self_test(as_json: bool) -> int:
         ("valid_minimal.json", True, None),
         ("valid_provenance_tetrahedron.json", True, None),
         ("valid_wxyz_projected.json", True, None),
+        ("valid_law_verified_tetrahedron.json", True, None),
         ("invalid_missing_invariant_diff.json", False, "gate_2_determinism_contract"),
         ("invalid_degenerate_triangle.json", False, "gate_3_typed_formation"),
         ("invalid_illegal_normalization.json", False, "gate_3_typed_formation"),
+        ("invalid_law_equation_mismatch.json", False, "gate_5_step_hash_and_rt"),
     ]
 
     ok = True

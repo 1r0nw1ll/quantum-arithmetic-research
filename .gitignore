@@ -168,3 +168,6 @@ trace/*
 !trace/TRACE_INDEX.md
 /gemini_qa_project/
 /gemini_project_assesment1.md
+
+# Generated corpus (local)
+qa_rt_corpus/

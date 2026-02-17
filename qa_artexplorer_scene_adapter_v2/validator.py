@@ -623,12 +623,16 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
                 else:
                     # Must match unreduced form exactly
                     if not _spread_pair_matches(cs, xs):
+                        target_path = f"result.rt_invariants.triangles[{tri_id}].s[{j}]"
                         results.append(GateResult(
                             "gate_5_step_hash_and_rt", GateStatus.FAIL,
-                            f"Spread {spread_labels[j]} mismatch: claimed={cs} computed={xs} "
-                            f"(reduced fraction without RT_REDUCE_FRACTION move?)",
+                            f"Spread {spread_labels[j]} pair identity mismatch: "
+                            f"claimed={{n:{cs.get('n')},d:{cs.get('d')}}} "
+                            f"computed={{n:{xs['n']},d:{xs['d']}}}",
                             {"fail_type": "ILLEGAL_NORMALIZATION",
+                             "reason": "PAIR_IDENTITY_MISMATCH",
                              "triangle_object_id": tri_id,
+                             "target_path": target_path,
                              "claimed": cs, "computed": xs}))
                         return results
 
@@ -659,6 +663,7 @@ def self_test(as_json: bool) -> int:
 
     fixtures = [
         ("valid_exact_345_triangle.json", True, None),
+        ("valid_reduction_with_projection.json", True, None),
         ("invalid_illegal_reduction.json", False, "gate_5_step_hash_and_rt"),
         ("invalid_wrong_unreduced_pair.json", False, "gate_5_step_hash_and_rt"),
     ]

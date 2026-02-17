@@ -1,0 +1,156 @@
+{
+  "schema_version": "v2",
+  "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v2",
+  "cert_id": "qa_artexplorer_v2_valid_reduction_0001",
+  "created_utc": "2026-02-17T14:00:00Z",
+  "compute_substrate": "qa_rational_pair_noreduce",
+  "source_semantics": {
+    "upstream": {
+      "name": "ARTexplorer (Algebraic Rational Trigonometry Explorer)",
+      "repo_url": "https://github.com/arossti/ARTexplorer",
+      "app_url": "https://arossti.github.io/ARTexplorer/"
+    },
+    "export": {
+      "format": "artexplorer_scene_json",
+      "exported_by": "ARTexplorer v1.0 scene export (rt-filehandler.js exportState)"
+    }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": { "integral_domain": true, "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "coordinate_system": "XYZ",
+    "scene_raw": {
+      "version": "1.0",
+      "timestamp": "2026-02-17T14:00:00.000Z",
+      "instances": [
+        {
+          "id": "tri-345",
+          "type": "Triangle",
+          "parameters": {},
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "appearance": { "opacity": 1.0, "visible": true },
+          "metadata": { "label": "Right_Triangle_345_WithReduction" }
+        }
+      ],
+      "metadata": { "instanceCount": 1 }
+    },
+    "scene_raw_sha256": "f8819e2a4df8ca38d445a890730ec8a7e75c111fe473465a6206aa9fd0444c6a"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_345_face",
+        "object_type": "TRIANGLE",
+        "label": "3-4-5 right triangle with certified sA reduction",
+        "vertices": [
+          { "id": "A", "coord": [0, 0, 0] },
+          { "id": "B", "coord": [3, 0, 0] },
+          { "id": "C", "coord": [0, 4, 0] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "ART_PARSE_SCENE",
+        "inputs": { "scene_raw_sha256": "f8819e2a4df8ca38d445a890730ec8a7e75c111fe473465a6206aa9fd0444c6a" },
+        "outputs": { "parsed_object_ids": ["tri_345_face"] },
+        "step_hash_sha256": "4cded226628c2685be6069c30e724d258c42cf316780c8a1d41b47dd3fc1dbdf"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tri_345_face" },
+        "outputs": {
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 144, "n": 144 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ]
+        },
+        "step_hash_sha256": "a3fb42375665a7f8cd429c9916d467b841e05a0dc7b6ddeb9661d91a5a760d0a"
+      },
+      {
+        "step_id": "s3",
+        "move_id": "RT_REDUCE_FRACTION",
+        "inputs": {
+          "n": 144,
+          "d": 144,
+          "target": "rt_invariants.triangles[tri_345_face].s[0]"
+        },
+        "outputs": {
+          "n_reduced": 1,
+          "d_reduced": 1,
+          "gcd": 144,
+          "scale_before": 144,
+          "scale_after": 1,
+          "non_reduction_axiom_ack": true
+        },
+        "step_hash_sha256": "d5cc6056df8c27dac44adb59e8c9f095bd643ed7c37ae35da534ad7da38213be"
+      },
+      {
+        "step_id": "s4",
+        "move_id": "RT_VALIDATE_LAW_EQUATION",
+        "inputs": {
+          "law_id": "RT_LAW_04",
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 1, "n": 1 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ],
+          "triangle_object_id": "tri_345_face"
+        },
+        "outputs": {
+          "verified": true,
+          "lhs": 409600,
+          "rhs": 409600
+        },
+        "step_hash_sha256": "049e5ceb5981bace3800a5ab520a24fa7f8510953e5c69124a814440029624e9"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        {
+          "triangle_object_id": "tri_345_face",
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 1, "n": 1 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ]
+        }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["parsed_objects[tri_345_face]"] },
+        { "step_id": "s2", "adds": ["rt_invariants.triangles[tri_345_face].Q", "rt_invariants.triangles[tri_345_face].s"] },
+        { "step_id": "s3", "adds": ["scale_collapse[rt_invariants.triangles[tri_345_face].s[0]]: 144 -> 1"] },
+        { "step_id": "s4", "adds": ["law_verification[RT_LAW_04].verified"] }
+      ],
+      "provenance": {
+        "upstream_tool": "ARTexplorer v1.0",
+        "upstream_format": "scene JSON (rt-filehandler.js exportState)",
+        "scene_raw_sha256": "f8819e2a4df8ca38d445a890730ec8a7e75c111fe473465a6206aa9fd0444c6a",
+        "geometry_source": "3-4-5 right triangle, sA reduced via certified RT_REDUCE_FRACTION projection"
+      }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

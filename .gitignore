@@ -104,6 +104,14 @@ Cargo.lock
 !qa_artexplorer_scene_adapter_v2/**/*.json
 !qa_artexplorer_scene_adapter_v2/*.json
 !Documents/QA_MAPPING_PROTOCOL__*.json
+
+# Future-proof: allow canonical QA family JSON artifacts
+!qa_*/schema.json
+!qa_*/**/schema.json
+!qa_*/fixtures/**/*.json
+!qa_*/**/fixtures/**/*.json
+!qa_*/mapping_protocol.json
+!qa_*/mapping_protocol_ref.json
 *.npy
 *.npz
 

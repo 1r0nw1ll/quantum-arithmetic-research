@@ -2635,6 +2635,30 @@ def _validate_rational_trig_type_system_family_if_present(base_dir: str) -> Opti
     return None
 
 
+def _validate_geogebra_scene_adapter_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_GEOGEBRA_SCENE_ADAPTER.v1 family (exact substrate, Z/Q typed coordinates, LCM lift).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_geogebra_scene_adapter_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_geogebra_scene_adapter_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_geogebra_scene_adapter_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_threejs_scene_adapter_family_if_present(base_dir: str) -> Optional[str]:
     """
     Validate QA_THREEJS_SCENE_ADAPTER.v1 family (float64 substrate, schema + validator + fixtures).
@@ -2745,6 +2769,9 @@ FAMILY_SWEEPS = [
     (55, "QA Three.js Scene Adapter family",
      _validate_threejs_scene_adapter_family_if_present,
      "schema + validator + fixtures", "55_threejs_scene_adapter", "../qa_threejs_scene_adapter_v1", True),
+    (56, "QA GeoGebra Scene Adapter family",
+     _validate_geogebra_scene_adapter_family_if_present,
+     "schema + validator + fixtures (exact substrate, Z/Q typed coords)", "56_geogebra_scene_adapter_exact", "../qa_geogebra_scene_adapter_v1", True),
 ]
 
 

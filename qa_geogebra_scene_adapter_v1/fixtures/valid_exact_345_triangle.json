@@ -1,0 +1,123 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_GEOGEBRA_SCENE_ADAPTER.v1",
+  "cert_id": "qa_geogebra_v1_exact_345_0001",
+  "created_utc": "2026-02-17T12:00:00Z",
+  "compute_substrate": "qa_rational_pair_noreduce",
+  "source_semantics": {
+    "upstream": {
+      "name": "GeoGebra",
+      "app_url": "https://www.geogebra.org/"
+    },
+    "export": {
+      "format": "geogebra_scene_export_v1",
+      "exported_by": "qa_geogebra_export_stub_v1"
+    }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": {
+      "integral_domain": true,
+      "field": true,
+      "no_zero_divisors": true
+    }
+  },
+  "scene": {
+    "coordinate_system": "XYZ",
+    "scene_raw": {
+      "version": "1.0",
+      "objects": [
+        {
+          "id": "tri_000001",
+          "type": "Triangle",
+          "label": "3-4-5 triangle",
+          "vertices": {
+            "A": [{"k": "Z", "v": 0}, {"k": "Z", "v": 0}, {"k": "Z", "v": 0}],
+            "B": [{"k": "Z", "v": 3}, {"k": "Z", "v": 0}, {"k": "Z", "v": 0}],
+            "C": [{"k": "Z", "v": 0}, {"k": "Z", "v": 4}, {"k": "Z", "v": 0}]
+          }
+        }
+      ]
+    },
+    "scene_raw_sha256": "efefd27dfb47dbe8407294360b9e9de1dfe3ec69935ac1f402b963a2dda9bbe1"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_000001",
+        "object_type": "TRIANGLE",
+        "label": "3-4-5 triangle",
+        "vertices": [
+          {"id": "A", "coord": [{"k": "Z", "v": 0}, {"k": "Z", "v": 0}, {"k": "Z", "v": 0}]},
+          {"id": "B", "coord": [{"k": "Z", "v": 3}, {"k": "Z", "v": 0}, {"k": "Z", "v": 0}]},
+          {"id": "C", "coord": [{"k": "Z", "v": 0}, {"k": "Z", "v": 4}, {"k": "Z", "v": 0}]}
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "GG_PARSE_SCENE",
+        "inputs": {"scene_raw_sha256": "efefd27dfb47dbe8407294360b9e9de1dfe3ec69935ac1f402b963a2dda9bbe1"},
+        "outputs": {"parsed_object_ids": ["tri_000001"]},
+        "step_hash_sha256": "a816473a8e507fb52a1e97ace033b85dbd0d527ce44a131cd484c9cab519a9d4"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": {"triangle_object_id": "tri_000001"},
+        "outputs": {
+          "Q": [25, 16, 9],
+          "s": [
+            {"n": 144, "d": 144},
+            {"n": 144, "d": 225},
+            {"n": 144, "d": 400}
+          ]
+        },
+        "step_hash_sha256": "e1464cb2c9f68f24e6eddfd50c6a67fcd090d1b11c2e3d6629fb1a8ba1982a9a"
+      },
+      {
+        "step_id": "s3",
+        "move_id": "RT_VALIDATE_LAW_EQUATION",
+        "inputs": {"law_id": "RT_LAW_04", "triangle_object_id": "tri_000001"},
+        "outputs": {"verified": true},
+        "step_hash_sha256": "f317fdca22c93f913a3747a7848d11a20ef7e2983e4f461276542e53e9ce3572"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        {
+          "triangle_object_id": "tri_000001",
+          "Q": [25, 16, 9],
+          "s": [
+            {"n": 144, "d": 144},
+            {"n": 144, "d": 225},
+            {"n": 144, "d": 400}
+          ]
+        }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        {"step_id": "s1", "adds": ["parsed_objects[tri_000001]"]},
+        {"step_id": "s2", "adds": ["rt_invariants.triangles[tri_000001].Q", "rt_invariants.triangles[tri_000001].s"]},
+        {"step_id": "s3", "adds": ["law_verification[RT_LAW_04].verified"]}
+      ],
+      "provenance": {
+        "upstream_tool": "qa_geogebra_export_stub_v1",
+        "upstream_format": "geogebra_scene_export_v1",
+        "compute_substrate": "qa_rational_pair_noreduce",
+        "geometry_source": "3-4-5 right triangle: Q=[25,16,9], sA={144,144}, sB={144,225}, sC={144,400}, Cross Law verified (exact)"
+      }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

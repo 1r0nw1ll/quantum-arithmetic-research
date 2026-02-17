@@ -149,3 +149,4 @@ Fraction reduction is **not** simplification — it is a **geometric projection*
 | [45] | ARTexplorer Scene Adapter v1 | External (ARTexplorer JSON) | float64 (rel tol 1e-9) |
 | [50] | ARTexplorer Scene Adapter v2 | External (ARTexplorer JSON) | exact (rational pairs, tol=0) |
 | [55] | Three.js Scene Adapter v1 | External (Three.js JSON) | float64 (rel tol 1e-9) |
+| [56] | GeoGebra Scene Adapter v1 | External (GeoGebra JSON) | exact (Z/Q typed coords, LCM lift, tol=0) |

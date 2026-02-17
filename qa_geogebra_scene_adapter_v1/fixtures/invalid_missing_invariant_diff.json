@@ -1,0 +1,61 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_GEOGEBRA_SCENE_ADAPTER.v1",
+  "cert_id": "qa_geogebra_v1_invalid_missing_invdiff_0001",
+  "created_utc": "2026-02-17T12:00:00Z",
+  "compute_substrate": "qa_rational_pair_noreduce",
+  "source_semantics": {
+    "upstream": {"name": "GeoGebra", "app_url": "https://www.geogebra.org/"},
+    "export": {"format": "geogebra_scene_export_v1", "exported_by": "qa_geogebra_export_stub_v1 (INVALID: missing invariant_diff)"}
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": {"integral_domain": true, "field": true, "no_zero_divisors": true}
+  },
+  "scene": {
+    "coordinate_system": "XYZ",
+    "scene_raw": {"objects": [], "version": "1.0"},
+    "scene_raw_sha256": "f536e1346965ea30f01112fe58824f6c5ca64190177ed5abe9323d90ddc409a3"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_000001",
+        "object_type": "TRIANGLE",
+        "label": "3-4-5 triangle",
+        "vertices": [
+          {"id": "A", "coord": [{"k": "Z", "v": 0}, {"k": "Z", "v": 0}, {"k": "Z", "v": 0}]},
+          {"id": "B", "coord": [{"k": "Z", "v": 3}, {"k": "Z", "v": 0}, {"k": "Z", "v": 0}]},
+          {"id": "C", "coord": [{"k": "Z", "v": 0}, {"k": "Z", "v": 4}, {"k": "Z", "v": 0}]}
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "GG_PARSE_SCENE",
+        "inputs": {"scene_raw_sha256": "f536e1346965ea30f01112fe58824f6c5ca64190177ed5abe9323d90ddc409a3"},
+        "outputs": {"parsed_object_ids": []},
+        "step_hash_sha256": "d6bd59e57242dba602005172e3381e2ed01c6551260ec861d953deda38e17758"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        {
+          "triangle_object_id": "tri_000001",
+          "Q": [25, 16, 9],
+          "s": [{"n": 144, "d": 144}, {"n": 144, "d": 225}, {"n": 144, "d": 400}]
+        }
+      ]
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

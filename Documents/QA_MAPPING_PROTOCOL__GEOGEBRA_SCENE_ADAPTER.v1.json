@@ -1,0 +1,73 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "geogebra_scene_adapter_v1_exact",
+  "state_manifold": {
+    "state_type": "Typed geometry objects parsed from a GeoGebra scene export JSON (format: geogebra_scene_export_v1). v1 certifies TRIANGLE objects with 3 XYZ coordinates, where each coordinate is either integer Z or unreduced rational pair Q(n,d). The compute substrate is exact: qa_rational_pair_noreduce. Coordinates are lifted per-triangle to integer lattice via LCM(denominators) with no reduction.",
+    "embedding_function": "Parse upstream geogebra_scene_export_v1 JSON into typed TRIANGLE objects with stable object_id ordering. Verify scene_raw_sha256 against canonical JSON of scene_raw. For each triangle, compute per-triangle L = LCM(denominators) using denominators exactly as provided (no gcd simplification). Lift coordinates to integers and compute RT invariants with explicit multiply form (x*x, never **2 or pow()). Spreads stored as unreduced integer pairs {n,d} with d=Q1*Q2 and n=d-dot*dot.",
+    "constraints": [
+      "compute_substrate must be qa_rational_pair_noreduce (exact-only; no float substrates permitted).",
+      "Coordinates must be typed Z or Q(n,d) with integer fields and d != 0.",
+      "No fraction reduction is permitted implicitly; denominators affect LCM lift and therefore the geometric embedding (Non-Reduction Axiom).",
+      "Object ordering must be stable (parsed_objects sorted by object_id, ascending).",
+      "Step hashes are sha256 of canonical JSON of step payloads ({inputs, move_id, outputs}).",
+      "All arithmetic must use explicit multiply form (x*x), never pow() or **2, to prevent libm ULP drift."
+    ]
+  },
+  "generators": [
+    {
+      "name": "GG_PARSE_SCENE",
+      "transition_rule": "Parse geogebra_scene_export_v1 scene_raw into typed TRIANGLE objects; reject malformed objects or unsupported types. Enforce Z/Q coordinate typing and nonzero denominators. Verify scene_raw_sha256 matches canonical JSON of scene_raw. Sort parsed_objects by object_id.",
+      "invariant_effect": "Creates typed object manifold from upstream data; emits TYPED_FORMATION_ERROR, NON_RATIONAL_COORDINATE, or ZERO_DENOMINATOR on invalid input."
+    },
+    {
+      "name": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+      "transition_rule": "For each TRIANGLE, compute L=LCM(denominators) using denominators as-given (no reduction). Lift XYZ coords to integer lattice. Compute Q=[Q(BC),Q(CA),Q(AB)] with dx*dx+dy*dy+dz*dz; compute spreads sA,sB,sC as pairs with d=Q1*Q2 and n=d-dot*dot using explicit multiply form. Store as unreduced pairs.",
+      "invariant_effect": "Adds exact RT invariants to state; emits ZERO_DIVISOR_OBSTRUCTION on degenerate spread denominators (Q=0)."
+    },
+    {
+      "name": "RT_VALIDATE_LAW_EQUATION",
+      "transition_rule": "Validate RT laws by strict integer equality (zero tolerance). Cross Law RT_LAW_04: t=Q1+Q2-Q3, check t*t*s3.d == 4*Q1*Q2*(s3.d-s3.n). Pythagoras RT_LAW_01: check Q3==Q1+Q2 (or permutation).",
+      "invariant_effect": "Adds verified law constraint; emits LAW_EQUATION_MISMATCH on any mismatch."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "scene_raw_sha256",
+      "definition": "sha256 of canonical JSON of scene_raw object. Verified at Gate 3 before parsing."
+    },
+    {
+      "name": "step_hash_sha256",
+      "definition": "sha256 of canonical JSON of each derivation step payload ({inputs, move_id, outputs}). Verified at Gate 5."
+    },
+    {
+      "name": "rt_invariants",
+      "definition": "Exact quadrances Q (integers) and spreads s (unreduced pairs {n,d}) per triangle, computed on integer-lifted coordinates (LCM lift). Verified by recomputation and strict pair identity at Gate 5."
+    },
+    {
+      "name": "invariant_diff",
+      "definition": "Typed diff of invariants across derivation steps. Required by determinism contract; validated at Gate 2 (not schema)."
+    }
+  ],
+  "failure_taxonomy": [
+    {"fail_type": "SCHEMA_INVALID", "trigger_condition": "JSON Schema Draft-07 validation fails."},
+    {"fail_type": "MISSING_DETERMINISM_CONTRACT", "trigger_condition": "determinism_contract missing or flags not all true."},
+    {"fail_type": "MISSING_INVARIANT_DIFF", "trigger_condition": "result.invariant_diff absent or not a JSON object."},
+    {"fail_type": "UNSUPPORTED_COMPUTE_SUBSTRATE", "trigger_condition": "compute_substrate != qa_rational_pair_noreduce."},
+    {"fail_type": "TYPED_FORMATION_ERROR", "trigger_condition": "scene_raw format wrong, objects malformed, unsupported object type, unstable ordering, or scene_raw_sha256 mismatch."},
+    {"fail_type": "NON_RATIONAL_COORDINATE", "trigger_condition": "Coordinate not typed as Z or Q(n,d)."},
+    {"fail_type": "ZERO_DENOMINATOR", "trigger_condition": "Q coordinate has d == 0."},
+    {"fail_type": "BASE_ALGEBRA_INADEQUATE", "trigger_condition": "base_algebra properties do not satisfy field + no_zero_divisors."},
+    {"fail_type": "ZERO_DIVISOR_OBSTRUCTION", "trigger_condition": "Spread denominator is zero during RT computation (degenerate triangle)."},
+    {"fail_type": "STEP_HASH_MISMATCH", "trigger_condition": "Computed step hash != claimed step_hash_sha256."},
+    {"fail_type": "LAW_EQUATION_MISMATCH", "trigger_condition": "Strict integer equality check for RT law fails, or Q mismatch, or outputs.verified != true."},
+    {"fail_type": "ILLEGAL_NORMALIZATION", "trigger_condition": "Spread pair identity mismatch: claimed {n,d} != computed {n,d} (unreduced pairs must match exactly)."}
+  ],
+  "reachability": {
+    "graph_type": "Directed acyclic derivation graph: GG_PARSE_SCENE -> RT_COMPUTE_TRIANGLE_INVARIANTS -> RT_VALIDATE_LAW_EQUATION.",
+    "component_analysis": "Exact substrate removes all tolerance; failures are discrete integer obstructions. Non-Reduction Axiom is enforced by pair identity checks on LCM-lifted invariants. Degenerate triangles fail at Gate 4/5 with typed obstructions."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "All computations are pure, exact integer arithmetic after deterministic LCM lift. Arithmetic form is deterministic (x*x, never pow() or **2). No RNG is permitted. Canonical JSON (sort_keys=True) ensures deterministic step hashes. invariant_diff must be present in result."
+  }
+}

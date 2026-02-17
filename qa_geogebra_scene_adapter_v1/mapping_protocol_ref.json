@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "Documents/QA_MAPPING_PROTOCOL__GEOGEBRA_SCENE_ADAPTER.v1.json",
+  "ref_sha256": "2acf9387c76d66879a4cbe64d122441f3fbd4b4c44bd2ffcbd74ca887a2190c1",
+  "scope_note": "GeoGebra scene export adapter v1 (exact-only): parse constrained geogebra_scene_export_v1 JSON into typed TRIANGLE objects with Z/Q coordinates, deterministic LCM lift to integer lattice, exact RT invariants and strict law verification, step-hash integrity and invariant_diff contract."
+}

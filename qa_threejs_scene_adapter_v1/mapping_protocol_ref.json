@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "Documents/QA_MAPPING_PROTOCOL__THREEJS_SCENE_ADAPTER.v1.json",
+  "ref_sha256": "262b177296a6ce43a8480ad006aa7ca70114d0df65964454c60ccf524bc8ba56",
+  "scope_note": "Three.js scene export adapter v1: parse constrained three_scene_export_v1 JSON into typed triangles, compute RT invariants over float64 (rel tol 1e-9), verify RT laws, enforce deterministic step hashes + invariant_diff completeness."
+}

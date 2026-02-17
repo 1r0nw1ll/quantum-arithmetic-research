@@ -2635,6 +2635,30 @@ def _validate_rational_trig_type_system_family_if_present(base_dir: str) -> Opti
     return None
 
 
+def _validate_threejs_scene_adapter_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_THREEJS_SCENE_ADAPTER.v1 family (float64 substrate, schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_threejs_scene_adapter_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_threejs_scene_adapter_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_threejs_scene_adapter_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -2718,6 +2742,9 @@ FAMILY_SWEEPS = [
     (50, "QA ARTexplorer Scene Adapter v2 (exact substrate) family",
      _validate_artexplorer_scene_adapter_v2_family_if_present,
      "schema + validator + fixtures (exact arithmetic)", "50_artexplorer_scene_adapter_v2_exact", "../qa_artexplorer_scene_adapter_v2", True),
+    (55, "QA Three.js Scene Adapter family",
+     _validate_threejs_scene_adapter_family_if_present,
+     "schema + validator + fixtures", "55_threejs_scene_adapter", "../qa_threejs_scene_adapter_v1", True),
 ]
 
 

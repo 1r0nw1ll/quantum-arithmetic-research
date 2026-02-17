@@ -1,0 +1,92 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "threejs_scene_adapter_v1",
+  "state_manifold": {
+    "state_type": "Typed geometry objects parsed from a Three.js scene export JSON (format: three_scene_export_v1): Triangle with 3 XYZ float64 vertex coordinates. Observables: quadrances Q (float64), spreads s (float64). Substrate: float64, REL_TOL=1e-9.",
+    "embedding_function": "Parse upstream three_scene_export_v1 JSON into typed Triangle objects with stable IDs (sorted by object_id). Compute RT invariants: quadrance Q via dx*dx+dy*dy+dz*dz (explicit multiply form), spread s via 1-(dot*dot)/(Q1*Q2). No normalization moves applicable (float64 substrate).",
+    "constraints": [
+      "All coordinates must be finite IEEE-754 doubles (null, NaN, Infinity are typed obstructions).",
+      "Triangle formation requires exactly 3 vertices with 3-element float64 coordinate arrays.",
+      "Objects are sorted by object_id for stable deterministic ordering.",
+      "Base algebra must be adequate for spread computation (requires field + no_zero_divisors).",
+      "scene_raw_sha256 must match sha256 of canonical JSON of scene_raw at Gate 3."
+    ]
+  },
+  "generators": [
+    {
+      "name": "THREE_PARSE_SCENE",
+      "transition_rule": "Parse upstream three_scene_export_v1 JSON into typed objects with stable object IDs. Detect non-finite coordinates. If format wrong or objects malformed: FAIL TYPED_FORMATION_ERROR. If coordinate non-finite: FAIL NONFINITE_COORDINATE.",
+      "invariant_effect": "Creates typed object manifold from upstream data; emits TYPED_FORMATION_ERROR or NONFINITE_COORDINATE on invalid input."
+    },
+    {
+      "name": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+      "transition_rule": "For each Triangle, compute Q1,Q2,Q3 (quadrances of sides) and s1,s2,s3 (spreads at vertices) using float64 arithmetic (explicit multiply form, never pow()). Requires non-degenerate triangle and no-zero-divisors base algebra.",
+      "invariant_effect": "Adds RT invariants to typed state; emits ZERO_DIVISOR_OBSTRUCTION if Q=0 in spread denominator."
+    },
+    {
+      "name": "RT_VALIDATE_LAW_EQUATION",
+      "transition_rule": "Validate a claimed RT law equation (Cross Law RT_LAW_04, Triple Spread RT_LAW_05, Pythagoras RT_LAW_01) by recomputing LHS and RHS with relative tolerance REL_TOL=1e-9. If rel_residual > REL_TOL: FAIL LAW_EQUATION_MISMATCH.",
+      "invariant_effect": "Adds verified law constraint; emits LAW_EQUATION_MISMATCH on numeric disagreement beyond relative tolerance."
+    }
+  ],
+  "invariants": [
+    {
+      "name": "scene_raw_sha256",
+      "definition": "sha256 of canonical JSON of scene_raw object. Verified at Gate 3 before parse."
+    },
+    {
+      "name": "step_hash_sha256",
+      "definition": "sha256 of canonical JSON of each derivation step payload ({move_id, inputs, outputs})."
+    },
+    {
+      "name": "rt_invariants",
+      "definition": "Computed quadrances Q and spreads s per triangle, verified against recomputation from parsed vertices."
+    },
+    {
+      "name": "invariant_diff",
+      "definition": "Typed diff of invariants across derivation steps. Must be present in result.invariant_diff."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "NONFINITE_COORDINATE",
+      "trigger_condition": "Coordinate value is null, NaN, Infinity, or otherwise not a finite IEEE-754 double."
+    },
+    {
+      "fail_type": "TYPED_FORMATION_ERROR",
+      "trigger_condition": "Scene format wrong, objects malformed, scene_raw_sha256 mismatch, or unsupported object type."
+    },
+    {
+      "fail_type": "MISSING_INVARIANT_DIFF",
+      "trigger_condition": "result.invariant_diff is absent or not a JSON object."
+    },
+    {
+      "fail_type": "MISSING_DETERMINISM_CONTRACT",
+      "trigger_condition": "Determinism contract flags not all true (canonical_json, stable_sorting, no_rng, invariant_diff_defined)."
+    },
+    {
+      "fail_type": "UNSUPPORTED_COMPUTE_SUBSTRATE",
+      "trigger_condition": "compute_substrate is not 'float64'."
+    },
+    {
+      "fail_type": "STEP_HASH_MISMATCH",
+      "trigger_condition": "SHA256 of canonical JSON of step payload does not match claimed step_hash_sha256."
+    },
+    {
+      "fail_type": "LAW_EQUATION_MISMATCH",
+      "trigger_condition": "Claimed RT law equation check fails: rel_residual > REL_TOL=1e-9, or outputs.verified != true."
+    },
+    {
+      "fail_type": "ZERO_DIVISOR_OBSTRUCTION",
+      "trigger_condition": "Spread computation has Q=0 in denominator (degenerate/zero-length edge)."
+    }
+  ],
+  "reachability": {
+    "graph_type": "Directed acyclic derivation graph: nodes are typed scene states (parsed objects + accumulated RT invariants), edges are adapter/RT moves.",
+    "component_analysis": "THREE_PARSE_SCENE -> RT_COMPUTE_TRIANGLE_INVARIANTS -> RT_VALIDATE_LAW_EQUATION is the canonical progression. Each step adds invariants. Failure states are typed obstructions at specific gates."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "Per QA canonical: generators (scene parse, RT computation, law validation) are pure functions with deterministic outputs given deterministic float64 arithmetic. Explicit multiply form (d*d not d**2) avoids libm pow() ULP drift. No RNG permitted. invariant_diff must be present in result."
+  }
+}

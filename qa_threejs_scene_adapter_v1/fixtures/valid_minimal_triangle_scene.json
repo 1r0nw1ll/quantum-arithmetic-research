@@ -1,0 +1,108 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_THREEJS_SCENE_ADAPTER.v1",
+  "cert_id": "qa_threejs_v1_valid_345_0001",
+  "created_utc": "2026-02-17T15:00:00Z",
+  "compute_substrate": "float64",
+  "source_semantics": {
+    "upstream": {
+      "name": "Three.js",
+      "repo_url": "https://github.com/mrdoob/three.js",
+      "docs_url": "https://threejs.org/docs/"
+    },
+    "export": {
+      "format": "three_scene_export_v1",
+      "exported_by": "qa_threejs_scene_adapter_v1 fixture generator"
+    }
+  },
+  "base_algebra": {
+    "name": "R",
+    "properties": { "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "scene_raw": {
+      "format": "three_scene_export_v1",
+      "objects": [
+        {
+          "id": "tri_345",
+          "type": "Triangle",
+          "label": "3-4-5 right triangle",
+          "vertices": [[0, 0, 0], [3, 0, 0], [0, 4, 0]]
+        }
+      ]
+    },
+    "scene_raw_sha256": "42026b1d5defee87f5e132c57dfb4794fc9182bc776de4de9907fa2b9dcb00a9"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_345",
+        "object_type": "TRIANGLE",
+        "label": "3-4-5 right triangle",
+        "vertices": [
+          { "id": "A", "coord": [0.0, 0.0, 0.0] },
+          { "id": "B", "coord": [3.0, 0.0, 0.0] },
+          { "id": "C", "coord": [0.0, 4.0, 0.0] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "THREE_PARSE_SCENE",
+        "inputs": { "scene_raw_sha256": "42026b1d5defee87f5e132c57dfb4794fc9182bc776de4de9907fa2b9dcb00a9" },
+        "outputs": { "parsed_object_ids": ["tri_345"] },
+        "step_hash_sha256": "e68dff388aac5eea7f1f73066b4615a18c532d9168cbce300bdd778fa1089f48"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tri_345" },
+        "outputs": { "Q": [25.0, 16.0, 9.0], "s": [1.0, 0.64, 0.36] },
+        "step_hash_sha256": "16c30426520cecdd7e3b4e07c0771d29521f6590bb0095341cea70c343e4e220"
+      },
+      {
+        "step_id": "s3",
+        "move_id": "RT_VALIDATE_LAW_EQUATION",
+        "inputs": {
+          "law_id": "RT_LAW_04",
+          "Q": [25.0, 16.0, 9.0],
+          "s": [1.0, 0.64, 0.36],
+          "triangle_object_id": "tri_345"
+        },
+        "outputs": { "verified": true, "lhs": 1024.0, "rhs": 1024.0 },
+        "step_hash_sha256": "584bdf713a243139d3c9f274ca7b88517c43d5d5cdc247c42a574c84c600f351"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        {
+          "triangle_object_id": "tri_345",
+          "Q": [25.0, 16.0, 9.0],
+          "s": [1.0, 0.64, 0.36]
+        }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["parsed_objects[tri_345]"] },
+        { "step_id": "s2", "adds": ["rt_invariants.triangles[tri_345].Q", "rt_invariants.triangles[tri_345].s"] },
+        { "step_id": "s3", "adds": ["law_verification[RT_LAW_04].verified"] }
+      ],
+      "provenance": {
+        "upstream_tool": "Three.js",
+        "upstream_format": "three_scene_export_v1",
+        "geometry_source": "3-4-5 right triangle: Q=[25,16,9], s=[1.0,0.64,0.36], Cross Law verified"
+      }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": "v1",
+  "cert_type": "QA_THREEJS_SCENE_ADAPTER.v1",
+  "cert_id": "qa_threejs_v1_invalid_nonfinite_0001",
+  "created_utc": "2026-02-17T15:00:00Z",
+  "compute_substrate": "float64",
+  "source_semantics": {
+    "upstream": {
+      "name": "Three.js",
+      "repo_url": "https://github.com/mrdoob/three.js",
+      "docs_url": "https://threejs.org/docs/"
+    },
+    "export": {
+      "format": "three_scene_export_v1",
+      "exported_by": "qa_threejs_scene_adapter_v1 fixture generator (INVALID: NaN coordinate)"
+    }
+  },
+  "base_algebra": {
+    "name": "R",
+    "properties": { "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "scene_raw": {
+      "format": "three_scene_export_v1",
+      "objects": [
+        {
+          "id": "tri_bad",
+          "type": "Triangle",
+          "label": "Triangle with NaN coordinate",
+          "vertices": [[0, 0, 0], [1e308, 1e308, null], [0, 1, 0]]
+        }
+      ]
+    },
+    "scene_raw_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_bad",
+        "object_type": "TRIANGLE",
+        "label": "Triangle with NaN coordinate",
+        "vertices": [
+          { "id": "A", "coord": [0.0, 0.0, 0.0] },
+          { "id": "B", "coord": [1.0, 0.0, 0.0] },
+          { "id": "C", "coord": [0.0, 1.0, 0.0] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "THREE_PARSE_SCENE",
+        "inputs": { "scene_raw_sha256": "0000000000000000000000000000000000000000000000000000000000000000" },
+        "outputs": { "parsed_object_ids": ["tri_bad"] },
+        "step_hash_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tri_bad" },
+        "outputs": { "Q": [1.0, 1.0, 1.0], "s": [0.5, 0.5, 0.5] },
+        "step_hash_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        {
+          "triangle_object_id": "tri_bad",
+          "Q": [1.0, 1.0, 1.0],
+          "s": [0.5, 0.5, 0.5]
+        }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["parsed_objects[tri_bad]"] },
+        { "step_id": "s2", "adds": ["rt_invariants.triangles[tri_bad].Q"] }
+      ],
+      "provenance": { "geometry_source": "INVALID: contains null/non-finite coordinate" }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

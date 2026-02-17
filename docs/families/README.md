@@ -37,11 +37,12 @@ A family **does not count as shipped** unless both tracts are present.
 | [44] | [QA Rational Trig Type System](44_rational_trig_type_system.md) | Schema + Validator + Fixtures | PASS |
 | [45] | [QA ARTexplorer Scene Adapter](45_artexplorer_scene_adapter.md) | Schema + Validator + Fixtures | PASS |
 | [50] | [QA ARTexplorer Scene Adapter v2 (Exact)](50_artexplorer_scene_adapter_v2_exact.md) | Schema + Validator + Fixtures (exact arithmetic) | PASS |
+| [55] | [QA Three.js Scene Adapter](55_threejs_scene_adapter.md) | Schema + Validator + Fixtures | PASS |
 
 ## Quick validation
 
 ```bash
-# Run all families [18]-[50] + external validation + doc gate
+# Run all families [18]-[55] + external validation + doc gate
 cd qa_alphageometry_ptolemy
 python qa_meta_validator.py
 

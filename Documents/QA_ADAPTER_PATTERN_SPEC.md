@@ -81,7 +81,7 @@ Relative (not absolute) tolerance is required because law equation terms scale a
 
 **Default REL_TOL = 1e-9** is intentionally loose vs observed ~7e-14 relative error at scales 10 and 1e6, providing 5 orders of margin.
 
-When a future adapter operates over an exact-arithmetic substrate (e.g., `fractions.Fraction`, rational pairs, or a finite field), the tolerance should be set to **0** and verification should be exact (i.e., check `(lhs - rhs) == 0` in the exact algebra after normalization to a common form).
+Family [50] (ARTexplorer Scene Adapter v2) implements an exact-arithmetic substrate using unreduced rational pairs — see "Exact Arithmetic Substrate" section below.
 
 ### Known Substrate Pitfall: `pow(x,2)` vs `x*x` (ULP drift)
 
@@ -101,9 +101,50 @@ IEEE-754 + libm `pow()` can diverge by 1 ULP from explicit multiplication. CPyth
 8. [ ] Write human-tract doc in `docs/families/[NN]_*.md`
 9. [ ] Verify: `python <family>/validator.py --self-test` all PASS
 
+## Exact Arithmetic Substrate (Family [50])
+
+Family [50] (`QA_ARTEXPLORER_SCENE_ADAPTER.v2`) eliminates all floating-point tolerance by operating on **unreduced rational pairs** with integer arithmetic.
+
+### Compute Substrate: `qa_rational_pair_noreduce`
+
+- **Coordinates**: must be integers (schema enforces `"type": "integer"`)
+- **Quadrance Q**: integer (sum of squared integer differences, explicit `d*d` form)
+- **Spread s**: unreduced rational pair `{"n": int, "d": int}` where:
+  - `d = Q1 * Q2` (product of adjacent quadrances)
+  - `dot_val = dot(v1, v2)`, `n = d - dot_val * dot_val` (explicit multiply, never `**2`)
+  - Validator recomputes and checks **pair equality** (not numeric equality)
+  - Any pair not matching the unreduced computation → `ILLEGAL_NORMALIZATION`
+
+### Law Verification by Cross-Multiplication (Zero Tolerance)
+
+All RT laws are verified as strict integer equalities after cross-multiplication:
+
+| Law | Cross-Multiplied Form |
+|-----|-----------------------|
+| Cross Law (RT_LAW_04) | `t*t*s3.d == 4*Q1*Q2*(s3.d - s3.n)` where `t = Q1+Q2-Q3` |
+| Triple Spread (RT_LAW_05) | Numerators compared at common denominator `(d1*d2*d3)^2` |
+| Pythagoras (RT_LAW_01) | `Q3 == Q1 + Q2` (integer equality) |
+
+### `RT_REDUCE_FRACTION`: Certified Projection
+
+Fraction reduction is **not** simplification — it is a **geometric projection** (scale collapse). To reduce a spread pair, the cert must include an explicit `RT_REDUCE_FRACTION` step:
+
+- **Inputs**: `n`, `d`, `target` (field path being reduced)
+- **Outputs**: `n_reduced`, `d_reduced`, `gcd`, `scale_before`, `scale_after`, `non_reduction_axiom_ack`
+- **Verification**: `n == n_reduced * gcd`, `d == d_reduced * gcd`, `gcd(n_reduced, d_reduced) == 1`, `non_reduction_axiom_ack == true`
+
+### Additional Failure Modes
+
+| Fail Type | Cause |
+|-----------|-------|
+| `NON_INTEGER_COORDINATE` | Vertex coordinate is not an integer |
+| `ILLEGAL_NORMALIZATION` | Spread reduced without `RT_REDUCE_FRACTION` move |
+| `UNSUPPORTED_COMPUTE_SUBSTRATE` | `compute_substrate` missing or wrong |
+
 ## Proven Instances
 
-| Family | Adapter | Source |
-|--------|---------|--------|
-| [44] | RT Type System | Internal (Wildberger RT + Martin-Lof) |
-| [45] | ARTexplorer Scene Adapter | External (ARTexplorer JSON scene exports) |
+| Family | Adapter | Source | Substrate |
+|--------|---------|--------|-----------|
+| [44] | RT Type System | Internal (Wildberger RT + Martin-Lof) | float64 |
+| [45] | ARTexplorer Scene Adapter v1 | External (ARTexplorer JSON) | float64 (rel tol 1e-9) |
+| [50] | ARTexplorer Scene Adapter v2 | External (ARTexplorer JSON) | exact (rational pairs, tol=0) |

@@ -2587,6 +2587,30 @@ def _validate_artexplorer_scene_adapter_family_if_present(base_dir: str) -> Opti
     return None
 
 
+def _validate_artexplorer_scene_adapter_v2_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_ARTEXPLORER_SCENE_ADAPTER.v2 family (exact substrate, schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_artexplorer_scene_adapter_v2", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_artexplorer_scene_adapter_v2/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_artexplorer_scene_adapter_v2 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_rational_trig_type_system_family_if_present(base_dir: str) -> Optional[str]:
     """
     Validate QA_RATIONAL_TRIG_TYPE_SYSTEM.v1 family (schema + validator + fixtures).
@@ -2691,6 +2715,9 @@ FAMILY_SWEEPS = [
     (45, "QA ARTexplorer Scene Adapter family",
      _validate_artexplorer_scene_adapter_family_if_present,
      "schema + validator + fixtures", "45_artexplorer_scene_adapter", "../qa_artexplorer_scene_adapter_v1", True),
+    (50, "QA ARTexplorer Scene Adapter v2 (exact substrate) family",
+     _validate_artexplorer_scene_adapter_v2_family_if_present,
+     "schema + validator + fixtures (exact arithmetic)", "50_artexplorer_scene_adapter_v2_exact", "../qa_artexplorer_scene_adapter_v2", True),
 ]
 
 

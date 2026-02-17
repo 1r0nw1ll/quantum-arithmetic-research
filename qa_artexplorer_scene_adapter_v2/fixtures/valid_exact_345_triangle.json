@@ -1,0 +1,137 @@
+{
+  "schema_version": "v2",
+  "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v2",
+  "cert_id": "qa_artexplorer_v2_exact_345_0001",
+  "created_utc": "2026-02-17T12:00:00Z",
+  "compute_substrate": "qa_rational_pair_noreduce",
+  "source_semantics": {
+    "upstream": {
+      "name": "ARTexplorer (Algebraic Rational Trigonometry Explorer)",
+      "repo_url": "https://github.com/arossti/ARTexplorer",
+      "app_url": "https://arossti.github.io/ARTexplorer/"
+    },
+    "export": {
+      "format": "artexplorer_scene_json",
+      "exported_by": "ARTexplorer v1.0 scene export (rt-filehandler.js exportState)"
+    }
+  },
+  "base_algebra": {
+    "name": "Q",
+    "properties": { "integral_domain": true, "field": true, "no_zero_divisors": true }
+  },
+  "scene": {
+    "coordinate_system": "XYZ",
+    "scene_raw": {
+      "version": "1.0",
+      "timestamp": "2026-02-17T12:00:00.000Z",
+      "instances": [
+        {
+          "id": "tri-345",
+          "type": "Triangle",
+          "parameters": {},
+          "transform": {
+            "position": { "x": 0, "y": 0, "z": 0 },
+            "rotation": { "x": 0, "y": 0, "z": 0 },
+            "scale": { "x": 1, "y": 1, "z": 1 }
+          },
+          "appearance": { "opacity": 1.0, "visible": true },
+          "metadata": { "label": "Right_Triangle_345" }
+        }
+      ],
+      "metadata": { "instanceCount": 1 }
+    },
+    "scene_raw_sha256": "a70d4d2fa4d5ce80e21eecdafd67ac1aebc165967be19298ba4f418c1bbb4ed6"
+  },
+  "derivation": {
+    "parsed_objects": [
+      {
+        "object_id": "tri_345_face",
+        "object_type": "TRIANGLE",
+        "label": "3-4-5 right triangle (exact)",
+        "vertices": [
+          { "id": "A", "coord": [0, 0, 0] },
+          { "id": "B", "coord": [3, 0, 0] },
+          { "id": "C", "coord": [0, 4, 0] }
+        ],
+        "faces": [["A", "B", "C"]]
+      }
+    ],
+    "steps": [
+      {
+        "step_id": "s1",
+        "move_id": "ART_PARSE_SCENE",
+        "inputs": { "scene_raw_sha256": "a70d4d2fa4d5ce80e21eecdafd67ac1aebc165967be19298ba4f418c1bbb4ed6" },
+        "outputs": { "parsed_object_ids": ["tri_345_face"] },
+        "step_hash_sha256": "658544bdace88496ce3065bdd7e1b7d0fc9392403ea30f3b30754bce4abe8380"
+      },
+      {
+        "step_id": "s2",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": { "triangle_object_id": "tri_345_face" },
+        "outputs": {
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 144, "n": 144 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ]
+        },
+        "step_hash_sha256": "a3fb42375665a7f8cd429c9916d467b841e05a0dc7b6ddeb9661d91a5a760d0a"
+      },
+      {
+        "step_id": "s3",
+        "move_id": "RT_VALIDATE_LAW_EQUATION",
+        "inputs": {
+          "law_id": "RT_LAW_04",
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 144, "n": 144 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ],
+          "triangle_object_id": "tri_345_face"
+        },
+        "outputs": {
+          "verified": true,
+          "lhs": 409600,
+          "rhs": 409600
+        },
+        "step_hash_sha256": "7662a2dfc9e102685589bb11f08e506348ba5b30e0a61060de2e33d7ad8bee88"
+      }
+    ]
+  },
+  "result": {
+    "rt_invariants": {
+      "triangles": [
+        {
+          "triangle_object_id": "tri_345_face",
+          "Q": [25, 16, 9],
+          "s": [
+            { "d": 144, "n": 144 },
+            { "d": 225, "n": 144 },
+            { "d": 400, "n": 144 }
+          ]
+        }
+      ]
+    },
+    "invariant_diff": {
+      "steps": [
+        { "step_id": "s1", "adds": ["parsed_objects[tri_345_face]"] },
+        { "step_id": "s2", "adds": ["rt_invariants.triangles[tri_345_face].Q", "rt_invariants.triangles[tri_345_face].s"] },
+        { "step_id": "s3", "adds": ["law_verification[RT_LAW_04].verified"] }
+      ],
+      "provenance": {
+        "upstream_tool": "ARTexplorer v1.0",
+        "upstream_format": "scene JSON (rt-filehandler.js exportState)",
+        "scene_raw_sha256": "a70d4d2fa4d5ce80e21eecdafd67ac1aebc165967be19298ba4f418c1bbb4ed6",
+        "geometry_source": "3-4-5 right triangle, exact substrate, Cross Law verified"
+      }
+    }
+  },
+  "determinism_contract": {
+    "canonical_json": true,
+    "stable_sorting": true,
+    "no_rng": true,
+    "invariant_diff_defined": true
+  }
+}

@@ -2,18 +2,23 @@
 """
 qa_rt_corpus_generator.py
 
-Certified Scene Corpus Generator for QA_ARTEXPLORER_SCENE_ADAPTER.v1.
+Certified Scene Corpus Generator for QA_ARTEXPLORER_SCENE_ADAPTER families.
 
-Generates N random non-degenerate 3D triangles, builds complete family [45]
-cert JSON (ART_PARSE_SCENE -> RT_COMPUTE -> RT_VALIDATE_LAW_EQUATION),
-validates each via the family [45] validator, and writes a CORPUS_MANIFEST.json
-with aggregate stats including per-law residual distributions and worst-case certs.
+Generates N random non-degenerate 3D triangles, builds complete cert JSON
+(ART_PARSE_SCENE -> RT_COMPUTE -> RT_VALIDATE_LAW_EQUATION),
+validates each via the appropriate family validator, and writes a
+CORPUS_MANIFEST.json with aggregate stats.
+
+Supports two substrates:
+  - float64 (default): family [45] v1, IEEE-754 doubles, relative tolerance 1e-9
+  - exact: family [50] v2, integer coords, unreduced rational pairs, tolerance = 0
 
 Usage:
     python qa_rt_corpus_generator.py --count 50 --output-dir qa_rt_corpus/
     python qa_rt_corpus_generator.py --count 10000 --output-dir qa_rt_corpus/burn_in --seed 42
     python qa_rt_corpus_generator.py --count 20 --laws RT_LAW_04,RT_LAW_05
     python qa_rt_corpus_generator.py --count 500 --near-degenerate-rate 0.5
+    python qa_rt_corpus_generator.py --count 100 --substrate exact --no-write
 """
 
 from __future__ import annotations
@@ -363,6 +368,305 @@ def build_cert(
 
 
 # ---------------------------------------------------------------------------
+# Exact-mode geometry (integer coordinates, unreduced rational pairs)
+# ---------------------------------------------------------------------------
+
+def _vec_sub_int(a: List[int], b: List[int]) -> List[int]:
+    return [a[i] - b[i] for i in range(3)]
+
+
+def _dot_int(a: List[int], b: List[int]) -> int:
+    return sum(a[i] * b[i] for i in range(3))
+
+
+def _quadrance_int(a: List[int], b: List[int]) -> int:
+    d = _vec_sub_int(b[:3], a[:3])
+    return d[0] * d[0] + d[1] * d[1] + d[2] * d[2]
+
+
+def _spread_pair(v1: List[int], v2: List[int]) -> Optional[Dict[str, int]]:
+    q1 = _dot_int(v1, v1)
+    q2 = _dot_int(v2, v2)
+    if q1 == 0 or q2 == 0:
+        return None
+    d = q1 * q2
+    dot_val = _dot_int(v1, v2)
+    n = d - dot_val * dot_val
+    return {"n": n, "d": d}
+
+
+def _cross_mag_sq_int(a: List[int], b: List[int], c: List[int]) -> int:
+    ab = _vec_sub_int(b[:3], a[:3])
+    ac = _vec_sub_int(c[:3], a[:3])
+    cx = ab[1] * ac[2] - ab[2] * ac[1]
+    cy = ab[2] * ac[0] - ab[0] * ac[2]
+    cz = ab[0] * ac[1] - ab[1] * ac[0]
+    return cx * cx + cy * cy + cz * cz
+
+
+def _compute_rt_exact(a: List[int], b: List[int], c: List[int]):
+    """Returns (Q, s) where Q=[int,int,int] and s=[{n,d},{n,d},{n,d}]."""
+    Q1 = _quadrance_int(b, c)
+    Q2 = _quadrance_int(c, a)
+    Q3 = _quadrance_int(a, b)
+
+    ab = _vec_sub_int(b[:3], a[:3])
+    ac = _vec_sub_int(c[:3], a[:3])
+    bc = _vec_sub_int(c[:3], b[:3])
+    ba = _vec_sub_int(a[:3], b[:3])
+    ca = _vec_sub_int(a[:3], c[:3])
+    cb = _vec_sub_int(b[:3], c[:3])
+
+    sA = _spread_pair(ab, ac)
+    sB = _spread_pair(bc, ba)
+    sC = _spread_pair(ca, cb)
+    if sA is None or sB is None or sC is None:
+        raise ValueError("Degenerate triangle (zero quadrance)")
+    return [Q1, Q2, Q3], [sA, sB, sC]
+
+
+def _exact_cross_law_check(Q, s):
+    """Cross law integer check. Returns True if satisfied."""
+    Q1, Q2, Q3 = Q
+    s3n, s3d = s[2]["n"], s[2]["d"]
+    t = Q1 + Q2 - Q3
+    lhs = t * t * s3d
+    rhs = 4 * Q1 * Q2 * (s3d - s3n)
+    return lhs, rhs, lhs == rhs
+
+
+def _exact_triple_spread_check(s):
+    """Triple spread integer check. Returns True if satisfied."""
+    n1, d1 = s[0]["n"], s[0]["d"]
+    n2, d2 = s[1]["n"], s[1]["d"]
+    n3, d3 = s[2]["n"], s[2]["d"]
+    cd = d1 * d2 * d3
+    sum_num = n1 * d2 * d3 + n2 * d1 * d3 + n3 * d1 * d2
+    lhs = sum_num * sum_num
+    s1sq = n1 * n1 * d2 * d2 * d3 * d3
+    s2sq = n2 * n2 * d1 * d1 * d3 * d3
+    s3sq = n3 * n3 * d1 * d1 * d2 * d2
+    prod = n1 * n2 * n3 * d1 * d2 * d3
+    rhs = 2 * (s1sq + s2sq + s3sq) + 4 * prod
+    return lhs, rhs, lhs == rhs
+
+
+_EXACT_LAW_FNS = {
+    "RT_LAW_04": _exact_cross_law_check,
+    "RT_LAW_05": _exact_triple_spread_check,
+}
+
+
+# Exact-mode triangle generators (integer coords)
+
+def _gen_scalene_int(rng: random.Random, scale: float = 10.0) -> List[List[int]]:
+    """Random scalene triangle with integer coords in [-scale, scale]."""
+    s = int(scale)
+    if s < 2:
+        s = 2
+    while True:
+        pts = [[rng.randint(-s, s) for _ in range(3)] for _ in range(3)]
+        if _cross_mag_sq_int(pts[0], pts[1], pts[2]) > 0:
+            return pts
+
+
+def _gen_right_int(rng: random.Random, scale: float = 10.0) -> List[List[int]]:
+    """Right triangle at origin with integer coords."""
+    s = max(1, int(scale))
+    while True:
+        l1 = rng.randint(1, s)
+        l2 = rng.randint(1, s)
+        a = [0, 0, 0]
+        b = [l1, 0, 0]
+        c = [0, l2, 0]
+        if _cross_mag_sq_int(a, b, c) > 0:
+            return [a, b, c]
+
+
+def _gen_near_degenerate_int(rng: random.Random, scale: float = 10.0) -> List[List[int]]:
+    """Nearly collinear triangle with integer coords (small cross product)."""
+    s = max(2, int(scale))
+    while True:
+        a = [0, 0, 0]
+        b = [rng.randint(s // 2, s), 0, 0]
+        c = [rng.randint(1, s - 1), rng.choice([1, -1]), 0]
+        if _cross_mag_sq_int(a, b, c) > 0:
+            return [a, b, c]
+
+
+def _build_generators_exact(near_degenerate_rate: Optional[float] = None):
+    if near_degenerate_rate is not None:
+        nd = max(0.0, min(1.0, near_degenerate_rate))
+        remaining = 1.0 - nd
+        return [
+            ("scalene_int", _gen_scalene_int, remaining * 0.7),
+            ("right_int", _gen_right_int, remaining * 0.3),
+            ("near_degenerate_int", _gen_near_degenerate_int, nd),
+        ]
+    return [
+        ("scalene_int", _gen_scalene_int, 0.60),
+        ("right_int", _gen_right_int, 0.30),
+        ("near_degenerate_int", _gen_near_degenerate_int, 0.10),
+    ]
+
+
+def build_cert_exact(
+    index: int,
+    triangle_type: str,
+    verts: List[List[int]],
+    laws: List[str],
+    timestamp: str,
+) -> Dict[str, Any]:
+    """Build a v2 exact-mode cert."""
+    a, b, c = verts
+    Q, s = _compute_rt_exact(a, b, c)
+
+    cert_id = f"qa_rt_corpus_exact_{index:06d}"
+    object_id = f"tri_{index:06d}"
+
+    scene_raw = {
+        "version": "1.0",
+        "timestamp": timestamp,
+        "instances": [{
+            "id": f"tri-{index:06d}",
+            "type": "Triangle",
+            "parameters": {"triangle_type": triangle_type},
+            "transform": {
+                "position": {"x": 0, "y": 0, "z": 0},
+                "rotation": {"x": 0, "y": 0, "z": 0},
+                "scale": {"x": 1, "y": 1, "z": 1},
+            },
+            "appearance": {"opacity": 1.0, "visible": True},
+            "metadata": {"label": f"corpus_exact_{triangle_type}_{index:06d}"},
+        }],
+        "metadata": {"instanceCount": 1},
+    }
+    scene_raw_sha = _sha256_hex(_canonical_json_compact(scene_raw))
+
+    parsed_obj = {
+        "object_id": object_id,
+        "object_type": "TRIANGLE",
+        "label": f"Corpus exact {triangle_type} triangle #{index}",
+        "vertices": [
+            {"id": "A", "coord": list(a)},
+            {"id": "B", "coord": list(b)},
+            {"id": "C", "coord": list(c)},
+        ],
+        "faces": [["A", "B", "C"]],
+    }
+
+    steps = []
+    step_num = 1
+
+    # Step 1: ART_PARSE_SCENE
+    s1_inputs = {"scene_raw_sha256": scene_raw_sha}
+    s1_outputs = {"parsed_object_ids": [object_id]}
+    steps.append({
+        "step_id": f"s{step_num}",
+        "move_id": "ART_PARSE_SCENE",
+        "inputs": s1_inputs,
+        "outputs": s1_outputs,
+        "step_hash_sha256": _step_hash("ART_PARSE_SCENE", s1_inputs, s1_outputs),
+    })
+    step_num += 1
+
+    # Step 2: RT_COMPUTE_TRIANGLE_INVARIANTS
+    s2_inputs = {"triangle_object_id": object_id}
+    s2_outputs = {"Q": Q, "s": s}
+    steps.append({
+        "step_id": f"s{step_num}",
+        "move_id": "RT_COMPUTE_TRIANGLE_INVARIANTS",
+        "inputs": s2_inputs,
+        "outputs": s2_outputs,
+        "step_hash_sha256": _step_hash("RT_COMPUTE_TRIANGLE_INVARIANTS", s2_inputs, s2_outputs),
+    })
+    step_num += 1
+
+    # Law verification steps (exact)
+    for law_id in laws:
+        if law_id not in _EXACT_LAW_FNS:
+            continue
+        law_fn = _EXACT_LAW_FNS[law_id]
+        if law_id == "RT_LAW_05":
+            lhs, rhs, ok = law_fn(s)
+        else:
+            lhs, rhs, ok = law_fn(Q, s)
+
+        law_inputs = {"law_id": law_id, "Q": Q, "s": s, "triangle_object_id": object_id}
+        law_outputs = {"verified": ok, "lhs": lhs, "rhs": rhs}
+        steps.append({
+            "step_id": f"s{step_num}",
+            "move_id": "RT_VALIDATE_LAW_EQUATION",
+            "inputs": law_inputs,
+            "outputs": law_outputs,
+            "step_hash_sha256": _step_hash("RT_VALIDATE_LAW_EQUATION", law_inputs, law_outputs),
+        })
+        step_num += 1
+
+    cert = {
+        "schema_version": "v2",
+        "cert_type": "QA_ARTEXPLORER_SCENE_ADAPTER.v2",
+        "cert_id": cert_id,
+        "created_utc": timestamp,
+        "compute_substrate": "qa_rational_pair_noreduce",
+        "source_semantics": {
+            "upstream": {
+                "name": "ARTexplorer (Algebraic Rational Trigonometry Explorer)",
+                "repo_url": "https://github.com/arossti/ARTexplorer",
+                "app_url": "https://arossti.github.io/ARTexplorer/",
+            },
+            "export": {
+                "format": "artexplorer_scene_json",
+                "exported_by": "qa_rt_corpus_generator.py (exact mode)",
+            },
+        },
+        "base_algebra": {
+            "name": "Q",
+            "properties": {"integral_domain": True, "field": True, "no_zero_divisors": True},
+        },
+        "scene": {
+            "coordinate_system": "XYZ",
+            "scene_raw": scene_raw,
+            "scene_raw_sha256": scene_raw_sha,
+        },
+        "derivation": {
+            "parsed_objects": [parsed_obj],
+            "steps": steps,
+        },
+        "result": {
+            "rt_invariants": {
+                "triangles": [{"triangle_object_id": object_id, "Q": Q, "s": s}],
+            },
+            "invariant_diff": {
+                "steps": [
+                    {"step_id": "s1", "adds": [f"parsed_objects[{object_id}]"]},
+                    {"step_id": "s2", "adds": [
+                        f"rt_invariants.triangles[{object_id}].Q",
+                        f"rt_invariants.triangles[{object_id}].s",
+                    ]},
+                ] + [
+                    {"step_id": f"s{3 + i}", "adds": [f"law_verification[{law}].verified"]}
+                    for i, law in enumerate(laws) if law in _EXACT_LAW_FNS
+                ],
+                "provenance": {
+                    "upstream_tool": "qa_rt_corpus_generator.py (exact mode)",
+                    "upstream_format": "synthetic (integer coordinates)",
+                    "triangle_type": triangle_type,
+                    "compute_substrate": "qa_rational_pair_noreduce",
+                },
+            },
+        },
+        "determinism_contract": {
+            "canonical_json": True,
+            "stable_sorting": True,
+            "no_rng": True,
+            "invariant_diff_defined": True,
+        },
+    }
+    return cert
+
+
+# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -379,19 +683,30 @@ def main(argv: Optional[List[str]] = None) -> int:
                     help="Coordinate magnitude scale (default 10.0)")
     ap.add_argument("--no-write", action="store_true",
                     help="Skip writing individual cert files (stats-only mode)")
+    ap.add_argument("--substrate", default="float64", choices=["float64", "exact"],
+                    help="Compute substrate: float64 (v1) or exact (v2 rational pairs)")
     args = ap.parse_args(argv)
 
     laws = [l.strip() for l in args.laws.split(",") if l.strip()]
     os.makedirs(args.output_dir, exist_ok=True)
 
-    generators = _build_generators(args.near_degenerate_rate)
+    use_exact = args.substrate == "exact"
+
+    if use_exact:
+        generators = _build_generators_exact(args.near_degenerate_rate)
+    else:
+        generators = _build_generators(args.near_degenerate_rate)
 
     rng = random.Random(args.seed)
     timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
     # Import validator directly for speed (avoids subprocess per cert)
-    validator_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
-                                 "qa_artexplorer_scene_adapter_v1")
+    if use_exact:
+        validator_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "qa_artexplorer_scene_adapter_v2")
+    else:
+        validator_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)),
+                                     "qa_artexplorer_scene_adapter_v1")
     sys.path.insert(0, validator_dir)
     from validator import validate_cert, GateStatus as VS
     sys.path.pop(0)
@@ -418,7 +733,12 @@ def main(argv: Optional[List[str]] = None) -> int:
     for i in range(args.count):
         tri_type, gen_fn = _pick_generator(rng, generators)
         verts = gen_fn(rng, scale=coord_scale)
-        cert, law_residuals = build_cert(i, tri_type, verts, laws, timestamp)
+
+        if use_exact:
+            cert = build_cert_exact(i, tri_type, verts, laws, timestamp)
+            law_residuals = {}  # exact mode: no residuals, just pass/fail
+        else:
+            cert, law_residuals = build_cert(i, tri_type, verts, laws, timestamp)
 
         if not args.no_write:
             out_path = os.path.join(args.output_dir, f"cert_{i:06d}.json")
@@ -450,9 +770,16 @@ def main(argv: Optional[List[str]] = None) -> int:
         for q in tri["Q"]:
             q_min = min(q_min, q)
             q_max = max(q_max, q)
-        for sv in tri["s"]:
-            s_min = min(s_min, sv)
-            s_max = max(s_max, sv)
+        if not use_exact:
+            for sv in tri["s"]:
+                s_min = min(s_min, sv)
+                s_max = max(s_max, sv)
+        else:
+            for sv in tri["s"]:
+                if isinstance(sv, dict) and sv["d"] != 0:
+                    val = sv["n"] / sv["d"]
+                    s_min = min(s_min, val)
+                    s_max = max(s_max, val)
 
         # Progress
         if (i + 1) % progress_interval == 0:
@@ -516,7 +843,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         "residual_stats": residual_stats,
         "coord_scale": coord_scale,
         "near_degenerate_rate": args.near_degenerate_rate,
-        "validator_rel_tolerance": 1e-9,
+        "compute_substrate": "exact" if use_exact else "float64",
+        "validator_rel_tolerance": 0 if use_exact else 1e-9,
     }
     manifest_path = os.path.join(args.output_dir, "CORPUS_MANIFEST.json")
     with open(manifest_path, "w", encoding="utf-8") as f:

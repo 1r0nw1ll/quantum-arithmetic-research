@@ -4,7 +4,7 @@ validator.py
 
 QA_KONA_EBM_QA_NATIVE_ORBIT_REG_CERT.v1 validator.
 
-Five gates:
+Six gates:
   Gate 1 -- Schema: required fields, types, algorithm constant
   Gate 2 -- Config sanity: n_visible==784, ranges, lr > 0, lambda_orbit >= 0
   Gate 3 -- Orbit map integrity: recompute orbit_map_hash, verify match.
@@ -15,6 +15,16 @@ Five gates:
              REGULARIZER_NUMERIC_INSTABILITY or GRADIENT_EXPLOSION ->
                invariant_diff non-null with fail_type/target_path/reason
              CONVERGED/STALLED -> invariant_diff must be null
+  Gate 6 -- LR schedule contract (conditional; only runs when
+             result.lr_per_epoch is present):
+             If model_config.lr_schedule is present and non-null:
+               - Verify type == "step"
+               - Verify steps[0].epoch == 1
+               - Verify lr_per_epoch length == len(result.energy_per_epoch)
+               - Verify each lr_per_epoch[i] matches the schedule for epoch i+1
+             If lr_schedule is absent or null:
+               - Verify all values in lr_per_epoch == model_config.lr
+             Failure type: LR_SCHEDULE_INVALID
 
 CLI:
     python validator.py <fixture.json>
@@ -35,7 +45,7 @@ sys.path.insert(0, _FAMILY63)
 sys.path.insert(0, _DIR)
 
 from qa_orbit_map import orbit_map_hash as compute_orbit_map_hash
-from rbm_qa_orbit_reg_train import train_qa_orbit_reg_rbm
+from rbm_qa_orbit_reg_train import train_qa_orbit_reg_rbm, _build_lr_lookup
 
 
 # ---------------------------------------------------------------------------
@@ -133,6 +143,39 @@ def gate1_schema(cert: Any) -> Tuple[dict, bool]:
             return _fail(gate, "SCHEMA_ERROR", f"model_config.{num_field}",
                          f"{num_field} must be a number"), False
 
+    # Validate lr_schedule if present (optional field)
+    if "lr_schedule" in mc:
+        lrs = mc["lr_schedule"]
+        if lrs is not None:
+            if not isinstance(lrs, dict):
+                return _fail(gate, "SCHEMA_ERROR", "model_config.lr_schedule",
+                             "lr_schedule must be null or an object"), False
+            if lrs.get("type") != "step":
+                return _fail(gate, "SCHEMA_ERROR", "model_config.lr_schedule.type",
+                             f"lr_schedule.type must be 'step', got {lrs.get('type')!r}"), False
+            steps = lrs.get("steps")
+            if not isinstance(steps, list) or len(steps) == 0:
+                return _fail(gate, "SCHEMA_ERROR", "model_config.lr_schedule.steps",
+                             "lr_schedule.steps must be a non-empty array"), False
+            for i, step in enumerate(steps):
+                if not isinstance(step, dict):
+                    return _fail(gate, "SCHEMA_ERROR",
+                                 f"model_config.lr_schedule.steps[{i}]",
+                                 f"steps[{i}] must be an object"), False
+                for k in ["epoch", "lr"]:
+                    if k not in step:
+                        return _fail(gate, "SCHEMA_ERROR",
+                                     f"model_config.lr_schedule.steps[{i}].{k}",
+                                     f"steps[{i}] missing required key '{k}'"), False
+                if not isinstance(step["epoch"], int) or step["epoch"] < 1:
+                    return _fail(gate, "SCHEMA_ERROR",
+                                 f"model_config.lr_schedule.steps[{i}].epoch",
+                                 f"steps[{i}].epoch must be a positive integer"), False
+                if not isinstance(step["lr"], (int, float)) or step["lr"] <= 0:
+                    return _fail(gate, "SCHEMA_ERROR",
+                                 f"model_config.lr_schedule.steps[{i}].lr",
+                                 f"steps[{i}].lr must be a positive number"), False
+
     res = cert.get("result")
     if not isinstance(res, dict):
         return _fail(gate, "SCHEMA_ERROR", "result", "result must be an object"), False
@@ -148,6 +191,16 @@ def gate1_schema(cert: Any) -> Tuple[dict, bool]:
         if not isinstance(res.get(arr_field), list):
             return _fail(gate, "SCHEMA_ERROR", f"result.{arr_field}",
                          f"{arr_field} must be an array"), False
+    # lr_per_epoch is optional; validate type if present
+    if "lr_per_epoch" in res:
+        if not isinstance(res["lr_per_epoch"], list):
+            return _fail(gate, "SCHEMA_ERROR", "result.lr_per_epoch",
+                         "lr_per_epoch must be an array"), False
+        for i, v in enumerate(res["lr_per_epoch"]):
+            if not isinstance(v, (int, float)):
+                return _fail(gate, "SCHEMA_ERROR", f"result.lr_per_epoch[{i}]",
+                             f"lr_per_epoch[{i}] must be a number"), False
+
     if not isinstance(res.get("final_weights_norm"), (int, float)):
         return _fail(gate, "SCHEMA_ERROR", "result.final_weights_norm",
                      "final_weights_norm must be a number"), False
@@ -347,6 +400,7 @@ def gate4_replay(cert: dict) -> Tuple[dict, bool]:
         lr=mc["lr"],
         lambda_orbit=mc["lambda_orbit"],
         seed=mc["seed"],
+        lr_schedule=mc.get("lr_schedule"),
     )
 
     expected_hash = cert["trace"]["trace_hash"]
@@ -410,6 +464,92 @@ def gate5_invariant_diff(cert: dict) -> Tuple[dict, bool]:
 
 
 # ---------------------------------------------------------------------------
+# Gate 6 -- LR schedule contract (conditional on lr_per_epoch presence)
+# ---------------------------------------------------------------------------
+
+def gate6_lr_schedule(cert: dict) -> Tuple[dict, bool]:
+    gate = "Gate6_lr_schedule"
+    res = cert["result"]
+    mc = cert["model_config"]
+
+    # Gate 6 is only active when lr_per_epoch is present in the result
+    if "lr_per_epoch" not in res:
+        return _pass(gate, {"skipped": "lr_per_epoch not present in result"}), True
+
+    lr_per_epoch = res["lr_per_epoch"]
+    n_epochs_result = len(res["energy_per_epoch"])
+    lr_schedule = mc.get("lr_schedule")
+
+    # Verify length: lr_per_epoch must have the same number of entries as energy_per_epoch
+    if len(lr_per_epoch) != n_epochs_result:
+        return _fail(
+            gate,
+            "LR_SCHEDULE_INVALID",
+            "result.lr_per_epoch",
+            f"lr_per_epoch length {len(lr_per_epoch)} does not match "
+            f"energy_per_epoch length {n_epochs_result}",
+        ), False
+
+    if lr_schedule is None or not isinstance(lr_schedule, dict):
+        # Fixed-lr path: all entries must equal model_config.lr
+        fixed_lr = float(mc["lr"])
+        for i, v in enumerate(lr_per_epoch):
+            expected = round(fixed_lr, 8)
+            if round(float(v), 8) != expected:
+                return _fail(
+                    gate,
+                    "LR_SCHEDULE_INVALID",
+                    f"result.lr_per_epoch[{i}]",
+                    f"lr_per_epoch[{i}]={v} but lr_schedule is null/absent so all "
+                    f"values must equal model_config.lr={fixed_lr}",
+                ), False
+        return _pass(gate, {"mode": "fixed_lr", "lr": fixed_lr,
+                             "n_epochs": n_epochs_result}), True
+
+    # Step-schedule path: validate structure then verify each entry
+    if lr_schedule.get("type") != "step":
+        return _fail(
+            gate,
+            "LR_SCHEDULE_INVALID",
+            "model_config.lr_schedule.type",
+            f"lr_schedule.type must be 'step', got {lr_schedule.get('type')!r}",
+        ), False
+
+    steps = lr_schedule.get("steps", [])
+    if not steps or steps[0].get("epoch") != 1:
+        return _fail(
+            gate,
+            "LR_SCHEDULE_INVALID",
+            "model_config.lr_schedule.steps[0].epoch",
+            "lr_schedule.steps[0].epoch must be 1",
+        ), False
+
+    # Build expected lr list using the same helper as the trainer
+    # n_epochs here is the full configured n_epochs (model_config), but
+    # lr_per_epoch may be shorter if training halted early.  We compute
+    # the full table and slice to len(lr_per_epoch).
+    n_epochs_config = mc["n_epochs"]
+    expected_lrs = _build_lr_lookup(lr_schedule, n_epochs_config, float(mc["lr"]))
+    expected_slice = expected_lrs[:len(lr_per_epoch)]
+
+    for i, (actual, expected) in enumerate(zip(lr_per_epoch, expected_slice)):
+        if round(float(actual), 8) != round(float(expected), 8):
+            return _fail(
+                gate,
+                "LR_SCHEDULE_INVALID",
+                f"result.lr_per_epoch[{i}]",
+                f"lr_per_epoch[{i}]={actual} but schedule says epoch {i+1} "
+                f"should use lr={expected}",
+            ), False
+
+    return _pass(gate, {
+        "mode": "step_schedule",
+        "steps": steps,
+        "n_epochs_checked": len(lr_per_epoch),
+    }), True
+
+
+# ---------------------------------------------------------------------------
 # Top-level validator
 # ---------------------------------------------------------------------------
 
@@ -444,6 +584,11 @@ def validate(cert: Any) -> dict:
     if not ok:
         return {"cert_id": cert_id, "status": "FAIL", "results": results}
 
+    g6, ok = gate6_lr_schedule(cert)
+    results.append(g6)
+    if not ok:
+        return {"cert_id": cert_id, "status": "FAIL", "results": results}
+
     return {"cert_id": cert_id, "status": "PASS", "results": results}
 
 
@@ -454,9 +599,11 @@ def validate(cert: Any) -> dict:
 _FIXTURES_DIR = os.path.join(_DIR, "fixtures")
 
 _SELF_TEST_CASES = [
-    ("valid_orbit_reg_stable_run.json",         "PASS"),
-    ("invalid_regularizer_instability.json",    "FAIL"),
-    ("invalid_trace_mismatch.json",             "FAIL"),
+    ("valid_orbit_reg_stable_run.json",             "PASS"),
+    ("invalid_regularizer_instability.json",        "FAIL"),
+    ("invalid_trace_mismatch.json",                 "FAIL"),
+    ("valid_orbit_reg_lr_decay_stable_run.json",    "PASS"),
+    ("invalid_lr_schedule.json",                    "FAIL"),
 ]
 
 

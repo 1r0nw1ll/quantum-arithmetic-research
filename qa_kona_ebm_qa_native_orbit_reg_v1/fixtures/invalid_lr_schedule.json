@@ -1,0 +1,146 @@
+{
+  "cert_type": "QA_KONA_EBM_QA_NATIVE_ORBIT_REG_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "kona_ebm_orbit_reg_lr_schedule_invalid_001",
+  "issued_utc": "2026-02-18T00:00:00Z",
+  "model_config": {
+    "n_visible": 784,
+    "n_samples": 1000,
+    "n_epochs": 5,
+    "lr": 0.01,
+    "lambda_orbit": 0.001,
+    "seed": 42,
+    "algorithm": "rbm_qa_native_orbit_reg_cd1_numpy",
+    "lr_schedule": {
+      "type": "step",
+      "steps": [
+        {
+          "epoch": 1,
+          "lr": 0.01
+        },
+        {
+          "epoch": 4,
+          "lr": 0.001
+        }
+      ]
+    }
+  },
+  "result": {
+    "status": "CONVERGED",
+    "energy_per_epoch": [
+      -80.219972,
+      -104.991626,
+      -102.02106,
+      -101.484199,
+      -100.82326
+    ],
+    "reconstruction_error_per_epoch": [
+      0.2093,
+      0.157779,
+      0.129812,
+      0.120276,
+      0.119086
+    ],
+    "grad_norm_per_epoch": [
+      26.130369,
+      20.651077,
+      15.804809,
+      13.059416,
+      12.763133
+    ],
+    "reg_norm_per_epoch": [
+      2.480862,
+      2.488548,
+      2.494671,
+      2.497991,
+      2.498546
+    ],
+    "lr_per_epoch": [
+      0.99,
+      0.99,
+      0.99,
+      0.99,
+      0.99
+    ],
+    "final_weights_norm": 6.531928,
+    "reg_trace_hash": "6bbfc82d0243c286dcec934fd59384266bf40ab6eb9c1c72f6188f6e0650622f",
+    "invariant_diff": null,
+    "orbit_analysis": {
+      "orbit_class_alignment": {
+        "COSMOS": [
+          0.649206,
+          0.726352,
+          0.701342,
+          0.727118,
+          0.700222,
+          0.707087,
+          0.747934,
+          0.718723,
+          0.784058,
+          0.77007
+        ],
+        "SATELLITE": [
+          0.643119,
+          0.727373,
+          0.699647,
+          0.727541,
+          0.699095,
+          0.707034,
+          0.744606,
+          0.715208,
+          0.784233,
+          0.769373
+        ],
+        "SINGULARITY": [
+          0.654701,
+          0.732601,
+          0.713033,
+          0.734311,
+          0.719128,
+          0.720038,
+          0.773979,
+          0.733077,
+          0.792349,
+          0.788403
+        ]
+      },
+      "orbit_coherence_score": {
+        "COSMOS": 0.000968,
+        "SATELLITE": 0.00097,
+        "SINGULARITY": 1.0
+      },
+      "orbit_dominant_class": {
+        "COSMOS": 8,
+        "SATELLITE": 8,
+        "SINGULARITY": 8
+      },
+      "orbit_map_hash": "e70c1f27dadb9f516b48c0a276f022194e05a17f30e9685d53979b4cc8a6111b",
+      "coherence_gap_stats": {
+        "COSMOS": {
+          "c_real": 0.000968,
+          "c_perm_mean": 0.000968,
+          "c_perm_std": 0.0,
+          "z_score": -0.847311,
+          "p_value": 0.808383
+        },
+        "SATELLITE": {
+          "c_real": 0.00097,
+          "c_perm_mean": 0.000968,
+          "c_perm_std": 3e-06,
+          "z_score": 0.517912,
+          "p_value": 0.331337
+        },
+        "SINGULARITY": {
+          "c_real": 1.0,
+          "c_perm_mean": 1.0,
+          "c_perm_std": 0.0,
+          "z_score": 0.0,
+          "p_value": 1.0
+        }
+      }
+    }
+  },
+  "trace": {
+    "trace_hash": "138393be9ac51060e8eb068f0a41348e9d8d0513df1c276c47c4f4b43493f67a"
+  }
+}

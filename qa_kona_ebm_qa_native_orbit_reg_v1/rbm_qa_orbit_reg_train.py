@@ -20,6 +20,13 @@ Additional outputs vs family [63]:
   reg_norm_per_epoch : list[float] Frobenius norm of reg gradient across orbit units
   reg_trace_hash     : sha256 of json.dumps(reg_norm_per_epoch, ...)
   trace_hash         : sha256 of json.dumps(energy_per_epoch, ...) only
+  lr_per_epoch       : list[float] actual lr used each epoch (always present)
+
+LR schedule (optional):
+  lr_schedule = {"type": "step", "steps": [{"epoch": 1, "lr": 0.01}, ...]}
+  steps sorted by epoch ascending; first step must have epoch == 1.
+  At each epoch (1-indexed), the lr from the most recent step whose epoch <=
+  current epoch is used.  If lr_schedule is None, all epochs use the fixed lr.
 """
 from __future__ import annotations
 
@@ -28,7 +35,7 @@ import json
 import os
 import struct
 import sys
-from typing import Dict, List
+from typing import Dict, List, Optional
 
 import numpy as np
 
@@ -137,17 +144,88 @@ def compute_coherence_permutation_gap(
     return result
 
 
+def _validate_lr_schedule(lr_schedule: dict) -> None:
+    """Raise ValueError if lr_schedule is malformed."""
+    if not isinstance(lr_schedule, dict):
+        raise ValueError("lr_schedule must be a dict")
+    if lr_schedule.get("type") != "step":
+        raise ValueError(
+            f"lr_schedule.type must be 'step', got {lr_schedule.get('type')!r}"
+        )
+    steps = lr_schedule.get("steps")
+    if not isinstance(steps, list) or len(steps) == 0:
+        raise ValueError("lr_schedule.steps must be a non-empty list")
+    for i, step in enumerate(steps):
+        if not isinstance(step, dict):
+            raise ValueError(f"lr_schedule.steps[{i}] must be a dict")
+        if "epoch" not in step or "lr" not in step:
+            raise ValueError(
+                f"lr_schedule.steps[{i}] must have 'epoch' and 'lr' keys"
+            )
+        if not isinstance(step["epoch"], int) or step["epoch"] < 1:
+            raise ValueError(
+                f"lr_schedule.steps[{i}].epoch must be a positive integer"
+            )
+        if not isinstance(step["lr"], (int, float)) or step["lr"] <= 0:
+            raise ValueError(
+                f"lr_schedule.steps[{i}].lr must be a positive number"
+            )
+    if steps[0]["epoch"] != 1:
+        raise ValueError(
+            f"lr_schedule.steps[0].epoch must be 1, got {steps[0]['epoch']}"
+        )
+
+
+def _build_lr_lookup(lr_schedule: dict, n_epochs: int, default_lr: float) -> List[float]:
+    """
+    Return a list of length n_epochs with the lr to use for each epoch
+    (epoch 1 = index 0).  Steps are sorted ascending by epoch.
+    """
+    steps = sorted(lr_schedule["steps"], key=lambda s: s["epoch"])
+    result = []
+    for ep in range(1, n_epochs + 1):
+        chosen_lr = default_lr
+        for step in steps:
+            if step["epoch"] <= ep:
+                chosen_lr = float(step["lr"])
+            else:
+                break
+        result.append(round(chosen_lr, 8))
+    return result
+
+
 def train_qa_orbit_reg_rbm(
     n_samples: int,
     n_epochs: int,
     lr: float,
     lambda_orbit: float,
     seed: int,
+    lr_schedule: Optional[dict] = None,
 ) -> dict:
     """
     Train QA-indexed RBM with orbit-coherence regularizer.
+
+    Parameters
+    ----------
+    n_samples     : number of MNIST training images to use
+    n_epochs      : number of full passes over the data
+    lr            : base learning rate (used when lr_schedule is None)
+    lambda_orbit  : orbit-coherence regularization strength
+    seed          : RNG seed for reproducibility
+    lr_schedule   : optional step-wise LR schedule dict (see module docstring)
+
+    Returns
+    -------
+    dict with keys including lr_per_epoch (always present).
     Status: CONVERGED | STALLED | GRADIENT_EXPLOSION | REGULARIZER_NUMERIC_INSTABILITY
     """
+    # Validate lr_schedule if provided
+    if lr_schedule is not None:
+        _validate_lr_schedule(lr_schedule)
+        epoch_lrs = _build_lr_lookup(lr_schedule, n_epochs, lr)
+    else:
+        epoch_lrs = [round(lr, 8)] * n_epochs
+
     rng = np.random.default_rng(seed)
 
     images = load_mnist_images(n_samples)
@@ -176,6 +254,7 @@ def train_qa_orbit_reg_rbm(
     recon_error_per_epoch: List[float] = []
     grad_norm_per_epoch: List[float] = []
     reg_norm_per_epoch: List[float] = []
+    lr_per_epoch: List[float] = []
 
     exploded = False
     reg_instability = False
@@ -183,12 +262,15 @@ def train_qa_orbit_reg_rbm(
     _last_recon: List[float] = []
     _last_grad: List[float] = []
     _last_reg: List[float] = []
+    _last_epoch_lr: float = epoch_lrs[0] if epoch_lrs else lr
 
     for epoch in range(n_epochs):
+        current_lr = epoch_lrs[epoch]
         epoch_recon: List[float] = []
         epoch_grad: List[float] = []
         epoch_reg: List[float] = []
         batch_broke = False
+        _last_epoch_lr = current_lr
 
         for b_idx in range(n_batches):
             v0 = images[b_idx * BATCH_SIZE: (b_idx + 1) * BATCH_SIZE]
@@ -204,7 +286,7 @@ def train_qa_orbit_reg_rbm(
             dc_update = np.mean(h0_prob - h1_prob, axis=0)
 
             grad_norm = float(np.linalg.norm(dW, ord="fro"))
-            update_norm = lr * grad_norm
+            update_norm = current_lr * grad_norm
             epoch_grad.append(grad_norm)
             epoch_recon.append(float(np.mean((v0 - v1_prob) ** 2)))
 
@@ -225,13 +307,13 @@ def train_qa_orbit_reg_rbm(
                 mu_orbit = W_orbit.mean(axis=0)
                 reg_grad = W_orbit - mu_orbit
                 batch_reg_sq += float(np.sum(reg_grad * reg_grad))
-                dW[idxs, :] -= lr * lambda_orbit * 2.0 * reg_grad
+                dW[idxs, :] -= current_lr * lambda_orbit * 2.0 * reg_grad
 
             epoch_reg.append(batch_reg_sq ** 0.5)
 
-            W += lr * dW
-            b_vis += lr * db_update
-            c_hid += lr * dc_update
+            W += current_lr * dW
+            b_vis += current_lr * db_update
+            c_hid += current_lr * dc_update
 
             if not (np.isfinite(W).all() and
                     np.isfinite(b_vis).all() and
@@ -250,6 +332,7 @@ def train_qa_orbit_reg_rbm(
         recon_error_per_epoch.append(round(float(np.mean(epoch_recon)), 6))
         grad_norm_per_epoch.append(round(float(np.mean(epoch_grad)), 6))
         reg_norm_per_epoch.append(round(float(np.mean(epoch_reg)) if epoch_reg else 0.0, 6))
+        lr_per_epoch.append(current_lr)
 
     # Status and partial-epoch records on early exit
     if reg_instability:
@@ -261,6 +344,7 @@ def train_qa_orbit_reg_rbm(
         recon_error_per_epoch.append(round(float(np.mean(_last_recon)) if _last_recon else 0.0, 6))
         grad_norm_per_epoch.append(round(float(np.mean(_last_grad)) if _last_grad else 0.0, 6))
         reg_norm_per_epoch.append(round(float(np.mean(_last_reg)) if _last_reg else 0.0, 6))
+        lr_per_epoch.append(_last_epoch_lr)
         status = "REGULARIZER_NUMERIC_INSTABILITY"
     elif exploded:
         try:
@@ -271,6 +355,7 @@ def train_qa_orbit_reg_rbm(
         recon_error_per_epoch.append(round(float(np.mean(_last_recon)) if _last_recon else 0.0, 6))
         grad_norm_per_epoch.append(round(explosion_update_norm, 6))
         reg_norm_per_epoch.append(round(float(np.mean(_last_reg)) if _last_reg else 0.0, 6))
+        lr_per_epoch.append(_last_epoch_lr)
         status = "GRADIENT_EXPLOSION"
     else:
         if len(energy_per_epoch) >= 2 and energy_per_epoch[-1] < energy_per_epoch[0]:
@@ -345,6 +430,7 @@ def train_qa_orbit_reg_rbm(
         "reconstruction_error_per_epoch": recon_error_per_epoch,
         "grad_norm_per_epoch":            grad_norm_per_epoch,
         "reg_norm_per_epoch":             reg_norm_per_epoch,
+        "lr_per_epoch":                   lr_per_epoch,
         "trace_hash":                     trace_hash,
         "reg_trace_hash":                 reg_trace_hash,
         "final_weights_norm":             final_weights_norm,

@@ -113,6 +113,82 @@ initialization and short training regime.
 receptive fields at 5 epochs. The scientific interest is in measuring how coherence
 z-scores scale with λ across 1e-5 / 1e-3 / 1e-1 / 1.0 / 10.0 and longer training.
 
+## Trajectory Analysis (λ=10, 50 epochs)
+
+A 5-seed sweep at λ=10 over 50 epochs reveals consistent three-phase dynamics
+in the COSMOS orbit coherence signal.
+
+### COSMOS Coherence Peak
+
+COSMOS coherence peaks at **epochs 6–7** across all 5 seeds (peak c ≈ 0.000977–0.000979).
+The peak is time-locked and seed-independent: despite different random initializations
+the orbit structure creates a reproducible resonance window in the early training phase.
+
+### Three Training Phases
+
+| Phase | Epochs | Coherence | reg_norm | Description |
+|-------|--------|-----------|----------|-------------|
+| A | 1–7 | Rising | Falling | CD-1 creates initial data structure; regularizer reinforces orbit groupings |
+| B | 7–23 | Falling | Falling | Weight vectors converge toward orbit mean, but activation correlations decay — CD-1 noise scrambles representations even as weights cluster |
+| C | 23+ | Falling | Rising | CD-1 noise fully overcomes regularizer; weights and activations both diverge from orbit structure |
+
+**Phase A**: The regularizer and CD-1 are cooperative. Early weight movement is large,
+orbit pull is strong relative to the noise, and coherence climbs.
+
+**Phase B**: The regularizer continues to reduce reg_norm (weights are clustering),
+but the CD-1 stochastic noise is progressively scrambling the hidden activations.
+Coherence falls even though the weight geometry is still improving.
+
+**Phase C**: reg_norm reverses and increases monotonically, indicating that the
+CD-1 update magnitude has grown large enough to pull individual weights away from
+the orbit mean faster than the regularizer can correct.
+
+### reg_norm Trajectory
+
+The reg_norm minimum of ≈1.84 occurs at **epoch 22–23**, after which it increases
+monotonically, reaching ≈4.5 by epoch 50.
+
+### Dissociation: Weight Convergence ≠ Activation Coherence
+
+The reg_norm minimum (epoch 23) does not coincide with the coherence peak (epoch 7).
+This 16-epoch gap demonstrates that weight-space clustering and activation-space
+coherence are **decoupled quantities** under CD-1 noise. Orbit regularization shapes
+the weight geometry, but whether that geometry expresses as coherent activations depends
+on the current noise level in the contrastive divergence updates.
+
+This is a key finding: a future regularizer design that additionally targets
+activation coherence (rather than weight proximity alone) would need a different
+loss term.
+
+### Gradient Mass Imbalance (v2 Design Note)
+
+The unscaled regularizer gives COSMOS (72 units) **9× the total gradient mass**
+compared to SATELLITE (8 units). This explains why the coherence effect appears
+first and most strongly in COSMOS. A v2 regularizer should normalize gradient
+contribution per orbit by dividing by `|O|`, making the per-unit pull equal across
+orbit types.
+
+## LR Decay Variant (lr_schedule)
+
+Motivated by the three-phase finding, the trainer now supports an optional
+step-wise LR schedule via `model_config.lr_schedule`. The intent is to damp CD-1
+noise onset at the Phase A→B transition (epoch 7–8), extending the coherence peak
+before Phase B decay begins.
+
+**Configuration**: `lr_schedule` is a list of `{"epoch": int, "lr": float}` entries
+specifying the learning rate to apply at that epoch boundary. If absent, a flat lr
+is used (original behavior).
+
+**Gate 6** validates `lr_per_epoch` in the trace against the declared schedule:
+each recorded per-epoch lr must match the schedule value active at that epoch.
+
+New fixtures:
+
+| File | Result | Notes |
+|------|--------|-------|
+| `fixtures/valid_orbit_reg_lr_decay_stable_run.json` | PASS | λ=10, lr drops at epoch 8 |
+| `fixtures/invalid_lr_schedule.json` | FAIL: `LR_SCHEDULE_INVALID` | recorded lr deviates from schedule |
+
 ## Relation to Family [63]
 
 Family [63] is the null-result baseline: standard CD-1 with no regularizer.

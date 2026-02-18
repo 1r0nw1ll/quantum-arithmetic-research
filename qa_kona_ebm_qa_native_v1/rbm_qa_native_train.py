@@ -63,6 +63,73 @@ def _pearson_corr_matrix(X: np.ndarray) -> np.ndarray:
     Xn = Xc / norms
     return Xn.T @ Xn / X.shape[0]
 
+def compute_coherence_permutation_gap(
+    h_probs: np.ndarray,
+    orbit_unit_indices: dict,
+    n_perm: int = 100,
+    perm_seed: int = 0,
+) -> dict:
+    """
+    Permutation gap test for orbit coherence.
+
+    For each orbit type, compute the mean pairwise Pearson correlation among real
+    orbit units (C_real), then compare to C_perm from 100 random permutations of
+    unit->orbit assignment (preserving orbit sizes).
+
+    Returns dict with keys COSMOS, SATELLITE, SINGULARITY, each containing:
+      c_real: float
+      c_perm_mean: float
+      c_perm_std: float
+      z_score: float  (= (c_real - c_perm_mean) / c_perm_std if std > 0 else 0.0)
+      p_value: float  (fraction of permutations where C_perm >= C_real)
+    """
+    rng = np.random.default_rng(perm_seed)
+    n_units = h_probs.shape[1]  # 81
+
+    # Compute C_real per orbit type
+    def mean_pairwise_r(idxs):
+        if len(idxs) < 2:
+            return 1.0
+        sub = h_probs[:, idxs]
+        C = _pearson_corr_matrix(sub)
+        n = len(idxs)
+        off = C.sum() - np.trace(C)
+        return float(off / (n * n - n))
+
+    orbit_types = ["COSMOS", "SATELLITE", "SINGULARITY"]
+    sizes = {ot: len(orbit_unit_indices[ot]) for ot in orbit_types}
+    c_real = {ot: mean_pairwise_r(orbit_unit_indices[ot]) for ot in orbit_types}
+
+    # Permutation loop
+    perm_scores = {ot: [] for ot in orbit_types}
+    all_units = list(range(n_units))
+    for _ in range(n_perm):
+        perm = rng.permutation(all_units).tolist()
+        # Re-assign: COSMOS gets first 72, SATELLITE next 8, SINGULARITY last 1
+        perm_idxs = {
+            "COSMOS":      perm[:sizes["COSMOS"]],
+            "SATELLITE":   perm[sizes["COSMOS"]: sizes["COSMOS"] + sizes["SATELLITE"]],
+            "SINGULARITY": perm[sizes["COSMOS"] + sizes["SATELLITE"]:],
+        }
+        for ot in orbit_types:
+            perm_scores[ot].append(mean_pairwise_r(perm_idxs[ot]))
+
+    result = {}
+    for ot in orbit_types:
+        cr = c_real[ot]
+        ps = perm_scores[ot]
+        pm = float(np.mean(ps))
+        ps_std = float(np.std(ps))
+        z = round((cr - pm) / ps_std, 6) if ps_std > 1e-12 else 0.0
+        pv = round(float(sum(p >= cr for p in ps)) / n_perm, 6)
+        result[ot] = {
+            "c_real":      round(cr, 6),
+            "c_perm_mean": round(pm, 6),
+            "c_perm_std":  round(ps_std, 6),
+            "z_score":     z,
+            "p_value":     pv,
+        }
+    return result
 
 def train_qa_rbm(
     n_samples: int,
@@ -225,11 +292,19 @@ def train_qa_rbm(
     for otype in ["COSMOS", "SATELLITE", "SINGULARITY"]:
         orbit_dominant_class[otype] = int(np.argmax(orbit_class_alignment[otype]))
 
+    # ------------------------------------------------------------------
+    # Permutation gap test for orbit coherence
+    # ------------------------------------------------------------------
+    coherence_gap_stats = compute_coherence_permutation_gap(
+        h_probs, orbit_unit_indices, n_perm=100, perm_seed=seed
+    )
+
     orbit_analysis = {
         "orbit_class_alignment": orbit_class_alignment,
         "orbit_coherence_score": orbit_coherence_score,
         "orbit_dominant_class": orbit_dominant_class,
         "orbit_map_hash": omhash,
+        "coherence_gap_stats": coherence_gap_stats,
     }
 
     return {

@@ -85,7 +85,30 @@
         "SATELLITE": 8,
         "SINGULARITY": 9
       },
-      "orbit_map_hash": "f70c1f27dadb9f516b48c0a276f022194e05a17f30e9685d53979b4cc8a6111b"
+      "orbit_map_hash": "f70c1f27dadb9f516b48c0a276f022194e05a17f30e9685d53979b4cc8a6111b",
+      "coherence_gap_stats": {
+        "COSMOS": {
+          "c_real": 0.000972,
+          "c_perm_mean": 0.000973,
+          "c_perm_std": 0.0,
+          "z_score": -0.943154,
+          "p_value": 0.8
+        },
+        "SATELLITE": {
+          "c_real": 0.000974,
+          "c_perm_mean": 0.000972,
+          "c_perm_std": 3e-06,
+          "z_score": 0.579704,
+          "p_value": 0.3
+        },
+        "SINGULARITY": {
+          "c_real": 1.0,
+          "c_perm_mean": 1.0,
+          "c_perm_std": 0.0,
+          "z_score": 0.0,
+          "p_value": 1.0
+        }
+      }
     }
   },
   "trace": {

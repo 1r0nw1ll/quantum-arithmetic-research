@@ -63,7 +63,8 @@ _REQUIRED_MODEL_CONFIG = ["n_visible", "n_samples", "n_epochs", "lr", "seed", "a
 _REQUIRED_RESULT = ["status", "energy_per_epoch", "reconstruction_error_per_epoch",
                     "grad_norm_per_epoch", "final_weights_norm", "invariant_diff", "orbit_analysis"]
 _REQUIRED_ORBIT_ANALYSIS = ["orbit_class_alignment", "orbit_coherence_score",
-                             "orbit_dominant_class", "orbit_map_hash"]
+                             "orbit_dominant_class", "orbit_map_hash",
+                             "coherence_gap_stats"]
 _ORBIT_TYPES = ["COSMOS", "SATELLITE", "SINGULARITY"]
 _REQUIRED_TRACE = ["trace_hash"]
 _VALID_STATUSES = {"CONVERGED", "STALLED", "GRADIENT_EXPLOSION"}
@@ -278,6 +279,36 @@ def gate3_orbit_map(cert: dict) -> Tuple[dict, bool]:
             "result.orbit_analysis.orbit_map_hash",
             "orbit assignment does not match canonical QA state enumeration",
         ), False
+
+    # Verify coherence_gap_stats present when training did not explode
+    status = cert["result"]["status"]
+    if status != "GRADIENT_EXPLOSION":
+        oa = cert["result"]["orbit_analysis"]
+        cgs = oa.get("coherence_gap_stats")
+        if not isinstance(cgs, dict):
+            return _fail(
+                gate,
+                "MISSING_COHERENCE_GAP_STATS",
+                "result.orbit_analysis.coherence_gap_stats",
+                f"coherence_gap_stats must be present and an object when status is {status!r}",
+            ), False
+        for ot in ["COSMOS", "SATELLITE", "SINGULARITY"]:
+            if ot not in cgs:
+                return _fail(
+                    gate,
+                    "MISSING_COHERENCE_GAP_STATS",
+                    f"result.orbit_analysis.coherence_gap_stats.{ot}",
+                    f"coherence_gap_stats missing orbit type '{ot}'",
+                ), False
+            stat = cgs[ot]
+            for key in ["c_real", "c_perm_mean", "c_perm_std", "z_score", "p_value"]:
+                if key not in stat:
+                    return _fail(
+                        gate,
+                        "MISSING_COHERENCE_GAP_STATS",
+                        f"result.orbit_analysis.coherence_gap_stats.{ot}.{key}",
+                        f"coherence_gap_stats.{ot} missing required key '{key}'",
+                    ), False
 
     return _pass(gate, {"orbit_map_hash": actual_hash}), True
 

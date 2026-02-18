@@ -135,7 +135,8 @@
             "orbit_class_alignment",
             "orbit_coherence_score",
             "orbit_dominant_class",
-            "orbit_map_hash"
+            "orbit_map_hash",
+            "coherence_gap_stats"
           ],
           "properties": {
             "orbit_class_alignment": {
@@ -222,6 +223,26 @@
             "orbit_map_hash": {
               "type": "string",
               "pattern": "^[a-f0-9]{64}$"
+            },
+            "coherence_gap_stats": {
+              "type": "object",
+              "description": "Permutation gap test for orbit coherence (100 permutations, seeded).",
+              "properties": {
+                "COSMOS": {
+                  "$ref": "#/definitions/gap_stat"
+                },
+                "SATELLITE": {
+                  "$ref": "#/definitions/gap_stat"
+                },
+                "SINGULARITY": {
+                  "$ref": "#/definitions/gap_stat"
+                }
+              },
+              "required": [
+                "COSMOS",
+                "SATELLITE",
+                "SINGULARITY"
+              ]
             }
           },
           "additionalProperties": false
@@ -243,5 +264,36 @@
       "additionalProperties": false
     }
   },
-  "additionalProperties": false
+  "additionalProperties": false,
+  "definitions": {
+    "gap_stat": {
+      "type": "object",
+      "properties": {
+        "c_real": {
+          "type": "number"
+        },
+        "c_perm_mean": {
+          "type": "number"
+        },
+        "c_perm_std": {
+          "type": "number"
+        },
+        "z_score": {
+          "type": "number"
+        },
+        "p_value": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      },
+      "required": [
+        "c_real",
+        "c_perm_mean",
+        "c_perm_std",
+        "z_score",
+        "p_value"
+      ]
+    }
+  }
 }

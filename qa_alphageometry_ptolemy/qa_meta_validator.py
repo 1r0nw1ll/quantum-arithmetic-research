@@ -3633,3 +3633,20 @@ if __name__ == "__main__":
     else:
         print(f"[{_gate_id}] Human-tract doc gate: FAIL")
         sys.exit(1)
+
+    # --- Demo smoke test ---
+    _demo_gate_id = _gate_id + 1
+    _demo_repo_root = os.path.normpath(os.path.join(_pkg_dir, ".."))
+    _demo_script = os.path.join(_demo_repo_root, "demos", "qa_family_demo.py")
+    import subprocess as _subprocess
+    _demo_proc = _subprocess.run(
+        [sys.executable, _demo_script, "--all", "--ci"],
+        capture_output=True, text=True, cwd=_demo_repo_root,
+    )
+    if _demo_proc.returncode == 0:
+        print(f"[{_demo_gate_id}] Demo smoke test (--all --ci): PASS")
+    else:
+        print(f"[{_demo_gate_id}] Demo smoke test (--all --ci): FAIL (exit {_demo_proc.returncode})")
+        if _demo_proc.stdout.strip():
+            print(_demo_proc.stdout.strip())
+        sys.exit(1)

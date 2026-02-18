@@ -66,7 +66,7 @@ def _pearson_corr_matrix(X: np.ndarray) -> np.ndarray:
 def compute_coherence_permutation_gap(
     h_probs: np.ndarray,
     orbit_unit_indices: dict,
-    n_perm: int = 100,
+    n_perm: int = 500,
     perm_seed: int = 0,
 ) -> dict:
     """
@@ -121,7 +121,8 @@ def compute_coherence_permutation_gap(
         pm = float(np.mean(ps))
         ps_std = float(np.std(ps))
         z = round((cr - pm) / ps_std, 6) if ps_std > 1e-12 else 0.0
-        pv = round(float(sum(p >= cr for p in ps)) / n_perm, 6)
+        k = sum(p >= cr for p in ps)
+        pv = round((k + 1) / (n_perm + 1), 6)
         result[ot] = {
             "c_real":      round(cr, 6),
             "c_perm_mean": round(pm, 6),
@@ -296,7 +297,7 @@ def train_qa_rbm(
     # Permutation gap test for orbit coherence
     # ------------------------------------------------------------------
     coherence_gap_stats = compute_coherence_permutation_gap(
-        h_probs, orbit_unit_indices, n_perm=100, perm_seed=seed
+        h_probs, orbit_unit_indices, n_perm=500, perm_seed=seed
     )
 
     orbit_analysis = {

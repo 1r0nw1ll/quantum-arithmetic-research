@@ -264,6 +264,32 @@ where `σ̂²_dev` is an effective deviation-noise estimate (capturing both mini
 
 **Stability condition**: orbit coherence contracts iff `κ̂_QA > 0`.
 
+#### Closed-Form Special Case (Family [64])
+
+For the mean-subtraction quadratic regularizer `R(W) = ½|QW|²_F` used in family [64], the deviation subspace Hessian is exactly `H = λ·Q`. The deviation linear map is `A = I − η·H`, and since `Q` is an orthogonal projector, all eigenvalues of `A` on `Im(Q)` are `1 − η·λ`. This gives a **one-line geometric curvature** requiring no probe:
+
+```
+κ̂_QA = 1 − |1 − lr · lambda_orbit|
+```
+
+Stable iff `0 < lr · lambda_orbit < 2`. For the family [64] baseline (lr=0.01, λ=10): `κ̂_QA = 1 − |1 − 0.1| = 0.1` (stable throughout Phase A).
+
+**Gate 3 recomputation** (planned v2): recompute `kappa_hat = 1 − abs(1 − lr * lambda_orbit)` per logged epoch, compare to cert value; fail with `CURVATURE_RECOMPUTE_MISMATCH` on mismatch, `NEGATIVE_GENERATOR_CURVATURE` if `kappa_hat < 0`.
+
+The noise-adjusted form `λ_orbit − 0.5·lr·σ̂²_dev` (requiring a gradient probe) provides additional information about CD-1 noise concentration but is not required for the geometric stability check.
+
+#### Universal Scope
+
+This curvature principle is not family-specific. The decomposition:
+
+```
+Δ_{t+1} = (I − η·H_reg)Δ_t − η·ξ_t
+κ_QA > 0 ⟺ stable attractor
+κ_QA < 0 ⟺ escape / instability permitted
+```
+
+applies to any QA generator pair where one generator is restorative (regularizer) and one is stochastic (CD-k noise, QARM noisy moves, etc.).
+
 This quantity is planned as a Gate-level certified invariant in a future v2 of family [64], with:
 - New failure type: `NEGATIVE_GENERATOR_CURVATURE` (Gate 3: recomputed κ̂ < 0)
 - Supporting types: `CURVATURE_PROBE_MISMATCH`, `CURVATURE_RECOMPUTE_MISMATCH`, `MAX_DEV_SPIKE_ATTESTATION_MISMATCH`

@@ -2707,6 +2707,31 @@ def _validate_kona_ebm_mnist_family_if_present(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_kona_ebm_qa_native_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_KONA_EBM_QA_NATIVE_CERT.v1 family (QA orbit manifold as RBM latent space,
+    orbit alignment analysis, ORBIT_MAP_VIOLATION and TRACE_HASH_MISMATCH obstructions).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_kona_ebm_qa_native_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_kona_ebm_qa_native_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_kona_ebm_qa_native_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -2799,6 +2824,9 @@ FAMILY_SWEEPS = [
     (62, "QA Kona EBM MNIST family",
      _validate_kona_ebm_mnist_family_if_present,
      "schema + validator + fixtures (RBM CD-1, real MNIST training, typed failure algebra)", "62_kona_ebm_mnist", "../qa_kona_ebm_mnist_v1", True),
+    (63, "QA Kona EBM QA-Native family",
+     _validate_kona_ebm_qa_native_family_if_present,
+     "schema + validator + fixtures (QA orbit manifold as latent space, orbit alignment analysis)", "63_kona_ebm_qa_native", "../qa_kona_ebm_qa_native_v1", True),
 ]
 
 

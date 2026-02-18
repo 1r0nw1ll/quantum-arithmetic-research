@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "Documents/QA_MAPPING_PROTOCOL__EBM_REASONING_KONA_PODCAST.v1.json",
+  "ref_sha256": "55cc98814e6b7a12b7e7ffa2598dc86dac9367182a12f7f1f77d1e348f203c09",
+  "scope_note": "QA state manifold (b,e) as RBM latent space. Hidden units indexed by 81 QA states (mod 9). Orbit structure (Cosmos/Satellite/Singularity) tested for alignment with MNIST digit geometry."
+}

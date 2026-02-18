@@ -388,6 +388,125 @@ def demo_rule30(ci_mode=False):
 
 
 # ---------------------------------------------------------------------------
+# QA Kona EBM MNIST family [62]
+# ---------------------------------------------------------------------------
+
+KONA_EBM_VALIDATOR    = "qa_kona_ebm_mnist_v1/validator.py"
+KONA_EBM_PASS_FIXTURE = "qa_kona_ebm_mnist_v1/fixtures/valid_stable_run.json"
+KONA_EBM_FAIL_FIXTURE = "qa_kona_ebm_mnist_v1/fixtures/invalid_gradient_explosion.json"
+KONA_EBM_EXPECTED_FAIL_TYPE = "GRADIENT_EXPLOSION"
+KONA_EBM_PUNCHLINE = (
+    "ML training instability becomes a typed structural obstruction -- "
+    "not 'training diverged', but GRADIENT_EXPLOSION at epoch 0, norm=2298, threshold=1000."
+)
+
+
+def _check_kona_ebm_paths():
+    for p in [KONA_EBM_VALIDATOR, KONA_EBM_PASS_FIXTURE, KONA_EBM_FAIL_FIXTURE]:
+        if not os.path.exists(os.path.join(REPO_ROOT, p)):
+            print(f"  ERROR: missing path {p}")
+            sys.exit(1)
+
+
+def demo_kona_ebm(ci_mode=False):
+    _check_kona_ebm_paths()
+
+    if not ci_mode:
+        print()
+        print("QA Cert Families -- narrated demo runner.")
+        print("Family: QA Kona EBM MNIST [62] -- RBM training on MNIST, deterministic trace.")
+
+    # --- Step 1: PASS -------------------------------------------------------
+    section(1, "Stable training run -- expect PASS", ci_mode)
+
+    fixture_path = os.path.join(REPO_ROOT, KONA_EBM_PASS_FIXTURE)
+    with open(fixture_path) as fh:
+        fixture_data = json.load(fh)
+
+    cert_id = fixture_data.get("cert_id", "(not found)")
+    trace_hash = fixture_data.get("trace", {}).get("trace_hash", "")
+    cert_label = "cert_sha256" if (isinstance(trace_hash, str) and len(trace_hash) == 64) else "cert_id"
+    cert_display = trace_hash if cert_label == "cert_sha256" else cert_id
+
+    _rc, stdout, _stderr, err_ind = run_validator(
+        [KONA_EBM_VALIDATOR, KONA_EBM_PASS_FIXTURE, "--json"],
+        expect_pass=True, ci_mode=ci_mode,
+    )
+
+    if ci_mode:
+        if err_ind == "PASS_EXPECTED_BUT_FAILED":
+            return False, "PASS fixture failed"
+    else:
+        print(f"  Fixture   : {KONA_EBM_PASS_FIXTURE}")
+        print(f"  Result    : {LABEL_PASS}")
+        print(f"  cert_id   : {cert_id}")
+        print(f"  {cert_label}: {cert_display}")
+        # Show energy curve summary
+        energy = fixture_data.get("result", {}).get("energy_per_epoch", [])
+        if energy:
+            print(f"  energy    : {energy[0]:.4f} → {energy[-1]:.4f} (CONVERGED)")
+
+    # --- Step 2: FAIL (GRADIENT_EXPLOSION) ----------------------------------
+    section(2, "Gradient explosion fixture -- expect FAIL (GRADIENT_EXPLOSION)", ci_mode)
+
+    _rc2, stdout2, _stderr2, err_ind2 = run_validator(
+        [KONA_EBM_VALIDATOR, KONA_EBM_FAIL_FIXTURE, "--json"],
+        expect_pass=False, ci_mode=ci_mode,
+    )
+
+    if ci_mode:
+        if err_ind2 == "FAIL_EXPECTED_BUT_PASSED":
+            return False, "FAIL fixture unexpectedly passed"
+        # Extract fail_type from JSON output
+        fail_type = None
+        try:
+            parsed = json.loads(stdout2.strip())
+            for gate in parsed.get("results", []):
+                if gate.get("status") == "FAIL":
+                    fail_type = gate.get("details", {}).get("invariant_diff", {}).get("fail_type")
+                    break
+        except (json.JSONDecodeError, AttributeError):
+            pass
+        if fail_type != KONA_EBM_EXPECTED_FAIL_TYPE:
+            return False, f"expected fail_type={KONA_EBM_EXPECTED_FAIL_TYPE!r}, got {fail_type!r}"
+        return True, None
+    else:
+        print(f"  Fixture  : {KONA_EBM_FAIL_FIXTURE}")
+        print(f"  Result   : {LABEL_FAIL}")
+        parsed = None
+        try:
+            for chunk in stdout2.strip().split("\n\n"):
+                try:
+                    parsed = json.loads(chunk.strip())
+                    break
+                except json.JSONDecodeError:
+                    pass
+            if parsed is None:
+                parsed = json.loads(stdout2.strip())
+        except json.JSONDecodeError:
+            pass
+        if parsed is not None:
+            for gate in parsed.get("results", []):
+                if gate.get("status") == "FAIL":
+                    details = gate.get("details", {})
+                    inv_diff = details.get("invariant_diff", details)
+                    print("  invariant_diff:")
+                    for line in json.dumps(inv_diff, indent=4).splitlines():
+                        print(f"    {line}")
+                    break
+        else:
+            print(f"  stdout: {stdout2.strip()[:400]}")
+
+    # --- Step 3: Summary ----------------------------------------------------
+    section(3, "Summary", ci_mode)
+    if not ci_mode:
+        print("  Family [62] certifies: RBM training on MNIST with deterministic trace and typed failure algebra.")
+        print("  Structural obstructions caught: GRADIENT_EXPLOSION, TRACE_HASH_MISMATCH.")
+        print(f"  Punchline: {KONA_EBM_PUNCHLINE}")
+        print()
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -399,7 +518,7 @@ def main():
     )
     parser.add_argument(
         "--family",
-        choices=["geogebra", "rule30"],
+        choices=["geogebra", "rule30", "kona_ebm"],
         help="Which cert family to demo.",
     )
     parser.add_argument(
@@ -433,8 +552,9 @@ def main():
             print("QA Cert Family Demo -- running all families")
 
         families = [
-            ("geogebra", demo_geogebra),
-            ("rule30",   demo_rule30),
+            ("geogebra",  demo_geogebra),
+            ("rule30",    demo_rule30),
+            ("kona_ebm",  demo_kona_ebm),
         ]
 
         if ci_mode:
@@ -459,8 +579,9 @@ def main():
     else:
         # Single family mode
         family_map = {
-            "geogebra": demo_geogebra,
-            "rule30":   demo_rule30,
+            "geogebra":  demo_geogebra,
+            "rule30":    demo_rule30,
+            "kona_ebm":  demo_kona_ebm,
         }
         fn = family_map[args.family]
 

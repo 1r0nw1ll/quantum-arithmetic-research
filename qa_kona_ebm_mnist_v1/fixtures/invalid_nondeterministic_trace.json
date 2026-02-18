@@ -1,0 +1,44 @@
+{
+  "cert_type": "QA_KONA_EBM_MNIST_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "kona_ebm_mnist_tampered_hash_001",
+  "issued_utc": "2026-02-17T00:00:00Z",
+  "model_config": {
+    "n_visible": 784,
+    "n_hidden": 64,
+    "n_samples": 1000,
+    "n_epochs": 5,
+    "lr": 0.01,
+    "seed": 42,
+    "algorithm": "rbm_cd1_numpy"
+  },
+  "result": {
+    "status": "CONVERGED",
+    "energy_per_epoch": [
+      -65.38211,
+      -93.212418,
+      -93.927437,
+      -87.834419,
+      -82.311173
+    ],
+    "reconstruction_error_per_epoch": [
+      0.216109,
+      0.168283,
+      0.13762,
+      0.121809,
+      0.113464
+    ],
+    "grad_norm_per_epoch": [
+      23.690301,
+      20.32931,
+      16.30342,
+      12.534187,
+      10.075865
+    ],
+    "final_weights_norm": 7.825239,
+    "invariant_diff": null
+  },
+  "trace": {
+    "trace_hash": "eca08ff656b4001f850ecfbd7f97ccf961475d11adb04f38c4ea07d68720d050"
+  }
+}

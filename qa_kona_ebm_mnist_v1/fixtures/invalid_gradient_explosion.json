@@ -1,0 +1,36 @@
+{
+  "cert_type": "QA_KONA_EBM_MNIST_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "kona_ebm_mnist_explosion_001",
+  "issued_utc": "2026-02-17T00:00:00Z",
+  "model_config": {
+    "n_visible": 784,
+    "n_hidden": 64,
+    "n_samples": 1000,
+    "n_epochs": 5,
+    "lr": 50.0,
+    "seed": 42,
+    "algorithm": "rbm_cd1_numpy"
+  },
+  "result": {
+    "status": "GRADIENT_EXPLOSION",
+    "energy_per_epoch": [
+      -44.718396
+    ],
+    "reconstruction_error_per_epoch": [
+      0.249972
+    ],
+    "grad_norm_per_epoch": [
+      2298.719282
+    ],
+    "final_weights_norm": 2.246457,
+    "invariant_diff": {
+      "fail_type": "GRADIENT_EXPLOSION",
+      "target_path": "result.grad_norm_per_epoch[0]",
+      "reason": "gradient norm exceeded threshold 1000.0 \u2014 training unstable under lr=50.0"
+    }
+  },
+  "trace": {
+    "trace_hash": "2abb15a95961d8370a027e9c604e8d12587f34aec8024ae30020a927c8ddfa9b"
+  }
+}

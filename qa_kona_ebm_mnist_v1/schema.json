@@ -1,0 +1,153 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_KONA_EBM_MNIST_CERT.v1",
+  "type": "object",
+  "required": [
+    "cert_type",
+    "schema_version",
+    "cert_id",
+    "issued_utc",
+    "model_config",
+    "result",
+    "trace"
+  ],
+  "properties": {
+    "cert_type": {
+      "type": "string",
+      "const": "QA_KONA_EBM_MNIST_CERT.v1"
+    },
+    "schema_version": {
+      "type": "integer",
+      "const": 1
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "issued_utc": {
+      "type": "string",
+      "minLength": 1
+    },
+    "model_config": {
+      "type": "object",
+      "required": [
+        "n_visible",
+        "n_hidden",
+        "n_samples",
+        "n_epochs",
+        "lr",
+        "seed",
+        "algorithm"
+      ],
+      "properties": {
+        "n_visible": {
+          "type": "integer"
+        },
+        "n_hidden": {
+          "type": "integer"
+        },
+        "n_samples": {
+          "type": "integer"
+        },
+        "n_epochs": {
+          "type": "integer"
+        },
+        "lr": {
+          "type": "number"
+        },
+        "seed": {
+          "type": "integer"
+        },
+        "algorithm": {
+          "type": "string",
+          "const": "rbm_cd1_numpy"
+        }
+      },
+      "additionalProperties": false
+    },
+    "result": {
+      "type": "object",
+      "required": [
+        "status",
+        "energy_per_epoch",
+        "reconstruction_error_per_epoch",
+        "grad_norm_per_epoch",
+        "final_weights_norm",
+        "invariant_diff"
+      ],
+      "properties": {
+        "status": {
+          "type": "string",
+          "enum": [
+            "CONVERGED",
+            "STALLED",
+            "GRADIENT_EXPLOSION"
+          ]
+        },
+        "energy_per_epoch": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "reconstruction_error_per_epoch": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "grad_norm_per_epoch": {
+          "type": "array",
+          "items": {
+            "type": "number"
+          }
+        },
+        "final_weights_norm": {
+          "type": "number"
+        },
+        "invariant_diff": {
+          "oneOf": [
+            {
+              "type": "null"
+            },
+            {
+              "type": "object",
+              "required": [
+                "fail_type",
+                "target_path",
+                "reason"
+              ],
+              "properties": {
+                "fail_type": {
+                  "type": "string"
+                },
+                "target_path": {
+                  "type": "string"
+                },
+                "reason": {
+                  "type": "string"
+                }
+              },
+              "additionalProperties": false
+            }
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "trace": {
+      "type": "object",
+      "required": [
+        "trace_hash"
+      ],
+      "properties": {
+        "trace_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

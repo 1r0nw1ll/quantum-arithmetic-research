@@ -2683,6 +2683,30 @@ def _validate_threejs_scene_adapter_family_if_present(base_dir: str) -> Optional
     return None
 
 
+def _validate_kona_ebm_mnist_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_KONA_EBM_MNIST_CERT.v1 family (RBM CD-1 on MNIST, deterministic trace, typed failure algebra).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_kona_ebm_mnist_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_kona_ebm_mnist_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_kona_ebm_mnist_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -2772,6 +2796,9 @@ FAMILY_SWEEPS = [
     (56, "QA GeoGebra Scene Adapter family",
      _validate_geogebra_scene_adapter_family_if_present,
      "schema + validator + fixtures (exact substrate, Z/Q typed coords)", "56_geogebra_scene_adapter_exact", "../qa_geogebra_scene_adapter_v1", True),
+    (62, "QA Kona EBM MNIST family",
+     _validate_kona_ebm_mnist_family_if_present,
+     "schema + validator + fixtures (RBM CD-1, real MNIST training, typed failure algebra)", "62_kona_ebm_mnist", "../qa_kona_ebm_mnist_v1", True),
 ]
 
 

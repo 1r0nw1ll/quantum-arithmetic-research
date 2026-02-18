@@ -65,10 +65,18 @@ def build_cert(cert_id: str, run: dict) -> dict:
             "reconstruction_error_per_epoch":  run["reconstruction_error_per_epoch"],
             "grad_norm_per_epoch":             run["grad_norm_per_epoch"],
             "reg_norm_per_epoch":              run["reg_norm_per_epoch"],
+            "lr_per_epoch":                    run["lr_per_epoch"],
             "final_weights_norm":              run["final_weights_norm"],
             "reg_trace_hash":                  run["reg_trace_hash"],
             "invariant_diff":                  invariant_diff,
             "orbit_analysis":                  run["orbit_analysis"],
+            "generator_curvature": {
+                "definition":         "kappa_hat = 1 - abs(1 - lr * lambda_orbit)",
+                "kappa_hat_per_epoch": run["kappa_hat_per_epoch"],
+                "min_kappa_hat":      run["min_kappa_hat"],
+                "min_kappa_epoch":    run["min_kappa_epoch"],
+                "kappa_hash":         run["kappa_hash"],
+            },
         },
         "trace": {
             "trace_hash": run["trace_hash"],

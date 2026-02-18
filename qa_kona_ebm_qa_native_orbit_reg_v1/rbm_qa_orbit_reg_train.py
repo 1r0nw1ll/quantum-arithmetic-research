@@ -368,6 +368,22 @@ def train_qa_orbit_reg_rbm(
     reg_payload = json.dumps(reg_norm_per_epoch, separators=(",", ":")).encode()
     reg_trace_hash = hashlib.sha256(reg_payload).hexdigest()
     final_weights_norm = round(float(np.linalg.norm(W, ord="fro")), 6)
+    kappa_hat_per_epoch: List[float] = [
+        round(1.0 - abs(1.0 - lr_ep * lambda_orbit), 8)
+        for lr_ep in lr_per_epoch
+    ]
+    if kappa_hat_per_epoch:
+        _kappa_min = min(kappa_hat_per_epoch)
+        min_kappa_hat = round(_kappa_min, 8)
+        min_kappa_epoch = next(
+            i + 1 for i, v in enumerate(kappa_hat_per_epoch)
+            if round(v, 8) == round(_kappa_min, 8)
+        )
+    else:
+        min_kappa_hat = 0.0
+        min_kappa_epoch = 0
+    kappa_payload = json.dumps(kappa_hat_per_epoch, separators=(",", ":")).encode()
+    kappa_hash = hashlib.sha256(kappa_payload).hexdigest()
 
     # Orbit analysis
     n_analysis = min(1000, n_samples)
@@ -436,6 +452,10 @@ def train_qa_orbit_reg_rbm(
         "final_weights_norm":             final_weights_norm,
         "status":                         status,
         "orbit_analysis":                 orbit_analysis,
+        "kappa_hat_per_epoch":            kappa_hat_per_epoch,
+        "min_kappa_hat":                  min_kappa_hat,
+        "min_kappa_epoch":                min_kappa_epoch,
+        "kappa_hash":                     kappa_hash,
     }
 
 

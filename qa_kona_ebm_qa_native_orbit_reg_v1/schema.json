@@ -65,21 +65,38 @@
         },
         "lr_schedule": {
           "oneOf": [
-            {"type": "null"},
+            {
+              "type": "null"
+            },
             {
               "type": "object",
-              "required": ["type", "steps"],
+              "required": [
+                "type",
+                "steps"
+              ],
               "properties": {
-                "type": {"type": "string", "const": "step"},
+                "type": {
+                  "type": "string",
+                  "const": "step"
+                },
                 "steps": {
                   "type": "array",
                   "minItems": 1,
                   "items": {
                     "type": "object",
-                    "required": ["epoch", "lr"],
+                    "required": [
+                      "epoch",
+                      "lr"
+                    ],
                     "properties": {
-                      "epoch": {"type": "integer", "minimum": 1},
-                      "lr": {"type": "number", "exclusiveMinimum": 0}
+                      "epoch": {
+                        "type": "integer",
+                        "minimum": 1
+                      },
+                      "lr": {
+                        "type": "number",
+                        "exclusiveMinimum": 0
+                      }
                     },
                     "additionalProperties": false
                   }
@@ -141,7 +158,9 @@
         },
         "lr_per_epoch": {
           "type": "array",
-          "items": {"type": "number"}
+          "items": {
+            "type": "number"
+          }
         },
         "final_weights_norm": {
           "type": "number"
@@ -291,6 +310,39 @@
                   "$ref": "#/definitions/gap_stat"
                 }
               }
+            }
+          },
+          "additionalProperties": false
+        },
+        "generator_curvature": {
+          "type": "object",
+          "required": [
+            "definition",
+            "kappa_hat_per_epoch",
+            "min_kappa_hat",
+            "min_kappa_epoch",
+            "kappa_hash"
+          ],
+          "properties": {
+            "definition": {
+              "type": "string"
+            },
+            "kappa_hat_per_epoch": {
+              "type": "array",
+              "items": {
+                "type": "number"
+              }
+            },
+            "min_kappa_hat": {
+              "type": "number"
+            },
+            "min_kappa_epoch": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "kappa_hash": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
             }
           },
           "additionalProperties": false

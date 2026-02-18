@@ -1,0 +1,128 @@
+{
+  "cert_type": "QA_KONA_EBM_QA_NATIVE_ORBIT_REG_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "kona_ebm_orbit_reg_neg_kappa_001",
+  "issued_utc": "2026-02-18T23:37:25Z",
+  "model_config": {
+    "n_visible": 784,
+    "n_samples": 1000,
+    "n_epochs": 2,
+    "lr": 0.5,
+    "lambda_orbit": 5.0,
+    "seed": 7,
+    "algorithm": "rbm_qa_native_orbit_reg_cd1_numpy"
+  },
+  "result": {
+    "status": "CONVERGED",
+    "energy_per_epoch": [
+      -429.87704,
+      -Infinity
+    ],
+    "reconstruction_error_per_epoch": [
+      0.158905,
+      0.852388
+    ],
+    "grad_norm_per_epoch": [
+      20.194506,
+      138.10954
+    ],
+    "reg_norm_per_epoch": [
+      31.420296,
+      2657.465401
+    ],
+    "lr_per_epoch": [
+      0.5,
+      0.5
+    ],
+    "final_weights_norm": 13821.287402,
+    "reg_trace_hash": "1b1cd9c3a0e21ef2e73868610914eddcc3aff9a1d314e49588304bb21f4a739c",
+    "invariant_diff": null,
+    "orbit_analysis": {
+      "orbit_class_alignment": {
+        "COSMOS": [
+          0.41337,
+          0.436476,
+          0.42759,
+          0.43211,
+          0.441025,
+          0.440518,
+          0.433104,
+          0.439512,
+          0.428779,
+          0.440765
+        ],
+        "SATELLITE": [
+          0.490979,
+          0.480214,
+          0.487373,
+          0.489247,
+          0.473664,
+          0.480978,
+          0.484805,
+          0.479812,
+          0.488017,
+          0.476751
+        ],
+        "SINGULARITY": [
+          0.995286,
+          1.0,
+          1.0,
+          1.0,
+          0.990476,
+          1.0,
+          1.0,
+          0.991458,
+          1.0,
+          1.0
+        ]
+      },
+      "orbit_coherence_score": {
+        "COSMOS": 1e-06,
+        "SATELLITE": -2e-06,
+        "SINGULARITY": 1.0
+      },
+      "orbit_dominant_class": {
+        "COSMOS": 4,
+        "SATELLITE": 0,
+        "SINGULARITY": 1
+      },
+      "orbit_map_hash": "e70c1f27dadb9f516b48c0a276f022194e05a17f30e9685d53979b4cc8a6111b",
+      "coherence_gap_stats": {
+        "COSMOS": {
+          "c_real": 1e-06,
+          "c_perm_mean": 0.0,
+          "c_perm_std": 0.0,
+          "z_score": 2.460391,
+          "p_value": 0.013972
+        },
+        "SATELLITE": {
+          "c_real": -2e-06,
+          "c_perm_mean": 1e-06,
+          "c_perm_std": 3e-06,
+          "z_score": -1.010441,
+          "p_value": 0.908184
+        },
+        "SINGULARITY": {
+          "c_real": 1.0,
+          "c_perm_mean": 1.0,
+          "c_perm_std": 0.0,
+          "z_score": 0.0,
+          "p_value": 1.0
+        }
+      }
+    },
+    "generator_curvature": {
+      "definition": "kappa_hat = 1 - abs(1 - lr * lambda_orbit)",
+      "kappa_hat_per_epoch": [
+        -0.5,
+        -0.5
+      ],
+      "min_kappa_hat": -0.5,
+      "min_kappa_epoch": 1,
+      "kappa_hash": "88f3ff6a1ed93dd6ae411334ec0f47ecee9edfc4e080546a04034caa647929a9"
+    }
+  },
+  "trace": {
+    "trace_hash": "5f06edf56734106e7114b87f635de88f7154df78428609ab42190003af952eb5"
+  }
+}

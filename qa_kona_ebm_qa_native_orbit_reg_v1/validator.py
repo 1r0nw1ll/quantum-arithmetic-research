@@ -9,6 +9,11 @@ Six gates:
   Gate 2 -- Config sanity: n_visible==784, ranges, lr > 0, lambda_orbit >= 0
   Gate 3 -- Orbit map integrity: recompute orbit_map_hash, verify match.
              Also verifies coherence_gap_stats present.
+             If result.generator_curvature is present: recomputes
+             kappa_hat_per_epoch = [1-|1-lr_ep*lambda_orbit| for each epoch],
+             checks kappa_hash, min_kappa_hat/epoch consistency, and fails
+             NEGATIVE_GENERATOR_CURVATURE if any recomputed kappa < 0, or
+             CURVATURE_RECOMPUTE_MISMATCH if values don't match cert.
   Gate 4 -- Deterministic replay: re-run train_qa_orbit_reg_rbm, verify
              trace_hash, reg_trace_hash, and status.
   Gate 5 -- Invariant_diff contract:
@@ -34,6 +39,7 @@ CLI:
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import os
 import sys
@@ -383,6 +389,75 @@ def gate3_orbit_map(cert: dict) -> Tuple[dict, bool]:
                         f"coherence_gap_stats.{ot} missing required key '{key}'",
                     ), False
 
+    # --- Curvature invariant check (conditional on generator_curvature present) ---
+    gc = cert["result"].get("generator_curvature")
+    if gc is not None:
+        import hashlib as _hashlib
+        lambda_orbit = cert["model_config"]["lambda_orbit"]
+        lpe = cert["result"].get("lr_per_epoch")
+        if not lpe:
+            n_ep = len(cert["result"]["energy_per_epoch"])
+            lpe = [float(cert["model_config"]["lr"])] * n_ep
+
+        recomputed = [round(1.0 - abs(1.0 - float(lr_ep) * lambda_orbit), 8)
+                      for lr_ep in lpe]
+
+        # Check kappa_hash
+        kappa_payload = json.dumps(recomputed, separators=(",", ":")).encode()
+        recomputed_hash = _hashlib.sha256(kappa_payload).hexdigest()
+        if recomputed_hash != gc.get("kappa_hash", ""):
+            return _fail(
+                gate, "CURVATURE_RECOMPUTE_MISMATCH",
+                "result.generator_curvature.kappa_hash",
+                f"recomputed kappa_hash {recomputed_hash} != cert {gc.get('kappa_hash')}",
+            ), False
+
+        # Check individual values
+        cert_kappas = gc.get("kappa_hat_per_epoch", [])
+        if len(cert_kappas) != len(recomputed):
+            return _fail(
+                gate, "CURVATURE_RECOMPUTE_MISMATCH",
+                "result.generator_curvature.kappa_hat_per_epoch",
+                f"length mismatch: cert={len(cert_kappas)} recomputed={len(recomputed)}",
+            ), False
+        for i, (ck, rk) in enumerate(zip(cert_kappas, recomputed)):
+            if round(float(ck), 8) != rk:
+                return _fail(
+                    gate, "CURVATURE_RECOMPUTE_MISMATCH",
+                    f"result.generator_curvature.kappa_hat_per_epoch[{i}]",
+                    f"cert={ck} recomputed={rk} at epoch {i+1}",
+                ), False
+
+        # Check for negative curvature (structural instability)
+        for i, k in enumerate(recomputed):
+            if k < 0.0:
+                lr_ep = float(lpe[i])
+                return _fail(
+                    gate, "NEGATIVE_GENERATOR_CURVATURE",
+                    f"result.generator_curvature.kappa_hat_per_epoch[{i}]",
+                    f"kappa_hat={k} < 0 at epoch {i+1}: "
+                    f"lr*lambda_orbit={lr_ep*lambda_orbit:.6f} > 2 "
+                    f"(lr={lr_ep}, lambda_orbit={lambda_orbit})",
+                ), False
+
+        # Check min_kappa_hat and min_kappa_epoch
+        actual_min = min(recomputed)
+        actual_min_ep = next(
+            i + 1 for i, v in enumerate(recomputed) if v == actual_min
+        )
+        if round(float(gc.get("min_kappa_hat", 0)), 8) != round(actual_min, 8):
+            return _fail(
+                gate, "CURVATURE_RECOMPUTE_MISMATCH",
+                "result.generator_curvature.min_kappa_hat",
+                f"cert={gc.get('min_kappa_hat')} recomputed={actual_min}",
+            ), False
+        if gc.get("min_kappa_epoch") != actual_min_ep:
+            return _fail(
+                gate, "CURVATURE_RECOMPUTE_MISMATCH",
+                "result.generator_curvature.min_kappa_epoch",
+                f"cert={gc.get('min_kappa_epoch')} recomputed={actual_min_ep}",
+            ), False
+
     return _pass(gate, {"orbit_map_hash": actual_hash}), True
 
 
@@ -414,6 +489,20 @@ def gate4_replay(cert: dict) -> Tuple[dict, bool]:
     if actual_reg_hash != expected_reg_hash:
         return _fail(gate, "TRACE_HASH_MISMATCH", "result.reg_trace_hash",
                      "deterministic replay produced different reg_trace_hash"), False
+
+    gc = cert["result"].get("generator_curvature")
+    if gc is not None:
+        import hashlib as _hashlib
+        lambda_orbit = cert["model_config"]["lambda_orbit"]
+        replayed_lpe = replayed.get("lr_per_epoch", [])
+        recomputed_kappas = [round(1.0 - abs(1.0 - float(lr_ep) * lambda_orbit), 8)
+                             for lr_ep in replayed_lpe]
+        kappa_payload = json.dumps(recomputed_kappas, separators=(",", ":")).encode()
+        replayed_kappa_hash = _hashlib.sha256(kappa_payload).hexdigest()
+        if replayed_kappa_hash != gc.get("kappa_hash", ""):
+            return _fail(gate, "TRACE_HASH_MISMATCH",
+                         "result.generator_curvature.kappa_hash",
+                         "kappa_hash from replay does not match cert"), False
 
     if cert["result"]["status"] != replayed["status"]:
         return _fail(gate, "TRACE_HASH_MISMATCH", "result.status",
@@ -604,6 +693,8 @@ _SELF_TEST_CASES = [
     ("invalid_trace_mismatch.json",                 "FAIL"),
     ("valid_orbit_reg_lr_decay_stable_run.json",    "PASS"),
     ("invalid_lr_schedule.json",                    "FAIL"),
+    ("valid_orbit_reg_kappa_stable.json",           "PASS"),
+    ("invalid_negative_generator_curvature.json",   "FAIL"),
 ]
 
 

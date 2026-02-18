@@ -330,23 +330,33 @@ def validate_cert(cert: Dict[str, Any], schema_dir: str) -> List[GateResult]:
             results.append(_fail("gate_3_typed_formation", "Triangle must have 3 vertices",
                                  {"fail_type": "TYPED_FORMATION_ERROR"}))
             return results
-        for v in verts:
+        oid = o["object_id"]
+        for vi, v in enumerate(verts):
             coord = v.get("coord", [])
             if not isinstance(coord, list) or len(coord) != 3:
                 results.append(_fail("gate_3_typed_formation", "Vertex coord must be length-3",
-                                     {"fail_type": "TYPED_FORMATION_ERROR"}))
+                                     {"fail_type": "TYPED_FORMATION_ERROR",
+                                      "object_id": oid,
+                                      "target_path": f"derivation.parsed_objects[{oid}].vertices[{vi}].coord"}))
                 return results
-            for c in coord:
+            for ci, c in enumerate(coord):
+                tp = f"derivation.parsed_objects[{oid}].vertices[{vi}].coord[{ci}]"
                 if not (_is_coord_Z(c) or _is_coord_Q(c)):
                     results.append(_fail("gate_3_typed_formation",
                                          "Coordinate is not Z or Q rational pair",
                                          {"fail_type": "NON_RATIONAL_COORDINATE",
+                                          "reason": "INVALID_COORDINATE_TYPE",
+                                          "object_id": oid,
+                                          "target_path": tp,
                                           "bad_coord": c}))
                     return results
                 if isinstance(c, dict) and c.get("k") == "Q" and int(c.get("d", 1)) == 0:
                     results.append(_fail("gate_3_typed_formation",
                                          "Zero denominator in rational coordinate",
                                          {"fail_type": "ZERO_DENOMINATOR",
+                                          "reason": "RATIONAL_PAIR_DENOMINATOR_ZERO",
+                                          "object_id": oid,
+                                          "target_path": tp,
                                           "bad_coord": c}))
                     return results
 

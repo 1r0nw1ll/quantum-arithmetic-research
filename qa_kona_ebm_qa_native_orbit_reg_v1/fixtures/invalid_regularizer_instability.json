@@ -1,0 +1,122 @@
+{
+  "cert_type": "QA_KONA_EBM_QA_NATIVE_ORBIT_REG_CERT.v1",
+  "schema_version": 1,
+  "cert_id": "kona_ebm_orbit_reg_instability_001",
+  "issued_utc": "2026-02-18T13:58:42Z",
+  "model_config": {
+    "n_visible": 784,
+    "n_samples": 1000,
+    "n_epochs": 5,
+    "lr": 1.0,
+    "lambda_orbit": 1000000000000000.0,
+    "seed": 42,
+    "algorithm": "rbm_qa_native_orbit_reg_cd1_numpy"
+  },
+  "result": {
+    "status": "REGULARIZER_NUMERIC_INSTABILITY",
+    "energy_per_epoch": [
+      -Infinity,
+      -Infinity,
+      NaN
+    ],
+    "reconstruction_error_per_epoch": [
+      0.453065,
+      0.475491,
+      0.474298
+    ],
+    "grad_norm_per_epoch": [
+      66.098113,
+      67.68119,
+      66.489735
+    ],
+    "reg_norm_per_epoch": [
+      1.2692986923032372e+137,
+      Infinity,
+      Infinity
+    ],
+    "final_weights_norm": Infinity,
+    "reg_trace_hash": "9b5eeb57dab99c45210e2a59ab30584125263526e5d030a44c0f296d67e2212f",
+    "invariant_diff": {
+      "fail_type": "REGULARIZER_NUMERIC_INSTABILITY",
+      "target_path": "result.status",
+      "reason": "NaN/Inf detected in model parameters during regularized training"
+    },
+    "orbit_analysis": {
+      "orbit_class_alignment": {
+        "COSMOS": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        "SATELLITE": [
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN,
+          NaN
+        ],
+        "SINGULARITY": [
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0,
+          1.0
+        ]
+      },
+      "orbit_coherence_score": {
+        "COSMOS": NaN,
+        "SATELLITE": NaN,
+        "SINGULARITY": 1.0
+      },
+      "orbit_dominant_class": {
+        "COSMOS": 0,
+        "SATELLITE": 0,
+        "SINGULARITY": 0
+      },
+      "orbit_map_hash": "e70c1f27dadb9f516b48c0a276f022194e05a17f30e9685d53979b4cc8a6111b",
+      "coherence_gap_stats": {
+        "COSMOS": {
+          "c_real": NaN,
+          "c_perm_mean": NaN,
+          "c_perm_std": NaN,
+          "z_score": 0.0,
+          "p_value": 0.001996
+        },
+        "SATELLITE": {
+          "c_real": NaN,
+          "c_perm_mean": NaN,
+          "c_perm_std": NaN,
+          "z_score": 0.0,
+          "p_value": 0.001996
+        },
+        "SINGULARITY": {
+          "c_real": 1.0,
+          "c_perm_mean": 1.0,
+          "c_perm_std": 0.0,
+          "z_score": 0.0,
+          "p_value": 1.0
+        }
+      }
+    }
+  },
+  "trace": {
+    "trace_hash": "f3edece556c9d37d13784faa8816b6ff7cd847cbabfbeefdcd967dd65f9196c1"
+  }
+}

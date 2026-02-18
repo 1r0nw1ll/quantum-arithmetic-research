@@ -507,6 +507,117 @@ def demo_kona_ebm(ci_mode=False):
 
 
 # ---------------------------------------------------------------------------
+# QA Kona EBM QA-Native Orbit Reg family [64]
+# ---------------------------------------------------------------------------
+
+KONA_EBM_REG_VALIDATOR    = "qa_kona_ebm_qa_native_orbit_reg_v1/validator.py"
+KONA_EBM_REG_PASS_FIXTURE = "qa_kona_ebm_qa_native_orbit_reg_v1/fixtures/valid_orbit_reg_stable_run.json"
+KONA_EBM_REG_FAIL_FIXTURE = "qa_kona_ebm_qa_native_orbit_reg_v1/fixtures/invalid_regularizer_instability.json"
+KONA_EBM_REG_EXPECTED_FAIL_TYPE = "REGULARIZER_NUMERIC_INSTABILITY"
+KONA_EBM_REG_PUNCHLINE = (
+    "Orbit-coherence regularizer failures become typed structural obstructions -- "
+    "not 'NaN weights', but REGULARIZER_NUMERIC_INSTABILITY with target_path and reason."
+)
+
+
+def demo_kona_ebm_reg(ci_mode=False):
+    for p in [KONA_EBM_REG_VALIDATOR, KONA_EBM_REG_PASS_FIXTURE, KONA_EBM_REG_FAIL_FIXTURE]:
+        if not os.path.exists(os.path.join(REPO_ROOT, p)):
+            print(f"  ERROR: missing path {p}")
+            sys.exit(1)
+
+    if not ci_mode:
+        print()
+        print("QA Cert Families -- narrated demo runner.")
+        print("Family: QA Kona EBM QA-Native Orbit Reg [64] -- orbit-coherence regularizer on MNIST RBM.")
+
+    # --- Step 1: PASS -------------------------------------------------------
+    section(1, "Stable orbit-reg run -- expect PASS", ci_mode)
+
+    fixture_path = os.path.join(REPO_ROOT, KONA_EBM_REG_PASS_FIXTURE)
+    with open(fixture_path) as fh:
+        fixture_data = json.load(fh)
+
+    cert_id = fixture_data.get("cert_id", "(not found)")
+    lambda_orbit = fixture_data.get("model_config", {}).get("lambda_orbit", "(not found)")
+
+    _rc, stdout, _stderr, err_ind = run_validator(
+        [KONA_EBM_REG_VALIDATOR, KONA_EBM_REG_PASS_FIXTURE, "--json"],
+        expect_pass=True, ci_mode=ci_mode,
+    )
+
+    if ci_mode:
+        if err_ind == "PASS_EXPECTED_BUT_FAILED":
+            return False, "PASS fixture failed"
+    else:
+        print(f"  Fixture       : {KONA_EBM_REG_PASS_FIXTURE}")
+        print(f"  Result        : {LABEL_PASS}")
+        print(f"  cert_id       : {cert_id}")
+        print(f"  lambda_orbit  : {lambda_orbit}")
+        energy = fixture_data.get("result", {}).get("energy_per_epoch", [])
+        if energy:
+            print(f"  energy        : {energy[0]:.4f} → {energy[-1]:.4f} (CONVERGED)")
+
+    # --- Step 2: FAIL (REGULARIZER_NUMERIC_INSTABILITY) ---------------------
+    section(2, "Regularizer instability fixture -- expect FAIL (REGULARIZER_NUMERIC_INSTABILITY)", ci_mode)
+
+    _rc2, stdout2, _stderr2, err_ind2 = run_validator(
+        [KONA_EBM_REG_VALIDATOR, KONA_EBM_REG_FAIL_FIXTURE, "--json"],
+        expect_pass=False, ci_mode=ci_mode,
+    )
+
+    if ci_mode:
+        if err_ind2 == "FAIL_EXPECTED_BUT_PASSED":
+            return False, "FAIL fixture unexpectedly passed"
+        fail_type = None
+        try:
+            parsed = json.loads(stdout2.strip())
+            for gate in parsed.get("results", []):
+                if gate.get("status") == "FAIL":
+                    fail_type = gate.get("details", {}).get("invariant_diff", {}).get("fail_type")
+                    break
+        except (json.JSONDecodeError, AttributeError):
+            pass
+        if fail_type != KONA_EBM_REG_EXPECTED_FAIL_TYPE:
+            return False, f"expected fail_type={KONA_EBM_REG_EXPECTED_FAIL_TYPE!r}, got {fail_type!r}"
+        return True, None
+    else:
+        print(f"  Fixture  : {KONA_EBM_REG_FAIL_FIXTURE}")
+        print(f"  Result   : {LABEL_FAIL}")
+        parsed = None
+        try:
+            for chunk in stdout2.strip().split("\n\n"):
+                try:
+                    parsed = json.loads(chunk.strip())
+                    break
+                except json.JSONDecodeError:
+                    pass
+            if parsed is None:
+                parsed = json.loads(stdout2.strip())
+        except json.JSONDecodeError:
+            pass
+        if parsed is not None:
+            for gate in parsed.get("results", []):
+                if gate.get("status") == "FAIL":
+                    details = gate.get("details", {})
+                    inv_diff = details.get("invariant_diff", details)
+                    print("  invariant_diff:")
+                    for line in json.dumps(inv_diff, indent=4).splitlines():
+                        print(f"    {line}")
+                    break
+        else:
+            print(f"  stdout: {stdout2.strip()[:400]}")
+
+    # --- Step 3: Summary ----------------------------------------------------
+    section(3, "Summary", ci_mode)
+    if not ci_mode:
+        print("  Family [64] certifies: QA orbit-coherence regularizer on RBM latent space.")
+        print("  Structural obstructions caught: REGULARIZER_NUMERIC_INSTABILITY, GRADIENT_EXPLOSION, TRACE_HASH_MISMATCH.")
+        print(f"  Punchline: {KONA_EBM_REG_PUNCHLINE}")
+        print()
+
+
+# ---------------------------------------------------------------------------
 # Entry point
 # ---------------------------------------------------------------------------
 
@@ -518,7 +629,7 @@ def main():
     )
     parser.add_argument(
         "--family",
-        choices=["geogebra", "rule30", "kona_ebm"],
+        choices=["geogebra", "rule30", "kona_ebm", "kona_ebm_reg"],
         help="Which cert family to demo.",
     )
     parser.add_argument(
@@ -579,9 +690,10 @@ def main():
     else:
         # Single family mode
         family_map = {
-            "geogebra":  demo_geogebra,
-            "rule30":    demo_rule30,
-            "kona_ebm":  demo_kona_ebm,
+            "geogebra":      demo_geogebra,
+            "rule30":        demo_rule30,
+            "kona_ebm":      demo_kona_ebm,
+            "kona_ebm_reg":  demo_kona_ebm_reg,
         }
         fn = family_map[args.family]
 

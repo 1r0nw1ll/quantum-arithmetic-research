@@ -41,6 +41,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [56] | [QA GeoGebra Scene Adapter (Exact)](56_geogebra_scene_adapter_exact.md) | Schema + Validator + Fixtures (exact substrate, Z/Q typed coords) | PASS |
 | [62] | [QA Kona EBM MNIST](62_kona_ebm_mnist.md) | Schema + Validator + Fixtures (RBM CD-1, real MNIST training, typed failure algebra) | PASS |
 | [63] | [QA Kona EBM QA-Native](63_kona_ebm_qa_native.md) | Schema + Validator + Fixtures (QA orbit manifold as latent space, orbit alignment analysis) | PASS |
+| [64] | [QA Kona EBM QA-Native Orbit Reg](64_kona_ebm_qa_native_orbit_reg.md) | Schema + Validator + Fixtures (orbit-coherence regularizer, permutation gap analysis) | PASS |
 
 ## Quick validation
 

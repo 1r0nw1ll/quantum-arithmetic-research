@@ -207,6 +207,74 @@ Three conditions were compared at λ=10, 5 seeds × 50 epochs. COSMOS coherence 
 
 **Conclusion**: Neither the regularizer alone nor the LR decay alone is sufficient to stabilize orbit coherence. Only their conjunction produces the observed plateau: the regularizer establishes the orbit-aligned weight geometry (reducing reg_norm to ~2.20), while the reduced learning rate prevents CD-1 stochastic noise from scrambling the resulting activation correlations. This confirms the Phase B/C dissociation finding — weight convergence and activation coherence are separately addressable design dimensions.
 
+## Theoretical Interpretation: Orbit-Coherence as Attractor Stabilization
+
+The three-condition empirical result admits a complete theoretical explanation in terms of stochastic dynamical systems.
+
+### Deviation Dynamics
+
+Let `Δ_t = Q·W_t` denote the intra-orbit deviation of hidden-unit weights from their orbit mean, where `Q = I - (1/|O|)·11ᵀ` is the mean-subtraction projector. The orbit-coherence regularizer contributes `∇R(W) = Q·W = Δ_t`, giving the deviation recurrence:
+
+```
+Δ_{t+1} = (1 - η_t·λ)·Δ_t − η_t·G_t
+```
+
+where `G_t = Q·∇L_CD(W_t)` is the CD-1 gradient projected to the deviation subspace. This is a contractive linear map plus a stochastic disturbance.
+
+### Lyapunov Noise Floor
+
+Taking `V(Δ) = ½|Δ|²_F` as a Lyapunov function and assuming `E[G_t | F_t] = 0`, `E[|G_t|²_F | F_t] ≤ σ²`:
+
+```
+E[|Δ_t|²_F] ≲ η·σ² / (2λ)    (steady state)
+```
+
+**Interpretation**: deviation energy scales linearly with learning rate `η` and inversely with regularization strength `λ`. LR decay reduces the numerator linearly while leaving the contraction term (denominator) unchanged — improving the signal-to-noise ratio of alignment dynamics.
+
+Mapping to logged quantities: `reg_norm ↔ |Δ_t|_F`, `lr ↔ η`, `lambda_orbit ↔ λ`.
+
+### Annealing Interpretation
+
+In the Ornstein–Uhlenbeck (continuous-time) limit, the learning rate acts as an effective temperature `T ∝ η·σ²`. The regularizer defines a quadratic basin of depth `λ/2·|Δ|²`. Under Freidlin–Wentzell large-deviations theory, the probability of escaping the orbit-coherent basin scales as:
+
+```
+P(escape) ≍ exp(−λ·r² / (2·η·σ²))
+```
+
+LR decay shrinks `η`, which exponentially suppresses escape probability. This converts the transient Phase A coherence peak into a stable fixed point.
+
+### Three-Phase Dynamics (Formal)
+
+| Phase | Epochs | κ_QA | Mechanism |
+|-------|--------|------|-----------|
+| A | 1–7 | > 0 | Regularizer dominates; deviations contract; coherence rises |
+| B | 7–23 | Shrinking | CD-1 negative-phase noise accumulates; σ²_dev grows |
+| C | 23+ | < 0 (flat LR) | Noise curvature exceeds restoring curvature; escape inevitable |
+| Plateau | 8–50 (LR decay) | > 0 | LR decay restores positive curvature; plateau preserved |
+
+### Generator Interaction Curvature κ_QA
+
+Define the **generator interaction curvature** (QA-native):
+
+```
+κ̂_QA = λ_orbit − 0.5 · lr · σ̂²_dev
+```
+
+where `σ̂²_dev` is an effective deviation-noise estimate (capturing both minibatch sampling noise and CD-1 negative-phase truncation error, which grows in stalled/oscillatory regimes).
+
+**Stability condition**: orbit coherence contracts iff `κ̂_QA > 0`.
+
+This quantity is planned as a Gate-level certified invariant in a future v2 of family [64], with:
+- New failure type: `NEGATIVE_GENERATOR_CURVATURE` (Gate 3: recomputed κ̂ < 0)
+- Supporting types: `CURVATURE_PROBE_MISMATCH`, `CURVATURE_RECOMPUTE_MISMATCH`, `MAX_DEV_SPIKE_ATTESTATION_MISMATCH`
+- Gate 4: hash-chain includes `result.generator_curvature` block (tamper-evident)
+
+### Note on CD-1 Noise
+
+In CD-1, the stochastic perturbation `G_t` reflects not only minibatch sampling variability but also bias and variance from the truncated negative phase. Consequently, the effective noise covariance `Σ_dev` can grow in oscillatory or stalled regimes, increasing the deviation noise floor `E|Δ|²_F ≈ η·tr(Σ_dev)/(2λ)` and explaining why a constant learning rate eventually destabilizes an initially contracting orbit-coherence state.
+
+Full mathematical derivations (Lyapunov lemma, Freidlin–Wentzell escape theorem, discrete spectral-radius bound, Mandt-style SDE limit, QA-native curvature formulation) are documented in the project's theoretical appendix notes.
+
 ## Relation to Family [63]
 
 Family [63] is the null-result baseline: standard CD-1 with no regularizer.

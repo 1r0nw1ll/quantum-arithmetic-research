@@ -166,8 +166,7 @@ def run_report(n_epochs: int, n_samples: int, lr: float, json_out) -> None:
 
         with open(json_out, "w") as fh:
             json.dump(report_body, fh, indent=2)
-        print(f"
-JSON report written to: {json_out}")
+        print(f"JSON report written to: {json_out}")
         print(f"report_sha256: {digest}")
 
 

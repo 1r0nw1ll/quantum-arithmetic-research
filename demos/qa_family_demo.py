@@ -17,7 +17,9 @@ import os
 import subprocess
 import sys
 
-REPO_ROOT = "/home/player2/signal_experiments"
+REPO_ROOT = os.path.normpath(
+    os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
+)
 
 BOLD  = "\033[1m"
 RESET = "\033[0m"
@@ -222,7 +224,7 @@ def demo_geogebra(ci_mode=False):
 RULE30_VALIDATOR    = "qa_alphageometry_ptolemy/qa_rule30/qa_rule30_cert_validator.py"
 RULE30_PASS_FIXTURE = (
     "qa_alphageometry_ptolemy/qa_rule30/certpacks/"
-    "rule30_nonperiodicity_v3/QA_RULE30_NONPERIODICITY_CERT.v1.json"
+    "rule30_nonperiodicity_v4/QA_RULE30_NONPERIODICITY_CERT.v1.json"
 )
 RULE30_FAIL_FIXTURE = (
     "qa_alphageometry_ptolemy/qa_rule30/fixtures/cert_neg_aggregate_mismatch.json"

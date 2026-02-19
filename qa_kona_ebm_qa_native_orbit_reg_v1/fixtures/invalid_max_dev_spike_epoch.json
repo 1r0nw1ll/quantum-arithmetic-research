@@ -1,7 +1,7 @@
 {
   "cert_type": "QA_KONA_EBM_QA_NATIVE_ORBIT_REG_CERT.v1",
   "schema_version": 1,
-  "cert_id": "kona_ebm_orbit_reg_kappa_stable_001",
+  "cert_id": "kona_ebm_orbit_reg_max_dev_spike_invalid_001",
   "issued_utc": "2026-02-19T00:01:47Z",
   "model_config": {
     "n_visible": 784,
@@ -139,7 +139,7 @@
       "min_kappa_epoch": 1,
       "kappa_hash": "b2bb87343a9db076f97e1516d0c79a051c52dec7cd7764b18e7160813da9d6ce",
       "max_dev_norm": 2.505948,
-      "max_dev_epoch": 5
+      "max_dev_epoch": 1
     }
   },
   "trace": {

@@ -384,6 +384,16 @@ def train_qa_orbit_reg_rbm(
         min_kappa_epoch = 0
     kappa_payload = json.dumps(kappa_hat_per_epoch, separators=(",", ":")).encode()
     kappa_hash = hashlib.sha256(kappa_payload).hexdigest()
+    if reg_norm_per_epoch:
+        _dev_max = max(reg_norm_per_epoch)
+        max_dev_norm = round(_dev_max, 8)
+        max_dev_epoch = next(
+            i + 1 for i, v in enumerate(reg_norm_per_epoch)
+            if round(v, 6) == round(_dev_max, 6)
+        )
+    else:
+        max_dev_norm = 0.0
+        max_dev_epoch = 0
 
     # Orbit analysis
     n_analysis = min(1000, n_samples)
@@ -456,6 +466,8 @@ def train_qa_orbit_reg_rbm(
         "min_kappa_hat":                  min_kappa_hat,
         "min_kappa_epoch":                min_kappa_epoch,
         "kappa_hash":                     kappa_hash,
+        "max_dev_norm":                   max_dev_norm,
+        "max_dev_epoch":                  max_dev_epoch,
     }
 
 

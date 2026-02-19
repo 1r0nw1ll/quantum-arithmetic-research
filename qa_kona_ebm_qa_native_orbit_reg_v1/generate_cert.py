@@ -76,6 +76,8 @@ def build_cert(cert_id: str, run: dict) -> dict:
                 "min_kappa_hat":      run["min_kappa_hat"],
                 "min_kappa_epoch":    run["min_kappa_epoch"],
                 "kappa_hash":         run["kappa_hash"],
+                "max_dev_norm":        run["max_dev_norm"],
+                "max_dev_epoch":       run["max_dev_epoch"],
             },
         },
         "trace": {

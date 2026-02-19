@@ -458,6 +458,30 @@ def gate3_orbit_map(cert: dict) -> Tuple[dict, bool]:
                 f"cert={gc.get('min_kappa_epoch')} recomputed={actual_min_ep}",
             ), False
 
+        # Check max_dev_norm and max_dev_epoch attestation
+        dev_norms = cert["result"].get("reg_norm_per_epoch", [])
+        if dev_norms:
+            actual_max_dev = max(dev_norms)
+            actual_max_ep = next(
+                i + 1 for i, v in enumerate(dev_norms)
+                if round(float(v), 6) == round(actual_max_dev, 6)
+            )
+            cert_max_dev = gc.get("max_dev_norm")
+            cert_max_ep = gc.get("max_dev_epoch")
+            if cert_max_dev is not None and round(float(cert_max_dev), 6) != round(actual_max_dev, 6):
+                return _fail(
+                    gate, "MAX_DEV_SPIKE_ATTESTATION_MISMATCH",
+                    "result.generator_curvature.max_dev_norm",
+                    f"cert={cert_max_dev} recomputed={round(actual_max_dev, 6)}",
+                ), False
+            if cert_max_ep is not None and cert_max_ep != actual_max_ep:
+                return _fail(
+                    gate, "MAX_DEV_SPIKE_ATTESTATION_MISMATCH",
+                    "result.generator_curvature.max_dev_epoch",
+                    f"cert={cert_max_ep} recomputed={actual_max_ep} "
+                    f"(argmax of reg_norm_per_epoch, tie-break: first)",
+                ), False
+
     return _pass(gate, {"orbit_map_hash": actual_hash}), True
 
 
@@ -695,6 +719,7 @@ _SELF_TEST_CASES = [
     ("invalid_lr_schedule.json",                    "FAIL"),
     ("valid_orbit_reg_kappa_stable.json",           "PASS"),
     ("invalid_negative_generator_curvature.json",   "FAIL"),
+    ("invalid_max_dev_spike_epoch.json",            "FAIL"),
 ]
 
 

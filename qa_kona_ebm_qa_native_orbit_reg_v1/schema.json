@@ -321,7 +321,9 @@
             "kappa_hat_per_epoch",
             "min_kappa_hat",
             "min_kappa_epoch",
-            "kappa_hash"
+            "kappa_hash",
+            "max_dev_norm",
+            "max_dev_epoch"
           ],
           "properties": {
             "definition": {
@@ -343,6 +345,13 @@
             "kappa_hash": {
               "type": "string",
               "pattern": "^[a-f0-9]{64}$"
+            },
+            "max_dev_norm": {
+              "type": "number"
+            },
+            "max_dev_epoch": {
+              "type": "integer",
+              "minimum": 0
             }
           },
           "additionalProperties": false

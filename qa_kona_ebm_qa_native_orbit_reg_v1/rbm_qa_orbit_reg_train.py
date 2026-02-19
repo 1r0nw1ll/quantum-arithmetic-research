@@ -31,10 +31,12 @@ LR schedule (optional):
 from __future__ import annotations
 
 import hashlib
+import gzip
 import json
 import os
 import struct
 import sys
+from pathlib import Path
 from typing import Dict, List, Optional
 
 import numpy as np
@@ -46,24 +48,43 @@ sys.path.insert(0, _HERE)
 
 from qa_orbit_map import build_orbit_map, orbit_map_hash as compute_orbit_map_hash
 
-MNIST_PATH = "/home/player2/signal_experiments/data/MNIST/raw"
 BATCH_SIZE = 100
 GRAD_EXPLOSION_THRESHOLD = 1000.0
 N_HIDDEN = 81
 N_VISIBLE = 784
 
 
+def _default_mnist_path() -> Path:
+    return Path(__file__).resolve().parent.parent / "data" / "MNIST" / "raw"
+
+
+def _resolve_mnist_file(base_name: str) -> Path:
+    base = Path(os.environ.get("MNIST_PATH", _default_mnist_path()))
+    raw_path = base / base_name
+    gz_path = base / f"{base_name}.gz"
+    if raw_path.exists():
+        return raw_path
+    if gz_path.exists():
+        return gz_path
+    raise FileNotFoundError(
+        f"MNIST file not found. Checked: '{raw_path}' and '{gz_path}'. "
+        "Set MNIST_PATH to override."
+    )
+
+
 def load_mnist_images(n_samples: int) -> np.ndarray:
-    fpath = os.path.join(MNIST_PATH, "train-images-idx3-ubyte")
-    with open(fpath, "rb") as f:
+    fpath = _resolve_mnist_file("train-images-idx3-ubyte")
+    opener = gzip.open if fpath.suffix == ".gz" else open
+    with opener(fpath, "rb") as f:
         _magic, _n, rows, cols = struct.unpack(">IIII", f.read(16))
         data = np.frombuffer(f.read(n_samples * rows * cols), dtype=np.uint8)
     return (data.reshape(n_samples, rows * cols) / 255.0 > 0.5).astype(np.float64)
 
 
 def load_mnist_labels(n_samples: int) -> np.ndarray:
-    fpath = os.path.join(MNIST_PATH, "train-labels-idx1-ubyte")
-    with open(fpath, "rb") as f:
+    fpath = _resolve_mnist_file("train-labels-idx1-ubyte")
+    opener = gzip.open if fpath.suffix == ".gz" else open
+    with opener(fpath, "rb") as f:
         _magic, _n = struct.unpack(">II", f.read(8))
         labels = np.frombuffer(f.read(n_samples), dtype=np.uint8)
     return labels.astype(np.int32)

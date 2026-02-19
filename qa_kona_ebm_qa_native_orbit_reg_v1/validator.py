@@ -460,6 +460,12 @@ def gate3_orbit_map(cert: dict) -> Tuple[dict, bool]:
 
         # Check max_dev_norm and max_dev_epoch attestation
         dev_norms = cert["result"].get("reg_norm_per_epoch", [])
+        if gc is not None and not dev_norms:
+            return _fail(
+                gate, "MAX_DEV_SPIKE_ATTESTATION_MISMATCH",
+                "result.reg_norm_per_epoch",
+                "reg_norm_per_epoch is empty; cannot attest max_dev when generator_curvature is present",
+            ), False
         if dev_norms:
             actual_max_dev = max(dev_norms)
             actual_max_ep = next(
@@ -720,6 +726,7 @@ _SELF_TEST_CASES = [
     ("valid_orbit_reg_kappa_stable.json",           "PASS"),
     ("invalid_negative_generator_curvature.json",   "FAIL"),
     ("invalid_max_dev_spike_epoch.json",            "FAIL"),
+    ("invalid_min_kappa_epoch.json",                "FAIL"),
 ]
 
 

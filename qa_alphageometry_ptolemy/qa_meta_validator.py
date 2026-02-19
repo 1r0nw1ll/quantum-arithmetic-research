@@ -1177,6 +1177,15 @@ INGEST_CERT_PATHS = {
 
 SVP_CMC_LEDGER_PATH = "qa_ledger__radionics_obstructions.v1.yaml"
 
+SPINE_V1_FAMILIES = [
+    "qa_kona_ebm_qa_native_orbit_reg_v1",
+]
+_SPINE_V1_REQUIRED_FIXTURES = [
+    "fixtures/invalid_negative_generator_curvature.json",
+    "fixtures/invalid_max_dev_spike_epoch.json",
+    "fixtures/invalid_min_kappa_epoch.json",
+]
+
 
 # FAMILY_SWEEPS is defined after all validator functions (see below).
 # It is THE canonical list: one entry per family, used by both the sweep
@@ -2757,6 +2766,28 @@ def _validate_kona_ebm_qa_native_orbit_reg_family_if_present(base_dir: str) -> O
     return None
 
 
+def test_spine_v1_compliance() -> bool:
+    """[70] QA Dynamics Spine v1 compliance linter.
+
+    For each family in SPINE_V1_FAMILIES, verify the required
+    Dynamics-Compatible fixture files exist. Failing here means
+    a spine-declared family is missing its tamper-evidence fixtures.
+    """
+    import os as _os
+    _repo_root = _os.path.normpath(_os.path.join(_os.path.dirname(_os.path.abspath(__file__)), ".."))
+    missing = []
+    for family in SPINE_V1_FAMILIES:
+        for fixture_rel in _SPINE_V1_REQUIRED_FIXTURES:
+            path = _os.path.join(_repo_root, family, fixture_rel)
+            if not _os.path.isfile(path):
+                missing.append(path)
+    if missing:
+        print(f"[FAIL] Spine v1 linter: missing fixtures: {missing}")
+        return False
+    print(f"[PASS] Spine v1 linter: all {len(SPINE_V1_FAMILIES)} families x {len(_SPINE_V1_REQUIRED_FIXTURES)} fixtures found")
+    return True
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -3732,4 +3763,13 @@ if __name__ == "__main__":
         print(f"[{_demo_gate_id}] Demo smoke test (--all --ci): FAIL (exit {_demo_proc.returncode})")
         if _demo_proc.stdout.strip():
             print(_demo_proc.stdout.strip())
+        sys.exit(1)
+
+    # --- Spine v1 compliance linter ---
+    print("\n--- QA DYNAMICS SPINE V1 COMPLIANCE LINTER ---")
+    _spine_gate_id = _demo_gate_id + 1
+    if test_spine_v1_compliance():
+        print(f"[{_spine_gate_id}] QA Dynamics Spine v1 compliance linter: PASS")
+    else:
+        print(f"[{_spine_gate_id}] QA Dynamics Spine v1 compliance linter: FAIL")
         sys.exit(1)

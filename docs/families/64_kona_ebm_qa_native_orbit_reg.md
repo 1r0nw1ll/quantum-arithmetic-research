@@ -1,5 +1,7 @@
 # Family [64]: QA Kona EBM QA-Native Orbit Reg
 
+**Spine compliance**: `dynamics_v1` — This family implements the Dynamics-Compatible standard defined in `docs/QA_DYNAMICS_SPINE.md`.
+
 ## Purpose
 
 Family [64] extends the QA-native EBM (family [63]) by adding an explicit
@@ -300,6 +302,18 @@ This quantity is planned as a Gate-level certified invariant in a future v2 of f
 In CD-1, the stochastic perturbation `G_t` reflects not only minibatch sampling variability but also bias and variance from the truncated negative phase. Consequently, the effective noise covariance `Σ_dev` can grow in oscillatory or stalled regimes, increasing the deviation noise floor `E|Δ|²_F ≈ η·tr(Σ_dev)/(2λ)` and explaining why a constant learning rate eventually destabilizes an initially contracting orbit-coherence state.
 
 Full mathematical derivations (Lyapunov lemma, Freidlin–Wentzell escape theorem, discrete spectral-radius bound, Mandt-style SDE limit, QA-native curvature formulation) are documented in the project's theoretical appendix notes.
+
+### Gate-3 Certified Invariants
+
+Family [64] certifies three "where/when" anchors that Gate 3 recomputes deterministically from the quantities logged during training. Because Gate 4's hash-chain seals the curvature array after the run, these anchors cannot be falsified by editing the cert after the fact.
+
+**`min_kappa_hat` / `min_kappa_epoch`** — the worst stability margin. Gate 3 recomputes κ̂ = 1 − |1 − lr·λ| for every epoch using the per-epoch learning rate recorded in the trace, then checks both the minimum value and the epoch at which it occurs (tie-break: first epoch wins). Attesting the argmin rather than just the minimum prevents a dishonest cert from hiding an unstable epoch by reporting a later, more favourable one.
+
+**`max_dev_norm` / `max_dev_epoch`** — the worst deviation spike. Gate 3 recomputes this from the logged `reg_norm_per_epoch` array and checks both the peak value and its epoch. This ensures the cert cannot understate the epoch where deviation energy concentrates — the epoch most likely to correspond to the onset of Phase C instability.
+
+**`kappa_hash`** — the Gate-4 hash-chain seal. This is the SHA-256 digest of the full `kappa_hat_per_epoch` array. Gate 4 replays the hash and rejects any cert whose stored digest disagrees with the recomputed one. The practical consequence is that `NEGATIVE_GENERATOR_CURVATURE` becomes a structural obstruction: an individual epoch with κ̂ < 0 cannot be silently dropped or smoothed away, because the hash would no longer match.
+
+Together these three anchors implement the **tamper-evident worst-epoch attestation** pattern defined in `docs/QA_DYNAMICS_SPINE.md`.
 
 ## Relation to Family [63]
 

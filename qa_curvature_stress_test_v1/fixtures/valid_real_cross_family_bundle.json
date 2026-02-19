@@ -1,0 +1,114 @@
+{
+  "schema_id": "QA_CURVATURE_STRESS_TEST_BUNDLE.v1",
+  "cert_id": "curvature_bundle_real_families_001",
+  "created_utc": "2026-02-19T12:00:00Z",
+  "subject": {
+    "bundle_version": "v1",
+    "purpose": "Real cross-family curvature stress test: families [62], [63], [64]. Family [56] excluded (stateless geometry adapter, no training dynamics).",
+    "notes": "Family [62] and [63] lack orbit regularization; lambda_orbit=0.0 represents the no-regularizer boundary case (kappa=0, ZERO sign). Family [64] uses lambda_orbit=0.001 (active regularizer). Family [56] GeoGebra excluded: incompatible schema (no lr or model_config)."
+  },
+  "result": {
+    "status": "OK",
+    "entries": [
+      {
+        "entry_id": "fam64-stable",
+        "family_id": 64,
+        "family_name": "qa_kona_ebm_qa_native_orbit_reg_v1",
+        "source_cert_id": "kona_ebm_orbit_reg_kappa_stable_001",
+        "model_config": {
+          "lr": 0.01,
+          "lambda_orbit": 0.001
+        },
+        "result": {
+          "lr_per_epoch": [0.01, 0.01, 0.01, 0.01, 0.01],
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - abs(1 - lr * lambda_orbit)",
+            "kappa_hat_per_epoch": [1e-05, 1e-05, 1e-05, 1e-05, 1e-05],
+            "min_kappa_hat": 1e-05,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "b2bb87343a9db076f97e1516d0c79a051c52dec7cd7764b18e7160813da9d6ce",
+            "max_dev_norm": 2.505948,
+            "max_dev_epoch": 5
+          },
+          "predicted": {
+            "kappa_sign": "POS",
+            "narrative": "Family [64] with lambda_orbit=0.001: curvature 1e-5 > 0 (active orbit regularization, stable training confirmed)."
+          },
+          "observed": {
+            "observed_regime": "STABLE",
+            "notes": "5-epoch stable convergence confirmed. Reconstruction error decreases monotonically."
+          }
+        }
+      },
+      {
+        "entry_id": "fam62-mnist-boundary",
+        "family_id": 62,
+        "family_name": "qa_kona_ebm_mnist_v1",
+        "source_cert_id": "kona_ebm_mnist_stable_001",
+        "model_config": {
+          "lr": 0.01,
+          "lambda_orbit": 0.0
+        },
+        "result": {
+          "lr_per_epoch": [0.01, 0.01, 0.01, 0.01, 0.01],
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - abs(1 - lr * lambda_orbit)",
+            "kappa_hat_per_epoch": [0.0, 0.0, 0.0, 0.0, 0.0],
+            "min_kappa_hat": 0.0,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "2b100faf74074607a614bbce5339ad349fecb6fae9966f5fbb5f2cf908028c2b",
+            "max_dev_norm": 23.690301,
+            "max_dev_epoch": 1
+          },
+          "predicted": {
+            "kappa_sign": "ZERO",
+            "narrative": "Family [62] MNIST EBM without orbit regularization: lambda_orbit=0 → kappa=0 (boundary case). No orbit restorative force."
+          },
+          "observed": {
+            "observed_regime": "STABLE",
+            "notes": "5-epoch stable convergence. Reconstruction error decreases without orbit regularization. ZERO kappa is the unregularized boundary."
+          }
+        }
+      },
+      {
+        "entry_id": "fam63-qa-native-boundary",
+        "family_id": 63,
+        "family_name": "qa_kona_ebm_qa_native_v1",
+        "source_cert_id": "kona_ebm_qa_native_001",
+        "model_config": {
+          "lr": 0.01,
+          "lambda_orbit": 0.0
+        },
+        "result": {
+          "lr_per_epoch": [0.01, 0.01, 0.01, 0.01, 0.01],
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - abs(1 - lr * lambda_orbit)",
+            "kappa_hat_per_epoch": [0.0, 0.0, 0.0, 0.0, 0.0],
+            "min_kappa_hat": 0.0,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "2b100faf74074607a614bbce5339ad349fecb6fae9966f5fbb5f2cf908028c2b",
+            "max_dev_norm": 26.130369,
+            "max_dev_epoch": 1
+          },
+          "predicted": {
+            "kappa_sign": "ZERO",
+            "narrative": "Family [63] QA-native EBM without orbit regularization: lambda_orbit=0 → kappa=0 (boundary case). QA orbit structure emergent but unregularized."
+          },
+          "observed": {
+            "observed_regime": "STABLE",
+            "notes": "5-epoch stable convergence with QA-native generator. Orbit coherence observed without regularization force."
+          }
+        }
+      }
+    ],
+    "compositions": [
+      {
+        "composition_id": "tensor-fam64-fam62",
+        "op": "TENSOR",
+        "components": ["fam64-stable", "fam62-mnist-boundary"],
+        "kappa_hat_composed": 0.0,
+        "notes": "Monoidal bottleneck: ZERO-curvature MNIST subsystem bottlenecks the stable [64] orbit-reg subsystem. The composed system sits on the stability boundary."
+      }
+    ]
+  }
+}

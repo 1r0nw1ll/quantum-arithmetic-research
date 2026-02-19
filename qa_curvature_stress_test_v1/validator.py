@@ -451,10 +451,11 @@ def _print_results(results: List[GateResult]) -> bool:
 # ---------------------------------------------------------------------------
 
 _SELF_TEST_CASES = [
-    ("valid_cross_family_bundle.json",      "PASS"),
-    ("invalid_missing_family.json",         "FAIL"),
-    ("invalid_kappa_sign_mismatch.json",    "FAIL"),
-    ("invalid_bottleneck_violation.json",   "FAIL"),
+    ("valid_cross_family_bundle.json",           "PASS"),
+    ("valid_real_cross_family_bundle.json",       "PASS"),
+    ("invalid_missing_family.json",              "FAIL"),
+    ("invalid_kappa_sign_mismatch.json",         "FAIL"),
+    ("invalid_bottleneck_violation.json",        "FAIL"),
 ]
 
 

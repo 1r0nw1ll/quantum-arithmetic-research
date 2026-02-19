@@ -69,6 +69,8 @@ Note: in CD-1/CD-k, `ξ_t` includes both minibatch sampling noise and negative-p
 > For small η_t this approximates η_t·λ. In the closed-form special case (H = λQ, L = λ),
 > the one-line certified formula κ̂_QA = 1 − |1 − η_t·λ| is the EXACT deviation-subspace
 > spectral contraction margin — not an approximation.
+>
+> In the closed-form quadratic regime (H = λQ), κ̂_QA equals the exact spectral contraction margin (1 − |1 − ηλ|). In the general non-quadratic regime, κ_QA(t) from D5 is a Lyapunov contraction-noise dominance proxy and does not equal the spectral radius margin. These are distinct objects; the closed-form special case is the only currently certified form.
 
 **D6. Lipschitz smoothness of the restoring gradient**
 
@@ -92,11 +94,15 @@ Under D1–D4, the deviation energy `V(Δ) = ½‖Δ‖²` satisfies:
 E[V(Δ_{t+1}) | F_t] ≤ (1 − 2η_t·λ + η_t²·L²)·V(Δ_t) + ½·η_t²·σ²_dev(t)
 ```
 
-where `L` is (L from D6). Whenever `κ_QA(t) > 0`, the process is mean-square stable and admits the steady-state noise floor:
+This bound follows from expanding ‖Δ_{t+1}‖², applying D3 for the cross-term lower bound, D6 for the Lipschitz upper bound on ‖Q∇R(x)‖, and D4 for the conditional noise moment (zero-mean cross-term drops under expectation).
+
+where `L` is (L from D6). Whenever 0 < η_t < 2λ/L² (discrete-time stability window, from D6), the deviation process is mean-square stable and admits the steady-state noise floor:
 
 ```
 E[‖Δ_t‖²] ≲ η·σ²_dev / (2λ)
 ```
+
+The curvature proxy κ_QA(t) > 0 (D5) additionally guarantees that contraction dominates deviation noise — it is a noise-dominance certificate, not the primary stability condition.
 
 Mean-square contraction requires the coefficient (1 − 2η_t·λ + η_t²·L²) < 1,
 which simplifies to: 0 < η_t < 2λ/L²  (discrete-time stability window, explicit in L).
@@ -139,6 +145,8 @@ In the continuous-time (Ornstein–Uhlenbeck) limit with effective temperature `
 ```
 P(escape from basin of radius r) ≍ exp(−λ·r² / (2·η·σ²))
 ```
+
+This expression holds in the small-step (η → 0) diffusion limit under standard Freidlin–Wentzell scaling assumptions; it is an asymptotic statement and does not directly apply to finite-step CD-1 dynamics.
 
 LR decay reduces the exponent denominator, exponentially suppressing basin escape.
 

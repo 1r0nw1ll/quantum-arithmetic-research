@@ -67,6 +67,7 @@ The composed system is only as stable as its least stable component.
 | `validator.py` | Five-gate validator |
 | `mapping_protocol_ref.json` | Gate 0 mapping protocol reference |
 | `fixtures/valid_cross_family_bundle.json` | PASS: 2 entries, 1 composition |
+| `fixtures/valid_real_cross_family_bundle.json` | PASS: 3 real entries ([62] MNIST λ=0, [63] QA-native λ=0, [64] λ=0.001), 1 composition |
 | `fixtures/invalid_missing_family.json` | FAIL: COMPOSITION_REF_MISSING |
 | `fixtures/invalid_kappa_sign_mismatch.json` | FAIL: KAPPA_SIGN_MISMATCH |
 | `fixtures/invalid_bottleneck_violation.json` | FAIL: BOTTLE_NECK_VIOLATION |
@@ -88,13 +89,29 @@ The composed system is only as stable as its least stable component.
 ## CLI
 
 ```bash
-# Self-test (4 fixtures: 1 valid, 3 negative)
+# Self-test (5 fixtures: 2 valid, 3 negative)
 python qa_curvature_stress_test_v1/validator.py --self-test
 
 # Validate a bundle cert
 python qa_curvature_stress_test_v1/validator.py \
   qa_curvature_stress_test_v1/fixtures/valid_cross_family_bundle.json
 ```
+
+## Real Cross-Family Bundle
+
+`valid_real_cross_family_bundle.json` contains real cert data from three families:
+
+| Entry | Family | λ_orbit | κ̂ | Sign | Observed |
+|-------|--------|---------|-----|------|----------|
+| `fam64-stable` | [64] orbit-reg | 0.001 | 1e-5 | POS | STABLE |
+| `fam62-mnist-boundary` | [62] MNIST EBM | 0.0 | 0.0 | ZERO | STABLE |
+| `fam63-qa-native-boundary` | [63] QA-native EBM | 0.0 | 0.0 | ZERO | STABLE |
+
+**Empirical finding**: Families [62] and [63] converge stably without orbit regularization (ZERO-curvature boundary case). Family [64] adds orbit regularization (λ=0.001) — the only source of positive curvature.
+
+**TENSOR composition**: `fam64-stable ⊗ fam62-mnist-boundary` → bottleneck κ̂ = 0.0. The ZERO-curvature MNIST subsystem bottlenecks the composed system, demonstrating that positive curvature in one subsystem is insufficient: all components must be positive for the composed system to be strictly stable.
+
+**Family [56] exclusion**: The GeoGebra adapter family is incompatible — it is a stateless geometry adapter with no training loop, `lr`, or `model_config`. It cannot participate in the curvature bundle.
 
 ## Relation to Family [64]
 

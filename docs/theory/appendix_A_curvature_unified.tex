@@ -1,0 +1,244 @@
+% =========================
+% Appendix A — Unified Curvature Framework (arXiv-ready)
+% Merges: (i) Gradient/CD-1 theorem, (ii) QARM sibling, (iii) Monoidal bottleneck
+% Document ID: QA_CURVATURE_UNIFICATION_APPENDIX.v1 (LaTeX)
+% Date: 2026-02-19
+% Source: ChatGPT architectural review (2026-02-19)
+% Sibling: docs/theory/QA_CURVATURE_UNIFICATION_APPENDIX.md
+% =========================
+
+\appendix
+\section{Unified Curvature Framework for QA Generator Dynamics}
+\label{app:qa-curvature-unified}
+
+This appendix unifies three curvature theorems governing certified stability in Quantum Arithmetic (QA) dynamics:
+(i) gradient stochastic dynamics (SGD/CD-$k$ class), (ii) discrete QARM generator dynamics, and
+(iii) monoidal composition of QA dynamical systems. All three are instances of a single
+\emph{curvature--contraction with dispersion} principle and map directly to Gate~3/4 certification anchors.
+
+\subsection{A.1 Unified setup and notation}
+Let $\mathcal{X}$ be a finite-dimensional real vector space with norm $\|\cdot\|$.
+Let $Q:\mathcal{X}\to\mathcal{X}$ be a symmetric idempotent projection:
+\[
+Q^2 = Q,\qquad Q^\top = Q.
+\]
+Define the deviation component
+\[
+\Delta_t := Q x_t.
+\]
+We consider discrete-time dynamics of the affine-noise form
+\begin{equation}
+x_{t+1} = x_t - \eta_t\big(D(x_t) + \zeta_t\big),
+\tag{A.1}\label{eq:A1}
+\end{equation}
+where $D$ is a restorative drift operator, $\zeta_t$ is a disturbance/noise term, and $\eta_t>0$ is a step size.
+Projecting \eqref{eq:A1} by $Q$ yields the deviation dynamics
+\begin{equation}
+\Delta_{t+1} = \Delta_t - \eta_t\big(QD(x_t) + \xi_t\big),\qquad \xi_t := Q\zeta_t.
+\tag{A.2}\label{eq:A2}
+\end{equation}
+All results below are statements about the deviation process $\{\Delta_t\}$.
+
+\subsection{A.2 Gradient generator curvature theorem (SGD/CD-$k$ regime)}
+This covers SGD, CD-1/CD-$k$, and related stochastic gradient systems, as certified in the closed-form special case
+(e.g., Hessian $H=\lambda Q$).
+
+\paragraph{Assumptions (G1--G4).}
+Let $R:\mathcal{X}\to\mathbb{R}$ be a restoring potential and consider $D(x)=\nabla R(x)$.
+Assume:
+
+\begin{itemize}
+\item[(G1)] (\emph{Deviation projection}) $\Delta_t=Qx_t$ with $Q^2=Q$, $Q^\top=Q$.
+\item[(G2)] (\emph{Update law}) $x_{t+1}=x_t-\eta_t(\nabla R(x_t)+g_t)$, so
+$\Delta_{t+1}=\Delta_t-\eta_t(Q\nabla R(x_t)+\xi_t)$ with $\xi_t:=Qg_t$.
+\item[(G3)] (\emph{Restricted strong convexity on deviation modes}) There exists $\lambda>0$ such that
+\[
+\langle \Delta,\, Q\nabla R(x)\rangle \ge \lambda\|\Delta\|^2.
+\tag{A.3}\label{eq:A3}
+\]
+A sufficient condition is that $R(x)=\widetilde R(Qx)$ (so $Q\nabla R(x)=Q\nabla R(Qx)$), or that
+$Q\nabla^2R(x)Q\succeq \lambda Q$.
+\item[(G4)] (\emph{Lipschitz smoothness on deviation modes}) There exists $L\ge \lambda$ such that
+\[
+\|Q\nabla R(x)-Q\nabla R(y)\| \le L\cdot \|Q(x-y)\|.
+\tag{A.4}\label{eq:A4}
+\]
+\end{itemize}
+Additionally assume the deviation noise is conditionally zero-mean with bounded second moment:
+\begin{equation}
+\mathbb{E}[\xi_t\mid \mathcal{F}_t]=0,\qquad
+\mathbb{E}[\|\xi_t\|^2\mid \mathcal{F}_t]\le \sigma^2,
+\tag{A.5}\label{eq:A5}
+\end{equation}
+where $\mathcal{F}_t$ is the natural filtration.
+
+\begin{theorem}[Gradient curvature contraction]\label{thm:A1}
+Under \eqref{eq:A2}--\eqref{eq:A5}, the deviation energy $V(\Delta):=\tfrac12\|\Delta\|^2$ satisfies
+\[
+\mathbb{E}\!\left[V(\Delta_{t+1})\mid \mathcal{F}_t\right]
+\le \bigl(1-2\eta_t\lambda+\eta_t^2L^2\bigr)V(\Delta_t) + \tfrac12\,\eta_t^2\sigma^2.
+\tag{A.6}\label{eq:A6}
+\]
+If $0<\eta_t<2\lambda/L^2$, then $\rho:=1-2\eta_t\lambda+\eta_t^2L^2\in(0,1)$ and the process is mean-square stable with
+\[
+\limsup_{t\to\infty}\mathbb{E}\|\Delta_t\|^2 \le \frac{\eta_t\sigma^2}{2\lambda-\eta_tL^2}.
+\tag{A.7}\label{eq:A7}
+\]
+\end{theorem}
+
+\paragraph{Curvature proxy.}
+Define the gradient curvature margin
+\[
+\kappa_{\mathrm{grad}}(t) := \lambda - \frac{\eta_tL^2}{2},
+\tag{A.8}\label{eq:A8}
+\]
+so $0<\eta_t<2\lambda/L^2$ is equivalent to $\kappa_{\mathrm{grad}}(t)>0$.
+
+\paragraph{Closed-form certified special case (exact).}
+If $\nabla^2R\equiv \lambda Q$ (equivalently: full-space Hessian $\lambda Q$, and restricted to $\mathrm{Im}(Q)$ it acts as
+$\lambda I$), then the deviation linear map is $A=I-\eta_t\lambda Q$, whose deviation-subspace spectral radius is
+$\rho_{\mathrm{dev}}(A)=|1-\eta_t\lambda|$, and the exact contraction margin is
+\[
+\widehat\kappa_{\mathrm{QA}}(t) = 1-|1-\eta_t\lambda|.
+\tag{A.9}\label{eq:A9}
+\]
+This is the ``no-probe'' Gate~3 formula used by closed-form families.
+
+\subsection{A.3 QARM generator curvature theorem (discrete generator algebra)}
+We now replace gradient drift with discrete QA generator algebra, with explicit basin-local constants.
+
+\paragraph{Assumptions (Q1--Q4).}
+Let the projected drift be $QD(x)$ (not necessarily a gradient). Assume there exists a basin $\mathcal{B}\subset\mathcal{X}$
+and constants $\lambda_b>0$, $L_b\ge 0$ such that for all times the trajectory remains in $\mathcal{B}$:
+
+\begin{itemize}
+\item[(Q1)] (\emph{Basin-local drift contraction}) For $x_t\in\mathcal{B}$,
+\[
+\mathbb{E}\langle \Delta_t,\, QD(x_t)\rangle \ge \lambda_b\|\Delta_t\|^2.
+\tag{A.10}\label{eq:A10}
+\]
+\item[(Q2)] (\emph{Basin-local Lipschitz drift}) For all $x,y\in\mathcal{B}$,
+\[
+\|QD(x)-QD(y)\| \le L_b \|x-y\|.
+\tag{A.11}\label{eq:A11}
+\]
+\item[(Q3)] (\emph{Generator dispersion}) The projected disturbance satisfies
+\[
+\mathbb{E}\|\xi_t\|^2 \le \sigma^2_{\mathrm{QARM}}.
+\tag{A.12}\label{eq:A12}
+\]
+\item[(Q4)] (\emph{Basin containment}) $x_t\in\mathcal{B}$ for all $t$ (escape is allowed as a failure mode; see below).
+\end{itemize}
+
+\paragraph{QARM curvature.}
+Define the basin-local QARM curvature margin
+\[
+\kappa_{\mathrm{QARM}}(t) := \lambda_b - \frac{\eta_tL_b^2}{2}.
+\tag{A.13}\label{eq:A13}
+\]
+
+\begin{theorem}[Basin-local QARM stability]\label{thm:A2}
+Under \eqref{eq:A2} and assumptions \eqref{eq:A10}--\eqref{eq:A12}, the deviation satisfies
+\[
+\mathbb{E}\|\Delta_{t+1}\|^2
+\le \bigl(1-2\eta_t\lambda_b+\eta_t^2L_b^2\bigr)\|\Delta_t\|^2 + \eta_t^2\sigma^2_{\mathrm{QARM}}.
+\tag{A.14}\label{eq:A14}
+\]
+If $0<\eta_t<2\lambda_b/L_b^2$ (equivalently $\kappa_{\mathrm{QARM}}(t)>0$), then
+\[
+\limsup_{t\to\infty}\mathbb{E}\|\Delta_t\|^2 \le \frac{\eta_t\sigma^2_{\mathrm{QARM}}}{2\lambda_b-\eta_tL_b^2}.
+\tag{A.15}\label{eq:A15}
+\]
+\end{theorem}
+
+\begin{corollary}[Escape destroys guarantees]\label{cor:A2-escape}
+If basin containment (Q4) fails, then (Q1)--(Q2) are no longer guaranteed; contraction and noise-floor bounds
+\eqref{eq:A14}--\eqref{eq:A15} do not apply after the escape time. In QA certification, this is a first-class obstruction
+(\texttt{BASIN\_ESCAPE}) and invalidates any claim of basin-local stability for the escaped segment.
+\end{corollary}
+
+\subsection{A.4 Monoidal curvature bottleneck theorem (universal composition law)}
+We now abstract both gradient and QARM forms into a universal QA dynamics object.
+
+\paragraph{Setup.}
+Let $(\mathcal{C},\otimes)$ be a monoidal category of QA dynamical systems (objects are systems; morphisms are certified maps).
+Each object $X\in\mathrm{Ob}(\mathcal{C})$ carries a deviation process $\Delta_{X,t}$ and satisfies a one-step affine
+contraction inequality of the form
+\begin{equation}
+\mathbb{E}\|\Delta_{X,t+1}\|^2 \le \alpha_X(t)\,\mathbb{E}\|\Delta_{X,t}\|^2 + \beta_X(t),
+\qquad \alpha_X(t)\in[0,1),\ \beta_X(t)\ge 0.
+\tag{A.16}\label{eq:A16}
+\end{equation}
+Define the monoidal curvature norm and noise floor proxy
+\[
+|\kappa|_\otimes(X,t) := 1-\alpha_X(t),\qquad
+\mathrm{NF}(X,t) := \frac{\beta_X(t)}{1-\alpha_X(t)}.
+\tag{A.17}\label{eq:A17}
+\]
+
+\begin{theorem}[Monoidal curvature bottleneck under $\otimes$]\label{thm:A3}
+Assume parallel composition $X\otimes Y$ evolves with product deviation energy
+$\|\Delta_{X\otimes Y,t}\|^2 := \|\Delta_{X,t}\|^2 + \|\Delta_{Y,t}\|^2$ and that the coupled evolution preserves the
+component-wise bounds \eqref{eq:A16}. Then the composed system satisfies an affine contraction bound
+\[
+\mathbb{E}\|\Delta_{X\otimes Y,t+1}\|^2 \le \alpha_{X\otimes Y}(t)\,\mathbb{E}\|\Delta_{X\otimes Y,t}\|^2 + \beta_{X\otimes Y}(t),
+\tag{A.18}\label{eq:A18}
+\]
+with bottleneck laws
+\[
+|\kappa|_\otimes(X\otimes Y,t) = \min\big(|\kappa|_\otimes(X,t),\,|\kappa|_\otimes(Y,t)\big),
+\tag{A.19}\label{eq:A19}
+\]
+and
+\[
+\mathrm{NF}(X\otimes Y,t)\ \le\ \frac{\beta_X(t)+\beta_Y(t)}{\min\big(1-\alpha_X(t),\,1-\alpha_Y(t)\big)}.
+\tag{A.20}\label{eq:A20}
+\]
+Consequently, a single unstable or marginal subsystem ($|\kappa|_\otimes=0$) collapses the composed curvature to zero.
+\end{theorem}
+
+\begin{corollary}[Serial composition accumulates log-contraction]\label{cor:A3-serial}
+If $X$ is iterated for $T$ steps with $\alpha_X(t)\le \bar\alpha<1$ and $\beta_X(t)\le \bar\beta$, then
+\[
+\mathbb{E}\|\Delta_{X,T}\|^2 \le \bar\alpha^{T}\,\mathbb{E}\|\Delta_{X,0}\|^2 + \frac{\bar\beta}{1-\bar\alpha}.
+\tag{A.21}\label{eq:A21}
+\]
+Thus log-contraction accumulates additively over time while the stationary deviation is controlled by $\bar\beta/(1-\bar\alpha)$.
+\end{corollary}
+
+\subsection{A.5 Certification mapping (Gate 3/4 anchors and obstruction algebra)}
+The unified curvature objects map directly to QA certification fields.
+
+\paragraph{A.5.1 Minimal log fields (per-family, per-epoch).}
+\begin{itemize}
+\item Deviation norm trace: \texttt{reg\_norm\_per\_epoch[t]} (or QARM analog).
+\item Step-size trace: \texttt{lr\_per\_epoch[t]} (or QARM step-size / temperature).
+\item Curvature trace: \texttt{kappa\_hat\_per\_epoch[t]}.
+\item Argmin/argmax anchors: \texttt{min\_kappa\_hat}, \texttt{min\_kappa\_epoch}, \texttt{max\_dev\_norm}, \texttt{max\_dev\_epoch}.
+\item Hash chain: \texttt{kappa\_hash} = SHA256(\texttt{kappa\_hat\_per\_epoch} canonical JSON).
+\end{itemize}
+
+\paragraph{A.5.2 Gate rules (canonical).}
+\begin{itemize}
+\item \textbf{Gate 3 (recompute)}: recompute $\widehat\kappa$ from the declared regime (closed-form or detector/probe),
+then enforce exact match (within declared rounding) and verify argmin/argmax anchors.
+\item \textbf{Gate 4 (hash-chain)}: verify \texttt{kappa\_hash} and any additional hash commitments (e.g., detector inputs).
+\end{itemize}
+
+\paragraph{A.5.3 Minimal obstruction list (unified).}
+\begin{itemize}
+\item \texttt{NEGATIVE\_GENERATOR\_CURVATURE}: recomputed $\widehat\kappa(t)<0$ for some $t$ (structural instability).
+\item \texttt{CURVATURE\_RECOMPUTE\_MISMATCH}: recomputed values disagree with attested values.
+\item \texttt{MAX\_DEV\_SPIKE\_ATTESTATION\_MISMATCH}: argmax(\texttt{reg\_norm}) does not match attested max fields.
+\item \texttt{BASIN\_ESCAPE}: basin containment assumption (Q4) violated (QARM/nonconvex regime).
+\item \texttt{DRIFT\_CONTRACTION\_VIOLATION}: empirical checks falsify (Q1)/(G3)-type contraction within the claimed basin.
+\item \texttt{DISPERSION\_BOUND\_MISSING}: missing or unverifiable dispersion bound required for noise-floor claims.
+\item \texttt{MOVE\_FAIL\_TYPE\_MISMATCH}: (QARM) transition log indicates failure modes inconsistent with certified regime.
+\end{itemize}
+
+\paragraph{A.6 One-line unification statement.}
+The gradient theorem (Thm.~\ref{thm:A1}), the QARM sibling (Thm.~\ref{thm:A2}), and the monoidal bottleneck law
+(Thm.~\ref{thm:A3}) are instances of:
+\[
+\textit{Stability is controlled by a curvature margin (contraction) minus dispersion (noise), and composition is bottlenecked by the weakest subsystem.}
+\]

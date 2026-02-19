@@ -2766,6 +2766,32 @@ def _validate_kona_ebm_qa_native_orbit_reg_family_if_present(base_dir: str) -> O
     return None
 
 
+
+
+def _validate_curvature_stress_test_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_CURVATURE_STRESS_TEST_BUNDLE.v1 family (cross-family κ universality,
+    monoidal bottleneck law, kappa sign prediction alignment).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_curvature_stress_test_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_curvature_stress_test_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_curvature_stress_test_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -2886,6 +2912,9 @@ FAMILY_SWEEPS = [
     (64, "QA Kona EBM QA-Native Orbit Reg family",
      _validate_kona_ebm_qa_native_orbit_reg_family_if_present,
      "schema + validator + fixtures (orbit-coherence regularizer, permutation gap analysis)", "64_kona_ebm_qa_native_orbit_reg", "../qa_kona_ebm_qa_native_orbit_reg_v1", True),
+    (71, "QA Curvature Stress-Test Bundle (cross-family \u03ba universality)",
+     _validate_curvature_stress_test_family_if_present,
+     "schema + validator + 4 fixtures (1 valid, 3 negative)", "71_curvature_stress_test", "../qa_curvature_stress_test_v1", True),
 ]
 
 

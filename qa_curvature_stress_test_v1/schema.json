@@ -1,0 +1,124 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_CURVATURE_STRESS_TEST_BUNDLE.v1.schema.json",
+  "title": "QA Curvature Stress-Test Bundle (v1)",
+  "type": "object",
+  "required": ["schema_id", "cert_id", "created_utc", "subject", "result"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_id": {"type": "string", "const": "QA_CURVATURE_STRESS_TEST_BUNDLE.v1"},
+    "cert_id": {"type": "string", "minLength": 6},
+    "created_utc": {"type": "string", "minLength": 10},
+    "subject": {
+      "type": "object",
+      "required": ["bundle_version", "purpose"],
+      "additionalProperties": false,
+      "properties": {
+        "bundle_version": {"type": "string", "const": "v1"},
+        "purpose": {"type": "string"},
+        "notes": {"type": "string"}
+      }
+    },
+    "result": {
+      "type": "object",
+      "required": ["status", "entries", "compositions"],
+      "additionalProperties": false,
+      "properties": {
+        "status": {"type": "string", "enum": ["OK", "FAIL"]},
+        "entries": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["entry_id", "family_id", "family_name", "model_config", "result"],
+            "additionalProperties": false,
+            "properties": {
+              "entry_id": {"type": "string", "pattern": "^[a-z0-9_\\-]{3,64}$"},
+              "family_id": {"type": "integer", "minimum": 1},
+              "family_name": {"type": "string", "minLength": 3},
+              "source_cert_id": {"type": "string"},
+              "model_config": {
+                "type": "object",
+                "required": ["lr", "lambda_orbit"],
+                "additionalProperties": false,
+                "properties": {
+                  "lr": {"type": "number"},
+                  "lambda_orbit": {"type": "number"}
+                }
+              },
+              "result": {
+                "type": "object",
+                "required": ["generator_curvature", "predicted", "observed"],
+                "additionalProperties": false,
+                "properties": {
+                  "lr_per_epoch": {"type": "array", "items": {"type": "number"}},
+                  "generator_curvature": {
+                    "type": "object",
+                    "required": ["definition", "kappa_hat_per_epoch", "min_kappa_hat", "min_kappa_epoch", "kappa_hash", "max_dev_norm", "max_dev_epoch"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "definition": {"type": "string"},
+                      "kappa_hat_per_epoch": {"type": "array", "minItems": 1, "items": {"type": "number"}},
+                      "min_kappa_hat": {"type": "number"},
+                      "min_kappa_epoch": {"type": "integer", "minimum": 1},
+                      "kappa_hash": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+                      "max_dev_norm": {"type": "number", "minimum": 0},
+                      "max_dev_epoch": {"type": "integer", "minimum": 1}
+                    }
+                  },
+                  "predicted": {
+                    "type": "object",
+                    "required": ["kappa_sign"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "kappa_sign": {"type": "string", "enum": ["POS", "ZERO", "NEG"]},
+                      "narrative": {"type": "string"}
+                    }
+                  },
+                  "observed": {
+                    "type": "object",
+                    "required": ["observed_regime"],
+                    "additionalProperties": false,
+                    "properties": {
+                      "observed_regime": {"type": "string", "enum": ["STABLE", "DRIFTING", "DIVERGENT", "BASIN_ESCAPE", "UNKNOWN"]},
+                      "notes": {"type": "string"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "compositions": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["composition_id", "op", "components", "kappa_hat_composed"],
+            "additionalProperties": false,
+            "properties": {
+              "composition_id": {"type": "string", "pattern": "^[a-z0-9_\\-]{3,64}$"},
+              "op": {"type": "string", "enum": ["TENSOR"]},
+              "components": {"type": "array", "minItems": 2, "items": {"type": "string"}},
+              "kappa_hat_composed": {"type": "number"},
+              "notes": {"type": "string"}
+            }
+          }
+        },
+        "invariant_diff": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["gate", "fail_type", "path", "reason"],
+            "additionalProperties": false,
+            "properties": {
+              "gate": {"type": "integer", "minimum": 0},
+              "fail_type": {"type": "string"},
+              "path": {"type": "string"},
+              "reason": {"type": "string"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

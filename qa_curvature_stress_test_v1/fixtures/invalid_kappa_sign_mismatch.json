@@ -1,0 +1,42 @@
+{
+  "schema_id": "QA_CURVATURE_STRESS_TEST_BUNDLE.v1",
+  "cert_id": "cst-sign-001",
+  "created_utc": "2026-02-19T00:00:00Z",
+  "subject": {
+    "bundle_version": "v1",
+    "purpose": "Negative fixture: kappa_sign set to NEG but recomputed min_kappa is POS"
+  },
+  "result": {
+    "status": "FAIL",
+    "entries": [
+      {
+        "entry_id": "fam64-stable",
+        "family_id": 64,
+        "family_name": "QA Kona EBM QA-Native Orbit Reg",
+        "model_config": {
+          "lr": 0.01,
+          "lambda_orbit": 0.001
+        },
+        "result": {
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - |1 - lr * lambda_orbit|",
+            "kappa_hat_per_epoch": [1e-05, 1e-05],
+            "min_kappa_hat": 1e-05,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "0ba2f4dd95f06c5455eef5fc427ec6cdcdf7f7fbff6fa1bd5f15a6ed384ecbf4",
+            "max_dev_norm": 0.000978,
+            "max_dev_epoch": 1
+          },
+          "predicted": {
+            "kappa_sign": "NEG",
+            "narrative": "WRONG: actual min_kappa=1e-5 is POS, not NEG"
+          },
+          "observed": {
+            "observed_regime": "STABLE"
+          }
+        }
+      }
+    ],
+    "compositions": []
+  }
+}

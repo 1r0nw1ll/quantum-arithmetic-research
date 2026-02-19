@@ -1,0 +1,83 @@
+{
+  "schema_id": "QA_CURVATURE_STRESS_TEST_BUNDLE.v1",
+  "cert_id": "cst-valid-001",
+  "created_utc": "2026-02-19T00:00:00Z",
+  "subject": {
+    "bundle_version": "v1",
+    "purpose": "Cross-family curvature stress-test: families [64] and [84]",
+    "notes": "Two-entry bundle exercising monoidal TENSOR composition law"
+  },
+  "result": {
+    "status": "OK",
+    "entries": [
+      {
+        "entry_id": "fam64-stable",
+        "family_id": 64,
+        "family_name": "QA Kona EBM QA-Native Orbit Reg",
+        "source_cert_id": "kona-orbit-reg-fixture-v1",
+        "model_config": {
+          "lr": 0.01,
+          "lambda_orbit": 0.001
+        },
+        "result": {
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - |1 - lr * lambda_orbit|",
+            "kappa_hat_per_epoch": [1e-05, 1e-05],
+            "min_kappa_hat": 1e-05,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "0ba2f4dd95f06c5455eef5fc427ec6cdcdf7f7fbff6fa1bd5f15a6ed384ecbf4",
+            "max_dev_norm": 0.000978,
+            "max_dev_epoch": 1
+          },
+          "predicted": {
+            "kappa_sign": "POS",
+            "narrative": "lr*lambda_orbit << 1, curvature is small but positive"
+          },
+          "observed": {
+            "observed_regime": "STABLE",
+            "notes": "Orbit coherence maintained throughout training"
+          }
+        }
+      },
+      {
+        "entry_id": "qarm-stable",
+        "family_id": 84,
+        "family_name": "QA-RM Orbit Manifold",
+        "source_cert_id": "qarm-baseline-v1",
+        "model_config": {
+          "lr": 0.25,
+          "lambda_orbit": 1.0
+        },
+        "result": {
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - |1 - lr * lambda_orbit|",
+            "kappa_hat_per_epoch": [0.25, 0.25],
+            "min_kappa_hat": 0.25,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "e881a28d72f87492451f04a38e300198d89682158c489c87eb1406f1ce80f068",
+            "max_dev_norm": 0.1,
+            "max_dev_epoch": 1
+          },
+          "predicted": {
+            "kappa_sign": "POS",
+            "narrative": "lr=0.25, lambda_orbit=1.0 — healthy positive curvature"
+          },
+          "observed": {
+            "observed_regime": "STABLE",
+            "notes": "Orbit basin well-maintained"
+          }
+        }
+      }
+    ],
+    "compositions": [
+      {
+        "composition_id": "tensor-two",
+        "op": "TENSOR",
+        "components": ["fam64-stable", "qarm-stable"],
+        "kappa_hat_composed": 1e-05,
+        "notes": "Bottleneck is fam64-stable with min_kappa=1e-05"
+      }
+    ],
+    "invariant_diff": []
+  }
+}

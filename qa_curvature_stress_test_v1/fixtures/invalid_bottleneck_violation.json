@@ -1,0 +1,77 @@
+{
+  "schema_id": "QA_CURVATURE_STRESS_TEST_BUNDLE.v1",
+  "cert_id": "cst-bottle-001",
+  "created_utc": "2026-02-19T00:00:00Z",
+  "subject": {
+    "bundle_version": "v1",
+    "purpose": "Negative fixture: TENSOR composition claims wrong kappa_hat_composed (max instead of min)"
+  },
+  "result": {
+    "status": "FAIL",
+    "entries": [
+      {
+        "entry_id": "entry-a",
+        "family_id": 64,
+        "family_name": "QA Kona EBM Orbit Reg Entry A",
+        "model_config": {
+          "lr": 0.01,
+          "lambda_orbit": 1.0
+        },
+        "result": {
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - |1 - lr * lambda_orbit|",
+            "kappa_hat_per_epoch": [0.01, 0.01],
+            "min_kappa_hat": 0.01,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "468909ab45c7358287186dd6a30792a8d0fe1af06074dca5e3e02b9cb7f255cc",
+            "max_dev_norm": 0.05,
+            "max_dev_epoch": 1
+          },
+          "predicted": {
+            "kappa_sign": "POS",
+            "narrative": "lr=0.01, lambda_orbit=1.0, kappa=0.01 is positive"
+          },
+          "observed": {
+            "observed_regime": "STABLE"
+          }
+        }
+      },
+      {
+        "entry_id": "entry-b",
+        "family_id": 84,
+        "family_name": "QA-RM Orbit Manifold Entry B",
+        "model_config": {
+          "lr": 0.25,
+          "lambda_orbit": 1.0
+        },
+        "result": {
+          "generator_curvature": {
+            "definition": "kappa_hat = 1 - |1 - lr * lambda_orbit|",
+            "kappa_hat_per_epoch": [0.25, 0.25],
+            "min_kappa_hat": 0.25,
+            "min_kappa_epoch": 1,
+            "kappa_hash": "e881a28d72f87492451f04a38e300198d89682158c489c87eb1406f1ce80f068",
+            "max_dev_norm": 0.1,
+            "max_dev_epoch": 1
+          },
+          "predicted": {
+            "kappa_sign": "POS",
+            "narrative": "lr=0.25, lambda_orbit=1.0, kappa=0.25 is positive"
+          },
+          "observed": {
+            "observed_regime": "STABLE"
+          }
+        }
+      }
+    ],
+    "compositions": [
+      {
+        "composition_id": "tensor-wrong",
+        "op": "TENSOR",
+        "components": ["entry-a", "entry-b"],
+        "kappa_hat_composed": 0.25,
+        "notes": "WRONG: claims 0.25 but bottleneck law requires min(0.01, 0.25)=0.01"
+      }
+    ]
+  }
+}

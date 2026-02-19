@@ -42,6 +42,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [62] | [QA Kona EBM MNIST](62_kona_ebm_mnist.md) | Schema + Validator + Fixtures (RBM CD-1, real MNIST training, typed failure algebra) | PASS |
 | [63] | [QA Kona EBM QA-Native](63_kona_ebm_qa_native.md) | Schema + Validator + Fixtures (QA orbit manifold as latent space, orbit alignment analysis) | PASS |
 | [64] | [QA Kona EBM QA-Native Orbit Reg](64_kona_ebm_qa_native_orbit_reg.md) | Schema + Validator + Fixtures (orbit-coherence regularizer, permutation gap analysis) | PASS |
+| [71] | [QA Curvature Stress-Test Bundle](71_curvature_stress_test.md) | Schema + Validator + 4 Fixtures (cross-family κ universality, monoidal bottleneck law) | PASS |
 
 ## Quick validation
 

@@ -1,0 +1,30 @@
+{
+  "schema_version": "QA_LOCALITY_BOUNDARY_CERT.v1",
+  "dataset": "ksc",
+  "classifier": "RandomForest",
+  "split_protocol": "stratified_0.10_train_seed42",
+  "seed": 42,
+  "generators": {
+    "spec": {"type": "pca30_center_pixel", "dim": 30},
+    "patch": {"type": "patch_only_mean_std_pca3_grad", "radius_values": [3, 5, 7], "feature_dim": 10}
+  },
+  "failure_curve": {
+    "spec_oa": 0.8979,
+    "patch_oa_by_radius": {
+      "3": 0.8237,
+      "5": 0.8633,
+      "7": 0.8881
+    },
+    "all_deltas_nonpositive": true
+  },
+  "boundary_geometry": {
+    "fragmentation_proxy": 0.72,
+    "thin_region_proxy": 0.61,
+    "fragmentation_scale_lt_r_star": true,
+    "notes": "KSC wetland scene has thin elongated class regions (marshes, scrub, hardwood swamp) narrower than r*=7. Label-adjacency cross-class contamination dominates patch windows at all tested radii. Proxy values are placeholders; replace with measured label-adjacency cross-class rate in v1.1 upgrade."
+  },
+  "dominance": {"patch_dominates_spec": false},
+  "digests": {
+    "canonical_sha256": "3aa17520b3d3db4ac2aad11a3e51be9534ea4259adc15642ed70d0425400dac8"
+  }
+}

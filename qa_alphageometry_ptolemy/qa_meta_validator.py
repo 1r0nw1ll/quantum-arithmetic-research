@@ -2944,6 +2944,32 @@ def _validate_neighborhood_sufficiency_cert_family_if_present(base_dir: str) -> 
     return None
 
 
+def _validate_locality_boundary_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Locality Boundary Cert family [78]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_locality_boundary_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_locality_boundary_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_locality_boundary_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3084,8 +3110,12 @@ FAMILY_SWEEPS = [
      "schema + validator + fixtures (finite poset + join-semilattice + monotone composition + propagation law)", "76_failure_algebra_structure_cert", "../qa_failure_algebra_structure_cert_v1", True),
     (77, "QA Neighborhood Sufficiency Cert family",
      _validate_neighborhood_sufficiency_cert_family_if_present,
-     "schema + validator + 5 fixtures (2 valid, 3 negative: dominance, plateau, digest)", "77_neighborhood_sufficiency_cert",
+     "schema v1.1 + validator (branching Gate 3) + 8 fixtures (4 valid: houston, indian_pines, salinas, ksc_failure; 4 negative: not_dominant, no_plateau, digest, claims_dominant_but_negative_delta)", "77_neighborhood_sufficiency_cert",
      "../qa_neighborhood_sufficiency_cert_v1", True),
+    (78, "QA Locality Boundary Cert family",
+     _validate_locality_boundary_cert_family_if_present,
+     "schema + validator (5-gate: schema, hash, failure curve all-nonpositive, delta flag, fragmentation explanation) + 3 fixtures (1 valid: ksc_boundary; 2 negative: not_a_boundary_case, digest_mismatch)", "78_locality_boundary_cert",
+     "../qa_locality_boundary_cert_v1", True),
 ]
 
 

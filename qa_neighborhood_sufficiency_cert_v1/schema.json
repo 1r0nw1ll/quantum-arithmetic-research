@@ -1,11 +1,12 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
   "title": "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1",
+  "description": "v1.1: adds dominance_result enum (DOMINANT / FAILS_BOUNDARY_CONTAMINATION / INCONCLUSIVE) and boundary_metrics. Backward-compatible: v1 fixtures omit these fields.",
   "type": "object",
   "required": ["schema_version", "dataset", "classifier", "split_protocol", "seed", "generators", "metrics", "dominance", "digests"],
   "additionalProperties": false,
   "properties": {
-    "schema_version": {"type": "string", "const": "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1"},
+    "schema_version": {"type": "string", "enum": ["QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1", "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1.1"]},
     "dataset": {"type": "string"},
     "classifier": {"type": "string"},
     "split_protocol": {"type": "string"},
@@ -42,8 +43,11 @@
         "spec": {
           "type": "object",
           "required": ["oa"],
+          "additionalProperties": true,
           "properties": {
-            "oa": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+            "oa": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+            "aa": {"type": ["number", "null"]},
+            "kappa": {"type": ["number", "null"]}
           }
         },
         "patch": {
@@ -53,12 +57,17 @@
             "type": "object",
             "required": ["oa"],
             "properties": {
-              "oa": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+              "oa": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+              "aa": {"type": ["number", "null"]},
+              "kappa": {"type": ["number", "null"]}
             }
           }
         },
         "minimal_radius": {"type": "integer", "minimum": 1},
-        "failure_mode": {"type": "string", "enum": ["BOUNDARY_CONTAMINATION", "INSUFFICIENT_CONTEXT", "NONE"]}
+        "failure_mode": {
+          "type": "string",
+          "enum": ["BOUNDARY_CONTAMINATION", "INSUFFICIENT_CONTEXT", "NONE", "BOUNDARY_CONTAMINATION_DOMINATES"]
+        }
       }
     },
     "dominance": {
@@ -70,9 +79,24 @@
         "plateau_tolerance_pp": {"type": "number", "minimum": 0.0}
       }
     },
+    "dominance_result": {
+      "type": "string",
+      "enum": ["DOMINANT", "FAILS_BOUNDARY_CONTAMINATION", "INCONCLUSIVE"]
+    },
+    "boundary_metrics": {
+      "type": ["object", "null"],
+      "additionalProperties": false,
+      "properties": {
+        "fragmentation_proxy": {"type": "number"},
+        "thin_region_proxy": {"type": "number"},
+        "expected_fail_type": {"type": "string", "enum": ["BOUNDARY_CONTAMINATION_DOMINATES"]},
+        "notes": {"type": "string"}
+      }
+    },
     "digests": {
       "type": "object",
       "required": ["canonical_sha256"],
+      "additionalProperties": false,
       "properties": {
         "canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
       }

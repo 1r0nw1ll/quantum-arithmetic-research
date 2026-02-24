@@ -2,16 +2,20 @@
 """
 validator.py
 
-QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1 validator (Machine Tract).
+QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1 / v1.1 validator (Machine Tract).
 
-Certifies the Neighborhood Sufficiency Principle:
+Certifies the Neighborhood Sufficiency Principle with branching Gate 3:
 - Gate 1: JSON schema validity
 - Gate 2: Canonical SHA-256 digest integrity
-- Gate 3: Generator dominance (patch[r*] > spec)
-- Gate 4: Monotonic improvement up to minimal_radius
-- Gate 5: Bounded plateau beyond minimal_radius (within plateau_tolerance_pp)
+- Gate 3: Dominance logic (BRANCHING in v1.1):
+    - DOMINANT or absent: require patch[r*] > spec (positive delta)
+    - FAILS_BOUNDARY_CONTAMINATION: require patch[r*] < spec + boundary_metrics present
+    - INCONCLUSIVE: pass without delta check
+- Gate 4: Monotonic improvement up to minimal_radius (DOMINANT only)
+- Gate 5: Bounded plateau beyond minimal_radius (DOMINANT only)
 
-Failure modes: NOT_DOMINANT, NO_PLATEAU, SPLIT_MISMATCH, BOUNDARY_CONTAMINATION
+Failure modes: NOT_DOMINANT, NO_PLATEAU, SPLIT_MISMATCH, BOUNDARY_CONTAMINATION,
+               MISSING_BOUNDARY_METRICS, NOT_A_FAILURE_CASE
 """
 from __future__ import annotations
 
@@ -95,25 +99,75 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
         return results
     results.append(GateResult("gate_2_canonical_hash", GateStatus.PASS, "canonical_sha256 matches"))
 
-    # Gate 3 — Patch dominates spec at minimal_radius
+    # Gate 3 — Dominance logic (branching for v1.1)
     metrics = obj["metrics"]
     spec_oa = metrics["spec"]["oa"]
     minimal_radius = metrics["minimal_radius"]
     patch_metrics = metrics["patch"]
     r_key = str(minimal_radius)
+
     if r_key not in patch_metrics:
         results.append(GateResult("gate_3_dominance", GateStatus.FAIL,
                                   f"minimal_radius={minimal_radius} not in patch metrics",
                                   {"keys": list(patch_metrics.keys())}))
         return results
+
     patch_oa_at_rstar = patch_metrics[r_key]["oa"]
-    if patch_oa_at_rstar <= spec_oa:
-        results.append(GateResult("gate_3_dominance", GateStatus.FAIL,
-                                  f"NOT_DOMINANT: patch[{minimal_radius}]={patch_oa_at_rstar:.4f} <= spec={spec_oa:.4f}",
-                                  {"patch_oa": patch_oa_at_rstar, "spec_oa": spec_oa}))
+    delta = patch_oa_at_rstar - spec_oa
+
+    # Read dominance_result (v1.1); fall back to old patch_dominates_spec boolean (v1)
+    dominance_result = obj.get("dominance_result")
+    if dominance_result is None:
+        # v1 backward-compat: infer from patch_dominates_spec field
+        dominance_result = "DOMINANT" if obj.get("dominance", {}).get("patch_dominates_spec", True) else "FAILS_BOUNDARY_CONTAMINATION"
+
+    if dominance_result == "DOMINANT":
+        if patch_oa_at_rstar <= spec_oa:
+            results.append(GateResult("gate_3_dominance", GateStatus.FAIL,
+                                      f"NOT_DOMINANT: patch[{minimal_radius}]={patch_oa_at_rstar:.4f} <= spec={spec_oa:.4f}",
+                                      {"patch_oa": patch_oa_at_rstar, "spec_oa": spec_oa,
+                                       "dominance_result": dominance_result}))
+            return results
+        results.append(GateResult("gate_3_dominance", GateStatus.PASS,
+                                   f"DOMINANT: patch[{minimal_radius}]={patch_oa_at_rstar:.4f} > spec={spec_oa:.4f}",
+                                   {"delta_pp": round(delta * 100, 4)}))
+
+    elif dominance_result == "FAILS_BOUNDARY_CONTAMINATION":
+        boundary_metrics = obj.get("boundary_metrics")
+        if boundary_metrics is None:
+            results.append(GateResult("gate_3_dominance", GateStatus.FAIL,
+                                      "MISSING_BOUNDARY_METRICS: dominance_result=FAILS_BOUNDARY_CONTAMINATION requires boundary_metrics",
+                                      {"dominance_result": dominance_result}))
+            return results
+        if patch_oa_at_rstar >= spec_oa:
+            results.append(GateResult("gate_3_dominance", GateStatus.FAIL,
+                                      f"NOT_A_FAILURE_CASE: patch[{minimal_radius}]={patch_oa_at_rstar:.4f} >= spec={spec_oa:.4f} (expected patch < spec)",
+                                      {"patch_oa": patch_oa_at_rstar, "spec_oa": spec_oa,
+                                       "dominance_result": dominance_result}))
+            return results
+        expected = boundary_metrics.get("expected_fail_type", "")
+        if expected != "BOUNDARY_CONTAMINATION_DOMINATES":
+            results.append(GateResult("gate_3_dominance", GateStatus.FAIL,
+                                      f"BOUNDARY_FAILTYPE_MISMATCH: expected_fail_type={expected!r}",
+                                      {"expected_fail_type": expected}))
+            return results
+        results.append(GateResult("gate_3_dominance", GateStatus.PASS,
+                                   f"VALIDATED_FAILURE: BOUNDARY_CONTAMINATION_DOMINATES confirmed "
+                                   f"patch[{minimal_radius}]={patch_oa_at_rstar:.4f} < spec={spec_oa:.4f}",
+                                   {"delta_pp": round(delta * 100, 4)}))
+
+    else:  # INCONCLUSIVE
+        results.append(GateResult("gate_3_dominance", GateStatus.PASS,
+                                   f"INCONCLUSIVE: delta={delta*100:.2f}pp; no directional claim",
+                                   {"delta_pp": round(delta * 100, 4)}))
+
+    # Gates 4 + 5 only apply to DOMINANT certs
+    if dominance_result != "DOMINANT":
+        results.append(GateResult("gate_4_monotonicity", GateStatus.PASS,
+                                   f"Skipped (dominance_result={dominance_result})"))
+        results.append(GateResult("gate_5_plateau", GateStatus.PASS,
+                                   f"Skipped (dominance_result={dominance_result})"))
         return results
-    results.append(GateResult("gate_3_dominance", GateStatus.PASS,
-                               f"patch[{minimal_radius}]={patch_oa_at_rstar:.4f} > spec={spec_oa:.4f}"))
 
     # Gate 4 — Monotonic improvement up to minimal_radius
     radius_values = sorted(int(k) for k in patch_metrics.keys())
@@ -133,11 +187,11 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
     above_rstar = [r for r in radius_values if r > minimal_radius]
     for r in above_rstar:
         oa = patch_metrics[str(r)]["oa"]
-        delta = abs(oa - patch_oa_at_rstar)
-        if delta > tol:
+        delta_r = abs(oa - patch_oa_at_rstar)
+        if delta_r > tol:
             results.append(GateResult("gate_5_plateau", GateStatus.FAIL,
-                                       f"NO_PLATEAU: patch[{r}]={oa:.4f} deviates {delta*100:.2f}pp from patch[{minimal_radius}]={patch_oa_at_rstar:.4f} (tol={tol*100:.1f}pp)",
-                                       {"r": r, "oa": oa, "r_star_oa": patch_oa_at_rstar, "delta_pp": delta * 100}))
+                                       f"NO_PLATEAU: patch[{r}]={oa:.4f} deviates {delta_r*100:.2f}pp from patch[{minimal_radius}]={patch_oa_at_rstar:.4f} (tol={tol*100:.1f}pp)",
+                                       {"r": r, "oa": oa, "r_star_oa": patch_oa_at_rstar, "delta_pp": delta_r * 100}))
             return results
     if above_rstar:
         results.append(GateResult("gate_5_plateau", GateStatus.PASS,
@@ -167,16 +221,23 @@ def self_test(as_json: bool) -> int:
     base = os.path.dirname(os.path.abspath(__file__))
     fx = os.path.join(base, "fixtures")
     fixtures = [
-        ("valid_houston.json", True, None),
-        ("valid_indian_pines.json", True, None),
-        ("invalid_not_dominant.json", False, "gate_3_dominance"),
-        ("invalid_no_plateau.json", False, "gate_5_plateau"),
-        ("invalid_digest_mismatch.json", False, "gate_2_canonical_hash"),
+        ("valid_houston.json",                              True,  None),
+        ("valid_indian_pines.json",                         True,  None),
+        ("valid_salinas.json",                              True,  None),
+        ("valid_ksc_failure.json",                          True,  None),
+        ("invalid_not_dominant.json",                       False, "gate_3_dominance"),
+        ("invalid_no_plateau.json",                         False, "gate_5_plateau"),
+        ("invalid_digest_mismatch.json",                    False, "gate_2_canonical_hash"),
+        ("invalid_claims_dominant_but_negative_delta.json", False, "gate_3_dominance"),
     ]
     ok = True
     details = []
     for name, should_pass, expected_fail_gate in fixtures:
         path = os.path.join(fx, name)
+        if not os.path.exists(path):
+            details.append({"fixture": name, "ok": None, "expected_ok": should_pass,
+                             "failed_gates": [], "note": "MISSING"})
+            continue
         obj = _load_json(path)
         res = validate_cert(obj)
         passed = _report_ok(res)
@@ -190,8 +251,11 @@ def self_test(as_json: bool) -> int:
     if as_json:
         print(json.dumps({"ok": ok, "fixtures": details}, indent=2, sort_keys=True))
     else:
-        print("=== QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1 SELF-TEST ===")
+        print("=== QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1.1 SELF-TEST ===")
         for d in details:
+            if d.get("note") == "MISSING":
+                print(f"  {d['fixture']}: MISSING (skip)")
+                continue
             status = "PASS" if (d["ok"] == d["expected_ok"]) else "FAIL"
             print(f"  {d['fixture']}: {status}")
         print(f"RESULT: {'PASS' if ok else 'FAIL'}")

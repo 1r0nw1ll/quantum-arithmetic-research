@@ -1,0 +1,85 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_LOCALITY_BOUNDARY_CERT.v1",
+  "description": "Certifies the Boundary Condition: when patch-only generators FAIL to dominate the spectral baseline, the failure is explained by spatial fragmentation (fragmentation_scale < r*). Documents the failure curve (delta_oa monotonically <= 0 across all radii), boundary geometry proxies, and the minimal radius at which failure first appears.",
+  "type": "object",
+  "required": ["schema_version", "dataset", "classifier", "split_protocol", "seed", "generators", "failure_curve", "boundary_geometry", "dominance", "digests"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["QA_LOCALITY_BOUNDARY_CERT.v1"]
+    },
+    "dataset": {"type": "string"},
+    "classifier": {"type": "string"},
+    "split_protocol": {"type": "string"},
+    "seed": {"type": "integer"},
+    "generators": {
+      "type": "object",
+      "required": ["spec", "patch"],
+      "additionalProperties": false,
+      "properties": {
+        "spec": {
+          "type": "object",
+          "required": ["type", "dim"],
+          "properties": {
+            "type": {"type": "string"},
+            "dim": {"type": "integer", "minimum": 1}
+          }
+        },
+        "patch": {
+          "type": "object",
+          "required": ["type", "radius_values", "feature_dim"],
+          "properties": {
+            "type": {"type": "string"},
+            "radius_values": {"type": "array", "items": {"type": "integer", "minimum": 1}, "minItems": 1},
+            "feature_dim": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    },
+    "failure_curve": {
+      "type": "object",
+      "required": ["spec_oa", "patch_oa_by_radius", "all_deltas_nonpositive"],
+      "additionalProperties": false,
+      "properties": {
+        "spec_oa": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "patch_oa_by_radius": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "number", "minimum": 0.0, "maximum": 1.0
+          }
+        },
+        "all_deltas_nonpositive": {"type": "boolean"}
+      }
+    },
+    "boundary_geometry": {
+      "type": "object",
+      "required": ["fragmentation_proxy", "thin_region_proxy", "fragmentation_scale_lt_r_star"],
+      "additionalProperties": false,
+      "properties": {
+        "fragmentation_proxy": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "thin_region_proxy": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "fragmentation_scale_lt_r_star": {"type": "boolean"},
+        "notes": {"type": "string"}
+      }
+    },
+    "dominance": {
+      "type": "object",
+      "required": ["patch_dominates_spec"],
+      "additionalProperties": false,
+      "properties": {
+        "patch_dominates_spec": {"type": "boolean", "enum": [false]}
+      }
+    },
+    "digests": {
+      "type": "object",
+      "required": ["canonical_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

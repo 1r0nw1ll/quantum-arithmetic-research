@@ -2970,6 +2970,32 @@ def _validate_locality_boundary_cert_family_if_present(base_dir: str) -> Optiona
     return None
 
 
+def _validate_locality_regime_sep_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Locality Regime Separator Cert family [79]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_locality_regime_sep_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_locality_regime_sep_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_locality_regime_sep_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3114,8 +3140,12 @@ FAMILY_SWEEPS = [
      "../qa_neighborhood_sufficiency_cert_v1", True),
     (78, "QA Locality Boundary Cert family",
      _validate_locality_boundary_cert_family_if_present,
-     "schema v1.1 + validator (6-gate: schema, hash, failure curve all-nonpositive, delta flag, fragmentation explanation, adjacency witness) + 5 fixtures (2 valid: ksc_boundary v1 + v1.1 with adjacency_witness; 3 negative: not_a_boundary_case, digest_mismatch, adj_rate_wrong)", "78_locality_boundary_cert",
+     "schema v1.2 + validator (6-gate: schema, hash, failure curve, delta flag, fragmentation, adjacency witness Mode A/B) + 7 fixtures (3 valid: ksc_boundary v1/v1.1/v1.2 path mode; 4 negative: not_a_boundary_case, digest_mismatch, adj_rate_wrong, gt_mask_sha_mismatch)", "78_locality_boundary_cert",
      "../qa_locality_boundary_cert_v1", True),
+    (79, "QA Locality Regime Separator Cert family",
+     _validate_locality_regime_sep_cert_family_if_present,
+     "schema v1 + validator (5-gate: schema, hash, delta evidence recompute, regime declaration consistency, regime_consistent flag) + 4 fixtures (2 valid: salinas DOMINANT, ksc BOUNDARY; 2 negative: regime_inconsistent, digest_mismatch)", "79_locality_regime_sep_cert",
+     "../qa_locality_regime_sep_cert_v1", True),
 ]
 
 

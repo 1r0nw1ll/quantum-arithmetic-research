@@ -1,0 +1,36 @@
+{
+  "schema_version": "QA_LOCALITY_BOUNDARY_CERT.v1.2",
+  "dataset": "ksc",
+  "classifier": "RandomForest",
+  "split_protocol": "stratified_0.10_train_seed42",
+  "seed": 42,
+  "generators": {
+    "spec": {"type": "pca30_center_pixel", "dim": 30},
+    "patch": {"type": "patch_only_mean_std_pca3_grad", "radius_values": [3, 5, 7], "feature_dim": 10}
+  },
+  "failure_curve": {
+    "spec_oa": 0.8979,
+    "patch_oa_by_radius": {
+      "3": 0.8237,
+      "5": 0.8633,
+      "7": 0.8881
+    },
+    "all_deltas_nonpositive": true
+  },
+  "boundary_geometry": {
+    "fragmentation_proxy": 0.72,
+    "thin_region_proxy": 0.61,
+    "fragmentation_scale_lt_r_star": true,
+    "notes": "KSC wetland. Mode B witness: 64x64 .npy excerpt with 2-pixel-wide stripes of 13 classes, simulating KSC fragmentation. adj_rate_4=1984/8064=0.246. Replace with real KSC GT mask in production."
+  },
+  "adjacency_witness": {
+    "adj_rate_4": 0.24603174603174602,
+    "gt_mask_path": "../assets/ksc_excerpt_64x64.npy",
+    "gt_mask_sha256": "9daf31cd070d067742f605cd9c323181b960a150543c58dcaebcf40d59433f93",
+    "notes": "Mode B (v1.2 path mode). 64x64 int32 .npy: 2-pixel horizontal stripes, 13 classes (matching KSC class count). cross_edges=1984, total_edges=8064."
+  },
+  "dominance": {"patch_dominates_spec": false},
+  "digests": {
+    "canonical_sha256": "26fc36f51ee110fbfc53097a676ee55f84a896e7d7e572cb1c15f90f3820e80f"
+  }
+}

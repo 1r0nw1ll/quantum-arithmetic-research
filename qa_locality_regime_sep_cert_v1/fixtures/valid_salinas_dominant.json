@@ -1,0 +1,22 @@
+{
+  "schema_version": "QA_LOCALITY_REGIME_SEP_CERT.v1",
+  "dataset": "salinas",
+  "r_star": 7,
+  "adj_rate_4": 0.12,
+  "delta_oa_by_radius": {
+    "3": 0.0056,
+    "5": 0.0303,
+    "7": 0.0429
+  },
+  "regime": "DOMINANT",
+  "regime_evidence": {
+    "all_deltas_nonpositive": false,
+    "any_delta_positive": true,
+    "max_delta_pp": 4.29,
+    "min_delta_pp": 0.56,
+    "regime_consistent": true
+  },
+  "digests": {
+    "canonical_sha256": "4df890f9e52988f4f16705d7dab932192070fffe3e7c85b166ae325f68f08056"
+  }
+}

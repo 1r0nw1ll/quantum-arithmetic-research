@@ -1,0 +1,74 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_LOCALITY_REGIME_SEP_CERT.v1",
+  "description": "Certifies the Locality Regime Separator: given a measured adj_rate_4 and the sign structure of ΔOA across all tested radii, classifies the scene as DOMINANT (variance reduction wins) or BOUNDARY (boundary bias dominates at all tested radii). Provides the critical-adjacency witness binding the empirical outcome to the variance-bias decomposition from QA theory.",
+  "type": "object",
+  "required": ["schema_version", "dataset", "r_star", "adj_rate_4", "delta_oa_by_radius", "regime", "regime_evidence", "digests"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["QA_LOCALITY_REGIME_SEP_CERT.v1"]
+    },
+    "dataset": {"type": "string"},
+    "r_star": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Minimal sufficient radius (pixels). For DOMINANT: r* where plateau begins. For BOUNDARY: the maximum tested radius (patch never reaches r*)."
+    },
+    "adj_rate_4": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Measured 4-neighbor cross-class adjacency rate (from adjacency_witness in Family [78] cert or measured directly)."
+    },
+    "delta_oa_by_radius": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "ΔOA(r) = patch_oa(r) - spec_oa for each tested radius r. Keys are integer radius strings."
+    },
+    "regime": {
+      "type": "string",
+      "enum": ["DOMINANT", "BOUNDARY"],
+      "description": "DOMINANT: at least one radius has ΔOA > 0 (variance reduction wins). BOUNDARY: all radii have ΔOA <= 0 (boundary bias dominates)."
+    },
+    "regime_evidence": {
+      "type": "object",
+      "required": ["all_deltas_nonpositive", "any_delta_positive", "regime_consistent"],
+      "additionalProperties": false,
+      "properties": {
+        "all_deltas_nonpositive": {
+          "type": "boolean",
+          "description": "True iff ΔOA(r) <= 0 for all tested radii."
+        },
+        "any_delta_positive": {
+          "type": "boolean",
+          "description": "True iff at least one ΔOA(r) > 0."
+        },
+        "max_delta_pp": {
+          "type": "number",
+          "description": "Maximum ΔOA(r) in percentage points across all radii."
+        },
+        "min_delta_pp": {
+          "type": "number",
+          "description": "Minimum ΔOA(r) in percentage points across all radii."
+        },
+        "regime_consistent": {
+          "type": "boolean",
+          "description": "True iff declared regime is consistent with the delta sign structure."
+        }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "required": ["canonical_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

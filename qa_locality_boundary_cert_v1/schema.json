@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "QA_LOCALITY_BOUNDARY_CERT.v1.1",
-  "description": "v1.1: adds adjacency_witness block with deterministic cross-class adjacency rate computed from an embedded GT label grid. Replaces fragmentation_proxy placeholder with a reproducible measured value. Backward-compatible: v1 fixtures omit adjacency_witness.",
+  "title": "QA_LOCALITY_BOUNDARY_CERT.v1.2",
+  "description": "v1.2: adjacency_witness supports two modes: (A) embedded gt_label_grid (v1.1), (B) external gt_mask_path + gt_mask_sha256 pointing to a .npy file under assets/. Backward-compatible: v1 certs omit adjacency_witness (Gate 6 skipped).",
   "type": "object",
   "required": ["schema_version", "dataset", "classifier", "split_protocol", "seed", "generators", "failure_curve", "boundary_geometry", "dominance", "digests"],
   "additionalProperties": false,
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["QA_LOCALITY_BOUNDARY_CERT.v1", "QA_LOCALITY_BOUNDARY_CERT.v1.1"]
+      "enum": ["QA_LOCALITY_BOUNDARY_CERT.v1", "QA_LOCALITY_BOUNDARY_CERT.v1.1", "QA_LOCALITY_BOUNDARY_CERT.v1.2"]
     },
     "dataset": {"type": "string"},
     "classifier": {"type": "string"},
@@ -47,9 +47,7 @@
         "patch_oa_by_radius": {
           "type": "object",
           "minProperties": 1,
-          "additionalProperties": {
-            "type": "number", "minimum": 0.0, "maximum": 1.0
-          }
+          "additionalProperties": {"type": "number", "minimum": 0.0, "maximum": 1.0}
         },
         "all_deltas_nonpositive": {"type": "boolean"}
       }
@@ -67,30 +65,18 @@
     },
     "adjacency_witness": {
       "type": "object",
-      "required": ["adj_rate_4", "gt_label_sha256", "gt_label_grid"],
+      "required": ["adj_rate_4"],
       "additionalProperties": false,
       "properties": {
-        "adj_rate_4": {
-          "type": "number",
-          "minimum": 0.0,
-          "maximum": 1.0,
-          "description": "Declared 4-neighbor cross-class adjacency rate. Must match value computed from gt_label_grid."
-        },
-        "gt_label_sha256": {
-          "type": "string",
-          "pattern": "^[0-9a-f]{64}$",
-          "description": "SHA-256 of canonical compact JSON of gt_label_grid (before adjacency_witness is zeroed)."
-        },
+        "adj_rate_4": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+        "gt_label_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "gt_label_grid": {
           "type": "array",
           "minItems": 1,
-          "items": {
-            "type": "array",
-            "minItems": 1,
-            "items": {"type": "integer", "minimum": 0}
-          },
-          "description": "Embedded 2D label grid (rows x cols). Integer class labels. Must be rectangular."
+          "items": {"type": "array", "minItems": 1, "items": {"type": "integer", "minimum": 0}}
         },
+        "gt_mask_path": {"type": "string"},
+        "gt_mask_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
         "notes": {"type": "string"}
       }
     },

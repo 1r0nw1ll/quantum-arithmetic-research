@@ -2,7 +2,7 @@
 """
 validator.py
 
-QA_LOCALITY_BOUNDARY_CERT.v1 / v1.1 validator (Machine Tract).
+QA_LOCALITY_BOUNDARY_CERT.v1 / v1.1 / v1.2 validator (Machine Tract).
 
 Certifies the Boundary Condition for locality-based generators:
 - Gate 1: JSON schema validity
@@ -11,14 +11,19 @@ Certifies the Boundary Condition for locality-based generators:
 - Gate 4: Declared all_deltas_nonpositive flag must match computed reality
 - Gate 5: boundary_geometry.fragmentation_scale_lt_r_star must be True
            (required structural explanation for the failure)
-- Gate 6 (v1.1 only): Adjacency witness — recompute adj_rate_4 from embedded
-           gt_label_grid, verify gt_label_sha256 matches, check declared
-           adj_rate_4 matches computed value within 1e-6. SKIPPED if
-           adjacency_witness is absent (v1 backward-compat).
+- Gate 6 (v1.1+): Adjacency witness, two modes:
+    Mode A (embedded grid): gt_label_grid present → recompute adj_rate_4,
+           verify gt_label_sha256 (SHA-256 of canonical JSON of grid),
+           check declared adj_rate_4 within 1e-6.
+    Mode B (path, v1.2): gt_mask_path present → load .npy file (relative to
+           cert file directory), verify gt_mask_sha256 (SHA-256 of raw bytes),
+           compute adj_rate_4, check declared value within 1e-6.
+    SKIPPED if adjacency_witness absent (v1 backward-compat).
 
 Failure modes: NOT_A_BOUNDARY_CASE, DELTA_FLAG_MISMATCH,
                MISSING_FRAGMENTATION_EXPLANATION, SCHEMA_INVALID, HASH_MISMATCH,
-               ADJ_WITNESS_HASH_MISMATCH, ADJ_RATE_MISMATCH, ADJ_GRID_INVALID
+               ADJ_WITNESS_HASH_MISMATCH, ADJ_RATE_MISMATCH, ADJ_GRID_INVALID,
+               ADJ_MASK_NOT_FOUND, ADJ_MASK_LOAD_ERROR, ADJ_WITNESS_MODE_AMBIGUOUS
 """
 from __future__ import annotations
 
@@ -108,7 +113,7 @@ def _compute_adj_rate_4(grid: List[List[int]]) -> Tuple[float, int, int]:
     return cross_edges / total_edges, cross_edges, total_edges
 
 
-def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
+def validate_cert(obj: Dict[str, Any], cert_dir: Optional[str] = None) -> List[GateResult]:
     results: List[GateResult] = []
 
     # Gate 1 — Schema validity
@@ -181,41 +186,93 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
                                f"(fragmentation_proxy={bg['fragmentation_proxy']}, "
                                f"thin_region_proxy={bg['thin_region_proxy']})"))
 
-    # Gate 6 (v1.1) — Adjacency witness: recompute from embedded label grid
+    # Gate 6 (v1.1+) — Adjacency witness: Mode A (embedded) or Mode B (path)
     aw = obj.get("adjacency_witness")
     if aw is None:
         results.append(GateResult("gate_6_adjacency_witness", GateStatus.PASS,
                                    "Skipped (no adjacency_witness — v1 backward-compat)"))
         return results
 
-    grid = aw.get("gt_label_grid")
-    if grid is None or len(grid) == 0:
-        results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
-                                  "ADJ_GRID_INVALID: gt_label_grid is empty or missing"))
-        return results
-
-    # Check grid is rectangular
-    W0 = len(grid[0]) if grid else 0
-    for i, row in enumerate(grid):
-        if len(row) != W0:
-            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
-                                      f"ADJ_GRID_INVALID: grid is not rectangular (row {i} has width {len(row)}, expected {W0})"))
-            return results
-
-    # Verify SHA-256 of the embedded grid
-    grid_json = _canonical_json_compact(grid)
-    grid_sha = _sha256_hex(grid_json)
-    declared_sha = aw.get("gt_label_sha256", "")
-    if grid_sha != declared_sha:
-        results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
-                                  "ADJ_WITNESS_HASH_MISMATCH: gt_label_sha256 does not match computed SHA-256 of gt_label_grid",
-                                  {"want": declared_sha, "got": grid_sha}))
-        return results
-
-    # Recompute adj_rate_4 and check against declared
-    computed_adj, cross_e, total_e = _compute_adj_rate_4(grid)
     declared_adj = aw.get("adj_rate_4", -1.0)
+    has_grid = aw.get("gt_label_grid") is not None
+    has_path = aw.get("gt_mask_path") is not None
     tol = 1e-6
+
+    if has_grid and has_path:
+        results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                  "ADJ_WITNESS_MODE_AMBIGUOUS: both gt_label_grid and gt_mask_path present; use exactly one"))
+        return results
+
+    if not has_grid and not has_path:
+        results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                  "ADJ_GRID_INVALID: neither gt_label_grid nor gt_mask_path present in adjacency_witness"))
+        return results
+
+    if has_grid:
+        # Mode A — embedded grid
+        grid = aw["gt_label_grid"]
+        if len(grid) == 0:
+            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                      "ADJ_GRID_INVALID: gt_label_grid is empty"))
+            return results
+        W0 = len(grid[0])
+        for i, row in enumerate(grid):
+            if len(row) != W0:
+                results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                          f"ADJ_GRID_INVALID: grid not rectangular (row {i} width={len(row)}, expected {W0})"))
+                return results
+        grid_json = _canonical_json_compact(grid)
+        grid_sha = _sha256_hex(grid_json)
+        declared_sha = aw.get("gt_label_sha256", "")
+        if declared_sha and grid_sha != declared_sha:
+            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                      "ADJ_WITNESS_HASH_MISMATCH: gt_label_sha256 does not match SHA-256 of gt_label_grid",
+                                      {"want": declared_sha, "got": grid_sha}))
+            return results
+        computed_adj, cross_e, total_e = _compute_adj_rate_4(grid)
+        mode_desc = f"{len(grid)}×{W0} embedded label grid"
+
+    else:
+        # Mode B — external .npy mask file (v1.2)
+        rel_path = aw["gt_mask_path"]
+        if cert_dir is None:
+            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                      "ADJ_MASK_NOT_FOUND: gt_mask_path present but cert_dir unknown "
+                                      "(pass cert file path to validator)"))
+            return results
+        mask_path = os.path.normpath(os.path.join(cert_dir, rel_path))
+        if not os.path.isfile(mask_path):
+            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                      f"ADJ_MASK_NOT_FOUND: {mask_path} does not exist",
+                                      {"cert_dir": cert_dir, "gt_mask_path": rel_path}))
+            return results
+        # Verify SHA-256 of raw bytes
+        with open(mask_path, "rb") as f:
+            raw = f.read()
+        file_sha = hashlib.sha256(raw).hexdigest()
+        declared_mask_sha = aw.get("gt_mask_sha256", "")
+        if declared_mask_sha and file_sha != declared_mask_sha:
+            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                      "ADJ_WITNESS_HASH_MISMATCH: gt_mask_sha256 does not match SHA-256 of loaded .npy file",
+                                      {"want": declared_mask_sha, "got": file_sha, "path": mask_path}))
+            return results
+        # Load .npy and compute adj_rate_4
+        try:
+            import numpy as np
+            arr = np.load(mask_path)
+        except Exception as e:
+            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                      f"ADJ_MASK_LOAD_ERROR: failed to load {mask_path}: {e}"))
+            return results
+        if arr.ndim != 2:
+            results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
+                                      f"ADJ_MASK_LOAD_ERROR: expected 2D array, got shape={arr.shape}"))
+            return results
+        grid = arr.tolist()
+        W0 = len(grid[0]) if grid else 0
+        computed_adj, cross_e, total_e = _compute_adj_rate_4(grid)
+        mode_desc = f"{arr.shape[0]}×{arr.shape[1]} .npy mask ({os.path.basename(mask_path)})"
+
     if abs(computed_adj - declared_adj) > tol:
         results.append(GateResult("gate_6_adjacency_witness", GateStatus.FAIL,
                                   f"ADJ_RATE_MISMATCH: declared adj_rate_4={declared_adj:.8f} but "
@@ -225,7 +282,7 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
         return results
 
     results.append(GateResult("gate_6_adjacency_witness", GateStatus.PASS,
-                               f"adj_rate_4={computed_adj:.6f} verified from {len(grid)}×{W0} label grid "
+                               f"adj_rate_4={computed_adj:.6f} verified from {mode_desc} "
                                f"({cross_e}/{total_e} cross-class 4-neighbor edges)",
                                {"adj_rate_4": round(computed_adj, 8),
                                 "cross_edges": cross_e, "total_edges": total_e}))
@@ -251,11 +308,13 @@ def self_test(as_json: bool) -> int:
     base = os.path.dirname(os.path.abspath(__file__))
     fx = os.path.join(base, "fixtures")
     fixtures = [
-        ("valid_ksc_boundary.json",            True,  None),
-        ("valid_ksc_boundary_v1_1.json",        True,  None),
-        ("invalid_not_a_boundary_case.json",    False, "gate_3_failure_curve"),
-        ("invalid_digest_mismatch.json",        False, "gate_2_canonical_hash"),
-        ("invalid_adj_rate_wrong.json",         False, "gate_6_adjacency_witness"),
+        ("valid_ksc_boundary.json",              True,  None),
+        ("valid_ksc_boundary_v1_1.json",          True,  None),
+        ("valid_ksc_boundary_v1_2.json",          True,  None),
+        ("invalid_not_a_boundary_case.json",      False, "gate_3_failure_curve"),
+        ("invalid_digest_mismatch.json",          False, "gate_2_canonical_hash"),
+        ("invalid_adj_rate_wrong.json",           False, "gate_6_adjacency_witness"),
+        ("invalid_gt_mask_sha_mismatch.json",     False, "gate_6_adjacency_witness"),
     ]
     ok = True
     details = []
@@ -267,7 +326,7 @@ def self_test(as_json: bool) -> int:
             ok = False
             continue
         obj = _load_json(path)
-        res = validate_cert(obj)
+        res = validate_cert(obj, cert_dir=fx)
         passed = _report_ok(res)
         if should_pass != passed:
             ok = False
@@ -279,7 +338,7 @@ def self_test(as_json: bool) -> int:
     if as_json:
         print(json.dumps({"ok": ok, "fixtures": details}, indent=2, sort_keys=True))
     else:
-        print("=== QA_LOCALITY_BOUNDARY_CERT.v1.1 SELF-TEST ===")
+        print("=== QA_LOCALITY_BOUNDARY_CERT.v1.2 SELF-TEST ===")
         for d in details:
             if d.get("note") == "MISSING":
                 print(f"  {d['fixture']}: MISSING (FAIL)")
@@ -302,7 +361,8 @@ def main(argv: Optional[List[str]] = None) -> int:
         ap.print_help()
         return 2
     obj = _load_json(args.file)
-    results = validate_cert(obj)
+    cert_dir = os.path.dirname(os.path.abspath(args.file))
+    results = validate_cert(obj, cert_dir=cert_dir)
     if args.json:
         _print_json(results)
     else:

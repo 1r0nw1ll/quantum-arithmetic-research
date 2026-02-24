@@ -49,7 +49,8 @@ A family **does not count as shipped** unless both tracts are present.
 | [75] | [QA Algebra Bridge Cert](75_algebra_bridge_cert.md) | Schema + Validator + 2 Fixtures (semantics anchor + word convention + component bridge + semantics hash binding) | PASS |
 | [76] | [QA Failure Algebra Structure Cert](76_failure_algebra_structure_cert.md) | Schema + Validator + 2 Fixtures (finite poset + join-semilattice + monotone associative composition + propagation law) | PASS |
 | [77] | [QA Neighborhood Sufficiency Cert](77_neighborhood_sufficiency_cert.md) | Schema v1.1 + Validator (branching Gate 3) + 8 Fixtures (4 valid: houston, indian_pines, salinas, ksc_failure; 4 negative: not_dominant, no_plateau, digest, claims_dominant_but_negative_delta) | PASS |
-| [78] | [QA Locality Boundary Cert](78_locality_boundary_cert.md) | Schema v1.1 + Validator (6-gate incl. Gate 6 adjacency witness) + 5 Fixtures (2 valid: ksc_boundary v1+v1.1; 3 negative: not_a_boundary_case, digest_mismatch, adj_rate_wrong) | PASS |
+| [78] | [QA Locality Boundary Cert](78_locality_boundary_cert.md) | Schema v1.2 + Validator (6-gate incl. Gate 6 adjacency witness Mode A/B) + 7 Fixtures (3 valid: ksc_boundary v1/v1.1/v1.2 path mode; 4 negative: not_a_boundary_case, digest_mismatch, adj_rate_wrong, gt_mask_sha_mismatch) | PASS |
+| [79] | [QA Locality Regime Separator Cert](79_locality_regime_sep_cert.md) | Schema v1 + Validator (5-gate: schema, hash, delta evidence recompute, regime declaration, regime_consistent flag) + 4 Fixtures (2 valid: salinas DOMINANT, ksc BOUNDARY; 2 negative: regime_inconsistent, digest_mismatch) | PASS |
 
 ## Quick validation
 

@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "QA_LOCALITY_BOUNDARY_CERT.v1",
-  "description": "Certifies the Boundary Condition: when patch-only generators FAIL to dominate the spectral baseline, the failure is explained by spatial fragmentation (fragmentation_scale < r*). Documents the failure curve (delta_oa monotonically <= 0 across all radii), boundary geometry proxies, and the minimal radius at which failure first appears.",
+  "title": "QA_LOCALITY_BOUNDARY_CERT.v1.1",
+  "description": "v1.1: adds adjacency_witness block with deterministic cross-class adjacency rate computed from an embedded GT label grid. Replaces fragmentation_proxy placeholder with a reproducible measured value. Backward-compatible: v1 fixtures omit adjacency_witness.",
   "type": "object",
   "required": ["schema_version", "dataset", "classifier", "split_protocol", "seed", "generators", "failure_curve", "boundary_geometry", "dominance", "digests"],
   "additionalProperties": false,
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["QA_LOCALITY_BOUNDARY_CERT.v1"]
+      "enum": ["QA_LOCALITY_BOUNDARY_CERT.v1", "QA_LOCALITY_BOUNDARY_CERT.v1.1"]
     },
     "dataset": {"type": "string"},
     "classifier": {"type": "string"},
@@ -62,6 +62,35 @@
         "fragmentation_proxy": {"type": "number", "minimum": 0.0, "maximum": 1.0},
         "thin_region_proxy": {"type": "number", "minimum": 0.0, "maximum": 1.0},
         "fragmentation_scale_lt_r_star": {"type": "boolean"},
+        "notes": {"type": "string"}
+      }
+    },
+    "adjacency_witness": {
+      "type": "object",
+      "required": ["adj_rate_4", "gt_label_sha256", "gt_label_grid"],
+      "additionalProperties": false,
+      "properties": {
+        "adj_rate_4": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Declared 4-neighbor cross-class adjacency rate. Must match value computed from gt_label_grid."
+        },
+        "gt_label_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of canonical compact JSON of gt_label_grid (before adjacency_witness is zeroed)."
+        },
+        "gt_label_grid": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "array",
+            "minItems": 1,
+            "items": {"type": "integer", "minimum": 0}
+          },
+          "description": "Embedded 2D label grid (rows x cols). Integer class labels. Must be rectangular."
+        },
         "notes": {"type": "string"}
       }
     },

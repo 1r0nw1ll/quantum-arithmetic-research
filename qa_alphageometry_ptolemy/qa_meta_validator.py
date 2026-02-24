@@ -3114,7 +3114,7 @@ FAMILY_SWEEPS = [
      "../qa_neighborhood_sufficiency_cert_v1", True),
     (78, "QA Locality Boundary Cert family",
      _validate_locality_boundary_cert_family_if_present,
-     "schema + validator (5-gate: schema, hash, failure curve all-nonpositive, delta flag, fragmentation explanation) + 3 fixtures (1 valid: ksc_boundary; 2 negative: not_a_boundary_case, digest_mismatch)", "78_locality_boundary_cert",
+     "schema v1.1 + validator (6-gate: schema, hash, failure curve all-nonpositive, delta flag, fragmentation explanation, adjacency witness) + 5 fixtures (2 valid: ksc_boundary v1 + v1.1 with adjacency_witness; 3 negative: not_a_boundary_case, digest_mismatch, adj_rate_wrong)", "78_locality_boundary_cert",
      "../qa_locality_boundary_cert_v1", True),
 ]
 

@@ -1,0 +1,47 @@
+{
+  "schema_version": "QA_LOCALITY_BOUNDARY_CERT.v1.1",
+  "dataset": "ksc",
+  "classifier": "RandomForest",
+  "split_protocol": "stratified_0.10_train_seed42",
+  "seed": 42,
+  "generators": {
+    "spec": {"type": "pca30_center_pixel", "dim": 30},
+    "patch": {"type": "patch_only_mean_std_pca3_grad", "radius_values": [3, 5, 7], "feature_dim": 10}
+  },
+  "failure_curve": {
+    "spec_oa": 0.8979,
+    "patch_oa_by_radius": {
+      "3": 0.8237,
+      "5": 0.8633,
+      "7": 0.8881
+    },
+    "all_deltas_nonpositive": true
+  },
+  "boundary_geometry": {
+    "fragmentation_proxy": 0.72,
+    "thin_region_proxy": 0.61,
+    "fragmentation_scale_lt_r_star": true,
+    "notes": "KSC wetland scene: thin elongated class regions (marshes, cypress, scrub) narrower than r*=7. Adjacency witness replaces proxy with deterministic 10x10 synthetic label grid capturing 1-pixel-wide stripe fragmentation pattern. Real adj_rate_4 from GT label mask to be substituted in production use."
+  },
+  "adjacency_witness": {
+    "adj_rate_4": 0.5,
+    "gt_label_sha256": "42659bebb8f64d4c9c1ec16a759d5510d86ced9ca75a65dfe6baa0055d79415e",
+    "gt_label_grid": [
+      [0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1],
+      [2,2,2,2,2,2,2,2,2,2],
+      [0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1],
+      [2,2,2,2,2,2,2,2,2,2],
+      [0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1],
+      [2,2,2,2,2,2,2,2,2,2],
+      [0,0,0,0,0,0,0,0,0,0]
+    ],
+    "notes": "10x10 synthetic label grid: 1-pixel-wide horizontal stripes of 3 classes. All 90 vertical edges are cross-class; 0 horizontal edges cross class. adj_rate_4 = 90/180 = 0.5. This is a reproducible proxy for KSC-like fragmentation; replace gt_label_grid with the real 512x614 KSC GT mask in production (v1.2 upgrade)."
+  },
+  "dominance": {"patch_dominates_spec": false},
+  "digests": {
+    "canonical_sha256": "c11ccb93e07c13b03e32535776a39355d11313109b7a55db6135c3da5fd60bd1"
+  }
+}

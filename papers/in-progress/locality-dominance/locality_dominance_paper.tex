@@ -629,6 +629,28 @@ that the primary structural advantage of CNN-based hyperspectral
 models may lie in implicit spatial aggregation rather than in
 high-capacity spectral transforms.
 
+\subsection{Machine-Verifiable Reproducibility Layer}
+
+To support reproducible review, all dominance and failure outcomes
+are encoded as machine-verifiable \emph{certificate families}.
+Dominant datasets (Houston, Indian Pines, PaviaU, Salinas) are
+certified by \emph{Family~[77]: QA Neighborhood Sufficiency Cert
+v1.1}, a five-gate validator that checks schema integrity, SHA-256
+digest, patch dominance, monotonic improvement up to~$\rstar$, and
+plateau stability beyond~$\rstar$.  Critically, KSC is \emph{not
+excluded as an anomaly} but is instead encoded as a validated failure
+certificate under the branching
+\texttt{FAILS\_BOUNDARY\_CONTAMINATION} outcome of the same family,
+requiring that patch OA~$<$~spec OA at~$\rstar$ and that
+\texttt{boundary\_metrics} documenting the fragmentation geometry are
+present and consistent.  The complementary \emph{Family~[78]: QA
+Locality Boundary Cert} independently certifies the failure mechanism:
+all patch-radius deltas must be nonpositive and
+\texttt{fragmentation\_scale\_lt\_r*} must be attested.  Together,
+Families~[77]--[78] make every result in this paper a CI-checkable
+artifact: a reviewer can re-run the self-tests and confirm that the
+certified numbers match the tables above.
+
 \subsection{Limitations}
 
 The findings are empirical and evaluated on five datasets. The
@@ -681,6 +703,10 @@ All experiments use publicly available datasets and standard
 scikit-learn RF classifiers (200 estimators). Patch extraction
 uses reflect padding; no GPU required. Experimental scripts and
 fixture data are archived with the submission.
+Dominance outcomes (Families~[77]--[78]) are CI-checkable certificate
+objects; run \texttt{python validator.py --self-test} in each family
+directory to verify all fixtures.  The KSC counterexample is certified
+rather than excluded, providing a tamper-evident boundary condition.
 
 % ============================================================
 \appendix

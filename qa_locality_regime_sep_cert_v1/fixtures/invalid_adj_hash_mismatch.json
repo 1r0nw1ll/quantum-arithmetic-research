@@ -1,0 +1,33 @@
+{
+  "schema_version": "QA_LOCALITY_REGIME_SEP_CERT.v1.1",
+  "dataset": "salinas",
+  "r_star": 7,
+  "adj_rate_4": 0.125,
+  "delta_oa_by_radius": {
+    "3": 0.0056,
+    "5": 0.0303,
+    "7": 0.0429
+  },
+  "regime": "DOMINANT",
+  "regime_evidence": {
+    "all_deltas_nonpositive": false,
+    "any_delta_positive": true,
+    "max_delta_pp": 4.29,
+    "min_delta_pp": 0.56,
+    "regime_consistent": true
+  },
+  "adjacency_witness": {
+    "adj_rate_4": 0.125,
+    "gt_label_sha256": "deadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeefdeadbeef",
+    "gt_label_grid": [
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [0, 0, 0, 0, 0],
+      [1, 1, 1, 1, 1]
+    ]
+  },
+  "digests": {
+    "canonical_sha256": "8f1af71d0da91024befa068d070147bdb8a85ab3f53ad7ca9cb2bc8478cf0eea"
+  }
+}

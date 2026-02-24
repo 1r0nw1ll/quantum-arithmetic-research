@@ -8,7 +8,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["QA_LOCALITY_REGIME_SEP_CERT.v1"]
+      "enum": ["QA_LOCALITY_REGIME_SEP_CERT.v1", "QA_LOCALITY_REGIME_SEP_CERT.v1.1"]
     },
     "dataset": {"type": "string"},
     "r_star": {
@@ -20,7 +20,7 @@
       "type": "number",
       "minimum": 0.0,
       "maximum": 1.0,
-      "description": "Measured 4-neighbor cross-class adjacency rate (from adjacency_witness in Family [78] cert or measured directly)."
+      "description": "Measured 4-neighbor cross-class adjacency rate. In v1.1+, must match adjacency_witness recomputed value within tolerance."
     },
     "delta_oa_by_radius": {
       "type": "object",
@@ -59,6 +59,39 @@
         "regime_consistent": {
           "type": "boolean",
           "description": "True iff declared regime is consistent with the delta sign structure."
+        }
+      }
+    },
+    "adjacency_witness": {
+      "type": "object",
+      "description": "Optional (v1.1+): machine-verifiable witness for adj_rate_4. Mode A = inline grid; Mode B = path to .npy file. Gate 6 recomputes adj_rate_4 and verifies hash.",
+      "required": ["adj_rate_4"],
+      "additionalProperties": false,
+      "properties": {
+        "adj_rate_4": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Declared adj_rate_4 in this witness block; validator recomputes and verifies."
+        },
+        "gt_label_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Mode A: SHA-256 of canonical JSON of gt_label_grid."
+        },
+        "gt_label_grid": {
+          "type": "array",
+          "description": "Mode A: 2D integer label grid (list of rows).",
+          "items": {"type": "array", "items": {"type": "integer"}}
+        },
+        "gt_mask_path": {
+          "type": "string",
+          "description": "Mode B: path to .npy label file (relative to cert file's directory)."
+        },
+        "gt_mask_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Mode B: SHA-256 of raw bytes of the .npy file."
         }
       }
     },

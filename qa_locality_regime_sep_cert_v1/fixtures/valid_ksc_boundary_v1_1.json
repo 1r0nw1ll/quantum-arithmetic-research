@@ -1,0 +1,27 @@
+{
+  "schema_version": "QA_LOCALITY_REGIME_SEP_CERT.v1.1",
+  "dataset": "ksc",
+  "r_star": 7,
+  "adj_rate_4": 0.24603174603174602,
+  "delta_oa_by_radius": {
+    "3": -0.0742,
+    "5": -0.0346,
+    "7": -0.0098
+  },
+  "regime": "BOUNDARY",
+  "regime_evidence": {
+    "all_deltas_nonpositive": true,
+    "any_delta_positive": false,
+    "max_delta_pp": -0.98,
+    "min_delta_pp": -7.42,
+    "regime_consistent": true
+  },
+  "adjacency_witness": {
+    "adj_rate_4": 0.24603174603174602,
+    "gt_mask_path": "../../qa_locality_boundary_cert_v1/assets/ksc_excerpt_64x64.npy",
+    "gt_mask_sha256": "9daf31cd070d067742f605cd9c323181b960a150543c58dcaebcf40d59433f93"
+  },
+  "digests": {
+    "canonical_sha256": "5b0ea9b947c237c93135d68009be212f93df9da1142be79d868215beef51d0e6"
+  }
+}

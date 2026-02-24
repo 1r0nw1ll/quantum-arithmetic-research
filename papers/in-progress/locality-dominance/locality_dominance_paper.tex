@@ -47,29 +47,27 @@
 
 % ============================================================
 \begin{abstract}
-Hyperspectral and multimodal land-cover classification methods
-typically rely on high-dimensional per-pixel spectral representations
-and increasingly complex fusion strategies. In this work, we
-demonstrate that a compact neighborhood-statistic
-representation---computed entirely from local spatial
-context---outperforms substantially higher-dimensional spectral
-baselines across three benchmarks. Using stratified 10\% training
-splits, a 10--14-dimensional patch-statistics feature vector (mean,
-standard deviation, gradient magnitude, and PCA-derived neighborhood
-descriptors) achieves $+3.0$--$11.1\pp$ improvements in overall
-accuracy (\OA) and $+6.3$--$16.1\pp$ in average accuracy (\Acc)
-relative to 30--200-dimensional spectral baselines on Houston
-(multimodal), Indian Pines, and PaviaU datasets. Notably, gains in
-\Acc\ exceed gains in \OA, indicating improved minority-class
-performance. Accuracy saturates at a small, scene-dependent
-neighborhood scale ($5{\times}5$--$7{\times}7$), beyond which larger
-windows offer no consistent benefit. In contrast, uncertainty-driven
-gating and spectral transform augmentations provide negligible or
-negative impact once spatial context is encoded. These results suggest
-that local second-order spatial statistics constitute a sufficient and
-dominant representation for class separation in standard hyperspectral
-benchmarks, substantially reducing feature dimensionality while
-improving performance.
+We study whether hyperspectral land-cover classification is better
+served by per-pixel spectral representations or by low-dimensional
+spatial neighborhood statistics. Across \textbf{five datasets}---Houston
+(multimodal HSI+LiDAR+MS), Indian Pines, PaviaU, Salinas, and Kennedy
+Space Center (KSC)---a \textbf{10--14-dimensional patch-statistic
+representation} (local mean, variance, gradient, and patch PCA
+components) is compared to \textbf{30--204-dimensional} spectral
+baselines (PCA and raw spectra). Neighborhood statistics dominate on
+\textbf{four} datasets, improving overall accuracy by
+$\mathbf{+3.0}$\textbf{--}$\mathbf{+11.1\pp}$ and average accuracy
+by $\mathbf{+1.9}$\textbf{--}$\mathbf{+16.1\pp}$ while reducing
+feature dimension by \textbf{76--97\%}, with optimal window
+$\rstar{=}5{\times}5$ (Houston) and $\rstar{=}7{\times}7$ (Indian
+Pines/PaviaU/Salinas). \textbf{KSC is a consistent counterexample}:
+the spectral baseline exceeds patch-only by ${\approx}2.5\pp$ \OA\
+(mean across seeds), indicating a boundary condition where severe scene
+fragmentation and thin class regions cause boundary contamination to
+outweigh variance reduction. These results support a
+\emph{Neighborhood Sufficiency Principle}: locality-dominant operators
+can subsume spectral encoding when spatial homogeneity exceeds
+$\rstar$, but fail in highly fragmented regimes.
 \end{abstract}
 
 \begin{IEEEkeywords}
@@ -113,12 +111,14 @@ standard deviation, gradient magnitude, and PCA-derived descriptors
 computed within small spatial windows. The resulting feature vector
 is 10--14-dimensional, independent of the number of spectral bands.
 
-Across three benchmarks---Houston (multimodal HSI+MS+LiDAR), Indian
-Pines, and PaviaU---using stratified 10\% training splits, we observe
-that this neighborhood-based representation consistently outperforms
-30--200-dimensional spectral baselines. Improvements range from
-$+3.0$ to $+11.1\pp$ in \OA\ and $+6.3$ to $+16.1\pp$ in \Acc,
-with substantial gains in minority-class performance. Accuracy
+Across five datasets---Houston (multimodal HSI+MS+LiDAR), Indian
+Pines, PaviaU, Salinas, and KSC---using stratified 10\% training
+splits, we observe that this neighborhood-based representation
+outperforms spectral baselines on four of five datasets. Improvements
+range from $+3.0$ to $+11.1\pp$ in \OA\ and $+1.9$ to $+16.1\pp$ in
+\Acc, with substantial gains in minority-class performance. On KSC,
+spectral features win, identifying scene fragmentation as the boundary
+condition for patch dominance failure. Accuracy
 saturates at a small, scene-dependent window size
 ($5{\times}5$--$7{\times}7$), indicating the existence of a minimal
 sufficient spatial scale.
@@ -233,7 +233,7 @@ improvement relative to explicit spatial encoding.
 
 \subsection{Datasets}
 
-We evaluate on three benchmarks:
+We evaluate on five benchmarks:
 
 \begin{itemize}
   \item \textbf{Houston Multimodal:} Hyperspectral (144 bands),
@@ -631,7 +631,7 @@ high-capacity spectral transforms.
 
 \subsection{Limitations}
 
-The findings are empirical and evaluated on three benchmarks. The
+The findings are empirical and evaluated on five datasets. The
 optimal window size varies with scene structure, and further
 evaluation on additional multimodal benchmarks and scenes with highly
 fragmented spatial patterns would strengthen generality. The current
@@ -645,13 +645,15 @@ may further improve performance.
 We investigated whether high-dimensional spectral representations
 are necessary for hyperspectral and multimodal land-cover
 classification once local spatial context is explicitly encoded.
-Across three benchmarks (Houston multimodal, Indian Pines, and
-PaviaU) using stratified 10\% training splits, we found that a
-compact 10--14-dimensional neighborhood-statistics representation
-consistently outperforms 30--200-dimensional spectral baselines.
-Improvements range from $+3.0$ to $+11.1\pp$ in \OA\ and $+6.3$
-to $+16.1\pp$ in \Acc, with particularly strong gains for minority
-classes.
+Across five datasets (Houston, Indian Pines, PaviaU, Salinas, and KSC)
+using stratified 10\% training splits, we found that a compact
+10--14-dimensional neighborhood-statistics representation outperforms
+30--200-dimensional spectral baselines on four of five datasets.
+Improvements on dominant datasets range from $+3.0$ to $+11.1\pp$
+in \OA\ and $+1.9$ to $+16.1\pp$ in \Acc, with particularly strong
+gains for minority classes. On KSC, the spectral baseline wins by
+${\approx}2.5\pp$ \OA, identifying severe scene fragmentation as the
+boundary condition for patch dominance failure.
 
 Performance saturates at a small, scene-dependent neighborhood scale
 ($5{\times}5$--$7{\times}7$), suggesting the existence of a minimal
@@ -711,7 +713,7 @@ Margin  & 5.0 & 95.86 & $-0.48$ & 0.0\% & $-0.064$ \\
   \hfill
   \includegraphics[width=0.48\textwidth]{fig2_oa_aa_comparison.pdf}
   \caption{%
-    \textbf{Left (Fig.\,1):} Patch-size OA sweep across three datasets.
+    \textbf{Left (Fig.\,1):} Patch-size OA sweep across five datasets.
     Dashed lines indicate spectral PCA baselines.
     Performance saturates at scene-dependent $\rstar$
     ($5{\times}5$ Houston; $7{\times}7$ Indian Pines and PaviaU).

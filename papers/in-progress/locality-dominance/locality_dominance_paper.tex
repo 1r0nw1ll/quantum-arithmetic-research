@@ -30,6 +30,8 @@
 \newcommand{\OA}{\ensuremath{\mathrm{OA}}}
 \newcommand{\Acc}{\ensuremath{\mathrm{AA}}}  % \AA is a LaTeX built-in (Angstrom A-ring)
 \newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
+\newcommand{\AdjSalinas}{0.120} % adj_rate_4 from Family [79] cert (valid_salinas_dominant)
+\newcommand{\AdjKSC}{0.246}     % adj_rate_4 from Family [78] v1.2 Mode B GT mask excerpt
 
 % ============================================================
 \begin{document}
@@ -572,7 +574,16 @@ statistics over an $r{\times}r$ window:
 Under spatial coherence assumptions, variance shrinks as
 $\mathrm{Var}(\boldsymbol{\varepsilon})/|N_r|$, while the class mean
 remains stable. The representation therefore increases signal-to-noise
-ratio without increasing feature dimensionality.
+ratio without increasing feature dimensionality.  Decomposing the
+approximation error as $\mathrm{err}(r) \approx V(r) + B(r)$, where
+$V(r) \propto \sigma^2/(2r{+}1)^2$ decreases with radius (variance
+reduction) and $B(r) \propto \mathrm{adj}_4 \cdot r \cdot
+\|\Delta\boldsymbol{\mu}\|^2$ increases with radius (boundary
+contamination), locality dominance holds when $V(r)$ dominates and
+fails when $B(r)$ dominates.  Family~[79] operationalizes this
+decomposition: DOMINANT scenes exhibit $\exists r$ s.t.\
+$\Delta\mathrm{OA}(r) > 0$; BOUNDARY scenes exhibit $\forall r$,
+$\Delta\mathrm{OA}(r) \le 0$.
 
 \subsection{The Neighborhood Sufficiency Principle}
 
@@ -650,6 +661,46 @@ all patch-radius deltas must be nonpositive and
 Families~[77]--[78] make every result in this paper a CI-checkable
 artifact: a reviewer can re-run the self-tests and confirm that the
 certified numbers match the tables above.
+
+\subsection{Regime Separation as a Theorem-Level Certificate}
+
+Beyond dataset-level dominance and boundary-condition certification
+(Families~[77]--[78]), we introduce a theorem-level regime classifier:
+\emph{Family~[79]: QA Locality Regime Separator Cert}.  This cert
+recomputes the empirical evidence $\Delta\mathrm{OA}(r)$ across tested
+radii and enforces consistency between observed deltas and the declared
+scene regime:
+
+\begin{itemize}
+\item \textbf{DOMINANT:} $\exists r$ such that $\Delta\mathrm{OA}(r) > 0$.
+\item \textbf{BOUNDARY:} $\forall r$, $\Delta\mathrm{OA}(r) \le 0$.
+\end{itemize}
+
+The validator recomputes the maximum delta over radii and rejects
+inconsistent declarations (e.g., declaring DOMINANT when all deltas
+are nonpositive).  This elevates the empirical observation
+``patch dominates'' from a narrative claim to a CI-checkable theorem
+predicate.  Table~\ref{tab:regime-separator} shows the certified
+regime outcome for representative datasets, with $\mathrm{adj}_4$
+sourced directly from the cert fixtures (Family~[78] Mode~B
+GT mask excerpt for KSC; Family~[79] inline value for Salinas).
+Empirically, KSC exhibits substantially higher cross-class adjacency
+($\mathrm{adj}_4{=}\AdjKSC$) than Salinas ($\mathrm{adj}_4{=}\AdjSalinas$),
+consistent with boundary contamination dominating across all tested radii.
+
+\begin{table}[t]
+\centering
+\caption{Certified regime classification (Family~[79]).}
+\label{tab:regime-separator}
+\begin{tabular}{lcccc}
+\hline
+Dataset & $r^\star$ & $\max_r \Delta\mathrm{OA}(r)$ & $\mathrm{adj}_4$ & Regime \\
+\hline
+Salinas & $7{\times}7$ & $+4.29\pp$ & $\AdjSalinas$ & DOMINANT \\
+KSC     & $7{\times}7$ & $-0.98\pp$ & $\AdjKSC$     & BOUNDARY \\
+\hline
+\end{tabular}
+\end{table}
 
 \subsection{Limitations}
 

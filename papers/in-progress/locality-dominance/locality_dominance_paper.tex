@@ -413,9 +413,8 @@ benchmark.
 
 \subsection{Cross-Dataset Generalization}
 
-The generalization experiment on Indian Pines and PaviaU constitutes
-the primary evidence for locality dominance as a scene-independent
-phenomenon.
+We evaluate locality dominance across four additional HSI benchmarks
+to assess whether the finding is scene-independent.
 
 On \textbf{Indian Pines}, a PCA-30 spectral representation achieves
 $\OA{=}70.66\%$, $\Acc{=}56.39\%$, $\kappa{=}0.657$. The 10-dimensional
@@ -426,12 +425,21 @@ substantially exceeds the gain in \OA\ ($\Delta\OA{=}+10.34\pp$),
 establishing that improvement is broad-based and disproportionately
 benefits rare categories.
 
-On \textbf{PaviaU}, the same configuration yields $\OA{=}91.98\%$,
-$\Acc{=}87.96\%$, $\kappa{=}0.893$, compared to the PCA-30 baseline
-of $\OA{=}88.07\%$, $\Acc{=}81.61\%$.
+On \textbf{PaviaU}, patch-only at $7{\times}7$ yields $\OA{=}91.98\%$,
+$\Acc{=}87.96\%$, $\kappa{=}0.893$, compared to the PCA-30 baseline of
+$\OA{=}88.07\%$, $\Acc{=}81.61\%$ ($\Delta\OA{=}+3.91\pp$,
+$\Delta\Acc{=}+6.35\pp$).
 
-Full results are reported in Tables~\ref{tab:indian_pines}
-and~\ref{tab:pavia}.
+On \textbf{Salinas}, which consists of 16 vegetative cover classes
+over large homogeneous agricultural fields (54\,129 labeled pixels),
+patch-only at $7{\times}7$ achieves $\OA{=}97.01\%$,
+$\Acc{=}97.81\%$, $\kappa{=}0.9667$ (seed=42), compared to the PCA-30
+baseline of $\OA{=}92.72\%$. The mean $\OA$ across three seeds is
+$97.06\%$ ($\Delta\OA{=}+4.00\pp$ mean). Results are stable across
+seeds (range $< 0.13\pp$), reflecting the high spatial homogeneity of
+the Salinas scene.
+
+Full results are reported in Tables~\ref{tab:indian_pines}--\ref{tab:ksc}.
 
 \begin{table}[t]
 \centering
@@ -469,14 +477,74 @@ Patch $5{\times}5$, only (RF)& 10  & 91.44 & 87.63 & 0.886 \\
 \end{tabular}
 \end{table}
 
+\begin{table}[t]
+\centering
+\caption{Salinas: OA / AA / $\kappa$ (seed=42, stratified 10\% train)}
+\label{tab:salinas}
+\begin{tabular}{lcccc}
+\toprule
+Method & Dims & OA (\%) & AA (\%) & $\kappa$ \\
+\midrule
+PCA-30, center pixel (RF)    & 30  & 92.72 & 95.83 & 0.919 \\
+Raw spectral 204D (RF)       & 204 & 91.44 & 94.88 & 0.905 \\
+Patch $3{\times}3$, only (RF)& 10  & 93.28 & 95.44 & 0.925 \\
+Patch $5{\times}5$, only (RF)& 10  & 95.75 & 97.21 & 0.953 \\
+\textbf{Patch $7{\times}7$, only (RF)}
+                             &\textbf{10}&\textbf{97.01}&\textbf{97.81}&\textbf{0.967}\\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\centering
+\caption{KSC: OA / AA / $\kappa$ (seed=42, stratified 10\% train).
+         Spectral baseline wins; locality dominance does not hold.}
+\label{tab:ksc}
+\begin{tabular}{lcccc}
+\toprule
+Method & Dims & OA (\%) & AA (\%) & $\kappa$ \\
+\midrule
+\textbf{PCA-30, center pixel (RF)} &\textbf{30} &\textbf{89.79}&\textbf{83.78}&\textbf{0.886}\\
+Raw spectral 176D (RF)       & 176 & 87.12 & 81.09 & 0.856 \\
+Patch $3{\times}3$, only (RF)& 10  & 82.37 & 73.60 & 0.804 \\
+Patch $5{\times}5$, only (RF)& 10  & 86.33 & 79.18 & 0.848 \\
+Patch $7{\times}7$, only (RF)& 10  & 88.81 & 82.40 & 0.875 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Boundary Condition: When Locality Dominance Fails}
+
+On \textbf{KSC} (Kennedy Space Center), the spectral baseline wins
+across all three seeds: PCA-30 achieves a mean $\OA$ of $91.11\%$
+versus patch-only $7{\times}7$ at $88.61\%$ ($\Delta\OA{=}-2.50\pp$
+mean). KSC is structurally distinct from the four dominant datasets:
+it contains only 5\,211 labeled pixels across 13 spectrally similar
+wetland and coastal vegetation classes, yielding approximately 40
+training samples per class. The scene exhibits high spatial
+fragmentation with thin elongated class regions (marshes, water
+bodies, scrub) where spatial neighborhoods span multiple class
+boundaries at any patch size.
+
+These conditions violate the spatial coherence assumption underlying
+locality dominance: when class regions are smaller than $r{\times}r$,
+neighborhood statistics aggregate cross-class pixels, introducing
+bias that outweighs variance reduction. KSC thus defines the
+boundary condition of the Neighborhood Sufficiency Principle:
+\emph{locality dominance holds when spatial homogeneity scale exceeds
+the minimal sufficient radius; it fails when scene fragmentation
+scale falls below $\rstar$}.
+
 \subsection{Summary}
 
-Across all three datasets, a 10--14-dimensional neighborhood-statistic
-representation consistently and substantially outperforms spectral
-baselines ranging from 30 to 200 dimensions, achieving a
-feature-dimension reduction of 76--95\% while improving $\OA$ by
-3.0--11.1\pp\ and $\Acc$ by 6.3--16.1\pp. The neighborhood operator
-is the dominant contributor to classification performance.
+Across five datasets, a 10--14-dimensional neighborhood-statistic
+representation outperforms spectral baselines on four (Houston,
+Indian Pines, PaviaU, Salinas), achieving a feature-dimension
+reduction of 76--97\% while improving $\OA$ by $3.0$--$11.1\pp$ and
+$\Acc$ by $1.9$--$16.1\pp$. On the fifth dataset (KSC), the spectral
+baseline wins by $2.5\pp$ mean $\OA$, identifying scene fragmentation
+and small training set size as the boundary condition for patch
+dominance failure.
 
 % ============================================================
 \section{Discussion}
@@ -522,9 +590,11 @@ beyond which accuracy plateaus or slightly regresses. This behavior
 is consistent with two competing effects: (i) variance reduction
 within homogeneous class regions, and (ii) boundary contamination
 when windows span multiple classes. Empirically, $\rstar{=}5{\times}5$
-on Houston and $\rstar{=}7{\times}7$ on Indian Pines and PaviaU,
-consistent with larger spatial homogeneity in agricultural and
-structured urban scenes.
+on Houston and $\rstar{=}7{\times}7$ on Indian Pines, PaviaU, and
+Salinas, consistent with larger spatial homogeneity in agricultural
+and structured urban scenes. On KSC, the fragmentation scale of
+wetland classes falls below $\rstar$, causing boundary contamination
+at all tested window sizes and spectral dominance.
 
 \subsection{Minority-Class Rescue}
 

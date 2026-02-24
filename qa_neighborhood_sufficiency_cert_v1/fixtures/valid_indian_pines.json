@@ -1,0 +1,47 @@
+{
+  "classifier": "RandomForest",
+  "dataset": "indian_pines",
+  "digests": {
+    "canonical_sha256": "683f8437e881dda23662b7de46bd8fb7ac275772fa555686b1c9e88ed911a4e8"
+  },
+  "dominance": {
+    "patch_dominates_spec": true,
+    "plateau_tolerance_pp": 0.5
+  },
+  "generators": {
+    "patch": {
+      "feature_dim": 10,
+      "radius_values": [
+        3,
+        5,
+        7
+      ],
+      "type": "patch_only_mean_std_pca3_grad"
+    },
+    "spec": {
+      "dim": 30,
+      "type": "pca30_center_pixel"
+    }
+  },
+  "metrics": {
+    "failure_mode": "BOUNDARY_CONTAMINATION",
+    "minimal_radius": 7,
+    "patch": {
+      "3": {
+        "oa": 0.7399
+      },
+      "5": {
+        "oa": 0.7964
+      },
+      "7": {
+        "oa": 0.81
+      }
+    },
+    "spec": {
+      "oa": 0.7066
+    }
+  },
+  "schema_version": "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1",
+  "seed": 42,
+  "split_protocol": "stratified_0.1_train_seed42"
+}

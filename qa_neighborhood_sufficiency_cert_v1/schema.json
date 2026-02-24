@@ -1,0 +1,81 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1",
+  "type": "object",
+  "required": ["schema_version", "dataset", "classifier", "split_protocol", "seed", "generators", "metrics", "dominance", "digests"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"type": "string", "const": "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1"},
+    "dataset": {"type": "string"},
+    "classifier": {"type": "string"},
+    "split_protocol": {"type": "string"},
+    "seed": {"type": "integer"},
+    "generators": {
+      "type": "object",
+      "required": ["spec", "patch"],
+      "additionalProperties": false,
+      "properties": {
+        "spec": {
+          "type": "object",
+          "required": ["type", "dim"],
+          "properties": {
+            "type": {"type": "string"},
+            "dim": {"type": "integer", "minimum": 1}
+          }
+        },
+        "patch": {
+          "type": "object",
+          "required": ["type", "radius_values", "feature_dim"],
+          "properties": {
+            "type": {"type": "string"},
+            "radius_values": {"type": "array", "items": {"type": "integer", "minimum": 1}, "minItems": 1},
+            "feature_dim": {"type": "integer", "minimum": 1}
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "required": ["spec", "patch", "minimal_radius", "failure_mode"],
+      "additionalProperties": false,
+      "properties": {
+        "spec": {
+          "type": "object",
+          "required": ["oa"],
+          "properties": {
+            "oa": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+          }
+        },
+        "patch": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {
+            "type": "object",
+            "required": ["oa"],
+            "properties": {
+              "oa": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+            }
+          }
+        },
+        "minimal_radius": {"type": "integer", "minimum": 1},
+        "failure_mode": {"type": "string", "enum": ["BOUNDARY_CONTAMINATION", "INSUFFICIENT_CONTEXT", "NONE"]}
+      }
+    },
+    "dominance": {
+      "type": "object",
+      "required": ["patch_dominates_spec", "plateau_tolerance_pp"],
+      "additionalProperties": false,
+      "properties": {
+        "patch_dominates_spec": {"type": "boolean"},
+        "plateau_tolerance_pp": {"type": "number", "minimum": 0.0}
+      }
+    },
+    "digests": {
+      "type": "object",
+      "required": ["canonical_sha256"],
+      "properties": {
+        "canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

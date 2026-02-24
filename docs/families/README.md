@@ -43,6 +43,12 @@ A family **does not count as shipped** unless both tracts are present.
 | [63] | [QA Kona EBM QA-Native](63_kona_ebm_qa_native.md) | Schema + Validator + Fixtures (QA orbit manifold as latent space, orbit alignment analysis) | PASS |
 | [64] | [QA Kona EBM QA-Native Orbit Reg](64_kona_ebm_qa_native_orbit_reg.md) | Schema + Validator + Fixtures (orbit-coherence regularizer, permutation gap analysis) | PASS |
 | [71] | [QA Curvature Stress-Test Bundle](71_curvature_stress_test.md) | Schema + Validator + 4 Fixtures (cross-family κ universality, monoidal bottleneck law) | PASS |
+| [72] | [QA Guarded Operator Category](72_guarded_operator_category.md) | Schema + Validator + 4 Fixtures (matrix embedding + guarded obstruction algebra) | PASS |
+| [73] | [QA Structural Algebra Cert](73_structural_algebra_cert.md) | Schema + Validator + 3 Fixtures (bounded normal forms + uniqueness + scaling + ν guards + bridge hash binding) | PASS |
+| [74] | [QA Component Decomposition Cert](74_component_decomposition_cert.md) | Schema + Validator + 3 Fixtures (gcd decomposition + scaled-seed roundtrip + ν power-of-two contraction characterization + bridge hash binding) | PASS |
+| [75] | [QA Algebra Bridge Cert](75_algebra_bridge_cert.md) | Schema + Validator + 2 Fixtures (semantics anchor + word convention + component bridge + semantics hash binding) | PASS |
+| [76] | [QA Failure Algebra Structure Cert](76_failure_algebra_structure_cert.md) | Schema + Validator + 2 Fixtures (finite poset + join-semilattice + monotone associative composition + propagation law) | PASS |
+| [77] | [QA Neighborhood Sufficiency Cert](77_neighborhood_sufficiency_cert.md) | Schema + Validator + 5 Fixtures (2 valid, 3 negative: dominance, plateau, digest) | PASS |
 
 ## Quick validation
 

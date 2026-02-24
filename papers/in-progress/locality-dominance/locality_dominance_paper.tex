@@ -27,9 +27,8 @@
 \newcommand{\Gspec}{G_{\mathrm{spec}}}
 \newcommand{\rstar}{r^{*}}
 \newcommand{\pp}{\,\text{pp}}
-\newcommand{\OA}{\mathrm{OA}}
-\newcommand{\AA}{\mathrm{AA}}
-\newcommand{\kappa}{\kappa}
+\newcommand{\OA}{\ensuremath{\mathrm{OA}}}
+\newcommand{\Acc}{\ensuremath{\mathrm{AA}}}  % \AA is a LaTeX built-in (Angstrom A-ring)
 \newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
 
 % ============================================================
@@ -58,10 +57,10 @@ baselines across three benchmarks. Using stratified 10\% training
 splits, a 10--14-dimensional patch-statistics feature vector (mean,
 standard deviation, gradient magnitude, and PCA-derived neighborhood
 descriptors) achieves $+3.0$--$11.1\pp$ improvements in overall
-accuracy (\OA) and $+6.3$--$16.1\pp$ in average accuracy (\AA)
+accuracy (\OA) and $+6.3$--$16.1\pp$ in average accuracy (\Acc)
 relative to 30--200-dimensional spectral baselines on Houston
 (multimodal), Indian Pines, and PaviaU datasets. Notably, gains in
-\AA\ exceed gains in \OA, indicating improved minority-class
+\Acc\ exceed gains in \OA, indicating improved minority-class
 performance. Accuracy saturates at a small, scene-dependent
 neighborhood scale ($5{\times}5$--$7{\times}7$), beyond which larger
 windows offer no consistent benefit. In contrast, uncertainty-driven
@@ -118,7 +117,7 @@ Across three benchmarks---Houston (multimodal HSI+MS+LiDAR), Indian
 Pines, and PaviaU---using stratified 10\% training splits, we observe
 that this neighborhood-based representation consistently outperforms
 30--200-dimensional spectral baselines. Improvements range from
-$+3.0$ to $+11.1\pp$ in \OA\ and $+6.3$ to $+16.1\pp$ in \AA,
+$+3.0$ to $+11.1\pp$ in \OA\ and $+6.3$ to $+16.1\pp$ in \Acc,
 with substantial gains in minority-class performance. Accuracy
 saturates at a small, scene-dependent window size
 ($5{\times}5$--$7{\times}7$), indicating the existence of a minimal
@@ -140,7 +139,7 @@ The primary contributions of this work are:
     radius $\rstar$, ranging from $5{\times}5$ to $7{\times}7$ across
     tested benchmarks.
   \item \textbf{Minority-Class Stabilization:} Neighborhood statistics
-    disproportionately improve average accuracy ($\Delta\AA >
+    disproportionately improve average accuracy ($\Delta\Acc >
     \Delta\OA$), mitigating majority-class bias inherent in
     high-dimensional spectral models.
   \item \textbf{Negative Fusion Result:} Uncertainty-based gating
@@ -333,7 +332,7 @@ Performance is measured using:
 \begin{itemize}
   \item \textbf{Overall Accuracy (\OA):} Fraction of correctly
     classified test pixels.
-  \item \textbf{Average Accuracy (\AA):} Mean of per-class
+  \item \textbf{Average Accuracy (\Acc):} Mean of per-class
     accuracies; emphasizes minority-class performance under class
     imbalance.
   \item \textbf{Cohen's kappa coefficient ($\kappa$):} Agreement
@@ -419,17 +418,17 @@ the primary evidence for locality dominance as a scene-independent
 phenomenon.
 
 On \textbf{Indian Pines}, a PCA-30 spectral representation achieves
-$\OA{=}70.66\%$, $\AA{=}56.39\%$, $\kappa{=}0.657$. The 10-dimensional
+$\OA{=}70.66\%$, $\Acc{=}56.39\%$, $\kappa{=}0.657$. The 10-dimensional
 patch-only representation at $7{\times}7$ achieves $\OA{=}81.00\%$,
-$\AA{=}72.46\%$, $\kappa{=}0.782$ (seed=42), with a mean $\OA$ of
-$81.05\%$ across seeds. The gain in \AA\ ($\Delta\AA{=}+16.08\pp$)
+$\Acc{=}72.46\%$, $\kappa{=}0.782$ (seed=42), with a mean $\OA$ of
+$81.05\%$ across seeds. The gain in \Acc\ ($\Delta\Acc{=}+16.08\pp$)
 substantially exceeds the gain in \OA\ ($\Delta\OA{=}+10.34\pp$),
 establishing that improvement is broad-based and disproportionately
 benefits rare categories.
 
 On \textbf{PaviaU}, the same configuration yields $\OA{=}91.98\%$,
-$\AA{=}87.96\%$, $\kappa{=}0.893$, compared to the PCA-30 baseline
-of $\OA{=}88.07\%$, $\AA{=}81.61\%$.
+$\Acc{=}87.96\%$, $\kappa{=}0.893$, compared to the PCA-30 baseline
+of $\OA{=}88.07\%$, $\Acc{=}81.61\%$.
 
 Full results are reported in Tables~\ref{tab:indian_pines}
 and~\ref{tab:pavia}.
@@ -476,7 +475,7 @@ Across all three datasets, a 10--14-dimensional neighborhood-statistic
 representation consistently and substantially outperforms spectral
 baselines ranging from 30 to 200 dimensions, achieving a
 feature-dimension reduction of 76--95\% while improving $\OA$ by
-3.0--11.1\pp\ and $\AA$ by 6.3--16.1\pp. The neighborhood operator
+3.0--11.1\pp\ and $\Acc$ by 6.3--16.1\pp. The neighborhood operator
 is the dominant contributor to classification performance.
 
 % ============================================================
@@ -529,11 +528,11 @@ structured urban scenes.
 
 \subsection{Minority-Class Rescue}
 
-On Indian Pines, $\Delta\AA{=}+16.08\pp$ substantially exceeds
+On Indian Pines, $\Delta\Acc{=}+16.08\pp$ substantially exceeds
 $\Delta\OA{=}+10.34\pp$. Pixel-only spectral models exhibit
-majority-class bias: $\OA$ increases while $\AA$ remains suppressed
+majority-class bias: $\OA$ increases while $\Acc$ remains suppressed
 (the 200D raw spectral baseline achieves $\OA{=}75.02\%$ but only
-$\AA{=}60.18\%$). Neighborhood statistics mitigate this by
+$\Acc{=}60.18\%$). Neighborhood statistics mitigate this by
 stabilizing minority-class signatures through local averaging and
 texture encoding, functioning not only as a noise-reduction operator
 but also as a class-balance equalizer.
@@ -581,7 +580,7 @@ PaviaU) using stratified 10\% training splits, we found that a
 compact 10--14-dimensional neighborhood-statistics representation
 consistently outperforms 30--200-dimensional spectral baselines.
 Improvements range from $+3.0$ to $+11.1\pp$ in \OA\ and $+6.3$
-to $+16.1\pp$ in \AA, with particularly strong gains for minority
+to $+16.1\pp$ in \Acc, with particularly strong gains for minority
 classes.
 
 Performance saturates at a small, scene-dependent neighborhood scale
@@ -638,9 +637,9 @@ Margin  & 5.0 & 95.86 & $-0.48$ & 0.0\% & $-0.064$ \\
 % Figure placeholders -- replace paths after running generate_paper_figures_locality.py
 \begin{figure*}[t]
   \centering
-  \includegraphics[width=0.48\textwidth]{../../results/figures_locality/fig1_patch_sweep.pdf}
+  \includegraphics[width=0.48\textwidth]{fig1_patch_sweep.pdf}
   \hfill
-  \includegraphics[width=0.48\textwidth]{../../results/figures_locality/fig2_oa_aa_comparison.pdf}
+  \includegraphics[width=0.48\textwidth]{fig2_oa_aa_comparison.pdf}
   \caption{%
     \textbf{Left (Fig.\,1):} Patch-size OA sweep across three datasets.
     Dashed lines indicate spectral PCA baselines.
@@ -655,7 +654,7 @@ Margin  & 5.0 & 95.86 & $-0.48$ & 0.0\% & $-0.064$ \\
 
 \begin{figure}[t]
   \centering
-  \includegraphics[width=\columnwidth]{../../results/figures_locality/fig3_gating_failure.pdf}
+  \includegraphics[width=\columnwidth]{fig3_gating_failure.pdf}
   \caption{%
     Houston per-class accuracy: concat baseline vs.\
     entropy gating ($T{=}1.0$). Classes C10--C13 (orange bars) are

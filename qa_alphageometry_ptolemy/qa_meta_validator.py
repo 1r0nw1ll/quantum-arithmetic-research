@@ -3144,7 +3144,7 @@ FAMILY_SWEEPS = [
      "../qa_locality_boundary_cert_v1", True),
     (79, "QA Locality Regime Separator Cert family",
      _validate_locality_regime_sep_cert_family_if_present,
-     "schema v1.1 + validator (6-gate incl. Gate 6 adjacency witness Mode A/B) + 8 fixtures (4 v1: salinas DOMINANT, ksc BOUNDARY, regime_inconsistent, digest_mismatch; 4 v1.1: salinas Mode A 5x5 grid adj=0.125, ksc Mode B .npy path adj=0.246, adj_rate_mismatch, adj_hash_mismatch)", "79_locality_regime_sep_cert",
+     "schema v1.2 + validator (7-gate incl. Gate 6 adj witness + Gate 7 predictive threshold adj_crit/epsilon/TRANSITION) + 12 fixtures (4 v1 + 4 v1.1 witness + 4 v1.2: salinas DOMINANT pred, ksc BOUNDARY pred, pred_mismatch, pred_conflicts_empirical)", "79_locality_regime_sep_cert",
      "../qa_locality_regime_sep_cert_v1", True),
 ]
 

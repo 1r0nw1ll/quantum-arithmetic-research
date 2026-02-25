@@ -8,7 +8,7 @@
   "properties": {
     "schema_version": {
       "type": "string",
-      "enum": ["QA_LOCALITY_REGIME_SEP_CERT.v1", "QA_LOCALITY_REGIME_SEP_CERT.v1.1"]
+      "enum": ["QA_LOCALITY_REGIME_SEP_CERT.v1", "QA_LOCALITY_REGIME_SEP_CERT.v1.1", "QA_LOCALITY_REGIME_SEP_CERT.v1.2"]
     },
     "dataset": {"type": "string"},
     "r_star": {
@@ -92,6 +92,38 @@
           "type": "string",
           "pattern": "^[0-9a-f]{64}$",
           "description": "Mode B: SHA-256 of raw bytes of the .npy file."
+        }
+      }
+    },
+    "regime_predictor": {
+      "type": "object",
+      "description": "Optional (v1.2+): predictive threshold gate. Gate 7 recomputes regime_pred from adj_rate_4, adj_crit, epsilon using the declared rule, enforces consistency with empirical regime except in TRANSITION band.",
+      "required": ["adj_crit", "epsilon", "regime_pred", "rule"],
+      "additionalProperties": false,
+      "properties": {
+        "adj_crit": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Critical adjacency threshold adj_4^crit."
+        },
+        "epsilon": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Transition band half-width. If |adj_rate_4 - adj_crit| <= epsilon => TRANSITION."
+        },
+        "regime_pred": {
+          "type": "string",
+          "enum": ["DOMINANT", "BOUNDARY", "TRANSITION"],
+          "description": "Declared prediction derived from the threshold rule."
+        },
+        "rule": {
+          "type": "string",
+          "enum": [
+            "adj_rate_4 < adj_crit - epsilon => DOMINANT; adj_rate_4 > adj_crit + epsilon => BOUNDARY; else TRANSITION"
+          ],
+          "description": "Literal rule string for auditability."
         }
       }
     },

@@ -276,6 +276,61 @@ def validate_cert(obj: Dict[str, Any], cert_dir: Optional[str] = None) -> List[G
         results.append(GateResult("gate_6_adjacency_witness", GateStatus.PASS,
                                    f"adj_rate_4 verified: {computed_adj:.6f} ({mode_note})"))
 
+    # Gate 7 — Predictive threshold gate (optional, v1.2+)
+    RULE_LITERAL = ("adj_rate_4 < adj_crit - epsilon => DOMINANT; "
+                    "adj_rate_4 > adj_crit + epsilon => BOUNDARY; else TRANSITION")
+    rp = obj.get("regime_predictor")
+    if rp is None:
+        results.append(GateResult("gate_7_regime_predictor", GateStatus.PASS,
+                                  "Skipped (no regime_predictor)"))
+        return results
+
+    adj = float(obj["adj_rate_4"])
+    adj_crit = float(rp["adj_crit"])
+    eps = float(rp["epsilon"])
+    declared_pred = rp["regime_pred"]
+    rule = rp["rule"]
+
+    if rule != RULE_LITERAL:
+        results.append(GateResult("gate_7_regime_predictor", GateStatus.FAIL,
+                                  "PRED_RULE_MISMATCH",
+                                  {"declared_rule": rule, "required_rule": RULE_LITERAL}))
+        return results
+
+    if not (0.0 <= adj_crit <= 1.0) or not (0.0 <= eps <= 1.0):
+        results.append(GateResult("gate_7_regime_predictor", GateStatus.FAIL,
+                                  "PRED_BAD_PARAMS: adj_crit/epsilon out of [0,1]",
+                                  {"adj_crit": adj_crit, "epsilon": eps}))
+        return results
+
+    if adj < (adj_crit - eps):
+        computed_pred = "DOMINANT"
+    elif adj > (adj_crit + eps):
+        computed_pred = "BOUNDARY"
+    else:
+        computed_pred = "TRANSITION"
+
+    if computed_pred != declared_pred:
+        results.append(GateResult("gate_7_regime_predictor", GateStatus.FAIL,
+                                  "PRED_DECL_MISMATCH: regime_pred does not match recomputed value",
+                                  {"declared_pred": declared_pred, "computed_pred": computed_pred,
+                                   "adj_rate_4": adj, "adj_crit": adj_crit, "epsilon": eps}))
+        return results
+
+    empirical_regime = obj["regime"]
+    if computed_pred != "TRANSITION" and computed_pred != empirical_regime:
+        results.append(GateResult("gate_7_regime_predictor", GateStatus.FAIL,
+                                  "PRED_CONFLICTS_EMPIRICAL: predictor disagrees with empirical regime outside transition band",
+                                  {"empirical_regime": empirical_regime, "predicted_regime": computed_pred,
+                                   "adj_rate_4": adj, "adj_crit": adj_crit, "epsilon": eps}))
+        return results
+
+    transition_note = "TRANSITION band: empirical regime not enforced" if computed_pred == "TRANSITION" else "Empirical regime agrees"
+    results.append(GateResult("gate_7_regime_predictor", GateStatus.PASS,
+                               f"regime_pred={computed_pred} verified (adj={adj:.6f}, adj_crit={adj_crit:.6f}, eps={eps:.6f}); {transition_note}",
+                               {"empirical_regime": empirical_regime, "predicted_regime": computed_pred,
+                                "adj_rate_4": adj, "adj_crit": adj_crit, "epsilon": eps}))
+
     return results
 
 
@@ -302,10 +357,15 @@ def self_test(as_json: bool) -> int:
         ("invalid_regime_inconsistent.json",      False, "gate_4_regime_declaration"),
         ("invalid_digest_mismatch.json",          False, "gate_2_canonical_hash"),
         # v1.1 adjacency witness fixtures
-        ("valid_salinas_dominant_v1_1.json",     True,  None),
-        ("valid_ksc_boundary_v1_1.json",          True,  None),
-        ("invalid_adj_rate_mismatch.json",        False, "gate_6_adjacency_witness"),
-        ("invalid_adj_hash_mismatch.json",        False, "gate_6_adjacency_witness"),
+        ("valid_salinas_dominant_v1_1.json",          True,  None),
+        ("valid_ksc_boundary_v1_1.json",               True,  None),
+        ("invalid_adj_rate_mismatch.json",             False, "gate_6_adjacency_witness"),
+        ("invalid_adj_hash_mismatch.json",             False, "gate_6_adjacency_witness"),
+        # v1.2 predictive threshold fixtures
+        ("valid_salinas_dominant_v1_2.json",          True,  None),
+        ("valid_ksc_boundary_v1_2.json",               True,  None),
+        ("invalid_pred_mismatch.json",                 False, "gate_7_regime_predictor"),
+        ("invalid_pred_conflicts_empirical.json",      False, "gate_7_regime_predictor"),
     ]
     ok = True
     details = []

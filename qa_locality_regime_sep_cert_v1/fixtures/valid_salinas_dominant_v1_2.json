@@ -1,0 +1,69 @@
+{
+  "schema_version": "QA_LOCALITY_REGIME_SEP_CERT.v1.2",
+  "dataset": "salinas",
+  "r_star": 7,
+  "adj_rate_4": 0.125,
+  "delta_oa_by_radius": {
+    "3": 0.0056,
+    "5": 0.0303,
+    "7": 0.0429
+  },
+  "regime": "DOMINANT",
+  "regime_evidence": {
+    "all_deltas_nonpositive": false,
+    "any_delta_positive": true,
+    "max_delta_pp": 4.29,
+    "min_delta_pp": 0.56,
+    "regime_consistent": true
+  },
+  "adjacency_witness": {
+    "adj_rate_4": 0.125,
+    "gt_label_sha256": "bbce634521703739dcf3b4c769fdea5ebbe3396be1998481b148bb4ce0393eb4",
+    "gt_label_grid": [
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        0,
+        0,
+        0,
+        0,
+        0
+      ],
+      [
+        1,
+        1,
+        1,
+        1,
+        1
+      ]
+    ]
+  },
+  "regime_predictor": {
+    "adj_crit": 0.18551587301587302,
+    "epsilon": 0.030257936507936505,
+    "regime_pred": "DOMINANT",
+    "rule": "adj_rate_4 < adj_crit - epsilon => DOMINANT; adj_rate_4 > adj_crit + epsilon => BOUNDARY; else TRANSITION"
+  },
+  "digests": {
+    "canonical_sha256": "d53ad58496dcd49ffaf12df35416c5eedb5a85b2c62021fab40e0201b35ce1cf"
+  }
+}

@@ -2996,6 +2996,32 @@ def _validate_locality_regime_sep_cert_family_if_present(base_dir: str) -> Optio
     return None
 
 
+def _validate_energy_cert_v1_1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Energy Cert v1.1 family [80]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_energy_cert_v1_1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_energy_cert_v1_1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_energy_cert_v1_1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3146,6 +3172,10 @@ FAMILY_SWEEPS = [
      _validate_locality_regime_sep_cert_family_if_present,
      "schema v1.2 + validator (7-gate incl. Gate 6 adj witness + Gate 7 predictive threshold adj_crit/epsilon/TRANSITION) + 12 fixtures (4 v1 + 4 v1.1 witness + 4 v1.2: salinas DOMINANT pred, ksc BOUNDARY pred, pred_mismatch, pred_conflicts_empirical)", "79_locality_regime_sep_cert",
      "../qa_locality_regime_sep_cert_v1", True),
+    (80, "QA Energy Cert v1.1 (CAPS_TR cognitive domain)",
+     _validate_energy_cert_v1_1_family_if_present,
+     "schema + validator (6-gate: schema/domain/ih-lock, BFS energy, reverse BFS return, monotonicity, return-in-k, SCC+power+family+interaction) + 6 fixtures (PASS_FEAR, PASS_LOVE, PASS_MIXED, FAIL_POWER, FAIL_INTERACTION, FAIL_HORIZON)", "80_energy_cert",
+     "../qa_energy_cert_v1_1", True),
 ]
 
 

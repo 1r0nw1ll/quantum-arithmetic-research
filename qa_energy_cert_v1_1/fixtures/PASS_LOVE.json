@@ -1,0 +1,194 @@
+{
+  "N": 2,
+  "cert_id": "energy_caps_tr_N2_love_only",
+  "created_utc": "2026-02-26T00:00:00Z",
+  "domain": "CAPS_TR",
+  "energy_map": [
+    {
+      "energy": 2,
+      "state": {
+        "R": 0,
+        "T": 0
+      }
+    },
+    {
+      "energy": 2,
+      "state": {
+        "R": 1,
+        "T": 0
+      }
+    },
+    {
+      "energy": 2,
+      "state": {
+        "R": 2,
+        "T": 0
+      }
+    },
+    {
+      "energy": 1,
+      "state": {
+        "R": 0,
+        "T": 1
+      }
+    },
+    {
+      "energy": 1,
+      "state": {
+        "R": 1,
+        "T": 1
+      }
+    },
+    {
+      "energy": 2,
+      "state": {
+        "R": 2,
+        "T": 1
+      }
+    },
+    {
+      "energy": 0,
+      "state": {
+        "R": 0,
+        "T": 2
+      }
+    },
+    {
+      "energy": 1,
+      "state": {
+        "R": 1,
+        "T": 2
+      }
+    },
+    {
+      "energy": 2,
+      "state": {
+        "R": 2,
+        "T": 2
+      }
+    }
+  ],
+  "expected_summary": {
+    "family_interaction_stats": [
+      {
+        "from_family": "love",
+        "max_delta": 2,
+        "mean_delta_den": 23,
+        "mean_delta_num": 28,
+        "min_delta": 0,
+        "to_family": "love"
+      }
+    ],
+    "family_power_stats": [
+      {
+        "family_tag": "love",
+        "max_delta": 1,
+        "mean_delta_den": 16,
+        "mean_delta_num": 10,
+        "min_delta": 0
+      }
+    ],
+    "max_energy": 2,
+    "max_scc_size": 1,
+    "power_stats": [
+      {
+        "max_delta": 1,
+        "mean_delta_den": 6,
+        "mean_delta_num": 3,
+        "min_delta": 0,
+        "name": "love_reframe"
+      },
+      {
+        "max_delta": 1,
+        "mean_delta_den": 4,
+        "mean_delta_num": 4,
+        "min_delta": 1,
+        "name": "love_soothe"
+      },
+      {
+        "max_delta": 1,
+        "mean_delta_den": 6,
+        "mean_delta_num": 3,
+        "min_delta": 0,
+        "name": "love_support"
+      }
+    ],
+    "reachable_count": 9,
+    "scc_count": 9
+  },
+  "generator_set": [
+    {
+      "family_tag": "love",
+      "name": "love_soothe"
+    },
+    {
+      "family_tag": "love",
+      "name": "love_support"
+    },
+    {
+      "family_tag": "love",
+      "name": "love_reframe"
+    }
+  ],
+  "interaction_horizon": 2,
+  "power_tests": [
+    {
+      "delta_constraints": {
+        "mean_sign": "nonnegative"
+      },
+      "name": "love_soothe"
+    },
+    {
+      "delta_constraints": {
+        "mean_sign": "nonnegative"
+      },
+      "name": "love_support"
+    },
+    {
+      "delta_constraints": {
+        "mean_sign": "nonnegative"
+      },
+      "name": "love_reframe"
+    }
+  ],
+  "reference_state": {
+    "R": 0,
+    "T": 2
+  },
+  "return_energy_map": [
+    {
+      "return_energy": 0,
+      "state": {
+        "R": 0,
+        "T": 2
+      }
+    }
+  ],
+  "return_in_k_tests": [
+    {
+      "expect_can_return": true,
+      "k": 0,
+      "state": {
+        "R": 0,
+        "T": 2
+      }
+    },
+    {
+      "expect_can_return": false,
+      "k": 100,
+      "state": {
+        "R": 2,
+        "T": 0
+      }
+    },
+    {
+      "expect_can_return": false,
+      "k": 100,
+      "state": {
+        "R": 1,
+        "T": 1
+      }
+    }
+  ],
+  "schema_version": "QA_ENERGY_CERT.v1.1"
+}

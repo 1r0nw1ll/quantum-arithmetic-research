@@ -1,0 +1,218 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_ENERGY_CERT.v1.1.schema.json",
+  "title": "QA_ENERGY_CERT.v1.1",
+  "description": "Generator-relative energy cert: Energy(s) = minimal BFS path length from reference_state. Supports CAPS_BE (mathematical) and CAPS_TR (cognitive Threat/Regulation) domains. Adds family_tag per generator, family_power_stats, and family_interaction_stats (2-step ordered family pairs, interaction_horizon locked to 2).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "cert_id",
+    "created_utc",
+    "domain",
+    "N",
+    "reference_state",
+    "generator_set",
+    "energy_map",
+    "return_energy_map",
+    "return_in_k_tests",
+    "expected_summary"
+  ],
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["QA_ENERGY_CERT.v1.1"]
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 8
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 10
+    },
+    "domain": {
+      "type": "string",
+      "enum": ["CAPS_BE", "CAPS_TR"]
+    },
+    "N": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 1000
+    },
+    "interaction_horizon": {
+      "description": "Declared horizon for family_interaction_stats. v1.1 validator hard-locks to 2.",
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10,
+      "default": 2
+    },
+    "reference_state": {
+      "description": "CAPS_BE: {b,e}; CAPS_TR: {T,R}. Must lie in domain.",
+      "type": "object",
+      "minProperties": 1
+    },
+    "generator_set": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name"],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "CAPS_BE: sigma|mu|lambda_k|nu. CAPS_TR: fear_up|fear_down|fear_lock|love_soothe|love_support|love_reframe."
+          },
+          "family_tag": {
+            "type": "string",
+            "enum": ["fear", "love"],
+            "description": "Optional operator-class label; drives family_power_stats and family_interaction_stats."
+          },
+          "k": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 1000,
+            "description": "Scale factor for lambda_k generator (CAPS_BE only)."
+          }
+        }
+      }
+    },
+    "energy_map": {
+      "description": "Energy(s) = shortest directed path length from reference_state to s under generator_set.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["state", "energy"],
+        "properties": {
+          "state": { "type": "object", "minProperties": 1 },
+          "energy": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "return_energy_map": {
+      "description": "ReturnEnergy(s) = shortest directed path length from s back to reference_state (reverse BFS).",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["state", "return_energy"],
+        "properties": {
+          "state": { "type": "object", "minProperties": 1 },
+          "return_energy": { "type": "integer", "minimum": 0 }
+        }
+      }
+    },
+    "return_in_k_tests": {
+      "description": "Qualitative return tests: can state s return to reference in ≤k steps?",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["state", "k", "expect_can_return"],
+        "properties": {
+          "state": { "type": "object", "minProperties": 1 },
+          "k": { "type": "integer", "minimum": 0, "maximum": 1000000 },
+          "expect_can_return": { "type": "boolean" }
+        }
+      }
+    },
+    "power_tests": {
+      "description": "Optional qualitative delta-constraint assertions per generator.",
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["name", "delta_constraints"],
+        "properties": {
+          "name": { "type": "string" },
+          "delta_constraints": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+              "min_delta_gte": { "type": "integer", "description": "Computed min_delta must be >= this." },
+              "max_delta_lte": { "type": "integer", "description": "Computed max_delta must be <= this." },
+              "mean_sign": {
+                "type": "string",
+                "enum": ["positive", "negative", "zero", "nonnegative", "nonpositive"],
+                "description": "Assertion on sign of mean_delta_num."
+              }
+            }
+          }
+        }
+      }
+    },
+    "expected_summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "reachable_count",
+        "max_energy",
+        "scc_count",
+        "max_scc_size",
+        "power_stats",
+        "family_power_stats",
+        "family_interaction_stats"
+      ],
+      "properties": {
+        "reachable_count": { "type": "integer", "minimum": 1 },
+        "max_energy": { "type": "integer", "minimum": 0 },
+        "scc_count": { "type": "integer", "minimum": 1 },
+        "max_scc_size": { "type": "integer", "minimum": 1 },
+        "power_stats": {
+          "description": "Per-generator ΔE statistics over reachable edges.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["name", "min_delta", "max_delta", "mean_delta_num", "mean_delta_den"],
+            "properties": {
+              "name": { "type": "string" },
+              "min_delta": { "type": "integer" },
+              "max_delta": { "type": "integer" },
+              "mean_delta_num": { "type": "integer" },
+              "mean_delta_den": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "family_power_stats": {
+          "description": "Aggregate ΔE by family_tag across all tagged generators. Empty array if no family_tags defined.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["family_tag", "min_delta", "max_delta", "mean_delta_num", "mean_delta_den"],
+            "properties": {
+              "family_tag": { "type": "string", "enum": ["fear", "love"] },
+              "min_delta": { "type": "integer" },
+              "max_delta": { "type": "integer" },
+              "mean_delta_num": { "type": "integer" },
+              "mean_delta_den": { "type": "integer", "minimum": 1 }
+            }
+          }
+        },
+        "family_interaction_stats": {
+          "description": "2-step path ΔE(s→u) over ordered (from_family, to_family) pairs. Empty if no family_tags or no 2-step paths.",
+          "type": "array",
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["from_family", "to_family", "min_delta", "max_delta", "mean_delta_num", "mean_delta_den"],
+            "properties": {
+              "from_family": { "type": "string", "enum": ["fear", "love"] },
+              "to_family": { "type": "string", "enum": ["fear", "love"] },
+              "min_delta": { "type": "integer" },
+              "max_delta": { "type": "integer" },
+              "mean_delta_num": { "type": "integer" },
+              "mean_delta_den": { "type": "integer", "minimum": 1 }
+            }
+          }
+        }
+      }
+    }
+  }
+}

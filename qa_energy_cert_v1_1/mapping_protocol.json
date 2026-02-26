@@ -68,7 +68,8 @@
     {"name": "1_lipschitz",          "definition": "Energy(t) ≤ Energy(s) + 1 for every generator edge s→t"},
     {"name": "tight_predecessor",    "definition": "Every reachable state except reference has a predecessor p with Energy(p) = Energy(s) - 1"},
     {"name": "family_power_stats",   "definition": "Aggregate ΔE by family_tag over all reachable tagged-generator edges"},
-    {"name": "family_interaction",   "definition": "2-step ΔE(s→u) keyed by ordered (from_family, to_family) pair (interaction_horizon=2)"}
+    {"name": "family_interaction",   "definition": "2-step ΔE(s→u) keyed by ordered (from_family, to_family) pair (interaction_horizon=2)"},
+    {"name": "episode_consistency",  "definition": "Observed episodes must respect per-generator ΔE bounds and (tagged) 2-step family interaction ΔE₂ bounds from expected_summary"}
   ],
   "failure_taxonomy": [
     {"fail_type": "SCHEMA_INVALID",                "trigger_condition": "schema_version mismatch or JSON schema violation"},

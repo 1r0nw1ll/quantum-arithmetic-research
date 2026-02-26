@@ -62,6 +62,7 @@ ALLOWED_FAIL_TYPES = [
     "SCC_MISMATCH",
     "POWER_STATS_MISMATCH",
     "POWER_TESTS_VIOLATION",
+    "EPISODE_SAMPLES_MISMATCH",
 ]
 
 # ── result envelope ───────────────────────────────────────────────────────────
@@ -421,6 +422,23 @@ def _compute_family_interaction_stats(
     return result
 
 
+# ── episode helpers ───────────────────────────────────────────────────────────
+
+def _gen_delta_bounds(power_stats: List[Dict[str, Any]]) -> Dict[str, Tuple[int, int]]:
+    """Map generator name → (min_delta, max_delta) from certified power_stats."""
+    return {p["name"]: (int(p["min_delta"]), int(p["max_delta"])) for p in power_stats}
+
+
+def _pair_delta_bounds(
+    family_interaction_stats: List[Dict[str, Any]],
+) -> Dict[Tuple[str, str], Tuple[int, int]]:
+    """Map (from_family, to_family) → (min_delta, max_delta) from certified interaction stats."""
+    return {
+        (p["from_family"], p["to_family"]): (int(p["min_delta"]), int(p["max_delta"]))
+        for p in family_interaction_stats
+    }
+
+
 # ── map list helpers ──────────────────────────────────────────────────────────
 
 def _energy_list_to_dict(rows: List[Dict], key: str,
@@ -644,6 +662,99 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                                               "got_mean_num": num}},
                              {"where": "gate_6.power_tests"})
 
+    # ── Gate 7 (optional): episode_samples consistency ────────────────────────
+    episodes = cert.get("episode_samples")
+    if episodes is not None:
+        name_to_family: Dict[str, str] = {
+            g["name"]: g["family_tag"] for g in gens if "family_tag" in g
+        }
+        gen_bounds = _gen_delta_bounds(power)
+        pair_bounds = _pair_delta_bounds(fam_interact)
+
+        for ep in episodes:
+            ep_id = ep.get("episode_id", "<missing>")
+            steps = ep["steps"]
+            states_raw = ep["states"]
+
+            if len(states_raw) != len(steps) + 1:
+                return _fail(
+                    "EPISODE_SAMPLES_MISMATCH",
+                    {"episode": {"episode_id": ep_id, "error": "length_mismatch",
+                                  "len_states": len(states_raw),
+                                  "len_steps": len(steps)}},
+                    {"where": "episode_samples"},
+                )
+
+            try:
+                seq = [_parse_state(s, domain) for s in states_raw]
+            except Exception as exc:
+                return _fail(
+                    "EPISODE_SAMPLES_MISMATCH",
+                    {"episode": {"episode_id": ep_id, "error": "state_parse_error"}},
+                    {"exception": str(exc)},
+                )
+
+            for idx, s in enumerate(seq):
+                if not _in_domain(s, N, domain):
+                    return _fail(
+                        "EPISODE_SAMPLES_MISMATCH",
+                        {"episode": {"episode_id": ep_id, "error": "state_out_of_domain",
+                                      "index": idx, "state": states_raw[idx]}},
+                        {"where": "episode_samples"},
+                    )
+                if s not in dist:
+                    return _fail(
+                        "EPISODE_SAMPLES_MISMATCH",
+                        {"episode": {"episode_id": ep_id, "error": "state_unreachable",
+                                      "index": idx, "state": states_raw[idx]}},
+                        {"where": "episode_samples"},
+                    )
+
+            # Per-step ΔE bounds (by generator name)
+            for i, gname in enumerate(steps):
+                if gname not in gen_bounds:
+                    return _fail(
+                        "EPISODE_SAMPLES_MISMATCH",
+                        {"episode": {"episode_id": ep_id, "error": "unknown_generator",
+                                      "step": i, "name": gname}},
+                        {"where": "episode_samples"},
+                    )
+                dE = dist[seq[i + 1]] - dist[seq[i]]
+                mn, mx = gen_bounds[gname]
+                if dE < mn or dE > mx:
+                    return _fail(
+                        "EPISODE_SAMPLES_MISMATCH",
+                        {"episode": {"episode_id": ep_id, "error": "deltaE_out_of_bounds",
+                                      "step": i, "generator": gname,
+                                      "deltaE": dE, "bounds": [mn, mx]}},
+                        {"where": "episode_samples"},
+                    )
+
+            # 2-step ΔE₂ bounds (by tagged family pair)
+            for i in range(len(steps) - 1):
+                f1 = name_to_family.get(steps[i])
+                f2 = name_to_family.get(steps[i + 1])
+                if f1 is None or f2 is None:
+                    continue  # untagged generator — skip interaction check
+                pair = (f1, f2)
+                if pair not in pair_bounds:
+                    return _fail(
+                        "EPISODE_SAMPLES_MISMATCH",
+                        {"episode": {"episode_id": ep_id, "error": "missing_family_pair_bounds",
+                                      "pair": list(pair)}},
+                        {"where": "episode_samples"},
+                    )
+                dE2 = dist[seq[i + 2]] - dist[seq[i]]
+                mn2, mx2 = pair_bounds[pair]
+                if dE2 < mn2 or dE2 > mx2:
+                    return _fail(
+                        "EPISODE_SAMPLES_MISMATCH",
+                        {"episode": {"episode_id": ep_id, "error": "deltaE2_out_of_bounds",
+                                      "step_pair": i, "pair": list(pair),
+                                      "deltaE2": dE2, "bounds": [mn2, mx2]}},
+                        {"where": "episode_samples"},
+                    )
+
     cert_sha = _sha256_hex(cert)
     return _ok({
         "reachable_count": len(dist),
@@ -660,13 +771,14 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
 # ── self-test ─────────────────────────────────────────────────────────────────
 
 _FIXTURES = [
-    # (filename, should_pass, expected_fail_gate_or_type)
+    # (filename, should_pass, expected_fail_type)
     ("PASS_FEAR.json",        True,  None),
     ("PASS_LOVE.json",        True,  None),
     ("PASS_MIXED.json",       True,  None),
     ("FAIL_POWER.json",       False, "POWER_TESTS_VIOLATION"),
     ("FAIL_INTERACTION.json", False, "POWER_STATS_MISMATCH"),
     ("FAIL_HORIZON.json",     False, "DOMAIN_INVALID"),
+    ("FAIL_EPISODE.json",     False, "EPISODE_SAMPLES_MISMATCH"),
 ]
 
 

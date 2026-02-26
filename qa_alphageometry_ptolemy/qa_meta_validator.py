@@ -3174,7 +3174,7 @@ FAMILY_SWEEPS = [
      "../qa_locality_regime_sep_cert_v1", True),
     (80, "QA Energy Cert v1.1 (CAPS_TR cognitive domain)",
      _validate_energy_cert_v1_1_family_if_present,
-     "schema + validator (6-gate: schema/domain/ih-lock, BFS energy, reverse BFS return, monotonicity, return-in-k, SCC+power+family+interaction) + 6 fixtures (PASS_FEAR, PASS_LOVE, PASS_MIXED, FAIL_POWER, FAIL_INTERACTION, FAIL_HORIZON)", "80_energy_cert",
+     "schema + validator (7-gate incl. Gate 7 episode_samples consistency) + 7 fixtures (PASS_FEAR, PASS_LOVE, PASS_MIXED+episode, FAIL_POWER, FAIL_INTERACTION, FAIL_HORIZON, FAIL_EPISODE)", "80_energy_cert",
      "../qa_energy_cert_v1_1", True),
 ]
 

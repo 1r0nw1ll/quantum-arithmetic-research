@@ -1,6 +1,6 @@
 {
   "N": 2,
-  "cert_id": "energy_caps_tr_N2_mixed",
+  "cert_id": "energy_caps_tr_N2_mixed_FAIL_episode",
   "created_utc": "2026-02-26T00:00:00Z",
   "domain": "CAPS_TR",
   "energy_map": [
@@ -66,6 +66,34 @@
         "R": 2,
         "T": 2
       }
+    }
+  ],
+  "episode_samples": [
+    {
+      "episode_id": "E_bad_fear_up",
+      "notes": "Claims fear_up keeps state at (0,2) (self-loop). dE=0 violates fear_up bounds [1,1].",
+      "start_state": {
+        "R": 2,
+        "T": 0
+      },
+      "states": [
+        {
+          "R": 2,
+          "T": 0
+        },
+        {
+          "R": 2,
+          "T": 0
+        },
+        {
+          "R": 1,
+          "T": 0
+        }
+      ],
+      "steps": [
+        "fear_up",
+        "fear_lock"
+      ]
     }
   ],
   "expected_summary": {
@@ -290,19 +318,5 @@
       }
     }
   ],
-  "schema_version": "QA_ENERGY_CERT.v1.1",
-  "episode_samples": [
-    {
-      "episode_id": "E1_escalate_and_recover",
-      "notes": "Fear escalates twice (fear_up, fear_lock), love_soothe returns to ref in one step. Exercises per-step ΔE bounds for all 3 generators and fear→fear + fear→love 2-step pair bounds.",
-      "start_state": { "T": 0, "R": 2 },
-      "steps": ["fear_up", "fear_lock", "love_soothe"],
-      "states": [
-        { "T": 0, "R": 2 },
-        { "T": 1, "R": 2 },
-        { "T": 1, "R": 1 },
-        { "T": 0, "R": 2 }
-      ]
-    }
-  ]
+  "schema_version": "QA_ENERGY_CERT.v1.1"
 }

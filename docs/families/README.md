@@ -52,6 +52,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [78] | [QA Locality Boundary Cert](78_locality_boundary_cert.md) | Schema v1.2 + Validator (6-gate incl. Gate 6 adjacency witness Mode A/B) + 7 Fixtures (3 valid: ksc_boundary v1/v1.1/v1.2 path mode; 4 negative: not_a_boundary_case, digest_mismatch, adj_rate_wrong, gt_mask_sha_mismatch) | PASS |
 | [79] | [QA Locality Regime Separator Cert](79_locality_regime_sep_cert.md) | Schema v1.1 + Validator (6-gate incl. Gate 6 adjacency witness Mode A/B) + 8 Fixtures (4 v1: DOMINANT, BOUNDARY, regime_inconsistent, digest_mismatch; 4 v1.1: Salinas Mode A 5×5, KSC Mode B .npy, adj_rate_mismatch, adj_hash_mismatch) | PASS |
 | [80] | [QA Energy Cert v1.1 (CAPS_TR cognitive domain)](80_energy_cert.md) | Schema + Validator (6-gate: schema/domain/ih-lock, BFS energy, reverse BFS return, monotonicity, return-in-k, SCC+power+family+interaction) + 6 Fixtures (PASS_FEAR, PASS_LOVE, PASS_MIXED, FAIL_POWER, FAIL_INTERACTION, FAIL_HORIZON) | PASS |
+| [81] | [QA Episode Regime Transitions Cert v1.0](81_episode_regime_transitions.md) | Schema + Validator (5-gate: schema, label validity, regime/counts/transition matrix, drift declaration, max-run) + 6 Fixtures (PASS_RECOVERING, PASS_ESCALATING, PASS_MIXED, FAIL_LABEL, FAIL_TRANSITION, FAIL_DRIFT) | PASS |
 
 ## Quick validation
 

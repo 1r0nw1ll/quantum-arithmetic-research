@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_EPISODE_REGIME_CERT.v1.0",
+  "cert_id": "FAIL_TRANSITION_WRONG_COUNT",
+  "description": "FAIL: PASS_RECOVERING episodes but transition_matrix declares MONOTONE_RECOVERY→RETURN_TO_REF count=2 (actual=1). Expected failure: TRANSITION_MISMATCH.",
+  "episodes": [
+    {"episode_id": "E1", "primary_label": "OSCILLATORY"},
+    {"episode_id": "E2", "primary_label": "MONOTONE_RECOVERY"},
+    {"episode_id": "E3", "primary_label": "RETURN_TO_REF"}
+  ],
+  "expected_summary": {
+    "episode_count": 3,
+    "escalation_count": 0,
+    "recovery_count": 2,
+    "neutral_count": 1,
+    "drift_declaration": "RECOVERING",
+    "regime_sequence": ["NEUTRAL", "RECOVERY", "RECOVERY"],
+    "transition_matrix": [
+      {"from_label": "MONOTONE_RECOVERY", "to_label": "RETURN_TO_REF",   "count": 2},
+      {"from_label": "OSCILLATORY",       "to_label": "MONOTONE_RECOVERY", "count": 1}
+    ],
+    "max_run_length": 1,
+    "max_run_label": "OSCILLATORY"
+  }
+}

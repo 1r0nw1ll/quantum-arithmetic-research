@@ -678,6 +678,8 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
         ep_skipped_pairs = 0
         ep_dE_values: List[int] = []
         ep_dE2_values: List[int] = []
+        fam_step: Dict[str, List[int]] = defaultdict(list)
+        fam_pair: Dict[Tuple[str, str], List[int]] = defaultdict(list)
 
         for ep in episodes:
             ep_id = ep.get("episode_id", "<missing>")
@@ -739,6 +741,9 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                     )
                 ep_checked_steps += 1
                 ep_dE_values.append(dE)
+                ftag = name_to_family.get(gname)
+                if ftag is not None:
+                    fam_step[ftag].append(dE)
 
             # 2-step ΔE₂ bounds (by tagged family pair)
             for i in range(len(steps) - 1):
@@ -767,6 +772,28 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                     )
                 ep_checked_pairs += 1
                 ep_dE2_values.append(dE2)
+                fam_pair[(f1, f2)].append(dE2)
+
+        def _fam_step_entry(tag: str, vals: List[int]) -> Dict:
+            return {
+                "family_tag": tag,
+                "count": len(vals),
+                "min_delta": min(vals),
+                "max_delta": max(vals),
+                "mean_delta_num": sum(vals),
+                "mean_delta_den": len(vals),
+            }
+
+        def _fam_pair_entry(f1: str, f2: str, vals: List[int]) -> Dict:
+            return {
+                "from_family": f1,
+                "to_family": f2,
+                "count": len(vals),
+                "min_delta2": min(vals),
+                "max_delta2": max(vals),
+                "mean_delta2_num": sum(vals),
+                "mean_delta2_den": len(vals),
+            }
 
         episode_summary = {
             "episode_count": len(episodes),
@@ -777,6 +804,14 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
             "dE_max": max(ep_dE_values) if ep_dE_values else None,
             "dE2_min": min(ep_dE2_values) if ep_dE2_values else None,
             "dE2_max": max(ep_dE2_values) if ep_dE2_values else None,
+            "observed_family_step_stats": [
+                _fam_step_entry(tag, fam_step[tag])
+                for tag in sorted(fam_step)
+            ],
+            "observed_family_pair_stats": [
+                _fam_pair_entry(f1, f2, fam_pair[(f1, f2)])
+                for (f1, f2) in sorted(fam_pair)
+            ],
         }
 
     cert_sha = _sha256_hex(cert)

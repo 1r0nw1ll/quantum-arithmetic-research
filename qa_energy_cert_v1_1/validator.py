@@ -664,12 +664,20 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
 
     # ── Gate 7 (optional): episode_samples consistency ────────────────────────
     episodes = cert.get("episode_samples")
+    episode_summary: Optional[Dict] = None
     if episodes is not None:
         name_to_family: Dict[str, str] = {
             g["name"]: g["family_tag"] for g in gens if "family_tag" in g
         }
         gen_bounds = _gen_delta_bounds(power)
         pair_bounds = _pair_delta_bounds(fam_interact)
+
+        # Accumulators for episode_summary (output-only, non-cert)
+        ep_checked_steps = 0
+        ep_checked_pairs = 0
+        ep_skipped_pairs = 0
+        ep_dE_values: List[int] = []
+        ep_dE2_values: List[int] = []
 
         for ep in episodes:
             ep_id = ep.get("episode_id", "<missing>")
@@ -729,12 +737,15 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                                       "deltaE": dE, "bounds": [mn, mx]}},
                         {"where": "episode_samples"},
                     )
+                ep_checked_steps += 1
+                ep_dE_values.append(dE)
 
             # 2-step ΔE₂ bounds (by tagged family pair)
             for i in range(len(steps) - 1):
                 f1 = name_to_family.get(steps[i])
                 f2 = name_to_family.get(steps[i + 1])
                 if f1 is None or f2 is None:
+                    ep_skipped_pairs += 1
                     continue  # untagged generator — skip interaction check
                 pair = (f1, f2)
                 if pair not in pair_bounds:
@@ -754,9 +765,22 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                                       "deltaE2": dE2, "bounds": [mn2, mx2]}},
                         {"where": "episode_samples"},
                     )
+                ep_checked_pairs += 1
+                ep_dE2_values.append(dE2)
+
+        episode_summary = {
+            "episode_count": len(episodes),
+            "checked_steps": ep_checked_steps,
+            "checked_pairs": ep_checked_pairs,
+            "skipped_unlabeled_pairs": ep_skipped_pairs,
+            "dE_min": min(ep_dE_values) if ep_dE_values else None,
+            "dE_max": max(ep_dE_values) if ep_dE_values else None,
+            "dE2_min": min(ep_dE2_values) if ep_dE2_values else None,
+            "dE2_max": max(ep_dE2_values) if ep_dE2_values else None,
+        }
 
     cert_sha = _sha256_hex(cert)
-    return _ok({
+    result: Dict = {
         "reachable_count": len(dist),
         "max_energy": max(dist.values()) if dist else 0,
         "scc_count": scc_count,
@@ -765,7 +789,10 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
         "family_power_stats": fam_power,
         "family_interaction_stats": fam_interact,
         "cert_sha256": cert_sha,
-    })
+    }
+    if episode_summary is not None:
+        result["episode_summary"] = episode_summary
+    return _ok(result)
 
 
 # ── self-test ─────────────────────────────────────────────────────────────────

@@ -51,6 +51,7 @@ All cert claims are structural (state-transition topology), not narrative.
 | Gate 4 | Energy monotonicity: 1-Lipschitz along edges · tight predecessor · E(ref)=0 |
 | Gate 5 | `return_in_k_tests` match computed reverse distances |
 | Gate 6 | SCC recompute · `power_stats` · `family_power_stats` · `family_interaction_stats` · optional `power_tests` qualitative assertions |
+| Gate 7 | Optional `episode_samples` consistency: per-step ΔE within certified generator bounds · 2-step ΔE₂ within certified family-pair bounds |
 
 ---
 
@@ -82,10 +83,59 @@ hard-locks it to 2.
 |---|---|---|
 | `PASS_FEAR.json` | PASS | N=2, ref=(0,2), generators: fear only |
 | `PASS_LOVE.json` | PASS | N=2, ref=(2,0), generators: love only |
-| `PASS_MIXED.json` | PASS | N=2, ref=(0,2), all 6 generators; 1 large SCC |
+| `PASS_MIXED.json` | PASS | N=2, ref=(0,2), all 6 generators; 1 large SCC; includes episode sample |
 | `FAIL_POWER.json` | FAIL | `POWER_TESTS_VIOLATION` — impossible mean_sign constraint |
 | `FAIL_INTERACTION.json` | FAIL | `POWER_STATS_MISMATCH` — wrong family_interaction_stats entry |
 | `FAIL_HORIZON.json` | FAIL | `DOMAIN_INVALID` — interaction_horizon=3 rejected |
+| `FAIL_EPISODE.json` | FAIL | `EPISODE_SAMPLES_MISMATCH` — fear_up self-loop violates ΔE bounds |
+
+---
+
+## Output-only episode telemetry (non-breaking)
+
+The validator may emit additional **output-only** fields when `episode_samples` is present. These fields:
+
+- do **not** change the schema (`QA_ENERGY_CERT.v1.1` unchanged),
+- do **not** affect PASS/FAIL beyond the existing Gate 7 checks,
+- are deterministic functions of the certified energy map and the provided episodes.
+
+### `episode_summary`
+
+When episodes are present and Gate 7 passes, the result envelope includes:
+
+- `episode_count`, `checked_steps`, `checked_pairs`, `skipped_unlabeled_pairs`
+- `dE_min`, `dE_max` — observed per-step ΔE over all episode steps
+- `dE2_min`, `dE2_max` — observed 2-step ΔE₂ over tagged family-pair windows
+
+### `observed_family_step_stats` / `observed_family_pair_stats`
+
+Behavior-prediction-ready summaries grouped from the observed episodes:
+
+- **`observed_family_step_stats`**: observed ΔE grouped by `family_tag`, sorted by tag name
+- **`observed_family_pair_stats`**: observed ΔE₂ grouped by ordered `(from_family, to_family)`, sorted lexicographically
+
+Means are exact rationals (`mean_delta_num / mean_delta_den`). Untagged generators contribute to global `dE_min/max` and `skipped_unlabeled_pairs` but not to family subblocks.
+
+### `episode_labels` trajectory classifier
+
+`episode_summary.episode_labels` is a deterministic topology classifier for each episode, derived purely from the energy sequence and integer comparisons — no thresholds, no floats:
+
+- **`primary_label`** (exhaustive, mutually exclusive, first match wins):
+  `RETURN_TO_REF` · `MONOTONE_ESCALATION` · `MONOTONE_RECOVERY` · `OSCILLATORY` · `STASIS`
+
+- **`tags`** (one from each group):
+  - Net direction: `NET_POS` · `NET_NEG` · `NET_ZERO`
+  - Peak location: `PEAK_AT_END` · `PEAK_BEFORE_END` · `NO_PEAK`
+  - Amplitude: `AMP_ZERO` · `AMP_ONE` · `AMP_GE_2`
+  - 2-step tendency (if ≥2 steps): `PAIR_POS` · `PAIR_NEG` · `PAIR_TIE`
+  - Family composition (if any tagged steps): `FAMILY_FEAR_DOMINANT` · `FAMILY_LOVE_DOMINANT` · `FAMILY_BALANCED` · `FAMILY_UNLABELED`
+
+- **`measures`**: `startE`, `endE`, `netE`, `minE`, `maxE`, `amp`, `pos`, `neg`, `zero`
+
+Episodes are sorted by `episode_id`. Labels are stable, low-cardinality features for downstream modeling; they do not alter certification semantics.
+
+**Example** — PASS_MIXED episode `E1_escalate_and_recover` (fear_up → fear_lock → love_soothe):
+`primary_label=RETURN_TO_REF`, tags=`[AMP_GE_2, FAMILY_FEAR_DOMINANT, NET_ZERO, PAIR_TIE, PEAK_BEFORE_END]`
 
 ---
 
@@ -110,4 +160,4 @@ current generator set; ΔE = generator power.
 python3 qa_energy_cert_v1_1/validator.py --self-test
 ```
 
-Expected: `RESULT: PASS` (6/6 fixtures).
+Expected: `RESULT: PASS` (7/7 fixtures).

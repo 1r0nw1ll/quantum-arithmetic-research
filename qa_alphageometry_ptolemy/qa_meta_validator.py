@@ -3046,6 +3046,28 @@ def _validate_episode_regime_cert_v1_family_if_present(base_dir: str) -> Optiona
     return None
 
 
+def _validate_bsd_local_euler_cert_v1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA BSD Local Euler Cert family [82]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_bsd_local_euler_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_bsd_local_euler_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_bsd_local_euler_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3204,6 +3226,10 @@ FAMILY_SWEEPS = [
      _validate_episode_regime_cert_v1_family_if_present,
      "schema + validator (5-gate) + 6 fixtures (PASS_RECOVERING, PASS_ESCALATING, PASS_MIXED, FAIL_LABEL, FAIL_TRANSITION, FAIL_DRIFT)", "81_episode_regime_transitions",
      "../qa_episode_regime_cert_v1", True),
+    (82, "QA BSD Local Euler Cert family",
+     _validate_bsd_local_euler_cert_v1_family_if_present,
+     "schema + validator (schema/recompute/reduction-type gates) + 2 fixtures (pass_good_p5, fail_wrong_ap)", "82_bsd_local_euler_cert",
+     "../qa_bsd_local_euler_cert_v1", True),
 ]
 
 

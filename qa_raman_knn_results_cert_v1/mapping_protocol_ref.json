@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Raman KNN Results Cert: locks in the verified LOO kNN classification results (95.2% headline, k-sweep, per-class breakdown, chi2 statistic) for the QA Raman spectroscopy paper against the frozen features artifact sha256. Certifies that the classifier is a valid classical model (model_not_physically_realizable=False), distinguishing it from retracted quantum model claims (cf. I3322 bell test)."
+}

@@ -3046,6 +3046,54 @@ def _validate_episode_regime_cert_v1_family_if_present(base_dir: str) -> Optiona
     return None
 
 
+def _validate_raman_knn_results_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Raman KNN Results Cert family [82]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_raman_knn_results_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_raman_knn_results_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_raman_knn_results_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
+def _validate_bell_chsh_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Bell CHSH Cert family [83]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_bell_chsh_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_bell_chsh_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_bell_chsh_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3204,6 +3252,14 @@ FAMILY_SWEEPS = [
      _validate_episode_regime_cert_v1_family_if_present,
      "schema + validator (5-gate) + 6 fixtures (PASS_RECOVERING, PASS_ESCALATING, PASS_MIXED, FAIL_LABEL, FAIL_TRANSITION, FAIL_DRIFT)", "81_episode_regime_transitions",
      "../qa_episode_regime_cert_v1", True),
+    (82, "QA Raman KNN Results Cert family",
+     _validate_raman_knn_results_cert_family_if_present,
+     "schema + validator (5-gate: schema, canonical hash, best-acc consistency, k=1 parity, model assessment) + 3 fixtures (PASS + FAIL_best_acc_mismatch + FAIL_model_not_realizable)", "82_raman_knn_results_cert",
+     "../qa_raman_knn_results_cert_v1", True),
+    (83, "QA Bell CHSH Cert family",
+     _validate_bell_chsh_cert_family_if_present,
+     "schema + validator (5-gate: schema, canonical hash, 8|N theorem, Tsirelson bound, model assessment) + 3 fixtures (PASS + FAIL_wrong_condition + FAIL_wrong_value)", "83_bell_chsh_cert",
+     "../qa_bell_chsh_cert_v1", True),
 ]
 
 

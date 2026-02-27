@@ -1,0 +1,122 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_BELL_CHSH_CERT.v1.schema.json",
+  "title": "QA_BELL_CHSH_CERT",
+  "description": "Certifies the '8|N theorem': the QA cosine correlator E_N(s,t)=cos(2π(s-t)/N) achieves the CHSH Tsirelson bound |S|=2√2 if and only if 8 divides N. Locks in the N-sweep results from qa_chsh_bell_test.py.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cert_id",
+    "cert_version",
+    "theorem",
+    "n_sweep",
+    "model_assessment",
+    "digests"
+  ],
+  "properties": {
+    "cert_id": {
+      "type": "string",
+      "description": "Human-readable identifier for this certificate instance."
+    },
+    "cert_version": {
+      "type": "string",
+      "const": "QA_BELL_CHSH_CERT.v1"
+    },
+    "theorem": {
+      "type": "object",
+      "description": "Statement of the certified theorem.",
+      "additionalProperties": false,
+      "required": ["name", "statement", "tsirelson_bound", "model_note"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Short theorem name, e.g. '8|N theorem'."
+        },
+        "statement": {
+          "type": "string",
+          "description": "Human-readable theorem statement."
+        },
+        "tsirelson_bound": {
+          "type": "number",
+          "description": "Numerical value of Tsirelson bound (2√2 ≈ 2.8284271247461902).",
+          "minimum": 2.8,
+          "maximum": 2.9
+        },
+        "model_note": {
+          "type": "string",
+          "description": "Note on the physical interpretation of the correlator model."
+        }
+      }
+    },
+    "n_sweep": {
+      "type": "array",
+      "description": "Results of the N-sweep: for each N, whether 8|N, the max |S| achieved, and whether it equals the Tsirelson bound.",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["N", "divisible_by_8", "max_abs_S", "hit_tsirelson"],
+        "properties": {
+          "N": {
+            "type": "integer",
+            "minimum": 2,
+            "description": "Cycle length of the QA N-gon."
+          },
+          "divisible_by_8": {
+            "type": "boolean",
+            "description": "True iff N % 8 == 0."
+          },
+          "max_abs_S": {
+            "type": "number",
+            "minimum": 0.0,
+            "maximum": 3.0,
+            "description": "Maximum |S| found over all settings (a, a', b, b') ∈ {0,...,N-1}^4."
+          },
+          "hit_tsirelson": {
+            "type": "boolean",
+            "description": "True if max_abs_S is within 1e-6 of 2√2."
+          },
+          "optimal_settings": {
+            "type": "array",
+            "description": "Optional: (a, a', b, b') settings achieving max_abs_S.",
+            "items": {"type": "integer", "minimum": 0},
+            "minItems": 4,
+            "maxItems": 4
+          }
+        }
+      }
+    },
+    "model_assessment": {
+      "type": "object",
+      "description": "Validity assessment of the correlator model.",
+      "additionalProperties": false,
+      "required": ["model_valid", "model_not_physically_realizable", "notes"],
+      "properties": {
+        "model_valid": {
+          "type": "boolean",
+          "description": "True if the model produces valid, reproducible results."
+        },
+        "model_not_physically_realizable": {
+          "type": "boolean",
+          "description": "True if the model is not a valid physical model (e.g. unconstrained quantum correlators). Must be False for the CHSH cosine correlator, which IS a valid deterministic LHV model."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Notes on model validity and physical interpretation."
+        }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_sha256"],
+      "properties": {
+        "canonical_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of canonical JSON (sort_keys, no spaces) with this field zeroed to 64 zeros."
+        }
+      }
+    }
+  }
+}

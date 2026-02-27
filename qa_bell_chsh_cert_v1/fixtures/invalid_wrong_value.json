@@ -1,0 +1,26 @@
+{
+  "cert_id": "chsh_fail_wrong_value",
+  "cert_version": "QA_BELL_CHSH_CERT.v1",
+  "theorem": {
+    "name": "8|N theorem",
+    "statement": "The QA cosine correlator E_N(s,t)=cos(2pi(s-t)/N) achieves the CHSH Tsirelson bound |S|=2sqrt(2) if and only if 8 divides N.",
+    "tsirelson_bound": 2.8284271247461903,
+    "model_note": "The correlator is continuous-valued (not binary +/-1), constituting a valid deterministic local hidden-variable model. It evades Bell theorem constraints on binary pre-assignments. Verified by exhaustive search over all N^4 settings for N <= 32."
+  },
+  "n_sweep": [
+    {"N": 6,  "divisible_by_8": false, "max_abs_S": 2.9,               "hit_tsirelson": false, "optimal_settings": [0, 1, 2, 4]},
+    {"N": 8,  "divisible_by_8": true,  "max_abs_S": 2.8284271247461903, "hit_tsirelson": true,  "optimal_settings": [0, 2, 5, 7]},
+    {"N": 12, "divisible_by_8": false, "max_abs_S": 2.732050808,        "hit_tsirelson": false, "optimal_settings": [0, 3, 7, 10]},
+    {"N": 16, "divisible_by_8": true,  "max_abs_S": 2.8284271247461903, "hit_tsirelson": true,  "optimal_settings": [0, 4, 10, 14]},
+    {"N": 24, "divisible_by_8": true,  "max_abs_S": 2.8284271247461903, "hit_tsirelson": true,  "optimal_settings": [0, 6, 15, 21]},
+    {"N": 32, "divisible_by_8": true,  "max_abs_S": 2.8284271247461903, "hit_tsirelson": true,  "optimal_settings": [0, 8, 20, 28]}
+  ],
+  "model_assessment": {
+    "model_valid": true,
+    "model_not_physically_realizable": false,
+    "notes": "Tampered: N=6 max_abs_S=2.9 (above Tsirelson bound) but hit_tsirelson=False (inconsistent)"
+  },
+  "digests": {
+    "canonical_sha256": "a0fd1707fd2023d9c208f4b6b652e63398fdb7c26b7f0ebdb29574611399bf5f"
+  }
+}

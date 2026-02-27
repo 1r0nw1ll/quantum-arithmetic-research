@@ -1,0 +1,47 @@
+{
+  "cert_id": "raman_knn_results_v1_fail_model",
+  "cert_version": "QA_RAMAN_KNN_RESULTS_CERT.v1",
+  "artifact": {
+    "csv_path": "submission/artifacts/qa_raman_features.csv",
+    "sha256": "defa2f205265ba4990cc8fd504ce1a93228c02bd5071a5c6504fbb611668234a",
+    "n_samples": 965,
+    "n_features": 40
+  },
+  "classifier": {
+    "algorithm": "LOO_kNN",
+    "best_k": 5,
+    "weighted": true,
+    "best_accuracy": 0.952332
+  },
+  "k_sweep": [
+    {"k": 1, "weighted": false, "accuracy": 0.958549},
+    {"k": 1, "weighted": true,  "accuracy": 0.958549},
+    {"k": 3, "weighted": false, "accuracy": 0.850777},
+    {"k": 3, "weighted": true,  "accuracy": 0.954404},
+    {"k": 5, "weighted": false, "accuracy": 0.837306},
+    {"k": 5, "weighted": true,  "accuracy": 0.952332},
+    {"k": 7, "weighted": false, "accuracy": 0.812435},
+    {"k": 7, "weighted": true,  "accuracy": 0.953368}
+  ],
+  "per_class_accuracies": {
+    "graphene":  0.6,
+    "diamond":   1.0,
+    "mos2":      0.9167,
+    "graphite":  0.8684,
+    "rutile":    0.9625,
+    "corundum":  0.9141,
+    "silicon":   1.0,
+    "hematite":  0.9125,
+    "quartz":    1.0,
+    "anatase":   0.9661
+  },
+  "chi2_statistic": 1930.0,
+  "model_assessment": {
+    "model_valid": true,
+    "model_not_physically_realizable": true,
+    "notes": "Incorrectly flagged as MODEL_NOT_PHYSICALLY_REALIZABLE (test fixture)"
+  },
+  "digests": {
+    "canonical_sha256": "61b83acea20a3c58120ae80d3493c5bf7eb49f8b68757cb216cfd7045069cd19"
+  }
+}

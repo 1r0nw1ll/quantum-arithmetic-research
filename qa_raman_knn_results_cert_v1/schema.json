@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_RAMAN_KNN_RESULTS_CERT.v1.schema.json",
+  "title": "QA_RAMAN_KNN_RESULTS_CERT",
+  "description": "Locks in verified LOO kNN results for the QA Raman spectroscopy classifier. Certifies the headline accuracy, k-sweep table, and per-class breakdown from qa_knn_baseline.py against the frozen features artifact.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "cert_id",
+    "cert_version",
+    "artifact",
+    "classifier",
+    "k_sweep",
+    "per_class_accuracies",
+    "chi2_statistic",
+    "model_assessment",
+    "digests"
+  ],
+  "properties": {
+    "cert_id": {
+      "type": "string",
+      "description": "Human-readable identifier for this certificate instance."
+    },
+    "cert_version": {
+      "type": "string",
+      "const": "QA_RAMAN_KNN_RESULTS_CERT.v1"
+    },
+    "artifact": {
+      "type": "object",
+      "description": "Provenance of the frozen features CSV used in all experiments.",
+      "additionalProperties": false,
+      "required": ["csv_path", "sha256", "n_samples", "n_features"],
+      "properties": {
+        "csv_path": {
+          "type": "string",
+          "description": "Relative path to the features CSV from the paper submission root."
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 hex digest of the features CSV file (raw bytes)."
+        },
+        "n_samples": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of spectra rows (excluding header)."
+        },
+        "n_features": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "Number of feature columns used by qa_knn_baseline.py."
+        }
+      }
+    },
+    "classifier": {
+      "type": "object",
+      "description": "Configuration of the best LOO kNN configuration.",
+      "additionalProperties": false,
+      "required": ["algorithm", "best_k", "weighted", "best_accuracy"],
+      "properties": {
+        "algorithm": {
+          "type": "string",
+          "description": "Classifier name, e.g. 'LOO_kNN'."
+        },
+        "best_k": {
+          "type": "integer",
+          "minimum": 1,
+          "description": "k value achieving best_accuracy."
+        },
+        "weighted": {
+          "type": "boolean",
+          "description": "Whether inverse-distance weighting was used."
+        },
+        "best_accuracy": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Headline overall LOO accuracy at best_k with this weighting scheme."
+        }
+      }
+    },
+    "k_sweep": {
+      "type": "array",
+      "description": "Full k-sweep table (each k × weighting combination).",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["k", "weighted", "accuracy"],
+        "properties": {
+          "k": {"type": "integer", "minimum": 1},
+          "weighted": {"type": "boolean"},
+          "accuracy": {"type": "number", "minimum": 0.0, "maximum": 1.0}
+        }
+      }
+    },
+    "per_class_accuracies": {
+      "type": "object",
+      "description": "Per-class LOO accuracy at best_k (weighted). Keys are material class names.",
+      "additionalProperties": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 1.0
+      }
+    },
+    "chi2_statistic": {
+      "type": "number",
+      "minimum": 0.0,
+      "description": "Chi-squared statistic for C_mod24 vs class dependence test."
+    },
+    "model_assessment": {
+      "type": "object",
+      "description": "Validity assessment of the classifier model.",
+      "additionalProperties": false,
+      "required": ["model_valid", "model_not_physically_realizable", "notes"],
+      "properties": {
+        "model_valid": {
+          "type": "boolean",
+          "description": "True if the classifier produces valid, reproducible results."
+        },
+        "model_not_physically_realizable": {
+          "type": "boolean",
+          "description": "True if the model violates physical realizability constraints (e.g. unconstrained quantum correlators). Must be False for a valid kNN classifier."
+        },
+        "notes": {
+          "type": "string",
+          "description": "Free-text notes on model validity."
+        }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["canonical_sha256"],
+      "properties": {
+        "canonical_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "SHA-256 of canonical JSON (sort_keys, no spaces) with this field zeroed to 64 zeros."
+        }
+      }
+    }
+  }
+}

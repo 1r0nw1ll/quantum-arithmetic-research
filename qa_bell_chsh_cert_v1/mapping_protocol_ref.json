@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Bell CHSH Cert: certifies the 8|N theorem — the QA cosine correlator E_N(s,t)=cos(2pi(s-t)/N) achieves CHSH Tsirelson bound |S|=2sqrt(2) iff 8|N. Verified by exhaustive settings search. The model is a valid deterministic LHV (model_not_physically_realizable=False), contrasting with the retracted I3322 implementation which used unconstrained quantum correlators."
+}

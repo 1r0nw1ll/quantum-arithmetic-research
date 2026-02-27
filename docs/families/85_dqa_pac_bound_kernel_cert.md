@@ -108,6 +108,16 @@ python3 qa_dqa_pac_bound_kernel_cert_v1/validator.py path/to/cert.json
 | Formula variant | `risk_hat + sqrt((K1·D_QA + ln(1/δ))/m)` | `risk_hat + sqrt((D_QA + ln(1/δ))/(2m))` |
 | Scope | Phase-1 paper constants | Reusable kernel for downstream certs |
 
+## Downstream Consumers
+
+**Family [84] requires this kernel_block_sha256.**
+`qa_pac_bayes_constant_cert_v1/validator.py` Gate 5 (`gate_5_kernel_ref_binding`) hard-codes:
+```
+_KERNEL_BLOCK_SHA256 = "553b7588ebf8fd1b10bddcc34a03387d85a0e8089ad3319fdaa234aa7f674676"
+```
+If the [85] kernel block is ever updated (formula change, rounding change, tolerance change),
+that hash will change → Gate 5 in [84] immediately fails → both certs must be re-blessed together.
+
 ## Provenance
 
 - Source paper: `papers/in-progress/phase1-pac-bayes/phase1_workspace/pac_bayes_qa_theory_complete.tex`

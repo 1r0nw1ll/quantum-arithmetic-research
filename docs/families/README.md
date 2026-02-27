@@ -56,6 +56,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [82] | [QA Raman KNN Results Cert v1](82_raman_knn_results_cert.md) | Schema + Validator (5-gate: schema, canonical hash, best-acc consistency, k=1 parity, model assessment) + 3 Fixtures (PASS + FAIL_best_acc_mismatch + FAIL_model_not_realizable) | PASS |
 | [83] | [QA Bell CHSH Cert v1](83_bell_chsh_cert.md) | Schema + Validator (5-gate: schema, canonical hash, 8\|N divisibility, Tsirelson bound values, model assessment) + 3 Fixtures (PASS + FAIL_wrong_condition + FAIL_wrong_value) | PASS |
 | [84] | [QA PAC-Bayes Constant Cert v1](84_pac_bayes_constant_cert.md) | Schema + Validator (5-gate: schema, canonical hash, K1 recompute 2C²N(M/2)², PAC bound+improvement ratio, DPI scope) + 3 Fixtures (PASS + FAIL_k1_mismatch + FAIL_dpi_claim_universal) | PASS |
+| [85] | [QA D_QA PAC Bound Kernel Cert v1](85_dqa_pac_bound_kernel_cert.md) | Schema + Validator (5-gate: schema, triple digest canonical+kernel_block+schema, kernel definition lock formula_id=PAC_BAYES_QA_DQA_LOGDELTA_V1, per-case recompute with witness intermediates, cross-case monotonicity) + 3 Fixtures (PASS + FAIL_digest_mismatch + FAIL_wrong_log_term) | PASS |
 
 ## Quick validation
 

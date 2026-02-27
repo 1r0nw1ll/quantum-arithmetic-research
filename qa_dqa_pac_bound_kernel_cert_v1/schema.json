@@ -1,0 +1,145 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_DQA_PAC_BOUND_KERNEL_CERT.v1.schema.json",
+  "title": "QA D_QA PAC Bound Kernel Certificate v1",
+  "description": "Single source of truth for the QA_DQA PAC bound kernel: formula_id=PAC_BAYES_QA_DQA_LOGDELTA_V1. Locks formula definition, log(1/delta) term, ROUND_HALF_UP rounding, and validates each case by numeric recomputation with witness intermediates.",
+  "type": "object",
+  "required": ["cert_id", "cert_version", "created_utc", "kernel", "cases", "digests"],
+  "additionalProperties": false,
+  "properties": {
+    "cert_id":      {"type": "string", "minLength": 1},
+    "cert_version": {"type": "string", "const": "QA_DQA_PAC_BOUND_KERNEL_CERT.v1"},
+    "created_utc":  {"type": "string", "minLength": 1},
+
+    "kernel": {
+      "type": "object",
+      "required": ["name", "kernel_version", "formula_id", "definition"],
+      "additionalProperties": false,
+      "properties": {
+        "name":           {"type": "string"},
+        "kernel_version": {"type": "string"},
+        "formula_id":     {"type": "string"},
+        "definition": {
+          "type": "object",
+          "required": ["inputs", "output", "computation"],
+          "additionalProperties": false,
+          "properties": {
+            "inputs": {
+              "type": "object",
+              "required": ["D_QA", "m", "delta", "risk_hat"],
+              "additionalProperties": false,
+              "properties": {
+                "D_QA":     {"type": "number", "minimum": 0},
+                "m":        {"type": "integer", "minimum": 1},
+                "delta":    {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+                "risk_hat": {"type": "number", "minimum": 0, "maximum": 1}
+              }
+            },
+            "output": {
+              "type": "object",
+              "required": ["bound_percent"],
+              "additionalProperties": false,
+              "properties": {
+                "bound_percent": {"type": "number", "minimum": 0}
+              }
+            },
+            "computation": {
+              "type": "object",
+              "required": ["uses_log_term", "log_term", "units", "rounding", "tolerance"],
+              "additionalProperties": false,
+              "properties": {
+                "uses_log_term": {"type": "boolean"},
+                "log_term":      {"type": "string"},
+                "units":         {"type": "string"},
+                "rounding": {
+                  "type": "object",
+                  "required": ["mode", "decimals"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "mode":     {"type": "string"},
+                    "decimals": {"type": "integer", "minimum": 0}
+                  }
+                },
+                "tolerance": {
+                  "type": "object",
+                  "required": ["abs"],
+                  "additionalProperties": false,
+                  "properties": {
+                    "abs": {"type": "number", "minimum": 0}
+                  }
+                }
+              }
+            },
+            "notes": {"type": "string", "maxLength": 4000}
+          }
+        }
+      }
+    },
+
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 50,
+      "items": {
+        "type": "object",
+        "required": ["case_id", "inputs", "expected", "witness"],
+        "additionalProperties": false,
+        "properties": {
+          "case_id": {"type": "string", "minLength": 1},
+          "inputs": {
+            "type": "object",
+            "required": ["D_QA", "m", "delta", "risk_hat"],
+            "additionalProperties": false,
+            "properties": {
+              "D_QA":     {"type": "number", "minimum": 0},
+              "m":        {"type": "integer", "minimum": 1},
+              "delta":    {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+              "risk_hat": {"type": "number", "minimum": 0, "maximum": 1}
+            }
+          },
+          "expected": {
+            "type": "object",
+            "required": ["bound_percent"],
+            "additionalProperties": false,
+            "properties": {
+              "bound_percent": {"type": "number", "minimum": 0}
+            }
+          },
+          "witness": {
+            "type": "object",
+            "required": ["intermediates", "rounding_applied"],
+            "additionalProperties": false,
+            "properties": {
+              "intermediates": {
+                "type": "object",
+                "required": ["log_1_over_delta", "bound_unrounded_percent"],
+                "additionalProperties": false,
+                "properties": {
+                  "log_1_over_delta":         {"type": "number"},
+                  "bound_unrounded_percent":  {"type": "number", "minimum": 0}
+                }
+              },
+              "rounding_applied": {"type": "boolean"}
+            }
+          },
+          "tags": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {"type": "string"}
+          }
+        }
+      }
+    },
+
+    "digests": {
+      "type": "object",
+      "required": ["canonical_sha256", "schema_sha256", "kernel_block_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_sha256":    {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "schema_sha256":       {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "kernel_block_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "D_QA PAC Bound Kernel Cert: single source of truth for formula_id=PAC_BAYES_QA_DQA_LOGDELTA_V1. Locks the QA_DQA bound kernel: L=ln(1/delta), slack=sqrt((D_QA+L)/(2*m)), bound=risk_hat+slack, ROUND_HALF_UP to 1dp. Validates per-case recomputation with witness intermediates and cross-case monotonicity."
+}

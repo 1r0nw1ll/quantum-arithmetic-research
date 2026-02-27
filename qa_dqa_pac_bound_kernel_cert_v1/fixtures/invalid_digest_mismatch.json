@@ -1,0 +1,107 @@
+{
+  "cases": [
+    {
+      "case_id": "base",
+      "expected": {
+        "bound_percent": 26.7
+      },
+      "inputs": {
+        "D_QA": 67.06,
+        "delta": 0.05,
+        "m": 1000,
+        "risk_hat": 0.08
+      },
+      "tags": [
+        "phase1_tight_avg"
+      ],
+      "witness": {
+        "intermediates": {
+          "bound_unrounded_percent": 26.715732990395274,
+          "log_1_over_delta": 2.995732273553991
+        },
+        "rounding_applied": true
+      }
+    },
+    {
+      "case_id": "smaller_delta",
+      "expected": {
+        "bound_percent": 26.9
+      },
+      "inputs": {
+        "D_QA": 67.06,
+        "delta": 0.01,
+        "m": 1000,
+        "risk_hat": 0.08
+      },
+      "tags": [
+        "delta_0.01"
+      ],
+      "witness": {
+        "intermediates": {
+          "bound_unrounded_percent": 26.929496848303717,
+          "log_1_over_delta": 4.605170185988092
+        },
+        "rounding_applied": true
+      }
+    },
+    {
+      "case_id": "bigger_DQ",
+      "expected": {
+        "bound_percent": 30.7
+      },
+      "inputs": {
+        "D_QA": 100.13,
+        "delta": 0.05,
+        "m": 1000,
+        "risk_hat": 0.08
+      },
+      "tags": [
+        "phase1_initial_avg"
+      ],
+      "witness": {
+        "intermediates": {
+          "bound_unrounded_percent": 30.70745827625298,
+          "log_1_over_delta": 2.995732273553991
+        },
+        "rounding_applied": true
+      }
+    }
+  ],
+  "cert_id": "QA_DQA_PAC_BOUND_KERNEL_CERT_v1_20260227",
+  "cert_version": "QA_DQA_PAC_BOUND_KERNEL_CERT.v1",
+  "created_utc": "2026-02-27T00:00:00Z",
+  "digests": {
+    "canonical_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "kernel_block_sha256": "553b7588ebf8fd1b10bddcc34a03387d85a0e8089ad3319fdaa234aa7f674676",
+    "schema_sha256": "27186078a914de55b0a6b7fee495af99af068b0aea3a27f5097810f6946372c3"
+  },
+  "kernel": {
+    "definition": {
+      "computation": {
+        "log_term": "ln(1/delta)",
+        "rounding": {
+          "decimals": 1,
+          "mode": "ROUND_HALF_UP"
+        },
+        "tolerance": {
+          "abs": 0.1
+        },
+        "units": "percent",
+        "uses_log_term": true
+      },
+      "inputs": {
+        "D_QA": 67.06,
+        "delta": 0.05,
+        "m": 1000,
+        "risk_hat": 0.08
+      },
+      "notes": "Kernel formula: L=ln(1/delta); slack=sqrt((D_QA+L)/(2*m)); bound=risk_hat+slack; bound_clipped=min(1,max(0,bound)); bound_percent_unrounded=100*bound_clipped; bound_percent=ROUND_HALF_UP(bound_percent_unrounded,1). QA_DQA variant: no K1 multiplier, log(1/delta) term only.",
+      "output": {
+        "bound_percent": 26.7
+      }
+    },
+    "formula_id": "PAC_BAYES_QA_DQA_LOGDELTA_V1",
+    "kernel_version": "v1",
+    "name": "QA_DQA_PAC_BOUND_KERNEL"
+  }
+}

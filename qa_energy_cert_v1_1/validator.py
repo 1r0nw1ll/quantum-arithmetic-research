@@ -680,6 +680,7 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
         ep_dE2_values: List[int] = []
         fam_step: Dict[str, List[int]] = defaultdict(list)
         fam_pair: Dict[Tuple[str, str], List[int]] = defaultdict(list)
+        episode_labels: List[Dict] = []
 
         for ep in episodes:
             ep_id = ep.get("episode_id", "<missing>")
@@ -720,6 +721,16 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                         {"where": "episode_samples"},
                     )
 
+            # Episode-local accumulators for labels (safe after reachability confirmed)
+            E_seq: List[int] = [dist[s] for s in seq]
+            dE2_seq: List[int] = []
+            pos = neg = zero = 0
+            pos2 = neg2 = zero2 = 0
+            startE = E_seq[0]
+            endE   = E_seq[-1]
+            minE   = min(E_seq)
+            maxE   = max(E_seq)
+
             # Per-step ΔE bounds (by generator name)
             for i, gname in enumerate(steps):
                 if gname not in gen_bounds:
@@ -741,6 +752,12 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                     )
                 ep_checked_steps += 1
                 ep_dE_values.append(dE)
+                if dE > 0:
+                    pos += 1
+                elif dE < 0:
+                    neg += 1
+                else:
+                    zero += 1
                 ftag = name_to_family.get(gname)
                 if ftag is not None:
                     fam_step[ftag].append(dE)
@@ -773,6 +790,82 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                 ep_checked_pairs += 1
                 ep_dE2_values.append(dE2)
                 fam_pair[(f1, f2)].append(dE2)
+                dE2_seq.append(dE2)
+                if dE2 > 0:
+                    pos2 += 1
+                elif dE2 < 0:
+                    neg2 += 1
+                else:
+                    zero2 += 1
+
+            # ── episode_labels: stable primary_label + tags + measures ──────────
+            at_ref_end = (seq[-1] == ref)
+            if at_ref_end:
+                primary_label = "RETURN_TO_REF"
+            elif neg == 0 and pos > 0:
+                primary_label = "MONOTONE_ESCALATION"
+            elif pos == 0 and neg > 0:
+                primary_label = "MONOTONE_RECOVERY"
+            elif pos > 0 and neg > 0:
+                primary_label = "OSCILLATORY"
+            else:
+                primary_label = "STASIS"
+
+            tags: List[str] = []
+
+            netE = endE - startE
+            if netE > 0:
+                tags.append("NET_POS")
+            elif netE < 0:
+                tags.append("NET_NEG")
+            else:
+                tags.append("NET_ZERO")
+
+            if endE == maxE and maxE > startE:
+                tags.append("PEAK_AT_END")
+            elif maxE > endE and maxE > startE:
+                tags.append("PEAK_BEFORE_END")
+            else:
+                tags.append("NO_PEAK")
+
+            amp = maxE - minE
+            if amp == 0:
+                tags.append("AMP_ZERO")
+            elif amp == 1:
+                tags.append("AMP_ONE")
+            else:
+                tags.append("AMP_GE_2")
+
+            if len(steps) >= 2:
+                if pos2 > neg2:
+                    tags.append("PAIR_POS")
+                elif neg2 > pos2:
+                    tags.append("PAIR_NEG")
+                else:
+                    tags.append("PAIR_TIE")
+
+            fear_steps = sum(1 for g in steps if name_to_family.get(g) == "fear")
+            love_steps = sum(1 for g in steps if name_to_family.get(g) == "love")
+            labeled = fear_steps + love_steps
+            if labeled == 0:
+                tags.append("FAMILY_UNLABELED")
+            elif fear_steps > love_steps:
+                tags.append("FAMILY_FEAR_DOMINANT")
+            elif love_steps > fear_steps:
+                tags.append("FAMILY_LOVE_DOMINANT")
+            else:
+                tags.append("FAMILY_BALANCED")
+
+            episode_labels.append({
+                "episode_id": ep_id,
+                "primary_label": primary_label,
+                "tags": tags,
+                "measures": {
+                    "startE": startE, "endE": endE, "netE": netE,
+                    "minE": minE, "maxE": maxE, "amp": amp,
+                    "pos": pos, "neg": neg, "zero": zero,
+                },
+            })
 
         def _fam_step_entry(tag: str, vals: List[int]) -> Dict:
             return {
@@ -812,6 +905,10 @@ def validate_cert(cert: Dict[str, Any]) -> Dict[str, Any]:
                 _fam_pair_entry(f1, f2, fam_pair[(f1, f2)])
                 for (f1, f2) in sorted(fam_pair)
             ],
+            "episode_labels": sorted(
+                episode_labels,
+                key=lambda x: str(x.get("episode_id", "")),
+            ),
         }
 
     cert_sha = _sha256_hex(cert)

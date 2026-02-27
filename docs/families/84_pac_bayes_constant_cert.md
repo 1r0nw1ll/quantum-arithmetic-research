@@ -1,18 +1,37 @@
-# Family [84]: QA PAC-Bayes Constant Cert v1
+# Family [84]: QA PAC-Bayes Constant Cert v1.1
 
-**Schema:** `QA_PAC_BAYES_CONSTANT_CERT.v1`
+**Schema:** `QA_PAC_BAYES_CONSTANT_CERT.v1.1`
 **Root:** `qa_pac_bayes_constant_cert_v1/`
 **Mapping protocol:** `mapping_protocol_ref.json` → `qa_mapping_protocol/canonical_mapping_protocol.json`
 
 ## Purpose
 
 Machine-tract lock for the Phase-1 PAC-Bayes theory paper (`pac_bayes_qa_theory_complete.tex`).
-Certifies four invariants that were identified during the 2026-02-27 revet audit:
+Certifies five invariants (four from the 2026-02-27 revet audit + one kernel binding added in v1.1):
 
 1. **K₁ formula correctness** — recomputes K₁ = 2C²N(M/2)² from raw system parameters
 2. **PAC bound recomputation** — derives bound percent directly from (D_QA, m, δ, risk_hat)
 3. **Improvement ratio consistency** — verifies 5585% → 1813% = 3.1× (not 3.2×)
-4. **DPI scope declaration** — enforces `claim="structured_only"` (universal is prohibited)
+4. **Kernel reference binding** — `pac_kernel_ref` links this cert to Family [85] via locked `formula_id` + `kernel_block_sha256` (no drift between [84] and [85] possible)
+5. **DPI scope declaration** — enforces `claim="structured_only"` (universal is prohibited)
+
+## v1.1 Change: Kernel Reference Binding
+
+v1.1 adds a mandatory `pac_kernel_ref` block that eliminates any possibility of the PAC
+bound formula in [84] diverging from the canonical kernel in [85]:
+
+```json
+"pac_kernel_ref": {
+  "formula_id":          "PAC_BAYES_QA_DQA_LOGDELTA_V1",
+  "kernel_block_sha256": "553b7588ebf8fd1b10bddcc34a03387d85a0e8089ad3319fdaa234aa7f674676",
+  "cert_version":        "QA_DQA_PAC_BOUND_KERNEL_CERT.v1"
+}
+```
+
+Gate 5 verifies that both `formula_id` and `kernel_block_sha256` match the locked Family [85]
+values. The `kernel_block_sha256` is the SHA-256 of the canonical JSON of `cert.kernel` from
+the Family [85] PASS fixture — it covers the formula name, log term, rounding policy, and
+tolerance, making formula drift CI-detectable.
 
 ## Corrected K₁ Formula
 
@@ -62,15 +81,16 @@ enforces `dpi.claim="structured_only"` to prevent future over-claims.
 | Single-step DPI | ✓ PASS | 51.8% FAIL |
 | Multi-step (5 steps) | ✓ PASS (0/5 violations) | not tested |
 
-## Gate Architecture (5 gates)
+## Gate Architecture (6 gates)
 
 | Gate | Name | What it checks |
 |------|------|----------------|
-| 1 | `gate_1_schema_validity` | JSON schema `QA_PAC_BAYES_CONSTANT_CERT.v1.schema.json` |
+| 1 | `gate_1_schema_validity` | JSON schema `QA_PAC_BAYES_CONSTANT_CERT.v1.1.schema.json` |
 | 2 | `gate_2_digest_integrity` | Self-referential SHA-256 |
 | 3 | `gate_3_k1_recompute` | K1_calc = 2C²N(M/2)² matches K1_expected and K1_recomputed within tolerance_abs; K1_formula string correct; M even |
 | 4 | `gate_4_pac_bound_recompute` | Recomputes bound_percent from (risk_hat, D_QA, m, delta, K1_calc, bound_variant); verifies improvement_ratio = round(initial/tight, rdp); tight < initial |
-| 5 | `gate_5_dpi_scope` | `dpi.claim == "structured_only"`; violation_rate in [0,1] |
+| 5 | `gate_5_kernel_ref_binding` | `pac_kernel_ref.formula_id == "PAC_BAYES_QA_DQA_LOGDELTA_V1"` and `kernel_block_sha256` matches locked Family [85] value |
+| 6 | `gate_6_dpi_scope` | `dpi.claim == "structured_only"`; violation_rate in [0,1] |
 
 ## Failure Modes
 
@@ -80,15 +100,17 @@ enforces `dpi.claim="structured_only"` to prevent future over-claims.
 | `DIGEST_MISMATCH` | 2 | Tampered certificate |
 | `K1_RECOMPUTE_MISMATCH` | 3 | K1_expected/K1_recomputed don't match 2C²N(M/2)²; or M_is_even wrong; or K1_formula string wrong |
 | `PAC_BOUND_RECOMPUTE_MISMATCH` | 4 | bound_percent inconsistent with recomputed value; improvement_ratio wrong; tight ≥ initial |
-| `DPI_SCOPE_VIOLATION` | 5 | `dpi.claim` is not `"structured_only"` |
+| `KERNEL_REF_MISMATCH` | 5 | `pac_kernel_ref.formula_id` or `kernel_block_sha256` doesn't match locked Family [85] values |
+| `DPI_SCOPE_VIOLATION` | 6 | `dpi.claim` is not `"structured_only"` |
 
 ## Fixtures
 
 | File | Expected | Trigger |
 |------|----------|---------|
-| `valid_pac_bayes_constant_v1.json` | PASS | All gates pass |
+| `valid_pac_bayes_constant_v1_1.json` | PASS | All gates pass |
 | `invalid_k1_mismatch.json` | FAIL gate 3 | K1_expected=27648 (old wrong 2×N×M² path) vs correct 4608 |
-| `invalid_dpi_claim_universal.json` | FAIL gate 5 | `dpi.claim="universal"` (overclaims universality despite 51.8% violation rate) |
+| `invalid_kernel_ref_mismatch.json` | FAIL gate 5 | `pac_kernel_ref.kernel_block_sha256` is wrong (64 'a' chars) |
+| `invalid_dpi_claim_universal.json` | FAIL gate 6 | `dpi.claim="universal"` (overclaims universality despite 51.8% violation rate) |
 
 ## Usage
 
@@ -107,5 +129,6 @@ python3 qa_pac_bayes_constant_cert_v1/validator.py --self-test --json
 
 - Source paper: `papers/in-progress/phase1-pac-bayes/phase1_workspace/pac_bayes_qa_theory_complete.tex`
 - Audit date: 2026-02-27 (revet campaign)
+- v1.1 binding: kernel_block_sha256 from Family [85] `qa_dqa_pac_bound_kernel_cert_v1/`
 - JSON results: `signal_pac_results.json`, `signal_pac_results_tight.json`
-- Related audit doc: `memory/pac_bayes_audit.md`
+- Related cert: Family [85] `85_dqa_pac_bound_kernel_cert.md`

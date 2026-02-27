@@ -1,14 +1,14 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "QA_PAC_BAYES_CONSTANT_CERT.v1.schema.json",
-  "title": "QA PAC-Bayes Constant Certificate v1",
-  "description": "Machine-tract cert locking Phase-1 PAC-Bayes constants and bound tables. Recomputes K1=2C^2*N*(M/2)^2, recomputes PAC bound from raw inputs, enforces improvement ratio consistency, and locks DPI scope to structured_only.",
+  "$id": "QA_PAC_BAYES_CONSTANT_CERT.v1.1.schema.json",
+  "title": "QA PAC-Bayes Constant Certificate v1.1",
+  "description": "Machine-tract cert locking Phase-1 PAC-Bayes constants and bound tables. Recomputes K1=2C^2*N*(M/2)^2, recomputes PAC bound from raw inputs, enforces improvement ratio consistency, locks DPI scope to structured_only, and binds to the canonical QA_DQA kernel cert (Family [85]) via pac_kernel_ref.",
   "type": "object",
-  "required": ["cert_id", "cert_version", "created_utc", "system", "constants", "pac_inputs", "pac_outputs", "dpi", "digests"],
+  "required": ["cert_id", "cert_version", "created_utc", "system", "constants", "pac_inputs", "pac_outputs", "dpi", "pac_kernel_ref", "digests"],
   "additionalProperties": false,
   "properties": {
     "cert_id":      {"type": "string", "minLength": 1},
-    "cert_version": {"type": "string", "const": "QA_PAC_BAYES_CONSTANT_CERT.v1"},
+    "cert_version": {"type": "string", "const": "QA_PAC_BAYES_CONSTANT_CERT.v1.1"},
     "created_utc":  {"type": "string", "minLength": 1},
 
     "system": {
@@ -93,6 +93,17 @@
             "seed_used_for_structured_demo":{"type": "integer"}
           }
         }
+      }
+    },
+
+    "pac_kernel_ref": {
+      "type": "object",
+      "required": ["formula_id", "kernel_block_sha256", "cert_version"],
+      "additionalProperties": false,
+      "properties": {
+        "formula_id":          {"type": "string"},
+        "kernel_block_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "cert_version":        {"type": "string"}
       }
     },
 

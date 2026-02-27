@@ -1,15 +1,15 @@
 {
-  "cert_id": "pac_bayes_constant_v1_1_fail_k1",
+  "cert_id": "pac_bayes_constant_v1_1_fail_kernel_ref",
   "cert_version": "QA_PAC_BAYES_CONSTANT_CERT.v1.1",
   "constants": {
-    "K1_expected": 27648.0,
+    "K1_expected": 4608.0,
     "K1_formula": "2*C^2*N*(M/2)^2",
-    "K1_recomputed": 27648.0,
+    "K1_recomputed": 4608.0,
     "tolerance_abs": 1e-09
   },
   "created_utc": "2026-02-27T00:00:00Z",
   "digests": {
-    "canonical_sha256": "b3881fc6d807f133554c04a9975cbcce981302ddfb1f6f40729b84b2afaf58f7"
+    "canonical_sha256": "72a0d73ca88b30eb80d3ae25cee246aa733f3eba5fa0e465e22825a27fc7bc52"
   },
   "dpi": {
     "claim": "structured_only",
@@ -30,7 +30,7 @@
   "pac_kernel_ref": {
     "cert_version": "QA_DQA_PAC_BOUND_KERNEL_CERT.v1",
     "formula_id": "PAC_BAYES_QA_DQA_LOGDELTA_V1",
-    "kernel_block_sha256": "553b7588ebf8fd1b10bddcc34a03387d85a0e8089ad3319fdaa234aa7f674676"
+    "kernel_block_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
   },
   "pac_outputs": {
     "bound_percent": 1724,

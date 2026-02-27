@@ -2,17 +2,20 @@
 """
 validator.py
 
-QA_PAC_BAYES_CONSTANT_CERT.v1 validator (Machine Tract) — Family [84].
+QA_PAC_BAYES_CONSTANT_CERT.v1.1 validator (Machine Tract) — Family [84].
 
 Locks the Phase-1 PAC-Bayes constants and bound tables into a
-CI-recomputable certificate.
+CI-recomputable certificate, and binds to the canonical QA_DQA kernel cert
+(Family [85]) via pac_kernel_ref.
 
 Gates:
-  1. JSON schema validity (cert_version == QA_PAC_BAYES_CONSTANT_CERT.v1)
+  1. JSON schema validity (cert_version == QA_PAC_BAYES_CONSTANT_CERT.v1.1)
   2. Canonical SHA-256 digest integrity (self-referential)
   3. K1 recomputation — verify K1 = 2*C^2*N*(M/2)^2 against constants fields
   4. PAC bound recomputation + improvement ratio consistency
-  5. DPI scope declaration — dpi.claim must be "structured_only"
+  5. Kernel reference binding — pac_kernel_ref.formula_id + kernel_block_sha256 must
+     match the locked Family [85] kernel block values
+  6. DPI scope declaration — dpi.claim must be "structured_only"
 
 Bound variant QA_DQA formula:
   bound = risk_hat + sqrt((K1 * D_QA + log(1/delta)) / m)
@@ -20,7 +23,7 @@ Bound variant QA_DQA formula:
 
 Failure modes:
   SCHEMA_INVALID, DIGEST_MISMATCH, K1_RECOMPUTE_MISMATCH,
-  PAC_BOUND_RECOMPUTE_MISMATCH, DPI_SCOPE_VIOLATION
+  PAC_BOUND_RECOMPUTE_MISMATCH, KERNEL_REF_MISMATCH, DPI_SCOPE_VIOLATION
 """
 from __future__ import annotations
 
@@ -29,9 +32,17 @@ import hashlib
 import json
 import math
 import os
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from enum import Enum
 from typing import Any, Dict, List, Optional
+
+
+# ---------------------------------------------------------------------------
+# Locked kernel reference constants (Family [85] binding)
+# ---------------------------------------------------------------------------
+_KERNEL_FORMULA_ID       = "PAC_BAYES_QA_DQA_LOGDELTA_V1"
+_KERNEL_BLOCK_SHA256     = "553b7588ebf8fd1b10bddcc34a03387d85a0e8089ad3319fdaa234aa7f674676"
+_KERNEL_CERT_VERSION     = "QA_DQA_PAC_BOUND_KERNEL_CERT.v1"
 
 
 # ---------------------------------------------------------------------------
@@ -109,7 +120,6 @@ def _compute_pac_bound_percent(
     elif bound_variant == "MCCALISTER":
         complexity = math.sqrt((K1 * D_QA + math.log(float(m) / delta)) / m)
     elif bound_variant == "CATONI":
-        # Catoni uses the same additive structure; treat as MCCALISTER here
         complexity = math.sqrt((K1 * D_QA + math.log(float(m) / delta)) / m)
     else:
         raise ValueError(f"Unknown bound_variant: {bound_variant!r}")
@@ -135,7 +145,7 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
         jsonschema.validate(instance=obj, schema=schema)
         results.append(GateResult(
             "gate_1_schema_validity", GateStatus.PASS,
-            "Schema valid; cert_version=QA_PAC_BAYES_CONSTANT_CERT.v1",
+            "Schema valid; cert_version=QA_PAC_BAYES_CONSTANT_CERT.v1.1",
         ))
     except Exception as exc:
         results.append(GateResult(
@@ -322,16 +332,62 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
     ))
 
     # ------------------------------------------------------------------
-    # Gate 5 — DPI scope declaration
+    # Gate 5 — Kernel reference binding ([84]→[85] link)
+    # ------------------------------------------------------------------
+    ref = obj["pac_kernel_ref"]
+    ref_errors = []
+
+    if ref.get("formula_id") != _KERNEL_FORMULA_ID:
+        ref_errors.append({
+            "path": "pac_kernel_ref.formula_id",
+            "expected": _KERNEL_FORMULA_ID,
+            "got": ref.get("formula_id"),
+        })
+    if ref.get("kernel_block_sha256") != _KERNEL_BLOCK_SHA256:
+        ref_errors.append({
+            "path": "pac_kernel_ref.kernel_block_sha256",
+            "expected": _KERNEL_BLOCK_SHA256,
+            "got": ref.get("kernel_block_sha256"),
+        })
+    if ref.get("cert_version") != _KERNEL_CERT_VERSION:
+        ref_errors.append({
+            "path": "pac_kernel_ref.cert_version",
+            "expected": _KERNEL_CERT_VERSION,
+            "got": ref.get("cert_version"),
+        })
+
+    if ref_errors:
+        results.append(GateResult(
+            "gate_5_kernel_ref_binding", GateStatus.FAIL,
+            "KERNEL_REF_MISMATCH: pac_kernel_ref does not match locked Family [85] values",
+            {"invariant_diff": {
+                "gate": 5,
+                "fields": ref_errors,
+                "expected_formula_id": _KERNEL_FORMULA_ID,
+                "expected_kernel_block_sha256": _KERNEL_BLOCK_SHA256,
+                "expected_cert_version": _KERNEL_CERT_VERSION,
+            }},
+        ))
+        return results
+
+    results.append(GateResult(
+        "gate_5_kernel_ref_binding", GateStatus.PASS,
+        (f"pac_kernel_ref bound to Family [85]: "
+         f"formula_id={_KERNEL_FORMULA_ID} "
+         f"kernel_block_sha256={_KERNEL_BLOCK_SHA256[:16]}..."),
+    ))
+
+    # ------------------------------------------------------------------
+    # Gate 6 — DPI scope declaration
     # ------------------------------------------------------------------
     dpi   = obj["dpi"]
     claim = dpi["claim"]
     if claim != "structured_only":
         results.append(GateResult(
-            "gate_5_dpi_scope", GateStatus.FAIL,
+            "gate_6_dpi_scope", GateStatus.FAIL,
             f"DPI_SCOPE_VIOLATION: dpi.claim must be 'structured_only', got '{claim}'",
             {"invariant_diff": {
-                "gate": 5,
+                "gate": 6,
                 "fields": [{"path": "dpi.claim", "expected": "structured_only", "got": claim}],
                 "recomputed": {
                     "K1_calc": k1_calc,
@@ -344,7 +400,7 @@ def validate_cert(obj: Dict[str, Any]) -> List[GateResult]:
 
     vr = float(dpi["random_trials"]["violation_rate"])
     results.append(GateResult(
-        "gate_5_dpi_scope", GateStatus.PASS,
+        "gate_6_dpi_scope", GateStatus.PASS,
         (f"dpi.claim='structured_only'; violation_rate={vr:.3f} "
          f"({int(round(vr*100))}% of {dpi['random_trials']['n_trials']} random trials; "
          f"seed={dpi['random_trials']['seed_used_for_structured_demo']})"),
@@ -375,9 +431,10 @@ def self_test(as_json: bool) -> int:
     base = os.path.dirname(os.path.abspath(__file__))
     fx   = os.path.join(base, "fixtures")
     fixtures = [
-        ("valid_pac_bayes_constant_v1.json",   True,  None),
-        ("invalid_k1_mismatch.json",            False, "gate_3_k1_recompute"),
-        ("invalid_dpi_claim_universal.json",    False, "gate_5_dpi_scope"),
+        ("valid_pac_bayes_constant_v1_1.json",    True,  None),
+        ("invalid_k1_mismatch.json",               False, "gate_3_k1_recompute"),
+        ("invalid_kernel_ref_mismatch.json",       False, "gate_5_kernel_ref_binding"),
+        ("invalid_dpi_claim_universal.json",       False, "gate_6_dpi_scope"),
     ]
     ok = True
     details = []
@@ -406,7 +463,7 @@ def self_test(as_json: bool) -> int:
     if as_json:
         print(json.dumps({"ok": ok, "fixtures": details}, indent=2, sort_keys=True))
     else:
-        print("=== QA_PAC_BAYES_CONSTANT_CERT.v1 SELF-TEST ===")
+        print("=== QA_PAC_BAYES_CONSTANT_CERT.v1.1 SELF-TEST ===")
         for d in details:
             if d.get("note") == "MISSING":
                 print(f"  {d['fixture']}: MISSING (FAIL)")
@@ -418,7 +475,7 @@ def self_test(as_json: bool) -> int:
 
 
 def main(argv=None) -> int:
-    ap = argparse.ArgumentParser(description="QA_PAC_BAYES_CONSTANT_CERT.v1 validator")
+    ap = argparse.ArgumentParser(description="QA_PAC_BAYES_CONSTANT_CERT.v1.1 validator")
     ap.add_argument("file", nargs="?", help="Certificate JSON file to validate")
     ap.add_argument("--self-test", action="store_true")
     ap.add_argument("--json", action="store_true")

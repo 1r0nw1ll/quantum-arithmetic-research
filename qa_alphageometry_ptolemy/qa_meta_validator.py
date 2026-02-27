@@ -3310,7 +3310,7 @@ FAMILY_SWEEPS = [
      "../qa_bell_chsh_cert_v1", True),
     (84, "QA PAC-Bayes Constant Cert family",
      _validate_pac_bayes_constant_cert_family_if_present,
-     "schema + validator (5-gate: schema, canonical hash, K1 recompute 2C^2N(M/2)^2, PAC bound+improvement ratio, DPI scope structured_only) + 3 fixtures (PASS + FAIL_k1_mismatch + FAIL_dpi_claim_universal)", "84_pac_bayes_constant_cert",
+     "schema v1.1 + validator (6-gate: schema, canonical hash, K1 recompute 2C^2N(M/2)^2, PAC bound+improvement ratio, kernel ref binding pac_kernel_ref->[85] formula_id+kernel_block_sha256, DPI scope structured_only) + 4 fixtures (PASS + FAIL_k1_mismatch + FAIL_kernel_ref_mismatch + FAIL_dpi_claim_universal)", "84_pac_bayes_constant_cert",
      "../qa_pac_bayes_constant_cert_v1", True),
     (85, "QA D_QA PAC Bound Kernel Cert family",
      _validate_dqa_pac_bound_kernel_cert_family_if_present,

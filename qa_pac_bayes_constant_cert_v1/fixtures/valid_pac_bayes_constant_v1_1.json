@@ -1,15 +1,15 @@
 {
-  "cert_id": "pac_bayes_constant_v1_1_fail_k1",
+  "cert_id": "pac_bayes_constant_v1_1_pass",
   "cert_version": "QA_PAC_BAYES_CONSTANT_CERT.v1.1",
   "constants": {
-    "K1_expected": 27648.0,
+    "K1_expected": 4608.0,
     "K1_formula": "2*C^2*N*(M/2)^2",
-    "K1_recomputed": 27648.0,
+    "K1_recomputed": 4608.0,
     "tolerance_abs": 1e-09
   },
   "created_utc": "2026-02-27T00:00:00Z",
   "digests": {
-    "canonical_sha256": "b3881fc6d807f133554c04a9975cbcce981302ddfb1f6f40729b84b2afaf58f7"
+    "canonical_sha256": "0539eb1a47baea3bd578ac66541439b687da4259b3cad225cf66bd034eb3f5ac"
   },
   "dpi": {
     "claim": "structured_only",

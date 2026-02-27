@@ -1,0 +1,21 @@
+{
+  "schema_id": "QA_BSD_LOCAL_EULER_CERT",
+  "schema_version": "v1",
+  "curve": {
+    "curve_id": "E_short_A0_B1_demo",
+    "model": {
+      "type": "short_weierstrass",
+      "A": 0,
+      "B": 1
+    }
+  },
+  "prime": 5,
+  "claimed": {
+    "point_count_fp": 6,
+    "ap": 0,
+    "reduction_type": "GOOD"
+  },
+  "meta": {
+    "notes": "Demo fixture: y^2 = x^3 + 1 at p = 5."
+  }
+}

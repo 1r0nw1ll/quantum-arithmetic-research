@@ -1,0 +1,104 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_BSD_LOCAL_EULER_CERT.v1.schema.json",
+  "title": "QA_BSD_LOCAL_EULER_CERT.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "schema_version",
+    "curve",
+    "prime",
+    "claimed"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_BSD_LOCAL_EULER_CERT"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "curve": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "curve_id",
+        "model"
+      ],
+      "properties": {
+        "curve_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "model": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "type",
+            "A",
+            "B"
+          ],
+          "properties": {
+            "type": {
+              "type": "string",
+              "const": "short_weierstrass"
+            },
+            "A": {
+              "type": "integer"
+            },
+            "B": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "prime": {
+      "type": "integer",
+      "minimum": 2,
+      "maximum": 100000
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "point_count_fp",
+        "ap"
+      ],
+      "properties": {
+        "point_count_fp": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "ap": {
+          "type": "integer"
+        },
+        "reduction_type": {
+          "type": "string",
+          "enum": [
+            "GOOD",
+            "BAD_UNSPECIFIED",
+            "BAD_MULTIPLICATIVE_SPLIT",
+            "BAD_MULTIPLICATIVE_NONSPLIT",
+            "BAD_ADDITIVE"
+          ]
+        },
+        "tamagawa_cp": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

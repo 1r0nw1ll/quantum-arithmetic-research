@@ -3118,6 +3118,30 @@ def _validate_pac_bayes_constant_cert_family_if_present(base_dir: str) -> Option
     return None
 
 
+def _validate_pac_bayes_dpi_scope_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA PAC-Bayes DPI Scope Cert family [86]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_pac_bayes_dpi_scope_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_pac_bayes_dpi_scope_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_pac_bayes_dpi_scope_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
 def _validate_dqa_pac_bound_kernel_cert_family_if_present(base_dir: str) -> Optional[str]:
     """QA D_QA PAC Bound Kernel Cert family [85]."""
     import subprocess
@@ -3316,6 +3340,10 @@ FAMILY_SWEEPS = [
      _validate_dqa_pac_bound_kernel_cert_family_if_present,
      "schema + validator (5-gate: schema, triple digest canonical+kernel_block+schema, kernel definition lock formula_id=PAC_BAYES_QA_DQA_LOGDELTA_V1, per-case recompute with witness intermediates, cross-case monotonicity) + 3 fixtures (PASS + FAIL_digest_mismatch + FAIL_wrong_log_term)", "85_dqa_pac_bound_kernel_cert",
      "../qa_dqa_pac_bound_kernel_cert_v1", True),
+    (86, "QA PAC-Bayes DPI Scope Cert family",
+     _validate_pac_bayes_dpi_scope_cert_family_if_present,
+     "schema + validator (5-gate: schema, canonical hash, evidence rate consistency n_violations/n_trials abs_tol=1e-12, scope separation structured<=threshold+random>=min_expected, claim policy dpi_claim=structured_only+forbidden_phrases) + 3 fixtures (PASS + FAIL_random_too_clean + FAIL_missing_forbidden_phrase)", "86_pac_bayes_dpi_scope_cert",
+     "../qa_pac_bayes_dpi_scope_cert_v1", True),
 ]
 
 

@@ -1,0 +1,77 @@
+{
+  "cert_id": "pac_bayes_dpi_scope_v1_fail_random_too_clean",
+  "cert_version": "QA_PAC_BAYES_DPI_SCOPE_CERT.v1",
+  "claims": {
+    "claim_level": "empirical_only",
+    "dpi_claim": "structured_only",
+    "forbidden_phrases": [
+      "for all distributions",
+      "proven",
+      "universal"
+    ]
+  },
+  "created_utc": "2026-02-27T00:00:00Z",
+  "digests": {
+    "canonical_sha256": "b721910a929e1b9fbe4307d5d0d5eb419c2048e3a6d66999b567360d3a786584"
+  },
+  "evidence": {
+    "multistep_audit": {
+      "enabled": true,
+      "k_steps": 5,
+      "n_trials": 5,
+      "n_violations": 0,
+      "seed": 42,
+      "violation_rate": 0.0
+    },
+    "random_trials": {
+      "distribution": "UNSTRUCTURED_RANDOM_V1",
+      "min_expected_violation_rate": 0.1,
+      "n_trials": 100,
+      "n_violations": 0,
+      "seed": 999,
+      "violation_rate": 0.0
+    },
+    "structured_trials": {
+      "n_trials": 5,
+      "n_violations": 0,
+      "pass_threshold": 0.0,
+      "seed": 42,
+      "violation_rate": 0.0
+    }
+  },
+  "refs": {
+    "family84_cert_version": "QA_PAC_BAYES_CONSTANT_CERT.v1.1",
+    "family85_kernel_ref": {
+      "cert_version": "QA_DQA_PAC_BOUND_KERNEL_CERT.v1",
+      "formula_id": "PAC_BAYES_QA_DQA_LOGDELTA_V1",
+      "kernel_block_sha256": "553b7588ebf8fd1b10bddcc34a03387d85a0e8089ad3319fdaa234aa7f674676"
+    }
+  },
+  "scope": {
+    "domain_note": "DPI holds for QA distributions initialized with seed=42 structured family (Cosmos 24-cycle), but fails on 51.6% of unstructured random initializations (250 trials). This cert locks that scope.",
+    "dpi_statement_target": "PAC_BAYES_PHASE1_DPI_SCOPE",
+    "paper_tag": "pac_bayes_qa_theory_complete_v2026-02-27"
+  },
+  "structured_definition": {
+    "canonicalization": {
+      "notes": "QA orbit family canonicalized by seed=42 structured Cosmos initializer. Full state reachable from seed start in <= M steps.",
+      "policy_id": "CANONICAL_STRUCTURED_V1"
+    },
+    "definition_id": "STRUCTURED_ONLY_V1",
+    "generator": {
+      "name": "QA_STRUCTURED_DEMO_GENERATOR",
+      "version": "v1"
+    },
+    "parameters": {
+      "M": 24,
+      "N": 16,
+      "constraints": [
+        "orbit_family=Cosmos",
+        "reachable_from_seed_start",
+        "no_satellite_mixing"
+      ],
+      "seed": 42,
+      "structured_family": "Cosmos_24_cycle"
+    }
+  }
+}

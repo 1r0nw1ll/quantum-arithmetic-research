@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "DPI Scope Cert: locks Phase-1 PAC-Bayes DPI claim to structured-only (definition_id=STRUCTURED_ONLY_V1, seed=42, Cosmos_24_cycle). Certifies empirical evidence (0/5 structured violations, 129/250=51.6% random violations), claim_level=empirical_only, forbidden_phrases including 'universal'+'proven'+'for all distributions'. References Family [84] (QA_PAC_BAYES_CONSTANT_CERT.v1.1) and Family [85] kernel (PAC_BAYES_QA_DQA_LOGDELTA_V1, kernel_block_sha256=553b7588...)."
+}

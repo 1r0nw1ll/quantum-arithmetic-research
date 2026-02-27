@@ -57,6 +57,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [83] | [QA Bell CHSH Cert v1](83_bell_chsh_cert.md) | Schema + Validator (5-gate: schema, canonical hash, 8\|N divisibility, Tsirelson bound values, model assessment) + 3 Fixtures (PASS + FAIL_wrong_condition + FAIL_wrong_value) | PASS |
 | [84] | [QA PAC-Bayes Constant Cert v1.1](84_pac_bayes_constant_cert.md) | Schema v1.1 + Validator (6-gate: schema, canonical hash, K1 recompute 2C²N(M/2)², PAC bound+improvement ratio, kernel ref binding→[85] formula_id+kernel_block_sha256, DPI scope structured_only) + 4 Fixtures (PASS + FAIL_k1_mismatch + FAIL_kernel_ref_mismatch + FAIL_dpi_claim_universal) | PASS |
 | [85] | [QA D_QA PAC Bound Kernel Cert v1](85_dqa_pac_bound_kernel_cert.md) | Schema + Validator (5-gate: schema, triple digest canonical+kernel_block+schema, kernel definition lock formula_id=PAC_BAYES_QA_DQA_LOGDELTA_V1, per-case recompute with witness intermediates, cross-case monotonicity) + 3 Fixtures (PASS + FAIL_digest_mismatch + FAIL_wrong_log_term) | PASS |
+| [86] | [QA PAC-Bayes DPI Scope Cert v1](86_pac_bayes_dpi_scope_cert.md) | Schema + Validator (5-gate: schema, canonical hash, evidence rate consistency n_violations/n_trials abs_tol=1e-12, scope separation structured<=threshold+random>=min_expected, claim policy dpi_claim+forbidden_phrases) + 3 Fixtures (PASS + FAIL_random_too_clean + FAIL_missing_forbidden_phrase) | PASS |
 
 ## Quick validation
 

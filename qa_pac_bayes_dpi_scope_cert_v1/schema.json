@@ -1,0 +1,157 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_PAC_BAYES_DPI_SCOPE_CERT.v1.schema.json",
+  "title": "QA PAC-Bayes DPI Scope Certificate v1",
+  "description": "Locks the DPI scope claim for Phase-1 PAC-Bayes work to structured-only. Certifies: definition of structured distributions, empirical evidence (random-trial violation rates), allowed claim levels, and cross-family refs to [84]/[85]. Prevents silent upgrade to universal or proven DPI.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["cert_id","cert_version","created_utc","scope","structured_definition","evidence","claims","refs","digests"],
+  "properties": {
+    "cert_id":      {"type":"string","minLength":1},
+    "cert_version": {"type":"string","const":"QA_PAC_BAYES_DPI_SCOPE_CERT.v1"},
+    "created_utc":  {"type":"string","minLength":1},
+
+    "scope": {
+      "type":"object",
+      "additionalProperties": false,
+      "required":["paper_tag","dpi_statement_target","domain_note"],
+      "properties":{
+        "paper_tag":              {"type":"string","minLength":1},
+        "dpi_statement_target":   {"type":"string","enum":["PAC_BAYES_PHASE1_DPI_SCOPE"]},
+        "domain_note":            {"type":"string","minLength":1}
+      }
+    },
+
+    "structured_definition": {
+      "type":"object",
+      "additionalProperties": false,
+      "required":["definition_id","generator","parameters","canonicalization"],
+      "properties":{
+        "definition_id": {"type":"string","enum":["STRUCTURED_ONLY_V1"]},
+        "generator": {
+          "type":"object",
+          "additionalProperties": false,
+          "required":["name","version"],
+          "properties":{
+            "name":    {"type":"string","enum":["QA_STRUCTURED_DEMO_GENERATOR"]},
+            "version": {"type":"string","minLength":1}
+          }
+        },
+        "parameters": {
+          "type":"object",
+          "additionalProperties": false,
+          "required":["seed","N","M","structured_family","constraints"],
+          "properties":{
+            "seed":               {"type":"integer","minimum":0},
+            "N":                  {"type":"integer","minimum":1},
+            "M":                  {"type":"integer","minimum":1},
+            "structured_family":  {"type":"string","minLength":1},
+            "constraints": {
+              "type":"array",
+              "items":{"type":"string","minLength":1},
+              "minItems":1
+            }
+          }
+        },
+        "canonicalization": {
+          "type":"object",
+          "additionalProperties": false,
+          "required":["policy_id","notes"],
+          "properties":{
+            "policy_id": {"type":"string","enum":["CANONICAL_STRUCTURED_V1"]},
+            "notes":     {"type":"string","minLength":1}
+          }
+        }
+      }
+    },
+
+    "evidence": {
+      "type":"object",
+      "additionalProperties": false,
+      "required":["structured_trials","random_trials"],
+      "properties":{
+        "structured_trials": {
+          "type":"object",
+          "additionalProperties": false,
+          "required":["n_trials","n_violations","violation_rate","seed","pass_threshold"],
+          "properties":{
+            "n_trials":       {"type":"integer","minimum":1},
+            "n_violations":   {"type":"integer","minimum":0},
+            "violation_rate": {"type":"number","minimum":0,"maximum":1},
+            "seed":           {"type":"integer","minimum":0},
+            "pass_threshold": {"type":"number","minimum":0,"maximum":1}
+          }
+        },
+        "random_trials": {
+          "type":"object",
+          "additionalProperties": false,
+          "required":["distribution","n_trials","n_violations","violation_rate","seed","min_expected_violation_rate"],
+          "properties":{
+            "distribution":               {"type":"string","enum":["UNSTRUCTURED_RANDOM_V1"]},
+            "n_trials":                   {"type":"integer","minimum":1},
+            "n_violations":               {"type":"integer","minimum":0},
+            "violation_rate":             {"type":"number","minimum":0,"maximum":1},
+            "seed":                       {"type":"integer","minimum":0},
+            "min_expected_violation_rate":{"type":"number","minimum":0,"maximum":1}
+          }
+        },
+        "multistep_audit": {
+          "type":"object",
+          "additionalProperties": false,
+          "required":["enabled","k_steps","n_trials","n_violations","violation_rate","seed"],
+          "properties":{
+            "enabled":        {"type":"boolean"},
+            "k_steps":        {"type":"integer","minimum":1},
+            "n_trials":       {"type":"integer","minimum":1},
+            "n_violations":   {"type":"integer","minimum":0},
+            "violation_rate": {"type":"number","minimum":0,"maximum":1},
+            "seed":           {"type":"integer","minimum":0}
+          }
+        }
+      }
+    },
+
+    "claims": {
+      "type":"object",
+      "additionalProperties": false,
+      "required":["dpi_claim","claim_level","forbidden_phrases"],
+      "properties":{
+        "dpi_claim":   {"type":"string","enum":["structured_only"]},
+        "claim_level": {"type":"string","enum":["empirical_only","proof_sketch","open"]},
+        "forbidden_phrases": {
+          "type":"array",
+          "items":{"type":"string","minLength":1},
+          "minItems":1
+        }
+      }
+    },
+
+    "refs": {
+      "type":"object",
+      "additionalProperties": false,
+      "required":["family84_cert_version","family85_kernel_ref"],
+      "properties":{
+        "family84_cert_version": {"type":"string","minLength":1},
+        "family85_kernel_ref": {
+          "type":"object",
+          "additionalProperties": false,
+          "required":["formula_id","kernel_block_sha256","cert_version"],
+          "properties":{
+            "formula_id":          {"type":"string"},
+            "kernel_block_sha256": {"type":"string","pattern":"^[0-9a-f]{64}$"},
+            "cert_version":        {"type":"string"}
+          }
+        }
+      }
+    },
+
+    "digests": {
+      "type":"object",
+      "additionalProperties": false,
+      "required":["canonical_sha256"],
+      "properties":{
+        "canonical_sha256": {"type":"string","pattern":"^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

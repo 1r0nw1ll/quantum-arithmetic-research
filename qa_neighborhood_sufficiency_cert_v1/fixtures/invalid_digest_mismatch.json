@@ -1,0 +1,51 @@
+{
+  "classifier": "RandomForest",
+  "dataset": "houston_multimodal",
+  "digests": {
+    "canonical_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+  "dominance": {
+    "patch_dominates_spec": true,
+    "plateau_tolerance_pp": 1.5
+  },
+  "generators": {
+    "patch": {
+      "feature_dim": 14,
+      "radius_values": [
+        3,
+        5,
+        7,
+        11
+      ],
+      "type": "patch_only_mean_std_pca3_grad"
+    },
+    "spec": {
+      "dim": 59,
+      "type": "concat_pca50_plus_lidar_ms"
+    }
+  },
+  "metrics": {
+    "failure_mode": "BOUNDARY_CONTAMINATION",
+    "minimal_radius": 5,
+    "patch": {
+      "11": {
+        "oa": 0.9917
+      },
+      "3": {
+        "oa": 0.9764
+      },
+      "5": {
+        "oa": 0.9988
+      },
+      "7": {
+        "oa": 0.9894
+      }
+    },
+    "spec": {
+      "oa": 0.9634
+    }
+  },
+  "schema_version": "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1",
+  "seed": 42,
+  "split_protocol": "stratified_0.7_train_seed42"
+}

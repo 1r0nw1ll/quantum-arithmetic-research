@@ -1,0 +1,322 @@
+{
+  "N": 2,
+  "cert_id": "energy_caps_tr_N2_mixed_FAIL_episode",
+  "created_utc": "2026-02-26T00:00:00Z",
+  "domain": "CAPS_TR",
+  "energy_map": [
+    {
+      "energy": 2,
+      "state": {
+        "R": 0,
+        "T": 0
+      }
+    },
+    {
+      "energy": 1,
+      "state": {
+        "R": 1,
+        "T": 0
+      }
+    },
+    {
+      "energy": 0,
+      "state": {
+        "R": 2,
+        "T": 0
+      }
+    },
+    {
+      "energy": 3,
+      "state": {
+        "R": 0,
+        "T": 1
+      }
+    },
+    {
+      "energy": 2,
+      "state": {
+        "R": 1,
+        "T": 1
+      }
+    },
+    {
+      "energy": 1,
+      "state": {
+        "R": 2,
+        "T": 1
+      }
+    },
+    {
+      "energy": 4,
+      "state": {
+        "R": 0,
+        "T": 2
+      }
+    },
+    {
+      "energy": 3,
+      "state": {
+        "R": 1,
+        "T": 2
+      }
+    },
+    {
+      "energy": 2,
+      "state": {
+        "R": 2,
+        "T": 2
+      }
+    }
+  ],
+  "episode_samples": [
+    {
+      "episode_id": "E_bad_fear_up",
+      "notes": "Claims fear_up keeps state at (0,2) (self-loop). dE=0 violates fear_up bounds [1,1].",
+      "start_state": {
+        "R": 2,
+        "T": 0
+      },
+      "states": [
+        {
+          "R": 2,
+          "T": 0
+        },
+        {
+          "R": 2,
+          "T": 0
+        },
+        {
+          "R": 1,
+          "T": 0
+        }
+      ],
+      "steps": [
+        "fear_up",
+        "fear_lock"
+      ]
+    }
+  ],
+  "expected_summary": {
+    "family_interaction_stats": [
+      {
+        "from_family": "fear",
+        "max_delta": 2,
+        "mean_delta_den": 37,
+        "mean_delta_num": 22,
+        "min_delta": -2,
+        "to_family": "fear"
+      },
+      {
+        "from_family": "fear",
+        "max_delta": 0,
+        "mean_delta_den": 37,
+        "mean_delta_num": -28,
+        "min_delta": -3,
+        "to_family": "love"
+      },
+      {
+        "from_family": "love",
+        "max_delta": 0,
+        "mean_delta_den": 37,
+        "mean_delta_num": -28,
+        "min_delta": -3,
+        "to_family": "fear"
+      },
+      {
+        "from_family": "love",
+        "max_delta": -2,
+        "mean_delta_den": 23,
+        "mean_delta_num": -56,
+        "min_delta": -4,
+        "to_family": "love"
+      }
+    ],
+    "family_power_stats": [
+      {
+        "family_tag": "fear",
+        "max_delta": 1,
+        "mean_delta_den": 18,
+        "mean_delta_num": 6,
+        "min_delta": -1
+      },
+      {
+        "family_tag": "love",
+        "max_delta": -1,
+        "mean_delta_den": 16,
+        "mean_delta_num": -20,
+        "min_delta": -2
+      }
+    ],
+    "max_energy": 4,
+    "max_scc_size": 9,
+    "power_stats": [
+      {
+        "max_delta": -1,
+        "mean_delta_den": 6,
+        "mean_delta_num": -6,
+        "min_delta": -1,
+        "name": "fear_down"
+      },
+      {
+        "max_delta": 1,
+        "mean_delta_den": 6,
+        "mean_delta_num": 6,
+        "min_delta": 1,
+        "name": "fear_lock"
+      },
+      {
+        "max_delta": 1,
+        "mean_delta_den": 6,
+        "mean_delta_num": 6,
+        "min_delta": 1,
+        "name": "fear_up"
+      },
+      {
+        "max_delta": -1,
+        "mean_delta_den": 6,
+        "mean_delta_num": -6,
+        "min_delta": -1,
+        "name": "love_reframe"
+      },
+      {
+        "max_delta": -2,
+        "mean_delta_den": 4,
+        "mean_delta_num": -8,
+        "min_delta": -2,
+        "name": "love_soothe"
+      },
+      {
+        "max_delta": -1,
+        "mean_delta_den": 6,
+        "mean_delta_num": -6,
+        "min_delta": -1,
+        "name": "love_support"
+      }
+    ],
+    "reachable_count": 9,
+    "scc_count": 1
+  },
+  "generator_set": [
+    {
+      "family_tag": "fear",
+      "name": "fear_up"
+    },
+    {
+      "family_tag": "fear",
+      "name": "fear_down"
+    },
+    {
+      "family_tag": "fear",
+      "name": "fear_lock"
+    },
+    {
+      "family_tag": "love",
+      "name": "love_soothe"
+    },
+    {
+      "family_tag": "love",
+      "name": "love_support"
+    },
+    {
+      "family_tag": "love",
+      "name": "love_reframe"
+    }
+  ],
+  "interaction_horizon": 2,
+  "reference_state": {
+    "R": 2,
+    "T": 0
+  },
+  "return_energy_map": [
+    {
+      "return_energy": 2,
+      "state": {
+        "R": 0,
+        "T": 0
+      }
+    },
+    {
+      "return_energy": 1,
+      "state": {
+        "R": 1,
+        "T": 0
+      }
+    },
+    {
+      "return_energy": 0,
+      "state": {
+        "R": 2,
+        "T": 0
+      }
+    },
+    {
+      "return_energy": 2,
+      "state": {
+        "R": 0,
+        "T": 1
+      }
+    },
+    {
+      "return_energy": 1,
+      "state": {
+        "R": 1,
+        "T": 1
+      }
+    },
+    {
+      "return_energy": 1,
+      "state": {
+        "R": 2,
+        "T": 1
+      }
+    },
+    {
+      "return_energy": 2,
+      "state": {
+        "R": 0,
+        "T": 2
+      }
+    },
+    {
+      "return_energy": 2,
+      "state": {
+        "R": 1,
+        "T": 2
+      }
+    },
+    {
+      "return_energy": 2,
+      "state": {
+        "R": 2,
+        "T": 2
+      }
+    }
+  ],
+  "return_in_k_tests": [
+    {
+      "expect_can_return": true,
+      "k": 0,
+      "state": {
+        "R": 2,
+        "T": 0
+      }
+    },
+    {
+      "expect_can_return": true,
+      "k": 3,
+      "state": {
+        "R": 0,
+        "T": 2
+      }
+    },
+    {
+      "expect_can_return": true,
+      "k": 2,
+      "state": {
+        "R": 1,
+        "T": 1
+      }
+    }
+  ],
+  "schema_version": "QA_ENERGY_CERT.v1.1"
+}

@@ -2792,6 +2792,236 @@ def _validate_curvature_stress_test_family_if_present(base_dir: str) -> Optional
         )
     return None
 
+
+def _validate_guarded_operator_category_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_GUARDED_OPERATOR_CATEGORY_CERT.v1 family (matrix embedding +
+    guarded partial-map obstructions).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_guarded_operator_category_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_guarded_operator_category_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_guarded_operator_category_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_structural_algebra_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_STRUCTURAL_ALGEBRA_CERT.v1 family (bounded normal forms,
+    uniqueness audits, scaling components, guarded contraction checks).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_structural_algebra_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_structural_algebra_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_structural_algebra_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_component_decomposition_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_COMPONENT_DECOMPOSITION_CERT.v1 family (gcd component decomposition,
+    scaled-seed roundtrip, and nu power-of-two contraction characterization).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_component_decomposition_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_component_decomposition_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_component_decomposition_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_algebra_bridge_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_ALGEBRA_BRIDGE_CERT.v1 family (semantic anchor for generator
+    definitions, word application convention, and component bridge invariants).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_algebra_bridge_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_algebra_bridge_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_algebra_bridge_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_failure_algebra_structure_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_FAILURE_ALGEBRA_STRUCTURE_CERT.v1 family (finite failure tag
+    algebra: poset + join-semilattice + monotone associative composition).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_failure_algebra_structure_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_failure_algebra_structure_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_failure_algebra_structure_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_neighborhood_sufficiency_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Neighborhood Sufficiency Cert family [77]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_neighborhood_sufficiency_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_neighborhood_sufficiency_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_neighborhood_sufficiency_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
+def _validate_locality_boundary_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Locality Boundary Cert family [78]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_locality_boundary_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_locality_boundary_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_locality_boundary_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
+def _validate_locality_regime_sep_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Locality Regime Separator Cert family [79]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_locality_regime_sep_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_locality_regime_sep_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_locality_regime_sep_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
+def _validate_energy_cert_v1_1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Energy Cert v1.1 family [80]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_energy_cert_v1_1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_energy_cert_v1_1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_energy_cert_v1_1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -2915,6 +3145,37 @@ FAMILY_SWEEPS = [
     (71, "QA Curvature Stress-Test Bundle (cross-family \u03ba universality)",
      _validate_curvature_stress_test_family_if_present,
      "schema + validator + 4 fixtures (1 valid, 3 negative)", "71_curvature_stress_test", "../qa_curvature_stress_test_v1", True),
+    (72, "QA Guarded Operator Category family",
+     _validate_guarded_operator_category_family_if_present,
+     "schema + validator + fixtures (matrix embedding + guarded obstructions)", "72_guarded_operator_category", "../qa_guarded_operator_category_v1", True),
+    (73, "QA Structural Algebra Cert family",
+     _validate_structural_algebra_cert_family_if_present,
+     "schema + validator + fixtures (normal forms + bounded uniqueness + scaling + guards)", "73_structural_algebra_cert", "../qa_structural_algebra_cert_v1", True),
+    (74, "QA Component Decomposition Cert family",
+     _validate_component_decomposition_cert_family_if_present,
+     "schema + validator + fixtures (gcd decomposition + scaled roundtrip + nu power-of-two characterization)", "74_component_decomposition_cert", "../qa_component_decomposition_cert_v1", True),
+    (75, "QA Algebra Bridge Cert family",
+     _validate_algebra_bridge_cert_family_if_present,
+     "schema + validator + fixtures (semantics anchor + word convention + component bridge + hash binding)", "75_algebra_bridge_cert", "../qa_algebra_bridge_cert_v1", True),
+    (76, "QA Failure Algebra Structure Cert family",
+     _validate_failure_algebra_structure_cert_family_if_present,
+     "schema + validator + fixtures (finite poset + join-semilattice + monotone composition + propagation law)", "76_failure_algebra_structure_cert", "../qa_failure_algebra_structure_cert_v1", True),
+    (77, "QA Neighborhood Sufficiency Cert family",
+     _validate_neighborhood_sufficiency_cert_family_if_present,
+     "schema v1.1 + validator (branching Gate 3) + 8 fixtures (4 valid: houston, indian_pines, salinas, ksc_failure; 4 negative: not_dominant, no_plateau, digest, claims_dominant_but_negative_delta)", "77_neighborhood_sufficiency_cert",
+     "../qa_neighborhood_sufficiency_cert_v1", True),
+    (78, "QA Locality Boundary Cert family",
+     _validate_locality_boundary_cert_family_if_present,
+     "schema v1.2 + validator (6-gate: schema, hash, failure curve, delta flag, fragmentation, adjacency witness Mode A/B) + 7 fixtures (3 valid: ksc_boundary v1/v1.1/v1.2 path mode; 4 negative: not_a_boundary_case, digest_mismatch, adj_rate_wrong, gt_mask_sha_mismatch)", "78_locality_boundary_cert",
+     "../qa_locality_boundary_cert_v1", True),
+    (79, "QA Locality Regime Separator Cert family",
+     _validate_locality_regime_sep_cert_family_if_present,
+     "schema v1.2 + validator (7-gate incl. Gate 6 adj witness + Gate 7 predictive threshold adj_crit/epsilon/TRANSITION) + 12 fixtures (4 v1 + 4 v1.1 witness + 4 v1.2: salinas DOMINANT pred, ksc BOUNDARY pred, pred_mismatch, pred_conflicts_empirical)", "79_locality_regime_sep_cert",
+     "../qa_locality_regime_sep_cert_v1", True),
+    (80, "QA Energy Cert v1.1 (CAPS_TR cognitive domain)",
+     _validate_energy_cert_v1_1_family_if_present,
+     "schema + validator (7-gate incl. Gate 7 episode_samples consistency) + 7 fixtures (PASS_FEAR, PASS_LOVE, PASS_MIXED+episode, FAIL_POWER, FAIL_INTERACTION, FAIL_HORIZON, FAIL_EPISODE)", "80_energy_cert",
+     "../qa_energy_cert_v1_1", True),
 ]
 
 

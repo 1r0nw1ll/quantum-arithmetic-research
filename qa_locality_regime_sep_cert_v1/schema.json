@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_LOCALITY_REGIME_SEP_CERT.v1",
+  "description": "Certifies the Locality Regime Separator: given a measured adj_rate_4 and the sign structure of ΔOA across all tested radii, classifies the scene as DOMINANT (variance reduction wins) or BOUNDARY (boundary bias dominates at all tested radii). Provides the critical-adjacency witness binding the empirical outcome to the variance-bias decomposition from QA theory.",
+  "type": "object",
+  "required": ["schema_version", "dataset", "r_star", "adj_rate_4", "delta_oa_by_radius", "regime", "regime_evidence", "digests"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "enum": ["QA_LOCALITY_REGIME_SEP_CERT.v1", "QA_LOCALITY_REGIME_SEP_CERT.v1.1", "QA_LOCALITY_REGIME_SEP_CERT.v1.2"]
+    },
+    "dataset": {"type": "string"},
+    "r_star": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Minimal sufficient radius (pixels). For DOMINANT: r* where plateau begins. For BOUNDARY: the maximum tested radius (patch never reaches r*)."
+    },
+    "adj_rate_4": {
+      "type": "number",
+      "minimum": 0.0,
+      "maximum": 1.0,
+      "description": "Measured 4-neighbor cross-class adjacency rate. In v1.1+, must match adjacency_witness recomputed value within tolerance."
+    },
+    "delta_oa_by_radius": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {
+        "type": "number"
+      },
+      "description": "ΔOA(r) = patch_oa(r) - spec_oa for each tested radius r. Keys are integer radius strings."
+    },
+    "regime": {
+      "type": "string",
+      "enum": ["DOMINANT", "BOUNDARY"],
+      "description": "DOMINANT: at least one radius has ΔOA > 0 (variance reduction wins). BOUNDARY: all radii have ΔOA <= 0 (boundary bias dominates)."
+    },
+    "regime_evidence": {
+      "type": "object",
+      "required": ["all_deltas_nonpositive", "any_delta_positive", "regime_consistent"],
+      "additionalProperties": false,
+      "properties": {
+        "all_deltas_nonpositive": {
+          "type": "boolean",
+          "description": "True iff ΔOA(r) <= 0 for all tested radii."
+        },
+        "any_delta_positive": {
+          "type": "boolean",
+          "description": "True iff at least one ΔOA(r) > 0."
+        },
+        "max_delta_pp": {
+          "type": "number",
+          "description": "Maximum ΔOA(r) in percentage points across all radii."
+        },
+        "min_delta_pp": {
+          "type": "number",
+          "description": "Minimum ΔOA(r) in percentage points across all radii."
+        },
+        "regime_consistent": {
+          "type": "boolean",
+          "description": "True iff declared regime is consistent with the delta sign structure."
+        }
+      }
+    },
+    "adjacency_witness": {
+      "type": "object",
+      "description": "Optional (v1.1+): machine-verifiable witness for adj_rate_4. Mode A = inline grid; Mode B = path to .npy file. Gate 6 recomputes adj_rate_4 and verifies hash.",
+      "required": ["adj_rate_4"],
+      "additionalProperties": false,
+      "properties": {
+        "adj_rate_4": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Declared adj_rate_4 in this witness block; validator recomputes and verifies."
+        },
+        "gt_label_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Mode A: SHA-256 of canonical JSON of gt_label_grid."
+        },
+        "gt_label_grid": {
+          "type": "array",
+          "description": "Mode A: 2D integer label grid (list of rows).",
+          "items": {"type": "array", "items": {"type": "integer"}}
+        },
+        "gt_mask_path": {
+          "type": "string",
+          "description": "Mode B: path to .npy label file (relative to cert file's directory)."
+        },
+        "gt_mask_sha256": {
+          "type": "string",
+          "pattern": "^[0-9a-f]{64}$",
+          "description": "Mode B: SHA-256 of raw bytes of the .npy file."
+        }
+      }
+    },
+    "regime_predictor": {
+      "type": "object",
+      "description": "Optional (v1.2+): predictive threshold gate. Gate 7 recomputes regime_pred from adj_rate_4, adj_crit, epsilon using the declared rule, enforces consistency with empirical regime except in TRANSITION band.",
+      "required": ["adj_crit", "epsilon", "regime_pred", "rule"],
+      "additionalProperties": false,
+      "properties": {
+        "adj_crit": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Critical adjacency threshold adj_4^crit."
+        },
+        "epsilon": {
+          "type": "number",
+          "minimum": 0.0,
+          "maximum": 1.0,
+          "description": "Transition band half-width. If |adj_rate_4 - adj_crit| <= epsilon => TRANSITION."
+        },
+        "regime_pred": {
+          "type": "string",
+          "enum": ["DOMINANT", "BOUNDARY", "TRANSITION"],
+          "description": "Declared prediction derived from the threshold rule."
+        },
+        "rule": {
+          "type": "string",
+          "enum": [
+            "adj_rate_4 < adj_crit - epsilon => DOMINANT; adj_rate_4 > adj_crit + epsilon => BOUNDARY; else TRANSITION"
+          ],
+          "description": "Literal rule string for auditability."
+        }
+      }
+    },
+    "digests": {
+      "type": "object",
+      "required": ["canonical_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

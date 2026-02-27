@@ -181,3 +181,7 @@ trace/*
 
 # Generated corpus (local)
 qa_rt_corpus/
+
+# AG2 guardrails POC secrets
+ag2_guardrails_poc/.env
+ag2_guardrails_poc/OAI_CONFIG_LIST

@@ -1,0 +1,22 @@
+{
+  "schema_version": "QA_LOCALITY_REGIME_SEP_CERT.v1",
+  "dataset": "ksc",
+  "r_star": 7,
+  "adj_rate_4": 0.24603174603174602,
+  "delta_oa_by_radius": {
+    "3": -0.0742,
+    "5": -0.0346,
+    "7": -0.0098
+  },
+  "regime": "BOUNDARY",
+  "regime_evidence": {
+    "all_deltas_nonpositive": true,
+    "any_delta_positive": false,
+    "max_delta_pp": -0.98,
+    "min_delta_pp": -7.42,
+    "regime_consistent": true
+  },
+  "digests": {
+    "canonical_sha256": "054d3fb3c6569e12d066fa341332b7992f03fa4cf62ceba70baa45f816057404"
+  }
+}

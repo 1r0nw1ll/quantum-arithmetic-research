@@ -1,0 +1,92 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_ENERGY_CERT_V1_1",
+  "state_manifold": {
+    "state_type": "CAPS_BE (b,e) or CAPS_TR (T=Threat, R=Regulation)",
+    "embedding_function": "BFS distance from reference state under generator set",
+    "constraints": [
+      "CAPS_BE: b,e ∈ {1..N}",
+      "CAPS_TR: T,R ∈ {0..N}",
+      "Reference state must lie in domain",
+      "Energy(s) = minimal generator path length from reference_state to s"
+    ]
+  },
+  "generators": [
+    {
+      "name": "fear_up",
+      "transition_rule": "CAPS_TR: (T,R) → (T+1,R) if T<N",
+      "invariant_effect": "increases threat level by 1"
+    },
+    {
+      "name": "fear_down",
+      "transition_rule": "CAPS_TR: (T,R) → (T-1,R) if T>0",
+      "invariant_effect": "decreases threat level by 1"
+    },
+    {
+      "name": "fear_lock",
+      "transition_rule": "CAPS_TR: (T,R) → (T,R-1) if R>0",
+      "invariant_effect": "decreases regulation; locks threat response"
+    },
+    {
+      "name": "love_soothe",
+      "transition_rule": "CAPS_TR: (T,R) → (T-1,R+1) if T>0 and R<N",
+      "invariant_effect": "decreases threat and increases regulation simultaneously"
+    },
+    {
+      "name": "love_support",
+      "transition_rule": "CAPS_TR: (T,R) → (T,R+1) if R<N",
+      "invariant_effect": "increases regulation without changing threat"
+    },
+    {
+      "name": "love_reframe",
+      "transition_rule": "CAPS_TR: (T,R) → (T-1,R) if T>0",
+      "invariant_effect": "reduces threat level by 1 without changing regulation"
+    },
+    {
+      "name": "sigma",
+      "transition_rule": "CAPS_BE: (b,e) → (b,e+1) if e+1 ≤ N",
+      "invariant_effect": "increments e coordinate"
+    },
+    {
+      "name": "mu",
+      "transition_rule": "CAPS_BE: (b,e) → (e,b)",
+      "invariant_effect": "swaps b and e"
+    },
+    {
+      "name": "lambda_k",
+      "transition_rule": "CAPS_BE: (b,e) → (kb,ke) if kb≤N and ke≤N",
+      "invariant_effect": "scales both coordinates by k"
+    },
+    {
+      "name": "nu",
+      "transition_rule": "CAPS_BE: (b,e) → (b/2,e/2) if b and e both even",
+      "invariant_effect": "halves both coordinates when both are even"
+    }
+  ],
+  "invariants": [
+    {"name": "energy_ref_zero",      "definition": "Energy(reference_state) = 0"},
+    {"name": "1_lipschitz",          "definition": "Energy(t) ≤ Energy(s) + 1 for every generator edge s→t"},
+    {"name": "tight_predecessor",    "definition": "Every reachable state except reference has a predecessor p with Energy(p) = Energy(s) - 1"},
+    {"name": "family_power_stats",   "definition": "Aggregate ΔE by family_tag over all reachable tagged-generator edges"},
+    {"name": "family_interaction",   "definition": "2-step ΔE(s→u) keyed by ordered (from_family, to_family) pair (interaction_horizon=2)"},
+    {"name": "episode_consistency",  "definition": "Observed episodes must respect per-generator ΔE bounds and (tagged) 2-step family interaction ΔE₂ bounds from expected_summary"}
+  ],
+  "failure_taxonomy": [
+    {"fail_type": "SCHEMA_INVALID",                "trigger_condition": "schema_version mismatch or JSON schema violation"},
+    {"fail_type": "DOMAIN_INVALID",                "trigger_condition": "unknown domain, reference_state out of domain, or interaction_horizon != 2"},
+    {"fail_type": "RECOMPUTE_MISMATCH",            "trigger_condition": "BFS recomputed energy or return_energy differs from cert"},
+    {"fail_type": "ENERGY_MONOTONICITY_VIOLATION", "trigger_condition": "1-Lipschitz or tight-predecessor invariant broken"},
+    {"fail_type": "RETURN_IN_K_MISMATCH",          "trigger_condition": "expect_can_return does not match computed reverse BFS result"},
+    {"fail_type": "SCC_MISMATCH",                  "trigger_condition": "recomputed SCC count or max_scc_size differs from expected_summary"},
+    {"fail_type": "POWER_STATS_MISMATCH",          "trigger_condition": "per-generator, family, or interaction stats differ from expected_summary"},
+    {"fail_type": "POWER_TESTS_VIOLATION",         "trigger_condition": "qualitative delta_constraints assertion failed"}
+  ],
+  "reachability": {
+    "graph_type": "directed",
+    "component_analysis": "Energy = BFS shortest-path distance from reference_state; return_energy = reverse BFS. Reachable set and all distances fully determined by (domain, N, reference_state, generator_set). SCC analysis via Kosaraju iterative algorithm."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "BFS distance is unique shortest-path length (FIFO queue, deterministic on sorted node list). SCC via Kosaraju iterative. Power stats sorted by generator name. All recomputed values are deterministic given (domain, N, reference_state, generator_set)."
+  }
+}

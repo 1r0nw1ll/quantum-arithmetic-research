@@ -1,0 +1,27 @@
+{
+  "schema_version": "QA_NEIGHBORHOOD_SUFFICIENCY_CERT.v1.1",
+  "dataset": "salinas",
+  "classifier": "RandomForest",
+  "split_protocol": "stratified_0.10_train_seed42",
+  "seed": 42,
+  "generators": {
+    "spec": {"type": "pca30_center_pixel", "dim": 30},
+    "patch": {"type": "patch_only_mean_std_pca3_grad", "radius_values": [3, 5, 7], "feature_dim": 10}
+  },
+  "metrics": {
+    "spec": {"oa": 0.9272, "aa": 0.9583, "kappa": 0.9188},
+    "patch": {
+      "3": {"oa": 0.9328},
+      "5": {"oa": 0.9575},
+      "7": {"oa": 0.9701, "aa": 0.9781, "kappa": 0.9667}
+    },
+    "minimal_radius": 7,
+    "failure_mode": "NONE"
+  },
+  "dominance": {"patch_dominates_spec": true, "plateau_tolerance_pp": 0.5},
+  "dominance_result": "DOMINANT",
+  "boundary_metrics": null,
+  "digests": {
+    "canonical_sha256": "f4fb062854844b8d3ed16c5391aab4b034dc97553447c96688200387d038ba44"
+  }
+}

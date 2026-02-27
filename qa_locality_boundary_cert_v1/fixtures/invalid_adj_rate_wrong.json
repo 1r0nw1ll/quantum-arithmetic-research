@@ -1,0 +1,47 @@
+{
+  "schema_version": "QA_LOCALITY_BOUNDARY_CERT.v1.1",
+  "dataset": "ksc",
+  "classifier": "RandomForest",
+  "split_protocol": "stratified_0.10_train_seed42",
+  "seed": 42,
+  "generators": {
+    "spec": {"type": "pca30_center_pixel", "dim": 30},
+    "patch": {"type": "patch_only_mean_std_pca3_grad", "radius_values": [3, 5, 7], "feature_dim": 10}
+  },
+  "failure_curve": {
+    "spec_oa": 0.8979,
+    "patch_oa_by_radius": {
+      "3": 0.8237,
+      "5": 0.8633,
+      "7": 0.8881
+    },
+    "all_deltas_nonpositive": true
+  },
+  "boundary_geometry": {
+    "fragmentation_proxy": 0.72,
+    "thin_region_proxy": 0.61,
+    "fragmentation_scale_lt_r_star": true,
+    "notes": "This fixture should fail Gate 6: adj_rate_4 is declared as 0.99 but the actual value computed from the embedded grid is 0.5."
+  },
+  "adjacency_witness": {
+    "adj_rate_4": 0.99,
+    "gt_label_sha256": "42659bebb8f64d4c9c1ec16a759d5510d86ced9ca75a65dfe6baa0055d79415e",
+    "gt_label_grid": [
+      [0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1],
+      [2,2,2,2,2,2,2,2,2,2],
+      [0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1],
+      [2,2,2,2,2,2,2,2,2,2],
+      [0,0,0,0,0,0,0,0,0,0],
+      [1,1,1,1,1,1,1,1,1,1],
+      [2,2,2,2,2,2,2,2,2,2],
+      [0,0,0,0,0,0,0,0,0,0]
+    ],
+    "notes": "Deliberately wrong adj_rate_4=0.99 (correct is 0.5). Should fail Gate 6 with ADJ_RATE_MISMATCH."
+  },
+  "dominance": {"patch_dominates_spec": false},
+  "digests": {
+    "canonical_sha256": "1d5f26487fe220e91855f69bfd39f585b94f4c107ea8e6abde2b432dbbae9f39"
+  }
+}

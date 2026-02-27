@@ -3094,6 +3094,30 @@ def _validate_bell_chsh_cert_family_if_present(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_pac_bayes_constant_cert_family_if_present(base_dir: str) -> Optional[str]:
+    """QA PAC-Bayes Constant Cert family [84]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_pac_bayes_constant_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_pac_bayes_constant_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_pac_bayes_constant_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3260,6 +3284,10 @@ FAMILY_SWEEPS = [
      _validate_bell_chsh_cert_family_if_present,
      "schema + validator (5-gate: schema, canonical hash, 8|N theorem, Tsirelson bound, model assessment) + 3 fixtures (PASS + FAIL_wrong_condition + FAIL_wrong_value)", "83_bell_chsh_cert",
      "../qa_bell_chsh_cert_v1", True),
+    (84, "QA PAC-Bayes Constant Cert family",
+     _validate_pac_bayes_constant_cert_family_if_present,
+     "schema + validator (5-gate: schema, canonical hash, K1 recompute 2C^2N(M/2)^2, PAC bound+improvement ratio, DPI scope structured_only) + 3 fixtures (PASS + FAIL_k1_mismatch + FAIL_dpi_claim_universal)", "84_pac_bayes_constant_cert",
+     "../qa_pac_bayes_constant_cert_v1", True),
 ]
 
 

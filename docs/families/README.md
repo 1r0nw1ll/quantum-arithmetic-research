@@ -55,6 +55,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [81] | [QA Episode Regime Transitions Cert v1.0](81_episode_regime_transitions.md) | Schema + Validator (5-gate: schema, label validity, regime/counts/transition matrix, drift declaration, max-run) + 6 Fixtures (PASS_RECOVERING, PASS_ESCALATING, PASS_MIXED, FAIL_LABEL, FAIL_TRANSITION, FAIL_DRIFT) | PASS |
 | [82] | [QA Raman KNN Results Cert v1](82_raman_knn_results_cert.md) | Schema + Validator (5-gate: schema, canonical hash, best-acc consistency, k=1 parity, model assessment) + 3 Fixtures (PASS + FAIL_best_acc_mismatch + FAIL_model_not_realizable) | PASS |
 | [83] | [QA Bell CHSH Cert v1](83_bell_chsh_cert.md) | Schema + Validator (5-gate: schema, canonical hash, 8\|N divisibility, Tsirelson bound values, model assessment) + 3 Fixtures (PASS + FAIL_wrong_condition + FAIL_wrong_value) | PASS |
+| [84] | [QA PAC-Bayes Constant Cert v1](84_pac_bayes_constant_cert.md) | Schema + Validator (5-gate: schema, canonical hash, K1 recompute 2C²N(M/2)², PAC bound+improvement ratio, DPI scope) + 3 Fixtures (PASS + FAIL_k1_mismatch + FAIL_dpi_claim_universal) | PASS |
 
 ## Quick validation
 

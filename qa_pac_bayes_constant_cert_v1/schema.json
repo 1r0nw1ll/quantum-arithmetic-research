@@ -1,0 +1,108 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_PAC_BAYES_CONSTANT_CERT.v1.schema.json",
+  "title": "QA PAC-Bayes Constant Certificate v1",
+  "description": "Machine-tract cert locking Phase-1 PAC-Bayes constants and bound tables. Recomputes K1=2C^2*N*(M/2)^2, recomputes PAC bound from raw inputs, enforces improvement ratio consistency, and locks DPI scope to structured_only.",
+  "type": "object",
+  "required": ["cert_id", "cert_version", "created_utc", "system", "constants", "pac_inputs", "pac_outputs", "dpi", "digests"],
+  "additionalProperties": false,
+  "properties": {
+    "cert_id":      {"type": "string", "minLength": 1},
+    "cert_version": {"type": "string", "const": "QA_PAC_BAYES_CONSTANT_CERT.v1"},
+    "created_utc":  {"type": "string", "minLength": 1},
+
+    "system": {
+      "type": "object",
+      "required": ["N", "M", "C", "M_is_even"],
+      "additionalProperties": false,
+      "properties": {
+        "N":        {"type": "integer", "minimum": 1},
+        "M":        {"type": "integer", "minimum": 2},
+        "C":        {"type": "number",  "exclusiveMinimum": 0},
+        "M_is_even":{"type": "boolean"}
+      }
+    },
+
+    "constants": {
+      "type": "object",
+      "required": ["K1_formula", "K1_expected", "K1_recomputed", "tolerance_abs"],
+      "additionalProperties": false,
+      "properties": {
+        "K1_formula":     {"type": "string", "const": "2*C^2*N*(M/2)^2"},
+        "K1_expected":    {"type": "number"},
+        "K1_recomputed":  {"type": "number"},
+        "tolerance_abs":  {"type": "number", "minimum": 0}
+      }
+    },
+
+    "pac_inputs": {
+      "type": "object",
+      "required": ["delta", "m", "risk_hat", "D_QA", "bound_variant", "notes"],
+      "additionalProperties": false,
+      "properties": {
+        "delta":         {"type": "number", "exclusiveMinimum": 0, "exclusiveMaximum": 1},
+        "m":             {"type": "integer", "minimum": 1},
+        "risk_hat":      {"type": "number", "minimum": 0, "maximum": 1},
+        "D_QA":          {"type": "number", "minimum": 0},
+        "bound_variant": {"type": "string", "enum": ["QA_DQA", "MCCALISTER", "CATONI"]},
+        "notes":         {"type": "string"}
+      }
+    },
+
+    "pac_outputs": {
+      "type": "object",
+      "required": [
+        "bound_percent", "bound_percent_recomputed",
+        "initial_bound_percent", "tight_bound_percent",
+        "improvement_ratio", "improvement_ratio_recomputed",
+        "rounding_policy"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "bound_percent":              {"type": "number", "minimum": 0},
+        "bound_percent_recomputed":   {"type": "number", "minimum": 0},
+        "initial_bound_percent":      {"type": "number", "minimum": 0},
+        "tight_bound_percent":        {"type": "number", "minimum": 0},
+        "improvement_ratio":          {"type": "number", "minimum": 1},
+        "improvement_ratio_recomputed":{"type": "number", "minimum": 1},
+        "rounding_policy": {
+          "type": "object",
+          "required": ["percent_round_dp", "ratio_round_dp"],
+          "additionalProperties": false,
+          "properties": {
+            "percent_round_dp": {"type": "integer", "minimum": 0},
+            "ratio_round_dp":   {"type": "integer", "minimum": 0}
+          }
+        }
+      }
+    },
+
+    "dpi": {
+      "type": "object",
+      "required": ["claim", "random_trials"],
+      "additionalProperties": false,
+      "properties": {
+        "claim": {"type": "string"},
+        "random_trials": {
+          "type": "object",
+          "required": ["n_trials", "violation_rate", "seed_used_for_structured_demo"],
+          "additionalProperties": false,
+          "properties": {
+            "n_trials":                     {"type": "integer", "minimum": 1},
+            "violation_rate":               {"type": "number", "minimum": 0, "maximum": 1},
+            "seed_used_for_structured_demo":{"type": "integer"}
+          }
+        }
+      }
+    },
+
+    "digests": {
+      "type": "object",
+      "required": ["canonical_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    }
+  }
+}

@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_EPISODE_REGIME_CERT.v1.0",
+  "cert_id": "FAIL_DRIFT_WRONG_DECLARATION",
+  "description": "FAIL: PASS_ESCALATING episodes (esc=2, rec=0, neu=1) but drift_declaration='RECOVERING'. Expected failure: DRIFT_MISMATCH.",
+  "episodes": [
+    {"episode_id": "E1", "primary_label": "STASIS"},
+    {"episode_id": "E2", "primary_label": "MONOTONE_ESCALATION"},
+    {"episode_id": "E3", "primary_label": "MONOTONE_ESCALATION"}
+  ],
+  "expected_summary": {
+    "episode_count": 3,
+    "escalation_count": 2,
+    "recovery_count": 0,
+    "neutral_count": 1,
+    "drift_declaration": "RECOVERING",
+    "regime_sequence": ["NEUTRAL", "ESCALATION", "ESCALATION"],
+    "transition_matrix": [
+      {"from_label": "MONOTONE_ESCALATION", "to_label": "MONOTONE_ESCALATION", "count": 1},
+      {"from_label": "STASIS",              "to_label": "MONOTONE_ESCALATION",  "count": 1}
+    ],
+    "max_run_length": 2,
+    "max_run_label": "MONOTONE_ESCALATION"
+  }
+}

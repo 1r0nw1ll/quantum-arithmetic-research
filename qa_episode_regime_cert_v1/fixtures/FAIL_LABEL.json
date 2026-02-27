@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_EPISODE_REGIME_CERT.v1.0",
+  "cert_id": "FAIL_LABEL_UNKNOWN",
+  "description": "FAIL: episode E2 has primary_label 'THREATENING' which is not in ALLOWED_PRIMARY_LABELS. Expected failure: LABEL_INVALID.",
+  "episodes": [
+    {"episode_id": "E1", "primary_label": "STASIS"},
+    {"episode_id": "E2", "primary_label": "THREATENING"},
+    {"episode_id": "E3", "primary_label": "RETURN_TO_REF"}
+  ],
+  "expected_summary": {
+    "episode_count": 3,
+    "escalation_count": 0,
+    "recovery_count": 1,
+    "neutral_count": 2,
+    "drift_declaration": "RECOVERING",
+    "regime_sequence": ["NEUTRAL", "NEUTRAL", "RECOVERY"],
+    "transition_matrix": [
+      {"from_label": "STASIS",      "to_label": "THREATENING",   "count": 1},
+      {"from_label": "THREATENING", "to_label": "RETURN_TO_REF", "count": 1}
+    ],
+    "max_run_length": 1,
+    "max_run_label": "STASIS"
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "QA_EPISODE_REGIME_CERT.v1.0",
+  "cert_id": "PASS_MIXED_6EP",
+  "description": "6 alternating episodes: RETURN_TO_REF/MONOTONE_ESCALATION × 3. escalation_count=3, recovery_count=3, neutral_count=0. Drift=MIXED (tie). Transitions: RTR→ME ×3, ME→RTR ×2.",
+  "episodes": [
+    {"episode_id": "E1", "primary_label": "RETURN_TO_REF"},
+    {"episode_id": "E2", "primary_label": "MONOTONE_ESCALATION"},
+    {"episode_id": "E3", "primary_label": "RETURN_TO_REF"},
+    {"episode_id": "E4", "primary_label": "MONOTONE_ESCALATION"},
+    {"episode_id": "E5", "primary_label": "RETURN_TO_REF"},
+    {"episode_id": "E6", "primary_label": "MONOTONE_ESCALATION"}
+  ],
+  "expected_summary": {
+    "episode_count": 6,
+    "escalation_count": 3,
+    "recovery_count": 3,
+    "neutral_count": 0,
+    "drift_declaration": "MIXED",
+    "regime_sequence": ["RECOVERY", "ESCALATION", "RECOVERY", "ESCALATION", "RECOVERY", "ESCALATION"],
+    "transition_matrix": [
+      {"from_label": "MONOTONE_ESCALATION", "to_label": "RETURN_TO_REF",        "count": 2},
+      {"from_label": "RETURN_TO_REF",       "to_label": "MONOTONE_ESCALATION",  "count": 3}
+    ],
+    "max_run_length": 1,
+    "max_run_label": "RETURN_TO_REF"
+  }
+}

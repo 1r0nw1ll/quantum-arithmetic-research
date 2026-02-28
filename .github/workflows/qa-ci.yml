@@ -16,6 +16,19 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Path sanity (repo root)
+        run: |
+          pwd
+          ls -la
+          test -f tools/qa_latex_claim_linter.py
+          test -f qa_alphageometry_ptolemy/qa_meta_validator.py
+          test -d papers
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Expected clean checkout but found changes:"
+            git status --porcelain
+            exit 1
+          fi
+
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
@@ -69,6 +82,20 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Path sanity (repo root)
+        working-directory: .
+        run: |
+          pwd
+          ls -la
+          test -f tools/qa_latex_claim_linter.py
+          test -f qa_alphageometry_ptolemy/qa_meta_validator.py
+          test -d papers
+          if [ -n "$(git status --porcelain)" ]; then
+            echo "Expected clean checkout but found changes:"
+            git status --porcelain
+            exit 1
+          fi
 
       - name: Set up Python
         uses: actions/setup-python@v5

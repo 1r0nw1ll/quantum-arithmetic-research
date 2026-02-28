@@ -2,7 +2,11 @@
 """
 QA_GENERATOR_FAILURE_UNIFICATION_CERT.v1 — Validator
 
-5 gates:
+6 gates:
+
+  Gate 0 — Cross-family reference guard
+             Verify referenced fixture paths exist, are git-tracked when git
+             metadata is present, and match expected canonical sha256 digests.
 
   Gate 1 — Schema + carrier cross-check
              Every failure_tag in generator_tagging must be in the failure_algebra_ref
@@ -36,6 +40,7 @@ import argparse
 import hashlib
 import json
 import os
+import subprocess
 import sys
 from collections import defaultdict, deque
 from pathlib import Path
@@ -53,6 +58,56 @@ _FIXTURES = _HERE / "fixtures"
 # to repo root) and recomputes canonical_sha256.  No directory scan, no ambiguity.
 
 _REPO_ROOT = _HERE.parent  # qa_generator_failure_unification_cert_v1/ is one level below root
+
+
+def _guard_cross_family_ref(ref_label: str, ref_obj: dict) -> Optional[str]:
+    """
+    Gate 0 cross-family reference guard.
+
+    Checks:
+      1) path existence
+      2) tracked-path assertion when .git metadata is present
+      3) canonical sha256 match against expected reference hash
+    """
+    ref_path = ref_obj.get("ref_path", "")
+    expected_sha = ref_obj.get("canonical_sha256", "")
+    if not isinstance(ref_path, str) or not ref_path:
+        return f"FAIL_MISSING_REF_FILE ({ref_label}): ref_path missing"
+    if not isinstance(expected_sha, str) or len(expected_sha) != 64:
+        return f"FAIL_REF_HASH_MISMATCH ({ref_label}): canonical_sha256 missing/invalid"
+
+    abs_path = (_REPO_ROOT / ref_path).resolve()
+    try:
+        common = os.path.commonpath([str(_REPO_ROOT.resolve()), str(abs_path)])
+    except ValueError:
+        return f"FAIL_MISSING_REF_FILE ({ref_label}): ref_path outside repo root: {ref_path}"
+    if common != str(_REPO_ROOT.resolve()):
+        return f"FAIL_MISSING_REF_FILE ({ref_label}): ref_path escapes repo root: {ref_path}"
+    if not abs_path.exists():
+        return f"FAIL_MISSING_REF_FILE ({ref_label}): {abs_path}"
+
+    git_dir = _REPO_ROOT / ".git"
+    if git_dir.exists():
+        rel = os.path.relpath(str(abs_path), str(_REPO_ROOT))
+        proc = subprocess.run(
+            ["git", "-C", str(_REPO_ROOT), "ls-files", "--error-unmatch", rel],
+            capture_output=True,
+            text=True,
+        )
+        if proc.returncode != 0:
+            return f"FAIL_UNTRACKED_REF_FILE ({ref_label}): {rel}"
+
+    try:
+        obj = json.loads(abs_path.read_text(encoding="utf-8"))
+    except Exception as exc:
+        return f"FAIL_MISSING_REF_FILE ({ref_label}): cannot parse JSON at {abs_path}: {exc}"
+    computed = _sha256_hex(_canonical_compact(obj))
+    if computed != expected_sha:
+        return (
+            f"FAIL_REF_HASH_MISMATCH ({ref_label}): expected={expected_sha} computed={computed} "
+            f"path={ref_path}"
+        )
+    return None
 
 
 def _load_ref_by_path(ref_path: str, expected_sha: str) -> Tuple[Optional[dict], Optional[str]]:
@@ -199,15 +254,25 @@ def _bfs_energy(ref_state: Tuple, adj: Dict) -> Dict[Tuple, int]:
 def _parse_ec_energy_map(ec_cert: dict, domain: str) -> Tuple[Optional[Dict[Tuple, int]], Optional[str]]:
     """
     Normalize [80] energy_map (list of {state, energy}) into a {state_tuple: energy} dict.
-    Returns (map, None) on success or (None, error_message) if the field is absent/malformed.
-    Accepts both list-of-objects and dict formats for future compatibility.
+
+    Return conventions:
+      (None, None)          — energy_map absent; drift check silently skipped (graceful degrade
+                              for older [80] fixtures that predate energy_map).
+      (None, error_msg)     — energy_map present but unrecognizable format; Gate 5 HARD FAIL.
+                              dict format falls here: [86] claims binding consistency but cannot
+                              verify it — that is a binding failure, not a graceful degrade.
+      (map_dict, None)      — successfully parsed; drift cross-check proceeds.
     """
     em = ec_cert.get("energy_map")
     if em is None:
-        return None, "energy_map field absent in [80] cert"
+        return None, None  # absent → skip (non-fatal; older certs may lack energy_map)
     if isinstance(em, dict):
-        # Future dict format: {"T0R0": energy, ...} — skip cross-check for now
-        return None, "energy_map is a dict (unsupported format for cross-check)"
+        # dict format is unrecognized — hard fail rather than silently skip.
+        # If [80] migrates to dict, [86] validator must be updated to parse it.
+        return None, (
+            "energy_map in [80] cert is a dict — format not supported by [86] drift check. "
+            "Update _parse_ec_energy_map to handle dict keys before claiming binding consistency."
+        )
     if not isinstance(em, list):
         return None, f"energy_map is neither list nor dict: {type(em).__name__}"
     result: Dict[Tuple, int] = {}
@@ -258,6 +323,27 @@ def _join_path(steps: List[str], tau: Dict[str, str], join_lk: Dict) -> str:
 
 def validate(cert: dict, cert_path: Optional[str] = None) -> Tuple[bool, List[str]]:
     errors: List[str] = []
+
+    # ── Gate 0: cross-family reference guard ──────────────────────────────────
+    # Fast-fail on missing/untracked/hash-mismatched cross-family dependencies.
+    fa_ref = cert.get("failure_algebra_ref")
+    if not isinstance(fa_ref, dict):
+        errors.append("Gate 0 FAIL: FAIL_MISSING_REF_FILE (failure_algebra_ref): object missing")
+    else:
+        guard_err = _guard_cross_family_ref("failure_algebra_ref", fa_ref)
+        if guard_err:
+            errors.append(f"Gate 0 FAIL: {guard_err}")
+
+    ec_ref = cert.get("energy_cert_ref")
+    if not isinstance(ec_ref, dict):
+        errors.append("Gate 0 FAIL: FAIL_MISSING_REF_FILE (energy_cert_ref): object missing")
+    else:
+        guard_err = _guard_cross_family_ref("energy_cert_ref", ec_ref)
+        if guard_err:
+            errors.append(f"Gate 0 FAIL: {guard_err}")
+
+    if errors:
+        return False, errors
 
     # ── Gate 1: schema + carrier cross-check ──────────────────────────────────
     required_top = {"cert_id", "cert_version", "created_utc", "domain", "N",
@@ -424,10 +510,13 @@ def validate(cert: dict, cert_path: Optional[str] = None) -> Tuple[bool, List[st
         monotone = (min_e_non_ok > min_e_ok) if non_ok_states else True
 
         # ── Cross-check BFS energies against [80] energy_map (drift detection) ─
+        # (None, None)     → absent, skip silently
+        # (None, err_msg)  → present but unrecognizable format → hard fail
+        # (map, None)      → parsed, run cross-check
         ec_em, ec_em_err = _parse_ec_energy_map(ec_cert, domain)
         if ec_em_err:
-            # Non-fatal: log but continue (energy_map may be absent in older [80] fixtures)
-            errors.append(f"Gate 5 WARN: cannot normalize [80] energy_map: {ec_em_err}")
+            errors.append(f"Gate 5 FAIL: [80] energy_map unrecognizable: {ec_em_err}")
+            return False, errors
         elif ec_em:
             for state, bfs_e in sorted(all_energy.items()):
                 ec_e = ec_em.get(state)
@@ -480,6 +569,7 @@ def self_test():
     fixtures = [
         ("valid_caps_tr_fear_love.json", True),
         ("invalid_tag_not_in_carrier.json", False),
+        ("invalid_energy_drift.json", False),
     ]
     passed = 0
     for fname, expect_pass in fixtures:

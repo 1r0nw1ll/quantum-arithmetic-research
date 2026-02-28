@@ -1,0 +1,21 @@
+{
+  "cert_id": "mock-energy-drift-for-86-test",
+  "cert_version": "QA_ENERGY_CERT.v1.1",
+  "domain": "CAPS_TR",
+  "N": 2,
+  "reference_state": {
+    "T": 0,
+    "R": 2
+  },
+  "energy_map": [
+    {"state": {"T": 0, "R": 0}, "energy": 2},
+    {"state": {"T": 0, "R": 1}, "energy": 1},
+    {"state": {"T": 0, "R": 2}, "energy": 0},
+    {"state": {"T": 1, "R": 0}, "energy": 3},
+    {"state": {"T": 1, "R": 1}, "energy": 2},
+    {"state": {"T": 1, "R": 2}, "energy": 99},
+    {"state": {"T": 2, "R": 0}, "energy": 4},
+    {"state": {"T": 2, "R": 1}, "energy": 3},
+    {"state": {"T": 2, "R": 2}, "energy": 2}
+  ]
+}

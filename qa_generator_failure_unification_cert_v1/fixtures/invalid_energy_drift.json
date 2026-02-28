@@ -1,0 +1,57 @@
+{
+  "cert_id": "qa-gen-fail-unification-invalid-energy-drift",
+  "cert_version": "QA_GENERATOR_FAILURE_UNIFICATION_CERT.v1",
+  "created_utc": "2026-02-28T00:00:00Z",
+  "domain": "CAPS_TR",
+  "N": 2,
+  "generator_tagging": [
+    {"name": "fear_up",      "family_tag": "fear", "failure_tag": "PARITY_BLOCK"},
+    {"name": "fear_down",    "family_tag": "fear", "failure_tag": "OK"},
+    {"name": "fear_lock",    "family_tag": "fear", "failure_tag": "INVARIANT_VIOLATION"},
+    {"name": "love_soothe",  "family_tag": "love", "failure_tag": "OK"},
+    {"name": "love_support", "family_tag": "love", "failure_tag": "OK"},
+    {"name": "love_reframe", "family_tag": "love", "failure_tag": "OK"}
+  ],
+  "failure_algebra_ref": {
+    "cert_id": "qa-failure-algebra-pass-tiny-001",
+    "schema_version": "QA_FAILURE_ALGEBRA_STRUCTURE_CERT.v1",
+    "ref_path": "qa_failure_algebra_structure_cert_v1/fixtures/PASS_tiny.json",
+    "canonical_sha256": "2cb33c7218721398535ea6e91770211a8ea9692a685fd53f2db58cfc359a3b63"
+  },
+  "energy_cert_ref": {
+    "cert_id": "mock-energy-drift-for-86-test",
+    "schema_version": "QA_ENERGY_CERT.v1.1",
+    "ref_path": "qa_generator_failure_unification_cert_v1/fixtures/mock_energy_cert_with_drift.json",
+    "canonical_sha256": "c90cfd67a6293f9040d44dd932b36451c526caf7b227d1019c95f23b8336c5ff"
+  },
+  "theorems": {
+    "T1_finite_image": {
+      "image_elements": ["INVARIANT_VIOLATION", "OK", "PARITY_BLOCK"],
+      "image_sha256": "bf0328b699ac44d981fa44e77495d245f3dc6b4e21427c6dded719463594110b"
+    },
+    "T2_scc_bounds": {
+      "scc_count": 1,
+      "max_scc_size": 9,
+      "scc_hash": "078ed0f6b1c828f4a773716fd967e71548899ac72ae763622e88e04c205f4282"
+    },
+    "T3_path_propagation": {
+      "sampled_paths": [
+        {"steps": ["fear_up", "love_soothe"],  "expected_join": "PARITY_BLOCK"},
+        {"steps": ["fear_lock", "fear_up"],    "expected_join": "OUT_OF_DOMAIN"},
+        {"steps": ["love_soothe", "love_support"], "expected_join": "OK"},
+        {"steps": ["fear_lock", "fear_lock"],  "expected_join": "INVARIANT_VIOLATION"}
+      ]
+    },
+    "T4_energy_monotonicity": {
+      "ok_only_state_count": 1,
+      "non_ok_required_state_count": 8,
+      "min_energy_ok": 0,
+      "min_energy_non_ok": 1,
+      "monotone_holds": true
+    }
+  },
+  "digests": {
+    "canonical_sha256": "6ebd903002e88958dfeefd7ac13083ad842746e5970e93627d25779a9c82bcf6",
+    "schema_sha256": "900a451d025652e14c0854adbdd790bc21de2ffdc7efb0802a5460c8d3cf39f3"
+  }
+}

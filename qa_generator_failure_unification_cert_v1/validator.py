@@ -47,64 +47,35 @@ _HERE = Path(__file__).parent
 _SCHEMA = _HERE / "schema.json"
 _FIXTURES = _HERE / "fixtures"
 
-# ── failure algebra fixture lookup ─────────────────────────────────────────────
+# ── deterministic ref loading ──────────────────────────────────────────────────
+#
+# Gate 1 opens exactly the path named in failure_algebra_ref.ref_path (relative
+# to repo root) and recomputes canonical_sha256.  No directory scan, no ambiguity.
 
-# The validator needs to load the referenced [76] cert to extract carrier + join table.
-# We keep a small in-memory cache of known [76] cert files by canonical_sha256.
-_FA_CACHE: Dict[str, dict] = {}
-
-
-def _load_fa_ref(sha256_hex: str) -> Optional[dict]:
-    """Load a [76] cert from _FA_CACHE or by scanning known fixture locations."""
-    if sha256_hex in _FA_CACHE:
-        return _FA_CACHE[sha256_hex]
-    # Scan standard locations
-    candidates: List[Path] = []
-    for root in [
-        _HERE.parent / "qa_failure_algebra_structure_cert_v1" / "fixtures",
-        _HERE.parent / "qa_alphageometry_ptolemy" / "qa_failure_algebra_structure_cert_v1" / "fixtures",
-    ]:
-        if root.exists():
-            candidates.extend(root.glob("*.json"))
-    for path in candidates:
-        try:
-            with open(path) as f:
-                obj = json.load(f)
-            h = _sha256_hex(_canonical_compact(obj))
-            _FA_CACHE[h] = obj
-            if h == sha256_hex:
-                return obj
-        except Exception:
-            continue
-    return None
+_REPO_ROOT = _HERE.parent  # qa_generator_failure_unification_cert_v1/ is one level below root
 
 
-# ── energy cert fixture lookup ─────────────────────────────────────────────────
-
-_EC_CACHE: Dict[str, dict] = {}
-
-
-def _load_ec_ref(sha256_hex: str) -> Optional[dict]:
-    if sha256_hex in _EC_CACHE:
-        return _EC_CACHE[sha256_hex]
-    candidates: List[Path] = []
-    for root in [
-        _HERE.parent / "qa_energy_cert_v1_1" / "fixtures",
-        _HERE.parent / "qa_alphageometry_ptolemy" / "qa_energy_cert_v1_1" / "fixtures",
-    ]:
-        if root.exists():
-            candidates.extend(root.glob("*.json"))
-    for path in candidates:
-        try:
-            with open(path) as f:
-                obj = json.load(f)
-            h = _sha256_hex(_canonical_compact(obj))
-            _EC_CACHE[h] = obj
-            if h == sha256_hex:
-                return obj
-        except Exception:
-            continue
-    return None
+def _load_ref_by_path(ref_path: str, expected_sha: str) -> Tuple[Optional[dict], Optional[str]]:
+    """
+    Open ref_path (relative to repo root), parse JSON, recompute canonical_sha256.
+    Returns (cert_dict, None) on success or (None, error_message) on failure.
+    """
+    abs_path = _REPO_ROOT / ref_path
+    if not abs_path.exists():
+        return None, f"ref_path does not exist: {abs_path}"
+    try:
+        with open(abs_path) as f:
+            obj = json.load(f)
+    except Exception as e:
+        return None, f"cannot parse ref_path {abs_path}: {e}"
+    computed = _sha256_hex(_canonical_compact(obj))
+    if computed != expected_sha:
+        return None, (
+            f"ref_path sha256 mismatch for {ref_path}\n"
+            f"  cert declares: {expected_sha}\n"
+            f"  file on disk:  {computed}"
+        )
+    return obj, None
 
 
 # ── hash utilities ─────────────────────────────────────────────────────────────
@@ -266,10 +237,13 @@ def validate(cert: dict, cert_path: Optional[str] = None) -> Tuple[bool, List[st
 
     fa_ref = cert["failure_algebra_ref"]
     fa_sha = fa_ref.get("canonical_sha256", "")
-    fa_cert = _load_fa_ref(fa_sha)
-    if fa_cert is None:
-        errors.append(f"Gate 1 FAIL: cannot load failure_algebra_ref (sha256={fa_sha[:12]}...); "
-                      f"ensure qa_failure_algebra_structure_cert_v1/fixtures/ is present")
+    fa_path = fa_ref.get("ref_path", "")
+    if not fa_path:
+        errors.append("Gate 1 FAIL: failure_algebra_ref.ref_path is missing")
+        return False, errors
+    fa_cert, fa_err = _load_ref_by_path(fa_path, fa_sha)
+    if fa_err:
+        errors.append(f"Gate 1 FAIL: {fa_err}")
         return False, errors
 
     carrier = set(fa_cert.get("carrier", []))
@@ -378,11 +352,19 @@ def validate(cert: dict, cert_path: Optional[str] = None) -> Tuple[bool, List[st
         return False, errors
 
     # ── Gate 5: T4 energy monotonicity ────────────────────────────────────────
-    ec_sha = cert["energy_cert_ref"].get("canonical_sha256", "")
-    ec_cert = _load_ec_ref(ec_sha)
+    ec_ref = cert["energy_cert_ref"]
+    ec_sha = ec_ref.get("canonical_sha256", "")
+    ec_path = ec_ref.get("ref_path", "")
+    if not ec_path:
+        errors.append("Gate 5 FAIL: energy_cert_ref.ref_path is missing")
+        return False, errors
+    ec_cert, ec_err = _load_ref_by_path(ec_path, ec_sha)
+    if ec_err:
+        errors.append(f"Gate 5 FAIL: {ec_err}")
+        return False, errors
     if ec_cert is None:
-        errors.append(f"Gate 5 WARN: cannot load energy_cert_ref (sha256={ec_sha[:12]}...); "
-                      f"skipping T4 cross-check")
+        errors.append(f"Gate 5 FAIL: cannot load energy_cert_ref at {ec_path}")
+        return False, errors
     else:
         # Extract reference state from [80] cert
         ref_raw = ec_cert.get("reference_state", {})

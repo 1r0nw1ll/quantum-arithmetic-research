@@ -40,25 +40,27 @@
     },
 
     "failure_algebra_ref": {
-      "description": "Reference to a certified Family [76] failure algebra. canonical_sha256 locks the exact cert version.",
+      "description": "Reference to a certified Family [76] failure algebra. ref_path (relative to repo root) + canonical_sha256 create a deterministic, path-explicit provenance link. Gate 1 opens exactly ref_path and recomputes the sha256.",
       "type": "object",
-      "required": ["cert_id", "schema_version", "canonical_sha256"],
+      "required": ["cert_id", "schema_version", "ref_path", "canonical_sha256"],
       "additionalProperties": false,
       "properties": {
-        "cert_id":         { "type": "string" },
-        "schema_version":  { "type": "string" },
+        "cert_id":          { "type": "string" },
+        "schema_version":   { "type": "string" },
+        "ref_path":         { "type": "string", "description": "Path to the [76] fixture JSON, relative to repo root" },
         "canonical_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
     },
 
     "energy_cert_ref": {
-      "description": "Reference to a certified Family [80] energy cert. canonical_sha256 locks the exact cert version.",
+      "description": "Reference to a certified Family [80] energy cert. ref_path (relative to repo root) + canonical_sha256 create a deterministic, path-explicit provenance link. Gate 5 opens exactly ref_path and recomputes the sha256.",
       "type": "object",
-      "required": ["cert_id", "schema_version", "canonical_sha256"],
+      "required": ["cert_id", "schema_version", "ref_path", "canonical_sha256"],
       "additionalProperties": false,
       "properties": {
-        "cert_id":         { "type": "string" },
-        "schema_version":  { "type": "string" },
+        "cert_id":          { "type": "string" },
+        "schema_version":   { "type": "string" },
+        "ref_path":         { "type": "string", "description": "Path to the [80] fixture JSON, relative to repo root" },
         "canonical_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
       }
     },

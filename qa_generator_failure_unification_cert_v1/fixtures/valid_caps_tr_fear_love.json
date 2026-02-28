@@ -39,11 +39,13 @@
   "failure_algebra_ref": {
     "cert_id": "qa-failure-algebra-pass-tiny-001",
     "schema_version": "QA_FAILURE_ALGEBRA_STRUCTURE_CERT.v1",
+    "ref_path": "qa_failure_algebra_structure_cert_v1/fixtures/PASS_tiny.json",
     "canonical_sha256": "2cb33c7218721398535ea6e91770211a8ea9692a685fd53f2db58cfc359a3b63"
   },
   "energy_cert_ref": {
     "cert_id": "energy_caps_tr_N2_mixed",
     "schema_version": "QA_ENERGY_CERT.v1.1",
+    "ref_path": "qa_energy_cert_v1_1/fixtures/PASS_MIXED.json",
     "canonical_sha256": "5463f9b4f621e7cf7abb56d35de42e8bfbc544e7c9b6deb5973c701d8d1e7cf2"
   },
   "theorems": {
@@ -101,7 +103,7 @@
     }
   },
   "digests": {
-    "canonical_sha256": "9ea074bc6f4e62a10da8643742fd8d01e48b23fbd6a1c64c15edf8a6e02841c1",
-    "schema_sha256": "4084aa558e691da4f11e32eea617f27094156c01a9c6d2d7d04783b81aeffefa"
+    "canonical_sha256": "42251599be8e1741dadb77daa6deaae18020962cd5802c00336fb8da18905a02",
+    "schema_sha256": "7d52a6049c1988b4ec7694a5acba0a53f0c51db7759753082a15ed1e212f484a"
   }
 }

@@ -79,7 +79,7 @@
               "prime": {
                 "type": "integer",
                 "minimum": 2,
-                "maximum": 100000
+                "maximum": 20000
               },
               "claimed": {
                 "type": "object",
@@ -147,7 +147,7 @@
                   "prime": {
                     "type": "integer",
                     "minimum": 2,
-                    "maximum": 100000
+                    "maximum": 20000
                   },
                   "sha256": {
                     "type": "string",

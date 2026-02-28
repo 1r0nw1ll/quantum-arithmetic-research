@@ -42,6 +42,7 @@ with exact handling for \(p=2\).
 |---|---|
 | `SCHEMA_INVALID` | Schema/type/required-field mismatch |
 | `DUPLICATE_PRIME` | Duplicate prime detected in source batch records |
+| `NON_PRIME_INPUT` | A record modulus is not prime (details include `prime` and reason `not prime`) |
 | `RECOMPUTE_MISMATCH` | Claimed local invariant or proxy value mismatches recomputation |
 | `MANIFEST_MISMATCH` | Claimed manifest hashes mismatch recomputed manifest |
 | `TRACE_LENGTH_MISMATCH` | `lower_bounds` and `upper_bounds` lengths differ |

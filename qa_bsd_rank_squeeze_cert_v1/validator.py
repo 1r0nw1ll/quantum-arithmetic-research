@@ -384,7 +384,7 @@ def validate_cert(cert: Dict[str, Any], schema: Dict[str, Any]) -> Dict[str, Any
                 ok=False,
                 fail_type=FAIL_NON_PRIME_INPUT,
                 invariant_diff={"prime": prime},
-                details={"error": str(exc)},
+                details={"prime": prime, "reason": "not prime", "error": str(exc)},
             ).__dict__
 
     gate_2 = gate_2_recompute_checks(source_batch, recomputed_by_prime)

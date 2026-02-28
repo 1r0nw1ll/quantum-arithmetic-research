@@ -3332,8 +3332,8 @@ FAMILY_SWEEPS = [
      "../qa_bsd_rank_squeeze_cert_v1", True),
     (86, "QA Generator-Failure Algebra Unification Cert family",
      _validate_generator_failure_unification_cert_v1_family_if_present,
-     "schema + validator (5-gate: carrier cross-check, digest, T1 finite image, T2 SCC + T3 path propagation, T4 energy monotonicity) + 2 fixtures (valid_caps_tr_fear_love, invalid_tag_not_in_carrier) + cross-binding to [76] failure algebra ref + [80] energy cert ref",
-     "87_generator_failure_unification_cert",
+     "schema + validator (5-gate: carrier cross-check, digest, T1 finite image, T2 SCC + T3 path propagation, T4 energy monotonicity) + 3 fixtures (valid_caps_tr_fear_love, invalid_tag_not_in_carrier, invalid_energy_drift) + cross-binding to [76] failure algebra ref + [80] energy cert ref",
+     "86_generator_failure_unification_cert",
      "../qa_generator_failure_unification_cert_v1", True),
 ]
 

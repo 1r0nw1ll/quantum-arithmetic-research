@@ -1,0 +1,60 @@
+{
+  "schema_id": "QA_BSD_PARTIAL_LSERIES_PROXY_CERT",
+  "schema_version": "v1",
+  "source_batch": {
+    "curve": {
+      "curve_id": "E_short_A0_B1_demo",
+      "model": {
+        "type": "short_weierstrass",
+        "A": 0,
+        "B": 1
+      }
+    },
+    "records": [
+      {
+        "prime": 5,
+        "claimed": {
+          "point_count_fp": 6,
+          "ap": 0
+        }
+      },
+      {
+        "prime": 11,
+        "claimed": {
+          "point_count_fp": 12,
+          "ap": 0,
+          "reduction_type": "GOOD",
+          "ap_source": "table"
+        }
+      }
+    ],
+    "claimed_manifest": {
+      "record_hashes": [
+        {
+          "prime": 5,
+          "sha256": "bc0a044f9fe9391f5446cfd2aecf3d879d7578a831cb4ee828c11d61b1b48943"
+        },
+        {
+          "prime": 11,
+          "sha256": "edf399ec9f946433a5966f92d776c3dda21e17f5c3c258aa74a6d0bfd21bef26"
+        }
+      ],
+      "batch_sha256": "dba4d986a6a3fbb6ffe08b9a2af2e11805867bae82e70a4d0ebb6861f13b80cb"
+    }
+  },
+  "claimed_proxy": {
+    "numerator_factors": [
+      6,
+      12
+    ],
+    "denominator_factors": [
+      5,
+      11
+    ],
+    "numerator": 72,
+    "denominator": 55
+  },
+  "meta": {
+    "notes": "PASS: exact non-reduced proxy Π(#E(F_p)/p) for p=5,11 (mixed claim granularity)."
+  }
+}

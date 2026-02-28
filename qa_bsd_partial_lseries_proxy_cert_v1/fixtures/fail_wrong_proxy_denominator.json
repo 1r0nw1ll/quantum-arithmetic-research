@@ -1,0 +1,66 @@
+{
+  "schema_id": "QA_BSD_PARTIAL_LSERIES_PROXY_CERT",
+  "schema_version": "v1",
+  "source_batch": {
+    "curve": {
+      "curve_id": "E_short_A0_B1_demo",
+      "model": {
+        "type": "short_weierstrass",
+        "A": 0,
+        "B": 1
+      }
+    },
+    "records": [
+      {
+        "prime": 5,
+        "claimed": {
+          "point_count_fp": 6,
+          "ap": 0,
+          "delta_mod_p": 3,
+          "is_good_reduction": true,
+          "reduction_type": "GOOD",
+          "ap_source": "point_count"
+        }
+      },
+      {
+        "prime": 7,
+        "claimed": {
+          "point_count_fp": 12,
+          "ap": -4,
+          "delta_mod_p": 2,
+          "is_good_reduction": true,
+          "reduction_type": "GOOD",
+          "ap_source": "point_count"
+        }
+      }
+    ],
+    "claimed_manifest": {
+      "record_hashes": [
+        {
+          "prime": 5,
+          "sha256": "bc0a044f9fe9391f5446cfd2aecf3d879d7578a831cb4ee828c11d61b1b48943"
+        },
+        {
+          "prime": 7,
+          "sha256": "a4938943a777ba40d8746a7fff4cab3afdd07a310752a88467f483654d968316"
+        }
+      ],
+      "batch_sha256": "7dc26108bdc428cc6e11ac328bb4d731b27f5362f65dc4ea8ce1d708759aff71"
+    }
+  },
+  "claimed_proxy": {
+    "numerator_factors": [
+      6,
+      12
+    ],
+    "denominator_factors": [
+      5,
+      7
+    ],
+    "numerator": 72,
+    "denominator": 36
+  },
+  "meta": {
+    "notes": "FAIL: proxy denominator wrong (should be 35)."
+  }
+}

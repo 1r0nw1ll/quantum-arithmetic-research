@@ -1,0 +1,210 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_BSD_PARTIAL_LSERIES_PROXY_CERT.v1.schema.json",
+  "title": "QA_BSD_PARTIAL_LSERIES_PROXY_CERT.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "schema_version",
+    "source_batch",
+    "claimed_proxy"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_BSD_PARTIAL_LSERIES_PROXY_CERT"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "source_batch": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "curve",
+        "records",
+        "claimed_manifest"
+      ],
+      "properties": {
+        "curve": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "curve_id",
+            "model"
+          ],
+          "properties": {
+            "curve_id": {
+              "type": "string",
+              "minLength": 1
+            },
+            "model": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": [
+                "type",
+                "A",
+                "B"
+              ],
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "const": "short_weierstrass"
+                },
+                "A": {
+                  "type": "integer"
+                },
+                "B": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        },
+        "records": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "prime",
+              "claimed"
+            ],
+            "properties": {
+              "prime": {
+                "type": "integer",
+                "minimum": 2,
+                "maximum": 100000
+              },
+              "claimed": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "point_count_fp",
+                  "ap"
+                ],
+                "properties": {
+                  "point_count_fp": {
+                    "type": "integer",
+                    "minimum": 1
+                  },
+                  "ap": {
+                    "type": "integer"
+                  },
+                  "delta_mod_p": {
+                    "type": "integer"
+                  },
+                  "is_good_reduction": {
+                    "type": "boolean"
+                  },
+                  "ap_source": {
+                    "type": "string",
+                    "enum": [
+                      "point_count",
+                      "table"
+                    ]
+                  },
+                  "reduction_type": {
+                    "type": "string",
+                    "enum": [
+                      "GOOD",
+                      "BAD_UNSPECIFIED",
+                      "BAD_MULTIPLICATIVE_SPLIT",
+                      "BAD_MULTIPLICATIVE_NONSPLIT",
+                      "BAD_ADDITIVE"
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "claimed_manifest": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "record_hashes",
+            "batch_sha256"
+          ],
+          "properties": {
+            "record_hashes": {
+              "type": "array",
+              "minItems": 1,
+              "items": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "prime",
+                  "sha256"
+                ],
+                "properties": {
+                  "prime": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 100000
+                  },
+                  "sha256": {
+                    "type": "string",
+                    "pattern": "^[a-f0-9]{64}$"
+                  }
+                }
+              }
+            },
+            "batch_sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$"
+            }
+          }
+        }
+      }
+    },
+    "claimed_proxy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "numerator_factors",
+        "denominator_factors",
+        "numerator",
+        "denominator"
+      ],
+      "properties": {
+        "numerator_factors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "denominator_factors": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "integer",
+            "minimum": 1
+          }
+        },
+        "numerator": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "denominator": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true,
+      "properties": {
+        "notes": {
+          "type": "string"
+        }
+      }
+    }
+  }
+}

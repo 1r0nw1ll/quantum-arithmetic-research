@@ -31,6 +31,9 @@ This family certifies a discrete **rank squeeze trace** over a certified local E
 | Gate 4 | Exact non-reduced proxy equality (`factors`, `numerator`, `denominator`) |
 | Gate 5 | Rank trace consistency (`len`, monotonicity, interval crossing, closure semantics) |
 
+Local point-count recomputation uses an \(O(p)\) odd-prime method (Legendre-symbol based)
+with exact handling for \(p=2\).
+
 ---
 
 ## Failure taxonomy
@@ -54,6 +57,8 @@ This family certifies a discrete **rank squeeze trace** over a certified local E
 | `pass_closed_p5_p7.json` | PASS | Squeeze closes at step 1 for primes `5,7` |
 | `pass_open_p5_p11.json` | PASS | Squeeze remains open for primes `5,11` |
 | `fail_bad_trace_crossing.json` | FAIL | Interval crossing (`lower > upper`) |
+| `fail_wrong_proxy_denominator.json` | FAIL | Gate 4 proxy mismatch (wrong denominator) |
+| `fail_wrong_ap_p7.json` | FAIL | Gate 2 local recompute mismatch (`ap`) |
 
 ---
 

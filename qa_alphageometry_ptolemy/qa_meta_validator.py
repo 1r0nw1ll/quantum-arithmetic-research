@@ -3306,7 +3306,7 @@ FAMILY_SWEEPS = [
      "../qa_bsd_partial_lseries_proxy_cert_v1", True),
     (85, "QA BSD Rank Squeeze Cert family",
      _validate_bsd_rank_squeeze_cert_v1_family_if_present,
-     "schema + validator (local recompute + manifest binding + exact proxy + monotone rank-trace consistency) + 3 fixtures (pass_closed_p5_p7, pass_open_p5_p11, fail_bad_trace_crossing)", "85_bsd_rank_squeeze_cert",
+     "schema + validator (local recompute + manifest binding + exact proxy + monotone rank-trace consistency) + 5 fixtures (pass_closed_p5_p7, pass_open_p5_p11, fail_bad_trace_crossing, fail_wrong_proxy_denominator, fail_wrong_ap_p7)", "85_bsd_rank_squeeze_cert",
      "../qa_bsd_rank_squeeze_cert_v1", True),
 ]
 

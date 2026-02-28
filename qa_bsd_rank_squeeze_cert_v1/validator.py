@@ -4,6 +4,7 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import math
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
@@ -25,15 +26,62 @@ def discriminant_short_weierstrass_mod_p(a_coeff: int, b_coeff: int, prime: int)
     return (-16 * (4 * a3 + 27 * b2)) % prime
 
 
+def is_prime(n: int) -> bool:
+    if n < 2:
+        return False
+    if n in (2, 3):
+        return True
+    if n % 2 == 0:
+        return False
+    limit = math.isqrt(n)
+    factor = 3
+    while factor <= limit:
+        if n % factor == 0:
+            return False
+        factor += 2
+    return True
+
+
+def count_points_fp_short_weierstrass_p2(a_coeff: int, b_coeff: int) -> int:
+    point_count = 1
+    for x_val in range(2):
+        rhs = (x_val ** 3 + a_coeff * x_val + b_coeff) % 2
+        for y_val in range(2):
+            if (y_val * y_val - rhs) % 2 == 0:
+                point_count += 1
+    return point_count
+
+
+def legendre_symbol(rhs: int, prime: int) -> int:
+    if rhs % prime == 0:
+        return 0
+    value = pow(rhs, (prime - 1) // 2, prime)
+    if value == 1:
+        return 1
+    if value == prime - 1:
+        return -1
+    # For odd primes this branch should be unreachable.
+    return 0
+
+
 def count_points_fp_short_weierstrass(a_coeff: int, b_coeff: int, prime: int) -> int:
+    if not is_prime(prime):
+        raise ValueError(f"prime field modulus must be prime, got {prime}")
+
+    if prime == 2:
+        return count_points_fp_short_weierstrass_p2(a_coeff, b_coeff)
+
+    # O(p) point count using Euler's criterion / Legendre symbol.
     point_count = 1
     a_mod = a_coeff % prime
     b_mod = b_coeff % prime
     for x_val in range(prime):
         rhs = (pow(x_val, 3, prime) + a_mod * x_val + b_mod) % prime
-        for y_val in range(prime):
-            if (y_val * y_val - rhs) % prime == 0:
-                point_count += 1
+        ls = legendre_symbol(rhs, prime)
+        if ls == 0:
+            point_count += 1
+        elif ls == 1:
+            point_count += 2
     return point_count
 
 
@@ -45,6 +93,7 @@ FAIL_SCHEMA = "SCHEMA_INVALID"
 FAIL_RECOMPUTE_MISMATCH = "RECOMPUTE_MISMATCH"
 FAIL_MANIFEST_MISMATCH = "MANIFEST_MISMATCH"
 FAIL_DUPLICATE_PRIME = "DUPLICATE_PRIME"
+FAIL_NON_PRIME_INPUT = "NON_PRIME_INPUT"
 FAIL_TRACE_LENGTH_MISMATCH = "TRACE_LENGTH_MISMATCH"
 FAIL_TRACE_MONOTONICITY_VIOLATION = "TRACE_MONOTONICITY_VIOLATION"
 FAIL_TRACE_INCONSISTENT = "TRACE_INCONSISTENT"
@@ -328,7 +377,15 @@ def validate_cert(cert: Dict[str, Any], schema: Dict[str, Any]) -> Dict[str, Any
     recomputed_by_prime: Dict[int, Dict[str, Any]] = {}
     for entry in source_batch["records"]:
         prime = int(entry["prime"])
-        recomputed_by_prime[prime] = recompute_for_prime(a_coeff, b_coeff, prime)
+        try:
+            recomputed_by_prime[prime] = recompute_for_prime(a_coeff, b_coeff, prime)
+        except ValueError as exc:
+            return Result(
+                ok=False,
+                fail_type=FAIL_NON_PRIME_INPUT,
+                invariant_diff={"prime": prime},
+                details={"error": str(exc)},
+            ).__dict__
 
     gate_2 = gate_2_recompute_checks(source_batch, recomputed_by_prime)
     if gate_2 is not None:
@@ -375,16 +432,24 @@ def run_self_test() -> int:
     pass_closed = load_json(str(base / "fixtures" / "pass_closed_p5_p7.json"))
     pass_open = load_json(str(base / "fixtures" / "pass_open_p5_p11.json"))
     fail_trace = load_json(str(base / "fixtures" / "fail_bad_trace_crossing.json"))
+    fail_proxy = load_json(str(base / "fixtures" / "fail_wrong_proxy_denominator.json"))
+    fail_ap = load_json(str(base / "fixtures" / "fail_wrong_ap_p7.json"))
 
     result_closed = validate_cert(pass_closed, schema)
     result_open = validate_cert(pass_open, schema)
     result_fail = validate_cert(fail_trace, schema)
+    result_fail_proxy = validate_cert(fail_proxy, schema)
+    result_fail_ap = validate_cert(fail_ap, schema)
 
     checks = [
         (result_closed.get("ok") is True, "closed squeeze fixture must validate"),
         (result_open.get("ok") is True, "open squeeze fixture must validate"),
         (result_fail.get("ok") is False, "invalid trace fixture must fail"),
+        (result_fail_proxy.get("ok") is False, "invalid proxy fixture must fail"),
+        (result_fail_ap.get("ok") is False, "invalid ap fixture must fail"),
         (result_fail.get("fail_type") == FAIL_TRACE_INCONSISTENT, "invalid trace must hit TRACE_INCONSISTENT"),
+        (result_fail_proxy.get("fail_type") == FAIL_RECOMPUTE_MISMATCH, "invalid proxy must hit RECOMPUTE_MISMATCH"),
+        (result_fail_ap.get("fail_type") == FAIL_RECOMPUTE_MISMATCH, "invalid ap must hit RECOMPUTE_MISMATCH"),
         (result_closed.get("value", {}).get("rank_summary", {}).get("first_closing_step") == 1, "closed fixture first closing step must be 1"),
         (result_closed.get("value", {}).get("rank_summary", {}).get("lower_final") == 1, "closed fixture final lower rank must be 1"),
         (result_open.get("value", {}).get("rank_summary", {}).get("squeeze_closed") is False, "open fixture must remain open"),
@@ -400,6 +465,8 @@ def run_self_test() -> int:
                 "pass_closed_result": result_closed,
                 "pass_open_result": result_open,
                 "fail_trace_result": result_fail,
+                "fail_proxy_result": result_fail_proxy,
+                "fail_ap_result": result_fail_ap,
             },
             indent=2,
             sort_keys=True,

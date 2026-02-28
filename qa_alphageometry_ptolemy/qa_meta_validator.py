@@ -3134,6 +3134,28 @@ def _validate_bsd_rank_squeeze_cert_v1_family_if_present(base_dir: str) -> Optio
     return None
 
 
+def _validate_generator_failure_unification_cert_v1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Generator-Failure Algebra Unification Cert family [86]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_generator_failure_unification_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_generator_failure_unification_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_generator_failure_unification_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3308,6 +3330,11 @@ FAMILY_SWEEPS = [
      _validate_bsd_rank_squeeze_cert_v1_family_if_present,
      "schema + validator (local recompute + manifest binding + exact proxy + monotone rank-trace consistency) + 5 fixtures (pass_closed_p5_p7, pass_open_p5_p11, fail_bad_trace_crossing, fail_wrong_proxy_denominator, fail_wrong_ap_p7)", "85_bsd_rank_squeeze_cert",
      "../qa_bsd_rank_squeeze_cert_v1", True),
+    (86, "QA Generator-Failure Algebra Unification Cert family",
+     _validate_generator_failure_unification_cert_v1_family_if_present,
+     "schema + validator (5-gate: carrier cross-check, digest, T1 finite image, T2 SCC + T3 path propagation, T4 energy monotonicity) + 2 fixtures (valid_caps_tr_fear_love, invalid_tag_not_in_carrier) + cross-binding to [76] failure algebra ref + [80] energy cert ref",
+     "87_generator_failure_unification_cert",
+     "../qa_generator_failure_unification_cert_v1", True),
 ]
 
 

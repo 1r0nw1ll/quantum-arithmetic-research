@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Generator-Failure Algebra Unification Cert: binds generator tagging function τ:G→F to a referenced Family [76] failure algebra cert (carrier cross-check, path propagation join-chain verification) and a referenced Family [80] energy cert (BFS energy monotonicity). Certifies T1 finite image, T2 SCC bounds, T3 path propagation, T4 energy-poset monotonicity."
+}

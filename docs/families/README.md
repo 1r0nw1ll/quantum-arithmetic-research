@@ -57,6 +57,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [83] | [QA BSD Local Euler Batch Cert v1](83_bsd_local_euler_batch_cert.md) | Schema + Validator (per-prime deterministic recompute + stable hash-manifest binding) + 3 Fixtures (pass_batch_p5_p7, pass_batch_p5_p11, fail_corrupt_record_p7_ap) | PASS |
 | [84] | [QA BSD Partial L-series Proxy Cert v1](84_bsd_partial_lseries_proxy_cert.md) | Schema + Validator (exact non-reduced Π(#E(F_p)/p) proxy + source-manifest binding) + 3 Fixtures (pass_proxy_p5_p7, pass_proxy_p5_p11, fail_wrong_proxy_denominator) | PASS |
 | [85] | [QA BSD Rank Squeeze Cert v1](85_bsd_rank_squeeze_cert.md) | Schema + Validator (local recompute + manifest binding + exact proxy + monotone rank-trace consistency/closure checks) + 5 Fixtures (pass_closed_p5_p7, pass_open_p5_p11, fail_bad_trace_crossing, fail_wrong_proxy_denominator, fail_wrong_ap_p7) | PASS |
+| [86] | [QA Generator-Failure Algebra Unification Cert v1](87_generator_failure_unification_cert.md) | Schema + Validator (5-gate: carrier cross-check, digest, T1 finite image, T2 SCC + T3 path propagation, T4 energy monotonicity) + 2 Fixtures (valid_caps_tr_fear_love, invalid_tag_not_in_carrier) + cross-binding to [76] failure algebra ref + [80] energy cert ref | PASS |
 
 ## Quick validation
 

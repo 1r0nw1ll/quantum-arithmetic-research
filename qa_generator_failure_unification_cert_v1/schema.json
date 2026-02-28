@@ -1,0 +1,147 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_GENERATOR_FAILURE_UNIFICATION_CERT.v1",
+  "description": "Certifies that a generator set G, acting on a domain, induces a failure algebra image F(G) ⊆ carrier([76]-ref) and that the induced SCC structure, path propagation law, and energy-poset monotonicity are jointly consistent with the referenced Family [76] failure algebra cert and Family [80] energy cert.",
+  "type": "object",
+  "required": [
+    "cert_id",
+    "cert_version",
+    "created_utc",
+    "domain",
+    "N",
+    "generator_tagging",
+    "failure_algebra_ref",
+    "energy_cert_ref",
+    "theorems",
+    "digests"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "cert_id":      { "type": "string" },
+    "cert_version": { "type": "string", "const": "QA_GENERATOR_FAILURE_UNIFICATION_CERT.v1" },
+    "created_utc":  { "type": "string", "format": "date-time" },
+    "domain":       { "type": "string" },
+    "N":            { "type": "integer", "minimum": 1 },
+
+    "generator_tagging": {
+      "description": "Tagging function τ: G → F. Each generator is assigned a failure algebra element from the referenced [76] carrier.",
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "family_tag", "failure_tag"],
+        "additionalProperties": false,
+        "properties": {
+          "name":        { "type": "string" },
+          "family_tag":  { "type": "string" },
+          "failure_tag": { "type": "string" }
+        }
+      }
+    },
+
+    "failure_algebra_ref": {
+      "description": "Reference to a certified Family [76] failure algebra. canonical_sha256 locks the exact cert version.",
+      "type": "object",
+      "required": ["cert_id", "schema_version", "canonical_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "cert_id":         { "type": "string" },
+        "schema_version":  { "type": "string" },
+        "canonical_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+
+    "energy_cert_ref": {
+      "description": "Reference to a certified Family [80] energy cert. canonical_sha256 locks the exact cert version.",
+      "type": "object",
+      "required": ["cert_id", "schema_version", "canonical_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "cert_id":         { "type": "string" },
+        "schema_version":  { "type": "string" },
+        "canonical_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+
+    "theorems": {
+      "type": "object",
+      "required": ["T1_finite_image", "T2_scc_bounds", "T3_path_propagation", "T4_energy_monotonicity"],
+      "additionalProperties": false,
+      "properties": {
+
+        "T1_finite_image": {
+          "description": "F(G) = {τ(g) | g ∈ G} is finite because it is a subset of the finite carrier of the referenced failure algebra.",
+          "type": "object",
+          "required": ["image_elements", "image_sha256"],
+          "additionalProperties": false,
+          "properties": {
+            "image_elements": {
+              "type": "array",
+              "items": { "type": "string" },
+              "minItems": 1
+            },
+            "image_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        },
+
+        "T2_scc_bounds": {
+          "description": "SCC structure of the generator-induced reachability graph. scc_hash seals the (scc_count, max_scc_size) pair.",
+          "type": "object",
+          "required": ["scc_count", "max_scc_size", "scc_hash"],
+          "additionalProperties": false,
+          "properties": {
+            "scc_count":    { "type": "integer", "minimum": 1 },
+            "max_scc_size": { "type": "integer", "minimum": 1 },
+            "scc_hash":     { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+          }
+        },
+
+        "T3_path_propagation": {
+          "description": "For a path g₁...gₖ, the failure image is τ(g₁) ⊔ ... ⊔ τ(gₖ) under the referenced [76] join table.",
+          "type": "object",
+          "required": ["sampled_paths"],
+          "additionalProperties": false,
+          "properties": {
+            "sampled_paths": {
+              "type": "array",
+              "minItems": 2,
+              "items": {
+                "type": "object",
+                "required": ["steps", "expected_join"],
+                "additionalProperties": false,
+                "properties": {
+                  "steps":         { "type": "array", "items": { "type": "string" }, "minItems": 2 },
+                  "expected_join": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+
+        "T4_energy_monotonicity": {
+          "description": "States reachable via OK-only tagged generators have strictly lower energy than states requiring non-OK generators. min_energy_ok is the min energy of OK-only reachable states; min_energy_non_ok is the min energy of states requiring at least one non-OK generator step.",
+          "type": "object",
+          "required": ["ok_only_state_count", "non_ok_required_state_count", "min_energy_ok", "min_energy_non_ok", "monotone_holds"],
+          "additionalProperties": false,
+          "properties": {
+            "ok_only_state_count":      { "type": "integer", "minimum": 1 },
+            "non_ok_required_state_count": { "type": "integer", "minimum": 0 },
+            "min_energy_ok":            { "type": "integer", "minimum": 0 },
+            "min_energy_non_ok":        { "type": "integer", "minimum": 0 },
+            "monotone_holds":           { "type": "boolean" }
+          }
+        }
+      }
+    },
+
+    "digests": {
+      "type": "object",
+      "required": ["canonical_sha256", "schema_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "canonical_sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "schema_sha256":    { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    }
+  }
+}

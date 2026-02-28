@@ -1,0 +1,107 @@
+{
+  "cert_id": "qa-gen-fail-unification-caps-tr-N2-v1",
+  "cert_version": "QA_GENERATOR_FAILURE_UNIFICATION_CERT.v1",
+  "created_utc": "2026-02-27T00:00:00Z",
+  "domain": "CAPS_TR",
+  "N": 2,
+  "generator_tagging": [
+    {
+      "name": "fear_up",
+      "family_tag": "fear",
+      "failure_tag": "PARITY_BLOCK"
+    },
+    {
+      "name": "fear_down",
+      "family_tag": "fear",
+      "failure_tag": "OK"
+    },
+    {
+      "name": "fear_lock",
+      "family_tag": "fear",
+      "failure_tag": "INVARIANT_VIOLATION"
+    },
+    {
+      "name": "love_soothe",
+      "family_tag": "love",
+      "failure_tag": "OK"
+    },
+    {
+      "name": "love_support",
+      "family_tag": "love",
+      "failure_tag": "OK"
+    },
+    {
+      "name": "love_reframe",
+      "family_tag": "love",
+      "failure_tag": "OK"
+    }
+  ],
+  "failure_algebra_ref": {
+    "cert_id": "qa-failure-algebra-pass-tiny-001",
+    "schema_version": "QA_FAILURE_ALGEBRA_STRUCTURE_CERT.v1",
+    "canonical_sha256": "2cb33c7218721398535ea6e91770211a8ea9692a685fd53f2db58cfc359a3b63"
+  },
+  "energy_cert_ref": {
+    "cert_id": "energy_caps_tr_N2_mixed",
+    "schema_version": "QA_ENERGY_CERT.v1.1",
+    "canonical_sha256": "5463f9b4f621e7cf7abb56d35de42e8bfbc544e7c9b6deb5973c701d8d1e7cf2"
+  },
+  "theorems": {
+    "T1_finite_image": {
+      "image_elements": [
+        "INVARIANT_VIOLATION",
+        "OK",
+        "PARITY_BLOCK"
+      ],
+      "image_sha256": "bf0328b699ac44d981fa44e77495d245f3dc6b4e21427c6dded719463594110b"
+    },
+    "T2_scc_bounds": {
+      "scc_count": 1,
+      "max_scc_size": 9,
+      "scc_hash": "078ed0f6b1c828f4a773716fd967e71548899ac72ae763622e88e04c205f4282"
+    },
+    "T3_path_propagation": {
+      "sampled_paths": [
+        {
+          "steps": [
+            "fear_up",
+            "love_soothe"
+          ],
+          "expected_join": "PARITY_BLOCK"
+        },
+        {
+          "steps": [
+            "fear_lock",
+            "fear_up"
+          ],
+          "expected_join": "OUT_OF_DOMAIN"
+        },
+        {
+          "steps": [
+            "love_soothe",
+            "love_support"
+          ],
+          "expected_join": "OK"
+        },
+        {
+          "steps": [
+            "fear_lock",
+            "fear_lock"
+          ],
+          "expected_join": "INVARIANT_VIOLATION"
+        }
+      ]
+    },
+    "T4_energy_monotonicity": {
+      "ok_only_state_count": 1,
+      "non_ok_required_state_count": 8,
+      "min_energy_ok": 0,
+      "min_energy_non_ok": 1,
+      "monotone_holds": true
+    }
+  },
+  "digests": {
+    "canonical_sha256": "9ea074bc6f4e62a10da8643742fd8d01e48b23fbd6a1c64c15edf8a6e02841c1",
+    "schema_sha256": "4084aa558e691da4f11e32eea617f27094156c01a9c6d2d7d04783b81aeffefa"
+  }
+}

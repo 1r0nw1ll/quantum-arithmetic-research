@@ -68,6 +68,7 @@ Cargo.lock
 !qa_alphageometry/core/results/**/*.json
 !qa_alphageometry_ptolemy/qa_ledger/**/*.json
 !qa_alphageometry_ptolemy/qa_fst/**/*.json
+!tools/*.json
 !qa_alphageometry_ptolemy/qa_fst/*.json
 !qa_alphageometry_ptolemy/qa_kayser/*.json
 !qa_alphageometry_ptolemy/examples/topology/*.json

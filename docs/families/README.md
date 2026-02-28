@@ -84,6 +84,28 @@ Families [18]-[23] form a certified provenance pipeline:
 [26] Competency Detection is a standalone portable module (`qa_competency/`)
 aligned with Michael Levin's Platonic Space competency-detection programme.
 
+## Tooling / CI
+
+### LaTeX Claim Linter (`tools/qa_latex_claim_linter.py`)
+
+Scans `.tex` sources for DPI-anchor and overclaim trigger phrases and enforces
+the PAC-Bayes tripwire bundle (families [84], [85], [86]).
+
+```bash
+# Lint the full PAC-Bayes workspace (strict mode for pre-submission)
+python3 tools/qa_latex_claim_linter.py papers/in-progress/phase1-pac-bayes/phase1_workspace --strict
+
+# Lint + JSON output (for CI pipelines)
+python3 tools/qa_latex_claim_linter.py papers/ --json
+
+# Custom rules
+python3 tools/qa_latex_claim_linter.py papers/ --config tools/qa_latex_claim_linter_rules.json
+```
+
+Tag: `tool-qa-latex-claim-linter-v1.0.0`
+
+---
+
 ## Two-tract checklist (for contributors)
 
 Before shipping any family:

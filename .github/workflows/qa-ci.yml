@@ -143,3 +143,10 @@ jobs:
       - name: LaTeX claim linter regression tests
         working-directory: .
         run: python tools/tests/test_latex_claim_linter.py
+
+      - name: Spine integrity sweep ([76]+[80]+[86] self-tests)
+        working-directory: .
+        run: |
+          python3 qa_failure_algebra_structure_cert_v1/validator.py --self-test
+          python3 qa_energy_cert_v1_1/validator.py --self-test
+          python3 qa_generator_failure_unification_cert_v1/validator.py --self-test

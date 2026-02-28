@@ -121,7 +121,7 @@
         },
 
         "T4_energy_monotonicity": {
-          "description": "States reachable via OK-only tagged generators have strictly lower energy than states requiring non-OK generators. min_energy_ok is the min energy of OK-only reachable states; min_energy_non_ok is the min energy of states requiring at least one non-OK generator step.",
+          "description": "States reachable via OK-only tagged generators have strictly lower energy than states requiring non-OK generators. min_energy_ok is the min energy of OK-only reachable states; min_energy_non_ok is the min energy of states requiring at least one non-OK generator step. non_ok_witness (optional) provides concrete witness states that Gate 5 spot-checks: each must be unreachable via OK-only generators and reachable at the declared min_energy.",
           "type": "object",
           "required": ["ok_only_state_count", "non_ok_required_state_count", "min_energy_ok", "min_energy_non_ok", "monotone_holds"],
           "additionalProperties": false,
@@ -130,7 +130,20 @@
             "non_ok_required_state_count": { "type": "integer", "minimum": 0 },
             "min_energy_ok":            { "type": "integer", "minimum": 0 },
             "min_energy_non_ok":        { "type": "integer", "minimum": 0 },
-            "monotone_holds":           { "type": "boolean" }
+            "monotone_holds":           { "type": "boolean" },
+            "non_ok_witness": {
+              "description": "Optional concrete witness states requiring non-OK generator steps. Validator verifies each is not OK-only reachable and has the declared energy.",
+              "type": "array",
+              "items": {
+                "type": "object",
+                "required": ["state", "min_energy"],
+                "additionalProperties": false,
+                "properties": {
+                  "state":      { "type": "object" },
+                  "min_energy": { "type": "integer", "minimum": 0 }
+                }
+              }
+            }
           }
         }
       }

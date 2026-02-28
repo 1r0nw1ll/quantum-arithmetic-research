@@ -99,11 +99,16 @@
       "non_ok_required_state_count": 8,
       "min_energy_ok": 0,
       "min_energy_non_ok": 1,
-      "monotone_holds": true
+      "monotone_holds": true,
+      "non_ok_witness": [
+        {"state": {"T": 1, "R": 2}, "min_energy": 1},
+        {"state": {"T": 0, "R": 1}, "min_energy": 1},
+        {"state": {"T": 2, "R": 0}, "min_energy": 4}
+      ]
     }
   },
   "digests": {
-    "canonical_sha256": "42251599be8e1741dadb77daa6deaae18020962cd5802c00336fb8da18905a02",
-    "schema_sha256": "7d52a6049c1988b4ec7694a5acba0a53f0c51db7759753082a15ed1e212f484a"
+    "canonical_sha256": "b299a29646c882e0986db5770527d9d7529457d16612f143364d9c891ff2b0bd",
+    "schema_sha256": "900a451d025652e14c0854adbdd790bc21de2ffdc7efb0802a5460c8d3cf39f3"
   }
 }

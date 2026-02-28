@@ -194,6 +194,42 @@ def _bfs_energy(ref_state: Tuple, adj: Dict) -> Dict[Tuple, int]:
     return energy
 
 
+# ── Gate 5 helpers ─────────────────────────────────────────────────────────────
+
+def _parse_ec_energy_map(ec_cert: dict, domain: str) -> Tuple[Optional[Dict[Tuple, int]], Optional[str]]:
+    """
+    Normalize [80] energy_map (list of {state, energy}) into a {state_tuple: energy} dict.
+    Returns (map, None) on success or (None, error_message) if the field is absent/malformed.
+    Accepts both list-of-objects and dict formats for future compatibility.
+    """
+    em = ec_cert.get("energy_map")
+    if em is None:
+        return None, "energy_map field absent in [80] cert"
+    if isinstance(em, dict):
+        # Future dict format: {"T0R0": energy, ...} — skip cross-check for now
+        return None, "energy_map is a dict (unsupported format for cross-check)"
+    if not isinstance(em, list):
+        return None, f"energy_map is neither list nor dict: {type(em).__name__}"
+    result: Dict[Tuple, int] = {}
+    for i, entry in enumerate(em):
+        if not isinstance(entry, dict):
+            return None, f"energy_map[{i}] is not a dict: {entry!r}"
+        state = entry.get("state", {})
+        energy = entry.get("energy")
+        if energy is None:
+            return None, f"energy_map[{i}] missing 'energy' field"
+        if domain == "CAPS_TR":
+            T = state.get("T")
+            R = state.get("R")
+            if T is None or R is None:
+                return None, f"energy_map[{i}] state missing T or R: {state!r}"
+            key = (int(T), int(R))
+        else:
+            return None, f"unsupported domain for energy_map parsing: {domain}"
+        result[key] = int(energy)
+    return result, None
+
+
 # ── Gate 4 helpers ─────────────────────────────────────────────────────────────
 
 def _build_join_lookup(fa_cert: dict) -> Dict[Tuple[str, str], str]:
@@ -387,6 +423,20 @@ def validate(cert: dict, cert_path: Optional[str] = None) -> Tuple[bool, List[st
         min_e_non_ok = min(non_ok_states.values()) if non_ok_states else 0
         monotone = (min_e_non_ok > min_e_ok) if non_ok_states else True
 
+        # ── Cross-check BFS energies against [80] energy_map (drift detection) ─
+        ec_em, ec_em_err = _parse_ec_energy_map(ec_cert, domain)
+        if ec_em_err:
+            # Non-fatal: log but continue (energy_map may be absent in older [80] fixtures)
+            errors.append(f"Gate 5 WARN: cannot normalize [80] energy_map: {ec_em_err}")
+        elif ec_em:
+            for state, bfs_e in sorted(all_energy.items()):
+                ec_e = ec_em.get(state)
+                if ec_e is not None and ec_e != bfs_e:
+                    errors.append(
+                        f"Gate 5 FAIL: energy drift — state {state}: "
+                        f"[86] BFS energy={bfs_e} but [80] energy_map={ec_e}"
+                    )
+
         t4 = cert["theorems"]["T4_energy_monotonicity"]
         if ok_count != t4.get("ok_only_state_count"):
             errors.append(f"Gate 5 FAIL: T4 ok_only_state_count: cert={t4.get('ok_only_state_count')} computed={ok_count}")
@@ -398,6 +448,28 @@ def validate(cert: dict, cert_path: Optional[str] = None) -> Tuple[bool, List[st
             errors.append(f"Gate 5 FAIL: T4 min_energy_non_ok: cert={t4.get('min_energy_non_ok')} computed={min_e_non_ok}")
         if monotone != t4.get("monotone_holds"):
             errors.append(f"Gate 5 FAIL: T4 monotone_holds: cert={t4.get('monotone_holds')} computed={monotone}")
+
+        # ── Spot-check non_ok_witness states (if provided) ──────────────────────
+        for i, w in enumerate(t4.get("non_ok_witness", [])):
+            raw = w.get("state", {})
+            if domain == "CAPS_TR":
+                ws = (raw.get("T", -1), raw.get("R", -1))
+            else:
+                errors.append(f"Gate 5 FAIL: T4 non_ok_witness[{i}]: unsupported domain {domain}")
+                continue
+            w_e = w.get("min_energy")
+            if ws in ok_energy:
+                errors.append(
+                    f"Gate 5 FAIL: T4 non_ok_witness[{i}] state {ws} "
+                    f"is OK-only reachable (should require non-OK generator)"
+                )
+            elif ws not in all_energy:
+                errors.append(f"Gate 5 FAIL: T4 non_ok_witness[{i}] state {ws} not reachable from ref via any generator")
+            elif all_energy[ws] != w_e:
+                errors.append(
+                    f"Gate 5 FAIL: T4 non_ok_witness[{i}] state {ws}: "
+                    f"cert min_energy={w_e} computed={all_energy[ws]}"
+                )
 
     return (len(errors) == 0), errors
 

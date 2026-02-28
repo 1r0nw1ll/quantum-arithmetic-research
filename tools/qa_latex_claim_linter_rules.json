@@ -1,0 +1,27 @@
+{
+  "version": "1.0",
+  "trigger_classes": {
+    "dpi_anchors": [
+      "\\bDPI\\b",
+      "data processing inequality",
+      "processing inequality"
+    ],
+    "overclaims": [
+      "\\buniversal\\b",
+      "\\bproven\\b",
+      "for all distributions",
+      "for any distribution",
+      "holds for all",
+      "always holds"
+    ]
+  },
+  "required_tripwires": [
+    "QA_PAC_BAYES_DPI_SCOPE_CERT.v1",
+    "QA_PAC_BAYES_CONSTANT_CERT.v1.1",
+    "QA_DQA_PAC_BOUND_KERNEL_CERT.v1"
+  ],
+  "allowed_claim_levels": [
+    "empirical_only",
+    "proof_sketch"
+  ]
+}

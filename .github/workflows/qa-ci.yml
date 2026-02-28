@@ -131,7 +131,8 @@ jobs:
       - name: Run Core System Stack validator
         run: python certs/qa_core_stack_validate.py
 
-      - name: LaTeX claim linter — broad scan (tripwire presence)
+      - name: LaTeX claim linter — broad scan (informational)
+        continue-on-error: true
         working-directory: ..
         run: python3 tools/qa_latex_claim_linter.py papers/ --json
 

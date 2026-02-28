@@ -39,7 +39,7 @@ from pathlib import Path
 # ---------------------------------------------------------------------------
 
 DEFAULT_RULES = {
-    "version": "1.0",
+    "version": "1.1",
     "trigger_classes": {
         "dpi_anchors": [
             r"\bDPI\b",
@@ -53,6 +53,10 @@ DEFAULT_RULES = {
             r"for any distribution",
             r"holds for all",
             r"always holds"
+        ],
+        "kernel_conformity": [
+            r"\\ln\(m/\\delta\)",
+            r"\\log\(m/\\delta\)"
         ]
     },
     "required_tripwires": [
@@ -79,10 +83,12 @@ def _load_rules(config_path=None):
 
 
 def _compile_patterns(rules):
-    """Return compiled regexes for (dpi_anchors, overclaims)."""
-    dpi = [re.compile(p, re.IGNORECASE) for p in rules["trigger_classes"]["dpi_anchors"]]
-    oc  = [re.compile(p, re.IGNORECASE) for p in rules["trigger_classes"]["overclaims"]]
-    return dpi, oc
+    """Return compiled regexes for (dpi_anchors, overclaims, kernel_conformity)."""
+    tc = rules["trigger_classes"]
+    dpi = [re.compile(p, re.IGNORECASE) for p in tc["dpi_anchors"]]
+    oc  = [re.compile(p, re.IGNORECASE) for p in tc["overclaims"]]
+    kc  = [re.compile(p) for p in tc.get("kernel_conformity", [])]
+    return dpi, oc, kc
 
 
 def _extract_tripwires(text):
@@ -150,17 +156,26 @@ def lint_file(filepath, rules, strict=False):
             "errors": [f"Cannot read file: {e}"]
         }
 
-    dpi_patterns, oc_patterns = _compile_patterns(rules)
+    dpi_patterns, oc_patterns, kc_patterns = _compile_patterns(rules)
 
     dpi_hits = _find_trigger_hits(text, dpi_patterns, "dpi_anchor")
     oc_hits  = _find_trigger_hits(text, oc_patterns,  "overclaim")
-    all_hits = dpi_hits + oc_hits
+    kc_hits  = _find_trigger_hits(text, kc_patterns,  "kernel_conformity")
+    all_hits = dpi_hits + oc_hits + kc_hits
 
     errors = []
     missing_tripwires = []
     strict_violation = False
 
-    if all_hits:
+    # kernel_conformity hits are always errors (formula mismatch vs locked kernel)
+    for h in kc_hits:
+        errors.append(
+            f"L{h['line_no']}: kernel_conformity: formula mismatch — "
+            f"expected \\ln(1/\\delta) per QA_DQA_PAC_BOUND_KERNEL_CERT.v1 "
+            f"(family-85), found pattern '{h['pattern']}'"
+        )
+
+    if dpi_hits or oc_hits:
         # Check tripwire bundle
         present = _extract_tripwires(text)
         required = set(rules["required_tripwires"])

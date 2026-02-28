@@ -1,5 +1,5 @@
 {
-  "version": "1.0",
+  "version": "1.1",
   "trigger_classes": {
     "dpi_anchors": [
       "\\bDPI\\b",
@@ -13,6 +13,10 @@
       "for any distribution",
       "holds for all",
       "always holds"
+    ],
+    "kernel_conformity": [
+      "\\\\ln\\(m/\\\\delta\\)",
+      "\\\\log\\(m/\\\\delta\\)"
     ]
   },
   "required_tripwires": [

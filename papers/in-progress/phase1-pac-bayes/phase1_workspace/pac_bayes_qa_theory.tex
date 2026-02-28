@@ -40,10 +40,11 @@ QA systems provide novel computational paradigms for machine learning.
 The modular distance $d_M$ on QA lattice satisfies metric axioms.
 \end{theorem}
 
+%% KERNEL_ANCHOR: QA_DQA_PAC_BOUND_KERNEL_CERT.v1 (family-85-dqa-pac-kernel-v1.0.0) formula_id=PAC_BAYES_QA_DQA_LOGDELTA_V1
 \begin{theorem}[PAC-Bayes Bound for QA]
 For prior $P$ and posterior $Q$:
 \begin{equation}
-\mathbb{E}_{h \sim Q} [R(h)] \leq \mathbb{E}_{h \sim Q} [\hat{R}_S(h)] + \sqrt{\frac{D_{QA}(Q || P) + \ln(m/\delta)}{2m}}
+\mathbb{E}_{h \sim Q} [R(h)] \leq \mathbb{E}_{h \sim Q} [\hat{R}_S(h)] + \sqrt{\frac{D_{QA}(Q \| P) + \ln(1/\delta)}{2m}}
 \end{equation}
 \end{theorem}
 

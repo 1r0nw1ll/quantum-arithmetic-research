@@ -18,7 +18,10 @@
     },
     "schema_version": {
       "type": "string",
-      "const": "v1"
+      "enum": [
+        "v1",
+        "v1.1"
+      ]
     },
     "curve": {
       "type": "object",
@@ -74,6 +77,19 @@
         },
         "ap": {
           "type": "integer"
+        },
+        "delta_mod_p": {
+          "type": "integer"
+        },
+        "is_good_reduction": {
+          "type": "boolean"
+        },
+        "ap_source": {
+          "type": "string",
+          "enum": [
+            "point_count",
+            "table"
+          ]
         },
         "reduction_type": {
           "type": "string",

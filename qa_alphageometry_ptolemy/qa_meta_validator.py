@@ -3228,7 +3228,7 @@ FAMILY_SWEEPS = [
      "../qa_episode_regime_cert_v1", True),
     (82, "QA BSD Local Euler Cert family",
      _validate_bsd_local_euler_cert_v1_family_if_present,
-     "schema + validator (schema/recompute/reduction-type gates) + 2 fixtures (pass_good_p5, fail_wrong_ap)", "82_bsd_local_euler_cert",
+     "schema v1/v1.1 + validator (schema/recompute/reduction-type gates; optional delta_mod_p/is_good_reduction checks) + 3 fixtures (pass_good_p5, pass_good_p7_v1_1, fail_wrong_ap)", "82_bsd_local_euler_cert",
      "../qa_bsd_local_euler_cert_v1", True),
 ]
 

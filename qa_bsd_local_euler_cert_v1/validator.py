@@ -105,6 +105,18 @@ def gate_2_3_checks(cert: Dict[str, Any], recomputed: Dict[str, Any]) -> Optiona
             "recomputed": int(recomputed["ap"]),
         }
 
+    if "delta_mod_p" in claimed and int(claimed["delta_mod_p"]) != int(recomputed["delta_mod_p"]):
+        invariant_diff["delta_mod_p"] = {
+            "claimed": int(claimed["delta_mod_p"]),
+            "recomputed": int(recomputed["delta_mod_p"]),
+        }
+
+    if "is_good_reduction" in claimed and bool(claimed["is_good_reduction"]) != bool(recomputed["is_good_reduction"]):
+        invariant_diff["is_good_reduction"] = {
+            "claimed": bool(claimed["is_good_reduction"]),
+            "recomputed": bool(recomputed["is_good_reduction"]),
+        }
+
     if invariant_diff:
         return Result(
             ok=False,
@@ -166,20 +178,40 @@ def load_json(path: str) -> Dict[str, Any]:
 def run_self_test() -> int:
     base_dir = Path(__file__).resolve().parent
     schema_path = base_dir / "schema.json"
-    pass_path = base_dir / "fixtures" / "pass_good_p5.json"
+    pass_p5_path = base_dir / "fixtures" / "pass_good_p5.json"
+    pass_p7_v1_1_path = base_dir / "fixtures" / "pass_good_p7_v1_1.json"
     fail_path = base_dir / "fixtures" / "fail_wrong_ap.json"
 
     schema = load_json(str(schema_path))
-    pass_cert = load_json(str(pass_path))
+    pass_p5_cert = load_json(str(pass_p5_path))
+    pass_p7_v1_1_cert = load_json(str(pass_p7_v1_1_path))
     fail_cert = load_json(str(fail_path))
 
-    pass_result = validate_cert(pass_cert, schema)
+    pass_p5_result = validate_cert(pass_p5_cert, schema)
+    pass_p7_v1_1_result = validate_cert(pass_p7_v1_1_cert, schema)
     fail_result = validate_cert(fail_cert, schema)
 
     checks = [
-        (pass_result.get("ok") is True, "pass fixture must validate"),
+        (pass_p5_result.get("ok") is True, "p5 pass fixture must validate"),
+        (pass_p7_v1_1_result.get("ok") is True, "p7 v1.1 pass fixture must validate"),
         (fail_result.get("ok") is False, "fail fixture must fail"),
         (fail_result.get("fail_type") == FAIL_RECOMPUTE_MISMATCH, "fail fixture must hit RECOMPUTE_MISMATCH"),
+        (
+            pass_p7_v1_1_result.get("value", {}).get("recomputed", {}).get("point_count_fp") == 12,
+            "p7 recompute point_count_fp must be 12",
+        ),
+        (
+            pass_p7_v1_1_result.get("value", {}).get("recomputed", {}).get("ap") == -4,
+            "p7 recompute ap must be -4",
+        ),
+        (
+            pass_p7_v1_1_result.get("value", {}).get("recomputed", {}).get("delta_mod_p") == 2,
+            "p7 recompute delta_mod_p must be 2",
+        ),
+        (
+            pass_p7_v1_1_result.get("value", {}).get("recomputed", {}).get("is_good_reduction") is True,
+            "p7 recompute is_good_reduction must be true",
+        ),
     ]
     failed_checks = [msg for ok, msg in checks if not ok]
 
@@ -187,7 +219,8 @@ def run_self_test() -> int:
         "self_test_ok": len(failed_checks) == 0,
         "checks": [msg for _, msg in checks],
         "failed_checks": failed_checks,
-        "pass_result": pass_result,
+        "pass_p5_result": pass_p5_result,
+        "pass_p7_v1_1_result": pass_p7_v1_1_result,
         "fail_result": fail_result,
     }
     print(json.dumps(summary, indent=2, sort_keys=True))

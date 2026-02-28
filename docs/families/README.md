@@ -54,6 +54,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [80] | [QA Energy Cert v1.1 (CAPS_TR cognitive domain)](80_energy_cert.md) | Schema + Validator (6-gate: schema/domain/ih-lock, BFS energy, reverse BFS return, monotonicity, return-in-k, SCC+power+family+interaction) + 6 Fixtures (PASS_FEAR, PASS_LOVE, PASS_MIXED, FAIL_POWER, FAIL_INTERACTION, FAIL_HORIZON) | PASS |
 | [81] | [QA Episode Regime Transitions Cert v1.0](81_episode_regime_transitions.md) | Schema + Validator (5-gate: schema, label validity, regime/counts/transition matrix, drift declaration, max-run) + 6 Fixtures (PASS_RECOVERING, PASS_ESCALATING, PASS_MIXED, FAIL_LABEL, FAIL_TRANSITION, FAIL_DRIFT) | PASS |
 | [82] | [QA BSD Local Euler Cert v1](82_bsd_local_euler_cert.md) | Schema v1/v1.1 + Validator (schema/recompute/reduction-type gates; v1.1 optional invariants `delta_mod_p`/`is_good_reduction` + `ap_source`) + 3 Fixtures (pass_good_p5, pass_good_p7_v1_1, fail_wrong_ap) | PASS |
+| [83] | [QA BSD Local Euler Batch Cert v1](83_bsd_local_euler_batch_cert.md) | Schema + Validator (per-prime deterministic recompute + stable hash-manifest binding) + 3 Fixtures (pass_batch_p5_p7, pass_batch_p5_p11, fail_corrupt_record_p7_ap) | PASS |
 
 ## Quick validation
 

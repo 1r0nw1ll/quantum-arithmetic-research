@@ -73,6 +73,36 @@ python qa_meta_validator.py --strict
 python qa_meta_validator.py --fast
 ```
 
+## PAC-Bayes certified spine ([84]→[85]→[86])
+
+Families [84]–[86] form a 3-node spine that locks the Phase-1 PAC-Bayes paper
+against formula drift, constants drift, and claim drift:
+
+```
+[85] QA_DQA_PAC_BOUND_KERNEL_CERT.v1
+     formula_id = PAC_BAYES_QA_DQA_LOGDELTA_V1
+     kernel_block_sha256 = 553b7588...
+         │
+         │  pac_kernel_ref (Gate 5 in [84])
+         ▼
+[84] QA_PAC_BAYES_CONSTANT_CERT.v1.1
+     K1 = 2C²N(M/2)²  ·  improvement ratio 3.1×
+     ↑ also refs [85] via refs.family85_kernel_ref
+         │
+         │  (shared evidence + forbidden_phrases policy)
+         ▼
+[86] QA_PAC_BAYES_DPI_SCOPE_CERT.v1
+     dpi_claim = "structured_only"
+     forbidden_phrases ⊇ {"universal","proven","for all distributions"}
+     claim_level = "empirical_only"
+```
+
+**Drift surfaces closed:**
+- **Formula drift** — [85] kernel_block_sha256 is locked; [84] Gate 5 verifies it
+- **Constants drift** — [84] K1 is recomputed from (N,M,C) each CI run
+- **Claim drift** — [86] Gate 5 blocks forbidden language; Gate 4 enforces empirical separation
+- **Paper drift** — LaTeX tripwire: `QA_CERT_REQUIRED: QA_PAC_BAYES_DPI_SCOPE_CERT.v1` in paper
+
 ## Provenance chain
 
 Families [18]-[23] form a certified provenance pipeline:

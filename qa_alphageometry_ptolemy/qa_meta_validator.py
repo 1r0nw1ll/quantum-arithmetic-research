@@ -3112,6 +3112,28 @@ def _validate_bsd_partial_lseries_proxy_cert_v1_family_if_present(base_dir: str)
     return None
 
 
+def _validate_bsd_rank_squeeze_cert_v1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA BSD Rank Squeeze Cert family [85]."""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_bsd_rank_squeeze_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_bsd_rank_squeeze_cert_v1/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_bsd_rank_squeeze_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3282,6 +3304,10 @@ FAMILY_SWEEPS = [
      _validate_bsd_partial_lseries_proxy_cert_v1_family_if_present,
      "schema + validator (exact non-reduced Π(#E(F_p)/p) proxy + manifest binding) + 3 fixtures (pass_proxy_p5_p7, pass_proxy_p5_p11, fail_wrong_proxy_denominator)", "84_bsd_partial_lseries_proxy_cert",
      "../qa_bsd_partial_lseries_proxy_cert_v1", True),
+    (85, "QA BSD Rank Squeeze Cert family",
+     _validate_bsd_rank_squeeze_cert_v1_family_if_present,
+     "schema + validator (local recompute + manifest binding + exact proxy + monotone rank-trace consistency) + 3 fixtures (pass_closed_p5_p7, pass_open_p5_p11, fail_bad_trace_crossing)", "85_bsd_rank_squeeze_cert",
+     "../qa_bsd_rank_squeeze_cert_v1", True),
 ]
 
 

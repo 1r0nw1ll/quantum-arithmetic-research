@@ -185,3 +185,17 @@ Follow the template in `QA_MAP_CANONICAL.md`:
 4. Implement recompute hooks
 5. Create example certificates (success + failure)
 6. Add entry to canonical registry
+
+## Multi-Agent Push Coordination (Required for Main)
+
+When multiple terminals/agents are active, follow this flow for any `main` push:
+
+1. Work in a dedicated clean clone/sandbox (no shared dirty tree).
+2. Stage only explicit target files (never `git add .`).
+3. Push via `tools/qa_safe_push_main.sh <allowed_path...>` instead of raw `git push`.
+4. If the script blocks on stale base or lock, resolve that first; do not force push around it.
+
+Recommended sandbox layout:
+- Human workspace: `~/signal_experiments` (manual work only)
+- Agent sandbox clone: `~/qa_agent_sandbox` (agent commits/pushes)
+- Agent artifacts outside git tree: `~/qa_agent_out/`

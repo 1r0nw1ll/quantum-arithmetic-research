@@ -186,3 +186,7 @@ qa_rt_corpus/
 # AG2 guardrails POC secrets
 ag2_guardrails_poc/.env
 ag2_guardrails_poc/OAI_CONFIG_LIST
+
+# Multi-agent local workspaces/artifacts (root-anchored)
+/workspaces/
+/qa_agent_out/

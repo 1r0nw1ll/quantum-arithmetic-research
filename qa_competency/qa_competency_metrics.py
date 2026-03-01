@@ -77,6 +77,31 @@ def control_entropy(move_probabilities: Dict[str, float]) -> float:
     return ent
 
 
+def pdi(multi_path_states: int, reachable_states: int) -> float:
+    """Path Diversity Index (PDI).
+
+    PDI = |{v ∈ R : #distinct directed paths from I to v >= 2}| / |R|
+
+    Levin mapping: extends Agency (Control Region) to capture counterfactual control.
+      PDI = 0   → tree-like deterministic expansion; no counterfactual freedom
+      PDI → 1   → rich multi-route control manifold; full counterfactual agency
+
+    (PI, PDI) quadrant interpretation:
+      PI=hi, PDI=lo  → linear deterministic explorer
+      PI=hi, PDI=hi  → flexible multi-route planner       (ideal)
+      PI=lo, PDI=hi  → stuck-loop thrashing               (cycles, no new states)
+      PI=lo, PDI=lo  → frozen — no paths, no progress
+
+    Computed by the llm_tool_agent adapter via SCC-aware BFS on condensation DAG.
+    Requires metric_inputs["multi_path_states"] for deterministic recomputation.
+    """
+    if reachable_states == 0:
+        return 0.0
+    if multi_path_states < 0:
+        raise ValueError("multi_path_states must be non-negative")
+    return float(min(multi_path_states, reachable_states)) / float(reachable_states)
+
+
 def compute_competency_metrics(
     *,
     reachable_states: int,

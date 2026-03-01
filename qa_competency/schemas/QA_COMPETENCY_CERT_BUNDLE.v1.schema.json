@@ -94,7 +94,12 @@
           "additionalProperties": { "type": "number" }
         },
         "delta_reachability": { "type": "number" },
-        "delta_perturbation": { "type": "number" }
+        "delta_perturbation": { "type": "number" },
+        "multi_path_states": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "# reachable states with >=2 distinct directed paths from initial states, counted via SCC-condensation DAG: non-trivial SCCs (cycles) saturate all internal nodes; trivial SCCs propagate path counts in topological order. Must be present when pdi is declared."
+        }
       }
     },
     "competency_metrics": {
@@ -105,7 +110,13 @@
         "agency_index": { "type": "number" },
         "plasticity_index": { "type": "number" },
         "goal_density": { "type": "number" },
-        "control_entropy": { "type": "number", "minimum": 0 }
+        "control_entropy": { "type": "number", "minimum": 0 },
+        "pdi": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1,
+          "description": "Path Diversity Index: pdi = multi_path_states / reachable_states, paths counted on the SCC-condensation DAG. 0 = tree-like deterministic expansion (no counterfactual freedom); 1 = all reachable states have multi-route access. Requires multi_path_states in metric_inputs."
+        }
       }
     },
     "system_metadata": {

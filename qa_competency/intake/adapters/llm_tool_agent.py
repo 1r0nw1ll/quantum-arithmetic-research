@@ -11,7 +11,7 @@ from __future__ import annotations
 import hashlib
 import json
 from collections import defaultdict
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Set, Tuple
 
 
 # ---------------------------------------------------------------------------
@@ -162,6 +162,89 @@ def _graph_diameter(adj: Dict[str, List[str]], nodes: set) -> int:
         if dist:
             diameter = max(diameter, max(dist.values()))
     return diameter
+
+
+# ---------------------------------------------------------------------------
+# Path Diversity Index (SCC-aware, O(|V|+|E|))
+# ---------------------------------------------------------------------------
+
+def _compute_pdi(
+    adj: Dict[str, List[str]],
+    initial_states: List[str],
+    sccs: List[List[str]],
+    reachable: set,
+) -> Tuple[float, int]:
+    """Compute Path Diversity Index using SCC-aware BFS on condensation DAG.
+
+    PDI = |{v ∈ R : #distinct directed paths from I to v >= 2}| / |R|
+
+    Correctness over naive capped-BFS: in graphs with cycles, a naive BFS
+    cannot propagate updated path counts backwards through already-processed
+    predecessors. Using the SCC condensation DAG sidesteps this:
+    - Non-trivial SCCs (size > 1) are cycles by definition → ALL states inside
+      have >= 2 directed paths (the direct path + any cycle-extended path).
+    - Trivial SCCs propagate path counts on the cycle-free condensation DAG,
+      where standard BFS propagation is exact.
+
+    Tarjan's algorithm (already called in adapt()) returns SCCs in reverse
+    topological order. iterating reversed(sccs) gives topological order
+    (sources first → sinks last), ensuring correct count propagation.
+
+    Returns (pdi_float, multi_path_states_int).
+    """
+    if not reachable:
+        return 0.0, 0
+
+    # Map node → SCC index
+    node_to_scc: Dict[str, int] = {}
+    for idx, scc in enumerate(sccs):
+        for node in scc:
+            node_to_scc[node] = idx
+
+    # Per-SCC path count initialised from initial states (capped at 2)
+    scc_path: Dict[int, int] = defaultdict(int)
+    for s in initial_states:
+        if s in reachable:
+            idx = node_to_scc.get(s)
+            if idx is not None:
+                scc_path[idx] = min(scc_path[idx] + 1, 2)
+
+    # Condensation adjacency: scc_idx → set of successor scc_idx (reachable only)
+    cond_adj: Dict[int, set] = defaultdict(set)
+    for u in reachable:
+        u_scc = node_to_scc.get(u)
+        if u_scc is None:
+            continue
+        for v in adj.get(u, []):
+            if v not in reachable:
+                continue
+            v_scc = node_to_scc.get(v)
+            if v_scc is not None and v_scc != u_scc:
+                cond_adj[u_scc].add(v_scc)
+
+    # Sweep in topological order (Tarjan returns reverse-topo → iterate reversed)
+    multi_path: set = set()
+    for scc in reversed(sccs):
+        scc_idx = node_to_scc[scc[0]]
+        in_reachable = [n for n in scc if n in reachable]
+        if not in_reachable:
+            continue
+
+        if len(scc) > 1:
+            # Non-trivial SCC (directed cycle): every state inside has >= 2 paths
+            for node in in_reachable:
+                multi_path.add(node)
+            scc_path[scc_idx] = 2  # saturate for downstream propagation
+        elif scc_path[scc_idx] >= 2:
+            # Trivial SCC with >= 2 incoming path-classes
+            multi_path.add(scc[0])
+
+        # Propagate to condensation successors
+        for succ_idx in cond_adj[scc_idx]:
+            scc_path[succ_idx] = min(scc_path[succ_idx] + scc_path[scc_idx], 2)
+
+    multi_path_count = len(multi_path)
+    return (float(multi_path_count) / float(len(reachable))), multi_path_count
 
 
 # ---------------------------------------------------------------------------
@@ -344,6 +427,9 @@ def adapt(
         delta_perturbation=1,
     )
 
+    # ---- 14b. Path Diversity Index (SCC-aware) ------------------------
+    pdi_value, multi_path_states = _compute_pdi(adj, initial_states, sccs, reachable)
+
     # ---- 15. Assemble cert dict ---------------------------------------
     cert: Dict[str, Any] = {
         "schema_id": "QA_COMPETENCY_DETECTION_FRAMEWORK.v1",
@@ -388,8 +474,9 @@ def adapt(
             "move_probabilities": move_probabilities,
             "delta_reachability": 0,
             "delta_perturbation": 1,
+            "multi_path_states": multi_path_states,
         },
-        "competency_metrics": metrics.as_dict(),
+        "competency_metrics": {**metrics.as_dict(), "pdi": pdi_value},
         "validation": {
             "validator": "qa_competency_validator.py",
             "hash": "sha256:" + HEX64_ZERO,

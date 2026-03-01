@@ -215,6 +215,50 @@ def _recompute_metrics(cert: Dict[str, Any], tol: float = 1e-9) -> None:
                 },
             )
 
+    # Gate 4b: PDI consistency (bidirectional: both fields must appear together)
+    if "multi_path_states" in mi:
+        try:
+            from qa_competency.qa_competency_metrics import pdi as _pdi
+        except ImportError:
+            from qa_competency_metrics import pdi as _pdi
+
+        multi_path_states = int(mi["multi_path_states"])
+        reachable_states_for_pdi = int(mi.get("reachable_states", 0))
+        computed_pdi = _pdi(multi_path_states, reachable_states_for_pdi)
+
+        declared_pdi = declared.get("pdi")
+        if declared_pdi is None:
+            raise ValidationError(
+                fail_type="PDI_MISMATCH",
+                invariant_diff={
+                    "issue": "multi_path_states declared but pdi absent from competency_metrics",
+                    "computed_pdi": computed_pdi,
+                    "multi_path_states": multi_path_states,
+                },
+            )
+        if abs(float(declared_pdi) - computed_pdi) > tol:
+            raise ValidationError(
+                fail_type="PDI_MISMATCH",
+                invariant_diff={
+                    "field": "pdi",
+                    "declared": float(declared_pdi),
+                    "computed": computed_pdi,
+                    "multi_path_states": multi_path_states,
+                    "reachable_states": reachable_states_for_pdi,
+                },
+            )
+    else:
+        # Dual guard: pdi without multi_path_states has no verifiable input basis
+        if "pdi" in declared:
+            raise ValidationError(
+                fail_type="PDI_INPUT_MISSING",
+                invariant_diff={
+                    "issue": "pdi declared in competency_metrics but multi_path_states absent from metric_inputs",
+                    "declared_pdi": float(declared["pdi"]),
+                    "rule": "pdi requires multi_path_states in metric_inputs for deterministic recomputation",
+                },
+            )
+
 
 # ---------------------------------------------------------------------------
 # Semantic checks

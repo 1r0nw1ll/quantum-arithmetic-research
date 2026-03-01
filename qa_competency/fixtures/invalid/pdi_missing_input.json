@@ -1,0 +1,58 @@
+{
+  "_expected_fail_type": "PDI_INPUT_MISSING",
+  "schema_id": "QA_COMPETENCY_DETECTION_FRAMEWORK.v1",
+  "system_metadata": {
+    "domain": "test",
+    "substrate": "fixture",
+    "description": "Invalid cert: pdi declared in competency_metrics but multi_path_states absent from metric_inputs"
+  },
+  "state_space": {
+    "dimension": 2,
+    "coordinates": ["x", "y"],
+    "constraints": []
+  },
+  "generators": [
+    {"id": "step_a", "description": "Step via route A", "action": "step_a"},
+    {"id": "step_b", "description": "Step via route B", "action": "step_b"}
+  ],
+  "invariants": [],
+  "reachability": {
+    "components": 1,
+    "diameter": 4,
+    "obstructions": []
+  },
+  "graph_snapshot": {
+    "hash_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "time_window": {
+      "start_utc": "2026-02-09T00:00:00Z",
+      "end_utc": "2026-02-09T00:00:00Z"
+    },
+    "edge_semantics": "generator-edges: apply generator id to state yields next-state"
+  },
+  "metric_inputs": {
+    "reachable_states": 5,
+    "total_states": 8,
+    "attractor_basins": 2,
+    "move_probabilities": {"step_a": 0.5, "step_b": 0.5},
+    "delta_reachability": 0.0,
+    "delta_perturbation": 0.0
+  },
+  "competency_metrics": {
+    "agency_index": 0.625,
+    "plasticity_index": 0.0,
+    "goal_density": 0.25,
+    "control_entropy": 0.6931471805599453,
+    "pdi": 0.6
+  },
+  "validation": {
+    "validator": "qa_competency_validator.py",
+    "hash": "sha256:0000000000000000000000000000000000000000000000000000000000000000",
+    "reproducibility_seed": 1
+  },
+  "examples": ["fixture_invalid_pdi_missing_input"],
+  "manifest": {
+    "manifest_version": 1,
+    "hash_alg": "sha256_canonical",
+    "canonical_json_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+  }
+}

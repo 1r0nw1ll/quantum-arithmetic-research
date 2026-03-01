@@ -34,7 +34,7 @@ from typing import Any, Dict, List, Set, Optional, Tuple
 
 # Scanner identification
 SCANNER_ID = "qa_guardrail.threat_scanner"
-SCANNER_VERSION = "1.2.1"
+SCANNER_VERSION = "1.3.0"
 
 # Domain tag for receipt hash (prevents collision with other sha256-of-json objects)
 RECEIPT_HASH_DOMAIN = "QA_IC_VERIFICATION_RECEIPT.v1\n"
@@ -52,8 +52,14 @@ MALICIOUS_PATTERNS: Set[str] = {
     "ignore all prior instructions",
     "ignore the above instructions",
     "ignore all preceding orders",
+    "ignore everything above",
+    "ignore the above",
+    "ignore above",
     "disregard previous",
+    "disregard instructions",
+    "disregard the above",
     "forget previous",
+    "forget the rules",
     "forget all previous tasks",
     "forget all previous assignments",
     "forget about all assignments",
@@ -110,6 +116,36 @@ ADVERSARIAL_PATTERNS: Set[str] = {
     "you are now",
 }
 
+# Regex rules for high-recall variants that are too broad for exact string matching.
+MALICIOUS_REGEX_RULES: Dict[str, str] = {
+    "reveal secret": r"\b(reveal|show|print|output|tell(?:\s+me)?)\b.{0,64}\b(secret|password|access code|api key|token|system prompt)\b",
+}
+ADVERSARIAL_REGEX_RULES: Dict[str, str] = {
+    "ignore previous instructions": r"\bignore\b.{0,48}\b(previous|prior|above|earlier|all|everything)\b",
+    "forget previous": r"\bforget\b.{0,40}\b(previous|prior|rules?|instructions?|above)\b",
+    "disregard previous": r"\bdisregard\b.{0,40}\b(previous|prior|rules?|instructions?|above|prompt)\b",
+}
+
+# Context cues used to suppress quoted/defensive mentions.
+QUOTED_SPAN_RE = re.compile(r'"[^"\n]{1,400}"|\'[^\'\n]{1,400}\'')
+MENTION_CUE_RE = re.compile(
+    r"\b("
+    r"example|for example|e\.g\.|quoted|quote|attacker says|user says|"
+    r"if user says|if the user says|literal string|defense|defensive"
+    r")\b"
+)
+NEGATED_PREFIX_NEAR_RE = re.compile(
+    r"(?:\bdo not\b|\bdon't\b|\bnever\b|\bmust not\b|\bshould not\b|\bcannot\b|\bcan't\b|\bavoid\b|\brefuse to\b|\bdecline to\b)"
+    r"(?:[\s,:-]+\w+){0,4}\s*$"
+)
+CONTEXTUAL_LABELS: Set[str] = {
+    "execute",
+    "ignore previous instructions",
+    "forget previous",
+    "disregard previous",
+    "reveal secret",
+}
+
 # Combined pattern set for quick lookup
 ALL_THREAT_PATTERNS = MALICIOUS_PATTERNS | MALFORMED_PATTERNS | ADVERSARIAL_PATTERNS
 
@@ -149,6 +185,10 @@ def patterns_sha256(
         lines.append(f"malformed:{p}")
     for p in sorted(adv):
         lines.append(f"adversarial:{p}")
+    for label, expr in sorted(MALICIOUS_REGEX_RULES.items()):
+        lines.append(f"malicious_regex:{label}:{expr}")
+    for label, expr in sorted(ADVERSARIAL_REGEX_RULES.items()):
+        lines.append(f"adversarial_regex:{label}:{expr}")
 
     return _sha256("\n".join(lines))
 
@@ -202,6 +242,15 @@ class ThreatScanner:
         self.malicious_patterns = malicious_patterns or MALICIOUS_PATTERNS
         self.malformed_patterns = malformed_patterns or MALFORMED_PATTERNS
         self.adversarial_patterns = adversarial_patterns or ADVERSARIAL_PATTERNS
+        self._compiled_malicious = self._compile_literal_patterns(self.malicious_patterns)
+        self._compiled_malformed = self._compile_literal_patterns(self.malformed_patterns)
+        self._compiled_adversarial = self._compile_literal_patterns(self.adversarial_patterns)
+        self._compiled_malicious_regex = {
+            label: re.compile(expr) for label, expr in MALICIOUS_REGEX_RULES.items()
+        }
+        self._compiled_adversarial_regex = {
+            label: re.compile(expr) for label, expr in ADVERSARIAL_REGEX_RULES.items()
+        }
 
     def scan(self, content: str) -> Dict[str, Any]:
         """
@@ -225,45 +274,112 @@ class ThreatScanner:
             "all_patterns": [],
         }
 
-        # Check malicious patterns
-        for pattern in sorted(self.malicious_patterns):
-            if self._match_pattern(pattern, content_lower):
-                result["malicious"].append(pattern)
-                result["all_patterns"].append(pattern)
+        quoted_spans = [m.span() for m in QUOTED_SPAN_RE.finditer(content_lower)]
 
-        # Check malformed patterns
-        for pattern in sorted(self.malformed_patterns):
-            if self._match_pattern(pattern, content_lower):
-                result["malformed"].append(pattern)
-                result["all_patterns"].append(pattern)
+        # Check literal malicious/malformed/adversarial patterns
+        self._scan_literal_category(
+            compiled_patterns=self._compiled_malicious,
+            content=content_lower,
+            quoted_spans=quoted_spans,
+            out=result["malicious"],
+        )
+        self._scan_literal_category(
+            compiled_patterns=self._compiled_malformed,
+            content=content_lower,
+            quoted_spans=quoted_spans,
+            out=result["malformed"],
+        )
+        self._scan_literal_category(
+            compiled_patterns=self._compiled_adversarial,
+            content=content_lower,
+            quoted_spans=quoted_spans,
+            out=result["adversarial"],
+        )
 
-        # Check adversarial patterns
-        for pattern in sorted(self.adversarial_patterns):
-            if self._match_pattern(pattern, content_lower):
-                result["adversarial"].append(pattern)
-                result["all_patterns"].append(pattern)
+        # Check regex rules for broader prompt-injection coverage.
+        self._scan_regex_category(
+            compiled_rules=self._compiled_malicious_regex,
+            content=content_lower,
+            quoted_spans=quoted_spans,
+            out=result["malicious"],
+        )
+        self._scan_regex_category(
+            compiled_rules=self._compiled_adversarial_regex,
+            content=content_lower,
+            quoted_spans=quoted_spans,
+            out=result["adversarial"],
+        )
 
         # Enforce deterministic ordering and uniqueness in outputs.
         result["malicious"] = sorted(set(result["malicious"]))
         result["malformed"] = sorted(set(result["malformed"]))
         result["adversarial"] = sorted(set(result["adversarial"]))
-        result["all_patterns"] = sorted(set(result["all_patterns"]))
+        result["all_patterns"] = sorted(
+            set(result["malicious"] + result["malformed"] + result["adversarial"])
+        )
         result["threats_found"] = len(result["all_patterns"]) > 0
         return result
 
-    def _match_pattern(self, pattern: str, content: str) -> bool:
-        """
-        Match pattern with word boundaries to avoid false positives.
+    def _compile_literal_patterns(self, patterns: Set[str]) -> Dict[str, re.Pattern]:
+        compiled: Dict[str, re.Pattern] = {}
+        for pattern in patterns:
+            if " " in pattern:
+                compiled[pattern] = re.compile(re.escape(pattern))
+            else:
+                compiled[pattern] = re.compile(r"\b" + re.escape(pattern) + r"\b")
+        return compiled
 
-        For multi-word patterns, uses simple containment.
-        For single-word patterns, uses word boundary regex.
-        """
-        if " " in pattern:
-            # Multi-word pattern: simple containment
-            return pattern in content
-        else:
-            # Single word: use word boundary
-            return bool(re.search(r'\b' + re.escape(pattern) + r'\b', content))
+    def _scan_literal_category(
+        self,
+        compiled_patterns: Dict[str, re.Pattern],
+        content: str,
+        quoted_spans: List[Tuple[int, int]],
+        out: List[str],
+    ) -> None:
+        for label in sorted(compiled_patterns):
+            regex = compiled_patterns[label]
+            for m in regex.finditer(content):
+                if not self._suppress_contextual_mention(label, content, m.start(), m.end(), quoted_spans):
+                    out.append(label)
+                    break
+
+    def _scan_regex_category(
+        self,
+        compiled_rules: Dict[str, re.Pattern],
+        content: str,
+        quoted_spans: List[Tuple[int, int]],
+        out: List[str],
+    ) -> None:
+        for label in sorted(compiled_rules):
+            regex = compiled_rules[label]
+            for m in regex.finditer(content):
+                if not self._suppress_contextual_mention(label, content, m.start(), m.end(), quoted_spans):
+                    out.append(label)
+                    break
+
+    def _suppress_contextual_mention(
+        self,
+        label: str,
+        content: str,
+        start: int,
+        end: int,
+        quoted_spans: List[Tuple[int, int]],
+    ) -> bool:
+        if label not in CONTEXTUAL_LABELS:
+            return False
+
+        prefix = content[max(0, start - 96):start]
+        in_quotes = any(q_start <= start and end <= q_end for q_start, q_end in quoted_spans)
+
+        # Suppress explicit negated mentions, e.g. "do not ignore previous instructions".
+        if NEGATED_PREFIX_NEAR_RE.search(prefix):
+            return True
+
+        # Suppress quoted mention contexts, e.g. "If user says 'ignore previous...', reject it."
+        if in_quotes and MENTION_CUE_RE.search(prefix):
+            return True
+
+        return False
 
     def is_safe(self, content: str) -> bool:
         """Quick check: returns True if no threats found."""

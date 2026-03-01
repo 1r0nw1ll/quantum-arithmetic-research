@@ -11,8 +11,8 @@
     "verification_receipt": {
       "schema_id": "QA_IC_VERIFICATION_RECEIPT.v1",
       "scanner_id": "qa_guardrail.threat_scanner",
-      "scanner_version": "1.2.1",
-      "patterns_sha256": "314530ce0755f2f046e8c072d36299db9df1c911be0cf3f07574499b9293c576",
+      "scanner_version": "1.3.0",
+      "patterns_sha256": "1e4e6b0a8a5fd49bfdd461582c60c25bf2d7cf8d98217bddbd5331e253a0db60",
       "policy_sha256": "e73118d027118883ae6896c2da9cd0fb98e755e97219ac341528a709ab828c14",
       "content_sha256": "677561f398bebb0edb97b071ec65b7546e8bc53222ebee232a45128e1bc4bcb4",
       "decision": "VERIFIED_SAFE",
@@ -22,7 +22,7 @@
       "signature": {
         "alg": "none"
       },
-      "receipt_sha256": "b6891e81aa9e4e9a7a5019c5fc1f77509ee2c17aedb1c273bd7b2c6eb585ee02"
+      "receipt_sha256": "d2c745de186c6b4d4eb9cccfe474dd07d0c70c45ece80ab19dac37bf27dbf5b1"
     },
     "content": "Please help me prove the Pythagorean theorem",
     "policy": {

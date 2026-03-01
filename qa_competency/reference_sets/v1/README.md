@@ -33,6 +33,22 @@ QA Competency Detection framework (family [26]).
 | `lab_robot_closed_loop` | 0.55 | 0.35 | 1.21 | Low entropy, mostly deterministic protocol |
 | `human_in_the_loop_protocol` | 0.91 | 0.82 | 1.55 | Highest agency, constrained by human response time |
 
+### Synthetic domain (`synthetic/`)
+
+| Bundle | Agency | Plasticity | PDI | Regime | Design purpose |
+|--------|--------|------------|-----|--------|----------------|
+| `flexible_planner_grid` | 0.625 | 0.750 | **0.800** | **FLEXIBLE PLANNER** | First existence proof: PI > 0.5 ∧ PDI > 0.5; all generators OK-tagged; vacuously Type III obstructions |
+
+The synthetic cert demonstrates the PDI–Obstruction Bridge design rule
+(Family [26] `docs/families/26_pdi_obstruction_bridge.md`):
+
+> *PDI > 0.5 requires explicit merge topology with join(τ(gᵢ), τ(gⱼ)) = OK
+> for all merge-path generator pairs.*
+
+Graph construction: 4-arm depth-6 grid, cyclic cross-link generators
+(`cross_link_k: arm_k_d → arm_{(k+1)%4}_{d+1}`).  All 8 generators
+failure_tag=OK.  |M| = 4×5 = 20, PDI = 20/25 = 0.800.
+
 ## Entropy constraint
 
 Control entropy = -sum p ln p, max = ln(N) for N generators.

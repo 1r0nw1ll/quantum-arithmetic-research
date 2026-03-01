@@ -52,6 +52,9 @@ python qa_competency/qa_competency_validator.py --validate-bundle \
 # Recompute manifest hashes
 python qa_competency/qa_competency_validator.py --rehash
 
+# Run Levin->QA mapping audit (core bundle + reference sets)
+python qa_competency/qa_competency_validator.py --levin-audit
+
 # Or via meta-validator
 cd qa_alphageometry_ptolemy
 python qa_meta_validator.py
@@ -83,6 +86,19 @@ python qa_meta_validator.py
   Placeholder sentinel: 64 hex zeros.
 - `reproducibility_seed` in `validation` block enables deterministic replay.
 
+### Levin mapping validation gates
+
+- **Competency -> Reachability**:
+  validates `0 <= reachable_states <= total_states` plus component consistency
+  (`reachable_states == 0 => components == 0`; `reachable_states > 0 => components >= 1`).
+- **Goal -> Attractor basin**:
+  validates `0 <= attractor_basins <= reachable_states`.
+- **Memory -> Invariant**:
+  invariant names must be unique; memory-signaling certs must include at least one invariant.
+- **Agency -> Control region**:
+  move-probability support must be a subset of generator IDs;
+  entropy must satisfy `H <= ln(k)` where `k` is support size; singleton support requires `H = 0`.
+
 ## Failure modes
 
 | fail_type | Meaning | invariant_diff | Fix |
@@ -91,6 +107,10 @@ python qa_meta_validator.py
 | `MISSING_REQUIRED_BLOCK` | Required block absent | `{"missing": [...]}` | Add the missing block |
 | `METRIC_MISMATCH` | Declared metric != recomputed | `{"field": "...", "declared": ..., "computed": ...}` | Correct metric or inputs |
 | `MANIFEST_HASH_MISMATCH` | Manifest hash wrong | `{"claimed": "...", "computed": "..."}` | Run `--rehash` |
+| `LEVIN_COMPETENCY_REACHABILITY_MISMATCH` | Competency/reachability mapping broken | `{"rule": "...", ...}` | Repair reachability counts/components |
+| `LEVIN_GOAL_ATTRACTOR_MISMATCH` | Goal/attractor mapping broken | `{"rule": "...", ...}` | Ensure attractor basins are reachable |
+| `LEVIN_MEMORY_INVARIANT_MISMATCH` | Memory/invariant mapping broken | `{"rule": "...", ...}` | Add/fix invariant witnesses |
+| `LEVIN_AGENCY_CONTROL_MISMATCH` | Agency/control mapping broken | `{"rule": "...", ...}` | Align generator support and entropy bounds |
 
 ## Example
 
@@ -158,6 +178,7 @@ domains (bio, AI, hybrid). Nine bundles total, each a valid
 Validate with:
 ```bash
 python qa_competency/qa_competency_validator.py --reference-sets
+python qa_competency/qa_competency_validator.py --levin-audit
 ```
 
 Reference sets are also validated during the family sweep (`validate_all`).
@@ -165,4 +186,5 @@ Reference sets are also validated during the family sweep (`validate_all`).
 ## Changelog
 
 - **v1.1.0** (2026-02-09): Add reference pack v1 (9 bundles across bio/AI/hybrid).
+- **v1.2.0** (2026-03-01): Add explicit Levin mapping semantic gates + `--levin-audit`.
 - **v1.0.0** (2026-02-09): Initial release. Levin-aligned competency framework.

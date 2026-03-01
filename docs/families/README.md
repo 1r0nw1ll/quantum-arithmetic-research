@@ -20,7 +20,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [22] | [QA Ingest->View Bridge](22_ingest_view_bridge.md) | Triplet | PASS |
 | [23] | [QA Ingestion](23_ingestion.md) | Triplet | PASS |
 | [24] | [QA SVP-CMC](24_svp_cmc.md) | Triplet + Ledger | PASS |
-| [26] | [QA Competency Detection](26_competency_detection.md) | Bundle + Metrics | PASS |
+| [26] | [QA Competency Detection](26_competency_detection.md) | Bundle + Metrics + Levin mapping semantic gates (`--levin-audit`) | PASS |
 | [27] | [QA Elliptic Correspondence](27_elliptic_correspondence.md) | Bundle + Deterministic Replay | PASS |
 | [28] | [QA Graph Structure](28_graph_structure.md) | Bundle + Paired Deltas | PASS |
 | [29] | [QA Agent Traces](29_agent_traces.md) | Schema + Validator + Fixtures | PASS |

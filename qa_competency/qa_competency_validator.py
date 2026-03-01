@@ -14,6 +14,7 @@ Usage:
     python qa_competency_validator.py --fixtures
     python qa_competency_validator.py --validate-bundle path/to/bundle.json
     python qa_competency_validator.py --reference-sets
+    python qa_competency_validator.py --levin-audit [path/to/bundle.json]
 """
 from __future__ import annotations
 
@@ -21,6 +22,7 @@ import argparse
 import copy
 import hashlib
 import json
+import math
 import os
 import sys
 from dataclasses import dataclass, field
@@ -225,6 +227,224 @@ REQUIRED_CERT_BLOCKS = [
 ]
 
 
+MEMORY_KEYWORDS = (
+    "memory",
+    "retain",
+    "retention",
+    "recall",
+    "remember",
+    "persistence",
+)
+
+
+def _contains_memory_signal(cert: Dict[str, Any]) -> bool:
+    """Heuristic: cert text indicates a memory-competency claim."""
+    desc = str(cert.get("system_metadata", {}).get("description", "")).lower()
+    examples = " ".join(str(x).lower() for x in cert.get("examples", []))
+    joined = f"{desc} {examples}"
+    return any(k in joined for k in MEMORY_KEYWORDS)
+
+
+def _levin_witness(cert: Dict[str, Any], tol: float = 1e-9) -> Dict[str, Any]:
+    """
+    Build deterministic Levin→QA witness values from cert fields.
+
+    Mapping:
+      Competency -> Reachability
+      Goal       -> Attractor basin
+      Memory     -> Invariants
+      Agency     -> Control region (generator support + entropy bounds)
+    """
+    mi = cert["metric_inputs"]
+    cm = cert["competency_metrics"]
+    reach = cert["reachability"]
+    gens = cert["generators"]
+    invs = cert["invariants"]
+
+    reachable_states = int(mi["reachable_states"])
+    total_states = int(mi["total_states"])
+    attractor_basins = int(mi["attractor_basins"])
+
+    move_probs_raw = mi.get("move_probabilities") or {}
+    move_probs: Dict[str, float] = {}
+    for k, v in move_probs_raw.items():
+        fv = float(v)
+        if fv > 0.0:
+            move_probs[str(k)] = fv
+
+    generator_ids = [str(g["id"]) for g in gens]
+    generator_set = set(generator_ids)
+    support = sorted(move_probs.keys())
+    support_size = len(support)
+
+    entropy_upper_bound = 0.0 if support_size == 0 else math.log(float(support_size))
+    control_entropy = float(cm["control_entropy"])
+
+    memory_signal = _contains_memory_signal(cert)
+    invariant_names = [str(inv["name"]) for inv in invs]
+
+    return {
+        "competency_reachability": {
+            "reachable_states": reachable_states,
+            "total_states": total_states,
+            "agency_index": float(cm["agency_index"]),
+            "components": int(reach["components"]),
+            "diameter": int(reach["diameter"]),
+            "reachable_ratio": 0.0 if total_states == 0 else (reachable_states / float(total_states)),
+            "tol": tol,
+        },
+        "goal_attractor": {
+            "attractor_basins": attractor_basins,
+            "goal_density": float(cm["goal_density"]),
+            "basin_ratio_total": 0.0 if total_states == 0 else (attractor_basins / float(total_states)),
+            "basin_ratio_reachable": 0.0 if reachable_states == 0 else (attractor_basins / float(reachable_states)),
+            "tol": tol,
+        },
+        "memory_invariant": {
+            "memory_signal_detected": memory_signal,
+            "invariant_count": len(invariant_names),
+            "invariant_names": invariant_names,
+        },
+        "agency_control_region": {
+            "generator_count": len(generator_ids),
+            "generator_ids": generator_ids,
+            "control_support": support,
+            "control_support_size": support_size,
+            "control_entropy": control_entropy,
+            "entropy_upper_bound_ln_k": entropy_upper_bound,
+            "tol": tol,
+        },
+    }
+
+
+def _validate_levin_mapping(cert: Dict[str, Any], tol: float = 1e-9) -> None:
+    """Validate Levin-to-QA mapping claims encoded by core cert fields."""
+    w = _levin_witness(cert, tol=tol)
+
+    comp = w["competency_reachability"]
+    goal = w["goal_attractor"]
+    mem = w["memory_invariant"]
+    agency = w["agency_control_region"]
+
+    reachable_states = int(comp["reachable_states"])
+    total_states = int(comp["total_states"])
+    components = int(comp["components"])
+    attractor_basins = int(goal["attractor_basins"])
+
+    # Competency -> Reachability
+    if not (0 <= reachable_states <= total_states):
+        raise ValidationError(
+            fail_type="LEVIN_COMPETENCY_REACHABILITY_MISMATCH",
+            invariant_diff={
+                "reachable_states": reachable_states,
+                "total_states": total_states,
+                "rule": "0 <= reachable_states <= total_states",
+            },
+        )
+    if reachable_states == 0 and components != 0:
+        raise ValidationError(
+            fail_type="LEVIN_COMPETENCY_REACHABILITY_MISMATCH",
+            invariant_diff={
+                "reachable_states": reachable_states,
+                "components": components,
+                "rule": "if reachable_states == 0 then components == 0",
+            },
+        )
+    if reachable_states > 0 and components < 1:
+        raise ValidationError(
+            fail_type="LEVIN_COMPETENCY_REACHABILITY_MISMATCH",
+            invariant_diff={
+                "reachable_states": reachable_states,
+                "components": components,
+                "rule": "if reachable_states > 0 then components >= 1",
+            },
+        )
+
+    # Goal -> Attractor basin
+    if not (0 <= attractor_basins <= reachable_states):
+        raise ValidationError(
+            fail_type="LEVIN_GOAL_ATTRACTOR_MISMATCH",
+            invariant_diff={
+                "attractor_basins": attractor_basins,
+                "reachable_states": reachable_states,
+                "rule": "0 <= attractor_basins <= reachable_states",
+            },
+        )
+
+    # Memory -> Invariants
+    inv_names = mem["invariant_names"]
+    if len(inv_names) != len(set(inv_names)):
+        raise ValidationError(
+            fail_type="LEVIN_MEMORY_INVARIANT_MISMATCH",
+            invariant_diff={
+                "invariant_names": inv_names,
+                "rule": "invariant names must be unique",
+            },
+        )
+    if mem["memory_signal_detected"] and int(mem["invariant_count"]) == 0:
+        raise ValidationError(
+            fail_type="LEVIN_MEMORY_INVARIANT_MISMATCH",
+            invariant_diff={
+                "memory_signal_detected": True,
+                "invariant_count": 0,
+                "rule": "memory-signaling certs must include at least one invariant",
+            },
+        )
+
+    # Agency -> Control region
+    generator_ids = agency["generator_ids"]
+    if len(generator_ids) != len(set(generator_ids)):
+        raise ValidationError(
+            fail_type="LEVIN_AGENCY_CONTROL_MISMATCH",
+            invariant_diff={
+                "generator_ids": generator_ids,
+                "rule": "generator ids must be unique",
+            },
+        )
+    support = agency["control_support"]
+    unknown = sorted([g for g in support if g not in set(generator_ids)])
+    if unknown:
+        raise ValidationError(
+            fail_type="LEVIN_AGENCY_CONTROL_MISMATCH",
+            invariant_diff={
+                "unknown_move_probability_generators": unknown,
+                "generator_ids": generator_ids,
+            },
+        )
+    support_size = int(agency["control_support_size"])
+    if reachable_states > 1 and support_size == 0:
+        raise ValidationError(
+            fail_type="LEVIN_AGENCY_CONTROL_MISMATCH",
+            invariant_diff={
+                "reachable_states": reachable_states,
+                "control_support_size": support_size,
+                "rule": "non-trivial reachable space requires non-empty control support",
+            },
+        )
+
+    control_entropy = float(agency["control_entropy"])
+    entropy_upper_bound = float(agency["entropy_upper_bound_ln_k"])
+    if control_entropy > entropy_upper_bound + tol:
+        raise ValidationError(
+            fail_type="LEVIN_AGENCY_CONTROL_MISMATCH",
+            invariant_diff={
+                "control_entropy": control_entropy,
+                "entropy_upper_bound_ln_k": entropy_upper_bound,
+                "support_size": support_size,
+                "rule": "H <= ln(k)",
+            },
+        )
+    if support_size == 1 and abs(control_entropy) > tol:
+        raise ValidationError(
+            fail_type="LEVIN_AGENCY_CONTROL_MISMATCH",
+            invariant_diff={
+                "control_entropy": control_entropy,
+                "support_size": support_size,
+                "rule": "H == 0 for singleton support",
+            },
+        )
+
+
 def _semantic_checks(cert: Dict[str, Any]) -> None:
     """Verify required blocks and schema_id."""
     if cert.get("schema_id") != "QA_COMPETENCY_DETECTION_FRAMEWORK.v1":
@@ -268,6 +488,7 @@ def validate_cert(
             _jsonschema_validate(cert, schema)
         _semantic_checks(cert)
         _recompute_metrics(cert, tol=metric_tol)
+        _validate_levin_mapping(cert, tol=metric_tol)
         if verify_manifest:
             _enforce_manifest(cert, "cert")
         return ValidationResult(ok=True)
@@ -323,6 +544,7 @@ def validate_bundle(
                 )
             _semantic_checks(cert)
             _recompute_metrics(cert, tol=metric_tol)
+            _validate_levin_mapping(cert, tol=metric_tol)
             if verify_manifest:
                 _enforce_manifest(cert, f"cert[{idx}]")
 
@@ -380,6 +602,46 @@ def validate_reference_sets() -> Dict[str, Any]:
         "failed": failed,
         "tests": results,
     }
+
+
+def run_levin_audit(bundle_path: Optional[str] = None) -> Dict[str, Any]:
+    """
+    Deterministic audit report for Levin->QA mapping witnesses.
+
+    If bundle_path is provided, audits only that bundle.
+    Otherwise audits core bundle + all reference-set bundles.
+    """
+    base = Path(__file__).parent
+    targets: List[Path] = []
+    if bundle_path:
+        targets = [Path(bundle_path)]
+    else:
+        core = base / "certs" / "QA_COMPETENCY_CERT_BUNDLE.v1.json"
+        if core.exists():
+            targets.append(core)
+        targets.extend(_reference_set_paths())
+
+    rows: List[Dict[str, Any]] = []
+    for p in targets:
+        bundle = _load_json(str(p))
+        certs = bundle.get("certs", [])
+        for idx, cert in enumerate(certs):
+            _validate_levin_mapping(cert, tol=1e-9)
+            w = _levin_witness(cert, tol=1e-9)
+            rows.append(
+                {
+                    "bundle": str(p.relative_to(base) if str(p).startswith(str(base)) else p),
+                    "cert_index": idx,
+                    "domain": cert.get("system_metadata", {}).get("domain", ""),
+                    "substrate": cert.get("system_metadata", {}).get("substrate", ""),
+                    "competency_reachability": w["competency_reachability"],
+                    "goal_attractor": w["goal_attractor"],
+                    "memory_invariant": w["memory_invariant"],
+                    "agency_control_region": w["agency_control_region"],
+                }
+            )
+
+    return {"ok": True, "cert_count": len(rows), "witness_rows": rows}
 
 
 def validate_all(*, bundle_path: str, reference_sets: bool = True) -> None:
@@ -583,6 +845,13 @@ def main(argv: Optional[List[str]] = None) -> int:
     ap.add_argument("--validate-bundle", metavar="PATH", help="Validate a bundle file")
     ap.add_argument("--reference-sets", action="store_true",
                     help="Validate all reference-set bundles")
+    ap.add_argument(
+        "--levin-audit",
+        nargs="?",
+        const="__default__",
+        metavar="BUNDLE_PATH",
+        help="Run Levin->QA mapping audit on core+reference sets (default) or a specific bundle path",
+    )
     ap.add_argument("--json", action="store_true", help="Output as JSON")
     args = ap.parse_args(argv)
 
@@ -642,8 +911,29 @@ def main(argv: Optional[List[str]] = None) -> int:
             print(json.dumps(result, indent=2))
         return 0 if result["ok"] else 1
 
+    if args.levin_audit is not None:
+        bundle_path = None if args.levin_audit == "__default__" else args.levin_audit
+        if bundle_path:
+            print(f"[Competency] Levin audit on bundle: {bundle_path}")
+        else:
+            print("[Competency] Levin audit on core bundle + reference sets...")
+        try:
+            result = run_levin_audit(bundle_path=bundle_path)
+            print(
+                "[Competency] Levin audit: PASS "
+                f"({result['cert_count']} cert(s) with validated mapping witnesses)"
+            )
+            if args.json:
+                print(json.dumps(result, indent=2))
+            return 0
+        except ValidationError as e:
+            print(f"[Competency] Levin audit: FAIL ({e.fail_type})")
+            if args.json:
+                print(json.dumps(e.to_dict(), indent=2))
+            return 1
+
     print("Usage: qa_competency_validator.py --demo | --rehash | --fixtures "
-          "| --validate-bundle PATH | --reference-sets")
+          "| --validate-bundle PATH | --reference-sets | --levin-audit [BUNDLE_PATH]")
     return 2
 
 

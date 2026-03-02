@@ -418,18 +418,18 @@ Total complexity: $O(|V|+|E|)$.
 
 \begin{remark}[Terminal behavior classification]
   \label{rem:terminal}
-  In a finite deterministic system, every trajectory eventually enters
-  a sink SCC (since the system becomes periodic).
-  Four terminal behaviors are possible:
-  (A)~trivial sink SCC: fixed-point convergence;
-  (B)~non-trivial, $C \cap M = \emptyset$: simple periodicity, no
-  multi-path states on the orbit;
-  (C)~non-trivial, $C \subseteq M$: structural thrashing
-  (Theorem~\ref{thm:thrash}(c));
-  (D)~non-trivial, $0 < |C \cap M| < |C|$: mixed cycling.
-  Case (C) requires $C \subseteq M$, which by Lemma~\ref{lem:scc_sat}
-  holds iff $\mathrm{cnt}[C] = 2$, i.e., the SCC was reached via
-  $\geq 2$ distinct SCC-paths from $I$.
+  In a finite deterministic system, every trajectory eventually becomes
+  periodic (pigeonhole on $V$), so $C_\omega$ is well-defined.
+  Three terminal behaviors are possible:
+  (A)~$C_\omega$ trivial: fixed-point convergence;
+  (B)~$C_\omega$ non-trivial, $\mathrm{cnt}[C_\omega] = 1$: simple
+  periodicity, no multi-path state on the orbit;
+  (C)~$C_\omega$ non-trivial, $\mathrm{cnt}[C_\omega] = 2$: structural
+  thrashing (Theorem~\ref{thm:thrash_iff}).
+  A fourth case $0 < |C_\omega \cap M| < |C_\omega|$ (mixed cycling)
+  is impossible: Lemma~\ref{lem:scc_sat} forces $\mathrm{cnt}[C_\omega]$
+  to be uniform across $C_\omega$, so either all or no states of $C_\omega$
+  lie in $M$.
 \end{remark}
 
 \begin{remark}[$\PI = 0$ and perturbation stability]
@@ -485,8 +485,8 @@ Total complexity: $O(|V|+|E|)$.
   If $\mathrm{cnt}[C_\omega] = 2$, Lemma~\ref{lem:scc_sat} gives
   $C_\omega \subseteq M$, so every state in $\Omega \subseteq C_\omega$
   is multi-path.
-  Since $|R|$ is fixed by $G$ (not by trajectory execution),
-  no new state is reached.
+  By eventual periodicity, the trajectory remains in $\Omega \subseteq C_\omega$
+  for all $t \geq t_0$.
   This is exactly case~(C) of Remark~\ref{rem:terminal}. \qed
 \end{proof}
 
@@ -495,15 +495,13 @@ Total complexity: $O(|V|+|E|)$.
   Let $G$ be finite with deterministic generators.
   For any fixed schedule and initial state in $I$, the trajectory's eventual
   periodic SCC $C_\omega$ (Definition~\ref{def:omega}) falls into exactly one
-  of the four cases of Remark~\ref{rem:terminal}:
+  of the three cases of Remark~\ref{rem:terminal}:
   \begin{enumerate}
     \item[(A)] $C_\omega$ trivial: fixed-point convergence.
     \item[(B)] $C_\omega$ non-trivial, $\mathrm{cnt}[C_\omega] = 1$:
       simple periodicity; no multi-path state on the orbit.
     \item[(C)] $C_\omega$ non-trivial, $\mathrm{cnt}[C_\omega] = 2$:
       structural thrashing (Theorem~\ref{thm:thrash_iff}).
-    \item[(D)] $C_\omega$ non-trivial,
-      $0 < |C_\omega \cap M| < |C_\omega|$: mixed cycling.
   \end{enumerate}
   Different schedules from the same $I$ may yield different $C_\omega$;
   no global sink-SCC uniqueness is assumed or required.
@@ -511,11 +509,10 @@ Total complexity: $O(|V|+|E|)$.
 \begin{proof}
   Eventual periodicity (pigeonhole + finite $V$) gives existence and
   uniqueness of $\Omega$ and hence $C_\omega$.
-  The four cases are exhaustive and mutually exclusive by whether $C_\omega$
-  is trivial and by the value of $\mathrm{cnt}[C_\omega] \in \{0,1,2\}$.
-  (Case D uses $0 < |C_\omega \cap M| < |C_\omega|$, which implies
-  $\mathrm{cnt}[C_\omega] = 1$ with some but not all states saturated ---
-  possible when the SCC has partial multi-path ancestry.)
+  The three cases are exhaustive and mutually exclusive by whether $C_\omega$
+  is trivial and by the value of $\mathrm{cnt}[C_\omega] \in \{1,2\}$.
+  (A putative fourth case $0 < |C_\omega \cap M| < |C_\omega|$ is ruled out
+  by Lemma~\ref{lem:scc_sat}: $\mathrm{cnt}$ is uniform within $C_\omega$.)
   Theorem~\ref{thm:thrash_iff} identifies case~(C) with structural thrashing.
   Schedule-dependence of $C_\omega$ follows from the paragraph on
   trajectories in \S\ref{sec:setup}. \qed
@@ -532,7 +529,7 @@ Total complexity: $O(|V|+|E|)$.
   is non-trivial iff $B_{C}$ contains a directed cycle, equivalently
   $\rho(B_{C}) \geq 1$.
   Structural thrashing corresponds to $\rho(B_{C_\omega}) \geq 1$
-  \emph{and} $C_\omega \subseteq M$ --- a joint spectral-and-reachability
+  \emph{and} $\mathrm{cnt}[C_\omega] = 2$ --- a joint spectral-and-path-diversity
   condition on the terminal SCC block, not detectable from $\Ghat$.
 \end{remark}
 

@@ -27,6 +27,7 @@ from qa_dashboard.validators import (
     run_validator,
 )
 from qa_dashboard.ledger import ledger
+from qa_dashboard.reporting import generate_report
 
 
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MiB
@@ -283,6 +284,7 @@ def verify(
         <a href="/runs/{stored.run_id}">Run page</a>
         <a href="/runs/{stored.run_id}/input">Download input.json</a>
         <a href="/runs/{stored.run_id}/result">Download result.json</a>
+        <a href="/runs/{stored.run_id}/report.json">Download audit report</a>
       </div>
     </div>
     <div class="card">
@@ -333,6 +335,7 @@ def run_page(run_id: str) -> HTMLResponse:
       <div class="links" style="margin-top: 10px;">
         <a href="/runs/{stored.run_id}/input">Download input.json</a>
         <a href="/runs/{stored.run_id}/result">Download result.json</a>
+        <a href="/runs/{stored.run_id}/report.json">Download audit report</a>
       </div>
     </div>
     <div class="card">
@@ -355,6 +358,15 @@ def run_result(run_id: str) -> JSONResponse:
     stored = _load_run(run_id)
     obj = json.loads(stored.result_path.read_text(encoding="utf-8"))
     return JSONResponse(obj)
+
+@app.get("/runs/{run_id}/report.json")
+def run_report(run_id: str) -> JSONResponse:
+    _load_run(run_id)  # existence + structure check
+    try:
+        rep = generate_report(run_id)
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=f"Failed to generate report: {e}") from e
+    return JSONResponse(rep)
 
 
 def _tail_ledger_lines(max_lines: int = 200) -> List[Dict[str, Any]]:

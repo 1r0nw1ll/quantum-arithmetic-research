@@ -17,6 +17,7 @@ Open `http://127.0.0.1:8000`.
 - Shows PASS/FAIL + a SHA-256 hash + a saved run folder
 - Persists `input.json` + `result.json` under `QA_DASHBOARD_RUNS_DIR` (default: `/tmp/qa_dashboard_runs`)
 - Appends a hash-chained audit log entry to `QA_AUDIT_LEDGER_PATH` (default: `/tmp/qa_dashboard_runs/audit_ledger.jsonl`)
+- Exposes an auditor-facing report per run: `GET /runs/{run_id}/report.json` (also linked in the UI)
 
 ## Validators Included
 

@@ -229,9 +229,13 @@ Process nodes of $\Ghat$ in reverse topological order:
 \begin{itemize}
   \item For every trivial SCC node $C = \{v\}$:
     $\mathrm{cnt}[v] \leftarrow \min\bigl(\sum_{u \to v \in \Ghat} \mathrm{cnt}[u],\, 2\bigr)$.
-  \item For every non-trivial SCC node $C$ (after updating $C$'s count
-    from its condensation predecessors): if $\mathrm{cnt}[C] \geq 2$,
-    saturate all original states in $C$ to count~$2$.
+  \item For every non-trivial SCC node $C$: compute
+    $\mathrm{cnt}[C] \leftarrow
+      \min\!\bigl(\sum_{P \to C \in \Ghat} \mathrm{cnt}[P],\,2\bigr)$
+    (same predecessor-sum rule as for trivial SCCs, since $C$ appears as
+    a single node in $\Ghat$); then set $\mathrm{cnt}[v] \leftarrow
+    \mathrm{cnt}[C]$ for every original state $v \in C$
+    (Lemma~\ref{lem:scc_sat} justifies this saturation step).
 \end{itemize}
 $|M| = |\{v \in R : \mathrm{cnt}[v] \geq 2\}|$.
 Total complexity: $O(|V|+|E|)$.
@@ -268,25 +272,65 @@ Total complexity: $O(|V|+|E|)$.
   can overcount $|M|$.
 \end{theorem}
 \begin{proof}
-  Under the convention, two paths are identical iff they traverse the same
-  sequence of SCC nodes in $\Ghat$.
-  The algorithm propagates counts in topological order of $\Ghat$, capping
-  at~$2$; it counts exactly the number of distinct SCC-node sequences from
-  $I$ to each $v$, which matches Definition~\ref{def:mps}.
+  We establish the following invariant by induction on topological order
+  of $\Ghat$: after processing SCC $C$,
+  \[
+    \mathrm{cnt}[C] = k \iff
+    \text{exactly } k \text{ distinct SCC-paths from }I\text{ to }C\text{ exist}
+    \quad (k \in \{0,1\};\; k{=}2 \text{ means } {\geq}2).
+  \]
 
-  \emph{Overcounting on $G$:}
-  Consider a non-trivial SCC $C$ with two back-edges $e_1, e_2$ (both
-  intra-SCC).
-  A path in $G$ that uses $e_1$ and a path that uses $e_2$ may differ as
-  edge sequences in $G$ while mapping to the \emph{same} SCC-node sequence
-  in $\Ghat$ (both stay within $C$).
-  An algorithm that counts paths in $G$ without condensation treats these
-  as distinct, inflating the count.
-  The condensation eliminates this inflation by definition. \qed
+  \emph{Soundness} ($\mathrm{cnt}[C] \geq 2$ only if two distinct SCC-paths exist).
+  \emph{Base:} source SCCs with $C \cap I \neq \emptyset$ are initialised
+  to $\mathrm{cnt}[C] = 1$ (one path: the empty sequence from the initial
+  state in $C$); no source SCC reaches $\mathrm{cnt} = 2$ during
+  initialisation.
+  \emph{Step:} suppose the invariant holds for all predecessors $P$ of $C$,
+  and $\mathrm{cnt}[C] = 2$, i.e., $\sum_{P \to C} \mathrm{cnt}[P] \geq 2$.
+  \emph{Case (i):} two distinct predecessors $P_1 \neq P_2$ each have
+  $\mathrm{cnt}[P_i] \geq 1$.
+  By induction, one SCC-path reaches each; appending the edge $P_i \to C$
+  yields two SCC-paths to $C$ that differ in their prefix before $C$,
+  hence are distinct.
+  \emph{Case (ii):} a single predecessor $P$ has $\mathrm{cnt}[P] = 2$.
+  By induction, two distinct SCC-paths reach $P$; appending $P \to C$
+  preserves their distinctness.
+  In both cases two distinct SCC-paths to $C$ exist.
+
+  \emph{Completeness} (if two distinct SCC-paths to $C$ exist,
+  $\mathrm{cnt}[C] = 2$).
+  Induct on topological order.
+  Let $\pi_1 \neq \pi_2$ be two distinct SCC-paths to $C$, and let
+  $P_i$ be the SCC immediately preceding $C$ in $\pi_i$.
+  \emph{Case A:} $P_1 \neq P_2$.
+  Each $\pi_i$ witnesses a path to $P_i$, so $\mathrm{cnt}[P_i] \geq 1$
+  by induction; thus $\sum_{P \to C} \mathrm{cnt}[P] \geq 2$,
+  giving $\mathrm{cnt}[C] = 2$.
+  \emph{Case B:} $P_1 = P_2 = P$.
+  The paths diverge before reaching $P$, so two distinct SCC-paths reach
+  $P$; by induction $\mathrm{cnt}[P] = 2$, and $\mathrm{cnt}[C] \geq 2$.
+
+  For non-trivial SCCs the same predecessor-sum rule applies at the
+  condensation level; all original states in $C$ then receive
+  $\mathrm{cnt}[v] = \mathrm{cnt}[C]$ by the saturation step,
+  justified by Lemma~\ref{lem:scc_sat}.
+
+  \emph{Overcounting on $G$.}
+  Let $C$ be a non-trivial SCC with two intra-SCC edges $e_1, e_2$.
+  The edge sequences $\sigma_1$ (traversing $e_1$) and $\sigma_2$
+  (traversing $e_2$) are distinct paths in $G$, yet both map to the
+  \emph{same} SCC-node sequence $\cdots \to C$ in $\Ghat$
+  (both remain within $C$).
+  An algorithm counting paths in $G$ directly treats $\sigma_1, \sigma_2$
+  as distinct, overcounting the path multiplicity to every state in $C$
+  that is reachable via $C$.
+  The condensation collapses this inflation by definition: path distinctness
+  is determined by SCC-node sequences, not edge sequences. \qed
 \end{proof}
 
 \begin{proposition}[Cyclic Grid PDI]
   \label{prop:grid_pdi}
+  Let $A \geq 2$ and $D \geq 1$ be integers.
   Let $G_{A,D}$ be the \emph{$A$-arm depth-$D$ cyclic cross-link grid}:
   one apex state $s_0$; arm states $\mathrm{arm}_{k,d}$ for $k \in \{0,\ldots,A{-}1\}$,
   $d \in \{1,\ldots,D\}$; generators
@@ -302,57 +346,97 @@ Total complexity: $O(|V|+|E|)$.
     \PDI(G_{A,D}) = \frac{A(D-1)}{1+AD}.
   \]
   In particular, $\PDI > 1/2$ iff $2A(D-1) > 1 + AD$,
-  i.e.\ $AD - 2A > 1$, satisfied for all $A \geq 2$, $D \geq 3$
-  (and all $A \geq 3$, $D \geq 2$).
+  i.e.\ $AD - 2A > 1$, i.e.\ $A(D-2) > 1$.
+  For integers $A \geq 2$, this holds iff $D \geq 3$
+  (since $A(D-2) \geq 2 \cdot 1 = 2 > 1$ whenever $D \geq 3$ and $A \geq 2$;
+  for $D = 2$, $A(D-2) = 0$ for all $A$).
 \end{proposition}
 \begin{proof}
-  $G_{A,D}$ is acyclic (depth strictly increases), so $\Ghat = G_{A,D}$.
+  $G_{A,D}$ is acyclic (each generator strictly increases depth), so
+  $\Ghat = G_{A,D}$ and all SCCs are trivial.
   The apex $s_0 \in I$ has path-count~$1$.
-  Each $\mathrm{arm}_{k,1}$ is reachable only from $s_0$ via $\texttt{adv}_k$:
+  Each $\mathrm{arm}_{k,1}$ is reachable only via $\texttt{adv}_k(s_0)$:
   count~$1$, not in $M$.
-  For $d \geq 2$: $\mathrm{arm}_{k,d}$ has two distinct predecessors in
-  $\Ghat$: $\mathrm{arm}_{k,d-1}$ via $\texttt{adv}_k$ (count $\geq 1$)
-  and $\mathrm{arm}_{(k-1)\%A,\,d-1}$ via $\texttt{cl}_{(k-1)\%A}$
-  (count $\geq 1$); these are distinct SCC-node sequences since they pass
-  through different arm states at depth $d-1$.
-  Thus $\mathrm{cnt}[\mathrm{arm}_{k,d}] = \min(1+1, 2) = 2$ for all $d \geq 2$:
+  For $d \geq 2$: $\mathrm{arm}_{k,d}$ has two predecessors in $\Ghat$:
+  $\mathrm{arm}_{k,d-1}$ via $\texttt{adv}_k$ and
+  $\mathrm{arm}_{(k-1)\bmod A,\,d-1}$ via $\texttt{cl}_{(k-1)\bmod A}$.
+  Since $A \geq 2$, these predecessors are distinct arm states
+  ($(k-1)\bmod A \neq k$), each with count $\geq 1$;
+  their SCC-node sequences to $\mathrm{arm}_{k,d}$ differ at depth $d-1$,
+  hence are distinct.
+  Thus $\mathrm{cnt}[\mathrm{arm}_{k,d}] = \min(1+1,2) = 2$ for all $d \geq 2$:
   all $A(D-1)$ depth-$\geq 2$ arm states are in $M$.
-  Depth-0 ($s_0$) and depth-1 states (A total) are not in $M$.
-  $|M| = A(D-1)$, $|R| = 1 + AD$. \qed
+  Depth-$0$ ($s_0$) and depth-$1$ states ($A$ total) are not in $M$.
+  $|M| = A(D-1)$, $|R| = 1 + AD$.
+  (For $A = 1$ the two generators coincide, giving a single predecessor at
+  each depth and $|M| = 0$, which is why $A \geq 2$ is required.) \qed
 \end{proof}
 
 \begin{theorem}[Cyclic Thrashing]
   \label{thm:thrash}
-  Let $G$ be a finite generator graph where each generator acts
-  deterministically ($g: V \to V$).
-  Suppose $\PI = 0$ (no generator sequence expands $|R|$).
-  If $G$ contains a sink non-trivial SCC $C$ reachable from $I$
-  (a directed cycle with no outgoing inter-SCC edges), then:
+  Let $G$ be a finite generator graph with deterministic generators
+  ($g: V \to V$ for all $g \in \gens$).
+  Let $C$ be a sink non-trivial SCC of $G$ reachable from $I$
+  (strongly connected, containing a directed cycle,
+  with no outgoing inter-SCC edges in $\Ghat$).
+  Any trajectory from $I$ that enters $C$:
   \begin{enumerate}
-    \item[(a)] every trajectory from $I$ eventually enters $C$
-      and cycles indefinitely;
-    \item[(b)] if additionally $C \subseteq M$, the trajectory
-      thrashes through multi-path states without reaching any new state.
+    \item[(a)] remains in $C$ indefinitely;
+    \item[(b)] is eventually periodic (cycles within $C$);
+    \item[(c)] if $C \subseteq M$, every state on the eventual periodic
+      orbit is multi-path, and no state outside $R$ is ever reached
+      (\emph{structural thrashing}).
   \end{enumerate}
 \end{theorem}
 \begin{proof}
-  (a) $G$ is finite and deterministic; by the pigeonhole principle every
-  trajectory eventually revisits a state, hence enters a cycle.
-  The cycle lies in a non-trivial SCC; since $C$ is a sink (no outgoing
-  inter-SCC edges), once entered $C$ cannot be exited.
-  $\PI = 0$ ensures $|R|$ does not grow, so no new states become
-  reachable to provide an escape route.
-  (b) By Lemma~\ref{lem:scc_sat}, if $C$ was entered via $\geq 2$ paths
-  then all states in $C$ are in $M$, so the trajectory cycles through
-  multi-path states. Since $|R|$ is fixed (PI=0), no new states are reached. \qed
+  (a) $C$ is a sink: no generator maps any $v \in C$ to a state outside
+  $C$ in $G$ (equivalently, no outgoing inter-SCC edge exists in $\Ghat$).
+  Hence $v_t \in C$ implies $v_{t+k} \in C$ for all $k \geq 0$.
+
+  (b) The trajectory is confined to the finite set $C$ and is
+  deterministic; by the pigeonhole principle it revisits some state
+  $v^* \in C$ at time $t_2 > t_1$, and the deterministic dynamics
+  imply $v_{t_1 + j} = v_{t_2 + j}$ for all $j \geq 0$.
+  Thus the trajectory is eventually periodic with period $t_2 - t_1$.
+
+  (c) If $C \subseteq M$, every state in the eventual periodic orbit
+  (which is a subset of $C$) is a multi-path state.
+  The reachable set $R$ is determined entirely by $G$; no trajectory
+  execution modifies $G$ or introduces new edges, so $|R|$ is fixed
+  and no state outside $R$ is visited. \qed
 \end{proof}
 
-\begin{remark}
-  Theorem~\ref{thm:thrash} formalises \emph{Stuck-Loop Thrashing}:
-  a system with redundant routes (PDI~$> 0$) that cannot adapt
-  ($\PI = 0$) cycles through known states instead of reaching goals.
-  A live system trace exhibiting this pattern showed Phase~3
-  $\PDI = 0.889$, $\PI = 0$ prior to intervention.
+\begin{remark}[Terminal behavior classification]
+  \label{rem:terminal}
+  In a finite deterministic system, every trajectory eventually enters
+  a sink SCC (since the system becomes periodic).
+  Four terminal behaviors are possible:
+  (A)~trivial sink SCC: fixed-point convergence;
+  (B)~non-trivial, $C \cap M = \emptyset$: simple periodicity, no
+  multi-path states on the orbit;
+  (C)~non-trivial, $C \subseteq M$: structural thrashing
+  (Theorem~\ref{thm:thrash}(c));
+  (D)~non-trivial, $0 < |C \cap M| < |C|$: mixed cycling.
+  Case (C) requires $C \subseteq M$, which by Lemma~\ref{lem:scc_sat}
+  holds iff $\mathrm{cnt}[C] = 2$, i.e., the SCC was reached via
+  $\geq 2$ distinct SCC-paths from $I$.
+\end{remark}
+
+\begin{remark}[$\PI = 0$ and perturbation stability]
+  \label{rem:pi_stab}
+  Theorem~\ref{thm:thrash} is a purely structural result;
+  it does not use $\PI$.
+  The role of $\PI = 0$ is perturbation-theoretic:
+  if $\PI = 0$, no modification of the generator set within the
+  perturbation budget $\delta_P$ increases $|R|$
+  (by definition $\PI = \delta_R / \delta_P$), so no perturbation
+  creates a new outgoing edge from $C$ or introduces an escape route.
+  Thus $\PI = 0$ ensures structural thrashing is \emph{stable under
+  generator perturbation}.
+  In the regime map (Figure~\ref{fig:regimes}), the
+  \emph{Stuck-Loop Thrashing} quadrant ($\PI$ low, $\PDI$ high)
+  captures this jointly: low $\PI$ ensures near-zero perturbation
+  resistance while high $\PDI$ confirms a cyclic sink with multi-path ancestry.
 \end{remark}
 
 % ─────────────────────────────────────────────────────────────────────────────
@@ -376,11 +460,17 @@ Total complexity: $O(|V|+|E|)$.
 \begin{remark}
   Definition~\ref{def:ea} is a design metric, not a proved orthogonality
   result.
-  The empirical near-independence of $\AI$ and $\PDI$ (Pearson $r < 0.15$
-  across the reference exemplar set) is consistent with the product form,
-  but the choice of multiplication over other composition operators
-  (min, weighted sum) is motivated by dimensional analogy
-  (area $=$ width~$\times$ height for independent dimensions), not derived.
+  $\AI$ and $\PDI$ measure distinct structural dimensions
+  ($\AI$: control-region extent; $\PDI$: merge-topology richness),
+  but whether they are statistically independent in practice depends on
+  the system class.
+  The choice of multiplication is motivated by dimensional analogy
+  (area $=$ width~$\times$ height when dimensions are independent),
+  not derived from a formal independence proof.
+  The reference exemplar set ($n = 9$, all synthetic) is too small to
+  make statistical claims; the compressed $\PDI$ range
+  ($0.425$--$0.475$, Table~\ref{tab:refset}) reflects the construction
+  protocol, not a domain-general measurement.
 \end{remark}
 
 The thresholds $\PI = 0.5$ and $\PDI = 0.5$ partition system space into
@@ -450,8 +540,10 @@ the residual graph. Write $R_O = R(G_O)$, $M_O = M(G_O)$.
   These three cases are exhaustive and mutually exclusive.
 \end{definition}
 
-\begin{theorem}[Failure-Tag Obstruction Typing]
+\begin{remark}[Failure-tag obstruction typing]
   \label{thm:bridge}
+  The following cases follow directly from the definitions of the
+  failure algebra and obstruction types; we state them for reference:
   \begin{itemize}
     \item $\tau(g) = \OK$ $\Rightarrow$ $g$'s edges are never blocked,
       so $O_g = \emptyset$ (Type~III vacuously).
@@ -462,7 +554,7 @@ the residual graph. Write $R_O = R(G_O)$, $M_O = M(G_O)$.
       if any state $v \in R$ is reachable only through $g$, then
       $v \notin R_O$ (Type~I).
   \end{itemize}
-\end{theorem}
+\end{remark}
 
 \begin{corollary}[Merge Stability Criterion]
   \label{cor:merge}
@@ -477,7 +569,7 @@ the residual graph. Write $R_O = R(G_O)$, $M_O = M(G_O)$.
 \end{corollary}
 
 \paragraph{Reference set obstruction analysis.}
-Of the 16 named obstructions across the nine reference exemplars,
+Of the 17 named obstructions across the nine reference exemplars,
 8 are Type~I (state-annihilating: \texttt{context\_overflow},
 \texttt{consensus\_deadlock}, \texttt{energy\_exhaustion}, etc.)
 and 9 are Type~II (route-reducing: \texttt{message\_loss},
@@ -538,13 +630,18 @@ fan-then-merge topology --- absent from the reference construction protocol.
 We instantiate $G_{4,6}$ (Proposition~\ref{prop:grid_pdi}):
 apex $s_0$; generators $\texttt{adv}_k$ and $\texttt{cl}_k$ for $k=0,\ldots,3$;
 all $\tau = \OK$.
-$|R| = 25$, $|M| = 20$.
+The state space has $T = |V| = 40$ states:
+$|R| = 1 + 4{\cdot}6 = 25$ reachable (apex + four arms $\times$ six depths)
+plus $15$ structurally isolated states outside the grid.
+$|M| = 4{\cdot}(6-1) = 20$.
 
 \paragraph{Closed-form verification.}
-By Proposition~\ref{prop:grid_pdi} with $A=4$, $D=6$:
+By Proposition~\ref{prop:grid_pdi} with $A=4$, $D=6$, and $T=40$:
 \[
-  \PDI = \frac{4 \times 5}{1 + 24} = \frac{20}{25} = 0.800,
-  \quad \PI = 0.750, \quad \EA = 0.625 \times 0.800 = 0.500.
+  \AI = |R|/T = 25/40 = 0.625,\quad
+  \PDI = 20/25 = 0.800,\quad
+  \PI = 0.750,\quad
+  \EA = \AI \times \PDI = 0.500.
 \]
 All generators $\tau = \OK$; by Corollary~\ref{cor:merge},
 $\tau(g_1) \jn \tau(g_2) = \OK$ for all merge pairs,
@@ -565,7 +662,16 @@ $\{\texttt{cl}_i\}_{i < k}$ from $\tau=\OK$ to $\tau=\PB$
 Blocking $\texttt{cl}_j$ removes the unique merge path to
 $\mathrm{arm}_{(j+1)\%4,d}$ for $d \geq 2$: those five states exit $M$
 (Type~II obstruction on $\mathrm{arm}_{(j+1)\%4}$) while remaining in $R$.
-Arms are independent, so effects do not compound across arms.
+Arms are independent: blocking $\texttt{cl}_j$ affects only
+$\mathrm{arm}_{(j+1)\%4}$'s incoming merge edge.
+$\mathrm{arm}_{(j+2)\%4,d}$ for $d \geq 2$ still receives two
+distinct predecessors --- $\mathrm{arm}_{(j+2)\%4,d-1}$ via
+$\texttt{adv}_{(j+2)\%4}$ (unblocked) and
+$\mathrm{arm}_{(j+1)\%4,d-1}$ via $\texttt{cl}_{(j+1)\%4}$
+(also unblocked, since only $\texttt{cl}_j$ is blocked) ---
+so its multi-path status is preserved.
+Thus each blocked $\texttt{cl}_j$ independently removes exactly five
+states from $M$, with no cross-arm interaction.
 By Proposition~\ref{prop:grid_pdi} applied to the residual graph
 (now $A - k$ arms retain merge edges):
 \[

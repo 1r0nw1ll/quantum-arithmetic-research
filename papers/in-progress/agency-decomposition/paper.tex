@@ -1,4 +1,4 @@
-% paper.tex  —  v2
+% paper.tex  —  v3.1
 % Agency Decomposition via Path Diversity:
 % SCC-Condensation Metrics for Goal-Directed Systems
 %
@@ -17,6 +17,14 @@
 %       PI=0 + finite state-space; "sink SCC" condition made explicit
 %   M1  Merge Stability Criterion: circularity removed; restated for R, not M
 %   M4  Theorem 4 (Lower Bound) removed; absorbed into Proposition
+%
+% v3.1 changes (theory extension):
+%   T1  Thrashing iff criterion: necessary and sufficient conditions stated
+%       explicitly; impossible mixed-cycling case removed from proof
+%   T2  Multi-basin dynamics: trajectory analysis extended to non-sink SCCs;
+%       C_omega may vary across basin boundaries
+%   T3  Spectral note (Remark): condensation spectrum cannot detect thrashing;
+%       SCC block structure + cnt required
 %
 % Compile: pdflatex paper && bibtex paper && pdflatex paper && pdflatex paper
 
@@ -61,7 +69,7 @@
 
 \hypersetup{
   colorlinks=true, linkcolor=black, citecolor=black, urlcolor=blue,
-  pdftitle={Agency Decomposition via Path Diversity v2},
+  pdftitle={Agency Decomposition via Path Diversity v3.1},
   pdfauthor={QA Research}
 }
 \setlength{\emergencystretch}{3em}  % last-resort stretch to avoid bibliography URL overfull
@@ -74,7 +82,7 @@
 
 \author{QA Research}
 \date{March 2026 \quad|\quad
-      arXiv preprint (v2) \quad|\quad
+      arXiv preprint (v3.1) \quad|\quad
       \href{https://github.com/1r0nw1ll/quantum-arithmetic-research}{%
         \texttt{github.com/1r0nw1ll/quantum-arithmetic-research}}}
 

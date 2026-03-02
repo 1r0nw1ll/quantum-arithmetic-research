@@ -1,0 +1,341 @@
+{
+  "schema_id": "QA_FAILURE_ALGEBRA_STRUCTURE_CLASSIFICATION_CERT",
+  "schema_version": "v1",
+  "cert_id": "qa-failure-algebra-structure-classification-fail-commutative-001",
+  "created_utc": "2026-03-02T00:00:00Z",
+  "family87_ref": {
+    "path": "qa_failure_compose_operator_cert_v1/fixtures/pass_feedback_escalation.json",
+    "cert_sha256": "3fe43f0f0ad29520a736c45c6f4fc124d8262e2d96cd7e35ac414fcb7fdf546f"
+  },
+  "carrier": [
+    "OK",
+    "PARITY_BLOCK",
+    "INVARIANT_VIOLATION",
+    "OUT_OF_DOMAIN"
+  ],
+  "forms": [
+    "serial",
+    "parallel",
+    "feedback"
+  ],
+  "compose_table": [
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "OK",
+      "comp": "OK"
+    },
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "OK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OK",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "OK",
+      "comp": "OK"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "OK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OK",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "OK",
+      "comp": "OK"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    }
+  ],
+  "claimed": {
+    "closure_holds": true,
+    "associativity_holds": true,
+    "per_form_claims": [
+      {
+        "form": "serial",
+        "identity": "OK",
+        "absorber": "OUT_OF_DOMAIN",
+        "commutative": false,
+        "monotone": null
+      },
+      {
+        "form": "parallel",
+        "identity": "OK",
+        "absorber": "OUT_OF_DOMAIN",
+        "commutative": true,
+        "monotone": null
+      },
+      {
+        "form": "feedback",
+        "identity": null,
+        "absorber": "OUT_OF_DOMAIN",
+        "commutative": true,
+        "monotone": null
+      }
+    ]
+  },
+  "meta": {
+    "notes": "FAIL fixture: wrong claimed commutativity for serial form."
+  }
+}

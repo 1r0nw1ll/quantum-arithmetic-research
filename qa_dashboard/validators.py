@@ -7,9 +7,15 @@ from typing import Any, Dict, List, Literal, Optional, Tuple
 from qa_alphageometry_ptolemy import qa_verify as spine_verify
 from qa_mapping_protocol import validator as mapping_protocol_v1
 from qa_fairness_demographic_parity_cert_v1 import validator as dp_v1
+from qa_fairness_equalized_odds_cert_v1 import validator as eo_v1
 
 
-ValidatorId = Literal["decision_spine", "mapping_protocol_v1", "fairness_demographic_parity_v1"]
+ValidatorId = Literal[
+    "decision_spine",
+    "mapping_protocol_v1",
+    "fairness_demographic_parity_v1",
+    "fairness_equalized_odds_v1",
+]
 
 
 def _result_dict(status: str, check_name: str, message: str, details: Optional[Dict[str, Any]] = None) -> Dict[str, Any]:
@@ -171,6 +177,36 @@ def _run_fairness_demographic_parity_v1(obj: Dict[str, Any]) -> Dict[str, Any]:
         **counts,
     }
 
+def _run_fairness_equalized_odds_v1(obj: Dict[str, Any]) -> Dict[str, Any]:
+    results: List[Dict[str, Any]] = []
+    try:
+        gate_results = eo_v1.validate(obj)
+    except Exception as e:
+        results.append(_result_dict("FAIL", "gate_0_runtime", f"Validation crashed: {e}"))
+        counts = _summarize(results)
+        return {
+            "ok": False,
+            "validator_id": "fairness_equalized_odds_v1",
+            "results": results,
+            **counts,
+        }
+
+    for gr in gate_results:
+        results.append({
+            "status": gr.status.value,
+            "check_name": gr.gate,
+            "message": gr.message,
+            "details": gr.details,
+        })
+
+    counts = _summarize(results)
+    return {
+        "ok": counts["failed"] == 0,
+        "validator_id": "fairness_equalized_odds_v1",
+        "results": results,
+        **counts,
+    }
+
 
 def run_validator(*, validator_id: ValidatorId, obj: Dict[str, Any]) -> Dict[str, Any]:
     if validator_id == "decision_spine":
@@ -179,6 +215,8 @@ def run_validator(*, validator_id: ValidatorId, obj: Dict[str, Any]) -> Dict[str
         return _run_mapping_protocol_v1(obj)
     if validator_id == "fairness_demographic_parity_v1":
         return _run_fairness_demographic_parity_v1(obj)
+    if validator_id == "fairness_equalized_odds_v1":
+        return _run_fairness_equalized_odds_v1(obj)
     return {
         "ok": False,
         "validator_id": validator_id,

@@ -20,12 +20,13 @@ from pathlib import Path
 from typing import Any, Dict, List, Literal, Optional, Tuple
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
-from fastapi.responses import HTMLResponse, JSONResponse
+from fastapi.responses import HTMLResponse, JSONResponse, PlainTextResponse
 
 from qa_dashboard.validators import (
     ValidatorId,
     run_validator,
 )
+from qa_dashboard.ledger import ledger
 
 
 MAX_UPLOAD_BYTES = 5 * 1024 * 1024  # 5 MiB
@@ -108,6 +109,11 @@ def _store_run(
         meta_path=meta_path,
     )
 
+def _add_ledger_to_meta(meta_path: Path, *, ledger_chain_hash: str) -> None:
+    meta = json.loads(meta_path.read_text(encoding="utf-8"))
+    meta["ledger_chain_hash"] = ledger_chain_hash
+    meta_path.write_text(json.dumps(meta, indent=2, sort_keys=True), encoding="utf-8")
+
 
 def _render_page(title: str, body_html: str) -> HTMLResponse:
     css = """
@@ -183,6 +189,7 @@ def index() -> HTMLResponse:
     </div>
     <div class="card">
       <p class="muted">Tip: try <code>demos/spine_bundle.json</code> with “Decision Spine”.</p>
+      <p class="muted">Audit ledger: <a href="/ledger">view</a> · <a href="/ledger/verify">verify</a></p>
     </div>
     """
     return _render_page("QA Auditor Dashboard", body)
@@ -211,6 +218,25 @@ def verify(
         result_obj=result,
         validator_id=validator_id,
     )
+
+    ledger_chain_hash = None
+    ledger_error = None
+    try:
+        append_res = ledger.append({
+            "run_id": stored.run_id,
+            "validator_id": validator_id,
+            "ok": bool(result.get("ok")),
+            "uploaded_sha256": uploaded_sha,
+            "canonical_sha256": canonical_sha,
+            "passed": int(result.get("passed", 0)),
+            "failed": int(result.get("failed", 0)),
+            "warnings": int(result.get("warnings", 0)),
+            "filename": file.filename or "upload.json",
+        })
+        ledger_chain_hash = append_res.chain_hash
+        _add_ledger_to_meta(stored.meta_path, ledger_chain_hash=ledger_chain_hash)
+    except Exception as e:
+        ledger_error = str(e)
 
     status = "PASS" if result.get("ok") else "FAIL"
     pill = "pass" if result.get("ok") else "fail"
@@ -245,9 +271,11 @@ def verify(
       <div style="margin-top: 10px;" class="muted">
         uploaded_sha256: <code>{uploaded_sha}</code><br/>
         canonical_sha256: <code>{canonical_sha}</code><br/>
+        ledger_chain_hash: <code>{html.escape(ledger_chain_hash) if ledger_chain_hash else "N/A"}</code><br/>
         run_id: <code>{stored.run_id}</code><br/>
         run_dir: <code>{html.escape(str(stored.run_dir))}</code>
       </div>
+      {"<div class='muted' style='margin-top:6px;color:#991b1b;'>ledger_write_error: <code>" + html.escape(ledger_error) + "</code></div>" if ledger_error else ""}
       <div class="links" style="margin-top: 10px;">
         <a href="/runs/{stored.run_id}">Run page</a>
         <a href="/runs/{stored.run_id}/input">Download input.json</a>
@@ -325,3 +353,85 @@ def run_result(run_id: str) -> JSONResponse:
     obj = json.loads(stored.result_path.read_text(encoding="utf-8"))
     return JSONResponse(obj)
 
+
+def _tail_ledger_lines(max_lines: int = 200) -> List[Dict[str, Any]]:
+    path = ledger.path
+    if not path.exists():
+        return []
+    lines = path.read_text(encoding="utf-8").splitlines()
+    out: List[Dict[str, Any]] = []
+    for s in lines[-max_lines:]:
+        s = s.strip()
+        if not s:
+            continue
+        try:
+            obj = json.loads(s)
+        except Exception:
+            continue
+        if isinstance(obj, dict):
+            out.append(obj)
+    return out
+
+
+@app.get("/ledger", response_class=HTMLResponse)
+def ledger_page() -> HTMLResponse:
+    records = _tail_ledger_lines(80)
+    if not records:
+        body = f"""
+        <div class="card">
+          <p class="muted">No ledger entries yet.</p>
+          <p class="muted">Ledger path: <code>{html.escape(str(ledger.path))}</code></p>
+        </div>
+        """
+        return _render_page("Audit Ledger", body)
+
+    rows = []
+    for rec in reversed(records):
+        entry = rec.get("entry", {}) if isinstance(rec.get("entry"), dict) else {}
+        run_id = html.escape(str(entry.get("run_id", "")))
+        ok = entry.get("ok")
+        status = "PASS" if ok is True else ("FAIL" if ok is False else "UNK")
+        st_class = "pass" if ok is True else ("fail" if ok is False else "warn")
+        chain_hash = html.escape(str(rec.get("chain_hash", "")))
+        created = html.escape(str(entry.get("created_utc", "")))
+        vid = html.escape(str(entry.get("validator_id", "")))
+        rows.append(
+            "<tr>"
+            f"<td><span class='pill {st_class}'>{status}</span></td>"
+            f"<td><code>{created}</code></td>"
+            f"<td><code>{vid}</code></td>"
+            f"<td><a href='/runs/{run_id}'><code>{run_id}</code></a></td>"
+            f"<td><code>{chain_hash[:16]}…</code></td>"
+            "</tr>"
+        )
+
+    table_html = (
+        "<table><thead><tr><th>Status</th><th>UTC</th><th>Validator</th><th>Run</th><th>Chain Hash</th></tr></thead>"
+        f"<tbody>{''.join(rows)}</tbody></table>"
+    )
+    body = f"""
+    <div class="card">
+      <p class="muted">Ledger path: <code>{html.escape(str(ledger.path))}</code></p>
+      <div class="links">
+        <a href="/ledger.jsonl">Download JSONL</a>
+        <a href="/ledger/verify">Verify chain</a>
+      </div>
+    </div>
+    <div class="card">
+      {table_html}
+    </div>
+    """
+    return _render_page("Audit Ledger", body)
+
+
+@app.get("/ledger.jsonl")
+def ledger_download() -> PlainTextResponse:
+    if not ledger.path.exists():
+        raise HTTPException(status_code=404, detail="Ledger not found")
+    return PlainTextResponse(ledger.path.read_text(encoding="utf-8"), media_type="application/jsonl")
+
+
+@app.get("/ledger/verify")
+def ledger_verify() -> JSONResponse:
+    ok, details = ledger.verify()
+    return JSONResponse({"ok": ok, **details})

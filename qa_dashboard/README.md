@@ -16,6 +16,7 @@ Open `http://127.0.0.1:8000`.
 - Select a validator
 - Shows PASS/FAIL + a SHA-256 hash + a saved run folder
 - Persists `input.json` + `result.json` under `QA_DASHBOARD_RUNS_DIR` (default: `/tmp/qa_dashboard_runs`)
+- Appends a hash-chained audit log entry to `QA_AUDIT_LEDGER_PATH` (default: `/tmp/qa_dashboard_runs/audit_ledger.jsonl`)
 
 ## Validators Included
 
@@ -25,4 +26,4 @@ Open `http://127.0.0.1:8000`.
 ## Configure
 
 - `QA_DASHBOARD_RUNS_DIR=/some/path` (optional)
-
+- `QA_AUDIT_LEDGER_PATH=/some/path/audit_ledger.jsonl` (optional)

@@ -29,7 +29,6 @@
 \newcommand{\pp}{\,\text{pp}}
 \newcommand{\OA}{\ensuremath{\mathrm{OA}}}
 \newcommand{\Acc}{\ensuremath{\mathrm{AA}}}  % \AA is a LaTeX built-in (Angstrom A-ring)
-\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
 \newcommand{\AdjSalinas}{0.120} % adj_rate_4 from Family [79] cert (valid_salinas_dominant)
 \newcommand{\AdjKSC}{0.246}     % adj_rate_4 from Family [78] v1.2 Mode B GT mask excerpt
 
@@ -240,8 +239,8 @@ We evaluate on five benchmarks:
 \begin{itemize}
   \item \textbf{Houston Multimodal:} Hyperspectral (144 bands),
     multispectral (8 bands), and LiDAR elevation data with 15
-    classes. Pre-extracted $11{\times}11$ patches are provided;
-    2832 labeled samples total.
+    classes~\cite{debes2014_grss_dfc2013}. Pre-extracted $11{\times}11$
+    patches are provided; 2832 labeled samples total.
   \item \textbf{Indian Pines:} $145{\times}145$ HSI with 200 spectral
     bands and 16 classes (10\,249 labeled pixels)~\cite{baumgardner2015_indian_pines}.
   \item \textbf{PaviaU:} $610{\times}340$ HSI with 103 spectral bands

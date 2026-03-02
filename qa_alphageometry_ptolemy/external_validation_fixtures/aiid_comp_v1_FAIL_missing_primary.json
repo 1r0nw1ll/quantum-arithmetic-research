@@ -1,0 +1,14 @@
+[
+  {
+    "schema_id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1",
+    "incident_id": 39,
+    "secondary": ["F6"],
+    "composition_form": "parallel",
+    "strain_witness": {
+      "reason": "Primary omitted intentionally.",
+      "competing_classes": ["F1", "F6"],
+      "missing_fields": ["intent"],
+      "notes": "Fixture FAIL missing primary"
+    }
+  }
+]

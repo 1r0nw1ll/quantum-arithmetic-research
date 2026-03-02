@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1.schema.json",
+  "title": "QA Failure Algebra Composition Label v1",
+  "description": "Additive composition label for incident-level F1-F6 decomposition with explicit strain witness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "incident_id",
+    "primary",
+    "secondary",
+    "composition_form",
+    "strain_witness"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1"
+    },
+    "incident_id": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "primary": {
+      "type": "string",
+      "enum": ["F1", "F2", "F3", "F4", "F5", "F6"]
+    },
+    "secondary": {
+      "type": "array",
+      "items": {
+        "type": "string",
+        "enum": ["F1", "F2", "F3", "F4", "F5", "F6"]
+      },
+      "uniqueItems": true,
+      "maxItems": 3
+    },
+    "composition_form": {
+      "type": "string",
+      "enum": ["serial", "parallel", "feedback", "unknown"]
+    },
+    "confidence": {
+      "type": "string",
+      "enum": ["high", "medium", "low"]
+    },
+    "strain_witness": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["reason", "competing_classes", "missing_fields", "notes"],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        },
+        "competing_classes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "enum": ["F1", "F2", "F3", "F4", "F5", "F6"]
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "maxItems": 6
+        },
+        "missing_fields": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          },
+          "minItems": 1,
+          "uniqueItems": true,
+          "maxItems": 12
+        },
+        "notes": {
+          "type": "string",
+          "maxLength": 280
+        }
+      }
+    }
+  }
+}

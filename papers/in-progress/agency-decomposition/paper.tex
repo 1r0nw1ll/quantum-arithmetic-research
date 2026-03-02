@@ -166,6 +166,16 @@ We write $R \subseteq V$ for the set of states reachable from $I$ under any
 generator sequence, $|R|$ for its cardinality,
 and $T = |V|$ for the total state count.
 
+\paragraph{Trajectories and schedules.}
+A \emph{trajectory} $(v_t)_{t \ge 0}$ from $v_0 \in I$ is a sequence produced
+by a fixed deterministic generator schedule: $v_{t+1} = g_t(v_t)$ where
+$(g_t)_{t \ge 0}$ is a fixed (possibly adversarial) sequence from $\gens$.
+All trajectory claims are relative to such a fixed deterministic schedule;
+we do \emph{not} assume fairness, ergodicity, or that the trajectory
+eventually visits every reachable state.
+In particular, a trajectory can enter a periodic orbit inside an SCC that has
+outgoing inter-SCC edges, simply because the orbit avoids the exit states.
+
 \paragraph{SCC-condensation DAG.}
 The SCC-condensation $\Ghat$ of $G$ is computed via Tarjan's algorithm
 \cite{tarjan1972depth}: each strongly connected component (SCC) is collapsed
@@ -437,6 +447,93 @@ Total complexity: $O(|V|+|E|)$.
   \emph{Stuck-Loop Thrashing} quadrant ($\PI$ low, $\PDI$ high)
   captures this jointly: low $\PI$ ensures near-zero perturbation
   resistance while high $\PDI$ confirms a cyclic sink with multi-path ancestry.
+\end{remark}
+
+\begin{definition}[Eventual periodic SCC]
+  \label{def:omega}
+  Fix a trajectory $(v_t)_{t \ge 0}$ from $I$ under a deterministic schedule.
+  Since $G$ is finite and the schedule is deterministic, there exist
+  $t_0 \geq 0$ and $p \geq 1$ such that $v_{t+p} = v_t$ for all $t \geq t_0$.
+  The \emph{eventual periodic orbit} is
+  $\Omega = \{v_{t_0}, \ldots, v_{t_0+p-1}\}$
+  and $C_\omega$ denotes the unique SCC of $G$ containing $\Omega$.
+\end{definition}
+
+\begin{theorem}[Structural thrashing: necessary and sufficient criterion]
+  \label{thm:thrash_iff}
+  In a finite generator graph $G$ with deterministic generators, fix any
+  trajectory from $I$ and let $C_\omega$ be its eventual periodic SCC
+  (Definition~\ref{def:omega}).
+  The trajectory exhibits structural thrashing if and only if
+  \[
+    C_\omega \text{ is non-trivial}
+    \quad\text{and}\quad
+    \mathrm{cnt}[C_\omega] = 2
+    \quad (\text{equivalently, } C_\omega \subseteq M).
+  \]
+\end{theorem}
+\begin{proof}
+  $(\Rightarrow)$
+  Structural thrashing (Remark~\ref{rem:terminal}, case~C) means
+  $C_\omega$ is non-trivial and $C_\omega \subseteq M$.
+  By Lemma~\ref{lem:scc_sat}, $C_\omega \subseteq M$ iff
+  $\mathrm{cnt}[C_\omega] = 2$.
+
+  $(\Leftarrow)$
+  If $C_\omega$ is non-trivial, $\Omega$ contains a cycle of length
+  $p \geq 2$ (by definition of non-trivial SCC).
+  If $\mathrm{cnt}[C_\omega] = 2$, Lemma~\ref{lem:scc_sat} gives
+  $C_\omega \subseteq M$, so every state in $\Omega \subseteq C_\omega$
+  is multi-path.
+  Since $|R|$ is fixed by $G$ (not by trajectory execution),
+  no new state is reached.
+  This is exactly case~(C) of Remark~\ref{rem:terminal}. \qed
+\end{proof}
+
+\begin{proposition}[Multi-schedule terminal classification]
+  \label{prop:terminal}
+  Let $G$ be finite with deterministic generators.
+  For any fixed schedule and initial state in $I$, the trajectory's eventual
+  periodic SCC $C_\omega$ (Definition~\ref{def:omega}) falls into exactly one
+  of the four cases of Remark~\ref{rem:terminal}:
+  \begin{enumerate}
+    \item[(A)] $C_\omega$ trivial: fixed-point convergence.
+    \item[(B)] $C_\omega$ non-trivial, $\mathrm{cnt}[C_\omega] = 1$:
+      simple periodicity; no multi-path state on the orbit.
+    \item[(C)] $C_\omega$ non-trivial, $\mathrm{cnt}[C_\omega] = 2$:
+      structural thrashing (Theorem~\ref{thm:thrash_iff}).
+    \item[(D)] $C_\omega$ non-trivial,
+      $0 < |C_\omega \cap M| < |C_\omega|$: mixed cycling.
+  \end{enumerate}
+  Different schedules from the same $I$ may yield different $C_\omega$;
+  no global sink-SCC uniqueness is assumed or required.
+\end{proposition}
+\begin{proof}
+  Eventual periodicity (pigeonhole + finite $V$) gives existence and
+  uniqueness of $\Omega$ and hence $C_\omega$.
+  The four cases are exhaustive and mutually exclusive by whether $C_\omega$
+  is trivial and by the value of $\mathrm{cnt}[C_\omega] \in \{0,1,2\}$.
+  (Case D uses $0 < |C_\omega \cap M| < |C_\omega|$, which implies
+  $\mathrm{cnt}[C_\omega] = 1$ with some but not all states saturated ---
+  possible when the SCC has partial multi-path ancestry.)
+  Theorem~\ref{thm:thrash_iff} identifies case~(C) with structural thrashing.
+  Schedule-dependence of $C_\omega$ follows from the paragraph on
+  trajectories in \S\ref{sec:setup}. \qed
+\end{proof}
+
+\begin{remark}[Why the condensation spectrum cannot detect thrashing]
+  \label{rem:spectral}
+  $\Ghat$ is a DAG, so its adjacency matrix is nilpotent and
+  $\rho(\Ghat) = 0$.
+  Spectral signatures of cyclic terminal behavior are therefore invisible
+  in $\Ghat$ alone.
+  Thrashing resides in the \emph{SCC subgraph blocks}: if $B_{C}$ is the
+  adjacency matrix of the subgraph of $G$ induced by SCC $C$, then $C$
+  is non-trivial iff $B_{C}$ contains a directed cycle, equivalently
+  $\rho(B_{C}) \geq 1$.
+  Structural thrashing corresponds to $\rho(B_{C_\omega}) \geq 1$
+  \emph{and} $C_\omega \subseteq M$ --- a joint spectral-and-reachability
+  condition on the terminal SCC block, not detectable from $\Ghat$.
 \end{remark}
 
 % ─────────────────────────────────────────────────────────────────────────────

@@ -165,6 +165,7 @@ def index() -> HTMLResponse:
         ("mapping_protocol_v1", "Mapping Protocol v1"),
         ("fairness_demographic_parity_v1", "Fairness: Demographic Parity v1"),
         ("fairness_equalized_odds_v1", "Fairness: Equalized Odds v1"),
+        ("safety_prompt_injection_refusal_v1", "Safety: Prompt Injection Refusal v1"),
     ]
     options = "\n".join(
         f'<option value="{html.escape(v)}">{html.escape(label)}</option>' for v, label in validators

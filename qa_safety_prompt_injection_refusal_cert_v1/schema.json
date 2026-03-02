@@ -1,0 +1,144 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_SAFETY_PROMPT_INJECTION_REFUSAL_CERT.v1.schema.json",
+  "title": "QA Safety Prompt Injection Refusal Certificate (v1)",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "cert_id",
+    "created_utc",
+    "test_suite_ref",
+    "run_context",
+    "test_results",
+    "claims",
+    "failure_obstructions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_SAFETY_PROMPT_INJECTION_REFUSAL_CERT.v1"
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 10
+    },
+    "test_suite_ref": {
+      "type": "object",
+      "required": ["suite_id", "suite_version", "suite_sha256", "license_id", "source_ref"],
+      "additionalProperties": false,
+      "properties": {
+        "suite_id": {"type": "string", "minLength": 3},
+        "suite_version": {"type": "string", "minLength": 1},
+        "suite_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        },
+        "license_id": {"type": "string", "minLength": 2},
+        "source_ref": {"type": "string", "minLength": 3}
+      }
+    },
+    "run_context": {
+      "type": "object",
+      "required": ["model_id", "endpoint_id", "judge_contract_hash", "harness_commit"],
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {"type": "string", "minLength": 1},
+        "endpoint_id": {"type": "string", "minLength": 1},
+        "system_prompt_hash": {"type": "string", "minLength": 8},
+        "judge_contract_hash": {"type": "string", "minLength": 8},
+        "harness_commit": {"type": "string", "minLength": 7}
+      }
+    },
+    "test_results": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["test_case_id", "verdict"],
+        "additionalProperties": false,
+        "properties": {
+          "test_case_id": {"type": "string", "minLength": 1},
+          "verdict": {"type": "string", "enum": ["PASS", "FAIL", "SKIP"]},
+          "technique_tags": {
+            "type": "array",
+            "items": {"type": "string"},
+            "minItems": 0
+          },
+          "failure_mode": {"type": "string"}
+        }
+      }
+    },
+    "claims": {
+      "type": "object",
+      "required": [
+        "pass_count",
+        "fail_count",
+        "skip_count",
+        "attempted_count",
+        "total_count",
+        "pass_rate_observed",
+        "pass_rate_min_required"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "pass_count": {"type": "integer", "minimum": 0},
+        "fail_count": {"type": "integer", "minimum": 0},
+        "skip_count": {"type": "integer", "minimum": 0},
+        "attempted_count": {"type": "integer", "minimum": 1},
+        "total_count": {"type": "integer", "minimum": 1},
+        "pass_rate_observed": {"$ref": "#/definitions/rational"},
+        "pass_rate_min_required": {"$ref": "#/definitions/rational"},
+        "rate_denominator_policy": {
+          "type": "string",
+          "enum": ["attempted_only"],
+          "default": "attempted_only"
+        }
+      }
+    },
+    "failure_obstructions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["obstruction_id", "conclusion", "witness"],
+        "additionalProperties": true,
+        "properties": {
+          "obstruction_id": {"type": "string"},
+          "conclusion": {"type": "string"},
+          "witness": {"type": "object"}
+        }
+      }
+    },
+    "invariant_diff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gate", "fail_type", "path", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "gate": {"type": "integer", "minimum": 0},
+          "fail_type": {"type": "string"},
+          "path": {"type": "string"},
+          "reason": {"type": "string"}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "rational": {
+      "description": "Exact rational scalar (int or 'p/q' string).",
+      "oneOf": [
+        {"type": "integer"},
+        {
+          "type": "string",
+          "pattern": "^-?\\d+(\\/\\d+)?$"
+        }
+      ]
+    }
+  }
+}
+

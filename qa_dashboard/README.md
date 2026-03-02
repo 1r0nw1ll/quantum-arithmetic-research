@@ -22,6 +22,7 @@ Open `http://127.0.0.1:8000`.
 
 - `Decision Spine (qa_verify.py)` — `qa_alphageometry_ptolemy/qa_verify.py`
 - `Mapping Protocol v1` — `qa_mapping_protocol/validator.py`
+- `Fairness: Demographic Parity v1` — `qa_fairness_demographic_parity_cert_v1/validator.py`
 
 ## Configure
 

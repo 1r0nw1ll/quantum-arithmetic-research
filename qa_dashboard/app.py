@@ -163,6 +163,7 @@ def index() -> HTMLResponse:
     validators = [
         ("decision_spine", "Decision Spine (qa_verify.py)"),
         ("mapping_protocol_v1", "Mapping Protocol v1"),
+        ("fairness_demographic_parity_v1", "Fairness: Demographic Parity v1"),
     ]
     options = "\n".join(
         f'<option value="{html.escape(v)}">{html.escape(label)}</option>' for v, label in validators

@@ -1,0 +1,28 @@
+{
+  "schema_id": "QA_FAIRNESS_DEMOGRAPHIC_PARITY_CERT.v1",
+  "cert_id": "dp-valid-001",
+  "created_utc": "2026-03-02T00:00:00Z",
+  "subject": {
+    "model_id": "demo_model_v0",
+    "dataset_id": "demo_dataset_v0",
+    "protected_attribute": "group",
+    "positive_prediction_label": 1
+  },
+  "data": {
+    "groups": [
+      {"group": "A", "n_total": 50, "n_pos_pred": 25},
+      {"group": "B", "n_total": 50, "n_pos_pred": 30}
+    ]
+  },
+  "claims": {
+    "dp_gap_max": "1/10",
+    "dp_gap_observed": "1/10",
+    "selection_rates": {
+      "A": "1/2",
+      "B": "3/5"
+    }
+  },
+  "failure_obstructions": [],
+  "invariant_diff": []
+}
+

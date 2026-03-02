@@ -61,6 +61,10 @@ A family **does not count as shipped** unless both tracts are present.
 | [86] | [QA Generator-Failure Algebra Unification Cert v1](86_generator_failure_unification_cert.md) | Schema + Validator (5-gate: carrier cross-check, digest, T1 finite image, T2 SCC + T3 path propagation, T4 energy monotonicity) + 3 Fixtures (valid_caps_tr_fear_love, invalid_tag_not_in_carrier, invalid_energy_drift) + cross-binding to [76] failure algebra ref + [80] energy cert ref | PASS |
 | [87] | [QA Failure Compose Operator Cert v1](87_failure_compose_operator_cert.md) | Schema + Validator (formal `compose(Fi,Fj,form)` with closure/table completeness + per-form associativity checks) + 3 Fixtures (pass_feedback_escalation, fail_closure_incomplete_table, fail_associativity_feedback_violation) | PASS |
 | [88] | [QA Failure Algebra Structure Classification Cert v1](88_failure_algebra_structure_classification_cert.md) | Schema + Validator (form-indexed semigroup/monoid classification with identity/absorber/commutativity and optional monotonicity checks) + 5 Fixtures (pass_classify_from_family87_tables, fail_identity_claim_wrong, fail_absorber_claim_wrong, fail_commutative_claim_wrong, fail_monotonicity_violation) | PASS |
+| [89] | [QA QALM Curvature Cert v1](89_qalm_curvature_cert.md) | Schema + Validator (H_QA recompute and curvature-scaled update-rule pin) + 3 Fixtures (pass_default_tuple, fail_h_qa_mismatch, fail_update_sign) | PASS |
+| [90] | [QA Fairness Demographic Parity Cert v1](90_fairness_demographic_parity_cert.md) | Schema + Validator (demographic parity gap with constructive failure witness) + 2 Fixtures (valid_min, invalid_gap) | PASS |
+| [91] | [QA Fairness Equalized Odds Cert v1](91_fairness_equalized_odds_cert.md) | Schema + Validator (equalized odds TPR/FPR gap with constructive failure witness) + 2 Fixtures (valid_min, invalid_gap) | PASS |
+| [92] | [QA Safety Prompt Injection Refusal Cert v1](92_safety_prompt_injection_refusal_cert.md) | Schema + Validator (prompt injection refusal rate with judge contract hash and failure witness) + 2 Fixtures (valid_min, invalid_rate) | PASS |
 
 ## Quick validation
 

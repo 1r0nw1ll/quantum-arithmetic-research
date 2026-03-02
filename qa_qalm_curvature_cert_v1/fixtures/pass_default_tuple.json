@@ -1,0 +1,38 @@
+{
+  "schema_id": "QA_QALM_CURVATURE_CERT",
+  "schema_version": "v1",
+  "cert_id": "qalm2_default_tuple_curvature_v1",
+  "created_utc": "2025-11-01T18:09:00Z",
+  "anchors": {
+    "h_qa_source": "qalm_2.0/qa_markovian_integration.py:47-54",
+    "update_rule_source": "qalm_2.0/qa_markovian_integration.py:260",
+    "ground_truth_source": "qalm_2.0/QALM2_TEST_RESULTS.md (Final Tuple)"
+  },
+  "inputs": {
+    "tuple": {
+      "b": 0.14,
+      "e": 0.031,
+      "d": -0.188,
+      "a": -0.155
+    },
+    "eps": 1e-9
+  },
+  "optimizer": {
+    "lr": 0.001,
+    "gain": 2.0
+  },
+  "claimed": {
+    "H_QA_raw": -0.05229510945626831,
+    "H_QA": 0.04969623918834872,
+    "loss_hat": -0.5977137970606309,
+    "update_example": {
+      "p_before": 1.0,
+      "grad": 3.0,
+      "p_after": 0.99970182256487
+    }
+  },
+  "meta": {
+    "note": "Ground-truth default tuple reported in QALM2_TEST_RESULTS.md; curvature computed from fallback harmonic_descent formula."
+  }
+}
+

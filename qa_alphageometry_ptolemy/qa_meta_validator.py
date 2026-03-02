@@ -3222,6 +3222,86 @@ def _validate_failure_algebra_structure_classification_cert_v1_family_if_present
     return None
 
 
+def _validate_qalm_curvature_cert_v1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA QALM Curvature Cert family [89]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_qalm_curvature_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_qalm_curvature_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_qalm_curvature_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_fairness_demographic_parity_cert_v1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Fairness Demographic Parity Cert family [90]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_fairness_demographic_parity_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_fairness_demographic_parity_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_fairness_demographic_parity_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_fairness_equalized_odds_cert_v1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Fairness Equalized Odds Cert family [91]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_fairness_equalized_odds_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_fairness_equalized_odds_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_fairness_equalized_odds_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_safety_prompt_injection_refusal_cert_v1_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Safety Prompt Injection Refusal Cert family [92]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_safety_prompt_injection_refusal_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_safety_prompt_injection_refusal_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_safety_prompt_injection_refusal_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3414,6 +3494,26 @@ FAMILY_SWEEPS = [
      "schema + validator (form-indexed semigroup/monoid classification with identity/absorber/commutativity and optional monotonicity checks) + 5 fixtures (pass_classify_from_family87_tables, fail_identity_claim_wrong, fail_absorber_claim_wrong, fail_commutative_claim_wrong, fail_monotonicity_violation)",
      "88_failure_algebra_structure_classification_cert",
      "../qa_failure_algebra_structure_classification_cert_v1", True),
+    (89, "QA QALM Curvature Cert family",
+     _validate_qalm_curvature_cert_v1_family_if_present,
+     "schema + validator (H_QA recompute and curvature-scaled update-rule pin) + 3 fixtures (pass_default_tuple, fail_h_qa_mismatch, fail_update_sign)",
+     "89_qalm_curvature_cert",
+     "../qa_qalm_curvature_cert_v1", True),
+    (90, "QA Fairness Demographic Parity Cert family",
+     _validate_fairness_demographic_parity_cert_v1_family_if_present,
+     "schema + validator (demographic parity gap with constructive failure witness) + 2 fixtures (valid_min, invalid_gap)",
+     "90_fairness_demographic_parity_cert",
+     "../qa_fairness_demographic_parity_cert_v1", True),
+    (91, "QA Fairness Equalized Odds Cert family",
+     _validate_fairness_equalized_odds_cert_v1_family_if_present,
+     "schema + validator (equalized odds TPR/FPR gap with constructive failure witness) + 2 fixtures (valid_min, invalid_gap)",
+     "91_fairness_equalized_odds_cert",
+     "../qa_fairness_equalized_odds_cert_v1", True),
+    (92, "QA Safety Prompt Injection Refusal Cert family",
+     _validate_safety_prompt_injection_refusal_cert_v1_family_if_present,
+     "schema + validator (prompt injection refusal rate with judge contract hash and failure witness) + 2 fixtures (valid_min, invalid_rate)",
+     "92_safety_prompt_injection_refusal_cert",
+     "../qa_safety_prompt_injection_refusal_cert_v1", True),
 ]
 
 

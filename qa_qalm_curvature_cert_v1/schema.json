@@ -1,0 +1,105 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_QALM_CURVATURE_CERT.v1.schema.json",
+  "title": "QA QALM Curvature Cert v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "schema_version",
+    "cert_id",
+    "created_utc",
+    "anchors",
+    "inputs",
+    "optimizer",
+    "claimed"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_QALM_CURVATURE_CERT"
+    },
+    "schema_version": {
+      "type": "string",
+      "const": "v1"
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 10
+    },
+    "anchors": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "h_qa_source",
+        "update_rule_source",
+        "ground_truth_source"
+      ],
+      "properties": {
+        "h_qa_source": {"type": "string", "minLength": 1},
+        "update_rule_source": {"type": "string", "minLength": 1},
+        "ground_truth_source": {"type": "string", "minLength": 1}
+      }
+    },
+    "inputs": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "tuple",
+        "eps"
+      ],
+      "properties": {
+        "tuple": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["b", "e", "d", "a"],
+          "properties": {
+            "b": {"type": "number"},
+            "e": {"type": "number"},
+            "d": {"type": "number"},
+            "a": {"type": "number"}
+          }
+        },
+        "eps": {"type": "number"}
+      }
+    },
+    "optimizer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lr", "gain"],
+      "properties": {
+        "lr": {"type": "number", "exclusiveMinimum": 0},
+        "gain": {"type": "number"}
+      }
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["H_QA_raw", "H_QA", "loss_hat", "update_example"],
+      "properties": {
+        "H_QA_raw": {"type": "number"},
+        "H_QA": {"type": "number", "minimum": 0, "maximum": 1},
+        "loss_hat": {"type": "number"},
+        "update_example": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p_before", "grad", "p_after"],
+          "properties": {
+            "p_before": {"type": "number"},
+            "grad": {"type": "number"},
+            "p_after": {"type": "number"}
+          }
+        }
+      }
+    },
+    "meta": {
+      "type": "object",
+      "additionalProperties": true
+    }
+  }
+}
+

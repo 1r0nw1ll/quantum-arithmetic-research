@@ -29,7 +29,6 @@
 \newcommand{\pp}{\,\text{pp}}
 \newcommand{\OA}{\ensuremath{\mathrm{OA}}}
 \newcommand{\Acc}{\ensuremath{\mathrm{AA}}}  % \AA is a LaTeX built-in (Angstrom A-ring)
-\newcommand{\TODO}[1]{\textcolor{red}{[TODO: #1]}}
 \newcommand{\AdjSalinas}{0.120} % adj_rate_4 from Family [79] cert (valid_salinas_dominant)
 \newcommand{\AdjKSC}{0.246}     % adj_rate_4 from Family [78] v1.2 Mode B GT mask excerpt
 
@@ -83,14 +82,14 @@ reduction, uncertainty gating, land-cover classification.
 \label{sec:intro}
 
 Hyperspectral image (HSI) and multimodal remote sensing classification
-remain central tasks in land-cover analysis~\cite{TODO_survey_hsi}.
+remain central tasks in land-cover analysis~\cite{bioucasdias2013_hsi_challenges}.
 Traditional approaches emphasize high-dimensional spectral
 representations, often employing dimensionality reduction
-(e.g., PCA~\cite{TODO_pca_hsi}), spectral transforms, or
+(e.g., PCA~\cite{green1988_mnf_transform}), spectral transforms, or
 increasingly complex multimodal fusion strategies. More recently,
 deep convolutional architectures have demonstrated strong performance
 by implicitly exploiting spatial context through learned receptive
-fields~\cite{TODO_cnn_hsi}. Despite these advances, the relative
+fields~\cite{hu2015_deep_cnn_hsi}. Despite these advances, the relative
 importance of spectral transforms versus explicit spatial aggregation
 remains underexplored.
 
@@ -165,7 +164,7 @@ Classical HSI classification methods operate on per-pixel spectral
 signatures, often comprising 100--200 bands. Dimensionality reduction
 techniques such as PCA, linear discriminant analysis (LDA), and band
 selection are commonly applied prior to classification using support
-vector machines (SVM)~\cite{TODO_svm_hsi}, random forests (RF), or
+vector machines (SVM)~\cite{campsvalls2005_kernel_hsi}, random forests (RF), or
 $k$-nearest neighbors. While effective in controlled settings,
 pixel-wise approaches are sensitive to intra-class spectral
 variability and mixed pixels, often requiring high model capacity to
@@ -180,14 +179,14 @@ neighborhood-based representations.
 To address the limitations of pixel-only models, numerous works
 incorporate spatial context through handcrafted texture descriptors,
 morphological profiles, and spatial filtering techniques. Extended
-morphological profiles (EMP)~\cite{TODO_emp}, gray-level
-co-occurrence matrix (GLCM) features~\cite{TODO_glcm}, and local
-binary patterns (LBP)~\cite{TODO_lbp} have demonstrated that
+morphological profiles (EMP)~\cite{benediktsson2005_emp}, gray-level
+co-occurrence matrix (GLCM) features~\cite{haralick1973_textural}, and local
+binary patterns (LBP)~\cite{ojala2002_lbp} have demonstrated that
 second-order spatial statistics improve classification stability.
 
 More recently, patch-based feature extraction and joint
 spectral--spatial descriptors have become standard, particularly in
-conjunction with deep architectures~\cite{TODO_patch_hsi}. However,
+conjunction with deep architectures~\cite{chen2016_deep_hsi_cnn}. However,
 many methods either dramatically increase feature dimensionality or
 rely on learned convolutional filters.
 
@@ -199,7 +198,7 @@ sufficiency without deep models or high-capacity transforms.
 
 CNNs have achieved state-of-the-art performance in hyperspectral
 classification by learning hierarchical spectral--spatial
-filters~\cite{TODO_cnn_hsi,TODO_3dcnn_hsi}. These architectures
+filters~\cite{hu2015_deep_cnn_hsi,li2017_3dcnn_hsi}. These architectures
 implicitly exploit local receptive fields, progressively aggregating
 spatial information across layers.
 
@@ -219,7 +218,7 @@ architectures on standard benchmarks.
 Multimodal remote sensing benchmarks (e.g., HSI + LiDAR +
 multispectral) have motivated diverse fusion strategies, including
 feature concatenation, late fusion, attention mechanisms, and
-uncertainty-driven gating~\cite{TODO_multimodal_fusion,TODO_gating}.
+uncertainty-driven gating~\cite{khodadadzadeh2015_hsi_lidar_fusion,hong2021_more_diverse_means_better}.
 Entropy-based or margin-based gating schemes aim to weight modalities
 according to classifier confidence.
 
@@ -240,12 +239,12 @@ We evaluate on five benchmarks:
 \begin{itemize}
   \item \textbf{Houston Multimodal:} Hyperspectral (144 bands),
     multispectral (8 bands), and LiDAR elevation data with 15
-    classes. Pre-extracted $11{\times}11$ patches are provided;
-    2832 labeled samples total.
+    classes~\cite{debes2014_grss_dfc2013}. Pre-extracted $11{\times}11$
+    patches are provided; 2832 labeled samples total.
   \item \textbf{Indian Pines:} $145{\times}145$ HSI with 200 spectral
-    bands and 16 classes (10\,249 labeled pixels)~\cite{TODO_indian_pines}.
+    bands and 16 classes (10\,249 labeled pixels)~\cite{baumgardner2015_indian_pines}.
   \item \textbf{PaviaU:} $610{\times}340$ HSI with 103 spectral bands
-    and 9 classes (42\,776 labeled pixels)~\cite{TODO_pavia}.
+    and 9 classes (42\,776 labeled pixels)~\cite{fauvel2013_spectral_spatial_advances}.
 \end{itemize}
 
 For Indian Pines and PaviaU, patches are extracted dynamically from
@@ -631,7 +630,7 @@ ambiguous too---the gate fires hardest where it is most wrong.
 
 The empirical dominance of small neighborhood statistics aligns with
 classical texture descriptors and with CNN receptive field
-theory~\cite{TODO_cnn_hsi}. CNNs implicitly learn spatial filters
+theory~\cite{hu2015_deep_cnn_hsi}. CNNs implicitly learn spatial filters
 that capture local mean, variance, and gradient information over
 small receptive fields. The present results show that much of this
 benefit can be achieved explicitly with low-dimensional
@@ -761,6 +760,8 @@ All experiments use publicly available datasets and standard
 scikit-learn RF classifiers (200 estimators). Patch extraction
 uses reflect padding; no GPU required. Experimental scripts and
 fixture data are archived with the submission.
+To regenerate the three paper figures and rebuild the PDF, run
+\texttt{./reproduce\_locality\_dominance.sh} from this paper directory.
 Dominance outcomes (Families~[77]--[78]) are CI-checkable certificate
 objects; run \texttt{python validator.py --self-test} in each family
 directory to verify all fixtures.  The KSC counterexample is certified

@@ -34,6 +34,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [37] | [QA EBM Navigation Cert](37_ebm_navigation_cert.md) | Schema + Validator + Fixtures | PASS |
 | [38] | [QA Energy–Capability Separation Cert](38_energy_capability_separation.md) | Schema + Validator + Fixtures | PASS |
 | [39] | [QA EBM Verifier Bridge Cert](39_ebm_verifier_bridge_cert.md) | Schema + Validator + Fixtures | PASS |
+| [40] | [QA Reachability Descent Run Cert v1](40_reachability_descent_run_cert.md) | Schema + Validator + Fixtures (PASS + negative fixtures) | PASS |
 | [44] | [QA Rational Trig Type System](44_rational_trig_type_system.md) | Schema + Validator + Fixtures | PASS |
 | [45] | [QA ARTexplorer Scene Adapter](45_artexplorer_scene_adapter.md) | Schema + Validator + Fixtures | PASS |
 | [50] | [QA ARTexplorer Scene Adapter v2 (Exact)](50_artexplorer_scene_adapter_v2_exact.md) | Schema + Validator + Fixtures (exact arithmetic) | PASS |
@@ -58,6 +59,12 @@ A family **does not count as shipped** unless both tracts are present.
 | [84] | [QA BSD Partial L-series Proxy Cert v1](84_bsd_partial_lseries_proxy_cert.md) | Schema + Validator (exact non-reduced Π(#E(F_p)/p) proxy + source-manifest binding) + 3 Fixtures (pass_proxy_p5_p7, pass_proxy_p5_p11, fail_wrong_proxy_denominator) | PASS |
 | [85] | [QA BSD Rank Squeeze Cert v1](85_bsd_rank_squeeze_cert.md) | Schema + Validator (local recompute + manifest binding + exact proxy + monotone rank-trace consistency/closure checks) + 5 Fixtures (pass_closed_p5_p7, pass_open_p5_p11, fail_bad_trace_crossing, fail_wrong_proxy_denominator, fail_wrong_ap_p7) | PASS |
 | [86] | [QA Generator-Failure Algebra Unification Cert v1](86_generator_failure_unification_cert.md) | Schema + Validator (5-gate: carrier cross-check, digest, T1 finite image, T2 SCC + T3 path propagation, T4 energy monotonicity) + 3 Fixtures (valid_caps_tr_fear_love, invalid_tag_not_in_carrier, invalid_energy_drift) + cross-binding to [76] failure algebra ref + [80] energy cert ref | PASS |
+| [87] | [QA Failure Compose Operator Cert v1](87_failure_compose_operator_cert.md) | Schema + Validator (formal `compose(Fi,Fj,form)` with closure/table completeness + per-form associativity checks) + 3 Fixtures (pass_feedback_escalation, fail_closure_incomplete_table, fail_associativity_feedback_violation) | PASS |
+| [88] | [QA Failure Algebra Structure Classification Cert v1](88_failure_algebra_structure_classification_cert.md) | Schema + Validator (form-indexed semigroup/monoid classification with identity/absorber/commutativity and optional monotonicity checks) + 5 Fixtures (pass_classify_from_family87_tables, fail_identity_claim_wrong, fail_absorber_claim_wrong, fail_commutative_claim_wrong, fail_monotonicity_violation) | PASS |
+| [89] | [QA QALM Curvature Cert v1](89_qalm_curvature_cert.md) | Schema + Validator (H_QA recompute and curvature-scaled update-rule pin) + 3 Fixtures (pass_default_tuple, fail_h_qa_mismatch, fail_update_sign) | PASS |
+| [90] | [QA Fairness Demographic Parity Cert v1](90_fairness_demographic_parity_cert.md) | Schema + Validator (demographic parity gap with constructive failure witness) + 2 Fixtures (valid_min, invalid_gap) | PASS |
+| [91] | [QA Fairness Equalized Odds Cert v1](91_fairness_equalized_odds_cert.md) | Schema + Validator (equalized odds TPR/FPR gap with constructive failure witness) + 2 Fixtures (valid_min, invalid_gap) | PASS |
+| [92] | [QA Safety Prompt Injection Refusal Cert v1](92_safety_prompt_injection_refusal_cert.md) | Schema + Validator (prompt injection refusal rate with judge contract hash and failure witness) + 2 Fixtures (valid_min, invalid_rate) | PASS |
 
 ## Quick validation
 

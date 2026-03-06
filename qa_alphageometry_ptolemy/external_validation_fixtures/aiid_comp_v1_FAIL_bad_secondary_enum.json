@@ -1,0 +1,15 @@
+[
+  {
+    "schema_id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1",
+    "incident_id": 39,
+    "primary": "F1",
+    "secondary": ["F9"],
+    "composition_form": "parallel",
+    "strain_witness": {
+      "reason": "Secondary uses invalid enum value.",
+      "competing_classes": ["F1"],
+      "missing_fields": ["intent"],
+      "notes": "Fixture FAIL bad secondary enum"
+    }
+  }
+]

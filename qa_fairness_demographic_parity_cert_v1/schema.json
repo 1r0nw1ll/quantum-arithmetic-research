@@ -1,0 +1,121 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_FAIRNESS_DEMOGRAPHIC_PARITY_CERT.v1.schema.json",
+  "title": "QA Fairness Demographic Parity Certificate (v1)",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "cert_id",
+    "created_utc",
+    "subject",
+    "data",
+    "claims",
+    "failure_obstructions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_FAIRNESS_DEMOGRAPHIC_PARITY_CERT.v1"
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 10
+    },
+    "subject": {
+      "type": "object",
+      "required": [
+        "model_id",
+        "dataset_id",
+        "protected_attribute",
+        "positive_prediction_label"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "model_id": {"type": "string", "minLength": 1},
+        "dataset_id": {"type": "string", "minLength": 1},
+        "protected_attribute": {"type": "string", "minLength": 1},
+        "positive_prediction_label": {"type": ["string", "integer"]}
+      }
+    },
+    "data": {
+      "type": "object",
+      "required": ["groups"],
+      "additionalProperties": false,
+      "properties": {
+        "groups": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "object",
+            "required": ["group", "n_total", "n_pos_pred"],
+            "additionalProperties": false,
+            "properties": {
+              "group": {"type": "string", "minLength": 1},
+              "n_total": {"type": "integer", "minimum": 1},
+              "n_pos_pred": {"type": "integer", "minimum": 0}
+            }
+          }
+        }
+      }
+    },
+    "claims": {
+      "type": "object",
+      "required": ["dp_gap_max", "dp_gap_observed", "selection_rates"],
+      "additionalProperties": false,
+      "properties": {
+        "dp_gap_max": {"$ref": "#/definitions/rational"},
+        "dp_gap_observed": {"$ref": "#/definitions/rational"},
+        "selection_rates": {
+          "type": "object",
+          "minProperties": 2,
+          "additionalProperties": {"$ref": "#/definitions/rational"}
+        }
+      }
+    },
+    "failure_obstructions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["obstruction_id", "conclusion", "witness"],
+        "additionalProperties": true,
+        "properties": {
+          "obstruction_id": {"type": "string"},
+          "conclusion": {"type": "string"},
+          "witness": {"type": "object"}
+        }
+      }
+    },
+    "invariant_diff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gate", "fail_type", "path", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "gate": {"type": "integer", "minimum": 0},
+          "fail_type": {"type": "string"},
+          "path": {"type": "string"},
+          "reason": {"type": "string"}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "rational": {
+      "description": "Exact rational scalar (int or 'p/q' string).",
+      "oneOf": [
+        {"type": "integer"},
+        {
+          "type": "string",
+          "pattern": "^-?\\d+(\\/\\d+)?$"
+        }
+      ]
+    }
+  }
+}
+

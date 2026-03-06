@@ -1,0 +1,16 @@
+[
+  {
+    "schema_id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1",
+    "incident_id": 39,
+    "primary": "F1",
+    "secondary": ["F6"],
+    "composition_form": "parallel",
+    "confidence": "low",
+    "strain_witness": {
+      "reason": "Authenticity formalization gap co-occurs with representation-isolation effects.",
+      "competing_classes": ["F1", "F6"],
+      "missing_fields": ["intent", "downstream_harm_trace"],
+      "notes": "Fixture PASS for composition schema."
+    }
+  }
+]

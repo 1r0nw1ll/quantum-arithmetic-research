@@ -1,0 +1,58 @@
+[
+  {
+    "schema_id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1",
+    "incident_id": 21,
+    "primary": "F4",
+    "secondary": ["F1"],
+    "composition_form": "parallel",
+    "confidence": "low",
+    "strain_witness": {
+      "reason": "Capability-boundary shortfall competes with problem-formulation framing for incident status.",
+      "competing_classes": ["F4", "F1"],
+      "missing_fields": ["deployment_context", "harm_realization", "incident_eligibility_criteria"],
+      "notes": "Downgraded issue boundary makes single-primitive assignment unstable across annotation policies."
+    }
+  },
+  {
+    "schema_id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1",
+    "incident_id": 39,
+    "primary": "F1",
+    "secondary": ["F6"],
+    "composition_form": "parallel",
+    "confidence": "low",
+    "strain_witness": {
+      "reason": "Authenticity formalization gap co-occurs with representation-isolation effects.",
+      "competing_classes": ["F1", "F6"],
+      "missing_fields": ["intent", "downstream_harm_trace", "deception_exposure"],
+      "notes": "Deepfake introduction case is mechanism-rich but harm realization details are sparse in the record."
+    }
+  },
+  {
+    "schema_id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1",
+    "incident_id": 41,
+    "primary": "F1",
+    "secondary": ["F4"],
+    "composition_form": "serial",
+    "confidence": "low",
+    "strain_witness": {
+      "reason": "Intentional stress-test setup blurs formalization failure versus bounded-capability demo.",
+      "competing_classes": ["F1", "F4"],
+      "missing_fields": ["deployment_intent", "production_use", "harm_scope"],
+      "notes": "Designed-to-fail experiment sits between benchmark pathology and real-world failure classification."
+    }
+  },
+  {
+    "schema_id": "QA_FAILURE_ALGEBRA_COMPOSITION_LABEL.v1",
+    "incident_id": 42,
+    "primary": "F2",
+    "secondary": ["F1"],
+    "composition_form": "serial",
+    "confidence": "low",
+    "strain_witness": {
+      "reason": "Combinatorial matching complexity interacts with underspecified fairness/stability objectives.",
+      "competing_classes": ["F2", "F1"],
+      "missing_fields": ["objective_tradeoffs", "constraint_design", "counterfactual_policy_baseline"],
+      "notes": "Historical matching-system critique supports explosion framing but objective semantics remain contested."
+    }
+  }
+]

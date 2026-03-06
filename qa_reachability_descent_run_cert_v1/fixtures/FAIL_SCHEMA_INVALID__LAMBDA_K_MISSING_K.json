@@ -1,0 +1,105 @@
+{
+  "schema_id": "QA_REACHABILITY_DESCENT_RUN_CERT",
+  "schema_version": "QA_REACHABILITY_DESCENT_RUN_CERT.v1",
+  "N": 6,
+  "objective": {
+    "type": "L2_TO_TARGET",
+    "target_state": {
+      "b": 1,
+      "e": 1
+    }
+  },
+  "generator_set": [
+    {
+      "name": "sigma"
+    },
+    {
+      "name": "mu"
+    },
+    {
+      "name": "lambda_k"
+    },
+    {
+      "name": "nu"
+    }
+  ],
+  "run": {
+    "policy": "GREEDY_MIN_ENERGY_TIEBREAK_MOVE_NAME",
+    "start_state": {
+      "b": 4,
+      "e": 2
+    },
+    "return_in_k_probes": [
+      {
+        "probe_id": "t0_back_to_start_in_1",
+        "k": 1,
+        "start_from_step_t": 0,
+        "goal_state": {
+          "b": 4,
+          "e": 2
+        },
+        "expected": {
+          "reachable": true,
+          "min_steps": 1
+        }
+      }
+    ],
+    "steps": [
+      {
+        "t": 0,
+        "state_before": {
+          "b": 4,
+          "e": 2
+        },
+        "energy_before": 10,
+        "attempted_moves": [
+          {
+            "move": {
+              "name": "sigma"
+            },
+            "result": {
+              "ok": true,
+              "value": {
+                "b": 4,
+                "e": 3
+              }
+            }
+          },
+          {
+            "move": {
+              "name": "mu"
+            },
+            "result": {
+              "ok": true,
+              "value": {
+                "b": 2,
+                "e": 4
+              }
+            }
+          },
+          {
+            "move": {
+              "name": "nu"
+            },
+            "result": {
+              "ok": true,
+              "value": {
+                "b": 2,
+                "e": 1
+              }
+            }
+          }
+        ],
+        "chosen_move": {
+          "name": "nu"
+        },
+        "state_after": {
+          "b": 2,
+          "e": 1
+        },
+        "energy_after": 1
+      }
+    ]
+  }
+}
+

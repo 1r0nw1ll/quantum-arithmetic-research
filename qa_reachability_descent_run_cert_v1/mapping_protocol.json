@@ -1,0 +1,79 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_REACHABILITY_DESCENT_RUN_CERT_V1",
+  "state_manifold": {
+    "state_type": "CAPS_BE state (b,e) with b,e ∈ ℕ and bounded by N",
+    "embedding_function": "Identity embedding of tuple (b,e); objective defines energy E(s)",
+    "constraints": [
+      "Natural domain: b,e ≥ 1",
+      "Caps bound: b,e ≤ N",
+      "Time is discrete path length (number of generator moves)"
+    ]
+  },
+  "generators": [
+    {
+      "name": "sigma",
+      "transition_rule": "(b,e) → (b, e+1) if e+1 ≤ N",
+      "invariant_effect": "Increases e by 1 within Caps(N,N)"
+    },
+    {
+      "name": "mu",
+      "transition_rule": "(b,e) → (e, b)",
+      "invariant_effect": "Swaps coordinates; preserves domain/caps if inputs do"
+    },
+    {
+      "name": "lambda_k",
+      "transition_rule": "(b,e) → (k·b, k·e) for integer k ≥ 2, if k·b,k·e ≤ N",
+      "invariant_effect": "Uniform scaling by k; may violate Caps(N,N)"
+    },
+    {
+      "name": "nu",
+      "transition_rule": "(b,e) → (b/2, e/2) if b,e are both even",
+      "invariant_effect": "Contracts by factor 2 on even-even states; preserves natural domain"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "NATURAL_DOMAIN",
+      "definition": "State must satisfy b,e ∈ ℕ with b,e ≥ 1"
+    },
+    {
+      "name": "CAPS_N",
+      "definition": "State must satisfy b,e ≤ N (certificate-provided N with 1 ≤ N ≤ 10)"
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "SCHEMA_INVALID",
+      "trigger_condition": "schema_version mismatch or JSON schema violation"
+    },
+    {
+      "fail_type": "NOT_IN_NATURAL_DOMAIN",
+      "trigger_condition": "state_before or state_after violates b,e ≥ 1"
+    },
+    {
+      "fail_type": "OUT_OF_BOUNDS",
+      "trigger_condition": "state_before or state_after violates Caps(N,N): b,e ≤ N"
+    },
+    {
+      "fail_type": "MOVE_PRECONDITION_FAILED",
+      "trigger_condition": "move-specific preconditions fail (e.g., nu requires even-even; lambda_k requires k ≥ 2)"
+    },
+    {
+      "fail_type": "POLICY_VIOLATION",
+      "trigger_condition": "chosen_move is not greedy argmin over attempted legal moves (tie-break by move name and lambda_k:k)"
+    },
+    {
+      "fail_type": "MOVE_NOT_IN_GENERATOR_SET",
+      "trigger_condition": "attempted_moves or chosen_move includes a move not listed in generator_set; membership is defined on the pair (name,k) (for lambda_k) and on (name,None) for other generators"
+    }
+  ],
+  "reachability": {
+    "graph_type": "directed",
+    "component_analysis": "Legal transitions form a finite directed graph over Caps(N,N) states. Optional return_in_k_probes are verified by BFS up to depth k using the declared generator_set (order-preserving compilation, identical moves deduplicated)."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "All move applications are deterministic total functions into (State ∪ Failure). Energy is a deterministic integer function of state. Greedy policy is deterministic via total ordering (energy_after, move_sort_key). Optional reachability probes are deterministic via BFS with fixed generator order."
+  }
+}

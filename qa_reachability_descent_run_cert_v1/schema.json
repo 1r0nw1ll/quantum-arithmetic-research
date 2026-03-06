@@ -1,0 +1,507 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_REACHABILITY_DESCENT_RUN_CERT.v1.schema.json",
+  "title": "QA Reachability Descent Run Certificate v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "schema_version",
+    "N",
+    "objective",
+    "generator_set",
+    "run"
+  ],
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_REACHABILITY_DESCENT_RUN_CERT"
+    },
+    "schema_version": {
+      "type": "string",
+      "enum": [
+        "QA_REACHABILITY_DESCENT_RUN_CERT.v1"
+      ]
+    },
+    "N": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 10
+    },
+    "objective": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "type",
+        "target_state"
+      ],
+      "properties": {
+        "type": {
+          "type": "string",
+          "enum": [
+            "L2_TO_TARGET"
+          ]
+        },
+        "target_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "b",
+            "e"
+          ],
+          "properties": {
+            "b": {
+              "type": "integer"
+            },
+            "e": {
+              "type": "integer"
+            }
+          }
+        }
+      }
+    },
+    "generator_set": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "enum": [
+              "sigma",
+              "mu",
+              "lambda_k",
+              "nu"
+            ]
+          },
+          "k": {
+            "type": "integer",
+            "minimum": 2,
+            "maximum": 10
+          }
+        },
+        "allOf": [
+          {
+            "if": {
+              "properties": {
+                "name": {
+                  "const": "lambda_k"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            },
+            "then": {
+              "required": [
+                "k"
+              ]
+            },
+            "else": {
+              "not": {
+                "required": [
+                  "k"
+                ]
+              }
+            }
+          }
+        ]
+      }
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "policy",
+        "start_state",
+        "steps"
+      ],
+      "properties": {
+        "policy": {
+          "type": "string",
+          "enum": [
+            "GREEDY_MIN_ENERGY_TIEBREAK_MOVE_NAME"
+          ]
+        },
+        "start_state": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "b",
+            "e"
+          ],
+          "properties": {
+            "b": {
+              "type": "integer"
+            },
+            "e": {
+              "type": "integer"
+            }
+          }
+        },
+        "steps": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "t",
+              "state_before",
+              "energy_before",
+              "attempted_moves",
+              "chosen_move",
+              "state_after",
+              "energy_after"
+            ],
+            "properties": {
+              "t": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "state_before": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "b",
+                  "e"
+                ],
+                "properties": {
+                  "b": {
+                    "type": "integer"
+                  },
+                  "e": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "energy_before": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "attempted_moves": {
+                "type": "array",
+                "minItems": 1,
+                "items": {
+                  "type": "object",
+                  "additionalProperties": false,
+                  "required": [
+                    "move",
+                    "result"
+                  ],
+                  "properties": {
+                    "move": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "name"
+                      ],
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "enum": [
+                            "sigma",
+                            "mu",
+                            "lambda_k",
+                            "nu"
+                          ]
+                        },
+                        "k": {
+                          "type": "integer",
+                          "minimum": 2,
+                          "maximum": 10
+                        }
+                      },
+                      "allOf": [
+                        {
+                          "if": {
+                            "properties": {
+                              "name": {
+                                "const": "lambda_k"
+                              }
+                            },
+                            "required": [
+                              "name"
+                            ]
+                          },
+                          "then": {
+                            "required": [
+                              "k"
+                            ]
+                          },
+                          "else": {
+                            "not": {
+                              "required": [
+                                "k"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    },
+                    "result": {
+                      "type": "object",
+                      "additionalProperties": false,
+                      "required": [
+                        "ok"
+                      ],
+                      "properties": {
+                        "ok": {
+                          "type": "boolean"
+                        },
+                        "value": {
+                          "type": "object",
+                          "additionalProperties": false,
+                          "required": [
+                            "b",
+                            "e"
+                          ],
+                          "properties": {
+                            "b": {
+                              "type": "integer"
+                            },
+                            "e": {
+                              "type": "integer"
+                            }
+                          }
+                        },
+                        "fail_type": {
+                          "type": "string",
+                          "enum": [
+                            "NOT_IN_NATURAL_DOMAIN",
+                            "OUT_OF_BOUNDS",
+                            "MOVE_PRECONDITION_FAILED"
+                          ]
+                        },
+                        "invariant_diff": {
+                          "type": "object"
+                        },
+                        "details": {
+                          "type": "object"
+                        }
+                      },
+                      "allOf": [
+                        {
+                          "if": {
+                            "properties": {
+                              "ok": {
+                                "const": true
+                              }
+                            },
+                            "required": [
+                              "ok"
+                            ]
+                          },
+                          "then": {
+                            "required": [
+                              "value"
+                            ],
+                            "not": {
+                              "required": [
+                                "fail_type"
+                              ]
+                            }
+                          },
+                          "else": {
+                            "required": [
+                              "fail_type",
+                              "invariant_diff",
+                              "details"
+                            ],
+                            "not": {
+                              "required": [
+                                "value"
+                              ]
+                            }
+                          }
+                        }
+                      ]
+                    }
+                  }
+                }
+              },
+              "chosen_move": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "name"
+                ],
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "enum": [
+                      "sigma",
+                      "mu",
+                      "lambda_k",
+                      "nu"
+                    ]
+                  },
+                  "k": {
+                    "type": "integer",
+                    "minimum": 2,
+                    "maximum": 10
+                  }
+                },
+                "allOf": [
+                  {
+                    "if": {
+                      "properties": {
+                        "name": {
+                          "const": "lambda_k"
+                        }
+                      },
+                      "required": [
+                        "name"
+                      ]
+                    },
+                    "then": {
+                      "required": [
+                        "k"
+                      ]
+                    },
+                    "else": {
+                      "not": {
+                        "required": [
+                          "k"
+                        ]
+                      }
+                    }
+                  }
+                ]
+              },
+              "state_after": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "b",
+                  "e"
+                ],
+                "properties": {
+                  "b": {
+                    "type": "integer"
+                  },
+                  "e": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "energy_after": {
+                "type": "integer",
+                "minimum": 0
+              }
+            }
+          }
+        },
+        "return_in_k_probes": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "probe_id",
+              "k",
+              "goal_state",
+              "expected"
+            ],
+            "properties": {
+              "probe_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "k": {
+                "type": "integer",
+                "minimum": 0,
+                "maximum": 20
+              },
+              "start_state": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "b",
+                  "e"
+                ],
+                "properties": {
+                  "b": {
+                    "type": "integer"
+                  },
+                  "e": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "start_from_step_t": {
+                "type": "integer",
+                "minimum": 0
+              },
+              "goal_state": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "b",
+                  "e"
+                ],
+                "properties": {
+                  "b": {
+                    "type": "integer"
+                  },
+                  "e": {
+                    "type": "integer"
+                  }
+                }
+              },
+              "expected": {
+                "type": "object",
+                "additionalProperties": false,
+                "required": [
+                  "reachable"
+                ],
+                "properties": {
+                  "reachable": {
+                    "type": "boolean"
+                  },
+                  "min_steps": {
+                    "type": "integer",
+                    "minimum": 0,
+                    "maximum": 20
+                  }
+                }
+              }
+            },
+            "allOf": [
+              {
+                "oneOf": [
+                  {
+                    "required": [
+                      "start_state"
+                    ],
+                    "not": {
+                      "required": [
+                        "start_from_step_t"
+                      ]
+                    }
+                  },
+                  {
+                    "required": [
+                      "start_from_step_t"
+                    ],
+                    "not": {
+                      "required": [
+                        "start_state"
+                      ]
+                    }
+                  }
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  }
+}

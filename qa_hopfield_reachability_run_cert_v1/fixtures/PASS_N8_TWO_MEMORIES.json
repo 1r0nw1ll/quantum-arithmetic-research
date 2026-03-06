@@ -1,0 +1,56 @@
+{
+  "schema_id": "QA_HOPFIELD_REACHABILITY_RUN_CERT",
+  "schema_version": "QA_HOPFIELD_REACHABILITY_RUN_CERT.v1",
+  "N": 8,
+  "objective": {
+    "type": "HAMMING_TO_NEAREST_MEMORY",
+    "memories": [
+      [1, 1, 1, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 1]
+    ]
+  },
+  "generator_set": [
+    { "name": "flip", "i": 0 },
+    { "name": "flip", "i": 1 },
+    { "name": "flip", "i": 2 },
+    { "name": "flip", "i": 3 },
+    { "name": "flip", "i": 4 },
+    { "name": "flip", "i": 5 },
+    { "name": "flip", "i": 6 },
+    { "name": "flip", "i": 7 }
+  ],
+  "run": {
+    "policy": "GREEDY_MIN_ENERGY_TIEBREAK_MOVE_KEY",
+    "start_state": [1, 1, 0, 1, 0, 0, 0, 0],
+    "return_in_k_probes": [
+      {
+        "probe_id": "recover_mem0_from_start_in_1",
+        "k": 1,
+        "start_state": [1, 1, 0, 1, 0, 0, 0, 0],
+        "goal_state": [1, 1, 1, 1, 0, 0, 0, 0],
+        "expected": { "reachable": true, "min_steps": 1 }
+      }
+    ],
+    "steps": [
+      {
+        "t": 0,
+        "state_before": [1, 1, 0, 1, 0, 0, 0, 0],
+        "energy_before": 1,
+        "attempted_moves": [
+          {
+            "move": { "name": "flip", "i": 2 },
+            "result": { "ok": true, "value": [1, 1, 1, 1, 0, 0, 0, 0] }
+          },
+          {
+            "move": { "name": "flip", "i": 7 },
+            "result": { "ok": true, "value": [1, 1, 0, 1, 0, 0, 0, 1] }
+          }
+        ],
+        "chosen_move": { "name": "flip", "i": 2 },
+        "state_after": [1, 1, 1, 1, 0, 0, 0, 0],
+        "energy_after": 0
+      }
+    ]
+  }
+}
+

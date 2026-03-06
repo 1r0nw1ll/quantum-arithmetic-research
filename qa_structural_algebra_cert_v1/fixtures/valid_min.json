@@ -1,0 +1,278 @@
+{
+  "schema_version": "QA_STRUCTURAL_ALGEBRA_CERT.v1",
+  "cert_id": "qa-structural-cert-valid-001",
+  "created_utc": "2026-02-20T00:00:00Z",
+  "subject": {
+    "seed": [
+      1,
+      1
+    ],
+    "N": 20,
+    "generators": [
+      "sigma",
+      "mu",
+      "R",
+      "lambda_k",
+      "nu"
+    ],
+    "algebra_bridge_semantics_sha256": "45891eeeb3a1903eb97d1b3f2690095ad5287d888e55648af0d7bd8af057155c"
+  },
+  "claims": {
+    "normal_form": true,
+    "uniqueness": true,
+    "scaling_components": true,
+    "guarded_contraction": true
+  },
+  "fixtures": {
+    "roundtrip_samples": [
+      {
+        "state": [
+          2,
+          3
+        ],
+        "expected_word": "RL",
+        "expected_roundtrip": [
+          2,
+          3
+        ]
+      },
+      {
+        "state": [
+          3,
+          2
+        ],
+        "expected_word": "LR",
+        "expected_roundtrip": [
+          3,
+          2
+        ]
+      },
+      {
+        "state": [
+          5,
+          3
+        ],
+        "expected_word": "RLR",
+        "expected_roundtrip": [
+          5,
+          3
+        ]
+      },
+      {
+        "state": [
+          8,
+          5
+        ],
+        "expected_word": "LRLR",
+        "expected_roundtrip": [
+          8,
+          5
+        ]
+      },
+      {
+        "state": [
+          13,
+          8
+        ],
+        "expected_word": "RLRLR",
+        "expected_roundtrip": [
+          13,
+          8
+        ]
+      },
+      {
+        "state": [
+          8,
+          13
+        ],
+        "expected_word": "LRLRL",
+        "expected_roundtrip": [
+          8,
+          13
+        ]
+      },
+      {
+        "state": [
+          4,
+          5
+        ],
+        "expected_word": "RRRL",
+        "expected_roundtrip": [
+          4,
+          5
+        ]
+      },
+      {
+        "state": [
+          5,
+          4
+        ],
+        "expected_word": "LLLR",
+        "expected_roundtrip": [
+          5,
+          4
+        ]
+      },
+      {
+        "state": [
+          7,
+          3
+        ],
+        "expected_word": "LLRR",
+        "expected_roundtrip": [
+          7,
+          3
+        ]
+      },
+      {
+        "state": [
+          3,
+          7
+        ],
+        "expected_word": "RRLL",
+        "expected_roundtrip": [
+          3,
+          7
+        ]
+      }
+    ],
+    "nu_guard_samples": [
+      {
+        "state": [
+          4,
+          6
+        ],
+        "expected_ok": true,
+        "expected_value": [
+          2,
+          3
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "state": [
+          2,
+          4
+        ],
+        "expected_ok": true,
+        "expected_value": [
+          1,
+          2
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "state": [
+          8,
+          12
+        ],
+        "expected_ok": true,
+        "expected_value": [
+          4,
+          6
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "state": [
+          3,
+          4
+        ],
+        "expected_ok": false,
+        "expected_fail_type": "ODD_BLOCK"
+      },
+      {
+        "state": [
+          5,
+          7
+        ],
+        "expected_ok": false,
+        "expected_fail_type": "ODD_BLOCK"
+      },
+      {
+        "state": [
+          2,
+          3
+        ],
+        "expected_ok": false,
+        "expected_fail_type": "ODD_BLOCK"
+      }
+    ],
+    "scale_samples": [
+      {
+        "state": [
+          2,
+          3
+        ],
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_scale": 1
+      },
+      {
+        "state": [
+          4,
+          6
+        ],
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_scale": 2
+      },
+      {
+        "state": [
+          6,
+          9
+        ],
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_scale": 3
+      },
+      {
+        "state": [
+          8,
+          12
+        ],
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_scale": 4
+      },
+      {
+        "state": [
+          10,
+          15
+        ],
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_scale": 5
+      },
+      {
+        "state": [
+          12,
+          18
+        ],
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_scale": 6
+      }
+    ]
+  },
+  "result": {
+    "ok": true,
+    "failures": [],
+    "invariant_diff_map": {
+      "entries": [],
+      "rollup_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

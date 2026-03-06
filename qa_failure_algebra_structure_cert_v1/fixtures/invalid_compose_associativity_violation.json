@@ -1,0 +1,206 @@
+{
+  "schema_version": "QA_FAILURE_ALGEBRA_STRUCTURE_CERT.v1",
+  "cert_id": "qa-failure-algebra-pass-tiny-001",
+  "created_utc": "2026-02-21T00:00:00Z",
+  "carrier": [
+    "OK",
+    "PARITY_BLOCK",
+    "INVARIANT_VIOLATION",
+    "OUT_OF_DOMAIN"
+  ],
+  "leq": [
+    {
+      "a": "OK",
+      "b": "OK"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION"
+    },
+    {
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "OK",
+      "b": "PARITY_BLOCK"
+    },
+    {
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION"
+    },
+    {
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN"
+    }
+  ],
+  "join_table": [
+    {
+      "a": "OK",
+      "b": "OK",
+      "join": "OK"
+    },
+    {
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "join": "PARITY_BLOCK"
+    },
+    {
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "join": "INVARIANT_VIOLATION"
+    },
+    {
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "join": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "join": "PARITY_BLOCK"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "join": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "join": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "join": "INVARIANT_VIOLATION"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "join": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "join": "OUT_OF_DOMAIN"
+    }
+  ],
+  "compose_table": [
+    {
+      "a": "OK",
+      "b": "OK",
+      "comp": "OK"
+    },
+    {
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "OK",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "OUT_OF_DOMAIN",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "OUT_OF_DOMAIN",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "OUT_OF_DOMAIN",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    }
+  ],
+  "unit": "OK",
+  "result": {
+    "ok": false,
+    "violations": [
+      {
+        "gate": 4,
+        "fail_type": "COMPOSE_ASSOCIATIVITY_VIOLATION",
+        "path": "compose_table",
+        "reason": "(PARITY_BLOCK∘OK)∘PARITY_BLOCK=OUT_OF_DOMAIN != PARITY_BLOCK∘(OK∘PARITY_BLOCK)=PARITY_BLOCK"
+      }
+    ],
+    "invariant_diff_map": {
+      "entries": [
+        {
+          "gate": 4,
+          "fail_type": "COMPOSE_ASSOCIATIVITY_VIOLATION",
+          "path": "compose_table",
+          "reason": "(PARITY_BLOCK∘OK)∘PARITY_BLOCK=OUT_OF_DOMAIN != PARITY_BLOCK∘(OK∘PARITY_BLOCK)=PARITY_BLOCK"
+        }
+      ],
+      "rollup_sha256": "06ecc0335c07e3ea455e0d06cf27250bbf005842d73ee0a9e5ca45bff6e030f3"
+    }
+  }
+}

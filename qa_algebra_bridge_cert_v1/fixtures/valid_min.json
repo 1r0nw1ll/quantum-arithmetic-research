@@ -1,0 +1,192 @@
+{
+  "schema_version": "QA_ALGEBRA_BRIDGE_CERT.v1",
+  "cert_id": "qa-algebra-bridge-valid-001",
+  "created_utc": "2026-02-20T00:00:00Z",
+  "subject": {
+    "semantics_id": "QA_ALGEBRA_SEMANTICS.v1",
+    "generator_semantics_ref": "QA_GENERATORS_SIGMA_SHEAR.v1",
+    "word_application_order": "left_to_right"
+  },
+  "semantics": {
+    "generator_defs": {
+      "sigma": "(b,e)->(b,e+b)",
+      "mu": "(b,e)->(e,b)",
+      "R": "R:=mu sigma mu; (b,e)->(b+e,e)",
+      "lambda_k": "(b,e,k)->(k*b,k*e), k>=1",
+      "nu": "(b,e)->(b/2,e/2) iff b,e both even; else ODD_BLOCK"
+    },
+    "core_properties": [
+      "gcd invariant under sigma/mu/R",
+      "state_to_word gives unique LR normal form on coprime states",
+      "state_to_word_with_scale gives (word,scale,normalized)",
+      "nu contraction depth on gcd is v2(g)"
+    ],
+    "semantics_sha256": "45891eeeb3a1903eb97d1b3f2690095ad5287d888e55648af0d7bd8af057155c"
+  },
+  "claims": {
+    "generator_behavior": true,
+    "word_convention": true,
+    "component_bridge": true,
+    "semantics_hash_binding": true
+  },
+  "fixtures": {
+    "generator_probes": [
+      {
+        "op": "sigma",
+        "state": [
+          2,
+          3
+        ],
+        "expected_ok": true,
+        "expected_value": [
+          2,
+          5
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "op": "mu",
+        "state": [
+          2,
+          3
+        ],
+        "expected_ok": true,
+        "expected_value": [
+          3,
+          2
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "op": "R",
+        "state": [
+          2,
+          3
+        ],
+        "expected_ok": true,
+        "expected_value": [
+          5,
+          3
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "op": "lambda_k",
+        "state": [
+          2,
+          3
+        ],
+        "k": 2,
+        "expected_ok": true,
+        "expected_value": [
+          4,
+          6
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "op": "nu",
+        "state": [
+          4,
+          6
+        ],
+        "expected_ok": true,
+        "expected_value": [
+          2,
+          3
+        ],
+        "expected_fail_type": ""
+      },
+      {
+        "op": "nu",
+        "state": [
+          2,
+          3
+        ],
+        "expected_ok": false,
+        "expected_fail_type": "ODD_BLOCK"
+      }
+    ],
+    "word_probes": [
+      {
+        "word": "RL",
+        "seed": [
+          1,
+          1
+        ],
+        "expected_state": [
+          2,
+          3
+        ]
+      },
+      {
+        "word": "LR",
+        "seed": [
+          1,
+          1
+        ],
+        "expected_state": [
+          3,
+          2
+        ]
+      },
+      {
+        "word": "RLR",
+        "seed": [
+          1,
+          1
+        ],
+        "expected_state": [
+          5,
+          3
+        ]
+      }
+    ],
+    "component_probes": [
+      {
+        "state": [
+          12,
+          18
+        ],
+        "expected_scale": 6,
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_word": "RL"
+      },
+      {
+        "state": [
+          24,
+          40
+        ],
+        "expected_scale": 8,
+        "expected_normalized": [
+          3,
+          5
+        ],
+        "expected_word": "LRL"
+      },
+      {
+        "state": [
+          2,
+          3
+        ],
+        "expected_scale": 1,
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_word": "RL"
+      }
+    ]
+  },
+  "result": {
+    "ok": true,
+    "failures": [],
+    "invariant_diff_map": {
+      "entries": [],
+      "rollup_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

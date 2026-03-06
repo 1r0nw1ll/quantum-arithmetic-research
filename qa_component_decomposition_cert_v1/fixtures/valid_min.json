@@ -1,0 +1,286 @@
+{
+  "schema_version": "QA_COMPONENT_DECOMPOSITION_CERT.v1",
+  "cert_id": "qa-component-decomp-valid-001",
+  "created_utc": "2026-02-20T00:00:00Z",
+  "subject": {
+    "seed_unit": [
+      1,
+      1
+    ],
+    "N": 24,
+    "generators": [
+      "sigma",
+      "mu",
+      "R",
+      "lambda_k",
+      "nu"
+    ],
+    "algebra_bridge_semantics_sha256": "45891eeeb3a1903eb97d1b3f2690095ad5287d888e55648af0d7bd8af057155c",
+    "failure_algebra_anchor_ref": "QA_FAILURE_ALGEBRA_STRUCTURE_CERT.v1",
+    "failure_algebra_anchor_rollup_sha256": "f41c3ed01e13976ac97789507a136a52ab59ce1818130471da63058f50726be5"
+  },
+  "claims": {
+    "component_decomposition": true,
+    "scaled_seed_roundtrip": true,
+    "nu_power2_characterization": true,
+    "bounded_theorem_sweep": true
+  },
+  "fixtures": {
+    "decomposition_samples": [
+      {
+        "state": [
+          2,
+          3
+        ],
+        "expected_gcd": 1,
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_word": "RL",
+        "expected_scaled_seed_roundtrip": [
+          2,
+          3
+        ]
+      },
+      {
+        "state": [
+          3,
+          2
+        ],
+        "expected_gcd": 1,
+        "expected_normalized": [
+          3,
+          2
+        ],
+        "expected_word": "LR",
+        "expected_scaled_seed_roundtrip": [
+          3,
+          2
+        ]
+      },
+      {
+        "state": [
+          5,
+          3
+        ],
+        "expected_gcd": 1,
+        "expected_normalized": [
+          5,
+          3
+        ],
+        "expected_word": "RLR",
+        "expected_scaled_seed_roundtrip": [
+          5,
+          3
+        ]
+      },
+      {
+        "state": [
+          12,
+          18
+        ],
+        "expected_gcd": 6,
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_word": "RL",
+        "expected_scaled_seed_roundtrip": [
+          12,
+          18
+        ]
+      },
+      {
+        "state": [
+          18,
+          30
+        ],
+        "expected_gcd": 6,
+        "expected_normalized": [
+          3,
+          5
+        ],
+        "expected_word": "LRL",
+        "expected_scaled_seed_roundtrip": [
+          18,
+          30
+        ]
+      },
+      {
+        "state": [
+          24,
+          40
+        ],
+        "expected_gcd": 8,
+        "expected_normalized": [
+          3,
+          5
+        ],
+        "expected_word": "LRL",
+        "expected_scaled_seed_roundtrip": [
+          24,
+          40
+        ]
+      },
+      {
+        "state": [
+          16,
+          24
+        ],
+        "expected_gcd": 8,
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_word": "RL",
+        "expected_scaled_seed_roundtrip": [
+          16,
+          24
+        ]
+      },
+      {
+        "state": [
+          20,
+          16
+        ],
+        "expected_gcd": 4,
+        "expected_normalized": [
+          5,
+          4
+        ],
+        "expected_word": "LLLR",
+        "expected_scaled_seed_roundtrip": [
+          20,
+          16
+        ]
+      },
+      {
+        "state": [
+          21,
+          35
+        ],
+        "expected_gcd": 7,
+        "expected_normalized": [
+          3,
+          5
+        ],
+        "expected_word": "LRL",
+        "expected_scaled_seed_roundtrip": [
+          21,
+          35
+        ]
+      },
+      {
+        "state": [
+          14,
+          21
+        ],
+        "expected_gcd": 7,
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_word": "RL",
+        "expected_scaled_seed_roundtrip": [
+          14,
+          21
+        ]
+      }
+    ],
+    "nu_samples": [
+      {
+        "state": [
+          12,
+          18
+        ],
+        "expected_v2_g": 1,
+        "expected_after_v2": [
+          6,
+          9
+        ],
+        "expected_reaches_normalized": false,
+        "expected_next_ok": false,
+        "expected_next_fail_type": "ODD_BLOCK"
+      },
+      {
+        "state": [
+          24,
+          40
+        ],
+        "expected_v2_g": 3,
+        "expected_after_v2": [
+          3,
+          5
+        ],
+        "expected_reaches_normalized": true,
+        "expected_next_ok": false,
+        "expected_next_fail_type": "ODD_BLOCK"
+      },
+      {
+        "state": [
+          16,
+          24
+        ],
+        "expected_v2_g": 3,
+        "expected_after_v2": [
+          2,
+          3
+        ],
+        "expected_reaches_normalized": true,
+        "expected_next_ok": false,
+        "expected_next_fail_type": "ODD_BLOCK"
+      },
+      {
+        "state": [
+          2,
+          3
+        ],
+        "expected_v2_g": 0,
+        "expected_after_v2": [
+          2,
+          3
+        ],
+        "expected_reaches_normalized": true,
+        "expected_next_ok": false,
+        "expected_next_fail_type": "ODD_BLOCK"
+      },
+      {
+        "state": [
+          18,
+          30
+        ],
+        "expected_v2_g": 1,
+        "expected_after_v2": [
+          9,
+          15
+        ],
+        "expected_reaches_normalized": false,
+        "expected_next_ok": false,
+        "expected_next_fail_type": "ODD_BLOCK"
+      },
+      {
+        "state": [
+          48,
+          72
+        ],
+        "expected_v2_g": 3,
+        "expected_after_v2": [
+          6,
+          9
+        ],
+        "expected_reaches_normalized": false,
+        "expected_next_ok": false,
+        "expected_next_fail_type": "ODD_BLOCK"
+      }
+    ]
+  },
+  "result": {
+    "ok": true,
+    "failures": [],
+    "invariant_diff_map": {
+      "entries": [],
+      "rollup_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945"
+    }
+  }
+}

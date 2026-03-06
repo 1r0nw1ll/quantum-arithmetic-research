@@ -1,0 +1,314 @@
+{
+  "schema_id": "QA_FAILURE_COMPOSE_OPERATOR_CERT",
+  "schema_version": "v1",
+  "cert_id": "qa-failure-compose-operator-fail-assoc-001",
+  "created_utc": "2026-03-02T00:00:00Z",
+  "carrier": [
+    "OK",
+    "PARITY_BLOCK",
+    "INVARIANT_VIOLATION",
+    "OUT_OF_DOMAIN"
+  ],
+  "forms": [
+    "serial",
+    "parallel",
+    "feedback"
+  ],
+  "compose_table": [
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "OK",
+      "comp": "OK"
+    },
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "serial",
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "OK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OK",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "serial",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "serial",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "OK",
+      "comp": "OK"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "parallel",
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "OK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "comp": "PARITY_BLOCK"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OK",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "INVARIANT_VIOLATION"
+    },
+    {
+      "form": "parallel",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "parallel",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "OK",
+      "comp": "OK"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "PARITY_BLOCK",
+      "comp": "OK"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "PARITY_BLOCK",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "INVARIANT_VIOLATION",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "PARITY_BLOCK",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "INVARIANT_VIOLATION",
+      "comp": "OUT_OF_DOMAIN"
+    },
+    {
+      "form": "feedback",
+      "a": "OUT_OF_DOMAIN",
+      "b": "OUT_OF_DOMAIN",
+      "comp": "OUT_OF_DOMAIN"
+    }
+  ],
+  "claimed": {
+    "closure_holds": true,
+    "associativity_holds": true
+  },
+  "meta": {
+    "notes": "FAIL fixture: mutated feedback(OK,PARITY_BLOCK)=OK to trigger associativity witness."
+  }
+}

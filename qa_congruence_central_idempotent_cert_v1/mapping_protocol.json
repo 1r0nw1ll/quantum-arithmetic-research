@@ -1,0 +1,38 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_CONGRUENCE_CENTRAL_IDEMPOTENT_CERT_V1",
+  "state_manifold": {
+    "state_type": "CENTER_CLASS_AVERAGE_ALGEBRA (PSL2(Z/NZ) class-average basis)",
+    "embedding_function": "Enumerate PSL2(Z/NZ), compute conjugacy classes, express e in class-average basis A_i",
+    "constraints": [
+      "v1 fixes N=72",
+      "G = PSL2(Z/NZ) represented as normalized 4-tuples (a,b,c,d) mod N with M ~ -M",
+      "Class-average basis element A_i = (1/|C_i|) * sum_{g in C_i} g in Q[G]",
+      "Centrality is automatic for any element expressed in the class-average basis",
+      "Idempotence is checked exactly in Q[G]"
+    ]
+  },
+  "invariants": [
+    {
+      "name": "centrality",
+      "definition": "Any element expressed as a linear combination of class-average basis elements is central."
+    },
+    {
+      "name": "idempotence",
+      "definition": "e is idempotent iff e*e = e in Z(Q[G])."
+    }
+  ],
+  "failure_taxonomy": [
+    {"fail_type": "SCHEMA_INVALID", "trigger_condition": "schema_id mismatch or missing required fields"},
+    {"fail_type": "GROUP_ENUMERATION_INCOMPLETE", "trigger_condition": "BFS did not enumerate full PSL2(Z/72Z)"},
+    {"fail_type": "CLASS_TABLE_MISMATCH", "trigger_condition": "Conjugacy classes do not partition G deterministically"},
+    {"fail_type": "COEFFICIENT_VECTOR_INVALID", "trigger_condition": "Coefficient specification invalid or incompatible with basis"},
+    {"fail_type": "IDEMPOTENCE_VIOLATION", "trigger_condition": "Provided PASS claim disproved by recomputation"},
+    {"fail_type": "FALSE_FAIL_WITNESS", "trigger_condition": "Provided FAIL witness recomputes to zero"}
+  ],
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "Generator order, PSL normalization, conjugacy-class ordering, and rational arithmetic are deterministic."
+  }
+}
+

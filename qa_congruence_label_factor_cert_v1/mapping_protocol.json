@@ -1,0 +1,68 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_CONGRUENCE_LABEL_FACTOR_CERT_V1",
+  "state_manifold": {
+    "state_type": "PSL2Z_HYPERBOLIC (2x2 integer matrices modulo ±I)",
+    "embedding_function": "word-evaluation in generators S,T,(T^{-1}) followed by PSL normalization",
+    "constraints": [
+      "Matrices represent elements of PSL_2(Z) via M ~ -M",
+      "Hyperbolic iff |tr(M)| > 2",
+      "Congruence reduction is rho_N: PSL_2(Z) -> PSL_2(Z/NZ), implemented by entrywise mod N and PSL normalization",
+      "Kernel elements satisfy k ≡ I (mod N) in SL_2(Z), hence rho_N(kM)=rho_N(M)"
+    ]
+  },
+  "generators": [
+    {
+      "name": "kernel_upper_unipotent",
+      "transition_rule": "k(m) = [[1, N*m],[0,1]] for m∈Z",
+      "invariant_effect": "k(m) ≡ I (mod N)"
+    },
+    {
+      "name": "kernel_lower_unipotent",
+      "transition_rule": "k(m) = [[1,0],[N*m,1]] for m∈Z",
+      "invariant_effect": "k(m) ≡ I (mod N)"
+    },
+    {
+      "name": "kernel_balanced_hyperbolic",
+      "transition_rule": "k(x) = [[1+N*x, N*x],[-N*x, 1-N*x]] for x∈Z",
+      "invariant_effect": "det(k(x))=1 and k(x) ≡ I (mod N)"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "rhoN_collision",
+      "definition": "For k ∈ ker(rho_N), rho_N(kM) = rho_N(M)"
+    },
+    {
+      "name": "factor_through_rhoN",
+      "definition": "A label L factors through rho_N iff for all k ∈ ker(rho_N) and all M (in scope), L(kM)=L(M)"
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "SCHEMA_INVALID",
+      "trigger_condition": "schema_id mismatch or missing required fields"
+    },
+    {
+      "fail_type": "REDUCTION_MISMATCH",
+      "trigger_condition": "rho_N(M) != rho_N(M') for a purported forced-collision pair"
+    },
+    {
+      "fail_type": "LABEL_EQUAL_ON_FAIL",
+      "trigger_condition": "certificate claims counterexample but recomputed labels match"
+    },
+    {
+      "fail_type": "LABEL_NOT_REPRODUCIBLE",
+      "trigger_condition": "label computation raises or is undefined on provided matrices"
+    },
+    {
+      "fail_type": "BOUNDED_SEARCH_DISAGREES",
+      "trigger_condition": "bounded-search certificate claims pass but recomputation finds counterexample"
+    }
+  ],
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "All checks are deterministic given explicit matrices/words, modulus N, label definition, and (for bounded-search) a fixed RNG seed and explicit construction recipe."
+  }
+}
+

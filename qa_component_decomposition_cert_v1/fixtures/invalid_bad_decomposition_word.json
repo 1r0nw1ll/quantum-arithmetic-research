@@ -1,0 +1,84 @@
+{
+  "schema_version": "QA_COMPONENT_DECOMPOSITION_CERT.v1",
+  "cert_id": "qa-component-decomp-invalid-001",
+  "created_utc": "2026-02-20T00:00:00Z",
+  "subject": {
+    "seed_unit": [
+      1,
+      1
+    ],
+    "N": 24,
+    "generators": [
+      "sigma",
+      "mu",
+      "R",
+      "lambda_k",
+      "nu"
+    ],
+    "algebra_bridge_semantics_sha256": "45891eeeb3a1903eb97d1b3f2690095ad5287d888e55648af0d7bd8af057155c"
+  },
+  "claims": {
+    "component_decomposition": true,
+    "scaled_seed_roundtrip": true,
+    "nu_power2_characterization": true,
+    "bounded_theorem_sweep": true
+  },
+  "fixtures": {
+    "decomposition_samples": [
+      {
+        "state": [
+          12,
+          18
+        ],
+        "expected_gcd": 6,
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_word": "LR",
+        "expected_scaled_seed_roundtrip": [
+          12,
+          18
+        ]
+      }
+    ],
+    "nu_samples": [
+      {
+        "state": [
+          24,
+          40
+        ],
+        "expected_v2_g": 3,
+        "expected_after_v2": [
+          3,
+          5
+        ],
+        "expected_reaches_normalized": true,
+        "expected_next_ok": false,
+        "expected_next_fail_type": "ODD_BLOCK"
+      }
+    ]
+  },
+  "result": {
+    "ok": false,
+    "failures": [
+      {
+        "gate": 2,
+        "fail_type": "DECOMP_WORD_MISMATCH",
+        "path": "fixtures.decomposition_samples[0].expected_word",
+        "reason": "expected 'LR', recomputed 'RL'"
+      }
+    ],
+    "invariant_diff_map": {
+      "entries": [
+        {
+          "gate": 2,
+          "fail_type": "DECOMP_WORD_MISMATCH",
+          "path": "fixtures.decomposition_samples[0].expected_word",
+          "reason": "expected 'LR', recomputed 'RL'"
+        }
+      ],
+      "rollup_sha256": "2184a506e1743db3e773e0897afa4d6e3cb6fa416710f9bcf25b7601a19d73f5"
+    }
+  }
+}

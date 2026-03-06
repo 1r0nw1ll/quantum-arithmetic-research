@@ -1,0 +1,86 @@
+{
+  "schema_version": "QA_STRUCTURAL_ALGEBRA_CERT.v1",
+  "cert_id": "qa-structural-cert-invalid-001",
+  "created_utc": "2026-02-20T00:00:00Z",
+  "subject": {
+    "seed": [
+      1,
+      1
+    ],
+    "N": 20,
+    "generators": [
+      "sigma",
+      "mu",
+      "R",
+      "lambda_k",
+      "nu"
+    ],
+    "algebra_bridge_semantics_sha256": "45891eeeb3a1903eb97d1b3f2690095ad5287d888e55648af0d7bd8af057155c"
+  },
+  "claims": {
+    "normal_form": true,
+    "uniqueness": true,
+    "scaling_components": true,
+    "guarded_contraction": true
+  },
+  "fixtures": {
+    "roundtrip_samples": [
+      {
+        "state": [
+          3,
+          2
+        ],
+        "expected_word": "RL",
+        "expected_roundtrip": [
+          3,
+          2
+        ]
+      }
+    ],
+    "nu_guard_samples": [
+      {
+        "state": [
+          3,
+          4
+        ],
+        "expected_ok": false,
+        "expected_fail_type": "ODD_BLOCK"
+      }
+    ],
+    "scale_samples": [
+      {
+        "state": [
+          4,
+          6
+        ],
+        "expected_normalized": [
+          2,
+          3
+        ],
+        "expected_scale": 2
+      }
+    ]
+  },
+  "result": {
+    "ok": false,
+    "failures": [
+      {
+        "gate": 2,
+        "fail_type": "ROUNDTRIP_WORD_MISMATCH",
+        "path": "fixtures.roundtrip_samples[0].expected_word",
+        "reason": "expected 'RL', recomputed 'LR'"
+      }
+    ],
+    "invariant_diff_map": {
+      "entries": [
+        {
+          "gate": 2,
+          "fail_type": "ROUNDTRIP_WORD_MISMATCH",
+          "path": "fixtures.roundtrip_samples[0].expected_word",
+          "reason": "expected 'RL', recomputed 'LR'"
+        }
+      ],
+      "rollup_sha256": "faf385c8d2aaab5bb22531ab5dd127b2071da34b2cecbb45d24538dd94bb8848"
+    }
+  }
+}

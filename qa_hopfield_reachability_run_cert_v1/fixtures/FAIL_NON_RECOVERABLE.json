@@ -1,0 +1,45 @@
+{
+  "schema_id": "QA_HOPFIELD_REACHABILITY_RUN_CERT",
+  "schema_version": "QA_HOPFIELD_REACHABILITY_RUN_CERT.v1",
+  "N": 8,
+  "objective": {
+    "type": "HAMMING_TO_NEAREST_MEMORY",
+    "memories": [
+      [1, 1, 1, 1, 0, 0, 0, 0],
+      [0, 0, 0, 0, 1, 1, 1, 1]
+    ]
+  },
+  "generator_set": [
+    { "name": "flip", "i": 0 }
+  ],
+  "run": {
+    "policy": "GREEDY_MIN_ENERGY_TIEBREAK_MOVE_KEY",
+    "start_state": [0, 0, 0, 0, 0, 0, 0, 0],
+    "return_in_k_probes": [
+      {
+        "probe_id": "cant_recover_mem0_with_only_flip0",
+        "k": 2,
+        "start_state": [0, 0, 0, 0, 0, 0, 0, 0],
+        "goal_state": [1, 1, 1, 1, 0, 0, 0, 0],
+        "expected": { "reachable": true }
+      }
+    ],
+    "steps": [
+      {
+        "t": 0,
+        "state_before": [0, 0, 0, 0, 0, 0, 0, 0],
+        "energy_before": 4,
+        "attempted_moves": [
+          {
+            "move": { "name": "flip", "i": 0 },
+            "result": { "ok": true, "value": [1, 0, 0, 0, 0, 0, 0, 0] }
+          }
+        ],
+        "chosen_move": { "name": "flip", "i": 0 },
+        "state_after": [1, 0, 0, 0, 0, 0, 0, 0],
+        "energy_after": 3
+      }
+    ]
+  }
+}
+

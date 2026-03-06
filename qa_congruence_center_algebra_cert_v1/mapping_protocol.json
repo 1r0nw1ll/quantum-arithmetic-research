@@ -1,0 +1,83 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_CONGRUENCE_CENTER_ALGEBRA_CERT_V1",
+  "state_manifold": {
+    "state_type": "CENTER ALGEBRA of PSL2(Z/72Z) (internal CRT route)",
+    "embedding_function": "Build SL2(Z/8Z) and SL2(Z/9Z) conjugacy classes + class-sum structure constants, then form PSL2(Z/72Z) conjugacy classes as sign-orbits of product classes under (i8,i9) ~ (neg(i8),neg(i9)), with exact orbit-basis multiplication via lift/multiply/project",
+    "constraints": [
+      "All arithmetic is exact (int, Fraction); no floats.",
+      "Factor caches are for SL2(Z/8Z) and SL2(Z/9Z) with deterministic class ordering by minimal element.",
+      "Orbit cache defines PSL2(Z/72Z) conjugacy classes as size-2 sign-orbits of product conjugacy classes (no fixed orbits for N=72).",
+      "Orbit-basis multiplication is defined by lifting to product class-sum tensor basis with K̄_orbit := (1/2)(K_pair + K_negpair), multiplying using factor structure constants, then projecting back."
+    ]
+  },
+  "invariants": [
+    {
+      "name": "provenance_lock",
+      "definition": "Engine source hash and cache file hashes match the certificate."
+    },
+    {
+      "name": "factor_correctness",
+      "definition": "Factor group sizes, conjugacy class partitions, identity/-identity classes, inversion/negation class maps, and class-sum structure constants are correct for SL2(Z/8Z) and SL2(Z/9Z)."
+    },
+    {
+      "name": "orbit_correctness",
+      "definition": "Orbit cache covers all product class pairs exactly once, has exactly 375 orbits, no fixed sign-orbits, correct orbit sizes, and deterministic representatives in PSL2(Z/72Z)."
+    },
+    {
+      "name": "quotient_center_algebra",
+      "definition": "Orbit-basis multiplication satisfies unit law, commutativity, and associativity on a deterministic battery (and thus is eligible as a certified backend for later character/idempotent packets)."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "SCHEMA_INVALID",
+      "trigger_condition": "schema_id mismatch or missing required fields"
+    },
+    {
+      "fail_type": "CACHE_HASH_MISMATCH",
+      "trigger_condition": "A referenced cache file hash does not match the certificate"
+    },
+    {
+      "fail_type": "ENGINE_HASH_MISMATCH",
+      "trigger_condition": "Engine source hash does not match the certificate"
+    },
+    {
+      "fail_type": "FACTOR_PARTITION_FAILURE",
+      "trigger_condition": "Recomputed conjugacy class partition or reps_hash differs from cached factor data"
+    },
+    {
+      "fail_type": "FACTOR_STRUCTURE_CONSTANTS_FAILURE",
+      "trigger_condition": "Factor structure constants fail integrality, unit law, or associativity battery"
+    },
+    {
+      "fail_type": "ORBIT_COVERAGE_FAILURE",
+      "trigger_condition": "Orbit cache does not cover all product pairs exactly once or has fixed sign-orbits"
+    },
+    {
+      "fail_type": "ORBIT_REPRESENTATIVE_FAILURE",
+      "trigger_condition": "Orbit representative in PSL2(Z/72Z) is not deterministically reproduced from factor reps via CRT+PSL normalization"
+    },
+    {
+      "fail_type": "UNIT_LAW_FAILURE",
+      "trigger_condition": "Claimed unit element does not satisfy e*a=a or a*e=a on the deterministic battery"
+    },
+    {
+      "fail_type": "ASSOCIATIVITY_FAILURE",
+      "trigger_condition": "Associativity fails on the deterministic battery"
+    },
+    {
+      "fail_type": "COMMUTATIVITY_FAILURE",
+      "trigger_condition": "Commutativity fails on the deterministic battery"
+    },
+    {
+      "fail_type": "FINGERPRINT_MISMATCH",
+      "trigger_condition": "Recomputed algebra fingerprint does not match the certificate"
+    }
+  ],
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "All loops use deterministic ordering (sorted element tuples, deterministic conjugacy BFS on fixed generators S,T,T^{-1}, deterministic orbit canonicalization, deterministic battery generation from a fixed seed)."
+  }
+}
+

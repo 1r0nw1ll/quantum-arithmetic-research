@@ -1,0 +1,65 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_HOPFIELD_REACHABILITY_RUN_CERT_V1",
+  "state_manifold": {
+    "state_type": "Binary state x ∈ {0,1}^N with 1 ≤ N ≤ 10",
+    "embedding_function": "Identity embedding of bitvector; energy defines ordering for descent",
+    "constraints": [
+      "Domain: length(x)=N and x_i ∈ {0,1}",
+      "Time is discrete path length (# generator moves)"
+    ]
+  },
+  "generators": [
+    {
+      "name": "flip",
+      "transition_rule": "x → x' where x'_i = 1 - x_i for specified index i",
+      "invariant_effect": "Toggles one bit; preserves domain"
+    },
+    {
+      "name": "flip_if_one",
+      "transition_rule": "x → x' where x'_i = 0 if x_i = 1; otherwise fails",
+      "invariant_effect": "Guarded flip; exposes MOVE_PRECONDITION_FAILED obstruction surface"
+    }
+  ],
+  "invariants": [
+    {
+      "name": "BIT_DOMAIN",
+      "definition": "States are bitvectors of length N with entries in {0,1}"
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "SCHEMA_INVALID",
+      "trigger_condition": "schema_version mismatch or JSON schema violation"
+    },
+    {
+      "fail_type": "DOMAIN_INVALID",
+      "trigger_condition": "bitvector length != N, values not in {0,1}, or generator index i not in [0..N-1]"
+    },
+    {
+      "fail_type": "MOVE_NOT_IN_GENERATOR_SET",
+      "trigger_condition": "attempted_moves or chosen_move includes a move not listed in generator_set; membership is defined on the pair (name,i)"
+    },
+    {
+      "fail_type": "MOVE_PRECONDITION_FAILED",
+      "trigger_condition": "move-specific preconditions fail (e.g., flip_if_one requires bit i == 1)"
+    },
+    {
+      "fail_type": "POLICY_VIOLATION",
+      "trigger_condition": "chosen_move is not greedy argmin over attempted legal moves (tie-break by move key name:i)"
+    },
+    {
+      "fail_type": "NON_RECOVERABLE",
+      "trigger_condition": "a probe expects reachable=true but BFS cannot reach goal within k under declared generator_set"
+    }
+  ],
+  "reachability": {
+    "graph_type": "directed",
+    "component_analysis": "Legal transitions form a directed graph on {0,1}^N. Optional return_in_k_probes are verified by BFS up to depth k using the declared generator_set (order-preserving compilation, identical moves deduplicated)."
+  },
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "Move application is deterministic. Energy is deterministic (min Hamming distance to any memory). Greedy policy is deterministic via ordering (energy_after, move_sort_key). Probes are deterministic via BFS with fixed generator order."
+  }
+}
+

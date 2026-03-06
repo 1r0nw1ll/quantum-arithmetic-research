@@ -1,0 +1,47 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_CONGRUENCE_SECTOR_LABEL_CERT_V1",
+  "state_manifold": {
+    "state_type": "PSL2_MOD_N (normalized 2x2 matrices over Z/NZ modulo ±I)",
+    "embedding_function": "BFS enumeration in PSL2(Z/NZ) from generators S,T",
+    "constraints": [
+      "Elements are represented as 4-tuples (a,b,c,d) with entries in {0..N-1}",
+      "PSL normalization identifies M ~ -M by choosing lexicographically minimal of (a,b,c,d) and (-a,-b,-c,-d) mod N",
+      "Group operation is matrix multiplication mod N with PSL normalization",
+      "Conjugation action is x ↦ g x g^{-1}"
+    ]
+  },
+  "invariants": [
+    {
+      "name": "well_defined_on_psl",
+      "definition": "Label depends only on PSL class (M ~ -M); enforced by PSL normalization and/or explicit check."
+    },
+    {
+      "name": "class_function",
+      "definition": "Label is a class function on PSL2(Z/NZ): for all g,x, label(g x g^{-1}) = label(x)."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "SCHEMA_INVALID",
+      "trigger_condition": "schema_id mismatch or missing required fields"
+    },
+    {
+      "fail_type": "GROUP_ENUMERATION_INCOMPLETE",
+      "trigger_condition": "BFS enumeration fails to generate claimed group size or hits inconsistent transitions"
+    },
+    {
+      "fail_type": "CLASS_FUNCTION_VIOLATION",
+      "trigger_condition": "Found g,x with label(g x g^{-1}) != label(x)"
+    },
+    {
+      "fail_type": "PSL_WELL_DEFINEDNESS_VIOLATION",
+      "trigger_condition": "Found x with label(x) != label(-x) (should not occur for PSL-normalized label)"
+    }
+  ],
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "BFS uses a fixed generator order (S, T, T^{-1}) and deterministic PSL normalization. Label evaluation is pure and deterministic."
+  }
+}
+

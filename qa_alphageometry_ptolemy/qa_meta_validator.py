@@ -3302,6 +3302,26 @@ def _validate_safety_prompt_injection_refusal_cert_v1_family_if_present(base_dir
     return None
 
 
+def _validate_gnn_mp_curvature_cert_family(base_dir: str) -> Optional[str]:
+    """QA GNN Message-Passing Curvature Cert family [93]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_gnn_message_passing_curvature_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_gnn_message_passing_curvature_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_gnn_message_passing_curvature_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3514,6 +3534,11 @@ FAMILY_SWEEPS = [
      "schema + validator (prompt injection refusal rate with judge contract hash and failure witness) + 2 fixtures (valid_min, invalid_rate)",
      "92_safety_prompt_injection_refusal_cert",
      "../qa_safety_prompt_injection_refusal_cert_v1", True),
+    (93, "QA GNN Message-Passing Curvature Cert family",
+     _validate_gnn_mp_curvature_cert_family,
+     "3/3 fixtures + gate checks",
+     "93_gnn_mp_curvature_cert",
+     "../qa_gnn_message_passing_curvature_cert_v1", True),
 ]
 
 

@@ -65,6 +65,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [90] | [QA Fairness Demographic Parity Cert v1](90_fairness_demographic_parity_cert.md) | Schema + Validator (demographic parity gap with constructive failure witness) + 2 Fixtures (valid_min, invalid_gap) | PASS |
 | [91] | [QA Fairness Equalized Odds Cert v1](91_fairness_equalized_odds_cert.md) | Schema + Validator (equalized odds TPR/FPR gap with constructive failure witness) + 2 Fixtures (valid_min, invalid_gap) | PASS |
 | [92] | [QA Safety Prompt Injection Refusal Cert v1](92_safety_prompt_injection_refusal_cert.md) | Schema + Validator (prompt injection refusal rate with judge contract hash and failure witness) + 2 Fixtures (valid_min, invalid_rate) | PASS |
+| [93] | [QA GNN Message-Passing Curvature Cert v1](93_gnn_mp_curvature_cert.md) | Schema + Validator (H_QA recompute + agg_gain update-rule pin + kappa pin + graph metadata) + 4 Fixtures (pass_default_graph, fail_agg_gain_mismatch, fail_h_qa_mismatch, fail_graph_metadata_invalid) | PASS |
 
 ## Quick validation
 

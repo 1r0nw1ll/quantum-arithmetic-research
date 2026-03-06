@@ -1,0 +1,42 @@
+{
+  "schema_id": "QA_ATTN_CURVATURE_CERT",
+  "schema_version": "v1",
+  "cert_id": "attn_fail_seq_len_invalid_v1",
+  "created_utc": "2026-03-06T00:00:00Z",
+  "anchors": {
+    "h_qa_source": "qa_attn_curvature_cert_v1/README.md (Definitions)",
+    "update_rule_source": "qa_attn_curvature_cert_v1/README.md (Definitions)",
+    "ground_truth_source": "qa_attn_curvature_cert_v1/fixtures/pass_default_attn.json"
+  },
+  "inputs": {
+    "tuple": {
+      "b": 1,
+      "e": 2,
+      "d": 3,
+      "a": 5
+    },
+    "eps": 1e-9
+  },
+  "optimizer": {
+    "lr": 0.01,
+    "attn_gain": 1.5,
+    "n_heads": 8,
+    "d_model": 512,
+    "seq_len": 0
+  },
+  "claimed": {
+    "H_QA_raw": 0.34615384610478306,
+    "H_QA": 0.25714285711578233,
+    "loss_hat": 0.3846153845857988,
+    "kappa": 0.0038571428567367727,
+    "update_example": {
+      "p_before": 0.5,
+      "grad": 0.1,
+      "p_after": 0.4985
+    }
+  },
+  "meta": {
+    "note": "Schema-invalid: optimizer.seq_len=0 violates minimum=1."
+  }
+}
+

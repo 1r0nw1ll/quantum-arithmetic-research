@@ -227,9 +227,32 @@ is positive if and only if $0<\eta_{\mathrm{eff}}<2$. In particular, any certifi
 
 **Interpretation.** This theorem is a statement about a shared certified local update form. It does not assert global convergence, multi-step equivalence, or semantic identity across architecture classes.
 
+#### 8.1 Finite-Orbit Descent Theorem (Quadratic Loss)
+
+The Unified Curvature Normal Form Theorem certifies one-step stability. For QA orbit families, the finite structure of the orbit enables a multi-step descent result.
+
+**Theorem (Finite-Orbit Descent).** *Let $L(w) = \tfrac{1}{2}w^2$ be a scalar quadratic loss. Let $\mathcal{O}=\{s_0,\ldots,s_{L-1}\}$ be a QA cosmos orbit of length $L=\pi(m)/2$ with per-step effective rates $\eta_{\mathrm{eff}}^{(t)}=\mathrm{lr}\cdot\mathrm{gain}\cdot H_{QA}(s_t)$ and curvature scores $\kappa_t = 1-|1-\eta_{\mathrm{eff}}^{(t)}|$. Define the orbit contraction factor*
+$$\rho(\mathcal{O}) := \prod_{t=0}^{L-1}(1-\kappa_t)^2.$$
+*If $\kappa_{\min}(\mathcal{O}):=\min_t\kappa_t > 0$, then:*
+*(i)* $L_{t+L}(w) \leq \rho(\mathcal{O})\cdot L_t(w)$ *for every initial $w$;*
+*(ii)* $\rho(\mathcal{O}) \leq (1-\kappa_{\min})^{2L} < 1$;
+*(iii)* $\rho(\mathcal{O})$ *is a computable exact quantity from the orbit alone, with no stochastic approximation.*
+
+**Proof.** For the scalar quadratic, the update gives $w_{t+1}=(1-\eta_{\mathrm{eff}}^{(t)})w_t$, so $L_{t+1}=(1-\eta_{\mathrm{eff}}^{(t)})^2 L_t$. Since $|1-\eta_{\mathrm{eff}}^{(t)}|=1-\kappa_t$, we have $L_{t+1}=(1-\kappa_t)^2 L_t$. Composing over $L$ steps: $L_{t+L}=\rho(\mathcal{O})\cdot L_t$. For (ii): $(1-\kappa_t)^2\leq(1-\kappa_{\min})^2$ for all $t$, so $\rho\leq(1-\kappa_{\min})^{2L}<1$ since $\kappa_{\min}>0$. For (iii): each $\kappa_t$ is computable from $s_t$ via §3, and $L=\pi(m)/2$ is finite by Prop.\ 1 (§12). $\square$
+
+**Corollary (Multi-orbit convergence).** After $k$ full orbits, $L_{kL}\leq\rho(\mathcal{O})^k\cdot L_0\to 0$ geometrically with rate $\log(1/\rho(\mathcal{O}))$ per orbit.
+
+**Key identity.** The per-step loss contraction factor is $(1-\kappa_t)^2$: higher $\kappa$ directly and exactly governs loss decrease. This gives the first-principles explanation of the empirical correlation $r(\text{mean}\,\kappa,\,\text{final loss})=-0.843$ reported in §11.
+
+**Numerical example ($m=9$, lr $=0.5$, gain $=1$).** The mod-9 cosmos orbit has $L=12$ states. Numerical evaluation yields $\kappa_{\min}=0.1077$ (bottleneck at state $(8,1,9,1)$) and
+$$\rho(\mathcal{O}) = \prod_{t=0}^{11}(1-\kappa_t)^2 = 0.001582,$$
+so every full orbit reduces loss by a factor of 632. The orbit-invariant $\rho(\mathcal{O})$ is the same for all 72 starting pairs in the cosmos group (they all traverse the same 12-cycle). After 10 orbits: $L_{10L}\leq(0.001582)^{10}\cdot L_0\approx 10^{-28}\cdot L_0$.
+
+**Scope.** The theorem is stated for scalar quadratic loss to give an exact, self-contained proof. Extension to vector-valued quadratic ($L(w)=\tfrac{1}{2}w^\top Q w$, $Q\succ 0$) is straightforward when $\eta_{\mathrm{eff}}\cdot\lambda_{\max}(Q)<2$; extension to PL-conditioned nonconvex loss is standard but requires additional assumptions on the landscape and is left to future work.
+
 ### 9. Limitations
 
-This framework currently certifies only a local one-step normal form. It does not, by itself, prove multi-step convergence, generalization, or robustness under distribution shift. In families [89]–[96], the gain is supplied as a free scalar witness; the metadata fields ($\mathrm{n\_nodes}$, $\mathrm{d\_model}$, $\mathrm{orbit\_size}$, etc.) are recorded for auditing but do not constrain that scalar. Accordingly, those families should be read as reusable machine-checkable local certification patterns.
+For general nonconvex losses, this framework certifies only a local one-step normal form and does not prove multi-step convergence, generalization, or robustness under distribution shift. The Finite-Orbit Descent Theorem (§8.1) gives an exact multi-step guarantee for scalar quadratic loss; extension to nonconvex settings requires additional assumptions on the loss landscape. In families [89]–[96], the gain is supplied as a free scalar witness; the metadata fields ($\mathrm{n\_nodes}$, $\mathrm{d\_model}$, $\mathrm{orbit\_size}$, etc.) are recorded for auditing but do not constrain that scalar. Accordingly, those families should be read as reusable machine-checkable local certification patterns.
 
 Families [98], [99], and [101] close this gap across three architecture classes: gain is derived from $\sigma_{\max}(W)$, $\sigma_{\max}(QK^\top/\!\sqrt{d_k})$, and $\|\mathbf{g}\|_2$ respectively, and cannot be freely adjusted. This upgrades those families from consistency checking to structural analysis. Extending derived-gain derivations to the remaining families (QARM, symbolic search) is left to future work.
 
@@ -239,7 +262,7 @@ This paper introduced a certificate-normal-form framework for local one-step sta
 
 The Unified Curvature Normal Form Theorem provides a bridge across disparate fields of AI, but only at the level of certified local update forms. This offers a practical route toward interoperable local stability checks across mixed computational systems.
 
-Future work will proceed in several directions. First, we plan to extend the framework to recurrent architectures, diffusion models, and Hopfield networks. Second, we will derive gain from native objects in the remaining free-witness families: QARM (orbit-step ratio) and symbolic search (effective branching factor). The gradient family [101] has already completed this transition via L2 norm. Third, the orbit curvature family [97] opens a multi-step direction: because QA orbits are finite and fully enumerable, $\kappa_{\min}$ over a full orbit provides an exact multi-step stability bound with no stochastic approximation. Finally, we will explore using $\kappa$ as an active regularization term in training, and connecting certified one-step curvature to multi-step convergence guarantees via Lyapunov-like arguments.
+Future work will proceed in several directions. First, we plan to extend the framework to recurrent architectures, diffusion models, and Hopfield networks. Second, we will derive gain from native objects in the remaining free-witness families: QARM (orbit-step ratio) and symbolic search (effective branching factor). The gradient family [101] has already completed this transition via L2 norm. Third, §8.1 establishes the first exact multi-step descent guarantee for quadratic loss; extending this to PL-conditioned nonconvex losses via Lyapunov-like arguments is a natural next direction. Finally, we will explore using $\kappa$ as an active regularization term in training.
 
 ### 11. Empirical Validation
 

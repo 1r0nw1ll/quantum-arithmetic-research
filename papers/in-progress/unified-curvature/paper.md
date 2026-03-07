@@ -78,30 +78,30 @@ The parameters $(a, b, d, e)$ can be conceptualized as defining a geometric conf
 
 Consider a general iterative process where a parameter $p$ is updated at each step. A typical update rule is:
 
-$$p_{\text{after}} = p_{\text{before}} - \eta \cdot \text{grad}$$
+$$p_{\mathrm{after}} = p_{\mathrm{before}} - \eta \cdot \mathrm{grad}$$
 
 We generalize this by defining an *effective learning rate* modulated by the system's substrate:
 
-$$\eta_{eff} = \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA}$$
+$$\eta_{\mathrm{eff}} = \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA}$$
 
 Here, $\mathrm{lr}$ is a global base learning rate, $H_{QA}$ is the Harmonic Index of the system's current state, and $\mathrm{gain}$ is a scalar witness specific to the architecture class. The certified update rule becomes:
 
-$$p_{\text{after}} = p_{\text{before}} - \eta_{eff} \cdot \text{grad}$$
+$$p_{\mathrm{after}} = p_{\mathrm{before}} - \eta_{\mathrm{eff}} \cdot \mathrm{grad}$$
 
-For a simple quadratic loss function, the condition for stable convergence of such an iterative update is that the scalar factor $(1 - \eta_{eff})$ must have magnitude less than 1. We define:
+For a simple quadratic loss function, the condition for stable convergence of such an iterative update is that the scalar factor $(1 - \eta_{\mathrm{eff}})$ must have magnitude less than 1. We define:
 
-$$\kappa = 1 - |1 - \eta_{eff}| = 1 - |1 - \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA}|$$
+$$\kappa = 1 - |1 - \eta_{\mathrm{eff}}| = 1 - |1 - \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA}|$$
 
-**Interpretation.** The quantity $\kappa = 1 - |1 - \eta_{eff}|$ should be interpreted as a **stability-margin score on the interval $(0,2)$**. It is positive exactly when the one-step scalar factor lies in the standard stable interval, and it is maximized at $\eta_{eff} = 1$. Thus, $\kappa$ is **not** a monotone measure of update smallness. Very small $\eta_{eff}$ gives $\kappa \approx 0$, while $\eta_{eff}$ near 1 gives $\kappa \approx 1$. The metric therefore measures proximity to the center of the admissible one-step interval rather than the absolute magnitude of the step.
+**Interpretation.** The quantity $\kappa = 1 - |1 - \eta_{\mathrm{eff}}|$ should be interpreted as a **stability-margin score on the interval $(0,2)$**. It is positive exactly when the one-step scalar factor lies in the standard stable interval, and it is maximized at $\eta_{\mathrm{eff}} = 1$. Thus, $\kappa$ is **not** a monotone measure of update smallness. Very small $\eta_{\mathrm{eff}}$ gives $\kappa \approx 0$, while $\eta_{\mathrm{eff}}$ near 1 gives $\kappa \approx 1$. The metric therefore measures proximity to the center of the admissible one-step interval rather than the absolute magnitude of the step.
 
 #### 4.2 Stability Theorem
 
-**Theorem:** The single-step update is stable (i.e., $\kappa \in (0, 1]$) if and only if the effective learning rate $\eta_{eff}$ is in the open interval $(0, 2)$.
+**Theorem:** The single-step update is stable (i.e., $\kappa \in (0, 1]$) if and only if the effective learning rate $\eta_{\mathrm{eff}}$ is in the open interval $(0, 2)$.
 
 **Proof Sketch:**
-For $\kappa$ to be in $(0, 1]$, we require $0 < 1 - |1 - \eta_{eff}| \le 1$.
-This simplifies to $0 \le |1 - \eta_{eff}| < 1$.
-This holds if and only if $-1 < 1 - \eta_{eff} < 1$, i.e., $0 < \eta_{eff} < 2$.
+For $\kappa$ to be in $(0, 1]$, we require $0 < 1 - |1 - \eta_{\mathrm{eff}}| \le 1$.
+This simplifies to $0 \le |1 - \eta_{\mathrm{eff}}| < 1$.
+This holds if and only if $-1 < 1 - \eta_{\mathrm{eff}} < 1$, i.e., $0 < \eta_{\mathrm{eff}} < 2$.
 
 A practical sufficient condition is to constrain $\mathrm{gain} \in (0,2]$ and choose $\mathrm{lr} < 1$. Since $H_{QA} < 1$ by construction, this implies $\eta_{\mathrm{eff}} = \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA} < 1 \cdot 2 \cdot 1 = 2$, ensuring stability.
 
@@ -110,31 +110,31 @@ A practical sufficient condition is to constrain $\mathrm{gain} \in (0,2]$ and c
 We now demonstrate the framework by applying it to five distinct computational families. Each family maps its own specific gain witness into the universal formula. Cross-row differences in the comparison table (Section 7) arise from different substrate and gain inputs, not from architecture identity alone.
 
 #### 5.1 QALM Gradient [ID 89]
-- **gain name:** `gain`
+- **Gain witness:** `gain`
 - **Structural metadata:** None (base case).
 - **Description:** The `gain` parameter acts as a scalar on the learning rate, modulated by the harmonicity of the current state.
 - **Fixture Example:** Substrate $(b=1, e=2, d=3, a=5)$, $H_{QA} \approx 0.2571$.
 
 #### 5.2 GNN Aggregation [ID 93]
-- **gain name:** `agg_gain`
+- **Gain witness:** `agg_gain`
 - **Structural metadata:** `n_nodes`, `n_edges`
 - **Description:** `agg_gain` controls the strength of the aggregated message that updates a node's representation. The gain witness is supplied as a scalar; the structural metadata provides auditable graph context but does not enter the curvature computation.
 - **Fixture Example:** Substrate $(b=1, e=2, d=3, a=5)$, $H_{QA} \approx 0.2571$.
 
 #### 5.3 Attention Layer [ID 94]
-- **gain name:** `attn_gain`
+- **Gain witness:** `attn_gain`
 - **Structural metadata:** `n_heads`, `d_model`, `seq_len`
 - **Description:** `attn_gain` scales the output of the attention head. The gain witness is a scalar; the structural metadata provides auditable configuration context.
 - **Fixture Example:** Substrate $(b=1, e=2, d=3, a=5)$, $H_{QA} \approx 0.2571$.
 
 #### 5.4 QARM Arithmetic [ID 95]
-- **gain name:** `qarm_gain`
+- **Gain witness:** `qarm_gain`
 - **Structural metadata:** `modulus`, `orbit_size`, `generator`
 - **Description:** `qarm_gain` controls the magnitude of state transitions within the finite field, where the substrate is derived from arithmetic operands.
 - **Fixture Example:** Substrate $(b=1, e=2, d=3, a=5)$, $H_{QA} \approx 0.2571$.
 
 #### 5.5 Symbolic Search [ID 96]
-- **gain name:** `sym_gain`
+- **Gain witness:** `sym_gain`
 - **Structural metadata:** `beam_width`, `search_depth`, `rule_count`
 - **Description:** `sym_gain` modulates the influence of $H_{QA}$ on path selection. The structural metadata characterizes the search configuration.
 - **Fixture Example:** Substrate $(b=3, e=5, d=8, a=13)$, $H_{QA} \approx 0.4235$. With $\mathrm{lr}=0.01$ and $\mathrm{sym\_gain}=1.1$: $\kappa \approx 0.00466$.
@@ -146,7 +146,7 @@ To make this unification a practical and enforceable standard, we introduce a ma
 - **Gate A — Substrate Integrity:** The validator recomputes $H_{QA}$ from the raw parameters $(a,b,d,e)$ in the certificate and compares to the claimed $H_{QA}$.
   - **Failure Mode:** `H_QA_MISMATCH`
 
-- **Gate B — Update Rule Integrity:** The validator checks that `gain` $\in (0, 2]$ (strict rejection, no clamping), then recomputes $\eta_{eff} = \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA}$ and verifies the claimed update witness $p_{\text{after}}$.
+- **Gate B — Update Rule Integrity:** The validator checks that the gain witness $\in (0, 2]$ (strict rejection, no clamping), then recomputes $\eta_{\mathrm{eff}} = \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA}$ and verifies the claimed update witness $p_{\mathrm{after}}$.
   - **Failure Modes:** `GAIN_OUT_OF_RANGE`, `UPDATE_RULE_MISMATCH`
 
 - **Gate C — Curvature Integrity:** Using verified $\mathrm{lr}$, $\mathrm{gain}$, and $H_{QA}$, the validator recomputes $\kappa$ and compares to the claimed value.
@@ -178,7 +178,7 @@ We use $\mathrm{lr}=0.01$ and $\mathrm{gain}=1.1$ for all families for compariso
 
 For a given substrate, $\kappa$ is identical across all five families despite their different purposes and structural metadata. This demonstrates that $\kappa$ is sensitive to the underlying scalar inputs (via $H_{QA}$ and $\mathrm{gain}$) while being independent of the architectural specifics (which are captured in the structural metadata but do not enter the curvature computation).
 
-### 8. Unified Curvature Theorem
+### 8. Unified Curvature Normal-Form Theorem
 
 **Theorem (Unified Curvature Normal Form).** Let a certified family provide a one-step update of the form
 

@@ -8,7 +8,7 @@ Building on this algebraic foundation, we introduce a certificate-normal-form fr
 
 $$\kappa = 1 - |1-\eta_{\mathrm{eff}}|.$$
 
-We instantiate this across eight certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], spectral-gain extensions [98, 99], and gradient Lipschitz gain [101]. Three families ([98], [99], [101]) derive gain from native structural objects—the spectral norm of weight/score matrices and the gradient $\ell_2$ norm—upgrading from consistency check to structural analysis. Empirically: across seven QA substrates, mean $\kappa$ correlates with final loss at $r=-0.843$; normalizing $\eta_{\mathrm{eff}}=1$ across all substrates equalizes convergence (loss std $1.9\times10^{-5}$), confirming that $H_{QA}$ governs convergence exclusively through $\eta_{\mathrm{eff}}$.
+We instantiate this across nine certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], spectral-gain extensions [98, 99], and gradient Lipschitz gain [101]. Three families ([98], [99], [101]) derive gain from native structural objects—the spectral norm of weight/score matrices and the gradient $\ell_2$ norm—upgrading from consistency check to structural analysis. For QA orbit families, the finite enumerable orbit structure enables an exact multi-step descent result: if $\kappa_{\min}(\mathcal{O})>0$, then $L_{t+L}\leq\rho(\mathcal{O})\cdot L_t$ where $\rho(\mathcal{O})=\prod_t(1-\kappa_t)^2<1$ is computable exactly (scalar quadratic loss; §8.1). Empirically: across seven QA substrates, mean $\kappa$ correlates with final loss at $r=-0.843$; normalizing $\eta_{\mathrm{eff}}=1$ across all substrates equalizes convergence (loss std $1.9\times10^{-5}$), confirming that $H_{QA}$ governs convergence exclusively through $\eta_{\mathrm{eff}}$.
 
 ### 1. Introduction
 
@@ -16,9 +16,9 @@ The field of artificial intelligence is characterized by a proliferation of arch
 
 This paper addresses this challenge by proposing a unified framework for certifying one-step stability across diverse computational architectures. Our primary contribution is the introduction of a curvature score $\kappa$, derived from a common mathematical substrate $H_{QA}$. This metric provides a single, interpretable value characterizing the single-step convergence behavior of a system's certified update rule, independent of domain-specific implementation details.
 
-**What this paper claims.** The paper's claim is that eight heterogeneous architecture families admit the same machine-checkable one-step curvature certificate form, not that they share the same full dynamics. For three of these families ([98], [99], [101]) the gain is not a free witness but a derived structural invariant—the spectral norm of a native operator—making the certificate a structural analysis, not merely a consistency check. We do not assert global convergence, multi-step equivalence, or semantic identity across architecture classes.
+**What this paper claims.** The paper's claim is that nine heterogeneous architecture families admit the same machine-checkable one-step curvature certificate form, not that they share the same full dynamics. For three of these families ([98], [99], [101]) the gain is not a free witness but a derived structural invariant—the spectral norm of a native operator—making the certificate a structural analysis, not merely a consistency check. For QA orbit families specifically, the Finite-Orbit Descent Theorem (§8.1) provides an exact multi-step descent bound for scalar quadratic loss. We do not assert general global convergence, multi-step equivalence across architectures, or semantic identity across architecture classes.
 
-We demonstrate this across seven distinct families:
+We demonstrate this across nine certified families:
 1. **QALM Gradient [89]:** Standard gradient-based optimization.
 2. **GNN Aggregation [93]:** The neighborhood aggregation step in Graph Neural Networks.
 3. **Attention Layer [94]:** The core mechanism in Transformer models.
@@ -225,7 +225,7 @@ $$\kappa = 1-\lvert 1-\eta_{\mathrm{eff}}\rvert$$
 
 is positive if and only if $0<\eta_{\mathrm{eff}}<2$. In particular, any certified family whose validator enforces this normal form inherits the same scalar one-step stability criterion, regardless of domain-specific interpretation of the gain witness.
 
-**Interpretation.** This theorem is a statement about a shared certified local update form. It does not assert global convergence, multi-step equivalence, or semantic identity across architecture classes.
+**Interpretation.** This theorem is a statement about a shared certified local update form. It does not assert global convergence or semantic identity across architecture classes. For QA orbit families, the Finite-Orbit Descent Theorem (§8.1) extends this to an exact multi-step bound for scalar quadratic loss.
 
 #### 8.1 Finite-Orbit Descent Theorem (Quadratic Loss)
 
@@ -258,9 +258,9 @@ Families [98], [99], and [101] close this gap across three architecture classes:
 
 ### 10. Conclusion
 
-This paper introduced a certificate-normal-form framework for local one-step stability analysis across heterogeneous computational architectures. By grounding the framework in a common mathematical substrate, $H_{QA}$, and a family-specific gain witness, we derived a universal curvature score $\kappa$ that provides a single comparable measure for certified update rules across five distinct architecture classes.
+This paper introduced a certificate-normal-form framework grounded in the arithmetic of $\mathbb{Q}(\sqrt{5})$: the QA map $T=Q^2$ acts as multiplication by $\varphi^2$ in $\mathbb{Z}[\varphi]$, and the harmonic index $H_{QA}$ decomposes as the normalized trace of a natural cross-coupling operator on the QA step matrix. Building on this foundation, we derived a universal curvature score $\kappa$ and certified its one-step stability form across nine architecture families.
 
-The Unified Curvature Normal Form Theorem provides a bridge across disparate fields of AI, but only at the level of certified local update forms. This offers a practical route toward interoperable local stability checks across mixed computational systems.
+For QA orbit families, the Finite-Orbit Descent Theorem (§8.1) goes further: if $\kappa_{\min}(\mathcal{O})>0$, then one full orbit of length $\pi(m)/2$ reduces scalar quadratic loss by an exactly computable factor $\rho(\mathcal{O})<1$. For the mod-9 cosmos orbit at lr $=0.5$, $\rho=0.001582$, giving factor-632 reduction per orbit. This is the paper's first exact multi-step convergence result, enabled uniquely by the finite enumerability of QA orbits.
 
 Future work will proceed in several directions. First, we plan to extend the framework to recurrent architectures, diffusion models, and Hopfield networks. Second, we will derive gain from native objects in the remaining free-witness families: QARM (orbit-step ratio) and symbolic search (effective branching factor). The gradient family [101] has already completed this transition via L2 norm. Third, §8.1 establishes the first exact multi-step descent guarantee for quadratic loss; extending this to PL-conditioned nonconvex losses via Lyapunov-like arguments is a natural next direction. Finally, we will explore using $\kappa$ as an active regularization term in training.
 

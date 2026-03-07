@@ -331,13 +331,19 @@ This is numerically verified for all 81 states of $\{1,\ldots,9\}^2$. The three 
 
 **Remark.** The orbit classification shows that QA dynamics on $\mathbb{Z}/m\mathbb{Z}$ are orbits of the map $x\mapsto\varphi^2 x$ in the ring $\mathbb{Z}[\varphi]/m\mathbb{Z}[\varphi]$, a finite quotient of the ring of integers of $\mathbb{Q}(\sqrt{5})$. This identifies QA as a dynamical system inside an algebraic number ring, not merely an ad-hoc modular arithmetic construction.
 
-**Partial result on $H_{QA}$.** Let $d=b+e$ be the first coordinate of $T(b,e)$ and let $\theta=\arctan(e/d)$ be the angle of the Fibonacci pair $(d,e)$ in $\mathbb{R}^2$. A direct computation shows
+**Fibonacci projective flow.** Let $z_t = e_t/(b_t+e_t)$ be the projective ratio of the QA state at step $t$. One verifies directly that
 
-$$H_{\text{raw}} = \frac{d^2-e^2}{4(d^2+e^2)} + \frac{e}{8} = \frac{\cos(2\theta)}{4} + \frac{e}{8}.$$
+$$z_{t+1} = \frac{1+z_t}{2+z_t},$$
 
-The first term $\cos(2\theta)/4$ is the projective asymmetry of the Fibonacci pair: it measures how far the current ratio $e/d$ departs from the golden fixed-point ratio $1/\varphi\approx 0.618$ (equivalently, from the attractor angle $\arctan(1/\varphi)\approx 31.7°$). This term is native to the $\mathbb{Q}(\sqrt{5})$ structure: the ratio $e/d$ is a projective coordinate on the Fibonacci orbit converging to $1/\varphi$ under repeated application of $Q$. The second term $e/8$ is a linear correction in the trailing Fibonacci component and is not yet accounted for by a purely algebraic argument. Both terms are verified numerically to match $H_{\text{raw}}$ exactly for all integer pairs tested.
+i.e.\ $T$ induces the Möbius transformation $z\mapsto(z+1)/(z+2)$ on projective coordinates. This is precisely the action of $Q^2$ on $\mathbb{P}^1$. The unique fixed point satisfies $z^2+z-1=0$, giving $z^* = (\sqrt{5}-1)/2 = 1/\varphi \approx 0.618$. Consequently, every QA orbit's projective ratio converges toward $z^*$ under repeated application of $T$ (over $\mathbb{Z}$, before modular reduction).
 
-**Open question.** A complete first-principles derivation of $H_{QA}$ from $\mathbb{Q}(\sqrt{5})$ remains open. The $\cos(2\theta)$ term is plausibly related to the conformal factor of the Möbius action $z\mapsto(z+1)/(z+2)$ on the upper half-plane, while the $e/8$ term may arise from a projection onto a native form in $\mathbb{Z}[\varphi]$. If a clean derivation is found, $\kappa$ would be derived end-to-end from the algebraic structure.
+**Partial result on $H_{QA}$.** Setting $d=b+e$ and $z=e/d$, a direct computation yields
+
+$$H_{\text{raw}} = \frac{1-z^2}{4(1+z^2)} + \frac{e}{8}.$$
+
+The first term is a pure function of the projective ratio $z$, measuring the asymmetry of the Fibonacci pair relative to the golden fixed point $z^*$: it equals zero at $z=1$ (equal components), is maximised as $z\to 0$ (strongly asymmetric pair), and equals $(\sqrt{5}-1)/(2(\sqrt{5}+1))\approx 0.112$ at the attractor $z=z^*$. This term arises from the Fibonacci projective dynamics, not directly from the algebraic structure of $\mathbb{Q}(\sqrt{5})$. The second term $e/8$ is a scale-dependent correction: writing $e = zd$, it equals $zd/8$ and depends on the absolute magnitude $d$ of the pair, not only on the ratio $z$. Consequently, $H_{\text{raw}}$ is not a projective invariant — it encodes both the ratio $z$ (Fibonacci projective flow) and the scale $e$ (absolute magnitude of the trailing component). Both terms are verified to match $H_{\text{raw}}$ exactly for all integer pairs tested.
+
+**Open question.** A complete first-principles derivation of $H_{QA}$ from the algebraic structure remains open. The projective term $(1-z^2)/(4(1+z^2))$ is determined by the Möbius flow $z\mapsto(z+1)/(z+2)$; the scale term $e/8$ likely arises from the asymmetric role of $e$ in the four-tuple $(b,e,d,a)$, but its algebraic origin is not yet identified.
 
 ---
 

@@ -359,7 +359,17 @@ Clearing denominators yields the bilinear identity
 $$4H_{\text{raw}}\cdot(e^2+d^2)\cdot(b+a) \;=\; ba\,(b+a)\;+\;ed\,(e^2+d^2),$$
 i.e.\ $4H_{\text{raw}}$ equals the outer self-coupling $ba$ weighted by the outer sum $(b+a)$, plus the inner self-coupling $ed$ weighted by the inner squared norm $(e^2+d^2)$, normalised by the product of those weights. This cross-coupling structure is verified to hold exactly for all seven experimental substrates (Table 1 values, integer arithmetic).
 
-**Partial resolution of the open question.** The two-term structure $\sigma_d+\sigma_{od}$ is the unique degree-(0,1) transpose-symmetric cross-coupling functional on $2\times 2$ positive-entry matrices that (i) decomposes cleanly into a projective Fibonacci component converging to $\cos(2\arctan(1/\varphi))$ at the golden-ratio attractor and (ii) has its scale component algebraically fixed by the Fibonacci identity $a+b=2d$. Together, properties (i) and (ii) characterise the formula up to the overall normalisation constant. The $1/4$ factor is a scaling choice that keeps $H_{\text{raw}}$ of order unity for typical modular states; a derivation of this constant from the Möbius action $z\mapsto(z+1)/(z+2)$ or from the norm/trace structure of $\mathbb{Z}[\varphi]$ remains open.
+**Trace and Rayleigh quotient interpretation.** Define the $2\times 2$ cross-coupling operator $\Lambda = \operatorname{diag}(\sigma_d,\, \sigma_{od})$. Then
+$$4H_{\text{raw}} = \operatorname{tr}(\Lambda) = \mathbf{e}_1^\top\Lambda\,\mathbf{e}_1 + \mathbf{e}_2^\top\Lambda\,\mathbf{e}_2,$$
+verified exactly for all experimental substrates. Equivalently,
+$$2H_{\text{raw}} = R\!\left(\Lambda,\,\tfrac{1}{\sqrt{2}}(1,1)^\top\right),$$
+the Rayleigh quotient of $\Lambda$ at the equal-weight unit vector $v_0 = (1,1)^\top/\sqrt{2}$. This gives the precise meaning of the factor $1/4$:
+$$H_{\text{raw}} = \frac{\operatorname{tr}(\Lambda)}{4} = \frac{\operatorname{tr}(\Lambda)}{2n}\bigg|_{n=2},$$
+i.e.\ $H_{\text{raw}}$ is the *normalised trace* of $\Lambda$ — the arithmetic mean of its two eigenvalues, divided by $2$. The normalised trace is also $R(\Lambda,v_0)/2$: the Rayleigh quotient at the equal-weight vector, halved. The $1/4$ therefore factors as $(1/n)\times(1/2)$, where $1/n=1/2$ is the dimension-averaging factor of the $2\times 2$ operator and the residual $1/2$ is the Rayleigh-quotient-to-trace conversion at the equal-weight vector.
+
+In the linear Fibonacci case ($a+b=2d$) the bilinear identity reduces to $G\cdot 2d = F\cdot 2d + (ed)\cdot G$, which can be read as: (inner squared norm $\times$ outer sum) $=$ (outer product $\times$ outer sum) $+$ (inner product $\times$ inner squared norm), expressing $4H_{\text{raw}}$ as a ratio of energy-balanced cross-couplings with the Fibonacci-orbit constraint absorbed.
+
+**Partial resolution of the open question.** The two-term structure $\sigma_d+\sigma_{od}$ is characterised by properties (i)–(iii): (i) degree-(0,1) homogeneity, (ii) transpose symmetry, (iii) decomposition into a projective Fibonacci component (converging to $\cos(2\arctan(1/\varphi))$ at the golden-ratio attractor) whose amplitude component is fixed by the Fibonacci identity $a+b=2d$. The factor $1/4$ is the normalised-trace scaling of the resulting $2\times 2$ operator, equivalent to taking the Rayleigh quotient at the equal-weight vector and halving. What remains open is a derivation of why the equal-weight vector $v_0$ is selected — i.e.\ a first-principles argument connecting the Möbius action $z\mapsto(z+1)/(z+2)$ or the norm/trace structure of $\mathbb{Z}[\varphi]$ to the choice $v_0$.
 
 ---
 

@@ -29,6 +29,16 @@ We demonstrate this across five distinct families:
 
 For each family, a machine-checkable certificate binds structural parameters and a gain witness to the universal $\kappa$ formula via a three-gate validation pattern, making stability an enforceable and verifiable property.
 
+**Table 1: Five certified families at a glance.**
+
+| Family | Domain | Gain witness | Structural metadata | Cert ID |
+|---|---|---|---|---|
+| QALM Gradient | Gradient optimization | `gain` | — | [89] |
+| GNN Aggregation | Graph neural networks | `agg_gain` | `n_nodes`, `n_edges` | [93] |
+| Attention Layer | Transformer attention | `attn_gain` | `n_heads`, `d_model`, `seq_len` | [94] |
+| QARM Arithmetic | Modular arithmetic dynamics | `qarm_gain` | `modulus`, `orbit_size`, `generator` | [95] |
+| Symbolic Search | Heuristic beam search | `sym_gain` | `beam_width`, `search_depth`, `rule_count` | [96] |
+
 ### 2. Background
 
 Our framework is built upon a mathematical structure we call the Quantum Arithmetic (QA) system. The core concept is the representation of relationships as harmonic structures. The central metric derived from this system is the Harmonic Index, $H_{QA}$.
@@ -93,7 +103,7 @@ For $\kappa$ to be in $(0, 1]$, we require $0 < 1 - |1 - \eta_{eff}| \le 1$.
 This simplifies to $0 \le |1 - \eta_{eff}| < 1$.
 This holds if and only if $-1 < 1 - \eta_{eff} < 1$, i.e., $0 < \eta_{eff} < 2$.
 
-A practical sufficient condition for stability is to constrain $\mathrm{gain} \in (0, 2]$ and ensure $\mathrm{lr} \cdot H_{QA} < 1$. Since $H_{QA} < 1$ by construction, any $\mathrm{lr} < 1$ satisfies this. This guarantees $\eta_{eff} < 2$, ensuring stability.
+A practical sufficient condition is to constrain $\mathrm{gain} \in (0,2]$ and choose $\mathrm{lr} < 1$. Since $H_{QA} < 1$ by construction, this implies $\eta_{\mathrm{eff}} = \mathrm{lr} \cdot \mathrm{gain} \cdot H_{QA} < 1 \cdot 2 \cdot 1 = 2$, ensuring stability.
 
 ### 5. Five Architecture Classes
 

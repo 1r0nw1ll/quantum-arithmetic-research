@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "GNN Spectral Gain Cert family [98]: derives the curvature gain from sigma_max(W) — the spectral norm of the GNN weight matrix — via power iteration on W^T W. Gain is a native structural object (determined by learned weights), not a free witness. Pins H_QA substrate formula, update rule p_after = p_before - lr*sigma_max*H_QA*grad, and kappa = 1 - |1 - lr*sigma_max*H_QA|."
+}

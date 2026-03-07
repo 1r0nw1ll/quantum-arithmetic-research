@@ -1,0 +1,17 @@
+{
+  "family": 98,
+  "description": "GNN Spectral Gain Certificate — missing weight_matrix",
+  "substrate": { "b": 3, "e": 5, "d": 8, "a": 13 },
+  "optimizer": { "lr": 0.01 },
+  "claimed": {
+    "sigma_max": 0.8820610061541095,
+    "H_QA": 0.4234817813765049,
+    "kappa": 0.0037353676616889153,
+    "update_example": {
+      "p_before": 0.5,
+      "grad": 0.1,
+      "p_after": 0.4996264632338311,
+      "lr": 0.01
+    }
+  }
+}

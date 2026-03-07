@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_GRADIENT_LIPSCHITZ_GAIN_CERT.v1.schema.json",
+  "title": "QA Gradient Lipschitz Gain Cert v1",
+  "description": "Derives the curvature gain from the L2 norm of the gradient vector — the natural Lipschitz constant of the update step — capped at 2.0. Gain is a native structural quantity computed from the gradient, not a free scalar witness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "description",
+    "substrate",
+    "grad_vector",
+    "optimizer",
+    "claimed"
+  ],
+  "properties": {
+    "family": { "type": "integer", "const": 101 },
+    "description": { "type": "string", "minLength": 1 },
+    "substrate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["b", "e", "d", "a"],
+      "properties": {
+        "b": { "type": "integer", "minimum": 1 },
+        "e": { "type": "integer", "minimum": 1 },
+        "d": { "type": "integer", "minimum": 1 },
+        "a": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "grad_vector": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "number" }
+    },
+    "optimizer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lr"],
+      "properties": {
+        "lr": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["grad_norm", "gain", "H_QA", "kappa", "update_example"],
+      "properties": {
+        "grad_norm": { "type": "number", "exclusiveMinimum": 0 },
+        "gain":      { "type": "number", "exclusiveMinimum": 0, "maximum": 2.0 },
+        "H_QA":      { "type": "number" },
+        "kappa":     { "type": "number" },
+        "update_example": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p_before", "grad", "p_after", "lr"],
+          "properties": {
+            "p_before": { "type": "number" },
+            "grad":     { "type": "number" },
+            "p_after":  { "type": "number" },
+            "lr":       { "type": "number", "exclusiveMinimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

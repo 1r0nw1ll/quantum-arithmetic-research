@@ -343,7 +343,13 @@ $$H_{\text{raw}} = \frac{1-z^2}{4(1+z^2)} + \frac{e}{8}.$$
 
 The first term is a pure function of the projective ratio $z$, measuring the asymmetry of the Fibonacci pair relative to the golden fixed point $z^*$: it equals zero at $z=1$ (equal components), is maximised as $z\to 0$ (strongly asymmetric pair), and equals $(\sqrt{5}-1)/(2(\sqrt{5}+1))\approx 0.112$ at the attractor $z=z^*$. This term arises from the Fibonacci projective dynamics, not directly from the algebraic structure of $\mathbb{Q}(\sqrt{5})$. The second term $e/8$ is a scale-dependent correction: writing $e = zd$, it equals $zd/8$ and depends on the absolute magnitude $d$ of the pair, not only on the ratio $z$. Consequently, $H_{\text{raw}}$ is not a projective invariant — it encodes both the ratio $z$ (Fibonacci projective flow) and the scale $e$ (absolute magnitude of the trailing component). Both terms are verified to match $H_{\text{raw}}$ exactly for all integer pairs tested.
 
-**Open question.** A complete first-principles derivation of $H_{QA}$ from the algebraic structure remains open. The projective term $(1-z^2)/(4(1+z^2))$ is determined by the Möbius flow $z\mapsto(z+1)/(z+2)$; the scale term $e/8$ likely arises from the asymmetric role of $e$ in the four-tuple $(b,e,d,a)$, but its algebraic origin is not yet identified.
+**Resolution of the scale term.** The original formula has a symmetric two-term structure that explains the $e/8$ term completely. Labelling the 4-tuple elements as *outer pair* $(b,a)$ and *inner pair* $(e,d)$, the formula is
+
+$$4H_{\text{raw}} = \underbrace{\frac{b\cdot a}{e^2+d^2}}_{\text{outer product}/\text{inner norm}^2} + \underbrace{\frac{e\cdot d}{a+b}}_{\text{inner product}/\text{outer sum}}.$$
+
+The first term is the outer-to-inner ratio; the second is the complementary inner-to-outer ratio. The Fibonacci recurrence forces $a+b=(b+2e)+b=2(b+e)=2d$, so the second term collapses: $e\cdot d/(a+b)=e\cdot d/(2d)=e/2$. This gives $4H_{\text{raw}}=\cos(2\theta)+e/2$, i.e.\ $H_{\text{raw}}=\cos(2\theta)/4+e/8$. The $e/8$ term is therefore not a free parameter—it is algebraically determined by the Fibonacci identity $a+b=2d$ applied to the inner-to-outer ratio. The two terms together form a complementary pair: one captures the projective shape of the Fibonacci progression (via $\cos(2\theta)$), the other captures the absolute scale of its trailing element (via $e$).
+
+**Open question.** The remaining derivation gap is the *motivation* for the two-term formula itself: why the specific combination of outer-to-inner and inner-to-outer ratios, and why the normalisation factor $1/4$? A first-principles derivation connecting this formula to the Möbius action $z\mapsto(z+1)/(z+2)$ or to the norm/trace structure of $\mathbb{Z}[\varphi]$ would complete the algebraic foundation of $H_{QA}$.
 
 ---
 

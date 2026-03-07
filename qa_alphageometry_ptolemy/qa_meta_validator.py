@@ -3362,6 +3362,38 @@ def _validate_qarm_curvature_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_symbolic_search_curvature_cert_family(base_dir: str) -> Optional[str]:
+    """QA Symbolic Search Curvature Cert family [96]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_symbolic_search_curvature_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_symbolic_search_curvature_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_symbolic_search_curvature_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_symbolic_search_curvature_cert_v1 self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_symbolic_search_curvature_cert_v1 self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3589,6 +3621,11 @@ FAMILY_SWEEPS = [
      "3/3 fixtures + gate checks",
      "95_qarm_curvature_cert",
      "../qa_qarm_curvature_cert_v1", True),
+    (96, "QA Symbolic Search Curvature Cert family",
+     _validate_symbolic_search_curvature_cert_family,
+     "QA symbolic search curvature cert (sym_gain, beam_width, search_depth, rule_count)",
+     "96_symbolic_search_curvature_cert",
+     "../qa_symbolic_search_curvature_cert_v1", True),
 ]
 
 

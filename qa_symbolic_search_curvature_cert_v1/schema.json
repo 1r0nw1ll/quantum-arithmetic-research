@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_SYMBOLIC_SEARCH_CURVATURE_CERT.v1.schema.json",
+  "title": "QA Symbolic Search Curvature Cert v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "description",
+    "substrate",
+    "optimizer",
+    "claimed"
+  ],
+  "properties": {
+    "family": {
+      "type": "integer",
+      "const": 96
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "substrate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "b",
+        "e",
+        "d",
+        "a"
+      ],
+      "properties": {
+        "b": { "type": "integer", "minimum": 1 },
+        "e": { "type": "integer", "minimum": 1 },
+        "d": { "type": "integer", "minimum": 1 },
+        "a": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "optimizer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "lr",
+        "sym_gain",
+        "beam_width",
+        "search_depth",
+        "rule_count"
+      ],
+      "properties": {
+        "lr": { "type": "number", "exclusiveMinimum": 0 },
+        "sym_gain": { "type": "number", "exclusiveMinimum": 0, "maximum": 2.0 },
+        "beam_width": { "type": "integer", "minimum": 1 },
+        "search_depth": { "type": "integer", "minimum": 1 },
+        "rule_count": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "H_QA",
+        "kappa",
+        "update_example"
+      ],
+      "properties": {
+        "H_QA": { "type": "number" },
+        "kappa": { "type": "number" },
+        "update_example": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "p_before",
+            "grad",
+            "p_after",
+            "lr",
+            "sym_gain"
+          ],
+          "properties": {
+            "p_before": { "type": "number" },
+            "grad": { "type": "number" },
+            "p_after": { "type": "number" },
+            "lr": { "type": "number", "exclusiveMinimum": 0 },
+            "sym_gain": { "type": "number", "exclusiveMinimum": 0, "maximum": 2.0 }
+          }
+        }
+      }
+    }
+  }
+}
+

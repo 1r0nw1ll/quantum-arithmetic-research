@@ -1,0 +1,29 @@
+{
+  "family": 96,
+  "description": "Symbolic Search Curvature Certificate (beam_width invalid)",
+  "substrate": {
+    "b": 3,
+    "e": 5,
+    "d": 8,
+    "a": 13
+  },
+  "optimizer": {
+    "lr": 0.01,
+    "sym_gain": 1.1,
+    "beam_width": 0,
+    "search_depth": 5,
+    "rule_count": 42
+  },
+  "claimed": {
+    "H_QA": 0.4234817813765049,
+    "kappa": 0.004658299595141524,
+    "update_example": {
+      "p_before": 0.5,
+      "grad": 0.1,
+      "p_after": 0.49953417004048584,
+      "lr": 0.01,
+      "sym_gain": 1.1
+    }
+  }
+}
+

@@ -331,7 +331,13 @@ This is numerically verified for all 81 states of $\{1,\ldots,9\}^2$. The three 
 
 **Remark.** The orbit classification shows that QA dynamics on $\mathbb{Z}/m\mathbb{Z}$ are orbits of the map $x\mapsto\varphi^2 x$ in the ring $\mathbb{Z}[\varphi]/m\mathbb{Z}[\varphi]$, a finite quotient of the ring of integers of $\mathbb{Q}(\sqrt{5})$. This identifies QA as a dynamical system inside an algebraic number ring, not merely an ad-hoc modular arithmetic construction.
 
-**Open question.** It remains to derive $H_{QA}$ from native objects in $\mathbb{Q}(\sqrt{5})$ — norm ratios, trace/norm combinations, or the projective metric of the Fibonacci companion action on the upper half-plane. If such a derivation exists, the curvature score $\kappa$ would be derived end-to-end from the algebraic structure, removing the last heuristic element from the framework.
+**Partial result on $H_{QA}$.** Let $d=b+e$ be the first coordinate of $T(b,e)$ and let $\theta=\arctan(e/d)$ be the angle of the Fibonacci pair $(d,e)$ in $\mathbb{R}^2$. A direct computation shows
+
+$$H_{\text{raw}} = \frac{d^2-e^2}{4(d^2+e^2)} + \frac{e}{8} = \frac{\cos(2\theta)}{4} + \frac{e}{8}.$$
+
+The first term $\cos(2\theta)/4$ is the projective asymmetry of the Fibonacci pair: it measures how far the current ratio $e/d$ departs from the golden fixed-point ratio $1/\varphi\approx 0.618$ (equivalently, from the attractor angle $\arctan(1/\varphi)\approx 31.7°$). This term is native to the $\mathbb{Q}(\sqrt{5})$ structure: the ratio $e/d$ is a projective coordinate on the Fibonacci orbit converging to $1/\varphi$ under repeated application of $Q$. The second term $e/8$ is a linear correction in the trailing Fibonacci component and is not yet accounted for by a purely algebraic argument. Both terms are verified numerically to match $H_{\text{raw}}$ exactly for all integer pairs tested.
+
+**Open question.** A complete first-principles derivation of $H_{QA}$ from $\mathbb{Q}(\sqrt{5})$ remains open. The $\cos(2\theta)$ term is plausibly related to the conformal factor of the Möbius action $z\mapsto(z+1)/(z+2)$ on the upper half-plane, while the $e/8$ term may arise from a projection onto a native form in $\mathbb{Z}[\varphi]$. If a clean derivation is found, $\kappa$ would be derived end-to-end from the algebraic structure.
 
 ---
 

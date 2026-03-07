@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Orbit Curvature Cert family [97]: enumerates full QA orbit from (b0,e0) under a given modulus, recomputes H_QA at every state via the substrate formula, and pins kappa_min = min_t(1 - |1 - lr*gain*H_QA(t)|) as the multi-step orbit stability margin."
+}

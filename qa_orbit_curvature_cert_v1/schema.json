@@ -1,0 +1,56 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_ORBIT_CURVATURE_CERT.v1.schema.json",
+  "title": "QA Orbit Curvature Cert v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "description",
+    "orbit_start",
+    "modulus",
+    "optimizer",
+    "claimed"
+  ],
+  "properties": {
+    "family": {
+      "type": "integer",
+      "const": 97
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "orbit_start": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["b", "e"],
+      "properties": {
+        "b": { "type": "integer", "minimum": 1 },
+        "e": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "modulus": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "optimizer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lr", "gain"],
+      "properties": {
+        "lr":   { "type": "number", "exclusiveMinimum": 0 },
+        "gain": { "type": "number", "exclusiveMinimum": 0, "maximum": 2.0 }
+      }
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["orbit_length", "kappa_min"],
+      "properties": {
+        "orbit_length": { "type": "integer", "minimum": 1 },
+        "kappa_min":    { "type": "number" }
+      }
+    }
+  }
+}

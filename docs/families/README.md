@@ -68,7 +68,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [93] | [QA GNN Message-Passing Curvature Cert v1](93_gnn_mp_curvature_cert.md) | Schema + Validator (H_QA recompute + agg_gain update-rule pin + kappa pin + graph metadata) + 4 Fixtures (pass_default_graph, fail_agg_gain_mismatch, fail_h_qa_mismatch, fail_graph_metadata_invalid) | PASS |
 | [94] | [QA Attention Layer Curvature Cert v1](94_attn_curvature_cert.md) | Schema + Validator (H_QA recompute + attn_gain update-rule pin + kappa pin + attention metadata) + 4 Fixtures (pass_default_attn, fail_attn_gain_mismatch, fail_h_qa_mismatch, fail_seq_len_invalid) | PASS |
 | [95] | [QA QARM Curvature Cert v1](95_qarm_curvature_cert.md) | Schema + Validator (H_QA recompute + qarm_gain update-rule pin + kappa pin + QARM metadata) + 4 Fixtures (pass_default_qarm, fail_qarm_gain_mismatch, fail_h_qa_mismatch, fail_modulus_invalid) | PASS |
-| [96] | [QA Symbolic Search Curvature Cert v1](96_symbolic_search_curvature_cert.md) | Schema + Validator (H_QA recompute + sym_gain update-rule pin + kappa pin + search metadata) + 4 Fixtures (pass_default_sym, fail_sym_gain_mismatch, fail_h_qa_mismatch, fail_beam_width_invalid) | PASS |
+| [96] | [QA Symbolic Search Curvature Cert v1](96_symbolic_search_curvature_cert.md) | Schema + Validator (H_QA recompute + sym_gain update-rule pin + kappa pin + search metadata) + 4 Fixtures (pass_default_sym, fail_sym_gain_mismatch, fail_h_qa_mismatch, fail_beam_width_invalid) | PASS |\n| [97] | [QA Orbit Curvature Cert v1](97_orbit_curvature_cert.md) | Schema + Validator (orbit enumeration, H_QA series, kappa_min stability margin) + 4 Fixtures (pass_orbit_12, fail_orbit_length_mismatch, fail_kappa_min_mismatch, fail_schema) | PASS |
 
 ## Quick validation
 

@@ -1,0 +1,10 @@
+{
+  "family": 97,
+  "description": "Orbit Curvature Certificate — missing modulus field",
+  "orbit_start": { "b": 1, "e": 2 },
+  "optimizer": { "lr": 0.5, "gain": 1.0 },
+  "claimed": {
+    "orbit_length": 12,
+    "kappa_min": 0.10765550239233579
+  }
+}

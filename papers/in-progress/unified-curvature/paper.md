@@ -10,7 +10,7 @@ we define a common curvature score
 
 $$\kappa = 1 - \lvert 1-\eta_{\mathrm{eff}}\rvert.$$
 
-We instantiate this template across seven certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], and spectral-gain extensions [98, 99]. Families [98] and [99] go beyond a scalar witness: they derive the gain directly from a native structural object—the spectral norm of the GNN weight matrix and the spectral norm of the attention score matrix, respectively—via power iteration. Our contribution is not a claim that these systems are globally equivalent, but that they admit a common machine-checkable one-step certification pattern, and that for two architecture classes the gain can be certified as a derived structural invariant. We formalize this pattern through a three-gate validation scheme—substrate recomputation, update-rule verification, and curvature verification—and show how it yields a single comparable scalar across multiple architecture classes. This provides a reproducible basis for cross-family local stability analysis and for future work connecting certified one-step curvature to richer multi-step behavior.
+We instantiate this template across eight certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], spectral-gain extensions [98, 99], and gradient Lipschitz gain [101]. Families [98], [99], and [101] go beyond a scalar witness: they derive the gain directly from a native structural object—the spectral norm of the GNN weight matrix, the spectral norm of the attention score matrix, and the L2 norm of the gradient vector—respectively. Our contribution is not a claim that these systems are globally equivalent, but that they admit a common machine-checkable one-step certification pattern, and that for two architecture classes the gain can be certified as a derived structural invariant. We formalize this pattern through a three-gate validation scheme—substrate recomputation, update-rule verification, and curvature verification—and show how it yields a single comparable scalar across multiple architecture classes. This provides a reproducible basis for cross-family local stability analysis and for future work connecting certified one-step curvature to richer multi-step behavior.
 
 ### 1. Introduction
 
@@ -18,7 +18,7 @@ The field of artificial intelligence is characterized by a proliferation of arch
 
 This paper addresses this challenge by proposing a unified framework for certifying one-step stability across diverse computational architectures. Our primary contribution is the introduction of a curvature score $\kappa$, derived from a common mathematical substrate $H_{QA}$. This metric provides a single, interpretable value characterizing the single-step convergence behavior of a system's certified update rule, independent of domain-specific implementation details.
 
-**What this paper claims.** The paper's claim is that seven heterogeneous architecture families admit the same machine-checkable one-step curvature certificate form, not that they share the same full dynamics. For two of these families ([98], [99]) the gain is not a free witness but a derived structural invariant—the spectral norm of a native operator—making the certificate a structural analysis, not merely a consistency check. We do not assert global convergence, multi-step equivalence, or semantic identity across architecture classes.
+**What this paper claims.** The paper's claim is that eight heterogeneous architecture families admit the same machine-checkable one-step curvature certificate form, not that they share the same full dynamics. For three of these families ([98], [99], [101]) the gain is not a free witness but a derived structural invariant—the spectral norm of a native operator—making the certificate a structural analysis, not merely a consistency check. We do not assert global convergence, multi-step equivalence, or semantic identity across architecture classes.
 
 We demonstrate this across seven distinct families:
 1. **QALM Gradient [89]:** Standard gradient-based optimization.
@@ -27,7 +27,9 @@ We demonstrate this across seven distinct families:
 4. **QARM Arithmetic [95]:** Operations within a modular arithmetic system.
 5. **Symbolic Search [96]:** Heuristic-guided search algorithms.
 6. **Orbit Curvature [97]:** QA orbit stability margin across a full finite orbit.
-7. **Derived Spectral Gain [98, 99]:** GNN and attention gains derived from native weight operators.
+7. **GNN Spectral Gain [98]:** Gain derived from σ_max(W) of the GNN weight matrix.
+8. **Attention Spectral Gain [99]:** Gain derived from σ_max(QKᵀ/√d_k).
+9. **Gradient Lipschitz Gain [101]:** Gain derived from ‖grad_vector‖₂, capped at 2.0.
 
 For each family, a machine-checkable certificate binds structural parameters and a gain witness to the universal $\kappa$ formula via a three-gate validation pattern, making stability an enforceable and verifiable property.
 
@@ -43,6 +45,7 @@ For each family, a machine-checkable certificate binds structural parameters and
 | Orbit Curvature | QA orbit stability | $\kappa_{\min}$ | derived (orbit enum.) | [97] |
 | GNN Spectral Gain | GNN weight geometry | $\sigma_{\max}(W)$ | derived (power iter.) | [98] |
 | Attention Spectral Gain | Attention score geometry | $\sigma_{\max}(QK^\top/\!\sqrt{d_k})$ | derived (power iter.) | [99] |
+| Gradient Lipschitz Gain | Gradient descent | $\min(\|g\|_2, 2)$ | derived (L2 norm) | [101] |
 
 ### 2. Background
 
@@ -158,6 +161,11 @@ We now demonstrate the framework by applying it to seven distinct computational 
 - **GNN Fixture:** $W=\begin{pmatrix}0.8&0.2\\0.1&0.6\end{pmatrix}$, substrate $(3,5,8,13)$, $H_{QA}\!\approx\!0.4235$, $\sigma_{\max}(W)\!\approx\!0.8821$, $\kappa\!\approx\!0.00374$.
 - **Attention Fixture:** $Q=\begin{pmatrix}0.6&0.4\\0.3&0.7\end{pmatrix}$, $K=\begin{pmatrix}0.5&0.3\\0.2&0.8\end{pmatrix}$, $d_k=2$, $\sigma_{\max}(QK^\top/\!\sqrt{2})\!\approx\!0.6603$, $\kappa\!\approx\!0.00280$.
 
+#### 5.8 Gradient Lipschitz Gain [ID 101]
+- **Gain:** $\min(\|\mathbf{g}\|_2, 2.0)$ where $\mathbf{g}$ is the gradient vector; derived by the validator from the submitted gradient, not a free scalar.
+- **Description:** The L2 norm of the gradient is the natural local Lipschitz constant of the update step—it bounds how far the parameter moves per unit of curvature. Gate B recomputes the norm internally and rejects any certificate where the claimed value disagrees.
+- **Fixture Example:** $\mathbf{g}=[0.3, 0.4]$, $\|\mathbf{g}\|_2=0.5$, substrate $(3,5,8,13)$, $H_{QA}\!\approx\!0.4235$, $\mathrm{lr}=0.01$, $\kappa\!\approx\!0.00212$.
+
 ### 6. The Three-Gate Certificate Pattern
 
 To make this unification a practical and enforceable standard, we introduce a machine-checkable certificate pattern. Any artifact claiming compliance must contain the necessary data and pass a three-gate validation process.
@@ -215,7 +223,7 @@ is positive if and only if $0<\eta_{\mathrm{eff}}<2$. In particular, any certifi
 
 This framework currently certifies only a local one-step normal form. It does not, by itself, prove multi-step convergence, generalization, or robustness under distribution shift. In families [89]–[96], the gain is supplied as a free scalar witness; the metadata fields ($\mathrm{n\_nodes}$, $\mathrm{d\_model}$, $\mathrm{orbit\_size}$, etc.) are recorded for auditing but do not constrain that scalar. Accordingly, those families should be read as reusable machine-checkable local certification patterns.
 
-Families [98] and [99] partially close this gap: gain is derived from the native operator ($W$ or $QK^\top/\!\sqrt{d_k}$) and cannot be freely adjusted. This upgrades those two families from consistency checking to structural analysis. Extending derived-gain derivations to the remaining families (QALM, QARM, symbolic search) is left to future work.
+Families [98], [99], and [101] close this gap across three architecture classes: gain is derived from $\sigma_{\max}(W)$, $\sigma_{\max}(QK^\top/\!\sqrt{d_k})$, and $\|\mathbf{g}\|_2$ respectively, and cannot be freely adjusted. This upgrades those families from consistency checking to structural analysis. Extending derived-gain derivations to the remaining families (QARM, symbolic search) is left to future work.
 
 ### 10. Conclusion
 
@@ -223,7 +231,7 @@ This paper introduced a certificate-normal-form framework for local one-step sta
 
 The Unified Curvature Normal Form Theorem provides a bridge across disparate fields of AI, but only at the level of certified local update forms. This offers a practical route toward interoperable local stability checks across mixed computational systems.
 
-Future work will proceed in several directions. First, we plan to extend the framework to recurrent architectures, diffusion models, and Hopfield networks. Second, we will derive gain from native objects in the remaining free-witness families: QALM (gradient norm), QARM (orbit-step ratio), and symbolic search (effective branching factor). Third, the orbit curvature family [97] opens a multi-step direction: because QA orbits are finite and fully enumerable, $\kappa_{\min}$ over a full orbit provides an exact multi-step stability bound with no stochastic approximation. Finally, we will explore using $\kappa$ as an active regularization term in training, and connecting certified one-step curvature to multi-step convergence guarantees via Lyapunov-like arguments.
+Future work will proceed in several directions. First, we plan to extend the framework to recurrent architectures, diffusion models, and Hopfield networks. Second, we will derive gain from native objects in the remaining free-witness families: QARM (orbit-step ratio) and symbolic search (effective branching factor). The gradient family [101] has already completed this transition via L2 norm. Third, the orbit curvature family [97] opens a multi-step direction: because QA orbits are finite and fully enumerable, $\kappa_{\min}$ over a full orbit provides an exact multi-step stability bound with no stochastic approximation. Finally, we will explore using $\kappa$ as an active regularization term in training, and connecting certified one-step curvature to multi-step convergence guarantees via Lyapunov-like arguments.
 
 ### References
 

@@ -3342,6 +3342,26 @@ def _validate_attn_curvature_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_qarm_curvature_cert_family(base_dir: str) -> Optional[str]:
+    """QA QARM Curvature Cert family [95]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_qarm_curvature_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_qarm_curvature_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_qarm_curvature_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def test_spine_v1_compliance() -> bool:
     """[70] QA Dynamics Spine v1 compliance linter.
 
@@ -3564,6 +3584,11 @@ FAMILY_SWEEPS = [
      "3/3 fixtures + gate checks",
      "94_attn_curvature_cert",
      "../qa_attn_curvature_cert_v1", True),
+    (95, "QA QARM Curvature Cert family",
+     _validate_qarm_curvature_cert_family,
+     "3/3 fixtures + gate checks",
+     "95_qarm_curvature_cert",
+     "../qa_qarm_curvature_cert_v1", True),
 ]
 
 

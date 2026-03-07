@@ -305,6 +305,16 @@ $$\kappa_{\min} = \min_{t=0}^{\pi(m)/2-1}\bigl(1-\lvert 1-\mathrm{lr}\cdot\mathr
 
 is computable exactly with no stochastic approximation. Family [97] certifies this quantity for a declared $(b_0,e_0,m)$ triple, providing the first multi-step certified stability bound in the framework.
 
+**Theorem (Orbit Contraction).** *Let $\mathcal{O} = \{s_0, s_1, \ldots, s_{L-1}\}$ be a finite QA orbit of length $L = \pi(m)/2$ under the certified update family, with per-step effective rate $\eta_{\mathrm{eff}}^{(t)} = \mathrm{lr}\cdot\mathrm{gain}\cdot H_{QA}^{(t)}$. Define*
+
+$$\kappa_{\min}(\mathcal{O}) = \min_{t=0}^{L-1}\Bigl(1 - \bigl\lvert 1 - \eta_{\mathrm{eff}}^{(t)}\bigr\rvert\Bigr).$$
+
+*If $\kappa_{\min}(\mathcal{O}) > 0$, then $0 < \eta_{\mathrm{eff}}^{(t)} < 2$ holds for every $t \in \{0,\ldots,L-1\}$. That is, every one-step QA update along the full orbit remains strictly inside the scalar stability interval.*
+
+**Proof.** The condition $\kappa_{\min} > 0$ requires $1 - |1 - \eta_{\mathrm{eff}}^{(t)}| > 0$ at every step, which is equivalent to $|1 - \eta_{\mathrm{eff}}^{(t)}| < 1$, i.e.\ $0 < \eta_{\mathrm{eff}}^{(t)} < 2$. Since the orbit is finite and fully enumerable, this condition can be checked exactly for all $t$. $\square$
+
+**Remark.** The theorem is deliberately minimal: it asserts only that all per-step updates avoid the boundary of the stability interval (the $\eta_{\mathrm{eff}} \leq 0$ divergence zone and the $\eta_{\mathrm{eff}} \geq 2$ oscillation zone), not that the sequence of iterates converges in any norm. Connecting $\kappa_{\min} > 0$ to multi-step convergence rates requires additional assumptions on the loss landscape and is left to future work. The value of the theorem is that $\kappa_{\min}$ is the only scalar that simultaneously certifies all $L$ steps of a full orbit in one computable quantity, with no stochastic approximation and no elliptic PDE—a property unique to the finite enumerable structure of QA orbits.
+
 ### References
 
 1. Vaswani, A., Shazeer, N., Parmar, N., Uszkoreit, J., Jones, L., Gomez, A. N., ... & Polosukhin, I. (2017). Attention is all you need. In *Advances in neural information processing systems* (pp. 5998–6008).

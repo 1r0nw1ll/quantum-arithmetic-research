@@ -1,0 +1,84 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_ATTN_SPECTRAL_GAIN_CERT.v1.schema.json",
+  "title": "QA Attention Spectral Gain Cert v1",
+  "description": "Derives the curvature gain from sigma_max(QK^T / sqrt(d_k)) — the natural Lipschitz constant of the attention score map — making gain a native structural object rather than a free witness.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "description",
+    "substrate",
+    "attention",
+    "optimizer",
+    "claimed"
+  ],
+  "properties": {
+    "family": {
+      "type": "integer",
+      "const": 99
+    },
+    "description": {
+      "type": "string",
+      "minLength": 1
+    },
+    "substrate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["b", "e", "d", "a"],
+      "properties": {
+        "b": { "type": "integer", "minimum": 1 },
+        "e": { "type": "integer", "minimum": 1 },
+        "d": { "type": "integer", "minimum": 1 },
+        "a": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "attention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["Q", "K", "d_k"],
+      "properties": {
+        "Q": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "array", "minItems": 1, "items": { "type": "number" } }
+        },
+        "K": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "array", "minItems": 1, "items": { "type": "number" } }
+        },
+        "d_k": { "type": "integer", "minimum": 1 }
+      }
+    },
+    "optimizer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["lr"],
+      "properties": {
+        "lr": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["sigma_max", "H_QA", "kappa", "update_example"],
+      "properties": {
+        "sigma_max": { "type": "number", "exclusiveMinimum": 0, "maximum": 2.0 },
+        "H_QA":      { "type": "number" },
+        "kappa":     { "type": "number" },
+        "update_example": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["p_before", "grad", "p_after", "lr"],
+          "properties": {
+            "p_before": { "type": "number" },
+            "grad":     { "type": "number" },
+            "p_after":  { "type": "number" },
+            "lr":       { "type": "number", "exclusiveMinimum": 0 }
+          }
+        }
+      }
+    }
+  }
+}

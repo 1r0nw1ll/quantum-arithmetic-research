@@ -3398,6 +3398,39 @@ def _validate_symbolic_search_curvature_cert_family(base_dir: str) -> Optional[s
 
 
 
+
+
+def _validate_attn_spectral_gain_cert_family(base_dir: str) -> Optional[str]:
+    """QA Attention Spectral Gain Cert family [99]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_attn_spectral_gain_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_attn_spectral_gain_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_attn_spectral_gain_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_attn_spectral_gain_cert_v1 self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_attn_spectral_gain_cert_v1 self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
 def _validate_gnn_spectral_gain_cert_family(base_dir: str) -> Optional[str]:
     """QA GNN Spectral Gain Cert family [98]."""
     import subprocess
@@ -3702,6 +3735,11 @@ FAMILY_SWEEPS = [
      "QA GNN spectral gain cert (sigma_max derived from weight matrix, not free witness)",
      "98_gnn_spectral_gain_cert",
      "../qa_gnn_spectral_gain_cert_v1", True),
+    (99, "QA Attention Spectral Gain Cert family",
+     _validate_attn_spectral_gain_cert_family,
+     "QA attention spectral gain cert (sigma_max(QK^T/sqrt(d_k)), natural Lipschitz constant)",
+     "99_attn_spectral_gain_cert",
+     "../qa_attn_spectral_gain_cert_v1", True),
 ]
 
 

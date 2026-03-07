@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Attention Spectral Gain Cert family [99]: derives the curvature gain from sigma_max(QK^T/sqrt(d_k)) — the natural Lipschitz constant of the scaled-dot-product attention score map — via power iteration on A^T A. Gain is the spectral norm of the attention score matrix, not a free witness. Pins H_QA substrate formula, update rule p_after = p_before - lr*sigma_max*H_QA*grad, and kappa = 1 - |1 - lr*sigma_max*H_QA|."
+}

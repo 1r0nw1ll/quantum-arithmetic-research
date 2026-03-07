@@ -1,0 +1,22 @@
+{
+  "family": 99,
+  "description": "Attention Spectral Gain Certificate — 2x2 Q/K, gain derived from sigma_max(QK^T/sqrt(d_k))",
+  "substrate": { "b": 3, "e": 5, "d": 8, "a": 13 },
+  "attention": {
+    "Q":   [[0.6, 0.4], [0.3, 0.7]],
+    "K":   [[0.5, 0.3], [0.2, 0.8]],
+    "d_k": 2
+  },
+  "optimizer": { "lr": 0.01 },
+  "claimed": {
+    "sigma_max": 0.6603293730339804,
+    "H_QA":      0.4234817813765049,
+    "kappa":     0.002796374591876649,
+    "update_example": {
+      "p_before": 0.5,
+      "grad":     0.1,
+      "p_after":  0.4997203625408123,
+      "lr":       0.01
+    }
+  }
+}

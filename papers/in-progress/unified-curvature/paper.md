@@ -2,15 +2,13 @@
 
 ### Abstract
 
-We introduce a certificate-normal-form framework for comparing one-step stability behavior across heterogeneous computational systems. The framework is built around a shared scalar substrate, $H_{QA}$, computed from a four-parameter tuple $(a,b,d,e)$, and a family-specific gain witness. For any certified family whose local update can be written in the form
+The dynamics of the Quantum Arithmetic (QA) system correspond to multiplication by $\varphi^2$ in $\mathbb{Z}[\varphi]$, the ring of integers of $\mathbb{Q}(\sqrt{5})$: the map $T:(b,e)\mapsto(b+e,\,b+2e)$ equals $Q^2$, the square of the Fibonacci companion matrix, and acts as $\times\varphi^2$ on $b+e\varphi$. The Fibonacci quadratic norm $N(b+e\varphi)=b^2+be-e^2$ is $T$-invariant, orbit lengths equal $\pi(m)/2$ (half the Pisano period), and the harmonic index $H_{QA}$ admits a clean operator decomposition: $4H_{\mathrm{raw}}=\mathrm{tr}(\Lambda)$ where $\Lambda=\mathrm{diag}(\sigma_d,\sigma_{od})$ is a $2\times 2$ cross-coupling operator whose degree-0 eigenvalue $\sigma_d=ba/(e^2+d^2)$ tracks the projective Fibonacci angle and whose degree-1 eigenvalue $\sigma_{od}=ed/(b+a)$ collapses to $e/2$ via the Fibonacci identity $a+b=2d$.
 
-$$p_{\mathrm{after}} = p_{\mathrm{before}} - \eta_{\mathrm{eff}}\cdot \mathrm{grad}, \qquad \eta_{\mathrm{eff}}=\mathrm{lr}\cdot \mathrm{gain}\cdot H_{QA},$$
+Building on this algebraic foundation, we introduce a certificate-normal-form framework for comparing one-step stability across heterogeneous computational systems. For any certified family whose local update writes as $p_{\mathrm{after}}=p_{\mathrm{before}}-\eta_{\mathrm{eff}}\cdot\mathrm{grad}$ with $\eta_{\mathrm{eff}}=\mathrm{lr}\cdot\mathrm{gain}\cdot H_{QA}$, we define the universal curvature score
 
-we define a common curvature score
+$$\kappa = 1 - |1-\eta_{\mathrm{eff}}|.$$
 
-$$\kappa = 1 - \lvert 1-\eta_{\mathrm{eff}}\rvert.$$
-
-We instantiate this template across eight certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], spectral-gain extensions [98, 99], and gradient Lipschitz gain [101]. Families [98], [99], and [101] go beyond a scalar witness: they derive the gain directly from a native structural object—the spectral norm of the GNN weight matrix, the spectral norm of the attention score matrix, and the L2 norm of the gradient vector—respectively. Our contribution is not a claim that these systems are globally equivalent, but that they admit a common machine-checkable one-step certification pattern, and that for two architecture classes the gain can be certified as a derived structural invariant. We formalize this pattern through a three-gate validation scheme—substrate recomputation, update-rule verification, and curvature verification—and show how it yields a single comparable scalar across multiple architecture classes. We further provide empirical validation on synthetic binary classification: across seven QA substrates, mean $\kappa$ correlates with final loss at $r=-0.843$; normalizing $\eta_{\mathrm{eff}}=1$ across all substrates equalizes convergence (loss std $1.9\times10^{-5}$), confirming that $H_{QA}$ influences convergence exclusively through $\eta_{\mathrm{eff}}$. This provides a reproducible basis for cross-family local stability analysis and for future work connecting certified one-step curvature to richer multi-step behavior.
+We instantiate this across eight certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], spectral-gain extensions [98, 99], and gradient Lipschitz gain [101]. Three families ([98], [99], [101]) derive gain from native structural objects—the spectral norm of weight/score matrices and the gradient $\ell_2$ norm—upgrading from consistency check to structural analysis. Empirically: across seven QA substrates, mean $\kappa$ correlates with final loss at $r=-0.843$; normalizing $\eta_{\mathrm{eff}}=1$ across all substrates equalizes convergence (loss std $1.9\times10^{-5}$), confirming that $H_{QA}$ governs convergence exclusively through $\eta_{\mathrm{eff}}$.
 
 ### 1. Introduction
 
@@ -47,15 +45,25 @@ For each family, a machine-checkable certificate binds structural parameters and
 | Attention Spectral Gain | Attention score geometry | $\sigma_{\max}(QK^\top/\!\sqrt{d_k})$ | derived (power iter.) | [99] |
 | Gradient Lipschitz Gain | Gradient descent | $\min(\|g\|_2, 2)$ | derived (L2 norm) | [101] |
 
-### 2. Background
+### 2. Mathematical Foundation
 
-Our framework is built upon a mathematical structure we call the Quantum Arithmetic (QA) system. The core concept is the representation of relationships as harmonic structures. The central metric derived from this system is the Harmonic Index, $H_{QA}$.
+The $H_{QA}$ substrate is not an ad-hoc formula. It arises from the arithmetic of $\mathbb{Q}(\sqrt{5})$ and from the projective dynamics of the Fibonacci recurrence. We summarise the structure here; formal proofs appear in §12.
 
-The QA system represents any state using four fundamental components labeled $a, b, d, e$. The Harmonic Index $H_{QA}$ is a function of these components producing a normalized value in $[0, 1)$. It measures the balance of the relationship between two conceptual pairs, $(b, a)$ and $(e, d)$. In the context of learning systems, $H_{QA}$ can be interpreted as a measure of the alignment between components of a system's internal state, which in turn influences the one-step stability of an update rule.
+**The ring $\mathbb{Z}[\varphi]$ and the QA map.** The golden ratio $\varphi=(\sqrt{5}+1)/2$ satisfies $\varphi^2=\varphi+1$. The ring of integers $\mathbb{Z}[\varphi]=\{b+e\varphi : b,e\in\mathbb{Z}\}$ carries the Fibonacci quadratic norm $N(b+e\varphi)=b^2+be-e^2$. The QA map $T:(b,e)\mapsto(d,a)$ with $d=b+e$, $a=b+2e$ (before modular reduction) corresponds to multiplication by $\varphi^2$ in $\mathbb{Z}[\varphi]$:
+$$\varphi^2(b+e\varphi) = (b+e) + (b+2e)\varphi = d + a\varphi.$$
+The matrix of $T$ is $Q^2=\begin{pmatrix}1&1\\1&2\end{pmatrix}$, the square of the Fibonacci companion matrix $Q=\begin{pmatrix}0&1\\1&1\end{pmatrix}$.
+
+**Norm invariance and orbit structure (Propositions 1 and 2, §12).** Since $N(\varphi^2)=1$, the norm $N(b+e\varphi)=b^2+be-e^2$ is $T$-invariant. Modulo $m$, the orbit length equals $\pi(m)/2$ — half the Pisano period — because the order of $Q^2$ in $GL_2(\mathbb{Z}/m\mathbb{Z})$ is $\pi(m)/2$ for all $m\geq 3$. For $m=9$: $\pi(9)=24$, orbit length $=12$, 72 starting pairs ("Cosmos" group). The modular value $N(b+e\varphi)\bmod m$ classifies orbits: for $m=9$, $3\nmid N$ gives cosmos (length 12), $3^2\mid N$ gives satellite (length 4 or 1), $3^4\mid N$ gives the singularity (length 1).
+
+**Projective Fibonacci flow.** The projective ratio $z=e/(b+e)$ evolves as the Möbius map $z\mapsto(z+1)/(z+2)$ under $T$, with unique fixed point $z^*=1/\varphi\approx 0.618$. Every pre-modular orbit converges projectively to $z^*$.
+
+**$H_{QA}$ as a cross-coupling trace.** The step matrix $M=\begin{pmatrix}b&e\\d&a\end{pmatrix}$ (rows = state before and after $T$) satisfies $\det(M)=N(b+e\varphi)$ (pre-modular). The harmonic index decomposes as:
+$$4H_{\mathrm{raw}} = \underbrace{\frac{ba}{e^2+d^2}}_{\sigma_d,\;\text{degree-0}} + \underbrace{\frac{ed}{b+a}}_{\sigma_{od},\;\text{degree-1}} = \mathrm{tr}(\Lambda), \qquad \Lambda = \mathrm{diag}(\sigma_d,\,\sigma_{od}).$$
+The degree-0 component $\sigma_d=\cos(2\arctan(z))$ tracks the projective Fibonacci angle and is scale-invariant; the degree-1 component $\sigma_{od}=e/2$ is fixed by the Fibonacci identity $a+b=2d$ and carries the amplitude. The factor $1/4$ is the normalised-trace scaling: $H_{\mathrm{raw}}=\mathrm{tr}(\Lambda)/4=R(\Lambda,(1,1)^\top/\sqrt{2})/2$, the Rayleigh quotient at the equal-weight vector divided by 2. Together, properties (i) degree-(0,1) homogeneity, (ii) transpose symmetry $\sigma(M)=\sigma(M^\top)$, and (iii) projective Fibonacci convergence characterise $4H_{\mathrm{raw}}$ as the natural cross-coupling trace of the QA step matrix.
 
 ### 3. The $H_{QA}$ Substrate
 
-The foundation of our framework is the $H_{QA}$ substrate, a set of equations that map four input parameters to the bounded Harmonic Index.
+Section 2 established the algebraic origin of $H_{QA}$. We now give the formal computational definition used by all validators.
 
 #### 3.1 Formal Definition
 
@@ -78,7 +86,7 @@ This ensures $H_{QA}$ is always non-negative and strictly less than 1. This boun
 
 #### 3.3 Geometric Interpretation
 
-The parameters $(a, b, d, e)$ can be conceptualized as defining a geometric configuration. One can imagine two vectors $\vec{v}_1 = (a, d)$ and $\vec{v}_2 = (b, e)$, with $H_{QA}$ measuring aspects of their relative lengths and orientations. This interpretation is heuristic and is not used in the validator proofs; it motivates the choice of substrate structure but does not enter any formal argument.
+As derived in §2, $4H_{\mathrm{raw}}=\mathrm{tr}(\Lambda)$ where $\Lambda=\mathrm{diag}(\sigma_d,\sigma_{od})$ is the cross-coupling operator of the QA step matrix. The degree-0 eigenvalue $\sigma_d=ba/(e^2+d^2)=\cos(2\arctan(z))$ measures the projective Fibonacci angle $z=e/d$; the degree-1 eigenvalue $\sigma_{od}=ed/(b+a)=e/2$ carries the state amplitude. Both terms are algebraically determined by the Q($\sqrt{5}$) structure; only the normalization constant $1/4$ carries a residual derivation gap (see §12).
 
 ### 4. The Universal $\kappa$ Formula
 

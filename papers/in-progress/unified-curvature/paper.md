@@ -305,6 +305,36 @@ $$\kappa_{\min} = \min_{t=0}^{\pi(m)/2-1}\bigl(1-\lvert 1-\mathrm{lr}\cdot\mathr
 
 is computable exactly with no stochastic approximation. Family [97] certifies this quantity for a declared $(b_0,e_0,m)$ triple, providing the first multi-step certified stability bound in the framework.
 
+**Proposition 2 (Quadratic Norm Invariant and Q(√5) Structure).**
+
+*The QA map $T$ is the linear representation of multiplication by $\varphi^2$ in $\mathbb{Z}[\varphi]$. The quadratic form $f(b,e)=b^2+be-e^2$ is the algebraic norm $N(b+e\varphi)$ in $\mathbb{Q}(\sqrt{5})$, and is invariant under $T$. The mod-$m$ value of $f$ classifies QA orbits.*
+
+**Proof.**
+
+*Step 1 — Algebraic identification.* Let $\varphi=(1+\sqrt{5})/2$ and $\bar\varphi=(1-\sqrt{5})/2$. In $\mathbb{Z}[\varphi]$ with basis $(1,\varphi)$, multiplication by $\varphi$ has matrix representation $Q=\begin{pmatrix}0&1\\1&1\end{pmatrix}$ (since $\varphi\cdot(b+e\varphi)=b\varphi+e\varphi^2=e+(b+e)\varphi$). Therefore $T=Q^2$ is the representation of multiplication by $\varphi^2$.
+
+*Step 2 — Norm identification.* The algebraic norm $N(b+e\varphi)=(b+e\varphi)(b+e\bar\varphi)=b^2+be(\varphi+\bar\varphi)+e^2\varphi\bar\varphi=b^2+be\cdot 1+e^2\cdot(-1)=b^2+be-e^2=f(b,e)$, using $\varphi+\bar\varphi=1$ and $\varphi\bar\varphi=-1$.
+
+*Step 3 — Invariance.* Since $N(\varphi^2)=N(\varphi)^2=(-1)^2=1$, multiplication by $\varphi^2$ preserves the norm: $N(\varphi^2\cdot(b+e\varphi))=N(b+e\varphi)$. Hence $f(T(b,e))=f(b,e)$ for all integer pairs. $\square$
+
+**Geometric identity.** An equivalent elementary proof: expanding the $2\times 2$ determinant $\det\bigl(\begin{smallmatrix}b&d\\e&a\end{smallmatrix}\bigr)=ba-ed=b(b+2e)-e(b+e)=b^2+be-e^2=f(b,e)$. Thus $f(b,e)$ is the determinant of the matrix whose columns are the state before and after one QA step.
+
+**Corollary (Orbit Classification by Norm Residue).** For $m=9$, the orbit type of $(b_0,e_0)$ is determined by the 3-adic valuation of $N(b_0+e_0\varphi)$:
+
+| $v_3(f(b_0,e_0))$ | Orbit length | Orbit type |
+|--------------------|--------------|------------|
+| $\geq 4$           | 1            | Singularity $(9,9)$ |
+| $2$ or $3$         | 4            | Satellite |
+| $0$                | 12           | Cosmos (primitive) |
+
+This is numerically verified for all 81 states of $\{1,\ldots,9\}^2$. The three orbit-type classes correspond exactly to the three cosets of the norm image in $(\mathbb{Z}/9\mathbb{Z})^{\times}$ under divisibility by $3$.
+
+**Remark.** The orbit classification shows that QA dynamics on $\mathbb{Z}/m\mathbb{Z}$ are orbits of the map $x\mapsto\varphi^2 x$ in the ring $\mathbb{Z}[\varphi]/m\mathbb{Z}[\varphi]$, a finite quotient of the ring of integers of $\mathbb{Q}(\sqrt{5})$. This identifies QA as a dynamical system inside an algebraic number ring, not merely an ad-hoc modular arithmetic construction.
+
+**Open question.** It remains to derive $H_{QA}$ from native objects in $\mathbb{Q}(\sqrt{5})$ — norm ratios, trace/norm combinations, or the projective metric of the Fibonacci companion action on the upper half-plane. If such a derivation exists, the curvature score $\kappa$ would be derived end-to-end from the algebraic structure, removing the last heuristic element from the framework.
+
+---
+
 **Theorem (Orbit Contraction).** *Let $\mathcal{O} = \{s_0, s_1, \ldots, s_{L-1}\}$ be a finite QA orbit of length $L = \pi(m)/2$ under the certified update family, with per-step effective rate $\eta_{\mathrm{eff}}^{(t)} = \mathrm{lr}\cdot\mathrm{gain}\cdot H_{QA}^{(t)}$. Define*
 
 $$\kappa_{\min}(\mathcal{O}) = \min_{t=0}^{L-1}\Bigl(1 - \bigl\lvert 1 - \eta_{\mathrm{eff}}^{(t)}\bigr\rvert\Bigr).$$

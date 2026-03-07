@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "E8 Alignment Audit Cert family [100]: full-population audit of QA orbit state alignment with the 240 E8 root system under fixed canonical embedding (b,e,d,a,b,e,d,a)/norm. Pre-registered decision rule (gap_vs_random > 0.10 AND ...) applied before inspecting results. Mod-9 result: INCIDENTAL — QA median 0.9113 < random baseline 0.9304; high cosines are a projection artifact of the symmetric (v,v)/norm embedding, not structural E8 alignment."
+}

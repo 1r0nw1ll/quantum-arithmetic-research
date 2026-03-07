@@ -1,0 +1,61 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_E8_ALIGNMENT_AUDIT_CERT.v1.schema.json",
+  "title": "QA E8 Alignment Audit Cert v1",
+  "description": "Full-population audit of QA orbit state alignment with the E8 root system under a fixed canonical embedding. Pre-registered decision rule classifies result as STRUCTURAL or INCIDENTAL before inspection of results.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "description",
+    "audit_params",
+    "claimed"
+  ],
+  "properties": {
+    "family": { "type": "integer", "const": 100 },
+    "description": { "type": "string", "minLength": 1 },
+    "audit_params": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["modulus", "embedding_rule", "e8_root_count", "random_baseline_n", "random_seed"],
+      "properties": {
+        "modulus":           { "type": "integer", "minimum": 1 },
+        "embedding_rule":    { "type": "string", "minLength": 1 },
+        "e8_root_count":     { "type": "integer", "const": 240 },
+        "random_baseline_n": { "type": "integer", "minimum": 1 },
+        "random_seed":       { "type": "integer", "minimum": 0 }
+      }
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "total_states",
+        "orbit_count",
+        "median_max_cosine",
+        "mean_max_cosine",
+        "std_max_cosine",
+        "mean_within_orbit_std_12",
+        "mean_orbit_persistence_12",
+        "random_baseline_median",
+        "gap_vs_random",
+        "verdict"
+      ],
+      "properties": {
+        "total_states":               { "type": "integer", "minimum": 1 },
+        "orbit_count":                { "type": "integer", "minimum": 1 },
+        "median_max_cosine":          { "type": "number" },
+        "mean_max_cosine":            { "type": "number" },
+        "std_max_cosine":             { "type": "number" },
+        "mean_within_orbit_std_12":   { "type": "number" },
+        "mean_orbit_persistence_12":  { "type": "number" },
+        "random_baseline_median":     { "type": "number" },
+        "gap_vs_random":              { "type": "number" },
+        "verdict": {
+          "type": "string",
+          "enum": ["STRUCTURAL", "INCIDENTAL"]
+        }
+      }
+    }
+  }
+}

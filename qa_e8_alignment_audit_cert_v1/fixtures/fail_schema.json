@@ -1,0 +1,16 @@
+{
+  "family": 100,
+  "description": "E8 Alignment Audit — missing audit_params",
+  "claimed": {
+    "total_states": 81,
+    "orbit_count": 9,
+    "median_max_cosine": 0.9112956546121255,
+    "mean_max_cosine": 0.9148418547328854,
+    "std_max_cosine": 0.043061553039783665,
+    "mean_within_orbit_std_12": 0.04255386730503805,
+    "mean_orbit_persistence_12": 0.8333333333333334,
+    "random_baseline_median": 0.93039020718268,
+    "gap_vs_random": -0.01909455257055448,
+    "verdict": "INCIDENTAL"
+  }
+}

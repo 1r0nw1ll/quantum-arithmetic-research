@@ -631,6 +631,53 @@ a strong predictor of convergence quality ($r=-0.843$); (ii) the critical design
 parameter is $\etaeff$, with $\kappa$ characterizing proximity to the stability
 boundary; (iii) once $\etaeff$ is equalized, convergence is equalized.
 
+\paragraph{Experiment 3 -- GNN message passing [93].}
+We replicate the sweep on a 2-layer GCN trained for node classification on a
+200-node stochastic block model graph (2 communities, $p_{\mathrm{in}}=0.30$,
+$p_{\mathrm{out}}=0.05$, 16 node features). The message-passing update is
+$H^{(l+1)}=\mathrm{ReLU}(\tilde{A}H^{(l)}W^{(l)})$ where $\tilde{A}$ is the
+symmetric normalised adjacency with self-loops. The $\kappa$-modulated rule applies
+to both weight matrices $W^{(1)},W^{(2)}$; gain is the $\ell_2$-norm of the
+concatenated gradient.
+Same 7 substrates, $\mathrm{lr}=0.05$, 300 epochs.
+Result: $r(\text{mean}\,\kappa,\,\text{final loss})=-0.810$ --- above the
+$-0.70$ threshold, confirming that $\kappa$ predicts convergence in message-passing
+architectures as strongly as in the MLP baseline.
+
+\paragraph{Experiment 4 -- Self-attention layer [94].}
+A single-head self-attention classifier (128 sequences $\times$ 8 tokens $\times$
+16 dims, $d_k=16$, mean-pool readout, binary BCE) is trained under the same
+substrate sweep ($\mathrm{lr}=0.10$, 300 epochs). Gain is the $\ell_2$-norm of
+all five weight-matrix gradients ($W_Q,W_K,W_V,W_O,W_{\mathrm{cls}}$).
+Softmax in the attention mechanism distributes gradients across tokens,
+systematically reducing per-parameter gradient norms and hence compressing the
+effective $\kappa$ range.
+Result: $r(\text{mean}\,\kappa,\,\text{final loss})=-0.706$, above threshold and
+exhibiting the same qualitative pattern: higher $\hqa\to$ lower final loss across
+the seven substrates.
+
+\begin{table}[h]
+\centering
+\caption{Cross-architecture $\kappa$ predictiveness: $r(\text{mean}\,\kappa, \text{final loss})$
+  in three independent experiments.}
+\begin{tabular}{llrr}
+\toprule
+Architecture & Family & Base lr & $r(\kappa, \text{loss})$ \\
+\midrule
+MLP gradient [89]       & Exp.\ 1 & 0.10 & $-0.843$ \\
+GNN aggregation [93]    & Exp.\ 3 & 0.05 & $-0.810$ \\
+Attention layer [94]    & Exp.\ 4 & 0.10 & $-0.706$ \\
+\bottomrule
+\end{tabular}
+\label{tab:cross-arch}
+\end{table}
+
+All three experiments use identical QA substrates, the same gain schedule, and the
+same 7-condition sweep.  The consistent negative correlation across architectures
+with substantially different gradient structures (dense MLP, graph-normalised
+aggregation, softmax-attenuated) supports the universality claim of the $\kappa$
+framework.
+
 \section{Appendix: Mathematical Proofs}
 \label{sec:appendix}
 \setcounter{theorem}{0}

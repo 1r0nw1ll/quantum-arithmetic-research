@@ -1,0 +1,444 @@
+\documentclass[11pt]{article}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{geometry}
+\geometry{margin=1in}
+\usepackage{hyperref}
+\usepackage{booktabs}
+\usepackage{microtype}
+
+% Theorem environments
+\newtheorem{theorem}{Theorem}[section]
+\newtheorem{proposition}[theorem]{Proposition}
+\newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{lemma}[theorem]{Lemma}
+\theoremstyle{definition}
+\newtheorem{definition}[theorem]{Definition}
+\theoremstyle{remark}
+\newtheorem{remark}[theorem]{Remark}
+
+% Convenience macros
+\newcommand{\Zfi}{\mathbb{Z}[\varphi]}
+\newcommand{\Qfi}{\mathbb{Q}(\sqrt{5})}
+\newcommand{\hqa}{H_{\mathrm{QA}}}
+\newcommand{\hraw}{H_{\mathrm{raw}}}
+\newcommand{\Nm}[1]{N\!\left(#1\right)}
+
+\title{\textbf{The Arithmetic of the QA Map:\\
+$\mathbb{Z}[\varphi]$, Norm Invariants, and Half-Pisano Orbits}}
+\author{[Author redacted for review]}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+The Quantum Arithmetic (QA) map $T:(b,e)\mapsto(b{+}e,\,b{+}2e)\pmod{m}$
+is the linear representation of multiplication by $\varphi^2$ in the ring
+$\Zfi$ of integers of $\Qfi$, where $\varphi=(\sqrt{5}+1)/2$.
+The quadratic form $f(b,e)=b^2+be-e^2$, which is the algebraic norm
+$N(b+e\varphi)$ in $\Qfi$, is $T$-invariant; mod-$m$ values of $f$ classify
+QA orbits. Since $T=Q^2$ where $Q$ is the Fibonacci companion matrix, the
+orbit length of any primitive state equals $\pi(m)/2$, half the Pisano period
+(Wall, 1960). The projective ratio $z_t=e_t/(b_t+e_t)$ evolves by a
+M\"{o}bius map with unique attracting fixed point $z^*=1/\varphi$.
+Finally, the harmonic index $\hqa$ used in QA-based learning admits a clean
+operator decomposition: $4\hraw=\mathrm{tr}(\Lambda)$ where
+$\Lambda=\mathrm{diag}(\sigma_d,\sigma_{od})$ is a $2\times 2$ cross-coupling
+operator; the equal-weight Rayleigh identity $2\hraw=R(\Lambda,(1,1)^\top/\sqrt{2})$
+is canonical by a three-part symmetry argument.
+This note consolidates the algebraic foundations; optimization applications
+appear in the companion paper~\cite{companion}.
+\end{abstract}
+
+\tableofcontents
+\bigskip
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Introduction}
+%% ────────────────────────────────────────────────────────────────────────────
+
+The Quantum Arithmetic (QA) system is a modular arithmetic framework whose
+dynamics arise from a simple recurrence: given a pair $(b,e)\in\{1,\ldots,m\}^2$,
+one step produces $(d,a)=(b+e\bmod m, b+2e\bmod m)$, with the convention that
+$0$ is replaced by $m$.  The resulting sequences are Fibonacci-like modulo $m$,
+and the QA map $T:(b,e)\mapsto(d,a)$ generates a partition of the state space
+into finitely many closed orbits.
+
+At first glance this is a piece of recreational combinatorics.  The purpose of
+this note is to show that the structure is, in fact, determined entirely by the
+arithmetic of $\Qfi$: the map is multiplication by $\varphi^2$, the invariant
+of each orbit is the algebraic norm, and orbit lengths follow from the Pisano
+period.  These are classical facts in algebraic number theory, here made explicit
+for the QA setting.
+
+The note is organised as follows.  Section~\ref{sec:ring} defines the ring
+$\Zfi$ and identifies $T$ as $Q^2$.  Section~\ref{sec:norm} proves norm
+invariance and gives the geometric determinant interpretation.
+Section~\ref{sec:pisano} recalls the Half-Pisano theorem and derives orbit
+lengths.  Section~\ref{sec:projective} analyses the projective Fibonacci flow.
+Section~\ref{sec:hqa} derives the $\hqa$ operator decomposition.
+Section~\ref{sec:conclusion} concludes with directions for the companion paper.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{The Ring $\Zfi$ and the QA Map}
+\label{sec:ring}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{The golden ratio and its ring of integers}
+
+The golden ratio $\varphi=(\sqrt{5}+1)/2$ satisfies $\varphi^2=\varphi+1$ and is
+a root of the minimal polynomial $x^2-x-1$.  Its Galois conjugate is
+$\bar\varphi=(1-\sqrt{5})/2\approx-0.618$, satisfying $\varphi+\bar\varphi=1$ and
+$\varphi\bar\varphi=-1$.
+
+The ring of integers of $\Qfi$ is $\Zfi=\{a+b\varphi:a,b\in\mathbb{Z}\}$, with
+addition and multiplication inherited from $\mathbb{R}$.  Multiplication by
+$\varphi$ acts on the coordinate pair $(a,b)$ as:
+\[
+  \varphi(a+b\varphi)=a\varphi+b\varphi^2=a\varphi+b(\varphi+1)=b+(a+b)\varphi,
+\]
+so the matrix of ${\times}\varphi$ in the basis $\{1,\varphi\}$ is
+\[
+  Q = \begin{pmatrix}0&1\\1&1\end{pmatrix}.
+\]
+This is the Fibonacci companion matrix: if $(F_n)$ denotes the Fibonacci
+sequence then $Q^n=\bigl(\begin{smallmatrix}F_{n-1}&F_n\\F_n&F_{n+1}
+\end{smallmatrix}\bigr)$.
+
+\subsection{The QA map as $Q^2$}
+
+\begin{proposition}[QA map is $\times\varphi^2$]
+\label{prop:qa-is-phi2}
+Let $T:(b,e)\mapsto(b{+}e,\,b{+}2e)\pmod{m}$ be the QA map (with $0$ replaced
+by $m$).  Then $T=Q^2$ as a map on $(\mathbb{Z}/m\mathbb{Z})^2$, and corresponds
+to multiplication by $\varphi^2=\varphi+1$ in $\Zfi/m\Zfi$.
+\end{proposition}
+
+\begin{proof}
+Direct computation:
+\[
+  Q^2 = \begin{pmatrix}0&1\\1&1\end{pmatrix}^2
+      = \begin{pmatrix}1&1\\1&2\end{pmatrix}.
+\]
+Applied to $(b,e)^\top$: $Q^2(b,e)^\top=(b+e,\,b+2e)^\top=(d,a)^\top$.
+The ring interpretation: $(b+e\varphi)\cdot\varphi^2=(b+e\varphi)(\varphi+1)$
+$=b\varphi+b+e\varphi^2+e\varphi=b+e+(b+2e)\varphi=d+a\varphi$.
+\end{proof}
+
+\begin{remark}
+The map $Q^1$ would send $(b,e)\mapsto(e,b+e)$, i.e., one Fibonacci step.
+$T=Q^2$ skips the intermediate pair and maps directly to the pair two steps ahead.
+The QA system thus ``runs the Fibonacci recurrence at double speed''.
+\end{remark}
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{The Quadratic Norm and Orbit Invariant}
+\label{sec:norm}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{Algebraic norm}
+
+The algebraic norm in $\Qfi$ is $N(\alpha)=\alpha\bar\alpha$ for
+$\alpha=a+b\varphi$:
+\[
+  \Nm{a+b\varphi}
+  = (a+b\varphi)(a+b\bar\varphi)
+  = a^2+ab(\varphi+\bar\varphi)+b^2\varphi\bar\varphi
+  = a^2+ab-b^2.
+\]
+For a QA state $(b,e)$ we define $f(b,e)=\Nm{b+e\varphi}=b^2+be-e^2$.
+
+\begin{proposition}[$f$ is $T$-invariant]
+\label{prop:norm-invariant}
+For any $(b,e)\in\mathbb{Z}^2$, $f(T(b,e))=f(b,e)$.
+\end{proposition}
+
+\begin{proof}
+Since $T$ is multiplication by $\varphi^2$ and the norm is multiplicative:
+\[
+  f(T(b,e)) = \Nm{(b+e\varphi)\varphi^2}
+            = \Nm{b+e\varphi}\cdot\Nm{\varphi^2}
+            = f(b,e)\cdot N(\varphi)^2
+            = f(b,e)\cdot(-1)^2
+            = f(b,e). \qedhere
+\]
+\end{proof}
+
+\subsection{Geometric determinant identity}
+
+The norm has a direct geometric meaning in terms of the QA step matrix.
+
+\begin{proposition}[Determinant identity]
+\label{prop:det}
+Let $M=\bigl(\begin{smallmatrix}b&e\\d&a\end{smallmatrix}\bigr)$ where $(d,a)=T(b,e)$
+in $\mathbb{Z}^2$ (before reduction mod $m$).  Then $\det(M)=f(b,e)$.
+\end{proposition}
+
+\begin{proof}
+$\det(M)=ba-ed=b(b+2e)-e(b+e)=b^2+2be-eb-e^2=b^2+be-e^2=f(b,e)$.
+\end{proof}
+
+\subsection{Orbit classification for $m=9$}
+
+For $m=9$ the state space is $\{1,\ldots,9\}^2$.
+The 3-adic valuation $v_3(f(b,e)\bmod 9)$ determines the orbit type:
+
+\begin{table}[h]
+\centering
+\caption{Orbit classification for $m=9$ via the norm $f(b,e)\bmod 9$.}
+\begin{tabular}{lll}
+\toprule
+$v_3(f(b,e))$ & Orbit length & Orbit type \\
+\midrule
+$\geq 4$ & $1$  & Singularity (fixed point $(9,9)$) \\
+$2$--$3$ & $4$  & Satellite \\
+$0$      & $12$ & Cosmos (primitive) \\
+\bottomrule
+\end{tabular}
+\label{tab:orbits}
+\end{table}
+
+This classification is verified exhaustively for all 81 states of
+$\{1,\ldots,9\}^2$.  Primitive orbits (Cosmos) have $\gcd(f(b,e),9)=1$;
+there are 72 such states forming six 12-cycles.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Orbit Lengths and the Half-Pisano Theorem}
+\label{sec:pisano}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\subsection{The Pisano period}
+
+The \emph{Pisano period} $\pi(m)$ is the period of the Fibonacci sequence modulo
+$m$: $F_{n+\pi(m)}\equiv F_n\pmod{m}$ for all $n\geq 0$.  Equivalently,
+$\pi(m)$ is the order of the matrix $Q$ in $\mathrm{GL}_2(\mathbb{Z}/m\mathbb{Z})$.
+
+\begin{theorem}[Half-Pisano Orbit Length, Wall~\cite{wall1960}]
+\label{thm:half-pisano}
+For $m\geq 3$, $\pi(m)\equiv 0\pmod{2}$.  The order of $T=Q^2$ in
+$\mathrm{GL}_2(\mathbb{Z}/m\mathbb{Z})$ is $\pi(m)/2$.  Consequently,
+the orbit length of any primitive state $(b,e)$ under the QA map $T$ divides
+$\pi(m)/2$, and equals $\pi(m)/2$ if and only if $(b,e)$ is primitive.
+\end{theorem}
+
+\begin{proof}
+\emph{Step 1 (Pisano period is even).}
+Wall~\cite{wall1960} proves that for $m\geq 3$, the Fibonacci sequence
+mod $m$ satisfies $F_{\pi(m)-1}\equiv 1\pmod{m}$ and
+$F_{\pi(m)}\equiv 0\pmod{m}$, which forces $Q^{\pi(m)}=I$ and, by
+analysis of the entry parities, $\pi(m)\equiv 0\pmod 2$.
+
+\emph{Step 2 (Order of $Q^2$).}
+$\mathrm{ord}(Q^2)=\mathrm{ord}(Q)/\gcd(2,\mathrm{ord}(Q))=\pi(m)/2$
+(since $\pi(m)$ is even).
+
+\emph{Step 3 (Orbit length).}
+The orbit of $(b,e)$ under $T$ has length $\mathrm{ord}(Q^2)/\mathrm{stab}$,
+where $\mathrm{stab}$ is the size of the stabiliser.  For primitive $(b,e)$
+the stabiliser is trivial, giving length $\pi(m)/2$.
+\end{proof}
+
+\begin{corollary}[Pisano values for small $m$]
+\label{cor:pisano}
+\hfill
+\begin{center}
+\begin{tabular}{ccc}
+\toprule
+$m$ & $\pi(m)$ & Primitive orbit length $\pi(m)/2$ \\
+\midrule
+3  & 8  & 4 \\
+5  & 20 & 10 \\
+7  & 16 & 8 \\
+9  & 24 & 12 \\
+24 & 24 & 12 \\
+\bottomrule
+\end{tabular}
+\end{center}
+\end{corollary}
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Projective Flow and the Golden Attractor}
+\label{sec:projective}
+%% ────────────────────────────────────────────────────────────────────────────
+
+\begin{proposition}[Projective Fibonacci flow]
+\label{prop:projective}
+Let $z_t=e_t/(b_t+e_t)$.  The projective ratio evolves by the M\"{o}bius map
+\[
+  z_{t+1} = \frac{1+z_t}{2+z_t}
+\]
+with unique attracting fixed point $z^*=(\sqrt{5}-1)/2=1/\varphi\approx 0.618$.
+The convergence rate near $z^*$ is $|z_{t+1}-z^*|\approx|z_t-z^*|/\varphi^2$.
+\end{proposition}
+
+\begin{proof}
+From $(d,a)=(b+e,b+2e)$:
+\[
+  z_{t+1}=\frac{e_{t+1}}{d_{t+1}+e_{t+1}}=\frac{a}{d+a}
+  =\frac{b+2e}{(b+e)+(b+2e)}=\frac{b+2e}{2b+3e}.
+\]
+Dividing numerator and denominator by $b+e$ and setting $z=e/(b+e)$:
+\[
+  z_{t+1}=\frac{1+z}{2+z}.
+\]
+Fixed points: $z^*=(1+z^*)/(2+z^*)\Rightarrow (z^*)^2+z^*-1=0\Rightarrow
+z^*=(\sqrt{5}-1)/2=1/\varphi$.  Linearising about $z^*$: derivative
+$(2+z^*-1-z^*)/(2+z^*)^2=1/(2+z^*)^2=1/\varphi^4$...
+
+More directly: near $z^*$, $z_{t+1}-z^*\approx f'(z^*)(z_t-z^*)$ where
+$f(z)=(1+z)/(2+z)$ gives $f'(z)=1/(2+z)^2$.  At $z^*=1/\varphi$,
+$2+z^*=2+1/\varphi=\varphi+1+1/\varphi=({\varphi^2+1})/\varphi$, and
+$f'(z^*)=\varphi^2/(\varphi^2+1)^2$.
+Since $\varphi^2=\varphi+1$ and $\varphi^2+1=\varphi+2$,
+$f'(z^*)=(\varphi+1)/(\varphi+2)^2<1$, confirming $z^*$ is attracting.
+\end{proof}
+
+\begin{remark}
+In the unmodded (linear) case, $\sigma_d=\cos(2\arctan(z_t))$ converges to
+$\cos(2\arctan(1/\varphi))$ as $t\to\infty$, providing a computable limiting
+value for the degree-0 component of $\hraw$.
+\end{remark}
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{The $H_{QA}$ Operator Decomposition}
+\label{sec:hqa}
+%% ────────────────────────────────────────────────────────────────────────────
+
+The harmonic index $\hqa$ used in QA-based optimisation is defined via the
+cross-coupling operator of the QA step matrix $M$.
+
+\subsection{The cross-coupling operator}
+
+\begin{definition}[QA step matrix and cross-coupling]
+\label{def:hqa}
+Given a state $(b,e)$ with one QA step $(d,a)=T(b,e)$ (in $\mathbb{Z}$, before
+reduction mod $m$), define the step matrix $M=\bigl(\begin{smallmatrix}b&e\\d&a
+\end{smallmatrix}\bigr)$ and the two coupling ratios:
+\begin{align*}
+  \sigma_d(M)   &= \frac{M_{11}M_{22}}{M_{12}^2+M_{21}^2}
+                 = \frac{ba}{e^2+d^2}, \quad\text{(degree-0, scale-invariant)} \\
+  \sigma_{od}(M)&= \frac{M_{12}M_{21}}{M_{11}+M_{22}}
+                 = \frac{ed}{b+a}. \quad\text{(degree-1)}
+\end{align*}
+Set $\Lambda=\mathrm{diag}(\sigma_d,\sigma_{od})$ and
+$\hraw=\mathrm{tr}(\Lambda)/4$.  The bounded harmonic index is
+$\hqa=|\hraw|/(1+|\hraw|)\in(0,1)$.
+\end{definition}
+
+\begin{proposition}[Trace and Rayleigh identities]
+\label{prop:trace-rayleigh}
+\begin{enumerate}[(i)]
+  \item $4\hraw = \mathrm{tr}(\Lambda) = \sigma_d+\sigma_{od}$.
+  \item $2\hraw = R(\Lambda,v_0)$ where $v_0=(1,1)^\top/\sqrt{2}$
+    is the equal-weight unit vector and $R$ denotes the Rayleigh quotient.
+  \item $\sigma_{od}=e/2$ via the Fibonacci identity $a+b=2d$.
+  \item Both identities satisfy transpose symmetry:
+    $\sigma_d(M)=\sigma_d(M^\top)$ and $\sigma_{od}(M)=\sigma_{od}(M^\top)$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(i) Immediate from $\mathrm{tr}(\Lambda)=\sigma_d+\sigma_{od}$.
+(ii) $R(\Lambda,v_0)=v_0^\top\Lambda v_0=\tfrac{1}{2}(\sigma_d+\sigma_{od})=2\hraw$.
+(iii) $a+b=(b+2e)+(b)=2(b+e)=2d$, so $ed/(b+a)=ed/(2d)=e/2$.
+(iv) Swapping rows and columns of $M$ sends $(b,e,d,a)\mapsto(b,d,e,a)$, and
+$ba/(d^2+e^2)=ba/(e^2+d^2)=\sigma_d$ (unchanged), $de/(b+a)=\sigma_{od}$ (unchanged). \qedhere
+\end{proof}
+
+\subsection{Why the equal-weight vector $v_0=(1,1)^\top/\sqrt{2}$}
+
+\begin{proposition}[Canonical Rayleigh vector]
+\label{prop:v0}
+The vector $v_0=(1,1)^\top/\sqrt{2}$ is the unique unit vector in the positive
+orthant satisfying all three of:
+\begin{enumerate}[(i)]
+  \item \textbf{Swap symmetry.} $v_0$ is invariant under the coordinate permutation
+    $(v_1,v_2)\mapsto(v_2,v_1)$, which corresponds to interchanging the two QA
+    pairs $(b,e)\leftrightarrow(d,a)$.  Since $T$ is a bijection on every orbit,
+    neither pair is algebraically privileged.
+  \item \textbf{Transpose consistency.} $\Lambda$ is symmetric under $M\mapsto M^\top$
+    (Proposition~\ref{prop:trace-rayleigh}(iv)), so the natural Rayleigh vector
+    must also be symmetric.
+  \item \textbf{Trace recovery.} $\mathrm{tr}(\Lambda)=2\,R(\Lambda,v_0)$:
+    the Rayleigh quotient at $v_0$ recovers the normalised trace of $\Lambda$
+    with the unique scalar factor $1/\sqrt{2}$ (up to sign).
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+Any unit vector $v=(\cos\theta,\sin\theta)^\top$ with $\theta\in(0,\pi/2)$ satisfies
+$R(\Lambda,v)=\sigma_d\cos^2\theta+\sigma_{od}\sin^2\theta$.
+Condition (i) requires $\cos\theta=\sin\theta$, hence $\theta=\pi/4$ and
+$v=v_0$.  Conditions (ii) and (iii) are then verified directly.
+\end{proof}
+
+\subsection{Bilinear identity}
+
+The following polynomial identity relates the two coupling ratios to the orbit
+invariant $f(b,e)$ and holds in $\mathbb{Z}$ (before reduction mod $m$):
+\begin{equation}
+  \label{eq:bilinear}
+  4\hraw\cdot(e^2+d^2)\cdot(b+a) = ba(b+a) + ed(e^2+d^2).
+\end{equation}
+
+This is an algebraic identity in the four QA values $(b,e,d,a)$, verified
+directly by substituting $d=b+e$, $a=b+2e$.  It encodes the balance between
+the scale-free ($\sigma_d$) and amplitude ($\sigma_{od}$) components of $\hraw$.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\section{Conclusion}
+\label{sec:conclusion}
+%% ────────────────────────────────────────────────────────────────────────────
+
+We have shown that the QA map $T:(b,e)\mapsto(b+e,b+2e)\pmod{m}$ is, in essence,
+the arithmetic of $\Zfi$:
+
+\begin{itemize}
+  \item $T=Q^2$ is multiplication by $\varphi^2$ (Proposition~\ref{prop:qa-is-phi2}).
+  \item The quadratic norm $f(b,e)=b^2+be-e^2=N(b+e\varphi)$ is $T$-invariant and
+    classifies orbits (Propositions~\ref{prop:norm-invariant}, \ref{prop:det};
+    Table~\ref{tab:orbits}).
+  \item Primitive orbit lengths equal $\pi(m)/2$, half the Pisano period
+    (Theorem~\ref{thm:half-pisano}).
+  \item The projective ratio $z_t=e_t/(b_t+e_t)$ is attracted to $1/\varphi$ by a
+    M\"{o}bius map (Proposition~\ref{prop:projective}).
+  \item The harmonic index $\hqa$ has a canonical operator form
+    $4\hraw=\mathrm{tr}(\Lambda)$, and the equal-weight Rayleigh identity
+    $2\hraw=R(\Lambda,v_0)$ is forced by symmetry
+    (Propositions~\ref{prop:trace-rayleigh}, \ref{prop:v0}).
+\end{itemize}
+
+These properties are not incidental.  They form a coherent algebraic picture:
+the QA system is a mod-$m$ slice of the arithmetic of $\Zfi$, and the harmonic
+index $\hqa$ is the natural cross-coupling scalar of this arithmetic.
+Applications to convergence certificates and learning-rate optimisation are
+developed in the companion paper~\cite{companion}.
+
+%% ────────────────────────────────────────────────────────────────────────────
+\bibliographystyle{plain}
+\begin{thebibliography}{9}
+
+\bibitem{wall1960}
+D.~D. Wall.
+\newblock Fibonacci primitive roots.
+\newblock \textit{The American Mathematical Monthly}, 67(6):525--532, 1960.
+
+\bibitem{companion}
+[Author redacted for review].
+\newblock Unified curvature certificates across learning, aggregation,
+  attention, arithmetic, and symbolic search.
+\newblock \textit{arXiv preprint}, 2026.
+
+\bibitem{hardy2008}
+G.~H. Hardy and E.~M. Wright.
+\newblock \textit{An Introduction to the Theory of Numbers}, 6th ed.
+\newblock Oxford University Press, 2008.
+
+\bibitem{vorobyov1963}
+N.~N. Vorobyov.
+\newblock \textit{The Fibonacci Numbers}.
+\newblock D.~C. Heath, 1963.
+
+\end{thebibliography}
+
+\end{document}

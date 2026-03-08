@@ -72,10 +72,12 @@ exactly (scalar quadratic loss, Theorem~\ref{thm:descent-quad}); for any
 $\beta$-smooth $\mu$-PL loss,
 $L(w_{t+L})-L^*\leq\rhoPL\cdot(L(w_t)-L^*)<L(w_t)-L^*$
 (Theorem~\ref{thm:descent-pl}), with $\rhoPL=\rhoO$ when $\beta=\mu$.
-Empirically: across seven QA substrates, mean $\kappa$ correlates with final loss at
-$r=-0.843$; normalizing $\etaeff=1$ across all substrates equalizes convergence
-(loss std $1.9\times10^{-5}$), confirming that $\hqa$ governs convergence
-exclusively through $\etaeff$.
+Empirically: across three independent architecture types (MLP gradient, GNN
+message-passing, single-head attention), mean $\kappa$ correlates with final loss at
+$r\in\{-0.843,\,-0.810,\,-0.706\}$, all exceeding $-0.70$, with identical
+seven-substrate QA sweeps and same gain schedule. Normalizing $\etaeff=1$ across
+substrates equalizes MLP convergence to loss std $1.9\times10^{-5}$, confirming that
+$\hqa$ governs convergence exclusively through $\etaeff$.
 \end{abstract}
 
 \section{Introduction}
@@ -188,7 +190,8 @@ The step matrix $M=\bigl(\begin{smallmatrix}b&e\\d&a\end{smallmatrix}\bigr)$
 The degree-0 component $\sigma_d=\cos(2\arctan(z))$ tracks the projective Fibonacci
 angle and is scale-invariant; the degree-1 component $\sigma_{od}=e/2$ is fixed by
 the Fibonacci identity $a+b=2d$ and carries the amplitude. The factor $1/4$ is the
-normalised-trace scaling: $\hraw=\mathrm{tr}(\Lambda)/4=R(\Lambda,(1,1)^\top/\sqrt{2})/2$.
+normalised-trace scaling: $\hraw=\mathrm{tr}(\Lambda)/4=R(\Lambda,(1,1)^\top/\sqrt{2})/2$
+(Proposition~\ref{prop:v0}).
 Properties (i) degree-(0,1) homogeneity, (ii) transpose symmetry
 $\sigma(M)=\sigma(M^\top)$, and (iii) projective Fibonacci convergence characterise
 $4\hraw$ as the natural cross-coupling trace of the QA step matrix
@@ -778,7 +781,9 @@ The formula satisfies transpose symmetry $\sigma(M)=\sigma(M^\top)$ and bilinear
 identity $4\hraw(e^2+d^2)(b+a)=ba(b+a)+ed(e^2+d^2)$ (verified for all seven
 experimental substrates). Defining $\Lambda=\mathrm{diag}(\sigma_d,\sigma_{od})$:
 $4\hraw=\mathrm{tr}(\Lambda)$ and $2\hraw=R(\Lambda,(1,1)^\top/\sqrt{2})$ (the
-Rayleigh quotient at the equal-weight vector). The factor $1/4=\mathrm{tr}(\Lambda)/(2n)|_{n=2}$
+Rayleigh quotient at the equal-weight vector;
+see Proposition~\ref{prop:v0} for why $(1,1)^\top/\!\sqrt{2}$ is canonical).
+The factor $1/4=\mathrm{tr}(\Lambda)/(2n)|_{n=2}$
 is the normalised-trace scaling of the $2\times 2$ operator.
 
 \begin{proposition}[Equal-Weight Rayleigh Vector]

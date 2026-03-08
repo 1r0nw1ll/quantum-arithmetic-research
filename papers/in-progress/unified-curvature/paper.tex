@@ -781,6 +781,28 @@ $4\hraw=\mathrm{tr}(\Lambda)$ and $2\hraw=R(\Lambda,(1,1)^\top/\sqrt{2})$ (the
 Rayleigh quotient at the equal-weight vector). The factor $1/4=\mathrm{tr}(\Lambda)/(2n)|_{n=2}$
 is the normalised-trace scaling of the $2\times 2$ operator.
 
+\begin{proposition}[Equal-Weight Rayleigh Vector]
+\label{prop:v0}
+The identity $2\hraw=R(\Lambda,v_0)$ with $v_0=(1,1)^\top/\!\sqrt{2}$ is the unique
+unit-vector Rayleigh representation that simultaneously satisfies:
+\begin{enumerate}[(i)]
+  \item \textbf{Transpose symmetry.} $\sigma_d$ and $\sigma_{od}$ are individually
+    invariant under $M\mapsto M^\top$ (rows and columns of the QA step matrix exchanged),
+    so $\Lambda$ is transpose-symmetric; $v_0$ is the eigenvector of the symmetry
+    group $\mathbb{Z}/2$ acting on $\mathbb{R}^2$ by coordinate swap.
+  \item \textbf{Before/after symmetry.} $M=\bigl(\begin{smallmatrix}b&e\\d&a\end{smallmatrix}\bigr)$
+    has two natural pairs: $(b,e)$ (state before $T$) and $(d,a)$ (state after $T$).
+    Neither is algebraically preferred, since $T$ is a bijection on every orbit.
+    Equal weighting of the two diagonal entries $\sigma_d$, $\sigma_{od}$ of $\Lambda$
+    corresponds exactly to $v_0$.
+  \item \textbf{Trace consistency.} $4\hraw=\mathrm{tr}(\Lambda)=2\,R(\Lambda,v_0)$,
+    so $v_0$ recovers the normalised-trace formula with the unique
+    scalar $1/\!\sqrt{2}$ normalization.
+\end{enumerate}
+Equivalently, $v_0=(1,1)^\top/\!\sqrt{2}$ is the unique unit vector in the positive
+orthant fixed by the swap $v_1\leftrightarrow v_2$.
+\end{proposition}
+
 \begin{theorem}[Orbit Contraction]
 Let $\mathcal{O}=\{s_0,\ldots,s_{L-1}\}$ be a finite QA orbit of length $L=\pi(m)/2$
 with per-step effective rate $\etaeff^{(t)}=\mathrm{lr}\cdot\mathrm{gain}\cdot\hqa^{(t)}$.

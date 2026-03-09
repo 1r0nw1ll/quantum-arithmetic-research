@@ -15,6 +15,7 @@ FAIL_SCHEMA = "SCHEMA_INVALID"
 FAIL_H_QA_MISMATCH = "H_QA_MISMATCH"
 FAIL_UPDATE_RULE_MISMATCH = "UPDATE_RULE_MISMATCH"
 FAIL_KAPPA_MISMATCH = "KAPPA_MISMATCH"
+FAIL_GAIN_DERIVATION_MISMATCH = "GAIN_DERIVATION_MISMATCH"
 
 
 def canonical_json_bytes(obj: Any) -> bytes:
@@ -46,6 +47,33 @@ def recompute_h_qa(substrate: Dict[str, Any]) -> Tuple[float, float]:
     h_raw = 0.25 * (F / (G + eps) + (e * d) / (a + b + eps))
     h_qa = abs(h_raw) / (1 + abs(h_raw))
     return float(h_raw), float(h_qa)
+
+
+def gate_d_gain_derivation(cert: Dict[str, Any]) -> Optional[Dict[str, Any]]:
+    opt = cert["optimizer"]
+    sym_gain   = float(opt["sym_gain"])
+    beam_width  = int(opt["beam_width"])
+    search_depth = int(opt["search_depth"])
+    rule_count  = int(opt["rule_count"])
+    derived_gain = min(float(rule_count) / (float(beam_width) * float(search_depth)), 2.0)
+    if not _close(sym_gain, derived_gain):
+        return {
+            "ok": False,
+            "fail_type": FAIL_GAIN_DERIVATION_MISMATCH,
+            "invariant_diff": {
+                "optimizer.sym_gain": {
+                    "claimed":  sym_gain,
+                    "derived":  derived_gain,
+                    "formula":  "min(rule_count / (beam_width * search_depth), 2.0)",
+                    "beam_width":   beam_width,
+                    "search_depth": search_depth,
+                    "rule_count":   rule_count,
+                }
+            },
+            "details": {},
+            "witnesses": [],
+        }
+    return None
 
 
 def gate_a_substrate(cert: Dict[str, Any]) -> Tuple[Optional[Dict[str, Any]], Dict[str, Any]]:
@@ -135,6 +163,10 @@ def validate_cert(cert: Dict[str, Any], schema: Dict[str, Any]) -> Dict[str, Any
     if g1 is not None:
         return g1
 
+    gd = gate_d_gain_derivation(cert)
+    if gd is not None:
+        return gd
+
     ga, recomputed_a = gate_a_substrate(cert)
     if ga is not None:
         return ga
@@ -168,7 +200,7 @@ def run_self_test() -> int:
 
     fixtures: List[Tuple[str, bool, Optional[str]]] = [
         ("pass_default_sym.json", True, None),
-        ("fail_sym_gain_mismatch.json", False, FAIL_UPDATE_RULE_MISMATCH),
+        ("fail_sym_gain_mismatch.json", False, FAIL_GAIN_DERIVATION_MISMATCH),
         ("fail_h_qa_mismatch.json", False, FAIL_H_QA_MISMATCH),
         ("fail_beam_width_invalid.json", False, FAIL_SCHEMA),
     ]

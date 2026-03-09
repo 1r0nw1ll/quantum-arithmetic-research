@@ -1,6 +1,6 @@
 {
   "family": 96,
-  "description": "Symbolic Search Curvature Certificate (p_after wrong by +0.001)",
+  "description": "Symbolic Search Curvature Certificate (sym_gain wrong: 1.1 != derived 0.84)",
   "substrate": {
     "b": 3,
     "e": 5,
@@ -12,18 +12,21 @@
     "sym_gain": 1.1,
     "beam_width": 10,
     "search_depth": 5,
-    "rule_count": 42
+    "rule_count": 42,
+    "gain_derivation": {
+      "method": "effective_branching_factor",
+      "formula": "min(rule_count / (beam_width * search_depth), 2.0)"
+    }
   },
   "claimed": {
     "H_QA": 0.4234817813765049,
-    "kappa": 0.004658299595141524,
+    "kappa": 0.003557246963562641,
     "update_example": {
       "p_before": 0.5,
       "grad": 0.1,
-      "p_after": 0.5005341700404859,
+      "p_after": 0.4996442753036437,
       "lr": 0.01,
       "sym_gain": 1.1
     }
   }
 }
-

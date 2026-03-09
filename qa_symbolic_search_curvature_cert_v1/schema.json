@@ -44,14 +44,24 @@
         "sym_gain",
         "beam_width",
         "search_depth",
-        "rule_count"
+        "rule_count",
+        "gain_derivation"
       ],
       "properties": {
         "lr": { "type": "number", "exclusiveMinimum": 0 },
         "sym_gain": { "type": "number", "exclusiveMinimum": 0, "maximum": 2.0 },
         "beam_width": { "type": "integer", "minimum": 1 },
         "search_depth": { "type": "integer", "minimum": 1 },
-        "rule_count": { "type": "integer", "minimum": 1 }
+        "rule_count": { "type": "integer", "minimum": 1 },
+        "gain_derivation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [ "method", "formula" ],
+          "properties": {
+            "method": { "type": "string", "const": "effective_branching_factor" },
+            "formula": { "type": "string", "const": "min(rule_count / (beam_width * search_depth), 2.0)" }
+          }
+        }
       }
     },
     "claimed": {

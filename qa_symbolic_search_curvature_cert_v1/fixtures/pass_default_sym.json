@@ -9,21 +9,24 @@
   },
   "optimizer": {
     "lr": 0.01,
-    "sym_gain": 1.1,
+    "sym_gain": 0.84,
     "beam_width": 10,
     "search_depth": 5,
-    "rule_count": 42
+    "rule_count": 42,
+    "gain_derivation": {
+      "method": "effective_branching_factor",
+      "formula": "min(rule_count / (beam_width * search_depth), 2.0)"
+    }
   },
   "claimed": {
     "H_QA": 0.4234817813765049,
-    "kappa": 0.004658299595141524,
+    "kappa": 0.003557246963562641,
     "update_example": {
       "p_before": 0.5,
       "grad": 0.1,
-      "p_after": 0.49953417004048584,
+      "p_after": 0.4996442753036437,
       "lr": 0.01,
-      "sym_gain": 1.1
+      "sym_gain": 0.84
     }
   }
 }
-

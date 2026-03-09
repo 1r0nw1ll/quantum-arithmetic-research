@@ -51,25 +51,44 @@ def _make_row(task_type, input_dict, answer, witness, difficulty):
 
 
 def generate_reachability_tasks(orbits: dict, modulus: int, max_orbit_length: int) -> list:
+    """Generate reachability tasks with balanced True/False ratio.
+
+    For each state (b,e), generates:
+      - L True tasks (all within-orbit reachable targets)
+      - L False tasks (unreachable targets from outside the orbit, cycling
+        through available external states to match the True count)
+
+    This produces an approximately 50/50 True/False ratio per orbit,
+    replacing the previous 1-False-per-state design which yielded ~92% True.
+    """
     rows = []
+    external_cache: dict = {}
+
     for (b, e), orbit in orbits.items():
         orbit_set = {s: i for i, s in enumerate(orbit)}
         L = len(orbit)
+        start_idx = orbit_set[(b, e)]
+
+        # True tasks — all within-orbit pairs
         for (bt, et), idx_t in orbit_set.items():
             input_dict = {"b": b, "e": e, "b_target": bt, "e_target": et, "modulus": modulus}
-            start_idx = orbit_set[(b, e)]
             steps = (idx_t - start_idx) % L
-            rows.append(_make_row("reachability", input_dict, True, steps, _difficulty_steps(steps)))
+            rows.append(_make_row("reachability", input_dict, True, steps,
+                                  _difficulty_steps(steps)))
 
-        # one unreachable example per state
-        other = None
-        for s in all_states(modulus):
-            if s not in orbit_set:
-                other = s
-                break
-        if other is not None:
-            input_dict = {"b": b, "e": e, "b_target": other[0], "e_target": other[1], "modulus": modulus}
-            rows.append(_make_row("reachability", input_dict, False, None, "easy"))
+        # False tasks — L unreachable targets (cycle through external states)
+        orbit_id = id(orbit)
+        if orbit_id not in external_cache:
+            external_cache[orbit_id] = [s for s in all_states(modulus)
+                                        if s not in orbit_set]
+        external = external_cache[orbit_id]
+        if external:
+            for k in range(L):
+                other = external[k % len(external)]
+                input_dict = {"b": b, "e": e,
+                              "b_target": other[0], "e_target": other[1],
+                              "modulus": modulus}
+                rows.append(_make_row("reachability", input_dict, False, None, "easy"))
 
     return rows
 

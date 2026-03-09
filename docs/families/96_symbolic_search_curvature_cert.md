@@ -23,6 +23,15 @@ It is intended as a drift detector: if the substrate curvature formula, the curv
 - Update witness: `p_after = p_before - lr * sym_gain * H_QA * grad`
 - `kappa = 1 - abs(1 - lr * sym_gain * H_QA)`
 
+## Derived gain (Gate 2D)
+
+`sym_gain` is not a free parameter. It must equal `min(rule_count / (beam_width * search_depth), 2.0)` — the effective branching factor of the search. The validator enforces this before checking the update witness.
+
+- **Formula:** `sym_gain = min(rule_count / (beam_width * search_depth), 2.0)`
+- **Method tag:** `effective_branching_factor`
+- **Schema field:** `optimizer.gain_derivation` (required; `method` and `formula` are `const`)
+- **Failure code:** `GAIN_DERIVATION_MISMATCH`
+
 ## Files
 
 | File | Purpose |
@@ -31,7 +40,7 @@ It is intended as a drift detector: if the substrate curvature formula, the curv
 | `validator.py` | schema + deterministic recompute + update + kappa pin |
 | `mapping_protocol_ref.json` | Gate-0 mapping protocol pin |
 | `fixtures/pass_default_sym.json` | PASS fixture |
-| `fixtures/fail_sym_gain_mismatch.json` | FAIL fixture (Gate B: update-rule mismatch) |
+| `fixtures/fail_sym_gain_mismatch.json` | FAIL fixture (Gate 2D: gain derivation mismatch) |
 | `fixtures/fail_h_qa_mismatch.json` | FAIL fixture (Gate A: curvature mismatch) |
 | `fixtures/fail_beam_width_invalid.json` | FAIL fixture (Gate 1: schema invalid) |
 
@@ -40,6 +49,7 @@ It is intended as a drift detector: if the substrate curvature formula, the curv
 | Gate | Check |
 |---|---|
 | 1 | Schema validity |
+| 2D | Derived gain: `sym_gain == min(rule_count / (beam_width * search_depth), 2.0)` (`GAIN_DERIVATION_MISMATCH`) |
 | A | Deterministic recompute of `H_QA` |
 | B | Strict `sym_gain ∈ (0,2]` and deterministic update witness |
 | C | Deterministic recompute of `kappa` |
@@ -56,6 +66,7 @@ python qa_symbolic_search_curvature_cert_v1/validator.py \
 ## Failure types
 
 - `SCHEMA_INVALID`
+- `GAIN_DERIVATION_MISMATCH`
 - `H_QA_MISMATCH`
 - `UPDATE_RULE_MISMATCH`
 - `KAPPA_MISMATCH`

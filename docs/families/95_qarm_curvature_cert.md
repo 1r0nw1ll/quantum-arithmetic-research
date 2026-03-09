@@ -23,6 +23,15 @@ It is intended as a drift detector: if the substrate formula, the update rule, o
 - `kappa = 1 - abs(1 - lr * qarm_gain * H_QA)`
 - Update witness: `p_after = p_before - lr * qarm_gain * grad`
 
+## Derived gain (Gate 2D)
+
+`qarm_gain` is not a free parameter. It must equal `orbit_size / modulus` (the orbit-step ratio). The validator enforces this before checking the update witness.
+
+- **Formula:** `qarm_gain = orbit_size / modulus`
+- **Method tag:** `orbit_step_ratio`
+- **Schema field:** `optimizer.gain_derivation` (required; `method` and `formula` are `const`)
+- **Failure code:** `GAIN_DERIVATION_MISMATCH`
+
 ## Structural metadata
 
 - `modulus`: arithmetic modulus (e.g. 9 or 24).
@@ -37,7 +46,7 @@ It is intended as a drift detector: if the substrate formula, the update rule, o
 | `validator.py` | schema + deterministic recompute + update + kappa pin |
 | `mapping_protocol_ref.json` | Gate-0 mapping protocol pin |
 | `fixtures/pass_default_qarm.json` | PASS fixture |
-| `fixtures/fail_qarm_gain_mismatch.json` | FAIL fixture (Gate 2B: update-rule mismatch) |
+| `fixtures/fail_qarm_gain_mismatch.json` | FAIL fixture (Gate 2D: gain derivation mismatch) |
 | `fixtures/fail_h_qa_mismatch.json` | FAIL fixture (Gate 2A: curvature mismatch) |
 | `fixtures/fail_modulus_invalid.json` | FAIL fixture (Gate 1: schema invalid) |
 
@@ -49,6 +58,7 @@ It is intended as a drift detector: if the substrate formula, the update rule, o
 | 2A | Deterministic recompute of `H_QA_raw`, normalized `H_QA`, and `loss_hat` |
 | 2B | Strict `qarm_gain ∈ (0,2]` and deterministic update witness |
 | 2C | Deterministic recompute of `kappa` |
+| 2D | Derived gain: `qarm_gain == orbit_size / modulus` (`GAIN_DERIVATION_MISMATCH`) |
 
 ## How to run
 
@@ -65,6 +75,7 @@ python qa_qarm_curvature_cert_v1/validator.py \
 - `EPS_MISMATCH`
 - `H_QA_MISMATCH`
 - `LOSS_HAT_MISMATCH`
+- `GAIN_DERIVATION_MISMATCH`
 - `QARM_GAIN_OUT_OF_RANGE`
 - `UPDATE_RULE_MISMATCH`
 - `KAPPA_MISMATCH`

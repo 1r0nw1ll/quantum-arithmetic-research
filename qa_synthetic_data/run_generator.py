@@ -30,49 +30,69 @@ from core import compute_all_orbits, classify_orbit
 
 
 def split_tasks(rows: list, modulus: int) -> dict:
-    """Split rows into train/dev/test by orbit family."""
-    # Identify distinct cosmos orbit families by their canonical first state
+    """Split rows into train/dev/test by orbit family.
+
+    Split logic (v2 — fixes label-prior pathology):
+      - singularity (fixed point): always train (only 1 state, cannot split)
+      - satellite orbits: split by orbit family 70/15/15, same as cosmos
+      - cosmos orbits: split by orbit family 70/15/15
+
+    This ensures dev and test contain satellite states, breaking the
+    100%-cosmos label prior that made orbit_class and reachability
+    trivially solvable from class frequency alone.
+    """
     all_orbits = compute_all_orbits(modulus)
     max_len = max(len(o) for o in all_orbits.values())
 
-    # Map each cosmos orbit to a family index (sorted for determinism)
-    cosmos_roots = sorted(set(
-        tuple(orbit[0]) for orbit in all_orbits.values()
-        if len(orbit) == max_len
-    ))
-    n = len(cosmos_roots)
-    n_train = max(1, int(n * 0.70))
-    n_dev   = max(1, int(n * 0.15))
-    # rest go to test
-
-    train_roots = set(cosmos_roots[:n_train])
-    dev_roots   = set(cosmos_roots[n_train:n_train + n_dev])
-    test_roots  = set(cosmos_roots[n_train + n_dev:])
-
-    def get_orbit_root(b, e):
+    def orbit_root(b, e):
         orbit = all_orbits.get((b, e))
-        if orbit is None:
-            return None
-        return tuple(orbit[0])
+        return tuple(orbit[0]) if orbit else None
+
+    def split_roots(orbit_class: str):
+        """Return (train_roots, dev_roots, test_roots) for a given class."""
+        roots = sorted(set(
+            orbit_root(b, e)
+            for (b, e), orbit in all_orbits.items()
+            if classify_orbit(len(orbit), max_len) == orbit_class
+            and orbit_root(b, e) is not None
+        ))
+        n = len(roots)
+        n_train = max(1, int(n * 0.70))
+        n_dev   = max(1, int(n * 0.15))
+        return (
+            set(roots[:n_train]),
+            set(roots[n_train:n_train + n_dev]),
+            set(roots[n_train + n_dev:]),
+        )
+
+    cosmos_tr,    cosmos_dv,    cosmos_ts    = split_roots("cosmos")
+    satellite_tr, satellite_dv, satellite_ts = split_roots("satellite")
 
     train_rows, dev_rows, test_rows = [], [], []
 
     for row in rows:
         inp = row["input"]
         b, e = inp["b"], inp["e"]
-        root = get_orbit_root(b, e)
         orbit = all_orbits.get((b, e), [])
-        cls = classify_orbit(len(orbit), max_len)
+        cls  = classify_orbit(len(orbit), max_len)
+        root = orbit_root(b, e)
 
-        if cls in ("singularity", "satellite"):
-            # Easy scaffold — all in train
+        if cls == "singularity":
             train_rows.append(row)
-        elif root in train_roots:
-            train_rows.append(row)
-        elif root in dev_roots:
-            dev_rows.append(row)
-        else:
-            test_rows.append(row)
+        elif cls == "satellite":
+            if root in satellite_dv:
+                dev_rows.append(row)
+            elif root in satellite_ts:
+                test_rows.append(row)
+            else:
+                train_rows.append(row)
+        else:  # cosmos
+            if root in cosmos_dv:
+                dev_rows.append(row)
+            elif root in cosmos_ts:
+                test_rows.append(row)
+            else:
+                train_rows.append(row)
 
     return {"train": train_rows, "dev": dev_rows, "test": test_rows}
 

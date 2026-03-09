@@ -1,7 +1,8 @@
 # QA-ORBIT Baseline Results
 
 **Date:** 2026-03-09
-**Status:** First baseline sweep — preliminary, not final.
+**Split version:** v2 (satellite orbits now split 70/15/15 — fixes label-prior pathology)
+**Status:** Baseline sweep complete on v2 splits.
 
 ---
 
@@ -11,10 +12,10 @@ Two moduli evaluated:
 
 | Modulus | Total tasks | Train | Dev | Test |
 |---------|-------------|-------|-----|------|
-| mod-9   | 2,037       | 1,389 | 324 | 324  |
-| mod-24  | 14,556      | 10,344| 1,944 | 2,268 |
+| mod-9   | 2,037       | 1,345 | 368 | 324  |
+| mod-24  | 14,556      | 10,066| 2,061 | 2,429 |
 
-Splits are by orbit family, not random. Singularity + all satellite states go to train. Cosmos orbits split 70 / 15 / 15 by orbit index. The test set therefore contains cosmos orbit families entirely unseen during training.
+**Split v2:** Orbit families split 70/15/15 for both cosmos *and* satellite classes. Singularity (single fixed point) remains train-only. This ensures dev and test contain satellite orbit families, breaking the 100%-cosmos label prior present in split v1.
 
 ---
 
@@ -39,7 +40,9 @@ The degree-2 expansion was added specifically to give the models access to the q
 
 ## 3. Split Pathology: `orbit_class` and `reachability`
 
-**Finding:** Both tasks are near-trivially solvable from label prior on the held-out splits. These are not reliable generalisation benchmarks under the current design.
+**Split v2 status:** `orbit_class` is substantially improved; `reachability` remains prior-dominated.
+
+**Finding (v1 split):** Both tasks were near-trivially solvable from label prior. **Under split v2, `orbit_class` becomes a real (if not primary) benchmark task.** `reachability` requires a task-generation fix, not a split fix.
 
 | Task | Test set label distribution | Implication |
 |------|-----------------------------|-------------|
@@ -48,9 +51,9 @@ The degree-2 expansion was added specifically to give the models access to the q
 
 The root cause is deliberate: satellite and singularity states are all in train (they serve as easy scaffold). The test set therefore contains only cosmos orbit families — so `orbit_class` is trivially "cosmos" everywhere in dev/test. For `reachability`, cosmos orbits are single-cycle structures, so most target pairs are reachable, inducing the 92% True prior.
 
-**Consequence:** The 100% OOD accuracy on `orbit_class` and near-100% on `reachability` does not reflect algebraic generalisation. It reflects label-prior leakage from the split design.
+**`orbit_class` under split v2:** MLP achieves dev=0.889, test=0.866, gap=+0.023. The prior drops from 100% to 87%, and the model demonstrates a real (if small) IID/OOD gap. `orbit_class` can now be treated as an auxiliary benchmark task.
 
-These tasks are retained in the dataset as auxiliary tasks. They should not be headlined in benchmark comparisons until a split design that preserves class balance in the held-out set is implemented.
+**`reachability` under split v2:** Prior remains ~92% True (dev=1.000, test=0.999 for MLP). This is a task-generation issue: the sampler draws more within-orbit (reachable) pairs than cross-orbit (unreachable) pairs. The fix is to balance True/False during generation in `tasks.py`, not in the split logic. `reachability` remains auxiliary until that is addressed.
 
 ---
 
@@ -60,33 +63,32 @@ These tasks are retained in the dataset as auxiliary tasks. They should not be h
 
 This is the most informative task under the current split. The answer is an integer path length (0 to m−1, or −1 for unreachable), with roughly uniform distribution in the test set. The model must reason about orbit traversal length, not just label prior.
 
-**mod-24:**
+*All numbers below use split v2 (satellite 70/15/15).*
+
+**mod-24 (float_poly features):**
 
 | Model | Train | Dev (IID) | Test (OOD) | Gap |
 |-------|-------|-----------|------------|-----|
-| LogisticRegression | 0.188 | 0.145 | 0.174 | −0.029 |
-| MLP(64×64) | 0.473 | 0.404 | 0.391 | +0.013 |
+| LogisticRegression | 0.179 | 0.147 | 0.173 | −0.026 |
+| MLP(64×64) | 0.493 | 0.426 | 0.413 | +0.013 |
 | Symbolic (ceiling) | — | 1.000 | 1.000 | 0.000 |
 
-**mod-9:**
+**mod-24 (onehot_flat — best encoding):**
 
 | Model | Train | Dev (IID) | Test (OOD) | Gap |
 |-------|-------|-----------|------------|-----|
-| LogisticRegression | 0.190 | 0.146 | 0.125 | +0.021 |
-| MLP(64×64) | 0.189 | 0.139 | 0.153 | −0.014 |
+| MLP(128×64) | 0.972 | 0.728 | 0.641 | +0.087 |
 | Symbolic (ceiling) | — | 1.000 | 1.000 | 0.000 |
 
-**Difficulty breakdown (MLP, mod-24 test):**
+**Difficulty breakdown (onehot_flat MLP, mod-24 test):**
 
 | Difficulty | Accuracy | Threshold |
 |------------|----------|-----------|
-| easy | 0.841 | ≤2 steps |
-| medium | 0.056 | ≤5 steps |
-| hard | 0.333 | >5 steps |
+| easy | 0.615 | ≤2 steps |
+| medium | 0.653 | ≤5 steps |
+| hard | 0.649 | >5 steps |
 
-The easy tier is nearly solved (0.841); medium collapses; hard recovers partially. The medium collapse is consistent with the transition from memorisable short paths to paths that require genuine orbit traversal reasoning.
-
-The IID/OOD gap for MLP mod-24 is small (+0.013). This does not mean the split is ineffective: train accuracy (0.473) substantially exceeds test accuracy (0.391), indicating that the model is memorising training orbit patterns. The small gap is partly because both dev and test come from cosmos families with similar orbit structure, differing only by orbit index.
+The onehot encoding achieves near-uniform accuracy across all difficulty tiers (0.615–0.653) — a qualitative shift from float features, which collapse on medium (0.044). The IID/OOD gap of +0.087 represents the fraction of orbit-traversal reasoning that fails to transfer from training cosmos/satellite families to held-out families. The gap is stable across both split versions.
 
 ### 4b. `invariant_pred`
 

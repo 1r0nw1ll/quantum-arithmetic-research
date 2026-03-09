@@ -3,43 +3,39 @@ Deterministic verifier for QA synthetic tasks.
 Re-runs computation independently and checks the stored answer.
 """
 
-from core import qa_step, qa_norm, compute_orbit, all_states, compute_all_orbits, classify_orbit, MODULUS
+from core import qa_step, qa_norm, compute_orbit, compute_all_orbits, classify_orbit
 
 
 def verify_row(row: dict) -> bool:
     task_type = row["task_type"]
     inp = row["input"]
     answer = row["answer"]
+    modulus = inp["modulus"]
 
     if task_type == "invariant_pred":
-        expected = qa_norm(inp["b"], inp["e"])
-        return answer == expected
+        return answer == qa_norm(inp["b"], inp["e"], modulus)
 
     elif task_type == "orbit_class":
-        orbit = compute_orbit(inp["b"], inp["e"])
-        all_orbits = compute_all_orbits()
+        orbit = compute_orbit(inp["b"], inp["e"], modulus)
+        all_orbits = compute_all_orbits(modulus)
         max_len = max(len(o) for o in all_orbits.values())
-        expected = classify_orbit(len(orbit), max_len)
-        return answer == expected
+        return answer == classify_orbit(len(orbit), max_len)
 
     elif task_type == "reachability":
         start = (inp["b"], inp["e"])
         target = (inp["b_target"], inp["e_target"])
-        orbit = compute_orbit(*start)
-        reachable = target in orbit
-        return answer == reachable
+        orbit = compute_orbit(*start, modulus)
+        return answer == (target in orbit)
 
     elif task_type == "shortest_witness":
         start = (inp["b"], inp["e"])
         target = (inp["b_target"], inp["e_target"])
-        orbit = compute_orbit(*start)
+        orbit = compute_orbit(*start, modulus)
         orbit_idx = {s: i for i, s in enumerate(orbit)}
         if target not in orbit_idx:
             return answer == -1
         L = len(orbit)
-        start_idx = orbit_idx[start]
-        target_idx = orbit_idx[target]
-        expected_steps = (target_idx - start_idx) % L
-        return answer == expected_steps
+        steps = (orbit_idx[target] - orbit_idx[start]) % L
+        return answer == steps
 
     return False

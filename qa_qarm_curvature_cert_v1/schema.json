@@ -70,13 +70,22 @@
     "optimizer": {
       "type": "object",
       "additionalProperties": false,
-      "required": [ "lr", "qarm_gain", "modulus", "orbit_size", "generator" ],
+      "required": [ "lr", "qarm_gain", "modulus", "orbit_size", "generator", "gain_derivation" ],
       "properties": {
         "lr": { "type": "number", "exclusiveMinimum": 0 },
         "qarm_gain": { "type": "number", "exclusiveMinimum": 0, "maximum": 2 },
         "modulus": { "type": "integer", "minimum": 2 },
         "orbit_size": { "type": "integer", "minimum": 1 },
-        "generator": { "type": "string", "minLength": 1 }
+        "generator": { "type": "string", "minLength": 1 },
+        "gain_derivation": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [ "method", "formula" ],
+          "properties": {
+            "method": { "type": "string", "const": "orbit_step_ratio" },
+            "formula": { "type": "string", "const": "orbit_size / modulus" }
+          }
+        }
       }
     },
     "claimed": {

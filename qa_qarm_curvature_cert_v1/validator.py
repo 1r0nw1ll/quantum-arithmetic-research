@@ -19,6 +19,7 @@ FAIL_H_QA_MISMATCH = "H_QA_MISMATCH"
 FAIL_LOSS_HAT_MISMATCH = "LOSS_HAT_MISMATCH"
 FAIL_UPDATE_RULE_MISMATCH = "UPDATE_RULE_MISMATCH"
 FAIL_QARM_GAIN_OUT_OF_RANGE = "QARM_GAIN_OUT_OF_RANGE"
+FAIL_GAIN_DERIVATION_MISMATCH = "GAIN_DERIVATION_MISMATCH"
 FAIL_KAPPA_MISMATCH = "KAPPA_MISMATCH"
 
 
@@ -129,6 +130,26 @@ def gate_2_gates(cert: Dict[str, Any]) -> Tuple[Optional[Dict[str, Any]], Dict[s
     lr = float(cert["optimizer"]["lr"])
     qarm_gain = float(cert["optimizer"]["qarm_gain"])
 
+    # Gate 2D: derived gain — qarm_gain must equal orbit_size / modulus (orbit-step ratio).
+    orbit_size = int(cert["optimizer"]["orbit_size"])
+    modulus    = int(cert["optimizer"]["modulus"])
+    derived_gain = float(orbit_size) / float(modulus)
+    if not _close(qarm_gain, derived_gain):
+        return {
+            "ok": False,
+            "fail_type": FAIL_GAIN_DERIVATION_MISMATCH,
+            "invariant_diff": {
+                "optimizer.qarm_gain": {
+                    "claimed":  qarm_gain,
+                    "derived":  derived_gain,
+                    "formula":  "orbit_size / modulus",
+                    "orbit_size": orbit_size,
+                    "modulus":  modulus,
+                }
+            },
+            "details": {},
+        }, {}
+
     if qarm_gain <= 0 or qarm_gain > 2:
         return {
             "ok": False,
@@ -205,7 +226,7 @@ def run_self_test() -> int:
 
     fixtures: List[Tuple[str, bool, Optional[str]]] = [
         ("pass_default_qarm.json", True, None),
-        ("fail_qarm_gain_mismatch.json", False, FAIL_UPDATE_RULE_MISMATCH),
+        ("fail_qarm_gain_mismatch.json", False, FAIL_GAIN_DERIVATION_MISMATCH),
         ("fail_h_qa_mismatch.json", False, FAIL_H_QA_MISMATCH),
         ("fail_modulus_invalid.json", False, FAIL_SCHEMA),
     ]

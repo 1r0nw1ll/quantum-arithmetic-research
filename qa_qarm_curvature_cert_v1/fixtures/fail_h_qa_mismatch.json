@@ -9,33 +9,23 @@
     "ground_truth_source": "qa_qarm_curvature_cert_v1/fixtures/pass_default_qarm.json"
   },
   "inputs": {
-    "tuple": {
-      "b": 1,
-      "e": 2,
-      "d": 3,
-      "a": 5
-    },
+    "tuple": { "b": 1, "e": 2, "d": 3, "a": 5 },
     "eps": 1e-9
   },
   "optimizer": {
     "lr": 0.01,
-    "qarm_gain": 0.9,
+    "qarm_gain": 1.0,
     "modulus": 24,
     "orbit_size": 24,
-    "generator": "sigma"
+    "generator": "sigma",
+    "gain_derivation": { "method": "orbit_step_ratio", "formula": "orbit_size / modulus" }
   },
   "claimed": {
     "H_QA_raw": 0.34615384610478306,
     "H_QA": 0.5,
     "loss_hat": 0.3846153845857988,
-    "kappa": 0.002314285714042019,
-    "update_example": {
-      "p_before": 0.5,
-      "grad": 0.1,
-      "p_after": 0.4991
-    }
+    "kappa": 0.0025714285711578233,
+    "update_example": { "p_before": 0.5, "grad": 0.1, "p_after": 0.499 }
   },
-  "meta": {
-    "note": "Schema-valid, but claimed.H_QA is intentionally wrong."
-  }
+  "meta": { "note": "Gate 2A failure: claimed H_QA=0.5 is wrong (correct=0.2571..)." }
 }

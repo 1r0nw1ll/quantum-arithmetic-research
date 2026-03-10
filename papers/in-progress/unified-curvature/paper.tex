@@ -5,7 +5,7 @@
 \usepackage{hyperref}
 \usepackage{booktabs}
 \usepackage{enumerate}
-\usepackage{microtype}
+% \usepackage{microtype}  % disabled: font expansion error with system fonts
 \usepackage{xcolor}
 
 % Theorem environments
@@ -513,14 +513,103 @@ For the mod-9 cosmos orbit at $\mathrm{lr}=0.5$: $\rhoPL=0.0016$ (condition 1),
 $0.61$ (condition 10), $0.95$ (condition 100). The orbit still guarantees descent for
 any finite condition number, with rate degrading gracefully.
 
+\subsection{Extension to \L{}ojasiewicz Losses}
+\label{sec:lojasiewicz}
+
+The results of \S\S\ref{sec:theorems}--\ref{sec:pl} are exact for quadratic and
+$\beta$-smooth $\mu$-PL losses. We now prove an extension to the broader
+\L{}ojasiewicz class ($\alpha\in(0,1)$), under an explicit trajectory hypothesis.
+The proof uses a change of variable $\varphi_t=V_t^{1-\alpha}$ that converts the
+nonlinear per-step bound into an additive orbit-window decrement.
+
+\begin{theorem}[Finite-Orbit Descent, \L{}ojasiewicz Loss]
+\label{thm:descent-loj}
+Let $L:\mathbb{R}^d\to\mathbb{R}$ be $\beta$-smooth and satisfy the
+\L{}ojasiewicz condition
+\[
+  \|\nabla L(w)\|^2 \geq 2\mu(L(w)-L^*)^\alpha
+  \quad \forall\,w\in S_0 := \{w: L(w)\leq L(w_t)\}
+\]
+for some $\mu>0$, $\alpha\in(0,1)$, where $L^*=\inf_w L(w)$.
+Let $\mathcal{O}$ be a QA cosmos orbit with $\etaeff^{(s)}\in(0,2/\beta)$ for all $s$,
+and suppose
+\begin{equation*}
+  \nabla L(w_s)\neq 0 \quad \text{for } s=t,\ldots,t+L-1 \qquad \text{(H-crit)}
+\end{equation*}
+Define $V_t=L(w_t)-L^*$, $\varphi_t=V_t^{1-\alpha}$, and
+\[
+  C(\mathcal{O}) := \sum_{s=0}^{L-1} 2\mu\,\etaeff^{(s)}\!\left(1-\tfrac{\beta}{2}\etaeff^{(s)}\right) > 0.
+\]
+Then either \textup{(A)} $V_{t+L}=0$ (convergence at the orbit endpoint), or
+\textup{(B)} $\varphi_{t+L} \leq \varphi_t - (1-\alpha)\,C(\mathcal{O})$.
+\end{theorem}
+
+\begin{proof}
+(H-crit) implies $V_s>0$ for $s\in\{t,\ldots,t+L-1\}$ (otherwise $w_s$ is a
+minimiser, so $\nabla L(w_s)=0$, contradicting (H-crit)). The $\beta$-smooth descent
+lemma and \L{}ojasiewicz condition give $V_{s+1}\leq V_s - c_s V_s^\alpha$ where
+$c_s=2\mu\etaeff^{(s)}(1-\tfrac{\beta}{2}\etaeff^{(s)})>0$. All iterates remain in
+$S_0$ by induction ($L(w_{s+1})\leq L(w_s)$), so the \L{}ojasiewicz condition
+applies throughout.
+
+Split on $V_{t+L}$. If $V_{t+L}=0$: conclusion (A). If $V_{t+L}>0$: at every step
+$s\in\{t,\ldots,t+L-1\}$, the overshoot case ($V_{s+1}=0$) is ruled out --- by
+(H-crit) for $s<t+L-1$, and by $V_{t+L}>0$ for the final step. Hence at each step,
+the concavity of $f(x)=x^{1-\alpha}$ (since $f''<0$) gives via the tangent-line bound:
+\[
+  \varphi_{s+1} = V_{s+1}^{1-\alpha}
+  \leq (V_s - c_s V_s^\alpha)^{1-\alpha}
+  \leq V_s^{1-\alpha} - (1-\alpha)c_s
+  = \varphi_s - (1-\alpha)c_s.
+\]
+Telescoping over $L$ steps yields conclusion (B).
+\end{proof}
+
+\paragraph{Convergence rate.}
+If $V_t>0$ for all complete orbits, convergence occurs within
+$\lceil\varphi_0/[(1-\alpha)C(\mathcal{O})]\rceil$ orbits. The orbit contributes
+through $C(\mathcal{O})$: higher $\kmin$ raises $\etaeff^{(s)}$, raises each $c_s$,
+and accelerates convergence. $\kmin$ remains the central orbit scalar.
+
+\paragraph{Relation to Theorem~\ref{thm:descent-pl}.}
+Theorem~\ref{thm:descent-loj} is a \emph{sublinear analogue} of
+Theorem~\ref{thm:descent-pl}, not a reduction to it. The PL result gives
+multiplicative contraction in $V$-coordinates; this theorem gives additive decay in
+$\varphi$-coordinates. The two are not equivalent at $\alpha=1$: the PL result is
+strictly stronger.
+
+\paragraph{Genericity of (H-crit).}
+If $\mathrm{crit}(L)=\{w:\nabla L(w)=0\}$ has Lebesgue measure zero (in particular
+if $L$ is a Morse function or polynomial), then for Lebesgue-almost-every starting
+point $w_0$, hypothesis (H-crit) holds. The bad set
+$\bigcup_{s=0}^{L-1}F_s^{-1}(\mathrm{crit}(L))$ is a finite union of measure-zero
+sets (by the Federer area formula applied to the gradient-flow maps $F_s$), hence
+has measure zero.
+
+\paragraph{Cert family [102].}
+Theorem~\ref{thm:descent-loj} is operationalized by cert family [102]
+(\texttt{QA\_LOJASIEWICZ\_ORBIT\_CERT.v1}). Gate~2D recomputes
+$C(\mathcal{O})=\sum_s 2\mu\etaeff^{(s)}(1-\tfrac{\beta}{2}\etaeff^{(s)})$ from
+the orbit $\eta_{\mathrm{eff}}$ sequence and verifies the claimed value to within
+$10^{-9}$. H-crit is an explicit witnessed boolean in v1; the intrinsic
+H-crit-free extension remains open.
+
+\paragraph{Open problem.}
+A fully intrinsic version --- depending only on the orbit $\mathcal{O}$ and loss
+class, with no condition on $w_0$ --- remains open. Closure would require either a
+\L{}ojasiewicz argument that structurally avoids saddle-point trajectories, or a
+Morse-theoretic bound on QA orbit windows.
+
 \section{Limitations}
 
 For general nonconvex losses, this framework certifies only a local one-step normal
 form and does not prove multi-step convergence, generalization, or robustness under
-distribution shift. Theorems~\ref{thm:descent-quad} and~\ref{thm:descent-pl} give
-exact multi-step guarantees for scalar quadratic and $\beta$-smooth $\mu$-PL losses
-respectively; extension to nonconvex losses (beyond PL) requires additional
-assumptions and remains open.
+distribution shift. Theorems~\ref{thm:descent-quad}, \ref{thm:descent-pl},
+and~\ref{thm:descent-loj} give exact or bounded multi-step guarantees for scalar
+quadratic, $\beta$-smooth $\mu$-PL, and \L{}ojasiewicz ($\alpha<1$) losses
+respectively; the \L{}ojasiewicz result (Theorem~\ref{thm:descent-loj}) requires an
+explicit trajectory hypothesis (H-crit) whose generic validity is established as a
+separate proposition. A fully intrinsic nonconvex extension remains open.
 
 In families [89]--[96], the gain is supplied as a free scalar witness; the metadata
 fields (\texttt{n\_nodes}, \texttt{d\_model}, \texttt{orbit\_size}, etc.) are
@@ -540,18 +629,22 @@ cross-coupling operator on the QA step matrix. Building on this foundation, we
 derived a universal curvature score $\kappa$ and certified its one-step stability
 form across nine architecture families.
 
-For QA orbit families, Theorems~\ref{thm:descent-quad} and~\ref{thm:descent-pl}
-provide exact multi-step descent guarantees: if $\kmin(\mathcal{O})>0$, one full
-orbit of length $\pi(m)/2$ reduces loss by exactly computable factor $\rhoO<1$ (for
-quadratic loss) or $\rhoPL<1$ (for any $\beta$-smooth $\mu$-PL loss). For the
-mod-9 cosmos orbit at $\mathrm{lr}=0.5$, $\rhoO=0.001582$ (factor-632 per orbit).
-These results are enabled uniquely by the finite enumerability of QA orbits---a
-structural property with no direct analogue in standard SGD analysis.
+For QA orbit families, Theorems~\ref{thm:descent-quad}, \ref{thm:descent-pl},
+and~\ref{thm:descent-loj} provide multi-step descent guarantees across three loss
+classes: if $\kmin(\mathcal{O})>0$, one full orbit reduces scalar quadratic loss by
+exactly computable factor $\rhoO<1$ (Theorem~\ref{thm:descent-quad}); for any
+$\beta$-smooth $\mu$-PL loss, $\rhoPL<1$ (§\ref{sec:pl}); and for any
+$\beta$-smooth \L{}ojasiewicz loss with $\alpha\in(0,1)$, either convergence occurs
+within the window or $\varphi_{t+L}\leq\varphi_t-(1-\alpha)C(\mathcal{O})$ where
+$C(\mathcal{O})>0$ is orbit-computable (§\ref{sec:lojasiewicz}, under H-crit).
+For the mod-9 cosmos orbit at $\mathrm{lr}=0.5$, $\rhoO=0.001582$ (factor-632 per
+orbit). Cert family [102] operationalizes Theorem~\ref{thm:descent-loj}.
 
-Future work: (1) extend to nonconvex losses via Lyapunov arguments; (2) derive gain
-from native objects in QARM and symbolic search families; (3) explore $\kappa$ as an
-active regularisation term in training; (4) develop a standalone mathematical note
-on the $\Zfi$/Half-Pisano/norm-invariant structure.
+Future work: (1) derive an intrinsic H-crit-free version of
+Theorem~\ref{thm:descent-loj}; (2) derive gain from native objects in QARM and
+symbolic search families; (3) explore $\kappa$ as an active regularisation term in
+training; (4) develop a standalone mathematical note on the
+$\Zfi$/Half-Pisano/norm-invariant structure.
 
 \section{Empirical Validation}
 \label{sec:empirical}

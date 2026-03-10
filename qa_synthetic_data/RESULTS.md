@@ -313,18 +313,44 @@ These results update and strengthen the interpretation in §9. The oracle null r
 
 ---
 
-## 11. Recommended Next Baselines
+## 11. Reachability Baseline — Balanced Data (2026-03-09)
+
+**Script:** `reachability_baseline.py`  **Data:** mod-24, split v2, balanced 50/50
+
+| Encoding | Model | Train | Dev | Test | IID-OOD |
+|---|---|---|---|---|---|
+| float_poly | LR | 0.954 | 0.994 | **1.000** | −0.006 |
+| float_poly | MLP(64,64) | 0.986 | 1.000 | **1.000** | +0.000 |
+| onehot_flat | LR | 0.986 | 1.000 | **1.000** | +0.000 |
+| onehot_flat | MLP(64,64) | 0.987 | 1.000 | **1.000** | +0.000 |
+| symbolic | — | 1.000 | 1.000 | 1.000 | 0.000 |
+
+**Finding:** `reachability` is solved (100% test) by every tested model once the data is balanced. Even logistic regression on polynomial features achieves perfect OOD accuracy.
+
+**Theoretical explanation:** Orbit membership is determined by norm class: two states share an orbit iff `f(b,e) ≡ f(b_target, e_target)` (modulo prime-power conditions on v₃(f)). The float_poly features include `b², be, e²` — exactly the components of f. A linear model can compute the norm *difference* `f(b,e) − f(b_target, e_target)` as a linear combination of these polynomial features, without the modular reduction step. Because False pairs are drawn from different orbits (different norm class), this comparison is a perfect discriminant.
+
+This explains the sharp contrast with `invariant_pred`:
+- **`invariant_pred`** (hard): predict `f(b,e) mod m` absolutely — requires representing a periodic modular function
+- **`reachability`** (easy): compare whether `f(b,e) ≈ f(b_target, e_target)` — reduces to a polynomial difference, no modular wrapping needed
+
+The benchmark now exhibits three structurally distinct difficulty levels:
+
+| Task | Difficulty | Minimum sufficient model | Test accuracy |
+|---|---|---|---|
+| `reachability` | Easy — polynomial comparison | LR (float_poly) | 100% |
+| `orbit_class` | Medium — orbit-type classification | MLP(64,64) onehot | 86.6% |
+| `shortest_witness` | Hard — discrete-log generalisation | MLP(64,) onehot_flat | 81.7% |
+| `invariant_pred` | Algebraic barrier — modular norm | None (all FAILED) | ≤33.0% |
+
+---
+
+## 12. Recommended Next Steps
 
 In priority order:
 
-1. ~~**Symbolic-token embedding for `invariant_pred`**~~ ✓ **Done** — one-hot MLP achieves 25–33% test, confirming mixed result: encoding matters, task is still genuinely hard.
-
-2. ~~**Capacity sweep**~~ ✓ **Done** — see §10. Hard wall confirmed for `invariant_pred`; minimum sufficient architecture (7K params) identified for `shortest_witness`.
-
-3. ~~**Re-split for `orbit_class` and `reachability`**~~ ✓ **Done** — split v2 + balanced reachability sampling; all four tasks now honest (see §3).
-
-4. **Reachability baseline rerun on balanced data:** The reachability results in §7 used pre-balance data. A rerun with the balanced split (§3) would complete the four-task baseline table.
-
-5. **Harder IID/OOD split for `shortest_witness`:** Split by orbit norm class or larger held-out fraction. The oracle null result (§10.2) suggests the persistent ~15pp gap is inherent to orbit-family structure, not norm computation. A harder split would test whether the pattern fully generalises.
-
-6. **PL-condition extension of the Finite-Orbit Descent Theorem:** The main theoretical open problem. See §9 (cert connection) and companion paper §10.
+1. ~~**Symbolic-token embedding for `invariant_pred`**~~ ✓ Done
+2. ~~**Capacity sweep**~~ ✓ Done — §10
+3. ~~**Re-split for `orbit_class` and `reachability`**~~ ✓ Done — §3
+4. ~~**Reachability baseline rerun on balanced data**~~ ✓ Done — §11
+5. **Harder IID/OOD split for `shortest_witness`:** Split by norm class. The oracle null (§10.2) shows the gap is structural, not norm-limited.
+6. **PL-condition extension of the Finite-Orbit Descent Theorem:** Main theoretical open problem. See companion paper §10.

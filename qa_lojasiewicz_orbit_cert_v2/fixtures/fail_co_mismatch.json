@@ -1,0 +1,16 @@
+{
+  "family": 103,
+  "description": "Same orbit as pass_default but claimed.C_O is wrong (0.4 instead of 0.3).",
+  "orbit": {
+    "eta_eff": [0.5, 0.5, 0.5, 0.5],
+    "mu": 0.1,
+    "beta": 1.0
+  },
+  "alpha": 0.5,
+  "phi_t": 2.0,
+  "claimed": {
+    "C_O": 0.4,
+    "phi_tL_bound": 1.8,
+    "convergence_orbits_bound": 10
+  }
+}

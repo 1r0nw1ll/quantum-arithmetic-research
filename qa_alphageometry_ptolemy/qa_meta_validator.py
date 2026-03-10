@@ -3404,6 +3404,37 @@ def _validate_symbolic_search_curvature_cert_family(base_dir: str) -> Optional[s
 
 
 
+def _validate_lojasiewicz_orbit_cert_v2_family(base_dir: str) -> Optional[str]:
+    """QA Lojasiewicz Orbit Descent Cert v2 family [103] — intrinsic (H-crit derived)."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_lojasiewicz_orbit_cert_v2", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_lojasiewicz_orbit_cert_v2/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_lojasiewicz_orbit_cert_v2 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_lojasiewicz_orbit_cert_v2 self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_lojasiewicz_orbit_cert_v2 self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_lojasiewicz_orbit_cert_family(base_dir: str) -> Optional[str]:
     """QA Lojasiewicz Orbit Descent Cert family [102]."""
     import subprocess
@@ -3850,6 +3881,11 @@ FAMILY_SWEEPS = [
      "QA Lojasiewicz orbit cert (phi-contraction phi_{t+L} <= phi_t - (1-alpha)*C(O), C(O) orbit-computable)",
      "102_lojasiewicz_orbit_cert",
      "../qa_lojasiewicz_orbit_cert_v1", True),
+    (103, "QA Lojasiewicz Orbit Descent Cert v2 (intrinsic) family",
+     _validate_lojasiewicz_orbit_cert_v2_family,
+     "QA Lojasiewicz orbit cert v2 (H-crit derived from phi_t>0 via B3; h_crit_witnessed field removed)",
+     "103_lojasiewicz_orbit_cert_v2",
+     "../qa_lojasiewicz_orbit_cert_v2", True),
 ]
 
 

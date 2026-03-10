@@ -1,0 +1,16 @@
+{
+  "family": 103,
+  "description": "L=4 orbit, mu=0.1, beta=1.0, alpha=0.5, phi_t=2.0. C(O)=0.3. H-crit derived via B3 — no h_crit_witnessed field.",
+  "orbit": {
+    "eta_eff": [0.5, 0.5, 0.5, 0.5],
+    "mu": 0.1,
+    "beta": 1.0
+  },
+  "alpha": 0.5,
+  "phi_t": 2.0,
+  "claimed": {
+    "C_O": 0.3,
+    "phi_tL_bound": 1.85,
+    "convergence_orbits_bound": 14
+  }
+}

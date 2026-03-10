@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Lojasiewicz Orbit Descent Cert family [103] v2: intrinsic form proved in B3. H-crit is derived from phi_t > 0 + Lojasiewicz + fixed-point propagation — the h_crit_witnessed field of v1 is dropped. Cert requires only phi_t > 0 (orbit not at minimum) beyond smoothness, Lojasiewicz, and orbit feasibility. Gate 2D recomputes C(O) = sum_t 2*mu*eta_eff_t*(1 - beta/2*eta_eff_t) as in v1."
+}

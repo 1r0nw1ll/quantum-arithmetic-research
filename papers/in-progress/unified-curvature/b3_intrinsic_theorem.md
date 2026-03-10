@@ -50,6 +50,11 @@ w_{s+1} = w_s − η_eff^(s) · ∇L(w_s) = w_s − η_eff^(s) · 0 = w_s.
 
 By induction: w_{s+k} = w_s for all k ≥ 0, so V_{s+k} = V_s = 0 for all k ≥ 0. ∎
 
+*Scope note: this fixed-point argument applies to **exact** gradient descent
+(∇L, not a stochastic approximation). For SGD, the stochastic gradient at w*
+may be non-zero, so the fixed-point property is not guaranteed. The theorem's
+update rule uses exact ∇L throughout.*
+
 ---
 
 ## The Intrinsic Theorem

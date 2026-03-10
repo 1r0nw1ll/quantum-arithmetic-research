@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_LOJASIEWICZ_ORBIT_CERT.v2.schema.json",
+  "title": "QA Lojasiewicz Orbit Descent Cert v2 (intrinsic)",
+  "description": "Intrinsic form of the Lojasiewicz orbit-window theorem (B3). H-crit is derived from phi_t > 0 + Lojasiewicz + fixed-point propagation — no h_crit_witnessed field. Gate 2D recomputes C(O) = sum_t 2*mu*eta_eff_t*(1 - beta/2*eta_eff_t). Only hypothesis beyond smoothness+Lojasiewicz+orbit-feasibility: phi_t > 0 (orbit window starts from non-minimizer).",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "description",
+    "orbit",
+    "alpha",
+    "phi_t",
+    "claimed"
+  ],
+  "properties": {
+    "family": { "type": "integer", "const": 103 },
+    "description": { "type": "string", "minLength": 1 },
+    "orbit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eta_eff", "mu", "beta"],
+      "properties": {
+        "eta_eff": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "number", "exclusiveMinimum": 0 }
+        },
+        "mu": { "type": "number", "exclusiveMinimum": 0 },
+        "beta": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "alpha": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 1
+    },
+    "phi_t": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["C_O", "phi_tL_bound", "convergence_orbits_bound"],
+      "properties": {
+        "C_O": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "phi_tL_bound": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "convergence_orbits_bound": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

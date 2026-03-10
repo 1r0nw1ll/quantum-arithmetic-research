@@ -73,6 +73,7 @@ A family **does not count as shipped** unless both tracts are present.
 | [99] | [QA Attention Spectral Gain Cert v1](99_attn_spectral_gain_cert.md) | Schema + Validator (H_QA recompute + sigma_max(QK^T/sqrt(d_k)) power iteration + update-rule pin + kappa pin) + 4 Fixtures (pass_attn_score, fail_sigma_mismatch, fail_h_qa_mismatch, fail_schema) | PASS |
 | [100] | [QA E8 Alignment Audit Cert v1](100_e8_alignment_audit_cert.md) | Schema + Validator (full orbit enumeration, 240 E8 cosines, pre-registered decision rule) + 4 Fixtures (pass_mod9_incidental, fail_wrong_verdict, fail_stats_mismatch, fail_schema) | PASS |
 | [101] | [QA Gradient Lipschitz Gain Cert v1](101_gradient_lipschitz_gain_cert.md) | Schema + Validator (H_QA recompute + grad_norm L2 derivation + update-rule pin + kappa pin) + 4 Fixtures (pass_grad_l2, fail_grad_norm_mismatch, fail_h_qa_mismatch, fail_schema) | PASS |
+| [102] | [QA Lojasiewicz Orbit Descent Cert v1](102_lojasiewicz_orbit_cert.md) | Schema + Validator (orbit feasibility + C(O) recompute Gate 2D + H-crit witness + phi-bound + orbits-bound) + 4 Fixtures (pass_default, fail_co_mismatch, fail_hcrit, fail_schema) | PASS |
 
 ## Quick validation
 

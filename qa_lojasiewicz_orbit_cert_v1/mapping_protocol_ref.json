@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Lojasiewicz Orbit Descent Cert family [102]: certifies per-orbit-window convergence of smooth, Lojasiewicz-conditioned losses under QA cosmos orbit update. The cert recomputes C(O) = sum_t 2*mu*eta_eff_t*(1 - beta/2*eta_eff_t) from the orbit eta_eff sequence and verifies phi_{t+L} <= phi_t - (1-alpha)*C(O), where phi_t = V_t^{1-alpha} is the Lojasiewicz change-of-variable. H-crit (no critical points along orbit) is an explicit witnessed hypothesis."
+}

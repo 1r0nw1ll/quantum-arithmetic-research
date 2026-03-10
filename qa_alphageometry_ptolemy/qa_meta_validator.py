@@ -3404,6 +3404,37 @@ def _validate_symbolic_search_curvature_cert_family(base_dir: str) -> Optional[s
 
 
 
+def _validate_lojasiewicz_orbit_cert_family(base_dir: str) -> Optional[str]:
+    """QA Lojasiewicz Orbit Descent Cert family [102]."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_lojasiewicz_orbit_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_lojasiewicz_orbit_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_lojasiewicz_orbit_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_lojasiewicz_orbit_cert_v1 self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_lojasiewicz_orbit_cert_v1 self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_gradient_lipschitz_gain_cert_family(base_dir: str) -> Optional[str]:
     """QA Gradient Lipschitz Gain Cert family [101]."""
     import subprocess
@@ -3814,6 +3845,11 @@ FAMILY_SWEEPS = [
      "QA gradient Lipschitz gain cert (gain = min(||grad||_2, 2.0), derived from gradient vector)",
      "101_gradient_lipschitz_gain_cert",
      "../qa_gradient_lipschitz_gain_cert_v1", True),
+    (102, "QA Lojasiewicz Orbit Descent Cert family",
+     _validate_lojasiewicz_orbit_cert_family,
+     "QA Lojasiewicz orbit cert (phi-contraction phi_{t+L} <= phi_t - (1-alpha)*C(O), C(O) orbit-computable)",
+     "102_lojasiewicz_orbit_cert",
+     "../qa_lojasiewicz_orbit_cert_v1", True),
 ]
 
 

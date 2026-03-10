@@ -1,0 +1,17 @@
+{
+  "family": 102,
+  "description": "L=4 orbit, mu=0.1, beta=1.0, alpha=0.5, phi_t=2.0. C(O)=0.3, phi_tL_bound=1.85.",
+  "orbit": {
+    "eta_eff": [0.5, 0.5, 0.5, 0.5],
+    "mu": 0.1,
+    "beta": 1.0
+  },
+  "alpha": 0.5,
+  "phi_t": 2.0,
+  "h_crit_witnessed": true,
+  "claimed": {
+    "C_O": 0.3,
+    "phi_tL_bound": 1.85,
+    "convergence_orbits_bound": 14
+  }
+}

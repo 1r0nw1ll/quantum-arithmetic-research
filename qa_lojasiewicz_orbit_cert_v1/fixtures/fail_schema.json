@@ -1,0 +1,16 @@
+{
+  "family": 102,
+  "description": "Missing required field alpha — schema validation should fail.",
+  "orbit": {
+    "eta_eff": [0.5, 0.5, 0.5, 0.5],
+    "mu": 0.1,
+    "beta": 1.0
+  },
+  "phi_t": 2.0,
+  "h_crit_witnessed": true,
+  "claimed": {
+    "C_O": 0.3,
+    "phi_tL_bound": 1.85,
+    "convergence_orbits_bound": 14
+  }
+}

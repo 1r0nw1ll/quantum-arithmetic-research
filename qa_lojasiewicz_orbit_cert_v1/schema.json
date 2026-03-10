@@ -1,0 +1,66 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_LOJASIEWICZ_ORBIT_CERT.v1.schema.json",
+  "title": "QA Lojasiewicz Orbit Descent Cert v1",
+  "description": "Certifies per-orbit-window phi-contraction for smooth, Lojasiewicz-conditioned losses under QA cosmos orbit update. Witness fields: orbit eta_eff sequence (determines C(O)), Lojasiewicz exponent alpha, smoothness beta, Lojasiewicz constant mu, initial phi_t, H-crit flag, and claimed C(O) / phi bound. Gate 2D recomputes C(O) = sum_t 2*mu*eta_eff_t*(1 - beta/2*eta_eff_t) from the orbit and checks claimed.C_O.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "family",
+    "description",
+    "orbit",
+    "alpha",
+    "phi_t",
+    "h_crit_witnessed",
+    "claimed"
+  ],
+  "properties": {
+    "family": { "type": "integer", "const": 102 },
+    "description": { "type": "string", "minLength": 1 },
+    "orbit": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eta_eff", "mu", "beta"],
+      "properties": {
+        "eta_eff": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "type": "number", "exclusiveMinimum": 0 }
+        },
+        "mu": { "type": "number", "exclusiveMinimum": 0 },
+        "beta": { "type": "number", "exclusiveMinimum": 0 }
+      }
+    },
+    "alpha": {
+      "type": "number",
+      "exclusiveMinimum": 0,
+      "exclusiveMaximum": 1
+    },
+    "phi_t": {
+      "type": "number",
+      "exclusiveMinimum": 0
+    },
+    "h_crit_witnessed": {
+      "type": "boolean"
+    },
+    "claimed": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["C_O", "phi_tL_bound", "convergence_orbits_bound"],
+      "properties": {
+        "C_O": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "phi_tL_bound": {
+          "type": "number",
+          "exclusiveMinimum": 0
+        },
+        "convergence_orbits_bound": {
+          "type": "integer",
+          "minimum": 1
+        }
+      }
+    }
+  }
+}

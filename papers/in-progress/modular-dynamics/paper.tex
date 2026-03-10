@@ -88,6 +88,54 @@ Let $p$ be a rational prime.
 
 \section{Orbit Classification for Inert Primes}
 
+Before stating the theorem we make explicit the identification between the matrix $F$,
+multiplication by~$\varphi$, and the field norm---the three objects that the proof connects.
+
+\begin{proposition}[Representation and norm identity]\label{prop:rep-norm}
+Write elements of\/ $\mathbb{Z}[\varphi]$ as column vectors $(b,e)^T$ representing
+$b+e\varphi$ in the $\mathbb{Z}$-basis $\{1,\varphi\}$.
+\begin{enumerate}
+\item \textup{(Matrix of $\times\varphi$).}
+Multiplication by $\varphi$ acts as
+\[
+  \varphi\cdot(b+e\varphi) \;=\; e \;+\; (b+e)\varphi,
+\]
+i.e.\ $(b,e)\mapsto(e,b+e)$, represented by $F=\bigl[\begin{smallmatrix}0&1\\1&1\end{smallmatrix}\bigr]$.
+In particular \emph{$F$ represents $\times\varphi$}; the QA operator $T=F^2$ represents
+$\times\varphi^2$.  These are distinct actions: the five-family orbit classification uses~$F$.
+
+\item \textup{(Norm equals determinant).}
+For any $\alpha=b+e\varphi\in\mathbb{Z}[\varphi]$, the matrix of multiplication by~$\alpha$
+in the basis $\{1,\varphi\}$ is
+\[
+  M(\alpha)=\begin{pmatrix}b & e \\ e & b+e\end{pmatrix},
+  \qquad
+  \det M(\alpha) = b^2+be-e^2 = N(\alpha).
+\]
+In particular, $\det(F)=N(\varphi)=-1$.
+
+\item \textup{(Reduction mod~$p$, inert case).}
+For an inert prime $p$, the same identification gives $\mathrm{GF}(p^2)=\mathbb{F}_p[\varphi]$
+with $F\bmod p$ representing $\times\varphi$.  The field norm satisfies
+\[
+  N_{\mathrm{GF}(p^2)/\mathrm{GF}(p)}(\varphi)
+  \;=\; \det(F\bmod p)
+  \;=\; \det(F)\bmod p \;=\; -1.
+\]
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(1): $\varphi(b+e\varphi)=b\varphi+e\varphi^2=b\varphi+e(\varphi+1)=e+(b+e)\varphi$.
+(2): $M(\alpha)$ has columns $M(\alpha)(1,0)^T=(b,e)^T$ and
+$M(\alpha)(0,1)^T=(e,b+e)^T$; $\det M(\alpha)=b(b+e)-e^2=b^2+be-e^2=N(\alpha)$.
+(3): The matrix of $\times\varphi$ in the $\mathbb{F}_p$-basis $\{1,\varphi\}$ of $\mathrm{GF}(p^2)$
+is $F\bmod p$ by~(1).  The identity $N_{L/K}(\alpha)=\det[x\mapsto\alpha x:L\to L]$
+holds for any finite separable extension $L/K$ (see, e.g., Lang \emph{Algebra} Ch.~VI),
+giving $N_{\mathrm{GF}(p^2)/\mathrm{GF}(p)}(\varphi)=\det(F\bmod p)$.
+Since $\det(F)=-1\in\mathbb{Z}$, this reduces to $-1\bmod p$.
+\end{proof}
+
 \begin{theorem}[Inert prime orbit structure]\label{thm:inert}
 Let $p\equiv\pm2\pmod5$ be an inert prime.  Then:
 \begin{enumerate}
@@ -103,15 +151,12 @@ Let $p\equiv\pm2\pmod5$ be an inert prime.  Then:
 \end{theorem}
 
 \begin{proof}
-\textbf{Step 1} (Norm identity).
-The norm $N_{\mathrm{GF}(p^2)/\mathrm{GF}(p)}(\varphi)$ equals
-$\varphi\cdot\varphi^p$.  The Frobenius $\sigma:\alpha\mapsto\alpha^p$ sends
-$\varphi$ to the other root of $x^2-x-1$, namely $1-\varphi=-1/\varphi$.
-Therefore
-\[
-  N(\varphi) = \varphi\cdot(-1/\varphi) = -1.
-\]
-(Equivalently, $N(\varphi)=\det F \bmod p = -1$.)
+\textbf{Step 1} (Norm of $\varphi$ equals $-1$).
+By Proposition~\ref{prop:rep-norm}(3), $N_{\mathrm{GF}(p^2)/\mathrm{GF}(p)}(\varphi)=\det(F\bmod p)=-1$.
+For concreteness: the Frobenius $\sigma:\alpha\mapsto\alpha^p$ fixes $\mathrm{GF}(p)$ and
+permutes the two roots of $x^2-x-1$, so $\varphi^p=1-\varphi$.  Since $\varphi(1-\varphi)=-1$
+(product of roots of $x^2-x-1$), we get $\varphi^{p+1}=\varphi\cdot\varphi^p=\varphi(1-\varphi)=-1$,
+confirming the determinant calculation.
 
 \textbf{Step 2} ($\varphi^{p+1}=-1$).
 $\varphi^{p+1}=\varphi\cdot\varphi^p=\varphi\cdot(-1/\varphi)=-1$.

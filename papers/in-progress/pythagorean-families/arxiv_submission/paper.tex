@@ -52,7 +52,8 @@ All numerical claims are machine-verified in the accompanying script
 
 \subsection{Background on Pythagorean Triples}
 
-A \emph{Pythagorean triple} is an ordered triple of positive integers $(C, F, G)$ satisfying the Pythagorean theorem:
+A \emph{Pythagorean triple} is an ordered triple of positive integers $(C, F, G)$
+satisfying the Pythagorean theorem:
 \begin{equation}
 C^2 + F^2 = G^2
 \end{equation}
@@ -479,7 +480,8 @@ W. Jones, ``Orbit Structure of the Fibonacci Matrix over Finite Quadratic Rings,
 
 \section{Computational Verification}
 
-All results in this paper have been computationally verified using Python 3.x with NumPy. The complete source code, including:
+{\sloppy
+All results in this paper have been computationally verified. The complete source code, including:
 \begin{itemize}
 \item Generators for all five families
 \item Pisano period computation
@@ -487,6 +489,12 @@ All results in this paper have been computationally verified using Python 3.x wi
 \item Pythagorean triple generation and validation
 \end{itemize}
 
-is available at the accompanying repository.  The standalone verification script \texttt{verify\_classification.py} checks all ten computational claims in this paper (V1--V10: partition, Pisano periods, orbit--family correspondence, order of~$F$, norm alternation, cosmos norm pairs, Tribonacci stabilizer, Ninbonacci fixed point, inradius identity, and generator actions) and runs in under one second with no dependencies beyond the Python standard library.
+is available at the accompanying repository.  The standalone verification script
+\texttt{verify\discretionary{}{}{\_}classification.py} checks all ten computational claims in this paper
+(V1--V10: partition, Pisano periods, orbit--family correspondence, order of~$F$,
+norm alternation, cosmos norm pairs, Tribonacci stabilizer, Ninbonacci fixed point,
+inradius identity, and generator actions) and runs in under one second with no
+dependencies beyond the Python standard library.
+} % end \sloppy
 
 \end{document}

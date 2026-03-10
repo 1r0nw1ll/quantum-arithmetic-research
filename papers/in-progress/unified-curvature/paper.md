@@ -8,7 +8,7 @@ Building on this algebraic foundation, we introduce a certificate-normal-form fr
 
 $$\kappa = 1 - |1-\eta_{\mathrm{eff}}|.$$
 
-We instantiate this across nine certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], spectral-gain extensions [98, 99], and gradient Lipschitz gain [101]. Three families ([98], [99], [101]) derive gain from native structural objects—the spectral norm of weight/score matrices and the gradient $\ell_2$ norm—upgrading from consistency check to structural analysis. For QA orbit families, the finite enumerable orbit structure enables exact multi-step descent results: if $\kappa_{\min}(\mathcal{O})>0$, then $L_{t+L}\leq\rho(\mathcal{O})\cdot L_t$ where $\rho(\mathcal{O})=\prod_t(1-\kappa_t)^2<1$ (scalar quadratic, §8.1); for any $\beta$-smooth $\mu$-PL loss, $L_{t+L}-L^*\leq\rho_{\mathrm{PL}}(\mathcal{O})\cdot(L_t-L^*)<L_t-L^*$ (§8.2), with $\rho_{\mathrm{PL}}=\rho$ when $\beta=\mu$. Empirically: across seven QA substrates, mean $\kappa$ correlates with final loss at $r=-0.845$ (gain-formula-robust across three lr values); normalizing $\eta_{\mathrm{eff}}=1$ across all substrates equalizes convergence (loss std $1.9\times10^{-5}$), confirming that $H_{QA}$ governs convergence exclusively through $\eta_{\mathrm{eff}}$.
+We instantiate this across nine certified families: gradient-based learning [89], graph aggregation [93], attention layers [94], modular arithmetic dynamics [95], symbolic search [96], orbit curvature [97], spectral-gain extensions [98, 99], and gradient Lipschitz gain [101]. Three families ([98], [99], [101]) derive gain from native structural objects—the spectral norm of weight/score matrices and the gradient $\ell_2$ norm—upgrading from consistency check to structural analysis. For QA orbit families, the finite enumerable orbit structure enables exact multi-step descent results: if $\kappa_{\min}(\mathcal{O})>0$, then $L_{t+L}\leq\rho(\mathcal{O})\cdot L_t$ where $\rho(\mathcal{O})=\prod_t(1-\kappa_t)^2<1$ (scalar quadratic, §8.1); for any $\beta$-smooth $\mu$-PL loss, $L_{t+L}-L^*\leq\rho_{\mathrm{PL}}(\mathcal{O})\cdot(L_t-L^*)<L_t-L^*$ (§8.2), with $\rho_{\mathrm{PL}}=\rho$ when $\beta=\mu$; and for any $\beta$-smooth Łojasiewicz loss with exponent $\alpha\in(0,1)$, either convergence occurs within the orbit window or $\varphi_{t+L}\leq\varphi_t-(1-\alpha)C(\mathcal{O})$ where $\varphi_t=V_t^{1-\alpha}$ and $C(\mathcal{O})>0$ is orbit-computable (§8.3, under explicit trajectory hypothesis). Empirically: across seven QA substrates, mean $\kappa$ correlates with final loss at $r=-0.845$ (gain-formula-robust across three lr values); normalizing $\eta_{\mathrm{eff}}=1$ across all substrates equalizes convergence (loss std $1.9\times10^{-5}$), confirming that $H_{QA}$ governs convergence exclusively through $\eta_{\mathrm{eff}}$.
 
 ### 1. Introduction
 
@@ -248,7 +248,7 @@ $$\rho(\mathcal{O}) := \prod_{t=0}^{L-1}(1-\kappa_t)^2.$$
 $$\rho(\mathcal{O}) = \prod_{t=0}^{11}(1-\kappa_t)^2 = 0.001582,$$
 so every full orbit reduces loss by a factor of 632. The orbit-invariant $\rho(\mathcal{O})$ is the same for all 72 starting pairs in the cosmos group (they all traverse the same 12-cycle). After 10 orbits: $L_{10L}\leq(0.001582)^{10}\cdot L_0\approx 10^{-28}\cdot L_0$.
 
-**Scope.** The theorem is stated for scalar quadratic loss; §8.2 extends it to any $\beta$-smooth, $\mu$-PL loss.
+**Scope.** The theorem is stated for scalar quadratic loss; §8.2 extends it to any $\beta$-smooth $\mu$-PL loss; §8.3 extends it further to Łojasiewicz losses with exponent $\alpha\in(0,1)$, with additive $\varphi$-window decay in place of multiplicative contraction.
 
 #### 8.2 Extension to PL-Conditioned Losses
 
@@ -264,29 +264,35 @@ $$\rho_{\mathrm{PL}}(\mathcal{O}) := \prod_{t=0}^{L-1}\!\left(1 - 2\mu\,\eta_{\m
 
 **Condition number dependence.** For the mod-9 cosmos orbit at lr$=0.5$: $\rho_{\mathrm{PL}}=0.0016$ (condition 1), $0.61$ (condition 10), $0.95$ (condition 100). The orbit still guarantees descent for any finite condition number, with rate degrading gracefully. The orbit feasibility condition $\eta_{\mathrm{eff}}^{(t)}<2/\beta$ is satisfied for all tested regimes (max $\eta_{\mathrm{eff}}=0.357<2/\beta$ for $\beta\leq 1$).
 
-#### 8.3 Conjecture Program: Extension to Nonconvex Losses
+#### 8.3 Extension to Łojasiewicz Losses
 
-The results of §§8.1–8.2 are exact for quadratic and $\beta$-smooth $\mu$-PL losses. We now state a precise conjecture program for the nonconvex case, identifying what holds, what remains open, and what additional structure is needed.
+The results of §§8.1–8.2 are exact for quadratic and $\beta$-smooth $\mu$-PL losses. We now prove an extension to the broader Łojasiewicz class ($\alpha\in(0,1)$), under an explicit trajectory hypothesis. The proof uses a change of variable $\varphi_t = V_t^{1-\alpha}$ that converts the nonlinear per-step bound into an additive orbit-window decrement.
 
-**Candidate Lyapunov quantity.** For a differentiable loss $L:\mathbb{R}^d\to\mathbb{R}$ and a QA cosmos orbit $\mathcal{O}$ of length $L$, define the orbit-window Lyapunov candidate:
-$$V_t := L(w_t) - L^*, \quad \Phi(\mathcal{O}, w_t) := \frac{V_{t+L}}{V_t}$$
-where $L^* = \inf_w L(w)$ (assumed finite). In the quadratic case $\Phi = \rho(\mathcal{O})$ exactly; for PL losses $\Phi = \rho_{\mathrm{PL}}(\mathcal{O}) < 1$.
+**Theorem (Finite-Orbit Descent, Łojasiewicz Loss).** *Let $L:\mathbb{R}^d\to\mathbb{R}$ be $\beta$-smooth and satisfy the Łojasiewicz condition*
+$$\|\nabla L(w)\|^2 \geq 2\mu(L(w)-L^*)^\alpha \quad \forall\, w\in S_0 := \{w: L(w)\leq L(w_t)\}$$
+*for some $\mu>0$, $\alpha\in(0,1)$, where $L^*=\inf_w L(w)$. Let $\mathcal{O}$ be a QA cosmos orbit with $\eta_{\mathrm{eff}}^{(s)}\in(0,2/\beta)$ for all $s$, and suppose*
+$$\nabla L(w_s)\neq 0 \quad \text{for } s = t,\ldots,t+L-1. \tag{H-crit}$$
+*Define $V_t=L(w_t)-L^*$, $\varphi_t=V_t^{1-\alpha}$, and*
+$$C(\mathcal{O}) := \sum_{s=0}^{L-1} 2\mu\,\eta_{\mathrm{eff}}^{(s)}\!\left(1 - \tfrac{\beta}{2}\eta_{\mathrm{eff}}^{(s)}\right) > 0.$$
+*Then either* **(A)** $V_{t+L}=0$ *(convergence at the orbit endpoint), or* **(B)** $\varphi_{t+L} \leq \varphi_t - (1-\alpha)\,C(\mathcal{O}).$
 
-**Loss class under consideration.** A loss $L$ is *compatible with the QA orbit structure* if: (a) $L$ is $\beta$-smooth; (b) $L$ satisfies a generalised Łojasiewicz condition $\|\nabla L(w)\|^2 \geq 2\mu(L(w)-L^*)^\alpha$ for some $\mu>0$, $\alpha\in(0,1]$; (c) $L$ has no flat regions along QA orbit trajectories (i.e.\ $\|\nabla L(w_t)\|>0$ for all $t$ in $\mathcal{O}$).
+**Proof.** (H-crit) implies $V_s>0$ for $s\in\{t,\ldots,t+L-1\}$ (otherwise $w_s$ is a minimiser, so $\nabla L(w_s)=0$, contradicting (H-crit)). The $\beta$-smooth descent lemma and Łojasiewicz condition give $V_{s+1}\leq V_s - c_s V_s^\alpha$ where $c_s = 2\mu\eta_{\mathrm{eff}}^{(s)}(1-\frac{\beta}{2}\eta_{\mathrm{eff}}^{(s)})>0$. All iterates remain in $S_0$ by induction ($L(w_{s+1})\leq L(w_s)$), so (H-Łoj) applies throughout.
 
-**Conjectured contraction.** *Let $L$ be compatible with the QA orbit structure with exponent $\alpha$ and let $\kappa_{\min}(\mathcal{O})>0$. Then there exists a computable $\rho_\alpha(\mathcal{O})<1$ depending on $\mu$, $\beta$, $\alpha$, and the orbit $\kappa$-sequence, such that $L(w_{t+L})-L^*\leq\rho_\alpha(\mathcal{O})\cdot(L(w_t)-L^*)^\alpha$.*
+Split on $V_{t+L}$. If $V_{t+L}=0$: conclusion (A). If $V_{t+L}>0$: at every step $s\in\{t,\ldots,t+L-1\}$, the overshoot case ($V_{s+1}=0$) is ruled out — by (H-crit) for $s<t+L-1$, and by $V_{t+L}>0$ for the final step. Hence at each step, the concavity of $f(x)=x^{1-\alpha}$ (since $f''<0$) gives via the tangent-line bound:
+$$\varphi_{s+1} = V_{s+1}^{1-\alpha} \leq (V_s - c_s V_s^\alpha)^{1-\alpha} \leq V_s^{1-\alpha} - (1-\alpha)c_s = \varphi_s - (1-\alpha)c_s.$$
+Telescoping over $L$ steps yields conclusion (B). $\square$
 
-Note: for $\alpha=1$ this reduces to Theorem 8.2. For $\alpha<1$ the contraction is sublinear but still geometric in the exponent.
+**Convergence rate.** If $V_t>0$ for all complete orbits, convergence occurs within $\lceil \varphi_0/[(1-\alpha)C(\mathcal{O})]\rceil$ orbits. The orbit contributes through $C(\mathcal{O})$: higher $\kappa_{\min}$ raises $\eta_{\mathrm{eff}}^{(s)}$, raises each $c_s$, and accelerates convergence. **$\kappa_{\min}$ remains the central orbit scalar.**
 
-**Role of $\kappa_{\min}$.** In all regimes, $\kappa_{\min}>0$ is a **necessary stability certificate** for contraction: it is the only orbit-level scalar that simultaneously certifies every step of $\mathcal{O}$ stays strictly inside the stability interval $(0,2)$, without stochastic approximation or PDE-based arguments.
+**Remark (relation to §8.2).** This theorem is a *sublinear analogue* of §8.2, not a reduction to it. The §8.2 result gives multiplicative contraction in $V$-coordinates; the present theorem gives additive decay in $\varphi$-coordinates. The two are not equivalent at $\alpha=1$: the PL result is strictly stronger.
 
-**Obstructions remaining.** Three gaps prevent closure: (O1) the Łojasiewicz exponent $\alpha$ is not computable from the QA orbit alone — it depends on the loss geometry; (O2) flat-region avoidance (condition (c)) requires assumptions on $L$ that are not intrinsic to QA; (O3) the telescoping argument used in §8.2 does not generalise directly to $\alpha<1$ because the per-step bound $V_{t+1}\leq c V_t^\alpha$ does not compose multiplicatively over $L$ steps without additional regularity.
+**Proposition (genericity of H-crit).** *If $\mathrm{crit}(L)=\{w:\nabla L(w)=0\}$ has Lebesgue measure zero (in particular if $L$ is a Morse function or polynomial), then for Lebesgue-almost-every starting point $w_0$, hypothesis (H-crit) holds.* The bad set $\bigcup_{s=0}^{L-1} F_s^{-1}(\mathrm{crit}(L))$ is a finite union of measure-zero sets (by the Federer area formula applied to the gradient-flow maps $F_s$), hence has measure zero.
 
-**Status.** This conjecture is open. It is stated here as a precise research program, not as a proved theorem. Closure would require either (i) a Lyapunov argument under semi-algebraic structure of $L$, or (ii) a Morse-theoretic bound on flat-region avoidance along finite orbits.
+**Remaining open problem.** The above theorem requires (H-crit) as an explicit hypothesis on the trajectory. A fully intrinsic version — depending only on the orbit $\mathcal{O}$ and loss class, with no condition on $w_0$ — remains open. Closure would require either a Łojasiewicz argument that structurally avoids saddle-point trajectories, or a Morse-theoretic bound on QA orbit windows.
 
 ### 9. Limitations
 
-For general nonconvex losses, this framework certifies only a local one-step normal form and does not prove multi-step convergence, generalization, or robustness under distribution shift. Theorems 8.1 and 8.2 give exact multi-step guarantees for scalar quadratic and $\beta$-smooth $\mu$-PL losses respectively; extension to nonconvex losses (beyond PL) requires additional assumptions and remains open. In families [89]–[96], the gain is supplied as a free scalar witness; the metadata fields ($\mathrm{n\_nodes}$, $\mathrm{d\_model}$, $\mathrm{orbit\_size}$, etc.) are recorded for auditing but do not constrain that scalar. Accordingly, those families should be read as reusable machine-checkable local certification patterns.
+For general nonconvex losses, this framework certifies only a local one-step normal form and does not prove multi-step convergence, generalization, or robustness under distribution shift. Theorems 8.1, 8.2, and 8.3 give exact or bounded multi-step guarantees for scalar quadratic, $\beta$-smooth $\mu$-PL, and Łojasiewicz ($\alpha<1$) losses respectively; the Łojasiewicz result (§8.3) requires an explicit trajectory hypothesis (H-crit) whose generic validity is established as a separate proposition. A fully intrinsic nonconvex extension remains open. In families [89]–[96], the gain is supplied as a free scalar witness; the metadata fields ($\mathrm{n\_nodes}$, $\mathrm{d\_model}$, $\mathrm{orbit\_size}$, etc.) are recorded for auditing but do not constrain that scalar. Accordingly, those families should be read as reusable machine-checkable local certification patterns.
 
 Families [98], [99], and [101] close this gap across three architecture classes: gain is derived from $\sigma_{\max}(W)$, $\sigma_{\max}(QK^\top/\!\sqrt{d_k})$, and $\|\mathbf{g}\|_2$ respectively, and cannot be freely adjusted. This upgrades those families from consistency checking to structural analysis. Extending derived-gain derivations to the remaining families (QARM, symbolic search) is left to future work.
 
@@ -296,7 +302,7 @@ This paper introduced a certificate-normal-form framework grounded in the arithm
 
 For QA orbit families, the Finite-Orbit Descent Theorem (§8.1) goes further: if $\kappa_{\min}(\mathcal{O})>0$, then one full orbit of length $\pi(m)/2$ reduces scalar quadratic loss by an exactly computable factor $\rho(\mathcal{O})<1$. For the mod-9 cosmos orbit at lr $=0.5$, $\rho=0.001582$, giving factor-632 reduction per orbit. This is the paper's first exact multi-step convergence result, enabled uniquely by the finite enumerability of QA orbits.
 
-Future work will proceed in several directions. First, we plan to extend the framework to recurrent architectures, diffusion models, and Hopfield networks. Second, we will derive gain from native objects in the remaining free-witness families: QARM (orbit-step ratio) and symbolic search (effective branching factor). The gradient family [101] has already completed this transition via L2 norm. Third, §§8.1–8.2 establish exact multi-step descent guarantees for scalar quadratic and $\beta$-smooth $\mu$-PL losses respectively; extending to nonconvex losses via Lyapunov arguments remains open. Finally, we will explore using $\kappa$ as an active regularization term in training.
+Future work will proceed in several directions. First, we plan to extend the framework to recurrent architectures, diffusion models, and Hopfield networks. Second, we will derive gain from native objects in the remaining free-witness families: QARM (orbit-step ratio) and symbolic search (effective branching factor). The gradient family [101] has already completed this transition via L2 norm. Third, §§8.1–8.3 now cover scalar quadratic (exact), $\beta$-smooth $\mu$-PL (geometric), and Łojasiewicz $\alpha<1$ (additive $\varphi$-window) losses; a fully intrinsic nonconvex extension without trajectory hypotheses remains open. Finally, we will explore using $\kappa$ as an active regularization term in training.
 
 ### 11. Empirical Validation
 

@@ -216,6 +216,52 @@ The five families naturally group into three \emph{orbital classes} based on the
 
 This 72-8-1 structure has been independently verified through computational experiments with Markovian dynamical systems on the BEDA parameter space.
 
+We now give a group-theoretic proof that this structure is not coincidental.
+
+\subsection{Group-Theoretic Origin: Five Families as Orbits of the Fibonacci Matrix}
+
+Let $\mathbb{Z}/9\mathbb{Z}$ denote the integers modulo~9, with elements $\{0,1,\ldots,8\}$ (where~$0$ corresponds to digital root~9).  The digital root map $\mathrm{dr}:\mathbb{Z}_{>0}\to\{1,\ldots,9\}$ induces a well-defined map $(\mathrm{dr}(b),\mathrm{dr}(e))\in(\mathbb{Z}/9\mathbb{Z})^2$.
+
+Define the \emph{Fibonacci matrix}
+\[
+  F = \begin{pmatrix} 0 & 1 \\ 1 & 1 \end{pmatrix} \in \mathrm{GL}_2(\mathbb{Z}/9\mathbb{Z}),
+\]
+which acts on $(\mathbb{Z}/9\mathbb{Z})^2$ by $(b,e)\mapsto (e,\, b+e)$.  This is exactly the Fibonacci recurrence step.
+
+\begin{theorem}[Group-Theoretic Classification]\label{thm:orbits}
+The five families of Theorem~\ref{thm:main} are exactly the orbits of the cyclic group $\langle F\rangle$ acting on $(\mathbb{Z}/9\mathbb{Z})^2$.  Specifically:
+\begin{enumerate}
+\item $F$ has order~$24$ in $\mathrm{GL}_2(\mathbb{Z}/9\mathbb{Z})$, with $\det F = -1$ and $F^{24} = I$.
+\item The action produces exactly $5$ orbits with sizes $24,\,24,\,24,\,8,\,1$, matching the five families.
+\item The unique fixed point $(0,0)$ is the Ninbonacci family; the length-$8$ orbit is the Tribonacci family; the three length-$24$ orbits are the Fibonacci, Lucas, and Phibonacci families.
+\item The three cosmos orbits are distinguished by the \emph{$Q(\sqrt{5})$ norm} $N(b,e)=b^2+be-e^2$ reduced mod~$9$: since $\det F=-1$ the action maps $N\mapsto -N$, so each cosmos orbit carries a norm pair $\{N,-N\}$ with values
+\[
+  \text{Fibonacci}: \{1,8\},\quad \text{Lucas}: \{4,5\},\quad \text{Phibonacci}: \{2,7\}.
+\]
+\item The Tribonacci orbit satisfies $N(b,e)\equiv 0\pmod{9}$ for all its elements; its stabilizer is $\langle F^8\rangle\cong\mathbb{Z}/3\mathbb{Z}$.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}
+All claims are verified by exhaustive computation over the $81$ elements of $(\mathbb{Z}/9\mathbb{Z})^2$, which we describe explicitly.
+
+\emph{Order of $F$.}  Direct matrix exponentiation mod~9 gives $F^{24}=I$ and $F^k\neq I$ for $k<24$; note $\det F = -1\equiv 8\pmod{9}$, so $F\notin\mathrm{SL}_2(\mathbb{Z}/9\mathbb{Z})$ but $F^2\in\mathrm{SL}_2(\mathbb{Z}/9\mathbb{Z})$.
+
+\emph{Orbit computation.}  Starting from each $(b,e)\in(\mathbb{Z}/9\mathbb{Z})^2$ and iterating $F$ until the orbit closes, one obtains exactly $5$ distinct orbits with sizes $1+8+24+24+24=81$.
+
+\emph{Matching to families.}  The initial conditions $(b_0,e_0)=(1,1),(2,1),(3,1),(3,3),(0,0)$ (in $\mathbb{Z}/9\mathbb{Z}$ coordinates) belong to distinct orbits.  Cross-checking each orbit against the classification of Theorem~\ref{thm:main} confirms that every element of a given orbit carries the same family label, and distinct orbits carry distinct labels.
+
+\emph{Norm invariant.}  For the Fibonacci step $F:(b,e)\mapsto(e,b+e)$,
+\[
+  N(e,b+e) = e^2+e(b+e)-(b+e)^2 = -(b^2+be-e^2) = -N(b,e).
+\]
+So $F$ negates the norm.  On a length-$24$ orbit $F^{24}=I$ multiplies the norm by $(-1)^{24}=1$, consistent.  The norm values $\{N,-N\pmod{9}\}$ are thus constant on each orbit, and computation gives the three pairs stated.
+\end{proof}
+
+\begin{remark}
+The order of $F$ in $\mathrm{GL}_2(\mathbb{Z}/9\mathbb{Z})$ equals the Pisano period $\pi(9)=24$: both measure the period of the Fibonacci sequence modulo~$9$.  Theorem~\ref{thm:orbits} thus explains \emph{why} $\pi(9)=24$ is the ``right'' period for the five-family classification --- it is the order of the Fibonacci generator acting on the digital-root state space.  The 72-8-1 decomposition is the orbit-type decomposition of this cyclic group action.
+\end{remark}
+
 \subsection{Connection to Pythagorean Triples}
 
 \begin{corollary}

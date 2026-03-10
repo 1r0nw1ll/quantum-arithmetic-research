@@ -210,16 +210,95 @@ $p$ & case & $\mathbb{Z}[\varphi]/p$ & $\mathrm{ord}(\varphi)$ & \#cosmos & orbi
 
 \section{Split and Ramified Primes}
 
-For \emph{split} primes ($p\equiv\pm1\pmod5$), $x^2-x-1$ factors as $(x-\varphi_0)(x-\psi_0)$
-over $\mathbb{F}_p$ with $\varphi_0,\psi_0\in\mathbb{F}_p^*$.  The action of~$F$ on
-$(\mathbb{Z}/p\mathbb{Z})^2\cong\mathbb{F}_p\times\mathbb{F}_p$ is diagonal with eigenvalues
-$\varphi_0$ and $\psi_0$.  Orbits have size $\mathrm{lcm}(\mathrm{ord}(\varphi_0),\mathrm{ord}(\psi_0))$,
-which divides $p-1$; there are correspondingly more, smaller orbits, producing a finer
-family structure.
+\begin{theorem}[Split prime orbit structure]\label{thm:split}
+Let $p\equiv\pm1\pmod5$ be a split prime.  Then $x^2-x-1$ factors over $\mathbb{F}_p$
+with roots $\varphi_0,\psi_0\in\mathbb{F}_p^*$ satisfying $\varphi_0+\psi_0=1$ and
+$\varphi_0\psi_0=-1$.  The CRT isomorphism
+\[
+  \Psi:\mathbb{Z}[\varphi]/p\mathbb{Z}[\varphi]\xrightarrow{\;\sim\;}\mathbb{F}_p\times\mathbb{F}_p,
+  \qquad
+  b+e\varphi\;\mapsto\;(b+e\varphi_0,\;b+e\psi_0),
+\]
+conjugates the action of $F$ on $(\mathbb{Z}/p\mathbb{Z})^2$ to $(x,y)\mapsto(\varphi_0 x,\psi_0 y)$
+on $\mathbb{F}_p\times\mathbb{F}_p$.  Setting $d_1=\mathrm{ord}_{\mathbb{F}_p^*}(\varphi_0)$
+and $d_2=\mathrm{ord}_{\mathbb{F}_p^*}(\psi_0)$, the orbit structure is:
 
-For the \emph{ramified} prime $p=5$, $F$ acts unipotently on $(\mathbb{Z}/5\mathbb{Z})^2$
-(single Jordan block with eigenvalue~$1$), yielding one large orbit of size~$20=p^2-p$,
-one orbit of size~$4$, and the fixed point.
+\begin{center}
+\renewcommand{\arraystretch}{1.2}
+\begin{tabular}{lll}
+\toprule
+CRT locus & orbit size & \# orbits \\
+\midrule
+$x=y=0$ & $1$ & $1$ \\
+$x\ne0,\ y=0$ & $d_1$ & $(p-1)/d_1$ \\
+$x=0,\ y\ne0$ & $d_2$ & $(p-1)/d_2$ \\
+$x\ne0,\ y\ne0$ & $\ell:=\mathrm{lcm}(d_1,d_2)$ & $(p-1)^2/\ell$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent
+Total: $1+(p-1)+(p-1)+(p-1)^2=p^2$. \checkmark
+\end{theorem}
+
+\begin{proof}
+Under $\Psi$, multiplication by $\varphi$ becomes $(x,y)\mapsto(\varphi_0 x,\psi_0 y)$ since
+$\Psi(F(b,e))=\Psi(e,b+e)=(\varphi_0 x,\psi_0 y)$ with $(x,y)=\Psi(b,e)$.
+Hence $F^k$ acts as $(x,y)\mapsto(\varphi_0^k x,\psi_0^k y)$.
+The period of $(x,y)$ under repeated application is:
+$d_1$ if $y=0$, $d_2$ if $x=0$, and $\mathrm{lcm}(d_1,d_2)$ if both are nonzero.
+Orbit counts follow by dividing the locus size by the orbit size.
+\end{proof}
+
+\begin{remark}
+Since $\psi_0=-\varphi_0^{-1}$ (from $\varphi_0\psi_0=-1$), we have
+$d_2=\mathrm{ord}(-\varphi_0^{-1})$.
+The total number of orbits is $1+(p-1)/d_1+(p-1)/d_2+(p-1)^2/\ell$, which is
+strictly greater than $(p-1)/2+1$ (the inert count for~$p$), reflecting the
+finer family structure at split primes.
+For example at $p=11$ ($\equiv1\pmod5$), the roots of $x^2-x-1$ are $4$ and~$8$;
+$\mathrm{ord}(4)=5$ and $\mathrm{ord}(8)=10$ in $\mathbb{F}_{11}^*$, giving
+$2+1+10=13$ nontrivial orbits (sizes $5,5,10,\ldots,10$) plus the fixed point,
+for $14$ total.
+\end{remark}
+
+\begin{theorem}[Ramified prime $p=5$]\label{thm:ramified}
+The Fibonacci matrix $F$ acts on $(\mathbb{Z}/5\mathbb{Z})^2$ with exactly three orbits
+of sizes $20$, $4$, and $1$.
+\end{theorem}
+
+\begin{proof}
+The characteristic polynomial of $F\bmod5$ is $x^2-x-1\equiv(x-3)^2\pmod5$,
+so~$F$ has double eigenvalue~$3$ with $(F-3I)^2\equiv0\pmod5$ (verified directly).
+A direct computation gives $F^5\equiv3I\pmod5$, hence
+\[
+  F^{20}\equiv(F^5)^4\equiv3^4 I\equiv81I\equiv I\pmod5,
+\]
+so every orbit has size dividing~$20$.
+
+\textit{Fixed point.} $F(b,e)=(b,e)$ requires $e=b$ and $b+e=e$, forcing $b=e=0$.
+Thus $(0,0)$ is the unique fixed point.
+
+\textit{Orbit of size $4$.}  The $\mathbb{F}_5$-eigenspace of~$F$ is
+$\ker(F-3I)=\{(b,e):e\equiv 3b\pmod5\}$,
+i.e., $E=\{(0,0),(1,3),(2,1),(3,4),(4,2)\}$ (5 elements).
+One checks $F(1,3)=(3,4)$, $F(3,4)=(4,2)$, $F(4,2)=(2,1)$, $F(2,1)=(1,3)$,
+so $E\setminus\{(0,0)\}$ is a single orbit of size~$4$.
+
+\textit{Orbit of size $20$.}  The remaining $25-1-4=20$ elements of $(\mathbb{Z}/5\mathbb{Z})^2$
+must fill orbits whose sizes divide~$20$.  None can have period~$1$, $2$, $4$, or~$5$:
+period~$1$ is ruled out (unique fixed point); periods $2,4$ require $F^4=I$, but
+$F^4\equiv\bigl[\begin{smallmatrix}2&3\\3&0\end{smallmatrix}\bigr]\pmod5\ne I$;
+period~$5$ requires $F^5(b,e)=3(b,e)=(b,e)$, impossible for $(b,e)\notin E$.
+Hence all remaining elements have period~$20$, forming a single orbit. \qed
+\end{proof}
+
+\begin{remark}
+The orbit sizes $1+4+20=25=5^2$ \checkmark.  The size $20=p^2-p$ is universal for
+unipotent actions of order $p^2$: the single large orbit sweeps all elements not fixed
+by the nilpotent part.  At $p=5$ the Pisano period of the Fibonacci sequence is also~$20$,
+consistent with $F^{20}=I\bmod5$.
+\end{remark}
 
 \section{Geodesic--Horocycle Structure}
 

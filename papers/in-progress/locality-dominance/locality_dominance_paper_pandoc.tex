@@ -1,0 +1,666 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+  journal]{IEEEtran}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{-\maxdimen} % remove section numbering
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={Locality Dominance in Hyperspectral and Multimodal Land-Cover Classification},
+  pdfauthor={Will Dale; Pond Science Institute},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{Locality Dominance in Hyperspectral and Multimodal Land-Cover
+Classification}
+\author{Will Dale}
+\date{}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+
+Hyperspectral and multimodal land-cover classification methods typically
+rely on high-dimensional per-pixel spectral representations and
+increasingly complex fusion strategies. In this work, we demonstrate
+that a compact neighborhood-statistic representation---computed entirely
+from local spatial context---outperforms substantially
+higher-dimensional spectral baselines across three benchmarks. Using
+stratified 10\% training splits, a 10--14 dimensional patch-statistics
+feature vector (mean, standard deviation, gradient magnitude, and
+PCA-derived neighborhood descriptors) achieves +3.0--11.1 percentage
+point (pp) improvements in overall accuracy (OA) and +6.3--16.1pp in
+average accuracy (AA) relative to 30--200 dimensional spectral baselines
+on Houston (multimodal), Indian Pines, and PaviaU datasets. Notably,
+gains in AA exceed gains in OA, indicating improved minority-class
+performance. Accuracy saturates at a small, scene-dependent neighborhood
+scale (5\(\times\)5--7\(\times\)7), beyond which larger windows offer no consistent
+benefit. In contrast, uncertainty-driven gating and spectral transform
+augmentations provide negligible or negative impact once spatial context
+is encoded. These results suggest that local second-order spatial
+statistics constitute a sufficient and dominant representation for class
+separation in standard hyperspectral benchmarks, substantially reducing
+feature dimensionality while improving performance.
+
+\end{abstract}
+
+\section{Introduction}
+
+Hyperspectral image (HSI) and multimodal remote sensing classification
+remain central tasks in land-cover analysis. Traditional approaches
+emphasize high-dimensional spectral representations, often employing
+dimensionality reduction (e.g., PCA), spectral transforms, or
+increasingly complex multimodal fusion strategies. More recently, deep
+convolutional architectures have demonstrated strong performance by
+implicitly exploiting spatial context through learned receptive fields.
+Despite these advances, the relative importance of spectral transforms
+versus explicit spatial aggregation remains underexplored.
+
+Most per-pixel spectral classifiers operate on high-dimensional feature
+vectors (100--200 bands), implicitly assuming that class separability is
+encoded primarily in spectral signatures. However, real-world scenes
+exhibit substantial intra-class spectral variability arising from
+illumination changes, mixed pixels, and local texture effects.
+Consequently, pixel-wise models frequently require either high model
+capacity or complex fusion mechanisms to stabilize predictions.
+
+In this work, we revisit a fundamental question: \textbf{Is
+high-dimensional spectral encoding necessary once local spatial context
+is explicitly represented?}
+
+We evaluate a compact neighborhood-statistics representation constructed
+entirely from local spatial summary features---mean, standard deviation,
+gradient magnitude, and PCA-derived descriptors computed within small
+spatial windows. The resulting feature vector is 10--14 dimensions,
+independent of the number of spectral bands.
+
+Across three benchmarks---Houston (multimodal HSI+MS+LiDAR), Indian
+Pines, and PaviaU---using stratified 10\% training splits, we observe
+that this neighborhood-based representation consistently outperforms
+30--200 dimensional spectral baselines. Improvements range from +3.0 to
++11.1pp in overall accuracy and +6.3 to +16.1pp in average accuracy,
+with substantial gains in minority-class performance. Accuracy saturates
+at a small, scene-dependent window size (5\(\times\)5--7\(\times\)7), indicating the
+existence of a minimal sufficient spatial scale.
+
+We further show that uncertainty-driven gating strategies do not improve
+performance in the multimodal setting and that spectral transform
+augmentations become redundant once spatial context is encoded.
+
+The primary contributions of this work are:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Neighborhood Sufficiency Principle (empirical):} A compact
+  local-statistics representation achieves performance comparable to or
+  exceeding high-dimensional spectral encodings across datasets.
+\item
+  \textbf{Minimal Spatial Scale Identification:} Classification accuracy
+  saturates at a small, scene-dependent neighborhood radius r*, ranging
+  from 5\(\times\)5 to 7\(\times\)7 across tested benchmarks.
+\item
+  \textbf{Minority-Class Stabilization:} Neighborhood statistics
+  disproportionately improve average accuracy (\(\Delta\)AA \textgreater{} \(\Delta\)OA),
+  mitigating majority-class bias inherent in high-dimensional spectral
+  models.
+\item
+  \textbf{Negative Fusion Result:} Uncertainty-based gating (entropy,
+  margin, Gini) does not confer benefit in the evaluated multimodal
+  benchmark; gate confidence exhibits slight negative correlation with
+  classification correctness.
+\end{enumerate}
+
+These findings suggest that local second-order spatial statistics
+constitute a dominant representational mechanism for standard
+hyperspectral benchmarks, with significant dimensionality and
+computational advantages.
+
+\section{Related Work}\label{related-work}
+
+\subsection{Pixel-wise Spectral
+Classification}\label{pixel-wise-spectral-classification}
+
+Classical hyperspectral image (HSI) classification methods operate on
+per-pixel spectral signatures, often comprising 100--200 bands.
+Dimensionality reduction techniques such as principal component analysis
+(PCA), linear discriminant analysis (LDA), and band selection methods
+are commonly applied prior to classification using support vector
+machines (SVM), random forests (RF), or k-nearest neighbors. While
+effective in controlled settings, pixel-wise approaches are sensitive to
+intra-class spectral variability and mixed pixels, often requiring high
+model capacity to compensate.
+
+Our spectral baselines (PCA-30 and raw spectral RF) follow this standard
+protocol to provide a direct comparison against neighborhood-based
+representations.
+
+\subsection{Spectral--Spatial Feature
+Extraction}\label{spectralspatial-feature-extraction}
+
+To address the limitations of pixel-only models, numerous works
+incorporate spatial context through handcrafted texture descriptors,
+morphological profiles, and spatial filtering techniques. Extended
+morphological profiles (EMP), gray-level co-occurrence matrix (GLCM)
+features, and local binary patterns (LBP) have demonstrated that
+second-order spatial statistics improve classification stability.
+
+More recently, patch-based feature extraction and joint
+spectral--spatial descriptors have become standard, particularly in
+conjunction with deep architectures. However, many methods either
+dramatically increase feature dimensionality or rely on learned
+convolutional filters.
+
+In contrast, the present work isolates a minimal set of low-dimensional
+neighborhood summary statistics and evaluates their sufficiency without
+deep models or high-capacity transforms.
+
+\subsection{Convolutional Neural Networks for
+HSI}\label{convolutional-neural-networks-for-hsi}
+
+Convolutional neural networks (CNNs) have achieved state-of-the-art
+performance in hyperspectral classification by learning hierarchical
+spectral--spatial filters. These architectures implicitly exploit local
+receptive fields, progressively aggregating spatial information across
+layers.
+
+While CNNs demonstrate strong performance, they introduce significant
+computational overhead and model complexity. The present study
+investigates whether the performance gains attributed to deep models may
+arise primarily from local spatial aggregation rather than from deep
+spectral transformation capacity.
+
+Our results suggest that small fixed neighborhoods (5\(\times\)5--7\(\times\)7) with
+simple second-order statistics capture much of the discriminative power
+typically associated with convolutional architectures on standard
+benchmarks.
+
+\subsection{Multimodal Fusion and
+Gating}\label{multimodal-fusion-and-gating}
+
+Multimodal remote sensing benchmarks (e.g., HSI + LiDAR + multispectral)
+have motivated diverse fusion strategies, including feature
+concatenation, late fusion, attention mechanisms, and uncertainty-driven
+gating. Entropy-based or margin-based gating schemes aim to weight
+modalities according to classifier confidence.
+
+However, uncertainty estimates may not align with true class-separating
+invariants in complex scenes. Our results provide empirical evidence
+that uncertainty-driven gating can degrade performance and that
+amplitude-based heuristics provide only modest improvement relative to
+explicit spatial encoding.
+
+\section{Methods}\label{methods}
+
+\subsection{Datasets}\label{datasets}
+
+We evaluate on three benchmarks:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Houston Multimodal:} Hyperspectral (144 bands), multispectral
+  (8 bands), and LiDAR elevation data with 15 classes. Pre-extracted
+  11\(\times\)11 patches are provided; 2832 labeled samples total.
+\item
+  \textbf{Indian Pines:} 145\(\times\)145 HSI with 200 spectral bands and 16
+  classes (10249 labeled pixels).
+\item
+  \textbf{PaviaU:} 610\(\times\)340 HSI with 103 spectral bands and 9 classes
+  (42776 labeled pixels).
+\end{itemize}
+
+For Indian Pines and PaviaU, patches are extracted dynamically from the
+full image cube using reflect padding at image borders.
+
+\subsection{Train--Test Protocol}\label{traintest-protocol}
+
+For Indian Pines and PaviaU, we use stratified random splits with 10\%
+of labeled pixels per class allocated to training and 90\% to testing,
+following standard literature protocol. For Houston multimodal, we use a
+70\%/30\% stratified split. All reported results use identical splits
+across methods for fair comparison. For Houston and Indian Pines,
+experiments are repeated across three random seeds (42, 1, 7) to assess
+stability.
+
+PCA transformations are fitted exclusively on the training set and
+applied to test data to prevent leakage. Patch-level PCA statistics are
+likewise fitted on training patch pixels only.
+
+\subsection{Spectral Baselines}\label{spectral-baselines}
+
+Two spectral baselines are evaluated:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{PCA-k spectral baseline:} PCA reduced to k components (k=30
+  for HSI-only datasets, k=50 for Houston), classified using Random
+  Forest (200 estimators).
+\item
+  \textbf{Raw spectral baseline:} All bands (103--200) used directly
+  with Random Forest.
+\end{enumerate}
+
+For Houston multimodal, a 59-dimensional concatenation baseline (HSI
+PCA-50 + LiDAR + MS) is used as the primary multimodal reference, along
+with area-weighted gating variants.
+
+\subsection{Neighborhood-Statistic
+Representation}\label{neighborhood-statistic-representation}
+
+For each labeled pixel, a square window of size r\(\times\)r centered at the
+pixel is extracted. The following features are computed over the
+neighborhood:
+
+\begin{itemize}
+\tightlist
+\item
+  Mean over all spectral bands (flattened patch)
+\item
+  Standard deviation over all spectral bands
+\item
+  Gradient magnitude (finite differences on mean-pooled spectral
+  intensity at patch center)
+\item
+  Mean and standard deviation of the first three PCA components computed
+  over the r\(\times\)r patch pixels (6 features)
+\end{itemize}
+
+For the multimodal Houston dataset, additional modality-specific
+statistics are included: LiDAR center-pixel residual (center minus patch
+mean), MS gradient magnitude, and per-modality mean/std. This yields a
+14-dimensional feature vector for Houston and a 10-dimensional vector
+for HSI-only datasets.
+
+Window sizes r \(\in\) \{3, 5, 7, 11\} are evaluated to identify the minimal
+sufficient spatial scale. The chosen center for all crops is pixel
+position (5, 5) within the 11\(\times\)11 pre-extracted patch for Houston, and
+the labeled pixel center for dynamically extracted patches.
+
+\subsection{Uncertainty Gating (Houston
+Only)}\label{uncertainty-gating-houston-only}
+
+For the Houston multimodal dataset, per-modality Random Forest
+classifiers are trained and used to compute uncertainty signals per
+sample: entropy (H = -\(\sum\) p log p), margin (top-1 minus top-2
+probability), and Gini impurity (1 - \(\sum p^2\)). Gate weights are computed as
+softmax(u/T) where u is the uncertainty signal and T is a temperature
+parameter. Sweeps over T \(\in\) \{0.1, 0.5, 1.0, 2.0, 5.0\} are conducted.
+
+Gate diagnostics reported include: per-modality mean gate weight,
+saturation rate (fraction of samples where any gate weight
+\textgreater{} 0.9 or \textless{} 0.1), and Pearson correlation between
+maximum gate weight and per-sample classification correctness.
+
+\subsection{Classification Model}\label{classification-model}
+
+Random Forest classifiers (200 estimators, fixed random seed) are used
+for all primary comparisons to isolate representational effects from
+model capacity. Experiments with gradient-boosted decision trees
+(HistGradientBoostingClassifier) confirm that the ranking between
+representations is stable across classifier choices (difference \(\leq\)
+0.24pp).
+
+\subsection{Evaluation Metrics}\label{evaluation-metrics}
+
+Performance is measured using:
+
+\begin{itemize}
+\tightlist
+\item
+  \textbf{Overall Accuracy (OA):} Fraction of correctly classified test
+  pixels.
+\item
+  \textbf{Average Accuracy (AA):} Mean of per-class accuracies;
+  emphasizes minority-class performance under class imbalance.
+\item
+  \textbf{Cohen's kappa coefficient (\(\kappa\)):} Agreement corrected for
+  chance.
+\end{itemize}
+
+Average Accuracy is emphasized throughout to assess whether gains are
+broad-based or driven by dominant classes.
+
+\section{Results}\label{results}
+
+\subsection{Spectral Baselines and Gating Methods (Houston
+Multimodal)}\label{spectral-baselines-and-gating-methods-houston-multimodal}
+
+Uncertainty-driven gating degrades classification performance on the
+Houston multimodal benchmark. Entropy gating (T = 1.0) reduces overall
+accuracy (OA) by 9.11 percentage points (pp) relative to the
+59-dimensional concatenation baseline (OA = 96.34\%), and margin gating
+at T = 5.0 yields a further -0.48pp. The failure mechanism is
+structural: the correlation between gate confidence (maximum modality
+weight) and per-sample classification correctness is corr(max\_w,
+correct) \(\approx\) -0.08, indicating that uncertainty is not a valid fusion
+invariant on this manifold. The gate fires hardest precisely where the
+classifier is most likely to be wrong, producing category-level damage
+concentrated in spectrally ambiguous classes 10--13, which suffer
+declines of 14--31pp relative to the unweighted baseline. Area gating,
+which uses amplitude as a proxy for signal stability rather than
+classifier uncertainty, is the sole gating variant to improve over
+concat, providing a modest +0.35pp gain (OA = 96.69\%). These results
+establish that naive uncertainty quantification does not confer fusion
+benefit in this multimodal scene configuration.
+
+\subsection{Neighborhood-Statistic
+Representation}\label{neighborhood-statistic-representation-1}
+
+Rather than aggregating modality-specific spectral transforms, the
+patch-statistics representation encodes local spatial context directly
+from the hyperspectral cube. Each sample is described by a
+10--14-dimensional feature vector comprising patch mean, standard
+deviation, gradient magnitude, and the leading PCA components computed
+within a square spatial window centered on the labeled pixel. This
+representation is constructed without any center-pixel spectral
+information; the entire feature budget is allocated to neighborhood
+summary statistics.
+
+On the Houston multimodal benchmark, the patch-only configuration (14D,
+5\(\times\)5 window) achieves a mean OA of 99.37\% across three independent
+random seeds (seed = 42, 1, 7), compared to 96.34\% for the
+59-dimensional concatenation baseline, a gain of +3.03pp (+2.7\%
+relative improvement). Full per-seed and per-method results are reported
+in Table 1. Augmenting the patch feature vector with chromogeometry
+descriptors and amplitude anchors (27D total) reduces mean OA by 0.47pp
+relative to patch-only, confirming that DFT-derived quadrances and
+spectral centroids are redundant once local spatial statistics are
+present. Substituting a gradient-boosted decision tree (GBDT) classifier
+for the random forest adds at most 0.24pp and does not change the
+ranking of feature configurations. The full patch-only pipeline requires
+0.45 seconds of training time on this dataset, reflecting the low
+dimensionality of the representation.
+
+\subsection{Optimal Neighborhood
+Scale}\label{optimal-neighborhood-scale}
+
+A patch-size sweep on the Houston scene identifies r* = 5\(\times\)5 as the
+optimal window. At 3\(\times\)3, patch-only OA is 97.64\%, a useful improvement
+over the 96.34\% concat baseline but 2.24pp below the 5\(\times\)5 result,
+indicating that a three-pixel window is insufficient to capture the
+spatial homogeneity structure of this scene. Performance at 5\(\times\)5 (OA =
+99.88\%, seed = 42) and 11\(\times\)11 (OA = 99.17\%) are within the range of
+seed-to-seed variance, placing the plateau at r \(\geq\) 5 on this benchmark.
+The absence of further gain beyond 5\(\times\)5 is consistent with class-boundary
+contamination: as the window expands, mixed-class neighborhoods
+introduce spectral mixture bias that offsets the variance reduction
+benefit of averaging over a larger sample of within-class pixels.
+
+\subsection{Cross-Dataset Generalization (Indian Pines and
+PaviaU)}\label{cross-dataset-generalization-indian-pines-and-paviau}
+
+The generalization experiment, conducted on Indian Pines (145\(\times\)145
+pixels, 200 bands, 16 classes, 10\% training) and PaviaU (610\(\times\)340
+pixels, 103 bands, 9 classes, 10\% training), constitutes the primary
+evidence for locality dominance as a scene-independent phenomenon.
+
+On Indian Pines, a 30-dimensional PCA spectral representation applied to
+the center pixel achieves OA = 70.66\%, AA = 56.39\%, \(\kappa\) = 0.657 as the
+reference spectral baseline. The 10-dimensional patch-only
+representation at 7\(\times\)7 achieves OA = 81.00\%, AA = 72.46\%, \(\kappa\) = 0.782
+(seed = 42), with a mean OA of 81.05\% across seeds 42, 1, and 7,
+confirming seed stability. The gain in average accuracy (\(\Delta\)AA = +16.08pp)
+substantially exceeds the gain in overall accuracy (\(\Delta\)OA = +10.34pp),
+establishing that improvement is broad-based across classes and
+disproportionately benefits rare and spectrally ambiguous categories.
+This asymmetry is diagnostic: the 200-dimensional raw spectral baseline
+achieves OA = 75.02\% but only AA = 60.18\%, reflecting majority-class
+dominance that the spatial representation resolves. On PaviaU, the same
+patch-only configuration (10D, 7\(\times\)7) yields OA = 91.98\%, AA = 87.96\%, \(\kappa\)
+= 0.893, compared to the PCA-30 baseline of OA = 88.07\%, AA = 81.61\%,
+\(\kappa\) = 0.837, a gain of \(\Delta\)OA = +3.91pp and \(\Delta\)AA = +6.35pp. Full OA, AA, and \(\kappa\)
+results for both datasets across all patch sizes are reported in Table 2
+and Table 3.
+
+The optimal window on both hyperspectral-only benchmarks is r* = 7\(\times\)7,
+one step larger than the r* = 5\(\times\)5 optimum on the Houston multimodal
+scene. This shift is consistent with the larger spatial homogeneity
+scale expected in agricultural landscapes (Indian Pines) and structured
+urban blocks (PaviaU) relative to the densely textured Houston scene,
+where the multimodal LiDAR channel provides additional structural
+disambiguation.
+
+\subsection{Summary}\label{summary}
+
+Across all three datasets and a total of nine seed-configuration
+combinations, a 10--14-dimensional neighborhood-statistic representation
+consistently and substantially outperforms spectral baselines ranging
+from 30 to 200 dimensions, achieving a feature-dimension reduction of
+76--95\% while improving OA by 3.0--11.1pp and AA by 6.3--16.1pp. The
+neighborhood operator is the dominant contributor to classification
+performance; spectral transforms, uncertainty-based modality gating, and
+chromogeometry descriptors are each redundant or mildly harmful once
+spatial context is encoded. The optimal neighborhood scale r* is
+scene-dependent and tracks the spatial homogeneity scale of the
+land-cover pattern, saturating at 5\(\times\)5 for dense multimodal urban imagery
+and at 7\(\times\)7 for hyperspectral agricultural and urban-block scenes.
+
+\section{Discussion}\label{discussion}
+
+\subsection{Why Local Neighborhood Statistics Outperform Spectral
+Transforms}\label{why-local-neighborhood-statistics-outperform-spectral-transforms}
+
+The central empirical finding across all three datasets is that
+low-dimensional neighborhood statistics outperform substantially
+higher-dimensional per-pixel spectral representations. This behavior can
+be understood through variance reduction and spatial stationarity.
+
+Let a pixel spectrum be modeled as:
+
+\[x_i = \mu_c + \varepsilon_i\]
+
+where \(\mu_c\) is the class-conditional mean and \(\varepsilon_i\) captures illumination
+variability, sensor noise, subpixel mixing, and fine-scale texture.
+Pixel-wise classifiers must separate classes under high within-class
+variance.
+
+By contrast, the neighborhood operator computes summary statistics over
+an r\(\times\)r window:
+
+\[\bar{x}_i = \frac{1}{|N_r|} \sum_{j \in N_r(i)} x_j\]
+
+Under spatial coherence assumptions, variance shrinks approximately as
+1/\textbar N\_r\textbar, while the class mean remains stable. The
+representation therefore increases signal-to-noise ratio without
+increasing feature dimensionality.
+
+The PCA-derived patch statistics and local variance features
+additionally encode second-order texture structure, capturing
+discriminative information that spectral basis transforms (e.g.,
+DFT-derived quadrances) do not uniquely provide once spatial context is
+incorporated.
+
+\subsection{The Neighborhood Sufficiency Principle
+(Empirical)}\label{the-neighborhood-sufficiency-principle-empirical}
+
+Across datasets, performance improves monotonically with window size up
+to a scene-dependent threshold r*, beyond which accuracy plateaus or
+slightly regresses.
+
+This behavior is consistent with two competing effects:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  \textbf{Variance reduction} within homogeneous class regions.
+\item
+  \textbf{Boundary contamination} when windows span multiple classes.
+\end{enumerate}
+
+We therefore observe a minimal sufficient neighborhood scale:
+
+\[r^* \approx \text{class spatial coherence radius}\]
+
+Empirically: - Houston multimodal: r* \(\approx\) 5\(\times\)5 - Indian Pines: r* \(\approx\) 7\(\times\)7 -
+PaviaU: r* \(\approx\) 7\(\times\)7
+
+These differences align with known scene structure: agricultural fields
+and urban blocks exhibit larger spatial homogeneity than dense mixed
+scenes.
+
+\textbf{Neighborhood Sufficiency Principle (empirical):}
+
+\begin{quote}
+A compact local-statistics representation computed over a small,
+scene-dependent neighborhood achieves performance comparable to or
+exceeding high-dimensional per-pixel spectral representations, with
+performance saturating beyond a bounded spatial scale r*.
+\end{quote}
+
+\subsection{Minority-Class Rescue and Class
+Imbalance}\label{minority-class-rescue-and-class-imbalance}
+
+On Indian Pines, the improvement in average accuracy (AA) substantially
+exceeds the improvement in overall accuracy (OA). This indicates that
+gains are not limited to dominant classes but instead reflect broad
+improvements across rare and spectrally ambiguous categories.
+
+Pixel-only spectral models exhibit majority-class bias: OA increases
+while AA remains suppressed. Neighborhood statistics mitigate this
+effect by stabilizing minority-class signatures through local averaging
+and texture encoding.
+
+This suggests that spatial context functions not only as a
+noise-reduction operator but also as a class-balance equalizer.
+
+\subsection{Why Uncertainty Gating
+Fails}\label{why-uncertainty-gating-fails}
+
+Uncertainty-based gating assumes that per-modality classifier confidence
+is aligned with classification correctness. However, in the Houston
+multimodal dataset, gate confidence exhibits a slight negative
+correlation with correctness (corr \(\approx\) -0.08). This indicates that
+ambiguity is intrinsic to the class manifold rather than a reliable
+fusion signal.
+
+Area-based gating succeeds modestly because amplitude proxies local
+signal stability. However, even this approach is dominated by explicit
+spatial encoding.
+
+Thus, uncertainty is not a reliable invariant for multimodal fusion in
+these scenes; spatial locality is.
+
+\subsection{Relation to Deep Learning and Texture
+Theory}\label{relation-to-deep-learning-and-texture-theory}
+
+The empirical dominance of small neighborhood statistics aligns with
+classical texture descriptors (e.g., second-order statistics) and with
+convolutional neural network receptive field theory.
+
+CNNs implicitly learn spatial filters that capture local mean, variance,
+and gradient information over small receptive fields. The present
+results show that much of this benefit can be achieved explicitly using
+handcrafted low-dimensional statistics, without deep architectures.
+
+This suggests that the primary structural advantage of CNN-based
+hyperspectral models may lie in their implicit spatial aggregation
+rather than in high-capacity spectral transforms.
+
+\subsection{Limitations and Scope}\label{limitations-and-scope}
+
+The findings are empirical and evaluated on three benchmarks. While
+locality dominance is consistent across datasets tested, the optimal
+window size varies with scene structure. Further evaluation on
+additional multimodal benchmarks and scenes with highly fragmented
+spatial patterns would strengthen generality claims.
+
+Additionally, the current work uses fixed window shapes and summary
+statistics; adaptive or anisotropic neighborhoods may further improve
+performance.
+
+\subsection{Implications}\label{implications}
+
+These results suggest a design principle for hyperspectral and
+multimodal classification:
+
+\begin{enumerate}
+\def\labelenumi{\arabic{enumi}.}
+\tightlist
+\item
+  Encode spatial context first.
+\item
+  Keep representation compact.
+\item
+  Introduce spectral transforms only if they add orthogonal information
+  beyond local statistics.
+\end{enumerate}
+
+In the tested benchmarks, the neighborhood operator subsumes spectral
+transform generators in class-separating power.
+
+\section{Conclusion}\label{conclusion}
+
+We investigated whether high-dimensional spectral representations are
+necessary for hyperspectral and multimodal land-cover classification
+once local spatial context is explicitly encoded. Across three
+benchmarks (Houston multimodal, Indian Pines, and PaviaU) using
+stratified 10\% training splits, we found that a compact 10--14
+dimensional neighborhood-statistics representation consistently
+outperforms 30--200 dimensional spectral baselines. Improvements range
+from +3.0 to +11.1 percentage points in overall accuracy and +6.3 to
++16.1 points in average accuracy, with particularly strong gains for
+minority classes.
+
+Performance saturates at a small, scene-dependent neighborhood scale
+(5\(\times\)5--7\(\times\)7), suggesting the existence of a minimal sufficient spatial
+radius beyond which larger windows provide no consistent benefit. In
+contrast, uncertainty-driven multimodal gating strategies fail to
+improve performance and, in some cases, substantially degrade it, with
+gate confidence exhibiting slight negative correlation with
+classification correctness.
+
+These results indicate that local second-order spatial statistics
+constitute a dominant and efficient representational mechanism for
+standard hyperspectral benchmarks. Importantly, this representation
+achieves superior performance with substantial dimensionality reduction
+(76--95\% fewer features) and minimal computational overhead.
+
+Future work should evaluate this principle on additional multimodal
+datasets, explore adaptive or anisotropic neighborhood selection, and
+analyze the interaction between explicit neighborhood statistics and
+learned convolutional representations.
+
+\end{document}

@@ -1,0 +1,751 @@
+% section_iv_corrected.tex
+% Corrected Section IV — Harmonic Expansion and Time Rigidity
+%
+% Fixes applied (referee report):
+%   F4.3  SL₂(𝔽ₚ) is finite → amenable: replaced by expander-family framing
+%   F4.5  Topological entropy of finite det. system = 0: entropy dropped; spectral gap used
+%   F4.4  NCTO circularity + undefined "continuous time": replaced by Gromov–Hausdorff statement
+%   F4.6  Factor 24 in M_p = 24p unexplained: explained via CRT splitting
+%   F4.2  Generator μ ∉ SL₂(ℤ) (det = −1): replaced by Weyl element w ∈ SL₂(ℤ)
+%   F4.1  "Manifold" for finite sets: terminology replaced throughout
+%
+% Mathematical framework:
+%   Tits alternative (1972): G ≤ GL₂(ℚ) finitely generated → virtually solvable or contains F₂
+%   Strong approximation (Matthews–Vaserstein–Weisfeiler): Zariski-dense G → ρ_p surjective
+%   Bourgain–Gamburd (2008): Zariski-dense lift → expander family with uniform spectral gap
+%   Gromov–Hausdorff: expander family with uniform gap ε → no 1D smooth limit
+
+% ─── Macros (assume these are defined in main preamble) ──────────────────────
+% \newcommand{\GG}{\mathcal{G}}
+% \newcommand{\HH}{\mathcal{H}}
+% \newcommand{\VV}{\mathcal{V}}
+% \newcommand{\FF}{\mathbb{F}}
+% \newcommand{\ZZ}{\mathbb{Z}}
+% \newcommand{\QQ}{\mathbb{Q}}
+% \newcommand{\RR}{\mathbb{R}}
+% \newcommand{\NN}{\mathbb{N}}
+
+\section{Harmonic Expansion and Time Rigidity}
+\label{sec:harmonic}
+
+\subsection{Generator-Relative Setup}
+\label{sec:harmonic:setup}
+
+Let $\Gamma \subset \mathrm{SL}_2(\mathbb{Z})$ be a finite symmetric set of generators
+($\Gamma = \Gamma^{-1}$, $|\Gamma| = d$),
+and let $G = \langle \Gamma \rangle \leq \mathrm{SL}_2(\mathbb{Z})$ be the group they generate.
+
+For a prime $p > 3$, let $\rho_p \colon \mathrm{SL}_2(\mathbb{Z}) \to \mathrm{SL}_2(\mathbb{F}_p)$
+be the reduction-mod-$p$ homomorphism, and define the Cayley graph
+\[
+  \mathcal{G}_p \;=\; \mathrm{Cay}\!\bigl(\rho_p(G),\;\rho_p(\Gamma)\bigr).
+\]
+
+\begin{definition}[Reachability time and spectral gap]
+  \label{def:time_gap}
+  The \emph{reachability time} from $x$ to $y$ in $\mathcal{G}_p$ is
+  \[
+    T_\Gamma(x \to y) \;=\; \min\bigl\{ k : y = g_k \cdots g_1 x,\; g_i \in \rho_p(\Gamma) \bigr\}.
+  \]
+  The \emph{diameter} is $\mathrm{diam}(\mathcal{G}_p) = \max_{x,y} T_\Gamma(x \to y)$.
+  The \emph{spectral gap} $\gamma_p$ is the second-smallest eigenvalue of the
+  normalized Laplacian $L_p = I - \frac{1}{d}A_p$, where $A_p$ is the adjacency matrix
+  of $\mathcal{G}_p$ (valid since $\mathcal{G}_p$ is $d$-regular when $\Gamma$ acts freely).
+\end{definition}
+
+\begin{remark}[Prime lift and CRT splitting]
+  \label{rem:prime_lift}
+  For applications to the mod-$24$ harmonic seed families, we set $M_p = 24p$ with
+  $p > 3$ prime, so $\gcd(24, p) = 1$.  By the Chinese Remainder Theorem,
+  \[
+    (\mathbb{Z}/M_p\mathbb{Z})^2 \;\cong\; (\mathbb{Z}/24\mathbb{Z})^2 \times (\mathbb{Z}/p\mathbb{Z})^2.
+  \]
+  The factor $(\mathbb{Z}/24\mathbb{Z})^2$ carries the mod-$24$ resonance structure (fixed
+  attractor families, parity layers) and is independent of $p$.
+  The factor $(\mathbb{Z}/p\mathbb{Z})^2 \cong \mathbb{F}_p^2$ carries the large-scale
+  geometric structure studied in this section.  All spectral and diameter
+  statements below refer to the $\mathbb{F}_p^2$ factor.
+\end{remark}
+
+\subsection{Harmonic Structure Definitions}
+\label{sec:harmonic:foliation}
+
+\begin{definition}[Harmonic foliation]
+  \label{def:foliation}
+  A \emph{harmonic foliation} of the finite set $V = \mathbb{F}_p^2$ is a
+  nontrivial $\Gamma$-invariant partition
+  $V = \bigsqcup_i F_i$ (nontrivial means $|V| > |\{F_i\}| > 1$).
+
+  Examples: fixed-parity sublattices; fixed coordinate lines; diagonal cosets;
+  fixed mod-$q$ residue classes for $q \mid p-1$.
+\end{definition}
+
+\begin{definition}[Harmonic reducibility]
+  \label{def:reducibility}
+  The pair $(V, \Gamma)$ is \emph{harmonically reducible} if a harmonic foliation
+  exists; otherwise it is \emph{harmonically irreducible}.
+\end{definition}
+
+\begin{remark}
+  Harmonic reducibility of $(V, \Gamma)$ is equivalent to the linear group
+  $\rho_p(G) \leq \mathrm{GL}_2(\mathbb{F}_p)$ preserving a nontrivial subspace of
+  $\mathbb{F}_p^2$, i.e., the action of $\rho_p(G)$ on $\mathbb{F}_p^2$ is
+  \emph{reducible} in the representation-theoretic sense.
+\end{remark}
+
+\subsection{Corrected Core Structure Lemma}
+\label{sec:harmonic:core}
+
+The following replaces the erroneous non-amenability claim from earlier drafts.
+Every finite group is amenable; the correct dichotomy lives at the level of the
+\emph{infinite} group $G \leq \mathrm{SL}_2(\mathbb{Z})$.
+
+\begin{lemma}[Tits Alternative, \cite{tits1972free}]
+  \label{lem:tits}
+  Let $G \leq \mathrm{SL}_2(\mathbb{Z})$ be finitely generated.
+  Then exactly one of the following holds:
+  \begin{enumerate}
+    \item[\emph{(A)}] $G$ is virtually solvable.
+    \item[\emph{(B)}] $G$ contains a free subgroup $F_2$ on two generators.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  $\mathrm{SL}_2(\mathbb{Z}) \leq \mathrm{GL}_2(\mathbb{Q})$, and $\mathbb{Q}$ has
+  characteristic zero, so the Tits Alternative for finitely generated linear
+  groups over characteristic-zero fields~\cite{tits1972free} applies directly.
+\end{proof}
+
+\begin{remark}[Spectral gap, not amenability]
+  \label{rem:amenability}
+  Every finite group is amenable; each $\mathrm{SL}_2(\mathbb{F}_p)$ is therefore
+  trivially amenable.  Amenability carries no information distinguishing
+  expansion behavior among the Cayley graphs $\{\mathcal{G}_p\}$.
+  The correct invariant is the \emph{uniform spectral gap} of the family:
+  $\inf_p \gamma_p > 0$ (expansion) versus $\gamma_p \to 0$ (non-expansion).
+  This is a property of the \emph{family} $\{\mathcal{G}_p\}$, controlled by the
+  structure of the infinite lifting group $G \leq \mathrm{SL}_2(\mathbb{Z})$,
+  not by amenability of individual finite quotients.
+\end{remark}
+
+\subsection{Harmonic Expansion Dichotomy}
+\label{sec:harmonic:dichotomy}
+
+\begin{definition}[Zariski-dense subgroup]
+  \label{def:zariski}
+  $G \leq \mathrm{SL}_2(\mathbb{Z})$ is \emph{Zariski-dense} in $\mathrm{SL}_2$
+  if its Zariski closure in $\mathrm{SL}_2(\mathbb{C})$ (in the Zariski topology of
+  $\mathbb{A}^4$) equals $\mathrm{SL}_2(\mathbb{C})$.
+  Equivalently, $G$ is not contained in any proper algebraic subgroup of
+  $\mathrm{SL}_2$ over $\overline{\mathbb{Q}}$.
+\end{definition}
+
+\begin{lemma}[Zariski density $\Leftrightarrow$ case (B)]
+  \label{lem:zariski_free}
+  $G \leq \mathrm{SL}_2(\mathbb{Z})$ is Zariski-dense if and only if $G$ is not
+  virtually solvable (equivalently, case~\emph{(B)} of Lemma~\ref{lem:tits} holds).
+\end{lemma}
+
+\begin{proof}
+  Virtually solvable subgroups of $\mathrm{SL}_2$ are contained in a Borel subgroup
+  (triangularizable over $\overline{\mathbb{Q}}$), hence have Zariski closure
+  $\subsetneq \mathrm{SL}_2$.  Conversely, if $G$ is not virtually solvable it
+  contains $F_2$; by the Tits proof, $F_2 \leq \mathrm{SL}_2(\mathbb{Z})$ is
+  Zariski-dense.
+\end{proof}
+
+\begin{theorem}[Harmonic Expansion Dichotomy]
+  \label{thm:expansion}
+  Let $\Gamma \subset \mathrm{SL}_2(\mathbb{Z})$ be a finite symmetric generating set,
+  $G = \langle \Gamma \rangle$.  For each prime $p > 3$, let
+  $\mathcal{G}_p = \mathrm{Cay}(\rho_p(G), \rho_p(\Gamma))$ with spectral gap $\gamma_p$.
+  Then:
+  \begin{enumerate}
+    \item[\emph{(A)}] \textbf{Virtually solvable case.}
+      If $G$ is virtually solvable, then $G$ has polynomial growth, and the family
+      $\{\mathcal{G}_p\}$ is \emph{not} an expander: $\gamma_p \to 0$ as $p \to \infty$.
+
+    \item[\emph{(B)}] \textbf{Zariski-dense / free-core case.}
+      If $G$ is Zariski-dense in $\mathrm{SL}_2$, then:
+      \begin{enumerate}
+        \item[\emph{(i)}] $G$ contains a free subgroup $F_2$ (Lemma~\ref{lem:tits}).
+        \item[\emph{(ii)}] $\rho_p(G) = \mathrm{SL}_2(\mathbb{F}_p)$ for all but finitely
+          many primes $p$ (strong approximation,~\cite{matthews1984congruence}).
+        \item[\emph{(iii)}] There exists $\varepsilon > 0$ such that
+          $\gamma_p \geq \varepsilon$ for all sufficiently large $p$:
+          the family $\{\mathcal{G}_p\}$ is an \emph{expander family}
+          (\cite{bourgain2008spectral}).
+        \item[\emph{(iv)}] $\mathrm{diam}(\mathcal{G}_p) = O(\log p)$.
+      \end{enumerate}
+  \end{enumerate}
+\end{theorem}
+
+\begin{proof}
+  \emph{Case~(A).}
+  Virtual solvability implies polynomial growth (Milnor--Wolf theorem).
+  Polynomial-growth groups satisfy Kesten's criterion for amenability, from which
+  $\gamma_p \to 0$ as the quotient grows.
+
+  \emph{Case~(B)-(i).} Lemma~\ref{lem:tits}.
+  The free subgroup $F_2 \leq G$ alone does \emph{not} imply expansion of the
+  finite quotients.  Expander families are a property of finite Cayley-graph
+  sequences; free subgroup existence in the lifting group $G$ is necessary but
+  not sufficient.  Uniform spectral gap of $\{\mathcal{G}_p\}$ requires the
+  arithmetic input provided by items~(ii) and~(iii): surjectivity of $\rho_p$
+  (strong approximation) and the product-growth machinery of
+  Bourgain--Gamburd~\cite{bourgain2008spectral}.
+
+  \emph{Case~(B)-(ii).} Since $G$ is Zariski-dense, the strong-approximation theorem
+  of Matthews--\allowbreak{}Vaserstein--\allowbreak{}Weisfeiler~\cite{matthews1984congruence}
+  implies $\rho_p(G) = \mathrm{SL}_2(\mathbb{F}_p)$ for all but finitely many $p$.
+
+  \emph{Case~(B)-(iii).}
+  We invoke Bourgain--Gamburd~\cite{bourgain2008spectral} under the following
+  explicit hypotheses, all of which hold in our setting:
+  \begin{itemize}
+    \item[(H1)] $\Gamma \subset \mathrm{SL}_2(\mathbb{Z})$ is a \emph{fixed} finite
+      symmetric generating set (independent of $p$).
+    \item[(H2)] $G = \langle \Gamma \rangle$ is \emph{Zariski-dense} in
+      $\mathrm{SL}_2$ over $\overline{\mathbb{Q}}$ (Definition~\ref{def:zariski}).
+    \item[(H3)] For all sufficiently large primes $p$,
+      $\rho_p(G) = \mathrm{SL}_2(\mathbb{F}_p)$ (established in item~(ii) via
+      strong approximation).
+  \end{itemize}
+  Under (H1)--(H3), Bourgain--Gamburd guarantees the existence of $\varepsilon > 0$
+  such that $\gamma_p \geq \varepsilon$ for all sufficiently large $p$:
+  the family $\{\mathcal{G}_p\}$ is an expander family.
+
+  \emph{Case~(B)-(iv).} From (iii), the spectral gap $\gamma_p \geq \varepsilon > 0$.
+  A $d$-regular expander on $n$ vertices has diameter $O(\log_d n)$
+  (standard; see e.g.~\cite{lubotzky1994discrete}).
+  Here $n = |\mathrm{SL}_2(\mathbb{F}_p)| = p(p^2 - 1) = O(p^3)$, giving
+  $\mathrm{diam}(\mathcal{G}_p) = O(\log p)$.
+\end{proof}
+
+\begin{remark}[No entropy; correct observables]
+  \label{rem:entropy}
+  Earlier drafts claimed $h_M \sim 1/M$ as a ``harmonic entropy.''
+  This is incorrect: the topological entropy of any finite deterministic system
+  is zero.  The correct observable characterizing expansion is the spectral gap
+  $\gamma_p$ (or equivalently the Cheeger constant via the discrete
+  Cheeger--Buser inequality), and the correct scaling observable is
+  $\mathrm{diam}(\mathcal{G}_p)$.  These replace all entropy claims throughout.
+\end{remark}
+
+\subsection{No Continuous-Time Obstruction --- Corrected Statement}
+\label{sec:ncto}
+
+\begin{definition}[Polynomial-volume scaling limit]
+  \label{def:pvol_limit}
+  A family $\{(X_p, d_p)\}_{p \to \infty}$ of metric spaces has a
+  \emph{polynomial-volume scaling limit} if there exist scale factors $s_p > 0$
+  such that $(X_p, d_p/s_p)$ converges, in the pointed Gromov--Hausdorff sense,
+  to a metric measure space $(Y, d_Y, \mu)$ whose volume satisfies
+  \[
+    \mu\bigl(B(y, r)\bigr) \;\leq\; C r^n
+  \]
+  for some constants $C, n > 0$, all $y \in Y$, and all $r > 0$.
+
+  This class includes: connected Riemannian manifolds (Bishop--Gromov), flat tori,
+  and Carnot groups (Pansu's volume formula).  It is the natural target for
+  rescaling limits of polynomial-growth groups.  Fractal and $p$-adic spaces are
+  excluded.
+
+  For our setting: $X_p$ is the vertex set of $\mathcal{G}_p$,
+  $d_p = T_\Gamma$ is the graph distance (reachability time),
+  and we ask whether any sequence $s_p$ produces such a limit.
+\end{definition}
+
+\begin{lemma}[Growth obstruction]
+  \label{lem:growth_obs}
+  Let $\{(X_p, d_p)\}_{p \geq p_0}$ be a family of connected $d$-regular graphs
+  with uniform spectral gap $\gamma_p \geq \varepsilon > 0$.  Then:
+  \begin{enumerate}
+    \item[\emph{(i)}] \textbf{Expander ball growth.} There exists
+      $c = c(\varepsilon, d) > 0$ such that
+      \[
+        |B(x, k)| \;\geq\; (1 + c)^{\,k}
+      \]
+      for all vertices $x \in X_p$ and all $1 \leq k \leq \tfrac{1}{2}\mathrm{diam}(X_p)$.
+    \item[\emph{(ii)}] \textbf{No polynomial-volume GH limit.} For every sequence
+      $s_p > 0$, the rescaled family $(X_p,\, d_p / s_p)$ does \emph{not}
+      Gromov--Hausdorff converge to any metric measure space with polynomial
+      volume growth.
+  \end{enumerate}
+\end{lemma}
+
+\begin{proof}
+  \emph{(i).}  Uniform spectral gap $\gamma_p \geq \varepsilon$ implies, via the
+  discrete Cheeger--Buser inequality, that the edge-expansion constant
+  $h(X_p) \geq \varepsilon/2$.  Standard ball-growth estimates for graphs with
+  positive Cheeger constant give exponential growth with $c \geq \varepsilon/(2d)$.
+
+  \emph{(ii).}  Suppose $(X_p, d_p/s_p) \xrightarrow{GH} (Y, d_Y, \mu)$ where
+  $\mu(B(y, r)) \leq C r^n$ for some $C, n > 0$.  For GH convergence to be
+  nondegenerate we need $s_p = \Theta(\mathrm{diam}(X_p))$.  For any $r > 0$,
+  the vertex count within rescaled distance $r$ satisfies
+  $|B(x, r s_p)| \geq (1+c)^{r s_p}$, which grows without bound in $p$,
+  contradicting polynomial growth of $\mu$.
+\end{proof}
+
+\begin{theorem}[Generator Growth Dichotomy]
+  \label{thm:growth_dichotomy}
+  Let $\Gamma \subset \mathrm{SL}_2(\mathbb{Z})$ be finite symmetric,
+  $G = \langle\Gamma\rangle$.  Exactly one of the following holds:
+  \begin{enumerate}
+    \item[\emph{(A)}] \textbf{Polynomial growth regime.}
+      $G$ is virtually solvable.  Ball volumes in $\mathcal{G}_p$ grow polynomially
+      in radius, and the family admits a polynomial-volume scaling limit.
+
+    \item[\emph{(B)}] \textbf{Exponential growth regime.}
+      $G$ is Zariski-dense.  There exists $c = c(\Gamma) > 0$ such that for all
+      sufficiently large primes $p$,
+      \[
+        \bigl|B_{\mathcal{G}_p}(x, r)\bigr| \;\geq\; e^{\,cr}
+      \]
+      for all vertices $x$ and all $1 \leq r \leq C\log p$.
+      The family admits \emph{no} polynomial-volume scaling limit.
+  \end{enumerate}
+  The growth regime is determined solely by the Zariski closure of
+  $G$ in $\mathrm{SL}_2$.
+\end{theorem}
+
+\begin{proof}
+  \emph{Case~(A).}
+  Virtual solvability in $\mathrm{SL}_2(\mathbb{Z})$ implies virtual abelianness:
+  the proper algebraic subgroups of $\mathrm{SL}_2$ are Borel (unipotent) or
+  split torus, both virtually abelian.  Virtually abelian groups have polynomial
+  growth (Milnor--Wolf theorem).  The congruence quotients $G_p = \rho_p(G)$
+  are abelian of bounded rank; their Cayley graphs have polynomial ball growth
+  (radius-$r$ ball has size $O(r^{\mathrm{rank}})$), and rescale by
+  $s_p = |G_p|^{1/\mathrm{rank}}$ to flat Riemannian tori, which have
+  polynomial volume growth.  A polynomial-volume scaling limit exists.
+
+  \emph{Case~(B).}
+  $G$ Zariski-dense $\Rightarrow$ by Theorem~\ref{thm:expansion}(B)(iii),
+  $\gamma_p \geq \varepsilon > 0$ for all large $p$.
+  The discrete Cheeger--Buser inequality gives $h(\mathcal{G}_p) \geq \varepsilon/2$,
+  whence $|B(x, r)| \geq (1 + c')^r$ with $c' = \varepsilon/(2d)$; set
+  $c = \log(1 + c') > 0$.  This is the exponential lower bound.
+
+  For the no-limit claim: suppose $(Y, d_Y, \mu)$ with
+  $\mu(B(y,r)) \leq Cr^n$ is a GH limit of the rescaled family.
+  By Theorem~\ref{thm:expansion}(B)(iv), $s_p = \Theta(\log p)$.
+  For any fixed $r > 0$,
+  \[|B(x, r s_p)| \;\geq\; e^{cr s_p} \;\to\; \infty \quad (p \to \infty),\]
+  contradicting polynomial volume growth of~$\mu$.
+\end{proof}
+
+\begin{corollary}[No Continuous-Time Obstruction]
+  \label{cor:ncto}
+  In the exponential growth regime (Case~\emph{(B)} of
+  Theorem~\ref{thm:growth_dichotomy}), the family
+  $\{(\mathcal{G}_p, T_\Gamma)\}$ admits no polynomial-volume scaling limit.
+  In particular, it admits no Riemannian and no sub-Riemannian (Carnot) scaling
+  limit.
+\end{corollary}
+
+\begin{remark}[Role of spectral gap]
+  \label{rem:gap_role}
+  The spectral gap $\gamma_p \geq \varepsilon > 0$ (Bourgain--Gamburd) is used in
+  Case~(B) as an intermediate step: Zariski-dense $\Rightarrow$ uniform gap
+  $\Rightarrow$ exponential ball growth.  It is not the structural invariant
+  of the theorem.  The invariant is the \emph{growth class} of the generator
+  group, which cleanly separates polynomial-volume limits from non-existence of
+  any such limit, across both Riemannian and sub-Riemannian target spaces.
+\end{remark}
+
+\subsection{NCTO as a Generator-Relative Obstruction Principle}
+\label{sec:ncto:gen}
+
+Theorem~\ref{thm:growth_dichotomy} characterises growth class from $\Gamma$ alone.
+The implication chain below extracts the spectral and geometric consequences
+in computable form.
+
+\begin{definition}[Generator obstruction tag]
+  \label{def:ncto_tag}
+  A finite symmetric $\Gamma \subset \mathrm{SL}_2(\mathbb{Z})$ carries the
+  \emph{NCTO tag}
+  \[
+    \tau(\Gamma) \;=\;
+    \begin{cases}
+      \texttt{ncto-blocked} & \text{if } \langle\Gamma\rangle
+                              \text{ is Zariski-dense in } \mathrm{SL}_2, \\
+      \texttt{ok}           & \text{if } \langle\Gamma\rangle
+                              \text{ is virtually solvable.}
+    \end{cases}
+  \]
+  By Lemma~\ref{lem:tits}, exactly one case applies to any finitely generated
+  $G \leq \mathrm{SL}_2(\mathbb{Z})$.
+\end{definition}
+
+\begin{theorem}[NCTO, Generator-Relative Implications]
+  \label{thm:ncto_equiv}
+  Let $\Gamma \subset \mathrm{SL}_2(\mathbb{Z})$ be finite symmetric,
+  $G = \langle\Gamma\rangle$.  Then:
+  \[
+    \text{(i)} \;\Rightarrow\; \text{(ii)} \;\Rightarrow\; \text{(iii)}
+    \;\Rightarrow\; \text{(iv)},
+  \]
+  where:
+  \begin{enumerate}
+    \item[\emph{(i)}]   $\tau(\Gamma) = \texttt{ncto-blocked}$ ($G$ Zariski-dense).
+    \item[\emph{(ii)}]  There exists $\varepsilon = \varepsilon(\Gamma) > 0$ such that
+                        $\gamma_p \geq \varepsilon$ for all sufficiently large $p$.
+    \item[\emph{(iii)}] $\mathrm{diam}(\mathcal{G}_p) = O(\log p)$.
+    \item[\emph{(iv)}]  $\{(\mathcal{G}_p, T_\Gamma)\}$ has no polynomial-volume
+                        scaling limit (Definition~\ref{def:pvol_limit}).
+  \end{enumerate}
+  Moreover, $\varepsilon(\Gamma)$ depends only on the Zariski closure of $G$;
+  for $\Gamma = \{\sigma^{\pm 1}, w^{\pm 1}\}$ it is made explicit by
+  Bourgain--Gamburd~\cite{bourgain2008spectral}.
+\end{theorem}
+
+\begin{proof}
+  \emph{(i) $\Rightarrow$ (ii).}
+  Theorem~\ref{thm:expansion}(B)(iii): Bourgain--Gamburd under (H1)--(H3).
+
+  \emph{(ii) $\Rightarrow$ (iii).}
+  A $d$-regular expander on $n$ vertices has diameter $O(\log n)$
+  (see e.g.~\cite{lubotzky1994discrete}).
+  Here $n = |\mathrm{SL}_2(\mathbb{F}_p)| = O(p^3)$, giving $O(\log p)$.
+
+  \emph{(iii) $\Rightarrow$ (iv).}
+  Logarithmic diameter implies exponential ball growth (Lemma~\ref{lem:growth_obs}(i)),
+  which prevents GH convergence to any polynomial-volume space
+  (Lemma~\ref{lem:growth_obs}(ii)).
+\end{proof}
+
+\begin{remark}[Converses fail]
+  \label{rem:ncto_conv}
+  The implications (ii)$\Rightarrow$(iii) and (iii)$\Rightarrow$(iv) are strict.
+  (ii) $\not\Leftarrow$ (iii): there exist bounded-degree graph families with
+  diameter $O(\log n)$ and spectral gap $\gamma_p \to 0$; logarithmic diameter
+  alone does not force a spectral gap lower bound.
+  (i) $\not\Leftarrow$ (iv): Definition~\ref{def:pvol_limit} already includes
+  Carnot (sub-Riemannian) limits, so virtually nilpotent groups (whose Pansu
+  limits are Carnot groups) are correctly placed on the ``limit exists'' side.
+  However, (iv) alone does not force Zariski-density without the growth
+  classification of Theorem~\ref{thm:growth_dichotomy}: one must also rule out
+  other reasons for non-convergence (e.g.\ non-compactness of the limit).
+\end{remark}
+
+\begin{remark}[QA obstruction types]
+  \label{rem:ncto_type}
+  In the QA generator-certificate framework, the NCTO tag classifies generators by
+  the \emph{type} of geometric obstruction they carry:
+  \begin{itemize}
+    \item \textbf{Type~I (topological):} connectivity or reachability obstruction;
+      the Cayley graph is disconnected or has isolated vertices.
+    \item \textbf{Type~II (metric / PDI):} route-reducing obstruction; the generator
+      is tagged \texttt{parity-block}, reducing multi-path states and lowering the
+      Path Diversity Index.
+    \item \textbf{Type~III (spectral / NCTO):} expansion obstruction.
+      Tag: $\tau(\Gamma) = \texttt{ncto-blocked}$.
+      Effect: uniform gap $\varepsilon(\Gamma) > 0$, no GH Riemannian limit.
+  \end{itemize}
+  Unlike Type~I and Type~II obstructions, which are local (they depend on individual
+  generator edges), the Type~III obstruction is \emph{global and family-level}: it
+  is a property of the entire congruence quotient family $\{\mathcal{G}_p\}$,
+  determined by the Zariski closure of $G = \langle\Gamma\rangle$ in $\mathrm{SL}_2$.
+
+  The tag $\tau(\Gamma)$ is finitely \emph{decidable} from $\Gamma$: algorithms
+  for testing virtual solvability in $\mathrm{SL}_2(\mathbb{Z})$ are known.
+  In practice, reduction modulo several primes provides strong numerical evidence
+  (if $\rho_p(\langle\Gamma\rangle) = \mathrm{SL}_2(\mathbb{F}_p)$ for multiple
+  primes, Zariski-density is highly indicated), but a single prime test does not
+  constitute a proof of the Bourgain--Gamburd hypotheses across all large~$p$.
+\end{remark}
+
+\subsection{Generator Specification and Correction}
+\label{sec:harmonic:generators}
+
+\begin{definition}[Prime-lifted tonal action]
+  \label{def:tonal_action}
+  Let $N = 24$ be the chromatic period of the mod-$24$ QA harmonic seed system,
+  and let $p > 3$ be prime with $M_p = 24p$.  The \emph{prime-lifted tonal action}
+  is the action of $G_0 = \langle \sigma, w \rangle = \mathrm{SL}_2(\mathbb{Z})$ on
+  $(\mathbb{Z}/M_p\mathbb{Z})^2$ via entry-wise reduction mod $M_p$.
+
+  The two basic tonal operations are identified as follows:
+  \begin{itemize}
+    \item \textbf{Semitone transposition}: $\sigma = \bigl[\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr]$
+      shifts the ``base'' coordinate by one step mod $M_p$, corresponding to ascending
+      one semitone in the $24$-tone chromatic lattice.
+    \item \textbf{Melodic inversion}: $w = \bigl[\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr]$
+      (Weyl element) swaps and negates coordinates, corresponding to inversion of a
+      pitch-class set around the central axis.
+  \end{itemize}
+
+  By the CRT splitting $(\mathbb{Z}/M_p\mathbb{Z})^2 \cong
+  (\mathbb{Z}/24\mathbb{Z})^2 \times \mathbb{F}_p^2$ (Remark~\ref{rem:prime_lift}),
+  the mod-$24$ factor records the harmonic seed structure (attractor families, parity
+  layers), while the $\mathbb{F}_p^2$ factor is the Cayley-graph domain analyzed by
+  Bourgain--Gamburd.  As $p \to \infty$, the lattice resolution increases, and the
+  spectral geometry of $\mathcal{G}_p$ (Theorem~\ref{thm:expansion}) governs the
+  large-scale tonal structure.
+\end{definition}
+
+Earlier drafts used generators $\sigma, \mu, \lambda$ where
+$\mu = \bigl[\begin{smallmatrix}0&1\\1&0\end{smallmatrix}\bigr]$ has
+$\det \mu = -1 \notin \mathrm{SL}_2(\mathbb{Z})$.
+The corrected generator set, all lying in $\mathrm{SL}_2(\mathbb{Z})$, is:
+\[
+  \sigma \;=\; \begin{pmatrix} 1 & 1 \\ 0 & 1 \end{pmatrix}, \qquad
+  w \;=\; \begin{pmatrix} 0 & 1 \\ -1 & 0 \end{pmatrix}, \qquad
+  \lambda_k \;=\; \begin{pmatrix} k & 0 \\ 0 & k^{-1} \end{pmatrix}
+\]
+where $k \in \mathbb{Z}$ with $k \neq \pm 1$ (so $\lambda_k$ is not unipotent) and
+$\gcd(k, M_p) = 1$ (so $\lambda_k$ is invertible mod $M_p$).
+
+Note: $w$ is the standard Weyl element of order~4 in $\mathrm{SL}_2(\mathbb{Z})$;
+it replaces $\mu$ and satisfies $\det w = 1$.  In the classical presentation of the
+modular group, set
+\[
+  T \;:=\; \sigma \;=\; \begin{pmatrix}1&1\\0&1\end{pmatrix}, \qquad
+  S \;:=\; w^{-1} \;=\; \begin{pmatrix}0&-1\\1&0\end{pmatrix};
+\]
+then $\mathrm{SL}_2(\mathbb{Z}) = \langle S, T \mid S^4 = I,\ (ST)^3 = S^2 \rangle$
+(so $\langle \sigma, w \rangle = \mathrm{SL}_2(\mathbb{Z})$).
+This identification makes the Zariski-density of $\langle \sigma, w \rangle$
+immediate: $\mathrm{SL}_2(\mathbb{Z})$ is a lattice in $\mathrm{SL}_2(\mathbb{R})$
+and hence Zariski-dense.
+Adding $\lambda_k$ with $k \neq \pm 1$ preserves Zariski-density (the group only grows)
+while ensuring the generator set is not contained in a unipotent or torus subgroup.
+
+\begin{lemma}[Zariski density of $\langle \sigma, w \rangle$]
+  \label{lem:generators_dense}
+  The group $G_0 = \langle \sigma, w \rangle = \mathrm{SL}_2(\mathbb{Z})$
+  is Zariski-dense in $\mathrm{SL}_2$.
+\end{lemma}
+
+\begin{proof}
+  $\mathrm{SL}_2(\mathbb{Z})$ is a lattice in $\mathrm{SL}_2(\mathbb{R})$, hence
+  Zariski-dense in $\mathrm{SL}_2(\mathbb{C})$.  Setting $T = \sigma$ and
+  $S = w^{-1}$, the standard presentation
+  $\langle S, T \mid S^4 = I,\ (ST)^3 = S^2 \rangle$
+  is verified in \S\ref{sec:harmonic:generators}.
+\end{proof}
+
+\begin{remark}
+  Adding $\lambda_k = \bigl[\begin{smallmatrix}k&0\\0&k^{-1}\end{smallmatrix}\bigr]$
+  for $k \in \mathbb{Z} \setminus \{0, \pm 1\}$ with $\gcd(k,6)=1$ preserves
+  Zariski-density (the group only grows).  It additionally ensures the generator set
+  is not confined to a unipotent or torus subgroup, which is relevant when $\lambda_k$
+  is used in the prime-lifted tonal action
+  (Definition~\ref{def:tonal_action}).
+\end{remark}
+
+\subsection{Reflective versus Rotational Tonal Inversion}
+\label{sec:harmonic:inversion_type}
+
+We distinguish two inversion types that arise in tonal systems.
+Call $r: p \mapsto -p$ (pitch-class reversal on $\mathbb{Z}/n\mathbb{Z}$) a
+\emph{reflective} inversion, and call the Weyl rotation
+$(b,e) \mapsto (e,-b)$ on $\mathbb{Z}^2$ a \emph{rotational} inversion.
+Both are called ``inversion'' in common usage, but they act on spaces of
+different dimension and land on opposite sides of
+Theorem~\ref{thm:growth_dichotomy}.
+
+\begin{definition}[Reflective inversion]
+  \label{def:refl_inv}
+  A \emph{reflective inversion} on a cyclic pitch space $\mathbb{Z}/n\mathbb{Z}$
+  is an automorphism $r$ satisfying
+  \[
+    r^2 = \mathrm{id}, \qquad r\sigma r^{-1} = \sigma^{-1}.
+  \]
+  The standard example is $r(p) = -p \pmod{n}$ (pitch-class inversion).
+  The symmetry group $\langle \sigma, r \rangle$ is the dihedral group $D_n$.
+\end{definition}
+
+\begin{definition}[Rotational inversion]
+  \label{def:rot_inv}
+  A \emph{rotational inversion} compatible with $\sigma$ is an automorphism
+  $w \in \mathrm{SL}_2(\mathbb{Z})$ with $w^2 = -\mathrm{id}$ and $\det(w) = 1$.
+  Setting $S := w^{-1}$ and $T := \sigma$, we require the modular relation
+  \[
+    S^4 = I, \qquad (ST)^3 = S^2.
+  \]
+  These are the standard $\mathrm{SL}_2(\mathbb{Z})$ presentation relations
+  (Lemma~\ref{lem:harm_gen}); they tie $w$ to the translation direction $\sigma$.
+
+  \emph{Remark.}  For the canonical $\sigma =
+  \bigl[\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr]$ and
+  $w = \bigl[\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr]$,
+  \[
+    w\sigma w^{-1} = \begin{pmatrix}1&0\\-1&1\end{pmatrix} =: \sigma_{\downarrow},
+  \]
+  so $w$ conjugates $\sigma$ (upper unipotent) to $\sigma_{\downarrow}$ (lower
+  unipotent): a harmonic role exchange, not inversion to $\sigma^{-1}$.
+  The modular relation $(ST)^3 = S^2$ is the correct algebraic tie.
+  The Weyl element $w = \bigl[\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr]$
+  (acting as $(b,e) \mapsto (e,-b)$) is the canonical example.
+\end{definition}
+
+\begin{lemma}[Harmonic lattice generation]
+  \label{lem:harm_gen}
+  Let $\sigma = \bigl[\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr]$ and
+  $w = \bigl[\begin{smallmatrix}0&1\\-1&0\end{smallmatrix}\bigr]$.
+  Then $w^2 = -\mathrm{id}$, $\det(w) = 1$, and
+  $\langle \sigma, w \rangle = \mathrm{SL}_2(\mathbb{Z})$.
+\end{lemma}
+
+\begin{proof}
+  Set $S := w^{-1} = \bigl[\begin{smallmatrix}0&-1\\1&0\end{smallmatrix}\bigr]$
+  and $T := \sigma$.
+  Direct matrix computation gives $S^4 = I$ and $(ST)^3 = S^2 = -I$
+  (see \S\ref{sec:harmonic:generators}).
+  The presentation $\langle S, T \mid S^4 = I,\ (ST)^3 = S^2 \rangle$
+  is a classical generator theorem for $\mathrm{SL}_2(\mathbb{Z})$
+  \cite{lubotzky1994discrete}.
+  Hence $\langle \sigma, w \rangle = \langle T, S \rangle = \mathrm{SL}_2(\mathbb{Z})$.
+\end{proof}
+
+\begin{proposition}[Tonal Inversion Dichotomy]
+  \label{prop:tonal_dict}
+  Let $\mathcal{T}$ be a tonal system closed under semitone transposition $\sigma$.
+  \begin{enumerate}
+    \item[\emph{(A)}] If $\mathcal{T}$ admits a \emph{reflective} inversion $r$
+      on a $1$-dimensional pitch space $\mathbb{Z}/n\mathbb{Z}$, then
+      $G_\mathcal{T} = \langle\sigma, r\rangle \cong D_n$ is virtually abelian:
+      polynomial ball growth, Case~(A) of Theorem~\ref{thm:growth_dichotomy}.
+    \item[\emph{(B)}] If $\mathcal{T}$ admits a $\sigma$-compatible rotational
+      inversion $w$ (Definition~\ref{def:rot_inv}), then by
+      Lemma~\ref{lem:harm_gen},
+      $\langle\sigma,w\rangle \cong \mathrm{SL}_2(\mathbb{Z})$;
+      in particular $G_\mathcal{T}$ is Zariski-dense:
+      exponential ball growth, Case~(B) of
+      Theorem~\ref{thm:growth_dichotomy}.
+  \end{enumerate}
+  The regime is determined by the inversion type: reflective ($r^2=\mathrm{id}$,
+  $1$-dimensional) yields Case~(A); $\sigma$-compatible rotational
+  ($S^4=I$, $(ST)^3=S^2$) yields Case~(B).
+\end{proposition}
+
+\begin{proof}
+  \emph{Case~(A).}  $D_n$ is virtually abelian;
+  Theorem~\ref{thm:growth_dichotomy}(A) applies.
+
+  \emph{Case~(B).}  By Lemma~\ref{lem:harm_gen},
+  $\langle\sigma, w\rangle = \mathrm{SL}_2(\mathbb{Z})$.
+  Apply Theorem~\ref{thm:growth_dichotomy}(B) and Corollary~\ref{cor:ncto}.
+\end{proof}
+
+\begin{remark}[Dimensional elevation]
+  \label{rem:dim_elevation}
+  Reflective inversion is an order-$2$ isometry of the pitch circle $S^1$; it
+  preserves the one-dimensional geometry.  Rotational inversion cannot be realised
+  as an isometry of $S^1$: it requires a $2$-dimensional harmonic lattice.
+  The passage from reflective to rotational inversion is therefore a dimensional
+  elevation from $S^1$ to the hyperbolic plane $\mathbb{H}$ (on which
+  $\mathrm{SL}_2(\mathbb{Z})$ acts via M\"{o}bius transformations), and this
+  elevation is precisely what forces the exponential growth regime.
+\end{remark}
+
+\subsection{Worked Examples --- Corrected}
+\label{sec:harmonic:examples}
+
+\paragraph{Example A --- Virtually Abelian (Case A).}
+Let $\Gamma = \{\pm\sigma\}$ where $\sigma = \bigl[\begin{smallmatrix}1&1\\0&1\end{smallmatrix}\bigr]$.
+Then $G = \langle \sigma \rangle \cong \mathbb{Z}$ is abelian, hence virtually solvable.
+
+The Cayley graph $\mathcal{G}_p = \mathrm{Cay}(\mathbb{Z}/p\mathbb{Z}, \{\pm 1\})$ is a
+cycle of length $p$.  Its spectral gap $\gamma_p = 1 - \cos(2\pi/p) \sim 2\pi^2/p^2 \to 0$.
+Its diameter is $\lfloor p/2 \rfloor \sim p/2$.
+
+This family is \emph{not} an expander: $\gamma_p \to 0$.  Rescaling by $s_p = p$
+gives convergence to the circle $S^1$: a smooth continuous limit exists.
+\emph{Continuous-time behavior is possible.}
+
+\paragraph{Example B (Case B: Zariski-dense).}
+Let $\Gamma = \{\sigma^{\pm 1}, w^{\pm 1}\}$ as in Definition~\ref{def:tonal_action}.
+Then $G = \mathrm{SL}_2(\mathbb{Z})$ (Zariski-dense lattice).
+
+By Bourgain--Gamburd~\cite{bourgain2008spectral} (Theorem~\ref{thm:expansion}(B)(iii)),
+the Cayley graphs $\mathcal{G}_p = \mathrm{Cay}(\mathrm{SL}_2(\mathbb{F}_p), \rho_p(\Gamma))$
+form an expander family with uniform gap $\gamma_p \geq \varepsilon > 0$.
+
+Diameter: $\mathrm{diam}(\mathcal{G}_p) = O(\log p)$.
+Ball volume: exponential in graph distance ($|B(x,r)| \geq e^{cr}$,
+Theorem~\ref{thm:growth_dichotomy}(B)).
+No rescaling produces any polynomial-volume limit (Corollary~\ref{cor:ncto}).
+\emph{Harmonic motion is geometrically rigid.}
+
+\subsection{Structural Summary}
+\label{sec:harmonic:summary}
+
+\[
+\renewcommand{\arraystretch}{1.3}
+\begin{array}{ccccc}
+  G \text{ virt.\ solvable} & \Longleftrightarrow &
+  \text{poly.\ ball growth} & \Rightarrow &
+  \text{poly-vol limit exists} \\
+  G \text{ Zariski-dense} & \Longleftrightarrow &
+  \text{exp.\ ball growth} & \Rightarrow &
+  \text{no poly-vol limit}
+\end{array}
+\]
+
+The growth class (polynomial vs.\ exponential) is the structural invariant,
+determined entirely by the Zariski closure of $G \leq \mathrm{SL}_2(\mathbb{Z})$.
+Spectral gap ($\gamma_p$) is a consequence of Zariski-density, not the primary
+object; it is used as an intermediate tool (Bourgain--Gamburd $\Rightarrow$
+Cheeger $\Rightarrow$ exponential growth) rather than the dichotomy's engine.
+
+\subsection{Tonal Consequence}
+\label{sec:harmonic:tonal}
+
+The following corollary instantiates the abstract dichotomy in concrete musical terms,
+using the generators identified in Definition~\ref{def:tonal_action}.
+
+\begin{corollary}[Tonal Regime Dichotomy]
+  \label{cor:tonal}
+  Under the prime-lifted tonal action (Definition~\ref{def:tonal_action}):
+  \begin{enumerate}
+    \item[\emph{(A)}] \textbf{Transposition-only regime.}
+      Let $\Gamma = \{\sigma^{\pm 1}\}$ (pure semitone transposition), so
+      $G \cong \mathbb{Z}$.
+      Restricting to any $\langle\sigma\rangle$-orbit, the Cayley graph is a cycle
+      $C_{M_p}$ of length $M_p = 24p$.  Hence $\gamma_p \to 0$ and the rescaled cycle
+      converges to $S^1$ (cf.\ Example~A).
+      Harmonic motion in this regime is \emph{geometrically smooth}: it embeds in a
+      continuous Riemannian flow.
+
+    \item[\emph{(B)}] \textbf{Harmonic inversion regime.}
+      Let $\Gamma \supseteq \{\sigma^{\pm 1}, w^{\pm 1}\}$ with $w$ a rotational
+      inversion (Definition~\ref{def:rot_inv}).
+      Proposition~\ref{prop:tonal_dict}(B) gives $G = \mathrm{SL}_2(\mathbb{Z})$.
+      Ball growth in $\{\mathcal{G}_p\}$ is exponential; by
+      Corollary~\ref{cor:ncto}, no polynomial-volume scaling limit exists.
+      Harmonic motion is \emph{geometrically rigid}: no rescaling of
+      reachability time produces a Riemannian polynomial-volume scaling limit.
+  \end{enumerate}
+\end{corollary}
+
+\begin{proof}
+  Case~(A): $G \cong \mathbb{Z}$, virtually abelian;
+  Theorem~\ref{thm:growth_dichotomy}(A) and Example~A.
+  Case~(B): $G = \mathrm{SL}_2(\mathbb{Z})$ by
+  Proposition~\ref{prop:tonal_dict}(B);
+  Theorem~\ref{thm:growth_dichotomy}(B) and Corollary~\ref{cor:ncto}.
+\end{proof}
+
+\begin{remark}[Musical interpretation]
+  The dichotomy is a property of the \emph{generator regime}, not of individual chord
+  moves.  A harmonic system whose generator regime is transposition-only has abelian lift
+  ($G \cong \mathbb{Z}$); its large-scale geometry is a circle, admitting smooth
+  voice-leading flows.
+  A system that combines transposition with inversion generates $\mathrm{SL}_2(\mathbb{Z})$,
+  whose congruence Cayley graphs have \emph{exponential ball growth}.
+  The Generator Growth Dichotomy says: \emph{exponential growth is incompatible
+  with any polynomial-volume scaling limit.}
+  No rescaling of reachability time can produce a smooth, Riemannian, or
+  sub-Riemannian description of the large-scale harmonic motion.
+\end{remark}
+
+% ─── Bibliography ─────────────────────────────────────────────────────────────
+% All four required entries live in refs_music.bib (same directory):
+%   tits1972free, matthews1984congruence, bourgain2008spectral, lubotzky1994discrete
+%
+% In the master document preamble use:
+%   \bibliography{refs,refs_music}

@@ -594,11 +594,22 @@ the orbit $\eta_{\mathrm{eff}}$ sequence and verifies the claimed value to withi
 $10^{-9}$. H-crit is an explicit witnessed boolean in v1; the intrinsic
 H-crit-free extension remains open.
 
-\paragraph{Open problem.}
-A fully intrinsic version --- depending only on the orbit $\mathcal{O}$ and loss
-class, with no condition on $w_0$ --- remains open. Closure would require either a
-\L{}ojasiewicz argument that structurally avoids saddle-point trajectories, or a
-Morse-theoretic bound on QA orbit windows.
+\paragraph{Intrinsic form (H-crit eliminated).}
+The hypothesis (H-crit) is in fact not independent: it follows from $V_t>0$ and the
+\L{}ojasiewicz condition via two observations.
+\begin{enumerate}
+\item \emph{Fixed-point propagation.} If $V_s=0$ for some intermediate
+  $s\in\{t+1,\ldots,t+L-1\}$, then $w_s$ is a global minimiser with $\nabla L(w_s)=0$
+  (first-order optimality for smooth $L$), so gradient descent fixes there and
+  $V_{t+L}=0$, contradicting Case~(B). Hence in Case~(B), $V_s>0$ for all
+  intermediate $s$.
+\item \emph{\L{}ojasiewicz $\Rightarrow$ H-crit.} $V_s>0$ and (H-\L{}oj) give
+  $\|\nabla L(w_s)\|^2\geq 2\mu V_s^\alpha>0$, hence $\nabla L(w_s)\neq 0$.
+\end{enumerate}
+Combining: under (H-smooth), (H-\L{}oj), (H-orbit), and $V_t>0$ alone, the theorem
+holds without assuming (H-crit). The condition $V_t>0$ is a trivial non-degeneracy
+condition (if $V_t=0$, convergence is already achieved). The intrinsic proof appears
+in companion note B3.
 
 \section{Limitations}
 
@@ -607,9 +618,10 @@ form and does not prove multi-step convergence, generalization, or robustness un
 distribution shift. Theorems~\ref{thm:descent-quad}, \ref{thm:descent-pl},
 and~\ref{thm:descent-loj} give exact or bounded multi-step guarantees for scalar
 quadratic, $\beta$-smooth $\mu$-PL, and \L{}ojasiewicz ($\alpha<1$) losses
-respectively; the \L{}ojasiewicz result (Theorem~\ref{thm:descent-loj}) requires an
-explicit trajectory hypothesis (H-crit) whose generic validity is established as a
-separate proposition. A fully intrinsic nonconvex extension remains open.
+respectively. The \L{}ojasiewicz result was initially stated with hypothesis (H-crit);
+the intrinsic form (companion note B3) shows H-crit follows from the \L{}ojasiewicz
+condition and the fixed-point property of gradient descent at minimisers --- only
+$V_t>0$ (not at the minimum) is required.
 
 In families [89]--[96], the gain is supplied as a free scalar witness; the metadata
 fields (\texttt{n\_nodes}, \texttt{d\_model}, \texttt{orbit\_size}, etc.) are
@@ -640,8 +652,8 @@ $C(\mathcal{O})>0$ is orbit-computable (§\ref{sec:lojasiewicz}, under H-crit).
 For the mod-9 cosmos orbit at $\mathrm{lr}=0.5$, $\rhoO=0.001582$ (factor-632 per
 orbit). Cert family [102] operationalizes Theorem~\ref{thm:descent-loj}.
 
-Future work: (1) derive an intrinsic H-crit-free version of
-Theorem~\ref{thm:descent-loj}; (2) derive gain from native objects in QARM and
+Future work: (1) upgrade cert family [102] to v2 dropping the explicit H-crit
+witness field (now derivable from $V_t>0$ via B3); (2) derive gain from native objects in QARM and
 symbolic search families; (3) explore $\kappa$ as an active regularisation term in
 training; (4) develop a standalone mathematical note on the
 $\Zfi$/Half-Pisano/norm-invariant structure.

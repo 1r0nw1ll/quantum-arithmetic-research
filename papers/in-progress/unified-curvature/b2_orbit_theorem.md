@@ -73,7 +73,11 @@ Since η_eff^(s) ∈ (0, 2/β) (H-orbit), the coefficient is strictly positive.
 
 **Step 3: Apply (H-Łoj).**
 
-Since w_s ∈ S₀ (descent keeps iterates in the sublevel set), (H-Łoj) gives:
+*Trajectory stays in S₀:* By Step 2, L(w_{s+1}) ≤ L(w_s) for each s ∈ {t,...,t+L−1}
+(the coefficient η_eff^(s)(1−β/2·η_eff^(s)) > 0 by (H-orbit), so the RHS is ≤ L(w_s)).
+By induction, L(w_{t+s}) ≤ L(w_t) for all s = 0,...,L, so w_s ∈ S₀ for all s.
+
+Since w_s ∈ S₀, (H-Łoj) gives:
 
 ```
 ‖∇L(w_s)‖² ≥ 2μ V_s^α
@@ -87,30 +91,29 @@ V_{s+1} ≤ V_s − c_s V_s^α
 
 where c_s = 2μ η_eff^(s) (1 − β/2 · η_eff^(s)) > 0.
 
-**Step 4: Apply B1 at each step s ∈ {t,...,t+L−2}.**
+**Step 4: Top-level case split on V_{t+L}.**
 
-For s < t+L−1: if Case 2 of B1 occurs (r_s < 0), then V_{s+1} = 0, meaning ∇L(w_{s+1}) = 0.
-But s+1 ∈ {t,...,t+L−1}, so (H-crit) is violated. Contradiction.
+**[Case (A): V_{t+L} = 0.]** Convergence at the orbit endpoint. Conclusion (A) holds immediately. ∎
 
-Hence Case 1 of B1 holds at each s ∈ {t,...,t+L−2}: Case 2 is ruled out by (H-crit).
+**[Case (B): V_{t+L} > 0.]** We show conclusion (B) holds.
 
-By B1 conclusion (B):
+**(B-i) Rule out B1 Case 2 at all L steps.**
+
+For steps s ∈ {t,...,t+L−2}: if B1 Case 2 applied at step s, then V_{s+1} = 0, so
+∇L(w_{s+1}) = 0, contradicting (H-crit) for s+1 ∈ {t,...,t+L−1}. Hence B1 Case 1 holds.
+
+For the final step s = t+L−1: if B1 Case 2 applied, then V_{t+L} = 0, contradicting V_{t+L} > 0
+(the Case (B) assumption). Hence B1 Case 1 holds at the final step as well.
+
+Therefore B1 Case 1 holds at **every** step s ∈ {t,...,t+L−1}.
+
+**(B-ii) Apply B1 conclusion (B) at each step.**
 
 ```
-φ_{s+1} ≤ φ_s − (1−α) c_s    for s = t, ..., t+L−2.
+φ_{s+1} ≤ φ_s − (1−α) c_s    for s = t, ..., t+L−1.
 ```
 
-**Step 5: Handle the final step s = t+L−1.**
-
-At the final step, (H-crit) covers w_{t+L−1} but not w_{t+L}. Two sub-cases:
-
-- **Sub-case (A):** Case 2 of B1 applies: V_{t+L} = 0. Conclusion (A) holds. Done.
-
-- **Sub-case (B):** Case 1 of B1 applies: φ_{t+L} ≤ φ_{t+L−1} − (1−α) c_{t+L−1}.
-
-**Step 6: Telescope.**
-
-In Sub-case (B), combine Steps 4 and 5:
+**(B-iii) Telescope over the orbit window.**
 
 ```
 φ_{t+L} ≤ φ_{t+L−1} − (1−α)c_{t+L−1}
@@ -121,6 +124,57 @@ In Sub-case (B), combine Steps 4 and 5:
 ```
 
 Conclusion (B) holds. ∎
+
+---
+
+**Why the original Step 5 was wrong and what this fixes.**
+
+The original draft split on B1 Case 1/Case 2 at the *final step*, and in Sub-case (A) claimed
+V_{t+L} = 0. But B1 Case 1 does NOT preclude V_{t+L} = 0 — it only gives the φ-bound. If
+V_{t+L} = 0 occurred in B1 Case 1, the bound φ_{t+L} ≤ φ_{t+L-1} - (1-α)c_{t+L-1} would
+require 0 ≤ φ_{t+L-1} - (1-α)c_{t+L-1}, which fails for small φ_{t+L-1} (near convergence).
+
+The corrected structure splits on V_{t+L} directly. In Case (B) (V_{t+L} > 0), the assumption
+itself rules out B1 Case 2 at the final step — no separate sub-case analysis needed. The bound
+then follows cleanly from B1 Case 1 at all L steps.
+
+---
+
+---
+
+### Reviewer audit checklist
+
+**(1) Step-size admissibility → c_t > 0:**
+η_eff^(t) ∈ (0, 2/β) by (H-orbit). Then 1 − β/2·η_eff^(t) > 1 − β/2·(2/β) = 0. So
+c_t = 2μ η_eff^(t)(1 − β/2·η_eff^(t)) > 0 for each t. Hence C(O) = Σ c_t > 0. ✓
+
+**(2) Domain of φ throughout the proof:**
+- Steps t,...,t+L−1: V_s > 0 from Step 1 → φ_s = V_s^{1-α} well-defined (1−α > 0). ✓
+- Step t+L in Case (A): V_{t+L} = 0 → φ_{t+L} = 0^{1−α} = 0 (defined since 1−α > 0). ✓
+- Step t+L in Case (B): V_{t+L} > 0 → φ_{t+L} > 0. ✓
+φ is well-defined throughout. No division by zero, no undefined exponent. ✓
+
+**(3) C(O) > 0:**
+C(O) = Σ_{t=0}^{L-1} c_t. Each c_t > 0 (point 1 above). L ≥ 1 (orbit has at least one step).
+Hence C(O) ≥ c_0 > 0. ✓
+
+**(4) Sublevel-set containment:**
+L(w_{s+1}) ≤ L(w_s) at each step (β-smooth descent, Step 3). By induction, all iterates in
+S₀ = {w : L(w) ≤ L(w_t)}, where (H-Łoj) holds. ✓ (Now explicit in proof.)
+
+**(5) The case split is exhaustive and non-overlapping:**
+V_{t+L} = 0 and V_{t+L} > 0 are mutually exclusive and collectively exhaustive. ✓
+
+**(6) B1 application requires V_s > 0 (not just V_s ≥ 0):**
+B1 requires V_s > 0 at each step s (the concavity argument uses V_s as the expansion point,
+requiring it to be in the interior of the domain). V_s > 0 for s ∈ {t,...,t+L-1} from Step 1;
+V_{t+L} > 0 is the Case (B) assumption. So B1 applies at every step. ✓
+
+**(7) The tangent bound in B1 is applied at the right point:**
+B1 uses f(a-b) ≤ f(a) + f'(a)(-b) with a = V_s > 0 (interior, where f = x^{1-α} is
+differentiable) and a-b = r_s = V_s - c_s V_s^α ≥ 0 (Case 1). Both domain conditions met. ✓
+
+No gap found in the audit. The proof is sound.
 
 ---
 

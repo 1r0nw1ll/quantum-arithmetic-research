@@ -3404,6 +3404,584 @@ def _validate_symbolic_search_curvature_cert_family(base_dir: str) -> Optional[s
 
 
 
+def _validate_obstruction_aware_planner_family(base_dir: str) -> Optional[str]:
+    """QA Obstruction-Aware Planner family [113] — planner must prune before search on forbidden targets."""
+    import subprocess
+    pl_dir = os.path.join(base_dir, "qa_obstruction_aware_planner")
+    validator = os.path.join(pl_dir, "qa_obstruction_aware_planner_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_obstruction_aware_planner/qa_obstruction_aware_planner_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=pl_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_obstruction_aware_planner self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_obstruction_aware_planner self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_obstruction_aware_planner self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_public_overview_doc_family(base_dir: str) -> Optional[str]:
+    """QA Public Overview Doc family [120] — presentation-grade export derived from [119]."""
+    import subprocess
+    po_dir = os.path.join(base_dir, "qa_public_overview_doc")
+    validator = os.path.join(po_dir, "qa_public_overview_doc_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_public_overview_doc/qa_public_overview_doc_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=po_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_public_overview_doc self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_public_overview_doc self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_public_overview_doc self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_engineering_core_cert_family(base_dir: str) -> Optional[str]:
+    """QA Engineering Core Cert family [121] — maps classical engineering systems to QA spec; EC11 catches arithmetic obstructions invisible to Kalman rank analysis."""
+    import subprocess
+    ec_dir = os.path.join(base_dir, "qa_engineering_core_cert")
+    validator = os.path.join(ec_dir, "qa_engineering_core_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_engineering_core_cert/qa_engineering_core_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=ec_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_engineering_core_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_engineering_core_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_engineering_core_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_dual_spine_unification_report_family(base_dir: str) -> Optional[str]:
+    """QA Dual Spine Unification Report family [119] — top-level validated overview of both public spines."""
+    import subprocess
+    du_dir = os.path.join(base_dir, "qa_dual_spine_unification_report")
+    validator = os.path.join(du_dir, "qa_dual_spine_unification_report_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_dual_spine_unification_report/qa_dual_spine_unification_report_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=du_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_dual_spine_unification_report self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_dual_spine_unification_report self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_dual_spine_unification_report self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_control_stack_report_family(base_dir: str) -> Optional[str]:
+    """QA Control Stack Report family [118] — reader-facing report packaging [117]."""
+    import subprocess
+    rp_dir = os.path.join(base_dir, "qa_control_stack_report")
+    validator = os.path.join(rp_dir, "qa_control_stack_report_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_control_stack_report/qa_control_stack_report_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=rp_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_control_stack_report self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_control_stack_report self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_control_stack_report self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_control_stack_family(base_dir: str) -> Optional[str]:
+    """QA Control Stack family [117] — synthesis cert for the control/compiler spine."""
+    import subprocess
+    cs_dir = os.path.join(base_dir, "qa_control_stack")
+    validator = os.path.join(cs_dir, "qa_control_stack_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_control_stack/qa_control_stack_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=cs_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_control_stack self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_control_stack self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_control_stack self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_obstruction_stack_report_family(base_dir: str) -> Optional[str]:
+    """QA Obstruction Stack Report family [116] — reader-facing report packaging [115]."""
+    import subprocess
+    rp_dir = os.path.join(base_dir, "qa_obstruction_stack_report")
+    validator = os.path.join(rp_dir, "qa_obstruction_stack_report_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_obstruction_stack_report/qa_obstruction_stack_report_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=rp_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_obstruction_stack_report self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_obstruction_stack_report self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_obstruction_stack_report self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_obstruction_stack_family(base_dir: str) -> Optional[str]:
+    """QA Obstruction Stack family [115] — synthesis spine compressing the full [111]–[114] chain."""
+    import subprocess
+    st_dir = os.path.join(base_dir, "qa_obstruction_stack")
+    validator = os.path.join(st_dir, "qa_obstruction_stack_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_obstruction_stack/qa_obstruction_stack_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=st_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_obstruction_stack self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_obstruction_stack self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_obstruction_stack self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_obstruction_efficiency_family(base_dir: str) -> Optional[str]:
+    """QA Obstruction Efficiency family [114] — quantifies search-cost savings from obstruction-aware pruning."""
+    import subprocess
+    ef_dir = os.path.join(base_dir, "qa_obstruction_efficiency")
+    validator = os.path.join(ef_dir, "qa_obstruction_efficiency_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_obstruction_efficiency/qa_obstruction_efficiency_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=ef_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_obstruction_efficiency self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_obstruction_efficiency self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_obstruction_efficiency self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_obstruction_compiler_bridge_family(base_dir: str) -> Optional[str]:
+    """QA Obstruction-Compiler Bridge family [112] — bridges [111] arithmetic to [106] control."""
+    import subprocess
+    bridge_dir = os.path.join(base_dir, "qa_obstruction_compiler_bridge")
+    validator = os.path.join(bridge_dir, "qa_obstruction_compiler_bridge_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_obstruction_compiler_bridge/qa_obstruction_compiler_bridge_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=bridge_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_obstruction_compiler_bridge self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_obstruction_compiler_bridge self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_obstruction_compiler_bridge self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_area_quantization_pk_family(base_dir: str) -> Optional[str]:
+    """QA Inert Prime Area Quantization family [111] — generalization of [108] to mod p^k."""
+    import subprocess
+    pk_dir = os.path.join(base_dir, "qa_area_quantization_pk")
+    validator = os.path.join(pk_dir, "qa_area_quantization_pk_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_area_quantization_pk/qa_area_quantization_pk_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=pk_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_area_quantization_pk self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_area_quantization_pk self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_area_quantization_pk self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_seismic_control_family(base_dir: str) -> Optional[str]:
+    """QA Seismic Pattern Control family [110] — domain_instance of QA_PLAN_CONTROL_COMPILER_CERT.v1."""
+    import subprocess
+    sc_dir = os.path.join(base_dir, "qa_seismic_control")
+    validator = os.path.join(sc_dir, "qa_seismic_control_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_seismic_control/qa_seismic_control_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=sc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_seismic_control self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_seismic_control self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    # self-test returns dict of {filename: {structural_validation, ...}}
+    # all entries must have structural_validation == "PASS"
+    all_ok = all(v.get("structural_validation") == "PASS" for v in payload.values())
+    if not all_ok:
+        raise RuntimeError(
+            "qa_seismic_control self-test has failing fixtures:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_inheritance_compat_family(base_dir: str) -> Optional[str]:
+    """QA Inheritance Compat family [109] — certifies inheritance edges as first-class objects."""
+    import subprocess
+    ic_dir = os.path.join(base_dir, "qa_inheritance_compat")
+    validator = os.path.join(ic_dir, "qa_inheritance_compat_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_inheritance_compat/qa_inheritance_compat_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=ic_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_inheritance_compat self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_inheritance_compat self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_inheritance_compat self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_area_quantization_family(base_dir: str) -> Optional[str]:
+    """QA Area Quantization family [108] — first family_extension of QA_CORE_SPEC.v1."""
+    import subprocess
+    aq_dir = os.path.join(base_dir, "qa_area_quantization")
+    validator = os.path.join(aq_dir, "qa_area_quantization_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_area_quantization/qa_area_quantization_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=aq_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_area_quantization self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_area_quantization self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_area_quantization self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_core_spec_family(base_dir: str) -> Optional[str]:
+    """QA Core Spec Kernel family [107] — base executable ontology cert."""
+    import subprocess
+    core_spec_dir = os.path.join(base_dir, "qa_core_spec")
+    validator = os.path.join(core_spec_dir, "qa_core_spec_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_core_spec/qa_core_spec_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=core_spec_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_core_spec self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_core_spec self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_core_spec self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_plan_control_compiler_family(base_dir: str) -> Optional[str]:
+    """QA Plan-Control Compiler family [106] — generic compilation relation cert."""
+    import subprocess
+    compiler_dir = os.path.join(base_dir, "qa_plan_control_compiler")
+    validator = os.path.join(compiler_dir, "qa_plan_control_compiler_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_plan_control_compiler/qa_plan_control_compiler_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=compiler_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_plan_control_compiler self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_plan_control_compiler self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_plan_control_compiler self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_cymatics_family_if_present(base_dir: str) -> Optional[str]:
+    """QA Cymatics Correspondence family [105] — mode + Faraday + control certs."""
+    import subprocess
+    cymatics_dir = os.path.join(base_dir, "qa_cymatics")
+    validator = os.path.join(cymatics_dir, "qa_cymatics_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cymatics/qa_cymatics_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=cymatics_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_cymatics self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_cymatics self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_cymatics self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_feuerbach_parent_scale_family(base_dir: str) -> Optional[str]:
+    """QA Feuerbach Parent Scale family [104] — scale=4 interior law + root exception (3,4,5)."""
+    import subprocess
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_feuerbach_parent_scale_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_feuerbach_parent_scale_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_feuerbach_parent_scale_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_feuerbach_parent_scale_v1 self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_feuerbach_parent_scale_v1 self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_lojasiewicz_orbit_cert_v2_family(base_dir: str) -> Optional[str]:
     """QA Lojasiewicz Orbit Descent Cert v2 family [103] — intrinsic (H-crit derived)."""
     import subprocess
@@ -3886,6 +4464,96 @@ FAMILY_SWEEPS = [
      "QA Lojasiewicz orbit cert v2 (H-crit derived from phi_t>0 via B3; h_crit_witnessed field removed)",
      "103_lojasiewicz_orbit_cert_v2",
      "../qa_lojasiewicz_orbit_cert_v2", True),
+    (104, "QA Feuerbach Parent Scale family",
+     _validate_feuerbach_parent_scale_family,
+     "Feuerbach parent-scale law: scale=4 for all non-root primitive triples; (3,4,5) unique boundary exception with QA closure scale 2G=10",
+     "104_feuerbach_parent_scale",
+     "../qa_feuerbach_parent_scale_v1", True),
+    (105, "QA Cymatics Correspondence family",
+     _validate_cymatics_family_if_present,
+     "mode witness (Chladni+QA tuple echo) + Faraday reachability + control cert (lawful generator sequence → target pattern); 6 fixtures, 3 schemas, self-test ok",
+     "105_cymatics",
+     "qa_cymatics", True),
+    (106, "QA Plan-Control Compiler family",
+     _validate_plan_control_compiler_family,
+     "generic certifiable compilation relation (search→plan→execution→witness); cymatics first instantiation; GENERATOR_SEQUENCE_MISMATCH, COMPILATION_HASH_MISMATCH, TARGET_INVARIANT_MISMATCH; 1 schema, 2 fixtures, self-test ok",
+     "106_plan_control_compiler",
+     "qa_plan_control_compiler", True),
+    (107, "QA Core Spec Kernel family",
+     _validate_core_spec_family,
+     "base executable ontology (state_space, generators, invariants, reachability, failure_algebra, logging, gates [0..5]); kernel witness + 3 FAIL fixtures; V1-V5 checks; self-test ok",
+     "107_qa_core_spec",
+     "qa_core_spec", True),
+    (108, "QA Area Quantization family",
+     _validate_area_quantization_family,
+     "first family_extension of QA_CORE_SPEC.v1; certifies discrete quadrea spectrum of Q(sqrt(5)) norm form b^2+be-e^2 mod m; mod-9 spectrum={0,1,2,4,5,7,8} forbidden={3,6} (3 inert in Z[phi]); IH1-IH4 inheritance checks + AQ1-AQ2 domain checks; 1 PASS + 1 FAIL fixture; self-test ok",
+     "108_qa_area_quantization",
+     "qa_area_quantization", True),
+    (109, "QA Inheritance Compat family",
+     _validate_inheritance_compat_family,
+     "certifies inheritance edges as first-class objects in the QA spec graph; IC1-IC8 checks (parent/child recognition, inherits_from match, gate policy superset, failure algebra extension, logging contract, invariant ref resolution, scope transition validity); 13 PASS edges ([107]→[108], [107]→[111]–[120], [106]→[105], [106]→[110]) + 1 FAIL (gate policy deleted); self-test ok",
+     "109_qa_inheritance_compat",
+     "qa_inheritance_compat", True),
+    (110, "QA Seismic Pattern Control family",
+     _validate_seismic_control_family,
+     "second domain_instance of QA_PLAN_CONTROL_COMPILER_CERT.v1 [106]; proves compiler is cross-domain (seismology vs cymatics); seismic wave states quiet/p_wave/s_wave/surface_wave/coda/disordered → QA orbits singularity/satellite/cosmos; S1-S6 checks; 1 PASS (quiet→p_wave→surface_wave, k=2) + 1 FAIL (illegal direct quiet→surface_wave); self-test ok",
+     "110_qa_seismic_control",
+     "qa_seismic_control", True),
+    (111, "QA Inert Prime Area Quantization family",
+     _validate_area_quantization_pk_family,
+     "family_extension of QA_CORE_SPEC.v1; generalises [108] to mod p^k for all inert primes p; theorem: Im(f)={r: v_p(r)!=1}, forbidden={r: v_p(r)=1}; validator exhaustively recomputes spectrum (O(p^2k) loop) and verifies theorem prediction; IH1-IH3 inheritance + PK1-PK4 domain checks; 3 PASS (p=3/k=2 anchor, p=3/k=3, p=7/k=2 second inert prime) + 1 FAIL (wrong forbidden set); self-test ok",
+     "111_qa_area_quantization_pk",
+     "qa_area_quantization_pk", True),
+    (112, "QA Obstruction-Compiler Bridge family",
+     _validate_obstruction_compiler_bridge_family,
+     "family_extension of QA_CORE_SPEC.v1; bridges arithmetic obstruction ([111]) to control reachability ([106]); theorem: v_p(r)=1 => no valid plan/control PASS cert may claim r as reachable target; validator recomputes v_p and checks claimed_reachable consistency; IH1-IH3 inheritance + B1-B7 bridge checks; 2 PASS (forbidden class 3 blocked, valid class 4 unblocked) + 1 FAIL (forbidden class 6 claimed reachable); self-test ok",
+     "112_qa_obstruction_compiler_bridge",
+     "qa_obstruction_compiler_bridge", True),
+    (113, "QA Obstruction-Aware Planner family",
+     _validate_obstruction_aware_planner_family,
+     "family_extension of QA_CORE_SPEC.v1; certifies planner correctly applies [112] bridge before search: forbidden targets (v_p=1) must be pruned with nodes_expanded=0; valid targets must not be pruned; correctness not just impossibility — obstruction actively governs computation; IH1-IH3 + BR1-BR5 + PA1-PA3 checks; 2 PASS (pruned class 3, search class 4 plan found) + 1 FAIL (forbidden class 6 but 47 nodes expanded: OBSTRUCTION_NOT_APPLIED); self-test ok",
+     "113_qa_obstruction_aware_planner",
+     "qa_obstruction_aware_planner", True),
+    (114, "QA Obstruction Efficiency family",
+     _validate_obstruction_efficiency_family,
+     "family_extension of QA_CORE_SPEC.v1; quantifies search-cost savings from obstruction-aware pruning ([113]); for forbidden targets (v_p=1): naive planner expands N>0 nodes, aware planner expands 0 (saved_nodes=N, pruning_ratio=1.0); for valid targets: no false pruning (pruning_ratio=0, false_pruning=false); validator recomputes saved_nodes and pruning_ratio from raw traces; IH1-IH3 + EF1-EF9 checks; 2 PASS (forbidden class 6 100% saved, valid class 4 zero savings) + 1 FAIL (valid class 4 falsely pruned: FALSE_PRUNING_EFFICIENCY + AWARE_TRACE_MISMATCH); self-test ok",
+     "114_qa_obstruction_efficiency",
+     "qa_obstruction_efficiency", True),
+    (115, "QA Obstruction Stack family",
+     _validate_obstruction_stack_family,
+     "synthesis spine compressing the full [111]–[114] obstruction chain into one theorem-bearing cert; recomputes all four layers independently (arithmetic v_p, control reachability, planner pruning, efficiency savings); OBSTRUCTION_PRESENT → control_verdict=UNREACHABLE + pruned(0 nodes) + pruning_ratio=1.0; validator checks cross-layer consistency and stack_conclusion.full_chain_holds; IH1-IH3 + OS1-OS12; 1 PASS (canonical forbidden r=6, full chain holds) + 1 FAIL (r=6 obstruction declared but planner expanded 12 nodes, ratio=0.74: PRUNING_CONCLUSION_MISMATCH + EFFICIENCY_CONCLUSION_MISMATCH + STACK_INCONSISTENCY); self-test ok",
+     "115_qa_obstruction_stack",
+     "qa_obstruction_stack", True),
+    (116, "QA Obstruction Stack Report family",
+     _validate_obstruction_stack_report_family,
+     "reader-facing report artifact packaging [115] for external audiences; contains theorem statement, one-line layer summaries for [111]–[115], recomputed summary table (v_p, forbidden, reachable, pruned, baseline/aware/saved nodes, pruning_ratio), canonical PASS+FAIL witnesses, source refs; validator recomputes entire table from arithmetic params and checks faithfulness; IH1-IH3 + RP1-RP9; 1 PASS (canonical r=6, two-row table verified) + 1 FAIL (r=6 row claims pruned=false, aware_nodes=12, ratio=0.74: SUMMARY_TABLE_MISMATCH); self-test ok",
+     "116_qa_obstruction_stack_report",
+     "qa_obstruction_stack_report", True),
+    (117, "QA Control Stack family",
+     _validate_control_stack_family,
+     "synthesis cert for the control/compiler spine; asserts QA_PLAN_CONTROL_COMPILER_CERT.v1 [106] is domain-generic: orbit trajectory singularity→satellite→cosmos and path_length_k=2 preserved across cymatics [105] (flat→stripes→hexagons) and seismology [110] (quiet→p_wave→surface_wave); validator recomputes cross-domain trace consistency (CS1-CS11); 1 PASS (both domains share orbit trajectory + k=2) + 1 FAIL (seismology declares final=satellite not cosmos: ORBIT_TRAJECTORY_MISMATCH + CROSS_DOMAIN_CLAIM_INCONSISTENT + STACK_INCONSISTENCY); self-test ok",
+     "117_qa_control_stack",
+     "qa_control_stack", True),
+    (118, "QA Control Stack Report family",
+     _validate_control_stack_report_family,
+     "reader-facing report packaging [117] for external audiences; contains theorem statement, one-line summaries for [106]/[105]/[110], comparison table (domain, initial/intermediate/target state, orbit_path, path_length_k, move_sequence), canonical PASS+FAIL witnesses; validator recomputes cross-row consistency from comparison table; IH1-IH3 + CR1-CR7; 1 PASS (two-row table consistent) + 1 FAIL (seismology row orbit_path ends in satellite, path_length_k=3: COMPARISON_TABLE_MISMATCH); self-test ok",
+     "118_qa_control_stack_report",
+     "qa_control_stack_report", True),
+    (119, "QA Dual Spine Unification Report family",
+     _validate_dual_spine_unification_report_family,
+     "top-level validated overview placing [116] (obstruction spine) and [118] (control spine) side by side; contains theorem paragraphs for each spine, two-row comparison table (entry_point, kernel, main_family_chain, canonical_theorem, pass/fail witness summaries, what_is_recomputed), synthesis statement unifying both spines; validator checks spine refs (DU1-DU2), theorem presence (DU3-DU4), comparison table structure and content (DU5-DU9), synthesis completeness (DU10-DU11), witness values (DU12-DU14); 1 PASS (canonical two-spine table) + 1 FAIL (obstruction_spine_ref points to cert not report: OBSTRUCTION_SPINE_REF_MISMATCH); self-test ok",
+     "119_qa_dual_spine_unification_report",
+     "qa_dual_spine_unification_report", True),
+    (120, "QA Public Overview Doc family",
+     _validate_public_overview_doc_family,
+     "presentation-grade export derived from [119]; designed to be handed to a reviewer as the first artifact they read; contains executive summary, two-spine diagram (chain + theorem for each spine), canonical obstruction example (r=6, p=3, k=2, pruning_ratio=1.0), canonical cross-domain control example (cymatics + seismology, shared orbit singularity→satellite→cosmos, k=2), why-it-matters section, spine entry-point pointers; validator checks faithfulness to [119] (PO1-PO9): overview_ref, executive summary, spine diagram completeness, obstruction example substantive content (v_p/ratio), control example domain names (cymatics+seismology), why_it_matters, both spine entry points present, witness values; 1 PASS (canonical overview) + 1 FAIL (spine_entry_points missing control spine: SPINE_ENTRY_POINTS_INCOMPLETE); self-test ok",
+     "120_qa_public_overview_doc",
+     "qa_public_overview_doc", True),
+    (121, "QA Engineering Core Cert family",
+     _validate_engineering_core_cert_family,
+     "family_extension of QA_CORE_SPEC.v1 [107]; certifies that any classical engineering system (state-space model + stability conditions + controllability claim) maps validly to a QA specification; validator recomputes IH1-IH3 (kernel inheritance), EC1 (state encoding 1<=b,e<=N), EC2 (all transitions have generator names), EC3 (all failure modes map to QA fail types), EC4 (target orbit family valid), EC5 (declared orbit_family matches recomputed f(b,e) 3-adic valuation), EC6 (lyapunov_function mentions QA invariant), EC7 (orbit_contraction_factor < 1.0), EC8 (equilibrium maps to singularity), EC9 (reachability_witness present for full_rank controllability), EC10 (minimality_witness present with optimization_claim), EC11 (obstruction_check.obstructed matches recomputed v_p(target_r) for inert primes — catches arithmetic obstructions invisible to Kalman rank analysis); fail types: STATE_ENCODING_INVALID, TRANSITION_NOT_GENERATOR, FAILURE_TAXONOMY_INCOMPLETE, TARGET_NOT_ORBIT_FAMILY, ORBIT_FAMILY_CLASSIFICATION_FAILURE, LYAPUNOV_QA_MISMATCH, CONTROLLABILITY_QA_MISMATCH, ARITHMETIC_OBSTRUCTION_IGNORED; 1 PASS (spring-mass oscillator: still/transient/steady_oscillation → singularity/satellite/cosmos, k=2, target_r=2 v3=0 not obstructed) + 1 FAIL (ARITHMETIC_OBSTRUCTION_IGNORED: target_r=3 v3(3)=1 inert, cert declares obstructed=false) + 1 FAIL (STATE_ENCODING_INVALID: b=0 outside domain {1,...,N}); self-test ok",
+     "121_qa_engineering_core_cert",
+     "qa_engineering_core_cert", True),
 ]
 
 

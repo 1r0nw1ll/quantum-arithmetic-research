@@ -1,0 +1,140 @@
+{
+  "schema_version": "QA_CYMATICS_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.faraday.nonlinear_escape.v1",
+  "title": "Faraday Pattern — NONLINEAR_ESCAPE Failure Fixture",
+  "cert_type": "faraday_reachability",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates NONLINEAR_ESCAPE: amplitude driven too high; system transitions to disordered turbulent state. No stable pattern class reachable. QA analogue: state forced outside all orbit families — no legal return path.",
+
+  "setup": {
+    "container_geometry": "circular_petri_dish_diameter_100mm",
+    "fluid_type": "glycerol_water_85pct",
+    "fluid_depth_mm": 3.5,
+    "surface_tension_mN_per_m": 63.0,
+    "viscosity_mPas": 109.0,
+    "drive_axis": "vertical",
+    "drive_frequency_hz": 80.0,
+    "drive_amplitude_normalized": 0.99
+  },
+
+  "pattern_state": {
+    "current_class": "disordered",
+    "wavelength_mm": null,
+    "temporal_period_s": null,
+    "faraday_subharmonic_ratio": "1/2",
+    "spatial_symmetry_group": "none"
+  },
+
+  "pattern_basin_graph": [
+    {
+      "from_pattern": "hexagons",
+      "to_pattern": "disordered",
+      "control_move": "increase_amplitude_to_0.99",
+      "transition_type": "discontinuous_jump",
+      "legal": true
+    },
+    {
+      "from_pattern": "disordered",
+      "to_pattern": "hexagons",
+      "control_move": "decrease_amplitude_to_0.72",
+      "transition_type": "hysteretic",
+      "legal": false,
+      "_note": "Hysteresis prevents direct return: once in disordered regime, amplitude must be reduced to flat and re-ramped. The cert system records this as illegal (path is blocked without passing through flat)."
+    }
+  ],
+
+  "reachability": {
+    "initial_pattern": "hexagons",
+    "target_pattern": "hexagons",
+    "witnessed_path": ["increase_amplitude_to_0.99"],
+    "path_length_k": 1,
+    "return_in_k": false,
+    "return_path": null
+  },
+
+  "obstruction_classes": [
+    {
+      "blocked_transition": "disordered → hexagons (direct)",
+      "obstruction_type": "NONLINEAR_ESCAPE",
+      "witness": "Turbulent regime at amplitude 0.99 exhibits broadband spatial spectrum; no dominant wavenumber. Hysteresis prevents direct return to hexagon basin without amplitude reset through flat."
+    }
+  ],
+
+  "qa_mapping": {
+    "drive_frequency_maps_to": "cosmos",
+    "subharmonic_maps_to": "period_collapse_cosmos_to_satellite",
+    "instability_threshold_maps_to": "mod_3_basin_boundary",
+    "pattern_class_to_orbit_family": {
+      "hexagons": "cosmos",
+      "disordered": "out_of_orbit"
+    },
+    "three_regime_correspondence": {
+      "flat": "singularity",
+      "stripes_squares": "satellite",
+      "hexagons_quasipatterns": "cosmos"
+    }
+  },
+
+  "validation_checks": [
+    {
+      "check_id": "F1",
+      "description": "faraday_subharmonic_ratio is '1/2'",
+      "passed": true,
+      "expected": "1/2",
+      "actual": "1/2"
+    },
+    {
+      "check_id": "F2",
+      "description": "witnessed_path length matches path_length_k",
+      "passed": true,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "check_id": "F3",
+      "description": "Each step in witnessed_path is legal",
+      "passed": true,
+      "expected": "all moves legal=true",
+      "actual": "increase_amplitude_to_0.99: legal=true (transition to disordered is a real physical move)"
+    },
+    {
+      "check_id": "F4",
+      "description": "return_in_k is true (can return to initial pattern in ≤k moves)",
+      "passed": false,
+      "expected": "return_in_k=true",
+      "actual": "return_in_k=false — hysteresis blocks direct return; must reset amplitude to flat first"
+    },
+    {
+      "check_id": "F5",
+      "description": "current_class is a recognizable non-disordered pattern",
+      "passed": false,
+      "expected": "pattern class in {flat, stripes, squares, hexagons, oscillons, quasipattern}",
+      "actual": "disordered — no stable pattern class"
+    }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "NONLINEAR_ESCAPE",
+      "witness": {
+        "check_ids": ["F4", "F5"],
+        "amplitude_at_escape": 0.99,
+        "final_pattern_class": "disordered",
+        "return_path": null,
+        "qa_analogue": "State forced outside all orbit families. In QA terms: amplitude overdrive is equivalent to choosing a modulus where the state pair (b,e) has no finite orbit — not representable in the QA system."
+      }
+    },
+    {
+      "fail_type": "RETURN_PATH_NOT_FOUND",
+      "witness": {
+        "initial_pattern": "hexagons",
+        "current_pattern": "disordered",
+        "attempted_direct_return": "decrease_amplitude_to_0.72",
+        "result": "hysteretic_failure — system stays disordered until amplitude reset to flat basin"
+      }
+    }
+  ],
+
+  "result": "FAIL"
+}

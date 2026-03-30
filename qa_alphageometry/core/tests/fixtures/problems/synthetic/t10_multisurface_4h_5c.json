@@ -1,0 +1,189 @@
+{
+  "id": "t10_multisurface_4h_5c",
+  "description": "Multi-surface problem (4 hub spokes, 5 chain links)",
+  "difficulty": 8,
+  "givens": [
+    {
+      "Perpendicular": [
+        1,
+        3
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        4
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        5
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        3,
+        4
+      ]
+    },
+    {
+      "Parallel": [
+        4,
+        5
+      ]
+    },
+    {
+      "Parallel": [
+        5,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        6,
+        7
+      ]
+    },
+    {
+      "Parallel": [
+        7,
+        8
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        4
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        5
+      ]
+    },
+    {
+      "CoincidentLines": [
+        15,
+        16
+      ]
+    },
+    {
+      "CoincidentLines": [
+        16,
+        17
+      ]
+    },
+    {
+      "CoincidentLines": [
+        17,
+        18
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        19,
+        20
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        20,
+        21
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        21,
+        22
+      ]
+    },
+    {
+      "EqualLength": [
+        23,
+        24
+      ]
+    },
+    {
+      "EqualLength": [
+        24,
+        25
+      ]
+    },
+    {
+      "EqualLength": [
+        25,
+        26
+      ]
+    },
+    {
+      "OnCircle": [
+        28,
+        27
+      ]
+    },
+    {
+      "OnCircle": [
+        29,
+        27
+      ]
+    },
+    {
+      "OnCircle": [
+        30,
+        27
+      ]
+    },
+    {
+      "OnCircle": [
+        31,
+        27
+      ]
+    },
+    {
+      "OnCircle": [
+        32,
+        27
+      ]
+    },
+    {
+      "OnLine": [
+        33,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        34,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        35,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        36,
+        3
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Parallel": [
+        3,
+        8
+      ]
+    }
+  ]
+}

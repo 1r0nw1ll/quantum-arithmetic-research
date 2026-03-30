@@ -1,0 +1,16 @@
+{
+  "id": "t1_p10_parallel_with_distractors",
+  "description": "Parallel chain with 3 distractor givens to increase search branching",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"EqualLength": [50, 51]},
+    {"EqualAngles": [60, 61]},
+    {"Concentric": [70, 71]}
+  ],
+  "goals": [
+    {"Parallel": [1, 4]}
+  ],
+  "difficulty": 4
+}

@@ -1,0 +1,19 @@
+{
+  "id": "t3_p08_ultimate_branching",
+  "description": "Ultimate branching test: 8 parallel givens creating exponential search space",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [1, 3]},
+    {"Parallel": [1, 4]},
+    {"Parallel": [2, 5]},
+    {"Parallel": [3, 6]},
+    {"Parallel": [4, 7]},
+    {"Parallel": [5, 8]},
+    {"Parallel": [6, 9]}
+  ],
+  "goals": [
+    {"Parallel": [7, 8]},
+    {"Parallel": [8, 9]}
+  ],
+  "difficulty": 10
+}

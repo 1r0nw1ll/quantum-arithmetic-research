@@ -1,0 +1,59 @@
+{
+  "schema_version": "QA_CHROMOGEOMETRY_CERT.v1",
+  "certificate_id": "qa.cert.chromogeometry.pass.ellipse.b3e2.v1",
+  "cert_type": "qa_chromogeometry_cert",
+  "title": "Chromogeometry PASS: (b=3,e=2) → 20-21-29 triple, ellipse (I=−1<0)",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Ellipse case. Generator (b=3,e=2) gives d=5,a=7. Chromogeometric quadrances: C=Q_green(5,2)=20, F=Q_red(5,2)=21, G=Q_blue(5,2)=29. Check: 20²+21²=400+441=841=29² ✓. Discriminant I=C−F=20−21=−1<0, equivalently I=2e²−b²=2·4−9=−1<0 → ellipse. This certifies the ellipse branch of the conic discriminant. F=b·a=3·7=21 ✓.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "b": 3,
+    "e": 2,
+    "d": 5,
+    "a": 7,
+    "_note": "d=b+e=5, a=b+2e=7; QA tuple (3,2,5,7)"
+  },
+
+  "chromogeometry": {
+    "C": 20,
+    "F": 21,
+    "G": 29,
+    "_C_derivation": "Q_green(d=5,e=2) = 2·5·2 = 20",
+    "_F_derivation": "Q_red(d=5,e=2) = d²−e² = 25−4 = 21 = b·a = 3·7 = 21",
+    "_G_derivation": "Q_blue(d=5,e=2) = d²+e² = 25+4 = 29",
+    "_pythagoras_check": "C²+F²=400+441=841=29²=G² ✓"
+  },
+
+  "conic_classification": {
+    "I": 1,
+    "I_formula": "I = |C − F| = |20 − 21| = 1 (positive difference)",
+    "conic_type": "ellipse",
+    "_rationale": "C=20 < F=21 → ellipse. I = |C−F| = 1. When F > C the direction vector is in the elliptic regime."
+  },
+
+  "wildberger_reference": {
+    "theorem": "Chromogeometric Theorem 6 (Wildberger arXiv:0806.2495, arXiv:0806.2789)",
+    "statement": "Q_blue(v)² = Q_red(v)² + Q_green(v)² for any vector v=(d,e)",
+    "qa_form": "G² = F² + C²; (d²+e²)² = (d²−e²)² + (2de)²"
+  },
+
+  "validation_checks": [
+    { "check_id": "CG1", "description": "schema_version is 'QA_CHROMOGEOMETRY_CERT.v1'",   "passed": true, "details": "schema_version='QA_CHROMOGEOMETRY_CERT.v1'" },
+    { "check_id": "CG2", "description": "C == 2·d·e (Green quadrance identity)",            "passed": true, "details": "2·5·2=20=C" },
+    { "check_id": "CG3", "description": "F == d²−e² (Red quadrance identity)",              "passed": true, "details": "25−4=21=F" },
+    { "check_id": "CG4", "description": "G == d²+e² (Blue quadrance identity)",             "passed": true, "details": "25+4=29=G" },
+    { "check_id": "CG5", "description": "C²+F²=G² (Chromogeometric Pythagoras)",           "passed": true, "details": "400+441=841=29²" },
+    { "check_id": "CG6", "description": "F == b·a (semi-latus product identity)",           "passed": true, "details": "b·a=3·7=21=F" },
+    { "check_id": "CG7", "description": "conic_type matches |C−F| and C vs F comparison",    "passed": true, "details": "C=20 < F=21 → ellipse; I=|20−21|=1 ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

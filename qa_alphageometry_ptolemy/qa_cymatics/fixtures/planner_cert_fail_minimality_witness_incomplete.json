@@ -1,0 +1,94 @@
+{
+  "schema_version": "QA_CYMATIC_PLANNER_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.planner.fail_minimality_witness_incomplete.v1",
+  "cert_type": "cymatic_planner",
+  "title": "Cymatic Planner FAIL: is_shortest=true but minimality_witness is internally inconsistent (MINIMALITY_WITNESS_INCOMPLETE)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates MINIMALITY_WITNESS_INCOMPLETE: the planner finds the valid flat→stripes→hexagons path (path_length_k=2), claims is_shortest=true, but provides a minimality_witness that is wrong in all three invariants: (1) proved_no_path_shorter_than=1 but path_length_k=2 — underclaims the proved bound; (2) excluded_shorter_lengths=[0] only — missing depth 1; (3) frontier_sizes=[1] — missing the depth-1 frontier entry. The validator rejects the minimality claim. The plan itself is valid and would succeed without the witness, but the cert cannot claim first-class minimality certification. QA analogue: claiming orbit distance singularity→cosmos is 1 (omitting the satellite threshold) — an algebraically false lower bound.",
+
+  "planning_problem": {
+    "initial_pattern_class": "flat",
+    "target_pattern_class":  "hexagons",
+    "max_depth_k": 3,
+    "optimization_goal": "shortest_path"
+  },
+
+  "generator_alphabet": [
+    "increase_amplitude",
+    "decrease_amplitude",
+    "set_frequency",
+    "increase_frequency",
+    "decrease_frequency",
+    "stabilize"
+  ],
+
+  "control_graph": {
+    "nodes": ["flat", "stripes", "hexagons", "disordered"],
+    "edges": [
+      { "from": "flat",     "move": "increase_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "set_frequency",       "to": "hexagons"   },
+      { "from": "hexagons", "move": "decrease_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "decrease_amplitude",  "to": "flat"       },
+      { "from": "hexagons", "move": "increase_amplitude",  "to": "disordered" }
+    ]
+  },
+
+  "planner_run": {
+    "algorithm": "bfs",
+    "searched_nodes": 3,
+    "searched_edges": 3,
+    "found_plan": true
+  },
+
+  "plan_witness": {
+    "path_length_k": 2,
+    "is_shortest": true,
+    "steps": [
+      { "step_index": 1, "from": "flat",    "move": "increase_amplitude", "to": "stripes"  },
+      { "step_index": 2, "from": "stripes", "move": "set_frequency",      "to": "hexagons" }
+    ],
+    "minimality_witness": {
+      "method": "bfs_frontier_exhaustion",
+      "proved_no_path_shorter_than": 1,
+      "frontier_sizes": [1],
+      "excluded_shorter_lengths": [0]
+    }
+  },
+
+  "observed_final_state": {
+    "pattern_class":  "hexagons",
+    "symmetry_group": "C6v",
+    "orbit_family":   "cosmos"
+  },
+
+  "qa_mapping": {
+    "initial_orbit_family": "singularity",
+    "target_orbit_family":  "cosmos",
+    "final_orbit_family":   "cosmos",
+    "state_pair": { "b": 1, "e": 2 },
+    "planning_qa_analogue": "The witness claims no path shorter than 1 exists, but the plan has length 2. This is an underspecified lower bound: the witness only exhausts depth 0 (flat alone, no hexagons reachable) but fails to record the depth-1 frontier (stripes), which is the key evidence that hexagons cannot be reached in 1 step. Without the depth-1 exhaustion record, the minimality claim is unverifiable. QA analogue: claiming the orbit distance from singularity to cosmos is bounded below by 1 without proving the satellite orbit is not a shortcut — the satellite threshold exhaustion is the missing link."
+  },
+
+  "validation_checks": [
+    { "check_id": "P1",  "description": "planner algorithm is recognized",                                    "passed": true,  "details": "bfs in {bfs, dfs, astar, dijkstra, iddfs}" },
+    { "check_id": "P2",  "description": "path_length_k <= max_depth_k",                                      "passed": true,  "details": "2 <= 3" },
+    { "check_id": "P3",  "description": "every plan step is a legal edge in control_graph",                  "passed": true,  "details": "flat--increase_amplitude-->stripes: legal; stripes--set_frequency-->hexagons: legal" },
+    { "check_id": "P4",  "description": "observed final pattern class matches target pattern class",          "passed": true,  "details": "hexagons == hexagons" },
+    { "check_id": "P5",  "description": "qa_mapping.final_orbit_family consistent with CONTROL_PATTERN_TO_ORBIT[final_class]", "passed": true, "details": "cosmos == CONTROL_PATTERN_TO_ORBIT[hexagons]=cosmos" },
+    { "check_id": "P6",  "description": "searched_nodes >= path_length_k + 1",                              "passed": true,  "details": "searched_nodes=3 >= 3" },
+    { "check_id": "P7",  "description": "BFS recomputed shortest == claimed path_length_k",                  "passed": true,  "details": "BFS shortest=2 == claimed 2 (plan is correct; only the minimality witness is wrong)" },
+    { "check_id": "P8",  "description": "no disordered/out_of_orbit state visited in plan",                 "passed": true,  "details": "plan visits only flat, stripes, hexagons" },
+    { "check_id": "P9",  "description": "return-path claim consistent if present",                           "passed": true,  "details": "no return path requested; N/A" },
+    { "check_id": "P11", "description": "minimality_witness internally consistent and consistent with path_length_k", "passed": false, "details": "proved_no_path_shorter_than=1 != path_length_k=2; excluded_shorter_lengths=[0] != range(2)=[0,1]; len(frontier_sizes)=1 != path_length_k=2 — three independent MINIMALITY_WITNESS_INCOMPLETE violations" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "MINIMALITY_WITNESS_INCOMPLETE",
+      "message": "minimality_witness has three inconsistencies with path_length_k=2: (1) proved_no_path_shorter_than=1 but must equal path_length_k=2; (2) excluded_shorter_lengths=[0] but must cover all depths [0,1] i.e. range(path_length_k); (3) frontier_sizes=[1] has length 1 but must have length path_length_k=2 (one frontier per excluded depth). The depth-1 frontier evidence — proving hexagons is not reachable from flat in 1 step via stripes — is entirely absent. The minimality claim cannot be verified without exhaustion evidence at every excluded depth."
+    }
+  ],
+
+  "result": "FAIL"
+}

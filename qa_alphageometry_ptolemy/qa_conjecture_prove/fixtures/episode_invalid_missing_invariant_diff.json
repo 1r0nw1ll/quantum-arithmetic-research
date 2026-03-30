@@ -1,0 +1,34 @@
+{
+  "_comment": "Negative fixture: FAIL step missing invariant_diff in result block. Expected: RESULT_INCOMPLETE.",
+  "schema_id": "QA_CONJECTURE_PROVE_EPISODE_SCHEMA.v1",
+  "episode_id": "EPISODE-NEGFIX0001",
+  "created_utc": "2026-02-10T23:40:00Z",
+  "agent_id": "qa-agent-ctrl-2",
+  "policy_id": "pi_conjecture_prove.v1",
+  "generator_set_id": "GENSET{sigma_down,sigma_tactic,sigma_up}.v1",
+  "objective": {
+    "type": "EXPLORE",
+    "target_hash": "a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2",
+    "budget": { "max_steps": 2, "max_seconds": 10 }
+  },
+  "initial_state": {
+    "layer": "human",
+    "state_hash": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2"
+  },
+  "steps": [
+    {
+      "step_index": 0,
+      "action": { "generator": "sigma_down", "params": {} },
+      "input_hash": "b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2b2",
+      "output_hash": "c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2c2",
+      "trace_ref": { "family": "QA_MATH_COMPILER_STACK.v1", "trace_id": "trace_bad" },
+      "result": { "status": "FAIL", "fail_type": "TYPE_MISMATCH" }
+    }
+  ],
+  "final_status": { "status": "FAIL", "summary": "Should fail CI: missing invariant_diff in step result" },
+  "merkle_parent": "d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2d2",
+  "invariant_diff": {
+    "fixture": true,
+    "note": "step[0].result missing invariant_diff on FAIL"
+  }
+}

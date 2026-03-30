@@ -1,0 +1,115 @@
+{
+  "schema_version": "QA_CYMATICS_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.mode.circular_m1n0_off_resonance.v1",
+  "title": "Chladni Mode (1,0) — OFF_RESONANCE Failure Fixture",
+  "cert_type": "mode_witness",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates OFF_RESONANCE failure: drive frequency 200 Hz below eigenfrequency; sand does not form stable nodal lines.",
+
+  "setup": {
+    "geometry": "circular_plate",
+    "material": "steel_304",
+    "dimensions_mm": { "diameter": 200, "thickness": 0.8 },
+    "clamp_config": "center_clamped",
+    "drive_point": "edge_midpoint",
+    "medium": "sand"
+  },
+
+  "drive_conditions": {
+    "frequency_hz": 1647.0,
+    "amplitude_normalized": 0.62,
+    "duration_s": 8.0
+  },
+
+  "mode_witness": {
+    "nodal_diameter_count": 1,
+    "nodal_circle_count": 0,
+    "chladni_index": "m1n0",
+    "symmetry_group": "C2",
+    "expected_frequency_formula": "f_{1,0} ≈ 1847 Hz for this plate",
+    "expected_eigenfrequency_hz": 1847.0,
+    "observed_frequency_hz": 1647.0,
+    "frequency_tolerance_hz": 15.0,
+    "nodal_graph_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+
+  "qa_mapping": {
+    "b": 1,
+    "e": 0,
+    "d_computed": 1,
+    "a_computed": 1,
+    "qa_norm": 1,
+    "orbit_family": "cosmos",
+    "chladni_formula_qa_match": true,
+    "notes": "QA mapping is internally consistent but cert fails because the physical setup is not at resonance — no nodal witness can be read."
+  },
+
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "Observed frequency within tolerance of expected eigenfrequency",
+      "passed": false,
+      "expected": "1847.0 ± 15.0 Hz",
+      "actual": "1647.0 Hz (delta = 200.0 Hz — OUTSIDE tolerance)"
+    },
+    {
+      "check_id": "V2",
+      "description": "Nodal counts non-negative integers",
+      "passed": true,
+      "expected": "m ≥ 0, n ≥ 0",
+      "actual": "m=1, n=0"
+    },
+    {
+      "check_id": "V3",
+      "description": "Symmetry group C2 for m=1, n=0",
+      "passed": true,
+      "expected": "C2",
+      "actual": "C2"
+    },
+    {
+      "check_id": "V4",
+      "description": "QA tuple formula: d_computed = b + e",
+      "passed": true,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "check_id": "V5",
+      "description": "QA tuple formula: a_computed = b + 2e",
+      "passed": true,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "check_id": "V6",
+      "description": "Chladni formula echo: a_computed == m + 2n",
+      "passed": true,
+      "expected": 1,
+      "actual": 1
+    },
+    {
+      "check_id": "V7",
+      "description": "QA orbit family consistent with norm",
+      "passed": true,
+      "expected": "cosmos",
+      "actual": "cosmos"
+    }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "OFF_RESONANCE",
+      "witness": {
+        "check_id": "V1",
+        "expected_freq_hz": 1847.0,
+        "observed_freq_hz": 1647.0,
+        "delta_hz": 200.0,
+        "tolerance_hz": 15.0,
+        "consequence": "No stable nodal pattern forms; sand particles remain distributed. No QA witness can be read from plate state."
+      }
+    }
+  ],
+
+  "result": "FAIL"
+}

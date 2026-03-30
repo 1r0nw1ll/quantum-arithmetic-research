@@ -15,6 +15,9 @@ failure-complete contract:
 Uses qa_cert_core exclusively for shared operations.
 """
 
+QA_COMPLIANCE = "cert_validator — validates cert JSON structure, no empirical QA state machine"
+
+
 from __future__ import annotations
 
 import json
@@ -3500,6 +3503,262 @@ def _validate_engineering_core_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_spread_period_cert_family(base_dir: str) -> Optional[str]:
+    """QA Spread Period Cert family [128] — certifies that the QA cosmos orbit period for modulus m equals the Pisano period π(m) of the Fibonacci sequence mod m (= order of Fibonacci shift F=[[0,1],[1,1]] in GL₂(Z/mZ)); π(9)=24, π(7)=16, π(3)=8; spread polynomial S_n(s) cycles after π(m) steps; checks SP1-SP5 (schema, Pisano period, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=7 period=16) + 1 FAIL (PISANO_PERIOD_MISMATCH+MATRIX_PERIOD_WRONG: claimed period=12 for m=9 — projective vs linear order confusion); self-test ok"""
+    import subprocess
+    spc_dir   = os.path.join(base_dir, "qa_spread_period_cert_v1")
+    validator = os.path.join(spc_dir, "qa_spread_period_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_spread_period_cert_v1/qa_spread_period_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=spc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_spread_period_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_spread_period_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_spread_period_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_projection_obstruction_cert_family(base_dir: str) -> Optional[str]:
+    """QA Projection Obstruction Cert family [129] — certifies the distinction between native symbolic closure, discrete representation-basis mismatch, and physical device realization; representation debt is not itself a physical-device failure. Checks IH1-IH3 + PO1-PO9 (native invariants, resolved references, representation layer structure/tags/verdicts, physical layer structure/verdict, obstruction ledger, overall verdict); 1 PASS (Arto ternary: lawful native arithmetic + representation debt + physical INCONCLUSIVE) + 2 FAIL (physical conflation under UNASSESSED status, unresolved invariant reference); self-test ok"""
+    import subprocess
+    poc_dir = os.path.abspath(os.path.join(base_dir, "qa_projection_obstruction_cert"))
+    validator = os.path.abspath(os.path.join(poc_dir, "qa_projection_obstruction_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_projection_obstruction_cert/qa_projection_obstruction_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=poc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_projection_obstruction_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_projection_obstruction_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_projection_obstruction_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_uhg_null_cert_family(base_dir: str) -> Optional[str]:
+    """QA UHG Null Cert family [127] — certifies that every QA triple (F,C,G)=(d²-e²,2de,d²+e²) is a null point [F:C:G] in Universal Hyperbolic Geometry satisfying F²+C²-G²=0; equivalent to Wildberger Chromogeometric Theorem 6; Gaussian integer interpretation: Z=d+ei, Z²=(d²-e²)+2dei, |Z|²=d²+e², so (F,C,G)=(Re(Z²),Im(Z²),|Z|²); checks UN1-UN7 (schema, green/red/blue quadrance, null condition, Gaussian decomp, null_quadrance field); 2 PASS (d=2e=1 → 3-4-5 null point, d=3e=2 → 5-12-13 null point) + 1 FAIL (BLUE_QUADRANCE_MISMATCH+NULL_CONDITION_VIOLATED+GAUSSIAN_DECOMP_MISMATCH: G claimed as 6 instead of 5); self-test ok"""
+    import subprocess
+    unc_dir   = os.path.join(base_dir, "qa_uhg_null_cert_v1")
+    validator = os.path.join(unc_dir, "qa_uhg_null_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_uhg_null_cert_v1/qa_uhg_null_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=unc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_uhg_null_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_uhg_null_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_uhg_null_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_red_group_cert_family(base_dir: str) -> Optional[str]:
+    """QA Red Group Cert family [126] — certifies that the QA T-operator is the Fibonacci shift F=[[0,1],[1,1]], representing multiplication by φ in the split-complex ring Z[√5]/mZ[√5] (Wildberger red isometry group); det(F)=-1=N_red(φ) (red norm), trace(F)=1 (φ+ψ=1); orbit period = ord(F) in GL₂(Z/mZ); cosmos period=24 for m=9, cosmos period=8 for m=3; checks RG1-RG7 (schema, T_matrix, det, trace, F^P≡I, minimality, orbit_type); 2 PASS (m=9 cosmos period=24, m=3 cosmos period=8) + 1 FAIL (ORBIT_PERIOD_WRONG: claimed period=12 but F^12=-I≢I for m=9); self-test ok"""
+    import subprocess
+    rgc_dir   = os.path.join(base_dir, "qa_red_group_cert_v1")
+    validator = os.path.join(rgc_dir, "qa_red_group_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_red_group_cert_v1/qa_red_group_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=rgc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_red_group_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_red_group_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_red_group_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_chromogeometry_cert_family(base_dir: str) -> Optional[str]:
+    """QA Chromogeometry Cert family [125] — certifies that the three QA invariants C, F, G of any generator (b,e) with d=b+e, a=b+2e are exactly the three chromogeometric quadrances of direction vector (d,e): C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² is Wildberger Chromogeometric Theorem 6; I=|C-F| conic discriminant: C>F→hyperbola, C=F→parabola, C<F→ellipse; checks CG1-CG7; 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED: claimed C=2 instead of 4); self-test ok"""
+    import subprocess
+    cgc_dir   = os.path.join(base_dir, "qa_chromogeometry_cert_v1")
+    validator = os.path.join(cgc_dir, "qa_chromogeometry_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_chromogeometry_cert_v1/qa_chromogeometry_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=cgc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_chromogeometry_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_chromogeometry_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_chromogeometry_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_security_competency_cert_family(base_dir: str) -> Optional[str]:
+    """QA Security Competency Cert family [124] — immune system architecture; extends [123] with security_role (identity/membrane/integrity/self_nonself/healing/collective), immune_function (detection/containment/recovery), pq_readiness (fips_final/in_progress/classical_only/hybrid_transitional); SC5 quantum resilience invariant: identity/membrane + classical_only → pq_migration_path required; SC6 FIPS designation required for fips_final; SC9 CELL_ORBIT_MISMATCH inherited from [123]; 2 PASS (ml_kem membrane/fips_final, ed25519 identity/classical_only+migration_path) + 1 FAIL (SC5_PQ_MIGRATION_REQUIRED: rsa_1024 no migration path); self-test ok"""
+    import subprocess
+    scc_dir   = os.path.join(base_dir, "qa_security_competency_cert")
+    validator = os.path.join(scc_dir, "qa_security_competency_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_security_competency_cert/qa_security_competency_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=scc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_security_competency_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_security_competency_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_security_competency_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_agent_competency_cert_family(base_dir: str) -> Optional[str]:
+    """QA Agent Competency Cert family [123] — formalizes Levin morphogenetic agent architecture; certifies that a QA Lab agent competency profile (goal, cognitive_horizon, convergence, orbit_signature, levin_cell_type, failure_modes, composition_rules, dedifferentiation_cond, recommitment_cond) is structurally valid; V8 CELL_ORBIT_MISMATCH enforces: differentiated↔cosmos, progenitor↔satellite/mixed, stem↔singularity; 2 PASS (merge_sort_agent cosmos/differentiated, gradient_descent_agent mixed/progenitor) + 1 FAIL (CELL_ORBIT_MISMATCH: stem agent declaring cosmos orbit); self-test ok"""
+    import subprocess
+    acc_dir = os.path.join(base_dir, "qa_agent_competency_cert")
+    validator = os.path.join(acc_dir, "qa_agent_competency_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_agent_competency_cert/qa_agent_competency_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=acc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_agent_competency_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_agent_competency_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_agent_competency_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_empirical_observation_cert_family(base_dir: str) -> Optional[str]:
+    """QA Empirical Observation Cert family [122] — bridges Open Brain / experiment results to cert ecosystem; certifies verdict (CONSISTENT/CONTRADICTS/PARTIAL/INCONCLUSIVE) against named parent cert claim."""
+    import subprocess
+    eo_dir = os.path.join(base_dir, "qa_empirical_observation_cert")
+    validator = os.path.join(eo_dir, "qa_empirical_observation_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_empirical_observation_cert/qa_empirical_observation_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=eo_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_empirical_observation_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_empirical_observation_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_empirical_observation_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_dual_spine_unification_report_family(base_dir: str) -> Optional[str]:
     """QA Dual Spine Unification Report family [119] — top-level validated overview of both public spines."""
     import subprocess
@@ -4554,6 +4813,46 @@ FAMILY_SWEEPS = [
      "family_extension of QA_CORE_SPEC.v1 [107]; certifies that any classical engineering system (state-space model + stability conditions + controllability claim) maps validly to a QA specification; validator recomputes IH1-IH3 (kernel inheritance), EC1 (state encoding 1<=b,e<=N), EC2 (all transitions have generator names), EC3 (all failure modes map to QA fail types), EC4 (target orbit family valid), EC5 (declared orbit_family matches recomputed f(b,e) 3-adic valuation), EC6 (lyapunov_function mentions QA invariant), EC7 (orbit_contraction_factor < 1.0), EC8 (equilibrium maps to singularity), EC9 (reachability_witness present for full_rank controllability), EC10 (minimality_witness present with optimization_claim), EC11 (obstruction_check.obstructed matches recomputed v_p(target_r) for inert primes — catches arithmetic obstructions invisible to Kalman rank analysis); fail types: STATE_ENCODING_INVALID, TRANSITION_NOT_GENERATOR, FAILURE_TAXONOMY_INCOMPLETE, TARGET_NOT_ORBIT_FAMILY, ORBIT_FAMILY_CLASSIFICATION_FAILURE, LYAPUNOV_QA_MISMATCH, CONTROLLABILITY_QA_MISMATCH, ARITHMETIC_OBSTRUCTION_IGNORED; 1 PASS (spring-mass oscillator: still/transient/steady_oscillation → singularity/satellite/cosmos, k=2, target_r=2 v3=0 not obstructed) + 1 FAIL (ARITHMETIC_OBSTRUCTION_IGNORED: target_r=3 v3(3)=1 inert, cert declares obstructed=false) + 1 FAIL (STATE_ENCODING_INVALID: b=0 outside domain {1,...,N}); self-test ok",
      "121_qa_engineering_core_cert",
      "qa_engineering_core_cert", True),
+    (122, "QA Empirical Observation Cert family",
+     _validate_empirical_observation_cert_family,
+     "bridge: Open Brain / experiment results → cert ecosystem; V1-V5 checks (source, parent ref, verdict, CONTRADICTS→fail_ledger, evidence); 2 PASS (audio orbit CONSISTENT, finance script 26 CONTRADICTS) + 1 FAIL (EMPTY_EVIDENCE); self-test ok",
+     "122_qa_empirical_observation_cert",
+     "qa_empirical_observation_cert", True),
+    (123, "QA Agent Competency Cert family",
+     _validate_agent_competency_cert_family,
+     "Levin morphogenetic agent architecture; V1-V10 checks (schema, horizon, convergence, orbit, cell_type, failure_modes, dediff_cond, CELL_ORBIT_MISMATCH, goal_length, composition_rules); 2 PASS (merge_sort cosmos/differentiated, gradient_descent mixed/progenitor) + 1 FAIL (CELL_ORBIT_MISMATCH); self-test ok",
+     "123_qa_agent_competency_cert",
+     "qa_agent_competency_cert", True),
+    (124, "QA Security Competency Cert family",
+     _validate_security_competency_cert_family,
+     "Immune system architecture; SC1-SC11 (schema, security_role, immune_function, pq_readiness, SC5 quantum resilience invariant, FIPS designation, failure_modes, composition_rules, CELL_ORBIT_MISMATCH, goal_length, result_match); 2 PASS (ml_kem membrane/fips_final, ed25519 identity/classical_only+migration) + 1 FAIL (SC5_PQ_MIGRATION_REQUIRED); self-test ok",
+     "124_qa_security_competency_cert",
+     "qa_security_competency_cert", True),
+    (129, "QA Projection Obstruction Cert family",
+     _validate_projection_obstruction_cert_family,
+     "separates native symbolic closure, discrete representation-basis mismatch, and physical device realization; representation debt is not itself device failure; checks IH1-IH3 + PO1-PO9; 1 PASS (Arto ternary lawful natively + representation debt + physical INCONCLUSIVE) + 2 FAIL (physical conflation, unresolved invariant ref); self-test ok",
+     "129_qa_projection_obstruction_cert",
+     "qa_projection_obstruction_cert", True),
+    (128, "QA Spread Period Cert family",
+     _validate_spread_period_cert_family,
+     "Pisano period = QA cosmos orbit: cosmos period for modulus m = π(m) = Fibonacci period mod m = ord(F) in GL₂(Z/mZ); π(9)=24, π(7)=16, π(3)=8; checks SP1-SP5 (schema, Pisano period, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=7 period=16) + 1 FAIL (PISANO_PERIOD_MISMATCH+MATRIX_PERIOD_WRONG: claimed period=12 for m=9); self-test ok",
+     "128_qa_spread_period",
+     "qa_spread_period_cert_v1", True),
+    (127, "QA UHG Null Cert family",
+     _validate_uhg_null_cert_family,
+     "UHG null points: every QA triple (F,C,G)=(d²-e²,2de,d²+e²) satisfies F²+C²-G²=0 (null condition in UHG); Gaussian integer interpretation Z=d+ei, Z²=(d²-e²)+2dei; checks UN1-UN7 (schema, green/red/blue quadrance, null condition, Gaussian decomp, null_quadrance); 2 PASS (3-4-5, 5-12-13) + 1 FAIL (BLUE_QUADRANCE_MISMATCH+NULL_CONDITION_VIOLATED+GAUSSIAN_DECOMP_MISMATCH: G=6 instead of 5); self-test ok",
+     "127_qa_uhg_null",
+     "qa_uhg_null_cert_v1", True),
+    (126, "QA Red Group Cert family",
+     _validate_red_group_cert_family,
+     "Wildberger red isometry group: QA T-operator = Fibonacci shift F=[[0,1],[1,1]] = red-rotation by φ in Z[√5]/mZ[√5]; det(F)=-1=N_red(φ), trace(F)=1; orbit period = ord(F) in GL₂(Z/mZ); checks RG1-RG7 (schema, T_matrix, det, trace, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=3 period=8) + 1 FAIL (ORBIT_PERIOD_WRONG: claimed period=12, F^12=-I≢I); self-test ok",
+     "126_qa_red_group",
+     "qa_red_group_cert_v1", True),
+    (125, "QA Chromogeometry Cert family",
+     _validate_chromogeometry_cert_family,
+     "Wildberger chromogeometric quadrances: C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² (Wildberger Thm 6); I=|C-F| conic discriminant; checks CG1-CG7 (schema, green/red/blue quadrance, Pythagoras, semi-latus, conic type); 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED); self-test ok",
+     "125_qa_chromogeometry",
+     "qa_chromogeometry_cert_v1", True),
 ]
 
 

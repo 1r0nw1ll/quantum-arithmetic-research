@@ -1,0 +1,291 @@
+# QA_MAP__SPARSE_ATTENTION.yaml
+#
+# QA Module Specification for Sparse Attention / Attention Plateau Papers
+# Covers: Linear attention, sparse transformers, attention collapse phenomena
+#
+# Maps attention mechanism structure to QA certificate framework.
+
+module:
+  name: "QA_SPARSE_ATTENTION"
+  version: "1.0.0"
+  source_papers:
+    - "Efficient Transformers: A Survey"
+    - "Linformer: Self-Attention with Linear Complexity"
+    - "BigBird: Transformers for Longer Sequences"
+    - "Attention is All You Need (original)"
+  schema_prefix: "QA_SPARSE_ATTENTION"
+  status: "COMPLETE - Gold Standard (2026-01-24)"
+
+  artifacts:
+    certificate_module: "qa_sparse_attention_certificate.py"
+    validator_module: "qa_sparse_attention_validator_v3.py"
+    success_example: "examples/sparse_attention/bert_base_success.json"
+    failure_example: "examples/sparse_attention/rank_collapse_failure.json"
+
+# ============================================================================
+# CORE MAPPING: Attention Concepts → QA Framework
+# ============================================================================
+
+concept_mapping:
+  # Attention matrix → QA transition operator
+  attention_matrix:
+    paper_name: "Attention weights A = softmax(QK^T/√d)"
+    paper_definition: "Learned soft routing between tokens"
+    qa_interpretation: "Stochastic transition matrix on token graph"
+    qa_structure: "TransitionOperator"
+    certificate_field: "attention_witness"
+    key_insight: "Attention = reachability weights between positions"
+
+  # Sparse patterns → constrained reachability
+  sparsity_pattern:
+    paper_name: "Sparse attention (local, strided, random)"
+    paper_definition: "Restricted attention connectivity patterns"
+    qa_interpretation: "Constrained reachability graph (not fully connected)"
+    qa_structure: "SparsityPatternWitness"
+    certificate_field: "sparsity_witness"
+    key_insight: "Sparsity = structural constraints on which transitions are allowed"
+
+  # Attention entropy → state space exploration
+  attention_entropy:
+    paper_name: "Attention entropy / sharpness"
+    paper_definition: "Entropy of attention distribution per query"
+    qa_interpretation: "Exploration breadth in state space"
+    qa_structure: "EntropyWitness"
+    certificate_field: "entropy_profile"
+    key_insight: "Low entropy = deterministic transitions; high entropy = diffuse exploration"
+
+  # Rank collapse → gauge degeneracy
+  rank_collapse:
+    paper_name: "Attention rank collapse / plateau"
+    paper_definition: "Attention matrices converging to low-rank"
+    qa_interpretation: "Gauge freedom collapse (effective dimension reduction)"
+    qa_structure: "RankCollapseWitness"
+    certificate_field: "rank_witness"
+    key_insight: "Rank collapse = gauge coordinates becoming degenerate"
+
+  # Linear attention → approximate reachability
+  linear_attention:
+    paper_name: "Linear attention (kernel approximation)"
+    paper_definition: "Attention without softmax: φ(Q)φ(K)^T V"
+    qa_interpretation: "Linearized transition dynamics (tractable reachability)"
+    qa_structure: "LinearApproximationWitness"
+    certificate_field: "linearization_witness"
+    key_insight: "Linear attention trades exact reachability for computational tractability"
+
+# ============================================================================
+# FAILURE-COMPLETENESS MAPPING
+# ============================================================================
+
+failure_completeness:
+  theorem: |
+    For every attention-based computation, exactly one of:
+    1. SUCCESS: Valid attention certificate with sparsity/entropy/rank witnesses, OR
+    2. FAILURE: Obstruction certificate explaining attention pathology
+
+  failure_modes:
+    # Sparsity failures
+    - mode: "disconnected_tokens"
+      description: "Some tokens have no attention path to others"
+      obstruction_witness: "Unreachable token pairs"
+
+    - mode: "sparsity_too_aggressive"
+      description: "Sparsity pattern removes critical information paths"
+      obstruction_witness: "Performance degradation vs. dense baseline"
+
+    # Entropy failures
+    - mode: "entropy_collapse"
+      description: "All attention concentrated on single token"
+      obstruction_witness: "Layer, head, entropy value"
+
+    - mode: "entropy_explosion"
+      description: "Attention uniform (no discrimination)"
+      obstruction_witness: "Layer, head, entropy approaching log(n)"
+
+    # Rank failures
+    - mode: "rank_collapse"
+      description: "Attention matrix rank << sequence length"
+      obstruction_witness: "Effective rank, expected rank, ratio"
+
+    - mode: "representation_collapse"
+      description: "Token representations converge to identical"
+      obstruction_witness: "Pairwise similarity matrix"
+
+    # Approximation failures
+    - mode: "linear_approximation_error"
+      description: "Linear attention deviates too far from softmax"
+      obstruction_witness: "Max/mean approximation error"
+
+    - mode: "kernel_feature_instability"
+      description: "Feature map produces unstable values"
+      obstruction_witness: "Feature map statistics"
+
+# ============================================================================
+# CROSS-PAPER UNIFICATION
+# ============================================================================
+
+unification_with_generalization_bounds:
+  shared_structure:
+    - concept: "Gauge freedom"
+      generalization_paper: "Overparametrization"
+      sparse_attention: "Attention head redundancy"
+      unified_qa: "Extra capacity that doesn't change task performance"
+
+    - concept: "Invariant control"
+      generalization_paper: "Operator norm bounds"
+      sparse_attention: "Attention entropy bounds"
+      unified_qa: "Constraints that control effective function class"
+
+    - concept: "Failure modes"
+      generalization_paper: "Vacuous bounds, norm explosion"
+      sparse_attention: "Rank collapse, entropy collapse"
+      unified_qa: "Structured obstruction with remediation paths"
+
+    - concept: "Architecture independence"
+      generalization_paper: "Bound independent of depth/width"
+      sparse_attention: "Performance independent of head count (often)"
+      unified_qa: "Certificate depends on functional properties, not structure"
+
+unification_with_neuralgcm:
+  shared_structure:
+    - concept: "Conservation"
+      neuralgcm: "Mass/energy/momentum"
+      sparse_attention: "Information flow preservation"
+      unified_qa: "Invariant quantities that must be tracked"
+
+    - concept: "Sparsity"
+      neuralgcm: "Localized physical interactions"
+      sparse_attention: "Sparse attention patterns"
+      unified_qa: "Constrained reachability graph"
+
+  key_unification_claim: |
+    All three papers demonstrate the same QA principle:
+
+    > **Effective computation is invariant-controlled reachability on a constrained graph.**
+
+    - Generalization: Norm-controlled function reachability
+    - NeuralGCM: Conservation-controlled state reachability
+    - Sparse Attention: Sparsity-controlled information reachability
+
+    The "extra" capacity (overparametrization / neural params / attention heads)
+    is gauge freedom that can be pruned without changing the certificate.
+
+# ============================================================================
+# CERTIFICATE SCHEMAS (IMPLEMENTED)
+# ============================================================================
+
+certificate_schemas:
+  QA_SPARSE_ATTENTION_V1:
+    description: "Full attention stack certificate with entropy/rank/flow analysis"
+    status: "COMPLETE"
+    required_fields:
+      - certificate_id
+      - version
+      - schema
+      - success
+      - num_layers
+      - num_heads
+      - head_dim
+      - sequence_length
+    success_fields:
+      - entropy_witnesses        # List[AttentionEntropyWitness]
+      - rank_witnesses           # List[EffectiveRankWitness]
+      - sparsity_witness         # SparsityPatternWitness
+      - head_redundancy          # List[HeadRedundancyWitness]
+      - information_flow         # InformationFlowWitness
+      - mean_entropy             # Fraction (aggregate)
+      - mean_rank_ratio          # Fraction (aggregate)
+      - total_gauge_dim          # int (total prunable capacity)
+      - task_accuracy            # Fraction (optional)
+      - qa_interpretation        # QA analysis
+    failure_fields:
+      - failure_mode             # enum of 8 failure types
+      - failure_witness          # Structured obstruction proof
+
+witness_types:
+  AttentionEntropyWitness:
+    fields: [layer, head, min_entropy, max_entropy, mean_entropy, max_possible_entropy, normalized_entropy, collapse_threshold, uniform_threshold, entropy_healthy]
+
+  EffectiveRankWitness:
+    fields: [layer, sequence_length, effective_rank, numerical_rank, rank_ratio, top_singular_value, singular_value_entropy, collapse_threshold, rank_healthy]
+
+  SparsityPatternWitness:
+    fields: [pattern_type, sequence_length, total_possible_pairs, allowed_pairs, sparsity_ratio, all_tokens_reachable]
+
+  HeadRedundancyWitness:
+    fields: [layer, total_heads, active_heads, redundant_heads, gauge_dim, pruning_threshold]
+
+  InformationFlowWitness:
+    fields: [num_layers, residual_contribution, attention_contribution, layer_similarity, flow_healthy]
+
+# ============================================================================
+# GAUGE FREEDOM ANALYSIS
+# ============================================================================
+
+gauge_freedom_analysis:
+  attention_head_redundancy:
+    observation: "Many attention heads are prunable without performance loss"
+    qa_interpretation: "Redundant heads = gauge coordinates"
+    certificate_implication: "Gauge freedom dimension = prunable head count"
+
+  layer_redundancy:
+    observation: "Deep transformers often have skippable layers"
+    qa_interpretation: "Redundant layers = gauge coordinates in depth"
+    certificate_implication: "Effective depth << nominal depth"
+
+  attention_pattern_equivalence:
+    observation: "Different sparsity patterns can achieve same performance"
+    qa_interpretation: "Pattern choice = gauge fixing"
+    certificate_implication: "Multiple valid certificates for same task"
+
+# ============================================================================
+# IMPLEMENTATION ROADMAP
+# ============================================================================
+
+implementation_roadmap:
+  phase_1:
+    description: "Attention entropy certificates"
+    tasks:
+      - "Define AttentionEntropyWitness dataclass"
+      - "Implement per-head entropy computation"
+      - "Create entropy collapse/explosion failure modes"
+
+  phase_2:
+    description: "Rank and sparsity certificates"
+    tasks:
+      - "Define RankCollapseWitness dataclass"
+      - "Implement effective rank computation"
+      - "Map sparsity patterns to reachability graphs"
+
+  phase_3:
+    description: "Cross-paper unification"
+    tasks:
+      - "Unify gauge freedom across all three mappings"
+      - "Create unified obstruction taxonomy"
+      - "Build cross-certificate coherence validator"
+
+# ============================================================================
+# CITATION
+# ============================================================================
+
+citation:
+  papers: |
+    @article{vaswani2017attention,
+      title={Attention is All You Need},
+      author={Vaswani, Ashish and others},
+      journal={NeurIPS},
+      year={2017}
+    }
+    @article{tay2020efficient,
+      title={Efficient Transformers: A Survey},
+      author={Tay, Yi and others},
+      journal={ACM Computing Surveys},
+      year={2020}
+    }
+
+  qa_mapping: |
+    @misc{qa_sparse_attention_mapping_2026,
+      title={QA Certificate Mapping for Sparse Attention},
+      author={Signal Experiments Research Group},
+      year={2026},
+      note={Gold Standard - Attention health as invariant-controlled efficiency}
+    }

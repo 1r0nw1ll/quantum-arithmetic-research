@@ -1,0 +1,1086 @@
+{
+  "source": "AIID /api/graphql classifications(filter namespace=CSETv0)",
+  "count": 100,
+  "rows": [
+    {
+      "incident_id": 1,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 2,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety",
+        "Harm to physical property"
+      ]
+    },
+    {
+      "incident_id": 3,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Critical",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety",
+        "Psychological harm",
+        "Harm to physical property",
+        "Harm to intangible property"
+      ]
+    },
+    {
+      "incident_id": 4,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Severe",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety",
+        "Psychological harm",
+        "Harm to physical property"
+      ]
+    },
+    {
+      "incident_id": 5,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Severe",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 6,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm",
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 7,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Other:Harm to publicly available information"
+      ]
+    },
+    {
+      "incident_id": 8,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 9,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 10,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 11,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties",
+        "Other:Reputational harm; False incarceration"
+      ]
+    },
+    {
+      "incident_id": 12,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 13,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm",
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 14,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 15,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 16,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm",
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 17,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 18,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 19,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to social or political systems",
+        "Harm to civil liberties",
+        "Other:Reputational harm"
+      ]
+    },
+    {
+      "incident_id": 20,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Severe",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety",
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 21,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 22,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 23,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety",
+        "Harm to physical property"
+      ]
+    },
+    {
+      "incident_id": 24,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Severe",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 25,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 26,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to intangible property"
+      ]
+    },
+    {
+      "incident_id": 27,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 28,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Deliberate or expected",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 30,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 31,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety",
+        "Harm to physical property"
+      ]
+    },
+    {
+      "incident_id": 32,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to civil liberties",
+        "Other:Privacy"
+      ]
+    },
+    {
+      "incident_id": 33,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Financial harm",
+        "Harm to physical property"
+      ]
+    },
+    {
+      "incident_id": 34,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 35,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Unclear",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 36,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Other"
+      ]
+    },
+    {
+      "incident_id": 37,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm",
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 38,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 39,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Deliberate or expected",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 40,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 41,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 42,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 43,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 44,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 45,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties",
+        "Other:Reputational harm/social harm (libel and defamation)"
+      ]
+    },
+    {
+      "incident_id": 46,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 47,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 48,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 49,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to intangible property"
+      ]
+    },
+    {
+      "incident_id": 50,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Deliberate or expected",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 51,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 52,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Severe",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 53,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 54,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 55,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 56,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 57,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 58,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 59,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 60,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 61,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 62,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 63,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 64,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 65,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 66,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 67,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 68,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical property"
+      ]
+    },
+    {
+      "incident_id": 69,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Severe",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 70,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Near miss",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 71,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical property"
+      ]
+    },
+    {
+      "incident_id": 72,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm",
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 73,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 74,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 75,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 76,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 77,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 78,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 79,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 80,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 81,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 82,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems",
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 83,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 84,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 85,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 86,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 87,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm",
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 88,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Deliberate or expected",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 89,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm"
+      ]
+    },
+    {
+      "incident_id": 91,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to physical health/safety"
+      ]
+    },
+    {
+      "incident_id": 92,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Minor",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 93,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 94,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 95,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Unclear/unknown",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": []
+    },
+    {
+      "incident_id": 96,
+      "namespace": "CSETv0",
+      "publish": true,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Harm to civil liberties"
+      ]
+    },
+    {
+      "incident_id": 97,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Negligible",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Other"
+      ]
+    },
+    {
+      "incident_id": 98,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": []
+    },
+    {
+      "incident_id": 99,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Minor",
+      "near_miss": "Unclear/unknown",
+      "intent": "Unclear",
+      "harm_type": [
+        "Other"
+      ]
+    },
+    {
+      "incident_id": 100,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Minor",
+      "near_miss": "Near miss",
+      "intent": "Accident",
+      "harm_type": [
+        "Financial harm"
+      ]
+    },
+    {
+      "incident_id": 101,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Moderate",
+      "near_miss": "Harm caused",
+      "intent": "Accident",
+      "harm_type": [
+        "Psychological harm",
+        "Financial harm",
+        "Harm to social or political systems"
+      ]
+    },
+    {
+      "incident_id": 102,
+      "namespace": "CSETv0",
+      "publish": false,
+      "severity": "Negligible",
+      "near_miss": "Unclear/unknown",
+      "intent": "Accident",
+      "harm_type": [
+        "Other"
+      ]
+    }
+  ]
+}

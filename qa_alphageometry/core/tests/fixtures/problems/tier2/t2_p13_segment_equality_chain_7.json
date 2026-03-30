@@ -1,0 +1,17 @@
+{
+  "id": "t2_p13_segment_equality_chain_7",
+  "description": "Long segment equality chain: AB=CD=...=OP => AB=OP (7 steps)",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]},
+    {"EqualLength": [13, 14]},
+    {"EqualLength": [14, 15]},
+    {"EqualLength": [15, 16]},
+    {"EqualLength": [16, 17]}
+  ],
+  "goals": [
+    {"EqualLength": [10, 17]}
+  ],
+  "difficulty": 5
+}

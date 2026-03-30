@@ -1,0 +1,36 @@
+{
+  "schema_id": "QA_FRONTIER_SNAPSHOT_SCHEMA.v1",
+  "snapshot_id": "SNAP-FIXTURE0001",
+  "created_utc": "2026-02-10T23:45:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "generator_set_id": "GENSET{sigma_down,sigma_tactic,sigma_up}.v1",
+  "frontier": [
+    {
+      "state_hash": "a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3a3",
+      "layer": "formal",
+      "priority": 0.91
+    },
+    {
+      "state_hash": "b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3b3",
+      "layer": "human",
+      "priority": 0.64
+    }
+  ],
+  "visited": [
+    "c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3c3",
+    "d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3d3"
+  ],
+  "score_model": {
+    "novelty_weight": 1.0,
+    "reuse_weight": 0.5,
+    "obstruction_diversity_weight": 0.75
+  },
+  "hash_chain": {
+    "prev_snapshot_hash": "e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3e3",
+    "this_snapshot_hash": "f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3f3"
+  },
+  "invariant_diff": {
+    "frontier_size": 2,
+    "visited_size": 2
+  }
+}

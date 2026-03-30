@@ -1,0 +1,88 @@
+{
+  "schema_version": "QA_CYMATIC_PLANNER_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.planner.fail_no_plan_within_bound.v1",
+  "cert_type": "cymatic_planner",
+  "title": "Cymatic Planner FAIL: no plan from flat to hexagons within bound k=1 (requires k=2)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates planner failure with documented obstruction: max_depth_k=1 is insufficient to reach hexagons from flat. BFS explores flat (depth 0) and expands to stripes (depth 1); stripes != hexagons, and depth limit is reached. Planner returns found_plan=false with NO_PLAN_WITHIN_BOUND + GOAL_NOT_REACHABLE. This is the negative fixture proving the planner is not cheating: it correctly refuses to emit a plan when the bound is too tight. QA analogue: attempting to certify a singularity->cosmos reachability witness in a single T-step — which is algebraically impossible because the satellite threshold must be crossed first.",
+
+  "planning_problem": {
+    "initial_pattern_class": "flat",
+    "target_pattern_class":  "hexagons",
+    "max_depth_k": 1,
+    "optimization_goal": "shortest_path"
+  },
+
+  "generator_alphabet": [
+    "increase_amplitude",
+    "decrease_amplitude",
+    "set_frequency",
+    "increase_frequency",
+    "decrease_frequency",
+    "stabilize"
+  ],
+
+  "control_graph": {
+    "nodes": ["flat", "stripes", "hexagons", "disordered"],
+    "edges": [
+      { "from": "flat",     "move": "increase_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "set_frequency",       "to": "hexagons"   },
+      { "from": "hexagons", "move": "decrease_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "decrease_amplitude",  "to": "flat"       },
+      { "from": "hexagons", "move": "increase_amplitude",  "to": "disordered" }
+    ]
+  },
+
+  "planner_run": {
+    "algorithm": "bfs",
+    "searched_nodes": 2,
+    "searched_edges": 1,
+    "found_plan": false
+  },
+
+  "plan_witness": {
+    "path_length_k": 0,
+    "is_shortest": false,
+    "steps": []
+  },
+
+  "observed_final_state": {
+    "pattern_class":  "flat",
+    "symmetry_group": "O2",
+    "orbit_family":   "singularity"
+  },
+
+  "qa_mapping": {
+    "initial_orbit_family": "singularity",
+    "target_orbit_family":  "cosmos",
+    "final_orbit_family":   "singularity",
+    "state_pair": { "b": 1, "e": 0 },
+    "planning_qa_analogue": "max_depth_k=1 cannot bridge singularity->cosmos. BFS from flat expands to stripes (satellite orbit) at depth 1 but the goal hexagons (cosmos) is at depth 2 minimum. The satellite-threshold crossing is structurally mandatory — no edge in the control graph skips it. QA analogue: the Q(√5) norm separates orbit families; a single T-application on the fixed-point state (b=9,e=9 mod 9) cannot produce a cosmos-orbit pair in one step."
+  },
+
+  "validation_checks": [
+    { "check_id": "P1", "description": "planner algorithm is recognized",                                "passed": true,  "details": "bfs in {bfs, dfs, astar, dijkstra, iddfs}" },
+    { "check_id": "P2", "description": "path_length_k <= max_depth_k (vacuous when no plan found)",     "passed": true,  "details": "0 <= 1; vacuously true — no plan executed" },
+    { "check_id": "P3", "description": "every plan step is a legal edge in control_graph",              "passed": true,  "details": "steps=[]; vacuously true — no steps to check" },
+    { "check_id": "P4", "description": "observed final pattern class matches target pattern class",      "passed": false, "details": "flat != hexagons — no plan found, system remains at initial state" },
+    { "check_id": "P5", "description": "qa_mapping.final_orbit_family consistent with CONTROL_PATTERN_TO_ORBIT[final_class]", "passed": true, "details": "singularity == CONTROL_PATTERN_TO_ORBIT[flat]=singularity" },
+    { "check_id": "P6", "description": "searched_nodes >= 1 (at least initial node explored)",          "passed": true,  "details": "searched_nodes=2 >= 1" },
+    { "check_id": "P7", "description": "BFS recomputed shortest path within bound also absent (planner not cheating)", "passed": true, "details": "BFS recomputes: no path flat->hexagons within max_depth_k=1; consistent with found_plan=false" },
+    { "check_id": "P8", "description": "no disordered/out_of_orbit state visited in plan",             "passed": true,  "details": "steps=[]; vacuously true" },
+    { "check_id": "P9", "description": "return-path claim consistent if present",                       "passed": true,  "details": "no return path requested; N/A" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "NO_PLAN_WITHIN_BOUND",
+      "message": "BFS exhausted all paths reachable from 'flat' within max_depth_k=1 without reaching 'hexagons'. The only depth-1 neighbor of flat is 'stripes' (via increase_amplitude), and stripes is not the target. The minimal path flat->stripes->hexagons requires k=2 moves. Increase max_depth_k to at least 2 to find a plan."
+    },
+    {
+      "fail_type": "GOAL_NOT_REACHABLE",
+      "message": "Target pattern 'hexagons' (QA orbit: cosmos) is not reachable from 'flat' (QA orbit: singularity) within the declared bound k=1. The legal control graph requires passing through 'stripes' (satellite orbit) as a mandatory intermediate — this threshold crossing cannot be skipped, and consumes one of the k steps. QA analogue: singularity->cosmos reachability requires at least two generator applications (satellite threshold crossing is structurally mandatory)."
+    }
+  ],
+
+  "result": "FAIL"
+}

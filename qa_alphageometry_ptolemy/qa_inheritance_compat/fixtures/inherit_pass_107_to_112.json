@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_INHERITANCE_COMPAT_CERT.v1",
+  "certificate_id": "qa.cert.inheritance.pass.107_to_112.v1",
+  "cert_type": "qa_inheritance_compat",
+  "title": "Inheritance PASS: [107] QA_CORE_SPEC.v1 → [112] QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Certifies the kernel inheritance edge for [112], the obstruction-compiler bridge. [112] is a family_extension of [107] — it respects the full gate policy [0..5] and adds bridge-specific failure types (ARITHMETIC_FAMILY_MISMATCH, CONTROL_FAMILY_MISMATCH, OBSTRUCTION_VERDICT_WRONG, FORBIDDEN_TARGET_REACHABILITY_CLAIM) on top of the kernel failure algebra. Note: [112] is the first 'bridge' family, which cross-references two sibling families ([111] and [106]) rather than inheriting from them. The cross-references are expressed as domain ref fields, not as inheritance edges; this cert only covers the [107]→[112] kernel inheritance edge. IC5 fires (child has non-empty failure algebra that extends parent). IC6-IC7 skipped (no logging contract or invariant refs in [112] v1).",
+
+  "parent_family": {
+    "family_id": 107,
+    "schema_version": "QA_CORE_SPEC.v1",
+    "spec_scope": "kernel"
+  },
+
+  "child_family": {
+    "family_id": 112,
+    "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",
+    "spec_scope": "family_extension"
+  },
+
+  "declared_inherits_from": "QA_CORE_SPEC.v1",
+  "scope_transition": "kernel -> family_extension",
+
+  "extracted_parent": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": ["OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR"],
+    "invariant_names": ["QA_relation_1", "QA_relation_2"],
+    "logging_required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "extracted_child": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": [
+      "OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR",
+      "ARITHMETIC_FAMILY_MISMATCH", "CONTROL_FAMILY_MISMATCH",
+      "MODULUS_MISMATCH", "PRIME_NOT_INERT", "TARGET_OUT_OF_RANGE",
+      "OBSTRUCTION_VERDICT_WRONG", "FORBIDDEN_TARGET_REACHABILITY_CLAIM"
+    ],
+    "preserves_invariants_refs": [],
+    "logging_required_fields": []
+  },
+
+  "compatibility_claims": {
+    "gate_policy_compatible":              true,
+    "failure_algebra_extends_not_replaces": true,
+    "logging_contract_compatible":          true,
+    "invariant_refs_resolve":               true,
+    "scope_transition_valid":               true
+  },
+
+  "validation_checks": [
+    { "check_id": "IC1", "description": "parent family schema version is a recognised QA cert family",            "passed": true,  "details": "'QA_CORE_SPEC.v1' is a registered kernel family" },
+    { "check_id": "IC2", "description": "child family schema version is a recognised QA cert family",             "passed": true,  "details": "'QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1' is a registered family_extension" },
+    { "check_id": "IC3", "description": "declared_inherits_from matches parent_family.schema_version",            "passed": true,  "details": "'QA_CORE_SPEC.v1' == 'QA_CORE_SPEC.v1'" },
+    { "check_id": "IC4", "description": "child gate policy is superset of parent gate policy",                    "passed": true,  "details": "both [0,1,2,3,4,5]; superset confirmed" },
+    { "check_id": "IC5", "description": "child failure algebra extends parent without deleting required types",    "passed": true,  "details": "parent types all present; child adds ARITHMETIC_FAMILY_MISMATCH, CONTROL_FAMILY_MISMATCH, MODULUS_MISMATCH, PRIME_NOT_INERT, TARGET_OUT_OF_RANGE, OBSTRUCTION_VERDICT_WRONG, FORBIDDEN_TARGET_REACHABILITY_CLAIM" },
+    { "check_id": "IC6", "description": "child logging contract includes move, fail_type, invariant_diff",        "passed": true,  "details": "SKIPPED — child logging_required_fields empty; IC6 conditional skip applies" },
+    { "check_id": "IC7", "description": "child preserves_invariants refs resolve against parent invariant names", "passed": true,  "details": "SKIPPED — child preserves_invariants_refs empty; IC7 conditional skip applies" },
+    { "check_id": "IC8", "description": "scope transition 'kernel -> family_extension' is valid",                 "passed": true,  "details": "valid transition" }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

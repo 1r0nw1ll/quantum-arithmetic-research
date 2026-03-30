@@ -1,0 +1,12 @@
+{
+  "id": "p09_coincident_lines",
+  "description": "Coincident line transitivity: L1≡L2, L2≡L3 => L1≡L3",
+  "givens": [
+    {"CoincidentLines": [11, 12]},
+    {"CoincidentLines": [12, 13]}
+  ],
+  "goals": [
+    {"CoincidentLines": [11, 13]}
+  ],
+  "difficulty": 1
+}

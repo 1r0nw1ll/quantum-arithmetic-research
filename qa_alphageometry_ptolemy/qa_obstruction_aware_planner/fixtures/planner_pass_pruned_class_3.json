@@ -1,0 +1,54 @@
+{
+  "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_planner.pass.pruned_class_3.v1",
+  "cert_type": "obstruction_aware_planner",
+  "title": "Obstruction-Aware Planner PASS: class 3 (forbidden) pruned before search — zero nodes expanded",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Canonical planner-correctness certificate for a forbidden target. The planner is asked to find a plan reaching arithmetic class 3 (mod 9). Before expanding any search node, it consults the [112] bridge: v_3(3)=1 → OBSTRUCTION_PRESENT. It correctly prunes the target immediately: pruned_before_search=true, nodes_expanded=0, plan_found=null. This is the correct obstruction-aware behavior. The cert validates that: (1) the obstruction verdict is correctly computed, (2) pruning happened before search, (3) zero nodes were wasted. Obstruction theory is not decorative — it actively governs search.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "obstruction_ref": {
+    "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1"
+  },
+
+  "arithmetic_params": {
+    "prime_p": 3,
+    "k": 2,
+    "modulus": 9
+  },
+
+  "target_arithmetic_class": 3,
+  "obstruction_verdict": "OBSTRUCTION_PRESENT",
+
+  "planner_behavior": {
+    "pruned_before_search": true,
+    "prune_reason": "Arithmetic obstruction test (via [112] bridge): v_3(3)=1, target class 3 is in the forbidden set {3,6} of the norm form f(b,e)=b^2+be-e^2 mod 9. No valid QA state can have arithmetic fingerprint 3. Search aborted before frontier expansion.",
+    "nodes_expanded": 0,
+    "search_bound": 1000,
+    "plan_found": null,
+    "plan_witness": null
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                        "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                           "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                     "passed": true, "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "BR1",  "description": "obstruction_ref is QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",  "passed": true, "details": "schema_version='QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1'" },
+    { "check_id": "BR2",  "description": "modulus == p^k = 3^2 = 9",                                  "passed": true, "details": "9 == 9" },
+    { "check_id": "BR3",  "description": "p=3 is inert: Legendre(5,3)=-1",                             "passed": true, "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "BR4",  "description": "target r=3 in range {0..8}",                                "passed": true, "details": "0 <= 3 < 9" },
+    { "check_id": "BR5",  "description": "obstruction_verdict matches v_p(3): v_3(3)=1 → PRESENT",    "passed": true, "details": "v_3(3)=1; obstruction_verdict='OBSTRUCTION_PRESENT'; match" },
+    { "check_id": "PA1",  "description": "forbidden target: pruned_before_search=true",                "passed": true, "details": "pruned_before_search=true; correct" },
+    { "check_id": "PA2",  "description": "forbidden target: nodes_expanded=0",                         "passed": true, "details": "nodes_expanded=0; no search wasted on impossible target" },
+    { "check_id": "PA3",  "description": "forbidden target: plan_found=null (no plan emitted)",        "passed": true, "details": "plan_found=null; planner correctly refused to emit a plan" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

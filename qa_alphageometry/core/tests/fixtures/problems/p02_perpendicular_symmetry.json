@@ -1,0 +1,11 @@
+{
+  "id": "p02_perpendicular_symmetry",
+  "description": "Perpendicular symmetry (handled by normalization): L1⊥L2 => L2⊥L1",
+  "givens": [
+    {"Perpendicular": [1, 2]}
+  ],
+  "goals": [
+    {"Perpendicular": [2, 1]}
+  ],
+  "difficulty": 1
+}

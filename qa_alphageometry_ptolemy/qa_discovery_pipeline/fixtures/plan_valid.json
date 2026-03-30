@@ -1,0 +1,13 @@
+{
+  "schema_id": "QA_DISCOVERY_BATCH_PLAN_SCHEMA.v1",
+  "plan_id": "PLAN-FIXTURE0001",
+  "created_utc": "2026-02-10T23:56:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "pipeline_id": "QA_DISCOVERY_PIPELINE.v1",
+  "run_queue": [
+    { "run_id": "RUN-1", "episode_ref": { "family": "QA_CONJECTURE_PROVE_CONTROL_LOOP.v1", "path_or_hash": "qa_conjecture_prove/fixtures/episode_valid.json" }, "k": 2 }
+  ],
+  "determinism": { "queue_ordering": "lexicographic(run_id)", "seed_policy": "frontier[0]", "canonical_json": true },
+  "budget": { "max_runs": 10, "max_seconds_total": 60 },
+  "merkle_parent": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}

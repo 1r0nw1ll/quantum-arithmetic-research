@@ -1,0 +1,64 @@
+{
+  "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+  "certificate_id": "qa.cert.compiler.pass_cymatics_hexagon.v1",
+  "cert_type": "plan_control_compiler",
+  "title": "Plan-Control Compiler PASS: cymatics flat→hexagons planner compiles to control cert",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "First physical instantiation of the generic QA compilation relation. Proves that the cymatics planner cert (planner_cert_pass_replay_hexagon.v1) compiles into the cymatics control cert (control_cert_pass_hexagon.v1) over the same generator algebra. The validator finds both certs, verifies their hashes, and recomputes all compilation_claims: initial flat==flat, target hexagons==hexagons, path_length 2==2, moves [increase_amplitude, set_frequency]==[increase_amplitude, set_frequency], final orbit cosmos==cosmos. This cert is the witness that the QA search→plan→execution→witness chain is closed under a certifiable compilation relation.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_alphabet_compatible": true,
+    "compilation_preserves_kernel_invariants": true,
+    "logging_contract_compatible": true,
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "source_planner_cert_id":   "qa.cert.cymatics.planner.pass_replay_hexagon.v1",
+  "source_planner_cert_hash": "24f7cd38c302613d10f2c61bc7d0f36b1334178318f3ade9abe1be0faf77c12d",
+  "source_domain": "cymatics",
+
+  "target_control_cert_id":   "qa.cert.cymatics.control.hexagon_reachable.v1",
+  "target_control_cert_hash": "ef54d9c38ca3dfd04e750aa993077768e4f17de3ab9226b82b5f3f1633ec8d12",
+  "target_domain": "cymatics",
+
+  "generator_alphabet": [
+    "increase_amplitude",
+    "decrease_amplitude",
+    "set_frequency",
+    "increase_frequency",
+    "decrease_frequency",
+    "stabilize"
+  ],
+
+  "compilation_claims": {
+    "initial_pattern_class": "flat",
+    "target_pattern_class":  "hexagons",
+    "path_length_k": 2,
+    "move_sequence": ["increase_amplitude", "set_frequency"],
+    "final_orbit_family": "cosmos"
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",                        "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",                          "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "core_kernel_compatibility.gate_policy_respected == [0..5]", "passed": true, "details": "gate_policy_respected=[0,1,2,3,4,5]" },
+    { "check_id": "CC1", "description": "source planner cert found in domain fixtures",          "passed": true,  "details": "qa.cert.cymatics.planner.pass_replay_hexagon.v1 found in cymatics domain" },
+    { "check_id": "CC2", "description": "source planner cert hash matches declared hash",         "passed": true,  "details": "sha256=24f7cd38... matches" },
+    { "check_id": "CC3", "description": "target control cert found in domain fixtures",           "passed": true,  "details": "qa.cert.cymatics.control.hexagon_reachable.v1 found in cymatics domain" },
+    { "check_id": "CC4", "description": "target control cert hash matches declared hash",          "passed": true,  "details": "sha256=ef54d9c3... matches" },
+    { "check_id": "CC5", "description": "initial_pattern_class matches both certs",              "passed": true,  "details": "planner.initial=flat, control.initial=flat, claimed=flat — all equal" },
+    { "check_id": "CC6", "description": "target_pattern_class matches both certs",               "passed": true,  "details": "planner.target=hexagons, control.target=hexagons, claimed=hexagons — all equal" },
+    { "check_id": "CC7", "description": "path_length_k matches both certs",                     "passed": true,  "details": "planner.path_length=2, control.path_length=2, claimed=2 — all equal" },
+    { "check_id": "CC8", "description": "move_sequence matches both certs",                     "passed": true,  "details": "planner=[increase_amplitude,set_frequency], control=[increase_amplitude,set_frequency], claimed=[increase_amplitude,set_frequency] — all equal" },
+    { "check_id": "CC9", "description": "final_orbit_family matches both certs",                 "passed": true,  "details": "planner.final_orbit=cosmos, control.final_orbit=cosmos, claimed=cosmos — all equal" }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

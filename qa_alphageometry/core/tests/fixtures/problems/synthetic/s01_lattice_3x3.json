@@ -1,0 +1,195 @@
+{
+  "id": "s01_lattice_3x3",
+  "description": "Small perpendicular lattice with high branching",
+  "difficulty": 4,
+  "givens": [
+    {
+      "Parallel": [
+        1,
+        2
+      ]
+    },
+    {
+      "Parallel": [
+        2,
+        3
+      ]
+    },
+    {
+      "Parallel": [
+        4,
+        5
+      ]
+    },
+    {
+      "Parallel": [
+        5,
+        6
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        4
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        5
+      ]
+    },
+    {
+      "Parallel": [
+        7,
+        8
+      ]
+    },
+    {
+      "Parallel": [
+        8,
+        9
+      ]
+    },
+    {
+      "Parallel": [
+        9,
+        10
+      ]
+    },
+    {
+      "Parallel": [
+        10,
+        11
+      ]
+    },
+    {
+      "Parallel": [
+        11,
+        12
+      ]
+    },
+    {
+      "Parallel": [
+        12,
+        13
+      ]
+    },
+    {
+      "Parallel": [
+        13,
+        14
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        15
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        16
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        17
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        18
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        19
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        20
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        21
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        22
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        23
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        24
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        25
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        26
+      ]
+    },
+    {
+      "Perpendicular": [
+        7,
+        27
+      ]
+    },
+    {
+      "Perpendicular": [
+        7,
+        28
+      ]
+    },
+    {
+      "Perpendicular": [
+        7,
+        29
+      ]
+    },
+    {
+      "Perpendicular": [
+        7,
+        30
+      ]
+    },
+    {
+      "Perpendicular": [
+        7,
+        31
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Perpendicular": [
+        1,
+        6
+      ]
+    }
+  ]
+}

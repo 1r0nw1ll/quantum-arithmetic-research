@@ -1,0 +1,17 @@
+{
+  "id": "t2_p10_equality_branching_complex",
+  "description": "Complex equality branching: multiple paths from AB to GH",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [10, 13]},
+    {"EqualLength": [13, 14]},
+    {"EqualLength": [14, 15]},
+    {"EqualLength": [12, 16]},
+    {"EqualLength": [16, 17]}
+  ],
+  "goals": [
+    {"EqualLength": [15, 17]}
+  ],
+  "difficulty": 6
+}

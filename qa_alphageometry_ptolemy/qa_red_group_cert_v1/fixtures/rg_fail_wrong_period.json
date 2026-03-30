@@ -1,0 +1,42 @@
+{
+  "schema_version": "QA_RED_GROUP_CERT.v1",
+  "certificate_id": "qa.cert.red_group.fail.wrong_period.m9.v1",
+  "cert_type": "qa_red_group_cert",
+  "title": "Red Group FAIL: ORBIT_PERIOD_WRONG — claimed period=12 for m=9 (F^12=−I≢I)",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Canonical confusion fail. For m=9, F^12=[[8,0],[0,8]]=−I mod 9 ≢ I. A common error is to claim period=12 because F^12·x=−x, mistaking −I for I (confusing projective order with linear order). The validator checks F^12 mod 9 = −I ≢ I, so ORBIT_PERIOD_WRONG fires. Note: the PROJECTIVE order (in PGL₂(Z/9Z)) is indeed 12 — the LINEAR order in GL₂(Z/9Z) is 24.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "m": 9
+  },
+
+  "red_group": {
+    "T_matrix": [[0, 1], [1, 1]],
+    "det_T": -1,
+    "trace_T": 1,
+    "char_poly": "x^2 - x - 1 = 0",
+    "orbit_period": 12,
+    "orbit_type": "cosmos",
+    "_error": "WRONG: claimed period=12 (projective order), but linear order in GL₂(Z/9Z) is 24; F^12=[[8,0],[0,8]]=-I ≢ I"
+  },
+
+  "validation_checks": [
+    { "check_id": "RG1", "description": "schema_version is 'QA_RED_GROUP_CERT.v1'",       "passed": true,  "details": "schema_version='QA_RED_GROUP_CERT.v1'" },
+    { "check_id": "RG2", "description": "T_matrix == [[0,1],[1,1]] (Fibonacci shift)",     "passed": true,  "details": "T_matrix=[[0,1],[1,1]] ✓" },
+    { "check_id": "RG3", "description": "det(T_matrix) ≡ −1 mod m",                       "passed": true,  "details": "det=−1 ≡ 8 mod 9 ✓" },
+    { "check_id": "RG4", "description": "trace(T_matrix) ≡ 1 mod m",                      "passed": true,  "details": "trace=1 mod 9 ✓" },
+    { "check_id": "RG5", "description": "T_matrix^orbit_period ≡ I mod m",                "passed": false, "details": "F^12 mod 9 = [[8,0],[0,8]] = −I ≢ I" },
+    { "check_id": "RG6", "description": "orbit_period is minimal",                         "passed": true,  "details": "RG5 already failed; minimality vacuous here" },
+    { "check_id": "RG7", "description": "orbit_type ∈ valid set AND period=1 ↔ singularity", "passed": true, "details": "orbit_type='cosmos', period=12≠1 — type consistent with wrong period" }
+  ],
+
+  "fail_ledger": ["ORBIT_PERIOD_WRONG"],
+  "result": "FAIL"
+}

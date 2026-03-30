@@ -1,0 +1,50 @@
+# GitHub Pages Configuration for QA Research Digital Garden
+
+title: "Quantum Arithmetic Research"
+description: "Open-source research on modular arithmetic, geometric coherence, and multi-modal applications"
+author: "QA Research Lab"
+
+# Theme
+theme: jekyll-theme-cayman
+# Alternative: minima, minimal, slate
+
+# Build settings
+markdown: kramdown
+highlighter: rouge
+
+# Navigation
+navigation:
+  - title: Home
+    url: /
+  - title: Getting Started
+    url: /quickstart
+  - title: Experiments
+    url: /experiments
+  - title: Research
+    url: /research
+  - title: GitHub
+    url: https://github.com/player2/signal_experiments
+
+# Exclude from build
+exclude:
+  - Gemfile
+  - Gemfile.lock
+  - node_modules
+  - vendor
+  - .sass-cache
+  - .jekyll-cache
+
+# Plugins
+plugins:
+  - jekyll-relative-links
+  - jekyll-seo-tag
+  - jekyll-sitemap
+
+# SEO
+lang: en
+twitter:
+  card: summary
+social:
+  name: QA Research Lab
+  links:
+    - https://github.com/player2/signal_experiments

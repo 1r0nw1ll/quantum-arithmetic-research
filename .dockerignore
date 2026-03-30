@@ -1,0 +1,39 @@
+# Don't copy these to Docker images
+
+# Virtual environments
+.venv/
+qa_lab/qa_venv/
+venv/
+env/
+
+# Private content
+private/
+
+# Cache and temporary files
+__pycache__/
+*.pyc
+.pytest_cache/
+.mypy_cache/
+
+# Large datasets (mount as volumes instead)
+data/
+checkpoints/
+results/
+results_*/
+multimodal_data/
+
+# Git and documentation
+.git/
+docs/
+*.md
+!README.md
+
+# OS files
+.DS_Store
+Thumbs.db
+*.swp
+
+# IDE
+.vscode/
+.idea/
+.claude/

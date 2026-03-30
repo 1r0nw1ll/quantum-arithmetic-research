@@ -1,0 +1,78 @@
+{
+  "_comment": "Negative fixture: event_index values are swapped (1,0 instead of 0,1). Expected fail_type: NONDETERMINISTIC_EVENT_ORDER.",
+  "schema_id": "QA_AGENT_TRACE_SCHEMA.v1",
+  "trace_id": "TRACE-NEGFIX0002",
+  "created_utc": "2026-02-10T22:10:00Z",
+  "provenance": {
+    "collector": "qa_trace_collector",
+    "collection_method": "synthetic",
+    "source_dataset": "princeton-nlp/SWE-bench_Lite",
+    "source_url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite",
+    "license": "mit",
+    "raw_artifacts_policy": "hash_only",
+    "privacy_redactions": ["api_keys", "tokens", "paths"]
+  },
+  "task": {
+    "task_type": "swe_bench_lite",
+    "instance_id": "django__django-11099",
+    "repo": "django/django",
+    "base_commit": "a5917978be39d13cd90b517e1de4e7a539ffaa48",
+    "problem_ref": {
+      "sha256": "f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1",
+      "length_bytes": 1871
+    }
+  },
+  "agent": {
+    "name": "qa_agent",
+    "version": "0.1.0",
+    "model": "claude-opus-4-6",
+    "policy": {
+      "tooling": ["read_file", "edit_file", "run_tests"],
+      "guardrails": ["qa_guardrail.v1"]
+    }
+  },
+  "environment": {
+    "os": "linux",
+    "python": "3.11",
+    "runner": "local"
+  },
+  "events": [
+    {
+      "event_index": 1,
+      "ts_utc": "2026-02-10T22:10:10Z",
+      "event_type": "test",
+      "payload": {"cmd_hash": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3"},
+      "invariant_diff": {"exit_code": 1}
+    },
+    {
+      "event_index": 0,
+      "ts_utc": "2026-02-10T22:10:01Z",
+      "event_type": "read",
+      "payload": {"path_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2"},
+      "invariant_diff": {"note": "read file"}
+    }
+  ],
+  "trace_hashes": {
+    "events_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "trace_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+    "hash_chain": [
+      {
+        "event_index": 1,
+        "event_sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+        "prev_sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+      },
+      {
+        "event_index": 0,
+        "event_sha256": "0000000000000000000000000000000000000000000000000000000000000002",
+        "prev_sha256": "0000000000000000000000000000000000000000000000000000000000000001"
+      }
+    ]
+  },
+  "summary": {
+    "event_count": 2,
+    "tool_call_count": 2,
+    "edit_count": 0,
+    "test_run_count": 1,
+    "outcome": "unresolved"
+  }
+}

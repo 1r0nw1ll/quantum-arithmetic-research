@@ -1,0 +1,13 @@
+{
+  "id": "t1_p08_angle_equality_chain",
+  "description": "Angle equality transitivity: ∠A=∠B=∠C=∠D => ∠A=∠D",
+  "givens": [
+    {"EqualAngles": [30, 31]},
+    {"EqualAngles": [31, 32]},
+    {"EqualAngles": [32, 33]}
+  ],
+  "goals": [
+    {"EqualAngles": [30, 33]}
+  ],
+  "difficulty": 3
+}

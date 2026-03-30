@@ -1,0 +1,12 @@
+{
+  "id": "p08_concentric_transitivity",
+  "description": "Concentric circles transitivity: C1~C2, C2~C3 => C1~C3",
+  "givens": [
+    {"ConcentricCircles": [101, 102]},
+    {"ConcentricCircles": [102, 103]}
+  ],
+  "goals": [
+    {"ConcentricCircles": [101, 103]}
+  ],
+  "difficulty": 1
+}

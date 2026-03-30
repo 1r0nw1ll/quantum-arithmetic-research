@@ -1,0 +1,64 @@
+{
+  "schema_version": "QA_INHERITANCE_COMPAT_CERT.v1",
+  "certificate_id": "qa.cert.inheritance.pass.107_to_108.v1",
+  "cert_type": "qa_inheritance_compat",
+  "title": "Inheritance PASS: [107] QA_CORE_SPEC.v1 (kernel) → [108] QA_AREA_QUANTIZATION_CERT.v1 (family_extension)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "First certified inheritance edge in the QA spec graph. Proves that [108] QA Area Quantization is a well-formed kernel extension: (1) it correctly declares inherits_from='QA_CORE_SPEC.v1'; (2) its gate policy [0..5] is a superset of the kernel's; (3) its failure algebra extends the kernel's four types without deleting any; (4) its logging contract is compatible (move/fail_type/invariant_diff all present); (5) its generators preserve only invariants declared in the kernel (QA_relation_1, QA_relation_2); (6) the scope transition 'kernel → family_extension' is valid. This cert turns the statement '[108] extends [107]' from a validator convention into a certified edge in the QA spec graph.",
+
+  "parent_family": {
+    "family_id": 107,
+    "schema_version": "QA_CORE_SPEC.v1",
+    "spec_scope": "kernel"
+  },
+
+  "child_family": {
+    "family_id": 108,
+    "schema_version": "QA_AREA_QUANTIZATION_CERT.v1",
+    "spec_scope": "family_extension"
+  },
+
+  "declared_inherits_from": "QA_CORE_SPEC.v1",
+  "scope_transition": "kernel -> family_extension",
+
+  "extracted_parent": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": ["OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR"],
+    "invariant_names": ["QA_relation_1", "QA_relation_2"],
+    "logging_required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "extracted_child": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": [
+      "OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR",
+      "QUADREA_MISMATCH", "FORBIDDEN_QUADREA_INCORRECT"
+    ],
+    "preserves_invariants_refs": ["QA_relation_1", "QA_relation_2"],
+    "logging_required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "compatibility_claims": {
+    "gate_policy_compatible":              true,
+    "failure_algebra_extends_not_replaces": true,
+    "logging_contract_compatible":          true,
+    "invariant_refs_resolve":               true,
+    "scope_transition_valid":               true
+  },
+
+  "validation_checks": [
+    { "check_id": "IC1", "description": "parent family schema version is a recognised QA cert family",            "passed": true,  "details": "'QA_CORE_SPEC.v1' is a registered kernel family" },
+    { "check_id": "IC2", "description": "child family schema version is a recognised QA cert family",             "passed": true,  "details": "'QA_AREA_QUANTIZATION_CERT.v1' is a registered family_extension" },
+    { "check_id": "IC3", "description": "declared_inherits_from matches parent_family.schema_version",            "passed": true,  "details": "'QA_CORE_SPEC.v1' == 'QA_CORE_SPEC.v1'" },
+    { "check_id": "IC4", "description": "child gate policy is superset of parent gate policy",                    "passed": true,  "details": "child=[0,1,2,3,4,5] ⊇ parent=[0,1,2,3,4,5]" },
+    { "check_id": "IC5", "description": "child failure algebra extends parent without deleting required types",    "passed": true,  "details": "parent={OUT_OF_BOUNDS,PARITY,INVARIANT_BREAK,ZERO_DENOMINATOR}; child adds QUADREA_MISMATCH,FORBIDDEN_QUADREA_INCORRECT; all parent types preserved" },
+    { "check_id": "IC6", "description": "child logging contract includes move, fail_type, invariant_diff",        "passed": true,  "details": "child.logging_required_fields=[move,fail_type,invariant_diff]; all three present" },
+    { "check_id": "IC7", "description": "child preserves_invariants refs resolve against parent invariant names", "passed": true,  "details": "child refs={QA_relation_1,QA_relation_2} ⊆ parent.invariant_names={QA_relation_1,QA_relation_2}" },
+    { "check_id": "IC8", "description": "scope transition 'kernel -> family_extension' is valid",                "passed": true,  "details": "'kernel -> family_extension' is in VALID_SCOPE_TRANSITIONS" }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

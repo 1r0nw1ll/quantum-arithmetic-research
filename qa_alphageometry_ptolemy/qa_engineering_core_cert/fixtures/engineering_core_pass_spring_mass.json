@@ -1,0 +1,98 @@
+{
+  "schema_version": "QA_ENGINEERING_CORE_CERT.v1",
+  "cert_type": "engineering_core",
+  "certificate_id": "qa.cert.engineering_core.pass.spring_mass.v1",
+  "title": "Engineering Core PASS: spring-mass oscillator maps to QA orbit traversal",
+  "created_utc": "2026-03-24T00:00:00Z",
+
+  "_fixture_purpose": "Canonical PASS fixture. A spring-mass oscillator has three distinguishable regimes: still (no oscillation), transient (damped startup), and steady_oscillation (limit cycle). These map exactly to QA orbit families singularity, satellite, cosmos respectively under mod-9 state encoding. State (9,9)=singularity (fixed point under F), (3,6)=satellite (f=-9≡0 mod 9, v3=2≥2), (1,2)=cosmos (f=-1≡8 mod 9, v3=0). The physical generators 'excite' (inject energy → σ-like) and 'tune' (adjust frequency → λ-like) drive the path still→transient→steady_oscillation in k=2 steps. Classical stability (Lyapunov V decreasing) maps to orbit contraction ρ=0.001582<1. Classical full-rank controllability maps to BFS reachability. Obstruction check: target r=b*e=1*2=2, v3(2)=0, not obstructed. All EC1-EC11 pass.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_alphabet_compatible": true,
+    "invariants_preserved": true,
+    "logging_contract_compatible": true,
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "classical_system": {
+    "description": "Spring-mass-damper: mx'' + cx' + kx = F(t). Discretised at three distinguishable energy/pattern regimes mapped to mod-9 QA states.",
+    "modulus": 9,
+    "state_encoding": [
+      { "label": "still",             "b": 9, "e": 9, "orbit_family": "singularity" },
+      { "label": "transient",         "b": 3, "e": 6, "orbit_family": "satellite"   },
+      { "label": "steady_oscillation","b": 1, "e": 2, "orbit_family": "cosmos"      }
+    ],
+    "transitions": [
+      { "from": "still",     "to": "transient",          "generator": "excite" },
+      { "from": "transient", "to": "steady_oscillation", "generator": "tune"   }
+    ],
+    "failure_modes": [
+      { "label": "overdrive",        "qa_fail_type": "OUT_OF_BOUNDS" },
+      { "label": "resonance_escape", "qa_fail_type": "OUT_OF_BOUNDS" }
+    ],
+    "target_condition": {
+      "label": "steady_oscillation",
+      "orbit_family": "cosmos"
+    },
+    "equilibrium_state": "still"
+  },
+
+  "stability_claim": {
+    "lyapunov_function": "f(b,e) = b*b + b*e - e*e  (Q(sqrt5) norm; decreasing toward equilibrium along generator paths with rho < 1)",
+    "orbit_contraction_factor": 0.001582,
+    "contraction_verified": true
+  },
+
+  "controllability_claim": {
+    "classical_controllability": "full_rank",
+    "reachability_witness": {
+      "algorithm": "BFS",
+      "depth_bound": 24,
+      "path": [
+        { "state": "still",              "orbit_family": "singularity" },
+        { "state": "transient",          "orbit_family": "satellite",  "move": "excite" },
+        { "state": "steady_oscillation", "orbit_family": "cosmos",     "move": "tune"   }
+      ],
+      "path_length_k": 2
+    },
+    "optimization_claim": {
+      "objective": "minimal_k",
+      "minimality_witness": {
+        "proved_no_path_shorter_than": 2,
+        "excluded_shorter_lengths": [1],
+        "frontier_sizes": { "depth_1": 1, "depth_2": 1 }
+      }
+    }
+  },
+
+  "obstruction_check": {
+    "modulus": 9,
+    "inert_primes": [3],
+    "target_r": 2,
+    "v_p_values": { "3": 0 },
+    "obstructed": false
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",                       "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",                         "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected == [0,1,2,3,4,5]",                   "passed": true, "details": "gate_policy_respected=[0,1,2,3,4,5]" },
+    { "check_id": "EC1", "description": "all state encodings have 1 ≤ b,e ≤ N",                     "passed": true, "details": "still(9,9), transient(3,6), steady_oscillation(1,2): all in [1,9]" },
+    { "check_id": "EC2", "description": "all transitions have a non-empty generator name",           "passed": true, "details": "excite, tune" },
+    { "check_id": "EC3", "description": "all failure modes map to QA fail type",                    "passed": true, "details": "overdrive→OUT_OF_BOUNDS, resonance_escape→OUT_OF_BOUNDS" },
+    { "check_id": "EC4", "description": "target_condition.orbit_family ∈ {singularity,satellite,cosmos}", "passed": true, "details": "cosmos" },
+    { "check_id": "EC5", "description": "declared orbit_family matches f(b,e) valuation for each state", "passed": true, "details": "still(9,9): (0,0) mod 9=singularity✓; transient(3,6): f=-9≡0 mod 9, v3=2→satellite✓; steady_oscillation(1,2): f=-1≡8 mod 9, v3=0→cosmos✓" },
+    { "check_id": "EC6", "description": "lyapunov_function mentions f, I, b, or e",                 "passed": true, "details": "mentions 'f(b,e)'" },
+    { "check_id": "EC7", "description": "orbit_contraction_factor < 1.0",                           "passed": true, "details": "0.001582 < 1.0" },
+    { "check_id": "EC8", "description": "equilibrium_state maps to singularity orbit family",       "passed": true, "details": "still → singularity" },
+    { "check_id": "EC9", "description": "reachability_witness present for full_rank controllability","passed": true, "details": "BFS path [still→transient→steady_oscillation], k=2" },
+    { "check_id": "EC10","description": "minimality_witness present with optimization_claim",       "passed": true, "details": "proved_no_path_shorter_than=2; excluded [1]; frontier_sizes depth_1=1 depth_2=1" },
+    { "check_id": "EC11","description": "obstruction_check.obstructed agrees with v_p(target_r) recomputation", "passed": true, "details": "target_r=2; v3(2)=0; 3 is inert; v3≠1 → not obstructed; cert declares obstructed=false ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,14 @@
+{
+  "id": "t2_p06_mixed_perp_parallel_complex",
+  "description": "Complex cascade: L1⊥L2⊥L3||L4, L4⊥L5 => L3⊥L5 (requires multiple rule applications)",
+  "givens": [
+    {"Perpendicular": [1, 2]},
+    {"Perpendicular": [2, 3]},
+    {"Perpendicular": [3, 4]},
+    {"Perpendicular": [4, 5]}
+  ],
+  "goals": [
+    {"Parallel": [3, 5]}
+  ],
+  "difficulty": 5
+}

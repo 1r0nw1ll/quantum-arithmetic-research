@@ -1,0 +1,12 @@
+{
+  "id": "p03_perp_parallel_propagation",
+  "description": "L1||L2, L3⊥L1 => L3⊥L2 (2 steps)",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Perpendicular": [3, 1]}
+  ],
+  "goals": [
+    {"Perpendicular": [3, 2]}
+  ],
+  "difficulty": 2
+}

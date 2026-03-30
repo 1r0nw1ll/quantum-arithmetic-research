@@ -1,0 +1,53 @@
+{
+  "schema_version": "QA_UHG_NULL_CERT.v1",
+  "certificate_id": "qa.cert.uhg_null.pass.d2e1.v1",
+  "cert_type": "qa_uhg_null_cert",
+  "title": "UHG Null PASS: (d=2,e=1) → 3-4-5 triple, null point [3:4:5] in UHG",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. Generator (d=2,e=1): F=d²-e²=3, C=2de=4, G=d²+e²=5. UHG null check: 3²+4²-5²=9+16-25=0 ✓. Gaussian integer: Z=2+i, Z²=(4-1)+4i=3+4i, |Z|²=5. So F=Re(Z²)=3, C=Im(Z²)=4, G=|Z|²=5. This certifies the simplest non-trivial QA triple as a null point [3:4:5] in UHG — a light-like vector in Minkowski 3-space.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "d": 2,
+    "e": 1,
+    "_note": "Corresponds to QA generator (b=1,e=1) since d=b+e=2, a=b+2e=3"
+  },
+
+  "uhg_null": {
+    "C": 4,
+    "F": 3,
+    "G": 5,
+    "null_quadrance": 0,
+    "_C_derivation": "Im(Z²) = 2·d·e = 2·2·1 = 4",
+    "_F_derivation": "Re(Z²) = d²−e² = 4−1 = 3",
+    "_G_derivation": "|Z|² = d²+e² = 4+1 = 5",
+    "_null_check": "F²+C²−G² = 9+16−25 = 0 ✓ (null point in UHG)",
+    "_minkowski": "(F,C,G)=(3,4,5) is a light-like vector: 3²+4²=5²",
+    "_gaussian": "Z=2+i, Z²=3+4i, |Z|²=5 ✓"
+  },
+
+  "wildberger_reference": {
+    "theorem": "UHG I Theorem 21 (Wildberger arXiv:0909.1377); Chromogeometry (arXiv:0806.2789)",
+    "statement": "Every QA triple (F,C,G)=(d²−e²,2de,d²+e²) is a null point [F:C:G] in UHG satisfying F²+C²−G²=0. The join of null points = Gaussian integer multiplication: Z=d+ei, Z²=(d²−e²)+2dei, giving (F,C,G)=(Re(Z²),Im(Z²),|Z|²).",
+    "qa_form": "QA triples = null points in UHG = light-like vectors in Minkowski 3-space over Z."
+  },
+
+  "validation_checks": [
+    { "check_id": "UN1", "description": "schema_version is 'QA_UHG_NULL_CERT.v1'",                        "passed": true, "details": "schema_version='QA_UHG_NULL_CERT.v1'" },
+    { "check_id": "UN2", "description": "C == 2·d·e (Green quadrance = Im(Z²))",                          "passed": true, "details": "2·2·1=4=C ✓" },
+    { "check_id": "UN3", "description": "F == d²−e² (Red quadrance = Re(Z²))",                            "passed": true, "details": "4−1=3=F ✓" },
+    { "check_id": "UN4", "description": "G == d²+e² (Blue quadrance = |Z|²)",                             "passed": true, "details": "4+1=5=G ✓" },
+    { "check_id": "UN5", "description": "F²+C²−G²=0 (UHG null condition)",                               "passed": true, "details": "9+16−25=0 ✓" },
+    { "check_id": "UN6", "description": "F=Re(Z²), C=Im(Z²), G=|Z|² for Z=d+e·i",                       "passed": true, "details": "Z=2+i, Z²=3+4i, |Z|²=5: F=3 ✓ C=4 ✓ G=5 ✓" },
+    { "check_id": "UN7", "description": "null_quadrance field == 0",                                       "passed": true, "details": "null_quadrance=0 ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

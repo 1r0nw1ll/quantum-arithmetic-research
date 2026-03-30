@@ -1,0 +1,19 @@
+{
+  "id": "t1_p14_angle_parallel_mixed",
+  "description": "Three goals with mixed rules: parallel chain, angle equality, segment equality",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"EqualAngles": [30, 31]},
+    {"EqualAngles": [31, 32]},
+    {"EqualAngles": [32, 33]},
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]}
+  ],
+  "goals": [
+    {"Parallel": [1, 3]},
+    {"EqualAngles": [30, 33]},
+    {"EqualLength": [10, 12]}
+  ],
+  "difficulty": 4
+}

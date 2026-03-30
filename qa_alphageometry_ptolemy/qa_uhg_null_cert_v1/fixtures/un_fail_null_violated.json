@@ -1,0 +1,41 @@
+{
+  "schema_version": "QA_UHG_NULL_CERT.v1",
+  "certificate_id": "qa.cert.uhg_null.fail.null_violated.d2e1.v1",
+  "cert_type": "qa_uhg_null_cert",
+  "title": "UHG Null FAIL: NULL_CONDITION_VIOLATED — G claimed as 6 instead of 5",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Canonical fail fixture. Generator (d=2,e=1): correct G=d²+e²=5. A common error is to confuse G with the perimeter or claim G=d+e+1=4 or round incorrectly. Here G is claimed as 6 (perhaps from G=d²+e²+1=6, an off-by-one error). With F=3,C=4,G=6: F²+C²-G²=9+16-36=-11≠0 → NULL_CONDITION_VIOLATED. Additionally G≠d²+e²=5 → BLUE_QUADRANCE_MISMATCH. Both checks fire; the Gaussian decomposition also fails (G≠|Z|²) → GAUSSIAN_DECOMP_MISMATCH. UN7: null_quadrance declared as 0 but actual F²+C²-G²=-11 — validator computes independently so UN7 does not fire (null_quadrance field itself = 0 matches the declared value; the violation is detected at UN5).",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "d": 2,
+    "e": 1
+  },
+
+  "uhg_null": {
+    "C": 4,
+    "F": 3,
+    "G": 6,
+    "null_quadrance": 0,
+    "_error": "WRONG: G=6 claimed instead of correct G=d²+e²=5; null condition 9+16-36=-11≠0"
+  },
+
+  "validation_checks": [
+    { "check_id": "UN1", "description": "schema_version is 'QA_UHG_NULL_CERT.v1'",                        "passed": true,  "details": "schema_version='QA_UHG_NULL_CERT.v1'" },
+    { "check_id": "UN2", "description": "C == 2·d·e",                                                    "passed": true,  "details": "2·2·1=4=C ✓" },
+    { "check_id": "UN3", "description": "F == d²−e²",                                                    "passed": true,  "details": "4−1=3=F ✓" },
+    { "check_id": "UN4", "description": "G == d²+e²",                                                    "passed": false, "details": "claimed G=6 ≠ d²+e²=5" },
+    { "check_id": "UN5", "description": "F²+C²−G²=0 (UHG null condition)",                               "passed": false, "details": "3²+4²−6²=9+16−36=−11 ≠ 0" },
+    { "check_id": "UN6", "description": "F=Re(Z²), C=Im(Z²), G=|Z|² for Z=d+e·i",                       "passed": false, "details": "G=6 ≠ |Z|²=|2+i|²=5" },
+    { "check_id": "UN7", "description": "null_quadrance field == 0",                                       "passed": true,  "details": "declared null_quadrance=0 ✓ (field value; UN5 catches the actual violation)" }
+  ],
+
+  "fail_ledger": ["BLUE_QUADRANCE_MISMATCH", "GAUSSIAN_DECOMP_MISMATCH", "NULL_CONDITION_VIOLATED"],
+  "result": "FAIL"
+}

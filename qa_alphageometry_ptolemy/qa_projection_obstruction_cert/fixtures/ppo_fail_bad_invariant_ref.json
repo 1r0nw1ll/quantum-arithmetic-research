@@ -1,0 +1,81 @@
+{
+  "schema_version": "QA_PROJECTION_OBSTRUCTION_CERT.v1",
+  "cert_type": "projection_obstruction",
+  "certificate_id": "qa.cert.projection_obstruction.fail.bad_invariant_ref.v1",
+  "title": "FAIL fixture: native witness references an undeclared invariant",
+  "created_utc": "2026-03-30T00:47:00Z",
+  "inherits_from": "QA_ENGINEERING_CORE_CERT.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_alphabet_compatible": true,
+    "invariants_preserved": true,
+    "logging_contract_compatible": true,
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+  "engineering_context": {
+    "native_state_space": "generic ternary symbolic state space",
+    "native_invariants": [
+      {
+        "id": "declared_invariant",
+        "title": "Declared invariant",
+        "rule": "Dummy invariant for the negative fixture."
+      }
+    ]
+  },
+  "native_witness": {
+    "lawful_invariants_supported": [
+      "phantom_invariant"
+    ],
+    "verdict": "CONSISTENT",
+    "evidence_summary": "Fixture intentionally uses an unresolved invariant id."
+  },
+  "representation_layers": [
+    {
+      "layer_id": "identity_layer",
+      "kind": "other",
+      "preserved_invariants": [
+        "declared_invariant"
+      ],
+      "native_state_count": 27,
+      "observed_state_count": 27,
+      "unused_state_count": 0,
+      "cost_ratio_vs_baseline": 1.0,
+      "selector_count": 0,
+      "merge_count": 0,
+      "topology_ratio_vs_baseline": 1.0,
+      "obstruction_tags": [],
+      "verdict": "CONSISTENT"
+    }
+  ],
+  "physical_realization": {
+    "assessment_status": "UNASSESSED",
+    "required_symbol_states": 3,
+    "stable_state_count": 0,
+    "threshold_margin_ratio": 1.0,
+    "noise_margin_ratio": 1.0,
+    "required_fanout": 1,
+    "fanout_supported": 1,
+    "timing_characterized": false,
+    "device_tags": [],
+    "verdict": "INCONCLUSIVE",
+    "notes": "No physical measurements supplied."
+  },
+  "overall_verdict": "PARTIAL",
+  "validation_checks": [
+    {
+      "check_id": "PO2",
+      "description": "native witness references must resolve to declared native invariants",
+      "passed": false,
+      "details": "fixture intentionally references phantom_invariant"
+    }
+  ],
+  "fail_ledger": [
+    {
+      "fail_type": "INVARIANT_REFERENCE_UNRESOLVED",
+      "details": "native_witness references an undeclared invariant id",
+      "invariant_diff": "phantom_invariant not found in engineering_context.native_invariants"
+    }
+  ],
+  "result": "FAIL"
+}

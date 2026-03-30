@@ -1,201 +1,161 @@
-# Repository Guidelines
+# QA Project — Agent Role Reference
 
-## Project Structure & Module Organization
-- Root-level Python scripts (`run_signal_experiments*.py`, `dynamic_coprocessor_test.py`, `statistical_validation_gauntlet.py`) hold runnable experiments; keep new modules adjacent and note entry points in header comments.
-- `data/` stores MNIST and CIFAR downloads; regenerated plots or CSVs should stay beside their scripts and replace prior artifacts only when sources change.
-- Archive long-form notes in `files/` or `QAnotes/` and surface publication-ready summaries through `Documents/` and `PAPER_SUBMISSION_README.md`.
+**Full specification:** `docs/specs/PROJECT_SPEC.md`
+**Meta-validator:** `qa_alphageometry_ptolemy/qa_meta_validator.py` (currently 128/128 PASS)
 
-## QA Canonical Reference
-- For QA control-theorem, generator, or invariant work, load `Formalizing tuple drift in quantum-native learning/files/files(1)/qa_canonical.md` and use definitions verbatim.
-- Theorem statements and proofs are extracted in `QA_CONTROL_THEOREMS.md`; README-ready axioms are in `QA_AXIOMS_BLOCK.md`.
-- Pipeline drift notes live in `QA_PIPELINE_AXIOM_DRIFT.md`.
+---
 
-## Build, Test, and Development Commands
-- Work inside a virtual environment (`python -m venv .venv && source .venv/bin/activate`) to isolate dependencies.
-- Install the common stack with `pip install numpy matplotlib torch torchvision tqdm seaborn scipy scikit-learn`, adding extras noted in individual scripts before committing.
-- Run the harmonic simulator via `python run_signal_experiments.py`; tweak the constant block up top for new scenarios and capture the emitted PNGs/logs in the repo root.
-- Reproduce the MNIST and CIFAR hybrids with `python dynamic_coprocessor_test.py` and `python statistical_validation_gauntlet.py`; both populate `data/` automatically and emit comparison plots.
+## Role Matrix
 
-## Coding Style & Naming Conventions
-- Target Python 3.10+, enforce 4-space indentation, snake_case functions, UpperCamelCase classes, and uppercase module constants to match existing files.
-- Maintain the `# --- Section ---` dividers to signal pipeline phases and extend them when inserting preprocessing, training, or visualization steps.
-- Group imports by origin (stdlib, third-party, local), favor vectorized NumPy/Torch logic over loops, and export any notebook prototypes to `.py` modules that run headlessly.
+| Agent | Primary responsibility | Does NOT do |
+|---|---|---|
+| **Claude** | Orchestration, architecture, analysis, cert design, spec writing | Write experiment code, write doc prose |
+| **Codex** | All Python writing, validators, fixtures, schema JSON | Architecture decisions, doc prose |
+| **Gemini** | README, paper prose, human tract docs, markdown | Code, architecture decisions |
+| **Open Brain** | Observation capture, idea storage, prior result retrieval | — |
+| **Git** | Version control at stable checkpoints | — |
 
-## Testing Guidelines
-- Script-based diagnostics (`dynamic_coprocessor_test.py`, `symmetry_generative_test.py`, `final_generative_test.py`) double as the regression suite; run them before proposing changes and log headline metrics in PRs.
-- Prefix new diagnostic runners with their focus (e.g., `qa_entropy_test.py`), ensure they print summary stats, and save plots to the working directory.
-- Seed randomness near `__main__` (`np.random.seed`, `torch.manual_seed`) so experiment diffs stay reproducible, and stage future pytest suites under `tests/` with notes in `QAnotes/`.
+---
 
-## Commit & Pull Request Guidelines
-- With no bundled Git log, default to short, imperative subjects ("Add CIFAR stress overlay") and describe parameter or data shifts in wrapped body text when relevant.
-- Mention affected scripts, regenerated artifacts, and required reruns ("Re-run `statistical_validation_gauntlet.py` for updated plots") inside each commit or PR.
-- PRs should summarize intent, list touched modules, share before/after accuracy or loss deltas, embed paths for new figures, and link supporting notes in `files/` or `QAnotes/`.
+## Track Ownership
 
-## QA Decision Certificate Spine (qa_alphageometry_ptolemy/)
+| Track | Primary | Secondary |
+|---|---|---|
+| A — Algebraic Foundations | Will (math) | Claude (cert design), Codex (verify scripts) |
+| B — Specification Infrastructure | Claude (architecture) | Codex (validators, fixtures), Gemini (human tracts) |
+| C — Convergence Theory | Will (proofs) | Claude (cert design, analysis), Codex (empirical scripts) |
+| D — Coherence Detection | Codex (experiments) | Claude (analysis, [122] certs), Open Brain (capture) |
 
-The `qa_alphageometry_ptolemy/` directory contains the **QA Decision Certificate Spine**—a unified framework for machine-checkable decision-making with constructive failure witnesses.
+---
 
-### Quick Verification
-```bash
-cd qa_alphageometry_ptolemy
-python qa_verify.py --demo  # Should output: ✔ ALL CHECKS PASSED
+## Claude — Invocation Context
+
+Claude is the orchestrator. Claude reads results, identifies what the system needs next,
+and specifies tasks precisely for Codex/Gemini. Claude writes code ONLY when no delegation
+path exists.
+
+**Standard inputs Claude reads before any task:**
+1. `mcp__open-brain__recent_thoughts` — what happened recently
+2. `MEMORY.md` — project state + rules
+3. Relevant cert family files if touching the cert ecosystem
+
+**What Claude produces:**
+- Task specs for Codex (see §Codex below)
+- Architecture decisions documented in `docs/specs/`
+- Cert family design (schema + check logic; Codex implements)
+- Analysis of experiment results → verdict → [122] cert spec
+
+---
+
+## Codex — Invocation Format
+
+Always provide a complete task spec:
+
+```
+TASK: [verb] [specific object]
+CONTEXT: [what exists; what's missing; why this is needed]
+READ: [list of files Codex must read first]
+WRITE: [list of files Codex must create or edit]
+CONSTRAINTS:
+  - validator must pass --self-test
+  - do not change [X]
+  - use d*d not d**2 (substrate rule)
+VERIFICATION: [how to confirm success]
 ```
 
-### Mapping Protocol Gate (Gate 0)
+**Codex standards:**
+- Every validator: `--self-test` must exit 0, return `{"ok": true}`
+- Every script: runnable standalone, no imports between experiment files
+- QA substrate: always `d*d`, never `d**2` (CPython pow() vs libm divergence)
+- Canonical JSON: `json.dumps(obj, sort_keys=True, separators=(',', ':'), ensure_ascii=False)`
+- Hash domain separation: `sha256(domain.encode() + b'\x00' + payload)`
 
-The meta-validator enforces an **intake constitution**: every certificate family root must include **exactly one** of:
+---
 
-- `mapping_protocol.json` (inline `QA_MAPPING_PROTOCOL.v1`), or
-- `mapping_protocol_ref.json` (reference `QA_MAPPING_PROTOCOL_REF.v1` → pinned mapping object)
+## Gemini — Invocation Format
 
-`qa_alphageometry_ptolemy/qa_meta_validator.py` controls the **family root** via `family_root_rel` in `FAMILY_SWEEPS`.
-Legacy families may share `"."` (a single root mapping); new families should prefer dedicated roots.
-
-**Repo law (Policy B, going forward)**:
-- One family = one root (for new families).
-- That root must ship exactly one of `mapping_protocol.json` or `mapping_protocol_ref.json`.
-- `python qa_alphageometry_ptolemy/qa_meta_validator.py --strict` enforces that `must_have_dedicated_root=True` families do not share a `family_root_rel` (and do not use `family_root_rel="."`).
-
-Protocol families live at repo root:
-
-- `qa_mapping_protocol/` (schema + validator + fixtures)
-- `qa_mapping_protocol_ref/` (schema + validator + fixtures)
-
-### Core Certificate Files
-| File | Description |
-|------|-------------|
-| `qa_certificate.py` | Core certificate dataclasses (7 types), validators, recompute hooks |
-| `qa_verify.py` | CLI verifier for certificates and bundles |
-| `QACertificateSpine.tla` | TLA+ formal specification |
-| `QA_DECISION_CERTIFICATE_SPINE.md` | Full technical documentation |
-
-### Generalization Bounds Mapping (arXiv:2504.05695)
-| File | Description |
-|------|-------------|
-| `qa_generalization_certificate.py` | Dataclasses for generalization bound certificates |
-| `qa_generalization_validator_v3.py` | Strict v3 validator (schema/consistency/recompute) |
-| `qa_generalization_hooks.py` | 4 recompute hooks for independent verification |
-| `QA_MAP__ARCH_INDEP_RELU_GENERALIZATION.yaml` | Full concept mapping specification |
-| `QA_MAP_CANONICAL.md` | Gold standard mapping registry |
-| `QA_GENERALIZATION_APPENDIX.md` | Conceptual interpretation document |
-
-### NeuralGCM Mapping (Physics-ML Weather Models)
-| File | Description |
-|------|-------------|
-| `qa_neuralgcm_certificate.py` | Conservation witness dataclasses |
-| `qa_neuralgcm_validator_v3.py` | Strict v3 validator for forecast certificates |
-| `QA_MAP__NEURALGCM.yaml` | Full concept mapping specification |
-| `examples/neuralgcm/10day_forecast_success.json` | Success certificate |
-| `examples/neuralgcm/mass_violation_failure.json` | Failure certificate |
-
-### Sparse Attention Mapping (Transformer Efficiency)
-| File | Description |
-|------|-------------|
-| `qa_sparse_attention_certificate.py` | Entropy/rank witness dataclasses |
-| `qa_sparse_attention_validator_v3.py` | Strict v3 validator for attention health |
-| `QA_MAP__SPARSE_ATTENTION.yaml` | Full concept mapping specification |
-| `examples/sparse_attention/bert_base_success.json` | Success certificate |
-| `examples/sparse_attention/rank_collapse_failure.json` | Failure certificate |
-
-### Axiom AI + Execution-Grounded Research Mapping
-| File | Description |
-|------|-------------|
-| `QA_MAP__AXIOM_AI.yaml` | Full concept mapping specification |
-| `appendix/QA_AXIOM_LEDGER.md` | Integrated ledger document |
-| `appendix/QA_AXIOM_STRATIFICATION_THEOREM.md` | Formal stratification theorem |
-| `appendix/QA_COMPARISON_TABLE.md` | QA vs Axiom vs AlphaGeometry |
-| `appendix/CHECKING_IS_NOT_ENOUGH.md` | QA manifesto |
-| `schemas/QA_FAILURE_ALGEBRA.json` | Unified failure type schema |
-
-### Cross-Paper Unification
-| File | Description |
-|------|-------------|
-| `QA_CROSS_PAPER_UNIFICATION.md` | Unified theory across all four Gold Standard mappings |
-
-### Certificate Tetrad + Conjecture Ledger
-
-The **tetrad** formalizes `Capability = Reachability(S, G, I)` across four directions, with a conjecture ledger for falsifiable claims. All use exact arithmetic (`int | Fraction`), canonical JSON serialization, and failure-complete validation.
-
-**Core theorem**: `Capability = Reachability(S, G, I)`
-**Intelligence metric**: `K = log_10(tau_blind / tau_agent)`
-
-| File | Description |
-|------|-------------|
-| `qa_cert_core.py` | Shared plumbing: `Scalar`, `canonical_json`, `certificate_hash`, `ValidationResult` |
-| `qa_generator_injection_certificate.py` | Direction 1: G1 subset G2 -> Reach expands |
-| `qa_diversity_collapse_certificate.py` | Direction 2: I_div violated -> Reach contracts |
-| `qa_field_computation_certificate.py` | Direction 3: G = physical ops -> Reach realized |
-| `qa_beyond_neurons_certificate.py` | Direction 4: P = <S,O,C,E,H> -> Intelligence is substrate-neutral |
-| `qa_conjecture_core.py` | Conjecture dataclass, factories, CLI (imports registry from meta-validator) |
-| `qa_meta_validator.py` | Cross-type validator: 5 cert types, single registry authority, 12 self-tests |
-| `TRIAD_INDEX.md` | Tetrad Index: comparison table, examples, general theorem |
-| `QA_MAP__GENERATOR_INJECTION.yaml` | Direction 1 YAML spine |
-| `QA_MAP__DIVERSITY_COLLAPSE.yaml` | Direction 2 YAML spine |
-| `QA_MAP__FIELD_COMPUTATION.yaml` | Direction 3 YAML spine |
-| `QA_MAP__BEYOND_NEURONS.yaml` | Direction 4 YAML spine (Levin & Chis-Ciure) |
-| `qa_ledger/conjectures/*.json` | 3 canonical conjecture JSONs with validator contracts |
-
-**Registry authority**: `KNOWN_CERT_TYPES` and `KNOWN_CONJECTURE_TYPES` are defined once in `qa_meta_validator.py`. All other modules import from there.
-
-### Validation Commands
-```bash
-# Certificate Tetrad + Conjectures (run from qa_alphageometry_ptolemy/)
-python qa_meta_validator.py          # 12 tests: 9 valid, 3 invalid
-python qa_conjecture_core.py         # 5 checks: factories, ledger, guards
-
-# Mapping Protocol families (run from repo root)
-python qa_mapping_protocol/validator.py --self-test
-python qa_mapping_protocol_ref/validator.py --self-test
-
-# Decision certificate spine
-python qa_verify.py --demo
-python -m pytest test_understanding_certificate.py -q  # 295 tests
-
-# Generalization bounds
-python qa_generalization_validator_v3.py --demo
-python qa_generalization_validator_v3.py examples/generalization/mnist_mlp_success.json
-python qa_generalization_validator_v3.py --bundle examples/generalization/complete_bundle.json
-
-# NeuralGCM
-python qa_neuralgcm_validator_v3.py --demo
-python qa_neuralgcm_validator_v3.py examples/neuralgcm/10day_forecast_success.json
-python qa_neuralgcm_validator_v3.py examples/neuralgcm/mass_violation_failure.json
-
-# Sparse Attention
-python qa_sparse_attention_validator_v3.py --demo
-python qa_sparse_attention_validator_v3.py examples/sparse_attention/bert_base_success.json
-python qa_sparse_attention_validator_v3.py examples/sparse_attention/rank_collapse_failure.json
-
-# Axiom AI (verify appendix and schema files)
-ls appendix/QA_AXIOM_*.md
-python -c "import json; d=json.load(open('schemas/QA_FAILURE_ALGEBRA.json')); print(f'Schema: {d[\"schema_id\"]}'); print(f'Failure classes: {len(d[\"failure_classes\"])}')"
+```
+TASK: write [human tract / README section / paper section] for [subject]
+AUDIENCE: [reviewer / developer / Will / public]
+TONE: [technical-precise / accessible / formal]
+SOURCE FILES: [cert files, experiment results, Open Brain IDs to draw from]
+REQUIRED SECTIONS: [list]
+OUTPUT: [exact file path]
+WORD BUDGET: [approx]
 ```
 
-### Certificate Design Principles
-1. **Exact arithmetic only**: All values use `int` or `Fraction`, never `float`
-2. **Failure-completeness**: Every decision yields success witness OR obstruction proof
-3. **Recompute hooks**: Independent verification from raw data
-4. **Deterministic serialization**: Reproducible hashes for all certificates
+**Gemini standards:**
+- Human tract docs must include: purpose, schema table, validator checks table, fixtures table, family relationships
+- No invented claims — draw only from source files provided
+- Never guess SVP terminology (see `memory/reference_svp_vocabulary.md`)
 
-### Adding New Mappings
-Follow the template in `QA_MAP_CANONICAL.md`:
-1. Create YAML module spec (`QA_MAP__<PAPER_ID>.yaml`)
-2. Implement certificate dataclasses with exact scalars
-3. Implement strict v3 validator (3 levels)
-4. Implement recompute hooks
-5. Create example certificates (success + failure)
-6. Add entry to canonical registry
+---
 
-## Multi-Agent Push Coordination (Required for Main)
+## Open Brain — Capture Protocol
 
-When multiple terminals/agents are active, follow this flow for any `main` push:
+Capture immediately when:
+- Any experiment produces output (even partial)
+- A theorem is proved or disproved
+- A claim is corrected
+- A paper status changes
+- An idea worth pursuing is formed
 
-1. Work in a dedicated clean clone/sandbox (no shared dirty tree).
-2. Stage only explicit target files (never `git add .`).
-3. Push via `tools/qa_safe_push_main.sh <allowed_path...>` instead of raw `git push`.
-4. If the script blocks on stale base or lock, resolve that first; do not force push around it.
+Capture format:
+```
+type: observation | task | idea | insight
+tags: [domain, experiment-name, result-type]
+body: [summary + key numbers + honest verdict vs pre-declared criteria]
+```
 
-Recommended sandbox layout:
-- Human workspace: `~/signal_experiments` (manual work only)
-- Agent sandbox clone: `~/qa_agent_sandbox` (agent commits/pushes)
-- Agent artifacts outside git tree: `~/qa_agent_out/`
+Search before re-deriving: `mcp__open-brain__search_thoughts` with relevant keywords.
+
+---
+
+## Cert Ecosystem — Quick Reference
+
+**Gate 0:** Every cert family root must have `mapping_protocol.json` OR `mapping_protocol_ref.json`
+
+**Minimum viable cert family:**
+```
+qa_[name]/
+├── mapping_protocol_ref.json
+├── qa_[name]_validate.py      ← --self-test returns {"ok": true}
+└── fixtures/
+    ├── [abbrev]_pass_*.json   ← at least 1
+    └── [abbrev]_fail_*.json   ← at least 1
+```
+
+**Add to meta-validator FAMILY_SWEEPS:**
+```python
+(N, "label", _validate_fn, "pass_description", "N_slug", "relative/path", True)
+```
+
+**Add to docs/families/README.md:** one table row
+**Add to docs/families/N_slug.md:** full human tract
+
+**Substrate rules (critical):**
+- `d*d` not `d**2`
+- `mapping_protocol_ref.json` fields: `protocol_version`, `ref_path`, `ref_sha256` (NOT `schema_version`)
+- Manifest hash placeholder: 64-char hex zeros (NOT the string "placeholder")
+
+---
+
+## Experiment Standards
+
+**Before running:** capture hypothesis + pre-declared success criteria in Open Brain
+**After running:** capture result immediately with honest verdict
+**If significant:** write [122] `QA_EMPIRICAL_OBSERVATION_CERT` within same session
+**Registry:** add entry to `experiments/registry.json`
+
+---
+
+## Current Project Health (2026-03-25)
+
+| Metric | Status |
+|---|---|
+| Meta-validator | 128/128 PASS |
+| Cert families | [18]–[122] active |
+| Papers | pythagorean-families (submission-ready), unified-curvature (arXiv), modular-dynamics (seed) |
+| Open Brain | Active; grand synthesis note captured 2026-03-25 |
+| Root directory | 579 items — `archive/` migration pending |
+| `qa_core/` module | Missing — QA_Engine duplicated in ~50 files |

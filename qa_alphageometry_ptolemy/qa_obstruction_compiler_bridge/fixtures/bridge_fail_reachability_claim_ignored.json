@@ -1,0 +1,58 @@
+{
+  "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_bridge.fail.reachability_claim_ignored.v1",
+  "cert_type": "obstruction_compiler_bridge",
+  "title": "Obstruction Bridge FAIL: class 6 (forbidden, v_3=1) claimed reachable — FORBIDDEN_TARGET_REACHABILITY_CLAIM",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Canonical obstruction-ignored failure. The presenting party claims target_arithmetic_class=6 is reachable (claimed_reachable=true). But v_3(6)=1, so by [111] this class is forbidden — no norm-form element in Z[phi]/9Z[phi] can have norm 6. The obstruction_verdict is correctly set to OBSTRUCTION_PRESENT, but the claimed_reachable=true flag is inconsistent. This is the FORBIDDEN_TARGET_REACHABILITY_CLAIM error: a control cert that asserts it can drive a system to a target with arithmetic fingerprint 6 would be lying — there is no QA state (b,e) with f(b,e)≡6 mod 9. Any [106]-family PASS cert making such a claim would be structurally invalid. The bridge cert catches this inconsistency before a full plan/control cert is constructed.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "arithmetic_family_ref": {
+    "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",
+    "prime_p": 3,
+    "k": 2,
+    "modulus": 9
+  },
+
+  "control_family_ref": {
+    "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1"
+  },
+
+  "target_arithmetic_class": 6,
+  "claimed_reachable": true,
+  "obstruction_verdict": "OBSTRUCTION_PRESENT",
+
+  "bridge_claim": {
+    "statement": "INVALID CLAIM: arithmetic class 6 is claimed reachable, but v_3(6)=1 places it in the forbidden set of [111]. No element of Z[phi]/9Z[phi] has norm 6. No valid plan/control cert from [106] or its domain instances may assert a target with this arithmetic fingerprint.",
+    "vp_value": "v_3(6) = 1",
+    "notes": "The obstruction_verdict is correctly set (OBSTRUCTION_PRESENT), but the claimed_reachable flag contradicts it. This is an arithmetic-obstruction-ignored error."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",                       "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",                          "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                    "passed": true,  "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "B1",  "description": "arithmetic_family_ref is QA_AREA_QUANTIZATION_PK_CERT.v1",  "passed": true,  "details": "schema_version='QA_AREA_QUANTIZATION_PK_CERT.v1'" },
+    { "check_id": "B2",  "description": "control_family_ref is QA_PLAN_CONTROL_COMPILER_CERT.v1",    "passed": true,  "details": "schema_version='QA_PLAN_CONTROL_COMPILER_CERT.v1'" },
+    { "check_id": "B3",  "description": "modulus == p^k = 3^2 = 9",                                 "passed": true,  "details": "9 == 9" },
+    { "check_id": "B4",  "description": "p=3 is inert: Legendre(5,3)=-1",                            "passed": true,  "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "B5",  "description": "target r=6 in range {0..8}",                               "passed": true,  "details": "0 <= 6 < 9" },
+    { "check_id": "B6",  "description": "obstruction_verdict matches v_p(r): v_3(6)=1 → PRESENT",   "passed": true,  "details": "v_3(6)=1; obstruction_verdict='OBSTRUCTION_PRESENT'; match" },
+    { "check_id": "B7",  "description": "claimed_reachable consistent with obstruction_verdict",      "passed": false, "details": "OBSTRUCTION_PRESENT but claimed_reachable=true: INCONSISTENT — obstruction ignored; arithmetic class 6 cannot be the target of any valid plan/control witness" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "FORBIDDEN_TARGET_REACHABILITY_CLAIM",
+      "message": "target_arithmetic_class=6 has v_3(6)=1, placing it in the forbidden set {3,6} of [111] for p=3,k=2. No element of Z[phi]/9Z[phi] has norm ≡ 6 mod 9. The claimed_reachable=true assertion is inconsistent with obstruction_verdict='OBSTRUCTION_PRESENT'. Any plan/control cert from QA_PLAN_CONTROL_COMPILER_CERT.v1 or its domain instances that asserts reachability of a QA target state with arithmetic fingerprint 6 is structurally invalid — it would require a witness that cannot exist."
+    }
+  ],
+
+  "result": "FAIL"
+}

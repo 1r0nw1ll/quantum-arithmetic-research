@@ -1,0 +1,87 @@
+{
+  "schema_version": "QA_CYMATIC_PLANNER_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.planner.pass_replay_hexagon.v1",
+  "cert_type": "cymatic_planner",
+  "title": "Cymatic Planner PASS: BFS plan compiles into verified control cert (replay consistent)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates the full search→plan→execution→witness chain: the planner finds flat→stripes→hexagons in k=2, then proves its plan compiles into the independently-certified control cert (control_cert_pass_hexagon.json). The validator confirms: (1) plan is BFS-shortest, (2) compiled_control_witness_hash matches the control cert on disk, (3) target/initial/final/move-sequence are semantically consistent. This closes the compilation loop: QA plans are not just found but proven to compile into executable certified controllers.",
+
+  "planning_problem": {
+    "initial_pattern_class": "flat",
+    "target_pattern_class":  "hexagons",
+    "max_depth_k": 3,
+    "optimization_goal": "shortest_path"
+  },
+
+  "generator_alphabet": [
+    "increase_amplitude",
+    "decrease_amplitude",
+    "set_frequency",
+    "increase_frequency",
+    "decrease_frequency",
+    "stabilize"
+  ],
+
+  "control_graph": {
+    "nodes": ["flat", "stripes", "hexagons", "disordered"],
+    "edges": [
+      { "from": "flat",     "move": "increase_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "set_frequency",       "to": "hexagons"   },
+      { "from": "hexagons", "move": "decrease_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "decrease_amplitude",  "to": "flat"       },
+      { "from": "hexagons", "move": "increase_amplitude",  "to": "disordered" }
+    ]
+  },
+
+  "planner_run": {
+    "algorithm": "bfs",
+    "searched_nodes": 3,
+    "searched_edges": 3,
+    "found_plan": true
+  },
+
+  "plan_witness": {
+    "path_length_k": 2,
+    "is_shortest": true,
+    "steps": [
+      { "step_index": 1, "from": "flat",    "move": "increase_amplitude", "to": "stripes"  },
+      { "step_index": 2, "from": "stripes", "move": "set_frequency",      "to": "hexagons" }
+    ]
+  },
+
+  "compiled_control_certificate_id": "qa.cert.cymatics.control.hexagon_reachable.v1",
+  "compiled_control_witness_hash":   "ef54d9c38ca3dfd04e750aa993077768e4f17de3ab9226b82b5f3f1633ec8d12",
+  "replay_consistent": true,
+
+  "observed_final_state": {
+    "pattern_class":  "hexagons",
+    "symmetry_group": "C6v",
+    "orbit_family":   "cosmos"
+  },
+
+  "qa_mapping": {
+    "initial_orbit_family": "singularity",
+    "target_orbit_family":  "cosmos",
+    "final_orbit_family":   "cosmos",
+    "state_pair": { "b": 1, "e": 2 },
+    "planning_qa_analogue": "Full QA compiler chain: (1) BFS over orbit graph finds shortest singularity→cosmos path in k=2 steps passing through satellite; (2) plan compiles into a certified controller whose hash is pinned; (3) controller replay witness is independently verified. The hash pin makes the compilation claim unforgeable: any change to the control cert breaks the planner cert's integrity check."
+  },
+
+  "validation_checks": [
+    { "check_id": "P1",  "description": "planner algorithm is recognized",                                  "passed": true,  "details": "bfs in {bfs, dfs, astar, dijkstra, iddfs}" },
+    { "check_id": "P2",  "description": "path_length_k <= max_depth_k",                                    "passed": true,  "details": "2 <= 3" },
+    { "check_id": "P3",  "description": "every plan step is a legal edge in control_graph",                "passed": true,  "details": "flat--increase_amplitude-->stripes: legal; stripes--set_frequency-->hexagons: legal" },
+    { "check_id": "P4",  "description": "observed final pattern class matches target pattern class",        "passed": true,  "details": "hexagons == hexagons" },
+    { "check_id": "P5",  "description": "qa_mapping.final_orbit_family consistent with CONTROL_PATTERN_TO_ORBIT[final_class]", "passed": true, "details": "cosmos == CONTROL_PATTERN_TO_ORBIT[hexagons]=cosmos" },
+    { "check_id": "P6",  "description": "searched_nodes >= path_length_k + 1",                            "passed": true,  "details": "searched_nodes=3 >= 3" },
+    { "check_id": "P7",  "description": "BFS recomputed shortest == claimed path_length_k",                "passed": true,  "details": "BFS shortest=2 == claimed 2" },
+    { "check_id": "P8",  "description": "no disordered/out_of_orbit state visited in plan",               "passed": true,  "details": "plan visits only flat, stripes, hexagons" },
+    { "check_id": "P9",  "description": "return-path claim consistent if present",                         "passed": true,  "details": "no return path requested; N/A" },
+    { "check_id": "P10", "description": "compiled control cert hash matches and semantic fields consistent", "passed": true,  "details": "cert qa.cert.cymatics.control.hexagon_reachable.v1 found; hash ef54d9c3... matches; target=hexagons, initial=flat, final=hexagons, moves=[increase_amplitude,set_frequency] all consistent" }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

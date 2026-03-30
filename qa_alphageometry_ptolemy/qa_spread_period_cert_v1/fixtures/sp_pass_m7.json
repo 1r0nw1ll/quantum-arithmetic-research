@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_SPREAD_PERIOD_CERT.v1",
+  "certificate_id": "qa.cert.spread_period.pass.m7.v1",
+  "cert_type": "qa_spread_period_cert",
+  "title": "Spread Period PASS: m=7 cosmos orbit period=16 = Pisano period π(7)",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Second PASS fixture. The Pisano period π(7)=16: the Fibonacci sequence mod 7 repeats with period 16. The QA cosmos orbit for m=7 has period 16 (48 states = 3 orbits of length 16). F^8=-I mod 7 (F^16=I, period exactly 16). This fixture is notable because the period for m=7 is 16, NOT 24 — demonstrating that the cosmos period depends on the modulus and cannot be assumed constant.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "m": 7
+  },
+
+  "spread_period": {
+    "cosmos_period": 16,
+    "orbit_type": "cosmos",
+    "_pisano_verification": "Fibonacci mod 7 first returns to (0,1) at k=16",
+    "_fib_sequence_mod7": "0,1,1,2,3,5,1,6,0,6,6,5,4,2,6,1,[0,1,...] — period=16 ✓",
+    "_matrix_witnesses": {
+      "F_pow_16": [[1, 0], [0, 1]],
+      "F_pow_8": [[6, 0], [0, 6]],
+      "_note": "F^8=-I mod 7 ≢ I; F^16=I → period 16 minimal ✓"
+    },
+    "_qalm_orbit_check": "QA affine map for m=7 has cosmos orbit period 16 (verified: 48 states in 3 orbits of length 16)"
+  },
+
+  "wildberger_reference": {
+    "theorem": "Spread Polynomials and QA orbit period (Wildberger arXiv:0911.1025)",
+    "statement": "QA cosmos orbit period = Pisano period π(m). For m=7: π(7)=16.",
+    "qa_form": "For m=7: π(7)=16 = cosmos orbit period; 48 cosmos states in 3 orbits ✓"
+  },
+
+  "validation_checks": [
+    { "check_id": "SP1", "description": "schema_version is 'QA_SPREAD_PERIOD_CERT.v1'",             "passed": true,  "details": "schema_version='QA_SPREAD_PERIOD_CERT.v1'" },
+    { "check_id": "SP2", "description": "Fibonacci period mod m == claimed cosmos_period",            "passed": true,  "details": "π(7)=16=cosmos_period ✓" },
+    { "check_id": "SP3", "description": "F_matrix^cosmos_period ≡ I mod m",                         "passed": true,  "details": "F^16 mod 7 = [[1,0],[0,1]] ✓" },
+    { "check_id": "SP4", "description": "cosmos_period is minimal",                                  "passed": true,  "details": "F^8=[[6,0],[0,6]]=-I≢I mod 7 → period 16 minimal ✓" },
+    { "check_id": "SP5", "description": "orbit_type ∈ valid set AND period=1 ↔ singularity",        "passed": true,  "details": "orbit_type='cosmos', period=16≠1 ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

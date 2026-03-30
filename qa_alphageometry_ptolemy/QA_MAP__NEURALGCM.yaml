@@ -1,0 +1,223 @@
+# QA_MAP__NEURALGCM.yaml
+#
+# QA Module Specification for NeuralGCM
+# "Neural General Circulation Models for Weather and Climate"
+# (Google DeepMind, 2024)
+#
+# Maps physics-constrained neural weather prediction to QA certificate framework.
+
+module:
+  name: "QA_NEURALGCM"
+  version: "1.0.0"
+  source_paper: "Neural General Circulation Models (NeuralGCM)"
+  title: "Neural General Circulation Models for Weather and Climate"
+  schema_prefix: "QA_NEURALGCM"
+  status: "COMPLETE - Gold Standard mapping"
+
+# ============================================================================
+# CORE MAPPING: NeuralGCM Concepts → QA Framework
+# ============================================================================
+
+concept_mapping:
+  # Conservation laws → QA invariants
+  conservation_laws:
+    paper_name: "Physical conservation constraints"
+    paper_definition: "Mass, energy, momentum conservation in atmosphere"
+    qa_interpretation: "Hard invariants that must be preserved by all transitions"
+    qa_structure: "InvariantPacket"
+    certificate_field: "conservation_witness"
+    key_insight: "Conservation = QA packet preservation across generator applications"
+
+  # Dynamical core → QA state space
+  dynamical_core:
+    paper_name: "Dynamical core (physics solver)"
+    paper_definition: "Numerical solver for atmospheric dynamics equations"
+    qa_interpretation: "Deterministic state transition function (like QA generators)"
+    qa_structure: "Generator"
+    certificate_field: "dynamics_witness"
+    key_insight: "Physics solver = QA generator with known invariant preservation"
+
+  # Neural parameterizations → gauge freedom
+  neural_parameterization:
+    paper_name: "Learned parameterizations (subgrid physics)"
+    paper_definition: "Neural networks replacing traditional parameterization schemes"
+    qa_interpretation: "Gauge freedom within physical constraints"
+    qa_structure: "GaugeFreedomWitness"
+    certificate_field: "parameterization_gauge"
+    key_insight: "Neural components = gauge coordinates that don't violate conservation"
+
+  # Forecast skill → generalization certificate
+  forecast_skill:
+    paper_name: "Forecast skill metrics (RMSE, ACC)"
+    paper_definition: "Accuracy of weather predictions over time"
+    qa_interpretation: "Reachability certificate with time-dependent bounds"
+    qa_structure: "ForecastSkillCertificate"
+    certificate_field: "skill_scores"
+    key_insight: "Skill degradation = controlled reachability radius expansion"
+
+  # Hybrid architecture → constraint satisfaction
+  hybrid_architecture:
+    paper_name: "Physics-ML hybrid"
+    paper_definition: "Combination of physical solver + neural components"
+    qa_interpretation: "Constrained optimization within invariant-preserving subspace"
+    qa_structure: "HybridConstraintWitness"
+    certificate_field: "hybrid_witness"
+    key_insight: "Hybrid = physics provides invariants, ML provides gauge fixing"
+
+# ============================================================================
+# FAILURE-COMPLETENESS MAPPING
+# ============================================================================
+
+failure_completeness:
+  theorem: |
+    For every NeuralGCM forecast, exactly one of:
+    1. SUCCESS: Valid forecast with conservation + skill certificates, OR
+    2. FAILURE: Obstruction certificate explaining physical violation or skill degradation
+
+  failure_modes:
+    # Conservation violations
+    - mode: "mass_conservation_violation"
+      description: "Total atmospheric mass not conserved"
+      obstruction_witness: "Mass delta and violation location"
+
+    - mode: "energy_conservation_violation"
+      description: "Total energy not conserved beyond tolerance"
+      obstruction_witness: "Energy imbalance and source"
+
+    - mode: "momentum_conservation_violation"
+      description: "Angular momentum not conserved"
+      obstruction_witness: "Momentum delta and violation location"
+
+    # Skill degradation
+    - mode: "skill_collapse"
+      description: "Forecast skill drops below climatology baseline"
+      obstruction_witness: "Time horizon and skill metrics"
+
+    - mode: "instability_detected"
+      description: "Numerical instability in forecast"
+      obstruction_witness: "Diverging fields and timestep"
+
+    # Constraint violations
+    - mode: "physical_bounds_exceeded"
+      description: "Unphysical values (negative humidity, etc.)"
+      obstruction_witness: "Field, location, value"
+
+    - mode: "cfl_violation"
+      description: "Courant-Friedrichs-Lewy condition violated"
+      obstruction_witness: "Timestep vs. grid spacing"
+
+# ============================================================================
+# CROSS-PAPER UNIFICATION
+# ============================================================================
+
+unification_with_generalization_bounds:
+  shared_structure:
+    - concept: "Gauge freedom"
+      generalization_paper: "Overparametrization in neural networks"
+      neuralgcm: "Neural parameterizations within physical constraints"
+      unified_qa: "Null directions that preserve certificate validity"
+
+    - concept: "Invariant control"
+      generalization_paper: "Operator norm bounds"
+      neuralgcm: "Conservation law preservation"
+      unified_qa: "Hard constraints on state transition"
+
+    - concept: "Failure modes"
+      generalization_paper: "Vacuous bounds, norm explosion"
+      neuralgcm: "Conservation violation, skill collapse"
+      unified_qa: "Structured obstruction certificates"
+
+    - concept: "Architecture independence"
+      generalization_paper: "Bound doesn't depend on parameter count"
+      neuralgcm: "Skill doesn't depend on neural architecture details"
+      unified_qa: "Certificate depends on invariants, not coordinates"
+
+  key_unification_claim: |
+    Both papers demonstrate the same QA principle:
+
+    > **Performance guarantees come from invariant control, not architectural choices.**
+
+    - Generalization: Operator norms control the bound
+    - NeuralGCM: Conservation laws control physical validity
+
+    In both cases, "extra" degrees of freedom (overparametrization / neural parameterizations)
+    are gauge coordinates that can be fixed arbitrarily within the constraint surface.
+
+# ============================================================================
+# CERTIFICATE SCHEMAS (STUB)
+# ============================================================================
+
+certificate_schemas:
+  QA_NEURALGCM_FORECAST_V1:
+    description: "Forecast certificate with conservation and skill witnesses"
+    status: "STUB"
+    required_fields:
+      - certificate_id
+      - schema
+      - success
+      - forecast_horizon
+      - initial_state_hash
+    success_fields:
+      - conservation_witness
+      - skill_scores
+      - physical_bounds_check
+    failure_fields:
+      - failure_mode
+      - failure_witness
+
+  QA_NEURALGCM_CONSERVATION_V1:
+    description: "Conservation law verification certificate"
+    status: "STUB"
+    required_fields:
+      - certificate_id
+      - mass_delta
+      - energy_delta
+      - momentum_delta
+      - tolerance
+
+# ============================================================================
+# IMPLEMENTATION ROADMAP
+# ============================================================================
+
+implementation_roadmap:
+  phase_1:
+    description: "Conservation law certificates"
+    tasks:
+      - "Define ConservationWitness dataclass"
+      - "Implement mass/energy/momentum delta computation"
+      - "Create validator for conservation certificates"
+
+  phase_2:
+    description: "Forecast skill certificates"
+    tasks:
+      - "Define ForecastSkillCertificate dataclass"
+      - "Implement RMSE/ACC computation hooks"
+      - "Create skill degradation failure modes"
+
+  phase_3:
+    description: "Full hybrid architecture certificates"
+    tasks:
+      - "Define HybridConstraintWitness"
+      - "Map neural parameterization gauge freedom"
+      - "Unify with generalization bounds framework"
+
+# ============================================================================
+# CITATION
+# ============================================================================
+
+citation:
+  paper: |
+    @article{neuralgcm2024,
+      title={Neural General Circulation Models for Weather and Climate},
+      author={Kochkov, Dmitrii and others},
+      journal={Nature},
+      year={2024}
+    }
+
+  qa_mapping: |
+    @misc{qa_neuralgcm_mapping_2026,
+      title={QA Certificate Mapping for NeuralGCM},
+      author={Signal Experiments Research Group},
+      year={2026},
+      note={STUB - Physics-constrained ML as invariant-controlled reachability}
+    }

@@ -1,0 +1,77 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.finance_curvature_vol_contradicts.v1",
+  "title": "QA Finance Script 26 — curvature does NOT uniformly predict forward vol cross-asset; CONTRADICTS uniform predictability claim",
+  "created_utc": "2026-03-25T00:00:00Z",
+
+  "_fixture_purpose": "PASS fixture: canonical CONTRADICTS result. Pre-declared criteria were OOS R²>0.01 on ≥3/4 assets AND DM p<0.10 on ≥2/4 assets. Script 26 results FAIL both. ETH-USD is a genuine single-asset exception (OOS R²=+0.024***, DM p=0.001) but this does not satisfy the cross-asset criteria. The cert itself PASSes — the contradiction is correctly documented with evidence and fail_ledger. This demonstrates honest negative result certification.",
+
+  "observation": {
+    "source": "experiment_script",
+    "script": "qa_finance/26_curvature_har_vol_forecasting.py",
+    "captured_utc": "2026-03-25T17:57:29Z",
+    "domain": "quantitative_finance",
+    "summary": "HAR+kappa_dw vs HAR OOS R² and Diebold-Mariano tests across SPY, BTC-USD, ETH-USD, GLD. Pre-declared criteria FAIL at h=5d (R²>0.01 on 0/4, DM p<0.10 on 1/4) and h=21d (0/4, 0/4). SPY VIX achieves R²=+0.042 — far better than QA curvature for equities. One genuine exception: ETH-USD h=1d R²=+0.024***, h=5d R²=+0.010** — but single-asset, needs separate validation.",
+    "key_numbers": {
+      "h5d_r2_above_threshold_count": 0,
+      "h5d_dm_significant_count": 1,
+      "h21d_r2_above_threshold_count": 0,
+      "h21d_dm_significant_count": 0,
+      "eth_h1d_oos_r2": 0.0244,
+      "eth_h1d_dm_p": 0.001,
+      "spy_vix_r2": 0.042,
+      "required_r2_threshold": 0.01,
+      "required_asset_count": 3
+    }
+  },
+
+  "parent_cert": {
+    "schema_version": "QA_CORE_SPEC.v1",
+    "certificate_id": "qa.cert.core.kernel.minimal_pass.v1",
+    "claim": "QA orbit curvature (kappa) is a structurally predictive signal for forward volatility across multiple asset classes — i.e., the curvature metric derived from QA state dynamics carries information beyond classical HAR model residuals"
+  },
+
+  "verdict": "CONTRADICTS",
+
+  "evidence": [
+    {
+      "type": "statistical",
+      "description": "OOS R² improvement of HAR+kappa_dw over HAR baseline at h=5d: 0/4 assets clear threshold of +0.01",
+      "value": "SPY R²=-0.004, BTC R²=0.000, ETH R²=+0.010, GLD R²=+0.001"
+    },
+    {
+      "type": "statistical",
+      "description": "Diebold-Mariano test at h=5d: 1/4 assets significant at p<0.10 — fails required count of 2",
+      "value": "only ETH significant; SPY/BTC/GLD not significant"
+    },
+    {
+      "type": "quantitative",
+      "description": "SPY VIX achieves R²=+0.042, DM p=0.035** vs SPY QA curvature near zero — for equities, realized vol implied vol is far better than geometric curvature",
+      "value": "VIX R²=+0.042 vs curvature R²=-0.004 on SPY"
+    },
+    {
+      "type": "qualitative",
+      "description": "ETH single-asset exception (R²=+0.024*** at h=1d) is genuine and worth separate validation, but does not satisfy pre-declared cross-asset criteria",
+      "value": "ETH in-sample kappa coefficient t=+3.61, p=0.0003"
+    }
+  ],
+
+  "validation_checks": [
+    { "check_id": "V1", "description": "observation.source is a known source type", "passed": true, "details": "source='experiment_script' ∈ known sources" },
+    { "check_id": "V2", "description": "parent_cert.schema_version is a non-empty string", "passed": true, "details": "schema_version='QA_CORE_SPEC.v1'" },
+    { "check_id": "V3", "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}", "passed": true, "details": "verdict='CONTRADICTS'" },
+    { "check_id": "V4", "description": "verdict==CONTRADICTS implies nonempty fail_ledger", "passed": true, "details": "fail_ledger has 1 entry: CROSS_ASSET_PREDICTABILITY_FAILS_CRITERIA" },
+    { "check_id": "V5", "description": "evidence is nonempty", "passed": true, "details": "evidence has 4 entries" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "CROSS_ASSET_PREDICTABILITY_FAILS_CRITERIA",
+      "details": "Pre-declared criteria (OOS R²>0.01 on ≥3/4 assets AND DM p<0.10 on ≥2/4 assets) not met at any horizon. Curvature does not uniformly predict forward vol cross-asset. ETH exception noted but insufficient alone.",
+      "invariant_diff": "claimed: kappa predicts vol cross-asset; observed: fails on SPY, BTC, GLD; single-asset exception ETH at short horizon only"
+    }
+  ],
+
+  "result": "PASS"
+}

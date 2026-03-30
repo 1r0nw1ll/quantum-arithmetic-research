@@ -1,0 +1,51 @@
+{
+  "schema_version": "QA_SPREAD_PERIOD_CERT.v1",
+  "certificate_id": "qa.cert.spread_period.pass.m9.v1",
+  "cert_type": "qa_spread_period_cert",
+  "title": "Spread Period PASS: m=9 cosmos orbit period=24 = Pisano period π(9)",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The Pisano period π(9)=24: the Fibonacci sequence mod 9 repeats with period 24 (F_24≡0, F_25≡1 mod 9). This equals the order of the Fibonacci shift F=[[0,1],[1,1]] in GL₂(Z/9Z): F^24≡I mod 9, F^12=-I≢I (period exactly 24). The QA cosmos orbit for m=9 has period 24, matching π(9). The spread polynomial S_n(s) in Z/9Z cycles back after 24 steps because the angle group has order 24.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "m": 9
+  },
+
+  "spread_period": {
+    "cosmos_period": 24,
+    "orbit_type": "cosmos",
+    "_pisano_verification": "Fibonacci mod 9 first returns to (F_k,F_{k+1})=(0,1) at k=24",
+    "_fib_sequence_mod9": "0,1,1,2,3,5,8,4,3,7,1,8,0,8,8,7,6,4,1,5,6,2,8,1,[0,1,...] — period=24 ✓",
+    "_matrix_witnesses": {
+      "F_pow_24": [[1, 0], [0, 1]],
+      "F_pow_12": [[8, 0], [0, 8]],
+      "F_pow_8": [[4, 3], [3, 7]],
+      "F_pow_3": [[1, 2], [2, 3]],
+      "_note": "F^12=-I≢I; F^8≢I; F^3≢I → period 24 is minimal ✓"
+    },
+    "_spread_connection": "S_n(s) = sin²(n·arcsin(√s)); angle θ has order π(9)=24 in F_9 spread group; S_24(s)=s for all s ∈ F_9"
+  },
+
+  "wildberger_reference": {
+    "theorem": "Spread Polynomials and QA orbit period (Wildberger arXiv:0911.1025, arXiv:math/0701338)",
+    "statement": "QA cosmos orbit period for modulus m = Pisano period π(m) = ord(F) in GL₂(Z/mZ) = period of spread polynomial S_n in F_m.",
+    "qa_form": "For m=9: π(9)=24 = cosmos orbit period ✓"
+  },
+
+  "validation_checks": [
+    { "check_id": "SP1", "description": "schema_version is 'QA_SPREAD_PERIOD_CERT.v1'",             "passed": true,  "details": "schema_version='QA_SPREAD_PERIOD_CERT.v1'" },
+    { "check_id": "SP2", "description": "Fibonacci period mod m == claimed cosmos_period",            "passed": true,  "details": "π(9)=24=cosmos_period ✓" },
+    { "check_id": "SP3", "description": "F_matrix^cosmos_period ≡ I mod m",                         "passed": true,  "details": "F^24 mod 9 = [[1,0],[0,1]] ✓" },
+    { "check_id": "SP4", "description": "cosmos_period is minimal (F^(P/k) ≢ I for prime k|P)",     "passed": true,  "details": "F^12=-I≢I, F^8≢I, F^3≢I → period 24 minimal ✓" },
+    { "check_id": "SP5", "description": "orbit_type ∈ valid set AND period=1 ↔ singularity",        "passed": true,  "details": "orbit_type='cosmos', period=24≠1 ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

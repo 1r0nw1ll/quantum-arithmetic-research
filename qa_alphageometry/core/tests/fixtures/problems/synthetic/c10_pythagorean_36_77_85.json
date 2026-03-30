@@ -1,0 +1,171 @@
+{
+  "id": "c10_pythagorean_36_77_85",
+  "description": "Coordinate-derived (36-77-85 triple, 4 hub spokes)",
+  "difficulty": 6,
+  "givens": [
+    {
+      "Perpendicular": [
+        1,
+        3
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        4
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        5
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        3,
+        4
+      ]
+    },
+    {
+      "Parallel": [
+        4,
+        5
+      ]
+    },
+    {
+      "Parallel": [
+        5,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        6,
+        7
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        4
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        5
+      ]
+    },
+    {
+      "EqualLength": [
+        25,
+        26
+      ]
+    },
+    {
+      "EqualLength": [
+        26,
+        27
+      ]
+    },
+    {
+      "EqualLength": [
+        27,
+        28
+      ]
+    },
+    {
+      "CoincidentLines": [
+        29,
+        30
+      ]
+    },
+    {
+      "CoincidentLines": [
+        30,
+        31
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        32,
+        33
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        33,
+        34
+      ]
+    },
+    {
+      "OnCircle": [
+        36,
+        35
+      ]
+    },
+    {
+      "OnCircle": [
+        37,
+        35
+      ]
+    },
+    {
+      "OnCircle": [
+        38,
+        35
+      ]
+    },
+    {
+      "OnCircle": [
+        39,
+        35
+      ]
+    },
+    {
+      "OnCircle": [
+        40,
+        35
+      ]
+    },
+    {
+      "OnLine": [
+        41,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        42,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        43,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        44,
+        3
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Parallel": [
+        3,
+        7
+      ]
+    }
+  ]
+}

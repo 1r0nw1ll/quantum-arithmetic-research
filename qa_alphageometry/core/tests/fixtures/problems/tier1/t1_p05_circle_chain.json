@@ -1,0 +1,14 @@
+{
+  "id": "t1_p05_circle_chain",
+  "description": "Concentric circle transitivity through 4 circles: C1~C2~C3~C4~C5 => C1~C5",
+  "givens": [
+    {"Concentric": [20, 21]},
+    {"Concentric": [21, 22]},
+    {"Concentric": [22, 23]},
+    {"Concentric": [23, 24]}
+  ],
+  "goals": [
+    {"Concentric": [20, 24]}
+  ],
+  "difficulty": 3
+}

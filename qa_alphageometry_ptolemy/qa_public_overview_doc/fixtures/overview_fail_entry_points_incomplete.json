@@ -1,0 +1,57 @@
+{
+  "schema_version": "QA_PUBLIC_OVERVIEW_DOC.v1",
+  "certificate_id": "qa.cert.public_overview_doc.fail.entry_points_incomplete.v1",
+  "cert_type": "qa_public_overview_doc",
+  "title": "QA Public Overview — FAIL: spine_entry_points missing control spine",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: spine_entry_points lists only the obstruction spine entry point, omitting the control spine. A report that directs the reviewer to only one of the two public spines is not a faithful overview of [119]. Validator fires PO7: SPINE_ENTRY_POINTS_INCOMPLETE.",
+
+  "overview_ref": "QA_DUAL_SPINE_UNIFICATION_REPORT.v1",
+
+  "executive_summary": "QA is a modular arithmetic system with two independently certified public spines — an obstruction spine and a control spine — both rooted in QA_CORE_SPEC.v1. The obstruction spine proves that v_p(r)=1 targets are unreachable and prunable at zero cost. The control spine proves the compiler law is domain-generic.",
+
+  "spine_diagram": {
+    "obstruction_spine": {
+      "chain": "[111]→[112]→[113]→[114]→[115]→[116]",
+      "theorem": "v_p(r)=1 → unreachable → pruned → pruning_ratio=1.0"
+    },
+    "control_spine": {
+      "chain": "[105],[110]→[106]→[117]→[118]",
+      "theorem": "orbit singularity→satellite→cosmos and k=2 preserved across domains"
+    }
+  },
+
+  "obstruction_example": {
+    "description": "Target r=6, p=3, k=2: v_3(6)=1, forbidden, pruned before search, pruning_ratio=1.0.",
+    "canonical_r": 6,
+    "canonical_p": 3,
+    "canonical_k": 2,
+    "result": "forbidden — pruned before search — pruning_ratio=1.0"
+  },
+
+  "control_example": {
+    "description": "Cymatics (flat→hexagons) and seismology (quiet→surface_wave) both traverse orbit singularity→satellite→cosmos with k=2.",
+    "domains": [
+      { "name": "cymatics",    "initial_state": "flat",  "target_state": "hexagons"     },
+      { "name": "seismology",  "initial_state": "quiet", "target_state": "surface_wave" }
+    ],
+    "shared_orbit": ["singularity", "satellite", "cosmos"],
+    "shared_k": 2
+  },
+
+  "why_it_matters": "Both spines are machine-verified through a shared kernel. The obstruction spine governs impossibility and pruning; the control spine governs cross-domain compilation.",
+
+  "spine_entry_points": [
+    "QA_OBSTRUCTION_STACK_REPORT.v1 [116]"
+  ],
+
+  "canonical_pass_witness": {
+    "overview_result": "public_overview_verified"
+  },
+
+  "canonical_fail_witness": {
+    "description": "spine_entry_points lists only the obstruction spine, omitting the control spine",
+    "fail_types": ["SPINE_ENTRY_POINTS_INCOMPLETE"]
+  }
+}

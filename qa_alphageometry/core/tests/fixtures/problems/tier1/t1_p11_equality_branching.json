@@ -1,0 +1,13 @@
+{
+  "id": "t1_p11_equality_branching",
+  "description": "Segment equality with multiple branching paths: AB=CD, AB=EF, CD=GH => EF=GH",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [10, 12]},
+    {"EqualLength": [11, 13]}
+  ],
+  "goals": [
+    {"EqualLength": [12, 13]}
+  ],
+  "difficulty": 3
+}

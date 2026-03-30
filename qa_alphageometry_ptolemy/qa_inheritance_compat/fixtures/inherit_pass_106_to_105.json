@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_INHERITANCE_COMPAT_CERT.v1",
+  "certificate_id": "qa.cert.inheritance.pass.106_to_105.v1",
+  "cert_type": "qa_inheritance_compat",
+  "title": "Inheritance PASS: [106] QA_PLAN_CONTROL_COMPILER_CERT.v1 (family_extension) → [105] QA_CYMATIC_CONTROL_CERT.v1 (domain_instance)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Second certified inheritance edge in the QA spec graph. Proves that [105] QA Cymatics Control is a valid domain instantiation of [106] QA Plan-Control Compiler: (1) it correctly declares inherits_from='QA_PLAN_CONTROL_COMPILER_CERT.v1'; (2) its gate policy is compatible; (3) as a domain_instance, the failure algebra is domain-specific (physical cymatics fail types) — IC5 is inapplicable here; domain instances define their own fail algebra because they operate in a different ontological layer (physical state transitions, not compilation relations); (4) IC6 and IC7 are also inapplicable for domain_instance scope (no explicit logging fields or invariant refs in the cymatics control cert); (5) the scope transition 'family_extension → domain_instance' is valid. This cert proves the full three-level stack: [107] kernel → [106] compiler → [105] cymatics is a well-formed inheritance chain.",
+
+  "parent_family": {
+    "family_id": 106,
+    "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+    "spec_scope": "family_extension"
+  },
+
+  "child_family": {
+    "family_id": 105,
+    "schema_version": "QA_CYMATIC_CONTROL_CERT.v1",
+    "spec_scope": "domain_instance"
+  },
+
+  "declared_inherits_from": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+  "scope_transition": "family_extension -> domain_instance",
+
+  "extracted_parent": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": [],
+    "invariant_names": [],
+    "logging_required_fields": []
+  },
+
+  "extracted_child": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": [
+      "OFF_RESONANCE", "BOUNDARY_MISMATCH", "MODE_MIXING", "DAMPING_COLLAPSE",
+      "NONLINEAR_ESCAPE", "MEASUREMENT_ALIAS",
+      "ILLEGAL_TRANSITION", "RETURN_PATH_NOT_FOUND", "GOAL_NOT_REACHED",
+      "ORBIT_CLASS_MISMATCH", "PATH_LENGTH_EXCEEDED", "PATTERN_CLASS_UNRECOGNIZED"
+    ],
+    "preserves_invariants_refs": [],
+    "logging_required_fields": []
+  },
+
+  "compatibility_claims": {
+    "gate_policy_compatible":              true,
+    "failure_algebra_extends_not_replaces": true,
+    "logging_contract_compatible":          true,
+    "invariant_refs_resolve":               true,
+    "scope_transition_valid":               true
+  },
+
+  "validation_checks": [
+    { "check_id": "IC1", "description": "parent family schema version is a recognised QA cert family",            "passed": true,  "details": "'QA_PLAN_CONTROL_COMPILER_CERT.v1' is a registered family_extension" },
+    { "check_id": "IC2", "description": "child family schema version is a recognised QA cert family",             "passed": true,  "details": "'QA_CYMATIC_CONTROL_CERT.v1' is a registered domain_instance" },
+    { "check_id": "IC3", "description": "declared_inherits_from matches parent_family.schema_version",            "passed": true,  "details": "'QA_PLAN_CONTROL_COMPILER_CERT.v1' == 'QA_PLAN_CONTROL_COMPILER_CERT.v1'" },
+    { "check_id": "IC4", "description": "child gate policy is superset of parent gate policy",                    "passed": true,  "details": "child=[0,1,2,3,4,5] ⊇ parent=[0,1,2,3,4,5]" },
+    { "check_id": "IC5", "description": "failure algebra check — inapplicable for domain_instance scope",         "passed": true,  "details": "domain_instance defines its own physical fail algebra (cymatics transitions); not required to extend compiler fail types. extracted_parent.failure_algebra_types=[]; IC5 skipped." },
+    { "check_id": "IC6", "description": "logging contract check — inapplicable (no explicit logging fields in parent or child at this scope)", "passed": true, "details": "parent and child extracted_parent/child.logging_required_fields=[]; IC6 skipped." },
+    { "check_id": "IC7", "description": "invariant ref check — inapplicable (no preserves_invariants in domain_instance)", "passed": true, "details": "extracted_child.preserves_invariants_refs=[]; IC7 skipped." },
+    { "check_id": "IC8", "description": "scope transition 'family_extension -> domain_instance' is valid",        "passed": true,  "details": "'family_extension -> domain_instance' is in VALID_SCOPE_TRANSITIONS" }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

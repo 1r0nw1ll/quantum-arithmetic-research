@@ -1,0 +1,547 @@
+warning: unused imports: `AngleId`, `LineId`, and `PointId`
+ --> core/src/geometry/normalize.rs:6:23
+  |
+6 | use crate::ir::{Fact, AngleId, LineId, PointId};
+  |                       ^^^^^^^  ^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `AngleId`
+ --> core/src/geometry/check.rs:6:50
+  |
+6 | use crate::ir::{GeoState, Fact, PointId, LineId, AngleId};
+  |                                                  ^^^^^^^
+
+warning: unused import: `Fact`
+ --> core/src/search/beam.rs:5:63
+  |
+5 | use crate::ir::{GeoState, ProofTrace, ProofStep, ProofStepId, Fact};
+  |                                                               ^^^^
+
+warning: unused import: `std::collections::VecDeque`
+ --> core/src/search/beam.rs:8:5
+  |
+8 | use std::collections::VecDeque;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/parallel.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, LineId};
+  |                                           ^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/perpendicular.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, LineId};
+  |                                           ^^^^^^
+
+warning: unused imports: `AngleId` and `SegmentId`
+ --> core/src/rules/equality.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, SegmentId, AngleId};
+  |                                           ^^^^^^^^^  ^^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/circle.rs:3:62
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, PointId, CircleId, LineId};
+  |                                                              ^^^^^^
+
+warning: unused imports: `AngleId`, `LineId`, and `PointId`
+ --> core/src/rules/angle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, AngleId, LineId, PointId};
+  |                                           ^^^^^^^  ^^^^^^  ^^^^^^^
+
+warning: unused imports: `LineId`, `PointId`, and `SegmentId`
+ --> core/src/rules/triangle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, PointId, SegmentId, LineId};
+  |                                           ^^^^^^^  ^^^^^^^^^  ^^^^^^
+
+warning: unused import: `crate::ir::Fact`
+ --> core/src/loader/geometry3k.rs:6:5
+  |
+6 | use crate::ir::Fact;
+  |     ^^^^^^^^^^^^^^^
+
+warning: unused variable: `line`
+  --> core/src/rules/circle.rs:88:34
+   |
+88 |             if let Fact::Tangent(line, _circle, _point) = fact {
+   |                                  ^^^^ help: if this is intentional, prefix it with an underscore: `_line`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> core/src/rules/circle.rs:84:13
+   |
+84 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> core/src/rules/angle.rs:19:13
+   |
+19 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/angle.rs:49:13
+   |
+49 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `l1`
+  --> core/src/rules/triangle.rs:24:40
+   |
+24 |             if let Fact::Perpendicular(l1, l2) = fact {
+   |                                        ^^ help: if this is intentional, prefix it with an underscore: `_l1`
+
+warning: unused variable: `l2`
+  --> core/src/rules/triangle.rs:24:44
+   |
+24 |             if let Fact::Perpendicular(l1, l2) = fact {
+   |                                            ^^ help: if this is intentional, prefix it with an underscore: `_l2`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:19:13
+   |
+19 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `seg1`
+  --> core/src/rules/triangle.rs:56:38
+   |
+56 |             if let Fact::EqualLength(seg1, seg2) = fact1 {
+   |                                      ^^^^ help: if this is intentional, prefix it with an underscore: `_seg1`
+
+warning: unused variable: `seg2`
+  --> core/src/rules/triangle.rs:56:44
+   |
+56 |             if let Fact::EqualLength(seg1, seg2) = fact1 {
+   |                                            ^^^^ help: if this is intentional, prefix it with an underscore: `_seg2`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:51:13
+   |
+51 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `a`
+  --> core/src/rules/triangle.rs:85:44
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                            ^ help: if this is intentional, prefix it with an underscore: `_a`
+
+warning: unused variable: `b`
+  --> core/src/rules/triangle.rs:85:47
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                               ^ help: if this is intentional, prefix it with an underscore: `_b`
+
+warning: unused variable: `c`
+  --> core/src/rules/triangle.rs:85:50
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                                  ^ help: if this is intentional, prefix it with an underscore: `_c`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:81:13
+   |
+81 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `p1`
+   --> core/src/rules/triangle.rs:115:40
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                        ^^ help: if this is intentional, prefix it with an underscore: `_p1`
+
+warning: unused variable: `p2`
+   --> core/src/rules/triangle.rs:115:44
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                            ^^ help: if this is intentional, prefix it with an underscore: `_p2`
+
+warning: unused variable: `p3`
+   --> core/src/rules/triangle.rs:115:48
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                                ^^ help: if this is intentional, prefix it with an underscore: `_p3`
+
+warning: variable does not need to be mutable
+   --> core/src/rules/triangle.rs:111:13
+    |
+111 |         let mut new_facts = Vec::new();
+    |             ----^^^^^^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: function `are_collinear` is never used
+  --> core/src/ir/coords.rs:88:12
+   |
+88 |     pub fn are_collinear(p1: Point2D, p2: Point2D, p3: Point2D, epsilon: f64) -> bool {
+   |            ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `are_perpendicular` is never used
+  --> core/src/ir/coords.rs:99:12
+   |
+99 |     pub fn are_perpendicular(
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: function `are_parallel` is never used
+   --> core/src/ir/coords.rs:116:12
+    |
+116 |     pub fn are_parallel(
+    |            ^^^^^^^^^^^^
+
+warning: function `is_right_angle` is never used
+   --> core/src/ir/coords.rs:133:12
+    |
+133 |     pub fn is_right_angle(p1: Point2D, p2: Point2D, p3: Point2D, epsilon: f64) -> bool {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `is_right_triangle` is never used
+   --> core/src/ir/coords.rs:144:12
+    |
+144 |     pub fn is_right_triangle(a: f64, b: f64, c: f64, epsilon: f64) -> bool {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: function `angle` is never used
+   --> core/src/ir/coords.rs:157:12
+    |
+157 |     pub fn angle(p1: Point2D, vertex: Point2D, p3: Point2D) -> f64 {
+    |            ^^^^^
+
+warning: method `C` should have a snake case name
+  --> core/src/qa/tuple.rs:69:12
+   |
+69 |     pub fn C(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `c`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: method `F` should have a snake case name
+  --> core/src/qa/tuple.rs:75:12
+   |
+75 |     pub fn F(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `f`
+
+warning: method `G` should have a snake case name
+  --> core/src/qa/tuple.rs:81:12
+   |
+81 |     pub fn G(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case: `g`
+
+warning: method `J` should have a snake case name
+  --> core/src/qa/tuple.rs:87:12
+   |
+87 |     pub fn J(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case: `j`
+
+warning: method `X` should have a snake case name
+  --> core/src/qa/tuple.rs:93:12
+   |
+93 |     pub fn X(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `x`
+
+warning: method `K` should have a snake case name
+  --> core/src/qa/tuple.rs:99:12
+   |
+99 |     pub fn K(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `k`
+
+warning: method `I` should have a snake case name
+   --> core/src/qa/tuple.rs:107:12
+    |
+107 |     pub fn I(&self) -> f64 {
+    |            ^ help: convert the identifier to snake case (notice the capitalization): `i`
+
+warning: unused imports: `FactStore` and `PointId`
+   --> core/src/qa/extract.rs:237:27
+    |
+237 |     use crate::ir::{Goal, FactStore, Fact, PointId};
+    |                           ^^^^^^^^^        ^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `FactType`
+   --> core/src/ir/state.rs:231:48
+    |
+231 |     use super::super::facts::{Fact, FactStore, FactType};
+    |                                                ^^^^^^^^
+
+warning: unused import: `PointId`
+   --> core/src/ir/state.rs:232:41
+    |
+232 |     use super::super::symbols::{LineId, PointId, SymbolTable};
+    |                                         ^^^^^^^
+
+warning: unused import: `AngleId`
+ --> core/src/geometry/normalize.rs:6:23
+  |
+6 | use crate::ir::{Fact, AngleId, LineId, PointId};
+  |                       ^^^^^^^
+
+warning: unused import: `Metadata`
+  --> core/src/geometry/constructions.rs:86:27
+   |
+86 |     use crate::ir::{Goal, Metadata};
+   |                           ^^^^^^^^
+
+warning: unused import: `Metadata`
+   --> core/src/geometry/check.rs:129:27
+    |
+129 |     use crate::ir::{Goal, Metadata, FactStore};
+    |                           ^^^^^^^^
+
+warning: unused imports: `AngleId` and `PointId`
+ --> core/src/rules/angle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, AngleId, LineId, PointId};
+  |                                           ^^^^^^^          ^^^^^^^
+
+warning: unused imports: `FactStore` and `Goal`
+   --> core/src/rules/triangle.rs:133:21
+    |
+133 |     use crate::ir::{Goal, FactStore};
+    |                     ^^^^  ^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> core/src/ir/state.rs:289:13
+    |
+289 |         let mut facts = FactStore::new();
+    |             ----^^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> core/src/ir/state.rs:412:13
+    |
+412 |         let mut facts = FactStore::new();
+    |             ----^^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/circle.rs:84:13
+   |
+84 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: function `angle` is never used
+   --> core/src/ir/coords.rs:157:12
+    |
+157 |     pub fn angle(p1: Point2D, vertex: Point2D, p3: Point2D) -> f64 {
+    |            ^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:372:17
+    |
+372 |         assert!(result.states_expanded >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_comparisons)]` on by default
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:373:17
+    |
+373 |         assert!(result.successors_generated >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:374:17
+    |
+374 |         assert!(result.successors_kept >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:375:17
+    |
+375 |         assert!(result.depth_reached >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+   --> core/src/rules/collinear.rs:166:17
+    |
+166 |         assert!(new_facts.len() >= 0); // Due to normalization, count may vary
+    |                 ^^^^^^^^^^^^^^^^^^^^
+
+warning: `qa-alphageometry-core` (lib) generated 42 warnings (run `cargo fix --lib -p qa-alphageometry-core` to apply 18 suggestions)
+warning: `qa-alphageometry-core` (lib test) generated 47 warnings (30 duplicates) (run `cargo fix --lib -p qa-alphageometry-core --tests` to apply 11 suggestions)
+warning: unused import: `std::path::Path`
+ --> core/tests/loader_e2e.rs:6:5
+  |
+6 | use std::path::Path;
+  |     ^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_problems`
+   --> core/tests/week4_benchmark.rs:345:52
+    |
+345 | fn verify_correctness(results: &[BenchmarkResult], num_problems: usize, num_configs: usize) {
+    |                                                    ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_problems`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_problems`
+  --> core/tests/week4_session3_ablation.rs:45:52
+   |
+45 | fn verify_correctness(results: &[BenchmarkResult], num_problems: usize, num_configs: usize) {
+   |                                                    ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_problems`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `qa-alphageometry-core` (test "loader_e2e") generated 1 warning (run `cargo fix --test "loader_e2e"` to apply 1 suggestion)
+warning: `qa-alphageometry-core` (test "week4_benchmark") generated 1 warning
+warning: `qa-alphageometry-core` (test "week4_session3_ablation") generated 1 warning
+   Compiling qa-alphageometry-core v0.1.0 (/home/player2/signal_experiments/qa_alphageometry/core)
+warning: fields `beam_signatures_qa0` and `beam_signatures_qa70` are never read
+  --> core/tests/synthetic_structure_probe.rs:23:5
+   |
+12 | struct ProbeResult {
+   |        ----------- fields in this struct
+...
+23 |     beam_signatures_qa0: Vec<(usize, u64)>,
+   |     ^^^^^^^^^^^^^^^^^^^
+24 |     beam_signatures_qa70: Vec<(usize, u64)>,
+   |     ^^^^^^^^^^^^^^^^^^^^
+   |
+   = note: `ProbeResult` has a derived impl for the trait `Debug`, but this is intentionally ignored during dead code analysis
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: `qa-alphageometry-core` (test "synthetic_structure_probe") generated 1 warning
+error[E0609]: no field `symbols` on type `GeometryProblem`
+  --> core/tests/track1_rulebatch_validation.rs:27:47
+   |
+27 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goal.clone());
+   |                                               ^^^^^^^ unknown field
+   |
+   = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `facts` on type `GeometryProblem`
+  --> core/tests/track1_rulebatch_validation.rs:27:72
+   |
+27 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goal.clone());
+   |                                                                        ^^^^^ unknown field
+   |
+   = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `goal` on type `GeometryProblem`
+  --> core/tests/track1_rulebatch_validation.rs:27:95
+   |
+27 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goal.clone());
+   |                                                                                               ^^^^ unknown field
+   |
+help: a field with a similar name exists
+   |
+27 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goals.clone());
+   |                                                                                                   +
+
+error[E0609]: no field `symbols` on type `GeometryProblem`
+  --> core/tests/track1_rulebatch_validation.rs:44:17
+   |
+44 |         problem.symbols.clone(),
+   |                 ^^^^^^^ unknown field
+   |
+   = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `facts` on type `GeometryProblem`
+  --> core/tests/track1_rulebatch_validation.rs:45:17
+   |
+45 |         problem.facts.clone(),
+   |                 ^^^^^ unknown field
+   |
+   = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `goal` on type `GeometryProblem`
+  --> core/tests/track1_rulebatch_validation.rs:46:17
+   |
+46 |         problem.goal.clone(),
+   |                 ^^^^ unknown field
+   |
+help: a field with a similar name exists
+   |
+46 |         problem.goals.clone(),
+   |                     +
+
+error[E0609]: no field `symbols` on type `GeometryProblem`
+   --> core/tests/track1_rulebatch_validation.rs:116:47
+    |
+116 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goal.clone());
+    |                                               ^^^^^^^ unknown field
+    |
+    = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `facts` on type `GeometryProblem`
+   --> core/tests/track1_rulebatch_validation.rs:116:72
+    |
+116 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goal.clone());
+    |                                                                        ^^^^^ unknown field
+    |
+    = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `goal` on type `GeometryProblem`
+   --> core/tests/track1_rulebatch_validation.rs:116:95
+    |
+116 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goal.clone());
+    |                                                                                               ^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+116 |     let initial_state = GeoState::new(problem.symbols.clone(), problem.facts.clone(), problem.goals.clone());
+    |                                                                                                   +
+
+error[E0609]: no field `symbols` on type `GeometryProblem`
+   --> core/tests/track1_rulebatch_validation.rs:132:17
+    |
+132 |         problem.symbols.clone(),
+    |                 ^^^^^^^ unknown field
+    |
+    = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `facts` on type `GeometryProblem`
+   --> core/tests/track1_rulebatch_validation.rs:133:17
+    |
+133 |         problem.facts.clone(),
+    |                 ^^^^^ unknown field
+    |
+    = note: available fields are: `id`, `description`, `givens`, `goals`, `answer`, `difficulty`
+
+error[E0609]: no field `goal` on type `GeometryProblem`
+   --> core/tests/track1_rulebatch_validation.rs:134:17
+    |
+134 |         problem.goal.clone(),
+    |                 ^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+134 |         problem.goals.clone(),
+    |                     +
+
+For more information about this error, try `rustc --explain E0609`.
+error: could not compile `qa-alphageometry-core` (test "track1_rulebatch_validation") due to 12 previous errors

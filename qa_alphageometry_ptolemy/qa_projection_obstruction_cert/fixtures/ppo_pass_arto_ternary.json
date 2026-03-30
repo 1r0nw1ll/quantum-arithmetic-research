@@ -1,0 +1,150 @@
+{
+  "schema_version": "QA_PROJECTION_OBSTRUCTION_CERT.v1",
+  "cert_type": "projection_obstruction",
+  "certificate_id": "qa.cert.projection_obstruction.arto_ternary.v1",
+  "title": "Arto ternary: lawful native arithmetic, representation debt, physical layer still unassessed",
+  "created_utc": "2026-03-30T00:45:00Z",
+  "inherits_from": "QA_ENGINEERING_CORE_CERT.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_alphabet_compatible": true,
+    "invariants_preserved": true,
+    "logging_contract_compatible": true,
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+  "engineering_context": {
+    "native_state_space": "balanced ternary symbol packets and carry packets",
+    "native_invariants": [
+      {
+        "id": "ternary_closure",
+        "title": "Ternary gate-universe closure",
+        "rule": "The 2-input 3-state local rule universe contains exactly 3^(3^2)=19,683 gates."
+      },
+      {
+        "id": "local_additive_conservation",
+        "title": "Balanced ternary local additive conservation",
+        "rule": "x+y+carry_in = sum_digit + 3*carry_out with outputs in {-1,0,+1}."
+      }
+    ]
+  },
+  "native_witness": {
+    "lawful_invariants_supported": [
+      "ternary_closure",
+      "local_additive_conservation"
+    ],
+    "verdict": "CONSISTENT",
+    "evidence_summary": "Gate count 19,683 exactly; all 27 one-digit adder cases and 4,921 in-range ripple pairs pass exact conservation."
+  },
+  "representation_layers": [
+    {
+      "layer_id": "decimal_display_map",
+      "kind": "display_projection",
+      "preserved_invariants": [
+        "ternary_closure"
+      ],
+      "native_state_count": 27,
+      "observed_state_count": 10,
+      "unused_state_count": 17,
+      "cost_ratio_vs_baseline": 1.0,
+      "selector_count": 0,
+      "merge_count": 0,
+      "topology_ratio_vs_baseline": 1.0,
+      "obstruction_tags": [
+        "STATE_SPACE_RESIDUAL"
+      ],
+      "verdict": "PARTIAL"
+    },
+    {
+      "layer_id": "signed_rail_realization",
+      "kind": "rail_projection",
+      "preserved_invariants": [
+        "local_additive_conservation"
+      ],
+      "native_state_count": 27,
+      "observed_state_count": 27,
+      "unused_state_count": 0,
+      "cost_ratio_vs_baseline": 9.485714285714286,
+      "selector_count": 15,
+      "merge_count": 20,
+      "topology_ratio_vs_baseline": 1.0,
+      "obstruction_tags": [
+        "COST_INFLATION",
+        "SELECTOR_AND_MERGE_DEBT"
+      ],
+      "verdict": "CONTRADICTS"
+    },
+    {
+      "layer_id": "published_7segment_topology",
+      "kind": "published_topology",
+      "preserved_invariants": [
+        "local_additive_conservation"
+      ],
+      "native_state_count": 27,
+      "observed_state_count": 18,
+      "unused_state_count": 9,
+      "cost_ratio_vs_baseline": 66.0,
+      "selector_count": 41,
+      "merge_count": 91,
+      "topology_ratio_vs_baseline": 66.0,
+      "obstruction_tags": [
+        "STATE_SPACE_RESIDUAL",
+        "COST_INFLATION",
+        "SELECTOR_AND_MERGE_DEBT",
+        "TOPOLOGY_PART_COUNT_DEBT"
+      ],
+      "verdict": "CONTRADICTS"
+    }
+  ],
+  "physical_realization": {
+    "assessment_status": "UNASSESSED",
+    "required_symbol_states": 3,
+    "stable_state_count": 0,
+    "threshold_margin_ratio": 1.0,
+    "noise_margin_ratio": 1.0,
+    "required_fanout": 1,
+    "fanout_supported": 1,
+    "timing_characterized": false,
+    "device_tags": [],
+    "verdict": "INCONCLUSIVE",
+    "notes": "No threshold, noise, fanout, or timing measurements yet. Representation debt must not be treated as physical-device failure."
+  },
+  "overall_verdict": "PARTIAL",
+  "validation_checks": [
+    {
+      "check_id": "IH1",
+      "description": "inherits_from is QA_ENGINEERING_CORE_CERT.v1",
+      "passed": true,
+      "details": "inherits_from='QA_ENGINEERING_CORE_CERT.v1'"
+    },
+    {
+      "check_id": "PO9",
+      "description": "overall verdict reflects native support plus representation debt plus unassessed physical layer",
+      "passed": true,
+      "details": "native=CONSISTENT, representation debt present, physical=INCONCLUSIVE -> overall=PARTIAL"
+    }
+  ],
+  "fail_ledger": [
+    {
+      "fail_type": "STATE_SPACE_RESIDUAL",
+      "details": "Display and published topology layers use strict subsets of the native 27-state space.",
+      "invariant_diff": "native 27 states -> observed subsets of size 10 and 18"
+    },
+    {
+      "fail_type": "COST_INFLATION",
+      "details": "Representation layers inflate cost relative to the binary baseline.",
+      "invariant_diff": "cost ratios 9.4857x and 66x under the chosen realizations"
+    },
+    {
+      "fail_type": "SELECTOR_AND_MERGE_DEBT",
+      "details": "Representation requires explicit selector and merge surfaces.",
+      "invariant_diff": "selector_count>0 or merge_count>0 on the non-native realization layers"
+    },
+    {
+      "fail_type": "TOPOLOGY_PART_COUNT_DEBT",
+      "details": "Published topology layer has a large raw part-count ratio.",
+      "invariant_diff": "published topology ratio vs baseline = 66x"
+    }
+  ],
+  "result": "PASS"
+}

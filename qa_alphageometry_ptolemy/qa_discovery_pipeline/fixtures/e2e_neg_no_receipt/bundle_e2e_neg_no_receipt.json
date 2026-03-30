@@ -1,0 +1,16 @@
+{
+  "schema_id": "QA_DISCOVERY_BUNDLE_SCHEMA.v1",
+  "bundle_id": "BUNDLE-E2E-NEG-NORECEIPT0001",
+  "created_utc": "2026-02-11T00:10:10Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "pipeline_id": "QA_DISCOVERY_PIPELINE.v1",
+  "plan_ref": { "family": "QA_DISCOVERY_PIPELINE.v1", "path_or_hash": "qa_discovery_pipeline/fixtures/e2e_neg_no_receipt/plan_e2e_neg_no_receipt.json" },
+  "run_refs": [
+    { "family": "QA_DISCOVERY_PIPELINE.v1", "path_or_hash": "qa_discovery_pipeline/fixtures/e2e_neg_no_receipt/run_RUN-NEG-NORECEIPT-1.json" }
+  ],
+  "artifact_refs": [
+    { "family": "QA_DISCOVERY_PIPELINE.v1", "schema_id": "QA_DISCOVERY_PIPELINE_RUN_SCHEMA.v1", "path_or_hash": "qa_discovery_pipeline/fixtures/e2e_neg_no_receipt/run_RUN-NEG-NORECEIPT-1.json" }
+  ],
+  "summary": { "runs_total": 1, "runs_success": 0, "fail_counts": { "SIM_FAIL": 1 } },
+  "hash_chain": { "prev_bundle_hash": "1111111111111111111111111111111111111111111111111111111111111111", "this_bundle_hash": "5b406802748bc44e0625f0770082f13f81f8026e65276e9b95b11a770b8a5f74" }
+}

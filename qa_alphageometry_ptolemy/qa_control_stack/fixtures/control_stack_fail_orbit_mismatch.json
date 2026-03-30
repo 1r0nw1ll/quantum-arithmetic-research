@@ -1,0 +1,92 @@
+{
+  "schema_version": "QA_CONTROL_STACK_CERT.v1",
+  "certificate_id": "qa.cert.control_stack.fail.orbit_mismatch.v1",
+  "cert_type": "control_stack",
+  "title": "Control Stack FAIL: seismology trace claims final_orbit_family=satellite, breaking cross-domain equivalence",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: cymatics trace is correct (singularity→satellite→cosmos, k=2), but the seismology trace claims orbit_trajectory=[singularity,satellite,satellite] and final_orbit_family=satellite instead of cosmos. The cross_domain_claim nonetheless declares orbit_trajectory_preserved=true and compiler_law_domain_generic=true — both lies. Validator recomputes cross-domain consistency (CS3) and detects the mismatch, then catches the inconsistent cross_domain_claim (CS7, CS9). Fail types: ORBIT_TRAJECTORY_MISMATCH, CROSS_DOMAIN_CLAIM_INCONSISTENT, STACK_INCONSISTENCY.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "compiler_ref": { "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1" },
+
+  "domain_instance_refs": [
+    { "domain": "cymatics",   "schema_version": "QA_CYMATIC_CONTROL_CERT.v1" },
+    { "domain": "seismology", "schema_version": "QA_SEISMIC_CONTROL_CERT.v1" }
+  ],
+
+  "domain_traces": [
+    {
+      "domain": "cymatics",
+      "initial_state":      "flat",
+      "intermediate_state": "stripes",
+      "target_state":       "hexagons",
+      "move_sequence":      ["increase_amplitude", "set_frequency"],
+      "path_length_k":      2,
+      "orbit_trajectory":   ["singularity", "satellite", "cosmos"],
+      "initial_orbit_family": "singularity",
+      "final_orbit_family":   "cosmos",
+      "notes": "Correctly declared: cymatics reaches cosmos."
+    },
+    {
+      "domain": "seismology",
+      "initial_state":      "quiet",
+      "intermediate_state": "p_wave",
+      "target_state":       "surface_wave",
+      "move_sequence":      ["increase_gain", "apply_lowpass"],
+      "path_length_k":      2,
+      "orbit_trajectory":   ["singularity", "satellite", "satellite"],
+      "initial_orbit_family": "singularity",
+      "final_orbit_family":   "satellite",
+      "notes": "INCORRECTLY declared: claims final orbit is satellite, not cosmos. surface_wave maps to cosmos, not satellite — this claim misrepresents the QA orbit structure of the seismic domain."
+    }
+  ],
+
+  "cross_domain_claim": {
+    "orbit_trajectory_preserved":  true,
+    "path_length_equal":           true,
+    "compiler_law_domain_generic": true,
+    "canonical_orbit_trajectory":  ["singularity", "satellite", "cosmos"],
+    "canonical_path_length_k":     2,
+    "notes": "INCORRECT claim: orbit_trajectory_preserved=true despite traces disagreeing on final orbit. cymatics ends in cosmos, seismology ends in satellite — the trajectories are NOT equal. The cross_domain_claim is inconsistent with the trace data."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                               "passed": true,  "details": "match" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                                 "passed": true,  "details": "match" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                                            "passed": true,  "details": "match" },
+    { "check_id": "CS1",  "description": "compiler_ref is QA_PLAN_CONTROL_COMPILER_CERT.v1",                                 "passed": true,  "details": "match" },
+    { "check_id": "CS2a", "description": "domain_instance_refs[0] is a known domain_instance schema",                        "passed": true,  "details": "QA_CYMATIC_CONTROL_CERT.v1 registered" },
+    { "check_id": "CS2b", "description": "domain_instance_refs[1] is a known domain_instance schema",                        "passed": true,  "details": "QA_SEISMIC_CONTROL_CERT.v1 registered" },
+    { "check_id": "CS3",  "description": "all domain_traces have matching orbit_trajectory",                                  "passed": false, "details": "cymatics=[singularity,satellite,cosmos]; seismology=[singularity,satellite,satellite]; MISMATCH — ORBIT_TRAJECTORY_MISMATCH" },
+    { "check_id": "CS4",  "description": "all domain_traces have equal path_length_k",                                        "passed": true,  "details": "both=2; equal" },
+    { "check_id": "CS5",  "description": "all domain_traces have matching initial_orbit_family",                               "passed": true,  "details": "both=singularity; match" },
+    { "check_id": "CS6",  "description": "all domain_traces have matching final_orbit_family",                                 "passed": false, "details": "cymatics=cosmos; seismology=satellite; MISMATCH — ORBIT_TRAJECTORY_MISMATCH" },
+    { "check_id": "CS7",  "description": "cross_domain_claim.orbit_trajectory_preserved consistent with CS3",                 "passed": false, "details": "orbit_trajectory_preserved=true but trajectories differ — CROSS_DOMAIN_CLAIM_INCONSISTENT" },
+    { "check_id": "CS8",  "description": "cross_domain_claim.path_length_equal consistent with CS4",                         "passed": true,  "details": "path_length_equal=true; consistent" },
+    { "check_id": "CS9",  "description": "cross_domain_claim.compiler_law_domain_generic consistent with CS7+CS8",            "passed": false, "details": "compiler_law_domain_generic=true but orbit trajectory is NOT preserved — STACK_INCONSISTENCY" },
+    { "check_id": "CS10", "description": "canonical_orbit_trajectory matches all domain trace orbit_trajectories",             "passed": false, "details": "canonical=[singularity,satellite,cosmos] but seismology=[singularity,satellite,satellite] — ORBIT_TRAJECTORY_MISMATCH" },
+    { "check_id": "CS11", "description": "canonical_path_length_k matches all domain trace path_length_k values",             "passed": true,  "details": "canonical=2; all traces=2; match" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "ORBIT_TRAJECTORY_MISMATCH",
+      "message": "domain_traces disagree on orbit_trajectory and final_orbit_family: cymatics ends cosmos, seismology ends satellite. Cross-domain equivalence requires identical orbit trajectories across all domain instances."
+    },
+    {
+      "fail_type": "CROSS_DOMAIN_CLAIM_INCONSISTENT",
+      "message": "cross_domain_claim.orbit_trajectory_preserved=true but traces show different trajectories. The claim contradicts the trace data."
+    },
+    {
+      "fail_type": "STACK_INCONSISTENCY",
+      "message": "cross_domain_claim.compiler_law_domain_generic=true but orbit trajectory is not preserved across domains. Domain-genericity requires orbit invariance; this cert does not establish it."
+    }
+  ],
+  "result": "FAIL"
+}

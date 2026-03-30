@@ -1,0 +1,13 @@
+{
+  "id": "t0_p04_angle_direct",
+  "description": "Direct angle equality: ∠A=∠B=∠C => ∠A=∠C (2 steps)",
+  "givens": [
+    {"EqualAngles": [30, 31]},
+    {"EqualAngles": [31, 32]},
+    {"EqualAngles": [32, 33]}
+  ],
+  "goals": [
+    {"EqualAngles": [30, 33]}
+  ],
+  "difficulty": 2
+}

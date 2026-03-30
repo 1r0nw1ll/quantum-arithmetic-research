@@ -1,0 +1,83 @@
+{
+  "schema_version": "QA_AREA_QUANTIZATION_CERT.v1",
+  "certificate_id": "qa.cert.area_quant.fail_wrong_kernel_ref.v1",
+  "cert_type": "qa_area_quantization",
+  "title": "QA Area Quantization FAIL: inherits_from='QA_CORE_SPEC.v0' (wrong version) → INVALID_KERNEL_REFERENCE",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates INVALID_KERNEL_REFERENCE: inherits_from is set to 'QA_CORE_SPEC.v0' (a non-existent prior version) instead of the required 'QA_CORE_SPEC.v1'. The validator detects this and emits INVALID_KERNEL_REFERENCE. This is the canonical inheritance failure mode: a family extension that points to the wrong kernel cannot be validated against the actual kernel contract. The gate_policy_inherited and failure_algebra checks are still structurally correct in this cert — only the kernel reference itself is wrong. This proves the validator checks the reference before accepting any other compatibility claims.",
+
+  "inherits_from": "QA_CORE_SPEC.v0",
+  "spec_scope": "family_extension",
+
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_names_resolve": true,
+    "invariant_refs_resolve": true,
+    "failure_algebra_extends_not_replaces": true,
+    "logging_contract_compatible": true,
+    "gate_policy_inherited": [0, 1, 2, 3, 4, 5]
+  },
+
+  "modulus": 9,
+  "quadrea_form": "b^2 + b*e - e^2 (mod 9)",
+
+  "quadrea_claim": {
+    "spectrum": [0, 1, 2, 4, 5, 7, 8],
+    "forbidden_values": [3, 6],
+    "forbidden_reason": "3 is inert in Z[phi]; f ≡ 0 mod 3 iff 3|b and 3|e."
+  },
+
+  "generators": [
+    {
+      "name": "sigma",
+      "kind": "bijection",
+      "action": "e → e + 1 (mod 9); updates d = b+e mod 9, a = e+d mod 9",
+      "domain_preconditions": [],
+      "failure_modes_emitted": ["OUT_OF_BOUNDS"],
+      "preserves_invariants": ["QA_relation_1", "QA_relation_2"]
+    }
+  ],
+
+  "invariants": [
+    { "name": "QA_relation_1", "rule": "b + e = d (mod 9)" },
+    { "name": "QA_relation_2", "rule": "e + d = a (mod 9)" }
+  ],
+
+  "failure_algebra": {
+    "types": [
+      "OUT_OF_BOUNDS",
+      "PARITY",
+      "INVARIANT_BREAK",
+      "ZERO_DENOMINATOR",
+      "QUADREA_MISMATCH",
+      "FORBIDDEN_QUADREA_INCORRECT"
+    ]
+  },
+
+  "logging": {
+    "required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "validation": {
+    "gates": [0, 1, 2, 3, 4, 5]
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                   "passed": false, "details": "inherits_from='QA_CORE_SPEC.v0'; expected 'QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",                                     "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "core_kernel_compatibility.gate_policy_inherited == [0,1,2,3,4,5]",     "passed": true,  "details": "gate_policy_inherited=[0,1,2,3,4,5]" },
+    { "check_id": "IH4", "description": "failure_algebra includes all kernel types",                             "passed": true,  "details": "all four kernel types present" },
+    { "check_id": "AQ1", "description": "quadrea_claim.spectrum matches computed f(b,e) mod 9 for all b,e",     "passed": true,  "details": "spectrum claim correct despite bad kernel ref" },
+    { "check_id": "AQ2", "description": "quadrea_claim.forbidden_values == complement of spectrum in 0..m-1",   "passed": true,  "details": "forbidden_values claim correct" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "INVALID_KERNEL_REFERENCE",
+      "message": "inherits_from='QA_CORE_SPEC.v0' is not a recognised kernel version. The only valid kernel reference for family_extension certs is 'QA_CORE_SPEC.v1'. A cert pointing to a non-existent or superseded kernel cannot be validated against the kernel contract: its compatibility claims (gate_policy_inherited, failure_algebra_extends_not_replaces, etc.) cannot be machine-verified. Correct by setting inherits_from='QA_CORE_SPEC.v1'."
+    }
+  ],
+
+  "result": "FAIL"
+}

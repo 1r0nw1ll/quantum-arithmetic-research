@@ -1,0 +1,53 @@
+{
+  "schema_version": "QA_RED_GROUP_CERT.v1",
+  "certificate_id": "qa.cert.red_group.pass.m3_cosmos.v1",
+  "cert_type": "qa_red_group_cert",
+  "title": "Red Group PASS: m=3 cosmos orbit period=8 (ord(F) in GL₂(Z/3Z))",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Second PASS fixture. The QA Fibonacci shift F=[[0,1],[1,1]] has order 8 in GL₂(Z/3Z): F^8≡I mod 3 and F^4=[[2,0],[0,2]]=-I≢I (so 8 is minimal). The affine QA map period also equals 8 for m=3 because (I+F+...+F^7)=(I+F+F^2+F^3)(I+F^4)=(I+...+F^3)·0=0. The cosmos orbit period for m=3 is 8. This demonstrates the same red-group structure at a smaller modulus.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "m": 3
+  },
+
+  "red_group": {
+    "T_matrix": [[0, 1], [1, 1]],
+    "T_matrix_derivation": "Fibonacci shift: (b,e) → (e, b+e mod m); universal across all moduli",
+    "det_T": -1,
+    "trace_T": 1,
+    "char_poly": "x^2 - x - 1 = 0",
+    "orbit_period": 8,
+    "orbit_type": "cosmos",
+    "_period_witnesses": {
+      "F_pow_8": [[1, 0], [0, 1]],
+      "F_pow_4": [[2, 0], [0, 2]],
+      "_note": "F^4 = −I mod 3 ≢ I, confirming 8 is minimal; F^8 = I ✓"
+    }
+  },
+
+  "wildberger_reference": {
+    "theorem": "1D Metrical Geometry, Red Isometry Group (Wildberger arXiv:math/0701338)",
+    "statement": "Orbit period = ord(F) in GL₂(Z/mZ) where F=[[0,1],[1,1]] is the Fibonacci shift representing red-rotation by φ. Period varies by modulus.",
+    "qa_form": "For m=3: ord(F)=8; QA cosmos has 8-cycle. For m=9: ord(F)=24; QA cosmos has 24-cycle."
+  },
+
+  "validation_checks": [
+    { "check_id": "RG1", "description": "schema_version is 'QA_RED_GROUP_CERT.v1'",       "passed": true,  "details": "schema_version='QA_RED_GROUP_CERT.v1'" },
+    { "check_id": "RG2", "description": "T_matrix == [[0,1],[1,1]] (Fibonacci shift)",     "passed": true,  "details": "T_matrix=[[0,1],[1,1]] ✓" },
+    { "check_id": "RG3", "description": "det(T_matrix) ≡ −1 mod m (red norm of φ)",       "passed": true,  "details": "det=−1 ≡ 2 mod 3 ✓" },
+    { "check_id": "RG4", "description": "trace(T_matrix) ≡ 1 mod m",                      "passed": true,  "details": "trace=1 mod 3 ✓" },
+    { "check_id": "RG5", "description": "T_matrix^orbit_period ≡ I mod m",                "passed": true,  "details": "F^8 mod 3 = [[1,0],[0,1]] ✓" },
+    { "check_id": "RG6", "description": "orbit_period is minimal",                         "passed": true,  "details": "F^4=[[2,0],[0,2]] ≢ I mod 3 → period 8 minimal ✓" },
+    { "check_id": "RG7", "description": "orbit_type ∈ valid set AND period=1 ↔ singularity", "passed": true, "details": "orbit_type='cosmos', period=8≠1 ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

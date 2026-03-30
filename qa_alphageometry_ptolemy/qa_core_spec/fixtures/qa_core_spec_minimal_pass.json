@@ -1,0 +1,96 @@
+{
+  "schema_version": "QA_CORE_SPEC.v1",
+  "certificate_id": "qa.cert.core.kernel.minimal_pass.v1",
+  "cert_type": "qa_core_spec",
+  "title": "QA Core Spec Kernel: canonical minimal pass — QA tuple system (b,e,d,a) with generators σ μ λ ν",
+  "created_utc": "2026-03-21T00:00:00Z",
+  "spec_name": "Quantum Arithmetic Kernel v1",
+  "spec_scope": "kernel",
+
+  "_fixture_purpose": "Canonical kernel witness for QA_CORE_SPEC.v1. Defines the minimal executable specification of the QA tuple system: 4-variable state space (b,e,d,a) under two structural constraints, four generators (sigma/mu/lambda/nu), two core invariants, bounded-BFS reachability, a four-type failure algebra, required logging fields, and gate sequence [0..5]. All five validator checks pass. This cert serves as the root ontology from which all downstream cert families inherit.",
+
+  "state_space": {
+    "type": "tuple",
+    "variables": ["b", "e", "d", "a"],
+    "constraints": [
+      "b + e = d",
+      "e + d = a"
+    ]
+  },
+
+  "generators": [
+    {
+      "name": "sigma",
+      "kind": "bijection",
+      "action": "e → e + 1 (mod m); updates d and a to preserve constraints",
+      "domain_preconditions": [],
+      "failure_modes_emitted": ["OUT_OF_BOUNDS"],
+      "preserves_invariants": ["QA_relation_1", "QA_relation_2"]
+    },
+    {
+      "name": "mu",
+      "kind": "bijection",
+      "action": "swap(b, e); recomputes d = b+e, a = b+2e",
+      "domain_preconditions": [],
+      "failure_modes_emitted": [],
+      "preserves_invariants": ["QA_relation_1", "QA_relation_2"]
+    },
+    {
+      "name": "lambda",
+      "kind": "partial",
+      "action": "scale(b, e, d, a) by k; valid only when k divides no invariant",
+      "domain_preconditions": ["k_nonzero"],
+      "failure_modes_emitted": ["ZERO_DENOMINATOR", "OUT_OF_BOUNDS"],
+      "preserves_invariants": ["QA_relation_1", "QA_relation_2"]
+    },
+    {
+      "name": "nu",
+      "kind": "contract",
+      "action": "divide tuple coordinates by 2 when all required coordinates are even",
+      "domain_preconditions": ["all_even"],
+      "failure_modes_emitted": ["PARITY"],
+      "preserves_invariants": ["QA_relation_1", "QA_relation_2"]
+    }
+  ],
+
+  "invariants": [
+    { "name": "QA_relation_1", "rule": "b + e = d" },
+    { "name": "QA_relation_2", "rule": "e + d = a" }
+  ],
+
+  "reachability": {
+    "method": "bounded_bfs",
+    "max_depth": 24,
+    "connected_components": "defined_by_invariant_equivalence_classes"
+  },
+
+  "failure_algebra": {
+    "types": ["OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR"]
+  },
+
+  "logging": {
+    "required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "validation": {
+    "gates": [0, 1, 2, 3, 4, 5]
+  },
+
+  "certificate_contract": {
+    "required": true,
+    "format": "QA_CERT.v1",
+    "witness_fields": ["path", "final_state", "fail_ledger"]
+  },
+
+  "validation_checks": [
+    { "check_id": "V1", "description": "generator names are unique",                                            "passed": true,  "details": "names=[sigma,mu,lambda,nu]; 4 unique, 0 duplicates" },
+    { "check_id": "V2", "description": "failure_algebra.types is nonempty",                                     "passed": true,  "details": "types=[OUT_OF_BOUNDS,PARITY,INVARIANT_BREAK,ZERO_DENOMINATOR]; len=4 >= 1" },
+    { "check_id": "V3", "description": "validation.gates is exactly [0,1,2,3,4,5]",                             "passed": true,  "details": "gates=[0,1,2,3,4,5]" },
+    { "check_id": "V4", "description": "logging.required_fields includes move, fail_type, invariant_diff",      "passed": true,  "details": "required_fields=[move,fail_type,invariant_diff]; all three present" },
+    { "check_id": "V5", "description": "all preserves_invariants references resolve to declared invariants",    "passed": true,  "details": "invariant names={QA_relation_1,QA_relation_2}; all preserves_invariants entries resolve" }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

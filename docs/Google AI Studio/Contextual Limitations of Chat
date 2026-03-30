@@ -1,0 +1,51 @@
+{
+  "runSettings": {
+    "temperature": 1.0,
+    "model": "models/gemini-2.5-flash-preview-04-17",
+    "topP": 0.95,
+    "topK": 64,
+    "maxOutputTokens": 65536,
+    "safetySettings": [{
+      "category": "HARM_CATEGORY_HARASSMENT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_HATE_SPEECH",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "OFF"
+    }, {
+      "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+      "threshold": "OFF"
+    }],
+    "responseMimeType": "text/plain",
+    "enableCodeExecution": false,
+    "enableSearchAsATool": false,
+    "enableBrowseAsATool": false,
+    "enableAutoFunctionResponse": false
+  },
+  "systemInstruction": {
+  },
+  "chunkedPrompt": {
+    "chunks": [{
+      "text": "so you have cross chat context?\n",
+      "role": "user",
+      "tokenCount": 9
+    }, {
+      "text": "**Define Cross-Chat Context**\n\nI\u0027m now zeroing in on the crux of the user\u0027s question. Initially, I\u0027ll flesh out my understanding of \"cross-chat context\". Currently, I see it as retaining information from *previous* conversations to enrich future interactions. I\u0027m focusing on the meaning within the realm of AI models to get a stronger grasp on the user\u0027s need.\n\n\n**Reframing My Understanding**\n\nI\u0027m now clarifying the initial definition. \"Cross-chat context\" implies persistent user history across multiple sessions. My architecture lacks this capability, as I operate primarily on a per-interaction basis. I have no method to build a long-term memory about a user\u0027s behavior. I can, however, access a transcript of a single ongoing chat to assist my responses.\n\n\n**Assessing My Capabilities**\n\nI\u0027m now fully immersed in dissecting the nuanced meaning of \"cross-chat context.\" I\u0027ve established that it represents remembering information across separate, ongoing conversations. My internal structure is designed for individual interactions, not long-term memory. I\u0027m focusing on framing my response to clearly highlight this operational limitation.\n\n\n**Addressing User\u0027s Query**\n\nI\u0027m now zeroing in on a precise response. I will clearly articulate my inability to retain cross-session memory. My focus is on making the explanation understandable. I will also clarify that I hold onto information within a single ongoing chat.\n\n**Differentiating Context Types**\n\nI\u0027m focusing on clarifying the difference between current and past interactions. I will state that I retain context *within* the chat, but I lack memory *across* multiple conversations. User comprehension is now my paramount concern.\n\n\n",
+      "role": "model",
+      "tokenCount": 635,
+      "isThought": true,
+      "thoughtSignatures": ["", "", "", ""]
+    }, {
+      "text": "No, I don\u0027t inherently have \"cross-chat context\" in the sense of remembering information from previous, separate conversation sessions you\u0027ve had with me.\n\nHere\u0027s how my context works:\n\n1.  **Within the current chat:** I maintain context for our *ongoing conversation*. This means I remember what we\u0027ve discussed earlier in *this specific chat session* to understand your current questions and provide relevant responses.\n2.  **Across different chats/sessions:** I do not store or access information from previous conversation sessions you\u0027ve had with me. Each new conversation is generally treated as a fresh start.\n\nThink of it like starting a new chat window or opening a new document – the context of the previous one isn\u0027t automatically carried over. While the platform you\u0027re using might save past conversations for *your* reference, I don\u0027t access that history to inform a *new* conversation.",
+      "role": "model",
+      "finishReason": "STOP",
+      "tokenCount": 190
+    }],
+    "pendingInputs": [{
+      "text": "",
+      "role": "user"
+    }]
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "schema_id": "QA_DISCOVERY_BUNDLE_SCHEMA.v1",
+  "bundle_id": "BUNDLE-FIXTURE0001",
+  "created_utc": "2026-02-10T23:57:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "pipeline_id": "QA_DISCOVERY_PIPELINE.v1",
+  "plan_ref": { "family": "QA_DISCOVERY_PIPELINE.v1", "path_or_hash": "qa_discovery_pipeline/fixtures/plan_valid.json" },
+  "run_refs": [
+    { "family": "QA_DISCOVERY_PIPELINE.v1", "path_or_hash": "qa_discovery_pipeline/fixtures/run_valid.json" }
+  ],
+  "artifact_refs": [
+    { "family": "QA_CONJECTURE_PROVE_CONTROL_LOOP.v1", "schema_id": "QA_FRONTIER_SNAPSHOT_SCHEMA.v1", "path_or_hash": "qa_conjecture_prove/out/frontier_snapshot.json" }
+  ],
+  "summary": {
+    "runs_total": 1,
+    "runs_success": 1,
+    "fail_counts": {}
+  },
+  "hash_chain": { "prev_bundle_hash": "f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1", "this_bundle_hash": "a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2a2" }
+}

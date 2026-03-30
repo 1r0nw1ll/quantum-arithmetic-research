@@ -1,0 +1,23 @@
+{
+  "id": "t2_p05_parallel_with_heavy_distractors",
+  "description": "5-step parallel chain buried in 8 distractor givens",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"EqualLength": [50, 51]},
+    {"Parallel": [2, 3]},
+    {"EqualAngle": [60, 61]},
+    {"Parallel": [3, 4]},
+    {"ConcentricCircles": [70, 71]},
+    {"Parallel": [4, 5]},
+    {"EqualLength": [52, 53]},
+    {"Parallel": [5, 6]},
+    {"EqualAngle": [62, 63]},
+    {"ConcentricCircles": [72, 73]},
+    {"EqualLength": [54, 55]},
+    {"Collinear": [80, 81, 82]}
+  ],
+  "goals": [
+    {"Parallel": [1, 6]}
+  ],
+  "difficulty": 6
+}

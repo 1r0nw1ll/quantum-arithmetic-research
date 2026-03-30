@@ -1,0 +1,291 @@
+{
+  "id": "s02_lattice_4x4",
+  "description": "Medium perpendicular lattice with high branching",
+  "difficulty": 5,
+  "givens": [
+    {
+      "Parallel": [
+        1,
+        2
+      ]
+    },
+    {
+      "Parallel": [
+        2,
+        3
+      ]
+    },
+    {
+      "Parallel": [
+        3,
+        4
+      ]
+    },
+    {
+      "Parallel": [
+        5,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        6,
+        7
+      ]
+    },
+    {
+      "Parallel": [
+        7,
+        8
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        5
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        7
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        9,
+        10
+      ]
+    },
+    {
+      "Parallel": [
+        10,
+        11
+      ]
+    },
+    {
+      "Parallel": [
+        11,
+        12
+      ]
+    },
+    {
+      "Parallel": [
+        12,
+        13
+      ]
+    },
+    {
+      "Parallel": [
+        13,
+        14
+      ]
+    },
+    {
+      "Parallel": [
+        14,
+        15
+      ]
+    },
+    {
+      "Parallel": [
+        15,
+        16
+      ]
+    },
+    {
+      "Parallel": [
+        16,
+        17
+      ]
+    },
+    {
+      "Parallel": [
+        17,
+        18
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        19
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        20
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        21
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        22
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        23
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        24
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        25
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        26
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        27
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        28
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        29
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        30
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        31
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        32
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        33
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        34
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        35
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        36
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        37
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        38
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        39
+      ]
+    },
+    {
+      "Perpendicular": [
+        6,
+        40
+      ]
+    },
+    {
+      "Perpendicular": [
+        6,
+        41
+      ]
+    },
+    {
+      "Perpendicular": [
+        6,
+        42
+      ]
+    },
+    {
+      "Perpendicular": [
+        6,
+        43
+      ]
+    },
+    {
+      "Perpendicular": [
+        6,
+        44
+      ]
+    },
+    {
+      "Perpendicular": [
+        6,
+        45
+      ]
+    },
+    {
+      "Perpendicular": [
+        6,
+        46
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Perpendicular": [
+        1,
+        8
+      ]
+    }
+  ]
+}

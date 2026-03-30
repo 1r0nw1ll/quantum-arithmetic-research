@@ -1,0 +1,15 @@
+{
+  "id": "t2_p02_perp_parallel_cascade",
+  "description": "Cascade of perpendicular and parallel rules: L1⊥L2⊥L3||L4⊥L5 => L1⊥L5",
+  "givens": [
+    {"Perpendicular": [1, 2]},
+    {"Perpendicular": [2, 3]},
+    {"Perpendicular": [3, 4]},
+    {"Perpendicular": [4, 5]},
+    {"Perpendicular": [5, 6]}
+  ],
+  "goals": [
+    {"Perpendicular": [1, 6]}
+  ],
+  "difficulty": 6
+}

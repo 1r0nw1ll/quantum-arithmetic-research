@@ -1,0 +1,225 @@
+{
+  "id": "s10_lattice",
+  "description": "Perpendicular lattice (5 hubs, 5 spokes) with decoys",
+  "difficulty": 6,
+  "givens": [
+    {
+      "Perpendicular": [
+        1,
+        20
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        21
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        22
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        23
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        24
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        25
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        26
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        27
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        28
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        29
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        30
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        31
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        32
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        33
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        34
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        35
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        36
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        37
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        38
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        39
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        40
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        41
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        42
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        43
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        44
+      ]
+    },
+    {
+      "Parallel": [
+        20,
+        21
+      ]
+    },
+    {
+      "Parallel": [
+        21,
+        22
+      ]
+    },
+    {
+      "Parallel": [
+        22,
+        23
+      ]
+    },
+    {
+      "Parallel": [
+        23,
+        24
+      ]
+    },
+    {
+      "CoincidentLines": [
+        45,
+        46
+      ]
+    },
+    {
+      "CoincidentLines": [
+        46,
+        47
+      ]
+    },
+    {
+      "OnCircle": [
+        49,
+        48
+      ]
+    },
+    {
+      "OnCircle": [
+        50,
+        48
+      ]
+    },
+    {
+      "OnCircle": [
+        51,
+        48
+      ]
+    },
+    {
+      "OnCircle": [
+        52,
+        48
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Parallel": [
+        20,
+        24
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "id": "t0_p10_trivial_sanity",
+  "description": "Trivial sanity check: direct application of one rule (1 step)",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]}
+  ],
+  "goals": [
+    {"EqualLength": [10, 12]}
+  ],
+  "difficulty": 1
+}

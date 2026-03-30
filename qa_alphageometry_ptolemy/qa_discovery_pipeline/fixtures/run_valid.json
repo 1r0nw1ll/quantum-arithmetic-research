@@ -1,0 +1,33 @@
+{
+  "schema_id": "QA_DISCOVERY_PIPELINE_RUN_SCHEMA.v1",
+  "run_id": "RUN-FIXTURE0001",
+  "created_utc": "2026-02-10T23:55:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "pipeline_id": "QA_DISCOVERY_PIPELINE.v1",
+  "toolchain": { "python": "3.12", "os": "ubuntu24", "toolchain_id": "lean4.12.0" },
+  "inputs": {
+    "episode_ref": { "family": "QA_CONJECTURE_PROVE_CONTROL_LOOP.v1", "path_or_hash": "qa_conjecture_prove/fixtures/episode_valid.json" },
+    "k": 2,
+    "determinism": {
+      "canonical_json": true,
+      "frontier_sort": "(-priority,state_hash)",
+      "bfs_tie_breaker": "(generator,step_index,output_hash)"
+    }
+  },
+  "execution": {
+    "steps": [
+      { "step_index": 0, "op": "LOAD_EPISODE", "result": { "status": "SUCCESS", "witness_hash": "w_load" } },
+      { "step_index": 1, "op": "VALIDATE_EPISODE", "result": { "status": "SUCCESS", "witness_hash": "w_validate" } },
+      { "step_index": 2, "op": "EMIT_FRONTIER", "result": { "status": "SUCCESS", "witness_hash": "w_frontier" } },
+      { "step_index": 3, "op": "EMIT_RETURN_RECEIPT", "result": { "status": "SUCCESS", "witness_hash": "w_receipt" } }
+    ]
+  },
+  "outputs": {
+    "artifacts": [
+      { "family": "QA_CONJECTURE_PROVE_CONTROL_LOOP.v1", "schema_id": "QA_FRONTIER_SNAPSHOT_SCHEMA.v1", "path_or_hash": "qa_conjecture_prove/out/frontier_snapshot.json" },
+      { "family": "QA_CONJECTURE_PROVE_CONTROL_LOOP.v1", "schema_id": "QA_BOUNDED_RETURN_RECEIPT_SCHEMA.v1", "path_or_hash": "qa_conjecture_prove/out/bounded_return_receipt.json" }
+    ]
+  },
+  "result": { "status": "SUCCESS" },
+  "merkle_parent": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb"
+}

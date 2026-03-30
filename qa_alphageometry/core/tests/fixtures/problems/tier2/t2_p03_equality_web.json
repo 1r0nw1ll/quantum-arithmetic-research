@@ -1,0 +1,16 @@
+{
+  "id": "t2_p03_equality_web",
+  "description": "Segment equality web with multiple branching paths: AB=CD=EF, AB=GH=IJ => EF=IJ",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]},
+    {"EqualLength": [10, 14]},
+    {"EqualLength": [14, 15]},
+    {"EqualLength": [15, 16]}
+  ],
+  "goals": [
+    {"EqualLength": [13, 16]}
+  ],
+  "difficulty": 6
+}

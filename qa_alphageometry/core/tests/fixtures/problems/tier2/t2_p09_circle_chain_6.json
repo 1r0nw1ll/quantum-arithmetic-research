@@ -1,0 +1,16 @@
+{
+  "id": "t2_p09_circle_chain_6",
+  "description": "Long concentric chain: C1~C2~C3~C4~C5~C6~C7 => C1~C7 (6 steps)",
+  "givens": [
+    {"ConcentricCircles": [20, 21]},
+    {"ConcentricCircles": [21, 22]},
+    {"ConcentricCircles": [22, 23]},
+    {"ConcentricCircles": [23, 24]},
+    {"ConcentricCircles": [24, 25]},
+    {"ConcentricCircles": [25, 26]}
+  ],
+  "goals": [
+    {"ConcentricCircles": [20, 26]}
+  ],
+  "difficulty": 5
+}

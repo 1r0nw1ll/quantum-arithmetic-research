@@ -1,0 +1,73 @@
+{
+  "schema_version": "QA_INHERITANCE_COMPAT_CERT.v1",
+  "certificate_id": "qa.cert.inheritance.pass.107_to_120.v1",
+  "cert_type": "qa_inheritance_compat",
+  "title": "Inheritance PASS: [107] QA_CORE_SPEC.v1 → [120] QA_PUBLIC_OVERVIEW_DOC.v1",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Certifies the kernel inheritance edge for [120], the public overview doc family. [120] is a family_extension of [107] adding public-overview-specific failure types on top of the kernel failure algebra. IC5 fires. IC6-IC7 skipped.",
+
+  "parent_family": {
+    "family_id": 107,
+    "schema_version": "QA_CORE_SPEC.v1",
+    "spec_scope": "kernel"
+  },
+
+  "child_family": {
+    "family_id": 120,
+    "schema_version": "QA_PUBLIC_OVERVIEW_DOC.v1",
+    "spec_scope": "family_extension"
+  },
+
+  "declared_inherits_from": "QA_CORE_SPEC.v1",
+  "scope_transition": "kernel -> family_extension",
+
+  "extracted_parent": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": ["OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR"],
+    "invariant_names": ["QA_relation_1", "QA_relation_2"],
+    "logging_required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "extracted_child": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": [
+      "OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR",
+      "INVALID_KERNEL_REFERENCE", "SPEC_SCOPE_MISMATCH", "GATE_POLICY_INCOMPATIBLE",
+      "OVERVIEW_REF_MISMATCH",
+      "EXECUTIVE_SUMMARY_MISSING",
+      "SPINE_DIAGRAM_MISSING",
+      "OBSTRUCTION_EXAMPLE_MISSING",
+      "OBSTRUCTION_EXAMPLE_INCOMPLETE",
+      "CONTROL_EXAMPLE_MISSING",
+      "CONTROL_EXAMPLE_INCOMPLETE",
+      "WHY_IT_MATTERS_MISSING",
+      "SPINE_ENTRY_POINTS_INCOMPLETE",
+      "WITNESS_MISMATCH"
+    ],
+    "preserves_invariants_refs": [],
+    "logging_required_fields": []
+  },
+
+  "compatibility_claims": {
+    "gate_policy_compatible":              true,
+    "failure_algebra_extends_not_replaces": true,
+    "logging_contract_compatible":          true,
+    "invariant_refs_resolve":               true,
+    "scope_transition_valid":               true
+  },
+
+  "validation_checks": [
+    { "check_id": "IC1", "passed": true, "description": "parent recognised", "details": "'QA_CORE_SPEC.v1' registered kernel" },
+    { "check_id": "IC2", "passed": true, "description": "child recognised",  "details": "'QA_PUBLIC_OVERVIEW_DOC.v1' registered family_extension" },
+    { "check_id": "IC3", "passed": true, "description": "declared_inherits_from matches parent", "details": "match" },
+    { "check_id": "IC4", "passed": true, "description": "gate policy superset", "details": "both [0..5]; superset" },
+    { "check_id": "IC5", "passed": true, "description": "failure algebra extends parent", "details": "parent types all present; child adds OVERVIEW_REF_MISMATCH, EXECUTIVE_SUMMARY_MISSING, SPINE_DIAGRAM_MISSING, OBSTRUCTION_EXAMPLE_MISSING, OBSTRUCTION_EXAMPLE_INCOMPLETE, CONTROL_EXAMPLE_MISSING, CONTROL_EXAMPLE_INCOMPLETE, WHY_IT_MATTERS_MISSING, SPINE_ENTRY_POINTS_INCOMPLETE, WITNESS_MISMATCH" },
+    { "check_id": "IC6", "passed": true, "description": "logging contract", "details": "SKIPPED — empty" },
+    { "check_id": "IC7", "passed": true, "description": "invariant refs", "details": "SKIPPED — empty" },
+    { "check_id": "IC8", "passed": true, "description": "scope transition valid", "details": "kernel -> family_extension" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,231 @@
+﻿Toroids, Vortices, Knots, Topology and Quanta
+Part 2
+Greg Volk
+1153 Tiffany Circle N, Eagan, MN 55123
+e-mail: the.volks@comcast.net
+
+What causes matter to bind together into the clusters we call particles?  At every location within every stable particle there must exist a balance between the natural repulsion of like elements and the attraction due to parallel motions.  For continuums of matter, every moving element within a structure must be immediately replaced by another, creating a circuit.  Now if circuits form the basis for the structure of matter itself, then analysis of the most fundamental form of circuit, the toroid, is a worthy subject.  I explore many interesting features of toroidal coordinates, the relationship toroids have with vortices, and the intimate connection between toroid knots and topology.  Real stable 3D particles must contain circulations both around the toroid of radius R and the cross-section of radius r, so that for every m times an element circulates around toroid R, it circulates n times around torus r. This integer relationship changes instantly when the relative phases exceed 360.  The quantum jump we observe at this point equates to the “strobe effect”, seen in a Las Vegas roulette wheel, wagon wheels in old westerns, and Lissajous patterns.  Backed by a physical demonstration, I argue that these quantum jumps correspond precisely with the absorption and emission of photons.  Finally I examine the increasingly popular Rodin coil, as a toroid case study.
+The version of this paper for NPA-18 covers only the mathematics of toroidal coordinates, and reserves the applications for a later, more complete version.
+
+    1. Introduction
+Fundamental to all continuous physical processes is the circuit.  Matter circulates in closed loops, naturally creating vortices, eddies, discontinuities or nodes.  Therefore a study of such processes should begin with the most basic shape for any circuit: the toroid.  Along the surface of a toroid or doughnut we can construct numerous slinky-like paths, complex closed knots, and fascinating topologies.  By nesting toroids, we can fill 3D space and examine the fractal nature of flowing circuits.
+Any serious study of toroids surely must begin with an analysis of toroidal coordinates.  Curvilinear coordinates, that change with a parameter, often time, have been studied and utilized in physics and engineering since the time of Euler, though the first explicit mention of the term “toroidal coordinates” may have been in Byerly’s 1893 classic on harmonics [1].  However, as in so many texts to follow [2 3 4 5 6], Byerly simply states the correct formulas with no development.  The treatment in most of these texts is that of a reference, presuming that the reader already knows what to do with these transformations.  Though the choice of parameter names varies from text to text, none of them discuss alternate and equivalent parameters to represent the same information.  Consequently we have today a number of different representations with little understanding of the connections between them.  This paper intends to connect some of these dots.
+    2. Bipolar Coordinates
+But to understand 3D toroidal coordinates, we must begin with a simpler 2D system known as bipolar coordinates.  Just as 2D polar coordinates are a prerequisite to 3D cylindrical and spherical coordinates, so bipolar must precede toroidal coordinates.  In a plane, polar coordinates may characterize the radial electric fields and circular magnetic fields of an idealized point charge or a current flowing into or out of the plane, while bipolar coordinates may characterize the same fields for two oppositely charged points or flows into and out of the plane. Most high school physics students have seen Faraday’s field lines for two opposite point charges, shown in Figure 1.  These special families of orthogonal circles were first analyzed by Appollius of Perga, and are consequently known as Appollonian Circles [7].
+
+Fig. 1.  Appollonian Circles [8]
+Since three non-colinear points define a circle, there always exists a circle passing through the two pole or node points and any other point in the plane, if we allow points along the axis defined by the two poles to create an “infinite circle” or straight line [i].  This family of “E-circles” corresponds to electric field lines, pointing from the positive pole to the negative, according to convention.  A second family of “M-circles”, corresponding to magnetic field lines, consists of two subfamilies enclosing the two poles, but everywhere perpendicular to the E-circles of the first family.  These circles are not concentric, but bunch up in the region between the poles.  If we regard both sets circles as akin to contour lines on a topological map, we find the region of highest gradients, which Faraday himself identified as the regions of greatest concentration of energy and force, nearest the two poles.
+What can bipolar coordinates analyze that simple polar coordinates can’t?  Polarity.  Ultimately all physical processes contain polarity of some kind.  That is, poles don’t occur in isolation, but in conjugate pairs.  For every positive, there exists a negative; for every emission, an absorption; for every action, a reaction; for every explosion, an implosion; for every out, an in; for every up, a down; for every yang, a yin; for every male, a female.  The list goes on.  Further, we can readily see the true circuit nature of field or energy flow lines with bipolar coordinates, whereas with polar coordinates, lines simply “go off to infinity” in an unrealistic idealization.  Bipolar coordinates offer the mathematical tools needed to characterize polarity in great depth, as exemplified by Faraday’s field lines, and yet can be understood with a few lines of basic trigonometry.  It’s truly a crime that something so powerful and useful isn’t taught in high school math.
+For our purpose, however, the greatest benefit of bipolar coordinates lies in its natural extension to 3D toroidal coordinates.  In Figure 1, let the z-axis divide the right and left half of the Appollonian Circles plane, and let the x-axis pass through the two pole points.  Then take any M-circle to the right of the z-axis and sweep it 360 around the xy-plane, where y points into the page [ii].  This M-circle becomes a toroid, and actually passes again through the xz-plane to the left of the z-axis at 180 of sweep.  Since the E-circles are centered on the z-axis, the sweep around the xy-plane converts these circles to spheres, everywhere cutting perpendicularly into the entire family of toroids.  This 360 sweep is precisely analogous to the azimuthal sweep which converts 2D polar to 3D spherical coordinates.  Though there exist many symbol conventions for azimuthal angle or longitude, I here choose , in conformity with most systems of spherical coordinates.  Since the conversion from 2D bipolar to 3D toroidal coordinates is quite straightforward, we can now focus our attention on the former, knowing that all the analysis also applies directly to the latter.
+Our task now is to construct the Appollonian circles, and determine the parameters that distinguish different M-circles and E-circles, so as to uniquely identify every point P in the xz plane.  Though it may seem awkward to eliminate y rather than z, keep in mind that z will be taken as perpendicular to the toroids in 3D.  By this convention, coordinate pair P = (x,z) necessarily excludes y.  Now every M-circle is centered on the x-axis (or xy-plane), every E-circle on the z-axis, and every point in the xz-plane is identified by a unique combination of M- and E-circles.  Thus, we can represent any point in the xz-plane with two parameters corresponding to these two circles.  Since these circles are orthogonal for every point in the plane, this characterization forms an orthogonal curvilinear coordinate set.
+Surprisingly, however, there are not just two parameters in the characterization of P, but three.  The third is a scale factor, denoted here by “a”.  Note that the node points are NOT at the center of each M-circle.  Instead the node points determine an entire family of M-circles and E-circles.  Let the distance between the two node points be 2a, and their coordinates thus A = (a,0) and A’ = (-a,0).  For every a, we can construct an entirely different set of Appollonian Circles.  So there may exist many M-circles or toroids centered at B=(R,0), but only one in the “a” family, which we’ll see satisfies , with r the radius of the M-circle and R the distance from the origin to the circle center.  This might seem strange at first, but a little reflection reveals the impossibility of filling the plane uniquely with concentric M-circles about a particular value of R.  Amazingly all other dimensioned parameters, like R and r, can be efficiently compared with “a” in terms of ratios or unitless parameters.  Since we’re generally not interested in absolute geometric sizes, but in relative ratios, this will prove a benefit of the bipolar and toroidal systems.
+
+Fig. 2.  Bipolar coordinates
+Thus, once we’ve established a given family “a”, we need only two unitless parameters to uniquely identify any point P = (x,z), so that the distance  satisfies
+		(2.1)
+In polar coordinates we simply represent P = (x,z) in terms of radial magnitude  and polar angle .  However, with bipolar coordinates, we instead characterize P in terms of the “a” family and two unitless parameters.
+Let’s first construct the E-circle containing P and the two poles A and A’.  From high school trigonometry, we know that the perpendicular bisector between any two of these points passes through the center H of this circle.  Since A and A’ are bisected by the z-axis, point H = (0, h) clearly lies along it.  Thus, we determine the height h above or below the x-axis by finding the intersection of the bisector of A and P with the z-axis.  One unique parameter for characterizing h is inclination angle or latitude .  If  is the radius of this E-circle, a glance at right triangle OHA in Figure 2 reveals:
+			(2.2a,b)
+		(2.3)
+Clearly  will never be smaller than a, and the smallest possible E-circle is the one centered at origin O with , h = 0 and .  Since this special circle (or sphere in 3D toroidal coordinates) plays an important role in much that follows, let’s name it the Base Circle (or Base Sphere when extended to 3D).  As we’ll see when we cover M-circles, every point within the Base Circle has a one-to-one correspondence with every point outside it, since every M-circle intersects every E-circle exactly once within the Base Circle and once without.  Given a, we might choose , h,  or any ratio between a, h, and , as the parameter determining inclination, or intersection point with any given M-circle or toroid, though there are still other parameters to explore.  With any choice, we must exercise some care in the behavior across the origin and “out to infinity”.  Angle  ranges from -90 to 90, but its sign is defined as that of the z-component.  That is, by definition, points with positive z will be assigned positive , and negative z’s assigned negative ’s.
+Since P lies on the same E-circle as A and A’, the distance HP is also , so that, by (1)
+		(2.4)
+Equating (4) with (3), we get:
+		(2.5)
+Further, the vector  is radial from H, and thus perpendicular to the E-circle, precisely the direction of interest.  Thus, unit vector  is
+		(2.6)
+The unit vector tangent to the E-circle, denoted , is clearly perpendicular to , or
+		(2.7)
+Using (4), we can also express unit vectors  and  in terms of  and , using the inversion formula for a 2x2 matrix.
+	,    	(2.8)
+We can designate  and  in terms of the M-circle passing through P as well.  Since this M-circle is orthogonal to the E-circle at P, the vector RP from center  to P must lie in the direction .
+		(2.9)
+Equating the  and  components of (7) and (9) (over r) reveals
+		(2.10a,b)
+=>		(2.11)
+=>		(2.12)
+=>		(2.13)
+Another result arises from M-circle radius r, analogous to (4):
+		(2.14)
+Since the Base circle mentioned earlier is also an E-circle, the current M-circle is also orthogonal to it.  Denote their intersection as B, so that  forms a right angle with sides a, r and R.   Thus
+		(2.15)
+Eq. (14) simplifies to
+		(2.16)
+Finally subtracting (5) from (16) gives:
+		(2.17)
+(10b) and (17) =>		(2.18)
+Thus…
+	(2.19)
+Next let  so that
+			(2.20a,b)
+Or in conjunction with (2), express everything in terms of a,  and 
+			(2.21a,b)
+			(2.22a,b)
+Thus (19) becomes simply
+		(2.23)
+or		(2.24)
+And (13) is confirmed to equal (19) by (15) and (3)
+		(2.25)
+Though (23) and (24) are concise and accurate, parameter  is usually replaced by , such that
+		(2.26)
+(Discuss the physical significance of ).
+Write   and  in terms of , , ,  by (8) and (23)
+		(2.27)
+		(2.28)
+		(2.29)
+Confirm that the determinant of matrix (29) is one (orthogonal).
+		(2.30)
+This provides a handy formula for , for which
+		(2.31)
+And thus
+		(2.32)
+These derivations were perhaps a tad bit sloppy, not necessarily considering poles and zeros, and all four quadrants.  However, in the case of (32), for example, the denominator approaches zero only as both  and  approach zero or .   In this case, both numerators also approach zero, and L’Hospital’s rule will show that the quotients retain absolute values less than unity.
+Finally from (10b), (21b) and (22a), solve for 
+		(2.33)
+    3. More on M-Circles
+Though (23) and (24) are concise and accurate, parameter  is usually replaced by , such that
+		(3.1)
+Now  isn’t a physical angle, like , but a parameter.  Knowing  is equivalent to knowing , and vice versa.  Any of the above formulas expresses the transformation between them.  Probably the handiest and easiest to remember form is
+		(3.2)
+which leads to an interesting identity
+		(3.3)
+Parameter  emphasizes characteristics of the M-Circle that  does not.  To see this, return to Eqs. (16) for the M-Circle centered at Point R = (R,0) with radius r.
+		(3.4)
+=>		(3.5)
+But we can express R in terms of a and , hence in terms of 
+		(3.6)
+=>		(3.7)
+=>		(3.8)
+=>		(3.9)
+=>		(3.10)
+Thus, a surprising new way to parameterize a given M-circle is by the ratio of the lengths  to .  In fact, we could define an M-circle in terms of “foci” A and  as the locus of points P with a fixed ratio , as essentially done by Arfkin [Error: Reference source not found, p. 100].  This is analogous to defining an ellipse as the locus of points P with a fixed sum .
+The simplest way to discover g for a given  or  is to plug the special case P = (R+r, 0) into (3.8).  Then by (2.20) and (3.1)
+		(3.11)
+where we obtain the ratio involving  by dividing by R and the ratio involving  by dividing by r,  switching the first two terms in both the denominator and numerator.  In the process, we also showed the non-obvious result that the square root in (3.8) equals the ratios in (3.9) for all P = (x, z) that lie on a given M-circle.
+Also we have a verifiable identity for .
+		(3.12)
+Because of the factor i in the sin relation, we do not obtain a simpler expression for g in .
+		(3.13)
+Though many equivalent parameters could be used to identify a particular M-Circle, this paper will consider only one more, used by Vladimir Ginzburg.  According to Ginzburg, a “helicola” is a spiral of a spiral of a spiral to any number of generations, and we will return to this important idea later in the paper.  Ginzburg identifies a particular spiral by the ratio b of the radius of a toroid  to its inner radius , the radius of the “hole” [9].
+		(3.14)
+Ginzburg calls b the “relative string radius” or “relative length of one string winding”, in the context of describing ratios from one level of helicola to another.  His second parameter”, the relative wavelength” k
+		(3.15)
+Or in terms of 
+		(3.16)
+Or in terms of g
+		=>		(3.17)
+So that g and k share an interesting reciprocity.
+Many of Ginzburg’s other parameters arise from combinations of b and k, for example his “relative translational / rotational / spiral velocities” k/b.
+		(3.18)
+Finally he identifies the “steepness angle” as the cosine of
+		(3.19)
+In other words, the “steepness angle” is simply .
+Remember that all of these parameters ,, g, b and k, plus combinations and functions of them, uniquely specify a particular M-Circle in 2D or torus radius in 3D.
+    4. Toroidal Coordinates
+Now for the good news: The hard part is done.  The step from bipolar to toroidal coordinates is almost trivial in comparison with the development of bipolar coordinates.  Just as 3D spherical coordinates are obtained by spinning 2D polar coordinates in the xz-plane about the z-axis, so 3D toroidal coordinates are obtained by spinning 2D bipolar coordinates in the xz-plane about the z-axis.  The angle of spin in the xy-plane is called azimuthal angle , comparable to “longitude” in spherical coordinates.  In (24), the component along  remains unchanged, and that along is multiplied by , while that along  gets the same factor times .
+		(4.1)
+This reduces to (24) for .  Substituting  for  with (3.1) gives the conventional textbook form of toroidal coordinates:
+		(4.2)
+One advantage of this form is that all the functions are given in terms of sin, cos, sinh and cosh.  Of course, we can achieve this with (4.1) as well by multiplying top and bottom by .
+		(4.3)
+After playing with various forms of these equations, I’ve found this last to be most convenient.  In this form, for example, we immediately recognize the  component as  in (32), for the important special case .  For the special case of a fixed toroid, , it’s helpful to replace the angles in (4.3) with a, r and R using (22) and (23).
+		(4.4)
+    5. Frenet-Serret Unit Vectors
+Consider the special case of a fixed toroid (toroidal angle ) with a fixed integer relationship between azimuthal and poloidal  angles.
+		(5.1)
+where m and n are relatively prime, sharing no common factors. Define parameter  such that 
+		(5.2)
+So that the toroid path cycles simultaneously n times toroidally (around the doughnut) and m times poloidally (around the cross section) as  cycles from 0 to .  Eq. (4.4) reduces to
+		(5.3)
+A path expressed by only one independent parameter .  Thus
+		(5.4)
+	(5.5)
+We desire the tangential , normal  and bi-normal unit vectors
+				(5.6)
+and can therefore ignore the common factor.
+		(5.7)
+		(5.8)
+In the special case , the no common factors condition requires both to equal unity.
+		(5.9)
+		(5.10)
+		(5.11)
+		(5.12)
+		(5.13)
+		(5.14)
+		(5.15)
+		(5.16)
+	(5.17)
+		(5.18)
+Binormal  is independent of  because the case  results in a circle of radius R, curvature , & torsion .
+    6. Conclusion (Part 1)
+As mentioned above, I reserve for a later version of this paper a complete discussion of the applications of toroidal coordinates.  The current version provides the essential mathematics needed for all toroidal systems.  Motion along a given toroidal path can be powerfully described with the natural, coordinate-system free Frenet-Serret vectors.  I shall show that ultimately all closed paths can be treated as a Fourier-like superposition of a series of simpler paths, so that these equations will indeed have more universal application than at first recognized.
+    7. Field Calculations
+In simple polar coordinates, the  and  fields are readily determined in terms of a Gaussian sphere and Stokes circle of radius r.  Q acts as a point charge located at the origin and I as the current that passes through the r-plane also at the origin.
+	,     	(1)
+From basic electrodynamics, we know that for all r, the surface integral on Gaussian sphere (surface area ) will contain charge Q, and the line integral around the Stokes circle (circumference ) will encompass current I.
+	,     	(2)
+Since this holds for each charge Q or current I separately, and for any closed surface or path, and since the relationships are linear, it will also hold for the superposition of two charges and or two currents and .  That is,
+		(3)
+We can therefore obtain dipole fields from the superposition of monopole fields.  Moreover, as we’ll soon see, we can also obtain quadrupole fields from the superposition of dipole fields, etc.
+Now return to Fig. 2, and note that
+		(4)
+		(5)
+	     	(6)
+		(7)
+		(8)
+	,     ,     	(9)
+		(10)
+The law of sines applied to AA’P. gives
+		(11)
+		(12)
+		(13)
+		(14)
+		(15)
+Expected result:
+		(16)
+A nifty identity from (9), (11) and (2.20):
+	,     ,     	(16)
+=>		(17)
+By (2.33), this becomes
+=>		(18)
+Summary of all the angles:
+PxOP / PzPO	,    ,    	(19)
+OHA	,    ,    	(20)
+BRO	,    ,    	(21)
+PxPR	,    ,    	(22)
+PzPH	,    ,    	(23)
+PxAP	,    ,    	(24)
+PxA’P	,    ,    	(25)
+Another nifty identity from (2.32)
+		(26)
+or in terms of 
+		(27)
+
+New stuff:
+Express  in terms of  and 
+		(28)
+Let		(29)
+=>	,   	(30)
+and		(31)
+		(32)
+		(33)
+Via triangles OPA and OPA’, the law of sines gives
+		(34)
+		(35)
+		(36)
+		(37)
+		(38)
+Question?  If this is correct, is there a shorter way to get to it?
+		(39)
+
+
+    8. Field Triples
+Electric and magnetic fields are rarely if ever parallel at any given point in space, but still insufficient to span 3D space.  A third vector, representing the actual flow of matter or energy is therefore required to complete the picture.  Since electric fields can be represented by either  or , and magnetic fields by  or , there are actually four combinations of these vectors, each with their corresponding flow vector.  I label these four triple sets of vectors as follows:
+Ampere	        	(8.1)
+Faraday	        ,  	(8.2)
+Poynting	        	(8.3)
+Momentum	        	(8.4)
+Though most folks balk at the idea that , ,  and  have much in common ( represents the flow of charge, while  the flow of energy), I submit that they share more characteristics than generally admitted.  There are important differences in the way each of the four relate to their electric and magnetic fields, yet all of them complete significant triples in physics that span 3D space.  Moreover, some thought provoking dualities exist.  For example,  (the field, not necessarily just the flow of charge) is derived from  and  in the Ampere triple, whereas  and  are derived from  in the Faraday triple.  In the Poynting and Momentum triples, a new field is derived from the interaction of the fields, rather than a relationship occurring between the two fields as in the Ampere and Faraday triples. The Momentum triple is so rarely used, it hasn’t even received a name, yet it may easily prove as physically useful and meaningful as the other three.
+In this paper, I’ve chosen to consider the Ampere triple, though the analysis holds equally well for the other three.  In no case are the three fields constrained to remain mutually orthogonal, yet such often occurs for many worthwhile phenomena.
+References
+

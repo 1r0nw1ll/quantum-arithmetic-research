@@ -1,0 +1,13 @@
+{
+  "_comment": "Negative fixture: this_bundle_hash is empty. Expected: HASH_CHAIN_INVALID.",
+  "schema_id": "QA_DISCOVERY_BUNDLE_SCHEMA.v1",
+  "bundle_id": "BUNDLE-NEGFIX0001",
+  "created_utc": "2026-02-10T23:57:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "pipeline_id": "QA_DISCOVERY_PIPELINE.v1",
+  "plan_ref": { "family": "QA_DISCOVERY_PIPELINE.v1", "path_or_hash": "x" },
+  "run_refs": [ { "family": "QA_DISCOVERY_PIPELINE.v1", "path_or_hash": "y" } ],
+  "artifact_refs": [ { "family": "z", "schema_id": "w", "path_or_hash": "q" } ],
+  "summary": { "runs_total": 1, "runs_success": 1, "fail_counts": {} },
+  "hash_chain": { "prev_bundle_hash": "f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1", "this_bundle_hash": "" }
+}

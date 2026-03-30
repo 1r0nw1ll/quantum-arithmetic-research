@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_SECURITY_COMPETENCY_CERT.v1",
+  "algorithm_name": "ed25519",
+  "security_role": "identity",
+  "immune_function": "detection",
+  "goal": "Ed25519 (EdDSA/Curve25519): deterministic digital signature for QA cert attestation and agent identity anchoring.",
+  "orbit_signature": "cosmos",
+  "levin_cell_type": "differentiated",
+  "pq_readiness": "classical_only",
+  "pq_migration_path": "Migrate to ML-DSA (FIPS 204) for post-quantum identity; use hybrid Ed25519+ML-DSA during transition period",
+  "nist_fips": "",
+  "failure_modes": [
+    "Quantum adversary: Shor's algorithm breaks ECDLP — migrate to ML-DSA before Q-Day",
+    "Signing key exposure — use hardware security module (HSM) for key storage",
+    "Cofactor vulnerability on non-prime-order curves — Curve25519 is safe (cofactor=8, Montgomery ladder handles it)"
+  ],
+  "composition_rules": [
+    "Sign all QA cert family payloads; public key = agent identity anchor in cert ecosystem",
+    "Pair with X25519 for full TLS handshake (sign + key exchange)",
+    "Hybrid deployment: Ed25519 + ML-DSA dual-signature during quantum transition"
+  ],
+  "parent_cert": "QA_AGENT_COMPETENCY_CERT.v1",
+  "result": "PASS"
+}

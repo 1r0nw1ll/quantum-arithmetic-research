@@ -1,0 +1,12 @@
+{
+  "id": "p04_double_perp_parallel",
+  "description": "L1⊥L2, L1⊥L3 => L2||L3 (perpendicular to parallel)",
+  "givens": [
+    {"Perpendicular": [1, 2]},
+    {"Perpendicular": [1, 3]}
+  ],
+  "goals": [
+    {"Parallel": [2, 3]}
+  ],
+  "difficulty": 1
+}

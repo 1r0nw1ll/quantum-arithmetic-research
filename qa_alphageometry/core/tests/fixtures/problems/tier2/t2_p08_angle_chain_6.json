@@ -1,0 +1,16 @@
+{
+  "id": "t2_p08_angle_chain_6",
+  "description": "Long angle equality chain: ∠A=∠B=∠C=∠D=∠E=∠F=∠G => ∠A=∠G (6 steps)",
+  "givens": [
+    {"EqualAngle": [30, 31]},
+    {"EqualAngle": [31, 32]},
+    {"EqualAngle": [32, 33]},
+    {"EqualAngle": [33, 34]},
+    {"EqualAngle": [34, 35]},
+    {"EqualAngle": [35, 36]}
+  ],
+  "goals": [
+    {"EqualAngle": [30, 36]}
+  ],
+  "difficulty": 5
+}

@@ -1,0 +1,83 @@
+{
+  "schema_version": "QA_OBSTRUCTION_STACK_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_stack.pass.forbidden_class_6.v1",
+  "cert_type": "obstruction_stack",
+  "title": "Obstruction Stack PASS: canonical forbidden case r=6 (p=3, k=2) — full chain holds",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "PASS fixture: the canonical forbidden residue r=6 (mod 9) under p=3, k=2. Walks through all four stack layers: (1) v_3(6)=1 → OBSTRUCTION_PRESENT [111]; (2) forbidden → claimed_reachable=false, control_verdict=UNREACHABLE [112]; (3) unreachable → pruned_before_search=true, nodes_expanded=0 [113]; (4) saved_nodes=47, pruning_ratio=1.0 vs naive 47-node search [114]. stack_conclusion.full_chain_holds=true. All four layers self-consistent and confirmed by independent recomputation.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "family_refs": {
+    "arithmetic_ref": { "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1" },
+    "control_ref":    { "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1" },
+    "planner_ref":    { "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1" },
+    "efficiency_ref": { "schema_version": "QA_OBSTRUCTION_EFFICIENCY_CERT.v1" }
+  },
+
+  "arithmetic_params": { "prime_p": 3, "k": 2, "modulus": 9 },
+
+  "target_arithmetic_class": 6,
+
+  "arithmetic_layer": {
+    "v_p_computed": 1,
+    "obstruction_verdict": "OBSTRUCTION_PRESENT",
+    "notes": "6 = 2·3^1; v_3(6)=1. 6 mod 3=0 (divisible) and 6 mod 9≠0 (not p^2-divisible). Exactly the forbidden class: r ∈ Im(f) iff v_p(r)≠1; since v_3(6)=1 it is absent from the norm form image."
+  },
+
+  "control_layer": {
+    "claimed_reachable": false,
+    "control_verdict": "UNREACHABLE",
+    "notes": "[112] bridge: v_3(r)=1 → no control PASS cert may assert r reachable. claimed_reachable=false is the only valid cert value for this target."
+  },
+
+  "planner_layer": {
+    "pruned_before_search": true,
+    "nodes_expanded": 0,
+    "plan_found": null,
+    "notes": "[113]: planner consults [112] bridge before any search expansion. OBSTRUCTION_PRESENT → prune immediately. Zero nodes expanded — entire search budget preserved."
+  },
+
+  "efficiency_layer": {
+    "baseline_nodes": 47,
+    "aware_nodes": 0,
+    "saved_nodes": 47,
+    "pruning_ratio": 1.0,
+    "false_pruning": false,
+    "notes": "[114]: naive planner exhausts 47 nodes before concluding no plan exists. Obstruction-aware planner expands 0. saved_nodes=47-0=47; pruning_ratio=47/47=1.0. Savings are structural (norm form impossibility), not heuristic."
+  },
+
+  "stack_conclusion": {
+    "arithmetic_induces_control":  true,
+    "control_induces_pruning":     true,
+    "pruning_induces_efficiency":  true,
+    "full_chain_holds":            true,
+    "notes": "The obstruction propagates deterministically: v_p(r)=1 (arithmetic) → unreachable (control) → pruned, 0 nodes (planner) → 47 nodes saved, ratio=1.0 (efficiency). Each implication is independently recomputable."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                 "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                   "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                              "passed": true,  "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "OS1",  "description": "arithmetic_ref is QA_AREA_QUANTIZATION_PK_CERT.v1",                   "passed": true,  "details": "match" },
+    { "check_id": "OS2",  "description": "control_ref is QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",               "passed": true,  "details": "match" },
+    { "check_id": "OS3",  "description": "planner_ref is QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",                 "passed": true,  "details": "match" },
+    { "check_id": "OS4",  "description": "efficiency_ref is QA_OBSTRUCTION_EFFICIENCY_CERT.v1",                 "passed": true,  "details": "match" },
+    { "check_id": "OS5",  "description": "modulus == p^k = 3^2 = 9",                                           "passed": true,  "details": "9 == 9" },
+    { "check_id": "OS6",  "description": "p=3 is inert: Legendre(5,3)=-1",                                     "passed": true,  "details": "5^1 ≡ 2 ≡ -1 mod 3; QNR confirmed" },
+    { "check_id": "OS7",  "description": "target r=6 in range {0..8}",                                         "passed": true,  "details": "0 <= 6 < 9" },
+    { "check_id": "OS8",  "description": "v_p(6)=1 → OBSTRUCTION_PRESENT (recomputed)",                        "passed": true,  "details": "v_3(6)=1; declared='OBSTRUCTION_PRESENT'; match" },
+    { "check_id": "OS9",  "description": "OBSTRUCTION_PRESENT → claimed_reachable=false, control_verdict=UNREACHABLE", "passed": true, "details": "claimed_reachable=false; control_verdict=UNREACHABLE; consistent" },
+    { "check_id": "OS10", "description": "OBSTRUCTION_PRESENT → pruned_before_search=true, nodes_expanded=0",  "passed": true,  "details": "pruned_before_search=true; nodes_expanded=0; consistent" },
+    { "check_id": "OS11", "description": "saved_nodes=47-0=47 (recomputed); pruning_ratio=47/47=1.0 (recomputed)", "passed": true, "details": "saved_nodes=47; ratio=1.0; arithmetic matches" },
+    { "check_id": "OS12", "description": "stack_conclusion.full_chain_holds consistent with all four layers",   "passed": true,  "details": "all four layers OBSTRUCTION_PRESENT-consistent; full_chain_holds=true; match" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,47 @@
+{
+  "schema_id": "QA_CONJECTURE_PROVE_EPISODE_SCHEMA.v1",
+  "episode_id": "EPISODE-FIXTURE0001",
+  "created_utc": "2026-02-10T23:40:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "policy_id": "pi_conjecture_prove.v1",
+  "generator_set_id": "GENSET{sigma_down,sigma_tactic,sigma_up}.v1",
+  "objective": {
+    "type": "PROVE",
+    "target_hash": "a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1a1",
+    "budget": { "max_steps": 5, "max_seconds": 30 }
+  },
+  "initial_state": {
+    "layer": "formal",
+    "state_hash": "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1"
+  },
+  "steps": [
+    {
+      "step_index": 0,
+      "action": { "generator": "sigma_tactic", "params": { "tactic": "simp" } },
+      "input_hash": "b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1b1",
+      "output_hash": "c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+      "trace_ref": { "family": "QA_MATH_COMPILER_STACK.v1", "trace_id": "trace_0001" },
+      "result": { "status": "SUCCESS", "witness_hash": "d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1d1" }
+    },
+    {
+      "step_index": 1,
+      "action": { "generator": "sigma_tactic", "params": { "tactic": "exact" } },
+      "input_hash": "c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1c1",
+      "output_hash": "e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1e1",
+      "trace_ref": { "family": "QA_MATH_COMPILER_STACK.v1", "trace_id": "trace_0002" },
+      "result": {
+        "status": "FAIL",
+        "fail_type": "GOAL_STUCK",
+        "invariant_diff": { "stuck_on": "missing_lemma", "needed": "lemma_hash_xyz" }
+      }
+    }
+  ],
+  "final_status": { "status": "FAIL", "summary": "Stuck: missing lemma" },
+  "merkle_parent": "f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1f1",
+  "invariant_diff": {
+    "steps_total": 2,
+    "steps_success": 1,
+    "steps_fail": 1,
+    "final_status": "FAIL"
+  }
+}

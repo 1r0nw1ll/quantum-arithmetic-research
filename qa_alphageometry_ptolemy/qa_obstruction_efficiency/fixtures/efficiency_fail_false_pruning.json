@@ -1,0 +1,69 @@
+{
+  "schema_version": "QA_OBSTRUCTION_EFFICIENCY_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_efficiency.fail.false_pruning_class_4.v1",
+  "cert_type": "obstruction_efficiency",
+  "title": "Obstruction Efficiency FAIL: class 4 (valid) — false pruning claimed, pruning_ratio=1.0 is wrong",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: the aware planner incorrectly prunes a valid target (class 4, v_3(4)=0, OBSTRUCTION_ABSENT). The cert declares aware_trace.pruned_before_search=true and efficiency_claim.pruning_ratio=1.0. This is doubly wrong: (1) pruning a valid target is a FALSE_PRUNING_EFFICIENCY error — the planner has incorrectly blocked a reachable goal; (2) the efficiency_claim is inconsistent with OBSTRUCTION_ABSENT (aware_trace.pruned_before_search must be false when obstruction is absent). The validator catches both: AWARE_TRACE_MISMATCH (pruned=true on OBSTRUCTION_ABSENT) and FALSE_PRUNING_EFFICIENCY (false_pruning=true on OBSTRUCTION_ABSENT target).",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "planner_ref": { "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1" },
+
+  "arithmetic_params": { "prime_p": 3, "k": 2, "modulus": 9 },
+
+  "target_arithmetic_class": 4,
+  "obstruction_verdict": "OBSTRUCTION_ABSENT",
+
+  "baseline_trace": {
+    "nodes_expanded": 3,
+    "plan_found": true,
+    "notes": "Naive planner: expanded 3 nodes, found 2-move plan (increase_gain → apply_lowpass)."
+  },
+
+  "aware_trace": {
+    "pruned_before_search": true,
+    "nodes_expanded": 0,
+    "plan_found": null,
+    "notes": "INCORRECTLY pruned: v_3(4)=0 means OBSTRUCTION_ABSENT, but planner applied prune anyway. This is a planner bug — it pruned a valid, reachable target."
+  },
+
+  "efficiency_claim": {
+    "saved_nodes": 3,
+    "pruning_ratio": 1.0,
+    "false_pruning": true,
+    "notes": "Pruning ratio 1.0 is spurious: the 3 'saved' nodes would have found a valid plan. This is not an efficiency gain — it is a correctness failure. false_pruning=true flags the error."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                  "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                             "passed": true,  "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "EF1",  "description": "planner_ref is QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",                "passed": true,  "details": "schema_version='QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1'" },
+    { "check_id": "EF2",  "description": "modulus == p^k = 3^2 = 9",                                          "passed": true,  "details": "9 == 9" },
+    { "check_id": "EF3",  "description": "p=3 is inert: Legendre(5,3)=-1",                                    "passed": true,  "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "EF4",  "description": "target r=4 in range {0..8}",                                        "passed": true,  "details": "0 <= 4 < 9" },
+    { "check_id": "EF5",  "description": "obstruction_verdict matches v_3(4)=0 → ABSENT",                     "passed": true,  "details": "v_3(4)=0; match" },
+    { "check_id": "EF6",  "description": "saved_nodes == baseline(3) - aware(0) = 3",                         "passed": true,  "details": "saved_nodes=3; 3-0=3; arithmetic match (but savings are spurious)" },
+    { "check_id": "EF7",  "description": "pruning_ratio == 3/3 = 1.0",                                        "passed": true,  "details": "pruning_ratio=1.0; 3/3=1.0; arithmetic match (but ratio is spurious)" },
+    { "check_id": "EF8",  "description": "OBSTRUCTION_ABSENT: aware_trace.pruned_before_search must be false", "passed": false, "details": "pruned_before_search=true on OBSTRUCTION_ABSENT target — AWARE_TRACE_MISMATCH" },
+    { "check_id": "EF9",  "description": "false_pruning=false required for PASS",                              "passed": false, "details": "false_pruning=true — valid target was pruned — FALSE_PRUNING_EFFICIENCY" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "AWARE_TRACE_MISMATCH",
+      "message": "aware_trace.pruned_before_search=true but obstruction_verdict=OBSTRUCTION_ABSENT: planner must not prune when v_p(r)=0."
+    },
+    {
+      "fail_type": "FALSE_PRUNING_EFFICIENCY",
+      "message": "efficiency_claim.false_pruning=true: the planner pruned a valid (non-forbidden) target class 4. Pruning a reachable goal is a correctness failure, not an efficiency gain."
+    }
+  ],
+  "result": "FAIL"
+}

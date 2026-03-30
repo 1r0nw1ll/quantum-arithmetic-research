@@ -1,0 +1,93 @@
+{
+  "certificate_type": "bounded_cycle_impossibility",
+  "version": "1.0",
+  "theorem_id": "rule30_center_nonperiodic_P1024_T16384",
+  "claim": "For all periods p in [1, 1024], there exists t in [0, 16384-p] such that center(t) ≠ center(t+p)",
+  "scope": "bounded",
+  "parameters": {
+    "rule": 30,
+    "initial_condition": "single 1 at position 0",
+    "projection": "center column (position 0)",
+    "time_horizon": {
+      "T_START": 0,
+      "T_END": 16384
+    },
+    "period_range": {
+      "P_MIN": 1,
+      "P_MAX": 1024
+    },
+    "window": {
+      "spatial_range": [-16384, 16384],
+      "width": 32769
+    }
+  },
+  "witness_data": {
+    "format": "explicit_counterexamples",
+    "total_periods": 1024,
+    "verified_periods": 1024,
+    "failures": [],
+    "files": {
+      "csv": {
+        "filename": "witness_rule30_center_P1024_T16384.csv",
+        "sha256": "47c99fcc3edc45ac28ef3b15a296572a3e07a79c16c905fc1217d33783aef95b",
+        "size_bytes": 10240,
+        "format": "p,t,center_t,center_t_plus_p"
+      },
+      "json": {
+        "filename": "witness_rule30_center_P1024_T16384.json",
+        "sha256": "572de7f23251f93bff6634b53f39fd1d795629ef3bef6bd17a4f60c6b9e54c21",
+        "size_bytes": 94208,
+        "format": "structured_json_with_summary"
+      },
+      "center_sequence": {
+        "filename": "center_rule30_T16384.txt",
+        "size_bytes": 33792,
+        "format": "space_separated_bits"
+      }
+    }
+  },
+  "verification": {
+    "method": "deterministic_evolution",
+    "reproducible": true,
+    "independent_verification": "Anyone can reproduce by implementing Rule 30 and checking witnesses",
+    "correctness_guarantee": "Light cone argument ensures finite window suffices"
+  },
+  "computational_details": {
+    "algorithm": "double_buffer_evolution",
+    "memory_complexity": "O(T)",
+    "time_complexity": "O(T * width)",
+    "computation_time_seconds": 120,
+    "implementation": "rule30_witness_generator.py"
+  },
+  "lemmas": {
+    "light_cone": {
+      "statement": "center(t) depends only on initial positions [-t, +t]",
+      "proof": "Nearest-neighbor propagation at most 1 cell/step",
+      "consequence": "Finite window [-T, +T] suffices for all t ≤ T"
+    },
+    "witness_validity": {
+      "statement": "For each period p, witness (t, center(t), center(t+p)) shows center(t) ≠ center(t+p)",
+      "proof": "Direct computation from Rule 30 evolution",
+      "verification": "Check each witness independently"
+    }
+  },
+  "limitations": {
+    "bounded_time": "Results valid only for t ≤ 16384",
+    "bounded_periods": "Only periods p ≤ 1024 verified",
+    "no_asymptotic_claims": "Does not prove infinite non-periodicity",
+    "no_irreducibility_claims": "Does not claim computational irreducibility",
+    "extension_possible": "Method can be extended to larger parameters"
+  },
+  "evidence_quality": "deterministic_explicit_counterexamples",
+  "confidence": "absolute_within_scope",
+  "submitter": "Will Dale",
+  "submission_date": "2026-01-06",
+  "target": "Wolfram Research Rule 30 Prize",
+  "notes": [
+    "This is a bounded certificate, not an unbounded proof",
+    "All claims are explicitly scoped to stated parameters",
+    "Witness data is reproducible and independently verifiable",
+    "No computational irreducibility claims are made",
+    "Extension to larger parameters is straightforward but not included"
+  ]
+}

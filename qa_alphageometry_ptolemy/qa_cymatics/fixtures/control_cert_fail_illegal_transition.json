@@ -1,0 +1,109 @@
+{
+  "schema_version": "QA_CYMATIC_CONTROL_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.control.illegal_transition.v1",
+  "cert_type": "cymatic_control",
+  "title": "Faraday Control Failure: illegal flat -> hexagons direct jump (missing stripes intermediate)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates ILLEGAL_TRANSITION + GOAL_NOT_REACHED + NONLINEAR_ESCAPE: the control sequence attempts to jump directly from flat to hexagons by changing only frequency (skipping the required amplitude threshold crossing). The system escapes to disordered state instead. QA analogue: attempting to jump from singularity to cosmos orbit without passing through the satellite threshold.",
+
+  "setup": {
+    "platform_type": "fluid",
+    "geometry": "circular_petri_dish_diameter_100mm",
+    "medium": "glycerol_water_85pct",
+    "boundary_condition": "fixed circular wall",
+    "actuator_type": "vertical shaker"
+  },
+
+  "initial_state": {
+    "pattern_class": "flat",
+    "symmetry_group": "O2",
+    "stability": "stable",
+    "frequency_hz": 70.0,
+    "amplitude_mm": 0.20,
+    "depth_mm": 3.0
+  },
+
+  "target_spec": {
+    "target_pattern_class": "hexagons",
+    "target_symmetry_group": "C6v",
+    "max_path_length_k": 1,
+    "goal_tolerance": {
+      "frequency_tolerance_hz": 2.0,
+      "amplitude_tolerance_mm": 0.10
+    }
+  },
+
+  "generator_sequence": [
+    {
+      "step_index": 1,
+      "move": "set_frequency",
+      "parameters": { "frequency_hz": 120.0 },
+      "expected_transition": "flat -> hexagons"
+    }
+  ],
+
+  "control_graph": {
+    "nodes": ["flat", "stripes", "hexagons", "disordered"],
+    "edges": [
+      { "from": "flat",     "move": "increase_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "set_frequency",       "to": "hexagons"   },
+      { "from": "hexagons", "move": "decrease_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "decrease_amplitude",  "to": "flat"       },
+      { "from": "hexagons", "move": "increase_amplitude",  "to": "disordered" }
+    ]
+  },
+
+  "observed_final_state": {
+    "pattern_class": "disordered",
+    "symmetry_group": "none",
+    "stability": "unstable",
+    "path_length_k": 1,
+    "return_in_k": false,
+    "return_path": [],
+    "frequency_hz": 120.0,
+    "amplitude_mm": 0.20,
+    "witness_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+  },
+
+  "qa_mapping": {
+    "initial_orbit_family": "singularity",
+    "target_orbit_family":  "cosmos",
+    "final_orbit_family":   "out_of_orbit",
+    "state_pair": { "b": 1, "e": 2 },
+    "generator_correspondence": [
+      { "control_move": "set_frequency", "qa_generator_role": "state-address selection (insufficient without prior threshold crossing)" }
+    ]
+  },
+
+  "validation_checks": [
+    { "check_id": "C1",  "description": "path_length_k equals number of generator steps",             "passed": true,  "details": "path_length_k=1, len(generator_sequence)=1" },
+    { "check_id": "C2",  "description": "path_length_k <= max_path_length_k",                         "passed": true,  "details": "1 <= 1" },
+    { "check_id": "C3",  "description": "final pattern class reaches target pattern class",            "passed": false, "details": "disordered != hexagons" },
+    { "check_id": "C4",  "description": "final symmetry group reaches target symmetry group",          "passed": false, "details": "none != C6v" },
+    { "check_id": "C5",  "description": "final pattern class recognized in CONTROL_PATTERN_TO_ORBIT", "passed": true,  "details": "disordered -> out_of_orbit (recognized as escape)" },
+    { "check_id": "C6",  "description": "final orbit family matches final pattern class",              "passed": true,  "details": "out_of_orbit == CONTROL_PATTERN_TO_ORBIT[disordered]=out_of_orbit" },
+    { "check_id": "C7",  "description": "target orbit family matches target pattern class",            "passed": true,  "details": "cosmos == CONTROL_PATTERN_TO_ORBIT[hexagons]=cosmos" },
+    { "check_id": "C8",  "description": "initial orbit family matches initial pattern class",          "passed": true,  "details": "singularity == CONTROL_PATTERN_TO_ORBIT[flat]=singularity" },
+    { "check_id": "C9",  "description": "all control transitions are legal edges in control_graph",   "passed": false, "details": "No edge flat --set_frequency--> hexagons in control_graph. Must pass through stripes." },
+    { "check_id": "C10", "description": "return path exists and terminates at initial state",          "passed": false, "details": "return_in_k=false; system in disordered state, no return path available" },
+    { "check_id": "C11", "description": "final state is not disordered",                              "passed": false, "details": "disordered == disordered — NONLINEAR_ESCAPE" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "ILLEGAL_TRANSITION",
+      "message": "No legal edge flat --set_frequency--> hexagons in control_graph. Frequency change alone cannot cross the Faraday amplitude threshold. Must first increase_amplitude to reach stripes, then set_frequency to select hexagons."
+    },
+    {
+      "fail_type": "GOAL_NOT_REACHED",
+      "message": "Observed final class 'disordered' does not match target class 'hexagons'. Symmetry 'none' does not match target 'C6v'."
+    },
+    {
+      "fail_type": "NONLINEAR_ESCAPE",
+      "message": "Final state is 'disordered' (out_of_orbit). Changing frequency at sub-threshold amplitude drove the fluid into turbulent/disordered regime rather than a stable Faraday pattern. QA analogue: jumping past all orbit families without passing through the mod-3 threshold."
+    }
+  ],
+
+  "result": "FAIL"
+}

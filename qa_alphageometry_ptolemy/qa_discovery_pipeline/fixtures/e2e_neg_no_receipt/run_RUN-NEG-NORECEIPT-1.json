@@ -1,0 +1,22 @@
+{
+  "_comment": "E2E negative: FAIL run with typed failure but NO receipt artifact. ci_check --allow_fail must reject with RUN_FAIL_NO_RECEIPT.",
+  "schema_id": "QA_DISCOVERY_PIPELINE_RUN_SCHEMA.v1",
+  "run_id": "RUN-NEG-NORECEIPT-1",
+  "created_utc": "2026-02-11T00:10:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "pipeline_id": "QA_DISCOVERY_PIPELINE.v1",
+  "toolchain": { "python": "3.12", "os": "ubuntu24", "toolchain_id": "lean4.12.0" },
+  "inputs": {
+    "episode_ref": { "family": "QA_CONJECTURE_PROVE_CONTROL_LOOP.v1", "path_or_hash": "qa_conjecture_prove/fixtures/episode_valid.json" },
+    "k": 2,
+    "determinism": { "canonical_json": true, "frontier_sort": "(-priority,state_hash)", "bfs_tie_breaker": "(generator,step_index,output_hash)" }
+  },
+  "execution": {
+    "steps": [
+      { "step_index": 0, "op": "VALIDATE_EPISODE", "result": { "status": "FAIL", "fail_type": "SIM_FAIL", "invariant_diff": { "reason": "simulated failure without receipt artifact" } } }
+    ]
+  },
+  "outputs": { "artifacts": [] },
+  "result": { "status": "FAIL", "fail_type": "SIM_FAIL", "invariant_diff": { "reason": "simulated failure without receipt artifact" } },
+  "merkle_parent": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+}

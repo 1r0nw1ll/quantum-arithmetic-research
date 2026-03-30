@@ -1,0 +1,17 @@
+{
+  "id": "t2_p01_parallel_chain_7",
+  "description": "Long parallel transitivity: L1||L2||...||L8 => L1||L8 (7 steps)",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"Parallel": [4, 5]},
+    {"Parallel": [5, 6]},
+    {"Parallel": [6, 7]},
+    {"Parallel": [7, 8]}
+  ],
+  "goals": [
+    {"Parallel": [1, 8]}
+  ],
+  "difficulty": 5
+}

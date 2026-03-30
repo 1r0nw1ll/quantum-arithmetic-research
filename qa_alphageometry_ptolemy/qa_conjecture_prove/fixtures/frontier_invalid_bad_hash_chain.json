@@ -1,0 +1,31 @@
+{
+  "_comment": "Negative fixture: this_snapshot_hash is empty string. Expected: HASH_CHAIN_INVALID.",
+  "schema_id": "QA_FRONTIER_SNAPSHOT_SCHEMA.v1",
+  "snapshot_id": "SNAP-NEGFIX0001",
+  "created_utc": "2026-02-10T23:45:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "generator_set_id": "GENSET{sigma_down,sigma_tactic,sigma_up}.v1",
+  "frontier": [
+    {
+      "state_hash": "a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4a4",
+      "layer": "formal",
+      "priority": 0.91
+    }
+  ],
+  "visited": [
+    "b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4b4"
+  ],
+  "score_model": {
+    "novelty_weight": 1.0,
+    "reuse_weight": 0.5,
+    "obstruction_diversity_weight": 0.75
+  },
+  "hash_chain": {
+    "prev_snapshot_hash": "c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4c4",
+    "this_snapshot_hash": ""
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "note": "this_snapshot_hash is empty"
+  }
+}

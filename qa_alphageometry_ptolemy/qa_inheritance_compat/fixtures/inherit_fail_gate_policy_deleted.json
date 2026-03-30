@@ -1,0 +1,69 @@
+{
+  "schema_version": "QA_INHERITANCE_COMPAT_CERT.v1",
+  "certificate_id": "qa.cert.inheritance.fail.gate_policy_deleted.v1",
+  "cert_type": "qa_inheritance_compat",
+  "title": "Inheritance FAIL: child removes Gate 5 from kernel gate policy (GATE_POLICY_INCOMPATIBLE)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates GATE_POLICY_INCOMPATIBLE: the child cert family declares gate_policy=[0,1,2,3,4] — removing Gate 5 (canonical hash / Merkle integrity). Gate 5 closes the replay chain and makes certs tamper-evident. A family extension that strips Gate 5 breaks the audibility guarantee inherited from the kernel: any cert produced by this family can no longer be verified as unmodified by an external auditor. The inheritance edge is invalid because a family_extension must include at least all the gates its parent requires. This is the canonical gate-policy obstruction certificate.",
+
+  "parent_family": {
+    "family_id": 107,
+    "schema_version": "QA_CORE_SPEC.v1",
+    "spec_scope": "kernel"
+  },
+
+  "child_family": {
+    "family_id": 108,
+    "schema_version": "QA_AREA_QUANTIZATION_CERT.v1",
+    "spec_scope": "family_extension"
+  },
+
+  "declared_inherits_from": "QA_CORE_SPEC.v1",
+  "scope_transition": "kernel -> family_extension",
+
+  "extracted_parent": {
+    "gate_policy": [0, 1, 2, 3, 4, 5],
+    "failure_algebra_types": ["OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR"],
+    "invariant_names": ["QA_relation_1", "QA_relation_2"],
+    "logging_required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "extracted_child": {
+    "gate_policy": [0, 1, 2, 3, 4],
+    "failure_algebra_types": [
+      "OUT_OF_BOUNDS", "PARITY", "INVARIANT_BREAK", "ZERO_DENOMINATOR",
+      "DOMAIN_SPECIFIC_FAIL"
+    ],
+    "preserves_invariants_refs": ["QA_relation_1", "QA_relation_2"],
+    "logging_required_fields": ["move", "fail_type", "invariant_diff"]
+  },
+
+  "compatibility_claims": {
+    "gate_policy_compatible":              false,
+    "failure_algebra_extends_not_replaces": true,
+    "logging_contract_compatible":          true,
+    "invariant_refs_resolve":               true,
+    "scope_transition_valid":               true
+  },
+
+  "validation_checks": [
+    { "check_id": "IC1", "description": "parent family schema version is a recognised QA cert family",            "passed": true,  "details": "'QA_CORE_SPEC.v1' is a registered kernel family" },
+    { "check_id": "IC2", "description": "child family schema version is a recognised QA cert family",             "passed": true,  "details": "'QA_AREA_QUANTIZATION_CERT.v1' is a registered family_extension (this fixture models a bad version of [108] that stripped Gate 5)" },
+    { "check_id": "IC3", "description": "declared_inherits_from matches parent_family.schema_version",            "passed": true,  "details": "'QA_CORE_SPEC.v1' == 'QA_CORE_SPEC.v1'" },
+    { "check_id": "IC4", "description": "child gate policy is superset of parent gate policy",                    "passed": false, "details": "child=[0,1,2,3,4] is missing Gate 5 from parent=[0,1,2,3,4,5]; missing={5}" },
+    { "check_id": "IC5", "description": "child failure algebra extends parent without deleting required types",    "passed": true,  "details": "parent types all present; child adds DOMAIN_SPECIFIC_FAIL" },
+    { "check_id": "IC6", "description": "child logging contract includes move, fail_type, invariant_diff",        "passed": true,  "details": "all three present" },
+    { "check_id": "IC7", "description": "child preserves_invariants refs resolve against parent invariant names", "passed": true,  "details": "refs resolve" },
+    { "check_id": "IC8", "description": "scope transition 'kernel -> family_extension' is valid",                "passed": true,  "details": "valid transition" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "GATE_POLICY_INCOMPATIBLE",
+      "message": "extracted_child.gate_policy=[0,1,2,3,4] is not a superset of extracted_parent.gate_policy=[0,1,2,3,4,5]. Missing gate: 5 (canonical hash / Merkle integrity). Gate 5 closes the replay chain and makes certs tamper-evident. A family_extension must include all gates required by its parent kernel. Removing Gate 5 means any cert produced by this hypothetical family cannot be independently audited for tampering — the inheritance edge is structurally invalid."
+    }
+  ],
+
+  "result": "FAIL"
+}

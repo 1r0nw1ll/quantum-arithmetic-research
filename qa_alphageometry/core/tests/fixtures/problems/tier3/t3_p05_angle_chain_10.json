@@ -1,0 +1,20 @@
+{
+  "id": "t3_p05_angle_chain_10",
+  "description": "Ultra-long angle equality chain: ∠A=∠B=...=∠K => ∠A=∠K (10 steps)",
+  "givens": [
+    {"EqualAngle": [30, 31]},
+    {"EqualAngle": [31, 32]},
+    {"EqualAngle": [32, 33]},
+    {"EqualAngle": [33, 34]},
+    {"EqualAngle": [34, 35]},
+    {"EqualAngle": [35, 36]},
+    {"EqualAngle": [36, 37]},
+    {"EqualAngle": [37, 38]},
+    {"EqualAngle": [38, 39]},
+    {"EqualAngle": [39, 40]}
+  ],
+  "goals": [
+    {"EqualAngle": [30, 40]}
+  ],
+  "difficulty": 8
+}

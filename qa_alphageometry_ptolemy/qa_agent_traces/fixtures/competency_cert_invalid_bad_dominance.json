@@ -1,0 +1,159 @@
+{
+  "_comment": "Negative fixture: by_dimension booleans disagree with deterministic recomputation from agent metrics vs baseline metrics. agency declared false (should be true: 0.21-0.05=0.16>=0.01), goal_density declared true (should be false: 0.12-0.12=0.00<0.01). Expected fail_type: NONDETERMINISTIC_DERIVATION.",
+  "trace": {
+    "schema_id": "QA_AGENT_TRACE_SCHEMA.v1",
+    "trace_id": "TRACE-FIXTURE0001",
+    "created_utc": "2026-02-10T22:10:00Z",
+    "provenance": {
+      "collector": "qa_trace_collector",
+      "collection_method": "synthetic",
+      "source_dataset": "princeton-nlp/SWE-bench_Lite",
+      "source_url": "https://huggingface.co/datasets/princeton-nlp/SWE-bench_Lite",
+      "license": "mit",
+      "raw_artifacts_policy": "hash_only",
+      "privacy_redactions": ["api_keys", "tokens", "paths"]
+    },
+    "task": {
+      "task_type": "swe_bench_lite",
+      "instance_id": "django__django-11099",
+      "repo": "django/django",
+      "base_commit": "a5917978be39d13cd90b517e1de4e7a539ffaa48",
+      "problem_ref": {
+        "sha256": "f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1",
+        "length_bytes": 1871
+      }
+    },
+    "agent": {
+      "name": "qa_agent",
+      "version": "0.1.0",
+      "model": "claude-opus-4-6",
+      "policy": {
+        "tooling": ["read_file", "search", "edit_file", "run_tests"],
+        "guardrails": ["qa_guardrail.v1"]
+      }
+    },
+    "environment": { "os": "linux", "python": "3.11", "runner": "local" },
+    "events": [
+      {
+        "event_index": 0,
+        "ts_utc": "2026-02-10T22:10:01Z",
+        "event_type": "read",
+        "payload": { "path_hash": "a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2" },
+        "invariant_diff": { "note": "read problem statement hash" }
+      },
+      {
+        "event_index": 1,
+        "ts_utc": "2026-02-10T22:10:05Z",
+        "event_type": "search",
+        "payload": { "query_hash": "b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3" },
+        "invariant_diff": { "results_count": 3 }
+      },
+      {
+        "event_index": 2,
+        "ts_utc": "2026-02-10T22:10:15Z",
+        "event_type": "edit",
+        "payload": { "file_hash": "c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4" },
+        "invariant_diff": { "lines_added": 5, "lines_removed": 2 }
+      },
+      {
+        "event_index": 3,
+        "ts_utc": "2026-02-10T22:10:30Z",
+        "event_type": "test",
+        "payload": { "cmd_hash": "d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5" },
+        "invariant_diff": { "exit_code": 0, "tests_passed": 4, "tests_failed": 0 }
+      },
+      {
+        "event_index": 4,
+        "ts_utc": "2026-02-10T22:10:35Z",
+        "event_type": "final",
+        "payload": { "patch_hash": "e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6a1b2c3d4e5f6" },
+        "invariant_diff": { "resolution": "patch_applied" }
+      }
+    ],
+    "trace_hashes": {
+      "events_sha256": "ec380a277fcd1341f4f744c8bedc70ec3e85458eea9f119bb7f2bb0de1d913bc",
+      "trace_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+      "hash_chain": [
+        { "event_index": 0, "event_sha256": "f9923dc9f0a61182eac49f0999df44e6822b109582e83d349a6715398d65cc15", "prev_sha256": "0000000000000000000000000000000000000000000000000000000000000000" },
+        { "event_index": 1, "event_sha256": "1667af508f6e5945de9c19dace775d153f9db4771ebb8862018aea38e251b55c", "prev_sha256": "f9923dc9f0a61182eac49f0999df44e6822b109582e83d349a6715398d65cc15" },
+        { "event_index": 2, "event_sha256": "30956e80b6de9fb8595d0b22eedada6a904442e179cedc7d7ce1436e733d7d77", "prev_sha256": "1667af508f6e5945de9c19dace775d153f9db4771ebb8862018aea38e251b55c" },
+        { "event_index": 3, "event_sha256": "9279aadaa87c3dc9e2112ac8100d2a471141aa53f7780341cdb2178061662a74", "prev_sha256": "30956e80b6de9fb8595d0b22eedada6a904442e179cedc7d7ce1436e733d7d77" },
+        { "event_index": 4, "event_sha256": "e39a8e3c1dd795147a14df621bb4145d950fd9b810d74c47267bad33c4decda9", "prev_sha256": "9279aadaa87c3dc9e2112ac8100d2a471141aa53f7780341cdb2178061662a74" }
+      ]
+    },
+    "summary": { "event_count": 5, "tool_call_count": 4, "edit_count": 1, "test_run_count": 1, "outcome": "resolved" }
+  },
+  "cert": {
+    "schema_id": "QA_AGENT_TRACE_COMPETENCY_CERT_SCHEMA.v1",
+    "cert_id": "CERT-NEGFIX0002",
+    "created_utc": "2026-02-10T23:00:00Z",
+    "trace_ref": {
+      "trace_id": "TRACE-FIXTURE0001",
+      "trace_sha256": "3f8e46747586ca8818f843af95fa5923c4345272472fb16048dafd4ea25dfa10",
+      "trace_schema_id": "QA_AGENT_TRACE_SCHEMA.v1"
+    },
+    "task_ref": {
+      "task_id": "django__django-11099",
+      "source_dataset": "princeton-nlp/SWE-bench_Lite",
+      "dataset_slice_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "license": "mit"
+    },
+    "derivation": {
+      "derivation_id": "QA_COMPETENCY_FROM_AGENT_TRACE.v1",
+      "version": "1.0.0",
+      "inputs": {
+        "event_types_used": ["read", "search", "edit", "test"],
+        "action_vocab": ["edit_file", "run_tests", "search", "patch_apply"],
+        "timebase": "trace_event_index"
+      },
+      "canonicalization": {
+        "json_sort_keys": true,
+        "json_separators": ",:",
+        "utf8": true
+      }
+    },
+    "metrics": {
+      "agency_index": 0.21,
+      "plasticity_index": 0.44,
+      "goal_density": 0.12,
+      "control_entropy": 0.88
+    },
+    "baselines": {
+      "baseline_set_id": "QA_BASELINES.v1",
+      "baseline_bundle_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "baselines_used": [
+        {
+          "baseline_id": "NULL_AGENT.v1",
+          "kind": "null",
+          "metrics": {
+            "agency_index": 0.05,
+            "plasticity_index": 0.02,
+            "goal_density": 0.12,
+            "control_entropy": 0.10
+          }
+        }
+      ]
+    },
+    "dominance": {
+      "rule": "existential_1of4",
+      "min_margin": 0.01,
+      "wins": {
+        "dimensions_won": 2,
+        "by_dimension": {
+          "agency": false,
+          "plasticity": true,
+          "goal_density": true,
+          "entropy": false
+        }
+      }
+    },
+    "verdict": {
+      "passed": true,
+      "fail_type": "OK"
+    },
+    "invariant_diff": {
+      "fixture": true,
+      "note": "agency declared false (recompute=true), goal_density declared true (recompute=false), entropy declared false (recompute=true)"
+    }
+  }
+}

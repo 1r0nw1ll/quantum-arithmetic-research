@@ -1,0 +1,12 @@
+{
+  "id": "t0_p07_parallel_perp_simple",
+  "description": "Simple parallel-perpendicular: L1||L2, L1⊥L3 => L2⊥L3 (1 step)",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Perpendicular": [1, 3]}
+  ],
+  "goals": [
+    {"Perpendicular": [2, 3]}
+  ],
+  "difficulty": 1
+}

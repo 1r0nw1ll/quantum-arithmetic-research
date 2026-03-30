@@ -1,0 +1,33 @@
+{
+  "id": "t3_p04_multi_goal_mega",
+  "description": "Five independent long chains requiring diverse rule applications",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"Parallel": [4, 5]},
+    {"Parallel": [5, 6]},
+    {"Perpendicular": [10, 11]},
+    {"Perpendicular": [11, 12]},
+    {"Perpendicular": [12, 13]},
+    {"EqualLength": [20, 21]},
+    {"EqualLength": [21, 22]},
+    {"EqualLength": [22, 23]},
+    {"EqualLength": [23, 24]},
+    {"EqualAngle": [30, 31]},
+    {"EqualAngle": [31, 32]},
+    {"EqualAngle": [32, 33]},
+    {"ConcentricCircles": [40, 41]},
+    {"ConcentricCircles": [41, 42]},
+    {"ConcentricCircles": [42, 43]},
+    {"ConcentricCircles": [43, 44]}
+  ],
+  "goals": [
+    {"Parallel": [1, 6]},
+    {"Parallel": [10, 13]},
+    {"EqualLength": [20, 24]},
+    {"EqualAngle": [30, 33]},
+    {"ConcentricCircles": [40, 44]}
+  ],
+  "difficulty": 10
+}

@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_PUBLIC_OVERVIEW_DOC.v1",
+  "certificate_id": "qa.cert.public_overview_doc.pass.canonical.v1",
+  "cert_type": "qa_public_overview_doc",
+  "title": "QA Public Overview — Canonical PASS",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Canonical PASS: all required sections present and substantively correct. overview_ref points to [119]. Executive summary present. Spine diagram contains both spines. Obstruction example has r=6, p=3, k=2. Control example lists both domains (cymatics, seismology) with shared orbit and k=2. why_it_matters present. spine_entry_points contains both [116] and [118]. PO1-PO9 all pass.",
+
+  "overview_ref": "QA_DUAL_SPINE_UNIFICATION_REPORT.v1",
+
+  "executive_summary": "QA (Quantum Arithmetic) is a modular arithmetic system whose state space partitions into three orbit families — singularity, satellite, and cosmos — governed by a kernel algebra rooted in the ring Z[φ] (φ = golden ratio). The system has two independently certified public spines. The obstruction spine proves that targets r with v_p(r)=1 (p inert in Z[φ]) are completely unreachable, and that an obstruction-aware planner can prune them before search at zero cost (pruning_ratio=1.0). The control spine proves that the compiler law — orbit trajectory singularity→satellite→cosmos with path_length_k=2 — is domain-generic, holding identically across cymatics (Faraday instability) and seismology (elastic wave propagation). Both spines share the same kernel and failure algebra.",
+
+  "spine_diagram": {
+    "obstruction_spine": {
+      "chain": "[111] inert-prime arithmetic → [112] control bridge → [113] planner correctness → [114] efficiency savings → [115] synthesis cert → [116] validated report",
+      "theorem": "v_p(r)=1 → unreachable → pruned (nodes_expanded=0) → pruning_ratio=1.0"
+    },
+    "control_spine": {
+      "chain": "[105] cymatics domain + [110] seismology domain → [106] compiler cert → [117] synthesis cert → [118] validated report",
+      "theorem": "orbit singularity→satellite→cosmos and path_length_k=2 preserved across all domain instances"
+    }
+  },
+
+  "obstruction_example": {
+    "description": "Target r=6, modulus m=9 (p=3, k=2). Since 3 is inert in Z[φ] and v_3(6)=1, the target is arithmetically forbidden. The obstruction-aware planner prunes r=6 before any search node is expanded: nodes_expanded=0, saved_nodes=47 (vs naive baseline), pruning_ratio=1.0. The result is certified through the full [111]→[114] chain.",
+    "canonical_r": 6,
+    "canonical_p": 3,
+    "canonical_k": 2,
+    "result": "forbidden — pruned before search — pruning_ratio=1.0"
+  },
+
+  "control_example": {
+    "description": "Two physically distinct domains instantiate the same abstract orbit trajectory under the QA compiler law. Cymatics (Faraday instability): flat → stripes → hexagons, moves=[increase_amplitude, set_frequency]. Seismology (elastic wave propagation): quiet → p_wave → surface_wave, moves=[increase_gain, apply_lowpass]. Both traverse orbit singularity→satellite→cosmos with path_length_k=2. The compiler law governs abstract orbit structure; the physical domain provides only concrete instantiation.",
+    "domains": [
+      {
+        "name": "cymatics",
+        "initial_state": "flat",
+        "target_state": "hexagons"
+      },
+      {
+        "name": "seismology",
+        "initial_state": "quiet",
+        "target_state": "surface_wave"
+      }
+    ],
+    "shared_orbit": ["singularity", "satellite", "cosmos"],
+    "shared_k": 2
+  },
+
+  "why_it_matters": "The two-spine architecture gives QA a dual character: it is simultaneously a system for proving impossibility (obstruction spine) and a system for certifying cross-domain structural equivalence (control spine). Both properties are machine-verified through a shared kernel — not asserted informally. A reviewer can verify the entire architecture by reading [116] for the obstruction story, [118] for the control story, and [119] for the unified claim. No domain expertise in cymatics or seismology is needed: the orbit structure is purely algebraic.",
+
+  "spine_entry_points": [
+    "QA_OBSTRUCTION_STACK_REPORT.v1 [116]",
+    "QA_CONTROL_STACK_REPORT.v1 [118]"
+  ],
+
+  "canonical_pass_witness": {
+    "overview_result": "public_overview_verified"
+  },
+
+  "canonical_fail_witness": {
+    "description": "spine_entry_points lists only the obstruction spine, omitting the control spine",
+    "fail_types": ["SPINE_ENTRY_POINTS_INCOMPLETE"]
+  }
+}

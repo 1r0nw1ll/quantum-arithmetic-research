@@ -1,0 +1,99 @@
+{
+  "schema_version": "QA_CONTROL_STACK_REPORT.v1",
+  "certificate_id": "qa.cert.control_stack_report.pass.cross_domain.v1",
+  "cert_type": "control_stack_report",
+  "title": "QA Control Stack Report — cross-domain orbit equivalence: cymatics and seismology",
+  "created_utc": "2026-03-22T00:00:00Z",
+  "intended_audience": "mathematicians, systems researchers, AI/planning reviewers",
+
+  "_fixture_purpose": "Canonical PASS report for the control stack. Packages [117] for external readers with: theorem statement; one-line summaries of [106], [105], [110]; a two-row comparison table; canonical PASS and FAIL witnesses; source refs. Validator checks that all comparison table rows are cross-domain consistent (orbit_path and path_length_k uniform) and that the report accurately represents [117].",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "control_stack_ref": { "schema_version": "QA_CONTROL_STACK_CERT.v1" },
+
+  "theorem_statement": "The QA plan-control compiler law (QA_PLAN_CONTROL_COMPILER_CERT.v1, [106]) is domain-generic: the orbit trajectory singularity→satellite→cosmos and path_length_k=2 are structural invariants, preserved across distinct physical domains under the same kernel-governed generator algebra. Cymatics (Faraday instability, flat→stripes→hexagons) and seismology (elastic wave propagation, quiet→p_wave→surface_wave) share the same QA orbit trajectory despite using entirely different physical state labels and move implementations. The compiler law governs abstract orbit structure; the physical domain provides only concrete instantiation.",
+
+  "domain_summaries": [
+    {
+      "family_id": 106,
+      "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+      "role": "generic compiler law",
+      "one_line": "The kernel-governed compilation relation that maps any domain's planner cert to a control cert, preserving orbit trajectory and path length as abstract invariants."
+    },
+    {
+      "family_id": 105,
+      "schema_version": "QA_CYMATIC_CONTROL_CERT.v1",
+      "role": "cymatics domain instance",
+      "one_line": "Faraday instability: flat (singularity) → stripes (satellite) → hexagons (cosmos) via increase_amplitude + set_frequency; path_length_k=2."
+    },
+    {
+      "family_id": 110,
+      "schema_version": "QA_SEISMIC_CONTROL_CERT.v1",
+      "role": "seismology domain instance",
+      "one_line": "Elastic wave propagation: quiet (singularity) → p_wave (satellite) → surface_wave (cosmos) via increase_gain + apply_lowpass; path_length_k=2."
+    }
+  ],
+
+  "comparison_table": [
+    {
+      "domain":               "cymatics",
+      "initial_state":        "flat",
+      "intermediate_state":   "stripes",
+      "target_state":         "hexagons",
+      "orbit_path":           ["singularity", "satellite", "cosmos"],
+      "path_length_k":        2,
+      "move_sequence":        ["increase_amplitude", "set_frequency"],
+      "notes": "Faraday instability (fluid). flat=sub-threshold, stripes=symmetry-breaking threshold, hexagons=organized hexagonal pattern."
+    },
+    {
+      "domain":               "seismology",
+      "initial_state":        "quiet",
+      "intermediate_state":   "p_wave",
+      "target_state":         "surface_wave",
+      "orbit_path":           ["singularity", "satellite", "cosmos"],
+      "path_length_k":        2,
+      "move_sequence":        ["increase_gain", "apply_lowpass"],
+      "notes": "Elastic wave propagation (solid). quiet=quiescent, p_wave=compressional primary wave, surface_wave=organized long-period propagation."
+    }
+  ],
+
+  "canonical_pass_witness": {
+    "description": "Both domains instantiate orbit_path=[singularity,satellite,cosmos] with path_length_k=2 under different physical generators. cross_domain_claim: orbit_trajectory_preserved=true, path_length_equal=true, compiler_law_domain_generic=true.",
+    "result": "cross_domain_equivalence_holds",
+    "notes": "Source: qa_control_stack/fixtures/control_stack_pass_cross_domain.json"
+  },
+
+  "canonical_fail_witness": {
+    "description": "Seismology trace declares final_orbit_family=satellite instead of cosmos, giving orbit_path=[singularity,satellite,satellite]. Trajectories disagree → ORBIT_TRAJECTORY_MISMATCH. Cross_domain_claim still asserts orbit_trajectory_preserved=true → CROSS_DOMAIN_CLAIM_INCONSISTENT. compiler_law_domain_generic=true with broken orbit → STACK_INCONSISTENCY.",
+    "fail_types": ["ORBIT_TRAJECTORY_MISMATCH", "CROSS_DOMAIN_CLAIM_INCONSISTENT", "STACK_INCONSISTENCY"],
+    "notes": "Source: qa_control_stack/fixtures/control_stack_fail_orbit_mismatch.json"
+  },
+
+  "source_refs": [
+    { "family_id": 106, "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1", "path": "qa_alphageometry_ptolemy/qa_plan_control_compiler/" },
+    { "family_id": 105, "schema_version": "QA_CYMATIC_CONTROL_CERT.v1",       "path": "qa_alphageometry_ptolemy/qa_cymatics/" },
+    { "family_id": 110, "schema_version": "QA_SEISMIC_CONTROL_CERT.v1",       "path": "qa_alphageometry_ptolemy/qa_seismic_control/" },
+    { "family_id": 117, "schema_version": "QA_CONTROL_STACK_CERT.v1",         "path": "qa_alphageometry_ptolemy/qa_control_stack/" }
+  ],
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                                  "passed": true, "details": "match" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                                    "passed": true, "details": "match" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                                               "passed": true, "details": "match" },
+    { "check_id": "CR1",  "description": "control_stack_ref is QA_CONTROL_STACK_CERT.v1",                                       "passed": true, "details": "match" },
+    { "check_id": "CR2",  "description": "theorem_statement non-empty",                                                         "passed": true, "details": "length=520 chars" },
+    { "check_id": "CR3",  "description": "domain_summaries covers [106], [105], [110] (≥3 entries, all required schemas)",       "passed": true, "details": "found: {106, 105, 110}" },
+    { "check_id": "CR4",  "description": "all comparison_table rows have consistent orbit_path",                                 "passed": true, "details": "cymatics=[singularity,satellite,cosmos]; seismology=[singularity,satellite,cosmos]; match" },
+    { "check_id": "CR5",  "description": "all comparison_table rows have equal path_length_k",                                  "passed": true, "details": "cymatics=2; seismology=2; equal" },
+    { "check_id": "CR6",  "description": "canonical_pass_witness.result is 'cross_domain_equivalence_holds'",                   "passed": true, "details": "match" },
+    { "check_id": "CR7",  "description": "canonical_fail_witness.fail_types non-empty",                                         "passed": true, "details": "3 fail types present" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

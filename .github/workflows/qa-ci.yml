@@ -75,8 +75,32 @@ jobs:
           cd "$tmp_dir/qa_alphageometry_ptolemy"
           python qa_meta_validator.py
 
+  qa-axiom-compliance:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: QA Axiom Compliance Gate
+        run: |
+          python tools/qa_axiom_linter.py --all
+          exit_code=$?
+          if [ $exit_code -eq 1 ]; then
+            echo ""
+            echo "AXIOM GATE FAILED — commit contains QA axiom violations."
+            echo "Authority: docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md"
+            exit 1
+          fi
+
   qa-validators:
-    needs: qa-clean-tree-meta-validator
+    needs: [qa-clean-tree-meta-validator, qa-axiom-compliance]
     runs-on: ubuntu-latest
     timeout-minutes: 10
     defaults:

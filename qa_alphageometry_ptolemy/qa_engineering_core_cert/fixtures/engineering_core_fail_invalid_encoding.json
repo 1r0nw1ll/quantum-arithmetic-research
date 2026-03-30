@@ -1,0 +1,88 @@
+{
+  "schema_version": "QA_ENGINEERING_CORE_CERT.v1",
+  "cert_type": "engineering_core",
+  "certificate_id": "qa.cert.engineering_core.fail.invalid_encoding.v1",
+  "title": "Engineering Core FAIL: state encoding uses b=0 — outside QA domain {1,...,N}",
+  "created_utc": "2026-03-24T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture demonstrating EC1: STATE_ENCODING_INVALID. The state 'still' is encoded as (b=0, e=9). Zero is excluded from the QA domain: Caps(9,9) = {(b,e) | 1 ≤ b ≤ 9, 1 ≤ e ≤ 9}. A common mistake when translating classical state-space models is to index states starting from 0 (as in C arrays or Python lists). QA uses {1,...,N}, not {0,...,N-1}. The validator recomputes: b=0 < 1 → STATE_ENCODING_INVALID for state 'still'. This is not ambiguous — zero has no role in QA arithmetic, which is defined on positive integers.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_alphabet_compatible": true,
+    "invariants_preserved": true,
+    "logging_contract_compatible": true,
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "classical_system": {
+    "description": "Spring-mass-damper with zero-indexed states — a common encoding error from classical 0-based state-space conventions.",
+    "modulus": 9,
+    "state_encoding": [
+      { "label": "still",             "b": 0, "e": 9, "orbit_family": "singularity" },
+      { "label": "transient",         "b": 3, "e": 6, "orbit_family": "satellite"   },
+      { "label": "steady_oscillation","b": 1, "e": 2, "orbit_family": "cosmos"      }
+    ],
+    "transitions": [
+      { "from": "still",     "to": "transient",          "generator": "excite" },
+      { "from": "transient", "to": "steady_oscillation", "generator": "tune"   }
+    ],
+    "failure_modes": [
+      { "label": "overdrive", "qa_fail_type": "OUT_OF_BOUNDS" }
+    ],
+    "target_condition": {
+      "label": "steady_oscillation",
+      "orbit_family": "cosmos"
+    },
+    "equilibrium_state": "still"
+  },
+
+  "stability_claim": {
+    "lyapunov_function": "f(b,e) = b*b + b*e - e*e",
+    "orbit_contraction_factor": 0.001582,
+    "contraction_verified": true
+  },
+
+  "controllability_claim": {
+    "classical_controllability": "full_rank",
+    "reachability_witness": {
+      "algorithm": "BFS",
+      "depth_bound": 24,
+      "path": [
+        { "state": "still",              "orbit_family": "singularity" },
+        { "state": "transient",          "orbit_family": "satellite",  "move": "excite" },
+        { "state": "steady_oscillation", "orbit_family": "cosmos",     "move": "tune"   }
+      ],
+      "path_length_k": 2
+    }
+  },
+
+  "obstruction_check": {
+    "modulus": 9,
+    "inert_primes": [3],
+    "target_r": 2,
+    "v_p_values": { "3": 0 },
+    "obstructed": false
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",                            "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",                              "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected == [0,1,2,3,4,5]",                        "passed": true,  "details": "gate_policy_respected=[0,1,2,3,4,5]" },
+    { "check_id": "EC1", "description": "all state encodings have 1 ≤ b,e ≤ N",                          "passed": false, "details": "state 'still' has b=0; QA domain is {1,...,9} — zero excluded; STATE_ENCODING_INVALID" },
+    { "check_id": "EC2", "description": "all transitions have a non-empty generator name",                "passed": true,  "details": "excite, tune" },
+    { "check_id": "EC3", "description": "all failure modes map to QA fail type",                         "passed": true,  "details": "overdrive→OUT_OF_BOUNDS" },
+    { "check_id": "EC4", "description": "target_condition.orbit_family ∈ {singularity,satellite,cosmos}","passed": true,  "details": "cosmos" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "STATE_ENCODING_INVALID",
+      "message": "state 'still' encoded as (b=0, e=9): b=0 is outside QA domain {1,...,9}. Zero is excluded from QA arithmetic. Re-encode using b ∈ {1,...,N}."
+    }
+  ],
+
+  "result": "FAIL"
+}

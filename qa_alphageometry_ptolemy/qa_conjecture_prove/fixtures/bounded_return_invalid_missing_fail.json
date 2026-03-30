@@ -1,0 +1,34 @@
+{
+  "_comment": "Negative fixture: NO_RETURN_WITHIN_K but no fail_type or invariant_diff in result. Expected: RESULT_INCOMPLETE.",
+  "schema_id": "QA_BOUNDED_RETURN_RECEIPT_SCHEMA.v1",
+  "receipt_id": "RCPT-NEGFIX0001",
+  "created_utc": "2026-02-10T23:50:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "generator_set_id": "GENSET{sigma_tactic}.v1",
+  "start_state": {
+    "layer": "formal",
+    "state_hash": "a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6"
+  },
+  "return_target_state": {
+    "layer": "formal",
+    "state_hash": "a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6a6"
+  },
+  "k": 2,
+  "search": {
+    "algorithm": "BFS",
+    "budget": { "max_nodes": 100, "max_seconds": 5 },
+    "determinism": {
+      "root_ordering": "lexicographic_state_hash",
+      "tie_breaker": "stable_generator_name_then_params_json",
+      "toolchain_id": "lean4.12.0"
+    }
+  },
+  "result": {
+    "status": "NO_RETURN_WITHIN_K"
+  },
+  "merkle_parent": "b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6b6",
+  "invariant_diff": {
+    "fixture": true,
+    "note": "result block missing fail_type + invariant_diff on NO_RETURN"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "id": "t2_p15_ultimate_distractor",
+  "description": "6-step equality chain buried in 15 distractor givens (ultimate search test)",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"Parallel": [1, 2]},
+    {"EqualAngle": [30, 31]},
+    {"EqualLength": [11, 12]},
+    {"ConcentricCircles": [20, 21]},
+    {"Perpendicular": [5, 6]},
+    {"EqualLength": [12, 13]},
+    {"Collinear": [40, 41, 42]},
+    {"Parallel": [3, 4]},
+    {"EqualLength": [13, 14]},
+    {"EqualAngle": [32, 33]},
+    {"EqualLength": [14, 15]},
+    {"ConcentricCircles": [22, 23]},
+    {"Perpendicular": [7, 8]},
+    {"EqualLength": [15, 16]},
+    {"Collinear": [43, 44, 45]},
+    {"Parallel": [9, 10]},
+    {"EqualAngle": [34, 35]}
+  ],
+  "goals": [
+    {"EqualLength": [10, 16]}
+  ],
+  "difficulty": 7
+}

@@ -1,0 +1,20 @@
+{
+  "id": "t3_p07_segment_chain_10",
+  "description": "Ultra-long segment equality: AB=CD=...=UV => AB=UV (10 steps)",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]},
+    {"EqualLength": [13, 14]},
+    {"EqualLength": [14, 15]},
+    {"EqualLength": [15, 16]},
+    {"EqualLength": [16, 17]},
+    {"EqualLength": [17, 18]},
+    {"EqualLength": [18, 19]},
+    {"EqualLength": [19, 20]}
+  ],
+  "goals": [
+    {"EqualLength": [10, 20]}
+  ],
+  "difficulty": 8
+}

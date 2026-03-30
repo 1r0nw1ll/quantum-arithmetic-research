@@ -1,0 +1,81 @@
+{
+  "id": "s04_lattice_with_parallels",
+  "description": "Lattice with heavy parallel distractors",
+  "difficulty": 5,
+  "givens": [
+    {
+      "Parallel": [
+        1,
+        2
+      ]
+    },
+    {
+      "Parallel": [
+        2,
+        3
+      ]
+    },
+    {
+      "Parallel": [
+        3,
+        4
+      ]
+    },
+    {
+      "Parallel": [
+        5,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        6,
+        7
+      ]
+    },
+    {
+      "Parallel": [
+        7,
+        8
+      ]
+    },
+    {
+      "Parallel": [
+        9,
+        10
+      ]
+    },
+    {
+      "Parallel": [
+        10,
+        11
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        5
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        7
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        6
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Perpendicular": [
+        1,
+        8
+      ]
+    }
+  ]
+}

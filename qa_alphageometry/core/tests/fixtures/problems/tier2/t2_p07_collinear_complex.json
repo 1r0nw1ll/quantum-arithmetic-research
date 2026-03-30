@@ -1,0 +1,14 @@
+{
+  "id": "t2_p07_collinear_complex",
+  "description": "Complex collinearity: points A,B,C,D,E,F on line L with branching inference",
+  "givens": [
+    {"Collinear": [40, 41, 42]},
+    {"Collinear": [42, 43, 44]},
+    {"Collinear": [44, 45, 46]},
+    {"Collinear": [40, 47, 48]}
+  ],
+  "goals": [
+    {"Collinear": [41, 43, 46]}
+  ],
+  "difficulty": 6
+}

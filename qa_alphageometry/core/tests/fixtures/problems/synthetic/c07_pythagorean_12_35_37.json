@@ -1,0 +1,201 @@
+{
+  "id": "c07_pythagorean_12_35_37",
+  "description": "Coordinate-derived (12-35-37 triple, 4 hub spokes)",
+  "difficulty": 5,
+  "givens": [
+    {
+      "Perpendicular": [
+        1,
+        3
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        4
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        5
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        3,
+        4
+      ]
+    },
+    {
+      "Parallel": [
+        4,
+        5
+      ]
+    },
+    {
+      "Parallel": [
+        5,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        6,
+        7
+      ]
+    },
+    {
+      "Parallel": [
+        7,
+        8
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        4
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        5
+      ]
+    },
+    {
+      "EqualLength": [
+        25,
+        26
+      ]
+    },
+    {
+      "EqualLength": [
+        26,
+        27
+      ]
+    },
+    {
+      "EqualLength": [
+        27,
+        28
+      ]
+    },
+    {
+      "EqualLength": [
+        28,
+        29
+      ]
+    },
+    {
+      "CoincidentLines": [
+        30,
+        31
+      ]
+    },
+    {
+      "CoincidentLines": [
+        31,
+        32
+      ]
+    },
+    {
+      "CoincidentLines": [
+        32,
+        33
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        34,
+        35
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        35,
+        36
+      ]
+    },
+    {
+      "ConcentricCircles": [
+        36,
+        37
+      ]
+    },
+    {
+      "OnCircle": [
+        39,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        40,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        41,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        42,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        43,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        44,
+        38
+      ]
+    },
+    {
+      "OnLine": [
+        45,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        46,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        47,
+        3
+      ]
+    },
+    {
+      "OnLine": [
+        48,
+        3
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Parallel": [
+        3,
+        8
+      ]
+    }
+  ]
+}

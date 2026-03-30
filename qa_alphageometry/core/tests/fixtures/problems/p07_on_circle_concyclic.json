@@ -1,0 +1,14 @@
+{
+  "id": "p07_on_circle_concyclic",
+  "description": "Four points on same circle are concyclic",
+  "givens": [
+    {"OnCircle": [1, 100]},
+    {"OnCircle": [2, 100]},
+    {"OnCircle": [3, 100]},
+    {"OnCircle": [4, 100]}
+  ],
+  "goals": [
+    {"Concyclic": [1, 2, 3, 4]}
+  ],
+  "difficulty": 1
+}

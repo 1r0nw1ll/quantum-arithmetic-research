@@ -1,0 +1,45 @@
+{
+  "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",
+  "certificate_id": "qa.cert.area_quantization_pk.pass.p3_k2.v1",
+  "cert_type": "area_quantization_pk",
+  "title": "Inert Prime Area Quantization PASS: p=3, k=2 (mod 9) — anchor case (reduces to [108])",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. p=3, k=2, modulus=9. This is the same arithmetic fact certified in family [108] (QA_AREA_QUANTIZATION_CERT.v1), now re-stated as an instance of the general inert-prime theorem QA_AREA_QUANTIZATION_PK_CERT.v1. Forbidden set = {3,6} = {r : v_3(r)=1} — the residues divisible by 3 but not 9. This anchor certifies that the general theorem reduces to the known mod-9 result, establishing backward consistency with [108].",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "prime_p": 3,
+  "k": 2,
+  "modulus": 9,
+
+  "inert_witness": {
+    "legendre_5_mod_p": -1,
+    "irreducibility_check": "x^2+x-1 mod 3: x=0 -> -1≡2, x=1 -> 1, x=2 -> 4+2-1=5≡2. No roots mod 3. Irreducible.",
+    "notes": "Legendre(5,3): 5≡2 mod 3; 2^((3-1)/2)=2^1=2≡-1 mod 3. QNR confirmed. Equivalently: 3 is inert in Z[phi] because Z[phi]/3Z[phi] ≅ GF(9)."
+  },
+
+  "theorem_claim": {
+    "statement": "For p=3 (inert in Z[phi]) and k=2: Im(f) = {r in Z/9Z : v_3(r) != 1} = {0,1,2,4,5,7,8}. Forbidden = {r : 3|r but 9∤r} = {3,6}.",
+    "spectrum": [0, 1, 2, 4, 5, 7, 8],
+    "forbidden": [3, 6],
+    "forbidden_description": "Residues with v_3(r)=1: divisible by 3 but not 9. These cannot be norms of elements in Z[phi]/9Z[phi] because 3 is inert (Z[phi]/3Z[phi] ≅ GF(9)); any element with norm divisible by 3 must have norm divisible by 9."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",           "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",              "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",        "passed": true, "details": "[0,1,2,3,4,5] ⊆ [0,1,2,3,4,5]" },
+    { "check_id": "PK1", "description": "p=3 is inert in Z[phi]: Legendre(5,3)=-1",      "passed": true, "details": "5 mod 3 = 2; 2^1=2≡-1 mod 3; QNR confirmed" },
+    { "check_id": "PK2", "description": "modulus == p^k = 3^2 = 9",                      "passed": true, "details": "9 == 9" },
+    { "check_id": "PK3", "description": "exhaustive spectrum recompute matches claim",    "passed": true, "details": "actual_spectrum={0,1,2,4,5,7,8} == claimed" },
+    { "check_id": "PK4", "description": "forbidden == {r : v_p(r)=1} matches theorem",   "passed": true, "details": "actual_forbidden={3,6}; theorem_forbidden={3,6}; match" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

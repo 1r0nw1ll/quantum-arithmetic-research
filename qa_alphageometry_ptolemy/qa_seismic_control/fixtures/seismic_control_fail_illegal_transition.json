@@ -1,0 +1,101 @@
+{
+  "schema_version": "QA_SEISMIC_CONTROL_CERT.v1",
+  "certificate_id": "qa.cert.seismic.control.fail_illegal_transition.v1",
+  "cert_type": "seismic_control",
+  "title": "Seismic Control FAIL: quiet → surface_wave in 1 illegal direct jump (ILLEGAL_TRANSITION)",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates ILLEGAL_TRANSITION: the generator sequence claims quiet→surface_wave in a single move 'apply_lowpass', but the control_graph has no edge (quiet, apply_lowpass, surface_wave). The only legal edge from quiet is (quiet, increase_gain, p_wave). Because the claimed transition is not in the control graph, the cert fails with ILLEGAL_TRANSITION. Additionally, since the path never reaches the target via any legal route, GOAL_NOT_REACHED is also raised.",
+
+  "inherits_from": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+  "spec_scope": "domain_instance",
+
+  "compiler_compatibility": {
+    "compiler_family": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+    "generator_alphabet_matches": true,
+    "initial_and_target_classes_certified": true,
+    "move_sequence_matches_compiler_claim": false
+  },
+
+  "setup": {
+    "sensor_type": "broadband_seismometer_STS-2",
+    "sampling_rate_hz": 100.0,
+    "recording_medium": "three_component_velocity",
+    "filter_chain": "gain→bandpass→lowpass chain matches QA generator alphabet",
+    "notes": "Illegal direct jump attempt: quiet→surface_wave with a single lowpass filter. No such edge exists in the seismic control graph. The quiet state can only be escaped via increase_gain, which transitions to p_wave. This is the canonical illegal-transition certificate for QA_SEISMIC_CONTROL_CERT.v1."
+  },
+
+  "initial_state": {
+    "pattern_class": "quiet",
+    "dominant_frequency_hz": 0.1,
+    "amplitude_db": -40.0
+  },
+
+  "target_spec": {
+    "target_pattern_class": "surface_wave",
+    "max_path_length_k": 1
+  },
+
+  "generator_sequence": [
+    {
+      "step_index": 1,
+      "move": "apply_lowpass",
+      "parameters": { "cutoff_hz": 1.0 },
+      "expected_transition": "quiet -> surface_wave"
+    }
+  ],
+
+  "control_graph": {
+    "nodes": ["quiet", "p_wave", "s_wave", "surface_wave", "coda", "disordered"],
+    "edges": [
+      { "from": "quiet",        "move": "increase_gain",  "to": "p_wave"       },
+      { "from": "p_wave",       "move": "apply_lowpass",  "to": "surface_wave" },
+      { "from": "p_wave",       "move": "apply_bandpass", "to": "s_wave"       },
+      { "from": "s_wave",       "move": "apply_lowpass",  "to": "surface_wave" },
+      { "from": "surface_wave", "move": "decrease_gain",  "to": "coda"         },
+      { "from": "coda",         "move": "decrease_gain",  "to": "quiet"        },
+      { "from": "p_wave",       "move": "increase_gain",  "to": "disordered"   }
+    ]
+  },
+
+  "observed_final_state": {
+    "pattern_class": "quiet",
+    "path_length_k": 1,
+    "dominant_frequency_hz": 0.1,
+    "amplitude_db": -40.0
+  },
+
+  "qa_mapping": {
+    "initial_orbit_family": "singularity",
+    "target_orbit_family": "cosmos",
+    "final_orbit_family": "singularity",
+    "state_pair": { "b": 9, "e": 9 },
+    "generator_correspondence": [
+      { "control_move": "apply_lowpass", "qa_generator_role": "ILLEGAL: no generator maps singularity directly to cosmos; singularity requires threshold-crossing expansion first" }
+    ]
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_PLAN_CONTROL_COMPILER_CERT.v1'",            "passed": true,  "details": "inherits_from='QA_PLAN_CONTROL_COMPILER_CERT.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'domain_instance'",                               "passed": true,  "details": "spec_scope='domain_instance'" },
+    { "check_id": "S1",  "description": "path_length_k equals number of generator steps",                 "passed": true,  "details": "path_length_k=1, len(generator_sequence)=1" },
+    { "check_id": "S2",  "description": "path_length_k <= max_path_length_k",                             "passed": true,  "details": "1 <= 1" },
+    { "check_id": "S3",  "description": "final pattern class reaches target pattern class",               "passed": false, "details": "quiet != surface_wave; goal not reached" },
+    { "check_id": "S4",  "description": "all transitions are legal edges in control_graph",               "passed": false, "details": "quiet-apply_lowpass->surface_wave: ILLEGAL — no such edge in control_graph; only legal edge from quiet is (quiet, increase_gain, p_wave)" },
+    { "check_id": "S5",  "description": "final pattern class maps to recognized QA orbit family",          "passed": true,  "details": "quiet → singularity (recognized)" },
+    { "check_id": "S6",  "description": "final orbit family is not out_of_orbit (not disordered)",        "passed": true,  "details": "singularity != out_of_orbit" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "ILLEGAL_TRANSITION",
+      "message": "Step 1: move='apply_lowpass' from state 'quiet' has no legal edge in control_graph. Legal moves from quiet: [increase_gain→p_wave]. The transition quiet→surface_wave via apply_lowpass does not exist; it would skip the mandatory threshold-crossing expansion from singularity to satellite orbit."
+    },
+    {
+      "fail_type": "GOAL_NOT_REACHED",
+      "message": "Final state 'quiet' does not match target_pattern_class 'surface_wave'. The illegal move failed to advance the state; the system remained in the initial quiet/singularity configuration."
+    }
+  ],
+
+  "result": "FAIL"
+}

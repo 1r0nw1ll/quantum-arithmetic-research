@@ -6,6 +6,26 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This is a mathematical research project exploring the **Quantum Arithmetic (QA) System** - a novel modular arithmetic framework with applications in signal processing, finance, neural network optimization, and automated theorem generation. The research is computational and experimental, not a traditional software project.
 
+## QA Axiom Compliance (HARD GATE — enforced on every commit)
+
+**Theorem NT (Observer Projection Firewall)**: Continuous functions are observer projections ONLY. They NEVER enter the QA discrete layer as causal inputs. QA dynamics are discrete; the boundary is crossed exactly twice (input → observer layer, QA layer → output).
+
+**The six non-negotiable axioms:**
+- **A1 (No-Zero)**: States in {1,...,N}. Never {0,...,N-1}. `qa_step`: `((b+e-1) % m) + 1`, not `(b+e) % m`.
+- **A2 (Derived Coords)**: `d = b+e`, `a = b+2e` — always derived, never assigned independently.
+- **T2 (Firewall)**: Float × modulus → int cast is a **QA violation** (T2-b). Observer outputs never feed back as QA inputs.
+- **S1 (No `**2`)**: Write `b*b`, never `b**2` (libm ULP drift).
+- **S2 (No float state)**: `b`, `e` must be `int` or `Fraction`. No `np.zeros`, `np.random.rand` as QA state.
+- **T1 (Path Time)**: QA time = integer path length k. No continuous time variables in QA logic.
+
+**Linter** (pre-commit hook installed): `python tools/qa_axiom_linter.py --staged`
+
+Manual scan: `python tools/qa_axiom_linter.py --all`
+
+Authority: `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md` | `QA_AXIOMS_BLOCK.md`
+
+---
+
 ## QA Mapping Protocol (Gate 0)
 
 The `qa_alphageometry_ptolemy/qa_meta_validator.py` family sweep enforces an **intake constitution**:

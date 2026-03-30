@@ -1,0 +1,53 @@
+{
+  "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_planner.pass.search_class_4.v1",
+  "cert_type": "obstruction_aware_planner",
+  "title": "Obstruction-Aware Planner PASS: class 4 (valid) — search proceeds, plan found",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Planner correctness certificate for a valid (non-forbidden) target. The planner is asked to find a plan reaching arithmetic class 4 (mod 9). The obstruction test passes: v_3(4)=0, OBSTRUCTION_ABSENT. The planner correctly does NOT prune: pruned_before_search=false. It expands 3 nodes and finds a valid 2-move plan. This fixture validates two things: (1) the planner correctly proceeds when the arithmetic side is clear, and (2) it would be wrong (PRUNE_DECISION_INCONSISTENT) to prune here. The plan witness is 'increase_gain → apply_lowpass' (seismic domain analog), reaching a state pair (b=2,e=0) with f(2,0)=4.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "obstruction_ref": {
+    "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1"
+  },
+
+  "arithmetic_params": {
+    "prime_p": 3,
+    "k": 2,
+    "modulus": 9
+  },
+
+  "target_arithmetic_class": 4,
+  "obstruction_verdict": "OBSTRUCTION_ABSENT",
+
+  "planner_behavior": {
+    "pruned_before_search": false,
+    "nodes_expanded": 3,
+    "search_bound": 1000,
+    "plan_found": true,
+    "plan_witness": "increase_gain (quiet→p_wave) → apply_lowpass (p_wave→surface_wave); target state pair (b=2,e=0) has f(2,0)=4 ≡ 4 mod 9; arithmetic fingerprint matches target class; 2-move plan certified"
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                        "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                           "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                     "passed": true, "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "BR1",  "description": "obstruction_ref is QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",  "passed": true, "details": "schema_version='QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1'" },
+    { "check_id": "BR2",  "description": "modulus == p^k = 3^2 = 9",                                  "passed": true, "details": "9 == 9" },
+    { "check_id": "BR3",  "description": "p=3 is inert: Legendre(5,3)=-1",                             "passed": true, "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "BR4",  "description": "target r=4 in range {0..8}",                                "passed": true, "details": "0 <= 4 < 9" },
+    { "check_id": "BR5",  "description": "obstruction_verdict matches v_p(4): v_3(4)=0 → ABSENT",     "passed": true, "details": "v_3(4)=0; obstruction_verdict='OBSTRUCTION_ABSENT'; match" },
+    { "check_id": "PA1",  "description": "valid target: pruned_before_search=false",                   "passed": true, "details": "pruned_before_search=false; planner correctly did not prune" },
+    { "check_id": "PA2",  "description": "valid target: nodes_expanded > 0 (search proceeded)",        "passed": true, "details": "nodes_expanded=3; search proceeded correctly" },
+    { "check_id": "PA3",  "description": "valid target: plan_found is bool (not null — search ran)",   "passed": true, "details": "plan_found=true; plan emitted with witness" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

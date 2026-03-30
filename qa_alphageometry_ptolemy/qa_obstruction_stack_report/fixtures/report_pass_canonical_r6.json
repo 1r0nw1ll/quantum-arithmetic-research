@@ -1,0 +1,129 @@
+{
+  "schema_version": "QA_OBSTRUCTION_STACK_REPORT.v1",
+  "certificate_id": "qa.cert.obstruction_stack_report.pass.canonical_r6.v1",
+  "cert_type": "obstruction_stack_report",
+  "title": "QA Obstruction Stack Report — canonical case p=3, k=2, r=6",
+  "created_utc": "2026-03-22T00:00:00Z",
+  "intended_audience": "mathematicians, systems researchers, AI/planning reviewers",
+
+  "_fixture_purpose": "Canonical PASS report for the obstruction stack. Packages [111]–[115] for external readers using the canonical forbidden case r=6 (mod 9, p=3). Contains: theorem statement; one-line summaries for each of the five families; a recomputed summary table (two rows: forbidden r=6 and valid r=4); canonical PASS and FAIL witnesses; and source refs. Validator recomputes every row of the summary table from arithmetic params and confirms faithfulness.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "stack_ref": { "schema_version": "QA_OBSTRUCTION_STACK_CERT.v1" },
+
+  "arithmetic_params": { "prime_p": 3, "k": 2, "modulus": 9 },
+
+  "theorem_statement": "For any prime p inert in Z[φ] (i.e. Legendre(5,p)=−1, equivalently x²+x−1 irreducible mod p) and any residue r with v_p(r)=1 (divisible by p but not p²), the norm form f(b,e)=b²+be−e² never takes the value r mod p^k. This arithmetic impossibility propagates deterministically: (1) no control certificate may claim r as a reachable target; (2) an obstruction-aware planner must prune before search, expanding zero nodes; (3) compared to a naive planner exhausting N nodes, the aware planner saves all N nodes with pruning_ratio=1.0. The savings are structural, not heuristic — they follow from the algebraic structure of Z[φ]/p^k Z[φ].",
+
+  "layer_summaries": [
+    {
+      "family_id": 111,
+      "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",
+      "role": "arithmetic theorem",
+      "one_line": "The norm form f(b,e)=b²+be−e² mod p^k never produces residues r with v_p(r)=1; these are structurally forbidden by the algebraic structure of Z[φ]/p^k Z[φ]."
+    },
+    {
+      "family_id": 112,
+      "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",
+      "role": "control bridge",
+      "one_line": "Forbidden arithmetic residues cannot be claimed reachable by any control certificate — the arithmetic obstruction blocks the control compiler."
+    },
+    {
+      "family_id": 113,
+      "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",
+      "role": "planner correctness",
+      "one_line": "A planner certified by [113] must consult the bridge before any search expansion and prune forbidden targets immediately, expanding exactly zero nodes."
+    },
+    {
+      "family_id": 114,
+      "schema_version": "QA_OBSTRUCTION_EFFICIENCY_CERT.v1",
+      "role": "efficiency guarantee",
+      "one_line": "For every forbidden target the aware planner saves all N baseline nodes (saved_nodes=N, pruning_ratio=1.0); for valid targets no false pruning occurs."
+    },
+    {
+      "family_id": 115,
+      "schema_version": "QA_OBSTRUCTION_STACK_CERT.v1",
+      "role": "synthesis spine",
+      "one_line": "One machine-verifiable artifact that recomputes all four layers independently and certifies that arithmetic impossibility deterministically induces control, planner, and efficiency consequences."
+    }
+  ],
+
+  "summary_table": [
+    {
+      "target_r":       6,
+      "v_p_r":          1,
+      "forbidden":      true,
+      "reachable":      false,
+      "pruned":         true,
+      "baseline_nodes": 47,
+      "aware_nodes":    0,
+      "saved_nodes":    47,
+      "pruning_ratio":  1.0,
+      "notes": "Canonical forbidden case. 6=2·3; v_3(6)=1. Naive search exhausts 47 nodes. Aware planner prunes immediately. 100% of search budget saved."
+    },
+    {
+      "target_r":       4,
+      "v_p_r":          0,
+      "forbidden":      false,
+      "reachable":      true,
+      "pruned":         false,
+      "baseline_nodes": 3,
+      "aware_nodes":    3,
+      "saved_nodes":    0,
+      "pruning_ratio":  0.0,
+      "notes": "Canonical valid case. 4 is not divisible by 3; v_3(4)=0. Both planners expand 3 nodes. No overhead from obstruction check. No false pruning."
+    }
+  ],
+
+  "canonical_pass_witness": {
+    "description": "Target r=6 (mod 9), p=3, k=2. All four stack layers are consistent with OBSTRUCTION_PRESENT: arithmetic layer recomputes v_3(6)=1 → forbidden; control layer declares claimed_reachable=false → UNREACHABLE; planner layer has pruned_before_search=true, nodes_expanded=0; efficiency layer has baseline=47, aware=0, saved=47, ratio=1.0. stack_conclusion.full_chain_holds=true.",
+    "target_r": 6,
+    "stack_verdict": "full_chain_holds",
+    "notes": "Source cert: qa_obstruction_stack/fixtures/stack_pass_forbidden_class_6.json"
+  },
+
+  "canonical_fail_witness": {
+    "description": "Target r=6 (mod 9) with OBSTRUCTION_PRESENT correctly declared, but the planner layer is broken: pruned_before_search=false, nodes_expanded=12. Efficiency layer inherits the broken planner: aware_nodes=12, saved_nodes=35, pruning_ratio=0.74. stack_conclusion.full_chain_holds=true despite the broken chain — a lie caught by OS12.",
+    "target_r": 6,
+    "fail_types": [
+      "PRUNING_CONCLUSION_MISMATCH",
+      "EFFICIENCY_CONCLUSION_MISMATCH",
+      "STACK_INCONSISTENCY"
+    ],
+    "notes": "Source cert: qa_obstruction_stack/fixtures/stack_fail_inconsistent_class_6.json"
+  },
+
+  "source_refs": [
+    { "family_id": 111, "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",         "path": "qa_alphageometry_ptolemy/qa_area_quantization_pk/" },
+    { "family_id": 112, "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",   "path": "qa_alphageometry_ptolemy/qa_obstruction_compiler_bridge/" },
+    { "family_id": 113, "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",     "path": "qa_alphageometry_ptolemy/qa_obstruction_aware_planner/" },
+    { "family_id": 114, "schema_version": "QA_OBSTRUCTION_EFFICIENCY_CERT.v1",         "path": "qa_alphageometry_ptolemy/qa_obstruction_efficiency/" },
+    { "family_id": 115, "schema_version": "QA_OBSTRUCTION_STACK_CERT.v1",              "path": "qa_alphageometry_ptolemy/qa_obstruction_stack/" }
+  ],
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                          "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                            "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                                       "passed": true,  "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "RP1",  "description": "stack_ref is QA_OBSTRUCTION_STACK_CERT.v1",                                   "passed": true,  "details": "match" },
+    { "check_id": "RP2",  "description": "modulus == p^k = 3^2 = 9",                                                    "passed": true,  "details": "9 == 9" },
+    { "check_id": "RP3",  "description": "p=3 is inert: Legendre(5,3)=-1",                                              "passed": true,  "details": "5^1 ≡ 2 ≡ -1 mod 3; QNR confirmed" },
+    { "check_id": "RP4",  "description": "theorem_statement is non-empty (≥20 chars)",                                   "passed": true,  "details": "length=551 chars" },
+    { "check_id": "RP5",  "description": "layer_summaries covers all five families [111]–[115]",                         "passed": true,  "details": "found: {111,112,113,114,115}" },
+    { "check_id": "RP6a", "description": "summary_table row r=6: recomputed v_3(6)=1, forbidden=true, reachable=false, pruned=true", "passed": true, "details": "v_3(6)=1; forbidden=true; reachable=false; pruned=true; arithmetic correct" },
+    { "check_id": "RP6b", "description": "summary_table row r=6: saved_nodes=47-0=47, pruning_ratio=47/47=1.0",         "passed": true,  "details": "saved_nodes=47; ratio=1.0; match" },
+    { "check_id": "RP6c", "description": "summary_table row r=4: recomputed v_3(4)=0, forbidden=false, reachable=true, pruned=false", "passed": true, "details": "v_3(4)=0; forbidden=false; reachable=true; pruned=false; correct" },
+    { "check_id": "RP6d", "description": "summary_table row r=4: saved_nodes=3-3=0, pruning_ratio=0/3=0.0",             "passed": true,  "details": "saved_nodes=0; ratio=0.0; match" },
+    { "check_id": "RP7",  "description": "all forbidden rows have pruned=true, aware_nodes=0, pruning_ratio=1.0",        "passed": true,  "details": "row r=6: pruned=true, aware_nodes=0, ratio=1.0" },
+    { "check_id": "RP8",  "description": "canonical_pass_witness.target_r=6 is a forbidden row in summary_table",        "passed": true,  "details": "r=6 present and forbidden=true" },
+    { "check_id": "RP9",  "description": "canonical_fail_witness has ≥1 fail_type from the known failure algebra",       "passed": true,  "details": "3 fail types: PRUNING_CONCLUSION_MISMATCH, EFFICIENCY_CONCLUSION_MISMATCH, STACK_INCONSISTENCY" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

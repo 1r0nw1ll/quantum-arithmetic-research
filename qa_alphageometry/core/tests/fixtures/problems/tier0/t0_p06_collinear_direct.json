@@ -1,0 +1,12 @@
+{
+  "id": "t0_p06_collinear_direct",
+  "description": "Direct collinearity: Points A,B,C,D on line => A,C,D collinear (1 step)",
+  "givens": [
+    {"Collinear": [40, 41, 42]},
+    {"Collinear": [42, 43, 44]}
+  ],
+  "goals": [
+    {"Collinear": [40, 42, 44]}
+  ],
+  "difficulty": 1
+}

@@ -1,0 +1,20 @@
+{
+  "id": "t3_p06_circle_chain_10",
+  "description": "Ultra-long concentric chain: C1~C2~...~C11 => C1~C11 (10 steps)",
+  "givens": [
+    {"ConcentricCircles": [20, 21]},
+    {"ConcentricCircles": [21, 22]},
+    {"ConcentricCircles": [22, 23]},
+    {"ConcentricCircles": [23, 24]},
+    {"ConcentricCircles": [24, 25]},
+    {"ConcentricCircles": [25, 26]},
+    {"ConcentricCircles": [26, 27]},
+    {"ConcentricCircles": [27, 28]},
+    {"ConcentricCircles": [28, 29]},
+    {"ConcentricCircles": [29, 30]}
+  ],
+  "goals": [
+    {"ConcentricCircles": [20, 30]}
+  ],
+  "difficulty": 8
+}

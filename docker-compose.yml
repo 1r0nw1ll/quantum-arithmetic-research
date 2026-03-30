@@ -1,0 +1,126 @@
+# Docker Compose for QA Research Multi-Container Setup
+# Phase 2: Docker Foundation
+
+version: '3.8'
+
+services:
+  # Main QA experiment runner
+  qa-experiment:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: qa-signal-experiment:latest
+    container_name: qa-experiment
+    volumes:
+      - ./results:/app/results
+      - ./data:/app/data:ro  # Read-only for safety
+    environment:
+      - PYTHONUNBUFFERED=1
+      - QA_MODULUS=24
+    networks:
+      - qa-network
+    # Uncomment to run specific experiment
+    # command: python run_signal_experiments_final.py
+
+  # Jupyter notebook server for interactive analysis
+  jupyter:
+    image: jupyter/scipy-notebook:latest
+    container_name: qa-jupyter
+    ports:
+      - "8888:8888"
+    volumes:
+      - .:/home/jovyan/work
+      - jupyter-data:/home/jovyan/.jupyter
+    environment:
+      - JUPYTER_ENABLE_LAB=yes
+      - GRANT_SUDO=yes
+    networks:
+      - qa-network
+    restart: unless-stopped
+
+  # PostgreSQL database for storing experiment results
+  postgres:
+    image: postgres:15-alpine
+    container_name: qa-postgres
+    environment:
+      POSTGRES_DB: qa_research
+      POSTGRES_USER: qa_user
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-changeme}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+      - ./sql/init.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - qa-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U qa_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for task queue (Phase 4: Agent coordination)
+  redis:
+    image: redis:7-alpine
+    container_name: qa-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - qa-network
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PGAdmin for database management (optional)
+  pgadmin:
+    image: dpage/pgadmin4:latest
+    container_name: qa-pgadmin
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_EMAIL:-admin@qa.local}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_PASSWORD:-admin}
+    ports:
+      - "5050:80"
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+    networks:
+      - qa-network
+    restart: unless-stopped
+    depends_on:
+      - postgres
+
+  # Redis Commander for Redis management (optional)
+  redis-commander:
+    image: rediscommander/redis-commander:latest
+    container_name: qa-redis-commander
+    environment:
+      - REDIS_HOSTS=local:redis:6379
+    ports:
+      - "8081:8081"
+    networks:
+      - qa-network
+    restart: unless-stopped
+    depends_on:
+      - redis
+
+# Named volumes for persistent data
+volumes:
+  postgres-data:
+    driver: local
+  redis-data:
+    driver: local
+  jupyter-data:
+    driver: local
+  pgadmin-data:
+    driver: local
+
+# Custom network for container communication
+networks:
+  qa-network:
+    driver: bridge

@@ -1,0 +1,14 @@
+{
+  "id": "t1_p03_equality_chain_4",
+  "description": "Segment equality through 4 intermediate segments: AB=CD=EF=GH=IJ => AB=IJ",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]},
+    {"EqualLength": [13, 14]}
+  ],
+  "goals": [
+    {"EqualLength": [10, 14]}
+  ],
+  "difficulty": 3
+}

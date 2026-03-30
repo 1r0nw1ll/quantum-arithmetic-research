@@ -1,0 +1,87 @@
+{
+  "id": "s05_lattice_with_equalities",
+  "description": "Lattice with heavy equality distractors",
+  "difficulty": 5,
+  "givens": [
+    {
+      "Parallel": [
+        1,
+        2
+      ]
+    },
+    {
+      "Parallel": [
+        2,
+        3
+      ]
+    },
+    {
+      "Parallel": [
+        3,
+        4
+      ]
+    },
+    {
+      "Parallel": [
+        5,
+        6
+      ]
+    },
+    {
+      "Parallel": [
+        6,
+        7
+      ]
+    },
+    {
+      "Parallel": [
+        7,
+        8
+      ]
+    },
+    {
+      "EqualLength": [
+        9,
+        10
+      ]
+    },
+    {
+      "EqualLength": [
+        10,
+        11
+      ]
+    },
+    {
+      "EqualLength": [
+        11,
+        12
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        5
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        7
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        6
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Perpendicular": [
+        1,
+        8
+      ]
+    }
+  ]
+}

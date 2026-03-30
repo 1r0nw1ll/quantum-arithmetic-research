@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_SECURITY_COMPETENCY_CERT.v1",
+  "algorithm_name": "ml_kem",
+  "security_role": "membrane",
+  "immune_function": "containment",
+  "goal": "ML-KEM (FIPS 203): lattice-based key encapsulation; quantum-safe membrane for QA agent channels; deploy now per NIST.",
+  "orbit_signature": "cosmos",
+  "levin_cell_type": "differentiated",
+  "pq_readiness": "fips_final",
+  "pq_migration_path": "",
+  "nist_fips": "FIPS 203",
+  "failure_modes": [
+    "Decapsulation failure probability ~2^-139 (negligible in practice)",
+    "Implementation side-channel — must use constant-time polynomial arithmetic",
+    "Parameter set downgrade (use ML-KEM-768 or ML-KEM-1024 for high-security contexts)"
+  ],
+  "composition_rules": [
+    "Hybrid mode: X25519+ML-KEM for transition (TLS 1.3 hybrid KEX — X25519MLKEM768)",
+    "Follow with HKDF to derive symmetric session keys from shared secret",
+    "NIST: deploy now — FIPS 203 final since August 2024"
+  ],
+  "parent_cert": "QA_AGENT_COMPETENCY_CERT.v1",
+  "result": "PASS"
+}

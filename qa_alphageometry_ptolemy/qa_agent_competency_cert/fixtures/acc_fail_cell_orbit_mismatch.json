@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_AGENT_COMPETENCY_CERT.v1",
+  "agent_name": "bad_agent",
+  "category": "sort",
+  "goal": "Sort N elements but declared as stem cell with cosmos orbit \u2014 contradiction.",
+  "cognitive_horizon": "local",
+  "convergence": "guaranteed",
+  "orbit_signature": "cosmos",
+  "levin_cell_type": "stem",
+  "failure_modes": [
+    "some failure"
+  ],
+  "composition_rules": [
+    "some rule"
+  ],
+  "dedifferentiation_cond": [
+    "always"
+  ],
+  "recommitment_cond": [
+    "never"
+  ],
+  "parent_cert": "QA_CORE_SPEC.v1",
+  "result": "FAIL"
+}

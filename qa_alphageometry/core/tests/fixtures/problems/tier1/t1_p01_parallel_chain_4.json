@@ -1,0 +1,14 @@
+{
+  "id": "t1_p01_parallel_chain_4",
+  "description": "Prove parallel transitivity through 4-step chain: L1||L2||L3||L4||L5 => L1||L5",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"Parallel": [4, 5]}
+  ],
+  "goals": [
+    {"Parallel": [1, 5]}
+  ],
+  "difficulty": 3
+}

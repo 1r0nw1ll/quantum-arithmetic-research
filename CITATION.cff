@@ -1,0 +1,14 @@
+cff-version: 1.2.0
+message: "If you use this construction, please cite it."
+title: "Generator-Relative Barrier Certificate (CapsPair 6x6)"
+authors:
+  - family-names: "Dale"
+    given-names: "Will"
+version: "1.0"
+date-released: "2026-01-23"
+keywords:
+  - reachability
+  - control
+  - generators
+  - BFS
+  - obstruction certificate

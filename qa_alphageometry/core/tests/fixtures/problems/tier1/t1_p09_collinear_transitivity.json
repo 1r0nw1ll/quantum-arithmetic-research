@@ -1,0 +1,12 @@
+{
+  "id": "t1_p09_collinear_transitivity",
+  "description": "Collinearity transitivity: Points A,B,C,D on line L => A,D collinear",
+  "givens": [
+    {"Collinear": [40, 41, 42]},
+    {"Collinear": [42, 43, 44]}
+  ],
+  "goals": [
+    {"Collinear": [40, 41, 44]}
+  ],
+  "difficulty": 3
+}

@@ -1,0 +1,50 @@
+% Canonical Expansion v2 (21→27) for QA Invariants
+% This file defines the 21 canonical QA invariants and the 6 canonical-expanded
+% invariants used in qa_feature_map_v3.py (qa21, qa27).
+
+\section*{Canonical QA Invariants (21)}
+
+We use the QA tuple with the conventional closure rules
+\(d = b + e\) and \(a = b + 2e\). Define squares
+\(B=b^2,\ E=e^2,\ D=d^2,\ A=a^2\).
+
+Triangle and ellipse-derived invariants (canonical set):
+\begin{align*}
+X &= e\,d, & C &= 2X = 2 e d, & F &= b a, & G &= e^2 + d^2, \\
+L &= \tfrac{C F}{12}, & H &= C + F, & I &= |C - F|, \\
+J &= b d, & K &= d a, & W &= X + K = d(e + a), \\
+Y &= A - D, & Z &= E + K, & h &= d\,\sqrt{|a b|}.
+\end{align*}
+
+Useful closures (checked in code as debug assertions):
+\begin{align*}
+C^2 + F^2 &= G^2, & W &= X + K, & Y &= A - D, & Z &= E + K.
+\end{align*}
+
+The 21 canonical invariants are
+\(\{b,e,d,a,B,E,D,A,X,C,F,G,L,H,I,J,K,W,Y,Z,h\}\).
+
+\section*{Canonical-Expanded Invariants ( +6 = 27 total)}
+
+We promote six additional scalars that stabilize scale and encode harmonic
+geometry (matching code in \texttt{feature\_maps/qa\_feature\_map\_v3.py}):
+\begin{align*}
+\varepsilon &= \frac{e}{a}, & \frac{F}{C} &= \frac{b a}{2 e d}, & \frac{G}{C} &= \frac{e^2 + d^2}{2 e d}, \\
+R_h &= \sqrt{B + E + D + A}, & E_{QA} &= G^2 - C F, & \theta &= \operatorname{atan2}(e, b).
+\end{align*}
+
+These six appended to the canonical 21 define \textbf{qa27}. The
+\textbf{qa21} mode uses only the canonical set above. All formulas are
+implemented in Rust (graph kernel features) and Python (tabular/manifold
+feature map), with exact name alignment to ensure reproducibility:
+\begin{itemize}
+  \item Rust: \texttt{codex\_on\_QA/qa\_graph\_experiments/src/main.rs}
+  \item Python: \texttt{codex\_on\_QA/feature\_maps/qa\_feature\_map\_v3.py}
+\end{itemize}
+
+\paragraph{Notes.} \(E_{QA}\) acts as an energy-like contrast between the
+Pythagorean (triangle) and ellipse composites; \(R_h\) is a tesseract-like
+magnitude. The angle \(\theta\) provides a stable phase for per-node QA tuples;
+downstream kernels may replace raw phases by sin/cos encodings to avoid wrap
+discontinuities.
+

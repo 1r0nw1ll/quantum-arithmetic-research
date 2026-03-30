@@ -1,0 +1,27 @@
+% Camera-ready captions for figures generated in codex_on_QA/out
+
+% Moons: Logistic Regression accuracy vs train size
+\newcommand{\capMoonsLogReg}{
+  Logistic Regression on two moons. QA per-feature mapping increases linear separability: test accuracy improves across all train sizes compared to raw features.
+}
+
+% Moons: SGD(logistic) accuracy vs epoch
+\newcommand{\capMoonsMLP}{
+  SGD(logistic) on two moons. QA features reach target accuracy in fewer epochs; combining raw+QA typically dominates both individually.
+}
+
+% Swiss roll: PCA raw
+\newcommand{\capSwissRaw}{
+  Swiss roll (raw PCA). The nonlinear manifold remains curved in the first two principal components.
+}
+
+% Swiss roll: PCA QA
+\newcommand{\capSwissQA}{
+  Swiss roll (QA PCA). QA features yield a straighter embedding, improving clusterability and downstream separability.
+}
+
+% Tabular: SGD(logistic) accuracy vs epoch
+\newcommand{\capTabularSGD}{
+  Synthetic tabular classification (20 features). QA and raw+QA reduce epochs-to-accuracy compared to raw under identical optimization and model capacity.
+}
+

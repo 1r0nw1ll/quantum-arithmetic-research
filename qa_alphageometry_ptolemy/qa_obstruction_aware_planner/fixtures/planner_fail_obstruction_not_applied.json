@@ -1,0 +1,59 @@
+{
+  "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_planner.fail.obstruction_not_applied.v1",
+  "cert_type": "obstruction_aware_planner",
+  "title": "Obstruction-Aware Planner FAIL: class 6 (forbidden) but planner expanded nodes — OBSTRUCTION_NOT_APPLIED",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Canonical planner-correctness failure. The planner is asked to find a plan reaching arithmetic class 6 (mod 9). The obstruction is present: v_3(6)=1. A correct planner should prune immediately (nodes_expanded=0). Instead, this planner expands 47 nodes before failing. This is the OBSTRUCTION_NOT_APPLIED error: the planner wasted search effort on an arithmetically impossible target. It means the planner did not consult the [112] bridge before search, violating the correctness guarantee of family [113]. The search work was structurally futile — no amount of expansion can produce a valid plan for a forbidden target.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "obstruction_ref": {
+    "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1"
+  },
+
+  "arithmetic_params": {
+    "prime_p": 3,
+    "k": 2,
+    "modulus": 9
+  },
+
+  "target_arithmetic_class": 6,
+  "obstruction_verdict": "OBSTRUCTION_PRESENT",
+
+  "planner_behavior": {
+    "pruned_before_search": false,
+    "nodes_expanded": 47,
+    "search_bound": 1000,
+    "plan_found": false,
+    "plan_witness": null
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                        "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                           "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                     "passed": true,  "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "BR1",  "description": "obstruction_ref is QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",  "passed": true,  "details": "schema_version='QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1'" },
+    { "check_id": "BR2",  "description": "modulus == p^k = 3^2 = 9",                                  "passed": true,  "details": "9 == 9" },
+    { "check_id": "BR3",  "description": "p=3 is inert: Legendre(5,3)=-1",                             "passed": true,  "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "BR4",  "description": "target r=6 in range {0..8}",                                "passed": true,  "details": "0 <= 6 < 9" },
+    { "check_id": "BR5",  "description": "obstruction_verdict matches v_p(6): v_3(6)=1 → PRESENT",    "passed": true,  "details": "v_3(6)=1; obstruction_verdict='OBSTRUCTION_PRESENT'; match" },
+    { "check_id": "PA1",  "description": "forbidden target: pruned_before_search must be true",        "passed": false, "details": "pruned_before_search=false; planner did NOT prune — obstruction test was not applied before search" },
+    { "check_id": "PA2",  "description": "forbidden target: nodes_expanded must be 0",                 "passed": false, "details": "nodes_expanded=47; 47 nodes wasted on arithmetically impossible target" },
+    { "check_id": "PA3",  "description": "forbidden target: plan_found must be null",                  "passed": true,  "details": "plan_found=false (no plan found, as expected — but search should not have started)" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "OBSTRUCTION_NOT_APPLIED",
+      "message": "target_arithmetic_class=6 has v_3(6)=1: forbidden by [111] for p=3,k=2. The planner was required to prune before search (nodes_expanded=0, pruned_before_search=true). Instead, it expanded 47 nodes before failing. 47 nodes of search effort were wasted on a structurally impossible target. The planner did not apply the [112] obstruction bridge test. This violates the correctness guarantee of QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1: obstruction-aware planners must consult v_p(r) before any frontier expansion."
+    }
+  ],
+
+  "result": "FAIL"
+}

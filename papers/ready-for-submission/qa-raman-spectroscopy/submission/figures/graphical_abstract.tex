@@ -1,0 +1,43 @@
+% Graphical Abstract: QA Geometry + Residues (compact)
+\documentclass[tikz,border=4pt]{standalone}
+\usepackage{amsmath,amssymb}
+\usetikzlibrary{arrows.meta,positioning,calc}
+\begin{document}
+\begin{tikzpicture}[>=Latex, font=\small]
+% Triangle (left)
+\coordinate (O) at (0,0);
+\coordinate (Cx) at (3.4,0);
+\coordinate (Fy) at (0,2.2);
+\draw[thick] (O)--(Cx)--(Fy)--cycle;
+\draw (0.25,0)--(0.25,0.25)--(0,0.25);
+\node[below] at ($(O)!0.5!(Cx)$) {$C=2ed$};
+\node[left]  at ($(O)!0.5!(Fy)$) {$F=ba$};
+\node[above right] at ($(Fy)!0.5!(Cx)$) {$G=e^2{+}d^2$};
+
+% Ellipse (center)
+\coordinate (E) at (6.4,1.1);
+\def\a{2.2}
+\def\b{1.1}
+\draw[thick] (E) ellipse (\a and \b);
+\node[below] at (E) {$2d$};
+\draw[dashed] ($(E)+(0,-\b)$)--($(E)+(0,\b)$);
+\node[left] at ($(E)+(0,\b)$) {$2d\sqrt{ba}$};
+\coordinate (J) at ($(E)+(-\a,0)$);
+\coordinate (K) at ($(E)+(\a,0)$);
+\fill (J) circle (1.2pt) node[above left] {$J{=}bd$};
+\fill (K) circle (1.2pt) node[above right] {$K{=}da$};
+\coordinate (F1) at ($(E)+(-1.2,0)$);
+\coordinate (F2) at ($(E)+( 1.2,0)$);
+\fill (F1) circle (1.2pt) (F2) circle (1.2pt);
+\draw[<->] ($(F1)+(0,0.35)$)--($(F2)+(0,0.35)$) node[midway,above] {$2X{=}2ed$};
+
+% Residues (right)
+\node[draw,rounded corners,fill=gray!5,align=center] (RC) at (10.4,2.0) {$C_{\mathrm{mod}\,24},\;C_{\mathrm{mod}\,9}$};
+\node[draw,rounded corners,fill=gray!5,align=center] (RF) at (10.4,0.2) {$F_{\mathrm{mod}\,24},\;F_{\mathrm{mod}\,9}$};
+\draw[->,thick] ($(O)!0.5!(Cx)$) .. controls (5.2,-0.6) .. (RC.west);
+\draw[->,thick] ($(O)!0.5!(Fy)$) .. controls (5.2, 0.6) .. (RF.west);
+
+% Title
+\node[font=\bfseries] at (5.2,3.1) {QA Geometry + Modular Residues};
+\end{tikzpicture}
+\end{document}

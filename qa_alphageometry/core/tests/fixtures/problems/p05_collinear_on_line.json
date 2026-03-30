@@ -1,0 +1,13 @@
+{
+  "id": "p05_collinear_on_line",
+  "description": "Points on same line are collinear: P1 on L1, P2 on L1, P3 on L1 => Collinear(P1,P2,P3)",
+  "givens": [
+    {"OnLine": [1, 10]},
+    {"OnLine": [2, 10]},
+    {"OnLine": [3, 10]}
+  ],
+  "goals": [
+    {"Collinear": [1, 2, 3]}
+  ],
+  "difficulty": 1
+}

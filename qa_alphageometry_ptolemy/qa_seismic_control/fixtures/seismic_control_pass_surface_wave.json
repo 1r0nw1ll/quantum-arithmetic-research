@@ -1,0 +1,99 @@
+{
+  "schema_version": "QA_SEISMIC_CONTROL_CERT.v1",
+  "certificate_id": "qa.cert.seismic.control.pass_surface_wave.v1",
+  "cert_type": "seismic_control",
+  "title": "Seismic Control PASS: quiet → p_wave → surface_wave in 2 lawful moves",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Second physical domain instance of QA_PLAN_CONTROL_COMPILER_CERT.v1. Proves that seismic wave pattern control obeys the same kernel-governed compilation law as cymatics, but in an independent physical domain (elastic wave propagation vs. Faraday instability). The two-move path quiet→p_wave→surface_wave maps to the QA orbit transition singularity→satellite→cosmos — the same orbit trajectory as cymatics flat→stripes→hexagons, despite completely different physics. This cross-domain equivalence is the core claim of [106]'s domain-genericity.",
+
+  "inherits_from": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+  "spec_scope": "domain_instance",
+
+  "compiler_compatibility": {
+    "compiler_family": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+    "generator_alphabet_matches": true,
+    "initial_and_target_classes_certified": true,
+    "move_sequence_matches_compiler_claim": true
+  },
+
+  "setup": {
+    "sensor_type": "broadband_seismometer_STS-2",
+    "sampling_rate_hz": 100.0,
+    "recording_medium": "three_component_velocity",
+    "filter_chain": "gain→bandpass→lowpass chain matches QA generator alphabet",
+    "notes": "Canonical demo control path for QA_SEISMIC_CONTROL_CERT.v1. Demonstrates singularity→cosmos orbit transition via 2 lawful seismic processing moves. QA thesis: modular state-address selection via lawful generator sequence governs seismic wave pattern transitions identically to cymatic pattern transitions."
+  },
+
+  "initial_state": {
+    "pattern_class": "quiet",
+    "dominant_frequency_hz": 0.1,
+    "amplitude_db": -40.0
+  },
+
+  "target_spec": {
+    "target_pattern_class": "surface_wave",
+    "max_path_length_k": 2
+  },
+
+  "generator_sequence": [
+    {
+      "step_index": 1,
+      "move": "increase_gain",
+      "parameters": { "gain_db": 20.0 },
+      "expected_transition": "quiet -> p_wave"
+    },
+    {
+      "step_index": 2,
+      "move": "apply_lowpass",
+      "parameters": { "cutoff_hz": 1.0 },
+      "expected_transition": "p_wave -> surface_wave"
+    }
+  ],
+
+  "control_graph": {
+    "nodes": ["quiet", "p_wave", "s_wave", "surface_wave", "coda", "disordered"],
+    "edges": [
+      { "from": "quiet",        "move": "increase_gain",  "to": "p_wave"       },
+      { "from": "p_wave",       "move": "apply_lowpass",  "to": "surface_wave" },
+      { "from": "p_wave",       "move": "apply_bandpass", "to": "s_wave"       },
+      { "from": "s_wave",       "move": "apply_lowpass",  "to": "surface_wave" },
+      { "from": "surface_wave", "move": "decrease_gain",  "to": "coda"         },
+      { "from": "coda",         "move": "decrease_gain",  "to": "quiet"        },
+      { "from": "p_wave",       "move": "increase_gain",  "to": "disordered"   }
+    ]
+  },
+
+  "observed_final_state": {
+    "pattern_class": "surface_wave",
+    "path_length_k": 2,
+    "dominant_frequency_hz": 0.05,
+    "amplitude_db": -12.0
+  },
+
+  "qa_mapping": {
+    "initial_orbit_family": "singularity",
+    "target_orbit_family":  "cosmos",
+    "final_orbit_family":   "cosmos",
+    "state_pair": { "b": 3, "e": 6 },
+    "generator_correspondence": [
+      { "control_move": "increase_gain",  "qa_generator_role": "threshold-crossing expansion (sub-threshold → cosmos entry via satellite)" },
+      { "control_move": "apply_lowpass",  "qa_generator_role": "state-address selection (low-frequency filter selects organized cosmos orbit class)" }
+    ]
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_PLAN_CONTROL_COMPILER_CERT.v1'",            "passed": true,  "details": "inherits_from='QA_PLAN_CONTROL_COMPILER_CERT.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'domain_instance'",                               "passed": true,  "details": "spec_scope='domain_instance'" },
+    { "check_id": "S1",  "description": "path_length_k equals number of generator steps",                 "passed": true,  "details": "path_length_k=2, len(generator_sequence)=2" },
+    { "check_id": "S2",  "description": "path_length_k <= max_path_length_k",                             "passed": true,  "details": "2 <= 2" },
+    { "check_id": "S3",  "description": "final pattern class reaches target pattern class",               "passed": true,  "details": "surface_wave == surface_wave" },
+    { "check_id": "S4",  "description": "all transitions are legal edges in control_graph",               "passed": true,  "details": "quiet-increase_gain->p_wave: legal; p_wave-apply_lowpass->surface_wave: legal" },
+    { "check_id": "S5",  "description": "final pattern class maps to recognized QA orbit family",          "passed": true,  "details": "surface_wave → cosmos (organized long-period propagation = cosmos orbit class)" },
+    { "check_id": "S6",  "description": "final orbit family is not out_of_orbit (not disordered)",        "passed": true,  "details": "cosmos != out_of_orbit" }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

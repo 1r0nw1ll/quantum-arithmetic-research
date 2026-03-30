@@ -1,0 +1,167 @@
+{
+  "schema_version": "QA_CYMATICS_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.faraday.hexagon_basin.v1",
+  "title": "Faraday Pattern Basin: flat → hexagons → squares — Passing Reachability Certificate",
+  "cert_type": "faraday_reachability",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "setup": {
+    "container_geometry": "circular_petri_dish_diameter_100mm",
+    "fluid_type": "glycerol_water_85pct",
+    "fluid_depth_mm": 3.5,
+    "surface_tension_mN_per_m": 63.0,
+    "viscosity_mPas": 109.0,
+    "drive_axis": "vertical",
+    "drive_frequency_hz": 80.0,
+    "drive_amplitude_normalized": 0.72
+  },
+
+  "pattern_state": {
+    "current_class": "hexagons",
+    "wavelength_mm": 8.4,
+    "temporal_period_s": 0.025,
+    "faraday_subharmonic_ratio": "1/2",
+    "spatial_symmetry_group": "C6v"
+  },
+
+  "pattern_basin_graph": [
+    {
+      "from_pattern": "flat",
+      "to_pattern": "stripes",
+      "control_move": "increase_amplitude_to_0.45",
+      "transition_type": "threshold",
+      "legal": true
+    },
+    {
+      "from_pattern": "stripes",
+      "to_pattern": "hexagons",
+      "control_move": "increase_amplitude_to_0.65",
+      "transition_type": "continuous",
+      "legal": true
+    },
+    {
+      "from_pattern": "hexagons",
+      "to_pattern": "squares",
+      "control_move": "increase_amplitude_to_0.85",
+      "transition_type": "discontinuous_jump",
+      "legal": true
+    },
+    {
+      "from_pattern": "hexagons",
+      "to_pattern": "flat",
+      "control_move": "decrease_amplitude_to_0.20",
+      "transition_type": "threshold",
+      "legal": true
+    },
+    {
+      "from_pattern": "flat",
+      "to_pattern": "hexagons",
+      "control_move": "jump_amplitude_to_0.72",
+      "transition_type": "discontinuous_jump",
+      "legal": false,
+      "_note": "Must pass through stripes; direct jump skips a legal intermediate state"
+    }
+  ],
+
+  "reachability": {
+    "initial_pattern": "flat",
+    "target_pattern": "hexagons",
+    "witnessed_path": [
+      "increase_amplitude_to_0.45",
+      "increase_amplitude_to_0.65"
+    ],
+    "path_length_k": 2,
+    "return_in_k": true,
+    "return_path": [
+      "decrease_amplitude_to_0.20"
+    ]
+  },
+
+  "obstruction_classes": [
+    {
+      "blocked_transition": "flat → disordered (direct)",
+      "obstruction_type": "FREQUENCY_OUT_OF_BAND",
+      "witness": "At 80 Hz and depth 3.5mm, the dispersion relation places disordered onset above amplitude 0.97 normalized; only available via extended drive at 0.95+."
+    },
+    {
+      "blocked_transition": "flat → oscillons (direct)",
+      "obstruction_type": "AMPLITUDE_BELOW_THRESHOLD",
+      "witness": "Oscillons require amplitude > 0.90 at this frequency and viscosity; current max tested = 0.85."
+    }
+  ],
+
+  "qa_mapping": {
+    "drive_frequency_maps_to": "cosmos",
+    "subharmonic_maps_to": "period_collapse_cosmos_to_satellite: drive at ω → Faraday response at ω/2, mirrors 24-cycle → 8-cycle under mod-3 threshold",
+    "instability_threshold_maps_to": "mod_3_basin_boundary: Faraday onset amplitude ↔ condition dr_b ≡ dr_e ≡ 0 (mod 3)",
+    "pattern_class_to_orbit_family": {
+      "flat": "singularity",
+      "stripes": "satellite",
+      "squares": "satellite",
+      "hexagons": "cosmos",
+      "quasipattern": "cosmos",
+      "disordered": "out_of_orbit"
+    },
+    "three_regime_correspondence": {
+      "flat": "singularity (1-cycle fixed point — no spatial pattern, maximum damping)",
+      "stripes_squares": "satellite (8-cycle — intermediate spatial organization, mod-3 threshold crossed)",
+      "hexagons_quasipatterns": "cosmos (24-cycle — maximal spatial organization, hexagonal C6v symmetry)"
+    }
+  },
+
+  "validation_checks": [
+    {
+      "check_id": "F1",
+      "description": "faraday_subharmonic_ratio is '1/2'",
+      "passed": true,
+      "expected": "1/2",
+      "actual": "1/2"
+    },
+    {
+      "check_id": "F2",
+      "description": "witnessed_path has length equal to path_length_k",
+      "passed": true,
+      "expected": 2,
+      "actual": 2
+    },
+    {
+      "check_id": "F3",
+      "description": "Each step in witnessed_path is a legal edge in pattern_basin_graph",
+      "passed": true,
+      "expected": "all moves legal=true",
+      "actual": "increase_amplitude_to_0.45: legal=true; increase_amplitude_to_0.65: legal=true"
+    },
+    {
+      "check_id": "F4",
+      "description": "return_in_k is true and return_path is non-null",
+      "passed": true,
+      "expected": "return_in_k=true, return_path=['decrease_amplitude_to_0.20']",
+      "actual": "return_in_k=true, return_path has 1 step"
+    },
+    {
+      "check_id": "F5",
+      "description": "pattern_class_to_orbit_family covers all pattern_basin_graph nodes",
+      "passed": true,
+      "expected": "flat, stripes, hexagons, squares all mapped",
+      "actual": "all mapped"
+    },
+    {
+      "check_id": "F6",
+      "description": "QA three-regime correspondence complete (flat→singularity, stripes→satellite, hexagons→cosmos)",
+      "passed": true,
+      "expected": "all three regimes mapped",
+      "actual": "all three mapped"
+    },
+    {
+      "check_id": "F7",
+      "description": "No illegal transitions in witnessed_path",
+      "passed": true,
+      "expected": "no legal=false moves in witnessed path",
+      "actual": "path uses only legal=true moves"
+    }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

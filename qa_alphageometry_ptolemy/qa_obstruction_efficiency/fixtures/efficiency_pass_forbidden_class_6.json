@@ -1,0 +1,60 @@
+{
+  "schema_version": "QA_OBSTRUCTION_EFFICIENCY_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_efficiency.pass.forbidden_class_6.v1",
+  "cert_type": "obstruction_efficiency",
+  "title": "Obstruction Efficiency PASS: class 6 (forbidden) — 47 nodes saved, pruning_ratio=1.0",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Efficiency certificate for a forbidden target. Baseline naive planner expands 47 nodes before exhausting the search bound without finding a plan (class 6 is arithmetically impossible — no plan can exist). Obstruction-aware planner checks v_3(6)=1, prunes immediately, expands 0 nodes. Saved: 47 nodes, pruning_ratio=1.0. This is the maximum possible savings (100% of search cost eliminated). The efficiency is not incidental — it follows from the arithmetic structure: any number of baseline nodes would be wasted since no plan for class 6 can exist. The cert reuses the same traces as the [113] FAIL fixture, reframing the obstruction-not-applied failure as a quantified efficiency loss.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "planner_ref": { "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1" },
+
+  "arithmetic_params": { "prime_p": 3, "k": 2, "modulus": 9 },
+
+  "target_arithmetic_class": 6,
+  "obstruction_verdict": "OBSTRUCTION_PRESENT",
+
+  "baseline_trace": {
+    "nodes_expanded": 47,
+    "plan_found": false,
+    "notes": "Naive planner: no arithmetic pre-check. Expanded 47 nodes, exhausted search depth without finding a plan. Failure is structural — class 6 is arithmetically impossible — but the naive planner discovers this only through exhaustion."
+  },
+
+  "aware_trace": {
+    "pruned_before_search": true,
+    "nodes_expanded": 0,
+    "plan_found": null,
+    "notes": "Obstruction-aware planner: v_3(6)=1 detected before any expansion. Prune applied immediately. Zero search work done."
+  },
+
+  "efficiency_claim": {
+    "saved_nodes": 47,
+    "pruning_ratio": 1.0,
+    "false_pruning": false,
+    "notes": "100% of search cost eliminated. The savings are guaranteed — not probabilistic — because v_3(6)=1 is a structural fact about Z[phi]/9Z[phi], not a heuristic estimate."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                  "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                             "passed": true, "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "EF1",  "description": "planner_ref is QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",                "passed": true, "details": "schema_version='QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1'" },
+    { "check_id": "EF2",  "description": "modulus == p^k = 3^2 = 9",                                          "passed": true, "details": "9 == 9" },
+    { "check_id": "EF3",  "description": "p=3 is inert: Legendre(5,3)=-1",                                     "passed": true, "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "EF4",  "description": "target r=6 in range {0..8}",                                        "passed": true, "details": "0 <= 6 < 9" },
+    { "check_id": "EF5",  "description": "obstruction_verdict matches v_3(6)=1 → PRESENT",                     "passed": true, "details": "v_3(6)=1; match" },
+    { "check_id": "EF6",  "description": "saved_nodes == baseline(47) - aware(0) = 47",                       "passed": true, "details": "saved_nodes=47; 47-0=47; match" },
+    { "check_id": "EF7",  "description": "pruning_ratio == 47/47 = 1.0",                                      "passed": true, "details": "pruning_ratio=1.0; 47/47=1.0; match" },
+    { "check_id": "EF8",  "description": "OBSTRUCTION_PRESENT: aware_trace.nodes_expanded=0, pruned=true",    "passed": true, "details": "nodes_expanded=0; pruned_before_search=true; correct" },
+    { "check_id": "EF9",  "description": "false_pruning=false (target is forbidden, pruning is correct)",      "passed": true, "details": "false_pruning=false; target is genuinely forbidden; no false pruning" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

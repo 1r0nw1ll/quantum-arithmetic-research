@@ -1,0 +1,36 @@
+{
+  "schema_version": "QA_SPREAD_PERIOD_CERT.v1",
+  "certificate_id": "qa.cert.spread_period.fail.wrong_period.m9.v1",
+  "cert_type": "qa_spread_period_cert",
+  "title": "Spread Period FAIL: PISANO_PERIOD_MISMATCH + MATRIX_PERIOD_WRONG — claimed period=12 for m=9",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Canonical fail fixture. For m=9, the correct Pisano period is π(9)=24. A common error is to claim period=12 because F^12=-I (projective order 12) rather than the linear order 24. SP2 fires: π(9)=24≠12. SP3 fires: F^12=[[8,0],[0,8]]=-I≢I mod 9. Both PISANO_PERIOD_MISMATCH and MATRIX_PERIOD_WRONG fire. SP4 does not fire for period=12 since checking minimality of claimed period 12: F^6=[[5,8],[8,4]]≢I → minimality would pass, but SP2 and SP3 already flag the error.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "m": 9
+  },
+
+  "spread_period": {
+    "cosmos_period": 12,
+    "orbit_type": "cosmos",
+    "_error": "WRONG: claimed period=12 (projective order in PGL₂(Z/9Z)) but correct linear order in GL₂(Z/9Z) is 24; Pisano period π(9)=24≠12; F^12=-I≢I"
+  },
+
+  "validation_checks": [
+    { "check_id": "SP1", "description": "schema_version is 'QA_SPREAD_PERIOD_CERT.v1'",             "passed": true,  "details": "schema_version='QA_SPREAD_PERIOD_CERT.v1'" },
+    { "check_id": "SP2", "description": "Fibonacci period mod m == claimed cosmos_period",            "passed": false, "details": "π(9)=24 ≠ claimed 12" },
+    { "check_id": "SP3", "description": "F_matrix^cosmos_period ≡ I mod m",                         "passed": false, "details": "F^12 mod 9 = [[8,0],[0,8]] = -I ≢ I" },
+    { "check_id": "SP4", "description": "cosmos_period is minimal",                                  "passed": true,  "details": "F^6=[[5,8],[8,4]]≢I mod 9 → period 12 would be minimal IF F^12=I (but it isn't — caught by SP3)" },
+    { "check_id": "SP5", "description": "orbit_type ∈ valid set AND period=1 ↔ singularity",        "passed": true,  "details": "orbit_type='cosmos', period=12≠1 — type internally consistent" }
+  ],
+
+  "fail_ledger": ["MATRIX_PERIOD_WRONG", "PISANO_PERIOD_MISMATCH"],
+  "result": "FAIL"
+}

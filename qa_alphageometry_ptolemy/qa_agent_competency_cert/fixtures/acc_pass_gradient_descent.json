@@ -1,0 +1,30 @@
+{
+  "schema_version": "QA_AGENT_COMPETENCY_CERT.v1",
+  "agent_name": "gradient_descent_agent",
+  "category": "optimize",
+  "goal": "Minimize loss L(theta) by iterating theta <- theta - eta * grad(L) until convergence criterion met.",
+  "cognitive_horizon": "local",
+  "convergence": "conditional",
+  "orbit_signature": "mixed",
+  "levin_cell_type": "progenitor",
+  "failure_modes": [
+    "Local minima: non-convex landscape traps agent in satellite orbit",
+    "Vanishing gradient: near-zero gradient -> singularity (no movement)",
+    "Learning rate too high: divergence -> escapes orbit boundary"
+  ],
+  "composition_rules": [
+    "Requires orbit_damper partner (Adam/RMSprop) to stay in cosmos on non-convex landscapes",
+    "Composes with scheduler as progenitor-to-cosmos promoter",
+    "MUST be paired with a cosmos spine agent when used in critical organ"
+  ],
+  "dedifferentiation_cond": [
+    "loss_plateau detected for 5 consecutive cycles (satellite loop)",
+    "gradient_norm < 1e-6 for 3 cycles (singularity trap)"
+  ],
+  "recommitment_cond": [
+    "switch to second-order methods when Hessian is available",
+    "replace with evolutionary optimizer on purely non-differentiable objective"
+  ],
+  "parent_cert": "QA_CORE_SPEC.v1",
+  "result": "PASS"
+}

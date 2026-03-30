@@ -1,0 +1,17 @@
+{
+  "id": "t1_p06_multi_goal_simple",
+  "description": "Two independent goals requiring separate inference chains",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]}
+  ],
+  "goals": [
+    {"Parallel": [1, 4]},
+    {"EqualLength": [10, 13]}
+  ],
+  "difficulty": 4
+}

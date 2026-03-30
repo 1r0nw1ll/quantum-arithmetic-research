@@ -1,0 +1,38 @@
+{
+  "id": "t3_p09_mega_distractor",
+  "description": "8-step parallel chain buried in 25 distractor givens (ultimate noise test)",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"EqualLength": [50, 51]},
+    {"EqualAngle": [60, 61]},
+    {"ConcentricCircles": [70, 71]},
+    {"Parallel": [2, 3]},
+    {"EqualLength": [51, 52]},
+    {"Collinear": [80, 81, 82]},
+    {"EqualAngle": [61, 62]},
+    {"Parallel": [3, 4]},
+    {"ConcentricCircles": [71, 72]},
+    {"EqualLength": [52, 53]},
+    {"Perpendicular": [90, 91]},
+    {"Parallel": [4, 5]},
+    {"EqualAngle": [62, 63]},
+    {"Collinear": [83, 84, 85]},
+    {"Parallel": [5, 6]},
+    {"ConcentricCircles": [72, 73]},
+    {"EqualLength": [53, 54]},
+    {"Perpendicular": [91, 92]},
+    {"Parallel": [6, 7]},
+    {"EqualAngle": [63, 64]},
+    {"Parallel": [7, 8]},
+    {"ConcentricCircles": [73, 74]},
+    {"Collinear": [86, 87, 88]},
+    {"Parallel": [8, 9]},
+    {"EqualLength": [54, 55]},
+    {"EqualAngle": [64, 65]},
+    {"Perpendicular": [92, 93]}
+  ],
+  "goals": [
+    {"Parallel": [1, 9]}
+  ],
+  "difficulty": 10
+}

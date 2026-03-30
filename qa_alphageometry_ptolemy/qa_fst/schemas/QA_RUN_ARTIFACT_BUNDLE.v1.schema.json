@@ -1,0 +1,158 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_RUN_ARTIFACT_BUNDLE.v1.schema.json",
+  "title": "QA_RUN_ARTIFACT_BUNDLE.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "version",
+    "run",
+    "git",
+    "artifacts",
+    "result",
+    "witness_manifest"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_RUN_ARTIFACT_BUNDLE.v1"
+    },
+    "version": {
+      "type": "integer",
+      "const": 1
+    },
+    "run": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_id",
+        "tool_id",
+        "tool_version",
+        "timestamp_utc"
+      ],
+      "properties": {
+        "run_id": {
+          "type": "string",
+          "minLength": 6,
+          "maxLength": 128
+        },
+        "tool_id": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 128
+        },
+        "tool_version": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "timestamp_utc": {
+          "type": "string",
+          "minLength": 10,
+          "maxLength": 40
+        },
+        "inputs_hash": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "git": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "head_before",
+        "head_after",
+        "dirty_before"
+      ],
+      "properties": {
+        "head_before": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 64
+        },
+        "head_after": {
+          "type": "string",
+          "minLength": 7,
+          "maxLength": 64
+        },
+        "dirty_before": {
+          "type": "boolean"
+        }
+      }
+    },
+    "artifacts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "run_report",
+        "snapshot",
+        "delta"
+      ],
+      "properties": {
+        "run_report": {
+          "$ref": "#/definitions/artifact_ref"
+        },
+        "snapshot": {
+          "$ref": "#/definitions/artifact_ref"
+        },
+        "delta": {
+          "$ref": "#/definitions/artifact_ref"
+        },
+        "optional_exhibits": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/artifact_ref"
+          }
+        }
+      }
+    },
+    "result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "status",
+        "fail_records"
+      ],
+      "properties": {
+        "status": {
+          "enum": [
+            "ok",
+            "partial",
+            "fail"
+          ]
+        },
+        "fail_records": {
+          "type": "array",
+          "items": {
+            "$ref": "FAIL_RECORD.v1.schema.json"
+          }
+        }
+      }
+    },
+    "witness_manifest": {
+      "$ref": "QA_SHA256_MANIFEST.v1.schema.json"
+    }
+  },
+  "definitions": {
+    "artifact_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "path",
+        "sha256"
+      ],
+      "properties": {
+        "path": {
+          "type": "string",
+          "minLength": 1,
+          "maxLength": 512
+        },
+        "sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    }
+  }
+}

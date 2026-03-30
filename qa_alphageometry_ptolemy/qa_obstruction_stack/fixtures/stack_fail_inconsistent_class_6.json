@@ -1,0 +1,96 @@
+{
+  "schema_version": "QA_OBSTRUCTION_STACK_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_stack.fail.inconsistent_class_6.v1",
+  "cert_type": "obstruction_stack",
+  "title": "Obstruction Stack FAIL: r=6 obstruction declared but planner and efficiency layers inconsistent",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: arithmetic layer correctly declares OBSTRUCTION_PRESENT for r=6 (v_3(6)=1), but the planner and efficiency layers are inconsistent with the obstruction: planner shows pruned_before_search=false and nodes_expanded=12 (should be 0 for OBSTRUCTION_PRESENT), and efficiency layer claims saved_nodes=35 and pruning_ratio=0.74 (neither matches recomputed 47-0=47 / ratio=1.0, nor is it self-consistent with aware_nodes=12). Furthermore stack_conclusion.full_chain_holds=true — which is a lie since the layers contradict the obstruction. Three fail types: PRUNING_CONCLUSION_MISMATCH (planner expanded nodes on forbidden target), EFFICIENCY_CONCLUSION_MISMATCH (ratio != 1.0 for OBSTRUCTION_PRESENT, and arithmetic wrong), STACK_INCONSISTENCY (full_chain_holds=true despite layer failures).",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "family_refs": {
+    "arithmetic_ref": { "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1" },
+    "control_ref":    { "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1" },
+    "planner_ref":    { "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1" },
+    "efficiency_ref": { "schema_version": "QA_OBSTRUCTION_EFFICIENCY_CERT.v1" }
+  },
+
+  "arithmetic_params": { "prime_p": 3, "k": 2, "modulus": 9 },
+
+  "target_arithmetic_class": 6,
+
+  "arithmetic_layer": {
+    "v_p_computed": 1,
+    "obstruction_verdict": "OBSTRUCTION_PRESENT",
+    "notes": "Correctly computed: v_3(6)=1 → OBSTRUCTION_PRESENT."
+  },
+
+  "control_layer": {
+    "claimed_reachable": false,
+    "control_verdict": "UNREACHABLE",
+    "notes": "Correctly declared: forbidden target cannot be claimed reachable."
+  },
+
+  "planner_layer": {
+    "pruned_before_search": false,
+    "nodes_expanded": 12,
+    "plan_found": false,
+    "notes": "INCORRECTLY declared: planner failed to prune despite OBSTRUCTION_PRESENT. Expanded 12 nodes before giving up. Should be pruned_before_search=true, nodes_expanded=0."
+  },
+
+  "efficiency_layer": {
+    "baseline_nodes": 47,
+    "aware_nodes": 12,
+    "saved_nodes": 35,
+    "pruning_ratio": 0.74,
+    "false_pruning": false,
+    "notes": "INCORRECTLY computed: aware_nodes=12 (planner was not pruning-aware), saved_nodes=35, ratio=0.74. For OBSTRUCTION_PRESENT the expected ratio is 1.0 (aware_nodes must be 0). The arithmetic is self-consistent (47-12=35, 35/47≈0.745) but the planner_layer it rests on is wrong."
+  },
+
+  "stack_conclusion": {
+    "arithmetic_induces_control":  true,
+    "control_induces_pruning":     false,
+    "pruning_induces_efficiency":  false,
+    "full_chain_holds":            true,
+    "notes": "INCORRECTLY claims full_chain_holds=true despite control_induces_pruning=false and pruning_induces_efficiency=false. The chain is broken at the planner layer."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                       "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                         "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                                    "passed": true,  "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "OS1",  "description": "arithmetic_ref is QA_AREA_QUANTIZATION_PK_CERT.v1",                         "passed": true,  "details": "match" },
+    { "check_id": "OS2",  "description": "control_ref is QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",                     "passed": true,  "details": "match" },
+    { "check_id": "OS3",  "description": "planner_ref is QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",                       "passed": true,  "details": "match" },
+    { "check_id": "OS4",  "description": "efficiency_ref is QA_OBSTRUCTION_EFFICIENCY_CERT.v1",                       "passed": true,  "details": "match" },
+    { "check_id": "OS5",  "description": "modulus == p^k = 3^2 = 9",                                                  "passed": true,  "details": "9 == 9" },
+    { "check_id": "OS6",  "description": "p=3 is inert: Legendre(5,3)=-1",                                            "passed": true,  "details": "5^1 ≡ -1 mod 3; confirmed" },
+    { "check_id": "OS7",  "description": "target r=6 in range {0..8}",                                                "passed": true,  "details": "0 <= 6 < 9" },
+    { "check_id": "OS8",  "description": "v_p(6)=1 → OBSTRUCTION_PRESENT (recomputed)",                              "passed": true,  "details": "v_3(6)=1; declared='OBSTRUCTION_PRESENT'; match" },
+    { "check_id": "OS9",  "description": "OBSTRUCTION_PRESENT → claimed_reachable=false, control_verdict=UNREACHABLE", "passed": true, "details": "claimed_reachable=false; control_verdict=UNREACHABLE; consistent" },
+    { "check_id": "OS10", "description": "OBSTRUCTION_PRESENT → pruned_before_search=true, nodes_expanded=0",         "passed": false, "details": "pruned_before_search=false; nodes_expanded=12 ≠ 0 — PRUNING_CONCLUSION_MISMATCH" },
+    { "check_id": "OS11", "description": "saved_nodes=47-0=47 (recomputed); pruning_ratio=1.0 for OBSTRUCTION_PRESENT", "passed": false, "details": "recomputed aware_nodes must be 0 for OBSTRUCTION_PRESENT; actual=12; saved_nodes should be 47, claimed=35; ratio should be 1.0, claimed=0.74 — EFFICIENCY_CONCLUSION_MISMATCH" },
+    { "check_id": "OS12", "description": "stack_conclusion.full_chain_holds consistent with all four layers",          "passed": false, "details": "planner+efficiency layers fail OBSTRUCTION_PRESENT contract; full_chain_holds=true is inconsistent — STACK_INCONSISTENCY" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "PRUNING_CONCLUSION_MISMATCH",
+      "message": "planner_layer.pruned_before_search=false and nodes_expanded=12 for OBSTRUCTION_PRESENT target r=6. Planner must prune before search with nodes_expanded=0 when v_p(r)=1."
+    },
+    {
+      "fail_type": "EFFICIENCY_CONCLUSION_MISMATCH",
+      "message": "For OBSTRUCTION_PRESENT, aware_nodes must be 0, saved_nodes must equal baseline_nodes (47), pruning_ratio must be 1.0. Cert claims aware_nodes=12, saved_nodes=35, pruning_ratio=0.74."
+    },
+    {
+      "fail_type": "STACK_INCONSISTENCY",
+      "message": "stack_conclusion.full_chain_holds=true despite planner and efficiency layers violating the OBSTRUCTION_PRESENT contract. The conclusion is inconsistent with the layer data."
+    }
+  ],
+  "result": "FAIL"
+}

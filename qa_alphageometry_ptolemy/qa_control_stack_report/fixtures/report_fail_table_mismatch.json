@@ -1,0 +1,95 @@
+{
+  "schema_version": "QA_CONTROL_STACK_REPORT.v1",
+  "certificate_id": "qa.cert.control_stack_report.fail.table_mismatch.v1",
+  "cert_type": "control_stack_report",
+  "title": "Control Stack Report FAIL: comparison_table seismology row claims orbit_path ending in satellite",
+  "created_utc": "2026-03-22T00:00:00Z",
+  "intended_audience": "mathematicians, systems researchers, AI/planning reviewers",
+
+  "_fixture_purpose": "FAIL fixture: structurally well-formed but the comparison_table seismology row claims orbit_path=[singularity,satellite,satellite] and path_length_k=3 instead of [singularity,satellite,cosmos] and path_length_k=2. Two separate errors: wrong orbit path (COMPARISON_TABLE_MISMATCH — orbit_paths not uniform) and wrong path_length_k (COMPARISON_TABLE_MISMATCH — path lengths not uniform). Validator recomputes cross-row consistency from the table and detects both.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "control_stack_ref": { "schema_version": "QA_CONTROL_STACK_CERT.v1" },
+
+  "theorem_statement": "The QA plan-control compiler law is domain-generic: orbit trajectory and path_length_k are preserved across distinct physical domains.",
+
+  "domain_summaries": [
+    {
+      "family_id": 106,
+      "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+      "role": "generic compiler law",
+      "one_line": "The kernel-governed compilation relation preserving orbit trajectory and path length."
+    },
+    {
+      "family_id": 105,
+      "schema_version": "QA_CYMATIC_CONTROL_CERT.v1",
+      "role": "cymatics domain instance",
+      "one_line": "flat→stripes→hexagons via increase_amplitude + set_frequency; orbit singularity→satellite→cosmos; k=2."
+    },
+    {
+      "family_id": 110,
+      "schema_version": "QA_SEISMIC_CONTROL_CERT.v1",
+      "role": "seismology domain instance",
+      "one_line": "quiet→p_wave→surface_wave; orbit singularity→satellite→cosmos; k=2."
+    }
+  ],
+
+  "comparison_table": [
+    {
+      "domain":               "cymatics",
+      "initial_state":        "flat",
+      "intermediate_state":   "stripes",
+      "target_state":         "hexagons",
+      "orbit_path":           ["singularity", "satellite", "cosmos"],
+      "path_length_k":        2,
+      "move_sequence":        ["increase_amplitude", "set_frequency"],
+      "notes": "Correctly declared."
+    },
+    {
+      "domain":               "seismology",
+      "initial_state":        "quiet",
+      "intermediate_state":   "p_wave",
+      "target_state":         "surface_wave",
+      "orbit_path":           ["singularity", "satellite", "satellite"],
+      "path_length_k":        3,
+      "move_sequence":        ["increase_gain", "apply_lowpass"],
+      "notes": "INCORRECTLY declared: orbit_path ends in satellite (should be cosmos); path_length_k=3 (should be 2). The report misrepresents the machine-verified seismic control cert."
+    }
+  ],
+
+  "canonical_pass_witness": {
+    "description": "Both domains share orbit_path=[singularity,satellite,cosmos] and path_length_k=2.",
+    "result": "cross_domain_equivalence_holds"
+  },
+
+  "canonical_fail_witness": {
+    "description": "Seismology trace misrepresents orbit and path length.",
+    "fail_types": ["ORBIT_TRAJECTORY_MISMATCH", "CROSS_DOMAIN_CLAIM_INCONSISTENT", "STACK_INCONSISTENCY"]
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from",                                                   "passed": true,  "details": "match" },
+    { "check_id": "IH2", "description": "spec_scope",                                                      "passed": true,  "details": "match" },
+    { "check_id": "IH3", "description": "gate_policy",                                                     "passed": true,  "details": "match" },
+    { "check_id": "CR1", "description": "control_stack_ref",                                               "passed": true,  "details": "match" },
+    { "check_id": "CR2", "description": "theorem_statement non-empty",                                     "passed": true,  "details": "match" },
+    { "check_id": "CR3", "description": "domain_summaries covers [106], [105], [110]",                     "passed": true,  "details": "all 3 found" },
+    { "check_id": "CR4", "description": "all comparison_table rows have consistent orbit_path",             "passed": false, "details": "cymatics=[singularity,satellite,cosmos]; seismology=[singularity,satellite,satellite]; MISMATCH — COMPARISON_TABLE_MISMATCH" },
+    { "check_id": "CR5", "description": "all comparison_table rows have equal path_length_k",              "passed": false, "details": "cymatics=2; seismology=3; NOT EQUAL — COMPARISON_TABLE_MISMATCH" },
+    { "check_id": "CR6", "description": "canonical_pass_witness.result is 'cross_domain_equivalence_holds'", "passed": true, "details": "match" },
+    { "check_id": "CR7", "description": "canonical_fail_witness.fail_types non-empty",                     "passed": true,  "details": "3 types" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "COMPARISON_TABLE_MISMATCH",
+      "message": "comparison_table rows are not cross-domain consistent: orbit_paths differ (cymatics ends cosmos, seismology ends satellite) and path_length_k differs (2 vs 3). The report inaccurately represents the machine-verified control stack results."
+    }
+  ],
+  "result": "FAIL"
+}

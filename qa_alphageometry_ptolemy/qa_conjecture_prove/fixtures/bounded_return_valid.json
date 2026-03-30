@@ -1,0 +1,40 @@
+{
+  "schema_id": "QA_BOUNDED_RETURN_RECEIPT_SCHEMA.v1",
+  "receipt_id": "RCPT-FIXTURE0001",
+  "created_utc": "2026-02-10T23:50:00Z",
+  "agent_id": "qa-agent-ctrl-1",
+  "generator_set_id": "GENSET{sigma_tactic}.v1",
+  "start_state": {
+    "layer": "formal",
+    "state_hash": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+  },
+  "return_target_state": {
+    "layer": "formal",
+    "state_hash": "a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5a5"
+  },
+  "k": 2,
+  "search": {
+    "algorithm": "BFS",
+    "budget": { "max_nodes": 100, "max_seconds": 5 },
+    "determinism": {
+      "root_ordering": "lexicographic_state_hash",
+      "tie_breaker": "stable_generator_name_then_params_json",
+      "toolchain_id": "lean4.12.0"
+    }
+  },
+  "result": {
+    "status": "NO_RETURN_WITHIN_K",
+    "fail_type": "NO_RETURN_WITHIN_K",
+    "invariant_diff": {
+      "k": 2,
+      "visited_nodes": 37,
+      "frontier_exhausted": true
+    }
+  },
+  "merkle_parent": "b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5b5",
+  "invariant_diff": {
+    "search_algorithm": "BFS",
+    "k": 2,
+    "result": "NO_RETURN_WITHIN_K"
+  }
+}

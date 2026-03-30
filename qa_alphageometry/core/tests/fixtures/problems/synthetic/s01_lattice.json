@@ -1,0 +1,129 @@
+{
+  "id": "s01_lattice",
+  "description": "Perpendicular lattice (2 hubs, 5 spokes) with decoys",
+  "difficulty": 3,
+  "givens": [
+    {
+      "Perpendicular": [
+        1,
+        20
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        21
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        22
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        23
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        24
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        25
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        26
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        27
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        28
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        29
+      ]
+    },
+    {
+      "Parallel": [
+        20,
+        21
+      ]
+    },
+    {
+      "Parallel": [
+        21,
+        22
+      ]
+    },
+    {
+      "Parallel": [
+        22,
+        23
+      ]
+    },
+    {
+      "CoincidentLines": [
+        30,
+        31
+      ]
+    },
+    {
+      "CoincidentLines": [
+        31,
+        32
+      ]
+    },
+    {
+      "OnCircle": [
+        34,
+        33
+      ]
+    },
+    {
+      "OnCircle": [
+        35,
+        33
+      ]
+    },
+    {
+      "OnCircle": [
+        36,
+        33
+      ]
+    },
+    {
+      "OnCircle": [
+        37,
+        33
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Parallel": [
+        20,
+        23
+      ]
+    }
+  ]
+}

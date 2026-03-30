@@ -1,0 +1,23 @@
+{
+  "schema_version": "QA_SECURITY_COMPETENCY_CERT.v1",
+  "algorithm_name": "rsa_1024_legacy",
+  "security_role": "identity",
+  "immune_function": "detection",
+  "goal": "RSA-1024 legacy signature — historically used for identity attestation; now below minimum security threshold.",
+  "orbit_signature": "cosmos",
+  "levin_cell_type": "differentiated",
+  "pq_readiness": "classical_only",
+  "pq_migration_path": "",
+  "nist_fips": "",
+  "failure_modes": [
+    "RSA-1024 factored in 2010 (768-bit) — 1024-bit now below NIST minimum",
+    "Quantum adversary breaks RSA factoring (Shor's algorithm)",
+    "No post-quantum migration path declared — SC5 violation"
+  ],
+  "composition_rules": [
+    "Do not use — below minimum key size (NIST requires >= 2048 for RSA through 2030)",
+    "Retire immediately; replace with Ed25519 or ML-DSA"
+  ],
+  "parent_cert": "QA_AGENT_COMPETENCY_CERT.v1",
+  "result": "FAIL"
+}

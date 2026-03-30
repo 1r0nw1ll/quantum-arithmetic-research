@@ -1,0 +1,51 @@
+{
+  "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",
+  "certificate_id": "qa.cert.area_quantization_pk.fail.wrong_forbidden.v1",
+  "cert_type": "area_quantization_pk",
+  "title": "Inert Prime Area Quantization FAIL: p=3, k=2 — forbidden set claims 9 is absent (FORBIDDEN_SET_MISMATCH)",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates FORBIDDEN_SET_MISMATCH: the cert claims forbidden={3,6,9} for p=3,k=2 (modulus=9), but 9≡0 is in the spectrum (f(0,0)=0=9 mod 9). The value 9 mod 9 is 0, which has v_3(0)=∞ (not 1), so 0 IS achievable. The cert incorrectly includes 0 (alias 9 in the range {1..9}) in the forbidden set, misrepresenting the theorem. The actual forbidden set is {3,6} only. This is the canonical forbidden-set obstruction certificate for QA_AREA_QUANTIZATION_PK_CERT.v1.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "prime_p": 3,
+  "k": 2,
+  "modulus": 9,
+
+  "inert_witness": {
+    "legendre_5_mod_p": -1,
+    "irreducibility_check": "x^2+x-1 mod 3: no roots. Irreducible.",
+    "notes": "p=3 is inert. Correct. The error is in the forbidden set claim."
+  },
+
+  "theorem_claim": {
+    "statement": "WRONG CLAIM: forbidden = {3,6,9}. Correct claim is {3,6}.",
+    "spectrum": [0, 1, 2, 4, 5, 7, 8],
+    "forbidden": [3, 6, 9],
+    "forbidden_description": "WRONG: claims 9 is absent. But 9 mod 9 = 0, and 0 = f(0,0) is always achieved. v_3(0) = infinity, not 1 — so 0 is not in the predicted forbidden set. The forbidden set should only contain {3,6}."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",           "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",              "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",        "passed": true,  "details": "[0,1,2,3,4,5] ⊆ [0,1,2,3,4,5]" },
+    { "check_id": "PK1", "description": "p=3 is inert in Z[phi]: Legendre(5,3)=-1",      "passed": true,  "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "PK2", "description": "modulus == p^k = 3^2 = 9",                      "passed": true,  "details": "9 == 9" },
+    { "check_id": "PK3", "description": "exhaustive spectrum recompute matches claim",    "passed": true,  "details": "actual_spectrum={0,1,2,4,5,7,8} == claimed spectrum (spectrum claim is correct; only the forbidden claim is wrong)" },
+    { "check_id": "PK4", "description": "forbidden == {r : v_p(r)=1} matches theorem",   "passed": false, "details": "claimed_forbidden={3,6,9} but theorem_forbidden={3,6}; 9 mod 9 = 0 has v_3(0)=inf (not 1) and IS achievable. Spurious entry: {9}. This also means claimed_forbidden is not a subset of {0..8} (9 is out of range); the certificate over-counts." }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "FORBIDDEN_SET_MISMATCH",
+      "message": "claimed forbidden={3,6,9} does not match theorem prediction {r in {0..8} : v_3(r)=1}={3,6}. The element 9 is out of range (modulus=9 means residues are {0..8}; 9 mod 9 = 0) and v_3(0)=inf ≠ 1. The correct forbidden set is {3,6}."
+    }
+  ],
+
+  "result": "FAIL"
+}

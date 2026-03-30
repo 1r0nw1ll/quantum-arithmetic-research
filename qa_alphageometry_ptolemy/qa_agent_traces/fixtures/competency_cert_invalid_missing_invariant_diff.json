@@ -1,0 +1,47 @@
+{
+  "_comment": "Negative fixture: invariant_diff missing. Expected fail_type: MISSING_INVARIANT_DIFF.",
+  "schema_id": "QA_AGENT_TRACE_COMPETENCY_CERT_SCHEMA.v1",
+  "cert_id": "CERT-NEGFIX0002",
+  "created_utc": "2026-02-10T23:00:00Z",
+  "trace_ref": {
+    "trace_id": "TRACE-NEGFIX0002",
+    "trace_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+    "trace_schema_id": "QA_AGENT_TRACE_SCHEMA.v1"
+  },
+  "task_ref": {
+    "task_id": "pytest__pytest-99999",
+    "source_dataset": "princeton-nlp/SWE-bench_Lite",
+    "dataset_slice_sha256": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+    "license": "mit"
+  },
+  "derivation": {
+    "derivation_id": "QA_COMPETENCY_FROM_AGENT_TRACE.v1",
+    "version": "1.0.0",
+    "inputs": {
+      "event_types_used": ["read"],
+      "action_vocab": ["run_tests"],
+      "timebase": "trace_event_index"
+    },
+    "canonicalization": { "json_sort_keys": true, "json_separators": ",:", "utf8": true }
+  },
+  "metrics": {
+    "agency_index": 0.1,
+    "plasticity_index": 0.1,
+    "goal_density": 0.1,
+    "control_entropy": 0.2
+  },
+  "baselines": {
+    "baseline_set_id": "QA_BASELINES.v1",
+    "baseline_bundle_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+    "baselines_used": [{ "baseline_id": "NULL_AGENT.v1", "kind": "null" }]
+  },
+  "dominance": {
+    "rule": "existential_1of4",
+    "min_margin": 0.01,
+    "wins": {
+      "dimensions_won": 1,
+      "by_dimension": { "agency": true, "plasticity": false, "goal_density": false, "entropy": false }
+    }
+  },
+  "verdict": { "passed": true, "fail_type": "OK" }
+}

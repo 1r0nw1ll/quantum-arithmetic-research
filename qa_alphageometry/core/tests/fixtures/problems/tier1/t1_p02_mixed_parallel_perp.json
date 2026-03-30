@@ -1,0 +1,13 @@
+{
+  "id": "t1_p02_mixed_parallel_perp",
+  "description": "Mixed parallel and perpendicular propagation: L1||L2||L3, L1⊥L4 => L3⊥L4",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Perpendicular": [1, 4]}
+  ],
+  "goals": [
+    {"Perpendicular": [3, 4]}
+  ],
+  "difficulty": 3
+}

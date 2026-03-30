@@ -1,0 +1,116 @@
+{
+  "schema_version": "QA_CYMATIC_CONTROL_CERT.v1",
+  "certificate_id": "qa.cert.cymatics.control.hexagon_reachable_kernel_ref.v1",
+  "cert_type": "cymatic_control",
+  "title": "Faraday Control: flat -> stripes -> hexagons (with kernel inheritance declaration)",
+  "created_utc": "2026-03-21T00:00:00Z",
+
+  "inherits_from": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+  "spec_scope": "domain_instance",
+
+  "compiler_compatibility": {
+    "compiler_family": "QA_PLAN_CONTROL_COMPILER_CERT.v1",
+    "generator_alphabet_matches": true,
+    "initial_and_target_classes_certified": true,
+    "move_sequence_matches_compiler_claim": true
+  },
+
+  "setup": {
+    "platform_type": "fluid",
+    "geometry": "circular_petri_dish_diameter_100mm",
+    "medium": "glycerol_water_85pct",
+    "boundary_condition": "fixed circular wall",
+    "actuator_type": "vertical shaker",
+    "notes": "Domain instance of QA_PLAN_CONTROL_COMPILER_CERT.v1. Demonstrates the full three-level hierarchy: [107] QA kernel → [106] compiler law → [105] cymatics physical instantiation. This cert carries an explicit inherits_from declaration linking the physical control execution back to the generic kernel-governed compilation relation. Same physical parameters as control_cert_pass_hexagon.v1."
+  },
+
+  "initial_state": {
+    "pattern_class": "flat",
+    "symmetry_group": "O2",
+    "stability": "stable",
+    "frequency_hz": 70.0,
+    "amplitude_mm": 0.20,
+    "depth_mm": 3.0
+  },
+
+  "target_spec": {
+    "target_pattern_class": "hexagons",
+    "target_symmetry_group": "C6v",
+    "max_path_length_k": 2,
+    "goal_tolerance": {
+      "frequency_tolerance_hz": 2.0,
+      "amplitude_tolerance_mm": 0.10
+    }
+  },
+
+  "generator_sequence": [
+    {
+      "step_index": 1,
+      "move": "increase_amplitude",
+      "parameters": { "delta_mm": 0.35 },
+      "expected_transition": "flat -> stripes"
+    },
+    {
+      "step_index": 2,
+      "move": "set_frequency",
+      "parameters": { "frequency_hz": 120.0 },
+      "expected_transition": "stripes -> hexagons"
+    }
+  ],
+
+  "control_graph": {
+    "nodes": ["flat", "stripes", "hexagons", "disordered"],
+    "edges": [
+      { "from": "flat",     "move": "increase_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "set_frequency",       "to": "hexagons"   },
+      { "from": "hexagons", "move": "decrease_amplitude",  "to": "stripes"    },
+      { "from": "stripes",  "move": "decrease_amplitude",  "to": "flat"       },
+      { "from": "hexagons", "move": "increase_amplitude",  "to": "disordered" }
+    ]
+  },
+
+  "observed_final_state": {
+    "pattern_class": "hexagons",
+    "symmetry_group": "C6v",
+    "stability": "stable",
+    "path_length_k": 2,
+    "return_in_k": true,
+    "return_path": [
+      { "move": "decrease_amplitude", "to": "stripes" },
+      { "move": "decrease_amplitude", "to": "flat"    }
+    ],
+    "frequency_hz": 120.4,
+    "amplitude_mm": 0.55,
+    "witness_hash": "b7d7c62c2ad6980c9d7ef7f7c4837e3a6f0e1dc7b8af9ce6ee8f8fbcaa001234"
+  },
+
+  "qa_mapping": {
+    "initial_orbit_family": "singularity",
+    "target_orbit_family":  "cosmos",
+    "final_orbit_family":   "cosmos",
+    "state_pair": { "b": 1, "e": 2 },
+    "generator_correspondence": [
+      { "control_move": "increase_amplitude", "qa_generator_role": "threshold-crossing expansion (sub-threshold → cosmos)" },
+      { "control_move": "set_frequency",      "qa_generator_role": "state-address selection (selects cosmos orbit class)" }
+    ]
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_PLAN_CONTROL_COMPILER_CERT.v1'",          "passed": true,  "details": "inherits_from='QA_PLAN_CONTROL_COMPILER_CERT.v1'; this cert is a domain instantiation of the kernel-governed compiler law" },
+    { "check_id": "IH2", "description": "spec_scope is 'domain_instance'",                              "passed": true,  "details": "spec_scope='domain_instance'; physical cymatics execution = domain instantiation of [106] compiler family" },
+    { "check_id": "C1",  "description": "path_length_k equals number of generator steps",              "passed": true,  "details": "path_length_k=2, len(generator_sequence)=2" },
+    { "check_id": "C2",  "description": "path_length_k <= max_path_length_k",                          "passed": true,  "details": "2 <= 2" },
+    { "check_id": "C3",  "description": "final pattern class reaches target pattern class",             "passed": true,  "details": "hexagons == hexagons" },
+    { "check_id": "C4",  "description": "final symmetry group reaches target symmetry group",           "passed": true,  "details": "C6v == C6v" },
+    { "check_id": "C5",  "description": "final pattern class recognized in CONTROL_PATTERN_TO_ORBIT",  "passed": true,  "details": "hexagons -> cosmos" },
+    { "check_id": "C6",  "description": "final orbit family matches final pattern class",               "passed": true,  "details": "cosmos == CONTROL_PATTERN_TO_ORBIT[hexagons]=cosmos" },
+    { "check_id": "C7",  "description": "target orbit family matches target pattern class",             "passed": true,  "details": "cosmos == CONTROL_PATTERN_TO_ORBIT[hexagons]=cosmos" },
+    { "check_id": "C8",  "description": "initial orbit family matches initial pattern class",           "passed": true,  "details": "singularity == CONTROL_PATTERN_TO_ORBIT[flat]=singularity" },
+    { "check_id": "C9",  "description": "all control transitions are legal edges in control_graph",    "passed": true,  "details": "flat-increase_amplitude->stripes: legal; stripes-set_frequency->hexagons: legal" },
+    { "check_id": "C10", "description": "return path exists and terminates at initial state",           "passed": true,  "details": "return_path[-1].to=flat == initial_state.pattern_class=flat" },
+    { "check_id": "C11", "description": "final state is not disordered",                               "passed": true,  "details": "hexagons != disordered" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

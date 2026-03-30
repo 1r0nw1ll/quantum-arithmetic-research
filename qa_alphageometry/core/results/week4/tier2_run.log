@@ -1,0 +1,522 @@
+warning: unused imports: `AngleId`, `LineId`, and `PointId`
+ --> core/src/geometry/normalize.rs:6:23
+  |
+6 | use crate::ir::{Fact, AngleId, LineId, PointId};
+  |                       ^^^^^^^  ^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `AngleId`
+ --> core/src/geometry/check.rs:6:50
+  |
+6 | use crate::ir::{GeoState, Fact, PointId, LineId, AngleId};
+  |                                                  ^^^^^^^
+
+warning: unused import: `Fact`
+ --> core/src/search/beam.rs:5:63
+  |
+5 | use crate::ir::{GeoState, ProofTrace, ProofStep, ProofStepId, Fact};
+  |                                                               ^^^^
+
+warning: unused import: `std::collections::VecDeque`
+ --> core/src/search/beam.rs:8:5
+  |
+8 | use std::collections::VecDeque;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/parallel.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, LineId};
+  |                                           ^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/perpendicular.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, LineId};
+  |                                           ^^^^^^
+
+warning: unused imports: `AngleId` and `SegmentId`
+ --> core/src/rules/equality.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, SegmentId, AngleId};
+  |                                           ^^^^^^^^^  ^^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/circle.rs:3:62
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, PointId, CircleId, LineId};
+  |                                                              ^^^^^^
+
+warning: unused imports: `AngleId`, `LineId`, and `PointId`
+ --> core/src/rules/angle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, AngleId, LineId, PointId};
+  |                                           ^^^^^^^  ^^^^^^  ^^^^^^^
+
+warning: unused imports: `LineId`, `PointId`, and `SegmentId`
+ --> core/src/rules/triangle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, PointId, SegmentId, LineId};
+  |                                           ^^^^^^^  ^^^^^^^^^  ^^^^^^
+
+warning: unused import: `crate::ir::Fact`
+ --> core/src/loader/geometry3k.rs:6:5
+  |
+6 | use crate::ir::Fact;
+  |     ^^^^^^^^^^^^^^^
+
+warning: unused variable: `p1`
+  --> core/src/qa/extract.rs:72:10
+   |
+72 |     for (p1, p2, p3) in right_triangles {
+   |          ^^ help: if this is intentional, prefix it with an underscore: `_p1`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `p2`
+  --> core/src/qa/extract.rs:72:14
+   |
+72 |     for (p1, p2, p3) in right_triangles {
+   |              ^^ help: if this is intentional, prefix it with an underscore: `_p2`
+
+warning: unused variable: `p3`
+  --> core/src/qa/extract.rs:72:18
+   |
+72 |     for (p1, p2, p3) in right_triangles {
+   |                  ^^ help: if this is intentional, prefix it with an underscore: `_p3`
+
+warning: unused variable: `line`
+  --> core/src/rules/circle.rs:88:34
+   |
+88 |             if let Fact::Tangent(line, _circle, _point) = fact {
+   |                                  ^^^^ help: if this is intentional, prefix it with an underscore: `_line`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/circle.rs:84:13
+   |
+84 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> core/src/rules/angle.rs:19:13
+   |
+19 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/angle.rs:49:13
+   |
+49 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `l1`
+  --> core/src/rules/triangle.rs:24:40
+   |
+24 |             if let Fact::Perpendicular(l1, l2) = fact {
+   |                                        ^^ help: if this is intentional, prefix it with an underscore: `_l1`
+
+warning: unused variable: `l2`
+  --> core/src/rules/triangle.rs:24:44
+   |
+24 |             if let Fact::Perpendicular(l1, l2) = fact {
+   |                                            ^^ help: if this is intentional, prefix it with an underscore: `_l2`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:19:13
+   |
+19 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `seg1`
+  --> core/src/rules/triangle.rs:56:38
+   |
+56 |             if let Fact::EqualLength(seg1, seg2) = fact1 {
+   |                                      ^^^^ help: if this is intentional, prefix it with an underscore: `_seg1`
+
+warning: unused variable: `seg2`
+  --> core/src/rules/triangle.rs:56:44
+   |
+56 |             if let Fact::EqualLength(seg1, seg2) = fact1 {
+   |                                            ^^^^ help: if this is intentional, prefix it with an underscore: `_seg2`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:51:13
+   |
+51 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `a`
+  --> core/src/rules/triangle.rs:85:44
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                            ^ help: if this is intentional, prefix it with an underscore: `_a`
+
+warning: unused variable: `b`
+  --> core/src/rules/triangle.rs:85:47
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                               ^ help: if this is intentional, prefix it with an underscore: `_b`
+
+warning: unused variable: `c`
+  --> core/src/rules/triangle.rs:85:50
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                                  ^ help: if this is intentional, prefix it with an underscore: `_c`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:81:13
+   |
+81 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `p1`
+   --> core/src/rules/triangle.rs:115:40
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                        ^^ help: if this is intentional, prefix it with an underscore: `_p1`
+
+warning: unused variable: `p2`
+   --> core/src/rules/triangle.rs:115:44
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                            ^^ help: if this is intentional, prefix it with an underscore: `_p2`
+
+warning: unused variable: `p3`
+   --> core/src/rules/triangle.rs:115:48
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                                ^^ help: if this is intentional, prefix it with an underscore: `_p3`
+
+warning: variable does not need to be mutable
+   --> core/src/rules/triangle.rs:111:13
+    |
+111 |         let mut new_facts = Vec::new();
+    |             ----^^^^^^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: function `are_collinear` is never used
+  --> core/src/ir/coords.rs:88:12
+   |
+88 |     pub fn are_collinear(p1: Point2D, p2: Point2D, p3: Point2D, epsilon: f64) -> bool {
+   |            ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `are_perpendicular` is never used
+  --> core/src/ir/coords.rs:99:12
+   |
+99 |     pub fn are_perpendicular(
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: function `are_parallel` is never used
+   --> core/src/ir/coords.rs:116:12
+    |
+116 |     pub fn are_parallel(
+    |            ^^^^^^^^^^^^
+
+warning: function `is_right_angle` is never used
+   --> core/src/ir/coords.rs:133:12
+    |
+133 |     pub fn is_right_angle(p1: Point2D, p2: Point2D, p3: Point2D, epsilon: f64) -> bool {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `is_right_triangle` is never used
+   --> core/src/ir/coords.rs:144:12
+    |
+144 |     pub fn is_right_triangle(a: f64, b: f64, c: f64, epsilon: f64) -> bool {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: function `angle` is never used
+   --> core/src/ir/coords.rs:157:12
+    |
+157 |     pub fn angle(p1: Point2D, vertex: Point2D, p3: Point2D) -> f64 {
+    |            ^^^^^
+
+warning: method `C` should have a snake case name
+  --> core/src/qa/tuple.rs:69:12
+   |
+69 |     pub fn C(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `c`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: method `F` should have a snake case name
+  --> core/src/qa/tuple.rs:75:12
+   |
+75 |     pub fn F(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `f`
+
+warning: method `G` should have a snake case name
+  --> core/src/qa/tuple.rs:81:12
+   |
+81 |     pub fn G(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case: `g`
+
+warning: method `J` should have a snake case name
+  --> core/src/qa/tuple.rs:87:12
+   |
+87 |     pub fn J(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case: `j`
+
+warning: method `X` should have a snake case name
+  --> core/src/qa/tuple.rs:93:12
+   |
+93 |     pub fn X(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `x`
+
+warning: method `K` should have a snake case name
+  --> core/src/qa/tuple.rs:99:12
+   |
+99 |     pub fn K(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `k`
+
+warning: method `I` should have a snake case name
+   --> core/src/qa/tuple.rs:107:12
+    |
+107 |     pub fn I(&self) -> f64 {
+    |            ^ help: convert the identifier to snake case (notice the capitalization): `i`
+
+warning: unused imports: `FactStore` and `PointId`
+   --> core/src/qa/extract.rs:221:27
+    |
+221 |     use crate::ir::{Goal, FactStore, Fact, PointId};
+    |                           ^^^^^^^^^        ^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `FactType`
+   --> core/src/ir/state.rs:231:48
+    |
+231 |     use super::super::facts::{Fact, FactStore, FactType};
+    |                                                ^^^^^^^^
+
+warning: unused import: `PointId`
+   --> core/src/ir/state.rs:232:41
+    |
+232 |     use super::super::symbols::{LineId, PointId, SymbolTable};
+    |                                         ^^^^^^^
+
+warning: unused import: `AngleId`
+ --> core/src/geometry/normalize.rs:6:23
+  |
+6 | use crate::ir::{Fact, AngleId, LineId, PointId};
+  |                       ^^^^^^^
+
+warning: unused import: `Metadata`
+  --> core/src/geometry/constructions.rs:86:27
+   |
+86 |     use crate::ir::{Goal, Metadata};
+   |                           ^^^^^^^^
+
+warning: unused import: `Metadata`
+   --> core/src/geometry/check.rs:129:27
+    |
+129 |     use crate::ir::{Goal, Metadata, FactStore};
+    |                           ^^^^^^^^
+
+warning: unused imports: `AngleId` and `PointId`
+ --> core/src/rules/angle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, AngleId, LineId, PointId};
+  |                                           ^^^^^^^          ^^^^^^^
+
+warning: unused imports: `FactStore` and `Goal`
+   --> core/src/rules/triangle.rs:133:21
+    |
+133 |     use crate::ir::{Goal, FactStore};
+    |                     ^^^^  ^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> core/src/ir/state.rs:289:13
+    |
+289 |         let mut facts = FactStore::new();
+    |             ----^^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> core/src/ir/state.rs:412:13
+    |
+412 |         let mut facts = FactStore::new();
+    |             ----^^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/circle.rs:84:13
+   |
+84 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: function `angle` is never used
+   --> core/src/ir/coords.rs:157:12
+    |
+157 |     pub fn angle(p1: Point2D, vertex: Point2D, p3: Point2D) -> f64 {
+    |            ^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:291:17
+    |
+291 |         assert!(result.states_explored >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_comparisons)]` on by default
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:292:17
+    |
+292 |         assert!(result.depth_reached >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+   --> core/src/rules/collinear.rs:166:17
+    |
+166 |         assert!(new_facts.len() >= 0); // Due to normalization, count may vary
+    |                 ^^^^^^^^^^^^^^^^^^^^
+
+warning: `qa-alphageometry-core` (lib) generated 45 warnings (run `cargo fix --lib -p qa-alphageometry-core` to apply 18 suggestions)
+warning: `qa-alphageometry-core` (lib test) generated 48 warnings (33 duplicates) (run `cargo fix --lib -p qa-alphageometry-core --tests` to apply 11 suggestions)
+warning: unused import: `std::path::Path`
+ --> core/tests/loader_e2e.rs:6:5
+  |
+6 | use std::path::Path;
+  |     ^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_problems`
+  --> core/tests/week4_session3_ablation.rs:39:52
+   |
+39 | fn verify_correctness(results: &[BenchmarkResult], num_problems: usize, num_configs: usize) {
+   |                                                    ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_problems`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused variable: `num_problems`
+   --> core/tests/week4_benchmark.rs:345:52
+    |
+345 | fn verify_correctness(results: &[BenchmarkResult], num_problems: usize, num_configs: usize) {
+    |                                                    ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_problems`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `qa-alphageometry-core` (test "loader_e2e") generated 1 warning (run `cargo fix --test "loader_e2e"` to apply 1 suggestion)
+warning: `qa-alphageometry-core` (test "week4_session3_ablation") generated 1 warning
+warning: `qa-alphageometry-core` (test "week4_benchmark") generated 1 warning
+    Finished `release` profile [optimized] target(s) in 0.06s
+     Running unittests src/lib.rs (/home/player2/signal_experiments/qa_alphageometry/target/release/deps/qa_alphageometry_core-12fe64af8c91c504)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 108 filtered out; finished in 0.00s
+
+     Running tests/benchmark.rs (/home/player2/signal_experiments/qa_alphageometry/target/release/deps/benchmark-cbaabc451f4be4ee)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/loader_e2e.rs (/home/player2/signal_experiments/qa_alphageometry/target/release/deps/loader_e2e-5c5c7d1ddad6b012)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 12 filtered out; finished in 0.00s
+
+     Running tests/week4_benchmark.rs (/home/player2/signal_experiments/qa_alphageometry/target/release/deps/week4_benchmark-dc2648a817d7ec61)
+
+running 0 tests
+
+test result: ok. 0 passed; 0 failed; 0 ignored; 0 measured; 2 filtered out; finished in 0.00s
+
+     Running tests/week4_session3_ablation.rs (/home/player2/signal_experiments/qa_alphageometry/target/release/deps/week4_session3_ablation-ccb7d3f61d4ff687)
+
+running 1 test
+
+🔬 Week 4 Session 3: Tier 2 Coordinate Facts Ablation
+
+Testing: 15 problems × 5 QA weights × 2 coord settings = 150 runs
+
+📝 t2_p01_parallel_chain_7 (difficulty: 5)
+   QA 0% Coord OFF | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 0% + Coords Coord ON | ✅ | States: 1356, Time: 5ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% Coord OFF | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% + Coords Coord ON | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% Coord OFF | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% + Coords Coord ON | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% Coord OFF | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% + Coords Coord ON | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% Coord OFF | ✅ | States: 1356, Time: 5ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% + Coords Coord ON | ✅ | States: 1356, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+
+📝 t2_p02_perp_parallel_cascade (difficulty: 6)
+   QA 0% Coord OFF | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 0% + Coords Coord ON | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% Coord OFF | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% + Coords Coord ON | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% Coord OFF | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% + Coords Coord ON | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% Coord OFF | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% + Coords Coord ON | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% Coord OFF | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% + Coords Coord ON | ❌ | States: 0, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+
+📝 t2_p03_equality_web (difficulty: 6)
+   QA 0% Coord OFF | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 0% + Coords Coord ON | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% Coord OFF | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% + Coords Coord ON | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% Coord OFF | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% + Coords Coord ON | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% Coord OFF | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% + Coords Coord ON | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% Coord OFF | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% + Coords Coord ON | ❌ | States: 187, Time: 0ms | QA Prior: 0.000, Entropy: 0.000
+
+📝 t2_p04_multi_goal_chains (difficulty: 6)
+   QA 0% Coord OFF | ✅ | States: 1336, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 0% + Coords Coord ON | ✅ | States: 1336, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% Coord OFF | ✅ | States: 1336, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 10% + Coords Coord ON | ✅ | States: 1336, Time: 6ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% Coord OFF | ✅ | States: 1336, Time: 7ms | QA Prior: 0.000, Entropy: 0.000
+   QA 30% + Coords Coord ON | ✅ | States: 1336, Time: 7ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% Coord OFF | ✅ | States: 1336, Time: 7ms | QA Prior: 0.000, Entropy: 0.000
+   QA 50% + Coords Coord ON | ✅ | States: 1336, Time: 7ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% Coord OFF | ✅ | States: 1336, Time: 7ms | QA Prior: 0.000, Entropy: 0.000
+   QA 70% + Coords Coord ON | ✅ | States: 1336, Time: 7ms | QA Prior: 0.000, Entropy: 0.000
+
+
+thread 'test_week4_session3_tier2_coord_ablation' (132624) panicked at core/tests/week4_session3_ablation.rs:64:45:
+Failed to load tier2/t2_p05_parallel_with_heavy_distractors: ParseError("unknown variant `EqualAngles`, expected one of `Collinear`, `Parallel`, `Perpendicular`, `OnCircle`, `EqualLength`, `EqualAngle`, `Midpoint`, `RightTriangle`, `OnLine`, `CoincidentLines`, `ConcentricCircles`, `Concyclic`, `Tangent`, `IsoscelesTriangle`, `EquilateralTriangle`, `Parallelogram`, `Rectangle`, `Square`, `RightAngle`, `PerpendicularSegments`, `Bisects`, `AngleBisector`, `PythagoreanTriple` at line 8 column 18")
+note: run with `RUST_BACKTRACE=1` environment variable to display a backtrace
+test test_week4_session3_tier2_coord_ablation ... FAILED
+
+failures:
+
+failures:
+    test_week4_session3_tier2_coord_ablation
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 1 filtered out; finished in 0.14s
+
+error: test failed, to rerun pass `--test week4_session3_ablation`

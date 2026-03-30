@@ -1,0 +1,55 @@
+{
+  "schema_version": "QA_DUAL_SPINE_UNIFICATION_REPORT.v1",
+  "certificate_id": "qa.cert.dual_spine_unification_report.fail.spine_ref_mismatch.v1",
+  "cert_type": "qa_dual_spine_unification_report",
+  "title": "QA Dual Spine Unification Report — FAIL: obstruction_spine_ref points to cert not report",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: obstruction_spine_ref is QA_OBSTRUCTION_STACK_CERT.v1 (the synthesis cert) instead of QA_OBSTRUCTION_STACK_REPORT.v1 (the validated report). This is a realistic mistake — confusing the synthesis cert [115] with the reader-facing report [116]. Validator fires DU1: OBSTRUCTION_SPINE_REF_MISMATCH.",
+
+  "obstruction_spine_ref": "QA_OBSTRUCTION_STACK_CERT.v1",
+  "control_spine_ref": "QA_CONTROL_STACK_REPORT.v1",
+
+  "obstruction_theorem": "For any QA modulus m=p^k with p inert in Z[phi], the p-adic valuation v_p(r)=1 is a complete arithmetic obstruction: every such target is unreachable, every obstruction-aware planner prunes it before search, and the pruning_ratio equals 1.0.",
+
+  "control_theorem": "The QA plan-control compiler law is domain-generic: orbit singularity→satellite→cosmos and path_length_k=2 are preserved across physically distinct domains under the same kernel-governed generator algebra.",
+
+  "comparison_table": [
+    {
+      "entry_point": "QA_OBSTRUCTION_STACK_REPORT.v1",
+      "kernel": "QA_CORE_SPEC.v1",
+      "main_family_chain": "[111]→[112]→[113]→[114]→[115]→[116]",
+      "canonical_theorem": "v_p(r)=1 → unreachable → pruned → ratio=1.0",
+      "canonical_pass_witness_summary": "r=6, p=3, k=2: forbidden, planner prunes, nodes_expanded=0, pruning_ratio=1.0",
+      "canonical_fail_witness_summary": "r=6 obstruction declared but planner expanded 12 nodes: PRUNING_CONCLUSION_MISMATCH",
+      "what_is_recomputed": "v_p(r), pruned flag, saved_nodes, pruning_ratio from arithmetic params"
+    },
+    {
+      "entry_point": "QA_CONTROL_STACK_REPORT.v1",
+      "kernel": "QA_CORE_SPEC.v1",
+      "main_family_chain": "[105],[110]→[106]→[117]→[118]",
+      "canonical_theorem": "orbit singularity→satellite→cosmos and k=2 preserved across domains",
+      "canonical_pass_witness_summary": "cymatics + seismology: both orbit_path=[singularity,satellite,cosmos], both k=2",
+      "canonical_fail_witness_summary": "seismology claims orbit ends in satellite: COMPARISON_TABLE_MISMATCH",
+      "what_is_recomputed": "orbit_path uniformity, path_length_k uniformity across comparison_table rows"
+    }
+  ],
+
+  "synthesis_statement": "QA is a kernel-governed system with two interacting public spines. The obstruction spine governs impossibility and pruning; the control spine governs cross-domain compilation and orbit preservation.",
+
+  "canonical_pass_witness": {
+    "obstruction_spine_result": "obstruction_spine_verified",
+    "control_spine_result": "control_spine_verified"
+  },
+
+  "canonical_fail_witness": {
+    "description": "obstruction_spine_ref is QA_OBSTRUCTION_STACK_CERT.v1 instead of QA_OBSTRUCTION_STACK_REPORT.v1",
+    "fail_types": ["OBSTRUCTION_SPINE_REF_MISMATCH"]
+  },
+
+  "source_refs": [
+    "QA_OBSTRUCTION_STACK_REPORT.v1 [116]",
+    "QA_CONTROL_STACK_REPORT.v1 [118]",
+    "QA_CORE_SPEC.v1 [107]"
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "id": "t3_p01_parallel_chain_12",
+  "description": "Ultra-long parallel transitivity: L1||L2||...||L13 => L1||L13 (12 steps)",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"Parallel": [4, 5]},
+    {"Parallel": [5, 6]},
+    {"Parallel": [6, 7]},
+    {"Parallel": [7, 8]},
+    {"Parallel": [8, 9]},
+    {"Parallel": [9, 10]},
+    {"Parallel": [10, 11]},
+    {"Parallel": [11, 12]},
+    {"Parallel": [12, 13]}
+  ],
+  "goals": [
+    {"Parallel": [1, 13]}
+  ],
+  "difficulty": 8
+}

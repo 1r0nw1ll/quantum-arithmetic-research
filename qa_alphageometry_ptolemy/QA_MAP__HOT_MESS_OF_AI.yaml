@@ -1,0 +1,409 @@
+# QA_MAP__HOT_MESS_OF_AI.yaml
+#
+# QA Module Specification for:
+#   "The Hot Mess of AI: How Does Misalignment Scale with Model Intelligence and Task Complexity?"
+#   Anthropic Alignment blog (2026)
+#
+# Core claim: as models scale and tasks require longer horizons, failures often look
+# less like coherent "wrong-goal optimization" (bias) and more like run-to-run
+# incoherence (variance-dominated error).
+#
+# This mapping treats an LLM (plus sampling + tool environment) as a stochastic
+# generator system. Coherence becomes an explicit invariant that must be certified.
+
+module:
+  name: "QA_HOT_MESS_OF_AI"
+  version: "0.1.0"
+  source:
+    - title: "The Hot Mess of AI: How Does Misalignment Scale with Model Intelligence and Task Complexity?"
+      venue: "Anthropic Alignment"
+      year: 2026
+      url: "https://alignment.anthropic.com/2026/hot-mess-of-ai/"
+  schema_prefix: "QA_HOT_MESS"
+  status: "DRAFT - Mapping spec only (2026-02-14)"
+
+  artifacts:
+    certificate_module: "qa_hot_mess_certificate.py"
+    validator_module: "qa_hot_mess_validator_v3.py"
+    mapping_note: "appendix/QA_HOT_MESS_OF_AI__QA_MAPPING.md"
+
+# ============================================================================
+# CORE MAPPING: Hot-Mess Concepts -> QA Framework
+# ============================================================================
+
+concept_mapping:
+  bias:
+    paper_name: "Bias (systematic error)"
+    paper_definition: "Consistent, repeatable mistake across runs"
+    qa_interpretation: "Stable obstruction / wrong basin reached reliably"
+    qa_structure: "ObstructionWitness (bias-dominant)"
+    key_insight: "Bias-dominant failure resembles coherent misalignment (consistent wrong answer/goal)"
+
+  variance:
+    paper_name: "Variance (run-to-run scatter)"
+    paper_definition: "Unpredictable error that changes across repeated runs"
+    qa_interpretation: "Trajectory divergence under stochastic generators"
+    qa_structure: "IncoherenceWitness (variance-dominant)"
+    key_insight: "Variance-dominant failure resembles industrial accidents: unstable, non-repeatable breakdowns"
+
+  incoherence:
+    paper_name: "Incoherence"
+    paper_definition: "Fraction of error attributable to variance rather than bias"
+    qa_interpretation: "Violation of coherence invariant I_coh for long-horizon reasoning"
+    qa_structure: "InvariantViolationWitness (I_coh)"
+    key_insight: "Misalignment can scale as loss of coherence, not just wrong-goal optimization"
+
+  reasoning_length:
+    paper_name: "Long reasoning / more steps"
+    paper_definition: "More actions/tokens in a solution attempt"
+    qa_interpretation: "Horizon expansion (larger H) increases reachable trajectories AND amplifies divergence"
+    qa_structure: "Horizon H and trace length |τ|"
+    key_insight: "Increasing H without additional invariants can increase incoherence"
+
+  task_complexity:
+    paper_name: "Task complexity"
+    paper_definition: "Harder tasks requiring deeper multi-step reasoning"
+    qa_interpretation: "Narrower goal set R* + rougher terrain + longer minimum horizon"
+    qa_structure: "GoalRegionWitness + TerrainWitness (optional)"
+    key_insight: "Hard tasks are more sensitive to stochastic drift; coherence becomes the bottleneck"
+
+  scale:
+    paper_name: "Model intelligence / scale"
+    paper_definition: "Larger, more capable models"
+    qa_interpretation: "Richer operator set + higher-dimensional internal dynamics; more gauge freedom"
+    qa_structure: "GeneratorRichnessWitness + GaugeFreedomWitness (optional)"
+    key_insight: "Scaling can reduce bias on easy tasks but may not reduce (and can increase) incoherence on hard tasks"
+
+  overthinking:
+    paper_name: "Overthinking"
+    paper_definition: "The model naturally spends more steps when stuck"
+    qa_interpretation: "Adaptive horizon expansion conditioned on uncertainty; a coherence hazard state"
+    qa_structure: "OverthinkingSpikeWitness"
+    key_insight: "Uncertainty-triggered long traces can spike incoherence beyond what fixed token budgets predict"
+
+  ensembling:
+    paper_name: "Ensembling / averaging multiple runs"
+    paper_definition: "Aggregate independent runs to cancel randomness"
+    qa_interpretation: "Add an aggregation operator A_k that reduces variance when reversibility allows"
+    qa_structure: "EnsembleAggregationWitness"
+    key_insight: "Variance can be reduced by multi-trace aggregation, but irreversibility blocks this mitigation"
+
+  dynamical_systems_view:
+    paper_name: "Models behave like dynamical systems"
+    paper_definition: "High-dimensional dynamics, not clean goal optimizers"
+    qa_interpretation: "Long-horizon reachability in a complex transition system; goal-following requires many simultaneous constraints"
+    qa_structure: "ProblemSpace P=<S,O,C,E,H>"
+    key_insight: "Alignment is constraint engineering (C/I), not merely objective specification (E)"
+
+# ============================================================================
+# QA FORMALIZATION (P = <S,O,C,E,H>)
+# ============================================================================
+
+qa_formalization:
+  problem_space:
+    S:
+      name: "RolloutState"
+      description: >
+        State of a task attempt, including the task instance, the partial
+        solution/trajectory, and the randomness configuration (seed, sampling
+        settings, tool outcomes) sufficient to make each rollout replayable.
+      example_coordinates:
+        - task_instance_id: str
+        - prompt: str
+        - trajectory_prefix: str
+        - rng_seed: int
+        - sampling: {temperature: Scalar, top_p: Scalar, top_k: Optional[int]}
+        - tool_context_hash: Optional[str]
+
+    O:
+      name: "Operators / Generators"
+      description: >
+        Atomic steps of the system: next-token generation, tool-call actions,
+        environment steps. Each operator is a partial function on S that either
+        advances the trajectory or returns a typed failure.
+      examples:
+        - "token_step"
+        - "tool_call(search/code_exec)"
+        - "environment_step"
+
+    C:
+      name: "Constraints / Invariants"
+      description: >
+        Constraints that must hold for a rollout to be acceptable (budget,
+        safety rules, reproducibility/coherence requirements). Hot-mess behavior
+        is modeled as violation of a coherence constraint under long horizons.
+      examples:
+        - "token_budget"
+        - "tool_safety_policy"
+        - "I_coh (coherence)"
+
+    E:
+      name: "Evaluation"
+      description: >
+        Task success metric used to define error and compute bias/variance
+        decomposition (e.g., 0/1 accuracy, Brier score, log loss, task reward).
+      examples:
+        - "multiple_choice_accuracy"
+        - "unit_test_pass_rate"
+        - "agent_reward"
+
+    H:
+      name: "Planning Horizon"
+      description: >
+        Maximum number of steps/tokens/actions in a rollout. Long reasoning
+        corresponds to larger H and longer traces |τ|.
+      examples:
+        - "H = max_tokens"
+        - "H = max_tool_actions"
+
+# ============================================================================
+# COHERENCE INVARIANTS (PROPOSED)
+# ============================================================================
+
+invariants:
+  I_coh:
+    name: "Coherence Invariant"
+    intent: "Repeated rollouts from the same task should not diverge excessively."
+    parameters:
+      - metric: "decomposition_metric_id"     # e.g. brier | kl | 0_1 | custom
+      - max_incoherence_ratio: Scalar        # threshold on variance fraction
+      - min_agreement_rate: Scalar           # optional: P(output == mode) lower bound
+      - max_overthinking_spike: Scalar       # optional: conditional incoherence jump cap
+    violation_condition: |
+      incoherence_ratio > max_incoherence_ratio
+      OR agreement_rate < min_agreement_rate
+      OR (incoherence_ratio_overthinking - incoherence_ratio_baseline) > max_overthinking_spike
+
+  I_rev:
+    name: "Reversibility / Retry Budget Invariant"
+    intent: "Whether ensembling is available as a mitigation."
+    parameters:
+      - irreversible_actions: bool
+      - max_retries: int
+    violation_condition: |
+      irreversible_actions == true AND incoherence_ratio is high
+      (mitigation via ensembling is blocked)
+
+# ============================================================================
+# FAILURE-COMPLETENESS MAPPING
+# ============================================================================
+
+failure_completeness:
+  theorem: |
+    For every model M and task family T under an evaluation E, exactly one of:
+    1) SUCCESS: Coherence invariant(s) satisfied and task performance certified, OR
+    2) FAILURE: An obstruction certificate classifying the dominant failure driver
+       (bias-dominant, variance-dominant, or mitigation-blocked).
+
+  failure_modes:
+    - mode: "BIAS_DOMINANT_MISALIGNMENT"
+      description: "Consistent, repeatable wrong behavior (systematic error)."
+      obstruction_witness: "Bias component dominates; modal output is wrong."
+
+    - mode: "HOT_MESS_INCOHERENCE"
+      description: "Variance-dominant failures; answers/actions are unstable across runs."
+      obstruction_witness: "High incoherence_ratio and low agreement_rate."
+
+    - mode: "OVERTHINKING_SPIKE"
+      description: "Incoherence spikes on unusually long traces (model 'gets stuck')."
+      obstruction_witness: "Conditional incoherence on long-step subset exceeds threshold."
+
+    - mode: "SCALE_NON_MONOTONICITY"
+      description: "Scaling up fails to reduce incoherence on hard tasks."
+      obstruction_witness: "Scale sweep shows incoherence not decreasing with scale."
+
+    - mode: "ENSEMBLE_ONLY_FIX"
+      description: "Single-run is incoherent; only k-run aggregation meets invariants."
+      obstruction_witness: "Ensemble size k required to satisfy I_coh exceeds budget."
+
+    - mode: "IRREVERSIBLE_ACTION_HAZARD"
+      description: "High incoherence in settings where retries/ensembles are infeasible."
+      obstruction_witness: "I_rev indicates irreversibility; I_coh violated."
+
+# ============================================================================
+# CERTIFICATE SCHEMAS (PROPOSED)
+# ============================================================================
+
+certificate_schemas:
+  QA_HOT_MESS_INCOHERENCE_CERT_V1:
+    description: "Bias/variance/incoherence decomposition certificate for a model-task pair"
+    status: "PROPOSED"
+    required_fields:
+      - certificate_id
+      - version
+      - schema
+      - success
+      - timestamp
+      - model_id
+      - task_family
+      - eval_metric_id
+      - num_runs
+      - run_outcomes
+      - decomposition_witness
+      - coherence_invariant
+    success_fields:
+      - agreement_rate
+      - incoherence_ratio
+      - bias_component
+      - variance_component
+      - reasoning_length_witness
+      - overthinking_spike_witness
+      - ensemble_effect_witness
+      - qa_interpretation
+    failure_fields:
+      - failure_mode
+      - failure_witness
+
+  QA_HOT_MESS_SWEEP_BUNDLE_V1:
+    description: "Sweep bundle across (scale x task_complexity x horizon/budget)"
+    status: "PROPOSED"
+    required_fields:
+      - bundle_id
+      - version
+      - schema
+      - timestamp
+      - sweep_axes
+      - certificates
+      - cross_certificate_claims
+    sweep_axes_examples:
+      - "model_scale"
+      - "task_family"
+      - "max_tokens"
+      - "temperature"
+      - "tooling_enabled"
+
+# ============================================================================
+# WITNESS TYPES (PROPOSED)
+# ============================================================================
+
+witness_types:
+  RunOutcomeWitness:
+    fields:
+      - run_id
+      - rng_seed
+      - step_count
+      - output_hash
+      - score
+      - success
+
+  IncoherenceDecompositionWitness:
+    fields:
+      - metric_id
+      - total_error
+      - bias_component
+      - variance_component
+      - incoherence_ratio
+      - notes
+
+  ReasoningLengthWitness:
+    fields:
+      - mean_step_count
+      - median_step_count
+      - p95_step_count
+      - corr_steps_incoherence
+
+  OverthinkingSpikeWitness:
+    fields:
+      - overthinking_threshold_steps
+      - incoherence_ratio_baseline
+      - incoherence_ratio_overthinking
+      - spike_delta
+      - spike_detected
+
+  EnsembleEffectWitness:
+    fields:
+      - ensemble_size
+      - error_single
+      - error_ensemble
+      - variance_reduction_factor
+      - ensemble_feasible
+
+# ============================================================================
+# RECOMPUTE HOOKS (PROPOSED)
+# ============================================================================
+
+recompute_hooks:
+  - hook_id: "recompute_decomposition_v1"
+    description: "Recompute bias/variance/incoherence from run_outcomes"
+
+  - hook_id: "recompute_agreement_v1"
+    description: "Recompute agreement_rate vs modal output"
+
+  - hook_id: "recompute_overthinking_spike_v1"
+    description: "Recompute conditional incoherence on long-step subset"
+
+  - hook_id: "recompute_ensemble_effect_v1"
+    description: "Recompute ensemble gain curves from run_outcomes"
+
+# ============================================================================
+# CROSS-MODULE UNIFICATION (QA INTERNAL)
+# ============================================================================
+
+unification:
+  with_beyond_neurons:
+    shared_structure:
+      - "Horizon expansion (H↑) enables multi-step reasoning but increases coherence burden"
+      - "Problem space P=<S,O,C,E,H> makes coherence an explicit constraint axis (C)"
+    qa_claim: "Hot-mess failures are a horizon-expansion obstruction when I_coh is missing."
+
+  with_neuralgcm:
+    shared_structure:
+      - "Long-horizon rollouts accumulate small errors and diverge"
+      - "Ensembling reduces variance when multiple rollouts are allowed"
+    qa_claim: "Hot-mess incoherence parallels forecast spread; both need stability invariants."
+
+  with_diversity_collapse:
+    shared_structure:
+      - "Both are distribution-shape pathologies across repeated attempts"
+    duality_note: >
+      Diversity collapse: variance collapses too far (outputs converge, exploration dies).
+      Hot mess: variance explodes (outputs diverge, reliability dies).
+      Both require certificate-controlled control of diversity/coherence.
+
+  with_axiom_ai:
+    shared_structure:
+      - "Long reasoning traces without kernel-like constraints lead to branching/case explosion"
+    qa_claim: "Kernel-stratum constraints are one route to enforce I_coh."
+
+# ============================================================================
+# IMPLEMENTATION ROADMAP
+# ============================================================================
+
+implementation_roadmap:
+  phase_1:
+    description: "Define certificate + validator skeleton (exact scalars via Fraction)"
+    tasks:
+      - "Implement qa_hot_mess_certificate.py dataclasses"
+      - "Implement qa_hot_mess_validator_v3.py (schema/consistency/recompute)"
+
+  phase_2:
+    description: "Add recompute hooks + example certificates"
+    tasks:
+      - "Implement qa_hot_mess_hooks.py"
+      - "Create toy success/failure examples under examples/hot_mess/"
+
+  phase_3:
+    description: "Integrate into meta-validator registry and cross-paper unification"
+    tasks:
+      - "Register schema IDs in qa_meta_validator.py"
+      - "Add Hot Mess entry to QA_MAP_CANONICAL.md after validation passes"
+
+# ============================================================================
+# CITATION
+# ============================================================================
+
+citation:
+  paper: |
+    @article{anthropic_hot_mess_2026,
+      title={The Hot Mess of AI: How Does Misalignment Scale with Model Intelligence and Task Complexity?},
+      author={Anthropic},
+      year={2026},
+      note={Alignment blog + research paper},
+    }
+  qa_mapping: |
+    @misc{qa_hot_mess_mapping_2026,
+      title={QA Mapping: Hot Mess of AI (Incoherence Certificates)},
+      author={Signal Experiments Research Group},
+      year={2026},
+      note={Draft mapping spec; coherence as an invariant},
+    }

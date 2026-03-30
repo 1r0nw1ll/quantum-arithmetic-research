@@ -1,0 +1,522 @@
+warning: unused imports: `AngleId`, `LineId`, and `PointId`
+ --> core/src/geometry/normalize.rs:6:23
+  |
+6 | use crate::ir::{Fact, AngleId, LineId, PointId};
+  |                       ^^^^^^^  ^^^^^^  ^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `AngleId`
+ --> core/src/geometry/check.rs:6:50
+  |
+6 | use crate::ir::{GeoState, Fact, PointId, LineId, AngleId};
+  |                                                  ^^^^^^^
+
+warning: unused import: `Fact`
+ --> core/src/search/beam.rs:5:63
+  |
+5 | use crate::ir::{GeoState, ProofTrace, ProofStep, ProofStepId, Fact};
+  |                                                               ^^^^
+
+warning: unused import: `std::collections::VecDeque`
+ --> core/src/search/beam.rs:8:5
+  |
+8 | use std::collections::VecDeque;
+  |     ^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/parallel.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, LineId};
+  |                                           ^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/perpendicular.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, LineId};
+  |                                           ^^^^^^
+
+warning: unused imports: `AngleId` and `SegmentId`
+ --> core/src/rules/equality.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, SegmentId, AngleId};
+  |                                           ^^^^^^^^^  ^^^^^^^
+
+warning: unused import: `LineId`
+ --> core/src/rules/circle.rs:3:62
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, PointId, CircleId, LineId};
+  |                                                              ^^^^^^
+
+warning: unused imports: `AngleId`, `LineId`, and `PointId`
+ --> core/src/rules/angle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, AngleId, LineId, PointId};
+  |                                           ^^^^^^^  ^^^^^^  ^^^^^^^
+
+warning: unused imports: `LineId`, `PointId`, and `SegmentId`
+ --> core/src/rules/triangle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, PointId, SegmentId, LineId};
+  |                                           ^^^^^^^  ^^^^^^^^^  ^^^^^^
+
+warning: unused import: `crate::ir::Fact`
+ --> core/src/loader/geometry3k.rs:6:5
+  |
+6 | use crate::ir::Fact;
+  |     ^^^^^^^^^^^^^^^
+
+warning: unused variable: `line`
+  --> core/src/rules/circle.rs:88:34
+   |
+88 |             if let Fact::Tangent(line, _circle, _point) = fact {
+   |                                  ^^^^ help: if this is intentional, prefix it with an underscore: `_line`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> core/src/rules/circle.rs:84:13
+   |
+84 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+   |
+   = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+  --> core/src/rules/angle.rs:19:13
+   |
+19 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/angle.rs:49:13
+   |
+49 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `l1`
+  --> core/src/rules/triangle.rs:24:40
+   |
+24 |             if let Fact::Perpendicular(l1, l2) = fact {
+   |                                        ^^ help: if this is intentional, prefix it with an underscore: `_l1`
+
+warning: unused variable: `l2`
+  --> core/src/rules/triangle.rs:24:44
+   |
+24 |             if let Fact::Perpendicular(l1, l2) = fact {
+   |                                            ^^ help: if this is intentional, prefix it with an underscore: `_l2`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:19:13
+   |
+19 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `seg1`
+  --> core/src/rules/triangle.rs:56:38
+   |
+56 |             if let Fact::EqualLength(seg1, seg2) = fact1 {
+   |                                      ^^^^ help: if this is intentional, prefix it with an underscore: `_seg1`
+
+warning: unused variable: `seg2`
+  --> core/src/rules/triangle.rs:56:44
+   |
+56 |             if let Fact::EqualLength(seg1, seg2) = fact1 {
+   |                                            ^^^^ help: if this is intentional, prefix it with an underscore: `_seg2`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:51:13
+   |
+51 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `a`
+  --> core/src/rules/triangle.rs:85:44
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                            ^ help: if this is intentional, prefix it with an underscore: `_a`
+
+warning: unused variable: `b`
+  --> core/src/rules/triangle.rs:85:47
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                               ^ help: if this is intentional, prefix it with an underscore: `_b`
+
+warning: unused variable: `c`
+  --> core/src/rules/triangle.rs:85:50
+   |
+85 |             if let Fact::PythagoreanTriple(a, b, c) = fact {
+   |                                                  ^ help: if this is intentional, prefix it with an underscore: `_c`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/triangle.rs:81:13
+   |
+81 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: unused variable: `p1`
+   --> core/src/rules/triangle.rs:115:40
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                        ^^ help: if this is intentional, prefix it with an underscore: `_p1`
+
+warning: unused variable: `p2`
+   --> core/src/rules/triangle.rs:115:44
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                            ^^ help: if this is intentional, prefix it with an underscore: `_p2`
+
+warning: unused variable: `p3`
+   --> core/src/rules/triangle.rs:115:48
+    |
+115 |             if let Fact::RightTriangle(p1, p2, p3) = fact {
+    |                                                ^^ help: if this is intentional, prefix it with an underscore: `_p3`
+
+warning: variable does not need to be mutable
+   --> core/src/rules/triangle.rs:111:13
+    |
+111 |         let mut new_facts = Vec::new();
+    |             ----^^^^^^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: function `are_collinear` is never used
+  --> core/src/ir/coords.rs:88:12
+   |
+88 |     pub fn are_collinear(p1: Point2D, p2: Point2D, p3: Point2D, epsilon: f64) -> bool {
+   |            ^^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `are_perpendicular` is never used
+  --> core/src/ir/coords.rs:99:12
+   |
+99 |     pub fn are_perpendicular(
+   |            ^^^^^^^^^^^^^^^^^
+
+warning: function `are_parallel` is never used
+   --> core/src/ir/coords.rs:116:12
+    |
+116 |     pub fn are_parallel(
+    |            ^^^^^^^^^^^^
+
+warning: function `is_right_angle` is never used
+   --> core/src/ir/coords.rs:133:12
+    |
+133 |     pub fn is_right_angle(p1: Point2D, p2: Point2D, p3: Point2D, epsilon: f64) -> bool {
+    |            ^^^^^^^^^^^^^^
+
+warning: function `is_right_triangle` is never used
+   --> core/src/ir/coords.rs:144:12
+    |
+144 |     pub fn is_right_triangle(a: f64, b: f64, c: f64, epsilon: f64) -> bool {
+    |            ^^^^^^^^^^^^^^^^^
+
+warning: function `angle` is never used
+   --> core/src/ir/coords.rs:157:12
+    |
+157 |     pub fn angle(p1: Point2D, vertex: Point2D, p3: Point2D) -> f64 {
+    |            ^^^^^
+
+warning: method `C` should have a snake case name
+  --> core/src/qa/tuple.rs:69:12
+   |
+69 |     pub fn C(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `c`
+   |
+   = note: `#[warn(non_snake_case)]` (part of `#[warn(nonstandard_style)]`) on by default
+
+warning: method `F` should have a snake case name
+  --> core/src/qa/tuple.rs:75:12
+   |
+75 |     pub fn F(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `f`
+
+warning: method `G` should have a snake case name
+  --> core/src/qa/tuple.rs:81:12
+   |
+81 |     pub fn G(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case: `g`
+
+warning: method `J` should have a snake case name
+  --> core/src/qa/tuple.rs:87:12
+   |
+87 |     pub fn J(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case: `j`
+
+warning: method `X` should have a snake case name
+  --> core/src/qa/tuple.rs:93:12
+   |
+93 |     pub fn X(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `x`
+
+warning: method `K` should have a snake case name
+  --> core/src/qa/tuple.rs:99:12
+   |
+99 |     pub fn K(&self) -> f64 {
+   |            ^ help: convert the identifier to snake case (notice the capitalization): `k`
+
+warning: method `I` should have a snake case name
+   --> core/src/qa/tuple.rs:107:12
+    |
+107 |     pub fn I(&self) -> f64 {
+    |            ^ help: convert the identifier to snake case (notice the capitalization): `i`
+
+warning: unused imports: `FactStore` and `PointId`
+   --> core/src/qa/extract.rs:237:27
+    |
+237 |     use crate::ir::{Goal, FactStore, Fact, PointId};
+    |                           ^^^^^^^^^        ^^^^^^^
+    |
+    = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: unused import: `FactType`
+   --> core/src/ir/state.rs:231:48
+    |
+231 |     use super::super::facts::{Fact, FactStore, FactType};
+    |                                                ^^^^^^^^
+
+warning: unused import: `PointId`
+   --> core/src/ir/state.rs:232:41
+    |
+232 |     use super::super::symbols::{LineId, PointId, SymbolTable};
+    |                                         ^^^^^^^
+
+warning: unused import: `AngleId`
+ --> core/src/geometry/normalize.rs:6:23
+  |
+6 | use crate::ir::{Fact, AngleId, LineId, PointId};
+  |                       ^^^^^^^
+
+warning: unused import: `Metadata`
+  --> core/src/geometry/constructions.rs:86:27
+   |
+86 |     use crate::ir::{Goal, Metadata};
+   |                           ^^^^^^^^
+
+warning: unused import: `Metadata`
+   --> core/src/geometry/check.rs:129:27
+    |
+129 |     use crate::ir::{Goal, Metadata, FactStore};
+    |                           ^^^^^^^^
+
+warning: unused imports: `AngleId` and `PointId`
+ --> core/src/rules/angle.rs:3:43
+  |
+3 | use crate::ir::{GeoState, Fact, FactType, AngleId, LineId, PointId};
+  |                                           ^^^^^^^          ^^^^^^^
+
+warning: unused imports: `FactStore` and `Goal`
+   --> core/src/rules/triangle.rs:133:21
+    |
+133 |     use crate::ir::{Goal, FactStore};
+    |                     ^^^^  ^^^^^^^^^
+
+warning: variable does not need to be mutable
+   --> core/src/ir/state.rs:289:13
+    |
+289 |         let mut facts = FactStore::new();
+    |             ----^^^^^
+    |             |
+    |             help: remove this `mut`
+    |
+    = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+   --> core/src/ir/state.rs:412:13
+    |
+412 |         let mut facts = FactStore::new();
+    |             ----^^^^^
+    |             |
+    |             help: remove this `mut`
+
+warning: variable does not need to be mutable
+  --> core/src/rules/circle.rs:84:13
+   |
+84 |         let mut new_facts = Vec::new();
+   |             ----^^^^^^^^^
+   |             |
+   |             help: remove this `mut`
+
+warning: function `angle` is never used
+   --> core/src/ir/coords.rs:157:12
+    |
+157 |     pub fn angle(p1: Point2D, vertex: Point2D, p3: Point2D) -> f64 {
+    |            ^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:372:17
+    |
+372 |         assert!(result.states_expanded >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(unused_comparisons)]` on by default
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:373:17
+    |
+373 |         assert!(result.successors_generated >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:374:17
+    |
+374 |         assert!(result.successors_kept >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+   --> core/src/search/beam.rs:375:17
+    |
+375 |         assert!(result.depth_reached >= 0);
+    |                 ^^^^^^^^^^^^^^^^^^^^^^^^^
+
+warning: comparison is useless due to type limits
+   --> core/src/rules/collinear.rs:166:17
+    |
+166 |         assert!(new_facts.len() >= 0); // Due to normalization, count may vary
+    |                 ^^^^^^^^^^^^^^^^^^^^
+
+warning: `qa-alphageometry-core` (lib) generated 42 warnings (run `cargo fix --lib -p qa-alphageometry-core` to apply 18 suggestions)
+warning: `qa-alphageometry-core` (lib test) generated 47 warnings (30 duplicates) (run `cargo fix --lib -p qa-alphageometry-core --tests` to apply 11 suggestions)
+   Compiling qa-alphageometry-core v0.1.0 (/home/player2/signal_experiments/qa_alphageometry/core)
+warning: unused import: `std::path::Path`
+ --> core/tests/loader_e2e.rs:6:5
+  |
+6 | use std::path::Path;
+  |     ^^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+error[E0609]: no field `states_explored` on type `SearchResult`
+   --> core/tests/loader_e2e.rs:215:50
+    |
+215 |              result_qa_off.solved, result_qa_off.states_explored, result_qa_off.depth_reached);
+    |                                                  ^^^^^^^^^^^^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+215 -              result_qa_off.solved, result_qa_off.states_explored, result_qa_off.depth_reached);
+215 +              result_qa_off.solved, result_qa_off.states_expanded, result_qa_off.depth_reached);
+    |
+
+error[E0609]: no field `states_explored` on type `SearchResult`
+   --> core/tests/loader_e2e.rs:217:48
+    |
+217 |              result_qa_on.solved, result_qa_on.states_explored, result_qa_on.depth_reached);
+    |                                                ^^^^^^^^^^^^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+217 -              result_qa_on.solved, result_qa_on.states_explored, result_qa_on.depth_reached);
+217 +              result_qa_on.solved, result_qa_on.states_expanded, result_qa_on.depth_reached);
+    |
+
+error[E0560]: struct `BenchmarkResult` has no field named `states_explored`
+  --> core/tests/benchmark.rs:66:9
+   |
+66 |         states_explored: result.successors_generated,
+   |         ^^^^^^^^^^^^^^^ `BenchmarkResult` does not have this field
+   |
+   = note: available fields are: `successors_generated`
+
+For more information about this error, try `rustc --explain E0609`.
+warning: `qa-alphageometry-core` (test "loader_e2e") generated 1 warning
+error: could not compile `qa-alphageometry-core` (test "loader_e2e") due to 2 previous errors; 1 warning emitted
+warning: build failed, waiting for other jobs to finish...
+error[E0609]: no field `states_explored` on type `&&BenchmarkResult`
+   --> core/tests/benchmark.rs:135:24
+    |
+135 |             .map(|r| r.states_explored)
+    |                        ^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `problem_id`, `config_name`, `qa_weight`, `geometric_weight`, `solved` ... and 5 others
+
+error[E0609]: no field `states_explored` on type `BenchmarkResult`
+   --> core/tests/benchmark.rs:230:25
+    |
+230 |              result_geo.states_explored, result_geo.best_score);
+    |                         ^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `problem_id`, `config_name`, `qa_weight`, `geometric_weight`, `solved` ... and 5 others
+
+error[E0609]: no field `states_explored` on type `BenchmarkResult`
+   --> core/tests/benchmark.rs:232:24
+    |
+232 |              result_qa.states_explored, result_qa.best_score);
+    |                        ^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `problem_id`, `config_name`, `qa_weight`, `geometric_weight`, `solved` ... and 5 others
+
+error[E0609]: no field `states_explored` on type `&BenchmarkResult`
+   --> core/tests/week4_session3_ablation.rs:323:49
+    |
+323 |                  r.use_coord_facts, r.solved, r.states_explored, r.depth_reached, r.proof_steps,
+    |                                                 ^^^^^^^^^^^^^^^ unknown field
+    |
+help: a field with a similar name exists
+    |
+323 -                  r.use_coord_facts, r.solved, r.states_explored, r.depth_reached, r.proof_steps,
+323 +                  r.use_coord_facts, r.solved, r.states_expanded, r.depth_reached, r.proof_steps,
+    |
+
+Some errors have detailed explanations: E0560, E0609.
+For more information about an error, try `rustc --explain E0560`.
+error: could not compile `qa-alphageometry-core` (test "benchmark") due to 4 previous errors
+error[E0560]: struct `BenchmarkResult` has no field named `states_explored`
+   --> core/tests/week4_benchmark.rs:127:9
+    |
+127 |         states_explored: result.successors_generated,
+    |         ^^^^^^^^^^^^^^^ `BenchmarkResult` does not have this field
+    |
+    = note: available fields are: `successors_generated`
+
+error[E0609]: no field `states_explored` on type `&&BenchmarkResult`
+   --> core/tests/week4_benchmark.rs:156:60
+    |
+156 |     let states: Vec<usize> = tier_results.iter().map(|r| r.states_explored).collect();
+    |                                                            ^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `problem_id`, `tier`, `difficulty`, `config_name`, `qa_weight` ... and 19 others
+
+error[E0609]: no field `states_explored` on type `&BenchmarkResult`
+   --> core/tests/week4_benchmark.rs:324:49
+    |
+324 |                  r.use_coord_facts, r.solved, r.states_explored, r.depth_reached, r.proof_steps,
+    |                                                 ^^^^^^^^^^^^^^^ unknown field
+    |
+    = note: available fields are: `problem_id`, `tier`, `difficulty`, `config_name`, `qa_weight` ... and 19 others
+
+warning: unused variable: `num_problems`
+  --> core/tests/week4_session3_ablation.rs:45:52
+   |
+45 | fn verify_correctness(results: &[BenchmarkResult], num_problems: usize, num_configs: usize) {
+   |                                                    ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_problems`
+   |
+   = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `qa-alphageometry-core` (test "week4_session3_ablation") generated 1 warning
+error: could not compile `qa-alphageometry-core` (test "week4_session3_ablation") due to 1 previous error; 1 warning emitted
+warning: unused variable: `num_problems`
+   --> core/tests/week4_benchmark.rs:345:52
+    |
+345 | fn verify_correctness(results: &[BenchmarkResult], num_problems: usize, num_configs: usize) {
+    |                                                    ^^^^^^^^^^^^ help: if this is intentional, prefix it with an underscore: `_num_problems`
+    |
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: `qa-alphageometry-core` (test "week4_benchmark") generated 1 warning
+error: could not compile `qa-alphageometry-core` (test "week4_benchmark") due to 3 previous errors; 1 warning emitted

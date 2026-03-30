@@ -1,0 +1,28 @@
+{
+  "schema_version": "QA_AGENT_COMPETENCY_CERT.v1",
+  "agent_name": "merge_sort_agent",
+  "category": "sort",
+  "goal": "Sort N elements via divide-and-conquer merge in O(N log N) \u2014 guaranteed convergence.",
+  "cognitive_horizon": "global",
+  "convergence": "guaranteed",
+  "orbit_signature": "cosmos",
+  "levin_cell_type": "differentiated",
+  "failure_modes": [
+    "O(N) auxiliary space \u2014 fails on memory-constrained streams",
+    "Not in-place \u2014 poor cache locality on large arrays"
+  ],
+  "composition_rules": [
+    "Requires spine role in any sorting organ (provides O(N log N) guarantee)",
+    "Can run in parallel with parallel_merge_sort variant"
+  ],
+  "dedifferentiation_cond": [
+    "success_rate < 0.4 over 10 tasks",
+    "orbit_drift_count > 3 consecutive cycles"
+  ],
+  "recommitment_cond": [
+    "input_size exceeds available memory \u2014 switch to external merge sort",
+    "streaming input requires different sort strategy"
+  ],
+  "parent_cert": "QA_CORE_SPEC.v1",
+  "result": "PASS"
+}

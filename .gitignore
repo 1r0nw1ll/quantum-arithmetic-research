@@ -194,3 +194,8 @@ ag2_guardrails_poc/OAI_CONFIG_LIST
 
 # Local MCP config (may contain secrets)
 /.mcp.json
+
+# Proofgold secrets
+proofgold_bounties/env/.env
+proofgold_bounties/data/proofgold-lava/explorer/i/pgsecret.php
+ag2_guardrails_poc/data/secret.txt

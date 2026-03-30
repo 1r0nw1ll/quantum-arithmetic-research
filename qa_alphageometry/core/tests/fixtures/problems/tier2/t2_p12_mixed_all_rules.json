@@ -1,0 +1,26 @@
+{
+  "id": "t2_p12_mixed_all_rules",
+  "description": "Four goals requiring all rule types: parallel, perpendicular, equality, circles",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"Perpendicular": [5, 6]},
+    {"Perpendicular": [6, 7]},
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]},
+    {"EqualAngle": [30, 31]},
+    {"EqualAngle": [31, 32]},
+    {"ConcentricCircles": [20, 21]},
+    {"ConcentricCircles": [21, 22]},
+    {"ConcentricCircles": [22, 23]}
+  ],
+  "goals": [
+    {"Parallel": [1, 4]},
+    {"Parallel": [5, 7]},
+    {"EqualLength": [10, 13]},
+    {"ConcentricCircles": [20, 23]}
+  ],
+  "difficulty": 7
+}

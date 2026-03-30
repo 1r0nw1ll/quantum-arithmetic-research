@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_CHROMOGEOMETRY_CERT.v1",
+  "certificate_id": "qa.cert.chromogeometry.fail.green_mismatch.b1e1.v1",
+  "cert_type": "qa_chromogeometry_cert",
+  "title": "Chromogeometry FAIL: GREEN_QUADRANCE_MISMATCH — C claimed as 2·b·e instead of 2·d·e",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Canonical confusion fail. Generator (b=1,e=1): the correct Green quadrance is C=Q_green(d,e)=2·d·e=2·2·1=4. A common error is to compute C=2·b·e=2·1·1=2 (using b instead of d). This fixture certifies that the validator catches this substitution error. Additionally, with C=2 and F=3, Pythagoras 4+9≠25 is also violated — both CG2 and CG5 should fire.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "b": 1,
+    "e": 1,
+    "d": 2,
+    "a": 3
+  },
+
+  "chromogeometry": {
+    "C": 2,
+    "F": 3,
+    "G": 5,
+    "_error": "WRONG: claimed C=2·b·e=2·1·1=2 instead of C=2·d·e=2·2·1=4"
+  },
+
+  "conic_classification": {
+    "I": 1,
+    "I_formula": "I = |C − F| = |2 − 3| = 1 (but C is wrong; correct C=4 gives same I=1)",
+    "conic_type": "ellipse",
+    "_error": "conic_type is wrong: claimed C=2 < F=3 → ellipse, but correct C=4 > F=3 → hyperbola"
+  },
+
+  "validation_checks": [
+    { "check_id": "CG1", "description": "schema_version is 'QA_CHROMOGEOMETRY_CERT.v1'",   "passed": true,  "details": "schema_version='QA_CHROMOGEOMETRY_CERT.v1'" },
+    { "check_id": "CG2", "description": "C == 2·d·e (Green quadrance identity)",            "passed": false, "details": "claimed C=2 ≠ 2·2·1=4" },
+    { "check_id": "CG3", "description": "F == d²−e² (Red quadrance identity)",              "passed": true,  "details": "4−1=3=F" },
+    { "check_id": "CG4", "description": "G == d²+e² (Blue quadrance identity)",             "passed": true,  "details": "4+1=5=G" },
+    { "check_id": "CG5", "description": "C²+F²=G² (Chromogeometric Pythagoras)",           "passed": false, "details": "2²+3²=13 ≠ 5²=25" },
+    { "check_id": "CG6", "description": "F == b·a (semi-latus product identity)",           "passed": true,  "details": "b·a=1·3=3=F" },
+    { "check_id": "CG7", "description": "conic_type matches |C−F| and C vs F comparison",  "passed": true,  "details": "claimed C=2 < F=3 → ellipse; I=|2−3|=1 — internally consistent with wrong C" }
+  ],
+
+  "fail_ledger": ["GREEN_QUADRANCE_MISMATCH", "PYTHAGORAS_VIOLATED"],
+  "result": "FAIL"
+}

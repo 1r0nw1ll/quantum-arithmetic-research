@@ -1,0 +1,45 @@
+{
+  "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",
+  "certificate_id": "qa.cert.area_quantization_pk.pass.p3_k3.v1",
+  "cert_type": "area_quantization_pk",
+  "title": "Inert Prime Area Quantization PASS: p=3, k=3 (mod 27) — first genuine generalization",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Genuine generalization step. p=3, k=3, modulus=27. The theorem predicts forbidden = {r : 3|r but 9∤r} = {3,6,12,15,21,24} (six residues with v_3=1 in Z/27Z). The spectrum has 21 elements out of 27, consistent with the pattern: |forbidden| = p^(k-1)*(p-1) = 9*2 = 18... wait, actually |{r : v_p(r)=1, 0<=r<p^k}| = p^(k-1) - p^(k-2) for k>=2? For k=3: {3,6,12,15,21,24} = 6 = p*(p-1) = 3*2 = 6. Correct. The obstruction count grows with k, but the forbidden set remains precisely the v_p=1 residues.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "prime_p": 3,
+  "k": 3,
+  "modulus": 27,
+
+  "inert_witness": {
+    "legendre_5_mod_p": -1,
+    "irreducibility_check": "x^2+x-1 mod 3: x=0 -> 2, x=1 -> 1, x=2 -> 2. No roots mod 3. Irreducible. (Same prime as anchor; inert status is a property of p, independent of k.)",
+    "notes": "Legendre(5,3)=-1 (same as p3_k2 anchor). Z[phi]/27Z[phi] = Z[phi]/(3^3 Z[phi]); since 3 is inert, this is Z/27Z[omega] where omega^2+omega-1=0 — the Galois ring GR(27,2)."
+  },
+
+  "theorem_claim": {
+    "statement": "For p=3 (inert in Z[phi]) and k=3: Im(f) = {r in Z/27Z : v_3(r) != 1}. Forbidden = {r : 3|r but 9∤r} = {3,6,12,15,21,24}.",
+    "spectrum": [0, 1, 2, 4, 5, 7, 8, 9, 10, 11, 13, 14, 16, 17, 18, 19, 20, 22, 23, 25, 26],
+    "forbidden": [3, 6, 12, 15, 21, 24],
+    "forbidden_description": "Residues r in {0..26} with v_3(r)=1: {3,6,12,15,21,24}. These are the six multiples of 3 that are not multiples of 9. The obstruction propagates from Z/9Z to Z/27Z: lifting a forbidden residue r=3u (gcd(u,3)=1) to Z/27Z produces 3u, 3u+9, 3u+18 — all forbidden, consistent with v_3=1 characterization."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",           "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",              "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",        "passed": true, "details": "[0,1,2,3,4,5] ⊆ [0,1,2,3,4,5]" },
+    { "check_id": "PK1", "description": "p=3 is inert in Z[phi]: Legendre(5,3)=-1",      "passed": true, "details": "5 mod 3=2; 2^1=2≡-1 mod 3; QNR confirmed" },
+    { "check_id": "PK2", "description": "modulus == p^k = 3^3 = 27",                     "passed": true, "details": "27 == 27" },
+    { "check_id": "PK3", "description": "exhaustive spectrum recompute matches claim",    "passed": true, "details": "actual_spectrum={0,1,2,4,5,7,8,9,10,11,13,14,16,17,18,19,20,22,23,25,26} (21 values) == claimed" },
+    { "check_id": "PK4", "description": "forbidden == {r : v_p(r)=1} matches theorem",   "passed": true, "details": "actual_forbidden={3,6,12,15,21,24}; theorem_forbidden={3,6,12,15,21,24}; match" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

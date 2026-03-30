@@ -1,0 +1,106 @@
+{
+  "schema_version": "QA_OBSTRUCTION_STACK_REPORT.v1",
+  "certificate_id": "qa.cert.obstruction_stack_report.fail.inconsistent_summary.v1",
+  "cert_type": "obstruction_stack_report",
+  "title": "Obstruction Stack Report FAIL: summary_table row for r=6 claims wrong pruning_ratio",
+  "created_utc": "2026-03-22T00:00:00Z",
+  "intended_audience": "mathematicians, systems researchers, AI/planning reviewers",
+
+  "_fixture_purpose": "FAIL fixture: the report is structurally well-formed but the summary_table row for r=6 contains incorrect values. It claims aware_nodes=12 and pruning_ratio=0.74 instead of the correct aware_nodes=0 and pruning_ratio=1.0 for a forbidden target (v_3(6)=1, OBSTRUCTION_PRESENT). The saved_nodes arithmetic is self-consistent (47-12=35) but wrong because aware_nodes should be 0. Additionally the row claims pruned=false. Validator recomputes all values and detects: SUMMARY_TABLE_MISMATCH (row r=6: pruned claimed=false but must be true; aware_nodes=12 but must be 0; saved_nodes=35 but must be 47; pruning_ratio=0.74 but must be 1.0).",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "stack_ref": { "schema_version": "QA_OBSTRUCTION_STACK_CERT.v1" },
+
+  "arithmetic_params": { "prime_p": 3, "k": 2, "modulus": 9 },
+
+  "theorem_statement": "For prime p inert in Z[φ] and residue r with v_p(r)=1, arithmetic impossibility induces control impossibility, planner pruning, and guaranteed search-cost savings.",
+
+  "layer_summaries": [
+    {
+      "family_id": 111,
+      "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",
+      "role": "arithmetic theorem",
+      "one_line": "Norm form f(b,e)=b²+be−e² mod p^k never produces residues r with v_p(r)=1."
+    },
+    {
+      "family_id": 112,
+      "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",
+      "role": "control bridge",
+      "one_line": "Forbidden residues cannot be claimed reachable by any control certificate."
+    },
+    {
+      "family_id": 113,
+      "schema_version": "QA_OBSTRUCTION_AWARE_PLANNER_CERT.v1",
+      "role": "planner correctness",
+      "one_line": "Forbidden targets must be pruned before search — zero nodes expanded."
+    },
+    {
+      "family_id": 114,
+      "schema_version": "QA_OBSTRUCTION_EFFICIENCY_CERT.v1",
+      "role": "efficiency guarantee",
+      "one_line": "Pruning forbidden targets saves all N baseline nodes with pruning_ratio=1.0."
+    },
+    {
+      "family_id": 115,
+      "schema_version": "QA_OBSTRUCTION_STACK_CERT.v1",
+      "role": "synthesis spine",
+      "one_line": "One artifact recomputing and certifying all four layers jointly."
+    }
+  ],
+
+  "summary_table": [
+    {
+      "target_r":       6,
+      "v_p_r":          1,
+      "forbidden":      true,
+      "reachable":      false,
+      "pruned":         false,
+      "baseline_nodes": 47,
+      "aware_nodes":    12,
+      "saved_nodes":    35,
+      "pruning_ratio":  0.74,
+      "notes": "INCORRECT: claims aware_nodes=12, pruned=false. For v_3(6)=1 (forbidden), the aware planner must prune with 0 nodes — saved_nodes must be 47 and ratio must be 1.0. These values describe a partially-aware planner that still expanded 12 nodes on an impossible target."
+    }
+  ],
+
+  "canonical_pass_witness": {
+    "description": "Target r=6 with all four layers consistent with OBSTRUCTION_PRESENT.",
+    "target_r": 6,
+    "stack_verdict": "full_chain_holds"
+  },
+
+  "canonical_fail_witness": {
+    "description": "Target r=6 with broken planner layer: nodes_expanded=12 on forbidden target.",
+    "target_r": 6,
+    "fail_types": ["PRUNING_CONCLUSION_MISMATCH", "EFFICIENCY_CONCLUSION_MISMATCH", "STACK_INCONSISTENCY"]
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1",  "description": "inherits_from is 'QA_CORE_SPEC.v1'",                                                  "passed": true,  "details": "match" },
+    { "check_id": "IH2",  "description": "spec_scope is 'family_extension'",                                                    "passed": true,  "details": "match" },
+    { "check_id": "IH3",  "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                                               "passed": true,  "details": "match" },
+    { "check_id": "RP1",  "description": "stack_ref is QA_OBSTRUCTION_STACK_CERT.v1",                                           "passed": true,  "details": "match" },
+    { "check_id": "RP2",  "description": "modulus == p^k = 9",                                                                  "passed": true,  "details": "9 == 9" },
+    { "check_id": "RP3",  "description": "p=3 is inert",                                                                        "passed": true,  "details": "Legendre(5,3)=-1" },
+    { "check_id": "RP4",  "description": "theorem_statement non-empty",                                                         "passed": true,  "details": "length=152" },
+    { "check_id": "RP5",  "description": "layer_summaries covers [111]–[115]",                                                  "passed": true,  "details": "all 5 found" },
+    { "check_id": "RP6a", "description": "row r=6: recomputed forbidden=true, pruned must be true for forbidden",               "passed": false, "details": "claimed pruned=false; recomputed must be true for v_p=1 — SUMMARY_TABLE_MISMATCH" },
+    { "check_id": "RP6b", "description": "row r=6: for forbidden, aware_nodes must be 0; saved_nodes=47; ratio=1.0",           "passed": false, "details": "claimed aware_nodes=12, saved_nodes=35, ratio=0.74; recomputed must be 0, 47, 1.0 — SUMMARY_TABLE_MISMATCH" },
+    { "check_id": "RP7",  "description": "all forbidden rows: pruned=true, aware_nodes=0, pruning_ratio=1.0",                   "passed": false, "details": "row r=6 (forbidden) has pruned=false, aware_nodes=12, ratio=0.74 — SUMMARY_TABLE_MISMATCH" },
+    { "check_id": "RP8",  "description": "canonical_pass_witness.target_r=6 is a forbidden row",                                "passed": true,  "details": "r=6 present, forbidden=true" },
+    { "check_id": "RP9",  "description": "canonical_fail_witness has ≥1 known fail_type",                                       "passed": true,  "details": "3 fail types present" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "SUMMARY_TABLE_MISMATCH",
+      "message": "summary_table row r=6: target is forbidden (v_3(6)=1) but claims pruned=false, aware_nodes=12, saved_nodes=35, pruning_ratio=0.74. For forbidden targets the obstruction-aware planner must yield aware_nodes=0, saved_nodes=47, pruning_ratio=1.0, pruned=true. The report is an inaccurate representation of the machine-verified results."
+    }
+  ],
+  "result": "FAIL"
+}

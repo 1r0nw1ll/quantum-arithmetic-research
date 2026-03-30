@@ -1,0 +1,54 @@
+{
+  "schema_version": "QA_RED_GROUP_CERT.v1",
+  "certificate_id": "qa.cert.red_group.pass.m9_cosmos.v1",
+  "cert_type": "qa_red_group_cert",
+  "title": "Red Group PASS: m=9 cosmos orbit period=24 (ord(F) in GL₂(Z/9Z))",
+  "created_utc": "2026-03-29T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The QA Fibonacci shift F=[[0,1],[1,1]] has order 24 in GL₂(Z/9Z): F^24≡I mod 9 and F^12=[[8,0],[0,8]]=-I≢I (so 24 is minimal). The affine QA map (b',e')→(e',b'+e'+1) mod 9 also has period 24 because the translation sum vanishes: (I+F+...+F^23)=(I+F+...+F^11)(I+F^12)=(I+F+...+F^11)·0=0. This matches the QA cosmos orbit period for m=9. det(F)=-1=red norm N_red(φ)=φ·ψ=−1 (φ=(1+√5)/2 is a red unit of norm −1 in Z[√5]).",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "generator": {
+    "m": 9
+  },
+
+  "red_group": {
+    "T_matrix": [[0, 1], [1, 1]],
+    "T_matrix_derivation": "Fibonacci shift: (b,e) → (e, b+e mod m); matrix of φ-multiplication in Z[√5]/mZ[√5] (red chromatic isometry group)",
+    "det_T": -1,
+    "trace_T": 1,
+    "char_poly": "x^2 - x - 1 = 0",
+    "_char_poly_note": "roots are φ=(1+√5)/2 and ψ=(1−√5)/2; φ·ψ = det = −1 (red norm)",
+    "orbit_period": 24,
+    "orbit_type": "cosmos",
+    "_period_witnesses": {
+      "F_pow_24": [[1, 0], [0, 1]],
+      "F_pow_12": [[8, 0], [0, 8]],
+      "_note": "F^12 = −I mod 9 ≠ I, confirming 24 is minimal; F^24 = I ✓"
+    }
+  },
+
+  "wildberger_reference": {
+    "theorem": "1D Metrical Geometry, Red Isometry Group (Wildberger arXiv:math/0701338)",
+    "statement": "Three chromatic isometry groups on P¹(F): Blue=[ac−bd:ad+bc], Red=[ac+bd:ad+bc], Green=[ac:bd]. For split-complex ring Z[√D], red isometry matrix [[u,Dv],[v,u]] with u²−Dv²=unit. For D=5 and φ=(1+√5)/2: N_red(φ)=−1 (norm −1 unit).",
+    "qa_form": "QA T-operator = Fibonacci shift F=[[0,1],[1,1]] = red isometry by φ in Z[√5]/mZ[√5]. Cosmos orbit period = ord(F) in GL₂(Z/mZ)."
+  },
+
+  "validation_checks": [
+    { "check_id": "RG1", "description": "schema_version is 'QA_RED_GROUP_CERT.v1'",       "passed": true,  "details": "schema_version='QA_RED_GROUP_CERT.v1'" },
+    { "check_id": "RG2", "description": "T_matrix == [[0,1],[1,1]] (Fibonacci shift)",     "passed": true,  "details": "T_matrix=[[0,1],[1,1]] ✓" },
+    { "check_id": "RG3", "description": "det(T_matrix) ≡ −1 mod m (red norm of φ)",       "passed": true,  "details": "det([[0,1],[1,1]])=0−1=−1 ≡ 8 mod 9 ✓" },
+    { "check_id": "RG4", "description": "trace(T_matrix) ≡ 1 mod m (φ+ψ=1)",             "passed": true,  "details": "trace=0+1=1 mod 9 ✓" },
+    { "check_id": "RG5", "description": "T_matrix^orbit_period ≡ I mod m",                "passed": true,  "details": "F^24 mod 9 = [[1,0],[0,1]] ✓" },
+    { "check_id": "RG6", "description": "orbit_period is minimal (T^(P/k) ≢ I for prime k|P)", "passed": true, "details": "F^12=[[8,0],[0,8]] ≢ I; F^8=[[4,3],[3,7]] ≢ I; F^3=[[1,2],[2,3]] ≢ I → period 24 minimal ✓" },
+    { "check_id": "RG7", "description": "orbit_type ∈ valid set AND period=1 ↔ singularity", "passed": true, "details": "orbit_type='cosmos', period=24≠1 → not singularity ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

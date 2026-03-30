@@ -1,0 +1,52 @@
+{
+  "schema_version": "QA_OBSTRUCTION_COMPILER_BRIDGE_CERT.v1",
+  "certificate_id": "qa.cert.obstruction_bridge.pass.valid_class_4.v1",
+  "cert_type": "obstruction_compiler_bridge",
+  "title": "Obstruction Bridge PASS: class 4 (in spectrum, v_3=0) — no obstruction, reachability claim unconstrained",
+  "created_utc": "2026-03-22T00:00:00Z",
+
+  "_fixture_purpose": "Second bridge certificate. The presenting party claims target_arithmetic_class=4 is reachable (claimed_reachable=true). The bridge validator confirms: v_3(4)=0, so 4 is in the spectrum of f(b,e) mod 9 — no arithmetic obstruction. The arithmetic side of the theory does not block a control cert from claiming a target in class 4. Note: the bridge cert certifies ABSENCE of obstruction only. Actual reachability via a specific plan/control path still requires a valid [106] PASS cert. The bridge is a necessary-but-not-sufficient filter. Cert result: PASS.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "arithmetic_family_ref": {
+    "schema_version": "QA_AREA_QUANTIZATION_PK_CERT.v1",
+    "prime_p": 3,
+    "k": 2,
+    "modulus": 9
+  },
+
+  "control_family_ref": {
+    "schema_version": "QA_PLAN_CONTROL_COMPILER_CERT.v1"
+  },
+
+  "target_arithmetic_class": 4,
+  "claimed_reachable": true,
+  "obstruction_verdict": "OBSTRUCTION_ABSENT",
+
+  "bridge_claim": {
+    "statement": "Arithmetic class 4 is in the spectrum of f(b,e) mod 9 (v_3(4)=0). No arithmetic obstruction from [111] blocks a control cert from claiming a target in this class. For example, f(2,0)=4 — the state pair (b=2,e=0) is a valid QA state with norm 4. A plan/control cert from [106] that drives a system to a state with arithmetic fingerprint 4 faces no norm-form barrier.",
+    "vp_value": "v_3(4) = 0",
+    "notes": "This fixture certifies obstruction ABSENCE. It does not itself certify that class 4 is reachable — that requires an [106]-family PASS cert with a witnessed plan/control sequence. The bridge is a pre-filter, not a full reachability witness."
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",                       "passed": true, "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",                          "passed": true, "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected ⊇ [0,1,2,3,4,5]",                    "passed": true, "details": "[0..5] ⊆ [0..5]" },
+    { "check_id": "B1",  "description": "arithmetic_family_ref is QA_AREA_QUANTIZATION_PK_CERT.v1",  "passed": true, "details": "schema_version='QA_AREA_QUANTIZATION_PK_CERT.v1'" },
+    { "check_id": "B2",  "description": "control_family_ref is QA_PLAN_CONTROL_COMPILER_CERT.v1",    "passed": true, "details": "schema_version='QA_PLAN_CONTROL_COMPILER_CERT.v1'" },
+    { "check_id": "B3",  "description": "modulus == p^k = 3^2 = 9",                                 "passed": true, "details": "9 == 9" },
+    { "check_id": "B4",  "description": "p=3 is inert: Legendre(5,3)=-1",                            "passed": true, "details": "5 mod 3=2; 2^1≡-1 mod 3; QNR confirmed" },
+    { "check_id": "B5",  "description": "target r=4 in range {0..8}",                               "passed": true, "details": "0 <= 4 < 9" },
+    { "check_id": "B6",  "description": "obstruction_verdict matches v_p(r): v_3(4)=0 → ABSENT",    "passed": true, "details": "v_3(4)=0; obstruction_verdict='OBSTRUCTION_ABSENT'; match" },
+    { "check_id": "B7",  "description": "claimed_reachable consistent with obstruction_verdict",      "passed": true, "details": "OBSTRUCTION_ABSENT with claimed_reachable=true: consistent — no arithmetic barrier" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

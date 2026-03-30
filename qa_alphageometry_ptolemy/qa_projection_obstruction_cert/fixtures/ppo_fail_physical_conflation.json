@@ -1,0 +1,95 @@
+{
+  "schema_version": "QA_PROJECTION_OBSTRUCTION_CERT.v1",
+  "cert_type": "projection_obstruction",
+  "certificate_id": "qa.cert.projection_obstruction.fail.physical_conflation.v1",
+  "title": "FAIL fixture: representation debt incorrectly promoted to physical-device failure without measurements",
+  "created_utc": "2026-03-30T00:46:00Z",
+  "inherits_from": "QA_ENGINEERING_CORE_CERT.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_alphabet_compatible": true,
+    "invariants_preserved": true,
+    "logging_contract_compatible": true,
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+  "engineering_context": {
+    "native_state_space": "balanced ternary symbol packets and carry packets",
+    "native_invariants": [
+      {
+        "id": "local_additive_conservation",
+        "title": "Balanced ternary local additive conservation",
+        "rule": "x+y+carry_in = sum_digit + 3*carry_out."
+      }
+    ]
+  },
+  "native_witness": {
+    "lawful_invariants_supported": [
+      "local_additive_conservation"
+    ],
+    "verdict": "CONSISTENT",
+    "evidence_summary": "Arithmetic law holds natively."
+  },
+  "representation_layers": [
+    {
+      "layer_id": "display_only",
+      "kind": "display_projection",
+      "preserved_invariants": [
+        "local_additive_conservation"
+      ],
+      "native_state_count": 27,
+      "observed_state_count": 10,
+      "unused_state_count": 17,
+      "cost_ratio_vs_baseline": 1.0,
+      "selector_count": 0,
+      "merge_count": 0,
+      "topology_ratio_vs_baseline": 1.0,
+      "obstruction_tags": [
+        "STATE_SPACE_RESIDUAL"
+      ],
+      "verdict": "PARTIAL"
+    }
+  ],
+  "physical_realization": {
+    "assessment_status": "UNASSESSED",
+    "required_symbol_states": 3,
+    "stable_state_count": 0,
+    "threshold_margin_ratio": 1.0,
+    "noise_margin_ratio": 1.0,
+    "required_fanout": 1,
+    "fanout_supported": 1,
+    "timing_characterized": false,
+    "device_tags": [
+      "INSUFFICIENT_STABLE_STATES"
+    ],
+    "verdict": "CONTRADICTS",
+    "notes": "This fixture incorrectly treats lack of measurements as proof of device failure."
+  },
+  "overall_verdict": "PARTIAL",
+  "validation_checks": [
+    {
+      "check_id": "PO7",
+      "description": "physical layer must stay INCONCLUSIVE when assessment_status is UNASSESSED",
+      "passed": false,
+      "details": "fixture intentionally violates the distinction"
+    }
+  ],
+  "fail_ledger": [
+    {
+      "fail_type": "STATE_SPACE_RESIDUAL",
+      "details": "Display projection uses only a subset of native states.",
+      "invariant_diff": "27 -> 10"
+    },
+    {
+      "fail_type": "PHYSICAL_LEDGER_MISMATCH",
+      "details": "UNASSESSED physical layer declares a non-empty device tag set.",
+      "invariant_diff": "recomputed physical tags are empty under UNASSESSED status"
+    },
+    {
+      "fail_type": "PHYSICAL_VERDICT_MISMATCH",
+      "details": "UNASSESSED physical layer declares CONTRADICTS instead of INCONCLUSIVE.",
+      "invariant_diff": "expected physical verdict INCONCLUSIVE"
+    }
+  ],
+  "result": "FAIL"
+}

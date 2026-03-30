@@ -1,0 +1,189 @@
+{
+  "id": "s09_lattice",
+  "description": "Perpendicular lattice (5 hubs, 4 spokes) with decoys",
+  "difficulty": 6,
+  "givens": [
+    {
+      "Perpendicular": [
+        1,
+        20
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        21
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        22
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        23
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        24
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        25
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        26
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        27
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        28
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        29
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        30
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        31
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        32
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        33
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        34
+      ]
+    },
+    {
+      "Perpendicular": [
+        4,
+        35
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        36
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        37
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        38
+      ]
+    },
+    {
+      "Perpendicular": [
+        5,
+        39
+      ]
+    },
+    {
+      "Parallel": [
+        20,
+        21
+      ]
+    },
+    {
+      "Parallel": [
+        21,
+        22
+      ]
+    },
+    {
+      "Parallel": [
+        22,
+        23
+      ]
+    },
+    {
+      "CoincidentLines": [
+        40,
+        41
+      ]
+    },
+    {
+      "CoincidentLines": [
+        41,
+        42
+      ]
+    },
+    {
+      "OnCircle": [
+        44,
+        43
+      ]
+    },
+    {
+      "OnCircle": [
+        45,
+        43
+      ]
+    },
+    {
+      "OnCircle": [
+        46,
+        43
+      ]
+    },
+    {
+      "OnCircle": [
+        47,
+        43
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Parallel": [
+        20,
+        23
+      ]
+    }
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "runSettings": {
+    "temperature": 1.0,
+    "model": "models/gemini-2.0-flash",
+    "topP": 0.95,
+    "topK": 40,
+    "maxOutputTokens": 8192,
+    "safetySettings": [{
+      "category": "HARM_CATEGORY_HARASSMENT",
+      "threshold": "BLOCK_NONE"
+    }, {
+      "category": "HARM_CATEGORY_HATE_SPEECH",
+      "threshold": "BLOCK_NONE"
+    }, {
+      "category": "HARM_CATEGORY_SEXUALLY_EXPLICIT",
+      "threshold": "BLOCK_NONE"
+    }, {
+      "category": "HARM_CATEGORY_DANGEROUS_CONTENT",
+      "threshold": "BLOCK_NONE"
+    }, {
+      "category": "HARM_CATEGORY_CIVIC_INTEGRITY",
+      "threshold": "BLOCK_NONE"
+    }],
+    "responseMimeType": "text/plain",
+    "enableCodeExecution": false,
+    "enableEnhancedCivicAnswers": true,
+    "enableSearchAsATool": false,
+    "enableBrowseAsATool": false,
+    "enableAutoFunctionResponse": false
+  },
+  "systemInstruction": {
+  },
+  "chunkedPrompt": {
+    "chunks": [{
+      "text": "500: Ollama: 500, message\u003d\u0027Internal Server Error\u0027, url\u003d\u0027http://host.docker.internal:11434/api/chat\u0027",
+      "role": "user",
+      "tokenCount": 39
+    }, {
+      "text": "This error message indicates a problem with the connection between your application and the Ollama service. Let\u0027s break it down and discuss potential solutions:\n\n* **500: Ollama: 500** -  This is the HTTP status code. A 500 status code means \"Internal Server Error.\"  It signifies that something went wrong on the Ollama server side while processing your request.  It\u0027s a generic error, meaning more specific details are needed to diagnose the root cause.\n\n* **message\u003d\u0027Internal Server Error\u0027** -  This is a text description of the error, reinforcing the 500 status code.  It doesn\u0027t give much specific information.\n\n* **url\u003d\u0027http://host.docker.internal:11434/api/chat\u0027** - This is the URL your application was trying to access on the Ollama server. This is crucial for understanding the context.\n\n**Common Causes and Troubleshooting Steps:**\n\n1. **Ollama Server Issues:**\n\n   * **Ollama is not running:** The most basic cause.  Make sure the Ollama server is actually running.  Check its logs for any startup errors. How you do this depends on how you installed Ollama (e.g., systemd, Docker Compose, etc.).\n   * **Ollama crashed:**  The Ollama process might have crashed unexpectedly. Check the Ollama server logs for any error messages or stack traces that might indicate the problem.  Restart the Ollama service.\n   * **Ollama is overloaded:** If Ollama is handling too many requests simultaneously or is running on a resource-constrained machine, it might be struggling to process requests and return 500 errors. Check the server\u0027s CPU, memory, and disk I/O usage.\n   * **Ollama has a bug:** There could be an actual bug in the Ollama server software that\u0027s causing it to crash or return errors under certain conditions.  Consider updating to the latest version of Ollama, as bugs are often fixed in new releases.  Also, search the Ollama issue tracker (usually on GitHub) for similar problems.\n\n2. **Network Connectivity Issues:**\n\n   * **Incorrect Hostname/IP:**  `host.docker.internal` is a special Docker DNS entry that allows containers to reach the host machine.  However, this only works *from within a Docker container*.  If your application is *not* running inside Docker, `host.docker.internal` will likely not resolve correctly. Replace `host.docker.internal` with the actual IP address or hostname of the machine where the Ollama server is running.\n   * **Firewall:**  A firewall on either the host machine (where Ollama is running) or the client machine could be blocking the connection to port 11434.  Make sure the firewall allows TCP traffic on port 11434.\n   * **Docker Networking:** If both your application and Ollama are running in Docker containers, they might not be on the same Docker network. They need to be on the same network to communicate directly by hostname.  You can either put them both in the same Docker Compose file, or use Docker network commands to connect them.\n   * **DNS Resolution:** Ensure your application can properly resolve the hostname `host.docker.internal` (if appropriate) or the actual hostname/IP address of the Ollama server.\n\n3. **Request Issues:**\n\n   * **Invalid API Request:** Your application might be sending a malformed or incorrect API request to the `/api/chat` endpoint. Double-check the request payload (e.g., the JSON body) against the Ollama API documentation.\n   * **Rate Limiting:**  Ollama might have a rate limit in place. If your application is making too many requests too quickly, it might be temporarily blocked. Check the Ollama documentation to see if rate limiting is enabled and what the limits are.\n   * **Large Request Size:** If the request payload you\u0027re sending to `/api/chat` is very large (e.g., a huge text prompt), it could be overwhelming the server. Try reducing the size of the request.\n\n**Debugging Steps:**\n\n1. **Check Ollama Server Logs:**  This is the most important step. The Ollama server logs will likely contain the most specific information about what\u0027s going wrong. The location of the logs depends on how you installed Ollama. Look for error messages, stack traces, or any other clues that might indicate the problem.\n\n2. **Simplify the Request:** Try sending a very simple request to the `/api/chat` endpoint to see if that works.  This will help you isolate whether the issue is with your application code or with the Ollama server itself.  For example, a minimal JSON payload might look like:\n\n   ```json\n   {\n     \"prompt\": \"Hello\"\n   }\n   ```\n\n3. **Use `curl` or `Postman`:** Use a command-line tool like `curl` or a GUI tool like Postman to send requests to the Ollama API directly. This allows you to bypass your application code and test the API endpoint independently.  For example:\n\n   ```bash\n   curl -X POST \\\n     -H \"Content-Type: application/json\" \\\n     -d \u0027{\"prompt\": \"Hello\"}\u0027 \\\n     http://host.docker.internal:11434/api/chat\n   ```\n\n4. **Ping the Server:** From the machine where your application is running, try to ping the Ollama server to verify basic network connectivity:\n\n   ```bash\n   ping host.docker.internal  # Or the actual IP address/hostname\n   ```\n\n5. **Telnet to the Port:**  Use `telnet` to verify that you can connect to port 11434 on the Ollama server:\n\n   ```bash\n   telnet host.docker.internal 11434  # Or the actual IP address/hostname\n   ```\n\n6. **Check Resource Usage:** Monitor the CPU, memory, and disk I/O usage on the Ollama server.  High resource usage can indicate that the server is overloaded.\n\n7. **Update Ollama:** Ensure you\u0027re running the latest version of Ollama.  Bug fixes and performance improvements are often included in new releases.\n\n8. **Restart Everything:**  Sometimes, a simple restart of both the Ollama server and your application can resolve transient issues.\n\n**Example Scenario (Application in Docker, Ollama on Host):**\n\nLet\u0027s say your application is running in a Docker container and Ollama is running directly on your host machine.  You\u0027re getting this 500 error.\n\n1. **Verify Ollama is Running:** Make sure Ollama is running on your host machine. Check its logs for errors.\n\n2. **Correct Hostname:**  Ensure your Docker container uses `host.docker.internal` to connect to Ollama (if that is the correct hostname).\n\n3. **Firewall:** Make sure your host machine\u0027s firewall allows connections to port 11434.\n\n4. **Try `curl` from *inside* the Container:**  `docker exec -it \u003ccontainer_id\u003e bash` to get a shell inside the container.  Then, run the `curl` command from *inside* the container:\n\n   ```bash\n   curl -X POST \\\n     -H \"Content-Type: application/json\" \\\n     -d \u0027{\"prompt\": \"Hello\"}\u0027 \\\n     http://host.docker.internal:11434/api/chat\n   ```\n\n**Key Takeaway:**\n\nThe 500 error is a general problem indicator. You **must** examine the Ollama server logs to get a more specific error message and understand the root cause of the problem. Once you have more information from the logs, you can take more targeted troubleshooting steps.  Also, clearly define where your application and Ollama are running (both host? both Docker? etc.) and their network configuration. Good luck!\n",
+      "role": "model",
+      "finishReason": "STOP"
+    }],
+    "pendingInputs": [{
+      "text": "",
+      "role": "user"
+    }]
+  }
+}

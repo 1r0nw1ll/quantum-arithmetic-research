@@ -1,0 +1,21 @@
+{
+  "id": "t3_p03_equality_mega_web",
+  "description": "Complex equality web with 3 parallel paths converging (8-10 steps required)",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]},
+    {"EqualLength": [10, 14]},
+    {"EqualLength": [14, 15]},
+    {"EqualLength": [15, 16]},
+    {"EqualLength": [16, 17]},
+    {"EqualLength": [10, 18]},
+    {"EqualLength": [18, 19]},
+    {"EqualLength": [19, 20]}
+  ],
+  "goals": [
+    {"EqualLength": [13, 17]},
+    {"EqualLength": [17, 20]}
+  ],
+  "difficulty": 9
+}

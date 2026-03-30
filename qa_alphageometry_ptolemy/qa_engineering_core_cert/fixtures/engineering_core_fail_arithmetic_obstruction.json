@@ -1,0 +1,94 @@
+{
+  "schema_version": "QA_ENGINEERING_CORE_CERT.v1",
+  "cert_type": "engineering_core",
+  "certificate_id": "qa.cert.engineering_core.fail.arithmetic_obstruction.v1",
+  "title": "Engineering Core FAIL: target r=3 has v3=1 — arithmetic obstruction ignored",
+  "created_utc": "2026-03-24T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture demonstrating EC11: ARITHMETIC_OBSTRUCTION_IGNORED. The cert encodes target state steady_oscillation as (b=1, e=3), giving r = b*e = 1*3 = 3. Since 3 is inert in Z[phi] and v3(3)=1, this target is arithmetically forbidden — no generator sequence can reach it. However, the cert declares obstruction_check.obstructed=false. The validator recomputes: target_r=3; v3(3)=1; 3 is inert; v3==1 → OBSTRUCTED. The declared obstructed=false contradicts the recomputed result. This demonstrates the key contribution of [121]: classical Kalman rank analysis may certify full controllability, but EC11 catches arithmetic obstructions invisible to that analysis.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "state_space_compatible": true,
+    "generator_alphabet_compatible": true,
+    "invariants_preserved": true,
+    "logging_contract_compatible": true,
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "classical_system": {
+    "description": "Same spring-mass-damper as PASS fixture, but target state encoded at (b=1, e=3) which has arithmetically forbidden inradius r=3.",
+    "modulus": 9,
+    "state_encoding": [
+      { "label": "still",             "b": 9, "e": 9, "orbit_family": "singularity" },
+      { "label": "transient",         "b": 3, "e": 6, "orbit_family": "satellite"   },
+      { "label": "steady_oscillation","b": 1, "e": 3, "orbit_family": "cosmos"      }
+    ],
+    "transitions": [
+      { "from": "still",     "to": "transient",          "generator": "excite" },
+      { "from": "transient", "to": "steady_oscillation", "generator": "tune"   }
+    ],
+    "failure_modes": [
+      { "label": "overdrive", "qa_fail_type": "OUT_OF_BOUNDS" }
+    ],
+    "target_condition": {
+      "label": "steady_oscillation",
+      "orbit_family": "cosmos"
+    },
+    "equilibrium_state": "still"
+  },
+
+  "stability_claim": {
+    "lyapunov_function": "f(b,e) = b*b + b*e - e*e",
+    "orbit_contraction_factor": 0.001582,
+    "contraction_verified": true
+  },
+
+  "controllability_claim": {
+    "classical_controllability": "full_rank",
+    "reachability_witness": {
+      "algorithm": "BFS",
+      "depth_bound": 24,
+      "path": [
+        { "state": "still",              "orbit_family": "singularity" },
+        { "state": "transient",          "orbit_family": "satellite",  "move": "excite" },
+        { "state": "steady_oscillation", "orbit_family": "cosmos",     "move": "tune"   }
+      ],
+      "path_length_k": 2
+    }
+  },
+
+  "obstruction_check": {
+    "modulus": 9,
+    "inert_primes": [3],
+    "target_r": 3,
+    "v_p_values": { "3": 0 },
+    "obstructed": false
+  },
+
+  "validation_checks": [
+    { "check_id": "IH1", "description": "inherits_from is 'QA_CORE_SPEC.v1'",                            "passed": true,  "details": "inherits_from='QA_CORE_SPEC.v1'" },
+    { "check_id": "IH2", "description": "spec_scope is 'family_extension'",                              "passed": true,  "details": "spec_scope='family_extension'" },
+    { "check_id": "IH3", "description": "gate_policy_respected == [0,1,2,3,4,5]",                        "passed": true,  "details": "gate_policy_respected=[0,1,2,3,4,5]" },
+    { "check_id": "EC1", "description": "all state encodings have 1 ≤ b,e ≤ N",                          "passed": true,  "details": "all states in [1,9]" },
+    { "check_id": "EC2", "description": "all transitions have a non-empty generator name",                "passed": true,  "details": "excite, tune" },
+    { "check_id": "EC3", "description": "all failure modes map to QA fail type",                         "passed": true,  "details": "overdrive→OUT_OF_BOUNDS" },
+    { "check_id": "EC4", "description": "target_condition.orbit_family ∈ {singularity,satellite,cosmos}","passed": true,  "details": "cosmos" },
+    { "check_id": "EC5", "description": "declared orbit_family matches f(b,e) valuation for each state", "passed": true,  "details": "steady_oscillation(1,3): f=1+3-9=-5≡4 mod 9, v3(4)=0→cosmos✓" },
+    { "check_id": "EC6", "description": "lyapunov_function mentions f, I, b, or e",                      "passed": true,  "details": "mentions 'f(b,e)'" },
+    { "check_id": "EC7", "description": "orbit_contraction_factor < 1.0",                                "passed": true,  "details": "0.001582 < 1.0" },
+    { "check_id": "EC8", "description": "equilibrium_state maps to singularity orbit family",            "passed": true,  "details": "still → singularity" },
+    { "check_id": "EC9", "description": "reachability_witness present for full_rank controllability",    "passed": true,  "details": "BFS path present, k=2" },
+    { "check_id": "EC11","description": "obstruction_check.obstructed agrees with v_p(target_r) recomputation", "passed": false, "details": "target_r=3; v3(3)=1; 3 is inert; v3==1 → OBSTRUCTED; but cert declares obstructed=false — ARITHMETIC_OBSTRUCTION_IGNORED" }
+  ],
+
+  "fail_ledger": [
+    {
+      "fail_type": "ARITHMETIC_OBSTRUCTION_IGNORED",
+      "message": "target_r=3; v3(3)=1; prime 3 is inert in Z[phi]; v_p(r)=1 makes this target arithmetically unreachable regardless of Kalman rank. Cert declares obstructed=false — obstruction was ignored."
+    }
+  ],
+
+  "result": "FAIL"
+}

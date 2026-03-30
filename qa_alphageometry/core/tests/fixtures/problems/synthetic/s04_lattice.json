@@ -1,0 +1,153 @@
+{
+  "id": "s04_lattice",
+  "description": "Perpendicular lattice (3 hubs, 5 spokes) with decoys",
+  "difficulty": 4,
+  "givens": [
+    {
+      "Perpendicular": [
+        1,
+        20
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        21
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        22
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        23
+      ]
+    },
+    {
+      "Perpendicular": [
+        1,
+        24
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        25
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        26
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        27
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        28
+      ]
+    },
+    {
+      "Perpendicular": [
+        2,
+        29
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        30
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        31
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        32
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        33
+      ]
+    },
+    {
+      "Perpendicular": [
+        3,
+        34
+      ]
+    },
+    {
+      "Parallel": [
+        20,
+        21
+      ]
+    },
+    {
+      "Parallel": [
+        21,
+        22
+      ]
+    },
+    {
+      "CoincidentLines": [
+        35,
+        36
+      ]
+    },
+    {
+      "CoincidentLines": [
+        36,
+        37
+      ]
+    },
+    {
+      "OnCircle": [
+        39,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        40,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        41,
+        38
+      ]
+    },
+    {
+      "OnCircle": [
+        42,
+        38
+      ]
+    }
+  ],
+  "goals": [
+    {
+      "Parallel": [
+        20,
+        22
+      ]
+    }
+  ]
+}

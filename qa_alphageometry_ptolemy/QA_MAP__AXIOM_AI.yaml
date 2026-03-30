@@ -1,0 +1,243 @@
+# QA_MAP__AXIOM_AI.yaml
+#
+# QA Module Specification for Axiom AI + Execution-Grounded Research
+# Covers: Autonomous theorem proving, execution-grounded AI research
+#
+# Maps formal reasoning systems to QA certificate framework.
+
+module:
+  name: "QA_AXIOM_AI"
+  version: "1.0.0"
+  source_papers:
+    - title: "From Seeing Why to Checking Everything"
+      source: "Axiom AI Territory Essays"
+      url: "https://axiommath.ai/territory"
+    - title: "Putnam 2025 Solutions"
+      source: "Axiom AI GitHub"
+      url: "https://github.com/axiommath/putnam2025"
+    - title: "Towards Execution-Grounded Automated AI Research"
+      source: "Stanford University"
+      arxiv: "2601.14525"
+      year: 2026
+  schema_prefix: "QA_AXIOM"
+  status: "COMPLETE - Gold Standard (2026-01-24)"
+
+  artifacts:
+    ledger: "appendix/QA_AXIOM_LEDGER.md"
+    stratification_theorem: "appendix/QA_AXIOM_STRATIFICATION_THEOREM.md"
+    comparison_table: "appendix/QA_COMPARISON_TABLE.md"
+    manifesto: "appendix/CHECKING_IS_NOT_ENOUGH.md"
+    failure_schema: "schemas/QA_FAILURE_ALGEBRA.json"
+
+# ============================================================================
+# CORE MAPPING: Axiom Concepts -> QA Framework
+# ============================================================================
+
+concept_mapping:
+  # Proof state -> QA state
+  proof_state:
+    paper_name: "Lean proof state (goals, context, hypotheses)"
+    paper_definition: "Current state of proof search"
+    qa_interpretation: "QA state in proof state space"
+    qa_structure: "ProofState"
+    key_insight: "Proof states are discrete, explicit, and navigable"
+
+  # Tactics -> Generators
+  tactics:
+    paper_name: "Lean tactics (simp, ring, linarith, etc.)"
+    paper_definition: "Proof transformation operations"
+    qa_interpretation: "Generator set over proof states"
+    qa_structure: "Generator"
+    key_insight: "Tactics are partial functions: State -> State | FAIL"
+
+  # Lean kernel -> Invariant oracle
+  lean_kernel:
+    paper_name: "Lean type checker / kernel"
+    paper_definition: "Deterministic proof verifier"
+    qa_interpretation: "Invariant oracle with ACCEPT/REJECT verdict"
+    qa_structure: "InvariantOracle"
+    key_insight: "The kernel is the final arbiter - no appeals"
+
+  # Intuition -> Observer projection
+  human_intuition:
+    paper_name: "Human mathematical intuition"
+    paper_definition: "Compressed, informal reasoning"
+    qa_interpretation: "Observer projection (non-executable)"
+    qa_structure: "ObserverProjection"
+    key_insight: "Intuition is projection; formalization is expansion"
+
+  # Execution-grounded -> Certificate-controlled
+  execution_grounded:
+    paper_name: "Execution-grounded research (Stanford)"
+    paper_definition: "Ideas validated by empirical execution"
+    qa_interpretation: "Certificate-controlled reachability"
+    qa_structure: "ExecutionCertificate"
+    key_insight: "Ideas must run, converge, and improve - or they fail"
+
+# ============================================================================
+# STRATIFICATION THEOREM
+# ============================================================================
+
+stratification_theorem:
+  theorem_id: "QA_AXIOM_STRATIFICATION_v1"
+
+  statement: |
+    For any reasoning task R, there exist three strata:
+
+    1. Intuition Stratum (IS): Observer-projected, compressed, non-replayable
+    2. Formalization Stratum (FS): Generator-restricted, discrete, budgeted
+    3. Kernel Stratum (KS): Deterministic invariant oracle
+
+    A solution is valid iff there exists a finite generator trace tau
+    reachable in FS and accepted by KS.
+
+    IS plausibility does NOT imply FS reachability.
+    FS reachability does NOT imply KS acceptance.
+    KS acceptance implies valid solution regardless of IS plausibility.
+
+  qa_interpretation: |
+    This theorem formalizes the gap between "seeming correct" and "being correct"
+    as a structural property of reasoning systems, not a human failing.
+
+# ============================================================================
+# FAILURE-COMPLETENESS MAPPING
+# ============================================================================
+
+failure_completeness:
+  theorem: |
+    For every reasoning attempt, exactly one of:
+    1. SUCCESS: Valid trace accepted by kernel, OR
+    2. FAILURE: Classified obstruction with failure type
+
+  failure_modes:
+    # Formalization failures
+    - mode: "FORMALIZATION_GAP"
+      description: "Obvious step cannot be expressed"
+      obstruction_witness: "Missing generator or lemma"
+      class: "F1"
+
+    - mode: "CASE_EXPLOSION"
+      description: "Proof devolves into massive branching"
+      obstruction_witness: "Exponential case count"
+      class: "F2"
+
+    - mode: "REWRITE_BLOCKED"
+      description: "Equality exists but unusable"
+      obstruction_witness: "Representation mismatch"
+      class: "F3"
+
+    # Resource failures
+    - mode: "BUDGET_EXHAUSTION"
+      description: "Time/token/step budget exceeded"
+      obstruction_witness: "Budget at termination"
+      class: "F4"
+
+    # Kernel failures
+    - mode: "KERNEL_VIOLATION"
+      description: "Trace rejected by invariant oracle"
+      obstruction_witness: "Specific violation"
+      class: "F5"
+
+    # Structural failures
+    - mode: "COMPONENT_ISOLATION"
+      description: "Target in different connected component"
+      obstruction_witness: "Barrier analysis"
+      class: "F6"
+
+# ============================================================================
+# GENERATOR INJECTION THEORY
+# ============================================================================
+
+generator_injection:
+  principle: |
+    Connectivity is generator-relative.
+    Adding generators can collapse barriers and connect components.
+    Removing generators can isolate regions.
+
+  certificate_type: "GENERATOR_INJECTION_WITNESS"
+
+  certificate_schema:
+    required_fields:
+      - task_id
+      - initial_generator_set
+      - extended_generator_set
+      - barrier_analysis
+
+    barrier_analysis_fields:
+      under_initial:
+        reachable: boolean
+        failure_type: string
+        steps_tried: integer
+      under_extended:
+        reachable: boolean
+        witness_trace: string
+        steps_used: integer
+
+  putnam_evidence: |
+    Axiom Putnam 2025: 8/12 solved during exam window, 4 more after.
+    The 4 later solutions required generator injection (new lemmas, tactics).
+    This is empirical evidence for generator-relative difficulty.
+
+# ============================================================================
+# CROSS-SYSTEM UNIFICATION
+# ============================================================================
+
+unification:
+  thesis: |
+    QA strictly subsumes both Axiom and AlphaGeometry as special cases.
+
+    - Axiom = QA over Lean proof states with Lean kernel as oracle
+    - AlphaGeometry = QA over geometric configs with consistency as oracle
+    - Stanford Execution = QA over research hypotheses with empirical results as oracle
+
+  comparison_matrix:
+    dimensions:
+      - "Primary Domain"
+      - "State Space"
+      - "Generators"
+      - "Invariant Oracle"
+      - "Failure Algebra"
+      - "Time Model"
+      - "Generalization"
+
+    systems:
+      QA:
+        domain: "Universal"
+        has_failure_algebra: true
+        has_generator_injection: true
+      Axiom:
+        domain: "Theorem proving"
+        has_failure_algebra: false
+        has_generator_injection: partial
+      AlphaGeometry:
+        domain: "Geometry"
+        has_failure_algebra: false
+        has_generator_injection: false
+
+# ============================================================================
+# VALIDATION COMMANDS
+# ============================================================================
+
+validation:
+  commands:
+    - description: "Verify appendix files exist"
+      command: "ls -la appendix/QA_AXIOM_*.md"
+
+    - description: "Verify schema file"
+      command: "python -c \"import json; json.load(open('schemas/QA_FAILURE_ALGEBRA.json'))\""
+
+    - description: "Validate schema"
+      command: "python -c \"import json; d=json.load(open('schemas/QA_FAILURE_ALGEBRA.json')); print(f'Schema: {d[\\\"schema_id\\\"]}'); print(f'Version: {d[\\\"version\\\"]}'); print(f'Failure classes: {len(d[\\\"failure_classes\\\"]):d}')\""
+
+# ============================================================================
+# CITATION
+# ============================================================================
+
+citation:
+  qa_mapping: |
+    @misc{qa_axiom_mapping_2026,
+      title={QA Certificate Mapping for Axiom AI and Execution-Grounded Research},
+      author={Signal Experiments Research Group},
+      year={2026},
+      note={Gold Standard - Formal reasoning as certificate-controlled reachability}
+    }

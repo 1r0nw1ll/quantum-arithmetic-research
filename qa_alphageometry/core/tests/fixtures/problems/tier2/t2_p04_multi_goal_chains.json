@@ -1,0 +1,24 @@
+{
+  "id": "t2_p04_multi_goal_chains",
+  "description": "Three independent 5-step chains: parallel, angle equality, concentric circles",
+  "givens": [
+    {"Parallel": [1, 2]},
+    {"Parallel": [2, 3]},
+    {"Parallel": [3, 4]},
+    {"Parallel": [4, 5]},
+    {"EqualAngle": [30, 31]},
+    {"EqualAngle": [31, 32]},
+    {"EqualAngle": [32, 33]},
+    {"EqualAngle": [33, 34]},
+    {"ConcentricCircles": [20, 21]},
+    {"ConcentricCircles": [21, 22]},
+    {"ConcentricCircles": [22, 23]},
+    {"ConcentricCircles": [23, 24]}
+  ],
+  "goals": [
+    {"Parallel": [1, 5]},
+    {"EqualAngle": [30, 34]},
+    {"ConcentricCircles": [20, 24]}
+  ],
+  "difficulty": 6
+}

@@ -1,0 +1,318 @@
+# QA_MAP__ARCH_INDEP_RELU_GENERALIZATION.yaml
+#
+# QA Module Specification for mapping arXiv:2504.05695
+# "Architecture independent generalization bounds for overparametrized deep ReLU networks"
+#
+# This document defines how the paper's concepts map to the QA Certificate framework.
+
+module:
+  name: "QA_GENERALIZATION_BOUNDS"
+  version: "1.0.0"
+  source_paper: "arXiv:2504.05695"
+  title: "Architecture independent generalization bounds for overparametrized deep ReLU networks"
+  schema_prefix: "QA_GENERALIZATION"
+
+# ============================================================================
+# CORE MAPPING: Paper Concepts → QA Framework
+# ============================================================================
+
+concept_mapping:
+  # Paper's D_geom (metric geometry of data) → QA state distances
+  metric_geometry:
+    paper_name: "D_geom"
+    paper_definition: "Metric entropy / covering number of data manifold"
+    qa_interpretation: "Terrain roughness of the QA state space"
+    qa_structure: "MetricGeometryWitness"
+    certificate_field: "metric_geometry"
+    key_insight: "Architecture-independent measure of data complexity"
+
+  # Paper's operator norms → QA energy bounds
+  operator_norms:
+    paper_name: "||W_l||_2, ||b_l||_2"
+    paper_definition: "Spectral norms of weight matrices, L2 norms of biases"
+    qa_interpretation: "Energy constraints on state transitions"
+    qa_structure: "OperatorNormWitness"
+    certificate_field: "operator_norms"
+    key_insight: "Bounds how far network can travel in function space"
+
+  # Paper's ReLU regularity → QA activation gates
+  activation_regularity:
+    paper_name: "Activation Lipschitz constant"
+    paper_definition: "Lipschitz constant of activation function"
+    qa_interpretation: "Gates that partition input space into linear regions"
+    qa_structure: "ActivationRegularityWitness"
+    certificate_field: "activation_regularity"
+    key_insight: "ReLU has Lipschitz = 1, controls region count"
+
+  # Paper's generalization bound → QA certificate
+  generalization_bound:
+    paper_formula: "gap ≤ C * D_geom * prod(||W_l||_2) * (1 + sum(||b_l||_2)) / sqrt(n)"
+    qa_interpretation: "Upper bound on test-train gap as a certificate"
+    qa_structure: "GeneralizationBoundCertificate"
+    certificate_field: "generalization_bound"
+    key_insight: "Architecture-independent: only depends on norms, not parameter count"
+
+  # Paper's zero-loss constructors → QA constructive proofs
+  zero_loss_constructor:
+    paper_theorem: "For n ≤ d, explicit zero-loss networks exist"
+    qa_interpretation: "Constructive success certificate without optimization"
+    qa_structure: "ZeroLossConstructorCertificate"
+    certificate_field: "zero_loss_constructor"
+    key_insight: "No gradient descent needed when samples ≤ input dimension"
+
+  # Paper's overparametrization → QA gauge freedom
+  gauge_freedom:
+    paper_name: "Overparametrization"
+    paper_definition: "Parameters beyond minimal needed for zero loss"
+    qa_interpretation: "Null directions in parameter space that don't change certificate"
+    qa_structure: "GaugeFreedomWitness"
+    certificate_field: "gauge_freedom"
+    key_insight: "Extra parameters are 'gauge' - can be fixed arbitrarily"
+
+# ============================================================================
+# FAILURE-COMPLETENESS MAPPING
+# ============================================================================
+
+failure_completeness:
+  theorem: |
+    For every generalization analysis, exactly one of:
+    1. SUCCESS: Valid generalization bound certificate with witnesses, OR
+    2. FAILURE: Obstruction certificate explaining why bound is not computable/valid
+
+  failure_modes:
+    # Data-related failures
+    - mode: "insufficient_samples"
+      description: "n too small for meaningful bound"
+      obstruction_witness: "Sample count n and required minimum"
+
+    - mode: "data_not_separable"
+      description: "Data intrinsically non-separable"
+      obstruction_witness: "Overlap witness showing inseparability"
+
+    - mode: "metric_degeneracy"
+      description: "Metric geometry witness cannot be computed"
+      obstruction_witness: "Degenerate distance matrix"
+
+    # Norm-related failures
+    - mode: "norm_explosion"
+      description: "Operator norms too large"
+      obstruction_witness: "Layer with exploding norm"
+
+    - mode: "spectral_overflow"
+      description: "Spectral product exceeds threshold"
+      obstruction_witness: "Product value and threshold"
+
+    - mode: "bias_overflow"
+      description: "Bias sum exceeds threshold"
+      obstruction_witness: "Sum value and threshold"
+
+    # Architecture failures
+    - mode: "depth_too_shallow"
+      description: "Network not deep enough for task"
+      obstruction_witness: "Required depth vs actual"
+
+    - mode: "width_insufficient"
+      description: "Layers not wide enough"
+      obstruction_witness: "Required width vs actual"
+
+    # Training failures
+    - mode: "no_zero_loss_solution"
+      description: "Zero training loss not achievable"
+      obstruction_witness: "Minimal achievable loss"
+
+    - mode: "optimization_stuck"
+      description: "Training did not converge"
+      obstruction_witness: "Loss curve and stopping criterion"
+
+    # Bound failures
+    - mode: "bound_vacuous"
+      description: "Computed bound > 1 (vacuous for classification)"
+      obstruction_witness: "Bound value and components"
+
+    - mode: "bound_not_computable"
+      description: "Cannot compute bound from available data"
+      obstruction_witness: "Missing data specification"
+
+# ============================================================================
+# CERTIFICATE SCHEMAS
+# ============================================================================
+
+certificate_schemas:
+  QA_GENERALIZATION_CERT_V1:
+    description: "Main generalization bound certificate"
+    required_fields:
+      - certificate_id
+      - schema
+      - success
+    success_fields:
+      - metric_geometry
+      - operator_norms
+      - activation_regularity
+      - generalization_bound
+    failure_fields:
+      - failure_mode
+      - failure_witness
+    optional_fields:
+      - empirical_train_loss
+      - empirical_test_loss
+      - empirical_gap
+      - tracking_error
+      - architecture
+      - zero_loss_constructor
+      - gauge_freedom_dim
+      - recompute_hook
+
+  QA_ZERO_LOSS_CONSTRUCTOR_V1:
+    description: "Zero-loss construction certificate (n ≤ d case)"
+    required_fields:
+      - certificate_id
+      - schema
+      - n_samples
+      - input_dim
+      - method
+    optional_fields:
+      - weights
+      - biases
+      - verified_zero_loss
+      - residuals
+      - construction_flops
+
+  QA_GENERALIZATION_BUNDLE_V1:
+    description: "Bundle of generalization certificates"
+    required_fields:
+      - bundle_id
+      - schema
+      - main_certificate
+    optional_fields:
+      - zero_loss_constructor
+      - gauge_freedom
+      - architecture_experiments
+      - coherence_verified
+      - coherence_failures
+
+# ============================================================================
+# RECOMPUTE HOOKS
+# ============================================================================
+
+recompute_hooks:
+  metric_geometry_v1:
+    description: "Recompute D_geom from raw data"
+    input: "Data matrix X of shape (n_samples, input_dim)"
+    output: "MetricGeometryWitness fields"
+    implementation: "qa_generalization_hooks.MetricGeometryHook"
+
+  operator_norm_v1:
+    description: "Recompute norms from weight matrices"
+    input: "Dict with 'weights' and 'biases' lists"
+    output: "OperatorNormWitness fields"
+    implementation: "qa_generalization_hooks.OperatorNormHook"
+
+  generalization_bound_v1:
+    description: "Recompute bound from witnesses"
+    input: "Certificate with metric_geometry and operator_norms"
+    output: "generalization_bound and components"
+    implementation: "qa_generalization_hooks.GeneralizationBoundHook"
+
+  zero_loss_constructor_v1:
+    description: "Verify zero-loss construction"
+    input: "Dict with 'X', 'y' data and certificate with weights"
+    output: "Residuals and verification status"
+    implementation: "qa_generalization_hooks.ZeroLossConstructorHook"
+
+# ============================================================================
+# QA INTERPRETATION NOTES
+# ============================================================================
+
+qa_interpretation:
+  main_insight: |
+    The paper shows generalization depends on:
+    1. Data geometry (D_geom) - intrinsic to the problem
+    2. Operator norms - controllable via regularization
+    3. Sample size (n) - controllable via data collection
+
+    But NOT on:
+    - Total parameter count
+    - Architecture depth/width (beyond implicit norm effects)
+    - Specific optimizer used
+
+    This maps perfectly to QA's philosophy:
+    - Certificates depend on WHAT was computed (norms, distances)
+    - Not on HOW it was computed (optimizer, architecture)
+
+  gauge_freedom_insight: |
+    Overparametrization = gauge freedom in QA terms.
+
+    When parameters > minimal needed for zero loss:
+    - Extra parameters form a "null space"
+    - Can be set arbitrarily without changing certificate
+    - This is like gauge fixing in physics
+
+    The paper's constructive zero-loss proofs for n ≤ d
+    are SUCCESS certificates with explicit witnesses.
+
+  failure_completeness_alignment: |
+    The paper's bounds naturally fit QA's failure-completeness:
+
+    SUCCESS path:
+    - Valid norms → compute bound → bound < 1 → certificate issued
+
+    FAILURE path:
+    - Invalid norms → obstruction: which norm exploded
+    - Bound > 1 → obstruction: vacuous bound with remediation hints
+    - Cannot compute → obstruction: missing data
+
+    Every analysis terminates with a certificate (success or failure).
+
+# ============================================================================
+# IMPLEMENTATION FILES
+# ============================================================================
+
+implementation:
+  certificate_module: "qa_generalization_certificate.py"
+  validator_module: "qa_generalization_validator_v3.py"
+  hooks_module: "qa_generalization_hooks.py"
+  examples_directory: "examples/generalization/"
+
+  example_files:
+    - "mnist_mlp_success.json"
+    - "vacuous_bound_failure.json"
+    - "zero_loss_constructor.json"
+    - "complete_bundle.json"
+
+# ============================================================================
+# VALIDATION COMMANDS
+# ============================================================================
+
+validation_commands:
+  validate_certificate: |
+    python qa_generalization_validator_v3.py examples/generalization/mnist_mlp_success.json
+
+  validate_bundle: |
+    python qa_generalization_validator_v3.py --bundle examples/generalization/complete_bundle.json
+
+  run_demo: |
+    python qa_generalization_validator_v3.py --demo
+
+  run_hooks_test: |
+    python qa_generalization_hooks.py
+
+# ============================================================================
+# CITATION
+# ============================================================================
+
+citation:
+  paper: |
+    @article{arxiv_2504_05695,
+      title={Architecture independent generalization bounds for overparametrized deep ReLU networks},
+      author={...},
+      journal={arXiv preprint arXiv:2504.05695},
+      year={2025}
+    }
+
+  qa_mapping: |
+    @misc{qa_generalization_mapping_2026,
+      title={QA Certificate Mapping for Architecture-Independent Generalization Bounds},
+      author={Signal Experiments Research Group},
+      year={2026},
+      note={Based on arXiv:2504.05695}
+    }

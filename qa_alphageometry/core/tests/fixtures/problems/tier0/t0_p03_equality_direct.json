@@ -1,0 +1,13 @@
+{
+  "id": "t0_p03_equality_direct",
+  "description": "Direct segment equality: AB=CD=EF => AB=EF (2 steps)",
+  "givens": [
+    {"EqualLength": [10, 11]},
+    {"EqualLength": [11, 12]},
+    {"EqualLength": [12, 13]}
+  ],
+  "goals": [
+    {"EqualLength": [10, 13]}
+  ],
+  "difficulty": 2
+}

@@ -1,0 +1,60 @@
+{
+  "schema_version": "QA_HAT_CERT.v1",
+  "certificate_id": "qa.cert.hat.pass.fundamental.v1",
+  "cert_type": "qa_hat_cert",
+  "title": "HAT PASS: fundamental direction (d,e)=(2,1), 3-4-5 triangle",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The fundamental QA direction (d,e)=(2,1) encodes the 3-4-5 triple: C=4, F=3, G=5. HAT₁=C/(G+F)=4/8=e/d=1/2. HAT₂=F/(G+C)=3/9=(d-e)/(d+e)=1/3. Spread s=E/G=1/5. H. Lee Price 2008: these are the canonical half-angle tangents for the 3-4-5 family. Fibonacci box [[1,1],[2,3]] has det=1 (fundamental node of the Barning tree).",
+
+  "direction": {"d": 2, "e": 1},
+  "triple": {"F": 3, "C": 4, "G": 5, "_labels": "F=d²-e²=odd_leg, C=2de=even_leg, G=d²+e²=hypotenuse"},
+
+  "hat_primary": {
+    "hat1": {"numerator": 1, "denominator": 2, "_as_fraction": "1/2"},
+    "formula_a": "e/d = 1/2",
+    "formula_b": "C/(G+F) = 4/8 = 1/2",
+    "_price_note": "HAT₁ = tan(α) where 2α is the smaller acute angle of the 3-4-5 triangle. Price 2008 §2."
+  },
+
+  "hat_secondary": {
+    "hat2": {"numerator": 1, "denominator": 3, "_as_fraction": "1/3"},
+    "formula_a": "(d-e)/(d+e) = 1/3",
+    "formula_b": "F/(G+C) = 3/9 = 1/3",
+    "_note": "HAT₂ = tan(β) where 2β is the larger acute angle. α+β = 45° (complementary pair)."
+  },
+
+  "spread": {
+    "s": {"numerator": 1, "denominator": 5, "_as_fraction": "1/5"},
+    "formula_a": "E/G = e²/(d²+e²) = 1/5",
+    "formula_b": "HAT1²/(1+HAT1²) = (1/4)/(1+1/4) = (1/4)/(5/4) = 1/5",
+    "_wildberger": "s = sin²(α) in Wildberger rational trig; s=E/G for direction (d,e)"
+  },
+
+  "fibonacci_box": {
+    "matrix": [[1, 1], [2, 3]],
+    "_construction": "[[e, d-e], [d, d+e]] = [[1,1],[2,3]]",
+    "determinant": 1,
+    "_note": "det=1 for the fundamental (2,1) node. Price uses this matrix to generate the three children in the Pythagorean tree."
+  },
+
+  "element_cross_check": {
+    "E": 1, "D": 4, "G": 5,
+    "HAT1_squared_check": "E/D = 1/4 = HAT1² ✓",
+    "spread_check": "E/G = 1/5 = s ✓"
+  },
+
+  "validation_checks": [
+    {"check_id": "HAT_1", "description": "schema_version is 'QA_HAT_CERT.v1'",                           "passed": true},
+    {"check_id": "HAT_2", "description": "HAT1 = e/d (primary direction ratio)",                         "passed": true, "details": "1/2 = 1/2 ✓"},
+    {"check_id": "HAT_3", "description": "HAT1 = C/(G+F) (Price formula)",                               "passed": true, "details": "4/8 = 1/2 ✓"},
+    {"check_id": "HAT_4", "description": "HAT2 = (d-e)/(d+e) (secondary direction ratio)",               "passed": true, "details": "1/3 = 1/3 ✓"},
+    {"check_id": "HAT_5", "description": "HAT2 = F/(G+C) (Price formula)",                               "passed": true, "details": "3/9 = 1/3 ✓"},
+    {"check_id": "HAT_6", "description": "HAT1² = E/D",                                                  "passed": true, "details": "1/4 = 1/4 ✓"},
+    {"check_id": "HAT_7", "description": "spread s = E/G",                                               "passed": true, "details": "1/5 = 1/5 ✓"},
+    {"check_id": "HAT_8", "description": "spread s = HAT1²/(1+HAT1²)",                                   "passed": true, "details": "(1/4)/(5/4) = 1/5 ✓"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

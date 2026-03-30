@@ -3566,6 +3566,29 @@ def _validate_projection_obstruction_cert_family(base_dir: str) -> Optional[str]
     return None
 
 
+def _validate_hat_cert_family(base_dir: str) -> Optional[str]:
+    """QA HAT Cert family [131] — certifies H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F), HAT₂=(d-e)/(d+e)=F/(G+C), spread s=E/G=HAT₁²/(1+HAT₁²); Fibonacci box [[e,d-e],[d,d+e]]; checks HAT_1-HAT_8+HAT_W/F; 2 PASS (fundamental 3-4-5, 5-witness general); self-test ok"""
+    import subprocess
+    hat_dir   = os.path.join(base_dir, "qa_hat_cert_v1")
+    validator = os.path.join(hat_dir, "qa_hat_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_hat_cert_v1/qa_hat_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=hat_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_hat_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_hat_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_hat_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_origin_of_24_cert_family(base_dir: str) -> Optional[str]:
     """QA Origin of 24 Cert family [130] — certifies dual derivation of mod-24: H²-G²=G²-I²=2CF for direction (d,e), where C=2de (green quadrance) and F=d²-e² (red quadrance); minimum value 24 at fundamental direction (d,e)=(2,1) for 3-4-5 triangle; always divisible by 24 for all primitive Pythagorean directions; checks O24_1-O24_9 (schema, elements C/F/G/H/I, dual routes Pyth-1 and Crystal) + O24_G/W/F/D (general theorem); 2 PASS (anchor 3-4-5, general theorem 6 witnesses); self-test ok"""
     import subprocess
@@ -3787,6 +3810,31 @@ def _validate_empirical_observation_cert_family(base_dir: str) -> Optional[str]:
             "qa_empirical_observation_cert self-test returned ok=false:\n"
             f"{json.dumps(payload, indent=2, sort_keys=True)}"
         )
+    return None
+
+
+def _validate_prime_bounded_certificate_scaling_cert_family(base_dir: str) -> Optional[str]:
+    """QA Prime Bounded Certificate Scaling Cert family [131] — certifies the tested-endpoint scaling law for bounded factor-certificate witness caps; checks schema, canonical hash, artifact parity, row recomputation, row-level honesty, and overall PASS/FAIL honesty; 1 PASS (100,250,500,1000 exact-match cert) + 1 FAIL (mock 500 mismatch cert) as valid fixtures; self-test ok"""
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_prime_bounded_certificate_scaling_cert_v1", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_prime_bounded_certificate_scaling_cert_v1/validator.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=120,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_prime_bounded_certificate_scaling_cert_v1 self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    data = json.loads(proc.stdout)
+    if not data.get("ok"):
+        failures = [f["fixture"] for f in data.get("fixtures", []) if not (f["ok"] == f["expected_ok"])]
+        raise RuntimeError(f"self-test fixture mismatches: {failures}")
     return None
 
 
@@ -4884,11 +4932,21 @@ FAMILY_SWEEPS = [
      "Wildberger chromogeometric quadrances: C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² (Wildberger Thm 6); I=|C-F| conic discriminant; checks CG1-CG7 (schema, green/red/blue quadrance, Pythagoras, semi-latus, conic type); 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED); self-test ok",
      "125_qa_chromogeometry",
      "qa_chromogeometry_cert_v1", True),
+    (132, "QA HAT Cert family",
+     _validate_hat_cert_family,
+     "H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F) [primary], HAT₂=(d-e)/(d+e)=F/(G+C) [secondary]; spread s=E/G=HAT₁²/(1+HAT₁²) [Wildberger]; Fibonacci box [[e,d-e],[d,d+e]]; Price Fibonacci box cols = QA generation matrix entries; proportionality: HAT fractions carry QA element meaning; checks HAT_1-8+HAT_W/F; 2 PASS; self-test ok",
+     "132_qa_hat",
+     "qa_hat_cert_v1", True),
     (130, "QA Origin of 24 Cert family",
      _validate_origin_of_24_cert_family,
      "dual derivation of mod-24: H²-G²=G²-I²=2CF for any direction (d,e) [C=2de=green quadrance, F=d²-e²=red quadrance]; C²+F²=G² (Pythagorean) → (C+F)²-G²=2CF; always ÷24 for primitive Pythagorean directions; minimum=24 at fundamental (d,e)=(2,1) for 3-4-5; 7²-5²=24 (Crystal route); checks O24_1-O24_9 + O24_G/W/F/D; 2 PASS (anchor 3-4-5, general theorem 6 witnesses d≤5); self-test ok",
      "130_qa_origin_of_24",
      "qa_origin_of_24_cert_v1", True),
+    (131, "QA Prime Bounded Certificate Scaling Cert family",
+     _validate_prime_bounded_certificate_scaling_cert_family,
+     "empirical scaling cert for bounded factor-certificate witness caps on tested intervals [2,N]; checks schema, canonical hash, artifact parity, row recomputation, row-level honesty, and overall PASS/FAIL honesty; 1 PASS (100,250,500,1000 exact-match cert) + 1 FAIL (mock 500 mismatch cert), both validator-valid; self-test ok",
+     "131_qa_prime_bounded_certificate_scaling_cert",
+     "../qa_prime_bounded_certificate_scaling_cert_v1", True),
 ]
 
 

@@ -34,7 +34,9 @@
     "proof": "Set b=I²=(C-F)², e=2CF, d=G², a=H². Then b+e = (C-F)²+2CF = C²+F² = G² = d [Pythagorean identity]. And b+2e = (C-F)²+4CF = (C+F)² = H² = a.",
     "geometric_interpretation": "2CF = 4·(1/2·C·F) = total area of the four right triangles in the Pythagorean twisted-square construction (Mathologer). At (2,1): 4 triangles of legs C=4, F=3 have total area 4·6=24 = H²-G² = 49-25.",
     "koenig_connection": "In the Koenig I→H chain of prime triples, each step produces a new (I², 2CF, G², H²) quadruple. The quantity 2CF is the step-element e in the quadrance-level QA quadruple, making the QA system self-similar under the squaring map.",
-    "_note": "Identified by Will Dale, 2026-03-30. The (b,e,d,a) structure at the element level reappears exactly at the quadrance level, linking the Koenig series and the Mathologer twisted-squares proof to the discrete QA arithmetic."
+    "_notation": "24L = 24·(CF/12) = 2CF — these are the same quantity under QA element notation.",
+    "_vault_ref": "QA vault 2024-12-15 'Fibonacci 4-Tuple Mapping': Will identified (I²,24L,G²,H²) as the twisted-squares quadruple; I=inner side, H=outer side of the Pythagorean twisted square. QA vault 2025-07 'QA Mapping Pythagorean Theorem': Mathologer twisted-square dissections mapped as modular isometries in QA lattice.",
+    "_note": "Pre-existing QA research (2024-12-15, Will Dale). Family [130] certifies the arithmetic identity; QA_KOENIG_TWISTED_SQUARES_CERT.v1 is the cert gap for full geometric + Koenig-series treatment."
   },
 
   "connection_to_mod24_arithmetic": {

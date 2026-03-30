@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_cyclic_quad_cert_family(base_dir: str) -> Optional[str]:
+    """QA Cyclic Quad Cert family [136] — certifies Ptolemy's theorem via three integer identities for QA direction pairs: BF (Brahmagupta-Fibonacci) G₁G₂=D²+E² where D=d₁d₂-e₁e₂, E=d₁e₂+d₂e₁; PP (Ptolemy Product) F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC (Ptolemy Conjugate) F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples on circle G₁G₂ = two diagonals of Ptolemy cyclic quadrilateral; algebraic proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²)=G₁²G₂²; historical: Ptolemy ~150 CE chord tables → Brahmagupta 628 CE → Gaussian Z[i] multiplication; connects to [127] UHG null (same null points); checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS (fundamental (2,1)×(3,2) G₃=65; 5-witness general); self-test ok"""
+    import subprocess
+    cq_dir    = os.path.join(base_dir, "qa_cyclic_quad_cert_v1")
+    validator = os.path.join(cq_dir, "qa_cyclic_quad_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cyclic_quad_cert_v1/qa_cyclic_quad_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=cq_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_cyclic_quad_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_cyclic_quad_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_cyclic_quad_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_egyptian_fraction_cert_family(base_dir: str) -> Optional[str]:
     """QA Egyptian Fraction Cert family [134] — certifies greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ where kᵢ=⌈dᵢ/eᵢ⌉; denominators strictly increasing; all intermediate pairs coprime; terminates when eₙ=1; Koenig descent path (d₀,e₀)→...→(kₙ,1) = Egyptian fraction steps; Rhind Papyrus ~1600 BCE greedy algorithm = Koenig tree navigation; checks EF_1-8+EF_W/F; 2 PASS (fundamental (2,1) expansion=[2]; 6-witness general covering lengths 1/2/3); self-test ok"""
     import subprocess
@@ -5011,6 +5034,11 @@ FAMILY_SWEEPS = [
      "three Barning-Hall/Berggren generator moves in QA direction space: M_A=(2d-e,d) k=2, M_B=(2d+e,d) k=3, M_C=(d+2e,e) k≥4; each preserves gcd=1 + opposite parity + F²+C²=G²; k-identification theorem links each move to Egyptian fraction first step k; root (2,1) has no valid parent; Barning 1963/Hall 1970/Price 2008 Fibonacci-boxes/Iverson Koenig = same tree; inverse of cert [134]; checks PT_1-4+PT_A/B/C+PT_ROOT/W/F; 2 PASS; self-test ok",
      "135_qa_pythagorean_tree",
      "qa_pythagorean_tree_cert_v1", True),
+    (136, "QA Cyclic Quad Cert family",
+     _validate_cyclic_quad_cert_family,
+     "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
+     "136_qa_cyclic_quad_cert",
+     "qa_cyclic_quad_cert_v1", True),
     (134, "QA Egyptian Fraction Cert family",
      _validate_egyptian_fraction_cert_family,
      "greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ, kᵢ=⌈dᵢ/eᵢ⌉; strictly increasing denominators; all intermediate pairs coprime; terminates at eₙ=1 (unit-fraction direction); Koenig descent path = Egyptian fraction steps; Rhind Papyrus ~1600 BCE = Ben Iverson Koenig = H. Lee Price Fibonacci-box navigation; checks EF_1-8+EF_W/F; 2 PASS; self-test ok",

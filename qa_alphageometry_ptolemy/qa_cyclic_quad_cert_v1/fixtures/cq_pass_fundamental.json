@@ -1,0 +1,61 @@
+{
+  "schema_version": "QA_CYCLIC_QUAD_CERT.v1",
+  "certificate_id": "qa.cert.cyclic_quad.pass.fundamental.v1",
+  "cert_type": "qa_cyclic_quad_cert",
+  "title": "Cyclic Quad PASS: fundamental pair (2,1)×(3,2) — 5·13=65, two triples on G=65 circle",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The two fundamental directions (2,1) and (3,2) give triples (3,4,5) and (5,12,13). Their Gaussian product D=d₁d₂-e₁e₂=4, E=d₁e₂+d₂e₁=7 gives G₃=65=5·13 (Brahmagupta-Fibonacci). The product triple (33,56,65) and conjugate triple (63,16,65) are the TWO diagonals of the Ptolemy cyclic quadrilateral on the G=65 circle. This is Ptolemy's ~150 CE chord-table formula: sin(θ₁+θ₂) and cos(θ₁+θ₂) written as QA integer identities.",
+
+  "triple_1": {"d": 2, "e": 1, "F": 3, "C": 4, "G": 5},
+  "triple_2": {"d": 3, "e": 2, "F": 5, "C": 12, "G": 13},
+
+  "brahmagupta_fibonacci": {
+    "D": 4, "E": 7,
+    "D_formula": "d1*d2 - e1*e2 = 2*3 - 1*2 = 4",
+    "E_formula": "d1*e2 + d2*e1 = 2*2 + 3*1 = 7",
+    "G3": 65,
+    "check": "D² + E² = 16 + 49 = 65 = G1*G2 = 5*13"
+  },
+
+  "ptolemy_product": {
+    "_note": "Ptolemy sin-addition + cos-subtraction: sin(θ₁+θ₂), cos(θ₁-θ₂)",
+    "F3_formula": "F1*F2 - C1*C2 = 3*5 - 4*12 = 15 - 48 = -33 → |F3|=33",
+    "C3_formula": "F1*C2 + F2*C1 = 3*12 + 5*4 = 36 + 20 = 56",
+    "F3": 33, "C3": 56, "G3": 65,
+    "check": "33² + 56² = 1089 + 3136 = 4225 = 65²",
+    "direction_3": {"D": 4, "E": 7, "_note": "direction (7,4) since E>D — swap: d=7,e=4"}
+  },
+
+  "ptolemy_conjugate": {
+    "_note": "Ptolemy cos-addition + sin-subtraction: cos(θ₁+θ₂), sin(θ₁-θ₂)",
+    "Dp_formula": "d1*d2 + e1*e2 = 2*3 + 1*2 = 8",
+    "Ep_formula": "|d1*e2 - d2*e1| = |2*2 - 3*1| = 1",
+    "F4_formula": "F1*F2 + C1*C2 = 3*5 + 4*12 = 15 + 48 = 63",
+    "C4_formula": "|F1*C2 - F2*C1| = |3*12 - 5*4| = |36 - 20| = 16",
+    "Dp": 8, "Ep": 1,
+    "F4": 63, "C4": 16, "G4": 65,
+    "check": "63² + 16² = 3969 + 256 = 4225 = 65²",
+    "direction_4": {"Dp": 8, "Ep": 1, "_note": "direction (8,1)"}
+  },
+
+  "ptolemy_cyclic_quad": {
+    "_interpretation": "The four triples (3,4,5),(5,12,13),(33,56,65),(63,16,65) form a Ptolemy quadrilateral. Two diagonals of the quadrilateral have squared-length G1²*G2²=65²; the four sides involve the cross-terms. Ptolemy's theorem: AC·BD = AB·CD + AD·BC reduces to the product identity F₃=F₁F₂-C₁C₂.",
+    "both_on_circle_G1G2": true,
+    "product_triple": [33, 56, 65],
+    "conjugate_triple": [63, 16, 65]
+  },
+
+  "validation_checks": [
+    {"check_id": "CQ_1",  "description": "schema_version is 'QA_CYCLIC_QUAD_CERT.v1'",        "passed": true},
+    {"check_id": "CQ_2",  "description": "F=d²-e², C=2de, G=d²+e² for both triples",          "passed": true},
+    {"check_id": "CQ_3",  "description": "F²+C²=G² for both triples",                          "passed": true},
+    {"check_id": "CQ_BF", "description": "G1*G2 = D²+E² (Brahmagupta-Fibonacci)",              "passed": true, "details": "65=16+49 ✓"},
+    {"check_id": "CQ_PP", "description": "F3=F1F2-C1C2, C3=F1C2+F2C1",                         "passed": true, "details": "33=|15-48|, 56=36+20 ✓"},
+    {"check_id": "CQ_PC", "description": "F4=F1F2+C1C2, C4=|F1C2-F2C1|",                       "passed": true, "details": "63=15+48, 16=|36-20| ✓"},
+    {"check_id": "CQ_G3", "description": "F3²+C3²=(G1G2)² and F4²+C4²=(G1G2)²",               "passed": true, "details": "4225=4225 both ✓"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

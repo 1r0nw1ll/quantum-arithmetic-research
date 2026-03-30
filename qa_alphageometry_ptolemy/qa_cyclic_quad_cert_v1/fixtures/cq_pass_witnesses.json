@@ -1,0 +1,96 @@
+{
+  "schema_version": "QA_CYCLIC_QUAD_CERT.v1",
+  "certificate_id": "qa.cert.cyclic_quad.pass.witnesses.v1",
+  "cert_type": "qa_cyclic_quad_cert",
+  "title": "Cyclic Quad PASS: 5 witness pairs covering depth-2 and depth-3 tree nodes",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "General theorem witnesses. For any two QA directions (d₁,e₁) and (d₂,e₂), the Ptolemy product formulas F₃=F₁F₂-C₁C₂, C₃=F₁C₂+F₂C₁ and conjugate F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁| both produce triples on the G₁G₂ circle. The Brahmagupta-Fibonacci identity G₁G₂=D²+E² is verified for each pair. These are the integer algebraic cores of: (1) Ptolemy's ~150 CE chord-table sin/cos addition formulas, (2) Brahmagupta 628 CE identity for products of sums-of-squares, (3) QA Gaussian integer multiplication of directions. Verified exhaustively: all pairs with d₁,d₂≤10 (0 failures). Edge case: when gcd(D,E)>1, product triple is composite (e.g. (2,1)×(4,3) gives 25·(3,4,5)); identities still hold.",
+
+  "general_theorem": {
+    "BF_statement": "For all QA directions (d1,e1),(d2,e2): G1*G2 = (d1*d2-e1*e2)² + (d1*e2+d2*e1)²",
+    "PP_statement": "F3=F1*F2-C1*C2, C3=F1*C2+F2*C1 satisfy F3²+C3²=(G1*G2)²",
+    "PC_statement": "F4=F1*F2+C1*C2, C4=|F1*C2-F2*C1| satisfy F4²+C4²=(G1*G2)²",
+    "ptolemy_connection": "PP and PC are Ptolemy's sin/cos angle-addition and subtraction formulas written as QA integer identities. The cyclic quadrilateral: 4 points on circle radius G1*G2 — two at G1-scaled positions, two at G2-scaled positions — satisfies Ptolemy AC·BD=AB·CD+AD·BC, which reduces to F3=F1F2-C1C2",
+    "brahmagupta_connection": "BF identity is Brahmagupta 628 CE Theorem 8.36: product of two sums of two squares is a sum of two squares. This gives the QA direction multiplication rule.",
+    "uhg_connection": "In UHG [cert 127]: QA null points α₁=(F₁:C₁:G₁) and α₂=(F₂:C₂:G₂); the product/conjugate triples correspond to the two intersection points of lines through the null conic — the Ptolemy quadrangle in null geometry.",
+    "algebraic_proof": "G1*G2=(d1²+e1²)(d2²+e2²) = (d1d2-e1e2)²+(d1e2+d2e1)² — direct expansion. F3²+C3²: (F1F2-C1C2)²+(F1C2+F2C1)² = F1²F2²-2F1F2C1C2+C1²C2²+F1²C2²+2F1F2C1C2+F2²C1² = F1²(F2²+C2²)+C1²(F2²+C2²)... wait: = F1²G2²+C1²G2²... no. Let me redo: (F1F2-C1C2)²+(F1C2+F2C1)² = F1²F2²+C1²C2²+F1²C2²+F2²C1² = (F1²+C1²)(F2²+C2²) = G1²G2² ✓",
+    "verified_range": "all pairs (d1,e1),(d2,e2) with 1≤e<d≤10, gcd=1, d-e odd — 0 failures"
+  },
+
+  "witnesses": [
+    {
+      "d1": 2, "e1": 1, "d2": 4, "e2": 1,
+      "T1": {"F": 3, "C": 4, "G": 5}, "T2": {"F": 15, "C": 8, "G": 17},
+      "D": 7, "E": 6, "G3": 85,
+      "BF_check": "7²+6²=49+36=85=5*17 ✓",
+      "T3": {"F": 13, "C": 84, "G": 85},
+      "PP_check": "F3=|3*15-4*8|=|45-32|=13, C3=3*8+15*4=24+60=84, 13²+84²=169+7056=7225=85² ✓",
+      "Dp": 9, "Ep": 2, "G4": 85,
+      "T4": {"F": 77, "C": 36, "G": 85},
+      "PC_check": "F4=3*15+4*8=45+32=77, C4=|3*8-15*4|=|24-60|=36, 77²+36²=5929+1296=7225=85² ✓"
+    },
+    {
+      "d1": 2, "e1": 1, "d2": 5, "e2": 2,
+      "T1": {"F": 3, "C": 4, "G": 5}, "T2": {"F": 21, "C": 20, "G": 29},
+      "D": 8, "E": 9, "G3": 145,
+      "BF_check": "8²+9²=64+81=145=5*29 ✓",
+      "T3": {"F": 17, "C": 144, "G": 145},
+      "PP_check": "F3=|3*21-4*20|=|63-80|=17, C3=3*20+21*4=60+84=144, 17²+144²=289+20736=21025=145² ✓",
+      "Dp": 12, "Ep": 1, "G4": 145,
+      "T4": {"F": 143, "C": 24, "G": 145},
+      "PC_check": "F4=3*21+4*20=63+80=143, C4=|3*20-21*4|=|60-84|=24, 143²+24²=20449+576=21025=145² ✓"
+    },
+    {
+      "d1": 3, "e1": 2, "d2": 4, "e2": 1,
+      "T1": {"F": 5, "C": 12, "G": 13}, "T2": {"F": 15, "C": 8, "G": 17},
+      "D": 10, "E": 11, "G3": 221,
+      "BF_check": "10²+11²=100+121=221=13*17 ✓",
+      "T3": {"F": 21, "C": 220, "G": 221},
+      "PP_check": "F3=|5*15-12*8|=|75-96|=21, C3=5*8+15*12=40+180=220, 21²+220²=441+48400=48841=221² ✓",
+      "Dp": 14, "Ep": 5, "G4": 221,
+      "T4": {"F": 171, "C": 140, "G": 221},
+      "PC_check": "F4=5*15+12*8=75+96=171, C4=|5*8-15*12|=|40-180|=140, 171²+140²=29241+19600=48841=221² ✓"
+    },
+    {
+      "d1": 3, "e1": 2, "d2": 5, "e2": 4,
+      "T1": {"F": 5, "C": 12, "G": 13}, "T2": {"F": 9, "C": 40, "G": 41},
+      "D": 7, "E": 22, "G3": 533,
+      "BF_check": "7²+22²=49+484=533=13*41 ✓",
+      "T3": {"F": 435, "C": 308, "G": 533},
+      "PP_check": "F3=|5*9-12*40|=|45-480|=435, C3=5*40+9*12=200+108=308, 435²+308²=189225+94864=284089=533² ✓",
+      "Dp": 23, "Ep": 2, "G4": 533,
+      "T4": {"F": 525, "C": 92, "G": 533},
+      "PC_check": "F4=5*9+12*40=45+480=525, C4=|5*40-9*12|=|200-108|=92, 525²+92²=275625+8464=284089=533² ✓"
+    },
+    {
+      "d1": 4, "e1": 3, "d2": 5, "e2": 2,
+      "T1": {"F": 7, "C": 24, "G": 25}, "T2": {"F": 21, "C": 20, "G": 29},
+      "D": 14, "E": 23, "G3": 725,
+      "BF_check": "14²+23²=196+529=725=25*29 ✓",
+      "T3": {"F": 333, "C": 644, "G": 725},
+      "PP_check": "F3=|7*21-24*20|=|147-480|=333, C3=7*20+21*24=140+504=644, 333²+644²=110889+414736=525625=725² ✓",
+      "Dp": 26, "Ep": 7, "G4": 725,
+      "T4": {"F": 627, "C": 364, "G": 725},
+      "PC_check": "F4=7*21+24*20=147+480=627, C4=|7*20-21*24|=|140-504|=364, 627²+364²=393129+132496=525625=725² ✓"
+    }
+  ],
+
+  "edge_case": {
+    "_note": "When gcd(D,E)>1, product triple is composite. Example: (2,1)×(4,3): D=5,E=10,gcd=5 → triple (75,100,125)=25·(3,4,5). Identities still hold: 75²+100²=5625+10000=15625=125² ✓",
+    "d1": 2, "e1": 1, "d2": 4, "e2": 3,
+    "D": 5, "E": 10, "G3": 125,
+    "T3_raw": {"F3_raw": -75, "C3": 100, "G3": 125},
+    "T3_abs": {"F": 75, "C": 100, "G": 125, "_is": "25*(3,4,5) — composite"},
+    "gcd_D_E": 5
+  },
+
+  "validation_checks": [
+    {"check_id": "CQ_1",  "description": "schema_version is 'QA_CYCLIC_QUAD_CERT.v1'", "passed": true},
+    {"check_id": "CQ_W",  "description": "≥3 witnesses",                               "passed": true, "details": "5 witnesses"},
+    {"check_id": "CQ_F",  "description": "fundamental (2,1)×(3,2) in separate fixture", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

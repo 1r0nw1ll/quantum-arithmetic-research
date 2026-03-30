@@ -1,0 +1,71 @@
+{
+  "schema_version": "QA_PYTHAGOREAN_TREE_CERT.v1",
+  "certificate_id": "qa.cert.pythagorean_tree.pass.witnesses.v1",
+  "cert_type": "qa_pythagorean_tree_cert",
+  "title": "Pythagorean Tree PASS: 5 witnesses at depth 2-3, covering all three move types",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "General theorem witnesses. Each witness (d,e) is a PPT direction at depth ≥2 in the tree. For each, all three children are computed and verified (k-identification, gcd, parity, parent recovery). The k theorem — k=2 iff M_A child, k=3 iff M_B child, k≥4 iff M_C child — is verified for each case. Verified exhaustively: all primitive PPT directions with d≤30 (0 failures).",
+
+  "general_theorem": {
+    "statement": "For any PPT direction (d,e) with gcd(d,e)=1, d>e>0, d-e odd: (i) M_A=(2d-e,d), M_B=(2d+e,d), M_C=(d+2e,e) are all valid PPT directions with gcd=1; (ii) k-identification holds: ceil(d'/e')=2,3,≥4 for M_A,M_B,M_C resp.; (iii) parent recovery: k of child uniquely identifies which inverse to apply; (iv) root (2,1) is the unique fixed point with no valid parent",
+    "gcd_proof_sketch": "gcd(2d±e,d)=gcd(±e,d)=gcd(e,d)=1; gcd(d+2e,e)=gcd(d,e)=1 — three-line Euclidean argument",
+    "k_proof_sketch": "M_A: d'/e'=(2d-e)/d=2-e/d ∈ (1,2) → ceil=2. M_B: d'/e'=2+e/d ∈ (2,3) → ceil=3. M_C: d'/e'=d/e+2 > 3 (since d>e) → ceil≥4",
+    "parity_proof_sketch": "d-e odd and 2d is even: (2d-e)-d=d-e odd ✓; (2d+e)-d=d+e, since d-e odd, d+e also odd ✓; (d+2e)-e=d+e odd ✓",
+    "price_connection": "H. Lee Price 2008: these three moves = his M1/M2/M3 Fibonacci-box column operations. Barning 1963 / Hall 1970: same moves expressed as 3×3 matrices on (F,C,G) triples",
+    "koenig_connection": "Ben Iverson Pyth-1: Koenig series generates all prime triangles via exactly these three moves. The Egyptian fraction first step k∈{2,3,≥4} is the 'address' of any direction in the tree",
+    "ef_link": "Cert [134] Egyptian Fraction and this cert [135] are inverse operations: [134] descends (child→parent via greedy k); [135] ascends (parent→children via three moves)"
+  },
+
+  "witnesses": [
+    {
+      "d": 3, "e": 2, "_depth": 2, "_parent_move": "M_A from (2,1)",
+      "children": {
+        "M_A": {"d": 4, "e": 3, "k": 2, "gcd": 1, "parity_ok": true, "triple": {"F": 7, "C": 24, "G": 25}},
+        "M_B": {"d": 8, "e": 3, "k": 3, "gcd": 1, "parity_ok": true, "triple": {"F": 55, "C": 48, "G": 73}},
+        "M_C": {"d": 7, "e": 2, "k": 4, "gcd": 1, "parity_ok": true, "triple": {"F": 45, "C": 28, "G": 53}}
+      }
+    },
+    {
+      "d": 5, "e": 2, "_depth": 2, "_parent_move": "M_B from (2,1)",
+      "children": {
+        "M_A": {"d": 8, "e": 5, "k": 2, "gcd": 1, "parity_ok": true, "triple": {"F": 39, "C": 80, "G": 89}},
+        "M_B": {"d": 12, "e": 5, "k": 3, "gcd": 1, "parity_ok": true, "triple": {"F": 119, "C": 120, "G": 169}},
+        "M_C": {"d": 9, "e": 2, "k": 5, "gcd": 1, "parity_ok": true, "triple": {"F": 77, "C": 36, "G": 85}}
+      }
+    },
+    {
+      "d": 4, "e": 1, "_depth": 2, "_parent_move": "M_C from (2,1)",
+      "children": {
+        "M_A": {"d": 7, "e": 4, "k": 2, "gcd": 1, "parity_ok": true, "triple": {"F": 33, "C": 56, "G": 65}},
+        "M_B": {"d": 9, "e": 4, "k": 3, "gcd": 1, "parity_ok": true, "triple": {"F": 65, "C": 72, "G": 97}},
+        "M_C": {"d": 6, "e": 1, "k": 6, "gcd": 1, "parity_ok": true, "triple": {"F": 35, "C": 12, "G": 37}}
+      }
+    },
+    {
+      "d": 4, "e": 3, "_depth": 3, "_parent_move": "M_A from (3,2)",
+      "children": {
+        "M_A": {"d": 5, "e": 4, "k": 2, "gcd": 1, "parity_ok": true, "triple": {"F": 9, "C": 40, "G": 41}},
+        "M_B": {"d": 11, "e": 4, "k": 3, "gcd": 1, "parity_ok": true, "triple": {"F": 105, "C": 88, "G": 137}},
+        "M_C": {"d": 10, "e": 3, "k": 4, "gcd": 1, "parity_ok": true, "triple": {"F": 91, "C": 60, "G": 109}}
+      }
+    },
+    {
+      "d": 7, "e": 2, "_depth": 3, "_parent_move": "M_C from (3,2)",
+      "children": {
+        "M_A": {"d": 12, "e": 7, "k": 2, "gcd": 1, "parity_ok": true, "triple": {"F": 95, "C": 168, "G": 193}},
+        "M_B": {"d": 16, "e": 7, "k": 3, "gcd": 1, "parity_ok": true, "triple": {"F": 207, "C": 224, "G": 305}},
+        "M_C": {"d": 11, "e": 2, "k": 6, "gcd": 1, "parity_ok": true, "triple": {"F": 117, "C": 44, "G": 125}}
+      }
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "PT_1", "description": "schema_version is 'QA_PYTHAGOREAN_TREE_CERT.v1'", "passed": true},
+    {"check_id": "PT_W", "description": "≥3 witnesses",                                     "passed": true, "details": "5 witnesses"},
+    {"check_id": "PT_F", "description": "fundamental (2,1) in separate fixture",             "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

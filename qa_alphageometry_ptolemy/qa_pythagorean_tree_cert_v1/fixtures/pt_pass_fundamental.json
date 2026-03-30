@@ -1,0 +1,72 @@
+{
+  "schema_version": "QA_PYTHAGOREAN_TREE_CERT.v1",
+  "certificate_id": "qa.cert.pythagorean_tree.pass.fundamental.v1",
+  "cert_type": "qa_pythagorean_tree_cert",
+  "title": "Pythagorean Tree PASS: root direction (d,e)=(2,1) and its three children",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The root direction (d,e)=(2,1) generates the 3-4-5 triple. Its three M_A/M_B/M_C children are (3,2)→5-12-13, (5,2)→21-20-29, (4,1)→15-8-17. Root has no valid parent (all inverses give e=0). This is Ben Iverson's fundamental QN direction.",
+
+  "direction": {"d": 2, "e": 1},
+  "triple": {"F": 3, "C": 4, "G": 5, "_note": "3-4-5 Pythagorean triple"},
+
+  "children": {
+    "M_A": {
+      "formula": "(2d-e, d)",
+      "child_d": 3, "child_e": 2,
+      "child_triple": {"F": 5, "C": 12, "G": 13},
+      "k_identification": 2,
+      "k_formula": "ceil((2d-e)/d) = ceil(2 - e/d) = 2 since 0 < e < d",
+      "gcd_check": 1,
+      "parity_check": "3-2=1 odd (opposite parity preserved)",
+      "parent_recovery": {"inv_formula": "(e', 2e'-d')", "recovered_d": 2, "recovered_e": 1}
+    },
+    "M_B": {
+      "formula": "(2d+e, d)",
+      "child_d": 5, "child_e": 2,
+      "child_triple": {"F": 21, "C": 20, "G": 29},
+      "k_identification": 3,
+      "k_formula": "ceil((2d+e)/d) = ceil(2 + e/d) = 3 since 0 < e < d",
+      "gcd_check": 1,
+      "parity_check": "5-2=3 odd (opposite parity preserved)",
+      "parent_recovery": {"inv_formula": "(e', d'-2e')", "recovered_d": 2, "recovered_e": 1}
+    },
+    "M_C": {
+      "formula": "(d+2e, e)",
+      "child_d": 4, "child_e": 1,
+      "child_triple": {"F": 15, "C": 8, "G": 17},
+      "k_identification": 4,
+      "k_formula": "ceil((d+2e)/e) = ceil(d/e + 2) >= 4 since d > e",
+      "gcd_check": 1,
+      "parity_check": "4-1=3 odd (opposite parity preserved)",
+      "parent_recovery": {"inv_formula": "(d'-2e', e')", "recovered_d": 2, "recovered_e": 1}
+    }
+  },
+
+  "root_check": {
+    "inv_A_candidate": {"d": 1, "e": 0, "valid": false, "_reason": "e=0 violates e>0"},
+    "inv_B_candidate": {"d": 1, "e": 0, "valid": false, "_reason": "e=0 violates e>0"},
+    "inv_C_candidate": {"d": 0, "e": 1, "valid": false, "_reason": "d=0 violates d>e>0"},
+    "conclusion": "(2,1) is the unique root — no valid parent in any of the three inverses"
+  },
+
+  "gcd_proofs": {
+    "M_A": "gcd(2d-e, d) = gcd(2d-e - 2d, d) = gcd(-e, d) = gcd(e,d) = 1",
+    "M_B": "gcd(2d+e, d) = gcd(2d+e - 2d, d) = gcd(e, d) = 1",
+    "M_C": "gcd(d+2e, e) = gcd(d+2e - 2e, e) = gcd(d, e) = 1"
+  },
+
+  "validation_checks": [
+    {"check_id": "PT_1", "description": "schema_version is 'QA_PYTHAGOREAN_TREE_CERT.v1'", "passed": true},
+    {"check_id": "PT_2", "description": "d > e > 0",                                        "passed": true},
+    {"check_id": "PT_3", "description": "gcd(d,e) = 1",                                     "passed": true},
+    {"check_id": "PT_4", "description": "d-e odd (PPT condition)",                           "passed": true, "details": "2-1=1 odd"},
+    {"check_id": "PT_A", "description": "M_A child (3,2): k=2, gcd=1, parity ok, parent recovers", "passed": true},
+    {"check_id": "PT_B", "description": "M_B child (5,2): k=3, gcd=1, parity ok, parent recovers", "passed": true},
+    {"check_id": "PT_C", "description": "M_C child (4,1): k=4, gcd=1, parity ok, parent recovers", "passed": true},
+    {"check_id": "PT_ROOT", "description": "(2,1) has no valid parent",                      "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

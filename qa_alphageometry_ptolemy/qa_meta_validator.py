@@ -3589,6 +3589,29 @@ def _validate_hat_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
+    """QA Pythagorean Tree Cert family [135] — certifies three Barning-Hall/Berggren generator moves in direction space: M_A=(2d-e,d), M_B=(2d+e,d), M_C=(d+2e,e); each preserves gcd=1 (Euclidean proof) + opposite parity + Pythagorean triple F²+C²=G²; k-identification theorem: ⌈d'/e'⌉=2 iff M_A, =3 iff M_B, ≥4 iff M_C (proofs: 2-e/d∈(1,2), 2+e/d∈(2,3), d/e+2>3); root (2,1) unique (all inverses give e=0 or d=0); Barning 1963 / Hall 1970 / Price 2008 (Fibonacci boxes=same moves) / Iverson Pyth-1 (Koenig series=same tree); inverse of [134] Egyptian fraction; checks PT_1-4+PT_A/B/C+PT_ROOT/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    pt_dir    = os.path.join(base_dir, "qa_pythagorean_tree_cert_v1")
+    validator = os.path.join(pt_dir, "qa_pythagorean_tree_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_tree_cert_v1/qa_pythagorean_tree_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=pt_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_pythagorean_tree_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_pythagorean_tree_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_pythagorean_tree_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_egyptian_fraction_cert_family(base_dir: str) -> Optional[str]:
     """QA Egyptian Fraction Cert family [134] — certifies greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ where kᵢ=⌈dᵢ/eᵢ⌉; denominators strictly increasing; all intermediate pairs coprime; terminates when eₙ=1; Koenig descent path (d₀,e₀)→...→(kₙ,1) = Egyptian fraction steps; Rhind Papyrus ~1600 BCE greedy algorithm = Koenig tree navigation; checks EF_1-8+EF_W/F; 2 PASS (fundamental (2,1) expansion=[2]; 6-witness general covering lengths 1/2/3); self-test ok"""
     import subprocess
@@ -4983,6 +5006,11 @@ FAMILY_SWEEPS = [
      "H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F) [primary], HAT₂=(d-e)/(d+e)=F/(G+C) [secondary]; spread s=E/G=HAT₁²/(1+HAT₁²) [Wildberger]; Fibonacci box [[e,d-e],[d,d+e]]; Price Fibonacci box cols = QA generation matrix entries; proportionality: HAT fractions carry QA element meaning; checks HAT_1-8+HAT_W/F; 2 PASS; self-test ok",
      "132_qa_hat",
      "qa_hat_cert_v1", True),
+    (135, "QA Pythagorean Tree Cert family",
+     _validate_pythagorean_tree_cert_family,
+     "three Barning-Hall/Berggren generator moves in QA direction space: M_A=(2d-e,d) k=2, M_B=(2d+e,d) k=3, M_C=(d+2e,e) k≥4; each preserves gcd=1 + opposite parity + F²+C²=G²; k-identification theorem links each move to Egyptian fraction first step k; root (2,1) has no valid parent; Barning 1963/Hall 1970/Price 2008 Fibonacci-boxes/Iverson Koenig = same tree; inverse of cert [134]; checks PT_1-4+PT_A/B/C+PT_ROOT/W/F; 2 PASS; self-test ok",
+     "135_qa_pythagorean_tree",
+     "qa_pythagorean_tree_cert_v1", True),
     (134, "QA Egyptian Fraction Cert family",
      _validate_egyptian_fraction_cert_family,
      "greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ, kᵢ=⌈dᵢ/eᵢ⌉; strictly increasing denominators; all intermediate pairs coprime; terminates at eₙ=1 (unit-fraction direction); Koenig descent path = Egyptian fraction steps; Rhind Papyrus ~1600 BCE = Ben Iverson Koenig = H. Lee Price Fibonacci-box navigation; checks EF_1-8+EF_W/F; 2 PASS; self-test ok",

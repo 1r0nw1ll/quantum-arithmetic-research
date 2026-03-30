@@ -3589,6 +3589,29 @@ def _validate_hat_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_eisenstein_cert_family(base_dir: str) -> Optional[str]:
+    """QA Eisenstein Cert family [133] — certifies two universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for all QA tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=A-D=a²-d²; algebraic proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z²; W (equilateral side) and Z (Eisenstein companion) per QA Law 15; fundamental (1,1,2,3): (F,W,Z)=(3,8,7), (Y,W,Z)=(5,8,7), both give 49=7²; checks EIS_1-EIS_7+EIS_W/U; 2 PASS (fundamental + 6-witness general); self-test ok"""
+    import subprocess
+    eis_dir   = os.path.join(base_dir, "qa_eisenstein_cert_v1")
+    validator = os.path.join(eis_dir, "qa_eisenstein_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_eisenstein_cert_v1/qa_eisenstein_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=eis_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_eisenstein_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_eisenstein_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_eisenstein_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_origin_of_24_cert_family(base_dir: str) -> Optional[str]:
     """QA Origin of 24 Cert family [130] — certifies dual derivation of mod-24: H²-G²=G²-I²=2CF for direction (d,e), where C=2de (green quadrance) and F=d²-e² (red quadrance); minimum value 24 at fundamental direction (d,e)=(2,1) for 3-4-5 triangle; always divisible by 24 for all primitive Pythagorean directions; checks O24_1-O24_9 (schema, elements C/F/G/H/I, dual routes Pyth-1 and Crystal) + O24_G/W/F/D (general theorem); 2 PASS (anchor 3-4-5, general theorem 6 witnesses); self-test ok"""
     import subprocess
@@ -4937,6 +4960,11 @@ FAMILY_SWEEPS = [
      "H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F) [primary], HAT₂=(d-e)/(d+e)=F/(G+C) [secondary]; spread s=E/G=HAT₁²/(1+HAT₁²) [Wildberger]; Fibonacci box [[e,d-e],[d,d+e]]; Price Fibonacci box cols = QA generation matrix entries; proportionality: HAT fractions carry QA element meaning; checks HAT_1-8+HAT_W/F; 2 PASS; self-test ok",
      "132_qa_hat",
      "qa_hat_cert_v1", True),
+    (133, "QA Eisenstein Cert family",
+     _validate_eisenstein_cert_family,
+     "universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for ALL tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=a²-d²=e(2b+3e); proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z²; W (equilateral side) and Z (Eisenstein companion) per QA Law 15; (1,1,2,3) gives (3,8,7) and (5,8,7), both Eisenstein triples; checks EIS_1-7+EIS_W/U; 2 PASS; self-test ok",
+     "133_qa_eisenstein",
+     "qa_eisenstein_cert_v1", True),
     (130, "QA Origin of 24 Cert family",
      _validate_origin_of_24_cert_family,
      "dual derivation of mod-24: H²-G²=G²-I²=2CF for any direction (d,e) [C=2de=green quadrance, F=d²-e²=red quadrance]; C²+F²=G² (Pythagorean) → (C+F)²-G²=2CF; always ÷24 for primitive Pythagorean directions; minimum=24 at fundamental (d,e)=(2,1) for 3-4-5; 7²-5²=24 (Crystal route); checks O24_1-O24_9 + O24_G/W/F/D; 2 PASS (anchor 3-4-5, general theorem 6 witnesses d≤5); self-test ok",

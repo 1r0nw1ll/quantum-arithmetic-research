@@ -1,0 +1,45 @@
+{
+  "schema_version": "QA_EISENSTEIN_CERT.v1",
+  "certificate_id": "qa.cert.eisenstein.pass.fundamental.v1",
+  "cert_type": "qa_eisenstein_cert",
+  "title": "Eisenstein PASS: fundamental tuple (b,e,d,a)=(1,1,2,3)",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The fundamental QA tuple (1,1,2,3) gives: F=3, W=8, Z=7, Y=5. Both (F,W,Z) and (Y,W,Z) satisfy the Eisenstein norm a²-ab+b²=c²: 3²-3·8+8²=9-24+64=49=7² and 5²-5·8+8²=25-40+64=49=7². The element W is the equilateral side and Z is the Eisenstein companion per QA Law 15 (elements.txt). Famous Eisenstein triple (3,5,7) also visible: F²+F·Y+Y²=9+15+25=49=Z² (triangular form for isosceles b=e case).",
+
+  "tuple": {"b": 1, "e": 1, "d": 2, "a": 3},
+
+  "elements": {
+    "F": 3,  "_F": "F = a·b = 3·1 = 3",
+    "W": 8,  "_W": "W = d·(e+a) = 2·(1+3) = 8",
+    "Z": 7,  "_Z": "Z = e²+a·d = 1+3·2 = 7",
+    "Y": 5,  "_Y": "Y = A−D = a²−d² = 9−4 = 5 = e·(2b+3e) = 1·5 = 5"
+  },
+
+  "eisenstein_fwz": {
+    "triple": [3, 8, 7],
+    "check": "3²−3·8+8²=9−24+64=49=7²",
+    "norm_form": "F²−F·W+W²=Z²"
+  },
+
+  "eisenstein_ywz": {
+    "triple": [5, 8, 7],
+    "check": "5²−5·8+8²=25−40+64=49=7²",
+    "norm_form": "Y²−Y·W+W²=Z²"
+  },
+
+  "_bonus_isosceles": "When b=e: Y=e(2e+3e)=5e²=5·F/3... and (F,Y,Z)=(3,5,7) satisfies F²+F·Y+Y²=H² (triangular Eisenstein). For b=e=1: 9+15+25=49=7² ✓. This is the classical (3,5,7) Eisenstein triple.",
+
+  "validation_checks": [
+    {"check_id": "EIS_1", "description": "schema_version is 'QA_EISENSTEIN_CERT.v1'",      "passed": true},
+    {"check_id": "EIS_2", "description": "F=ab declared correctly",                         "passed": true, "details": "F=3=1·3 ✓"},
+    {"check_id": "EIS_3", "description": "W=d(e+a) declared correctly",                     "passed": true, "details": "W=8=2·4 ✓"},
+    {"check_id": "EIS_4", "description": "Z=e²+ad declared correctly",                      "passed": true, "details": "Z=7=1+6 ✓"},
+    {"check_id": "EIS_5", "description": "Y=a²-d² declared correctly",                      "passed": true, "details": "Y=5=9-4 ✓"},
+    {"check_id": "EIS_6", "description": "F²-FW+W²=Z² (Eisenstein norm identity 1)",        "passed": true, "details": "9-24+64=49=7² ✓"},
+    {"check_id": "EIS_7", "description": "Y²-YW+W²=Z² (Eisenstein norm identity 2)",        "passed": true, "details": "25-40+64=49=7² ✓"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

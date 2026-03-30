@@ -1,0 +1,57 @@
+{
+  "schema_version": "QA_ORIGIN_OF_24_CERT.v1",
+  "certificate_id": "qa.cert.origin_of_24.pass.fundamental.v1",
+  "cert_type": "qa_origin_of_24_cert",
+  "title": "Origin of 24 PASS: fundamental direction (d,e)=(2,1), H²-G²=G²-I²=24 exactly",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The fundamental QA direction (d,e)=(2,1) encodes the 3-4-5 Pythagorean triple: C=2de=4 (green quadrance), F=d²-e²=3 (red quadrance), G=d²+e²=5 (blue quadrance). The derived quantities H=C+F=7 and I=C-F=1 satisfy H²-G²=49-25=24 and G²-I²=25-1=24. This is the primary origin of mod-24 in QA: 24 is the exact difference at the fundamental direction. Ben Iverson (Pyth-1) identified this as 'Plato's independent 2nd dimension'.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "direction": { "d": 2, "e": 1 },
+
+  "qa_elements": {
+    "C": 4,  "_C_def": "C = 2*d*e = 2*2*1 = 4  (green quadrance)",
+    "F": 3,  "_F_def": "F = d²-e² = 4-1 = 3   (red quadrance, also b*a)",
+    "G": 5,  "_G_def": "G = d²+e² = 4+1 = 5   (blue quadrance)",
+    "H": 7,  "_H_def": "H = C+F = 4+3 = 7     (apogee sum)",
+    "I": 1,  "_I_def": "I = C-F = 4-3 = 1     (perigee difference)"
+  },
+
+  "origin_of_24": {
+    "route_pyth1": {
+      "H_squared": 49,
+      "G_squared": 25,
+      "H2_minus_G2": 24,
+      "check": "H²-G² = 49-25 = 24 ✓",
+      "_source": "Ben Iverson Pyth-1: 'H²-G²=G²-I²=24 for the 3-4-5 triangle'"
+    },
+    "route_crystal": {
+      "identity": "7² - 5² = 49 - 25 = 24",
+      "check": "G²-I² = 25-1 = 24 ✓",
+      "_source": "QA-4 Iota crystal geometry: 7²-5²=24 at the fundamental direction"
+    },
+    "equality_check": "H²-G² = G²-I² = 24 — both routes give the same 24 ✓",
+    "modulus_meaning": "QA arithmetic uses mod 24 because 24 is the exact gap at the fundamental Pythagorean direction. The cosmos orbit period π(9)=24 (Pisano period) is the same 24."
+  },
+
+  "validation_checks": [
+    { "check_id": "O24_1", "description": "schema_version is 'QA_ORIGIN_OF_24_CERT.v1'",             "passed": true,  "details": "schema_version='QA_ORIGIN_OF_24_CERT.v1'" },
+    { "check_id": "O24_2", "description": "C = 2*d*e",                                               "passed": true,  "details": "C=4, 2*2*1=4 ✓" },
+    { "check_id": "O24_3", "description": "F = d*d - e*e",                                           "passed": true,  "details": "F=3, 4-1=3 ✓" },
+    { "check_id": "O24_4", "description": "G = d*d + e*e",                                           "passed": true,  "details": "G=5, 4+1=5 ✓" },
+    { "check_id": "O24_5", "description": "H = C + F",                                               "passed": true,  "details": "H=7, 4+3=7 ✓" },
+    { "check_id": "O24_6", "description": "I = C - F",                                               "passed": true,  "details": "I=1, 4-3=1 ✓" },
+    { "check_id": "O24_7", "description": "H²-G² = 24 (Pyth-1 route)",                              "passed": true,  "details": "49-25=24 ✓" },
+    { "check_id": "O24_8", "description": "G²-I² = 24 (crystal route)",                             "passed": true,  "details": "25-1=24 ✓" },
+    { "check_id": "O24_9", "description": "H²-G² = G²-I² (dual derivation consistency)",            "passed": true,  "details": "24=24 ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

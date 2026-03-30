@@ -1,0 +1,53 @@
+{
+  "schema_version": "QA_ORIGIN_OF_24_CERT.v1",
+  "certificate_id": "qa.cert.origin_of_24.pass.general.v1",
+  "cert_type": "qa_origin_of_24_cert",
+  "title": "Origin of 24 PASS: general theorem — H²-G²=G²-I²=2CF≡0 (mod 24) for all primitive Pythagorean directions",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "General theorem fixture. For ALL primitive Pythagorean directions (d>e>0, gcd(d,e)=1, d+e odd), H²-G²=G²-I²=2CF≡0 (mod 24). The fundamental direction (d,e)=(2,1) achieves the minimum value 24. Machine-verified for all d≤20.",
+
+  "inherits_from": "QA_CORE_SPEC.v1",
+  "spec_scope": "family_extension",
+  "core_kernel_compatibility": {
+    "gate_policy_respected": [0, 1, 2, 3, 4, 5]
+  },
+
+  "general_theorem": {
+    "statement": "For all d>e>0 with gcd(d,e)=1 and d+e odd: H²-G²=G²-I²=2CF and 24 | (H²-G²)",
+    "where": "C=2de, F=d²-e², G=d²+e², H=C+F, I=C-F",
+    "proof_sketch": "H²-G² = (C+F)²-G² = C²+2CF+F²-G². Since C²+F²=G² (Pythagorean identity for the QA direction), this simplifies to 2CF. Similarly G²-I²=(d²+e²)²-(C-F)²=G²-C²+2CF-F²=2CF. So H²-G²=G²-I²=2CF=2(2de)(d²-e²)=4de(d-e)(d+e). Divisibility by 24: (a) div by 8 — since d+e is odd, exactly one of d,e is even, so de is even; then 4de(...)=8·(something integer). (b) div by 3 — if neither d nor e is divisible by 3, then d≡1,e≡2 or d≡2,e≡1 (mod 3), giving d+e≡0 (mod 3). So 3 always divides at least one of d,e,d+e,d-e. Together: 24 | 2CF.",
+    "verified_range": "all primitive (d,e) with d≤20 (machine-verified)"
+  },
+
+  "witnesses": [
+    {"d": 2, "e": 1, "H2_G2": 24,  "factor_of_24": 1,  "triple": "3-4-5"},
+    {"d": 3, "e": 2, "H2_G2": 120, "factor_of_24": 5,  "triple": "5-12-13"},
+    {"d": 4, "e": 1, "H2_G2": 240, "factor_of_24": 10, "triple": "8-15-17"},
+    {"d": 4, "e": 3, "H2_G2": 336, "factor_of_24": 14, "triple": "7-24-25"},
+    {"d": 5, "e": 2, "H2_G2": 840, "factor_of_24": 35, "triple": "20-21-29"},
+    {"d": 5, "e": 4, "H2_G2": 720, "factor_of_24": 30, "triple": "9-40-41"}
+  ],
+
+  "corollary_second_order_quadruple": {
+    "statement": "(I², 2CF, G², H²) is a QA quadruple: I²+(2CF)=G² and I²+2(2CF)=H²",
+    "proof": "I²+2CF = (C-F)²+2CF = C²-2CF+F²+2CF = C²+F² = G². Then G²+2CF = G²+(H²-G²)/1... = G²+2CF = I²+4CF = (C+F)²=H².",
+    "_note": "The quantity 2CF=H²-G²=G²-I² is the 'e' step-element of a second-order QA quadruple built from squares of primary elements. The (b,e,d,a) structure is self-similar across the squaring map."
+  },
+
+  "connection_to_mod24_arithmetic": {
+    "statement": "The QA cosmos orbit period π(9)=24 equals the Pisano period of Fibonacci mod 9. The same 24 appears as the exact minimum gap H²-G²=24 at the fundamental Pythagorean direction (d,e)=(2,1). This is not a coincidence: both arise from the Fibonacci/golden-ratio structure of Z[φ] and its reduction mod 9.",
+    "significance": "Ben Iverson identified this as the origin of QA's mod-24 structure. The number 24 is not arbitrary — it is the natural periodicity forced by the fundamental Pythagorean geometry. The formula H²-G²=2CF links QA's two key elements: C (green quadrance) and F (red quadrance)."
+  },
+
+  "validation_checks": [
+    { "check_id": "O24_1", "description": "schema_version is 'QA_ORIGIN_OF_24_CERT.v1'",             "passed": true },
+    { "check_id": "O24_G", "description": "general_theorem.statement is present",                    "passed": true },
+    { "check_id": "O24_W", "description": "at least 3 witnesses with correct H2_G2 values",          "passed": true, "details": "6 witnesses provided; H2_G2=2CF verified" },
+    { "check_id": "O24_F", "description": "fundamental witness (d=2,e=1) has H2_G2=24",              "passed": true, "details": "witnesses[0].H2_G2=24 ✓" },
+    { "check_id": "O24_D", "description": "all witness H2_G2 divisible by 24",                       "passed": true, "details": "24,120,240,336,840,720 all ÷24 ✓" }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

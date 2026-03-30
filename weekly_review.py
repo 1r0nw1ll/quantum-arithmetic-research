@@ -271,8 +271,53 @@ def agent_display_name(agent: str) -> str:
     }.get(agent, agent.title())
 
 
+def run_linter_stats() -> dict:
+    """Run qa_axiom_linter.py --all and return error/warning counts and file breakdown."""
+    import subprocess, re
+    linter = Path(__file__).parent / "tools" / "qa_axiom_linter.py"
+    if not linter.exists():
+        return {"available": False, "error": "linter not found"}
+    try:
+        proc = subprocess.run(
+            [sys.executable, str(linter), "--all"],
+            capture_output=True, text=True, timeout=120,
+            cwd=str(Path(__file__).parent),
+        )
+        stdout = proc.stdout or ""
+        stderr = proc.stderr or ""
+        combined = stdout + stderr
+
+        errors, warnings = 0, 0
+        error_files: dict = {}   # file -> list of (rule, snippet)
+        warning_files: dict = {}
+
+        for line in combined.splitlines():
+            m_e = re.match(r"^(.+?)\s+ERROR\s+(\S+)\s*(.*)", line)
+            m_w = re.match(r"^(.+?)\s+WARN\s+(\S+)\s*(.*)", line)
+            if m_e:
+                errors += 1
+                fname = m_e.group(1).strip()
+                error_files.setdefault(fname, []).append((m_e.group(2), m_e.group(3)[:60]))
+            elif m_w:
+                warnings += 1
+                fname = m_w.group(1).strip()
+                warning_files.setdefault(fname, []).append((m_w.group(2), m_w.group(3)[:60]))
+
+        return {
+            "available": True,
+            "returncode": proc.returncode,
+            "errors": errors,
+            "warnings": warnings,
+            "error_files": error_files,
+            "warning_files": warning_files,
+            "raw_tail": combined[-800:] if len(combined) > 800 else combined,
+        }
+    except Exception as ex:
+        return {"available": True, "error": str(ex), "errors": -1, "warnings": -1}
+
+
 def generate_report(thoughts: list, collab_events: list, commits: list,
-                    since_days: int, week_of: str) -> str:
+                    since_days: int, week_of: str, lint_stats: dict = None) -> str:
 
     # Group thoughts by agent
     by_agent = defaultdict(list)
@@ -412,6 +457,32 @@ def generate_report(thoughts: list, collab_events: list, commits: list,
         lines.append("*No open ideas/tasks found.*")
     lines.append("")
 
+    # Linting health
+    lines.append("## Linting Health (qa_axiom_linter)")
+    lines.append("")
+    if lint_stats is None or not lint_stats.get("available"):
+        lines.append("*Linter not available — run `python tools/qa_axiom_linter.py --all` manually.*")
+    elif "error" in lint_stats and lint_stats.get("errors", 0) < 0:
+        lines.append(f"*Linter error: {lint_stats['error']}*")
+    else:
+        e = lint_stats["errors"]
+        w = lint_stats["warnings"]
+        status = "🔴 ERRORS PRESENT — must fix before commit" if e > 0 else "🟢 Clean (0 errors)"
+        lines.append(f"**Status:** {status}")
+        lines.append(f"**Errors:** {e}  |  **Warnings:** {w}")
+        lines.append("")
+        if lint_stats.get("error_files"):
+            lines.append("### Error files")
+            for fname, issues in sorted(lint_stats["error_files"].items())[:10]:
+                lines.append(f"- `{fname}`: {', '.join(r for r,_ in issues[:3])}")
+        if lint_stats.get("warning_files"):
+            lines.append("### Warning files (top 10)")
+            for fname, issues in sorted(lint_stats["warning_files"].items())[:10]:
+                lines.append(f"- `{fname}`: {', '.join(r for r,_ in issues[:3])}")
+        lines.append("")
+        lines.append("**Improvement target:** reduce warning count week-over-week; zero errors is mandatory.")
+    lines.append("")
+
     # Recursive: note for next review
     lines.append("---")
     lines.append("*This report is auto-generated. Review it, correct agent attributions or scores, and feed corrections back as Open Brain observations tagged `weekly-review`.*")
@@ -437,13 +508,17 @@ def main():
     thoughts = fetch_open_brain(since_days)
     print(f"  Open Brain: {len(thoughts)} entries", file=sys.stderr)
 
+    print(f"  Running linter...", file=sys.stderr)
+    lint_stats = run_linter_stats()
+    print(f"  Linter: {lint_stats.get('errors',0)} errors, {lint_stats.get('warnings',0)} warnings", file=sys.stderr)
+
     collab = read_collab_events(since)
     print(f"  qa-collab:  {len(collab)} events", file=sys.stderr)
 
     commits = read_git_log(since_days)
     print(f"  git:        {len(commits)} commits", file=sys.stderr)
 
-    report = generate_report(thoughts, collab, commits, since_days, week_of)
+    report = generate_report(thoughts, collab, commits, since_days, week_of, lint_stats)
 
     # Output
     if args.out:

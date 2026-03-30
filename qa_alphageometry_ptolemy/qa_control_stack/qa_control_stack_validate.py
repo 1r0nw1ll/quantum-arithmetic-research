@@ -36,10 +36,11 @@ Checks:
   CS11  cross_domain_claim.canonical_path_length_k matches all domain trace path_length_k
 """
 
+from __future__ import annotations
+
 QA_COMPLIANCE = "cert_validator — validates cert JSON structure, no empirical QA state machine"
 
 
-from __future__ import annotations
 
 import json
 import sys

@@ -36,10 +36,11 @@ Fail types:
   WITNESS_MISMATCH               DU12/DU13/DU14
 """
 
+from __future__ import annotations
+
 QA_COMPLIANCE = "cert_validator — validates cert JSON structure, no empirical QA state machine"
 
 
-from __future__ import annotations
 import json
 import os
 import sys

@@ -15,10 +15,9 @@ failure-complete contract:
 Uses qa_cert_core exclusively for shared operations.
 """
 
-QA_COMPLIANCE = "cert_validator — validates cert JSON structure, no empirical QA state machine"
-
-
 from __future__ import annotations
+
+QA_COMPLIANCE = "cert_validator — validates cert JSON structure, no empirical QA state machine"
 
 import json
 import sys
@@ -3567,6 +3566,38 @@ def _validate_projection_obstruction_cert_family(base_dir: str) -> Optional[str]
     return None
 
 
+def _validate_origin_of_24_cert_family(base_dir: str) -> Optional[str]:
+    """QA Origin of 24 Cert family [130] — certifies dual derivation of mod-24: H²-G²=G²-I²=2CF for direction (d,e), where C=2de (green quadrance) and F=d²-e² (red quadrance); minimum value 24 at fundamental direction (d,e)=(2,1) for 3-4-5 triangle; always divisible by 24 for all primitive Pythagorean directions; checks O24_1-O24_9 (schema, elements C/F/G/H/I, dual routes Pyth-1 and Crystal) + O24_G/W/F/D (general theorem); 2 PASS (anchor 3-4-5, general theorem 6 witnesses); self-test ok"""
+    import subprocess
+    o24_dir   = os.path.join(base_dir, "qa_origin_of_24_cert_v1")
+    validator = os.path.join(o24_dir, "qa_origin_of_24_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_origin_of_24_cert_v1/qa_origin_of_24_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=o24_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_origin_of_24_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            "qa_origin_of_24_cert self-test returned non-JSON output:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}\nstderr={(proc.stderr or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_origin_of_24_cert self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_uhg_null_cert_family(base_dir: str) -> Optional[str]:
     """QA UHG Null Cert family [127] — certifies that every QA triple (F,C,G)=(d²-e²,2de,d²+e²) is a null point [F:C:G] in Universal Hyperbolic Geometry satisfying F²+C²-G²=0; equivalent to Wildberger Chromogeometric Theorem 6; Gaussian integer interpretation: Z=d+ei, Z²=(d²-e²)+2dei, |Z|²=d²+e², so (F,C,G)=(Re(Z²),Im(Z²),|Z|²); checks UN1-UN7 (schema, green/red/blue quadrance, null condition, Gaussian decomp, null_quadrance field); 2 PASS (d=2e=1 → 3-4-5 null point, d=3e=2 → 5-12-13 null point) + 1 FAIL (BLUE_QUADRANCE_MISMATCH+NULL_CONDITION_VIOLATED+GAUSSIAN_DECOMP_MISMATCH: G claimed as 6 instead of 5); self-test ok"""
     import subprocess
@@ -4853,6 +4884,11 @@ FAMILY_SWEEPS = [
      "Wildberger chromogeometric quadrances: C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² (Wildberger Thm 6); I=|C-F| conic discriminant; checks CG1-CG7 (schema, green/red/blue quadrance, Pythagoras, semi-latus, conic type); 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED); self-test ok",
      "125_qa_chromogeometry",
      "qa_chromogeometry_cert_v1", True),
+    (130, "QA Origin of 24 Cert family",
+     _validate_origin_of_24_cert_family,
+     "dual derivation of mod-24: H²-G²=G²-I²=2CF for any direction (d,e) [C=2de=green quadrance, F=d²-e²=red quadrance]; C²+F²=G² (Pythagorean) → (C+F)²-G²=2CF; always ÷24 for primitive Pythagorean directions; minimum=24 at fundamental (d,e)=(2,1) for 3-4-5; 7²-5²=24 (Crystal route); checks O24_1-O24_9 + O24_G/W/F/D; 2 PASS (anchor 3-4-5, general theorem 6 witnesses d≤5); self-test ok",
+     "130_qa_origin_of_24",
+     "qa_origin_of_24_cert_v1", True),
 ]
 
 

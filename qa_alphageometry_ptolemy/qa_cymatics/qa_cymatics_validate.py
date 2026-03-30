@@ -24,10 +24,11 @@ Usage:
     python qa_cymatics_validate.py --self-test
 """
 
+from __future__ import annotations
+
 QA_COMPLIANCE = "cert_validator — validates cert JSON structure, no empirical QA state machine"
 
 
-from __future__ import annotations
 
 import argparse
 import hashlib

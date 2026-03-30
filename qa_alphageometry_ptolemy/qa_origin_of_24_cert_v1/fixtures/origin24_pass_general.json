@@ -30,9 +30,11 @@
   ],
 
   "corollary_second_order_quadruple": {
-    "statement": "(I², 2CF, G², H²) is a QA quadruple: I²+(2CF)=G² and I²+2(2CF)=H²",
-    "proof": "I²+2CF = (C-F)²+2CF = C²-2CF+F²+2CF = C²+F² = G². Then G²+2CF = G²+(H²-G²)/1... = G²+2CF = I²+4CF = (C+F)²=H².",
-    "_note": "The quantity 2CF=H²-G²=G²-I² is the 'e' step-element of a second-order QA quadruple built from squares of primary elements. The (b,e,d,a) structure is self-similar across the squaring map."
+    "statement": "(I², 2CF, G², H²) is a QA quadruple satisfying b+e=d, b+2e=a",
+    "proof": "Set b=I²=(C-F)², e=2CF, d=G², a=H². Then b+e = (C-F)²+2CF = C²+F² = G² = d [Pythagorean identity]. And b+2e = (C-F)²+4CF = (C+F)² = H² = a.",
+    "geometric_interpretation": "2CF = 4·(1/2·C·F) = total area of the four right triangles in the Pythagorean twisted-square construction (Mathologer). At (2,1): 4 triangles of legs C=4, F=3 have total area 4·6=24 = H²-G² = 49-25.",
+    "koenig_connection": "In the Koenig I→H chain of prime triples, each step produces a new (I², 2CF, G², H²) quadruple. The quantity 2CF is the step-element e in the quadrance-level QA quadruple, making the QA system self-similar under the squaring map.",
+    "_note": "Identified by Will Dale, 2026-03-30. The (b,e,d,a) structure at the element level reappears exactly at the quadrance level, linking the Koenig series and the Mathologer twisted-squares proof to the discrete QA arithmetic."
   },
 
   "connection_to_mod24_arithmetic": {

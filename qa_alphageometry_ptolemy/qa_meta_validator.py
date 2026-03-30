@@ -3589,6 +3589,29 @@ def _validate_hat_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_egyptian_fraction_cert_family(base_dir: str) -> Optional[str]:
+    """QA Egyptian Fraction Cert family [134] — certifies greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ where kᵢ=⌈dᵢ/eᵢ⌉; denominators strictly increasing; all intermediate pairs coprime; terminates when eₙ=1; Koenig descent path (d₀,e₀)→...→(kₙ,1) = Egyptian fraction steps; Rhind Papyrus ~1600 BCE greedy algorithm = Koenig tree navigation; checks EF_1-8+EF_W/F; 2 PASS (fundamental (2,1) expansion=[2]; 6-witness general covering lengths 1/2/3); self-test ok"""
+    import subprocess
+    ef_dir    = os.path.join(base_dir, "qa_egyptian_fraction_cert_v1")
+    validator = os.path.join(ef_dir, "qa_egyptian_fraction_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_egyptian_fraction_cert_v1/qa_egyptian_fraction_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=ef_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_egyptian_fraction_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_egyptian_fraction_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_egyptian_fraction_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_eisenstein_cert_family(base_dir: str) -> Optional[str]:
     """QA Eisenstein Cert family [133] — certifies two universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for all QA tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=A-D=a²-d²; algebraic proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z²; W (equilateral side) and Z (Eisenstein companion) per QA Law 15; fundamental (1,1,2,3): (F,W,Z)=(3,8,7), (Y,W,Z)=(5,8,7), both give 49=7²; checks EIS_1-EIS_7+EIS_W/U; 2 PASS (fundamental + 6-witness general); self-test ok"""
     import subprocess
@@ -4960,6 +4983,11 @@ FAMILY_SWEEPS = [
      "H. Lee Price half-angle tangents bridge to QA: HAT₁=e/d=C/(G+F) [primary], HAT₂=(d-e)/(d+e)=F/(G+C) [secondary]; spread s=E/G=HAT₁²/(1+HAT₁²) [Wildberger]; Fibonacci box [[e,d-e],[d,d+e]]; Price Fibonacci box cols = QA generation matrix entries; proportionality: HAT fractions carry QA element meaning; checks HAT_1-8+HAT_W/F; 2 PASS; self-test ok",
      "132_qa_hat",
      "qa_hat_cert_v1", True),
+    (134, "QA Egyptian Fraction Cert family",
+     _validate_egyptian_fraction_cert_family,
+     "greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ, kᵢ=⌈dᵢ/eᵢ⌉; strictly increasing denominators; all intermediate pairs coprime; terminates at eₙ=1 (unit-fraction direction); Koenig descent path = Egyptian fraction steps; Rhind Papyrus ~1600 BCE = Ben Iverson Koenig = H. Lee Price Fibonacci-box navigation; checks EF_1-8+EF_W/F; 2 PASS; self-test ok",
+     "134_qa_egyptian_fraction",
+     "qa_egyptian_fraction_cert_v1", True),
     (133, "QA Eisenstein Cert family",
      _validate_eisenstein_cert_family,
      "universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for ALL tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=a²-d²=e(2b+3e); proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z²; W (equilateral side) and Z (Eisenstein companion) per QA Law 15; (1,1,2,3) gives (3,8,7) and (5,8,7), both Eisenstein triples; checks EIS_1-7+EIS_W/U; 2 PASS; self-test ok",

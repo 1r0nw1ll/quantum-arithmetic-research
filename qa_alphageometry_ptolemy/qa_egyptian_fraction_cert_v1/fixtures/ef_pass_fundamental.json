@@ -1,0 +1,44 @@
+{
+  "schema_version": "QA_EGYPTIAN_FRACTION_CERT.v1",
+  "certificate_id": "qa.cert.egyptian_fraction.pass.fundamental.v1",
+  "cert_type": "qa_egyptian_fraction_cert",
+  "title": "Egyptian Fraction PASS: fundamental direction (d,e)=(2,1)",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The fundamental QA direction (d,e)=(2,1) gives HAT₁=e/d=1/2 — already a unit fraction, so the expansion is a single step [2]. This is the root of the Koenig tree (corresponding to the 3-4-5 triangle). All other expansions descend from here. Ben Iverson Pyth-1: this is QN (1,1,2,3) in direction-pair form.",
+
+  "direction": {"d": 2, "e": 1},
+  "hat1": {"numerator": 1, "denominator": 2, "_note": "e/d = 1/2"},
+
+  "expansion": {
+    "unit_fractions": [{"k": 2, "unit": "1/2"}],
+    "denominators": [2],
+    "check_sum": "1/2 = 1/2",
+    "length": 1
+  },
+
+  "koenig_descent": [
+    {"step": 1, "d": 2, "e": 1, "k": 2, "note": "terminal: e=1, this IS the root direction"}
+  ],
+
+  "properties": {
+    "strictly_increasing": true,
+    "all_coprime": true,
+    "terminal_e_equals_1": true,
+    "sum_equals_hat1": true
+  },
+
+  "validation_checks": [
+    {"check_id": "EF_1", "description": "schema_version is 'QA_EGYPTIAN_FRACTION_CERT.v1'", "passed": true},
+    {"check_id": "EF_2", "description": "d > e > 0",                                         "passed": true, "details": "2 > 1 > 0"},
+    {"check_id": "EF_3", "description": "gcd(d,e) = 1",                                      "passed": true, "details": "gcd(2,1)=1"},
+    {"check_id": "EF_4", "description": "expansion sums to e/d",                              "passed": true, "details": "1/2 = 1/2"},
+    {"check_id": "EF_5", "description": "denominators strictly increasing",                   "passed": true, "details": "[2] — single term"},
+    {"check_id": "EF_6", "description": "each kᵢ = ceil(dᵢ/eᵢ) (greedy)",                  "passed": true, "details": "ceil(2/1)=2"},
+    {"check_id": "EF_7", "description": "all intermediate pairs coprime",                     "passed": true, "details": "gcd(2,1)=1"},
+    {"check_id": "EF_8", "description": "terminal e=1",                                       "passed": true, "details": "e=1 at step 1"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

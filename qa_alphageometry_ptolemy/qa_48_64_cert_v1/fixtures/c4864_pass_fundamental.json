@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_48_64_CERT.v1",
+  "certificate_id": "qa.cert.48_64.pass.fundamental.v1",
+  "cert_type": "qa_48_64_cert",
+  "title": "48/64 PASS: fundamental (d,e)=(2,1) — 48L=48, equilateral polynomial (4,4,4)",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. Two faces of the same coin: (1) ALGEBRAIC: for direction (2,1), L=1, H=7, I=1: 48L=48=H²-I²=4CF — the minimum value. This is the origin-of-24 corollary: 2CF=24L (cert [137]) doubled gives H²-I²=4CF=48L. (2) POLYNOMIAL: the equilateral null triangle has biangle triple (P,R,T)=(4,4,4) satisfying PR+RT+PT=48, PRT=64 — the polynomial (x-4)³=x³-12x²+48x-64. This is the UNIQUE symmetric (P=R=T) solution. Connected to: 48=2×cosmos_period=2×24 (cert [128]: cosmos orbit has period 24); 64=satellite_period²=8² (cert [128]: satellite orbit has period 8); 48/64=3/4=equilateral spread in Wildberger chromogeometry.",
+
+  "direction": {"d": 2, "e": 1},
+  "triple": {"F": 3, "C": 4, "G": 5},
+
+  "koenig_elements": {"H": 7, "I": 1, "L": 1,
+    "_note": "H=C+F=7, I=C-F=1 (>0→hyperbola), L=CF/12=12/12=1"},
+
+  "algebraic_48": {
+    "formula": "48L = H²-I² = 4CF",
+    "H_sq_minus_I_sq": 48,
+    "four_CF": 48,
+    "forty_eight_L": 48,
+    "proof": "(C+F)²-(C-F)² = 4CF = 48·(CF/12) ✓",
+    "check": "7²-1²=49-1=48=4·4·3=48·1 ✓"
+  },
+
+  "equilateral_polynomial": {
+    "_note": "The symmetric solution P=R=T=4 to (PR+RT+PT=48, PRT=64) represents the equilateral null triangle — three null biangles all equal to 4.",
+    "P": 4, "R": 4, "T": 4,
+    "e2_PR_RT_PT": 48,
+    "e3_PRT": 64,
+    "e1_P_R_T": 12,
+    "polynomial": "x³-12x²+48x-64 = (x-4)³",
+    "factored": "(x-4)³",
+    "check_e2": "4*4+4*4+4*4=48 ✓",
+    "check_e3": "4*4*4=64 ✓",
+    "uniqueness": "Only solution with P=R=T: 3P²=48→P²=16→P=4; P³=64 ✓"
+  },
+
+  "orbit_constants": {
+    "cosmos_period": 24,
+    "satellite_period": 8,
+    "forty_eight": 48,
+    "forty_eight_as": "2×cosmos = 2×24 = 48",
+    "sixty_four": 64,
+    "sixty_four_as": "satellite² = 8² = 64",
+    "ratio": "48/64 = 3/4 = equilateral spread in chromogeometry (Wildberger)",
+    "_ref_cert": "[128] QA_SPREAD_PERIOD_CERT.v1 — cosmos period=24, satellite period=8"
+  },
+
+  "connections": {
+    "cert_137": "48L=H²-I²=4CF ≥ 48 for all primitive directions (L≥1 since CF/12≥1); min at (2,1) with L=1",
+    "cert_130": "H²-G²=G²-I²=2CF=24L (cert [130]); doubling: H²-I²=4CF=48L",
+    "cert_133": "Eisenstein equilateral: three biangles P=R=T=4 at 120° spacing; (4)³=64 in Z[ω]",
+    "cert_128": "cosmos=24=period of spread polynomials in F₇; satellite=8; 48=2×24, 64=8²"
+  },
+
+  "validation_checks": [
+    {"check_id": "C4864_1",    "description": "schema_version is 'QA_48_64_CERT.v1'", "passed": true},
+    {"check_id": "C4864_ALG",  "description": "48L = H²-I² = 4CF for direction (2,1)", "passed": true, "details": "48=48=48 ✓"},
+    {"check_id": "C4864_POLY", "description": "P=R=T=4: PR+RT+PT=48, PRT=64", "passed": true, "details": "48=48, 64=64 ✓"},
+    {"check_id": "C4864_ORB",  "description": "48=2×24, 64=8²", "passed": true},
+    {"check_id": "C4864_F",    "description": "fundamental (d,e)=(2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

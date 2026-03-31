@@ -1,0 +1,105 @@
+{
+  "schema_version": "QA_SYNCHRONOUS_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.synchronous_harmonics.pass.sync_and_par.v1",
+  "cert_type": "qa_synchronous_harmonics_cert",
+  "title": "Synchronous Harmonics PASS: coprime synchronization + par interference witnesses",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Core theorems: (1) coprime periods synchronize at product (minimum time); non-coprime at LCM < product. (2) Same-par odd wavelets SUPPORT at quarter-points; cross-par OPPOSE. Source: Iverson Pyth-2 Ch XIII, QA-2 Ch 6.",
+
+  "sync_pairs": [
+    {
+      "m": 3, "n": 5,
+      "coprime": true, "sync_time": 15,
+      "note": "fundamental coprime odd pair; sync at 3×5=15"
+    },
+    {
+      "m": 3, "n": 7,
+      "coprime": true, "sync_time": 21,
+      "note": "two 3-par wavelets; sync at product"
+    },
+    {
+      "m": 5, "n": 7,
+      "coprime": true, "sync_time": 35,
+      "note": "5-par × 3-par; sync at product"
+    },
+    {
+      "m": 5, "n": 13,
+      "coprime": true, "sync_time": 65,
+      "note": "both 5-par; sync at product"
+    },
+    {
+      "m": 7, "n": 11,
+      "coprime": true, "sync_time": 77,
+      "note": "both 3-par; sync at product"
+    },
+    {
+      "m": 6, "n": 9,
+      "coprime": false, "sync_time": 18,
+      "note": "non-coprime (gcd=3); LCM=18 < product=54"
+    },
+    {
+      "m": 8, "n": 12,
+      "coprime": false, "sync_time": 24,
+      "note": "non-coprime (gcd=4); LCM=24 < product=96; LCM=24=cosmos period"
+    }
+  ],
+
+  "par_pairs": [
+    {
+      "p1": 3, "p2": 7,
+      "par1": "3-par", "par2": "3-par",
+      "interference": "SUPPORT",
+      "note": "both 3-par (4k+3): both LOW at 1/4, both HIGH at 3/4 → constructive"
+    },
+    {
+      "p1": 5, "p2": 13,
+      "par1": "5-par", "par2": "5-par",
+      "interference": "SUPPORT",
+      "note": "both 5-par (4k+1): both HIGH at 1/4, both LOW at 3/4 → constructive"
+    },
+    {
+      "p1": 3, "p2": 5,
+      "par1": "3-par", "par2": "5-par",
+      "interference": "OPPOSE",
+      "note": "cross-par: 3-par LOW at 1/4 vs 5-par HIGH at 1/4 → destructive"
+    },
+    {
+      "p1": 7, "p2": 13,
+      "par1": "3-par", "par2": "5-par",
+      "interference": "OPPOSE",
+      "note": "cross-par: 3-par(7) vs 5-par(13) → destructive at quarter-points"
+    },
+    {
+      "p1": 11, "p2": 19,
+      "par1": "3-par", "par2": "3-par",
+      "interference": "SUPPORT",
+      "note": "both 3-par: 11≡3(mod4), 19≡3(mod4) → constructive"
+    },
+    {
+      "p1": 5, "p2": 17,
+      "par1": "5-par", "par2": "5-par",
+      "interference": "SUPPORT",
+      "note": "both 5-par: 5≡1(mod4), 17≡1(mod4) → constructive"
+    },
+    {
+      "p1": 11, "p2": 17,
+      "par1": "3-par", "par2": "5-par",
+      "interference": "OPPOSE",
+      "note": "cross-par: 3-par(11) vs 5-par(17) → destructive"
+    }
+  ],
+
+  "qn_witnesses": [],
+
+  "validation_checks": [
+    {"check_id": "SH_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "SH_SYNC", "description": "7 sync pairs: 5 coprime (sync=product), 2 non-coprime (LCM<product)", "passed": true},
+    {"check_id": "SH_PAR",  "description": "7 par pairs: 4 SUPPORT (same-par), 3 OPPOSE (cross-par)", "passed": true},
+    {"check_id": "SH_W",    "description": "14 total witnesses", "passed": true},
+    {"check_id": "SH_F",    "description": "fundamental (3,5) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

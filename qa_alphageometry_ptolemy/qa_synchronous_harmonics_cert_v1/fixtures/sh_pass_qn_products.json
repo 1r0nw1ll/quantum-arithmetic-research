@@ -1,0 +1,71 @@
+{
+  "schema_version": "QA_SYNCHRONOUS_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.synchronous_harmonics.pass.qn_products.v1",
+  "cert_type": "qa_synchronous_harmonics_cert",
+  "title": "Synchronous Harmonics PASS: QN products divisible by 6 + par sync witnesses",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Certifies (1) all QN products b*e*d*a are divisible by 6 (because d=b+e guarantees factor of 2 or 3 among b,e,d), and (2) par synchronization for QN-derived periods. Source: QA-3 Ch 4 'all QNs are multiples of 6'.",
+
+  "sync_pairs": [
+    {
+      "m": 3, "n": 5,
+      "coprime": true, "sync_time": 15,
+      "note": "fundamental pair"
+    },
+    {
+      "m": 3, "n": 13,
+      "coprime": true, "sync_time": 39,
+      "note": "3-par × 5-par = cross-par"
+    },
+    {
+      "m": 6, "n": 10,
+      "coprime": false, "sync_time": 30,
+      "note": "non-coprime (gcd=2); LCM=30 < product=60"
+    }
+  ],
+
+  "par_pairs": [
+    {
+      "p1": 3, "p2": 5,
+      "par1": "3-par", "par2": "5-par",
+      "interference": "OPPOSE",
+      "note": "fundamental cross-par opposition"
+    },
+    {
+      "p1": 7, "p2": 11,
+      "par1": "3-par", "par2": "3-par",
+      "interference": "SUPPORT",
+      "note": "same-par support (both 3-par)"
+    },
+    {
+      "p1": 9, "p2": 17,
+      "par1": "5-par", "par2": "5-par",
+      "interference": "SUPPORT",
+      "note": "same-par support (both 5-par: 9≡1 mod4, 17≡1 mod4)"
+    }
+  ],
+
+  "qn_witnesses": [
+    {"b": 1, "e": 1, "product": 6,     "note": "fundamental QN (1,1,2,3); 6=2×3"},
+    {"b": 1, "e": 2, "product": 30,    "note": "QN (1,2,3,5); 30=2×3×5"},
+    {"b": 1, "e": 3, "product": 84,    "note": "QN (1,3,4,7); 84=2²×3×7"},
+    {"b": 2, "e": 3, "product": 240,   "note": "QN (2,3,5,8); 240=2⁴×3×5"},
+    {"b": 3, "e": 5, "product": 1560,  "note": "QN (3,5,8,13); 1560=2³×3×5×13"},
+    {"b": 5, "e": 8, "product": 10920, "note": "QN (5,8,13,21); 10920=2³×3×5×7×13"},
+    {"b": 1, "e": 4, "product": 180,   "note": "QN (1,4,5,9); 180=2²×3²×5"},
+    {"b": 2, "e": 1, "product": 24,    "note": "QN (2,1,3,4); 24=2³×3 (female of fundamental)"}
+  ],
+
+  "validation_checks": [
+    {"check_id": "SH_1",     "description": "schema_version correct", "passed": true},
+    {"check_id": "SH_SYNC",  "description": "3 sync pairs verified", "passed": true},
+    {"check_id": "SH_PAR",   "description": "3 par pairs verified", "passed": true},
+    {"check_id": "SH_PROD6", "description": "8 QN products all divisible by 6", "passed": true},
+    {"check_id": "SH_W",     "description": "6 sync+par witnesses + 8 QN witnesses", "passed": true},
+    {"check_id": "SH_F",     "description": "fundamental (3,5) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

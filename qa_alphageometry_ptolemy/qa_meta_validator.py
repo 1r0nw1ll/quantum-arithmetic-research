@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_synchronous_harmonics_cert_family(base_dir: str) -> Optional[str]:
+    """QA Synchronous Harmonics Cert family [147] — certifies coprime synchronization (periods m,n coprime → sync at m×n; non-coprime → LCM<product), par-based interference (3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE), and QN product divisibility by 6 (among b,e,d at least one even and one div by 3). Source: Iverson Pyth-2 Ch XIII, QA-2 Ch 6, QA-3 Ch 4; checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    sh_dir    = os.path.join(base_dir, "qa_synchronous_harmonics_cert_v1")
+    validator = os.path.join(sh_dir, "qa_synchronous_harmonics_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_synchronous_harmonics_cert_v1/qa_synchronous_harmonics_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=sh_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_synchronous_harmonics_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_synchronous_harmonics_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_synchronous_harmonics_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_path_scale_cert_family(base_dir: str) -> Optional[str]:
     """QA Path Scale Cert family [146] — certifies G=d^2+e^2 growth profiles along Pythagorean-tree generator paths. UNIFORM_B paths grow exponentially: G ratio converges to 3+2*sqrt(2)=5.828... (silver ratio squared, from M_B dominant eigenvalue 1+sqrt(2)). UNIFORM_A and UNIFORM_C paths grow polynomially (G ratio -> 1). All forward paths from (2,1) have G monotone increasing. 8-step Pell chain converges by step 4 (6 d.p.). Source: Pell equation theory, certs [135] Pythagorean Tree, [141] Pell Norm, [145] Path Shape; checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok"""
     import subprocess
@@ -5269,6 +5292,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (147, "QA Synchronous Harmonics Cert family",
+     _validate_synchronous_harmonics_cert_family,
+     "coprime periods sync at product; non-coprime at LCM<product; 3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE; QN products divisible by 6; checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok",
+     "147_qa_synchronous_harmonics_cert",
+     "qa_synchronous_harmonics_cert_v1", True),
     (146, "QA Path Scale Cert family",
      _validate_path_scale_cert_family,
      "G=d^2+e^2 growth profiles along Pythagorean-tree paths; UNIFORM_B exponential (ratio->3+2sqrt(2)=5.828), UNIFORM_A/C polynomial (ratio->1); all forward paths G monotone increasing; 8-step Pell convergence witness; checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok",

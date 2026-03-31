@@ -1,0 +1,91 @@
+{
+  "schema_version": "QA_KLEIN4_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.klein4.pass.witnesses.v1",
+  "cert_type": "qa_klein4_harmonics_cert",
+  "title": "Klein 4 Harmonics PASS: 6 general witnesses across H/E/mixed and Pell boundary",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "General witnesses for Klein 4-group harmonic action across diverse QA directions. Covers: hyperbolic directions (I>0), elliptic directions (I<0), Pell boundary |I|=1, large directions. For each (d,e): all four K4 images preserve F²+C²=G²; I₁ swaps H↔I; I₂ maps (H,I)→(-I,-H); I₃ negates both. The K4 orbit {(H,I),(I,H),(-I,-H),(-H,-I)} is the complete harmonic packet for direction (d,e).",
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1,
+      "F": 3, "C": 4, "G": 5, "H": 7, "I": 1,
+      "k4_orbit": [
+        {"idx": 0, "H":  7, "I":  1},
+        {"idx": 1, "H":  1, "I":  7},
+        {"idx": 2, "H": -1, "I": -7},
+        {"idx": 3, "H": -7, "I": -1}
+      ],
+      "check": "fundamental; Pell boundary |I|=1; (d,e)→(e,d)=(1,2) gives I₁ image"
+    },
+    {
+      "d": 5, "e": 2,
+      "F": 21, "C": 20, "G": 29, "H": 41, "I": -1,
+      "k4_orbit": [
+        {"idx": 0, "H":  41, "I":  -1},
+        {"idx": 1, "H":  -1, "I":  41},
+        {"idx": 2, "H":   1, "I": -41},
+        {"idx": 3, "H": -41, "I":   1}
+      ],
+      "check": "Pell boundary |I|=1 ellipse side (d/e=2.5 > 1+√2=2.414); I=-1; G²=841: 441+400=841 ✓"
+    },
+    {
+      "d": 3, "e": 2,
+      "F": 5, "C": 12, "G": 13, "H": 17, "I": 7,
+      "k4_orbit": [
+        {"idx": 0, "H":  17, "I":   7},
+        {"idx": 1, "H":   7, "I":  17},
+        {"idx": 2, "H":  -7, "I": -17},
+        {"idx": 3, "H": -17, "I":  -7}
+      ],
+      "check": "Pell norm P=-7; I=7 hyperbola; orbit { (17,7),(7,17),(-7,-17),(-17,-7) }"
+    },
+    {
+      "d": 4, "e": 1,
+      "F": 15, "C": 8, "G": 17, "H": 23, "I": -7,
+      "k4_orbit": [
+        {"idx": 0, "H":  23, "I":  -7},
+        {"idx": 1, "H":  -7, "I":  23},
+        {"idx": 2, "H":   7, "I": -23},
+        {"idx": 3, "H": -23, "I":   7}
+      ],
+      "check": "Pell norm P=7; I=-7 ellipse; I₁ swaps H=23↔I=-7 ✓"
+    },
+    {
+      "d": 4, "e": 3,
+      "F": 7, "C": 24, "G": 25, "H": 31, "I": 17,
+      "k4_orbit": [
+        {"idx": 0, "H":  31, "I":  17},
+        {"idx": 1, "H":  17, "I":  31},
+        {"idx": 2, "H": -17, "I": -31},
+        {"idx": 3, "H": -31, "I": -17}
+      ],
+      "check": "Pell norm P=-17; I=17 hyperbola; G²=625: 49+576=625 ✓"
+    },
+    {
+      "d": 12, "e": 5,
+      "F": 119, "C": 120, "G": 169, "H": 239, "I": 1,
+      "k4_orbit": [
+        {"idx": 0, "H":  239, "I":    1},
+        {"idx": 1, "H":    1, "I":  239},
+        {"idx": 2, "H":   -1, "I": -239},
+        {"idx": 3, "H": -239, "I":   -1}
+      ],
+      "check": "Plimpton Row 1; Pell boundary |I|=1; G²=28561: 14161+14400=28561 ✓; d/e=2.4 barely hyperbolic"
+    }
+  ],
+
+  "pell_boundary_note": "Directions with |I|=1 (Pell boundary): K4 orbit includes (H,1),(1,H),(-1,-H),(-H,-1) — the four 'nearest hyperbola/ellipse' harmonic packets. I₁ maps the hyperbola boundary direction to its ellipse-boundary partner.",
+
+  "validation_checks": [
+    {"check_id": "K4_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "K4_W",    "description": "6 witnesses covering H/E/Pell-boundary", "passed": true},
+    {"check_id": "K4_ACT",  "description": "all K4 images preserve F²+C²=G²", "passed": true},
+    {"check_id": "K4_HARM", "description": "harmonic action verified for all witnesses", "passed": true},
+    {"check_id": "K4_F",    "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

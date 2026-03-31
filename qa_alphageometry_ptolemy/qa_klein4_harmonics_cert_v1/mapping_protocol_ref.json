@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Klein 4 Harmonics Cert family [142]: certifies that the four sign-changes of (F,C,G) form a Klein 4-group K4=Z2×Z2 that preserves F²+C²=G² and acts on the harmonic packet {H,I,-H,-I}={C+F,C-F,-(C+F),-(C-F)}. Group elements: I₀=identity, I₁=(F,C)→(-F,C) [F-flip; (d,e)→(e,d)], I₂=(F,C)→(F,-C) [C-flip], I₃=(F,C)→(-F,-C) [composition]. Harmonic action: I₁ swaps H↔I; I₂ maps (H,I)→(-I,-H); I₃ negates both. Every element is its own inverse. I₁∘I₂=I₃. Source: QA elements.txt (H=C+F, I=C-F); cert [137] Koenig twisted squares; cert [125] chromogeometry (F=Qr, C=Qg)."
+}

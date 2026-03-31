@@ -1,0 +1,89 @@
+{
+  "schema_version": "QA_KLEIN4_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.klein4.pass.group_axioms.v1",
+  "cert_type": "qa_klein4_harmonics_cert",
+  "title": "Klein 4 Harmonics PASS: group axioms + harmonic orbit proofs",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. Two theorems certified simultaneously. (1) GROUP: The four sign-changes of (F,C,G) form K4=Z2×Z2. Every element is self-inverse. I₁∘I₂=I₃. (2) HARMONIC ACTION: I₁ swaps H↔I; I₂ maps (H,I)→(-I,-H); I₃ negates both. PROOFS: I₁(-F,C): H'=C-F=I, I'=C+F=H ✓. I₂(F,-C): H'=(-C)+F=-(C-F)=-I, I'=(-C)-F=-(C+F)=-H ✓. I₃(-F,-C): H'=(-C)+(-F)=-(C+F)=-H, I'=(-C)-(-F)=F-C=-(C-F)=-I ✓. COORDINATE: I₁ corresponds to (d,e)→(e,d) [physical swap]; I₂ and I₃ are formal algebraic operations. All four preserve F²+C²=G².",
+
+  "group_table": [
+    [0, 1, 2, 3],
+    [1, 0, 3, 2],
+    [2, 3, 0, 1],
+    [3, 2, 1, 0]
+  ],
+
+  "group_table_legend": {
+    "0": "I0 = identity: (F,C)→(F,C)",
+    "1": "I1 = F-flip: (F,C)→(-F,C); (d,e)→(e,d)",
+    "2": "I2 = C-flip: (F,C)→(F,-C); (d,e)→(d,-e)",
+    "3": "I3 = FC-flip: (F,C)→(-F,-C); (d,e)→(e,-d)",
+    "closure": "every product is in {0,1,2,3}",
+    "self_inverse": "diagonal is all 0 (every element squares to identity)",
+    "abelian": "table is symmetric (group is abelian)"
+  },
+
+  "algebraic_proof": {
+    "pythagorean_invariance": "F²+C²=G² iff (-F)²+C²=G² iff F²+(-C)²=G² iff (-F)²+(-C)²=G² — sign changes are transparent to squares",
+    "harmonic_I1": "I₁(-F,C): H'=C+(-F)=C-F=I; I'=C-(-F)=C+F=H → swaps H↔I",
+    "harmonic_I2": "I₂(F,-C): H'=(-C)+F=-(C-F)=-I; I'=(-C)-F=-(C+F)=-H → (H,I)→(-I,-H)",
+    "harmonic_I3": "I₃(-F,-C): H'=(-C)+(-F)=-(C+F)=-H; I'=(-C)-(-F)=F-C=-(C-F)=-I → (H,I)→(-H,-I)"
+  },
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1,
+      "F": 3, "C": 4, "G": 5, "H": 7, "I": 1,
+      "k4_orbit": [
+        {"idx": 0, "op": "I0_identity",  "H":  7, "I":  1, "check": "G²=25: F'=3,C'=4; 9+16=25 ✓"},
+        {"idx": 1, "op": "I1_F_flip",    "H":  1, "I":  7, "check": "G²=25: F'=-3,C'=4; 9+16=25 ✓; H=I=1, I=H=7"},
+        {"idx": 2, "op": "I2_C_flip",    "H": -1, "I": -7, "check": "G²=25: F'=3,C'=-4; 9+16=25 ✓; H=-I=-1, I=-H=-7"},
+        {"idx": 3, "op": "I3_FC_flip",   "H": -7, "I": -1, "check": "G²=25: F'=-3,C'=-4; 9+16=25 ✓; H=-H=-7, I=-I=-1"}
+      ],
+      "orbit_set": "{ (7,1), (1,7), (-1,-7), (-7,-1) } — four corners of the harmonic packet"
+    },
+    {
+      "d": 3, "e": 2,
+      "F": 5, "C": 12, "G": 13, "H": 17, "I": 7,
+      "k4_orbit": [
+        {"idx": 0, "H":  17, "I":   7},
+        {"idx": 1, "H":   7, "I":  17},
+        {"idx": 2, "H":  -7, "I": -17},
+        {"idx": 3, "H": -17, "I":  -7}
+      ],
+      "check": "G²=169: 25+144=169 ✓; orbit { (17,7),(7,17),(-7,-17),(-17,-7) }"
+    },
+    {
+      "d": 4, "e": 1,
+      "F": 15, "C": 8, "G": 17, "H": 23, "I": -7,
+      "k4_orbit": [
+        {"idx": 0, "H":  23, "I":  -7},
+        {"idx": 1, "H":  -7, "I":  23},
+        {"idx": 2, "H":   7, "I": -23},
+        {"idx": 3, "H": -23, "I":   7}
+      ],
+      "check": "G²=289: 225+64=289 ✓; I negative (ellipse: I=C-F=8-15=-7); orbit { (23,-7),(-7,23),(7,-23),(-23,7) }"
+    }
+  ],
+
+  "connections": {
+    "cert_137": "H=C+F and I=C-F defined in Koenig twisted squares; H²-G²=G²-I²=2CF; K4 action permutes {I,H,-I,-H}",
+    "cert_125": "F=Qr=red, C=Qg=green, G=Qb=blue; I₁=(d,e)→(e,d)=red reflection; I₂=(d,e)→(d,-e)=green reflection",
+    "cert_140": "I=C-F is conic discriminant; K4 swaps H↔I (I₁) = swaps ellipse↔hyperbola boundary values",
+    "cert_141": "I=-(x²-2y²) Pell norm; I₁ maps I→H, i.e. maps P(d-e,e) to C+F=H"
+  },
+
+  "validation_checks": [
+    {"check_id": "K4_1",    "description": "schema_version is 'QA_KLEIN4_HARMONICS_CERT.v1'", "passed": true},
+    {"check_id": "K4_2",    "description": "F,C,G,H,I values correct for all witnesses", "passed": true},
+    {"check_id": "K4_3",    "description": "group table is K4=Z2×Z2 (4×4, self-inverse, abelian)", "passed": true},
+    {"check_id": "K4_ACT",  "description": "all four images preserve F'²+C'²=G²", "passed": true},
+    {"check_id": "K4_HARM", "description": "I₁ swaps H↔I; I₂: (H,I)→(-I,-H); I₃: (H,I)→(-H,-I)", "passed": true},
+    {"check_id": "K4_F",    "description": "fundamental (2,1): orbit {(7,1),(1,7),(-1,-7),(-7,-1)}", "passed": true},
+    {"check_id": "K4_W",    "description": "3 witnesses", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

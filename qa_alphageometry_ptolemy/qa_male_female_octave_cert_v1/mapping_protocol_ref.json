@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Male/Female Octave Cert family [144]: certifies the Male→Female transform on QA Quantum Numbers (b,e,d,a): female=(2e,b,a,2d) [double e then swap b↔e; d_f=a_male, a_f=2d_male]. Algebraic proof: female_product=2e×b×a×2d=4×(b×e×d×a)=4×male_product. Musical interpretation: 4×=2 octaves (1 octave=2× frequency). Fundamental: male(1,1,2,3) product=6; female(2,1,3,4) product=24=4×6. Transform chains: each step adds 2 octaves (×4). Source: Ben Iverson QA framework male/female QN taxonomy; Dale Pond SVP Keely male/female vibration terminology."
+}

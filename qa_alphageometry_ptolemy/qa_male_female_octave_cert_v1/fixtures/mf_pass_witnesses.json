@@ -1,0 +1,54 @@
+{
+  "schema_version": "QA_MALE_FEMALE_OCTAVE_CERT.v1",
+  "certificate_id": "qa.cert.male_female_octave.pass.witnesses.v1",
+  "cert_type": "qa_male_female_octave_cert",
+  "title": "Male/Female Octave PASS: 5 general QN pairs — Fibonacci sequence and arbitrary",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "General witnesses for the 4× octave ratio across diverse QNs. Includes: Fibonacci QN pairs (the natural QA sequence), arbitrary (b,e) pairs. In all cases, female=(2e,b,a,2d) and female_product=4×male_product exactly. Note: (2,1,3,4) female of the fundamental is itself a valid male; its female (2,2,4,6) has product 96=4×24 — showing the transform can chain indefinitely, each step adding 2 more octaves.",
+
+  "pairs": [
+    {
+      "male":   {"b": 1, "e": 1, "d": 2, "a": 3, "product": 6},
+      "female": {"b": 2, "e": 1, "d": 3, "a": 4, "product": 24},
+      "ratio": 4,
+      "note": "fundamental pair"
+    },
+    {
+      "male":   {"b": 1, "e": 2, "d": 3, "a": 5, "product": 30},
+      "female": {"b": 4, "e": 1, "d": 5, "a": 6, "product": 120},
+      "ratio": 4,
+      "note": "Fibonacci QN F(2),F(3)"
+    },
+    {
+      "male":   {"b": 1, "e": 3, "d": 4, "a": 7, "product": 84},
+      "female": {"b": 6, "e": 1, "d": 7, "a": 8, "product": 336},
+      "ratio": 4,
+      "note": "d/e=4/3=Perfect Fourth interval"
+    },
+    {
+      "male":   {"b": 3, "e": 5, "d": 8, "a": 13, "product": 1560},
+      "female": {"b": 10, "e": 3, "d": 13, "a": 16, "product": 6240},
+      "ratio": 4,
+      "note": "Fibonacci QNs F(4),F(5),F(6),F(7)"
+    },
+    {
+      "male":   {"b": 2, "e": 1, "d": 3, "a": 4, "product": 24},
+      "female": {"b": 2, "e": 2, "d": 4, "a": 6, "product": 96},
+      "ratio": 4,
+      "note": "chained: (2,1,3,4) is female of fundamental; its female is (2,2,4,6) prod=96=4×24=16×6 (4 octaves above fundamental male)"
+    }
+  ],
+
+  "chaining_note": "The transform composes: male→female→female_of_female→... Each step multiplies product by 4 (adds 2 octaves). So: (1,1,2,3) prod=6 (0 octaves), (2,1,3,4) prod=24 (2 octaves), (2,2,4,6) prod=96 (4 octaves), (4,2,6,8) prod=384 (6 octaves), etc.",
+
+  "validation_checks": [
+    {"check_id": "MF_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "MF_W",    "description": "5 pairs", "passed": true},
+    {"check_id": "MF_PROD", "description": "all ratios=4", "passed": true},
+    {"check_id": "MF_F",    "description": "fundamental (1,1,2,3)→(2,1,3,4) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

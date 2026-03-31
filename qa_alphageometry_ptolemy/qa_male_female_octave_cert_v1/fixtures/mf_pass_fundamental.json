@@ -1,0 +1,65 @@
+{
+  "schema_version": "QA_MALE_FEMALE_OCTAVE_CERT.v1",
+  "certificate_id": "qa.cert.male_female_octave.pass.fundamental.v1",
+  "cert_type": "qa_male_female_octave_cert",
+  "title": "Male/Female Octave PASS: transform definition + algebraic proof + fundamental pair",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. Certifies: (1) TRANSFORM: Male→Female = (double e, swap b↔e) = (2e, b, a, 2d). (2) ALGEBRAIC PROOF: female_product = 4 × male_product for all QNs. PROOF: female=(2e,b,a,2d); female_product=2e×b×a×2d=4×(e×b×a×d)=4×male_product ✓. (3) MUSICAL INTERPRETATION: 4× frequency ratio = 2 octaves. Source: Ben Iverson QA framework (male/female QN taxonomy); Dale Pond SVP Keely terminology (male/female vibrations). Fundamental: (1,1,2,3)→(2,1,3,4); products 6→24=4×6.",
+
+  "algebraic_proof": {
+    "claim": "female_product = 4 × male_product for any QN (b,e,d,a) with d=b+e, a=b+2e",
+    "transform": "female = (b_f, e_f, d_f, a_f) = (2e, b, a, 2d)",
+    "steps": [
+      "Step 1: double e — (b,e) → (b, 2e)",
+      "Step 2: swap b↔e — (b, 2e) → (2e, b)",
+      "Derived: d_f = b_f+e_f = 2e+b = (b+2e) = a_male ✓",
+      "Derived: a_f = b_f+2e_f = 2e+2b = 2(b+e) = 2d_male ✓",
+      "female_product = 2e × b × a × 2d",
+      "= 4 × (e × b × a × d)",
+      "= 4 × (b × e × d × a)",
+      "= 4 × male_product  ✓"
+    ],
+    "musical": "4× = 2 octaves (1 octave = 2× frequency); female is always 2 octaves above male"
+  },
+
+  "pairs": [
+    {
+      "male":   {"b": 1, "e": 1, "d": 2, "a": 3, "product": 6},
+      "female": {"b": 2, "e": 1, "d": 3, "a": 4, "product": 24},
+      "ratio": 4,
+      "check": "fundamental pair; 24=4×6; male b=e=1 (unit QN); female b=2e=2×1=2 ✓; d_f=a_male=3 ✓; a_f=2d_male=4 ✓"
+    },
+    {
+      "male":   {"b": 1, "e": 2, "d": 3, "a": 5, "product": 30},
+      "female": {"b": 4, "e": 1, "d": 5, "a": 6, "product": 120},
+      "ratio": 4,
+      "check": "120=4×30; d_f=a_male=5 ✓; a_f=2d_male=6 ✓"
+    },
+    {
+      "male":   {"b": 2, "e": 3, "d": 5, "a": 8, "product": 240},
+      "female": {"b": 6, "e": 2, "d": 8, "a": 10, "product": 960},
+      "ratio": 4,
+      "check": "960=4×240; d_f=a_male=8 ✓; a_f=2d_male=10 ✓"
+    }
+  ],
+
+  "connections": {
+    "qa_source": "Ben Iverson QA framework: male QNs have b=e (symmetric); female QNs have b=2e (from transform); both follow d=b+e, a=b+2e",
+    "svp": "Dale Pond SVP: male/female vibrations in Keely's harmonic theory; female always 2 octaves (4×) above male",
+    "cert_143": "Fundamental male (1,1,2,3) product=6; 6³=216=3³+4³+5³ (cube sum cert); female (2,1,3,4) product=24=6³/9=216/9"
+  },
+
+  "validation_checks": [
+    {"check_id": "MF_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "MF_2",    "description": "d=b+e, a=b+2e for all QNs", "passed": true},
+    {"check_id": "MF_TRANS","description": "female=(2e,b,a,2d) verified", "passed": true},
+    {"check_id": "MF_PROD", "description": "female product=4×male product", "passed": true},
+    {"check_id": "MF_OCT",  "description": "4×=2 octaves (musical interpretation)", "passed": true},
+    {"check_id": "MF_F",    "description": "fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6", "passed": true},
+    {"check_id": "MF_W",    "description": "3 pairs", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

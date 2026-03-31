@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_male_female_octave_cert_family(base_dir: str) -> Optional[str]:
+    """QA Male/Female Octave Cert family [144] — certifies Male→Female transform on QA Quantum Numbers (b,e,d,a): female=(2e,b,a,2d) [double e then swap b↔e]; female_product=4×male_product (algebraic proof: 2e×b×a×2d=4×b×e×d×a); 4×=2 octaves (musical interpretation); fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; transform chains: each step ×4 adds 2 octaves; 5 Fibonacci+arbitrary pair witnesses; source: Ben Iverson QA framework + Dale Pond SVP male/female vibration; checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    mf_dir    = os.path.join(base_dir, "qa_male_female_octave_cert_v1")
+    validator = os.path.join(mf_dir, "qa_male_female_octave_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_male_female_octave_cert_v1/qa_male_female_octave_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=mf_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_male_female_octave_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_male_female_octave_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_male_female_octave_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_cube_sum_cert_family(base_dir: str) -> Optional[str]:
     """QA Cube Sum Cert family [143] — certifies F³+C³+G³=216=6³ for fundamental QA direction (d,e)=(2,1) with (F,C,G)=(3,4,5): the unique 3D extension of 3²+4²=5² (Pythagorean); (k-1)³+k³+(k+1)³=3k(k²+2) for k=4 gives 12×18=216=6³; k=4 unique in [1,10000]; QA connections: 6=b×e×d×a=1×1×2×3 (fundamental QN product); 216=9×24=mod-9×mod-24 (product of both QA orbit moduli); 4 non-cube witnesses (3,2),(4,1),(4,3),(5,2) confirm uniqueness in QA direction space; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS; self-test ok"""
     import subprocess
@@ -5200,6 +5223,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (144, "QA Male/Female Octave Cert family",
+     _validate_male_female_octave_cert_family,
+     "Male→Female transform (double e, swap b↔e) gives female=(2e,b,a,2d); female_product=4×male_product; 4×=2 octaves; fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; chains indefinitely (+2 octaves per step); checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok",
+     "144_qa_male_female_octave_cert",
+     "qa_male_female_octave_cert_v1", True),
     (143, "QA Cube Sum Cert family",
      _validate_cube_sum_cert_family,
      "F³+C³+G³=216=6³ for fundamental (F,C,G)=(3,4,5); k=4 unique in [1,10000] for (k-1)³+k³+(k+1)³ perfect cube; 216=9×24; 6=b×e×d×a; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS; self-test ok",

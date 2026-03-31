@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Sixteen Identities Cert family [148]: certifies the 16 named quantities (A-L,X,W,Y,Z) of a prime Pythagorean direction and 9 algebraic relations: G+C=A, G-C=B, G=(A+B)/2, F^2+C^2=G^2, H^2+I^2=2G^2, L=CF/12 integer, C=4-par, G=5-par, W=X+K. Source: Ben Iverson Pyth-1 Ch V (Sixteen Identities)."
+}

@@ -1,0 +1,74 @@
+{
+  "schema_version": "QA_SIXTEEN_IDENTITIES_CERT.v1",
+  "certificate_id": "qa.cert.sixteen_identities.pass.fundamental.v1",
+  "cert_type": "qa_sixteen_identities_cert",
+  "title": "Sixteen Identities PASS: fundamental (2,1) + algebraic proof of all relations",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "The 3-4-5 triangle (d=2,e=1) is the fundamental prime Pythagorean direction. All 16 named quantities and 9 algebraic relations verified. G+C=A, G-C=B, G=(A+B)/2, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par. For (2,1): L=1 (unit quantum volume), I=1 (minimum nonzero), H=7, G=5 (the concentric circle radii giving origin-of-24).",
+
+  "directions": [
+    {
+      "d": 2, "e": 1,
+      "identities": {
+        "A": 9, "B": 1, "C": 4, "D": 4, "E": 1, "F": 3, "G": 5,
+        "H": 7, "I": 1, "J": 2, "K": 6, "L": 1,
+        "X": 2, "W": 8, "Y": 5, "Z": 7
+      },
+      "note": "3-4-5 triangle: F=3,C=4,G=5; H=7,I=1; L=1 (unit); G²-I²=24, H²-G²=24"
+    },
+    {
+      "d": 3, "e": 2,
+      "identities": {
+        "A": 25, "B": 1, "C": 12, "D": 9, "E": 4, "F": 5, "G": 13,
+        "H": 17, "I": 7, "J": 3, "K": 15, "L": 5,
+        "X": 6, "W": 21, "Y": 16, "Z": 19
+      },
+      "note": "5-12-13 triangle: b=1 (unit base); L=5"
+    },
+    {
+      "d": 4, "e": 1,
+      "identities": {
+        "A": 25, "B": 9, "C": 8, "D": 16, "E": 1, "F": 15, "G": 17,
+        "H": 23, "I": -7, "J": 12, "K": 20, "L": 10,
+        "X": 4, "W": 24, "Y": 9, "Z": 21
+      },
+      "note": "8-15-17 triangle: I<0 (elliptic regime); W=24"
+    },
+    {
+      "d": 4, "e": 3,
+      "identities": {
+        "A": 49, "B": 1, "C": 24, "D": 16, "E": 9, "F": 7, "G": 25,
+        "H": 31, "I": 17, "J": 4, "K": 28, "L": 14,
+        "X": 12, "W": 40, "Y": 33, "Z": 37
+      },
+      "note": "7-24-25 triangle: C=24 (cosmos period); b=1; G=25=5²"
+    }
+  ],
+
+  "algebraic_relations": [
+    "G + C = A = a²",
+    "G - C = B = b²",
+    "G = (A+B)/2",
+    "F² + C² = G² (Pythagorean / chromogeometry Thm 6)",
+    "H² + I² = 2G²",
+    "L = CF/12 (always integer for primitive directions)",
+    "C ≡ 0 (mod 4) — C is always 4-par",
+    "G ≡ 1 (mod 4) — G is always 5-par",
+    "W = X + K = d(e+a)"
+  ],
+
+  "validation_checks": [
+    {"check_id": "SI_1",   "description": "schema_version correct", "passed": true},
+    {"check_id": "SI_2",   "description": "all directions primitive, opposite parity", "passed": true},
+    {"check_id": "SI_IDEN","description": "all 16 quantities recomputed correctly", "passed": true},
+    {"check_id": "SI_REL", "description": "all 9 algebraic relations verified", "passed": true},
+    {"check_id": "SI_PAR", "description": "C=4-par, G=5-par for all directions", "passed": true},
+    {"check_id": "SI_L",   "description": "L=CF/12 positive integer for all", "passed": true},
+    {"check_id": "SI_W",   "description": "4 direction witnesses", "passed": true},
+    {"check_id": "SI_F",   "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

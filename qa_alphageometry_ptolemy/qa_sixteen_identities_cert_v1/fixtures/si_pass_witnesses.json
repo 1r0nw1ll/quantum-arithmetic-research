@@ -1,0 +1,80 @@
+{
+  "schema_version": "QA_SIXTEEN_IDENTITIES_CERT.v1",
+  "certificate_id": "qa.cert.sixteen_identities.pass.witnesses.v1",
+  "cert_type": "qa_sixteen_identities_cert",
+  "title": "Sixteen Identities PASS: 6 diverse directions spanning elliptic and hyperbolic regimes",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Extended witnesses across both conic regimes. I>0 (hyperbolic): (3,2),(4,3),(5,4) with I=7,17,31. I<0 (elliptic): (4,1),(5,2) with I=-7,-1. Fundamental (2,1) with I=1 (barely hyperbolic, Pell boundary). Demonstrates parity rules hold universally: C always 4-par, G always 5-par, L always positive integer.",
+
+  "directions": [
+    {
+      "d": 2, "e": 1,
+      "identities": {
+        "A": 9, "B": 1, "C": 4, "D": 4, "E": 1, "F": 3, "G": 5,
+        "H": 7, "I": 1, "J": 2, "K": 6, "L": 1,
+        "X": 2, "W": 8, "Y": 5, "Z": 7
+      },
+      "note": "fundamental; I=1 (Pell boundary)"
+    },
+    {
+      "d": 3, "e": 2,
+      "identities": {
+        "A": 25, "B": 1, "C": 12, "D": 9, "E": 4, "F": 5, "G": 13,
+        "H": 17, "I": 7, "J": 3, "K": 15, "L": 5,
+        "X": 6, "W": 21, "Y": 16, "Z": 19
+      },
+      "note": "5-12-13; I=7 (hyperbolic)"
+    },
+    {
+      "d": 4, "e": 1,
+      "identities": {
+        "A": 25, "B": 9, "C": 8, "D": 16, "E": 1, "F": 15, "G": 17,
+        "H": 23, "I": -7, "J": 12, "K": 20, "L": 10,
+        "X": 4, "W": 24, "Y": 9, "Z": 21
+      },
+      "note": "8-15-17; I=-7 (elliptic)"
+    },
+    {
+      "d": 4, "e": 3,
+      "identities": {
+        "A": 49, "B": 1, "C": 24, "D": 16, "E": 9, "F": 7, "G": 25,
+        "H": 31, "I": 17, "J": 4, "K": 28, "L": 14,
+        "X": 12, "W": 40, "Y": 33, "Z": 37
+      },
+      "note": "7-24-25; C=24 (cosmos period); I=17"
+    },
+    {
+      "d": 5, "e": 2,
+      "identities": {
+        "A": 49, "B": 9, "C": 20, "D": 25, "E": 4, "F": 21, "G": 29,
+        "H": 41, "I": -1, "J": 15, "K": 35, "L": 35,
+        "X": 10, "W": 45, "Y": 24, "Z": 39
+      },
+      "note": "20-21-29; I=-1 (Pell boundary, elliptic); Plimpton Row 1"
+    },
+    {
+      "d": 5, "e": 4,
+      "identities": {
+        "A": 81, "B": 1, "C": 40, "D": 25, "E": 16, "F": 9, "G": 41,
+        "H": 49, "I": 31, "J": 5, "K": 45, "L": 30,
+        "X": 20, "W": 65, "Y": 56, "Z": 61
+      },
+      "note": "9-40-41; H=49=7²; I=31; b=1"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "SI_1",   "description": "schema_version correct", "passed": true},
+    {"check_id": "SI_2",   "description": "6 directions, all primitive with opposite parity", "passed": true},
+    {"check_id": "SI_IDEN","description": "96 identity values recomputed (16 per direction × 6)", "passed": true},
+    {"check_id": "SI_REL", "description": "all algebraic relations verified for all 6 directions", "passed": true},
+    {"check_id": "SI_PAR", "description": "C=4-par, G=5-par for all", "passed": true},
+    {"check_id": "SI_L",   "description": "L positive integer for all", "passed": true},
+    {"check_id": "SI_W",   "description": "6 witnesses", "passed": true},
+    {"check_id": "SI_F",   "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

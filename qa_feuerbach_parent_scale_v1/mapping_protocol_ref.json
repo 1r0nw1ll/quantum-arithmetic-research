@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Feuerbach parent-scale law for primitive Pythagorean triples. Interior scale=4 (inverse transport law); root (3,4,5) is the unique boundary obstruction with QA closure scale 2G=10. Connected to Barning-Berggren tree and QA modular orbit structure."
+}

@@ -1,0 +1,35 @@
+{
+  "canonical_hash": "bdd2c9487338ab238a36394ddef9bf2a6e3d91ab57e67eb86949b61aa9633493",
+  "experiment_id": "qa_prime_bounded_certificate_scaling_100_500_fail_mock",
+  "honest_interpretation": "Mock FAIL artifact for validator self-test. The tested endpoints do not all satisfy the scaling law, so the empirical result is FAIL.",
+  "hypothesis": "For interval [2, N], the minimal bounded witness cap needed for exact prime/composite separation in the factor-certificate graph is the largest prime <= sqrt(N).",
+  "result": "FAIL",
+  "rows": [
+    {
+      "candidate_caps": [2, 3, 5, 7],
+      "end": 100,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 7,
+      "predicted_largest_prime_leq_sqrt_end": 7,
+      "sqrt_floor": 10
+    },
+    {
+      "candidate_caps": [2, 3, 5, 7, 11, 13],
+      "end": 250,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 13,
+      "predicted_largest_prime_leq_sqrt_end": 13,
+      "sqrt_floor": 15
+    },
+    {
+      "candidate_caps": [2, 3, 5, 7, 11, 13, 17, 19],
+      "end": 500,
+      "matches_prediction": false,
+      "observed_minimal_pass_prime_max": 17,
+      "predicted_largest_prime_leq_sqrt_end": 19,
+      "sqrt_floor": 22
+    }
+  ],
+  "success_criteria": "PASS if the observed minimal passing prime_max matches the largest prime <= sqrt(N) for every tested endpoint.",
+  "tested_endpoints": [100, 250, 500]
+}

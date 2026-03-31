@@ -1,0 +1,23 @@
+{
+  "_comment": "FAIL: interior_law.scale_value=5 is wrong (must be 4). Gate 4 WRONG_SCALE_VALUE.",
+  "schema_id": "QA_FEUERBACH_PARENT_SCALE_CERT.v1",
+  "cert_id": "feuerbach-fail-badscale",
+  "created_utc": "2026-03-21T00:00:00Z",
+  "batch_limit": 50,
+  "primitive_count": 7,
+  "interior_law": {
+    "scale_value": 5,
+    "confirmed_count": 6
+  },
+  "root_exception": {
+    "triple": [3, 4, 5],
+    "raw_legs": [0, 1],
+    "qa_scale": 10
+  },
+  "uniqueness_confirmed": true,
+  "sex_invariant_confirmed": true,
+  "samples": [
+    {"triple": [5, 12, 13], "parent_legs": [3, 4], "sex": "female"}
+  ],
+  "invariant_diff": []
+}

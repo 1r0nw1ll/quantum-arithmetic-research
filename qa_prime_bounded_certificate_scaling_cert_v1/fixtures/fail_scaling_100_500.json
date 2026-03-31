@@ -1,0 +1,51 @@
+{
+  "schema_version": "QA_PRIME_BOUNDED_CERTIFICATE_SCALING_CERT.v1",
+  "cert_type": "qa_prime_bounded_certificate_scaling_cert",
+  "certificate_id": "qa.cert.prime_bounded_scaling.100_500.fail.v1",
+  "title": "Bounded factor-certificate scaling fails on tested endpoints 100, 250, 500 under mock observed data",
+  "created_utc": "2026-03-30T00:00:00Z",
+  "claim": {
+    "interval_start": 2,
+    "predictor": "largest_prime_leq_sqrt_end",
+    "target_property": "minimal_pass_prime_max",
+    "scope": "empirical_tested_endpoints_only",
+    "honest_interpretation": "This fixture is a valid negative cert. The row data are internally consistent and honestly summarized as FAIL because endpoint 500 does not match the scaling prediction."
+  },
+  "evidence": {
+    "artifact_path": "qa_prime_bounded_certificate_scaling_cert_v1/fixtures/mock_fail_scaling_artifact.json",
+    "artifact_canonical_hash": "bdd2c9487338ab238a36394ddef9bf2a6e3d91ab57e67eb86949b61aa9633493",
+    "experiment_id": "qa_prime_bounded_certificate_scaling_100_500_fail_mock",
+    "hypothesis": "For interval [2, N], the minimal bounded witness cap needed for exact prime/composite separation in the factor-certificate graph is the largest prime <= sqrt(N).",
+    "success_criteria": "PASS if the observed minimal passing prime_max matches the largest prime <= sqrt(N) for every tested endpoint."
+  },
+  "rows": [
+    {
+      "candidate_caps": [2, 3, 5, 7],
+      "end": 100,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 7,
+      "predicted_largest_prime_leq_sqrt_end": 7,
+      "sqrt_floor": 10
+    },
+    {
+      "candidate_caps": [2, 3, 5, 7, 11, 13],
+      "end": 250,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 13,
+      "predicted_largest_prime_leq_sqrt_end": 13,
+      "sqrt_floor": 15
+    },
+    {
+      "candidate_caps": [2, 3, 5, 7, 11, 13, 17, 19],
+      "end": 500,
+      "matches_prediction": false,
+      "observed_minimal_pass_prime_max": 17,
+      "predicted_largest_prime_leq_sqrt_end": 19,
+      "sqrt_floor": 22
+    }
+  ],
+  "result": "FAIL",
+  "digests": {
+    "canonical_sha256": "c11bbe476cfd0098b327969b5cbac20351bd943fce4a087a47b89fab2f7cfbaa"
+  }
+}

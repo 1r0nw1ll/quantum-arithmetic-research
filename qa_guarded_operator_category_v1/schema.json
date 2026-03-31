@@ -1,0 +1,177 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_GUARDED_OPERATOR_CATEGORY_CERT.v1.schema.json",
+  "title": "QA Guarded Operator Category Certificate (v1)",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "cert_id",
+    "created_utc",
+    "subject",
+    "rho",
+    "claims",
+    "failure_obstructions"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_GUARDED_OPERATOR_CATEGORY_CERT.v1"
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 6
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 10
+    },
+    "subject": {
+      "type": "object",
+      "required": [
+        "generator_set",
+        "state_domain",
+        "matrix_convention",
+        "generator_semantics_ref"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "generator_set": {
+          "type": "array",
+          "minItems": 2,
+          "items": {
+            "type": "string",
+            "enum": ["sigma", "mu", "lambda_k", "nu"]
+          }
+        },
+        "state_domain": {
+          "type": "string",
+          "enum": ["Z2", "N2"]
+        },
+        "matrix_convention": {
+          "type": "string",
+          "const": "column_vector"
+        },
+        "generator_semantics_ref": {
+          "type": "string",
+          "minLength": 3
+        },
+        "guards": {
+          "type": "object",
+          "additionalProperties": {"$ref": "#/definitions/guard_spec"}
+        }
+      }
+    },
+    "rho": {
+      "type": "object",
+      "required": ["sigma", "mu"],
+      "additionalProperties": false,
+      "properties": {
+        "sigma": {"$ref": "#/definitions/matrix2"},
+        "mu": {"$ref": "#/definitions/matrix2"}
+      }
+    },
+    "claims": {
+      "type": "object",
+      "required": ["composition_samples", "determinants", "mod_n_checks"],
+      "additionalProperties": false,
+      "properties": {
+        "composition_samples": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["word", "expected_matrix", "seed", "expected_state"],
+            "additionalProperties": false,
+            "properties": {
+              "word": {
+                "type": "array",
+                "items": {"type": "string", "enum": ["sigma", "mu"]}
+              },
+              "expected_matrix": {"$ref": "#/definitions/matrix2"},
+              "seed": {"$ref": "#/definitions/vector2"},
+              "expected_state": {"$ref": "#/definitions/vector2"}
+            }
+          }
+        },
+        "determinants": {
+          "type": "object",
+          "required": ["sigma", "mu"],
+          "additionalProperties": false,
+          "properties": {
+            "sigma": {"type": "integer"},
+            "mu": {"type": "integer"}
+          }
+        },
+        "mod_n_checks": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["n", "expected_generated_size", "expected_det_pm_one_size"],
+            "additionalProperties": false,
+            "properties": {
+              "n": {"type": "integer", "minimum": 2, "maximum": 64},
+              "expected_generated_size": {"type": "integer", "minimum": 1},
+              "expected_det_pm_one_size": {"type": "integer", "minimum": 1}
+            }
+          }
+        }
+      }
+    },
+    "failure_obstructions": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["obstruction_id", "conclusion"],
+        "additionalProperties": true,
+        "properties": {
+          "obstruction_id": {"type": "string"},
+          "conclusion": {"type": "string"}
+        }
+      }
+    },
+    "invariant_diff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gate", "fail_type", "path", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "gate": {"type": "integer", "minimum": 0},
+          "fail_type": {"type": "string"},
+          "path": {"type": "string"},
+          "reason": {"type": "string"}
+        }
+      }
+    }
+  },
+  "definitions": {
+    "matrix2": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {"type": "integer"}
+      }
+    },
+    "vector2": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"type": "integer"}
+    },
+    "guard_spec": {
+      "type": "object",
+      "required": ["type", "requires"],
+      "additionalProperties": false,
+      "properties": {
+        "type": {"type": "string"},
+        "requires": {"type": "string"}
+      }
+    }
+  }
+}

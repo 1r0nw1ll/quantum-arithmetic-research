@@ -1,0 +1,26 @@
+{
+  "schema_id": "QA_FEUERBACH_PARENT_SCALE_CERT.v1",
+  "cert_id": "feuerbach-pass-l50",
+  "created_utc": "2026-03-21T00:00:00Z",
+  "batch_limit": 50,
+  "primitive_count": 7,
+  "interior_law": {
+    "scale_value": 4,
+    "confirmed_count": 6
+  },
+  "root_exception": {
+    "triple": [3, 4, 5],
+    "raw_legs": [0, 1],
+    "qa_scale": 10
+  },
+  "uniqueness_confirmed": true,
+  "sex_invariant_confirmed": true,
+  "samples": [
+    {"triple": [5, 12, 13],  "parent_legs": [3, 4],   "sex": "female"},
+    {"triple": [8, 15, 17],  "parent_legs": [3, 4],   "sex": "male"},
+    {"triple": [7, 24, 25],  "parent_legs": [5, 12],  "sex": "female"},
+    {"triple": [20, 21, 29], "parent_legs": [3, 4],   "sex": "male"},
+    {"triple": [12, 35, 37], "parent_legs": [8, 15],  "sex": "male"}
+  ],
+  "invariant_diff": []
+}

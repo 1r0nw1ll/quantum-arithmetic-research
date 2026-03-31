@@ -1,0 +1,59 @@
+{
+  "schema_version": "QA_PRIME_BOUNDED_CERTIFICATE_SCALING_CERT.v1",
+  "cert_type": "qa_prime_bounded_certificate_scaling_cert",
+  "certificate_id": "qa.cert.prime_bounded_scaling.100_1000.v1",
+  "title": "Bounded factor-certificate scaling matches largest prime <= sqrt(N) on tested endpoints 100, 250, 500, 1000",
+  "created_utc": "2026-03-30T00:00:00Z",
+  "claim": {
+    "interval_start": 2,
+    "predictor": "largest_prime_leq_sqrt_end",
+    "target_property": "minimal_pass_prime_max",
+    "scope": "empirical_tested_endpoints_only",
+    "honest_interpretation": "This cert records an empirical scaling law over the listed endpoints only. It is not a proof beyond the tested intervals."
+  },
+  "evidence": {
+    "artifact_path": "results/qa_prime_bounded_certificate_scaling_experiment.json",
+    "artifact_canonical_hash": "7783660ec86ff6d41734da65dbcb4208d31162dcbb17bbf727d40c91303895a3",
+    "experiment_id": "qa_prime_bounded_certificate_scaling_100_1000",
+    "hypothesis": "For interval [2, N], the minimal bounded witness cap needed for exact prime/composite separation in the factor-certificate graph is the largest prime <= sqrt(N).",
+    "success_criteria": "PASS if the observed minimal passing prime_max matches the largest prime <= sqrt(N) for every tested endpoint."
+  },
+  "rows": [
+    {
+      "candidate_caps": [2, 3, 5, 7],
+      "end": 100,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 7,
+      "predicted_largest_prime_leq_sqrt_end": 7,
+      "sqrt_floor": 10
+    },
+    {
+      "candidate_caps": [2, 3, 5, 7, 11, 13],
+      "end": 250,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 13,
+      "predicted_largest_prime_leq_sqrt_end": 13,
+      "sqrt_floor": 15
+    },
+    {
+      "candidate_caps": [2, 3, 5, 7, 11, 13, 17, 19],
+      "end": 500,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 19,
+      "predicted_largest_prime_leq_sqrt_end": 19,
+      "sqrt_floor": 22
+    },
+    {
+      "candidate_caps": [2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31],
+      "end": 1000,
+      "matches_prediction": true,
+      "observed_minimal_pass_prime_max": 31,
+      "predicted_largest_prime_leq_sqrt_end": 31,
+      "sqrt_floor": 31
+    }
+  ],
+  "result": "PASS",
+  "digests": {
+    "canonical_sha256": "64f40b9b4a9e0665f08098ec5b404a51271b0b17d3db7f5e6911969e952bb168"
+  }
+}

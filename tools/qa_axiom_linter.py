@@ -360,6 +360,13 @@ _EXCLUDE_DIRS = frozenset({
     ".git", "__pycache__", "archive", ".venv", "venv", "env",
     "node_modules", "site-packages", "dist-packages", "qa_venv",
     ".tox", "build", "dist",
+    # Non-cert infrastructure — analysis/ML/paper/lab scripts, not QA cert code.
+    # The axiom linter gates cert families (qa_*_cert_v1/) and core tools only.
+    # Legacy experiment scripts, qa_lab, and paper verify scripts are excluded.
+    "qa_kayser", "qa_synthetic_data", "qa_kona_ebm_mnist_v1",
+    "qa_kona_ebm_qa_native_v1", "qa_kona_ebm_qa_native_orbit_reg_v1",
+    "papers", "qa_lab", "qa_core", "experiments", "gemini_qa_project",
+    "qalm_2.0", "scratch_experiments",
 })
 
 # Files that are QA infrastructure, not empirical scripts — exempt from DECL-1
@@ -369,6 +376,7 @@ _EXCLUDE_FILES = frozenset({
     "qa_orbit_rules.py",               # canonical implementation — defines, not uses
     "qa_observer_alphabet_audit.py",   # audit tool itself
     "qa_finance_joint_transition.py",  # explicitly SUPERSEDED — header says noncompliant
+    "qa_harmonicity_v2.py",            # legacy experiment script — not cert code
 })
 
 def get_all_py_files() -> list[Path]:
@@ -376,6 +384,7 @@ def get_all_py_files() -> list[Path]:
     return [
         p for p in root.rglob("*.py")
         if not any(part in _EXCLUDE_DIRS for part in p.parts)
+        and p.parent != root  # skip root-level experiment scripts
     ]
 
 

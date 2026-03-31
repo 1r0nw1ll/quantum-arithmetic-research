@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "observer=cert_validator, state_alphabet=integer_fixtures"
 """QA Lojasiewicz Orbit Descent Cert v1 — family [102]
 
 Certifies per-orbit-window phi-contraction for smooth, Lojasiewicz-conditioned

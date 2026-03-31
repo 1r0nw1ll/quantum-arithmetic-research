@@ -1,0 +1,138 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_FEUERBACH_PARENT_SCALE_CERT.v1.schema.json",
+  "title": "QA Feuerbach Parent Scale Certificate (v1)",
+  "description": "Certifies the Feuerbach parent-scale law for primitive Pythagorean triples: all non-root triples have geometric parent reconstruction scale=4; root (3,4,5) is the unique boundary exception with QA closure scale qa_scale=2G=10.",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "cert_id",
+    "created_utc",
+    "batch_limit",
+    "primitive_count",
+    "interior_law",
+    "root_exception",
+    "uniqueness_confirmed",
+    "sex_invariant_confirmed",
+    "samples",
+    "invariant_diff"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_id": {
+      "type": "string",
+      "const": "QA_FEUERBACH_PARENT_SCALE_CERT.v1"
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 4
+    },
+    "created_utc": {
+      "type": "string",
+      "minLength": 10
+    },
+    "batch_limit": {
+      "type": "integer",
+      "minimum": 5,
+      "description": "Hypotenuse upper bound G <= batch_limit for the primitive triple sweep."
+    },
+    "primitive_count": {
+      "type": "integer",
+      "minimum": 1,
+      "description": "Total primitive triples (C,F,G) with G <= batch_limit, including root."
+    },
+    "interior_law": {
+      "type": "object",
+      "required": ["scale_value", "confirmed_count"],
+      "additionalProperties": false,
+      "properties": {
+        "scale_value": {
+          "type": "integer",
+          "const": 4,
+          "description": "Feuerbach parent reconstruction scale for all non-root primitive triples."
+        },
+        "confirmed_count": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Number of non-root triples confirmed at scale=4 (= primitive_count - 1)."
+        }
+      }
+    },
+    "root_exception": {
+      "type": "object",
+      "required": ["triple", "raw_legs", "qa_scale"],
+      "additionalProperties": false,
+      "properties": {
+        "triple": {
+          "type": "array",
+          "items": {"type": "integer"},
+          "minItems": 3,
+          "maxItems": 3,
+          "description": "The root primitive triple [C, F, G] = [3, 4, 5]."
+        },
+        "raw_legs": {
+          "type": "array",
+          "items": {"type": "integer"},
+          "minItems": 2,
+          "maxItems": 2,
+          "description": "Sorted computed parent legs [min, max] = [0, 1]; min=0 signals degeneracy."
+        },
+        "qa_scale": {
+          "type": "integer",
+          "const": 10,
+          "description": "QA boundary closure scale = 2*G = 2*5 = 10 for the root packet."
+        }
+      }
+    },
+    "uniqueness_confirmed": {
+      "type": "boolean",
+      "description": "True iff (3,4,5) is the unique degenerate triple in the batch."
+    },
+    "sex_invariant_confirmed": {
+      "type": "boolean",
+      "description": "True iff every primitive triple in the batch has its even leg divisible by 4."
+    },
+    "samples": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["triple", "parent_legs", "sex"],
+        "additionalProperties": false,
+        "properties": {
+          "triple": {
+            "type": "array",
+            "items": {"type": "integer"},
+            "minItems": 3,
+            "maxItems": 3
+          },
+          "parent_legs": {
+            "type": "array",
+            "items": {"type": "integer"},
+            "minItems": 2,
+            "maxItems": 2,
+            "description": "Sorted [min_leg, max_leg] of the reconstructed parent."
+          },
+          "sex": {
+            "type": "string",
+            "enum": ["male", "female"],
+            "description": "male = C (first leg) is divisible by 4; female = F (second leg) is divisible by 4."
+          }
+        }
+      }
+    },
+    "invariant_diff": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["gate", "fail_type", "path", "reason"],
+        "additionalProperties": false,
+        "properties": {
+          "gate":      {"type": "integer", "minimum": 0},
+          "fail_type": {"type": "string"},
+          "path":      {"type": "string"},
+          "reason":    {"type": "string"}
+        }
+      }
+    }
+  }
+}

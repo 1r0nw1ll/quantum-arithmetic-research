@@ -1,0 +1,49 @@
+{
+  "schema_id": "QA_GUARDED_OPERATOR_CATEGORY_CERT.v1",
+  "cert_id": "gme-invalid-nu-guard-001",
+  "created_utc": "2026-02-20T00:00:00Z",
+  "subject": {
+    "generator_set": ["sigma", "mu", "nu"],
+    "state_domain": "Z2",
+    "matrix_convention": "column_vector",
+    "generator_semantics_ref": "QA_GENERATORS_SIGMA_SHEAR.v1",
+    "guards": {
+      "nu": {
+        "type": "parity",
+        "requires": "odd_only"
+      }
+    }
+  },
+  "rho": {
+    "sigma": [[1, 0], [1, 1]],
+    "mu": [[0, 1], [1, 0]]
+  },
+  "claims": {
+    "composition_samples": [
+      {
+        "word": ["sigma"],
+        "expected_matrix": [[1, 0], [1, 1]],
+        "seed": [2, 3],
+        "expected_state": [2, 5]
+      }
+    ],
+    "determinants": {
+      "sigma": 1,
+      "mu": -1
+    },
+    "mod_n_checks": [
+      {"n": 2, "expected_generated_size": 6, "expected_det_pm_one_size": 6}
+    ]
+  },
+  "failure_obstructions": [
+    {
+      "obstruction_id": "nu_not_integer_total_linear",
+      "conclusion": "No N in M_2(Z) realizes nu as total map on Z^2",
+      "equations": [
+        "N*(2,0)^T=(1,0)^T",
+        "N*(0,2)^T=(0,1)^T"
+      ]
+    }
+  ],
+  "invariant_diff": []
+}

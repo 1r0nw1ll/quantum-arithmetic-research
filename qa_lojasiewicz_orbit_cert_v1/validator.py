@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-QA_COMPLIANCE = "observer=cert_validator, state_alphabet=integer_fixtures"
 """QA Lojasiewicz Orbit Descent Cert v1 — family [102]
 
 Certifies per-orbit-window phi-contraction for smooth, Lojasiewicz-conditioned
@@ -28,6 +27,8 @@ Gates:
              FAIL_TYPE: ORBITS_BOUND_MISMATCH
 """
 from __future__ import annotations
+
+QA_COMPLIANCE = "observer=cert_validator, state_alphabet=integer_fixtures"
 
 import argparse
 import hashlib

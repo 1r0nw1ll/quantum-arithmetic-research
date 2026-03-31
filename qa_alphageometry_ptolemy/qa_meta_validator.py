@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_law_of_harmonics_cert_family(base_dir: str) -> Optional[str]:
+    """QA Law of Harmonics Cert family [149] — certifies Iverson's formal law of harmonic resonance: two QN products sharing all but one prime factor each are harmonic; harmony ratio=min(id1,id2)/max(id1,id2); all QN products divisible by 6; Fibonacci QN chain shows adjacent harmonic pattern; source: Iverson QA-3 Ch 4; checks LH_1+ALIQ/IDEN/RATIO/DIV6/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    lh_dir    = os.path.join(base_dir, "qa_law_of_harmonics_cert_v1")
+    validator = os.path.join(lh_dir, "qa_law_of_harmonics_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_law_of_harmonics_cert_v1/qa_law_of_harmonics_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=lh_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_law_of_harmonics_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_law_of_harmonics_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_law_of_harmonics_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_sixteen_identities_cert_family(base_dir: str) -> Optional[str]:
     """QA Sixteen Identities Cert family [148] — certifies the 16 named quantities (A-L,X,W,Y,Z) of a prime Pythagorean direction and 9 universal algebraic relations: G+C=A, G-C=B, G=(A+B)/2, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par, W=X+K. Fundamental (2,1): F=3,C=4,G=5,H=7,I=1,L=1. Source: Iverson Pyth-1 Ch V; checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS; self-test ok"""
     import subprocess
@@ -5315,6 +5338,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (149, "QA Law of Harmonics Cert family",
+     _validate_law_of_harmonics_cert_family,
+     "Iverson's formal law: two QN products sharing all but one prime factor each are harmonic; ratio=min(id)/max(id); all products÷6; Fibonacci chain adjacency pattern; checks LH_1+ALIQ/IDEN/RATIO/DIV6/W/F; 2 PASS; self-test ok",
+     "149_qa_law_of_harmonics_cert",
+     "qa_law_of_harmonics_cert_v1", True),
     (148, "QA Sixteen Identities Cert family",
      _validate_sixteen_identities_cert_family,
      "16 named quantities (A-L,X,W,Y,Z) of prime Pythagorean direction + 9 algebraic relations: G+C=A, G-C=B, F²+C²=G², H²+I²=2G², L=CF/12 integer, C=4-par, G=5-par; checks SI_1/2+IDEN/REL/PAR/L/W/F; 2 PASS; self-test ok",

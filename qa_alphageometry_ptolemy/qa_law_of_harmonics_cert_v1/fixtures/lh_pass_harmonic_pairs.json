@@ -1,0 +1,65 @@
+{
+  "schema_version": "QA_LAW_OF_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.law_of_harmonics.pass.harmonic_pairs.v1",
+  "cert_type": "qa_law_of_harmonics_cert",
+  "title": "Law of Harmonics PASS: 5 harmonic QN pairs with aliquot/identity analysis",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates Iverson's Law of Harmonics: two QN products sharing all but one prime factor each are in harmonic resonance. The harmony ratio (smaller identity prime / larger identity prime) measures resonance strength. All products divisible by 6. Source: QA-3 Ch 4.",
+
+  "harmonic_pairs": [
+    {
+      "qn1": {"b": 1, "e": 2}, "product1": 30,
+      "qn2": {"b": 1, "e": 3}, "product2": 84,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 5, "identity_prime_2": 7,
+      "is_harmonic": true, "harmony_ratio": 0.7143,
+      "note": "P=30=2×3×5 vs P=84=2²×3×7; shared {2,3}; 5:7 ratio=Major Third interval"
+    },
+    {
+      "qn1": {"b": 1, "e": 3}, "product1": 84,
+      "qn2": {"b": 2, "e": 3}, "product2": 240,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 7, "identity_prime_2": 5,
+      "is_harmonic": true, "harmony_ratio": 0.7143,
+      "note": "P=84=2²×3×7 vs P=240=2⁴×3×5; shared {2,3}; 5:7"
+    },
+    {
+      "qn1": {"b": 1, "e": 3}, "product1": 84,
+      "qn2": {"b": 1, "e": 4}, "product2": 180,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 7, "identity_prime_2": 5,
+      "is_harmonic": true, "harmony_ratio": 0.7143,
+      "note": "P=84=2²×3×7 vs P=180=2²×3²×5; shared {2,3}; 5:7"
+    },
+    {
+      "qn1": {"b": 3, "e": 1}, "product1": 60,
+      "qn2": {"b": 1, "e": 3}, "product2": 84,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 5, "identity_prime_2": 7,
+      "is_harmonic": true, "harmony_ratio": 0.7143,
+      "note": "P=60=2²×3×5 vs P=84=2²×3×7; shared {2,3}; 5:7"
+    },
+    {
+      "qn1": {"b": 1, "e": 1}, "product1": 6,
+      "qn2": {"b": 1, "e": 2}, "product2": 30,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": null, "identity_prime_2": null,
+      "is_harmonic": false, "harmony_ratio": null,
+      "note": "P=6=2×3 has NO identity prime beyond shared set — NOT harmonic (fundamental is pure aliquot)"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "LH_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "LH_ALIQ", "description": "aliquot sets verified for all 5 pairs", "passed": true},
+    {"check_id": "LH_IDEN", "description": "identity primes verified for 4 harmonic pairs", "passed": true},
+    {"check_id": "LH_RATIO","description": "harmony ratios correct (4 at 5/7=0.714)", "passed": true},
+    {"check_id": "LH_DIV6", "description": "all 7 QN products divisible by 6", "passed": true},
+    {"check_id": "LH_W",    "description": "5 pairs (4 harmonic + 1 non-harmonic)", "passed": true},
+    {"check_id": "LH_F",    "description": "fundamental P=6 present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

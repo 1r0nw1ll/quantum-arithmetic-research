@@ -1,0 +1,65 @@
+{
+  "schema_version": "QA_LAW_OF_HARMONICS_CERT.v1",
+  "certificate_id": "qa.cert.law_of_harmonics.pass.fibonacci_chain.v1",
+  "cert_type": "qa_law_of_harmonics_cert",
+  "title": "Law of Harmonics PASS: Fibonacci QN chain showing harmonic adjacency pattern",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "The Fibonacci QN sequence (1,1),(1,2),(1,3),(2,3),(3,5) has products 6,30,84,240,1560. Adjacent pairs (30,84) and (84,240) are harmonic with shared {2,3} and identity primes 5 vs 7. Non-adjacent pair (30,240) shares {2,3,5} with no identity primes — deeper aliquot sharing but NOT harmonic. The pattern: harmony requires exactly one identity prime per QN.",
+
+  "harmonic_pairs": [
+    {
+      "qn1": {"b": 1, "e": 2}, "product1": 30,
+      "qn2": {"b": 1, "e": 3}, "product2": 84,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 5, "identity_prime_2": 7,
+      "is_harmonic": true, "harmony_ratio": 0.7143,
+      "note": "Fibonacci adjacent: (1,2)→(1,3); 5:7 harmonic"
+    },
+    {
+      "qn1": {"b": 1, "e": 3}, "product1": 84,
+      "qn2": {"b": 2, "e": 3}, "product2": 240,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": 7, "identity_prime_2": 5,
+      "is_harmonic": true, "harmony_ratio": 0.7143,
+      "note": "Fibonacci adjacent: (1,3)→(2,3); 7:5 harmonic (same ratio)"
+    },
+    {
+      "qn1": {"b": 1, "e": 1}, "product1": 6,
+      "qn2": {"b": 1, "e": 3}, "product2": 84,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": null, "identity_prime_2": null,
+      "is_harmonic": false, "harmony_ratio": null,
+      "note": "P=6 has no identity prime: {2,3} ⊂ {2,3,7}, id1={} — not harmonic"
+    },
+    {
+      "qn1": {"b": 1, "e": 2}, "product1": 30,
+      "qn2": {"b": 2, "e": 3}, "product2": 240,
+      "aliquot_set": [2, 3, 5],
+      "identity_prime_1": null, "identity_prime_2": null,
+      "is_harmonic": false, "harmony_ratio": null,
+      "note": "Non-adjacent: shared {2,3,5} fully contains P=30 primes — not harmonic"
+    },
+    {
+      "qn1": {"b": 1, "e": 1}, "product1": 6,
+      "qn2": {"b": 2, "e": 1}, "product2": 24,
+      "aliquot_set": [2, 3],
+      "identity_prime_1": null, "identity_prime_2": null,
+      "is_harmonic": false, "harmony_ratio": null,
+      "note": "Male (1,1) and female (2,1): both {2,3} only — not harmonic (same aliquot class)"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "LH_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "LH_ALIQ", "description": "aliquot sets verified", "passed": true},
+    {"check_id": "LH_IDEN", "description": "identity primes verified for harmonic pairs", "passed": true},
+    {"check_id": "LH_RATIO","description": "harmony ratios correct", "passed": true},
+    {"check_id": "LH_DIV6", "description": "all products divisible by 6", "passed": true},
+    {"check_id": "LH_W",    "description": "5 pairs (2 harmonic + 3 non-harmonic)", "passed": true},
+    {"check_id": "LH_F",    "description": "fundamental P=6 present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

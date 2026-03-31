@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Law of Harmonics Cert family [149]: certifies Iverson's formal law of harmonic resonance between QN products. Two QNs sharing all but one prime factor each are harmonic; harmony ratio = min(id1,id2)/max(id1,id2) measures resonance strength. All QN products divisible by 6. Source: Ben Iverson QA-3 Ch 4 Theory of Harmony."
+}

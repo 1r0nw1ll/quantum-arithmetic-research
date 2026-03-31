@@ -1,0 +1,109 @@
+{
+  "schema_version": "QA_PLIMPTON322_CERT.v1",
+  "certificate_id": "qa.cert.plimpton322.pass.witnesses.v1",
+  "cert_type": "qa_plimpton322_cert",
+  "title": "Plimpton 322 PASS: 5 rows covering Rows 1,2,5,6,9 + QA anchor (2,1)",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "General theorem witnesses. Every row of Plimpton 322 corresponds to a QA direction (d,e) with both d,e regular (5-smooth), generating triple (F,C,G)=(d²-e²,2de,d²+e²). The G/C ratio (Plimpton column 3÷column 2 = δ/β in Mansfield notation) terminates in sexagesimal because the denominator C=2de is a regular base-60 number. The column-1 value (G/C)² decreases from Row 1 to Row 15 (angle increases from ~45° to ~58° measured from the vertical). The QA fundamental direction (2,1) corresponds to Row 11 (unscaled triple 3,4,5). All rows: F²+C²=G² (Pythagorean); F,C,G>0 (SPVN no-zero = QA A1); I=C-F ≷ 0 distinguishes hyperbola/ellipse type.",
+
+  "general_theorem": {
+    "claim": "For any QA direction (d,e) with d,e regular (5-smooth): the triple (d²-e², 2de, d²+e²) forms a row of Plimpton-322 type; G/C terminates in base-60",
+    "proof_regularity": "d,e regular → C=2de has only factors 2,3,5 → gcd(G,C) may reduce denominator but resulting denom still 5-smooth → G/C terminates in base-60",
+    "proof_pythagorean": "(d²-e²)²+(2de)²=d⁴-2d²e²+e⁴+4d²e²=d⁴+2d²e²+e⁴=(d²+e²)² ✓",
+    "column1_formula": "Plimpton col-1 = (G/C)² = (d²+e²)²/(2de)² = (csc θ)² where θ=arctan(e/d)",
+    "mansfield_wildberger": "Mansfield & Wildberger 2017 (Historia Mathematica 44:395-419): Plimpton 322 is a trigonometric table in exact rational/sexagesimal arithmetic, not an approximation. The generating pairs (d,e) are chosen so both are regular, giving exact base-60 entries.",
+    "qa_chromogeometry": "F=Qr(d,e) (red quadrance), C=Qg(d,e) (green quadrance), G=Qb(d,e) (blue quadrance) — Wildberger Chromogeometry Theorem 6: Qb²=Qr²+Qg², i.e. F²+C²=G²"
+  },
+
+  "witnesses": [
+    {
+      "plimpton_row": 11,
+      "d": 2, "e": 1,
+      "triple": {"F": 3, "C": 4, "G": 5},
+      "d_regular": true, "d_factors": "2=2¹",
+      "e_regular": true, "e_factors": "1=1",
+      "base60": [1, 15],
+      "base60_string": "1;15",
+      "G_over_C": "5/4",
+      "denom_reduced": 4, "denom_factors": "4=2²",
+      "pythagorean": "9+16=25 ✓",
+      "I_value": 1, "conic_type": "hyperbola",
+      "no_zero_check": "3>0, 4>0, 5>0 ✓",
+      "_note": "QA fundamental direction. Row 11 of Plimpton 322 encodes (45,60,75)=15×(3,4,5); unscaled direction (2,1)"
+    },
+    {
+      "plimpton_row": 5,
+      "d": 9, "e": 4,
+      "triple": {"F": 65, "C": 72, "G": 97},
+      "d_regular": true, "d_factors": "9=3²",
+      "e_regular": true, "e_factors": "4=2²",
+      "base60": [1, 20, 50],
+      "base60_string": "1;20,50",
+      "G_over_C": "97/72",
+      "denom_reduced": 72, "denom_factors": "72=2³×3²",
+      "pythagorean": "4225+5184=9409=97² ✓",
+      "I_value": 7, "conic_type": "hyperbola",
+      "no_zero_check": "65>0, 72>0, 97>0 ✓"
+    },
+    {
+      "plimpton_row": 1,
+      "d": 12, "e": 5,
+      "triple": {"F": 119, "C": 120, "G": 169},
+      "d_regular": true, "d_factors": "12=2²×3",
+      "e_regular": true, "e_factors": "5=5¹",
+      "base60": [1, 24, 30],
+      "base60_string": "1;24,30",
+      "G_over_C": "169/120",
+      "denom_reduced": 120, "denom_factors": "120=2³×3×5",
+      "pythagorean": "14161+14400=28561=169² ✓",
+      "I_value": 1, "conic_type": "hyperbola",
+      "no_zero_check": "119>0, 120>0, 169>0 ✓",
+      "_note": "Row 1 of tablet — largest G²/C² value = steepest angle"
+    },
+    {
+      "plimpton_row": 6,
+      "d": 20, "e": 9,
+      "triple": {"F": 319, "C": 360, "G": 481},
+      "d_regular": true, "d_factors": "20=2²×5",
+      "e_regular": true, "e_factors": "9=3²",
+      "base60": [1, 20, 10],
+      "base60_string": "1;20,10",
+      "G_over_C": "481/360",
+      "denom_reduced": 360, "denom_factors": "360=2³×3²×5",
+      "pythagorean": "101761+129600=231361=481² ✓",
+      "I_value": 41, "conic_type": "hyperbola",
+      "no_zero_check": "319>0, 360>0, 481>0 ✓"
+    },
+    {
+      "plimpton_row": 9,
+      "d": 25, "e": 12,
+      "triple": {"F": 481, "C": 600, "G": 769},
+      "d_regular": true, "d_factors": "25=5²",
+      "e_regular": true, "e_factors": "12=2²×3",
+      "base60": [1, 16, 54],
+      "base60_string": "1;16,54",
+      "G_over_C": "769/600",
+      "denom_reduced": 600, "denom_factors": "600=2³×3×5²",
+      "pythagorean": "231361+360000=591361=769² ✓",
+      "I_value": 119, "conic_type": "hyperbola",
+      "no_zero_check": "481>0, 600>0, 769>0 ✓"
+    }
+  ],
+
+  "non_row_counterexample": {
+    "_note": "Direction (7,3): d=7 is NOT regular (7 is prime, not 2/3/5-smooth). Triple (40,42,58)=2×(20,21,29). G/C=58/42=29/21; denom 21=3×7 — factor 7 makes it non-regular → G/C does NOT terminate in base-60. This is why (7,3) does NOT appear in Plimpton 322.",
+    "d": 7, "e": 3,
+    "d_regular": false, "d_factors": "7=7 — irregular prime",
+    "base60_terminates": false
+  },
+
+  "validation_checks": [
+    {"check_id": "P322_1",   "description": "schema_version is 'QA_PLIMPTON322_CERT.v1'", "passed": true},
+    {"check_id": "P322_W",   "description": "≥3 witness rows", "passed": true, "details": "5 witnesses"},
+    {"check_id": "P322_F",   "description": "fundamental (d,e)=(2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

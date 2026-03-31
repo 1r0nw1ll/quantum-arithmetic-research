@@ -1,0 +1,65 @@
+{
+  "schema_version": "QA_PLIMPTON322_CERT.v1",
+  "certificate_id": "qa.cert.plimpton322.pass.fundamental.v1",
+  "cert_type": "qa_plimpton322_cert",
+  "title": "Plimpton 322 PASS: Row 1 (d,e)=(12,5) — (119,120,169) triple, G/C=1;24,30 in base-60",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture on Row 1 of Plimpton 322, the most famous row. Direction (d,e)=(12,5): both regular (12=2²×3, 5=5¹). Triple (119,120,169). G/C=169/120=1;24,30 in base-60 (exact 2-place termination). Plimpton column 1 value: (G/C)²=(169/120)²=28561/14400. This is the largest value on the tablet (the table is ordered by decreasing G²/C², i.e., decreasing angle). The tablet was written ~1800 BCE in Old Babylonian Nippur/Larsa; recovered by Edgar Banks, sold to G.A. Plimpton ~1900. Mansfield & Wildberger 2017 (Historia Mathematica 44:395-419) established that it is a table of exact sexagesimal trigonometric values for QA-type (cot,csc) pairs.",
+
+  "row": 1,
+  "direction": {"d": 12, "e": 5},
+  "triple": {"F": 119, "C": 120, "G": 169,
+    "_note": "F=d²-e²=144-25=119 (short side β), C=2de=120 (middle), G=d²+e²=169=13² (diagonal δ)"},
+
+  "regularity": {
+    "d_regular": true,
+    "d_factors": "12=2²×3 — only factors 2,3",
+    "e_regular": true,
+    "e_factors": "5=5¹ — only factor 5",
+    "C_regular": true,
+    "C_value": 120,
+    "C_factors": "120=2³×3×5 — all regular"
+  },
+
+  "base60": {
+    "ratio": "G/C = 169/120",
+    "denominator_reduced": 120,
+    "denominator_regular": true,
+    "denominator_factors": "120=2³×3×5",
+    "base60_representation": [1, 24, 30],
+    "base60_string": "1;24,30",
+    "check": "1 + 24/60 + 30/3600 = 1 + 0.4 + 0.00833... = 1.40833... = 169/120 ✓",
+    "terminates_in": 2
+  },
+
+  "plimpton_column1": {
+    "value_exact": "28561/14400",
+    "value_decimal": "1.98340277...",
+    "formula": "(G/C)² = (d²+e²)²/(2de)² = 169²/120² = 28561/14400",
+    "_note": "Row 1 has the largest G²/C² value — largest angle from vertical in the tablet's sequence"
+  },
+
+  "pythagorean_check": "119²+120²=14161+14400=28561=169² ✓",
+
+  "qa_connection": {
+    "chromogeometry": "F=Qr(12,5)=119 (red quadrance), C=Qg(12,5)=120 (green quadrance), G=Qb(12,5)=169 (blue quadrance)",
+    "conic_type": "hyperbola (I=C-F=1>0)",
+    "I_value": 1,
+    "no_zero": "F=119>0, C=120>0, G=169>0 — SPVN no-zero convention satisfied (QA A1)",
+    "uhg_null": "Triple (119,120,169) represents null point [119:120:169] in UHG — satisfies F²+C²=G²"
+  },
+
+  "validation_checks": [
+    {"check_id": "P322_1",   "description": "schema_version is 'QA_PLIMPTON322_CERT.v1'", "passed": true},
+    {"check_id": "P322_2",   "description": "F=d²-e², C=2de, G=d²+e²", "passed": true, "details": "119=144-25, 120=2×12×5, 169=144+25 ✓"},
+    {"check_id": "P322_3",   "description": "F²+C²=G²", "passed": true, "details": "14161+14400=28561=169² ✓"},
+    {"check_id": "P322_4",   "description": "gcd(d,e)=1, d>e, d-e odd", "passed": true, "details": "gcd(12,5)=1, 12>5, 12-5=7 odd ✓"},
+    {"check_id": "P322_REG", "description": "d,e are 5-smooth (regular in base-60)", "passed": true, "details": "12=2²×3, 5=5 ✓"},
+    {"check_id": "P322_BASE60", "description": "G/C terminates in base-60", "passed": true, "details": "169/120=1;24,30 ✓"},
+    {"check_id": "P322_NOZERO", "description": "F,C,G > 0 (SPVN no-zero = QA A1)", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

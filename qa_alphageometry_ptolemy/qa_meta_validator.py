@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_plimpton322_cert_family(base_dir: str) -> Optional[str]:
+    """QA Plimpton 322 Cert family [138] — certifies Babylonian tablet Plimpton 322 (~1800 BCE) encodes QA chromogeometric triples: each row = direction (d,e) with d,e regular (5-smooth), F=d²-e² (short side β), C=2de, G=d²+e² (diagonal δ); regularity → C=2de regular → G/C terminates in base-60 (exact sexagesimal); F²+C²=G² (Pythagorean); SPVN no-zero = QA A1; counterexample: (7,3) irregular → G/C non-terminating → absent from tablet; checks P322_1-4+P322_REG/BASE60/NOZERO/W/F; source: Mansfield & Wildberger 2017 Historia Mathematica 44:395-419; QA: F=Qr=red quadrance, C=Qg=green quadrance, G=Qb=blue quadrance (Wildberger Chromo Thm 6); 2 PASS (Row 1 (12,5)→(119,120,169); 5-witness Rows 1,5,6,9,11); self-test ok"""
+    import subprocess
+    p322_dir  = os.path.join(base_dir, "qa_plimpton322_cert_v1")
+    validator = os.path.join(p322_dir, "qa_plimpton322_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_plimpton322_cert_v1/qa_plimpton322_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=p322_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_plimpton322_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_plimpton322_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_plimpton322_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_koenig_twisted_squares_cert_family(base_dir: str) -> Optional[str]:
     """QA Koenig Twisted Squares Cert family [137] — certifies H²-G²=G²-I²=2CF=24L for any QA direction: H=C+F (outer Koenig square), I=C-F (inner; sign=conic type), L=CF/12 (always integer for primitive); (I²,2CF,G²,H²) is arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF, G²-I²=(C²+F²)-(C-F)²=2CF; div-24: 8|C=2de (one even), 3|F=(d-e)(d+e) (one div by 3); geometric: twisted-squares outer²-inner²=4×triangle_area=2CF; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 (I²,2CF,G²,H²) corollary; checks KTS_1-9+KTS_W/F; 2 PASS (fundamental (2,1) 2CF=24; 5-witness general); self-test ok"""
     import subprocess
@@ -5062,6 +5085,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (138, "QA Plimpton 322 Cert family",
+     _validate_plimpton322_cert_family,
+     "Babylonian tablet Plimpton 322 (~1800 BCE) encodes QA chromogeometric triples: each row = direction (d,e) with d,e regular (5-smooth=only factors 2,3,5); F=d²-e² (short side β=Qr), C=2de (Qg), G=d²+e² (diagonal δ=Qb); regularity → C regular → G/C terminates in base-60 (exact sexagesimal); F²+C²=G²; SPVN no-zero=QA A1; counterexample (7,3): d=7 irregular → absent from tablet; Mansfield & Wildberger 2017 Historia Mathematica 44:395-419; Wildberger Chromo Thm 6: G²=F²+C²; checks P322_1-4+REG/BASE60/NOZERO/W/F; 2 PASS; self-test ok",
+     "138_qa_plimpton322_cert",
+     "qa_plimpton322_cert_v1", True),
     (137, "QA Koenig Twisted Squares Cert family",
      _validate_koenig_twisted_squares_cert_family,
      "H²-G²=G²-I²=2CF=24L for all QA directions: H=C+F (outer Koenig square), I=C-F (inner; sign=conic), L=CF/12 integer; (I²,2CF,G²,H²) arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF using C²+F²=G²; divisibility: 8|C=2de (one of d,e even), 3|F=(d-e)(d+e); twisted-squares: outer²-inner²=4×area; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 quadruple corollary; connects to [130] origin of 24; checks KTS_1-9+KTS_W/F; 2 PASS; self-test ok",

@@ -1,0 +1,44 @@
+{
+  "schema_version": "QA_SEPTENARY_CERT.v1",
+  "certificate_id": "qa.cert.septenary.pass.qa_connection.v1",
+  "cert_type": "qa_septenary_cert",
+  "title": "Septenary PASS: QA orbit connection — septenary = cosmos/satellite residues, complement = singularity",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "The septenary partition {1,2,4,5,7,8} vs {0,3,6} is the QA singularity partition of mod-9: singularity fixed point (9,9)≡(0,0) mod 9 lives in the complement {0,3,6}; cosmos/satellite orbits live in {1,2,4,5,7,8}. The doubling cycle 1→2→4→8→7→5→1 is the orbit of the T² operator (Fibonacci shift squared) acting on (Z/9Z)*. Period 6 = Euler totient φ(9). Source: Iverson QA orbit structure + Grant Philomath Ch 1.",
+
+  "septenary_set": [1, 2, 4, 5, 7, 8],
+  "doubling_cycle": [1, 2, 4, 8, 7, 5],
+  "cycle_period": 6,
+  "complement_set": [0, 3, 6],
+
+  "diagonal_pairs": [[1, 8], [2, 7], [4, 5]],
+
+  "parity_sums": {
+    "even_elements": [2, 4, 8],
+    "even_sum": 14,
+    "odd_elements": [1, 5, 7],
+    "odd_sum": 13
+  },
+
+  "qa_connections": {
+    "singularity_set": [0, 3, 6],
+    "euler_totient_9": 6,
+    "pisano_period_9": 24,
+    "orbit_note": "φ(9)=6 = septenary cycle period; π(9)=24 = cosmos orbit period; 24/6=4 = ratio of full orbit to unit cycle"
+  },
+
+  "validation_checks": [
+    {"check_id": "SP_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "SP_GROUP","description": "(Z/9Z)* verified", "passed": true},
+    {"check_id": "SP_CYCLE","description": "period 6 doubling cycle", "passed": true},
+    {"check_id": "SP_COMP", "description": "{0,3,6} complement", "passed": true},
+    {"check_id": "SP_DIAG", "description": "diagonal pairs sum to 9", "passed": true},
+    {"check_id": "SP_PAR",  "description": "parity cross-sums", "passed": true},
+    {"check_id": "SP_W",    "description": "6 elements witnessed", "passed": true},
+    {"check_id": "SP_F",    "description": "starts from 1", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

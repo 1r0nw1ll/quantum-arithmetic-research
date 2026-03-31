@@ -1,0 +1,72 @@
+{
+  "schema_version": "QA_PELL_NORM_CERT.v1",
+  "certificate_id": "qa.cert.pell_norm.pass.witnesses.v1",
+  "cert_type": "qa_pell_norm_cert",
+  "title": "Pell Norm PASS: 6 general witnesses + off-chain Pell directions",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "General witnesses for I=-(x²-2y²) across diverse directions — both on and off the Pell boundary chain. The identity holds for ALL QA directions, not just the boundary ones with |P|=1. For example (3,2): x=1,y=2, P=1-8=-7, I=7; (4,1): x=3,y=1, P=9-2=7, I=-7. The Pell norm P(x,y)=x²-2y² can take any integer value, and |I|=|P| measures how far the direction is from the parabola boundary.",
+
+  "general_theorem": {
+    "identity": "For all QA directions (d,e): I = C-F = -(x²-2y²) where x=d-e, y=e",
+    "proof": "Algebraic identity — see fundamental fixture",
+    "boundary_interpretation": "|P|=|x²-2y²| = distance from parabola boundary in Pell units",
+    "pell_chain": "P=±1 directions form the M_B spine; P=±7 directions include (3,2),(4,1),(8,3),(9,4) — next tier"
+  },
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1, "x": 1, "y": 1,
+      "triple": {"F": 3, "C": 4, "G": 5},
+      "pell_norm": -1, "I": 1, "type": "H",
+      "check": "P(1,1)=1-2=-1; I=-(−1)=1 ✓"
+    },
+    {
+      "d": 3, "e": 2, "x": 1, "y": 2,
+      "triple": {"F": 5, "C": 12, "G": 13},
+      "pell_norm": -7, "I": 7, "type": "H",
+      "check": "P(1,2)=1-8=-7; I=7 ✓"
+    },
+    {
+      "d": 4, "e": 1, "x": 3, "y": 1,
+      "triple": {"F": 15, "C": 8, "G": 17},
+      "pell_norm": 7, "I": -7, "type": "E",
+      "check": "P(3,1)=9-2=7; I=-7 ✓"
+    },
+    {
+      "d": 4, "e": 3, "x": 1, "y": 3,
+      "triple": {"F": 7, "C": 24, "G": 25},
+      "pell_norm": -17, "I": 17, "type": "H",
+      "check": "P(1,3)=1-18=-17; I=17 ✓"
+    },
+    {
+      "d": 9, "e": 4, "x": 5, "y": 4,
+      "triple": {"F": 65, "C": 72, "G": 97},
+      "pell_norm": -7, "I": 7, "type": "H",
+      "check": "P(5,4)=25-32=-7; I=7 ✓"
+    },
+    {
+      "d": 8, "e": 3, "x": 5, "y": 3,
+      "triple": {"F": 55, "C": 48, "G": 73},
+      "pell_norm": 7, "I": -7, "type": "E",
+      "check": "P(5,3)=25-18=7; I=-7 ✓"
+    }
+  ],
+
+  "pell_norm_levels": {
+    "_note": "Pell norm |P| = distance from parabola boundary; directions with same |P| are 'equidistant' from boundary",
+    "P_minus_1": "I=+1 hyperbola boundary: (2,1),(12,5),(70,29),(169·...)...",
+    "P_plus_1":  "I=-1 ellipse boundary: (5,2),(29,12),(169,70),...",
+    "P_minus_7": "I=+7 (3,2),(9,4),...",
+    "P_plus_7":  "I=-7 (4,1),(8,3),..."
+  },
+
+  "validation_checks": [
+    {"check_id": "PN_1",    "description": "schema_version is 'QA_PELL_NORM_CERT.v1'", "passed": true},
+    {"check_id": "PN_W",    "description": "≥3 witnesses", "passed": true, "details": "6 witnesses"},
+    {"check_id": "PN_F",    "description": "fundamental (d,e)=(2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

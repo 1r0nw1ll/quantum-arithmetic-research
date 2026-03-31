@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pell Norm Cert family [141]: certifies I=C-F=-(x²-2y²) where x=d-e, y=e for any QA direction (d,e). The Pell norm P(x,y)=x²-2y² evaluates to I=-P(d-e,e). Pell boundary: P=-1→I=+1 (hyperbola boundary); P=+1→I=-1 (ellipse boundary). Fundamental Pell solution (x,y)=(1,1)→direction (2,1)→I=1=QA fundamental. M_B Pythagorean tree move (cert [135]) = Pell-norm-flip in (x,y) variables: M_B(d,e)=(2d+e,d) corresponds to (x,y)→(x+2y,x+y) which sends P→-P. M_B chain 2/1→5/2→12/5→29/12→70/29→... is the complete Pell boundary sequence alternating H/E. Source: Wildberger arXiv:0806.2490."
+}

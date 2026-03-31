@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_PELL_NORM_CERT.v1",
+  "certificate_id": "qa.cert.pell_norm.pass.fundamental.v1",
+  "cert_type": "qa_pell_norm_cert",
+  "title": "Pell Norm PASS: I=-(x²-2y²) identity and the M_B Pell chain from (2,1)",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. Two theorems certified simultaneously. (1) IDENTITY: I=C-F=-(x²-2y²) where x=d-e, y=e. Proof: I=2de-(d²-e²)=2y(x+y)-((x+y)²-y²)=2xy+2y²-x²-2xy=2y²-x²=-(x²-2y²). (2) CHAIN: the M_B Pythagorean tree move M_B(d,e)=(2d+e,d) equals (x,y)→(x+2y,x+y) in Pell variables, which maps P(x,y)=x²-2y² to P(x+2y,x+y)=(x+2y)²-2(x+y)²=-P(x,y). So M_B flips the Pell sign. Starting from (2,1) with P=-1, the M_B chain generates all boundary directions with alternating P=±1.",
+
+  "identity_proof": {
+    "claim": "I = C-F = -(x²-2y²) where x=d-e, y=e",
+    "steps": [
+      "I = C-F = 2de-(d²-e²)",
+      "Let x=d-e, y=e, so d=x+y",
+      "I = 2(x+y)y-((x+y)²-y²)",
+      "= 2xy+2y²-(x²+2xy+y²-y²)",
+      "= 2xy+2y²-x²-2xy",
+      "= 2y²-x²",
+      "= -(x²-2y²) = -P(d-e, e)  ✓"
+    ]
+  },
+
+  "mb_pell_proof": {
+    "claim": "M_B(d,e)=(2d+e,d) maps Pell norm P→-P",
+    "steps": [
+      "Let (d',e')=M_B(d,e)=(2d+e,d)",
+      "Then x'=d'-e'=(2d+e)-d=d+e, y'=e'=d",
+      "x'=d+e=x+2y (since x=d-e, y=e → d=x+y → x+2y=d-e+2e=d+e ✓)",
+      "y'=d=x+y",
+      "P(x',y')=(x+2y)²-2(x+y)²",
+      "= x²+4xy+4y²-2x²-4xy-2y²",
+      "= -x²+2y²",
+      "= -(x²-2y²) = -P(x,y)  ✓"
+    ]
+  },
+
+  "pell_chain": {
+    "_note": "M_B chain from fundamental (2,1); each step flips Pell sign",
+    "chain": [
+      {"d": 2,   "e": 1,  "x": 1,  "y": 1,  "pell": -1, "I":  1, "type": "H", "triple": [3,4,5]},
+      {"d": 5,   "e": 2,  "x": 3,  "y": 2,  "pell":  1, "I": -1, "type": "E", "triple": [21,20,29]},
+      {"d": 12,  "e": 5,  "x": 7,  "y": 5,  "pell": -1, "I":  1, "type": "H", "triple": [119,120,169]},
+      {"d": 29,  "e": 12, "x": 17, "y": 12, "pell":  1, "I": -1, "type": "E", "triple": [697,696,985]},
+      {"d": 70,  "e": 29, "x": 41, "y": 29, "pell": -1, "I":  1, "type": "H", "triple": [4059,4060,5741]},
+      {"d": 169, "e": 70, "x": 99, "y": 70, "pell":  1, "I": -1, "type": "E", "triple": [23661,23660,33461]}
+    ],
+    "pattern": "P alternates -1/+1/−1/+1; |I|=1 at every step; d/e→1+√2=2.41421..."
+  },
+
+  "connections": {
+    "cert_135": "M_B=(2d+e,d) is the Barning-Hall tree move — Pell chain is the M_B spine of the Pythagorean tree",
+    "cert_140": "I=-(Pell norm); Pell-1→I=+1 (hyp boundary); Pell+1→I=-1 (ell boundary)",
+    "cert_138": "Plimpton Row 1 (12,5) is a Pell-1 direction: P(7,5)=49-50=-1, I=1",
+    "wildberger": "arXiv:0806.2490 — Pell equation and QA direction geometry; solutions generate the boundary sequence"
+  },
+
+  "validation_checks": [
+    {"check_id": "PN_1",    "description": "schema_version is 'QA_PELL_NORM_CERT.v1'", "passed": true},
+    {"check_id": "PN_IDEN", "description": "I=-(x²-2y²) for all chain entries", "passed": true},
+    {"check_id": "PN_MB",   "description": "M_B step flips Pell sign", "passed": true},
+    {"check_id": "PN_F",    "description": "fundamental (2,1): P=-1, I=1", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

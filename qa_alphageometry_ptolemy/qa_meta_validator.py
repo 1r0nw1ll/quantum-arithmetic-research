@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_pell_norm_cert_family(base_dir: str) -> Optional[str]:
+    """QA Pell Norm Cert family [141] — certifies I=C-F=-(x²-2y²) where x=d-e, y=e: the QA conic discriminant equals the negated Pell norm P(x,y)=x²-2y² for D=2; Pell boundary: P=-1→I=+1 (hyperbola boundary), P=+1→I=-1 (ellipse boundary); P=0 impossible for primitive integers (would require d/e=silver ratio); M_B Pythagorean tree move (cert [135]) M_B(d,e)=(2d+e,d) corresponds to (x,y)→(x+2y,x+y) in Pell variables, which maps P→-P (Pell-sign-flip); M_B chain from (2,1): 2/1→5/2→12/5→29/12→70/29→169/70 generates Pell solution sequence x²-2y²=±1 with alternating H/E; fundamental (2,1): P=-1, I=+1; Wildberger arXiv:0806.2490; checks PN_1-3+IDEN/MB/W/F; 2 PASS (chain 6 steps; 6 general witnesses at P=±1,±7,±17); self-test ok"""
+    import subprocess
+    pn_dir    = os.path.join(base_dir, "qa_pell_norm_cert_v1")
+    validator = os.path.join(pn_dir, "qa_pell_norm_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pell_norm_cert_v1/qa_pell_norm_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=pn_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_pell_norm_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_pell_norm_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_pell_norm_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_conic_discriminant_cert_family(base_dir: str) -> Optional[str]:
     """QA Conic Discriminant Cert family [140] — certifies I=C-F=Qg-Qr as the conic discriminant: I>0→hyperbola (C>F, d/e<1+√2), I=0→parabola (impossible for integers: d/e=1+√2=silver ratio, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (F>C, d/e>1+√2); silver-ratio convergents [2;2,2,2,...]=2/1,5/2,12/5,29/12,70/29 alternate H/E with |I|=1; Plimpton Row 1 (12,5) has I=1 barely hyperbolic; chromogeometry: I=Qg-Qr=green minus red quadrance; checks CD_1-4+PARA/W/F; 2 PASS (4 directions straddling boundary; 4+4 type witnesses + convergent sequence); self-test ok"""
     import subprocess
@@ -5131,6 +5154,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (141, "QA Pell Norm Cert family",
+     _validate_pell_norm_cert_family,
+     "I=C-F=-(x²-2y²) where x=d-e, y=e: discriminant = negated Pell norm P(x,y)=x²-2y²; Pell boundary P=±1→|I|=1 (minimum nonzero); M_B(d,e)=(2d+e,d) = Pell-sign-flip in (x,y) space; M_B chain from (2,1) generates full Pell solution sequence alternating H/E; checks PN_1-3+IDEN/MB/W/F; 2 PASS; self-test ok",
+     "141_qa_pell_norm_cert",
+     "qa_pell_norm_cert_v1", True),
     (140, "QA Conic Discriminant Cert family",
      _validate_conic_discriminant_cert_family,
      "I=C-F=Qg-Qr as QA conic discriminant: I>0→hyperbola (d/e<1+√2), I=0→parabola (impossible: d/e=silver ratio=1+√2, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (d/e>1+√2); silver-ratio CF [2;2,2,2,...] convergents 2/1,5/2,12/5,29/12 alternate H/E with |I|=1; Plimpton Row 1 (12,5) I=1 barely hyperbolic (d/e=2.4 vs 2.414); chromogeometry: I=Qg-Qr=green minus red; checks CD_1-4+PARA/W/F; 2 PASS; self-test ok",

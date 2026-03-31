@@ -1,0 +1,91 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.prime_bounded_scaling_consistent.v1",
+  "title": "Bounded factor-certificate scaling experiment — CONSISTENT with QA_PRIME_BOUNDED_CERTIFICATE_SCALING_CERT.v1 on tested endpoints",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "PASS fixture: repo-native empirical observation tying the real bounded-certificate scaling experiment artifact to the new formal cert family. The narrow claim is empirical only: on tested endpoints 100, 250, 500, and 1000, the minimal passing bounded witness cap matched the largest prime <= sqrt(N).",
+
+  "observation": {
+    "source": "experiment_script",
+    "script": "experiments/qa_prime_bounded_certificate_scaling_experiment.py",
+    "captured_utc": "2026-03-30T00:00:00Z",
+    "domain": "qa_prime_certificate_graph",
+    "summary": "The bounded-certificate scaling experiment passed on endpoints 100, 250, 500, and 1000. Observed minimal passing prime_max values were 7, 13, 19, and 31, exactly matching the largest prime <= sqrt(N) at each endpoint.",
+    "key_numbers": {
+      "endpoint_100_observed": 7,
+      "endpoint_250_observed": 13,
+      "endpoint_500_observed": 19,
+      "endpoint_1000_observed": 31
+    }
+  },
+
+  "parent_cert": {
+    "schema_version": "QA_PRIME_BOUNDED_CERTIFICATE_SCALING_CERT.v1",
+    "certificate_id": "qa.cert.prime_bounded_scaling.100_1000.v1",
+    "claim": "On the tested endpoints, the observed minimal passing prime_max matches the largest prime <= sqrt(N)"
+  },
+
+  "verdict": "CONSISTENT",
+
+  "evidence": [
+    {
+      "type": "artifact",
+      "description": "Scaling experiment artifact",
+      "value": "results/qa_prime_bounded_certificate_scaling_experiment.json canonical_hash=7783660ec86ff6d41734da65dbcb4208d31162dcbb17bbf727d40c91303895a3"
+    },
+    {
+      "type": "artifact",
+      "description": "Formal cert instance",
+      "value": "qa_prime_bounded_certificate_scaling_cert_v1/fixtures/pass_scaling_100_1000.json"
+    },
+    {
+      "type": "quantitative",
+      "description": "Observed and predicted bounds agree on every tested endpoint",
+      "value": "100->7, 250->13, 500->19, 1000->31"
+    }
+  ],
+
+  "open_questions": [
+    "Does the same scaling law persist on larger endpoints beyond 1000?",
+    "Can this empirical law be strengthened into a theorem without collapsing back to ordinary smallest-factor reasoning?"
+  ],
+
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' ∈ {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_PRIME_BOUNDED_CERTIFICATE_SCALING_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONSISTENT'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger (not applicable here)",
+      "passed": true,
+      "details": "verdict='CONSISTENT'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 3 entries"
+    }
+  ],
+
+  "fail_ledger": [],
+
+  "result": "PASS"
+}

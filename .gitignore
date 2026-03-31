@@ -199,3 +199,6 @@ ag2_guardrails_poc/OAI_CONFIG_LIST
 proofgold_bounties/env/.env
 proofgold_bounties/data/proofgold-lava/explorer/i/pgsecret.php
 ag2_guardrails_poc/data/secret.txt
+
+# Large raw data files (>100MB — GitHub limit)
+qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_multibench_cases.jsonl

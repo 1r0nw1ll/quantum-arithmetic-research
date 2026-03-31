@@ -1,0 +1,79 @@
+{
+  "schema_version": "QA_KOENIG_TWISTED_SQUARES_CERT.v1",
+  "certificate_id": "qa.cert.koenig_twisted_squares.pass.fundamental.v1",
+  "cert_type": "qa_koenig_twisted_squares_cert",
+  "title": "Koenig Twisted Squares PASS: fundamental (d,e)=(2,1) — 3-4-5 triple, H²-G²=G²-I²=2CF=24",
+  "created_utc": "2026-03-30T00:00:00Z",
+
+  "_fixture_purpose": "Anchor fixture. The fundamental QA direction (d,e)=(2,1) gives triple (F,C,G)=(3,4,5). QA elements H=C+F=7 (outer square side), I=C-F=1 (inner square side, sign: I>0 → hyperbola). Twisted-squares identity: H²-G²=49-25=24=2CF=2·4·3; G²-I²=25-1=24=2CF. Divisibility: always 24 for primitive Pythagorean directions. The pair (I,H)=(1,7) is the Koenig I→H step: inner-square integer 1²=1 maps to outer-square integer 7²=49. L=CF/12=12/12=1 (minimal). 24L=24. (I²,2CF,G²,H²)=(1,24,25,49): these four values form a QA arithmetic sequence with constant step 2CF=24.",
+
+  "direction": {"d": 2, "e": 1},
+  "triple": {"F": 3, "C": 4, "G": 5,
+    "_note": "F=d²-e²=3 (red quadrance=semi-latus), C=2de=4 (green quadrance=4×area), G=d²+e²=5 (blue quadrance=hypotenuse)"},
+
+  "koenig_elements": {
+    "H": 7, "H_formula": "C+F = 4+3 = 7",
+    "I": 1, "I_formula": "C-F = 4-3 = 1",
+    "L": 1, "L_formula": "C*F/12 = 12/12 = 1",
+    "_note": "I=C-F>0 → hyperbola; I=0 → parabola; I<0 → ellipse (QA conic discriminant)"
+  },
+
+  "twisted_squares_identities": {
+    "H_sq_minus_G_sq": 24,
+    "H_sq_minus_G_sq_check": "H²-G² = 49-25 = 24 = 2*C*F = 2*4*3",
+    "G_sq_minus_I_sq": 24,
+    "G_sq_minus_I_sq_check": "G²-I² = 25-1 = 24 = 2*C*F = 2*4*3",
+    "two_CF": 24,
+    "two_CF_check": "2*C*F = 2*4*3 = 24",
+    "twenty_four_L": 24,
+    "twenty_four_L_check": "24*L = 24*1 = 24"
+  },
+
+  "quadruple_structure": {
+    "_note": "(I²,2CF,G²,H²) form an arithmetic progression with step 2CF=24",
+    "I_sq": 1,
+    "two_CF_val": 24,
+    "G_sq": 25,
+    "H_sq": 49,
+    "step": 24,
+    "check": "1 + 24 = 25; 25 + 24 = 49 ✓ — arithmetic progression step 2CF"
+  },
+
+  "divisibility": {
+    "value": 24,
+    "divisible_by_24": true,
+    "check": "24 % 24 = 0 ✓"
+  },
+
+  "koenig_chain_step": {
+    "_note": "The Koenig series generates next direction from (d,e) → (H,I) = (C+F, C-F) = (d+2e+d²-e²/... algebraically: H=C+F, I=C-F as QA elements",
+    "current_dir": [2, 1],
+    "H_as_d_next": 7,
+    "I_as_e_next": 1,
+    "next_dir": [7, 1],
+    "next_triple": {"F": 48, "C": 14, "G": 50,
+      "_note": "(7,1): F=49-1=48, C=14, G=50; note G=50=2×25 — composite, not primitive until reduced"}
+  },
+
+  "algebraic_proof": {
+    "H_sq_minus_G_sq": "H²-G²=(C+F)²-(C²+F²)=2CF ✓  (since C²+F²=G²)",
+    "G_sq_minus_I_sq": "G²-I²=(C²+F²)-(C-F)²=(C²+F²)-(C²-2CF+F²)=2CF ✓",
+    "div_24": "For primitive Pythagorean direction (d,e) with gcd(d,e)=1 and d-e odd: C=2de (even), F=d²-e²=(d-e)(d+e). Either d or e is even (since d-e odd → exactly one even). If e even: 2|e → 8|2de=C; if d even: 2|d → 4|de and (d-e)(d+e) has d-e,d+e both odd with one divisible by 3 → 3|F. Either way, 24|2CF. ✓"
+  },
+
+  "validation_checks": [
+    {"check_id": "KTS_1", "description": "schema_version is 'QA_KOENIG_TWISTED_SQUARES_CERT.v1'", "passed": true},
+    {"check_id": "KTS_2", "description": "F=d²-e², C=2de, G=d²+e² for declared triple", "passed": true},
+    {"check_id": "KTS_3", "description": "F²+C²=G² (Pythagorean identity)", "passed": true, "details": "9+16=25 ✓"},
+    {"check_id": "KTS_4", "description": "H=C+F, I=C-F computed correctly", "passed": true, "details": "H=7, I=1 ✓"},
+    {"check_id": "KTS_5", "description": "H²-G²=2CF", "passed": true, "details": "49-25=24=2*4*3 ✓"},
+    {"check_id": "KTS_6", "description": "G²-I²=2CF", "passed": true, "details": "25-1=24=2*4*3 ✓"},
+    {"check_id": "KTS_7", "description": "L=C*F/12 integer", "passed": true, "details": "L=12/12=1 ✓"},
+    {"check_id": "KTS_8", "description": "24L=2CF", "passed": true, "details": "24=24 ✓"},
+    {"check_id": "KTS_9", "description": "2CF divisible by 24 (primitive direction)", "passed": true, "details": "24%24=0 ✓"},
+    {"check_id": "KTS_F", "description": "fundamental (d,e)=(2,1) present with 2CF=24", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

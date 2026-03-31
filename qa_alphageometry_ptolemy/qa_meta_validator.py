@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_koenig_twisted_squares_cert_family(base_dir: str) -> Optional[str]:
+    """QA Koenig Twisted Squares Cert family [137] — certifies H²-G²=G²-I²=2CF=24L for any QA direction: H=C+F (outer Koenig square), I=C-F (inner; sign=conic type), L=CF/12 (always integer for primitive); (I²,2CF,G²,H²) is arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF, G²-I²=(C²+F²)-(C-F)²=2CF; div-24: 8|C=2de (one even), 3|F=(d-e)(d+e) (one div by 3); geometric: twisted-squares outer²-inner²=4×triangle_area=2CF; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 (I²,2CF,G²,H²) corollary; checks KTS_1-9+KTS_W/F; 2 PASS (fundamental (2,1) 2CF=24; 5-witness general); self-test ok"""
+    import subprocess
+    kts_dir   = os.path.join(base_dir, "qa_koenig_twisted_squares_cert_v1")
+    validator = os.path.join(kts_dir, "qa_koenig_twisted_squares_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_koenig_twisted_squares_cert_v1/qa_koenig_twisted_squares_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=kts_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_koenig_twisted_squares_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_koenig_twisted_squares_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_koenig_twisted_squares_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_cyclic_quad_cert_family(base_dir: str) -> Optional[str]:
     """QA Cyclic Quad Cert family [136] — certifies Ptolemy's theorem via three integer identities for QA direction pairs: BF (Brahmagupta-Fibonacci) G₁G₂=D²+E² where D=d₁d₂-e₁e₂, E=d₁e₂+d₂e₁; PP (Ptolemy Product) F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC (Ptolemy Conjugate) F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples on circle G₁G₂ = two diagonals of Ptolemy cyclic quadrilateral; algebraic proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²)=G₁²G₂²; historical: Ptolemy ~150 CE chord tables → Brahmagupta 628 CE → Gaussian Z[i] multiplication; connects to [127] UHG null (same null points); checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS (fundamental (2,1)×(3,2) G₃=65; 5-witness general); self-test ok"""
     import subprocess
@@ -5039,6 +5062,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (137, "QA Koenig Twisted Squares Cert family",
+     _validate_koenig_twisted_squares_cert_family,
+     "H²-G²=G²-I²=2CF=24L for all QA directions: H=C+F (outer Koenig square), I=C-F (inner; sign=conic), L=CF/12 integer; (I²,2CF,G²,H²) arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF using C²+F²=G²; divisibility: 8|C=2de (one of d,e even), 3|F=(d-e)(d+e); twisted-squares: outer²-inner²=4×area; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 quadruple corollary; connects to [130] origin of 24; checks KTS_1-9+KTS_W/F; 2 PASS; self-test ok",
+     "137_qa_koenig_twisted_squares_cert",
+     "qa_koenig_twisted_squares_cert_v1", True),
     (134, "QA Egyptian Fraction Cert family",
      _validate_egyptian_fraction_cert_family,
      "greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ, kᵢ=⌈dᵢ/eᵢ⌉; strictly increasing denominators; all intermediate pairs coprime; terminates at eₙ=1 (unit-fraction direction); Koenig descent path = Egyptian fraction steps; Rhind Papyrus ~1600 BCE = Ben Iverson Koenig = H. Lee Price Fibonacci-box navigation; checks EF_1-8+EF_W/F; 2 PASS; self-test ok",

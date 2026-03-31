@@ -1,0 +1,31 @@
+{
+  "schema_version": "QA_EQUILATERAL_TRIANGLE_CERT.v1",
+  "certificate_id": "qa.cert.equilateral_triangle.pass.eisenstein.v1",
+  "cert_type": "qa_equilateral_triangle_cert",
+  "title": "Equilateral Triangle PASS: W,Y,Z Eisenstein norms for 6 directions",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Verifies F²-FW+W²=Z² and Y²-YW+W²=Z² (Eisenstein norm) for 6 primitive directions spanning both conic regimes. Also verifies F+Y=W and Y=A-D=C+E (dual definition). Source: Iverson QA-2 Ch 7, cert [133] Eisenstein.",
+
+  "directions": [
+    {"d": 2, "e": 1, "identities": {"W": 8, "Y": 5, "Z": 7, "F": 3}, "note": "fundamental; F²-FW+W²=9-24+64=49=7²"},
+    {"d": 3, "e": 2, "identities": {"W": 21, "Y": 16, "Z": 19, "F": 5}, "note": "5-12-13; 25-105+441=361=19²"},
+    {"d": 4, "e": 1, "identities": {"W": 24, "Y": 9, "Z": 21, "F": 15}, "note": "8-15-17; I<0 (elliptic)"},
+    {"d": 4, "e": 3, "identities": {"W": 40, "Y": 33, "Z": 37, "F": 7}, "note": "7-24-25; C=24"},
+    {"d": 5, "e": 2, "identities": {"W": 45, "Y": 24, "Z": 39, "F": 21}, "note": "20-21-29; Plimpton Row 1"},
+    {"d": 5, "e": 4, "identities": {"W": 65, "Y": 56, "Z": 61, "F": 9}, "note": "9-40-41; H=49=7²"}
+  ],
+
+  "validation_checks": [
+    {"check_id": "ET_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "ET_DEF",  "description": "W,Y,Z computed correctly for all 6", "passed": true},
+    {"check_id": "ET_DUAL", "description": "Y=A-D=C+E verified for all 6", "passed": true},
+    {"check_id": "ET_EIS",  "description": "both Eisenstein norms = Z² for all 6", "passed": true},
+    {"check_id": "ET_SUM",  "description": "F+Y=W for all 6", "passed": true},
+    {"check_id": "ET_W",    "description": "6 direction witnesses", "passed": true},
+    {"check_id": "ET_F",    "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

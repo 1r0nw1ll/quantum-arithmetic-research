@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_equilateral_triangle_cert_family(base_dir: str) -> Optional[str]:
+    """QA Equilateral Triangle Cert family [152] — certifies W=d(e+a)=X+K, Y=A-D=C+E (dual definition bridging square and product layers), Z=E+K; two Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum rule F+Y=W; source: Iverson QA-2 Ch 7; checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    et_dir    = os.path.join(base_dir, "qa_equilateral_triangle_cert_v1")
+    validator = os.path.join(et_dir, "qa_equilateral_triangle_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_equilateral_triangle_cert_v1/qa_equilateral_triangle_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=et_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_equilateral_triangle_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_equilateral_triangle_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_equilateral_triangle_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_par_number_cert_family(base_dir: str) -> Optional[str]:
     """QA Par Number Cert family [151] — certifies Iverson's Double Parity (par) system: 4-way mod-4 classification (2-par=4k+2, 3-par=4k+3, 4-par=4k, 5-par=4k+1); male²=5-par always; C=4-par, G=5-par for primitive directions; par multiplication table closed; Fib_hits observations; source: Iverson QA-2 Ch 3; checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS; self-test ok"""
     import subprocess
@@ -5384,6 +5407,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (152, "QA Equilateral Triangle Cert family",
+     _validate_equilateral_triangle_cert_family,
+     "W=d(e+a), Y=A-D=C+E (dual definition), Z=E+K; Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum F+Y=W; checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok",
+     "152_qa_equilateral_triangle_cert",
+     "qa_equilateral_triangle_cert_v1", True),
     (151, "QA Par Number Cert family",
      _validate_par_number_cert_family,
      "Iverson Double Parity: 2/3/4/5-par mod-4 classification; male²=5-par; C=4-par, G=5-par; multiplication table; Fib_hits observations; checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS; self-test ok",

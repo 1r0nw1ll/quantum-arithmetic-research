@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Equilateral Triangle Cert family [152]: certifies W=d(e+a)=X+K, Y=A-D=C+E (dual definition), Z=E+K; Eisenstein norm F²-FW+W²=Z² and Y²-YW+W²=Z²; sum rule F+Y=W. Source: Iverson QA-2 Ch 7 equilateral triangle identities."
+}

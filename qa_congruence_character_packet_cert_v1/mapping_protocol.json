@@ -1,0 +1,74 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_CONGRUENCE_CHARACTER_PACKET_CERT_V1",
+  "state_manifold": {
+    "state_type": "PACKETS of central idempotents over Z(Q[PSL2(Z/72Z)]) (backend-relative)",
+    "embedding_function": "Consume a certified center-algebra backend (QA_CONGRUENCE_CENTER_ALGEBRA_CERT.v1 with profile=full_backend). Interpret each packet element as a sparse rational coefficient vector in the PSL2(Z/72Z) orbit basis. Verify idempotence, orthogonality, and completeness by exact orbit-basis multiplication via the backend engine.",
+    "constraints": [
+      "This family is strictly backend-relative: it does not introduce or certify character tables.",
+      "All arithmetic is exact (int, Fraction); no floats.",
+      "Basis is fixed: psl2_mod72_orbit_basis as defined by qa_psl2_mod72_center_algebra.py and certified by QA_CONGRUENCE_CENTER_ALGEBRA_CERT.v1 (full_backend)."
+    ]
+  },
+  "invariants": [
+    {
+      "name": "packet_idempotence",
+      "definition": "Each element e_i satisfies e_i^2 = e_i in the center algebra."
+    },
+    {
+      "name": "packet_orthogonality",
+      "definition": "For i≠j, e_i e_j = 0 in the center algebra."
+    },
+    {
+      "name": "packet_completeness",
+      "definition": "Sum_i e_i = 1 (the algebra identity) in the center algebra."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "SCHEMA_INVALID",
+      "trigger_condition": "schema_id mismatch or missing required fields"
+    },
+    {
+      "fail_type": "DEPENDENCY_PROFILE_MISMATCH",
+      "trigger_condition": "Dependency backend cert is not profile=full_backend"
+    },
+    {
+      "fail_type": "BACKEND_CERT_HASH_MISMATCH",
+      "trigger_condition": "Dependency cert hash does not match"
+    },
+    {
+      "fail_type": "BACKEND_CERT_INVALID",
+      "trigger_condition": "Dependency backend cert does not validate"
+    },
+    {
+      "fail_type": "PACKET_WELL_FORMEDNESS_FAILURE",
+      "trigger_condition": "Invalid sparse vectors (out of range indices, duplicate indices, non-normalized rationals)"
+    },
+    {
+      "fail_type": "IDEMPOTENCE_FAILURE",
+      "trigger_condition": "Found e_i with e_i^2 != e_i"
+    },
+    {
+      "fail_type": "ORTHOGONALITY_FAILURE",
+      "trigger_condition": "Found i≠j with e_i e_j != 0"
+    },
+    {
+      "fail_type": "SUM_TO_IDENTITY_FAILURE",
+      "trigger_condition": "Sum_i e_i != 1"
+    },
+    {
+      "fail_type": "TARGET_RESOLUTION_FAILURE",
+      "trigger_condition": "Optional target element z does not equal the claimed linear combination of packet elements"
+    },
+    {
+      "fail_type": "PACKET_FINGERPRINT_MISMATCH",
+      "trigger_condition": "Recomputed packet fingerprint does not match"
+    }
+  ],
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "All parsing is deterministic, backend multiplication is exact, and hashes use canonical JSON serialization (sort_keys, fixed separators)."
+  }
+}
+

@@ -1,0 +1,71 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL.v1",
+  "mapping_id": "QA_CONGRUENCE_PRIMITIVE_IDEMPOTENT_CERT_V1",
+  "state_manifold": {
+    "state_type": "PRIMITIVITY of central idempotents in Z(Q[PSL2(Z/72Z)]) (backend-relative)",
+    "embedding_function": "Consume a certified center-algebra backend (QA_CONGRUENCE_CENTER_ALGEBRA_CERT.v1 with profile=full_backend). Interpret the idempotent e and (optional) witnesses a,b as sparse rational vectors in the psl2_mod72_orbit_basis. Verify primitivity relative to a finite, explicit refinement search space (PASS) or verify explicit refinability witness e=a+b with a,b orthogonal idempotents (FAIL-witness).",
+    "constraints": [
+      "This family is strictly backend-relative: it does not certify global representation-theoretic primitivity.",
+      "PASS certificates certify 'primitive relative to the declared finite refinement scope' by exhaustive search within that scope.",
+      "All arithmetic is exact (int, Fraction); no floats.",
+      "Basis is fixed: psl2_mod72_orbit_basis as defined by qa_psl2_mod72_center_algebra.py and certified by QA_CONGRUENCE_CENTER_ALGEBRA_CERT.v1 (full_backend)."
+    ]
+  },
+  "invariants": [
+    {
+      "name": "idempotence",
+      "definition": "e^2 = e."
+    },
+    {
+      "name": "refinability_witness",
+      "definition": "Non-primitivity can be certified by a,b with a^2=a, b^2=b, ab=ba=0, a≠0, b≠0, and a+b=e."
+    },
+    {
+      "name": "primitive_in_scope",
+      "definition": "Within a declared finite refinement search space A, there is no nontrivial idempotent a in A with 0<a<e and ae=a (equivalently yielding a nontrivial orthogonal refinement)."
+    }
+  ],
+  "failure_taxonomy": [
+    {
+      "fail_type": "SCHEMA_INVALID",
+      "trigger_condition": "schema_id mismatch or missing required fields"
+    },
+    {
+      "fail_type": "DEPENDENCY_PROFILE_MISMATCH",
+      "trigger_condition": "Dependency backend cert is not profile=full_backend"
+    },
+    {
+      "fail_type": "BACKEND_CERT_HASH_MISMATCH",
+      "trigger_condition": "Dependency cert hash does not match"
+    },
+    {
+      "fail_type": "BACKEND_CERT_INVALID",
+      "trigger_condition": "Dependency backend cert does not validate"
+    },
+    {
+      "fail_type": "WELL_FORMEDNESS_FAILURE",
+      "trigger_condition": "Invalid sparse vectors (out of range indices, duplicate indices, non-normalized rationals)"
+    },
+    {
+      "fail_type": "E_NOT_IDEMPOTENT",
+      "trigger_condition": "Provided e does not satisfy e^2=e"
+    },
+    {
+      "fail_type": "REFINEMENT_WITNESS_INVALID",
+      "trigger_condition": "Provided a,b do not satisfy the refinement witness conditions"
+    },
+    {
+      "fail_type": "PRIMITIVITY_VIOLATION",
+      "trigger_condition": "PASS cert is falsified by finding a nontrivial refinement within the declared finite search scope"
+    },
+    {
+      "fail_type": "PRIMITIVITY_FINGERPRINT_MISMATCH",
+      "trigger_condition": "Recomputed primitivity fingerprint does not match"
+    }
+  ],
+  "determinism_contract": {
+    "invariant_diff_defined": true,
+    "nondeterminism_proof": "All parsing is deterministic, the refinement search space is finite and exhaustively enumerated in lexicographic order, backend multiplication is exact, and hashes use canonical JSON serialization."
+  }
+}
+

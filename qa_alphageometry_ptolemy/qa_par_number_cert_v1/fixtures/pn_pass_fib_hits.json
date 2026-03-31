@@ -1,0 +1,47 @@
+{
+  "schema_version": "QA_PAR_NUMBER_CERT.v1",
+  "certificate_id": "qa.cert.par_number.pass.fib_hits.v1",
+  "cert_type": "qa_par_number_cert",
+  "title": "Par Number PASS: Fib_hits observations for par-classified primes",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Documents the relationship between par class and Fibonacci zero-count within Pisano periods. The pattern is nuanced: for primes p, Fib_hits depends on Legendre symbol (5/p). This fixture records observed values without enforcing a universal rule. The QA connection: par class predicts the quadratic character of 5 mod p, which governs Pisano period structure.",
+
+  "par_witnesses": [
+    {"n": 11, "par": 3},
+    {"n": 19, "par": 3},
+    {"n": 9, "par": 5},
+    {"n": 29, "par": 5}
+  ],
+
+  "square_witnesses": [
+    {"n": 11, "square_par": 5, "note": "11²=121 → 5-par"},
+    {"n": 19, "square_par": 5, "note": "19²=361 → 5-par"}
+  ],
+
+  "direction_witnesses": [
+    {"d": 2, "e": 1, "C": 4, "G": 5}
+  ],
+
+  "fib_witnesses": [
+    {"m": 9, "fib_hits": 2, "note": "5-par; pi(9)=24; 24/2=12; hits=2"},
+    {"m": 11, "fib_hits": 1, "note": "3-par prime; pi(11)=10; hits=1"},
+    {"m": 19, "fib_hits": 1, "note": "3-par prime; pi(19)=18; hits=1"},
+    {"m": 29, "fib_hits": 1, "note": "5-par prime; pi(29)=14; hits=1; (5/29)=-1"}
+  ],
+
+  "par_multiplication_table": null,
+
+  "validation_checks": [
+    {"check_id": "PN_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "PN_CLASS","description": "4 par witnesses verified", "passed": true},
+    {"check_id": "PN_SQ",   "description": "2 male squares verified", "passed": true},
+    {"check_id": "PN_QA",   "description": "1 direction: C=4-par, G=5-par", "passed": true},
+    {"check_id": "PN_FIB",  "description": "4 Fib_hits values verified against Pisano computation", "passed": true},
+    {"check_id": "PN_W",    "description": "11 total witnesses", "passed": true},
+    {"check_id": "PN_F",    "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

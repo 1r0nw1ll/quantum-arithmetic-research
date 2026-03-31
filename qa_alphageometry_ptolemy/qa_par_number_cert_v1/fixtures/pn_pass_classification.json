@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_PAR_NUMBER_CERT.v1",
+  "certificate_id": "qa.cert.par_number.pass.classification.v1",
+  "cert_type": "qa_par_number_cert",
+  "title": "Par Number PASS: 4-way classification + square rule + multiplication table + QA direction parity",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Iverson's par system: 2-par=4k+2, 3-par=4k+3, 4-par=4k, 5-par=4k+1. Universal rules: (1) male² always 5-par (odd²≡1 mod 4). (2) C=2de always 4-par. (3) G=d²+e² always 5-par (opposite parity squares). (4) Par multiplication table is closed. Source: QA-2 Ch 3.",
+
+  "par_witnesses": [
+    {"n": 2, "par": 2, "note": "2-par: 2≡2 mod 4"},
+    {"n": 6, "par": 2, "note": "2-par: 6≡2 mod 4"},
+    {"n": 3, "par": 3, "note": "3-par: 3≡3 mod 4"},
+    {"n": 7, "par": 3, "note": "3-par: 7≡3 mod 4"},
+    {"n": 4, "par": 4, "note": "4-par: 4≡0 mod 4"},
+    {"n": 8, "par": 4, "note": "4-par: 8≡0 mod 4"},
+    {"n": 5, "par": 5, "note": "5-par: 5≡1 mod 4"},
+    {"n": 9, "par": 5, "note": "5-par: 9≡1 mod 4"}
+  ],
+
+  "square_witnesses": [
+    {"n": 3, "square_par": 5, "note": "3²=9 → 5-par (male squared)"},
+    {"n": 5, "square_par": 5, "note": "5²=25 → 5-par (male squared)"},
+    {"n": 7, "square_par": 5, "note": "7²=49 → 5-par (male squared)"},
+    {"n": 9, "square_par": 5, "note": "9²=81 → 5-par (male squared)"},
+    {"n": 11, "square_par": 5, "note": "11²=121 → 5-par (male squared)"},
+    {"n": 13, "square_par": 5, "note": "13²=169 → 5-par (male squared)"}
+  ],
+
+  "direction_witnesses": [
+    {"d": 2, "e": 1, "C": 4, "G": 5, "note": "C=4 (4-par); G=5 (5-par)"},
+    {"d": 3, "e": 2, "C": 12, "G": 13, "note": "C=12 (4-par); G=13 (5-par)"},
+    {"d": 4, "e": 1, "C": 8, "G": 17, "note": "C=8 (4-par); G=17 (5-par)"},
+    {"d": 4, "e": 3, "C": 24, "G": 25, "note": "C=24 (4-par); G=25 (5-par)"},
+    {"d": 5, "e": 2, "C": 20, "G": 29, "note": "C=20 (4-par); G=29 (5-par)"},
+    {"d": 5, "e": 4, "C": 40, "G": 41, "note": "C=40 (4-par); G=41 (5-par)"}
+  ],
+
+  "fib_witnesses": [],
+
+  "par_multiplication_table": [
+    {"a_par": 2, "b_par": 2, "result_par": 4},
+    {"a_par": 2, "b_par": 3, "result_par": 2},
+    {"a_par": 2, "b_par": 4, "result_par": 4},
+    {"a_par": 2, "b_par": 5, "result_par": 2},
+    {"a_par": 3, "b_par": 3, "result_par": 5},
+    {"a_par": 3, "b_par": 4, "result_par": 4},
+    {"a_par": 3, "b_par": 5, "result_par": 3},
+    {"a_par": 4, "b_par": 4, "result_par": 4},
+    {"a_par": 4, "b_par": 5, "result_par": 4},
+    {"a_par": 5, "b_par": 5, "result_par": 5}
+  ],
+
+  "validation_checks": [
+    {"check_id": "PN_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "PN_CLASS","description": "8 par classification witnesses verified", "passed": true},
+    {"check_id": "PN_SQ",   "description": "6 male squares all 5-par", "passed": true},
+    {"check_id": "PN_QA",   "description": "6 directions: C=4-par, G=5-par", "passed": true},
+    {"check_id": "PN_MULT", "description": "10-entry multiplication table verified", "passed": true},
+    {"check_id": "PN_W",    "description": "20 total witnesses", "passed": true},
+    {"check_id": "PN_F",    "description": "fundamental (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

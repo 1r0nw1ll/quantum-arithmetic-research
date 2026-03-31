@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_conic_discriminant_cert_family(base_dir: str) -> Optional[str]:
+    """QA Conic Discriminant Cert family [140] — certifies I=C-F=Qg-Qr as the conic discriminant: I>0→hyperbola (C>F, d/e<1+√2), I=0→parabola (impossible for integers: d/e=1+√2=silver ratio, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (F>C, d/e>1+√2); silver-ratio convergents [2;2,2,2,...]=2/1,5/2,12/5,29/12,70/29 alternate H/E with |I|=1; Plimpton Row 1 (12,5) has I=1 barely hyperbolic; chromogeometry: I=Qg-Qr=green minus red quadrance; checks CD_1-4+PARA/W/F; 2 PASS (4 directions straddling boundary; 4+4 type witnesses + convergent sequence); self-test ok"""
+    import subprocess
+    cd_dir    = os.path.join(base_dir, "qa_conic_discriminant_cert_v1")
+    validator = os.path.join(cd_dir, "qa_conic_discriminant_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_conic_discriminant_cert_v1/qa_conic_discriminant_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=cd_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_conic_discriminant_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_conic_discriminant_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_conic_discriminant_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_48_64_cert_family(base_dir: str) -> Optional[str]:
     """QA 48/64 Cert family [139] — certifies structural constants 48 and 64: ALGEBRAIC: 48L=H²-I²=4CF for all QA directions (proof: (C+F)²-(C-F)²=4CF=48L); min 48 at (2,1) L=1; ORBIT: 48=2×cosmos_period=2×24, 64=satellite_period²=8²; POLYNOMIAL: equilateral null triangle (P,R,T)=(4,4,4) satisfies PR+RT+PT=48, PRT=64 → polynomial (x-4)³=x³-12x²+48x-64; unique symmetric positive integer solution; 48/64=3/4=equilateral spread (Wildberger chromo §6.4); connects to [137] (H²-I²=4CF corollary), [128] (cosmos/satellite periods), [133] (Eisenstein equilateral); checks C4864_1-3+ALG/POLY/ORB/W/F; 2 PASS (fundamental (2,1) 48L=48; 6-witness incl. 5040=7! at (7,2)); self-test ok"""
     import subprocess
@@ -5108,6 +5131,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (140, "QA Conic Discriminant Cert family",
+     _validate_conic_discriminant_cert_family,
+     "I=C-F=Qg-Qr as QA conic discriminant: I>0→hyperbola (d/e<1+√2), I=0→parabola (impossible: d/e=silver ratio=1+√2, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (d/e>1+√2); silver-ratio CF [2;2,2,2,...] convergents 2/1,5/2,12/5,29/12 alternate H/E with |I|=1; Plimpton Row 1 (12,5) I=1 barely hyperbolic (d/e=2.4 vs 2.414); chromogeometry: I=Qg-Qr=green minus red; checks CD_1-4+PARA/W/F; 2 PASS; self-test ok",
+     "140_qa_conic_discriminant_cert",
+     "qa_conic_discriminant_cert_v1", True),
     (139, "QA 48/64 Cert family",
      _validate_48_64_cert_family,
      "structural constants 48 and 64: ALGEBRAIC 48L=H²-I²=4CF for all QA directions (proof: (C+F)²-(C-F)²=4CF=48L; min at (2,1) L=1→48); ORBIT 48=2×cosmos_period=2×24, 64=satellite_period²=8²; POLYNOMIAL equilateral (4,4,4): PR+RT+PT=48, PRT=64, polynomial (x-4)³=x³-12x²+48x-64, unique symmetric positive integer solution; 48/64=3/4=equilateral spread; 5040=7! at (7,2) L=105; connects to [137] Koenig (H²-I²=4CF corollary), [128] spread period (cosmos/satellite), [133] Eisenstein (equilateral); checks C4864_1-3+ALG/POLY/ORB/W/F; 2 PASS; self-test ok",

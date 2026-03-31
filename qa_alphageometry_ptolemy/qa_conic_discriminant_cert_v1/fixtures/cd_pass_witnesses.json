@@ -1,0 +1,81 @@
+{
+  "schema_version": "QA_CONIC_DISCRIMINANT_CERT.v1",
+  "certificate_id": "qa.cert.conic_discriminant.pass.witnesses.v1",
+  "cert_type": "qa_conic_discriminant_cert",
+  "title": "Conic Discriminant PASS: 4 hyperbola + 4 ellipse witnesses + convergent sequence",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "General theorem witnesses. For any QA direction (d,e): I=C-F=2de-(d²-e²) determines conic type. The silver-ratio continued fraction convergents 2/1, 5/2, 12/5, 29/12, 70/29 alternate hyperbola/ellipse with |I|=1 at each step — the closest integer approach to the parabola boundary. The QA elements G=F+C+I-I=F+C and I are related by G²=F²+C² (cert [125]); sign(I) is independent of G. Chromogeometry: I=Qg(d,e)-Qr(d,e)=C-F; negative means red dominates (more 'stretch'), positive means green dominates (more 'rotation').",
+
+  "general_theorem": {
+    "discriminant": "I = C-F = 2de-(d²-e²) = -(d²-2de-e²)",
+    "type_rule": "I>0 ↔ hyperbola; I=0 ↔ parabola (impossible for integers); I<0 ↔ ellipse",
+    "threshold": "d/e = 1+√2 (silver ratio) separates hyperbola from ellipse",
+    "independence": "sign(I) independent of scale; if (d,e)→(kd,ke) then I→k²(C-F) same sign",
+    "chromogeometry": "I = Qg-Qr = green minus red quadrance; sign = dominance of one color metric",
+    "continued_fraction": "[2;2,2,2,...] → convergents 2/1(H,I=1), 5/2(E,I=-1), 12/5(H,I=1), 29/12(E,I=-1), 70/29(H,I=1) — alternating with |I|=1"
+  },
+
+  "hyperbola_witnesses": [
+    {
+      "d": 2, "e": 1, "F": 3,  "C": 4,   "G": 5,   "I": 1,  "conic_type": "hyperbola",
+      "check": "I=4-3=1>0 ✓", "d_over_e": 2.0
+    },
+    {
+      "d": 3, "e": 2, "F": 5,  "C": 12,  "G": 13,  "I": 7,  "conic_type": "hyperbola",
+      "check": "I=12-5=7>0 ✓", "d_over_e": 1.5
+    },
+    {
+      "d": 4, "e": 3, "F": 7,  "C": 24,  "G": 25,  "I": 17, "conic_type": "hyperbola",
+      "check": "I=24-7=17>0 ✓", "d_over_e": 1.333
+    },
+    {
+      "d": 12, "e": 5, "F": 119, "C": 120, "G": 169, "I": 1, "conic_type": "hyperbola",
+      "check": "I=120-119=1>0 ✓", "d_over_e": 2.4,
+      "_note": "Plimpton 322 Row 1 — barely hyperbolic; d/e=2.4 just below silver ratio 2.414"
+    }
+  ],
+
+  "ellipse_witnesses": [
+    {
+      "d": 5,  "e": 2, "F": 21, "C": 20,  "G": 29,  "I": -1, "conic_type": "ellipse",
+      "check": "I=20-21=-1<0 ✓", "d_over_e": 2.5,
+      "_note": "Closest ellipse to parabola boundary; d/e=2.5 just above silver ratio"
+    },
+    {
+      "d": 4,  "e": 1, "F": 15, "C": 8,   "G": 17,  "I": -7, "conic_type": "ellipse",
+      "check": "I=8-15=-7<0 ✓", "d_over_e": 4.0
+    },
+    {
+      "d": 8,  "e": 3, "F": 55, "C": 48,  "G": 73,  "I": -7, "conic_type": "ellipse",
+      "check": "I=48-55=-7<0 ✓", "d_over_e": 2.667
+    },
+    {
+      "d": 29, "e": 12, "F": 697, "C": 696, "G": 985, "I": -1, "conic_type": "ellipse",
+      "check": "I=696-697=-1<0 ✓", "d_over_e": 2.4167,
+      "_note": "Convergent 29/12 — alternating with Row 1 (12,5); |I|=1, barely elliptic"
+    }
+  ],
+
+  "convergent_sequence": {
+    "_note": "Silver ratio 1+√2=[2;2,2,2,...]; convergents alternate H(I=1)/E(I=-1) with each convergent one step closer to parabola",
+    "convergents": [
+      {"d": 2,  "e": 1,  "I":  1, "type": "H", "d_over_e": 2.0},
+      {"d": 5,  "e": 2,  "I": -1, "type": "E", "d_over_e": 2.5},
+      {"d": 12, "e": 5,  "I":  1, "type": "H", "d_over_e": 2.4},
+      {"d": 29, "e": 12, "I": -1, "type": "E", "d_over_e": 2.4167},
+      {"d": 70, "e": 29, "I":  1, "type": "H", "d_over_e": 2.4138}
+    ],
+    "limit": "1+√2 = 2.41421...",
+    "pattern": "|I|=1 at every convergent; type alternates H/E; d/e→silver ratio from both sides"
+  },
+
+  "validation_checks": [
+    {"check_id": "CD_1",    "description": "schema_version is 'QA_CONIC_DISCRIMINANT_CERT.v1'", "passed": true},
+    {"check_id": "CD_W",    "description": "≥3 witnesses of each conic type", "passed": true, "details": "4 hyperbola + 4 ellipse"},
+    {"check_id": "CD_F",    "description": "fundamental (d,e)=(2,1) present as hyperbola", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

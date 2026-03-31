@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Path Shape Cert family [145]: classifies generator-sequence shapes in the Pythagorean tree. Four shape classes: UNIFORM_A (only M_A, consecutive integers), UNIFORM_B (only M_B, Pell chain with alternating norm), UNIFORM_C (only M_C, constant e), MIXED (two or more generators). Invariants: primitivity preserved, Pell alternation for UNIFORM_B, e constant for UNIFORM_C. Source: Barning 1963/Hall 1970/Price 2008, certs [134][135][141]."
+}

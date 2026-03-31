@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Path Scale Cert family [146]: certifies G=d^2+e^2 growth profiles along generator paths. UNIFORM_B paths grow exponentially with G ratio converging to 3+2sqrt(2)=5.8284...; UNIFORM_A paths grow polynomially (consecutive integers, G~2n^2); UNIFORM_C paths grow polynomially (arithmetic d, G~d^2). All forward paths from (2,1) have G monotone increasing. Source: Pell equation theory, certs [135] Pythagorean Tree, [141] Pell Norm, [145] Path Shape."
+}

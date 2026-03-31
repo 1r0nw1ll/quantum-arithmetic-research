@@ -3612,6 +3612,52 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_path_scale_cert_family(base_dir: str) -> Optional[str]:
+    """QA Path Scale Cert family [146] — certifies G=d^2+e^2 growth profiles along Pythagorean-tree generator paths. UNIFORM_B paths grow exponentially: G ratio converges to 3+2*sqrt(2)=5.828... (silver ratio squared, from M_B dominant eigenvalue 1+sqrt(2)). UNIFORM_A and UNIFORM_C paths grow polynomially (G ratio -> 1). All forward paths from (2,1) have G monotone increasing. 8-step Pell chain converges by step 4 (6 d.p.). Source: Pell equation theory, certs [135] Pythagorean Tree, [141] Pell Norm, [145] Path Shape; checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    sc_dir    = os.path.join(base_dir, "qa_path_scale_cert_v1")
+    validator = os.path.join(sc_dir, "qa_path_scale_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_path_scale_cert_v1/qa_path_scale_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=sc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_path_scale_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_path_scale_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_path_scale_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_path_shape_cert_family(base_dir: str) -> Optional[str]:
+    """QA Path Shape Cert family [145] — classifies generator-sequence shapes in the Pythagorean tree into four classes: UNIFORM_A (only M_A, consecutive integers), UNIFORM_B (only M_B, Pell chain with alternating norm), UNIFORM_C (only M_C, constant e, arithmetic d), MIXED (two or more generators). Invariants: primitivity preserved at every step; UNIFORM_B: Pell norm alternates sign; UNIFORM_C: e constant. Source: Barning 1963/Hall 1970/Price 2008, certs [134] Egyptian Fraction, [135] Pythagorean Tree, [141] Pell Norm; checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    ps_dir    = os.path.join(base_dir, "qa_path_shape_cert_v1")
+    validator = os.path.join(ps_dir, "qa_path_shape_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_path_shape_cert_v1/qa_path_shape_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=ps_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_path_shape_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_path_shape_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_path_shape_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_male_female_octave_cert_family(base_dir: str) -> Optional[str]:
     """QA Male/Female Octave Cert family [144] — certifies Male→Female transform on QA Quantum Numbers (b,e,d,a): female=(2e,b,a,2d) [double e then swap b↔e]; female_product=4×male_product (algebraic proof: 2e×b×a×2d=4×b×e×d×a); 4×=2 octaves (musical interpretation); fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; transform chains: each step ×4 adds 2 octaves; 5 Fibonacci+arbitrary pair witnesses; source: Ben Iverson QA framework + Dale Pond SVP male/female vibration; checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok"""
     import subprocess
@@ -5223,6 +5269,16 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (146, "QA Path Scale Cert family",
+     _validate_path_scale_cert_family,
+     "G=d^2+e^2 growth profiles along Pythagorean-tree paths; UNIFORM_B exponential (ratio->3+2sqrt(2)=5.828), UNIFORM_A/C polynomial (ratio->1); all forward paths G monotone increasing; 8-step Pell convergence witness; checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok",
+     "146_qa_path_scale_cert",
+     "qa_path_scale_cert_v1", True),
+    (145, "QA Path Shape Cert family",
+     _validate_path_shape_cert_family,
+     "four shape classes: UNIFORM_A (consecutive integers), UNIFORM_B (Pell chain, norm alternates), UNIFORM_C (constant e, arithmetic d), MIXED (2+ generators); primitivity preserved; checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS; self-test ok",
+     "145_qa_path_shape_cert",
+     "qa_path_shape_cert_v1", True),
     (144, "QA Male/Female Octave Cert family",
      _validate_male_female_octave_cert_family,
      "Male→Female transform (double e, swap b↔e) gives female=(2e,b,a,2d); female_product=4×male_product; 4×=2 octaves; fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; chains indefinitely (+2 octaves per step); checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok",

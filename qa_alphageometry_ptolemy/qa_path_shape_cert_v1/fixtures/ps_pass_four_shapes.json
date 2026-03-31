@@ -1,0 +1,69 @@
+{
+  "schema_version": "QA_PATH_SHAPE_CERT.v1",
+  "certificate_id": "qa.cert.path_shape.pass.four_shapes.v1",
+  "cert_type": "qa_path_shape_cert",
+  "title": "Path Shape PASS: one witness per shape class from fundamental root (2,1)",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates the four shape classes. UNIFORM_A: (2,1)->(3,2)->(4,3)->(5,4) consecutive integers. UNIFORM_B: (2,1)->(5,2)->(12,5)->(29,12) Pell chain. UNIFORM_C: (2,1)->(4,1)->(6,1)->(8,1) constant e. MIXED: (2,1)->M_B->(5,2)->M_A->(8,5)->M_C->(18,5) all three generators.",
+
+  "paths": [
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_A", "M_A", "M_A"],
+      "shape_class": "UNIFORM_A",
+      "steps": [
+        {"d": 3, "e": 2, "F": 5, "C": 12, "G": 13},
+        {"d": 4, "e": 3, "F": 7, "C": 24, "G": 25},
+        {"d": 5, "e": 4, "F": 9, "C": 40, "G": 41}
+      ],
+      "note": "M_A increments: (d,e)->(d+1,d); consecutive integers"
+    },
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_B", "M_B", "M_B"],
+      "shape_class": "UNIFORM_B",
+      "steps": [
+        {"d": 5, "e": 2, "F": 21, "C": 20, "G": 29},
+        {"d": 12, "e": 5, "F": 119, "C": 120, "G": 169},
+        {"d": 29, "e": 12, "F": 697, "C": 696, "G": 985}
+      ],
+      "note": "Pell chain; P(d-e,e) alternates -1,+1,-1,+1"
+    },
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_C", "M_C", "M_C"],
+      "shape_class": "UNIFORM_C",
+      "steps": [
+        {"d": 4, "e": 1, "F": 15, "C": 8, "G": 17},
+        {"d": 6, "e": 1, "F": 35, "C": 12, "G": 37},
+        {"d": 8, "e": 1, "F": 63, "C": 16, "G": 65}
+      ],
+      "note": "e stays constant; d grows by +2e each step"
+    },
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_B", "M_A", "M_C"],
+      "shape_class": "MIXED",
+      "steps": [
+        {"d": 5, "e": 2, "F": 21, "C": 20, "G": 29},
+        {"d": 8, "e": 5, "F": 39, "C": 80, "G": 89},
+        {"d": 18, "e": 5, "F": 299, "C": 180, "G": 349}
+      ],
+      "note": "all three generators used in sequence"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "PS_1",     "description": "schema_version correct", "passed": true},
+    {"check_id": "PS_2",     "description": "all directions d>e>0, gcd=1", "passed": true},
+    {"check_id": "PS_CLASS", "description": "shape class matches moves", "passed": true},
+    {"check_id": "PS_INV_B", "description": "Pell alternation for UNIFORM_B", "passed": true},
+    {"check_id": "PS_INV_C", "description": "e constant for UNIFORM_C", "passed": true},
+    {"check_id": "PS_W",     "description": "4 paths (one per class)", "passed": true},
+    {"check_id": "PS_F",     "description": "root (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

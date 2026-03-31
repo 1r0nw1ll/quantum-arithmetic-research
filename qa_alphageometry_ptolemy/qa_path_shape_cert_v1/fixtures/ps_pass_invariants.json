@@ -1,0 +1,85 @@
+{
+  "schema_version": "QA_PATH_SHAPE_CERT.v1",
+  "certificate_id": "qa.cert.path_shape.pass.invariants.v1",
+  "cert_type": "qa_path_shape_cert",
+  "title": "Path Shape PASS: longer paths demonstrating invariant preservation",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Extended witnesses: 5-step UNIFORM_B (Pell alternation over 6 signs), 5-step UNIFORM_C (e=1 constant over 6 steps), 4-step UNIFORM_A (consecutive integers), and two MIXED paths with different generator orderings. All from root (2,1).",
+
+  "paths": [
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_B", "M_B", "M_B", "M_B", "M_B"],
+      "shape_class": "UNIFORM_B",
+      "steps": [
+        {"d": 5,   "e": 2,  "F": 21,    "C": 20,    "G": 29},
+        {"d": 12,  "e": 5,  "F": 119,   "C": 120,   "G": 169},
+        {"d": 29,  "e": 12, "F": 697,   "C": 696,   "G": 985},
+        {"d": 70,  "e": 29, "F": 4059,  "C": 4060,  "G": 5741},
+        {"d": 169, "e": 70, "F": 23661, "C": 23660, "G": 33461}
+      ],
+      "note": "Pell signs: P(1,1)=-1, P(3,2)=+1, P(7,5)=-1, P(17,12)=+1, P(41,29)=-1, P(99,70)=+1"
+    },
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_C", "M_C", "M_C", "M_C", "M_C"],
+      "shape_class": "UNIFORM_C",
+      "steps": [
+        {"d": 4,  "e": 1, "F": 15,  "C": 8,  "G": 17},
+        {"d": 6,  "e": 1, "F": 35,  "C": 12, "G": 37},
+        {"d": 8,  "e": 1, "F": 63,  "C": 16, "G": 65},
+        {"d": 10, "e": 1, "F": 99,  "C": 20, "G": 101},
+        {"d": 12, "e": 1, "F": 143, "C": 24, "G": 145}
+      ],
+      "note": "e=1 constant throughout; d=2,4,6,8,10,12 (arithmetic +2)"
+    },
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_A", "M_A", "M_A", "M_A"],
+      "shape_class": "UNIFORM_A",
+      "steps": [
+        {"d": 3, "e": 2, "F": 5,  "C": 12, "G": 13},
+        {"d": 4, "e": 3, "F": 7,  "C": 24, "G": 25},
+        {"d": 5, "e": 4, "F": 9,  "C": 40, "G": 41},
+        {"d": 6, "e": 5, "F": 11, "C": 60, "G": 61}
+      ],
+      "note": "consecutive integers: (n+2,n+1) at step n; F=2n+3 (odd), C=2(n+2)(n+1)"
+    },
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_A", "M_C", "M_B"],
+      "shape_class": "MIXED",
+      "steps": [
+        {"d": 3,  "e": 2, "F": 5,   "C": 12,  "G": 13},
+        {"d": 7,  "e": 2, "F": 45,  "C": 28,  "G": 53},
+        {"d": 16, "e": 7, "F": 207, "C": 224, "G": 305}
+      ],
+      "note": "A then C then B: all three generators in a different order than fixture 1"
+    },
+    {
+      "root": {"d": 2, "e": 1},
+      "moves": ["M_C", "M_B", "M_A"],
+      "shape_class": "MIXED",
+      "steps": [
+        {"d": 4,  "e": 1, "F": 15,  "C": 8,   "G": 17},
+        {"d": 9,  "e": 4, "F": 65,  "C": 72,  "G": 97},
+        {"d": 14, "e": 9, "F": 115, "C": 252, "G": 277}
+      ],
+      "note": "C then B then A: reverse order"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "PS_1",     "description": "schema_version correct", "passed": true},
+    {"check_id": "PS_2",     "description": "all directions valid and primitive", "passed": true},
+    {"check_id": "PS_CLASS", "description": "shape class matches moves", "passed": true},
+    {"check_id": "PS_INV_B", "description": "Pell alternation over 6 Pell signs", "passed": true},
+    {"check_id": "PS_INV_C", "description": "e=1 constant over 6 steps", "passed": true},
+    {"check_id": "PS_W",     "description": "5 paths, all 4 classes", "passed": true},
+    {"check_id": "PS_F",     "description": "root (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

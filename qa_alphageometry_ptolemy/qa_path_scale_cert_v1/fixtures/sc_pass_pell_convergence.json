@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_PATH_SCALE_CERT.v1",
+  "certificate_id": "qa.cert.path_scale.pass.pell_convergence.v1",
+  "cert_type": "qa_path_scale_cert",
+  "title": "Path Scale PASS: 8-step Pell chain demonstrating rapid convergence to 3+2sqrt(2)",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Deep UNIFORM_B path (8 M_B steps from (2,1)) showing G ratio convergence to 3+2*sqrt(2) = 5.828427... by step 4, exact to 6 decimal places. G values are squares of Pell denominators: 5=1^2+2^2, 29=2^2+5^2, 169=5^2+12^2=13^2, 985=12^2+29^2, etc. Also includes a POLYNOMIAL path for contrast.",
+
+  "paths": [
+    {
+      "root": {"d": 2, "e": 1, "G": 5},
+      "moves": ["M_B", "M_B", "M_B", "M_B", "M_B", "M_B", "M_B", "M_B"],
+      "scale_class": "EXPONENTIAL",
+      "G_sequence": [5, 29, 169, 985, 5741, 33461, 195025, 1136689, 6625109],
+      "G_ratios": [5.8, 5.8276, 5.8284, 5.8284, 5.8284, 5.8284, 5.8284, 5.8284],
+      "convergence_note": "Converges to 3+2*sqrt(2) = 5.828427124746190... by step 4 (6 decimal places). Growth factor per step: (1+sqrt(2))^2 = silver ratio squared."
+    },
+    {
+      "root": {"d": 2, "e": 1, "G": 5},
+      "moves": ["M_A", "M_A", "M_A", "M_A", "M_A"],
+      "scale_class": "POLYNOMIAL",
+      "G_sequence": [5, 13, 25, 41, 61, 85],
+      "G_ratios": [2.6, 1.9231, 1.64, 1.4878, 1.3934],
+      "convergence_note": "Ratio -> 1 (polynomial growth ~2n^2). Contrast with EXPONENTIAL: after 5 steps G=85 vs G=33461 for UNIFORM_B."
+    },
+    {
+      "root": {"d": 2, "e": 1, "G": 5},
+      "moves": ["M_C", "M_C", "M_C", "M_C", "M_C"],
+      "scale_class": "POLYNOMIAL",
+      "G_sequence": [5, 17, 37, 65, 101, 145],
+      "G_ratios": [3.4, 2.1765, 1.7568, 1.5538, 1.4356],
+      "convergence_note": "Ratio -> 1 (polynomial growth). After 5 steps G=145 vs G=33461 for UNIFORM_B."
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "SC_1",      "description": "schema_version correct", "passed": true},
+    {"check_id": "SC_2",      "description": "G values recomputed correctly (9 values for 8-step chain)", "passed": true},
+    {"check_id": "SC_GROWTH", "description": "G monotone increasing in all 3 paths", "passed": true},
+    {"check_id": "SC_RATIO",  "description": "declared ratios match computed within 0.001", "passed": true},
+    {"check_id": "SC_CONV_B", "description": "8-step Pell chain final ratio within 0.0001 of 3+2sqrt(2)", "passed": true},
+    {"check_id": "SC_W",      "description": "3 paths", "passed": true},
+    {"check_id": "SC_F",      "description": "root (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

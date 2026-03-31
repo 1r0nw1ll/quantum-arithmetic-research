@@ -1,0 +1,50 @@
+{
+  "schema_version": "QA_PATH_SCALE_CERT.v1",
+  "certificate_id": "qa.cert.path_scale.pass.scale_classes.v1",
+  "cert_type": "qa_path_scale_cert",
+  "title": "Path Scale PASS: three generator types showing exponential vs polynomial growth",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates the two scale classes. EXPONENTIAL: UNIFORM_B (Pell chain) with G ratio converging to 3+2*sqrt(2)=5.828... POLYNOMIAL: UNIFORM_A (consecutive integers, G~2n^2, ratio->1) and UNIFORM_C (constant e, G~d^2, ratio->1). All paths from fundamental root (2,1). G monotone increasing in all cases.",
+
+  "paths": [
+    {
+      "root": {"d": 2, "e": 1, "G": 5},
+      "moves": ["M_B", "M_B", "M_B", "M_B", "M_B"],
+      "scale_class": "EXPONENTIAL",
+      "G_sequence": [5, 29, 169, 985, 5741, 33461],
+      "G_ratios": [5.8, 5.8276, 5.8284, 5.8284, 5.8284],
+      "pell_limit_note": "G ratio -> 3+2*sqrt(2) = (1+sqrt(2))^2 = 5.82842712...",
+      "note": "M_B dominant eigenvalue = 1+sqrt(2); G ~ d^2 so G ratio -> (1+sqrt(2))^2"
+    },
+    {
+      "root": {"d": 2, "e": 1, "G": 5},
+      "moves": ["M_A", "M_A", "M_A", "M_A", "M_A"],
+      "scale_class": "POLYNOMIAL",
+      "G_sequence": [5, 13, 25, 41, 61, 85],
+      "G_ratios": [2.6, 1.9231, 1.64, 1.4878, 1.3934],
+      "note": "UNIFORM_A: (d,e)=(n+2,n+1); G=2n^2+6n+5; ratio -> 1 (polynomial)"
+    },
+    {
+      "root": {"d": 2, "e": 1, "G": 5},
+      "moves": ["M_C", "M_C", "M_C", "M_C", "M_C"],
+      "scale_class": "POLYNOMIAL",
+      "G_sequence": [5, 17, 37, 65, 101, 145],
+      "G_ratios": [3.4, 2.1765, 1.7568, 1.5538, 1.4356],
+      "note": "UNIFORM_C: e=1 fixed, d arithmetic; G=(2n)^2+1; ratio -> 1 (polynomial)"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "SC_1",      "description": "schema_version correct", "passed": true},
+    {"check_id": "SC_2",      "description": "all G values recomputed correctly", "passed": true},
+    {"check_id": "SC_GROWTH", "description": "G monotone increasing in all paths", "passed": true},
+    {"check_id": "SC_RATIO",  "description": "declared ratios match computed", "passed": true},
+    {"check_id": "SC_CONV_B", "description": "EXPONENTIAL path final ratio within 0.01 of 3+2sqrt(2)", "passed": true},
+    {"check_id": "SC_W",      "description": "3 paths", "passed": true},
+    {"check_id": "SC_F",      "description": "root (2,1) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,17 @@
+{
+  "registry_id": "QA_GENERATOR_SEMANTICS_REGISTRY.v1",
+  "definitions": {
+    "QA_GENERATORS_SIGMA_UNIT.v1": {
+      "sigma": "(b,e)->(b,e+1)",
+      "mu": "(b,e)->(e,b)",
+      "lambda_k": "(b,e,k)->(k*b,k*e)",
+      "nu": "(b,e)->(b/2,e/2) iff both even"
+    },
+    "QA_GENERATORS_SIGMA_SHEAR.v1": {
+      "sigma": "(b,e)->(b,e+b)",
+      "mu": "(b,e)->(e,b)",
+      "lambda_k": "(b,e,k)->(k*b,k*e)",
+      "nu": "(b,e)->(b/2,e/2) iff both even"
+    }
+  }
+}

@@ -1,0 +1,41 @@
+{
+  "cache_files": {
+    "psl2_mod72_orbits": "qa_center_algebra_cache/psl2_mod72_orbit_cache.json",
+    "sl2_mod8": "qa_center_algebra_cache/sl2_mod8_center_cache.json",
+    "sl2_mod9": "qa_center_algebra_cache/sl2_mod9_center_cache.json"
+  },
+  "cache_sha256": {
+    "psl2_mod72_orbits": "84f87e28541a19f9e8db16f40d71f84546f901e7e110c3d01125c1ca74e8a0ab",
+    "sl2_mod8": "28359cdc919aea1b127d49abd9ac66636c25133d12901b21bf978a6c58d2f579",
+    "sl2_mod9": "482dbbde8160159babc71675404e30b083e386a242cc09a1fe5ac7d594fc33b0"
+  },
+  "engine_source_path": "qa_psl2_mod72_center_algebra.py",
+  "engine_source_sha256": "6889974b17f28d28bbb58143027b7c980ba5a29781e12c4d2180a6f5203832a9",
+  "fail_type": "UNIT_LAW_FAILURE",
+  "modulus_n": 72,
+  "schema_id": "QA_CONGRUENCE_CENTER_ALGEBRA_CERT.v1",
+  "status": "fail_witness",
+  "witness": {
+    "a_sparse": [
+      [
+        224,
+        1,
+        1
+      ]
+    ],
+    "claimed_unit_orbit_index": 216,
+    "expected_at": [
+      0,
+      1
+    ],
+    "left_at": [
+      1,
+      1
+    ],
+    "mismatch_index": 222,
+    "right_at": [
+      1,
+      1
+    ]
+  }
+}

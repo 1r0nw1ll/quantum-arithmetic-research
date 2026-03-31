@@ -1,0 +1,10 @@
+{
+  "schema_id": "QA_CONGRUENCE_CENTRAL_IDEMPOTENT_CERT.v1",
+  "status": "pass_exact",
+  "modulus_n": 72,
+  "construction_mode": "coefficients_sparse",
+  "coefficients_sparse": [
+    {"class_index": 0, "num": 1, "den": 1}
+  ]
+}
+

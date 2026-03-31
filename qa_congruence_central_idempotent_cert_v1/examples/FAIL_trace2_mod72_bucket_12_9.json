@@ -1,0 +1,12 @@
+{
+  "schema_id": "QA_CONGRUENCE_CENTRAL_IDEMPOTENT_CERT.v1",
+  "status": "fail_witness",
+  "modulus_n": 72,
+  "construction_mode": "bucket_indicator",
+  "label_name": "trace2_mod72",
+  "bucket_spec": {"label_mod24": 12, "label_dr9": 9},
+  "witness": {
+    "class_index": 0,
+    "diff_coeff": {"num": 41, "den": 216}
+  }
+}

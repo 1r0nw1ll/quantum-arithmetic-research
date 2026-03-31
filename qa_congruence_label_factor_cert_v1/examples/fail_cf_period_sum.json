@@ -1,0 +1,26 @@
+{
+  "schema_id": "QA_CONGRUENCE_LABEL_FACTOR_CERT.v1",
+  "status": "fail",
+  "label_name": "cf_period_sum",
+  "modulus_n": 72,
+  "max_word_len": 11,
+  "include_t_inv": true,
+  "limit_hyperbolic_rows": 600,
+  "seed": 0,
+  "kernel_collision_trials": 400,
+  "kernel_steps": 2,
+  "kernel_x_bound": 80,
+  "trial_index": 0,
+  "attempt_index": 0,
+  "base_word": "TSUUSTSUUUU",
+  "base_mat": [4, -19, 3, -14],
+  "base_reduction": [4, 53, 3, 58],
+  "base_label": [5, 5],
+  "kernel_specs": [
+    {"kind": "lower_unipotent", "params": [-72]},
+    {"kind": "balanced_hyperbolic", "params": [-35]}
+  ],
+  "collided_mat": [17636, -83141, -91442667, 431086118],
+  "collided_reduction": [4, 53, 3, 58],
+  "collided_label": [9, 9]
+}

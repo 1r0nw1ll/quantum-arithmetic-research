@@ -1,0 +1,14 @@
+{
+  "schema_id": "QA_CONGRUENCE_LABEL_FACTOR_CERT.v1",
+  "status": "bounded_pass",
+  "label_name": "disc_mod72",
+  "modulus_n": 72,
+  "max_word_len": 11,
+  "include_t_inv": true,
+  "limit_hyperbolic_rows": 600,
+  "seed": 0,
+  "kernel_collision_trials": 400,
+  "kernel_steps": 2,
+  "kernel_x_bound": 80
+}
+

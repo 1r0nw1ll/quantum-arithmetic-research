@@ -1,0 +1,158 @@
+{
+  "basis": "psl2_mod72_orbit_basis",
+  "dependency": {
+    "cert_path": "qa_congruence_center_algebra_cert_v1/examples/PASS_center_algebra_full_build.json",
+    "cert_sha256": "e23ecc4fe69c220ccce1dfb0abadd8e626d8e7968f104a2256eb4db44a3fd852",
+    "family": "QA_CONGRUENCE_CENTER_ALGEBRA_CERT.v1",
+    "profile_required": "full_backend"
+  },
+  "e": [
+    [
+      200,
+      1,
+      648
+    ],
+    [
+      201,
+      1,
+      648
+    ],
+    [
+      202,
+      1,
+      648
+    ],
+    [
+      203,
+      1,
+      648
+    ],
+    [
+      204,
+      1,
+      648
+    ],
+    [
+      205,
+      1,
+      648
+    ],
+    [
+      206,
+      1,
+      648
+    ],
+    [
+      207,
+      1,
+      648
+    ],
+    [
+      208,
+      1,
+      648
+    ],
+    [
+      209,
+      1,
+      648
+    ],
+    [
+      210,
+      1,
+      648
+    ],
+    [
+      211,
+      1,
+      648
+    ],
+    [
+      212,
+      1,
+      648
+    ],
+    [
+      213,
+      1,
+      648
+    ],
+    [
+      214,
+      1,
+      648
+    ],
+    [
+      215,
+      1,
+      648
+    ],
+    [
+      216,
+      1,
+      648
+    ],
+    [
+      217,
+      1,
+      648
+    ],
+    [
+      218,
+      1,
+      648
+    ],
+    [
+      219,
+      1,
+      648
+    ],
+    [
+      220,
+      1,
+      648
+    ],
+    [
+      221,
+      1,
+      648
+    ],
+    [
+      222,
+      1,
+      648
+    ],
+    [
+      223,
+      1,
+      648
+    ],
+    [
+      224,
+      1,
+      648
+    ]
+  ],
+  "modulus_n": 72,
+  "primitivity_fingerprint_sha256": "ec2ab632e47da5cfd0e6b665b40b0057bd6715d4725f8e8d1f0ea71dac6fe68f",
+  "primitivity_scope": {
+    "allowed_coeffs": [
+      [
+        1,
+        648
+      ]
+    ],
+    "allowed_orbit_indices": [
+      200,
+      201,
+      202,
+      203,
+      204,
+      205
+    ],
+    "kind": "finite_a_search",
+    "max_support": 2
+  },
+  "schema_id": "QA_CONGRUENCE_PRIMITIVE_IDEMPOTENT_CERT.v1",
+  "status": "pass_exact"
+}

@@ -1,0 +1,23 @@
+{
+  "basis": "psl2_mod72_orbit_basis",
+  "dependency": {
+    "cert_path": "qa_congruence_center_algebra_cert_v1/examples/PASS_unit_law.json",
+    "cert_sha256": "3d1daf378d8f269d9f04efe40ae479e78aa7e7d3470a72e4dec605191fc21bd1",
+    "family": "QA_CONGRUENCE_CENTER_ALGEBRA_CERT.v1",
+    "profile_required": "full_backend"
+  },
+  "fail_type": "DEPENDENCY_PROFILE_MISMATCH",
+  "modulus_n": 72,
+  "packet": [
+    {
+      "name": "1",
+      "sparse": []
+    }
+  ],
+  "schema_id": "QA_CONGRUENCE_CHARACTER_PACKET_CERT.v1",
+  "status": "fail_witness",
+  "witness": {
+    "actual_profile": "unit_law_only",
+    "required_profile": "full_backend"
+  }
+}

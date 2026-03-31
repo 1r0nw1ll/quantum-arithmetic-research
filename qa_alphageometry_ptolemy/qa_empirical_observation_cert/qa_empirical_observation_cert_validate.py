@@ -151,6 +151,7 @@ def self_test() -> dict:
         "eoc_pass_finance_contradicts.json":      True,
         "eoc_pass_qa_matched_generator_compression_discrete_consistent.json": True,
         "eoc_pass_qa_segmented_compression_consistent.json": True,
+        "eoc_pass_prime_bounded_scaling_consistent.json": True,
         "eoc_fail_empty_evidence.json":           True,
     }
 

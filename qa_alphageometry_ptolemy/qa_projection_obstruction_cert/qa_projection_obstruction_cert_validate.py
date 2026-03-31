@@ -49,7 +49,7 @@ VALID_LAYER_KINDS = frozenset([
     "published_topology",
     "other",
 ])
-VALID_PHYSICAL_STATUS = frozenset(["UNASSESSED", "MEASURED"])
+VALID_PHYSICAL_STATUS = frozenset(["UNASSESSED", "ANALYTIC_PROXY", "MEASURED"])
 REPRESENTATION_OBSTRUCTION_TYPES = frozenset([
     "STATE_SPACE_RESIDUAL",
     "COST_INFLATION",

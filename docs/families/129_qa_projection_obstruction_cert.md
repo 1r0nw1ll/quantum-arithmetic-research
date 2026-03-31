@@ -19,6 +19,12 @@
 3. **Physical device realization**  
    Actual device performance is a separate layer. Lack of physical measurements is not the same thing as device failure.
 
+The physical layer therefore supports three assessment statuses:
+
+- `UNASSESSED` — no device-level basis yet; verdict must remain `INCONCLUSIVE`
+- `ANALYTIC_PROXY` — source-grounded device proxy, but not bench-measured
+- `MEASURED` — actual device characterization
+
 This family exists to stop a common analytical mistake:
 
 > Representation debt is **not** itself proof that the underlying electronic logic is physically bad.
@@ -96,6 +102,8 @@ The family makes that distinction machine-checkable.
 
 Important: a cert may show heavy representation debt while the physical layer remains `INCONCLUSIVE`. That is valid and often the correct conclusion.
 
+Equally important: a cert may move the physical layer to `PARTIAL` under `ANALYTIC_PROXY` without claiming bench performance. That is the correct status when the source basis is enough to witness targeted device states but not enough to certify timing or measured margins.
+
 ---
 
 ## Certified fixtures
@@ -115,6 +123,8 @@ This fixture formalizes the distinction that motivated the family:
 - physical layer: not yet measured
 
 The result is **overall `PARTIAL`**, not because the native law failed, but because the law is preserved only in its native symbolic space while non-native representations accumulate debt.
+
+The shipped Arto result cert extends this one step further: the physical layer is no longer `INCONCLUSIVE`, but `PARTIAL` under an analytic proxy grounded in Arto's published `+5/0/-5` ternary voltage coding and relay/Photo-MOS hardware notes. Timing remains unverified, so the physical layer is still not `CONSISTENT`.
 
 ---
 

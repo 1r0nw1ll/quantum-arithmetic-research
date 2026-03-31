@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Dual Spine Unification Report family [119]: top-level validated overview placing [116] (obstruction spine) and [118] (control spine) side by side. Contains theorem paragraphs for each spine, a two-row comparison table, and a synthesis statement. Validator checks faithfulness of all spine references and substantive content. IH1-IH3 + DU1-DU14."
+}

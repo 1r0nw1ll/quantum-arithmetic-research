@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Egyptian Fraction Cert family [134]: certifies the greedy Egyptian fraction expansion of the HAT direction ratio HAT₁=e/d. For any primitive QA direction (d,e) with gcd(d,e)=1 and d>e>0, the greedy algorithm expands e/d = 1/k₁ + 1/k₂ + ... + 1/kₙ where kᵢ=⌈dᵢ/eᵢ⌉, denominators strictly increase, all intermediate pairs are coprime, and the expansion terminates when eₙ=1 (unit-fraction direction). The intermediate pairs (dᵢ,eᵢ) trace the Koenig tree path from (d,e) to the root direction (k,1). Source: Ben Iverson Pyth-1 (Koenig series + Egyptian fractions explicitly connected); H. Lee Price 2008 'Pythagorean Tree: A New Species' (HAT=e/d, Fibonacci boxes = QA generation matrices); Rhind Papyrus ~1600 BCE (greedy unit-fraction decomposition)."
+}

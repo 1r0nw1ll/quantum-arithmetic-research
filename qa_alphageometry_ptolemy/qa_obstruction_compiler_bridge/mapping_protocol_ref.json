@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Obstruction-Compiler Bridge family [112]: family_extension of QA_CORE_SPEC.v1 [107]. Certifies that arithmetic obstruction laws from [111] (inert-prime area quantization) directly constrain control-theoretic reachability claims from [106] (plan-control compiler). If a target arithmetic class has v_p-valuation 1, it is forbidden by [111] and no valid plan/control witness cert from [106] may assert its reachability. This is the first bridge family: it makes the two halves of the QA theory interact."
+}

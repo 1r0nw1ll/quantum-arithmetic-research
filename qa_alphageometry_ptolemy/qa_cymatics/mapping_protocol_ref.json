@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cymatics correspondence family: QA_CYMATIC_MODE_CERT.v1 and QA_FARADAY_REACHABILITY_CERT.v1 follow the canonical QA mapping protocol. State = (b,e) plate/pattern index; generators = control moves (frequency, amplitude, boundary); invariants = nodal symmetry group, orbit family, Chladni formula; failure taxonomy = {OFF_RESONANCE, BOUNDARY_MISMATCH, MODE_MIXING, DAMPING_COLLAPSE, MEASUREMENT_ALIAS, NONLINEAR_ESCAPE, ILLEGAL_TRANSITION}."
+}

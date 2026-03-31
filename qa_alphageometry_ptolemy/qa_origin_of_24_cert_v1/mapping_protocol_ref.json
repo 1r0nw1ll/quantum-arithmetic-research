@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Origin of 24 Cert family [129]: certifies the dual derivation of mod-24 as the natural modulus of QA arithmetic. Route 1 (Pyth-1): for any primitive Pythagorean direction (d,e) with gcd(d,e)=1 and d+e odd, H²-G²=G²-I²≡0 (mod 24), with equality H²-G²=24 for the fundamental direction (d,e)=(2,1) of the 3-4-5 triangle. Route 2 (crystal): 7²-5²=49-25=24, where H=7 and G=5 are the QA apogee-sum and blue-quadrance root of the (2,1) direction — the same identity from the crystal geometry perspective. Sources: Ben Iverson Pyth-1 (primary), QA-4 Iota crystal geometry (primary); QA mathematical structure."
+}

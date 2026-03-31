@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Inheritance Compat family [109]: certifies inheritance edges between QA cert families as first-class objects; turns '[108] extends [107]' from a validator convention into a certified edge in the QA spec graph."
+}

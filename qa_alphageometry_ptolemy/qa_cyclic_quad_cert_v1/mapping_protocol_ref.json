@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Cyclic Quadrilateral Cert family [136]: certifies Ptolemy's theorem via three integer identities for QA triple pairs (F₁,C₁,G₁) and (F₂,C₂,G₂). BF (Brahmagupta-Fibonacci): G₁G₂=D²+E² where D=d₁d₂-e₁e₂, E=d₁e₂+d₂e₁. PP (Ptolemy Product): F₃=F₁F₂-C₁C₂ and C₃=F₁C₂+F₂C₁ give new triple with G₃=G₁G₂. PC (Ptolemy Conjugate): F₄=F₁F₂+C₁C₂ and C₄=|F₁C₂-F₂C₁| give second triple with G₄=G₁G₂. Both product and conjugate triples lie on the circle G₁G₂ — the two diagonals of the Ptolemy cyclic quadrilateral. Historical chain: Ptolemy ~150 CE chord tables → QA direction Gaussian integer multiplication → Brahmagupta 628 CE identity → connects to [127] UHG null cert (null points in Minkowski 3-space)."
+}

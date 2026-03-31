@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Chromogeometry Cert family [125]: certifies that the three QA invariants C, F, G of any generator (b,e) are exactly the three chromogeometric quadrances (Green=C=2de, Red=F=d^2-e^2=ab, Blue=G=d^2+e^2) of the direction vector (d,e), and that the identity C^2+F^2=G^2 is Wildberger Chromogeometric Theorem 6. Also certifies the conic discriminant I=C-F=2e^2-b^2 partitioning into ellipse (I<0), parabola (I=0), hyperbola (I>0). Source: Wildberger arXiv:0806.2495, arXiv:0806.2789, arXiv:math/0701338."
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Area Quantization family [108]: first family_extension inheriting from QA_CORE_SPEC.v1 kernel; certifies discrete quadrea spectrum of the Q(sqrt(5)) norm form b^2+be-e^2 mod m over the kernel state space."
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Plimpton 322 Cert family [138]: certifies that the Babylonian tablet Plimpton 322 (~1800 BCE) encodes QA chromogeometric triples. Each row corresponds to a QA direction (d,e) where both d and e are 'regular' (5-smooth: only factors 2,3,5), generating triple F=d²-e² (short side β), C=2de (middle side), G=d²+e² (diagonal δ). The Plimpton column 1 value G²/C² = (d²+e²)²/(2de)² is the squared ratio. Key: regularity of d,e ensures C=2de is a regular base-60 number, so G/C terminates in base-60 sexagesimal notation (exact Babylonian arithmetic). F²+C²=G² (Pythagorean identity). SPVN no-zero convention = QA A1. Source: Mansfield & Wildberger 2017, Historia Mathematica 44:395-419."
+}

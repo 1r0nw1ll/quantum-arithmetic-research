@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Conic Discriminant Cert family [140]: certifies I=C-F=Qg-Qr as the conic type discriminant for QA directions. For direction (d,e): I=2de-(d²-e²); I>0→hyperbola (C>F, d/e<1+√2), I=0→parabola (F=C; impossible for integers since d/e=1+√2 is irrational), I<0→ellipse (F>C, d/e>1+√2). Parabola boundary: d²-e²=2de → (d/e)=1+√2=irrational (discriminant of x²-2x-1=0 is 8=non-square) → no primitive integer direction lands on parabola. The threshold d/e=1+√2 is the silver ratio. Connects to Wildberger chromogeometry (I=Qg-Qr) and cert [125] (C=Qg, F=Qr)."
+}

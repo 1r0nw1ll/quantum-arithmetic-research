@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Security Competency Cert family [124]: extends [123] (QA Agent Competency) with immune system structure; certifies that a security algorithm profile declares a valid security_role (identity/membrane/integrity/self_nonself/healing/collective), immune_function (detection/containment/recovery), and pq_readiness (fips_final/in_progress/classical_only/hybrid_transitional); SC5 enforces that identity/membrane algorithms with pq_readiness=classical_only must declare a pq_migration_path — the quantum resilience invariant; SC8 enforces cell/orbit consistency (inherited from [123]); 2 PASS (ml_kem membrane/differentiated/fips_final, ed25519 identity/differentiated/classical_only+migration_path) + 1 FAIL (SC5_PQ_MIGRATION_REQUIRED: rsa_1024 identity/classical_only with no migration path)."
+}

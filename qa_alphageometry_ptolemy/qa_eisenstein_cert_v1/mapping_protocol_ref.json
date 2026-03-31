@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Eisenstein Cert family [133]: certifies two universal Eisenstein-norm identities from QA elements. For ALL QA tuples (b,e,d,a) with d=b+e, a=b+2e: (1) F²-FW+W²=Z² where F=ab, W=d(e+a), Z=e²+ad — the Eisenstein integer norm N(F+Wω)=Z in ℤ[ω]; (2) Y²-YW+W²=Z² where Y=A-D=a²-d²=e(2b+3e) — same norm with Y replacing F. Algebraic proof: via substitution u=b²+3be, (F+W)²-3FW=(u+3e²)²=Z²; same for Y. QA elements W (equilateral side) and Z (Eisenstein companion) from elements.txt QA Law 15 sit naturally in the Eisenstein/triangular lattice. Sources: Ben Iverson elements.txt QA Law 15; Eisenstein integer theory ℤ[ω], ω=e^{2πi/3}."
+}

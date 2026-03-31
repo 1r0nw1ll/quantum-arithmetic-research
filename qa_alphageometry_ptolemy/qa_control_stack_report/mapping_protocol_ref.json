@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Control Stack Report family [118]: reader-facing report packaging [117] for external audiences. Contains theorem statement, one-line summaries for [106]/[105]/[110], a comparison table across domains (domain, initial/intermediate/target state, QA orbit path, path_length_k, move sequence), canonical PASS+FAIL witnesses, source refs. Validator recomputes the comparison table from domain_traces and checks faithfulness."
+}

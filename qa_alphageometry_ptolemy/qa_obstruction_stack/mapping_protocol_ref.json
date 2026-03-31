@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Obstruction Stack family [115]: synthesis spine for the full [111]–[114] obstruction chain. A single cert that recomputes and asserts: (1) v_p(r)=1 → arithmetic impossible [111]; (2) impossible → control unreachable [112]; (3) unreachable → planner prunes with 0 nodes [113]; (4) pruned → saved_nodes=N, pruning_ratio=1.0 [114]. Arithmetic impossibility deterministically induces control impossibility, planner pruning, and guaranteed search-cost savings. Validator recomputes every layer independently."
+}

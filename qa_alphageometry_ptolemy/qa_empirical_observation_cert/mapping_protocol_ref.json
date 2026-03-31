@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Empirical Observation Cert family [122]: bridge between captured experimental observations (Open Brain, experiment scripts, paper results) and the cert ecosystem; certifies whether an empirical finding is CONSISTENT, CONTRADICTS, PARTIAL, or INCONCLUSIVE with respect to a named parent cert claim."
+}

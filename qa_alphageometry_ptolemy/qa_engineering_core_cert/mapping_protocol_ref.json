@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Engineering Core Cert family [121]: family_extension of QA_CORE_SPEC.v1 proving that any classical engineering system (state-space model, stability conditions, controllability claim) maps validly to a QA specification. Certifies: (EC1-EC5) valid QA mapping of states/transitions/failures/orbit families, (EC6-EC8) classical stability conditions correspond to QA invariant preservation and orbit contraction, (EC9-EC11) classical controllability corresponds to QA reachability with arithmetic obstruction override. Key contribution: EC11 shows that v_p(r)=1 for inert prime p makes a target unreachable even when the classical Kalman rank condition certifies full controllability."
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean Tree Cert family [135]: certifies the three Barning-Hall/Berggren generator moves in QA direction space (d,e). M_A: (d,e)→(2d-e,d); M_B: (d,e)→(2d+e,d); M_C: (d,e)→(d+2e,e). Each preserves gcd=1 and opposite parity (PPT condition). Key theorem: Egyptian fraction first step k=⌈d'/e'⌉ uniquely identifies which move generated child (d',e'): k=2→M_A, k=3→M_B, k≥4→M_C. Root (2,1) has no valid parent. Sources: Barning 1963, Hall 1970 (matrices); H. Lee Price 2008 (HAT/Fibonacci-box = same tree); Ben Iverson Pyth-1 (Koenig series = same tree). Egyptian fraction descent [134] and tree generation [135] are inverse operations."
+}

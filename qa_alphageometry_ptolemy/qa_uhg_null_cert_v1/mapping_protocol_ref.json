@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA UHG Null Cert family [127]: certifies that every QA triple (F,C,G)=(d^2-e^2, 2de, d^2+e^2) is a null point [F:C:G] in Universal Hyperbolic Geometry (UHG); the null condition F^2+C^2-G^2=0 is identical to C^2+F^2=G^2 (Wildberger Chromogeometric Theorem 6); QA triples are light-like vectors in Minkowski 3-space and join of null points = Gaussian integer multiplication Z=d+ei, giving (F,C,G)=(Re(Z^2), Im(Z^2), |Z|^2). Source: Wildberger arXiv:0909.1377 (UHG I), arXiv:0806.2789 (Chromo Conics), arXiv:math/0701338."
+}

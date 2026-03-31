@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Inert Prime Area Quantization family [111]: family_extension of QA_CORE_SPEC.v1 [107]; certifies that for any prime p inert in Z[phi], the norm form f(b,e)=b^2+be-e^2 over Z/p^k Z omits exactly the residues r with v_p(r)=1 (divisible by p but not p^2). Generalises [108] from the specific case p=3, k=2 to arbitrary inert p and k>=1."
+}

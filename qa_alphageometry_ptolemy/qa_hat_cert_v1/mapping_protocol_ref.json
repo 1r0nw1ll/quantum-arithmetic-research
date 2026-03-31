@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Half-Angle Tangent Cert family [131]: certifies the bridge between H. Lee Price's half-angle tangents (HATs) and QA direction structure. HAT₁=C/(G+F)=e/d (primary direction ratio); HAT₂=F/(G+C)=(d-e)/(d+e) (secondary); spread s=E/G=HAT₁²/(1+HAT₁²) (Wildberger rational trig); Fibonacci box [[e,d-e],[d,d+e]] = Price's 2×2 generation matrix. Proportionality: HAT fractions must be read as C/(G+F) and F/(G+C) from the triple — the numerators carry QA element meaning (C=green quadrance, F=red quadrance). Sources: H. Lee Price 2008 'The Pythagorean Tree: A New Species'; QA vault 2025-07 'Lee price half-angle tangent'; Ben Iverson Pyth-1 (Koenig+Egyptian fractions context)."
+}

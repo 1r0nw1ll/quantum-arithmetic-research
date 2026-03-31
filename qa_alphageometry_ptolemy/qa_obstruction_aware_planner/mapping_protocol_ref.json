@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Obstruction-Aware Planner family [113]: family_extension of QA_CORE_SPEC.v1 [107]. Certifies that a planner correctly applies the arithmetic obstruction test from [112] before expanding its search frontier: forbidden targets (v_p=1) must be pruned with zero nodes expanded; allowed targets must proceed to search. Turns [112] bridge theorem from impossibility theory into algorithmic correctness guarantee."
+}

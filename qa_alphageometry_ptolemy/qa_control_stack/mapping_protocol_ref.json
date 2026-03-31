@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Control Stack family [117]: synthesis cert for the control/compiler spine. Compresses [106] generic compiler law + [105] cymatics domain instance + [110] seismology domain instance into one theorem-bearing cert asserting: the orbit trajectory singularity→satellite→cosmos and path_length_k=2 are preserved across distinct physical domains (Faraday instability and elastic wave propagation) under the same kernel-governed compiler law. Validator recomputes orbit-trajectory consistency across domain traces independently."
+}

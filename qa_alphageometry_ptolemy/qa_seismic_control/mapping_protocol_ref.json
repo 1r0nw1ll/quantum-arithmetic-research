@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Seismic Pattern Control family [110]: second domain_instance of QA_PLAN_CONTROL_COMPILER_CERT.v1 [106]; certifies that seismic wave pattern control (quiet→P-wave→surface wave) is a distinct physical instantiation of the generic kernel-governed compilation law, proving [106] is cross-domain."
+}

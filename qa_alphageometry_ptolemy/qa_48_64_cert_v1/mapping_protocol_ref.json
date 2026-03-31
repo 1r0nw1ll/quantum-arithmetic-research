@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA 48/64 Cert family [139]: certifies the two structural constants 48 and 64 in QA. ALGEBRAIC: 48L = H²-I² = 4CF for all QA directions where H=C+F, I=C-F, L=CF/12; proof: H²-I²=(C+F)²-(C-F)²=4CF=48L. ORBIT: 48=2×cosmos_period=2×24; 64=satellite_period²=8². POLYNOMIAL: the symmetric null triangle has biangle triple (P,R,T)=(4,4,4) satisfying PR+RT+PT=48 and PRT=64; (x-4)³=x³-12x²+48x-64 — the unique symmetric solution; 48/64=3/4=equilateral spread (Wildberger). Connects to [137] Koenig twisted squares (48L=H²-I²=4CF≥48 for L≥1) and [128] spread period (cosmos period 24, satellite period 8)."
+}

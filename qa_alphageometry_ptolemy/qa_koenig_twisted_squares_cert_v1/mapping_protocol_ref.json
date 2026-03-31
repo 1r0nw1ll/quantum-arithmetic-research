@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Koenig Twisted Squares Cert family [137]: certifies (I²,2CF,G²,H²) QA quadruple structure. For any QA direction (d,e): H=d+e (outer square side), I=|d-e| (inner square side, I²=twisted difference), C=2de (green quadrance = 4×triangle area), F=d²-e²=ab (red quadrance = semi-latus rectum), G=d²+e²=b+a (blue quadrance); key identities H²-G²=G²-I²=2CF=4×triangle_area=24L; (I²,2CF,G²,H²) is a QA b+e=d, b+2e=a quadruple with b=I², e=2CF; twisted-squares geometric proof: outer (d+e)² - inner (d-e)² = 4de+4de = 8de = 2·2de·2 — connects to Mathologer twisted-squares video; Koenig I→H→I chain: each (d,e) produces next direction (H,I)=(d+e,|d-e|); generates all primes via descent; always divisible by 24 for primitive Pythagorean directions."
+}

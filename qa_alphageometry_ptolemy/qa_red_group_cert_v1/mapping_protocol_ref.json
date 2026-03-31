@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Red Group Cert family [126]: certifies that the QA T-operator is a red isometry (split-complex rotation by phi in Z[sqrt(5)]/mZ[sqrt(5)]); the red T-matrix for phi is [[1,5],[1,1]] (mod m); orbit period = order of T in the red isometry group mod m; checks: matrix entries, determinant = -4 (red norm of phi = 1-5 = -4), orbit period by direct iteration, and the 3-orbit structure (cosmos period 24, satellite period 8, singularity period 1) for m=9. Source: Wildberger arXiv:math/0701338 (1D Metrical Geometry), QA mathematical structure."
+}

@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_cube_sum_cert_family(base_dir: str) -> Optional[str]:
+    """QA Cube Sum Cert family [143] — certifies F³+C³+G³=216=6³ for fundamental QA direction (d,e)=(2,1) with (F,C,G)=(3,4,5): the unique 3D extension of 3²+4²=5² (Pythagorean); (k-1)³+k³+(k+1)³=3k(k²+2) for k=4 gives 12×18=216=6³; k=4 unique in [1,10000]; QA connections: 6=b×e×d×a=1×1×2×3 (fundamental QN product); 216=9×24=mod-9×mod-24 (product of both QA orbit moduli); 4 non-cube witnesses (3,2),(4,1),(4,3),(5,2) confirm uniqueness in QA direction space; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS; self-test ok"""
+    import subprocess
+    cs_dir    = os.path.join(base_dir, "qa_cube_sum_cert_v1")
+    validator = os.path.join(cs_dir, "qa_cube_sum_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cube_sum_cert_v1/qa_cube_sum_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=cs_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_cube_sum_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_cube_sum_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_cube_sum_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_klein4_harmonics_cert_family(base_dir: str) -> Optional[str]:
     """QA Klein 4 Harmonics Cert family [142] — certifies that the four sign-changes of (F,C,G) form K4=Z2×Z2 preserving F²+C²=G² and permuting harmonic packet {H,I,-H,-I}: I₀=identity, I₁=(F,C)→(-F,C) [F-flip; (d,e)→(e,d)], I₂=(F,C)→(F,-C) [C-flip], I₃=(F,C)→(-F,-C) [composition]; harmonic action: I₁ swaps H↔I, I₂ maps (H,I)→(-I,-H), I₃ negates both; every element self-inverse; I₁∘I₂=I₃; fundamental (2,1) orbit {(7,1),(1,7),(-1,-7),(-7,-1)}; source: elements.txt H=C+F/I=C-F, cert [137] Koenig, cert [125] chromogeometry; checks K4_1-3+ACT/HARM/W/F; 2 PASS (group axioms + 3 witnesses; 6 general witnesses H/E/Pell-boundary); self-test ok"""
     import subprocess
@@ -5177,6 +5200,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (143, "QA Cube Sum Cert family",
+     _validate_cube_sum_cert_family,
+     "F³+C³+G³=216=6³ for fundamental (F,C,G)=(3,4,5); k=4 unique in [1,10000] for (k-1)³+k³+(k+1)³ perfect cube; 216=9×24; 6=b×e×d×a; checks CS_1-2+IDEN/DUAL/MOD/QN/UNIQ/W/F; 2 PASS; self-test ok",
+     "143_qa_cube_sum_cert",
+     "qa_cube_sum_cert_v1", True),
     (142, "QA Klein 4 Harmonics Cert family",
      _validate_klein4_harmonics_cert_family,
      "sign-changes of (F,C,G) form K4=Z2×Z2 preserving F²+C²=G²; I₁ swaps H↔I; I₂ maps (H,I)→(-I,-H); I₃ negates; every element self-inverse; fundamental (2,1) orbit {(7,1),(1,7),(-1,-7),(-7,-1)}; checks K4_1-3+ACT/HARM/W/F; 2 PASS; self-test ok",

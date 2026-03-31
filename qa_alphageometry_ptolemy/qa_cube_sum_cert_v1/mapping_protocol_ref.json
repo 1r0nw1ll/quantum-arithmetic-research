@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Cube Sum Cert family [143]: certifies F³+C³+G³=216=6³ for the fundamental QA direction (d,e)=(2,1) with triple (F,C,G)=(3,4,5). This is the unique 3D extension of the 2D Pythagorean identity 3²+4²=5². QA connections: 6=b×e×d×a=1×1×2×3 (fundamental QN product); 216=9×24=mod-9×mod-24 (product of both QA orbit moduli); k=4 is the unique positive integer where (k-1)³+k³+(k+1)³ is a perfect cube (verified to k=10000); (k-1)³+k³+(k+1)³=3k(k²+2). Source: QA memory/qa_source_texts.md (cube sum as 3D extension of Pythagorean triple)."
+}

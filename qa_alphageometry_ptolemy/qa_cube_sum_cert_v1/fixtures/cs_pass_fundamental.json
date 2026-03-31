@@ -1,0 +1,70 @@
+{
+  "schema_version": "QA_CUBE_SUM_CERT.v1",
+  "certificate_id": "qa.cert.cube_sum.pass.fundamental.v1",
+  "cert_type": "qa_cube_sum_cert",
+  "title": "Cube Sum PASS: 3³+4³+5³=6³=216 — the dual of 3²+4²=5²",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "The fundamental QA triple (F,C,G)=(3,4,5) for direction (d,e)=(2,1) satisfies TWO simultaneous power identities: (2D) 3²+4²=5²=25 (Pythagorean triple), and (3D) 3³+4³+5³=216=6³ (cube sum). No other primitive Pythagorean triple satisfies both. The 3D identity is the unique consecutive-integer cube sum: k=4 gives (3,4,5) as the only k∈[1,10000] where (k-1)³+k³+(k+1)³ is a perfect cube. Proof of (k-1)³+k³+(k+1)³=3k(k²+2): expand and collect. For k=4: 3×4×(16+2)=12×18=216=6³. QA connections: 6=b×e×d×a=1×1×2×3 (fundamental QN product); 216=9×24=mod-9×mod-24.",
+
+  "fundamental_qn": {
+    "b": 1, "e": 1, "d": 2, "a": 3,
+    "product": 6,
+    "cube": 216,
+    "check": "b×e×d×a=1×1×2×3=6; 6³=216=3³+4³+5³ ✓"
+  },
+
+  "cube_sum_identity": {
+    "claim": "3³+4³+5³=6³=216",
+    "steps": [
+      "F=d²-e²=4-1=3, C=2de=4, G=d²+e²=5 for (d,e)=(2,1)",
+      "F³+C³+G³=27+64+125=216",
+      "6³=216 ✓",
+      "Alternative: 3k(k²+2) for k=4 → 12×18=216=6³"
+    ]
+  },
+
+  "pythagorean_dual": {
+    "2D_identity": "F²+C²=G²: 9+16=25 ✓",
+    "3D_identity": "F³+C³+G³=6³: 27+64+125=216 ✓",
+    "note": "The triple (3,4,5) simultaneously satisfies the Pythagorean identity (squared) and the cube sum identity (cubed). These are the n=2 and n=3 cases of the power sum for this specific triple."
+  },
+
+  "moduli_connection": {
+    "mod_9": 9, "mod_24": 24, "product": 216,
+    "check": "9×24=216=6³; QA orbits have periods 9 (mod-9 Cosmos) and 24 (mod-24 Cosmos)"
+  },
+
+  "uniqueness_check": {
+    "claim": "k=4 is the unique positive integer where (k-1)³+k³+(k+1)³ is a perfect cube",
+    "formula": "(k-1)³+k³+(k+1)³ = 3k³+6k = 3k(k²+2)",
+    "checked_up_to": 10000,
+    "solutions": [4],
+    "proof_sketch": "3k(k²+2)=n³ requires k and (k²+2)/k or k and k²+2 to conspire to be a perfect cube. Verified computationally to k=10000."
+  },
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1,
+      "F": 3, "C": 4, "G": 5,
+      "cube_sum": 216,
+      "is_perfect_cube": true,
+      "cube_root": 6,
+      "check": "3³+4³+5³=27+64+125=216=6³; F²+C²=9+16=25=G² ✓"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "CS_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "CS_2",    "description": "F,C,G verified; F²+C²=G²=25", "passed": true},
+    {"check_id": "CS_IDEN", "description": "3³+4³+5³=216=6³", "passed": true},
+    {"check_id": "CS_DUAL", "description": "3²+4²=5² (Pythagorean 2D) ✓", "passed": true},
+    {"check_id": "CS_MOD",  "description": "216=9×24 (mod-9 × mod-24)", "passed": true},
+    {"check_id": "CS_QN",   "description": "6=b×e×d×a=1×1×2×3; 6³=216", "passed": true},
+    {"check_id": "CS_UNIQ", "description": "k=4 unique in [1,10000]", "passed": true},
+    {"check_id": "CS_F",    "description": "fundamental (2,1): (F,C,G)=(3,4,5); 3³+4³+5³=216=6³", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

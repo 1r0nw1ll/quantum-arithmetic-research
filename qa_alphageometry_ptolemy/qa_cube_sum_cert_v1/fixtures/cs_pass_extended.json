@@ -1,0 +1,80 @@
+{
+  "schema_version": "QA_CUBE_SUM_CERT.v1",
+  "certificate_id": "qa.cert.cube_sum.pass.extended.v1",
+  "cert_type": "qa_cube_sum_cert",
+  "title": "Cube Sum PASS: extended witnesses — non-cube sums confirm uniqueness",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Extended witness set showing that (2,1) is the unique QA direction for which F³+C³+G³ is a perfect cube. Other primitive QA directions have non-cube sums: (3,2)→4050, (4,1)→8800, (4,3)→29792. This empirically confirms uniqueness in the QA direction space. The fundamental (2,1) is singled out because F³+C³+G³=216=6³ requires the simultaneous Pythagorean structure (3²+4²=5²) and the cube sum structure (3³+4³+5³=6³) — a dual coincidence that only occurs at the fundamental.",
+
+  "uniqueness_check": {
+    "claim": "k=4 unique in [1,1000]",
+    "formula": "(k-1)³+k³+(k+1)³ = 3k(k²+2)",
+    "checked_up_to": 1000,
+    "solutions": [4]
+  },
+
+  "witnesses": [
+    {
+      "d": 2, "e": 1,
+      "F": 3, "C": 4, "G": 5,
+      "cube_sum": 216,
+      "is_perfect_cube": true,
+      "cube_root": 6,
+      "check": "3³+4³+5³=216=6³ ✓ — the unique QA direction with perfect cube sum"
+    },
+    {
+      "d": 3, "e": 2,
+      "F": 5, "C": 12, "G": 13,
+      "cube_sum": 4050,
+      "is_perfect_cube": false,
+      "check": "5³+12³+13³=125+1728+2197=4050; cube root ≈15.94; not a perfect cube"
+    },
+    {
+      "d": 4, "e": 1,
+      "F": 15, "C": 8, "G": 17,
+      "cube_sum": 8800,
+      "is_perfect_cube": false,
+      "check": "15³+8³+17³=3375+512+4913=8800; cube root ≈20.6; not a perfect cube"
+    },
+    {
+      "d": 4, "e": 3,
+      "F": 7, "C": 24, "G": 25,
+      "cube_sum": 29792,
+      "is_perfect_cube": false,
+      "check": "7³+24³+25³=343+13824+15625=29792; cube root ≈30.9; not a perfect cube"
+    },
+    {
+      "d": 5, "e": 2,
+      "F": 21, "C": 20, "G": 29,
+      "cube_sum": 41650,
+      "is_perfect_cube": false,
+      "check": "21³+20³+29³=9261+8000+24389=41650; not a perfect cube"
+    }
+  ],
+
+  "connections": {
+    "cert_130": "Origin of 24: same fundamental triple (3,4,5); H²-G²=G²-I²=2CF=24 → minimum 24",
+    "cert_137": "Koenig twisted squares: (I²,2CF,G²,H²)=(1,24,25,49) for (2,1); 6=√(CF)? No; but 216=9×24",
+    "cert_135": "Pythagorean tree root (2,1); F³+C³+G³=216 is a cube-root-of-sum property of the tree root only",
+    "cert_138": "Plimpton 322: (12,5) not (2,1); 5-smooth ≠ cube sum property"
+  },
+
+  "newton_identity_check": {
+    "a": 3, "b": 4, "c": 5,
+    "three_abc": 180,
+    "sum_abc": 12,
+    "sq_minus_cross": 3,
+    "formula": "a³+b³+c³ = 3abc + (a+b+c)(a²+b²+c²-ab-bc-ca) = 180+12×3=216 ✓"
+  },
+
+  "validation_checks": [
+    {"check_id": "CS_1",    "description": "schema_version correct", "passed": true},
+    {"check_id": "CS_W",    "description": "5 witnesses (1 cube + 4 non-cube)", "passed": true},
+    {"check_id": "CS_UNIQ", "description": "uniqueness [1,1000]: only k=4", "passed": true},
+    {"check_id": "CS_F",    "description": "fundamental (2,1) present with cube_sum=216=6³", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

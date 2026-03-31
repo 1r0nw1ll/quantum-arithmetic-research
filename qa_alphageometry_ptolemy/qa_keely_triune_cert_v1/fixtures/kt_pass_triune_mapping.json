@@ -1,0 +1,78 @@
+{
+  "schema_version": "QA_KEELY_TRIUNE_CERT.v1",
+  "certificate_id": "qa.cert.keely_triune.pass.triune_mapping.v1",
+  "cert_type": "qa_keely_triune_cert",
+  "title": "Keely Triune PASS: SVP triune modes mapped to QA orbits with structural verification",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Certifies the mapping between Keely's three vibratory modes (from svpwiki.com) and QA's three orbit types. DOMINANT=SINGULARITY (neutral center=fixed point), ENHARMONIC=SATELLITE (bounded/material=8-cycle), HARMONIC=COSMOS (expansive/celestial=24-cycle). Verifies: three orbits partition mod-9 state space, periods 1/8/24, {0,3,6}=singularity residues, LCM(1,8,24)=24. Source: Keely via Dale Pond SVP; Iverson QA orbit theory.",
+
+  "modulus": 9,
+
+  "triune_orbit_mapping": {
+    "DOMINANT": "SINGULARITY",
+    "ENHARMONIC": "SATELLITE",
+    "HARMONIC": "COSMOS"
+  },
+
+  "orbit_partition": {
+    "modulus": 9,
+    "orbit_counts": {
+      "SINGULARITY": 1,
+      "SATELLITE": 8,
+      "COSMOS": 72
+    },
+    "note": "1 + 8 + 72 = 81 = 9² (complete mod-9 state space)"
+  },
+
+  "orbit_periods": {
+    "SINGULARITY": 1,
+    "SATELLITE": 8,
+    "COSMOS": 24
+  },
+
+  "singularity_residues_mod9": [0, 3, 6],
+  "orbit_lcm": 24,
+
+  "witnesses": [
+    {
+      "triune": "DOMINANT",
+      "orbit": "SINGULARITY",
+      "example_state": [9, 9],
+      "period": 1,
+      "svp_property": "neutral center, dynamic balance, controls both tendencies",
+      "qa_property": "fixed point (9,9)≡(0,0) mod 9; T(9,9)=(9,9)"
+    },
+    {
+      "triune": "ENHARMONIC",
+      "orbit": "SATELLITE",
+      "example_state": [1, 3],
+      "period": 8,
+      "svp_property": "terrestrial, matter, entropy, bounded oscillation",
+      "qa_property": "8-cycle: (1,3)→(4,7)→(2,3)→...→(1,3); 3D symmetric structure"
+    },
+    {
+      "triune": "HARMONIC",
+      "orbit": "COSMOS",
+      "example_state": [1, 1],
+      "period": 24,
+      "svp_property": "celestial, spirit, syntropy, expansive concentration",
+      "qa_property": "24-cycle: (1,1)→(2,3)→(5,7)→...; 1D linear, visits 72 states"
+    }
+  ],
+
+  "tesla_369_note": "Tesla: 'If you only knew the magnificence of 3, 6, and 9.' In QA mod-9: {3,6,9≡0} = singularity residues = the DOMINANT triune mode. The triune numbers ARE the neutral center.",
+
+  "validation_checks": [
+    {"check_id": "KT_1",     "description": "schema_version correct", "passed": true},
+    {"check_id": "KT_MAP",   "description": "triune→orbit mapping verified", "passed": true},
+    {"check_id": "KT_PART",  "description": "1+8+72=81=9² partition verified", "passed": true},
+    {"check_id": "KT_PERIOD","description": "periods 1,8,24 verified", "passed": true},
+    {"check_id": "KT_369",   "description": "{0,3,6}=singularity residues", "passed": true},
+    {"check_id": "KT_LCM",   "description": "LCM(1,8,24)=24", "passed": true},
+    {"check_id": "KT_W",     "description": "3 witnesses (one per triune mode)", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

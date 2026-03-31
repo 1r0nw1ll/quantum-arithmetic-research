@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_keely_triune_cert_family(base_dir: str) -> Optional[str]:
+    """QA Keely Triune Cert family [153] — maps Keely's three vibratory modes (Enharmonic/Dominant/Harmonic from svpwiki.com) to QA three orbits (Satellite/Singularity/Cosmos). DOMINANT=SINGULARITY (neutral center=fixed point), ENHARMONIC=SATELLITE (bounded=8-cycle), HARMONIC=COSMOS (expansive=24-cycle). {0,3,6} mod 9=singularity=Tesla 3-6-9. Brinton three Laws of Being. Source: svpwiki.com + Iverson; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok"""
+    import subprocess
+    kt_dir    = os.path.join(base_dir, "qa_keely_triune_cert_v1")
+    validator = os.path.join(kt_dir, "qa_keely_triune_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_keely_triune_cert_v1/qa_keely_triune_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=kt_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_keely_triune_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_keely_triune_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_keely_triune_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_equilateral_triangle_cert_family(base_dir: str) -> Optional[str]:
     """QA Equilateral Triangle Cert family [152] — certifies W=d(e+a)=X+K, Y=A-D=C+E (dual definition bridging square and product layers), Z=E+K; two Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum rule F+Y=W; source: Iverson QA-2 Ch 7; checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok"""
     import subprocess
@@ -5407,6 +5430,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (153, "QA Keely Triune Cert family",
+     _validate_keely_triune_cert_family,
+     "Keely triune (Enharmonic/Dominant/Harmonic) → QA orbits (Satellite/Singularity/Cosmos); {0,3,6}=singularity=Tesla 3-6-9; LCM(1,8,24)=24; Brinton Laws of Being; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok",
+     "153_qa_keely_triune_cert",
+     "qa_keely_triune_cert_v1", True),
     (152, "QA Equilateral Triangle Cert family",
      _validate_equilateral_triangle_cert_family,
      "W=d(e+a), Y=A-D=C+E (dual definition), Z=E+K; Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum F+Y=W; checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok",

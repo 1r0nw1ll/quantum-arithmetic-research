@@ -1,0 +1,79 @@
+{
+  "schema_version": "QA_KEELY_TRIUNE_CERT.v1",
+  "certificate_id": "qa.cert.keely_triune.pass.brinton_laws.v1",
+  "cert_type": "qa_keely_triune_cert",
+  "title": "Keely Triune PASS: Brinton's three Laws of Being mapped to QA orbit dynamics",
+  "created_utc": "2026-03-31T00:00:00Z",
+
+  "_fixture_purpose": "Maps Professor Daniel Brinton's three Laws of Being (derived from Keely's Triune) to QA orbit dynamics. Law of Assimilation = cosmos (expansion/syntropy), Law of Individualization = satellite (contraction/entropy), Law of the Dominant = singularity (neutral balance). The three primes (2,3,5) that Ramsay identifies as generating all harmony = the first three primes always present in QA bead numbers.",
+
+  "modulus": 9,
+
+  "triune_orbit_mapping": {
+    "DOMINANT": "SINGULARITY",
+    "ENHARMONIC": "SATELLITE",
+    "HARMONIC": "COSMOS"
+  },
+
+  "orbit_partition": {
+    "modulus": 9,
+    "orbit_counts": {
+      "SINGULARITY": 1,
+      "SATELLITE": 8,
+      "COSMOS": 72
+    }
+  },
+
+  "orbit_periods": {
+    "SINGULARITY": 1,
+    "SATELLITE": 8,
+    "COSMOS": 24
+  },
+
+  "singularity_residues_mod9": [0, 3, 6],
+  "orbit_lcm": 24,
+
+  "witnesses": [
+    {
+      "triune": "HARMONIC",
+      "orbit": "COSMOS",
+      "brinton_law": "Law of Assimilation",
+      "svp_property": "every object assimilates itself to all other objects (syntropy, expansion)",
+      "qa_property": "cosmos 24-cycle visits 72 states — maximum reach, assimilates the full state space"
+    },
+    {
+      "triune": "ENHARMONIC",
+      "orbit": "SATELLITE",
+      "brinton_law": "Law of Individualization",
+      "svp_property": "every object tends to assimilate all other objects to itself (entropy, contraction)",
+      "qa_property": "satellite 8-cycle is bounded and symmetric — self-referential, individualized structure"
+    },
+    {
+      "triune": "DOMINANT",
+      "orbit": "SINGULARITY",
+      "brinton_law": "Law of the Dominant",
+      "svp_property": "higher dominant force controls both tendencies (neutral center)",
+      "qa_property": "singularity (9,9) is the unique fixed point — controls/anchors the entire orbit structure"
+    },
+    {
+      "triune": "HARMONIC",
+      "orbit": "COSMOS",
+      "brinton_law": null,
+      "svp_property": "Ramsay: 'number 3 is creative power in music, producing fifths'",
+      "qa_property": "three primes {2,3,5} always present in QA QN products (all products divisible by 6=2×3)"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "KT_1",     "description": "schema_version correct", "passed": true},
+    {"check_id": "KT_MAP",   "description": "triune→orbit mapping verified", "passed": true},
+    {"check_id": "KT_PART",  "description": "partition verified", "passed": true},
+    {"check_id": "KT_PERIOD","description": "periods verified", "passed": true},
+    {"check_id": "KT_369",   "description": "singularity residues verified", "passed": true},
+    {"check_id": "KT_LCM",   "description": "LCM=24 verified", "passed": true},
+    {"check_id": "KT_W",     "description": "4 witnesses including Brinton law mapping", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

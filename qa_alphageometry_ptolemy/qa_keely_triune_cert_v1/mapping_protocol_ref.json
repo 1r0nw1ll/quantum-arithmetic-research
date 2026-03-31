@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Keely Triune Cert family [153]: maps Keely's three vibratory modes (Enharmonic/Dominant/Harmonic) to QA three orbits (Satellite/Singularity/Cosmos). DOMINANT=SINGULARITY (neutral center=fixed point), ENHARMONIC=SATELLITE (bounded=8-cycle), HARMONIC=COSMOS (expansive=24-cycle). {0,3,6} mod 9 = singularity = Tesla 3-6-9. LCM(1,8,24)=24. Source: svpwiki.com (Keely/Pond), Brinton three Laws of Being."
+}

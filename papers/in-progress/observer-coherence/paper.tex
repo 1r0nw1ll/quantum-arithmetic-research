@@ -285,8 +285,22 @@ semantic meaning of QCI without modeling it as a separate layer.
 The correct architecture is a \emph{multi-layer observer}: local and global
 observers produce separate QCI signals, and their discrepancy (the gap
 between local coherence and global coherence) is where regime-change
-information lives. This architecture is designed but not yet empirically
-validated.
+information lives.
+
+Empirical validation confirms this architecture. A pure global observer
+using rolling correlation, PCA concentration, and dispersion features
+produces $\text{QCI}_{\text{global}}$ with $r = +0.25$ with future volatility
+(note the \emph{opposite sign} from local QCI). The gap signal
+$\text{QCI}_{\text{gap}} = \text{QCI}_{\text{local}} - \text{QCI}_{\text{global}}$
+achieves partial $r = -0.42$ beyond lagged RV at its best configuration ---
+nearly double the local-only signal. Robustness: 16/16 grid configurations
+significant for both global and gap signals (100\%).
+
+The opposite signs carry the key insight: during stress, the coupling
+structure \emph{tightens} (correlation increases $\to$ high global coherence)
+while individual trajectories \emph{fragment} (chaotic movement $\to$ low
+local coherence). The discrepancy between these layers --- structural
+contraction with trajectory disorder --- is the universal stress signature.
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{The QA Observable Principle}

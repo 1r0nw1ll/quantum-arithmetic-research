@@ -36,9 +36,10 @@ tightens. \textbf{(C)}~The gap $\mathrm{QCI}_\mathrm{local} -
 \mathrm{QCI}_\mathrm{global}$ achieves partial $r = -0.42$ beyond lagged
 volatility (100\% robustness, permutation-validated), capturing stress as
 \emph{structural contraction with path disorder}. Cross-domain validation
-in EEG seizure classification ($\Delta R^2 = +0.21$, 10 patients) and audio
-signal analysis (partial $r = +0.75$) confirms the architecture is
-domain-general. The core finding: deviation from QA-predicted transition
+in EEG seizure classification ($\Delta R^2 = +0.21$, 10 patients), audio
+signal analysis (partial $r = +0.75$), and seismology ($r = +0.23$ with
+future activity, $\chi^2 = 61$ for regime discrimination) confirms the
+architecture is domain-general across four unrelated scientific domains. The core finding: deviation from QA-predicted transition
 dynamics carries forward-looking structural information that classical
 volatility measures do not fully capture.
 \end{abstract}
@@ -337,6 +338,21 @@ noise matches the null distribution. Partial $r = +0.75$ ($p = 0.02$)
 beyond lag-1 autocorrelation confirms QA structure is real, though the
 effect is modest.
 
+\subsection{Seismology: Earthquake Catalog}
+
+Using the USGS earthquake catalog (152,237 M4+ events, 2016--2026),
+daily features are computed: event count, mean magnitude, max magnitude,
+and mean depth (4 channels). The topographic observer ($K=4$, mod-24)
+applied to these features produces QCI that correlates with future
+21-day seismic activity ($r = +0.23$, $p < 10^{-8}$, $n = 1679$ OOS days).
+
+Orbit distributions differ significantly between active and quiet periods
+($\chi^2 = 61.3$, $p < 10^{-6}$):
+active periods show elevated satellite (60\%) and singularity (4\%)
+rates, while quiet periods are cosmos-dominated (60\%).
+This mirrors the finance pattern: instability corresponds to departure
+from cosmos toward bounded/singularity orbits.
+
 % ═══════════════════════════════════════════════════════════════════════════
 \section{The Local/Global Observer Separation}
 \label{sec:separation}
@@ -471,7 +487,7 @@ This positions QA alongside other structural frameworks:
 
 \begin{enumerate}
   \item Test multi-layer observer (local + global + fusion) cross-domain (EEG, audio).
-  \item Apply to additional domains (seismology, climate, genomics).
+  \item Apply to additional domains (climate, genomics, hyperspectral imaging).
   \item Investigate theoretical connections to phase-conjugate and pump-wave
     frameworks in nonlinear physics (the opposite-sign structure of local
     and global QCI bears resemblance to pump-conjugate dynamics).

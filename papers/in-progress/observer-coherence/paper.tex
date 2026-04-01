@@ -268,6 +268,40 @@ achieves $r = 0.44$ --- competitive with RF HAR despite using no volatility
 history. These results confirm that QCI carries genuine structural
 information that complements classical volatility models.
 
+\subsection{Multi-step T-prediction}
+
+The T-operator can be applied $k$ times to predict the state $k$ steps ahead.
+Testing $k \in \{1,2,3,5,8\}$:
+
+\begin{table}[h]
+\centering
+\caption{Multi-step QCI: partial $r$ with future vol (controlling lagged RV, OOS)}
+\begin{tabular}{ccc}
+\toprule
+$k$ & partial $r$ & Significance \\
+\midrule
+1 & $-0.215$ & $p < 10^{-8}$ \\
+2 & $\mathbf{-0.260}$ & $p < 10^{-8}$ \\
+3 & $-0.044$ & ns \\
+5 & $+0.077$ & $p < 0.01$ \\
+8 & $+0.134$ & $p < 10^{-3}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The $k=2$ (double-step) lookahead is \emph{stronger} than $k=1$
+(partial $r = -0.26$ vs $-0.22$), consistent with the algebraic
+structure of the Fibonacci shift where $T^2$ has special properties.
+The signal vanishes at $k=3$ and reverses sign at $k \geq 5$, indicating
+a coherence horizon of approximately 2 transition steps.
+
+\subsection{Nonlinear model comparison}
+
+MLP neural networks ($\{64,32\}$ and $\{128,64,32\}$ architectures) do not
+outperform Random Forest ($R^2 = 0.11$ vs $0.20$). The QCI signal is
+adequately captured by shallow tree models, suggesting the information is
+piecewise-linear rather than requiring deep nonlinear fitting.
+
 \subsection{RV as Orbit Persistence}
 
 When realized volatility is ingested as a 7th observer channel, the QCI
@@ -429,16 +463,14 @@ This positions QA alongside other structural frameworks:
     structured but not universal across all configurations.
   \item The multi-layer observer architecture (Section~\ref{sec:separation})
     is validated for finance but not yet tested cross-domain (EEG, audio).
-  \item The Random Forest benchmark uses shallow trees ($\text{max\_depth}=5$);
-    deeper models or neural architectures may yield different results.
+  \item MLP neural networks underperform Random Forest on this dataset;
+    transformer or attention-based architectures remain untested.
 \end{enumerate}
 
 \subsection{Future Work}
 
 \begin{enumerate}
   \item Test multi-layer observer (local + global + fusion) cross-domain (EEG, audio).
-  \item Test deeper nonlinear architectures (neural networks) for QCI + vol combinations.
-  \item Extend the T-operator to multi-step prediction ($k$-step reachability).
   \item Apply to additional domains (seismology, climate, genomics).
   \item Investigate theoretical connections to phase-conjugate and pump-wave
     frameworks in nonlinear physics (the opposite-sign structure of local

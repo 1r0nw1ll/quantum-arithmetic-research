@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA T-Operator Coherence Cert family [154]: certifies QCI (QA Coherence Index) as domain-general structural indicator. Mechanism: topographic observer → QA states → T-operator prediction → rolling accuracy = QCI. Finance (Tier A): partial r=-0.22 beyond lagged RV, 84% robustness grid, permutation-validated. Cross-domain: EEG (dR²=+0.21), audio (partial r=+0.75). Frozen scripts 30-37."
+}

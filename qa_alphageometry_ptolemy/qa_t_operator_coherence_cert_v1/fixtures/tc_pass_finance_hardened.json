@@ -1,0 +1,117 @@
+{
+  "schema_version": "QA_T_OPERATOR_COHERENCE_CERT.v1",
+  "certificate_id": "qa.cert.t_operator_coherence.pass.finance_hardened.v1",
+  "cert_type": "qa_t_operator_coherence_cert",
+  "title": "T-Operator Coherence PASS: Finance QCI hardened result (Tier A)",
+  "created_utc": "2026-04-01T00:00:00Z",
+
+  "_fixture_purpose": "Certifies the hardened finance QCI result: topographic observer (6-asset returns, K=6, mod-24) → T-operator coherence → rolling prediction accuracy anticorrelates with future volatility. OOS-validated, robustness-gridded, permutation-tested, partial-correlation-controlled. Scripts 30-37 frozen.",
+
+  "observer_pipeline": {
+    "input_channels": ["SPY_5d_ret", "QQQ_5d_ret", "IWM_5d_ret", "TLT_5d_ret", "GLD_5d_ret", "BTC-USD_5d_ret"],
+    "channel_type": "local_state",
+    "standardization": "rolling z-score (63d mean, 63d std)",
+    "clustering_method": "k-means",
+    "n_clusters": 6,
+    "qa_mapping_rule": "{0:8, 1:16, 2:24, 3:5, 4:3, 5:11}",
+    "modulus": 24,
+    "t_operator": "T(b,e) = (e, ((b+e-1) % 24) + 1)"
+  },
+
+  "qci_spec": {
+    "definition": "rolling mean of T-prediction match over window W",
+    "window": 63,
+    "match_criterion": "qa_mod(b_t + e_t, 24) == cluster_map[label_{t+2}]"
+  },
+
+  "oos_protocol": {
+    "split_method": "temporal_half",
+    "split_description": "first half of return vector series = train; second half = test",
+    "train_period": "2016-2021 approx",
+    "test_period": "2021-2026 approx",
+    "oos_days": 1203
+  },
+
+  "primary_result": {
+    "qci_vs_future_vol_r": -0.3175,
+    "qci_vs_future_vol_p": 0.000000,
+    "forecast_horizon_days": 21,
+    "direction": "negative: low QCI → high future vol"
+  },
+
+  "partial_correlation": {
+    "r": -0.2154,
+    "p": 0.000000,
+    "controlling_for": "lagged_realized_vol_21d",
+    "interpretation": "QCI carries independent information beyond vol persistence"
+  },
+
+  "robustness": {
+    "grid_dimensions": "5 cluster_counts × 4 qci_windows × 4 forecast_horizons = 80 configs",
+    "significant_count": 67,
+    "total_count": 80,
+    "significant_fraction": 0.84,
+    "best_config": "K=5, W=63, FH=42, r=-0.47"
+  },
+
+  "permutation_test": {
+    "n_shuffles": 1000,
+    "real_chi2": 23.48,
+    "max_null_chi2": 12.88,
+    "permutation_p": 0.0,
+    "interpretation": "real chi2 exceeds ALL null shuffles"
+  },
+
+  "early_warning": {
+    "chi2": 154.89,
+    "p": 0.000000,
+    "precision": 0.543,
+    "recall": 0.482
+  },
+
+  "domain_witnesses": [
+    {
+      "domain": "finance",
+      "signal_type": "forward_prediction",
+      "metric": "partial r(QCI, future_vol | lagged_RV) = -0.22",
+      "p_value": 0.000000,
+      "scripts": "~/Desktop/qa_finance/30-37",
+      "status": "Tier A hardened"
+    },
+    {
+      "domain": "eeg",
+      "signal_type": "contemporaneous_classification",
+      "metric": "mean dR2=+0.210, Fisher p=2.9e-33, 10/10 patients",
+      "p_value": 2.9e-33,
+      "scripts": "eeg_orbit_classifier.py, eeg_chbmit_scale.py",
+      "status": "validated"
+    },
+    {
+      "domain": "audio",
+      "signal_type": "structural_detection",
+      "metric": "partial r=+0.752, p=0.020 beyond lag-1 AC",
+      "p_value": 0.020,
+      "scripts": "qa_audio_residual_control.py",
+      "status": "validated"
+    }
+  ],
+
+  "frozen_scripts": {
+    "hash_file": "~/Desktop/qa_finance/FROZEN_HASHES_30_37.txt",
+    "bundle_doc": "~/Desktop/qa_finance/FROZEN_EXPERIMENT_BUNDLE.md"
+  },
+
+  "validation_checks": [
+    {"check_id": "TC_1",       "description": "schema_version correct", "passed": true},
+    {"check_id": "TC_OBS",     "description": "observer pipeline fully declared", "passed": true},
+    {"check_id": "TC_QCI",     "description": "QCI construction specified", "passed": true},
+    {"check_id": "TC_OOS",     "description": "OOS protocol: temporal half split", "passed": true},
+    {"check_id": "TC_PARTIAL", "description": "partial r=-0.22, p<10^-8 beyond lagged RV", "passed": true},
+    {"check_id": "TC_ROBUST",  "description": "67/80 (84%) grid configs significant", "passed": true},
+    {"check_id": "TC_W",       "description": "3 domain witnesses (finance, EEG, audio)", "passed": true},
+    {"check_id": "TC_F",       "description": "finance domain present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

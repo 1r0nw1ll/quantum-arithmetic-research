@@ -1,0 +1,88 @@
+{
+  "schema_version": "QA_T_OPERATOR_COHERENCE_CERT.v1",
+  "certificate_id": "qa.cert.t_operator_coherence.pass.cross_domain.v1",
+  "cert_type": "qa_t_operator_coherence_cert",
+  "title": "T-Operator Coherence PASS: cross-domain evidence (finance + EEG + audio)",
+  "created_utc": "2026-04-01T00:00:00Z",
+
+  "_fixture_purpose": "Demonstrates the topographic observer → QA → T-operator pipeline works across three unrelated domains. The observer architecture is domain-general: multi-channel signal → clustering → microstate transitions → QA orbit classification. Each domain validates a different aspect: finance (forward prediction), EEG (contemporaneous classification), audio (structural detection).",
+
+  "observer_pipeline": {
+    "input_channels": ["domain_specific_multi_channel"],
+    "channel_type": "local_state",
+    "standardization": "domain-specific normalization",
+    "clustering_method": "k-means (finance) / spectral-power (EEG) / autocorrelation (audio)",
+    "n_clusters": "4-6 domain-dependent",
+    "qa_mapping_rule": "microstate → (b,e) with orbit diversity design",
+    "modulus": 24,
+    "t_operator": "T(b,e) = (e, ((b+e-1) % m) + 1)"
+  },
+
+  "qci_spec": {
+    "definition": "rolling T-prediction accuracy (finance) / orbit distribution difference (EEG) / partial autocorrelation (audio)",
+    "window": "domain-dependent"
+  },
+
+  "oos_protocol": {
+    "split_method": "temporal_half (finance) / per-patient (EEG) / per-signal (audio)",
+    "split_description": "each domain uses appropriate OOS methodology"
+  },
+
+  "partial_correlation": {
+    "r": -0.2154,
+    "p": 0.000000,
+    "controlling_for": "lagged_realized_vol_21d",
+    "interpretation": "finance QCI independent of vol persistence"
+  },
+
+  "robustness": {
+    "significant_fraction": 0.84,
+    "grid_dimensions": "80 configs (finance grid)"
+  },
+
+  "domain_witnesses": [
+    {
+      "domain": "finance",
+      "signal_type": "forward_prediction",
+      "metric": "partial r=-0.22 beyond lagged RV",
+      "p_value": 0.000000,
+      "mechanism": "QCI = rolling T-accuracy; low QCI → high future vol",
+      "channels": 6,
+      "status": "Tier A hardened"
+    },
+    {
+      "domain": "eeg",
+      "signal_type": "contemporaneous_classification",
+      "metric": "mean dR2=+0.210 across 10 patients",
+      "p_value": 2.9e-33,
+      "mechanism": "topographic k-means on 23 EEG channels → orbit distribution differs seizure vs baseline",
+      "channels": 23,
+      "status": "validated"
+    },
+    {
+      "domain": "audio",
+      "signal_type": "structural_detection",
+      "metric": "partial r=+0.752 beyond lag-1 AC",
+      "p_value": 0.020,
+      "mechanism": "QA orbit transition rates differ by signal type (sine vs noise)",
+      "channels": 1,
+      "status": "validated"
+    }
+  ],
+
+  "cross_domain_thesis": "The topographic observer → QA state → T-operator coherence pipeline detects genuine structure in multi-channel signals regardless of domain. The T-operator error signal (deviation from Fibonacci-shift predictions) carries information about system stability that domain-specific baselines do not fully capture.",
+
+  "validation_checks": [
+    {"check_id": "TC_1",       "description": "schema_version correct", "passed": true},
+    {"check_id": "TC_OBS",     "description": "observer pipeline declared", "passed": true},
+    {"check_id": "TC_QCI",     "description": "QCI construction specified", "passed": true},
+    {"check_id": "TC_OOS",     "description": "OOS protocol per domain", "passed": true},
+    {"check_id": "TC_PARTIAL", "description": "partial r=-0.22 (finance)", "passed": true},
+    {"check_id": "TC_ROBUST",  "description": "84% grid significant", "passed": true},
+    {"check_id": "TC_W",       "description": "3 domains witnessed", "passed": true},
+    {"check_id": "TC_F",       "description": "finance present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -421,7 +421,7 @@ This positions QA alongside other structural frameworks:
     at $K=4$. The sensitivity to cluster count suggests the signal is
     structured but not universal across all configurations.
   \item The multi-layer observer architecture (Section~\ref{sec:separation})
-    is a design proposal, not yet empirically hardened.
+    is validated for finance but not yet tested cross-domain (EEG, audio).
   \item The HAR and GARCH comparison (Section~\ref{sec:finance}) uses linear
     regression; nonlinear or ensemble combinations may yield different results.
 \end{enumerate}
@@ -429,10 +429,13 @@ This positions QA alongside other structural frameworks:
 \subsection{Future Work}
 
 \begin{enumerate}
-  \item Implement and validate the multi-layer observer (local + global + fusion).
+  \item Test multi-layer observer (local + global + fusion) cross-domain (EEG, audio).
   \item Test nonlinear combinations of QCI with classical vol models.
   \item Extend the T-operator to multi-step prediction ($k$-step reachability).
   \item Apply to additional domains (seismology, climate, genomics).
+  \item Investigate theoretical connections to phase-conjugate and pump-wave
+    frameworks in nonlinear physics (the opposite-sign structure of local
+    and global QCI bears resemblance to pump-conjugate dynamics).
 \end{enumerate}
 
 % ═══════════════════════════════════════════════════════════════════════════

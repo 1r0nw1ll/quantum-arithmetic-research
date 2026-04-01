@@ -344,11 +344,19 @@ across out-of-sample testing, robustness grids, permutation tests, and
 partial correlation controls. Cross-domain validation in neuroscience and
 audio processing demonstrates that the architecture is not domain-specific.
 
-The deeper insight is architectural: QA is not a feature extractor but a
-\emph{state-space lens} --- a discrete algebraic framework that absorbs and
-structurally organizes continuous observables. The T-operator coherence
-measures how closely a system follows its own inherent arithmetic. When it
-stops following, instability is emerging.
+The deeper insight is foundational: continuous observables are pushforwards
+of discrete QA state distributions under observer projection. QA does not
+approximate observables --- it defines the \emph{admissible manifold} from
+which they are generated. The T-operator coherence measures how closely
+a system's observed dynamics conform to the algebraic constraints of this
+manifold. When conformity breaks down, the system is departing from its
+own structural law --- and instability follows.
+
+This positions QA not as a feature extractor but as a \emph{state-space lens}:
+a discrete algebraic framework analogous to the Koopman operator approach
+(where observables evolve linearly in function space), but with the crucial
+advantage of a \emph{finite, generator-constrained state graph} admitting
+exact reachability analysis rather than infinite-dimensional approximation.
 
 \bigskip
 \noindent\textbf{Data and code availability.}

@@ -21,22 +21,26 @@
 \maketitle
 
 \begin{abstract}
-We introduce the \emph{QA Coherence Index} (QCI), a domain-general structural
-indicator derived from the transition dynamics of Quantum Arithmetic (QA).
-The QCI measures the rolling prediction accuracy of the QA Fibonacci-shift
-operator applied to topographically clustered multi-channel signals.
-In finance, the QCI anticorrelates with future realized volatility
-($r = -0.32$, $p < 10^{-6}$ out-of-sample) and carries independent information
-beyond lagged volatility persistence (partial $r = -0.22$, $p < 10^{-8}$
-after controlling for 21-day realized volatility). The result survives a
-robustness grid of 80 configurations (84\% significant) and permutation
-testing (real $\chi^2 = 23.48$ exceeds all 1000 null shuffles). Cross-domain
-validation in EEG seizure classification ($\Delta R^2 = +0.21$, $p < 10^{-33}$,
-10 patients) and audio signal analysis (partial $r = +0.75$, $p = 0.02$)
-demonstrates that the topographic observer architecture is not domain-specific.
-The core finding is that \emph{deviation from QA-predicted transition dynamics
-carries forward-looking structural information} --- establishing QA as a
-measurement framework for system-state coherence.
+We introduce the \emph{QA Coherence Index} (QCI), a structural indicator
+derived from the transition dynamics of Quantum Arithmetic (QA), and show
+it detects system instability across unrelated domains. The QCI measures
+the rolling prediction accuracy of the QA Fibonacci-shift operator applied
+to topographically clustered multi-channel signals. We establish three
+claims. \textbf{(A)}~A local observer (multi-asset returns) produces QCI
+that anticorrelates with future volatility (partial $r = -0.22$ beyond
+lagged realized volatility, 84\% robustness across 80 configurations,
+permutation-validated). \textbf{(B)}~A separate global observer
+(cross-asset correlation, PCA concentration) produces QCI with the
+\emph{opposite sign} ($r = +0.25$): during stress, coupling structure
+tightens. \textbf{(C)}~The gap $\mathrm{QCI}_\mathrm{local} -
+\mathrm{QCI}_\mathrm{global}$ achieves partial $r = -0.42$ beyond lagged
+volatility (100\% robustness, permutation-validated), capturing stress as
+\emph{structural contraction with path disorder}. Cross-domain validation
+in EEG seizure classification ($\Delta R^2 = +0.21$, 10 patients) and audio
+signal analysis (partial $r = +0.75$) confirms the architecture is
+domain-general. The core finding: deviation from QA-predicted transition
+dynamics carries forward-looking structural information that classical
+volatility measures do not fully capture.
 \end{abstract}
 
 % ═══════════════════════════════════════════════════════════════════════════

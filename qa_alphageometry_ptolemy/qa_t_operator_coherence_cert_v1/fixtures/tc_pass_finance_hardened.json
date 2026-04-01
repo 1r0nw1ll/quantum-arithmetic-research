@@ -96,8 +96,20 @@
     }
   ],
 
+  "multi_layer_result": {
+    "global_observer": "rolling correlation + PCA concentration + dispersion → 4 structural modes",
+    "qci_global_vs_future_vol": {"r": 0.2475, "p": 0.0, "sign": "positive (opposite of local)"},
+    "qci_gap_partial_r_beyond_rv": {"r": -0.168, "p": 0.0},
+    "qci_gap_best_config": {"K_g": 6, "W": 21, "partial_r": -0.42},
+    "global_robustness": "16/16 (100%) significant",
+    "gap_permutation": "real |partial r|=0.168 exceeds ALL 1000 null values (max null=0.091)",
+    "interpretation": "stress = global coupling tightens (high QCI_global) + local trajectories fragment (low QCI_local); discrepancy = universal stress signature",
+    "scripts": "40-42",
+    "status": "Tier A hardened"
+  },
+
   "frozen_scripts": {
-    "hash_file": "~/Desktop/qa_finance/FROZEN_HASHES_30_37.txt",
+    "hash_file": "~/Desktop/qa_finance/FROZEN_HASHES_30_42.txt",
     "bundle_doc": "~/Desktop/qa_finance/FROZEN_EXPERIMENT_BUNDLE.md"
   },
 

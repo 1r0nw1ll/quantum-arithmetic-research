@@ -68,21 +68,30 @@ structural indicator.
 
 \subsection{Contributions}
 
+The paper makes three empirical claims supported by a unifying principle:
+
 \begin{enumerate}
-  \item We define the \textbf{QA Coherence Index} (QCI): the rolling accuracy
-    of the QA T-operator applied to topographically clustered multi-channel
-    signals.
-  \item We demonstrate that QCI \textbf{predicts future volatility} in financial
-    markets with partial $r = -0.22$ beyond lagged realized volatility,
-    validated out-of-sample with 84\% robustness across 80 parameter
-    configurations.
-  \item We show cross-domain applicability in EEG seizure detection
-    ($\Delta R^2 = +0.21$) and audio signal classification
-    (partial $r = +0.75$).
-  \item We identify a \textbf{local/global observer separation principle}:
-    coordinate-level observables (returns, volatility) and manifold-level
-    observables (correlation, eigenstructure) require distinct observer layers.
+  \item[\textbf{A.}] \textbf{Local QCI detects path-law breakdown.}
+    A local topographic observer (multi-channel returns) produces QCI via
+    T-operator prediction accuracy. Low local QCI anticorrelates with future
+    volatility (partial $r = -0.22$ beyond lagged RV, 84\% robustness,
+    permutation-validated).
+  \item[\textbf{B.}] \textbf{Global QCI detects manifold contraction.}
+    A separate global observer (correlation, PCA concentration, dispersion)
+    produces QCI with the \emph{opposite sign}: high global QCI correlates
+    with future volatility ($r = +0.25$). During stress, the coupling
+    manifold \emph{contracts} (everything correlates).
+  \item[\textbf{C.}] \textbf{QCI gap detects stress as structural divergence.}
+    The discrepancy $\text{QCI}_{\text{gap}} = \text{QCI}_{\text{local}} -
+    \text{QCI}_{\text{global}}$ achieves partial $r = -0.42$ beyond lagged RV
+    at best configuration, with 100\% robustness (16/16 grid) and
+    permutation-validated ($p < 0.001$). Stress is the regime where the
+    market becomes globally more constrained while locally less lawful.
 \end{enumerate}
+
+Cross-domain validation in EEG ($\Delta R^2 = +0.21$, 10 patients) and
+audio (partial $r = +0.75$) demonstrates the local observer architecture
+is not domain-specific.
 
 % ═══════════════════════════════════════════════════════════════════════════
 \section{Background: Quantum Arithmetic}

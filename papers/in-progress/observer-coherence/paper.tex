@@ -289,6 +289,58 @@ information lives. This architecture is designed but not yet empirically
 validated.
 
 % ═══════════════════════════════════════════════════════════════════════════
+\section{The QA Observable Principle}
+\label{sec:principle}
+% ═══════════════════════════════════════════════════════════════════════════
+
+We now state the theoretical principle underlying the empirical results.
+
+\begin{definition}[QA Observer System]
+A \emph{QA observer system} is a triple $(S_m, G, \pi)$ where:
+\begin{itemize}
+  \item $S_m = \{1,\ldots,m\}^2$ is the QA state space;
+  \item $G = \{T\}$ is the generator set (Fibonacci shift, possibly extended
+    with $\sigma, \mu, \lambda, \nu$);
+  \item $\pi: S_m \to \mathcal{O}$ is an observer projection into a
+    continuous observation space $\mathcal{O}$.
+\end{itemize}
+The \emph{reachability graph} $\Gamma_G$ has vertex set $S_m$ and directed
+edges $(s, T(s))$ for each generator $T \in G$.
+\end{definition}
+
+\begin{theorem}[QA Observable Principle]
+\label{thm:observable}
+Let $(S_m, G, \pi)$ be a QA observer system. Then observed data
+$o_0, o_1, \ldots$ are not primitive objects but arise as pushforwards of
+path measures on $(S_m, \Gamma_G)$:
+\[
+  P_k(o \mid s_0) = \mu_k\bigl(\pi^{-1}(o)\bigr),
+\]
+where $\mu_k$ is a measure on states reachable from $s_0$ along paths of
+length $k$ in $\Gamma_G$.
+
+The \emph{QA Coherence Index} at time $t$ is the empirical estimate of
+the probability that observed transitions conform to $\Gamma_G$:
+\[
+  \mathrm{QCI}_t = \frac{1}{W}\sum_{s=t-W+1}^{t}
+    \mathbf{1}\bigl[(b_{s+1}, e_{s+1}) \in \Gamma_G(b_s, e_s)\bigr].
+\]
+\end{theorem}
+
+\begin{proposition}[QCI as Manifold Deviation]
+\label{prop:deviation}
+Low QCI indicates that observed transitions frequently leave the admissible
+edges of $\Gamma_G$. If the system's true dynamics are well-approximated
+by QA generators, then low QCI signals departure from structural equilibrium.
+Empirically, this manifests as:
+\begin{enumerate}
+  \item anticorrelation with future volatility (finance: $r = -0.32$);
+  \item elevated cosmos-orbit rates (EEG seizure: $\Delta R^2 = +0.21$);
+  \item reduced orbit return rates (audio: partial $r = +0.75$).
+\end{enumerate}
+\end{proposition}
+
+% ═══════════════════════════════════════════════════════════════════════════
 \section{Discussion}
 \label{sec:discussion}
 % ═══════════════════════════════════════════════════════════════════════════
@@ -345,18 +397,19 @@ partial correlation controls. Cross-domain validation in neuroscience and
 audio processing demonstrates that the architecture is not domain-specific.
 
 The deeper insight is foundational: continuous observables are pushforwards
-of discrete QA state distributions under observer projection. QA does not
-approximate observables --- it defines the \emph{admissible manifold} from
-which they are generated. The T-operator coherence measures how closely
-a system's observed dynamics conform to the algebraic constraints of this
-manifold. When conformity breaks down, the system is departing from its
-own structural law --- and instability follows.
+of path measures on QA reachability graphs under observer projection.
+QA does not approximate observables --- it defines the \emph{admissible
+manifold} from which they are generated. The T-operator coherence measures
+how closely a system's observed dynamics conform to the algebraic constraints
+of this manifold. When conformity breaks down, the system is departing from
+its own structural law --- and instability follows.
 
-This positions QA not as a feature extractor but as a \emph{state-space lens}:
-a discrete algebraic framework analogous to the Koopman operator approach
-(where observables evolve linearly in function space), but with the crucial
-advantage of a \emph{finite, generator-constrained state graph} admitting
-exact reachability analysis rather than infinite-dimensional approximation.
+Unlike Koopman operator methods, which lift nonlinear dynamics to an
+infinite-dimensional function space requiring truncation and approximation,
+QA operates on a finite, algebraically closed state graph, enabling exact
+reachability and obstruction analysis. This positions QA not as a feature
+extractor but as a \emph{state-space lens}: a discrete algebraic framework
+that constrains the problem \emph{before} learning happens.
 
 \bigskip
 \noindent\textbf{Data and code availability.}

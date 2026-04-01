@@ -1,0 +1,359 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage[margin=1in]{geometry}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+
+\title{Transition-Coherence as a Structural Indicator:\\
+  A Domain-General Framework from Quantum Arithmetic}
+
+\author{Will Dale}
+
+\date{\today}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+We introduce the \emph{QA Coherence Index} (QCI), a domain-general structural
+indicator derived from the transition dynamics of Quantum Arithmetic (QA).
+The QCI measures the rolling prediction accuracy of the QA Fibonacci-shift
+operator applied to topographically clustered multi-channel signals.
+In finance, the QCI anticorrelates with future realized volatility
+($r = -0.32$, $p < 10^{-6}$ out-of-sample) and carries independent information
+beyond lagged volatility persistence (partial $r = -0.22$, $p < 10^{-8}$
+after controlling for 21-day realized volatility). The result survives a
+robustness grid of 80 configurations (84\% significant) and permutation
+testing (real $\chi^2 = 23.48$ exceeds all 1000 null shuffles). Cross-domain
+validation in EEG seizure classification ($\Delta R^2 = +0.21$, $p < 10^{-33}$,
+10 patients) and audio signal analysis (partial $r = +0.75$, $p = 0.02$)
+demonstrates that the topographic observer architecture is not domain-specific.
+The core finding is that \emph{deviation from QA-predicted transition dynamics
+carries forward-looking structural information} --- establishing QA as a
+measurement framework for system-state coherence.
+\end{abstract}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Introduction}
+% ═══════════════════════════════════════════════════════════════════════════
+
+The problem of detecting structural regime changes in complex systems ---
+financial markets, neural dynamics, acoustic signals --- is central to
+multiple scientific disciplines. Classical approaches rely on domain-specific
+features: realized volatility in finance, spectral power ratios in
+neuroscience, autocorrelation in signal processing. While effective within
+their domains, these features lack a unifying mathematical framework that
+explains \emph{why} they work and \emph{what structural property} they
+measure.
+
+Quantum Arithmetic (QA) is a modular dynamical system operating on integer
+state pairs $(b,e) \in \{1,\ldots,m\}^2$ via the Fibonacci-shift operator
+$T(b,e) = (e, ((b+e-1) \bmod m) + 1)$. The state space partitions into
+three orbit types: \emph{singularity} (period 1, fixed point),
+\emph{satellite} (period 8 for $m=24$), and \emph{cosmos} (period 24).
+This partition is a discrete analogue of the triune vibratory structure
+described by Keely and formalized in Sympathetic Vibratory Physics.
+
+We propose that QA provides the missing unifying framework: continuous
+observables enter at the \emph{observer boundary}, are projected into discrete
+QA states, and the coherence of subsequent state transitions --- measured by
+the T-operator's prediction accuracy --- constitutes a domain-general
+structural indicator.
+
+\subsection{Contributions}
+
+\begin{enumerate}
+  \item We define the \textbf{QA Coherence Index} (QCI): the rolling accuracy
+    of the QA T-operator applied to topographically clustered multi-channel
+    signals.
+  \item We demonstrate that QCI \textbf{predicts future volatility} in financial
+    markets with partial $r = -0.22$ beyond lagged realized volatility,
+    validated out-of-sample with 84\% robustness across 80 parameter
+    configurations.
+  \item We show cross-domain applicability in EEG seizure detection
+    ($\Delta R^2 = +0.21$) and audio signal classification
+    (partial $r = +0.75$).
+  \item We identify a \textbf{local/global observer separation principle}:
+    coordinate-level observables (returns, volatility) and manifold-level
+    observables (correlation, eigenstructure) require distinct observer layers.
+\end{enumerate}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Background: Quantum Arithmetic}
+\label{sec:qa}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{definition}[QA State Space]
+For modulus $m$, the QA state space is $S_m = \{1,\ldots,m\}^2$.
+The Fibonacci-shift operator $T: S_m \to S_m$ is defined by
+\[
+  T(b,e) = \bigl(e,\; ((b+e-1) \bmod m) + 1\bigr).
+\]
+\end{definition}
+
+\begin{definition}[QA Norm]
+The QA norm $f: S_m \to \mathbb{Z}/m\mathbb{Z}$ is
+$f(b,e) = b^2 + be - e^2 \pmod{m}$.
+This is the norm form of the golden ratio ring $\mathbb{Z}[\varphi]$.
+\end{definition}
+
+\begin{proposition}[Orbit Partition]
+For $m = 9$, $S_9$ partitions into exactly three orbit families:
+\begin{itemize}
+  \item \textbf{Singularity}: 1 state $(9,9)$, period 1
+  \item \textbf{Satellite}: 8 states, period 8, symmetric 3D structure
+  \item \textbf{Cosmos}: 72 states, period 24, linear 1D structure
+\end{itemize}
+Total: $1 + 8 + 72 = 81 = 9^2$. The orbit period 24 equals the
+Pisano period $\pi(9)$.
+\end{proposition}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Topographic Observer Architecture}
+\label{sec:observer}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Observer-Projection Firewall (Theorem NT)}
+
+Continuous measurements enter QA \emph{exactly once} at the observer boundary
+and exit \emph{exactly once} at the projection boundary. No continuous
+quantity participates in QA dynamics. This firewall is both a correctness
+constraint and a design principle.
+
+\subsection{Pipeline}
+
+\begin{enumerate}
+  \item \textbf{Observer layer} (continuous permitted):
+    Multi-channel signal $\mathbf{x}_t \in \mathbb{R}^d$ is clustered into
+    $K$ discrete microstates via $k$-means: $c_t = \text{cluster}(\mathbf{x}_t)$.
+  \item \textbf{QA layer} (integer only):
+    Microstate transitions map to QA states via a designed mapping
+    $\phi: \{0,\ldots,K{-}1\}^2 \to S_m$:
+    $(b_t, e_t) = \phi(c_t, c_{t+1})$.
+  \item \textbf{T-operator prediction}:
+    $(\hat{b}_{t+1}, \hat{e}_{t+1}) = T(b_t, e_t)$.
+  \item \textbf{Projection layer} (continuous permitted):
+    Rolling prediction accuracy over window $W$:
+    \[
+      \text{QCI}_t = \frac{1}{W} \sum_{s=t-W+1}^{t}
+        \mathbf{1}[\hat{e}_{s+1} = e_{s+1}^{\text{actual}}]
+    \]
+\end{enumerate}
+
+\subsection{Mapping Design}
+
+The microstate-to-QA mapping $\phi$ must ensure all three orbit types
+(singularity, satellite, cosmos) are reachable from the microstate transition
+set. For $m = 24$, satellite requires multiples of 8; singularity requires
+$(24,24)$. Our canonical mapping for $K=6$:
+$\{0 \mapsto 8,\; 1 \mapsto 16,\; 2 \mapsto 24,\; 3 \mapsto 5,\;
+4 \mapsto 3,\; 5 \mapsto 11\}$.
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Finance: QCI Predicts Future Volatility}
+\label{sec:finance}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{Data and Setup}
+
+Six assets (SPY, QQQ, IWM, TLT, GLD, BTC-USD), 10 years daily data.
+Standardized 5-day log returns form the 6-channel topographic signal.
+$K$-means ($K=6$, trained on first temporal half) clusters returns into
+microstates. QCI computed with window $W=63$ trading days.
+
+Target: future 21-day realized volatility of SPY.
+
+\subsection{Results}
+
+\begin{table}[h]
+\centering
+\caption{QCI vs.\ future volatility (out-of-sample, $n = 1203$ days)}
+\begin{tabular}{lcc}
+\toprule
+Metric & Value & Significance \\
+\midrule
+QCI vs.\ future vol & $r = -0.32$ & $p < 10^{-6}$ \\
+Partial $r$ (controlling lagged RV) & $-0.22$ & $p < 10^{-8}$ \\
+Robustness grid (80 configs) & 67/80 significant & 84\% \\
+Permutation test (1000 shuffles) & $\chi^2 = 23.48$ & $> \max(\text{null}) = 12.88$ \\
+Early warning ($\chi^2$ test) & $\chi^2 = 155$ & precision 54\%, recall 48\% \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\textbf{Interpretation}: When cross-asset dynamics deviate from QA
+Fibonacci-shift predictions (low QCI), future volatility increases.
+The partial correlation demonstrates this is not merely a volatility
+proxy --- QCI carries independent structural information.
+
+\subsection{Regime Structure}
+
+The orbit distribution differs significantly between stress and calm regimes
+($\chi^2 = 9.34$, $p = 0.009$, out-of-sample, $K=6$).
+T-operator prediction accuracy itself varies by regime:
+calm markets show 21\% accuracy (above the 16.7\% chance level),
+stress markets show 12.3\% (below chance).
+This means calm markets are more QA-coherent --- their dynamics more closely
+follow the Fibonacci shift --- while stress markets are QA-incoherent.
+
+\subsection{Baseline Comparison}
+
+\begin{table}[h]
+\centering
+\caption{Baselines: correlation with future 21-day vol (OOS)}
+\begin{tabular}{lc}
+\toprule
+Feature & $r$ with future vol \\
+\midrule
+Lagged realized vol (21d) & $+0.50$ \\
+QCI ($K=6$, $W=63$) & $-0.32$ \\
+Cross-asset correlation & $+0.25$ \\
+PCA concentration & $+0.10$ \\
+\midrule
+QCI partial (controlling RV) & $-0.22$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+Lagged realized volatility remains the strongest single predictor, as expected
+from the well-known persistence of volatility. However, QCI survives after
+partialling out RV, confirming it adds \emph{orthogonal structural information}.
+
+\subsection{RV as Orbit Persistence}
+
+When realized volatility is ingested as a 7th observer channel, the QCI
+signal strengthens (raw $r = -0.44$ at $K=8$). This suggests that RV
+persistence is a continuous projection of QA orbit persistence: the
+T-operator naturally captures the state-transition autocorrelation that
+underlies vol clustering. QA does not compete with classical observables ---
+it provides the structural framework that explains them.
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Cross-Domain Validation}
+\label{sec:cross}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{EEG Seizure Classification}
+
+Using 23-channel EEG recordings from the CHB-MIT Scalp EEG Database
+(10 patients), a topographic $k$-means observer classifies 1-second windows
+into 4 microstates. QA orbit distributions differ significantly between
+seizure and baseline: mean $\Delta R^2 = +0.21$, Fisher combined
+$p = 2.9 \times 10^{-33}$, 10/10 patients significant.
+
+The pattern: baseline EEG maps to singularity-dominated states (stable
+resting topography), while seizure maps to cosmos-dominated states
+(dynamic propagation). This mirrors the finance finding: instability
+corresponds to departure from the singularity/dominant mode.
+
+\subsection{Audio Signal Structure}
+
+QA orbit transition rates differ by signal type: sine waves at 880~Hz
+show elevated orbit return rates ($0.17$ vs $0.11$ chance), while white
+noise matches the null distribution. Partial $r = +0.75$ ($p = 0.02$)
+beyond lag-1 autocorrelation confirms QA structure is real, though the
+effect is modest.
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{The Local/Global Observer Separation}
+\label{sec:separation}
+% ═══════════════════════════════════════════════════════════════════════════
+
+Not all continuous observables should be naively stacked into the same
+clustering space. We distinguish:
+
+\begin{itemize}
+  \item \textbf{Local state observables} (returns, RV, volume): describe the
+    system's current coordinates. Safe to stack.
+  \item \textbf{Global structure observables} (correlation, PCA eigenstructure,
+    entropy): describe the geometry of the state space itself. Require a
+    separate observer layer.
+\end{itemize}
+
+When cross-asset correlation was naively added as an 8th channel, the QCI
+sign \emph{reversed} --- the correlation channel dominated clustering and
+redefined what microstates represent. This is a \texttt{LOCAL\_GLOBAL\_LAYER\_COLLISION}
+failure: a manifold descriptor was treated as a coordinate, changing the
+semantic meaning of QCI without modeling it as a separate layer.
+
+The correct architecture is a \emph{multi-layer observer}: local and global
+observers produce separate QCI signals, and their discrepancy (the gap
+between local coherence and global coherence) is where regime-change
+information lives. This architecture is designed but not yet empirically
+validated.
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Discussion}
+\label{sec:discussion}
+% ═══════════════════════════════════════════════════════════════════════════
+
+\subsection{QA as a Measurement Framework}
+
+The central claim of this paper is not that QA predicts specific outcomes
+(return direction, seizure timing, signal identity). It is that
+\emph{deviation from QA-native transition dynamics carries forward-looking
+structural information about system stability}. QA provides a measurement
+layer: a discrete algebraic framework into which continuous observables can
+be ingested and structurally organized.
+
+This positions QA alongside other structural frameworks:
+\begin{itemize}
+  \item In physics, symmetries describe system structure, not individual events.
+  \item In control theory, state classification precedes control design.
+  \item In QA, orbit coherence measures structural health before
+    domain-specific prediction.
+\end{itemize}
+
+\subsection{Limitations}
+
+\begin{enumerate}
+  \item The microstate-to-QA mapping is designed, not learned. The mapping
+    must ensure orbit diversity, which constrains the design space.
+  \item The finance result is strongest at $K=5$--$6$ clusters and degrades
+    at $K=4$. The sensitivity to cluster count suggests the signal is
+    structured but not universal across all configurations.
+  \item The multi-layer observer architecture (Section~\ref{sec:separation})
+    is a design proposal, not yet empirically hardened.
+  \item We have not benchmarked QCI against named standard volatility models
+    (HAR, GARCH) under identical protocols.
+\end{enumerate}
+
+\subsection{Future Work}
+
+\begin{enumerate}
+  \item Implement and validate the multi-layer observer (local + global + fusion).
+  \item Benchmark QCI against HAR and GARCH volatility models.
+  \item Extend the T-operator to multi-step prediction ($k$-step reachability).
+  \item Apply to additional domains (seismology, climate, genomics).
+\end{enumerate}
+
+% ═══════════════════════════════════════════════════════════════════════════
+\section{Conclusion}
+% ═══════════════════════════════════════════════════════════════════════════
+
+We have shown that the QA Fibonacci-shift operator, applied to topographically
+clustered multi-channel signals, produces a coherence index with genuine
+predictive power for future system instability. The result is hardened
+across out-of-sample testing, robustness grids, permutation tests, and
+partial correlation controls. Cross-domain validation in neuroscience and
+audio processing demonstrates that the architecture is not domain-specific.
+
+The deeper insight is architectural: QA is not a feature extractor but a
+\emph{state-space lens} --- a discrete algebraic framework that absorbs and
+structurally organizes continuous observables. The T-operator coherence
+measures how closely a system follows its own inherent arithmetic. When it
+stops following, instability is emerging.
+
+\bigskip
+\noindent\textbf{Data and code availability.}
+All scripts (30--37) are frozen with SHA-256 hashes.
+The QA certificate ecosystem (154 families) is available at
+\texttt{github.com/1r0nw1ll/quantum-arithmetic-research}.
+
+\end{document}

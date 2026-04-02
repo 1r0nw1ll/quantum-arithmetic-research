@@ -1,0 +1,14 @@
+overrides:
+  Harmonic Index (HI):
+    b: 12
+    e: 8
+  E₈ alignment statistic:
+    b: 15
+    e: 3
+  QA tuple:
+    b: 6
+    e: 6
+  Coherence collapse:
+    b: 3
+    e: 9
+

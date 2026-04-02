@@ -1,0 +1,171 @@
+# Seizure Detection Evaluation Configuration
+# This file configures the automated testing framework for CHB-MIT seizure detection experiments
+
+# Dataset Configuration
+dataset:
+  # Directory containing CHB-MIT data
+  data_dir: "phase2_data/eeg/chbmit"
+
+  # Subject to test (chb01, chb02, etc.)
+  subject: "chb01"
+
+  # Baseline files (no seizures)
+  baseline_files:
+    - "chb01/chb01_01.edf"
+    - "chb01/chb01_02.edf"
+
+  # Files containing seizures
+  seizure_files:
+    - "chb01/chb01_03.edf"
+    - "chb01/chb01_04.edf"
+    - "chb01/chb01_15.edf"
+    - "chb01/chb01_16.edf"
+
+  # Seizure annotations (filename: [(start, end), ...] in seconds)
+  seizure_annotations:
+    chb01_03.edf:
+      - [2996, 3036]
+    chb01_04.edf:
+      - [1467, 1494]
+    chb01_15.edf:
+      - [1732, 1772]
+    chb01_16.edf:
+      - [1015, 1066]
+
+# Feature Extraction Configuration
+features:
+  # Feature extractor type (module name)
+  extractor: "eeg_brain_feature_extractor_fixed"
+
+  # Feature type
+  type: "spectral_7d"
+
+  # Feature names (for reporting)
+  feature_names:
+    - "VIS"  # Visual Network
+    - "SMN"  # Somatomotor Network
+    - "DAN"  # Dorsal Attention Network
+    - "VAN"  # Ventral Attention Network
+    - "FPN"  # Frontoparietal Network
+    - "DMN"  # Default Mode Network
+    - "LIM"  # Limbic Network
+
+  # EEG segmentation parameters
+  segment:
+    window_sec: 4.0
+    overlap_sec: 2.0
+
+# Classifier Configuration
+classifier:
+  # Base classifier type
+  type: "RandomForest"
+
+  # Hyperparameters
+  params:
+    n_estimators: 100
+    max_depth: 5
+    random_state: 42
+    class_weight: null  # null, 'balanced', or custom dict
+
+# Evaluation Configuration
+evaluation:
+  # Train/test split
+  test_size: 0.2
+  random_state: 42
+
+  # Metrics to compute (all computed by default)
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1_score"
+    - "specificity"
+    - "npv"
+    - "roc_auc"
+    - "confusion_matrix"
+
+# Methods to Compare
+# Each method is a complete experiment configuration
+methods:
+  - name: "RF_baseline"
+    description: "Random Forest baseline (no balancing)"
+    classifier:
+      type: "RandomForest"
+      params:
+        n_estimators: 100
+        max_depth: 5
+        random_state: 42
+    balancing: null
+
+  - name: "RF_balanced_weights"
+    description: "Random Forest with balanced class weights"
+    classifier:
+      type: "RandomForest"
+      params:
+        n_estimators: 100
+        max_depth: 5
+        random_state: 42
+        class_weight: "balanced"
+    balancing: null
+
+  - name: "RF_oversample"
+    description: "Random Forest with random oversampling"
+    classifier:
+      type: "RandomForest"
+      params:
+        n_estimators: 100
+        max_depth: 5
+        random_state: 42
+    balancing: "oversample"
+
+  - name: "RF_undersample"
+    description: "Random Forest with random undersampling"
+    classifier:
+      type: "RandomForest"
+      params:
+        n_estimators: 100
+        max_depth: 5
+        random_state: 42
+    balancing: "undersample"
+
+  - name: "RF_smote"
+    description: "Random Forest with SMOTE oversampling"
+    classifier:
+      type: "RandomForest"
+      params:
+        n_estimators: 100
+        max_depth: 5
+        random_state: 42
+    balancing: "smote"
+    balance_params:
+      k_neighbors: 3
+
+  - name: "RF_deep"
+    description: "Random Forest with deeper trees"
+    classifier:
+      type: "RandomForest"
+      params:
+        n_estimators: 200
+        max_depth: 10
+        random_state: 42
+        class_weight: "balanced"
+    balancing: null
+
+# Output Configuration
+output:
+  # Output directory for results
+  output_dir: "phase2_workspace/evaluations"
+
+  # Save detailed results
+  save_predictions: true
+  save_probabilities: true
+  save_feature_importance: true
+
+  # Generate plots
+  generate_plots: true
+
+  # Generate markdown report
+  generate_report: true
+
+  # Include git commit hash
+  include_git_info: true

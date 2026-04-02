@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Megalithic Cert family [178]: certifies that megalithic construction used discrete integer arithmetic consistent with QA framework. (1) Megalithic Yard (MY=2.72ft) confirmed as quantum of length (p=0.0096, Thom 1962 84 circles). (2) Megalithic Fathom (2MY) as primary unit (p<0.0001, 83% even). (3) Construction triangles 3:4:5 and 5:12:13 = first two all-Fibonacci QN triples. (4) Mod-24 residue non-uniformity explained by fathom preference. Honest: Fibonacci ratios in diameter pairs NOT significant; mod-9 uniform. Tier 2 structural + Tier 3 statistical (MY/fathom)."
+}

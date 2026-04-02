@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA H-Null Modularity Cert family [180]: certifies H-null chromogeometric modularity model for graph community detection. H(b,e)=C+F where C=2de (green quadrance) and F=d*d-e*e (red quadrance). Degree mapping: b=max(k_i,k_j), e=min(k_i,k_j), d=b+e=k_i+k_j. Les Miserables ARI=0.638 vs standard ARI=0.588 (+0.050). Topology-specific: wins on hub-dominated networks with community-internal hubs. Tier 2: 1/10 benchmark graphs show improvement. Source: qa_lab/qa_graph/ H-null analysis."
+}

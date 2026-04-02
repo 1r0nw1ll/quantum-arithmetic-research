@@ -3828,6 +3828,38 @@ def _validate_planetary_qn_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_megalithic_cert_family(base_dir: str) -> Optional[str]:
+    """QA Megalithic Cert family [178] — MY p=0.0096, Fathom p<0.0001, Fibonacci QN triangles. Tier 2+3. Checks MG_1+MY/FATHOM/TRIANGLE/HONEST/W/F; 1 PASS+1 FAIL; self-test ok"""
+    import subprocess
+    d = os.path.join(base_dir, "qa_megalithic_cert_v1")
+    v = os.path.join(d, "qa_megalithic_cert_validate.py")
+    if not os.path.exists(v):
+        return "missing qa_megalithic_cert_v1/qa_megalithic_cert_validate.py"
+    proc = subprocess.run([sys.executable, v, "--self-test"], capture_output=True, text=True, timeout=60, cwd=d)
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_megalithic_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_megalithic_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_paired_pisano_cert_family(base_dir: str) -> Optional[str]:
+    """QA Paired Pisano Cert family [179] — Fib pairs 2.25x higher both-divide rate (0.526 vs 0.234), p=0.0017. Tier 3. Checks PP_1+PAIRS/STAT/RATIO/ORDER/MECH/HONEST/W/F; 1 PASS+1 FAIL; self-test ok"""
+    import subprocess
+    d = os.path.join(base_dir, "qa_paired_pisano_cert_v1")
+    v = os.path.join(d, "qa_paired_pisano_cert_validate.py")
+    if not os.path.exists(v):
+        return "missing qa_paired_pisano_cert_v1/qa_paired_pisano_cert_validate.py"
+    proc = subprocess.run([sys.executable, v, "--self-test"], capture_output=True, text=True, timeout=60, cwd=d)
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_paired_pisano_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_paired_pisano_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_ellipsoid_geodesic_cert_family(base_dir: str) -> Optional[str]:
     """QA Ellipsoid Geodesic Cert family [168] — certifies geodesic properties of WGS84 quantum ellipse in QN arithmetic. M/N=F/(d²-e²·s_φ). b/a=√F/d. I=C-F=-10039<0→ellipse. Quantum lattice: s_φ=C/G≈Tropic, e²/G=eccentricity resonance. Tier 1. Checks EG_1+QN/CURV/AXIS/DISC/LATTICE/W/F; 1 PASS+1 FAIL; self-test ok"""
     import subprocess
@@ -5578,6 +5610,28 @@ def _validate_cross_domain_invariance_cert_family(base_dir: str) -> Optional[str
     return None
 
 
+def _validate_h_null_modularity_cert_family(base_dir: str) -> Optional[str]:
+    """QA H-Null Modularity Cert family [180] — certifies H-null chromogeometric modularity model for graph community detection. H(b,e)=C+F where C=2de (green quadrance) and F=d*d-e*e (red quadrance). Les Miserables ARI=0.638 vs standard ARI=0.588 (+0.050). HONEST: wins on 1/10 graphs only — topology-specific to hub-dominated networks. Tier 2. Checks HN_1+MODEL/CHROMO/BENCH/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_h_null_modularity_cert_v1")
+    validator = os.path.join(fam_dir, "qa_h_null_modularity_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_h_null_modularity_cert_v1/qa_h_null_modularity_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_h_null_modularity_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_h_null_modularity_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_h_null_modularity_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -6198,6 +6252,21 @@ FAMILY_SWEEPS = [
      "Solar system QN catalog: 10 bodies shape+orbital; Earth-Jupiter b=59, Earth-Uranus b=101 harmonics; Saturn (79,139,199) prime AP; char latitudes via 2ε/(1+ε²); Earth Tropic match Tier 2 p≈0.013; Tier 2 structural; checks PQ_1+TUPLE/TRIPLE/ECC/HARMONIC/W/F; 1 PASS+1 FAIL; self-test ok",
      "177_qa_planetary_qn_cert",
      "qa_planetary_qn_cert_v1", True),
+    (178, "QA Megalithic Cert family",
+     _validate_megalithic_cert_family,
+     "Megalithic Yard p=0.00022 z=-3.54 (Thom 1962+1967 combined 202 circles); Fathom p<10⁻⁸ (74% even of 202); 3:4:5→QN(1,1,2,3) 5:12:13→QN(1,2,3,5) Fibonacci; honest: Fib ratios ns, mod-9 uniform, mod-24 explained by fathom; Tier 2+3; checks MG_1+MY/FATHOM/TRIANGLE/HONEST/W/F; 1 PASS+1 FAIL; self-test ok",
+     "178_qa_megalithic_cert",
+     "qa_megalithic_cert_v1", True),
+    (179, "QA Paired Pisano Cert family",
+     _validate_paired_pisano_cert_family,
+     "Paired Pisano divisibility: Fib pairs 2.25x higher both-divide rate (0.526 vs 0.234), Mann-Whitney p=0.0017; order-1 3.77x p=0.028; mechanism: lcm(p,q)=p*q smaller for Fib; product-matched 56%; 4:1 exception (Kirkwood); Tier 3; checks PP_1+PAIRS/STAT/RATIO/ORDER/MECH/HONEST/W/F; 1 PASS+1 FAIL; self-test ok",
+     "179_qa_paired_pisano_cert",
+     "qa_paired_pisano_cert_v1", True),
+    (180, "QA H-Null Modularity Cert family",
+     _validate_h_null_modularity_cert_family,
+     "H-null chromogeometric modularity: H(b,e)=C+F where C=2de (green) F=d*d-e*e (red); Les Miserables ARI=0.638 vs standard 0.588 (+0.050); HONEST: 1/10 graphs improved, topology-specific to hub-dominated networks; H/X=b/e+4+2e/b linear in degree asymmetry; Tier 2; checks HN_1+MODEL/CHROMO/BENCH/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "180_qa_h_null_modularity_cert",
+     "qa_h_null_modularity_cert_v1", True),
 ]
 
 

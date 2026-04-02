@@ -1,0 +1,31 @@
+{
+  "domain": "climate_teleconnection",
+  "channels": [
+    "ONI",
+    "NAO",
+    "AO",
+    "PDO",
+    "AMO"
+  ],
+  "n_months_total": 817,
+  "n_oos": 397,
+  "test1_qci_vs_dispersion": {
+    "r": -0.0798816942691335,
+    "p": 0.11202581564581447
+  },
+  "test2_orbit_by_enso": {
+    "chi2": 94.8781865330147,
+    "p": 1.2096495628670173e-19,
+    "dof": 4
+  },
+  "test3_partial_r": {
+    "r": -0.134462458928236,
+    "p": 0.007298864641522355
+  },
+  "params": {
+    "K": 4,
+    "QCI_WINDOW": 24,
+    "FH": 12,
+    "MODULUS": 24
+  }
+}

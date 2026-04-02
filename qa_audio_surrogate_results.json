@@ -1,0 +1,38 @@
+{
+  "domain": "audio_surrogates",
+  "design": "CORRECTED",
+  "real_partial_r": 0.752,
+  "real_partial_p": 0.0195,
+  "n_surrogates": 1000,
+  "summary": {
+    "random_table": {
+      "real": 0.752,
+      "surr_mean": 0.002,
+      "surr_std": 0.404,
+      "rank_p": 0.029,
+      "beats": true
+    },
+    "shifted_mod": {
+      "real": 0.752,
+      "surr_mean": -0.079,
+      "surr_std": 0.438,
+      "rank_p": 0.0,
+      "beats": true
+    },
+    "random_mod": {
+      "real": 0.752,
+      "surr_mean": 0.742,
+      "surr_std": 0.088,
+      "rank_p": 0.505,
+      "beats": false
+    },
+    "permuted_states": {
+      "real": 0.752,
+      "surr_mean": 0.0,
+      "surr_std": 0.378,
+      "rank_p": 0.02,
+      "beats": true
+    }
+  },
+  "n_pass": 3
+}

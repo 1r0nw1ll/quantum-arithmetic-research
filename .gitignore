@@ -200,5 +200,8 @@ proofgold_bounties/env/.env
 proofgold_bounties/data/proofgold-lava/explorer/i/pgsecret.php
 ag2_guardrails_poc/data/secret.txt
 
+# ERA5 / WeatherBench2 cache (12GB+ per download run)
+.era5_cache/
+
 # Large raw data files (>100MB — GitHub limit)
 qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_multibench_cases.jsonl

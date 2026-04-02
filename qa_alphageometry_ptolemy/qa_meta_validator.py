@@ -3612,6 +3612,29 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_bearden_phase_conjugate_cert_family(base_dir: str) -> Optional[str]:
+    """QA Bearden Phase Conjugate Cert family [155] — certifies structural parallel between Bearden's pumped phase conjugate mirror theory ('stress is a pumper') and the QCI opposite-sign discovery. Global QCI rises (pump=coupling tightens) while local QCI drops (conjugate=trajectories scatter). QCI_gap = phase conjugation signature. Source: Will Dale 2026-04-01, Bearden scalar EM, SVP-adjacent. Checks BPC_1+MODEL/MAP/SIGN/EMP/SVP/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    bpc_dir   = os.path.join(base_dir, "qa_bearden_phase_conjugate_cert_v1")
+    validator = os.path.join(bpc_dir, "qa_bearden_phase_conjugate_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_bearden_phase_conjugate_cert_v1/qa_bearden_phase_conjugate_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=bpc_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_bearden_phase_conjugate_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_bearden_phase_conjugate_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_bearden_phase_conjugate_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_t_operator_coherence_cert_family(base_dir: str) -> Optional[str]:
     """QA T-Operator Coherence Cert family [154] — certifies QCI (QA Coherence Index) as domain-general structural indicator. Topographic observer → QA states → T-operator prediction → rolling accuracy = QCI. Finance Tier A: partial r=-0.22 beyond lagged RV, 84% robustness, permutation-validated. Cross-domain: EEG (dR²=+0.21), audio (r=+0.75). Frozen scripts 30-37. Checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F; 2 PASS; self-test ok"""
     import subprocess
@@ -5453,6 +5476,11 @@ FAMILY_SWEEPS = [
      "Ptolemy theorem via three integer identities for QA direction pairs: BF G₁G₂=D²+E² (Brahmagupta-Fibonacci); PP F₃=|F₁F₂-C₁C₂|, C₃=F₁C₂+F₂C₁, F₃²+C₃²=(G₁G₂)²; PC F₄=F₁F₂+C₁C₂, C₄=|F₁C₂-F₂C₁|, F₄²+C₄²=(G₁G₂)²; both triples = two diagonals of Ptolemy cyclic quadrilateral on circle G₁G₂; proof: (F₁F₂-C₁C₂)²+(F₁C₂+F₂C₁)²=(F₁²+C₁²)(F₂²+C₂²); Ptolemy ~150 CE→Brahmagupta 628 CE→Gaussian Z[i]; connects to [127] UHG null; checks CQ_1/2/3/BF/PP/PC/G3/W/F; 2 PASS; self-test ok",
      "136_qa_cyclic_quad_cert",
      "qa_cyclic_quad_cert_v1", True),
+    (155, "QA Bearden Phase Conjugate Cert family",
+     _validate_bearden_phase_conjugate_cert_family,
+     "Bearden 'stress is a pumper' = QCI opposite-sign: global QCI+ (pump/coupling tightens) + local QCI- (conjugate/trajectories scatter); QCI_gap partial r=-0.17 to -0.42; 100% robust; permutation-validated; SVP lineage Keely→Pond→Bearden; checks BPC_1+MODEL/MAP/SIGN/EMP/SVP/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "155_qa_bearden_phase_conjugate_cert",
+     "qa_bearden_phase_conjugate_cert_v1", True),
     (154, "QA T-Operator Coherence Cert family",
      _validate_t_operator_coherence_cert_family,
      "QCI = rolling T-operator prediction accuracy; finance partial r=-0.22 beyond RV (Tier A hardened); 84% robustness grid; cross-domain: EEG dR²=+0.21, audio r=+0.75; checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F; 2 PASS; self-test ok",

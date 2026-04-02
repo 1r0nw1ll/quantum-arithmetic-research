@@ -1,0 +1,63 @@
+{
+  "domain": "eeg_surrogates",
+  "design": "CORRECTED: real seizure labels + real delta, surrogate orbit features only",
+  "n_patients": 15,
+  "real": {
+    "mean_dr2": 0.19240267499626204,
+    "fisher_chi2": 287.55682016509587,
+    "fisher_p": 7.40064175291226e-44
+  },
+  "n_surrogates": 200,
+  "summary": {
+    "permuted_microstates_mean_dr2": {
+      "real": 0.19240267499626204,
+      "surr_mean": 0.19586131185863553,
+      "surr_std": 0.007402756843191301,
+      "z": -0.4672093026471051,
+      "rank_p": 0.695,
+      "beats": false
+    },
+    "permuted_microstates_fisher_chi2": {
+      "real": 287.55682016509587,
+      "surr_mean": 298.32540199942144,
+      "surr_std": 9.974089566105926,
+      "z": -1.0796556179843724,
+      "rank_p": 0.86,
+      "beats": false
+    },
+    "random_fracs_mean_dr2": {
+      "real": 0.19240267499626204,
+      "surr_mean": 0.024808520877197187,
+      "surr_std": 0.006896453787399259,
+      "z": 24.301497448628126,
+      "rank_p": 0.0,
+      "beats": true
+    },
+    "random_fracs_fisher_chi2": {
+      "real": 287.55682016509587,
+      "surr_mean": 32.67107681971895,
+      "surr_std": 8.292348385945271,
+      "z": 30.737461992960114,
+      "rank_p": 0.0,
+      "beats": true
+    },
+    "permuted_segments_mean_dr2": {
+      "real": 0.19240267499626204,
+      "surr_mean": 0.021615255728092107,
+      "surr_std": 0.006080301450103474,
+      "z": 28.088643411793914,
+      "rank_p": 0.0,
+      "beats": true
+    },
+    "permuted_segments_fisher_chi2": {
+      "real": 287.55682016509587,
+      "surr_mean": 28.497392876534924,
+      "surr_std": 7.508184975785213,
+      "z": 34.50360215205916,
+      "rank_p": 0.0,
+      "beats": true
+    }
+  },
+  "dr2_pass": 2,
+  "fc_pass": 2
+}

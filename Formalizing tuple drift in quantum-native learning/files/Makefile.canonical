@@ -1,0 +1,11 @@
+# QA Canonical Validation Makefile
+# Add this to your project's Makefile or use standalone
+
+.PHONY: validate
+validate:
+	python validate_canonical.py
+
+.PHONY: help
+help:
+	@echo "QA Canonical Reference - Make Targets"
+	@echo "  make validate    Run canonical compliance validation"

@@ -1,0 +1,57 @@
+Query: What is Harmonic Index?
+Query: What is Harmonic Index?
+Query QA tuple: (6, 2, 8, 10)
+
+1. Equivariant operator — score=0.900, QA=(9, 2, 11, 13), E8=0.960
+   Definition: Implementation view of the QA layer respecting modular structure.
+
+2. QA tuple — score=0.883, QA=(6, 6, 12, 18), E8=1.000
+   Definition: (b,e,d,a) with d = b + e (mod 24) and a = b + 2e (mod 24).
+
+3. Early‑Warning Detector — score=0.852, QA=(1, 2, 3, 5), E8=0.992
+   Definition: Dual‑channel alert using (HI collapse) ∧ (Deviation spike).
+
+4. Coherence collapse — score=0.703, QA=(3, 9, 12, 21), E8=0.984
+   Definition: HI falls below a defined threshold relative to baseline.
+
+5. E₈ alignment statistic — score=0.695, QA=(15, 3, 18, 21), E8=0.956
+   Definition: Mean per‑node max |cosine| to the 240 E₈ roots after R⁸ embedding of node states.
+
+Query: Find all Bell test experiments
+Query: Find all Bell test experiments
+Query QA tuple: (6, 4, 10, 14)
+
+1. QA tuple — score=0.942, QA=(6, 6, 12, 18), E8=1.000
+   Definition: (b,e,d,a) with d = b + e (mod 24) and a = b + 2e (mod 24).
+
+2. Equivariant operator — score=0.842, QA=(9, 2, 11, 13), E8=0.960
+   Definition: Implementation view of the QA layer respecting modular structure.
+
+3. Early‑Warning Detector — score=0.794, QA=(1, 2, 3, 5), E8=0.992
+   Definition: Dual‑channel alert using (HI collapse) ∧ (Deviation spike).
+
+4. Coherence collapse — score=0.762, QA=(3, 9, 12, 21), E8=0.984
+   Definition: HI falls below a defined threshold relative to baseline.
+
+5. E₈ alignment statistic — score=0.695, QA=(15, 3, 18, 21), E8=0.956
+   Definition: Mean per‑node max |cosine| to the 240 E₈ roots after R⁸ embedding of node states.
+
+Query: How does QA relate to seizure detection?
+Query: How does QA relate to seizure detection?
+Query QA tuple: (18, 18, 12, 6)
+
+1. Harmonic Neuro‑Regulator — score=0.790, QA=(23, 18, 17, 11), E8=0.785
+   Definition: Closed‑loop read–analyze–nudge–verify controller. *(Future work)*
+
+2. State Deviation — score=0.751, QA=(15, 21, 12, 9), E8=0.753
+   Definition: L2 distance between live HF and Baseline Fingerprint.
+   Related: Baseline Fingerprint
+
+3. Harmonic loss — score=0.731, QA=(15, 22, 13, 11), E8=0.784
+   Definition: L(Θ) uses squared minimal residue of a^2 − (d^2 + 2de + e^2) under mod 24.
+
+4. Harmonic Fingerprint — score=0.727, QA=(11, 17, 4, 21), E8=0.868
+   Definition: 96‑dim vector from final 24×(b,e,d,a) tuples flattened; the geometric signature of a window.
+
+5. Seismic Coherence Dashboard — score=0.713, QA=(16, 1, 17, 18), E8=0.919
+   Definition: Two‑panel figure showing signal + (HI, Deviation) with ground‑truth spans.

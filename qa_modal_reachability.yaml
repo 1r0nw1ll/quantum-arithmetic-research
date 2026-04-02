@@ -1,0 +1,297 @@
+version: "0.1"
+domain: "QA_Polyspectral_Reachability"
+description: >
+  QA control-theoretic reachability framework for poly-spectral imaging
+  modalities. This specification defines state spaces, modal generators,
+  invariants, failure algebra, and certificate schemas for HSI, LiDAR, and IR.
+
+qa_canonical_reference:
+  path: "Formalizing tuple drift in quantum-native learning/files/files(1)/qa_canonical.md"
+  version: "1.0"
+  note: >
+    Canonical QA generators and invariants are defined only in qa_canonical.md.
+    This spec does not redefine them; modal generators include analogy labels
+    for cross-domain mapping only.
+
+########################################
+# STATE DEFINITIONS
+########################################
+
+states:
+  LiDAR:
+    id: S_L
+    components:
+      geometry:
+        type: [point_cloud, range_image, depth_map]
+        space: R3
+      pose:
+        type: SE3
+        required: true
+      instrument:
+        wavelength: optional
+        beam_pattern: required
+        sampling_rate: required
+      uncertainty:
+        noise_model: [gaussian, speckle, mixed]
+    invariants:
+      - geometry_connectivity
+      - rigid_transform_equivalence
+    capabilities:
+      has_pose: true
+      has_extrinsics: true
+      has_spectral_response: false
+      has_radiometric_model: false
+      has_temperature_model: false
+      has_emissivity_model: false
+      supports_coregistration: true
+
+  HSI:
+    id: S_H
+    components:
+      cube:
+        axes: [x, y, lambda]
+        lambda_units: nm
+      calibration:
+        spectral_response: required
+        radiometric_model: required
+      illumination:
+        model: optional
+      uncertainty:
+        noise_model: [poisson, gaussian, mixed]
+    invariants:
+      - spectral_shape
+      - band_order
+      - spatial_adjacency
+    capabilities:
+      has_pose: false
+      has_extrinsics: false
+      has_spectral_response: true
+      has_radiometric_model: true
+      has_temperature_model: true
+      has_emissivity_model: true
+      supports_coregistration: true
+
+  IR:
+    id: S_IR
+    components:
+      image:
+        axes: [x, y]
+        band: [MWIR, LWIR]
+      calibration:
+        radiometric_model: required
+        atmospheric_model: optional
+      physics:
+        temperature_model: optional
+        emissivity_model: optional
+      uncertainty:
+        noise_model: [gaussian, thermal, mixed]
+    invariants:
+      - thermal_contrast
+      - emissivity_bounds
+    capabilities:
+      has_pose: false
+      has_extrinsics: false
+      has_spectral_response: false
+      has_radiometric_model: true
+      has_temperature_model: false
+      has_emissivity_model: false
+      supports_coregistration: false
+
+########################################
+# GENERATORS (LEGAL MODAL MOVES)
+########################################
+
+generators:
+  pose_transform:
+    id: gen_pose_transform
+    description: Coordinate transformation using known extrinsics
+    domain: LiDAR
+    codomain: LiDAR
+    requires:
+      - pose
+    requires_capabilities:
+      - has_pose
+      - has_extrinsics
+    preserves:
+      - geometry_connectivity
+    qa_generator_analogy: lambda_2
+
+  repr_swap:
+    id: gen_repr_swap
+    description: Swap LiDAR representation (point cloud to depth map)
+    domain: LiDAR
+    codomain: LiDAR
+    involutive: true
+    preserves:
+      - rigid_transform_equivalence
+    qa_generator_analogy: mu
+
+  refine:
+    id: gen_refine
+    description: Increase sampling density or resolution
+    domain: [LiDAR, HSI]
+    codomain: same
+    monotone:
+      uncertainty: non_increasing
+    preserves:
+      - spectral_shape
+      - geometry_connectivity
+    qa_generator_analogy: sigma
+
+  project_lossy:
+    id: gen_project_lossy
+    description: Lossy projection or marginalization
+    domain: [HSI, LiDAR]
+    codomain: reduced_state
+    irreversible: true
+    destroys:
+      - spectral_shape
+      - fine_geometry
+    qa_generator_analogy: nu
+
+  coregister_hsi_lidar:
+    id: gen_coregister_hsi_lidar
+    description: Map LiDAR geometry into HSI pixel space using extrinsics
+    domain: LiDAR
+    codomain: HSI
+    requires:
+      - pose
+      - calibration
+    requires_capabilities:
+      - has_pose
+      - has_extrinsics
+      - supports_coregistration
+    preserves:
+      - geometry_connectivity
+      - spatial_adjacency
+    qa_generator_analogy: lambda_2
+
+  thermal_forward:
+    id: gen_thermal_forward
+    description: Forward model from HSI reflectance to IR radiance
+    domain: HSI
+    codomain: IR
+    requires:
+      - temperature_model
+      - emissivity_model
+      - radiometric_model
+    requires_capabilities:
+      - has_temperature_model
+      - has_emissivity_model
+      - has_radiometric_model
+    preserves:
+      - spatial_adjacency
+      - thermal_contrast
+    qa_generator_analogy: lambda_2
+
+  thermal_inverse:
+    id: gen_thermal_inverse
+    description: Approximate inversion from IR radiance to spectral constraints
+    domain: IR
+    codomain: HSI
+    requires:
+      - temperature_model
+      - emissivity_model
+      - radiometric_model
+    requires_capabilities:
+      - has_temperature_model
+      - has_emissivity_model
+      - has_radiometric_model
+    may_fail:
+      - EMISSIVITY_TEMPERATURE_AMBIGUITY
+      - PHYSICS_MISMATCH
+    qa_generator_analogy: nu
+
+########################################
+# FAILURE ALGEBRA
+########################################
+
+failures:
+  CALIBRATION_MISSING:
+    description: Required instrument calibration absent
+    terminal: true
+
+  NON_IDENTIFIABLE:
+    description: Attempted inverse of irreversible projection
+    terminal: true
+
+  OCCLUSION:
+    description: Geometry blocks cross-modal correspondence
+    terminal: false
+
+  SAMPLING_ALIAS:
+    description: Resolution mismatch prevents unique mapping
+    terminal: false
+
+  PHYSICS_MISMATCH:
+    description: Observations violate physical model constraints
+    terminal: true
+
+  EMISSIVITY_TEMPERATURE_AMBIGUITY:
+    description: Temperature and emissivity are not separately identifiable
+    terminal: true
+
+  GENERATOR_INSUFFICIENT:
+    description: Required capabilities are missing for available generators
+    terminal: true
+
+  UNREACHABLE:
+    description: No valid path exists under the current constraints
+    terminal: true
+
+########################################
+# CERTIFICATE SCHEMAS
+########################################
+
+certificates:
+  RETURN_CONSTRUCTED:
+    description: Successful reachability path between modalities
+    fields:
+      source_state: string
+      target_state: string
+      path:
+        type: list
+        elements: generator_id
+      preconditions_met: list
+      invariants_preserved: list
+      error_bounds:
+        type: numeric
+      notes: optional
+
+  CYCLE_IMPOSSIBLE:
+    description: Certified obstruction to return path
+    fields:
+      attempted_goal: string
+      required_missing_information: list
+      fail_type: failure_id
+      invariant_difference: list
+      notes: optional
+
+########################################
+# CANONICAL REACHABILITY CLAIMS (v0)
+########################################
+
+claims:
+  - id: HSI_LIDAR_FUSION_POSSIBLE
+    statement: >
+      Given calibrated extrinsics, LiDAR geometry is reachable to HSI pixel
+      space with preserved geometry invariants.
+    certificate: RETURN_CONSTRUCTED
+
+  - id: RGB_TO_HSI_IMPOSSIBLE
+    statement: >
+      RGB projections cannot uniquely recover hyperspectral cubes without
+      external priors.
+    certificate: CYCLE_IMPOSSIBLE
+
+  - id: HSI_TO_IR_FORWARD_POSSIBLE
+    statement: >
+      Given temperature, emissivity, and radiometric calibration, HSI can be
+      forward-modeled into IR radiance with preserved spatial adjacency.
+    certificate: RETURN_CONSTRUCTED
+
+  - id: IR_TO_HSI_IMPOSSIBLE_NO_EMISSIVITY
+    statement: >
+      IR radiance alone cannot recover full HSI spectra without emissivity
+      and temperature priors, yielding a non-identifiable inversion.
+    certificate: CYCLE_IMPOSSIBLE

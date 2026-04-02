@@ -25,23 +25,21 @@ We introduce the \emph{QA Coherence Index} (QCI), a structural indicator
 derived from the transition dynamics of Quantum Arithmetic (QA), and show
 it detects system instability across unrelated domains. The QCI measures
 the rolling prediction accuracy of the QA Fibonacci-shift operator applied
-to topographically clustered multi-channel signals. We establish three
-claims. \textbf{(A)}~A local observer (multi-asset returns) produces QCI
-that anticorrelates with future volatility (partial $r = -0.22$ beyond
-lagged realized volatility, 84\% robustness across 80 configurations,
-permutation-validated). \textbf{(B)}~A separate global observer
-(cross-asset correlation, PCA concentration) produces QCI with the
-\emph{opposite sign} ($r = +0.25$): during stress, coupling structure
-tightens. \textbf{(C)}~The gap $\mathrm{QCI}_\mathrm{local} -
-\mathrm{QCI}_\mathrm{global}$ achieves partial $r = -0.42$ beyond lagged
-volatility (100\% robustness, permutation-validated), capturing stress as
-\emph{structural contraction with path disorder}. Cross-domain validation
-in EEG seizure classification ($\Delta R^2 = +0.21$, 10 patients), audio
-signal analysis (partial $r = +0.75$), and seismology ($r = +0.23$ with
-future activity, $\chi^2 = 61$ for regime discrimination) confirms the
-architecture is domain-general across four unrelated scientific domains. The core finding: deviation from QA-predicted transition
-dynamics carries forward-looking structural information that classical
-volatility measures do not fully capture.
+to topographically clustered multi-channel signals. In finance, a local
+observer produces QCI that anticorrelates with future volatility (partial
+$r = -0.22$ beyond lagged realized volatility, 84\% robustness), while a
+separate global observer shows the opposite sign ($r = +0.25$); their gap
+achieves partial $r = -0.42$ (100\% robustness). Cross-domain validation
+in EEG seizure classification ($\Delta R^2 = +0.19$, 15 patients),
+audio signal analysis (partial $r = +0.75$), ERA5 atmospheric reanalysis
+(partial $r = +0.43$), and climate teleconnection ($\chi^2 = 95$ for ENSO
+phase discrimination) demonstrates the architecture is domain-general.
+Process-level surrogate validation with a corrected null design ---
+holding real targets fixed while replacing only QCI with
+process-matched surrogates --- confirms four of six domains exceed
+surrogate baselines. The core finding: deviation from QA-predicted
+transition dynamics carries forward-looking structural information that
+domain-specific baselines do not fully capture.
 \end{abstract}
 
 % ═══════════════════════════════════════════════════════════════════════════
@@ -63,7 +61,7 @@ $T(b,e) = (e, ((b+e-1) \bmod m) + 1)$. The state space partitions into
 three orbit types: \emph{singularity} (period 1, fixed point),
 \emph{satellite} (period 8 for $m=24$), and \emph{cosmos} (period 24).
 This partition is a discrete analogue of the triune vibratory structure
-described by Keely and formalized in Sympathetic Vibratory Physics.
+described by Keely~\cite{keely} and formalized in Sympathetic Vibratory Physics.
 
 We propose that QA provides the missing unifying framework: continuous
 observables enter at the \emph{observer boundary}, are projected into discrete
@@ -118,7 +116,7 @@ The Fibonacci-shift operator $T: S_m \to S_m$ is defined by
 \begin{definition}[QA Norm]
 The QA norm $f: S_m \to \mathbb{Z}/m\mathbb{Z}$ is
 $f(b,e) = b^2 + be - e^2 \pmod{m}$.
-This is the norm form of the golden ratio ring $\mathbb{Z}[\varphi]$.
+This is the norm form of the golden ratio ring $\mathbb{Z}[\varphi]$~\cite{iverson2}.
 \end{definition}
 
 \begin{proposition}[Orbit Partition]
@@ -129,7 +127,7 @@ For $m = 9$, $S_9$ partitions into exactly three orbit families:
   \item \textbf{Cosmos}: 72 states, period 24, linear 1D structure
 \end{itemize}
 Total: $1 + 8 + 72 = 81 = 9^2$. The orbit period 24 equals the
-Pisano period $\pi(9)$.
+Pisano period $\pi(9)$~\cite{wall1960}.
 \end{proposition}
 
 % ═══════════════════════════════════════════════════════════════════════════
@@ -146,10 +144,21 @@ constraint and a design principle.
 
 \subsection{Pipeline}
 
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{fig2_pipeline.pdf}
+\caption{The topographic observer pipeline. Continuous signals enter at
+the observer boundary (left), are discretized via $k$-means, mapped to
+QA states, and the T-operator prediction accuracy is projected back as
+the continuous QCI signal (right). No continuous quantity participates
+in QA dynamics (center).}
+\label{fig:pipeline}
+\end{figure}
+
 \begin{enumerate}
   \item \textbf{Observer layer} (continuous permitted):
     Multi-channel signal $\mathbf{x}_t \in \mathbb{R}^d$ is clustered into
-    $K$ discrete microstates via $k$-means: $c_t = \text{cluster}(\mathbf{x}_t)$.
+    $K$ discrete microstates via $k$-means~\cite{kmeans}: $c_t = \text{cluster}(\mathbf{x}_t)$.
   \item \textbf{QA layer} (integer only):
     Microstate transitions map to QA states via a designed mapping
     $\phi: \{0,\ldots,K{-}1\}^2 \to S_m$:
@@ -239,8 +248,9 @@ QCI partial (controlling RV) & $-0.22$ \\
 \end{tabular}
 \end{table}
 
-We benchmark against standard volatility models on the same out-of-sample
-period (601 test days):
+We benchmark against standard volatility models --- HAR~\cite{corsi2009}
+and GARCH(1,1)~\cite{bollerslev1986} --- on the same out-of-sample period
+(601 test days):
 
 \begin{table}[h]
 \centering
@@ -323,11 +333,12 @@ it provides the structural framework that explains them.
 
 \subsection{EEG Seizure Classification}
 
-Using 23-channel EEG recordings from the CHB-MIT Scalp EEG Database
+Using 23-channel EEG recordings from the CHB-MIT Scalp EEG Database~\cite{chbmit}
 (15 patients), a topographic $k$-means observer classifies 10-second windows
 into 4 microstates. QA orbit distributions differ significantly between
 seizure and baseline: mean $\Delta R^2 = +0.19$, Fisher combined
-$p = 7.4 \times 10^{-44}$, 15/15 patients with positive $\Delta R^2$.
+$p = 7.4 \times 10^{-44}$ via Fisher's method~\cite{fisher1932},
+15/15 patients with positive $\Delta R^2$.
 
 The pattern: baseline EEG maps to singularity-dominated states (stable
 resting topography), while seizure maps to cosmos-dominated states
@@ -344,7 +355,7 @@ effect is modest.
 
 \subsection{Seismology: Earthquake Catalog}
 
-Using the USGS earthquake catalog (152,237 M4+ events, 2016--2026),
+Using the USGS earthquake catalog~\cite{usgs} (152,237 M4+ events, 2016--2026),
 daily features are computed: event count, mean magnitude, max magnitude,
 and mean depth (4 channels). The topographic observer ($K=4$, mod-24)
 applied to these features produces QCI that correlates with future
@@ -359,7 +370,7 @@ from cosmos toward bounded/singularity orbits.
 
 \subsection{ERA5 Atmospheric Reanalysis}
 
-Using WeatherBench2 ERA5 daily reanalysis (2014--2023), 15 channels
+Using WeatherBench2~\cite{weatherbench2} ERA5 daily reanalysis (2014--2023), 15 channels
 (geopotential, temperature, u-wind at 500~hPa across 5 global grid points),
 the topographic observer ($K=6$, mod-24, $W=63$) produces QCI that
 correlates with future 21-day atmospheric variability
@@ -370,7 +381,7 @@ This is the \emph{strongest} cross-domain QCI result.
 
 \subsection{Climate Teleconnection Indices}
 
-Five NOAA climate indices (ONI, NAO, AO, PDO, AMO; 1950--2023, 876 months)
+Five NOAA~\cite{noaa} climate indices (ONI, NAO, AO, PDO, AMO; 1950--2023, 876 months)
 form the input channels. While QCI does not significantly predict future
 cross-index dispersion (partial $r = -0.13$, $p = 0.007$), the orbit
 distribution differs dramatically by ENSO phase
@@ -399,8 +410,9 @@ biased against the real signal.
 
 \subsection{Corrected Design}
 
-The corrected surrogate test holds the \emph{real target} fixed and replaces
-only the predictor:
+Building on the surrogate data framework of Theiler et~al.~\cite{theiler1992}
+and Schreiber and Schmitz~\cite{schreiber2000}, the corrected test holds
+the \emph{real target} fixed and replaces only the predictor:
 
 \begin{enumerate}
   \item Compute the real target (future volatility, seizure labels, ENSO phases)
@@ -442,6 +454,17 @@ Seismology ($r$) & 200 & 0/4 & $z = +1.3$ & $r = +0.21$, rank $p \approx 0.12$ \
 \bottomrule
 \end{tabular}
 \end{table}
+
+\begin{figure}[h]
+\centering
+\includegraphics[width=\textwidth]{fig1_surrogate_validation.pdf}
+\caption{Process-level surrogate validation across six domains.
+Green bars: domains where real QCI exceeds surrogate distribution
+($\geq 2$ surrogate types beaten). Red bars: domains that do not
+survive surrogates. Labels show pass count (e.g., 3/4 = 3 of 4
+surrogate types beaten at $p < 0.05$). Dashed line: $z = 1.96$.}
+\label{fig:surrogates}
+\end{figure}
 
 Four of six domains achieve Tier~3 confirmation: the QCI signal from real
 data significantly exceeds QCI from process-matched surrogates. The
@@ -548,7 +571,7 @@ by QA generators, then low QCI signals departure from structural equilibrium.
 Empirically, this manifests as:
 \begin{enumerate}
   \item anticorrelation with future volatility (finance: $r = -0.32$);
-  \item elevated cosmos-orbit rates (EEG seizure: $\Delta R^2 = +0.21$);
+  \item elevated cosmos-orbit rates (EEG seizure: $\Delta R^2 = +0.19$, 15 patients);
   \item reduced orbit return rates (audio: partial $r = +0.75$).
 \end{enumerate}
 \end{proposition}
@@ -597,7 +620,9 @@ This positions QA alongside other structural frameworks:
 
 \begin{enumerate}
   \item Test multi-layer observer (local + global + fusion) cross-domain (EEG, audio, ERA5).
-  \item Investigate the seismology domain with expanded channels and longer history.
+  \item Seismology: expanded testing (20 years, 8 channels, 16 parameter
+    configurations) did not reach significance; alternative observer designs
+    (e.g., spatial clustering of epicenters) may be needed.
   \item Develop the EEG distributional finding: why does microstate \emph{distribution}
     but not \emph{temporal order} drive orbit discrimination?
   \item Investigate theoretical connections to phase-conjugate and pump-wave
@@ -629,8 +654,9 @@ how closely a system's observed dynamics conform to the algebraic constraints
 of this manifold. When conformity breaks down, the system is departing from
 its own structural law --- and instability follows.
 
-Unlike Koopman operator methods, which lift nonlinear dynamics to an
-infinite-dimensional function space requiring truncation and approximation,
+Unlike Koopman operator methods~\cite{koopman1931}, which lift nonlinear
+dynamics to an infinite-dimensional function space requiring truncation
+and approximation,
 QA operates on a finite, algebraically closed state graph, enabling exact
 reachability and obstruction analysis. This positions QA not as a feature
 extractor but as a \emph{state-space lens}: a discrete algebraic framework
@@ -642,5 +668,86 @@ All scripts (30--37, 46--49) are frozen with SHA-256 hashes.
 Surrogate validation scripts and result JSONs are committed to the
 repository. The QA certificate ecosystem (155 families) is available at
 \texttt{github.com/1r0nw1ll/quantum-arithmetic-research}.
+
+% ═══════════════════════════════════════════════════════════════════════════
+% References
+% ═══════════════════════════════════════════════════════════════════════════
+
+\begin{thebibliography}{20}
+
+\bibitem{iverson1}
+B.~Iverson, \emph{Pythagorean Triples}, self-published, c.~1990.
+
+\bibitem{iverson2}
+B.~Iverson, \emph{Quantum Arithmetic}, Vols.~1--4, self-published, c.~1995.
+
+\bibitem{wildberger2005}
+N.~J.~Wildberger, \emph{Divine Proportions: Rational Trigonometry to
+Universal Geometry}, Wild Egg Books, 2005.
+
+\bibitem{wildberger2008}
+N.~J.~Wildberger, ``Chromogeometry and relativistic conics,''
+\emph{KoG}, vol.~13, pp.~43--50, 2009. arXiv:0806.2789.
+
+\bibitem{chbmit}
+A.~L.~Goldberger et~al., ``PhysioBank, PhysioToolkit, and PhysioNet:
+Components of a new research resource for complex physiologic signals,''
+\emph{Circulation}, vol.~101, no.~23, pp.~e215--e220, 2000.
+
+\bibitem{weatherbench2}
+S.~Rasp et~al., ``WeatherBench 2: A benchmark for the next generation of
+data-driven weather models,'' \emph{J. Adv. Model. Earth Syst.},
+vol.~16, e2023MS004019, 2024.
+
+\bibitem{usgs}
+U.S.~Geological Survey, ``Earthquake Hazards Program,''
+\url{https://earthquake.usgs.gov/}, accessed 2026.
+
+\bibitem{noaa}
+NOAA Climate Prediction Center, ``Climate indices,''
+\url{https://www.cpc.ncep.noaa.gov/}, accessed 2026.
+
+\bibitem{kmeans}
+J.~MacQueen, ``Some methods for classification and analysis of
+multivariate observations,'' in \emph{Proc.\ 5th Berkeley Symp.\
+Mathematical Statistics and Probability}, vol.~1, pp.~281--297, 1967.
+
+\bibitem{fisher1932}
+R.~A.~Fisher, \emph{Statistical Methods for Research Workers},
+4th~ed., Oliver and Boyd, 1932.
+
+\bibitem{corsi2009}
+F.~Corsi, ``A simple approximate long-memory model of realized
+volatility,'' \emph{J. Financial Econometrics}, vol.~7, no.~2,
+pp.~174--196, 2009.
+
+\bibitem{bollerslev1986}
+T.~Bollerslev, ``Generalized autoregressive conditional
+heteroskedasticity,'' \emph{J. Econometrics}, vol.~31, no.~3,
+pp.~307--327, 1986.
+
+\bibitem{theiler1992}
+J.~Theiler, S.~Eubank, A.~Longtin, B.~Galdrikian, and J.~D.~Farmer,
+``Testing for nonlinearity in time series: the method of surrogate
+data,'' \emph{Physica D}, vol.~58, pp.~77--94, 1992.
+
+\bibitem{schreiber2000}
+T.~Schreiber and A.~Schmitz, ``Surrogate time series,''
+\emph{Physica D}, vol.~142, pp.~346--382, 2000.
+
+\bibitem{koopman1931}
+B.~O.~Koopman, ``Hamiltonian systems and transformation in Hilbert
+space,'' \emph{Proc.\ Natl.\ Acad.\ Sci.}, vol.~17, no.~5,
+pp.~315--318, 1931.
+
+\bibitem{wall1960}
+D.~D.~Wall, ``Fibonacci series modulo $m$,'' \emph{Amer.\ Math.\
+Monthly}, vol.~67, no.~6, pp.~525--532, 1960.
+
+\bibitem{keely}
+J.~W.~Keely and D.~B.~Pond, \emph{Universal Laws Never Before
+Revealed: Keely's Secrets}, The Message Company, 1995.
+
+\end{thebibliography}
 
 \end{document}

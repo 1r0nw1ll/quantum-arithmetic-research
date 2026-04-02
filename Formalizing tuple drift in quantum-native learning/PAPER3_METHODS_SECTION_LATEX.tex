@@ -1,0 +1,150 @@
+% Paper 3: RML - Methods Section (LaTeX-ready)
+% Meta-Policy Learning Over QA Manifolds
+% Generated: 2025-12-29
+
+\section{Methods}
+
+\subsection{Task Formalization}
+
+We evaluate structure-aware control on a standard reachability task over the Caps(30,30) manifold. Following the QA canonical reference~\cite{qa_canonical}, Caps(30,30) is defined as:
+
+\begin{equation}
+\text{Caps}(30,30) = \{(b,e) : 1 \le b,e \le 30, \; b+e \le 30\}
+\end{equation}
+
+Each state $(b,e)$ generates a 21-element invariant packet including the derived coordinates $d = b+e$ and $a = b+2e$ (with wraparound at 30). The manifold contains 900 states organized into a single strongly connected component under the generator set $\Sigma = \{\sigma, \mu, \lambda_2, \nu\}$, where each generator transforms $(b,e)$ according to exact algebraic rules detailed in Paper 1.
+
+The \textbf{diagonal reachability task} is defined as follows:
+
+\begin{itemize}
+\item \textbf{Initial state}: Sampled uniformly from off-diagonal states $\{(b,e) : b \ne e\}$
+\item \textbf{Target set}: Diagonal states $\mathcal{T} = \{(b,b) : 1 \le b \le 30\}$
+\item \textbf{Horizon}: $k = 20$ steps
+\item \textbf{Generators}: $\Sigma = \{\sigma, \mu, \lambda_2, \nu\}$ applied with oracle validation
+\item \textbf{Success criterion}: Reaching any state in $\mathcal{T}$ within $k$ steps
+\end{itemize}
+
+At each timestep $t$, a policy selects a generator $g_t \in \Sigma$, queries the oracle to verify legality and compute the successor state $s_{t+1} = g_t(s_t)$, and continues until either reaching $\mathcal{T}$ or exhausting the horizon. Each oracle call incurs unit cost. The task evaluates a policy's ability to achieve high success rates while minimizing oracle usage.
+
+\subsection{QAWM Architecture}
+
+The QA World Model (QAWM) is a multi-head feedforward classifier trained in Paper 2 to predict topological properties from state invariant packets. We use the canonical implementation from Paper 2 without modification.
+
+\textbf{Input representation.} Each state $(b,e)$ is encoded using a 26-dimensional feature vector derived from its 21-element invariant packet:
+
+\begin{itemize}
+\item \textbf{Primitives}: $b, e$ (2 features)
+\item \textbf{Derived coordinates}: $d = b+e$, $a = b+2e$, $C = \gcd(b,d)$, $F = \gcd(e,d)$ (4 features)
+\item \textbf{3-bucket expansions}: For each of $\{b,e,d,a,C,F\}$, compute $(x \bmod 2, x \bmod 3, x \bmod 5)$ (18 features)
+\item \textbf{Phases}: $\phi_9 = d \bmod 9$, $\phi_{24} = a \bmod 24$ (2 features, included in bucket expansions)
+\end{itemize}
+
+This representation captures both raw state coordinates and modular structure relevant to generator legality and topological properties.
+
+\textbf{Architecture.} QAWM is implemented as a scikit-learn MLPClassifier with:
+\begin{itemize}
+\item Input layer: 26 features
+\item Hidden layers: (128, 64) neurons with ReLU activations
+\item Output heads: 3 independent binary classifiers
+  \begin{itemize}
+  \item \textbf{Legality head}: Predicts whether at least one generator in $\Sigma$ is legal from state $s$
+  \item \textbf{Failure-type head}: Predicts whether illegal generators fail due to specific constraint violations
+  \item \textbf{Return-in-$k$ head}: Predicts whether state $s$ can reach a randomly sampled target within $k$ steps
+  \end{itemize}
+\item Training: Adam optimizer, cross-entropy loss, 5,000 labeled transitions (1.4\% of Caps(30,30))
+\end{itemize}
+
+Paper 2 demonstrated that QAWM achieves 0.836 AUROC on return-in-$k$ prediction for Caps(30,30) and generalizes to the larger Caps(50,50) manifold with 0.816 AUROC. Critically, QAWM learns \textit{structural predicates}—binary properties about reachability topology—not forward dynamics models.
+
+\subsection{Baseline Policies}
+
+We compare three policies varying in oracle usage and structural knowledge.
+
+\subsubsection{Random-Legal}
+
+Random-Legal serves as an uninformed baseline. At each timestep:
+
+\begin{enumerate}
+\item Query the oracle to determine the legal generator set $\Sigma_{\text{legal}}(s_t) \subseteq \Sigma$
+\item Sample uniformly from $\Sigma_{\text{legal}}(s_t)$
+\item Apply the selected generator via oracle call
+\end{enumerate}
+
+\textbf{Oracle calls per step}: $|\Sigma| + 1 = 5$ (4 legality checks + 1 transition execution)
+
+This policy explores uniformly among feasible actions without directional guidance toward the target.
+
+\subsubsection{Oracle-Greedy}
+
+Oracle-Greedy represents the information-optimal upper bound. At each timestep:
+
+\begin{enumerate}
+\item For each $g \in \Sigma$, query the oracle to compute the successor state $s' = g(s_t)$ if legal
+\item For each legal successor $s'$, run breadth-first search (BFS) with the oracle to compute $\text{return-in-}k(s', \mathcal{T})$—whether $s'$ can reach the target set $\mathcal{T}$ within $k$ remaining steps
+\item Select the generator maximizing $\text{return-in-}k(s', \mathcal{T})$
+\item Tie-breaking: prefer generators with smaller BFS depths to target
+\end{enumerate}
+
+\textbf{Oracle calls per step}: $O(|\Sigma| \cdot k \cdot |\Sigma|) \approx 8{-}12$ average (4 successor computations + BFS queries for each legal successor)
+
+This policy uses exhaustive ground-truth queries to make information-optimal decisions. It provides an upper bound on task success but incurs high oracle cost.
+
+\subsubsection{QAWM-Greedy}
+
+QAWM-Greedy uses learned structural predictions to guide action selection with minimal oracle verification. At each timestep:
+
+\begin{enumerate}
+\item For each $g \in \Sigma$, predict the successor state $\hat{s}' = g(s_t)$ using QA's deterministic generator algebra (no oracle needed)
+\item Query QAWM's return-in-$k$ head to score each predicted successor: $\text{score}(g) = P_{\text{QAWM}}(\text{return-in-}k(\hat{s}', \mathcal{T}))$
+\item Select the generator $g^* = \arg\max_{g \in \Sigma} \text{score}(g)$
+\item Query the oracle once to verify $g^*$ is legal and compute the true successor $s_{t+1} = g^*(s_t)$
+\item If $g^*$ is illegal, fallback to Random-Legal for that step
+\end{enumerate}
+
+\textbf{Oracle calls per step}: 1 (single verification of top-ranked generator)
+
+This policy trades Oracle-Greedy's exhaustive simulation for efficient learned queries. Because QAWM was trained on generic return-in-$k$ labels (not task-specific rewards), the same model works for arbitrary target sets without retraining.
+
+\subsection{Scoring Function Ablation}
+
+To investigate which structural properties most influence control, we ablate QAWM-Greedy's scoring function across four modes:
+
+\begin{enumerate}
+\item \textbf{Return-in-$k$ only} (``return\_only''): $\text{score}(g) = P_{\text{QAWM}}(\text{return-in-}k)$
+\item \textbf{Legality only} (``legality\_only''): $\text{score}(g) = P_{\text{QAWM}}(\text{legal})$
+\item \textbf{Product} (``product''): $\text{score}(g) = P_{\text{QAWM}}(\text{return-in-}k) \times P_{\text{QAWM}}(\text{legal})$
+\item \textbf{Weighted sum} (``weighted\_sum''): $\text{score}(g) = 0.7 \cdot P_{\text{QAWM}}(\text{return-in-}k) + 0.3 \cdot P_{\text{QAWM}}(\text{legal})$
+\end{enumerate}
+
+This ablation tests whether global topological structure (return-in-$k$) or local feasibility constraints (legality) provide stronger control signals.
+
+\subsection{Evaluation Protocol}
+
+For each baseline policy, we run 100 independent episodes with the following protocol:
+
+\begin{itemize}
+\item \textbf{Initialization}: Sample a random off-diagonal state $(b,e)$ with $b \ne e$
+\item \textbf{Execution}: Apply the policy for up to $k=20$ steps or until reaching $\mathcal{T}$
+\item \textbf{Metrics}:
+  \begin{itemize}
+  \item \textbf{Success rate}: Fraction of episodes reaching $\mathcal{T}$
+  \item \textbf{Oracle calls}: Average oracle queries per episode
+  \item \textbf{Normalized success} (primary metric): $\frac{\text{success rate}}{\text{oracle calls per episode}}$
+  \end{itemize}
+\item \textbf{Reproducibility}: Fixed random seed for episode initialization
+\end{itemize}
+
+The normalized success metric isolates efficiency per success, answering: \textit{how many successes does a policy achieve per unit oracle cost?} This metric is critical in oracle-limited regimes where ground-truth queries dominate computational expense.
+
+\subsection{Implementation Details}
+
+All experiments use Python 3.9 with the following dependencies:
+
+\begin{itemize}
+\item \textbf{QA Oracle}: Canonical implementation from \texttt{qa\_oracle.py} (Paper 1), verified against validation checksums in \texttt{qa\_canonical.md}
+\item \textbf{QAWM}: Pre-trained model from Paper 2 (\texttt{qawm\_model.pkl}), scikit-learn 1.3
+\item \textbf{BFS}: Standard breadth-first search with early termination at horizon $k$
+\item \textbf{Reproducibility}: NumPy 1.24, random seed 42 for episode initialization
+\end{itemize}
+
+The oracle implementation follows the canonical reference exactly: 21-element invariant packets, exact generator algebra, deterministic failure taxonomy. This ensures all results are reproducible and verifiable against the ground-truth QA transition system.

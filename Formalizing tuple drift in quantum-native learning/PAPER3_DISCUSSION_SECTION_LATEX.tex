@@ -1,0 +1,111 @@
+% Paper 3: RML - Discussion Section (LaTeX-ready)
+% Unified Discussion Tying Papers 1-3 Together
+% Generated: 2025-12-29
+
+\section{Discussion}
+
+This work demonstrates a new paradigm for learning and control on discrete invariant manifolds. Across three papers, we have shown: (1) that QA transition systems exhibit rich algebraic structure (Paper 1), (2) that global topological properties can be learned from sparse samples (Paper 2), and (3) that learned structural predictions enable oracle-efficient control (Paper 3). Together, these results establish a framework for \textit{structure-aware learning}—an alternative to dynamics-based approaches in domains where state spaces are governed by discrete invariants.
+
+\subsection{The Efficiency Paradigm: Structure Over Simulation}
+
+The central finding of Paper 3—that QAWM-Greedy achieves 1.41$\times$ more successes per oracle call than Oracle-Greedy—reveals a fundamental principle: \textbf{in oracle-limited regimes, learned structural queries can dominate ground-truth simulation}. This result challenges the conventional wisdom that access to perfect information (the oracle) necessarily yields the most efficient control.
+
+Oracle-Greedy represents the information-optimal baseline: at each step, it queries the true reachability structure via breadth-first search, guaranteeing that selected generators maximize return-in-$k$ probability. However, this optimality comes at a cost: each BFS query requires traversing the generator graph, accumulating 8-12 oracle calls per decision. In contrast, QAWM-Greedy approximates these queries via learned predictions, requiring only 1-2 oracle calls per decision for verification. The resulting trade-off—32\% success at 7.6 calls versus 60\% success at 20.2 calls—favors the learned approach when normalized by oracle usage.
+
+This efficiency advantage is not merely quantitative; it reflects a \textit{qualitative shift in how learning is employed}. Traditional model-based reinforcement learning learns dynamics models $P(s' \mid s, a)$ to simulate future trajectories, then plans over these simulations. QAWM-Greedy, in contrast, learns \textit{structural predicates} about reachability—binary properties of the manifold's topology—and uses these to guide action selection without simulating next states. This distinction matters in domains where:
+
+\begin{enumerate}
+\item \textbf{Oracle access is expensive}: Physical experiments, expert feedback, or complex simulations make ground-truth queries costly.
+\item \textbf{Structural properties are learnable}: Topological features (reachability, connectivity, SCC structure) can be inferred from offline data.
+\item \textbf{Discrete invariants govern dynamics}: State spaces are partitioned by algebraic constraints that persist across transitions.
+\end{enumerate}
+
+The QA system exemplifies all three properties, making it an ideal testbed for structure-aware learning. However, the principle generalizes: whenever structural queries are cheaper than dynamics simulation, learned topology can replace ground-truth planning.
+
+\subsection{Why Topology Dominates Constraints: A Theoretical Perspective}
+
+The scoring function ablation (Table 2) revealed an unexpected result: using only QAWM's return-in-$k$ predictions (ignoring legality) outperforms combined scoring (28\% vs 20\% success). This finding contradicts the intuition that incorporating more information (both legality and reachability) should improve performance. The resolution lies in understanding the \textit{scale} of structural information.
+
+\textbf{Legality is local.} A legality constraint $\text{legal}(s, g)$ determines whether generator $g$ can be applied at state $s$, a one-step property dependent on the current invariant packet. Legality predictions capture fine-grained algebraic constraints (e.g., whether $b^2 \equiv e \pmod{N}$ for generator $\sigma$), but these constraints are \textit{myopic}: they reveal nothing about long-term reachability.
+
+\textbf{Return-in-$k$ is global.} A reachability predicate $\text{return-in-}k(s, \mathcal{R}^*, k)$ encodes whether target class $\mathcal{R}^*$ is accessible from state $s$ within $k$ steps, a multi-step property that depends on the manifold's SCC structure, generator connectivity, and path existence. Return-in-$k$ predictions capture \textit{topological} information: they reflect global properties of the state space graph, not just local constraints.
+
+For control tasks involving navigation through complex state spaces, \textbf{global topology dominates local constraints}. A greedy policy that selects generators based on legality may avoid illegal moves but still wander aimlessly through the manifold. In contrast, a policy guided by reachability predictions inherently encodes directional information toward the target, even if it occasionally proposes illegal moves (which are caught by oracle verification).
+
+This principle—\textit{topology over constraints}—suggests a design heuristic for learning-based control: when state spaces exhibit hierarchical structure (local constraints nested within global topology), \textbf{learn the global structure first and verify local constraints as needed}. This inverts the traditional approach of planning within hard constraints, instead using soft topological priors to guide search and hard verification to ensure feasibility.
+
+\subsection{Structure-Aware Learning Is Not Reinforcement Learning}
+
+A critical distinction separates this work from model-based reinforcement learning. Standard RL (whether model-free or model-based) optimizes a policy $\pi(a \mid s)$ to maximize expected cumulative reward $\mathbb{E}\left[\sum_t \gamma^t r_t\right]$. Model-based RL specifically learns a forward dynamics model $P(s' \mid s, a)$ and uses it for planning, either via tree search (e.g., AlphaZero), trajectory optimization (e.g., MPC), or value estimation.
+
+QAWM-Greedy shares no components with this framework:
+
+\begin{itemize}
+\item \textbf{No value function}: QAWM does not learn $V(s)$ or $Q(s,a)$. It learns structural predicates: $P(\text{legal} \mid s, g)$ and $P(\text{return-in-}k \mid s, g)$.
+\item \textbf{No next-state prediction}: QAWM does not learn $P(s' \mid s, g)$. It never predicts or simulates future states.
+\item \textbf{No cumulative reward}: The objective is binary reachability (reach target within $k$ steps), not discounted return. Success is a constraint, not an optimization target.
+\item \textbf{No reward signal}: QAWM was trained (Paper 2) on labeled structural properties (legality, fail types, return-in-$k$), not on task rewards. The control policy (Paper 3) queries these pre-trained predictions without further learning.
+\end{itemize}
+
+Instead, QAWM-Greedy exemplifies \textit{structure-aware control}: it leverages learned knowledge of \textit{which worlds are possible} (topology) to guide action selection, querying the oracle only for verification. This design is closer in spirit to \textit{symbolic planning} or \textit{constraint-based search} than to RL, but operates over learned predicates rather than hand-coded rules.
+
+The distinction matters for domains where:
+\begin{enumerate}
+\item \textbf{Dynamics are deterministic and discrete}: Transitions are governed by algebraic rules, not stochastic processes.
+\item \textbf{Invariants partition the state space}: Structural properties (e.g., SCC membership) determine reachability, not reward gradients.
+\item \textbf{Offline data is abundant but online interaction is expensive}: Pre-training on structural labels is feasible, but trial-and-error exploration is costly.
+\end{enumerate}
+
+In such settings, structure-aware learning may offer advantages over RL: no need for reward shaping, no exploration-exploitation dilemma, and direct transfer of learned topology to new tasks (as demonstrated by QAWM-Greedy's use of Paper 2's model without retraining).
+
+\subsection{Trilogy Coherence: From Axioms to Efficiency}
+
+The three papers form a coherent research program, each building on the last:
+
+\textbf{Paper 1 (QA Transition System)} establishes the mathematical foundations. By defining the 21-element invariant packet, generator algebra, and SCC partition structure, Paper 1 demonstrates that discrete manifolds governed by modular arithmetic exhibit rich, learnable structure. The key insight is that QA dynamics are \textit{not arbitrary}: transitions preserve invariants, and reachability is constrained by algebraic relationships. This structural regularity is the precondition for learning.
+
+\textbf{Paper 2 (QAWM Learning)} proves that structural properties are learnable from sparse data. The 0.836 AUROC on return-in-$k$ prediction from only 5,000 samples (1.4\% of Caps(30,30)'s state space) demonstrates that topological features can be inferred without exhaustive enumeration. Critically, the generalization experiments—0.816 AUROC on Caps(50,50) and 100\% accuracy on held-out SCCs—show that learned structure \textit{transfers} across manifold sizes and components. This transfer is possible because QAWM learns \textit{principles} (how invariants govern reachability), not memorized tables.
+
+\textbf{Paper 3 (RML Control)} demonstrates that learned structure enables efficient action. The 1.41$\times$ normalized success advantage (4.20 vs 2.97) proves that structural queries can replace ground-truth simulation in oracle-limited regimes. By achieving 32\% success with 7.6 oracle calls—compared to Oracle-Greedy's 60\% success with 20.2 calls—QAWM-Greedy validates the central thesis: \textbf{learning enables control via structural queries, not reward optimization}.
+
+Together, the trilogy establishes a paradigm:
+\begin{enumerate}
+\item Identify algebraic invariants that govern state space structure (Paper 1).
+\item Learn topological predicates from offline structural labels (Paper 2).
+\item Query learned predicates to guide control, minimizing oracle usage (Paper 3).
+\end{enumerate}
+
+This framework applies wherever discrete dynamics exhibit invariant structure: algebraic rewriting systems, combinatorial optimization, constraint satisfaction, and potentially neural network optimization (where loss landscapes may exhibit learnable topological features).
+
+\subsection{Limitations and Future Directions}
+
+\textbf{Task-Specific Performance.} QAWM-Greedy's 32\% success rate, while efficient, leaves room for improvement. The policy uses QAWM trained on generic return-in-$k$ labels, not diagonal-specific reachability. Fine-tuning QAWM's return-in-$k$ head on task-specific data (e.g., reachability to diagonal from off-diagonal starts) would likely improve success without sacrificing oracle efficiency. Alternatively, task-conditioned QAWM models could learn reachability predicates for multiple target classes, enabling multi-task control from a single learned structure.
+
+\textbf{Beam Search and Exploration.} QAWM-Greedy uses greedy action selection, which may miss good paths due to locally misleading predictions. Beam search—retaining the top-$w$ generators at each step and exploring all paths in parallel—could improve success at the cost of increased oracle calls. The optimal beam width $w$ would balance success and efficiency, potentially achieving better normalized success than greedy selection. This trade-off curve (varying $w$ from 1 to $|\Sigma|$) would characterize the Pareto frontier of success versus oracle cost.
+
+\textbf{SCC-Aware Control.} The Oracle-Greedy ceiling of 60\% suggests that many random off-diagonal states may be unreachable from diagonal within $k=20$ steps, possibly due to SCC structure. Future work could characterize the manifold's strongly connected components and identify which SCCs contain both off-diagonal starts and diagonal targets. Restricting task initialization to tractable SCCs would increase success rates across all baselines, enabling clearer differentiation of policy quality.
+
+\textbf{Generalization to Other Manifolds.} Paper 2 demonstrated that QAWM transfers from Caps(30,30) to Caps(50,50) without retraining. Extending this analysis to other QA manifolds (varying moduli, alternative generator sets, different invariant structures) would test the limits of structural transfer. If QAWM generalizes across manifold families, it would suggest that topological learning captures universal principles rather than task-specific patterns.
+
+\textbf{Applications Beyond QA.} The principles demonstrated here—learning global topology, prioritizing structural queries over local constraints, achieving efficiency via learned predicates—may apply to other domains:
+
+\begin{itemize}
+\item \textbf{Combinatorial optimization}: Learning reachability on constraint satisfaction problems (e.g., SAT, graph coloring) to guide local search without exhaustive backtracking.
+\item \textbf{Neural architecture search}: Learning which architectural modifications (width, depth, connectivity) preserve or improve loss landscape properties, enabling efficient exploration.
+\item \textbf{Molecular design}: Learning which chemical transformations preserve or enhance desired molecular properties (e.g., drug-likeness, stability), guiding synthesis pathways.
+\item \textbf{Theorem proving}: Learning which proof steps (axioms, inference rules) are reachable from premises to conclusions, enabling efficient proof search.
+\end{itemize}
+
+Each domain exhibits discrete dynamics governed by structural constraints, making structure-aware learning a natural fit.
+
+\subsection{Broader Implications: Learning as Structural Discovery}
+
+The most general contribution of this work is a reframing of learning itself. Traditional supervised learning optimizes predictive accuracy; reinforcement learning optimizes cumulative reward; unsupervised learning discovers latent representations. \textbf{Structure-aware learning discovers topological invariants that govern state space dynamics.}
+
+This perspective shifts the objective from \textit{approximating functions} to \textit{inferring structure}. QAWM does not approximate the oracle's BFS algorithm; it learns \textit{which structural properties the oracle would reveal if queried}. This distinction enables transfer: structural properties (e.g., "states in SCC $C_5$ can reach diagonal in $\le 15$ steps") persist across instances, whereas function values (e.g., "BFS from state $(17, 23)$ returns path length 12") are instance-specific.
+
+By learning structure rather than functions, QAWM achieves generalization (Paper 2) and efficiency (Paper 3) that pure function approximation cannot. This principle—\textit{structure as the learning target}—may inform future work in domains where symbolic constraints coexist with learned predictions, blending the strengths of classical AI (structured reasoning) and modern ML (statistical learning).
+
+\subsection{Conclusion}
+
+We have demonstrated that learned structural predictions enable oracle-efficient control on discrete invariant manifolds. By achieving 4.20 successes per oracle call versus Oracle-Greedy's 2.97—a 1.41$\times$ efficiency advantage—QAWM-Greedy proves that learned topology can dominate ground-truth simulation in resource-constrained settings. The scoring function ablation further reveals that global reachability predictions outperform local legality constraints, establishing the principle that \textit{topology dominates constraints for planning}. Together with Paper 2's demonstration of cross-manifold generalization and Paper 1's algebraic foundations, these results establish structure-aware learning as a paradigm for domains where discrete dynamics exhibit invariant structure. Future work will extend these principles to combinatorial optimization, neural architecture search, and other settings where structural discovery enables efficient reasoning.

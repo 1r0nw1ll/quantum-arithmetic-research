@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Observer Core Cert family [159]: certifies qa_mod() A1 compliance (output always in {1,...,m}, never 0) and compute_qci() determinism. These two functions are the computational atoms of the topographic observer pipeline used across all 6 empirical domains (finance, EEG, audio, seismology, climate, ERA5). qa_mod formula: ((int(x)-1) % m) + 1. T2 compliance: no float->int feedback. Source: qa_lab/qa_observer/core.py, canonical from 46_seismic_topographic_observer.py."
+}

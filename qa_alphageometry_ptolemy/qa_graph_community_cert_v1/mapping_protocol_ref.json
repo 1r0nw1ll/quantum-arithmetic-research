@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Graph Community Cert family [158]: certifies QA feature map dimensions (qa21=21, qa27=27, qa83=83 invariants from (b,e) tuples) and community detection benchmarks on standard networks (football 115 nodes, karate 34 nodes, dolphins 62 nodes). Feature maps compute canonical 16 QA identities + chromogeometric invariants. Chromogeometry check: C^2+F^2=G^2 (Wildberger Theorem 6). Source: codex_on_QA/ Rust spectral clustering + Python Louvain pipeline."
+}

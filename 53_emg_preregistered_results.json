@@ -1,0 +1,33 @@
+{
+  "domain": "emg_preregistered",
+  "phi_preregistered": -1,
+  "classification": "disorder-stress",
+  "data": "PhysioNet EMG Database",
+  "n_windows": 1183,
+  "n_normal": 197,
+  "n_pathological": 1006,
+  "real_result": {
+    "r2_base": 0.3619237948771157,
+    "r2_full": 0.9695841022501155,
+    "delta_r2": 0.6076603073729998,
+    "p_qa_add": 1.7270265495511064e-132
+  },
+  "surrogate_summary": {
+    "permuted_segments": {
+      "real": 0.6076603073729998,
+      "surr_mean": 0.0018974941631246334,
+      "surr_std": 0.0018592224309666912,
+      "rank_p": 0.0,
+      "beats": true
+    },
+    "random_fracs": {
+      "real": 0.6076603073729998,
+      "surr_mean": 0.0019048040356001656,
+      "surr_std": 0.00200287647671515,
+      "rank_p": 0.0,
+      "beats": true
+    }
+  },
+  "n_surr_pass": 2,
+  "phi_confirmed": true
+}

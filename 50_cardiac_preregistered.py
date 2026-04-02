@@ -32,8 +32,9 @@ import os, sys, json
 import numpy as np
 import pandas as pd
 from sklearn.cluster import KMeans
+from sklearn.linear_model import LogisticRegression
+from sklearn.preprocessing import StandardScaler
 from scipy import stats
-from scipy.special import expit
 from scipy.stats import chi2 as chi2_dist
 import wfdb
 
@@ -142,32 +143,29 @@ def compute_orbit_features(features_array, km, n_clusters, m=MODULUS):
 
 
 def nested_model(y, baseline, feat1, feat2):
-    """Nested logistic regression: y ~ baseline vs y ~ baseline + feat1 + feat2."""
-    def _std(x):
-        sd = x.std()
-        return (x - x.mean()) / (sd + 1e-9)
+    """Nested logistic regression using sklearn (fast C implementation).
+    y ~ baseline vs y ~ baseline + feat1 + feat2.
+    Returns McFadden pseudo-R² and LR test p-value."""
+    scaler = StandardScaler()
 
-    def _fit(X, y, lr=0.1, n_iter=3000, l2=1e-4):
-        beta = np.zeros(X.shape[1])
-        for _ in range(n_iter):
-            logits = np.clip(X @ beta, -30, 30)
-            probs = expit(logits)
-            beta -= lr * (X.T @ (probs - y) / len(y) + l2 * beta)
-        return beta
+    # Null model (intercept only)
+    n = len(y)
+    p1 = y.mean()
+    ll0 = float(np.sum(y * np.log(p1 + 1e-10) + (1 - y) * np.log(1 - p1 + 1e-10)))
 
-    def _ll(X, y, beta):
-        logits = np.clip(X @ beta, -30, 30)
-        probs = np.clip(expit(logits), 1e-10, 1 - 1e-10)
-        return float(np.sum(y * np.log(probs) + (1 - y) * np.log(1 - probs)))
+    # Base model: y ~ baseline
+    X1 = scaler.fit_transform(baseline.reshape(-1, 1))
+    lr1 = LogisticRegression(C=1e4, max_iter=1000, solver='lbfgs')
+    lr1.fit(X1, y)
+    p1_pred = np.clip(lr1.predict_proba(X1)[:, 1], 1e-10, 1 - 1e-10)
+    ll1 = float(np.sum(y * np.log(p1_pred) + (1 - y) * np.log(1 - p1_pred)))
 
-    X0 = np.ones((len(y), 1))
-    ll0 = _ll(X0, y, _fit(X0, y))
-
-    X1 = np.c_[np.ones(len(y)), _std(baseline)]
-    ll1 = _ll(X1, y, _fit(X1, y))
-
-    X2 = np.c_[np.ones(len(y)), _std(baseline), _std(feat1), _std(feat2)]
-    ll2 = _ll(X2, y, _fit(X2, y))
+    # Full model: y ~ baseline + feat1 + feat2
+    X2 = scaler.fit_transform(np.c_[baseline, feat1, feat2])
+    lr2 = LogisticRegression(C=1e4, max_iter=1000, solver='lbfgs')
+    lr2.fit(X2, y)
+    p2_pred = np.clip(lr2.predict_proba(X2)[:, 1], 1e-10, 1 - 1e-10)
+    ll2 = float(np.sum(y * np.log(p2_pred) + (1 - y) * np.log(1 - p2_pred)))
 
     r2_base = 1.0 - ll1 / ll0 if ll0 != 0 else 0.0
     r2_full = 1.0 - ll2 / ll0 if ll0 != 0 else 0.0
@@ -186,18 +184,36 @@ def main():
     print("Data: MIT-BIH Arrhythmia Database (PhysioNet)")
     print("=" * 72)
 
-    # Download and extract features
-    all_beats = []
-    records_used = 0
-    for rec in MITBIH_RECORDS:
-        print(f"  Downloading {rec}...", end=" ")
-        beats = extract_beat_features(rec)
-        n_norm = sum(1 for b in beats if b["type"] == "normal")
-        n_arr = sum(1 for b in beats if b["type"] == "arrhythmia")
-        print(f"{n_norm} normal, {n_arr} arrhythmia")
-        if beats:
-            all_beats.extend(beats)
-            records_used += 1
+    # Download and extract features (with caching)
+    cache_path = os.path.join(HERE, ".cardiac_cache.npz")
+    if os.path.exists(cache_path):
+        print("Loading cached cardiac data...")
+        cached = np.load(cache_path, allow_pickle=True)
+        features_all = cached["features"]
+        types_all = cached["types"]
+        rr_all = cached["rr"]
+        records_used = int(cached["records_used"])
+        all_beats = [{"type": t, "features": f, "rr_prev": r}
+                     for t, f, r in zip(types_all, features_all, rr_all)]
+    else:
+        all_beats = []
+        records_used = 0
+        for rec in MITBIH_RECORDS:
+            print(f"  Downloading {rec}...", end=" ")
+            beats = extract_beat_features(rec)
+            n_norm = sum(1 for b in beats if b["type"] == "normal")
+            n_arr = sum(1 for b in beats if b["type"] == "arrhythmia")
+            print(f"{n_norm} normal, {n_arr} arrhythmia")
+            if beats:
+                all_beats.extend(beats)
+                records_used += 1
+        # Cache for re-runs
+        np.savez(cache_path,
+                 features=np.array([b["features"] for b in all_beats]),
+                 types=np.array([b["type"] for b in all_beats]),
+                 rr=np.array([b["rr_prev"] for b in all_beats]),
+                 records_used=np.array(records_used))
+        print(f"  Cached to {cache_path}")
 
     n_normal = sum(1 for b in all_beats if b["type"] == "normal")
     n_arrhythmia = sum(1 for b in all_beats if b["type"] == "arrhythmia")

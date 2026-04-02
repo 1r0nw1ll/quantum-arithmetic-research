@@ -1,0 +1,34 @@
+{
+  "domain": "cardiac_preregistered",
+  "phi_preregistered": -1,
+  "classification": "disorder-stress",
+  "data": "MIT-BIH Arrhythmia Database",
+  "n_beats": 94536,
+  "n_normal": 75013,
+  "n_arrhythmia": 19523,
+  "records_used": 48,
+  "real_result": {
+    "r2_base": 0.06641216358518043,
+    "r2_full": 0.10363875323879779,
+    "delta_r2": 0.03722658965361736,
+    "p_qa_add": 0.0
+  },
+  "surrogate_summary": {
+    "permuted_segments": {
+      "real": 0.03722658965361736,
+      "surr_mean": 2.0701362290246326e-05,
+      "surr_std": 1.9937074282359712e-05,
+      "rank_p": 0.0,
+      "beats": true
+    },
+    "random_fracs": {
+      "real": 0.03722658965361736,
+      "surr_mean": 2.0373653399772262e-05,
+      "surr_std": 1.9572444280783368e-05,
+      "rank_p": 0.0,
+      "beats": true
+    }
+  },
+  "n_surr_pass": 2,
+  "phi_confirmed": true
+}

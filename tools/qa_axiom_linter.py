@@ -16,7 +16,12 @@ Exit codes:
     2 = usage error
 
 Rule groups:
-    T2-b  — Theorem NT: continuous → discrete boundary violations
+    T2-b  — Theorem NT: continuous → discrete boundary violations (code-level)
+    T2-D  — Theorem NT: design-level violations (stochastic/random graph generators,
+              continuous distributions as QA data sources). Added 2026-04-02 after
+              repeated violations using SBM/random models to test QA hypotheses.
+              Use # noqa: T2-D-N if the random process is an explicit observer
+              projection (null model, noise annealing, measurement simulation).
     A1    — No-Zero axiom
     A2    — Derived coordinates
     S1    — No x**2
@@ -209,6 +214,71 @@ RULES: list[ViolationRule] = [
         severity="WARNING",
         qa_file_only=True,
     ),
+
+    # T2-DESIGN: Stochastic/random graph generators used to produce QA test data.
+    # Random graph models (SBM, Erdos-Renyi, Barabasi-Albert) are continuous
+    # processes that violate Theorem NT at the DESIGN level: the graph has no QA
+    # structure, so QA properties measured on it are meaningless noise.
+    # These are ERRORS in QA experiment files, not just warnings.
+    ViolationRule(
+        id="T2-D-1",
+        axiom="T2-D",
+        description="stochastic_block_model generates random graphs — T2 design violation: "
+                    "use QA-native graph construction (generator moves, harmonic edges) for "
+                    "testing QA hypotheses. If used as a NULL MODEL, add # noqa: T2-D-1 and "
+                    "declare as observer projection in QA_COMPLIANCE",
+        pattern=re.compile(r'stochastic_block_model\s*\('),
+        severity="ERROR",
+        qa_file_only=True,
+    ),
+    ViolationRule(
+        id="T2-D-2",
+        axiom="T2-D",
+        description="erdos_renyi_graph generates random graphs — T2 design violation: "
+                    "no QA structure to test. Use QA-native graph construction or declare "
+                    "as observer projection with # noqa: T2-D-2",
+        pattern=re.compile(r'erdos_renyi_graph\s*\(|gnp_random_graph\s*\(|gnm_random_graph\s*\('),
+        severity="ERROR",
+        qa_file_only=True,
+    ),
+    ViolationRule(
+        id="T2-D-3",
+        axiom="T2-D",
+        description="barabasi_albert_graph generates random graphs — T2 design violation: "
+                    "preferential attachment is a continuous process. Declare as observer "
+                    "projection with # noqa: T2-D-3",
+        pattern=re.compile(r'barabasi_albert_graph\s*\('),
+        severity="ERROR",
+        qa_file_only=True,
+    ),
+    ViolationRule(
+        id="T2-D-4",
+        axiom="T2-D",
+        description="random_partition_graph generates random graphs — T2 design violation",
+        pattern=re.compile(r'random_partition_graph\s*\(|planted_partition_graph\s*\('),
+        severity="ERROR",
+        qa_file_only=True,
+    ),
+    ViolationRule(
+        id="T2-D-5",
+        axiom="T2-D",
+        description="np.random used for QA state/graph generation — T2 design violation: "
+                    "random processes are observer projections, not QA inputs. If used for "
+                    "noise annealing or measurement simulation, add # noqa: T2-D-5",
+        pattern=re.compile(r'np\.random\.(?:normal|randn|standard_normal|multivariate_normal)\s*\('),
+        severity="WARNING",
+        qa_file_only=True,
+    ),
+    ViolationRule(
+        id="T2-D-6",
+        axiom="T2-D",
+        description="scipy.stats continuous distribution used in QA context — continuous "
+                    "functions are observer projections only (Theorem NT). Declare as such "
+                    "or add # noqa: T2-D-6",
+        pattern=re.compile(r'scipy\.stats\.(?:norm|t|chi2|f|gamma|beta|uniform)\.(?:rvs|pdf|cdf)\s*\('),
+        severity="WARNING",
+        qa_file_only=True,
+    ),
 ]
 
 # Required declaration block pattern — all QA empirical scripts must declare their observer
@@ -245,6 +315,9 @@ _ORBIT_RULES_FILENAME = "qa_orbit_rules.py"
 def is_qa_file(lines: list[str]) -> bool:
     """Return True if the file contains QA-specific keywords indicating it does QA work."""
     content = "\n".join(lines)
+    # A file with QA_COMPLIANCE declaration is definitively a QA file
+    if QA_COMPLIANCE_DECLARATION.search(content):
+        return True
     return any(p.search(content) for p in QA_INDICATOR_PATTERNS)
 
 def is_comment_or_string(line: str, match_start: int) -> bool:

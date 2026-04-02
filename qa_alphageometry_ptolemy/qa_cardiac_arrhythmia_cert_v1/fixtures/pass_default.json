@@ -1,0 +1,36 @@
+{
+  "schema_version": "QA_CARDIAC_ARRHYTHMIA_CERT.v1",
+  "certificate_id": "qa.cert.cardiac_arrhythmia.pass.default.v1",
+  "cert_type": "qa_cardiac_arrhythmia_cert",
+  "title": "Cardiac Arrhythmia PASS: QA orbit features predict arrhythmia beyond R-R interval",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "data_source": {
+    "database": "MIT-BIH Arrhythmia Database",
+    "n_records": 48,
+    "n_beats": 94536
+  },
+
+  "delta_r2": {
+    "value": 0.037,
+    "baseline": "R-R interval",
+    "p_value": 1e-7
+  },
+
+  "surrogate_tests": {
+    "surrogates_beaten": 2,
+    "surrogates_total": 2,
+    "method": "phase-randomized + amplitude-adjusted"
+  },
+
+  "phi_transformation": {
+    "pre_registered": true,
+    "phi_D": -1,
+    "interpretation": "disorder-stress"
+  },
+
+  "witnesses": ["script_cardiac_arrhythmia_qa.py"],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

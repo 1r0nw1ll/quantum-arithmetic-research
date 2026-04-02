@@ -1,0 +1,33 @@
+{
+  "schema_version": "QA_SURROGATE_METHODOLOGY_CERT.v1",
+  "certificate_id": "qa.cert.surrogate_methodology.pass.default.v1",
+  "cert_type": "qa_surrogate_methodology_cert",
+  "title": "Surrogate Methodology PASS: corrected null design with 6 domains confirmed",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "null_design": {
+    "targets_fixed": true,
+    "surrogate_qci_only": true,
+    "description": "Real targets held constant; only QCI is recomputed from surrogate signals"
+  },
+
+  "circular_null_problem": {
+    "identified": true,
+    "description": "Original design randomized both QCI and targets, inflating null baseline",
+    "resolution": "Fix real targets; randomize QCI only; compare to fixed-target baseline"
+  },
+
+  "confirmed_domains": [
+    "finance",
+    "EEG",
+    "audio",
+    "climate",
+    "ERA5",
+    "cardiac"
+  ],
+
+  "witnesses": ["script_surrogate_corrected.py"],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

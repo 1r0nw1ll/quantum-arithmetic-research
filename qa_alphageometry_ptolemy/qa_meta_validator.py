@@ -3796,6 +3796,38 @@ def _validate_historical_nav_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_inertial_nav_cert_family(base_dir: str) -> Optional[str]:
+    """QA Inertial Nav Cert family [170] — zero drift proof. Classical INS O(ε√N) vs QA exact 0. 3 routes × 4 noise levels. Tier 1 computational. Checks IN_1+QA_EXACT/DRIFT/ZERO/RATIO/W/F; 1 PASS+1 FAIL; self-test ok"""
+    import subprocess
+    d = os.path.join(base_dir, "qa_inertial_nav_cert_v1")
+    v = os.path.join(d, "qa_inertial_nav_cert_validate.py")
+    if not os.path.exists(v):
+        return "missing qa_inertial_nav_cert_v1/qa_inertial_nav_cert_validate.py"
+    proc = subprocess.run([sys.executable, v, "--self-test"], capture_output=True, text=True, timeout=60, cwd=d)
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_inertial_nav_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_inertial_nav_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_planetary_qn_cert_family(base_dir: str) -> Optional[str]:
+    """QA Planetary QN Cert family [171] — solar system QN catalog. 10 bodies shape+orbital. Earth-Jupiter b=59, Earth-Uranus b=101 harmonics. Saturn prime AP. Tier 2. Checks PQ_1+TUPLE/TRIPLE/ECC/HARMONIC/W/F; 1 PASS+1 FAIL; self-test ok"""
+    import subprocess
+    d = os.path.join(base_dir, "qa_planetary_qn_cert_v1")
+    v = os.path.join(d, "qa_planetary_qn_cert_validate.py")
+    if not os.path.exists(v):
+        return "missing qa_planetary_qn_cert_v1/qa_planetary_qn_cert_validate.py"
+    proc = subprocess.run([sys.executable, v, "--self-test"], capture_output=True, text=True, timeout=60, cwd=d)
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_planetary_qn_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_planetary_qn_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_ellipsoid_geodesic_cert_family(base_dir: str) -> Optional[str]:
     """QA Ellipsoid Geodesic Cert family [168] — certifies geodesic properties of WGS84 quantum ellipse in QN arithmetic. M/N=F/(d²-e²·s_φ). b/a=√F/d. I=C-F=-10039<0→ellipse. Quantum lattice: s_φ=C/G≈Tropic, e²/G=eccentricity resonance. Tier 1. Checks EG_1+QN/CURV/AXIS/DISC/LATTICE/W/F; 1 PASS+1 FAIL; self-test ok"""
     import subprocess
@@ -5414,6 +5446,138 @@ def _validate_observer_core_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_cardiac_arrhythmia_cert_family(base_dir: str) -> Optional[str]:
+    """QA Cardiac Arrhythmia Cert family [170] — certifies QA orbit features as independent predictors of arrhythmia classification beyond R-R interval baseline using MIT-BIH (48 records, 94536 beats). dR2=+0.037 p<10^-6; 2/2 surrogates beaten; Phi(D)=-1 pre-registered. Checks CAR_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_cardiac_arrhythmia_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cardiac_arrhythmia_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cardiac_arrhythmia_cert_v1/qa_cardiac_arrhythmia_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_cardiac_arrhythmia_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_cardiac_arrhythmia_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_cardiac_arrhythmia_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_emg_pathology_cert_family(base_dir: str) -> Optional[str]:
+    """QA EMG Pathology Cert family [171] — certifies QA orbit features as independent predictors of EMG pathology classification beyond RMS using PhysioNet EMG (3 records, 1203 windows). dR2=+0.608 p<10^-6; 2/2 surrogates beaten; Phi(D)=-1 pre-registered. Checks EMG_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_emg_pathology_cert_v1")
+    validator = os.path.join(fam_dir, "qa_emg_pathology_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_emg_pathology_cert_v1/qa_emg_pathology_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_emg_pathology_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_emg_pathology_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_emg_pathology_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_era5_reanalysis_cert_family(base_dir: str) -> Optional[str]:
+    """QA ERA5 Reanalysis Cert family [172] — certifies QCI as predictor of atmospheric variability using WeatherBench2 ERA5 (3297 days x 15 channels, 500hPa). r=+0.46, partial r=+0.43; 4/4 surrogates beaten. Checks ERA_1+DATA/R/PARTIAL/SURR/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_era5_reanalysis_cert_v1")
+    validator = os.path.join(fam_dir, "qa_era5_reanalysis_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_era5_reanalysis_cert_v1/qa_era5_reanalysis_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_era5_reanalysis_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_era5_reanalysis_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_era5_reanalysis_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_surrogate_methodology_cert_family(base_dir: str) -> Optional[str]:
+    """QA Surrogate Methodology Cert family [173] — certifies corrected surrogate null design: real targets fixed, surrogate QCI only. Circular null problem identified and resolved. 6/8 domains confirmed. Checks SRM_1+DESIGN/CIRCULAR/DOMAINS/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_surrogate_methodology_cert_v1")
+    validator = os.path.join(fam_dir, "qa_surrogate_methodology_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_surrogate_methodology_cert_v1/qa_surrogate_methodology_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_surrogate_methodology_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_surrogate_methodology_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_surrogate_methodology_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_phi_transformation_cert_family(base_dir: str) -> Optional[str]:
+    """QA Phi Transformation Cert family [174] — certifies Phi(D) transformation law: disorder-stress vs order-stress classification. 2/2 pre-registered (cardiac, EMG), 6/6 post-hoc consistent. Domain requirement: temporal multi-channel signals with non-trivial baselines. Checks PHI_1+CLASS/PREREG/POSTHOC/REQ/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_phi_transformation_cert_v1")
+    validator = os.path.join(fam_dir, "qa_phi_transformation_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_phi_transformation_cert_v1/qa_phi_transformation_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_phi_transformation_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_phi_transformation_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_phi_transformation_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_cross_domain_invariance_cert_family(base_dir: str) -> Optional[str]:
+    """QA Cross-Domain Invariance Cert family [175] — certifies 3 structural invariants (surrogate survival, independent information, domain-general architecture) across 6 Tier 3 domains. Checks CDI_1+INV1/INV2/INV3/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_cross_domain_invariance_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cross_domain_invariance_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cross_domain_invariance_cert_v1/qa_cross_domain_invariance_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_cross_domain_invariance_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_cross_domain_invariance_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_cross_domain_invariance_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -5994,6 +6158,46 @@ FAMILY_SWEEPS = [
      "QA slicing: latitude circles R²=a²d²c_φ/(d²-e²s_φ); meridian=shape QN ellipse (self-similar); chromo C/F/G curve families; 24 Pisano longitude bands=time zones; Tropic≈C/G quantum point; Tier 1+2; checks SL_1+LAT/MER/CHROMO/BAND/W/F; 1 PASS+1 FAIL; self-test ok",
      "169_qa_ellipsoid_slice_cert",
      "qa_ellipsoid_slice_cert_v1", True),
+    (170, "QA Cardiac Arrhythmia Cert family",
+     _validate_cardiac_arrhythmia_cert_family,
+     "MIT-BIH 48 records 94536 beats; dR2=+0.037 beyond R-R interval p<10^-6; 2/2 surrogates beaten; Phi(D)=-1 pre-registered and confirmed (disorder-stress); checks CAR_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "170_qa_cardiac_arrhythmia_cert",
+     "qa_cardiac_arrhythmia_cert_v1", True),
+    (171, "QA EMG Pathology Cert family",
+     _validate_emg_pathology_cert_family,
+     "PhysioNet EMG 3 records 1203 windows (healthy/myopathy/neuropathy); dR2=+0.608 beyond RMS p<10^-6; 2/2 surrogates beaten; Phi(D)=-1 pre-registered; checks EMG_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "171_qa_emg_pathology_cert",
+     "qa_emg_pathology_cert_v1", True),
+    (172, "QA ERA5 Reanalysis Cert family",
+     _validate_era5_reanalysis_cert_family,
+     "WeatherBench2 ERA5 3297 days x 15 channels 500hPa; r=+0.46 partial r=+0.43; 4/4 surrogates beaten; checks ERA_1+DATA/R/PARTIAL/SURR/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "172_qa_era5_reanalysis_cert",
+     "qa_era5_reanalysis_cert_v1", True),
+    (173, "QA Surrogate Methodology Cert family",
+     _validate_surrogate_methodology_cert_family,
+     "Corrected null design: real targets fixed, surrogate QCI only; circular null problem identified and resolved; 6/8 domains confirmed; checks SRM_1+DESIGN/CIRCULAR/DOMAINS/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "173_qa_surrogate_methodology_cert",
+     "qa_surrogate_methodology_cert_v1", True),
+    (174, "QA Phi Transformation Cert family",
+     _validate_phi_transformation_cert_family,
+     "Phi(D) transformation law: disorder-stress vs order-stress; 2/2 pre-registered (cardiac, EMG); 6/6 post-hoc consistent; domain requirement: temporal multi-channel signals; checks PHI_1+CLASS/PREREG/POSTHOC/REQ/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "174_qa_phi_transformation_cert",
+     "qa_phi_transformation_cert_v1", True),
+    (175, "QA Cross-Domain Invariance Cert family",
+     _validate_cross_domain_invariance_cert_family,
+     "3 structural invariants: surrogate survival, independent information, domain-general architecture; 6 Tier 3 domains confirmed; checks CDI_1+INV1/INV2/INV3/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "175_qa_cross_domain_invariance_cert",
+     "qa_cross_domain_invariance_cert_v1", True),
+    (176, "QA Inertial Nav Cert family",
+     _validate_inertial_nav_cert_family,
+     "Zero drift proof: classical INS O(ε√N) vs QA exact 0; 3 routes × 4 noise levels (ULP/trig/MEMS/cheap); ratio→∞; FPGA: ~10% logic of sin/cos pipeline; Theorem NT: only error = observer projection; Tier 1 computational; checks IN_1+QA_EXACT/DRIFT/ZERO/RATIO/W/F; 1 PASS+1 FAIL; self-test ok",
+     "176_qa_inertial_nav_cert",
+     "qa_inertial_nav_cert_v1", True),
+    (177, "QA Planetary QN Cert family",
+     _validate_planetary_qn_cert_family,
+     "Solar system QN catalog: 10 bodies shape+orbital; Earth-Jupiter b=59, Earth-Uranus b=101 harmonics; Saturn (79,139,199) prime AP; char latitudes via 2ε/(1+ε²); Earth Tropic match Tier 2 p≈0.013; Tier 2 structural; checks PQ_1+TUPLE/TRIPLE/ECC/HARMONIC/W/F; 1 PASS+1 FAIL; self-test ok",
+     "177_qa_planetary_qn_cert",
+     "qa_planetary_qn_cert_v1", True),
 ]
 
 

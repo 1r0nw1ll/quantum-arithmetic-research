@@ -1,0 +1,6 @@
+# Build artifacts
+rust_ingestion_pull/target/
+
+# Outputs
+out/*.json
+

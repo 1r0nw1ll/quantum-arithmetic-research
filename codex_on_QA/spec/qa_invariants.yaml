@@ -1,0 +1,51 @@
+canonical:
+  - { name: b, type: base, expr: "b" }
+  - { name: e, type: base, expr: "e" }
+  - { name: d, type: derived, expr: "b + e" }
+  - { name: a, type: derived, expr: "b + 2*e" }
+
+  - { name: B, type: square, expr: "b^2" }
+  - { name: E, type: square, expr: "e^2" }
+  - { name: D, type: square, expr: "d^2" }
+  - { name: A, type: square, expr: "a^2" }
+
+  - { name: X, type: triangle, expr: "e*d" }
+  - { name: C, type: triangle, expr: "2*X" }
+  - { name: F, type: triangle, expr: "b*a" }
+  - { name: G, type: triangle, expr: "D + E" }
+
+  - { name: L, type: composite, expr: "C*F/12" }
+  - { name: H, type: composite, expr: "C + F" }
+  - { name: I, type: composite, expr: "abs(C - F)" }
+
+  - { name: J, type: ellipse, expr: "b*d" }
+  - { name: K, type: ellipse, expr: "d*a" }
+  - { name: W, type: ellipse, expr: "d*(e + a)" }
+  - { name: Y, type: ellipse, expr: "A - D" }
+  - { name: Z, type: ellipse, expr: "E + K" }
+  - { name: h, type: ellipse, expr: "d*sqrt(a*b)" }
+
+canonical_expanded:
+  - { name: eps, type: ratio, expr: "e / a" }
+  - { name: F_over_C, type: ratio, expr: "F / C" }
+  - { name: G_over_C, type: ratio, expr: "G / C" }
+  - { name: R_h, type: radius, expr: "sqrt(b^2 + e^2 + d^2 + a^2)" }
+  - { name: E_QA, type: energy, expr: "G^2 - C*F" }
+  - { name: theta, type: angle, expr: "atan(e / b)" }
+
+modes:
+  qa21:
+    include:
+      - canonical
+  qa27:
+    include:
+      - canonical
+      - canonical_expanded
+  qa83:
+    include:
+      - canonical
+      - canonical_expanded
+      - modular
+      - physical
+      - ml
+

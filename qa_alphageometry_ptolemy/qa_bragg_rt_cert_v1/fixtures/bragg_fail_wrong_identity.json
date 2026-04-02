@@ -1,0 +1,44 @@
+{
+  "schema_version": "QA_BRAGG_RT_CERT.v1",
+  "certificate_id": "qa.cert.bragg_rt.fail.wrong_identity.v1",
+  "cert_type": "qa_bragg_rt_cert",
+  "title": "Bragg FAIL: Wrong identity n²Q_λ = 2Q_d·s (factor 2 instead of 4)",
+  "created_utc": "2026-04-01T00:00:00Z",
+  "tier": "Tier 1",
+  "transcendental_free": true,
+
+  "_fixture_purpose": "FAIL fixture: uses the WRONG identity with factor 2 instead of 4 in n²Q_λ = 4Q_d·s. The witness declares Q_d that is 2x too large (as if the identity were n²Q_λ = 2Q_d·s). This catches errors in the squaring derivation.",
+
+  "witnesses": [
+    {
+      "label": "WRONG: factor 2 instead of 4",
+      "n": 1,
+      "Q_lambda": "237344836",
+      "Q_d": "6362371208",
+      "s": "59336209/3181185604",
+      "_note": "Q_d is 2x too large: 2*56402²=6362371208 instead of 56402²=3181185604. n²Q_λ=237344836 ≠ 4*6362371208*s"
+    },
+    {
+      "label": "Padding witness 1",
+      "n": 1,
+      "Q_lambda": "237344836",
+      "Q_d": "6362371208",
+      "s": "59336209/3181185604"
+    },
+    {
+      "label": "Padding witness 2",
+      "n": 1,
+      "Q_lambda": "237344836",
+      "Q_d": "6362371208",
+      "s": "59336209/3181185604"
+    }
+  ],
+
+  "miller_witnesses": [],
+  "crystal_witnesses": [],
+
+  "fail_ledger": [
+    {"check_id": "BRT_BRAGG", "reason": "Wrong factor: n²Q_λ ≠ 4Q_d·s with Q_d=2a² instead of a²"}
+  ],
+  "result": "FAIL"
+}

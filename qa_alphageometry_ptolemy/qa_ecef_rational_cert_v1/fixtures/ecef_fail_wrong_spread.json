@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_ECEF_RATIONAL_CERT.v1",
+  "certificate_id": "qa.cert.ecef_rational.fail.wrong_spread.v1",
+  "cert_type": "qa_ecef_rational_cert",
+  "title": "ECEF FAIL: Wrong spread values (sin instead of sin²)",
+  "created_utc": "2026-04-01T00:00:00Z",
+  "tier": "Tier 1",
+
+  "_fixture_purpose": "FAIL fixture: uses sin(φ) instead of sin²(φ) as the spread. This is the most common mistake — confusing angle with spread. The validator should catch this because s_phi ≠ sin²(lat).",
+
+  "witnesses": [
+    {
+      "label": "London WRONG (using sin not sin²)",
+      "lat_deg": 51.4769,
+      "lon_deg": -0.0005,
+      "h_meters": 0,
+      "s_phi": 0.782413,
+      "s_lambda": 0.000008727,
+      "spread_tolerance": 1e-6,
+      "tolerance_m_sq": 0.01,
+      "_note": "s_phi=sin(51.4769°)=0.7824 instead of sin²(51.4769°)=0.6121"
+    },
+    {
+      "label": "Tokyo WRONG",
+      "lat_deg": 35.6762,
+      "lon_deg": 139.6503,
+      "h_meters": 0,
+      "s_phi": 0.583204,
+      "s_lambda": 0.647452,
+      "spread_tolerance": 1e-6,
+      "tolerance_m_sq": 0.01
+    },
+    {
+      "label": "Sydney WRONG",
+      "lat_deg": -33.8688,
+      "lon_deg": 151.2093,
+      "h_meters": 0,
+      "s_phi": 0.557193,
+      "s_lambda": 0.481611,
+      "spread_tolerance": 1e-6,
+      "tolerance_m_sq": 0.01
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "ECEF_SPREAD", "reason": "Used sin(φ) instead of sin²(φ) = spread. Spread = sin² always."}
+  ],
+  "result": "FAIL"
+}

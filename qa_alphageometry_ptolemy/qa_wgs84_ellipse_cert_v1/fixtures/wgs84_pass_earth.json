@@ -1,0 +1,97 @@
+{
+  "schema_version": "QA_WGS84_ELLIPSE_CERT.v1",
+  "certificate_id": "qa.cert.wgs84_ellipse.pass.earth.v1",
+  "cert_type": "qa_wgs84_ellipse_cert",
+  "title": "WGS84 Ellipsoid = QA Quantum Ellipse — Earth shape QN (101,9,110,119) + orbit QN (59,1,60,61)",
+  "created_utc": "2026-04-01T00:00:00Z",
+  "tier": "Tier 1 — exact reformulation",
+
+  "_fixture_purpose": "Anchor fixture certifying that the WGS84 reference ellipsoid is a QA quantum ellipse. Shape QN (101,9,110,119): eccentricity e/d=9/110=0.081818 matches WGS84 0.081819 to 0.001%. Axis ratio sqrt(ab)/d=sqrt(12019)/110=0.996647 matches WGS84 b/a to 7 significant figures. Orbit QN (59,1,60,61): eccentricity 1/60=0.01667 matches orbital eccentricity 0.01671 to 0.25%. Triple (1980,12019,12181) satisfies C^2+F^2=G^2. Both QNs are primitive (gcd=1). WGS84 source: NIMA Technical Report 8350.2 (2000).",
+
+  "shape_qn": {"b": 101, "e": 9, "d": 110, "a": 119},
+  "shape_triple": {
+    "C": 1980, "F": 12019, "G": 12181,
+    "_note": "C=2de=2*110*9=1980, F=ab=101*119=12019, G=d*d+e*e=12100+81=12181"
+  },
+
+  "shape_match": {
+    "wgs84_eccentricity": 0.0818191908,
+    "qa_eccentricity": 0.0818181818,
+    "eccentricity_relative_error": 1.23e-05,
+    "eccentricity_error_percent": 0.0012,
+    "wgs84_axis_ratio": 0.9966471893,
+    "qa_axis_ratio": 0.9966472722,
+    "axis_ratio_relative_error": 8.32e-08,
+    "axis_ratio_sig_figs": 7,
+    "_note": "101 is prime. 119=7*17. 110=2*5*11. Triple is primitive: gcd(1980,12019,12181)=1."
+  },
+
+  "orbit_qn": {"b": 59, "e": 1, "d": 60, "a": 61},
+  "orbit_triple": {
+    "C": 120, "F": 3599, "G": 3601,
+    "_note": "C=2*60*1=120, F=59*61=3599, G=60*60+1*1=3601"
+  },
+
+  "orbit_match": {
+    "j2000_eccentricity": 0.0167086,
+    "qa_eccentricity": 0.0166667,
+    "eccentricity_relative_error": 0.00251,
+    "eccentricity_error_percent": 0.25,
+    "_note": "59 and 61 are twin primes. Earth orbit is nearly circular (ecc < 0.02)."
+  },
+
+  "tolerance_ecc": 0.001,
+  "tolerance_axis": 1e-6,
+  "tolerance_orbit_ecc": 0.01,
+
+  "earth_moon_halley_chain": {
+    "earth_orbit": {"b": 59, "e": 1, "d": 60, "a": 61},
+    "moon_shape":  {"b": 58, "e": 3, "d": 61, "a": 64},
+    "halley":      {"b": 1, "e": 29, "d": 30, "a": 59},
+    "shared_primes": {
+      "earth_moon": "share 61 (Earth a = Moon d)",
+      "earth_halley": "share 59 (Earth b = Halley a)",
+      "moon_halley": "share 29 (Moon b = 2*29, Halley e = 29)"
+    },
+    "_note": "Ben's Law of Harmonics: bodies sharing prime factors in QNs are harmonically resonant."
+  },
+
+  "pythagorean_check": {
+    "shape": "1980*1980+12019*12019=3920400+144456361=148376761=12181*12181",
+    "orbit": "120*120+3599*3599=14400+12952801=12967201=3601*3601"
+  },
+
+  "qa_connection": {
+    "quantum_ellipse": "Semi-major=d, semi-minor=sqrt(F)=sqrt(ab). Foci at +/-e from center. Axis ratio = sqrt(ab)/d.",
+    "conic_type_shape": "ellipse (I=C-F=1980-12019=-10039 < 0)",
+    "conic_type_orbit": "ellipse (I=C-F=120-3599=-3479 < 0)",
+    "chromogeometry": "C=Qg(d,e)=2de (green), F=Qr(d,e)=d*d-e*e=ab (red), G=Qb(d,e)=d*d+e*e (blue)",
+    "uhg_null": "Both triples are null points in UHG: F*F+C*C=G*G"
+  },
+
+  "sources": [
+    "WGS84: NIMA Technical Report 8350.2, 3rd ed. (2000)",
+    "Quantum Ellipse: Ben Iverson, Pythagoras and the Quantum World, Vol. 1",
+    "Rational Trigonometry: Norman Wildberger, Divine Proportions (2005)",
+    "QN fitting: Will Dale, qa_geodesy_bridge.py (2026-04-01)"
+  ],
+
+  "validation_checks": [
+    {"check_id": "WGS_1", "description": "schema_version is QA_WGS84_ELLIPSE_CERT.v1", "passed": true},
+    {"check_id": "WGS_QN", "description": "shape QN b+e=d, b+2e=a, gcd=1", "passed": true,
+     "details": "101+9=110, 101+18=119, gcd(101,9)=1"},
+    {"check_id": "WGS_TRIPLE", "description": "C=2de, F=ab, G=d*d+e*e, C*C+F*F=G*G", "passed": true,
+     "details": "1980=2*110*9, 12019=101*119, 12181=12100+81, 148376761=148376761"},
+    {"check_id": "WGS_ECC", "description": "eccentricity matches WGS84 within tolerance", "passed": true,
+     "details": "9/110=0.081818 vs 0.081819, rel_err=1.2e-5 < 0.001"},
+    {"check_id": "WGS_AXIS", "description": "axis ratio matches WGS84 within tolerance", "passed": true,
+     "details": "sqrt(12019)/110=0.9966473 vs 0.9966472, rel_err=8.3e-8 < 1e-6"},
+    {"check_id": "WGS_ORBIT", "description": "orbit QN eccentricity matches", "passed": true,
+     "details": "1/60=0.01667 vs 0.01671, rel_err=0.0025 < 0.01"},
+    {"check_id": "WGS_W", "description": "at least 1 witness present", "passed": true},
+    {"check_id": "WGS_F", "description": "fail detection: no errors, declared PASS", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

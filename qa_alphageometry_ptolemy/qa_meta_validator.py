@@ -3612,6 +3612,167 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_fibonacci_resonance_cert_family(base_dir: str) -> Optional[str]:
+    """QA Fibonacci Resonance Cert family [162] — certifies MMRs preferentially select Fibonacci ratios. 60 resonances across 8+ systems (solar+exoplanet). Order-1: 33/43 (77%) Fib vs 22% expected, p<10⁻⁶. Unique ratios: 8/14 (57%) vs 31% expected, p=0.040. Fisher combined p<10⁻⁶. QA: T-operator=Fib shift makes Fib ratios deeper attractors. Tier 2→3. Checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fr_dir    = os.path.join(base_dir, "qa_fibonacci_resonance_cert_v1")
+    validator = os.path.join(fr_dir, "qa_fibonacci_resonance_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_resonance_cert_v1/qa_fibonacci_resonance_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=fr_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_fibonacci_resonance_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_fibonacci_resonance_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_fibonacci_resonance_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_ecef_rational_cert_family(base_dir: str) -> Optional[str]:
+    """QA ECEF Rational Cert family [161] — certifies geodetic→ECEF via spreads/crosses only. X²=(N+h)²·c_φ·c_λ, Y²=(N+h)²·c_φ·s_λ, Z²=(N(1-e²)+h)²·s_φ, N²=a²/(1-e²·s_φ). 6 cities all hemispheres. X²+Y²=(N+h)²·c_φ identity. Tier 1. Checks ECEF_1+SPREAD/N/XYZ/SUM/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    ecef_dir  = os.path.join(base_dir, "qa_ecef_rational_cert_v1")
+    validator = os.path.join(ecef_dir, "qa_ecef_rational_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ecef_rational_cert_v1/qa_ecef_rational_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=ecef_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_ecef_rational_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_ecef_rational_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_ecef_rational_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_bragg_rt_cert_family(base_dir: str) -> Optional[str]:
+    """QA Bragg RT Cert family [160] — certifies Bragg's law as rational trigonometry: n²Q_λ=4Q_d·s. Derivation: square nλ=2d·sinθ. Miller Q(h,k,l)=h²+k²+l². Crystal spreads: cubic=1, hexagonal γ=3/4. NaCl Cu Kα 4 reflections exact. Tier 1 algebraic identity. Checks BRT_1+BRAGG/MILLER/SPREAD/PYTH/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    brt_dir   = os.path.join(base_dir, "qa_bragg_rt_cert_v1")
+    validator = os.path.join(brt_dir, "qa_bragg_rt_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_bragg_rt_cert_v1/qa_bragg_rt_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=brt_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_bragg_rt_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_bragg_rt_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_bragg_rt_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_human_needs_sdt_cert_family(base_dir: str) -> Optional[str]:
+    """QA Human Needs SDT Cert family [162] — certifies structural alignment between Ryan & Deci Self-Determination Theory (3 validated needs: Autonomy, Competence, Relatedness) and QA paired architecture (generators, state+derivative, reach+integral). Canonical mapping: Certainty=b, Variety=e, Significance=d, Connection=a, Growth=DeltaT, Contribution=SigmaT. 5/5 structural predictions confirmed against SDT literature (n=48550, 27 countries). Theorem NT compliant (observer projection). Source: Will Dale Apr/Oct 2025, Ryan & Deci 2022, Tony Robbins/Cloe Madanes. Checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS; self-test ok"""
+    import subprocess
+    hn_dir    = os.path.join(base_dir, "qa_human_needs_sdt_cert_v1")
+    validator = os.path.join(hn_dir, "qa_human_needs_sdt_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_human_needs_sdt_cert_v1/qa_human_needs_sdt_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=hn_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_human_needs_sdt_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_human_needs_sdt_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_human_needs_sdt_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_dead_reckoning_cert_family(base_dir: str) -> Optional[str]:
+    """QA Dead Reckoning Cert family [163] — certifies QA T-operator as exact dead reckoning engine on mod-m lattice. T^k·(b₀,e₀) mod m via augmented matrix exponentiation. Zero computational drift (classical DR accumulates sin/cos float error). Three chromogeometric metrics per direction: G=d²+e² (blue/Euclidean), F=d²-e² (red/Minkowski), C=2de (green/area), C²+F²=G². Compass rose mod-24 = QA orbit partition. Theorem NT compliant. Tier 2. Checks DR_1+TOP/EXACT/DRIFT/CHROMO/COMPASS/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    dr_dir    = os.path.join(base_dir, "qa_dead_reckoning_cert_v1")
+    validator = os.path.join(dr_dir, "qa_dead_reckoning_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_dead_reckoning_cert_v1/qa_dead_reckoning_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=dr_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_dead_reckoning_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_dead_reckoning_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_dead_reckoning_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_gnomonic_rt_cert_family(base_dir: str) -> Optional[str]:
+    """QA Gnomonic RT Cert family [164] — certifies gnomonic map projection via rational trigonometry. Gnomonic quadrance Q=spread_c/cross_c=tan²(angular_dist). Great circles → straight lines (collinearity cross product <10⁻¹²). Berggren tree generators produce Pythagorean triples C²+F²=G² = discrete geodesic steps on cone. London tangent point, 5 cities. Tier 1 (quadrance) + Tier 2 (Berggren). Checks GN_1+QUAD/SPREAD/COLLINEAR/BERGGREN/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    gn_dir    = os.path.join(base_dir, "qa_gnomonic_rt_cert_v1")
+    validator = os.path.join(gn_dir, "qa_gnomonic_rt_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_gnomonic_rt_cert_v1/qa_gnomonic_rt_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=gn_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_gnomonic_rt_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_gnomonic_rt_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_gnomonic_rt_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_wgs84_ellipse_cert_family(base_dir: str) -> Optional[str]:
+    """QA WGS84 Ellipse Cert family [156] — certifies WGS84 reference ellipsoid = QA quantum ellipse. Shape QN (101,9,110,119): ecc=9/110 matches WGS84 0.081819 to 0.001%; axis ratio sqrt(12019)/110 matches to 7 sig figs. Orbit QN (59,1,60,61): ecc=1/60 matches orbital 0.01671 to 0.25%. Triple (1980,12019,12181): C*C+F*F=G*G. Tier 1 exact reformulation. Checks WGS_1+QN/TRIPLE/ECC/AXIS/ORBIT/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    wgs_dir   = os.path.join(base_dir, "qa_wgs84_ellipse_cert_v1")
+    validator = os.path.join(wgs_dir, "qa_wgs84_ellipse_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_wgs84_ellipse_cert_v1/qa_wgs84_ellipse_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=wgs_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_wgs84_ellipse_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_wgs84_ellipse_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_wgs84_ellipse_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_bearden_phase_conjugate_cert_family(base_dir: str) -> Optional[str]:
     """QA Bearden Phase Conjugate Cert family [155] — certifies structural parallel between Bearden's pumped phase conjugate mirror theory ('stress is a pumper') and the QCI opposite-sign discovery. Global QCI rises (pump=coupling tightens) while local QCI drops (conjugate=trajectories scatter). QCI_gap = phase conjugation signature. Source: Will Dale 2026-04-01, Bearden scalar EM, SVP-adjacent. Checks BPC_1+MODEL/MAP/SIGN/EMP/SVP/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -5086,6 +5247,72 @@ def test_spine_v1_compliance() -> bool:
     return True
 
 
+def _validate_pim_kernel_cert_family(base_dir: str) -> Optional[str]:
+    """QA PIM Kernel Cert family [157] — certifies PIM kernel correctness: CRT (coprime+non-coprime), RESIDUE_SELECT, TORUS_SHIFT, ROLLING_SUM_PHASE, A1 coordinate-layer documentation. Checks PIM_1+CRT/KERNEL/A1/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pim_kernel_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pim_kernel_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pim_kernel_cert_v1/qa_pim_kernel_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_pim_kernel_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_pim_kernel_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_pim_kernel_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_graph_community_cert_family(base_dir: str) -> Optional[str]:
+    """QA Graph Community Cert family [158] — certifies QA feature map dimensions (qa21=21, qa27=27, qa83=83) and community detection benchmarks on standard networks. Chromogeometry check: C*C+F*F=G*G. Checks GC_1+DIM/CHROMO/BENCH/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_graph_community_cert_v1")
+    validator = os.path.join(fam_dir, "qa_graph_community_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_graph_community_cert_v1/qa_graph_community_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_graph_community_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_graph_community_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_graph_community_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_observer_core_cert_family(base_dir: str) -> Optional[str]:
+    """QA Observer Core Cert family [159] — certifies qa_mod() A1 compliance (output in {1,...,m}, never 0) and compute_qci() determinism across all 6 empirical domains. T2 firewall: no float->int feedback. Checks OC_1+A1/QCI/T2/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_observer_core_cert_v1")
+    validator = os.path.join(fam_dir, "qa_observer_core_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_observer_core_cert_v1/qa_observer_core_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_observer_core_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_observer_core_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_observer_core_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -5481,6 +5708,41 @@ FAMILY_SWEEPS = [
      "Bearden 'stress is a pumper' = QCI opposite-sign: global QCI+ (pump/coupling tightens) + local QCI- (conjugate/trajectories scatter); QCI_gap partial r=-0.17 to -0.42; 100% robust; permutation-validated; SVP lineage Keely→Pond→Bearden; checks BPC_1+MODEL/MAP/SIGN/EMP/SVP/W/F; 1 PASS + 1 FAIL; self-test ok",
      "155_qa_bearden_phase_conjugate_cert",
      "qa_bearden_phase_conjugate_cert_v1", True),
+    (156, "QA WGS84 Ellipse Cert family",
+     _validate_wgs84_ellipse_cert_family,
+     "WGS84 reference ellipsoid = QA quantum ellipse; shape QN (101,9,110,119) ecc=9/110 matches WGS84 0.08182 to 0.001%; axis ratio sqrt(12019)/110 matches 7 sig figs; orbit QN (59,1,60,61) ecc=1/60 matches 0.01671 to 0.25%; triple (1980,12019,12181) C²+F²=G²; Tier 1 exact reformulation; checks WGS_1+QN/TRIPLE/ECC/AXIS/ORBIT/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "156_qa_wgs84_ellipse_cert",
+     "qa_wgs84_ellipse_cert_v1", True),
+    (163, "QA Fibonacci Resonance Cert family",
+     _validate_fibonacci_resonance_cert_family,
+     "MMRs preferentially select Fibonacci ratios; 60 resonances across 8+ planetary systems (solar+exoplanet); order-1: 33/43 (77%) Fib vs 22% expected p<10⁻⁶; unique 8/14 (57%) vs 31% p=0.040; Fisher combined p<10⁻⁶; QA T-operator=Fibonacci shift makes Fib ratios deeper attractors; three-body problem selection principle; Tier 2→3; checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "163_qa_fibonacci_resonance_cert",
+     "qa_fibonacci_resonance_cert_v1", True),
+    (161, "QA ECEF Rational Cert family",
+     _validate_ecef_rational_cert_family,
+     "Geodetic→ECEF via spreads/crosses: X²=(N+h)²·c_φ·c_λ, Y²=(N+h)²·c_φ·s_λ, Z²=(N(1-e²)+h)²·s_φ; 6 cities all hemispheres + poles; X²+Y²=(N+h)²·c_φ identity; Tier 1 exact reformulation; checks ECEF_1+SPREAD/N/XYZ/SUM/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "161_qa_ecef_rational_cert",
+     "qa_ecef_rational_cert_v1", True),
+    (160, "QA Bragg RT Cert family",
+     _validate_bragg_rt_cert_family,
+     "Bragg's law as rational trigonometry: n²Q_λ=4Q_d·s (square both sides of nλ=2d·sinθ); Miller Q(h,k,l)=h²+k²+l² for cubic; crystal spreads: cubic all=1, hexagonal γ=3/4; NaCl Cu Kα 4 reflections exact integer arithmetic; Tier 1 algebraic identity; checks BRT_1+BRAGG/MILLER/SPREAD/PYTH/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "160_qa_bragg_rt_cert",
+     "qa_bragg_rt_cert_v1", True),
+    (157, "QA PIM Kernel Cert family",
+     _validate_pim_kernel_cert_family,
+     "PIM kernel correctness: CRT coprime+non-coprime, RESIDUE_SELECT, TORUS_SHIFT, ROLLING_SUM_PHASE; A1 coordinate-layer note; checks PIM_1+CRT/KERNEL/A1/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "157_qa_pim_kernel_cert",
+     "qa_pim_kernel_cert_v1", True),
+    (158, "QA Graph Community Cert family",
+     _validate_graph_community_cert_family,
+     "QA feature map dimensions qa21=21 qa27=27 qa83=83; chromogeometry C*C+F*F=G*G; benchmark graphs football/karate; checks GC_1+DIM/CHROMO/BENCH/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "158_qa_graph_community_cert",
+     "qa_graph_community_cert_v1", True),
+    (159, "QA Observer Core Cert family",
+     _validate_observer_core_cert_family,
+     "qa_mod() A1 compliance (output in {1,...,m} never 0) + compute_qci() determinism; 6 domain witnesses; T2 no float->int feedback; checks OC_1+A1/QCI/T2/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "159_qa_observer_core_cert",
+     "qa_observer_core_cert_v1", True),
     (154, "QA T-Operator Coherence Cert family",
      _validate_t_operator_coherence_cert_family,
      "QCI = rolling T-operator prediction accuracy; finance partial r=-0.22 beyond RV (Tier A hardened); 84% robustness grid; cross-domain: EEG dR²=+0.21, audio r=+0.75; checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F; 2 PASS; self-test ok",
@@ -5591,6 +5853,21 @@ FAMILY_SWEEPS = [
      "empirical scaling cert for bounded factor-certificate witness caps on tested intervals [2,N]; checks schema, canonical hash, artifact parity, row recomputation, row-level honesty, and overall PASS/FAIL honesty; 1 PASS (100,250,500,1000 exact-match cert) + 1 FAIL (mock 500 mismatch cert), both validator-valid; self-test ok",
      "131_qa_prime_bounded_certificate_scaling_cert",
      "../qa_prime_bounded_certificate_scaling_cert_v1", True),
+    (162, "QA Human Needs SDT Cert family",
+     _validate_human_needs_sdt_cert_family,
+     "SDT 3 basic needs (Autonomy/Competence/Relatedness) = QA 3 paired types: (b,e) generators, (d,DeltaT) state+derivative, (a,SigmaT) reach+integral; canonical mapping: certainty=b, variety=e, significance=d, connection=a, growth=DeltaT, contribution=SigmaT; 5/5 structural predictions confirmed (SDT n=48550); Theorem NT compliant (observer projection); checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS; self-test ok",
+     "162_qa_human_needs_sdt_cert",
+     "qa_human_needs_sdt_cert_v1", True),
+    (163, "QA Dead Reckoning Cert family",
+     _validate_dead_reckoning_cert_family,
+     "T-operator exact DR on mod-m lattice; T^k·(b₀,e₀) via augmented 3x3 matrix exponentiation; zero computational drift vs classical sin/cos accumulation; chromogeometric triple C²+F²=G² per direction: G=position/F=hyperbolic/C=cross-track; compass rose mod-24 = orbit partition; Theorem NT; Tier 2; checks DR_1+TOP/EXACT/DRIFT/CHROMO/COMPASS/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "163_qa_dead_reckoning_cert",
+     "qa_dead_reckoning_cert_v1", True),
+    (164, "QA Gnomonic RT Cert family",
+     _validate_gnomonic_rt_cert_family,
+     "Gnomonic projection via spreads/crosses; Q=spread_c/cross_c=tan²(angular_dist); great circles→straight lines (collinearity <10⁻¹²); Berggren tree C²+F²=G² = discrete geodesic steps projecting to lines; London tangent 5 cities; Plimpton 322 = nav table; Tier 1+2; checks GN_1+QUAD/SPREAD/COLLINEAR/BERGGREN/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "164_qa_gnomonic_rt_cert",
+     "qa_gnomonic_rt_cert_v1", True),
 ]
 
 

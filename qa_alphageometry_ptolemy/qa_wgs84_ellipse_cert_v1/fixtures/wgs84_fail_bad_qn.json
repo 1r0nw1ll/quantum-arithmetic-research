@@ -1,0 +1,22 @@
+{
+  "schema_version": "QA_WGS84_ELLIPSE_CERT.v1",
+  "certificate_id": "qa.cert.wgs84_ellipse.fail.bad_qn.v1",
+  "cert_type": "qa_wgs84_ellipse_cert",
+  "title": "WGS84 FAIL: QN (2,1,3,4) does NOT match WGS84 — axis ratio 0.943 vs 0.997",
+  "created_utc": "2026-04-01T00:00:00Z",
+  "tier": "Tier 1 — exact reformulation",
+
+  "_fixture_purpose": "FAIL fixture demonstrating that an arbitrary QN (2,1,3,4) does NOT match WGS84. The axis ratio sqrt(ab)/d=sqrt(8)/3=0.943 is far from WGS84's 0.997. Eccentricity e/d=1/3=0.333 is 4x too large. This fixture validates the fail detection path.",
+
+  "shape_qn": {"b": 2, "e": 1, "d": 3, "a": 4},
+  "shape_triple": {"C": 6, "F": 8, "G": 10},
+
+  "tolerance_ecc": 0.001,
+  "tolerance_axis": 1e-6,
+
+  "fail_ledger": [
+    {"check_id": "WGS_ECC", "reason": "e/d=1/3=0.333 vs WGS84 0.082: relative error 3.07 >> 0.001"},
+    {"check_id": "WGS_AXIS", "reason": "sqrt(8)/3=0.943 vs WGS84 0.997: relative error 0.054 >> 1e-6"}
+  ],
+  "result": "FAIL"
+}

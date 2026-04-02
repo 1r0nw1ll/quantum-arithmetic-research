@@ -1,0 +1,61 @@
+{
+  "schema_version": "QA_FIBONACCI_RESONANCE_CERT.v1",
+  "certificate_id": "qa.cert.fibonacci_resonance.fail.not_significant.v1",
+  "cert_type": "qa_fibonacci_resonance_cert",
+  "title": "FAIL: Hypothetical catalogue where Fibonacci rate does not exceed expected",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+
+  "_fixture_purpose": "FAIL fixture: a hypothetical catalogue where resonances are uniformly distributed across ratio types, so Fibonacci rate ≈ expected. Tests that the validator correctly rejects non-significant results.",
+
+  "datasets": [
+    {"name": "hypothetical_uniform", "count": 30, "source": "synthetic"}
+  ],
+
+  "witness_systems": [
+    "Hypothetical System A",
+    "Hypothetical System B",
+    "Hypothetical System C"
+  ],
+
+  "catalogue": [
+    {"system": "A", "body1": "a1", "body2": "a2", "p": 2, "q": 1, "is_fibonacci": true, "source": "syn"},
+    {"system": "A", "body1": "a2", "body2": "a3", "p": 4, "q": 3, "is_fibonacci": false, "source": "syn"},
+    {"system": "A", "body1": "a3", "body2": "a4", "p": 5, "q": 4, "is_fibonacci": false, "source": "syn"},
+    {"system": "A", "body1": "a4", "body2": "a5", "p": 6, "q": 5, "is_fibonacci": false, "source": "syn"},
+    {"system": "A", "body1": "a5", "body2": "a6", "p": 7, "q": 6, "is_fibonacci": false, "source": "syn"},
+    {"system": "B", "body1": "b1", "body2": "b2", "p": 3, "q": 2, "is_fibonacci": true, "source": "syn"},
+    {"system": "B", "body1": "b2", "body2": "b3", "p": 8, "q": 7, "is_fibonacci": false, "source": "syn"},
+    {"system": "B", "body1": "b3", "body2": "b4", "p": 9, "q": 8, "is_fibonacci": false, "source": "syn"},
+    {"system": "B", "body1": "b4", "body2": "b5", "p": 10, "q": 9, "is_fibonacci": false, "source": "syn"},
+    {"system": "B", "body1": "b5", "body2": "b6", "p": 7, "q": 4, "is_fibonacci": false, "source": "syn"},
+    {"system": "C", "body1": "c1", "body2": "c2", "p": 3, "q": 1, "is_fibonacci": true, "source": "syn"},
+    {"system": "C", "body1": "c2", "body2": "c3", "p": 4, "q": 1, "is_fibonacci": false, "source": "syn"},
+    {"system": "C", "body1": "c3", "body2": "c4", "p": 7, "q": 3, "is_fibonacci": false, "source": "syn"},
+    {"system": "C", "body1": "c4", "body2": "c5", "p": 9, "q": 5, "is_fibonacci": false, "source": "syn"},
+    {"system": "C", "body1": "c5", "body2": "c6", "p": 7, "q": 2, "is_fibonacci": false, "source": "syn"},
+    {"system": "A", "body1": "a6", "body2": "a7", "p": 9, "q": 4, "is_fibonacci": false, "source": "syn"},
+    {"system": "B", "body1": "b6", "body2": "b7", "p": 7, "q": 5, "is_fibonacci": false, "source": "syn"},
+    {"system": "C", "body1": "c6", "body2": "c7", "p": 10, "q": 7, "is_fibonacci": false, "source": "syn"},
+    {"system": "A", "body1": "a7", "body2": "a8", "p": 5, "q": 2, "is_fibonacci": true, "source": "syn"},
+    {"system": "B", "body1": "b7", "body2": "b8", "p": 9, "q": 2, "is_fibonacci": false, "source": "syn"},
+    {"system": "C", "body1": "c7", "body2": "c8", "p": 10, "q": 3, "is_fibonacci": false, "source": "syn"}
+  ],
+
+  "statistics": {
+    "total_resonances": 21,
+    "fibonacci_count": 4,
+    "nonfibonacci_count": 17,
+    "observed_fibonacci_rate": 0.190,
+    "expected_fibonacci_rate": 0.312,
+    "p_value": 0.95,
+    "test": "binomial one-tailed"
+  },
+
+  "caveats": ["Synthetic data — no real observational content"],
+
+  "fail_ledger": [
+    {"check_id": "FR_STAT", "reason": "Observed Fibonacci rate 0.190 ≤ expected 0.312 — Fibonacci NOT overrepresented"}
+  ],
+  "result": "FAIL"
+}

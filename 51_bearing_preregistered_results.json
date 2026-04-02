@@ -1,0 +1,33 @@
+{
+  "domain": "bearing_fault_preregistered",
+  "phi_preregistered": -1,
+  "classification": "disorder-stress",
+  "data": "CWRU Bearing Data Center",
+  "n_windows": 3044,
+  "n_normal": 1652,
+  "n_fault": 1412,
+  "real_result": {
+    "r2_base": 0.9995704705155611,
+    "r2_full": 0.9996595643027321,
+    "delta_r2": 8.909378717092409e-05,
+    "p_qa_add": 0.8292168088240757
+  },
+  "surrogate_summary": {
+    "permuted_segments": {
+      "real": 8.909378717092409e-05,
+      "surr_mean": 0.00016209452687660552,
+      "surr_std": 6.731719182316161e-05,
+      "rank_p": 0.815,
+      "beats": false
+    },
+    "random_fracs": {
+      "real": 8.909378717092409e-05,
+      "surr_mean": 0.00015432032772059456,
+      "surr_std": 6.560083857513545e-05,
+      "rank_p": 0.78,
+      "beats": false
+    }
+  },
+  "n_surr_pass": 0,
+  "phi_confirmed": false
+}

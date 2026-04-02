@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA PIM Kernel Cert family [157]: certifies correctness of QA-native Processing-In-Memory kernels (RESIDUE_SELECT, TORUS_SHIFT, RADD_m, RMUL_m, MIRROR4, ROLLING_SUM_PHASE) and Chinese Remainder Theorem with non-coprime moduli support. Extracted from qa_graph_pim_repo_v2 vault artifact (Sept 2025), now at qa_lab/qa_pim/. PIM kernels operate at coordinate layer (0-indexed); QA state-level A1 enforcement at observer layer."
+}

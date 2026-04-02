@@ -1,0 +1,64 @@
+{
+  "domains": {
+    "finance": {
+      "phi": 1,
+      "stress_type": "order-stress",
+      "prediction": "Low QCI \u2192 high future vol (negative r)",
+      "observed_r": -0.31,
+      "observed_partial_r": -0.22,
+      "surrogate_pass": "3/4",
+      "tier": 3
+    },
+    "era5": {
+      "phi": -1,
+      "stress_type": "disorder-stress",
+      "prediction": "High QCI \u2192 high future variability (positive r)",
+      "observed_r": 0.4619670505297526,
+      "observed_partial_r": 0.4265915440301492,
+      "surrogate_pass": "4/4",
+      "tier": 3
+    },
+    "audio": {
+      "phi": 1,
+      "stress_type": "order-stress",
+      "prediction": "Higher OFR for dynamical signals (positive partial r)",
+      "observed_r": null,
+      "observed_partial_r": 0.752,
+      "surrogate_pass": "3/4",
+      "tier": 3
+    },
+    "eeg": {
+      "phi": -1,
+      "stress_type": "disorder-stress",
+      "prediction": "QA orbits distinguish seizure from baseline (positive \u0394R\u00b2)",
+      "observed_r": null,
+      "observed_partial_r": null,
+      "surrogate_pass": "2/3",
+      "tier": 3
+    },
+    "teleconnection": {
+      "phi": -1,
+      "stress_type": "disorder-stress",
+      "prediction": "Orbits discriminate ENSO phase (structural, not predictive)",
+      "observed_r": -0.0798816942691335,
+      "observed_partial_r": -0.134462458928236,
+      "surrogate_pass": "4/4 chi\u00b2, 0/4 partial r",
+      "tier": 2
+    },
+    "seismology": {
+      "phi": -1,
+      "stress_type": "disorder-stress",
+      "prediction": "QCI predicts future activity (positive r)",
+      "observed_r": 0.20793016302165265,
+      "observed_partial_r": 0.17807035347949668,
+      "surrogate_pass": "0/4",
+      "tier": 2
+    }
+  },
+  "invariants": {
+    "surrogate_survival": true,
+    "independent_information": true,
+    "domain_general_architecture": true,
+    "phi_sign_invariance": "consistent but not formally tested"
+  }
+}

@@ -24,6 +24,14 @@ Authority: `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md` | `QA_AXIOM
 python tools/qa_axiom_linter.py --all && cd qa_alphageometry_ptolemy && python qa_meta_validator.py
 ```
 
+## Security Audit (run daily or after infrastructure changes)
+
+```bash
+python tools/qa_security_audit.py
+```
+
+Checks: guardrail E2E (12 tests), agent security kernel (14 tests), collab bus agent registry, event log credential scan, GUARDRAIL_DENY report, bridge process status. All bridges MUST run with guardrail enabled (no `--no-guardrail` flag).
+
 ## Do Not Touch
 
 These directories/files are off-limits — never modify, delete, or reorganize:

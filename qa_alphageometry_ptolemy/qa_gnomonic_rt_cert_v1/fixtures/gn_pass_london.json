@@ -1,0 +1,148 @@
+{
+  "schema_version": "QA_GNOMONIC_RT_CERT.v1",
+  "certificate_id": "qa.cert.gnomonic_rt.pass.london.v1",
+  "cert_type": "qa_gnomonic_rt_cert",
+  "title": "Gnomonic Projection via Rational Trigonometry — London tangent point, 5 cities + great circle collinearity + Berggren tree",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 1 (gnomonic quadrance) + Tier 2 (Berggren structural)",
+
+  "_fixture_purpose": "Certifies that gnomonic map projection can be computed entirely via spreads and crosses. Gnomonic quadrance Q = spread_c / cross_c = tan²(angular_distance) matches classical x²+y² to float precision. Great circles project to collinear points (cross product < 10⁻¹²). Berggren tree generates Pythagorean triples for discrete geodesic navigation.",
+
+  "_derivation": "Classical gnomonic: x = cos(φ)sin(Δλ)/cos(c). Square: x² = (1-s)·sΔ/cos²(c) where s=sin²(φ), sΔ=sin²(Δλ). The gnomonic quadrance Q = x²+y² = tan²(c) = spread_c/cross_c. This is the ratio of spread to cross of the angular distance — a pure RT quantity. The only non-rational intermediate is cos(c) = √(s₀s) + √(c₀·c·cΔ), but Q = (1-cos²(c))/cos²(c) is still well-defined from spread/cross alone.",
+
+  "tangent_point": {
+    "label": "London (51.48°N, 0°E)",
+    "lat_deg": 51.48,
+    "lon_deg": 0.0,
+    "s_phi0": 0.61184,
+    "_note": "sin²(51.48°) = 0.61184. The tangent plane touches Earth at London."
+  },
+
+  "witnesses": [
+    {
+      "label": "Paris (48.86°N, 2.35°E)",
+      "lat_deg": 48.86,
+      "lon_deg": 2.35,
+      "s_phi": 0.567243,
+      "s_dlam": 0.001683,
+      "gnomonic_quadrance": 0.002786,
+      "spread_c": 0.002778,
+      "cross_c": 0.997222,
+      "tolerance": 1e-4,
+      "_note": "London→Paris: ~340km. Q = 0.002786 = tan²(3.02°). Small angle, spread ≈ quadrance."
+    },
+    {
+      "label": "Amsterdam (52.37°N, 4.90°E)",
+      "lat_deg": 52.37,
+      "lon_deg": 4.90,
+      "s_phi": 0.62732,
+      "s_dlam": 0.007310,
+      "gnomonic_quadrance": 0.003028,
+      "spread_c": 0.003018,
+      "cross_c": 0.996982,
+      "tolerance": 1e-4,
+      "_note": "London→Amsterdam: ~360km. Northeast from tangent point."
+    },
+    {
+      "label": "Edinburgh (55.95°N, 3.19°W)",
+      "lat_deg": 55.95,
+      "lon_deg": -3.19,
+      "s_phi": 0.68630,
+      "s_dlam": 0.003098,
+      "gnomonic_quadrance": 0.007203,
+      "spread_c": 0.007151,
+      "cross_c": 0.992849,
+      "tolerance": 1e-4,
+      "_note": "London→Edinburgh: ~530km. Northwest from tangent point."
+    },
+    {
+      "label": "Brussels (50.85°N, 4.35°E)",
+      "lat_deg": 50.85,
+      "lon_deg": 4.35,
+      "tolerance": 1e-4,
+      "_note": "Spreads computed from lat/lon by validator. London→Brussels: ~320km."
+    },
+    {
+      "label": "Dublin (53.35°N, 6.26°W)",
+      "lat_deg": 53.35,
+      "lon_deg": -6.26,
+      "tolerance": 1e-4,
+      "_note": "Spreads computed from lat/lon by validator. London→Dublin: ~460km."
+    }
+  ],
+
+  "collinearity_test": {
+    "_note": "Five points along a great circle from London bearing 45° (NE), at 1°-5° angular distance. Under gnomonic projection, these MUST be collinear — the defining property of the gnomonic projection.",
+    "bearing_deg": 45,
+    "collinearity_tolerance": 1e-12,
+    "great_circle_points": [
+      {"lat_deg": 52.181520837455267, "lon_deg": 1.153233212360426, "_angular_dist_deg": 1},
+      {"lat_deg": 52.871439998955758, "lon_deg": 2.343120823992623, "_angular_dist_deg": 2},
+      {"lat_deg": 53.549084960644429, "lon_deg": 3.571121967783581, "_angular_dist_deg": 3},
+      {"lat_deg": 54.213745043195850, "lon_deg": 4.838698452541035, "_angular_dist_deg": 4},
+      {"lat_deg": 54.864670278760656, "lon_deg": 6.147302468639753, "_angular_dist_deg": 5}
+    ],
+    "_verification": "Cross products of consecutive triples all < 10⁻¹⁷. Great circles → straight lines: confirmed."
+  },
+
+  "berggren_tree": {
+    "_note": "Berggren tree from root direction (2,1) = fundamental Pythagorean triple (3,4,5). Three generators produce child triples. Each triple is a Pythagorean triple with C²+F²=G². These are discrete geodesic steps on the Pythagorean cone — under gnomonic projection, they become straight-line segments on the chart.",
+    "root": {"d": 2, "e": 1, "C": 4, "F": 3, "G": 5},
+    "moves": [
+      {
+        "name": "M_A",
+        "rule": "(d,e) → (2d-e, d)",
+        "d": 3, "e": 2,
+        "C": 12, "F": 5, "G": 13,
+        "_note": "Egyptian fraction step k=2. Triple (5,12,13)."
+      },
+      {
+        "name": "M_B",
+        "rule": "(d,e) → (2d+e, d)",
+        "d": 5, "e": 2,
+        "C": 20, "F": 21, "G": 29,
+        "_note": "Egyptian fraction step k=3. Triple (20,21,29)."
+      },
+      {
+        "name": "M_C",
+        "rule": "(d,e) → (d+2e, e)",
+        "d": 4, "e": 1,
+        "C": 8, "F": 15, "G": 17,
+        "_note": "Koenig descent step k≥4. Triple (8,15,17)."
+      },
+      {
+        "name": "M_A∘M_A (depth 2)",
+        "rule": "(3,2) → (4,3)",
+        "d": 4, "e": 3,
+        "C": 24, "F": 7, "G": 25,
+        "_note": "Second generation. C=24=mod. Triple (7,24,25)."
+      },
+      {
+        "name": "M_C∘M_C (depth 2)",
+        "rule": "(4,1) → (6,1)",
+        "d": 6, "e": 1,
+        "C": 12, "F": 35, "G": 37,
+        "_note": "Second generation. Triple (12,35,37)."
+      }
+    ]
+  },
+
+  "qa_connection": {
+    "gnomonic_is_rt": "The gnomonic projection's fundamental operation — great circles to straight lines — is naturally expressed in RT. The gnomonic quadrance Q = spread/cross is a pure spread-cross ratio requiring no transcendental functions.",
+    "berggren_is_discrete_gnomonic": "Berggren tree generators are discrete steps along geodesics on the Pythagorean cone C²+F²=G². Under gnomonic projection, geodesics become straight lines. So each Berggren move = one discrete straight-line segment on the gnomonic chart. Navigation by Berggren tree = navigation by straight-line segments connecting Pythagorean waypoints.",
+    "theorem_nt": "Continuous lat/lon → QA direction (d,e) is observer projection (boundary in). QA state → gnomonic chart is observer projection (boundary out). Between these: purely discrete Berggren tree navigation on integer lattice. Boundary crossed exactly twice.",
+    "plimpton322_is_chart": "Plimpton 322 (cert [138]) lists Pythagorean triples = Berggren tree nodes = gnomonic chart waypoints. The Babylonian tablet IS a navigation table — each row gives a direction (d,e) and its gnomonic quadrance G=d²+e²."
+  },
+
+  "sources": [
+    "Gnomonic projection: Thales (~600 BCE), formalized by Lambert (1772)",
+    "Rational Trigonometry: N.J. Wildberger, Divine Proportions (2005)",
+    "Berggren tree: Berggren (1934), Barning (1963), Hall (1970)",
+    "Pythagorean tree cert: [135] QA_PYTHAGOREAN_TREE_CERT.v1",
+    "Plimpton 322 cert: [138] QA_PLIMPTON322_CERT.v1",
+    "Chromogeometry: Wildberger (2008), arXiv:0806.3617"
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,27 @@
+{
+  "schema_version": "QA_ELLIPSOID_GEODESIC_CERT.v1",
+  "certificate_id": "qa.cert.ellipsoid_geodesic.fail.wrong_qn.v1",
+  "cert_type": "qa_ellipsoid_geodesic_cert",
+  "title": "FAIL: QN tuple with d ≠ b+e",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 1",
+
+  "shape_qn": {
+    "b": 101, "e": 9, "d": 111, "a": 119,
+    "C": 1998, "F": 12240, "G": 12402,
+    "_note": "WRONG: d=111 but b+e=110. Invalid QN tuple."
+  },
+
+  "discriminant_I": -10242,
+
+  "witnesses": [
+    {"lat_deg": 0.0, "s_phi": 0.0, "curvature_ratio_MN": 0.993, "tolerance": 0.01},
+    {"lat_deg": 45.0, "s_phi": 0.5, "curvature_ratio_MN": 0.996, "tolerance": 0.01},
+    {"lat_deg": 90.0, "s_phi": 1.0, "curvature_ratio_MN": 1.0, "tolerance": 0.01}
+  ],
+
+  "fail_ledger": [
+    {"check_id": "EG_QN", "reason": "d=111 ≠ b+e=101+9=110. Not a valid QA tuple."}
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,119 @@
+{
+  "schema_version": "QA_HUMAN_NEEDS_SDT_CERT.v1",
+  "certificate_id": "qa.cert.human_needs_sdt.pass.structural_alignment.v1",
+  "cert_type": "qa_human_needs_sdt_cert",
+  "title": "Human Needs SDT PASS: structural alignment of SDT 3-need model with QA paired architecture",
+  "created_utc": "2026-04-01T00:00:00Z",
+  "_fixture_purpose": "Core claim: Ryan & Deci SDT's 3 validated basic needs (Autonomy, Competence, Relatedness) each decompose into a Robbins pair, and each pair maps to a structurally distinct QA pair type (generators, state+derivative, reach+integral). 5 structural predictions confirmed against SDT literature. Source: Will Dale Apr/Oct 2025, Ryan & Deci 2022.",
+
+  "canonical_mapping": {
+    "certainty": {"qa_element": "b", "role": "generator_1", "sdt_need": "autonomy"},
+    "variety": {"qa_element": "e", "role": "generator_2", "sdt_need": "autonomy"},
+    "significance": {"qa_element": "d", "role": "derived_state_1", "sdt_need": "competence", "derivation": "d = b + e"},
+    "connection": {"qa_element": "a", "role": "derived_state_2", "sdt_need": "relatedness", "derivation": "a = b + 2e"},
+    "growth": {"qa_element": "DeltaT", "role": "derivative", "sdt_need": "competence", "derivation": "T(n+1) - T(n)"},
+    "contribution": {"qa_element": "SigmaT", "role": "integral", "sdt_need": "relatedness", "derivation": "sum T(i) for i=1..n"}
+  },
+
+  "sdt_pairing": [
+    {
+      "sdt_need": "autonomy",
+      "robbins_pair": ["certainty", "variety"],
+      "qa_pair": ["b", "e"],
+      "qa_type": "generators",
+      "note": "Independent degrees of freedom; everything else derives from b and e"
+    },
+    {
+      "sdt_need": "competence",
+      "robbins_pair": ["significance", "growth"],
+      "qa_pair": ["d", "DeltaT"],
+      "qa_type": "state_plus_derivative",
+      "note": "Where you are (d) + how fast you are changing (DeltaT); current mastery + rate of improvement"
+    },
+    {
+      "sdt_need": "relatedness",
+      "robbins_pair": ["connection", "contribution"],
+      "qa_pair": ["a", "SigmaT"],
+      "qa_type": "reach_plus_integral",
+      "note": "How far you reach (a) + what you have accumulated for others (SigmaT); bonding + giving"
+    }
+  ],
+
+  "structural_predictions": [
+    {
+      "pred_id": "PRED_1",
+      "claim": "Autonomy is prerequisite for competence and relatedness",
+      "qa_prediction": "d and a are derived from b and e; generators must exist before derived quantities can be computed",
+      "sdt_evidence": "SDT research shows autonomy must be partially satisfied before competence and relatedness develop fully",
+      "confirmed": true
+    },
+    {
+      "pred_id": "PRED_2",
+      "claim": "Need satisfaction and frustration are partially independent dimensions",
+      "qa_prediction": "Within each QA pair, elements are independent (not inverses): b is not -e; d is not -DeltaT; a is not -SigmaT",
+      "sdt_evidence": "Bifactor-ESEM studies show satisfaction and frustration are partially independent, not opposite ends of one scale",
+      "confirmed": true
+    },
+    {
+      "pred_id": "PRED_3",
+      "claim": "Growth and contribution emerge after personality needs",
+      "qa_prediction": "DeltaT requires a sequence of tuples (multiple T-steps before a derivative exists); SigmaT requires DeltaT to integrate; operations are temporally downstream of elements",
+      "sdt_evidence": "Both Robbins and Maslow place growth/contribution (self-actualization/transcendence) as emerging after personality/deficiency needs are met",
+      "confirmed": true
+    },
+    {
+      "pred_id": "PRED_4",
+      "claim": "Contribution is the integration of growth; growth-contribution form a cycle",
+      "qa_prediction": "Fundamental theorem of discrete calculus: Sigma(DeltaT) = T; integrating growth reconstructs the self one level up; the new T seeds the next DeltaT",
+      "sdt_evidence": "Robbins describes growth naturally leading to contribution and contribution spurring further growth; Maslow places self-actualization as transitional to self-transcendence",
+      "confirmed": true
+    },
+    {
+      "pred_id": "PRED_5",
+      "claim": "All three SDT needs contribute independently to well-being",
+      "qa_prediction": "(b,e), (d,DeltaT), (a,SigmaT) are structurally distinct types: generators vs first-order derived vs second-order derived; related but not redundant",
+      "sdt_evidence": "SDT 27-country study (n=48550) showed autonomy, competence, relatedness each predict well-being independently after controlling for the others",
+      "confirmed": true
+    }
+  ],
+
+  "derivation_witnesses": [
+    {
+      "witness_id": "W_FUND",
+      "label": "fundamental QN (1,1,2,3)",
+      "b": 1, "e": 1,
+      "d_derived": 2, "d_check": "1 + 1 = 2",
+      "a_derived": 3, "a_check": "1 + 2*1 = 3",
+      "note": "Fibonacci seed; generators produce all derived quantities"
+    }
+  ],
+
+  "theorem_nt_compliance": {
+    "status": "compliant",
+    "framing": "observer_projection",
+    "explanation": "Psychological needs are continuous observer-layer projections of discrete QA dynamics. QA generates; psychology observes. Same paradigm as EEG topographic orbits, financial volatility regimes, climate teleconnection. Psychology does NOT feed back into QA as causal input."
+  },
+
+  "source_grounding": [
+    {"source": "Ryan & Deci 2022", "detail": "SDT validation across 27 European countries, n=48550, SEM with alignment invariance", "doi": "10.1177/19485506221113678"},
+    {"source": "Will Dale, Apr 2025", "detail": "First QA-Human Needs mapping: b=certainty, e=variety, d=significance, a=connection"},
+    {"source": "Will Dale, Oct 2025", "detail": "Extended mapping with ΔT=growth, ΣT=contribution, toroidal geometry, psychophysiological coherence"},
+    {"source": "Tony Robbins / Cloe Madanes", "detail": "Six Human Needs framework: certainty, variety, significance, connection, growth, contribution"},
+    {"source": "Maslow 1969", "detail": "Self-transcendence above self-actualization; growth as transitional to contribution"}
+  ],
+
+  "validation_checks": [
+    {"check_id": "HN_1", "description": "schema_version correct", "passed": true},
+    {"check_id": "HN_MAP", "description": "canonical mapping complete: 6 needs, 6 QA elements, all derivations valid", "passed": true},
+    {"check_id": "HN_SDT", "description": "3 SDT needs present, each paired with exactly 2 Robbins needs", "passed": true},
+    {"check_id": "HN_TYPE", "description": "3 QA pair types present and structurally distinct (generators, state+derivative, reach+integral)", "passed": true},
+    {"check_id": "HN_PRED", "description": "5 structural predictions, all confirmed against SDT literature", "passed": true},
+    {"check_id": "HN_NT", "description": "Theorem NT compliance declared: observer projection framing", "passed": true},
+    {"check_id": "HN_SRC", "description": ">=3 source groundings including >=1 peer-reviewed", "passed": true},
+    {"check_id": "HN_W", "description": ">=5 structural predictions as witnesses", "passed": true},
+    {"check_id": "HN_F", "description": "fundamental mapping (b=certainty, e=variety) present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,121 @@
+{
+  "schema_version": "QA_ELLIPSOID_SLICE_CERT.v1",
+  "certificate_id": "qa.cert.ellipsoid_slice.pass.slices.v1",
+  "cert_type": "qa_ellipsoid_slice_cert",
+  "title": "QA Ellipsoid Slicing — Latitude Circles, Meridian Ellipse, Chromogeometric Families",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 1 (latitude/meridian) + Tier 2 (chromogeometric)",
+
+  "_fixture_purpose": "Certifies three types of QA slicing of the WGS84 quantum ellipse: (1) latitude circles with R²=a²d²c_φ/(d²-e²s_φ), (2) meridian ellipses with axis ratio √F/d, (3) chromogeometric slice families C/F/G. Plus 24-fold Pisano longitude bands.",
+
+  "shape_qn": {"b": 101, "e": 9, "d": 110, "a": 119},
+
+  "latitude_slices": [
+    {
+      "label": "Equator (s_φ=0)",
+      "lat_deg": 0.0,
+      "s_phi": 0.0,
+      "R_meters": 6378137.0,
+      "_note": "R = a_earth (maximum). The equatorial circle. c_φ=1, denom=d²=12100."
+    },
+    {
+      "label": "Tropic of Cancer (s_φ≈0.158)",
+      "lat_deg": 23.44,
+      "R_meters": 5854897.0,
+      "_note": "Near quantum lattice point s_φ=C/G=0.1625. Sun's maximum declination."
+    },
+    {
+      "label": "45°N (s_φ=1/2)",
+      "lat_deg": 45.0,
+      "s_phi": 0.5,
+      "R_meters": 4517591.0,
+      "_note": "Spread midpoint. R ≈ a/√2 (adjusted for eccentricity)."
+    },
+    {
+      "label": "London (s_φ≈0.612)",
+      "lat_deg": 51.5,
+      "R_meters": 3978648.0,
+      "_note": "Navigation stack reference point."
+    },
+    {
+      "label": "Arctic Circle (s_φ≈0.842)",
+      "lat_deg": 66.56,
+      "R_meters": 2544328.0,
+      "_note": "Sun's minimum altitude boundary."
+    },
+    {
+      "label": "Pole (s_φ=1)",
+      "lat_deg": 90.0,
+      "s_phi": 1.0,
+      "R_meters": 0.0,
+      "_note": "Degenerate: circle collapses to a point. c_φ=0 → R=0."
+    }
+  ],
+
+  "meridian_ellipse": {
+    "semi_major_a": 6378137.0,
+    "semi_minor_b": 6356752.8,
+    "axis_ratio_ba": 0.99664727,
+    "eccentricity_sq": 0.00669421,
+    "tolerance": 1e-5,
+    "_note": "Every meridian has the SAME ellipse shape as the whole Earth: axis ratio √F/d = √12019/110. The ellipsoid is self-similar under meridional slicing. e² = 81/12100 = e_QN²/d_QN².",
+    "_qa_identity": "The meridian ellipse IS the shape QN (101,9,110,119) realized as a 2D curve. Slicing the 3D ellipsoid by a meridional plane recovers the generating QN."
+  },
+
+  "chromo_slices": [
+    {
+      "label": "Fundamental direction (1,1) — 45° diagonal",
+      "d_dir": 1, "e_dir": 1,
+      "C": 2, "F": 0, "G": 2,
+      "_note": "F=0 → null direction in red metric (light-like in Minkowski). The 45° line."
+    },
+    {
+      "label": "Pythagorean (3,4)",
+      "d_dir": 3, "e_dir": 4,
+      "C": 24, "F": -7, "G": 25,
+      "_note": "C=24=mod. The green quadrance equals the modulus — a chromogeometric resonance."
+    },
+    {
+      "label": "Earth QN direction (110,9)",
+      "d_dir": 110, "e_dir": 9,
+      "C": 1980, "F": 12019, "G": 12181,
+      "_note": "The shape QN itself as a chromo slice. C²+F²=G² is the defining identity of the quantum ellipse. Slicing at the Earth's own direction recovers the shape triple."
+    },
+    {
+      "label": "Orbit QN direction (60,1)",
+      "d_dir": 60, "e_dir": 1,
+      "C": 120, "F": 3599, "G": 3601,
+      "_note": "The orbital QN as a chromo slice. G-F=2 always (twin prime structure: 59,61). Shape and orbit chromo slices are harmonically independent."
+    }
+  ],
+
+  "pisano_bands": {
+    "n_bands": 24,
+    "band_width_deg": 15.0,
+    "_note": "π(24)=24 → the mod-24 T-operator creates 24 equally-spaced longitude bands, each 15° wide. These correspond to: (a) 24 hours of sidereal rotation, (b) 24 time zones, (c) the 24-fold symmetry of the cosmos orbit. The TIME ZONE SYSTEM is a Pisano-period partition.",
+    "bands": [
+      {"band": 1, "lon_range": "0°-15°E", "example_city": "London/Paris"},
+      {"band": 7, "lon_range": "90°-105°E", "example_city": "Bangkok"},
+      {"band": 13, "lon_range": "180°-165°W", "example_city": "Date Line"},
+      {"band": 19, "lon_range": "90°-75°W", "example_city": "New York"}
+    ]
+  },
+
+  "qa_connection": {
+    "self_similarity": "Meridional slicing recovers the shape QN — the ellipsoid is self-similar. Latitude slicing produces circles whose radius is a QN expression. The 3D shape encodes its own 2D generator.",
+    "three_slice_families": "C-constant, F-constant, G-constant curves partition the surface into three families satisfying C²+F²=G² everywhere. These are the green (area), red (Minkowski), and blue (Euclidean) level sets — chromogeometric slicing.",
+    "time_zones_are_pisano": "The 24 time zones = 24 Pisano bands of 15° each. This is NOT a coincidence — the sidereal day divides naturally into 24 equal parts because the mod-24 cosmos orbit has period 24. Time zones are a Pisano-period partition of the quantum ellipse.",
+    "tropic_is_quantum": "The Tropic of Cancer (23.44°) falls within 0.34° of the quantum lattice point s_φ = C/G = 1980/12181 (23.78°). The green/blue ratio of the shape QN nearly predicts the axial tilt."
+  },
+
+  "sources": [
+    "WGS84: NIMA TR 8350.2 (2000)",
+    "Shape QN: cert [156] QA_WGS84_ELLIPSE_CERT.v1",
+    "Geodesic properties: cert [168] QA_ELLIPSOID_GEODESIC_CERT.v1",
+    "Chromogeometry: cert [125] QA_CHROMOGEOMETRY_CERT.v1",
+    "Pisano period: cert [128] QA_SPREAD_PERIOD_CERT.v1"
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,54 @@
+{
+  "schema_version": "QA_PIM_KERNEL_CERT.v1",
+  "certificate_id": "qa.cert.pim_kernel.pass.default.v1",
+  "cert_type": "qa_pim_kernel_cert",
+  "title": "PIM kernel correctness — CRT + 3 kernel witnesses",
+  "created_utc": "2026-04-02T02:00:00Z",
+  "_fixture_purpose": "Canonical PASS: CRT coprime + non-coprime cases, 3 kernel witnesses, A1 note",
+
+  "crt_tests": {
+    "cases": [
+      {"a1": 2, "m1": 3, "a2": 3, "m2": 5, "solvable": true, "x": 8, "lcm": 15,
+       "note": "coprime: x=2(mod 3), x=3(mod 5) => x=8(mod 15)"},
+      {"a1": 1, "m1": 6, "a2": 7, "m2": 9, "solvable": true, "x": 7, "lcm": 18,
+       "note": "non-coprime solvable: gcd(6,9)=3, (7-1)%3=0"},
+      {"a1": 1, "m1": 6, "a2": 8, "m2": 9, "solvable": false, "x": null, "lcm": null,
+       "note": "non-coprime unsolvable: (8-1)%3=1 != 0"},
+      {"a1": 1, "m1": 9, "a2": 1, "m2": 24, "solvable": true, "x": 1, "lcm": 72,
+       "note": "QA-relevant: mod-9 and mod-24, lcm=72"}
+    ]
+  },
+
+  "kernel_witnesses": {
+    "RESIDUE_SELECT": {
+      "input": {"sectors": [0, 1, 2, 1, 0, 3, 2, 1], "mask": [1, 3]},
+      "output": [false, true, false, true, false, true, false, true]
+    },
+    "TORUS_SHIFT": {
+      "input": {"arr": [10, 20, 30], "delta": 5, "P": 25},
+      "output": [15, 0, 10]
+    },
+    "ROLLING_SUM_PHASE": {
+      "input": {"values": [1, 2, 3, 4, 5], "width": 3},
+      "output_first": 6,
+      "output_length": 5
+    }
+  },
+
+  "a1_compliance_note": "RADD_m and RMUL_m operate at the coordinate layer (0-indexed, range 0..m-1). QA state-level A1 enforcement (range 1..m) is handled by qa_observer.core.qa_mod() at a higher layer. PIM kernels are analogous to CPU instructions — they don't enforce application-level invariants.",
+
+  "witnesses": [
+    {"domain": "graph_pim", "direction": [1, 1], "operation": "RESIDUE_SELECT sectors {1,3} on football network",
+     "result": "selects 8/24 sectors correctly"}
+  ],
+
+  "validation_checks": [
+    {"check_id": "PIM_1", "description": "schema version", "passed": true},
+    {"check_id": "PIM_CRT", "description": "CRT correctness", "passed": true},
+    {"check_id": "PIM_KERNEL", "description": "kernel witnesses", "passed": true},
+    {"check_id": "PIM_W", "description": "domain witness", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

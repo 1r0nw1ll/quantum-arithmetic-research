@@ -1,0 +1,46 @@
+{
+  "schema_version": "QA_DEAD_RECKONING_CERT.v1",
+  "certificate_id": "qa.cert.dead_reckoning.fail.wrong_state.v1",
+  "cert_type": "qa_dead_reckoning_cert",
+  "title": "FAIL: Wrong final state (off-by-one in T-operator)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+  "modulus": 24,
+
+  "_fixture_purpose": "FAIL fixture: declares wrong final (b,e) after T^100 steps. Simulates an implementation that uses 0-indexed modular arithmetic instead of A1-compliant {1,...,m}. The validator should catch the state mismatch at DR_TOP.",
+
+  "witnesses": [
+    {
+      "label": "WRONG: 0-indexed T^100 on (1,1) mod 24",
+      "b0": 1,
+      "e0": 1,
+      "n_steps": 100,
+      "final_b": 4,
+      "final_e": 7,
+      "_note": "Deliberately wrong — this is what you get with 0-indexed arithmetic: ((b+e)%24, (e)%24) instead of A1 compliant"
+    },
+    {
+      "label": "WRONG: T^1000 on (3,5) mod 24",
+      "b0": 3,
+      "e0": 5,
+      "n_steps": 1000,
+      "final_b": 20,
+      "final_e": 1,
+      "_note": "Off by one in both components"
+    },
+    {
+      "label": "WRONG: T^500 on (7,13) mod 24",
+      "b0": 7,
+      "e0": 13,
+      "n_steps": 500,
+      "final_b": 19,
+      "final_e": 4,
+      "_note": "Off by one"
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "DR_TOP", "reason": "Used 0-indexed modular arithmetic instead of A1-compliant {1,...,m}. QA axiom A1 requires states in {1,...,N}, never {0,...,N-1}."}
+  ],
+  "result": "FAIL"
+}

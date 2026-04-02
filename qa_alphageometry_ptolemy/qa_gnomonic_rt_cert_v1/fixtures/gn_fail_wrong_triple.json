@@ -1,0 +1,40 @@
+{
+  "schema_version": "QA_GNOMONIC_RT_CERT.v1",
+  "certificate_id": "qa.cert.gnomonic_rt.fail.wrong_triple.v1",
+  "cert_type": "qa_gnomonic_rt_cert",
+  "title": "FAIL: Berggren triple with C²+F²≠G² (non-Pythagorean direction)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+
+  "_fixture_purpose": "FAIL fixture: declares a Berggren tree move with a non-Pythagorean triple. The triple (7,11,13) does NOT satisfy C²+F²=G² (49+121=170≠169). This means the direction is NOT on the Pythagorean cone and cannot serve as a valid gnomonic navigation step.",
+
+  "tangent_point": {
+    "label": "London",
+    "lat_deg": 51.48,
+    "lon_deg": 0.0,
+    "s_phi0": 0.61184
+  },
+
+  "witnesses": [
+    {"label": "Paris", "lat_deg": 48.86, "lon_deg": 2.35, "tolerance": 1e-4},
+    {"label": "Amsterdam", "lat_deg": 52.37, "lon_deg": 4.90, "tolerance": 1e-4},
+    {"label": "Edinburgh", "lat_deg": 55.95, "lon_deg": -3.19, "tolerance": 1e-4}
+  ],
+
+  "berggren_tree": {
+    "root": {"d": 2, "e": 1, "C": 4, "F": 3, "G": 5},
+    "moves": [
+      {
+        "name": "WRONG: not a Berggren move",
+        "d": 3, "e": 2,
+        "C": 7, "F": 11, "G": 13,
+        "_note": "WRONG: C should be 2*3*2=12, F should be 9-4=5, G should be 9+4=13. Declared (7,11,13) violates C²+F²=G²."
+      }
+    ]
+  },
+
+  "fail_ledger": [
+    {"check_id": "GN_BERGGREN", "reason": "Triple (7,11,13) is not Pythagorean: 49+121=170≠169. Navigation on non-Pythagorean directions is not gnomonic-valid."}
+  ],
+  "result": "FAIL"
+}

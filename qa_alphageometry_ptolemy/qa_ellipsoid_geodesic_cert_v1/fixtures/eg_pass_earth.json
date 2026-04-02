@@ -1,0 +1,144 @@
+{
+  "schema_version": "QA_ELLIPSOID_GEODESIC_CERT.v1",
+  "certificate_id": "qa.cert.ellipsoid_geodesic.pass.earth.v1",
+  "cert_type": "qa_ellipsoid_geodesic_cert",
+  "title": "WGS84 Quantum Ellipse — Geodesic Properties in QN Arithmetic",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 1 — exact reformulation",
+
+  "_fixture_purpose": "Certifies that the geodesic properties of the WGS84 quantum ellipse (shape QN 101,9,110,119) can be expressed entirely in QN component arithmetic. Curvature ratio M/N = F/(d²-e²·s_φ). Axis ratio b/a = √F/d. Discriminant I<0 confirms ellipse. Quantum lattice points at QN-harmonic spreads coincide with geophysically significant latitudes.",
+
+  "shape_qn": {
+    "b": 101, "e": 9, "d": 110, "a": 119,
+    "C": 1980, "F": 12019, "G": 12181,
+    "_note": "d=b+e=110, a=b+2e=119. C²+F²=G²=148376761."
+  },
+
+  "discriminant_I": -10039,
+  "axis_ratio_ba": 0.99664727,
+  "axis_tolerance": 1e-6,
+
+  "_key_identities": {
+    "curvature_ratio": "M/N = F/(d² - e²·s_φ) = 12019/(12100 - 81·s_φ)",
+    "axis_ratio": "b/a = √F/d = √12019/110",
+    "eccentricity_sq": "e²_ell = e²_QN/d²_QN = 81/12100",
+    "N_squared": "N² = a²_earth · d²/(d² - e²·s_φ) = a² · 12100/(12100 - 81·s_φ)",
+    "discriminant": "I = C - F = 1980 - 12019 = -10039 < 0 → ellipse"
+  },
+
+  "witnesses": [
+    {
+      "label": "Equator (s_φ=0)",
+      "lat_deg": 0.0,
+      "s_phi": 0.0,
+      "curvature_ratio_MN": 0.99330579,
+      "N_meters": 6378137.0,
+      "tolerance": 1e-6,
+      "_note": "M/N = F/d² = 12019/12100 = 0.99331. Maximum difference between M and N."
+    },
+    {
+      "label": "30°N (s_φ=1/4)",
+      "lat_deg": 30.0,
+      "s_phi": 0.25,
+      "curvature_ratio_MN": 0.99497092,
+      "N_meters": 6383481.0,
+      "tolerance": 1e-6
+    },
+    {
+      "label": "45°N (s_φ=1/2)",
+      "lat_deg": 45.0,
+      "s_phi": 0.5,
+      "curvature_ratio_MN": 0.99664165,
+      "N_meters": 6388838.0,
+      "tolerance": 1e-6,
+      "_note": "s_φ=1/2: the spread midpoint. M/N approaches 1."
+    },
+    {
+      "label": "London (s_φ≈0.612)",
+      "lat_deg": 51.5,
+      "s_phi": 0.612476,
+      "curvature_ratio_MN": 0.99739515,
+      "N_meters": 6391253.0,
+      "tolerance": 1e-6
+    },
+    {
+      "label": "60°N (s_φ=3/4)",
+      "lat_deg": 60.0,
+      "s_phi": 0.75,
+      "curvature_ratio_MN": 0.99831800,
+      "N_meters": 6394209.0,
+      "tolerance": 1e-6
+    },
+    {
+      "label": "Pole (s_φ=1)",
+      "lat_deg": 90.0,
+      "s_phi": 1.0,
+      "curvature_ratio_MN": 1.0,
+      "N_meters": 6399593.0,
+      "tolerance": 1e-6,
+      "_note": "M/N = F/(d²-e²) = F/F = 1. At the pole, the ellipsoid is locally spherical."
+    }
+  ],
+
+  "quantum_lattice_points": [
+    {
+      "label": "Equator",
+      "s_num": 0, "s_den": 1,
+      "lat_deg": 0.0,
+      "lat_tolerance": 0.01,
+      "_note": "s_φ = 0. The fundamental reference."
+    },
+    {
+      "label": "Eccentricity resonance",
+      "s_num": 81, "s_den": 12181,
+      "lat_deg": 4.6774,
+      "lat_tolerance": 0.01,
+      "_note": "s_φ = e²/G = 81/12181. The latitude where spread equals the eccentricity-to-blue ratio. N barely changes from equatorial value here."
+    },
+    {
+      "label": "Green/blue ratio (≈ Tropic)",
+      "s_num": 1980, "s_den": 12181,
+      "lat_deg": 23.7767,
+      "lat_tolerance": 0.01,
+      "_note": "s_φ = C/G = 1980/12181 ≈ 0.1625. Latitude ≈ 23.78° — within 0.34° of the Tropic of Cancer (23.44°). The green quadrance ratio marks a geophysically significant boundary."
+    },
+    {
+      "label": "45° midpoint",
+      "s_num": 1, "s_den": 2,
+      "lat_deg": 45.0,
+      "lat_tolerance": 0.01,
+      "_note": "s_φ = 1/2. The spread midpoint — equal sin and cos."
+    },
+    {
+      "label": "Red/blue ratio",
+      "s_num": 12019, "s_den": 12181,
+      "lat_deg": 83.3777,
+      "lat_tolerance": 0.01,
+      "_note": "s_φ = F/G = 12019/12181. High-latitude quantum point where M/N ≈ 1."
+    },
+    {
+      "label": "Pole",
+      "s_num": 1, "s_den": 1,
+      "lat_deg": 90.0,
+      "lat_tolerance": 0.01,
+      "_note": "s_φ = 1. M = N = polar radius of curvature."
+    }
+  ],
+
+  "qa_connection": {
+    "curvature_is_qn": "The ratio M/N = F/(d²-e²·s_φ) expresses ellipsoidal curvature entirely in QN components {b,e,d,a,C,F,G}. No trigonometry, no transcendentals — just the quantum numbers of the Earth.",
+    "tropic_is_green_blue": "The green/blue ratio C/G gives a quantum lattice point at 23.78° — within 0.34° of the Tropic of Cancer. The tropic (maximum sun declination = Earth's axial tilt) nearly coincides with a QN-harmonic spread. This may connect the shape QN to the axial tilt via orbital mechanics.",
+    "nav_stack_surface": "Every cert in the navigation stack [163-167] operates ON this quantum ellipse. Dead reckoning paths curve according to M/N. Gnomonic tangent planes touch at points with curvature N. Celestial sights measure altitude from N above the reference ellipsoid.",
+    "orbit_independence": "Shape QN (101,9,110,119) and orbit QN (59,1,60,61) share no prime factors: 101 is prime, 59,61 are twin primes, 119=7·17. By the Law of Harmonics [149], shape and orbit are structurally linked but harmonically independent."
+  },
+
+  "sources": [
+    "WGS84: NIMA TR 8350.2 (2000)",
+    "Shape QN: cert [156] QA_WGS84_ELLIPSE_CERT.v1",
+    "Conic discriminant: cert [140] QA_CONIC_DISCRIMINANT_CERT.v1",
+    "Chromogeometry: cert [125] QA_CHROMOGEOMETRY_CERT.v1"
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

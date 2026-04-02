@@ -1,0 +1,55 @@
+{
+  "schema_version": "QA_BEARDEN_PHASE_CONJUGATE_CERT.v1",
+  "certificate_id": "qa.cert.bearden_phase_conjugate.pass.default.v1",
+  "cert_type": "qa_bearden_phase_conjugate_cert",
+  "title": "Bearden Phase Conjugate PASS: QCI opposite-sign as pumped phase conjugation",
+  "created_utc": "2026-04-01T03:30:00Z",
+
+  "_fixture_purpose": "Certifies the structural parallel between Bearden's pumped phase conjugate mirror model and the empirical QCI opposite-sign pattern. Global stress (pump) creates coherence at manifold level while producing scattered conjugate response at trajectory level.",
+
+  "bearden_model": {
+    "source": "Bearden scalar EM / pumped phase conjugate mirror theory",
+    "core_claim": "stress is a pumper — stress acts as a pump beam creating phase conjugation",
+    "pump_beam": "global stress tightens coupling (order at manifold level)",
+    "conjugate_response": "local trajectories scatter (disorder at trajectory level)",
+    "phase_conjugation_signature": "discrepancy between pump and conjugate = the signal"
+  },
+
+  "qa_mapping": {
+    "pump_beam_qa": "QCI_global rises during stress (positive correlation with future vol)",
+    "conjugate_response_qa": "QCI_local drops during stress (negative correlation with future vol)",
+    "phase_conjugation_qa": "QCI_gap = QCI_local - QCI_global = the phase conjugation signature",
+    "qci_global_sign": "positive",
+    "qci_local_sign": "negative",
+    "sign_opposition": true
+  },
+
+  "empirical_evidence": {
+    "qci_local_partial_r": -0.22,
+    "qci_global_partial_r": 0.13,
+    "qci_gap_partial_r": -0.17,
+    "qci_gap_best_r": -0.42,
+    "gap_robustness": "16/16 (100%)",
+    "gap_permutation_p": 0.0,
+    "scripts": "~/Desktop/qa_finance/40-42"
+  },
+
+  "svp_connection": {
+    "lineage": "Keely → Dale Pond → Bearden (SVP-adjacent)",
+    "keely_triune_link": "stress = departure from DOMINANT/singularity toward ENHARMONIC/satellite",
+    "cert_153_ref": "QA_KEELY_TRIUNE_CERT.v1"
+  },
+
+  "validation_checks": [
+    {"check_id": "BPC_1", "description": "schema_version correct", "passed": true},
+    {"check_id": "BPC_MODEL", "description": "Bearden model declared with source", "passed": true},
+    {"check_id": "BPC_MAP", "description": "QA mapping: pump→global, conjugate→local", "passed": true},
+    {"check_id": "BPC_SIGN", "description": "opposite-sign pattern confirmed", "passed": true},
+    {"check_id": "BPC_EMP", "description": "empirical evidence with partial correlations", "passed": true},
+    {"check_id": "BPC_SVP", "description": "SVP lineage declared", "passed": true},
+    {"check_id": "BPC_W", "description": "witness: finance multi-layer observer", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": "QA_CELESTIAL_NAV_CERT.v1",
+  "certificate_id": "qa.cert.celestial_nav.fail.wrong_sigma.v1",
+  "cert_type": "qa_celestial_nav_cert",
+  "title": "FAIL: Wrong hemisphere flag for Sirius (σ₁=+1 instead of -1)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 1",
+
+  "_fixture_purpose": "FAIL fixture: declares σ₁=+1 for Sirius (dec=-16.7°) observed from lat=51.5°N. Since lat>0 and dec<0, the correct flag is σ₁=-1 (opposite hemispheres). This is the most dangerous error in RT celestial nav — wrong orientation makes above-horizon stars appear below, and vice versa.",
+
+  "witnesses": [
+    {
+      "label": "Sirius WRONG σ₁",
+      "lat_deg": 51.5,
+      "dec_deg": -16.7,
+      "lha_deg": 45.0,
+      "sigma_dec": 1,
+      "sigma_lha": 1,
+      "s_altitude": 0.41797,
+      "tolerance": 1e-4,
+      "_note": "WRONG: σ₁=+1 but lat=51.5>0, dec=-16.7<0 → opposite hemispheres → σ₁=-1"
+    },
+    {
+      "label": "Rigel WRONG σ₁",
+      "lat_deg": 51.5,
+      "dec_deg": -8.2,
+      "lha_deg": 30.0,
+      "sigma_dec": 1,
+      "sigma_lha": 1,
+      "tolerance": 1e-4,
+      "_note": "WRONG: same error, σ₁=+1 for opposite-hemisphere star"
+    },
+    {
+      "label": "Polaris (correct, for minimum witness count)",
+      "lat_deg": 51.5,
+      "dec_deg": 89.3,
+      "lha_deg": 0.0,
+      "sigma_dec": 1,
+      "sigma_lha": 1,
+      "tolerance": 1e-4
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "CN_SIGMA", "reason": "σ₁=+1 for southern-hemisphere stars observed from northern latitude. Must be σ₁=-1 when lat and dec have opposite signs."}
+  ],
+  "result": "FAIL"
+}

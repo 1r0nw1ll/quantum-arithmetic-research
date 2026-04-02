@@ -1,0 +1,80 @@
+{
+  "schema_version": "QA_PHILOMATH_BRIDGE.v1",
+  "cert_type": "qa_philomath_bridge",
+  "source_manifest_ref": "qa_ingestion_sources/qa_philomath_corpus_manifest.json",
+  "source_queue_ref": "qa_ingestion_sources/qa_philomath_ingestion_queue.json",
+  "source_claim_ledger_ref": "qa_ingestion_sources/qa_philomath_claim_ledger.json",
+  "source_crosswalk_ref": "qa_ingestion_sources/qa_philomath_top5_crosswalk.json",
+  "top5_order": [
+    "Prime Numbers",
+    "The Digital Root",
+    "Reciprocity of Numbers and Prime Factorization",
+    "Number Classification",
+    "Semiprime Factorization - The Geometric Solutions"
+  ],
+  "chapter_bridges": [
+    {
+      "priority": 1,
+      "chapter": "The Digital Root",
+      "claim_class": "modular",
+      "qa_native_rewrite": "Restate the chapter entirely inside Z/9Z and preserve only residue-class consequences.",
+      "promotion_test_type": "exact_reduction",
+      "promotion_condition": "No semantic content remains outside modular arithmetic after the rewrite.",
+      "candidate_outputs": [
+        "mod_9_note"
+      ]
+    },
+    {
+      "priority": 2,
+      "chapter": "Prime Numbers",
+      "claim_class": "modular",
+      "qa_native_rewrite": "Reduce the 24-wheel chapter to residue filters in Z/24Z and keep necessity versus sufficiency explicit.",
+      "promotion_test_type": "residue_filter_verification",
+      "promotion_condition": "The resulting statement is a valid wheel filter and does not overclaim primality.",
+      "candidate_outputs": [
+        "mod_24_wheel_note"
+      ]
+    },
+    {
+      "priority": 3,
+      "chapter": "Reciprocity of Numbers and Prime Factorization",
+      "claim_class": "structural_analogy",
+      "qa_native_rewrite": "Recast reciprocity as factor-pair symmetry, factor graphs, or difference-of-squares recovery.",
+      "promotion_test_type": "factor_recovery",
+      "promotion_condition": "The structure must encode recoverable factor information on tested examples.",
+      "candidate_outputs": [
+        "factor_graph_note"
+      ]
+    },
+    {
+      "priority": 4,
+      "chapter": "Number Classification",
+      "claim_class": "modular",
+      "qa_native_rewrite": "Convert all classes to exact predicates over congruence, tuples, or recursion laws.",
+      "promotion_test_type": "membership_testability",
+      "promotion_condition": "Every promoted class has deterministic membership and explicit non-members.",
+      "candidate_outputs": [
+        "classification_taxonomy"
+      ]
+    },
+    {
+      "priority": 5,
+      "chapter": "Semiprime Factorization - The Geometric Solutions",
+      "claim_class": "structural_analogy",
+      "qa_native_rewrite": "Treat geometry only as an invertible witness layer over semiprime arithmetic.",
+      "promotion_test_type": "invertible_geometry",
+      "promotion_condition": "The geometry must decode back to the factor data on test cases.",
+      "candidate_outputs": [
+        "semiprime_geometry_note"
+      ]
+    }
+  ],
+  "canonical_pass_witness": {
+    "bridge_result": "top5_bridge_verified"
+  },
+  "canonical_fail_witness": {
+    "fail_types": [
+      "TOP5_ORDER_MISMATCH"
+    ]
+  }
+}

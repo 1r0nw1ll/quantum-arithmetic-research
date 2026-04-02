@@ -1,0 +1,44 @@
+{
+  "schema_version": "QA_LOXODROME_CERT.v1",
+  "certificate_id": "qa.cert.loxodrome.fail.wrong_period.v1",
+  "cert_type": "qa_loxodrome_cert",
+  "title": "FAIL: Wrong loxodrome period (declared 12 for cosmos orbit)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+  "modulus": 24,
+
+  "_fixture_purpose": "FAIL fixture: declares period=12 for (1,1) mod 24, which actually has period 24 (Pisano period). Also declares satellite orbit, but period 24 = cosmos. The Pisano period is mathematically determined — declaring a different period is a structural error.",
+
+  "witnesses": [
+    {
+      "label": "WRONG: (1,1) mod 24 declared period 12",
+      "b0": 1,
+      "e0": 1,
+      "period": 12,
+      "orbit": "satellite",
+      "_note": "WRONG: actual period is 24 (cosmos), not 12 (satellite)"
+    },
+    {
+      "label": "WRONG: (3,5) mod 24 declared period 16",
+      "b0": 3,
+      "e0": 5,
+      "period": 16,
+      "orbit": "cosmos",
+      "_note": "WRONG: actual period is 24"
+    },
+    {
+      "label": "WRONG: (8,8) mod 24 declared period 24",
+      "b0": 8,
+      "e0": 8,
+      "period": 24,
+      "orbit": "cosmos",
+      "_note": "WRONG: actual period is 8 (satellite)"
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "LX_PATH", "reason": "Pisano period is determined by (b₀,e₀) mod m. Cannot be freely declared."},
+    {"check_id": "LX_ORBIT", "reason": "Orbit classification follows from period. Wrong period → wrong orbit."}
+  ],
+  "result": "FAIL"
+}

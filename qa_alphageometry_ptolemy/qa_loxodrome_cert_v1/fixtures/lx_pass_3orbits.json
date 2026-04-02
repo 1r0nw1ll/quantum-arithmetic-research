@@ -1,0 +1,124 @@
+{
+  "schema_version": "QA_LOXODROME_CERT.v1",
+  "certificate_id": "qa.cert.loxodrome.pass.3orbits.v1",
+  "cert_type": "qa_loxodrome_cert",
+  "title": "QA Loxodromes — T-operator constant-bearing paths on mod-24 lattice",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2 — structural",
+  "modulus": 24,
+
+  "_fixture_purpose": "Certifies that QA T-operator paths are discrete loxodromes (constant-bearing). Three orbit types demonstrated: cosmos (period 24), satellite (period 8), singularity (period 1). Bearing spread = e²/G. Mercator identity s_φ = tanh²(ψ) verified at 5 latitudes. Each orbit type represents a class of rhumb lines on the discrete lattice.",
+
+  "_derivation": "A loxodrome = constant-bearing path. On a sphere, bearing is fixed → path spirals toward a pole. On a QA mod-m lattice, the T-operator IS the constant generator → path cycles after π(m) steps. The bearing of this discrete loxodrome is determined by the direction (d,e): bearing_spread = sin²(angle_from_north) = e²/(d²+e²) = e²/G. The Mercator projection maps loxodromes to straight lines; in spread coordinates, s_φ = tanh²(ψ) where ψ = isometric (Mercator) latitude.",
+
+  "witnesses": [
+    {
+      "label": "Cosmos loxodrome: (1,1) mod 24",
+      "b0": 1,
+      "e0": 1,
+      "period": 24,
+      "orbit": "cosmos",
+      "d": 1,
+      "e_dir": 1,
+      "bearing_spread": 0.5,
+      "tolerance": 1e-8,
+      "_first_6_states": "(1,1)→(1,2)→(2,3)→(3,5)→(5,8)→(8,13)",
+      "_note": "Full 24-step circumnavigation. Bearing spread 1/2 = 45° from north (NE). Fibonacci sequence mod 24."
+    },
+    {
+      "label": "Cosmos loxodrome: (3,5) mod 24",
+      "b0": 3,
+      "e0": 5,
+      "period": 24,
+      "orbit": "cosmos",
+      "d": 5,
+      "e_dir": 12,
+      "bearing_spread": 0.852071005917,
+      "tolerance": 1e-6,
+      "_note": "Same 24-step period, different starting point. Bearing spread 144/169 ≈ 67.4° from north."
+    },
+    {
+      "label": "Satellite loxodrome: (8,8) mod 24",
+      "b0": 8,
+      "e0": 8,
+      "period": 8,
+      "orbit": "satellite",
+      "d": 1,
+      "e_dir": 1,
+      "bearing_spread": 0.5,
+      "tolerance": 1e-8,
+      "_first_states": "(8,8)→(8,16)→(16,24)→(24,16)→(16,16)→(16,8)→(8,24)→(24,8)→(8,8)",
+      "_note": "Reduced 8-step loxodrome. The 8 principal compass winds. Satellite orbit = loxodrome that doesn't circumnavigate."
+    },
+    {
+      "label": "Singularity: (24,24) mod 24",
+      "b0": 24,
+      "e0": 24,
+      "period": 1,
+      "orbit": "singularity",
+      "_note": "Degenerate loxodrome — no motion. Fixed point. The navigator at the pole: all bearings converge."
+    }
+  ],
+
+  "mercator_identity": [
+    {
+      "label": "London",
+      "lat_deg": 51.5,
+      "s_phi": 0.6124755272,
+      "psi_isometric": 1.0520656868,
+      "tolerance": 1e-6,
+      "_note": "tanh²(1.0521) = 0.6125 = sin²(51.5°)"
+    },
+    {
+      "label": "Equator",
+      "lat_deg": 0.0,
+      "s_phi": 0.0,
+      "psi_isometric": 0.0,
+      "tolerance": 1e-10,
+      "_note": "tanh²(0) = 0 = sin²(0°). Mercator origin."
+    },
+    {
+      "label": "Paris",
+      "lat_deg": 48.86,
+      "s_phi": 0.5671660478,
+      "psi_isometric": 0.9800886409,
+      "tolerance": 1e-6,
+      "_note": "tanh²(0.9801) = 0.5672 = sin²(48.86°)"
+    },
+    {
+      "label": "Cape Town",
+      "lat_deg": -33.9,
+      "s_phi": 0.3110796066,
+      "psi_isometric": -0.6295541096,
+      "tolerance": 1e-6,
+      "_note": "Southern hemisphere: negative ψ. tanh²(-0.6296) = 0.3111 = sin²(33.9°)"
+    },
+    {
+      "label": "High latitude (75°)",
+      "lat_deg": 75.0,
+      "s_phi": 0.9330127019,
+      "psi_isometric": 2.0275894218,
+      "tolerance": 1e-6,
+      "_note": "Near pole: ψ grows large. tanh²(2.028) = 0.9330 = sin²(75°)"
+    }
+  ],
+
+  "qa_connection": {
+    "t_operator_is_constant_bearing": "The T-operator is a single fixed generator applied repeatedly. This IS a constant-bearing path — the discrete analogue of a loxodrome. The generator doesn't change; only the state advances.",
+    "pisano_is_circumnavigation": "The Pisano period π(m) is the number of steps to complete the loxodrome cycle. π(24)=24 for cosmos orbits. The loxodrome spirals and returns after exactly π(m) steps — impossible on a continuous sphere (continuous loxodromes never close, except for cardinal bearings).",
+    "orbit_partitions_loxodromes": "Cosmos = full circumnavigation rhumb lines (24 steps). Satellite = reduced rhumb lines (8 steps, the principal winds). Singularity = degenerate (no motion). This partition is STRUCTURAL — it arises from the algebra, not from geometry.",
+    "mercator_is_spread": "The Mercator identity s_φ = tanh²(ψ) shows that spreads ARE Mercator-native quantities. The isometric latitude ψ is the natural coordinate for loxodromes; its square hyperbolic tangent IS the spread. Mercator projection was a spread projection all along.",
+    "theorem_nt": "Continuous latitude φ → spread s_φ is observer projection. The QA loxodrome operates on discrete states (b,e) mod m. Mercator coordinate ψ is a second observer projection. The discrete path is the reality; the projected charts are views."
+  },
+
+  "sources": [
+    "Mercator projection: Gerardus Mercator (1569)",
+    "Loxodrome: Pedro Nunes (1537), first description of rhumb lines",
+    "Pisano period: Wall (1960), QA T-operator periodicity",
+    "Isometric latitude: Bowditch, American Practical Navigator",
+    "Dead reckoning cert: [163] QA_DEAD_RECKONING_CERT.v1"
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

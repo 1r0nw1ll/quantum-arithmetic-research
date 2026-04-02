@@ -1,0 +1,29 @@
+{
+  "schema_version": "QA_ELLIPSOID_SLICE_CERT.v1",
+  "certificate_id": "qa.cert.ellipsoid_slice.fail.bad_band.v1",
+  "cert_type": "qa_ellipsoid_slice_cert",
+  "title": "FAIL: Wrong Pisano band count (declared 12 instead of 24)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+
+  "shape_qn": {"b": 101, "e": 9, "d": 110, "a": 119},
+
+  "latitude_slices": [
+    {"lat_deg": 0.0, "s_phi": 0.0, "R_meters": 6378137.0},
+    {"lat_deg": 45.0, "s_phi": 0.5, "R_meters": 4517591.0},
+    {"lat_deg": 90.0, "s_phi": 1.0, "R_meters": 0.0}
+  ],
+
+  "chromo_slices": [],
+
+  "pisano_bands": {
+    "n_bands": 12,
+    "band_width_deg": 15.0,
+    "_note": "WRONG: 12 × 15° = 180° ≠ 360°. Must be 24 bands."
+  },
+
+  "fail_ledger": [
+    {"check_id": "SL_BAND", "reason": "12 × 15° = 180°, not 360°. The Pisano period π(24)=24 requires 24 bands."}
+  ],
+  "result": "FAIL"
+}

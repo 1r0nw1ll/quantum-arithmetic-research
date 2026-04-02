@@ -3727,6 +3727,107 @@ def _validate_dead_reckoning_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_celestial_nav_cert_family(base_dir: str) -> Optional[str]:
+    """QA Celestial Nav Cert family [165] — certifies celestial navigation sight reduction as rational trigonometry. sin²(h) = [σ₁√(s_φ·s_δ) + σ₂√(c_φ·c_δ·c_LHA)]² where σ₁,σ₂ ∈ {±1} discrete orientation flags. Sextant = spread instrument. Position circle = spread locus. Two-star fix = algebraic spread intersection. Theorem NT: continuous angles → spreads + discrete σ. 7 star witnesses. Tier 1. Checks CN_1+SIGHT/SPREAD/SIGMA/AZIMUTH/FIX/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    cn_dir    = os.path.join(base_dir, "qa_celestial_nav_cert_v1")
+    validator = os.path.join(cn_dir, "qa_celestial_nav_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_celestial_nav_cert_v1/qa_celestial_nav_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=cn_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_celestial_nav_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_celestial_nav_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_celestial_nav_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_loxodrome_cert_family(base_dir: str) -> Optional[str]:
+    """QA Loxodrome Cert family [166] — certifies loxodromes (rhumb lines) as QA T-operator constant-bearing paths on mod-m lattice. Period=Pisano π(m). Bearing spread=e²/G. Mercator identity s_φ=tanh²(ψ). Three orbit types partition loxodromes: cosmos/satellite/singularity. 4 path witnesses + 5 Mercator points. Tier 2 structural. Checks LX_1+PATH/BEARING/MERCATOR/ORBIT/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    lx_dir    = os.path.join(base_dir, "qa_loxodrome_cert_v1")
+    validator = os.path.join(lx_dir, "qa_loxodrome_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_loxodrome_cert_v1/qa_loxodrome_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=lx_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_loxodrome_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_loxodrome_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_loxodrome_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_historical_nav_cert_family(base_dir: str) -> Optional[str]:
+    """QA Historical Nav Cert family [167] — certifies 5 historical navigation systems as proto-QA integer arithmetic. Babylon (Plimpton 322 = Berggren tree), Egypt (seked = spread ratio), Polynesia (star compass = mod-32), Norse (sun stones = spread measurement), Arab (kamal = integer spread increments). Common structure: discrete states + integer arithmetic + observer projection at boundaries. Tier 2 structural. Checks HN_1+SYSTEM/SEKED/KAMAL/TRIPLE/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    hn_dir    = os.path.join(base_dir, "qa_historical_nav_cert_v1")
+    validator = os.path.join(hn_dir, "qa_historical_nav_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_historical_nav_cert_v1/qa_historical_nav_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60,
+        cwd=hn_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_historical_nav_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_historical_nav_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_historical_nav_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_ellipsoid_geodesic_cert_family(base_dir: str) -> Optional[str]:
+    """QA Ellipsoid Geodesic Cert family [168] — certifies geodesic properties of WGS84 quantum ellipse in QN arithmetic. M/N=F/(d²-e²·s_φ). b/a=√F/d. I=C-F=-10039<0→ellipse. Quantum lattice: s_φ=C/G≈Tropic, e²/G=eccentricity resonance. Tier 1. Checks EG_1+QN/CURV/AXIS/DISC/LATTICE/W/F; 1 PASS+1 FAIL; self-test ok"""
+    import subprocess
+    eg_dir = os.path.join(base_dir, "qa_ellipsoid_geodesic_cert_v1")
+    validator = os.path.join(eg_dir, "qa_ellipsoid_geodesic_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ellipsoid_geodesic_cert_v1/qa_ellipsoid_geodesic_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator, "--self-test"], capture_output=True, text=True, timeout=60, cwd=eg_dir)
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_ellipsoid_geodesic_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_ellipsoid_geodesic_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_ellipsoid_slice_cert_family(base_dir: str) -> Optional[str]:
+    """QA Ellipsoid Slice Cert family [169] — certifies QA slicing of WGS84 quantum ellipse. Latitude circles R²=a²d²c_φ/(d²-e²s_φ). Meridian ellipse axis=√F/d. Chromo slices C/F/G constant curves. 24 Pisano longitude bands=time zones. Tier 1+2. Checks SL_1+LAT/MER/CHROMO/BAND/W/F; 1 PASS+1 FAIL; self-test ok"""
+    import subprocess
+    sl_dir = os.path.join(base_dir, "qa_ellipsoid_slice_cert_v1")
+    validator = os.path.join(sl_dir, "qa_ellipsoid_slice_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ellipsoid_slice_cert_v1/qa_ellipsoid_slice_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator, "--self-test"], capture_output=True, text=True, timeout=60, cwd=sl_dir)
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_ellipsoid_slice_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_ellipsoid_slice_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_gnomonic_rt_cert_family(base_dir: str) -> Optional[str]:
     """QA Gnomonic RT Cert family [164] — certifies gnomonic map projection via rational trigonometry. Gnomonic quadrance Q=spread_c/cross_c=tan²(angular_dist). Great circles → straight lines (collinearity cross product <10⁻¹²). Berggren tree generators produce Pythagorean triples C²+F²=G² = discrete geodesic steps on cone. London tangent point, 5 cities. Tier 1 (quadrance) + Tier 2 (Berggren). Checks GN_1+QUAD/SPREAD/COLLINEAR/BERGGREN/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -5868,6 +5969,31 @@ FAMILY_SWEEPS = [
      "Gnomonic projection via spreads/crosses; Q=spread_c/cross_c=tan²(angular_dist); great circles→straight lines (collinearity <10⁻¹²); Berggren tree C²+F²=G² = discrete geodesic steps projecting to lines; London tangent 5 cities; Plimpton 322 = nav table; Tier 1+2; checks GN_1+QUAD/SPREAD/COLLINEAR/BERGGREN/W/F; 1 PASS + 1 FAIL; self-test ok",
      "164_qa_gnomonic_rt_cert",
      "qa_gnomonic_rt_cert_v1", True),
+    (165, "QA Celestial Nav Cert family",
+     _validate_celestial_nav_cert_family,
+     "Sight reduction as RT: s_h=[σ₁√(s_φ·s_δ)+σ₂√(c_φ·c_δ·c_LHA)]²; σ₁,σ₂∈{±1} discrete orientation; sextant=spread instrument; position circle=spread locus; two-star fix=algebraic; 7 stars London; Tier 1; checks CN_1+SIGHT/SPREAD/SIGMA/AZIMUTH/FIX/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "165_qa_celestial_nav_cert",
+     "qa_celestial_nav_cert_v1", True),
+    (166, "QA Loxodrome Cert family",
+     _validate_loxodrome_cert_family,
+     "Loxodromes=constant-bearing T-operator paths on mod-m lattice; period=Pisano π(m); bearing spread=e²/G; Mercator identity s_φ=tanh²(ψ); 3 orbit types; cosmos/satellite/singularity partition; 4 paths + 5 Mercator points; Tier 2; checks LX_1+PATH/BEARING/MERCATOR/ORBIT/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "166_qa_loxodrome_cert",
+     "qa_loxodrome_cert_v1", True),
+    (167, "QA Historical Nav Cert family",
+     _validate_historical_nav_cert_family,
+     "5 civilizations proto-QA: Babylon P322=Berggren tree; Egypt seked=spread ratio; Polynesia star compass=mod-32; Norse sun stones=spread measurement; Arab kamal=integer spread increments; common: discrete states+integer arithmetic+observer projection; Tier 2; checks HN_1+SYSTEM/SEKED/KAMAL/TRIPLE/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "167_qa_historical_nav_cert",
+     "qa_historical_nav_cert_v1", True),
+    (168, "QA Ellipsoid Geodesic Cert family",
+     _validate_ellipsoid_geodesic_cert_family,
+     "WGS84 quantum ellipse geodesics in QN arithmetic; M/N=F/(d²-e²·s_φ); b/a=√F/d=√12019/110; I=C-F=-10039<0=ellipse; quantum lattice s_φ=C/G≈Tropic(23.78°); shape/orbit QN harmonically independent; Tier 1; checks EG_1+QN/CURV/AXIS/DISC/LATTICE/W/F; 1 PASS+1 FAIL; self-test ok",
+     "168_qa_ellipsoid_geodesic_cert",
+     "qa_ellipsoid_geodesic_cert_v1", True),
+    (169, "QA Ellipsoid Slice Cert family",
+     _validate_ellipsoid_slice_cert_family,
+     "QA slicing: latitude circles R²=a²d²c_φ/(d²-e²s_φ); meridian=shape QN ellipse (self-similar); chromo C/F/G curve families; 24 Pisano longitude bands=time zones; Tropic≈C/G quantum point; Tier 1+2; checks SL_1+LAT/MER/CHROMO/BAND/W/F; 1 PASS+1 FAIL; self-test ok",
+     "169_qa_ellipsoid_slice_cert",
+     "qa_ellipsoid_slice_cert_v1", True),
 ]
 
 

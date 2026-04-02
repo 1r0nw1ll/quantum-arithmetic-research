@@ -1,0 +1,40 @@
+{
+  "schema_version": "QA_HISTORICAL_NAV_CERT.v1",
+  "certificate_id": "qa.cert.historical_nav.fail.bad_triple.v1",
+  "cert_type": "qa_historical_nav_cert",
+  "title": "FAIL: Claimed Plimpton 322 triple is not Pythagorean",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+
+  "_fixture_purpose": "FAIL fixture: includes a claimed Plimpton 322 triple (100, 99, 140) that does not satisfy C²+F²=G² (10000+9801=19801≠19600). This represents a misreading of the tablet.",
+
+  "systems": [
+    {
+      "name": "Babylonian WRONG triple",
+      "era": "~1800 BCE",
+      "method": "Plimpton 322 misread",
+      "qa_equivalent": "NOT a valid Berggren node",
+      "pythagorean_triples": [
+        {"label": "WRONG triple", "d": 10, "e": 7, "C": 100, "F": 99, "G": 140,
+         "_note": "C²+F²=10000+9801=19801, G²=19600. NOT Pythagorean."}
+      ]
+    },
+    {
+      "name": "Polynesian (valid)",
+      "era": "~1000 CE",
+      "method": "Star compass",
+      "qa_equivalent": "Mod-32 bearings"
+    },
+    {
+      "name": "Arab (valid)",
+      "era": "~900 CE",
+      "method": "Kamal",
+      "qa_equivalent": "Integer spread increments"
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "HN_TRIPLE", "reason": "(100,99,140) is not Pythagorean: 10000+9801=19801≠19600. Tablet misread."}
+  ],
+  "result": "FAIL"
+}

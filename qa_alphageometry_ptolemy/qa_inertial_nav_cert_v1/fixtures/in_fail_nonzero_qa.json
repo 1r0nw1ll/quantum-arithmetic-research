@@ -1,0 +1,21 @@
+{
+  "schema_version": "QA_INERTIAL_NAV_CERT.v1",
+  "certificate_id": "qa.cert.inertial_nav.fail.nonzero_qa.v1",
+  "cert_type": "qa_inertial_nav_cert",
+  "title": "FAIL: Claims non-zero QA error (impossible for integer arithmetic)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 1",
+  "modulus": 24,
+
+  "witnesses": [
+    {"b0": 1, "e0": 1, "n_steps": 100, "final_b": 5, "final_e": 8, "qa_error": 0.001,
+     "_note": "WRONG: qa_error must be 0. Integer mod arithmetic has no drift."},
+    {"b0": 3, "e0": 5, "n_steps": 50, "qa_error": 0},
+    {"b0": 7, "e0": 13, "n_steps": 200, "qa_error": 0}
+  ],
+
+  "fail_ledger": [
+    {"check_id": "IN_ZERO", "reason": "QA error declared as 0.001 but must be exactly 0. T-operator is integer mod — no drift by construction."}
+  ],
+  "result": "FAIL"
+}

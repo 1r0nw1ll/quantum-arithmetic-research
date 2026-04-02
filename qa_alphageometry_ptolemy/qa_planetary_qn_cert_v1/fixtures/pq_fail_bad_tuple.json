@@ -1,0 +1,26 @@
+{
+  "schema_version": "QA_PLANETARY_QN_CERT.v1",
+  "certificate_id": "qa.cert.planetary_qn.fail.bad_tuple.v1",
+  "cert_type": "qa_planetary_qn_cert",
+  "title": "FAIL: Invalid QN tuple (d ≠ b+e)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+
+  "bodies": [
+    {"name": "Bad_Earth", "eccentricity": 0.08182, "ecc_tolerance": 0.01,
+     "qn": {"b": 101, "e": 9, "d": 111, "a": 119}, "_note": "WRONG d=111≠110"},
+    {"name": "Mars_shape", "eccentricity": 0.06489, "ecc_tolerance": 0.001,
+     "qn": {"b": 245, "e": 17, "d": 262, "a": 279}},
+    {"name": "Jupiter_shape", "eccentricity": 0.35364, "ecc_tolerance": 0.001,
+     "qn": {"b": 276, "e": 151, "d": 427, "a": 578}},
+    {"name": "Saturn_shape", "eccentricity": 0.43165, "ecc_tolerance": 0.001,
+     "qn": {"b": 79, "e": 60, "d": 139, "a": 199}},
+    {"name": "Moon_orbit", "eccentricity": 0.05490, "ecc_tolerance": 0.001,
+     "qn": {"b": 241, "e": 14, "d": 255, "a": 269}}
+  ],
+
+  "fail_ledger": [
+    {"check_id": "PQ_TUPLE", "reason": "Bad_Earth: d=111 but b+e=101+9=110."}
+  ],
+  "result": "FAIL"
+}

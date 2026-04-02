@@ -71,6 +71,77 @@ For full experiment list and how to run them: `docs/experiments/RUNNING_EXPERIME
 3. **Coupling is bidirectional**: Signal affects coupling, coupling affects evolution
 4. **Statistical rigor**: Multi-trial validation, t-tests, KS tests — check for honest failure reporting
 
+## Multi-Session Parallelism Protocol
+
+Multiple Claude sessions may run in parallel across worktrees or within the same worktree. File-level resource locking via the `qa-collab` MCP bus prevents conflicts.
+
+### Session Startup (REQUIRED for every session)
+
+1. **Pick a session name**: `paper-<topic>`, `exp-<topic>`, `cert-<topic>`, `lab-<topic>`
+2. **Read existing locks**: `collab_get_state(key="file_locks")` — inspect what's claimed
+3. **Register yourself**: `collab_set_state(key="session:<name>", value={"scope": "<dir>", "ts": "<ISO8601>"})`
+4. **Check disk**: if `df -h /` shows < 2GB free, warn Will before heavy compute
+
+### File Locking (REQUIRED before editing any file another session might touch)
+
+**Acquire lock before editing:**
+```
+1. collab_get_state(key="file_locks")          → read current locks dict
+2. Check: is your target file already locked?
+   - YES and lock.ts is < 5 min old → WAIT or ask Will
+   - YES and lock.ts is > 5 min old → stale lock, safe to claim (dead session)
+   - NO → proceed
+3. collab_set_state(key="file_locks", value={...existing, "<path>": {"session": "<name>", "ts": "<ISO8601>"}})
+```
+
+**Release lock when done editing:**
+```
+1. collab_get_state(key="file_locks")          → read current
+2. Remove your file's entry from the dict
+3. collab_set_state(key="file_locks", value={...without your entry})
+```
+
+**Broadcast major changes** so other sessions react:
+```
+collab_broadcast(event_type="file_updated", data={"session": "<name>", "file": "<path>", "summary": "..."})
+```
+
+### Files That ALWAYS Require Locking
+
+- `CLAUDE.md`, `MEMORY.md`, `AGENTS.md` — shared config
+- `qa_alphageometry_ptolemy/qa_meta_validator.py` — cert registry
+- `docs/families/README.md` — family index
+- Any file you know another active session uses
+
+### Files That NEVER Need Locking
+
+- New files you are creating (no other session knows about them yet)
+- Files inside your exclusive scope directory when no other session claims that scope
+- Read-only access (reading never conflicts)
+
+### Git Commit Rules for Parallel Sessions
+
+- **Preferred**: Will commits from a dedicated terminal. Sessions stage nothing.
+- **If a session must commit**: `collab_broadcast(event_type="commit_intent", data={"session": "<name>", "files": [...]})` then wait 5s for objections via `collab_wait_for_event(topic="commit_veto", timeout_s=5)` before proceeding.
+- **Never force-push from a parallel session.**
+
+### Session Shutdown
+
+1. Release all your file locks (remove entries from `file_locks`)
+2. `collab_broadcast(event_type="session_done", data={"session": "<name>", "summary": "..."})`
+3. Remove `session:<name>` state key
+4. Capture key findings in Open Brain
+
+### Worktree Layout
+
+| Directory | Branch | Workstream |
+|---|---|---|
+| `/home/player2/signal_experiments/` | `main` | qa_lab, domain experiments, heavy compute |
+| `/home/player2/wt-papers/` | `wt/papers` | Paper writing/editing |
+| `/home/player2/wt-certs/` | `wt/certs` | Cert families + validator |
+
+Multiple sessions MAY work in the same worktree if they lock files properly and have disjoint scopes.
+
 ## Research Documentation
 
 - **GEMINI.md**: High-level project overview

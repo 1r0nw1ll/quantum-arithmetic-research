@@ -1,0 +1,93 @@
+{
+  "schema_version": "QA_H_NULL_MODULARITY_CERT.v1",
+  "certificate_id": "qa.cert.h_null_modularity.pass.lesmis.v1",
+  "cert_type": "qa_h_null_modularity_cert",
+  "title": "H-Null Modularity PASS: Les Miserables hub-dominated network",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": 2,
+
+  "_fixture_purpose": "Certifies H-null modularity model on Les Miserables co-appearance network (77 nodes, 254 edges). H-null ARI=0.638 vs standard ARI=0.588 (+0.050). Hub-dominated topology where community-internal hubs benefit from asymmetric null. HONEST: wins on 1/10 benchmark graphs only.",
+
+  "h_null_model": {
+    "definition": "H(b,e) = C + F where C = 2*d*e (green quadrance), F = d*d - e*e (red quadrance)",
+    "degree_mapping": "b = max(k_i, k_j), e = min(k_i, k_j), d = b + e = k_i + k_j",
+    "standard_null": "X = k_i * k_j (purely multiplicative)",
+    "h_vs_x_ratio": "H/X = b/e + 4 + 2*e/b grows linearly with degree asymmetry r=b/e",
+    "chromogeometry": "H = C + F = green + red quadrance (Wildberger chromogeometry)"
+  },
+
+  "mathematical_identity": {
+    "C": "2*d*e = 2*(b+e)*e = green quadrance Qg(d,e)",
+    "F": "d*d - e*e = (b+e)*(b+e) - e*e = b*b + 2*b*e = b*(b+2*e) = b*a = red quadrance Qr(d,e)",
+    "G": "d*d + e*e = blue quadrance Qb(d,e)",
+    "H_equals_C_plus_F": true,
+    "chromogeometric_identity": "C*C + F*F = G*G (Wildberger Theorem 6)",
+    "chromogeometry_verified": true
+  },
+
+  "primary_result": {
+    "graph": "les_miserables",
+    "nodes": 77,
+    "edges": 254,
+    "topology_class": "hub-dominated with community-internal hubs",
+    "h_null_ari": 0.638,
+    "standard_ari": 0.588,
+    "delta_ari": 0.050,
+    "h_null_nmi": 0.786,
+    "standard_nmi": 0.756,
+    "method": "louvain with H-null expected weight",
+    "direction": "H-null outperforms standard on hub-dominated networks"
+  },
+
+  "secondary_results": [
+    {
+      "graph": "football",
+      "nodes": 115,
+      "edges": 613,
+      "topology_class": "uniform degree",
+      "h_null_ari": 0.824,
+      "standard_ari": 0.824,
+      "delta_ari": 0.0,
+      "note": "All QA null models tie — low degree variance means null model choice irrelevant"
+    }
+  ],
+
+  "honest_negatives": {
+    "wins": 1,
+    "ties": 3,
+    "losses": 6,
+    "total_graphs": 10,
+    "loses_on": ["powerlaw_cluster", "karate", "random_partition", "stochastic_block_model", "dolphins", "polbooks"],
+    "ties_on": ["football", "email_eu_core", "celegans"],
+    "wins_on": ["les_miserables"],
+    "interpretation": "H-null is topology-specific, NOT a universal improvement. Effect requires hub-dominated networks with community-internal hubs where degree asymmetry between node pairs carries structural information."
+  },
+
+  "axiom_compliance": {
+    "A1": "degrees are positive integers in {1,...,N}",
+    "A2": "d=b+e, a=b+2*e derived correctly (never assigned independently)",
+    "T2": "ARI/NMI scores and community assignments are observer projections only",
+    "S1": "no **2 in QA computation — d*d not d**2",
+    "S2": "all QA state is integer (degrees, C, F, G, H values)"
+  },
+
+  "witnesses": [
+    {
+      "graph": "les_miserables",
+      "direction": "hub_asymmetry",
+      "observation": "H-null captures both symmetric (C=2de) and asymmetric (F=b*a) degree relationships; standard null X=k_i*k_j misses the additive component through d=k_i+k_j"
+    }
+  ],
+
+  "validation_checks": [
+    {"check_id": "HN_1", "description": "schema version correct", "passed": true},
+    {"check_id": "HN_MODEL", "description": "H-null model definition complete", "passed": true},
+    {"check_id": "HN_CHROMO", "description": "C*C+F*F=G*G identity verified", "passed": true},
+    {"check_id": "HN_BENCH", "description": "benchmark ARI/NMI in valid range", "passed": true},
+    {"check_id": "HN_HONEST", "description": "honest negatives declared (1/10 wins)", "passed": true},
+    {"check_id": "HN_W", "description": "at least one witness present", "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

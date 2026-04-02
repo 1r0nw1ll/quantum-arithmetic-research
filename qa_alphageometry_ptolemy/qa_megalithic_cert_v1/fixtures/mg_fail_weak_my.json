@@ -1,0 +1,33 @@
+{
+  "schema_version": "QA_MEGALITHIC_CERT.v1",
+  "certificate_id": "qa.cert.megalithic.fail.weak_my.v1",
+  "cert_type": "qa_megalithic_cert",
+  "title": "FAIL: MY claim with insufficient sample (n=16, p=0.16)",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 2",
+
+  "_fixture_purpose": "FAIL fixture: claims MY significance from only 16 circles (Wikipedia subset). p=0.16 is NOT significant. Demonstrates that small samples lack power to detect the MY quantum — Thom's full 84-circle dataset is needed.",
+
+  "megalithic_yard": {
+    "value_ft": 2.72,
+    "p_value": 0.16,
+    "n_circles": 16,
+    "_note": "FAIL: p=0.16 > 0.05. Only 16 circles from Wikipedia. Insufficient power."
+  },
+
+  "megalithic_fathom": {
+    "even_count": 12,
+    "total": 16,
+    "even_fraction": 0.75,
+    "p_value": 0.038
+  },
+
+  "construction_triangles": [
+    {"label": "3:4:5", "sides": [3, 4, 5], "qn": {"b": 1, "e": 1, "d": 2, "a": 3}}
+  ],
+
+  "fail_ledger": [
+    {"check_id": "MG_MY", "reason": "p=0.16 with n=16. Need Thom's full 84-circle dataset for statistical power. Small samples don't have enough resolution to detect the MY quantum."}
+  ],
+  "result": "FAIL"
+}

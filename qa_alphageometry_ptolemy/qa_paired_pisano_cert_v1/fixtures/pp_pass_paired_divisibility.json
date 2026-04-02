@@ -1,0 +1,89 @@
+{
+  "schema_version": "QA_PAIRED_PISANO_CERT.v1",
+  "certificate_id": "qa.cert.paired_pisano.pass.paired_divisibility.v1",
+  "cert_type": "qa_paired_pisano_cert",
+  "title": "Paired Pisano Divisibility — Fibonacci pairs have 2.25x higher both-divide rate across 499 moduli",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": "Tier 3",
+
+  "parameters": {
+    "max_modulus": 500,
+    "max_p": 10,
+    "n_moduli": 499
+  },
+
+  "fibonacci_pairs": [
+    {"p": 2, "q": 1, "both_divide_rate": 0.8577, "product": 2},
+    {"p": 3, "q": 1, "both_divide_rate": 0.6934, "product": 3},
+    {"p": 3, "q": 2, "both_divide_rate": 0.5571, "product": 6},
+    {"p": 5, "q": 1, "both_divide_rate": 0.5511, "product": 5},
+    {"p": 5, "q": 2, "both_divide_rate": 0.4389, "product": 10},
+    {"p": 5, "q": 3, "both_divide_rate": 0.4529, "product": 15},
+    {"p": 8, "q": 1, "both_divide_rate": 0.5010, "product": 8},
+    {"p": 8, "q": 3, "both_divide_rate": 0.3647, "product": 24},
+    {"p": 8, "q": 5, "both_divide_rate": 0.3146, "product": 40}
+  ],
+
+  "statistics": {
+    "overall_fib_mean": 0.526,
+    "overall_nonfib_mean": 0.234,
+    "overall_ratio": 2.25,
+    "overall_mann_whitney_U": 239.0,
+    "overall_mann_whitney_p": 0.0017,
+    "test": "Mann-Whitney U, one-sided (H1: Fib > NonFib)",
+    "order1_fib_mean": 0.857,
+    "order1_nonfib_mean": 0.227,
+    "order1_ratio": 3.77,
+    "order1_mann_whitney_p": 0.028,
+    "product_matched_wins": 5,
+    "product_matched_total": 9,
+    "product_matched_fraction": 0.556
+  },
+
+  "order_analysis": [
+    {"order": 1, "fib_pairs": ["2:1", "3:2"], "fib_mean": 0.707, "nonfib_mean": 0.227, "ratio": 3.12},
+    {"order": 2, "fib_pairs": ["3:1", "5:3"], "fib_mean": 0.573, "nonfib_mean": 0.277, "ratio": 2.07},
+    {"order": 3, "fib_pairs": ["5:2", "8:5"], "fib_mean": 0.377, "nonfib_mean": 0.213, "ratio": 1.77},
+    {"order": 4, "fib_pairs": ["5:1", "8:3"], "fib_mean": 0.433, "nonfib_mean": 0.195, "ratio": 2.22},
+    {"order": 7, "fib_pairs": ["8:1"], "fib_mean": 0.501, "nonfib_mean": 0.236, "ratio": 2.12}
+  ],
+
+  "mechanism": {
+    "lcm_principle": "For coprime (p,q), both p|pi(m) AND q|pi(m) iff lcm(p,q)=p*q divides pi(m). Fibonacci pairs have smaller products, so their lcm divides pi(m) more often.",
+    "individual_advantage": "Fibonacci numbers individually divide pi(m) at 3.70x the rate of non-Fibonacci numbers (from prior [163] analysis). The paired advantage compounds both effects.",
+    "exception": "4:1 has higher rate than some Fibonacci pairs at order-3 because lcm(4,1)=4 is very small. This explains Kirkwood gap 4:1 being as deep as Fibonacci resonances."
+  },
+
+  "qa_connection": {
+    "pisano_period": "pi(m) = period of Fibonacci sequence mod m = orbit period of T-operator [[0,1],[1,1]] in Z/mZ",
+    "divisibility_identity": "F_k | F_{nk} (every k-th Fibonacci divides every (nk)-th). Fibonacci numbers divide pi(m) when the T-operator orbit aligns with the Fibonacci index.",
+    "paired_resonance": "A p:q resonance is 'deep' when BOTH p and q divide pi(m), meaning the T-operator orbit has commensurability with both components simultaneously.",
+    "kirkwood_connection": "Kirkwood gap 4:1 exception: lcm(4,1)=4 is smaller than many Fibonacci products, so 4:1 paired divisibility is high despite 4 not being Fibonacci."
+  },
+
+  "axiom_compliance": {
+    "A1": "Fibonacci indices and moduli in {1,...,500}, positive integers only",
+    "A2": "Pisano period derived from modular Fibonacci recurrence: F_{k+1} = (F_k + F_{k-1}) mod m",
+    "T2": "p-values, Mann-Whitney U, and both-divide rates are observer projections of discrete divisibility",
+    "S1": "m*m used instead of m**2 in Pisano computation (line 35 of source)",
+    "S2": "All QA state (Fibonacci indices, moduli, Pisano periods) is integer"
+  },
+
+  "caveats": [
+    "Product-matched control shows only 56% Fibonacci wins (5/9) — the advantage is partially explained by smaller products.",
+    "4:1 exception shows non-Fibonacci pairs can achieve high both-divide rates when lcm is small.",
+    "Modulus range 2..500 is finite; asymptotic behavior may differ.",
+    "Order-1 comparison has small Fibonacci sample (2 pairs vs 7 non-Fibonacci), limiting statistical power.",
+    "The 2.25x overall advantage conflates multiple orders; per-order advantages range from 1.77x to 3.12x."
+  ],
+
+  "sources": [
+    "qa_pisano_paired_divisibility.py — Will Dale conjecture, Claude computation (2026-04-02)",
+    "Family [163] QA_FIBONACCI_RESONANCE_CERT.v1 — individual Fibonacci divisibility of pi(m)",
+    "Wall (1960) — Fibonacci entry point and Pisano period properties",
+    "Renault (1996) — The Fibonacci Sequence Under Various Moduli"
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

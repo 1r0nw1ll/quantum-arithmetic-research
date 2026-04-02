@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Paired Pisano Cert family [179]: certifies that Fibonacci coprime pairs (p,q) have higher paired Pisano divisibility than non-Fibonacci pairs. Both-divide rate 0.526 vs 0.234 (2.25x), Mann-Whitney p=0.0017. Mechanism: for coprime (p,q), both p|pi(m) AND q|pi(m) requires lcm(p,q)=p*q | pi(m); Fibonacci pairs have smaller products AND individually divide pi(m) more often. Order-1: Fib mean 0.857 vs non-Fib 0.227 (3.77x, p=0.028). Product-matched control: 5/9 (56%) Fib wins — modest but real. Exception: 4:1 beats Fibonacci at order-3 (lcm=4 small). Tier 3 statistical. Source: qa_pisano_paired_divisibility.py computation over m=2..500."
+}

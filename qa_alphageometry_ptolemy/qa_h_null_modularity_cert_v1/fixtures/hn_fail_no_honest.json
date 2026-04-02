@@ -1,0 +1,44 @@
+{
+  "schema_version": "QA_H_NULL_MODULARITY_CERT.v1",
+  "certificate_id": "qa.cert.h_null_modularity.fail.no_honest.v1",
+  "cert_type": "qa_h_null_modularity_cert",
+  "title": "H-Null Modularity FAIL: missing honest negatives",
+  "created_utc": "2026-04-02T00:00:00Z",
+  "tier": 2,
+
+  "_fixture_purpose": "FAIL: Missing honest_negatives section triggers HN_HONEST check. A Tier 2 cert MUST declare limitations.",
+
+  "h_null_model": {
+    "definition": "H(b,e) = C + F where C = 2*d*e, F = d*d - e*e",
+    "degree_mapping": "b = max(k_i, k_j), e = min(k_i, k_j), d = b + e",
+    "standard_null": "X = k_i * k_j",
+    "h_vs_x_ratio": "H/X = b/e + 4 + 2*e/b",
+    "chromogeometry": "H = C + F = green + red quadrance"
+  },
+
+  "mathematical_identity": {
+    "C": "2*d*e",
+    "F": "d*d - e*e = b*a",
+    "G": "d*d + e*e",
+    "H_equals_C_plus_F": true,
+    "chromogeometric_identity": "C*C + F*F = G*G",
+    "chromogeometry_verified": true
+  },
+
+  "primary_result": {
+    "graph": "les_miserables",
+    "nodes": 77,
+    "edges": 254,
+    "h_null_ari": 0.638,
+    "standard_ari": 0.588,
+    "delta_ari": 0.050,
+    "method": "louvain"
+  },
+
+  "witnesses": [
+    {"graph": "les_miserables", "direction": "hub_asymmetry", "observation": "test"}
+  ],
+
+  "fail_ledger": [{"check_id": "HN_HONEST", "message": "honest_negatives section missing — Tier 2 cert requires declared limitations"}],
+  "result": "FAIL"
+}

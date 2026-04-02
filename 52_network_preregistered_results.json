@@ -1,0 +1,31 @@
+{
+  "domain": "network_traffic_preregistered",
+  "phi_preregistered": -1,
+  "classification": "disorder-stress",
+  "data": "NSL-KDD",
+  "n_connections": 19980,
+  "real_result": {
+    "r2_base": 3.0160505273046923e-05,
+    "r2_full": 7.185079103022574e-05,
+    "delta_r2": 4.169028575717881e-05,
+    "p_qa_add": 0.5613716413423144
+  },
+  "surrogate_summary": {
+    "permuted_segments": {
+      "real": 4.169028575717881e-05,
+      "surr_mean": 7.548343077919351e-05,
+      "surr_std": 7.468352679796826e-05,
+      "rank_p": 0.595,
+      "beats": false
+    },
+    "random_fracs": {
+      "real": 4.169028575717881e-05,
+      "surr_mean": 6.833440788129696e-05,
+      "surr_std": 7.579060348095488e-05,
+      "rank_p": 0.535,
+      "beats": false
+    }
+  },
+  "n_surr_pass": 0,
+  "phi_confirmed": false
+}

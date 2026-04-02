@@ -1,0 +1,109 @@
+HYPERSPECTRAL DATASET INSPECTION REPORT
+==================================================
+
+Dataset: Indian_pines_corrected
+Dimensions: [145, 145, 200] (H×W×Bands)
+Total pixels: 21,025
+Spectral bands: 200
+Classes: 16
+Labeled pixels: 10,249 (48.7%)
+Spectral range: [955.00, 9604.00]
+Memory usage: 8.0 MB
+
+Class distribution:
+  Class 1: 46 pixels
+  Class 2: 1,428 pixels
+  Class 3: 830 pixels
+  Class 4: 237 pixels
+  Class 5: 483 pixels
+  Class 6: 730 pixels
+  Class 7: 28 pixels
+  Class 8: 478 pixels
+  Class 9: 20 pixels
+  Class 10: 972 pixels
+  Class 11: 2,455 pixels
+  Class 12: 593 pixels
+  Class 13: 205 pixels
+  Class 14: 1,265 pixels
+  Class 15: 386 pixels
+  Class 16: 93 pixels
+
+--------------------------------------------------
+
+Dataset: PaviaU
+Dimensions: [610, 340, 103] (H×W×Bands)
+Total pixels: 207,400
+Spectral bands: 103
+Classes: 9
+Labeled pixels: 42,776 (20.6%)
+Spectral range: [0.00, 8000.00]
+Memory usage: 40.7 MB
+
+Class distribution:
+  Class 1: 6,631 pixels
+  Class 2: 18,649 pixels
+  Class 3: 2,099 pixels
+  Class 4: 3,064 pixels
+  Class 5: 1,345 pixels
+  Class 6: 5,029 pixels
+  Class 7: 1,330 pixels
+  Class 8: 3,682 pixels
+  Class 9: 947 pixels
+
+--------------------------------------------------
+
+Dataset: KSC
+Dimensions: [512, 614, 176] (H×W×Bands)
+Total pixels: 314,368
+Spectral bands: 176
+Classes: 13
+Labeled pixels: 5,211 (1.7%)
+Spectral range: [0.00, 65535.00]
+Memory usage: 105.5 MB
+
+Class distribution:
+  Class 1: 761 pixels
+  Class 2: 243 pixels
+  Class 3: 256 pixels
+  Class 4: 252 pixels
+  Class 5: 161 pixels
+  Class 6: 229 pixels
+  Class 7: 105 pixels
+  Class 8: 431 pixels
+  Class 9: 520 pixels
+  Class 10: 404 pixels
+  Class 11: 419 pixels
+  Class 12: 503 pixels
+  Class 13: 927 pixels
+
+--------------------------------------------------
+
+Dataset: Salinas_corrected
+Dimensions: [512, 217, 204] (H×W×Bands)
+Total pixels: 111,104
+Spectral bands: 204
+Classes: 16
+Labeled pixels: 54,129 (48.7%)
+Spectral range: [-11.00, 9207.00]
+Memory usage: 43.2 MB
+
+Class distribution:
+  Class 1: 2,009 pixels
+  Class 2: 3,726 pixels
+  Class 3: 1,976 pixels
+  Class 4: 1,394 pixels
+  Class 5: 2,678 pixels
+  Class 6: 3,959 pixels
+  Class 7: 3,579 pixels
+  Class 8: 11,271 pixels
+  Class 9: 6,203 pixels
+  Class 10: 3,278 pixels
+  Class 11: 1,068 pixels
+  Class 12: 1,927 pixels
+  Class 13: 916 pixels
+  Class 14: 1,070 pixels
+  Class 15: 7,268 pixels
+  Class 16: 1,807 pixels
+
+--------------------------------------------------
+

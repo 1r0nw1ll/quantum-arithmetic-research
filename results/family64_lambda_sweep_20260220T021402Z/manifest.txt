@@ -1,0 +1,22 @@
+family: 64 (qa_kona_ebm_qa_native_orbit_reg_v1)
+script: qa_kona_ebm_qa_native_orbit_reg_v1/generate_multi_seed_report.py
+n_epochs: 20
+n_samples: 1000
+lr: 0.01
+seeds: 0,1,2,3,4 (internal)
+lambdas: 1e-5,1e-3,1e-1,1,10
+[RUN] lambda_orbit=1e-5
+[DONE] lambda_orbit=1e-5
+
+[RUN] lambda_orbit=1e-3
+[DONE] lambda_orbit=1e-3
+
+[RUN] lambda_orbit=1e-1
+[DONE] lambda_orbit=1e-1
+
+[RUN] lambda_orbit=1
+[DONE] lambda_orbit=1
+
+[RUN] lambda_orbit=10
+[DONE] lambda_orbit=10
+

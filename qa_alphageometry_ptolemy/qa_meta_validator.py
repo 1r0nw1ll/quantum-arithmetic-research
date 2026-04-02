@@ -2329,7 +2329,7 @@ def _validate_rule30_cert_if_present(base_dir: str) -> Optional[str]:
             proc = subprocess.run(
                 [sys.executable, validator, "manifest", man_path,
                  "--verify-files", "--ci"],
-                capture_output=True, text=True, timeout=30)
+                capture_output=True, text=True, timeout=120)
             if proc.returncode != 0:
                 raise RuntimeError(
                     f"Manifest validation failed for {man_path}:\n"

@@ -126,6 +126,20 @@ def check_guardrail_denials():
         RESULTS["pass"].append("Guardrail: no blocked prompts in log")
 
 
+def check_topic_acl():
+    """Verify topic ACL is present in collab MCP server."""
+    server_file = ROOT / "qa_lab" / "qa_mcp_servers" / "qa-collab" / "server.py"
+    if not server_file.exists():
+        RESULTS["warn"].append("Collab MCP server not found")
+        return
+
+    content = server_file.read_text()
+    if "TOPIC_ACL" in content and "_check_topic_acl" in content:
+        RESULTS["pass"].append("Topic ACL: enforced in collab MCP server")
+    else:
+        RESULTS["fail"].append("Topic ACL: NOT present in collab MCP server — llm_request.* topics unprotected")
+
+
 def check_bridge_processes():
     """Check if bridges are running with guardrail."""
     rc, stdout, _ = _run("ps aux | grep llm_bridge_agent | grep -v grep")
@@ -160,6 +174,7 @@ def main():
     check_collab_agents()
     check_event_log_secrets()
     check_guardrail_denials()
+    check_topic_acl()
     check_bridge_processes()
 
     print()

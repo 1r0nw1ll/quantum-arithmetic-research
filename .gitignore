@@ -205,3 +205,6 @@ ag2_guardrails_poc/data/secret.txt
 
 # Large raw data files (>100MB — GitHub limit)
 qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_multibench_cases.jsonl
+
+# Playwright MCP temp data
+.playwright-mcp/

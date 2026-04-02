@@ -1,0 +1,31 @@
+{
+  "schema_version": "QA_ERA5_REANALYSIS_CERT.v1",
+  "certificate_id": "qa.cert.era5_reanalysis.fail.missing_field.v1",
+  "cert_type": "qa_era5_reanalysis_cert",
+  "title": "ERA5 Reanalysis FAIL: missing correlation section",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "data_source": {
+    "dataset": "WeatherBench2 ERA5",
+    "n_days": 3297,
+    "n_channels": 15,
+    "level": "500hPa"
+  },
+
+  "partial_correlation": {
+    "partial_r": 0.43,
+    "controlling_for": "lagged variability"
+  },
+
+  "surrogate_tests": {
+    "surrogates_beaten": 4,
+    "surrogates_total": 4
+  },
+
+  "witnesses": ["script_49_era5_reanalysis.py"],
+
+  "fail_ledger": [
+    {"check_id": "ERA_R", "message": "correlation section missing"}
+  ],
+  "result": "FAIL"
+}

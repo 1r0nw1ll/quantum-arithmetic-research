@@ -1,0 +1,32 @@
+{
+  "schema_version": "QA_EMG_PATHOLOGY_CERT.v1",
+  "certificate_id": "qa.cert.emg_pathology.fail.missing_field.v1",
+  "cert_type": "qa_emg_pathology_cert",
+  "title": "EMG Pathology FAIL: missing surrogate_tests section",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "data_source": {
+    "database": "PhysioNet EMG Database",
+    "n_records": 3,
+    "n_windows": 1203,
+    "conditions": ["healthy", "myopathy", "neuropathy"]
+  },
+
+  "delta_r2": {
+    "value": 0.608,
+    "baseline": "RMS",
+    "p_value": 1e-7
+  },
+
+  "phi_transformation": {
+    "pre_registered": true,
+    "phi_D": -1
+  },
+
+  "witnesses": ["script_emg_pathology_qa.py"],
+
+  "fail_ledger": [
+    {"check_id": "EMG_SURR", "message": "surrogate_tests section missing"}
+  ],
+  "result": "FAIL"
+}

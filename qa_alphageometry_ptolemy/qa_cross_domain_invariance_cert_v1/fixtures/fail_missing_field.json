@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_CROSS_DOMAIN_INVARIANCE_CERT.v1",
+  "certificate_id": "qa.cert.cross_domain_invariance.fail.missing_field.v1",
+  "cert_type": "qa_cross_domain_invariance_cert",
+  "title": "Cross-Domain Invariance FAIL: missing invariant_independent_info section",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "invariant_surrogate_survival": {
+    "description": "QCI survives all surrogate null tests in every domain",
+    "domains_confirmed": ["finance", "EEG", "audio", "climate", "cardiac", "EMG"]
+  },
+
+  "invariant_domain_general": {
+    "description": "Same observer architecture applies without domain-specific tuning",
+    "domains_confirmed": ["finance", "EEG", "audio", "climate", "cardiac", "EMG"]
+  },
+
+  "witnesses": ["script_cross_domain_summary.py"],
+
+  "fail_ledger": [
+    {"check_id": "CDI_INV2", "message": "invariant_independent_info section missing"}
+  ],
+  "result": "FAIL"
+}

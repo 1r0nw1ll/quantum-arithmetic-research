@@ -1,0 +1,31 @@
+{
+  "schema_version": "QA_PHI_TRANSFORMATION_CERT.v1",
+  "certificate_id": "qa.cert.phi_transformation.pass.default.v1",
+  "cert_type": "qa_phi_transformation_cert",
+  "title": "Phi Transformation PASS: disorder-stress vs order-stress classification",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "classification": {
+    "disorder_stress": "Phi(D) = -1: pathology/arrhythmia increases disorder (QCI drops)",
+    "order_stress": "Phi(D) = +1: stress increases order (QCI rises)"
+  },
+
+  "pre_registered": [
+    {"domain": "cardiac", "phi_D": -1, "confirmed": true},
+    {"domain": "EMG", "phi_D": -1, "confirmed": true}
+  ],
+
+  "post_hoc_consistent": [
+    {"domain": "EEG", "phi_D": -1},
+    {"domain": "finance", "phi_D": 1},
+    {"domain": "climate", "phi_D": -1},
+    {"domain": "audio", "phi_D": -1}
+  ],
+
+  "domain_requirement": "temporal multi-channel signals with non-trivial baselines",
+
+  "witnesses": ["script_phi_transformation.py"],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

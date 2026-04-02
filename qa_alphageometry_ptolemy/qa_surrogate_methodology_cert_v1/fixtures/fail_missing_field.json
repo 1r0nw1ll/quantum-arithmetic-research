@@ -1,0 +1,28 @@
+{
+  "schema_version": "QA_SURROGATE_METHODOLOGY_CERT.v1",
+  "certificate_id": "qa.cert.surrogate_methodology.fail.missing_field.v1",
+  "cert_type": "qa_surrogate_methodology_cert",
+  "title": "Surrogate Methodology FAIL: missing circular_null_problem section",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "null_design": {
+    "targets_fixed": true,
+    "surrogate_qci_only": true
+  },
+
+  "confirmed_domains": [
+    "finance",
+    "EEG",
+    "audio",
+    "climate",
+    "ERA5",
+    "cardiac"
+  ],
+
+  "witnesses": ["script_surrogate_corrected.py"],
+
+  "fail_ledger": [
+    {"check_id": "SRM_CIRCULAR", "message": "circular_null_problem section missing"}
+  ],
+  "result": "FAIL"
+}

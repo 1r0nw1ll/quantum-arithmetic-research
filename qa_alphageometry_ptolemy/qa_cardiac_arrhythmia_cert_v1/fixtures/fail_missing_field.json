@@ -1,0 +1,30 @@
+{
+  "schema_version": "QA_CARDIAC_ARRHYTHMIA_CERT.v1",
+  "certificate_id": "qa.cert.cardiac_arrhythmia.fail.missing_field.v1",
+  "cert_type": "qa_cardiac_arrhythmia_cert",
+  "title": "Cardiac Arrhythmia FAIL: missing delta_r2 section",
+  "created_utc": "2026-04-02T00:00:00Z",
+
+  "data_source": {
+    "database": "MIT-BIH Arrhythmia Database",
+    "n_records": 48,
+    "n_beats": 94536
+  },
+
+  "surrogate_tests": {
+    "surrogates_beaten": 2,
+    "surrogates_total": 2
+  },
+
+  "phi_transformation": {
+    "pre_registered": true,
+    "phi_D": -1
+  },
+
+  "witnesses": ["script_cardiac_arrhythmia_qa.py"],
+
+  "fail_ledger": [
+    {"check_id": "CAR_DELTA", "message": "delta_r2 section missing"}
+  ],
+  "result": "FAIL"
+}

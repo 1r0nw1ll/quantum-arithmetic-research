@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Planetary QN Cert family [171]: catalogs quantum numbers for 10 solar system bodies (shape + orbital). Each body's eccentricity → best-fit QN tuple (b,e,d,a) with C²+F²=G². Characteristic latitude = arcsin(√(2ε/(1+ε²))). Harmonic connections: Earth-Jupiter shared b=59, Earth-Uranus shared b=101. Saturn (79,139,199) prime AP. Mars shape/orbit GCD=30. Earth Tropic match Tier 2 (p≈0.013). Tier 2 structural catalog."
+}

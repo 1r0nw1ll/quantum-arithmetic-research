@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Inertial Nav Cert family [170]: certifies that QA T-operator navigation has zero computational drift vs classical INS O(ε√N) error growth. Numerical proof: 10000-step routes with ULP (1e-15), trig-table (1e-10), and MEMS-grade (1e-6) noise levels all show √N error growth in classical DR while QA maintains exact 0. Error ratio classical/QA → ∞ as N → ∞. Theorem NT: the ONLY error source in QA nav is the observer projection at input/output boundaries. Tier 1 computational proof."
+}

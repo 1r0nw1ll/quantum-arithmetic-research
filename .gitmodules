@@ -1,0 +1,3 @@
+[submodule "qa_lab"]
+	path = qa_lab
+	url = https://github.com/1r0nw1ll/Quantum_Arithmetic.git

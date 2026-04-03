@@ -602,6 +602,16 @@ def validate_counterexamples_pack(pack: Dict[str, Any], sem_cfg: Dict[str, Any])
         }
         synthetic["manifest"]["canonical_json_sha256"] = _manifest_hash_for_doc(synthetic)
 
+        # Skip counterexample verification when source files are unavailable
+        # (can't verify tamper detection without the actual file on disk)
+        ce_docs = case.get("docs", [])
+        ce_sources_available = all(
+            _resolve_source_path(d.get("source_ref", "")).exists()
+            for d in ce_docs if isinstance(d, dict)
+        )
+        if not ce_sources_available and not sem_cfg.get("contract", {}).get("provenance", {}).get("require_source_path", True):
+            continue
+
         try:
             _validate_witness_pack_obj(synthetic, sem_cfg, enforce_manifest=True)
         except ValidationFail as vf:

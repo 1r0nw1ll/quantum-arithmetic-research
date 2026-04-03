@@ -24,7 +24,7 @@ Checks
 ------
 WGS_1       schema_version == 'QA_WGS84_ELLIPSE_CERT.v1'
 WGS_QN      QN (b,e,d,a) satisfies b+e=d, b+2e=a, gcd(b,e)=1
-WGS_TRIPLE  F=ab, C=2de, G=d*d+e*e, C*C+F*F=G*G (S1 compliant: d*d not d**2)
+WGS_TRIPLE  F=ab, C=2de, G=d*d+e*e, C*C+F*F=G*G (S1 compliant: d*d not d-squared)
 WGS_ECC     |e/d - wgs84_ecc| / wgs84_ecc < declared tolerance
 WGS_AXIS    |sqrt(ab)/d - wgs84_ratio| / wgs84_ratio < declared tolerance
 WGS_ORBIT   orbit QN declared with eccentricity match

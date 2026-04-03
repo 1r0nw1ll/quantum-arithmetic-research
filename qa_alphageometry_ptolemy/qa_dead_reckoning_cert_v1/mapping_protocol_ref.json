@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Dead Reckoning Cert family [163]: certifies that the QA T-operator provides exact dead reckoning on a mod-m lattice with zero computational drift. Classical DR accumulates sin/cos float error at each leg; QA DR is integer-exact after any number of steps. Position (b_k,e_k)=T^k·(b_0,e_0) mod m via matrix exponentiation. Three chromogeometric metrics per bearing: G=d²+e² (Euclidean/position), F=d²-e² (Minkowski/hyperbolic), C=2de (area/cross-track), with C²+F²=G². Compass rose mod-24 = QA orbit partition. Theorem NT compliant: continuous Earth coordinates enter/exit as observer projections only. Tier 2 structural + computational."
+}

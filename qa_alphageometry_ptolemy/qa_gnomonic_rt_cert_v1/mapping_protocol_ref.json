@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Gnomonic RT Cert family [164]: certifies gnomonic map projection via rational trigonometry (spreads/crosses). Gnomonic quadrance Q = spread_c / cross_c where spread_c = 1 - cos²(angular_distance). Great circles project to straight lines (collinearity via spread). Berggren tree moves on C²+F²=G² cone = discrete geodesic steps that project to straight-line segments. Three Berggren generators M_A, M_B, M_C produce Pythagorean triples. Theorem NT compliant: continuous lat/lon → QA direction (d,e) → gnomonic chart. Tier 1 exact reformulation + Tier 2 structural (Berggren connection)."
+}

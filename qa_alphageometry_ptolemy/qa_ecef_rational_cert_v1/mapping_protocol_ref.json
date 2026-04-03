@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA ECEF Rational Cert family [161]: certifies that geodetic-to-ECEF coordinate conversion can be expressed entirely using spreads (s=sin²) and crosses (c=cos²=1-s), eliminating all transcendental functions. Classical: X=(N+h)cos(φ)cos(λ), Y=(N+h)cos(φ)sin(λ), Z=(N(1-e²)+h)sin(φ). Rational: X²=(N+h)²·c_φ·c_λ, Y²=(N+h)²·c_φ·s_λ, Z²=(N(1-e²)+h)²·s_φ, N²=a²/(1-e²·s_φ). All intermediate quadrances are rational when s_φ, s_λ are rational. Verified at 6 reference geodetic points against classical computation. Tier 1 exact reformulation."
+}

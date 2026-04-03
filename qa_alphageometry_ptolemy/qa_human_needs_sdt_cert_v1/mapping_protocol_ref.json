@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Human Needs SDT Cert family [162]: certifies structural alignment between Ryan & Deci Self-Determination Theory (3 validated needs: Autonomy, Competence, Relatedness) and QA paired structures (generators, state+derivative, reach+integral). Canonical mapping: Certainty=b, Variety=e, Significance=d, Connection=a, Growth=DeltaT, Contribution=SigmaT. Autonomy=(b,e) generators, Competence=(d,DeltaT) state+derivative, Relatedness=(a,SigmaT) reach+integral. 5 structural predictions confirmed against SDT literature. Theorem NT compliant (observer projection). Source: Will Dale Apr/Oct 2025, Ryan & Deci 2022 (n=48550, 27 countries), Tony Robbins Six Human Needs via Cloe Madanes."
+}

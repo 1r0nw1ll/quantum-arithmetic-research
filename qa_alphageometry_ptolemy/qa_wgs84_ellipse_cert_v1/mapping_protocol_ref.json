@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA WGS84 Ellipse Cert family [156]: certifies that the WGS84 reference ellipsoid (Earth's oblate spheroid) IS a QA quantum ellipse with QN (101,9,110,119). Eccentricity e/d=9/110=0.081818... matches WGS84 first eccentricity 0.081819... to 0.001%. Axis ratio sqrt(ab)/d=sqrt(12019)/110=0.996647... matches WGS84 b/a=0.996647... to 7 significant figures. Triple (C,F,G)=(1980,12019,12181). Earth orbit QN (59,1,60,61) separately matches orbital eccentricity 1/60=0.01667 (actual 0.01671, 0.25% error). Tier 1: exact reformulation — no empirical claim, pure algebraic identity between WGS84 parameters and QA quantum ellipse."
+}

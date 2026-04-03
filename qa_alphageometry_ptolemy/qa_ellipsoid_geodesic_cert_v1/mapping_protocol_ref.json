@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Ellipsoid Geodesic Cert family [168]: certifies geodesic properties of the WGS84 quantum ellipse (shape QN 101,9,110,119) in QN component arithmetic. Curvature ratio M/N = F/(d²-e²·s_φ). Axis ratio b/a = √F/d. Discriminant I = C-F = -10039 < 0 confirms ellipse. Quantum lattice points at QN-harmonic spreads: s_φ=C/G≈Tropic, s_φ=e²/G=eccentricity resonance. Navigation stack [163-167] operates ON this quantum surface. Tier 1 exact reformulation."
+}

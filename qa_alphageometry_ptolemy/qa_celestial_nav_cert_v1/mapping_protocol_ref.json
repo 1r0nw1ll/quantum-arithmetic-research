@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Celestial Nav Cert family [165]: certifies celestial navigation sight reduction as rational trigonometry. sin²(altitude) = [σ₁√(s_φ·s_δ) + σ₂√(c_φ·c_δ·c_LHA)]² where σ₁,σ₂ ∈ {-1,+1} are discrete hemisphere/quadrant orientation flags. Sextant measures sin²(altitude) = spread directly. Position circle = spread locus. Two-star fix = intersection of spread equations. Theorem NT: continuous angles → spreads + discrete σ flags → algebraic fix. 7 star witnesses verified against classical. Tier 1 exact reformulation."
+}

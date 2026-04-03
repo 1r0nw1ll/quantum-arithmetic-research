@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Ellipsoid Slice Cert family [169]: certifies QA-style slicing of the WGS84 quantum ellipse. Latitude slices are circles with R²=N²·c_φ (rational in spreads). Meridian slices are ellipses with axis ratio √F/d. Conic discriminant I classifies each slice: I<0=ellipse (latitude circles), I=0=parabola (impossible on ellipsoid), I>0=hyperbola (impossible). Chromogeometric slicing: C-constant (green/area), F-constant (red/Minkowski), G-constant (blue/Euclidean) curves. Pisano-period lattice gives 24 equally-spaced longitude bands. Tier 1+2."
+}

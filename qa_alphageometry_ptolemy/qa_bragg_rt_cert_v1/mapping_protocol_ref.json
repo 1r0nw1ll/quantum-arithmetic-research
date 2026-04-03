@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Bragg RT Cert family [157]: certifies Bragg's law of X-ray diffraction as a rational trigonometry identity. Classical nλ=2d·sinθ becomes n²Q_λ=4Q_d·s where Q_λ=λ² (wavelength quadrance), Q_d=d² (lattice spacing quadrance), s=sin²θ (diffraction spread). No transcendental functions needed. Miller index quadrance Q(h,k,l)=h²+k²+l² for cubic crystals: d²=a²/Q(h,k,l). Crystal system lattice angle constraints expressed as spread conditions. Tier 1: exact algebraic reformulation — squaring both sides of Bragg's law eliminates sin and sqrt. Sources: W.H. Bragg & W.L. Bragg (1913); Wildberger Divine Proportions (2005); QA-4 crystal geometry."
+}

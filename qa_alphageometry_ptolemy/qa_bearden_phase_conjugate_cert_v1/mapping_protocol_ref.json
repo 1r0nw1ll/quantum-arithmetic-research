@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Bearden Phase Conjugate Cert family [155]: certifies the structural parallel between Bearden's pumped phase conjugate mirror theory ('stress is a pumper') and the QCI opposite-sign discovery. Global QCI rises (pump beam = coupling tightens) while local QCI drops (conjugate response = trajectories scatter). QCI_gap = phase conjugation signature. Source: Will Dale insight 2026-04-01, Bearden scalar EM, SVP-adjacent physics."
+}

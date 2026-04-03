@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Historical Nav Cert family [167]: certifies that historical navigation systems across 5 civilizations used integer-ratio methods structurally equivalent to QA arithmetic. Plimpton 322 (Babylon ~1800BCE) = Berggren tree direction table. Polynesian star compass (32 houses) = mod-32 discrete bearing system. Norse sun stones = spread measurement via birefringence. Arab kamal = integer spread increments (finger-widths). Egyptian seked = integer slope ratio = spread. Each system operates on discrete integer states with observer projection at measurement — proto-QA navigation. Tier 2 structural correspondence."
+}

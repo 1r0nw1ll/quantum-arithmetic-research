@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Loxodrome Cert family [166]: certifies that loxodromes (rhumb lines = constant-bearing paths) arise naturally from QA T-operator iteration on a mod-m lattice. A discrete loxodrome = T-operator path with fixed initial direction; period = π(m) (Pisano period). Bearing spread = e²/G for direction (d,e). Mercator identity: s_φ = tanh²(ψ) where ψ = isometric latitude. Three orbit types partition loxodromes: cosmos (period 24, full circumnavigation), satellite (period 8, reduced), singularity (period 1, fixed). Theorem NT compliant. Tier 2 structural."
+}

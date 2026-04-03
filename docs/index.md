@@ -1,208 +1,94 @@
 ---
 layout: default
-title: Home
+title: Quantum Arithmetic Research
 ---
 
-# Quantum Arithmetic Research
+# Quantum Arithmetic
 
-Welcome to the **Quantum Arithmetic (QA) System** digital garden - an open-source research project exploring novel mathematical frameworks with applications in signal processing, geometric theorem discovery, and quantum physics.
+**A discrete modular framework that finds structure where continuous methods see noise.**
 
-## What is Quantum Arithmetic?
-
-The QA System is a modular arithmetic framework (mod-9, mod-24) that exhibits remarkable geometric properties:
-
-- **Multi-orbit structure**: State space partitions into 24-cycle "Cosmos", 8-cycle "Satellite", and 1-cycle "Singularity"
-- **E8 alignment**: QA tuples project into 8D space with strong correlation to the E8 exceptional Lie algebra root system
-- **Harmonic coherence**: Emergent geometric patterns quantified via the "Harmonic Index"
-
-### Key Applications
-
-🎵 **Signal Processing**: Audio classification using harmonic resonance patterns
-🔬 **Bell Test Validation**: Quantum correlation beyond traditional bounds
-📊 **Financial Markets**: Trading strategy based on geometric coherence
-🧮 **Theorem Discovery**: Automated generation of geometric conjectures via GNN
+Quantum Arithmetic operates on pairs `(b, e)` in `{1,...,N}` under a Fibonacci-like shift operator. The resulting orbits, invariants, and coherence measures add predictive power beyond standard features in 6+ empirical domains.
 
 ---
 
-## Getting Started
-
-### Quick Demo
-
-Try the simplest QA experiment - signal classification:
+## Try It
 
 ```bash
-git clone https://github.com/player2/signal_experiments.git
-cd signal_experiments
-pip install numpy matplotlib pandas scikit-learn
-python run_signal_experiments_final.py
+git clone https://github.com/1r0nw1ll/quantum-arithmetic-research.git
+cd quantum-arithmetic-research
+pip install numpy scipy scikit-learn pandas
+PYTHONPATH=qa_observer:. python -m qa_observer.demo
 ```
 
-This will classify audio signals (pure tones, chords, white noise) using the Harmonic Index metric.
-
-**Expected output**: PNG visualization showing E8 alignment and classification accuracy.
-
-### Core Concepts
-
-- **QA Tuples**: `(b, e, d, a)` where `d = (b+e) mod N`, `a = (b+2e) mod N`
-- **E8 Projection**: Map 4D tuple → 8D vector, measure cosine similarity to 240 E8 roots
-- **Harmonic Index**: `HI = E8_alignment × exp(-0.1 × loss)`
-
-[Read the full quickstart guide →](quickstart.md)
+The demo shows three things: orbit structure (576 pairs self-organize into 3 families), coherence detection (T-operator scores structured sequences at 1.0, noise at chance), and chromogeometry (Pythagorean triples from Fibonacci directions via Wildberger's theorem).
 
 ---
 
-## Featured Experiments
+## Empirical Results
 
-### 1. Signal Processing
+QCI (QA Coherence Index) adds predictive power *on top of* the best conventional predictor in each domain:
 
-**File**: `run_signal_experiments_final.py`
-
-Classifies audio signals by projecting acoustic features into QA state space. Achieves >90% accuracy distinguishing major/minor chords and >95% for harmonic vs non-harmonic sounds.
-
-**Key Finding**: Harmonic signals cluster in high E8 alignment regions of QA space.
-
-[View experiment details →](experiments/signal-processing.md)
-
----
-
-### 2. Bell Test Validation
-
-**File**: `qa_platonic_bell_tests.py`
-
-Tests quantum correlation inequalities on Platonic solid geometries using QA-derived correlation kernels.
-
-**Key Result**: **1852.6% of quantum bound** on dodecahedron geometry (Simple Cosine kernel, N=30).
-
-[View experiment details →](experiments/bell-tests.md)
+| Domain | What QCI Adds | Key Result |
+|--------|--------------|------------|
+| EEG seizure detection | Topographic orbit state beyond delta power | +0.21 R², 10/10 patients, p < 10⁻³³ |
+| EMG pathology | Motor unit recruitment structure | +0.61 R², strongest single-domain lift |
+| Climate teleconnection | ENSO orbit classification | La Nina 97% satellite, p < 10⁻⁶ |
+| Financial volatility | T-operator coherence predicts vol | Partial r = -0.22 beyond realized vol |
+| Audio classification | Orbit transition rates | Partial r = +0.75, p = 0.020 |
+| Atmospheric reanalysis | QCI vs future variability | Partial r = -0.20, p < 10⁻⁵ |
 
 ---
 
-### 3. Automated Theorem Discovery
+## 186 Certificate Families
 
-**File**: `geometrist_v4_gnn.py`
+Every empirical claim is backed by a machine-verifiable certificate: schema, validator, witnesses, and documentation. The meta-validator runs in CI — 186/186 PASS.
 
-Graph Neural Network trained on Universal Hyperbolic Geometry concepts (quadreas, quadrumes) to generate valid geometric theorems.
+Families span: Pythagorean triples, E8 alignment, chromogeometry, Fibonacci resonance, Keely triune streams, megalithic geometry, planetary quantum numbers, graph community detection, and more.
 
-**Architecture**: 3-layer GCN → symbolic conjecture mining via DBSCAN clustering.
-
-[View experiment details →](experiments/theorem-generation.md)
+[Browse certificate families](certificates) | [View validator source](https://github.com/1r0nw1ll/quantum-arithmetic-research/tree/main/qa_alphageometry_ptolemy)
 
 ---
 
-### 4. Financial Backtesting
+## Explore
 
-**File**: `backtest_advanced_strategy.py`
-
-Trading strategy combining Harmonic Index regime detection with 200-day SMA trend following on S&P 500.
-
-**Backtest Period**: 2010-2020
-**Metric**: Sharpe ratio, maximum drawdown, win rate
-
-[View experiment details →](experiments/financial-strategy.md)
+- [**Demos**](demos) -- Interactive demos and the qa_observer API
+- [**Certificate Families**](certificates) -- 186 machine-verifiable claims
+- [**Running Experiments**](experiments/RUNNING_EXPERIMENTS) -- How to run every experiment
+- [**Getting Started**](quickstart) -- Full setup and installation guide
+- [**Specifications**](specs/PROJECT_SPEC) -- Technical spec and architecture
 
 ---
 
-## Research Highlights
+## Core Packages
 
-### Multimodal Remote Sensing
+**qa-observer** -- Domain-general coherence measurement
 
-**Integer chromogeometry** for hyperspectral + LiDAR + multispectral fusion:
-- **96.69% accuracy** on Houston 2013 dataset
-- **5.4× dimensionality reduction** (59D → 11D)
-- **Integer-only arithmetic** (embedded systems ready)
+```python
+from qa_observer import TopographicObserver
 
-[Read technical summary →](research/multimodal-fusion.md)
+obs = TopographicObserver(modulus=24, n_clusters=6, qci_window=63)
+obs.fit(train_data)          # (n_samples, n_channels)
+qci = obs.transform(data)   # QCI time series
+result = obs.evaluate(data, target, lagged_control)
+```
 
-### QALM 2.0: QA-Optimized Language Model
+**qa-lab** -- Research infrastructure with CLI
 
-Markovian context extension for infinite-length reasoning with **O(n) memory** (vs O(n²) for transformers).
-
-**Architecture**:
-- Chunk-based state compression via mod-24 iteration count
-- **4× cheaper training** than standard LLMs
-- Harmonic coherence as optimization objective
-
-[Read architecture spec →](research/qalm-2.0.md)
-
----
-
-## Visualizations
-
-<div class="gallery">
-  <img src="assets/images/quartz_qa_state_space.png" alt="QA State Space" width="400">
-  <img src="assets/images/quartz_piezo_tensor_3d.png" alt="Piezoelectric Tensor" width="400">
-  <img src="assets/images/quartz_qa_dynamics.png" alt="QA Dynamics" width="400">
-</div>
-
-*Interactive visualizations and Jupyter notebooks coming soon!*
-
----
-
-## Publications & Talks
-
-**Preprints**:
-- *Quantum Arithmetic and E8 Exceptional Algebra* (arXiv, 2025) - In preparation
-- *Self-Oscillating Piezoelectric via Trapped-Atom Excitation* (Physical Review Letters) - Submitted
-
-**Conferences**:
-- APS March Meeting 2026 (poster accepted)
-- IEEE UFFC Symposium 2026 (talk submitted)
-
-[View all publications →](research/publications.md)
-
----
-
-## Community
-
-🐙 **GitHub**: [github.com/player2/signal_experiments](https://github.com/player2/signal_experiments)
-📖 **Wiki**: [Detailed documentation](https://github.com/player2/signal_experiments/wiki)
-💬 **Discussions**: [Ask questions, share results](https://github.com/player2/signal_experiments/discussions)
-🐦 **Updates**: Follow [@QA_Research](https://twitter.com/QA_Research) (coming soon)
-
----
-
-## Contributing
-
-We welcome contributions! Areas of interest:
-
-- **New experiments**: Apply QA to other domains (biology, materials science, cryptography)
-- **Optimization**: Improve E8 alignment algorithms, GPU acceleration
-- **Visualization**: Interactive web demos, 3D tensor displays
-- **Documentation**: Tutorials, explanatory videos, blog posts
-
-See [CONTRIBUTING.md](https://github.com/player2/signal_experiments/blob/main/CONTRIBUTING.md) for guidelines.
-
----
-
-## License
-
-This research is released under **MIT License** - free for academic and commercial use.
-
-**Citation**:
-```bibtex
-@software{qa_research_2025,
-  author = {QA Research Lab},
-  title = {Quantum Arithmetic System: Modular Framework for Geometric Coherence},
-  year = {2025},
-  url = {https://github.com/player2/signal_experiments}
-}
+```bash
+cd qa_lab && pip install -e .
+qa status       # pipeline health
+qa dispatch     # route tasks to agents
+qa meta         # run meta-validator
 ```
 
 ---
 
-## Acknowledgments
+## Links
 
-This research builds on foundational work in:
-- Exceptional Lie algebras (E8)
-- Universal Hyperbolic Geometry
-- Modular arithmetic and number theory
-- Graph neural networks
-
-Special thanks to the open-source community for tools: NumPy, PyTorch, scikit-learn, matplotlib.
+- [GitHub Repository](https://github.com/1r0nw1ll/quantum-arithmetic-research)
+- [v3.0.0 Release](https://github.com/1r0nw1ll/quantum-arithmetic-research/releases/tag/v3.0.0)
+- [CHANGELOG](https://github.com/1r0nw1ll/quantum-arithmetic-research/blob/main/CHANGELOG.md)
 
 ---
 
-<div align="center">
-  <p><em>Exploring the geometry of numbers</em></p>
-  <p>Last updated: November 2025</p>
-</div>
+*The arithmetic of geometry, applied.*

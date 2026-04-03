@@ -1,12 +1,11 @@
 # GitHub Pages Configuration for QA Research Digital Garden
 
 title: "Quantum Arithmetic Research"
-description: "Open-source research on modular arithmetic, geometric coherence, and multi-modal applications"
-author: "QA Research Lab"
+description: "A discrete modular framework that finds structure where continuous methods see noise"
+author: "Will Dale"
 
 # Theme
 theme: jekyll-theme-cayman
-# Alternative: minima, minimal, slate
 
 # Build settings
 markdown: kramdown
@@ -18,12 +17,14 @@ navigation:
     url: /
   - title: Getting Started
     url: /quickstart
+  - title: Demos
+    url: /demos
+  - title: Certificate Families
+    url: /certificates
   - title: Experiments
-    url: /experiments
-  - title: Research
-    url: /research
+    url: /experiments/RUNNING_EXPERIMENTS
   - title: GitHub
-    url: https://github.com/player2/signal_experiments
+    url: https://github.com/1r0nw1ll/quantum-arithmetic-research
 
 # Exclude from build
 exclude:
@@ -33,6 +34,7 @@ exclude:
   - vendor
   - .sass-cache
   - .jekyll-cache
+  - Google AI Studio
 
 # Plugins
 plugins:
@@ -45,6 +47,6 @@ lang: en
 twitter:
   card: summary
 social:
-  name: QA Research Lab
+  name: Will Dale
   links:
-    - https://github.com/player2/signal_experiments
+    - https://github.com/1r0nw1ll/quantum-arithmetic-research

@@ -1,3 +1,15 @@
+# === SECURITY: never track secrets or personal documents ===
+*.odt
+*.env
+*.env.*
+.env.local
+*.pem
+*.key
+*secret*key*
+*credentials*
+*service_role*
+natebjones/
+
 # Python
 __pycache__/
 *.py[cod]

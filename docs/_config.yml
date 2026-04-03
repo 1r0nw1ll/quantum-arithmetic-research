@@ -35,6 +35,7 @@ exclude:
   - .sass-cache
   - .jekyll-cache
   - Google AI Studio
+  - ai_chats
 
 # Plugins
 plugins:

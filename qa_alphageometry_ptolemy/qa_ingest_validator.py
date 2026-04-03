@@ -437,8 +437,13 @@ def _validate_witness_pack_obj(pack: Dict[str, Any], sem_cfg: Dict[str, Any], *,
         _require(all(_is_hex64(h) for h in chunk_hashes_declared),
                  "SCHEMA_MISMATCH", f"docs[{i}].chunk_hashes entries must be 64-hex")
 
-        # Skip file-content verification when source not available and not required
+        # Skip file-content verification when source not available and not required;
+        # trust declared hashes for merkle leaf computation.
         if not source_available and not provenance["require_source_path"]:
+            total_chars += total_chars_declared
+            total_chunks += chunk_count_declared
+            doc_leaf_hashes.append(
+                _doc_leaf_hash(sem_cfg["doc_root_domain"], doc_id, normalized_declared, chunk_root_declared))
             continue
 
         raw_bytes = _read_bytes(str(resolved_source_ref))

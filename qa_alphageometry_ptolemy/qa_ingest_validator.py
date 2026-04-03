@@ -406,9 +406,10 @@ def _validate_witness_pack_obj(pack: Dict[str, Any], sem_cfg: Dict[str, Any], *,
                  "SCHEMA_MISMATCH", f"docs[{i}].container_type not accepted by ingest semantics")
 
         resolved_source_ref = _resolve_source_path(source_ref)
+        source_available = resolved_source_ref.exists()
         if provenance["require_source_path"]:
             _require(
-                resolved_source_ref.exists(),
+                source_available,
                 "INGEST_DOC_MISSING",
                 f"docs[{i}] source not found: {source_ref}",
                 {"source_ref": source_ref, "resolved_path": str(resolved_source_ref)},
@@ -435,6 +436,10 @@ def _validate_witness_pack_obj(pack: Dict[str, Any], sem_cfg: Dict[str, Any], *,
         _require(isinstance(chunk_hashes_declared, list), "SCHEMA_MISMATCH", f"docs[{i}].chunk_hashes must be list")
         _require(all(_is_hex64(h) for h in chunk_hashes_declared),
                  "SCHEMA_MISMATCH", f"docs[{i}].chunk_hashes entries must be 64-hex")
+
+        # Skip file-content verification when source not available and not required
+        if not source_available and not provenance["require_source_path"]:
+            continue
 
         raw_bytes = _read_bytes(str(resolved_source_ref))
         file_sha_actual = _sha256_bytes(raw_bytes)

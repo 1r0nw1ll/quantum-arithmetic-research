@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Bateson Learning Levels Cert family [191]: formalizes Gregory Bateson's learning hierarchy (0/I/II/III) as a strict invariant filtration on QA state spaces. Four invariants (orbit ⊂ family ⊂ modulus ⊂ ambient category) define five operator classes L_0, L_1, L_2a, L_2b, L_3. Tiered Reachability Theorem: only 26% of S_9 pairs are Level-I reachable; 52.67% require L_2a promotion, 20% require L_2b. Exhaustively verified on S_9 (6561 pairs). Source: Bateson, 'Steps to an Ecology of Mind' (1972); Ashby 'Introduction to Cybernetics' (1956). Checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

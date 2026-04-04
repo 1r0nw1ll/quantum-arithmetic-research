@@ -5632,6 +5632,28 @@ def _validate_h_null_modularity_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_bateson_learning_levels_cert_family(base_dir: str) -> Optional[str]:
+    """QA Bateson Learning Levels Cert family [191] — formalizes Gregory Bateson's learning hierarchy (0/I/II/III) as a strict invariant filtration on QA state spaces. Four invariants (orbit ⊂ family ⊂ modulus ⊂ ambient category) define L_0/L_1/L_2a/L_2b/L_3 operator classes. Tiered Reachability Theorem exhaustively verified on S_9: only 26% of 6561 pairs are Level-I reachable; 52.67% require L_2a, 20% require L_2b. Witnesses at every tier (qa_step, scalar_mult k=2, scalar_mult k=3, modulus_reduction). Source: Bateson (1972), Ashby (1956). Checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_bateson_learning_levels_cert_v1")
+    validator = os.path.join(fam_dir, "qa_bateson_learning_levels_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_bateson_learning_levels_cert_v1/qa_bateson_learning_levels_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_bateson_learning_levels_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_bateson_learning_levels_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_bateson_learning_levels_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -6267,6 +6289,11 @@ FAMILY_SWEEPS = [
      "H-null chromogeometric modularity: H(b,e)=C+F where C=2de (green) F=d*d-e*e (red); Les Miserables ARI=0.638 vs standard 0.588 (+0.050); HONEST: 1/10 graphs improved, topology-specific to hub-dominated networks; H/X=b/e+4+2e/b linear in degree asymmetry; Tier 2; checks HN_1+MODEL/CHROMO/BENCH/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
      "180_qa_h_null_modularity_cert",
      "qa_h_null_modularity_cert_v1", True),
+    (191, "QA Bateson Learning Levels Cert family",
+     _validate_bateson_learning_levels_cert_family,
+     "Bateson Learning 0/I/II/III as strict invariant filtration (orbit ⊂ family ⊂ modulus ⊂ ambient category); L_0/L_1/L_2a/L_2b/L_3 operator classes; Tiered Reachability Theorem exhaustively verified on S_9 (81+1712+3456+1312=6561); only 26% Level-I reachable; witnesses: qa_step, scalar_mult k=2 (L_2a), scalar_mult k=3 (L_2b), modulus_reduction (L_3); source Bateson 1972 + Ashby 1956; checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "191_qa_bateson_learning_levels_cert",
+     "qa_bateson_learning_levels_cert_v1", True),
 ]
 
 

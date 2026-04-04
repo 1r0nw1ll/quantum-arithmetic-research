@@ -1,0 +1,12 @@
+{
+  "schema_version": "QA_BATESON_LEARNING_LEVELS_CERT.v1",
+  "certificate_id": "qa.cert.bateson_learning_levels.fail.bad_tier.v1",
+  "cert_type": "qa_bateson_learning_levels_cert",
+  "title": "Bateson Learning Levels FAIL: demonstrates tier misclassification detection",
+  "created_utc": "2026-04-04T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL. Would catch a witness declaring tier=1 (orbit-preserving) for an operator that actually crosses orbits.",
+  "fail_ledger": [
+    {"check_id": "BLL_L1", "message": "Deliberately wrong tier declaration for testing: scalar_mult k=2 declared as L_1 but actually crosses orbits (L_2a)"}
+  ],
+  "result": "FAIL"
+}

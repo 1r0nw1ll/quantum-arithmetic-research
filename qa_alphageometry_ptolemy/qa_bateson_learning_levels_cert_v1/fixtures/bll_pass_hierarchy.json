@@ -1,0 +1,145 @@
+{
+  "schema_version": "QA_BATESON_LEARNING_LEVELS_CERT.v1",
+  "certificate_id": "qa.cert.bateson_learning_levels.pass.hierarchy.v1",
+  "cert_type": "qa_bateson_learning_levels_cert",
+  "title": "Bateson Learning Levels PASS: strict invariant filtration on S_9 with witnesses at every tier",
+  "created_utc": "2026-04-04T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Bateson's Learning Levels (0/I/II/III) as a strict invariant filtration on QA state spaces. Four invariants (orbit, family, modulus, ambient category) define five operator classes (L_0, L_1, L_2a, L_2b, L_3). Tiered Reachability Theorem exhaustively verified on S_9: 81+1712+3456+1312 = 6561 pairs. Only 26% Level-I reachable — quantitative double bind.",
+
+  "source_attribution": "Gregory Bateson, 'Steps to an Ecology of Mind' (1972), logical types hierarchy from Russell & Whitehead 'Principia Mathematica'. Requisite variety: W. Ross Ashby, 'An Introduction to Cybernetics' (1956). QA formalization: Will Dale + Claude, 2026-04-04. Full theoretical sketch: docs/theory/QA_BATESON_LEARNING_LEVELS_SKETCH.md. Exhaustive verification: tools/verify_bateson_double_bind.py.",
+
+  "invariant_filtration": [
+    {
+      "invariant": "orbit",
+      "class": "L_1",
+      "description": "Orbit-preserving operators: phi(s) in Orbit(s) for all s in S_m. Includes all powers of T and intra-orbit automorphisms. The Level-I reachable set R_1(s_0) equals Orbit(s_0).",
+      "preserves_below": []
+    },
+    {
+      "invariant": "family",
+      "class": "L_2a",
+      "description": "Orbit-changing, family-preserving operators: sends some orbit to a distinct orbit while preserving cosmos/satellite/singularity family classification.",
+      "preserves_below": ["family"]
+    },
+    {
+      "invariant": "modulus",
+      "class": "L_2b",
+      "description": "Family-changing, modulus-preserving operators: crosses cosmos/satellite/singularity boundaries while staying in S_m.",
+      "preserves_below": []
+    },
+    {
+      "invariant": "ambient_category",
+      "class": "L_3",
+      "description": "Modulus-changing operators: maps S_m -> S_n with m != n. Includes reductions (mod 9 -> mod 3) and extensions (mod 9 -> mod 24 via CRT).",
+      "preserves_below": []
+    }
+  ],
+
+  "tiered_reachability_theorem": {
+    "statement": "For s_0, s_* in S_m, the minimum tier tau(s_0, s_*) required to reach s_* from s_0 via operators of class L_0 union ... union L_k is determined by which invariant separates source from target: tau=0 iff s_0=s_*; tau=1 iff s_* in Orbit(s_0); tau=2a iff different orbit, same family; tau=2b iff different family, same modulus; tau=3 iff different modulus.",
+    "key_lemma": "R_1(s_0) = Orbit(s_0). Proof: T in L_1 generates the orbit; every L_1 operator preserves orbit membership by definition; hence any composition of L_1 operators applied to s_0 remains in Orbit(s_0).",
+    "proof_sketch": "Lower bound: each tier is characterized by preserving a specific invariant (orbit, family, modulus). Operators below that tier preserve the invariant; targets breaking the invariant are unreachable. Upper bound: piecewise construction phi(s_0)=s_*, phi|_{S_m\\{s_0}}=id achieves the minimum tier since the only family/orbit change is at s_0 itself."
+  },
+
+  "tier_distribution_s9": {
+    "0": 81,
+    "1": 1712,
+    "2a": 3456,
+    "2b": 1312,
+    "total": 6561
+  },
+
+  "quantitative_double_bind": {
+    "level_i_reachable_fraction": 0.2609,
+    "level_ii_a_required_fraction": 0.5267,
+    "level_ii_b_required_fraction": 0.2000,
+    "interpretation": "Under the default QA dynamic T alone, 73.91% of target configurations in S_9 are unreachable — a quantitative version of Bateson's clinical observation that most problems cannot be solved at the level they appear. Escape requires promotion to a higher operator class, with the required tier determined by the invariant separating source from target."
+  },
+
+  "s9_orbit_structure": {
+    "total_points": 81,
+    "num_orbits": 5,
+    "orbits": [
+      {"index": 0, "length": 24, "family": "cosmos",     "representative": [1, 1]},
+      {"index": 1, "length": 24, "family": "cosmos",     "representative": [1, 3]},
+      {"index": 2, "length": 24, "family": "cosmos",     "representative": [1, 4]},
+      {"index": 3, "length": 8,  "family": "satellite",  "representative": [3, 3]},
+      {"index": 4, "length": 1,  "family": "singularity","representative": [9, 9]}
+    ]
+  },
+
+  "witnesses": [
+    {
+      "tier": "1",
+      "operator": {"kind": "qa_step"},
+      "source": [1, 1],
+      "target": [1, 2],
+      "note": "Canonical dynamic T. (1,1) -> (1,2) stays in cosmos orbit 0. Orbit-preserving = Level I."
+    },
+    {
+      "tier": "2a",
+      "operator": {"kind": "scalar_mult", "k": 2},
+      "source": [1, 1],
+      "target": [2, 2],
+      "note": "Scalar multiplication by 2 is an element of (Z/9Z)*, order 6. Sends cosmos orbit 0 to cosmos orbit 1 (rep (1,3) contains (2,2)). Orbit-changing, family-preserving = Level II-a."
+    },
+    {
+      "tier": "2a",
+      "operator": {"kind": "swap"},
+      "source": [1, 2],
+      "target": [2, 1],
+      "note": "Swap (b,e)->(e,b). (1,2) in orbit 0, (2,1) in orbit 1. Orbit-changing, family-preserving = Level II-a. Second II-a witness to confirm the class is non-degenerate."
+    },
+    {
+      "tier": "2b",
+      "operator": {"kind": "scalar_mult", "k": 3},
+      "source": [1, 1],
+      "target": [3, 3],
+      "note": "Scalar multiplication by 3. 3 is NOT a unit mod 9 (gcd(3,9)=3). (1,1) cosmos -> (3,3) satellite. Family-changing = Level II-b."
+    },
+    {
+      "tier": "2b",
+      "operator": {"kind": "constant", "c_b": 9, "c_e": 9},
+      "source": [1, 1],
+      "target": [9, 9],
+      "note": "Constant map to (9,9). Collapses every point (except the singularity itself) to the fixed point. Cosmos -> singularity is family-changing = Level II-b."
+    },
+    {
+      "tier": "3",
+      "operator": {"kind": "modulus_reduction", "m_target": 3},
+      "source": [4, 5],
+      "target": [1, 2],
+      "note": "Reduction S_9 -> S_3. Codomain is a different state space entirely — cardinality 9 vs 81. No L_1 or L_2 operator can produce this (they are all self-maps of S_9). This is the canonical witness for L_2 ⊊ L_3."
+    }
+  ],
+
+  "strictness_verification": {
+    "L_1_strict_in_L_2a": "scalar_mult k=2 has 72/81 orbit crossings but 0 family crossings -> L_2a but not L_1. Witnessed.",
+    "L_2a_strict_in_L_2b": "scalar_mult k=3 has family crossings -> L_2b but not L_2a (L_2a requires family preservation). Witnessed.",
+    "L_2b_strict_in_L_3":  "modulus_reduction with m_target=3 has codomain S_3, which is a different set from S_9. No self-map of S_9 (L_1 or L_2) can have codomain S_3. Witnessed by cardinality argument.",
+    "chain": "L_0 ⊊ L_1 ⊊ L_2a ⊊ L_2b ⊊ L_3, each inclusion strict by explicit witness."
+  },
+
+  "convergence_map": [
+    {"source": "Bateson Learning 0/I/II/III", "mapping": "L_0 / L_1 / L_2 / L_3"},
+    {"source": "Ashby ultrastability (Level 1 feedback / Level 2 parameter change)", "mapping": "L_1 / L_2"},
+    {"source": "Watzlawick first-order vs second-order change",                      "mapping": "L_1 / L_2"},
+    {"source": "Korzybski levels of abstraction",                                    "mapping": "L_1 / L_2 / L_3"},
+    {"source": "NLP first-order vs second-order change",                             "mapping": "L_1 / L_2a and L_2b"},
+    {"source": "Dilts logical levels (env/behav/capability/belief/identity/spirit)", "mapping": "L_1/L_2a/L_2b/L_3 (approximate)"},
+    {"source": "Stafford Beer VSM recursion",                                        "mapping": "L_2 / L_3"},
+    {"source": "Levin morphogenesis (differentiation / metamorphosis)",              "mapping": "L_2a / L_2b or L_3"}
+  ],
+
+  "cross_references": [
+    {"family": 130, "name": "QA Origin of 24",               "relation": "Orbit classification via v_3(f) underpins the cosmos/satellite/singularity family distinction used here"},
+    {"family": 133, "name": "QA Eisenstein Norm",            "relation": "Norm f(b,e) = b²+be-e² determines orbit family"},
+    {"family": 140, "name": "QA Conic Discriminant",         "relation": "I>0/I=0/I<0 stratification is another invariant filtration on S_m"},
+    {"family": 150, "name": "QA Septenary Unit Group",       "relation": "(Z/9Z)* = 6-element group whose action on S_9 provides concrete L_2a operators"},
+    {"family": 153, "name": "QA Keely Triune",               "relation": "Triune (cosmos/satellite/singularity) = the family invariant preserved by L_2a, broken by L_2b"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

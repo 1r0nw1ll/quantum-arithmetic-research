@@ -1,0 +1,86 @@
+{
+  "schema_version": "QA_SATELLITE_PRODUCT_SUM_CERT.v1",
+  "certificate_id": "qa.cert.satellite_product_sum.pass.multi_modulus.v1",
+  "cert_type": "qa_satellite_product_sum_cert",
+  "title": "Satellite Product Sum PASS: identity verified for mod-9, mod-24, and mod-99",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Multi-modulus witness. Verifies the satellite product sum identity for three representative moduli: mod-9 (theoretical default), mod-24 (applied default), and mod-99 (stress test). Each modulus entry includes the full satellite enumeration, product computation, and M^4 comparison.",
+
+  "identity": {
+    "statement": "For any modulus M divisible by 3, the sum of b*e*d*a over all satellite pairs equals M^4",
+    "formula": "sum_{satellite} b*e*d*a = M^4",
+    "proof_sketch": "Let s=M/3. Satellite pairs: (is,js) for i,j in {1,2,3} minus (3s,3s). Sub-lattice is Fibonacci-closed (d,a also multiples of s). Products factor as s^4*(i*j*k*l). Sum of normalized products = 81 = 3^4. Total = s^4 * 3^4 = (3s)^4 = M^4."
+  },
+
+  "witnesses": [
+    {
+      "modulus": 9,
+      "sat_divisor": 3,
+      "satellite_count": 8,
+      "satellite_pairs": [
+        {"b": 3, "e": 3, "d": 6, "a": 9, "product": 486},
+        {"b": 3, "e": 6, "d": 9, "a": 6, "product": 972},
+        {"b": 3, "e": 9, "d": 3, "a": 3, "product": 243},
+        {"b": 6, "e": 3, "d": 9, "a": 3, "product": 486},
+        {"b": 6, "e": 6, "d": 3, "a": 9, "product": 972},
+        {"b": 6, "e": 9, "d": 6, "a": 6, "product": 1944},
+        {"b": 9, "e": 3, "d": 3, "a": 6, "product": 486},
+        {"b": 9, "e": 6, "d": 6, "a": 3, "product": 972}
+      ],
+      "product_sum": 6561,
+      "M_fourth": 6561,
+      "match": true
+    },
+    {
+      "modulus": 24,
+      "sat_divisor": 8,
+      "satellite_count": 8,
+      "satellite_pairs": [
+        {"b": 8, "e": 8, "d": 16, "a": 24, "product": 24576},
+        {"b": 8, "e": 16, "d": 24, "a": 16, "product": 49152},
+        {"b": 8, "e": 24, "d": 8, "a": 8, "product": 12288},
+        {"b": 16, "e": 8, "d": 24, "a": 8, "product": 24576},
+        {"b": 16, "e": 16, "d": 8, "a": 24, "product": 49152},
+        {"b": 16, "e": 24, "d": 16, "a": 16, "product": 98304},
+        {"b": 24, "e": 8, "d": 8, "a": 16, "product": 24576},
+        {"b": 24, "e": 16, "d": 16, "a": 8, "product": 49152}
+      ],
+      "product_sum": 331776,
+      "M_fourth": 331776,
+      "match": true
+    },
+    {
+      "modulus": 99,
+      "sat_divisor": 33,
+      "satellite_count": 8,
+      "product_sum": 96059601,
+      "M_fourth": 96059601,
+      "match": true,
+      "_note": "Stress test: mod-99 satellite pairs have b,e in {33,66,99}"
+    }
+  ],
+
+  "normalized_products": {
+    "_note": "Products of (i,j,k,l) where b=is, e=js, d=ks, a=ls, for all 8 satellite pairs. These are CONSTANT across all moduli.",
+    "values": [6, 12, 3, 6, 12, 24, 6, 12],
+    "sum": 81,
+    "equals_3_to_4": true
+  },
+
+  "corollary": {
+    "statement": "Singularity product = M^4 (since b=e=d=a=M), so satellite total volume = singularity volume",
+    "singularity_product_mod9": 6561,
+    "singularity_product_mod24": 331776,
+    "satellite_equals_singularity": true
+  },
+
+  "fibonacci_closure": {
+    "statement": "If b and e are multiples of s=M/3, then d=qa_mod(b+e,M) and a=qa_mod(b+2e,M) are also multiples of s",
+    "verified_moduli": [3, 6, 9, 12, 15, 18, 21, 24, 27, 30, 33, 36, 39, 42, 45, 48, 51, 54, 57, 60, 63, 66, 69, 72, 75, 78, 81, 84, 87, 90, 93, 96, 99],
+    "all_pass": true
+  },
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

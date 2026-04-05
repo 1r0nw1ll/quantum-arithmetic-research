@@ -1,0 +1,109 @@
+{
+  "schema_version": "QA_KEELY_AGGREGATION_CERT.v1",
+  "certificate_id": "qa.cert.keely_aggregation.pass.composition.v1",
+  "cert_type": "qa_keely_aggregation_cert",
+  "title": "Keely Aggregation PASS: 5 laws mapped to QA state composition/decomposition",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Keely's 5 aggregation/disintegration laws (Category 4, Vibes framework). Non-isolated states couple (Law 3); orbit density = effective pitch (Law 12); discord = dissociation (Laws 28,34); pitch determines orbit deterministically (Law 35).",
+
+  "category": "aggregation_disintegration",
+  "category_number": 4,
+  "framework": "Vibes 5-category (2026-04-03)",
+
+  "laws": {
+    "3": {
+      "name": "Law of Corporeal Oscillations",
+      "keely_text": "All coherent aggregates not isolated from like bodies oscillate at a period-frequency varying with the tensions",
+      "qa_mapping": "When states interact (not isolated), coupling tension modifies effective behavior. Satellite (8-cycle) is bounded by tension; cosmos (24-cycle) extends far from equilibrium.",
+      "qa_mechanism": "coupling_tension",
+      "aggregation_aspect": "Non-isolated states modify each other's effective period"
+    },
+    "12": {
+      "name": "Law of Oscillating Atomic Substances",
+      "keely_text": "Coherent atomic substances are capable of oscillating at a pitch varying directly as the density",
+      "qa_mapping": "Orbit density = how many states occupy a region. Cosmos has 72 states (high density), satellite has 8 (low density). Pitch varies directly as density per Law 12.",
+      "qa_mechanism": "orbit_density",
+      "aggregation_aspect": "Density of state occupation determines effective pitch"
+    },
+    "28": {
+      "name": "Law of Chemical Dissociation",
+      "keely_text": "If the pitch of either atom in a molecule be raised or lowered until the mutual ratio be that of a discord",
+      "qa_mapping": "Perturbation moving f-value out of concordance causes pair to dissociate — no shared orbit or resonance. Generator-driven orbit ejection.",
+      "qa_mechanism": "discord_dissociation",
+      "aggregation_aspect": "Discord causes orbit separation"
+    },
+    "34": {
+      "name": "Law of Atomic Dissociation",
+      "keely_text": "Overtones of high rad-energy pitches produce separation of the atomoles and recombinations among the atomolic molecules",
+      "qa_mapping": "High-energy perturbation disrupts modular structure; equivalent to orbit reassignment under forced conditions.",
+      "qa_mechanism": "forced_orbit_reassignment",
+      "aggregation_aspect": "External energy forces new orbit assignment"
+    },
+    "35": {
+      "name": "Law of Atomolic Synthesis of Chemical Elements",
+      "keely_text": "Harmonic pitches of atomolity produce association of etheric-atomolic particles to form atoms; the kind of atom is determinable by the pitches employed",
+      "qa_mapping": "Given f-values (pitches), the resulting QA tuple is fully determined. (b,e) determines (b,e,d,a) uniquely. Kind of atom = orbit family membership.",
+      "qa_mechanism": "deterministic_synthesis",
+      "aggregation_aspect": "Pitch selection determines orbit membership"
+    }
+  },
+
+  "orbit_density": {
+    "modulus": 9,
+    "cosmos_count": 72,
+    "satellite_count": 8,
+    "singularity_count": 1,
+    "note": "Cosmos: 72 states / 24-cycle; Satellite: 8 states / 8-cycle; density ratio reflects effective pitch"
+  },
+
+  "deterministic_synthesis": {
+    "fully_determined": true,
+    "rule": "Given (b,e) and modulus m, d=qa_mod(b+e,m), a=qa_mod(b+2e,m) — the full tuple is uniquely determined",
+    "orbit_rule": "f = b*b+b*e-e*e; orbit family determined by v_3(f)"
+  },
+
+  "witnesses": [
+    {
+      "law_refs": [3],
+      "description": "Coupling modifies effective behavior",
+      "isolated_state": {"b": 1, "e": 1, "orbit": "COSMOS", "period": 24},
+      "coupled_state": {"b": 1, "e": 1, "partner_b": 2, "partner_e": 3, "orbit": "COSMOS", "coupling_effect": "resonance amplification"},
+      "note": "Same orbit — coupling enhances (Law 3: tensions augment equilibrium)"
+    },
+    {
+      "law_refs": [12],
+      "description": "Orbit density determines pitch",
+      "cosmos_density": "72 states in 24-period cycle = 3 states per step",
+      "satellite_density": "8 states in 8-period cycle = 1 state per step",
+      "singularity_density": "1 state in 1-period cycle = 1 state per step",
+      "note": "Cosmos has highest density = highest effective pitch per Keely's direct relationship (Law 12: pitch varies directly as density)"
+    },
+    {
+      "law_refs": [28, 34],
+      "description": "Dissociation via discord",
+      "concordant_pair": {"b1": 1, "e1": 1, "b2": 2, "e2": 3, "orbit": "COSMOS", "concordant": true},
+      "discordant_pair": {"b1": 1, "e1": 1, "b2": 3, "e2": 3, "orbits": ["COSMOS", "SATELLITE"], "concordant": false, "dissociated": true},
+      "note": "Cross-orbit = discord = dissociation (Laws 28,34)"
+    },
+    {
+      "law_refs": [35],
+      "description": "Deterministic synthesis from pitch",
+      "input_pair": {"b": 2, "e": 1},
+      "modulus": 9,
+      "derived_tuple": {"b": 2, "e": 1, "d": 3, "a": 4},
+      "f_value": 5,
+      "orbit": "COSMOS",
+      "note": "Pitch (b=2,e=1) uniquely determines full tuple and orbit (Law 35)"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 153, "name": "QA Keely Triune Cert", "relation": "Parent triune mapping"},
+    {"family": 185, "name": "QA Keely Sympathetic Transfer Cert", "relation": "Sibling: transfer mechanisms that aggregation laws depend on"},
+    {"family": 184, "name": "QA Keely Structural Ratio Cert", "relation": "Sibling: structural invariants"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

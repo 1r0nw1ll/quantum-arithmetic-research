@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_KEELY_AGGREGATION_CERT.v1",
+  "certificate_id": "qa.cert.keely_aggregation.fail.bad_density.v1",
+  "cert_type": "qa_keely_aggregation_cert",
+  "title": "Keely Aggregation FAIL: demonstrates bad density declaration",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL.",
+
+  "fail_ledger": [
+    {
+      "check_id": "KAG_DENSITY",
+      "message": "Deliberately wrong orbit density for testing"
+    }
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,189 @@
+{
+  "schema_version": "QA_KEELY_PHENOMENOLOGICAL_CERT.v1",
+  "certificate_id": "qa.cert.keely_phenomenological.pass.observer.v1",
+  "cert_type": "qa_keely_phenomenological_cert",
+  "title": "Keely Phenomenological PASS: 17 laws classified as Theorem NT observer projections",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Keely's 17 phenomenological laws (Category 5, Vibes framework) as observer projections under Theorem NT. All describe continuous measurements that REVEAL discrete QA structure but never feed back causally. Signal = EFFECT (Vibes).",
+
+  "category": "phenomenological",
+  "category_number": 5,
+  "framework": "Vibes 5-category (2026-04-03)",
+
+  "theorem_nt_compliance": {
+    "all_laws_observer_projections": true,
+    "no_causal_feedback": true,
+    "boundary_crossings": "exactly 2: (1) input -> observer layer, (2) QA layer -> output",
+    "vibes_confirmation": "Signal = EFFECT; arithmetic relationships = CAUSE"
+  },
+
+  "laws": {
+    "13": {
+      "name": "Law of Sono-thermity",
+      "keely_text": "Internal vibrations capable of vibrating at a period-frequency directly as their density, inversely as their linear dimensions",
+      "continuous_observable": "frequency, density, temperature, dimension",
+      "discrete_qa_source": "orbit period and state density",
+      "theorem_nt_role": "observer_projection"
+    },
+    "14": {
+      "name": "Law of Oscillating Atoms",
+      "keely_text": "All atoms when in tension are capable of oscillating at a pitch inversely as the cube of their Atomic weights",
+      "continuous_observable": "atomic weight, oscillation pitch",
+      "discrete_qa_source": "f-value (QA norm), orbit period",
+      "theorem_nt_role": "observer_projection"
+    },
+    "15": {
+      "name": "Law of Vibrating Atomolic Substances",
+      "keely_text": "Atoms capable of vibrating at pitch inversely as the Dyne and as the atomic volume, directly as the Atomic weight",
+      "continuous_observable": "gravity coefficient, atomic volume, atomic weight",
+      "discrete_qa_source": "QA tuple elements, orbit membership",
+      "theorem_nt_role": "observer_projection"
+    },
+    "19": {
+      "name": "Law of Variation of Atomic Pitch by Rad-energy",
+      "keely_text": "Higher harmonics and overtones of projected rad-energy cause the atom to expand",
+      "continuous_observable": "expansion, radiation energy",
+      "discrete_qa_source": "orbit transition under generator perturbation",
+      "theorem_nt_role": "observer_projection"
+    },
+    "20": {
+      "name": "Law of Variation of Atomic Pitch by Electricity and Magnetism",
+      "keely_text": "Electricity and Magnetism produce internal vibrations followed by proportional changes in volume and pitch",
+      "continuous_observable": "electric field, magnetic field, volume change",
+      "discrete_qa_source": "state transition, orbit reassignment",
+      "theorem_nt_role": "observer_projection"
+    },
+    "21": {
+      "name": "Law of Variation of Atomic Pitch by Temperature",
+      "keely_text": "Atoms in chemical combination oscillate with increasing amplitude directly as the temperature",
+      "continuous_observable": "temperature, oscillation amplitude",
+      "discrete_qa_source": "coupling strength between co-orbital states",
+      "theorem_nt_role": "observer_projection"
+    },
+    "22": {
+      "name": "Law of Pitch of Atomic Oscillation",
+      "keely_text": "Atoms in tension oscillate at a pitch that is a resultant of Atomic weight, volume, and tension",
+      "continuous_observable": "resultant pitch, weight, volume, tension",
+      "discrete_qa_source": "f-value composite from QA tuple",
+      "theorem_nt_role": "observer_projection"
+    },
+    "23": {
+      "name": "Law of Variation of Atomic Oscillation by Pressure",
+      "keely_text": "Frequency of atomic oscillation increases and diminishes inversely as the square of the pressure",
+      "continuous_observable": "pressure, oscillation frequency",
+      "discrete_qa_source": "orbit period under external constraint",
+      "theorem_nt_role": "observer_projection"
+    },
+    "24": {
+      "name": "Law of Variation of Atomic Oscillation by Temperature",
+      "keely_text": "The force of cohesion diminishes inversely as the square of the distance the atoms are apart",
+      "continuous_observable": "cohesion force, inter-atomic distance, temperature",
+      "discrete_qa_source": "coupling coefficient between QA states",
+      "theorem_nt_role": "observer_projection"
+    },
+    "25": {
+      "name": "Law of Variation of Atomic Oscillation by Electricity",
+      "keely_text": "Electric current destroys cohesion and chemical tension directly as square of current",
+      "continuous_observable": "electric current, cohesion, resistance",
+      "discrete_qa_source": "orbit dissociation threshold",
+      "theorem_nt_role": "observer_projection"
+    },
+    "26": {
+      "name": "Law of Variation of Atomic Oscillation by Sono-thermism",
+      "keely_text": "Diminishes the tensions directly as the quantity of heat developed",
+      "continuous_observable": "heat quantity, tension",
+      "discrete_qa_source": "coupling strength modulation",
+      "theorem_nt_role": "observer_projection"
+    },
+    "30": {
+      "name": "Law of Chemical Substitution",
+      "keely_text": "Describes substitution conditions in chemical compounds",
+      "continuous_observable": "substitution rate, affinity measures",
+      "discrete_qa_source": "f-value concordance between substitute and host",
+      "theorem_nt_role": "observer_projection"
+    },
+    "31": {
+      "name": "Law of Catalysis",
+      "keely_text": "The presence of harmonics and discords",
+      "continuous_observable": "catalytic rate, reaction threshold",
+      "discrete_qa_source": "harmonic/discordant f-value relationships (borderline Cat 1/5)",
+      "theorem_nt_role": "observer_projection",
+      "note": "Condition is structural but catalytic EFFECT is observed"
+    },
+    "32": {
+      "name": "Law of Molecular Synthesis and Combination (Organic)",
+      "keely_text": "The molecular pitch must be a derived harmony of the radicals",
+      "continuous_observable": "molecular pitch measurement",
+      "discrete_qa_source": "f-value as derived harmony of component pairs",
+      "theorem_nt_role": "observer_projection",
+      "note": "Borderline Cat 4/5: states constraint but molecular pitch is measured"
+    },
+    "36": {
+      "name": "Law of Heat",
+      "keely_text": "Atoms under tension of chemical combination oscillate with amplitude directly as temperature, inversely as pressure, as square of specific heat",
+      "continuous_observable": "temperature, pressure, specific heat, amplitude",
+      "discrete_qa_source": "orbit coupling under thermodynamic conditions",
+      "theorem_nt_role": "observer_projection"
+    },
+    "38": {
+      "name": "Law of Cohesion",
+      "keely_text": "Cohesion diminishes directly as the square root of pressure and temperature, and as the square of electric intensity",
+      "continuous_observable": "cohesion, pressure, temperature, electric intensity",
+      "discrete_qa_source": "coupling coefficient decay under external perturbation",
+      "theorem_nt_role": "observer_projection"
+    },
+    "39": {
+      "name": "Law of Refractive Indices",
+      "keely_text": "A table of refractive indices indicates molecular pitch; with crystalline form the phase of molecular oscillation",
+      "continuous_observable": "refractive index, crystalline form",
+      "discrete_qa_source": "f-value (molecular pitch) and orbit phase",
+      "theorem_nt_role": "observer_projection",
+      "note": "Most explicitly bidirectional: continuous measurement REVEALS discrete structure"
+    }
+  },
+
+  "witnesses": [
+    {
+      "law_refs": [13, 14, 15],
+      "description": "Physical measurement laws — frequency/density/weight",
+      "continuous_domain": "thermoacoustics, atomic physics",
+      "qa_source": "orbit period, f-value, state density",
+      "theorem_nt": "These measurements are observer OUTPUTS — they describe what the discrete structure produces, not what drives it",
+      "note": "Laws 13-15 form a cluster: frequency-density-weight-dimension relationships"
+    },
+    {
+      "law_refs": [19, 20, 21, 22, 23, 24, 25, 26],
+      "description": "Variation laws — how pitch/oscillation changes under external conditions",
+      "continuous_domain": "radiation, electricity, magnetism, temperature, pressure",
+      "qa_source": "orbit transition, coupling modulation, dissociation threshold",
+      "theorem_nt": "The VARIATION is observed continuously; the underlying STATE CHANGE is discrete (orbit transition or coupling change)",
+      "note": "8 laws all follow pattern: continuous variable -> observed change in pitch/oscillation"
+    },
+    {
+      "law_refs": [30, 31, 32],
+      "description": "Chemical process laws — substitution, catalysis, synthesis",
+      "continuous_domain": "reaction rates, catalytic effects, molecular properties",
+      "qa_source": "f-value concordance, harmonic relationships, derived harmonies",
+      "theorem_nt": "The chemical PROCESS is observed; the structural CONDITION (concordance/harmony) is discrete",
+      "note": "Borderline laws: structural conditions produce phenomenological effects"
+    },
+    {
+      "law_refs": [36, 38, 39],
+      "description": "Thermodynamic and optical laws",
+      "continuous_domain": "heat, cohesion, refractive index",
+      "qa_source": "coupling coefficients, orbit stability, f-value as molecular pitch",
+      "theorem_nt": "Law 39 is most explicitly bidirectional: refractive index REVEALS discrete pitch, creating a measurement bridge",
+      "note": "Law 39 = observer projection that points BACK at discrete structure"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 153, "name": "QA Keely Triune Cert", "relation": "Parent triune mapping"},
+    {"family": 184, "name": "QA Keely Structural Ratio Cert", "relation": "Sibling: the discrete invariants these laws project"},
+    {"family": 155, "name": "QA Bearden Phase Conjugate Cert", "relation": "Theorem NT boundary formalization"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

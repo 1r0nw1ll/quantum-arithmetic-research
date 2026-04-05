@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_KEELY_SYMPATHETIC_TRANSFER_CERT.v1",
+  "certificate_id": "qa.cert.keely_sympathetic_transfer.fail.cross_orbit.v1",
+  "cert_type": "qa_keely_sympathetic_transfer_cert",
+  "title": "Keely Sympathetic Transfer FAIL: demonstrates cross-orbit reachability violation",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL.",
+
+  "fail_ledger": [
+    {
+      "check_id": "KST_REACH",
+      "message": "Deliberately declared cross-orbit reachability for testing"
+    }
+  ],
+  "result": "FAIL"
+}

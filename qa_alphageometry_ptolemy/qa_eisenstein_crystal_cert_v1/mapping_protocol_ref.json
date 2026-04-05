@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Eisenstein Crystal Cert family [183]: certifies three interlocking algebraic results connecting QA identities to crystal structure constants. (1) NEW IDENTITY Z-Y=J=bd (perigee): proved algebraically from Z=e²+ad, Y=a²-d², d-e=b. (2) FACTORIZATION Z²-Y²=J·a·(a+e): from (Z-Y)(Z+Y)=bd·a(a+e). For Unity Block (1,1,2,3): J·a·(a+e)=2·3·4=24=cosmos period. (3) EISENSTEIN-CRYSTAL BRIDGE: F²-FW+W²=Z² (cert [133]) encodes {F=3,W=8,Z=7} for Unity Block — these are EXACTLY Ben Iverson's 'four Forces' {3,5,7,8}={F,G,Z,W} from QA-4 Crystal Universe (1990). The satellite divisor (F=ab), satellite period (W=d(e+a)), and Eisenstein companion (Z=e²+ad) are locked in a norm relation that generates the crystal lattice structure. Tier 1 algebraic. Connects [133] Eisenstein, [139] 48/64, [181] satellite product sum, [182] Miller orbit. Checks EC_1+ZYJ/FACTOR/EISEN/UNITY/W/F; 1 PASS + 1 FAIL; self-test ok"
+}

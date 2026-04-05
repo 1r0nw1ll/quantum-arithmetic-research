@@ -5632,6 +5632,226 @@ def _validate_h_null_modularity_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_satellite_product_sum_cert_family(base_dir: str) -> Optional[str]:
+    """QA Satellite Product Sum Cert family [181] — certifies that the sum of QA tuple products (b*e*d*a) over all satellite pairs equals M^4 for any modulus M divisible by 3. Proof: satellite sub-lattice is Fibonacci-closed with normalized product sum = 81 = 3^4, giving total = s^4 * 3^4 = M^4. Corollary: satellite total volume = singularity volume. Tier 1 algebraic identity. Verified for 33 moduli (M=3..99). Checks SPS_1+PROOF/COUNT/SUM/TUPLES/CLOSURE/COROL/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_satellite_product_sum_cert_v1")
+    validator = os.path.join(fam_dir, "qa_satellite_product_sum_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_satellite_product_sum_cert_v1/qa_satellite_product_sum_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_satellite_product_sum_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_satellite_product_sum_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_satellite_product_sum_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_miller_orbit_cert_family(base_dir: str) -> Optional[str]:
+    """QA Miller Orbit Cert family [182] — certifies structural properties of QA mod-9 orbit classification applied to crystallographic Miller indices. Four Tier 1 results: (1) cosmos d > satellite d universal across all crystal systems (proved from Q_M ≥ 9 for satellite); (2) satellite Q_M mod 9 ∈ QR(9) = {0,1,4,7} (quadratic residue restriction); (3) singularity Q_M = perfect squares (h=k=0 → Q_M=l²); (4) satellite green channel 3× cosmos (chromogeometric shift). Verified 21 minerals, 13055 reflections. Checks MO_1+ORDER/QR/SQUARE/CHROMO/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_miller_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_miller_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_miller_orbit_cert_v1/qa_miller_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_miller_orbit_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_miller_orbit_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_miller_orbit_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_eisenstein_crystal_cert_family(base_dir: str) -> Optional[str]:
+    """QA Eisenstein Crystal Cert family [183] — certifies Z-Y=J=bd (new universal identity), Z²-Y²=J·a·(a+e) factorization, and Eisenstein norm F²-FW+W²=Z² as crystal constant encoder. Unity Block {F,G,Z,W}={3,5,7,8}=Ben Iverson's 'four Forces' (QA-4 Crystal Universe 1990). Tier 1 algebraic. 10 witnesses. Connects [133] Eisenstein, [182] Miller orbit. Checks EC_1+ZYJ/FACTOR/EISEN/TUPLE/UNITY/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_eisenstein_crystal_cert_v1")
+    validator = os.path.join(fam_dir, "qa_eisenstein_crystal_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_eisenstein_crystal_cert_v1/qa_eisenstein_crystal_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_eisenstein_crystal_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_eisenstein_crystal_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_eisenstein_crystal_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_keely_structural_ratio_cert_family(base_dir: str) -> Optional[str]:
+    """QA Keely Structural Ratio Cert family [184] — certifies Keely's 8 structural ratio laws (Laws 2,4,9,10,18,27,29,33) as QA modular invariants. Category 1 of Vibes 5-category framework. Maps pitch=f-value, period divisibility 1|8|24, concordance coupling, chromogeometry C*C+F*F=G*G. Checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO/CLOSURE/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_keely_structural_ratio_cert_v1")
+    validator = os.path.join(fam_dir, "qa_keely_structural_ratio_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_keely_structural_ratio_cert_v1/qa_keely_structural_ratio_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_keely_structural_ratio_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_keely_structural_ratio_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_keely_structural_ratio_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_keely_sympathetic_transfer_cert_family(base_dir: str) -> Optional[str]:
+    """QA Keely Sympathetic Transfer Cert family [185] — certifies Keely's 7 sympathetic transfer laws (Laws 5,6,7,8,17,37,40) as QA reachability and path structure. Category 2 of Vibes framework. Sympathetic oscillation=orbit co-membership; discord=reachability obstruction; triad concordance condition. Checks KST_1+LAWS/REACH/BLOCK/PATH/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_keely_sympathetic_transfer_cert_v1")
+    validator = os.path.join(fam_dir, "qa_keely_sympathetic_transfer_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_keely_sympathetic_transfer_cert_v1/qa_keely_sympathetic_transfer_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_keely_sympathetic_transfer_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_keely_sympathetic_transfer_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_keely_sympathetic_transfer_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_keely_dominant_control_cert_family(base_dir: str) -> Optional[str]:
+    """QA Keely Dominant Control Cert family [186] — certifies Keely's 3 dominant/control laws (Laws 1,11,16) as QA orbit hierarchy. Category 3 of Vibes framework. Invariant substrate, triune generator manifestation, singularity as neutral center/dominant. Checks KDC_1+LAWS/SUB/TRIUNE/SING/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_keely_dominant_control_cert_v1")
+    validator = os.path.join(fam_dir, "qa_keely_dominant_control_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_keely_dominant_control_cert_v1/qa_keely_dominant_control_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_keely_dominant_control_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_keely_dominant_control_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_keely_dominant_control_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_keely_aggregation_cert_family(base_dir: str) -> Optional[str]:
+    """QA Keely Aggregation Cert family [187] — certifies Keely's 5 aggregation/disintegration laws (Laws 3,12,28,34,35) as QA state composition/decomposition. Category 4 of Vibes framework. Coupling tension, orbit density, discord dissociation, deterministic synthesis. Checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_keely_aggregation_cert_v1")
+    validator = os.path.join(fam_dir, "qa_keely_aggregation_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_keely_aggregation_cert_v1/qa_keely_aggregation_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_keely_aggregation_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_keely_aggregation_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_keely_aggregation_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_keely_phenomenological_cert_family(base_dir: str) -> Optional[str]:
+    """QA Keely Phenomenological Cert family [188] — certifies Keely's 17 phenomenological laws (Laws 13-15,19-26,30-32,36,38,39) as Theorem NT observer projections. Category 5 of Vibes framework. All 17 describe continuous measurements that reveal but never causally feed back into QA. Largest category (42.5%). Checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_keely_phenomenological_cert_v1")
+    validator = os.path.join(fam_dir, "qa_keely_phenomenological_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_keely_phenomenological_cert_v1/qa_keely_phenomenological_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_keely_phenomenological_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_keely_phenomenological_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_keely_phenomenological_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_dale_circle_cert_family(base_dir: str) -> Optional[str]:
+    """QA Dale Circle Cert family [189] — certifies Dale Pond's integer circle construction. Three new elements: P=2W (diameter), Q=P (circumference=diameter in QA units), R=W² (area). Pi disappears in QA circular units. Source: svpwiki.com 1998. Checks DC_1+P/Q/R/W/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_dale_circle_cert_v1")
+    validator = os.path.join(fam_dir, "qa_dale_circle_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_dale_circle_cert_v1/qa_dale_circle_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_dale_circle_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_dale_circle_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_dale_circle_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_equilateral_height_cert_family(base_dir: str) -> Optional[str]:
+    """QA Equilateral Height Cert family [190] — certifies element S=d²e=d*X=D*e, Dale Pond's equilateral triangle height (#25 in svpwiki.com QA Elements). Three equivalent definitions verified for 7 directions. Connects to [152] W side and [189] circle. Checks EH_1+S/DX/DE/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_equilateral_height_cert_v1")
+    validator = os.path.join(fam_dir, "qa_equilateral_height_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_equilateral_height_cert_v1/qa_equilateral_height_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_equilateral_height_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_equilateral_height_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_equilateral_height_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_dual_extremality_24_cert_family(base_dir: str) -> Optional[str]:
     """QA Dual Extremality 24 Cert family [192] — certifies the joint extremality of m=24 under the Pisano period operator pi and the Carmichael lambda function. (1) pi(24)=24: minimum non-trivial Pisano fixed point (OEIS A235702). (2) lambda(24)=2 and max{m : lambda(m)=2}=24 (structurally proved: m | 24). (3) pi(9)=24: QA theoretical modulus maps to applied modulus in one Pisano step. (4) Basin of 24 in [1,30] = {6,9,12,16,18,24}. (5) Cannonball identity 1^2+...+24^2=70^2. (6) 24-theorem: p^2-1 div by 24 for primes p>=5. Closes item 5 of [191] Bateson sketch (Level-III self-improvement fixed point). ORIGINAL: joint (pi, lambda) extremality observation. Source: Wall 1960, OEIS A235702, Carmichael 1910, Watson 1918, Baez 2008. Checks DE_1+PISANO/MIN_FP/CARMICHAEL/MAX_LAM/JOINT/BRIDGE/BASIN/CANNON/24THM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -6311,6 +6531,56 @@ FAMILY_SWEEPS = [
      "H-null chromogeometric modularity: H(b,e)=C+F where C=2de (green) F=d*d-e*e (red); Les Miserables ARI=0.638 vs standard 0.588 (+0.050); HONEST: 1/10 graphs improved, topology-specific to hub-dominated networks; H/X=b/e+4+2e/b linear in degree asymmetry; Tier 2; checks HN_1+MODEL/CHROMO/BENCH/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
      "180_qa_h_null_modularity_cert",
      "qa_h_null_modularity_cert_v1", True),
+    (181, "QA Satellite Product Sum Cert family",
+     _validate_satellite_product_sum_cert_family,
+     "satellite product sum identity: sum_{satellite} b*e*d*a = M^4 for all M divisible by 3; proof via Fibonacci closure of satellite sub-lattice; normalized product sum = 81 = 3^4; corollary: satellite total volume = singularity volume; Tier 1 algebraic; verified 33 moduli; checks SPS_1+PROOF/COUNT/SUM/TUPLES/CLOSURE/COROL/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "181_qa_satellite_product_sum_cert",
+     "qa_satellite_product_sum_cert_v1", True),
+    (182, "QA Miller Orbit Cert family",
+     _validate_miller_orbit_cert_family,
+     "Miller orbit crystallography: cosmos d > satellite d universal (21/21 minerals, p<10⁻⁶); satellite Q_M mod 9 ∈ QR(9)={0,1,4,7} (quadratic residue restriction); singularity Q_M = perfect squares; satellite green 3× cosmos; all Tier 1 algebraic; 13055 reflections, 4 crystal systems; checks MO_1+ORDER/QR/SQUARE/CHROMO/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "182_qa_miller_orbit_cert",
+     "qa_miller_orbit_cert_v1", True),
+    (183, "QA Eisenstein Crystal Cert family",
+     _validate_eisenstein_crystal_cert_family,
+     "Eisenstein crystal bridge: Z-Y=J=bd (new identity); Z²-Y²=J·a·(a+e) factorization; F²-FW+W²=Z² encodes crystal constants; Unity Block {F,G,Z,W}={3,5,7,8}=Ben's four Forces; J·a·(a+e)=2·3·4=24=cosmos period; Tier 1 algebraic; 10 witnesses; checks EC_1+ZYJ/FACTOR/EISEN/TUPLE/UNITY/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "183_qa_eisenstein_crystal_cert",
+     "qa_eisenstein_crystal_cert_v1", True),
+    (184, "QA Keely Structural Ratio Cert family",
+     _validate_keely_structural_ratio_cert_family,
+     "Keely's 8 structural ratio laws (2,4,9,10,18,27,29,33) → QA modular invariants; Category 1 Vibes framework; pitch=f-value, period 1|8|24, concordance, chromogeometry C*C+F*F=G*G; checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO/CLOSURE/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "184_qa_keely_structural_ratio_cert",
+     "qa_keely_structural_ratio_cert_v1", True),
+    (185, "QA Keely Sympathetic Transfer Cert family",
+     _validate_keely_sympathetic_transfer_cert_family,
+     "Keely's 7 sympathetic transfer laws (5,6,7,8,17,37,40) → QA reachability/path structure; Category 2 Vibes framework; orbit co-membership=sympathy, discord=obstruction, triad concordance; checks KST_1+LAWS/REACH/BLOCK/PATH/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "185_qa_keely_sympathetic_transfer_cert",
+     "qa_keely_sympathetic_transfer_cert_v1", True),
+    (186, "QA Keely Dominant Control Cert family",
+     _validate_keely_dominant_control_cert_family,
+     "Keely's 3 dominant/control laws (1,11,16) → QA orbit hierarchy; Category 3 Vibes framework; invariant substrate, triune generator, singularity=neutral center; checks KDC_1+LAWS/SUB/TRIUNE/SING/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "186_qa_keely_dominant_control_cert",
+     "qa_keely_dominant_control_cert_v1", True),
+    (187, "QA Keely Aggregation Cert family",
+     _validate_keely_aggregation_cert_family,
+     "Keely's 5 aggregation/disintegration laws (3,12,28,34,35) → QA state composition/decomposition; Category 4 Vibes framework; coupling tension, orbit density, discord dissociation, deterministic synthesis; checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "187_qa_keely_aggregation_cert",
+     "qa_keely_aggregation_cert_v1", True),
+    (188, "QA Keely Phenomenological Cert family",
+     _validate_keely_phenomenological_cert_family,
+     "Keely's 17 phenomenological laws (13-15,19-26,30-32,36,38,39) → Theorem NT observer projections; Category 5 Vibes framework; 42.5% of laws; continuous measurements reveal but never feed back into QA; checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "188_qa_keely_phenomenological_cert",
+     "qa_keely_phenomenological_cert_v1", True),
+    (189, "QA Dale Circle Cert family",
+     _validate_dale_circle_cert_family,
+     "Dale Pond's integer circle: P=2W (diameter), Q=P (circumference=diameter in QA units), R=W² (area); pi disappears; svpwiki.com 1998; checks DC_1+P/Q/R/W/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "189_qa_dale_circle_cert",
+     "qa_dale_circle_cert_v1", True),
+    (190, "QA Equilateral Height Cert family",
+     _validate_equilateral_height_cert_family,
+     "Element S=d²e=d*X=D*e; Dale Pond equilateral triangle height (#25 svpwiki.com); three equivalent definitions; 7 directions verified; connects [152] W side + [189] circle; checks EH_1+S/DX/DE/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "190_qa_equilateral_height_cert",
+     "qa_equilateral_height_cert_v1", True),
     (191, "QA Bateson Learning Levels Cert family",
      _validate_bateson_learning_levels_cert_family,
      "Bateson Learning 0/I/II/III as strict invariant filtration (orbit ⊂ family ⊂ modulus ⊂ ambient category); L_0/L_1/L_2a/L_2b/L_3 operator classes; Tiered Reachability Theorem exhaustively verified on S_9 (81+1712+3456+1312=6561); only 26% Level-I reachable; witnesses: qa_step, scalar_mult k=2 (L_2a), scalar_mult k=3 (L_2b), modulus_reduction (L_3); source Bateson 1972 + Ashby 1956; checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",

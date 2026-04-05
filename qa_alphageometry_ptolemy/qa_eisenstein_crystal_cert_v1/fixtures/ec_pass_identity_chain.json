@@ -1,0 +1,102 @@
+{
+  "schema_version": "QA_EISENSTEIN_CRYSTAL_CERT.v1",
+  "certificate_id": "qa.cert.eisenstein_crystal.pass.identity_chain.v1",
+  "cert_type": "qa_eisenstein_crystal_cert",
+  "title": "Eisenstein Crystal PASS: Z-Y=J identity + Eisenstein-crystal bridge verified across 10 QA directions",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Multi-witness fixture. Verifies three interlocking algebraic results: (1) Z-Y=J=bd universal identity, (2) Z²-Y²=J·a·(a+e) factorization, (3) Eisenstein norm F²-FW+W²=Z² encoding crystal constants. Includes Unity Block (1,1,2,3) as anchor witness showing {F,G,Z,W}={3,5,7,8}=Ben's four Forces.",
+
+  "identity_zy_j": {
+    "claim": "Z - Y = J = bd for all QA directions (b,e)",
+    "proof": "Z = e²+ad, Y = a²-d². Z-Y = e²+ad-a²+d² = e²+d²+a(d-a). Since a-d = e: = e²+d²-ae = d²-de+e²-ae+e² ... actually: d²+e²-ae = d²+e²-(b+2e)e = d²-be-e² = (b+e)²-be-e² = b²+be = b(b+e) = bd = J. QED.",
+    "formula": "Z - Y = bd = J"
+  },
+
+  "factorization": {
+    "claim": "Z² - Y² = J · a · (a+e) for all QA directions",
+    "proof": "Z²-Y² = (Z-Y)(Z+Y) = J·(Z+Y). Z+Y = e²+ad+a²-d² = a²+ae = a(a+e). So Z²-Y² = J·a·(a+e) = bd·a·(a+e).",
+    "formula": "Z² - Y² = bd · a · (a+e)"
+  },
+
+  "eisenstein_crystal": {
+    "claim": "For Unity Block (1,1,2,3): F²-FW+W²=Z² encodes crystal constants {F=3,W=8,Z=7}",
+    "unity_block": {"b": 1, "e": 1, "d": 2, "a": 3},
+    "four_forces": {
+      "F": 3, "G": 5, "Z": 7, "W": 8,
+      "_note": "Ben Iverson QA-4 (1990): 'The four integers 3, 5, 7, 8 represent the four Forces'"
+    },
+    "eisenstein_check": {
+      "formula": "F² - F·W + W² = Z²",
+      "lhs": "9 - 24 + 64 = 49",
+      "rhs": "49",
+      "holds": true
+    },
+    "crystal_mapping": {
+      "F_equals_3": "satellite divisor for mod-9 (m//3 = 3)",
+      "W_equals_8": "satellite period = satellite divisor for mod-24 (m//3 = 8) = Ben's '8-unit edge'",
+      "Z_equals_7": "Eisenstein companion; 7²-5² = 24 = cosmos period",
+      "G_equals_5": "blue quadrance d²+e²; 5²-1² = 24 = cosmos period"
+    },
+    "cosmos_period_from_unity": {
+      "formula": "J·a·(a+e) = 2·3·4 = 24",
+      "equals_cosmos_period": true,
+      "_note": "Product of three consecutive integers from Unity Block"
+    }
+  },
+
+  "witnesses": [
+    {"b": 1, "e": 1, "d": 2, "a": 3, "J": 2, "Y": 5, "Z": 7, "F": 3, "W": 8,
+     "Z_minus_Y": 2, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 24, "J_a_ape": 24, "factorization_holds": true,
+     "F2_FW_W2": 49, "Z2": 49, "eisenstein_holds": true},
+
+    {"b": 2, "e": 1, "d": 3, "a": 4, "J": 6, "Y": 7, "Z": 13, "F": 8, "W": 15,
+     "Z_minus_Y": 6, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 120, "J_a_ape": 120, "factorization_holds": true,
+     "F2_FW_W2": 169, "Z2": 169, "eisenstein_holds": true},
+
+    {"b": 3, "e": 1, "d": 4, "a": 5, "J": 12, "Y": 9, "Z": 21, "F": 15, "W": 24,
+     "Z_minus_Y": 12, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 360, "J_a_ape": 360, "factorization_holds": true,
+     "F2_FW_W2": 441, "Z2": 441, "eisenstein_holds": true},
+
+    {"b": 1, "e": 2, "d": 3, "a": 5, "J": 3, "Y": 16, "Z": 19, "F": 5, "W": 21,
+     "Z_minus_Y": 3, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 105, "J_a_ape": 105, "factorization_holds": true,
+     "F2_FW_W2": 361, "Z2": 361, "eisenstein_holds": true},
+
+    {"b": 4, "e": 1, "d": 5, "a": 6, "J": 20, "Y": 11, "Z": 31, "F": 24, "W": 35,
+     "Z_minus_Y": 20, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 840, "J_a_ape": 840, "factorization_holds": true,
+     "F2_FW_W2": 961, "Z2": 961, "eisenstein_holds": true},
+
+    {"b": 3, "e": 2, "d": 5, "a": 7, "J": 15, "Y": 24, "Z": 39, "F": 21, "W": 45,
+     "Z_minus_Y": 15, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 945, "J_a_ape": 945, "factorization_holds": true,
+     "F2_FW_W2": 1521, "Z2": 1521, "eisenstein_holds": true},
+
+    {"b": 2, "e": 3, "d": 5, "a": 8, "J": 10, "Y": 39, "Z": 49, "F": 16, "W": 55,
+     "Z_minus_Y": 10, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 880, "J_a_ape": 880, "factorization_holds": true,
+     "F2_FW_W2": 2401, "Z2": 2401, "eisenstein_holds": true},
+
+    {"b": 5, "e": 1, "d": 6, "a": 7, "J": 30, "Y": 13, "Z": 43, "F": 35, "W": 48,
+     "Z_minus_Y": 30, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 1680, "J_a_ape": 1680, "factorization_holds": true,
+     "F2_FW_W2": 1849, "Z2": 1849, "eisenstein_holds": true},
+
+    {"b": 1, "e": 3, "d": 4, "a": 7, "J": 4, "Y": 33, "Z": 37, "F": 7, "W": 40,
+     "Z_minus_Y": 4, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 280, "J_a_ape": 280, "factorization_holds": true,
+     "F2_FW_W2": 1369, "Z2": 1369, "eisenstein_holds": true},
+
+    {"b": 5, "e": 2, "d": 7, "a": 9, "J": 35, "Y": 32, "Z": 67, "F": 45, "W": 77,
+     "Z_minus_Y": 35, "Z_minus_Y_eq_J": true,
+     "Z2_minus_Y2": 3465, "J_a_ape": 3465, "factorization_holds": true,
+     "F2_FW_W2": 4489, "Z2": 4489, "eisenstein_holds": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

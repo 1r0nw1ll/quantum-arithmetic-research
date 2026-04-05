@@ -1,0 +1,108 @@
+{
+  "schema_version": "QA_KEELY_DOMINANT_CONTROL_CERT.v1",
+  "certificate_id": "qa.cert.keely_dominant_control.pass.hierarchy.v1",
+  "cert_type": "qa_keely_dominant_control_cert",
+  "title": "Keely Dominant Control PASS: 3 laws mapped to QA orbit hierarchy",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Keely's 3 dominant/control laws (Category 3, Vibes framework) as QA orbit hierarchy mappings. Law 1: invariant substrate. Law 11: triune manifestation of generator. Law 16: singularity as neutral center.",
+
+  "category": "dominant_control",
+  "category_number": 3,
+  "framework": "Vibes 5-category (2026-04-03)",
+
+  "laws": {
+    "1": {
+      "name": "Law of Matter and Force",
+      "keely_text": "There exists an infinite and unchangeable quantity of atomoles, the base of all matter; these are in a state of constant vibratory motion",
+      "qa_mapping": "State space {1,...,N} is fixed and unchangeable — 81 states in mod-9. The generator always applies; states always evolve. The atomoles = irreducible integer pairs.",
+      "qa_invariant": "fixed_state_space",
+      "control_aspect": "The substrate is invariant; what changes is the path through it"
+    },
+    "11": {
+      "name": "Law of Force",
+      "keely_text": "Energy manifests itself in three forms: Creative, Transmissive, Attractive",
+      "qa_mapping": "Three manifestations of the generator: (1) Creative = orbit classification, (2) Transmissive = generator propagation, (3) Attractive = resonance coupling",
+      "qa_invariant": "generator_triune",
+      "control_aspect": "The triune manifestation of a single underlying operation (the generator)"
+    },
+    "16": {
+      "name": "Law of Oscillating Atomoles",
+      "keely_text": "Atomoles oscillating at a uniform pitch produce the creative force Atomolity, whose transmissive form Gravism is propagated through more rarefied media",
+      "qa_mapping": "Singularity (9,9) is the uniform pitch — unchanging fixed point, creative, the source from which other orbits are defined by departure. Gravism = attractive stability of singularity.",
+      "qa_invariant": "singularity_dominance",
+      "control_aspect": "Singularity = dominant = neutral center = source of coherence"
+    }
+  },
+
+  "invariant_substrate": {
+    "modulus": 9,
+    "state_count": 81,
+    "note": "81 = 9*9 states, fixed and unchangeable (Law 1)"
+  },
+
+  "generator_triune": {
+    "creative": {
+      "description": "Orbit classification itself — partitioning state space into singularity/satellite/cosmos",
+      "orbit": "ALL",
+      "law_ref": 11
+    },
+    "transmissive": {
+      "description": "Generator propagation (b,e) -> (e,d) through state space",
+      "orbit": "COSMOS",
+      "law_ref": 11
+    },
+    "attractive": {
+      "description": "Resonance coupling between co-orbital states via tuple alignment",
+      "orbit": "SATELLITE",
+      "law_ref": 11
+    }
+  },
+
+  "singularity_dominant": {
+    "state": [9, 9],
+    "modulus": 9,
+    "period": 1,
+    "is_fixed_point": true,
+    "is_neutral_center": true,
+    "svp_property": "uniform pitch, controls both tendencies (expansion/contraction)",
+    "qa_property": "T(9,9) = (9,9); unique element unchanged by generator",
+    "law_ref": 16
+  },
+
+  "witnesses": [
+    {
+      "law_refs": [1],
+      "description": "Invariant state space",
+      "modulus": 9,
+      "total_states": 81,
+      "partition": {"SINGULARITY": 1, "SATELLITE": 8, "COSMOS": 72},
+      "note": "1+8+72=81: complete, no overlap, no gaps — atomoles are unchangeable"
+    },
+    {
+      "law_refs": [11],
+      "description": "Generator as triune force",
+      "example_state": [1, 1],
+      "creative_result": "COSMOS (orbit assignment)",
+      "transmissive_result": "(1,1)->(1,2): generator step",
+      "attractive_result": "coupling with (2,3): same orbit, high resonance",
+      "note": "Single generator operation manifests in three distinguishable ways"
+    },
+    {
+      "law_refs": [16],
+      "description": "Singularity as dominant/neutral center",
+      "singularity_state": [9, 9],
+      "generator_result": [9, 9],
+      "note": "Only state unchanged by generator — the neutral center that anchors the entire orbit structure"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 153, "name": "QA Keely Triune Cert", "relation": "Parent triune mapping (DOMINANT=SINGULARITY)"},
+    {"family": 150, "name": "QA Septenary Cert", "relation": "Unit group structure around neutral center"},
+    {"family": 184, "name": "QA Keely Structural Ratio Cert", "relation": "Sibling: structural invariants"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

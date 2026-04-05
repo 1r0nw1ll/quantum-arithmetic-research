@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Satellite Product Sum Cert family [181]: certifies the identity that the sum of QA tuple products (b*e*d*a) over all satellite pairs equals M^4 for any modulus M divisible by 3. PROOF: satellite pairs have b,e in {s,2s,3s} where s=M/3, excluding singularity (M,M). The sub-lattice is Fibonacci-closed: d,a are also multiples of s. So each product factors as s^4 * (i*j*k*l) where i,j,k,l in {1,2,3}. The sum of normalized products is exactly 81=3^4, giving total = s^4 * 3^4 = (3s)^4 = M^4. COROLLARY: singularity product = M^4 (since b=e=d=a=M), so satellite total volume = singularity volume. Verified computationally for all M in {3,6,9,...,99} (33 moduli). Tier 1 algebraic identity. Connects to [139] QA_48_64_CERT (orbit constants), [128] spread period cert (satellite period 8), and Fuller synergetics voxelation (cube=3 tet-volumes). Checks SPS_1+PROOF/SAT_COUNT/PRODUCT_SUM/CLOSURE/COROLLARY/W/F; 1 PASS + 1 FAIL; self-test ok"
+}

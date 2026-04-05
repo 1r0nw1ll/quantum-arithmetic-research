@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Keely Aggregation Cert family [187]: certifies Keely's 5 aggregation/disintegration laws (Laws 3,12,28,34,35) as QA state composition/decomposition. Category 4 of Vibes framework. Coupling tension, orbit density, discord dissociation, deterministic synthesis. Checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok"
+}

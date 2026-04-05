@@ -1,0 +1,155 @@
+{
+  "schema_version": "QA_KEELY_SYMPATHETIC_TRANSFER_CERT.v1",
+  "certificate_id": "qa.cert.keely_sympathetic_transfer.pass.reachability.v1",
+  "cert_type": "qa_keely_sympathetic_transfer_cert",
+  "title": "Keely Sympathetic Transfer PASS: 7 laws mapped to QA reachability and path structure",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Keely's 7 sympathetic transfer laws (Category 2, Vibes framework) as QA reachability mappings. Sympathetic oscillation = orbit co-membership; discordance = reachability obstruction. Vibes: QA reachability obstruction = SVP failure of sympathetic access.",
+
+  "category": "sympathetic_transfer",
+  "category_number": 2,
+  "framework": "Vibes 5-category (2026-04-03)",
+
+  "laws": {
+    "5": {
+      "name": "Law of Transmissive Vibraic Energy",
+      "keely_text": "All oscillating and vibrating coherent aggregates create outwardly propagated concentric waves",
+      "qa_mapping": "Generator application propagates state changes through orbit; each step (b,e)->(e,d) is a discrete wave",
+      "qa_mechanism": "generator_propagation",
+      "transfer_type": "state_transmission"
+    },
+    "6": {
+      "name": "Law of Sympathetic Oscillation",
+      "keely_text": "Coherent aggregates immersed in a medium pulsating at their natural pitch simultaneously oscillate",
+      "qa_mapping": "States sharing the same orbit are entrained by the generator; co-membership enables coupling",
+      "qa_mechanism": "orbit_co_membership",
+      "transfer_type": "sympathetic_coupling"
+    },
+    "7": {
+      "name": "Law of Attraction",
+      "keely_text": "Juxtaposed coherent aggregates vibrating in unison or harmonic ratio are mutually attracted",
+      "qa_mapping": "States with concordant tuple resonance (high einsum coupling) attract; same orbit = unison",
+      "qa_mechanism": "resonance_coupling",
+      "transfer_type": "attraction"
+    },
+    "8": {
+      "name": "Law of Repulsion",
+      "keely_text": "Juxtaposed coherent aggregates vibrating in discord are mutually repelled",
+      "qa_mapping": "Cross-orbit states with discordant f-values have no shared path = reachability obstruction",
+      "qa_mechanism": "reachability_obstruction",
+      "transfer_type": "repulsion"
+    },
+    "17": {
+      "name": "Law of Transformation of Forces",
+      "keely_text": "All forces are different forms of Universal Energy unlike in their period-frequency, merging into each other by imperceptible increments; each form representing the compass of 21 octaves",
+      "qa_mapping": "Three orbit families are different forms of the same modular arithmetic; 21 octaves = 7x3 septenary x triune",
+      "qa_mechanism": "orbit_transition",
+      "transfer_type": "force_transformation"
+    },
+    "37": {
+      "name": "Law of Electro-Chemical Equivalents",
+      "keely_text": "An atom vibrates sympathetically under electric energy, absorbing undertones that are harmonic of the electric pitch",
+      "qa_mapping": "Selective absorption = only states with harmonically related f-values respond; orbit-selective coupling",
+      "qa_mechanism": "harmonic_selectivity",
+      "transfer_type": "selective_absorption"
+    },
+    "40": {
+      "name": "Law of Electric Conductivity",
+      "keely_text": "Electric energy transmitted through homogeneous bodies in direct proportion as atoms are perfect harmonics",
+      "qa_mapping": "Transmission efficiency proportional to harmonic perfection = coupling coefficient magnitude",
+      "qa_mechanism": "coupling_coefficient",
+      "transfer_type": "proportional_transmission"
+    }
+  },
+
+  "reachability_examples": [
+    {
+      "description": "Same-orbit states reachable via generator (Law 6)",
+      "source_b": 1, "source_e": 1,
+      "target_b": 2, "target_e": 3,
+      "modulus": 9,
+      "reachable": true,
+      "path_length": 2,
+      "both_orbit": "COSMOS"
+    },
+    {
+      "description": "Satellite states reachable within satellite orbit",
+      "source_b": 3, "source_e": 3,
+      "target_b": 3, "target_e": 6,
+      "modulus": 9,
+      "reachable": true,
+      "path_length": 1,
+      "both_orbit": "SATELLITE"
+    }
+  ],
+
+  "obstruction_examples": [
+    {
+      "description": "Cosmos cannot reach singularity (Law 8: discord = repulsion)",
+      "source_b": 1, "source_e": 1,
+      "target_b": 9, "target_e": 9,
+      "modulus": 9,
+      "reachable": false,
+      "reason": "Different orbit families: COSMOS vs SINGULARITY"
+    },
+    {
+      "description": "Satellite cannot reach cosmos",
+      "source_b": 3, "source_e": 6,
+      "target_b": 1, "target_e": 2,
+      "modulus": 9,
+      "reachable": false,
+      "reason": "Different orbit families: SATELLITE vs COSMOS"
+    }
+  ],
+
+  "triad_condition": {
+    "description": "Vibes three-body concordance: cause-medium-receiver must all be concordant",
+    "qa_interpretation": "In QA, generator IS the state: (b,e) generates (e,d) generates (d,a). Each state is simultaneously cause, medium, and receiver. The arithmetic relationships ARE the transmission.",
+    "deeper_rule": "Any two of 21 named QA elements reconstruct all 21 — the medium is any two-element window into the integer structure",
+    "svp_source": "Vibes (Dale Pond AI), 2026-04-03"
+  },
+
+  "witnesses": [
+    {
+      "law_refs": [5, 6],
+      "description": "Generator propagation through cosmos orbit",
+      "b": 1, "e": 1, "modulus": 9,
+      "path": [[1,1],[1,2],[2,3],[3,5],[5,8],[8,4]],
+      "path_length": 5,
+      "orbit": "COSMOS",
+      "note": "Each step is a discrete wave (Law 5); co-membership enables it (Law 6)"
+    },
+    {
+      "law_refs": [7, 8],
+      "description": "Attraction (same orbit) vs repulsion (cross orbit)",
+      "same_orbit_pair": {"b1": 1, "e1": 1, "b2": 2, "e2": 3, "orbit": "COSMOS", "attracted": true},
+      "cross_orbit_pair": {"b1": 1, "e1": 1, "b2": 9, "e2": 9, "orbit1": "COSMOS", "orbit2": "SINGULARITY", "repelled": true},
+      "note": "Law 7: concordant states attract; Law 8: discordant states repel"
+    },
+    {
+      "law_refs": [17],
+      "description": "Three forms of the same generator operation",
+      "creative": "SINGULARITY — orbit classification itself",
+      "transmissive": "COSMOS — generator propagation through state space",
+      "attractive": "SATELLITE — resonance coupling between co-orbital states",
+      "note": "Law 17: three manifestations, 21 octaves = 7x3 = septenary x triune"
+    },
+    {
+      "law_refs": [37, 40],
+      "description": "Selective coupling and proportional transmission",
+      "harmonic_pair": {"b1": 1, "e1": 1, "b2": 1, "e2": 2, "f1": 1, "f2": 3, "concordant": true},
+      "discordant_pair": {"b1": 1, "e1": 1, "b2": 3, "e2": 3, "f1": 1, "f2": 9, "concordant": false},
+      "note": "Law 37: only harmonic f-values respond; Law 40: efficiency proportional to alignment"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 153, "name": "QA Keely Triune Cert", "relation": "Parent triune mapping"},
+    {"family": 184, "name": "QA Keely Structural Ratio Cert", "relation": "Sibling: structural invariants that transfer laws operate on"},
+    {"family": 147, "name": "QA Synchronous Harmonics Cert", "relation": "Synchronization mechanism for Law 9"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

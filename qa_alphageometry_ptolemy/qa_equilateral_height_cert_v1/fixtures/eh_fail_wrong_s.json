@@ -1,0 +1,10 @@
+{
+  "schema_version": "QA_EQUILATERAL_HEIGHT_CERT.v1",
+  "certificate_id": "qa.cert.equilateral_height.fail.wrong_s.v1",
+  "cert_type": "qa_equilateral_height_cert",
+  "title": "Equilateral Height FAIL: demonstrates S != d²e detection",
+  "created_utc": "2026-04-03T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL.",
+  "fail_ledger": [{"check_id": "EH_S", "message": "Deliberately wrong S for testing"}],
+  "result": "FAIL"
+}

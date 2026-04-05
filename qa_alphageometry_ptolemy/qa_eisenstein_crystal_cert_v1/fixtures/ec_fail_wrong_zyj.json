@@ -1,0 +1,25 @@
+{
+  "schema_version": "QA_EISENSTEIN_CRYSTAL_CERT.v1",
+  "certificate_id": "qa.cert.eisenstein_crystal.fail.wrong_zyj.v1",
+  "cert_type": "qa_eisenstein_crystal_cert",
+  "title": "Eisenstein Crystal FAIL: Z-Y does not equal J in witness",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: a witness claims Z-Y=5 but J=bd=2 for direction (1,1). Validator must catch the mismatch.",
+
+  "identity_zy_j": {
+    "claim": "Z - Y = J = bd for all QA directions",
+    "formula": "Z - Y = bd = J"
+  },
+
+  "witnesses": [
+    {"b": 1, "e": 1, "d": 2, "a": 3, "J": 2, "Y": 5, "Z": 7,
+     "Z_minus_Y": 5, "Z_minus_Y_eq_J": false,
+     "_note": "INTENTIONAL ERROR: Z_minus_Y should be 2, not 5"}
+  ],
+
+  "fail_ledger": [
+    {"check_id": "EC_ZYJ", "message": "Z-Y=5 but J=bd=2 for direction (1,1)"}
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_KEELY_STRUCTURAL_RATIO_CERT.v1",
+  "certificate_id": "qa.cert.keely_structural_ratio.fail.wrong_fval.v1",
+  "cert_type": "qa_keely_structural_ratio_cert",
+  "title": "Keely Structural Ratio FAIL: demonstrates f-value mismatch detection",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: deliberately sets wrong f-value to verify KSR_FVAL check catches it. Validator should skip detailed checks because result=FAIL.",
+
+  "fail_ledger": [
+    {
+      "check_id": "KSR_FVAL",
+      "message": "Deliberately wrong f-value for testing",
+      "law_ref": 18
+    }
+  ],
+  "result": "FAIL"
+}

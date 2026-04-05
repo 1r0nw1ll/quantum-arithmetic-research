@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_DALE_CIRCLE_CERT.v1",
+  "certificate_id": "qa.cert.dale_circle.pass.circle.v1",
+  "cert_type": "qa_dale_circle_cert",
+  "title": "Dale Circle PASS: P=2W, Q=P, R=W² verified for 7 tuples",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Dale Pond's integer circle construction (svpwiki.com, 1998). Three new QA elements: P (diameter)=2W, Q (circumference)=P, R (area)=W². In QA circular units, pi disappears — diameter equals circumference. Extends Ben Iverson's 21 elements to 24 (with S from [190]).",
+
+  "source_attribution": "Dale Pond, 'Unpublished Notes' / 'Quantum Arithmetic Elements', svpwiki.com, December 1998. Quote: 'When Ben said there was no way to define a circle with Quantum Arithmetic, I developed three different ways to do this.'",
+
+  "elements_defined": {
+    "P": {"formula": "2*W", "meaning": "Circle diameter in QA integer units"},
+    "Q": {"formula": "P = 2*W", "meaning": "Circle circumference in QA integer units"},
+    "R": {"formula": "W*W", "meaning": "Circle area in QA integer units"}
+  },
+
+  "key_insight": "Dale defines P=2W as diameter, Q=P as circumference, R=W² as area — effectively choosing QA circular units where pi=1. This is a unit convention (analogous to natural units c=1 in physics), not a structural theorem. The algebraic identities P=2W, Q=P, R=W² are exact by definition. Dale's contribution is identifying W as the natural radius-like quantity for QA circles.",
+
+  "witnesses": [
+    {
+      "b": 1, "e": 1, "d": 2, "a": 3,
+      "W": 8, "P": 16, "Q": 16, "R": 64,
+      "note": "Unity Block: W=8 (satellite period), P=Q=16, R=64=8²"
+    },
+    {
+      "b": 2, "e": 1, "d": 3, "a": 4,
+      "W": 15, "P": 30, "Q": 30, "R": 225,
+      "note": "Female Unity: W=15, P=Q=30 (3D QN requirement), R=225"
+    },
+    {
+      "b": 3, "e": 2, "d": 5, "a": 7,
+      "W": 45, "P": 90, "Q": 90, "R": 2025,
+      "note": "Direction (3,2): W=45, P=Q=90, R=2025=45²"
+    },
+    {
+      "b": 5, "e": 2, "d": 7, "a": 9,
+      "W": 77, "P": 154, "Q": 154, "R": 5929,
+      "note": "Direction (5,2): W=77, P=Q=154, R=5929=77²"
+    },
+    {
+      "b": 5, "e": 3, "d": 8, "a": 11,
+      "W": 112, "P": 224, "Q": 224, "R": 12544,
+      "note": "Direction (5,3): W=112, P=Q=224, R=12544=112²"
+    },
+    {
+      "b": 7, "e": 3, "d": 10, "a": 13,
+      "W": 160, "P": 320, "Q": 320, "R": 25600,
+      "note": "Direction (7,3): W=160, P=Q=320, R=25600=160²"
+    },
+    {
+      "b": 8, "e": 3, "d": 11, "a": 14,
+      "W": 187, "P": 374, "Q": 374, "R": 34969,
+      "note": "Direction (8,3): W=187, P=Q=374, R=34969=187²"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 152, "name": "QA Equilateral Triangle Cert", "relation": "W = equilateral side; P,Q,R derived from W"},
+    {"family": 133, "name": "QA Eisenstein Norm Cert", "relation": "F²-FW+W²=Z²; W is the Eisenstein equilateral side"},
+    {"family": 190, "name": "QA Equilateral Height Cert", "relation": "S = equilateral height; S,W,P form equilateral-circle bridge"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

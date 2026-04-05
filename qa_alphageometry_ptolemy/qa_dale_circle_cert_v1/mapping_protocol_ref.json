@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Dale Circle Cert family [189]: certifies Dale Pond's integer circle construction extending Iverson's QA. Three new elements: P=2W (diameter), Q=P (circumference=diameter in QA units), R=W² (area). Pi disappears in QA circular units. Source: svpwiki.com 'Quantum Arithmetic Elements' (1998). Checks DC_1+P/Q/R/W/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

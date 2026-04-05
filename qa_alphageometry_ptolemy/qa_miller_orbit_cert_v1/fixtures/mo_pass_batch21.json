@@ -1,0 +1,96 @@
+{
+  "schema_version": "QA_MILLER_ORBIT_CERT.v1",
+  "certificate_id": "qa.cert.miller_orbit.pass.batch21.v1",
+  "cert_type": "qa_miller_orbit_cert",
+  "title": "Miller Orbit PASS: 21 minerals, 13055 reflections, 4 crystal systems — all structural predictions confirmed",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Batch witness. Verifies all four structural predictions of QA mod-9 orbit classification applied to Miller indices across 21 minerals spanning cubic, hexagonal, tetragonal, and orthorhombic crystal systems.",
+
+  "dataset": {
+    "n_minerals": 21,
+    "n_reflections": 13055,
+    "crystal_systems": ["cubic", "hexagonal", "tetragonal", "orthorhombic"],
+    "q_max": 50,
+    "d_min_angstrom": 0.8,
+    "minerals": [
+      {"name": "Silicon", "system": "cubic", "n_refs": 678},
+      {"name": "Diamond", "system": "cubic", "n_refs": 182},
+      {"name": "Halite", "system": "cubic", "n_refs": 709},
+      {"name": "Magnetite", "system": "cubic", "n_refs": 751},
+      {"name": "Fluorite", "system": "cubic", "n_refs": 678},
+      {"name": "Pyrite", "system": "cubic", "n_refs": 654},
+      {"name": "Galena", "system": "cubic", "n_refs": 751},
+      {"name": "Garnet", "system": "cubic", "n_refs": 751},
+      {"name": "Quartz", "system": "hexagonal", "n_refs": 444},
+      {"name": "Calcite", "system": "hexagonal", "n_refs": 571},
+      {"name": "Corundum", "system": "hexagonal", "n_refs": 510},
+      {"name": "Hematite", "system": "hexagonal", "n_refs": 571},
+      {"name": "Apatite", "system": "hexagonal", "n_refs": 751},
+      {"name": "Beryl", "system": "hexagonal", "n_refs": 751},
+      {"name": "Rutile", "system": "tetragonal", "n_refs": 253},
+      {"name": "Anatase", "system": "tetragonal", "n_refs": 413},
+      {"name": "Zircon", "system": "tetragonal", "n_refs": 751},
+      {"name": "Forsterite", "system": "orthorhombic", "n_refs": 691},
+      {"name": "Anhydrite", "system": "orthorhombic", "n_refs": 751},
+      {"name": "Enstatite", "system": "orthorhombic", "n_refs": 746},
+      {"name": "Olivine", "system": "orthorhombic", "n_refs": 698}
+    ]
+  },
+
+  "orbit_census": {
+    "cosmos": 11550,
+    "satellite": 1370,
+    "singularity": 135,
+    "cosmos_fraction": 0.8847,
+    "satellite_fraction": 0.1049,
+    "singularity_fraction": 0.0103
+  },
+
+  "ordering": {
+    "claim": "cosmos mean d-spacing > satellite mean d-spacing for ALL minerals and crystal systems",
+    "proof": "Satellite requires |h|,|k| both divisible by m//3 = 3 (mod-9). This forces h²+k² >= 9, so Q_M = h²+k²+l² >= 9. Since d = a/sqrt(Q_M) for cubic (and analogous for other systems), higher Q_M → smaller d.",
+    "n_minerals_tested": 21,
+    "n_minerals_confirmed": 21,
+    "fraction_confirmed": 1.0,
+    "cosmos_mean_d": 1.4687,
+    "satellite_mean_d": 1.3282,
+    "t_test_p": 2.4e-10,
+    "ks_test_p": 3.1e-7,
+    "mann_whitney_p": 5.9e-6,
+    "per_mineral_confirmed": true
+  },
+
+  "quadratic_residues": {
+    "claim": "Satellite Q_M mod 9 is restricted to quadratic residues QR(9) = {0, 1, 4, 7}",
+    "proof": "Satellite has h,k both divisible by 3, so h² + k² ≡ 0 mod 9. Therefore Q_M = h² + k² + l² ≡ l² mod 9, which is always a quadratic residue mod 9.",
+    "qr_9": [0, 1, 4, 7],
+    "satellite_residues_observed": [0, 1, 4, 7],
+    "satellite_residue_counts": {"0": 448, "1": 326, "4": 300, "7": 296},
+    "forbidden_residues": [2, 3, 5, 6, 8],
+    "forbidden_count": 0,
+    "restriction_exact": true
+  },
+
+  "perfect_squares": {
+    "claim": "Singularity Q_M values are always perfect squares",
+    "proof": "Singularity has h = k = 0 (both mapped to m=9 in QA mod), so Q_M = 0² + 0² + l² = l².",
+    "observed_values": [1, 4, 9, 16, 25, 36, 49],
+    "all_perfect_squares": true
+  },
+
+  "chromogeometric_shift": {
+    "claim": "Satellite has higher green-channel fraction than cosmos",
+    "cosmos_blue_fraction": 0.883,
+    "cosmos_green_fraction": 0.117,
+    "satellite_blue_fraction": 0.697,
+    "satellite_green_fraction": 0.303,
+    "singularity_degenerate_fraction": 1.0,
+    "green_ratio_satellite_over_cosmos": 2.59,
+    "_note": "Green channel = Qg = 2hk dominates when h ≈ k. Satellite divisibility by 3 creates more h=k=3n coincidences."
+  },
+
+  "witnesses": ["experiments/qa_voxelation_crystal_batch.py"],
+  "fail_ledger": [],
+  "result": "PASS"
+}

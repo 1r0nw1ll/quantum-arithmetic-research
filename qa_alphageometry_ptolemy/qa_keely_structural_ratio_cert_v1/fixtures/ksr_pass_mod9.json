@@ -1,0 +1,138 @@
+{
+  "schema_version": "QA_KEELY_STRUCTURAL_RATIO_CERT.v1",
+  "certificate_id": "qa.cert.keely_structural_ratio.pass.mod9.v1",
+  "cert_type": "qa_keely_structural_ratio_cert",
+  "title": "Keely Structural Ratio PASS: 8 laws mapped to QA mod-9 invariants",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Certifies Keely's 8 structural ratio laws (Category 1, Vibes framework) as QA modular invariants. Each law states an exact integer constraint: orbit period, f-value, period divisibility, concordance, chromogeometry, or closure. Source: Keely via SVP (svpwiki.com); Vibes 5-category classification (2026-04-03).",
+
+  "category": "structural_ratio",
+  "category_number": 1,
+  "framework": "Vibes 5-category (2026-04-03)",
+
+  "laws": {
+    "2": {
+      "name": "Law of Corporeal Vibrations",
+      "keely_text": "All coherent aggregates when isolated vibrate at a given ascertainable pitch",
+      "qa_mapping": "Every state (b,e) has a definite orbit and period — a pitch determined by its modular class",
+      "qa_invariant": "orbit_period",
+      "integer_constraint": "period in {1, 8, 24}"
+    },
+    "4": {
+      "name": "Law of Harmonic Vibrations",
+      "keely_text": "All coherent aggregates are perpetually vibrating at a period-frequency corresponding to some harmonic ratio of the fundamental pitch",
+      "qa_mapping": "Derived coordinates d=b+e, a=b+2e are harmonic ratios of the generator pair; satellite period 8 divides cosmos period 24",
+      "qa_invariant": "period_divisibility",
+      "integer_constraint": "1|8|24"
+    },
+    "9": {
+      "name": "Law of Cycles",
+      "keely_text": "Coherent aggregates harmonically united constitute centers of vibration bearing relation to the fundamental pitch not multiples of the harmonic pitch",
+      "qa_mapping": "Orbit families are NOT simple multiples; LCM(1,8,24)=24; coprime cycles synchronize at product",
+      "qa_invariant": "lcm_synchronization",
+      "integer_constraint": "LCM(1,8,24)=24"
+    },
+    "10": {
+      "name": "Law of Harmonic Pitch",
+      "keely_text": "Any aggregate in a state of vibration develops a series of vibration in symmetrical sub-multiple portions of itself",
+      "qa_mapping": "Cosmos-orbit generates sub-patterns at period 8 (satellite) and period 1 (singularity); 24 = 3x8 = 24x1",
+      "qa_invariant": "sub_multiple_structure",
+      "integer_constraint": "24 = 3*8 = 24*1"
+    },
+    "18": {
+      "name": "Law of Atomic Pitch",
+      "keely_text": "Atoms have each a different and definite pitch at which they naturally vibrate",
+      "qa_mapping": "Each (b,e) pair has unique f-value: f = b*b+b*e-e*e = norm in Q(sqrt(5))",
+      "qa_invariant": "f_value",
+      "integer_constraint": "f is always an integer; orbit classification by v_3(f)"
+    },
+    "27": {
+      "name": "Law of Chemical Affinity",
+      "keely_text": "Atoms whose atomic pitches are in either unison, harmonic or concordant ratios unite to form molecules",
+      "qa_mapping": "States with concordant f-values (same orbit family) can compose; coupling strength from tuple alignment",
+      "qa_invariant": "concordance",
+      "integer_constraint": "concordance = integer ratio between f-values"
+    },
+    "29": {
+      "name": "Law of Chemical Transposition",
+      "keely_text": "New molecules must be harmonics of the fundamental pitch",
+      "qa_mapping": "Under generator application, new states remain in the same orbit; closure under modular arithmetic",
+      "qa_invariant": "orbit_closure",
+      "integer_constraint": "generator preserves orbit family"
+    },
+    "33": {
+      "name": "Law of Chemical Morphology",
+      "keely_text": "The angle of crystallization is determined by the relation between the molecular pitch to the variation-density of the liquid",
+      "qa_mapping": "QA tuples determine geometric angles via chromogeometry: C=2de, F=d*d-e*e, G=d*d+e*e; C*C+F*F=G*G",
+      "qa_invariant": "chromogeometry",
+      "integer_constraint": "C*C + F*F = G*G (Wildberger Chromogeometry Theorem 6)"
+    }
+  },
+
+  "orbit_periods": {
+    "SINGULARITY": 1,
+    "SATELLITE": 8,
+    "COSMOS": 24
+  },
+  "orbit_lcm": 24,
+
+  "witnesses": [
+    {
+      "law_refs": [2, 18, 27, 33],
+      "b": 1, "e": 1, "modulus": 9,
+      "d": 2, "a": 3,
+      "f_value": 1,
+      "orbit_family": "COSMOS",
+      "period": 24,
+      "C": 4, "F": 3, "G": 5,
+      "note": "Unity Block (1,1,2,3): f=1, C*C+F*F=16+9=25=G*G"
+    },
+    {
+      "law_refs": [2, 29],
+      "b": 1, "e": 1, "modulus": 9,
+      "orbit_family": "COSMOS",
+      "next_b": 1, "next_e": 2,
+      "next_orbit_family": "COSMOS",
+      "note": "Generator (1,1)->(1,2): both COSMOS, orbit preserved"
+    },
+    {
+      "law_refs": [2, 18],
+      "b": 9, "e": 9, "modulus": 9,
+      "f_value": 81,
+      "orbit_family": "SINGULARITY",
+      "period": 1,
+      "note": "Singularity (9,9): f=81=9*9, period 1, fixed point"
+    },
+    {
+      "law_refs": [2, 18, 29],
+      "b": 3, "e": 3, "modulus": 9,
+      "f_value": 9,
+      "orbit_family": "SATELLITE",
+      "period": 8,
+      "next_b": 3, "next_e": 6,
+      "next_orbit_family": "SATELLITE",
+      "note": "Satellite (3,3): f=9, period 8, generator preserves satellite orbit"
+    },
+    {
+      "law_refs": [4, 9, 10],
+      "description": "Period divisibility structure",
+      "period_1_divides_8": true,
+      "period_1_divides_24": true,
+      "period_8_divides_24": true,
+      "lcm_1_8_24": 24,
+      "sub_multiples": "24 = 3*8 = 24*1"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 128, "name": "QA Spread Period Cert", "relation": "Period structure 1|8|24"},
+    {"family": 133, "name": "QA Eisenstein Norm Cert", "relation": "Chromogeometry C*C+F*F=G*G"},
+    {"family": 147, "name": "QA Synchronous Harmonics Cert", "relation": "LCM synchronization"},
+    {"family": 148, "name": "QA Sixteen Identities Cert", "relation": "f-value and named quantities"},
+    {"family": 153, "name": "QA Keely Triune Cert", "relation": "Parent triune mapping"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

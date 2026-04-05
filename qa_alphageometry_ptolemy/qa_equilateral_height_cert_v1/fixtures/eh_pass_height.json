@@ -1,0 +1,75 @@
+{
+  "schema_version": "QA_EQUILATERAL_HEIGHT_CERT.v1",
+  "certificate_id": "qa.cert.equilateral_height.pass.height.v1",
+  "cert_type": "qa_equilateral_height_cert",
+  "title": "Equilateral Height PASS: S=d²e verified for 7 tuples",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "Certifies element S = d²*e = d*X = D*e, Dale Pond's 25th QA element (#25 in svpwiki.com QA Elements). Dale labeled this 'Height of equilateral triangle' but geometrically S = d*(C/2) is a rectangle area (semi-major × half-base), NOT a height. The algebraic identity is exact regardless of geometric label. Three equivalent definitions verified for 7 Pythagorean directions.",
+
+  "source_attribution": "Dale Pond, 'Quantum Arithmetic Elements', svpwiki.com, item 25: 'S = d*X = Height of equilateral triangle' — NOTE: geometric label is incorrect; S is a rectangle area d×(C/2), not a triangle height",
+
+  "element_defined": {
+    "S": {
+      "formula_1": "d*d*e",
+      "formula_2": "d*X (where X=d*e=C/2)",
+      "formula_3": "D*e (where D=d²)",
+      "meaning": "Dale's 25th element; rectangle area d*(C/2); labeled 'equilateral height' on SVP wiki but this is geometrically incorrect",
+      "typo_note": "SVP wiki calls this 'Height of equilateral triangle' but for Unity Block W=8, continuous equilateral height=8*sqrt(3)/2≈6.93, while S=4. S is actually d*X = semi-major × half-base = a rectangle area."
+    }
+  },
+
+  "witnesses": [
+    {
+      "b": 1, "e": 1,
+      "d": 2, "a": 3, "D": 4, "X": 2, "W": 8,
+      "S": 4,
+      "note": "Unity Block: S=4, d*X=2*2=4, D*e=4*1=4"
+    },
+    {
+      "b": 2, "e": 1,
+      "d": 3, "a": 4, "D": 9, "X": 3, "W": 15,
+      "S": 9,
+      "note": "Female Unity: S=9=D*e=9*1, d*X=3*3=9"
+    },
+    {
+      "b": 3, "e": 2,
+      "d": 5, "a": 7, "D": 25, "X": 10, "W": 45,
+      "S": 50,
+      "note": "Direction (3,2): S=50, d*X=5*10=50, D*e=25*2=50"
+    },
+    {
+      "b": 5, "e": 2,
+      "d": 7, "a": 9, "D": 49, "X": 14, "W": 77,
+      "S": 98,
+      "note": "Direction (5,2): S=98, d*X=7*14=98, D*e=49*2=98"
+    },
+    {
+      "b": 5, "e": 3,
+      "d": 8, "a": 11, "D": 64, "X": 24, "W": 112,
+      "S": 192,
+      "note": "Direction (5,3): S=192, d*X=8*24=192, D*e=64*3=192"
+    },
+    {
+      "b": 7, "e": 3,
+      "d": 10, "a": 13, "D": 100, "X": 30, "W": 160,
+      "S": 300,
+      "note": "Direction (7,3): S=300, d*X=10*30=300, D*e=100*3=300"
+    },
+    {
+      "b": 8, "e": 3,
+      "d": 11, "a": 14, "D": 121, "X": 33, "W": 187,
+      "S": 363,
+      "note": "Direction (8,3): S=363, d*X=11*33=363, D*e=121*3=363"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 152, "name": "QA Equilateral Triangle Cert", "relation": "W = equilateral side; S = equilateral height"},
+    {"family": 189, "name": "QA Dale Circle Cert", "relation": "P,Q,R derived from same W; S+W+P form equilateral-circle bridge"},
+    {"family": 148, "name": "QA Sixteen Identities Cert", "relation": "S extends the 16 identities to 17+ (with P,Q,R = 20+)"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

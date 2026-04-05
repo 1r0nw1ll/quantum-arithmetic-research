@@ -1,0 +1,42 @@
+{
+  "schema_version": "QA_MILLER_ORBIT_CERT.v1",
+  "certificate_id": "qa.cert.miller_orbit.fail.wrong_residues.v1",
+  "cert_type": "qa_miller_orbit_cert",
+  "title": "Miller Orbit FAIL: satellite Q_M residues include forbidden value",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: claims satellite Q_M mod 9 includes residue 5, which is not a quadratic residue mod 9. Validator must catch this violation.",
+
+  "dataset": {
+    "n_minerals": 1,
+    "n_reflections": 10,
+    "crystal_systems": ["cubic"]
+  },
+
+  "orbit_census": {
+    "cosmos": 8,
+    "satellite": 2,
+    "singularity": 0
+  },
+
+  "quadratic_residues": {
+    "claim": "Satellite Q_M mod 9 is restricted to QR(9) = {0, 1, 4, 7}",
+    "qr_9": [0, 1, 4, 7],
+    "satellite_residues_observed": [0, 1, 4, 5, 7],
+    "forbidden_residues": [2, 3, 5, 6, 8],
+    "forbidden_count": 1,
+    "restriction_exact": false,
+    "_note": "INTENTIONAL ERROR: residue 5 is not in QR(9)"
+  },
+
+  "ordering": {
+    "n_minerals_tested": 1,
+    "n_minerals_confirmed": 1,
+    "fraction_confirmed": 1.0
+  },
+
+  "fail_ledger": [
+    {"check_id": "MO_QR", "message": "satellite Q_M residues include forbidden value 5 (not in QR(9))"}
+  ],
+  "result": "FAIL"
+}

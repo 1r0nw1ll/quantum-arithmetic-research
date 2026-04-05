@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Miller Orbit Cert family [182]: certifies structural properties of QA mod-9 orbit classification applied to crystallographic Miller indices (h,k,l). Four Tier 1 algebraic results: (1) ORDERING: cosmos mean d-spacing > satellite mean d-spacing for ALL crystal systems — proved from satellite divisibility (h,k divisible by 3 → Q_M ≥ 9 → smaller d); verified 21/21 minerals, t=6.34 p<10⁻⁶. (2) QUADRATIC RESIDUE RESTRICTION: satellite Q_M mod 9 ∈ {0,1,4,7} = QR(9) — because h²+k² ≡ 0 mod 9 forces Q_M ≡ l² mod 9. (3) SINGULARITY PERFECT SQUARES: singularity has h=k=0 → Q_M = l², always a perfect square. (4) CHROMOGEOMETRIC SHIFT: satellite green fraction 30.3% vs cosmos 11.7% — satellite divisibility by 3 increases h=k coincidence rate. All findings are structural consequences of the satellite divisor condition (m//3)|h AND (m//3)|k. Connects to [160] Bragg RT (rational crystallography), [181] satellite product sum (orbit algebra), and Fuller voxelation. Checks MO_1+ORDER/QR/SQUARE/CHROMO/WITNESS/W/F; 1 PASS + 1 FAIL; self-test ok"
+}

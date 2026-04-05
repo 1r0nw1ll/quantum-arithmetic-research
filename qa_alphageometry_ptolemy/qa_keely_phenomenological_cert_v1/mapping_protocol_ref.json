@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Keely Phenomenological Cert family [188]: certifies Keely's 17 phenomenological laws (Laws 13-15,19-26,30-32,36,38,39) as Theorem NT observer projections. Category 5 of Vibes framework. All 17 describe continuous measurements that reveal but never causally feed back into QA. Checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok"
+}

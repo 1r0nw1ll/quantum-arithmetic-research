@@ -1,0 +1,42 @@
+{
+  "schema_version": "QA_SATELLITE_PRODUCT_SUM_CERT.v1",
+  "certificate_id": "qa.cert.satellite_product_sum.fail.wrong_sum.v1",
+  "cert_type": "qa_satellite_product_sum_cert",
+  "title": "Satellite Product Sum FAIL: declared sum does not match M^4",
+  "created_utc": "2026-04-03T00:00:00Z",
+
+  "_fixture_purpose": "FAIL fixture: witnesses section declares a product_sum that does not equal M^4. Validator must catch the mismatch.",
+
+  "identity": {
+    "statement": "For any modulus M divisible by 3, the sum of b*e*d*a over all satellite pairs equals M^4",
+    "formula": "sum_{satellite} b*e*d*a = M^4",
+    "proof_sketch": "See PASS fixture for proof."
+  },
+
+  "witnesses": [
+    {
+      "modulus": 9,
+      "sat_divisor": 3,
+      "satellite_count": 8,
+      "satellite_pairs": [
+        {"b": 3, "e": 3, "d": 6, "a": 9, "product": 486},
+        {"b": 3, "e": 6, "d": 9, "a": 6, "product": 972},
+        {"b": 3, "e": 9, "d": 3, "a": 3, "product": 243},
+        {"b": 6, "e": 3, "d": 9, "a": 3, "product": 486},
+        {"b": 6, "e": 6, "d": 3, "a": 9, "product": 972},
+        {"b": 6, "e": 9, "d": 6, "a": 6, "product": 1944},
+        {"b": 9, "e": 3, "d": 3, "a": 6, "product": 486},
+        {"b": 9, "e": 6, "d": 6, "a": 3, "product": 972}
+      ],
+      "product_sum": 7000,
+      "M_fourth": 6561,
+      "match": false,
+      "_note": "INTENTIONAL ERROR: product_sum is wrong (7000 != 6561)"
+    }
+  ],
+
+  "fail_ledger": [
+    {"check_id": "SPS_SUM", "message": "product_sum 7000 != M^4 6561 for modulus 9"}
+  ],
+  "result": "FAIL"
+}

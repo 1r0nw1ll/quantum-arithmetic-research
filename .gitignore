@@ -106,6 +106,15 @@ proofgold_bounties/env/
 # plus cert family [34]. This directory is a Jan-9 pre-ecosystem snapshot.
 wolfram_rule_30/
 
+# Broken placeholder — multi_ai_workspace/dataset_generator.py generates
+# synthetic QA training data with family labels assigned uniformly at
+# random (no relation to the actual (b,e) values). Also uses b%24 / e%24
+# reduction which produces 0 (A1 violation). Predates axiom enforcement
+# (2025-10-30). Do NOT commit: would train any downstream ML model on
+# feature-label noise and leak anti-patterns to public. See
+# memory/feedback_no_stochastic_qa.md.
+multi_ai_workspace/dataset_generator.py
+
 *.dat
 *.csv
 *.json

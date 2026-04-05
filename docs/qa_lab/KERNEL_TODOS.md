@@ -6,6 +6,68 @@ future session to patch.
 
 ---
 
+## OPEN-01 — v2 organic-failure trigger has never fired on live data
+
+**STATUS**: OPEN — deliberately not manufactured.
+**File**: `qa_lab/agents/self_improvement_agent_v2.py` + caller workloads.
+
+### The gap
+
+SelfImprovementAgentV2's ρ-EWMA Lyapunov gate, snapshot-restore, and
+probe-path are all unit-tested and live-audited (see
+`test_self_improvement_v2.py` T3 and `run_batch_v2_hardening.py` phase 3
+with seeded weak-agent perf).  But in production runs, v2 has never
+observed an **organic** failure — every batch routed through the kernel
+since the A1 refactor has produced uniform-success cycles, so R3
+WEAK_AGENT never fires without manual seeding and the L_2a probe path
+has never been exercised on real-world failure data.
+
+### Why not manufacture it
+
+The tempting fix is to wire a deliberately-failing EXPERIMENT task into
+the lab status runner so R3 fires "naturally."  Rejected because:
+
+1. **Signal pollution.**  A fake failure would count toward the real
+   `agent_performance()` counters that future v2 cycles read.  The
+   kernel quality vector (`p_verified`, `n_weak_agents`) would be
+   permanently noisy.
+2. **Gaming the gate.**  An L_2a auto-commit on a manufactured failure
+   would land a real spawn spec in `_spawn_queue` for an agent that
+   doesn't actually need to be spawned.  Operator approval downstream
+   would have to catch the fake.
+3. **It isn't the invariant we're testing.**  The invariant is: "when
+   a real failure accumulates, does v2 correctly propose L_2a,
+   probe-gate, and roll back if the probe worsens the Lyapunov?"  The
+   probe mechanism is already verified under synthetic seeds.  The
+   only thing waiting is the real failure, and forcing one corrupts
+   that signal.
+
+### What to do instead
+
+Let v2 watch production workloads as they accumulate.  The first
+organic failure will come from:
+
+- A script timing out (`timeout=N` in ExperimentAgent)
+- A CERTIFY task where the validator exits non-zero (e.g., a cert
+  whose script SHA no longer matches the captured hash)
+- A THEOREM claim that doesn't verify against qa_core
+- A QUERY with malformed inputs
+
+All four are reachable from the existing agent roster without
+manufacturing fake failures.  When one of them fires in a real batch
+and v2 proposes an L_2a remediation through the probe gate, that's
+the signal we're waiting for.  Until then, this gap is **deliberately
+open**.
+
+### What would close it
+
+A post-mortem cert (new [122] entry) recording the first organic L_2a
+committed through the probe path, with the failing cycle's rho, the
+probe's lyap_post, and the operator's downstream decision on the
+queued spawn spec.
+
+---
+
 ## K-002 — RESOLVED 2026-04-04 — `run_cycle` lookups use pre-A1 `% self.modulus` reduction
 
 **STATUS**: Fixed. All 6 sites in `qa_lab/kernel/loop.py` that did

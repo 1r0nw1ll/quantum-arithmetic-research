@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Self-Improvement Cert family (STUB, unassigned number). Certifies that SelfImprovementAgentV2 cycle traces respect the [191] filtration: every proposal carries a level tag, no L_2b/L_3 proposal reaches `applied`, CONSISTENT cycles satisfy lyap_post <= lyap_pre + tol, and the three Pisano-analog fixed-point candidates (A trace compression, B routing barycenter, C restricted Pisano periodicity) are populated with numeric values. Parents: [122] QA_EMPIRICAL_OBSERVATION_CERT.v1, [191] QA_BATESON_LEARNING_LEVELS_CERT.v1, [192] QA_DUAL_EXTREMALITY_24_CERT.v1. Validator implements checks V1 LEVEL_TAGGED, V2 NO_L2B_APPLIED, V3 LYAP_MONOTONE, V4 FP_CANDIDATES, V5 SELF_TEST; 1 PASS + 1 FAIL fixture; self-test ok. NOT YET REGISTERED in the meta-validator — promotion to a live cert number is deferred to a follow-up session per the `lab-self-improvement` kickoff guardrails."
+}

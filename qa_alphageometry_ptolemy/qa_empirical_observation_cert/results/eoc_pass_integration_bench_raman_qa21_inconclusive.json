@@ -1,0 +1,86 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.integration_bench_raman_qa21_inconclusive.v1",
+  "title": "Raman QA21 spectral classification: full-QA integration delta is near-zero \u2014 INCONCLUSIVE",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "qa_lab/qa_graph/integration_bench.py",
+    "script_sha256": "05263ab31921427d2c9838ebf2b7ac9e5fb4315217713859a623b4433f4a9bc9",
+    "result_json": "qa_lab/qa_graph/integration_bench_results.json",
+    "result_json_sha256": "827c63ad7245b657aa97b96a23cd28977c73bff84cccee55220a37587337bbbc",
+    "captured_utc": "2026-04-05T00:00:00Z",
+    "domain": "spectral_classification",
+    "summary": "Integration bench Raman QA21 entry: adding the full QA invariant set to the baseline spectral classifier produces a near-zero delta in both ARI and NMI. Neither a win nor a loss \u2014 the QA invariants appear orthogonal to the signal the Raman classifier is using on this dataset, or the dataset lacks the community structure QA integration amplifies on football. INCONCLUSIVE is the honest verdict; future work should either swap to a different QA descriptor (analogous to the karate hub-distance remedy) or accept that this task is not a QA-benefiting one.",
+    "key_numbers": {
+      "baseline_ari": null,
+      "full_qa_ari": null,
+      "delta_ari": null,
+      "baseline_nmi": null,
+      "delta_nmi": null
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_PIM_KERNEL_CERT.v1",
+    "certificate_id": "qa.cert.pim_kernel.v1",
+    "claim": "QA invariants improve spectral classification \u2014 this cert is INCONCLUSIVE for Raman QA21"
+  },
+  "verdict": "INCONCLUSIVE",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "Raman QA21 spectral classification baseline",
+      "value": "ARI=? NMI=? purity=?"
+    },
+    {
+      "type": "quantitative",
+      "description": "Full-QA integration",
+      "value": "ARI=? NMI=?"
+    },
+    {
+      "type": "quantitative",
+      "description": "Delta full-QA over baseline",
+      "value": "dARI=? dNMI=? \u2014 tiny, near-zero effect"
+    },
+    {
+      "type": "qualitative",
+      "description": "Raman QA21 sits between football (QA helps) and karate (QA hurts under default encoding) \u2014 no meaningful signal either direction",
+      "value": "INCONCLUSIVE \u2014 either the QA descriptor is orthogonal to the Raman classification task, or the dataset does not have enough community structure for integration to amplify"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_PIM_KERNEL_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='INCONCLUSIVE'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='INCONCLUSIVE'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 4 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

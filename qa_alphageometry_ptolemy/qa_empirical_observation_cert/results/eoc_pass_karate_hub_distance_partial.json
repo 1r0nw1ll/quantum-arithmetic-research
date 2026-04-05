@@ -1,0 +1,100 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.karate_hub_distance_qa_partial.v1",
+  "title": "Karate club: hub-closer (b<e) on hub-distance QA tuples achieves ARI=0.67, above Louvain 0.49 but below spectral baseline 0.88 \u2014 PARTIAL",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "qa_lab/qa_graph/karate_hub_distance_qa.py",
+    "script_sha256": "01e68945c9956c8e3c6c6fc27f2ddc71042d16d5c992ab5bc4f166851a9be2d1",
+    "result_json": "qa_lab/qa_graph/karate_hub_distance_qa_results.json",
+    "result_json_sha256": "c0a87b476a03b041a23ac4bc068c18b28604b421e244ca144981ad85de510288",
+    "captured_utc": "2026-04-04T06:36:00Z",
+    "domain": "graph_community_detection",
+    "summary": "Zachary karate club (34 nodes, 78 edges). Two degree hubs: node 33 (deg=17) and node 0 (deg=16). Hub-distance QA tuples constructed as (b=dist_to_hub0, e=dist_to_hub1). Hub-closer rule (b<e) achieves ARI=0.6685, QA rule (b<2e) yields ARI=0.3291. Spectral clustering baseline is strongest at ARI=0.8823; Louvain 0.4905. The hub-distance descriptor captures community signal above random and Louvain, but does not match spectral. Honest PARTIAL verdict \u2014 demonstrates the descriptor is non-trivial but is not a QA victory over standard methods on this graph.",
+    "key_numbers": {
+      "ari_hub_closer": 0.6685,
+      "nmi_hub_closer": 0.6486,
+      "ari_qa_rule": 0.3291,
+      "ari_spectral_baseline": 0.8823,
+      "ari_louvain": 0.4905,
+      "ari_qa_kernel": 0.0724,
+      "ari_random": -0.0272,
+      "n_nodes": 34,
+      "n_edges": 78
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_GRAPH_COMMUNITY_CERT.v1",
+    "certificate_id": "qa.cert.graph_community.v1",
+    "claim": "integer QA tuples extracted from graph structure encode non-trivial community information"
+  },
+  "verdict": "PARTIAL",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "Hub-closer (b<e) rule on hub-distance QA tuples",
+      "value": "ARI = 0.6685, NMI = 0.6486"
+    },
+    {
+      "type": "quantitative",
+      "description": "QA canonical rule (b<2e) on same tuples",
+      "value": "ARI = 0.3291, NMI = 0.4112"
+    },
+    {
+      "type": "quantitative",
+      "description": "Spectral clustering baseline (non-QA)",
+      "value": "ARI = 0.8823, NMI = 0.8372 \u2014 best method, above all QA rules"
+    },
+    {
+      "type": "quantitative",
+      "description": "Louvain community detection baseline",
+      "value": "ARI = 0.4905, NMI = 0.5942"
+    },
+    {
+      "type": "quantitative",
+      "description": "Random baseline for reference",
+      "value": "ARI = -0.0272, NMI = 0.0025"
+    },
+    {
+      "type": "qualitative",
+      "description": "Hub-closer rule beats Louvain and random, but is meaningfully below spectral \u2014 the 'hub-distance QA tuple' descriptor encodes community signal but does not dominate a strong non-QA baseline",
+      "value": "verdict: modest positive signal relative to naive baselines, negative relative to spectral"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_GRAPH_COMMUNITY_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='PARTIAL'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='PARTIAL'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 6 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

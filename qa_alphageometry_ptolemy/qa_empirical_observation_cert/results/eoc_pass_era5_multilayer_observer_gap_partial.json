@@ -1,0 +1,94 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.era5_multilayer_local_observer_partial_r.v1",
+  "title": "ERA5 reanalysis multilayer observer split: local observer partial_r = 0.427, global observer raw_r = 0.237 \u2014 PARTIAL with qa_era5_reanalysis_cert_v1",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "49_era5_multilayer.py",
+    "script_sha256": "e246fd37fb8ef51cc6718dd10f80b222496c60a5a55aa0bcbb300b32dd3845f7",
+    "result_json": "49_era5_multilayer_results.json",
+    "result_json_sha256": "b51861870effd2f7f2ccf25402a3b60a2955a401a86e55af816f374d6d27da26",
+    "captured_utc": "2026-04-01T00:00:00Z",
+    "domain": "era5_reanalysis",
+    "summary": "Multilayer observer split on ERA5 atmospheric reanalysis data (n_oos=1538). Local observer yields raw_r=0.462 and partial_r=0.427 (controlling for baseline autoregressive model). Global observer yields raw_r=0.237. Observer gap is 0.173 raw / 0.161 partial, with local-global correlation of 0.235 \u2014 the two observer modes pick up genuinely distinct structure. The script's composite improvement metric is -0.266, meaning that for the specific combination rule it declares, adding the second observer does not improve performance despite each being individually informative. This is honest failure reporting of the composition rule, not of the individual observer findings.",
+    "key_numbers": {
+      "local_raw_r": 0.462,
+      "local_partial_r": 0.427,
+      "global_raw_r": 0.237,
+      "gap_raw_r": 0.173,
+      "gap_partial_r": 0.161,
+      "local_global_corr": 0.235,
+      "improvement_composite": -0.266,
+      "n_oos": 1538
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_ERA5_REANALYSIS_CERT.v1",
+    "certificate_id": "qa.cert.era5_reanalysis.v1",
+    "claim": "QA observer layers extracted from ERA5 atmospheric data encode predictive structure"
+  },
+  "verdict": "PARTIAL",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "Local-observer partial correlation (controlling for baseline autoreg)",
+      "value": "partial_r = 0.4266, raw_r = 0.4620, n_oos = 1538"
+    },
+    {
+      "type": "quantitative",
+      "description": "Global-observer raw correlation",
+      "value": "raw_r = 0.2366"
+    },
+    {
+      "type": "quantitative",
+      "description": "Observer gap (local \u2212 global)",
+      "value": "gap raw_r = 0.1730, gap partial_r = 0.1611"
+    },
+    {
+      "type": "quantitative",
+      "description": "Local-global correlation in observer outputs",
+      "value": "local_global_corr = 0.2347 \u2014 observers produce meaningfully different signals"
+    },
+    {
+      "type": "honesty",
+      "description": "'Improvement' metric from the script is negative",
+      "value": "improvement = -0.2655 \u2014 the specific composite metric declared on-disk does not improve despite both observers being individually informative"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_ERA5_REANALYSIS_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='PARTIAL'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='PARTIAL'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 5 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

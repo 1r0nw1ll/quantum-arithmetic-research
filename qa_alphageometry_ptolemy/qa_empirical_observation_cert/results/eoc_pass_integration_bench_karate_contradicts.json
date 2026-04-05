@@ -1,0 +1,99 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.integration_bench_karate_contradicts.v1",
+  "title": "Zachary karate (integration_bench config): full-QA integration DEGRADES ARI 0.77 \u2192 0.15 (dARI=-0.62) \u2014 CONTRADICTS with remedy in companion hub-distance cert",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "qa_lab/qa_graph/integration_bench.py",
+    "script_sha256": "05263ab31921427d2c9838ebf2b7ac9e5fb4315217713859a623b4433f4a9bc9",
+    "result_json": "qa_lab/qa_graph/integration_bench_results.json",
+    "result_json_sha256": "827c63ad7245b657aa97b96a23cd28977c73bff84cccee55220a37587337bbbc",
+    "captured_utc": "2026-04-05T00:00:00Z",
+    "domain": "graph_community_detection",
+    "summary": "Honest failure report: integration_bench's default QA tuple construction degrades Zachary karate community detection from baseline ARI=0.7717 to ARI=0.1528 (dARI=-0.6189). Root cause diagnosed 2026-04-05: the (b=degree, e=core_number) encoding collapses both degree-hubs into identical invariant space, destroying the hub-proximity signal karate ground truth depends on. The remedy is the hub-distance descriptor in karate_hub_distance_qa.py / karate_spectral_qa_fingerprint.py, which recovers the signal via the 'e' invariant alone. This cert is a CONTRADICTS record of the suboptimal application; the corresponding remedy is certed separately as qa.cert.empirical.karate_spectral_qa_fingerprint_e_single_coord.v1.",
+    "key_numbers": {
+      "baseline_ari": 0.7717,
+      "full_qa_ari": 0.1528,
+      "delta_ari": -0.6189,
+      "baseline_nmi": 0.7324,
+      "full_qa_nmi": 0.2859,
+      "delta_nmi": -0.4465
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_PIM_KERNEL_CERT.v1",
+    "certificate_id": "qa.cert.pim_kernel.v1",
+    "claim": "QA invariants improve graph community detection \u2014 this cert CONTRADICTS the claim for karate under the default tuple encoding"
+  },
+  "verdict": "CONTRADICTS",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "Spectral baseline on Zachary karate (k=2, in integration_bench config)",
+      "value": "ARI = 0.7717, NMI = 0.7324, purity = 0.9412"
+    },
+    {
+      "type": "quantitative",
+      "description": "Full-QA ARI (C, X, G, F invariants appended to spectral features)",
+      "value": "ARI = 0.1528, NMI = 0.2859, purity = 0.7059"
+    },
+    {
+      "type": "quantitative",
+      "description": "Delta full-QA relative to baseline",
+      "value": "dARI = -0.6189, dNMI = -0.4465, dpurity = -0.2353"
+    },
+    {
+      "type": "quantitative",
+      "description": "Every individual invariant (X, G, F) also reduces ARI to ~0.15",
+      "value": "there is no single invariant that preserves baseline performance \u2014 the failure is structural for this graph"
+    },
+    {
+      "type": "qualitative",
+      "description": "ROOT CAUSE (per 2026-04-05 diagnostic): karate ground truth reflects hub-proximity; integration_bench's tuple construction maps both hubs to identical invariant space via (b=degree, e=core_number), causing collapse. This is a suboptimal APPLICATION of QA, not a QA failure \u2014 see companion cert qa.cert.empirical.karate_hub_distance_qa_partial.v1 for the remedial descriptor.",
+      "value": "map-best-to-QA principle: the right QA descriptor for hub-dominated graphs is integer hub-distance, not centrality"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_PIM_KERNEL_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONTRADICTS'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='CONTRADICTS'; V4 applicable"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 5 entries"
+    }
+  ],
+  "fail_ledger": [
+    {
+      "fail_type": "QA_INTEGRATION_DEGRADES_KARATE_COMMUNITY",
+      "description": "Integration bench's (b=degree, e=core_number) tuple construction collapses both degree-hubs into identical invariant space, destroying the hub-proximity signal that drives karate ground truth.",
+      "evidence": "dARI = -0.6189 vs spectral baseline; every QA invariant falls to ARI ~0.15",
+      "remedy": "Use (b=dist_to_hub0, e=dist_to_hub1) hub-distance construction \u2014 see karate_hub_distance_qa.py and karate_spectral_qa_fingerprint.py; the 'e' invariant alone recovers ARI 0.77 vs ground truth."
+    }
+  ],
+  "result": "PASS"
+}

@@ -1,0 +1,127 @@
+{
+  "schema_version": "QA_SELF_IMPROVEMENT_CERT.v1",
+  "agent": "self_improvement_agent_v2",
+  "description": "Synthetic 5-cycle pass fixture — monotone rho-EWMA, R7 HEALTHY firing each cycle.",
+  "cycles": [
+    {
+      "cycle_idx": 1,
+      "verdict": "INCONCLUSIVE",
+      "proposals": [
+        {
+          "rule": "R7_HEALTHY",
+          "action": "LOG_ONLY",
+          "level": null,
+          "invariant_broken": "none",
+          "cert_ref": "QA_BATESON_LEARNING_LEVELS_CERT.v1"
+        }
+      ],
+      "applied": [
+        {
+          "rule": "R7_HEALTHY",
+          "level": null,
+          "committed": true
+        }
+      ],
+      "deferred": [],
+      "lyapunov": {"name": "rho_ewma", "pre": 0.85, "post": 0.82, "tol": 1e-6},
+      "fixed_point_candidates": {
+        "A_trace_compression": 0.41,
+        "B_routing_barycenter": 0.12,
+        "C_pisano_periodicity": 1.0
+      }
+    },
+    {
+      "cycle_idx": 2,
+      "verdict": "INCONCLUSIVE",
+      "proposals": [
+        {
+          "rule": "R7_HEALTHY",
+          "action": "LOG_ONLY",
+          "level": null,
+          "invariant_broken": "none",
+          "cert_ref": "QA_BATESON_LEARNING_LEVELS_CERT.v1"
+        }
+      ],
+      "applied": [
+        {"rule": "R7_HEALTHY", "level": null, "committed": true}
+      ],
+      "deferred": [],
+      "lyapunov": {"name": "rho_ewma", "pre": 0.82, "post": 0.80, "tol": 1e-6},
+      "fixed_point_candidates": {
+        "A_trace_compression": 0.40,
+        "B_routing_barycenter": 0.12,
+        "C_pisano_periodicity": 1.0
+      }
+    },
+    {
+      "cycle_idx": 3,
+      "verdict": "CONSISTENT",
+      "proposals": [
+        {
+          "rule": "R3_WEAK_AGENT",
+          "action": "SPAWN_IMPROVED",
+          "level": "L_2a",
+          "invariant_broken": "orbit",
+          "cert_ref": "QA_BATESON_LEARNING_LEVELS_CERT.v1"
+        }
+      ],
+      "applied": [
+        {"rule": "R3_WEAK_AGENT", "level": "L_2a", "committed": true, "lyap_probe": 0.79}
+      ],
+      "deferred": [],
+      "lyapunov": {"name": "rho_ewma", "pre": 0.80, "post": 0.78, "tol": 1e-6},
+      "fixed_point_candidates": {
+        "A_trace_compression": 0.40,
+        "B_routing_barycenter": 0.11,
+        "C_pisano_periodicity": 1.0
+      }
+    },
+    {
+      "cycle_idx": 4,
+      "verdict": "CONSISTENT",
+      "proposals": [
+        {
+          "rule": "R4_ORBIT_DRIFT",
+          "action": "DEDIFFERENTIATE",
+          "level": "L_2b",
+          "invariant_broken": "family",
+          "cert_ref": "QA_BATESON_LEARNING_LEVELS_CERT.v1"
+        }
+      ],
+      "applied": [],
+      "deferred": [
+        {"rule": "R4_ORBIT_DRIFT", "level": "L_2b", "committed": false,
+         "note": "level=L_2b requires operator approval per [191]"}
+      ],
+      "lyapunov": {"name": "rho_ewma", "pre": 0.78, "post": 0.77, "tol": 1e-6},
+      "fixed_point_candidates": {
+        "A_trace_compression": 0.39,
+        "B_routing_barycenter": 0.10,
+        "C_pisano_periodicity": 1.0
+      }
+    },
+    {
+      "cycle_idx": 5,
+      "verdict": "INCONCLUSIVE",
+      "proposals": [
+        {
+          "rule": "R7_HEALTHY",
+          "action": "LOG_ONLY",
+          "level": null,
+          "invariant_broken": "none",
+          "cert_ref": "QA_BATESON_LEARNING_LEVELS_CERT.v1"
+        }
+      ],
+      "applied": [
+        {"rule": "R7_HEALTHY", "level": null, "committed": true}
+      ],
+      "deferred": [],
+      "lyapunov": {"name": "rho_ewma", "pre": 0.77, "post": 0.76, "tol": 1e-6},
+      "fixed_point_candidates": {
+        "A_trace_compression": 0.39,
+        "B_routing_barycenter": 0.10,
+        "C_pisano_periodicity": 1.0
+      }
+    }
+  ]
+}

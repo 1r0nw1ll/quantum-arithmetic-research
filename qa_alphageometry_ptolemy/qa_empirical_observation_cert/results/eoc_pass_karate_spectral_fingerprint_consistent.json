@@ -1,0 +1,93 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.karate_spectral_qa_fingerprint_e_single_coord.v1",
+  "title": "Karate club: QA invariant 'e' (distance to hub1) as a single integer recovers community at ARI=0.77 vs GT; sign(b-e) matches spectral at ARI=0.77 \u2014 CONSISTENT with QA-native community descriptor",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "qa_lab/qa_graph/karate_spectral_qa_fingerprint.py",
+    "script_sha256": "7a7b920bdaf841d187397d17833acb63a976837c49cc4cdbcab2f6e8d509ecea",
+    "result_json": "qa_lab/qa_graph/karate_spectral_qa_fingerprint.json",
+    "result_json_sha256": "351c1c76347f315f7d392ca2e388a9378183d64ca9dfec65c0550603d38dab41",
+    "captured_utc": "2026-04-04T06:37:00Z",
+    "domain": "graph_community_detection",
+    "summary": "On Zachary karate, QA invariants of the hub-distance tuple (b=dist_hub0, e=dist_hub1) were ranked as single-feature community classifiers. 'e' alone gives ARI=0.7716 vs ground truth (87% of spectral baseline 0.8823). sign(b-e) gives ARI=0.7718 against the spectral partition itself, demonstrating that spectral clustering on karate is implicitly computing the same hub-proximity signal that the QA 'e' invariant encodes directly. Path-sum d=b+e gives near-zero discrimination, as expected for a uniformly-propagating integer.",
+    "key_numbers": {
+      "ari_e_vs_gt": 0.7716,
+      "ari_e_vs_spectral": 0.6682,
+      "ari_sign_b_minus_e_vs_spectral": 0.7718,
+      "ari_b_minus_e_vs_spectral": 0.7718,
+      "ari_d_vs_gt": 0.0,
+      "ari_d_vs_spectral": 0.0074,
+      "spectral_ari_vs_gt": 0.8823
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_GRAPH_COMMUNITY_CERT.v1",
+    "certificate_id": "qa.cert.graph_community.v1",
+    "claim": "integer QA tuples extracted from graph structure encode the same community information that spectral methods compute implicitly"
+  },
+  "verdict": "CONSISTENT",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "QA invariant 'e' (distance to hub1=Mr. Hi) as single-integer classifier",
+      "value": "ARI vs GT = 0.7716 \u2014 matches spectral (0.8823) at ~87% of the way"
+    },
+    {
+      "type": "quantitative",
+      "description": "QA invariant 'sign(b-e)' as boolean classifier",
+      "value": "ARI vs spectral = 0.7718 \u2014 spectral is computing the same hub-proximity signal"
+    },
+    {
+      "type": "quantitative",
+      "description": "QA invariant 'b-e' (signed integer)",
+      "value": "ARI vs spectral = 0.7718, ARI vs GT = 0.6685"
+    },
+    {
+      "type": "quantitative",
+      "description": "d = b+e (path sum) gives zero discrimination",
+      "value": "ARI = 0.0074 \u2014 path-sum is ~constant across nodes, no discriminant power"
+    },
+    {
+      "type": "qualitative",
+      "description": "CORE INSIGHT: a single integer coord (e = dist to Mr. Hi) recovers community structure at ARI 0.77, and sign(b-e) recovers ARI 0.77 vs spectral \u2014 spectral is implicitly computing hub-proximity and QA's 'e' extracts it directly",
+      "value": "the QA-native community descriptor for hub-dominated graphs is integer graph-distance to each hub, not centrality measures"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_GRAPH_COMMUNITY_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONSISTENT'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='CONSISTENT'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 5 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

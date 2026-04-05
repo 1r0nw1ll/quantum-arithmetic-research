@@ -1,0 +1,91 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.qa_reasoner_a1_compliance_59_of_59.v1",
+  "title": "qa_reasoner package + qa_core A1 refactor: 59/59 tests pass, QALM scrapped, single-source qa_arithmetic re-export \u2014 CONSISTENT with QA_CORE_SPEC.v1",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "qa_lab/qa_reasoner/tests/test_reasoner.py + qa_lab/qa_core/tests/test_reachability_paths.py",
+    "script_sha256": "a5ae820d180417b95e5d30c4b3eb344daf7cfe6471c622db9cdadb8647ac59e4",
+    "captured_utc": "2026-04-05T00:00:00Z",
+    "domain": "qa_infrastructure_tests",
+    "summary": "2026-04-05 qa_lab rehabilitation session: (1) qa_core refactored to A1 convention ({1..m}, qa_step = ((b+e-1)%m)+1) with single-source-of-truth re-export from qa_arithmetic package \u2014 tests go 38 \u2192 42 pass, Fibonacci trajectory verified only under A1. (2) QALM torch-based model scrapped for tautological invariants, T2-b float violations, and unstable activations; 5 files moved to /tmp/qalm_scrapped/. (3) qa_reasoner package built from scratch as a pure-integer discrete symbolic reasoner with QAReasoner class, 16-identity compute, chromogeometric quadrances, PatternMatcher, and CLI \u2014 17/17 tests pass on first run. Combined 59/59 tests PASS. This is the 'axiom-faithful reasoner' replacement for the scrapped QALM.",
+    "key_numbers": {
+      "qa_reasoner_tests_pass": 17,
+      "qa_reasoner_tests_total": 17,
+      "qa_core_tests_before_a1": 38,
+      "qa_core_tests_after_a1": 42,
+      "combined_tests_pass": 59,
+      "combined_tests_total": 59,
+      "qalm_files_scrapped": 5
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_CORE_SPEC.v1",
+    "certificate_id": "qa.cert.core.kernel.minimal_pass.v1",
+    "claim": "qa_core integer primitives comply with A1 (no-zero), A2 (derived coords), S1/S2 (no float state), and Theorem NT (observer firewall)"
+  },
+  "verdict": "CONSISTENT",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "qa_reasoner package test suite",
+      "value": "17 / 17 tests PASS on first run"
+    },
+    {
+      "type": "quantitative",
+      "description": "Combined qa_core + qa_pim + qa_graph + qa_reasoner",
+      "value": "42 + 17 = 59 / 59 tests PASS"
+    },
+    {
+      "type": "quantitative",
+      "description": "qa_core A1 compliance refactor",
+      "value": "38 \u2192 42 tests pass after patching qa_step to A1 convention ({1..m} with ((b+e-1)%m)+1); Fibonacci trajectory (1,1)\u2192(1,2)\u2192(2,3)\u2192(3,5) only holds under A1"
+    },
+    {
+      "type": "qualitative",
+      "description": "qa_reasoner replaces the scrapped QALM torch-based model (which had tautological invariants and T2-b violations) with a pure-integer discrete symbolic reasoner: classify/invariants/witness/explain/enumerate_orbits/orbit_statistics + 16-identity compute + chromogeometric quadrances with Qr\u00b2+Qg\u00b2=Qb\u00b2 theorem verified",
+      "value": "CONSISTENT with QA_CORE_SPEC.v1 and Theorem NT (no floats in QA state, no continuous reasoning)"
+    },
+    {
+      "type": "qualitative",
+      "description": "qa_lab/qa_core now re-exports qa_arithmetic primitives for single source of truth, with qa-arithmetic>=0.1.0 added as a pyproject dep",
+      "value": "single-source-of-truth refactor complete"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_CORE_SPEC.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONSISTENT'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='CONSISTENT'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 5 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

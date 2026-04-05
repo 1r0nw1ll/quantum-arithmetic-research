@@ -1,0 +1,86 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.finance_qci_robustness_sweep_partial_r.v1",
+  "title": "Finance QCI (T-operator coherence) partial-correlates future realized volatility beyond RV itself: partial_r=-0.215, p=4.3e-14, 67/80 grid configurations significant \u2014 CONSISTENT",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "36_qci_robustness_sweep.py (frozen, in /home/player2/Desktop/qa_finance/)",
+    "script_sha256": "fa1e2324412c37abed300cb551a10cdb1382d2bbb96f827350cd47347105adcc",
+    "result_json": "36_robustness_results.json",
+    "result_json_sha256": "6e94a12a5eaf42ed8077f52a4a32d47da1ccc1a994ffb4cb662e34e4188e0cd3",
+    "captured_utc": "2026-03-31T00:00:00Z",
+    "domain": "finance_volatility_forecasting",
+    "summary": "QCI robustness sweep over 80 parameter configurations (grid over window lengths, modulus, K, FH). Primary statistic \u2014 partial correlation of QCI with forward realized volatility controlling for current RV \u2014 is r=-0.2154 with p=4.3e-14. 67 of 80 grid configurations (83.75%) are individually significant at the same sign. This is the robustness-verified signal behind the [154] QA_BEARDEN_PHASE_CONJUGATE_CERT.v1 claim that stress is a pumper: QCI captures a component of future volatility information not contained in realized volatility.",
+    "key_numbers": {
+      "partial_r_qci_given_rv": -0.2154,
+      "partial_r_p_value": 4.3e-14,
+      "grid_significant": 67,
+      "grid_total": 80,
+      "grid_sig_rate": 0.8375
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_T_OPERATOR_COHERENCE_CERT.v1",
+    "certificate_id": "qa.cert.t_operator_coherence.v1",
+    "claim": "T-operator coherence (QCI) extracted from asset return series predicts future realized volatility beyond current RV"
+  },
+  "verdict": "CONSISTENT",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "Partial correlation: QCI vs future realized volatility, controlling for realized volatility itself",
+      "value": "partial_r = -0.2154, p = 4.3e-14"
+    },
+    {
+      "type": "quantitative",
+      "description": "Grid robustness sweep: fraction of parameter configurations with significant QCI effect",
+      "value": "67 / 80 configurations significant (83.75%)"
+    },
+    {
+      "type": "qualitative",
+      "description": "QCI (T-operator coherence) retains a negative relationship with future volatility across the majority of parameter grid \u2014 sign-robust and statistically robust",
+      "value": "84% grid-significance is strong evidence the effect is not parameter-cherry-picked"
+    },
+    {
+      "type": "honesty",
+      "description": "Effect size is modest (partial r ~-0.22); the finding is about sign-consistency and beyond-RV information, not large magnitude",
+      "value": "script 26 (curvature vs HAR forecasting) separately CONTRADICTS cross-asset \u2014 see its own cert when landed"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_T_OPERATOR_COHERENCE_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONSISTENT'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='CONSISTENT'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 4 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,93 @@
+{
+  "schema_version": "QA_EMPIRICAL_OBSERVATION_CERT.v1",
+  "cert_type": "qa_empirical_observation_cert",
+  "certificate_id": "qa.cert.empirical.climate_enso_teleconnection_chi2_partial_r.v1",
+  "title": "Climate teleconnection: ENSO state predicts QA orbit family assignment (chi\u00b2=94.88) and QCI partial-correlates future forecast horizon beyond lagged ONI (r=-0.134 p=0.007)",
+  "created_utc": "2026-04-04T06:40:00Z",
+  "observation": {
+    "source": "experiment_script",
+    "script": "48_teleconnection_surrogates.py",
+    "script_sha256": "38070be475427c3864fad46138e8c664dcbdc3480a08d3bac73c4c32d295c5d1",
+    "result_json": "48_teleconnection_results.json",
+    "result_json_sha256": "e55a3e7f447f3a9f60ef005811f043eab59f8081bc9199ffcc7ba4db79a1045c",
+    "captured_utc": "2026-04-01T00:00:00Z",
+    "domain": "climate_teleconnection",
+    "summary": "Five-channel climate index dataset (ONI, NAO, AO, PDO, AMO) analyzed with K=4 orbit classifier and QCI at mod-24, QCI window 24 months, forecast horizon 12 months. Primary test \u2014 orbit family \u03c7\u00b2 by ENSO state \u2014 is strongly significant (\u03c7\u00b2=94.88, p=1.2e-19). Secondary test \u2014 partial correlation of QCI with future forecast horizon, conditioning on lagged ONI \u2014 is r=-0.134, p=0.007. The tertiary raw-dispersion test is not significant. The 5th scientific domain to show QA-linked predictive structure (after EEG, audio, crypto, finance).",
+    "key_numbers": {
+      "chi2_orbit_by_enso": 94.88,
+      "chi2_p_value": 1.2e-19,
+      "chi2_dof": 4,
+      "partial_r_qci_horizon_given_oni": -0.134,
+      "partial_r_p_value": 0.0073,
+      "n_months_total": 817,
+      "n_oos": 397,
+      "n_channels": 5,
+      "K": 4,
+      "modulus": 24,
+      "qci_window": 24,
+      "forecast_horizon_months": 12
+    }
+  },
+  "parent_cert": {
+    "schema_version": "QA_OBSERVER_CORE_CERT.v1",
+    "certificate_id": "qa.cert.observer_core.v1",
+    "claim": "orbit classification and QCI extracted from observer-layer time series encode predictive dynamical structure"
+  },
+  "verdict": "CONSISTENT",
+  "evidence": [
+    {
+      "type": "quantitative",
+      "description": "Orbit family distribution conditioned on ENSO state (K=4, 5 climate channels, mod-24)",
+      "value": "chi\u00b2 = 94.88, p = 1.2e-19, dof = 4, n_months = 817"
+    },
+    {
+      "type": "quantitative",
+      "description": "Partial correlation: QCI vs forecast horizon, controlling for lagged ONI",
+      "value": "partial_r = -0.134, p = 0.0073, n_oos = 397"
+    },
+    {
+      "type": "quantitative",
+      "description": "Test 1 (raw correlation of QCI with channel dispersion) is null",
+      "value": "r = -0.080, p = 0.112 (n.s., honestly reported)"
+    },
+    {
+      "type": "qualitative",
+      "description": "ENSO\u2192orbit coupling passes; dispersion\u2192QCI does not \u2014 indicates QA picks up structured teleconnection, not diffuse noise",
+      "value": "2 of 3 pre-declared tests pass"
+    }
+  ],
+  "validation_checks": [
+    {
+      "check_id": "V1",
+      "description": "observation.source is a known source type",
+      "passed": true,
+      "details": "source='experiment_script' \u2208 {open_brain, experiment_script, paper_result, external_dataset}"
+    },
+    {
+      "check_id": "V2",
+      "description": "parent_cert.schema_version is a non-empty string",
+      "passed": true,
+      "details": "schema_version='QA_OBSERVER_CORE_CERT.v1'"
+    },
+    {
+      "check_id": "V3",
+      "description": "verdict is one of {CONSISTENT, CONTRADICTS, PARTIAL, INCONCLUSIVE}",
+      "passed": true,
+      "details": "verdict='CONSISTENT'"
+    },
+    {
+      "check_id": "V4",
+      "description": "verdict==CONTRADICTS implies nonempty fail_ledger",
+      "passed": true,
+      "details": "verdict='CONSISTENT'; V4 vacuously satisfied"
+    },
+    {
+      "check_id": "V5",
+      "description": "evidence is nonempty",
+      "passed": true,
+      "details": "evidence has 4 entries"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

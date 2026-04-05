@@ -1,0 +1,35 @@
+{
+  "schema_version": "QA_SELF_IMPROVEMENT_CERT.v1",
+  "agent": "self_improvement_agent_v2",
+  "description": "Fail fixture — a single cycle where an L_2b proposal landed in `applied`. V2 must flag this as a safety violation (V2 NO_L2B_APPLIED).",
+  "cycles": [
+    {
+      "cycle_idx": 1,
+      "verdict": "CONSISTENT",
+      "proposals": [
+        {
+          "rule": "R4_ORBIT_DRIFT",
+          "action": "DEDIFFERENTIATE",
+          "level": "L_2b",
+          "invariant_broken": "family",
+          "cert_ref": "QA_BATESON_LEARNING_LEVELS_CERT.v1"
+        }
+      ],
+      "applied": [
+        {
+          "rule": "R4_ORBIT_DRIFT",
+          "level": "L_2b",
+          "committed": true,
+          "note": "(INVALID) L_2b auto-applied — must have been deferred per [191]"
+        }
+      ],
+      "deferred": [],
+      "lyapunov": {"name": "rho_ewma", "pre": 0.80, "post": 0.80, "tol": 1e-6},
+      "fixed_point_candidates": {
+        "A_trace_compression": 0.42,
+        "B_routing_barycenter": 0.15,
+        "C_pisano_periodicity": 1.0
+      }
+    }
+  ]
+}

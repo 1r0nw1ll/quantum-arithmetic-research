@@ -1,0 +1,120 @@
+Document THEORY_ID_PLACEHOLDER
+
+(* ============================================ *)
+(* Proofgold Document Template                 *)
+(* Theory: THEORY_ID_PLACEHOLDER               *)
+(* Target Proposition: PROPOSITION_ID_PLACEHOLDER *)
+(* Created: TIMESTAMP                          *)
+(* ============================================ *)
+
+(* This template follows the Proofgold IHOL grammar *)
+(* See: https://prfgld.github.io/ihol.html *)
+
+(* ============================================ *)
+(* Section 1: Known Declarations (Imports)     *)
+(* ============================================ *)
+
+(* Import base logical connectives *)
+Known and : prop -> prop -> prop
+Known or : prop -> prop -> prop
+Known not : prop -> prop
+Known iff : prop -> prop -> prop
+Known eq : forall A:SType, A -> A -> prop
+
+(* Import base set operations (if needed) *)
+(* Known In : set -> set -> prop *)
+(* Known Subq : set -> set -> prop *)
+(* Known Empty : set *)
+
+(* Import other needed definitions from the theory *)
+(* Replace these with actual definitions from your target theory *)
+(* Known FUNCTION_NAME : TYPE_SIGNATURE *)
+
+(* ============================================ *)
+(* Section 2: Definitions                      *)
+(* ============================================ *)
+
+(* Define helper concepts needed for your proof *)
+(* Example structure:
+Def myHelper : set -> prop :=
+  fun x:set =>
+    (* definition body *)
+    ...
+*)
+
+(* Add your definitions here *)
+
+(* ============================================ *)
+(* Section 3: Lemmas (if needed)               *)
+(* ============================================ *)
+
+(* Prove intermediate lemmas that help build the main theorem *)
+(* Example structure:
+Thm lemma1 : statement
+Proof:
+  proof_term
+Qed.
+*)
+
+(* Add your lemmas here *)
+
+(* ============================================ *)
+(* Section 4: Main Theorem                     *)
+(* ============================================ *)
+
+(* This is the theorem that claims the bounty *)
+(* Replace PROPOSITION_STATEMENT with the actual statement *)
+(* Replace PROOF_TERM with your constructed proof *)
+
+Thm main_theorem : PROPOSITION_STATEMENT_PLACEHOLDER
+Proof:
+  (* Proof term in Proofgold's assembly-style format *)
+  (* Common proof constructors:
+     - Lam : Lambda abstraction (fun x => ...)
+     - Ap : Application
+     - PrAp : Proof application
+     - All : Universal quantifier
+     - Imp : Implication
+  *)
+
+  (* Example minimal proof structure:
+  Lam (fun H1:prop =>
+    Lam (fun H2:prop =>
+      PrAp H1 H2))
+  *)
+
+  (* REPLACE THIS WITH YOUR ACTUAL PROOF *)
+  PROOF_TERM_PLACEHOLDER
+
+Qed.
+
+(* ============================================ *)
+(* Section 5: Documentation (Optional)         *)
+(* ============================================ *)
+
+(* You can add comments explaining your proof strategy *)
+(* These are ignored by the parser but helpful for review *)
+
+(*
+Proof Strategy:
+1. [Describe high-level approach]
+2. [Key lemmas or insights]
+3. [Why this proves the target proposition]
+
+References:
+- [Any papers or proofs this builds on]
+
+Notes:
+- [Any caveats or assumptions]
+*)
+
+(* ============================================ *)
+(* End of Document                             *)
+(* ============================================ *)
+
+(* Before publishing:
+   1. Validate locally: ./scripts/70_bounty_workflow.sh (option 3)
+   2. Ensure all placeholders are replaced
+   3. Test proof term is well-formed
+   4. Check that theorem statement matches target bounty exactly
+*)

@@ -365,11 +365,15 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
                 "their observer and state alphabet (see QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md)"))
 
     # ORBIT-4: local orbit_family reimplementation (whole-file check)
-    # Skip the canonical file itself.
+    # Skip the canonical file itself.  Respect inline `# noqa: ORBIT-4`
+    # on the def line — a marked fallback is an intentional decision.
     if not is_orbit_rules and file_is_qa:
         for m in _ORBIT_REDEF_PATTERN.finditer(content):
             lineno = content[:m.start()].count("\n") + 1
             fn_name = re.search(r'def\s+(\w+)', m.group()).group(1)
+            def_line = lines[lineno - 1] if lineno <= len(lines) else ""
+            if "noqa: ORBIT-4" in def_line or "noqa:ORBIT-4" in def_line:
+                continue
             violations.append((lineno, "ORBIT-4", "ORBIT",
                 f"Local reimplementation of '{fn_name}' — import from qa_orbit_rules instead; "
                 "local copies diverge and reintroduce wrong orbit rules"))

@@ -1,0 +1,363 @@
+{
+  "schema_version": "QA_CORPUS_INGEST_QUEUE.v1",
+  "queue_id": "qa.corpus.philomath.queue.v1",
+  "created_utc": "2026-03-30T00:00:00Z",
+  "source_manifest": "qa_ingestion_sources/qa_philomath_corpus_manifest.json",
+  "default_actions": {
+    "ingest": "Admit into QA-adjacent corpus with normal tagging and later promotion checks.",
+    "overlay_only": "Keep as interpretive/model layer only; do not cite as established QA.",
+    "quarantine": "Retain only as speculative notebook material with explicit warning labels."
+  },
+  "promotion_gate": [
+    "canonical_tuple_law",
+    "explicit_mod_n_structure",
+    "finite_lattice_or_graph_action",
+    "reproducible_computation",
+    "certifiable_empirical_observation",
+    "explicit_proof_target"
+  ],
+  "queue": [
+    {
+      "id": "philomath.p1.c1",
+      "part": "Part I: Mathematics and Numbers",
+      "chapter": "The Digital Root",
+      "priority": 1,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Direct bridge to mod-9 filtering and residue-class reasoning.",
+      "allowed_next_steps": [
+        "map_to_mod_9",
+        "extract_residue_claims",
+        "compare_with_existing_qa_modular_notes"
+      ],
+      "tags": [
+        "PHILOMATH.part1.high",
+        "digital_root",
+        "mod_9"
+      ]
+    },
+    {
+      "id": "philomath.p1.c2",
+      "part": "Part I: Mathematics and Numbers",
+      "chapter": "Prime Numbers",
+      "priority": 2,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Strong overlap with mod-24 wheel language and QA prime-pattern discussions.",
+      "allowed_next_steps": [
+        "extract_mod_24_claims",
+        "compare_prime_residue_classes",
+        "reduce_visual_claims_to_residue_structure"
+      ],
+      "tags": [
+        "PHILOMATH.part1.high",
+        "primes",
+        "mod_24"
+      ]
+    },
+    {
+      "id": "philomath.p1.c5",
+      "part": "Part I: Mathematics and Numbers",
+      "chapter": "Reciprocity of Numbers and Prime Factorization",
+      "priority": 3,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Useful as symmetry/factor-graph heuristic when reduced to explicit arithmetic.",
+      "allowed_next_steps": [
+        "extract_factor_symmetry_claims",
+        "convert_to_graph_heuristics",
+        "reject_unproved_visual_equivalences"
+      ],
+      "tags": [
+        "PHILOMATH.part1.high",
+        "factorization",
+        "symmetry"
+      ]
+    },
+    {
+      "id": "philomath.p1.c6",
+      "part": "Part I: Mathematics and Numbers",
+      "chapter": "Number Classification",
+      "priority": 4,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Good candidate for modular taxonomy alignment and recursive class labeling.",
+      "allowed_next_steps": [
+        "extract_class_terms",
+        "map_to_modular_taxonomy",
+        "build_crosswalk_to_qa_labels"
+      ],
+      "tags": [
+        "PHILOMATH.part1.high",
+        "classification",
+        "taxonomy"
+      ]
+    },
+    {
+      "id": "philomath.p2.c4",
+      "part": "Part II: Geometry and Symmetry",
+      "chapter": "Semiprime Factorization - The Geometric Solutions",
+      "priority": 5,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Geometric language can be salvaged into mirror/factor graph intuition.",
+      "allowed_next_steps": [
+        "extract_semiprime_examples",
+        "restate_as_factor_graphs",
+        "require_arithmetic_verification"
+      ],
+      "tags": [
+        "PHILOMATH.part2.medium",
+        "semiprime",
+        "geometry_bridge"
+      ]
+    },
+    {
+      "id": "philomath.p2.c5",
+      "part": "Part II: Geometry and Symmetry",
+      "chapter": "The Fractal Root",
+      "priority": 6,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Potentially useful if recast as recursive tuple-tree language.",
+      "allowed_next_steps": [
+        "extract_recursion_patterns",
+        "map_to_tuple_trees",
+        "separate_imagery_from_claims"
+      ],
+      "tags": [
+        "PHILOMATH.part2.medium",
+        "fractal_root",
+        "recursion"
+      ]
+    },
+    {
+      "id": "philomath.p2.c1",
+      "part": "Part II: Geometry and Symmetry",
+      "chapter": "Geometry - Forms and Categorization",
+      "priority": 7,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Useful as orbit/categorization language, but not as stand-alone proof.",
+      "allowed_next_steps": [
+        "extract_shape_taxonomy",
+        "map_forms_to_orbits",
+        "demote_non_arithmetic claims"
+      ],
+      "tags": [
+        "PHILOMATH.part2.medium",
+        "geometry",
+        "categorization"
+      ]
+    },
+    {
+      "id": "philomath.p3.c2",
+      "part": "Part III: Music and Sound",
+      "chapter": "Base-12 Numeric System",
+      "priority": 8,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Base-12 framing is a workable QA-adjacent harmonic scaffold.",
+      "allowed_next_steps": [
+        "extract_base_12_claims",
+        "map_to_residue_cycles",
+        "compare_with_existing_qa_music_notes"
+      ],
+      "tags": [
+        "PHILOMATH.part3.medium",
+        "base_12",
+        "music_bridge"
+      ]
+    },
+    {
+      "id": "philomath.p3.c1",
+      "part": "Part III: Music and Sound",
+      "chapter": "The Geometry of Sound",
+      "priority": 9,
+      "recommended_action": "ingest",
+      "confidence": "medium",
+      "reason": "Interval geometry and harmonic cycles are usable; keep claims modular and ratio-based.",
+      "allowed_next_steps": [
+        "extract_ratio_claims",
+        "map_to_integer_intervals",
+        "label_432_as_optional"
+      ],
+      "tags": [
+        "PHILOMATH.part3.medium",
+        "geometry_of_sound",
+        "intervals"
+      ]
+    },
+    {
+      "id": "philomath.p1.c4",
+      "part": "Part I: Mathematics and Numbers",
+      "chapter": "The Wave Dynamic of Numbers",
+      "priority": 10,
+      "recommended_action": "overlay_only",
+      "confidence": "medium",
+      "reason": "Can inspire discrete dynamics work, but needs formal operators before promotion.",
+      "allowed_next_steps": [
+        "extract_discrete_update_rules",
+        "propose_operator_form",
+        "block_promotion_without_model"
+      ],
+      "tags": [
+        "PHILOMATH.part1.high",
+        "wave_dynamics",
+        "overlay_only"
+      ]
+    },
+    {
+      "id": "philomath.p2.c3",
+      "part": "Part II: Geometry and Symmetry",
+      "chapter": "Geometry in the D-Space",
+      "priority": 11,
+      "recommended_action": "overlay_only",
+      "confidence": "low",
+      "reason": "Interesting symbolic space language, but not canonical until rewritten in tuple/modular form.",
+      "allowed_next_steps": [
+        "rewrite_in_modular_terms",
+        "define_state_space_explicitly",
+        "block_direct_citation"
+      ],
+      "tags": [
+        "PHILOMATH.part2.medium",
+        "d_space",
+        "overlay_only"
+      ]
+    },
+    {
+      "id": "philomath.p2.c2",
+      "part": "Part II: Geometry and Symmetry",
+      "chapter": "The HexaPentakis - The Geometry of Life",
+      "priority": 12,
+      "recommended_action": "overlay_only",
+      "confidence": "low",
+      "reason": "Useful mainly as geometry metaphor and visualization scaffold.",
+      "allowed_next_steps": [
+        "retain_for_visual_language",
+        "avoid_physical_claims",
+        "require_group_or_lattice_formalization"
+      ],
+      "tags": [
+        "PHILOMATH.part2.medium",
+        "hexapentakis",
+        "overlay_only"
+      ]
+    },
+    {
+      "id": "philomath.p1.c3",
+      "part": "Part I: Mathematics and Numbers",
+      "chapter": "Magical Numbers",
+      "priority": 13,
+      "recommended_action": "overlay_only",
+      "confidence": "low",
+      "reason": "May contain reusable harmonic motifs, but numerological claims require strict reduction before use.",
+      "allowed_next_steps": [
+        "extract_integer_factorizations",
+        "discard_claims_without_modular_support",
+        "label_432_optional"
+      ],
+      "tags": [
+        "PHILOMATH.part1.high",
+        "magical_numbers",
+        "overlay_only"
+      ]
+    },
+    {
+      "id": "philomath.p4.c1",
+      "part": "Part IV: Physical Science",
+      "chapter": "SpaceTime",
+      "priority": 14,
+      "recommended_action": "overlay_only",
+      "confidence": "low",
+      "reason": "Model-generating only. Do not promote without explicit dynamics and tests.",
+      "allowed_next_steps": [
+        "propose_discrete_model",
+        "define_state_update_equations",
+        "block_claims_of_established_physics"
+      ],
+      "tags": [
+        "PHILOMATH.part4.low_model",
+        "spacetime",
+        "overlay_only"
+      ]
+    },
+    {
+      "id": "philomath.p4.c2",
+      "part": "Part IV: Physical Science",
+      "chapter": "Matter",
+      "priority": 15,
+      "recommended_action": "overlay_only",
+      "confidence": "low",
+      "reason": "Standing-wave matter language is acceptable as hypothesis framing only.",
+      "allowed_next_steps": [
+        "extract_hypothesis",
+        "require_experiment_or_simulation",
+        "avoid_canonical_promotion"
+      ],
+      "tags": [
+        "PHILOMATH.part4.low_model",
+        "matter",
+        "overlay_only"
+      ]
+    },
+    {
+      "id": "philomath.p4.c3",
+      "part": "Part IV: Physical Science",
+      "chapter": "Gravity and Electromagnetism",
+      "priority": 16,
+      "recommended_action": "overlay_only",
+      "confidence": "low",
+      "reason": "Keep as phase-field analogy until formal model or evidence exists.",
+      "allowed_next_steps": [
+        "state_operator_candidates",
+        "require_model_comparison",
+        "block_physics_authority_use"
+      ],
+      "tags": [
+        "PHILOMATH.part4.low_model",
+        "gravity_em",
+        "overlay_only"
+      ]
+    },
+    {
+      "id": "philomath.p5.light",
+      "part": "Part V: Consciousness and Light",
+      "chapter": "Light",
+      "priority": 17,
+      "recommended_action": "quarantine",
+      "confidence": "low",
+      "reason": "Can remain as philosophical notebook material, not validated QA optics.",
+      "allowed_next_steps": [
+        "retain_with_warning",
+        "avoid_scientific_promotion",
+        "require_operational_model_for_reentry"
+      ],
+      "tags": [
+        "PHILOMATH.part5.quarantine",
+        "light",
+        "quarantine"
+      ]
+    },
+    {
+      "id": "philomath.p5.consciousness",
+      "part": "Part V: Consciousness and Light",
+      "chapter": "Consciousness",
+      "priority": 18,
+      "recommended_action": "quarantine",
+      "confidence": "low",
+      "reason": "Most speculative material in the source set; keep fully firewalled from validated corpus claims.",
+      "allowed_next_steps": [
+        "retain_with_warning",
+        "notebook_only",
+        "require_explicit_speculative_label"
+      ],
+      "tags": [
+        "PHILOMATH.part5.quarantine",
+        "consciousness",
+        "quarantine"
+      ]
+    }
+  ]
+}

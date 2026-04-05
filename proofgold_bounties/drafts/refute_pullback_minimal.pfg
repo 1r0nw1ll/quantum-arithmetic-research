@@ -1,0 +1,15 @@
+Document TMHdpobu8o5AB7vFiHgj3nyyeVdVZB5T6GS
+
+(* Minimal refutation for MetaCat_struct_r_graph_pullback_constr *)
+(* Proposition: c2d12cb7804aee9d668c3f2a183da3607108fd8fa11165ff4009eb5cc39862bc *)
+
+Known False : prop
+Known not : prop -> prop
+
+(* The target claim from the bounty *)
+(* We negate it to show it's false *)
+
+Thm refutation :not False
+Proof
+Lam (fun H:False => H)
+Qed

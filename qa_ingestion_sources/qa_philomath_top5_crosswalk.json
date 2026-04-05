@@ -1,0 +1,191 @@
+{
+  "schema_version": "QA_CROSSWALK.v1",
+  "crosswalk_id": "qa.corpus.philomath.top5.v1",
+  "created_utc": "2026-03-30T00:00:00Z",
+  "source_manifest": "qa_ingestion_sources/qa_philomath_corpus_manifest.json",
+  "source_queue": "qa_ingestion_sources/qa_philomath_ingestion_queue.json",
+  "source_claim_ledger": "qa_ingestion_sources/qa_philomath_claim_ledger.json",
+  "scope": "Top 5 PHILOMATH ingestion targets only. Each entry converts a best-effort PHILOMATH-style claim into a QA-native rewrite and a concrete promotion test.",
+  "entries": [
+    {
+      "crosswalk_id": "philomath.top5.digital_root",
+      "priority": 1,
+      "chapter": "The Digital Root",
+      "philomath_claim": "Digital root organizes number behavior through harmonic residue patterns.",
+      "claim_class": "modular",
+      "qa_native_rewrite": {
+        "core_statement": "Define rho_9(n) = n mod 9. Any promoted PHILOMATH digital-root claim must be restated entirely as a statement about residue classes in Z/9Z.",
+        "allowed_objects": [
+          "Z/9Z",
+          "residue classes",
+          "casting-out-nines checks",
+          "modular cycle diagrams"
+        ],
+        "forbidden_shortcuts": [
+          "digit mysticism",
+          "decimal-base metaphysics",
+          "harmonic closure without explicit modular content"
+        ]
+      },
+      "promotion_test": {
+        "type": "exact_reduction",
+        "steps": [
+          "Restate the claim as a proposition over Z/9Z.",
+          "Check that all downstream consequences depend only on congruence classes mod 9.",
+          "Exhibit at least one nontrivial example and one counterexample boundary."
+        ],
+        "pass_condition": "No semantic content is lost when the original claim is rewritten purely in modular terms."
+      },
+      "candidate_outputs": [
+        "mod_9_note",
+        "residue_class_table",
+        "qa_digital_root_cross_reference"
+      ]
+    },
+    {
+      "crosswalk_id": "philomath.top5.prime_numbers",
+      "priority": 2,
+      "chapter": "Prime Numbers",
+      "philomath_claim": "Prime numbers lie on structured symmetry arms of a 24-fold wheel / icositetragon.",
+      "claim_class": "modular",
+      "qa_native_rewrite": {
+        "core_statement": "For integers n > 3, candidate primes must lie in the residue classes coprime to 24. Promote only the wheel-filter fact, not a full primality criterion.",
+        "allowed_objects": [
+          "Z/24Z",
+          "coprime residue classes",
+          "wheel factorization",
+          "residue-class diagrams"
+        ],
+        "forbidden_shortcuts": [
+          "equating spoke membership with primality",
+          "visual symmetry as proof",
+          "predictive prime claims without test set"
+        ]
+      },
+      "promotion_test": {
+        "type": "residue_filter_verification",
+        "steps": [
+          "List the allowed residue classes modulo 24.",
+          "Verify sample primes and sample composites against the wheel.",
+          "Explicitly document that the wheel is a necessary filter, not a sufficient test."
+        ],
+        "pass_condition": "Promoted statement survives as a valid residue-class filter with clear necessary-versus-sufficient language."
+      },
+      "candidate_outputs": [
+        "mod_24_wheel_note",
+        "prime_residue_fixture_table",
+        "qa_icositetragon_cross_reference"
+      ]
+    },
+    {
+      "crosswalk_id": "philomath.top5.reciprocity_factorization",
+      "priority": 3,
+      "chapter": "Reciprocity of Numbers and Prime Factorization",
+      "philomath_claim": "Factor structure can be revealed by reciprocal or mirror pairings.",
+      "claim_class": "structural_analogy",
+      "qa_native_rewrite": {
+        "core_statement": "Recast the idea as symmetry of factor pairs around arithmetic invariants such as product, midpoint, or difference-of-squares decomposition.",
+        "allowed_objects": [
+          "factor pairs",
+          "difference of squares",
+          "factor graphs",
+          "mirror involutions on pair sets"
+        ],
+        "forbidden_shortcuts": [
+          "purely pictorial reciprocity",
+          "geometric revelation claims without arithmetic recovery",
+          "factor claims without executable witness"
+        ]
+      },
+      "promotion_test": {
+        "type": "factor_recovery",
+        "steps": [
+          "Choose a family of composite examples.",
+          "Show how the promoted construction recovers or encodes the correct factor pairs.",
+          "Provide a graph or algebraic invariant that remains stable under the mirror interpretation."
+        ],
+        "pass_condition": "The construction encodes real factor information and is not merely a diagrammatic analogy."
+      },
+      "candidate_outputs": [
+        "factor_graph_note",
+        "mirror_pair_table",
+        "difference_of_squares_crosswalk"
+      ]
+    },
+    {
+      "crosswalk_id": "philomath.top5.number_classification",
+      "priority": 4,
+      "chapter": "Number Classification",
+      "philomath_claim": "Numbers fall into recursive harmonic families or classes.",
+      "claim_class": "modular",
+      "qa_native_rewrite": {
+        "core_statement": "Any promoted class must be defined by an exact membership rule: congruence condition, tuple constraint, recursive rule, or graph-theoretic predicate.",
+        "allowed_objects": [
+          "congruence classes",
+          "tuple families",
+          "recursive generators",
+          "rooted graph labels"
+        ],
+        "forbidden_shortcuts": [
+          "soft family resemblance language",
+          "classification without decision rule",
+          "ancestry terms without recursion law"
+        ]
+      },
+      "promotion_test": {
+        "type": "membership_testability",
+        "steps": [
+          "Write each class as an exact predicate.",
+          "Give positive examples and explicit non-members.",
+          "Confirm that classification is reproducible by computation."
+        ],
+        "pass_condition": "Every promoted class has a deterministic membership test and boundary behavior."
+      },
+      "candidate_outputs": [
+        "classification_taxonomy",
+        "class_membership_script",
+        "qa_family_cross_reference"
+      ]
+    },
+    {
+      "crosswalk_id": "philomath.top5.semiprime_geometry",
+      "priority": 5,
+      "chapter": "Semiprime Factorization - The Geometric Solutions",
+      "philomath_claim": "Semiprimes admit geometric constructions that reveal their two prime factors.",
+      "claim_class": "structural_analogy",
+      "qa_native_rewrite": {
+        "core_statement": "Allow geometry only as a representation layer over already-defined semiprime arithmetic. The promoted object must carry recoverable factor data.",
+        "allowed_objects": [
+          "two-node factor graphs",
+          "semiprime witness tables",
+          "mirror planes indexed by factor pairs",
+          "exact coordinate encodings with inverse map"
+        ],
+        "forbidden_shortcuts": [
+          "geometry-first factor revelation",
+          "claims of bypassing arithmetic verification",
+          "non-invertible pictures"
+        ]
+      },
+      "promotion_test": {
+        "type": "invertible_geometry",
+        "steps": [
+          "Specify the forward map from semiprime arithmetic data to geometry.",
+          "Specify the inverse map from the geometry back to factor data.",
+          "Test on multiple semiprimes and at least one failure/control case."
+        ],
+        "pass_condition": "The geometric object is an invertible witness for semiprime structure, not a decorative analogy."
+      },
+      "candidate_outputs": [
+        "semiprime_geometry_note",
+        "invertible_factor_map",
+        "qa_semiprime_cross_reference"
+      ]
+    }
+  ],
+  "next_actions": [
+    "Build a compact Markdown human tract from this JSON for reviewer use.",
+    "Create computational stubs for the promotion tests with small fixtures.",
+    "Link resulting validated artifacts back into the corpus manifest."
+  ]
+}

@@ -1,0 +1,6 @@
+Document 205bb94e1cb9e6a6e7c01dd6fadd85a66ace11d84d498db4dcc608011825bdc1
+
+Known False : prop
+Known not : prop -> prop
+
+Thm test : not False := PrLa H False (Hyp 0)

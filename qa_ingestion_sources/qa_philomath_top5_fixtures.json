@@ -1,0 +1,168 @@
+{
+  "digital_root_cases": [
+    {
+      "n": 18,
+      "expected_mod9": 0
+    },
+    {
+      "n": 29,
+      "expected_mod9": 2
+    },
+    {
+      "n": 12345,
+      "expected_mod9": 6
+    }
+  ],
+  "digital_root_operation_cases": [
+    {
+      "a": 17,
+      "b": 25,
+      "expected_sum_mod9": 6,
+      "expected_product_mod9": 2
+    },
+    {
+      "a": 44,
+      "b": 19,
+      "expected_sum_mod9": 0,
+      "expected_product_mod9": 8
+    }
+  ],
+  "prime_wheel_cases": [
+    {
+      "n": 5,
+      "expected_allowed": true,
+      "is_prime_ground_truth": true
+    },
+    {
+      "n": 11,
+      "expected_allowed": true,
+      "is_prime_ground_truth": true
+    },
+    {
+      "n": 25,
+      "expected_allowed": true,
+      "is_prime_ground_truth": false
+    },
+    {
+      "n": 27,
+      "expected_allowed": false,
+      "is_prime_ground_truth": false
+    },
+    {
+      "n": 49,
+      "expected_allowed": true,
+      "is_prime_ground_truth": false
+    },
+    {
+      "n": 91,
+      "expected_allowed": true,
+      "is_prime_ground_truth": false
+    }
+  ],
+  "factor_recovery_cases": [
+    {
+      "n": 15,
+      "factors": [
+        3,
+        5
+      ]
+    },
+    {
+      "n": 21,
+      "factors": [
+        3,
+        7
+      ]
+    },
+    {
+      "n": 45,
+      "factors": [
+        5,
+        9
+      ]
+    }
+  ],
+  "classification_cases": [
+    {
+      "n": 9,
+      "expected_labels": [
+        "composite",
+        "dr0",
+        "odd",
+        "semiprime",
+        "square"
+      ]
+    },
+    {
+      "n": 25,
+      "expected_labels": [
+        "composite",
+        "odd",
+        "semiprime",
+        "spoke24",
+        "square"
+      ]
+    },
+    {
+      "n": 35,
+      "expected_labels": [
+        "composite",
+        "odd",
+        "semiprime",
+        "spoke24"
+      ]
+    },
+    {
+      "n": 37,
+      "expected_labels": [
+        "odd",
+        "prime",
+        "spoke24"
+      ]
+    },
+    {
+      "n": 48,
+      "expected_labels": [
+        "composite",
+        "even"
+      ]
+    }
+  ],
+  "semiprime_geometry_positive_cases": [
+    {
+      "n": 15,
+      "factors": [
+        3,
+        5
+      ]
+    },
+    {
+      "n": 21,
+      "factors": [
+        3,
+        7
+      ]
+    },
+    {
+      "n": 49,
+      "factors": [
+        7,
+        7
+      ]
+    }
+  ],
+  "semiprime_geometry_negative_cases": [
+    {
+      "graph": {
+        "n": 27,
+        "nodes": [
+          3,
+          9
+        ],
+        "midpoint": 6,
+        "delta": 3
+      },
+      "should_validate": false
+    }
+  ]
+}

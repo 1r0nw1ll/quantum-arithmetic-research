@@ -1,0 +1,234 @@
+{
+  "schema_version": "QA_CORPUS_INGEST_MANIFEST.v1",
+  "manifest_id": "qa.corpus.philomath.v1",
+  "title": "PHILOMATH QA Corpus Ingestion Manifest",
+  "created_utc": "2026-03-30T00:00:00Z",
+  "description": "Machine-readable corpus classification for PHILOMATH: The Geometric Unification of Science & Art Through Number by Robert Edward Grant and Talal Ghannam. This manifest records how PHILOMATH should be treated inside the QA corpus given currently available evidence.",
+  "source_work": {
+    "title": "PHILOMATH: The Geometric Unification of Science & Art Through Number",
+    "authors": [
+      "Robert Edward Grant",
+      "Talal Ghannam"
+    ],
+    "publication_year": 2021,
+    "verified_full_text_in_repo": false,
+    "assessment_mode": "best_effort_from_local_notes_plus_public_metadata",
+    "source_availability": {
+      "local_verified_pdf": false,
+      "public_metadata_confirmed": true,
+      "public_full_text_used": false,
+      "note": "Manifest is based on local QA/Open-Brain-derived notes and public book metadata. A verified full-text copy was not available in-session."
+    }
+  },
+  "corpus_decision": {
+    "primary_class": "QA_ADJACENT",
+    "secondary_class": "SECONDARY_SOURCE",
+    "overall_status": "INGEST_WITH_GUARDRAILS",
+    "summary": "PHILOMATH is suitable as an interpretive expansion layer for the QA corpus. It is useful for motif alignment, vocabulary bridging, visualization, and conjecture generation, but not for direct theorem sourcing, validator sourcing, or empirical authority."
+  },
+  "global_policy": {
+    "allowed_uses": [
+      "motif_alignment",
+      "vocabulary_bridge",
+      "visualization_bridge",
+      "conjecture_generation",
+      "cross_domain_harmonic_framing"
+    ],
+    "disallowed_uses": [
+      "theorem_source",
+      "validator_source",
+      "empirical_authority",
+      "physics_authority",
+      "consciousness_authority"
+    ],
+    "default_interpretation_mode": "qa_primary_external_facts_constrain_overreach",
+    "promotion_required": true
+  },
+  "part_assessment": {
+    "part_1_mathematics_and_numbers": {
+      "status": "INGEST_HIGH",
+      "confidence": "medium",
+      "qa_overlap": "strong",
+      "canonicality": "adjacent_not_core",
+      "salvageable_claims": [
+        "digital_root_as_mod_9_filter",
+        "mod_24_prime_wheel_language",
+        "residue_class_visualization",
+        "number_classification_via_modular_patterns",
+        "factorization_symmetry_as_heuristic"
+      ],
+      "risk_flags": [
+        "do_not_infer_proof_from_visual_symmetry_alone"
+      ],
+      "corpus_tags": [
+        "PHILOMATH.part1.high",
+        "MODULAR_COMPATIBLE",
+        "NUMBER_THEORY_BRIDGE"
+      ]
+    },
+    "part_2_geometry_and_symmetry": {
+      "status": "INGEST_MEDIUM",
+      "confidence": "medium",
+      "qa_overlap": "moderate",
+      "canonicality": "structural_analogy",
+      "salvageable_claims": [
+        "geometry_as_orbit_language",
+        "semiprime_mirror_graph_intuition",
+        "recursive_fractal_root_imagery_if_reduced_to_tuple_trees",
+        "polyhedral_and_projection_language_as_visual_scaffolding"
+      ],
+      "risk_flags": [
+        "d_space_not_canonical_without_tuple_rewrite",
+        "geometry_first_claims_require_modular_reduction_before_promotion"
+      ],
+      "corpus_tags": [
+        "PHILOMATH.part2.medium",
+        "STRUCTURAL_ANALOGY",
+        "GEOMETRY_BRIDGE"
+      ]
+    },
+    "part_3_music_and_sound": {
+      "status": "INGEST_MEDIUM",
+      "confidence": "medium",
+      "qa_overlap": "moderate",
+      "canonicality": "structural_analogy",
+      "salvageable_claims": [
+        "base_12_harmonic_lattice_language",
+        "interval_geometry",
+        "modular_pitch_cycle_framing",
+        "music_as_integer_ratio_visualization"
+      ],
+      "risk_flags": [
+        "432_not_foundational",
+        "do_not_promote_432_as_universal_axiom"
+      ],
+      "corpus_tags": [
+        "PHILOMATH.part3.medium",
+        "MUSIC_BRIDGE",
+        "432_OPTIONAL_NOT_FOUNDATIONAL"
+      ]
+    },
+    "part_4_physical_science": {
+      "status": "INGEST_LOW_MODEL",
+      "confidence": "low",
+      "qa_overlap": "weak_to_moderate",
+      "canonicality": "model_layer_only",
+      "salvageable_claims": [
+        "spacetime_as_tuple_phase_analogy",
+        "matter_as_standing_harmonic_node_analogy",
+        "gravity_and_em_as_phase_field_analogies"
+      ],
+      "risk_flags": [
+        "no_direct_promotion_without_formalization",
+        "no_direct_promotion_without_experiment",
+        "physics_claims_are_hypothesis_level"
+      ],
+      "corpus_tags": [
+        "PHILOMATH.part4.low_model",
+        "HYPOTHESIS_LAYER",
+        "PHYSICS_ANALOGY"
+      ]
+    },
+    "part_5_consciousness_and_light": {
+      "status": "QUARANTINE_SPECULATIVE",
+      "confidence": "low",
+      "qa_overlap": "weak",
+      "canonicality": "philosophical_overlay",
+      "salvageable_claims": [
+        "recursion_feedback_self_reference_as_metaphor",
+        "consciousness_language_for_notebook_level_speculation"
+      ],
+      "risk_flags": [
+        "do_not_treat_as_validated_science",
+        "do_not_treat_as_empirical_support",
+        "consciousness_and_light_claims_require_explicit_speculative_label"
+      ],
+      "corpus_tags": [
+        "PHILOMATH.part5.quarantine",
+        "SPECULATIVE_OVERLAY",
+        "CONSCIOUSNESS_HIGH_RISK"
+      ]
+    }
+  },
+  "promotion_policy": {
+    "promote_if_any_of": [
+      "canonical_tuple_law",
+      "explicit_mod_n_residue_structure",
+      "finite_lattice_or_graph_action",
+      "reproducible_computation",
+      "certifiable_empirical_observation",
+      "proof_obligation_with_explicit_closure_or_invariance_target"
+    ],
+    "retain_as_overlay_if_only": [
+      "metaphoric_geometry",
+      "cross_domain_rhetoric",
+      "harmony_language_without_formal_model",
+      "speculative_physics_analogy",
+      "consciousness_analogy"
+    ],
+    "promotion_blockers": [
+      "requires_verified_full_text_for_chapter_faithful_claims",
+      "visual_symmetry_without_argument",
+      "numerology_without_modular_reduction",
+      "physics_claim_without_model_or_data",
+      "consciousness_claim_without_operationalization"
+    ]
+  },
+  "tag_vocabulary": {
+    "source_tags": [
+      "QA_ADJACENT",
+      "SECONDARY_SOURCE",
+      "INTERPRETIVE_OVERLAY",
+      "SPECULATIVE_EXTENSION",
+      "MODEL_LAYER_ONLY"
+    ],
+    "part_tags": [
+      "PHILOMATH.part1.high",
+      "PHILOMATH.part2.medium",
+      "PHILOMATH.part3.medium",
+      "PHILOMATH.part4.low_model",
+      "PHILOMATH.part5.quarantine"
+    ]
+  },
+  "evidence_basis": {
+    "local_notes": [
+      {
+        "path": "qa_lab/vault/Nexus AI Chat Imports/chatgpt/2025/08/Map document to QA.md",
+        "role": "primary_section_by_section_mapping"
+      },
+      {
+        "path": "qa_lab/vault/Nexus AI Chat Imports/chatgpt/2025/08/QA PHILOMATH integration summary.md",
+        "role": "compressed_five_part_summary"
+      },
+      {
+        "path": "private/QAnotes/Nexus AI Chat Imports/2025/09/PHILOMATH Quantum Arithmetic Review.md",
+        "role": "rigorous_vs_plausible_vs_speculative_review"
+      }
+    ],
+    "public_metadata": [
+      {
+        "url": "https://books.google.com/books/about/Philomath.html?id=Wnk8zwEACAAJ",
+        "role": "book_existence_and_synopsis"
+      },
+      {
+        "url": "https://robertedwardgrant.com/about/?pgid=jlcuvuzi-37abd88c-75cd-46b9-834f-645928c49e53",
+        "role": "author_site_title_confirmation"
+      }
+    ]
+  },
+  "operational_summary": {
+    "best_value": [
+      "motif_bridge",
+      "diagram_bridge",
+      "conjecture_generator",
+      "cross_domain_teaching_text"
+    ],
+    "lowest_value": [
+      "proof_source",
+      "validator_source",
+      "physics_authority",
+      "consciousness_authority"
+    ],
+    "next_upgrade_condition": "Reassess if a verified local full-text copy becomes available for chapter-faithful audit."
+  }
+}

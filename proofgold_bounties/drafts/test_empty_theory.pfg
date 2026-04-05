@@ -1,0 +1,6 @@
+Document Empty
+
+Known False : prop
+Known not : prop -> prop
+
+Thm test : not False := PrLa H False (Hyp 0)

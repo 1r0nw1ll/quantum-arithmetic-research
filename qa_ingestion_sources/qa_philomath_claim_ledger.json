@@ -1,0 +1,130 @@
+{
+  "schema_version": "QA_CLAIM_LEDGER.v1",
+  "ledger_id": "qa.corpus.philomath.claims.v1",
+  "created_utc": "2026-03-30T00:00:00Z",
+  "source_manifest": "qa_ingestion_sources/qa_philomath_corpus_manifest.json",
+  "source_queue": "qa_ingestion_sources/qa_philomath_ingestion_queue.json",
+  "scope": "Top-priority PHILOMATH ingestion chapters only. Claims are recorded as best-effort reductions from local QA/Open-Brain-derived notes, not from a verified in-session full text.",
+  "claims": [
+    {
+      "claim_id": "philomath.p1.c1.claim1",
+      "chapter": "The Digital Root",
+      "claim": "Digital root is a modular filter that can organize number behavior into residue classes.",
+      "classification": "modular",
+      "qa_status": "salvageable",
+      "qa_rewrite": "Treat digital root strictly as projection into Z/9Z and use only residue-class consequences.",
+      "promotion_test": "Show that the downstream QA use depends only on mod-9 arithmetic, not on decimal-digit mysticism.",
+      "notes": "High-priority ingest candidate."
+    },
+    {
+      "claim_id": "philomath.p1.c2.claim1",
+      "chapter": "Prime Numbers",
+      "claim": "Prime numbers occupy structured symmetry classes on a mod-24 wheel / icositetragon.",
+      "classification": "modular",
+      "qa_status": "salvageable",
+      "qa_rewrite": "Reduce to prime residue classes modulo 24 and explicitly separate possible-prime spokes from primality proofs.",
+      "promotion_test": "Verify every promoted statement as a residue-class fact or computational wheel-filter fact.",
+      "notes": "Useful bridge to existing QA mod-24 language."
+    },
+    {
+      "claim_id": "philomath.p1.c5.claim1",
+      "chapter": "Reciprocity of Numbers and Prime Factorization",
+      "claim": "Factorization can be interpreted through mirror symmetry or reciprocal geometric pairings.",
+      "classification": "structural_analogy",
+      "qa_status": "salvageable_with_rewrite",
+      "qa_rewrite": "Recast as factor-pair symmetry, difference-of-squares heuristics, or explicit factor-graph constructions.",
+      "promotion_test": "Require an arithmetic factor identity or graph invariant; reject purely visual reciprocity claims.",
+      "notes": "Good candidate for a mirror-graph notebook, not a proof source by itself."
+    },
+    {
+      "claim_id": "philomath.p1.c6.claim1",
+      "chapter": "Number Classification",
+      "claim": "Numbers can be grouped into recursive harmonic classes or root-like families.",
+      "classification": "modular",
+      "qa_status": "salvageable_with_rewrite",
+      "qa_rewrite": "Map classes to explicit modular taxonomies, tuple families, or recursive graph labels.",
+      "promotion_test": "Each class must have an exact rule, membership test, and counterexample boundary.",
+      "notes": "Promising if converted into a formal taxonomy ledger."
+    },
+    {
+      "claim_id": "philomath.p2.c4.claim1",
+      "chapter": "Semiprime Factorization - The Geometric Solutions",
+      "claim": "Semiprimes admit a geometric interpretation that reveals their factors.",
+      "classification": "structural_analogy",
+      "qa_status": "salvageable_with_rewrite",
+      "qa_rewrite": "Use geometry only as a depiction of already-verified semiprime relations or mirror planes in factor graphs.",
+      "promotion_test": "Require arithmetic recovery of the factors from the proposed construction.",
+      "notes": "Admit only as a geometry bridge until recovery is executable."
+    },
+    {
+      "claim_id": "philomath.p2.c5.claim1",
+      "chapter": "The Fractal Root",
+      "claim": "Numbers descend through recursive root shells or ancestry trees.",
+      "classification": "structural_analogy",
+      "qa_status": "salvageable_with_rewrite",
+      "qa_rewrite": "Translate into recursive tuple trees, modular collapse pathways, or explicitly generated rooted graphs.",
+      "promotion_test": "Provide a deterministic recursion rule and confirm repeatability on sample inputs.",
+      "notes": "Useful as recursive language if stripped of mysticism."
+    },
+    {
+      "claim_id": "philomath.p3.c2.claim1",
+      "chapter": "Base-12 Numeric System",
+      "claim": "Base-12 provides a privileged harmonic framework for cyclic structure.",
+      "classification": "structural_analogy",
+      "qa_status": "salvageable_with_limits",
+      "qa_rewrite": "Use base-12 as one convenient cyclic scaffold among several, not as an unquestioned universal base.",
+      "promotion_test": "Show explicit computational convenience or symmetry advantage over nearby bases.",
+      "notes": "Good corpus bridge; avoid exclusivity claims."
+    },
+    {
+      "claim_id": "philomath.p3.c1.claim1",
+      "chapter": "The Geometry of Sound",
+      "claim": "Musical intervals and sound structure can be represented through integer ratio geometry.",
+      "classification": "modular",
+      "qa_status": "salvageable",
+      "qa_rewrite": "Keep only interval-ratio, cycle, and lattice claims that can be represented with exact arithmetic.",
+      "promotion_test": "Express promoted claims as exact ratios, modular cycles, or reproducible tuning transforms.",
+      "notes": "Soundest music-side entry point."
+    },
+    {
+      "claim_id": "philomath.p1.c3.claim1",
+      "chapter": "Magical Numbers",
+      "claim": "Specific integers such as 108, 216, and 432 carry privileged harmonic significance.",
+      "classification": "hypothesis",
+      "qa_status": "overlay_only",
+      "qa_rewrite": "Downgrade to optional harmonic motifs unless a modular derivation produces them non-arbitrarily.",
+      "promotion_test": "Require explicit generation rule and comparison against nearby control values.",
+      "notes": "Do not allow numerology to enter the canonical layer."
+    },
+    {
+      "claim_id": "philomath.p4.c1.claim1",
+      "chapter": "SpaceTime",
+      "claim": "Time and space can be replaced by tuple-phase and modular displacement dynamics.",
+      "classification": "hypothesis",
+      "qa_status": "overlay_only",
+      "qa_rewrite": "Treat as a model proposal requiring explicit state variables and update equations.",
+      "promotion_test": "Produce a discrete dynamics model with observable outputs or certifiable invariants.",
+      "notes": "No direct promotion without formal model."
+    },
+    {
+      "claim_id": "philomath.p4.c3.claim1",
+      "chapter": "Gravity and Electromagnetism",
+      "claim": "Gravity and electromagnetism can be reinterpreted as modular phase-field effects.",
+      "classification": "hypothesis",
+      "qa_status": "overlay_only",
+      "qa_rewrite": "Keep only as phase-field analogy until there is a precise operator model or empirical witness.",
+      "promotion_test": "Define operators, compute predictions, and compare against reference cases.",
+      "notes": "Model layer only."
+    },
+    {
+      "claim_id": "philomath.p5.consciousness.claim1",
+      "chapter": "Consciousness",
+      "claim": "Consciousness emerges from recursive harmonic self-reference in number-geometry structures.",
+      "classification": "quarantine",
+      "qa_status": "quarantine",
+      "qa_rewrite": "Notebook-level philosophical overlay only.",
+      "promotion_test": "None until a clear operationalization exists.",
+      "notes": "Firewalled from validated corpus claims."
+    }
+  ]
+}

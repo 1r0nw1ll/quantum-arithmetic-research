@@ -74,6 +74,38 @@ Cargo.lock
 # Large generated files (but allow paper PDFs/figures)
 # *.png  # Commented - selectively add needed figures
 # *.pdf  # Commented - allow paper PDFs
+# --- Privacy / personal data (hard rules) ---
+# ChatGPT export zips and derivatives — contain personal conversations,
+# README in chat_data/ confirms "local only". Hard rule from memory.
+chat_data/
+
+# --- Large regenerable ML blobs ---
+# Workspaces that hold .pt torch checkpoints + .npy embeddings: we commit
+# the JSON result files (conjectures, reports) but skip the binary blobs,
+# which are regenerable from source + the JSON results.
+multi_ai_workspace/*.pt
+multi_ai_workspace/*.npy
+qa_discovery_workspace/*.pt
+qa_discovery_workspace/*.npy
+qa_discovery_workspace/checkpoints/
+qa_discovery_workspace/qa_embeddings.*
+
+# --- Third-party clones + heavy data ---
+# Upstream grokking repo clone with its own .git — committing it as
+# embedded would require a proper submodule. Our overlay files live
+# in grokking_qa_overlay_files/ instead.
+grokking_qa_overlay/
+
+# Proofgold blockchain data (119M) and local env dir. README + scripts
+# + drafts are committed; data and env are regenerable / per-host.
+proofgold_bounties/data/
+proofgold_bounties/env/
+
+# Stale Wolfram Rule 30 submission snapshot — the canonical, up-to-date
+# version lives in qa_alphageometry_ptolemy/rule30_submission_package/
+# plus cert family [34]. This directory is a Jan-9 pre-ecosystem snapshot.
+wolfram_rule_30/
+
 *.dat
 *.csv
 *.json

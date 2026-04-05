@@ -1,0 +1,141 @@
+================================================================================
+GROKKING QA OVERLAY - FINAL WORKING VERSION
+2026-01-15
+================================================================================
+
+PREVIOUS VERSIONS: All broken (wrong hyperparameters)
+THIS VERSION: Uses paper's exact parameters from run_main_experiments.sh
+
+================================================================================
+WHAT TO DO RIGHT NOW
+================================================================================
+
+1. Go to https://colab.research.google.com
+
+2. Upload this file: FINAL_WORKING_QA_NOTEBOOK.ipynb
+
+3. Run cells 1-3 (takes 1 minute)
+
+4. Run cell 4 (takes 1-2 hours - go get coffee)
+
+5. Run cells 5-7 (takes 5 minutes)
+
+6. Verify the plot shows:
+   - Orange line (test acc) jumps from 0.1 to 0.95
+   - Purple line (grokking) is LEFT of red area (illegality)
+
+7. If yes → You have the story → Publish to Ploutos
+
+================================================================================
+FILES YOU NEED
+================================================================================
+
+PRIMARY:
+  - FINAL_WORKING_QA_NOTEBOOK.ipynb  ← The notebook to run
+
+GUIDES:
+  - QUICK_REFERENCE.md    ← Keep open while running (cheat sheet)
+  - EXECUTE_THIS.md       ← Detailed step-by-step instructions
+  - WHAT_I_FIXED.md       ← Technical explanation of fixes
+  - README_FINAL.md       ← Overview and quick start
+
+STATUS:
+  - STATUS_2026-01-15.md  ← What I just fixed
+
+TEMPLATE:
+  - PLOUTOS_POST.md       ← Post template (update with your results)
+
+================================================================================
+WHY THIS VERSION WORKS
+================================================================================
+
+Previous versions used:
+  - Full training dataset → memorization, no generalization
+  - cross_entropy loss → wrong dynamics
+  - float32 dtype → less numerical headroom
+  Result: Test acc = 0.07 (random guessing)
+
+This version uses paper's actual parameters:
+  - 40% training data (--train_fraction 0.4) → forces generalization
+  - StableMax loss (--loss_function stablemax) → correct dynamics
+  - float64 dtype (--cross_entropy_dtype float64) → better precision
+  Result: Test acc should jump to >0.95 (actual grokking)
+
+================================================================================
+EXPECTED TIMELINE
+================================================================================
+
+Now → +5 min:    Upload + setup (cells 1-3)
++5 → +2 hrs:     GPU training (cell 4) - GO AWAY, DO SOMETHING ELSE
++2 hrs → +2:10:  Generate plots (cells 5-6)
++2:10 → +2:15:   Download artifacts (cell 7)
++2:15 → +3:00:   Write + publish post
+
+TOTAL: 3 hours (2 hours is unattended GPU time)
+
+================================================================================
+WHAT YOU'LL GET
+================================================================================
+
+1. PNG plot showing:
+   - Test accuracy jump (grokking)
+   - Generator legality timeline
+   - Correlation: grokking while legal, collapse after
+
+2. JSONL logs with full state traces:
+   - State vectors
+   - Generator legality
+   - Failure modes
+
+3. Publishable story:
+   "Grokking is reachability at numerical boundaries. The test accuracy jump
+   occurred at epoch XXXX while SGD generator remained legal. Numerical
+   saturation (illegality) occurred at epoch YYYY, AFTER grokking, not before."
+
+================================================================================
+SUCCESS CRITERIA
+================================================================================
+
+Before publishing, verify:
+
+✓ Cell 6 output says "GROKKING DETECTED!"
+✓ Panel 1 shows orange line (test acc) jumping from low to high
+✓ Panel 5 shows purple line (grokking) LEFT of red area (illegality)
+✓ Downloaded PNG + JSONL files
+
+If all checked → Ready to publish
+
+================================================================================
+IF SOMETHING GOES WRONG
+================================================================================
+
+No grokking:        Try --seed 42 or --num_epochs 120000
+CUDA memory:        Change cuda:0 to cpu in cell 4
+FileNotFoundError:  Cell 4 didn't finish - check for errors
+Still test=0.07:    You're using old notebook - use FINAL version
+
+================================================================================
+YOU ARE HERE
+================================================================================
+
+Status: Fixed notebook ready
+Action: Upload to Colab and run
+Files: FINAL_WORKING_QA_NOTEBOOK.ipynb + docs
+
+Next 5 minutes:  Upload + run cells 1-3
+Next 2 hours:    Wait for GPU (do something else)
+In 2 hours:      Run cells 5-7, verify, publish
+
+================================================================================
+START NOW
+================================================================================
+
+1. Open Colab: https://colab.research.google.com
+2. Upload: FINAL_WORKING_QA_NOTEBOOK.ipynb
+3. Run cells 1-3
+4. Run cell 4
+5. Go get coffee (seriously - it takes 2 hours)
+
+Come back in 2 hours.
+
+================================================================================

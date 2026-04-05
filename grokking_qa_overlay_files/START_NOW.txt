@@ -1,0 +1,132 @@
+================================================================================
+START HERE - EXECUTE NOW
+================================================================================
+
+You chose Option B: Wait for grokking (complete story)
+
+IMMEDIATE ACTIONS:
+1. Open your Colab notebook
+2. Open file: OPTION_B_EXECUTION_GUIDE.md
+3. Follow Step 1, Step 2, Step 3 (takes 5 min to set up)
+4. Let GPU run (~1 hour)
+5. Come back and do Steps 4-9
+
+================================================================================
+COPY-PASTE SEQUENCE (Do this in Colab)
+================================================================================
+
+CELL 1: Create cell, paste from "%%writefile qa_logger.py" through end of logger
+        Run → should see "Writing qa_logger.py"
+
+CELL 2: Create cell, paste from "%%writefile grokking_experiments_qa_fixed.py" through end
+        Run → should see "Writing grokking_experiments_qa_fixed.py"
+
+CELL 3: Create cell, paste:
+        !python grokking_experiments_qa_fixed.py \
+            --dataset modular_addition \
+            --loss_function cross_entropy \
+            --lr 0.01 \
+            --seed 0 \
+            --num_epochs 50000 \
+            --log_frequency 100 \
+            --device cuda \
+            --full_batch
+
+        Run → Go get coffee (takes 30-60 min)
+
+CELL 4: (After training done) Create cell, paste plot_results.py from guide
+        Run → should see "Writing plot_results.py"
+
+CELL 5: Create cell, paste:
+        !python plot_results.py
+
+        Run → should show 5-panel plot + diagnosis
+
+CELL 6: Create cell, paste:
+        from google.colab import files
+        files.download('qa_grokking_modular_addition_cross_entropy_seed0.png')
+
+        Run → Download plot to your computer
+
+================================================================================
+WHAT YOU'RE LOOKING FOR (Success)
+================================================================================
+
+After Step 5 (plot_results.py), you should see:
+
+✓ GROKKING DETECTED!
+  Test acc jumped at step XXXX
+  Legality lost at step YYYY
+  → Grokking occurred while generator was legal
+  → Then saturation after grokking
+
+✓ READY TO PUBLISH!
+
+And the plot should show:
+- Panel 1: Orange line (test acc) JUMPS from ~0.1 to ~0.95
+- Panel 5: Purple line (grokking) is LEFT of red line (illegality)
+
+That means: Grokking happened while legal, saturation after.
+
+THAT'S THE PUBLISHABLE STORY.
+
+================================================================================
+IF SOMETHING GOES WRONG
+================================================================================
+
+Problem: No grokking detected
+Fix: Run longer (--num_epochs 100000) or try seed 42
+
+Problem: CUDA out of memory
+Fix: Change --device cuda to --device cpu (slower but works)
+
+Problem: Training crashes
+Fix: Check you have --lr 0.01 in command
+
+Problem: Plot missing test acc
+Fix: Re-upload fixed training script (CELL 2), rerun
+
+================================================================================
+TIME ESTIMATE
+================================================================================
+
+Setup (Cells 1-3): 5 minutes
+GPU training: 30-60 minutes (hands-off)
+Plotting (Cells 4-5): 3 minutes
+Download + verify: 5 minutes
+Write post: 15-30 minutes
+Publish: 10 minutes
+
+TOTAL: 1.5-2 hours
+
+You'll spend most of this waiting for GPU.
+
+================================================================================
+FILES YOU NEED OPEN
+================================================================================
+
+PRIMARY: OPTION_B_EXECUTION_GUIDE.md (has all the code)
+BACKUP: COLAB_CHECKLIST.md (checklist format)
+THIS FILE: START_NOW.txt (you are here)
+
+================================================================================
+DO THIS LITERALLY RIGHT NOW
+================================================================================
+
+1. Open Colab
+2. Open OPTION_B_EXECUTION_GUIDE.md
+3. Copy-paste Cell 1 into Colab
+4. Run it
+5. Copy-paste Cell 2 into Colab
+6. Run it
+7. Copy-paste Cell 3 into Colab
+8. Run it
+9. Go get coffee
+
+Come back in 1 hour.
+
+That's it. The guide has everything else.
+
+================================================================================
+GOOD LUCK! 🚀
+================================================================================

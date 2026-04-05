@@ -21,7 +21,9 @@ REPO="/home/player2/signal_experiments"
 # Skip directories that don't contain QA logic
 REL="${FILE_PATH#$REPO/}"
 case "$REL" in
-  .claude/*|archive/*|Documents/*|QAnotes/*|*venv*|*__pycache__*|tools/qa_axiom_linter.py)
+  .claude/*|archive/*|Documents/*|QAnotes/*|qa_lab/*|*venv*|*__pycache__*|tools/qa_axiom_linter.py)
+    # qa_lab/* is in the linter's _EXCLUDE_DIRS — mirror that here so
+    # bulk scans and per-file hook checks agree.
     exit 0
     ;;
 esac

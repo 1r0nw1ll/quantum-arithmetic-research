@@ -1,0 +1,1280 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - generic [ref=e3]:
+      - generic [ref=e4]:
+        - generic:
+          - generic:
+            - link "SVPwiki site Logo" [ref=e6] [cursor=pointer]:
+              - /url: ./
+              - img "SVPwiki site Logo" [ref=e7]
+            - generic [ref=e8]:
+              - heading "Sympathetic Vibratory Physics" [level=1] [ref=e9]:
+                - link "Sympathetic Vibratory Physics" [ref=e10] [cursor=pointer]:
+                  - /url: ./
+              - heading "Bridging Science and Spirituality" [level=2] [ref=e11]
+        - generic [ref=e12]:
+          - heading "Search" [level=3] [ref=e14]
+          - generic [ref=e18]:
+            - textbox "Find" [ref=e19]
+            - generic [ref=e20]:
+              - button "Search" [ref=e21] [cursor=pointer]
+              - button "Go" [ref=e22] [cursor=pointer]
+        - generic [ref=e23]:
+          - button "Log in" [ref=e24] [cursor=pointer]: Log in
+          - text: 
+      - generic [ref=e30]:
+        - link "Sympathetic Vibratory Physics" [ref=e31] [cursor=pointer]:
+          - /url: tiki-index.php
+        - text: »
+        - link "Quantum Arithmetic Elements" [ref=e32] [cursor=pointer]:
+          - /url: Quantum-Arithmetic-Elements
+    - generic [ref=e34]:
+      - generic [ref=e37]:
+        - link "" [ref=e38] [cursor=pointer]:
+          - /url: "#"
+          - generic [ref=e39]: 
+        - text:    
+      - heading "Quantum Arithmetic Elements" [level=1] [ref=e40]:
+        - link "Quantum Arithmetic Elements" [ref=e41] [cursor=pointer]:
+          - /url: Quantum-Arithmetic-Elements
+      - article [ref=e42]:
+        - generic [ref=e43]:
+          - strong [ref=e45]: originally titled "Unpublished Notes"
+          - generic [ref=e46]:
+            - text: by,
+            - link "Dale Pond" [ref=e47] [cursor=pointer]:
+              - /url: Dale-Pond
+            - text: ", December, 1998"
+          - paragraph [ref=e48]:
+            - link "Ben Iverson" [ref=e49] [cursor=pointer]:
+              - /url: Iverson
+            - text: originated
+            - link "Quantum Arithmetic" [ref=e50] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: . During the 14 years he and I worked closely together I developed a number of new identities, procedures, rules and methods as additions and extensions to
+            - link "Ben" [ref=e51] [cursor=pointer]:
+              - /url: Iverson
+            - text: "'s work. For instance this entire page was developed as I struggled to decipher his work and put it into a form that would be easily understandable to others. By illustrating each and every entity, point and law the whole thing began taking on clarity. Many new relations started showing up and new additions and extensions became obvious. When"
+            - link "Ben" [ref=e52] [cursor=pointer]:
+              - /url: Iverson
+            - text: said there was no way to define a circle with
+            - link "Quantum Arithmetic" [ref=e53] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: I developed three different ways to do this. These are contained herein.
+            - link "Ben" [ref=e54] [cursor=pointer]:
+              - /url: Iverson
+            - text: often said the future of
+            - link "Quantum Arithmetic" [ref=e55] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: was in the 3-D world which he claimed he was not able to develop. I began the process as you can see on the Quaternion page because of the circles development and adding in the triple axis configurations of all vibrations. I also developed and added all the musical enhancements and calculations which are but simplistic attempts where I know many more years of work are needed.
+          - paragraph [ref=e56]:
+            - text: This is only the beginning of where
+            - link "Quantum Arithmetic" [ref=e57] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: will eventually take us. I believe many new changes and modifications will be needed but the basic material appear to be good and solid. I feel certain as did
+            - link "Ben" [ref=e58] [cursor=pointer]:
+              - /url: Iverson
+            - link "Quantum Arithmetic" [ref=e59] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: will serve best when used in a 3-D or even 4-D manners. For instance how can we extrapolate musical arrangements of the tones in sound into a sound field calculated using calculus with its squareness and imprecision? It cant be done with accuracy. One needs to use whole numbers to describe a whole number phenomena which sound is. Circles and areas will be the tools as opposed to linear quantities.
+            - link "Quantum Arithmetic" [ref=e60] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: appears to be the only method available and flexible enough to address this issue.
+          - paragraph [ref=e61]:
+            - text: Also I wish to point out I do not believe
+            - link "Quantum Arithmetic" [ref=e62] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: (all by itself) will be the foundation math of
+            - link "sympathetic vibratory physics" [ref=e63] [cursor=pointer]:
+              - /url: Sympathetic-Vibratory-Physics
+            - text: . There are elements in this math that will and do apply however. In the end I think we will have a system using parts from many different modes of
+            - link "arithmetic" [ref=e64] [cursor=pointer]:
+              - /url: arithmetic
+            - text: ","
+            - link "music" [ref=e65] [cursor=pointer]:
+              - /url: Music
+            - text: ","
+            - link "mathematics" [ref=e66] [cursor=pointer]:
+              - /url: mathematics
+            - text: ","
+            - link "cycles" [ref=e67] [cursor=pointer]:
+              - /url: cycle
+            - text: ","
+            - link "geometry" [ref=e68] [cursor=pointer]:
+              - /url: Geometry
+            - text: and others.
+            - link "Dale Pond" [ref=e69] [cursor=pointer]:
+              - /url: Dale-Pond
+          - generic [ref=e70]:
+            - strong [ref=e72]: A identity
+            - img "A identity" [ref=e75]
+            - strong [ref=e77]: A identity
+            - generic [ref=e78]:
+              - text: (
+              - link "click to enlarge" [ref=e79] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagea.gif
+              - generic [ref=e80]: 
+              - text: )
+            - paragraph [ref=e81]:
+              - text: A = a
+              - superscript [ref=e82]: "2"
+            - text: A = d
+            - superscript [ref=e83]: "2"
+            - text: + 2de + e
+            - superscript [ref=e84]: "2"
+          - strong [ref=e86]: PARITY LAWS OF QUANTUM ARITHMETIC.
+          - paragraph [ref=e87]:
+            - text: In conventional math there have been four laws established along the order of logic and such things as Comutative association. The LAWS continue on into
+            - link "Quantum Arithmetic" [ref=e88] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: . There are quite a few basic laws and they expand into a whole field of logic in combinations of these laws. So let me get started.
+          - paragraph [ref=e89]: 1) Every Quantum Number consists of not less than three and not more than seven prime numbers, which also includes their powers. Only the first Quantum Number contains only two roots in 2x3=6 which is considered as the "ONE" of Quantum Arithmetic.
+          - paragraph [ref=e90]: 2) Every Quantum Number, in 2-dimensional math, must contain the prime number "2, and "3" or their powers. That means that only one number out of six cardinal numbers can qualify as a Quantum Number.
+          - paragraph [ref=e91]: "3) Once a Quantum Number is so identified by the two preceeding laws, it can be divided into its prime factors and their powers. These prime factors, and their products can then be so divided into four groups such the first group added to the second group will equal the third group, and the second group added to the third group will equal the third group, as the working roots, (b, e, d, & a), of a given Quantum Number. (Described beginning with Law #7) An extension of this Law says that this four number group can be formed in one way and one way only, but this portion of Law has not been proven. No standard method has yet been found to form this latter four-number group of roots from the factors. It can be done by \"Quantizing\" (See the last paragraph and Law #14)."
+          - paragraph [ref=e92]: 4) Not an established Law for third-dimensional Quantum Arithmetic, but it is anticipated that a 3-diminsional Quantum Arithmetic,(QA), will include the number "5" also being required in addition to the "2" and "3". The smallest third-dimensional Quantum Number will be, 2x3x5=30 and only one integer in 30 will be a third-dimensonal Quantum Number
+          - paragraph [ref=e93]: "5) When a number is to be checked for factorability: (a) If it is an even number is divisible by \"2\"; (b) If the sum of the values of the digits is divisible by \"3\" then the number is divisible by \"3\"; (c) If the number (in the decinary notation), ends with a \"0\" or a \"5\", the number is divisible by \"5\"."
+          - paragraph [ref=e94]:
+            - text: 6) The system of numbers is divided into four groups of parity. This is an extension, of "odd/even" from common math. When a number is divided by "4" it can have a remainder of 1 (or 5), 2, 3, or 0. They run in that cyclical order through the whole system of numbers. They are called "5-par, 2-par, 3-par & 4-par" respectively. (
+            - link "Euclid" [ref=e95] [cursor=pointer]:
+              - /url: Euclid
+            - text: describes them as "even-odd, odd-odd, even-even and odd-even.". They each have distinctive characteristics, and form their own rules of parity, for addition, subtraction, multiplication, and powers, which rules will not be given here, at this time.
+          - strong [ref=e97]: ROOTS
+          - paragraph [ref=e98]: 7) Every Quantum Number can be represented as the product of four roots. These roots will be displayed in Fibonacci fashion, (The sum of the first plus the second equals the third; and the sum of the second plus the third equals the fourth), and they will each be prime to the other three.
+          - paragraph [ref=e99]: 8) The first set of roots is 1, 1, 2, 3 and represents the "ONE". It will divide into roots of all other Quantum Numbers, and sets the stage for Quantum Creation.
+          - paragraph [ref=e100]: 9) Each set of Roots is unique. At least one will be prime in itself. The others may be products of two to four prime factors.
+          - paragraph [ref=e101]: 10) Roots are divided into two sets, separating the "male" from the female. The male roots will begin and end with odd numbers with one even number, and one odd number as intermediates. and may be considered to represent the x and y chromosome.
+          - paragraph [ref=e102]: The female roots will begin and end with even numbers one of which is 2-par and the other 4-par, in either order. The two intermediate numbers will be odd. In this one case the "4" is considered to be prime to "2", and the "2" and "4" may be considered to represent the two x choromosomes.
+          - paragraph [ref=e103]: 11) The first female set of roots is 2, 1, 3, 4, and represents the female side of the "ONE" and the female side of Quantum Creation. In this case the "2" and the "4"(being a power of 2), can both appear in a set of Quantum Roots. In other higher cases the power of a prime represents but displaces its root prime. So a female Quantum number must contain an "8" and a "3" for the smallest Quantum Number of 24.
+          - strong [ref=e105]: "Triangle:"
+          - paragraph [ref=e106]: 12) (a) Twice the product of the two intermediate roots will form the base of an unique Quantum right triangle.
+          - paragraph [ref=e107]: (b) The sum of the squares of these two intermediate roots will form the diagonal of the same unique triangle.
+          - paragraph [ref=e108]: (c) The product of the first and fourth Root will form the altitude of the same unique triangle.
+          - paragraph [ref=e109]: (d) Twice the square of the intermediate will be the sum of the altitude and the diagonal of this unique triangle.
+          - paragraph [ref=e110]: (e) Twice the sum of the square of the first and fourth roots will equal the difference between the diagonal and the altitude of this unique triangle.
+          - paragraph [ref=e111]: (f) The square of the third root will be the mean of the altitude and the hypotenuse, of this same unique triangle.
+          - paragraph [ref=e112]: "13) Conversely:"
+          - paragraph [ref=e113]: (a) The difference between the base and hypotenuse of the triangle is
+          - paragraph [ref=e114]: equal to the square of the first Root.(b)
+          - paragraph [ref=e115]: (b) The sum of the base and the hypotenuse of the triangle is equal to
+          - paragraph [ref=e116]: the square of the fourth Root.(a)
+          - paragraph [ref=e117]: (c) Half the difference between the altitude and the hyotenuse of the
+          - paragraph [ref=e118]: triangle equal to the square of the second Root.(e)
+          - paragraph [ref=e119]: (d) Half the suj of the altitude and the hypotenuse of the triangle is
+          - paragraph [ref=e120]: equal to the square of the third Root.(d)
+          - strong [ref=e122]:
+            - link "Ellipse" [ref=e123] [cursor=pointer]:
+              - /url: ellipse
+            - text: ":"
+          - paragraph [ref=e124]:
+            - text: 14) Every prime right triangle also represents the measurements within an unique
+            - link "ellipse" [ref=e125] [cursor=pointer]:
+              - /url: ellipse
+            - text: .
+          - paragraph [ref=e126]:
+            - text: 15) The four Roots are represented along the major diameter of the
+            - link "ellipse" [ref=e127] [cursor=pointer]:
+              - /url: ellipse
+            - text: ":"
+          - paragraph [ref=e128]:
+            - text: (a) The first Root, (b), is represented in the
+            - link "perigee" [ref=e129] [cursor=pointer]:
+              - /url: Perigee
+          - paragraph [ref=e130]: (b) The second Root, (e), is represented as the half distance betwen foci.
+          - paragraph [ref=e131]:
+            - text: (c) The third Root, (d) is represented in the semi-major diameter by the
+            - link "apogee" [ref=e132] [cursor=pointer]:
+              - /url: apogee
+            - text: .
+          - paragraph [ref=e133]:
+            - text: (d) The fourth root,(a), is represented in the
+            - link "apogee" [ref=e134] [cursor=pointer]:
+              - /url: apogee
+            - text: .
+          - paragraph [ref=e135]:
+            - text: 16) In actual measurements in constructing an
+            - link "ellipse" [ref=e136] [cursor=pointer]:
+              - /url: ellipse
+            - text: ":"
+          - paragraph [ref=e137]: (a) The square of the third root,(d), is the semi-major diameter.
+          - paragraph [ref=e138]:
+            - text: (b) The product of the first root, and the square root of the semi major-diameter, is equal to the actual measurement of the
+            - link "perigee" [ref=e139] [cursor=pointer]:
+              - /url: Perigee
+            - text: .
+          - paragraph [ref=e140]: (c) The product of the second root, and the square root of the semi-major diameter is equal to the half distance between foci.
+          - paragraph [ref=e141]:
+            - text: (d) The product of the fourth root, and the square root of the semi-major diameter is equal to the actual measurement of the
+            - link "apogee" [ref=e142] [cursor=pointer]:
+              - /url: apogee
+            - text: .
+          - paragraph [ref=e143]: (e) The product of the first root and the fourth root is the measurement of the semi-latera-recta
+          - paragraph [ref=e144]:
+            - text: (f) The square of the third root is equal to the diagonal measurement from either focus to the midpoint of the locus of the
+            - link "ellipse" [ref=e145] [cursor=pointer]:
+              - /url: ellipse
+            - text: .
+          - paragraph [ref=e146]: (g) The sum of the squares of the two intermediate roots is equal to the diagonal measurement from a focus to the end of the opposite latus rectum.
+          - paragraph [ref=e147]: END
+          - paragraph [ref=e148]: This does not complete the present Laws by any means, but to give more at this time will overload the system, if it has not already.
+          - paragraph [ref=e149]:
+            - text: The analysis of the major diameter of the
+            - link "ellipse" [ref=e150] [cursor=pointer]:
+              - /url: ellipse
+            - text: in relation to its roots makes it possible to "
+            - link "Quantize" [ref=e151] [cursor=pointer]:
+              - /url: Quantize
+            - text: "\" any valid Quantum number into its four roots. It will also \""
+            - link "Quantize" [ref=e152] [cursor=pointer]:
+              - /url: Quantize
+            - text: "\" any integer or non-integer and develop new unit-of-measure in which all measurements are in integers and integer relationships."
+          - paragraph [ref=e153]: It is recommended that the reader concentrate on the first 11 Laws and commit them to memory and use before seriously beginning on the twelfth Law on.
+          - generic [ref=e154]:
+            - strong [ref=e156]: B identity
+            - img "B identity" [ref=e159]
+            - strong [ref=e161]: B identity
+            - generic [ref=e162]:
+              - text: (
+              - link "click to enlarge" [ref=e163] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageb.gif
+              - generic [ref=e164]: 
+              - text: )
+            - paragraph [ref=e165]:
+              - text: B = b
+              - superscript [ref=e166]: "2"
+            - text: B = d
+            - superscript [ref=e167]: "2"
+            - text: "- 2de + e"
+            - superscript [ref=e168]: "2"
+          - generic [ref=e169]:
+            - strong [ref=e171]: bead - Root Numbers
+            - img "bead - Root Numbers" [ref=e174]
+            - strong [ref=e176]: bead - Root Numbers
+            - generic [ref=e177]:
+              - text: (
+              - link "click to enlarge" [ref=e178] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagern.gif
+              - generic [ref=e179]: 
+              - text: )
+            - img "bead - Root Numbers" [ref=e182]
+            - strong [ref=e184]: bead - Root Numbers
+            - generic [ref=e185]:
+              - text: (
+              - link "click to enlarge" [ref=e186] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagebead.gif
+              - generic [ref=e187]: 
+              - text: )
+            - paragraph [ref=e188]: The hypotenuse added to the altitude equals the area of 2D. i.e., G + F = 2D.
+            - paragraph [ref=e189]: The hypotenuse minus the altitude equals the area of 2E. i.e., G - F = 2E.
+            - paragraph [ref=e190]: The hypotenuse added to the base equals the area of B. i.e., G - C = B.
+            - paragraph [ref=e191]: The sides of these squares are d, e, a, and b, respectively.
+            - text: "They are in the format: b, e, d, a, in which b+e=d and e+d=a, as per"
+            - link "Fibonacci" [ref=e192] [cursor=pointer]:
+              - /url: Fibonacci
+            - text: ", but he did not know this."
+          - generic [ref=e193]:
+            - strong [ref=e195]: C identity - BASE
+            - paragraph [ref=e196]:
+              - text: C = (a
+              - superscript [ref=e197]: "2"
+              - text: "- h"
+              - superscript [ref=e198]: "2"
+              - text: )/2
+            - paragraph [ref=e199]: C = 2de
+            - paragraph [ref=e200]: The value of C is the base or foundation number in every case.
+            - paragraph [ref=e201]:
+              - text: C is the base in the triangle, and it is the distance between foci of the
+              - link "ellipse" [ref=e202] [cursor=pointer]:
+                - /url: ellipse
+              - text: .
+            - paragraph [ref=e203]: C is always an even number.
+            - paragraph [ref=e204]: C is a 4-par number.
+            - paragraph [ref=e205]:
+              - text: In the
+              - link "ellipse" [ref=e206] [cursor=pointer]:
+                - /url: ellipse
+              - text: C maintains the orientation of the
+              - link "ellipse" [ref=e207] [cursor=pointer]:
+                - /url: ellipse
+              - text: ", and has a great deal to do with proportion."
+            - text: C provides the baseline from which all of the other identities work.
+          - generic [ref=e208]:
+            - strong [ref=e210]: W identity
+            - generic [ref=e211]: Circles and Equilateral Triangles
+            - img "Circles and Equilateral Triangles" [ref=e214]
+            - strong [ref=e216]: Circles and Equilateral Triangles
+            - generic [ref=e217]:
+              - text: (
+              - link "click to enlarge" [ref=e218] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageW.gif
+              - generic [ref=e219]: 
+              - text: )
+            - img "Circles and Equilateral Triangles" [ref=e222]
+            - strong [ref=e224]: Circles and Equilateral Triangles
+            - generic [ref=e225]:
+              - text: (
+              - link "click to enlarge" [ref=e226] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagetr.gif
+              - generic [ref=e227]: 
+              - text: )
+          - generic [ref=e228]:
+            - strong [ref=e230]: D identity
+            - img "D identity" [ref=e233]
+            - strong [ref=e235]: D identity
+            - generic [ref=e236]:
+              - text: (
+              - link "click to enlarge" [ref=e237] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageD.gif
+              - generic [ref=e238]: 
+              - text: )
+            - paragraph [ref=e239]:
+              - text: D = d
+              - superscript [ref=e240]: "2"
+            - paragraph [ref=e241]:
+              - text: D = (a
+              - superscript [ref=e242]: "2"
+              - text: + 2ab + b
+              - superscript [ref=e243]: "2"
+              - text: )/4
+            - paragraph [ref=e244]: The value of D is the next most important after C.
+            - paragraph [ref=e245]:
+              - text: D is the mediator, being midway between F and G, and midway between J and K in the
+              - link "ellipse" [ref=e246] [cursor=pointer]:
+                - /url: ellipse
+              - text: .
+            - paragraph [ref=e247]:
+              - text: D plays two separate parts within every
+              - link "ellipse" [ref=e248] [cursor=pointer]:
+                - /url: ellipse
+              - text: .
+            - paragraph [ref=e249]:
+              - text: D is the semi-major diameter of the
+              - link "ellipse" [ref=e250] [cursor=pointer]:
+                - /url: ellipse
+              - text: .
+            - text: On the other hand, the value of D, is the distance from either focus to the midpoint on the rim of the
+            - link "ellipse" [ref=e251] [cursor=pointer]:
+              - /url: ellipse
+            - text: . In this latter position, it also sets the value of the semi-minor diameter.
+          - generic [ref=e252]:
+            - strong [ref=e254]: Double Parity Rule
+            - paragraph [ref=e255]: No square number may be 2-par or 3-par.
+            - paragraph [ref=e256]: Every 3-par number is the product of a 3-par and a 5-par number, or as the product of an odd number of 3-par products.
+            - paragraph [ref=e257]: A 2-par integer is, "2", or a product of 2 and any odd integer. The odd number may be either 3-par or 5-par.
+            - strong [ref=e258]:
+              - link "PAR NUMBER" [ref=e259] [cursor=pointer]:
+                - /url: tiki-editpage.php?page=PAR+NUMBER
+            - text: ": ["
+            - link "Quantum Arithmetic" [ref=e260] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: "] A classification of numbers similar to mode 4 numbers with slight changes to comply with the requirements of Quantum Arithmetic. They are 2-par, 3-par, 4-par, and 5-par being respectively 4n-2, 4n-1, 4n, and 4n+1. The value of n is an integer but the integer value is never assigned. These are the four types of numbers described by"
+            - link "Euclid" [ref=e261] [cursor=pointer]:
+              - /url: Euclid
+            - text: as even-odd, odd-odd, even-even, and odd-even, with a main emphasis on excess and deficiency rather than on residue as applies to contemporary mathematics.
+          - strong [ref=e263]: Doubling
+          - paragraph [ref=e264]:
+            - text: The "doubling" of the roots is not a true doubling in the mathematical sense, but this doubling does "double" the value of all the other identities within the
+            - link "ellipse" [ref=e265] [cursor=pointer]:
+              - /url: ellipse
+            - text: . Thus, the doubling of 1, 1, 2, 3 will give us 2, 1, 3, 4, but these two combinations are the roots of the 3, 4, 5, triangle and of the 6, 8, 10 triangle, which is a double of the first. The measurements of J, C/2, D, and K, along the major diameter of the same
+            - link "ellipse" [ref=e266] [cursor=pointer]:
+              - /url: ellipse
+            - text: will be 2, 2, 4, 6 for the first roots and will be 6, 3, 9,12 for the second. This not a true doubling. The doubling occurs only in the triangle. A true doubling of the major diameter could not be because this
+            - link "ellipse" [ref=e267] [cursor=pointer]:
+              - /url: ellipse
+            - text: is much more elliptical, but the triangle is truly doubled in its dimensions and quadrupled in its area. Along with that it is turned by ninety degrees in itself and within the
+            - link "ellipse" [ref=e268] [cursor=pointer]:
+              - /url: ellipse
+            - text: which it represents. (see ROTATION herein for more information)
+          - generic [ref=e269]:
+            - strong [ref=e271]: E identity
+            - img "E identity" [ref=e274]
+            - strong [ref=e276]: E identity
+            - generic [ref=e277]:
+              - text: (
+              - link "click to enlarge" [ref=e278] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageE.gif
+              - generic [ref=e279]: 
+              - text: )
+            - paragraph [ref=e280]:
+              - text: E = (a
+              - superscript [ref=e281]: "2"
+              - text: "- 2ab + b"
+              - superscript [ref=e282]: "2"
+              - text: )/4
+            - paragraph [ref=e283]:
+              - text: E = e
+              - superscript [ref=e284]: "2"
+          - generic [ref=e285]:
+            - strong [ref=e287]: Earth Fields
+            - img "Earth Fields" [ref=e290]
+            - strong [ref=e292]: Earth Fields
+            - generic [ref=e293]:
+              - text: (
+              - link "click to enlarge" [ref=e294] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageEF.gif
+              - generic [ref=e295]: 
+              - text: )
+          - generic [ref=e296]:
+            - strong [ref=e298]:
+              - link "ellipse" [ref=e299] [cursor=pointer]:
+                - /url: ellipse
+              - text: Triangulation
+            - img "((ellipse)) Triangulation" [ref=e302]
+            - strong [ref=e304]:
+              - link "ellipse" [ref=e305] [cursor=pointer]:
+                - /url: ellipse
+              - text: Triangulation
+            - generic [ref=e306]:
+              - text: (
+              - link "click to enlarge" [ref=e307] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageell.gif
+              - generic [ref=e308]: 
+              - text: )
+            - paragraph [ref=e309]:
+              - text: n has a linear value of d/e which is a prime fraction. x = nd/e. The quaternion points on the locus of the
+              - link "ellipse" [ref=e310] [cursor=pointer]:
+                - /url: ellipse
+              - text: are integer radial values from both foci. See next card for more details.
+            - paragraph [ref=e311]: The XY points of "1" alongthe perimeter are determined by triangulation from the Base C and Height F.
+            - img "((ellipse)) Triangulation" [ref=e314]
+            - strong [ref=e316]:
+              - link "ellipse" [ref=e317] [cursor=pointer]:
+                - /url: ellipse
+              - text: Triangulation
+            - generic [ref=e318]:
+              - text: (
+              - link "click to enlarge" [ref=e319] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageeltr.gif
+              - generic [ref=e320]: 
+              - text: )
+          - generic [ref=e321]:
+            - strong [ref=e323]: Elliptical Functions
+            - img "Elliptical Functions" [ref=e326]
+            - strong [ref=e328]: Elliptical Functions
+            - generic [ref=e329]:
+              - text: (
+              - link "click to enlarge" [ref=e330] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageefun.gif
+              - generic [ref=e331]: 
+              - text: )
+            - paragraph [ref=e332]: Elliptical functions are represented by J, F, D, G & K.
+            - text: See also Quantum
+            - link "ellipse" [ref=e333] [cursor=pointer]:
+              - /url: ellipse
+            - text: s
+          - generic [ref=e334]:
+            - strong [ref=e336]: Equalized Sphere
+            - img "Equalized Sphere" [ref=e339]
+            - strong [ref=e341]: Equalized Sphere
+            - generic [ref=e342]:
+              - text: (
+              - link "click to enlarge" [ref=e343] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagees.gif
+              - generic [ref=e344]: 
+              - text: )
+            - paragraph [ref=e345]: In an Equalized Sphere all vectors are equated, balanced or harmonized as 1 triune unit.
+            - paragraph [ref=e346]: Confluence of C & G or F & G coincide with curve. In this case (of a sphere) F = C.
+            - paragraph [ref=e347]: All CFG triangles depart from the center at 90Â°. This is an important point.
+            - paragraph [ref=e348]: All CFG triangles are equal when in a sphere.
+            - paragraph [ref=e349]: There are 12 equal CFG triangles in a sphere.
+            - paragraph [ref=e350]: There are 4 per polarity or triplet
+            - paragraph [ref=e351]:
+              - text: There are 24 equal CFG triangles in an
+              - link "ellipse" [ref=e352] [cursor=pointer]:
+                - /url: ellipse
+              - text: .
+            - paragraph [ref=e353]: There are 4 per polarity or triplet
+            - text: There are 12 per Foci
+          - generic [ref=e354]:
+            - strong [ref=e356]: F identity
+            - img "F identity" [ref=e359]
+            - strong [ref=e361]: F identity
+            - generic [ref=e362]:
+              - text: (
+              - link "click to enlarge" [ref=e363] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageF.gif
+              - generic [ref=e364]: 
+              - text: )
+            - paragraph [ref=e365]: F = ab
+            - paragraph [ref=e366]:
+              - text: F = d
+              - superscript [ref=e367]: "2"
+              - text: "- e"
+              - superscript [ref=e368]: "2"
+            - paragraph [ref=e369]: The number values which can be used for F are never prime numbers because F = ab and a and b are prime to each other. (except in the female set where one factor of , a or b, is 2-par and the other is 4-par.)
+            - paragraph [ref=e370]: The value of F will be coprime to C, D, E, G, H, I.
+            - paragraph [ref=e371]: F is also the height of the Prime Pythagorean Triangle.
+            - paragraph [ref=e372]: F is of the odd parity.
+            - paragraph [ref=e373]: Any and every odd integer can be a value for F, so long as that odd integer is the product of two odd numbers.
+            - paragraph [ref=e374]: F can be either 3-par or 5-par.
+            - paragraph [ref=e375]: (There is an exception in the female set where it is always the double of the base of the triangle of which the female set is the double. F represents the height of the triangle, but the triangle has been rotated 90Â°. In this set, F will always be an 8n integer. The base of this female triangle is a 2-par integer.)
+            - paragraph [ref=e376]: The shape requirements for F are the most complex of any identity.
+            - paragraph [ref=e377]: The number used for F must be a rectangle with dimensions a and b. F = ab.
+            - paragraph [ref=e378]: The number used for F must also be able to form a gnomon which is shaped when F + E = D.
+            - paragraph [ref=e379]: The outside length of the gnomon of F, will be d. The inside length of the legs will be e, the width of the legs will be b. b + e = d.
+            - paragraph [ref=e380]: The values of F and G work together. They always stay equidistant from D, in value.
+            - paragraph [ref=e381]: F and G begin at opposite ends of the orienting base, C.
+            - paragraph [ref=e382]:
+              - text: In the
+              - link "ellipse" [ref=e383] [cursor=pointer]:
+                - /url: ellipse
+              - text: they both start at the foci which are at the ends of C, giving them a stable base to work from.
+            - paragraph [ref=e384]:
+              - text: With give and take of integers, between F and G, they sweep out the rim of an
+              - link "ellipse" [ref=e385] [cursor=pointer]:
+                - /url: ellipse
+              - text: ", always maintaining the value of D midway between them, as their mean."
+            - paragraph [ref=e386]:
+              - text: The maximum values as they travel around the
+              - link "ellipse" [ref=e387] [cursor=pointer]:
+                - /url: ellipse
+              - text: is K.
+            - text: The minimum value of F and G is J.
+          - generic [ref=e388]:
+            - strong [ref=e390]: Fibonacci Spiral
+            - img "Fibonacci Spiral" [ref=e393]
+            - strong [ref=e395]: Fibonacci Spiral
+            - generic [ref=e396]:
+              - text: (
+              - link "click to enlarge" [ref=e397] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagefib.gif
+              - generic [ref=e398]: 
+              - text: )
+          - generic [ref=e399]:
+            - strong [ref=e401]:
+              - text: Formulae for
+              - link "Quantum Arithmetic" [ref=e402] [cursor=pointer]:
+                - /url: Quantum-Arithmetic
+            - paragraph [ref=e403]:
+              - text: 1) b = root b
+              - superscript [ref=e404]: "2"
+              - text: = B
+            - paragraph [ref=e405]:
+              - text: 2) e = root e
+              - superscript [ref=e406]: "2"
+              - text: = E
+            - paragraph [ref=e407]:
+              - text: 3) d = b+e d
+              - superscript [ref=e408]: "2"
+              - text: = D
+            - paragraph [ref=e409]:
+              - text: 4) a = e+d a
+              - superscript [ref=e410]: "2"
+              - text: = A
+            - paragraph [ref=e411]: 5) B = b*b = Area of b
+            - paragraph [ref=e412]:
+              - text: 6) E = e*e = Vector extension of right triangle E = e*e = Area of e
+              - superscript [ref=e413]: "2"
+            - paragraph [ref=e414]:
+              - text: 7) D = d*d = Vector on right triangle D = d*d = Half width of
+              - link "ellipse" [ref=e415] [cursor=pointer]:
+                - /url: ellipse
+              - text: D = d*d = Locus to apex on
+              - link "ellipse" [ref=e416] [cursor=pointer]:
+                - /url: ellipse
+              - text: D = d*d = Area of d
+              - superscript [ref=e417]: "2"
+            - paragraph [ref=e418]:
+              - text: 8) A = a*a = Area of a
+              - superscript [ref=e419]: "2"
+            - paragraph [ref=e420]:
+              - text: 9) X = e*d = Half length of right triangle X = C/2 = Quarter width of
+              - link "ellipse" [ref=e421] [cursor=pointer]:
+                - /url: ellipse
+            - paragraph [ref=e422]:
+              - text: 10) C = e*d*2 = Length of right triangle C = e*d*2 = Loci distance on
+              - link "ellipse" [ref=e423] [cursor=pointer]:
+                - /url: ellipse
+            - paragraph [ref=e424]: 11) F = b*a = Height of right triangle
+            - paragraph [ref=e425]:
+              - text: 12) G = D+E = Hypotenuse of right triangle G = dd+ee = Locus to semi-apex on
+              - link "ellipse" [ref=e426] [cursor=pointer]:
+                - /url: ellipse
+            - paragraph [ref=e427]: 13) L = C*F/12
+            - paragraph [ref=e428]: 14) H = C+F
+            - paragraph [ref=e429]: 15) I = C-F (result must be a positive number)
+            - paragraph [ref=e430]:
+              - text: 16) J = d*b = Distance of loci to outer width of
+              - link "ellipse" [ref=e431] [cursor=pointer]:
+                - /url: ellipse
+            - paragraph [ref=e432]:
+              - text: 17) K = d*a = Furthest loci to outer width of
+              - link "ellipse" [ref=e433] [cursor=pointer]:
+                - /url: ellipse
+            - paragraph [ref=e434]: 18) W = d(e+a) = Side of equilateral triangle W = K+C/2 W = de+da W = X+K
+            - paragraph [ref=e435]: 19) Y = A-D
+            - paragraph [ref=e436]:
+              - text: 20) Z = E+K Z = ee+K Z = e
+              - superscript [ref=e437]: "2"
+              - text: + (a*d)
+            - paragraph [ref=e438]:
+              - text: 21) h = d(a*b) = Half height of
+              - link "ellipse" [ref=e439] [cursor=pointer]:
+                - /url: ellipse
+            - paragraph [ref=e440]: 22) P = 2*W = Diameter of circle
+            - paragraph [ref=e441]: 23) Q = P = Circumference of circle
+            - paragraph [ref=e442]:
+              - text: 24) R = W
+              - superscript [ref=e443]: "2"
+              - text: = Area of circle
+            - text: 25) S = d*X = Height of equilateral triangle
+          - generic [ref=e444]:
+            - strong [ref=e446]: G identity - Hypotenuse
+            - img "G identity - Hypotenuse" [ref=e449]
+            - strong [ref=e451]: G identity - Hypotenuse
+            - generic [ref=e452]:
+              - text: (
+              - link "click to enlarge" [ref=e453] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageG.gif
+              - generic [ref=e454]: 
+              - text: )
+            - paragraph [ref=e455]: G = C + B
+            - paragraph [ref=e456]: G = F + 2E
+            - paragraph [ref=e457]: G = D + E
+            - paragraph [ref=e458]:
+              - text: G = (a
+              - superscript [ref=e459]: "2"
+              - text: + b
+              - superscript [ref=e460]: "2"
+              - text: )/2
+            - paragraph [ref=e461]:
+              - text: G = d
+              - superscript [ref=e462]: "2"
+              - text: + e
+              - superscript [ref=e463]: "2"
+            - paragraph [ref=e464]: G (the hypotenuse) must always be a 5-par number.
+            - text: G is greater than F by 2E.
+          - generic [ref=e465]:
+            - strong [ref=e467]: Geometric Harmony
+            - img "Geometric Harmony" [ref=e470]
+            - strong [ref=e472]: Geometric Harmony
+            - generic [ref=e473]:
+              - text: (
+              - link "click to enlarge" [ref=e474] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagegh.gif
+              - generic [ref=e475]: 
+              - text: )
+            - text: Geometric harmony is represented here by circles. Circles are long regarded as a symbol of perfection. All the radii bear a ratio of 1:1 to each other thus showing there are no partial differences between them. Thus they are here proven to be in a state of harmony. This is rightly part of SVP and not QA but is included here as it helps wwork with spherical QA.
+          - generic [ref=e476]:
+            - strong [ref=e478]: Greek Magic Number
+            - img "Greek Magic Number" [ref=e481]
+            - strong [ref=e483]: Greek Magic Number
+            - generic [ref=e484]:
+              - text: (
+              - link "click to enlarge" [ref=e485] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagegmn.gif
+              - generic [ref=e486]: 
+              - text: )
+            - paragraph [ref=e487]: 1 x 2 x 3 x 4 x 5 x 6 x 7 = 5040
+            - paragraph [ref=e488]: 71 x 71 = 5041
+            - paragraph [ref=e489]: 7 x 8 x 9 x 10 = 5040
+            - link "Pythagoras" [ref=e490] [cursor=pointer]:
+              - /url: Pythagoras
+            - text: "said: \"The numbers stop at 10.\" [as in the column sum of multiples.]"
+          - generic [ref=e491]:
+            - strong [ref=e493]: H identity
+            - paragraph [ref=e494]:
+              - text: H = (a
+              - superscript [ref=e495]: "2"
+              - text: + 2ab - b
+              - superscript [ref=e496]: "2"
+              - text: )/2
+            - text: H = d
+            - superscript [ref=e497]: "2"
+            - text: + 2de - e
+            - superscript [ref=e498]: "2"
+          - generic [ref=e499]:
+            - strong [ref=e501]: Harmonic Cycle
+            - img "Harmonic Cycle" [ref=e504]
+            - strong [ref=e506]: Harmonic Cycle
+            - generic [ref=e507]:
+              - text: (
+              - link "click to enlarge" [ref=e508] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageHC.gif
+              - generic [ref=e509]: 
+              - text: )
+            - generic [ref=e510]: The Harmonic Cycle of 3, 4, 5
+            - paragraph [ref=e511]: The prime numbers are symmetrical. All odd composite numbers are covered by one cycle or another.
+            - text: "They are: 15, 21, 33, 35, 39, 45, 51, 55 and 57."
+          - generic [ref=e512]:
+            - text: I identity
+            - paragraph [ref=e513]:
+              - text: I = (a
+              - superscript [ref=e514]: "2"
+              - text: "- 2ab - b"
+              - superscript [ref=e515]: "2"
+              - text: )/2
+            - text: I = e
+            - superscript [ref=e516]: "2"
+            - text: + 2de - d
+            - superscript [ref=e517]: "2"
+          - generic [ref=e518]:
+            - strong [ref=e520]: J identity
+            - img "J identity" [ref=e523]
+            - strong [ref=e525]: J identity
+            - generic [ref=e526]:
+              - text: (
+              - link "click to enlarge" [ref=e527] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageJ.gif
+              - generic [ref=e528]: 
+              - text: )
+            - paragraph [ref=e529]: J = b*d.
+            - paragraph [ref=e530]:
+              - text: J = (d
+              - superscript [ref=e531]: "2"
+              - text: "- de)"
+            - paragraph [ref=e532]: J = D - de
+            - paragraph [ref=e533]:
+              - text: J = (b
+              - superscript [ref=e534]: "2"
+              - text: + ab)/2
+            - paragraph [ref=e535]:
+              - text: J only appears in the
+              - link "ellipse" [ref=e536] [cursor=pointer]:
+                - /url: ellipse
+              - text: and not in the triangle.
+            - paragraph [ref=e537]: J is never prime.
+            - paragraph [ref=e538]: J shares common factors with B, C, D, F & L.
+            - paragraph [ref=e539]: The value for J has no specific parity requirement.
+            - paragraph [ref=e540]: J may have any parity which is controlled by the factors b and d.
+            - paragraph [ref=e541]: The shape of J is always a rectangle, paired with K and having one dimension, d, in common.
+            - text: The J rectangle also has b for its other dimension.
+          - generic [ref=e542]:
+            - strong [ref=e544]: K identity
+            - img "K identity" [ref=e547]
+            - strong [ref=e549]: K identity
+            - generic [ref=e550]:
+              - text: (
+              - link "click to enlarge" [ref=e551] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageK.gif
+              - generic [ref=e552]: 
+              - text: )
+            - paragraph [ref=e553]: K = a*d.
+            - paragraph [ref=e554]:
+              - text: K = a
+              - superscript [ref=e555]: "2"
+              - text: + ab)/2
+            - paragraph [ref=e556]:
+              - text: K = (d
+              - superscript [ref=e557]: "2"
+              - text: + de)
+            - paragraph [ref=e558]:
+              - text: K appears in the
+              - link "ellipse" [ref=e559] [cursor=pointer]:
+                - /url: ellipse
+              - text: and not in the triangle.
+            - paragraph [ref=e560]: K is never prime.
+            - paragraph [ref=e561]: K shares common factors with A, C, D, F & L.
+            - paragraph [ref=e562]: The value for K has no specific parity requirements.
+            - paragraph [ref=e563]: K may have any parity, which is controlled by the factors a and d.
+            - paragraph [ref=e564]: K is always a rectangle paired with J in such a fashion as to share one dimension, d.
+            - text: The K rectangle will have a short dimension of d; and a long dimension of a.
+          - generic [ref=e565]:
+            - strong [ref=e567]: L identity - Area
+            - img "L identity - Area" [ref=e570]
+            - strong [ref=e572]: L identity - Area
+            - generic [ref=e573]:
+              - text: (
+              - link "click to enlarge" [ref=e574] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageL.gif
+              - generic [ref=e575]: 
+              - text: )
+            - paragraph [ref=e576]:
+              - text: L = (a
+              - superscript [ref=e577]: "3"
+              - text: b - ab
+              - superscript [ref=e578]: "3"
+              - text: )/6
+            - paragraph [ref=e579]:
+              - text: L = (d
+              - superscript [ref=e580]: "3"
+              - text: e - de
+              - superscript [ref=e581]: "3"
+              - text: )/6
+            - paragraph [ref=e582]: L = FC/2
+            - paragraph [ref=e583]: L is the AREA of the Prime Pythagorean Triangle.
+            - paragraph [ref=e584]: L is never prime because it will have the factors b, e, d, & a.
+            - paragraph [ref=e585]: L has no strict parity requirements.
+            - paragraph [ref=e586]: The geometric shape of L is more complex than any of the other identities.
+            - text: In some ways L may be considered as a 4-dimensional solid.
+          - generic [ref=e587]:
+            - strong [ref=e589]: Line
+            - img "Line" [ref=e592]
+            - strong [ref=e594]: Line
+            - generic [ref=e595]:
+              - text: (
+              - link "click to enlarge" [ref=e596] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageLi.gif
+              - generic [ref=e597]: 
+              - text: )
+            - paragraph [ref=e598]: The Line has length and breadth. Some may argue it has any breadth but for it to be a line of any magnitude whatsoever that magnitude is some quantity and the least quantity possible is always 1.
+            - text: For it to be a Line (which is more than a point) its length must be greater than 1 (its breadth) and the least quantity greater than 1 can only be 2.
+          - generic [ref=e599]:
+            - strong [ref=e601]: P - Entity
+            - text: P = Circle Diameter
+          - generic [ref=e602]:
+            - strong [ref=e604]: Point
+            - img "Point" [ref=e607]
+            - strong [ref=e609]: Point
+            - generic [ref=e610]:
+              - text: (
+              - link "click to enlarge" [ref=e611] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagept.gif
+              - generic [ref=e612]: 
+              - text: )
+            - paragraph [ref=e613]: The Point has no dimension but it does have quantity.
+            - paragraph [ref=e614]: "Therefore its mathematical description means:"
+            - paragraph [ref=e615]: a quantity X to the zeroth dimension = 1.
+            - paragraph [ref=e616]: The Point is dimensionless yet it has quantity and the least real quantity is always and can only be 1.
+            - text: see
+            - link "QUATERNION" [ref=e617] [cursor=pointer]:
+              - /url: Quaternion
+            - text: in this stack for more discussion concerning dimensions.
+          - generic [ref=e618]:
+            - strong [ref=e620]: Porisms (Rules)
+            - paragraph [ref=e621]: "1. All integers are divided into two classes: odd and even."
+            - paragraph [ref=e622]: "2. All even integers are divided into two classes: 2-par, (4n-2) and 4-par, (4n) integers."
+            - paragraph [ref=e623]: "3. All odd integers are divided into two classes: 3-par (4n-1), and 5-par, (4n+1)."
+            - paragraph [ref=e624]: 4. Only 4-par and 5-par numbers may be squares of integers. 2-par and 3-par integers may not, but all four may be rectangles.
+            - paragraph [ref=e625]: 5. Both odd and even integers further divides each of its classes into pairs of classes on a binary basis, around 8, 16, 32, 64, etc.
+            - paragraph [ref=e626]:
+              - text: 6. The base, C, of a triangle, and the line joining foci of an
+              - link "ellipse" [ref=e627] [cursor=pointer]:
+                - /url: ellipse
+              - text: must be a 4-par integer. (Doubling changes this to 2-par.) This 4-par integer is the foundation number in every mathematical case in Quantum Arithmetic around which all the integers of a detail will build. And in the vein of Pseudaria, this 4-par integer maintains its group of integers in a strict orientation and polarity when they build upon it. This base is always divisible by four in its prime useages, (but divisible by 2 after a doubling takes place.)
+            - paragraph [ref=e628]: 7. The altitude F, of a triangle, is always divisible by three, or by some higher odd integer. When not divisible by three, then the base is divisible by three as well as by four. (i.e., divisible by 12). The altitude of a triangle will form a gnomon which is the difference of two squares, and a rectangle, in as many as it has divisors less than the square root of the integer representing it.
+            - paragraph [ref=e629]: 8. The hypotenuse, G, of a triangle, must be divisible by 5, or be some higher integer which is 5-par. It cannot be divisible by 3 or 4. If G is not divisible by 5 then the altitude, F, must be divisible by 5. If the hypotenuse or the altitude are not divisible by 5 then the base must be so divisible in addition to its other duties. The hypotenuse must be the sum of two squares, (D and E), and must be the mean of two squares, (B and A).
+            - paragraph [ref=e630]: 9. The mean of the altitude, F, and the hypotenuse, G, must be a square number, D, and must differ from them by another square, E, which is of an opposite parity. Of these two squares, one must be 4-par, and the other must be 5-par.
+            - paragraph [ref=e631]: 10. The value of the hypotenuse, G, as the mean of two sqares, A and B, will differ from them by a 4-par number, C, and both squares must be odd and 5-par integers.
+            - paragraph [ref=e632]: 11. Every operation with a group of connected integers will have a system of four roots, b, e, d, and a, underlying the operation. One of these roots, d or e, must be even, and the other three must be odd. (Doubling changes the rule.)
+            - paragraph [ref=e633]: 12. One of the four roots must be divisible by three.
+            - text: 13. One of the four roots must be divisible by five, or the sum of the squares of the two center ones, d and e, must be divisble by 5. (vis. must be 5-pent or 5n in character.)
+          - generic [ref=e634]:
+            - strong [ref=e636]: Prime Pythagorean Triangle
+            - img "Prime Pythagorean Triangle" [ref=e639]
+            - strong [ref=e641]: Prime Pythagorean Triangle
+            - generic [ref=e642]:
+              - text: (
+              - link "click to enlarge" [ref=e643] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageppt.gif
+              - generic [ref=e644]: 
+              - text: )
+          - generic [ref=e645]:
+            - strong [ref=e647]: Primeness
+            - text: No integer is considered to be prime at all times, or in all cases. Primeness refers to non-factorability of an integer by smaller integers. It has factors of itself and unity. Any power of any prime number will reduce only to its root and to unity, so, the power of a prime number is also considered as being prime. Numbers are considered as being co-prime when they have no common factors other than ONE. Neither must necessarily be prime in itself but will act as though it is prime. (i.e., 7, 8, and 9 are all co-prime, although only the 7 is actually prime.) A number is said to be "functionally prime" when it acts in a given problem, as though it is prime, but may not be prime by the above definition.
+          - generic [ref=e648]:
+            - strong [ref=e650]: Pythagorean Triangle
+            - img "Pythagorean Triangle" [ref=e653]
+            - strong [ref=e655]: Pythagorean Triangle
+            - generic [ref=e656]:
+              - text: (
+              - link "click to enlarge" [ref=e657] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagepyt.gif
+              - generic [ref=e658]: 
+              - text: )
+          - generic [ref=e659]:
+            - strong [ref=e661]: Q- Entity
+            - paragraph [ref=e662]: Q = Circle Circumference
+          - generic [ref=e663]:
+            - strong [ref=e665]:
+              - text: Quantizing an
+              - link "ellipse" [ref=e666] [cursor=pointer]:
+                - /url: ellipse
+            - img "Quantizing an ((ellipse))" [ref=e669]
+            - strong [ref=e671]:
+              - text: Quantizing an
+              - link "ellipse" [ref=e672] [cursor=pointer]:
+                - /url: ellipse
+            - generic [ref=e673]:
+              - text: (
+              - link "click to enlarge" [ref=e674] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageqe.gif
+              - generic [ref=e675]: 
+              - text: )
+            - paragraph [ref=e676]:
+              - text: There are four presently known ways to quantize an
+              - link "ellipse" [ref=e677] [cursor=pointer]:
+                - /url: ellipse
+              - text: . Regardless of which measurements are given to dictate the way for quantizing the
+              - link "ellipse" [ref=e678] [cursor=pointer]:
+                - /url: ellipse
+              - text: ", one must eventually reduce this to finding the value of D or d"
+              - superscript [ref=e679]: "2"
+              - text: . Once the value of D is found then one other root must be located. So, some pairs of given measurements result in a fairly simple solution, but other pairs make the solution complex.
+            - paragraph [ref=e680]: 1) If the values of F and G are given, the method is quite simple because D is the mean of F and G and E is the variation from the mean. In this case (G + F)/2 = D and (G - F)/2 = E.
+            - paragraph [ref=e681]:
+              - text: 2) If the values of C and G are given, one can complete the triangle and use the above method, or one can use the feature that G is the mean of two squares, A and B, and C is the variation from the mean. In this case G + C = A and G - C = B which are a
+              - superscript [ref=e682]: "2"
+              - text: and b
+              - superscript [ref=e683]: "2"
+              - text: . The other two roots, d, and e, are the mean, and the variation from the mean of a and b.
+            - paragraph [ref=e684]:
+              - text: 3) A third method will result when C and F are given. Again, one can complete the triangle and use the first method. Or one can depend upon the feature that G
+              - superscript [ref=e685]: "2"
+              - text: is the mean of I
+              - superscript [ref=e686]: "2"
+              - text: and H
+              - superscript [ref=e687]: "2"
+              - text: ", which are (C - F)"
+              - superscript [ref=e688]: "2"
+              - text: and (C + F)
+              - superscript [ref=e689]: "2"
+              - text: respectively. This still does not resolve any of the roots and one must revert to either of the first two methods.
+            - text: 4) The fourth method involves having any two of the measurements along the major diameter, (Or line of apsides). This method is the most acceptable and accessible because these can be the most accurate and all four measurements can be easily determined. The four measurements then contain all four roots of the
+            - link "ellipse" [ref=e690] [cursor=pointer]:
+              - /url: ellipse
+            - text: . They are J = bd, C/2 = ed, D = d
+            - superscript [ref=e691]: "2"
+            - text: ", and K = ad. Of these, D is the square of the root d. Then dividing any of the other measurements by this root will produce their other root. This method is used almost exclusively in this text, and is the basis for the computer program given elsewhere."
+          - generic [ref=e692]:
+            - strong [ref=e694]: Quantum Circle
+            - img "Quantum Circle" [ref=e697]
+            - strong [ref=e699]: Quantum Circle
+            - generic [ref=e700]:
+              - text: (
+              - link "click to enlarge" [ref=e701] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageqc.gif
+              - generic [ref=e702]: 
+              - text: )
+          - generic [ref=e703]:
+            - strong [ref=e705]: Quantum Music Intervals
+            - paragraph [ref=e706]: Music Intervals of a Pythagorean Triangle.
+            - table [ref=e707]:
+              - rowgroup [ref=e708]:
+                - row "Interval Ratio identities ratio" [ref=e709]:
+                  - cell "Interval" [ref=e710]:
+                    - strong [ref=e712]:
+                      - link "Interval" [ref=e713] [cursor=pointer]:
+                        - /url: Interval
+                  - cell "Ratio" [ref=e714]:
+                    - strong [ref=e716]:
+                      - link "Ratio" [ref=e717] [cursor=pointer]:
+                        - /url: Ratio
+                  - cell "identities ratio" [ref=e718]:
+                    - strong [ref=e720]: identities ratio
+                - row "Unison 1:1" [ref=e721]:
+                  - cell "Unison" [ref=e722]
+                  - cell "1:1" [ref=e723]
+                  - cell [ref=e724]
+                - row "Octave 2:1" [ref=e725]:
+                  - cell "Octave" [ref=e726]
+                  - cell "2:1" [ref=e727]
+                  - cell [ref=e728]
+                - row "Perfect Fifth 3:2" [ref=e729]:
+                  - cell "Perfect Fifth" [ref=e730]
+                  - cell "3:2" [ref=e731]
+                  - cell [ref=e732]
+                - row "Major Third 5:4 G:F" [ref=e733]:
+                  - cell "Major Third" [ref=e734]
+                  - cell "5:4" [ref=e735]
+                  - cell "G:F" [ref=e736]
+                - row "Perfect Fourth 4:3 F:C" [ref=e737]:
+                  - cell "Perfect Fourth" [ref=e738]
+                  - cell "4:3" [ref=e739]
+                  - cell "F:C" [ref=e740]
+                - row "Major Tenth 5:2" [ref=e741]:
+                  - cell "Major Tenth" [ref=e742]
+                  - cell "5:2" [ref=e743]
+                  - cell [ref=e744]
+                - row "Perfect Twelfth 3:1 C:L" [ref=e745]:
+                  - cell "Perfect Twelfth" [ref=e746]
+                  - cell "3:1" [ref=e747]
+                  - cell "C:L" [ref=e748]
+                - row "Major Sixth 5:3 G:C" [ref=e749]:
+                  - cell "Major Sixth" [ref=e750]
+                  - cell "5:3" [ref=e751]
+                  - cell "G:C" [ref=e752]
+                - row "Double Octave 4:1 F:L" [ref=e753]:
+                  - cell "Double Octave" [ref=e754]
+                  - cell "4:1" [ref=e755]
+                  - cell "F:L" [ref=e756]
+            - text: The ratios above are taken directly from a plot of a right triangle created using the rules of QA. It is interesting to note that of the nine ratios six are Perfect Intervals (1, 2, and 3 par numbers) the remaining three are all Major Intervals (5 par numbers). This demonstrates that the triangle is indeed a unit of strength by being constructed solely of prime numbers.
+          - generic [ref=e757]:
+            - strong [ref=e759]: Quaternion Vectors (Hamiltonian)
+            - img "Quaternion Vectors (Hamiltonian)" [ref=e762]
+            - strong [ref=e764]: Quaternion Vectors (Hamiltonian)
+            - generic [ref=e765]:
+              - text: (
+              - link "click to enlarge" [ref=e766] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageqvh.gif
+              - generic [ref=e767]: 
+              - text: )
+          - generic [ref=e768]:
+            - strong [ref=e770]: Quaternion Dimensions
+            - paragraph [ref=e771]: Space is divided into at least 12 dimensions. There are the three conventional dimensions, and each of these is divided into four sub-dimensions.
+            - paragraph [ref=e772]:
+              - text: The first and basic sub-dimension is the quaternion, the unit of which has a diameter of one unit, or a cube which is one unit on a side. This unit is so miniscule that we may consider it dimensionless. We take this unit to be on the order of 10
+              - superscript [ref=e773]: "-14"
+              - text: millimeter. The quaternion is the equivalent of a point in space, in Quantum Arithmetic.
+            - paragraph [ref=e774]: The second sub-dimension is the product of two quaternions, and is considered on the same basis as a line. It is used here as a root, and has length but its width and thickness is the unit quaternion. The root is the equivalent of a point (qv) in space in conventional mathematics. It is represented by b, e, d, or a.
+            - paragraph [ref=e775]: The third sub-dimension is the product of two roots or the product of four quaternions. It is an area in Quantum Arithmetic, but considered as a line in conventional methematics. It is represented by any of the capitalized identities, A through K. This dimension has length and width but its thickness is the unit quaternion.
+            - paragraph [ref=e776]:
+              - text: The fourth dimension in Quantum Arithmetic is the product of two of the third-dimensions; of four of the roots; or of eight of the quaternions. It will have measurable length, width and thickness. It is represented in the capitalized identities by L, (L = beda/6), or by the squares of any of the other capitalized identities, (C
+              - superscript [ref=e777]: "2"
+              - text: + F
+              - superscript [ref=e778]: "2"
+              - text: = G
+              - superscript [ref=e779]: "2"
+              - text: ). In Quantum Arithmetic this dimension is a solid. In conventional methmatics it is undefined. (The area of an
+              - link "ellipse" [ref=e780] [cursor=pointer]:
+                - /url: ellipse
+              - text: is the product of pi and three roots, d
+              - superscript [ref=e781]: "3"
+              - text: ", and two quaternions, a, and b, in square units. For the same measurement in circular units it is : Area = d"
+              - superscript [ref=e782]: "3"
+              - text: ab).
+            - paragraph [ref=e783]: This last dimension has had little discussion in this text, partly to avoid going into the higher dimensions, and partly because this higher dimension and its relationship to conventional dimensions, has not been investigated. When these lower dimensions are more fully understood then the upper dimensions will fall into place. It is anticipated that a 5-way division is involved, and that the conventional 3-dimensions, the 4-dimensions of Quantum Arithmetic, and the unexplored 5-dimension system will, working through Synchronous Harmonics, make a 60-way division of space, hence the viability of the sexigesimal system of numerical notation.
+            - paragraph [ref=e784]: The system of integers forms an associated symmetry around a square of an integer, D. Each pair of integers will have a complimentary system of characteristics for par-value, primeness/factorability, and shape. The arrangement goes into greater detail as more subsidiary integers are added to the framework.
+            - text: "General: Although the"
+            - link "ellipse" [ref=e785] [cursor=pointer]:
+              - /url: ellipse
+            - text: is derived through porisms (qv), the aspects of the
+            - link "ellipse" [ref=e786] [cursor=pointer]:
+              - /url: ellipse
+            - text: discussed here; the role of C in maintaining the orientation of the
+            - link "ellipse" [ref=e787] [cursor=pointer]:
+              - /url: ellipse
+            - text: ; the role of E as a mediator of the
+            - link "ellipse" [ref=e788] [cursor=pointer]:
+              - /url: ellipse
+            - text: and the role of J, F, G, and K in the operational phases; are all in the field of Pseudaria. In retrospect, and particularly in the derivation of fractional equivalents, lead to a deeper meaning in that the
+            - link "ellipse" [ref=e789] [cursor=pointer]:
+              - /url: ellipse
+            - text: may be only a frame of reference in which these are taken. This has all been done through constructive geometry because it would have been relatively impossible to approach and describe in an abstract sense. This four-way division of duties between C, D, E, and the operators, J, F, G, and K can be extended outside the realm of mathematics and into many other fields. Plato refers to these duties in Republic, but in a philosophical sense. Quantum Arithmetic leads almost naturally into the humanities and far beyond the limits of conventional mathematics.
+          - generic [ref=e790]:
+            - strong [ref=e792]: Quaternions (Quantum and Hamilton)
+            - img "Quaternions (Quantum and Hamilton)" [ref=e795]
+            - strong [ref=e797]: Quaternions (Quantum and Hamilton)
+            - generic [ref=e798]:
+              - text: (
+              - link "click to enlarge" [ref=e799] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imageqqah.gif
+              - generic [ref=e800]: 
+              - text: )
+          - generic [ref=e801]:
+            - strong [ref=e803]: R - Entity
+            - text: R = Circle Area
+          - generic [ref=e804]:
+            - strong [ref=e806]: Rotation
+            - paragraph [ref=e807]:
+              - text: After using the Quantize program for a short time, one will notice that some of the roots have a series that begin and end with even numbers, and the two center ones, e and d, are odd. This points up something which was thought trivial about the Prime Pythagorean triangles, but appears to be quite important. These even valued roots inject a concept of "doubling" or the influence of "2". The
+              - link "ellipse" [ref=e808] [cursor=pointer]:
+                - /url: ellipse
+              - text: which these roots project, is turned on end, that is, the
+              - link "ellipse" [ref=e809] [cursor=pointer]:
+                - /url: ellipse
+              - text: is rotated through ninety degrees, when b > e, (vis; N > O), after doubling. (see DOUBLING)
+            - paragraph [ref=e810]:
+              - text: The rotation of the
+              - link "ellipse" [ref=e811] [cursor=pointer]:
+                - /url: ellipse
+              - text: is perhaps best demonstrated by reverting to the prime Pythagorean triangle from which the
+              - link "ellipse" [ref=e812] [cursor=pointer]:
+                - /url: ellipse
+              - text: derives. In such a triangle, the sum and difference of the hypotenuse and altitude, G and F, is always a double square. At the same time the sum and difference of the hypotenuse and base, G, and C, are single squares. In the "doubling" process, the double of a single square is a double square, but the doubling of a double square is a single square. This, in effect, reverses the position of D and E, with A and B. Then such a triangle is considered to be rotated through ninety degrees.
+            - paragraph [ref=e813]:
+              - text: But the "doubling" process is not particularly a mathematical doubling. In fact it has nothing to do with doubling. In this doubling process the ellipticity of the
+              - link "ellipse" [ref=e814] [cursor=pointer]:
+                - /url: ellipse
+              - text: is actually drastically changed. All
+              - link "ellipse" [ref=e815] [cursor=pointer]:
+                - /url: ellipse
+              - text: s fall on one side or the other of the basic
+              - link "ellipse" [ref=e816] [cursor=pointer]:
+                - /url: ellipse
+              - text: which begins with the roots, 1, 1, 2, 3, which are in turn, representative of the 3, 4, 5,
+              - link "Prime Pythagorean triangle" [ref=e817] [cursor=pointer]:
+                - /url: tiki-editpage.php?page=Prime+Pythagorean+triangle
+              - text: . When an
+              - link "ellipse" [ref=e818] [cursor=pointer]:
+                - /url: ellipse
+              - text: or triangle have roots which are near to this value the doubling process causes little change. One side will have
+              - link "ellipse" [ref=e819] [cursor=pointer]:
+                - /url: ellipse
+              - text: s slightly more circular. The other side of this median will have
+              - link "ellipse" [ref=e820] [cursor=pointer]:
+                - /url: ellipse
+              - text: s slightly more elongated.
+            - text: If this "doubling" (see DOUBLING) concept has a reality and an application it would be in the case of the correlation between
+            - link "Earth" [ref=e821] [cursor=pointer]:
+              - /url: earth
+            - text: orbit and the orbit of
+            - link "Halleys Comet" [ref=e822] [cursor=pointer]:
+              - /url: tiki-editpage.php?page=Halleys+Comet
+            - text: . Note that the
+            - link "quantum numbers" [ref=e823] [cursor=pointer]:
+              - /url: quantum-number
+            - text: for them 1, 29, 30, 59, and 59, 1, 60, 61. This combination indicates that
+            - link "Halleys Comet" [ref=e824] [cursor=pointer]:
+              - /url: tiki-editpage.php?page=Halleys+Comet
+            - text: has some special relationship with
+            - link "Earth" [ref=e825] [cursor=pointer]:
+              - /url: earth
+            - text: . The "59" used as roots in both cases indicates a close
+            - link "synchronization" [ref=e826] [cursor=pointer]:
+              - /url: synchronization
+            - text: between them, and the "1" in each case indicates a highly stabilized orbit, for each of them.
+          - generic [ref=e827]:
+            - strong [ref=e829]: Tangent Functions
+            - text: Tangent functions are represented with F/C.
+          - generic [ref=e830]:
+            - strong [ref=e832]: The Laws of One (QA)
+            - img "The Laws of One (QA)" [ref=e835]
+            - strong [ref=e837]: The Laws of One (QA)
+            - generic [ref=e838]:
+              - text: (
+              - link "click to enlarge" [ref=e839] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagelqa.gif
+              - generic [ref=e840]: 
+              - text: )
+            - paragraph [ref=e841]: "THE ONE is composed of two squares: One male, one female. They break into 3 rectangles, C, J & K, and into 3 more squares, A, B & E."
+            - paragraph [ref=e842]: Capital letters are areas. Lower case are distances. b+e=d, e+d=a.
+            - text: In this case b=3; e=1; d=4; a=5. There may be other
+            - link "coprime" [ref=e843] [cursor=pointer]:
+              - /url: tiki-editpage.php?page=coprime
+            - text: values.
+          - generic [ref=e844]:
+            - strong [ref=e846]: Trigonometric Functions
+            - text: Trigonometric functions are represented with C, F & G.
+          - generic [ref=e847]:
+            - strong [ref=e849]: Triune Modes Quantized
+            - img "Triune Modes Quantized" [ref=e852]
+            - strong [ref=e854]: Triune Modes Quantized
+            - generic [ref=e855]:
+              - text: (
+              - link "click to enlarge" [ref=e856] [cursor=pointer]:
+                - /url: http://svpwiki.com/imagesQA/imagetmq.gif
+              - generic [ref=e857]: 
+              - text: )
+          - paragraph [ref=e858]:
+            - link "DP" [ref=e859] [cursor=pointer]:
+              - /url: Dale-Pond
+            - text: ": This was a beginning effort to marry"
+            - link "QA" [ref=e860] [cursor=pointer]:
+              - /url: Quantum-Arithmetic
+            - text: to
+            - link "SVP" [ref=e861] [cursor=pointer]:
+              - /url: SVP
+            - text: . I think it can only work via 3-D and 4-D
+            - link "projective geometry" [ref=e862] [cursor=pointer]:
+              - /url: tiki-editpage.php?page=projective+geometry
+            - text: . Another connection is the two foci of an
+            - link "ellipse" [ref=e863] [cursor=pointer]:
+              - /url: ellipse
+            - text: . See links below.
+          - img "Possible QA in 3D?" [ref=e866]
+          - generic [ref=e867]: Possible QA in 3D?
+          - paragraph [ref=e868]: See Also
+          - separator [ref=e869]
+          - paragraph [ref=e870]:
+            - strong [ref=e871]:
+              - link "Apsidal" [ref=e872] [cursor=pointer]:
+                - /url: apsidal
+            - strong [ref=e873]:
+              - link "Arithmetic" [ref=e874] [cursor=pointer]:
+                - /url: arithmetic
+            - strong [ref=e875]:
+              - link "cube-sphere" [ref=e876] [cursor=pointer]:
+                - /url: cube-sphere-2
+            - text: "- Cubing the Sphere"
+            - strong [ref=e877]:
+              - link "Cubing the Sphere" [ref=e878] [cursor=pointer]:
+                - /url: Cubing-the-Sphere
+            - strong [ref=e879]:
+              - link "East-West spherical planes" [ref=e880] [cursor=pointer]:
+                - /url: East-West-spherical-planes
+            - strong [ref=e881]:
+              - link "Figure 9.7 - Two Centers Showing Complex Attraction Dynamics" [ref=e882] [cursor=pointer]:
+                - /url: Figure-9.7---Two-Centers-Showing-Complex-Attraction-Dynamics
+            - strong [ref=e883]:
+              - link "Geometry" [ref=e884] [cursor=pointer]:
+                - /url: Geometry
+            - strong [ref=e885]:
+              - link "Iverson" [ref=e886] [cursor=pointer]:
+                - /url: Iverson
+            - strong [ref=e887]:
+              - link "Iverson's books on Quantum Arithmetic" [ref=e888] [cursor=pointer]:
+                - /url: http://www.svpbookstore.com/Quantum-Arithmetic_c_70.html
+              - generic [ref=e889]: 
+            - strong [ref=e890]:
+              - link "Number" [ref=e891] [cursor=pointer]:
+                - /url: number
+            - strong [ref=e892]:
+              - link "Prime Fraction Equivalent" [ref=e893] [cursor=pointer]:
+                - /url: Prime-Fraction-Equivalent
+            - strong [ref=e894]:
+              - link "Quadrature of the Circle" [ref=e895] [cursor=pointer]:
+                - /url: Quadrature-of-the-Circle
+            - strong [ref=e896]:
+              - link "Quantization - Physics" [ref=e897] [cursor=pointer]:
+                - /url: Quantization---Physics
+            - strong [ref=e898]:
+              - link "Quantize to One" [ref=e899] [cursor=pointer]:
+                - /url: Quantize-to-One
+            - strong [ref=e900]:
+              - link "Quantize" [ref=e901] [cursor=pointer]:
+                - /url: Quantize
+            - strong [ref=e902]:
+              - link "Quantum Arithmetic" [ref=e903] [cursor=pointer]:
+                - /url: Quantum-Arithmetic
+            - strong [ref=e904]:
+              - link "spherical coordinates" [ref=e905] [cursor=pointer]:
+                - /url: spherical-coordinates
+            - strong [ref=e906]:
+              - link "two centers" [ref=e907] [cursor=pointer]:
+                - /url: two-centers
+            - strong [ref=e908]:
+              - link "two controlling points of stillness" [ref=e909] [cursor=pointer]:
+                - /url: two-controlling-points-of-stillness
+            - strong [ref=e910]:
+              - link "two dividing poles" [ref=e911] [cursor=pointer]:
+                - /url: two-dividing-poles
+            - strong [ref=e912]:
+              - link "two lights of the spectrum" [ref=e913] [cursor=pointer]:
+                - /url: two-lights-of-the-spectrum
+            - strong [ref=e914]:
+              - link "two opposed electric forces" [ref=e915] [cursor=pointer]:
+                - /url: two-opposed-electric-forces
+            - strong [ref=e916]:
+              - link "two points of stillness" [ref=e917] [cursor=pointer]:
+                - /url: two-points-of-stillness
+            - strong [ref=e918]:
+              - link "two poles" [ref=e919] [cursor=pointer]:
+                - /url: two-poles
+            - strong [ref=e920]:
+              - link "two-way compression-expansion sequence" [ref=e921] [cursor=pointer]:
+                - /url: two-way-compression-expansion-sequence
+            - strong [ref=e922]:
+              - link "two-way divided effects of motion" [ref=e923] [cursor=pointer]:
+                - /url: two-way-divided-effects-of-motion
+            - strong [ref=e924]:
+              - link "two-way effect" [ref=e925] [cursor=pointer]:
+                - /url: two-way-effect
+            - strong [ref=e926]:
+              - link "two-way extension of a point in space" [ref=e927] [cursor=pointer]:
+                - /url: two-way-extension-of-a-point-in-space
+            - strong [ref=e928]:
+              - link "two-way motion" [ref=e929] [cursor=pointer]:
+                - /url: two-way-motion
+            - strong [ref=e930]:
+              - link "two-way opening and closing universe" [ref=e931] [cursor=pointer]:
+                - /url: two-way-opening-and-closing-universe
+            - strong [ref=e932]:
+              - link "two-way universe" [ref=e933] [cursor=pointer]:
+                - /url: two-way-universe
+            - strong [ref=e934]:
+              - link "What is Quantum Arithmetic?" [ref=e935] [cursor=pointer]:
+                - /url: What-is-Quantum-Arithmetic
+            - strong [ref=e936]:
+              - link "12.38 - Orbital revolution" [ref=e937] [cursor=pointer]:
+                - /url: 12.38---Orbital-revolution
+            - strong [ref=e938]:
+              - link "9.23 - Circular Harmonic Orbit" [ref=e939] [cursor=pointer]:
+                - /url: 9.23---Circular-Harmonic-Orbit
+            - strong [ref=e940]:
+              - link "9.24 - Elliptical Enharmonic Orbit" [ref=e941] [cursor=pointer]:
+                - /url: 9.24---Elliptical-Enharmonic-Orbit
+      - contentinfo [ref=e942]:
+        - emphasis [ref=e943]: "Created by Dale Pond. Last Modification: Friday February 17, 2023 06:30:24 MST by Dale Pond."
+    - contentinfo
+  - status [ref=e944]

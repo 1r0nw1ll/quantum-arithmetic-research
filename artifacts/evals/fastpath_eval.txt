@@ -1,0 +1,5 @@
+[default] kept=256/800000 gates=199809 qe=2048 time(pipeline)=0.795s baseline=2.576s speedup=3.24x
+[numpy_pref] kept=256/200000 gates=9590 qe=4096 time(pipeline)=0.211s baseline=0.547s speedup=2.59x
+[rust_disabled] kept=256/200000 gates=9314 qe=4096 time(pipeline)=0.211s baseline=0.551s speedup=2.61x
+CHSH(N=24): max|S|=2.8284 (<= 2.8284) at a0=0,a1=6,b0=3,b1=21
+I3322(N=24): value=1.2144 at a=(0,6,11), b=(3,8,16)

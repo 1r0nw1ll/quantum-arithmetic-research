@@ -1,0 +1,17 @@
+QA Lab Daily Summary — 2025-11-23
+=
+Fast-Path Evaluation (gates → QE → E8)
+- default: kept=256/800000 gates=199809 qe=2048 pipeline=0.795s baseline=2.576s speedup=3.24x roots=240
+- numpy_pref: kept=256/200000 gates=9590 qe=4096 pipeline=0.211s baseline=0.547s speedup=2.59x roots=240
+- rust_disabled: kept=256/200000 gates=9314 qe=4096 pipeline=0.211s baseline=0.551s speedup=2.61x roots=240
+
+Trend entries: 3
+See: artifacts/evals/fastpath_eval.txt
+
+Vault Mining Suggestions:
+- Wheel: enable=True
+- Family: enable=True phi_tol=0.05
+- Curv weight: 0.25
+- Ideal weight: 0.1
+
+Fast-Path Settings (current):

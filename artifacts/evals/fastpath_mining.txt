@@ -1,0 +1,19 @@
+Vault Mining Suggestions (fast-path)
+=
+Signals:
+- curvature: 9366 occurrences
+- eisenstein: 776 occurrences
+- fibonacci: 17104 occurrences
+- ideal: 4 occurrences
+- lucas: 3397 occurrences
+- positivity: 2340 occurrences
+- triangle: 12704 occurrences
+- wheel: 26001 occurrences
+
+Recommended toggles/weights:
+- QA_FP_ENABLE_WHEEL=1
+- QA_FP_ENABLE_FAMILY=1
+- QA_FP_FAMILY_TOL=0.05
+- QA_FP_POS_MIN=0.0
+- QA_QE_CURV_WEIGHT=0.25
+- QA_QE_IDEAL_WEIGHT=0.1

@@ -1,0 +1,7448 @@
+---
+source: Pyth-3-Ennea-PRINT/Pythagoras vol3 Enneagram-smaller.pdf
+series: Pyth-3
+method: pdf
+chars: 305687
+extracted: 2026-03-26
+---
+
+# Pyth-3 — Pythagoras vol3 Enneagram-smaller
+
+
+<!-- page 1 -->
+PYTHAGORAS
+AND THE
+QUANTUM WORLD
+Volume I I I
+Enneagram
+Ben lverson & Carl Elkins
+
+<!-- page 3 -->
+PYTHAGORAS
+AND THE
+QUANTUM WORLD
+Volume I I I
+By: Ben lverson & Carl Elkins
+Printed by: Delta Spectrum Research
+921 Sante Fé Avenue
+La Junta, Colorado, 2006
+Publisher: Delta Spectrum Research
+La Junta, Colorado
+ESBN 1-883401-03-0
+
+<!-- page 5 -->
+One should have read, (studied) Volumes
+I & 2, before attempting this book, Volume 3.
+This book should be easier reading. Volume 3
+begins with a quick review of Volume I in the
+first chapters. There are certain essentials
+which the reader must remember to observe.
+This Third Book is written from the
+viewpoint of 1995 - '96. Parts of this Edition
+will be quite different from that which is
+found in the early volumes. Some subject mat-
+ter will be extended here, and some subjects
+will be quite abbreviated. New subjects will
+be introduced after chapter 5.
+The simple existence of Quantum Arithme-
+tic tends to support the idea of ancient civiliza-
+tions, and the legendary feats they could per-
+form. The sophistication and rigor which is
+achievable in Quantum Arithmetic points to-
+ward the Atlantean Civilization of 12,000
+years ago. Most of their literature was de-
+stroyed while it lay in the library of Alexan-
+dria. We cannot reclaim those 600,000 to one
+million volumes which were burned. We do
+have several surviving pieces such as the
+Rhind Mathematical Papyrus, The Egyptian
+Leather Roll, the Moscow Papyrus and a few
+others. We also have the recovered portions of
+Euclids Geometry. Several others have sur-
+vived to give us confidence that Quantum
+Arithmetic is on the right track.
+Quantum Arithmetic seems to start out
+with ordinary math. It leads us on a far differ-
+ent path to Quantum Numbers used by nature.
+These numbers take on whole new and differ-
+ent meaning in a scientific context. It continu-
+ally branches out to cover all areas of current
+math practices and belief, disproving some of
+those beliefs. There are other branches which
+reach into entirely new areas. Many of these
+new areas will occupy researchers for decades.
+These three volumes of Pythagoras And
+The Quantum World break precedence with
+the past. It tries to avoid "in-house" cliches
+and cryptic terms and symbols, in order to
+make it more understandable to the layman.
+Attempts are made to make this presentable to
+high school students, however many profes-
+sional mathematicians will find Quantum
+Arithmetic very difficult to follow, because
+there is so very much to unlearn first.
+Conventional mathematics is an invented
+device. Quantum Arithmetic is entirely Natu-
+ral Math as nearly as it can be understood.
+There is no invention except to correlate it
+with contemporary mathematics. Professional
+mathematicians find they must discard some
+of their learning before they will be able to un-
+derstand Quantum Arithmetic.
+The previous proofs of Quantum Arith-
+metic take Number theory and turns it into
+Number Law. A better understanding about
+prime numbers allows one to form solid
+proofs of the theories of Number Theory. This
+leads to adding other features which extend
+the Law. Many of the patent problems in con-
+ventional mathematics are solved. Other prob-
+lems such as "Fermat's Last Theorem" begin
+to show the proper solution, but has not been
+solved nor has this problem been attempted.
+The famous "Cattle Problem" of Archimedes
+is solved physically and application is made in
+a surprising way.
+Euclid's Lemma that any number is fac-
+torable, in only one way, into its prime factors
+will continue to be a lemma, until proved oth-
+erwise. It holds up as fact under Quantum
+Arithmetic.
+In the case of "Fermat's Last Theorem",
+the sum of two squares, one even and one odd,
+will be an odd square. The extension of this to
+third dimension is "The sum of three cubes
+can be equal to the cube of a fourth integer".
+e.g. (32 + 42 = 52) and (33 + 43 +53 = 63)
+The resolution of this latter equation is made
+at the end of this book.
+This does not solve the problem but it
+does give us an indication which leads to solu-
+INTRODUCTION
+
+<!-- page 6 -->
+tions. Dr. Elkins adds information about 3rd
+dimension and cubes. This is rather astound-
+ing in the possibilities of its application.
+In trigonometry, the features and transpo-
+sitions are the same except that Tan=F/C, or
+Tan=ab/2de. Sin=F/G or Sin= ab/(d +e ) = b.
+All trigonometric formulae are transposable
+into any trigonometric function through the
+roots of the integers involved and the relation-
+ships between the roots. Trigonometry still ap-
+plies in Quantum Arithmetic but the usage of
+it is changed in the terms used. The use of
+trigonometric tables is unnecessary because
+the actual, absolute values, are used. The frac-
+tions include all of the implied decimal digits
+and are equivalent to using one hundred place
+tables.
+On the other hand, the use of calculus is
+obsolete. It is replaced by computer program
+"Quantize" which appears in Volume II. One
+will work with relative (or true) Quantum
+Numbers.
+These three volumes of Pythagoras And
+The Quantum World should be accompanied
+by the three textbooks on Quantum Arithmetic
+which are entitled, QA-1, QA-2, and QA-3.
+They are the text book versions introducing
+Quantum Arithmetic. The QA books are in-
+tended as graduated beginner text books. They
+do not contain the proofs, which will be found
+only in Pythagoras And The Quantum World,
+with a more technical description. The two
+versions do not run in exact parallel but in
+general, QA-2 and QA-3 will go with these
+current volumes. It is recommended the reader
+has studied all of the previous texts and vol-
+umes, which contains many of the details
+which are not included in Volume III.
+THE DEVELOPMENT OF QUANTUM
+ARITHMETIC
+Quantum Arithmetic is not just a "flash-
+in-the-pan" as have been so many alternative
+ways of teaching invented mathematics. It is
+the natural mathematics which was used
+10,000 years ago, and will again become the
+mathematics which our civilization will devel-
+op and use. This use will not occur over night.
+It may take many years to get it incorporated
+uniformly into our schools, or it could happen
+soon.
+It is presently being incorporated into our
+advanced sciences, and technology. It is the
+foundation on which science will advance.
+Quantum Arithmetic does not preclude the use
+of present invented mathematics. Invented
+mathematics will continue in commercial use
+and Quantum Arithmetic will be an adjunct to
+it for science.
+The reader will be interested in the history of
+Quantum Arithmetic which has been under re-
+search for more than 50 years. That research
+has been spiritually inspired and guided for
+that entire time. This occurred with the present
+author but, also with others who will be join-
+ing the work. Partly for this reason Quantum
+Arithmetic is essentially a non-profit venture.
+Many thousands of dollars of private funding
+have gone into this research, which can never
+be recovered, nor will it be recovered. That is
+not to say that others cannot make reasonable
+financial gain, but it cannot be done at the sac-
+rifice of the truth of this knowledge. A profit
+must be accompanied by a balance in all fac-
+tors involved.
+These works are registered under copy-
+right for the purpose of preventing others from
+usurping this work for their own, and prevent
+withholding the knowledge from general pub-
+lic use.
+In this Volume III the reader will be in-
+troduced to Dr. Carl Elkins, who has also been
+doing advanced independent research for
+many years. It is found that his work is a natu-
+ral extension of basic Quantum Arithmetic,
+without having knowledge that this prior
+Quantum Arithmetic existed. His report car-
+ries into the Third Dimension with definite ap-
+plications involving the torus. With that, every
+reader will be challenged to the limit of their
+mental ability.
+There are also others who are standing in
+the wings, ready to proceed with their own im-
+provements and areas of interest. Many read-
+ers, world wide, have acclaimed Quantum
+Arithmetic. It is due to these ardent supporters
+that Quantum Arithmetic has reached the
+
+<!-- page 7 -->
+stage at which we find it today. There are sup-
+porters in every state in the union, most prov-
+inces in Canada, and all major countries in the
+world. Many of these supporters who have
+read these books, have become researchers to
+extend our knowledge of Quantum Arithmetic,
+and I wish them well. Advanced scientists are
+beginning to apply this material to their work,
+and are meeting with success. These people
+have all been helpful to me in extending and
+improving my understanding of Quantum
+Arithmetic. That help is very much appreciat-
+ed. I also want to extend thanks to Dr. Carl El-
+kins for sharing his discoveries which incorpo-
+rate the 9-pointed enneagram of Pythagoras.
+This brings us to a discovery in which
+new places where Quantum Arithmetic can be
+applied. The drawing at the right appeared in
+Volume 2, on page 137 of this series. The
+drawing was first produced by Dobrinka Alex-
+adrova, in Bulgaria.
+Now comes word from a researcher in the
+field of Sacred Geometry, that he recognizes
+this figure as furnishing the background by
+which we can make an evaluation of the ge-
+ometry of the "Face on Mars". The reader may
+expect more information on this and its addi-
+tional relationships to the numerous "Wood
+Henges" and "Stone Henges" and other mega-
+lithic structures in Europe as investigated more
+than 30 years ago by Lyle B. Borst, while at
+the State University of New York, Buffalo.
+WELCOME TO QUANTUM ARITHMETIC
+Anyone who would like to continue in ex-
+tending this research, please contact the author.
+There are many sub areas within this field, where
+much additional detail can be discovered. Leads
+can be furnished, and additional help will be appre-
+ciated. The field is wide open for further indepen-
+dent research. The subject needs to be, and is being
+extended to the Third Dimension applications. The
+previous material has advanced, in these present
+books, to the Third Dimension in only a very few
+places.
+Volume 4 will eventually give a phenomenal
+magic square, which will lead the way to ennea-
+gram applications, which are almost beyond belief,
+in the areas which we now refer to as "metaphysi-
+cal". Such an extended system of magic squares is
+one of the keys to great advancement in science,
+and will double our scientific knowledge, without
+making it more complicated. Magic Squares will
+be approached through the enneagrams. Simply
+showing this special Magic Square will leave any-
+one in awe, that the arrangement of such complex
+fields of numbers has even been discovered.
+On the other hand, time will not be wasted in
+countering detractors of these books. If anyone has
+negative comment, it is recommended that they re-
+read the material, or forget the idea completely.
+The books defend themselves. However, the au-
+thor will try to assist anyone, (especially the
+younger generation), who needs the help and asks
+for it. -
+Ben Iverson, - Author
+
+<!-- page 8 -->
+Chapter 1. -- THE NARROW PATH -- Page 1 - 3
+The first thing to learn and know is that science is a single thing which starts with under-
+standing. That single thing is ENERGY -- A vibration of the æther. When one accepts this one
+has made a start on the narrow path.
+The aboriginal vibration is on the order of a quadrillion vibrations per second. It immediate-
+ly brings in the 2-way division of number and of vibration, in the Law of Opposites which we
+can call "male and female". As the vibrations start with harmony they form into lower values
+called "Myriads". Matter is in the fourth Myriad. Music is in the sixth Myriad.
+We are told, "The Gate is narrow, and the path is straight." As we follow the path, we find
+that it is as narrow as the sharp edge of a knife, we come to additional "gates" leading to paths,
+which are also straight and narrow.
+Chapter 2. -- BASIC BEGINNING -- Pages 4 - 9
+The beginning is in the calculating and organizing of the integers for each prime Pythagore-
+an triangle into a block of 16 or 20 related numerical values. There are four root numbers for
+each triangle, which are all prime to each other. Roots have been given the designation of "b, e,
+d, & a". They are "Sum and Difference" numbers as Euclid defined them. They are easily found
+in every right triangle and every ellipse. But in the non-quantum figures they are seldom inte-
+gers. Quantum Arithmetic uses computer program "Quantize" to reduce them to Quantum status,
+as integers. Once converted any problem can be solved through Quantum Arithmetic. In the pro-
+cess, a coefficient is found which can be used to convert back to conventional measures, at any
+time.
+Chapter 3. -- NIGHTSIDE ENERGY -- Pages 10 - 12
+Nightside energy is the natural outgrowth of the 2-way division of numbers into odd and
+even, creating the Law of Opposites. The difference and the harmonics between Dayside and
+Nightside energy is explored.
+Chapter 4. -- ENERGY PARAMETERS -- Pages 13 - 19
+Contemporary science is based almost entirely on its beginning in Matter. Beginning with "ener-
+gy" the whole picture changes. Several successful developments have produced Nightside Ener-
+gy. Phenomenal results have been obtained. Wavelet theory is introduced, and is explained.
+Chapter 5. -- QA & ENERGY -- Pages 20 - 27
+Harmonics and Synchronous Harmonics are reviewed to discuss discoveries which had not
+been covered. This includes the relationship between harmonics and the attractions of bonding,
+and between dis-harmonics and repulsion. Examples of wavelet theory are given. How we hear is
+explained in wavelet theory. Twin Primes are explained in Quantum Arithmetic. Euclid's intro-
+TABLE
+OF 
+CONTENTS
+
+<!-- page 9 -->
+duction to the Quantum Roots is given. Some major differences between Conventional math, and
+Quantum Arithmetic are given.
+Chapter 6. -- SPIRITUALITY -- Pages 28 - 36
+This begins a series of five chapters of exploration into the Metaphysical Myriad. Research must
+take a different tack because we have almost no empirical data, and must build a whole new data
+base. The development of Quantum Arithmetic becomes part of that data base. Anyone must
+agree that the Quantum Arithmetic results are positive indicators. The Spirit World, has come to-
+gether to help, giving technical answers to questions far above our present science. Five unrelat-
+ed spiritual experiences are given.
+Chapter 7. -- METAPHYSICS MYRIAD --- Pages 37 - 42
+Certain features can be tentatively assumed to be similar to those found in lower Myriads.
+Three physical events tried to put this into practice and were successful. The spirit world is non-
+religious. Religion per se is relegated to the Creative Myriad above the Metaphysical Myriad.
+Just the assumption of similarities between the Metaphysical Myriad and the lower, known, My-
+riads gives us clues of where to look to understand the Metaphysical better.
+Chapter 8. -- CHILDREN --- Pages 43 - 47
+"Listen to the Children" is a bit of very good advice. I was able to put things in some sort of
+perspective. It appears that parents of young children should tread lightly in correcting their off-
+spring. By the time children have come to terms with their memories and have developed a
+knowledge of the basic arithmetic of addition and multiplication, they are ready to begin study in
+earnest.
+Chapter 9. -- BILLY’S STORY -- Pages 48 - 55
+The memories of a 4-year old boy and how the chance to talk them out changed his life. It is
+similar to past-lives regression from a different angle.
+Chapter 10. -- THE HUMAN SPIRIT -- Pages 56 - 59
+Recapping and explaining why and how these last four chapters fit into a proposed Metaphysi-
+cal Myriad.
+Chapter 11. -- PITFALLS AHEAD -- Pages 60 - 64
+Chapter 11 goes into problems which will result from research if we do not include the spiritu-
+al and the Creator in our work and plans. Several successful researchers failed, not because their
+discovery was faulty. It wasn’t. They failed because they realized too late, their inability to mar-
+ket it.
+
+<!-- page 10 -->
+Chapter 12. -- TWO FORMS OF ENERGY -- Pages 65 - 73
+Comparison between the two forms of energy is discussed in parameters discovered to date.
+There are other helps from the Metaphysical in Dowsing.
+Chapter 13. THE QUANTUM SETUP --- PAGES 74 - 78
+The bottom line data to go into our data bank are parameters which are common to all Myri-
+ads, placing them into a common context, with a few minor reservations. They can be applied to
+explain some daily scientific problems we encounter. Nature has set up a system of cataloging
+everything created and keeping each part of it unique from all else. That is one thing which
+Quantum Arithmetic explains.
+Chapter 14 . -- THE THIRD DIMENSION --- pages 79 - 89
+In this chapter, Dr. Carl Elkins introduces us to the third dimension which is a natural pro-
+gression in Quantum Arithmetic. He developed it over a period of years, completely unaware I
+was developing the first and second dimensions of Quantum Arithmetic. With this we make a
+"Quantum Leap" into the future as he introduces the "enneagrams". This is only a bare introduc-
+tion, but he promises to have much, much more to write in a future volume of this series.
+
+<!-- page 11 -->
+1
+Science requires we follow the straight and
+narrow way to gaining knowledge. The way to
+get on the path of science is through mathe-
+matics. The first thing to learn and know is
+that science is a single thing which starts with
+understanding. That single thing is ENERGY.
+A vibration of the æther.
+We study energy and learn about it through
+mathematics. Energy is simply a vibration. A
+single energy is a single vibration. And that is
+where the path to knowledge starts. An or-
+dered array of the Prime Pythagorean Trian-
+gles introduces us to a way to sort out single
+energies. That single energy is assigned its
+unique number which is a series of prime
+numbers making it unique from all othe vibra-
+tions. To make this more understandable, we
+shall start with considering that number to rep-
+resent a wavelength.
+The first energy wavelength is approximate-
+ly one vibration in one, four quadrillionth of a
+second. That is, it is 1/4,000,000,000,000,000.
+But the first viable and useable energy cannot
+exist alone. It must have a Quantum Number
+value including 2, joined by a vibration of 3
+and often a vibration of 5 and/or 7. The basic
+beginning, which we seldom come across it in
+its aboriginal form is 1, 1, 2, 3, having a prod-
+uct of 6 for the first Creative Quantum Num-
+ber
+The roots of a "female" vibration begin and
+end with even numbers. The Female aborigi-
+nal number is 2, 1, 3, 4. The roots of a "male"
+vibration begin and end with odd numbers.
+When anything is assigned a Quantum Num-
+ber, it always includes a 2 and a 3. 1, 1, 2, 3 is
+the aboriginal male vibration.
+We usually start with a wave which has the
+number 2, 3, 5, 8, having a product of 240, but
+even that is stripped down to its bare mathe-
+matical essentials. To be a viable and useable
+energy it must have a number which involves
+three to five prime numbers along with factors
+of 2 and 3. That is, it must have a total of 5 to
+7 prime numbers, and never more than 7
+prime numbers. 3, 7, 10, 17 has five,- 2, 3, 5,
+7, & 17 as prime factors.
+MYRIADS:
+To move ahead a bit, there are seven myri-
+ads of energy of which we know nothing of
+the first or top, (Creative), Myriad, and very
+little of the second (Metaphysical), Myriad.
+We do understand the third, (Electro-
+magnetic), Myriad through eyesight. It is the
+Myriad in which Light is the middle octave of
+seven octaves, and is manifest in our eyesight.
+Each Myriad contains exactly seven octaves.
+Here, there are 3 octaves below light and 3 oc-
+taves above light. The number of frequencies
+per octave varies from 4 to 10,000.
+The fourth Myriad is the Myriad of Chem-
+ism, in which Matter is created by energy. It,
+also contains seven octaves, (or Periods) in
+what we call the "Periodic Table of Ele-
+ments". Matter is created by male electrons
+and female protons of energy.
+Below Matter is the fifth Myriad of Ultra-
+Sound. We have little solid data on this Myri-
+ad because it is not sensed directly. It is pre-
+sumed to consist of seven octaves, and each
+octave consists of a series of Quantum energy
+vibrations. We do know that these individual
+energy vibrations can be joined together.
+When they are so joined, harmonically, they
+will create a single tone in the sixth Myriad.
+The sixth myriad, is Sound, of which Music
+is a major component. The Third, Fourth and
+Sixth Myriads are all that we can sense direct-
+Chapter 1
+The Straight and Narrow Path of Science
+
+<!-- page 12 -->
+2
+ly - (Music, Matter & Colors of Light). This
+Myriad of Sound is divided into seven octaves
+in which each octave is double the frequency
+of the one below it. Here we find a correlation
+between the major chord C, F, A, C, in an oc-
+tave, and the four primary colors in the visible
+light octave in the E/M Myriad, being red, yel-
+low, green and blue. In which blue is double
+the frequency of red.
+The seventh Myriad is Sub-Sound having
+frequencies from about one vibration per sec-
+ond to something less than 32 vibrations per
+second. The lower frequencies in this Myriad
+are in the same range as our brain waves. As
+such, they are very important to our emotional
+feelings
+We are told, "The Gate is narrow, and the
+path is straight." As we follow the path we
+find, that it is as narrow as the sharp edge of a
+knife, we come to additional "gates" leading
+to paths, which are also straight and narrow.
+(In Chapter 14 we get a better definition of a
+Myriad in relation to numbers.)
+VIBRATIONS IN A MYRIAD;
+Each single vibration can be related to a sin-
+gle Prime Pythagorean Triangle. When we
+have absorbed this, the Path leads us to the
+Quantum Ellipse for another gate and a path
+beyond. Each Prime Pythagorean triangle is
+related to a specific Quantum ellipse. This el-
+lipse will further define and describe a single
+vibration. It is much easier to relate a Quan-
+tum Ellipse to a given physical reality, than
+with the triangle. In our case, it relates to what
+appears to be a single vibration, but is actually
+a combination of five to seven even smaller
+vibrations which generate this ellipse. They
+are commonly termed, "harmonic" frequen-
+cies. The vibration may be (1) the tone of a
+musical tone, or it can be (2) the energy state
+of an electron of an atom. it can be (3) the spe-
+cific quantum color of a beam of light. (4) it
+could be a single musical tone. It all depends
+upon which Myriad we are concerned with at
+the time.
+We may take any one of these four "gates",
+but it is most appropriate. to take the gate into
+music because we understand the full seven
+octaves. In the case of matter and electrons.
+There are also seven octaves in the Periodic
+Table of Elements, but much of our knowl-
+edge is tied up in theory. It would be inappro-
+priate to take the Myriad of Light because we
+have only one of the seven octaves.
+Although the Myriad of Sound energy is
+one Myriad, it extends upward into the Myriad
+of Ultra Sound. It also extends downward into
+the Seventh Myriad which is Sub-Sound in
+which the frequencies reach from about 30 vi-
+brations per second down to less than one vi-
+bration per second. It is very potent in emo-
+tionalism and brain functions. So we learn to
+extrapolate, from one Myriad to another, as
+we travel down this straight and narrow path,
+when and where extrapolation is valid.  We
+must remember there is change ratio of per-
+haps 10,000 fold in the unit of measure which
+applies.
+The Sub-sound Myriad is important to us
+because it contains frequencies in the same
+range as our brain and nervous system. It is
+also this range of frequencies which control
+our emotions. (But it is not the range of our
+thought energy which falls above the Myriad
+of Light.) These low frequencies are created
+by the tremolo of music as the beat between
+two musical tones.
+Once we understand the mathematical rules
+which apply to the seven octaves in the Myri-
+ad of Music, we find that certain of these rules
+also apply to the other Myriads. In this 'feature
+we learn where to look in the other Myriads
+for certain previously demonstrated rules
+which were found in Music.
+One of the things we learn about music, is
+that only certain tone frequencies in any Myri-
+ad, will operate together in harmony. We also
+learn that certain number values segregate
+themselves in the hierarchy, within any Myri-
+ad. Only one thing is changed. A different
+unit-of-measure is used, but the number values
+remain exactly the same, (1 to 10,000), in this
+new unit-of-measure.
+This "Straight and Narrow Path", has
+brought us through the Prime Triangles, to the
+Quantum Ellipse, to the range of the full Myri-
+
+<!-- page 13 -->
+3
+ad of Music and sound'. This is the mathemat-
+ics of the "Straight and Narrow Path". We are
+ready to make the scientific discoveries within
+the Myriad of Music.
+But let us first define the Myriad. The word
+comes from the Greek usage in which the
+"Myriad" runs from One, to Ten Thousand.
+All values are in  integers. It is not allowed to
+add or subtract a decimal part of any integer.
+To do so would carry us off the Path and into
+the chaotic non-quantum values. In this do-
+main, the prime numbers will rule.
+Prime
+numbers will maintain a unique difference be-
+tween any two Quantum Numbers in any My-
+riad.
+
+<!-- page 14 -->
+4
+Quantum Arithmetic should not be the mys-
+tery with which we started in Volume 1. But
+there are some parts which the reader has not
+melded with the rest of Quantum Arithmetic.
+This chapter should help on that score. It starts
+with the beginning of the straight and narrow
+way. (Shown in Table I in the appendix of this
+book). That beginning was in the calculating
+and organizing of the integers for each prime
+Pythagorean triangle into a block of 16 or 20
+numerical values. Each of these blocks fell
+into an increasing numerical sequence for the
+root "b" in vertical lines, in columns across the
+page. There are also increasing values for root
+"e" in the horizontal lines across the page.
+The growth of Quantum Arithmetic begins
+with the investigation of the great number of
+prime Pythagorean triangles. In the beginning
+of accepted (male), tri angles, each has a base
+dimension which is divisible by four. Each al-
+titude is an odd number for male triangles, and
+an even (8n) number for the female triangles.
+Each triangle can be tested in that the sum
+of the squares of the base and altitude will
+equal the square of the hypotenuse. This fur-
+ther restricts the number of right triangles
+which apply to Quantum Arithmetic. It ap-
+pears that ultimately there are only about
+10,000 such triangles which meet the require-
+ments. We are specially concerned with the
+first 5040 triangles. The number 5040 is the
+"magic" number which is equal to 7 or
+1x2x3x4x5x6x7.
+Every such triangle has four root numbers
+which are all prime to each other. These have
+been given the designation of "b, e, d, & a"
+and are arranged in such order that b + e = d,
+and e + d a.. In other words they fall in Fibo-
+nacci configuration.
+THE QUANTUM NUMBER
+The Quantum Number of a thing or of an
+action can be considered as these four root
+numbers; Or it can be considered as the single
+integer which is the product of these four
+numbers; Or it can be considered as the 5 to 7
+prime numbers which form "b, e, d, a"; Or it
+can be the product of these five to  seven
+prime numbers. In Nature, these are all the
+same number.
+The roots, "b, e, d, a", are found from the
+Pythagorean triangle as:
+The value of "b" is the square root of the
+difference between the hypotenuse and the
+base.
+The value of "a" is the square root of the
+sum of the hypotenuse and the base
+The value of "e is the square root of half the
+difference between the hypotenuse and the al-
+titude.
+"d" is the square root of half the sum of the
+hypotenuse and the altitude.
+They meet the requirement which was set
+out by Fibonacci, but they actually derive
+from Euclid's definition and tell us much more
+from that source. They are "Sum and Differ-
+ence" numbers as Euclid defined them. The
+first and last are the difference and the sum of
+the two intermediate numbers of the four. Al-
+ternatively, the two intermediate numbers are
+the mean and the variation of the two ex-
+tremes, as they are used statistically. Their
+squares are the mean and variation of the hy-
+potenuse and altitude of a prime right triangle.
+So this is the source of the four roots. They
+are the basis of every mathematical problem.
+Chapter 2
+The Basic Beginning
+
+<!-- page 15 -->
+5
+These roots can also be found directly in every
+ellipse. They apply to circles and to squares
+and to equilateral and isosceles triangles.
+These four roots apply to every thing and eve-
+ry action. Because the numbers are uniquely
+prime, they are unique, and the thing or action
+is defined mathematically.
+It is possible to convert conventional mathe-
+matical values to this form of arithmetic. This
+conversion is done through the computer pro-
+gram, "QUANTIZE", which was introduced in
+Volume 2 and, also in QA -3 as an appendix.
+This program gives the number as a Quantum
+Number. Program Quantize also gives a con-
+version factor for the ratio between the Quan-
+tum Number and the conventional numbering,
+allowing one to change back and forth be-
+tween the two kinds of mathematics. One can
+then perform calculations, which today, are
+impossible.
+Knowing the Earth orbit, any grade
+school student will be able to determine the
+exact distance from Earth to Sun at any point
+in time they want. It really cannot be done that
+simply in the math which is being taught to-
+day. Since every set of four roots will contain
+the numbers two and three, that means that
+five, out of every six number combinations are
+not used for these number combinations. They
+were excluded from the blocks of Table 1.
+I will attempt to give a picture of how
+Quantum Numbers are formed, and what they
+mean. It begins with the great number of
+Prime Pythagorean Triangles. As explained
+above the Quantum Number of a thing is de-
+rived from the sum and difference of the hy-
+potenuse from the other two sides of a trian-
+gle. It consists of four integers, of which the
+two center ones are prime to each other and
+the remaining ones are the sum and difference
+of these two.
+According to Euclid's proof, all four
+numbers will be prime to the two center num-
+bers. Using this primeness, every set of four
+integers will be unique and distinguishable
+from every other set. That is the basis upon
+which the whole arrangement of creation is
+set, in order to maintain everything related to
+everything else, but yet unique from each oth-
+er.
+In the previous work, only the odd values
+were shown for the values of b. There was a
+second stage in which only the even numbered
+integers were used for root "b". (These two ta-
+bles should be combined, as they are given in
+Table 2 in appendix b in this book.) The first
+was for the conventional male triangles, and
+the second was for unconventional female tri-
+angles. These two tables are combined here,
+because Table. 2 will be recalled several times
+in the first part of this volume.
+The separation of these two tables, in the first
+place, was a concession to conventional math-
+ematics since the conventional mathematics
+did not consider the female triangles of any
+consequence. They are tremendously impor-
+tant in Quantum Arithmetic and comprise half
+of the subject. As this subject advances we
+find that the female triangles must be included
+in the table in order to cover the full scope, as
+far as we go.
+So the first reference is that the reader
+should review this table as it is given here.
+Particularly note the recurrence of integers
+from their first use, in other blocks in the ta-
+ble. It is the recurrence of numbers which ties
+the table together in many different ways for
+different geometric figures. All quantum num-
+bers are unique, but they are also related to
+each other. The table then demonstrates a
+comprehensive web of interrelationships, as it
+ties the whole table together. There are per-
+haps 100 different ways to check this table.
+This table is important in another way. At
+the end of this book, in the last chapters, the
+
+<!-- page 16 -->
+6
+table is generated by using only the four roots,
+and combining them into groupings of nine.
+This creates the Third dimension, which will
+become immensely important in the times
+ahead. Dr. Carl Elkins explains their usage
+and application.
+TABLE 2 in appendix B, has been checked,
+but it should be further checked by the reader.
+The first check, which was applied, was that Y
++ F = W. Since W was derived from W = de +
+K and the "de" can be taken as C/2, the formu-
+la W = F + Y checks K from the ellipse, and
+also checks C and the roots a, b, and d & e. It
+also checks W, F, Y, and K. If there is an error
+in any one of these ten entries it will show up
+in the check of F + Y=W. That simple check
+will check half of the entries in each block of
+the table.
+TABLE 2 depends only on two variables.
+These are the first two integers on the first line
+of each block. They are designated as "b", &
+"e". The value of "b" begins with 1 and runs
+through 11 across the pages. The value of "e"
+also starts with a value of 1 and continues
+down the page to 7. After these values are en-
+tered in all four pages, the next two values are
+added in the top line of each block. These are
+"d" which is d = b + e, and a= e+d.
+The next operation is to calculate the four
+values in the second line of each block. They
+are B, E, D, and A as squares of b, e, d, and a,
+respectively.
+The remaining operations should enter the
+value of each entry in all blocks of the table.
+The legend is given on the top left corner of
+the first page. So the value of C = 2de, is add-
+ed to line three of every block. When that is
+finished the following entries are completed in
+all blocks:
+F = ab, is the second entry on the third line
+of every block.
+G = D + E is the third entry on the third line
+of every block.
+L = abde/6 is the fourth entry on the third
+line of every block.
+The fourth line of all blocks are H, I, J, and
+K, which the legend says are related to circles
+and ellipses. They are entered in the order of:
+H = C + F for the first entry on the fourth
+line.
+I = C - F or F - C giving the absolute value,
+(positive value), of the difference between H
+& I, for the second entry of the fourth line.
+J = bd, is the perigee of an ellipse for the
+third entry on the fourth line.
+K = ad, is the apogee of an ellipse for the
+fourth entry in the fourth line.
+This completes sixteen entries on Table 1,
+leaving only four more to calculate in the fifth
+line of each block, for the remaining four en-
+tries. These all pertain to the Equilateral and
+isosceles triangles. If any previous entry was
+changed in a given block, the entries of W, F,
+Y, and Z will change in that block.
+These are W, F, Y, and Z and are measure-
+ments of prime equilateral triangles. They are:
+W = C/2 + K, or = de + K for the sides of
+an equilateral triangle.
+F = F, (from above) for one division of the
+base, and
+Y = C + E, for the other division of the base
+of the triangle. One can see that Y + F must
+equal the side of this triangle, or Y + F = W.
+This provides an interim check on most calcu-
+lations up to this point.
+The twentieth and last entry is the length of
+the line which will divide the triangle. It is Z =
+G + C/2, or Z = G + de.
+This last line provides a check on many of
+the other identities which  were first entered in
+the Table. If W = F + Y then an error may
+have been made in one or more of the roots; In
+the value of E, C, F, G, or K. So in this check
+in the last line, one will see if W = F + Y.
+These other values are checked as well.
+IT IS IMPORTANT THAT THE FORMU-
+LAE FOR THESE TWENTY IDENTITIES
+BE MEMORIZED BECAUSE IT WILL AID
+GREATLY IN BEING ABLE TO MORE
+EASILY FOLLOW THE REST OF THE
+TEXT IN QUANTUM ARITHMETIC.
+
+<!-- page 17 -->
+7
+Once the organization of this table is mem-
+orized. the reader will have made the biggest
+step. This is probably the most important part
+of learning Quantum Arithmetic. The best way
+to memorize this table is to re-do the table on
+scratch paper, just as it is described on the pre-
+ceding pages. After each identity is entered in
+every block it should be compared with the ta-
+ble as given. Then the scratch paper can be
+discarded.
+It may be that errors are found in that you
+do not agree with the printed table. It will then
+be necessary to redo that specific block. If
+your work checks out, then check the printed
+table itself. It is possible that an error has been
+made in the printed table, particularly in cer-
+tain identities of Table 2, which are not cov-
+ered in the overall check from the fifth line.
+The main check is that W was derived as W =
+K + de; Y = C + E, F is given in above and Y
++ F = W.
+In the case of "Z", it must be less than "W",
+and it must be greater than F or Y. But actual-
+ly, other checks were applied, but they are
+more complex. One check was to see that H
+squared minus I squared = 2 G squared. These
+squares are not given in the Table. Another
+check was to see that the number values ran
+serially in the lines and in the columns. An-
+other was to check that the number values
+were in correct proportion with others in the
+same block. Another check could be that H
+squared minus 1 squared = 48 L.
+Another simple check is to see that any
+identity progresses by a certain number series.
+Each identity has a certain, sometimes com-
+plex, number progression in various directions
+including: on the horizontal, or vertical, or di-
+agonal. Some of them which progress in the
+shape of the move of a knight in chess. The
+values of J and K will be pellian numbers, be-
+ing d squared - de = J, and d squared + de) =
+K. These progressions are often a number se-
+ries which originally was found in convention-
+al mathematics, but many progressions turn
+out to be an entirely new, unnamed number
+series. The Koenig Series is one of these.
+When the formulae for these twenty identi-
+ties are memorized, the proofs which were
+given in the first two volumes will also begin
+to fall into place. Also, we will soon be going
+into the third dimension of solids and into dy-
+namics in which the certain group of related
+numbers in one block, are intimately related to
+other nearby blocks. All the numbers in any
+given block are inter-related to other blocks,
+and all blocks are related to all other blocks.
+The blocks will present a cycle, and present a
+moving picture of the number system in oper-
+ation. Astounding things will happen which
+are not presently accounted for in convention-
+al mathematics or physics.
+If the reader has studied Volume 1 and Vol-
+ume 2, but found them very difficult, the
+above practice with scratch paper will be
+found to be very helpful in understanding
+these prior volumes.
+There are several phases which originate in
+Quantum Arithmetic. The prime Pythagorean
+triangles have been covered previously. Syn-
+chronous Harmonics has been covered. The
+ellipse has been described and the Koenig Se-
+ries has been investigated. However the Koe-
+nig Series will again come into play in its third
+dimension application in an extra-ordinary
+music, and the torus.
+The one thing which was covered in the text
+books (QA-1, -2, and -3), but has not been
+
+<!-- page 18 -->
+8
+covered in these technical books are the equi-
+lateral triangles, and the isosceles triangles. A
+picture will fill that in. There is a series of
+equilateral triangles which parallel the prime
+Pythagorean right triangles. These equilateral
+triangles are unique in that a line can be
+dropped from any angle to the opposite side,
+and is measured by an integer. It divides the
+intersected side into two parts, each of which
+is measured by an integer.
+If the dividing line is placed first on one
+side and then on the other, it will become an
+isosceles triangle. These also, will form into
+another parallel series of geometric figures.
+These have been described in the text book
+QA-2.
+The values within the isosceles triangle are
+exactly the same as the values in the equilater-
+al triangle. The only difference is that the val-
+ue of Z is repeated to form the two equal sides
+of the isosceles triangle. Each individual equi-
+lateral triangle creates its own unique isosce-
+les triangle.
+Another natural innovation is found in the
+construction of the equilateral triangle with
+the dividing line projecting from all three an-
+gles to the opposite sides. In this way, it re-
+creates a smaller unique equilateral triangle at
+the center, and this smaller triangle is rotated
+slightly. This is one possible way in which
+fractals are created. Combine this with the
+fractals which were described  in QA -2, and
+there are a great many possibilities.
+There is still another triangle which is the
+isosceles 120° triangle.  These have not been
+investigated, nor reported in any of these
+books. It is open to investigation by any stu-
+dent who has learned enough about the gener-
+alities of Quantum Arithmetic. The isosceles
+120° triangle has not been investigated, nor re-
+ported in any of these books. It is open to in-
+vestigation by any reader who is willing to
+study.
+There are other features which are minor
+paths leading away from the ones described
+here. This book would be far too complex if
+they were included more than a simple men-
+tion of them. It is hoped that this chapter has
+helped in the case of some parts which the
+reader has not melded with the rest of Quan-
+tum Arithmetic. We are started at the basic be-
+ginning of the straight and narrow way.
+(Shown in Table in the appendix of this book).
+That beginning is in the calculating and orga-
+nizing of the integers for each prime Pythago-
+rean triangle into a block, which is entirely
+
+<!-- page 19 -->
+9
+unique but yet, is related to every other block
+we can enter in the Table.
+The relationship between all blocks starts
+with, "Every block utilizes and gives us the
+prime numbers 2 and 3." Specific relation-
+ships build specific physical relationships be-
+tween them to create the natural sciences
+which is generated within the numbers found
+in Quantum Arithmetic.
+The relationship then extend to every
+block in one of four divisions. 
+1) The block may not have a representation
+of 5 or 7; 
+2) The block may have a 5 but not the 7; 
+3) The block may have a 7 but not a 5 or ; 
+4) The block may have both, or neither, 5
+and 7 represented among its primes.
+This 4-way division is very important when
+working with harmonics.
+There is one other important part of the
+subject which is the Quantum ellipse. This
+was fairly well discussed in the previous vol-
+umes and is fairly well up-to-date. However, it
+is important and will occur again when we get
+into the Third Dimension of the Torus, the
+Vortex, and Music.
+
+<!-- page 20 -->
+10
+There is much more to be known about the
+generality and origin of general types of ener-
+gy. It is not "new" energy because it has been
+covert and undiscovered until recently, but it
+has always been there, and it is possible that it
+occurs in some present applications. We are
+now learning how to make it available and us-
+able on demand.
+Each energy is of an integer wavelength in
+the scale in which it is assigned. This wave-
+length is a composite of "wavelets " which oc-
+cur at a higher, scale. In this higher scale there
+will be from five to seven wavelets, from the
+Myriad above, which form the single lower
+scale, frequency. These wavelets are of specif-
+ic frequencies which are prime to each other.
+Between them as a group, they are also har-
+monic to each other (See Volume II), in vari-
+ous ratios between them. The precise harmon-
+ic is found by the of pairing these wavelets.
+There are also seven Myriads of Nightside
+energy, like the conventional Dayside energy.
+Each Myriad uses the same numbers and num-
+ber combinations in a doubling process. Each
+uses the same established natural mathemati-
+cal Laws as given here. The greatest mathe-
+matical difference between Myriads is that
+each Myriad of energy has its own unit of
+measure which is 5000 to 10,000 larger than
+the unit of measure of the higher Myriad
+above it. Our present science recognizes only
+three of these myriads. (1) one octave of the
+seven octaves in the Myriad of visible light,
+(I.R., and U.V.);  (2) The table of elements of
+Matter has its seven octaves and;  (3) The My-
+riad of Music, also has its seven octaves.
+These are the three, which our senses will de-
+tect. This is only a tenth of the energy. Night-
+side energy is similar but generally invisible.
+The wavelet energy frequencies, when tak-
+en all together will be made of five to seven
+prime factors in their Quantum Number val-
+ues. These five to seven integers will also
+combine to make four numbers, in such a way
+to form a Fibonacci type configuration. Their
+product makes a single lower scale frequency,
+at the larger unit-of-measure. This also applies
+to Nightside energy.
+These Fibonacci type numbers will define
+the difference between normal energy and
+nightside energy. In the case of Nightside en-
+ergy the four numbers will contain two inte-
+gers, (b & a), which are even at the begin-
+ning and the end. And there will be two odd
+integers, (e & d), being intermediate. One of
+these two integers, (d), will be the mean of b
+& a. The other, (e), is the variation from the
+mean, of b and a. The two even numbers in
+nightside energy will be one of them as 2n,
+and the other is a 4n integer. (2-par and 4-par).
+In the case of the dayside energy, there will
+also be four integers in Fibonacci configura-
+tion, but the first and last will be odd inte-
+gers and the two intermediate integers will
+be, one odd and one even. The larger of these
+two intermediate integers, (d), will be the
+mean of b and a. The other, (e), will again, be
+the variation of b and a from the mean.
+This is the basic mathematical difference
+between conventional energy and Nightside
+energy. This latter is also called "female" en-
+ergy to typify it as being different from "male"
+energy. They are also be called cold, (zero-
+point) energy, and hot energy, with their oppo-
+sites. Alternatively they could be called right-
+handed energy for the female energy and left-
+handed energy for the male energy. They com-
+ply with the Law of Opposites which means
+they are opposite in one characteristic at any
+given instance. That characteristic applies to
+both, in opposition between dayside energy
+and nightside energy.
+Chapter 3
+Nightside Energy
+
+<!-- page 21 -->
+11
+There are four categories of integers deter-
+mined somewhat along the lines of even/odd.
+These are the even-even, even-odd, odd-even,
+and odd-odd integers. These are described in
+"Definitions" in Euclid Book VII.
+Their definitions are not clear, between the
+odd-even and the oddodd, in present language.
+The even-even integers are, of course the 4-n
+integers. The even-odd integers are even inte-
+gers, which are not evenly divisible by four.
+The two types of odd integers have, now, been
+named 3-par and 5-par, for clarity. When any
+integer is divided by 4 it gives no remainder,
+or it gives a remainder of 2, 3, or 1 (or 5).
+These last two are called 3-par and 5-par, re-
+spectively.
+We understand the rules for addition, sub-
+traction and multiplication of the even and odd
+integers. (See Chapter 9 of Volume 1.) This
+leads to the case of the four-way partitioning
+of numbers. The product of two 3-par num-
+bers is a 5-par number. The product of two 5-
+par integers is also a 5-par integer. The sum of
+two 3-par, or two 5-par integers is a 2-par inte-
+ger. The sum of a 3-par and a 5-par integer is
+a 4-par integer, and the product of a 3-par
+number and a 5-par number is a 3-par number.
+This relationship carries through to the pro-
+duction of all energy. It results in combination
+of these four types of integers. They add new
+parameters to our mathematics within Quan-
+tum Arithmetic.
+They also add to our knowledge about new
+energy projects:
+NIGHTSIDE ENERGY
+There have been many attempts to develop
+Nightside energy. Some of them have been
+successful.
+Several characteristics of night-
+side energy have been found.
+(1) It is associated with cooling rather than
+heating. This is the most notable characteris-
+tic.
+(2) If one obtains the true quantum number
+of any Nightside frequency, this quantum
+number will begin with 4 or 2.
+(3) Most attempts have involved specialized
+inequality of magnetic forces.
+(4) Levitation is involved with this energy.
+It appears that the capturing of nightside en-
+ergy need not be so complicated as has been
+experienced. In a highly developed ancient
+civilization, some aspects of nightside energy
+appear to have been brought about by a simple
+but concentrated mental effort. One narrative
+describes the simple drawing of a circle on the
+ground with a cross within the circle. Through
+mental effort, a Nightside flame is produced in
+the circle so long as the circular line is un-
+broken. It is a consuming flame which will
+consume any material object which is brought
+in contact with the flame. Other than that, the
+flame appears to utilize only aetheric energy
+for its fuel. This energy can appear in any
+form that conventional energy often appears.
+Johann Ernest Bessier was born in Zattu
+Germany in 1680. He was generally known as
+Orffyreus, and in 1712 he gave a demonstra-
+tion with a three-foot diameter wheel, on
+which it is supposed that he had placed spe-
+cially ground harmonic conch shells. When
+this wheel was set into motion it would contin-
+ue unabated to rotate until physically stopped.
+In 1948 John Roy Robert Searl, at 15 years
+of age, had constructed a small model in his
+kitchen. This model eventually, had magnetic
+rollers which rolled around a circular track
+This device levitated off the kitchen table and
+on right through the roof. He went on to har-
+ness the device to produce "Nightside" elec-
+tricity. This brought resistance from the elec-
+trical company in England. He was arrested
+and sent to prison, and his device and most of
+the research data was destroyed in 1968.
+By 1991 Floyd "Sparky" Sweet used a spe-
+cially magnetized disk which revolved and
+supposedly also produced some ionization.
+This ionization was picked up by an electrical
+circuit, thus producing up to 5 Kilowatts of
+free energy. Above 6 KW, it levitated and
+created a disastrous energy vortex
+Others such as Tesla and Moray also pro-
+duced this Nightside energy. It is quite possi-
+ble that "nightside" energy has been encoun-
+tered many other times in the past. One of its
+features is that it seems to be an unlimited en-
+
+<!-- page 22 -->
+12
+ergy. When more energy is required, it will be
+produced by most devices. The end result is
+that it drops to absolute zero as this energy ris-
+es to explosive force when the demand is high.
+So, it is possible that unexplained accidents
+have occurred, and the operators learned to
+avoid these situations rather than explore them
+and harness the overage of energy.
+All of these depended on the use of harmon-
+ics as is described in these books, but they
+seem to require one more thing. That is to say,
+it appears that a mental intent, on the part of
+the inventor or operator, is required as well, in
+order to come in control of Nightside energy.
+There are general features which produce
+Nightside energy. This has been principally
+electricity, but most have demonstrated some
+levitation qualities as well. Another effect is
+that Nightside energy seems to have a cleans-
+ing and balancing effect on the environment.
+Nightside and Dayside energies are every-
+where in paired and balanced quantities. In
+that state, neither one is manifest since they
+counter one another. If one of them is re-
+moved, the other becomes manifest in its ef-
+fects.
+There are probably thousands of ways in
+which this new energy can be produced, as we
+have seen in the reporting of accidents where
+harmonics are involved. We have yet to deter-
+mine the exact parameters which must be ob-
+served. Quantum Arithmetic will give us leads
+to determine various parameters to be
+searched out. The harmonics which has been
+presented is only one of those aids.
+New devices and instruments are being re-
+searched today, by interested scientists. When
+they are in production they will give us param-
+eters of their operation which are presently un-
+known. As new parameters of Nightside ener-
+gy are found and identified, it will be
+necessary to develop instruments to measure
+and quantify each parameter. Quantum Arith-
+metic stands by to help find and extend its ap-
+plication to this new research effort.
+
+<!-- page 23 -->
+13
+The major fallacy of conventional physics
+has been found. That physics should, here af-
+ter, be called "nincompoop physics", which
+was chosen by another scientist, but is a very
+apt title. The fallacy is that nincompoop phys-
+ics has based its work almost entirely on the
+existence of Matter, our physical senses, and
+empirical research. It has no ultimate founda-
+tion except prior theories.
+We find that Matter is just one phase of sev-
+en kinds of energy. When energy is classified
+by its frequency, (or wavelength), in the entire
+spectrum of electro-magnetic energy we find
+that Matter lies somewhere in the middle of
+that spectrum. Actually it lies near the loga-
+rithmic middle of the spectrum, depending on
+whether wavelength or frequency is the unit of
+measure to be used. New Science has a solid
+foundation in mathematics and invisible ener-
+gy.
+So the subject of study is "Energy", but in
+order to study energy we must go back to the
+forces which create the energy in the first
+place. There are four forces which combine in
+various ways to create energy.
+Professor John R. R. Searl says they are in
+two pairs of parallel forces. Then each of these
+pairs of the four forces, lies at a right angle to
+the other pair. This appears to be sufficient be-
+ginning information for Professor Searl to
+have constructed his Demo 1, and Demo 2
+space ships.
+We agree that there are four forces which,
+probably should be considered, but Professor
+Searl is probably considering energies rather
+than forces. We may be talking about the same
+thing but on different levels. In the end, he is
+probably considering the same geometric con-
+figuration in which he will pair up a third pair
+which is, again, at right angles to the first two
+pairs.
+However, we are all familiar with three of
+the four forces. It must be this way in our 3-
+dimensional world. Professor Searl must use it
+to obtain lift as well as horizontal control. As
+forces these are "Gravity", "Electricity" and
+"Magnetism". Looking at them here on earth,
+we can see that these three are all at right an-
+gles to each other creating three dimensions.
+In order to get this configuration, one must be-
+lieve that there is an electrical force which
+travels East/West. The fourth force seems to
+be a mental or metaphysical force. 
+All energy is described within the seven
+Myriads of energy. This energy will be classi-
+fied by its hertz value. The top of the hierar-
+chy has frequencies in the range of teva-hertz,
+and the high giga-hertz called the; (1) CREA-
+TIVE Myriad. The bottom of the hierarchy is
+the; (7) SUB-SOUND frequencies of 1 to
+about 25 hertz. The (6) MUSIC MYRIAD
+runs from about 40 hertz to about 6 kilo-hertz
+for the place near the bottom of the hierarchy
+of the seven Myriads.
+Other Myriads in descending order are: (1)
+CREATIVE MYRIAD, followed by (2) THE
+METAPHYSICAL MYRIAD just below is
+the (3) MYRIAD OF LIGHT, the; (4) MYRI-
+AD OF MATTER, and the (5) MYRIAD OF
+ULTRA-SOUND, and (6) THE MYRIAD OF
+MUSIC. (These are described more fully in
+Volume II.)
+The characteristic of frequencies in any my-
+riad are defined and described by their pecu-
+liar Quantum Number. MUSIC IS THE
+ONLY MYRIAD IN WHICH WE UNDER-
+STAND MOST OF THE RANGE, but there
+are other forms of energy in this myriad, be-
+sides the musical tones. The Quantum Number
+defines how that will be expressed. There are
+other energy forms within the Music Myriad,
+which we cannot observe through our senses
+Chapter 4
+The Parameters of Energy
+
+<!-- page 24 -->
+14
+or instrumentation. They are defined only
+mathematically through their Quantum Num-
+bers.
+These seven Myriads cover the beginning
+of energy consolidation from about four Quad-
+rillion Hertz down to one hertz. As stated, it
+requires up to seven different prime vibra-
+tions, as wavelets, for an energy to cascade
+down to a lower Myriad.
+The first Myriad begins, (theoretically), at
+about four Quadrillion hertz. Wavelets of this
+energy will cascade down to the Second Myri-
+ad which is metaphysical and contains
+thought.
+The Third Myriad begins with Ultra-Violet
+light and ends with Infra-Red.
+The Fourth Myriad includes elemental Mat-
+ter.
+The Fifth Myriad includes Ultra-Sound.
+The Sixth includes all Music frequencies. 
+The Seventh Myriad includes sub-sound,
+Emotion, as well as Brain Waves.
+Each Myriad consists of seven octaves.
+Each octave contains a maximum of 10,000
+different quantum frequencies. 
+VERY LARGE UNITS OF MEASURE 
+From 1 second periods to billions of years
+is another Seven Myriads. They include:
+(1) the axial rotation of the various bodies.
+(2) the Annular rotation of minor satellites
+around the major satellites, Moons;
+(3) The rotation of the major satellites
+(moons) around the parent planet;
+(4) the rotation of the planets around their
+Star;
+(5) the rotation of the various stars and their
+planetary system, within a galaxy;
+
+<!-- page 25 -->
+15
+(6) the revolution of the various galax-
+ies in the Universe;
+(7) the revolution of the Universe.
+In studying energy, it will be limited
+to the seven Myriads from Creation of
+energy to the Sub-sound Myriad. The
+various Myriads can be pictured as a
+series of waterfalls, with non-quantum
+frequencies within the waterfalls which
+are areas of chaos.
+Of course, our present (nincompoop)
+measurements of energy in "hertz" is continu-
+ous and all values are non-quantum like the ar-
+eas between waterfalls. It is only rarely that
+we will occasionally hit a "quantum" frequen-
+cy, This occurs in the non-quantum continu-
+ous spectrum. At these points we say that an
+"unwanted harmonic" has been struck. Quite
+often a violent accident occurs. At these
+points, they no longer meet nincom-poop
+planning.
+It is an analogy to this which Nightside en-
+ergy researchers have found at about five or
+six kilowatts of produced energy. Sparky
+Sweet and John Searl both encountered
+this phenomenon. There was a sudden
+swirling of chaos in an unwanted aether-
+ic vortex. Searl overcame this by insert-
+ing another "plate" to accomodate the
+higher wattage. At the top of this higher
+wattage, he inserted still a third plate,
+and was able to experience the full thrust
+of levitation. In effect there was a "wa-
+terfall", introduced at the end of each
+Myriad, from 5- 6 kilowatts to mega-
+watts. It is apparent that Nightside ener-
+gy can be produced only in quantum
+amounts and by quantum means. 
+There is a mathematical context to the
+parameters of energy. Prominent in that
+context is the number “7", (7 Myriads
+each with 7 Octaves) giving us a picture
+of the seven Myriads of energy, and it
+also represents any one of the 7 octaves.
+The left end is low frequency. The right
+end is high frequency. One can liken this
+to the piano keyboard. The low octaves
+and the high octaves are less musical
+than the central, base or the treble octaves. 
+This could also be the Scale of part of the
+Electro/Magnetic Myriad of Light, with three
+octaves in the heat range and three octaves of
+UV. In this case the peak frequencies are the
+single intermediate octave of visible light. In
+each case, each of the loops, also, will repre-
+sent an octave or line in the Table of Ele-
+ments, an octave of music, or an octave in the
+E/M Scale.
+
+<!-- page 26 -->
+16
+The picture, as shown can be used to repre-
+sent the whole of energy from the top, (Crea-
+tion), down to the lowest Scale, which is Emo-
+tional energy to take in the whole s ectrum of
+energy. On the other hand each of the Myriads
+of energy can be divided into its seven oc-
+taves. This picture can be used to represent a
+single octave and the seven major frequencies
+in each octave, in a more detailed scale.
+If we drop to even lower scale and divide
+each of the frequencies into its seven wavelets
+compose the given frequency. Each Myriad;
+Each octave of a Myriad; Each frequency of
+an octave; Each wavelet, must be a "quantum
+"frequency.
+Those are the mathematical parameters of
+energy reaching down from the Creative Myri-
+ad to the Myriad of Emotional energy. We do
+not know the precise frequency at which most
+Myriads begin or end. I do know that the fre-
+quencies throughout must be precise quantum,
+(integer), measurements.
+The lowest Myriad of Emotional energy,
+(Sub-sound), is in the range of about 0.1 hertz
+to about 25 hertz. The true beginning of the
+Myriad of Music begins so some what above
+the commonly accepted value of 32 hertz and
+goes to about five or six kilohertz. Above that,
+Ultra-sound is in kilohertz. The three higher
+Myriads are in the range of megahertz, nano-
+hertz, and tevahertz or higher.
+There is a range of non-quantum frequen-
+cies between Myriads. Because all of our,
+(nincompoop) work has been with non-
+quantum frequencies, these different ranges
+are not operative, or readily detectable. The
+quantum frequencies are presently detectable
+only through mathematics of Quantum Arith-
+metic. The two lowest Myriads show that
+these energy frequencies can be very reveal-
+ing. The whole scale is related to "Music of
+The Spheres", and each Myriad, Octave, wave
+Frequency, and wavelet frequency also oper-
+ate under the limitation, and rules of Music of
+the Spheres.
+When we bring in Quantum frequencies,
+some amazing things happen and amazing re-
+lations between them develop. Apparently
+Sparky Sweet reached the top of the Myriad in
+which he was working and the device went
+out of control. It created a violent uncontrolla-
+ble aetheric energy vortex, and the device be-
+gan to levitate. Essentially the same thing hap-
+pened until Professor John Searl learned to
+control it in his Inverse-Gravity disk. Searl ap-
+pears to have learned how to control it to a
+point, that he appears to have gone from one
+Myriad to possibly two Myriads above with
+the three "ring-plates". Each of these rings and
+their runners graduated the energy to a higher
+level in the next higher Myriad. His "Levity
+disk" used three Myriads but his S.E.G. ap-
+pears to be confined to two Myriads.
+Knowing the mathematical parameters of
+energy will help to understand when the dan-
+ger can become a problem. Knowing a prob-
+lem may be developing, one can take precau-
+tions as Sparky did by limiting his device to
+Five K-watts.
+But there can be other unknown and unpre-
+dictable dangerous events. Professor Searl and
+his "Law Of The Squares" enabled him to op-
+erate in, (and know he was operating in), a
+"quantum mode". Dr. Elkins, now refines that
+further.
+The biggest problem is that Music of the
+Spheres sets up some powerful harmonics.
+That is the energy we are trying to tap. In ordi-
+nary engineering these harmonics may devel-
+op accidentally, causing a complete failure of
+a designed structure or device. That is the pri-
+mary reason that a marching column of men
+must break step in crossing any bridge. There
+are two main causes of failures of a system.
+One is that the system is under designed, but
+much of the time, failure is caused by un-
+known and unidentified harmonic origins.
+Most of my research in the mathematics of
+harmonics comes from the three lowest Myri-
+ads of energy. From the Ultra-Sound Myriad I
+was able to "cascade" Ultra-Sound frequencies
+down into the Myriad of Musical tones with a
+group of Ultra-Sound wavelets. The next cas-
+cade was from the Myriad of Music down to
+the Myriad of sub-sound. This latter is famil-
+iar to all of us because it concerns the tremolo
+or vibrato of Music, which is really the Myri-
+
+<!-- page 27 -->
+17
+ad below Music. This tremolo very seriously
+impinges on one's emotional state, and can be
+one of the hazard of working in this range.
+One's judgement may be so impaired that cor-
+rect interpretations of the work becomes diffi-
+cult. That judgement cannot always be trusted,
+because it may be flawed by an emotion of
+calmness and over-confidence on the one
+hand, and by the emotion of fear on the other
+extreme. These are both evident, and I have
+created both of them in demonstration.
+Lord Rayleigh was absolutely wrong In
+stating that a frequency produces all of the
+harmonics above it. His proof is absolutely
+backward. Much of our knowledge about elec-
+trical frequencies has Lord Rayleigh behind its
+theories. If he was wrong, then how much else
+is wrong? Energy cascades from a Myriad
+above. Those higher harmonics exist as wave-
+lets which cascade to the lower Myriad, thus
+creating the single tone we seem to hear.
+On the technical side, the mathematical Pa-
+rameters of Energy will help one avoid, or at
+least be aware of danger spots in the research,
+which we are doing. Just do not let the units
+which you are constructing, do you in, be-
+cause of ignorance of the mathematical param-
+eters and what they may portend in the areas
+of the unknown. In order to tap the Zero-Point
+Energy one must work in these frequencies or
+within a limited range of variation from them.
+Every device must be "tuned" into resonance
+with this unit-of-measure.
+There is a natural method of numeration.
+which we have been told is related to the cu-
+bit. I have not derived the natural units of
+measure but we are getting close to it. What
+we have learned about Music Of The Spheres,
+will lead us to the natural unit-of-measure. All
+units of measure are related to one another,
+whether they are the measurement of an atom
+or electron, or measurements on the cosmic
+scale. Natural frequencies occur within this
+measurement system.
+There is definite relationship between the
+Prime Pythagorean Triangles and the Law of
+the Squares as used by Professor Searl in his
+generation of the Searl Effect through the
+Magic Squares. His work is more advanced
+than Quantum Arithmetic. Quantum Arithme-
+tic is the base on which our scientific knowl-
+edge must start. The mathematics of the Zero-
+Point Energy was discovered nearly 30 years
+ago, but did not go beyond that, to see exactly
+what it was.
+It seems that Einstein's "Black Holes" have
+gone down the drain. There is a small grain of
+truth to them, but there are extensions of it
+which are very wrong. We do have to accept
+that, but we have accepted a lot more which is
+wrong in scientific theory as it derives from an
+invented mathermatic.
+ They say that electricity is a stream of elec-
+tron flowing down a wire. If we back up and
+look at this, it sounds rather asinine. If an
+atom loses an electron it changes into another
+element. That is not found in any electrical
+circuit. We do find electrolysis in which
+whole atoms are transferred out and we also
+find arcing which transfers matter. 
+In an electrical current it is ordinarily only
+energy which is being transferred. It is trans-
+ferred from an electron in one atom to another
+electron in a different atom. In this case the
+first electron stays within its atom and only
+changes its elliptical orbit, or energy state. An
+electron in an adjacent atom picks up this en-
+ergy and changes its orbit within its own atom,
+in the compensating direction. One electron
+changes orbit by one or more photons, and in
+a nearby atom, its electron changes its orbit by
+the same one or more photons. An electron
+cannot change from one atom to another with-
+out changing the atom. It can only change the
+energy state of the atom, by moving to a new
+orbit.
+Quantum Arithmetic, says that Zero-Point
+energy is not changing the orbit of an electron
+from one atom to another. It is probably
+changing the orbital energy of. one or more
+protons within the atom.
+Electrons and protons are created matter.
+Each electron is created with specific energy
+states it can occupy. The energy used to create
+an electron or proton consists of seven differ-
+ent wavelets which are tightly bonded, (quan-
+tum- wise), to each other through super har-
+
+<!-- page 28 -->
+18
+monics. It can absorb energy by changing or-
+bit in which it travels by ordinary harmonics.
+So, it stands to reason that an electron cannot
+travel at the rate of 186,000 miles per second.
+Only the energy differential between energy
+states can do that. That differential is meas-
+ured in "photons".
+The electron's wavelets will interact with
+the wavelets of electrons in adjacent atoms
+passing their energy to, or from, them through
+the weak force thus passing on and moving
+the energy. Just this one change in interpreta-
+tion begins to explain many anomalies which
+are found in conventional science.
+The electrons are bonded to the nucleus by
+the strong force of the male/female bond. Both
+electrons and protons are formed of densified
+aether, which formed them in their original
+creation. 
+Quantum Arithmetic defines the differ-
+ence between maleness and femaleness. In
+general the odd numbers denote "male"
+and the even numbers denote "female" in
+the ancient terms. This is found to have
+modern connotation. There is a great deal
+more to this in that male and female have
+strictly defined mathematical characteris-
+tics. In these characteristics, we find that
+the difference between the conventional
+energy and Zero-Point energy seems to
+follow along with these same generalities.
+The generalities are hot vs. cold, gravity
+vs. anti-gravity, or levitation, and electrons
+vs. protons.
+With that in mind, it seems that the pro-
+tons of the atom should relate to Nightside
+energy, and the electrons seem to denote
+conventional energies. This seems true so
+long as we deal only in Quantum states.
+This distinction disappears in the present
+chaotic approximations of conventional
+science.
+We seem to be ready to go deeper into sci-
+entific terms and definitions. Not only have
+black holes disappeared, -- they are defined in
+different terms than we have used until now.
+A black hole seems to occur at the top of My-
+riads of the quantum Energy, but we do not
+have to deal with that right now.
+We do have to deal with more basic scien-
+tific terms, closer to home. The schematic of
+an electron and a proton of an atom is a begin-
+ning in that direction. Quantum Arithmetic
+says this is the tentative picture of that atom. It
+needs to be applied to determine the truth, in
+actual application. If this proves out, it is a
+new beginning in science. The beginning has
+to be made first in our mathematics. Science
+and Art will follow along as Quantum Arith-
+metic progresses and proves itself as it goes
+along. We have thought that conventional
+mathematics did that, but it has serious errors
+in its basic foundations has been shown in
+Volume 1 & 11 of this series.
+The present difficulty in analyzing the
+present machines for producing over unity en-
+ergy, could very well be caused by a need for
+different tools and measuring instruments than
+those which are conventually used on male en-
+ergy. Science usually measures generated
+heat. It does not measure generated cold, and
+Nightside energy does generate cold. Our test
+instruments would show cold as a negative. In
+Nightside energy it is positive. It is something
+
+<!-- page 29 -->
+19
+which needs to be looked at.
+We really do not know enough about this
+female, (Zero-Point), energy to judge. Does
+female energy follow the right-hand rule or
+does it have a left-hand rule for determining
+current flow in relation to the magnetic field?
+Since female energy is cold energy, will it ig-
+nite a flammable gas in which a spark is creat-
+ed? Or is there any spark at all? How does this
+energy cause electronic devices to react? I un-
+derstand it will not work in such things as tape
+recorders or computers. it will work on resis-
+tance heating or lighting devices. What does
+this have to say about the theory of "electron
+holes?"
+So, it raises a question of whether the
+present testing instruments are valid for test-
+ing over-unity production of Zero-point ener-
+gy. Can Quantum Arithmetic be of any help in
+designing proper testing instruments? I am
+sure it can.
+Just what is Quantum Arithmetic? It is the
+natural mathematics of the future without any
+invented devices or artificial rules. It operates
+within the divine rules of Nature and proves
+them as it goes along. So long as one follows
+the rules, many things become apparent. But
+one must always be aware that, although cer-
+tain features are "apparent", the interpretation
+is critical. One must search for the truth
+through mathematical proofs which will be
+available through Quantum Arithmetic.
+The factual discoveries in conventional sci-
+ence are all valid. Conventional science makes
+an interpretation, which is not valid. This turn
+of events has been so rampant in the past that
+it has thrown conventional science into chaos.
+There are two prime examples. Rayleigh's
+"proof" that a single tone produces innumera-
+ble higher harmonics, is one example. The
+other is the much older discovery by Fibonac-
+ci and "His Series". Today, such misinterpre-
+tations, are practically a daily occurrence.
+Every sentence begins, "it is believed that...",
+or "It is suggested that...” or "Tests have
+shown...” This is not the whole truth, and the
+interpretation contains much guesswork.
+In summation: All of our energy comes di-
+rectly or indirectly from an active aether
+which is in a continuous state of vibration, and
+varying states of densification or rarification.
+The energy from the aether consist of four
+kinds, all of which are in perfect balance.
+They can be called Male Energy and Female
+energy, each of which has two currents going
+in opposite directions. When they are in bal-
+ance, all are undetectable by present instru-
+ments. If a resistance to one of the four forms,
+is placed it will give an outlet for the compen-
+sating form of energy, making it accessible
+and useable.
+
+<!-- page 30 -->
+20
+Let us drop back to basics for a moment to
+put the foregoing into context of mathematics.
+We will start with the "Quantum Number" of
+a thing, or of an action. It starts with the har-
+monics between two or more Quantum Num-
+bers.
+The most basic quantum number is “1, 1, 2,
+3”, which probably occurs in nature only in
+the Creative Myriad. It is the most harmonic
+number because it contain the factors of “2”
+and “3”, and every other Quantum Number
+does also.
+The law of harmonics states, "When the
+Quantum Numbers of two things have the
+same prime factors, excepting one prime
+factor of each, the two objects will be in
+harmony." If two Quantum Numbers have
+three, or four other prime factors, (wavelets),
+which are the same, and one additional prime
+factor, (wavelet), which is different, they will
+be in harmony. The closer the two different
+prime factors are to being in a low fractional
+ratio, the greater will be the harmony. That
+harmony results in the bonding factor between
+the two objects. This bonding is called "Sym-
+pathetic Harmonics". This was mathematically
+and physically proven in the previous books
+through musical application. It was also tested
+with atomic elements.
+ We are able to determine the Quantum Num-
+ber of a few of the simpler energies, such as in
+the energy state, of an atom; of a simple musi-
+cal tone, of a pure color of light. We are not
+yet able to relate an object to its Quantum
+Number, because many objects will have com-
+plex multiple or "chain" Quantum Numbers.
+The orbit of our Moon is one of those complex
+Quantum Numbers because it is a combination
+of two Quantum Numbers which create the
+Lissajou Orbit of the Moon, rather than a sim-
+ple ellipse.
+We know, from the Law of Opposites, that
+the female Quantum Number will have the
+same prime factors as the Quantum Number of
+their male counterpart, making the strongest
+bond. However, we do not, yet, know the ob-
+ject to which the Quantum Number belongs.
+They will differ only in the even factors. The
+female has a 2-factor and a 4-factor, and the
+male counterpart has only one even prime fac-
+tor. We also know that the bonding properties
+will be there, without knowing the precise ob-
+jects. We can determine the actual Quantum
+Number of any single energy frequency, or of
+anything for which we have the empirical el-
+lipse. These include energy states of an atom;
+two different tones of music; or two different
+pure colors of light.
+Now, having written all of that, an example
+of "bonding" is badly needed. If the reader has
+reviewed Synchronous Harmonics (page 65-
+84 of volume 2, Pythagoras And The Quan-
+tum World, and/or page 66-99, in QA-7), it
+could be quite helpful.
+Synchronous Harmonics concerns the bond-
+ing between two wavelets of different frequen-
+cies. Let us use wavelets in Ultrasound, which
+are defined only by number values in that My-
+riad. Five to seven of these wavelets interact
+to create a single tone in the Myriad of Music
+below Ultra-Sound. This can be studied only
+in a quantum sense so that type of example
+will be used:
+Say we have five wavelets which have the
+numbers 2, 3, 5, 7, 11, in Ultra-Sound, which
+will create an audible tone having the Quan-
+tum Number 2x3x5x7xl1 = 2310. Then say we
+have another set of wavelets which have the
+Quantum Number 2, 3, 5, 7, 13, in Ultra-
+Sound, which will create the audible tone,
+2x3x5x7xl3= 2730. Both of these cases have
+the common factors of 2, 3, 5, and 7, for both.
+Chapter 5
+QUANTUM ARITHMETIC & ENERGY
+
+<!-- page 31 -->
+21
+This will create a strong bond provided the
+two unique factors, 11 and 13 are low and
+close together. They are.
+The first has the unique prime factor of 11,
+and the second has the prime factor 13. These
+are imagined to represent two string, one of
+which vibrates at 2310, the other vibrates at
+2730. They have a common denominator of
+2x3x5x7= 210. So, both strings will have 210
+for an aliquot part. The first string projects 13
+of these aliquot part. The second string pro-
+jects 11 of these aliquot parts. At this time
+both strings will come into Sympathetic Har-
+mony, both having completed their aliquot
+210-cycles at the same time and ready to start
+over. They will coincide only at that point.
+210 x 11 = 2310, and 210 x 13 = 2730. They
+coincide because 2310 in one unit of measure,
+equals 2730 in a smaller unit of measure. Ei-
+ther string when plucked will mathematically
+divide itself into halves, thirds, fifths, and sev-
+enths. But one will also divide itself into elev-
+enths and the other will divide itself into thir-
+teenths. Their units of measure are in the ratio
+of 11/13. So the lower valued, (11) string will
+have to go 13 smaller cycles and the higher
+valued, (13) string will go through 11 larger
+cycles, in order to coincide. This will be their
+bond through sympathy.
+This example can be tested by playing notes
+of these two values, 2310 & 2730, on a music
+synthesizer. The two note chord which results
+will be very unusual in harmony because these
+are quantum values. They are of mathematical
+design in this example.
+Let us take an example from a practical
+"Equal Temperament scale". Let us take two
+strings which are practically tuned. When we
+pluck them, they will divide themselves into
+halves, thirds, fifths, sevenths, elevenths, etc
+through the prime numbers. When we pluck
+them they vibrate by these wavelets.
+We take a string with the C-note, (261.6),
+and another string with an F-note (349.2),
+Each string will be using a different unit of
+measure. Their fractional wavelets will be dif-
+ferent lengths on the string. Only the half-
+wavelets and the third-wavelets of both strings
+will resonate. The fifth wavelet will resonate
+very slightly but the others are all wasted ener-
+gy. The bond will be very weak on the order
+of 218 : 291 instead of the former ratio of 11 :
+13
+Quantum Arithmetic can calculate these
+number values through program "Quantize".
+But they all bear long decimal values. Of
+course F : C is a musical chord to our ears, but
+the F-note is a more than 1/3 higher than C.
+These two notes will reach Synchronous Har-
+monics at a ratio of 218:291. These numbers
+are far too high to be Quantum Music. They
+should be in the absolute ratio of 3:4 in order
+to be quantum tones. If the C-note is 261.6 HZ
+then the F-note should be 348.8 instead of
+349.2. It is a change of only 0.4 HZ but makes
+the difference. The bonding properties are far
+too weak to be considered as being quantum.
+A trained ear can detect this.
+Back to the beginning before these exam-
+ples: -- When we pluck a string we cause it to
+resonate in those fractional aliquot parts.
+These aliquot parts are the wavelets which
+produce the note we see, hear, and record. It is
+the cochlea of the ear which perceives these
+wavelets, and the single note we hear is pro-
+duced in the brain. The absolute value of tones
+is one parameter which must be met.
+The strongest bond of all is the male/female
+bond. This bond is so strong that most trained
+ears cannot separate them into a chord. The
+first male quantum number is "1, 1, 2, 3",
+which is also probably inaccessible to us be-
+cause it contains only four factors, including
+"The two One's". The equivalent female quan-
+tum number is "2, 1, 3, 4". This is the first
+Nightside, (female), quantum number relating
+to the Law of Opposites and relates to what is
+called "negative energy" or "Zero-point ener-
+gy", or "female energy". I prefer to call it by
+its ancient name, "Nightside" energy. There
+will be in perfect harmony except the Night-
+side is exactly two octaves higher than the
+Dayside. These are inaccessible to us, and
+probably will remain so for some time. Since
+1 x 2 x 3 = 6, and 2 x 1 x 3 x 4 = 24 . Their ra-
+tio is 1 : 4, or a differential of two octaves.
+The second male Quantum Number is "l, 2,
+3, 5", which is also probably inaccessible to us
+
+<!-- page 32 -->
+22
+because it contains only four factors, including
+"The One". Its female counterpart is the quan-
+tum number "4, 1, 5, 6". This is the second
+Nightside quantum number relating to the
+Law of Opposites and relates to what is called
+"Nightside energy" or "Zero-point energy", or
+"female energy". This second Quantum Num-
+ber may also be inaccessible to us. Their fre-
+quencies are 30 and 120, which again, is two
+octaves higher.
+These quantum Numbers should be called
+"virtual". They probably occur only in the
+creative Myriad, or they may be used in origi-
+nating the "cascade" to a lower Myriad, upon
+which the other Quantum Numbers build.
+They may be used in building the foundations
+of atoms which form in the Myriad of Matter,
+but they do not manifest to us.
+There is a difference between the formation
+of an atom and the energy which creates the
+appearance of heating or changing energy
+states within the atom. Can we assume that the
+atom is formed above 0° Kelvin? When 0°
+Kelvin is reached it appears to release this ab-
+original energy of the atom into its higher My-
+riad with an explosive release of energy in the
+form of an aetheric vortex. From this it would
+appear that "Zero-Point" or absolute zero is
+the point of change, rather than the energy it-
+self. This point has been reached by several
+researchers, with what could have been disas-
+trous results.
+It is important to understand the "Law of
+Harmony" and the "Law of Opposites" in or-
+der to do research in advanced science. This
+research is in the domain of quantum physics,
+so it must use Quantum Arithmetic in order to
+understand what is happening.
+There are other virtual Quantum Numbers.
+The quantum number, 5, 3, 8, 11 is a male
+number containing the prime factors of 2, 3, 5,
+& 11. This is a minimal but very important
+quantum number because it brings in factors
+of 11. It is a “male” quantum number because
+the even number appears in one of the inter-
+mediate factors. Its female counterpart is 6, 5,
+11,16. The mean (11 and variation, (5), of 6,
+5, 11, 16, are odd numbers. These each have
+only four prime factors, so they are also prob-
+ably "virtual" female Quantum Numbers
+The next number is 3, 5, 8, 13 for the male,
+and 10, 3, 13, 16 for the female. These are still
+virtual with only four prime factors.
+Let us now jump ahead to quantum num-
+bers which are no longer "virtual" and become
+manifest in our physical world. The quantum
+number, 5, 8, 13, 21 is a male number contain-
+ing the prime factors of 2, 3, 5, 7 & 13. This is
+a minimal but very important quantum num-
+ber because it brings in five factors of 13 or
+lower. It is a "male" quantum number 5, 8, 13,
+21, because the even number appears in one of
+the intermediate factors. The female counter-
+part is 16, 5, 21, 26. These have the minimal
+five prime factors, so it is no longer virtual. It
+represents a specific energy frequency which
+should manifest.
+For a female (or Nightside), quantum num-
+ber we can use 4, 5, 9, 14 containing the fac-
+tors 2, 3, 4, 5 & 7. Notice that 2 and 4 are both
+included. This is a female (nightside) quantum
+number because it begins with a 4-par integer
+and ends with a 2-par integer -- both even. It
+has the minimum compliment of five prime
+factors, so it may be a functional quantum
+number of Nightside energy. Its male counter-
+part will be 5, 2, 7, 9, which probably is non-
+functional because it contains only the four
+factors, 2, 3, 5 & 7. -- (But, of course it con-
+tains the virtual "1", because it contains only
+integers, and one unit is the difference be-
+tween integers. The One-unit seems to repre-
+sent the Creator, and the creation of the num-
+ber system.)
+The vast bulk of the 5,000 to 10,000 possi-
+ble quantum numbers contain seven factors.
+They can be functional with only five factors.
+The quantum number can also be considered
+as being the product of the four integers in the
+above quantum numbers. The female one, (4,
+1, 5, 9, 14) given first has a value of
+(4x5x9xl4) = 2520. The second male quantum
+number, 3, 2, 5, 7 will multiply to (5X2X7x9)
+= 630 which is 1/4 of the value of its counter-
+part female quantum number. That is, the fe-
+male frequency is two octaves above the male
+frequency. The female number is functional
+but the male number is only virtually function-
+
+<!-- page 33 -->
+23
+al. For a better understanding of how "har-
+monics" operates, and the mathematical laws
+which are involved, one should study the
+chapter in Volume 11, which is entitled "Syn-
+chronous Harmonics".
+HOW WE HEAR
+Contrary to what is readily apparent, we do
+not "hear" sound with our ears. The sound en-
+ters the ear canal. The ear breaks this down in
+the cochlea, into its components wavelets as
+the hairlets respond to the wavelet frequen-
+cies. Each wavelet has a wavelength measured
+by one of the prime factors within the Quan-
+tum Number of the audible sound. These
+wavelet signals are sent to the brain where the
+single tone is reconstructed and interpreted.
+The cochlea has its hairlike construction
+which is responsive to the wavelet frequencies
+within a tone. They do not respond to the
+whole tone, itself, because they are of a length
+which is resonant to the higher frequency,
+shorter wavelengths of the wavelets. This is
+what harmony is all about. This is a case of
+wavelet theory giving us an idea how the me-
+chanical construction of the ear can receive
+and translate a tone. At the same time in re-
+verse order, the wavelet theory gives us the in-
+terpretation of the physical laws used by the
+ear.
+HARMONICS -- IT IS THE LAW
+With regrets, I send my condolences to
+Lord Rayleigh. These condolences are also be-
+ing sent to the scientific community for the
+acts of Lord Rayleigh. Harmonics is not as
+Lord Rayleigh so inaccurately proved. This
+has put science into a spin for the past century.
+There is a flaw in his mathematical proof. He
+employed time reversal, unknowingly in his
+proof.
+Some scientists began to sense the true con-
+ditions required of Harmonics and knowingly,
+or unknowingly circumvented Rayleigh. The
+"transpositions" which became so necessary in
+closed circuit telephone systems, was made
+necessary by this misunderstanding of har-
+monics, but they were put in for the wrong
+reasons. The harmonic resonance of tall build-
+ings for seismic protection, has never been a
+full success, because the wrong parameters
+have been utilized. The explanation of why
+the female voice is one or more octaves above
+the average male voice, also depends upon a
+correct explanation of the role of harmonics.
+But, to explain how harmonics works, it is
+necessary to go back to the very beginning.
+What Rayleigh probably was proving, and can
+be logically proved as he tried to prove, was
+the time-reversal aspect of harmonics and
+sound. In short, the proof was backwards. A
+single audible sound does not produce all of
+its higher harmonics. The higher harmonics
+are a priori to the audible sound, even though
+these higher ultrasounds cannot be sensed as
+sound. In our material world, these higher har-
+monics begin at the scale of the atom and its
+electrons. For the proof of this, one must go
+back in mathematics to straighten out some
+misunderstandings which were first given to
+Rayleigh, and to science.
+The problem goes back to mathematics be-
+cause what we use, is an invented mathemat-
+ics. It is not the natural mathematics which
+was used more than two thousand years ago.
+So we must begin with the ancient times. We
+must first discover the laws which govern this
+mathematics. We must discover the real use of
+the prime numbers, where all mathematics be-
+gins. The prime numbers lie behind all mathe-
+matics. We must eventually adopt this mathe-
+matics. When we finally adopt it, mathematics
+will become a primary area of research. It will
+not be the dry and dull mathematics which is
+taught today. It will become exciting and ad-
+venturesome, in learning the laws which apply
+and how they carry over into and beyond the
+most advanced sciences of today.
+Many of our definitions within mathematics
+are awry and/or deficient. The definition of
+prime number is one of those definitions. The
+important aspect is in one integer being
+PRIME TO another integer. Any individual
+integer can be prime only when there is at
+least one other integer to which it is prime.
+The first thing which becomes clarified is
+the reason and the place of twin-primes. In ef-
+fect, all so-called prime numbers are one of a
+
+<!-- page 34 -->
+24
+pair of twin primes. So let us start by going
+through and listing them up to 100. They are:
+5-7, 11-13, 17-19, 23-25, 29-31, 35-37, 41-43,
+47-49, 53-55, 59-61, 65-67, 71-73, 77-79, 83-
+85, 89-91, 95-97, 101-103. Note the total ab-
+sence of the prime number 3. This is what
+creates the twin primes. The intervening inte-
+ger between the twin primes is always divisi-
+ble by 3.
+The first seeming exception to primeness is
+the use of 25, which is followed by 49, and the
+next similar exception is 121. Any power of a
+prime number, is fundamentally prime and
+takes the place of its root. In harmonics, the
+square of a defined prime number is prime,
+and it will supersede and minimize the physi-
+cal application of its root. This begins to ex-
+plain many things within harmonics. This
+anomaly first showed up in Synchronous Har-
+monics and the. interaction between energy
+waves.
+The second exception consists of another
+type of prime number. These are integers
+which have two smaller prime factors. In the
+above list, these are: 35, 55, 65, 77, 85, 91,
+and 95. 35 = 5x7; 55=5x11; 65=5x13;
+77=7x11; 85=5x17; 91 = 7x13; and 95=5x19
+These are products of 5 or 7 and a larger
+prime number, being 7, 11, 13, 17, and 19 in
+these cases.
+From the above analysis it becomes very
+apparent that the integer "3" plays a signifi-
+cantly different part. Other than 1-3 and 3-5,
+there are no other twin primes with the factor
+of 3, which can be one party of a twin prime
+as can 5, and 7. The intervening number in
+any twin prime is divisible by 3 and there are
+four integers between twin primes. These are
+the only two types which have not agreed with
+our conventional definition for twin primes.
+These exceptions in our understanding, are
+important 
+to 
+understanding 
+harmonics.
+Through the twin-primes we can learn some of
+the basic differences between invented mathe-
+matics and natural mathematics. It is a minor
+but important revision.
+Part of the natural reason for this is, every
+applied calculation in natural mathematics,
+must contain the prime numbers 2 and 3, or
+products of 2 and 3. The twin primes begin
+with 5-7. Any integer may be PRIME TO an-
+other, when neither one is prime in itself.
+Our understanding of prime numbers is so
+very basic to all of science that it becomes the
+cause of many of the "accidents" in empirical
+science. This is but one of many other misin-
+terpretations. In order to understand the NAT-
+URAL mathematics, one must relate the con-
+ventional definitions to the definitions as they
+occur in NATURAL mathematics. In that re-
+spect, the new definition of prime number will
+not be exactly the same as the conventional
+definition. This natural mathematics will be
+called QUANTUM ARITHMETIC because
+that is what it turns out to be. It is a mathemat-
+ics of integers and natural LAWS.
+Quantum Arithmetic turns out to be just that.
+The word "Quantum" means composed of
+whole numbers only". The word "Arithmetic"
+means "use of only the arithmetical functions
+of addition, subtraction, multiplication and in-
+stead of division will be the factoring of any
+integer into its prime factors in each case of
+application. It is simple arithmetic, but in spite
+of that simplicity it is capable of providing so-
+lutions of problems which cannot be solved by
+conventional empirical mathematics.
+One of the first things which Quantum
+Arithmetic gives us is the definition of a
+Quantum Number. "A quantum number is an
+integer which has at least four co-prime fac-
+tors, and not more than seven prime numbers."
+Most Quantum Numbers will contain six or
+seven prime factors. Its list of prime factors
+makes a Quantum Number unique from all
+other integers. This puts us in a position to
+state the Law of Harmonics: When two Quan-
+tum Numbers have the same prime factors,
+EXCEPTING ONE PRIME FACTOR, they
+will be in the state of harmonic resonance with
+each other. The lower the ratio of the excepted
+prime factors, the greater will be the harmony
+between them.
+The laws explains much about science
+which has been in the land of mystery. For in-
+stance "What is Sympathetic Vibration?" Why
+will a string tuned to a certain frequency cause
+another string stretched the same frequency to
+
+<!-- page 35 -->
+25
+vibrate when there is no physical connection
+between them? The reason is, that the two
+strings will have frequencies of the same
+quantum number, and they thus become ONE
+under the Law of Harmony, and the Laws of
+Quantum Arithmetic.
+We can suppose that the energy of one
+string is transferred through the air, but that is
+not necessarily true. Experiments must be per-
+formed to show that this transfer of energy
+does not occur in a vacuum, and occurs only
+when there is an atmospheric, or other materi-
+al connection between them. Quantum Arith-
+metic implies that there is a possibility that the
+air may not be a necessary transmissive medi-
+um. Transfer of energy does not require mate-
+rial substance, particularly when the energy is
+being transferred from the Sun to Earth.
+There is too much detail within Quantum
+Arithmetic to give in this text, but it is possi-
+ble to tell some of the basics, which are famil-
+iar.
+One of the basics of Quantum Arithmetic
+utilizes what are called "Fibonacci type num-
+bers", but it is first necessary to clarify our un-
+derstanding of Fibonacci. He gave us what he
+could glean in his time. What he gave us is far
+from complete. A more complete description
+is that given in Euclid Book VII, Proposition
+28. "The sum of two numbers which are
+prime to each other, are also prime to them.
+The difference of two numbers which are
+prime to each other is also prime to them."
+This gives us a series of four integers in the
+Fibonacci configuration. But let us go back
+1500 years before Euclid, and we find they
+also used these 4 integer combinations in their
+calculations in the Rhind Mathematical Papy-
+rus. In this four integer combination, the third
+integer is the mean of the first and fourth. The
+second is their variation from the mean. This
+is presently a part of "Statistical Analysis", so
+we are still on familiar ground.
+We begin to leave familiar ground when we
+study the method of multiplication as used in
+Quantum Arithmetic. This was taught up to 80
+years ago, but has now been generally
+dropped from our education system.
+The system of multiplication of two inte-
+gers, in Quantum Arithmetic, is to consider
+they are the first and fourth integers of a Fibo-
+nacci configuration. Their product is found by
+the subtraction of the square of their variation
+from the square of their mean.
+ This is one of the basic operations within
+Quantum Arithmetic, Only the first and fourth
+integer are required to solve any problem in
+Quantum Arithmetic. They, along with their
+sum and difference form the four "roots".
+With these roots, we can solve any problem,
+but it is first necessary to find the correct
+prime ratio between the mean and the varia-
+tion. Quantum Arithmetic provides the means
+to perform this operation.
+The operation is called "Quantizing" but the
+rest of Quantum Arithmetic must be explained
+and understood, in order to comprehend how
+and what the rules are.
+Essentially, the second and third integers of
+the Fibonacci configuration, become the
+square roots of the variation, and of the mean
+between the Hypotenuse and the Altitude of
+an unique Prime Pythagorean Triangle. The
+original two integers are the square roots of
+the sum and difference of the Base and the
+Hypotenuse of that same Prime Pythagorean
+triangle. The square roots of these four
+squares, are the four integers which are the
+roots of the selected problem and they will be
+in Fibonacci configuration and are the Quan-
+tum Number of that triangle. They are also the
+roots of all other plane geometric figures, in-
+cluding the equilateral triangle, the isosceles
+triangle, the ellipse, and a series of the ellipse,
+and a series of integral concentric circular fig-
+ures. The numbers 59, 1, 60, 61, in Fibonacci
+configuration are considered to be the Quan-
+tum Number of Earth Orbit. In order for this
+system to work, the empirical values must be
+
+<!-- page 36 -->
+26
+critically accurate.
+Once any two of the roots are obtained and
+properly quantized, it is a simple matter to de-
+termine all of the parameters of an orbiting or
+vibrating body. An example will probably
+demonstrate the procedure:
+In finding the precise orbit of the Earth-
+Moon system about the Sun, the perigee of the
+orbit will be the smaller number, and the apo-
+gee will be the larger number. These two num-
+bers, in whatever units, will be put through the
+"Quantize" Process. They turn out to be 59
+and 61. Their mean is 60 and their variation is
+1. Multiplying 59 times 60 will give us 3540
+quantum units of the perigee. Multiplying 61
+times 60 will give 3660 for the quantum units
+of the apogee. If our original input is in miles,
+we find there are 25834.3 miles* per quantum
+unit. There will be 240 points in the orbit
+around the Sun in which the measurement's in
+quantum units will be integers of quantum dis-
+tance from the Sun, and will also be in inte-
+gers for the distance from the secondary focus
+of the elliptical orbit. (*The constant 25834.3
+is inaccurate because the empirical distances
+to the Sun are inaccurate.)
+It will also be possible to calculate the pre-
+cise distance, at any precise time, in rectangu-
+lar coordinates from the Sun. With that calcu-
+lation it is possible to plot the precise position
+of the Earth/ Moon system within a tolerance
+of one mile accuracy. The empirical measure-
+ments, with which one begins, must be accu-
+rate to one unit per thousand. The Quantizing
+selects the nearest possible Quantum Number
+which is unique to the problem.
+One can also Quantize the orbits of elec-
+trons around the nucleus of an atom by the
+same process except the spectrographic lines
+are used for quantizing the energy state of an
+electron. This value, in relation to all other
+spectrographic lines is considered to be the ra-
+tio between the perigee and the apogee. This
+tentative Quantum number for each energy
+state, can be used to compare energy states of
+various electrons of one element with another.
+The Quantum numbers, and similarity be-
+tween Quantum numbers, will then tell where
+bonding will likely take place between two
+elements, and at what energy state, and in
+what proportions they will combine, as well as
+give the relative strength of the bonding. 
+This process is too complex and detailed to
+describe here. This is where harmony comes
+in. There is harmony between energy states of
+atoms, just as there is harmony between the
+various planets of our planetary system. The
+same system of harmony also applies between
+the colors of the rainbow, and it applies to
+notes of music. This latter, is where the Music
+Of The Spheres comes in. We presently have
+enough information, through Quantum Arith-
+metic to determine the precise notes of Music
+Of The Spheres, but a very refined and direct-
+ed research process will be required.
+As for Quantum Arithmetic, it has every
+promise of being the Grand Unified Field.
+This is not for everyone because it does what
+science has predicted but it certainly does not
+do it in the way which has been anticipated. It
+points out so many of the deficiencies, omis-
+sions, and errors in our system of theories.
+There were vast deficiencies in the definitions
+which Fibonacci gave us, and there was an ac-
+tual reversal of process in what Lord Rayleigh
+gave us. These are not isolated cases. It
+spreads throughout our sciences, our arts, and
+our system of education. The Grand Unified
+Field is much more far-reaching than anyone
+had anticipated.
+It is time to look back and review what has
+been changed in conventional arithmetic to
+make it become Quantum Arithmetic.
+1) Fibonacci: The original Fibonacci
+Number series has been added onto by accept-
+ing the original definition as set out by Euclid
+Book VII, Proposition 28. This had divided
+the so called "Series" into groups of four inte-
+gers and added over ten times as many num-
+ber combinations as Fibonacci reported.
+2) Primeness: The definition changed,
+by added to the present definition by including
+powers of prime numbers. Certain combina-
+tions of prime numbers. especially products of
+low primes, (7 and lower), and a larger prime.
+These are composite numbers, are prime to all
+others which do not contain a prime factor
+
+<!-- page 37 -->
+27
+used in the composite number.
+ 3) Decimals: Use of decimals is elimi-
+nated in favor of using prime fractions. This
+brings in an absolutism of all values which has
+never been available in conventional mathe-
+matics.
+4) Transcendental Numbers: Practical
+elimination of transcendental numbers has
+been accomplished The value of PI is 20612/
+6561. This makes PI an absolute value carried
+to the equivalent of several thousand decimal
+places. This is not new. It was first advanced
+130 years ago [by Parker/Keely*] but rejected
+by "people of influence".
+5) Base-10 Numeration: Elimination of
+binary and decinary numeration for calcula-
+tion is eliminated by introduction of multi-
+base numeration. Provision is made to work
+between Base-10 and multi-base numeration
+through Program "Quantize". One problem re-
+mains here in that conventional numeration is
+empirical and is almost never in absolute
+terms. To overcome that omission, it is possi-
+ble to make an allowable error factor for the
+empirical values.
+These five changes are very basic and enter
+the domain which we thought was absolutely
+stable. It seems that no mathematician has
+gone into this foundation of mathematics.
+They simply assumed it was rock stable. Now
+we find it is a foundation of sand, on which
+was supported an invented system of mathe-
+matics.
+This is a stable foundation found within the
+unchangeable prime numbers. On this founda-
+tion, Quantum Arithmetic has advanced to
+build a Natural Mathematics. We have found
+not one single current theory which is com-
+plete and without error. Many of these have
+been corrected and completed. In several, we
+have converted them to absolute LAW.
+This is important to New Energy research
+because the changes have a bearing in many
+things. Secondly, we will soon be able to do
+such research with methodical calculation of
+what works or does not. The last chapter clos-
+es the loop. Enneagrams are the counterpart of
+the Magic Squares used by John Searl, for lev-
+itation and power.
+*See Quadrature of the Circle by John A. Parker
+
+<!-- page 38 -->
+28
+Science is oriented almost exclusively
+around matter instead of around energy. Mat-
+ter is just one of seven kinds of energy, when
+energy is classified by wavelength or frequen-
+cy.
+Matter is just a part of one of seven Myriads
+of energy. There are three Myriads above mat-
+ter and three Myriads below matter, Immedi-
+ately below the Myriad of matter is ultrasound
+energy. Below that are music and subsound
+Myriads. Above matter is the Myriad of Light
+along with its octaves of infra red and ultra vi-
+olet.. Above that is the Myriad of the Meta-
+physical. Above metaphysical is the Creative
+Myriad, making seven orders with which sci-
+ence should be concerned.
+This chapter concerns the Metaphysical
+Myriad, in which all of the spiritual phenome-
+nal lie. This Myriad is just as complex as is
+the one Myriad which we call Matter. The
+Metaphysical Myriad has never been studied
+except in the context of the Myriad of Matter.
+We must study all things through the other six
+Myriads of energy which can be analogous to
+this Myriad. In studying the other six Myriads
+we can adapt those Laws and relationships
+which are common to them and probably per-
+tain to this Myriad of Spirituality. There are
+frequencies in this Myriad which will have
+similarities with the other known Myriads.
+We can begin by assuming there are seven
+octaves of frequencies in the Spiritual, or Met-
+aphysical Myriad. We can also assume there
+are seven primary frequencies in each octave.
+In the Myriad of Light, the single octave
+has seven colors. Of these seven colors there
+are four, -- red, yellow green and blue, whIch
+are classified as primary and superior to the
+other colors.
+In the Myriad of Music, each octave has four
+primary notes which are produced by the ordi-
+nary bugle. They are C, F, A, and C. As blue
+is half the wavelength of red, so is the upper C
+one octave above the wavelength of the lower
+C note. So, we can assume there are seven oc-
+taves in the Metaphysical Myriad. Spirituality
+may be one or more of those octaves. 
+In addressing the idea of spirituality, it is
+done in the mechanistic sense, not in the relig-
+ious sense. In this respect it becomes a person-
+al characteristic, as well as the global or mass
+consciousness. We ask the question, "Where
+does energy come from, above the frequency
+of light"?
+We have much anecdotal reporting, begin-
+ning with the Egyptian "Book of The Dead",
+then down through Plato. There is also much,
+being reported on a day by day basis. I will
+rely on those of which I was an integral cart,
+and try to put them in the context of the ques-
+tion.
+One of the Biblical books which has been
+withheld by organized religion, is the Book of
+Immanuel, or the Talmud of Immanuel. There
+are said to be only six of these books in exis-
+tence today, and they are being held in deepest
+secrecy. They are important to religious
+thought because they corcern the personal part
+of the life of Jesus Christ, and contain some of
+his own personal remarks about Himself, His
+birth, and His travels to other countries. But
+one must start with the beginning of the gener-
+al organization of Creation, as we under-stand
+it.
+There is a drastic change in the idea of crea-
+tion as given to us by Genesis. The very top
+level of creation is Creation itself. Creation
+consists of a series of laws which apply for all
+places and all time. The main parameter which
+Chapter 6
+Spirituality
+
+<!-- page 39 -->
+29
+we are studying is the the frequency, or wave-
+length of the involved energy in each Myriad.
+These laws, as far as energy goes, are unalter-
+able and unchangeable, even by God.
+In Quantum Arithmetic, we must study the
+Myriad of Spirituality from the standpoint of
+energy and proper number values which apply
+in that Myriad. It Is pretty much accepted that
+primordial energy is generated or created in
+the first Myriad. It then cascades down to the
+Spiritual Myriad, to the Myriad which we call
+Light, and then to Matter, Ultra Sound, to Mu-
+sic, and then to Sub-Sound and brain wave
+frequencies.
+There are certain artifacts in the Metaphysi-
+cal Myriad above the Myriad of light. The one
+feature is that Thought energy falls in this My-
+riad while energy of emotion falls in the sev-
+enth, Sub-Sound Myriad. So all thought ener-
+gy falls in this Myriad. A part of thought
+energy is the capability of Dowsing in, its the
+beginning of the general organization of our
+creation.-The laws of Creation.
+Spiritual things also seem to occur in this
+Myriad.
+Another artifact is the existence of Spirit
+Guides who appear to come from this Myriad.
+The idea of synchronicity between events con-
+cerning us on Earth also arises here, Hypno-
+tism and all other psychic things such as clair-
+voyance, channelling, and all the other
+psychic aspects occur in this Myriad. In the
+past year the advent of the Photon Belt has
+had profound effects within this Myriad.
+Little is known about this Myriad. High sci-
+entific circles avoid talking about it, and that
+is part of the reason so little is known. With
+quantum Arithmetic we can investigate it
+through the mathematical laws which develop
+for all Myriads. We can start to put together,
+the parts within this Myriad. in this context.
+But, first we must start talking and writing
+about it.
+Let me start here with a descriptions of
+some of the many events which I have experi-
+enced. They all have a spiritual, but not a re-
+ligious context:
+EPISODE I -- THE SOURCE OF
+QUANTUM ARITHMETIC:
+I will give you the beginning and the ending
+first. This all started in 1942 when I was com-
+pleting my final course in calculus. Yes, I un-
+derstood the calculus, but a thought kept run-
+ning through my mind that, "There must be a
+better and more direct way to perform these
+mathematical operations." Within ten years I
+was on the way to the discovery of this ancient
+mathematics. But let me say, I will eventually
+be given credit for the discovery. but that
+credit is misplaced. My only contribution was
+to follow through.
+As Socrates said, "I can teach a boy all
+there is to know without telling him anything.
+I will ask the boy questions and he will derive
+the answers from his own mind." That is the
+way Quantum Arithmetic was developed.
+While I was asleep, I would be partially awak-
+ened and a question would be placed in my
+mind. I could not go back to sleep as the ques-
+tion was asked over and over for what seemed
+like hours on end. Quite some time later I dis-
+covered that I could get up and write down the
+question, with the intent of answering it dur-
+ing the next day or days. Then and only then
+could get a sound sleep for the rest of the
+night. The next day I would answer the ques-
+tion, and that is the way Quantum Arithmetic
+was developed step-by-step over a period of
+50 years.
+Now I will skip to the ending which was in
+August 1988. This was after some 40 years
+and between 5,000 and 10,000 separate ques-
+tions I had to answer and after I had developed
+Quantum Arithmetic.
+I had been kept awake for three days and
+three nights except for a brief 2 or 3 hours of
+sleep between 3 and 6 AM. I was being ques-
+tioned continually by my spirit guide and I
+knew enough about Quantum Arithmetic by
+then, that I could derive the answer in an hour
+or less, and the next question would be asked.
+ After three days of mostly skipped meals and
+no real exercise, I went out onto the porch for
+a brief respite. I could sense a spirit standing
+nearby. So, for the millionth time, I asked him
+
+<!-- page 40 -->
+30
+his name, which he would never tell me previ-
+ously. Then he answered me with a single
+word, -- "Archimedes." I mused on that for a
+while and then told him that I must mow the
+lawn for the exercise, but it also needed mow-
+ing, being more than an acre in size, and had
+not been mowed for over a week.
+I then, went out to the equipment shed
+where my riding mower was kept and started
+it up. I mowed the outer perimeter of the lawn
+and was half way through with the second
+round when Archimedes said, "I'd like to do
+that!" I was tired and thought I would get off
+the mower for only a minute.
+But it was only my astral body which got
+off and went out to stand or, the lawn. Archi-
+medes took over and finished mowing the
+lawn. I marvelled as he clipped by trees and
+other obstructions by less than on-half inch at
+a full throttle and about 10 mile per hour
+speed. I stood in the middle of the lawn the
+whole time in my astral body, seeing a small
+strip of grass here and there that he had
+missed. I wondered how he would correct that,
+and he did. He finished the lawn in the highest
+speed in 40 minutes, which was half the time
+it would have taken me. I put the mower away
+and Archimedes had disappeared. I (did not
+see him again for more than three years, in
+which time I started writing the present edi-
+tions of Pythagoras And The Quantum World.
+I went to the house and got some food and
+much needed rest. That was the end of Archi-
+medes.
+Archimedes had given me the questions to
+answer over that period, from about 1946 to
+1988, for me to learn Quantum Arithmetic.
+The questions were quite regular with three to
+five questions every week in that 40 years. So,
+there were between 8000 and 10,000 encoun-
+ters with Archimedes. It is Archimedes to
+whom credit must be given for this rediscov-
+ery of Quantum Arithmetic. I deserve only the
+credit for following through on his questions.
+All of his early questions led up to the ques-
+tion, "is there some kind of order to the Prime
+Pythagorean Triangles?" (The answer is in Ta-
+ble 1). To answer that question, I had to first
+derive the Fibonacci type Numbers which lead
+to each triangle. To get the Fibonacci numbers
+in the proper context I had to read and restudy
+the entire 13 Books of Euclid. It was Proposi-
+tion 28 in Book VII of Euclid, which was the
+key in this case.
+June 1976 1 was given the key between the
+Prime Pythagorean Triangles and what turned
+out to be Prime (Quantum) Ellipses. Three
+years later in 1979, 1 was into the solution of
+Music Of The Spheres, and started to develop
+that music, which I continued well up into
+1991, for about 12 years.
+That is a very brief history of how Quantum
+Arithmetic was developed. Before Archi-
+medes would accept my answer to a question,
+he would always have the additional question,
+"Why?", and I had to give him the proof,
+These proofs would be given along the line of
+"Proofs" which were given in Chapter IX of
+Volume I of "Pythagoras And The Quantum
+World". Another similar example of devel-
+oped proof is given on pages 124 & 125, in
+Volume 2 of "Pythagoras And The Quantum
+World".
+Quantum Arithmetic has now begun to take,
+its place in the search for New (aetheric) Ener-
+gy. Most, if not all, of these researchers will
+have to incorporate it in their search, to reach
+success. But more than that, they will have to
+have a similar kind of spiritual guidance and
+protection to reach fruition from their search.
+They will not only be required to accept guid-
+ance, but they will be required to acknowledge
+that they have uitilized such quidance, and
+give credit where credit is due for that guid-
+ance.
+As things stand in the discovery, they all
+make the grand mistake which we found with
+Lord Rayleigh, of misinterpretation of results.
+In their search for New Energy, there is not a
+single researcher who has, or ever will reach
+fruition of their efforts, without this spiritual
+help, and acknowledgement of its presence in
+their discovery. They will all make the grand
+mistake which we found with Lord Rayleigh,
+of misinterpretation of results. It will eventual-
+ly lead to failure. This is the way it is and al-
+ways was. Contemporary science has come to
+the end of their rope for these omissions. In
+
+<!-- page 41 -->
+31
+the past year (November 1995 through Octo-
+ber 1966) 1 have learned that the past scien-
+tists, now in the Spirit World, have come to-
+gether to help any researcher who is willing to
+accept them. They want to help us in any way
+they can, but even they do not always have the
+answers. They are encouraging us to find
+those answers, although they will give us a
+pointer here and there along the way. In this
+same way, I discovered the answer to Music
+of the Spheres.
+In those last days when Archimedes was
+with me he confided to me that the notes
+which were found in the basement of the Vati-
+can on "The Cattle Problem" were a part of
+the correspondence between himself and Era-
+tosthenes. Only the translation had been made.
+He said he had not solved the problem but as-
+sisted me to do so, on my own. In fact he was
+trying to solve that problem when he was so
+rudely thrust through by the Roman Soldier's
+sword.
+EPISODE 2 -- THE NDE (Near death
+experience)
+The time was 1:30 PM on December 15,
+1986 when I experienced an NDE. I am here
+today only because of help from a very unusu-
+al source. Several people have come forward
+since that time to help me understand. I will
+give you the story as I wrote it about three
+weeks later on January 8, 1987.
+If It has now been three weeks since my ac-
+cident at 1:30 P.M on December 15, 1986 and
+I can now start putting things back in perspec-
+tive. As I reconstruct the series of events im-
+mediately after that, I have learned of things
+which could not have occurred in any other
+way. It was a "near death" experience and not
+recomnmended for anyone else.
+"To set the scene: There were two trees,
+which were about eighteen inches in diameter,
+and as I later measured them they were about
+120 feet tall. They had been tilted at a forty
+five degree angle and had hung up in nearby
+trees. I had decided that the time had come to
+bring them on down.
+"As I completed the cut on the first tree, I
+saw it break loose from the stump. It did not
+simply fall to the ground. It was aimed direct-
+ly at my head from the bind the tree had been
+in. I did not see the binding because of inter-
+lacing limbs of this tree and the trees in which
+it was hung up. It was aimed like a batter
+swinging that huge baseball bat.
+"My first thought was, "Oh, No! I can't go
+now, I still have too much work to do!" I cer-
+tainly did not say that because there simply
+was not time in the milliseconds before it hit. I
+saw it for sure when the butt of the tree had
+travelled three feet and was only one foot
+from my head, and travelling at great speed.
+At that point, all time stopped and each milli-
+second became a minute or longer. For the
+next two hours I saw things only in stop-frame
+pictures.
+"The whole thing took only milliseconds. I
+watched it as it slowly contacted me directly
+on my nose. Then I felt it slowly crush in and
+the bone crumbling being compressed into the
+center of my skull. Picture by picture it un-
+folded.
+"My awareness was in milliseconds but my
+reaction time of my body was still in normal
+time. I could not move in the space of time I
+had left. I felt it crush in but there was no pain
+as I was thrown 12 feet. X-rays later on
+showed that the bones of my nose were de-
+molished and the under side of my skull was
+cracked open appreciably by the force of my
+nose being crushed inside. The tree did not hit
+my upper jaw, nor did it create any breakage
+of the bones around my eyes, But the blow lit-
+erally ripped my nose off my face and pushed
+it completely inside. I found my glasses in the
+next few days where my head had fallen. They
+were unbent and unbroken.
+I had been thrown some 12 feet but the tree
+was not yet done with me. In the following
+milliseconds I saw the tree about to land on
+my chest and crush the rest of life out of me.
+My body twisted convulsively as I saw the
+tree approaching. It struck a glancing blow
+and cause damage but it was several days be-
+fore I realized that I had three broken ribs, and
+a severe whiplash. My coat and several layers
+of clothing were ripped from my chest but no
+
+<!-- page 42 -->
+32
+skin breakage.
+"I had delivered my thought message that I
+was not ready to go, before I passed out. I do
+not know how long I was out because I am
+sure the accident did happen before 1:30 P.M.
+Whenever that time was, I had no account of
+time until I next saw a clock which was 3:20
+P.M.
+"Some time later I heard the chain saw still
+putt-putt-putting away where I had dropped it,
+as it fell from the tree stump. I got up, turned
+off the switch on the chain saw. At some point
+my spirit left my body. It was as though my
+spirit had been called back momentarily to
+take care of it.
+"Later and still unconscious, I picked up the
+chain saw, along with my ax and two wedges.
+I almost immediately heard a loud voice say,
+"You must get back to the house." Then it said
+"Leave the tools! You've gotta get back to the
+house. You need help" I dropped the chain
+saw, axe and wedges, but the next day, I found
+that I had carried them more than 40 feet. I
+had somehow walked through swamp, brush,
+sharp thorns and mud, carrying those heavy
+tools. I was lucid, for less than a second, in
+putting down the tools, before passing out.
+"Next, I had walked another hundred feet
+through swampy ground, when I next heard
+the voice say, "Which way?" I found myself
+standing in the middle of the trail weaving
+around in a drunken stupor and barely able to
+stand. I turned the direction toward home and
+passed out again.
+"Somehow, my unconscious steps were to-
+ward home, but I had walked only thirty feet. I
+had stepped off the trail into the ditch and had
+fallen. My spirit re-entered my body for the
+fifth time. I was righted and on the edge of the
+trail in two stop-frame pictures for the sixth
+and last time. I remember thinking., "There is
+a narrow three-foot wide footbridge across the
+stream, and beyond that more mud, and there
+is a sudden turn to the right as join the next
+trail". My dog standing nearby, was the only
+witness. She was very concerned.
+"Finally, I regained consciousness, and
+found I had walked three more city-blocks
+through the forest. I was at the door to my
+home.. The door was locked because my wife
+had gone to town for the afternoon. For the
+first time I noticed the blood dripping from
+my face and realized that I would need help.
+“During all of my period of unconscious-
+ness, I was not aware of my body. I was aware
+of only one thing. There was huge tunnel, ap-
+pearing like a huge culvert, some twenty feet
+in diameter that was snaking off toward the
+north. It first appeared before the tree contact-
+ed my nose . I was paying no attention to my
+body, walking the trail, but I was aware of the
+tunnel following me all the way to my home.
+It stayed twenty or thirty feet away. There
+were many trees which were in its way but the
+tunnel seemingly passed through them as
+though they were not there. Each time I was
+needed, my spirit would scramble away from
+the tunnel entrance and attend to my body.
+The tunnel was gone when I finally regained
+consciousness on reaching the house.
+"I reached in my pocket for the keys. My
+fingers were covered with blood. I had to get
+help. It was twenty miles to the hospital and I
+was in no shape to drive. I phoned the hospital
+but they said there was no available ambu-
+lance. I phoned a neighbor lady who gladly
+drove me to the hospital. I had blood spatters
+on the floor, on the stairs, on the door knobs
+and on the phone. I cleaned them up as best I
+could so my wife would not worry. I left a
+note telling her I had a nosebleed and the
+neighbor had taken me to the doctor.
+"Then I picked up a towel to catch the
+blood from my face, and I also picked up an
+empty tin can from tomatoes to hold it under
+my nose in case there was too much blood for
+the towel. My neighbor was busy watching the
+road and had no time to look me over. She
+drove very carefully, arriving at the emergen-
+cy room about 4 P.M. She went into the lobby
+after depositing me in one of the examining
+rooms.
+"The doctor entered and cleaned me only
+enough to measure the damage. He plugged
+my nose with gauze to stem the flow of blood
+and put me in a wheelchair to go to the x-ray
+lab. My nose had swelled, forcing it into a
+
+<!-- page 43 -->
+33
+normal position. The doctor also had put three
+small adhesive snips. on the bridge of my nose
+which had been torn from cheek to cheek.
+“I still did not realize how badly I had been
+hurt until the technician said, "Do not close
+your eyes. You may never wake up again." I
+must have been a horrible sight. Seventeen x-
+rays were taken for skull damage. Some of
+these showed the break in the under side of the
+skull. It must have been substantial because it
+was several months before my jaw bone
+would accommodate the extra width of my
+skull. The x-rays did not show the whiplash
+fracture at the base of the skull or the broken
+ribs which were to cause more pain and trou-
+ble in the coming days. I was still unaware of
+this damage.
+"With the x-rays over, I was wheeled back
+into the examining room. I had to wait for the
+doctor, so I asked the nurse to send my neigh-
+bor in, because she had been waiting nearly an
+hour. My neighbor finally came into the room.
+I was a bloody mess with my coat, shirt and
+underwear all torn and saturated with blood
+down to my skin. She started to clean me up
+but handed me the kleenex and went out into
+the hall where she fainted away at the sight,
+having seen me for the first time in reality.
+"I was released about 5:30. The doctor
+wanted to put me in the hospital but I de-
+clined. We drove home without much conver-
+sation. My wife was quite surprised to see the
+state I was in, from the "nosebleed". I was
+bloody from head to toe and my clothing was
+torn and bloody.
+"It was about ten days before I could again
+breathe through my nose. The tapes had held it
+in place quite well without stitches. I must
+have had some supernatural help because most
+of the discoloration had faded and I was up
+and around again. Eating was a slight problem
+because of the wider head and the original
+width between my jaw bone hinges. I had to
+wear a neck brace continually for the next
+year, and the ribs had healed up in a little over
+a month.
+ 
+"As the original accident was happening,
+my spirit immediately sized up the situation. It
+had gone through similar experiences count-
+less times in previous lifetimes.
+"My soul was left in my body to do the best
+it could. Then it had the sporadic help from
+my spirit as it was called to return to my body
+each time it was needed. Other than those five
+times when the spirit returned to my body, I
+knew nothing about the long walk of over a
+quarter of a mile to get home. I do know that
+my body had been in the arms of death for an
+hour or probably two hours. But there was
+very little pain, for the past three weeks."
+"EPISODE 2 raises many questions, but it
+answers some. My spirit decided it was not
+time to go into the tunnel. Now that I have re-
+gained my senses and reviewed the experience
+of the past three weeks, I feel it is time to put
+it down on paper while the memories are still
+fresh. Death is not something to be feared. It is
+a journey to new beginnings. Death is a
+chance to discard an old and worn out body in
+exchange for a new one. As Plato wrote, 'It is
+like putting on a new coat after discarding the
+old one which is of no further use.' In the past
+three weeks since December 15, 1986, I have
+had reason to test whether I am in the astral
+world. I am in the Material world."
+I was to put this learning to good use in the
+next 18 months.
+EPISODE 3 -- ONE WHO MISSED
+THE TUNNEL.
+On July 13, 1988 1 was sound asleep when
+I heard someone calling my name. I could not
+arouse myself immediately. I next heard a
+lady crying and calling my name. She was sit-
+ting on the edge of my bed and crying. I sat up
+suddenly, and she said, "Why doesn't anyone
+love me anymore? Why doesn't anyone care?"
+Then I recognized her. Although she was
+much younger than I remembered. She was
+my Mother.
+ I stood up. Then picked her up and cradled
+her in my arms as one would cradle a child.
+She was as light as a feather. I told her, "But
+we do care. We all love you very much." Then
+I went on, "Mother, You shouldn't be here. I
+had to step out of my body to come and meet
+
+<!-- page 44 -->
+34
+you in the astral world because you did not
+move on to the spiritual world as you should.
+Mother, you died 37 years ago, and I am now
+70 years old myself. You were only 61 years
+old and would be 98 years old if you had
+lived."
+It was only then that I realized that I was
+out of my own body and looked back to see It
+lying there on the bed beside me. The differ-
+ence between the actual living world and the
+in-between astral world is so slight that Moth-
+er could not realize, until I told her, that she
+had died.
+Everything In the living world has its astral
+counterpart. In the astral world one can see
+into the living world but cannot go there, if
+they have died. What they see is the astral
+counterpart of everything in the living world.
+Nearly the only difference is that there is no
+solid matter, as we know it, in the astral
+world, (or is it the other way around?). How-
+ever, no astral body can occupy the same
+space which is occupied by an astral counter-
+part of another body.
+I explained to Mother that she is to go into
+the tunnel and to the light in order to get out of
+the astral world and enter the spiritual world.
+She must do this before she can enter another
+newborn body. When she understood, she
+heaved a final sighed of relief. She faded and
+disappeared from my arms. I returned to my
+own body
+What brought on this episode after 37
+years? Everyone can and does enter into this
+astral world at times. It happens in our
+dreams, or it can be done by meditation. These
+dreams are very real and sometimes have
+some very advanced information. In these
+dreams one will meet others who live in the
+astral world as did my Mother. Often we will
+not recognize these astral figures. They will
+lead us on a "merry adventure" if they are
+good astral spirits. If they are mischievous
+spirits they may lead us into a nightmare.
+I had had, in the past, many such dreams of
+both kinds. If I found a malicious spirit I had
+learned to simply tell them to "go away" and
+thus stop the dream. But since this astral inci-
+dent of my Mother, I decided to advise the
+astral spirit, good or bad, of the route they
+should take. In fact, on the day before meeting
+Mother's astral form, I decided "Maybe these
+spirits need help in understanding their situa-
+tion. If so, I will help them if I can."
+This change in my attitude and change in
+my personal goals allowed Mother to get
+through to me, and allowed me to recognize
+her, and to help her. She had only to approach
+me and call me to her astral world while I was
+in a dream state. I'll not see her again in my
+dreams because she has gone on, and is free to
+proceed on her journey of further spiritual de-
+velopment in a new body.
+After my accident, there were times that I
+wondered if I too, was in an astral world. Is it
+possible that I am already in the astral world
+since I refused to go in the tunnel.
+The doubt arises from what happened to me
+eighteen months before my adventure with
+Mother. I should not have lived through the
+bashing of what happened from that tree. I
+was in the throes of death for two hours.
+Somehow, my body managed to walk the
+quarter mile to the house through swamp,
+bushes and vines and across a narrow foot-
+bridge, and a very wet and muddy trail while
+completely unconscious. My face was bashed
+in, yet there was never any severe pain from it,
+and the healing was quite rapid, as though I
+was getting some supernatural healing help.
+Episode 4 -- ON TO DUCK HEAVEN
+The accident finally helped me to under-
+stand a happening which occurred several
+years earlier. I had killed a white drake from
+my flock of Muscovey ducks. He was to serve
+us a meal. After chopping off his head I held
+him by the feet with one hand. With the other
+hand I held him up so he would not get blood
+on the pure white feathers, and soft duck
+down, which I wanted to save.
+I was holding him facing east (except his
+head lay on the ground and he had no face.)
+He flapped his right wing violently as if to
+turn. Then I faced him south and both wings
+flapped violently. I turned to the west and only
+
+<!-- page 45 -->
+35
+his left wing was actively flapping. When I
+turned him to face north, the violent flapping
+turned into a graceful flight as one sees in the
+flocks of passing geese. This drake was telling
+me that he was finally leaving this life behind
+and was heading "home".
+Why did he choose North? How did he
+know which way was North? Was it like the
+tunnel, which I saw that was leading to the
+North, after my accident? There is that possi-
+bility.
+What do these four episodes have to do
+with Quantum Arithmetic? We are trying to
+determine the parameters of the next Myriad
+above the Myriad of Light. Can we extrapo-
+late from the lower Myriads into this higher
+Myriad of the Metaphysical? It appears that
+we can begin to see this next myriad, as com-
+posed of seven octaves. 
+EPISODE 5 -- AN EPILOGUE
+Episode 2 was with me for most of the past
+ten years. It was on my mind, questioning
+what really happened behind the scenes.
+In 1989 I joined a local Dowser Society.
+Dowsers do not just find water sources. They
+learn to have access to a much wider knowl-
+edge. They have a question and the first thing
+they ask of "a higher power" is, "Can I; May I;
+and Should I inquire to that certain subject?"
+If the answer is "No", there will be no search
+even though no reason is given. If the answer
+is "Yes", then the Dowser is allowed to pro-
+ceed. We are not allowed to interfere with the
+life and well being of another. Nor are we al-
+lowed to accept gratuities for our work.
+One of the first things I inquired into was
+my own self and condition of my own spirit. I
+was told by other dowsers that I had two spir-
+its, and a kirillian photograph also showed a
+different aura on the two sides of my head. I
+dowsed the question and it was true. The other
+Dowser said it appeared that my second spirit
+was foreign. I dowsed, and found the second
+spirit was from the Star system of Sirus. His
+spirit had wanted to reincarnate on Earth. He
+wanted to learn more about our human socie-
+ty, but did not want to go through the child-
+hood or adolescent years. He had been a major
+ruler of one of the Nations in his Star System.
+It was he who walked me out of the woods af-
+ter I died. He stayed with me through the heal-
+ing process.
+What was unusual was that he agreed to ac-
+company my orginal spirit in his learning pro-
+cess. We would both live together in one,
+body.
+Three or four years ago, another Dowser
+who is a close and dear friend, confessed to
+me that tie was a "Walk-in" since he was in
+his teen years. He felt then, 50 years ago and
+feels now, that lie is still a foreigner in this
+land. He described his life as a "walk-in", It
+was then that I realize that I was also a "part
+walk-in”. I kept track of my two spirits
+through dowsing.
+About the first of 1996, my original spirit
+decided that it was time to move on, since
+most of the books were written concerning my
+past 50 years of research in Quanturn Arith-
+metic. This left me in the good hands of my
+"walk-in" spirit, but all of my original memo-
+rie stay with me. I have never- been privy to
+the past memories of my "walk-in". My origi-
+nal spirit has moved on beyond the Astral
+plane while the Sirus spirit has put on this old
+overcoat of a body. He is able to keep it going
+in spite of serious setbacks.
+Being a proficient healer, he has seen me
+through a heart attack. He took care of my
+body after a serious auto wreck. In spite of re-
+curring aneurysms he has been able to bring
+them under control. He saw me through a
+chemical poisoning in which I could have lost
+my eyesight. Yes! The medical doctors were
+on hand and making their attempts to save me,
+but were ineffectual -- even to the point of ex-
+acerbating the problems. I had to tell them
+hands off and that I was a Healer. My walk-in
+made efficient cures, even as I approach age
+80 years now. I have faith that he will contin-
+ue to do so.
+CONCLUSION:
+There are two reasons for telling these very
+private thoughts. The first reason is that they
+
+<!-- page 46 -->
+36
+are all Metaphysical and lead to a better un-
+derstanding of the Metaphysical Myriad. Put-
+ting them all together from the different areas
+of the Metaphysical gives a smattering of an
+idea of how it works.
+The second reason is purely Metaphysical.
+About a year ago, a new Guiding Spirit has
+stepped in to give me a different goal. This
+Guiding Spirit is one of several prominent sci-
+entists who are working together in the Spirit
+world. Their whole group is seriously con-
+cerned about our civilization, and our rudi-
+mentary state of general knowledge. They
+want the world to know that they are watch-
+ing, waiting and helping where they can,
+through perilous times ahead.. Though a
+Channel they send us messages of a very tech-
+nical nature which we check out and find to be
+true. They have told us about specific proper-
+ties of various elements and how they are to
+be combined and used to produce New Ener-
+gy.
+But their main message is to start accepting
+the help of the Spirit World if we hope to
+avoid our continuing plunge into self destruc-
+tion. They tell us our science is oriented al-
+most exclusively around matter instead of
+around energy. Matter is just one of seven
+kinds of energy. Energy is classified by wave-
+length, or frequency and the Spirit World is
+just one of many different worlds, all of which
+are formed of energy in different frequencies
+and combinations. The next four chapters will
+continue exploring this subject.
+
+<!-- page 47 -->
+37
+Ultraviolet Light is the 50th octave. The
+Astral octave appears to be just above that,
+with the 51st octave relating to the aura of liv-
+ing bodies. Now let us say that the "Light"
+which the discarnates must go to, is the next
+octave above making it the 52nd octave. Then
+the spirit world itself may occupy the seven
+octaves, -- 52 through 58, which is sometimes
+called "4th Dimension". The astral spirit will
+have to cross to the next dimension. or next
+Myriad. This may provide a hypothesis from
+which to work. Let us look a little further.
+Before going further we must observe cer-
+tain cautions. There was not much interpreta-
+tion of observations given in the last chapter.
+In Quantum Arithmetic we are not allowed to
+make, and accept unchecked and unproven in-
+terpretations. The final acceptance may come
+at some distant future time, when we can cor-
+relate the observations with mathematical val-
+ues that are proven through Quantum Arith-
+metic. All we can do at this time is to try to
+classify and to catalogue our observations into
+certain progressive categories.
+There are no mathematical values available
+from empirical sources for anything in the
+Metaphysical Myriad. As Quantum Arithmetic
+developed to this stage, there were empirical
+values available from the various lower Myri-
+ads. That is not true in the Myriad of Meta-
+physics. The episodes described were only a
+beginning. There are millions of episodes
+from which to draw. Given enough of these,
+we can begin to draw trends which develop
+along the same lines, but it may mean another
+pitfall. How can we verify the truth of any giv-
+en report?
+So these four chapters must be taken only
+as a trial run until we can feel very very sure
+that we are working with the ultimate truths,
+only the truths, and nothing but the truths. So
+far, we can only say that it appears we are
+working with a new Myriad which lies be-
+tween the Light Myriad and the Creation My-
+riad. All the rest is guess work until we have
+built our data base, and evaluated it.
+Having said that. Let us get to work starting
+the data base which we will need. Eventually,
+we will be able to overlay this data base over
+other Myriads, and hope for a match, That will
+only be a lead. It will not be acceptable proof.
+OTHER ADDITIONS (Miscellaneous)
+(1) In the late 1970's our daughter was hav-
+ing troubles with unwanted psychic invasion.
+She was In San Francisco. I was in Seattle. I
+managed to go to San Francisco, in OOBE.
+There was a group doing psychic research in
+the area at that time. I found one of the mem-
+bers of the group and managed to correct the
+situation. This trip took only about 20 min-
+utes. Then I went back the following day be-
+cause I understood the whole group was meet-
+ing. I met the seven or so members and yes,
+they had received my previous message to lay
+off. Our daughter was no longer bothered by
+them. You have only my word on this.
+(2) In this present year I began to investi-
+gate discarnates, (astral bodies) which at-
+tached themselves to living people. One case
+was a person whom I met nearly every day.
+He had become very emotional. I asked for
+permission from higher spiritual beings, to
+help. Then I dowsed for unwanted and unhelp-
+ful astral beings. Finding them, I advised these
+discarnates that they had died, and were in the
+in-between, astral world. They should go
+through the portal to the next dimension to the
+light. They went willingly and quickly. Just as
+quickly, the person who had been their host,
+returned to his cheerful and natural self.
+Chapter 7
+METAPHYSICS MYRIAD
+
+<!-- page 48 -->
+38
+He is a person who is rather unsure of himself
+and lacks self confidence. I have continued to
+observe him. He has relapsed many times with
+new discarnates. So I have had to repeat the
+process many times over the past six months.
+It is amazing to see the changes in his person-
+ality each time I have removed a new group of
+discarnates. So far I have encouraged more
+than 150 discarnates to proceed to the tunnel
+portal. Now I have started to put white light
+protection around the individual. This had re-
+duced his relapses. The response has been
+rather amazing. In addition to emotional im-
+provement, he has had great improvement in
+his health, but only between relapses. It
+works.
+(3) In the few weeks before Archimedes bid
+his final farewell to me, I had a 4-year old
+neighbor boy, who told me amazing stories
+about past lives mostly in Roman times. He is
+now a teen-ager. Visiting him recently, I find
+that he has no recollection of some of the
+physical events he described to me earlier. He
+had totally forgotten them in his conscious
+memory. That is the subject of another chap-
+ter. These three bits of experience will fall in
+the lower octaves of the Myriad of the Meta-
+physical.
+Number (1) concerns manipulation of ones
+own spiritual self, in planned Out Of Body
+Experience (OOBE). This involves energy fre-
+quencies as the top of the Light Myriad, and
+enhancing these to the bottom of the Meta-
+physical Myriad.
+Number (2) gets into the activities of discar-
+nates in a little higher stage. It is the top of the
+Light Myriad, and bottom octave of the Meta-
+physical Myriad.
+Number (3) concerns memories supposedly
+retained in the super unconscious which are
+attached to the spirit and soul and may contin-
+ue through several reincarnations. This in-
+volves several octaves in the middle portion of
+the Metaphysical Myriad, probably the third
+or fourth octave for memories.
+The "conscious" is that part of the uncon-
+scious which applies only to the material
+world. There are several stages of the uncon-
+scious. The part of the unconscious which re-
+tains the history of an individual soul, is called
+the memory, and the memory of that soul lives
+on even after the body dies.
+When a spirit returns to Earth in a new
+body, the unconscious also returns to the new
+body at some time after birth. There are
+records, in India, which show cases of the soul
+not being joined to the body until one child
+was six years old, but generally the soul joins
+the body at or shortly after birth. With the
+joining of the soul to the spirit, the memories
+of the previous earthly life will return to that
+child.
+Parents are so prone to erase those prior
+memories because they are in the context of a
+time perhaps two hundred years earlier. Sure-
+ly, some of the memories are outdated, but the
+child will reorganize, and save those memo-
+ries which are in context with his or her new
+life. The outdated memories will be builded
+upon and revised to meet conditions. After
+many lifetimes each soul can gain enormous
+knowledge, and part of that knowledge is
+"Know Thyself". In the statement, "Know
+Thyself" one must know their soul which has
+been termed by various names. One of those
+names is the "unconscious" of a person.
+This brings us to the very reason for our be-
+ing. Our being on Earth is to gain knowledge.
+In order to advance further in science today
+we need mathematics, (Quantum Arithmetic),
+which is used by Nature. The mathematics and
+Spirituality, are being used in the development
+of several successful ventures into discovery
+of New Energy.
+By gaining knowledge in all areas, one be-
+gins to Know themselves better. What better
+place to start than in studying Creation
+through studying mathematics? The problem
+with that is that the mathematics we common-
+ly use today is NOT the mathematics of Crea-
+tion. Science has touched upon the mathemat-
+ics of Creation in such basic things as the
+Periodic Table of Elements, and in Music but
+they still do not have the mathematics. The
+mathematics of music also depends upon the
+mathematics of Creation, but neither do musi-
+cians have the mathematics of Creation. The
+
+<!-- page 49 -->
+39
+mathematics of Creation was once known
+more than 2000 years ago. It was used by the
+Greek Mathematicians but it died out shortly
+thereafter. There were ancient civilizations
+more than 10,000 years ago, and up to 70,000
+years ago, Who used the full extent of the
+Mathematics of Creation. We are recovering
+that today, as Quantum Arithmetic.
+Creation, with which we are concerned can
+be studied by learning the precise laws which
+apply by using the prime numbers as a base.
+But the purpose of this chapter is not to ex-
+plain the mathematics. It is to explain the
+body, spirit and soul, in terms which have
+been unknown to us these several millennia.
+In this way we can learn more about the Meta-
+physical Myriad.
+"The oldest souls of today have the knowl-
+edge of this mathematics buried in their an-
+cient memories, but it has been overshadowed
+by the current inept teachings of mathematics.
+There is no substitute for truth. The oldest
+souls remember this mathematics, within their
+unconscious, but when taught today's mathe-
+matics, they find conflict with those earlier
+memories and a mental block against any form
+of mathematics is created. That is the reason
+so many people hate and fear mathematics, to-
+day. They have been confronted with an un-
+truth which was taught to them as the ultimate
+truth. In their unconscious Soul, tile, untruth
+was recognized, but this memory has never
+reached their conscious Soul.
+These are given as a basic examples of the
+problems which confront us in giving our soul
+a chance to express its unconscious memories.
+But therein lies an answer. The spirit and soul
+is a microcosm of the universe. This soul does
+not need to be educated, because it already has
+all knowledge. It has all of the knowledge of
+the past, but being free of the space/time di-
+mension, it also has all knowledge of the fu-
+ture. We do not recognize this because very
+few are in touch with their unconscious, or
+with their soul, to that depth.
+There are two ways to get in touch with our
+soul. One way is through meditation, but it is a
+very unsure way because those untruths in our
+conscious memory get in the way. We can not
+be sure of, or trust the revelations we receive
+through meditation. The other way is the natu-
+ral way which has been set up through the
+laws of Creation. It is a slow and tedious way
+but its results are sure, if one follows the other
+laws of Creation. One particular set of laws
+are the laws of Love, Charity and Gratitude.
+This way leads to the gaining of knowledge
+and truth at each sojourn on Earth.
+Many have run afoul of these laws in their
+progress toward perfection. In doing so they
+have tended to diminish their soul through
+practice of Greed, Hate, and Intolerance.
+When these practices harm their fellow be-
+ings, such an entity is in danger of losing their
+spirit and soul. When that happens they do not
+go to hell after death, they simply gather kar-
+ma and may risk disappearing into nothing-
+ness.
+Organized religions teach the worship of Je-
+sus, but Jesus, states in the Talmud of Imma-
+nuel, that one who worships him as a God, has
+already failed Jesus taught that he was an ordi-
+nary man with a soul which was advanced
+enough to bring the message of Creation, at
+that time.
+Jesus had the same spark of the Christ Spirit
+which every soul has. Buddha was another
+such man with the same message, 600 years
+earlier as was Mohammed, 600 years later.
+They were all the same Christ Spirit. But We,
+call them Buddha, 600 years before, Jesus.
+with the same message, as was Mohammed,
+600 years later. They were all the same Christ
+Spirit.
+If any one has even minimal contact with
+their own spirit and soul, as "know Thyself",
+they begin to have the ability to contact one of
+the higher spirits, which are known as "Spirit
+Guides". These work to assist mankind. The
+"Shasta People" appear to be of this advanced
+type of group.
+There is a New Testament Book of Imma-
+nuel, or Talmud of Jmnuel which was omitted
+from the Bible. It describes the life of Jesus,
+and the period after he was crucified. I am told
+there are only six copies in the world. I have a
+recent English translation. It tells of Jesus in
+
+<!-- page 50 -->
+40
+India where lie learned from the Hindu relig-
+ion, the ability to enter suspended animation,
+which was his condition on being placed in
+the sepulchre. He and a large party of his fam-
+ily and others then are supposed to have gone
+to Europe, Ireland, and then on to North
+America. This last could have been the origin
+of the "Great White Father" of the North
+American natives. The Metaphysical has al-
+ways been claimed by all religions, and has
+been their mainstay. In our scientific order of
+things, religion should be and should stay in
+the next Myriad, the Creative Myriad, There is
+really nothing which is magical in the Meta-
+physical Myriad, it is only magic when it is
+not understood.
+Perfection is achieved on Earth, when a
+spirit and Soul has no need to return to a new
+body for further improvement. But even then,
+many choose to return in the spirit form to as-
+sist others, and to assist humanity.
+I still do not understand exactly what hap-
+pened oil that December day In 1986. It could
+have been something of which I have been
+hearing lately. I really should have died on
+that day, and I cannot say that I didn't.
+The main purpose for being on Earth is to
+gain knowledge and truth in all areas. The
+negative part of this is to eliminate the untruth
+which has been previously learned. Some-
+times that is a difficult task even in a single
+lifetime. For instance, when one learns music
+through the chromatic scale, they must be able
+to unlearn this, and recognize that Creation
+has its own musical scale. It is called "Music
+Of The Spheres". Most find it difficult to re-
+vise this memory within music, in favor of the
+truth. They will not find it any easier in other
+areas. The mind must be kept flexible to ac-
+cept truthful knowledge when It is encountert-
+ed.
+Then, there is the "walk-in" as the one
+which took over to salvage my body after my
+accident in 1986. 1 have been learning about
+"walk-ins". These are higher level spirits who
+want to reincarnate but do not want to go
+through the process of rebirth through being a
+baby and the growth (and miss-education)
+through the 'teens. They are often from other
+star systems and sufficiently advanced that
+they can enter a perfectly good, but dying
+body. They can take this dying body and bring
+it back to health with all of its previous memo-
+ries intact. The original spirit passes on but the
+advanced spirit takes his or her place within,
+the abandoned adult body, and nurtures it back
+to health. They reincarnate without going
+through the birth process., and are called
+"walk-ins" I believe this is what happened to
+me. However, there is an exception. I main-
+tained my original spirit as well. I believe my
+spirit struck a deal. I noticed no change. There
+seems to have been a nine year transition. My
+walk-in came from the planet system of Sirius,
+where he had been a ruler.
+When a spirit and soul has progressed be-
+yond the need to occupy an earthly body, there
+is higher progress to be made. It appears that
+my original spirit passed on to the next dimen-
+sion in November 1995 after a special period
+of “enlightement”. I had written six books in
+that period, 1986-1995. Two of the books are
+revised editions of books, which were com-
+piled from previously written desktop books.
+The others are compilations of many articles
+which were originally written many years ear-
+lier. That may be the natural evolution of
+books. It does not require a walk-in for that.
+This present book is underdirection of my
+"walk-in" spirit.
+To say, there was a walk it), will explain
+many things about the accident,. It may have
+been that the old and new spirits had agreed to
+work together to salvage the body. This ex-
+plains why the brief periods of lucidity when
+the original spirit was called back to accom-
+plish the task of getting the dead body over an
+unanticipated difficulty. It also may explain
+the lack of any memories of the longer periods
+when my body was in the unconscious state
+and in the control of the new spirit. This al-
+lowed my original spirit to contemplate the
+tunnel arid released it from further obligation
+other than writing the six books. So I will
+have to leave you with many questions, "Is the
+Tunnel real? Is it a portal to another dimen-
+sion and another Myriad?" "What is the order,
+and depth of our spiritual development?" and
+"? ? ?".
+
+<!-- page 51 -->
+41
+The truth must be known and the Truth will
+make you free. Our brains have been filled
+with many untruths which have been accepted
+for so many ages that they have become ac-
+cepted as the final truth, but are not. Quantum
+Arithmetic has proven this without a doubt.
+within mathematics. An entity can make
+progress only while in a living material body,
+and that is the real purpose of life. Spiritual
+development does not occur in higher dimen-
+sions. The wheel of life goes on and on. Each
+turn is supposed to reach a new and higher
+goal for the spirit, while it is in a material
+body. My present Sirian spirit wanted a short
+sojourn on Earth to personally learn and ob-
+serve Earth's human civilization.
+The first thing about which we must learn
+the truth, comes in the term "Know Thyself!"
+What is a human being? We have come to ac-
+cept that our capabilities are so restricted that
+there is not much hope. This is not true. The
+human being is a microcosm of the universe.
+Each human being is capable of anything
+which can be imagined. But each person must
+know themselves first. Those who believe we
+are super intelligent, tend to ignore any infor-
+mation about a spirit or soul. They call them-
+selves "skeptics", and probably will always
+be.
+The human being is much more than just a
+body. The body is only the temple in which
+the major part of the human being, resides for
+a time. We need, to drastically change our
+thinking about the space time dimension.
+These apply only to the material world in
+which the human body resides. Beyond this
+there is only the spirit and the Soul. A major
+problem against any change, comes from our
+interpretation of spirit and soul. The interpre-
+tation of today was to us by organized relig-
+ion. It has no scientific basis.
+ 
+In the quantum world each octave is per-
+mitted to have 5040 frequencies, but only the
+144 are strong enough to be considered separ-
+ately. That leaves 4896 frequencies which are
+much weaker quantumwise. Of the 144 fre-
+quencies used 12 to 18, are much stronger
+than the rest. Of this 12-18 frequencies, seven
+frequencies are still stronger, and of these sev-
+en there are four which are really important.
+This seems to establish an hierarchy within
+each Myriad and within the system of octaves
+of each Myriad. We find this hierarchy in mu-
+sic, Matter, and Light. Is this same hierarchy
+found in the Metaphysical Myraid?
+We can use this generality extend to the
+other four Myriads of energy being the first,
+Creation; the second, Metaphysics; the fifth,
+Ultra Sound; and the seventh, Sub-sound. But
+there are other generalities which can also be
+used to study these four missing Myriads.
+They are missing primarily because we do not
+have the sensory organs to perceive frequen-
+cies in these other four Myriads. We have also
+failed to establish any empirical number val-
+ues in them.
+We have some evidence of the Metaphysi-
+cal Myriad. We can assume there are seven
+octaves, but cannot prove it. If it does, it
+would seem that the lower octaves will start
+with the Spiritual domain. Quite possibly the
+Christ spirit is in the seventh octave or the top
+of the Myriad. Can we find a way to fit other
+methaphysical artifacts within these intermedi-
+ate octaves?
+This problem cannot be solved overnight. If
+we keep working at it like I have worked for
+over 50 years in developing and recovering
+Quantum Arithmetic, it is possible that this
+problem can be concluded. Possibly the
+biggest part of the problem is for one to over-
+come the tendency of the general population
+to try to maintain the status quo and refuse to
+discuss the Metaphysical Myriad in any terms.
+It is only a mental block brought on by a use-
+less taboo in our civilization.
+All things which are created are created out
+of the energy of the aether. The more the aeth-
+er is densified the more complex will be the
+thing which is created. So, the metaphysical
+Myriad consists of a series of bound aetheric
+energy fields which are less dense than the
+matter of which we are composed. In this
+same way but to a lesser degree hydrogen is
+less dense than helium and so on up the Peri-
+odic Table of Elements. In the case of the
+Metaphysical Myriad, the aether is even less
+dense than the density of aether of the Hydro-
+gen which is non-Metaphysical.
+
+<!-- page 52 -->
+42
+The last chapter of this book involves stud-
+ying how the aether of the higher Myriads is
+put together through the Torus, and the whirl-
+wind of the Vortex. Even here it is only a start
+but there will be another book which carries
+our knowledge forward, by Dr. Elkins.
+
+<!-- page 53 -->
+43
+The bible says, "Listen to the children". It is
+such an innocent statement, but children can
+be a source of a great wealth of knowledge
+which can be gained.
+This is not mentioned in the ancient texts
+from Greece and Egypt, but the background
+for it is implied in all of their investigation and
+reporting of the "after-life" experiences. From
+these ancient reports, and from our present
+anecdotal reports, it is possible to trace a trail
+which one travels from lifetime to lifetime.
+The first stumbling block on the way is in
+the Modern Christian church teachings that
+there is "resurrection" and no reincarnation.
+Up until 425 A. D. all Christianity taught rein-
+carnation until the Bishop of Alexandria, and
+Emperor Constantine decreed that the teaching
+would be of "Resurrection" and there was to
+be no "reincarnation". Nearly every other re-
+ligion still teaches the idea of reincarnation.
+Some of them consider past memories of chil-
+dren.
+Our present anecdotal reports of after-death
+and near-death experiences can lead one to un-
+derstand the first part of the trail one follows,
+and helps to understand the condition of the
+spiritual portion of each person's entity. There
+is the person's spirit hovering over the discard-
+ed body and looking down on it and its materi-
+al surroundings of familiar people and things.
+As far as the floating spirit is concerned, they
+have entered a period of timelessness, so it is
+impossible for a victim to know how much
+time passes, in terms of time on Earth.
+The next step along the way is the appear-
+ance of a long tunnel which invites the spirit
+to enter. In my own case, this long tunnel
+seemed to be a metallic pipe about twenty feet
+in diameter and was snaking away toward the
+north.
+In my own case, I was determined, and said,
+or gave out the thought, "I can't go just now. I
+have much work still to do in Quantum Arith-
+metic". With that I was still in the astral realm.
+My unconscious body was being carried, or
+manipulated to walk in the unconscious state
+for nearly a quarter mile. During this walk
+there were a few incidents in which conscious-
+ness returned for me to make conscious deci-
+sions about the pathway back to safety. My
+spirit savior did not seem to know where I
+must go for home and safety. In between these
+moments of lucidity I was again unconscious
+but this tunnel followed me all the way back
+to my door. In following me I noted that it
+seemed to pass through the objects which
+were in its path. I knew nothing of the walking
+back home. The tunnel disappeared when I
+reached my door and regained fairly full con-
+sciousness, but a full two hours of Earth time
+had passed during this period. I found that I
+was still bleeding quite profusely had a severe
+head wound and a skull fracture which should
+have killed me. It was another day before I re-
+alized that I also had three broken ribs, and a
+dislocation of my neck.
+On first arriving at home, I asked a neigh-
+bor to drive me to the emergency room of the
+hospital some twenty miles away. There I was
+taken to x-ray room where eighteen pictures
+were taken. The technician warned me, "Don't
+shut your eyes because you may never wake
+up." I must have been a terrible sight in my
+torn clothing and blood stained from head to
+toe. When my neighbor came into the examin-
+ing room some time later, while I was await-
+ing the x-ray pictures, and the physician, she
+came into the room and immediately walked
+back out into the hall and fainted dead away.
+ At the beginning of the accident I had seen
+the butt end of a fairly large tree coming di-
+Chapter 8
+CHILDREN AND THEIR PAST LIVES
+
+<!-- page 54 -->
+44
+rectly at my head. I knew this was the end,
+and in that split second I said, "No! I can't go."
+Before the tree struck me I went into a
+"stopped-time" mode. I saw the tree getting
+closer in several "stopped-time" views of it.
+The tree struck me full in the face and threw
+me twelve feet as I measured it later. From the
+time of contact until I reached the door at
+home I was unconscious but there were fleet-
+ing moments when my consciousness was
+called forth. The first was in the few minutes
+after the contact. The chain saw was lying on
+the ground and I was told to shut off that mo-
+tor. A voice also said, "We must get you to
+home and safety."
+The next moment was a voice saying, "Put
+those tools down! You can get them tomor-
+ow." I had been carrying the chain saw and
+some fifty pounds of tools through deep
+swamp and heavy vines and brush. When I
+found them the next day I found that I had car-
+ried them nearly one hundred feet. In the mo-
+ment of consciousness, in another stopped-
+time view, I saw them placed on the stump of
+a tree I had cut previously, but I had a death
+grip on them. I released them and immediately
+passed off into unconsciousness again. After
+walking another hundred feet across muddy
+ground I had miraculously gotten on the trail
+to home, but still another quarter mile to go. I
+was brought to consciousness momentarily,
+with the question "Which way?"' my guide not
+knowing the trail to home. I was weaving bad-
+ly. This time there were stopped-time pictures.
+In the first I saw I was facing the wrong direc-
+tion and my dog was curiously watching. In
+the second I had turned in the proper direction
+and immediately went unconscious again.
+The trail was narrow and I had stepped off
+the trail into a ditch and had fallen, at which
+time I was brought back to momentary con-
+sciousness. Again there were two stopped-
+time pictures. In the first I was lying in the
+mud of the ditch. In the second I was standing
+at the edge of the trail.
+I remember thinking that I must be careful
+not to fall off the narrow foot bridge across the
+stream and I must remember the right angle
+fork in the trail beyond that. Apparently, what-
+ever was guiding me, took that thought in their
+own mind and I did not recover consciousness
+for the last quarter mile. I had no memory of
+it. I was aware only of that tunnel following
+me, cutting through trees as though they were
+not there.
+Several days later I was remembering in ret-
+rospect, what had happened and how I had
+made the, unknowing, (except for the stopped-
+time pictures), trek home. The injuries were
+severe but recovery was rapid, except the se-
+vere whiplash. It was several months before
+my lower jaw would fit properly in its original
+sockets because my skull had widened and my
+jaw bone had not. It did not fit and I was un-
+able to chew food for several weeks.
+The explanation of what it was that saved
+me was a mystery. On thinking it over, I re-
+called a different experience several months
+earlier. On this occasion, I had killed a white
+Muscovey Drake in preparation of it for our
+dinner table. I had cut off its head but I did not
+want it to get blood on its beautiful white and
+plumage. I held its legs in one hand and my
+other hand was under its breast.
+As I held it there it was furiously flapping
+only its right wing. I was facing to the east. I
+turned to face west and the left wing began to
+flap furiously. Then I turned to face north in
+the same direction that my tunnel seemed to
+extend. This drake started a graceful rhythm
+with both wings. It had the appearance of the
+geese as they fly north in the spring. The body
+of the drake wanted to fly north.
+That drake was actually trying to fly into
+that same tunnel which I saw in my own expe-
+rience, but he was beheaded and had no other
+option. I had nearly ended up in that same
+condition in my own experience with the tree.
+The difference was that I had the option of re-
+fusing to go. When I refused to go, the rescu-
+ing spirit took over and a deal was made for it
+to allow my body to continue to live.
+These are the actual facts in both cases as
+nearly as I can reconstruct them. The stopped-
+time pictures gave me information which
+helped me to understand and interpret my two-
+hour death experience. That was all I had to
+
+<!-- page 55 -->
+45
+go on.
+Other features have helped me to under-
+stand the probabilities as they derive from the
+Natural Mathematics. The body many die but
+the soul or spirit continues on. Was it my own
+spirit which was talking to me? That couldn’t
+be. My spirit and soul were watching but not
+venturing into the tunnel which was following
+me. It was a different spirit which had come to
+my rescue at the time of my accident.
+Although my experience was different, it
+tends to relate to a similar story as written by
+Plato in Book X of Republic. This is about a
+soldier who died in battle and then returned t
+otell of his travels to the nether world. I had
+refused to go into the tunnel to experience
+what may lie beyond.
+One part is unexplained. In view of the de-
+gree of my injuries, why did I seem to heal so
+rapidly? Was that guiding spirit still with me
+in the healing process?
+More recently another explanation has
+come my way through four people I have met
+in the past year. All of them are brilliant in
+science. Two of them are what may be called
+“walk-ins”. These two explained to me, what a
+“walk-in” is. A spirit agrees to come in and
+take over a mortally wounded body, and the
+walk-out spirit must agree to this arrangement.
+It is a way of being reborn in which the in-
+coming spirit does not have to go through the
+travails of living to the age at which the walk-
+in enters the new body.
+One of my friends received his walk-in
+when he was 16 years old. He did not speak of
+any accident but he said there was a sudden
+turn in his personality at that time. He is now
+70 years old and tells me that he knew he was
+not like other people. He felt out of place in
+any group of people, and does so, to this day.
+It was many years before he heard of walk-ins
+and knew immediately that his spirit was a
+walk-in. He has lost his childhood memories
+and had memories of having lived in a distant
+galaxy in outer space.
+The second friend is much younger, being
+in his mid 40's today. At some different time
+and place he voluntarily came to Earth know-
+ing that the civilization he decided to enter
+would be backward and primitive. He feels
+somewhat out of place here. He has lived here
+to experience the earth-living in many coun-
+tries and climes. He is a scientist of much ac-
+complishment. In a previous lifetime he was
+brilliant. In his work he piloted a space ship
+from system to system gathering information.
+It was an advanced mentally evolved society
+to which he belonged then. Even now he gets
+input from metaphysical areas which are be-
+yond anything which contemporary science
+has considered, or will even begin to consider.
+So he does not talk to many people about
+these strange thoughts. He is a walk-in with a
+spirit from an extra terrestrial space.
+His concern today is with the greedy. Their
+lack of trust has them fearfully gathering more
+and more fears, causing more and more imbal-
+ance. This must be corrected and harmony re-
+stored. For him he must stay reserved not do
+himself too much harm while still using the
+freedom that is granted him.
+From these two friends I have learned much
+about walk-ins. From the other two I know lit-
+tle except they are also of extra-terrestrial ori-
+gin, I find many parallels between their stories
+and my own present condition.
+That is a possibility in my case. In these
+cases, the newly occupied body, (mine), re-
+tained its memories. The back ground and ob-
+jectives of the new walk-in is generally added
+on to current memories, but was not in my
+case.
+These persons who now admit they have a
+"walk-in" spirit had noticed no appreciable
+change until others had told them about a
+"walk-in". The new spirit will generally con-
+tinue the same agenda, and will try not disrupt
+the previous existence. It will be a more ad-
+vanced spirit than the one it is replacing. The
+walk-in spirit will also have added memories
+and capabilities which the original body had
+not learned, but any such previous memories
+are passes on to me only very weakly. It is a
+possibility which I will have to examine as
+time goes on.
+
+<!-- page 56 -->
+46
+From this beginning, we can now examine
+how a child obtains a spirit or a soul in the
+first place. Many children will have "imagi-
+nary" friends, which their parents eventually
+cause them to drop and ignore. Are these
+"imaginary" friends and playmates? Or are
+they a carryover of associates from a previous
+life experience? There seems to be some va-
+lidity for this. One extensive case will be dis-
+cussed in the following chapter. This will de-
+scribe some eleven hours of recordings of
+discussions with a four-year old boy.
+These all tend to validate the idea of rein-
+carnation. In the case of a child, the spirit will
+not enter the body until after the birth. India
+has stories of a child not obtaining a spirit of
+its own until several years after its birth. In
+one case the child was six years old and even
+pointed out a place where he lived only a few
+months previously. He knew the present occu-
+pants as his relatives.
+When a child has learned to talk, parents
+should listen. They can judge many years lat-
+er, whether there was a validity to what the
+child has to say about their invisible "play-
+mates". When the parent forbids any such talk,
+it will create violent emotions in the child,
+which will last him or her the rest of their life-
+time. We find that the memories exist, not in
+the brain of the child, but in the energy field
+surrounding that child as an aura. The aura ap-
+pears not to be the spirit. These memories are
+of the past lives of the spirit of that child. To
+the child, they are truth, and contradiction of
+that truth will invariably create mental blocks
+later on. 
+By this time, many will be saying, "But
+what has this got to do with Quantum Arith-
+metic?" It really has everything to do with it.
+This is the domain where Quantum Arithmetic
+got its start. If it were not for that, and the
+many years spent in developing Quantum
+Arithmetic and then developing the proofs, we
+still would not believe there could be another
+way to use numbers to tie everything together,
+as well as the development of a useable calcu-
+lation method.
+In the past over 2000 years ago, the devel-
+opment of philosophy originates with mathe-
+matics, and was well developed by the Greeks,
+the Arabs, and Egyptians. If the reader under-
+stands Quantum Arithmetic sufficiently, it is a
+logical conclusion that there are such things as
+atoms. The original atomic theory was devel-
+oped in those ancient times, much along the
+same lines as we now presume atomic theory
+to be. Indeed, this fourth dimension 'in the
+Metaphysical Myriad is the heart and soul of
+Quantum Arithmetic.
+This chapter, and the next, attack the one
+obstacle which stands in the way for the adop-
+tion of Quantum Arithmetic. The one reason
+that Quantum Arithmetic has not been adopt-
+ed, is that it has run into a stone wall of taboos
+which have been places within our society.
+One of those taboos is that children are taught
+that it is improper for them to have invisible
+"playmates". It is possible that Quantum
+Arithmetic can be started as early as kinder-
+garten, if the proper devices, toys and instruc-
+tion are given to them.
+By the time children have developed a
+knowledge of the basic arithmetic of addition
+and multiplication, they are ready to begin
+study in earnest. When they can get started on
+working out the Table which starts the ball
+rolling in the first text book, QA-1, they are
+ready to continue with the lessons. Even be-
+fore that, if they can operate a pocket calcula-
+tor, they can begin working on that table, in
+QA-1. This is precisely how it was introduced
+in one case, to three children in a family.
+There was an amazing transition in a ten-
+year old boy, the youngest of the three, when
+saw that the numbers in the table were running
+in many different number series. He no longer
+had to calculate the numbers in each block. He
+could just go to the next number in the series
+which he saw and had selected. His eyes light-
+ed up and he became very excited about fin-
+ishing the table. That never happens when a
+child starts the rote learning of arithmetic.
+It happened that his two older siblings had
+more advanced conventional mathematics
+training. They failed to appreciate Quantum
+Arithmetic at the time, but did so after three
+hours of instruction. The ten-year old had be-
+gun to grasp it, on his own, after only one
+
+<!-- page 57 -->
+47
+hour and really needed no more instruction to
+complete his copy of the table.
+There is another side to this story. It will be
+covered in the next chapter. In this case it is a
+4-year old boy who was too young to begin
+any mathematics, but he certainly had many
+residual memories of his past live. I allowed
+him to tell me about his "invisible playmates"
+and the times which he spent with them. What
+he had to tell me was very emotional with
+him. He was so tied up up up with these mem-
+ories that his parents were having extreme dif-
+ficulties with him.
+Being able to talk freely with me, without
+any taboos, he was able to get into many sub-
+jects of his past lives that would never have
+surfaced otherwise. I made every effort not to
+guide and control the subject matter which he
+wished to cover. Over a period of short visits
+which would ordinarily be his visits with me
+very much as Dennis the Menace visits his
+neighbor. These visits were generally for a
+half hour up to an hour over a period of about
+two weeks. The conversations were tape re-
+corded and culminated in over eleven hours of
+tape with a voice activated recorder. In these
+two weeks he had become very pliant with his
+parents, and much of his anger was gone.
+He participated in any work I was doing, or
+he would play with my dog. A special part of
+every visit was the ritual of feeding the fish in
+my trout pond. After that we would do other
+things from picking apples or berries, working
+in the vegetable garden or any other work I
+had scheduled for myself. I gave him and his
+parents some copies of the tapes.
+This boy has now grown and has become a
+responsible 15-year old who is very adult in
+his activity. I was called to move my residence
+to another city and had little contact with him
+for several years.
+One "Playmate" in particular was his
+daughter. The mother of his daughter had been
+a war captive, and had died in captivity after
+giving birth. This daughter was the life and
+joy of Billy. He would do anything for her. He
+had told me that, "When I became a King .."
+this daughter was "very happy and had a castle
+all for her very own." He was very ecstatic
+whenever he discussed her on the tapes. (it
+was on the subject of his daughter that all of
+these conversations started.)
+When I finally visited him after several
+years, I asked about his past "playmates" by
+the names he had used. I asked him how was
+everything with your daughter Bayalla. I was
+amazed, when I was met by a blank stare. He
+did not know what I was talking about. It was
+as though he had never heard the name. I pur-
+sued the subject by asking about some of the
+other "playmates". He still had no recognition
+of those people about whom he had previously
+been so emotional and ecstatic. So I changed
+the conversation to the present. Those "play-
+mates" had been erased from his conscious
+memory by the very society which could have
+eventually been able to recover some of the
+technology, which I presume is still within his
+subconscious memory.
+He is turning out very successful in a busi-
+ness sort of way. But is he fulfilling his desti-
+ny for which he came to Earth this time? I
+don't know and possibly no one will ever
+know.
+The whole point of this next chapter is to
+demonstrate the strength which those memo-
+ries of past lives can have. Those memories
+should be explored, not just dismissed and de-
+stroyed. It would be much better if those
+memories are placed in the proper perspective.
+They are now in his subconscious and may
+arise at any time, subconsciously, to create an-
+other memory block to learning, which is
+available in this lifetime.
+'These memory blocks are afflicting many
+people to the extent that they are unable to un-
+derstand and absorb the simplicity and ease,
+by which any person may learn all of the
+mathematics they will ever need in Quantum
+Arithmetic. LISTEN TO THE CHILDREN
+
+<!-- page 58 -->
+48
+This is the story of a four year old boy who
+had a lot of unexplained things on his mind. I
+lived on a seven-acre mini-farm which con-
+sisted of about three acres of orchard and
+growing area, and four acres of forested area
+in which I had made walking trails. There
+were many springs and water seeps so the
+grounds were often quite wet. Some of the wet
+places of the trail on the property were sur-
+faced with corduroy. Other places where the
+water was gathered into streams, a wooden
+footbridge was constructed. At the far side of
+the forested area I had built two fish ponds.
+They were stocked with small trout in one
+pond. The other pond had full grown three to
+five pound salmon.
+There had been a few days of heavy rains.
+Everything in the woodlands was soaked and
+wet and there was much mud on parts of the
+trail. I had my rubber boots on my feet but
+Billy only had canvas tennis shoes.
+Every morning, and every evening I would
+walk the trail to feed these fish in the trout
+pond. These were fish for the table. Billy, his
+parents and his grandfather always enjoyed
+visiting here.
+Billy lived with his father and mother near-
+by. He would sometimes come over to accom-
+pany me on these feeding excursions. We
+would talk on these walks. Rather early on, I
+had told him of a book I had been reading
+about John Tyndall, the sound researcher of
+the 1870's who had discovered that there are
+certain, (unexplained) times when high
+pitched sounds travelled much further than
+low pitched sounds. I told him that, I too, had
+noticed there were times when the jet planes
+flying overhead would be heard as the high
+pitched whine of the turbines. Sometimes, un-
+expected things happened. But most of the
+time it was only the roar of the jets which
+would be heard.
+One day when walking to feed the fish, Bil-
+ly noticed the high pitched whine of a plane
+passing overhead He remarked, "This will be a
+fall-down day." He was essentially saying that
+the high pitched whine portends a time of ac-
+cidents or misfortune.
+It was many years before I fully understood
+how he had made the connection.
+I was soon to learn that Billy had memories
+which seemed to date 2000 to 8000, or more,
+years ago, and we will soon get into that. it
+eventually occurred to me that leaders in those
+early times depended a great deal on their ora-
+cle advisors.
+The oracle's attention to conditions may
+have included listening to the pitch of the pre-
+dominant sounds. Then the oracle may have
+forecast some of his or her prognostications on
+the basis of whether the sounds were predomi-
+nantly high or low pitched, or mixed. The an-
+cients appear to have known about this inter-
+connection within nature. I had learned that
+vibrations, in the range of one vibration per
+second, to about twelve vibrations per second,
+are the frequency range of some of our brain
+waves. This range will affect a person's emo-
+tions is a dramatic way.
+But to continue Billy's story, he was begin-
+ning to become rather unruly at home because
+of things in his mind. He apparently could not
+talk freely to his parents but he found he could
+relax and talk to me on our walks in the wood-
+ed trails. He told me many stories of his past
+lives which lived in his memory.
+Most of these past lives were somewhat
+mixed together and difficult to separate. Oth-
+ers because of their general context and condi-
+Chapter 9
+BILLY’S STORY
+
+<!-- page 59 -->
+49
+tions could be sorted out. His first story was
+one of these, although it may contain short
+sketches of other lives.
+The first story caught me entirely by sur-
+prise. On this morning's walk, Billy was be-
+coming unruly and aggressive. We had come
+to a short section of the trail which was very
+muddy but I wore heavy waterproof boots. He
+wore tennis shoes, and besides that he was
+having one of his unruly and obstinate spells.
+I picked 4-year old Billy up in my arms,
+and carried him over this wet and slippery sec-
+tion. As I picked him up he seemed to sudden-
+ly relax in my arms. It took only ten or twenty
+seconds to cross the muddy patch on the trail.
+As I put film down, it took him a moment to
+regain his composure when I put him on his
+feet. He had suddenly become quiet and pen-
+sive and to have lost his bearings. I asked him
+what was the matter. He said, "I saw Bayalla"
+and two ladies. 
+I asked, "Who is Bayalla?"
+Billy answered, very positively, "She is my
+daughter."
+I asked, "How old is Bayalla"
+Billy responded, "She is 16 and there were
+two other women."
+My next question was, "Where was this?"
+To which Billy answered, "Italy".
+It happened that Italy was the only far away
+place that Billy knew of. His parents had lived
+in Bologna, Italy for a year when Billy was
+one year old. But Billy did not leave it at that.
+He continued, "And there were lots of robbers
+in Italy and they had pistols. They would rob
+people and would shoot them."
+Other than the sojourn to Italy, Billy had
+lived a very sequestered life. He watched no
+television and had no neighborhood play-
+mates, nor did he spend any time in daycare.
+His father was an artist and his mother was an
+architect, and both work at home. His mother
+had told me that Billy was becoming difficult
+to manage because he was angry so often.
+No one was robbing them and I was in a
+quandary as to the origin of that statement.
+This is where Billy's story really started. I got
+a tape recorder. Billy rather dictated his story
+on following days. But I didn't have it this
+day.
+With that Billy started the story. He told of
+riding in carriages and the dangers they en-
+countered. Billy started out, " And there were
+bad people that had pistols, and swords. They
+would rob people and they would shoot them."
+I: " Did they rob you or shoot you?'
+Billy- "No-o-o-o ! We were riding in a car-
+riage!” His statements were very emphatic.
+One would feel he was actually reliving them.
+I.- "Did they ever stop your carriage?
+Billy: "We wouldn't let them."
+I: "How did you stop them?
+Billy: "We would pull down the curtains
+and my father and mother would gallop the
+horses." He talked of many things, both of to-
+day and from his memories. The conversation
+ended with Billy saying, "And one day the sol-
+diers came and got me and took me away."
+With that the interview ended. We had re-
+turned from feeding the fish and had returned
+to the house. Billy went on to his own home,
+and he seemed much relieved and relaxed that
+he was able to tell someone of the things on
+his mind.
+Several days later Billy came over again to
+help me feed the fish. This time I was armed
+with a portable voice activated tape recorder.
+After leaving the area of the house but before
+entering the forested trails we stopped and sat
+on the grass. 
+I asked Billy, "What did the soldiers do
+when they took you away?"
+ Billy: "They took me to the castle. Then the
+soldiers took me to the field behind the castle.
+They had cannons there."
+
+<!-- page 60 -->
+50
+I had visions of Billy being arrested and
+about to be disciplined in some way. So I
+asked as simply as I could, "And what did you
+do then?"
+He said, "And they let me fire the cannons."
+I: "What were the cannons shooting at?"
+Billy: "They were shooting targets."
+I: How many targets were there?'
+Billy: "There were three targets and three
+cannons." 
+I: "How big were the cannon balls?"
+Billy:' "They were this big." indicating with
+his hands about a foot in with his diameter.
+Then he retracted, "No they were this big", in-
+dicting again with hands that the cannon balls
+were about two inches in diameter. He always
+had trouble with answers when the answer in-
+volved a number or a size.
+It came out that the cannons had two wheels
+probably two or three feet in diameter and
+could be pulled by horses or men.
+I: "So the soldiers were only showing you
+how to shoot a cannon?"
+Billy: "Yes! And later on when I got bigger
+I became a soldier, too."
+We continued on to our objective of feeding
+the fish. On the way he stopped suddenly. He
+said, "Oh-o! This is another 'fall-down' day. It
+was then that I realized a plane had just passed
+overhead emitting the whining sound of the jet
+turbines, instead of the usual roar.
+The fish were fed and we had returned to
+the clearing. It was a beautiful sunny day and
+we sat again on the grass, with my dog nearby.
+Billy returned to the subject on his own
+without any questions from me. It was here
+where the conflict between memories were be-
+coming mixed with the day by day incidents
+of today. He spoke of his involvement with
+castles. Apparently he was talking about his
+early training as a soldier. I was a little wary
+in trying to establish a time or a sequence.
+Billy continued the conversation:, "I was in
+the school in the castle. We were writing on a
+board with pictures of things for the King.
+You know about him. Don't you?"
+I: "I think all kings are great. Which king
+was it?"
+Billy: After a bit of hesitation trying to re-
+member a name, "it was king Arthur?" This
+was the first name of a king which came to his
+mind partly because Billy was an avid follow-
+er of Prince Valiant in the comics. This will
+partly reflect his attempts to match his current
+learning with past events, and the confusion
+which resulted, for him. This made me even
+more wary and to avoid any leading questions.
+Then came a diversion. Billy said, "What
+are you eating Sera?" Sera was my faithful
+dog which was always with me. She and Billy
+were great friends.
+I: "She is cracking a plum pit. She knows
+how to crack nuts and to eat them. What does
+the King -- What does the Lord...?
+Billy did not give me a chance to finish the
+question. "We took our pictures and writing to
+show to the Lord."
+I asked, "Were there other people when you
+went to show the Lord your work?"
+Billy, "There was a general, and there was
+my regent, and there was a girl person who
+gave us our food, and some other people, and
+we showed all of them our work. on the writ-
+ing board. Then the King wanted me to sit on
+his throne"
+Apparently he was talking about his early
+training to be a soldier. 
+I: "Was there also a Court Jester?"
+Billy: "Yes."
+I: " What did he do?"
+
+<!-- page 61 -->
+51
+Billy: "He ruled the Court, and in the King's
+room. I had to climb a ladder to get to the
+Kings's room."
+I: "Where did the ladder go?"
+Billy: "I mean the room was above the Cas-
+tle. It was on the roof.
+I: "Did the ladder go through a window or a
+hole in the roof?"
+Billy: "Uh-huh. And we had to go through a
+window in the King's room. We had to go up
+the ladder through a hole in the roof and then
+through a window. The window was in the
+kings room, and a ladder came down from a
+hole in the roof. We had to climb up the lad-
+der. We would go in the room and tell the king
+and the queen about my royal possessions and
+my men, and hunters--.”
+I: "You had hunters? How did they hunt?”
+My question stumped Billy for a while. Ap-
+parently there was a flash-back to a different
+time and a different place.
+Billy: "Uh huh! I had hunters and men with
+peace pipes. The hunters had long spears with
+clam shells."
+I: "Clam shells?"
+ Billy: "Yah! Those and BARBONS. They
+would tie them on with clam shells and hooks,
+(barbs). And they had bows. They would point
+them at the animals and shoot and kill them.
+And then they had snow shoes. I told you
+about them before*." He drew pictures of four
+different types of "barbon". (*In a previous
+story he told of a winter of very deep snow
+over 10 feet deep.)
+I: "The barbons? They were made out of
+clam shells? Were they sharp, and you tied
+them on a --- ? "
+Billy completed my question, "--Stick.
+Then when we saw a deer we would run the,
+barbon-- (he demonstrated the spearing of an
+animal, acting it out), into the deer or the big
+fish." (I will have to interrupt here to break
+away to an experience in the late winter of
+1990.)
+I had arrived by train in Denver, on my way to
+a Mini-Science Symposium to be held the fol-
+lowing day in Colorado Springs with Dale
+Pond. I was stranded in the Greyhound Bus
+depot for four hours until midnight when the
+bus was scheduled to depart. In this wait, I
+struck up a conversation with an elderly be-
+whiskered WW II veteran from Durango who
+was also waiting. He had come to Denver to
+see the doctor at the Veterans Administration
+Hospital, and was headed back home on the
+same bus.
+Somehow, the conversation drifted into past
+lives which some people remember. I asked
+him if he had any experience with "barbons".
+This was without mentioning Billy or any oth-
+er reference. He said that he did and he de-
+scribed them and drew pictures exactly like
+the ones which Billy was describing. He was
+in his late 70's or early 80's, and a veteran of
+WW II, but he did not appear to think my
+question was odd or unexpected. I do not
+know why I asked the question. I was more
+surprised at his answer than he was about my
+question. I had run into something which was
+quite unexpected, this being some three years
+after Billy first told me about them. This eld-
+erly man had corroborated Billy's story. (And
+now we will return to Billy.)
+I: "You would run the spear into the deer,
+and with the barbons the spear wouldn't come
+out, huh?
+Billy: "And how we got the fish,-- We
+would get them in a big net that was tied with
+grass and vines. Then when we got the fish,
+we would kill them with other kinds of bar-
+bons."
+I: " Were these big fish or just little fish?"
+Billy: " They were this big." (demonstrating
+with his hands.)
+I: "Oh, like salmon, were they? They were
+bigger than my fish, huh?"
+Billy: "Uh huh! And they were this fat?"
+
+<!-- page 62 -->
+52
+(again demonstrating), "Or it could be a wolf
+eel." 
+I: " They weren't whales, were they?"
+ Billy: "No-o-o! We would catch whales
+though. We used canoes made out of grass and
+bark. We would use shells to make holes in
+the bark. We would spear them with barbons
+tied to the canoe. The whales would be our
+tow."
+Billy: "We did hunting, Our castles did
+farming and we had little lodges and animals
+and wells.
+I: "Were there other castles too?"
+Billy: "Uh huh. But those castles were bad.
+There were only four more castles that were
+nice to us. All the other castles were bad. And
+we wrote with feathers dipped in ink."
+I: “What bird did the feathers come from, a
+goose or -
+Billy: "They were from a blue jay. And we
+had a special block of wood to write on."
+I: "What kind of clothes did you wear?"
+Billy: "Cloth with grass, and grass tied
+across them, and shoes made out of bark and
+covered over with grass and reeds and fas-
+tened together with sticks, the toes going up."
+I: "Something like boats, huh?"
+Billy: "And we would write on pieces of
+wood?"
+I: "Why didn't you write on paper?"
+Billy: "We wrote on wood because we
+didn't know how to make paper."
+I: "Was Bayalla there?" I thought I could re-
+turn the conversation back to Italy. But, it
+seemed only to confuse the situation.
+Billy: "Yes, Bayalla liked being there, and I
+always had toys along so she could play with
+them."
+I: "Was that the time you were in Italy, or
+was it another time?"
+Billy: "It was in Italy but I was a Lord this
+time."
+I: "How come you were a Lord, instead of a
+so1dier?
+Billy: "I was a Lord because 1 was tired be-
+ing a soldier. After I was a Lord, I became a
+hunting man. I lived in a little cottage about
+this big." (He drew out the size on the ground.
+'The cottage was built of whatever was availa-
+ble in the forest. He sticks and logs and rocks,
+and grass and reeds. He goes on to talk of the
+great forest and the rivers and the mountains,
+and avalanches in the mountains, There were
+caves in the mountains.)
+I: "Did you go in the caves? Did people live
+in them too?"
+Billy: We would kill bears and wolves in
+the caves. Sometimes people would live in
+them. There would be two or three or five or
+six.
+I: "What did the people in the caves eat."
+Billy: "They would eat meat, bears and cats
+and berries and their fruit was Navigans.
+That's something you put in meat."
+I: "What kinds of berries were there?"
+Billy: "Any kind, but not poison. We knew
+what kind. Some of us were berry tasters. --
+3000 berry tasters. They tasted all the berries.
+I: "When they tasted them, did any of them
+get sick?"
+ Billy: (very gravely) "Some of them died --.
+But the berry tasters knew what kind of ber-
+ries he ate. Then we wouldn't eat that kind."
+I: " How did you fix the meat?"
+Billy: "We soaked it a long time in water,
+and then we dried it. And then they would
+cook it in pies with berries on top and there
+were nettles inside."
+
+<!-- page 63 -->
+53
+I: "How would you grind tip the meat?"
+Billy: "We would beat it a long time with a
+stick of wood.”
+I: "Did you use wood or rocks?"
+Billy: "We used wood, and then we would
+clean it because it would have stuff on it and
+would get bugs and germs on it. We would
+grind the meat with the wood and then we
+would dry it. That is what we called 'pennicun'
+(Pemmican), You know what that is, don't
+you?"
+I: "So that is how you would make pemmi-
+can."
+Billy: "And we had another kind that had
+fruit and nuts and apples in it it. "And we had
+That is what we called 'fruit pennicun'." 
+I: Was this in Italy? I thought just the Indi-
+ans made pemmican."
+Billy: “No! That was in Italy, and another
+country had apples and plums, cooked with a
+lot of berries. And that is what they called
+fruit pennicun' 'cause it had a lot of fruit in it."
+I: “Did you live in another place, some-
+time?”
+Billy: “No! Not while I live here."
+ 
+I: "I mean you told me you were a soldier
+and then a general when Bayalls was a child
+and then a king. What were you before you
+lived as a solder?"
+Billy: "We lived in a place where we had
+flowers, and gardens, and birds and animals.
+They were inside the houses and we had par-
+ties and people there. And we had potlatches
+there."
+I: "Your mother said for you to be back in a
+half hour and your half hour is done. I guess it
+is time for you to go home. I'll see you later.”
+(Aug. 30,1988)
+I could see how Billy was wrapped up in at
+least four different lifetimes, not realizing they
+were different lives. His memories contained
+nothing about death. He was first a soldier,
+then a Lord, then he was a hunter. He had not
+separated them into different lifetimes. I had
+not told him of my past life memories, but this
+last was certainly Atlantis. It seems that Billy
+and I had lived in the same country at the
+same time in some of his recountings of his
+past lives.
+I had lived in Atlantis in 11,000 B.C. about
+1000 years before the sinking. Plato claimed
+that it sank about 10,000 B.C. The story Billy
+tells of Atlantis is very much like the descrip-
+tion which was given in the book, “Dweller on
+Two Planets".
+I have present memories of having lived on
+Atlantis, as a scientist, in roughly that same
+time frame but about 1000 miles west from
+the Capitol. I had not told Billy about my
+memories nor did I tell him at this time.
+He confirmed a week or so later, that he knew
+me in another lifetime, perhaps 1000 years af-
+ter the sinking. Billy previously mentioned the
+"very deep snow". I had asked Billy about
+this. Billy told of living in a cave at the head
+of a valley only a mile or so from the sea-
+shore. He told of' a plane flying overhead and
+dropping a bottle on a parachute. Inside the
+bottle was a piece of paper, but no one in the
+small tribe could read it, even though they had
+ancient books hidden in the cave which had
+the same writing in them. I remembered the
+books and I couldn't read them either at the
+time but I knew nothing about the bottle with
+the message. 
+I believe these were the books which Nos-
+tradamus; found in southwest France, and later
+burned. He said they contained information
+"from the ancients. They burned with an ex-
+plosive flame", he wrote in his books. He also
+explained that he burned them because he did
+not think future generations should have them.
+I believe these were the real source of his
+prognostications.
+I had met Nostradamus in one of my past lives when
+I was Court Jester for King Henry II. I was born as the
+illegitimate son of Henry and a chamber maid. Nostrad-
+amus came to be interviewed by King Henry but he had
+to wait nearty two weeks. I talked extensively to Nos-
+
+<!-- page 64 -->
+54
+tradamus during this time. When King Henry died, his
+legitimate sons took the throne, I being much older, be-
+came consort to Queen Katherine, and was the de facto
+ruler.
+Billy went on to describe the snow in which
+the tribe was beginning to die of starvation. At
+this point I told Billy that I had memories also
+of living in a cave. We were starving so I took
+nine men to go to the ocean for fish.
+Billy seemed much older when he interrupt-
+ed me.
+Billy: "When you didn't come back we
+found you frozen. Then I took some men and
+we dug a tunnel under the snow all the way to
+the beach."
+This caught me very much by surprise. I
+had apparently jogged another of Billy's mem-
+ories. Within my own memories, I had placed
+this memory at some period of time after the
+sinking of Atlantis. My memories were de-
+rived through self regression in the mid '70's.
+Billy had made the connection to having
+known me as leader of that small tribe.
+This was about the third interview and Billy
+was getting things out of his memory. He was
+becoming more at ease with himself and re-
+laxed both here and in his home. He had not
+correlated his memories with today's happen-
+ings but was more at ease with them. It is
+quite clear that he was dealing with much
+more than the one lifetime which he consid-
+ered it to be.
+Two years had passed and I hadn't seen Bil-
+ly, in that time. I asked him "How are things
+with Bayalla?" His answer was a blank stare.
+He had absolutely no recollection of Bayalla
+or what I was talking about. Billy had his
+brains washed out as far as those memories
+were concerned. Only two years before, he
+had had such an emotional attachment to Bay-
+alla, that I could not imagine it not surfacing
+now three years later. There was not a vestige
+of recognition of the name "Bayalla".
+This chapter gets a long way from the main
+subject of Quantum Arithmetic. Billy's story
+was so real to him that it gives us an idea of
+how the brain, the spirit, and memories work.
+I believe that as Billy grows to adulthood, and
+then ages a bit, he will begin to remember
+some of these stories. His subconscious will
+have put them in a more reasonable perspec-
+tive for him, as his worldly knowledge grows.
+I believe they will reside in his subconscious
+and only be remembered when Billy decides
+to recall them.
+Between lifetimes, these memories must
+have resided somewhere as an organized field
+of energy in the aether, possibly attached to
+his spirit in another dimension. Has it been the
+same with me in the deriving of Quantum
+Arithmetic? Have there been vague vestiges of
+knowledge of this ancient mathematics, tied
+up in my subconscious, which Archimedes
+was awakening within me? It seems as though
+that may have been the case.
+What is memory? From the aspect of "ener-
+gy" information is an organized energy field.
+Each byte on a computer is an energy field in
+itself. This energy field is one byte of informa-
+tion and it is tied into other energy fields to
+make an enlarged field. Then these larger en-
+ergy fields are tied together to make up memo-
+ry. The whole field begins to have a context,
+but it was disorganized in Billy's case.
+There have been many unexplainable inci-
+dents, that have happened to direct me to the
+proper areas. I have many intuitional insights
+that also lead me to the correct end. I have
+been given many experiences, some of which
+I did not really enjoy, but they were necessary
+in order to recover Quantum Arithmetic to the
+state I have given it. It will be necessary to
+continue for yet one more Volume, on Quan-
+tum Arithmetic after this one Is finished. At
+that time, this work will be handed over to
+others to venture i nto the Third Dimension of
+Quantum Arithmetic,
+The interviews with Billy carried on for
+more than three weeks and, more than ten
+hours of recordings. They are quite enough to
+make a book in themselves. His soldier days,
+within the memories of several lives, is very
+extensive with methods of war which was
+more like guerilla warfare. He would rattle off
+the various weapons as though he were a gen-
+eral reporting to his Commander in Chief. He
+
+<!-- page 65 -->
+55
+had memories of several lives and was trying
+to put them together as one lifetime. but his
+life as a soldier, a General and then a King is
+rather continuous, and very detailed. There Is
+quite a bit more about Bayalla to whom Billy
+was very emotionally attached. Her mother, (a
+war captive), died shortly after Bayalla was
+born. So, Billy had to care for her or have oth-
+er military officers care for her when she
+could not accompany him.
+I often wonder how his life would have
+gone, had he not been able to unload his mem-
+ory problems ten years ago. Billy has com-
+pletely cut his communication with that an-
+cient memory field, but the memory energy
+field surely still exists somewhere and Billy
+may be destined to contact it again, later in
+this lifetime.
+This incursion into the Metaphysical Myri-
+ad has led to a slightly better understanding of
+it, but there is still a long way to go. This
+Chapter and the few preceding ones give us a
+little insight. One more chapter to wrap up the
+spiritual part will bring a little more cohesion.
+
+<!-- page 66 -->
+56
+The truth must be known and the Truth will
+make you free. Our brains have been filled
+with many untruths which have been accepted
+for so many ages that they have become ac-
+cepted as the final truth, but are not. The first
+thing about which we must learn the truth,
+comes in the term "Know thyself!" What is a
+human being?
+Many have come to accept that our capabil-
+ities are so restricted that there is not much
+hope. Others have claimed that humans are the
+most intelligent beings in the Universe. Nei-
+ther is true. The truth lies somewhere between,
+but is closer to the latter, in capability. The hu-
+man being is a microcosm of the universe.
+Each human being is capable of anything
+which can be imagined. But each person must
+know themselves first.
+The human being is much more than just a
+body. The body is only the temple in which
+the major part of the human entity, resides for
+a time. We need, to drastically change our
+thinking about the space time dimension.
+These apply only to the material world in
+which the human body resides. It seems the
+brain is only a reader which reads the sur-
+rounding energy field called the aura. The in-
+formation seems to be stored here. Contact
+with this energy (information) field is through
+the spirit, the soul and the brain. A major
+problem against any change, comes from our
+interpretation of spirit and soul. The interpre-
+tation of today was given to us by organized
+religion.
+One of the Biblical books which has been
+withheld by organized religion, is the Book of
+Immanuel, or the Talmud of Jmanuel. There
+are said to be only six of these books in exis-
+tence today, and they are being held in deepest
+secrecy. They are important to religious
+thought because they concern the personal
+part of the life of Jesus Christ, and contain
+some of his own personal remarks about Him-
+self, His birth, and His travels to other coun-
+tries. But one must start with the beginning of
+the general organization of our creation under
+the laws of Creation.
+There is a drastic change in the idea of crea-
+tion as given to us by Genesis. The very top
+level of creation is Creation itself. Creation
+consists of a series of laws which apply for all
+places and all time.
+These laws are unalterable and unchangea-
+ble, even by God. If there is God above these
+laws, that God is unreachable and more prob-
+ably unconcerned about human existences.
+Creation is based upon a system of perfect
+mathematical laws. These laws, then produce
+Creation and man after seeing this, creates the
+God to which we pray. We pray to God, but it
+is Creation which hears and grants our
+prayers.
+We can probably say that Creation is God,
+"The Creator", and below God is the spark or
+spirit of the Christ Spirit. This Christ Spirit
+governs all religions, -- not just the Christian
+religion. The Talmud of Immanuel tells us,
+that Jesus taught that he was an ordinary man
+with a soul which was old enough to bring the
+message of Creation, at that time. He was the
+Christ Spirit. Jesus was the origin of the spark
+of the Christ Spirit which every soul has. Con-
+fuscius and Buddha had the same Christ Spirit
+earlier. Mohammed, 600 years later, and Jo-
+seph Smith carried the same message to the
+Mormons 1200 years later still. They all had a
+body in which the Christ Spirit resided, and
+they taught the same message, but humanity
+chose not to understand, and not to believe.
+From this Christ Spirit is given a small
+spark, or seed, if you will. This spark becomes
+Chapter 10
+THE HUMAN SPIRIT
+
+<!-- page 67 -->
+57
+what we call a human spirit which is given to
+a child at the time of birth, for his or her spirit.
+When the child is born it still is not a human
+being because it has no soul.
+The soul is what makes the difference be-
+tween a human and other living things. In the
+statement, "Know Thyself" one must know
+their soul which has been termed by various
+names. One of those names is the "uncon-
+scious" of a person. The "conscious" is that
+part of the unconscious which applies only to
+the material world.
+There are several other stages of the uncon-
+scious. The part of the unconscious which re-
+tains the history of an individual soul is called
+the memory, and the memory of that soul lives
+on even after the body dies. When a spirit re-
+turns to Earth in a new body, the unconscious
+also returns to that body at some time after
+birth. It appears that the soul is not joined to
+the body until the child is older, but generally
+the soul joins the body shortly after birth.
+With the joining of the soul, to the spirit and
+the body, the memories of the previous earthly
+life will return to that child.
+The outdated memories will be builded
+upon, and revised, to meet conditions. After
+many lifetimes each soul can gain enormous
+knowledge, and part of that knowledge is
+"Know Thyself". This brings us to the very
+reason for our being. Our being (on Earth par-
+ticularly), is to gain knowledge.
+By gaining knowledge in all areas, one be-
+gins to Know themselves better. What better
+place to start than in studying Creation
+through studying mathematics? The problem
+with that is that the mathematics we common-
+ly use today is not the mathematics of Crea-
+tion. Science has touched upon the mathemat-
+ics of Creation in such basic things as the
+Periodic Table of Elements, but they still do
+not have the mathematics.
+There is also the mathematics of music
+which depends upon the ancient knowledge,
+but neither do musicians have the mathematics
+of Creation. The mathematics of Creation, and
+Music-Of-The-Spheres were once known
+more than 3000 years ago. Part of it was used
+by the Greek Mathematicians and Philoso-
+phers, but it died out shortly thereafter. There
+were ancient civilizations more than 10,000
+years ago, and up to 70,000 years ago, which
+used the full extent of the Mathematics of
+Creation. We are beginning to recover that
+knowledge, today.
+Creation, with which we are concerned can
+be studied by learning the precise laws which
+apply, by using the prime numbers as a base.
+But the purpose of this chapter is not to ex-
+plain the mathematics. it is to explain the
+body, spirit and soul, in terms which have
+been kept secret these several millennia. The
+oldest souls of today have the knowledge of
+this mathematics buried in their ancient mem-
+ories, but it has been overshadowed by current
+inept teachings of mathematics. There is no
+substitute for truth. The oldest souls remember
+this ancient mathematics.
+When these oldest souls are taught the
+mathematics which is being taught in the
+schools today, they are confronted with an un-
+truth which is being taught to them as the ulti-
+mate truth. The untruth was recognized, in
+their unconscious soul, but this memory was
+never given a chance to reach their conscious
+soul. Only a mysterious mental block is seen
+as, "I hate math." This was somewhat the di-
+lemma which confronted Billy in relation to
+what he remembered and what he was finding
+in this life..
+This is given as a basic example of the
+problems which confront us in giving our soul
+a chance to express its unconscious memories.
+But therein lies an answer. The spirit and soul
+is a microcosm of the universe. This soul does
+not need to be educated, because it already has
+all knowledge. It has all of the knowledge of
+the past, but being free of the space/time di-
+mension, it also has much knowledge of the
+future. We do not recognize this because al-
+most no one is in touch with their uncon-
+scious, or with their soul.
+Parents and society are so prone to erase
+those prior memories because they are in the
+context of a time perhaps two hundred or
+more years earlier. Surely, some of the memo-
+ries are outdated, but the child will reorganize,
+
+<!-- page 68 -->
+58
+and save those memories which are in context
+with his or her present experiences and learn-
+ing.
+There are two ways to get in touch with our
+soul, and our unconscious. One way is through
+meditation, but it is a very unsure way because
+many trust the revelations we receive through
+meditation.
+The other way is the natural way which has
+been set up through the laws of Creation. It is
+a slow and tedious way but its results are sure,
+if one follows the other laws of Creation. One
+particular set of laws are the laws of love,
+charity and gratitude. This way is the gaining
+of knowledge and truth at each sojourn on
+Earth.
+In their progress toward perfection, many
+have run afoul of these laws. In doing so they
+have tended to destroy their soul through prac-
+tice of greed, hate, and intolerance. When
+these practices harm their fellow beings, such
+a soul is in danger of degrading their spirit and
+soul. When that happens they do not go to hell
+after death, they simply disappear into noth-
+ingness. They will have no further chance to
+progress to perfection, except at the sincere
+prayer of another who asks, out of love and
+compassion, that their soul be reinstated.
+Organized religion teaches of Hell and uses
+this fear to control and enslave their member-
+ship. On the other hand they teach the worship
+of Jesus, but Jesus, himself, states in the Tal-
+mud of Immanuel, that one who worships him
+as a God, has already failed. They may wor-
+ship only the Christ Spirit.
+Perfection is achieved on Earth, when a
+spirit and soul has no need to return to a new
+body. An entity can progress only in body
+form in combination with spirit and soul. Spir-
+itual progress does not occur in the same way
+when in the upper dimensions. (There are indi-
+cations that there are some spirits and souls
+from other planetary systems who incarnate
+here. Some of them incarnate as "walk-ins",
+occurring later, in a mature body which has
+met accidental death. They provide a spirit
+and soul to that body and bring it back to live
+and to health.)
+Some spirits may choose to reincarnate in a
+new body to assist in the progress toward per-
+fection for humanity. Many may choose to re-
+incarnate sporadically, from the spirit form to
+assist others, and to assist humanity.
+If any one has fair contact with their own
+spirit and soul, as "know Thyself", they begin
+to have the ability to contact returned spirits,
+which then are known as "Spirit Guides". An-
+other name for them is "White Brotherhood"
+which works as a group to assist mankind. The
+"Shasta People", sometimes called "Lemuri-
+ans", appear to be of this advanced type of
+group.
+The main purpose for being on Earth is to
+gain knowledge and truth in all areas. The
+negative part of this is to eliminate the untruth
+which has been previously learned. Some-
+times that is a difficult task in a single life-
+time. For instance, when one learns music
+through the chromatic scale, they must be able
+to unlearn this, and recognize that Creation
+has its own musical scale. It was called "Mu-
+sic Of The Spheres". Most find it difficult to
+revise, and revive this memory within music,
+in favor of the truth. They will not find it any
+easier in other areas. The mind must be kept
+flexible to accept truthful knowledge when it
+is encountered.
+When a spirit and soul does not progressed
+beyond the need to occupy an Earthly body,
+there is progress to be made in a later lifetime
+through reincarnation.
+That brings these last four chapters full cir-
+cle in discussing the spiritual aspects of Sci-
+ence, Nature, and the search for greater
+knowledge. This spiritual side is one thing
+which is sorely missing from present day sci-
+ence. It is a part which must accompany sci-
+ence as an integral part of the search for
+knowledge. That is not to say that religion is
+necessary because the subject of spirituality is
+not religion per se. Religion is a personal thing
+or belief system, and pertains only to the spe-
+cific person. The Spirit World discussed here,
+is truly a part of Science and is a part of the
+Energy Spectrum within the Myriad of Meta-
+physics. Each bit has its own energy field,
+which may be a part of a still larger energy
+
+<!-- page 69 -->
+59
+field. Through many lifetimes we may pick
+and choose, but it is the truth which gets
+saved. It may be out of context, as was Billy's,
+but it is the truth
+So, that explains why these last four chap-
+ters are included in a book which is a discus-
+sion of mathematics.
+
+<!-- page 70 -->
+60
+This chapter is not so much about Quantum
+Arithmetic as it is about the management of a
+project in New Science. It is not about, sci-
+ence but the economics and social aspect of a
+research project.
+There is a parameter of Advanced Science
+which is hidden behind a cloud. This cloud is
+reinforced by the distraction of earnest re-
+search. The researcher is so involved with the
+science side that they will tend to forget the
+ultimate objective. The main objective is get-
+ting devices on the market and into use in so-
+ciety. The main handicap in reaching this ob-
+jective is funding. Outside funding usually
+creates obligations to the financial world.
+If and when financing is extended, the per-
+son furnishing the funding will be making an
+investment. They may seem to have the inter-
+est in the research, but the money is really an
+investment and is more important to them,
+when it becomes apparent that the researcher
+is getting into difficulty. Or perhaps the re-
+searcher is successful but is not ready to mar-
+ket a sub standard product. in either case, the
+person furnishing the funding may become
+overly anxious and start to dictate to the re-
+searcher in matters of which neither is in-
+formed.
+THE VTA-
+A case in point is that of the VTA project
+by Floyd "Sparky" Sweet. He had developed
+the VTA, (about the size of a breadbox) to the
+point that he could draw energy from it. It was
+not the size of the machine but one property of
+the energy he was producing, which caused
+his problem. It was cold energy or as some
+called it, "Zero-Point- Energy". It was the
+same as that, which these books call, "Night-
+side Energy". The property was that the ma-
+chine would furnish as much energy as Sparky
+desired to draw from it.
+That was the beginning of his downfall. He
+told me that he could draw five kilowatts from
+it. But if he went to anything above that, the
+machine would begin to levitate, in producing
+this extra power above 5 kilowatts. In addition
+to that it created a massive energy field which
+formed a howling vortex. It was apparently an
+aetheric vortex. It began to shake the ground
+and the surrounding countryside. This is what
+Sparky told me over the phone. He had to dis-
+able the VTA to gain control of it.
+Be that, as it may, Sparky went ahead and
+obtained a patent on the VTA. Now having the
+patent pending, he sold manufacturing rights
+to one of the major auto makers. He never dis-
+closed, to me, the sum but it allowed Sparky
+to build for himself, a first class research la-
+boratory, (Which he told me cost $40,000).
+This money, apparently was furnished by
+his financial source, on the strength of the li-
+cense he had sold to the auto maker. One year
+later Sparky had still received no money from
+the Licensee auto maker, Sparky told me.
+Sparky never told me the amount to be paid
+him for the license, but he told me other things
+of events which had occurred earlier. -- His fi-
+nancial source was pressuring Sparky to sell to
+them the complete rights to the VTA, or to
+agree to stop any further development of it. I
+do not know who his financial support was,
+but it was implied that it was some corpora-
+tion in the energy business. He said that, at lat-
+er date, three men dressed entirely in black
+had come to his door and delivered a physical
+threat to Sparky. He could not identify them,
+but they were very frightening.
+Sparky was employing the scalars and vec-
+tors of quaternions in developing the VTA. I
+Chapter 11
+PITFALLS OF INVENTION
+
+<!-- page 71 -->
+61
+told him that I had found a still better way of
+finding the so-called "quaternions" which he
+needed, and that I described it in my books on
+Quantum Arithmetic. He became interested
+and asked me to send him copies. I tried to
+lead him through it without getting too in-
+volved in the first two Volumes of Pythagoras
+And The Quantum World. , I concentrated on
+the ellipse and the method of finding the prop-
+er quaternions which he needed, by using cer-
+tain of his empirical data. He was interested.
+Sparky had my books by the end of May
+1995, and said he was reading them. I know
+he wasn't making much headway by starting
+in the middle without understanding the basis
+of Quantum Arithmetic. At this time he would
+refer me to his "helper", who was not really
+studying either. I phoned him again about the
+middle of June 1995. Again he referred me to
+his helper, but now called him, "My assistant".
+The assistant still was making no headway
+with Quantum Arithmetic. My next call was at
+the end of June 1995, but Sparky was calling
+this "helper" as "My Supervisor" as he trans-
+ferred my phone call to him. The conversation
+was unproductive, of any help I had to offer
+Sparky.
+My last call to Sparky was on July 5th,
+1995. 1 had a feeling that Sparky wanted me
+to call that morning, but I had nothing special
+to tell Sparky. I waited until afternoon to make
+the call. Violet, his wife, answered my call
+and said that "Sparky had had a massive heart
+attack " that morning, and his it supervisor"
+was taking care of getting him to the hospital,
+but Spark was gone before they reached the
+hospital.
+And since I started into this discussion
+about difficulty with providers of financial as-
+sistant, I was told that several moving trucks
+came in the very next day and hauled away all
+of Sparky's records, data, and equipment, in-
+cluding the two books I had sent him. That
+brings this to a close. So, what is the answer to
+this predicament?
+The answer to this predicament is quite sim-
+ple. The answer is to work small and DON'T
+GET GREEDY. I see in an advertizement, in
+today's mail that a health product, which can
+be manufactured for less than $2 per gallon is
+being sold for as much as $60 per half pint.
+The rest of the cost is in packaging and mar-
+keting, but it does not run the cost up to $60
+per half pint, which amounts to $960 per gal-
+lon for a product which costs less than $2 to
+produce.
+I see a company marketing a one pint gener-
+ator for Brown's Gas for $8000 per unit be-
+cause it will be worth that amount to the pur-
+chaser. Another developer already has a 20
+gallon generator for Brown's Gas which he ob-
+tained for little or nothing more than the work
+to get it operating. But there is another part to
+that story.
+The second party is making full utilization
+of the information contained in the four previ-
+ous chapters. He is including the Spiritual side
+within all of his research. He is slowly ap-
+proaching success, but it has not grown to the
+extent that he has anything like unlimited
+funds. He is avoiding GREED on his part, and
+on the part of all of his associates in the re-
+search. This researcher will win.
+I want to back up to the beginning of this
+topic, or thread to the point where Sparky
+overloaded his VTA and was headed for abso-
+lute power with his great excess of energy. He
+had become trapped in a pitfall for which
+there was a way out.
+In 1948, Professor John R. R. Searl had
+come to this same point while he was still a
+teenager. He had made his first disc in his
+kitchen. It levitated and went through the ceil-
+ing and the roof. Later Professor Searl put in
+additional stages, (probably in a different My-
+riads of energy), and harnessed this excess en-
+ergy. Still later he developed a third stage.,
+and he had his DEMO 1.
+Surely Professor Searl and Sparky Sweet
+were approaching the problem from different
+aspects and each had developed the first stage
+generator in their own way. Now, if Sparky
+and John could have gotten together, they
+could have made a multiple attack on the vari-
+ous problems, both technical and financial
+which have stopped both projects. They would
+both have climbed out of this pitfall and the
+
+<!-- page 72 -->
+62
+whole New Energy will have passed a new
+milestone. Now, let us go on to the next pit-
+fall.
+The road to success is in manufacturing a
+product which can be obtained with the fund-
+ing available. That can be a toy, or it could be
+a minor adaptation such as creating a genera-
+tor which will keep an automobile battery at
+full charge, thus eliminating the necessity for
+a separate generator as is found on all automo-
+biles. In addition it will be possible to draw
+small amounts of electricity from the battery
+which is not associated in any way with the
+car, such as operating a chain saw, maybe an
+auxilliary garage light.
+The secret is to sell at a reasonable profit
+margin, as was done by Henry Ford when he
+constructed his first cheap cars. When any de-
+vice is put into mass production, at a reason-
+able price, it will sell itself by word-ofmouth,
+not by extravagant claims for an extravagant
+price.
+That is exactly how the price of these books
+is determined. They could have been put out
+in extra glossy form and probably sell a few at
+$150 each. The knowledge is worth every bit
+of that higher price, but must be no GREED.
+That is the road which will lead to success,
+without begging from a funding source. 
+ FINANCING AND MARKETING
+This next pitfall is to avoid the hoop-a-la.
+Customers become suspecious Of new things
+when they know it has never been done be-
+fore.
+A second aspect concerns the changing of
+social life with the advent of an entirely new
+type of device. A large segment of society
+does not readily accept major changes. They
+do not accept major changes, but will accept
+minor ones. By accepting small changes, they
+will eventually experience the gradual ad-
+vance to the larger change, without the disrup-
+tion which would surely occur with making
+the change in one jump.
+Among the Parameters of Energy, and
+Change, is the elimination of greed and ego.
+Do not expect help from others outside your
+circle. Neither should one accept offered help
+without investigation of the motives behind
+that offer. This will help one make progress.
+One of the first rules to follow is do riot make
+too big of a splash and attract undesirables
+into the venture. When greed enters the pic-
+ture, all else is lost and judgements are im-
+paired. The undesirables will try to take over
+and rule out good judgements, or they will try
+to destroy any competitive ideas.
+The second rule is, "Do not expect any help
+from the Government or from the Establish-
+ment." They do not want anyone to rock their
+leaky boat, and will do anything to stop one
+from changing the status quo, rather than to
+provide help or funding. It will be necessary to
+keep your operations within your own group.
+able to thwart that advance by them.
+That does not mean that we must operate in
+secrecy to avoid these agents. Often they are
+very low level agents, who can be won over to
+our goals. They are out to make a buck or gain
+a great adventure in a spy thriller. If they can
+be enticed to support our side, the danger is
+minimized. There have been many researchers
+who have died under suspicious circumstanc-
+es, and their inventions taken or destroyed.
+Many lesser known developers have simply
+disappeared after their discovery had been
+widely publicized. They are, invariably
+classed as suicides, or "natural causes", when
+it obviously is not so. If any researcher is ap-
+proached by agents to sell out, or receives a
+vague threat, that fact should be reported to all
+others in and out of our groups. We should im-
+plement teamwork. It probably should also be
+reported to the police in some cases where the
+police may have something effective to act
+upon.
+If a threat is received, one should attempt to
+get an identity of those giving the threat. By
+that I mean get a license plate number from
+their vehicle, or even mark places they may
+have left fingerprints, and notify others within
+the group. We do have a viable network of
+members which can help out.
+It is necessary to make progress in small
+steps and eventually the big steps will occur
+
+<!-- page 73 -->
+63
+over long periods of time, through these small
+steps. The small steps are less costly, and they
+will get your product on the market. Make
+them as small and simple as possible. If they
+can be made into a "fad" they will market.
+I have not attended a Symposium which
+was not also attended by one or more infiltra-
+tors, who apparently reported to someone who
+employed them.
+At the breakfast table, on the first morning
+of a three-day convention, several associates
+mentioned an attendee who did not seem to
+belong. We followed it up and finally identi-
+fied an agent who was attending. NO! We did
+not just kick him out. First we kidded him for
+a while, and when he understood that he had
+been discovered, we invited him to join us. He
+was an entirely different person by the end of
+the day, joining in our jovialities , and actually
+becoming one of us. He was swung over to
+our side without any hard feelings. That does
+not mean he became a full participant. He still
+had a large hurdle to make, in showing that he
+could be trusted.
+There was another meeting at which there
+was more than one agent. There were both the
+CIA and the KGB represented. After the sym-
+posium was over they even tried to trace some
+of us to our homes in other states. We have
+one ace in the hole which we can put to use.
+That ace in the hole is by living without greed
+for money. It is not greed which is a trap. It is
+a state of mind which clouds judgement and
+forestalls further advance.
+It is a virtual impossibility for anyone or
+any group to destroy my work on Quantum
+Arithmetic because I have worldwide distribu-
+tion. You will find copies of my books in
+many public libraries across the U. S. There
+are also hundreds of copies in private hands,
+all over the world. I once went to an airport
+and, over a cup of coffee, asked a passenger to
+Egypt to distribute five books to any conven-
+ient places in Egypt. When a friend of mine
+goes to far away places I will often give them
+several copies to give out at their destination.
+In this way there is at least one book on the is-
+land of Paulau, in the western Pacific, and oth-
+ers in New Guinea. India has several.
+Then there comes a time when it is neces-
+sary to reach out to the public. For thirty years
+I submitted articles to the major science jour-
+nals. They were all rejected regardless of how
+simple I made the article. I found that I was
+wasting much time trying to get published. I
+decided it was time to challenge the major sci-
+ence journals. In 1990 1 began to submit a
+statement with my last article saying that this
+was the last free article I would waste time in
+submitting. In the future if they found they
+wanted to print any of my work they would
+prepay, under contract, at a price of one dollar
+per character space or $3000 per typed sheet.
+They previously had sent me rejection slips.
+Scientific American did this. They rejected an
+article of only two paragraphs, which I sent in
+1991. Then three years later, this letter was
+getting under their skin and they hashed up a
+letter I had supposedly written. They pub-
+lished it as a "Letter To The Editor" in April
+1994. When this issue hit the news stands, I
+received supportive phone calls from all over
+the United States and even Canada. Several
+calls were from people whose names I recog-
+nized from scientific articles they had written
+and published.
+I am not making a huge splash but I am
+slowly making headway which will assure that
+Quantum Arithmetic will continue even after I
+am gone and my name is forgotten. In this re-
+search, even in Quantum Arithmetic which is
+a part of New Science, it is necessary to get
+outside of the laboratory and be of the man-
+agement areas and the areas of social impact.
+If any of the New Energy devices should
+come to be accepted by the public without res-
+ervation, it could cause serious impacts on the
+social and commercial structure of our society.
+They will open the way for other devices to
+become popular. That is one of the reasons for
+starting small. There will be a jolt, but we
+want it to be a small jolt, so the public can be-
+come accustomed to change. A large jolt is a
+threat to those whose vested interests are in-
+volved.
+Now we come, again to greed, as it relates
+to marketing. Some products are being pres-
+ently being marketed, and most are trying to
+
+<!-- page 74 -->
+64
+use a pyramid scheme. Just the adoption of the
+pyramid method of marketing causes a loss of
+credibility in all who are aware of the pyramid
+scheme. This scheme is based on greed, not
+only for the inventor but for those in the top of
+the pyramid. Remember those chapters on
+spirituality? Greed is not mentioned but it is
+behind the vice in marketing.
+There is a unit cost of making an item in the
+quantities which are required to be ready for
+market. The builder usually makes a 100%
+markup to sell to the first agent. In the pyra-
+mid scheme the second layer of the pyramid is
+priced 100% above the price they had to pay
+to obtain it. Say the total costs per unit, includ-
+ing packaging and freight, were $10 each. The
+first increase brings that to $20, and the sec-
+ond 100% increase brings that to $40. If there
+is another markup, the unit will now cost $80
+for something which the user could have ob-
+tained for $20 or less.
+If there is another level on the pyramid the
+price would be $160 per unit, which is really
+less than the users are paying for the presently
+used item which is being replaced. The manu-
+facturer is making $10, but those inbetween
+agents in the pyramid are making $20, $40, or
+$80, divided between them and the upper
+echelons of the pyramid.
+In the first place, the final customer is not
+benefitting by the new product to the extent he
+should. This opens the door to competition
+and does not result in the cash-flow for the '
+originator. The unit should be priced so that it
+is fair and not dictated by the price to the cus-
+tomer, being based on the cost of his present
+Out dated thing which is being replaced. If the
+manufacturer gets the idea of fairness, across
+to his customers, he can be in business for the
+long term, and not just a flash-in-the-pan. The
+alternative of continual mark-up or basing the
+cost of a unit on the going cost which the cus-
+tomer is presently paying, leads to an eventual
+fade-out of the novel item being sold.
+But it goes much deeper than that. If we are
+to succeed, the public is smart enough to know
+that we have to get rid of greed in our society,
+If New Energy is ever going to succeed. The
+public also demands honesty. The society is
+ready for honesty and needs it if there is going
+to be over-all spiritual growth into the future.
+if this change does not occur, all societies of
+the world will fail. Spirituality, and Creation,
+demand that we make this change.
+The inventor must incorporate spirituality in
+their production. To be otherwise, the spirit
+world will insure our demise. As many re-
+searchers are beginning to find out, the spirit
+world is sincere in helping us through these
+difficult times. Very few inventors are able to
+describe where an idea originates. I have per-
+sonally found that the spirit world has the
+upper hand in handing out the dispensation of
+workable ideas. it also has a hand in allowing
+us to defeat our own purposes, by wrong deci-
+sions, methods, and impressions.
+A parameter of Advanced Science is hidden
+behind a cloud. This cloud is reinforced by the
+distraction of earnest research. The researcher
+is so involved with the science side that they
+will tend to forget the ultimate objective. That
+objective is to elevate our society in technolo-
+gy, in science, and in spirituality.
+All researchers are aware of the first two,
+and work to those ends. But they forget about
+spirituality. They let their ego and greed, and
+sometimes lust for power, get in the way,.
+These get in the way and reinforce the cloud.
+Now, don't those four intervening chapters
+begin to make sense? Don't overlook the spirit
+world as a part of our total progress.
+
+<!-- page 75 -->
+65
+Energy is continually flowing within the
+aether. There is conventional, (Dayside) ener-
+gy flowing one direction and there is Night-
+side energy flowing in the opposite direction.
+They are out of phase by 180'. They will, eve-
+rywhere, cancel each other and become invisi-
+ble and virtual. Either Dayside energy or
+Nightside energy will manifest when the other
+is removed.
+For the present let us characterize them as
+active energy for the Dayside (male) energy,
+and reactive energy for the Nightside (female)
+energy.
+Most of our present energy is, active, Day-
+side (male) and outgoing. It leaves its tracks
+which result in pollution. The, reactive, Night-
+side (female) energy is attracting which leaves
+no tracks. It is being found to be nonpolluting.
+It seems, in fact, to clean up pollution, as we
+see it today. The use of the presently utilized
+sine curve does not fully demonstrate these
+two forms in unison. It is a bit more complex
+than that, but the sine curve will be used for
+demonstration. The next chapter brings in the
+Third Dimension. This tends to lead to the 3-
+dimensional sine wave, or the helix.
+In our three dimensional world we should
+consider each sine wave as at least a three-
+dimensional helix. As we will find in the next
+Volume of Pythagoras And The Quantum
+World, energy is most probably a torus in
+shape. We see the torus as we see a smoke
+ring, but energy per se, is non-material and
+virtual. That is why it is difficult to picture it
+as we describe it.
+Only when the energy picks up and throws
+matter about, can we get any visualization of
+it. It is as difficult to imagine any dimension
+higher than third-dimension from our third-
+dimensional domain, In the same way, it is
+difficult for a 2-dimensional Flatlander to ima-
+gine the third-dimension. However, it is some-
+thing with which we must eventually deal in
+order to understand and depict "energies".
+When the Dayside energy is reflected, the
+reflection causes it to change phase by 180°
+creating the Nightside version. That is quite
+probably the cause of a difference in colored
+light and colored pigments. Starting with the
+colors, of red, yellow and blue as the male, or
+yin colors of light we derive the pigment col-
+ors of orange, green and violet as their compli-
+mentary, yang, color as reflected colors of pig-
+ments. On the other hand, starting with the
+orange, green and violet light, we come upon
+the reflected colors of red, yellow and blue.
+This is the "1-2" division in Quantum Arith-
+metic and creates the two genders.
+It has not been well understood in contem-
+porary terms, but the reflected phase change
+of 180° explains how the complimentary col-
+ors are formed in our senses. This change in
+color strictly conforms with all we have
+learned in Quantum Arithmetic. {For more detail
+on the relationships of colors, the reader is referred to
+the article "Color And The Trigrams" by Constance
+Achilles, in "FULCRUM"-- “The Science Journal of
+The University of Science and Philosophy” Volume 2,
+No. 3, (February 1994)]. This article describes colors
+from their basic aspect of the here-and-now and from
+ancient usage in I-Ching.
+So, in the Myriad of IR, Light, and UV, the
+octave of Light separates the Yin from the
+Yang, the Dayside from the Nightside, and the
+active from the reactive. Again, this is a two
+dimensional split deriving from the number
+"2" in the system of numerals. One can also
+note that there are three colors of each type,
+which brings in the number "3" for 3-
+dimensional expression. From this we Put to-
+gether the "1-2-3" of Quantum Arithmetic and
+entry into the third-dimension.
+Chapter 12
+The Two Forms of Energy
+And the Light and Metaphysical Myriads
+
+<!-- page 76 -->
+66
+The Quantum Arithmetic which has been
+presented, so far, is 2-dimensions, as it is
+created by the number "2". The "2" represents
+the female attractive or reactive energy. It is
+used to depict 2-dimensional pictures and
+graphs in rectangular coordinates. The number
+"2" also generates the two forms of energy
+which we are considering. This was covered
+in an earlier volume. It is anticipated that the
+work in Quantum Arithmetic will be expanded
+in the following Volume 4, when it is pub-
+lished. This will bring us to the three. dimen-
+sional application of Quantum Arithmetic.
+If the reader will forgive the shortcomings
+of depicting something which is virtual and
+cannot be pictured in Our 2-dimensional, or 3-
+dimensional The graphic below will try to
+make that picture.
+This carries us to the top edge of the 3-
+dimensional world, and its bordering into the
+spiritual world.
+To get deeper into it we must consider what
+little we know of the spiritual world. I have
+come to the conclusion that we do not have
+original ideas. The ideas are either recovered
+from past life experiences or are given to us
+from the spirit world. This tends to help ex-
+plain "Synchronicity". It is the result of the
+spirit world working in many different areas at
+a given time. The spirit world is not hampered
+by having only three dimensions. In some
+way, there is a different way to consider space
+time, which has no indication of existing in
+the spirit world. Time/space is discontinued
+and replaced with something else.
+The most basic way in which an idea starts
+is with the spirit world, which projects a
+
+<!-- page 77 -->
+67
+thought. This thought becomes a picture and
+then becomes a word. We are left then to ma-
+terialize that word and thought picture. To do
+this we must consider higher dimensions, and
+higher frequencies.
+In the spirit world, time and space are also
+quantum. That is to say that time/space, at this
+higher frequency does not move. It is either in
+one place or another. It may disappear and re-
+appear at a different place, giving the appear-
+ance of movement. That is exactly the way I
+perceived it during my NDE. All of the pic-
+tures I saw were stop-frame pictures. If there
+was movement, it was shown as the position
+before the move, and another picture after the
+move.
+This begins to explain the paradox of con-
+temporary science of "is it a wave? Or is it a
+particle?" It all depends upon the dimension in
+which something is considered. All particles
+are in third-dimension. All energy is in the
+higher so- called, "fourth dimension".
+To bring this down to earth, consider mak-
+ing a movie of a speeding automobile. On the
+film it will appear as a series of stop frame po-
+sitions of the automobile, at intervals of 1/16
+of a second. In television all the pictures on
+the screen are stop frame at 1/32 of a second.
+Our viewing it from the third dimension gives
+us the appearance of movement. In reviewing
+the technology we find no technology in the
+Metaphysical Myriad which discloses any
+movement. Everything is stop frame. It is as
+though time and movement, or space, cease to
+exist. In this Metaphysical Myriad it may be
+possible to move forward or backward in time/
+space.
+So, that is the reason that it is all but impos-
+sible to picture energy from our station within
+the third dimension. The sine wave of energy
+is a compilation of considered stop-frame pic-
+tures, as we try to make a smooth transition
+from one condition, or position to another. It
+apparently cannot be done.. It is another di-
+mension and it is all quantum in Nature. At
+any given instant it either "it is" or "it isn't",
+depending on whether the picture is quantum
+or whether it is in third dimension.
+This is a big jump to make in studying ener-
+gy. We can consider it only in the third dimen-
+sion. This makes it difficult to separate the
+NIGHTSIDE reactive energy from the Day-
+side male, active, energy. In knowing about
+the Dayside and the Nightside energies, we
+learn more about the Metaphysical Myriad. In
+the colors we can still show the results. In
+nearly any other type of energy the picture
+will be virtual and can not be visualized by us.
+Energy is simply a vibration in several dif-
+ferent modes. We understand frequencies or
+periods, and wavelengths, but that is not suffi-
+cient to say that we understand energy. We
+can develop an understanding in the different
+modes of vibration. There are three. In steel
+strings, one mode is simply a lateral vibration.
+In the second there can be a circular vibration,
+and the third is longitudinal and related to
+compressive vibration. John Tyndall these dif-
+ferent modes in the 1870's, but his results are
+not expansive enough to make comparisons in
+various materials or densities of the vibrating
+materials.
+In studying the two forms of energy, we
+must know more about the Metaphysical My-
+riad. It is sort of a catch-22. In order to know
+more about the studying the two, Dayside/
+Nightside, forms of energy, metaphysical My-
+riad, will help.
+There have been research results from vari-
+ous recent New Energy projects.
+The results show there are several differenc-
+es between conventional energy and Nightside
+energy. 
+(1) They are complimentary to one another
+in the range of color. 
+(2) They are opposites in respect to temper-
+ature and heat. One heads for solar tempera-
+tures, the Nightside heads downward to frigid
+temperatures to absolute zero and possibly be-
+yond. 
+(3) Nightside energies are related to anti-
+gravity and then supposedly, Dayside energy
+leads to gravitational pull. 
+(4) Dayside energies have top limits in any
+machine or instrument which harness it.
+Nightside energies go the other way. As more
+
+<!-- page 78 -->
+68
+demand for power is made on a generator of
+Nightside energy the machine goes on to pro-
+duce it. There seems to be no absolute limit to
+Nightside energy, other than that imposed by
+the operator.
+These differences are quite positively iden-
+tified. There are these facts ot understanding
+of these two energies. There are other differ-
+ences which are rather qualified. This is par-
+ticularly true in regard to magnetic conditions,
+which has not been correlated with the two
+way division for magnetism into north/south.
+The use of magnetism seems to be a suc-
+cessful means for making the Nightside ener-
+gy available in sizeable quantity. It was done
+in both cases where an aetheric vortex was
+formed. Professor Searl used magnetic condi-
+tions and so did Sparky Sweet. Tesla and Mo-
+ray released this energy use of vibrators, but
+there may be other clues in their writings.
+This is not much information, from which
+to work but it is more than has previously
+been put together. There are also thought ener-
+gies, which are apparently at a very high fre-
+quency, and probably near the top octaves of
+the Metaphysical Myriad. One concentrated
+area of thought energy is to be found in the
+practice of dowsing.
+Thought energy is stored as an energy field.
+Quite often that energy field is stationary and
+can be located and identified by a dowser sep-
+arate from the dowser who created it. Remote
+dowsing is practiced by most dowsers after
+they have became proficient at on-site dows-
+ing for anything.
+DOWSING IN THE METAPHYSICAL
+Dowsing seems to be an anomaly to most
+people. Many, including Dowsers, know next
+to nothing about how dowsing works. The cu-
+rious part about it is that nearly anyone with
+the will to do so, can become a proficient
+dowser with practice, patience, and experi-
+ence. We can be sure that dowsing is in the
+Metaphysical Myriad, and can teach us some-
+thing about that Myriad.
+The first thing with which a Dowser begins
+is an objective to be reached. The Dowser then
+asks permission from the Creative forces to
+pursue this objective. Permission is gained, by
+dowsing for an answer to "Can I? May I?
+Should l?" If permission is approved the
+dowser may proceed. If it is not approved, the
+Dowser is prohibited from going further.
+Most people connect Dowsers with locating
+a source for water. This has been the main
+goal of dowsing since prehistoric times.
+Dowsers have now branched out into nearly
+every field of information. They have also de-
+veloped instruments along technical lines, and
+methods, to answer many various questions.
+Dowsing is one of the few ways to enter the
+Metaphysical Myriad. it requires that one be
+able to get in communication with one's own
+unconsciousness. A main requirement is that
+the dowser operate on faith in their abilities,
+and not have unwarranted skepticism. Nor
+does one question the answers given by the
+Creative forces, However, one is not required
+to act on the answers to any question.
+Dowsing has ethical laws which are not to
+be broken. One of these laws is that a dowser
+may not interfere with another person's desti-
+ny, except under rigid circumstances. It should
+If we tabulate these differences they are:
+Dayside
+Nightside
+In the light octave
+3 primary colors
+3 secondary colors
+Heat
+Increasing Heat
+Increasing Cold
+Gravitation
+Positive gravity
+Negative gravity
+Availability
+Limited
+Unlimited
+
+<!-- page 79 -->
+69
+not be used to correct another person's faults
+or shortcomings, The limitations on dowsing
+subjects, other than the above, are few, and are
+limited primarily by the particular dowser's
+abilities
+Once permission is given, there is no limit
+on the subject matter, physical or metaphysi-
+cal, which may be covered, within the limits
+of that permission.
+EXAMPLE
+To give an example of the possibilities of
+dowsing and the way it works in the Meta-
+physical world: Two days after the crash of
+TWA-800, I tried to determine the cause and
+the sequence of causes leading up to that
+crash. I had to ask the questions such that they
+could be answered "yes" or "no", and I had to
+have permission to pose the questions. The an-
+swer to each question leads up to to following
+questions.
+The questions began with the cause of the
+crash, whether it was mechanical or was it
+caused by human or other factors. It was
+caused by mechanical failure, and the failure
+was in the inboard motor on the right wing.
+From here the questioning continued with
+the sequences after the failure. The motor be-
+came unbalanced and the turbine literally blew
+up. It exploded outward from the fuselage, and
+badly damaged the right wing surface and
+structure. It tore through the right wing tank
+and released all of its jet fuel but did not cause
+a fire or, explosion of the gases. At the same
+time, the outboard motor on the right wing
+was still operating at full power for sufficient
+time for it. to pull the outer wing forward,
+hinged as it were by the remaining structure of
+the. wing. The motor and the outer wing then
+contacted the nose of the plane. This removed
+the nose cone of the plane. The fire in the re-
+leased gasses from the jet fuel cloud, then ex-
+ploded in the air from cabin electrical spark-
+ing, causing the first explosion heard from the
+ground.
+The plane was travelling approximately 400
+miles per hour. When the nose was removed,
+the 400 mile per hour wind entered the plane
+causing immense pressure which stretched the
+fuselage covering., straining many of the riv-
+ets. The passengers and the crew immediately
+were made unconscious, and six to ten passen-
+gers and crew members died at this time. The
+remainder were unconscious until the plane hit
+the water, killing the rest of them on impact.
+This is given as an example of the extent
+one can go in dowsing out answers to ques-
+tion. Remote dowsing was involved, and made
+possible within the Metaphysical Myriad, so it
+also gives some indication of conditions, and
+possibilities within this Myriad.
+To continue on with my questioning, which
+came somewhat later, I asked as to the welfare
+of the victims of the crash. To those questions,
+there were somewhat less than half of them
+had gone through the portal to the spiritual
+part of the Metaphysical Myriad. Somewhat
+more than half did not and are still in their
+astral bodies in our present world. I asked per-
+mission to advise them that they had died, and
+to show them the way to the portal into the
+spiritual world. Permission was not given, so
+it ended there. I could have had permission to
+help individuals, if I could identify them.
+There were certain persons on board whose
+destiny called for them to stay for a period in
+the astral world.
+The questioning then turned to the cause of
+the motor failure. It turned out that the plane,
+either on landing at the airport or in taking off,
+had picked up a small piece of some kind of
+wrapping or packing material, weighing less
+than four ounce, and possibly as small as two
+ounces, had been ingested by the failed motor.
+This threw the turbine out of balance. The ac-
+celeration of this motor at the start of a climb
+above 13,000 feet elevation, precipitated the
+impeller explosion.
+Having dowsed out the answers to the
+crash, I did not have to follow the news stories
+about it. I had cleared also, that no explosives
+nor any missile was involved in the failure.
+Several days later I saw the right wing being
+recovered. I noted the condition, on the televi-
+sion picture, of the oddly twisted and bent in-
+ternal structural members which were inside
+the wing, confirming in my mind, that I had
+
+<!-- page 80 -->
+70
+the right answers in that respect.
+I wrote the report of the results of dowsing
+and posted it on the electronic bulletin board,
+(BBS) within a few days of the crash. At least
+forty other members of that BBS read the re-
+port at that time. I do not know whether other
+subscribers of this BBS dared to put it on In-
+ternet.
+Putting things in the context of learning
+how the Metaphysical Myriad is organized, is
+the objective of presenting this example.
+Dowsing operates within the Metaphysical
+Myriad, and may, at times enter into the next
+Myriad, the Creative Myriad. Anyone can
+learn to enter the Metaphysical Myriad by this
+route or this portal. There is nothing magic
+about it, although many of the readers un-
+doubtably believe otherwise. One never
+knows until one tries it. We can learn a great
+deal about this Myriad because dowsing has a
+vast expanse of knowledge about it.
+Whatever we can learn about the Metaphys-
+ical Myriad can never be finally proven, re-
+gardless of how the information is obtained.
+The type of proof used in the third dimension
+does not exist in the higher Myriads. The best
+proof which can be given will be the proof
+through positive results observed. But that is
+exactly how our present science is derived, --
+by empirical results which are repeatable.
+Be that as it may, New Science, and Quan-
+tum Arithmetic has developed a system of ab-
+solute proof which is getting beyond depen-
+dence on empirical results and theory.
+Quantum Arithmetic has developed a series of
+absolute Law based on mathematics, just as
+Euclid has been developed, in many cases.
+CONTEXT
+To put the entire system together: Energy is
+an aetheric vibration, which we believe is gra-
+vito-electro-magnetic. These vibrations are
+created in the CREATIVE MYRIAD begin-
+ning at something greater than one quadrillion
+hertz. It probably contains seven octaves of vi-
+brational frequency. But we are far from deter-
+mining much else about it, other than the fact
+that these frequencies, through the Laws of
+Harmonics, gather together in groups of 5 to 7
+frequencies and cascade down into the Meta-
+physical Myriad.
+The METAPHYSICAL MYRIAD, also
+consists of seven octaves of vibrational fre-
+quencies. These seven octaves probably repre-
+sent a different feature within the myriad. The
+highest octave probably represents Thought
+Energy. The lowest octave probably repre-
+sents Spirituality or Spiritual Energy fields.
+The five octaves in between represent; Psi ca-
+pability, including dowsing; Memory Energy
+Fields; The Christ Energy Field; and the field
+of the Spiritual Masters, in some order. Each
+of these octaves needs investigation and filling
+in.
+Below this is the LIGHT ENERGY MYRI-
+AD. Light is only one octave in the middle of
+this myriad. The highest octave appears to be
+the Astral octave. Below that are two octaves
+which we call the Ultra-Violet octaves. In the
+middle lies the Light octave which is divided
+up into frequencies of Color. Below this there
+are three more octaves. Two of them are the
+Infra-Red octaves and one octave of transfer-
+rable energy in the form of photosynthesis.
+This along with heat is cascaded into the
+MYRIAD OF CHEMISM photosynthesis is
+transferred primarily to living plants. The heat
+and light is also in control of chemical com-
+pounds. The Periodic Table of Elements occu-
+pies the entire seven octaves, and are the first
+created Matter. This is where the third dimen-
+sion originates.
+Below Chemism are found the three Myri-
+ads. The MYRIAD OF ULTRA-SOUND;
+THE MYRIAD OF SOUND AND MUSIC,
+and THE MYRIAD OF EMOTIONALISM,
+which includes Brain Wave frequencies.
+In all of these Myriads we have access,
+through our senses, only to Music, and to
+Chemism, both of which have seven octaves,
+and to one octave of Light. These three Myri-
+ads, through their commonalities, then allow
+us to consider the probable organization of the
+other four Myriads. The other four Myriads
+are Emotion, Ultra-Sound, Metaphysics, and
+Creation. There is so much to learn in these
+
+<!-- page 81 -->
+71
+four Myriads, from the information which has
+been collected so far.
+This organization or knowledge is tied to
+the seven Myriads, but contemporary science
+has put a taboo against looking under the hood
+of the Metaphysical Myriad to learn what is
+there. There has been enough given in the pre-
+vious four chapters that such a look is now
+warranted. When one hears the word "Spiritu-
+alism", there is a tendency to consider it as
+"Religion".
+It is not religion any more, than the human
+body is religion. Religion is a relationship
+with the Creator. It is like the Potter and the
+Clay. The Creator molds the clay into whatev-
+er form the Creator's thoughts may take. This
+begins a relationship and is part of the charac-
+terization of the thing made. The human body
+and the human spirit each have a different re-
+lationship to the Creator. In studying the Met-
+aphysical Myriad. we are trying to find out
+what the various relationships are. The spirit
+has a higher and closer relationship to the
+Creator than does the human body. The hu-
+man body has a higher and closer relationship
+to the Creator than do the plants; or the vari-
+ous elements. The various elements have a
+higher and closer relationship, than do the
+notes of music, and the notes of music are
+closer thab the human emotions. We are going
+down the ladder of relationships. None of
+these are religion, but all of them taken togeth-
+er will make religion.
+That is not so say that Religion and science
+are entirely different subjects. They are one
+and the same subject, except the religion is a
+personal thing, which is to be acknowledged
+in working with the sciences, or the arts. It is
+the one thing which is missing in contempo-
+rary science. This attitude of holding contem-
+porary science separate from religion is the
+one thing which is preventing science from
+making the advances which it could be mak-
+ing. So long as contemporary science excludes
+the work of the Creator, it will prohibit any
+scientist from getting much beyond the third
+dimensim. It needs to be put into context in or-
+der for New Science to progress and to
+progress 
+successfully. 
+To 
+do 
+otherwise
+through human frailty is to cut off our access
+to deeper knowledge. This is being done in
+several cases and there appears to be success
+beyond any previous expectations.
+In colors, there are three combinations for
+the three primary colors, red/yellow, red/blue,
+and yellow/blue, may be matched. Each of
+these will make one of the three secondary
+colors. In Music we have the three notes C, F,
+and A, which match the three primary colors.
+Then there are the three notes C, E and G
+which seem to match the secondary colors. In
+the Table of elements we have the elements
+which have negative valence and those which
+have a positive valence. Again this leads to the
+two-way division within the science of chem-
+istry.
+Aetheric energy per se, falls in a higher My-
+riad and it also has its two-part major division
+between Dayside and Nightside energy. As we
+proceed further we will find there is also a 4-
+way division beyond the 3-way division of
+Color, in the Myriad of Light, and the 4-way
+division of notes in the Myriad of Sound.
+ 
+When it comes to the division of each My-
+riad into seven octaves, we have a basis for
+considering that the Metaphysical Myriad is
+probably also divided into its seven octaves. if
+the product of energies is in one of the other
+forms such as heat, gravity or amplitude, we
+still have not developed the proper parameters.
+Some of these parameters will carry over into
+the Metaphysical Myriad. What are the proper
+parameters for these products of energies?
+The previous chapters concern the many ob-
+servations of the Metaphysical Myriad, which
+I have made, derived principally from my own
+personal experiences. Each of these experienc-
+es pose many questions, the answers to which
+fall within the Metaphysical Myriad. 
+Each reader probably has their own experi-
+ences to add to these. Any reader who is in
+even minimal contact with their unconscious.
+Will probably have many incidents from their
+own life to add, and to fit them into the Meta-
+physical Myriad. With the advent of the Pho-
+ton Belt in the past year, it has brought many
+people into that contact, possibly without them
+knowing it.
+
+<!-- page 82 -->
+72
+This chapter will close with a simple listing
+of some of the major questions which arose in
+the chapters on Spiritualism and should fit
+within the Metaphysical Myriad. Each well
+known Myriad has its two forms of energy.
+From Chapter 6: 
+Spiritual derivation of Quantum Arithmetic;
+Astral experience in the last three days with
+Archimedes; The appearance of the spirits of
+past scientists; My Near-Death-Experience
+(NDE) in 1986; The return of my mother in
+astral form and my helping her find the portal;
+The White Duck heading north. 
+Not listed in these chapters are:
+There have been many incidents after my
+NDE which could easily culminate in my
+death;
+The serious aneurysms I have had for the
+past 30 years but only recently diagnosed.
+My heart attack this year and a stroke three
+years ago. Only recently another aneurysm
+was stretched to the breaking point and leaked
+a little but then was assuaged.
+Each one had a miracle recovery. The re-
+covery from halogen poisoning which was go-
+ing to send me to the operating room but I was
+given the proper home cure.
+The poisoning was diagnosed as a cancer of
+the lung in 1981. I was given a home cure for
+it, spiritually, and there was no operation. The
+‘cancer’ disappeared and it has not returned in
+the past 15 years.
+From Chapter 7: 
+My out of body experiences, OOBE, in cor-
+recting my daughter’s psychic invasion, with a
+follow-up OOBE to check that the problem
+was resolved.
+My new-found ability to guide lost astral
+bodies to the portal to the spirit world, thus,
+helping them, and at the same time helping
+their previous victims to recover a stable and
+healthy life.
+A young boy whose character and personal-
+ity changed on being able to tell me about his
+invisible playments and past-life memories.
+From Chapter 8:
+Children and non acceptance by their par-
+ents of their playmates.
+The stop-time mode I went into in the tree
+incident and other questions.
+Similarity of my accident and the story by
+Plato in Book VII of Republic.
+Other similarities of events about walk-ins
+of others.
+The invisible playmates of many children.
+The mental blocks which children develop
+from eradicating these playmates.
+The development of the atomic theory in
+Greek  times.
+The 10-year old boy who recovered his an-
+cient mathematical memory after less than
+three hours instruction in Quantum Arithme-
+tic.
+From Chapter 9:
+The miraculous memory of many past lives
+by another boy, Billy.
+His diagnosis of the portent of prevalence
+of high pitched sounds
+The war veteran in Denver who corroborat-
+ed his story of Barbons
+From Chapter 10:
+The chain of events leading through the
+Christ spirit in many different bodies.
+The capabilities of the unconscious and the
+body coming into communication with it.
+Mental blocks from being out of touch with
+
+<!-- page 83 -->
+73
+the unconscious.
+Amazing results from applying the Laws of
+Love, Charity, and Gratitude.
+The amazing penalties for applying the laws
+of Hate, Greed and Intolerance.
+The Shasta People and their origins.
+I am interested in similar incidents which
+any reader would care to report to me. I am
+most interested in those incidents which can
+be confirmed by later physical incidents, as
+having a solid basis.
+It is possible that someone would like to put
+such reports in book form. If so, I can gather
+the reports and send them to someone who is
+interested in doing so.
+My use of the reports will be only to try to
+put them in orderly form to flesh out the Meta-
+physical Myriad.
+Energy is continually flowing within the
+aether. There is conventional, (Dayside) ener-
+gy flowing one direction and there is Night-
+side energy flowing in the opposite direction.
+In most cases these two types are so evenly
+balanced that they cannot be detected because,
+although the available female energy is) so
+much greater. it will still only balance the
+male energy.
+The aether is the most elastic material of the
+universe. The female energy seems to get its
+extra quantity by liberating energy which is
+bound up in the more densified energy, of
+such things as matter when the cold it produc-
+es reaches, or nears absolute zero.
+With that, the next chapter of this volume
+will get closer to what we are beginning to
+know about the third dimension of Quantum
+Arithmetic from Dr. Elkins. His contribution
+will use fairly solid knowledge to replace the
+so-called Magic which people have rightfully
+condemned. Hopefully this will continue later,
+into Volume 4 of Pythagoras And The Quan-
+tum World.
+[Editor’s Note: Iverson’s life stream was inter-
+rupted (heart attack) before he could write vol-
+ume IV of Pythagoras and the Quantum
+World.]
+
+<!-- page 84 -->
+74
+Quantum Arithmetic demonstrates Nature
+and its "Filing System". In its own way it
+keeps all things in separate files according to
+the specie, and genera to which it belongs. It
+does this through the number system. Or
+should we say, “system of prime numbers?"
+The number "one" designates Creation. It
+creates the remainder of the numbering sys-
+tem, in which each additional number is separ-
+ated from the previous number by one unit.
+So, the System of Numbers Is really a system
+of integers. Each item in our catalog of Crea-
+tion is given a unique number. This sets up the
+system of "Quanta" in which each created
+item is designated by a certain whole number.
+The next two numbers are "2" and “1".
+These must be factors of any number which is
+uniquely assigned to any item of Creation.
+These two numbers each have an additional
+duty. The number "2" divides the numbers
+into two parts. These are the odd and the even
+integers. It also divides the items which they
+represent into two categories. One category is
+the compliment and opposite of the other. The
+other number, "3", has not been finalized, but
+it prepares us for the Third Dimension. It was
+also discussed previously that it sets out the
+Twin Primes, in the System Of Numbers, after
+the prime numbers are created.
+The Creation has one more thing to create.
+It must create something to count and identify.
+So, energy was created. Energy, working in
+compliance with the numbers, started the pro-
+cess of creating all else. A single energy is a
+single vibration, and there were 5040 different
+Quantum Vibrations. The number 5040 was
+chosen because it is factorial 7 or the product
+of the first 7 integers. The Greeks called it the
+"magic" number. (It is also 7x8x9x10 and again it is
+one unit less than the square of 71.) Each numbered
+vibration was assigned a unique Quantum
+Number value which is designated by four in-
+tegers.
+These numbered vibrations worked with
+other numbered vibration, so that there was
+harmony between them, or varing degrees of
+disharmony between them. Two numbered vi-
+brations, in harmony, would be attracted to
+each other.
+Two numbered vibrations which are in dis-
+harmony would tend to repel each other. This
+was in line with the law of opposites which
+was established previously by the number "2".
+(The Law of Harmony is discussed in Volume
+2.) So, now there are two forces, or the push/
+pull of nature. This characteristic of each ener-
+gy value is designated as male/female, or Day-
+side/Nightside, or hot/cold energy, or right/
+left, North/South, etc.. Yes, cold is not just the
+absence of heat. It is a distinct energy type.
+Creation, now needs another category so it
+creates the number "4". This divides each of
+the two previous categories into two parts,
+making a 4-way division within the System of
+Numbers. The even numbers are divided into
+those divisible by only 2, and those divisible
+by 4. The odd numbers were divided into the
+4n-1, and the 4n+1 odd numbers. These are
+described in Definitions by Euclid in Book
+VII. In these present volumes the even num-
+bers are called "2-par" and "4-par". The odd
+numbers are called "3-par" and 5-par" respec-
+tively. The numbers assigned to various ener-
+gies were also divided by 4, but on a different
+basis. We are not ready to discuss these until
+we get into three dimensional Quantum Arith-
+metic, and into New Energy applications. The
+reader is asked only to anticipate this.
+The Creator continues by creating the num-
+bers "5" and "7", filling out the main catego-
+ries of its filing system. It also established a
+Chapter 13
+THE QUANTUM SETUP
+
+<!-- page 85 -->
+75
+system of Quantum Numbers for each thing
+which was composed of only these numbers
+up to and including 7. These Quantum Num-
+bers are very limited, being: 1,1,2,3; 1,2,3,5;
+1,3,4,7; 2,1,3,4; 2,3,4,7; 3,1,4,5; 3,2,5,7;
+4,1,5,6; and 5,1,6,7. It is as though these are
+"creative" Quantum numbers and are used
+only by the Creator. (Dr Elkins will have
+something to add to this.)
+The Creator also created bigger quantum
+numbers which contain five to seven prime
+factors. They all contain a factor "2" and a fac-
+tor "3" for one of the divisions. In addition to
+these are three other categories: The Quantum
+Number may contain a factor "5"; They may
+contain a factor "7". They may contain, nei-
+ther or, both a factor "5, and a factor "7". This
+gives us a 4-way division of Quantum Num-
+bers, for our catalog listing. Whether there are
+5, 6, or 7 prime factors, they must be such that
+one can combined primes such as to have only
+four co-prime integers. Then these four must
+be able to be arranged into a 4-Integer Quan-
+tum Number such that the two intermediate in-
+tegers are prime to each other. Secondly, the
+first is the difference between the two interme-
+diates and the fourth must be their sum. it
+must be in accord with Euclid Book VII, Prop-
+osition 28.
+What has been described, is one scale of the
+creation of energy which will be called "One
+Myriad" of seven similar myriads. Each Myri-
+ad reaches from 1 to approximately 10,000
+hertz. The working myriad actually reaches
+from 1 to 5040 hertz. Between 5040 hertz and
+10,000 hertz is essentially an overflow area.
+The higher the number of hertz in any Myriad,
+the weaker is the quantum effect.
+In setting the working Myriad to a maxi-
+mum of 5040 hertz, also limits the prime num-
+bers which can reasonably used in a Quantum
+number of a thing. The value 5040 is derived
+as the product when the seven prime factors
+are multiplied together. Above that, the value
+5041 is 71 squared. The prime number, 71, ap-
+pears to be the highest prime number which
+can used for the mean, (d), within any Quan-
+tum Number. That will limit the highest inte-
+ger, (a) of a Quantum Number at something
+less than twice 71, or to prime numbers below
+142. These are, roughly, the parameters of a
+Myriad.
+To make the span between the beginning,
+(Creative) Myriad, which has a top value of
+approximately 4 Quadrillion hertz and a value
+accurate to one hertz, down to one hertz vibra-
+tions. The Creator then divided this whole
+span into seven Myriads, each of which has
+the same parameters as those layed out above.
+They will be called (1) The Creative Myriad;
+(2) The Metaphysical Myriad (3) The Light,
+or Electromagnetic Myriad; (4) The Chemism
+Myriad; (5) the Ultra-Sound Myriad; (6) the
+Sound, or Music, Myriad; and (7) the Emo-
+tional Myriad each being of lower vibrational
+frequency of about a magnitude of 10,000 : 1.
+The lowest Myriad is the one which created
+"Humanity". It is the range of frequencies at
+which the emotional brain operates. It runs at
+something like a vibrational period of one vi-
+bration every four seconds which is 1/4 hertz,
+and from there up to about 25 or 30 hertz, to
+make up seven octaves.
+The next lowest Myriad is the Myriad of
+Sound and Music. In music there are again
+seven octaves. They are relatively well identi-
+fied, as to the general characteristics of each
+octave. The precise beginning and ending of
+each octave is not well set, but they can be de-
+termined with the recovery of Music of The
+Spheres. Within each octave are four promi-
+nent notes which are identified as C, F, A, C.
+This expands into the secondary chord of C,
+E, G, C.
+Music is probably the best understood My-
+riad of all seven Myriads. As we find corre-
+sponding characteristics in two other Myriads,
+we can get a gist of their general composition.
+One thing we find to be changed from conven-
+tional concepts is that any number which is a
+power of a lower prime number, will also act
+as a prime number. That is to say, 8, 9, 16, 25,
+32, and 49 will act as one of a pair of twin
+primes. In each case, the number which falls
+between the two primes which are twins, will
+be divisible by 3. This sets out one of the uses
+to which the number "3" becomes active.
+The third Myriad from the bottom is the
+Myriad of Ultra-Sound, which lies just above
+
+<!-- page 86 -->
+76
+Music. We can assume this Myriad is divided
+into seven octaves, and that there are promi-
+nent frequencies, being like the Music Myriad
+below, and the Chemism and Light Myriads
+above it.
+How this Myriad works in Nature is rela-
+tively undetermined. One feature has been
+found in the interaction between the Ultra-
+Sound Myriad and the Music Myriad. By us-
+ing digital, (silent), notes from the Ultra-sound
+Myriad, in certain combinations, they will pro-
+duce audible tones in the Music Myriad. This
+appears to be an analog to the way colors from
+the Light Myriad can be cascaded to the
+Chemism Myriad as photo-synthesis. This
+process is called, "Cascading". The critical
+feature which must be maintained is that the
+different notes must be harmonic to one an-
+other, and there may be up to seven of these
+notes, wavelets, of the upper Myriad, which
+are involved in a cascade to the lower Myriad.
+The subject of "Harmonics" is discussed in
+Volume 2 of Pythagoras And the Quantum
+World, in chapter 5 with the definition given
+on page 81.
+The fourth Myriad from the bottom is the
+Myriad of Chemism, or chemicals. It begins
+with the Periodic Table of Elements. Again,
+there are seven octaves or Periods in this table.
+The second and third octaves have seven ele-
+ments plus a noble element. The first octave
+contains only Hydrogen and Helium plus their
+isotopes. The 4th and 5th octaves have 18 ele-
+ments in each. (Mathematically there are 18
+prime fractional parts into which an octave
+can be divided with fractions running down to
+1/7, and up to 7/7.) The sixth and seventh oc-
+taves of the Periodic Table of Elements have
+14 elements respectively inserted after the
+third regular element. The sixth octave con-
+tains 18 elements in addition to these 14 ele-
+ments. The seventh octave is considered to be
+incomplete.
+ Many of the elements in these two highest oc-
+taves are unstable and radioactive. That is to
+be expected with their higher, and weaker,
+Quantum Numbers to hold them together. One
+can liken these to notes in the highest octaves
+in the Music Myriad. These elements will also
+transmute into natural elements with much
+lower Quantum Numbers. There has been re-
+cent publication of being able to transmute
+elements, to a limited degree, in the Cold Fu-
+sion Energy devices of Fleishmann- Pons.
+The fifth Myriad from the bottom, or third
+Myriad from the top is the one which contains
+the one octave of Visible Light. There are at
+least two octaves of Infra-Red light below the
+octave of Visible Light, and at least two oc-
+taves of Ultra-Violet above the octave of visi-
+ble Light. As noted before, it is reasonable to
+believe that the third octave below Light may
+be the transformation of energy in cascading
+downward into the Chemism Myriad of Mat-
+ter. There may also be the third octave above
+light which also acts as a transform from the
+Myriad above, as noted in a previous chapter
+concerning discarnates who have died but
+have not reached the Portal to the upper Myri-
+ad.
+So far, our five senses are credited for near-
+ly the sum total of all of our so-called firm
+knowledge in science. The Music Myriad is
+accessible through our hearing. The Light My-
+riad is accessible for one octave to our sense
+of sight. The Chemism Myriad accounts for
+the other three of our senses of Matter, which
+are touch, taste, and smell.
+Now to go to the second Myriad from the
+top, the Metaphysical Myriad, we have
+touched on the movement of discarnates into
+the next dimension where spiritual ascension
+is thought to exist. This also seems to be the
+Myriad where most of the thought energy be-
+comes possible. This is in contrast to the low-
+est Myriad, where the emotional energy is
+known to exist. We do not know whether
+thought energy is confined only to this Meta-
+physical Myriad. It may be possible to extend
+it into the top or Creative Myriad.
+ This is the realm in which Dowsers work in
+all of their accomplishment. They can locate
+objects or substances, which are unseen such
+as underground, lost, or distant objects, or wa-
+ter. Dowsers are also capable of creating
+"thought forms" which other dowsers can lo-
+cate and describe without further information.
+Some dowsers say they can communicate with
+their own unconscious, which is all knowing.
+
+<!-- page 87 -->
+77
+That would occur, also, in the Metaphysical
+Myriad. A thought form is essentially a cohe-
+sive and coherent energy field.
+Other people have developed considerable
+psychic ability, and a few can channel infor-
+mation from the Spirit World downward into
+the lower five Myriads. in the case of Sai
+Baba, he is said to have thought forms which
+are powerful enough to actually materialize
+complex material objects and make them man-
+ifest.
+This Myriad is what the five chapters in the
+middle of this book are about. We do have
+considerable metaphysical information con-
+cerning working in this Myriad. Some of it
+can be tested and has been, but most of it is
+beyond our testing capability. We know little
+about this field, not because we have no infor-
+mation on it, but because conventional science
+has placed a superstitious taboo on the dissem-
+ination of this information. This is the reason
+that those five chapters in the middle of this
+book are important to Quantum Arithmetic. If
+we can better understand that second Myriad
+from the top, we gain greatly.
+With this much established we are now
+ready to go into practical usage of Quantum
+Arithmetic. The first usage is in making an
+hierarchial catalog of all created things. In
+fact, all knowledge can be catalogued as na-
+ture catalogues it. With this knowledge we can
+begin to understand the complexities of matter
+by considering that all matter is only a very
+specialized energy field in one of the middle
+Myriads of Creation. Does that not explain the
+Book of "Genesis"?
+The four integers and/or their product, or
+the product of its prime factors, is what is
+called a Quantum Number. As four integers,
+these four integers become the "roots" of any
+practical problem which can be devised. It is
+absolutely unnecessary to go into higher math-
+ematics of Calculus, higher Algebra, or even
+Trigonometry to solve any problem. Simple
+addition and multiplication is all that are need-
+ed, along with the negative addition and use of
+prime numbers in place of division.
+Needless to say, this is what we should have
+had instead of Fibonacci's 1202 A.D. defini-
+tion, all these years. We must back up for
+these eight centuries and make corrections
+wherever they are needed.
+Creation then sets up systems of numbers
+which are ruled by "5" and “7". Creation also
+sets up the system of prime numbers, each of
+which is independent, and unique, but is
+joined to the system through the Creator,
+"One". Each of these numbers, 1, 2, 3, 5, & 7,
+is already prime but Creation continues to set
+up the larger prime numbers in hierarchial or-
+der.
+Each prime number might be considered as
+a separate filing cabinet in the system. The
+numbers up to "7" enjoy the highest place in
+the hierarchy of the system. The numbers up
+to "7" enjoy the highest place in the hierarchy
+of the quantum filing system. These are the
+ones which created the greatest Harmony and
+the greatest Sympathy.
+This is all well and good so long as we stay
+in the 2-dimensional world. When we go into
+the Third dimension, Dr. Elkins will show us
+how to combine nine different Quantum Num-
+bers into and enneagram, of pure energy. He
+also solidifies our knowledge of the Music Of
+The Spheres, and many of the other statements
+which were made above.
+So, that demonstrates how Nature works,
+and how its "Filing System" has been orga-
+nized. In its own way it keeps all things in
+separate files according to the specie, and gen-
+era to which it belongs. It does this through
+the number system. Or should we say "system
+of numbers?"
+The number "one" designates Creation. It
+creates the remainder of the numbering sys-
+tem, in which each additional number is separ-
+ated from the previous number by whole units.
+ This, then, demonstrates how Nature oper-
+ates, and how its "Filing System" is organized.
+In its own way it keeps all things in separate
+files according to which unique prime num-
+bers are assigned to it. These prime numbers
+identify the specie, and genera to which it be-
+longs. It does this through the number system.
+
+<!-- page 88 -->
+78
+Or should we say "system of prime numbers"?
+WE ARE NOW READY TO JUMP INTO
+THE THIRD DIMENSION
+
+<!-- page 89 -->
+79
+We now start the move above and beyond
+the second dimension where Quantum Arith-
+metic has been concentrated. As astounding as
+this first and second dimension may seem, the
+THIRD DIMENSION will bring many more
+surprises.
+The reader should now, (If they have stud-
+ied), be prepared to go into the Third Dimen-
+sion of Quantum Arithmetic. The most impor-
+tant part of that preparation is working out
+Table 1, first given in QA-1. If that has not
+been done, it should be done now, at this time,
+before proceeding. Sheets for doing so are in
+Appendix A
+In Quantum Arithmetic, the beginning clus-
+tered around becoming familiar with the so-
+called "Fibonacci" numbers and the various
+series of them. in making the Quantum Jump
+we will be moving out of the two-dimensional
+Quantum Arithmetic, and into the advanced
+three-dimensional form. It is a major leap in
+understanding. This includes, and demands, a
+good working knowledge of the Fibonacci
+configurations and values as described to this
+point.
+To make the transition, TABLE 2 is given
+in appendix B. This table is the foundation of
+two-dimensional Quantum Arithmetic. It is or-
+ganized with the numbers 1 through 15 for the
+columns, (Value of b), and 1 through 8 for the
+horizontal lines, (values for e). All squares in
+the larger blocks are calculated from these val-
+ues, as described in the heading of the table as
+it was given in QA-1 text book. For the con-
+venience of the reader they will be given
+again:
+In the original table it was said that the non-
+prime blocks did not apply to 2-dimensional
+Chapter 14
+THE THIRD DIMENSION
+
+<!-- page 90 -->
+80
+Quantum Arithmetic. These non-prime trian-
+gle blocks are necessary in the 3rd dimension-
+Table 2, as given in appendix B, is also differ-
+ent and more complete than the original table
+in that it contains both the male and female
+gender Fibonacci groupings. This table has
+one more feature which must be changed. It
+will include working out parts of those squares
+which are listed as "non-prime". In other
+words, every square of this table must be filled
+and will be used. -- male squares, female
+squares and non-prime squares.
+The Fibonacci numbers are not a series.
+They come in groups of four integers. The
+first such four number group is 1, 1, 2, 3. This
+is the aboriginal group, and . it creates or gen-
+erates all of the others. In that respect, every
+other generated group must contain in the fac-
+tors "2" and "3", (which occur in this first
+"creative" group), in one or another of the four
+integers in their four-integer group. These two
+factors are what create the "quantumness" of
+four-integer group. These two factors are what
+create Quantum Arithmetic, in the second di-
+mension.
+In previous work the text touched on the Third
+Dimension in several cases, but did not go into
+the dimension itself. One case was in the alge-
+braic formula showing the derovation of the
+Babylonian formula for the Volume of a trun-
+cated pyramid. Another case was the formula
+for the volume of a tetrahedron, using vari-
+ables of two opposite sides and the perpendic-
+ular distance between them.
+There was also some investigation of the five
+platonlic solids as they related to the number-
+ing system described in the previous chapter.
+There are three solids, the tetrahedron, the oc-
+tahedron, and the icosahedron which have fac-
+es of equilateral triangles. The cube uses
+squares for its faces, and the dodecahedron
+uses pentagons for its faces. Here we have the
+application of the basic 3, 4, 5, as 3, 4, 3, 5, 3
+as faces of the various polyhedra, respectively.
+The two largest solids use the 3, 4, 5, also in
+a different way. The docecahadron has 3 x 4 =
+12 pentagon faces, each of which has 5 bound-
+ing edges. The icosahedron has 4 x 5 = 20 tri-
+angular faces. That will eventually come into
+play in 3-dimensional Ouantum Arithmetic.
+There was also mention of 3rd dimensional
+penetrations which could be made with the
+fractals created by equilateral triangles. 
+It is now possible to enter fully into the
+THIRD DIMENSION with of the work which
+has been done by Dr. Carl Elkins.
+ While I was working in the first and second
+dimension, my guide told me not to go into
+the Third dimension. In 1995, Dr. Elkins saw
+a listing of my books and ordered the full set.
+These were sent to him. Within two weeks he
+wrote back that he understood them. He was
+surprised that it was the foundation of his
+
+<!-- page 91 -->
+81
+work in the third dimension. When he advised
+me, I began to see why I was not allowed to
+go into the third dimension by my spirit guide.
+I was supposed to get the first and second di-
+mension complete enough to make applica-
+tions of them. We had been working indepen-
+dently, not knowing the other was working on
+a different phase of the same mathematics. Dr.
+Elkins had little trouble to adapt his work to
+the, identities which I had assigned. This had
+to be spirit planning.
+Dr Elkins had been working on the third di-
+mension for a number of years. When he saw
+my work he straightway wrote up a table and
+sent it to me. It was all new work to me. I
+studied it for some time and Dr Elkins led me
+through it as far as I could understand. Finally
+my own spirit guide enlightened me enough
+for me to carry on in making a connection be-
+tween my work and that of Dr. Elkins.
+This much was determined in volume 1. It
+leads us into the measurements for calculating
+the torus volume, circumferences etc., so long
+as we have the Quantum Number for any spe-
+cific torus.
+The radii for the three circles are H=C+F,
+and I= C-F(Pos). So the midpoint of the ring
+of the torus is a radius of C, (or F), from the
+eye of the torus. The line shown on the dia-
+gram above as G, is not the centerline of the
+torus. It is used for calculating surface areas of
+the circles and the rings. The G-circle divides
+the area of the torus into two equal areas. The
+centerline of the torus is (H-1)/2. That gives us
+most of the information we need to begin to
+calculate the parameters of the torus from first
+and second dimension.
+To begin, we will not use the complete ta-
+ble. We will use only the squares which run
+diagonally down from the creative square
+through a series of nonprime squares, being 2,
+2, 4, 8; 3, 3, 6, 9; 4, 4, 8, 12, etc. . . . , down to
+13, 13, 26, 39, (See Table 2). These are the
+children of the 1, 1, 2, 3 and are the "secon-
+dary creative" groups. Each of these squares
+will be accompanied by the square to their im-
+mediate left, and the square to their immediate
+right.
+Each of the three squares in each line will
+show only the roots, as given in the top line of
+the squares as given in Table 2, (Appendix B).
+Dr. Elkins advises me that the center square is
+filled by a "scalar" value, which is the remain-
+der when the 9's are "cast out" of "a". 
+He writes: "Now you must look at the Central
+Pipe. At the top is the 1, 1, 2, 3. For any Myri-
+ad, this is First Cause [diagonally) to 13, 113,
+26, 39. This Pipe contains all the descendants
+of First Cause. This is the energy of the aether
+which anyone can access., -- if we can under-
+stand how it cascades through the Myriads,
+Quantums, and Octaves.
+
+<!-- page 92 -->
+82
+"First we must see how the Myriads are
+connected. The Myriads are connected as fol-
+lows, [2, 2, 4, 6, down to 13, 13, 26, 39. which
+is the first Myriad.) 1, 1, 2, 3 is the same as
+13, 13, 26, 39. Everything repeats, Only the
+scale has been changed. This can be proved
+using Quantum Arithmetic."
+QUANTUMS
+"Now we must ask about the Quantum.
+First Cause (1, 1, 2, 3) FIRST QUANTUM
+creates an energy system, for each Quantum,
+This energy system, (as shown), is a parallelo-
+gram around the central PIPE of Quantum 1.
+"The central number of the NINE squares is
+derived by "casting out nines” from the "a" of
+beda. It can be shown mathematically that all
+ONES, TWO'S . . . . . NINE'S are scalar quan-
+tities of the same number as shown. So, this is
+the repetition of each parallelogram in a Myri-
+ad. (See Table 1, which should have been
+completed by this time.)
+"There are only 4 Quantums in each Myri-
+ad, (See Table 2). There can be no more than
+FOUR QUANTUMS in a Myriad. 1 + 2 + 3 +
+4 = 10.
+“First Cause (1, 1, 2, 3) which is a [3] sys-
+tem, creates the first Quantum. And the [3](4,
+4, 8, 12) of the first Quantum, creates the 2nd
+Quantum. This follows for all four Quantums.
+“The parallelograms around the central
+PIPE are resonant forms of the energy of the
+6, 9, 3 system. HERE IS WHERE WE GET
+TO AN UNDERSTANDING OF THE TOR-
+US. You’ll be able to see that there is a rela-
+tionship but we  must see it as a Torus to fully
+get its implication.
+“Pythagoras first saw this relationship as a
+combination of the 6, 9, 3 and of the 7, 1, 4, 5,
+2, 8. This is a combination of the Law of
+Three (the Trinity) and the Law of Six (The
+Octave). Thus he used the enneagram symbol
+as his signature. I do not beleive that Pythago-
+ras knew about the torus but perhaps he did.
+He must have learned of the b, e, d, a in the
+
+<!-- page 93 -->
+83
+Egyptian temple at Heliopolis where he is
+known to have studied. The priests(ess) at the
+Egyptian Temple of the goddess of Isis were
+fully aware of the torus and also of the path of
+the ellipse. This pattern is recognized in the
+star Sirus (Isis) and in Osirus’ star (the largest
+star in Orion’s Belt).
+“But I digress... The parallelograms along
+the central PIPE are all resonant energy forms
+of the FIRST CAUSE. They are Co-Creators
+of all that is manifest.
+None of these energies are visibly manifest
+to us. They are CAUSE NOT EFFECT.”
+The comment by Dr. Elkins will be broken
+here to explain the diagrams which accompa-
+ny his text.
+There are only four enneagrams on the cen-
+tral pipe and no more than four in any Myriad.
+Each is created by the enneagram before it.
+The first enneagram is created by the Creative
+Enneagram (Quantum). The fourth enneagram
+in any Myriad creates the next Myriad.
+Given here are the enneagrams which are on
+the central PIPE.
+“Myriad” is somewhat more precise than
+the "myraid" (10,000), which was previously
+described in the distribution of energy.
+The Myriad of 36 sets of root numbers from
+2, 2, 4, 6 to 13, 13, 26, 39 is divided into four
+parts, each of which is called an "Enneagram"
+(derived from the practice of "grouping by
+9's"). Each is composed of nine sets of Quan-
+tum root numbers. Within each enneagram,
+the central "PIPE" is given a scalar value of
+the positive remainder when 9 is subtracted
+
+<!-- page 94 -->
+84
+from "a", which lies directly below it. This is a
+process called casting out 9's" (i.e., to above
+12 - 9 = 3).
+There are two different strings of Fibonacci
+numbers. The string in the male gender run 1,
+2, 2, 3, 5, 8, 13, 21. The string of female gen-
+der Fibonacci numbers are 2, 1, 3, 4, 7, 11, 18.
+The last number n each is the first which is not
+prime or are the power of a single prime. So,
+beginning with “3" there are only four which
+are prime in these basic strings.
+If the whole of Table 1 from QA-1 is then
+shown, these “children” enneagrams will pro-
+duce other enneagrams throughout the entire
+table. Each enneagram can be shown to repre-
+sent its own unique torus, which in turn, will
+represent a special group of energy frequen-
+cies in the THIRD DIMENSION. Each torus
+is a part of the scheme of Music of the
+Spheres. There is much to look forward to in
+advancing to the third dimension of Quantum
+Arithmetic. In order to make this Quantum
+JUMP, the reader should have a clear under-
+standing of Quantum Arithmetic in the second
+dimension.
+APPLICATIONS
+The objective of these books is not to show
+the useable applications of Quantum Arithme-
+tic, but primarily to show the arrangement and
+order of numbers to form the Natural Quan-
+tum Arithmetic. Not with-standing, some very
+important applications are being made by oth-
+ers who have gained sufficient understanding.
+There have been suggestions in other parts of
+these books which suggest possible applica-
+tions which can be made, particularly in chem-
+istry and in music.
+With that, let me introduce Dr. Carl Elkins
+who has been doing considerable work In the
+Third Dimension. His work, until quite recent-
+ly, has been entirely independent of Quantum
+Arithmetic in the first two dimensions.
+Knowing the difficulty of carrying such a
+new view of old arithmetic in its new setting, I
+wish Dr. Carl Elkins much success. We will
+be working together in the future. I have pub-
+lished many editions of my books which did
+not have much distribution before I let them
+go out-of-print. There were many seemingly
+unrelated parts which were omitted in the later
+edition because they led in divergent direc-
+tions. There are many, many of these minor
+points yet to be incorporated in the first two
+dimensions of Quantum Arithmetic. As in this
+present book, many of the chapters on the first
+two dimensions will be separate and free
+standing, to finish the many branching places
+which were minimized or omitted.
+As Dr. Elkins writes, there should be many
+places where the first two dimensions will
+come into focus to help make the Third di-
+mension more understandable. I will fill them
+in, as is appropriate to each case. Good luck
+
+<!-- page 95 -->
+85
+Carl, in helping the reader to make the
+QUANTUM JUMP.
+To continue Dr Carl Elkins' descriptions:
+"To map what is manifest, we shall need only
+look at the parallelograms to the right and to
+the left OF the central PIPE.
+"THE OCTAVES
+Here is our first chance to look at energy spec-
+trums. I'll stay on the parallelograms on the
+PIPE, (See page 85), because this is our direct
+link to the SOURCE, and our FIRST CAUSE.
+"MUSIC
+"In Quantum 1, we see that First Cause has
+created a SIX (2, 2, 4, 6); NINE (3, 3, 6, 9),
+and another First Cause, also a THREE (4, 4,
+8, 12). If we can assume, as in MUSIC, that
+First Cause is some energy and that it may
+correspond to a note of a scale, then we might
+as well assign it the NOTE C.
+
+<!-- page 96 -->
+86
+"If so, then SIX, NINE, AND THREE of
+the First Quantum CO-CREATOR would also
+be a C note. In Scale the SIX would be One
+half of FIRST CAUSE, and NINE half of SIX,
+and THREE would be half of NINE. Mathe-
+matically we are speaking of the wavelength
+of this energy becoming longer as we descend
+the PIPE. So there must be three C Notes in
+each Quantum (enneagram). This relationship
+will hold for every Quantum.
+"The relationship of all nine notes of all par-
+allelograms is set out [below], which I called
+the Quantum Scale of Musical Notes.
+THE NOTES
+So we will see that FIRST CAUSE and the
+CO-CREATOR PARALLELOGRAM togeth-
+er produce the first manifest waveforms of en-
+ergy. These are represented by the Parallelo-
+gram (shown page 87 to the right).
+
+<!-- page 97 -->
+87
+"In the Myriad of SOUND, if first cause is set
+to 86016 HZ then every Note, in every Quan-
+tum, in every enneagrarn energy system is a
+whole number. This relationship holds across
+the entire 20 KHz to 20 HZ audible range. it
+can be shown that all of the harmonics gener-
+ated by any tone follow exactly the pattern de-
+scribed by the cascading of enneagrams. This
+will be the pattern described by the cascading
+of enneagrams. This will be the breakthrough
+long sought in physics which explains and
+unifies Harmonic and Geometric mean theo-
+ries.
+I am informed by Dr. Carl Elkins that he is
+willing to provide readers with a computer
+print-out of a 15" x 15" x 22" triangular sheet
+showing all the enneagrams up to (b, e =)  30-
+1; 1-30; and 15-15. This brings all of the en-
+neagrams together in their interrelationship.
+He will send a computer print-out if the reader
+emails a request, to "torus@ipdi.com, internet
+for his enneagram sheet. (B.I.)
+CONSTRUCTION OF THE TORUS
+"The last diagram I sent you is a scale mod-
+el of a construction template. You need to
+double the drawing and transfer it to a piece of
+cloth. Be sure to add the diagonal lines and the
+ellipse to the cloth transfer." [(Note: The dia-
+gram, 8.5" x 14", to be transferred is given in
+Appendix D at the back of the book.) Please
+note the Copyright shown on the drawing. b.i.]
+"1. Cut out the rectangle, leaving 1/4 inch
+seams all around. Make 4 copies on cloth.
+Sew together in pairs edge to edge, then the
+two pieces end to end.
+"2. Fold in half lengthwise and sew the long
+seam. (The diagonal lines should connect.)
+This will give a tube which is 2 feet long.
+"3. Turn right side out.
+"4. Cut a piece of 4" Duct Tube, (clothes dryer
+vent at a hardware store), to length of the cloth
+tube, (2 feet). 
+"5. Slip the cloth tube you've just sewn over
+the Duct Tube.
+"6. Tape, staple or sew the Duct Tube into a
+torus shape.
+"7. Sew the ends of the cloth tube together
+such that the diagonal lines match.
+"THERE YOU HAVE IT. YOUR OWN
+TORUS. It's the energy system you've been
+working on, transformed into the next dimen-
+sion.
+TORUS of TORUS
+1. Every triangle in the system is a different
+torus and is described by its beda number. 
+1a. There is a finite number of different torus
+forms, in each Quantum. 
+1b. one hundred and eight are stable, and
+eighty-one are unstable.
+"2. Every Quantum is also made up of Torus
+forms as described in the diagrams.
+"2.a. There is only one torus system manifest
+in Quantum 1 . It is stable. 
+"2b. There are only five torus systems mani-
+fest in Quantum 2. All are stable. Plus the Co-
+Creator System which isn’t manifest. 
+“2c. There are only seven torus systems mani-
+fest in Quantum 3. Plus the Co-Creator Sys-
+tem which isn't manifest. There is a link in
+Quantum 3 to the other Myriad. 
+“2d. There are only six fully Stable torus sys-
+tems manifest in Quantum 4. Plus the Co-
+Creator System which isn't Manifest. There
+are many Quantum links in Quantum 4 to the
+next Myriad (See The enneaag [sic] sheet
+which Dr Elkins will send). 
+"3. Every Myriad is made up of the same torus
+forms, only the scale changes. 
+“3a. The linkage on the vertical axis of the
+GREAT PYRAMID is as described above at
+the point where 1, 1, 2, 3 Is also 13, 13, 26,
+39. 
+“3b. The linkage on the horizontal axis occurs
+where 1, 19, 20, 39 is the same as 19, 1, 20,
+21.
+THE DIFFERENT TORUS SHAPES
+"Like the ellipse, the torus has different
+
+<!-- page 98 -->
+88
+shapes. The tube itself isn't usually round, but
+elliptical. This means that one torus can be al-
+most flat like the one used to solve the Cattle
+Problem. Or they can conform generally to the
+one you constructed above. In every case,
+there is an exact relationship of the volume of
+the central vortex to the volume of the total
+disk area of the torus. This vortex volume is
+always "THE ONE".--the tithe, that part given
+back to God.
+“In engineering terms, a torus is composed
+of some tube shape and a major diameter.
+What has been hidden from us is the possibili-
+ty that a torus of energy can be constructed
+such that the diameter of the tube is almost as
+great as the major diameter. This can be visu-
+alized by thinking of the Yin Yang symbol.
+Ball Lightning is a notable example of this
+form of energy that has been observed.
+"From these varied shapes we may derive
+the relationship of the torus as b, e, d, a, where
+b, e, d, a, are the first 4 numbers 1-4, and Sur-
+face area (square units), 5 in 3D, 3 squared + 4
+squared = 5 squared, and Volume, (cubic
+units) 6 in 3D, 3 cubed + 4 cubed + 5 cubed =
+6 cubed.
+"TORUS AND PERCEPTION
+"It is the shape and form of the torus which
+allows a thing to continue existence. The ener-
+gy from FIRST CAUSE acting in its cascade
+of CO- CREATION keeps a thing in motion
+and physically manifest. This is nature's way
+of pumping the spin energy to keep matter in
+existence.
+"How does this work? In torus terms it is
+the frequency of the input energy of THREE
+of the system above acting at a point SIX of
+the descendent system. Only that amount of
+THREE energy needed to maintain the har-
+monic nature of NINE is used. The balance (if
+any) of the THREE input is given off at its
+THREE to nurture other descendants in the
+cascade of things manifest. If you refer to the
+diagram of complete Table 2, you can see how
+energy of FIRST CAUSE and of CO-
+CREATION spreads downward and outward
+to keep all things manifest in equilibrium.
+
+<!-- page 99 -->
+89
+“Now, and finally, hold the torus you've
+built in front of you. Notice the two continu-
+ous paths of energy -- the smooth sinusoidal
+flow of the THREE, SIX, and NINE, and the
+other elliptical path of 1, 4, 2, 8, 5, 7. Can you
+roll your torus so that it aligns with the paral-
+lelogram? OK. This will put nodal points 2,
+8, 5, on top and 7, 1, 4 on the bottom. In this
+way we will have a way to actually understand
+how all perception fails to account for energy
+in motion. Notice how the 2, 5, 8 moves away
+from you and how 7, 1, 4 moves towards you.
+Do you see the very real possibility that a
+Doppler shift occurs? It is precisely this phe-
+nomena that hides TRUTH from us, and de-
+nies us access to TRUTH. This same thing is
+true of THREE, SIX, and NINE. However,
+THREE and SIX are perceived as NINE.
+There is a lot of math to be derived here. To
+put it in short form, every system:- beda,
+Quantum, and Myriad, is receiving only one
+frequency and transmitting another. Every-
+thing else is perception error due to this reso-
+nating Doppler effect. 
+IMPLICATION FOR NEW ENERGY
+"If THREE begets SIX to produce the per-
+ceived NINE, and CO-CREATES the 2, 5, 8,
+7, 1, 4 system - then if we tune a toroid system
+to 2, 5, 8 then we should be able to access the
+THREE and the SIX.
+"For any properly tuned toroid system, then
+a small additional input energy at SIX will
+create a large additionai output energy at
+THREE. THIS WILL CAUSE EACH NOTE
+OF 2, 5, 8 TO SING. SOMEONE CALLED
+THIS SINGING, THE “MUSIC OF THE
+SPHERES”.
+"CHAOS
+“Are you familiar with CHAOS THEORY?
+This explains much about the nature of the in-
+terface between Myriads. I've much to the in-
+terface between Myriads."
+"The pattern for the torus contains many
+keys. In the real world a Thing can only exist
+where its torus may be represented by a trian-
+gle which is (1) prime; (2) connected as part
+of a stable energy system, (enneagram); and
+(3) as such, is connected to the source (central
+Pipe). In all these case it's the quantum ellipse
+(described in Volume 2) associated with each
+of these triangles that is inscribed on the pat-
+tern. 
+"REMEMBER, THE ONLY DEFINITION
+WE HAVE FOR MATTER IS 'ENERGY IN
+MOTION'. WE'VE DESCRIBED THIS MO-
+TION WITH THE TORUS, THE ELLIPSE,
+AND THE TRIANGLE. 
+"In this way, all natural things must be de-
+scribable using Quantum Arithmetic.” Carl El-
+kins, - Ph.D., torus@ipdi. com, internet
+With that, Dr. Carl Elkins concludes his dis-
+cussion about the Third Dimension and the
+Torus. That much is sufficient for this volume
+3 concerning the torus and the 3rd Dimension
+of CREATION. Look for more in Volume 4*. 
+For an email to <torus@ipdi.com, internet>
+he will send a computer generated 20"x20" ta-
+ble of enneagrams.
+EDITOR’S NOTE: As of this date, 9/18/06, and to my
+knowledge volume 4 was never created. We do know
+Iverson did not write it.
+
+<!-- page 100 -->
+90
+APPENDIX
+
+<!-- page 101 -->
+91
+
+<!-- page 102 -->
+92
+
+<!-- page 103 -->
+93
+
+<!-- page 104 -->
+94

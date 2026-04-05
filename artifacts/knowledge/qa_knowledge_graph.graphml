@@ -1,0 +1,562 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d16" for="edge" attr.name="strength" attr.type="double"/>
+<key id="d15" for="edge" attr.name="transition" attr.type="string"/>
+<key id="d14" for="edge" attr.name="shared_terms" attr.type="string"/>
+<key id="d13" for="edge" attr.name="relationship" attr.type="string"/>
+<key id="d12" for="node" attr.name="hi" attr.type="double"/>
+<key id="d11" for="node" attr.name="e8_alignment" attr.type="double"/>
+<key id="d10" for="node" attr.name="loss" attr.type="double"/>
+<key id="d9" for="node" attr.name="a" attr.type="long"/>
+<key id="d8" for="node" attr.name="d" attr.type="long"/>
+<key id="d7" for="node" attr.name="e" attr.type="long"/>
+<key id="d6" for="node" attr.name="b" attr.type="long"/>
+<key id="d5" for="node" attr.name="qa_tuple" attr.type="string"/>
+<key id="d4" for="node" attr.name="symbol" attr.type="string"/>
+<key id="d3" for="node" attr.name="definition" attr.type="string"/>
+<key id="d2" for="node" attr.name="section" attr.type="string"/>
+<key id="d1" for="node" attr.name="slug" attr.type="string"/>
+<key id="d0" for="node" attr.name="name" attr.type="string"/>
+<graph edgedefault="directed"><node id="Harmonic Index (HI):">
+  <data key="d0">Harmonic Index (HI):</data>
+  <data key="d1">harmonic-index-hi</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Scalar order parameter from QA‑Markovian dynamics, computed as `HI = A(Φ(S_t)) * exp(-k * L(Φ(S_t)))`.</data>
+  <data key="d4">HI</data>
+  <data key="d5">18,17,11,4</data>
+  <data key="d6">18</data>
+  <data key="d7">17</data>
+  <data key="d8">11</data>
+  <data key="d9">4</data>
+  <data key="d10">30.679094540612518</data>
+  <data key="d11">0.6505382386916236</data>
+  <data key="d12">0.030261934200572195</data>
+</node>
+<node id="Harmonic Fingerprint (HF):">
+  <data key="d0">Harmonic Fingerprint (HF):</data>
+  <data key="d1">harmonic-fingerprint-hf</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">96‑dim vector from final 24×(b,e,d,a) tuples flattened; the geometric signature of a window.</data>
+  <data key="d4">HF</data>
+  <data key="d5">5,23,4,3</data>
+  <data key="d6">5</data>
+  <data key="d7">23</data>
+  <data key="d8">4</data>
+  <data key="d9">3</data>
+  <data key="d10">453.35172413793106</data>
+  <data key="d11">0.48286708498473774</data>
+  <data key="d12">9.88581290556061e-21</data>
+</node>
+<node id="QA‑Markovian system:">
+  <data key="d0">QA‑Markovian system:</data>
+  <data key="d1">qamarkovian-system</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Resonance‑driven, message‑passing dynamics in mod 24 over 24 nodes.</data>
+  <data key="d4"></data>
+  <data key="d5">17,3,20,23</data>
+  <data key="d6">17</data>
+  <data key="d7">3</data>
+  <data key="d8">20</data>
+  <data key="d9">23</data>
+  <data key="d10">0.0</data>
+  <data key="d11">0.9508714314867199</data>
+  <data key="d12">0.9508714314867199</data>
+</node>
+<node id="Symmetry‑informed kernel:">
+  <data key="d0">Symmetry‑informed kernel:</data>
+  <data key="d1">symmetryinformed-kernel</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Conceptual view of HI/HF operator as a kernel biased toward symmetry.</data>
+  <data key="d4"></data>
+  <data key="d5">12,2,14,16</data>
+  <data key="d6">12</data>
+  <data key="d7">2</data>
+  <data key="d8">14</data>
+  <data key="d9">16</data>
+  <data key="d10">0.0</data>
+  <data key="d11">0.9486832980505138</data>
+  <data key="d12">0.9486832980505138</data>
+</node>
+<node id="Equivariant operator (mod 24):">
+  <data key="d0">Equivariant operator (mod 24):</data>
+  <data key="d1">equivariant-operator-mod-24</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Implementation view of the QA layer respecting modular structure.</data>
+  <data key="d4"></data>
+  <data key="d5">14,23,13,12</data>
+  <data key="d6">14</data>
+  <data key="d7">23</data>
+  <data key="d8">13</data>
+  <data key="d9">12</data>
+  <data key="d10">97.57074109720885</data>
+  <data key="d11">0.7933976107766691</data>
+  <data key="d12">4.5924817901433575e-05</data>
+</node>
+<node id="E₈ alignment statistic:">
+  <data key="d0">E₈ alignment statistic:</data>
+  <data key="d1">e-alignment-statistic</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Mean per‑node max |cosine| to the 240 E₈ roots after R⁸ embedding of node states.</data>
+  <data key="d4"></data>
+  <data key="d5">13,18,7,1</data>
+  <data key="d6">13</data>
+  <data key="d7">18</data>
+  <data key="d8">7</data>
+  <data key="d9">1</data>
+  <data key="d10">138.7058823529412</data>
+  <data key="d11">0.5318579962516268</data>
+  <data key="d12">5.033565933577245e-07</data>
+</node>
+<node id="Coherence collapse:">
+  <data key="d0">Coherence collapse:</data>
+  <data key="d1">coherence-collapse</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">HI falls below a defined threshold relative to baseline.</data>
+  <data key="d4"></data>
+  <data key="d5">21,7,4,11</data>
+  <data key="d6">21</data>
+  <data key="d7">7</data>
+  <data key="d8">4</data>
+  <data key="d9">11</data>
+  <data key="d10">83.23566878980891</data>
+  <data key="d11">0.7114914586232078</data>
+  <data key="d12">0.00017269927942119195</data>
+</node>
+<node id="State Deviation:">
+  <data key="d0">State Deviation:</data>
+  <data key="d1">state-deviation</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">L2 distance between live HF and Baseline Fingerprint.</data>
+  <data key="d4"></data>
+  <data key="d5">11,0,11,11</data>
+  <data key="d6">11</data>
+  <data key="d7">0</data>
+  <data key="d8">11</data>
+  <data key="d9">11</data>
+  <data key="d10">0.0</data>
+  <data key="d11">0.8944271909999157</data>
+  <data key="d12">0.8944271909999157</data>
+</node>
+<node id="Baseline Fingerprint (healthy/baseline):">
+  <data key="d0">Baseline Fingerprint (healthy/baseline):</data>
+  <data key="d1">baseline-fingerprint-healthy-baseline</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">HF computed from calm/quiet segment; comparison anchor.</data>
+  <data key="d4"></data>
+  <data key="d5">7,16,23,15</data>
+  <data key="d6">7</data>
+  <data key="d7">16</data>
+  <data key="d8">23</data>
+  <data key="d9">15</data>
+  <data key="d10">59.90943396226415</data>
+  <data key="d11">0.9045055619589804</data>
+  <data key="d12">0.0022624426717059434</data>
+</node>
+<node id="Harmonic Rotation (strategy):">
+  <data key="d0">Harmonic Rotation (strategy):</data>
+  <data key="d1">harmonic-rotation-strategy</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">SPY/TLT allocation guided by HI asymmetry.</data>
+  <data key="d4"></data>
+  <data key="d5">6,20,2,22</data>
+  <data key="d6">6</data>
+  <data key="d7">20</data>
+  <data key="d8">2</data>
+  <data key="d9">22</data>
+  <data key="d10">150.69405405405405</data>
+  <data key="d11">0.8154355063002009</data>
+  <data key="d12">2.3271801547701376e-07</data>
+</node>
+<node id="Early‑Warning Detector:">
+  <data key="d0">Early‑Warning Detector:</data>
+  <data key="d1">earlywarning-detector</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Dual‑channel alert using (HI collapse) ∧ (Deviation spike).</data>
+  <data key="d4"></data>
+  <data key="d5">18,14,8,22</data>
+  <data key="d6">18</data>
+  <data key="d7">14</data>
+  <data key="d8">8</data>
+  <data key="d9">22</data>
+  <data key="d10">130.39476145930777</data>
+  <data key="d11">0.9006863799659568</data>
+  <data key="d12">1.9570461107957547e-06</data>
+</node>
+<node id="Seismic Coherence Dashboard:">
+  <data key="d0">Seismic Coherence Dashboard:</data>
+  <data key="d1">seismic-coherence-dashboard</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Two‑panel figure showing signal + (HI, Deviation) with ground‑truth spans.</data>
+  <data key="d4"></data>
+  <data key="d5">21,13,10,23</data>
+  <data key="d6">21</data>
+  <data key="d7">13</data>
+  <data key="d8">10</data>
+  <data key="d9">23</data>
+  <data key="d10">184.29677419354837</data>
+  <data key="d11">0.9022436386781061</data>
+  <data key="d12">8.941628501476336e-09</data>
+</node>
+<node id="Harmonic Resonant Inducer:">
+  <data key="d0">Harmonic Resonant Inducer:</data>
+  <data key="d1">harmonic-resonant-inducer</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Inductive (magnetic) write‑in device for bioelectric nudges. *(Future work)*</data>
+  <data key="d4"></data>
+  <data key="d5">15,21,12,9</data>
+  <data key="d6">15</data>
+  <data key="d7">21</data>
+  <data key="d8">12</data>
+  <data key="d9">9</data>
+  <data key="d10">78.45739910313901</data>
+  <data key="d11">0.7525489793561388</data>
+  <data key="d12">0.0002945596272444763</data>
+</node>
+<node id="Harmonic Neuro‑Regulator:">
+  <data key="d0">Harmonic Neuro‑Regulator:</data>
+  <data key="d1">harmonic-neuroregulator</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Closed‑loop read–analyze–nudge–verify controller. *(Future work)*</data>
+  <data key="d4"></data>
+  <data key="d5">18,4,22,2</data>
+  <data key="d6">18</data>
+  <data key="d7">4</data>
+  <data key="d8">22</data>
+  <data key="d9">2</data>
+  <data key="d10">262.63932448733414</data>
+  <data key="d11">0.6460582824697986</data>
+  <data key="d12">2.5350747111615385e-12</data>
+</node>
+<node id="Harmonic Probabilistic Geometry:">
+  <data key="d0">Harmonic Probabilistic Geometry:</data>
+  <data key="d1">harmonic-probabilistic-geometry</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Umbrella name of the framework.</data>
+  <data key="d4"></data>
+  <data key="d5">12,7,19,2</data>
+  <data key="d6">12</data>
+  <data key="d7">7</data>
+  <data key="d8">19</data>
+  <data key="d9">2</data>
+  <data key="d10">173.10912343470483</data>
+  <data key="d11">0.6886171275731505</data>
+  <data key="d12">2.0890272878602667e-08</data>
+</node>
+<node id="QA‑CPLearn engine:">
+  <data key="d0">QA‑CPLearn engine:</data>
+  <data key="d1">qacplearn-engine</data>
+  <data key="d2">Official Terms</data>
+  <data key="d3">Core simulator/operator implementation (use this hyphenated spelling).</data>
+  <data key="d4"></data>
+  <data key="d5">3,18,21,15</data>
+  <data key="d6">3</data>
+  <data key="d7">18</data>
+  <data key="d8">21</data>
+  <data key="d9">15</data>
+  <data key="d10">11.664</data>
+  <data key="d11">0.8822575465125694</data>
+  <data key="d12">0.27481111750147075</data>
+</node>
+<node id="QA tuple">
+  <data key="d0">QA tuple</data>
+  <data key="d1">qa-tuple</data>
+  <data key="d2">Mathematical Primitives</data>
+  <data key="d3">`(b,e,d,a)` with `d = b + e (mod 24)` and `a = b + 2e (mod 24)`.</data>
+  <data key="d4"></data>
+  <data key="d5">6,6,12,18</data>
+  <data key="d6">6</data>
+  <data key="d7">6</data>
+  <data key="d8">12</data>
+  <data key="d9">18</data>
+  <data key="d10">0.0</data>
+  <data key="d11">1.0</data>
+  <data key="d12">1.0</data>
+</node>
+<node id="Harmonic loss">
+  <data key="d0">Harmonic loss</data>
+  <data key="d1">harmonic-loss</data>
+  <data key="d2">Mathematical Primitives</data>
+  <data key="d3">`L(Θ)` uses **squared minimal residue** of `a^2 − (d^2 + 2de + e^2)` under mod 24.</data>
+  <data key="d4"></data>
+  <data key="d5">15,22,13,11</data>
+  <data key="d6">15</data>
+  <data key="d7">22</data>
+  <data key="d8">13</data>
+  <data key="d9">11</data>
+  <data key="d10">72.0</data>
+  <data key="d11">0.7842289302333949</data>
+  <data key="d12">0.0005854941898306775</data>
+</node>
+<node id="Alignment">
+  <data key="d0">Alignment</data>
+  <data key="d1">alignment</data>
+  <data key="d2">Mathematical Primitives</data>
+  <data key="d3">cosine vs. normalized E₈ roots; report **mean** and **distribution**.</data>
+  <data key="d4"></data>
+  <data key="d5">16,5,21,2</data>
+  <data key="d6">16</data>
+  <data key="d7">5</data>
+  <data key="d8">21</data>
+  <data key="d9">2</data>
+  <data key="d10">236.63273727647868</data>
+  <data key="d11">0.6612035107624793</data>
+  <data key="d12">3.495472962238995e-11</data>
+</node>
+<node id="Defaults">
+  <data key="d0">Defaults</data>
+  <data key="d1">defaults</data>
+  <data key="d2">Mathematical Primitives</data>
+  <data key="d3">modulus = **24**, nodes = **24**. (Note: E₈ emergence is largely modulus-independent, with modulus influencing discrete sampling resolution).</data>
+  <data key="d4"></data>
+  <data key="d5">16,7,23,6</data>
+  <data key="d6">16</data>
+  <data key="d7">7</data>
+  <data key="d8">23</data>
+  <data key="d9">6</data>
+  <data key="d10">253.94259471871413</data>
+  <data key="d11">0.7615773105863908</data>
+  <data key="d12">7.1306190670928675e-12</data>
+</node>
+<node id="Windowing (current demos)">
+  <data key="d0">Windowing (current demos)</data>
+  <data key="d1">windowing-current-demos</data>
+  <data key="d2">Mathematical Primitives</data>
+  <data key="d3">seismic `window=50, step=5`; finance HI on `252d` rolling with `21d` cadence.</data>
+  <data key="d4"></data>
+  <data key="d5">8,17,1,18</data>
+  <data key="d6">8</data>
+  <data key="d7">17</data>
+  <data key="d8">1</data>
+  <data key="d9">18</data>
+  <data key="d10">91.61708394698086</data>
+  <data key="d11">0.8032015583667851</data>
+  <data key="d12">8.432282380808102e-05</data>
+</node>
+<edge source="Harmonic Index (HI):" target="Harmonic Fingerprint (HF):">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">11,6,17,23</data>
+  <data key="d16">0.9922778767136676</data>
+</edge>
+<edge source="Harmonic Index (HI):" target="QA‑Markovian system:">
+  <data key="d13">related</data>
+  <data key="d14">markovian</data>
+  <data key="d15">23,10,9,19</data>
+  <data key="d16">0.8520859229960716</data>
+</edge>
+<edge source="Harmonic Index (HI):" target="Harmonic Rotation (strategy):">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">12,3,15,18</data>
+  <data key="d16">0.9647638212377321</data>
+</edge>
+<edge source="Harmonic Index (HI):" target="Harmonic Resonant Inducer:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">21,4,1,5</data>
+  <data key="d16">0.4934351637951689</data>
+</edge>
+<edge source="Harmonic Index (HI):" target="Harmonic Neuro‑Regulator:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">0,11,11,22</data>
+  <data key="d16">0.9486832980505138</data>
+</edge>
+<edge source="Harmonic Index (HI):" target="Harmonic Probabilistic Geometry:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">18,14,8,22</data>
+  <data key="d16">0.9006863799659568</data>
+</edge>
+<edge source="Harmonic Index (HI):" target="Harmonic loss">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">21,5,2,7</data>
+  <data key="d16">0.578017340780339</data>
+</edge>
+<edge source="Harmonic Fingerprint (HF):" target="State Deviation:">
+  <data key="d13">related</data>
+  <data key="d14">fingerprint</data>
+  <data key="d15">6,1,7,8</data>
+  <data key="d16">0.9486832980505138</data>
+</edge>
+<edge source="Harmonic Fingerprint (HF):" target="Baseline Fingerprint (healthy/baseline):">
+  <data key="d13">related</data>
+  <data key="d14">fingerprint</data>
+  <data key="d15">2,17,19,12</data>
+  <data key="d16">0.8500331705159767</data>
+</edge>
+<edge source="Harmonic Fingerprint (HF):" target="Harmonic Rotation (strategy):">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">1,21,22,19</data>
+  <data key="d16">0.8852587100294375</data>
+</edge>
+<edge source="Harmonic Fingerprint (HF):" target="Harmonic Resonant Inducer:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">10,22,8,6</data>
+  <data key="d16">0.6515837655350015</data>
+</edge>
+<edge source="Harmonic Fingerprint (HF):" target="Harmonic Neuro‑Regulator:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">13,5,18,23</data>
+  <data key="d16">0.9814905920256988</data>
+</edge>
+<edge source="Harmonic Fingerprint (HF):" target="Harmonic Probabilistic Geometry:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">7,8,15,23</data>
+  <data key="d16">0.9996539193528471</data>
+</edge>
+<edge source="Harmonic Fingerprint (HF):" target="Harmonic loss">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">10,23,9,8</data>
+  <data key="d16">0.6960575579871305</data>
+</edge>
+<edge source="Symmetry‑informed kernel:" target="Equivariant operator (mod 24):">
+  <data key="d13">related</data>
+  <data key="d14">operator</data>
+  <data key="d15">2,21,23,20</data>
+  <data key="d16">0.8985675159864317</data>
+</edge>
+<edge source="Symmetry‑informed kernel:" target="QA‑CPLearn engine:">
+  <data key="d13">related</data>
+  <data key="d14">operator</data>
+  <data key="d15">15,16,7,23</data>
+  <data key="d16">0.9045055619589804</data>
+</edge>
+<edge source="Equivariant operator (mod 24):" target="QA‑CPLearn engine:">
+  <data key="d13">related</data>
+  <data key="d14">operator</data>
+  <data key="d15">13,19,8,3</data>
+  <data key="d16">0.5993362829826862</data>
+</edge>
+<edge source="E₈ alignment statistic:" target="Alignment">
+  <data key="d13">related</data>
+  <data key="d14">alignment,e₈</data>
+  <data key="d15">3,11,14,1</data>
+  <data key="d16">0.642529405317179</data>
+</edge>
+<edge source="E₈ alignment statistic:" target="Defaults">
+  <data key="d13">related</data>
+  <data key="d14">e₈</data>
+  <data key="d15">3,13,16,5</data>
+  <data key="d16">0.7592566023652966</data>
+</edge>
+<edge source="Coherence collapse:" target="State Deviation:">
+  <data key="d13">related</data>
+  <data key="d14">baseline</data>
+  <data key="d15">14,17,7,0</data>
+  <data key="d16">0.5028011423654931</data>
+</edge>
+<edge source="Coherence collapse:" target="Baseline Fingerprint (healthy/baseline):">
+  <data key="d13">related</data>
+  <data key="d14">baseline</data>
+  <data key="d15">10,9,19,4</data>
+  <data key="d16">0.7541997111515459</data>
+</edge>
+<edge source="Coherence collapse:" target="Seismic Coherence Dashboard:">
+  <data key="d13">related</data>
+  <data key="d14">coherence</data>
+  <data key="d15">0,6,6,12</data>
+  <data key="d16">0.9486832980505138</data>
+</edge>
+<edge source="State Deviation:" target="Baseline Fingerprint (healthy/baseline):">
+  <data key="d13">related</data>
+  <data key="d14">baseline,fingerprint</data>
+  <data key="d15">20,16,12,4</data>
+  <data key="d16">0.6507913734559684</data>
+</edge>
+<edge source="State Deviation:" target="Early‑Warning Detector:">
+  <data key="d13">related</data>
+  <data key="d14">deviation</data>
+  <data key="d15">7,14,21,11</data>
+  <data key="d16">0.8725470130387389</data>
+</edge>
+<edge source="State Deviation:" target="Seismic Coherence Dashboard:">
+  <data key="d13">related</data>
+  <data key="d14">deviation</data>
+  <data key="d15">10,13,23,12</data>
+  <data key="d16">0.8833203139688703</data>
+</edge>
+<edge source="Harmonic Rotation (strategy):" target="Harmonic Resonant Inducer:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">9,1,10,11</data>
+  <data key="d16">0.934487734928968</data>
+</edge>
+<edge source="Harmonic Rotation (strategy):" target="Harmonic Neuro‑Regulator:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">12,8,20,4</data>
+  <data key="d16">0.7442084075352507</data>
+</edge>
+<edge source="Harmonic Rotation (strategy):" target="Harmonic Probabilistic Geometry:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">6,11,17,4</data>
+  <data key="d16">0.7567874686642695</data>
+</edge>
+<edge source="Harmonic Rotation (strategy):" target="Harmonic loss">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">9,2,11,13</data>
+  <data key="d16">0.96</data>
+</edge>
+<edge source="Early‑Warning Detector:" target="Seismic Coherence Dashboard:">
+  <data key="d13">related</data>
+  <data key="d14">deviation</data>
+  <data key="d15">3,23,2,1</data>
+  <data key="d16">0.36565237242299337</data>
+</edge>
+<edge source="Seismic Coherence Dashboard:" target="Windowing (current demos)">
+  <data key="d13">related</data>
+  <data key="d14">seismic</data>
+  <data key="d15">11,4,15,19</data>
+  <data key="d16">0.9794570432566516</data>
+</edge>
+<edge source="Harmonic Resonant Inducer:" target="Harmonic Neuro‑Regulator:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">3,7,10,17</data>
+  <data key="d16">0.9892034623538708</data>
+</edge>
+<edge source="Harmonic Resonant Inducer:" target="Harmonic Probabilistic Geometry:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">21,10,7,17</data>
+  <data key="d16">0.8360479108370626</data>
+</edge>
+<edge source="Harmonic Resonant Inducer:" target="Harmonic loss">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">0,1,1,2</data>
+  <data key="d16">0.948683298050514</data>
+</edge>
+<edge source="Harmonic Neuro‑Regulator:" target="Harmonic Probabilistic Geometry:">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">18,3,21,0</data>
+  <data key="d16">0.5846883487091896</data>
+</edge>
+<edge source="Harmonic Neuro‑Regulator:" target="Harmonic loss">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">21,18,15,9</data>
+  <data key="d16">0.7574097093298413</data>
+</edge>
+<edge source="Harmonic Probabilistic Geometry:" target="Harmonic loss">
+  <data key="d13">related</data>
+  <data key="d14">harmonic</data>
+  <data key="d15">3,15,18,9</data>
+  <data key="d16">0.827349407598459</data>
+</edge>
+<edge source="Alignment" target="Defaults">
+  <data key="d13">related</data>
+  <data key="d14">e₈</data>
+  <data key="d15">0,2,2,4</data>
+  <data key="d16">0.948683298050514</data>
+</edge>
+</graph></graphml>

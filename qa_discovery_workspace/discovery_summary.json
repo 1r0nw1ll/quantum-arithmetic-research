@@ -1,0 +1,23 @@
+{
+  "timestamp": "2025-10-29T22:33:30.922899",
+  "config": {
+    "dataset": "qa_10000_balanced_tuples.csv",
+    "workspace": "./qa_discovery_workspace",
+    "gnn_epochs": "300",
+    "gnn_checkpoint_interval": "50",
+    "max_conjectures_to_verify": "20",
+    "graph_output": "qa_discovery_workspace/qa_graph.pt",
+    "embeddings_output": "qa_discovery_workspace/qa_embeddings.npy",
+    "conjectures_output": "qa_discovery_workspace/conjectures.json",
+    "lean_proofs_dir": "qa_discovery_workspace/lean_proofs",
+    "checkpoint_dir": "qa_discovery_workspace/checkpoints",
+    "gnn_log_interval": "10",
+    "clustering_method": "dbscan"
+  },
+  "statistics": {
+    "total_conjectures": 22,
+    "top_conjecture_score": 53.58531703067558,
+    "verified_proofs": 0,
+    "failed_proofs": 20
+  }
+}

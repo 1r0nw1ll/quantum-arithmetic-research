@@ -1,0 +1,606 @@
+[
+  {
+    "cluster_id": 19,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 17,
+        "count": 467
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 467
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 467
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 467
+      }
+    ],
+    "tuple_count": 467,
+    "rank_score": 53.58531703067558
+  },
+  {
+    "cluster_id": 18,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 20,
+        "count": 460
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 460
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 460
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 460
+      }
+    ],
+    "tuple_count": 460,
+    "rank_score": 53.52490595793256
+  },
+  {
+    "cluster_id": 6,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 3,
+        "count": 454
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 454
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 454
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 454
+      }
+    ],
+    "tuple_count": 454,
+    "rank_score": 53.47238879216539
+  },
+  {
+    "cluster_id": 13,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 13,
+        "count": 440
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 440
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 440
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 440
+      }
+    ],
+    "tuple_count": 440,
+    "rank_score": 53.347098907649226
+  },
+  {
+    "cluster_id": 7,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 9,
+        "count": 435
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 435
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 435
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 435
+      }
+    ],
+    "tuple_count": 435,
+    "rank_score": 53.30138412435474
+  },
+  {
+    "cluster_id": 14,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 2,
+        "count": 435
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 435
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 435
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 435
+      }
+    ],
+    "tuple_count": 435,
+    "rank_score": 53.30138412435474
+  },
+  {
+    "cluster_id": 11,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 10,
+        "count": 429
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 429
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 429
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 429
+      }
+    ],
+    "tuple_count": 429,
+    "rank_score": 53.245827675712064
+  },
+  {
+    "cluster_id": 20,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 21,
+        "count": 420
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 420
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 420
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 420
+      }
+    ],
+    "tuple_count": 420,
+    "rank_score": 53.16101884510965
+  },
+  {
+    "cluster_id": 2,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 18,
+        "count": 419
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 419
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 419
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 419
+      }
+    ],
+    "tuple_count": 419,
+    "rank_score": 53.151483679688546
+  },
+  {
+    "cluster_id": 1,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 16,
+        "count": 418
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 418
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 418
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 418
+      }
+    ],
+    "tuple_count": 418,
+    "rank_score": 53.14192573009902
+  },
+  {
+    "cluster_id": 16,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 19,
+        "count": 417
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 417
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 417
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 417
+      }
+    ],
+    "tuple_count": 417,
+    "rank_score": 53.13234488719521
+  },
+  {
+    "cluster_id": 5,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 4,
+        "count": 416
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 416
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 416
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 416
+      }
+    ],
+    "tuple_count": 416,
+    "rank_score": 53.12274104104506
+  },
+  {
+    "cluster_id": 3,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 12,
+        "count": 408
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 408
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 408
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 408
+      }
+    ],
+    "tuple_count": 408,
+    "rank_score": 53.04506869761664
+  },
+  {
+    "cluster_id": 15,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 14,
+        "count": 406
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 406
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 406
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 406
+      }
+    ],
+    "tuple_count": 406,
+    "rank_score": 53.02541263840693
+  },
+  {
+    "cluster_id": 0,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 1,
+        "count": 404
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 404
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 404
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 404
+      }
+    ],
+    "tuple_count": 404,
+    "rank_score": 53.005659511844605
+  },
+  {
+    "cluster_id": 21,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 23,
+        "count": 398
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 398
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 398
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 398
+      }
+    ],
+    "tuple_count": 398,
+    "rank_score": 52.94580802113775
+  },
+  {
+    "cluster_id": 12,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 22,
+        "count": 396
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 396
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 396
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 396
+      }
+    ],
+    "tuple_count": 396,
+    "rank_score": 52.925656845017926
+  },
+  {
+    "cluster_id": 8,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 11,
+        "count": 395
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 395
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 395
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 395
+      }
+    ],
+    "tuple_count": 395,
+    "rank_score": 52.91554305960449
+  },
+  {
+    "cluster_id": 10,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 15,
+        "count": 389
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 389
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 389
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 389
+      }
+    ],
+    "tuple_count": 389,
+    "rank_score": 52.85431737447379
+  },
+  {
+    "cluster_id": 17,
+    "patterns": [
+      {
+        "type": "modular_constant",
+        "column": "a_mod24",
+        "value": 0,
+        "count": 389
+      },
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 389
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 389
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 389
+      }
+    ],
+    "tuple_count": 389,
+    "rank_score": 52.85431737447379
+  },
+  {
+    "cluster_id": 4,
+    "patterns": [
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 846
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 846
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 846
+      }
+    ],
+    "tuple_count": 846,
+    "rank_score": 46.221558078818674
+  },
+  {
+    "cluster_id": 9,
+    "patterns": [
+      {
+        "type": "modular_identity",
+        "formula": "a \u2261 b + 2e (mod 24)",
+        "count": 759
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "d = b + e",
+        "count": 759
+      },
+      {
+        "type": "algebraic_identity",
+        "formula": "a = b + 2e",
+        "count": 759
+      }
+    ],
+    "tuple_count": 759,
+    "rank_score": 45.89600533218689
+  }
+]

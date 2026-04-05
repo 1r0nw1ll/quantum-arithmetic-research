@@ -1,0 +1,124 @@
+{
+  "schema_version": "QA_DUAL_EXTREMALITY_24_CERT.v1",
+  "certificate_id": "qa.cert.dual_extremality_24.pass.extremality.v1",
+  "cert_type": "qa_dual_extremality_24_cert",
+  "title": "Dual Extremality 24 PASS: 24 is simultaneously min non-trivial Pisano fixed point and max Carmichael lambda=2 modulus",
+  "created_utc": "2026-04-04T00:00:00Z",
+
+  "_fixture_purpose": "Certifies the joint extremality of m=24 under the Pisano period operator pi and the Carmichael lambda function. Provides a classical number-theoretic answer to 'why m=24?' for QA. Closes item 5 of the Bateson Learning Levels sketch (Level-III self-improvement fixed point). The joint (pi, lambda) extremality observation is the original contribution; both halves individually are classical.",
+
+  "source_attribution": "Wall, D.D., 'Fibonacci series modulo m', American Mathematical Monthly 67 (1960), 525-532. OEIS A001175 (Pisano periods), OEIS A235702 (Pisano period fixed points = 24*5^k). Carmichael, R.D., 'Note on a new number theory function', Bull. AMS 16 (1910), 232-238. Watson, G.N., 'The problem of the square pyramid', Messenger of Mathematics 48 (1918), 1-22 (cannonball identity). Baez, J., 'My Favorite Numbers: 24', Rankin Lecture, University of Glasgow, 2008. Joint extremality observation: Will Dale + Claude, 2026-04-04.",
+
+  "theorem_statement": "m=24 is simultaneously (a) the minimum non-trivial fixed point of the Pisano period operator pi: N -> N, where pi(m) = length of Fibonacci sequence mod m, and (b) the maximum modulus m with Carmichael lambda(m) = 2. Furthermore, pi(9) = 24, so the QA theoretical modulus maps to the QA applied modulus in exactly one Pisano step.",
+
+  "original_contribution": "The joint (pi, lambda) extremality statement at 24. Both halves individually are classical (OEIS A235702 for Pisano fixed points; Carmichael lambda structure for lambda=2 divisibility). The joint observation — that 24 is simultaneously extremal in BOTH directions, and that the QA choice m=9 is a natural pre-image in the Pisano basin — appears to be original to this project and provides a principled number-theoretic answer to the question 'why m=24?' in Quantum Arithmetic.",
+
+  "key_facts": {
+    "pisano_fp_24": "pi(24) = 24",
+    "pisano_min_nontrivial": "24 is the minimum m > 1 with pi(m) = m",
+    "pisano_full_sequence": "Pisano fixed points = OEIS A235702 = {24 * 5^k : k >= 0} = {24, 120, 600, 3000, ...}",
+    "carmichael_24": "lambda(24) = 2",
+    "carmichael_lambda_2_set": "{m : lambda(m) = 2} = {3, 4, 6, 8, 12, 24}",
+    "carmichael_max": "max{m : lambda(m) = 2} = 24",
+    "carmichael_structural_proof": "m with lambda(m)=2 must satisfy: all prime factors in {2,3}, v_2(m) <= 3, v_3(m) <= 1. Hence m | 24. Set is {d : d | 24, d >= 3}.",
+    "qa_bridge": "pi(9) = 24; QA theoretical m=9 maps to QA applied m=24 in one Pisano step",
+    "basin_of_24": "pi^-1(24) intersect [1,30] = {6, 9, 12, 16, 18, 24} (six moduli in Pisano-24 basin)",
+    "cannonball": "1^2 + 2^2 + ... + 24^2 = 4900 = 70^2 (Watson 1918; unique nontrivial pyramidal-square solution)",
+    "24_theorem": "For every prime p >= 5, p^2 - 1 is divisible by 24",
+    "leech_connection": "24 = dimension of Leech lattice = critical dimension of bosonic string - 2 (Baez 2008; Conway-Sloane; monstrous moonshine)"
+  },
+
+  "witnesses": [
+    {
+      "m": 24,
+      "pisano_period": 24,
+      "carmichael_lambda": 2,
+      "role": "joint extremum",
+      "note": "The star witness. pi(24)=24 AND lambda(24)=2. Minimum non-trivial Pisano FP AND maximum lambda=2 modulus. QA applied modulus."
+    },
+    {
+      "m": 9,
+      "pisano_period": 24,
+      "carmichael_lambda": 6,
+      "role": "QA theoretical modulus; Pisano pre-image",
+      "note": "pi(9) = 24 — QA theoretical modulus maps to applied modulus in one Pisano step. lambda(9)=6 because (Z/9Z)* is cyclic of order 6."
+    },
+    {
+      "m": 120,
+      "pisano_period": 120,
+      "carmichael_lambda": 4,
+      "role": "second Pisano fixed point",
+      "note": "pi(120) = 120. Next element of OEIS A235702 after 24. Confirms sequence 24 * 5^k. lambda(120)=4 so NOT in the lambda=2 set."
+    },
+    {
+      "m": 12,
+      "pisano_period": 24,
+      "carmichael_lambda": 2,
+      "role": "dual candidate; not Pisano FP",
+      "note": "12 has lambda=2 (in the lambda=2 set) AND pi(12)=24 (in the Pisano-24 basin), but pi(12) != 12 so 12 is NOT a Pisano FP. 24 = lcm(8,3) = 12*2 strictly dominates 12."
+    },
+    {
+      "m": 8,
+      "pisano_period": 12,
+      "carmichael_lambda": 2,
+      "role": "lambda=2 member",
+      "note": "lambda(8) = 2 because (Z/8Z)* = {1,3,5,7} all square to 1. pi(8)=12, NOT a Pisano FP."
+    },
+    {
+      "m": 6,
+      "pisano_period": 24,
+      "carmichael_lambda": 2,
+      "role": "lambda=2 member AND Pisano-24 basin member",
+      "note": "Both lambda=2 and pi=24. Sits in both the Carmichael lambda=2 set AND the Pisano-24 basin — but m=6 is strictly smaller than 24 in both orderings."
+    },
+    {
+      "m": 1,
+      "pisano_period": 1,
+      "carmichael_lambda": 1,
+      "role": "trivial case",
+      "note": "m=1: Z/1Z is the zero ring. pi(1)=1 trivially. Excluded from 'non-trivial' Pisano FP counting. lambda(1)=1 (not 2), excluded from lambda=2 set."
+    }
+  ],
+
+  "basin_of_attraction_24": {
+    "range": "[1, 30]",
+    "preimage": [6, 9, 12, 16, 18, 24],
+    "count": 6,
+    "note": "Six distinct moduli in [1, 30] map to 24 under pi. The QA theoretical choice m=9 is one of six natural pre-images. 24 has a rich basin of attraction, not a singleton."
+  },
+
+  "carmichael_lambda_2_structural_proof": {
+    "statement": "{m : lambda(m) = 2} = {3, 4, 6, 8, 12, 24}",
+    "proof": "If lambda(m) = 2, then (Z/mZ)* has exponent 2, so every unit squares to 1. Write m = 2^a * 3^b * (product of other primes). (i) For any prime p >= 5 dividing m, lambda((Z/pZ)*) = p-1 >= 4 > 2, contradiction. So m = 2^a * 3^b. (ii) lambda(2^a) = 2^(a-2) for a >= 3. For this to equal 2, a <= 3. (iii) lambda(3^b) = 2 * 3^(b-1). For this to be <= 2, b <= 1. So m | 2^3 * 3 = 24. (iv) Checking divisors: lambda(1)=1, lambda(2)=1, lambda(3)=2, lambda(4)=2, lambda(6)=2, lambda(8)=2, lambda(12)=2, lambda(24)=2. Hence {m : lambda(m)=2} = {3, 4, 6, 8, 12, 24}.",
+    "max": 24,
+    "bijection_to_divisors_of_24": "Set is exactly the divisors of 24 that are >= 3"
+  },
+
+  "connection_to_learning_levels_cert_191": {
+    "statement": "This cert closes item 5 of the Bateson Learning Levels sketch (docs/theory/QA_BATESON_LEARNING_LEVELS_SKETCH.md): 'Self-improvement fixed point check — is m=9 or m=24 a fixed point of a natural Level-III operator?'",
+    "answer": "The Pisano period operator pi: N -> N is a natural Level-III self-improvement operator on QA state spaces (it takes a modulus to the length of its Fibonacci orbit). Under pi, m=24 is the minimum non-trivial fixed point, and m=9 is a pre-image reaching the fixed point in exactly one step. QA's modulus choices sit at the two canonical positions in the minimal attractor basin.",
+    "implication_for_cert_191": "Level-III stability in the QA kernel self-improvement sense is not an open problem — it has a classical answer. The Pisano fixed point at 24 is the Level-III stable modulus, and the QA choice of m=9 is justified as its canonical pre-image."
+  },
+
+  "convergence_map": [
+    {"source": "OEIS A235702 (Pisano fixed points)", "fact": "24 is minimum non-trivial element"},
+    {"source": "Classical Carmichael lambda", "fact": "24 is maximum m with lambda=2"},
+    {"source": "Watson 1918 (cannonball identity)", "fact": "24 is unique n with sum of squares = perfect square"},
+    {"source": "Conway-Sloane Leech lattice", "fact": "24 = dimension of unique even unimodular lattice with no roots"},
+    {"source": "Bosonic string theory", "fact": "24 = critical dimension - 2"},
+    {"source": "Dedekind eta function", "fact": "eta^24 = Delta (modular discriminant); Ramanujan tau"},
+    {"source": "Baez 'My Favorite Numbers: 24'", "fact": "Convergence survey of all above"},
+    {"source": "24-theorem (elementary)", "fact": "p^2 - 1 divisible by 24 for primes p >= 5"},
+    {"source": "QA cert [130] Origin of 24", "fact": "H^2 - G^2 = 2CF always divisible by 24 for Pythagorean directions"},
+    {"source": "QA cert [191] Bateson Learning Levels", "fact": "24 is the Level-III self-improvement fixed point closing item 5"}
+  ],
+
+  "cross_references": [
+    {"family": 130, "name": "QA Origin of 24", "relation": "Dual derivation of 24 from Pyth-1 and QA-4 geometry; this cert adds a THIRD derivation via Pisano/Carmichael extremality"},
+    {"family": 150, "name": "QA Septenary Unit Group", "relation": "(Z/9Z)* = Z/6Z is the unit group; pi(9)=24 shows 9 maps to the Pisano FP 24"},
+    {"family": 191, "name": "QA Bateson Learning Levels", "relation": "Closes item 5 (Level-III self-improvement fixed point). Pisano operator is the natural Level-III operator on moduli."}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

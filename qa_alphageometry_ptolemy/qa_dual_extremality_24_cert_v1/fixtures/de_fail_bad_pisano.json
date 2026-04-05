@@ -1,0 +1,12 @@
+{
+  "schema_version": "QA_DUAL_EXTREMALITY_24_CERT.v1",
+  "certificate_id": "qa.cert.dual_extremality_24.fail.bad_pisano.v1",
+  "cert_type": "qa_dual_extremality_24_cert",
+  "title": "Dual Extremality 24 FAIL: demonstrates Pisano period mismatch detection",
+  "created_utc": "2026-04-04T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL. Would catch a witness declaring wrong pi(m) or lambda(m) values.",
+  "fail_ledger": [
+    {"check_id": "DE_PISANO", "message": "Deliberately wrong Pisano period declaration for testing"}
+  ],
+  "result": "FAIL"
+}

@@ -5632,6 +5632,28 @@ def _validate_h_null_modularity_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_dual_extremality_24_cert_family(base_dir: str) -> Optional[str]:
+    """QA Dual Extremality 24 Cert family [192] — certifies the joint extremality of m=24 under the Pisano period operator pi and the Carmichael lambda function. (1) pi(24)=24: minimum non-trivial Pisano fixed point (OEIS A235702). (2) lambda(24)=2 and max{m : lambda(m)=2}=24 (structurally proved: m | 24). (3) pi(9)=24: QA theoretical modulus maps to applied modulus in one Pisano step. (4) Basin of 24 in [1,30] = {6,9,12,16,18,24}. (5) Cannonball identity 1^2+...+24^2=70^2. (6) 24-theorem: p^2-1 div by 24 for primes p>=5. Closes item 5 of [191] Bateson sketch (Level-III self-improvement fixed point). ORIGINAL: joint (pi, lambda) extremality observation. Source: Wall 1960, OEIS A235702, Carmichael 1910, Watson 1918, Baez 2008. Checks DE_1+PISANO/MIN_FP/CARMICHAEL/MAX_LAM/JOINT/BRIDGE/BASIN/CANNON/24THM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_dual_extremality_24_cert_v1")
+    validator = os.path.join(fam_dir, "qa_dual_extremality_24_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_dual_extremality_24_cert_v1/qa_dual_extremality_24_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_dual_extremality_24_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_dual_extremality_24_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_dual_extremality_24_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_bateson_learning_levels_cert_family(base_dir: str) -> Optional[str]:
     """QA Bateson Learning Levels Cert family [191] — formalizes Gregory Bateson's learning hierarchy (0/I/II/III) as a strict invariant filtration on QA state spaces. Four invariants (orbit ⊂ family ⊂ modulus ⊂ ambient category) define L_0/L_1/L_2a/L_2b/L_3 operator classes. Tiered Reachability Theorem exhaustively verified on S_9: only 26% of 6561 pairs are Level-I reachable; 52.67% require L_2a, 20% require L_2b. Witnesses at every tier (qa_step, scalar_mult k=2, scalar_mult k=3, modulus_reduction). Source: Bateson (1972), Ashby (1956). Checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -6294,6 +6316,11 @@ FAMILY_SWEEPS = [
      "Bateson Learning 0/I/II/III as strict invariant filtration (orbit ⊂ family ⊂ modulus ⊂ ambient category); L_0/L_1/L_2a/L_2b/L_3 operator classes; Tiered Reachability Theorem exhaustively verified on S_9 (81+1712+3456+1312=6561); only 26% Level-I reachable; witnesses: qa_step, scalar_mult k=2 (L_2a), scalar_mult k=3 (L_2b), modulus_reduction (L_3); source Bateson 1972 + Ashby 1956; checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "191_qa_bateson_learning_levels_cert",
      "qa_bateson_learning_levels_cert_v1", True),
+    (192, "QA Dual Extremality 24 Cert family",
+     _validate_dual_extremality_24_cert_family,
+     "Joint extremality of m=24: simultaneously minimum non-trivial Pisano fixed point (OEIS A235702 = {24, 120, 600, ...}) AND maximum Carmichael lambda=2 modulus (structurally proved: m | 24, set = {3,4,6,8,12,24}); pi(9)=24 bridges theoretical to applied modulus; basin {6,9,12,16,18,24}; cannonball 1^2+..+24^2=70^2; 24-theorem p^2-1 div 24; closes item 5 of [191] Bateson sketch (Level-III self-improvement fixed point); ORIGINAL joint (pi,lambda) observation; source Wall 1960 + OEIS + Carmichael 1910 + Watson 1918 + Baez 2008; checks DE_1+PISANO/MIN_FP/CARMICHAEL/MAX_LAM/JOINT/BRIDGE/BASIN/CANNON/24THM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "192_qa_dual_extremality_24_cert",
+     "qa_dual_extremality_24_cert_v1", True),
 ]
 
 

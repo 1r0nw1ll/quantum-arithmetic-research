@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Dual Extremality 24 Cert family [192]: certifies the joint extremality of m=24 under the Pisano period operator pi and the Carmichael lambda function. (1) pi(24)=24: 24 is a Pisano fixed point. (2) 24 is the minimum non-trivial Pisano fixed point (OEIS A235702: {24, 120, 600, ...} = 24*5^k). (3) {m : lambda(m) = 2} = {3, 4, 6, 8, 12, 24}, with 24 as maximum; structurally proved: m divides 24. (4) pi(9)=24: QA theoretical modulus maps to applied modulus in one step. (5) pi^-1(24) intersect [1,30] = {6,9,12,16,18,24}, the basin of attraction of 24. (6) Cannonball identity 1^2+...+24^2=70^2 (Watson 1918, unique). (7) 24-theorem: p^2-1 divisible by 24 for primes p>=5. ORIGINAL CONTRIBUTION: the joint (pi, lambda) extremality statement. Closes item 5 of Bateson Learning Levels sketch — the Level-III self-improvement fixed point for QA is classical. Tier 1 algebraic. Checks DE_1+PISANO/MIN_FP/CARMICHAEL/MAX_LAM/JOINT/BRIDGE/BASIN/CANNON/24THM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

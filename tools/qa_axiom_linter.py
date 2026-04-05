@@ -296,9 +296,9 @@ _ORBIT_REDEF_PATTERN = re.compile(
     re.MULTILINE,
 )
 
-# ORBIT-5: orbit_family used without importing from qa_orbit_rules
+# ORBIT-5: orbit_family used without importing from qa_orbit_rules or qa_arithmetic
 _ORBIT_CALL_PATTERN   = re.compile(r'\borbit_family\s*\(')
-_ORBIT_IMPORT_PATTERN = re.compile(r'from\s+qa_orbit_rules\s+import')
+_ORBIT_IMPORT_PATTERN = re.compile(r'from\s+(qa_orbit_rules|qa_arithmetic)\s+import')
 
 # ORBIT-6: STATE_ALPHABET / MICROSTATE_STATES / WAVE_CLASS_STATES declared
 # without a corresponding audit_alphabet() call anywhere in the file.
@@ -307,8 +307,22 @@ _ALPHABET_DECL_PATTERN  = re.compile(
 )
 _ALPHABET_AUDIT_PATTERN = re.compile(r'\baudit_alphabet\s*\(')
 
-# Canonical orbit-rule file — never flag ORBIT-4/5 here
+# Canonical orbit-rule files — never flag ORBIT-4/5 here.
+# qa_orbit_rules.py is the legacy canonical module; qa_arithmetic/qa_arithmetic/* is
+# the new canonical package home (same role, cleaner packaging).
 _ORBIT_RULES_FILENAME = "qa_orbit_rules.py"
+_CANONICAL_ORBIT_PATH_PARTS = ("qa_arithmetic", "qa_arithmetic")  # matches qa_arithmetic/qa_arithmetic/*
+
+def _is_canonical_orbit_source(path: Path) -> bool:
+    """True if this file IS a canonical orbit_family source (legacy or new package)."""
+    if path.name == _ORBIT_RULES_FILENAME:
+        return True
+    parts = path.parts
+    # Match any path containing .../qa_arithmetic/qa_arithmetic/... (the package interior)
+    for i in range(len(parts) - 1):
+        if parts[i] == _CANONICAL_ORBIT_PATH_PARTS[0] and parts[i+1] == _CANONICAL_ORBIT_PATH_PARTS[1]:
+            return True
+    return False
 
 # ── Core linting logic ────────────────────────────────────────────────────────
 
@@ -341,7 +355,7 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
 
     lines = content.splitlines()
     file_is_qa = is_qa_file(lines)
-    is_orbit_rules = path.name == _ORBIT_RULES_FILENAME
+    is_orbit_rules = _is_canonical_orbit_source(path)
 
     # Check for required declaration block in QA files (hard gate — ERROR)
     if file_is_qa:

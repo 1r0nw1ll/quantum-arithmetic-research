@@ -17,7 +17,7 @@ from scipy import stats
 from numpy.linalg import lstsq as np_lstsq
 
 from qa_observer.orbits import qa_mod
-from qa_orbit_rules import orbit_family  # noqa: ORBIT-5 canonical import
+from qa_arithmetic import orbit_family  # noqa: ORBIT-5
 
 __all__ = ["TopographicObserver", "QCI"]
 

@@ -1,0 +1,12 @@
+{
+  "observer": "signal_dynamics_generator_inference",
+  "patient": "chb01",
+  "n_seizure": 43,
+  "n_baseline": 54,
+  "downsample": 4,
+  "mod": 9,
+  "r2_delta": 0.4208596942648216,
+  "r2_full": 0.4720175699818471,
+  "delta_r2": 0.05115787571702546,
+  "p_qa_add": 0.14597810742757925
+}

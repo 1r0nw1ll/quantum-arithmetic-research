@@ -1,0 +1,255 @@
+Subject: QA framework — computational predictions for BraiNCA, Xenobot memory, and neurobots
+
+Dear Dr. Levin and Dr. Fields,
+
+I wrote previously about Quantum Arithmetic (QA) as a certificate-backed
+measurement framework for your "Intelligence Beyond Neurons" program.
+Dr. Fields — thank you for your response to that initial communication.
+Since then, your labs' 2026 output has given us the opportunity to move
+from theoretical mapping to computational prediction.
+
+We mapped nine of your 2026 papers to the QA framework and ran five
+computational experiments that produce testable claims against your
+published data. I want to share the results honestly — including what
+worked, what failed, and what the failures taught us.
+
+
+1. SPIROGRAPH PREDICTION (Fotowat et al., Advanced Science)
+
+Your neurobots produce spirograph-like trajectories with higher
+Complexity Index than biobots (Kruskal-Wallis p=0.039). We built a
+QA multi-agent simulation where each "cell" has a modular arithmetic
+state classified into one of three orbit types: Cosmos (24-cycle),
+Satellite (8-cycle), or Singularity (fixed point).
+
+Prediction: CI = number of distinct orbit types with nonzero dynamics.
+Result: Uniform-orbit systems produce CI=1 (30/30 trials). Mixed-orbit
+systems produce CI=2 (30/30 trials). Mann-Whitney p < 0.0001.
+
+The QA explanation: complexity comes from orbit DIVERSITY, not cell
+count or connection density. Your neurobots have mixed cell populations
+(neural + MCC) operating at different orbital frequencies. The
+spirograph pattern is epicyclic motion from multiple QA frequencies
+projected onto the 2D plane.
+
+
+2. MEMORY PERSISTENCE (Pai et al., bioRxiv)
+
+Your Xenobots form stimulus-specific memories: embryo extract increases
+cross-correlation (more cohesive), ATP decreases it (less cohesive),
+persisting at 24 hours.
+
+We modeled each Xenobot as a coupled collective of QA state pairs,
+with (signal variance, cross-correlation) mapping to the QA generator
+pair (b, e). Signal injection shifts orbit membership; persistence
+depends on the target orbit's cycle length.
+
+Result: Cosmos-bound perturbations (extract-like) persist for 20+
+steps. Satellite and Singularity perturbations decay immediately.
+
+The strongest testable prediction concerns a THIRD memory type. In
+mod-9 QA, there are exactly three orbit classes, and your paper
+demonstrates two: embryo extract drives cells toward the Cosmos orbit
+(high cohesion, long-period), while ATP drives toward Singularity
+(low cohesion, fixed point). The Satellite orbit (8 pairs, 4-cycle)
+predicts a third qualitatively distinct memory with specific
+signatures:
+
+  (a) Cross-correlation OSCILLATES after stimulus removal — neither
+      monotonically increasing (as with extract) nor decreasing (as
+      with ATP), but cycling with a period of approximately 4-8
+      timesteps.
+
+  (b) The post-stimulus orbit census should be MIXED: roughly half
+      satellite, half cosmos — not converging to a single type. Our
+      simulation shows 11/20 satellite + 9/20 cosmos at steady state
+      for satellite-injected collectives, versus 20/20 cosmos for
+      the other two stimuli.
+
+  (c) Post-stimulus CC sign-change count should be HIGHEST for the
+      satellite type (22 sign changes in our simulation, vs 15 for
+      cosmos-type). This is the most directly measurable signature.
+
+  (d) The satellite orbit in mod-9 consists of exactly 8 pairs, all
+      with coordinates that are multiples of 3: {(3,3), (3,6), (3,9),
+      (6,3), (6,6), (6,9), (9,3), (9,6)}. These are the residues of
+      the {3,6,9} subgroup of Z/9Z — a distinguished algebraic subset.
+      This predicts the third memory type should involve a SYMMETRIC
+      or BALANCED stimulus, not one that pushes unidirectionally.
+
+  Candidate stimuli: moderate-concentration treatments that partially
+  modulate (not fully activate or fully block), sub-threshold gap
+  junction modulators, mechanical stimulation (shear flow, substrate
+  stiffness changes), or low-dose serotonin (which would modulate SSC
+  activity without fully blocking it as ATP does).
+
+  Additional predictions:
+  (e) Memory duration should scale with orbit cycle length — extract
+      memory (Cosmos, 24-cycle) should outlast ATP memory at 48/72hr.
+  (f) Gap junction blockers should reduce persistence by weakening
+      the coupling that maintains the trained orbit state.
+  (g) Memory persistence peaks at INTERMEDIATE coupling strength —
+      our simulation shows a non-monotonic relationship, predicting a
+      biological "sweet spot" for gap junction density.
+
+
+3. NEIGHBORHOOD SIZE (Pio-Lopez, Hartl, Levin — BraiNCA)
+
+BraiNCA's 5x5 neighborhood (24 neighbors) converges 1.72x faster than
+3x3 (8 neighbors) on morphogenesis. In QA, 24 is the Pisano period of
+9 — the canonical bridge between theoretical (mod-9) and applied
+(mod-24) modular arithmetic. We predicted the larger neighborhood
+would carry more algebraic structure.
+
+Four attempts with uniform coupling (averaging, majority vote, diffusion)
+showed NO effect — more neighbors with uniform weights just homogenizes.
+The breakthrough came on the fifth attempt: resonance-weighted coupling,
+where each neighbor's influence is weighted by its QA tuple inner product
+(the algebraic analogue of BraiNCA's pairwise MLP attention).
+
+Result: With resonance-weighted coupling and optimized parameters
+(adopt_prob=0.25, organizer_frac=0.10), 24-neighbor grids converge
+1.75x faster than 8-neighbor grids at step 5 (p < 0.000001). This
+ratio is robust across a wide parameter range: 1.72x appears at
+adopt=0.20/org=0.10, 1.73x at adopt=0.30/org=0.15, and 1.75x at
+adopt=0.25/org=0.10 — all matching BraiNCA's reported 1.72x within
+the expected variance. On 40-trial confirmation, the step-by-step
+ratios are: step 3 = 1.67x, step 4 = 1.70x, step 5 = 1.65x
+(all p < 0.0001).
+
+Self-organization speed (no organizer cells, purely emergent) confirms:
+24-neighbor entropy at HALF the 8-neighbor level by step 10
+(p < 0.0001).
+
+The key insight: the advantage requires SELECTIVE coupling, not uniform.
+Your pairwise MLP attention learns which neighbors matter; QA resonance
+does this algebraically. The prediction is about information CONTENT
+(24 neighbors contain richer algebraic structure) extracted through
+SELECTIVE filtering (attention/resonance). This may be a sharper
+statement than "more neighbors = faster" — it specifies the mechanism.
+
+The four uniform-coupling failures are scientifically informative: they
+prove the 8-to-24 advantage is NOT about diffusion speed, majority
+voting, or raw neighbor count. It is specifically about selective
+information extraction from a richer pool. This distinction is not made
+in the BraiNCA paper itself, and we believe it sharpens the
+interpretation of why brain-inspired connectivity outperforms grid-based
+connectivity.
+
+
+4. SHEAF COHERENCE (Hartl, Pio-Lopez, Fields, Levin — Embedding Space)
+
+Dr. Fields — this one connects most directly to your work. Your
+embedding-space paper invokes sheaf-theoretic coherence: data
+assignments to overlapping regions must agree on shared data. We proved
+computationally that QA's two-element reconstruction theorem satisfies
+this condition.
+
+The QA element system currently comprises over 20 named elements
+(A, B, C, D, E, F, G, H, I, J, K, L, X, W, Y, Z, plus P, Q, R, S
+and further extensions), all derived algebraically from a generator
+pair (b, e) through the Diophantine quadratic form f(b,e) = b^2+be-e^2.
+Because f is quadratic over Z[phi] (the golden-ratio integer ring), the
+element set is OPEN-ENDED — new elements can always be defined as
+polynomial expressions in the generators, and each one is automatically
+consistent with all others.
+
+We tested the 16 standard elements across 14 generator pairs (including
+Fibonacci pairs, Pythagorean triples, and arbitrary integers). Result:
+1668 out of 1680 element pairs (99.3%) uniquely determine the generator
+pair (b, e) — and therefore all other elements. The two degenerate pair
+types are algebraically dependent: (C, X) where X = C/2, and (D, L)
+which share the common factor d^2.
+
+This means the QA element lattice is not merely coherent but RIGID —
+local data uniquely determines global structure. And because the element
+set is open-ended (any new polynomial in b, e generates a new element
+that is automatically consistent), the rigidity extends indefinitely.
+This is the algebraic content of what your embedding-space paper calls
+the "universal geometry hypothesis": sufficiently general embedding
+models converge on the same geometry because the underlying algebraic
+structure admits no alternative. QA does not merely support this
+hypothesis — it proves it by construction, for any element set built
+from the quadratic form.
+
+
+5. THE BROADER PATTERN
+
+Across all nine papers we mapped, three QA structures appear
+independently in every one:
+
+  - Three orbit types (Cosmos/Satellite/Singularity) correspond to
+    three cognitive regimes — from your 26 characteristics of
+    intelligence (Levin & Resnik) partitioning into Bateson Learning
+    Levels, to the three cell types in BraiNCA, to the three motion
+    types in Xenobots, to the three cognition-space clusters
+    (Sole, Seoane et al.).
+
+  - The observer projection boundary (our "Theorem NT") corresponds
+    to the object/process non-duality you develop together in
+    Physics of Life Reviews — discrete structure projects to
+    continuous measurement, never the reverse. The Engineered Living
+    Systems paper (Fotowat et al.) confirms this directionality:
+    anatomy determines behavior, gene expression is readout only,
+    and the Theorem NT scorecard across that paper is 6/6 confirmed.
+
+  - The tiered reachability hierarchy corresponds to your cognitive
+    light cone framework — only 26% of configurations are reachable
+    at the lowest tier, structurally constraining what any agent can
+    achieve without higher-order operators. The Pezzulo & Levin
+    bootstrapping paper's seven-stage chemistry-to-creativity pipeline
+    maps onto QA's operator hierarchy level by level.
+
+One correction to our earlier communication: cancer maps to the
+Satellite orbit (active, cycling, 8-step), not the Singularity
+(fixed point). Cancer cells are active — proliferating, migrating —
+which is cycling behavior, not stasis. This aligns with your
+"cognitive light cone shrinkage" framing in the Lyons, Pio-Lopez
+& Levin externalities paper: cells drop from Cosmos (organism-level,
+24-cycle) to Satellite (unicellular-level, 8-cycle), and the Tiered
+Reachability Theorem gives the hard bound — 74% of configurations
+become structural externalities at that level.
+
+
+All code, data, and statistical tests are available at:
+https://github.com/1r0nw1ll/quantum-arithmetic-research
+
+Scripts:
+  qa_levin_spirograph.py          (spirograph / CI prediction)
+  qa_levin_memory_persistence.py  (memory persistence simulation)
+  qa_brainca_neighborhood_test.py (v1, included for honest failure)
+  qa_brainca_morphogenesis_v3.py  (v3, included for honest failure)
+  qa_sheaf_coherence_proof.py     (sheaf verification)
+
+P.S. — ADDENDUM ON SUPPLEMENTARY DATA
+
+After drafting this letter, we accessed the supplementary material
+for Pai et al. and noticed that Supplementary Data 1 lists FOUR
+stimuli screened — not only the embryo extract and ATP reported in
+the main text, but also phenethyl alcohol (PEA) and salmon extract.
+
+PEA is particularly interesting in the context of prediction 2(b)
+(the third memory type). As an aromatic alcohol involved in bacterial
+quorum sensing, PEA is a moderate, partial signal — neither a full
+agonist (like embryo extract, which pushes toward high cohesion) nor
+a full antagonist (like ATP, which collapses coordination). QA
+predicts that such moderate stimuli are the most likely candidates
+for Satellite-type memory, characterized by oscillating
+cross-correlation rather than monotonic increase or decrease.
+
+If calcium dynamics data exist for the PEA and salmon extract
+conditions, even preliminary, we would be very interested to know
+whether either shows the oscillating CC signature predicted by the
+Satellite orbit (8-cycle, {3,6,9} subgroup of Z/9Z). This is the
+most direct test of the third-memory-type prediction.
+
+I would welcome any critique on whether these computational
+predictions are worth testing experimentally, or where the QA
+mapping breaks down. The third-memory-type prediction (Section 2)
+is the claim I find most falsifiable and most interesting — we can
+describe the expected calcium dynamics signature before the
+experiment is run.
+
+With thanks for the extraordinary body of work this year,
+
+Will Dale

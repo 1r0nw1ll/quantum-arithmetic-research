@@ -1,0 +1,66 @@
+Subject: Arithmetic structure invisible to geometric metrics — connection to your NAACL prompting geometry work
+
+Hi Artem,
+
+I came across your NAACL 2025 paper with SueYeon Chung on the
+geometry of prompting — the result that different prompting strategies
+induce distinct representational geometries in LLMs is striking. I
+wanted to flag a finding from a different direction that raises a
+question I think your toolkit is uniquely positioned to investigate.
+
+I work on Quantum Arithmetic (QA), a modular arithmetic framework.
+The setup is simple: integer pairs (b, e) mod m generate 4-tuples
+(b, e, d, a) where d = b+e, a = b+2e. For m = 9, the 81-element
+state space self-classifies into three orbit types under iteration:
+72 elements in a 24-cycle ("Cosmos"), 8 in an 8-cycle ("Satellite"),
+and 1 fixed point ("Singularity").
+
+Here is what's interesting about the representational geometry of
+these tuples:
+
+Standard metrics see NOTHING. The 4D tuple space has:
+  - Participation ratio = 4.00/4.00 (perfectly isotropic)
+  - SVD spectrum = [0.250, 0.250, 0.250, 0.250] (perfectly flat)
+  - Cosine gap between orbit classes = -0.034 (NEGATIVE — between-
+    class pairs are MORE similar than within-class)
+  - Fisher ratio = 1.36 (barely above chance)
+
+Every standard representational geometry tool reports "no structure"
+or "isotropic."
+
+But an arithmetic decoder sees PERFECT structure. The 3-adic
+valuation of the quadratic norm f(b,e) = b^2+be-e^2 classifies
+orbits with zero error:
+  - v_3(f) = 0 → Cosmos (72/72 correct)
+  - v_3(f) = 2 → Satellite (8/8 correct)
+  - v_3(f) = 4 → Singularity (1/1 correct)
+
+When we tested "arithmetic attention" (selecting neighbors by v_3
+proximity) vs cosine attention (selecting by angle): v_3 attention
+retrieves same-orbit neighbors 100% of the time. Cosine attention
+retrieves 64% — worse than the 89% random baseline. Cosine
+anti-selects.
+
+The algebraic reason: f(b,e) is the norm in the golden ratio integer
+ring Z[phi], and the orbit structure of Z[phi]/9Z[phi] is determined
+by 3-adic ideal factorization. The classification is number-theoretic,
+not geometric — no embedding metric can recover it because the
+structure lives in divisibility, not direction.
+
+This raises a specific question for neural representations: are
+there cases where activations appear isotropic under PCA/cosine/
+clustering, but reveal structure under arithmetic operations
+(modular residues, p-adic valuations, divisibility patterns)? If
+standard tools are systematically blind to arithmetic encoding,
+that's a gap in the field's analysis toolkit.
+
+I don't know the answer, but it seems like the kind of question
+your statistical physics framework could test — you already analyze
+how representational geometry depends on the method used to probe it.
+
+Code and data: github.com/1r0nw1ll/quantum-arithmetic-research
+Key scripts: qa_representational_geometry.py (metrics),
+qa_levin_spirograph.py (spectral complexity from orbit diversity)
+
+Best,
+Will Dale

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pezzulo Levin Bootstrap Cert family [195]: maps Pezzulo & Levin 'Bootstrapping Life-Inspired Machine Intelligence' (arXiv:2602.08079) 7-stage pipeline to QA architecture levels. Chemistry=A1, Metabolic=single-step dynamics, Transcriptional=orbit classification v3(f), Anatomical=orbit structure+E8, Behavioral=observer projection (Theorem NT), Abstract=multi-modulus L2, Creativity=L3 modulus change pi(9)=24. Intelligence ratchet = Pisano fixed point [192]. 5 design principles map to QA operations. Source: Pezzulo & Levin arXiv:2602.08079. Checks PLB_1+STAGES/RATCHET/PRINCIPLES/PIPELINE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

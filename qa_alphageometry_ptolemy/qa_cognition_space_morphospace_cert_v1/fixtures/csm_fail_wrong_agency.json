@@ -1,0 +1,12 @@
+{
+  "schema_version": "QA_COGNITION_SPACE_MORPHOSPACE_CERT.v1",
+  "certificate_id": "qa.cert.cognition_space_morphospace.fail.wrong_agency.v1",
+  "cert_type": "qa_cognition_space_morphospace_cert",
+  "title": "Cognition Space Morphospace FAIL: demonstrates agency ratio mismatch detection",
+  "created_utc": "2026-04-05T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL. Would catch agency ratio not matching orbit size.",
+  "fail_ledger": [
+    {"check_id": "CSM_AGENCY", "message": "Deliberately wrong: cosmos agency declared as 8/81 but actual orbit size is 72"}
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,134 @@
+{
+  "schema_version": "QA_HEBREW_MOD9_IDENTITY_CERT.v1",
+  "title": "Hebrew gematria mod-9 identity with QA A1 axiom",
+  "claims": [
+    {
+      "id": "AIQ",
+      "label": "Aiq Bekar (Nine Chambers) is identically QA mod-9",
+      "witnesses": {
+        "chambers": [
+          {"chamber": 1, "letters": ["Aleph", "Yod", "Qof"], "values": [1, 10, 100], "digital_root": 1},
+          {"chamber": 2, "letters": ["Bet", "Kaf", "Resh"], "values": [2, 20, 200], "digital_root": 2},
+          {"chamber": 3, "letters": ["Gimel", "Lamed", "Shin"], "values": [3, 30, 300], "digital_root": 3},
+          {"chamber": 4, "letters": ["Dalet", "Mem", "Tav"], "values": [4, 40, 400], "digital_root": 4},
+          {"chamber": 5, "letters": ["He", "Nun"], "values": [5, 50], "digital_root": 5},
+          {"chamber": 6, "letters": ["Vav", "Samekh"], "values": [6, 60], "digital_root": 6},
+          {"chamber": 7, "letters": ["Zayin", "Ayin"], "values": [7, 70], "digital_root": 7},
+          {"chamber": 8, "letters": ["Chet", "Pe"], "values": [8, 80], "digital_root": 8},
+          {"chamber": 9, "letters": ["Tet", "Tsadi"], "values": [9, 90], "digital_root": 9}
+        ],
+        "operation": "dr(n) = 1 + ((n - 1) mod 9)",
+        "state_space": [1, 2, 3, 4, 5, 6, 7, 8, 9],
+        "zero_excluded": true,
+        "qa_axiom": "A1 (No-Zero)"
+      }
+    },
+    {
+      "id": "DR",
+      "label": "Digital root is additive and multiplicative homomorphism",
+      "witnesses": {
+        "properties": [
+          {"id": "P1.2", "statement": "dr(m * n) = dr(dr(m) * dr(n))", "source": "Izmirli 2014 Property 1.2"},
+          {"id": "P1.3", "statement": "dr(m + n) = dr(dr(m) + dr(n))", "source": "Izmirli 2014 Property 1.3"},
+          {"id": "P1.4", "statement": "dr(m^n) = dr(dr(m)^n)", "source": "Izmirli 2014 Property 1.4"},
+          {"id": "P1.5", "statement": "dr(m - n) = dr(dr(m) - dr(n))", "source": "Izmirli 2014 Property 1.5"}
+        ],
+        "vedic_square_identity": "mod-9 multiplication table with 0 replaced by 9",
+        "source": "Izmirli, Advances in Pure Mathematics 4:295-301, 2014"
+      }
+    },
+    {
+      "id": "ENNEAD",
+      "label": "Three enneads: 27 signs = {mod-9 residue} x {decimal order}",
+      "witnesses": {
+        "sign_count": 27,
+        "factorization": "27 = 3 x 9 = 3^3",
+        "structure": "9 equivalence classes under mod-9, each with 3 members (units, tens, hundreds)",
+        "greek_27": "24 Ionic letters + 3 archaic (Digamma=6, Koppa=90, Sampi=900)",
+        "hebrew_27": "22 letters + 5 final forms (sofit) for 500-900",
+        "convergence": "Multiple independent alphabets converge on 9k signs (27, 28, 36)",
+        "pythmen": "Ancient Greek term for digital root; practiced by Pythagoreans",
+        "source": "Psychoyos, Semiotica 154:157-224, 2005"
+      }
+    },
+    {
+      "id": "SY24",
+      "label": "Sefer Yetzirah computes 4! = 24 as structural constant",
+      "witnesses": {
+        "passage": "Sefer Yetzirah 4:16",
+        "text": "Four stones build 24 houses",
+        "factorial_sequence": [2, 6, 24, 120, 720, 5040],
+        "mod_24_value": 24,
+        "qa_connection": "24 = min non-trivial Pisano fixed point AND max Carmichael lambda=2 modulus; pi(9)=24",
+        "source": "Glaz, Bridges Conference Proceedings 2021, pp. 39-46"
+      }
+    },
+    {
+      "id": "SKIN",
+      "label": "Skinner metrological kernel built on powers of 9",
+      "witnesses": {
+        "parker_base": 6561,
+        "factorization": "6561 = 9^4 = 3^8 = 81^2",
+        "adam_144": {"value": 144, "digital_root": 9, "note": "1+4+4 = 9"},
+        "woman_135": {"value": 135, "digital_root": 9, "note": "1+3+5 = 9"},
+        "serpent_teth": {"value": 9, "digital_root": 9},
+        "skinner_quote": "Adam, and the woman, and the serpent, are one in the center of this garden, as the number 9",
+        "solar_day_5184": {"value": 5184, "factorization": "72^2 = 144 x 36", "qa_note": "72 = QA Cosmos orbit pair count"},
+        "garden_eden_24": {"gematria_sum": 24, "note": "gn-odn = 3+5+7+4+5 = 24"},
+        "source": "Skinner, Key to the Hebrew-Egyptian Mystery in the Source of Measures, 1875"
+      }
+    },
+    {
+      "id": "BRIDGE",
+      "label": "Factor 6 bridges mod-9 theoretical to mod-24 applied",
+      "witnesses": {
+        "bridge_factor": 6,
+        "factorization_6": "6 = 2 x 3",
+        "derivations": [
+          {"target": 24, "formula": "6 x 4", "role": "applied modulus / hours"},
+          {"target": 360, "formula": "6 x 60", "role": "circle degrees"},
+          {"target": 5184, "formula": "6^4 x 4", "role": "solar day characteristic"}
+        ],
+        "qa_pisano": "pi(9) = 24; 24 / 9 mediated by factor structure involving 6",
+        "source": "Skinner 1875; QA [192] dual extremality"
+      }
+    },
+    {
+      "id": "PYTH",
+      "label": "Pythagorean transmission path documented via Iamblichus",
+      "witnesses": {
+        "claim": "Pythagoras learned number theory in Canaan, spent time at Mount Carmel",
+        "source_text": "Iamblichus, Life of Pythagoras",
+        "mount_carmel": "Center for religious/mystical retreats since Prophet Elijah (900-849 BCE)",
+        "shared_features": ["abstract number manipulation", "oral/secret transmission", "reverence for number properties"],
+        "tetractys_sefirot": "1+2+3+4 = 10 may represent both Tetractys and Ten Sefirot",
+        "source": "Glaz 2021, citing Iamblichus [9]"
+      }
+    },
+    {
+      "id": "BASE9",
+      "label": "Pre-biblical base-9 hypothesis: 9 as cognitive/computational optimum",
+      "witnesses": {
+        "anomaly": "Biblical Hebrew writes 15 as 9+6 and 16 as 9+7 (not 10+5, 10+6)",
+        "ternary_optimality": "Base 3 minimizes radix economy (Knuth); 9 = 3^2 is human-scale compression",
+        "miller_law": "9 items = upper bound of human working memory (Miller 1956)",
+        "source": "Kreinovich & Kosheleva, UTEP-CS-18-31, 2018"
+      }
+    }
+  ],
+  "falsifiers": [
+    {
+      "id": "F1",
+      "description": "If Aiq Bekar mapped to {0,...,8} instead of {1,...,9}, it would violate A1 and break the identity",
+      "check": "digital_root(n) must never return 0 for any positive integer"
+    }
+  ],
+  "sources": [
+    "Izmirli, Advances in Pure Mathematics 4:295-301 (2014)",
+    "Psychoyos, Semiotica 154:157-224 (2005)",
+    "Kreinovich & Kosheleva, UTEP-CS-18-31 (2018)",
+    "Glaz, Bridges Conference Proceedings pp.39-46 (2021)",
+    "Skinner, Key to the Hebrew-Egyptian Mystery in the Source of Measures (1875)",
+    "Cardoso et al., arXiv:2110.03746 (2021)"
+  ]
+}

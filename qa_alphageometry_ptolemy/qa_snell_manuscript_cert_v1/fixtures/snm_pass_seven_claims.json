@@ -1,0 +1,109 @@
+{
+  "schema_version": "QA_SNELL_MANUSCRIPT_CERT.v1",
+  "description": "Seven structural claims from the Snell Manuscript mapped to QA",
+  "claims": [
+    {
+      "id": "S1",
+      "name": "Seven Subdivisions x Triple = 21",
+      "snell_text": "seven distinct orders of triple subdivision",
+      "qa_mapping": "7 x 3 = 21; septenary (crystal interior) x triune (orbit types)",
+      "witnesses": {
+        "subdivision_count": 7,
+        "triple_per_level": 3,
+        "total": 21,
+        "mod_9": 3,
+        "mod_9_note": "singularity residue — complete hierarchy maps to dominant"
+      }
+    },
+    {
+      "id": "S2",
+      "name": "Frequency Scaling by 3 and 9",
+      "snell_text": "harmonic thirds 100M, enharmonic sixths 300M, diatonic ninths 900M, etheric sixths 8100M, interetheric ninths 24300M",
+      "qa_mapping": "scaling factors exclusively 3 and 9; mod-9 digital roots: 1->3->9->9->9",
+      "witnesses": {
+        "frequencies_hz": [100000000, 300000000, 900000000, 8100000000, 24300000000],
+        "ratios": [3, 3, 9, 3],
+        "total_ratio": 243,
+        "total_ratio_factored": "3^5",
+        "digital_roots_mod9": [1, 3, 9, 9, 9],
+        "convergence": "singularity"
+      }
+    },
+    {
+      "id": "S3",
+      "name": "Trexar Physical Orbit Encoding",
+      "snell_text": "wire composed of silver (third), gold (sixth), platinum (ninth)",
+      "qa_mapping": "{3,6,9} = singularity residues mod 9 = Tesla numbers",
+      "witnesses": {
+        "metals": ["silver", "gold", "platinum"],
+        "intervals": [3, 6, 9],
+        "mod_9_residues": [3, 6, 0],
+        "all_divisible_by_3": true,
+        "orbit": "singularity",
+        "tesla_369": true
+      }
+    },
+    {
+      "id": "S4",
+      "name": "Mass = Difference of Forces = f-value",
+      "snell_text": "molecular weight consists in the difference between terrestrial attraction and celestial sympathetic outreach",
+      "qa_mapping": "f(b,e) = b*b + b*e - e*e = terrestrial(b*b+b*e) - celestial(e*e)",
+      "witnesses": {
+        "example_state": [3, 1],
+        "b": 3, "e": 1,
+        "terrestrial": 12,
+        "celestial": 1,
+        "f_value": 11,
+        "v3_f": 0,
+        "orbit": "cosmos"
+      }
+    },
+    {
+      "id": "S5",
+      "name": "Polarity Inversion at 2/3 and 1/3",
+      "snell_text": "repulse at 66 2/3 against 100; attract at 33 1/3 against 100",
+      "qa_mapping": "2/3 = cross-orbit discord majority; 1/3 = near-concordant minority",
+      "witnesses": {
+        "repulsion_threshold": "2/3",
+        "attraction_threshold": "1/3",
+        "sum": 1,
+        "mod3_connection": "3 residue classes: 2 in discord = repulsion, 1 in discord = attraction",
+        "repulsion_boundary_diameters": 10,
+        "boundary_mod_9": 1,
+        "boundary_note": "singularity residue"
+      }
+    },
+    {
+      "id": "S6",
+      "name": "Triple Aqueous Disintegration = Orbit Descent",
+      "snell_text": "first thirds molecular, second sixths atomic ether, third ninths high atomic harmonic",
+      "qa_mapping": "cosmos(24,thirds) -> satellite(8,sixths) -> singularity(1,ninths)",
+      "witnesses": {
+        "stages": [
+          {"order": "thirds", "product": "H2+O2", "orbit": "cosmos", "period": 24},
+          {"order": "sixths", "product": "low atomic ether", "orbit": "satellite", "period": 8},
+          {"order": "ninths", "product": "high atomic harmonic", "orbit": "singularity", "period": 1}
+        ],
+        "period_descent": [24, 8, 1],
+        "period_ratios": [3, 8]
+      }
+    },
+    {
+      "id": "S7",
+      "name": "Rotation from 3:9 Ratio",
+      "snell_text": "rotation arises from harmonic interaction of dominant and enharmonic in ratio 3:9; propeller thirds 120rpm, sixths 360rpm",
+      "qa_mapping": "360/120 = 3 = 24/8 = cosmos/satellite period ratio",
+      "witnesses": {
+        "thirds_rpm": 120,
+        "sixths_rpm": 360,
+        "ratio": 3,
+        "cosmos_period": 24,
+        "satellite_period": 8,
+        "period_ratio": 3,
+        "rpm_mod_9": [3, 0],
+        "rpm_mod_24": [0, 0],
+        "both_multiples_of_24": true
+      }
+    }
+  ]
+}

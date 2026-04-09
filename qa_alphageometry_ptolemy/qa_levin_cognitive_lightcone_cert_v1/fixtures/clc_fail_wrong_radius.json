@@ -1,0 +1,12 @@
+{
+  "schema_version": "QA_LEVIN_COGNITIVE_LIGHTCONE_CERT.v1",
+  "certificate_id": "qa.cert.levin_cognitive_lightcone.fail.wrong_radius.v1",
+  "cert_type": "qa_levin_cognitive_lightcone_cert",
+  "title": "Levin Cognitive Lightcone FAIL: demonstrates radius mismatch detection",
+  "created_utc": "2026-04-05T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL. Would catch orbit radius not matching cycle length.",
+  "fail_ledger": [
+    {"check_id": "CLC_RADIUS", "message": "Deliberately wrong: satellite orbit_radius declared as 24 but actual cycle length is 8"}
+  ],
+  "result": "FAIL"
+}

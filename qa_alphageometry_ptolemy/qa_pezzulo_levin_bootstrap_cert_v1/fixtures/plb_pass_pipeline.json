@@ -1,0 +1,113 @@
+{
+  "schema_version": "QA_PEZZULO_LEVIN_BOOTSTRAP_CERT.v1",
+  "certificate_id": "qa.cert.pezzulo_levin_bootstrap.pass.pipeline.v1",
+  "cert_type": "qa_pezzulo_levin_bootstrap_cert",
+  "title": "Pezzulo Levin Bootstrap PASS: 7-stage intelligence pipeline maps to QA architecture levels",
+  "created_utc": "2026-04-05T00:00:00Z",
+
+  "_fixture_purpose": "Certifies that Pezzulo & Levin's 7-stage bootstrapping pipeline (Chemistry -> Metabolic -> Transcriptional -> Anatomical -> Behavioral -> Abstract -> Creativity) maps to QA architecture levels with increasing operator complexity. Intelligence ratchet = Pisano fixed point pi(9)=24 [192]. Five design principles map to QA axioms/operations.",
+
+  "source_attribution": "Giovanni Pezzulo & Michael Levin, 'Bootstrapping Life-Inspired Machine Intelligence: Mechanisms, Design Principles, and Open Problems' (arXiv:2602.08079, Feb 2026). QA formalization: Will Dale + Claude, 2026-04-05.",
+
+  "stage_mapping": [
+    {
+      "stage": 1,
+      "pezzulo_name": "Chemistry",
+      "qa_level": "A1 (No-Zero axiom)",
+      "description": "Chemical substrate provides discrete states. QA: states in {1,...,N}, never {0,...,N-1}. The no-zero axiom is the algebraic analog of chemistry providing a non-trivial ground state.",
+      "bateson_level": "L_0"
+    },
+    {
+      "stage": 2,
+      "pezzulo_name": "Metabolic networks",
+      "qa_level": "Single-step dynamics T(b,e)",
+      "description": "Metabolic cycles = single-step Fibonacci iteration. The fundamental dynamical unit: (b,e) -> (e, (b+e) mod m). Energy cycling within a fixed state.",
+      "bateson_level": "L_0"
+    },
+    {
+      "stage": 3,
+      "pezzulo_name": "Transcriptional networks",
+      "qa_level": "Orbit classification via v_3(f)",
+      "description": "Gene regulatory networks select between programs. QA: the 3-adic valuation of the norm f(b,e) = b*b+b*e-e*e classifies states into orbit families. This is the first structural differentiation.",
+      "bateson_level": "L_1"
+    },
+    {
+      "stage": 4,
+      "pezzulo_name": "Anatomical morphogenesis",
+      "qa_level": "Orbit structure + E8 alignment",
+      "description": "Large-scale body plan = orbit topology. The three orbit families (cosmos/satellite/singularity) define the anatomical layout. E8 alignment measures how close a tuple configuration is to the maximal exceptional symmetry.",
+      "bateson_level": "L_1 to L_2a"
+    },
+    {
+      "stage": 5,
+      "pezzulo_name": "Behavioral repertoire",
+      "qa_level": "Observer projection (Theorem NT)",
+      "description": "Behavior = observable outputs. QA: the observer projection firewall (Theorem NT) maps discrete QA states to continuous measurements. This is the boundary between internal dynamics and external behavior — crossed exactly twice.",
+      "bateson_level": "L_2a"
+    },
+    {
+      "stage": 6,
+      "pezzulo_name": "Abstract reasoning",
+      "qa_level": "Multi-modulus L_2 (cross-family operators)",
+      "description": "Abstraction = operating across orbit families within a modulus. Bateson Level-II: the agent can change which orbit it occupies, selecting different behavioral programs. Multi-modulus reasoning compares S_9 and S_24 structures.",
+      "bateson_level": "L_2a and L_2b"
+    },
+    {
+      "stage": 7,
+      "pezzulo_name": "Creativity / open-ended evolution",
+      "qa_level": "L_3 modulus change: pi(9)=24",
+      "description": "Creativity = escaping the current state space entirely. QA: Level-III modulus change (S_9 -> S_24 via Pisano bridge pi(9)=24). The intelligence ratchet: once the system discovers the Pisano fixed point, it cannot unknow it — pi(24)=24 is self-referential.",
+      "bateson_level": "L_3"
+    }
+  ],
+
+  "intelligence_ratchet": {
+    "mechanism": "Pisano fixed point pi(9) = 24, pi(24) = 24",
+    "cert_ref": 192,
+    "description": "The transition from Stage 6 to Stage 7 (creativity) is irreversible because pi(24)=24 is a fixed point. Once the system reaches modulus 24, further Pisano iteration stays at 24. This is the algebraic formalization of Pezzulo & Levin's observation that intelligence, once bootstrapped, becomes self-sustaining.",
+    "dual_extremality": "m=24 is simultaneously the minimum non-trivial Pisano FP and the maximum Carmichael lambda=2 modulus — the ratchet locks at the unique joint extremal point."
+  },
+
+  "design_principle_mapping": [
+    {
+      "principle": "Autonomy",
+      "pezzulo_description": "Agents must be autonomous — self-governing, not externally programmed",
+      "qa_mapping": "A1 (No-Zero): states are intrinsic {1,...,N}, not assigned from outside. The system's ground state is self-determined.",
+      "axiom": "A1"
+    },
+    {
+      "principle": "Self-assembly",
+      "pezzulo_description": "Complex structures emerge from local interactions without global blueprint",
+      "qa_mapping": "Orbit emergence: three orbit families arise from Fibonacci dynamics alone — no explicit encoding of cosmos/satellite/singularity. Geometry is emergent.",
+      "axiom": "structural"
+    },
+    {
+      "principle": "Rebuilding / regeneration",
+      "pezzulo_description": "Agents can rebuild after damage, returning to the target morphology",
+      "qa_mapping": "T1 (Path Time): QA time = integer path length k. Regeneration = re-traversing the orbit from a perturbed state. The orbit is an attractor; perturbations decay back to the cycle.",
+      "axiom": "T1"
+    },
+    {
+      "principle": "Constraint satisfaction",
+      "pezzulo_description": "Development = solving a constraint satisfaction problem over morphospace",
+      "qa_mapping": "S1+S2 (No **2, No float state): QA constraints are exact integer arithmetic. No floating-point drift, no ULP errors. The constraint space is discrete and exactly solvable.",
+      "axiom": "S1, S2"
+    },
+    {
+      "principle": "Signaling / communication",
+      "pezzulo_description": "Cells communicate via bioelectric, chemical, and mechanical signals",
+      "qa_mapping": "Resonance coupling: np.einsum('ik,jk->ij', tuples, tuples). Signal injection enters via b state, influences coupling before propagation. Bidirectional: signal affects coupling, coupling affects evolution.",
+      "axiom": "structural"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels", "relation": "7 stages map to Bateson levels L_0 through L_3; stage transitions = level promotions"},
+    {"family": 192, "name": "QA Dual Extremality 24", "relation": "Intelligence ratchet = Pisano fixed point; Stage 7 creativity locks at m=24"},
+    {"family": 153, "name": "QA Keely Triune", "relation": "Three orbit families = anatomical morphogenesis (Stage 4)"},
+    {"family": 130, "name": "QA Origin of 24", "relation": "Stage 3 orbit classification via v_3(f)"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

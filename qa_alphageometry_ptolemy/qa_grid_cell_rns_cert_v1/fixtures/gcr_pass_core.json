@@ -1,0 +1,130 @@
+{
+  "schema_version": "QA_GRID_CELL_RNS_CERT.v1",
+  "title": "Grid cell residue number system mapped to QA modular arithmetic",
+  "claims": [
+    {
+      "id": "RNS",
+      "label": "Grid cell phase code is a residue number system isomorphic to QA",
+      "witnesses": {
+        "grid_cell_formula": "chi_alpha(x) = x mod lambda_alpha",
+        "qa_formula": "b_new = ((b + e - 1) % m) + 1",
+        "isomorphism": "Both compute state as residue modulo a period/modulus",
+        "modules_in_rats": "4-10 discrete modules with distinct periods",
+        "qa_moduli": [9, 24],
+        "source": "Fiete et al., J. Neuroscience 28(27):6858, 2008"
+      }
+    },
+    {
+      "id": "CRT",
+      "label": "CRT reconstruction: grid cell decoding = QA multi-modulus join",
+      "witnesses": {
+        "grid_crt": "Position uniquely recoverable from (x mod lambda_1, ..., x mod lambda_N) via CRT",
+        "qa_crt": "qa_pim/crt.py implements crt_join_coprime() and crt_join_general()",
+        "coprime_capacity": "prod(lambda_i) distinguishable positions when moduli coprime",
+        "non_coprime_capacity": "LCM(lambda_i) when moduli share factors",
+        "example": "For moduli (13,15,16,17,19): capacity = 1,007,760 positions from 5 residues",
+        "source": "Fiete et al. 2008"
+      }
+    },
+    {
+      "id": "RATIO",
+      "label": "QA ratio 24/9 = 2.667 within 2% of optimal e = 2.718",
+      "witnesses": {
+        "qa_ratio": {"numerator": 24, "denominator": 9, "value_exact": "8/3", "value_decimal": 2.6667},
+        "optimal_1d": {"value": 2.7183, "source": "Wei et al. eLife 2015"},
+        "percent_deviation": 1.9,
+        "derivation": "Minimize N = d * r * log_r(R) over r; dN/dr = 0 implies ln(r) = 1, r = e",
+        "optimal_2d": {"value": 1.6487, "formula": "sqrt(e)", "source": "Wei et al. 2015"},
+        "measured_in_rats": [
+          {"study": "Barry et al. 2007", "ratio": 1.64, "sd": 0.09, "n": 6},
+          {"study": "Stensola et al. 2012", "ratio": 1.42, "sd": 0.17, "n": 24}
+        ],
+        "qa_note": "24/9 is the ratio of QA applied modulus to theoretical modulus"
+      }
+    },
+    {
+      "id": "LCM",
+      "label": "LCM(9,24) = 72 = Cosmos orbit cardinality",
+      "witnesses": {
+        "gcd_9_24": 3,
+        "lcm_9_24": 72,
+        "cosmos_pairs": 72,
+        "cosmos_cycle": 24,
+        "derivation": "LCM(a,b) = a*b/gcd(a,b) = 9*24/3 = 72",
+        "grid_cell_analog": "Non-coprime modules have capacity = LCM, not product",
+        "qa_note": "72 is exactly the number of distinct (b,e) pairs in the 24-cycle Cosmos orbit"
+      }
+    },
+    {
+      "id": "PHI",
+      "label": "Golden ratio phi optimal for two-module coding; QA norm field = Q(sqrt(5))",
+      "witnesses": {
+        "phi": 1.6180,
+        "optimal_for": "Two-module grid cell RNS (Hurwitz theorem bound)",
+        "qa_norm": "f(b,e) = b*b + b*e - e*e = N(b + e*phi) in Q(sqrt(5))",
+        "connection": "QA is algebraically built on the number phi that is optimal for two-module residue coding",
+        "source": "Vago & Ujfalussy, PLOS Comp Bio 2018"
+      }
+    },
+    {
+      "id": "CARRY",
+      "label": "Carry-free computation = QA axiom independence",
+      "witnesses": {
+        "grid_property": "Each module updates phase independently: (a mod lambda) + (b mod lambda) = (a+b) mod lambda",
+        "qa_property": "QA state (b,e) updates within modulus m without cross-modulus communication",
+        "computational_advantage": "No inter-module coordination needed; parallel updates",
+        "source": "Fiete et al. 2008; Kymn et al. Neural Computation 37:1, 2025"
+      }
+    },
+    {
+      "id": "ABS",
+      "label": "Grid codes organize abstract (non-spatial) concepts",
+      "witnesses": {
+        "experiment": "Subjects learned 2D bird space (neck length x leg length); fMRI showed 6-fold hexagonal symmetry",
+        "brain_regions": ["vmPFC (Z=4.09)", "entorhinal cortex (Z=4.41)", "OFC (Z=4.27)", "retrosplenial (Z=4.73)"],
+        "control": "6-fold ONLY; 4,5,7,8-fold all non-significant",
+        "session_stability": "Grid angles persist across hours and weeks",
+        "qa_note": "Supports QA application to non-spatial domains (finance, EEG, audio, climate)",
+        "source": "Constantinescu et al., Science 352:1464, 2016"
+      }
+    },
+    {
+      "id": "TORUS",
+      "label": "Toroidal state space: grid modules on tori = QA pairs on (Z/mZ)^2",
+      "witnesses": {
+        "grid_topology": "Each grid module fires on a hexagonal lattice with periodic boundary = 2D torus",
+        "qa_topology": "QA state pairs (b,e) in (Z/mZ)^2 form a discrete 2D torus",
+        "orbit_partition": "Three QA orbits (Cosmos, Satellite, Singularity) partition the torus into invariant subsets",
+        "hexagonal_symmetry": 6
+      }
+    },
+    {
+      "id": "HEX27",
+      "label": "Hexagonal encoding for m=9 uses 27 codebook vectors",
+      "witnesses": {
+        "formula": "3*m*m - 3*m + 1 distinct states with 3*m codebook vectors",
+        "m_9": {"states": 217, "codebook_vectors": 27},
+        "m_3": {"states": 19, "codebook_vectors": 9},
+        "qa_note": "27 = 3 x 9 = three enneads (Hebrew/Greek letter-number system); 217 = 7 x 31 (Ashe Seven Palaces sum)",
+        "source": "Kymn et al. Neural Computation 37:1, 2025"
+      }
+    }
+  ],
+  "falsifiers": [
+    {
+      "id": "F1",
+      "description": "If 24/9 deviated more than 10% from e, the economy-principle connection would be weak",
+      "check": "abs(24/9 - e) / e < 0.10",
+      "actual_deviation": 0.019,
+      "passes": true
+    }
+  ],
+  "sources": [
+    "Fiete et al., J. Neuroscience 28(27):6858 (2008)",
+    "Sreenivasan & Fiete, Nature Neuroscience 14:1330 (2011)",
+    "Vago & Ujfalussy, PLOS Comp Bio (2018)",
+    "Wei et al., eLife (2015)",
+    "Constantinescu et al., Science 352:1464 (2016)",
+    "Kymn et al., Neural Computation 37:1 (2025)"
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Sefer Yetzirah Combinatorics Cert family [203]: certifies the combinatorial structures in the Sefer Yetzirah (Book of Formation, c. 2nd-6th century CE) as QA-compatible discrete mathematics: 231 gates = C(22,2) = K_22 complete graph, factorial computation (n! for n=2..7), 3-7-12 letter partition, 32 paths = 10+22, oscillating circle as cyclic structure, and the Pythagorean transmission path via Iamblichus/Mount Carmel. Checks SYC_1+GATES/FACT/PART/PATHS/CIRC/PYTH/W/F; 2 PASS + 1 FAIL; self-test ok"
+}

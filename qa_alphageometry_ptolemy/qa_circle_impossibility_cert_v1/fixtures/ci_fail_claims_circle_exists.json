@@ -1,0 +1,66 @@
+{
+  "schema_version": "QA_CIRCLE_IMPOSSIBILITY_CERT.v1",
+  "certificate_id": "qa.cert.circle_impossibility.fail.claims_circle.v1",
+  "cert_type": "qa_circle_impossibility_cert",
+  "title": "Circle Impossibility FAIL: incorrectly claims a QA state with C=0 exists",
+  "created_utc": "2026-04-08T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: claims (0,5) is a valid QA state with C=0. Validator must catch A1 violation (b=0 not in {1,...,m}) and reject the circle claim.",
+
+  "source_attribution": "Intentionally wrong fixture for validation testing.",
+
+  "circle_impossibility": {
+    "theorem": "WRONG: claims C=0 is possible at (0,5)",
+    "proof": "INVALID: b=0 violates A1",
+    "minimum_C": {
+      "modulus": 9,
+      "min_C_value": 0,
+      "min_C_states": [[0, 5]],
+      "note": "WRONG: b=0 is not a valid QA state"
+    }
+  },
+
+  "exhaustive_verification": {
+    "modulus": 9,
+    "total_states": 81,
+    "all_C_positive": false,
+    "min_C": 0,
+    "max_C": 162
+  },
+
+  "parabola_impossibility": {
+    "theorem": "Included but irrelevant since circle claim is wrong",
+    "all_I_nonzero": true,
+    "min_abs_I": 1
+  },
+
+  "observer_projection_interpretation": {
+    "will_dale_insight": "Missing",
+    "standard_view": "Claims circle exists as QA state",
+    "qa_view": "WRONG"
+  },
+
+  "hierarchy_of_impossibilities": [],
+
+  "witnesses": [
+    {
+      "state_be": [0, 5],
+      "d": 5,
+      "e": 5,
+      "C": 0,
+      "F": 0,
+      "I": 0,
+      "conic_type": "circle",
+      "note": "INVALID: b=0 violates A1. Not a valid QA state."
+    }
+  ],
+
+  "cross_references": [],
+
+  "fail_ledger": [
+    "CI_C_MIN: claims min_C=0 but C=2de>=2 for all valid states",
+    "CI_EXHAUSTIVE: all_C_positive is false, contradicts theorem",
+    "CI_WITNESS: witness (0,5) has b=0, violating A1 (No-Zero)"
+  ],
+  "result": "FAIL"
+}

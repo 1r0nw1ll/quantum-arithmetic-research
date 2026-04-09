@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_GRID_CELL_RNS_CERT.v1",
+  "expect_fail": true,
+  "fail_reason": "QA ratio deviates more than 10% from e, breaking the economy-principle connection",
+  "claims": [
+    {
+      "id": "RATIO",
+      "label": "INVALID: QA ratio far from optimal",
+      "witnesses": {
+        "qa_ratio": {"numerator": 24, "denominator": 7, "value_decimal": 3.4286},
+        "optimal_1d": {"value": 2.7183},
+        "percent_deviation": 26.1,
+        "error": "Using wrong QA modulus (7 instead of 9); deviation 26% exceeds 10% threshold"
+      }
+    }
+  ]
+}

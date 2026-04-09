@@ -1,0 +1,47 @@
+{
+  "schema_version": "QA_SEFER_YETZIRAH_COMBINATORICS_CERT.v1",
+  "title": "Numerical verification of Sefer Yetzirah combinatorial structures",
+  "numerical_checks": {
+    "gates_231": {
+      "n": 22,
+      "n_minus_1": 21,
+      "product": 462,
+      "half": 231,
+      "factorization": [3, 7, 11],
+      "product_of_factors": 231,
+      "mod_9": 6,
+      "mod_24": 15
+    },
+    "factorial_verification": [
+      {"n": 2, "factorial": 2, "correct": true, "dr": 2, "mod_24": 2},
+      {"n": 3, "factorial": 6, "correct": true, "dr": 6, "mod_24": 6},
+      {"n": 4, "factorial": 24, "correct": true, "dr": 6, "mod_24": 0},
+      {"n": 5, "factorial": 120, "correct": true, "dr": 3, "mod_24": 0},
+      {"n": 6, "factorial": 720, "correct": true, "dr": 9, "mod_24": 0},
+      {"n": 7, "factorial": 5040, "correct": true, "dr": 9, "mod_24": 0}
+    ],
+    "partition_check": {
+      "mothers": 3,
+      "doubles": 7,
+      "simples": 12,
+      "sum": 22,
+      "check": true,
+      "mothers_mod9": 3,
+      "doubles_mod9": 7,
+      "simples_mod9": 3
+    },
+    "paths_check": {
+      "sefirot": 10,
+      "letters": 22,
+      "total": 32,
+      "is_power_of_2": true,
+      "exponent": 5
+    },
+    "factorial_dr_convergence": {
+      "note": "For n >= 6, n! is divisible by 9 (contains factors 3 and 6), so dr(n!) = 9",
+      "n_6_divisible_by_9": true,
+      "n_7_divisible_by_9": true,
+      "dr_pattern": [2, 6, 6, 3, 9, 9]
+    }
+  }
+}

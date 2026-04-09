@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Grid Cell RNS Cert family [205]: certifies the structural isomorphism between the entorhinal grid cell residue number system (Fiete 2008, Sreenivasan 2011, Wei 2015, Vago 2018, Constantinescu 2016) and QA modular arithmetic. Key claims: RNS isomorphism, CRT reconstruction, 24/9 ratio within 2% of optimal e (Wei 2015 economy principle), LCM(9,24)=72=Cosmos orbit, golden ratio optimality for two-module coding (phi = QA norm field), carry-free = axiom independence, abstract domain generalization, toroidal state space. Checks GCR_1+RNS/CRT/RATIO/LCM/PHI/CARRY/ABS/TORUS/W/F; 2 PASS + 1 FAIL; self-test ok"
+}

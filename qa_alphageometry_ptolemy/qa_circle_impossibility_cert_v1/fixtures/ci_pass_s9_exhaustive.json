@@ -1,0 +1,136 @@
+{
+  "schema_version": "QA_CIRCLE_IMPOSSIBILITY_CERT.v1",
+  "certificate_id": "qa.cert.circle_impossibility.pass.s9_exhaustive.v1",
+  "cert_type": "qa_circle_impossibility_cert",
+  "title": "Circle Impossibility PASS: exhaustive proof that C >= 4 for all S_9 states",
+  "created_utc": "2026-04-09T00:00:00Z",
+
+  "_fixture_purpose": "Proves no QA state has C=0 (circle impossibility). d = b+e (raw, A2); C = 2de = 2(b+e)e. By A1, b >= 1 and e >= 1, so d >= 2 and e >= 1. Therefore C >= 2*2*1 = 4. Also d > e always (b >= 1), so F = b*a = d*d - e*e > 0 always — no degenerate conics exist. Exhaustively verified on all 81 S_9 states. Minimum C = 4 at (1,1,2,3).",
+
+  "source_attribution": "Will Dale, 2026-04-08/09. Insight: a circle is NOT a degenerate ellipse with C=0; it is the side view of an ellipsoid where C is nonzero but lies along the viewing axis. The observed radius = F. Correction 2026-04-09: C >= 4 (not C >= 2) — elements use raw d = b+e, not mod-reduced d.",
+
+  "circle_impossibility": {
+    "theorem": "For any QA state (b,e) with b,e in {1,...,m}: d = b+e (A2, raw), C = 2de = 2(b+e)e. By A1, b >= 1 and e >= 1, so d >= 2 and C >= 4. No QA state has C < 4, let alone C = 0.",
+    "proof": "d = b + e (A2). b >= 1, e >= 1 (A1). So d = b + e >= 1 + 1 = 2. C = 2*d*e = 2*(b+e)*e >= 2*2*1 = 4. Also d = b + e > e (since b >= 1), so F = d*d - e*e = (d-e)*(d+e) = b*(b+2e) > 0. Every QA state defines a non-degenerate conic. QED.",
+    "minimum_C": {
+      "modulus": 9,
+      "min_C_value": 4,
+      "min_C_states": [[1, 1]],
+      "note": "d = 1+1 = 2, e = 1, C = 2*2*1 = 4. The 3-4-5 fundamental direction. This is as close as any QA state gets to 'circular.'"
+    },
+    "key_distinction": "Elements (C, F, G) use RAW d = b+e, a = b+2e. The T-operator step function uses MOD-REDUCED d = (b+e-1)%m+1. These are different operations. Elements are properties of the direction; mod-reduction is for state evolution."
+  },
+
+  "exhaustive_verification": {
+    "modulus": 9,
+    "total_states": 81,
+    "all_C_ge_4": true,
+    "min_C": 4,
+    "max_C": 324,
+    "all_d_gt_e": true,
+    "all_F_positive": true,
+    "note": "Every one of the 81 S_9 states has C >= 4, d > e, and F > 0. No degenerate conics exist."
+  },
+
+  "parabola_impossibility": {
+    "theorem": "No QA state has I = C - F = 0 (parabola). Requires d/e = 1+sqrt(2), irrational.",
+    "all_I_nonzero": true,
+    "min_abs_I": 1,
+    "min_abs_I_direction": [2, 1],
+    "note": "Already certified in [140]. d/e = (b+e)/e = 1 + b/e. For I=0, b/e = sqrt(2), impossible for integers."
+  },
+
+  "observer_projection_interpretation": {
+    "will_dale_insight": "A circle is the side view of an ellipsoid where C lies along the viewing axis. C is nonzero but hidden from the observer's perspective. The observed radius = F (semi-latus rectum).",
+    "standard_view": "Circle = degenerate ellipse with C=0. Foci collapse to center. Shape loses a degree of freedom.",
+    "qa_view": "The circle has never lost a degree of freedom. C >= 4 for every QA state. The observer sees a circle because they are looking along the C-axis of the ellipsoid. The 'missing' eccentricity is orthogonal to the observation plane.",
+    "theorem_nt_connection": "The observer who measures a circle and concludes eccentricity=0 is committing a T2 violation: using a continuous measurement (observed eccentricity = 0) as if it were a QA state. The discrete truth is C >= 4.",
+    "torus_connection": "Dale torus: center = C, tube radius = F. Viewing along the C-axis, the observer sees a circle of radius F. C is the depth they cannot see."
+  },
+
+  "hierarchy_of_impossibilities": [
+    {
+      "shape": "circle",
+      "condition": "C = 0",
+      "why_impossible": "C = 2(b+e)e >= 4 by A1+A2: b >= 1, e >= 1, d = b+e >= 2",
+      "cert": 207,
+      "min_gap": 4,
+      "strength": "algebraic (follows from A1 + A2 alone)"
+    },
+    {
+      "shape": "parabola",
+      "condition": "I = C - F = 0",
+      "why_impossible": "Requires d/e = 1 + sqrt(2), irrational",
+      "cert": 140,
+      "min_gap": 1,
+      "strength": "number-theoretic (quadratic irrationality)"
+    }
+  ],
+
+  "chromogeometry_connection": {
+    "I_as_metric_difference": "I = Qg - Qr (green minus red quadrance, cert [125]). Circle would require Qg = Qr — green and red metrics agree. But C = 2de and F = d*d - e*e; for d > e (always true), these are distinct positive integers that never coincide at 0."
+  },
+
+  "witnesses": [
+    {
+      "state_be": [1, 1],
+      "d": 2,
+      "e": 1,
+      "a": 3,
+      "C": 4,
+      "F": 3,
+      "I": 1,
+      "conic_type": "hyperbola",
+      "note": "Minimum C state. d=1+1=2, a=1+2=3. C=2*2*1=4, F=1*3=3, I=1>0. The 3-4-5 fundamental direction. |I|=1 = closest to parabola boundary."
+    },
+    {
+      "state_be": [5, 2],
+      "d": 7,
+      "e": 2,
+      "a": 9,
+      "C": 28,
+      "F": 45,
+      "I": -17,
+      "conic_type": "ellipse",
+      "note": "d=5+2=7, a=5+4=9. C=2*7*2=28, F=5*9=45, I=-17<0. Elliptic."
+    },
+    {
+      "state_be": [2, 1],
+      "d": 3,
+      "e": 1,
+      "a": 4,
+      "C": 6,
+      "F": 8,
+      "I": -2,
+      "conic_type": "ellipse",
+      "note": "d=2+1=3, a=2+2=4. C=2*3*1=6, F=2*4=8, I=-2<0. Elliptic. Note: DIRECTION (d=2,e=1) gives 3-4-5, but STATE (b=2,e=1) has d=3."
+    },
+    {
+      "state_be": [9, 9],
+      "d": 18,
+      "e": 9,
+      "a": 27,
+      "C": 324,
+      "F": 243,
+      "I": 81,
+      "conic_type": "hyperbola",
+      "note": "d=9+9=18, a=9+18=27. C=2*18*9=324, F=9*27=243, I=81=9*9>0. Maximum C in S_9. Hyperbolic."
+    }
+  ],
+
+  "cross_references": [
+    {"family": 140, "name": "QA Conic Discriminant", "relation": "Parabola impossibility (I=0). This cert extends: circle (C=0) also impossible, and by a wider margin (min gap 4 vs 1)."},
+    {"family": 189, "name": "QA Dale Circle", "relation": "Dale's pi=1 convention works because the 'circle' is always a projection with radius=F. This cert explains WHY."},
+    {"family": 125, "name": "QA Chromogeometry", "relation": "I = Qg - Qr. Circle would require Qg = Qr. Impossible: C and F are always distinct positive integers."},
+    {"family": 133, "name": "QA Eisenstein Norm", "relation": "Eisenstein crystal encodes the elliptic/hyperbolic classification via F."},
+    {"family": 137, "name": "QA Koenig Twisted Squares", "relation": "I = C - F is inner Koenig square side. Circle would require inner square to vanish."}
+  ],
+
+  "parker_connection": {
+    "proposition_ix": "Circle and triangle are opposite in all elements (Parker, Propositions of Geometry). QA: the circle HIDES C along the viewing axis; the triangle REVEALS it.",
+    "proposition_iii": "The circle is the natural basis of all area. QA: the mod-m cycle is the natural basis, but it is always an observer projection of the underlying state which has C >= 4."
+  },
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

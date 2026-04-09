@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_SEFER_YETZIRAH_COMBINATORICS_CERT.v1",
+  "expect_fail": true,
+  "fail_reason": "Gate count uses C(22,3) = 1540 instead of C(22,2) = 231",
+  "claims": [
+    {
+      "id": "GATES",
+      "label": "INVALID: Wrong combination formula",
+      "witnesses": {
+        "n": 22,
+        "formula": "n*(n-1)*(n-2)/6",
+        "result": 1540,
+        "error": "Used 3-combinations instead of 2-combinations"
+      }
+    }
+  ]
+}

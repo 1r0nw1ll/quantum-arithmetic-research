@@ -1,0 +1,174 @@
+{
+  "schema_version": "QA_QUADRANCE_PRODUCT_CERT.v1",
+  "certificate_id": "qa.cert.quadrance_product.pass.product_table.v1",
+  "cert_type": "qa_quadrance_product_cert",
+  "title": "Quadrance Product PASS: every QA area element is irreducibly a two-factor product",
+  "created_utc": "2026-04-08T00:00:00Z",
+
+  "_fixture_purpose": "Proves that every QA area-type element is a product of two role-distinct base elements. Quadrances (A=a*a, B=b*b) are products, not powers. S1 (b*b not b**2) encodes this structurally. Even 1*1=1 is an area, not a scalar. The 'square as special rectangle' collapses role-distinction into value-equality — an observer projection.",
+
+  "source_attribution": "Will Dale, 2026-04-08. Insight: a square is NOT a 'special case' of rectangle where sides are equal. It is a rectangle whose observer projection hides the role-distinction between its two factors. 1*1 = 1^2 is still an AREA, not the integer 1. Parallels circle impossibility [207]. S1 axiom (b*b not b**2) is the structural encoding of this principle.",
+
+  "product_table": {
+    "description": "Every QA area element expressed as a product of two base-level elements (b, e, d, a). The two factors always have distinct structural roles even when their values coincide.",
+    "base_elements": ["b", "e", "d", "a"],
+    "area_elements": [
+      {
+        "element": "A",
+        "formula": "a * a",
+        "factor_1": {"value": "a", "role": "fourth coordinate (b + 2e mod m)"},
+        "factor_2": {"value": "a", "role": "multiplier (same value, distinct structural role)"},
+        "type": "quadrance",
+        "note": "S1 mandates a*a, not a**2. The product form preserves two-factor structure."
+      },
+      {
+        "element": "B",
+        "formula": "b * b",
+        "factor_1": {"value": "b", "role": "base state coordinate"},
+        "factor_2": {"value": "b", "role": "multiplier"},
+        "type": "quadrance",
+        "note": "Fundamental quadrance. b*b is area, not power."
+      },
+      {
+        "element": "D",
+        "formula": "d * d",
+        "factor_1": {"value": "d", "role": "first derived coordinate (b + e mod m)"},
+        "factor_2": {"value": "d", "role": "multiplier"},
+        "type": "quadrance",
+        "note": "d = b+e, so D = (b+e)*(b+e). Still a product of two things."
+      },
+      {
+        "element": "E",
+        "formula": "e * e",
+        "factor_1": {"value": "e", "role": "generator coordinate"},
+        "factor_2": {"value": "e", "role": "multiplier"},
+        "type": "quadrance",
+        "note": "Generator quadrance."
+      },
+      {
+        "element": "C",
+        "formula": "2 * d * e",
+        "factor_1": {"value": "d", "role": "derived coordinate"},
+        "factor_2": {"value": "e", "role": "generator coordinate"},
+        "type": "product (scaled)",
+        "note": "Green quadrance (Qg). Two distinct base elements, never collapses."
+      },
+      {
+        "element": "F",
+        "formula": "b * a",
+        "factor_1": {"value": "b", "role": "base state"},
+        "factor_2": {"value": "a", "role": "fourth coordinate"},
+        "type": "product",
+        "note": "Also F = d*d - e*e = (d-e)(d+e). Either form is a product of two distinct things."
+      },
+      {
+        "element": "J",
+        "formula": "b * d",
+        "factor_1": {"value": "b", "role": "base state"},
+        "factor_2": {"value": "d", "role": "derived coordinate"},
+        "type": "product",
+        "note": "From [183] Eisenstein Crystal: Z - Y = J = bd. Always a product."
+      },
+      {
+        "element": "X",
+        "formula": "e * d",
+        "factor_1": {"value": "e", "role": "generator"},
+        "factor_2": {"value": "d", "role": "derived"},
+        "type": "product",
+        "note": "X = ed = C/2. Half the green quadrance."
+      },
+      {
+        "element": "L",
+        "formula": "C * F / 12",
+        "factor_1": {"value": "C", "role": "green quadrance (area-type)"},
+        "factor_2": {"value": "F", "role": "red quadrance (area-type)"},
+        "type": "area-of-areas (scaled)",
+        "note": "L = abde/6 = CF/12. Product of two area elements. Always integer for primitive directions."
+      },
+      {
+        "element": "G",
+        "formula": "d * d + e * e",
+        "factor_1": {"value": "D", "role": "quadrance of d"},
+        "factor_2": {"value": "E", "role": "quadrance of e"},
+        "type": "sum of quadrances",
+        "note": "G = D + E. Not itself a simple product but a SUM of two products (d*d + e*e). Blue quadrance (Qb). F*F + C*C = G*G."
+      }
+    ]
+  },
+
+  "role_distinction_proof": {
+    "theorem": "In every QA product element, the two factors have distinct structural roles even when their values are numerically equal. A quadrance b*b is NOT the same as 'b squared' — it is the product of b-as-base-coordinate and b-as-multiplier.",
+    "proof_by_structure": "The QA tuple (b, e, d, a) assigns each coordinate a distinct role: b = base state, e = generator, d = b+e (first derived), a = b+2e (second derived). When computing A = a*a, the first 'a' is the fourth coordinate of the tuple; the second 'a' is a scaling factor. Their values coincide but their roles in the algebraic structure are distinct. This is why S1 mandates b*b (product, two operands) over b**2 (power, one operand): the product form preserves role-distinction.",
+    "s1_deep_reason": "S1 (No **2) is not merely a floating-point guard. It is the structural encoding of irreducible two-factor products. b**2 collapses two roles into one; b*b preserves them. The power operator destroys dimensional information.",
+    "dimensional_types": {
+      "length": ["b", "e", "d", "a"],
+      "area": ["A", "B", "C", "D", "E", "F", "J", "X"],
+      "area_squared": ["L"]
+    }
+  },
+
+  "square_rectangle_parallel": {
+    "standard_view": "A square is a 'special case' of rectangle where length equals width. The rectangle 'loses' a degree of freedom, collapsing to a simpler shape.",
+    "qa_view": "A square is a rectangle whose two side-roles happen to have equal values. The product structure (length * width) is IRREDUCIBLE — it never collapses to a single factor. Even when length = width = 1, the area 1*1 = 1 is still a PRODUCT of two things, not the integer 1.",
+    "key_example": {
+      "computation": "1 * 1 = 1",
+      "standard_interpretation": "1 squared = 1; the product collapses to a scalar",
+      "qa_interpretation": "1 * 1 = area of 1; the product of two unit lengths. Numerically identical to the length 1, but dimensionally distinct. The coincidence 1^2 = 1 is unique to the unit — for all other values, n^2 != n."
+    },
+    "circle_parallel": {
+      "circle_207": "Observer sees equal axes → concludes C=0. But C=2de >= 2 always. The eccentricity is hidden along the viewing axis.",
+      "square_208": "Observer sees equal sides → concludes 'special case, one parameter.' But the product has TWO factors with distinct roles. The role-distinction is hidden by value-equality."
+    }
+  },
+
+  "exhaustive_area_minimum": {
+    "modulus": 9,
+    "total_states": 81,
+    "all_areas_positive": true,
+    "element_minima": {
+      "B_min": {"value": 1, "state_be": [1, 1], "note": "B = b*b = 1*1 = 1. The unit area. Still a product."},
+      "E_min": {"value": 1, "state_be": [1, 1], "note": "E = e*e = 1*1 = 1. Unit area."},
+      "C_min": {"value": 4, "state_be": [1, 1], "note": "C = 2*d*e = 2*2*1 = 4 where d = b+e = 2 (raw, A2). Certified in [207]."}
+    },
+    "note": "d = b+e > e always (b >= 1), so F = b*a = d*d - e*e > 0 always. No degenerate cases. All products well-defined positive integers."
+  },
+
+  "witnesses": [
+    {
+      "state_be": [1, 1],
+      "tuple_beda": [1, 1, 2, 3],
+      "products": {"B": "1*1=1", "E": "1*1=1", "C": "2*2*1=4", "F": "1*3=3", "J": "1*2=2"},
+      "note": "The minimal b,e state. B=1 and E=1 are unit areas (1*1). d=1+1=2, a=1+2=3 (raw A2). Even unit products have two factors."
+    },
+    {
+      "state_be": [3, 3],
+      "tuple_beda": [3, 3, 6, 9],
+      "products": {"B": "3*3=9", "E": "3*3=9", "C": "2*6*3=36", "F": "3*9=27", "J": "3*6=18"},
+      "note": "Equal-value state. B=E=9 (equal quadrances because b=e=3). d=3+3=6, a=3+6=9. Equal values, distinct roles: b is base, e is generator."
+    },
+    {
+      "state_be": [2, 1],
+      "tuple_beda": [2, 1, 3, 4],
+      "products": {"B": "2*2=4", "E": "1*1=1", "C": "2*3*1=6", "F": "2*4=8", "J": "2*3=6"},
+      "note": "d=2+1=3, a=2+2=4. The (2,1) STATE has d=3. All products irreducible."
+    },
+    {
+      "state_be": [5, 2],
+      "tuple_beda": [5, 2, 7, 9],
+      "products": {"B": "5*5=25", "E": "2*2=4", "C": "2*7*2=28", "F": "5*9=45", "J": "5*7=35"},
+      "note": "d=5+2=7, a=5+4=9. Every product has two distinct-role factors."
+    }
+  ],
+
+  "cross_references": [
+    {"family": 207, "name": "QA Circle Impossibility", "relation": "Parallel impossibility: circle (C=0) impossible, square non-collapse (product irreducible). Both are observer projections of 'special cases' that QA does not permit."},
+    {"family": 148, "name": "QA Sixteen Identities", "relation": "The 16 identities relate area elements. Every identity preserves the product structure — no identity collapses a product to a scalar."},
+    {"family": 133, "name": "QA Eisenstein Norm", "relation": "F=ab (product form) enters F^2-FW+W^2=Z^2. The Eisenstein norm is built from products of products."},
+    {"family": 137, "name": "QA Koenig Twisted Squares", "relation": "H=C+F, I=C-F. Even sums/differences of area elements remain area-type. H^2-G^2=2CF is a product of products."},
+    {"family": 183, "name": "QA Eisenstein Crystal", "relation": "J=bd certified. Two-factor product structure is load-bearing for the crystal constant encoder."},
+    {"family": 125, "name": "QA Chromogeometry", "relation": "F=Qr, C=Qg, G=Qb. All three chromogeometric quadrances are products or sums-of-products. The color classification operates on area-type objects."}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

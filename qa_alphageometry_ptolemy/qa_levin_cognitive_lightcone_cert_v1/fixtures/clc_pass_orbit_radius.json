@@ -1,0 +1,100 @@
+{
+  "schema_version": "QA_LEVIN_COGNITIVE_LIGHTCONE_CERT.v1",
+  "certificate_id": "qa.cert.levin_cognitive_lightcone.pass.orbit_radius.v1",
+  "cert_type": "qa_levin_cognitive_lightcone_cert",
+  "title": "Levin Cognitive Lightcone PASS: CLC maps to QA orbit radius with cancer as orbit demotion",
+  "created_utc": "2026-04-05T00:00:00Z",
+
+  "_fixture_purpose": "Certifies that Levin's cognitive light cone (CLC) — the spatiotemporal scale of the largest goal an agent can pursue — maps exactly to QA orbit radius. Three orbit types define three CLC tiers. Cancer = CLC shrinkage = forced orbit demotion (Cosmos->Satellite). Tiered Reachability Theorem [191] gives the structural ceiling: only 26% of S_9 pairs are Level-I reachable, bounding the maximal goal horizon within a single orbit.",
+
+  "source_attribution": "Michael Levin & Joshua Resnik, 'Mind Everywhere: Cognition from Cells to Societies' (Biological Theory, 2026). Lyons, Pio-Lopez & Levin, 'Cancer to AI Alignment: From Developmental Biology to Scalable Machine Intelligence' (Preprints, 2026). QA formalization: Will Dale + Claude, 2026-04-05.",
+
+  "clc_orbit_mapping": [
+    {
+      "clc_tier": "minimal",
+      "qa_orbit": "singularity",
+      "orbit_radius": 0,
+      "cycle_length": 1,
+      "description": "Fixed point (9,9). No temporal extent, no goal pursuit. The agent's cognitive light cone collapses to a single point — pure homeostasis with zero spatiotemporal reach."
+    },
+    {
+      "clc_tier": "local",
+      "qa_orbit": "satellite",
+      "orbit_radius": 8,
+      "cycle_length": 8,
+      "description": "8-cycle orbits (8 pairs, 3D). Local goals within a bounded spatiotemporal horizon. Cellular-level cognition: gradient following, simple pattern completion."
+    },
+    {
+      "clc_tier": "global",
+      "qa_orbit": "cosmos",
+      "orbit_radius": 24,
+      "cycle_length": 24,
+      "description": "24-cycle orbits (72 pairs, 1D). Far-reaching goals spanning the full state space. Organism-level and collective cognition: morphogenetic fields, long-range bioelectric signaling."
+    }
+  ],
+
+  "cancer_as_orbit_demotion": {
+    "mechanism": "Cancer = cognitive light cone shrinkage. Cells defect from the collective morphogenetic goal (whole-organism anatomy) to local proliferation. In QA: Cosmos->Satellite orbit transition — the agent loses access to the 24-cycle dynamics and collapses to 8-cycle local behavior.",
+    "qa_operator_class": "L_2a",
+    "bateson_level": "Level-II-a (orbit-changing, family-preserving — both cosmos and satellite are non-singularity)",
+    "note": "Levin's key insight: cancer is not primarily genetic but a failure of cellular communication — the cognitive light cone shrinks. QA captures this as algebraic orbit demotion, not parameter drift."
+  },
+
+  "structural_ceiling": {
+    "theorem": "Tiered Reachability [191]",
+    "level_i_reachable_fraction": 0.2609,
+    "interpretation": "Within a single orbit (CLC tier), only 26% of target states are reachable. This is the structural bound on goal pursuit without tier promotion — Levin's observation that cognitive expansion requires genuine architectural change, not just parameter tuning."
+  },
+
+  "s9_orbit_structure": {
+    "total_points": 81,
+    "singularity_count": 1,
+    "satellite_count": 8,
+    "cosmos_count": 72,
+    "singularity_fraction": 0.0123,
+    "satellite_fraction": 0.0988,
+    "cosmos_fraction": 0.8889
+  },
+
+  "witnesses": [
+    {
+      "type": "singularity_fixed_point",
+      "state": [9, 9],
+      "orbit_length": 1,
+      "clc_tier": "minimal",
+      "note": "T(9,9) = (9, (9+9-1)%9+1) = (9,9). Fixed point confirms zero-radius CLC."
+    },
+    {
+      "type": "satellite_cycle",
+      "state": [3, 3],
+      "orbit_length": 8,
+      "clc_tier": "local",
+      "note": "Representative of satellite orbit. 3|b and 3|e, not singularity. 8-step cycle."
+    },
+    {
+      "type": "cosmos_cycle",
+      "state": [1, 1],
+      "orbit_length": 24,
+      "clc_tier": "global",
+      "note": "Representative of cosmos orbit 0. Full 24-cycle = maximal CLC radius."
+    },
+    {
+      "type": "cancer_demotion",
+      "source_orbit": "cosmos",
+      "target_orbit": "satellite",
+      "operator": {"kind": "scalar_mult", "k": 3},
+      "source": [1, 1],
+      "target": [3, 3],
+      "note": "Scalar mult by 3 sends cosmos (1,1) to satellite (3,3). This is the QA analog of cancer: CLC shrinkage from global to local."
+    }
+  ],
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels", "relation": "CLC tier = Bateson learning level; CLC shrinkage = double bind (L1-unreachable targets)"},
+    {"family": 153, "name": "QA Keely Triune", "relation": "Triune cosmos/satellite/singularity = three CLC tiers"},
+    {"family": 192, "name": "QA Dual Extremality 24", "relation": "Cosmos cycle length 24 = Pisano fixed point; maximal CLC radius is algebraically determined"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

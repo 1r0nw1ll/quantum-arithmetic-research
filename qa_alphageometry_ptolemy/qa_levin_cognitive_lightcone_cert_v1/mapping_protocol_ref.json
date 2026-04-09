@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Levin Cognitive Lightcone Cert family [193]: maps Michael Levin's cognitive light cone (CLC) to QA orbit radius. CLC = spatiotemporal scale of largest goal an agent can pursue. Singularity=radius 0 (fixed point, no goals), Satellite=radius 8 (8-cycle, local goals), Cosmos=radius 24 (24-cycle, far-reaching goals). Cancer = CLC shrinkage = Cosmos->Satellite orbit transition. Tiered Reachability [191]: 26% L1-reachable = structural CLC ceiling. Source: Levin & Resnik 'Mind Everywhere' (Biological Theory 2026); Lyons/Pio-Lopez/Levin 'Cancer to AI Alignment' (Preprints 2026). Checks CLC_1+ORBIT/RADIUS/CANCER/CEIL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

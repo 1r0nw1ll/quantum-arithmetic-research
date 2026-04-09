@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_HERA_ORCHESTRATION_EVOLUTION_CERT.v1",
+  "expect_fail": true,
+  "fail_reason": "If system converged to single agent (Singularity), orbit descent analogy fails. HERA beats single-agent by 38.69%.",
+  "claims": [
+    {
+      "id": "PHASE",
+      "label": "INVALID: Convergence to Singularity",
+      "witnesses": {
+        "phases": [
+          {"phase": 1, "name": "Initial", "qa_orbit": "Satellite-like"},
+          {"phase": 4, "name": "Final", "qa_orbit": "Singularity", "agent_count": 1}
+        ],
+        "error": "Single-agent convergence = Singularity, but HERA outperforms single agent by 38.69%"
+      }
+    }
+  ]
+}

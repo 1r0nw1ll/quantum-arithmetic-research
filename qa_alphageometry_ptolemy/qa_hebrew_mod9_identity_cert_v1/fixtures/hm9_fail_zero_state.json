@@ -1,0 +1,20 @@
+{
+  "schema_version": "QA_HEBREW_MOD9_IDENTITY_CERT.v1",
+  "expect_fail": true,
+  "fail_reason": "State space includes 0, violating A1 No-Zero axiom",
+  "claims": [
+    {
+      "id": "AIQ",
+      "label": "INVALID: Aiq Bekar with zero",
+      "witnesses": {
+        "chambers": [
+          {"chamber": 0, "letters": ["NONE"], "values": [0], "digital_root": 0}
+        ],
+        "operation": "n mod 9",
+        "state_space": [0, 1, 2, 3, 4, 5, 6, 7, 8],
+        "zero_excluded": false,
+        "qa_axiom": "VIOLATED"
+      }
+    }
+  ]
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Hebrew Mod-9 Identity Cert family [202]: certifies the structural identity between Hebrew gematria mod-9 reduction (Aiq Bekar / pythmen) and QA A1 axiom state space {1,...,9}. Maps three enneads (27 signs), digital root homomorphism, Sefer Yetzirah 4!=24, Skinner metrological 9^4=6561 kernel, and the 9->24 bridge via factor 6. Checks HM9_1+AIQ/DR/ENNEAD/SY24/SKIN/BRIDGE/PYTH/W/F; 2 PASS + 1 FAIL; self-test ok"
+}

@@ -1,0 +1,111 @@
+{
+  "schema_version": "QA_HERA_ORCHESTRATION_EVOLUTION_CERT.v1",
+  "title": "HERA orchestration evolution mapped to QA orbit dynamics",
+  "claims": [
+    {
+      "id": "ROPE",
+      "label": "Role-Aware Prompt Evolution = Bateson Learning Levels filtration",
+      "witnesses": {
+        "hera_axes": {
+          "operational_rules": "Short-term corrective behaviors (Delta_rho^op)",
+          "behavioral_principles": "Long-term strategies (Delta_rho^bp)"
+        },
+        "bateson_mapping": {
+          "op_rules": "Level I — orbit-preserving, within-role adaptation",
+          "bp_principles": "Level II-a — orbit-changing, family-preserving",
+          "topology_mutation": "Level II-b — family-changing (agent replacement)",
+          "modulus_change": "Level III — not in HERA (would require changing LLM backbone)"
+        },
+        "double_bind": "Agent trapped in Level 0 cannot learn from errors requiring Level I+ operators. HERA's credit assignment detects this.",
+        "source": "Li & Ramakrishnan 2026 §4.2; Bateson cert [191]"
+      }
+    },
+    {
+      "id": "PHASE",
+      "label": "Four-phase topology evolution = orbit descent with rebound",
+      "witnesses": {
+        "phases": [
+          {"phase": 1, "name": "Initial", "qa_orbit": "Satellite-like", "description": "narrow, shallow, low agent count, minimal cycles"},
+          {"phase": 2, "name": "Exploration", "qa_orbit": "Cosmos-like", "description": "recruits more agents, increasing diameter and cycles"},
+          {"phase": 3, "name": "Refinement", "qa_orbit": "descent", "description": "prunes redundant agents, diameter decreases, efficiency rises"},
+          {"phase": 4, "name": "Optimization", "qa_orbit": "Satellite-like", "description": "compact chains, minimal nodes, high per-agent utility"}
+        ],
+        "not_singularity": "System does NOT converge to single agent (Singularity). Direct baseline (single agent) beaten by 38.69%.",
+        "qa_interpretation": "System finds minimal orbit that solves the task — Satellite, not Singularity",
+        "source": "Li & Ramakrishnan 2026 §5.3"
+      }
+    },
+    {
+      "id": "ENTROPY",
+      "label": "Entropy plateau at intermediate level = Satellite convergence",
+      "witnesses": {
+        "observation": "After initial rise, entropy stabilizes at intermediate level",
+        "not_maximum": "Not Cosmos (uniform exploration, maximum entropy)",
+        "not_zero": "Not Singularity (fixed behavior, zero entropy)",
+        "intermediate": "Satellite-like: structured flexibility",
+        "quote": "preventing premature convergence to suboptimal strategies while allowing the integration of novel cooperation pathways",
+        "source": "Li & Ramakrishnan 2026 §5.3"
+      }
+    },
+    {
+      "id": "SPARSE",
+      "label": "Sparse exploration = orbit discovery (invariant subsets)",
+      "witnesses": {
+        "hera_finding": "Sparse exploration leads to compact, high-performing networks",
+        "qa_parallel": "QA's 81 mod-9 pairs partition into exactly 3 orbits (Cosmos:72, Satellite:8, Singularity:1). Orbit structure IS sparse.",
+        "efficiency": "Node efficiency (F1/|V|) increases over training = more with fewer agents = Satellite more efficient than Cosmos",
+        "source": "Li & Ramakrishnan 2026 §5.3"
+      }
+    },
+    {
+      "id": "NT",
+      "label": "Theorem NT compliance: semantic insights = observer projections",
+      "witnesses": {
+        "e_step": "Topology sampling (discrete) = QA layer",
+        "m_step": "Semantic insight extraction (continuous/linguistic) = observer layer",
+        "firewall": "Frozen LLMs prevent observer layer from corrupting generative layer",
+        "grpo": "Group Relative Policy Optimization operates on discrete topology space, conditioned on continuous rewards",
+        "experience_library": "Stores (query_chars, NL_insight, utility_float) — NL and float components are observer projections per T2",
+        "source": "Li & Ramakrishnan 2026 §3-4"
+      }
+    },
+    {
+      "id": "PERF",
+      "label": "38.69% improvement validates orbit-aware orchestration",
+      "witnesses": {
+        "improvement": 38.69,
+        "benchmarks": 6,
+        "over": "SOTA multi-agent RAG baselines",
+        "interpretation": "Adaptive topology (orbit-aware routing) >> fixed topology (static role assignment)",
+        "qa_implication": "Static agent roles (current AGENTS.md) lose ~39% vs adaptive orbit-classified routing",
+        "source": "Li & Ramakrishnan 2026 Table 2"
+      }
+    }
+  ],
+  "qualified_claims": [
+    {
+      "id": "Q_RNS",
+      "label": "Multi-agent coordination does NOT map to RNS/CRT",
+      "status": "WEAK/NULL",
+      "detail": "HERA's architecture is sequential pipeline, not parallel-modular. CRT analogy is forced."
+    },
+    {
+      "id": "Q_GRAPH",
+      "label": "Agent interaction graph ~ QA coupling matrix is structural, not algebraic",
+      "status": "MODERATE",
+      "detail": "Transition matrix resembles resonance matrix, but has no algebraic symmetry guaranteed."
+    }
+  ],
+  "falsifiers": [
+    {
+      "id": "F1",
+      "description": "If HERA converged to a single agent (Singularity), the orbit descent analogy would fail. The paper shows single-agent baseline is beaten by 38.69%.",
+      "check": "optimal_topology_agent_count > 1"
+    }
+  ],
+  "sources": [
+    "Li & Ramakrishnan, Experience as a Compass: Multi-agent RAG with Evolving Orchestration and Agent Prompts, arXiv:2604.00901 (2026)",
+    "QA Bateson Learning Levels cert [191]",
+    "QA Grid Cell RNS cert [205]"
+  ]
+}

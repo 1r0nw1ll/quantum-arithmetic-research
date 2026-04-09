@@ -1,0 +1,55 @@
+{
+  "schema_version": "QA_QUADRANCE_PRODUCT_CERT.v1",
+  "certificate_id": "qa.cert.quadrance_product.fail.power_notation.v1",
+  "cert_type": "qa_quadrance_product_cert",
+  "title": "Quadrance Product FAIL: uses b**2 power notation instead of b*b product form",
+  "created_utc": "2026-04-08T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: expresses quadrances using power notation (b**2) instead of product form (b*b), violating S1 and the irreducible-product principle. Validator must detect the S1 violation.",
+
+  "source_attribution": "Intentionally wrong fixture for validation testing.",
+
+  "product_table": {
+    "description": "WRONG: uses power notation",
+    "base_elements": ["b", "e", "d", "a"],
+    "area_elements": [
+      {
+        "element": "B",
+        "formula": "b**2",
+        "factor_1": {"value": "b", "role": "base"},
+        "factor_2": {"value": "b", "role": "base"},
+        "type": "quadrance",
+        "note": "S1 VIOLATION: uses ** notation"
+      }
+    ]
+  },
+
+  "role_distinction_proof": {
+    "theorem": "Missing",
+    "proof_by_structure": "Missing",
+    "s1_deep_reason": "Missing"
+  },
+
+  "square_rectangle_parallel": {
+    "standard_view": "present",
+    "qa_view": "Missing"
+  },
+
+  "witnesses": [
+    {
+      "state_be": [2, 1],
+      "tuple_beda": [2, 1, 2, 3],
+      "products": {"B": "2**2=4"},
+      "note": "Uses power notation"
+    }
+  ],
+
+  "cross_references": [],
+
+  "fail_ledger": [
+    "QP_S1: formula uses **2 power notation instead of b*b product form",
+    "QP_ROLE: factor roles are identical ('base'/'base') — not role-distinct",
+    "QP_PRODUCT: product table has only 1 element, need >= 6"
+  ],
+  "result": "FAIL"
+}

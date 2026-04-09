@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Snell Manuscript Cert family [201]: certifies 7 structural claims from the Snell Manuscript (Keely, compiled 1934) as QA invariants. Maps 7x3=21 hierarchy, frequency scaling by 3/9, Trexar orbit encoding, mass-as-difference=f-value, polarity inversion at 2/3, triple dissociation=orbit descent, rotation from 3:9 ratio. Checks SNM_1+21/FREQ/SCALE/TREX/FVAL/POL/DISS/ROT/CHORD/W/F; 2 PASS + 1 FAIL; self-test ok"
+}

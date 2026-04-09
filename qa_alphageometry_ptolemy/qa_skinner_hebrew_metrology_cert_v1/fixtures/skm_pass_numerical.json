@@ -1,0 +1,55 @@
+{
+  "schema_version": "QA_SKINNER_HEBREW_METROLOGY_CERT.v1",
+  "title": "Numerical verification of Skinner metrological constants",
+  "numerical_checks": {
+    "powers_of_9": [
+      {"power": 1, "value": 9, "dr": 9, "mod_24": 9},
+      {"power": 2, "value": 81, "dr": 9, "mod_24": 9},
+      {"power": 3, "value": 729, "dr": 9, "mod_24": 9},
+      {"power": 4, "value": 6561, "dr": 9, "mod_24": 9}
+    ],
+    "digital_root_tests": [
+      {"input": 144, "dr": 9, "label": "Adam"},
+      {"input": 135, "dr": 9, "label": "Woman"},
+      {"input": 9, "dr": 9, "label": "Serpent/Tet"},
+      {"input": 113, "dr": 5, "label": "Man/diameter"},
+      {"input": 355, "dr": 4, "label": "Metius numerator"},
+      {"input": 5184, "dr": 9, "label": "Solar day"},
+      {"input": 6561, "dr": 9, "label": "Parker base"},
+      {"input": 5153, "dr": 5, "label": "Inscribed circle"},
+      {"input": 20612, "dr": 2, "label": "Parker circumference"},
+      {"input": 31, "dr": 4, "label": "El"},
+      {"input": 42800, "dr": 5, "label": "Chord of mass"}
+    ],
+    "subtraction_chain": [
+      {"a": 144, "b": 31, "result": 113, "label": "Adam - El = Man"},
+      {"a": 5184, "b": 31, "result": 5153, "label": "Solar day - El = Circle area"},
+      {"a": 144, "b": 135, "result": 9, "label": "Adam - Woman = Serpent"}
+    ],
+    "factor_6_chain": [
+      {"formula": "6 * 4", "result": 24},
+      {"formula": "6 * 60", "result": 360},
+      {"formula": "6^4 * 4", "result": 5184},
+      {"formula": "6^2", "result": 36},
+      {"formula": "6^3", "result": 216}
+    ],
+    "mod_24_table": [
+      {"value": 6561, "mod_24": 9},
+      {"value": 5184, "mod_24": 0},
+      {"value": 5153, "mod_24": 17},
+      {"value": 144, "mod_24": 0},
+      {"value": 135, "mod_24": 15},
+      {"value": 113, "mod_24": 17},
+      {"value": 72, "mod_24": 0},
+      {"value": 42800, "mod_24": 8}
+    ],
+    "el_generator_test": {
+      "el": 31,
+      "el_mod_9": 4,
+      "order_in_Z9_star": 3,
+      "generated_subgroup": [1, 4, 7],
+      "is_full_generator": false,
+      "full_generators_of_Z9_star": [2, 5]
+    }
+  }
+}

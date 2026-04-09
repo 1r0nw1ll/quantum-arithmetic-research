@@ -1,0 +1,43 @@
+{
+  "schema_version": "QA_HEBREW_MOD9_IDENTITY_CERT.v1",
+  "title": "Numerical verification of Hebrew mod-9 structures",
+  "numerical_checks": {
+    "aiq_bekar_verification": {
+      "test_values": [1, 10, 100, 2, 20, 200, 9, 90, 400],
+      "expected_roots": [1, 1, 1, 2, 2, 2, 9, 9, 4],
+      "formula": "dr(n) = 1 + ((n - 1) mod 9)"
+    },
+    "homomorphism_tests": [
+      {"a": 144, "b": 135, "op": "+", "result": 279, "dr_a": 9, "dr_b": 9, "dr_result": 9, "dr_of_dr_sum": 9},
+      {"a": 81, "b": 81, "op": "*", "result": 6561, "dr_a": 9, "dr_b": 9, "dr_result": 9, "dr_of_dr_prod": 9}
+    ],
+    "skinner_powers_of_9": [
+      {"power": 1, "value": 9, "dr": 9},
+      {"power": 2, "value": 81, "dr": 9},
+      {"power": 3, "value": 729, "dr": 9},
+      {"power": 4, "value": 6561, "dr": 9}
+    ],
+    "solar_day_72_squared": {
+      "value": 5184,
+      "factorization": "72 * 72",
+      "dr": 9,
+      "mod_24": 0,
+      "qa_cosmos_pairs": 72
+    },
+    "sefer_yetzirah_factorials": [
+      {"n": 2, "factorial": 2, "dr": 2},
+      {"n": 3, "factorial": 6, "dr": 6},
+      {"n": 4, "factorial": 24, "dr": 6},
+      {"n": 5, "factorial": 120, "dr": 3},
+      {"n": 6, "factorial": 720, "dr": 9},
+      {"n": 7, "factorial": 5040, "dr": 9}
+    ],
+    "garden_eden_24": {
+      "letters": ["gimel", "nun", "ayin", "dalet", "nun"],
+      "values": [3, 50, 70, 4, 50],
+      "sum": 177,
+      "skinner_reading": 24,
+      "note": "Skinner uses characteristic values 3+5+7+4+5=24"
+    }
+  }
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Skinner Hebrew Metrology Cert family [204]: certifies 7 verified metrological claims from J.R. Skinner's 'Key to the Hebrew-Egyptian Mystery in the Source of Measures' (1875). Parker quadrature kernel 6561=9^4, Garden-Eden characteristic sum=24, solar day 5184=72^2, Adam/Woman digital roots=9, factor 6 bridge mod-9->mod-24, Metius dr-closure, T2 compliance (pi as observer output). 3 qualified claims documented honestly: El=31 subgroup only, palindrome dr trivial, Parker pi mediocre. Checks SKM_1+PARK/EDEN/SOLAR/ADAM/BRIDGE/MET/T2/W/F; 2 PASS + 1 FAIL; self-test ok"
+}

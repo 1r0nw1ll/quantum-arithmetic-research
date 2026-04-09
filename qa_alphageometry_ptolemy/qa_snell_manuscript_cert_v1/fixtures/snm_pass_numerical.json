@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_SNELL_MANUSCRIPT_CERT.v1",
+  "description": "Numerical analysis of Snell Manuscript values in QA",
+  "chord_of_mass": {
+    "vibrations_per_sec": 42800,
+    "mod_9": 5,
+    "mod_24": 8,
+    "v3": 0,
+    "orbit_by_v3": "cosmos",
+    "mod24_note": "equals satellite orbit period",
+    "factorization": "2^4 * 5^2 * 107",
+    "musical_chord": {
+      "notes": ["Bb1", "Eb2", "Bb3"],
+      "pitch_classes_mod12": [10, 3, 10],
+      "pitch_classes_mod9": [1, 3, 1],
+      "intervals_semitones": [5, 7],
+      "interval_names": ["perfect fourth", "perfect fifth"],
+      "intervals_mod9": [5, 7],
+      "both_are_generators_of_Z9Z_star": true
+    }
+  },
+  "base_frequency": {
+    "hz": 20000,
+    "mod_9": 2,
+    "mod_24": 8,
+    "mod24_note": "satellite period"
+  },
+  "atomic_triplet": {
+    "revolution_fraction": "4/3",
+    "excess_over_full_revolution": "1/3",
+    "connection": "matches triune 1/3 structure and 33-1/3 attraction threshold"
+  },
+  "neutral_center": {
+    "qa_mapping": "singularity fixed point (9,9) in mod-9",
+    "keely_quote": "focalization and distribution of streams of energy",
+    "not_associated_with": "magnetism (per Keely)"
+  },
+  "repulsion_boundary": {
+    "diameters": 10,
+    "mod_9": 1,
+    "note": "one step beyond mod-9 cycle",
+    "inside": "attraction (same orbit)",
+    "outside": "repulsion/separation (cross orbit)"
+  },
+  "molecular_motion_range": {
+    "fraction_of_diameter": "1/3",
+    "connection": "triune fundamental ratio"
+  }
+}

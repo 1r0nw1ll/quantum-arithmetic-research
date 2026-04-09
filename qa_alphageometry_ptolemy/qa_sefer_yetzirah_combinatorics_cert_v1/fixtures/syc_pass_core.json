@@ -1,0 +1,126 @@
+{
+  "schema_version": "QA_SEFER_YETZIRAH_COMBINATORICS_CERT.v1",
+  "title": "Sefer Yetzirah combinatorial structures mapped to QA",
+  "claims": [
+    {
+      "id": "GATES",
+      "label": "231 gates = C(22,2) = complete graph K_22",
+      "witnesses": {
+        "passage": "Sefer Yetzirah 2:4",
+        "text": "Twenty-two Foundation Letters: He placed them in a circle like a wall with 231 Gates. The Circle oscillates back and forth.",
+        "n": 22,
+        "formula": "n*(n-1)/2",
+        "result": 231,
+        "graph": "K_22 complete graph on 22 vertices",
+        "factorization": "231 = 3 x 7 x 11",
+        "mod_9": 6,
+        "note": "231 factors through both partition elements (3 and 7)",
+        "source": "Glaz, Bridges Conference Proceedings 2021, pp. 39-46"
+      }
+    },
+    {
+      "id": "FACT",
+      "label": "Factorial computation: earliest known systematic treatment",
+      "witnesses": {
+        "passage": "Sefer Yetzirah 4:16",
+        "text": "Two stones build 2 houses / Three stones build 6 houses / Four stones build 24 houses / Five stones build 120 houses / Six stones build 720 houses / Seven stones build 5040 houses",
+        "factorials": [
+          {"n": 2, "value": 2, "dr": 2},
+          {"n": 3, "value": 6, "dr": 6},
+          {"n": 4, "value": 24, "dr": 6},
+          {"n": 5, "value": 120, "dr": 3},
+          {"n": 6, "value": 720, "dr": 9},
+          {"n": 7, "value": 5040, "dr": 9}
+        ],
+        "qa_note_24": "4! = 24 = QA applied modulus = pi(9) = min Pisano FP",
+        "qa_note_convergence": "dr(n!) converges to 9 for n >= 6 (all n! divisible by 9 for n >= 6)",
+        "textual_error": "Some manuscripts give 6! = 620 instead of 720 — scribal error",
+        "source": "Glaz 2021; Gandz 1940s (earliest academic analysis)"
+      }
+    },
+    {
+      "id": "PART",
+      "label": "3-7-12 partition of 22 Hebrew letters",
+      "witnesses": {
+        "total": 22,
+        "partition": {
+          "mother_letters": {"count": 3, "letters": ["Aleph", "Mem", "Shin"], "domain": "elements/dimensions"},
+          "double_letters": {"count": 7, "letters": ["Bet", "Gimel", "Dalet", "Kaf", "Pe", "Resh", "Tav"], "domain": "planets/days"},
+          "simple_letters": {"count": 12, "letters": ["He", "Vav", "Zayin", "Chet", "Tet", "Yod", "Lamed", "Nun", "Samekh", "Ayin", "Tsadi", "Qof"], "domain": "zodiac/months"}
+        },
+        "sum_check": "3 + 7 + 12 = 22",
+        "mod_9_values": {"mothers": 3, "doubles": 7, "simples": 3},
+        "qa_mapping": "3 = triune (singularity residue); 7 = septenary (Iverson Iota interior); 12 = zodiac (mod-12 pitch class)",
+        "source": "Sefer Yetzirah chapters 3, 4, 5; Hayman 2004 critical edition"
+      }
+    },
+    {
+      "id": "PATHS",
+      "label": "32 paths of Wisdom = 10 Sefirot + 22 letters",
+      "witnesses": {
+        "total": 32,
+        "decomposition": "10 + 22",
+        "power_of_2": "32 = 2^5",
+        "sefirot": 10,
+        "letters": 22,
+        "tetractys": "1+2+3+4 = 10 (possibly shared with Pythagorean Tetractys)",
+        "qa_note": "10 mod 9 = 1 (singularity); 22 mod 9 = 4; 32 mod 9 = 5"
+      }
+    },
+    {
+      "id": "CIRC",
+      "label": "Oscillating circle: cyclic structure on 22 elements",
+      "witnesses": {
+        "text": "The Circle oscillates back and forth",
+        "structure": "Z/22Z vertex set with complete graph K_22",
+        "cyclical_embedding": "Their end is imbedded in their beginning and their beginning in their end",
+        "qa_note": "Cyclic structure is the natural topology for modular arithmetic; the oscillation suggests generator action on the cycle"
+      }
+    },
+    {
+      "id": "PYTH",
+      "label": "Pythagorean transmission: documented historical contact",
+      "witnesses": {
+        "source_text": "Iamblichus, Life of Pythagoras",
+        "claim": "Pythagoras learned geometry in Egypt and number theory in Canaan",
+        "mount_carmel": "Pythagoras spent time at Mount Carmel in sacred pursuits",
+        "carmel_tradition": "Center for mystical retreats since Prophet Elijah (900-849 BCE) — meditation, astrology, numerology",
+        "shared_features": [
+          "abstract number manipulation independent of practical uses",
+          "oral and secret transmission of knowledge",
+          "reverential attitude toward numbers and their properties",
+          "Tetractys (1+2+3+4=10) possibly = Ten Sefirot"
+        ],
+        "transmission_direction": "Hebrew -> Pythagorean (Canaan teaching, not learning)",
+        "source": "Glaz 2021, citing Iamblichus [9]"
+      }
+    },
+    {
+      "id": "TZERUF",
+      "label": "Letter permutation (tzeruf) as group action",
+      "witnesses": {
+        "practitioner": "Abraham Abulafia (13th century)",
+        "method": "Systematic cycling through all arrangements of letter subsets",
+        "group": "Permutation group S_n acting on n-letter subsets of the 22 Hebrew letters",
+        "factorial_connection": "Sefer Yetzirah 4:16 counts |S_n| = n! for n=2..7",
+        "qa_mapping": "Group action on discrete state space; QA generator T acts on (b,e) pairs analogously",
+        "source": "Idel, Language Torah and Hermeneutics in Abraham Abulafia, SUNY Press 1989"
+      }
+    }
+  ],
+  "falsifiers": [
+    {
+      "id": "F1",
+      "description": "If the 231 gates were C(22,3) = 1540 instead of C(22,2) = 231, the text would be wrong",
+      "check": "gate_count must equal n*(n-1)/2 for n=22, not n*(n-1)*(n-2)/6"
+    }
+  ],
+  "sources": [
+    "Glaz, Bridges Conference Proceedings pp.39-46 (2021)",
+    "Gandz, Proceedings of the AAJR (1940s)",
+    "Hayman, Sefer Yesira: Critical Edition, Mohr Siebeck (2004)",
+    "Idel, Language Torah and Hermeneutics in Abraham Abulafia, SUNY Press (1989)",
+    "Kaplan, Sefer Yetzirah: The Book of Creation, Weiser Books (1991)",
+    "Eco, The Search for the Perfect Language, Blackwell (1993)"
+  ]
+}

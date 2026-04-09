@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Circle Impossibility Cert family [207]: proves no QA state has C=0 (true circle impossible in integer arithmetic). C=2de, A1 says d,e>=1, so C>=2 always. The circle is an observer projection of an ellipsoid where C lies along the viewing axis (Will Dale 2026-04-06). Extends [140] conic discriminant impossibility (parabola). Connects [189] Dale Circle, [125] Chromogeometry, Theorem NT. Source: Will Dale 2026-04-06, Parker Propositions of Geometry IX. Checks CI_1+C_MIN/EXHAUSTIVE/PROJECTION/HIERARCHY/CHROMO/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

@@ -1,0 +1,12 @@
+{
+  "schema_version": "QA_PEZZULO_LEVIN_BOOTSTRAP_CERT.v1",
+  "certificate_id": "qa.cert.pezzulo_levin_bootstrap.fail.bad_stage.v1",
+  "cert_type": "qa_pezzulo_levin_bootstrap_cert",
+  "title": "Pezzulo Levin Bootstrap FAIL: demonstrates stage mapping mismatch detection",
+  "created_utc": "2026-04-05T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: validator skips detailed checks because result=FAIL. Would catch stage numbering or Bateson level inconsistency.",
+  "fail_ledger": [
+    {"check_id": "PLB_STAGES", "message": "Deliberately wrong: Stage 7 (Creativity) declared as L_1 but should be L_3 (modulus change)"}
+  ],
+  "result": "FAIL"
+}

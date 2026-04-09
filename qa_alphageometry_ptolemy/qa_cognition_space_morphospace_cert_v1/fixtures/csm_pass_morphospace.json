@@ -1,0 +1,101 @@
+{
+  "schema_version": "QA_COGNITION_SPACE_MORPHOSPACE_CERT.v1",
+  "certificate_id": "qa.cert.cognition_space_morphospace.pass.morphospace.v1",
+  "cert_type": "qa_cognition_space_morphospace_cert",
+  "title": "Cognition Space Morphospace PASS: three qualitative clusters realized as three exact QA orbits",
+  "created_utc": "2026-04-05T00:00:00Z",
+
+  "_fixture_purpose": "Certifies that the qualitative morphospace of Sole, Seoane et al. (2601.12837) — with three identified clusters (basal cognition, neural cognition, human/AI cognition) separated by voids — maps exactly to QA's three orbit families. Voids are algebraically necessary (no intermediate orbit lengths exist in S_9). Agency metric = |reachable set|/|total states| is computable for each orbit.",
+
+  "source_attribution": "Ricard Sole, Luisa Seoane et al., 'Cognition spaces and the possible forms of intelligence' (arXiv:2601.12837, Jan 2026). QA formalization: Will Dale + Claude, 2026-04-05.",
+
+  "cluster_orbit_mapping": [
+    {
+      "sole_cluster": "basal",
+      "description": "Minimal cognition: chemotaxis, tropisms, single-cell decision-making",
+      "qa_orbit": "singularity",
+      "orbit_size": 1,
+      "agency_ratio": "1/81",
+      "agency_decimal": 0.0123
+    },
+    {
+      "sole_cluster": "neural",
+      "description": "Neural cognition: nervous systems, brains, learning",
+      "qa_orbit": "satellite",
+      "orbit_size": 8,
+      "agency_ratio": "8/81",
+      "agency_decimal": 0.0988
+    },
+    {
+      "sole_cluster": "human_ai",
+      "description": "Human and AI cognition: language, abstraction, tool use, artificial general intelligence",
+      "qa_orbit": "cosmos",
+      "orbit_size": 72,
+      "agency_ratio": "72/81",
+      "agency_decimal": 0.8889
+    }
+  ],
+
+  "void_algebraic_necessity": {
+    "statement": "S_9 admits exactly three orbit families with cycle lengths {1, 8, 24}. No intermediate cycle length exists. The voids between Sole et al.'s clusters are not contingent gaps in a continuous landscape but algebraically necessary consequences of modular Fibonacci dynamics.",
+    "proof_sketch": "T = QA Fibonacci map on (Z/9Z)^2. Orbit lengths must divide the period pi(9)=24. Divisors of 24 that actually appear as orbit lengths in S_9 are {1, 8, 24}. The missing divisors {2,3,4,6,12} do not appear — verified by exhaustive enumeration of all 81 states.",
+    "missing_divisors": [2, 3, 4, 6, 12],
+    "realized_lengths": [1, 8, 24]
+  },
+
+  "agency_metric": {
+    "definition": "agency(s) = |Orbit(s)| / |S_m| = fraction of total state space reachable by iterating T from state s",
+    "values": {
+      "singularity": {"numerator": 1, "denominator": 81, "decimal": 0.0123},
+      "satellite": {"numerator": 8, "denominator": 81, "decimal": 0.0988},
+      "cosmos": {"numerator": 72, "denominator": 81, "decimal": 0.8889}
+    },
+    "note": "This gives a constructive, integer-valued agency metric. Sole et al. discuss agency qualitatively; QA makes it exact and enumerable."
+  },
+
+  "enumerability": {
+    "statement": "QA provides the constructive, enumerable cognition space that Sole et al. identify as lacking. Every point in S_m is classifiable by orbit family, cycle length, and agency ratio. The morphospace is finite and completely characterized.",
+    "s9_total_states": 81,
+    "s9_orbit_count": 5,
+    "s9_family_count": 3
+  },
+
+  "witnesses": [
+    {
+      "type": "basal_singularity",
+      "state": [9, 9],
+      "orbit_length": 1,
+      "agency": "1/81",
+      "sole_cluster": "basal"
+    },
+    {
+      "type": "neural_satellite",
+      "state": [3, 3],
+      "orbit_length": 8,
+      "agency": "8/81",
+      "sole_cluster": "neural"
+    },
+    {
+      "type": "human_ai_cosmos",
+      "state": [1, 1],
+      "orbit_length": 24,
+      "agency": "72/81",
+      "sole_cluster": "human_ai"
+    },
+    {
+      "type": "void_witness",
+      "claimed_length": 12,
+      "exists_in_s9": false,
+      "note": "No orbit of length 12 exists in S_9 despite 12|24. This is a void between satellite (8) and cosmos (24) — the algebraic gap corresponding to Sole et al.'s morphospace void."
+    }
+  ],
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels", "relation": "Bateson levels = learning across orbit boundaries; morphospace voids = double bind zones"},
+    {"family": 153, "name": "QA Keely Triune", "relation": "Three orbit families = Keely's three modes of vibration"},
+    {"family": 130, "name": "QA Origin of 24", "relation": "Orbit classification via v_3(f) determines the three families"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,28 @@
+{
+  "schema_version": "QA_HERA_ORCHESTRATION_EVOLUTION_CERT.v1",
+  "title": "Numerical verification of HERA-QA correspondence",
+  "numerical_checks": {
+    "performance_improvement": {
+      "hera_avg_improvement_pct": 38.69,
+      "benchmarks": 6,
+      "over_baseline": "SOTA multi-agent RAG",
+      "single_agent_beaten": true
+    },
+    "phase_count": {
+      "phases": 4,
+      "names": ["Initial", "Exploration", "Refinement", "Optimization"],
+      "qa_orbit_trajectory": ["Satellite-like", "Cosmos-like", "descent", "Satellite-like"]
+    },
+    "bateson_level_count": {
+      "levels_in_191": 4,
+      "levels_mapped_to_hera": 3,
+      "unmapped": "Level III (modulus change) — would require changing LLM backbone"
+    },
+    "entropy_behavior": {
+      "initial": "low",
+      "peak": "intermediate (not maximum)",
+      "plateau": "intermediate (Satellite-like structured flexibility)",
+      "final": "stable intermediate"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_SKINNER_HEBREW_METROLOGY_CERT.v1",
+  "expect_fail": true,
+  "fail_reason": "Claims El=31 is a full generator of (Z/9Z)*, but 31 mod 9 = 4 has order 3, generating only {1,4,7}",
+  "claims": [
+    {
+      "id": "PARK",
+      "label": "INVALID: El as full generator",
+      "witnesses": {
+        "el_value": 31,
+        "el_mod_9": 4,
+        "claimed_order": 6,
+        "actual_order": 3,
+        "error": "4^1=4, 4^2=16 mod 9=7, 4^3=64 mod 9=1. Only generates {1,4,7}, not all of {1,...,8}"
+      }
+    }
+  ]
+}

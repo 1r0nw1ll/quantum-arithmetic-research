@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA HERA Orchestration Evolution Cert family [206]: certifies the structural correspondence between HERA's multi-agent orchestration evolution (Li & Ramakrishnan, Virginia Tech 2026, arXiv:2604.00901) and QA orbit dynamics. Key claims: RoPE dual-axes (op/bp) = Bateson [191] L1/L2a filtration, four-phase topology evolution = orbit descent (Satellite->Cosmos->Satellite), entropy plateau = Satellite convergence (structured flexibility), sparse exploration = orbit discovery, Theorem NT compliance (semantic insights = observer projections). Checks HOE_1+ROPE/PHASE/ENTROPY/SPARSE/NT/W/F; 2 PASS + 1 FAIL; self-test ok"
+}

@@ -1,0 +1,154 @@
+{
+  "schema_version": "QA_SKINNER_HEBREW_METROLOGY_CERT.v1",
+  "title": "Skinner metrological claims verified against QA axioms",
+  "claims": [
+    {
+      "id": "PARK",
+      "label": "Parker quadrature kernel: 6561 = 9^4 = 3^8",
+      "witnesses": {
+        "value": 6561,
+        "as_power_of_9": {"base": 9, "exponent": 4, "product": 6561},
+        "as_power_of_3": {"base": 3, "exponent": 8, "product": 6561},
+        "as_square": {"base": 81, "squared": 6561},
+        "digital_root": 9,
+        "mod_24": 9,
+        "factorization": [3, 3, 3, 3, 3, 3, 3, 3],
+        "smooth_basis": [3],
+        "inscribed_circle_area": 5153,
+        "parker_ratio": "6561:20612",
+        "parker_pi_approx": 3.14159388,
+        "actual_pi": 3.14159265,
+        "pi_error": 1.23e-6,
+        "note": "Parker pi derived from integer system, not from continuous pi",
+        "source": "Skinner 1875, Parker Quadrature Props X-XII"
+      }
+    },
+    {
+      "id": "EDEN",
+      "label": "Garden-Eden characteristic sum = 24",
+      "witnesses": {
+        "word": "gn-odn (Garden-Eden)",
+        "letters": ["Gimel", "Nun", "Ayin", "Dalet", "Nun"],
+        "standard_values": [3, 50, 70, 4, 50],
+        "standard_sum": 177,
+        "characteristic_values": [3, 5, 7, 4, 5],
+        "characteristic_sum": 24,
+        "characteristic_operation": "digital root of each letter value",
+        "dr_verification": {
+          "dr_3": 3, "dr_50": 5, "dr_70": 7, "dr_4": 4, "dr_50b": 5
+        },
+        "qa_connection": "24 = QA applied modulus = pi(9) = min Pisano FP",
+        "source": "Skinner 1875, Appendix pp. 58-59"
+      }
+    },
+    {
+      "id": "SOLAR",
+      "label": "Solar day 5184 = 72^2; 72 = QA Cosmos orbit pair count",
+      "witnesses": {
+        "value": 5184,
+        "as_square": {"base": 72, "squared": 5184},
+        "as_product": {"a": 144, "b": 36, "product": 5184},
+        "digital_root": 9,
+        "mod_24": 0,
+        "factorization_prime": "2^6 x 3^4",
+        "smooth_basis": [2, 3],
+        "qa_cosmos_pairs": 72,
+        "qa_note": "72 pairs in the 24-cycle Cosmos orbit; 144 = 2 x 72 = Adam",
+        "source": "Skinner 1875, Sections 30-31"
+      }
+    },
+    {
+      "id": "ADAM",
+      "label": "Adam=144 and Woman=135 both have digital root 9",
+      "witnesses": {
+        "adam": {"value": 144, "digital_root": 9, "digit_sum": "1+4+4=9", "factorization": "12^2 = 2^4 x 3^2"},
+        "woman": {"value": 135, "digital_root": 9, "digit_sum": "1+3+5=9", "factorization": "3^3 x 5"},
+        "serpent": {"value": 9, "digital_root": 9, "letter": "Tet"},
+        "difference": {"adam_minus_woman": 9, "note": "144 - 135 = 9; the difference IS the digital root"},
+        "skinner_quote": "Adam, and the woman, and the serpent, are one in the center of this garden, as the number 9",
+        "qa_note": "9 = QA Singularity fixed point (9,9) in mod-9",
+        "source": "Skinner 1875, Appendix pp. 58-59"
+      }
+    },
+    {
+      "id": "BRIDGE",
+      "label": "Factor 6 bridges mod-9 theoretical to mod-24 applied",
+      "witnesses": {
+        "bridge_factor": 6,
+        "factorization": "6 = 2 x 3",
+        "derivations": [
+          {"formula": "6 x 4", "result": 24, "role": "applied modulus / hours"},
+          {"formula": "6 x 60", "result": 360, "role": "circle degrees"},
+          {"formula": "6^4 x 4", "result": 5184, "role": "solar day characteristic"},
+          {"formula": "6 x 6", "result": 36, "role": "area unit"},
+          {"formula": "6^3", "result": 216, "role": "Plato's number / cube"}
+        ],
+        "chain": "9 -> 81 -> 6561 -> 20612 -> 360 (derived from 9 via Parker)",
+        "source": "Skinner 1875, Sections 47-54"
+      }
+    },
+    {
+      "id": "MET",
+      "label": "Metius pi: dr(113) + dr(355) = 9 (dr-closure)",
+      "witnesses": {
+        "numerator": 355,
+        "denominator": 113,
+        "ratio": 3.14159292,
+        "pi_error": 2.67e-7,
+        "dr_numerator": 4,
+        "dr_denominator": 5,
+        "dr_sum": 9,
+        "qa_note": "numerator and denominator digital roots sum to QA modulus",
+        "skinner_connection": "113 = 144 - 31 (Adam minus El); 355 links via Parker ratio",
+        "source": "Skinner 1875, throughout"
+      }
+    },
+    {
+      "id": "T2",
+      "label": "Skinner's system is T2-compliant: pi as observer projection only",
+      "witnesses": {
+        "method": "All derivations use integer arithmetic: subtraction (144-31=113), powers (9^4=6561), products (72*72=5184)",
+        "pi_role": "Pi appears ONLY as output comparison (observer projection). 20612/6561 ≈ pi is a MEASUREMENT of the integer system, not an input to it.",
+        "t2_statement": "Float x modulus -> int cast is a QA violation (T2-b). Skinner never does this.",
+        "examples": [
+          "5153 = 5184 - 31 (integer subtraction, not pi*r^2)",
+          "20612 = 5153 x 4 (integer multiplication, not 2*pi*r)",
+          "6561:20612 ratio COMPARED to pi, not DERIVED from pi"
+        ],
+        "qa_note": "Theorem NT practiced in 1875: discrete arithmetic is primary, continuous pi is observer output"
+      }
+    }
+  ],
+  "qualified_claims": [
+    {
+      "id": "Q_EL",
+      "label": "El=31 is NOT a full QA generator (generates only {1,4,7})",
+      "status": "QUALIFIED",
+      "detail": "31 mod 9 = 4; order of 4 in (Z/9Z)* is 3; generates subgroup {1,4,7}, not full group. True generators are 2 and 5 (order 6)."
+    },
+    {
+      "id": "Q_PALINDROME",
+      "label": "Palindrome dr-preservation is trivially true",
+      "status": "QUALIFIED",
+      "detail": "Digit reversal preserves digit sum in any base, hence preserves digital root. This is a base-10 arithmetic identity, not a structural property of the Hebrew system."
+    },
+    {
+      "id": "Q_PARKER_PI",
+      "label": "Parker pi is mediocre compared to Metius",
+      "status": "QUALIFIED",
+      "detail": "20612/6561 error ≈ 1.23e-6; Metius 355/113 error ≈ 2.67e-7 (about 5x better). The value of Parker's ratio is not its accuracy but that 6561 = 9^4."
+    }
+  ],
+  "falsifiers": [
+    {
+      "id": "F1",
+      "description": "If El=31 were a full generator of (Z/9Z)*, all residues would be reachable. But 31 mod 9 = 4, order 3, so only {1,4,7} are reachable.",
+      "check": "el_mod_9_order must be < 6 (phi(9))"
+    }
+  ],
+  "sources": [
+    "Skinner, Key to the Hebrew-Egyptian Mystery in the Source of Measures (1875)",
+    "Parker, The Quadrature of the Circle (in Skinner 1875)",
+    "Archive.org: https://archive.org/details/keytohebrewegypt00skin"
+  ]
+}

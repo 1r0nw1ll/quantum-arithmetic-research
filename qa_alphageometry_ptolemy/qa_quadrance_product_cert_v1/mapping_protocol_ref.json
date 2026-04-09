@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Quadrance Product Cert family [208]: proves every QA area element is irreducibly a two-factor product of role-distinct base elements. Quadrances (A=a*a, B=b*b, D=d*d, E=e*e) are products, not powers — S1 (b*b not b**2) is structural, not just numerical. Product elements (C=2de, F=ba, J=bd, X=ed) are always two-factor. Even 1*1=1 is an area (product of two role-distinct 1s), not a scalar. A square is a rectangle whose sides happen to be equal — the product structure is irreducible. Parallels [207] circle impossibility: observer sees 'special case' but QA preserves full structure. Source: Will Dale 2026-04-08. Checks QP_1+PRODUCT/ROLE/S1/AREA_MIN/EXHAUSTIVE/DIM/SQUARE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

@@ -1,0 +1,53 @@
+{
+  "schema_version": "QA_GRID_CELL_RNS_CERT.v1",
+  "title": "Numerical verification of grid cell RNS to QA mapping",
+  "numerical_checks": {
+    "ratio_test": {
+      "qa_ratio": 2.6667,
+      "euler_e": 2.7183,
+      "absolute_deviation": 0.0516,
+      "percent_deviation": 1.9,
+      "within_threshold": true,
+      "threshold_percent": 10
+    },
+    "lcm_test": {
+      "a": 9,
+      "b": 24,
+      "gcd": 3,
+      "lcm": 72,
+      "product": 216,
+      "formula": "lcm = a * b / gcd = 216 / 3 = 72",
+      "cosmos_orbit_pairs": 72,
+      "match": true
+    },
+    "euler_totient_test": {
+      "m": 9,
+      "phi_m": 6,
+      "hexagonal_symmetry": 6,
+      "match": true
+    },
+    "hex_encoding_test": {
+      "m": 9,
+      "states": 217,
+      "formula": "3*9*9 - 3*9 + 1 = 243 - 27 + 1 = 217",
+      "codebook_vectors": 27,
+      "formula_vectors": "3*9 = 27",
+      "three_enneads": true
+    },
+    "golden_ratio_test": {
+      "phi": 1.6180,
+      "sqrt_5": 2.2361,
+      "phi_squared": 2.6180,
+      "phi_squared_vs_ratio": {
+        "phi_sq": 2.6180,
+        "qa_ratio": 2.6667,
+        "deviation_percent": 1.86,
+        "note": "phi^2 = phi + 1 = 2.618 is also within 2% of 24/9"
+      }
+    },
+    "measured_ratios_vs_qa": [
+      {"study": "Barry 2007", "ratio": 1.64, "qa_sqrt_ratio": 1.633, "deviation_percent": 0.4},
+      {"study": "Stensola 2012", "ratio": 1.42, "qa_cube_root_ratio": 1.387, "deviation_percent": 2.4}
+    ]
+  }
+}

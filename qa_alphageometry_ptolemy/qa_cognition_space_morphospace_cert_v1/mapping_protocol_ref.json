@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Cognition Space Morphospace Cert family [194]: maps Sole, Seoane et al. 'Cognition spaces' (arXiv:2601.12837) qualitative morphospace to QA exact discrete morphospace. Three clusters (basal/neural/human-AI) = three QA orbits (singularity/satellite/cosmos). Voids between clusters = algebraically necessary. Agency = |reachable set|/|total states|: Singularity=1/81, Satellite=8/81, Cosmos=72/81. QA provides the constructive enumerable cognition space the paper lacks. Source: Sole et al. arXiv:2601.12837. Checks CSM_1+CLUSTERS/VOIDS/AGENCY/ENUM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

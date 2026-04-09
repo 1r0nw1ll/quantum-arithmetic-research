@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_SNELL_MANUSCRIPT_CERT.v1",
+  "description": "FALSIFIER: incorrect frequency scaling ratio (x5 instead of x3)",
+  "expect_fail": true,
+  "fail_reason": "scaling factor 5 is not a power of 3; breaks SNM_SCALE check",
+  "claims": [
+    {
+      "id": "S2_WRONG",
+      "name": "Frequency Scaling by 5 (INVALID)",
+      "frequencies_hz": [100000000, 500000000, 2500000000],
+      "ratios": [5, 5],
+      "total_ratio": 25,
+      "total_ratio_factored": "5^2",
+      "digital_roots_mod9": [1, 5, 7],
+      "note": "does NOT converge to singularity; 5 and 7 are cosmos generators, not singularity residues"
+    }
+  ]
+}

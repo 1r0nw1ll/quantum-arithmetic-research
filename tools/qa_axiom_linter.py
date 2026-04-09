@@ -27,6 +27,10 @@ Rule groups:
     S1    — No x**2
     S2    — No float state
     DECL  — Missing QA_COMPLIANCE declaration
+    ELEM  — Element computation enforcement (raw vs mod-reduced):
+              ELEM-1  Modular reduction inside element (C/F/G) computation → ERROR
+              ELEM-4  norm_f() or invariant from mod-reduced input → WARNING
+              ELEM-5  Hardcoded (b,e) lookup table (CMAP/MICROSTATE_STATES) → WARNING
     ORBIT — Orbit-rule integrity (gaps identified 2026-03-28):
               ORBIT-1  v₃(f) equal to 1 is algebraically impossible → ERROR
               ORBIT-2  orbit_family assigned as string literal (abstract label) → WARNING
@@ -279,6 +283,62 @@ RULES: list[ViolationRule] = [
         severity="WARNING",
         qa_file_only=True,
     ),
+    # ── ELEM rules: element computation enforcement ──────────────────────────
+    ViolationRule(
+        id="ELEM-1",
+        axiom="ELEM",
+        description="Modular reduction (% m) in element computation context — "
+                    "QA elements (C, F, G, A, B, D, E) use RAW d=b+e, "
+                    "NEVER mod-reduced. Use qa_elements() from qa_elements.py. "
+                    "If this is a T-operator step, add # noqa: ELEM-1",
+        pattern=re.compile(
+            r'(?:^|[^#])\b(?:C|F|G)\s*=.*%\s*(?:m\b|M\b|modulus|MODULUS|\d{1,2}\b)'
+        ),
+        severity="ERROR",
+        qa_file_only=True,
+    ),
+
+    # ELEM-4: QA invariants (norm_f, C=2de, F=ba) computed from mod-reduced
+    # inputs. The invariants should use RAW values; mod reduction is T-operator
+    # only. Catches: norm_f(x % m, ...) or norm_f(qa_residue(...), ...) or
+    # computing f/C/F from e that was already mod-reduced.
+    # If this IS a T-operator (orbit classification only), add # noqa: ELEM-4
+    ViolationRule(
+        id="ELEM-4",
+        axiom="ELEM",
+        description="norm_f() or QA invariant computed from mod-reduced input — "
+                    "invariants should use RAW values (d=b+e, a=b+2e unmodulated). "
+                    "Mod reduction is T-operator ONLY (orbit classification). "
+                    "If this is orbit classification, add # noqa: ELEM-4",
+        pattern=re.compile(
+            r'norm_f\s*\(\s*(?:'
+            r'[^,)]*%\s*(?:m\b|M\b|MOD|modulus|MODULUS|\d{1,2})\b'   # norm_f(x % m, ...)
+            r'|[^,)]*qa_residue\s*\('                                  # norm_f(qa_residue(...), ...)
+            r')'
+        ),
+        severity="WARNING",
+        qa_file_only=True,
+    ),
+
+    # ELEM-5: Hardcoded state lookup tables (CMAP, MICROSTATE_STATES,
+    # QUINTILE_TO_STATE) that assign (b,e) by analyst choice instead of
+    # deriving from data. Superseded by [209] generator inference.
+    # If the mapping is canonical (from QA books/Volk/Grant), add # noqa: ELEM-5
+    ViolationRule(
+        id="ELEM-5",
+        axiom="ELEM",
+        description="Hardcoded (b,e) lookup table — [209] generator inference "
+                    "supersedes analyst-chosen state mappings. Derive (b,e) from "
+                    "signal evolution instead. If mapping is canonical (Volk/Grant), "
+                    "add # noqa: ELEM-5",
+        pattern=re.compile(
+            r'\bCMAP\s*=\s*\{[^}]*\d+\s*:\s*\d+'
+            r'|MICROSTATE_STATES\s*[=:{]'
+            r'|QUINTILE_TO_STATE\s*[=:{]'
+        ),
+        severity="WARNING",
+        qa_file_only=True,
+    ),
 ]
 
 # Required declaration block pattern — all QA empirical scripts must declare their observer
@@ -401,6 +461,33 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
                     "STATE_ALPHABET declared without audit_alphabet() call — run "
                     "audit_alphabet(STATE_ALPHABET, MODULUS) to verify satellite coverage "
                     "before this script can be considered QA-compliant"))
+
+    # ELEM-2: validator reimplements element computation without importing qa_elements
+    # Detect: def compute_C, compute_F, compute_G, compute_all, compute_elements,
+    # qa_derived (in element context), qa_tuple (with modulus for elements).
+    # Skip qa_elements.py itself and canonical modules.
+    _ELEM_REDEF_PATTERN = re.compile(
+        r'^\s*def\s+(?:compute_C|compute_F|compute_G|compute_all|'
+        r'compute_elements|compute_16|qa_derived|qa_raw_derived)\s*\(',
+        re.MULTILINE,
+    )
+    _ELEM_IMPORT_PATTERN = re.compile(
+        r'from\s+qa_elements\s+import|from\s+qa_arithmetic'
+    )
+    _is_qa_elements_file = (path.name == "qa_elements.py")
+    _is_canonical_elem = _is_qa_elements_file or _is_canonical_orbit_source(path)
+
+    if not _is_canonical_elem and file_is_qa:
+        if _ELEM_REDEF_PATTERN.search(content) and not _ELEM_IMPORT_PATTERN.search(content):
+            m_elem = _ELEM_REDEF_PATTERN.search(content)
+            lineno_elem = content[:m_elem.start()].count("\n") + 1
+            def_line_elem = lines[lineno_elem - 1] if lineno_elem <= len(lines) else ""
+            if "# noqa: ELEM-2" not in def_line_elem:
+                violations.append((lineno_elem, "ELEM-2", "ELEM",
+                    "Local reimplementation of element computation — import from "
+                    "qa_elements.py instead. Local copies diverge and cause axiom "
+                    "violations (C>=4 bound, raw d=b+e, F identity). "
+                    "Add # noqa: ELEM-2 if intentional."))
 
     # Per-line rules
     for lineno, line in enumerate(lines, 1):

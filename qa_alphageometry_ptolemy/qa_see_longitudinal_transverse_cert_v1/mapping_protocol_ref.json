@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA See Longitudinal Transverse Cert family [197]: maps T.J.J. See's wave duality (longitudinal/compression = gravity; transverse/shear = light; same medium, orthogonal modes) to QA generator/observer duality (generator action = discrete T-operator along orbit path; observer projection = continuous measurement perpendicular to orbit dynamics; same tuple space, orthogonal access modes). Theorem NT is the special case: longitudinal and transverse modes cannot mix in a linear medium. Source: See, 'Electrodynamic Wave-Theory of Physical Forces' (1917). Checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

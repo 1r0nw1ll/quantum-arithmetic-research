@@ -5896,6 +5896,248 @@ def _validate_bateson_learning_levels_cert_family(base_dir: str) -> Optional[str
     return None
 
 
+def _validate_levin_cognitive_lightcone_cert_family(base_dir: str) -> Optional[str]:
+    """QA Levin Cognitive Lightcone Cert family [193] — maps Michael Levin's cognitive light cone (CLC) to QA orbit radius. Singularity=radius 0 (fixed point, no goals), Satellite=radius 8 (8-cycle, local goals), Cosmos=radius 24 (24-cycle, far-reaching goals). Cancer = CLC shrinkage = Cosmos->Satellite orbit transition. Tiered Reachability [191]: 26% L1-reachable = structural CLC ceiling. Source: Levin & Resnik 'Mind Everywhere' (Biological Theory 2026); Lyons/Pio-Lopez/Levin 'Cancer to AI Alignment' (Preprints 2026). Checks CLC_1+ORBIT/RADIUS/CANCER/CEIL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_levin_cognitive_lightcone_cert_v1")
+    validator = os.path.join(fam_dir, "qa_levin_cognitive_lightcone_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_levin_cognitive_lightcone_cert_v1/qa_levin_cognitive_lightcone_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_levin_cognitive_lightcone_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_levin_cognitive_lightcone_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_levin_cognitive_lightcone_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_cognition_space_morphospace_cert_family(base_dir: str) -> Optional[str]:
+    """QA Cognition Space Morphospace Cert family [194] — maps Sole, Seoane et al. 'Cognition spaces' (arXiv:2601.12837) qualitative morphospace to QA exact discrete morphospace. Three clusters (basal/neural/human-AI) = three QA orbits. Voids = algebraically necessary. Agency = |reachable set|/|total states|: Singularity=1/81, Satellite=8/81, Cosmos=72/81. Source: Sole et al. arXiv:2601.12837. Checks CSM_1+CLUSTERS/VOIDS/AGENCY/ENUM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_cognition_space_morphospace_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cognition_space_morphospace_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cognition_space_morphospace_cert_v1/qa_cognition_space_morphospace_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_cognition_space_morphospace_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_cognition_space_morphospace_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_cognition_space_morphospace_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_pezzulo_levin_bootstrap_cert_family(base_dir: str) -> Optional[str]:
+    """QA Pezzulo Levin Bootstrap Cert family [195] — maps Pezzulo & Levin 'Bootstrapping Life-Inspired Machine Intelligence' (arXiv:2602.08079) 7-stage pipeline to QA architecture levels. Chemistry=A1, Metabolic=single-step T(b,e), Transcriptional=v_3(f) orbit classification, Anatomical=orbit+E8, Behavioral=observer projection (Theorem NT), Abstract=multi-modulus L_2, Creativity=L_3 pi(9)=24. Intelligence ratchet = Pisano FP [192]. 5 design principles map to QA axioms. Source: Pezzulo & Levin arXiv:2602.08079. Checks PLB_1+STAGES/RATCHET/PRINCIPLES/PIPELINE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pezzulo_levin_bootstrap_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pezzulo_levin_bootstrap_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pezzulo_levin_bootstrap_cert_v1/qa_pezzulo_levin_bootstrap_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_pezzulo_levin_bootstrap_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_pezzulo_levin_bootstrap_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_pezzulo_levin_bootstrap_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_see_capture_convergence_cert_family(base_dir: str) -> Optional[str]:
+    """QA See Capture Convergence Cert family [196] — maps T.J.J. See's capture theory of cosmical evolution (1909-1910) to QA transient-to-periodic orbit convergence. Free body = arbitrary (b,e); resisting medium = modular reduction; eccentricity decay = transient steps; stable capture = orbit membership. All 81 S_9 states instantly captured (tau=0); extended conditions tau=1. Distribution: cosmos=72, satellite=8, singularity=1. Source: See, 'Capture Theory' (1910). Checks SCC_1+CONV/MEAN/MAX/DIST/MED/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_see_capture_convergence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_see_capture_convergence_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_see_capture_convergence_cert_v1/qa_see_capture_convergence_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_see_capture_convergence_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_see_capture_convergence_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_see_capture_convergence_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_see_longitudinal_transverse_cert_family(base_dir: str) -> Optional[str]:
+    """QA See Longitudinal Transverse Cert family [197] — maps T.J.J. See's wave duality (longitudinal/compression=gravity, transverse/shear=light; same medium, orthogonal modes) to QA generator/observer duality (T-operator=discrete causal, projection=continuous measurement). Theorem NT = mode orthogonality. Complementary to [153] Keely triune (3-fold within longitudinal) vs See (2-mode between generator/observer). Source: See, 'Electrodynamic Wave-Theory' (1917). Checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_see_longitudinal_transverse_cert_v1")
+    validator = os.path.join(fam_dir, "qa_see_longitudinal_transverse_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_see_longitudinal_transverse_cert_v1/qa_see_longitudinal_transverse_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_see_longitudinal_transverse_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_see_longitudinal_transverse_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_see_longitudinal_transverse_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_snell_manuscript_cert_family(base_dir: str) -> Optional[str]:
+    """QA Snell Manuscript Cert family [201] — certifies 7 structural claims from the Snell Manuscript (Keely's own notes, compiled 1934 by C.W. Snell) as QA invariants: 7x3=21 hierarchy, frequency scaling by 3/9, Trexar orbit encoding (Ag/Au/Pt={3,6,9}), mass-as-difference=f-value, polarity inversion at 2/3, triple dissociation=orbit descent, rotation from 3:9 ratio. Checks SNM_1+21/FREQ/SCALE/TREX/FVAL/POL/DISS/ROT/CHORD/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_snell_manuscript_cert_v1")
+    validator = os.path.join(fam_dir, "qa_snell_manuscript_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_snell_manuscript_cert_v1/qa_snell_manuscript_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_snell_manuscript_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_snell_manuscript_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_snell_manuscript_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_hebrew_mod9_identity_cert_family(base_dir: str) -> Optional[str]:
+    """QA Hebrew Mod-9 Identity Cert family [202] — certifies the structural identity between Hebrew gematria mod-9 reduction (Aiq Bekar / pythmen) and QA A1 axiom state space {1,...,9}. Maps three enneads (27 signs), digital root homomorphism (Izmirli 2014), Sefer Yetzirah 4!=24, Skinner metrological 9^4=6561 kernel, 9->24 bridge via factor 6, Pythagorean transmission (Iamblichus), base-9 hypothesis (Kreinovich 2018). Checks HM9_1+AIQ/DR/ENNEAD/SY24/SKIN/BRIDGE/NUM/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_hebrew_mod9_identity_cert_v1")
+    validator = os.path.join(fam_dir, "qa_hebrew_mod9_identity_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_hebrew_mod9_identity_cert_v1/qa_hebrew_mod9_identity_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_hebrew_mod9_identity_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_hebrew_mod9_identity_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_hebrew_mod9_identity_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_sefer_yetzirah_combinatorics_cert_family(base_dir: str) -> Optional[str]:
+    """QA Sefer Yetzirah Combinatorics Cert family [203] — certifies combinatorial structures in the Sefer Yetzirah (Book of Formation, c. 2nd-6th century CE): 231 gates = C(22,2) = K_22 complete graph, factorial computation n! for n=2..7 (earliest known), 3-7-12 letter partition, 32 paths = 10+22 = 2^5, oscillating circle, Pythagorean transmission (Iamblichus), tzeruf permutation groups. Checks SYC_1+GATES/FACT/PART/PATHS/NUM/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_sefer_yetzirah_combinatorics_cert_v1")
+    validator = os.path.join(fam_dir, "qa_sefer_yetzirah_combinatorics_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_sefer_yetzirah_combinatorics_cert_v1/qa_sefer_yetzirah_combinatorics_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_sefer_yetzirah_combinatorics_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_sefer_yetzirah_combinatorics_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_sefer_yetzirah_combinatorics_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_skinner_hebrew_metrology_cert_family(base_dir: str) -> Optional[str]:
+    """QA Skinner Hebrew Metrology Cert family [204] — certifies 7 verified metrological claims from Skinner's 'Source of Measures' (1875): Parker kernel 6561=9^4, Garden-Eden=24 via digital roots, solar day 5184=72^2 (Cosmos pairs), Adam/Woman dr=9, factor 6 bridge mod-9->mod-24, Metius dr-closure dr(113)+dr(355)=9, T2 compliance (pi as observer output). 3 qualified: El=31 subgroup, palindrome trivial, Parker pi mediocre. Checks SKM_1+PARK/EDEN/SOLAR/ADAM/BRIDGE/MET/NUM/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_skinner_hebrew_metrology_cert_v1")
+    validator = os.path.join(fam_dir, "qa_skinner_hebrew_metrology_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_skinner_hebrew_metrology_cert_v1/qa_skinner_hebrew_metrology_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_skinner_hebrew_metrology_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_skinner_hebrew_metrology_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_skinner_hebrew_metrology_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_grid_cell_rns_cert_family(base_dir: str) -> Optional[str]:
+    """QA Grid Cell RNS Cert family [205] — certifies structural isomorphism between entorhinal grid cell residue number system and QA modular arithmetic: RNS isomorphism, CRT reconstruction, 24/9 ratio within 2% of optimal e (Wei 2015), LCM(9,24)=72=Cosmos orbit, golden ratio for two-module (Vago 2018), carry-free=axiom independence, abstract domain (Constantinescu 2016), toroidal state space, hex27 encoding. Checks GCR_1+RATIO/LCM/PHI6/HEX/NUM/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_grid_cell_rns_cert_v1")
+    validator = os.path.join(fam_dir, "qa_grid_cell_rns_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_grid_cell_rns_cert_v1/qa_grid_cell_rns_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_grid_cell_rns_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_grid_cell_rns_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_grid_cell_rns_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_hera_orchestration_evolution_cert_family(base_dir: str) -> Optional[str]:
+    """QA HERA Orchestration Evolution Cert family [206] — certifies structural correspondence between HERA multi-agent orchestration evolution (Li & Ramakrishnan VT 2026, arXiv:2604.00901) and QA orbit dynamics: RoPE dual-axes = Bateson [191] L1/L2a, four-phase topology = orbit descent (Satellite->Cosmos->Satellite, NOT Singularity), entropy plateau = Satellite convergence, sparse exploration = orbit discovery, Theorem NT compliance. 38.69% improvement over SOTA. Checks HOE_1+ROPE/PHASE/ENT/PERF/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_hera_orchestration_evolution_cert_v1")
+    validator = os.path.join(fam_dir, "qa_hera_orchestration_evolution_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_hera_orchestration_evolution_cert_v1/qa_hera_orchestration_evolution_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_hera_orchestration_evolution_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_hera_orchestration_evolution_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_hera_orchestration_evolution_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -6591,6 +6833,61 @@ FAMILY_SWEEPS = [
      "Joint extremality of m=24: simultaneously minimum non-trivial Pisano fixed point (OEIS A235702 = {24, 120, 600, ...}) AND maximum Carmichael lambda=2 modulus (structurally proved: m | 24, set = {3,4,6,8,12,24}); pi(9)=24 bridges theoretical to applied modulus; basin {6,9,12,16,18,24}; cannonball 1^2+..+24^2=70^2; 24-theorem p^2-1 div 24; closes item 5 of [191] Bateson sketch (Level-III self-improvement fixed point); ORIGINAL joint (pi,lambda) observation; source Wall 1960 + OEIS + Carmichael 1910 + Watson 1918 + Baez 2008; checks DE_1+PISANO/MIN_FP/CARMICHAEL/MAX_LAM/JOINT/BRIDGE/BASIN/CANNON/24THM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "192_qa_dual_extremality_24_cert",
      "qa_dual_extremality_24_cert_v1", True),
+    (193, "QA Levin Cognitive Lightcone Cert family",
+     _validate_levin_cognitive_lightcone_cert_family,
+     "Levin CLC mapped to QA orbit radius: Singularity=0 (fixed point), Satellite=8 (local goals), Cosmos=24 (far-reaching goals); cancer = CLC shrinkage = Cosmos->Satellite orbit demotion (L_2a); Tiered Reachability [191] gives 26% L1-reachable structural ceiling; source Levin & Resnik 2026 + Lyons/Pio-Lopez/Levin 2026; checks CLC_1+ORBIT/RADIUS/CANCER/CEIL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "193_qa_levin_cognitive_lightcone_cert",
+     "qa_levin_cognitive_lightcone_cert_v1", True),
+    (194, "QA Cognition Space Morphospace Cert family",
+     _validate_cognition_space_morphospace_cert_family,
+     "Sole/Seoane et al. qualitative morphospace realized as QA exact discrete morphospace; three clusters (basal/neural/human-AI) = three orbits; voids algebraically necessary (missing divisors {2,3,4,6,12}); agency = |orbit|/81; constructive enumerable cognition space; source Sole et al. arXiv:2601.12837; checks CSM_1+CLUSTERS/VOIDS/AGENCY/ENUM/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "194_qa_cognition_space_morphospace_cert",
+     "qa_cognition_space_morphospace_cert_v1", True),
+    (195, "QA Pezzulo Levin Bootstrap Cert family",
+     _validate_pezzulo_levin_bootstrap_cert_family,
+     "Pezzulo & Levin 7-stage bootstrapping pipeline mapped to QA architecture levels (Chemistry=A1 through Creativity=L_3 pi(9)=24); intelligence ratchet = Pisano FP [192]; 5 design principles map to QA axioms (autonomy=A1, self-assembly=orbit emergence, rebuilding=T1, constraints=S1+S2, signaling=resonance); source Pezzulo & Levin arXiv:2602.08079; checks PLB_1+STAGES/RATCHET/PRINCIPLES/PIPELINE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "195_qa_pezzulo_levin_bootstrap_cert",
+     "qa_pezzulo_levin_bootstrap_cert_v1", True),
+    (196, "QA See Capture Convergence Cert family",
+     _validate_see_capture_convergence_cert_family,
+     "T.J.J. See capture theory (1910) mapped to QA orbit convergence; free body=arbitrary (b,e); resisting medium=modular reduction; eccentricity decay=transient steps; stable capture=orbit membership; S_9: cosmos=72, satellite=8, singularity=1, all tau=0 (instant capture); source See 'Capture Theory' 1910; checks SCC_1+CONV/MEAN/MAX/DIST/MED/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "196_qa_see_capture_convergence_cert",
+     "qa_see_capture_convergence_cert_v1", True),
+    (197, "QA See Longitudinal Transverse Cert family",
+     _validate_see_longitudinal_transverse_cert_family,
+     "T.J.J. See wave duality (1917) mapped to QA generator/observer duality; longitudinal=T-operator (discrete causal), transverse=observer projection (continuous measurement); Theorem NT = mode orthogonality; complementary to [153] Keely triune (3-fold within longitudinal); source See 'Electrodynamic Wave-Theory' 1917; checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "197_qa_see_longitudinal_transverse_cert",
+     "qa_see_longitudinal_transverse_cert_v1", True),
+    (201, "QA Snell Manuscript Cert family",
+     _validate_snell_manuscript_cert_family,
+     "Snell Manuscript (Keely, 1934) 7 structural claims mapped to QA: 7x3=21 hierarchy, frequency scaling by 3/9, Trexar Ag/Au/Pt={3,6,9} orbit encoding, mass-as-difference=f-value, polarity inversion 2/3 threshold, triple dissociation=orbit descent, rotation 3:9=cosmos/satellite ratio. Checks SNM_1+21/FREQ/SCALE/TREX/FVAL/POL/DISS/ROT/CHORD/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "201_qa_snell_manuscript_cert",
+     "qa_snell_manuscript_cert_v1", True),
+    (202, "QA Hebrew Mod-9 Identity Cert family",
+     _validate_hebrew_mod9_identity_cert_family,
+     "Hebrew gematria Aiq Bekar / pythmen = QA A1 mod-9 identity. Three enneads (27=3x9), digital root homomorphism (Izmirli 2014), Sefer Yetzirah 4!=24, Skinner 9^4=6561 kernel, 9->24 bridge, Pythagorean transmission (Iamblichus), base-9 hypothesis (Kreinovich 2018). Checks HM9_1+AIQ/DR/ENNEAD/SY24/SKIN/BRIDGE/NUM/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "202_qa_hebrew_mod9_identity_cert",
+     "qa_hebrew_mod9_identity_cert_v1", True),
+    (203, "QA Sefer Yetzirah Combinatorics Cert family",
+     _validate_sefer_yetzirah_combinatorics_cert_family,
+     "Sefer Yetzirah (Book of Formation, c. 2nd-6th century CE) combinatorial structures: 231 gates = C(22,2) = K_22 (earliest binomial coefficient), n! for n=2..7 (earliest factorial), 3-7-12 letter partition, 32 paths = 2^5, oscillating circle, Pythagorean transmission (Iamblichus/Carmel), tzeruf permutation groups. Checks SYC_1+GATES/FACT/PART/PATHS/NUM/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "203_qa_sefer_yetzirah_combinatorics_cert",
+     "qa_sefer_yetzirah_combinatorics_cert_v1", True),
+    (204, "QA Skinner Hebrew Metrology Cert family",
+     _validate_skinner_hebrew_metrology_cert_family,
+     "Skinner 'Source of Measures' (1875) 7 verified metrological claims: Parker kernel 6561=9^4, Garden-Eden=24 (digital roots), solar day 5184=72^2 (Cosmos pairs), Adam/Woman dr=9, factor 6 bridge 9->24, Metius dr-closure dr(113)+dr(355)=9, T2 compliance. 3 qualified: El=31 subgroup, palindrome trivial, Parker pi mediocre. Checks SKM_1+PARK/EDEN/SOLAR/ADAM/BRIDGE/MET/NUM/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "204_qa_skinner_hebrew_metrology_cert",
+     "qa_skinner_hebrew_metrology_cert_v1", True),
+    (205, "QA Grid Cell RNS Cert family",
+     _validate_grid_cell_rns_cert_family,
+     "Grid cell residue number system (Fiete 2008, Wei 2015, Vago 2018, Constantinescu 2016) = QA modular arithmetic: RNS isomorphism, CRT reconstruction, 24/9 within 2% of optimal e, LCM(9,24)=72=Cosmos, phi optimal for two-module, carry-free, abstract domains, toroidal state space, hex27 encoding. Checks GCR_1+RATIO/LCM/PHI6/HEX/NUM/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "205_qa_grid_cell_rns_cert",
+     "qa_grid_cell_rns_cert_v1", True),
+    (206, "QA HERA Orchestration Evolution Cert family",
+     _validate_hera_orchestration_evolution_cert_family,
+     "HERA multi-agent orchestration (Li & Ramakrishnan VT 2026) = QA orbit dynamics: RoPE = Bateson [191] L1/L2a filtration, 4-phase topology = orbit descent (never Singularity), entropy plateau = Satellite convergence, sparse exploration = orbit discovery, Theorem NT compliance. 38.69% over SOTA. Checks HOE_1+ROPE/PHASE/ENT/PERF/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "206_qa_hera_orchestration_evolution_cert",
+     "qa_hera_orchestration_evolution_cert_v1", True),
 ]
 
 

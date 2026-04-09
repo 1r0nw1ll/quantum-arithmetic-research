@@ -1,0 +1,46 @@
+{
+  "schema_version": "QA_SEE_LONGITUDINAL_TRANSVERSE_CERT.v1",
+  "certificate_id": "qa.cert.see_longitudinal_transverse.fail.no_orth.v1",
+  "cert_type": "qa_see_longitudinal_transverse_cert",
+  "title": "See Longitudinal/Transverse FAIL: missing orthogonality claim",
+  "created_utc": "2026-04-07T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: provides mode mappings but omits the orthogonality claim and Theorem NT link. Validator must catch both.",
+
+  "source_attribution": "See, 'Electrodynamic Wave-Theory' (1917). Intentionally incomplete fixture.",
+
+  "longitudinal_mode": {
+    "see_description": "Compression waves producing gravity",
+    "qa_mapping": "T-operator generator action, discrete causal dynamics"
+  },
+
+  "transverse_mode": {
+    "see_description": "Shear waves producing light",
+    "qa_mapping": "Observer projection, continuous measurement"
+  },
+
+  "orthogonality": {
+    "note": "Missing required fields"
+  },
+
+  "theorem_nt_link": {
+    "note": "Missing required fields"
+  },
+
+  "keely_complementarity": {
+    "keely_scope": "Triune (3 orbit types)",
+    "see_scope": "Duality (2 access modes)",
+    "relation": "Complementary"
+  },
+
+  "witnesses": [
+    {"mode": "longitudinal", "example": "T-operator", "note": "single witness only"}
+  ],
+
+  "fail_ledger": [
+    "SLT_ORTH: orthogonality missing see_claim/qa_claim/physical_basis",
+    "SLT_NT: theorem_nt_link missing statement",
+    "SLT_WITNESS: only 1 mode witnessed, need both longitudinal and transverse"
+  ],
+  "result": "FAIL"
+}

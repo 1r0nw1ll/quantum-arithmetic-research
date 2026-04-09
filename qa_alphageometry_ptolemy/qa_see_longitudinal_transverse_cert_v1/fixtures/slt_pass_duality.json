@@ -1,0 +1,93 @@
+{
+  "schema_version": "QA_SEE_LONGITUDINAL_TRANSVERSE_CERT.v1",
+  "certificate_id": "qa.cert.see_longitudinal_transverse.pass.duality.v1",
+  "cert_type": "qa_see_longitudinal_transverse_cert",
+  "title": "See Longitudinal/Transverse PASS: wave duality maps to QA generator/observer duality",
+  "created_utc": "2026-04-07T00:00:00Z",
+
+  "_fixture_purpose": "Maps T.J.J. See's wave duality (longitudinal=gravity, transverse=light, same medium, orthogonal modes) to QA's generator/observer duality (T-operator=discrete causal, projection=continuous measurement, same tuple space, orthogonal access modes). Theorem NT is the special case: modes cannot mix.",
+
+  "source_attribution": "T.J.J. See, 'Electrodynamic Wave-Theory of Physical Forces' Vols I-II (1917); 'New Theory of the Aether', Astronomische Nachrichten 211-226 (1920-1926). Tesla noted support. QA mapping: Will Dale + Claude, 2026-04-07.",
+
+  "see_wave_theory": {
+    "statement": "The aether medium supports two orthogonal wave modes: longitudinal (compression) waves that produce gravity, magnetism, and electrostatic fields; and transverse (shear) waves that produce light, heat, and radio. Both propagate through the same medium (aether/aetherons) but cannot convert into each other.",
+    "key_distinction": "Longitudinal = along propagation direction = force/attraction. Transverse = perpendicular to propagation = radiation/measurement.",
+    "medium": "Aetherons — particulate aether medium, elastic, supports both compression and shear."
+  },
+
+  "longitudinal_mode": {
+    "see_description": "Compression/longitudinal waves in the aether. Responsible for gravity, magnetism, electrostatic attraction. Travel along the line connecting two bodies. Produce forces (push/pull).",
+    "qa_mapping": "Generator action: the T-operator acts ALONG the orbit path, driving discrete state transitions (b,e) -> (e, (b+e-1)%m+1). This is the causal, force-producing mode. It determines dynamics, orbit membership, and state evolution. Entirely integer, entirely discrete.",
+    "properties": {
+      "direction": "Along the orbit trajectory (sequential state transitions)",
+      "nature": "Discrete, integer, causal",
+      "qa_primitives": ["T-operator", "qa_step", "orbit generation", "v_3(f) classification"],
+      "produces": "State evolution, orbit structure, family membership"
+    }
+  },
+
+  "transverse_mode": {
+    "see_description": "Shear/transverse waves in the aether. Responsible for light, heat, radio. Oscillate perpendicular to propagation direction. Carry information but do not produce forces.",
+    "qa_mapping": "Observer projection: continuous functions that MEASURE QA states perpendicular to the orbit dynamics. E8 alignment, cosine similarity, spectral analysis, correlation — all are transverse to the discrete generator action. They carry information about QA state but do not produce state transitions. They are the measurement/observation layer.",
+    "properties": {
+      "direction": "Perpendicular to orbit dynamics (state -> observable)",
+      "nature": "Continuous, float, non-causal",
+      "qa_primitives": ["E8 cosine similarity", "HI = E8 * exp(-0.1*loss)", "spectral decomposition", "correlation"],
+      "produces": "Measurements, observables, plots, human-readable outputs"
+    }
+  },
+
+  "orthogonality": {
+    "see_claim": "Longitudinal and transverse modes in the same elastic medium are orthogonal eigenmodes. A pure compression wave cannot generate shear, and vice versa. This is structural, not conventional.",
+    "qa_claim": "Generator dynamics (T-operator, integer arithmetic) and observer projections (continuous functions, float outputs) operate on the same tuple space but in orthogonal directions. Generator output cannot be observer input, and observer output cannot be generator input.",
+    "physical_basis": "In linear elasticity, the stress tensor decomposes into dilatational (longitudinal) and deviatoric (transverse) components. These are eigenspaces of the wave operator with different propagation speeds (P-waves vs S-waves in seismology). The decomposition is exact and complete — every disturbance resolves uniquely into the two modes. QA's generator/observer decomposition has the same algebraic structure: every interaction with the tuple space is either a discrete state transition (generator) or a continuous measurement (observer), and the two never compose.",
+    "seismological_analogue": "P-waves (compression, faster, longitudinal) = QA generator action. S-waves (shear, slower, transverse) = QA observer projection. S-waves cannot travel through liquid (no shear modulus) = observer projections have no causal power in the discrete layer."
+  },
+
+  "theorem_nt_link": {
+    "statement": "Theorem NT (Observer Projection Firewall): Continuous functions are observer projections ONLY. They NEVER enter the QA discrete layer as causal inputs. QA dynamics are discrete; the boundary is crossed exactly twice (input -> observer layer, QA layer -> output).",
+    "see_grounding": "Theorem NT is the QA expression of mode orthogonality. See's insight that longitudinal and transverse waves in the same medium cannot mix provides the physical intuition: the 'firewall' is not an arbitrary rule but a consequence of eigenspace orthogonality. Mixing modes would create a wave that is neither compression nor shear — physically impossible in a linear medium.",
+    "implication": "This elevates Theorem NT from a design constraint to a structural theorem: in any system with discrete generators and continuous observers operating on the same state space, the two modes are necessarily orthogonal if the generator algebra is closed under composition."
+  },
+
+  "keely_complementarity": {
+    "keely_scope": "Keely's triune (enharmonic/harmonic/dominant) classifies structure WITHIN the generator (longitudinal) mode: cosmos=enharmonic (full propagation), satellite=harmonic (bounded oscillation), singularity=dominant (fixed point). Three orbit types = three vibrational aspects. [153] QA_KEELY_TRIUNE_CERT.",
+    "see_scope": "See's duality classifies structure BETWEEN the two access modes: generator vs observer. Binary decomposition orthogonal to Keely's ternary.",
+    "relation": "Complementary, not redundant. Keely's triune lives entirely within See's longitudinal mode. See's transverse mode (observer projections) is outside Keely's framework — Keely had no concept of 'measurement as a separate mode.' Together: See gives the 2-mode architecture, Keely gives the 3-fold internal structure of the causal mode.",
+    "combined_structure": "2 modes (See) x 3 orbit families (Keely) = 6 fundamental channels of interaction with QA state space. The 6 elements correspond to: generator-cosmos, generator-satellite, generator-singularity, observer-cosmos, observer-satellite, observer-singularity."
+  },
+
+  "witnesses": [
+    {
+      "mode": "longitudinal",
+      "example": "T-operator step: (1,1) -> (1,2) -> (2,3) -> ... (24-cycle cosmos orbit)",
+      "see_analogue": "Gravitational force propagating between two bodies along the line connecting them",
+      "properties": "Discrete, integer, causal, orbit-generating",
+      "note": "The T-operator IS the longitudinal wave: it propagates state information along the orbit path sequentially, producing 'force' (state change) at each step."
+    },
+    {
+      "mode": "transverse",
+      "example": "E8 alignment: project 4D tuple (b,e,d,a) to 8D, compute cosine similarity with 240 E8 root vectors",
+      "see_analogue": "Light radiating from a body perpendicular to the gravitational field line — carries information about the body but exerts no gravitational force",
+      "properties": "Continuous, float, non-causal, measurement-only",
+      "note": "E8 alignment MEASURES the QA state but does not change it. The cosine similarity is a 'transverse' observable — it reads the state perpendicular to the generator direction."
+    },
+    {
+      "mode": "longitudinal",
+      "example": "v_3(f(b,e)) classification: f=b*b+b*e-e*e, v_3 = 3-adic valuation. Returns orbit family (cosmos/satellite/singularity).",
+      "see_analogue": "Gravitational potential — determined by the longitudinal (radial) structure, not by transverse radiation",
+      "properties": "Discrete, integer, diagnostic (not observer projection because it uses only integer arithmetic)",
+      "note": "v_3(f) is a longitudinal diagnostic: it reads the generator algebra directly, without any continuous projection. Compare to E8 alignment which IS a transverse measurement."
+    }
+  ],
+
+  "cross_references": [
+    {"family": 153, "name": "QA Keely Triune", "relation": "Triune = 3-fold structure within the longitudinal mode; See = 2-mode architecture encompassing it"},
+    {"family": 155, "name": "QA Bearden Phase Conjugate", "relation": "Bearden scalar waves = See's longitudinal compression waves; phase conjugation = time-reversed generator action"},
+    {"family": 191, "name": "QA Bateson Learning Levels", "relation": "Bateson's levels operate within the longitudinal (generator) mode; observer projections are always Level-0 (no state change)"},
+    {"family": 196, "name": "QA See Capture Convergence", "relation": "Companion cert: capture dynamics within the longitudinal mode"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

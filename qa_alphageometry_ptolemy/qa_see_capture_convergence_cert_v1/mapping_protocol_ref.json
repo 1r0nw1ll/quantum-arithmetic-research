@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA See Capture Convergence Cert family [196]: maps T.J.J. See's capture theory of cosmical evolution (1909-1910) to QA transient-to-periodic orbit convergence. Free body entering gravitational field = arbitrary (b,e) entering mod-m arithmetic. Resisting medium = modular reduction. Eccentricity decay = transient steps before orbit entry. Stable capture = orbit membership (cosmos/satellite/singularity). Convergence time computed for all 81 S_9 initial conditions; mean/max/distribution by orbit family verified. Source: See, 'Researches on the Evolution of the Stellar Systems' Vol II (1910). Checks SCC_1+CONV/MEAN/MAX/DIST/MED/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

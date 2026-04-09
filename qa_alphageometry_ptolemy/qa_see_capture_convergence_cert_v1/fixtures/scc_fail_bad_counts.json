@@ -1,0 +1,51 @@
+{
+  "schema_version": "QA_SEE_CAPTURE_CONVERGENCE_CERT.v1",
+  "certificate_id": "qa.cert.see_capture_convergence.fail.bad_counts.v1",
+  "cert_type": "qa_see_capture_convergence_cert",
+  "title": "See Capture Convergence FAIL: incorrect orbit family distribution",
+  "created_utc": "2026-04-07T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: claims wrong orbit distribution for S_9 (cosmos=70 instead of 72). Validator must catch the structural mismatch.",
+
+  "source_attribution": "See, 'Capture Theory' (1910). Intentionally wrong fixture.",
+
+  "convergence": {
+    "modulus": 9,
+    "total_states": 81,
+    "mean_tau": 0,
+    "max_tau": 0,
+    "family_distribution": {
+      "cosmos": {
+        "count": 70,
+        "num_orbits": 3,
+        "cycle_length": 24,
+        "tau_internal": 0
+      },
+      "satellite": {
+        "count": 10,
+        "num_orbits": 1,
+        "cycle_length": 8,
+        "tau_internal": 0
+      },
+      "singularity": {
+        "count": 1,
+        "num_orbits": 1,
+        "cycle_length": 1,
+        "tau_internal": 0
+      }
+    }
+  },
+
+  "resisting_medium_mapping": {
+    "see_concept": "Physical resisting medium",
+    "qa_concept": "Modular reduction"
+  },
+
+  "witnesses": [
+    {"orbit_family": "cosmos", "state": [1, 1], "tau": 0, "orbit_length": 24, "note": "cosmos witness"},
+    {"orbit_family": "satellite", "state": [3, 3], "tau": 0, "orbit_length": 8, "note": "satellite witness"}
+  ],
+
+  "fail_ledger": ["SCC_DIST: cosmos count 70 != expected 72", "SCC_WITNESS: only 2 families witnessed, need 3"],
+  "result": "FAIL"
+}

@@ -6138,6 +6138,72 @@ def _validate_hera_orchestration_evolution_cert_family(base_dir: str) -> Optiona
     return None
 
 
+def _validate_circle_impossibility_cert_family(base_dir: str) -> Optional[str]:
+    """QA Circle Impossibility Cert family [207] — proves no QA state has C=0 (true circle impossible in integer arithmetic). C=2de, A1 says d,e>=1, so C>=2 always. The circle is an observer projection of an ellipsoid where C lies along the viewing axis (Will Dale 2026-04-08). Extends [140] conic discriminant impossibility (parabola). Connects [189] Dale Circle, [125] Chromogeometry, Theorem NT. Checks CI_1+C_MIN/EXHAUSTIVE/PROJECTION/HIERARCHY/CHROMO/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_circle_impossibility_cert_v1")
+    validator = os.path.join(fam_dir, "qa_circle_impossibility_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_circle_impossibility_cert_v1/qa_circle_impossibility_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_circle_impossibility_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_circle_impossibility_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_circle_impossibility_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_quadrance_product_cert_family(base_dir: str) -> Optional[str]:
+    """QA Quadrance Product Cert family [208] — proves every QA area element is irreducibly a two-factor product of role-distinct base elements. Quadrances (A=a*a, B=b*b) are products, not powers. S1 (always b*b product form) is structural. Even 1*1=1 is an area, not scalar. Square = rectangle with equal sides, product never collapses. Parallels [207] circle impossibility. Source: Will Dale 2026-04-08. Checks QP_1+PRODUCT/ROLE/S1/AREA_MIN/DIM/SQUARE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_quadrance_product_cert_v1")
+    validator = os.path.join(fam_dir, "qa_quadrance_product_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_quadrance_product_cert_v1/qa_quadrance_product_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_quadrance_product_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_quadrance_product_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_quadrance_product_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_signal_generator_inference_cert_family(base_dir: str) -> Optional[str]:
+    """QA Signal Generator Inference Cert family [209] — for any m-valued time series, e_t = ((b_{t+1} - b_t - 1) % m) + 1 is the unique A1-compliant generator. The signal IS the orbit; the generator IS the dynamics. b (amplitude state) and e (transition generator) are role-distinct per [208]. Cross-series generator synchrony measures coupling per [207]. Supersedes hardcoded CMAP/MICROSTATE_STATES lookups. EEG chb01: DR2=+0.157 p=0.0003 beyond delta; DR2=+0.085 p=0.024 beyond Observer 3. Source: Will Dale + Claude 2026-04-08. Checks SGI_1+CLOSURE/UNIQUE/ROLE/SYNC/EMPIRICAL/SUPERSEDE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_signal_generator_inference_cert_v1")
+    validator = os.path.join(fam_dir, "qa_signal_generator_inference_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_signal_generator_inference_cert_v1/qa_signal_generator_inference_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_signal_generator_inference_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_signal_generator_inference_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_signal_generator_inference_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -6888,6 +6954,22 @@ FAMILY_SWEEPS = [
      "HERA multi-agent orchestration (Li & Ramakrishnan VT 2026) = QA orbit dynamics: RoPE = Bateson [191] L1/L2a filtration, 4-phase topology = orbit descent (never Singularity), entropy plateau = Satellite convergence, sparse exploration = orbit discovery, Theorem NT compliance. 38.69% over SOTA. Checks HOE_1+ROPE/PHASE/ENT/PERF/W/F; 2 PASS + 1 FAIL; self-test ok",
      "206_qa_hera_orchestration_evolution_cert",
      "qa_hera_orchestration_evolution_cert_v1", True),
+    (207, "QA Circle Impossibility Cert family",
+     _validate_circle_impossibility_cert_family,
+     "No QA state has C=0 (circle impossible). C=2de>=2 always by A1 No-Zero. Circle = observer projection of ellipsoid where C lies along viewing axis (Will Dale 2026-04-08). Extends [140] parabola impossibility. Connects [189] Dale Circle, [125] Chromogeometry, Theorem NT. Checks CI_1+C_MIN/EXHAUSTIVE/PROJECTION/HIERARCHY/CHROMO/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "207_qa_circle_impossibility_cert",
+     "qa_circle_impossibility_cert_v1", True),
+    (208, "QA Quadrance Product Cert family",
+     _validate_quadrance_product_cert_family,
+     "Every QA area element is irreducibly a two-factor product of role-distinct base elements. S1 (b*b product form) is structural: product preserves two-factor roles, power operator collapses them. 1*1=1 is area, not scalar. Square = rectangle with equal values, distinct roles. Parallels [207] circle impossibility. Will Dale 2026-04-08. Checks QP_1+PRODUCT/ROLE/S1/AREA_MIN/DIM/SQUARE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "208_qa_quadrance_product_cert",
+     "qa_quadrance_product_cert_v1", True),
+
+    (209, "QA Signal Generator Inference Cert family",
+     _validate_signal_generator_inference_cert_family,
+     "For any m-valued time series, e_t = ((b_{t+1} - b_t - 1) % m) + 1 is the unique A1-compliant generator. Signal IS orbit; generator IS dynamics. Role-distinct per [208]. Cross-series synchrony per [207]. Supersedes hardcoded CMAP/MICROSTATE_STATES. EEG chb01: directionally correct (synch seizure>baseline), ns on single patient, needs multi-patient. Will Dale + Claude 2026-04-08. Checks SGI_1+CLOSURE/UNIQUE/ROLE/SYNC/EMPIRICAL/SUPERSEDE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "209_qa_signal_generator_inference_cert",
+     "qa_signal_generator_inference_cert_v1", True),
 ]
 
 

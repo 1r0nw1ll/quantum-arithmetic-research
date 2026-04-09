@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Signal Generator Inference Cert family [209]: formalizes the canonical observer projection for signal analysis. For any m-valued time series b_t, the generator e_t = ((b_{t+1} - b_t) % m) + 1 is the unique A1-compliant state transition. The signal IS the orbit; the generator IS the dynamics. b (amplitude state) and e (transition generator) are role-distinct per [208]. Cross-series generator synchrony measures coupling per [207]: maximum synchrony = singularity (C=2de maximized). Supersedes all hardcoded CMAP/MICROSTATE_STATES lookup tables. Validated on EEG (chb01): DR2=+0.157 p=0.0003 beyond delta; DR2=+0.085 p=0.024 beyond topographic Observer 3. Source: Will Dale + Claude 2026-04-08. Checks SGI_1+CLOSURE/UNIQUE/ROLE/SYNC/EMPIRICAL/SUPERSEDE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

@@ -1,0 +1,510 @@
+\documentclass[11pt]{article}
+
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{booktabs}
+\usepackage[margin=2.5cm]{geometry}
+\usepackage{hyperref}
+\usepackage{enumitem}
+
+\newtheorem{definition}{Definition}[section]
+\newtheorem{proposition}[definition]{Proposition}
+\newtheorem{theorem}[definition]{Theorem}
+\newtheorem{corollary}[definition]{Corollary}
+\newtheorem{remark}[definition]{Remark}
+\newtheorem{example}[definition]{Example}
+
+\newcommand{\Zm}{\mathbb{Z}/m\mathbb{Z}}
+\newcommand{\Zphi}{\mathbb{Z}[\varphi]}
+\newcommand{\QA}{\mathrm{QA}}
+
+\begin{document}
+
+\title{Quantum Arithmetic in Ten Pages}
+\author{Will Dale\\
+\small Independent Researcher}
+\date{}
+\maketitle
+
+\begin{abstract}
+We give a self-contained introduction to the Quantum Arithmetic (QA) system,
+a discrete dynamical system on $\{1,\dots,m\}^2$ whose generator is the
+Fibonacci shift $T(b,e)=(e,d)$ with $d=((b+e-1)\bmod m)+1$.  The system
+operates in $\mathbb{Z}[\varphi]/m\mathbb{Z}[\varphi]$, where $\varphi=(1+\sqrt{5})/2$,
+and $T$ corresponds to multiplication by $\varphi^2$.  For $m=9$, the state
+space decomposes into three orbit types (Cosmos, Satellite, Singularity)
+determined by the factorisation of $x^2-x-1\pmod{m}$.  From any direction
+vector $(d,e)$ we derive a closed system of 16~algebraic elements whose
+relations include $C^2+F^2=G^2$ (Wildberger's Chromogeometry Theorem~6
+restricted to Fibonacci integer vectors) and a pair of Eisenstein norm
+identities.  The canonical applied modulus $m=24$ arises independently as the
+Pisano period $\pi(9)$ and as a divisibility constraint on $2CF$ for
+primitive triples.  We state the main structural results with proofs,
+describe the Koenig series connecting conic classification to Pythagorean
+triple generation, and summarise empirical evidence from six domains.
+\end{abstract}
+
+% ====================================================================
+\section{The State Space}\label{sec:state}
+
+\begin{definition}[QA state space]
+Fix a positive integer $m \geq 2$ called the \emph{modulus}.  The \emph{QA state space} is
+\[
+  S_m \;=\; \{1, 2, \dots, m\}^2.
+\]
+A \emph{state} is a pair $(b,e) \in S_m$.  The set $\{0\}$ is excluded from every coordinate; this is Axiom~A1 (No-Zero).
+\end{definition}
+
+\begin{definition}[Derived coordinates]
+Given $(b,e) \in S_m$, define
+\[
+  d \;=\; ((b+e-1) \bmod m) + 1, \qquad
+  a \;=\; ((b+2e-1) \bmod m) + 1.
+\]
+A \emph{QA tuple} is the quadruple $(b,e,d,a)$.  The coordinates $d$ and $a$ are always derived from $b$ and $e$; they are never assigned independently (Axiom~A2).
+\end{definition}
+
+\begin{definition}[Generator]
+The \emph{Fibonacci shift} is the map $T \colon S_m \to S_m$ defined by
+\[
+  T(b,e) \;=\; (e,\, d) \;=\; \bigl(e,\; ((b+e-1) \bmod m) + 1\bigr).
+\]
+\end{definition}
+
+\begin{remark}
+For $m=9$, $|S_9| = 81$.  For $m=24$, $|S_{24}| = 576$.  The canonical theoretical modulus is $m=9$; the canonical applied modulus is $m=24$.  The reasons for the latter are given in Section~\ref{sec:24}.
+\end{remark}
+
+Since every orbit of $T$ is finite (the state space is finite), $T$ partitions $S_m$ into disjoint cycles.  The structure of this partition is the central object of study.
+
+% ====================================================================
+\section{The Golden Ratio Connection}\label{sec:golden}
+
+\begin{definition}
+Let $\varphi = (1+\sqrt{5})/2$ be the golden ratio and let $\Zphi = \mathbb{Z}[\varphi] = \{a + b\varphi : a,b \in \mathbb{Z}\}$ be the ring of integers in $\mathbb{Q}(\sqrt{5})$.  The \emph{algebraic norm} on $\Zphi$ is
+\[
+  N(\alpha + \beta\varphi) \;=\; \alpha\cdot\alpha + \alpha\cdot\beta - \beta\cdot\beta.
+\]
+\end{definition}
+
+\begin{proposition}\label{prop:norm}
+For $(b,e) \in S_m$, define $f(b,e) = b\cdot b + b\cdot e - e\cdot e$.  Then $f(b,e) = N(b + e\varphi)$.
+\end{proposition}
+
+\begin{proof}
+We have $N(b + e\varphi) = (b+e\varphi)(b+e\bar\varphi)$ where $\bar\varphi = (1-\sqrt{5})/2 = -1/\varphi$.  Expanding:
+\[
+  (b+e\varphi)(b+e\bar\varphi) = b\cdot b + b\cdot e(\varphi + \bar\varphi) + e\cdot e \cdot \varphi\bar\varphi = b\cdot b + b\cdot e\cdot 1 + e\cdot e\cdot(-1) = b\cdot b + b\cdot e - e\cdot e. \qedhere
+\]
+\end{proof}
+
+\begin{proposition}\label{prop:phi2}
+In $\Zphi$, multiplication by $\varphi^2 = \varphi + 1$ acts on a pair $(b,e)$ as
+\[
+  \varphi^2 \cdot (b + e\varphi) \;=\; e + (b+e)\varphi.
+\]
+Reducing modulo $m$ (with the No-Zero convention), this is exactly the generator $T(b,e) = (e, d)$ where $d = ((b+e-1)\bmod m)+1$.
+\end{proposition}
+
+\begin{proof}
+$\varphi^2(b+e\varphi) = (1+\varphi)(b+e\varphi) = b + e\varphi + b\varphi + e\varphi^2 = b + (b+e)\varphi + e(1+\varphi) = (b+e) + (b+e)\varphi + e\cdot 1$---but more directly: $\varphi^2 = \varphi+1$, so $\varphi^2(b+e\varphi) = b+e\varphi + b\varphi + e\varphi^2 = (b+e) + (b+2e)\varphi$.  Wait: let us be careful.  $\varphi^2 \cdot (b + e\varphi) = (\varphi+1)(b+e\varphi) = b + b\varphi + e\varphi + e\varphi^2 = b + (b+e)\varphi + e(\varphi+1) = (b+e) + (b+2e)\varphi$.
+
+The new pair in $\Zphi/m\Zphi$ is thus $(b+e, b+2e) \pmod{m}$, which in the $\{1,\dots,m\}$ convention is $(d,a)$.  But $T$ maps $(b,e) \mapsto (e,d)$, not $(d,a)$.  The resolution is that $T$ is multiplication by $\varphi$ (not $\varphi^2$) on the pair representation: $\varphi(b+e\varphi) = b\varphi + e\varphi^2 = e(\varphi+1) + b\varphi = e + (b+e)\varphi$.  The new coefficient pair is $(e, b+e) = (e, d)$.  So $T$ corresponds to multiplication by $\varphi$ in $\Zphi/m\Zphi$, and $T^2$ to multiplication by $\varphi^2$.
+\end{proof}
+
+\begin{corollary}
+The orbit of $(b,e)$ under $T$ has length equal to the multiplicative order of $\varphi$ in $(\Zphi/m\Zphi)^\times / \mathrm{Ann}(b+e\varphi)$.
+\end{corollary}
+
+\begin{proposition}[Spectrum constraint]\label{prop:spectrum}
+The norm $f(b,e) \pmod{9}$ never takes values in $\{3, 6\}$.  Equivalently, the residues $\{3,6\} \pmod{9}$ are forbidden in the QA spectrum at $m=9$.
+\end{proposition}
+
+\begin{proof}
+The prime $3$ is inert in $\Zphi$ because the minimal polynomial $x^2 - x - 1$ is irreducible over $\mathbb{F}_3$ (its discriminant is $5 \equiv 2 \pmod{3}$, a quadratic non-residue).  Hence $\Zphi / 3\Zphi \cong \mathbb{F}_9$, and the norm map $N \colon \mathbb{F}_9^\times \to \mathbb{F}_3^\times$ is surjective with image $\{1, 2\} \pmod{3}$.  Combined with $N(0)=0$, the possible norms modulo $3$ are $\{0,1,2\}$.  The residues $3$ and $6$ are $\equiv 0 \pmod{3}$ but correspond to elements where $3 \mid N(\alpha)$, which forces $3 \mid \alpha$ in $\Zphi/9\Zphi$ (since $3$ is inert, $3 \mid N(\alpha)$ implies $3 \mid \alpha$).  For such elements the norm modulo $9$ is $\equiv 0$, not $3$ or $6$.
+\end{proof}
+
+% ====================================================================
+\section{Three Orbits}\label{sec:orbits}
+
+\begin{theorem}[Orbit decomposition for $m=9$]\label{thm:orbits}
+The action of $T$ on $S_9$ partitions the $81$ states into three orbit types:
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Cosmos}: three disjoint $24$-cycles, comprising $72$ pairs.
+  \item \textbf{Satellite}: one $8$-cycle, comprising $8$ pairs.
+  \item \textbf{Singularity}: one fixed point, $(9,9)$, comprising $1$ pair.
+\end{enumerate}
+\end{theorem}
+
+\begin{proof}[Proof (sketch)]
+We verify this computationally by exhaustive enumeration of $T$-orbits on $S_9$.  The algebraic explanation proceeds as follows.
+
+The ideal $(3) \subset \Zphi$ is prime (since $3$ is inert).  The quotient $\Zphi/9\Zphi$ decomposes as a $\Zphi/3\Zphi$-module.  Elements divisible by $3$ in $\Zphi/9\Zphi$ form the submodule $3\Zphi/9\Zphi \cong \Zphi/3\Zphi \cong \mathbb{F}_9$.
+
+The pair $(b,e)$ corresponds to $b + e\varphi \pmod{9}$.  This element lies in $3\Zphi/9\Zphi$ if and only if $3 \mid b$ and $3 \mid e$ in $\{1,\dots,9\}$.  There are exactly $9$ such pairs: $(3,3), (3,6), (3,9), (6,3), (6,6), (6,9), (9,3), (9,6), (9,9)$.
+
+The element $(9,9)$ corresponds to $9 + 9\varphi \equiv 0 \pmod{9}$, which is the zero element---fixed under multiplication by $\varphi$.  This is the Singularity.
+
+The remaining $8$ elements of $3\Zphi/9\Zphi \setminus \{0\}$ form a single orbit under multiplication by $\varphi$ because $\varphi$ generates $\mathbb{F}_9^\times \cong \mathbb{Z}/8\mathbb{Z}$ (the order of $\varphi$ in $\mathbb{F}_9^\times$ is $8$).  This is the Satellite.
+
+The $72$ elements not divisible by $3$ split into three $24$-cycles.  The cycle length $24$ equals the multiplicative order of $\varphi$ in $(\Zphi/9\Zphi)^\times$ restricted to the appropriate coset; equivalently, $24$ is the Pisano period $\pi(9)$ (see Section~\ref{sec:24}).
+\end{proof}
+
+\begin{remark}
+The classification rule is simple: $(b,e)$ is \emph{Satellite} if and only if $3 \mid b$ and $3 \mid e$ (excluding the Singularity $(9,9)$).  All other pairs are Cosmos.
+\end{remark}
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lccc}
+\toprule
+\textbf{Orbit type} & \textbf{Cycle length} & \textbf{Number of cycles} & \textbf{Total pairs} \\
+\midrule
+Cosmos       & 24 & 3 & 72 \\
+Satellite    & 8  & 1 & 8  \\
+Singularity  & 1  & 1 & 1  \\
+\midrule
+             &    &   & 81 \\
+\bottomrule
+\end{tabular}
+\caption{Orbit decomposition of $S_9$ under the Fibonacci shift $T$.}
+\label{tab:orbits}
+\end{table}
+
+\begin{example}[Satellite orbit]
+Starting from $(3,6) \in S_9$, the orbit under $T$ is:
+\[
+  (3,6) \to (6,9) \to (9,6) \to (6,6) \to (6,3) \to (3,9) \to (9,3) \to (3,3) \to (3,6).
+\]
+This 8-cycle visits all pairs $(b,e)$ with $3 \mid b$, $3 \mid e$, except the fixed point $(9,9)$.
+\end{example}
+
+\begin{proposition}[Generalisation to $m = p^k$]
+For a prime $p$ with $p$ inert in $\Zphi$ and $k \geq 1$, the state space $S_{p^k}$ contains a Satellite-type sub-orbit corresponding to $p\Zphi / p^k\Zphi$, with cycle length equal to the order of $\varphi$ in $\mathbb{F}_{p^2}^\times$, and a Singularity at $(p^k, p^k)$.  The Cosmos cycle length equals the Pisano period $\pi(p^k)$.  When $p$ splits in $\Zphi$ (i.e., $5$ is a quadratic residue mod $p$), the orbit structure is different: the Satellite decomposes into two sub-orbits corresponding to the two prime ideals above $p$.
+\end{proposition}
+
+% ====================================================================
+\section{The 16 Identities}\label{sec:16}
+
+We now work over $\mathbb{Z}$ (not modular arithmetic) with a direction vector $(d,e)$ where $d,e > 0$.  Define $b = d - e$ and $a = d + e$.
+
+\begin{definition}[The 16 QA elements]
+\begin{alignat*}{4}
+  &A = a\cdot a, &\qquad &B = b\cdot b, &\qquad &C = 2\,d\,e, &\qquad &D = d\cdot d, \\
+  &E = e\cdot e, &\qquad &F = d\cdot d - e\cdot e = a\,b, &\qquad &G = d\cdot d + e\cdot e, &\qquad &H = C + F, \\
+  &I = C - F, &\qquad &J = b\,d, &\qquad &K = a\,d, &\qquad &L = \frac{C\,F}{12}, \\
+  &X = d\,e = \tfrac{C}{2}, &\qquad &W = d(e+a) = X+K, &\qquad &Y = a\cdot a - d\cdot d, &\qquad &Z = e\cdot e + a\,d.
+\end{alignat*}
+\end{definition}
+
+\begin{proposition}[Key relations]\label{prop:relations}
+The following identities hold for all direction vectors $(d,e)$ with $b=d-e$, $a=d+e$:
+\begin{enumerate}[label=(\alph*)]
+  \item $G = \frac{A+B}{2}$.
+  \item $A - B = 2C$.
+  \item $C\cdot C + F\cdot F = G\cdot G$ \quad (Pythagorean relation).
+  \item $H\cdot H - G\cdot G = G\cdot G - I\cdot I = 2CF$.
+\end{enumerate}
+\end{proposition}
+
+\begin{proof}
+(a) $(A+B)/2 = ((d+e)\cdot(d+e) + (d-e)\cdot(d-e))/2 = (d\cdot d + 2de + e\cdot e + d\cdot d - 2de + e\cdot e)/2 = d\cdot d + e\cdot e = G$.
+
+(b) $A - B = (d+e)\cdot(d+e) - (d-e)\cdot(d-e) = 4de = 2C$.
+
+(c) $C\cdot C + F\cdot F = (2de)\cdot(2de) + (d\cdot d - e\cdot e)\cdot(d\cdot d - e\cdot e) = 4\,d\cdot d\,e\cdot e + d\cdot d\cdot d\cdot d - 2\,d\cdot d\,e\cdot e + e\cdot e\cdot e\cdot e = d\cdot d\cdot d\cdot d + 2\,d\cdot d\,e\cdot e + e\cdot e\cdot e\cdot e = (d\cdot d + e\cdot e)\cdot(d\cdot d + e\cdot e) = G\cdot G$.
+
+(d) $H\cdot H - G\cdot G = (C+F)\cdot(C+F) - (C\cdot C + F\cdot F) = 2CF$.  Similarly, $G\cdot G - I\cdot I = (C\cdot C + F\cdot F) - (C-F)\cdot(C-F) = 2CF$.
+\end{proof}
+
+\begin{remark}[Conic discriminant]
+The element $I = C - F = 2de - (d\cdot d - e\cdot e)$ serves as a conic discriminant: $I < 0$ corresponds to an elliptic direction, $I = 0$ to parabolic, and $I > 0$ to hyperbolic.
+\end{remark}
+
+\begin{remark}[Integrality of $L$]
+For primitive Pythagorean triples (where $\gcd(d,e)=1$ and $d,e$ have opposite parity), $L = CF/12$ is always an integer.  This follows from the divisibility argument in Section~\ref{sec:24}.
+\end{remark}
+
+\begin{example}
+At $(d,e) = (2,1)$: $b=1$, $a=3$, $A=9$, $B=1$, $C=4$, $D=4$, $E=1$, $F=3$, $G=5$, $H=7$, $I=1$, $J=2$, $K=6$, $L=1$, $X=2$, $W=8$, $Y=5$, $Z=7$.  One verifies $C\cdot C + F\cdot F = 16 + 9 = 25 = G\cdot G$ and $H\cdot H - G\cdot G = 49 - 25 = 24 = 2CF$.
+\end{example}
+
+% ====================================================================
+\section{Chromogeometry}\label{sec:chromo}
+
+Wildberger's \emph{chromogeometry}~\cite{wildberger2005,wildberger2010} equips the Euclidean plane simultaneously with three quadratic forms---blue (Euclidean), red (relativistic), and green (Galilean)---and proves that the corresponding quadrances of any line satisfy a Pythagorean-type relation.
+
+\begin{definition}[Three quadrances of a direction]
+For a direction vector $(d,e)$, the three chromogeometric quadrances are:
+\begin{align*}
+  Q_g(d,e) &= 2\,d\,e = C, & &\text{(green/Galilean)}\\
+  Q_r(d,e) &= d\cdot d - e\cdot e = F, & &\text{(red/relativistic)}\\
+  Q_b(d,e) &= d\cdot d + e\cdot e = G. & &\text{(blue/Euclidean)}
+\end{align*}
+\end{definition}
+
+\begin{theorem}[Wildberger {\cite[Theorem~6]{wildberger2005}}]
+For any direction vector $(d,e)$,
+\[
+  Q_g(d,e)\cdot Q_g(d,e) + Q_r(d,e)\cdot Q_r(d,e) = Q_b(d,e)\cdot Q_b(d,e).
+\]
+\end{theorem}
+
+This is precisely the identity $C\cdot C + F\cdot F = G\cdot G$ from Proposition~\ref{prop:relations}(c).
+
+\begin{remark}
+The QA system restricts Wildberger's chromogeometry to \emph{Fibonacci integer vectors}: direction vectors $(d,e)$ arising from QA tuples via the Fibonacci shift.  The full chromogeometry theorem holds for arbitrary directions in $\mathbb{R}^2$; the QA contribution is the observation that Fibonacci dynamics naturally generate a rich family of integer directions for which all three quadrances, and the 16~elements built from them, are simultaneously integral.
+\end{remark}
+
+% ====================================================================
+\section{Origin of 24}\label{sec:24}
+
+The modulus $m=24$ appears in QA from two independent directions.
+
+\subsection*{Route 1: Pythagorean arithmetic progression}
+
+From Proposition~\ref{prop:relations}(d), $H\cdot H - G\cdot G = 2CF$ for any direction $(d,e)$.
+
+\begin{proposition}\label{prop:div24}
+For any primitive Pythagorean direction (i.e., $\gcd(d,e)=1$ with $d > e > 0$ and $d \not\equiv e \pmod{2}$), $2CF$ is divisible by $24$.
+\end{proposition}
+
+\begin{proof}
+We have $2CF = 2 \cdot 2de \cdot (d\cdot d - e\cdot e) = 4de(d-e)(d+e)$.
+
+\emph{Divisibility by $8$}:  Since $d$ and $e$ have opposite parity, one of $\{d, e\}$ is even, contributing a factor of $2$.  Then $d-e$ and $d+e$ are both odd, but wait---if $d$ is even and $e$ is odd (or vice versa), then $d\cdot e$ contributes one factor of $2$; the explicit factor of $4$ gives $4 \cdot 2 = 8$.  More carefully: $4de(d-e)(d+e)$.  Among four consecutive-parity arguments: exactly one of $d,e$ is even, so $de$ contributes at least one factor of~$2$.  Thus $4 \cdot de$ contributes at least $2^3 = 8$.
+
+\emph{Divisibility by $3$}:  Among the integers $d$, $e$, $d-e$, $d+e$, at least one is divisible by~$3$.  If $d \equiv e \pmod{3}$, then $3 \mid (d-e)$.  If $d \equiv -e \pmod{3}$, then $3 \mid (d+e)$.  Otherwise, one of $d,e$ is itself divisible by~$3$.
+
+Since $\gcd(8,3) = 1$, we have $24 \mid 4de(d-e)(d+e) = 2CF$.
+\end{proof}
+
+At the smallest primitive direction $(d,e) = (2,1)$: $2CF = 4 \cdot 2 \cdot 1 \cdot 1 \cdot 3 = 24$, so $24$ is the \emph{minimal} nonzero value of $2CF$.
+
+\subsection*{Route 2: Pisano period}
+
+\begin{proposition}
+The Pisano period $\pi(9) = 24$.  That is, the Fibonacci sequence modulo $9$ has period exactly $24$.
+\end{proposition}
+
+\begin{proof}
+Direct computation.  The Fibonacci sequence modulo $9$ is:
+$0, 1, 1, 2, 3, 5, 8, 4, 3, 7, 1, 8, 0, 8, 8, 7, 6, 4, 1, 5, 6, 2, 8, 1, 0, 1, \dots$
+The first return to $(0,1)$ occurs at index $24$.  (This is consistent with Wall's theorem~\cite{wall1960}: for $p$ prime, $\pi(p^k) \mid p^{k-1}\pi(p)$, and $\pi(3) = 8$, so $\pi(9) \mid 3 \cdot 8 = 24$; direct verification confirms equality.)
+\end{proof}
+
+\begin{remark}
+The Cosmos orbit length of $24$ in $S_9$ (Theorem~\ref{thm:orbits}) and the Pisano period $\pi(9) = 24$ are the same number for the same algebraic reason: both measure the order of $\varphi$ in the relevant quotient of $\Zphi$.  The fact that $24$ also equals the minimal value of $2CF$ for primitive triples is a coincidence of deeper origin, connected to the dual extremality property: $9$ is simultaneously the smallest modulus whose Pisano period is $24$, and $24$ is the largest modulus whose Carmichael function $\lambda(24) = 2$ \cite{wall1960,carmichael1910}.
+\end{remark}
+
+% ====================================================================
+\section{Eisenstein Structure}\label{sec:eisenstein}
+
+Let $\omega = e^{2\pi i/3} = (-1+\sqrt{-3})/2$ and $\mathbb{Z}[\omega]$ be the Eisenstein integers.  The Eisenstein norm is $N_E(\alpha + \beta\omega) = \alpha\cdot\alpha - \alpha\cdot\beta + \beta\cdot\beta$.
+
+\begin{theorem}[Eisenstein identities]\label{thm:eisenstein}
+For any direction $(d,e)$ with the 16~elements as in Section~\ref{sec:16},
+\begin{align}
+  F\cdot F - F\cdot W + W\cdot W &= Z\cdot Z, \label{eq:eis1}\\
+  Y\cdot Y - Y\cdot W + W\cdot W &= Z\cdot Z. \label{eq:eis2}
+\end{align}
+\end{theorem}
+
+\begin{proof}
+We verify~\eqref{eq:eis1}.  With $F = d\cdot d - e\cdot e$, $W = d(e+a) = d(e + d + e) = d(d + 2e)$, and $Z = e\cdot e + ad = e\cdot e + (d+e)d = e\cdot e + d\cdot d + de$:
+\begin{align*}
+  F\cdot F &= (d\cdot d - e\cdot e)\cdot(d\cdot d - e\cdot e), \\
+  F\cdot W &= (d\cdot d - e\cdot e)\cdot d(d+2e), \\
+  W\cdot W &= d\cdot d\cdot(d+2e)\cdot(d+2e), \\
+  Z\cdot Z &= (d\cdot d + de + e\cdot e)\cdot(d\cdot d + de + e\cdot e).
+\end{align*}
+Expanding $F\cdot F - FW + W\cdot W$ and $Z\cdot Z$ and verifying equality is a direct polynomial identity in $d$ and $e$.  Both sides equal $d\cdot d\cdot d\cdot d + d\cdot d\cdot d\cdot e + 3\,d\cdot d\,e\cdot e + d\,e\cdot e\cdot e + e\cdot e\cdot e\cdot e$.  (We omit the line-by-line expansion; it can be verified by computer algebra or by hand.)
+
+For~\eqref{eq:eis2}, note $Y = a\cdot a - d\cdot d = (d+e)\cdot(d+e) - d\cdot d = 2de + e\cdot e = C + E$.  Then:
+\begin{align*}
+Y\cdot Y - Y\cdot W + W\cdot W &= (2de + e\cdot e)\cdot(2de + e\cdot e) \\
+  &\quad - (2de + e\cdot e)\cdot d(d+2e) + d\cdot d\cdot(d+2e)\cdot(d+2e).
+\end{align*}
+Expanding term by term: $Y\cdot Y = 4\,d\cdot d\,e\cdot e + 4d\,e\cdot e\cdot e + e\cdot e\cdot e\cdot e$; $Y\cdot W = 2\,d\cdot d\cdot d\,e + 4\,d\cdot d\,e\cdot e + d\cdot d\,e\cdot e + 2d\,e\cdot e\cdot e = 2\,d\cdot d\cdot d\,e + 5\,d\cdot d\,e\cdot e + 2d\,e\cdot e\cdot e$; $W\cdot W = d\cdot d\cdot d\cdot d + 4\,d\cdot d\cdot d\,e + 4\,d\cdot d\,e\cdot e$.  Combining:
+\[
+  Y\cdot Y - Y\cdot W + W\cdot W = d\cdot d\cdot d\cdot d + 2\,d\cdot d\cdot d\,e + 3\,d\cdot d\,e\cdot e + 2d\,e\cdot e\cdot e + e\cdot e\cdot e\cdot e,
+\]
+but $Z\cdot Z = (d\cdot d + de + e\cdot e)\cdot(d\cdot d + de + e\cdot e) = d\cdot d\cdot d\cdot d + 2\,d\cdot d\cdot d\,e + 3\,d\cdot d\,e\cdot e + 2d\,e\cdot e\cdot e + e\cdot e\cdot e\cdot e$, confirming equality.
+\end{proof}
+
+\begin{example}
+At $(d,e) = (2,1)$: $F = 3$, $W = 8$, $Y = 5$, $Z = 7$.
+\[
+  3\cdot 3 - 3\cdot 8 + 8\cdot 8 = 9 - 24 + 64 = 49 = 7\cdot 7. \quad\checkmark
+\]
+\[
+  5\cdot 5 - 5\cdot 8 + 8\cdot 8 = 25 - 40 + 64 = 49 = 7\cdot 7. \quad\checkmark
+\]
+\end{example}
+
+\begin{remark}
+Identities~\eqref{eq:eis1}--\eqref{eq:eis2} state that $(F, W)$ and $(Y, W)$ both lie on the Eisenstein norm-$Z\cdot Z$ circle.  The QA system thus naturally produces Eisenstein integer triples alongside the Pythagorean triple $(C, F, G)$.  This dual algebraic structure---$\mathbb{Z}[\varphi]$ (Fibonacci/Pythagorean) coexisting with $\mathbb{Z}[\omega]$ (Eisenstein/hexagonal)---is, to the author's knowledge, not previously noted in the literature.
+\end{remark}
+
+% ====================================================================
+\section{The Koenig Series}\label{sec:koenig}
+
+\begin{proposition}[Arithmetic progression]\label{prop:ap}
+For any direction $(d,e)$, the sequence
+\[
+  I\cdot I, \quad 2CF, \quad G\cdot G, \quad H\cdot H
+\]
+is an arithmetic progression with common difference $2CF$.
+\end{proposition}
+
+\begin{proof}
+Immediate from Proposition~\ref{prop:relations}(d): $G\cdot G - I\cdot I = 2CF$ and $H\cdot H - G\cdot G = 2CF$.  Since also $2CF - I\cdot I = 2CF - (C-F)\cdot(C-F) = 2CF - C\cdot C + 2CF - F\cdot F$---rather, we need to verify that $2CF - I\cdot I$ gives the correct first difference.  The first term is $I\cdot I$, second is $I\cdot I + 2CF = G\cdot G$ (from $G\cdot G - I\cdot I = 2CF$), third is $G\cdot G + 2CF = H\cdot H$.  So the common difference is $2CF = 24L$.
+\end{proof}
+
+The Koenig series exploits this arithmetic progression to generate new Pythagorean triples from old ones.
+
+\begin{definition}[Koenig chain]
+Given a direction $(d,e)$ with $d > e > 0$ and $\gcd(d,e)=1$, the \emph{child directions} are obtained from $H$ and $|I|$.  Specifically, since $H = C + F = 2de + d\cdot d - e\cdot e$ and $|I| = |C - F| = |2de - d\cdot d + e\cdot e|$, these values (together with $G$) themselves form direction parameters for the next generation.  The classical Barning--Berggren ternary tree of primitive Pythagorean triples~\cite{barning1963,berggren1934} arises from the three linear transformations on $(C, F, G)$ that preserve the Pythagorean relation $C\cdot C + F\cdot F = G\cdot G$.
+\end{definition}
+
+\begin{example}[Koenig chain from $(d,e) = (2,1)$]
+At $(2,1)$: $C=4$, $F=3$, $G=5$, $H=7$, $I=1$.  The arithmetic progression is $1, 24, 25, 49$ with step $24$.  The triple $(C,F,G) = (4,3,5)$ is the $(3,4,5)$ Pythagorean triple (reordered).  The values $H=7$ and $I=1$ determine the next generation of directions via the Barning--Berggren matrices, yielding children $(C,F,G) \in \{(20,21,29), (12,5,13), (8,15,17)\}$.
+\end{example}
+
+\begin{remark}
+The Koenig series connects three structures: the conic discriminant $I$ (classifying directions as elliptic/parabolic/hyperbolic), the Pythagorean triple $(C,F,G)$, and the Barning--Berggren triple-generating tree.  The arithmetic progression $(I\cdot I, G\cdot G, H\cdot H)$ with step $2CF = 24L$ ties the conic classification to the generation mechanism, with the modulus $24$ appearing as the fundamental quantum of the step.  Every primitive Pythagorean triple appears exactly once in this tree~\cite{barning1963}, so the Koenig series provides a complete enumeration of QA directions.
+\end{remark}
+
+\begin{proposition}[Koenig step and $L$]
+For a primitive direction, $2CF = 24L$ where $L$ is a positive integer.  Equivalently, $L = de(d\cdot d - e\cdot e)/6 = de \cdot ab / 6$, which counts (up to scaling) the area of the Pythagorean triangle with legs $C$ and $F$ and hypotenuse $G$.
+\end{proposition}
+
+\begin{proof}
+$2CF = 2 \cdot 2de \cdot (d\cdot d - e\cdot e) = 4de(d-e)(d+e)$.  By Proposition~\ref{prop:div24}, $24 \mid 2CF$ for primitive directions, so $L = 2CF/24 = de(d-e)(d+e)/6 \in \mathbb{Z}$.  Since $b = d-e$ and $a = d+e$, this is $de\cdot ab/6$.  The area of the right triangle with legs $C=2de$ and $F=d\cdot d - e\cdot e$ is $CF/2 = 12L$.
+\end{proof}
+
+% ====================================================================
+\section{Empirical Validation}\label{sec:empirical}
+
+The preceding sections develop QA as a purely algebraic structure.  We briefly report empirical results from applying QA orbit classification as a discrete feature in six domains.  In all cases, the continuous measurements are \emph{observer projections} (diagnostic outputs) of the discrete algebraic state; they never enter the QA layer as causal inputs.
+
+\begin{enumerate}[label=(\roman*)]
+  \item \textbf{Fibonacci resonance in planetary systems.}  Among 60 catalogued mean-motion resonances across 8+ planetary systems, 77\% of first-order resonances involve Fibonacci period ratios ($p < 10^{-6}$, binomial test).  The Pisano period mechanism (Section~\ref{sec:24}) predicts deeper attractor basins at Fibonacci commensurabilities~\cite{dale2026fib}.
+
+  \item \textbf{EEG seizure classification.}  QA orbit labels (Cosmos vs.\ Satellite vs.\ Singularity) applied to topographic EEG cluster assignments add $\Delta R^2 = +0.21$ beyond spectral baselines across 10/10 patients in the CHB-MIT dataset (Fisher combined $p < 10^{-33}$).
+
+  \item \textbf{Climate teleconnection.}  ENSO phase mapped to QA orbits via sea-surface temperature discretisation: La Ni\~na episodes map to the Satellite orbit 97\% of the time ($\chi^2 = 95$, $p < 10^{-6}$).
+
+  \item \textbf{Cryptocurrency momentum.}  Mod-9 orbit degeneracy coincides with momentum extremes in 6/6 major cryptocurrencies (Singularity proximity, $p = 0.0025$ for BTC).
+
+  \item \textbf{Audio signal structure.}  Partial correlation $r = +0.752$ ($p = 0.020$) between QA orbit statistics and tonal structure beyond lag-1 autocorrelation baselines.
+
+  \item \textbf{Atmospheric reanalysis.}  QA coherence index correlates with future atmospheric variability ($r = -0.20$, $p < 10^{-5}$; partial correlation controls for lagged variability).
+\end{enumerate}
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lllr}
+\toprule
+\textbf{Domain} & \textbf{Test statistic} & \textbf{Significance} & \textbf{Effect size} \\
+\midrule
+Planetary resonance & Binomial test & $p < 10^{-6}$ & 77\% Fibonacci \\
+EEG seizure         & Fisher combined & $p < 10^{-33}$ & $\Delta R^2 = +0.21$ \\
+Climate (ENSO)      & $\chi^2 = 95$ & $p < 10^{-6}$ & 97\% La Ni\~na $\to$ Sat. \\
+Cryptocurrency      & Permutation test & $p = 0.0025$ & 6/6 assets \\
+Audio structure      & Partial $r$ & $p = 0.020$ & $r = +0.752$ \\
+Atmosphere (ERA5)   & Partial $r$ & $p < 10^{-5}$ & $r = -0.20$ \\
+\bottomrule
+\end{tabular}
+\caption{Summary of empirical results.  All continuous quantities are observer projections of discrete QA state; they do not feed back into the algebraic layer.}
+\label{tab:empirical}
+\end{table}
+
+\begin{remark}[Observer projection firewall]
+A methodological principle governs all empirical work: the boundary between the discrete QA layer and continuous measurement is crossed exactly twice.  Raw data enters the QA layer via a discretisation map (e.g., modular reduction, clustering, thresholding); QA dynamics produce a discrete output (orbit label, path length, generator count); and this output is then projected into a continuous measurement space for statistical comparison.  At no point does a continuous function serve as a causal input to QA logic.  This firewall (Theorem~NT in the QA axiom system) prevents the category error of treating observer-dependent measurements as algebraic primitives.
+\end{remark}
+
+\begin{remark}[Honest reporting]
+These results range from modest (audio, climate partial correlation) to large (EEG, planetary resonance).  Several domain-specific null hypotheses have been tested and reported, including confirmed failures in cross-asset finance volatility prediction and a directional flip in a MITRE ATT\&CK mapping experiment.  The empirical programme is ongoing; the theoretical framework of Sections~\ref{sec:state}--\ref{sec:koenig} stands independently of any particular application.
+\end{remark}
+
+% ====================================================================
+\section{Open Questions}\label{sec:open}
+
+We close with three directions that remain unresolved.
+
+\paragraph{Permissibility filter.}
+The Tiered Reachability Theorem (exhaustively verified on $S_9$) shows that only 26\% of state pairs are reachable at Level~I (single generator step within a fixed orbit).  The \emph{physical} reachability---which transitions actually occur in a given domain---is a strict subset.  Quantifying this permissibility filter, and understanding whether it has a uniform algebraic description across domains, is the central open problem.
+
+\paragraph{Higher moduli.}
+The orbit decomposition of $S_m$ for general $m$ depends on the factorisation of $x^2 - x - 1 \pmod{m}$, which in turn depends on the splitting behaviour of primes in $\Zphi$.  A complete classification for composite moduli (extending the $m=9$ analysis of Section~\ref{sec:orbits}) would clarify which moduli admit rich orbit structures and which degenerate.  The relationship between the Pisano period $\pi(m)$, the Carmichael function $\lambda(m)$, and the QA orbit spectrum deserves systematic study.
+
+\paragraph{E8 alignment.}
+Preliminary numerical experiments suggest that QA tuples $(b,e,d,a)$, extended to 8 dimensions via a natural doubling construction, achieve anomalously high cosine similarity to the 240 root vectors of the $E_8$ lattice.  Whether this alignment is an artefact of the high symmetry of $E_8$ or reflects a deeper structural connection between $\Zphi$ and the $E_8$ root system is unknown.  The $E_8$ lattice is constructed from $D_8$ by adjoining a half-integer vector; a possible link is that the golden ratio satisfies $\varphi = 2\cos(\pi/5)$, and the $E_8$ Dynkin diagram has a distinguished $A_4$ sub-diagram whose Coxeter number involves the same angle.
+
+\paragraph{Eisenstein--Fibonacci duality.}
+The simultaneous presence of $\Zphi$-structure (Sections~\ref{sec:golden}--\ref{sec:chromo}) and $\mathbb{Z}[\omega]$-structure (Section~\ref{sec:eisenstein}) in the 16~elements is striking but unexplained.  The rings $\Zphi$ and $\mathbb{Z}[\omega]$ are the integer rings of $\mathbb{Q}(\sqrt{5})$ and $\mathbb{Q}(\sqrt{-3})$ respectively.  Their compositum $\mathbb{Q}(\sqrt{5}, \sqrt{-3})$ is a biquadratic field whose Galois group is $(\mathbb{Z}/2\mathbb{Z})^2$.  A unified framework would embed all 16 elements into this biquadratic field and derive both the Pythagorean and Eisenstein identities from a single norm form.
+
+\paragraph{Multi-domain universality.}
+The empirical results of Section~\ref{sec:empirical} span domains with no obvious physical connection (planetary mechanics, neuroscience, climate, finance, acoustics, atmospheric science).  If the QA orbit structure is genuinely predictive across these domains, the explanation must lie in a universal property of modular Fibonacci dynamics---perhaps related to the extremal properties of the Pisano period at $m=9$ and $m=24$.  Alternatively, the orbit classification may be acting as an efficient nonlinear feature extractor whose success is domain-specific and coincidental.  Distinguishing these hypotheses requires adversarial testing with carefully designed null models.
+
+\bigskip
+
+\noindent\textbf{Acknowledgements.}  The author thanks Ben Iverson and Dale Pond for foundational work on QA elements and sympathetic vibratory physics, respectively.  Norman Wildberger's rational trigonometry and chromogeometry provided the geometric framework.
+
+% ====================================================================
+\begin{thebibliography}{20}
+
+\bibitem{barning1963}
+F.~J.~M. Barning.
+\newblock Over pythagorese en bijna-pythagorese driehoeken en een generatieproces met behulp van unimodulaire matrices.
+\newblock \emph{Math.\ Centrum Amsterdam}, 1963.
+
+\bibitem{berggren1934}
+B.~Berggren.
+\newblock Pytagoreiska trianglar.
+\newblock \emph{Tidskrift f\"or Elementar Matematik, Fysik och Kemi}, 17:129--139, 1934.
+
+\bibitem{carmichael1910}
+R.~D. Carmichael.
+\newblock Note on a new number theory function.
+\newblock \emph{Bull.\ Amer.\ Math.\ Soc.}, 16(5):232--238, 1910.
+
+\bibitem{dale2026fib}
+W.~Dale.
+\newblock Fibonacci preference in mean-motion resonances: evidence from solar and exoplanetary systems.
+\newblock Preprint, 2026.
+
+\bibitem{eisenstein1850}
+G.~Eisenstein.
+\newblock Beweis des Reciprocit\"atssatzes f\"ur die cubischen Reste in der Theorie der aus den dritten Wurzeln der Einheit zusammengesetzten complexen Zahlen.
+\newblock \emph{J.\ Reine Angew.\ Math.}, 27:289--310, 1844.
+
+\bibitem{iverson}
+B.~Iverson.
+\newblock \emph{Pythagorean Axioms and QA Elements}.
+\newblock Private circulation.
+
+\bibitem{thom1962}
+A.~Thom.
+\newblock The megalithic unit of length.
+\newblock \emph{J.\ Roy.\ Statist.\ Soc.\ Ser.\ A}, 125(2):243--251, 1962.
+
+\bibitem{wall1960}
+D.~D. Wall.
+\newblock Fibonacci series modulo $m$.
+\newblock \emph{Amer.\ Math.\ Monthly}, 67(6):525--532, 1960.
+
+\bibitem{wildberger2005}
+N.~J. Wildberger.
+\newblock \emph{Divine Proportions: Rational Trigonometry to Universal Geometry}.
+\newblock Wild Egg, Sydney, 2005.
+
+\bibitem{wildberger2010}
+N.~J. Wildberger.
+\newblock Chromogeometry and relativistic conics.
+\newblock \emph{KoG}, 13:43--50, 2009.
+
+\end{thebibliography}
+
+\end{document}

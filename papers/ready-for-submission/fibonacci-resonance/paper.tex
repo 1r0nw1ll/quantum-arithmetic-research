@@ -1,0 +1,509 @@
+\documentclass[twocolumn,11pt]{article}
+
+\usepackage{amsmath,amssymb}
+\usepackage{booktabs}
+\usepackage{graphicx}
+\usepackage{natbib}
+\usepackage[margin=2cm]{geometry}
+\usepackage{hyperref}
+
+\begin{document}
+
+\title{Fibonacci Preference in Mean-Motion Resonances:\\
+Evidence from Solar and Exoplanetary Systems}
+
+\author{Will Dale\\
+\small Independent Researcher}
+\date{}
+\maketitle
+
+\begin{abstract}
+Mean-motion resonances (MMRs) in planetary systems preferentially
+occur at period ratios $p$:$q$ where both $p$ and $q$ are Fibonacci
+numbers.  We catalogue 60 confirmed MMRs across 8+ independent
+planetary systems---including the solar system, TRAPPIST-1, HD~110067,
+K2-138, Kepler-80, Kepler-223, TOI-178, GJ-876, and HD~158259---and
+classify each as Fibonacci or non-Fibonacci.  Among first-order
+resonances ($|p-q|=1$), 33 of 43 instances (77\%) involve Fibonacci
+ratios (2:1 or 3:2), compared to the 22\% expected under uniform
+selection from the 9 coprime first-order ratios.  This preference is
+highly significant ($p < 10^{-6}$, binomial test) and persists across
+resonance orders (Fisher combined $p = 6 \times 10^{-7}$).
+An adversarial out-of-sample replication on 341 additional
+multi-planet systems from the NASA Exoplanet Archive confirms the
+effect: order-1 Fibonacci rate 81.3\% ($p < 10^{-48}$), with Fisher
+combined $p = 3.21 \times 10^{-46}$ across orders.  Standard
+perturbation theory explains why low-order resonances are preferred
+but does not predict Fibonacci preference \emph{within} each order
+class.  We propose a mechanism based on the Pisano periodicity of the
+Fibonacci sequence: because Fibonacci numbers divide Pisano periods
+$\pi(m)$ more frequently than non-Fibonacci integers of comparable
+magnitude, dynamical systems governed by Fibonacci-shift operators
+exhibit deeper attractor basins at Fibonacci-ratio commensurabilities.
+A parallel pattern appears in megalithic archaeology, where the two
+most common Neolithic construction triangles correspond to the two
+smallest all-Fibonacci Pythagorean triples.
+\end{abstract}
+
+\noindent\textit{Keywords:} celestial mechanics, planets and satellites: dynamical evolution and stability, methods: statistical
+
+% ══════════════════════════════════════════════════════════════
+\section{Introduction}
+\label{sec:intro}
+
+Mean-motion resonances (MMRs) are a ubiquitous feature of planetary
+systems.  Two bodies are in a $p$:$q$ MMR when their orbital periods
+satisfy $P_1/P_2 \approx p/q$ for small integers $p > q$.  Resonances
+stabilize systems against gravitational perturbation, protect against
+close encounters, and arise naturally during convergent orbital
+migration \citep{murray1999,peale1976}.
+
+The \emph{strength} of a $p$:$q$ resonance scales as $e^{|p-q|}$
+in the disturbing function expansion, where $e$ is the orbital
+eccentricity \citep{murray1999}.  This explains why first-order
+resonances ($|p-q| = 1$) are the most commonly observed.  However,
+within a given order class, standard theory does not predict which
+specific ratios should be preferred.  Among the 9 coprime first-order
+ratios $\{2\!:\!1,\ 3\!:\!2,\ 4\!:\!3,\ 5\!:\!4,\ \ldots,\
+10\!:\!9\}$, only 2:1 and 3:2 dominate the observed population, with
+4:3 as a distant third.
+
+In this Letter, we present evidence that the preferred ratios are
+those where \emph{both} $p$ and $q$ are Fibonacci numbers
+($F = \{1, 1, 2, 3, 5, 8, 13, 21, \ldots\}$).  This pattern holds
+across independent planetary systems spanning diverse stellar types,
+ages, and architectures, suggesting a structural rather than
+contingent origin.
+
+% ══════════════════════════════════════════════════════════════
+\section{Data and Methods}
+\label{sec:data}
+
+\subsection{Resonance Catalogue}
+
+We compile a catalogue of 60 confirmed or well-established
+MMRs from two independent datasets:
+
+\begin{enumerate}
+\item \textbf{Solar system} (29 resonances): satellite--satellite
+resonances (Io--Europa, Mimas--Tethys, etc.), planet--planet near-commensurabilities (Jupiter--Saturn 5:2), Kirkwood gaps and asteroid
+group resonances with Jupiter, and trans-Neptunian object resonances
+with Neptune.  Sources: \citet{murray1999}, NASA JPL Small Body
+Database.
+
+\item \textbf{Exoplanet systems} (31 resonances): adjacent-pair
+period ratios from confirmed resonant chains in TRAPPIST-1
+\citep{luger2017}, HD~110067 \citep{luque2024}, K2-138
+\citep{christiansen2018}, Kepler-80 \citep{macdonald2016},
+Kepler-223 \citep{mills2016}, TOI-178 \citep{leleu2021}, GJ-876
+\citep{rivera2010}, and HD~158259 \citep{hara2020}.
+\end{enumerate}
+
+Each resonance is reduced to lowest terms $p$:$q$ with
+$\gcd(p,q) = 1$ and classified as \emph{Fibonacci} if both
+$p \in F$ and $q \in F$, or \emph{non-Fibonacci} otherwise.
+
+\subsection{Null Model}
+
+Under a uniform null hypothesis, each resonance of order $k = |p-q|$
+is drawn equally from the set of coprime ratios $p$:$q$ with
+$p \leq 10$.  The expected Fibonacci fraction for each order is
+computed from the proportion of Fibonacci ratios among all coprime
+ratios of that order (Table~\ref{tab:orders}).
+
+\subsection{Statistical Tests}
+
+We apply five tests:
+\begin{enumerate}
+\item Binomial test on unique ratio types (most conservative)
+\item Binomial test on all instances
+\item Order-stratified binomial tests with Fisher's method for combination
+\item Exoplanet-only binomial test (independent validation)
+\item First-order-only binomial test (cleanest comparison)
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{Results}
+\label{sec:results}
+
+\subsection{Overall Fibonacci Fraction}
+
+Of 60 catalogued resonances, 45 (75\%) involve Fibonacci ratios.
+Among 14 unique ratio types observed, 8 (57\%) are Fibonacci.  The
+expected Fibonacci fraction under uniform selection from coprime
+ratios with $p \leq 10$ is 31\% (10/32).
+
+\subsection{Order-Stratified Analysis}
+
+Figure~\ref{fig:orders} and Table~\ref{tab:orders} present the
+breakdown by resonance order.  The Fibonacci preference is strongest
+at orders 1 and 2:
+
+\begin{figure}[ht]
+\centering
+\includegraphics[width=\columnwidth]{figure1_fibonacci_resonance.pdf}
+\caption{(a) Resonance counts by order, colored by Fibonacci (blue) vs.\
+non-Fibonacci (red) classification.  Percentages show Fibonacci fraction.
+(b) Observed Fibonacci rate compared to expected rate under uniform
+selection from coprime ratios with $p \leq 10$.  Asterisks mark orders
+where observed substantially exceeds expected.}
+\label{fig:orders}
+\end{figure}
+
+\begin{table}[h]
+\centering
+\caption{Observed vs.\ expected Fibonacci fractions by resonance order. Non-Fibonacci ratios shown in bold.}
+\label{tab:orders}
+\begin{tabular}{ccccrl}
+\toprule
+Order & $n_\mathrm{Fib}$ & $n_\mathrm{tot}$ & \% Fib & Exp.\ \% & Ratios observed \\
+\midrule
+0 & 1 & 1 & 100 & 100 & 1:1 \\
+1 & 33 & 43 & 77 & 22 & 2:1, 3:2, \textbf{4:3} \\
+2 & 6 & 6 & 100 & 50 & 3:1, 5:3 \\
+3 & 4 & 6 & 67 & 40 & 5:2, 8:5, \textbf{4:1}, \textbf{7:4} \\
+4 & 1 & 2 & 50 & 33 & 5:1, \textbf{7:3} \\
+5 & 0 & 2 & 0 & 25 & \textbf{7:2}, \textbf{9:4} \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\subsection{Statistical Significance}
+
+All five tests reject the uniform null (Table~\ref{tab:stats}):
+
+\begin{table}[h]
+\centering
+\caption{Statistical tests for Fibonacci preference.}
+\label{tab:stats}
+\begin{tabular}{lcc}
+\toprule
+Test & Observed & $p$-value \\
+\midrule
+Unique ratios binomial & 8/14 (57\%) & 0.040 \\
+All instances binomial & 45/60 (75\%) & $< 10^{-6}$ \\
+Fisher combined & $\chi^2 = 59.0$ & $< 10^{-6}$ \\
+Exoplanet-only & 24/31 (77\%) & $< 10^{-6}$ \\
+First-order only & 33/43 (77\%) & $< 10^{-6}$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The most conservative test (unique ratios) gives $p = 0.040$; all
+instance-weighted and stratified tests give $p < 10^{-6}$.
+
+% ══════════════════════════════════════════════════════════════
+\section{A Fibonacci-Shift Mechanism}
+\label{sec:mechanism}
+
+We propose a mechanism rooted in the Pisano periodicity of the
+Fibonacci sequence.
+
+\subsection{The Fibonacci Shift Operator}
+
+Define the matrix $F = \bigl(\begin{smallmatrix} 0 & 1 \\ 1 & 1
+\end{smallmatrix}\bigr)$, whose powers encode Fibonacci numbers:
+\begin{equation}
+F^n = \begin{pmatrix} F_{n-1} & F_n \\ F_n & F_{n+1} \end{pmatrix},
+\end{equation}
+where $F_n$ is the $n$-th Fibonacci number.  The eigenvalues of $F$
+are $\varphi = (1+\sqrt{5})/2$ (the golden ratio) and
+$\psi = -1/\varphi$.
+
+\subsection{Pisano Periods}
+
+For any modulus $m$, the Fibonacci sequence modulo $m$ is periodic
+with period $\pi(m)$, the \emph{Pisano period}.  Equivalently,
+$\pi(m)$ is the order of $F$ in $\mathrm{GL}_2(\mathbb{Z}/m\mathbb{Z})$.
+
+A key identity from number theory is that every $k$-th Fibonacci
+number is divisible by $F_k$:
+\begin{equation}
+F_k \mid F_{nk} \quad \text{for all } n \geq 1.
+\label{eq:fibdiv}
+\end{equation}
+
+This forces the \emph{rank of apparition} $\alpha(F_k)$ (the smallest
+index at which $F_k$ divides a Fibonacci number) to satisfy
+$\alpha(F_k) \mid k$, and consequently $\pi(F_k) \mid 2k$
+\citep{wall1960}.
+
+\subsection{Pisano Divisibility and Resonance Depth}
+
+For a dynamical system governed by $F$ acting modulo $m$, the operator
+$F^p$ has order $\pi(m) / \gcd(p, \pi(m))$ in $\mathrm{GL}_2(\mathbb{Z}/m\mathbb{Z})$.  When $p$ divides $\pi(m)$, this order is
+minimized---corresponding to a shorter return time and a deeper
+dynamical attractor.
+
+We computed $\pi(m)$ for $m = 2, \ldots, 500$ and found that the
+Fibonacci set $\{2, 3, 5, 8\}$ collectively divides $\pi(m)$ at a
+rate of 0.677 across moduli, compared to 0.491 for the non-Fibonacci
+set $\{4, 6, 7, 9\}$ of the same magnitude range.  For a $p$:$q$
+resonance to be ``deep,'' \emph{both} $p$ and $q$ should divide
+$\pi(m)$; the Fibonacci set achieves this with higher probability.
+
+This mechanism is statistical over the set of Fibonacci numbers, not
+guaranteed for each individual member (e.g., 4 divides $\pi(9) = 24$
+while 5 does not).  This is consistent with the empirical observation:
+Fibonacci ratios dominate (77\%) but do not exclude all alternatives.
+
+% ══════════════════════════════════════════════════════════════
+\section{Out-of-Sample Replication}
+\label{sec:replication}
+
+To test whether the Fibonacci preference is robust beyond the 8
+hand-selected resonant chains analysed above, we performed an
+adversarial out-of-sample replication using a broad, unfiltered query
+of the NASA Exoplanet Archive.
+
+\subsection{Method}
+
+We queried the Planetary Systems Composite (PSComPars) table via TAP,
+retrieving all confirmed multi-planet systems, and excluded the 8
+systems used in the original analysis.  This yielded 341 new
+multi-planet systems with no overlap.  For each system, we computed
+adjacent-pair period ratios (sorted by orbital period), identified the
+nearest coprime ratio $p$:$q$ ($p,q \leq 10$) within a tolerance of
+0.05, and classified each matched resonance as Fibonacci or
+non-Fibonacci using the same criteria as Section~\ref{sec:data}.
+
+\subsection{Results}
+
+Table~\ref{tab:replication} presents the per-order breakdown for the
+341 new systems.  The order-1 Fibonacci rate of 81.3\% slightly
+exceeds the 77\% found in the original 8 systems, confirming that the
+effect is not an artefact of system selection.
+
+\begin{table}[h]
+\centering
+\caption{Out-of-sample replication: Fibonacci fractions by resonance
+order for 341 new multi-planet systems from the NASA Exoplanet Archive.}
+\label{tab:replication}
+\begin{tabular}{ccccc}
+\toprule
+Order & $n_\mathrm{Fib}$ & $n_\mathrm{tot}$ & \% Fib & $p$-value \\
+\midrule
+1 & 113 & 139 & 81.3 & $2.55 \times 10^{-49}$ \\
+2 & 53 & 78 & 67.9 & $1.02 \times 10^{-3}$ \\
+3 & 60 & 116 & 51.7 & $6.95 \times 10^{-3}$ \\
+4 & 4 & 69 & 5.8 & 1.00 \\
+5 & 9 & 40 & 22.5 & 0.70 \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+The Fisher combined $p$-value across all orders is $3.21 \times
+10^{-46}$.  The effect concentrates in orders 1--3 and vanishes at
+orders 4--5, consistent with the dynamical significance of low-order
+resonances: Fibonacci preference operates within the regime where
+resonances are physically strong enough to capture and retain orbiting
+bodies.
+
+% ══════════════════════════════════════════════════════════════
+\section{Caveats}
+\label{sec:caveats}
+
+Several caveats apply to this analysis:
+
+\begin{enumerate}
+\item \textbf{Detection bias.}  The 2:1 and 3:2 resonances produce
+the largest transit timing variations, making them easiest to detect
+in \emph{Kepler}/TESS photometry.  Higher-order and non-Fibonacci
+resonances may be systematically underrepresented.
+
+\item \textbf{Catalogue completeness.}  Our catalogue is not
+exhaustive; additional confirmed resonances from ongoing surveys
+(TESS, PLATO) could shift the Fibonacci fraction.
+
+\item \textbf{``Almost Fibonacci.''} The dominant non-Fibonacci
+resonance is 4:3, and 4 lies between Fibonacci numbers 3 and 5.
+Whether this has structural significance is unclear.
+
+\item \textbf{Expected rate.}  The null model assumes uniform
+selection from coprime ratios with $p \leq 10$.  Alternative caps
+(e.g., $p \leq 5$ or $p \leq 20$) change the expected rate.
+
+\item \textbf{Formation physics.}  Resonance capture depends on
+dissipation history (tidal friction, gas drag), which may
+independently favor certain ratios.
+
+\item \textbf{Tougher null model.}  The current null model assumes
+uniform selection from coprime ratios of each order.  However,
+orbital mechanics already favors low-integer ratios (e.g., 2:1 over
+9:8) because lower-order resonances have wider libration widths.
+A weighted null model that accounts for this physical preference for
+small integers---for instance, weighting by inverse resonance
+strength $\propto e^{-(p+q)}$ or by empirical capture
+probabilities from N-body simulations---would provide a more
+stringent test of whether the Fibonacci pattern exceeds what
+low-integer preference alone predicts.
+\end{enumerate}
+
+% ══════════════════════════════════════════════════════════════
+\section{Discussion}
+\label{sec:discussion}
+
+Standard perturbation theory explains why low-order resonances are
+preferred \citep{murray1999} but does not predict the specific ratio
+selection within each order class.  The three-body problem, lacking a
+general analytical solution, treats the population of specific
+resonances as contingent on initial conditions and dissipation
+history.
+
+The Fibonacci-shift mechanism proposed here provides a structural
+selection principle: period ratios corresponding to Fibonacci numbers
+create shorter operator cycles (deeper dynamical attractors) across a
+wider range of moduli than non-Fibonacci ratios of the same order.
+This is a consequence of the self-referential divisibility of the
+Fibonacci sequence (Equation~\ref{eq:fibdiv}), which ensures that
+Fibonacci numbers are ``native'' divisors of the dynamical periods
+generated by the same recurrence.
+
+The Fibonacci preference holds independently in three datasets---the
+solar system (72\% Fibonacci, $n = 29$), 8 known resonant chains
+(77\% Fibonacci, $n = 31$), and 341 out-of-sample multi-planet
+systems (81.3\% order-1 Fibonacci, $n = 139$)---spanning systems with
+diverse stellar types, ages ($\sim 10^7$--$10^{10}$ yr), and
+architectures.  This triple cross-validation argues against a
+selection effect specific to any one system or catalogue.
+
+The observed pattern is consistent with---but does not prove---the
+hypothesis that gravitational dynamics contain a Fibonacci-shift
+component in their discrete algebraic structure.  Further tests with
+expanded catalogues (TESS, PLATO) and N-body simulations examining
+resonance capture probabilities as a function of period ratio would
+be valuable.
+
+\subsection{Fibonacci Structure Beyond Orbital Dynamics}
+
+The Fibonacci preference in resonance ratios finds a parallel in
+megalithic archaeology.  The two most commonly used construction
+triangles in Neolithic stone circles---the 3:4:5 and 5:12:13
+Pythagorean triples---are exactly the two smallest primitive triples
+whose QA quantum numbers consist entirely of Fibonacci numbers:
+$(1,1,2,3)$ and $(1,2,3,5)$ respectively.  Among the 16 primitive
+Pythagorean triples with hypotenuse $\leq 100$, only 3 (19\%) have
+all-Fibonacci quantum numbers; yet megalithic builders selected from
+this set for their two primary construction tools.  The generating
+directions for these triples---$(2,1)$, $(3,2)$, $(8,5)$---are
+themselves consecutive Fibonacci pairs, suggesting the Fibonacci
+recurrence generates the preferred geometric primitives through the
+same mechanism that selects orbital resonance ratios.  Combined with
+independent confirmation that stone circle diameters cluster on
+integer multiples of the Megalithic Yard ($p = 0.0096$, $n = 84$
+circles from Thom's 1962 dataset \citep{thom1962}), this points
+toward a deep structural role for discrete Fibonacci arithmetic
+across scales from planetary dynamics to ancient construction.
+
+% ══════════════════════════════════════════════════════════════
+\section{Conclusion}
+\label{sec:conclusion}
+
+We have shown that mean-motion resonances across 8+ planetary systems
+preferentially select period ratios where both integers are Fibonacci
+numbers.  This preference is statistically significant ($p < 10^{-6}$
+for instance-weighted and order-stratified tests; $p = 0.040$ for
+unique ratio types), persists across solar and exoplanetary systems,
+and is confirmed by an adversarial out-of-sample replication on 341
+additional systems (Fisher combined $p = 3.21 \times 10^{-46}$).
+The effect is not explained by the standard order-based resonance
+strength scaling.  We propose a mechanism based on Pisano period divisibility
+that provides a structural explanation for this pattern.
+
+\section*{Acknowledgments}
+This work builds on the Quantum Arithmetic framework developed by
+Ben Iverson. The author thanks Claude (Anthropic) for computational
+assistance.
+
+\appendix
+\section{Resonance Catalogue}
+
+Table~\ref{tab:catalogue} lists all 60 resonances in the analysis.
+The ``Fib?'' column indicates whether both $p$ and $q$ are Fibonacci
+numbers; the ``Order'' column gives $|p-q|$.
+
+\begin{table*}[ht]
+\centering
+\scriptsize
+\caption{Full catalogue of 60 mean-motion resonances used in this study.}
+\label{tab:catalogue}
+\begin{tabular}{llllccc}
+\toprule
+System & Body 1 & Body 2 & $p$:$q$ & Order & Fib? & Source \\
+\midrule
+Solar & Io & Europa & 2:1 & 1 & Y & Laplace \\
+Solar & Europa & Ganymede & 2:1 & 1 & Y & Laplace \\
+Solar & Mimas & Tethys & 2:1 & 1 & Y & Saturn \\
+Solar & Enceladus & Dione & 2:1 & 1 & Y & Saturn \\
+Solar & Dione & Rhea & 5:3 & 2 & Y & Saturn \\
+Solar & Titan & Hyperion & 4:3 & 1 & N & Saturn \\
+Solar & Ariel & Umbriel & 5:3 & 2 & Y & Uranus \\
+Solar & Pluto & Neptune & 3:2 & 1 & Y & TNO \\
+Solar & Jupiter & Saturn & 5:2 & 3 & Y & Great Inequality \\
+Solar & Kirkwood 4:1 & Jupiter & 4:1 & 3 & N & Kirkwood \\
+Solar & Kirkwood 3:1 & Jupiter & 3:1 & 2 & Y & Kirkwood \\
+Solar & Kirkwood 5:2 & Jupiter & 5:2 & 3 & Y & Kirkwood \\
+Solar & Kirkwood 7:3 & Jupiter & 7:3 & 4 & N & Kirkwood \\
+Solar & Kirkwood 2:1 & Jupiter & 2:1 & 1 & Y & Kirkwood \\
+Solar & Hildas & Jupiter & 3:2 & 1 & Y & capture \\
+Solar & Trojans & Jupiter & 1:1 & 0 & Y & capture \\
+Solar & Thule & Jupiter & 4:3 & 1 & N & capture \\
+Solar & Zhongguo & Jupiter & 2:1 & 1 & Y & capture \\
+Solar & Griqua & Jupiter & 2:1 & 1 & Y & capture \\
+Solar & Plutinos & Neptune & 3:2 & 1 & Y & TNO \\
+Solar & Twotinos & Neptune & 2:1 & 1 & Y & TNO \\
+Solar & 5:3 TNOs & Neptune & 5:3 & 2 & Y & TNO \\
+Solar & 7:4 TNOs & Neptune & 7:4 & 3 & N & TNO \\
+Solar & 5:2 TNOs & Neptune & 5:2 & 3 & Y & TNO \\
+Solar & 4:3 TNOs & Neptune & 4:3 & 1 & N & TNO \\
+Solar & 3:1 TNOs & Neptune & 3:1 & 2 & Y & TNO \\
+Solar & 9:4 TNOs & Neptune & 9:4 & 5 & N & TNO \\
+Solar & 7:2 TNOs & Neptune & 7:2 & 5 & N & TNO \\
+Solar & 5:1 TNOs & Neptune & 5:1 & 4 & Y & TNO \\
+\midrule
+TRAPPIST-1 & b & c & 8:5 & 3 & Y & Luger 2017 \\
+TRAPPIST-1 & c & d & 5:3 & 2 & Y & Luger 2017 \\
+TRAPPIST-1 & d & e & 3:2 & 1 & Y & Luger 2017 \\
+TRAPPIST-1 & e & f & 3:2 & 1 & Y & Luger 2017 \\
+TRAPPIST-1 & f & g & 4:3 & 1 & N & Luger 2017 \\
+TRAPPIST-1 & g & h & 3:2 & 1 & Y & Luger 2017 \\
+\midrule
+HD 110067 & b & c & 3:2 & 1 & Y & Luque 2024 \\
+HD 110067 & c & d & 3:2 & 1 & Y & Luque 2024 \\
+HD 110067 & d & e & 3:2 & 1 & Y & Luque 2024 \\
+HD 110067 & e & f & 4:3 & 1 & N & Luque 2024 \\
+HD 110067 & f & g & 4:3 & 1 & N & Luque 2024 \\
+\midrule
+K2-138 & b & c & 3:2 & 1 & Y & Christiansen 2018 \\
+K2-138 & c & d & 3:2 & 1 & Y & Christiansen 2018 \\
+K2-138 & d & e & 3:2 & 1 & Y & Christiansen 2018 \\
+K2-138 & e & f & 3:2 & 1 & Y & Christiansen 2018 \\
+\midrule
+Kepler-223 & b & c & 4:3 & 1 & N & Mills 2016 \\
+Kepler-223 & c & d & 3:2 & 1 & Y & Mills 2016 \\
+Kepler-223 & d & e & 4:3 & 1 & N & Mills 2016 \\
+\midrule
+Kepler-80 & d & e & 3:2 & 1 & Y & MacDonald 2016 \\
+Kepler-80 & e & b & 3:2 & 1 & Y & MacDonald 2016 \\
+Kepler-80 & b & c & 4:3 & 1 & N & MacDonald 2016 \\
+Kepler-80 & c & f & 3:2 & 1 & Y & MacDonald 2016 \\
+\midrule
+TOI-178 & c & d & 2:1 & 1 & Y & Leleu 2021 \\
+TOI-178 & d & e & 3:2 & 1 & Y & Leleu 2021 \\
+TOI-178 & e & f & 3:2 & 1 & Y & Leleu 2021 \\
+TOI-178 & f & g & 4:3 & 1 & N & Leleu 2021 \\
+\midrule
+GJ-876 & c & b & 2:1 & 1 & Y & Rivera 2010 \\
+GJ-876 & b & e & 2:1 & 1 & Y & Rivera 2010 \\
+\midrule
+HD 158259 & b & c & 3:2 & 1 & Y & Hara 2020 \\
+HD 158259 & c & d & 3:2 & 1 & Y & Hara 2020 \\
+HD 158259 & d & e & 3:2 & 1 & Y & Hara 2020 \\
+\bottomrule
+\end{tabular}
+\end{table*}
+
+\bibliography{refs}
+\bibliographystyle{plainnat}
+
+\end{document}

@@ -11,11 +11,13 @@ Usage:
 Checks:
   1. Guardrail E2E tests (12 tests)
   2. Agent security kernel self-tests (14 tests)
-  3. Collab bus agent registry (flag unknowns)
-  4. Bridge guardrail status
-  5. Recent GUARDRAIL_DENY events
-  6. Sensitive data in event log
-  7. Axiom linter (existing)
+  3. Bridge cert enforcement wiring (static)
+  4. Bridge cert self-test (runtime)
+  5. Collab bus agent registry (flag unknowns)
+  6. Bridge guardrail status
+  7. Recent GUARDRAIL_DENY events
+  8. Sensitive data in event log
+  9. Axiom linter (existing)
 """
 
 import json
@@ -23,16 +25,32 @@ import os
 import re
 import subprocess
 import sys
+import time
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = {"pass": [], "fail": [], "warn": []}
+BRIDGE_FILE = ROOT / "qa_lab" / "qa_agents" / "cli" / "llm_bridge_agent.py"
 
 
 def _run(cmd: str, cwd: str = None, timeout: int = 60) -> tuple:
     try:
         p = subprocess.run(cmd, shell=True, capture_output=True, text=True,
                            timeout=timeout, cwd=cwd or str(ROOT))
+        return p.returncode, p.stdout, p.stderr
+    except subprocess.TimeoutExpired:
+        return 124, "", "TIMEOUT"
+
+
+def _run_argv(argv: list[str], cwd: str = None, timeout: int = 60) -> tuple:
+    try:
+        p = subprocess.run(
+            argv,
+            capture_output=True,
+            text=True,
+            timeout=timeout,
+            cwd=cwd or str(ROOT),
+        )
         return p.returncode, p.stdout, p.stderr
     except subprocess.TimeoutExpired:
         return 124, "", "TIMEOUT"
@@ -56,6 +74,89 @@ def check_agent_security():
         RESULTS["pass"].append("Agent Security Kernel: 14/14 PASS")
     else:
         RESULTS["fail"].append(f"Agent Security Kernel: FAILED (rc={rc})")
+
+
+def check_bridge_cert_static():
+    """Fail unless the bridge is wired to emit certs on the live path."""
+    if not BRIDGE_FILE.exists():
+        RESULTS["fail"].append("Bridge cert wiring: llm_bridge_agent.py not found")
+        return
+
+    content = BRIDGE_FILE.read_text(encoding="utf-8")
+    required_markers = [
+        "TOOL_CALL_CERT.v1",
+        "PROMPT_INJECTION_OBSTRUCTION.v1",
+        "OUTPUT_SCAN_CERT.v1",
+        "BridgeExecutionCerts",
+        "--self-test",
+        "enforce_policy",
+        "CapabilityToken",
+        "_mint_bridge_token",
+        "_scan_and_redact_output",
+        "output_provenance",
+    ]
+    missing = [marker for marker in required_markers if marker not in content]
+    if missing:
+        RESULTS["fail"].append(
+            f"Bridge cert wiring: missing markers {missing} in llm_bridge_agent.py"
+        )
+    else:
+        RESULTS["pass"].append("Bridge cert wiring: cert-gated + capability-enforced")
+
+
+def check_bridge_cert_runtime():
+    """Run the bridge self-test and verify real cert artifacts are produced."""
+    if not BRIDGE_FILE.exists():
+        RESULTS["fail"].append("Bridge cert runtime: llm_bridge_agent.py not found")
+        return
+
+    rc, stdout, stderr = _run_argv(
+        [
+            sys.executable,
+            str(BRIDGE_FILE),
+            "--self-test",
+            "--name",
+            "audit_bridge",
+            "--cmd",
+            "cat",
+        ],
+        timeout=60,
+    )
+    if rc != 0:
+        RESULTS["fail"].append(f"Bridge cert runtime: self-test failed (rc={rc})")
+        return
+
+    try:
+        payload = json.loads(stdout.strip())
+    except json.JSONDecodeError:
+        RESULTS["fail"].append("Bridge cert runtime: self-test did not return JSON")
+        return
+
+    trace_path = Path(payload.get("trace_path", ""))
+    cap_enforced = payload.get("capability_enforced", False)
+    tests_passed = payload.get("tests_passed", 0)
+    tests_total = payload.get("tests_total", 0)
+    if (
+        payload.get("ok")
+        and payload.get("tool_call_cert_count", 0) >= 2
+        and trace_path.exists()
+        and cap_enforced
+        and tests_passed == tests_total
+    ):
+        RESULTS["pass"].append(
+            f"Bridge cert runtime: {tests_passed}/{tests_total} tests, capability enforced"
+        )
+    else:
+        detail = []
+        if not payload.get("ok"):
+            detail.append("self-test failed")
+        if not cap_enforced:
+            detail.append("capability NOT enforced")
+        if tests_passed != tests_total:
+            detail.append(f"tests {tests_passed}/{tests_total}")
+        RESULTS["fail"].append(
+            f"Bridge cert runtime: {' + '.join(detail) or 'unknown failure'}"
+        )
 
 
 def check_collab_agents():
@@ -141,25 +242,43 @@ def check_topic_acl():
 
 
 def check_bridge_processes():
-    """Check if bridges are running with guardrail."""
-    rc, stdout, _ = _run("ps aux | grep llm_bridge_agent | grep -v grep")
-    bridges = [l for l in stdout.strip().split("\n") if l.strip()]
-
-    if not bridges:
+    """Check bridge liveness via shared heartbeat files, not process namespace state."""
+    bridge_root = ROOT / "qa_lab" / "logs" / "bridge_security"
+    if not bridge_root.exists():
         RESULTS["warn"].append("No LLM bridge agents running")
         return
 
-    for b in bridges:
-        name = "unknown"
-        if "--name" in b:
-            parts = b.split("--name")
-            if len(parts) > 1:
-                name = parts[1].strip().split()[0]
+    current_unix = int(time.time())
+    active = 0
 
-        if "--no-guardrail" in b:
-            RESULTS["fail"].append(f"Bridge {name}: running WITHOUT guardrail!")
+    for status_file in sorted(bridge_root.glob("*/bridge_status.json")):
+        try:
+            payload = json.loads(status_file.read_text(encoding="utf-8"))
+        except Exception:
+            RESULTS["warn"].append(f"Bridge status unreadable: {status_file}")
+            continue
+
+        agent = str(payload.get("agent") or status_file.parent.name)
+        updated_unix = payload.get("updated_unix")
+        if not isinstance(updated_unix, int):
+            RESULTS["warn"].append(f"Bridge {agent}: missing heartbeat timestamp")
+            continue
+
+        age_s = max(0, current_unix - updated_unix)
+
+        if age_s > 5 or not payload.get("running", False):
+            continue
+
+        active += 1
+        if not payload.get("guardrail_active", False):
+            RESULTS["fail"].append(f"Bridge {agent}: heartbeat shows guardrail disabled")
+        elif not payload.get("bus_connected", False):
+            RESULTS["warn"].append(f"Bridge {agent}: running without collaboration bus connectivity")
         else:
-            RESULTS["pass"].append(f"Bridge {name}: running (guardrail enabled)")
+            RESULTS["pass"].append(f"Bridge {agent}: running (guardrail enabled, bus connected)")
+
+    if active == 0:
+        RESULTS["warn"].append("No LLM bridge agents running")
 
 
 def main():
@@ -171,6 +290,8 @@ def main():
 
     check_guardrail_e2e()
     check_agent_security()
+    check_bridge_cert_static()
+    check_bridge_cert_runtime()
     check_collab_agents()
     check_event_log_secrets()
     check_guardrail_denials()

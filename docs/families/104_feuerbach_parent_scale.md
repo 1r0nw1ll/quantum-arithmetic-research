@@ -76,7 +76,7 @@ Gate 4 verifies this for every triple in the batch.
 
 ## Connections to other families
 
-- Pythagorean families paper (arXiv-ready 2026-03-10): five families = orbits of F=[[0,1],[1,1]] on (Z/9Z)²
+- Pythagorean families paper (arXiv-ready 2026-03-10): orbit families of F=[[0,1],[1,1]] on (Z/9Z)² (NOTE: A1-compliant step gives 9 families, not 5 — see [198] correction 2026-04-08)
 - Barning-Berggren tree: semigroup words in {A, B, C} applied to primitive triples
 - QA modular orbit structure: interior = cosmos reachability; root = boundary fixed point
 

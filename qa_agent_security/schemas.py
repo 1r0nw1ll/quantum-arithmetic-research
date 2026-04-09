@@ -83,6 +83,21 @@ SCHEMA_SEND_EMAIL_V1: Dict[str, Any] = {
     },
 }
 
+SCHEMA_BRIDGE_CLI_EXEC_V1: Dict[str, Any] = {
+    "$id": "SCHEMA.BRIDGE_CLI_EXEC.v1",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title": "BRIDGE_CLI_EXEC tool args",
+    "type": "object",
+    "additionalProperties": False,
+    "required": ["command", "prompt"],
+    "properties": {
+        "command": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "prompt": {"type": "string", "minLength": 0, "maxLength": 1000000},
+        "cwd": {"type": "string", "minLength": 1, "maxLength": 4096},
+        "timeout_ms": {"type": "integer", "minimum": 1, "maximum": 600000},
+    },
+}
+
 SCHEMA_HTTP_FETCH_V1: Dict[str, Any] = {
     "$id": "SCHEMA.HTTP_FETCH.v1",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
@@ -119,6 +134,7 @@ SCHEMA_HTTP_FETCH_V1: Dict[str, Any] = {
 
 SCHEMAS: Dict[str, Dict[str, Any]] = {
     SCHEMA_RUN_SHELL_V1["$id"]: SCHEMA_RUN_SHELL_V1,
+    SCHEMA_BRIDGE_CLI_EXEC_V1["$id"]: SCHEMA_BRIDGE_CLI_EXEC_V1,
     SCHEMA_SEND_EMAIL_V1["$id"]: SCHEMA_SEND_EMAIL_V1,
     SCHEMA_HTTP_FETCH_V1["$id"]: SCHEMA_HTTP_FETCH_V1,
 }

@@ -47,7 +47,7 @@ TAINTED = "TAINTED"
 TRUSTED = "TRUSTED"
 
 VALID_SOURCES = frozenset({
-    "user", "web", "email", "file", "system", "policy_kernel"
+    "user", "web", "email", "file", "system", "policy_kernel", "cli_output"
 })
 
 
@@ -230,6 +230,7 @@ class ToolSpec:
 CRITICAL_FIELDS: Dict[str, Set[str]] = {
     "send_email": {"to"},
     "run_shell": {"command"},
+    "bridge_cli_exec": {"command"},
     "http_fetch": {"url"},
     "create_file": {"path"},
     "calendar_create": {"attendees"},
@@ -257,6 +258,8 @@ class CapabilityToken:
     issued_at: str = ""
     expires_at: str = ""
     instance_id: str = "local-kernel"
+    max_executions: int = 0  # 0 = unlimited
+    _executions_used: int = field(default=0, repr=False)
 
     def __post_init__(self):
         if not self.issued_at:
@@ -267,6 +270,15 @@ class CapabilityToken:
             return False
         now = now or now_rfc3339()
         return now > self.expires_at
+
+    def is_budget_exhausted(self) -> bool:
+        if self.max_executions <= 0:
+            return False
+        return self._executions_used >= self.max_executions
+
+    def consume_execution(self) -> None:
+        """Decrement budget. Called by enforce_policy on success."""
+        self._executions_used += 1
 
     def find_capability(self, tool_name: str, scope: str) -> Optional[CapabilityEntry]:
         for cap in self.capabilities:
@@ -299,7 +311,7 @@ def _check_constraints(cap: CapabilityEntry, args_pv: Dict[str, Dict[str, Any]])
     constraints = cap.constraints
 
     # command denylist (regex)
-    if cap.tool == "run_shell" and "command" in args_pv:
+    if cap.tool in ("run_shell", "bridge_cli_exec") and "command" in args_pv:
         import re
         cmd_val = args_pv["command"].get("value", "")
         for pattern in constraints.get("command_denylist_regex", []):
@@ -309,6 +321,49 @@ def _check_constraints(cap: CapabilityEntry, args_pv: Dict[str, Dict[str, Any]])
                     "expected": "pass",
                     "got": f"fail (matched {pattern!r})",
                 })
+
+    # command allowlist (bridge_cli_exec)
+    if cap.tool == "bridge_cli_exec" and "command" in args_pv:
+        cmd_val = args_pv["command"].get("value", "")
+        allow = constraints.get("command_allowlist")
+        if allow is not None and cmd_val not in allow:
+            diffs.append({
+                "inv": "COMMAND_ALLOWLIST",
+                "expected": f"command in {allow!r}",
+                "got": f"fail (command={cmd_val!r})",
+            })
+
+    # prompt denylist (bridge_cli_exec — defense-in-depth beyond guardrail)
+    if cap.tool == "bridge_cli_exec" and "prompt" in args_pv:
+        import re
+        prompt_val = args_pv["prompt"].get("value", "")
+        for pattern in constraints.get("prompt_denylist_regex", []):
+            if re.search(pattern, prompt_val, re.IGNORECASE):
+                diffs.append({
+                    "inv": "PROMPT_DENYLIST",
+                    "expected": "pass",
+                    "got": f"fail (matched {pattern!r})",
+                })
+
+    # workspace boundary (bridge_cli_exec / run_shell)
+    if cap.tool in ("bridge_cli_exec", "run_shell"):
+        allowed_paths = constraints.get("allowed_paths")
+        if allowed_paths is not None:
+            cwd_val = ""
+            if "cwd" in args_pv:
+                cwd_val = args_pv["cwd"].get("value", "")
+            elif "prompt" in args_pv:
+                # For bridge_cli_exec, cwd may not be explicit — check constraints only
+                cwd_val = ""
+            if cwd_val:
+                import os.path
+                resolved = os.path.realpath(cwd_val)
+                if not any(resolved.startswith(os.path.realpath(p)) for p in allowed_paths):
+                    diffs.append({
+                        "inv": "WORKSPACE_BOUNDARY",
+                        "expected": f"cwd within {allowed_paths!r}",
+                        "got": f"fail (cwd={resolved!r})",
+                    })
 
     # domain allowlist (http_fetch) — uses normalized (lowercase) hostname
     if cap.tool == "http_fetch" and "url" in args_pv:
@@ -375,6 +430,7 @@ FAIL_TYPES = frozenset({
     "CAPABILITY_TOKEN_EXPIRED",
     "CAPABILITY_NOT_FOUND",
     "CONSTRAINT_VIOLATION",
+    "BUDGET_EXHAUSTED",
 })
 
 
@@ -473,6 +529,12 @@ def enforce_policy(
     if capability_token is not None:
         if capability_token.is_expired():
             inv_diff.append({"inv": "CAPABILITY_TOKEN_VALID", "expected": "pass", "got": "fail (expired)"})
+        if capability_token.is_budget_exhausted():
+            inv_diff.append({
+                "inv": "BUDGET_NOT_EXHAUSTED",
+                "expected": "pass",
+                "got": f"fail (used {capability_token._executions_used}/{capability_token.max_executions})",
+            })
         cap = capability_token.find_capability(tool.name, tool.capability_scope)
         if cap is None:
             inv_diff.append({
@@ -515,11 +577,13 @@ def enforce_policy(
         inv_names = {d["inv"] for d in inv_diff}
         if "NO_WEB_TO_EXEC" in inv_names:
             fail_type = "CAPABILITY_ESCALATION_ATTEMPT"
+        elif "BUDGET_NOT_EXHAUSTED" in inv_names:
+            fail_type = "BUDGET_EXHAUSTED"
         elif "CAPABILITY_TOKEN_VALID" in inv_names:
             fail_type = "CAPABILITY_TOKEN_EXPIRED"
         elif "CAPABILITY_FOUND" in inv_names:
             fail_type = "CAPABILITY_NOT_FOUND"
-        elif "COMMAND_DENYLIST" in inv_names or "DOMAIN_ALLOWLIST" in inv_names or "RECIPIENT_ALLOWLIST" in inv_names:
+        elif "COMMAND_DENYLIST" in inv_names or "COMMAND_ALLOWLIST" in inv_names or "PROMPT_DENYLIST" in inv_names or "WORKSPACE_BOUNDARY" in inv_names or "DOMAIN_ALLOWLIST" in inv_names or "RECIPIENT_ALLOWLIST" in inv_names:
             fail_type = "CONSTRAINT_VIOLATION"
         elif "STRICT_ARGS_SCHEMA" in inv_names:
             fail_type = "SCHEMA_BREAKOUT"
@@ -589,6 +653,10 @@ def enforce_policy(
         },
     }
     cert["cert_id"] = canonical_json_sha256(cert)
+
+    # Consume execution budget on success
+    if capability_token is not None:
+        capability_token.consume_execution()
 
     # Log success to trace
     if trace is not None:

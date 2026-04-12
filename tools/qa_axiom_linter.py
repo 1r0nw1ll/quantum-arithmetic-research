@@ -435,6 +435,33 @@ RULES: list[ViolationRule] = [
         qa_file_only=True,
     ),
 
+    # ── MAP rules: enforce domain-specific (b,e) mapping ─────────────────────
+    # The generic mapping b=degree, e=core_number throws away domain structure
+    # (e.g., edge signs, edge weights, temporal order). Every QA graph experiment
+    # MUST declare its mapping rationale. A script that assigns b from degree()
+    # without a QA_MAP comment is using the generic default, which has repeatedly
+    # produced nulls on graphs where domain-specific mappings (signed-degree,
+    # hub-distance, generator inference) would have worked.
+    # The rule: any line that does `b = ...degree...` or `b = max(1, int(degree`
+    # must have a `# QA_MAP:` comment on the same line or within 3 lines above
+    # explaining WHY this mapping is correct for this domain.
+    # Suppression: # noqa: MAP-1 if the generic mapping is intentionally used
+    # as a BASELINE for comparison (not as the primary QA method).
+    ViolationRule(
+        id="MAP-1",
+        axiom="MAP",
+        description="Generic b=degree mapping without QA_MAP declaration — every QA graph "
+                    "experiment must declare WHY this (b,e) mapping is appropriate for this "
+                    "domain. Add a '# QA_MAP: <rationale>' comment within 3 lines, or use "
+                    "a domain-specific mapping (signed-degree, hub-distance, generator "
+                    "inference per [209]). Add # noqa: MAP-1 if generic is intentional baseline.",
+        pattern=re.compile(
+            r'b\s*=\s*(?:max\s*\(\s*1\s*,\s*)?int\s*\(\s*degree'
+        ),
+        severity="WARNING",
+        qa_file_only=True,
+    ),
+
     # ── FIREWALL rules (added 2026-04-11 after FST v1 audit) ────────────────
     # Theorem NT / T2-b at the validator-source level: a file that handles
     # both observer-layer values (MeV, frequency, continuous measurement)

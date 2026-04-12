@@ -1,0 +1,34 @@
+{
+  "schema_version": "QA_CAYLEY_BATESON_FILTRATION_CERT.v1",
+  "certificate_id": "qa.cert.cayley_bateson_filtration.fail.missing_generators.v1",
+  "cert_type": "qa_cayley_bateson_filtration_cert",
+  "title": "FAIL fixture: missing L2b generator set",
+  "created_utc": "2026-04-11T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: generator_sets omits L2b. Validator must flag CBF_GEN missing L2b.",
+
+  "source_attribution": "Arthur Cayley 1878 (Cayley graph). Negative fixture for [211] validator self-test.",
+
+  "generator_sets": {
+    "L1":  ["T"],
+    "L2a": ["T", "scalar_2", "scalar_4", "scalar_5", "scalar_7", "scalar_8", "swap"]
+  },
+
+  "component_sizes_s9": {
+    "L1":  [24, 24, 24, 8, 1],
+    "L2a": [72, 8, 1]
+  },
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "prerequisite"}
+  ],
+
+  "witnesses": [
+    {"tier_transition": "L0 -> L1", "new_generator": "T", "source": [1, 1], "target": [1, 2], "effect": "orbit merge"},
+    {"tier_transition": "L1 -> L2a", "new_generator": "scalar_2", "source": [1, 1], "target": [2, 2], "effect": "orbit family merge"},
+    {"tier_transition": "L2a -> L2b", "new_generator": "scalar_3", "source": [1, 1], "target": [3, 3], "effect": "family merge"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

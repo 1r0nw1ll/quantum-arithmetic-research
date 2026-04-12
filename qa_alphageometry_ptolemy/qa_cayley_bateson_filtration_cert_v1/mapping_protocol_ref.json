@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Cayley Bateson Filtration Cert family [211]: proves that the tiered reachability classes of family [191] are exactly the connected components of nested undirected Cayley graphs on S_m. Cay(S_9, {T}) yields T-orbits (5 components: 24+24+24+8+1); adding (Z/9Z)*-scalars and swap yields orbit families (3 components: 72+8+1); adding zero-divisor scalars and const_(9,9) yields the full connected state space (1 component of 81). Sum-of-squared-component-sizes gives cumulative pair counts 1793/5249/6561; non-cumulative differences 1712/3456/1312 match [191] exactly. Source grounding: Cayley 1878 (abstract groups by generators and relations), Dehn 1911 (word problem), plus [191] Bateson learning levels + [150] (Z/9Z)* unit group. Checks CBF_1+GEN/COMP/CUMU/DIFF/L1/L2A/L2B/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"
+}

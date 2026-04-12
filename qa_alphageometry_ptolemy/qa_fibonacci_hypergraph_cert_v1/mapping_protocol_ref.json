@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Fibonacci Hypergraph Cert family [212]: Every QA state (b,e) defines a length-4 Fibonacci window hyperedge (b,e,d,a) with d=b+e, a=b+2e. The resulting state-residue incidence hypergraph H(m) satisfies three structural theorems exhaustively verified on S_9: (1) SLIDING WINDOW — H(T(s)) = (e,d,a,(d+a) mod m), so T acts as 1-step Fibonacci window shift, 81/81 match; (2) UNIFORM VERTEX DEGREE — every residue v in {1..m} appears in exactly 4m hyperedges, on S_9 that is 36 per vertex, total 324; (3) ORBIT-MULTISET COLLAPSE — cosmos 24-orbits yield 22 distinct multiset hyperedges each, satellite 8-orbit yields 4, singularity yields 1. Source: Fibonacci 1202 (recurrence), Lucas 1878 (periods mod m), Wall 1960 (Pisano periods), Berge 1989 (hypergraph theory). Prerequisites: [191] Bateson Learning Levels, [192] Dual Extremality 24 (orbit length = Pisano period). Checks HGR_1+SLIDE/DEG/ORB/FIB/STATES/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"
+}

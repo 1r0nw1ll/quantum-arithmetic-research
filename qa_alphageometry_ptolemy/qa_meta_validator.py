@@ -5874,6 +5874,116 @@ def _validate_dual_extremality_24_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_conversation_arag_cert_family(base_dir: str) -> Optional[str]:
+    """QA Conversation A-RAG Cert family [210] — QA-native conversation retrieval datastore. Three sources (ChatGPT, Claude.ai, Gemini) mapped to integer tuples via Candidate F: b=dr(sum(ord(c))), e=role_rank, using [202] Aiq Bekar digital root. Three A-RAG views: keyword (FTS5), semantic (PPR over parent/cite/succ/ref edges, alpha=0.5), chunk (direct raw_text). Role-diagonal property: (a_label-d_label) mod 9 = e mod 9. Cross-source invariance verified on 5361 messages. T2 firewall: BM25/PPR = observer measurements, never QA inputs. A2: only b,e stored, d/a derived on read. Composes with [18], [20], QA_ARAG_INTERFACE, [202], [122], [191]. Checks CAV_1+SCHEMA/TUPLE/DIAG/CROSS/PROMO/A1/A2/T2/VIEWS/W/F; 2 fixtures PASS+FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_conversation_arag_cert_v1")
+    validator = os.path.join(fam_dir, "qa_conversation_arag_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_conversation_arag_cert_v1/qa_conversation_arag_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_conversation_arag_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_conversation_arag_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_conversation_arag_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_norm_flip_signed_cert_family(base_dir: str) -> Optional[str]:
+    """QA Norm-Flip Signed-Temporal Cert family [214] — Eisenstein quadratic form f(b,e) = b*b + b*e - e*e satisfies integer identity f(e,b+e) = -f(b,e). T^2 preserves f mod m. On S_9, 5 T-orbits decompose into 3 signed cosmos orbits with norm pairs {1,8}/{4,5}/{2,7} (Fibonacci/Lucas/Phibonacci) and 2 null orbits (Tribonacci satellite, Ninbonacci singularity). Temporal sign formula: (-1)^t * sign(f(s_0)) on integer lift. Connects [133] Eisenstein, [155] Bearden phase conjugate (QCI opposite-sign IS this flip), [191] stratification. Source: Eisenstein 1844. Checks NFS_1+FLIP/T2/PAIRS/TEMPORAL/155/133/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_norm_flip_signed_cert_v1")
+    validator = os.path.join(fam_dir, "qa_norm_flip_signed_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_norm_flip_signed_cert_v1/qa_norm_flip_signed_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_norm_flip_signed_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_norm_flip_signed_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_norm_flip_signed_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_causal_dag_cert_family(base_dir: str) -> Optional[str]:
+    """QA Causal DAG Cert family [213] — The A2 axiom (d=b+e, a=b+2e) IS the structural equation system of a 4-node Y-structure causal DAG with b,e exogenous and d,a endogenous colliders. Pair-invertibility theorem: all 6 pairs bijective on S_m iff gcd(2,m)=1; on S_9 all 6 bijective, on S_24 pair (b,a) is 2-to-1. Pearl-level collapse theorem: deterministic SCM collapses association/intervention/counterfactual to the A2 identities — SCM form of Theorem NT. Source: Pearl 2009, Wright 1921. Prerequisites: [191], [150], [202]. Checks CDG_1+STRUCT/A2/PAIRS/PEARL/NT/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_causal_dag_cert_v1")
+    validator = os.path.join(fam_dir, "qa_causal_dag_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_causal_dag_cert_v1/qa_causal_dag_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_causal_dag_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_causal_dag_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_causal_dag_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_fibonacci_hypergraph_cert_family(base_dir: str) -> Optional[str]:
+    """QA Fibonacci Hypergraph Cert family [212] — proves three structural theorems about the QA state-residue incidence hypergraph H(m) whose hyperedges are length-4 Fibonacci windows (b,e,d,a). Theorem 1: sliding window h(T(s))=(e,d,a,(d+a) mod m), 81/81 on S_9. Theorem 2: uniform vertex degree 4m=36 per residue, total 324 on S_9. Theorem 3: orbit-multiset collapse on S_9 T-orbits (24,24,24,8,1) yielding (22,22,22,4,1) distinct multisets. Source: Fibonacci 1202, Lucas 1878, Wall 1960, Berge 1989. Prerequisites: [191], [192], [211]. Checks HGR_1+SLIDE/DEG/ORB/FIB/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_fibonacci_hypergraph_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_hypergraph_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_hypergraph_cert_v1/qa_fibonacci_hypergraph_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_fibonacci_hypergraph_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_fibonacci_hypergraph_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_fibonacci_hypergraph_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_cayley_bateson_filtration_cert_family(base_dir: str) -> Optional[str]:
+    """QA Cayley Bateson Filtration Cert family [211] — proves the tiered reachability classes of [191] are exactly the connected components of nested undirected Cayley graphs on S_9. Generator sets Gamma_L1={T}, Gamma_L2a=Gamma_L1 U (Z/9Z)*-scalars U {swap}, Gamma_L2b=Gamma_L2a U zero-divisor-scalars U {const_(9,9)} yield components (24,24,24,8,1)/(72,8,1)/(81). Cumulative sums-of-squares 1793/5249/6561 and non-cumulative differences 1712/3456/1312 match [191] EXPECTED_TIER_COUNTS_S9. Undirected convention essential. Source: Cayley 1878, Dehn 1911. Prerequisite: [191]. Checks CBF_1+GEN/COMP/CUMU/DIFF/L1/L2A/L2B/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_cayley_bateson_filtration_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cayley_bateson_filtration_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cayley_bateson_filtration_cert_v1/qa_cayley_bateson_filtration_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_cayley_bateson_filtration_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_cayley_bateson_filtration_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_cayley_bateson_filtration_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_bateson_learning_levels_cert_family(base_dir: str) -> Optional[str]:
     """QA Bateson Learning Levels Cert family [191] — formalizes Gregory Bateson's learning hierarchy (0/I/II/III) as a strict invariant filtration on QA state spaces. Four invariants (orbit ⊂ family ⊂ modulus ⊂ ambient category) define L_0/L_1/L_2a/L_2b/L_3 operator classes. Tiered Reachability Theorem exhaustively verified on S_9: only 26% of 6561 pairs are Level-I reachable; 52.67% require L_2a, 20% require L_2b. Witnesses at every tier (qa_step, scalar_mult k=2, scalar_mult k=3, modulus_reduction). Source: Bateson (1972), Ashby (1956). Checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -6970,6 +7080,36 @@ FAMILY_SWEEPS = [
      "For any m-valued time series, e_t = ((b_{t+1} - b_t - 1) % m) + 1 is the unique A1-compliant generator. Signal IS orbit; generator IS dynamics. Role-distinct per [208]. Cross-series synchrony per [207]. Supersedes hardcoded CMAP/MICROSTATE_STATES. EEG chb01: directionally correct (synch seizure>baseline), ns on single patient, needs multi-patient. Will Dale + Claude 2026-04-08. Checks SGI_1+CLOSURE/UNIQUE/ROLE/SYNC/EMPIRICAL/SUPERSEDE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "209_qa_signal_generator_inference_cert",
      "qa_signal_generator_inference_cert_v1", True),
+
+    (211, "QA Cayley Bateson Filtration Cert family",
+     _validate_cayley_bateson_filtration_cert_family,
+     "Proves that the tiered reachability classes of family [191] are exactly the connected components of nested undirected Cayley graphs on S_9 under stratified generator sets. Gamma_L1={T} -> (24,24,24,8,1); Gamma_L2a adds (Z/9Z)* scalars + swap -> (72,8,1); Gamma_L2b adds non-unit scalars + const_(9,9) -> (81). Cumulative sums-of-squares 1793/5249/6561 and non-cumulative differences 1712/3456/1312 match [191] EXPECTED_TIER_COUNTS_S9 byte-for-byte. Undirected Cayley convention is essential because scalar_3 and const are non-bijective. Validator independently recomputes components on S_9 via stdlib BFS. Source: Cayley 1878 (graphical representation of groups), Dehn 1911 (word problem). Prerequisite: [191]. Will Dale + Claude 2026-04-11. Checks CBF_1+GEN/COMP/CUMU/DIFF/L1/L2A/L2B/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
+     "211_qa_cayley_bateson_filtration_cert",
+     "qa_cayley_bateson_filtration_cert_v1", True),
+
+    (210, "QA Conversation A-RAG Cert family",
+     _validate_conversation_arag_cert_family,
+     "QA-native conversation retrieval datastore: ChatGPT/Claude.ai/Gemini exports mapped to integer tuples via Candidate F b=dr(sum(ord(c))) + e=role_rank, grounded in [202] Aiq Bekar digital root. Three A-RAG views (keyword_search=FTS5, semantic_search=PPR over parent/cite/succ/ref edges, chunk_read). Role-diagonal property: each canonical role occupies one mod-9 diagonal because (a_label-d_label) mod 9 = e mod 9. Cross-source invariance verified on 5361 msgs (Claude+Gemini). T2 firewall: FTS5/PPR scores are observer measurements, never QA inputs. A2 compliance: only b,e stored, d/a derived on read. Composes with [18], [20], QA_ARAG_INTERFACE, [202] dr, [122] OB bridge, [191] Bateson. Checks CAV_1+SCHEMA/TUPLE/DIAG/CROSS/PROMO/A1/A2/T2/VIEWS/W/F; 2 fixtures PASS+FAIL; self-test ok",
+     "210_qa_conversation_arag_cert",
+     "qa_conversation_arag_cert_v1", True),
+
+    (212, "QA Fibonacci Hypergraph Cert family",
+     _validate_fibonacci_hypergraph_cert_family,
+     "Every QA state (b,e) defines a length-4 Fibonacci window hyperedge (b,e,d,a). The resulting state-residue incidence hypergraph H(m) satisfies three structural theorems on S_9: (1) SLIDING WINDOW h(T(s))=(e,d,a,(d+a) mod m), 81/81 states match; (2) UNIFORM VERTEX DEGREE every residue in {1..9} has degree 36=4m, total 324; (3) ORBIT-MULTISET COLLAPSE cosmos/satellite/singularity T-orbits (24,24,24,8,1) produce (22,22,22,4,1) distinct multiset hyperedges. Validator independently recomputes all three theorems in stdlib. Source: Fibonacci 1202 (recurrence), Lucas 1878 + Wall 1960 (Pisano periods), Berge 1989 (hypergraph theory). Prerequisites: [191] Bateson Learning Levels, [192] Dual Extremality 24, [211] Cayley view. Will Dale + Claude 2026-04-11. Checks HGR_1+SLIDE/DEG/ORB/FIB/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
+     "212_qa_fibonacci_hypergraph_cert",
+     "qa_fibonacci_hypergraph_cert_v1", True),
+
+    (213, "QA Causal DAG Cert family",
+     _validate_causal_dag_cert_family,
+     "The A2 axiom (d=b+e, a=b+2e) IS the structural equation system of a 4-node Y-structure causal DAG with b,e exogenous and d,a endogenous colliders. Pair-invertibility theorem: all 6 unordered pairs of {b,e,d,a} bijective as maps from S_m=(1..m)^2 to their image iff gcd(2,m)=1. On S_9 (gcd=1): all 6 bijective (81/81 each). On S_24 (gcd=2): 5 bijective, pair (b,a) is 2-to-1 (288/576). Pearl-level collapse theorem: because A2 is deterministic integer arithmetic, Pearl's association/intervention/counterfactual hierarchy collapses to the A2 identities themselves. This is the SCM form of Theorem NT observer projection firewall. Source: Pearl 2009 (Causality), Wright 1921 (path analysis). Prerequisites: [191], [150], [202]. Will Dale + Claude 2026-04-11. Checks CDG_1+STRUCT/A2/PAIRS/PEARL/NT/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
+     "213_qa_causal_dag_cert",
+     "qa_causal_dag_cert_v1", True),
+
+    (214, "QA Norm-Flip Signed-Temporal Cert family",
+     _validate_norm_flip_signed_cert_family,
+     "The Eisenstein quadratic form f(b,e) = b*b + b*e - e*e satisfies the integer identity f(e,b+e) = -f(b,e) where T(b,e)=(e,b+e). Corollary: T^2 preserves f mod m, giving T-orbit graph of S_m a signed-temporal structure. On S_9, 5 T-orbits decompose into 3 signed cosmos orbits with norm pairs {1,8}/{4,5}/{2,7} (Fibonacci/Lucas/Phibonacci) and 2 null orbits (satellite Tribonacci, singularity Ninbonacci) where f is identically 0 mod 9. Three cosmos orbits are bipartite signed (12 + 12 states alternating sign under T). Temporal sign formula: sign(f(T^t(s_0))) = (-1)^t * sign(f(s_0)) on integer lift. This is the SIGNED-TEMPORAL view of the same T dynamic certified structurally by [211]-[213] and operationally by [210]. Source: Eisenstein 1844, Pythagorean Families paper (Will Dale + Claude 2026-03). Connects [133] Eisenstein cert, [155] Bearden phase conjugate (QCI opposite-sign = norm-sign flip), [191] cosmos/satellite/singularity stratification. Will Dale + Claude 2026-04-11. Checks NFS_1+FLIP/T2/PAIRS/TEMPORAL/155/133/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
+     "214_qa_norm_flip_signed_cert",
+     "qa_norm_flip_signed_cert_v1", True),
 ]
 
 

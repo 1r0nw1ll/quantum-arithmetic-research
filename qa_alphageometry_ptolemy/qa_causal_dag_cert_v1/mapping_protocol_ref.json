@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Causal DAG Cert family [213]: The A2 axiom (d=b+e, a=b+2e) IS the structural equation system of a 4-node causal DAG with b,e exogenous and d,a endogenous colliders. Y-structure with 4 nodes and 4 edges, acyclic. Pair-invertibility theorem: for modulus m, all 6 unordered pairs of {b,e,d,a} bijective on S_m iff gcd(2,m)=1; otherwise exactly the pair (b,a) is g-to-1 where g=gcd(2,m). On S_9 (gcd=1): all 6 bijective. On S_24 (gcd=2): pair (b,a) is 2-to-1 (288/576 distinct). Pearl-level collapse: because QA equations are deterministic integer arithmetic, Pearl's association/intervention/counterfactual hierarchy collapses to the A2 identities. This is the SCM form of Theorem NT observer projection firewall. Source: Pearl 'Causality' 2009 (SCM + do-calculus), Wright 1921 (path analysis), plus [191] Bateson, [150] septenary unit group, [202] Aiq Bekar. Checks CDG_1+STRUCT/A2/PAIRS/PEARL/NT/191/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"
+}

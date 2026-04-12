@@ -1,0 +1,40 @@
+{
+  "schema_version": "QA_NORM_FLIP_SIGNED_CERT.v1",
+  "certificate_id": "qa.cert.norm_flip_signed.fail.wrong_orbit.v1",
+  "cert_type": "qa_norm_flip_signed_cert",
+  "title": "FAIL fixture: declared norm pairs contradict independent recomputation",
+  "created_utc": "2026-04-11T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: declares the cosmos Lucas orbit with norm pair {3, 6} (wrong; actual is {4, 5}) and is missing cross-ref to [155]. Validator must flag NFS_PAIRS and NFS_155.",
+
+  "source_attribution": "Eisenstein 1844. Negative fixture for [214] validator self-test.",
+
+  "flip_identity_s9": {"checked": 81, "matched": 81},
+  "t2_preservation_s9": {"checked": 81, "matched": 81},
+
+  "signed_orbits_s9": [
+    {"length": 24, "distinct_norms_mod_m": [1, 8], "pair_type": "signed"},
+    {"length": 24, "distinct_norms_mod_m": [3, 6], "pair_type": "signed"},
+    {"length": 24, "distinct_norms_mod_m": [2, 7], "pair_type": "signed"},
+    {"length": 8,  "distinct_norms_mod_m": [0],    "pair_type": "null"},
+    {"length": 1,  "distinct_norms_mod_m": [0],    "pair_type": "null"}
+  ],
+
+  "temporal_sign_formula": "sign = (-1)^t * sign(f(s_0))",
+
+  "cross_references": [
+    {"family": 133, "name": "QA Eisenstein Cert", "relation": "norm"},
+    {"family": 191, "name": "QA Bateson Learning Levels", "relation": "stratification"}
+  ],
+
+  "witnesses": [
+    {"orbit": "cosmos_fibonacci", "source": [1, 1]},
+    {"orbit": "cosmos_lucas", "source": [1, 3]},
+    {"orbit": "cosmos_phibonacci", "source": [1, 4]},
+    {"orbit": "satellite", "source": [3, 3]},
+    {"orbit": "singularity", "source": [9, 9]}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

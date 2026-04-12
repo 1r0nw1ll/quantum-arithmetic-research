@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_CAUSAL_DAG_CERT.v1",
+  "certificate_id": "qa.cert.causal_dag.fail.bad_structure.v1",
+  "cert_type": "qa_causal_dag_cert",
+  "title": "FAIL fixture: declared DAG has wrong structural equations and missing exogenous partition",
+  "created_utc": "2026-04-11T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: structural_equations.a declares 'b + 3e' (wrong; correct is b+2e). Also missing exogenous partition. Validator must flag CDG_A2 and CDG_STRUCT.",
+
+  "source_attribution": "Pearl 2009, Wright 1921. Negative fixture for [213] validator self-test.",
+
+  "causal_dag": {
+    "nodes": ["b", "e", "d", "a"],
+    "edges": [["b", "d"], ["e", "d"], ["b", "a"], ["e", "a"]],
+    "exogenous": [],
+    "endogenous": ["d", "a"],
+    "colliders": ["d", "a"],
+    "structural_equations": {
+      "d": "b + e",
+      "a": "b + 3e"
+    }
+  },
+
+  "pair_bijectivity_s9": {
+    "b_e": "bijective",
+    "b_d": "bijective",
+    "b_a": "bijective",
+    "e_d": "bijective",
+    "e_a": "bijective",
+    "d_a": "bijective"
+  },
+
+  "pearl_level_collapse": {"collapses": true, "reason": "deterministic SCM"},
+  "theorem_nt_correspondence": "observer projection firewall",
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels", "relation": "prerequisite"}
+  ],
+
+  "witnesses": [
+    {"pair": "be", "modulus": 9, "note": "trivial"},
+    {"pair": "da", "modulus": 9, "note": "collider"},
+    {"pair": "ba", "modulus": 9, "note": "unit"},
+    {"pair": "ba", "modulus": 24, "note": "fold"}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

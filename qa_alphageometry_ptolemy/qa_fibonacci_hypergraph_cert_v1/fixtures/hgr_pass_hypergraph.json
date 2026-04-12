@@ -1,0 +1,77 @@
+{
+  "schema_version": "QA_FIBONACCI_HYPERGRAPH_CERT.v1",
+  "certificate_id": "qa.cert.fibonacci_hypergraph.pass.incidence.v1",
+  "cert_type": "qa_fibonacci_hypergraph_cert",
+  "title": "QA Fibonacci hypergraph structural theorems on S_9 — sliding window, uniform degree, orbit-multiset collapse",
+  "created_utc": "2026-04-11T00:00:00Z",
+
+  "_fixture_purpose": "Certifies the state-residue incidence hypergraph H(m) where each QA state (b,e) contributes a length-4 Fibonacci window hyperedge (b,e,d,a) with d=b+e, a=b+2e. Three structural theorems: (1) T acts as 1-step Fibonacci window shift, (2) vertex degrees uniform at 4m, (3) orbit-multiset distribution matches (22,22,22,4,1) on S_9 T-orbits.",
+
+  "source_attribution": "Leonardo of Pisa (Fibonacci), 'Liber Abaci' (1202) — Fibonacci recurrence F_{n+1}=F_n+F_{n-1}. Edouard Lucas, 'Theorie des Fonctions Numeriques Simplement Periodiques' (American Journal of Mathematics, 1878). D. D. Wall, 'Fibonacci Series Modulo m' (American Mathematical Monthly 67, 1960, pp. 525-532) — Pisano period function pi(m). Claude Berge, 'Hypergraphs: Combinatorics of Finite Sets' (North-Holland, 1989) — hypergraph theory foundations. QA formalization: Will Dale + Claude, 2026-04-11.",
+
+  "theorem_statement": "Let H(m) be the bipartite incidence hypergraph with vertex set V={1,...,m} and hyperedge set E={(b,e,d,a) : (b,e) in S_m} where d=(b+e) mod m and a=(b+2e) mod m (A1-adjusted). Then: (1) the QA generator T=(b,e)->(e,d) acts on hyperedges as the 1-step Fibonacci window shift (F0,F1,F2,F3) -> (F1,F2,F3,F2+F3); (2) every vertex v in V has degree exactly 4m in H(m); (3) within each T-orbit of S_m, the set of distinct multiset hyperedges has size strictly less than or equal to the orbit length, with collapses determined by the internal symmetry of the Fibonacci-window sequence.",
+
+  "fibonacci_recurrence": "F_{k+1} = F_{k-1} + F_k; in hyperedge terms, the slide shifts (F0,F1,F2,F3) -> (F1,F2,F3,F4) where F4 = F2 + F3 = d + a (mod m)",
+
+  "sliding_window_s9": {
+    "checked": 81,
+    "matched": 81,
+    "formula": "H(T(s)) = (e_s, d_s, a_s, (d_s + a_s) mod m)"
+  },
+
+  "vertex_degree_s9": {
+    "per_vertex": 36,
+    "total": 324,
+    "formula": "degree(v) = 4m; on S_9 this is 36 per vertex, total 4 * 81 = 324",
+    "proof_sketch": "Each of the 4 hyperedge positions (b, e, d, a) takes value v for exactly m of the m^2 states in S_m (one equation per slot). Summing: 4m contributions per vertex, independent of v."
+  },
+
+  "orbit_multisets_s9": [
+    {"orbit_representative": [1, 1], "length": 24, "distinct_multisets": 22, "family": "cosmos"},
+    {"orbit_representative": [1, 3], "length": 24, "distinct_multisets": 22, "family": "cosmos"},
+    {"orbit_representative": [1, 4], "length": 24, "distinct_multisets": 22, "family": "cosmos"},
+    {"orbit_representative": [3, 3], "length": 8,  "distinct_multisets": 4,  "family": "satellite"},
+    {"orbit_representative": [9, 9], "length": 1,  "distinct_multisets": 1,  "family": "singularity"}
+  ],
+
+  "witnesses": [
+    {
+      "family": "cosmos",
+      "state": [1, 1],
+      "hyperedge": [1, 1, 2, 3],
+      "T_state": [1, 2],
+      "T_hyperedge": [1, 2, 3, 5],
+      "note": "Fibonacci window starts at (F_0,F_1,F_2,F_3) = (1,1,2,3); one slide gives (1,2,3,5), the next Fibonacci window. d+a = 2+3 = 5 = new last element. Canonical Fibonacci seed."
+    },
+    {
+      "family": "satellite",
+      "state": [3, 3],
+      "hyperedge": [3, 3, 6, 9],
+      "T_state": [3, 6],
+      "T_hyperedge": [3, 6, 9, 6],
+      "note": "Satellite orbit slide: (3,3,6,9) -> (3,6,9,6) because d+a = 6+9 = 15 mod 9 = 6 (A1-adjusted). The 8-cycle produces only 4 distinct multisets due to internal period-2 symmetry."
+    },
+    {
+      "family": "singularity",
+      "state": [9, 9],
+      "hyperedge": [9, 9, 9, 9],
+      "T_state": [9, 9],
+      "T_hyperedge": [9, 9, 9, 9],
+      "note": "Fixed point: (9,9,9,9). The singleton hyperedge {9} with multiplicity 4. Single multiset, single orbit."
+    }
+  ],
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "prerequisite — provides orbit classification underlying theorem 3 (orbit-multiset collapse)"},
+    {"family": 192, "name": "QA Dual Extremality 24",        "relation": "orbit length in S_9 equals Pisano period pi_(b,e)(9); 24 is the maximum"},
+    {"family": 211, "name": "QA Cayley Bateson Filtration",  "relation": "dual view of the same T dynamics — Cayley graph components (structural) versus Fibonacci hypergraph slides (dynamical)"},
+    {"family": 130, "name": "QA Origin of 24",               "relation": "family invariant cosmos/satellite/singularity controls the multiset collapse pattern"},
+    {"family": 150, "name": "QA Septenary Unit Group",       "relation": "(Z/9Z)* orbit on S_9 preserves vertex degree uniformity via transitive scalar action"}
+  ],
+
+  "verification_script": "qa_lab/qa_graph/hypergraph.py :: verify_all_theorems(9)",
+  "verification_result": "all_ok = true; sliding_window 81/81; vertex_degree uniform at 36; orbit_multisets match (22,22,22,4,1)",
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,91 @@
+{
+  "schema_version": "QA_CAYLEY_BATESON_FILTRATION_CERT.v1",
+  "certificate_id": "qa.cert.cayley_bateson_filtration.pass.equivalence.v1",
+  "cert_type": "qa_cayley_bateson_filtration_cert",
+  "title": "Cayley-graph equivalence of Bateson learning-level reachability classes on S_9",
+  "created_utc": "2026-04-11T00:00:00Z",
+
+  "_fixture_purpose": "Certifies that the tiered reachability classes of family [191] are exactly the connected components of nested undirected Cayley graphs on S_9 under stratified generator sets. Independently verifies the component sizes (24,24,24,8,1)/(72,8,1)/(81), cumulative sums-of-squares 1793/5249/6561, and non-cumulative differences 1712/3456/1312 matching [191] exactly.",
+
+  "source_attribution": "Arthur Cayley, 'Desiderata and Suggestions No. 2: The Theory of Groups: Graphical Representation' (American Journal of Mathematics 1, 1878, pp. 174-176) — original definition of the Cayley graph of a group with respect to a generating set. Max Dehn, 'Über unendliche diskontinuierliche Gruppen' (1911) — word problem on Cayley graphs. QA formalization: Will Dale + Claude, 2026-04-11. Prerequisite: family [191] qa_bateson_learning_levels_cert.",
+
+  "theorem_statement": "Let Cay_undirected(S_9, Gamma) denote the undirected graph with vertex set S_9 = {(b,e) : 1<=b,e<=9} and an edge {s, g(s)} for each s in S_9 and each g in Gamma. Define the tier generator sets Gamma_{L1} = {T}; Gamma_{L2a} = Gamma_{L1} U {scalar_k : k in (Z/9Z)*, k != 1} U {swap}; Gamma_{L2b} = Gamma_{L2a} U {scalar_k : gcd(k,9)>1, k!=1} U {const_(9,9)}. Then the connected components of Cay_undirected(S_9, Gamma_{tier}) equal the tier-reachability classes of [191] Bateson learning levels.",
+
+  "undirected_convention_note": "Undirected Cayley graph is essential: scalar_3 and const_(9,9) are non-bijective on S_9 (kernels of size > 1), so reachability is only symmetric under closure of generators under inverses, which the standard Cayley-graph undirected convention provides.",
+
+  "generator_sets": {
+    "L1":  ["T"],
+    "L2a": ["T", "scalar_2", "scalar_4", "scalar_5", "scalar_7", "scalar_8", "swap"],
+    "L2b": ["T", "scalar_2", "scalar_3", "scalar_4", "scalar_5", "scalar_6", "scalar_7", "scalar_8", "swap", "const_singularity"]
+  },
+
+  "component_sizes_s9": {
+    "L1":  [24, 24, 24, 8, 1],
+    "L2a": [72, 8, 1],
+    "L2b": [81]
+  },
+
+  "cumulative_pair_count_s9": {
+    "L1":  1793,
+    "L2a": 5249,
+    "L2b": 6561
+  },
+
+  "tier_differences": {
+    "1":  1712,
+    "2a": 3456,
+    "2b": 1312
+  },
+
+  "correspondence_to_191": {
+    "L1_components": "T-orbits — three cosmos orbits of length 24, one satellite orbit of length 8, the singularity fixed point",
+    "L2a_components": "orbit families — cosmos (72 states), satellite (8 states), singularity (1 state)",
+    "L2b_components": "entire state space S_9 (81 states) — one connected component",
+    "cumulative_matches": "1793 = 81 + 1712; 5249 = 1793 + 3456; 6561 = 5249 + 1312",
+    "non_cumulative_matches_191": {
+      "1": 1712,
+      "2a": 3456,
+      "2b": 1312
+    }
+  },
+
+  "witnesses": [
+    {
+      "tier_transition": "L0 -> L1",
+      "new_generator": "T",
+      "source": [1, 1],
+      "target": [1, 2],
+      "effect": "T merges the trivial component {(1,1)} with {(1,2)}; repeated application traces out the 24-element cosmos orbit containing (1,1)",
+      "note": "Canonical QA step; L1 generator set {T} produces exactly the T-orbit decomposition (24+24+24+8+1 = 81)"
+    },
+    {
+      "tier_transition": "L1 -> L2a",
+      "new_generator": "scalar_2",
+      "source": [1, 1],
+      "target": [2, 2],
+      "effect": "scalar_2 is a (Z/9Z)* unit (order 6); it merges the three cosmos orbits into a single 72-element family component; satellite orbit is fixed setwise because 2*{3,6,9} = {6,3,9} mod 9",
+      "note": "After adding scalar_2, _4, _5, _7, _8 and swap, components become (72, 8, 1) = cosmos/satellite/singularity families"
+    },
+    {
+      "tier_transition": "L2a -> L2b",
+      "new_generator": "scalar_3",
+      "source": [1, 1],
+      "target": [3, 3],
+      "effect": "scalar_3 is a non-unit (gcd(3,9)=3), image is the satellite family; under undirected convention this merges cosmos and satellite components",
+      "note": "Adding scalar_3, scalar_6, and const_singularity collapses all three families into a single 81-element component"
+    }
+  ],
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "prerequisite — provides the tiered reachability classes whose Cayley-graph characterization this cert proves"},
+    {"family": 150, "name": "QA Septenary Unit Group", "relation": "(Z/9Z)* is the 6-element cyclic group providing concrete L_2a generators via scalar multiplication"},
+    {"family": 130, "name": "QA Origin of 24", "relation": "orbit classification via v_3(f) is the family invariant underlying the L_2a component structure"},
+    {"family": 192, "name": "QA Dual Extremality 24", "relation": "(Z/9Z)* cyclic structure dovetails with the Carmichael lambda(24)=2 extremality statement"}
+  ],
+
+  "verification_script": "qa_lab/qa_graph/cayley.py :: verify_bateson_cayley_equivalence(9)",
+  "verification_result": "matches_191_counts = true; all three tier cumulative_pair_counts equal expected; all three non-cumulative differences equal [191] BATESON_191_S9_COUNTS",
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

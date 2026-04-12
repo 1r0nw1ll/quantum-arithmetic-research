@@ -1,0 +1,37 @@
+{
+  "schema_version": "QA_FIBONACCI_HYPERGRAPH_CERT.v1",
+  "certificate_id": "qa.cert.fibonacci_hypergraph.fail.bad_degree.v1",
+  "cert_type": "qa_fibonacci_hypergraph_cert",
+  "title": "FAIL fixture: declared vertex degree contradicts independent recomputation",
+  "created_utc": "2026-04-11T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture: declares per_vertex degree 35 (wrong; correct is 36=4*9). Validator recomputes from S_9 and must flag HGR_DEG. Also missing witnesses to trigger HGR_WIT.",
+
+  "source_attribution": "Fibonacci 1202, Berge 1989. Negative fixture for [212] validator self-test.",
+
+  "fibonacci_recurrence": "F_{k+1} = F_{k-1} + F_k",
+
+  "sliding_window_s9": {"checked": 81, "matched": 81},
+
+  "vertex_degree_s9": {
+    "per_vertex": 35,
+    "total": 315
+  },
+
+  "orbit_multisets_s9": [
+    {"length": 24, "distinct_multisets": 22},
+    {"length": 24, "distinct_multisets": 22},
+    {"length": 24, "distinct_multisets": 22},
+    {"length": 8,  "distinct_multisets": 4},
+    {"length": 1,  "distinct_multisets": 1}
+  ],
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "prerequisite"}
+  ],
+
+  "witnesses": [],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

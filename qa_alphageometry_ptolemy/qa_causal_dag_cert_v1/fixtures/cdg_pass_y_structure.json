@@ -1,0 +1,112 @@
+{
+  "schema_version": "QA_CAUSAL_DAG_CERT.v1",
+  "certificate_id": "qa.cert.causal_dag.pass.y_structure.v1",
+  "cert_type": "qa_causal_dag_cert",
+  "title": "QA 4-tuple as a 4-node Y-structure causal DAG — pair invertibility and Pearl-level collapse",
+  "created_utc": "2026-04-11T00:00:00Z",
+
+  "_fixture_purpose": "Certifies that the A2 axiom (d=b+e, a=b+2e) IS the structural equation system of a 4-node causal DAG. The DAG has b,e exogenous and d,a endogenous colliders. Pair-invertibility theorem: all 6 pairs bijective on S_9 (gcd(2,9)=1); on S_24, 5 of 6 bijective with (b,a) 2-to-1 (gcd(2,24)=2). Pearl's three causal levels collapse because structural equations are deterministic.",
+
+  "source_attribution": "Judea Pearl, 'Causality: Models, Reasoning, and Inference' (Cambridge University Press, 2nd ed. 2009) — structural causal models, do-calculus, three-level causal hierarchy. Sewall Wright, 'Correlation and Causation' (Journal of Agricultural Research 20, 1921, pp. 557-585) — original path analysis. QA formalization: Will Dale + Claude, 2026-04-11. Prerequisites: families [191] Bateson Learning Levels, [150] Septenary Unit Group, [202] Aiq Bekar digital root.",
+
+  "causal_dag": {
+    "nodes": ["b", "e", "d", "a"],
+    "edges": [["b", "d"], ["e", "d"], ["b", "a"], ["e", "a"]],
+    "exogenous": ["b", "e"],
+    "endogenous": ["d", "a"],
+    "colliders": ["d", "a"],
+    "leaves": ["d", "a"],
+    "structural_equations": {
+      "d": "b + e",
+      "a": "b + 2e"
+    },
+    "topology": "Y-structure (two exogenous sources, two endogenous collider sinks), acyclic, 4 nodes, 4 directed edges"
+  },
+
+  "pair_invertibility_theorem": {
+    "statement": "For modulus m, all 6 unordered pairs of {b,e,d,a} are bijective as maps from S_m = {1..m}^2 to their image iff gcd(2,m) = 1. When gcd(2,m) = g > 1, exactly the pair (b,a) is g-to-1.",
+    "proof_sketch": "Given any 2 of (b,e,d,a), solve the 2x2 linear system from the A2 structural equations over Z/mZ. Pairs (b,e), (b,d), (e,d), (e,a), (d,a) have full-rank integer-matrix linear solves (determinant ±1). Pair (b,a) requires solving 2e = a - b (mod m), which has a unique solution iff 2 is invertible mod m."
+  },
+
+  "pair_bijectivity_s9": {
+    "b_e": "bijective",
+    "b_d": "bijective",
+    "b_a": "bijective",
+    "e_d": "bijective",
+    "e_a": "bijective",
+    "d_a": "bijective",
+    "note": "S_9 has gcd(2,9)=1 so 2 is a unit; all 6 pairs yield 81/81 distinct projections"
+  },
+
+  "pair_bijectivity_s24": {
+    "b_e": "bijective",
+    "b_d": "bijective",
+    "b_a": "2-to-1",
+    "e_d": "bijective",
+    "e_a": "bijective",
+    "d_a": "bijective",
+    "note": "S_24 has gcd(2,24)=2 so 2 is NOT a unit; pair (b,a) has 288/576 distinct = 2-to-1 fold; other 5 pairs remain 576/576 bijective"
+  },
+
+  "pearl_level_collapse": {
+    "collapses": true,
+    "reason": "The A2 structural equations d=b+e, a=b+2e are deterministic integer arithmetic with NO stochastic noise term. Pearl's three levels (association, intervention, counterfactual) all deliver the same value because there is no noise to marginalize over. This is a degenerate but valid SCM.",
+    "witness_b1_e1": {
+      "input": [1, 1],
+      "level_1_observation": [2, 3],
+      "level_2_intervention": [2, 3],
+      "level_3_counterfactual_b_plus_1": {"b_cf": 2, "d_cf": 3, "a_cf": 4},
+      "note": "Levels 1 and 2 match exactly because d, a are deterministic functions of b, e. Level 3 is also deterministic given counterfactual b value."
+    }
+  },
+
+  "theorem_nt_correspondence": "The Pearl-level collapse under determinism is the SCM formulation of Theorem NT (observer projection firewall). QA causal structure lives entirely in the discrete A2 equations; the observer (measurement) layer sits orthogonally. Continuous functions that might correlate with the tuple are observer projections — they cannot be causal inputs because the SCM is closed under A2.",
+
+  "witnesses": [
+    {
+      "pair": "be",
+      "modulus": 9,
+      "example_tuple": [3, 5, 8, 4],
+      "invertibility": "bijective",
+      "note": "Trivial: (b,e) are the exogenous inputs; uniquely determine d=b+e, a=b+2e."
+    },
+    {
+      "pair": "da",
+      "modulus": 9,
+      "example_tuple": [3, 5, 8, 4],
+      "recovery": {"e": "a - d = 4 - 8 = -4 mod 9 = 5", "b": "2d - a = 16 - 4 = 12 mod 9 = 3"},
+      "invertibility": "bijective",
+      "note": "The (d,a) pair is the 'observational' pair — when you only see the endogenous variables, you can still recover the exogenous drivers via linear algebra."
+    },
+    {
+      "pair": "ba",
+      "modulus": 9,
+      "example_tuple": [3, 5, 8, 4],
+      "recovery": {"e": "(a - b) / 2 = (4 - 3) * 2^(-1) mod 9 = 1 * 5 = 5"},
+      "invertibility": "bijective",
+      "note": "On S_9 the pair (b,a) IS bijective because 2 is a unit mod 9 (2^-1 = 5). 81/81 distinct."
+    },
+    {
+      "pair": "ba",
+      "modulus": 24,
+      "example_tuples": [[1, 2, 3, 5], [1, 14, 15, 5]],
+      "recovery": "e = (a - b) / 2 has no unique solution: both e=2 and e=14 give b=1, a=5 after mod 24",
+      "invertibility": "2-to-1",
+      "note": "On S_24 the pair (b,a) is 2-to-1 because gcd(2,24)=2. Exactly 288/576 distinct projections. Witness: b=1, a=5 is attained by two distinct (b,e) states."
+    }
+  ],
+
+  "cross_references": [
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "prerequisite — the filtration L_1/L_2a/L_2b is the causal-hierarchy analog on QA state operators"},
+    {"family": 150, "name": "QA Septenary Unit Group", "relation": "2 ∈ (Z/9Z)* (cyclic of order 6, 2^6=1 mod 9) is the exact reason pair (b,a) is bijective on S_9"},
+    {"family": 202, "name": "QA Hebrew Mod-9 Identity", "relation": "Aiq Bekar dr function supplies the A1 adjustment used in sector labels"},
+    {"family": 211, "name": "QA Cayley Bateson Filtration", "relation": "the same T dynamic viewed as a Cayley graph is the generator-graph analog of this causal DAG"},
+    {"family": 212, "name": "QA Fibonacci Hypergraph", "relation": "the 4-tuple hyperedge structure and this causal DAG are dual views of the same (b,e,d,a) object"}
+  ],
+
+  "verification_script": "qa_lab/qa_graph/causal_dag.py :: verify_y_structure(), verify_pair_invertibility_theorem(9), verify_pair_invertibility_theorem(24), pearl_level_collapse_samples(9)",
+  "verification_result": "Y-structure is_acyclic=true; S_9 all 6 pairs bijective; S_24 pair (b,a) 2-to-1 others bijective; Pearl level 1/2 match for all 4 witness states; level 3 counterfactuals deterministic",
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

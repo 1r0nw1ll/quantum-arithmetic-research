@@ -58,9 +58,22 @@ class ViolationRule(NamedTuple):
     qa_file_only: bool     # Only applies to files that use QA keywords
 
 # Patterns that indicate a file is doing QA work (not just importing)
+# Group A: orbit/state keywords (original indicators).
+# Group B: cert-module / validator / schema keywords — added 2026-04-11 after
+#          the FST v1 audit revealed that validator source files containing
+#          observer/QA-layer firewall crossings were being skipped entirely
+#          because they lacked Group-A keywords. Validator sources for
+#          schema-registered cert modules must be linted regardless of
+#          whether they mention orbit classification directly.
 QA_INDICATOR_PATTERNS = [
     re.compile(r'orbit_famil|orbit_class|classify_orbit|qa_tuple|QASystem|QAEngine|'
                r'singularity|satellite|cosmos|v_3\(f\)|three_adic|norm_f\('),
+    re.compile(r'QA_MAP_MODULE_SPINE|QA_CERT_BUNDLE|QA_SUBMISSION_PACKET_SPINE|'
+               r'QA_RUN_ARTIFACT_BUNDLE|QA_SHA256_MANIFEST|'
+               r'qa\.cert\.|qa\.map\.|qa\.manifest\.|'
+               r'validator_contract|module_spine|cert_bundle|'
+               r'fail_records|FAIL_RECORD|fail_record\(|add_fail\(|add_warning\(|'
+               r'LOOP_TO_MEV|FST_PROTON|FST_STF_|FST_FERMION|FST_QUARK|FST_LOOP_MASS'),
 ]
 
 RULES: list[ViolationRule] = [
@@ -77,7 +90,10 @@ RULES: list[ViolationRule] = [
         id="T2-b-2",
         axiom="T2-b",
         description="astype(int) on float array likely creates continuous (b,e) state",
-        pattern=re.compile(r'\.astype\s*\(\s*int\s*\)'),
+        # Precision (2026-04-11): skip when the argument is clearly a boolean
+        # mask expression (e.g. `(vals > thresh).astype(int)`), which is just
+        # converting 0/1 cluster labels, not creating a float-derived QA state.
+        pattern=re.compile(r'(?<![=!<>])\s*(?<!\))\.astype\s*\(\s*int\s*\)'),
         severity="WARNING",
         qa_file_only=True,
     ),
@@ -161,11 +177,61 @@ RULES: list[ViolationRule] = [
     ),
 
     # A2: Independent assignment of derived coordinates
+    # Precision note (2026-04-11, tightened after qa_guardrail and qa_graph
+    # triage): the original rule matched `d = <anything>` which produced false
+    # positives on every Python idiom where `d` means "dict" or "distance" or
+    # "denominator". Now the rule fires ONLY when the RHS looks like it could
+    # be a QA coordinate value being set independently. Excluded patterns:
+    #   d = {, d = [, d = (      dict / list / tuple literal
+    #   d = obj.to_dict(), d = obj.dict, d = dict(   dict construction
+    #   d = json.<anything>      JSON parsing
+    #   d = math.<anything>      math library (sqrt, log, etc.)
+    #   d = np.<anything>        numpy array construction/op
+    #   d = torch.<anything>     torch tensor op
+    #   d = <numeric literal>    scalar initializer like d = 0.0
+    #   d = <identifier> =       chained assignment like d = a = 0
+    #   d = <identifier>.<attr>  attribute access (d = W.sum, d = self.x)
+    #   d = b + e, d = b+e       legitimate derivation
+    # Same exclusions applied to the A2-2 rule for `a`.
+    # Pragmatic precision notes (2026-04-11 round 2):
+    #   - Accept d = b+e, d = b + e, a = b+2e, a = b + 2e, a = b + 2.0 * e
+    #   - Skip subscript access: d = result[...], d = obj['key']
+    #   - Skip tuple unpacking: `..., a = func(...)` where `a` is inside a
+    #     comma-separated LHS list. Handled by requiring the A2 variable to
+    #     be the FIRST non-whitespace token on the line (after optional
+    #     `self.` prefix).
     ViolationRule(
         id="A2-1",
         axiom="A2",
         description="d assigned independently (A2: d must always be derived as d = b+e)",
-        pattern=re.compile(r'(?<![beda])\bd\s*=\s*(?!\s*b\s*\+\s*e|\s*b\+e)'),
+        pattern=re.compile(
+            r'^\s*(?:self\.)?d\s*=\s*'   # must be first token (no tuple unpack)
+            r'(?!'
+            r'\s*b\s*\+\s*e|'
+            r'\s*b\+e|'
+            r'\s*qa_mod\s*\(|'           # QA mod-wrapper of b+e (A2-compliant)
+            r'\s*int\s*\(|'              # int cast wrapper
+            r'\s*Fraction\s*\(|'         # Fraction wrapper
+            r'\s*\{|'
+            r'\s*\[|'
+            r'\s*\(|'
+            r'\s*\w+\s*\.\s*to_dict|'
+            r'\s*\w+\s*\.\s*dict|'
+            r'\s*dict\s*\(|'
+            r'\s*json\.|'
+            r'\s*math\.|'
+            r'\s*np\.|'
+            r'\s*numpy\.|'
+            r'\s*torch\.|'
+            r'\s*tf\.|'
+            r'\s*-?[0-9]+(?:\.[0-9]*)?\s*$|'
+            r'\s*-?[0-9]+(?:\.[0-9]*)?\s*[,)\]}]|'
+            r'\s*\w+\s*=\s*|'
+            r'\s*\w+\s*\.\s*\w+|'
+            r'\s*\w+\s*\[|'                     # d = result[key]
+            r'\s*True\b|\s*False\b|\s*None\b'
+            r')'
+        ),
         severity="WARNING",
         qa_file_only=True,
     ),
@@ -173,7 +239,36 @@ RULES: list[ViolationRule] = [
         id="A2-2",
         axiom="A2",
         description="a assigned independently (A2: a must always be derived as a = b+2e)",
-        pattern=re.compile(r'(?<![beda])\ba\s*=\s*(?!\s*b\s*\+\s*2\s*\*?\s*e|\s*b\+2\*?e)'),
+        pattern=re.compile(
+            r'^\s*(?:self\.)?a\s*=\s*'
+            r'(?!'
+            r'\s*b\s*\+\s*2(?:\.0)?\s*\*?\s*e|'
+            r'\s*b\+2(?:\.0)?\*?e|'
+            r'\s*d\s*\+\s*e|'            # a = d+e is algebraically equivalent when d=b+e
+            r'\s*d\+e|'
+            r'\s*qa_mod\s*\(|'           # QA mod-wrapper (A2-compliant)
+            r'\s*int\s*\(|'
+            r'\s*Fraction\s*\(|'
+            r'\s*\{|'
+            r'\s*\[|'
+            r'\s*\(|'
+            r'\s*\w+\s*\.\s*to_dict|'
+            r'\s*\w+\s*\.\s*dict|'
+            r'\s*dict\s*\(|'
+            r'\s*json\.|'
+            r'\s*math\.|'
+            r'\s*np\.|'
+            r'\s*numpy\.|'
+            r'\s*torch\.|'
+            r'\s*tf\.|'
+            r'\s*-?[0-9]+(?:\.[0-9]*)?\s*$|'
+            r'\s*-?[0-9]+(?:\.[0-9]*)?\s*[,)\]}]|'
+            r'\s*\w+\s*=\s*|'
+            r'\s*\w+\s*\.\s*\w+|'
+            r'\s*\w+\s*\[|'
+            r'\s*True\b|\s*False\b|\s*None\b'
+            r')'
+        ),
         severity="WARNING",
         qa_file_only=True,
     ),
@@ -339,10 +434,57 @@ RULES: list[ViolationRule] = [
         severity="WARNING",
         qa_file_only=True,
     ),
+
+    # ── FIREWALL rules (added 2026-04-11 after FST v1 audit) ────────────────
+    # Theorem NT / T2-b at the validator-source level: a file that handles
+    # both observer-layer values (MeV, frequency, continuous measurement)
+    # AND QA-layer values (loop counts, integer states) must route the
+    # crossing through an explicit observer projection Pi. A line that
+    # arithmetically mixes a mev-named identifier and a loop-named
+    # identifier without going through apply_Pi is a firewall crossing
+    # with no declared direction, i.e. a T2-b violation at the code level.
+    # Root cause: v1 FST validator had "abs(mev_ratio - loop_ratio)" which
+    # subtracted an observer-layer float from a QA-layer int ratio inside
+    # the same decision logic, never declaring Pi. The linter did not
+    # catch this because (a) the file was not a recognized QA file and
+    # (b) no rule pattern matched this specific construction. Both
+    # problems are now fixed.
+    ViolationRule(
+        id="FIREWALL-1",
+        axiom="T2-b",
+        description="MeV and loop identifiers arithmetically combined without declared Pi projection (observer/QA firewall crossing). If this line is the observer projection itself, mark with # noqa: FIREWALL-1 and ensure the enclosing function is named apply_Pi.",
+        pattern=re.compile(
+            r'(?i)'
+            r'(?:\b\w*mev\w*\s*[+\-*/]\s*\w*loop\w*)'
+            r'|(?:\b\w*loop\w*\s*[+\-*/]\s*\w*mev\w*)'
+            r'|(?:abs\s*\([^)]*\b\w*mev\w*[^)]*\b\w*loop\w*[^)]*\))'
+            r'|(?:abs\s*\([^)]*\b\w*loop\w*[^)]*\b\w*mev\w*[^)]*\))'
+        ),
+        severity="ERROR",
+        qa_file_only=True,
+    ),
 ]
 
+# ── FIREWALL-2: whole-file check ──────────────────────────────────────────────
+# A cert-validator file that:
+#   (a) defines or reads both mev_* and loop_* identifiers (both layers appear)
+#   (b) does NOT declare an apply_Pi() function (or import one from qa_cert_core)
+# is a firewall violation at the module level. Either the file is QA-only
+# (no mev_*), observer-only (no loop_*), or it must route crossings through Pi.
+_MEV_IDENT_PATTERN = re.compile(r'\b\w*[mM][eE][vV]\w*\b')
+_LOOP_IDENT_PATTERN = re.compile(r'\b\w*[lL]oop\w*\b')
+_APPLY_PI_DECL_PATTERN = re.compile(
+    r'^\s*def\s+(?:apply_Pi|apply_pi|observer_project|project_Pi)\s*\(',
+    re.MULTILINE,
+)
+_APPLY_PI_IMPORT_PATTERN = re.compile(
+    r'from\s+\S+\s+import[^#\n]*\b(?:apply_Pi|apply_pi|observer_project)\b'
+)
+
 # Required declaration block pattern — all QA empirical scripts must declare their observer
-QA_COMPLIANCE_DECLARATION = re.compile(r'QA_COMPLIANCE\s*=\s*[\'"{]')
+# Matches both single-line: QA_COMPLIANCE = "..."
+# and multi-line:           QA_COMPLIANCE = (\n  "..."\n)
+QA_COMPLIANCE_DECLARATION = re.compile(r'QA_COMPLIANCE\s*=\s*[\'\"{(]')
 
 # ── Whole-file orbit-rule patterns ────────────────────────────────────────────
 
@@ -395,12 +537,59 @@ def is_qa_file(lines: list[str]) -> bool:
     return any(p.search(content) for p in QA_INDICATOR_PATTERNS)
 
 def is_comment_or_string(line: str, match_start: int) -> bool:
-    """Heuristic: is the match inside a comment or string?"""
-    stripped = line[:match_start]
-    # Check if preceded by # (comment)
-    if "#" in stripped:
+    """Heuristic: is the match inside a comment or string?
+
+    Checks:
+      (a) a `#` comment earlier on the same line
+      (b) the match position lies inside a single-line string literal
+          (either single or double-quoted). This is NOT a full parser —
+          it doesn't handle cross-line triple-quoted strings; those are
+          filtered separately by strip_triple_quoted_strings().
+    """
+    prefix = line[:match_start]
+    if "#" in prefix.split('"')[0].split("'")[0]:
+        return True
+    # Count unescaped quote pairs before the match. Odd count = inside string.
+    single = prefix.count("'") - prefix.count("\\'")
+    double = prefix.count('"') - prefix.count('\\"')
+    if single % 2 == 1 or double % 2 == 1:
         return True
     return False
+
+
+def strip_triple_quoted_strings(content: str) -> str:
+    """Return content with all triple-quoted string bodies replaced by blank
+    lines (preserving line numbers). Prevents false positives inside
+    docstrings, multi-line string literals, and negative-example code samples.
+    """
+    out: list[str] = []
+    i = 0
+    in_triple = False
+    triple_char = ''
+    while i < len(content):
+        if not in_triple:
+            # Look for an opening triple quote
+            if content[i:i+3] == '"""' or content[i:i+3] == "'''":
+                triple_char = content[i:i+3]
+                in_triple = True
+                out.append(content[i:i+3])
+                i += 3
+                continue
+            out.append(content[i])
+            i += 1
+        else:
+            # Inside a triple-quoted string: keep newlines, mask everything else
+            if content[i:i+3] == triple_char:
+                in_triple = False
+                out.append(triple_char)
+                i += 3
+                continue
+            if content[i] == '\n':
+                out.append('\n')
+            else:
+                out.append(' ')
+            i += 1
+    return ''.join(out)
 
 def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
     """
@@ -417,9 +606,26 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
     file_is_qa = is_qa_file(lines)
     is_orbit_rules = _is_canonical_orbit_source(path)
 
+    # Strip triple-quoted string bodies for per-line rule matching so that
+    # docstrings documenting bad patterns (e.g. `S1: use x*x, not b**2`) do
+    # not trip the very rules they are explaining. Line numbers are preserved.
+    masked_content = strip_triple_quoted_strings(content)
+    masked_lines = masked_content.splitlines()
+
     # Check for required declaration block in QA files (hard gate — ERROR)
+    # Exemptions (2026-04-11):
+    #   (a) test_*.py files — test suites don't carry empirical observer
+    #       declarations; the code they test does.
+    #   (b) top-of-file `# noqa: DECL-1 (reason)` suppression — for
+    #       infrastructure files that trip the QA indicator but are not
+    #       empirical scripts (data models, schema validators, etc.).
     if file_is_qa:
-        if not QA_COMPLIANCE_DECLARATION.search(content):
+        is_test_file = path.name.startswith("test_") or "/tests/" in str(path)
+        first_15 = "\n".join(lines[:15])
+        has_top_noqa = "noqa: DECL-1" in first_15
+        if not QA_COMPLIANCE_DECLARATION.search(content) \
+                and not is_test_file \
+                and not has_top_noqa:
             violations.append((1, "DECL-1", "DECL",
                 "Missing QA_COMPLIANCE declaration block — empirical QA scripts must declare "
                 "their observer and state alphabet (see QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md)"))
@@ -462,6 +668,34 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
                     "audit_alphabet(STATE_ALPHABET, MODULUS) to verify satellite coverage "
                     "before this script can be considered QA-compliant"))
 
+    # FIREWALL-2: file defines both mev_* and loop_* identifiers without
+    # declaring apply_Pi (whole-file Theorem NT firewall check)
+    if file_is_qa:
+        has_mev = bool(_MEV_IDENT_PATTERN.search(content))
+        has_loop = bool(_LOOP_IDENT_PATTERN.search(content))
+        has_apply_pi = bool(_APPLY_PI_DECL_PATTERN.search(content) or
+                             _APPLY_PI_IMPORT_PATTERN.search(content))
+        if has_mev and has_loop and not has_apply_pi:
+            # Allow whole-file suppression at top of file
+            first_non_blank = next(
+                (ln for ln in lines[:15] if ln.strip()), "")
+            if "noqa: FIREWALL-2" not in "\n".join(lines[:15]):
+                # Find first line that mentions mev for precise pointer
+                mev_lineno = 1
+                for i, ln in enumerate(lines, 1):
+                    if _MEV_IDENT_PATTERN.search(ln):
+                        mev_lineno = i
+                        break
+                violations.append((mev_lineno, "FIREWALL-2", "T2-b",
+                    "File references both mev_* and loop_* identifiers but "
+                    "does not declare an apply_Pi() function or import one. "
+                    "Cert-validator files that bridge observer-layer MeV "
+                    "and QA-layer loop counts must route crossings through "
+                    "an explicit Pi projection (Theorem NT). Add "
+                    "def apply_Pi(loop_count: int) -> float, or suppress "
+                    "with # noqa: FIREWALL-2 in the first 15 lines if the "
+                    "file is pure observer-layer or pure QA-layer."))
+
     # ELEM-2: validator reimplements element computation without importing qa_elements
     # Detect: def compute_C, compute_F, compute_G, compute_all, compute_elements,
     # qa_derived (in element context), qa_tuple (with modulus for elements).
@@ -490,12 +724,16 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
                     "Add # noqa: ELEM-2 if intentional."))
 
     # Per-line rules
-    for lineno, line in enumerate(lines, 1):
+    # Use masked_lines (triple-quoted string bodies replaced with spaces)
+    # for matching so docstrings cannot trip rules they describe.
+    for lineno, (line, masked) in enumerate(zip(lines, masked_lines), 1):
         stripped = line.strip()
         if not stripped or stripped.startswith("#"):
             continue
 
         # Support inline suppression: # noqa: RULE-ID[,RULE-ID]
+        # The suppression comment is read from the ORIGINAL line (not masked)
+        # so comments inside strings don't activate suppression.
         noqa_ids: set[str] = set()
         noqa_m = re.search(r'#\s*noqa:\s*([\w,-]+)', line)
         if noqa_m:
@@ -506,8 +744,8 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
                 continue
             if rule.qa_file_only and not file_is_qa:
                 continue
-            m = rule.pattern.search(line)
-            if m and not is_comment_or_string(line, m.start()):
+            m = rule.pattern.search(masked)
+            if m and not is_comment_or_string(masked, m.start()):
                 violations.append((lineno, rule.id, rule.axiom, rule.description))
 
     return violations
@@ -545,6 +783,12 @@ _EXCLUDE_DIRS = frozenset({
     "qa_kona_ebm_qa_native_v1", "qa_kona_ebm_qa_native_orbit_reg_v1",
     "papers", "qa_lab", "qa_core", "experiments", "gemini_qa_project",
     "qalm_2.0", "scratch_experiments",
+    # Linter test fixtures — intentionally bad files that exercise the
+    # FIREWALL rules via the test harness test_qa_axiom_linter_firewall.py.
+    # Excluded from bulk --all scan so they don't appear as errors in repo
+    # audits; they ARE scanned directly by the test harness, which asserts
+    # on expected violations.
+    "linter_fixtures",
 })
 
 # Files that are QA infrastructure, not empirical scripts — exempt from DECL-1

@@ -80,7 +80,7 @@ def validate(cert, *, collect_errors=True):
     decl_comp = cert.get("complement_set")
     if decl_comp is not None:
         decl_cs = frozenset(decl_comp)
-        expected_comp = frozenset(k % 9 for k in range(0, 9) if gcd(k, 9) != 1 or k == 0)
+        expected_comp = frozenset(k % 9 for k in range(0, 9) if gcd(k, 9) != 1 or k == 0)  # noqa: A1-2 — ring Z/9Z arithmetic (0 is a valid ring element, not a QA state)
         # {0, 3, 6}
         if decl_cs != COMPLEMENT:
             err("SP_COMP", f"complement declared {sorted(decl_cs)} != {sorted(COMPLEMENT)}")

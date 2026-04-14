@@ -6737,6 +6737,50 @@ def _validate_twelve_dihedral_orderings_cert_family(base_dir):
     return None
 
 
+def _validate_diamond_sl3_irrep_dimension_cert_family(base_dir):
+    """QA Diamond sl3 Irrep Dimension Cert family [240] - Wildberger's diamond model bridge: under (qa_b,qa_e)=(sl3_a,sl3_b), d=b+e gives dim pi[a,b]=(b+1)(e+1)(d+2)/2 as an integer QA polynomial. Verifies 22 standard entries, adjoint dim 8, quark/anti-quark dim 3 triples, triangular D(a,0) column, and integer Heisenberg commutators. Source: Wildberger 2003; Will Dale + Claude 2026-04-14. Checks DSI_1+DIM_FORMULA/ADJOINT/TRIANGULAR_COLUMN/QUARK_ANTIQUARK/HEISENBERG/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_diamond_sl3_irrep_dimension_cert_v1")
+    validator = os.path.join(fam_dir, "qa_diamond_sl3_irrep_dimension_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_diamond_sl3_irrep_dimension_cert_v1/qa_diamond_sl3_irrep_dimension_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_diamond_sl3_irrep_dimension_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_diamond_sl3_irrep_dimension_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_diamond_sl3_irrep_dimension_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_quadruple_coplanarity_cert_family(base_dir):
+    """QA Quadruple Coplanarity Cert family [241] - every QA point (b,e,d) with d=b+e lies in the plane d-b-e=0 in R3, so every four QA points have zero 4-point Cayley-Menger determinant under blue, red, and green chromogeometric quadrances. Uses SymPy integer determinants; checks [-9..9]^2 plane identity, 30 triples, 30 quadruples plus Satellite #1. Source: Notowidigdo + Wildberger 2019/2021 and Wildberger Chromogeometry 2008; Will Dale + Claude 2026-04-14. Checks QCO_1+PLANE_IDENTITY/PARALLELEPIPED_VOL/CM_4POINT_BLUE_RED_GREEN/CHROMO_COPLANARITY_PRESERVED/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_quadruple_coplanarity_cert_v1")
+    validator = os.path.join(fam_dir, "qa_quadruple_coplanarity_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_quadruple_coplanarity_cert_v1/qa_quadruple_coplanarity_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_quadruple_coplanarity_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_quadruple_coplanarity_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_quadruple_coplanarity_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_neuberg_cubic_f23_cert_family(base_dir):
     """QA Neuberg Cubic F23 Cert family [242] - Wildberger's finite-field Neuberg setting over F_23: E:y^2=x^3+x+1 has 27 affine points plus infinity, Weierstrass tangent-conic witnesses are enumerated as identical or disjoint F_23 point sets, and the spread witness is an integer-polynomial pair with no division required in the fixture. Source: Wildberger 2008; Will Dale + Claude 2026-04-14. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -7677,6 +7721,16 @@ FAMILY_SWEEPS = [
      "Five objects under D_5 give 5!/(2*5)=12 dihedral classes, each of size 10; exhaustive 120-permutation canonicalization verifies the listed reps and the 12-count links to G_2 roots, cuboctahedral S_1, and icosahedral vertices. Checks TDO_1+GROUP/PERMUTATIONS/CANONICAL_REPS/CLASS_COUNT/CLASS_SIZE/FORMULA/QA_CONNECTION/SRC/F; 1 PASS + 1 FAIL; self-test ok",
      "239_qa_twelve_dihedral_orderings_cert",
      "qa_twelve_dihedral_orderings_cert_v1", True),
+    (240, "QA Diamond sl3 Irrep Dimension Cert family",
+     _validate_diamond_sl3_irrep_dimension_cert_family,
+     "Wildberger diamond sl3 bridge: dim pi[a,b]=(b+1)(e+1)(d+2)/2 under QA coordinates; verifies 22 standard entries, adjoint dim 8, quark/anti-quark triples, triangular column, and integer Heisenberg commutators. Checks DSI_1+DIM_FORMULA/ADJOINT/TRIANGULAR_COLUMN/QUARK_ANTIQUARK/HEISENBERG/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "240_qa_diamond_sl3_irrep_dimension_cert",
+     "qa_diamond_sl3_irrep_dimension_cert_v1", True),
+    (241, "QA Quadruple Coplanarity Cert family",
+     _validate_quadruple_coplanarity_cert_family,
+     "Every QA point (b,e,d=b+e) lies in the plane d-b-e=0 in R3; 30 triples have zero parallelepiped determinant and 30 quadruples plus Satellite #1 have zero Cayley-Menger determinant under blue/red/green chromogeometric quadrances. Checks QCO_1+PLANE_IDENTITY/PARALLELEPIPED_VOL/CM_4POINT_BLUE_RED_GREEN/CHROMO_COPLANARITY_PRESERVED/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "241_qa_quadruple_coplanarity_cert",
+     "qa_quadruple_coplanarity_cert_v1", True),
     (242, "QA Neuberg Cubic F23 Cert family",
      _validate_neuberg_cubic_f23_cert_family,
      "Wildberger Neuberg finite-field bridge over F_23: E:y^2=x^3+x+1 has 27 affine points plus infinity; tangent-conic witnesses enumerate F_23 point sets and are identical or disjoint; spread witness is integer-polynomial and QA-compatible for char not 2 or 3. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok",

@@ -17,6 +17,8 @@
 | [236] | [QA Spread Polynomial Composition](236_qa_spread_polynomial_composition_cert.md) | Exact spread-polynomial composition S_n composed with S_m = S_{n*m}; S_2 logistic map; S_2/S_3/S_4 closed forms | PASS |
 | [237] | [QA 4D Diagonal Rule](237_qa_4d_diagonal_rule_cert.md) | QA tuple (b,e,d,a) spans a 4D 2-plane with Gram determinant 9 and two diagonal-rule witnesses | PASS |
 | [239] | [QA Twelve Dihedral Orderings](239_qa_twelve_dihedral_orderings_cert.md) | Five objects under D_5 give 12 dihedral classes by exhaustive 120-permutation canonicalization; every class has size 10 | PASS |
+| [240] | [QA Diamond sl3 Irrep Dimension](240_qa_diamond_sl3_irrep_dimension_cert.md) | Wildberger diamond model bridge: sl(3) irrep dimension formula becomes QA polynomial (b+1)(e+1)(d+2)/2; 22/22 table entries | PASS |
+| [241] | [QA Quadruple Coplanarity](241_qa_quadruple_coplanarity_cert.md) | Four QA points are coplanar in R3; blue/red/green Cayley-Menger determinants vanish on 30 samples plus Satellite #1 | PASS |
 | [242] | [QA Neuberg Cubic F23](242_qa_neuberg_cubic_f23_cert.md) | F_23 elliptic point count, Weierstrass tangent-conic dichotomy witnesses, integer-polynomial spread pair, and char 23 QA compatibility | PASS |
 | [223] | [QA Experiment Protocol](223_qa_experiment_protocol.md) | Schema + Validator + Fixtures; enforces study design (linter EXP-1) | PASS |
 | [224] | [QA Benchmark Protocol](224_qa_benchmark_protocol.md) | Schema + Validator + Fixtures; enforces calibration provenance + framework inheritance (linter BENCH-1) | PASS |

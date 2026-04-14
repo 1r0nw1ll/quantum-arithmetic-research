@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Quadruple Coplanarity Cert family [241]: every QA 3-tuple (b,e,d) with d=b+e lies in the plane d-b-e=0 in R3. Therefore any three QA 3-tuples have zero parallelepiped determinant and any four QA points have zero 4-point Cayley-Menger determinant under the blue, red, and green chromogeometric quadrance forms. The validator uses SymPy integer determinants only, verifies the plane identity on [-9..9]^2, checks 30 fixed random triples from {1..9}^2, and checks 30 fixed random quadruples plus Satellite #1 {(3,3),(6,9),(6,6),(3,9)}. Source: Notowidigdo + Wildberger, Generalised vector products and metrical trigonometry of a tetrahedron, arXiv:1909.08814; Wildberger, Chromogeometry, 2008; theory note docs/theory/QA_WILDBERGER_TIER2_FOLLOWUPS.md section 4. Checks QCO_1+PLANE_IDENTITY/PARALLELEPIPED_VOL/CM_4POINT_BLUE_RED_GREEN/CHROMO_COPLANARITY_PRESERVED/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

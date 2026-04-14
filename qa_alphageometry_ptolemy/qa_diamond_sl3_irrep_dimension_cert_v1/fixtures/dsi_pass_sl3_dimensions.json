@@ -1,0 +1,342 @@
+{
+  "adjoint": {
+    "computed_dim": 8,
+    "qa_coordinates": {
+      "b": 1,
+      "d": 2,
+      "e": 1
+    },
+    "sl3_highest_weight": [
+      1,
+      1
+    ],
+    "sl3_lie_algebra_dim": 8
+  },
+  "dim_formula": {
+    "formula": "(qa_b+1)*(qa_e+1)*(qa_d+2)//2",
+    "identification": "(qa_b,qa_e)=(sl3_a,sl3_b)",
+    "matches": [
+      {
+        "computed_dim": 1,
+        "expected_dim": 1,
+        "qa_b": 0,
+        "qa_d": 0,
+        "qa_e": 0,
+        "sl3_a": 0,
+        "sl3_b": 0
+      },
+      {
+        "computed_dim": 3,
+        "expected_dim": 3,
+        "qa_b": 1,
+        "qa_d": 1,
+        "qa_e": 0,
+        "sl3_a": 1,
+        "sl3_b": 0
+      },
+      {
+        "computed_dim": 3,
+        "expected_dim": 3,
+        "qa_b": 0,
+        "qa_d": 1,
+        "qa_e": 1,
+        "sl3_a": 0,
+        "sl3_b": 1
+      },
+      {
+        "computed_dim": 8,
+        "expected_dim": 8,
+        "qa_b": 1,
+        "qa_d": 2,
+        "qa_e": 1,
+        "sl3_a": 1,
+        "sl3_b": 1
+      },
+      {
+        "computed_dim": 6,
+        "expected_dim": 6,
+        "qa_b": 2,
+        "qa_d": 2,
+        "qa_e": 0,
+        "sl3_a": 2,
+        "sl3_b": 0
+      },
+      {
+        "computed_dim": 6,
+        "expected_dim": 6,
+        "qa_b": 0,
+        "qa_d": 2,
+        "qa_e": 2,
+        "sl3_a": 0,
+        "sl3_b": 2
+      },
+      {
+        "computed_dim": 15,
+        "expected_dim": 15,
+        "qa_b": 2,
+        "qa_d": 3,
+        "qa_e": 1,
+        "sl3_a": 2,
+        "sl3_b": 1
+      },
+      {
+        "computed_dim": 15,
+        "expected_dim": 15,
+        "qa_b": 1,
+        "qa_d": 3,
+        "qa_e": 2,
+        "sl3_a": 1,
+        "sl3_b": 2
+      },
+      {
+        "computed_dim": 10,
+        "expected_dim": 10,
+        "qa_b": 3,
+        "qa_d": 3,
+        "qa_e": 0,
+        "sl3_a": 3,
+        "sl3_b": 0
+      },
+      {
+        "computed_dim": 10,
+        "expected_dim": 10,
+        "qa_b": 0,
+        "qa_d": 3,
+        "qa_e": 3,
+        "sl3_a": 0,
+        "sl3_b": 3
+      },
+      {
+        "computed_dim": 27,
+        "expected_dim": 27,
+        "qa_b": 2,
+        "qa_d": 4,
+        "qa_e": 2,
+        "sl3_a": 2,
+        "sl3_b": 2
+      },
+      {
+        "computed_dim": 24,
+        "expected_dim": 24,
+        "qa_b": 3,
+        "qa_d": 4,
+        "qa_e": 1,
+        "sl3_a": 3,
+        "sl3_b": 1
+      },
+      {
+        "computed_dim": 24,
+        "expected_dim": 24,
+        "qa_b": 1,
+        "qa_d": 4,
+        "qa_e": 3,
+        "sl3_a": 1,
+        "sl3_b": 3
+      },
+      {
+        "computed_dim": 42,
+        "expected_dim": 42,
+        "qa_b": 3,
+        "qa_d": 5,
+        "qa_e": 2,
+        "sl3_a": 3,
+        "sl3_b": 2
+      },
+      {
+        "computed_dim": 42,
+        "expected_dim": 42,
+        "qa_b": 2,
+        "qa_d": 5,
+        "qa_e": 3,
+        "sl3_a": 2,
+        "sl3_b": 3
+      },
+      {
+        "computed_dim": 15,
+        "expected_dim": 15,
+        "qa_b": 4,
+        "qa_d": 4,
+        "qa_e": 0,
+        "sl3_a": 4,
+        "sl3_b": 0
+      },
+      {
+        "computed_dim": 15,
+        "expected_dim": 15,
+        "qa_b": 0,
+        "qa_d": 4,
+        "qa_e": 4,
+        "sl3_a": 0,
+        "sl3_b": 4
+      },
+      {
+        "computed_dim": 64,
+        "expected_dim": 64,
+        "qa_b": 3,
+        "qa_d": 6,
+        "qa_e": 3,
+        "sl3_a": 3,
+        "sl3_b": 3
+      },
+      {
+        "computed_dim": 35,
+        "expected_dim": 35,
+        "qa_b": 4,
+        "qa_d": 5,
+        "qa_e": 1,
+        "sl3_a": 4,
+        "sl3_b": 1
+      },
+      {
+        "computed_dim": 35,
+        "expected_dim": 35,
+        "qa_b": 1,
+        "qa_d": 5,
+        "qa_e": 4,
+        "sl3_a": 1,
+        "sl3_b": 4
+      },
+      {
+        "computed_dim": 60,
+        "expected_dim": 60,
+        "qa_b": 4,
+        "qa_d": 6,
+        "qa_e": 2,
+        "sl3_a": 4,
+        "sl3_b": 2
+      },
+      {
+        "computed_dim": 60,
+        "expected_dim": 60,
+        "qa_b": 2,
+        "qa_d": 6,
+        "qa_e": 4,
+        "sl3_a": 2,
+        "sl3_b": 4
+      }
+    ],
+    "polynomial_equivalence_checked_on_grid_0_to_6": true,
+    "qa_d_rule": "qa_d=qa_b+qa_e",
+    "standard_entry_count": 22
+  },
+  "fail_ledger": [],
+  "heisenberg_commutators": {
+    "basis": [
+      "X_alpha",
+      "X_beta",
+      "X_alpha_plus_beta"
+    ],
+    "brackets": [
+      {
+        "coefficient": 1,
+        "lhs": [
+          "X_alpha",
+          "X_beta"
+        ],
+        "rhs": "X_alpha_plus_beta"
+      },
+      {
+        "coefficient": 0,
+        "lhs": [
+          "X_alpha",
+          "X_alpha_plus_beta"
+        ],
+        "rhs": "0"
+      },
+      {
+        "coefficient": 0,
+        "lhs": [
+          "X_alpha_plus_beta",
+          "X_beta"
+        ],
+        "rhs": "0"
+      }
+    ],
+    "integer_coefficients": true
+  },
+  "quark_antiquark": {
+    "D(0,1)": {
+      "dim": 3,
+      "heights": [
+        -1,
+        -1,
+        0
+      ],
+      "name": "anti-quark triple"
+    },
+    "D(1,0)": {
+      "dim": 3,
+      "heights": [
+        1,
+        0,
+        1
+      ],
+      "name": "quark triple"
+    },
+    "fundamental_decomposition": "D(a,b)=D(a,0)+D(0,b)"
+  },
+  "result": "PASS",
+  "schema_version": "QA_DIAMOND_SL3_IRREP_DIMENSION_CERT.v1",
+  "source_attribution": "Wildberger, Quarks, diamonds, and representations of sl_3, UNSW preprint, Oct 2003; Fulton-Harris / LiE standard dimension table cross-check; Will Dale + Claude 2026-04-14",
+  "triangular_column": {
+    "a_range": [
+      0,
+      5
+    ],
+    "dims": [
+      {
+        "a": 0,
+        "dim": 1,
+        "triangular_index": 1
+      },
+      {
+        "a": 1,
+        "dim": 3,
+        "triangular_index": 2
+      },
+      {
+        "a": 2,
+        "dim": 6,
+        "triangular_index": 3
+      },
+      {
+        "a": 3,
+        "dim": 10,
+        "triangular_index": 4
+      },
+      {
+        "a": 4,
+        "dim": 15,
+        "triangular_index": 5
+      },
+      {
+        "a": 5,
+        "dim": 21,
+        "triangular_index": 6
+      }
+    ],
+    "family": "D(a,0)"
+  },
+  "witnesses": [
+    {
+      "kind": "DIM_FORMULA",
+      "verdict": "22/22 standard entries match"
+    },
+    {
+      "kind": "ADJOINT",
+      "verdict": "pi[1,1] dimension is 8"
+    },
+    {
+      "kind": "TRIANGULAR_COLUMN",
+      "verdict": "D(a,0) dimensions are T_{a+1} for a=0..5"
+    },
+    {
+      "kind": "QUARK_ANTIQUARK",
+      "verdict": "D(1,0) and D(0,1) both have dimension 3"
+    },
+    {
+      "kind": "HEISENBERG",
+      "verdict": "integer Heisenberg commutator structure matches"
+    }
+  ]
+}

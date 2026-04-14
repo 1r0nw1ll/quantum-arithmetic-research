@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Diamond sl3 Irrep Dimension Cert family [240]: Wildberger's integer diamond model for sl_3 is packaged through the standard irreducible dimension formula dim pi[a,b]=(a+1)(b+1)(a+b+2)/2. Under QA identification (qa_b,qa_e)=(sl3_a,sl3_b), qa_d=qa_b+qa_e, so dim=(qa_b+1)(qa_e+1)(qa_d+2)/2. The family verifies 22 standard Fulton-Harris/LiE entries, adjoint pi[1,1] dimension 8, quark and anti-quark fundamental triples of dimension 3, triangular D(a,0) column dimensions, and integer Heisenberg commutator structure. Source: Wildberger, Quarks, diamonds, and representations of sl_3, UNSW preprint, Oct 2003; theory note docs/theory/QA_WILDBERGER_TIER2_FOLLOWUPS.md section 3. Checks DSI_1+DIM_FORMULA/ADJOINT/TRIANGULAR_COLUMN/QUARK_ANTIQUARK/HEISENBERG/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

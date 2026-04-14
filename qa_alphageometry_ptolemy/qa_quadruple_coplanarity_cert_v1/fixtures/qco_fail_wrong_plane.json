@@ -1,0 +1,29 @@
+{
+  "fail_ledger": [
+    {
+      "field": "plane_identity.explicit_points",
+      "reason": "Synthetic non-QA point (1,2,5) has d-b-e=2, breaking the QA plane identity."
+    }
+  ],
+  "plane_identity": {
+    "b_range": [
+      -9,
+      9
+    ],
+    "checked_count": 361,
+    "e_range": [
+      -9,
+      9
+    ],
+    "explicit_points": [
+      [
+        1,
+        2,
+        5
+      ]
+    ],
+    "max_abs_residual": 0
+  },
+  "result": "FAIL",
+  "schema_version": "QA_QUADRUPLE_COPLANARITY_CERT.v1"
+}

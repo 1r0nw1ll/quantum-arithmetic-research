@@ -1,0 +1,23 @@
+{
+  "adjoint": {
+    "computed_dim": 7,
+    "qa_coordinates": {
+      "b": 1,
+      "d": 2,
+      "e": 1
+    },
+    "sl3_highest_weight": [
+      1,
+      1
+    ],
+    "sl3_lie_algebra_dim": 8
+  },
+  "fail_ledger": [
+    {
+      "field": "adjoint.computed_dim",
+      "reason": "Synthetic negative fixture claims pi[1,1] has dimension 7 instead of 8."
+    }
+  ],
+  "result": "FAIL",
+  "schema_version": "QA_DIAMOND_SL3_IRREP_DIMENSION_CERT.v1"
+}

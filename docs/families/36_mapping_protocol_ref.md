@@ -39,11 +39,10 @@ The REF validator enforces:
 - schema validity (`QA_MAPPING_PROTOCOL_REF.v1`)
 - `ref_path` must resolve within repo root (no path escape)
 - referenced mapping file must exist
-- optional `ref_sha256` must match file-bytes sha256 (tamper detection)
+- required `ref_sha256` must match file-bytes sha256 (tamper detection)
 - referenced mapping must validate as `QA_MAPPING_PROTOCOL.v1`
 - referenced mapping must include the v1 determinism contract essentials
 
 ## Changelog
 
 - **v1** (2026-02-14): Initial schema + validator + fixtures; wired into meta-validator family sweeps.
-

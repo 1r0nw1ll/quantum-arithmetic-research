@@ -34,7 +34,7 @@ Distribution: cosmos=72 (88.9%), satellite=8 (9.9%), singularity=1 (1.2%).
 
 - [130] QA Origin of 24 (orbit periods are capture attractors)
 - [133] QA Eisenstein Norm (v_3(f) classifies which attractor captures each state)
-- [163] QA Fibonacci Resonance (why certain orbits are selected)
+- [219] QA Fibonacci Resonance (why certain orbits are selected)
 - [191] QA Bateson Learning Levels (L_3 escape = exceeding escape velocity)
 
 ## Sources

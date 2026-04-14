@@ -94,7 +94,7 @@ Base-3 minimizes radix economy (Knuth, TAOCP vol. 2). 9 = 3² is the human-scale
 
 - **[192] Dual Extremality**: π(9) = 24 grounds the mod-9 → mod-24 bridge
 - **[153] Keely Triune**: Skinner's 3-fold structure = Keely's triune
-- **[163] Fibonacci Resonance**: Fibonacci mod-9 periodicity (Pisano period)
+- **[219] Fibonacci Resonance**: Fibonacci mod-9 periodicity (Pisano period)
 - **[130] Origin of 24**: dual derivation of 24 as applied modulus
 - **[191] Bateson Learning Levels**: mod-9 classification as invariant filtration
 

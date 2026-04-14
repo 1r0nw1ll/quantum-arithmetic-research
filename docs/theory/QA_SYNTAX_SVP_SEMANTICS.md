@@ -59,6 +59,31 @@ A concrete example of the gap:
   the filter function; he has given us a principled reason to expect it
   exists.
 
+### A first candidate for the filter function — bin-width correspondence
+
+**Added 2026-04-12** (cert family [215], `qa_resonance_bin_correspondence_cert_v1`).
+
+The permissibility filter is now one step less abstract:
+
+> At modulus `m`, the equivalence class `[k]_m = { x ∈ ℝ : quantize(x, m) = k }`
+> is isomorphic to a resonance tolerance bandwidth centered on integer
+> eigenvalue `k`. The filter function is
+>
+>     window_width(k, m)  ∝  2π / m.
+
+The *same* mathematical object that makes two real phases "QA-equal"
+(landing in the same integer bin) is what makes them physically able to
+couple sympathetically (being within the Q-bandwidth of the resonator).
+The Hensel lift `m → m·p` is thus a **tightening of the permissibility
+window**, not a wholly new structure.
+
+Cert [215] empirically verifies this via the Arnold-tongue experiment:
+critical coupling `K*(m)` for phase-lock mode-dominance is monotone
+increasing in `m` (m=6→K*=0.06, m=18→0.08, m=48→0.10). This is the
+first permissibility filter we can test empirically rather than infer
+from phenomenology. Other filters (phase concordance, harmonic-ratio
+gating, amplitude thresholds) likely compose on top.
+
 ---
 
 ## The syntax–semantics mapping

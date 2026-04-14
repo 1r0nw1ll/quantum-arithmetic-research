@@ -20,7 +20,7 @@ Among consecutive ratios (|p-q|=1): Fibonacci mean 0.857 vs non-Fibonacci mean 0
 
 ### LCM mechanism
 
-For coprime (p,q), both-divide requires lcm(p,q)=p*q | pi(m). Fibonacci pairs have smaller products AND Fibonacci numbers individually divide pi(m) 3.70x more often (from [163]).
+For coprime (p,q), both-divide requires lcm(p,q)=p*q | pi(m). Fibonacci pairs have smaller products AND Fibonacci numbers individually divide pi(m) 3.70x more often (from [219]).
 
 ### Product-matched control
 

@@ -33,5 +33,5 @@ Only 19% of primitive triples (hyp <= 100) are all-Fibonacci QN. Megalithic buil
 
 - [167] QA_HISTORICAL_NAV — megalithic builders as proto-QA navigators
 - [164] QA_GNOMONIC_RT — megalithic sites as proto-gnomonic stations
-- [163] QA_FIBONACCI_RESONANCE — same Fibonacci preference in orbital physics
+- [219] QA_FIBONACCI_RESONANCE — same Fibonacci preference in orbital physics
 - [135] QA_PYTHAGOREAN_TREE — 3:4:5 and 5:12:13 as Berggren tree nodes

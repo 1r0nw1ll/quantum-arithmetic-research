@@ -132,8 +132,8 @@ def deterministic_T_sequence(b0: int, e0: int, m: int, n: int) -> tuple[np.ndarr
     Returns (b, e) arrays of length n where e[t] = T(b[t], e[t]) — the
     TypeD identity for an exactly-T-following sequence.
     """
-    b = np.empty(n, dtype=np.int64)
-    e = np.empty(n, dtype=np.int64)
+    b = np.empty(n, dtype=np.int64)  # noqa: S2-1
+    e = np.empty(n, dtype=np.int64)  # noqa: S2-1
     b[0] = b0
     e[0] = e0
     for t in range(1, n):

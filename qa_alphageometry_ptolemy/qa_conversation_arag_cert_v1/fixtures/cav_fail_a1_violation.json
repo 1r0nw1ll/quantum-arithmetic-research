@@ -1,0 +1,23 @@
+{
+  "schema_version": "QA_CONVERSATION_ARAG_CERT.v1",
+  "family": 210,
+  "expect_fail": true,
+  "fail_kind": "A1_SECTOR_ZERO",
+  "fail_reason": "Sector labels computed via raw ((b+e) mod 9) produce 0 when b+e is a multiple of 9, violating A1 (states in {1..9}, zero excluded). The correct form is the Aiq Bekar digital root 1 + ((b+e-1) mod 9). This fixture demonstrates the violation with a witness whose d_label_mod9 = 0.",
+  "witnesses": [
+    {
+      "source": "chatgpt",
+      "native_id": "fail-demo-001",
+      "conv_id": "fail-demo-conv",
+      "conv_title": "A1 violation demo",
+      "role": "user",
+      "b": 8,
+      "e": 1,
+      "char_count": 100,
+      "char_ord_sum": 9000,
+      "d_label_mod9": 0,
+      "a_label_mod9": 1,
+      "text_snippet": "b=8, e=1, so d_raw = 9, and (9 mod 9) = 0, violating A1."
+    }
+  ]
+}

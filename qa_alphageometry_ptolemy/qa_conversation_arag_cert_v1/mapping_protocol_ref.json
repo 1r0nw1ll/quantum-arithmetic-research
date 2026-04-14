@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Conversation A-RAG Cert family [210]: certifies that the conversation graph store at _forensics/qa_retrieval.sqlite is a QA-native A-RAG datastore instance. Maps cross-source conversational messages (ChatGPT, Claude.ai, Google AI Studio) to canonical (b, e) integer tuples via Candidate F: b = dr(char_ord_sum) using certified Aiq Bekar digital root [family 202], e = role_rank {user:1, assistant:2, tool:3, system:4, thought:5}. Composes with QA_ARAG_INTERFACE_CERT.v1 (three views: keyword_search/semantic_search/chunk_read). Certifies A1/A2/S2/T2 compliance, role-diagonal property (a-d mod 9 = role_rank mod 9), thought-promotion rules per source, and cross-source formula invariance. Checks CAV_1+SCHEMA/TUPLE/DIAG/CROSS/PROMO/A1/A2/T2/VIEWS/WITNESS/FAIL; 2 PASS + 1 FAIL; self-test ok"
+}

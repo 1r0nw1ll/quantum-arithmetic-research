@@ -1,0 +1,248 @@
+{
+  "schema_version": "QA_CONVERSATION_ARAG_CERT.v1",
+  "family": 210,
+  "title": "QA Conversation A-RAG Cert",
+  "description": "Certifies the conversation graph store at _forensics/qa_retrieval.sqlite is a QA-native A-RAG datastore instance per QA_ARAG_INTERFACE_CERT.v1, with cross-source messages mapped to canonical (b, e) tuples via Candidate F (gematria + role_rank) grounded in Aiq Bekar [cert 202].",
+  "arag_tool_set": [
+    "keyword_search",
+    "semantic_search",
+    "chunk_read"
+  ],
+  "tool_to_view_kind": {
+    "keyword_search": "KEYWORD_VIEW",
+    "semantic_search": "SEMANTIC_VIEW",
+    "chunk_read": "CHUNK_STORE"
+  },
+  "view_substrates": {
+    "KEYWORD_VIEW": "SQLite FTS5 (unicode61) over messages_fts, filtered by orbit sector",
+    "SEMANTIC_VIEW": "Personalized PageRank (alpha=0.5) over parent/cite/succ/ref edges, scoped by sector",
+    "CHUNK_STORE": "Direct messages.raw_text lookup by msg_id"
+  },
+  "tuple_derivation": {
+    "candidate": "F",
+    "b_formula": "dr(sum(ord(c) for c in raw_text))",
+    "e_formula": "role_rank[canonical_role]",
+    "dr_cert_ref": "family_202",
+    "dr_definition": "dr(n) = 1 + ((n - 1) mod 9), maps Z+ to {1..9}",
+    "role_rank_table": {
+      "user": 1,
+      "assistant": 2,
+      "tool": 3,
+      "system": 4,
+      "thought": 5,
+      "note": 6
+    },
+    "d_formula": "d = b + e (raw)",
+    "a_formula": "a = b + 2e (raw)",
+    "sector_formula": "(d_label, a_label) = (dr(d), dr(a)) in {1..9} x {1..9}"
+  },
+  "thought_promotion_rules": {
+    "chatgpt": "native content_type in {thoughts, reasoning_recap} triggers role=thought regardless of native_role",
+    "claude": "native content[].type == 'thinking' triggers role=thought; thinking strings concatenated into raw_text",
+    "gemini": "native chunk.isThought == true triggers role=thought; parts[].text concatenated into raw_text"
+  },
+  "a2_compliance": {
+    "d_derived_on_read": true,
+    "a_derived_on_read": true,
+    "stored_columns": [
+      "b",
+      "e"
+    ],
+    "rationale": "Per 2026-04-09 rule: elements use d=b+e, a=b+2e RAW. Mod reduction is T-operator only."
+  },
+  "t2_firewall": {
+    "raw_text_role": "observer_projection",
+    "fts_score_role": "observer_measurement",
+    "ppr_score_role": "observer_measurement",
+    "qa_state_feedback_allowed": false,
+    "boundary_crossings": 2,
+    "notes": "Text enters at ingest (observer -> discrete). QA layer operates on integer (b,e,d,a). Scores at FTS/PPR are output-only."
+  },
+  "axiom_compliance": {
+    "A1": "b in {1..9}, e in {1..5}, sector labels in {1..9} via dr form",
+    "A2": "d and a derived on read, never stored",
+    "S1": "no ** operator in storage schema or ingest code",
+    "S2": "all tuple columns INTEGER, no float state",
+    "T1": "path time not applicable to storage layer",
+    "T2": "observer-layer scores never feed back into QA state",
+    "NT": "generator/observer boundary crossed exactly twice"
+  },
+  "witnesses": [
+    {
+      "source": "chatgpt",
+      "native_id": "8d76b26b-0409-4efd-8519-b262b8921d2c",
+      "conv_id": "68e7f23f-60f4-8333-9005-de691a10b35d",
+      "conv_title": "Dollard Bearden conflict",
+      "role": "user",
+      "b": 6,
+      "e": 1,
+      "char_count": 1741,
+      "char_ord_sum": 283011,
+      "d_label_mod9": 7,
+      "a_label_mod9": 8,
+      "text_snippet": "┌──(gemini)─(player4㉿player4)-[~/whittaker_stienmetz] └─$ python run_qa_analysis.py --file N87_BH_loop.csv --seed 1 1 2 "
+    },
+    {
+      "source": "chatgpt",
+      "native_id": "56ab438e-cd6a-4df7-a35f-d25007346d45",
+      "conv_id": "68864368-f4e4-8331-95bc-eb7492a25dea",
+      "conv_title": "Lee price half-angle tangent",
+      "role": "assistant",
+      "b": 2,
+      "e": 2,
+      "char_count": 611,
+      "char_ord_sum": 594632,
+      "d_label_mod9": 4,
+      "a_label_mod9": 6,
+      "text_snippet": "Here are the **symbolic forms** for the resonance invariants:  ### ✅ Primary Resonance Law: \\[ \\lambda' = \\frac{L}{F} = "
+    },
+    {
+      "source": "chatgpt",
+      "native_id": "93cc5c1b-7d26-4762-91fb-2afcc97b5ea8",
+      "conv_id": "68aef60e-6760-8329-a761-a4411a0d41a1",
+      "conv_title": "Bell inequality explanation",
+      "role": "thought",
+      "b": 5,
+      "e": 5,
+      "char_count": 251,
+      "char_ord_sum": 39083,
+      "d_label_mod9": 1,
+      "a_label_mod9": 6,
+      "text_snippet": "Displaying data I've already computed S_sigma in the CHSH DataFrame. Now I’ll display both DataFrames for you using the "
+    },
+    {
+      "source": "chatgpt",
+      "native_id": "05e898f1-4fee-4f7d-9e6c-7f62c8170e80",
+      "conv_id": "67cdec24-1f60-8001-89fd-99eaea71a8a9",
+      "conv_title": "Keely Vibrations Analysis",
+      "role": "tool",
+      "b": 6,
+      "e": 3,
+      "char_count": 119,
+      "char_ord_sum": 11058,
+      "d_label_mod9": 9,
+      "a_label_mod9": 3,
+      "text_snippet": " Please remember to search the user's documents if an answer to their question is not contained in the above snippets. "
+    },
+    {
+      "source": "claude",
+      "native_id": "019b6676-c193-77a7-a87c-8fdfd0c3d757",
+      "conv_id": "ade02b98-acd2-4dfa-a9a5-d477aee28a1e",
+      "conv_title": "Formalizing tuple drift in quantum-native learning",
+      "role": "user",
+      "b": 6,
+      "e": 1,
+      "char_count": 4385,
+      "char_ord_sum": 938112,
+      "d_label_mod9": 7,
+      "a_label_mod9": 8,
+      "text_snippet": "ChatGPT: Yep — with the move semantics you locked (σ: e↦e+1, μ swap, λ₂ scale, ν halve-even on Caps(N,N)=N² lattice, q_d"
+    },
+    {
+      "source": "claude",
+      "native_id": "019b627d-25e9-75d2-9f21-6acecabf6a6f",
+      "conv_id": "4ceeed97-5b6e-4fc2-a670-cb0757644edf",
+      "conv_title": "Initial greeting",
+      "role": "assistant",
+      "b": 1,
+      "e": 2,
+      "char_count": 3561,
+      "char_ord_sum": 464896,
+      "d_label_mod9": 3,
+      "a_label_mod9": 5,
+      "text_snippet": "  Perfect sequencing! I'll write **Appendix A.3: Theorem C** in journal-quality form using the exact QARM definitions.  "
+    },
+    {
+      "source": "claude",
+      "native_id": "019b6321-d3cf-7684-9f72-bfdd4d4d7827",
+      "conv_id": "e98de897-bc86-40c7-a44f-9a69b0662e4c",
+      "conv_title": "SCC fingerprint and QAWM PoC patch development",
+      "role": "thought",
+      "b": 3,
+      "e": 5,
+      "char_count": 4117,
+      "char_ord_sum": 424407,
+      "d_label_mod9": 8,
+      "a_label_mod9": 4,
+      "text_snippet": "  Looking at this conversation, Will has uploaded a README.md for a QAWM PoC (QA World Model) project and ChatGPT has pr"
+    },
+    {
+      "source": "gemini",
+      "native_id": "Google AI Studio/Geometric Standard Model Embedding#58",
+      "conv_id": "Google AI Studio/Geometric Standard Model Embedding",
+      "conv_title": "Geometric Standard Model Embedding",
+      "role": "user",
+      "b": 2,
+      "e": 1,
+      "char_count": 175,
+      "char_ord_sum": 16130,
+      "d_label_mod9": 3,
+      "a_label_mod9": 4,
+      "text_snippet": "    Anomaly Cancellation: A critical self-consistency check to prove that the full set of QA-generated fermions results "
+    },
+    {
+      "source": "gemini",
+      "native_id": "Google AI Studio/Quantum Arithmetic and Machine Learning#106",
+      "conv_id": "Google AI Studio/Quantum Arithmetic and Machine Learning",
+      "conv_title": "Quantum Arithmetic and Machine Learning",
+      "role": "assistant",
+      "b": 9,
+      "e": 2,
+      "char_count": 867,
+      "char_ord_sum": 78876,
+      "d_label_mod9": 2,
+      "a_label_mod9": 4,
+      "text_snippet": "I understand your request, but I am unable to fulfill it directly due to the way I'm designed to work. I don't have a me"
+    },
+    {
+      "source": "gemini",
+      "native_id": "Google AI Studio/Rational Arithmetic Approximates Functions#8",
+      "conv_id": "Google AI Studio/Rational Arithmetic Approximates Functions",
+      "conv_title": "Rational Arithmetic Approximates Functions",
+      "role": "thought",
+      "b": 1,
+      "e": 5,
+      "char_count": 2545,
+      "char_ord_sum": 234820,
+      "d_label_mod9": 6,
+      "a_label_mod9": 2,
+      "text_snippet": "**Selecting the Initial Dataset**  I'm zeroing in on the ideal dataset for this initial run. Considering the user's focu"
+    },
+    {
+      "source": "obsidian",
+      "native_id": "18f4ba55c0ced5fda1be",
+      "conv_id": "theoretical_review.md",
+      "conv_title": "theoretical_review.md",
+      "role": "note",
+      "b": 5,
+      "e": 6,
+      "char_count": 884,
+      "char_ord_sum": 180221,
+      "d_label_mod9": 2,
+      "a_label_mod9": 8,
+      "text_snippet": "From Obsidian note \"theoretical_review.md\" (section: \"3. Formal Abstract Assessment\"):  - **Positionally Accurate:** The"
+    }
+  ],
+  "witness_count": 11,
+  "empirical_verification": {
+    "source_counts": {
+      "chatgpt": "52,559 messages, 1,345 conversations (from 2026-02-10 export)",
+      "claude": "386 messages, 19 conversations",
+      "gemini": "4,975 messages, 71 conversation files",
+      "obsidian": "74 research note sections, 4 source files"
+    },
+    "total_messages": 57994,
+    "role_diagonal_check": "45 sector/role combinations across 4 sources, 0 axiom violations",
+    "thought_promotion_observed": {
+      "chatgpt_thought_rate": "6,698 / 52,559 = 12.7%",
+      "claude_thought_rate": "91 / 386 = 23.6%",
+      "gemini_thought_rate": "874 / 4,975 = 17.6%"
+    },
+    "edge_counts": {
+      "parent": 37601,
+      "succ": 60325,
+      "ref": 67986
+    },
+    "smoke_test_status": "all 8 checks passing (tools/qa_retrieval/smoke_test.py)"
+  }
+}

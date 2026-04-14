@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA SL3 Hexagonal Ring Identity Cert family [245]: packages the Wildberger sl_3 diamond follow-up identity ring(a,b)=dim pi[a,b]-dim pi[a-1,b-1]=T_{d+1}+a*b where d=a+b. Under QA coordinates (b_QA,e_QA)=(a,b), this is ring=T(d+1)+b_QA*e_QA, a pure integer polynomial. The family verifies the cleared-denominator symbolic expansion, all 196 entries on [1..14]^2, QA coordinate form, and known multiplicities ring(1,1)=7, ring(2,1)=12, ring(2,2)=19. Source: Wildberger, Quarks, diamonds, and representations of sl_3, UNSW preprint, 2003; theory note docs/theory/QA_WILDBERGER_STRUCTURAL_FOLLOWUPS.md section 1. Checks SHR_1+ALGEBRAIC_EXPANSION/EXHAUSTIVE/QA_COORD_FORM/KNOWN_MULTIPLICITIES/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

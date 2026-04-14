@@ -20,6 +20,8 @@
 | [240] | [QA Diamond sl3 Irrep Dimension](240_qa_diamond_sl3_irrep_dimension_cert.md) | Wildberger diamond model bridge: sl(3) irrep dimension formula becomes QA polynomial (b+1)(e+1)(d+2)/2; 22/22 table entries | PASS |
 | [241] | [QA Quadruple Coplanarity](241_qa_quadruple_coplanarity_cert.md) | Four QA points are coplanar in R3; blue/red/green Cayley-Menger determinants vanish on 30 samples plus Satellite #1 | PASS |
 | [242] | [QA Neuberg Cubic F23](242_qa_neuberg_cubic_f23_cert.md) | F_23 elliptic point count, Weierstrass tangent-conic dichotomy witnesses, integer-polynomial spread pair, and char 23 QA compatibility | PASS |
+| [245] | [QA SL3 Hexagonal Ring Identity](245_qa_sl3_hexagonal_ring_identity_cert.md) | Wildberger sl(3) diamond follow-up: ring(a,b)=dim pi[a,b]-dim pi[a-1,b-1]=T(d+1)+a*b; 196/196 grid entries | PASS |
+| [246] | [QA Chromogeometric TQF Symmetry](246_qa_chromogeometric_tqf_symmetry_cert.md) | Triple Quad residues satisfy TQF_r=TQF_g=-TQF_b; symbolic proof, 3000 triangle sample, exhaustive collinearity invariant | PASS |
 | [223] | [QA Experiment Protocol](223_qa_experiment_protocol.md) | Schema + Validator + Fixtures; enforces study design (linter EXP-1) | PASS |
 | [224] | [QA Benchmark Protocol](224_qa_benchmark_protocol.md) | Schema + Validator + Fixtures; enforces calibration provenance + framework inheritance (linter BENCH-1) | PASS |
 

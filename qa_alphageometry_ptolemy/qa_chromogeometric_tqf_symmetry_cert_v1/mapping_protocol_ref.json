@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Chromogeometric TQF Symmetry Cert family [246]: certifies the planar chromogeometric Triple Quad Formula sign symmetry TQF_r(P1,P2,P3)=TQF_g(P1,P2,P3)=-TQF_b(P1,P2,P3) for integer coordinate triples. SymPy proves TQF_r+TQF_b=0 and TQF_g+TQF_b=0 symbolically, and factors TQF_b as 4*area2*area2=16*A*A. The validator checks a deterministic 3000-triangle sample from [1..9]^2 and exhaustively confirms collinearity invariance across all C(81,3) triples. Source: Wildberger, Chromogeometry, Math. Intelligencer 30:26-38, 2008; Wildberger, Divine Proportions, 2005; theory note docs/theory/QA_WILDBERGER_STRUCTURAL_FOLLOWUPS.md section 2. Checks CTQF_1+SYMBOLIC_RB/SYMBOLIC_GB/SAMPLE_EXHAUSTIVE/FACTORED_BLUE/COLLINEARITY_INVARIANT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

@@ -6781,6 +6781,50 @@ def _validate_quadruple_coplanarity_cert_family(base_dir):
     return None
 
 
+def _validate_sl3_hexagonal_ring_identity_cert_family(base_dir):
+    """QA SL3 Hexagonal Ring Identity Cert family [245] - Wildberger sl3 diamond follow-up: ring(a,b)=dim pi[a,b]-dim pi[a-1,b-1]=T_{d+1}+a*b under QA coordinates (b_QA,e_QA)=(a,b). Verifies cleared-denominator symbolic expansion, all 196 entries on [1..14]^2, QA coordinate form, and known multiplicities ring(1,1)=7, ring(2,1)=12, ring(2,2)=19. Source: Wildberger 2003; Will Dale + Claude 2026-04-14. Checks SHR_1+ALGEBRAIC_EXPANSION/EXHAUSTIVE/QA_COORD_FORM/KNOWN_MULTIPLICITIES/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_sl3_hexagonal_ring_identity_cert_v1")
+    validator = os.path.join(fam_dir, "qa_sl3_hexagonal_ring_identity_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_sl3_hexagonal_ring_identity_cert_v1/qa_sl3_hexagonal_ring_identity_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_sl3_hexagonal_ring_identity_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_sl3_hexagonal_ring_identity_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_sl3_hexagonal_ring_identity_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_chromogeometric_tqf_symmetry_cert_family(base_dir):
+    """QA Chromogeometric TQF Symmetry Cert family [246] - Wildberger chromogeometry Triple Quad Formula sign symmetry: TQF_r=TQF_g=-TQF_b for integer-coordinate triangles, with TQF_b=4*area2*area2=16*A*A. Uses SymPy symbolic identities, deterministic 3000-triangle sample from [1..9]^2, and exhaustive C(81,3) collinearity invariant. Source: Wildberger Chromogeometry 2008 and Divine Proportions 2005; Will Dale + Claude 2026-04-14. Checks CTQF_1+SYMBOLIC_RB/SYMBOLIC_GB/SAMPLE_EXHAUSTIVE/FACTORED_BLUE/COLLINEARITY_INVARIANT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_chromogeometric_tqf_symmetry_cert_v1")
+    validator = os.path.join(fam_dir, "qa_chromogeometric_tqf_symmetry_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_chromogeometric_tqf_symmetry_cert_v1/qa_chromogeometric_tqf_symmetry_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_chromogeometric_tqf_symmetry_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_chromogeometric_tqf_symmetry_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_chromogeometric_tqf_symmetry_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_neuberg_cubic_f23_cert_family(base_dir):
     """QA Neuberg Cubic F23 Cert family [242] - Wildberger's finite-field Neuberg setting over F_23: E:y^2=x^3+x+1 has 27 affine points plus infinity, Weierstrass tangent-conic witnesses are enumerated as identical or disjoint F_23 point sets, and the spread witness is an integer-polynomial pair with no division required in the fixture. Source: Wildberger 2008; Will Dale + Claude 2026-04-14. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -7736,6 +7780,16 @@ FAMILY_SWEEPS = [
      "Wildberger Neuberg finite-field bridge over F_23: E:y^2=x^3+x+1 has 27 affine points plus infinity; tangent-conic witnesses enumerate F_23 point sets and are identical or disjoint; spread witness is integer-polynomial and QA-compatible for char not 2 or 3. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok",
      "242_qa_neuberg_cubic_f23_cert",
      "qa_neuberg_cubic_f23_cert_v1", True),
+    (245, "QA SL3 Hexagonal Ring Identity Cert family",
+     _validate_sl3_hexagonal_ring_identity_cert_family,
+     "Wildberger sl3 diamond follow-up: ring(a,b)=dim pi[a,b]-dim pi[a-1,b-1]=T_{d+1}+a*b under QA coordinates; verifies symbolic expansion, 196/196 grid entries, QA coordinate form, and known multiplicities. Checks SHR_1+ALGEBRAIC_EXPANSION/EXHAUSTIVE/QA_COORD_FORM/KNOWN_MULTIPLICITIES/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "245_qa_sl3_hexagonal_ring_identity_cert",
+     "qa_sl3_hexagonal_ring_identity_cert_v1", True),
+    (246, "QA Chromogeometric TQF Symmetry Cert family",
+     _validate_chromogeometric_tqf_symmetry_cert_family,
+     "Wildberger chromogeometry Triple Quad Formula sign symmetry TQF_r=TQF_g=-TQF_b; symbolic polynomial proof, TQF_b=4*area2*area2, deterministic 3000-triangle sample, and exhaustive C(81,3) collinearity invariant. Checks CTQF_1+SYMBOLIC_RB/SYMBOLIC_GB/SAMPLE_EXHAUSTIVE/FACTORED_BLUE/COLLINEARITY_INVARIANT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "246_qa_chromogeometric_tqf_symmetry_cert",
+     "qa_chromogeometric_tqf_symmetry_cert_v1", True),
 ]
 
 

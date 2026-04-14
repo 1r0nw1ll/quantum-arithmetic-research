@@ -73,13 +73,43 @@ This gives a Theorem-NT-clean alignment witness that does not depend on cosine s
 - [ ] Prototype a discrete integer-Gram alignment classifier on Satellite orbits (Codex task — python-write gated for Claude).
 - [ ] If integer classifier discriminates comparably to cosine-sim, dual-run or replace.
 
-## 6. Short conclusion
+## 6. 2026-04-14 CORRECTION — Mutation Game 2020 handles E_8
 
-The 2003 minuscule-poset construction does not supply a direct drop-in replacement for QA's E_8 alignment, because E_8 is the canonical exception to minuscule methods. A Theorem-NT-clean E_8 alignment is still available — via the E_8 Gram matrix directly — but it requires a separate construction and separate code path. Wildberger's 2003 work remains useful for A_n, D_n, E_6, E_7 alignments (none of which the current QA codebase uses), not for E_8 specifically.
+**This section corrects §2–5.** The 2003 minuscule-poset construction excluded E_8, but Wildberger's **2020 paper** *The Mutation Game, Coxeter–Dynkin Graphs, and Generalized Root Systems* (acquired 2026-04-14 from user's Downloads) extends the framework to cover **all** finite Coxeter types — including E_8.
 
-## 7. References
+**Primary source.** Wildberger, N.J. *The Mutation Game, Coxeter–Dynkin Graphs, and Generalized Root Systems* (≈ 79 pp; later published in Algebra Colloquium 27 (2020)). Local `/tmp/wild/mutation_game_2020.txt`.
+
+**Theorem 0.1 (verbatim from primary source):** The finite Coxeter groups W correspond to Coxeter graphs Γ in the list: A_n (n ≥ 1), B_n (n ≥ 2), D_n (n ≥ 4), **E_6, E_7, E_8**, F_4, G_2, H_3, H_4, I_2(m). E_8 is explicitly included.
+
+**Theorem 0.3** lists the reduced irreducible root systems: A_n, B_n, C_n, D_n, E_6, E_7, **E_8**, F_4, G_2.
+
+**How the construction reaches E_8.** Not via minuscule posets (which still fail for E_8) but via **bidirected multigraphs and the Mutation Game**. Martians and anti-Martians occupy vertices of a directed multigraph; populations mutate by a specific integer-valued rule; the root populations R(X) are exactly the lattice produced from a single simple root by iterated mutations. For Coxeter graphs of type ADE (including E_8), mutations generate the full positive root poset R+(X, x).
+
+**Inductive cascade (verbatim):** A_n → A_{n+1}, D_n → D_{n+1}, and the exceptional chain **E_6 → E_7 → E_8**, connected by ψ-complementation maps. The paper explicitly tabulates R+(E_8, 7) as a 120-element poset of integer-coefficient vectors (the 120 positive roots; with negatives, the full 240 E_8 roots).
+
+**QA consequence.** Wildberger now has a Theorem-NT-clean **integer E_8 construction** via mutations. The QA codebase's current cosine-similarity E_8 alignment (`qa_representational_geometry.py:159–204`, still observer-layer-only and Theorem-NT-clean) can be supplemented or replaced by an integer mutation-based classifier:
+
+- Represent a QA tuple (b, e, d, a) as an initial population on a chosen Coxeter graph.
+- Apply integer mutations; the reachable populations are exactly the roots of the associated root system.
+- Classify a QA orbit by which root-system region its T-iterates populate.
+
+This is a substantive upgrade to the E_8 reconciliation situation. Not yet implemented; flagged as cert candidate **[244] QA_MUTATION_GAME_ROOT_LATTICE_CERT.v1** for future session work.
+
+## 7. Summary across 2003 and 2020 Wildberger integer Lie-algebra works
+
+| Construction | Year | Types covered | QA applicability |
+|--------------|------|---------------|-------------------|
+| Minuscule-poset construction | 2003 | A_n, D_n, E_6, E_7 | Integer-clean; E_8 excluded |
+| G_2 hexagon operators | 2003 | G_2 | Integer matrix entries {−2, −1, 0, 1, 2} |
+| sl(3) diamond model | 2003 | sl(3) = A_2 | Integer polytope; cert [240] |
+| **Mutation Game** | **2020** | **All finite Coxeter incl. E_8** | **Integer mutations; full 240-root E_8 explicitly** |
+
+The earlier "E_8 excluded" conclusion was accurate for the 2003 method but is superseded by the 2020 Mutation Game paper. Wildberger's integer-Lie-algebra program now covers the full finite Coxeter classification, including E_8.
+
+## 8. References
 
 - Wildberger, N.J. *A combinatorial construction for simply-laced Lie algebras*. J. Lie Theory **13** (2003) 155–165.
 - Wildberger, N.J. *A combinatorial construction for simply-laced Lie algebras*. Adv. Appl. Math. **30** (2003) 385–396.
 - Wildberger, N.J. *Minuscule posets from neighbourly graph sequences*. Eur. J. Combin. **24** (2003) 741–757.
-- Green, R.M. *Combinatorics of Minuscule Representations*. Cambridge Tracts in Math. 199, 2013 — confirms E_8 has no minuscule representation.
+- **Wildberger, N.J.** *The Mutation Game, Coxeter–Dynkin Graphs, and Generalized Root Systems*. Algebra Colloquium **27** (2020). Primary source for E_8 via mutations; acquired 2026-04-14.
+- Green, R.M. *Combinatorics of Minuscule Representations*. Cambridge Tracts in Math. 199, 2013 — confirms E_8 has no minuscule representation (relevant only to the 2003 method).

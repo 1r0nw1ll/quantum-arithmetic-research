@@ -1,0 +1,49 @@
+{
+  "certificate_id": "resonance_bin_correspondence_v1_pass_001",
+  "schema": "QA_RESONANCE_BIN_CORRESPONDENCE_CERT.v1",
+  "version": "1.0.0",
+  "timestamp": "2026-04-12T00:00:00Z",
+  "claim": "At modulus m, the equivalence class [k]_m = { x in R : quantize(x,m)=k } is isomorphic to a resonance tolerance bandwidth centered on integer eigenvalue k; Hensel lift m -> m*p is progressive bandwidth narrowing.",
+  "moduli_tested": [9, 24],
+  "witnesses": {
+    "arnold_tongue": {
+      "description": "Two coupled phase oscillators dphi_1/dt = 1 + K*sin(phi_2 - phi_1), dphi_2/dt = (1+delta) + K*sin(phi_1 - phi_2). Predict locked-fraction (mode-mass of QA-binned phase difference) rises monotonically in K and falls monotonically in m at fixed K.",
+      "params": {"delta": 0.05, "n_steps": 6000, "dt": 0.01, "seed": 0},
+      "K_values_tested": [0.0, 0.1, 0.3],
+      "expected_direction": "monotone_increasing_in_K"
+    },
+    "integer_roundtrip": {
+      "description": "For any continuous input x, quantize(x,m) -> int64 bin -> bin-center -> re-bin preserves the integer bin assignment. Asserts S2/A1 compliance of TypeA-style encoding: no float drift, no auto-reducing fractions.",
+      "n_samples": 500,
+      "moduli": [9, 24]
+    }
+  },
+  "hensel_reference": {
+    "artifact_path": "qa_brainca_selforg_v2.py",
+    "alt_artifact": "qa_hensel_selforg_experiment.py",
+    "claim": "Orbit-family count on S_{3^k} grows with k; Pudelko/Hensel prediction: mod-3=2 families, mod-9=5 families, mod-27=further splitting. Progressive bandwidth narrowing.",
+    "validated_by": "existing self-organization experiments (repo root)"
+  },
+  "permissibility_filter_role": {
+    "syntax_layer": "QA integer equivalence class [k]_m (modular arithmetic, bin assignment)",
+    "semantics_layer": "SVP sympathetic transmission bandwidth centered on physical resonance k (Arnold tongue width, Q-factor)",
+    "filter_function": "bandwidth(k, m) proportional to 2*pi/m (inverse of modulus selectivity)"
+  },
+  "integer_only_invariant": true,
+  "axiom_compliance": ["A1", "A2", "S1", "S2", "T1", "T2"],
+  "source": {
+    "authors": ["Will Dale", "Claude (Opus 4.6)"],
+    "date": "2026-04-12",
+    "grounding": [
+      "Dale Pond + Vibes letter 2026-04-05 (OB a9307705-6ff0-4422-bd62-9889dcd0f1b2)",
+      "docs/theory/QA_SYNTAX_SVP_SEMANTICS.md"
+    ]
+  },
+  "meta": {
+    "physics_analogs": [
+      "Arnold tongue phase-locking width",
+      "Q-factor resonance bandwidth (wine-glass destructive resonance)",
+      "Quantum eigenvalue selection under Hamiltonian perturbation"
+    ]
+  }
+}

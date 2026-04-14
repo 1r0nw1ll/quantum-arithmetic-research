@@ -2502,6 +2502,66 @@ def _validate_mapping_protocol_ref_family_if_present(base_dir: str) -> Optional[
     return None
 
 
+def _validate_experiment_protocol_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_EXPERIMENT_PROTOCOL.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_experiment_protocol", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_experiment_protocol/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_experiment_protocol self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_experiment_protocol self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_benchmark_protocol_family_if_present(base_dir: str) -> Optional[str]:
+    """
+    Validate QA_BENCHMARK_PROTOCOL.v1 family (schema + validator + fixtures).
+    """
+    import subprocess
+
+    repo_root = os.path.normpath(os.path.join(base_dir, ".."))
+    validator = os.path.join(repo_root, "qa_benchmark_protocol", "validator.py")
+    if not os.path.exists(validator):
+        return "missing qa_benchmark_protocol/validator.py"
+
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test", "--json"],
+        capture_output=True, text=True, timeout=30,
+        cwd=repo_root,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "qa_benchmark_protocol self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    payload = json.loads((proc.stdout or "").strip() or "{}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            "qa_benchmark_protocol self-test returned ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_ebm_navigation_cert_family_if_present(base_dir: str) -> Optional[str]:
     """
     Validate QA_EBM_NAVIGATION_CERT.v1 family (schema + validator + fixtures).
@@ -3613,7 +3673,7 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_fibonacci_resonance_cert_family(base_dir: str) -> Optional[str]:
-    """QA Fibonacci Resonance Cert family [162] — certifies MMRs preferentially select Fibonacci ratios. 60 resonances across 8+ systems (solar+exoplanet). Order-1: 33/43 (77%) Fib vs 22% expected, p<10⁻⁶. Unique ratios: 8/14 (57%) vs 31% expected, p=0.040. Fisher combined p<10⁻⁶. QA: T-operator=Fib shift makes Fib ratios deeper attractors. Tier 2→3. Checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Fibonacci Resonance Cert family [219] — certifies MMRs preferentially select Fibonacci ratios. 60 resonances across 8+ systems (solar+exoplanet). Order-1: 33/43 (77%) Fib vs 22% expected, p<10⁻⁶. Unique ratios: 8/14 (57%) vs 31% expected, p=0.040. Fisher combined p<10⁻⁶. QA: T-operator=Fib shift makes Fib ratios deeper attractors. Tier 2→3. Corrective renumber: [163] is reserved by QA Dead Reckoning. Checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fr_dir    = os.path.join(base_dir, "qa_fibonacci_resonance_cert_v1")
     validator = os.path.join(fr_dir, "qa_fibonacci_resonance_cert_validate.py")
@@ -5984,6 +6044,50 @@ def _validate_cayley_bateson_filtration_cert_family(base_dir: str) -> Optional[s
     return None
 
 
+def _validate_ebm_equivalence_cert_family(base_dir: str) -> Optional[str]:
+    """QA EBM Equivalence Cert family [216] — formal claim that QA coherence is a discrete-native, Theorem NT-compliant Energy-Based Model. Pointwise energy E_QA(b,e,next) = 0 if T(b,e)==next else 1; window energy = 1 - QCI. Five EBM axioms verified in-cert: (E1) non-negativity exhaustive on S_9^2 × {1..9}; (E2) data-manifold zero — E(deterministic T-trajectory)=0 exactly; (E3) monotonicity — injecting k% mismatch grows E linearly (0→0.19→0.46→0.66→0.83 at 0/10/30/50/80%); (E4) Boltzmann occupancy well-formed, T=2π/m per cert [215]; (E5) score identity — argmax of Boltzmann over next_state equals T-operator step (exhaustive S_9, 81/81). Structural consequence: qa_detect IS a trained EBM; MCMC-free sampling = T-operator walk; no gradient approximation; reproducible by integer arithmetic. Source: Will Dale + Claude 2026-04-12; LeCun et al. 2006 EBM tutorial, Hinton 2002 CD. Cross-refs [154] QCI empirical, [191] Bateson filtration, [215] bin-resonance temperature identity, Theorem NT. Checks EBM_1+SCHEMA/NONNEG/ZERO/MONOTONE/BOLTZMANN/SCORE/INT_ONLY/SELFTEST; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_ebm_equivalence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_ebm_equivalence_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ebm_equivalence_cert_v1/qa_ebm_equivalence_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_ebm_equivalence_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_ebm_equivalence_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_ebm_equivalence_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_resonance_bin_correspondence_cert_family(base_dir: str) -> Optional[str]:
+    """QA Resonance-Bin Correspondence Cert family [215] — formalizes the bin-width ≡ resonance-tolerance isomorphism as a candidate permissibility filter connecting QA syntax (integer equivalence classes under modulus m) to SVP semantics (sympathetic transmission windows). Three witnesses: (1) Arnold-tongue phase-lock width matches QA bin width at corresponding modulus — critical coupling K* scales monotonically with m (m=6→K*=0.06, m=18→0.08, m=48→0.10 empirically); (2) Hensel lift mod 3→9→27 progressive bandwidth narrowing via external reference qa_brainca_selforg_v2.py; (3) integer-only round-trip preserves bin assignment with zero fractions.Fraction usage (S2/A1 compliant). Closes the permissibility-filter gap flagged in docs/theory/QA_SYNTAX_SVP_SEMANTICS.md from Dale Pond + Vibes letter 2026-04-05 (OB a9307705). Source: Will Dale + Claude 2026-04-12; Arnold tongue theory (Arnold 1961), Q-factor resonance. Checks RBC_1+SCHEMA/ARNOLD/BINWIDTH/HENSEL/ROUNDTRIP/INT_ONLY/SELFTEST; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_resonance_bin_correspondence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_resonance_bin_correspondence_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_resonance_bin_correspondence_cert_v1/qa_resonance_bin_correspondence_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_resonance_bin_correspondence_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_resonance_bin_correspondence_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_resonance_bin_correspondence_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_bateson_learning_levels_cert_family(base_dir: str) -> Optional[str]:
     """QA Bateson Learning Levels Cert family [191] — formalizes Gregory Bateson's learning hierarchy (0/I/II/III) as a strict invariant filtration on QA state spaces. Four invariants (orbit ⊂ family ⊂ modulus ⊂ ambient category) define L_0/L_1/L_2a/L_2b/L_3 operator classes. Tiered Reachability Theorem exhaustively verified on S_9: only 26% of 6561 pairs are Level-I reachable; 52.67% require L_2a, 20% require L_2b. Witnesses at every tier (qa_step, scalar_mult k=2, scalar_mult k=3, modulus_reduction). Source: Bateson (1972), Ashby (1956). Checks BLL_1+FILT/TIER/L1/L2A/L2B/L3/STRICT/DB/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -6160,6 +6264,57 @@ def _validate_hebrew_mod9_identity_cert_family(base_dir: str) -> Optional[str]:
     return None
 
 
+def _validate_self_tested_family(base_dir: str, fam_root: str, validator_name: str, label: str) -> Optional[str]:
+    import subprocess
+    fam_dir = os.path.join(base_dir, fam_root)
+    validator = os.path.join(fam_dir, validator_name)
+    if not os.path.exists(validator):
+        return f"missing {fam_root}/{validator_name}"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"{label} self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"{label} self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"{label} self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_pudelko_modular_periodicity_cert_family(base_dir: str) -> Optional[str]:
+    """QA Pudelko Modular Periodicity Cert family [198] — partial-verification cert with explicit V2/V5 open-item honesty gates; self-test ok"""
+    return _validate_self_tested_family(
+        base_dir,
+        "qa_pudelko_modular_periodicity_cert_v1",
+        "qa_pudelko_modular_periodicity_cert_validate.py",
+        "qa_pudelko_modular_periodicity_cert",
+    )
+
+
+def _validate_grokking_eigenvalue_transition_cert_family(base_dir: str) -> Optional[str]:
+    """QA Grokking Eigenvalue Transition Cert family [199] — partial-verification cert separating DFT mode count from QA orbit-family count; self-test ok"""
+    return _validate_self_tested_family(
+        base_dir,
+        "qa_grokking_eigenvalue_transition_cert_v1",
+        "qa_grokking_eigenvalue_transition_cert_validate.py",
+        "qa_grokking_eigenvalue_transition_cert",
+    )
+
+
+def _validate_spherical_grokking_theorem_nt_cert_family(base_dir: str) -> Optional[str]:
+    """QA Spherical Grokking Theorem NT Cert family [200] — partial-verification cert preserving local 3x speedup and untested S5 scope boundary; self-test ok"""
+    return _validate_self_tested_family(
+        base_dir,
+        "qa_spherical_grokking_theorem_nt_cert_v1",
+        "qa_spherical_grokking_theorem_nt_cert_validate.py",
+        "qa_spherical_grokking_theorem_nt_cert",
+    )
+
+
 def _validate_sefer_yetzirah_combinatorics_cert_family(base_dir: str) -> Optional[str]:
     """QA Sefer Yetzirah Combinatorics Cert family [203] — certifies combinatorial structures in the Sefer Yetzirah (Book of Formation, c. 2nd-6th century CE): 231 gates = C(22,2) = K_22 complete graph, factorial computation n! for n=2..7 (earliest known), 3-7-12 letter partition, 32 paths = 10+22 = 2^5, oscillating circle, Pythagorean transmission (Iamblichus), tzeruf permutation groups. Checks SYC_1+GATES/FACT/PART/PATHS/NUM/W/F; 2 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -6289,6 +6444,318 @@ def _validate_quadrance_product_cert_family(base_dir: str) -> Optional[str]:
         raise RuntimeError(f"qa_quadrance_product_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
     if payload.get("ok") is not True:
         raise RuntimeError(f"qa_quadrance_product_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_fuller_ve_diagonal_decomposition_cert_family(base_dir: str) -> Optional[str]:
+    """QA Fuller VE Diagonal Decomposition Cert family [217] — Fuller's cuboctahedral / vector-equilibrium shell count S_n = 10n^2+2 (12, 42, 92, 162, 252, 362, ...) decomposes across QA integer diagonals by n mod 3: n not divisible by 3 => on b=e diagonal D_1 with tuple (S_n/3, S_n/3, 2*S_n/3, S_n); n divisible by 3 => off D_1 on sibling odd-divisor diagonal D_k with (2k+1)|S_n. Proof: S_n mod 3 = (n^2+2) mod 3 = 0 iff n not div by 3. First documented hierarchy whose QA decomposition is mixed across diagonal classes (complements FST/STF entirely on D_1). Mod-3 selection is QA-native triune; 2:1 density ratio of on- vs off-diagonal shells. Source: Will Dale + Claude 2026-04-13, Buckminster Fuller Synergetics (1975). Checks FVDD_1+FORMULA/MOD3/DIAGONAL/OFFDIAGONAL/COMPUTATIONAL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_fuller_ve_diagonal_decomposition_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fuller_ve_diagonal_decomposition_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fuller_ve_diagonal_decomposition_cert_v1/qa_fuller_ve_diagonal_decomposition_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_fuller_ve_diagonal_decomposition_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_fuller_ve_diagonal_decomposition_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_fuller_ve_diagonal_decomposition_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+
+def _validate_haramein_scaling_diagonal_cert_family(base_dir):
+    """QA Haramein Scaling Diagonal Cert family [218] — Haramein-Rauscher-Hyson 2008 Table 1 (Big Bang/Planck, Atomic, Stellar Solar, Galactic G1/G2, Universe) encoded as integer (log10 R cm, log10 nu Hz) tuples sit on a QA fixed-d hyperbola (b+e = const, the Schwarzschild line R*nu = c after decade-rounding) and exhibit four structural segment-ratios on 2D Euclidean distances whose integer quadratic-form quotients approximate phi^2 or 1/phi^2 to <= 7%: (25^2+25^2)/(16^2+15^2) = 1250/481 ~ phi^2; (6^2+7^2)/(4^2+4^2) = 85/32 ~ phi^2; (2^2+3^2)/(4^2+4^2) = 13/32 ~ 1/phi^2; (16^2+16^2)/(25^2+25^2) = 512/1250 ~ 1/phi^2. Null (N=200000 random slope-minus-1 6-point placements, same structural pair positions): p < 5e-6. Places Haramein hierarchy in Q(sqrt 5) = Z[phi] algebraic family on fixed-d diagonal (distinct from [217] b=e D_1, companion to [163]). Primary source: Documents/haramein_rsf/scale_unification_2008.pdf. Theory: docs/theory/QA_HARAMEIN_SCALING_DIAGONAL.md. Source: Will Dale + Claude 2026-04-13. Checks HSD_1+TABLE/FIXED_D/SEGMENTS/QUADRATIC/PHI_RATIOS/NULL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_haramein_scaling_diagonal_cert_v1")
+    validator = os.path.join(fam_dir, "qa_haramein_scaling_diagonal_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_haramein_scaling_diagonal_cert_v1/qa_haramein_scaling_diagonal_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_haramein_scaling_diagonal_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_haramein_scaling_diagonal_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_haramein_scaling_diagonal_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+
+def _validate_madelung_d_ordering_cert_family(base_dir):
+    """QA Madelung d-Ordering Cert family [220] — atomic subshells (n,l), n>=1, 0<=l<=n-1, identified as QA (b,e)=(n,l). Then d=b+e=n+l IS the Madelung quantum. Aufbau filling order EXACTLY = QA (d,-e) ascending sort, verified over first 36 Janet-extended subshells (1s through 11s) with zero mismatches. Deterministic selection rule: within-d antidiagonal (b,e)->(b+1,e-1) when e>0; between-d jump (b,0)->(ceil((b+2)/2), floor(b/2)) when e=0; holds for 35/35 transitions. Derived: subshell pop = 4e+2 = 2(2l+1); period-k pop = 2*ceil((k+1)/2)^2 = {2,8,8,18,18,32,32,50,...} (matches physical periodic table periods 1-7 + Janet predictions 8+); shell-n cumulative total = 2*Sum k^2 through n. Distinct QA class from [217]/[218]/[219]: d-ordering walk across ALL d-classes, NOT a Q(sqrt 5) / Z[phi] structure. Madelung rule was empirical (Madelung 1936, Klechkowski 1962); QA promotes it from aufbau heuristic to structural consequence of A2 axiom. Does NOT claim derivation from Schrodinger or prediction of Madelung anomalies (Cr/Cu/lanthanides) — those live in SVP/permissibility semantic layer. Source: Will Dale + Claude 2026-04-13. Theory: docs/theory/QA_MADELUNG_D_ORDERING.md. Checks MAD_1+MAPPING/ORDER/RULE/POP/PERIODS/SHELL/CLASS/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_madelung_d_ordering_cert_v1")
+    validator = os.path.join(fam_dir, "qa_madelung_d_ordering_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_madelung_d_ordering_cert_v1/qa_madelung_d_ordering_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_madelung_d_ordering_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_madelung_d_ordering_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_madelung_d_ordering_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+
+def _validate_nuclear_magic_spin_extension_cert_family(base_dir):
+    """QA Nuclear Magic Spin-Extension Cert family [221] — extends QA with Dirac axiom D1 (sigma in {1,2} encodes spin alignment, j = l + (2*sigma-3)/2, pop = 2j+1 = 2(e+sigma-1)). Maps (b,e)=(n,l), HO shell N=2b-e-2. Fractional-1/2 promotion: when sigma=2 AND b=e+1 AND l>=l*, N_eff = N - 1/2. The 1/2 is Dirac spin unit (derived from D1). Threshold l* derived from single physics input P1: r=alpha/hbar_omega in [1/3, 1/2), giving l*=ceil(1/r)=3 by integer-ceiling. Empirical nuclear r~0.3-0.4 inside window (Mayer-Jensen 1950, Bohr-Mottelson 1969). Atomic r~0.01-0.02 gives l*>50 never reached, explaining why [220] Madelung needs no extension. Magic-shell criterion: N_eff in {0,1,2} OR N_eff half-integer. Cumulative populations at magic closures = {2,8,20,28,50,82,126}, all 7 experimental nuclear magic numbers exactly. Non-magic integer N_eff>=3 closures at 40,70,112,168 (HO residues, physically smaller gaps). Scope: combinatorial identity plus one discrete physical ratio input; honest framing of what QA derives vs physics supplies. Will Dale + Claude 2026-04-13. Theory note: docs/theory/QA_NUCLEAR_MAGIC_SPIN_EXTENSION.md. Checks NMS_1+D1/HO/PROMOTION/THRESHOLD/MAGIC/P1/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_nuclear_magic_spin_extension_cert_v1")
+    validator = os.path.join(fam_dir, "qa_nuclear_magic_spin_extension_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_nuclear_magic_spin_extension_cert_v1/qa_nuclear_magic_spin_extension_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_nuclear_magic_spin_extension_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_nuclear_magic_spin_extension_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_nuclear_magic_spin_extension_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+
+def _validate_madelung_anomaly_boundary_cert_family(base_dir):
+    """QA Madelung Anomaly Boundary Cert family [222] — every known atomic Madelung anomaly (20 total: Cr, Cu, Nb, Mo, Ru, Rh, Pd, Ag, La, Ce, Gd, Pt, Au, Ac, Th, Pa, U, Np, Cm, Lr) satisfies |d(src) - d(dst)| <= 1 in QA (n,l) = (b,e). 10 at |Δd|=0 (intra-class f↔d in lanthanides/actinides, d↔p in Lr); 10 at |Δd|=1 (inter-class s↔d). Null (uniform random 2-subshell pairs from first 20 Madelung positions): 36.8% in zone; observed 100% (20/20); enrichment 2.71x; binomial p = 2.1e-9. Necessary but not sufficient — Ti/V/Mn/Fe/Co/Ni (d=4↔5) and Ta/W/Re/Os/Ir (d=6↔7) in zone follow Madelung. Falsifiable: newly-discovered anomaly with |Δd|>=2 breaks claim. Extends [220] d-ordering; complements [221] nuclear-magic-spin-extension. QA provides boundary structure; exchange/relativistic mechanisms in semantic layer. Sources: NIST Atomic Spectra Database + Sato et al. 2015 Nature 520 (Lr 7p1). Will Dale + Claude 2026-04-13. Theory: docs/theory/QA_MADELUNG_ANOMALY_BOUNDARY.md. Checks MAB_1+ANOMALIES/MAPPING/ZONE/COVERAGE/NULL/COUNTEREX/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_madelung_anomaly_boundary_cert_v1")
+    validator = os.path.join(fam_dir, "qa_madelung_anomaly_boundary_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_madelung_anomaly_boundary_cert_v1/qa_madelung_anomaly_boundary_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_madelung_anomaly_boundary_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_madelung_anomaly_boundary_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_madelung_anomaly_boundary_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_hyper_catalan_diagonal_cert_family(base_dir):
+    """QA Hyper-Catalan Diagonal Correspondence Cert family [231] — under b=V_m-1 and e=F_m for Wildberger-Rubine hyper-Catalan multi-index m, d=b+e equals E_m exactly and Euler V_m-E_m+F_m=1 follows. Single-type m_k=n sits on sibling diagonal b=(k-1)e+1; Catalan/Fuss single-type values match OEIS A000108/A001764/A002293/A002294; no single-type case k in [2,7], n in [0,9] sits on D_1. Source: Wildberger-Rubine 2025; Will Dale + Claude 2026-04-13. Checks HCD_1+EULER/OEIS/FUSS/SINGLE_DIAGONAL/D1_DISJOINT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_hyper_catalan_diagonal_cert_v1")
+    validator = os.path.join(fam_dir, "qa_hyper_catalan_diagonal_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_hyper_catalan_diagonal_cert_v1/qa_hyper_catalan_diagonal_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_hyper_catalan_diagonal_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_hyper_catalan_diagonal_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_hyper_catalan_diagonal_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_uhg_diagonal_coincidence_cert_family(base_dir):
+    """QA UHG Diagonal Coincidence Cert family [232] — at m=9 on {1,...,9}^2, UHG zero quadrance under <a,b>=-(b1e2+e1b2) coincides exactly with QA gcd-reduced diagonal class: 64 unordered zero-quadrance pairs, 64 same-diagonal pairs, intersection 64, zero counterexamples either direction. Source: Wildberger UHG I 2013; Will Dale + Claude 2026-04-13. Checks UDC_1+M/COUNTS/INTERSECTION/COUNTEREXAMPLES/WITNESS/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_uhg_diagonal_coincidence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_uhg_diagonal_coincidence_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_uhg_diagonal_coincidence_cert_v1/qa_uhg_diagonal_coincidence_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_uhg_diagonal_coincidence_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_uhg_diagonal_coincidence_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_uhg_diagonal_coincidence_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_uhg_orbit_diagonal_profile_cert_family(base_dir):
+    """QA UHG Orbit Diagonal Profile Cert family [233] — at m=9, QA T-step partitions 81 points into 1 singularity length 1, 2 satellite orbits length 4, and 6 cosmos orbits length 12. Every non-singular D_1-containing orbit has exactly two D_1 points summing to (9,9): Sat#1, Cos#1, Cos#3, Cos#4. Source: Will Dale + Claude 2026-04-13. Checks UODP_1+M/PARTITION/ORBIT_DATA/D1_PROFILE/COMPLEMENT/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_uhg_orbit_diagonal_profile_cert_v1")
+    validator = os.path.join(fam_dir, "qa_uhg_orbit_diagonal_profile_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_uhg_orbit_diagonal_profile_cert_v1/qa_uhg_orbit_diagonal_profile_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_uhg_orbit_diagonal_profile_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_uhg_orbit_diagonal_profile_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_uhg_orbit_diagonal_profile_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_chromogeometry_pythagorean_identity_cert_family(base_dir):
+    """QA Chromogeometry Pythagorean Identity Cert family [234] — with Q_b=b*b+e*e, Q_r=b*b-e*e, and Q_g=2*b*e, Wildberger's chromogeometry identity Q_b square = Q_r square + Q_g square holds exhaustively over (b,e) in [1..19]^2 with zero failures; QA coordinate forms Q_r=(b-e)d, Q_g=2be, Q_b=b*b+e*e are verified. Source: Wildberger Chromogeometry 2008; Will Dale + Claude 2026-04-13. Checks CPI_1+SAMPLES/RANGE/FORMULAS/PLIMPTON/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_chromogeometry_pythagorean_identity_cert_v1")
+    validator = os.path.join(fam_dir, "qa_chromogeometry_pythagorean_identity_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_chromogeometry_pythagorean_identity_cert_v1/qa_chromogeometry_pythagorean_identity_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_chromogeometry_pythagorean_identity_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_chromogeometry_pythagorean_identity_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_chromogeometry_pythagorean_identity_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_super_catalan_diagonal_cert_family(base_dir):
+    """QA Super Catalan Diagonal Cert family [235] — Limanta-Wildberger super Catalan numbers S(m,n) identify with QA coordinates (b,e)=(m,n), so d=b+e gives the formula denominator factor (m+n)! = d!. S(b,b) for b=0..10 matches OEIS A000984 central binomials; swap symmetry and recurrence 4*S(b,e)=S(b+1,e)+S(b,e+1) hold exhaustively on [0..7]^2; S(1,n)=2*Catalan(n) for n=0..9. Source: Limanta + Wildberger 2021/2022; Will Dale + Claude 2026-04-13. Checks SCD_1+D1_A000984/SYMMETRY/RECURRENCE/CATALAN/QA_IDENT/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_super_catalan_diagonal_cert_v1")
+    validator = os.path.join(fam_dir, "qa_super_catalan_diagonal_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_super_catalan_diagonal_cert_v1/qa_super_catalan_diagonal_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_super_catalan_diagonal_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_super_catalan_diagonal_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_super_catalan_diagonal_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_spread_polynomial_composition_cert_family(base_dir):
+    """QA Spread Polynomial Composition Cert family [236] — Goh-Wildberger spread polynomials S_0=0, S_1=s, S_{n+1}=2(1-2s)*S_n-S_{n-1}+2s satisfy S_n composed with S_m = S_{n*m}. Exact SymPy composition verifies pairs (2,3), (3,2), (2,4), (4,3), (3,3), (2,5); S_2=4*s*(1-s) is the logistic map; integer closed forms for S_2/S_3/S_4 match. Trig identity recorded but skipped as float-dependent. Source: Goh + Wildberger 2009; Will Dale + Claude 2026-04-13. Checks SPC_1+COMPOSITION/CLOSED_FORMS/LOGISTIC/TRIG_NOTE/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_spread_polynomial_composition_cert_v1")
+    validator = os.path.join(fam_dir, "qa_spread_polynomial_composition_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_spread_polynomial_composition_cert_v1/qa_spread_polynomial_composition_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_spread_polynomial_composition_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_spread_polynomial_composition_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_spread_polynomial_composition_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_4d_diagonal_rule_cert_family(base_dir):
+    """QA 4D Diagonal Rule Cert family [237] — QA tuple (b,e,d,a) with d=b+e and a=b+2e is exactly b*v1+e*v2 in the 2-plane of R^4 spanned by v1=(1,0,1,1) and v2=(0,1,1,2). Integer embedding verified for b,e in [-5..5]; Gram matrix [[3,3],[3,6]] has determinant 9 equal to QA canonical modulus m; two concrete perpendicular QA-tuple witnesses satisfy Wildberger's Diagonal Rule Q1+Q2=Q3. Source: Wildberger KoG 21:47-54, 2017; Will Dale + Claude 2026-04-13. Checks Q4D_1+EMBED/GRAM/MODULUS/DIAGONAL_RULE/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_4d_diagonal_rule_cert_v1")
+    validator = os.path.join(fam_dir, "qa_4d_diagonal_rule_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_4d_diagonal_rule_cert_v1/qa_4d_diagonal_rule_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_4d_diagonal_rule_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_4d_diagonal_rule_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_4d_diagonal_rule_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_twelve_dihedral_orderings_cert_family(base_dir):
+    """QA Twelve Dihedral Orderings Cert family [239] - five objects under D_5 give 5!/(2*5)=12 dihedral classes, each of size 10, by exhaustive permutation enumeration and canonicalization via 5 rotations plus 5 reflections. The 12-count is recorded as G_2 non-identity root count, cuboctahedral S_1, and icosahedral vertex count. Source: Le + Wildberger 2020; Will Dale + Claude 2026-04-14. Checks TDO_1+GROUP/PERMUTATIONS/CANONICAL_REPS/CLASS_COUNT/CLASS_SIZE/FORMULA/QA_CONNECTION/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_twelve_dihedral_orderings_cert_v1")
+    validator = os.path.join(fam_dir, "qa_twelve_dihedral_orderings_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_twelve_dihedral_orderings_cert_v1/qa_twelve_dihedral_orderings_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_twelve_dihedral_orderings_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_twelve_dihedral_orderings_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_twelve_dihedral_orderings_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_neuberg_cubic_f23_cert_family(base_dir):
+    """QA Neuberg Cubic F23 Cert family [242] - Wildberger's finite-field Neuberg setting over F_23: E:y^2=x^3+x+1 has 27 affine points plus infinity, Weierstrass tangent-conic witnesses are enumerated as identical or disjoint F_23 point sets, and the spread witness is an integer-polynomial pair with no division required in the fixture. Source: Wildberger 2008; Will Dale + Claude 2026-04-14. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_neuberg_cubic_f23_cert_v1")
+    validator = os.path.join(fam_dir, "qa_neuberg_cubic_f23_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_neuberg_cubic_f23_cert_v1/qa_neuberg_cubic_f23_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_neuberg_cubic_f23_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_neuberg_cubic_f23_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_neuberg_cubic_f23_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
     return None
 
 
@@ -6714,10 +7181,10 @@ FAMILY_SWEEPS = [
      "WGS84 reference ellipsoid = QA quantum ellipse; shape QN (101,9,110,119) ecc=9/110 matches WGS84 0.08182 to 0.001%; axis ratio sqrt(12019)/110 matches 7 sig figs; orbit QN (59,1,60,61) ecc=1/60 matches 0.01671 to 0.25%; triple (1980,12019,12181) C²+F²=G²; Tier 1 exact reformulation; checks WGS_1+QN/TRIPLE/ECC/AXIS/ORBIT/W/F; 1 PASS + 1 FAIL; self-test ok",
      "156_qa_wgs84_ellipse_cert",
      "qa_wgs84_ellipse_cert_v1", True),
-    (163, "QA Fibonacci Resonance Cert family",
+    (219, "QA Fibonacci Resonance Cert family",
      _validate_fibonacci_resonance_cert_family,
-     "MMRs preferentially select Fibonacci ratios; 60 resonances across 8+ planetary systems (solar+exoplanet); order-1: 33/43 (77%) Fib vs 22% expected p<10⁻⁶; unique 8/14 (57%) vs 31% p=0.040; Fisher combined p<10⁻⁶; QA T-operator=Fibonacci shift makes Fib ratios deeper attractors; three-body problem selection principle; Tier 2→3; checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
-     "163_qa_fibonacci_resonance_cert",
+     "MMRs preferentially select Fibonacci ratios; 60 resonances across 8+ planetary systems (solar+exoplanet); order-1: 33/43 (77%) Fib vs 22% expected p<10⁻⁶; unique 8/14 (57%) vs 31% p=0.040; Fisher combined p<10⁻⁶; QA T-operator=Fibonacci shift makes Fib ratios deeper attractors; three-body problem selection principle; Tier 2→3; corrective renumber from duplicate [163], which is reserved by Dead Reckoning; checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "219_qa_fibonacci_resonance_cert",
      "qa_fibonacci_resonance_cert_v1", True),
     (161, "QA ECEF Rational Cert family",
      _validate_ecef_rational_cert_family,
@@ -7034,6 +7501,21 @@ FAMILY_SWEEPS = [
      "T.J.J. See wave duality (1917) mapped to QA generator/observer duality; longitudinal=T-operator (discrete causal), transverse=observer projection (continuous measurement); Theorem NT = mode orthogonality; complementary to [153] Keely triune (3-fold within longitudinal); source See 'Electrodynamic Wave-Theory' 1917; checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "197_qa_see_longitudinal_transverse_cert",
      "qa_see_longitudinal_transverse_cert_v1", True),
+    (198, "QA Pudelko Modular Periodicity Cert family",
+     _validate_pudelko_modular_periodicity_cert_family,
+     "Pudelko modular Fibonacci periodicity mapped to QA T-operator family counts; partial-verification honesty gate preserves V2 Legendre-bridge refinement and V5 mirror-symmetry open item; checks PUD_1+STATUS/ORBIT/SELF_SIM/WEIGHT/HONEST/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "198_qa_pudelko_modular_periodicity_cert",
+     "qa_pudelko_modular_periodicity_cert_v1", True),
+    (199, "QA Grokking Eigenvalue Transition Cert family",
+     _validate_grokking_eigenvalue_transition_cert_family,
+     "Schiffman grokking eigenvalue transition mapped to QA with m=97 prime-control evidence, m=9 non-grokking composite target, and explicit DFT frequency-pair vs QA orbit-family correction; checks GET_1+STATUS/PRIME/COMPOSITE/CORRECTION/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "199_qa_grokking_eigenvalue_transition_cert",
+     "qa_grokking_eigenvalue_transition_cert_v1", True),
+    (200, "QA Spherical Grokking Theorem NT Cert family",
+     _validate_spherical_grokking_theorem_nt_cert_family,
+     "Yildirim spherical grokking mapped to Theorem NT; partial-verification honesty gate preserves local m=97 3x speedup, residual norm bound, uniform-attention result, m=9 non-applicability, and untested S5 boundary; checks SGT_1+STATUS/SPEEDUP/NORM/UNIFORM/M9/HONEST/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "200_qa_spherical_grokking_theorem_nt_cert",
+     "qa_spherical_grokking_theorem_nt_cert_v1", True),
     (201, "QA Snell Manuscript Cert family",
      _validate_snell_manuscript_cert_family,
      "Snell Manuscript (Keely, 1934) 7 structural claims mapped to QA: 7x3=21 hierarchy, frequency scaling by 3/9, Trexar Ag/Au/Pt={3,6,9} orbit encoding, mass-as-difference=f-value, polarity inversion 2/3 threshold, triple dissociation=orbit descent, rotation 3:9=cosmos/satellite ratio. Checks SNM_1+21/FREQ/SCALE/TREX/FVAL/POL/DISS/ROT/CHORD/W/F; 2 PASS + 1 FAIL; self-test ok",
@@ -7110,6 +7592,96 @@ FAMILY_SWEEPS = [
      "The Eisenstein quadratic form f(b,e) = b*b + b*e - e*e satisfies the integer identity f(e,b+e) = -f(b,e) where T(b,e)=(e,b+e). Corollary: T^2 preserves f mod m, giving T-orbit graph of S_m a signed-temporal structure. On S_9, 5 T-orbits decompose into 3 signed cosmos orbits with norm pairs {1,8}/{4,5}/{2,7} (Fibonacci/Lucas/Phibonacci) and 2 null orbits (satellite Tribonacci, singularity Ninbonacci) where f is identically 0 mod 9. Three cosmos orbits are bipartite signed (12 + 12 states alternating sign under T). Temporal sign formula: sign(f(T^t(s_0))) = (-1)^t * sign(f(s_0)) on integer lift. This is the SIGNED-TEMPORAL view of the same T dynamic certified structurally by [211]-[213] and operationally by [210]. Source: Eisenstein 1844, Pythagorean Families paper (Will Dale + Claude 2026-03). Connects [133] Eisenstein cert, [155] Bearden phase conjugate (QCI opposite-sign = norm-sign flip), [191] cosmos/satellite/singularity stratification. Will Dale + Claude 2026-04-11. Checks NFS_1+FLIP/T2/PAIRS/TEMPORAL/155/133/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
      "214_qa_norm_flip_signed_cert",
      "qa_norm_flip_signed_cert_v1", True),
+    (215, "QA Resonance-Bin Correspondence Cert family",
+     _validate_resonance_bin_correspondence_cert_family,
+     "Bin-width ≡ resonance-tolerance isomorphism: at modulus m, equivalence class [k]_m = {x ∈ R : quantize(x,m)=k} is isomorphic to a resonance tolerance bandwidth; Hensel lift mod 3→9→27 = progressive bandwidth narrowing. Three witnesses: (W1) Arnold tongue empirical — critical coupling K* for phase-lock mode-dominance rises monotone in m (m=6→0.06, m=18→0.08, m=48→0.10); (W2) Hensel external-artifact reference to qa_brainca_selforg_v2.py; (W3) integer-only round-trip (S2/A1). Candidate permissibility-filter formalization flagged as open in docs/theory/QA_SYNTAX_SVP_SEMANTICS.md (Dale Pond + Vibes letter 2026-04-05, OB a9307705). Source: Will Dale + Claude 2026-04-12. Arnold 1961, Q-factor resonance theory. Checks RBC_1+SCHEMA/ARNOLD/BINWIDTH/HENSEL/ROUNDTRIP/INT_ONLY/SELFTEST; 1 PASS + 1 FAIL; self-test ok",
+     "215_qa_resonance_bin_correspondence_cert",
+     "qa_resonance_bin_correspondence_cert_v1", True),
+    (216, "QA EBM Equivalence Cert family",
+     _validate_ebm_equivalence_cert_family,
+     "QA coherence is a discrete-native, Theorem NT-compliant Energy-Based Model. Pointwise energy E_QA(b,e,next)=0 if T(b,e)==next else 1; window energy = 1-QCI. Five EBM axioms verified: (E1) non-negativity exhaustive on S_9; (E2) data-manifold zero on deterministic T-trajectory; (E3) monotonicity — E grows 0→0.19→0.46→0.66→0.83 with 0/10/30/50/80% injected mismatch; (E4) Boltzmann occupancy well-formed with T=2π/m per cert [215]; (E5) score identity — argmax of Boltzmann over next_state = T-operator (exhaustive S_9, 81/81). qa_detect IS a trained EBM; MCMC-free sampling = T-operator walk; no gradient approximation. Source: Will Dale + Claude 2026-04-12; LeCun et al. 2006, Hinton 2002 CD. Cross-refs [154][191][215], Theorem NT. Checks EBM_1+SCHEMA/NONNEG/ZERO/MONOTONE/BOLTZMANN/SCORE/INT_ONLY/SELFTEST; 1 PASS + 1 FAIL; self-test ok",
+     "216_qa_ebm_equivalence_cert",
+     "qa_ebm_equivalence_cert_v1", True),
+    (217, "QA Fuller VE Diagonal Decomposition Cert family",
+     _validate_fuller_ve_diagonal_decomposition_cert_family,
+     "Fuller's cuboctahedral / vector-equilibrium shell count S_n = 10n^2+2 (n=1: 12, n=2: 42, n=3: 92, n=4: 162, n=5: 252, n=6: 362, n=7: 492, n=8: 642, n=9: 812) decomposes across QA integer diagonals by n mod 3: on b=e diagonal D_1 iff n mod 3 != 0 (tuple (S_n/3, S_n/3, 2*S_n/3, S_n)); else on sibling odd-divisor diagonal D_k with (2k+1)|S_n. Proof: S_n mod 3 = (n^2+2) mod 3 = 0 iff n not divisible by 3. First documented physical hierarchy whose QA decomposition is mixed across diagonal classes (complements FST/STF, which sits entirely on D_1 per Briddell). Mod-3 selection is QA-native triune structure on canonical Sierpinski diagonal; 2:1 density ratio of on- vs off-diagonal shells. Foundation note: docs/theory/QA_SIERPINSKI_SELF_SIMILAR_DIAGONAL.md. Source: Will Dale + Claude 2026-04-13; Buckminster Fuller, Synergetics (1975). Checks FVDD_1+FORMULA/MOD3/DIAGONAL/OFFDIAGONAL/COMPUTATIONAL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "217_qa_fuller_ve_diagonal_decomposition_cert",
+     "qa_fuller_ve_diagonal_decomposition_cert_v1", True),
+    (218, "QA Haramein Scaling Diagonal Cert family",
+     _validate_haramein_scaling_diagonal_cert_family,
+     "Haramein-Rauscher-Hyson 2008 Table 1 (Big Bang/Planck, Atomic, Stellar Solar, Galactic G1, Galactic G2, Universe) encoded as integer (log10 R cm, log10 nu Hz) sits on QA fixed-d hyperbola (b+e = const, Schwarzschild line R*nu=c after decade-rounding). Four structural segment-ratios on 2D Euclidean distances in (log R, log nu) have integer quadratic-form quotients approximating {phi^2, 1/phi^2} within 7%: (25^2+25^2)/(16^2+15^2)=1250/481~phi^2 (0.7% off); (6^2+7^2)/(4^2+4^2)=85/32~phi^2 (1.4%); (2^2+3^2)/(4^2+4^2)=13/32~1/phi^2 (6.3%); (16^2+16^2)/(25^2+25^2)=512/1250~1/phi^2 (7.3%). Null (N=200000 random slope-minus-1 6-point placements, same structural pair positions): p < 5e-6. Places Haramein hierarchy in Q(sqrt 5)=Z[phi] algebraic family on fixed-d diagonal (distinct from [217] b=e D_1, companion to [219] Fibonacci Resonance). Primary source: Documents/haramein_rsf/scale_unification_2008.pdf. Theory: docs/theory/QA_HARAMEIN_SCALING_DIAGONAL.md. Source: Will Dale + Claude 2026-04-13. Checks HSD_1+TABLE/FIXED_D/SEGMENTS/QUADRATIC/PHI_RATIOS/NULL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "218_qa_haramein_scaling_diagonal_cert",
+     "qa_haramein_scaling_diagonal_cert_v1", True),
+    (220, "QA Madelung d-Ordering Cert family",
+     _validate_madelung_d_ordering_cert_family,
+     "Atomic subshells (n,l) identified as QA (b,e)=(n,l); d=b+e=n+l IS Madelung quantum. Aufbau = QA (d,-e) ascending sort, verified exactly through Janet-extended 36-subshell sequence (1s through 11s, zero mismatches). Selection rule: within-d antidiagonal (b,e)->(b+1,e-1) + between-d jump (b,0)->(ceil((b+2)/2), floor(b/2)); holds 35/35. Derived: subshell pop=4e+2; period-k pop=2*ceil((k+1)/2)^2={2,8,8,18,18,32,32,50,...} matching physical periodic table + Janet predictions; shell-n cumulative total=2*Sum k^2. Distinct QA class from [217] b=e D_1, [218] fixed-d hyperbola, [219] Fibonacci T-orbit: this is d-ordering walk across ALL d-classes, NOT a Q(sqrt 5) structure (polynomial-not-exponential). Madelung rule (Madelung 1936, Klechkowski 1962) was empirical aufbau heuristic; QA promotes it to structural consequence of A2 axiom (d=b+e). Does NOT claim derivation from Schrodinger or prediction of anomalies (Cr/Cu/lanthanides) — permissibility semantics live in SVP layer. Source: Will Dale + Claude 2026-04-13. Theory: docs/theory/QA_MADELUNG_D_ORDERING.md. Checks MAD_1+MAPPING/ORDER/RULE/POP/PERIODS/SHELL/CLASS/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "220_qa_madelung_d_ordering_cert",
+     "qa_madelung_d_ordering_cert_v1", True),
+    (221, "QA Nuclear Magic Spin-Extension Cert family",
+     _validate_nuclear_magic_spin_extension_cert_family,
+     "Extends QA with Dirac axiom D1 (sigma in {1,2}, j=l+(2sigma-3)/2, pop=2(e+sigma-1)). Identifies (b,e)=(n,l); HO shell N=2b-e-2. Fractional-1/2 promotion: sigma=2 AND b=e+1 AND l>=l* forces N_eff = N-1/2 (Dirac spin unit, not free parameter). Threshold l*=ceil(1/r) derived from physics input P1: r=alpha/hbar_omega in [1/3, 1/2), empirical nuclear ~0.3-0.4. Gives l*=3 by integer-ceiling. Magic criterion: N_eff in {0,1,2} OR half-integer. Cumulative sequence reproduces {2,8,20,28,50,82,126} exactly, zero tunable parameters beyond one discrete physical ratio in narrow window. Non-magic integer N_eff>=3 closures (40,70,112,168) are HO residues, smaller physical gaps. Explains why atomic [220] Madelung needs no extension (atomic r<<1/100). Will Dale + Claude 2026-04-13. Mayer 1950, Jensen 1950, Bohr-Mottelson 1969. Theory: docs/theory/QA_NUCLEAR_MAGIC_SPIN_EXTENSION.md. Checks NMS_1+D1/HO/PROMOTION/THRESHOLD/MAGIC/P1/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "221_qa_nuclear_magic_spin_extension_cert",
+     "qa_nuclear_magic_spin_extension_cert_v1", True),
+    (222, "QA Madelung Anomaly Boundary Cert family",
+     _validate_madelung_anomaly_boundary_cert_family,
+     "Every known atomic Madelung anomaly (20 total: Cr, Cu, Nb, Mo, Ru, Rh, Pd, Ag, La, Ce, Gd, Pt, Au, Ac, Th, Pa, U, Np, Cm, Lr) has |d(src)-d(dst)|<=1 under QA (b,e)=(n,l). 10 intra-class + 10 inter-class; 0 at |Δd|>=2. Null (uniform 2-subshell pairs from first 20 Madelung positions): 36.8% in zone; observed 100%; enrichment 2.71x; binomial p=2.1e-9. Necessary-not-sufficient: Ti/V/Mn/Fe/Co/Ni (d=4↔5) and Ta/W/Re/Os/Ir (d=6↔7) in zone follow Madelung. Falsifiable on any future |Δd|>=2 anomaly. Extends [220]; companion [221]. Exchange/relativistic mechanisms semantic-layer only. Sources: NIST ASD + Sato 2015 (Lr). Will Dale + Claude 2026-04-13. Theory: docs/theory/QA_MADELUNG_ANOMALY_BOUNDARY.md. Checks MAB_1+ANOMALIES/MAPPING/ZONE/COVERAGE/NULL/COUNTEREX/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "222_qa_madelung_anomaly_boundary_cert",
+     "qa_madelung_anomaly_boundary_cert_v1", True),
+    (231, "QA Hyper-Catalan Diagonal Correspondence Cert family",
+     _validate_hyper_catalan_diagonal_cert_family,
+     "Wildberger-Rubine hyper-Catalan multi-indices map to QA coordinates b=V_m-1, e=F_m with d=b+e=E_m exactly; Euler V_m-E_m+F_m=1 follows. Single-type m_k=n lies on sibling diagonal b=(k-1)e+1; OEIS A000108/A001764/A002293/A002294 match; no single-type k in [2,7], n in [0,9] sits on D_1. Checks HCD_1+EULER/OEIS/FUSS/SINGLE_DIAGONAL/D1_DISJOINT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "231_qa_hyper_catalan_diagonal_cert",
+     "qa_hyper_catalan_diagonal_cert_v1", True),
+    (232, "QA UHG Diagonal Coincidence Cert family",
+     _validate_uhg_diagonal_coincidence_cert_family,
+     "At m=9 over {1,...,9}^2, UHG zero quadrance coincides exactly with QA gcd-reduced diagonal class: 64 zero-q pairs, 64 same-diagonal pairs, intersection 64, no counterexamples. Checks UDC_1+M/COUNTS/INTERSECTION/COUNTEREXAMPLES/WITNESS/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "232_qa_uhg_diagonal_coincidence_cert",
+     "qa_uhg_diagonal_coincidence_cert_v1", True),
+    (233, "QA UHG Orbit Diagonal Profile Cert family",
+     _validate_uhg_orbit_diagonal_profile_cert_family,
+     "At m=9, the QA T-step partitions 81 points into 1 singularity length 1, 2 satellite orbits length 4, and 6 cosmos orbits length 12; every non-singular D_1-containing orbit has two D_1 points summing to (9,9). Checks UODP_1+M/PARTITION/ORBIT_DATA/D1_PROFILE/COMPLEMENT/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "233_qa_uhg_orbit_diagonal_profile_cert",
+     "qa_uhg_orbit_diagonal_profile_cert_v1", True),
+    (234, "QA Chromogeometry Pythagorean Identity Cert family",
+     _validate_chromogeometry_pythagorean_identity_cert_family,
+     "Wildberger chromogeometry under QA coordinates Q_b=b*b+e*e, Q_r=b*b-e*e, Q_g=2*b*e satisfies Q_b square = Q_r square + Q_g square exhaustively on (b,e) in [1..19]^2 with zero failures; QA coordinate formulas and five Pythagorean triples verified. Checks CPI_1+SAMPLES/RANGE/FORMULAS/PLIMPTON/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "234_qa_chromogeometry_pythagorean_identity_cert",
+     "qa_chromogeometry_pythagorean_identity_cert_v1", True),
+    (223, "QA Experiment Protocol family",
+     _validate_experiment_protocol_family_if_present,
+     "Enforceable design contract for empirical QA studies. Validates QA_EXPERIMENT_PROTOCOL.v1 JSON against five gates: schema validity, null-independence declared (addresses 2026-04-01 circularity rule), pre-registration complete (seed+date+n_trials), decision-rules complete (accept+reject+on_unsupportive enum), observer-projection declared. Harvested from MEMORY.md Hard Rules (Adversarial Testing 2026-04-01, No Stochastic 2026-04-02, QA Always Applies 2026-04-08, Primary Sources 2026-04-10). Linter gate EXP-1 requires EXPERIMENT_PROTOCOL_REF or sibling experiment_protocol.json on any script with statistical-test call sites. Authority: EXPERIMENT_AXIOMS_BLOCK.md Part A (E1-E6) + Part C (N1-N3). Source: Will Dale + Claude 2026-04-13. schema + validator + fixtures; self-test ok",
+     "223_qa_experiment_protocol",
+     "../qa_experiment_protocol", True),
+    (224, "QA Benchmark Protocol family",
+     _validate_benchmark_protocol_family_if_present,
+     "Enforceable design contract for benchmarks comparing a QA method against baseline methods. Validates QA_BENCHMARK_PROTOCOL.v1 JSON against five gates: schema validity, baseline parity (same seed/split/preprocessing, non-empty baselines), calibration provenance (procedure+learned_on+domain_of_origin — addresses 2026-04-13 cmap-tuned-for-finance silent failure), framework inheritance (inherit/ported/novel; prior_cert required if not novel — addresses 2026-04-05 Bearden observer-framework port lesson), metrics declared. Linter gate BENCH-1 requires BENCHMARK_PROTOCOL_REF or sibling benchmark_protocol.json on scripts importing sklearn baselines alongside metric calls or declaring baselines/methods structures. Authority: EXPERIMENT_AXIOMS_BLOCK.md Part B (B1-B4). Source: Will Dale + Claude 2026-04-13. schema + validator + fixtures; self-test ok",
+     "224_qa_benchmark_protocol",
+     "../qa_benchmark_protocol", True),
+    (235, "QA Super Catalan Diagonal Cert family",
+     _validate_super_catalan_diagonal_cert_family,
+     "Limanta-Wildberger super Catalan S(m,n) maps to QA (b,e)=(m,n), so d=b+e gives (m+n)! = d!; S(b,b) b=0..10 matches OEIS A000984, swap symmetry and recurrence hold on [0..7]^2, and S(1,n)=2*Catalan(n) for n=0..9. Checks SCD_1+D1_A000984/SYMMETRY/RECURRENCE/CATALAN/QA_IDENT/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "235_qa_super_catalan_diagonal_cert",
+     "qa_super_catalan_diagonal_cert_v1", True),
+    (236, "QA Spread Polynomial Composition Cert family",
+     _validate_spread_polynomial_composition_cert_family,
+     "Goh-Wildberger spread polynomials satisfy S_n composed with S_m = S_{n*m}; exact SymPy composition verifies pairs (2,3), (3,2), (2,4), (4,3), (3,3), (2,5); S_2=4*s*(1-s) logistic map and integer closed forms S_2/S_3/S_4 match. Checks SPC_1+COMPOSITION/CLOSED_FORMS/LOGISTIC/TRIG_NOTE/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "236_qa_spread_polynomial_composition_cert",
+     "qa_spread_polynomial_composition_cert_v1", True),
+    (237, "QA 4D Diagonal Rule Cert family",
+     _validate_4d_diagonal_rule_cert_family,
+     "QA tuple (b,e,d,a) with d=b+e and a=b+2e equals b*(1,0,1,1)+e*(0,1,1,2); embedding verified on [-5..5]^2; Gram matrix [[3,3],[3,6]] det=9 equals QA canonical modulus m; two perpendicular QA-tuple witnesses satisfy Q1+Q2=Q3. Checks Q4D_1+EMBED/GRAM/MODULUS/DIAGONAL_RULE/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "237_qa_4d_diagonal_rule_cert",
+     "qa_4d_diagonal_rule_cert_v1", True),
+    (239, "QA Twelve Dihedral Orderings Cert family",
+     _validate_twelve_dihedral_orderings_cert_family,
+     "Five objects under D_5 give 5!/(2*5)=12 dihedral classes, each of size 10; exhaustive 120-permutation canonicalization verifies the listed reps and the 12-count links to G_2 roots, cuboctahedral S_1, and icosahedral vertices. Checks TDO_1+GROUP/PERMUTATIONS/CANONICAL_REPS/CLASS_COUNT/CLASS_SIZE/FORMULA/QA_CONNECTION/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "239_qa_twelve_dihedral_orderings_cert",
+     "qa_twelve_dihedral_orderings_cert_v1", True),
+    (242, "QA Neuberg Cubic F23 Cert family",
+     _validate_neuberg_cubic_f23_cert_family,
+     "Wildberger Neuberg finite-field bridge over F_23: E:y^2=x^3+x+1 has 27 affine points plus infinity; tangent-conic witnesses enumerate F_23 point sets and are identical or disjoint; spread witness is integer-polynomial and QA-compatible for char not 2 or 3. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "242_qa_neuberg_cubic_f23_cert",
+     "qa_neuberg_cubic_f23_cert_v1", True),
 ]
 
 

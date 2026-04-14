@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA UHG Orbit Diagonal Profile Cert family [233]: packages the pre-verified m=9 QA T-orbit partition under T(b,e)=((b+e-1) mod 9)+1 and step (b,e)->(T(b,e),T(e,T(b,e))). The 81 points partition as 1 singularity of length 1, 2 satellite orbits of length 4, and 6 cosmos orbits of length 12. Every non-singular D_1-containing orbit contains exactly two D_1 points, and those points sum to (9,9): Sat#1 (3,3)+(6,6), Cos#1 (1,1)+(8,8), Cos#3 (2,2)+(7,7), Cos#4 (5,5)+(4,4). Source: Will Dale + Claude 2026-04-13. Checks UODP_1+M/PARTITION/ORBIT_DATA/D1_PROFILE/COMPLEMENT/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

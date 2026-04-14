@@ -1,0 +1,38 @@
+{
+  "certificate_id": "ebm_equivalence_v1_pass_001",
+  "schema": "QA_EBM_EQUIVALENCE_CERT.v1",
+  "version": "1.0.0",
+  "timestamp": "2026-04-12T00:00:00Z",
+  "claim": "E_QA(b, e, next_state) = 0 if T(b,e) == next_state else 1 is a structurally well-formed energy function on QA state spaces satisfying all five EBM axioms (non-negativity, data-manifold zero, monotonicity in mismatch, valid Boltzmann distribution, discrete score identity) with integer state throughout (S2, A1 compliant).",
+  "axioms_verified": {
+    "non_negativity": "E in {0, 1}, exhaustively verified on S_9^2 x {1..9}",
+    "data_manifold_zero": "E_window(deterministic T-trajectory) = 0 exactly",
+    "monotonicity": "E_window grows monotonically with injected T-mismatch fraction",
+    "boltzmann_distribution": "well-formed occupancy distribution; T_boltzmann = 2π/m per cert [215]",
+    "score_identity": "argmax of Boltzmann over next_state equals T-operator step (exhaustive S_9)"
+  },
+  "moduli_tested": [9, 24],
+  "structural_corollaries": [
+    "qa_detect is a trained EBM: fit() learns low-energy manifold, score_anomaly() evaluates E_window",
+    "MCMC-free sampling: T-operator walk IS Gibbs sampling from QA Boltzmann",
+    "No approximation error in the score function (discrete-exact)",
+    "Theorem NT compliance: energy read-out is the only observer-layer crossing"
+  ],
+  "cross_references": {
+    "qa_cert_154": "T-operator coherence — empirical QCI validation on finance pipeline (partial r=-0.22, 84% robust)",
+    "qa_cert_191": "Bateson Learning Levels — invariant filtration provides the EBM manifold stratification",
+    "qa_cert_215": "Resonance-Bin Correspondence — gives the temperature identity T_boltzmann = 2π/m",
+    "theorem_NT": "Observer Projection Firewall — energy is integer-valued pointwise; continuous only at read-out"
+  },
+  "external_references": {
+    "lecun_2006": "LeCun, Chopra, Hadsell, Ranzato, Huang (2006) — A Tutorial on Energy-Based Learning",
+    "hinton_2002": "Hinton (2002) — Training Products of Experts by Minimizing Contrastive Divergence"
+  },
+  "integer_only_invariant": true,
+  "axiom_compliance": ["A1", "A2", "S1", "S2", "T1", "T2"],
+  "source": {
+    "authors": ["Will Dale", "Claude (Opus 4.6)"],
+    "date": "2026-04-12",
+    "motivation": "Recognize that qa_detect, qa_mapping QCI pipeline, and broader QA coherence toolkit are already a discrete-native EBM. Making the claim formal and certified connects QA to the established EBM research tradition without changing the underlying algebra."
+  }
+}

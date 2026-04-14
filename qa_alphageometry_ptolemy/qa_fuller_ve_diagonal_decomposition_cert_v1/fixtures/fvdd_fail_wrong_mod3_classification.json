@@ -1,0 +1,57 @@
+{
+  "schema_version": "QA_FULLER_VE_DIAGONAL_DECOMPOSITION_CERT.v1",
+  "certificate_id": "qa.cert.fuller_ve_diagonal_decomposition.fail.wrong_mod3_classification.v1",
+  "cert_type": "qa_fuller_ve_diagonal_decomposition_cert",
+  "title": "Fuller VE Shell Decomposition FAIL: n=3 shell (92) incorrectly claimed on D_1",
+  "created_utc": "2026-04-13T00:00:00Z",
+  "result": "FAIL",
+
+  "_fixture_purpose": "Negative control. Claims shell n=3 (S=92) sits on D_1, which is false: 92 mod 3 = 2, so 92 does NOT admit an integer b=e representation. Validator must reject via FVDD_MOD3 and FVDD_DIAGONAL.",
+
+  "source_attribution": "Will Dale + Claude 2026-04-13. Fuller Synergetics. Intentionally malformed fixture for FVDD_MOD3/FVDD_DIAGONAL negative test.",
+
+  "structural_claim": {
+    "formula": "S_n = 10*n*n + 2",
+    "diagonal_selection_rule": "on D_1 (b=e) iff n mod 3 != 0",
+    "proof_sketch": "(deliberately violated below)"
+  },
+
+  "shell_table": [
+    {"n": 1, "shell_count": 12,  "on_d1": true,  "d1_tuple": [4, 4, 8, 12]},
+    {"n": 2, "shell_count": 42,  "on_d1": true,  "d1_tuple": [14, 14, 28, 42]},
+    {"n": 3, "shell_count": 92,  "on_d1": true,  "d1_tuple": [30, 30, 60, 90]},
+    {"n": 4, "shell_count": 162, "on_d1": true,  "d1_tuple": [54, 54, 108, 162]},
+    {"n": 5, "shell_count": 252, "on_d1": true,  "d1_tuple": [84, 84, 168, 252]},
+    {"n": 6, "shell_count": 362, "on_d1": false, "sibling_candidates": [{"k": 90, "b": 2}]},
+    {"n": 7, "shell_count": 492, "on_d1": true,  "d1_tuple": [164, 164, 328, 492]},
+    {"n": 8, "shell_count": 642, "on_d1": true,  "d1_tuple": [214, 214, 428, 642]},
+    {"n": 9, "shell_count": 812, "on_d1": false, "sibling_candidates": [{"k": 3, "b": 116}]}
+  ],
+
+  "witnesses": [
+    {
+      "kind": "on_diagonal",
+      "description": "placeholder",
+      "n": 1,
+      "shell_count": 12,
+      "tuple_beda": [4, 4, 8, 12]
+    },
+    {
+      "kind": "off_diagonal",
+      "description": "placeholder",
+      "n": 6,
+      "shell_count": 362,
+      "tuple_beda": [2, 180, 182, 362]
+    },
+    {
+      "kind": "mod3_structural",
+      "description": "placeholder",
+      "d1_count": 7,
+      "off_d1_count": 2
+    }
+  ],
+
+  "fail_ledger": [
+    {"rule": "FVDD_MOD3", "reason": "deliberate misclassification of n=3 (92) as on D_1; 92 mod 3 = 2"}
+  ]
+}

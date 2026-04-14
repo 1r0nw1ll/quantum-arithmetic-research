@@ -1,0 +1,128 @@
+{
+  "schema_version": "QA_HARAMEIN_SCALING_DIAGONAL_CERT.v1",
+  "certificate_id": "qa.cert.haramein_scaling_diagonal.pass.table1.v1",
+  "cert_type": "qa_haramein_scaling_diagonal_cert",
+  "title": "Haramein 2008 Table 1 PASS: fixed-d hyperbola + phi^2 integer-quadratic-form ratios",
+  "created_utc": "2026-04-13T00:00:00Z",
+  "result": "PASS",
+
+  "_fixture_purpose": "Proves that the six canonical scale-points of Haramein/Rauscher/Hyson 2008 Table 1 (Big Bang/Planck, Atomic, Stellar Solar, Galactic G1, Galactic G2, Universe), treated as integer (log10 R cm, log10 nu Hz) tuples, lie on a QA fixed-d hyperbola (d = b + e = const, the Schwarzschild line R*nu = c to within +-1 decade of rounding), and exhibit four structural segment-ratios on 2D Euclidean distances in (log R, log nu) whose integer quadratic-form quotients approximate phi^2 or 1/phi^2 to within 7%. Null probability < 5e-6 against uniform slope-minus-1 line placements (200000 samples). This places Haramein's hierarchy in the Q(sqrt 5) = Z[phi] algebraic family on a fixed-d QA diagonal, distinct from [217] Fuller b=e D_1 class.",
+
+  "source_attribution": "Will Dale + Claude 2026-04-13. Primary source: Haramein, N.; Rauscher, E.A.; Hyson, M. (2008). Scale Unification — A Universal Scaling Law for Organized Matter. In Cs Varga, I. Dienes, R.L. Amoroso (eds.), Proc. Unified Theories Conference, Budapest. PDF acquired 2026-04-13 from spacefed.com and cached at Documents/haramein_rsf/scale_unification_2008.pdf. Table 1 values OCR'd from PDF page 5 and cross-verified against body-text derivations for Universe (page 2, R_u ~ 10^28 cm, nu_u ~ 10^-17 Hz) and Schwarzschild-proton (pages 6-7, T = 5.537e-24 s, nu = 1.806e22 Hz). Theory note: docs/theory/QA_HARAMEIN_SCALING_DIAGONAL.md.",
+
+  "structural_claim": {
+    "scaling_law": "log10 R(cm) + log10 nu(Hz) = log10 c(cm/s) ~= 10.48; decade-rounded to d = b + e ~= 10 in {9, 10, 11}",
+    "diagonal_class": "fixed-d hyperbola (b + e = const); distinct from [217] b=e D_1 diagonal and from [219] Fibonacci-order-1 structure",
+    "phi_structure": "four 2D-Euclidean segment-ratios approximate {phi^2, 1/phi^2} on integer quadratic forms over (delta b, delta e)",
+    "algebraic_family": "Q(sqrt 5) = Z[phi]; companion to [219] Fibonacci Resonance on different diagonal class"
+  },
+
+  "table1": [
+    {"name": "Big Bang", "b": -33, "e":  43, "mass_exp_log10_g": null, "velocity_exp_log10_cms": 10},
+    {"name": "Atomic",   "b":  -8, "e":  18, "mass_exp_log10_g":  -24, "velocity_exp_log10_cms": 10},
+    {"name": "Stellar",  "b":   6, "e":   5, "mass_exp_log10_g":   33, "velocity_exp_log10_cms": 11},
+    {"name": "G1",       "b":   8, "e":   2, "mass_exp_log10_g":   36, "velocity_exp_log10_cms": 10},
+    {"name": "G2",       "b":  12, "e":  -2, "mass_exp_log10_g":   40, "velocity_exp_log10_cms": 10},
+    {"name": "Universe", "b":  28, "e": -17, "mass_exp_log10_g":   56, "velocity_exp_log10_cms": 10}
+  ],
+
+  "segments": [
+    {"from": "Big Bang", "to": "Atomic",   "delta_b":  25, "delta_e":  25, "quadratic_form": 1250},
+    {"from": "Atomic",   "to": "G1",       "delta_b":  16, "delta_e":  16, "quadratic_form":  512},
+    {"from": "Stellar",  "to": "G2",       "delta_b":   6, "delta_e":  -7, "quadratic_form":   85},
+    {"from": "G2",       "to": "Universe", "delta_b":  16, "delta_e": -15, "quadratic_form":  481},
+    {"from": "G1",       "to": "G2",       "delta_b":   4, "delta_e":  -4, "quadratic_form":   32},
+    {"from": "Stellar",  "to": "G1",       "delta_b":   2, "delta_e":  -3, "quadratic_form":   13}
+  ],
+
+  "phi_ratios": [
+    {
+      "label": "BB-A / G2-U",
+      "numerator_segment":   ["Big Bang", "Atomic"],
+      "denominator_segment": ["G2", "Universe"],
+      "num_quadratic": 1250,
+      "den_quadratic":  481,
+      "target": "phi_squared",
+      "paper_value": 1.612
+    },
+    {
+      "label": "S-G2 / G1-G2",
+      "numerator_segment":   ["Stellar", "G2"],
+      "denominator_segment": ["G1", "G2"],
+      "num_quadratic": 85,
+      "den_quadratic": 32,
+      "target": "phi_squared",
+      "paper_value": 1.629
+    },
+    {
+      "label": "A-G1 / BB-A",
+      "numerator_segment":   ["Atomic", "G1"],
+      "denominator_segment": ["Big Bang", "Atomic"],
+      "num_quadratic":  512,
+      "den_quadratic": 1250,
+      "target": "inverse_phi_squared",
+      "paper_value": 0.639
+    },
+    {
+      "label": "S-G1 / G1-G2",
+      "numerator_segment":   ["Stellar", "G1"],
+      "denominator_segment": ["G1", "G2"],
+      "num_quadratic": 13,
+      "den_quadratic": 32,
+      "target": "inverse_phi_squared",
+      "paper_value": 0.637
+    }
+  ],
+
+  "null_test": {
+    "procedure": "N random 6-point draws on slope-minus-1 line within box (log R in [-33, 28], intercept jittered in [9, 11]); compute the same four structural segment-ratios at the same sorted-index positions and sum |log(ratio/target)| across the four ratios.",
+    "n_samples": 200000,
+    "rng_seed": 0,
+    "observed_stat": 0.0767,
+    "null_median": 4.697,
+    "null_5pct": 1.584,
+    "p_value_upper_bound": 0.000005,
+    "script_note": "reproduced inline in docs/theory/QA_HARAMEIN_SCALING_DIAGONAL.md Section 4; exact reproduction requires numpy with default_rng(0)"
+  },
+
+  "witnesses": [
+    {
+      "kind": "fixed_d",
+      "description": "All 6 Table-1 rows have b + e in {9, 10, 11} — a fixed-d hyperbola to within +-1 decade of rounding.",
+      "observed_sums": [10, 10, 11, 10, 10, 11],
+      "verification": "R*nu = c (Schwarzschild line); decade-rounded integer exponents sum to log10(c) ~= 10.48 rounded to nearest decade."
+    },
+    {
+      "kind": "phi_ratio",
+      "description": "Ratio BB-A / G2-U = 1250/481 ~= 2.599, which is phi^2 = 2.618 within 0.7%. Computed from integer deltas: (25^2 + 25^2) / (16^2 + 15^2) = 1250 / 481.",
+      "num_quadratic": 1250,
+      "den_quadratic": 481,
+      "target_phi_squared_lower": 2.6180339,
+      "target_phi_squared_upper": 2.6180340,
+      "observed_ratio_float": 2.5988,
+      "log_deviation_percent": 0.72
+    },
+    {
+      "kind": "null",
+      "description": "200000 random 6-point slope-minus-1 placements never produced a test statistic below the observed 0.077. Null 5th percentile was 1.584 (~20x observed).",
+      "n_samples": 200000,
+      "observed_stat": 0.0767,
+      "null_5pct": 1.584,
+      "verification": "p < 5e-6 gives structural significance; Haramein's phi-spacing is not an artifact of 6 random points on a slope-minus-1 line."
+    }
+  ],
+
+  "cross_references": {
+    "foundation_note": "docs/theory/QA_HARAMEIN_SCALING_DIAGONAL.md",
+    "diagonal_methodology": "docs/theory/QA_SIERPINSKI_SELF_SIMILAR_DIAGONAL.md",
+    "qa_syntax_svp_semantics": "docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+    "related_certs": [
+      "[219] QA Fibonacci Resonance (same Q(sqrt 5) algebraic family, different domain)",
+      "[217] QA Fuller VE Diagonal Decomposition (different diagonal class: b=e D_1)",
+      "[191] QA Bateson Learning Levels (scale hierarchy methodology)"
+    ],
+    "primary_pdf": "Documents/haramein_rsf/scale_unification_2008.pdf"
+  },
+
+  "fail_ledger": []
+}

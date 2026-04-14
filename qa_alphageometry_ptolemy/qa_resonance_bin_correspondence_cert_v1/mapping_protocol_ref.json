@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Resonance-Bin Correspondence Cert: formalizes the bin-width ≡ resonance-tolerance isomorphism as a candidate permissibility filter connecting QA syntax (integer equivalence classes under modulus m) to SVP semantics (sympathetic transmission windows). At modulus m, the equivalence class [k]_m = {x ∈ R : quantize(x,m)=k} is isomorphic to a resonance tolerance bandwidth centered on integer eigenvalue k. Hensel lift mod 3→9→27→81 is progressive bandwidth narrowing. Witnesses: (1) Arnold-tongue phase-lock width matches QA bin width at corresponding modulus; (2) Hensel lift narrowing, via existing qa_hensel_selforg_experiment.py orbit-family count growth; (3) continuous→TypeA→reconstruct round-trip preserves dynamics within bin tolerance with zero Fraction usage (S2/A1 compliant). Source: Will Dale + Claude 2026-04-12; grounded in Dale Pond + Vibes letter of 2026-04-05 (OB a9307705-6ff0-4422-bd62-9889dcd0f1b2) calling for a permissibility-filter formalization; links to docs/theory/QA_SYNTAX_SVP_SEMANTICS.md. Checks RBC_1+SCHEMA/ARNOLD/HENSEL/ROUNDTRIP/INT_ONLY/SELFTEST; 1 PASS + 1 FAIL fixture; self-test ok."
+}

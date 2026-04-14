@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA 4D Diagonal Rule Cert family [237]: packages the pre-verified Wildberger 4D rational-trigonometry mapping where QA tuple (b,e,d,a), with d=b+e and a=b+2e, equals b*v1+e*v2 for v1=(1,0,1,1) and v2=(0,1,1,2). The validator exhaustively verifies the integer embedding for b,e in [-5..5], recomputes Gram matrix [[3,3],[3,6]], determinant 9, determinant equals QA canonical modulus m=9, and two concrete perpendicular QA-tuple diagonal-rule witnesses with Q1+Q2=Q3. Source: Wildberger, Rational Trigonometry in Higher Dimensions and a Diagonal Rule for 2-planes in Four-dimensional Space, KoG 21:47-54, 2017; Will Dale + Claude 2026-04-13. Checks Q4D_1+EMBED/GRAM/MODULUS/DIAGONAL_RULE/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

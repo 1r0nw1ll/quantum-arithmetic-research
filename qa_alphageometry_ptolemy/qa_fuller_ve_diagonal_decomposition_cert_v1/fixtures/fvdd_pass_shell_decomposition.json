@@ -1,0 +1,67 @@
+{
+  "schema_version": "QA_FULLER_VE_DIAGONAL_DECOMPOSITION_CERT.v1",
+  "certificate_id": "qa.cert.fuller_ve_diagonal_decomposition.pass.shell_decomposition.v1",
+  "cert_type": "qa_fuller_ve_diagonal_decomposition_cert",
+  "title": "Fuller VE Shell Decomposition PASS: cuboctahedral shell count 10n^2+2 decomposes across D_1 and sibling diagonals by n mod 3",
+  "created_utc": "2026-04-13T00:00:00Z",
+  "result": "PASS",
+
+  "_fixture_purpose": "Proves that Fuller's cuboctahedral / vector-equilibrium shell count S_n = 10n^2 + 2 (n=1: 12, n=2: 42, n=3: 92, n=4: 162, n=5: 252, n=6: 362, n=7: 492, n=8: 642, n=9: 812) sits on the QA b=e diagonal D_1 exactly when n is not divisible by 3, and on an odd-divisor sibling diagonal D_k otherwise. The mod-3 selection is QA-natural (triune residue structure on the canonical Sierpinski diagonal).",
+
+  "source_attribution": "Will Dale + Claude 2026-04-13. Shell count formula S_n = 10n^2 + 2 per Buckminster Fuller, Synergetics (1975), cuboctahedral frequency shells. QA diagonal decomposition originated in docs/theory/QA_SIERPINSKI_SELF_SIMILAR_DIAGONAL.md (structural note, 2026-04-13), extending the b=e canonical diagonal ↔ Briddell STF identification documented in qa_fst/qa_fst_addendum_b_equals_e_diagonal.tex.",
+
+  "structural_claim": {
+    "formula": "S_n = 10*n*n + 2, n >= 1",
+    "diagonal_selection_rule": "on D_1 (b=e) iff n mod 3 != 0; else on sibling D_k with 2k+1 | S_n",
+    "proof_sketch": "S_n mod 3 = (n*n + 2) mod 3. n*n mod 3 is 1 when n mod 3 in {1,2} and 0 when n mod 3 == 0. Hence S_n mod 3 == 0 iff n mod 3 != 0, which is the D_1 residence condition.",
+    "qa_naturalness": "mod-3 selection on D_1 corresponds to the triune residue partition — smallest non-trivial residue-class structure of the canonical Sierpinski diagonal."
+  },
+
+  "shell_table": [
+    {"n": 1, "shell_count": 12,  "on_d1": true,  "d1_tuple": [4, 4, 8, 12]},
+    {"n": 2, "shell_count": 42,  "on_d1": true,  "d1_tuple": [14, 14, 28, 42]},
+    {"n": 3, "shell_count": 92,  "on_d1": false, "sibling_candidates": [{"k": 11, "b": 4}]},
+    {"n": 4, "shell_count": 162, "on_d1": true,  "d1_tuple": [54, 54, 108, 162]},
+    {"n": 5, "shell_count": 252, "on_d1": true,  "d1_tuple": [84, 84, 168, 252]},
+    {"n": 6, "shell_count": 362, "on_d1": false, "sibling_candidates": [{"k": 90, "b": 2}]},
+    {"n": 7, "shell_count": 492, "on_d1": true,  "d1_tuple": [164, 164, 328, 492]},
+    {"n": 8, "shell_count": 642, "on_d1": true,  "d1_tuple": [214, 214, 428, 642]},
+    {"n": 9, "shell_count": 812, "on_d1": false, "sibling_candidates": [{"k": 3, "b": 116}, {"k": 14, "b": 28}, {"k": 101, "b": 4}]}
+  ],
+
+  "witnesses": [
+    {
+      "kind": "on_diagonal",
+      "description": "Shell n=1 (cuboctahedral frequency 1, 12 vertices = outer spheres of VE) sits on b=e diagonal",
+      "n": 1,
+      "shell_count": 12,
+      "tuple_beda": [4, 4, 8, 12],
+      "verification": "b+e=8=d, b+2e=12=a, b=e (on D_1)"
+    },
+    {
+      "kind": "off_diagonal",
+      "description": "Shell n=3 (92 spheres) does not admit b=e representation; 92 = 4 * 23 = (2*11+1) * 4, sitting on D_11",
+      "n": 3,
+      "shell_count": 92,
+      "tuple_beda": [4, 44, 48, 92],
+      "verification": "92 mod 3 = 2 (not on D_1). Odd divisors of 92 are {1, 23}; only non-trivial odd divisor is 23 = 2*11+1. On D_11: e = 11*b with b=4 gives (4, 44, 48, 92)."
+    },
+    {
+      "kind": "mod3_structural",
+      "description": "Mod-3 partition of first 9 shells: n in {1,2,4,5,7,8} -> D_1 (6 shells); n in {3,6,9} -> sibling diagonals (3 shells). Ratio 2:1 matches QA triune.",
+      "d1_count": 6,
+      "off_d1_count": 3,
+      "ratio_2_to_1": true,
+      "verification": "Residue class {1,2} mod 3 has density 2/3 in N; triune partition is native to D_1 mod-3 structure."
+    }
+  ],
+
+  "cross_references": {
+    "foundation_note": "docs/theory/QA_SIERPINSKI_SELF_SIMILAR_DIAGONAL.md",
+    "fst_paradigm": "qa_alphageometry_ptolemy/qa_fst/qa_fst_addendum_b_equals_e_diagonal.tex (STF entirely on D_1)",
+    "qa_syntax_svp_semantics": "docs/theory/QA_SYNTAX_SVP_SEMANTICS.md (triune structure)",
+    "related_certs": ["qa_fst (Briddell STF = D_1)", "[207] circle impossibility (C=0 only as observer projection)"]
+  },
+
+  "fail_ledger": []
+}

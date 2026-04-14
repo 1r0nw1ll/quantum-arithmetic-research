@@ -10,7 +10,7 @@ Checks:
   - REF schema validity
   - ref_path resolves within repo root (no escape)
   - referenced file exists
-  - optional ref_sha256 matches file bytes sha256
+  - required ref_sha256 matches file bytes sha256
   - referenced file validates against QA_MAPPING_PROTOCOL.v1 schema
   - referenced determinism_contract meets v1 essentials
 """
@@ -123,18 +123,17 @@ def validate_ref(ref_obj: Dict[str, Any]) -> List[CheckResult]:
     results.append(CheckResult("ref_exists", CheckStatus.PASS, "Referenced mapping file exists",
                                {"resolved": resolved_abs}))
 
-    if "ref_sha256" in ref_obj:
-        want = str(ref_obj.get("ref_sha256", "")).lower().strip()
-        got = _sha256_file(resolved_abs)
-        if want != got:
-            results.append(CheckResult(
-                "ref_sha256",
-                CheckStatus.FAIL,
-                "ref_sha256 mismatch",
-                {"expected": want, "got": got},
-            ))
-            return results
-        results.append(CheckResult("ref_sha256", CheckStatus.PASS, "ref_sha256 matches", {"sha256": got}))
+    want = str(ref_obj.get("ref_sha256", "")).lower().strip()
+    got = _sha256_file(resolved_abs)
+    if want != got:
+        results.append(CheckResult(
+            "ref_sha256",
+            CheckStatus.FAIL,
+            "ref_sha256 mismatch",
+            {"expected": want, "got": got},
+        ))
+        return results
+    results.append(CheckResult("ref_sha256", CheckStatus.PASS, "ref_sha256 matches", {"sha256": got}))
 
     # Validate referenced mapping
     try:

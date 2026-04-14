@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Twelve Dihedral Orderings Cert family [239]: packages the pre-verified Le-Wildberger count of five-object dihedral orderings under D_5. Exhaustive enumeration of 120 permutations groups by min over 5 rotations and 5 reflections, yielding 12 canonical classes of size 10, with 12 linked to G_2 non-identity roots, cuboctahedral S_1, and icosahedral vertices. Source: Le + Wildberger, Pentagrammum Mysticum, Twelve Special Conics and the Twisted Icosahedron, J. Geom. Graphics 24(2):175-191, 2020; Will Dale + Claude 2026-04-14. Checks TDO_1+GROUP/PERMUTATIONS/CANONICAL_REPS/CLASS_COUNT/CLASS_SIZE/FORMULA/QA_CONNECTION/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

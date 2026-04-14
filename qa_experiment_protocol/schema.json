@@ -1,0 +1,90 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_EXPERIMENT_PROTOCOL.v1",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "experiment_id",
+    "hypothesis",
+    "null_model",
+    "pre_registration",
+    "decision_rules",
+    "observer_projection",
+    "real_data_status"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1,
+      "const": "QA_EXPERIMENT_PROTOCOL.v1"
+    },
+    "experiment_id": { "type": "string", "minLength": 1 },
+    "hypothesis": { "type": "string", "minLength": 1 },
+    "null_model": {
+      "type": "object",
+      "required": ["description", "independence_argument"],
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "independence_argument": { "type": "string", "minLength": 1 },
+        "permutation_axis": { "type": "string" },
+        "surrogate_types": { "type": "array", "items": { "type": "string" } }
+      },
+      "additionalProperties": false
+    },
+    "pre_registration": {
+      "type": "object",
+      "required": ["seed", "date_utc", "n_trials"],
+      "properties": {
+        "seed": { "type": "integer", "minimum": 0 },
+        "date_utc": { "type": "string", "minLength": 1, "format": "date-time" },
+        "n_trials": { "type": "integer", "minimum": 1 }
+      },
+      "additionalProperties": false
+    },
+    "decision_rules": {
+      "type": "object",
+      "required": ["accept_criterion", "reject_criterion", "on_unsupportive"],
+      "properties": {
+        "accept_criterion": { "type": "string", "minLength": 1 },
+        "reject_criterion": { "type": "string", "minLength": 1 },
+        "on_unsupportive": {
+          "type": "string",
+          "minLength": 1,
+          "enum": [
+            "investigate_observer",
+            "investigate_implementation",
+            "pre_registered_accept"
+          ]
+        }
+      },
+      "additionalProperties": false
+    },
+    "observer_projection": {
+      "type": "object",
+      "required": ["description", "state_alphabet"],
+      "properties": {
+        "description": { "type": "string", "minLength": 1 },
+        "state_alphabet": { "type": "string", "minLength": 1 },
+        "source_domain": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "real_data_status": {
+      "oneOf": [
+        { "type": "string", "enum": ["pending", "synthetic_only"] },
+        {
+          "type": "string",
+          "minLength": 1,
+          "not": { "enum": ["pending", "synthetic_only"] }
+        }
+      ],
+      "description": "Path/source of real data, or 'pending', or 'synthetic_only'"
+    },
+    "reproduces": { "type": "string" },
+    "primary_sources": {
+      "type": "array",
+      "items": { "type": "string" }
+    }
+  },
+  "additionalProperties": false
+}

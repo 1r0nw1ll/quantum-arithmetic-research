@@ -50,7 +50,7 @@
 
   "mechanism": {
     "lcm_principle": "For coprime (p,q), both p|pi(m) AND q|pi(m) iff lcm(p,q)=p*q divides pi(m). Fibonacci pairs have smaller products, so their lcm divides pi(m) more often.",
-    "individual_advantage": "Fibonacci numbers individually divide pi(m) at 3.70x the rate of non-Fibonacci numbers (from prior [163] analysis). The paired advantage compounds both effects.",
+    "individual_advantage": "Fibonacci numbers individually divide pi(m) at 3.70x the rate of non-Fibonacci numbers (from prior [219] analysis). The paired advantage compounds both effects.",
     "exception": "4:1 has higher rate than some Fibonacci pairs at order-3 because lcm(4,1)=4 is very small. This explains Kirkwood gap 4:1 being as deep as Fibonacci resonances."
   },
 
@@ -79,7 +79,7 @@
 
   "sources": [
     "qa_pisano_paired_divisibility.py — Will Dale conjecture, Claude computation (2026-04-02)",
-    "Family [163] QA_FIBONACCI_RESONANCE_CERT.v1 — individual Fibonacci divisibility of pi(m)",
+    "Family [219] QA_FIBONACCI_RESONANCE_CERT.v1 — individual Fibonacci divisibility of pi(m)",
     "Wall (1960) — Fibonacci entry point and Pisano period properties",
     "Renault (1996) — The Fibonacci Sequence Under Various Moduli"
   ],

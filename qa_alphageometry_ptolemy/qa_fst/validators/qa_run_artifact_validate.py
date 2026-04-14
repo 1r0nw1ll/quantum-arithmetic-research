@@ -1,3 +1,4 @@
+# noqa: DECL-1 (infrastructure — schema validator for QA_RUN_ARTIFACT_BUNDLE.v1; not empirical)
 #!/usr/bin/env python3
 """
 Validate QA_RUN_ARTIFACT_BUNDLE.v1 certificates.

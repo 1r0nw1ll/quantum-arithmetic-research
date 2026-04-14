@@ -1,0 +1,82 @@
+{
+  "schema_version": "QA_UHG_ORBIT_DIAGONAL_PROFILE_CERT.v1",
+  "result": "PASS",
+  "m": 9,
+  "partition_summary": {"singularity_orbits": 1, "satellite_orbits": 2, "cosmos_orbits": 6, "total_points": 81},
+  "orbits": [
+    {
+      "label": "cos_1",
+      "cycle_length": 12,
+      "points": [[1, 1], [2, 3], [5, 8], [4, 3], [7, 1], [8, 9], [8, 8], [7, 6], [4, 1], [5, 6], [2, 8], [1, 9]],
+      "diagonal_class_multiset": [[1, 1], [2, 3], [5, 8], [4, 3], [7, 1], [8, 9], [1, 1], [7, 6], [4, 1], [5, 6], [1, 4], [1, 9]],
+      "d1_multiplicity": 2,
+      "d1_complement_pair": [[1, 1], [8, 8]]
+    },
+    {
+      "label": "cos_2",
+      "cycle_length": 12,
+      "points": [[1, 2], [3, 5], [8, 4], [3, 7], [1, 8], [9, 8], [8, 7], [6, 4], [1, 5], [6, 2], [8, 1], [9, 1]],
+      "diagonal_class_multiset": [[1, 2], [3, 5], [2, 1], [3, 7], [1, 8], [9, 8], [8, 7], [3, 2], [1, 5], [3, 1], [8, 1], [9, 1]],
+      "d1_multiplicity": 0,
+      "d1_complement_pair": []
+    },
+    {
+      "label": "cos_3",
+      "cycle_length": 12,
+      "points": [[1, 3], [4, 7], [2, 9], [2, 2], [4, 6], [1, 7], [8, 6], [5, 2], [7, 9], [7, 7], [5, 3], [8, 2]],
+      "diagonal_class_multiset": [[1, 3], [4, 7], [2, 9], [1, 1], [2, 3], [1, 7], [4, 3], [5, 2], [7, 9], [1, 1], [5, 3], [4, 1]],
+      "d1_multiplicity": 2,
+      "d1_complement_pair": [[2, 2], [7, 7]]
+    },
+    {
+      "label": "cos_4",
+      "cycle_length": 12,
+      "points": [[1, 4], [5, 9], [5, 5], [1, 6], [7, 4], [2, 6], [8, 5], [4, 9], [4, 4], [8, 3], [2, 5], [7, 3]],
+      "diagonal_class_multiset": [[1, 4], [5, 9], [1, 1], [1, 6], [7, 4], [1, 3], [8, 5], [4, 9], [1, 1], [8, 3], [2, 5], [7, 3]],
+      "d1_multiplicity": 2,
+      "d1_complement_pair": [[5, 5], [4, 4]]
+    },
+    {
+      "label": "cos_5",
+      "cycle_length": 12,
+      "points": [[2, 1], [3, 4], [7, 2], [9, 2], [2, 4], [6, 1], [7, 8], [6, 5], [2, 7], [9, 7], [7, 5], [3, 8]],
+      "diagonal_class_multiset": [[2, 1], [3, 4], [7, 2], [9, 2], [1, 2], [6, 1], [7, 8], [6, 5], [2, 7], [9, 7], [7, 5], [3, 8]],
+      "d1_multiplicity": 0,
+      "d1_complement_pair": []
+    },
+    {
+      "label": "cos_6",
+      "cycle_length": 12,
+      "points": [[3, 1], [4, 5], [9, 5], [5, 1], [6, 7], [4, 2], [6, 8], [5, 4], [9, 4], [4, 8], [3, 2], [5, 7]],
+      "diagonal_class_multiset": [[3, 1], [4, 5], [9, 5], [5, 1], [6, 7], [2, 1], [3, 4], [5, 4], [9, 4], [1, 2], [3, 2], [5, 7]],
+      "d1_multiplicity": 0,
+      "d1_complement_pair": []
+    },
+    {
+      "label": "sat_1",
+      "cycle_length": 4,
+      "points": [[3, 3], [6, 9], [6, 6], [3, 9]],
+      "diagonal_class_multiset": [[1, 1], [2, 3], [1, 1], [1, 3]],
+      "d1_multiplicity": 2,
+      "d1_complement_pair": [[3, 3], [6, 6]]
+    },
+    {
+      "label": "sat_2",
+      "cycle_length": 4,
+      "points": [[3, 6], [9, 6], [6, 3], [9, 3]],
+      "diagonal_class_multiset": [[1, 2], [3, 2], [2, 1], [3, 1]],
+      "d1_multiplicity": 0,
+      "d1_complement_pair": []
+    },
+    {
+      "label": "singularity",
+      "cycle_length": 1,
+      "points": [[9, 9]],
+      "diagonal_class_multiset": [[1, 1]],
+      "d1_multiplicity": 1,
+      "d1_complement_pair": []
+    }
+  ],
+  "source_attribution": "Will Dale + Claude packaging 2026-04-13",
+  "fail_ledger": []
+}

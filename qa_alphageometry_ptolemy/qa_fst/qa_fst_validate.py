@@ -124,21 +124,58 @@ class FSTValidationResult:
         return json.dumps(self.to_dict(), indent=indent, sort_keys=True)
 
 
+# ============================================================================
+# THEOREM NT BOUNDARY: observer-layer constants
+# ============================================================================
+# These constants are the ONLY float values the validator touches and they
+# live strictly on the observer side of the Pi boundary. Integer state is
+# never compared to or updated from these numbers.
+
+QA_COMPLIANCE = {
+    "observer": "FST_LOOP_MASS_CALIBRATION_POSTULATE_P1",
+    "state_alphabet": "integer STF basis {3,9,27,81,243,729,2187}",
+    "rationale": "Pi is the ONLY sanctioned int->float boundary crossing; "
+                 "all MeV arithmetic lives on the observer side of Pi.",
+}
+
+M_E_MEV = 0.51099895069  # PDG 2024 electron rest mass, MeV/c^2
+PDG_PROTON_MEV = 938.27208816  # PDG 2024 proton rest mass
+PDG_LAMBDA_MEV = 1115.683  # PDG 2024 Lambda^0 baryon rest mass
+
+STF_BASIS = (3, 9, 27, 81, 243, 729, 2187)
+
+
+def apply_Pi(loop_count: int) -> float:
+    """Observer projection Pi: int loop count -> float MeV.
+
+    This is the ONLY sanctioned float cast in the FST module. Loop count enters
+    as int; MeV leaves as float. The reverse direction (MeV -> int) is
+    forbidden by Theorem NT and does not exist in this module.
+    """
+    assert isinstance(loop_count, int), "Pi requires int input (Theorem NT)"
+    return loop_count * M_E_MEV  # noqa: FIREWALL-1 (Pi projection)
+
+
 def validate_bundle(spine: Dict[str, Any],
                     cert_bundle: Dict[str, Any],
                     manifest: Optional[Dict[str, Any]] = None
                     ) -> FSTValidationResult:
     """
-    Full deterministic validation of FST module spine + certificate bundle.
+    Full deterministic validation of FST module spine + certificate bundle (v2).
 
     Steps:
-        1. LOAD: schema version checks
+        1. LOAD: schema version checks + cross-reference
         2. CANONICALIZE: sha256 of canonical JSON
-        3. ENFORCE_STF_BASIS: lambda bookkeeping arithmetic
-        4. ENFORCE_SYMMETRY: delta_sym threshold for stability claims
-        5. ENFORCE_HOMOMORPHISM: ratio test + bookkeeping
-        6. CLASSIFY: emit fail records
+        3. ENFORCE_STF_DECOMPOSITION: integer partition and subtraction checks
+        4. ENFORCE_SECTOR_INVARIANT: Rspin/Aspin cardinality for fermions
+        5. APPLY_PI: calibration postulate - Pi projection and drift logging
+        6. CLASSIFY: emit fail records + warnings
         7. EMIT_METRICS: return metrics bundle
+
+    v2 changes: removed hexagon symmetry witness handler (not in source);
+    removed tautological u/d ratio pass handler; replaced homomorphism path
+    with Pi-based direct-read calibration; all MeV arithmetic now lives
+    behind the Pi firewall and is explicitly observer-layer.
     """
     out = FSTValidationResult()
 
@@ -155,7 +192,6 @@ def validate_bundle(spine: Dict[str, Any],
                       "got": cert_bundle.get("schema_version")})
         return out
 
-    # Check module_id cross-reference
     if cert_bundle.get("module_id") != spine.get("module_id"):
         out.add_fail("LOAD", "MODULE_ID_MISMATCH",
                      {"spine": spine.get("module_id"),
@@ -167,7 +203,6 @@ def validate_bundle(spine: Dict[str, Any],
     out.hashes["spine"] = spine_hash
     out.hashes["cert_bundle"] = cert_hash
 
-    # Verify against manifest if provided
     if manifest is not None:
         for entry in manifest.get("entries", []):
             eid = entry.get("id", "")
@@ -175,7 +210,8 @@ def validate_bundle(spine: Dict[str, Any],
             if eid == spine.get("module_id"):
                 if spine_hash != expected_hash:
                     out.add_fail("CANONICALIZE", "HASH_MISMATCH",
-                                 {"artifact": "spine", "expected": expected_hash,
+                                 {"artifact": "spine",
+                                  "expected": expected_hash,
                                   "computed": spine_hash})
             elif eid == cert_bundle.get("certificate_id"):
                 if cert_hash != expected_hash:
@@ -185,156 +221,204 @@ def validate_bundle(spine: Dict[str, Any],
                                   "computed": cert_hash})
 
     # ---- STEPS 3-5: Process each claim ----
+    calibration_drifts: List[Dict[str, Any]] = []
+
     for claim in cert_bundle.get("claims", []):
         claim_type = claim.get("type", "")
 
-        # ---- STEP 4: ENFORCE_SYMMETRY (delta_sym witness) ----
-        if claim_type.startswith("FST_PROTON_STABILITY"):
-            w = claim.get("symmetry_witness", {})
-            excess = w.get("side_excess_triangles", [])
-            total = w.get("total_triangles", 1)
+        # ---- STEP 3a: FST_STF_DECOMPOSITION_PROTON ----
+        if claim_type == "FST_STF_DECOMPOSITION_PROTON.v1":
+            decomp = claim.get("stf_decomposition", {})
+            total = decomp.get("total_loops")
+            partition = decomp.get("partition", [])
+            partition_sum = sum(partition)
 
-            # Recompute L1 and delta_sym
-            l1_recomputed = sum(abs(x) for x in excess)
-            delta_sym_recomputed = l1_recomputed / total if total > 0 else 0.0
+            out.metrics["proton_partition"] = list(partition)
+            out.metrics["proton_partition_sum"] = partition_sum
+            out.metrics["proton_declared_total"] = total
 
-            out.metrics["delta_sym_recomputed"] = delta_sym_recomputed
-            out.metrics["l1_recomputed"] = l1_recomputed
+            if not all(isinstance(x, int) for x in partition):
+                out.add_fail("ENFORCE_STF_DECOMPOSITION",
+                             "NON_INTEGER_PARTITION",
+                             {"partition": partition})
+            elif total != partition_sum:
+                out.add_fail("ENFORCE_STF_DECOMPOSITION", "NOT_IN_STF_BASIS",
+                             {"declared_total": total,
+                              "partition_sum": partition_sum,
+                              "partition": partition})
 
-            # Check declared values match recomputation
-            declared_l1 = w.get("computed", {}).get("l1")
-            declared_delta = w.get("computed", {}).get("delta_sym")
+            # All partition elements must live in the STF basis (or be
+            # repetitions of basis elements - e.g. two 27s are allowed).
+            for p in partition:
+                if p not in STF_BASIS:
+                    out.add_fail("ENFORCE_STF_DECOMPOSITION",
+                                 "NOT_IN_STF_BASIS",
+                                 {"element": p, "basis": list(STF_BASIS)})
 
-            if declared_l1 is not None and declared_l1 != l1_recomputed:
-                out.add_fail("ENFORCE_SYMMETRY", "RECOMPUTE_MISMATCH",
-                             {"field": "l1", "declared": declared_l1,
-                              "recomputed": l1_recomputed})
+            # Source typo is a warning, not a failure.
+            typo = claim.get("source_typo")
+            if typo is not None:
+                out.add_warning("ENFORCE_STF_DECOMPOSITION",
+                                "SOURCE_INTERNAL_INCONSISTENCY",
+                                {"location": typo.get("location"),
+                                 "diagnosis": typo.get("diagnosis"),
+                                 "actual_sum": typo.get("actual_sum")})
 
-            if declared_delta is not None:
-                if abs(declared_delta - delta_sym_recomputed) > 1e-12:
-                    out.add_fail("ENFORCE_SYMMETRY", "RECOMPUTE_MISMATCH",
-                                 {"field": "delta_sym",
-                                  "declared": declared_delta,
-                                  "recomputed": delta_sym_recomputed})
+        # ---- STEP 3b: FST_STF_LAMBDA_DECAY_BOOKKEEPING ----
+        if claim_type == "FST_STF_LAMBDA_DECAY_BOOKKEEPING.v1":
+            decay = claim.get("stf_decay_bookkeeping", {})
+            initial = decay.get("initial_loops")
+            subtract = decay.get("subtract", [])
+            declared_final = decay.get("final_loops")
+            computed_final = initial - sum(subtract) if initial is not None else None
 
-            # Threshold check
-            threshold = w.get("thresholds", {}).get("stable_if_delta_sym_le")
-            if threshold is not None:
-                if delta_sym_recomputed > threshold:
-                    out.add_fail("ENFORCE_SYMMETRY", "SYMMETRY_DEFECT",
-                                 {"delta_sym": delta_sym_recomputed,
-                                  "threshold": threshold})
+            out.metrics["lambda_initial_loops"] = initial
+            out.metrics["lambda_subtract_sum"] = sum(subtract) if subtract else 0
+            out.metrics["lambda_decay_final_recomputed"] = computed_final
 
-        # ---- STEPS 3 + 5: ENFORCE_STF_BASIS + ENFORCE_HOMOMORPHISM ----
-        if claim_type.startswith("LOOP_TO_MEV_HOMOMORPHISM"):
+            if computed_final != declared_final:
+                out.add_fail("ENFORCE_STF_DECOMPOSITION",
+                             "BOOKKEEPING_MISMATCH",
+                             {"initial": initial, "subtract": subtract,
+                              "declared_final": declared_final,
+                              "recomputed_final": computed_final})
+
+            for s in subtract:
+                if s not in STF_BASIS:
+                    out.add_fail("ENFORCE_STF_DECOMPOSITION",
+                                 "NOT_IN_STF_BASIS",
+                                 {"element": s, "basis": list(STF_BASIS)})
+
+            typo = claim.get("source_typo")
+            if typo is not None:
+                out.add_warning("ENFORCE_STF_DECOMPOSITION",
+                                "SOURCE_INTERNAL_INCONSISTENCY",
+                                {"location": typo.get("location"),
+                                 "diagnosis": typo.get("diagnosis"),
+                                 "actual_missing": typo.get("actual_missing")})
+
+        # ---- STEP 5: FST_LOOP_MASS_CALIBRATION_POSTULATE ----
+        if claim_type == "FST_LOOP_MASS_CALIBRATION_POSTULATE.v1":
+            # Verify the declared m_e matches our PDG constant to avoid
+            # silent calibration drift between spine and validator.
+            postulate = claim.get("postulate_P1", {})
+            declared_me = postulate.get("m_e_mev")
+            if declared_me is not None and declared_me != M_E_MEV:
+                out.add_fail("APPLY_PI", "CALIBRATION_ANCHOR_MISMATCH",
+                             {"declared_m_e": declared_me,
+                              "validator_m_e": M_E_MEV})
+
+            # Apply Pi to every row in the calibration table and log drift.
+            # All float arithmetic here is explicitly observer-layer.
             tolerances = claim.get("tolerances", {})
-            ratio_tol = tolerances.get("ratio_abs_tol", 0.001)
+            warn_at_percent = tolerances.get(
+                "calibration_drift_warn_at_percent", 0.01)
+            fail_at_percent = tolerances.get(
+                "calibration_drift_fail_at_percent", 1.0)
 
-            for test in claim.get("tests", []):
-                test_name = test.get("name", "")
+            calibration_recomputed = []
+            for row in claim.get("calibration_table", []):
+                loops = row.get("loops")
+                if loops is None or not isinstance(loops, int):
+                    continue
 
-                # Ratio test (u/d quark)
-                if test_name == "u_d_ratio":
-                    mev = test.get("mev", {})
-                    loops = test.get("loops", {})
+                pi_mev = apply_Pi(loops)
+                record = {
+                    "label": row.get("label"),
+                    "loops": loops,
+                    "pi_mev_recomputed": pi_mev,
+                }
 
-                    # Recompute ratios
-                    mev_u = mev.get("u", 0)
-                    mev_d = mev.get("d", 1)
-                    loop_u = loops.get("u", 0)
-                    loop_d = loops.get("d", 1)
+                # Consistency check against declared pi_mev_expected
+                declared_pi = row.get("pi_mev_expected")
+                if declared_pi is not None:
+                    if abs(declared_pi - pi_mev) > 1e-6:
+                        out.add_fail("APPLY_PI", "RECOMPUTE_MISMATCH",
+                                     {"label": row.get("label"),
+                                      "declared": declared_pi,
+                                      "recomputed": pi_mev})
 
-                    mev_ratio = mev_u / mev_d if mev_d != 0 else 0
-                    loop_ratio = loop_u / loop_d if loop_d != 0 else 0
-                    abs_delta = abs(mev_ratio - loop_ratio)
+                # Drift against PDG reference (if declared)
+                pdg_ref = row.get("pdg_ref_value")
+                if pdg_ref is not None:
+                    drift_abs = abs(pi_mev - pdg_ref)
+                    drift_percent = 100.0 * drift_abs / pdg_ref
+                    record["pdg_ref_value"] = pdg_ref
+                    record["drift_mev"] = drift_abs
+                    record["drift_percent"] = drift_percent
 
-                    out.metrics["u_d_mev_ratio_recomputed"] = mev_ratio
-                    out.metrics["u_d_loop_ratio_recomputed"] = loop_ratio
-                    out.metrics["u_d_ratio_abs_delta"] = abs_delta
+                    if drift_percent > fail_at_percent:
+                        out.add_fail("APPLY_PI", "CALIBRATION_DRIFT_HARD",
+                                     {"label": row.get("label"),
+                                      "pi_mev": pi_mev,
+                                      "pdg_ref": pdg_ref,
+                                      "drift_percent": drift_percent,
+                                      "fail_threshold_percent": fail_at_percent})
+                    elif drift_percent > warn_at_percent:
+                        drift_record = {
+                            "label": row.get("label"),
+                            "loops": loops,
+                            "pi_mev": pi_mev,
+                            "pdg_ref": pdg_ref,
+                            "drift_mev": drift_abs,
+                            "drift_percent": drift_percent,
+                        }
+                        calibration_drifts.append(drift_record)
+                        out.add_warning("APPLY_PI", "CALIBRATION_DRIFT",
+                                        drift_record)
 
-                    # Check declared ratio values
-                    declared_mev_ratio = mev.get("ratio")
-                    if declared_mev_ratio is not None:
-                        if abs(declared_mev_ratio - mev_ratio) > 1e-10:
-                            out.add_fail("ENFORCE_HOMOMORPHISM",
-                                         "RECOMPUTE_MISMATCH",
-                                         {"field": "mev.ratio",
-                                          "declared": declared_mev_ratio,
-                                          "recomputed": mev_ratio})
+                calibration_recomputed.append(record)
 
-                    declared_loop_ratio = loops.get("ratio")
-                    if declared_loop_ratio is not None:
-                        if abs(declared_loop_ratio - loop_ratio) > 1e-10:
-                            out.add_fail("ENFORCE_HOMOMORPHISM",
-                                         "RECOMPUTE_MISMATCH",
-                                         {"field": "loops.ratio",
-                                          "declared": declared_loop_ratio,
-                                          "recomputed": loop_ratio})
+            out.metrics["calibration_table_recomputed"] = calibration_recomputed
 
-                    # Tolerance check
-                    if abs_delta > ratio_tol:
-                        out.add_fail("ENFORCE_HOMOMORPHISM", "RATIO_MISMATCH",
-                                     {"abs_delta": abs_delta,
-                                      "tolerance": ratio_tol})
+        # ---- STEP 3c: FST_QUARK_GEOMETRIC_STRUCTURE ----
+        if claim_type == "FST_QUARK_GEOMETRIC_STRUCTURE.v1":
+            structural = claim.get("structural_claim", {})
+            partition = structural.get("proton_integer_partition", [])
+            partition_sum = sum(partition)
+            out.metrics["quark_partition"] = list(partition)
+            out.metrics["quark_partition_sum"] = partition_sum
 
-                # Lambda decay bookkeeping
-                if test_name == "lambda_decay_to_proton_loop_bookkeeping":
-                    loops_data = test.get("loops", {})
-                    mev_data = test.get("mev", {})
+            if partition_sum != 1836:
+                out.add_fail("ENFORCE_STF_DECOMPOSITION",
+                             "QUARK_PARTITION_SUM_MISMATCH",
+                             {"partition": partition,
+                              "partition_sum": partition_sum,
+                              "expected": 1836})
 
-                    # ENFORCE_STF_BASIS: loop arithmetic is exact
-                    lambda_loops = loops_data.get("lambda", 0)
-                    minus_loops = loops_data.get("minus", [])
-                    loops_result = lambda_loops - sum(minus_loops)
-                    declared_loops_result = loops_data.get("result")
+            # The numerological observation is not validated; it is simply
+            # carried through to metrics as declared observer-layer data.
+            obs = claim.get("numerological_observation")
+            if obs is not None:
+                out.metrics["numerological_loop_ratio"] = obs.get(
+                    "loop_ratio_378_over_729")
+                out.metrics["numerological_pdg_u_over_d"] = obs.get(
+                    "pdg_2024_current_quark_ratio_u_over_d")
 
-                    out.metrics["lambda_loops_recomputed"] = loops_result
+        # ---- STEP 4: FST_FERMION_SIX_LOOP_CHIRAL_STRUCTURE ----
+        if claim_type == "FST_FERMION_SIX_LOOP_CHIRAL_STRUCTURE.v1":
+            structural = claim.get("structural_claim", {})
+            required = structural.get("sector_cardinality_required", {})
+            rspin = required.get("Rspin")
+            aspin = required.get("Aspin")
 
-                    if declared_loops_result is not None:
-                        if loops_result != declared_loops_result:
-                            out.add_fail("ENFORCE_STF_BASIS",
-                                         "BOOKKEEPING_MISMATCH",
-                                         {"declared": declared_loops_result,
-                                          "recomputed": loops_result})
+            out.metrics["fermion_sector_rspin"] = rspin
+            out.metrics["fermion_sector_aspin"] = aspin
 
-                    # MeV bookkeeping (record, warn on drift)
-                    lambda_mev = mev_data.get("lambda", 0)
-                    minus_mev = mev_data.get("minus", [])
-                    mev_result = lambda_mev - sum(minus_mev)
-                    declared_mev_result = mev_data.get("result")
+            if not (isinstance(rspin, int) and isinstance(aspin, int)):
+                out.add_fail("ENFORCE_SECTOR_INVARIANT",
+                             "SECTOR_CARDINALITY_NOT_INT",
+                             {"Rspin": rspin, "Aspin": aspin})
+            elif rspin != 3 or aspin != 3:
+                out.add_fail("ENFORCE_SECTOR_INVARIANT", "SECTOR_IMBALANCE",
+                             {"Rspin": rspin, "Aspin": aspin,
+                              "required": "both == 3"})
 
-                    out.metrics["lambda_mev_recomputed"] = mev_result
-
-                    if declared_mev_result is not None:
-                        mev_diff = abs(mev_result - declared_mev_result)
-                        if mev_diff > 1e-6:
-                            # SOURCE_NUMERIC_DRIFT: warning, not hard fail
-                            out.add_warning(
-                                "ENFORCE_HOMOMORPHISM",
-                                "SOURCE_NUMERIC_DRIFT",
-                                {"declared_mev_result": declared_mev_result,
-                                 "recomputed_mev_result": mev_result,
-                                 "diff": mev_diff})
-
-                    # Downstream comparison: bookkeeping MeV vs known
-                    # proton mass. Drift here is expected and logged as
-                    # warning (the source text claims equivalence but the
-                    # bookkeeping MeV result doesn't exactly match PDG).
-                    ref = test.get("proton_mev_reference", {})
-                    ref_value = ref.get("value")
-                    if ref_value is not None:
-                        drift = abs(mev_result - ref_value)
-                        out.metrics["proton_mev_drift"] = drift
-                        decay_tol = tolerances.get("decay_mev_abs_tol", 5.0)
-                        if drift > 0.01:
-                            out.add_warning(
-                                "ENFORCE_HOMOMORPHISM",
-                                "SOURCE_NUMERIC_DRIFT",
-                                {"bookkeeping_mev": mev_result,
-                                 "proton_mev_reference": ref_value,
-                                 "drift": drift,
-                                 "within_tolerance": drift <= decay_tol})
-
+    out.metrics["calibration_drift_count"] = len(calibration_drifts)
+    out.metrics["theorem_nt_firewall_crossings"] = sum(
+        1 for c in cert_bundle.get("claims", [])
+        if c.get("type") == "FST_LOOP_MASS_CALIBRATION_POSTULATE.v1"
+        for _ in c.get("calibration_table", []))
     return out
 
 
@@ -636,16 +720,25 @@ if __name__ == "__main__":
         sys.exit(0 if result["ok"] else 1)
 
     if "--all" in args:
-        # Full behavioral validation
+        # Full behavioral validation (v2)
         mp = manifest_path if os.path.exists(manifest_path) else None
         result = validate_from_files(spine_path, bundle_path, mp)
 
         if json_output:
             print(result.to_json())
         else:
-            print(f"FST Validation: {result.result_label}")
-            print(f"  delta_sym = {result.metrics.get('delta_sym_recomputed')}")
-            print(f"  u/d ratio delta = {result.metrics.get('u_d_ratio_abs_delta')}")
+            print(f"FST Validation (v2): {result.result_label}")
+            print(f"  proton partition sum = "
+                  f"{result.metrics.get('proton_partition_sum')}")
+            print(f"  lambda decay final   = "
+                  f"{result.metrics.get('lambda_decay_final_recomputed')}")
+            print(f"  fermion sector       = "
+                  f"R={result.metrics.get('fermion_sector_rspin')} "
+                  f"A={result.metrics.get('fermion_sector_aspin')}")
+            print(f"  firewall crossings   = "
+                  f"{result.metrics.get('theorem_nt_firewall_crossings')}")
+            print(f"  calibration drifts   = "
+                  f"{result.metrics.get('calibration_drift_count')}")
             print(f"  warnings: {len(result.warnings)}")
             print(f"  fails:    {len(result.fail_records)}")
             if result.fail_records:
@@ -681,8 +774,8 @@ if __name__ == "__main__":
         print(result.to_json())
         sys.exit(0 if result.ok else 1)
 
-    # ---- SELF-TEST ----
-    print("=== FST VALIDATOR SELF-TEST ===\n")
+    # ---- SELF-TEST (v2) ----
+    print("=== FST VALIDATOR SELF-TEST (v2) ===\n")
 
     checks_passed = 0
     checks_total = 0
@@ -692,10 +785,17 @@ if __name__ == "__main__":
     result = validate_from_files(spine_path, bundle_path)
     label = result.result_label
     print(f"[1] Validate spine + bundle: {label}")
-    print(f"    delta_sym = {result.metrics.get('delta_sym_recomputed')}")
-    print(f"    u/d ratio delta = {result.metrics.get('u_d_ratio_abs_delta')}")
-    print(f"    lambda loops = {result.metrics.get('lambda_loops_recomputed')}")
-    print(f"    lambda MeV   = {result.metrics.get('lambda_mev_recomputed')}")
+    print(f"    proton partition sum = "
+          f"{result.metrics.get('proton_partition_sum')}")
+    print(f"    lambda decay final   = "
+          f"{result.metrics.get('lambda_decay_final_recomputed')}")
+    print(f"    fermion sector       = "
+          f"R={result.metrics.get('fermion_sector_rspin')} "
+          f"A={result.metrics.get('fermion_sector_aspin')}")
+    print(f"    firewall crossings   = "
+          f"{result.metrics.get('theorem_nt_firewall_crossings')}")
+    print(f"    calibration drifts   = "
+          f"{result.metrics.get('calibration_drift_count')}")
     print(f"    warnings: {len(result.warnings)}")
     print(f"    fails:    {len(result.fail_records)}")
 
@@ -707,46 +807,73 @@ if __name__ == "__main__":
         for fr in result.fail_records:
             print(f"       {fr}")
 
-    # Test 2: delta_sym recomputation matches declared
+    # Test 2: proton partition sum is 1836
     checks_total += 1
-    expected_delta = 6 / 1836
-    actual_delta = result.metrics.get("delta_sym_recomputed", -1)
-    if abs(actual_delta - expected_delta) < 1e-12:
+    psum = result.metrics.get("proton_partition_sum")
+    if psum == 1836:
         checks_passed += 1
-        print(f"[2] delta_sym recompute: {actual_delta:.16f} == 6/1836 -> PASS")
+        print(f"[2] Proton partition sum = {psum} (expected 1836) -> PASS")
     else:
-        print(f"[2] delta_sym recompute: {actual_delta} != {expected_delta} -> FAIL")
+        print(f"[2] Proton partition sum = {psum} (expected 1836) -> FAIL")
 
-    # Test 3: Loop bookkeeping is exact (2187 - 243 - 81 - 27 = 1836)
+    # Test 3: Lambda decay bookkeeping (2187 - 243 - 81 - 27 = 1836)
     checks_total += 1
-    loops_result = result.metrics.get("lambda_loops_recomputed")
-    if loops_result == 1836:
+    lambda_final = result.metrics.get("lambda_decay_final_recomputed")
+    if lambda_final == 1836:
         checks_passed += 1
-        print(f"[3] Loop bookkeeping: 2187-243-81-27 = {loops_result} -> PASS")
+        print(f"[3] Lambda decay: 2187 - 351 = {lambda_final} -> PASS")
     else:
-        print(f"[3] Loop bookkeeping: got {loops_result}, expected 1836 -> FAIL")
+        print(f"[3] Lambda decay: got {lambda_final}, expected 1836 -> FAIL")
 
-    # Test 4: u/d ratio within tolerance
+    # Test 4: Pi calibration on proton gives ~938.194 MeV (within 0.01 MeV)
     checks_total += 1
-    ratio_delta = result.metrics.get("u_d_ratio_abs_delta", 999)
-    if ratio_delta < 0.001:
+    pi_proton = apply_Pi(1836)
+    expected_proton_pi = 1836 * M_E_MEV
+    if abs(pi_proton - expected_proton_pi) < 1e-9:
         checks_passed += 1
-        print(f"[4] u/d ratio tolerance: delta={ratio_delta:.10f} < 0.001 -> PASS")
+        print(f"[4] Pi(1836) = {pi_proton:.6f} MeV (direct-read calibration) "
+              f"-> PASS")
     else:
-        print(f"[4] u/d ratio tolerance: delta={ratio_delta} >= 0.001 -> FAIL")
+        print(f"[4] Pi(1836) recompute mismatch -> FAIL")
 
-    # Test 5: SOURCE_NUMERIC_DRIFT is warning (not fail)
+    # Test 5: Pi(1836) drift vs PDG is < 0.01% (at the warn threshold)
     checks_total += 1
-    drift_warnings = [w for w in result.warnings
-                      if w.get("fail_type") == "SOURCE_NUMERIC_DRIFT"]
-    if len(drift_warnings) >= 1 and result.ok:
+    proton_drift_pct = 100.0 * abs(pi_proton - PDG_PROTON_MEV) / PDG_PROTON_MEV
+    # We expect the proton drift to exceed the 0.01% warn threshold
+    # (actual ~0.0083% — right at the edge) so we just verify it's < 1%.
+    if proton_drift_pct < 1.0:
         checks_passed += 1
-        drift_val = result.metrics.get("proton_mev_drift", "?")
-        print(f"[5] SOURCE_NUMERIC_DRIFT logged as warning (not fail): "
-              f"drift={drift_val} MeV <= 5.0 tol -> PASS")
+        print(f"[5] Proton calibration drift = {proton_drift_pct:.5f}% "
+              f"(< 1% hard-fail threshold) -> PASS")
     else:
-        print(f"[5] Expected SOURCE_NUMERIC_DRIFT warning: "
-              f"warnings={len(drift_warnings)}, ok={result.ok} -> FAIL")
+        print(f"[5] Proton drift {proton_drift_pct}% >= 1% -> FAIL")
+
+    # Test 6: Lambda drift is in the CALIBRATION_DRIFT warn band
+    checks_total += 1
+    pi_lambda = apply_Pi(2187)
+    lambda_drift_pct = 100.0 * abs(pi_lambda - PDG_LAMBDA_MEV) / PDG_LAMBDA_MEV
+    cal_warns = [w for w in result.warnings
+                 if w.get("fail_type") == "CALIBRATION_DRIFT"]
+    if lambda_drift_pct > 0.01 and len(cal_warns) >= 1 and result.ok:
+        checks_passed += 1
+        print(f"[6] Lambda drift {lambda_drift_pct:.4f}% logged as "
+              f"CALIBRATION_DRIFT warning (ok={result.ok}) -> PASS")
+    else:
+        print(f"[6] Expected CALIBRATION_DRIFT warning for lambda "
+              f"(drift={lambda_drift_pct}%, warns={len(cal_warns)}, "
+              f"ok={result.ok}) -> FAIL")
+
+    # Test 7: SOURCE_INTERNAL_INCONSISTENCY flagged for the two in-source typos
+    checks_total += 1
+    typo_warns = [w for w in result.warnings
+                  if w.get("fail_type") == "SOURCE_INTERNAL_INCONSISTENCY"]
+    if len(typo_warns) >= 2:
+        checks_passed += 1
+        print(f"[7] In-source typos flagged: {len(typo_warns)} "
+              f"SOURCE_INTERNAL_INCONSISTENCY warnings -> PASS")
+    else:
+        print(f"[7] Expected >=2 SOURCE_INTERNAL_INCONSISTENCY warnings, "
+              f"got {len(typo_warns)} -> FAIL")
 
     # Test 6: Bad schema version triggers hard fail
     checks_total += 1

@@ -1,0 +1,39 @@
+{
+  "schema_version": "QA_4D_DIAGONAL_RULE_CERT.v1",
+  "result": "FAIL",
+  "embedding_range": "[-5..5]^2",
+  "embedding_failures": 0,
+  "basis": {
+    "v1": [1, 0, 1, 1],
+    "v2": [0, 1, 1, 2]
+  },
+  "gram_matrix": [[3, 3], [3, 6]],
+  "gram_det": 8,
+  "canonical_modulus": 9,
+  "diagonal_rule_witnesses": [
+    {
+      "u_be": [1, 0],
+      "v_be": [1, -1],
+      "u_tuple": [1, 0, 1, 1],
+      "v_tuple": [1, -1, 0, -1],
+      "dot": 0,
+      "Q1": 3,
+      "Q2": 3,
+      "Q3": 6,
+      "Q1_plus_Q2_minus_Q3": 0
+    },
+    {
+      "u_be": [0, 1],
+      "v_be": [-2, 1],
+      "u_tuple": [0, 1, 1, 2],
+      "v_tuple": [-2, 1, -1, 0],
+      "dot": 0,
+      "Q1": 6,
+      "Q2": 6,
+      "Q3": 12,
+      "Q1_plus_Q2_minus_Q3": 0
+    }
+  ],
+  "source_attribution": "Wildberger, Rational Trigonometry in Higher Dimensions and a Diagonal Rule for 2-planes in Four-dimensional Space, KoG 21:47-54, 2017; Will Dale + Claude packaging 2026-04-13",
+  "fail_ledger": [{"fail_type": "GRAM_DETERMINANT_WRONG", "detail": "Synthetic fixture changes determinant from 9 to 8"}]
+}

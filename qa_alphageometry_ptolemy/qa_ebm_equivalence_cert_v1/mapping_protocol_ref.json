@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA EBM Equivalence Cert: formal claim that E_QA(b,e; hist) = 1 - QCI(b,e) over a window is a structurally well-formed energy function on QA state spaces satisfying the Energy-Based Model axioms with integer state throughout. Five witnesses: (E1) non-negativity — E_QA in [0,1] by construction; (E2) data-manifold zero — deterministic T-sequences have E_QA=0 exactly; (E3) monotonicity — injecting k% random mismatch grows E_QA monotonically in k; (E4) Boltzmann duality — bin-occupancy distribution matches p ∝ exp(-E/T) with T = 2π/m (corollary of [215]); (E5) score identity — the discrete score function ∇ log p equals the T-operator step exactly, no MCMC approximation. Implication: qa_detect and the wider QA-ML toolkit ARE a discrete-native, Theorem NT-compliant EBM. Source: Will Dale + Claude 2026-04-12; LeCun et al. 2006 'A Tutorial on Energy-Based Learning'; builds on [154] T-operator coherence, [191] Bateson filtration, [215] bin-resonance correspondence. Checks EBM_1+SCHEMA/NONNEG/ZERO/MONOTONE/BOLTZMANN/SCORE/INT_ONLY/SELFTEST; 1 PASS + 1 FAIL; self-test ok."
+}

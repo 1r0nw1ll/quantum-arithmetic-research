@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Grokking Eigenvalue Transition Cert family [199]: records the partially verified Schiffman grokking eigenvalue bridge. The cert requires prime-control evidence, composite m=9 non-grokking evidence, and the explicit correction that DFT frequency pairs for Z/9Z are not the same object as QA T-orbit families on S_9."
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": "QA_SPHERICAL_GROKKING_THEOREM_NT_CERT.v1",
+  "result": "PASS",
+  "status": "PARTIALLY_VERIFIED",
+  "prime_control": {
+    "modulus": 97,
+    "standard_epoch": 1200,
+    "spherical_epoch": 400,
+    "speedup_x": 3.0
+  },
+  "residual_norm": {
+    "standard_approx": 10.0,
+    "spherical_constant": 1.0,
+    "s2_compliant": true
+  },
+  "uniform_attention": {
+    "confirmed": true,
+    "accuracy": 1.0
+  },
+  "m9_composite_target": {
+    "modulus": 9,
+    "no_model_grokked": true,
+    "epochs": 100000,
+    "interpretation": "not_applicable"
+  },
+  "honesty_gate": {
+    "s5_local_tested": false,
+    "s5_status": "UNTESTED_LOCAL",
+    "local_speedup_weaker_than_yildirim": true
+  },
+  "source_attribution": "Yildirim arXiv 2603.05228 plus local qa_spherical_grokking_mod9.py and qa_bateson_coupling_experiment.py results documented 2026-04-08.",
+  "witnesses": [
+    {"kind": "speedup", "claim": "m=97 local speedup 3x"},
+    {"kind": "norm", "claim": "spherical residual norm fixed at 1.0"},
+    {"kind": "uniform_attention", "claim": "uniform attention achieved 100 percent accuracy"},
+    {"kind": "m9", "claim": "m=9 did not grok and is marked not applicable"}
+  ],
+  "fail_ledger": [
+    {"claim": "local evidence proves greater than 10x speedup", "status": "rejected"},
+    {"claim": "S5 validated locally", "status": "untested"}
+  ]
+}

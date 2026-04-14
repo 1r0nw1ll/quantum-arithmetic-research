@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Chromogeometry Pythagorean Identity Cert family [234]: packages the pre-verified Wildberger chromogeometry identity under QA coordinates (b,e). With Q_b=b*b+e*e, Q_r=b*b-e*e, and Q_g=2*b*e, the identity Q_b square = Q_r square + Q_g square holds exhaustively on (b,e) in [1..19]^2 with zero failures. QA coordinate forms verified: Q_r=(b-e)*d, Q_g=2*b*e, Q_b=b*b+e*e. Source: Wildberger, Chromogeometry, Mathematical Intelligencer 30:26-38, 2008; Will Dale + Claude 2026-04-13. Checks CPI_1+SAMPLES/RANGE/FORMULAS/PLIMPTON/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

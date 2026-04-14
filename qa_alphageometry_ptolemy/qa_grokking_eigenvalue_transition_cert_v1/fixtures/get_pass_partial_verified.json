@@ -1,0 +1,32 @@
+{
+  "schema_version": "QA_GROKKING_EIGENVALUE_TRANSITION_CERT.v1",
+  "result": "PASS",
+  "status": "PARTIALLY_VERIFIED",
+  "prime_control": {
+    "modulus": 97,
+    "grokked": true,
+    "test_accuracy": 1.0,
+    "unit_circle_eigenvalues": 97,
+    "pre_grokking_modes": 251,
+    "post_grokking_modes": 17
+  },
+  "composite_target": {
+    "modulus": 9,
+    "grokked": false,
+    "no_grokking_epochs": 100000
+  },
+  "mode_count_correction": {
+    "dft_frequency_pairs_m9": 5,
+    "qa_orbit_families_m9": 9,
+    "distinct_quantities": true
+  },
+  "source_attribution": "Schiffman arXiv 2602.22600 plus local qa_spherical_grokking_mod9.py and qa_bateson_coupling_experiment.py results documented 2026-04-08.",
+  "witnesses": [
+    {"kind": "prime_control", "claim": "m=97 grokked and exposed unit-circle eigenvalues"},
+    {"kind": "composite_target", "claim": "m=9 did not grok in local run"},
+    {"kind": "correction", "claim": "DFT frequency pairs are not QA orbit families"}
+  ],
+  "fail_ledger": [
+    {"claim": "mode count equals QA family count for m=9", "status": "rejected"}
+  ]
+}

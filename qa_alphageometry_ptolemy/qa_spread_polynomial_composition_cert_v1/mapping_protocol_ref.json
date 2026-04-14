@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Spread Polynomial Composition Cert family [236]: packages the pre-verified Goh-Wildberger spread-polynomial monoid identity S_n composed with S_m = S_{n*m}. The validator uses exact SymPy symbolic arithmetic and no floats. Checks requested pairs (2,3), (3,2), (2,4), (4,3), (3,3), (2,5), verifies S_2=4*s*(1-s) as the logistic map, and verifies integer closed forms for S_2, S_3, and S_4. The rational-trig sine-square identity is recorded as a note and skipped because it is float-dependent in ordinary runtime checks. Source: Goh + Wildberger, Spread polynomials, rotations and the butterfly effect, arXiv 0911.1025, 2009; Will Dale + Claude 2026-04-13. Checks SPC_1+COMPOSITION/CLOSED_FORMS/LOGISTIC/TRIG_NOTE/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

@@ -1,0 +1,13 @@
+{
+  "certificate_id": "ebm_equivalence_v1_fail_001",
+  "schema": "QA_EBM_EQUIVALENCE_CERT.v1",
+  "version": "1.0.0",
+  "timestamp": "2026-04-12T00:00:00Z",
+  "claim": "EBM equivalence asserted WITHOUT axiom documentation and WITHOUT cross_references — validator must reject.",
+  "moduli_tested": [9],
+  "integer_only_invariant": true,
+  "source": {
+    "authors": ["Will Dale", "Claude"],
+    "date": "2026-04-12"
+  }
+}

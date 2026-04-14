@@ -82,7 +82,7 @@
 
   "qa_connection": {
     "discrete_arithmetic": "Megalithic builders used discrete integer arithmetic: fathom-based measurement → integer multiples → exact Pythagorean triangles. This IS the QA framework: discrete states, integer computation, no continuous approximation.",
-    "fibonacci_preference": "The two most common construction triangles have all-Fibonacci QN tuples. Only 19% of primitive triples (hyp≤100) qualify. Same Fibonacci preference as orbital mean-motion resonances (cert [163]).",
+    "fibonacci_preference": "The two most common construction triangles have all-Fibonacci QN tuples. Only 19% of primitive triples (hyp≤100) qualify. Same Fibonacci preference as orbital mean-motion resonances (cert [219]).",
     "thom_crowhurst_pipeline": "Thom (measurement/MY) → Crowhurst (Carnac harmonics/mod-12) → Wildberger (rational geometry) → QA (discrete dynamics). Four independent discoveries of the same discrete-arithmetic framework.",
     "proto_navigation": "Megalithic sites are proto-gnomonic stations. The 3:4:5 triangle enables right-angle surveying (the gnomonic tangent plane). The MY is the base scale. The fathom is the operational unit. Combined: a discrete navigation system predating all written records.",
     "theorem_nt": "The MY is the observer projection: continuous ground distance → discrete integer MY. Between measurements: exact integer arithmetic. Boundary crossed exactly twice per measurement."
@@ -94,7 +94,7 @@
     "Crowhurst, 'Carnac: the Alignments', Epigraphica (2012)",
     "Barnatt & Moir, 'Stone Circles and Megalithic Mathematics', Proc Prehist Soc (1984)",
     "Cert [167] QA_HISTORICAL_NAV_CERT.v1 (megalithic context)",
-    "Cert [163] QA_FIBONACCI_RESONANCE_CERT.v1 (Fibonacci preference in physics)"
+    "Cert [219] QA_FIBONACCI_RESONANCE_CERT.v1 (Fibonacci preference in physics)"
   ],
 
   "fail_ledger": [],

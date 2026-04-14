@@ -1,0 +1,28 @@
+{
+  "protocol_version": "QA_EXPERIMENT_PROTOCOL.v1",
+  "experiment_id": "example_min_experiment",
+  "hypothesis": "Rolling QCI predicts future volatility beyond realized-variance baseline.",
+  "null_model": {
+    "description": "Circular block-bootstrap of the return series.",
+    "independence_argument": "Block bootstrap preserves local autocorrelation but destroys long-range coupling; no structure shared with positive-arm clustering.",
+    "surrogate_types": ["block_bootstrap"]
+  },
+  "pre_registration": {
+    "seed": 7,
+    "date_utc": "2026-04-13T00:00:00Z",
+    "n_trials": 200
+  },
+  "decision_rules": {
+    "accept_criterion": "Partial-r(QCI, future_vol | RV) negative with p<0.01 in >=80% of seeds.",
+    "reject_criterion": "|partial-r| < 0.05 in >=50% of seeds.",
+    "on_unsupportive": "investigate_implementation"
+  },
+  "observer_projection": {
+    "description": "K-means cluster labels of 6D standardized return features; labels mapped through calibrated cmap to (b,e) in {1..24}.",
+    "state_alphabet": "(b,e) in {1..24}^2",
+    "source_domain": "return_panel"
+  },
+  "real_data_status": "synthetic_only",
+  "reproduces": "none",
+  "primary_sources": []
+}

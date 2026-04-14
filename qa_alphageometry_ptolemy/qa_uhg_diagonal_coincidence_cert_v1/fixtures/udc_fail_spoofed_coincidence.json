@@ -1,0 +1,27 @@
+{
+  "schema_version": "QA_UHG_DIAGONAL_COINCIDENCE_CERT.v1",
+  "result": "FAIL",
+  "m": 9,
+  "zero_q_pair_count": 64,
+  "same_diagonal_pair_count": 64,
+  "intersection_size": 64,
+  "counter_examples": {"zero_q_but_diff_diagonal": [], "same_diagonal_but_nonzero_q": []},
+  "witnesses": {
+    "zero_q_pairs": [
+      {"p": [1, 2], "q": [2, 4], "diagonal_class_p": [1, 2], "diagonal_class_q": [2, 4], "same_diagonal": false, "quadrance": "0"},
+      {"p": [1, 1], "q": [2, 2], "diagonal_class_p": [1, 1], "diagonal_class_q": [1, 1], "same_diagonal": true, "quadrance": "0"},
+      {"p": [1, 1], "q": [3, 3], "diagonal_class_p": [1, 1], "diagonal_class_q": [1, 1], "same_diagonal": true, "quadrance": "0"},
+      {"p": [2, 3], "q": [6, 9], "diagonal_class_p": [2, 3], "diagonal_class_q": [2, 3], "same_diagonal": true, "quadrance": "0"},
+      {"p": [3, 2], "q": [9, 6], "diagonal_class_p": [3, 2], "diagonal_class_q": [3, 2], "same_diagonal": true, "quadrance": "0"}
+    ],
+    "non_zero_q_pairs": [
+      {"p": [1, 1], "q": [1, 2], "diagonal_class_p": [1, 1], "diagonal_class_q": [1, 2], "same_diagonal": false, "quadrance": "-1/8"},
+      {"p": [1, 1], "q": [1, 3], "diagonal_class_p": [1, 1], "diagonal_class_q": [1, 3], "same_diagonal": false, "quadrance": "-1/3"},
+      {"p": [1, 1], "q": [2, 1], "diagonal_class_p": [1, 1], "diagonal_class_q": [2, 1], "same_diagonal": false, "quadrance": "-1/8"},
+      {"p": [1, 1], "q": [2, 3], "diagonal_class_p": [1, 1], "diagonal_class_q": [2, 3], "same_diagonal": false, "quadrance": "-1/24"},
+      {"p": [1, 2], "q": [2, 1], "diagonal_class_p": [1, 2], "diagonal_class_q": [2, 1], "same_diagonal": false, "quadrance": "-9/16"}
+    ]
+  },
+  "source_attribution": "Wildberger UHG I 2013; Will Dale + Claude packaging 2026-04-13",
+  "fail_ledger": [{"fail_type": "DIAGONAL_LABEL_SPOOF", "detail": "(1,2) and (2,4) are gcd-reduced to the same class (1,2) despite the fixture's artificial label"}]
+}

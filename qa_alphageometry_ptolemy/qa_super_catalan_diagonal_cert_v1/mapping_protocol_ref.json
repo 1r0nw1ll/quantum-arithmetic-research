@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Super Catalan Diagonal Cert family [235]: packages the pre-verified Limanta-Wildberger super Catalan mapping under (b,e)=(m,n), with d=b+e so (m+n)! is d! in the formula. Checks S(b,b) for b=0..10 against OEIS A000984 central binomials, swap symmetry on [0..7]^2, recurrence 4*S(b,e)=S(b+1,e)+S(b,e+1) on [0..7]^2, and S(1,n)=2*Catalan(n) for n=0..9. Source: Limanta + Wildberger, Super Catalan Numbers and Fourier Summations over Finite Fields, arXiv 2108.10191, Bull. Austral. Math. Soc. 2022; Will Dale + Claude 2026-04-13. Checks SCD_1+D1_A000984/SYMMETRY/RECURRENCE/CATALAN/QA_IDENT/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

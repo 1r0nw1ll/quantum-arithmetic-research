@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pudelko Modular Periodicity Cert family [198]: records the partially verified bridge from Pudelko modular Fibonacci periodicity to QA T-operator orbit families. The cert requires the claimed 3^k family counts for m=3,9,27, preserves the documented V2/V5 open items, and prevents a docs-only family from being counted as a validated sweep entry without fixtures. Source: Pudelko arXiv 2510.24882 and local experiments qa_hensel_selforg_experiment.py, qa_hensel_orbit_cycling_experiment.py, qa_bateson_coupling_experiment.py."
+}

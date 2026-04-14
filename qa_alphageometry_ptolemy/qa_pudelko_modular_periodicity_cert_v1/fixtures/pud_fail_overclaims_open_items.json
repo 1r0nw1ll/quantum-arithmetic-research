@@ -1,0 +1,36 @@
+{
+  "schema_version": "QA_PUDELKO_MODULAR_PERIODICITY_CERT.v1",
+  "result": "FAIL",
+  "status": "VERIFIED",
+  "orbit_family_counts": [
+    {"modulus": 3, "families": 3},
+    {"modulus": 9, "families": 5},
+    {"modulus": 27, "families": 27}
+  ],
+  "fractal_self_similarity": {
+    "pattern": "3^k families for mod-3^k",
+    "satellite_invariant": true,
+    "singularity_invariant": true,
+    "cosmos_scales": true
+  },
+  "weight_preservation": {
+    "non_singularity_weight_preserved": true
+  },
+  "verification_status": {
+    "V1": "VERIFIED",
+    "V2": "VERIFIED",
+    "V3": "VERIFIED",
+    "V4": "VERIFIED",
+    "V5": "VERIFIED",
+    "V6": "VERIFIED",
+    "V7": "VERIFIED",
+    "V8": "VERIFIED"
+  },
+  "source_attribution": "Pudelko arXiv 2510.24882.",
+  "witnesses": [
+    {"kind": "orbit_count", "claim": "wrong m=9 count"},
+    {"kind": "self_similarity", "claim": "overclaimed"},
+    {"kind": "weight", "claim": "overclaimed"}
+  ],
+  "fail_ledger": []
+}

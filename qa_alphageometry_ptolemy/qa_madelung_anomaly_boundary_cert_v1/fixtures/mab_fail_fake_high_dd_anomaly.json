@@ -1,0 +1,60 @@
+{
+  "schema_version": "QA_MADELUNG_ANOMALY_BOUNDARY_CERT.v1",
+  "certificate_id": "qa.cert.madelung_anomaly_boundary.fail.fake_high_dd.v1",
+  "cert_type": "qa_madelung_anomaly_boundary_cert",
+  "title": "FAIL: fabricated anomaly with |Δd| = 3 violates boundary zone",
+  "created_utc": "2026-04-13T00:00:00Z",
+  "result": "FAIL",
+
+  "_fixture_purpose": "Negative control. Same 20 real anomalies as PASS fixture PLUS one fabricated entry claiming an anomaly with |Δd| = 3 (e.g. 2s ↔ 3d would be |Δd| = |2 - 5| = 3). Validator check MAB_ZONE must detect the out-of-zone entry.",
+
+  "source_attribution": "Will Dale + Claude 2026-04-13. Negative control.",
+
+  "structural_claim": {
+    "mapping": "(b, e) = (n, l); d = n + l",
+    "boundary_zone": "|Δd| <= 1",
+    "necessity": "this fixture INTENTIONALLY VIOLATES necessity",
+    "sufficiency": "N/A for negative control",
+    "falsifiability": "this fixture fabricates an out-of-zone anomaly for negative testing"
+  },
+
+  "anomalies": [
+    {"Z": 24, "symbol": "Cr", "source": {"n": 4, "l": 0, "d": 4}, "destination": {"n": 3, "l": 2, "d": 5}, "delta_d": 1, "description": "real"},
+    {"Z": 999, "symbol": "Xx", "source": {"n": 2, "l": 0, "d": 2}, "destination": {"n": 3, "l": 2, "d": 5}, "delta_d": 3, "description": "FABRICATED out-of-zone"}
+  ],
+
+  "distribution": {
+    "delta_d_0": 0,
+    "delta_d_1": 1,
+    "delta_d_ge_2": 1,
+    "total": 2
+  },
+
+  "null_test": {
+    "procedure": "same as PASS",
+    "n_positions": 20,
+    "total_pairs": 380,
+    "zone_pairs": 140,
+    "baseline_zone_rate": 0.368,
+    "observed_zone_rate": 0.5,
+    "enrichment_factor": 1.36,
+    "binomial_p_value": 0.5,
+    "note": "meaningless on 2-point sample"
+  },
+
+  "counterexamples_in_zone_but_no_anomaly": [],
+
+  "witnesses": [
+    {"kind": "zone_coverage", "description": "N/A", "coverage": "1/2", "verification": "fabricated"},
+    {"kind": "null_significance", "description": "N/A", "baseline": 0.368, "observed": 0.5, "p_value": 0.5, "verification": "negative"},
+    {"kind": "necessity_not_sufficiency", "description": "N/A", "counterexample_count": 0, "verification": "negative"}
+  ],
+
+  "cross_references": {
+    "note": "negative control; PASS fixture is mab_pass_20_anomalies.json"
+  },
+
+  "fail_ledger": [
+    {"check": "MAB_ZONE", "reason": "fabricated entry Xx has |Δd| = 3, outside the claimed boundary zone |Δd| ≤ 1"}
+  ]
+}

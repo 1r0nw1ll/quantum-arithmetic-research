@@ -1,0 +1,118 @@
+{
+  "schema_version": "QA_MADELUNG_D_ORDERING_CERT.v1",
+  "certificate_id": "qa.cert.madelung_d_ordering.pass.janet_36_subshells.v1",
+  "cert_type": "qa_madelung_d_ordering_cert",
+  "title": "Madelung aufbau = QA (d, -e) sort, verified through 36 Janet-extended subshells",
+  "created_utc": "2026-04-13T00:00:00Z",
+  "result": "PASS",
+
+  "_fixture_purpose": "Verifies the identification (b, e) = (n, l) for atomic quantum numbers and the claim that the Madelung aufbau filling order is exactly the QA (d, -e) ascending sort. Fixture tabulates the first 36 subshells (Janet left-step extended periodic table, through 11s) with the QA trajectory, per-subshell populations, period structure, and transition rule. Validator independently regenerates the QA trajectory by (d, -e) sort and checks exact equality against the tabulated sequence.",
+
+  "source_attribution": "Will Dale + Claude 2026-04-13. Madelung rule: Madelung, E. (1936) Die mathematischen Hilfsmittel des Physikers, Springer, 4th ed.; Klechkowski, V. M. (1962) atomizdat Moscow. Extended Janet form: Janet, C. (1928). Theory note: docs/theory/QA_MADELUNG_D_ORDERING.md.",
+
+  "structural_claim": {
+    "mapping": "(b, e) = (n, l); d = b + e = n + l = Madelung quantum; a = b + 2e = n + 2l",
+    "filling_order": "QA (d, -e) ascending sort = Madelung (n+l, n) rule",
+    "selection_rule_within_d": "(b, e) -> (b+1, e-1) when e > 0",
+    "selection_rule_between_d": "(b, 0) -> (ceil((b+2)/2), floor(b/2)) when e = 0",
+    "subshell_population": "4e + 2 = 2(2l+1)",
+    "period_population": "2 * ceil((k+1)/2)^2  for period k",
+    "shell_total": "2 * n^2  for shell n"
+  },
+
+  "madelung_sequence": [
+    {"k":  1, "n": 1, "l": 0, "b": 1, "e": 0, "d": 1, "a": 1,  "label": "1s",  "population":  2},
+    {"k":  2, "n": 2, "l": 0, "b": 2, "e": 0, "d": 2, "a": 2,  "label": "2s",  "population":  2},
+    {"k":  3, "n": 2, "l": 1, "b": 2, "e": 1, "d": 3, "a": 4,  "label": "2p",  "population":  6},
+    {"k":  4, "n": 3, "l": 0, "b": 3, "e": 0, "d": 3, "a": 3,  "label": "3s",  "population":  2},
+    {"k":  5, "n": 3, "l": 1, "b": 3, "e": 1, "d": 4, "a": 5,  "label": "3p",  "population":  6},
+    {"k":  6, "n": 4, "l": 0, "b": 4, "e": 0, "d": 4, "a": 4,  "label": "4s",  "population":  2},
+    {"k":  7, "n": 3, "l": 2, "b": 3, "e": 2, "d": 5, "a": 7,  "label": "3d",  "population": 10},
+    {"k":  8, "n": 4, "l": 1, "b": 4, "e": 1, "d": 5, "a": 6,  "label": "4p",  "population":  6},
+    {"k":  9, "n": 5, "l": 0, "b": 5, "e": 0, "d": 5, "a": 5,  "label": "5s",  "population":  2},
+    {"k": 10, "n": 4, "l": 2, "b": 4, "e": 2, "d": 6, "a": 8,  "label": "4d",  "population": 10},
+    {"k": 11, "n": 5, "l": 1, "b": 5, "e": 1, "d": 6, "a": 7,  "label": "5p",  "population":  6},
+    {"k": 12, "n": 6, "l": 0, "b": 6, "e": 0, "d": 6, "a": 6,  "label": "6s",  "population":  2},
+    {"k": 13, "n": 4, "l": 3, "b": 4, "e": 3, "d": 7, "a": 10, "label": "4f",  "population": 14},
+    {"k": 14, "n": 5, "l": 2, "b": 5, "e": 2, "d": 7, "a": 9,  "label": "5d",  "population": 10},
+    {"k": 15, "n": 6, "l": 1, "b": 6, "e": 1, "d": 7, "a": 8,  "label": "6p",  "population":  6},
+    {"k": 16, "n": 7, "l": 0, "b": 7, "e": 0, "d": 7, "a": 7,  "label": "7s",  "population":  2},
+    {"k": 17, "n": 5, "l": 3, "b": 5, "e": 3, "d": 8, "a": 11, "label": "5f",  "population": 14},
+    {"k": 18, "n": 6, "l": 2, "b": 6, "e": 2, "d": 8, "a": 10, "label": "6d",  "population": 10},
+    {"k": 19, "n": 7, "l": 1, "b": 7, "e": 1, "d": 8, "a": 9,  "label": "7p",  "population":  6},
+    {"k": 20, "n": 8, "l": 0, "b": 8, "e": 0, "d": 8, "a": 8,  "label": "8s",  "population":  2},
+    {"k": 21, "n": 5, "l": 4, "b": 5, "e": 4, "d": 9, "a": 13, "label": "5g",  "population": 18},
+    {"k": 22, "n": 6, "l": 3, "b": 6, "e": 3, "d": 9, "a": 12, "label": "6f",  "population": 14},
+    {"k": 23, "n": 7, "l": 2, "b": 7, "e": 2, "d": 9, "a": 11, "label": "7d",  "population": 10},
+    {"k": 24, "n": 8, "l": 1, "b": 8, "e": 1, "d": 9, "a": 10, "label": "8p",  "population":  6},
+    {"k": 25, "n": 9, "l": 0, "b": 9, "e": 0, "d": 9, "a": 9,  "label": "9s",  "population":  2},
+    {"k": 26, "n": 6, "l": 4, "b": 6, "e": 4, "d": 10,"a": 14, "label": "6g",  "population": 18},
+    {"k": 27, "n": 7, "l": 3, "b": 7, "e": 3, "d": 10,"a": 13, "label": "7f",  "population": 14},
+    {"k": 28, "n": 8, "l": 2, "b": 8, "e": 2, "d": 10,"a": 12, "label": "8d",  "population": 10},
+    {"k": 29, "n": 9, "l": 1, "b": 9, "e": 1, "d": 10,"a": 11, "label": "9p",  "population":  6},
+    {"k": 30, "n": 10,"l": 0, "b": 10,"e": 0, "d": 10,"a": 10, "label": "10s", "population":  2},
+    {"k": 31, "n": 6, "l": 5, "b": 6, "e": 5, "d": 11,"a": 16, "label": "6h",  "population": 22},
+    {"k": 32, "n": 7, "l": 4, "b": 7, "e": 4, "d": 11,"a": 15, "label": "7g",  "population": 18},
+    {"k": 33, "n": 8, "l": 3, "b": 8, "e": 3, "d": 11,"a": 14, "label": "8f",  "population": 14},
+    {"k": 34, "n": 9, "l": 2, "b": 9, "e": 2, "d": 11,"a": 13, "label": "9d",  "population": 10},
+    {"k": 35, "n": 10,"l": 1, "b": 10,"e": 1, "d": 11,"a": 12, "label": "10p", "population":  6},
+    {"k": 36, "n": 11,"l": 0, "b": 11,"e": 0, "d": 11,"a": 11, "label": "11s", "population":  2}
+  ],
+
+  "period_structure": [
+    {"period": 1, "population":  2, "formula_check": "2*ceil(2/2)^2 = 2"},
+    {"period": 2, "population":  8, "formula_check": "2*ceil(3/2)^2 = 8"},
+    {"period": 3, "population":  8, "formula_check": "2*ceil(4/2)^2 = 8"},
+    {"period": 4, "population": 18, "formula_check": "2*ceil(5/2)^2 = 18"},
+    {"period": 5, "population": 18, "formula_check": "2*ceil(6/2)^2 = 18"},
+    {"period": 6, "population": 32, "formula_check": "2*ceil(7/2)^2 = 32"},
+    {"period": 7, "population": 32, "formula_check": "2*ceil(8/2)^2 = 32"},
+    {"period": 8, "population": 50, "formula_check": "2*ceil(9/2)^2 = 50"}
+  ],
+
+  "shell_totals": [
+    {"n": 1, "total": 2,   "formula": "2*1^2 = 2"},
+    {"n": 2, "total": 10,  "formula": "2*(1+4) = 10"},
+    {"n": 3, "total": 28,  "formula": "2*(1+4+9) = 28"},
+    {"n": 4, "total": 60,  "formula": "2*(1+4+9+16) = 60"},
+    {"n": 5, "total": 110, "formula": "2*(1+4+9+16+25) = 110"}
+  ],
+
+  "witnesses": [
+    {
+      "kind": "exact_sort",
+      "description": "The sequence of first 36 (n, l) pairs generated by QA (d, -e) ascending sort equals the Janet-extended Madelung sequence exactly; no mismatches.",
+      "n_subshells_checked": 36,
+      "n_mismatches": 0,
+      "verification": "sort {(n+l, -l, n, l) : n>=1, l<n, n+l<=11} and read off (n, l); independently cross-check against Madelung 1936 / Klechkowski 1962."
+    },
+    {
+      "kind": "selection_rule",
+      "description": "Deterministic (b, e)-lattice walk: (b,e)->(b+1,e-1) within a d-class; (b,0)->(ceil((b+2)/2), floor(b/2)) between d-classes. Holds for every adjacent pair in the 36-subshell sequence.",
+      "n_transitions_checked": 35,
+      "n_violations": 0,
+      "verification": "pairwise check of each (k, k+1) pair against the within-d or between-d rule; no ambiguity because d strictly non-decreasing."
+    },
+    {
+      "kind": "derived_structure",
+      "description": "Physical periodic-table structure is derivable from the walk: period population = 2*ceil((k+1)/2)^2; shell-n total = 2n^2. Both match empirical periodic table for periods 1-7 and agree with Janet's predictions for 8-11.",
+      "periods_matched": [2, 8, 8, 18, 18, 32, 32, 50],
+      "shell_totals_checked": [2, 10, 28, 60, 110],
+      "verification": "sum 4l+2 over subshells in each period boundary region (s to s); sum 2(2l+1) over l=0..n-1 for each shell."
+    }
+  ],
+
+  "cross_references": {
+    "foundation_note": "docs/theory/QA_MADELUNG_D_ORDERING.md",
+    "diagonal_methodology": "docs/theory/QA_SIERPINSKI_SELF_SIMILAR_DIAGONAL.md",
+    "qa_syntax_svp_semantics": "docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+    "related_certs": [
+      "[217] QA Fuller VE Diagonal Decomposition (b=e D_1 class)",
+      "[218] QA Haramein Scaling Diagonal (fixed-d hyperbola, Q(sqrt 5))",
+      "[219] QA Fibonacci Resonance (T-orbit Fibonacci shift)",
+      "distinct CLASS from all three: d-ordering walk"
+    ]
+  },
+
+  "fail_ledger": []
+}

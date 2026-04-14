@@ -1,0 +1,38 @@
+{
+  "schema_version": "QA_CHROMOGEOMETRY_PYTHAGOREAN_IDENTITY_CERT.v1",
+  "result": "PASS",
+  "sample_pairs": [
+    {"b": 1, "e": 1, "Q_b": 2, "Q_r": 0, "Q_g": 2, "Q_b_sq": 4, "Q_r_sq_plus_Q_g_sq": 4, "difference": 0},
+    {"b": 1, "e": 2, "Q_b": 5, "Q_r": -3, "Q_g": 4, "Q_b_sq": 25, "Q_r_sq_plus_Q_g_sq": 25, "difference": 0},
+    {"b": 2, "e": 1, "Q_b": 5, "Q_r": 3, "Q_g": 4, "Q_b_sq": 25, "Q_r_sq_plus_Q_g_sq": 25, "difference": 0},
+    {"b": 2, "e": 3, "Q_b": 13, "Q_r": -5, "Q_g": 12, "Q_b_sq": 169, "Q_r_sq_plus_Q_g_sq": 169, "difference": 0},
+    {"b": 3, "e": 2, "Q_b": 13, "Q_r": 5, "Q_g": 12, "Q_b_sq": 169, "Q_r_sq_plus_Q_g_sq": 169, "difference": 0},
+    {"b": 3, "e": 4, "Q_b": 25, "Q_r": -7, "Q_g": 24, "Q_b_sq": 625, "Q_r_sq_plus_Q_g_sq": 625, "difference": 0},
+    {"b": 4, "e": 3, "Q_b": 25, "Q_r": 7, "Q_g": 24, "Q_b_sq": 625, "Q_r_sq_plus_Q_g_sq": 625, "difference": 0},
+    {"b": 4, "e": 5, "Q_b": 41, "Q_r": -9, "Q_g": 40, "Q_b_sq": 1681, "Q_r_sq_plus_Q_g_sq": 1681, "difference": 0},
+    {"b": 5, "e": 2, "Q_b": 29, "Q_r": 21, "Q_g": 20, "Q_b_sq": 841, "Q_r_sq_plus_Q_g_sq": 841, "difference": 0},
+    {"b": 5, "e": 5, "Q_b": 50, "Q_r": 0, "Q_g": 50, "Q_b_sq": 2500, "Q_r_sq_plus_Q_g_sq": 2500, "difference": 0},
+    {"b": 6, "e": 7, "Q_b": 85, "Q_r": -13, "Q_g": 84, "Q_b_sq": 7225, "Q_r_sq_plus_Q_g_sq": 7225, "difference": 0},
+    {"b": 7, "e": 6, "Q_b": 85, "Q_r": 13, "Q_g": 84, "Q_b_sq": 7225, "Q_r_sq_plus_Q_g_sq": 7225, "difference": 0},
+    {"b": 8, "e": 9, "Q_b": 145, "Q_r": -17, "Q_g": 144, "Q_b_sq": 21025, "Q_r_sq_plus_Q_g_sq": 21025, "difference": 0},
+    {"b": 9, "e": 8, "Q_b": 145, "Q_r": 17, "Q_g": 144, "Q_b_sq": 21025, "Q_r_sq_plus_Q_g_sq": 21025, "difference": 0},
+    {"b": 10, "e": 10, "Q_b": 200, "Q_r": 0, "Q_g": 200, "Q_b_sq": 40000, "Q_r_sq_plus_Q_g_sq": 40000, "difference": 0},
+    {"b": 12, "e": 5, "Q_b": 169, "Q_r": 119, "Q_g": 120, "Q_b_sq": 28561, "Q_r_sq_plus_Q_g_sq": 28561, "difference": 0},
+    {"b": 13, "e": 7, "Q_b": 218, "Q_r": 120, "Q_g": 182, "Q_b_sq": 47524, "Q_r_sq_plus_Q_g_sq": 47524, "difference": 0},
+    {"b": 15, "e": 8, "Q_b": 289, "Q_r": 161, "Q_g": 240, "Q_b_sq": 83521, "Q_r_sq_plus_Q_g_sq": 83521, "difference": 0},
+    {"b": 18, "e": 19, "Q_b": 685, "Q_r": -37, "Q_g": 684, "Q_b_sq": 469225, "Q_r_sq_plus_Q_g_sq": 469225, "difference": 0},
+    {"b": 19, "e": 18, "Q_b": 685, "Q_r": 37, "Q_g": 684, "Q_b_sq": 469225, "Q_r_sq_plus_Q_g_sq": 469225, "difference": 0}
+  ],
+  "exhaustive_range": "[1..19]^2",
+  "exhaustive_failures": 0,
+  "qa_coord_formulas_verified": {"Q_r": "(b-e)*d", "Q_g": "2*b*e", "Q_b": "b*b + e*e"},
+  "plimpton_link": [
+    {"r": 2, "s": 1, "triple": [3, 4, 5], "qa_generated": true},
+    {"r": 3, "s": 2, "triple": [5, 12, 13], "qa_generated": true},
+    {"r": 4, "s": 1, "triple": [15, 8, 17], "qa_generated": true},
+    {"r": 4, "s": 3, "triple": [7, 24, 25], "qa_generated": true},
+    {"r": 5, "s": 2, "triple": [21, 20, 29], "qa_generated": true}
+  ],
+  "source_attribution": "Wildberger Chromogeometry 2008; Will Dale + Claude packaging 2026-04-13",
+  "fail_ledger": []
+}

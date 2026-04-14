@@ -1,0 +1,38 @@
+{
+  "schema_version": "QA_SPHERICAL_GROKKING_THEOREM_NT_CERT.v1",
+  "result": "FAIL",
+  "status": "VERIFIED",
+  "prime_control": {
+    "modulus": 97,
+    "standard_epoch": 1200,
+    "spherical_epoch": 400,
+    "speedup_x": 3.0
+  },
+  "residual_norm": {
+    "spherical_constant": 1.0,
+    "s2_compliant": true
+  },
+  "uniform_attention": {
+    "confirmed": true,
+    "accuracy": 1.0
+  },
+  "m9_composite_target": {
+    "modulus": 9,
+    "no_model_grokked": false,
+    "epochs": 100000,
+    "interpretation": "success"
+  },
+  "honesty_gate": {
+    "s5_local_tested": true,
+    "s5_status": "VERIFIED",
+    "local_speedup_weaker_than_yildirim": false
+  },
+  "source_attribution": "Yildirim arXiv 2603.05228.",
+  "witnesses": [
+    {"kind": "speedup", "claim": "ok"},
+    {"kind": "norm", "claim": "ok"},
+    {"kind": "uniform_attention", "claim": "ok"},
+    {"kind": "m9", "claim": "overclaimed"}
+  ],
+  "fail_ledger": []
+}

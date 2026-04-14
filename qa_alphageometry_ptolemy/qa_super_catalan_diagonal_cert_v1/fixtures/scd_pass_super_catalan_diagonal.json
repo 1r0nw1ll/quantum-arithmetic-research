@@ -1,0 +1,41 @@
+{
+  "schema_version": "QA_SUPER_CATALAN_DIAGONAL_CERT.v1",
+  "result": "PASS",
+  "d1_a000984_values": [
+    {"b": 0, "S_b_b": 1, "A000984": 1},
+    {"b": 1, "S_b_b": 2, "A000984": 2},
+    {"b": 2, "S_b_b": 6, "A000984": 6},
+    {"b": 3, "S_b_b": 20, "A000984": 20},
+    {"b": 4, "S_b_b": 70, "A000984": 70},
+    {"b": 5, "S_b_b": 252, "A000984": 252},
+    {"b": 6, "S_b_b": 924, "A000984": 924},
+    {"b": 7, "S_b_b": 3432, "A000984": 3432},
+    {"b": 8, "S_b_b": 12870, "A000984": 12870},
+    {"b": 9, "S_b_b": 48620, "A000984": 48620},
+    {"b": 10, "S_b_b": 184756, "A000984": 184756}
+  ],
+  "swap_symmetry_range": "[0..7]^2",
+  "swap_symmetry_failures": 0,
+  "recurrence_range": "[0..7]^2",
+  "recurrence_failures": 0,
+  "s1n_catalan_values": [
+    {"n": 0, "S_1_n": 2, "Catalan_n": 1, "two_Catalan_n": 2},
+    {"n": 1, "S_1_n": 2, "Catalan_n": 1, "two_Catalan_n": 2},
+    {"n": 2, "S_1_n": 4, "Catalan_n": 2, "two_Catalan_n": 4},
+    {"n": 3, "S_1_n": 10, "Catalan_n": 5, "two_Catalan_n": 10},
+    {"n": 4, "S_1_n": 28, "Catalan_n": 14, "two_Catalan_n": 28},
+    {"n": 5, "S_1_n": 84, "Catalan_n": 42, "two_Catalan_n": 84},
+    {"n": 6, "S_1_n": 264, "Catalan_n": 132, "two_Catalan_n": 264},
+    {"n": 7, "S_1_n": 858, "Catalan_n": 429, "two_Catalan_n": 858},
+    {"n": 8, "S_1_n": 2860, "Catalan_n": 1430, "two_Catalan_n": 2860},
+    {"n": 9, "S_1_n": 9724, "Catalan_n": 4862, "two_Catalan_n": 9724}
+  ],
+  "qa_identification": {
+    "b": "m",
+    "e": "n",
+    "d": "b+e",
+    "formula_denominator_factor": "(m+n)! = d!"
+  },
+  "source_attribution": "Limanta + Wildberger, Super Catalan Numbers and Fourier Summations over Finite Fields, arXiv 2108.10191, Bull. Austral. Math. Soc. 2022; Will Dale + Claude packaging 2026-04-13",
+  "fail_ledger": []
+}

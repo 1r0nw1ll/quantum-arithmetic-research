@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_UHG_ORBIT_DIAGONAL_PROFILE_CERT.v1",
+  "result": "FAIL",
+  "m": 9,
+  "partition_summary": {"singularity_orbits": 1, "satellite_orbits": 2, "cosmos_orbits": 6, "total_points": 81},
+  "orbits": [
+    {
+      "label": "sat_1",
+      "cycle_length": 4,
+      "points": [[3, 3], [6, 9], [6, 6], [3, 9]],
+      "diagonal_class_multiset": [[1, 1], [2, 3], [1, 1], [1, 3]],
+      "d1_multiplicity": 2,
+      "d1_complement_pair": [[3, 3], [5, 5]]
+    }
+  ],
+  "source_attribution": "Will Dale + Claude packaging 2026-04-13",
+  "fail_ledger": [{"fail_type": "WRONG_D1_COMPLEMENT_PAIR", "detail": "Sat#1 claims (3,3)+(5,5) instead of the recomputed D_1 complement (3,3)+(6,6)=(9,9)"}]
+}

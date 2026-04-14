@@ -1,0 +1,29 @@
+{
+  "schema_version": "QA_GROKKING_EIGENVALUE_TRANSITION_CERT.v1",
+  "result": "FAIL",
+  "status": "VERIFIED",
+  "prime_control": {
+    "modulus": 97,
+    "grokked": true,
+    "test_accuracy": 1.0,
+    "unit_circle_eigenvalues": 97,
+    "post_grokking_modes": 17
+  },
+  "composite_target": {
+    "modulus": 9,
+    "grokked": true,
+    "no_grokking_epochs": 1000
+  },
+  "mode_count_correction": {
+    "dft_frequency_pairs_m9": 5,
+    "qa_orbit_families_m9": 5,
+    "distinct_quantities": false
+  },
+  "source_attribution": "Schiffman arXiv 2602.22600.",
+  "witnesses": [
+    {"kind": "prime_control", "claim": "ok"},
+    {"kind": "composite_target", "claim": "overclaimed"},
+    {"kind": "correction", "claim": "conflated"}
+  ],
+  "fail_ledger": []
+}

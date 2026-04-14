@@ -1,39 +1,40 @@
 {
   "schema_version": "QA_MAP_MODULE_SPINE.v1",
-  "module_id": "qa.map.fst.plenum_to_particle.v1",
-  "title": "QA Mapping Spine: Field Structure Theory (FST) / Structural Physics (SP) — Plenum-to-Particle Loop Sequence",
+  "module_id": "qa.map.fst.plenum_to_particle.v2",
+  "title": "QA Mapping Spine: Field Structure Theory (FST) / Structural Physics (SP) — Plenum-to-Particle Loop Sequence (v2, axiom-compliant re-map)",
   "authors": [
-    "Will (QA mapping)",
-    "Don Briddell (source theory)"
+    "Will Dale (QA mapping and formalization)",
+    "Don Briddell (source theory, Field Structure Theory)"
   ],
-  "created_utc": "2026-01-27T00:00:00Z",
+  "created_utc": "2026-04-11T00:00:00Z",
   "source_artifacts": [
     {
-      "artifact_id": "fst_journal_2026-01-27",
-      "kind": "odt",
-      "title": "QA-native mapping of FST Plenum-to-Particle Loop Sequence",
-      "citation": "ingestion candidates/fst_journal.odt"
+      "artifact_id": "briddell_particle_hierarchy_2026",
+      "kind": "docx",
+      "title": "The Particle Hierarchy Paradigm — part one of two",
+      "citation": "Briddell, D. (2026). The Particle Hierarchy Paradigm: According to Field Structure Theory. Manuscript draft; first edition ISBN 978-1-7357041-0-4."
     },
     {
-      "artifact_id": "fst_paper_summary_2026-01-18",
+      "artifact_id": "briddell_frontiers_submission_2026",
       "kind": "docx",
-      "title": "Paper Summary 18 Jan 2026",
-      "citation": "ingestion candidates/Paper Summary 18 Jan 2026.docx"
+      "title": "The Plenum-to-Particle Loop Sequence of Field Structure Theory (FST)",
+      "citation": "Briddell, D. (2026). Manuscript submitted to Frontiers in Physics, 2026-04-08, manuscript ID 1850870."
     },
     {
-      "artifact_id": "fst_submission_letter_2026-01-25",
+      "artifact_id": "briddell_submission_letter_2026",
       "kind": "docx",
-      "title": "AI letter 25 Jan 26",
-      "citation": "ingestion candidates/AI letter 25 Jan 26.docx"
+      "title": "Cover letter to Frontiers in Physics editor-in-chief",
+      "citation": "Briddell, D. (2026-01-25). Author cover letter accompanying manuscript 1850870."
     }
   ],
   "qa_interpretation": {
     "pattern_space": {
-      "name": "Plenum configuration space Ω",
-      "description": "Non-local, isometric loop potential from which space/time and matter emerge via condensation and interaction. QA translation: pre-geometry layer — a state space of admissible discrete configurations where space/time are derived observables.",
+      "name": "Plenum configuration space Omega",
+      "description": "Non-local, isometric loop potential from which space, time, and matter emerge through loop condensation. In this v2 QA mapping, Omega is instantiated as the set of admissible integer STF basis decompositions of first-generation particle loop counts. Continuous-valued quantities such as MeV, frequency, or position are NOT part of Omega; they enter only as outputs of the declared observer projection Pi (see cert bundle). This enforces Theorem NT: continuous functions are observer projections only, never causal inputs to the QA layer. v2 change: v1 allowed MeV comparisons inside the validator without declared firewall; v2 routes all continuous values through Pi exactly once.",
       "primary_claim_refs": [
-        "Paper Summary: Plenum consists of continuous action loops",
-        "Cover Letter: action condenses from non-local background isometric looped Plenum"
+        "Briddell 2026 Chap 15 The Sequences: STF iterations 3, 9, 27, 81, 243, 729, 2187 define the first-generation particle hierarchy.",
+        "Briddell 2026 line 861: the proton and neutron are not iterations of the STF although their loop counts are well within the seven iterations.",
+        "Briddell 2026 line 795: a fermion mass is composed of six loops, three Rspin real-loop quarks and three Aspin anti-loops quarks."
       ]
     },
     "state_packet": {
@@ -42,163 +43,126 @@
         {
           "name": "loop_count_total_loves",
           "type": "int",
-          "semantics": "Total loop quanta (Loves) in structure; mass proxy."
+          "semantics": "Total loop quanta (Loves) in the structure. Integer; non-reducible; lives in the QA discrete layer. A1 compliance: loop counts are strictly positive integers; no zero-loop states are admitted (minimum structure is 3 loops per Briddell's Structor definition)."
         },
         {
-          "name": "sector",
-          "type": "enum",
-          "values": ["Rspin", "Aspin"],
-          "semantics": "Chiral sector / observer-relative visibility. Rspin = anti-matter (deployed, rotating), Aspin = real-matter (may condense)."
+          "name": "stf_basis_decomposition",
+          "type": "vector_int",
+          "semantics": "Vector phi = (phi_1, ..., phi_7) of non-negative integer coefficients against the STF basis [3, 9, 27, 81, 243, 729, 2187]. Invariant: loop_count_total_loves == dot(phi, basis). A2 compliance: loop_count_total_loves is a derived invariant computed from phi, never independently assigned."
+        },
+        {
+          "name": "sector_cardinality",
+          "type": "dict_int",
+          "semantics": "Chiral sector cardinality {Rspin: int, Aspin: int}. For first-generation fermions the invariant is |Rspin| == |Aspin| == 3 per Briddell line 795. Integer-valued; no float."
         },
         {
           "name": "deployment",
           "type": "enum",
           "values": ["deployed", "condensed", "mixed"],
-          "semantics": "Whether loopage is deployed vs condensed into interaction boundary."
+          "semantics": "Deployment state for each sector. Does not change loop count; acts on observer-relative visibility only via cloaking logic."
         },
         {
           "name": "cloak_state",
           "type": "enum",
           "values": ["none", "A_cloaks_R", "R_cloaks_A"],
-          "semantics": "Which sector is cloaked by the other (observability obstruction). Cloaking occurs when condensed Aspin fully encloses deployed Rspin."
-        },
-        {
-          "name": "stf_basis_decomposition",
-          "type": "object",
-          "semantics": "Representation in STF basis {3, 9, 27, 81, 243, 729, 2187} and/or combinations."
-        },
-        {
-          "name": "symmetry_witness",
-          "type": "object",
-          "semantics": "Structural superimposability / quasi-symmetry evidence (delta_sym etc.)."
+          "semantics": "Observer-relative visibility obstruction. Briddell: any particle that cannot be seen is an Aspin particle. Does not affect loop count or STF decomposition. S2 compliance: all fields are int or enum; no float state."
         }
       ]
     },
     "generators": [
       {
         "name": "sigma",
-        "signature": "(l) -> (l+1)",
-        "semantics": "Add one loop quantum (Loves). Adding more loopage increases the energy."
+        "signature": "l -> l + 1",
+        "semantics": "Add one loop quantum (one Love). Integer-valued transformation. Preserves A1 (loop count stays positive integer)."
       },
       {
         "name": "lambda_3",
-        "signature": "(l) -> (3*l)",
-        "semantics": "STF iteration scale step. Hierarchy uses 3^n: {3, 9, 27, 81, 243, 729, 2187}."
+        "signature": "l -> 3 * l",
+        "semantics": "STF iteration scale step. Promotes an iteration-k configuration to iteration-(k+1). Integer multiplication by 3; preserves A1."
       },
       {
         "name": "mu",
-        "signature": "sector swap",
-        "semantics": "Rspin <-> Aspin involution / chirality swap. Same structure, opposite handedness."
+        "signature": "sector swap Rspin <-> Aspin",
+        "semantics": "Chirality involution. Identity on loop count; permutes sector cardinality."
       },
       {
         "name": "kappa",
         "signature": "deploy <-> condense",
-        "semantics": "Boundary formation / condensation operator. Deployed loopage can condense to nucleus."
+        "semantics": "Deployment-state toggle. Identity on loop count; changes observability only. Briddell: condensed Aspin loopage forms the interaction boundary."
       },
       {
         "name": "chi",
         "signature": "cloak transform",
-        "semantics": "Cloaking operator controlling observability by boundary intersection. Produces CLOAKED_FROM_OBSERVER obstruction depending on observer sector."
+        "semantics": "Cloaking operator. Modifies cloak_state to produce CLOAKED_FROM_OBSERVER obstructions. Identity on loop count and STF decomposition. T1 compliance: generator application is path-length only; no continuous time."
       }
     ],
     "invariants": [
       {
         "name": "l_total",
         "type": "int",
-        "description": "Total loop count in Loves."
+        "description": "Total loop count. Preserved by mu, kappa, chi. Changed by sigma (+1) and lambda_3 (x3) per their explicit signatures."
       },
       {
         "name": "phi_stf",
-        "type": "vector<int>",
-        "description": "STF basis coefficients for {3, 9, 27, 81, 243, 729, 2187}."
+        "type": "vector_int",
+        "description": "STF basis coefficients satisfying dot(phi, [3,9,27,81,243,729,2187]) == l_total. Always integer; derived per A2 (never independently assigned)."
       },
       {
-        "name": "delta_sym",
-        "type": "rational",
-        "description": "Normalized symmetry defect relative to Plenum template (superimposability). Stable particles have delta_sym <= threshold."
-      },
-      {
-        "name": "obs_projector",
-        "type": "enum",
-        "values": ["visible", "cloaked"],
-        "description": "Observer-relative visibility given sector and cloak state."
+        "name": "sector_balance",
+        "type": "predicate",
+        "description": "For first-generation fermions: Rspin cardinality equals Aspin cardinality equals 3 (Briddell line 795). Type-level invariant enforced by ENFORCE_SECTOR_INVARIANT validator step."
       }
     ],
     "obstruction_types": [
       {
         "fail_type": "NOT_IN_STF_BASIS",
-        "rule": "If decomposition in STF basis is absent or invalid for claimed particle class."
+        "rule": "If a declared STF basis decomposition does not sum to the declared l_total under integer arithmetic (dot(phi, basis) != l_total)."
       },
       {
-        "fail_type": "SYMMETRY_DEFECT",
-        "rule": "If delta_sym exceeds threshold for stability claim."
+        "fail_type": "SECTOR_IMBALANCE",
+        "rule": "If a first-generation fermion state packet has Rspin cardinality not equal to Aspin cardinality, or either is not exactly 3."
       },
       {
         "fail_type": "CLOAKED_FROM_OBSERVER",
-        "rule": "If cloak_state blocks boundary intersection for observer sector."
+        "rule": "If cloak_state blocks boundary intersection for the declared observer sector. Briddell: any particle that cannot be seen is an Aspin particle."
       },
       {
-        "fail_type": "SOURCE_NUMERIC_DRIFT",
-        "rule": "If arithmetic or figures inside the source text are self-inconsistent; record invariant_diff and continue with warning."
+        "fail_type": "CALIBRATION_DRIFT",
+        "rule": "Observer-layer WARNING ONLY. If Pi(l) differs from a PDG reference value by more than a declared tolerance. Does not invalidate the underlying integer claims. Severity is warning."
+      },
+      {
+        "fail_type": "SOURCE_INTERNAL_INCONSISTENCY",
+        "rule": "If the primary source contains arithmetic or bookkeeping slips (typos) that the completion layer has had to correct to maintain STF consistency. Logged for corrigendum, not promoted to validation failure. Severity is warning."
       }
     ]
   },
   "validator_contract": {
-    "name": "replay_trace -> enforce_invariants -> classify_fail -> emit_metrics",
+    "name": "replay_trace -> enforce_integer_invariants -> project_via_Pi -> log_drifts -> emit_metrics",
     "determinism": {
-      "canonical_json": "UTF-8, keys sorted, separators=(',',':'), no NaN/Infinity, numbers as JSON numbers.",
+      "canonical_json": "UTF-8, keys sorted, separators comma colon, no NaN or Infinity, numbers as JSON numbers. Inherited from qa_cert_core.canonical_json_compact.",
       "hash": "sha256(canonical_json)"
     },
     "steps": [
-      {
-        "step": "LOAD",
-        "action": "Load spine + certificate JSON; verify schema_version matches expected."
-      },
-      {
-        "step": "CANONICALIZE",
-        "action": "Compute canonical_json and sha256; compare with sha256_manifest."
-      },
-      {
-        "step": "ENFORCE_STF_BASIS",
-        "action": "Validate STF basis coefficients and recompute l_total from basis; compare."
-      },
-      {
-        "step": "ENFORCE_SYMMETRY",
-        "action": "Compute delta_sym from symmetry_witness using declared metric; threshold-check for stability claims."
-      },
-      {
-        "step": "ENFORCE_HOMOMORPHISM",
-        "action": "For each ratio/decay test: recompute ratios and residuals; classify SOURCE_NUMERIC_DRIFT if internal inconsistencies exceed tolerance."
-      },
-      {
-        "step": "CLASSIFY",
-        "action": "Emit {move, fail_type, invariant_diff} records for any violated check."
-      },
-      {
-        "step": "EMIT_METRICS",
-        "action": "Return pass/fail plus metrics bundle (residuals, delta_sym, ratio deltas)."
-      }
+      {"step": "LOAD", "action": "Load spine and certificate JSON; verify schema_version matches QA_MAP_MODULE_SPINE.v1 and QA_CERT_BUNDLE.v1 respectively; verify cross-reference of module_id."},
+      {"step": "CANONICALIZE", "action": "Compute canonical_json and sha256 for both artifacts; compare with manifest if provided."},
+      {"step": "ENFORCE_STF_DECOMPOSITION", "action": "For each integer-arithmetic claim (proton partition, lambda decay bookkeeping): verify sum(phi_i * basis_i) == l_total and that any declared subtraction arithmetic is exact in integer."},
+      {"step": "ENFORCE_SECTOR_INVARIANT", "action": "For first-generation fermion claims: verify Rspin cardinality equals Aspin cardinality equals 3 as a type-level invariant."},
+      {"step": "APPLY_PI", "action": "For the calibration postulate cert: apply observer projection Pi to each declared STF iteration and compute drift against PDG reference values. All float arithmetic is explicitly observer-layer and logged, never fed back to state. Theorem NT firewall crossed exactly once at this step per claim."},
+      {"step": "CLASSIFY", "action": "Emit {move, fail_type, invariant_diff} records for any violated integer check. Log calibration drifts under CALIBRATION_DRIFT warning. Log in-source typos under SOURCE_INTERNAL_INCONSISTENCY warning."},
+      {"step": "EMIT_METRICS", "action": "Return pass/fail plus metrics bundle: partition sums, Pi values, drift values, and the full calibration table for transparency."}
     ]
   },
-  "external_reference_sources": [
-    {
-      "id": "pdg_proton_mass",
-      "label": "PDG",
-      "value": 938.272,
-      "units": "MeV",
-      "version": "2024",
-      "note": "Particle Data Group proton mass. Used as independent reference for SOURCE_NUMERIC_DRIFT classification."
-    }
-  ],
   "submission_context": {
-    "target_journal": "Frontiers of Physics",
+    "target_journal": "Frontiers in Physics",
     "cover_letter_claims": [
-      "Manuscript is 12 pages; introduces SP/FST; maps STF loop counts to particle mass ratios in eV; claims quantitative consistency.",
-      "Original and not under consideration elsewhere."
+      "Twelve-page manuscript introducing Structural Physics (SP) as an application of Field Structure Theory; target section Nuclear Physics; manuscript ID 1850870 submitted 2026-04-08.",
+      "Maps STF loop counts onto first-generation particle masses via the declared unit-identification postulate P1 (1 Love equals one electron rest mass).",
+      "Original work; not under consideration elsewhere. Companion paper to Briddell (2026) The Plenum-to-Particle Loop Sequence of Field Structure Theory, providing deterministic machine-checkable verification of its structural claims without proposing new physics."
     ],
     "refs": [
-      "ingestion candidates/AI letter 25 Jan 26.docx",
-      "ingestion candidates/Paper Summary 18 Jan 2026.docx"
+      "ingestion candidates/AI letter 25 Jan 26.docx (cover letter)",
+      "ingestion candidates/Paper Summary 18 Jan 2026.docx (submission summary)",
+      "ingestion candidates/The Particle Hierarchy Paradigm - part one of two.docx (primary theoretical source)"
     ]
   }
 }

@@ -102,7 +102,7 @@
   "cross_references": [
     {"family": 130, "name": "QA Origin of 24", "relation": "Orbit periods (1,8,24) are the capture attractors"},
     {"family": 133, "name": "QA Eisenstein Norm", "relation": "v_3(f) classifies which attractor captures each state"},
-    {"family": 163, "name": "QA Fibonacci Resonance", "relation": "Fibonacci ratios as preferred resonance orbits — See's question of WHY certain orbits are selected"},
+    {"family": 219, "name": "QA Fibonacci Resonance", "relation": "Fibonacci ratios as preferred resonance orbits — See's question of WHY certain orbits are selected"},
     {"family": 191, "name": "QA Bateson Learning Levels", "relation": "L_3 escape = exceeding the 'escape velocity' of the modular medium"},
     {"family": 197, "name": "QA See Longitudinal Transverse", "relation": "Companion cert: wave duality as generator/observer duality"}
   ],

@@ -1,109 +1,214 @@
 {
   "schema_version": "QA_CERT_BUNDLE.v1",
-  "certificate_id": "qa.cert.fst.proton_stability_and_loop_mev_homomorphism.v1",
-  "module_id": "qa.map.fst.plenum_to_particle.v1",
-  "created_utc": "2026-01-27T00:00:00Z",
+  "certificate_id": "qa.cert.fst.stf_decomposition_and_mass_calibration.v2",
+  "module_id": "qa.map.fst.plenum_to_particle.v2",
+  "created_utc": "2026-04-11T00:00:00Z",
   "claims": [
     {
-      "type": "FST_PROTON_STABILITY_DELTA_SYM_WITNESS.v1",
+      "type": "FST_STF_DECOMPOSITION_PROTON.v1",
       "subject": {
         "particle": "proton",
         "loop_count_loves": 1836
       },
       "evidence_refs": [
         {
-          "ref": "Paper Summary: proton structurally composed of 3 anti-matter quarks (Rspin) + 3 real-matter quarks (Aspin)",
-          "note": "Only electron and proton stable due to superimposability requirement."
+          "ref": "Briddell 2026 MS line 1286 (Fig 2.64 caption)",
+          "note": "The Proton mass, having 1836 loops (caption shows 729+729+243+27+27=1836 — see source_typo below)."
         },
         {
-          "ref": "FST mapping: hexagon_side_imbalance model",
-          "note": "Proton quasi-symmetric: +2 triangles on 3 of 6 hexagon sides."
+          "ref": "Briddell 2026 MS lines 1287-1288",
+          "note": "Top row cluster = 378 electron masses. Bottom two triangles = 729 loops each."
         },
         {
-          "ref": "FST mapping: anti-proton balance",
-          "note": "Balance provided when entangled anti-proton included."
+          "ref": "Briddell 2026 MS line 861",
+          "note": "The proton and neutron are not iterations of the STF although their loop counts are well within the seven iterations."
         }
       ],
-      "symmetry_witness": {
-        "model": "hexagon_side_imbalance",
-        "side_excess_triangles": [2, 2, 2, 0, 0, 0],
-        "total_triangles": 1836,
-        "metric": "L1_norm(excess)/total",
-        "computed": {
-          "l1": 6,
-          "delta_sym": 0.0032679738562091504
-        },
-        "thresholds": {
-          "stable_if_delta_sym_le": 0.01
-        }
+      "stf_decomposition": {
+        "total_loops": 1836,
+        "partition": [729, 729, 243, 81, 27, 27],
+        "partition_sum_check": "dot_product_of_integer_partition_equals_total",
+        "geometric_interpretation": "Two iteration-6 sub-triangles of 729 loops each (bottom of the STF), plus one top cluster of 378 loops = 243+81+27+27 formed from iteration-5, iteration-4, and two iteration-3 sub-triangles."
       },
-      "validator_expectation": {
-        "result": "PASS",
-        "fail_type_if_not": "SYMMETRY_DEFECT"
-      },
-      "metrics": {
-        "delta_sym": 0.0032679738562091504
-      }
-    },
-    {
-      "type": "LOOP_TO_MEV_HOMOMORPHISM_LAMBDA_BOOKKEEPING_AND_RATIO_TEST.v1",
-      "evidence_refs": [
-        {
-          "ref": "FST mapping: u/d quark ratio comparison",
-          "note": "Up/Down quark ratio matches between MeV and loops."
-        },
-        {
-          "ref": "FST mapping: lambda 2187 loops decay bookkeeping",
-          "note": "Lambda 2187 loops decay bookkeeping; compare to proton loop count."
-        },
-        {
-          "ref": "Paper Summary: loop counts corresponding directly to measured particle masses",
-          "note": "Claim: measuring in electron masses (MeV) and in loops have identical outcomes for proton 1836."
-        }
-      ],
-      "tests": [
-        {
-          "name": "u_d_ratio",
-          "mev": {
-            "u": 2.552,
-            "d": 4.925,
-            "ratio": 0.5181725888324873
-          },
-          "loops": {
-            "u": 378,
-            "d": 729,
-            "ratio": 0.5185185185185185
-          },
-          "residuals": {
-            "abs_delta": 0.00034592968603119516
-          }
-        },
-        {
-          "name": "lambda_decay_to_proton_loop_bookkeeping",
-          "loops": {
-            "lambda": 2187,
-            "minus": [243, 81, 27],
-            "result": 1836
-          },
-          "mev": {
-            "lambda": 1115.683,
-            "minus": [124.173, 41.391, 13.797],
-            "result": 936.322
-          },
-          "proton_mev_reference": {
-            "value": 938.272,
-            "source": "PDG 2024 proton mass"
-          },
-          "notes": "Source provides the lambda bookkeeping numbers. Loop bookkeeping is exact (2187-243-81-27=1836). MeV bookkeeping result (936.322) compared to known proton mass (938.272 MeV); difference logged as SOURCE_NUMERIC_DRIFT warning."
-        }
-      ],
-      "tolerances": {
-        "ratio_abs_tol": 0.001,
-        "decay_mev_abs_tol": 5.0
+      "theorem_nt_compliance": "Integer-only. No float state. No observer-layer inputs. No Pi application.",
+      "source_typo": {
+        "location": "Briddell 2026 MS line 1286 caption arithmetic: 729+729+243+27+27=1836",
+        "actual_sum": 1755,
+        "correct_formula": "729+729+243+81+27+27=1836",
+        "diagnosis": "Caption is missing the 81 term. The geometry in Fig 2.64 is correct; only the in-caption arithmetic has a typo. Flagged under SOURCE_INTERNAL_INCONSISTENCY for corrigendum; does not invalidate the underlying STF decomposition.",
+        "severity": "warning"
       },
       "validator_expectation": {
         "result": "PASS_WITH_WARNINGS",
-        "warnings": ["SOURCE_NUMERIC_DRIFT"]
+        "warnings": ["SOURCE_INTERNAL_INCONSISTENCY"]
+      }
+    },
+    {
+      "type": "FST_STF_LAMBDA_DECAY_BOOKKEEPING.v1",
+      "subject": {
+        "particle": "lambda",
+        "loop_count_loves": 2187
+      },
+      "evidence_refs": [
+        {
+          "ref": "Briddell 2026 MS line 828",
+          "note": "The 7th iteration of the STF will have 3 times 729 for a total of 2187 loops."
+        },
+        {
+          "ref": "Briddell 2026 MS line 1292",
+          "note": "Missing are 378 loops, which are the other decay products of the lambda (see source_typo below)."
+        }
+      ],
+      "stf_decay_bookkeeping": {
+        "initial_loops": 2187,
+        "subtract": [243, 81, 27],
+        "subtract_sum": 351,
+        "final_loops": 1836,
+        "integer_check": "2187 - (243 + 81 + 27) == 1836",
+        "geometric_interpretation": "Lambda is a full iteration-7 Sierpinski triangle. Proton is obtained by removing three smaller nested STF sub-triangles: iteration-5 (243), iteration-4 (81), and iteration-3 (27)."
+      },
+      "theorem_nt_compliance": "Integer-only. All arithmetic on positive integers. No float. No Pi application.",
+      "source_typo": {
+        "location": "Briddell 2026 MS line 1292: Missing are 378 loops",
+        "actual_missing": 351,
+        "diagnosis": "2187 - 1836 = 351 = 243+81+27 (three STF sub-iterations). The 378 on line 1292 conflates the down-quark cluster loop count (378 = one of the three proton quark clusters) with the decay product count (351). Flagged under SOURCE_INTERNAL_INCONSISTENCY for corrigendum.",
+        "severity": "warning"
+      },
+      "validator_expectation": {
+        "result": "PASS_WITH_WARNINGS",
+        "warnings": ["SOURCE_INTERNAL_INCONSISTENCY"]
+      }
+    },
+    {
+      "type": "FST_LOOP_MASS_CALIBRATION_POSTULATE.v1",
+      "subject": {
+        "scope": "first_generation_particles"
+      },
+      "evidence_refs": [
+        {
+          "ref": "Briddell 2026 MS lines 1580-1587 (shell-to-STF table)",
+          "note": "Briddell's own loop-to-MeV table: 9 loops = 4.599 MeV, 27 loops = 13.797 MeV, 81 loops = 41.391 MeV, 243 loops = 124.173 MeV, 729 loops = 372.519 MeV, 1836 loops = 938.196 MeV, 2187 loops = 1115.683 MeV."
+        },
+        {
+          "ref": "PDG 2024",
+          "note": "Particle Data Group electron mass 0.51099895069 MeV/c^2, proton mass 938.27208816 MeV/c^2, lambda mass 1115.683 MeV/c^2."
+        }
+      ],
+      "postulate_P1": {
+        "statement": "One loop (one Love) is calibrated to one electron rest mass. 1 Love := m_e = 0.51099895069 MeV/c^2.",
+        "type": "calibration_postulate",
+        "status": "declared, not derived",
+        "rationale": "Briddell's own loop-to-MeV table has a constant ratio of 0.5110 MeV per loop across all seven first-generation iterations. This is a unit identification declared at calibration time, not a mathematical derivation from a deeper principle. The completion layer certifies it as a postulate and logs the drift between Pi(l) and PDG reference values for each particle.",
+        "non_derivation_clause": "P1 is not derived from any deeper principle in FST or QA. It is the bridge assumption that makes the loop-to-MeV mapping well-defined. Any reader who rejects P1 can read the other certs in this bundle as integer-only structural claims with no MeV content.",
+        "m_e_mev": 0.51099895069,
+        "m_e_source": "PDG 2024 electron rest mass"
+      },
+      "observer_projection_Pi": {
+        "definition": "Pi: FST_STATE -> MeV; Pi(state) = state.loop_count_total_loves * m_e_mev.",
+        "theorem_nt_declaration": "Pi is the ONLY sanctioned boundary crossing between the QA discrete layer and the continuous observer layer in this module. All MeV values below are outputs of Pi. No MeV value is permitted to re-enter the QA causal layer as an input. This enforces Theorem NT (Observer Projection Firewall): continuous functions are observer projections only, never causal inputs.",
+        "firewall_crossings_per_validation": 7,
+        "firewall_direction": "int_to_float_one_way_only",
+        "T2b_compliance": "Float cast occurs exactly at the Pi application point. The validator's MeV arithmetic is explicitly declared observer-layer and may not feed back into state packet or generator application."
+      },
+      "calibration_table": [
+        {"label": "STF iter 2",     "loops": 9,    "pi_mev_expected": 4.59899055621,    "briddell_mev": 4.599,    "pdg_ref_label": "2nd shell electron"},
+        {"label": "STF iter 3",     "loops": 27,   "pi_mev_expected": 13.79697166863,   "briddell_mev": 13.797,   "pdg_ref_label": "3rd shell electron"},
+        {"label": "STF iter 4",     "loops": 81,   "pi_mev_expected": 41.39091500589,   "briddell_mev": 41.391,   "pdg_ref_label": "4th shell electron"},
+        {"label": "STF iter 5",     "loops": 243,  "pi_mev_expected": 124.17274501767,  "briddell_mev": 124.173,  "pdg_ref_label": "5th shell meson"},
+        {"label": "STF iter 6",     "loops": 729,  "pi_mev_expected": 372.51823505301,  "briddell_mev": 372.519,  "pdg_ref_label": "6th shell koan-meson"},
+        {"label": "proton",         "loops": 1836, "pi_mev_expected": 938.19407346684,  "briddell_mev": 938.196,  "pdg_ref_label": "proton",  "pdg_ref_value": 938.27208816, "drift_vs_pdg_mev_expected": 0.07801469316},
+        {"label": "lambda",         "loops": 2187, "pi_mev_expected": 1117.55470515903, "briddell_mev": 1115.683, "pdg_ref_label": "lambda",  "pdg_ref_value": 1115.683,     "drift_vs_pdg_mev_expected": 1.87170515903}
+      ],
+      "drift_interpretation": {
+        "proton_drift_mev": 0.07801469316,
+        "proton_drift_percent": 0.00831,
+        "lambda_drift_mev": 1.87170515903,
+        "lambda_drift_percent": 0.16776,
+        "commentary": "P1 holds at the 0.01% level through the proton and then drifts at the lambda by roughly 0.17%. This is an empirically observable pattern: the loop-as-electron-mass calibration is an approximation that degrades at the highest-mass first-generation particle. This is a real prediction FST must account for; v2 surfaces it as a calibration drift rather than hiding it behind a subtraction-path alternative.",
+        "v1_comparison": "The v1 cert used a subtraction-path calculation for the proton (1115.683 - 124.173 - 41.391 - 13.797 = 936.322 MeV) and logged a 1.95 MeV drift vs PDG. That path selected the WORSE of the two numbers available in Briddell's text. v2 uses the direct-read Pi(1836) = 938.194 MeV with drift 0.078 MeV, a 25x improvement and a cleaner statement."
+      },
+      "tolerances": {
+        "calibration_drift_warn_at_percent": 0.01,
+        "calibration_drift_fail_at_percent": 1.0
+      },
+      "validator_expectation": {
+        "result": "PASS_WITH_WARNINGS",
+        "warnings": ["CALIBRATION_DRIFT"]
+      }
+    },
+    {
+      "type": "FST_QUARK_GEOMETRIC_STRUCTURE.v1",
+      "subject": {
+        "particle": "proton",
+        "structure": "three_cluster_geometric_decomposition"
+      },
+      "evidence_refs": [
+        {
+          "ref": "Briddell 2026 MS lines 1287-1288",
+          "note": "Fig 2.64 caption: the top row cluster is the down quark having 378 loops; the bottom two triangles are the up quarks with 729 loops each."
+        },
+        {
+          "ref": "Briddell 2026 MS line 795",
+          "note": "A fermion mass is composed of six loops, three Rspin real-loop quarks and three Aspin anti-loops quarks."
+        },
+        {
+          "ref": "Briddell 2026 MS lines 1313-1320",
+          "note": "Author describes back-fitting up=2.552 MeV within PDG margin (2.7 minus 0.148 equals 2.552) and down=4.925 MeV (4.8625 plus 0.0625) to match the 378/729 loop ratio — see numerological_observation below for full context."
+        }
+      ],
+      "structural_claim": {
+        "proton_integer_partition": [729, 729, 378],
+        "partition_sum_check": "729 + 729 + 378 == 1836",
+        "cluster_roles_briddell_labels": ["Briddell-up", "Briddell-up", "Briddell-down"],
+        "cluster_roles_semantics": "Briddell's labels 'up quark' and 'down quark' refer to geometric positions in the Sierpinski triangle decomposition (two bottom clusters and one top cluster), NOT to Standard Model flavor identifications."
+      },
+      "sm_flavor_identification_disclaimer": {
+        "statement": "This certificate does NOT claim that Briddell's 'up quark' is identical to the Standard Model up quark, nor that Briddell's 'down quark' is identical to the Standard Model down quark.",
+        "rationale": "Briddell's clusters at 729 and 378 loops correspond under postulate P1 to 372.5 MeV and 193.2 MeV respectively. These values do not match the Standard Model current-quark masses (u ~ 2.16 MeV, d ~ 4.67 MeV) by three orders of magnitude, and they also do not match the Standard Model constituent-quark masses (~ 336 MeV, ~ 339 MeV). The clusters are FST geometric constructs, not SM quark-flavor objects.",
+        "consequence": "The v1 certification of a u/d mass-ratio match between MeV and loops is withdrawn as category-confused. The integer partition claim stands; the flavor identification does not."
+      },
+      "numerological_observation": {
+        "note": "Briddell's text contains an observation that 378/729 = 0.51851... is numerically close to an SM u/d ratio of 0.518 computed from a specific pair of MeV values he selects. This is a NUMEROLOGICAL coincidence, not a derived prediction, because Briddell's own text explicitly describes selecting those MeV values to land on the ratio.",
+        "loop_ratio_378_over_729": 0.5185185185185185,
+        "briddell_selected_mev_ratio_2552_over_4925": 0.5181725888324873,
+        "pdg_2024_current_quark_ratio_u_over_d": 0.46253,
+        "pdg_2024_absolute_difference_from_loop_ratio": 0.0559885,
+        "briddell_backfit_procedure_quoted": "Briddell MS lines 1313-1320: 'Considering the margin of error, the mass of an Up Quark could be as low as -0.04 percent of 2.7 MeV/c^2 = -0.148 MeV/c^2. Thus 2.7 - 0.148 = 2.552 MeV/c^2.' And: '0.0625 + 4.8 = 4.8625 MeV/c^2. 4.8625 + 0.0625 = 4.925.' These are explicit back-walks within PDG uncertainty to target the loop ratio 378/729.",
+        "verdict": "recorded_as_observer_layer_note_not_certified_as_verified_claim"
+      },
+      "theorem_nt_compliance": "Integer partition claim is int-only. The numerological observation is explicitly flagged observer-layer and does not feed back into QA state.",
+      "validator_expectation": {
+        "result": "PASS"
+      }
+    },
+    {
+      "type": "FST_FERMION_SIX_LOOP_CHIRAL_STRUCTURE.v1",
+      "subject": {
+        "class": "first_generation_fermion"
+      },
+      "evidence_refs": [
+        {
+          "ref": "Briddell 2026 MS line 795",
+          "note": "A fermion mass is composed of six loops, three of which are Rspin real-loop quarks and three are Aspin anti-loops quarks."
+        },
+        {
+          "ref": "Briddell 2026 Structor definition (Chap 1)",
+          "note": "Minimal space-defining unit is the Structor: three deployed Rspin loops enclosed by three condensed Aspin loops."
+        },
+        {
+          "ref": "Briddell 2026 MS line 861",
+          "note": "Rspin and Aspin loopage taken together gives a mass total of zero. The chiral loops have positive and negative values to create zero mass and achieve the needed symmetry."
+        }
+      ],
+      "structural_claim": {
+        "sector_cardinality_required": {"Rspin": 3, "Aspin": 3},
+        "invariant": "|Rspin| == |Aspin| == 3 for first-generation fermions.",
+        "sector_total_mass_zero_claim": "Briddell line 861: in FST's own mass accounting, Rspin and Aspin contributions cancel; the Standard Model's mass accounting sees only the Rspin visible component. Not certified in MeV; this is a qualitative structural statement about sector sign conventions.",
+        "chirality_symmetry": "Every fermion state packet must include both Rspin and Aspin sectors; single-sector states are type-invalid."
+      },
+      "theorem_nt_compliance": "Type-level structural claim. No numerics. No Pi application. No observer-layer content.",
+      "validator_expectation": {
+        "result": "PASS"
       }
     }
   ]

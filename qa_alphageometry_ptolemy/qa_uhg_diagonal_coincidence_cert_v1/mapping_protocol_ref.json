@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA UHG Diagonal Coincidence Cert family [232]: packages the pre-verified m=9 exhaustive witness that UHG zero quadrance under <a,b>=-(b1*e2+e1*b2) coincides exactly with QA gcd-reduced diagonal class on {1,...,9}^2. The 81-point grid has 64 unordered zero-quadrance pairs, 64 same-diagonal pairs, and intersection 64, with zero counterexamples in either direction. Source: Wildberger UHG I, Geometriae Dedicata 163:215-274, 2013; Will Dale + Claude 2026-04-13. Checks UDC_1+M/COUNTS/INTERSECTION/COUNTEREXAMPLES/WITNESS/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

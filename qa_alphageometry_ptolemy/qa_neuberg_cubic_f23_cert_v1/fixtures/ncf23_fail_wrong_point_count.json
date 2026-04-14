@@ -1,0 +1,90 @@
+{
+  "schema_version": "QA_NEUBERG_CUBIC_F23_CERT.v1",
+  "result": "FAIL",
+  "elliptic_curve": {
+    "p": 23,
+    "a": 1,
+    "b": 1,
+    "equation": "y^2=x^3+x+1",
+    "affine_point_count": 27,
+    "projective_point_count": 27,
+    "points": [
+      [0, 1],
+      [0, 22],
+      [1, 7],
+      [1, 16],
+      [3, 10],
+      [3, 13],
+      [4, 0],
+      [5, 4],
+      [5, 19],
+      [6, 4],
+      [6, 19],
+      [7, 11],
+      [7, 12],
+      [9, 7],
+      [9, 16],
+      [11, 3],
+      [11, 20],
+      [12, 4],
+      [12, 19],
+      [13, 7],
+      [13, 16],
+      [17, 3],
+      [17, 20],
+      [18, 3],
+      [18, 20],
+      [19, 5],
+      [19, 18]
+    ]
+  },
+  "tangent_conic_witnesses": [
+    {
+      "case": "identical",
+      "curve_1": {"a": 1, "b": 1, "point": [3, 10], "equation": "y^2=x^3+x+1"},
+      "curve_2": {"a": 1, "b": 1, "point": [3, 10], "equation": "y^2=x^3+x+1"},
+      "lambda_1": 5,
+      "lambda_2": 5,
+      "lambda_1_is_nonsquare": true,
+      "lambda_2_is_nonsquare": true,
+      "conic_size_1": 1,
+      "conic_size_2": 1,
+      "intersection_count": 1,
+      "set_relation": "identical"
+    },
+    {
+      "case": "disjoint",
+      "curve_1": {"a": 1, "b": 1, "point": [3, 10], "equation": "y^2=x^3+x+1"},
+      "curve_2": {"a": 2, "b": 1, "point": [1, 2], "equation": "y^2=x^3+2*x+1"},
+      "lambda_1": 5,
+      "lambda_2": 5,
+      "lambda_1_is_nonsquare": true,
+      "lambda_2_is_nonsquare": true,
+      "conic_size_1": 1,
+      "conic_size_2": 1,
+      "intersection_count": 0,
+      "set_relation": "disjoint"
+    }
+  ],
+  "orthic_spread_polynomial_witness": {
+    "triangle": [[1, 1], [4, 5], [6, 3]],
+    "field": "F_23",
+    "spread_at_vertex_index": 0,
+    "polynomial_form": "cross=(x2-x1)*(y3-y1)-(y2-y1)*(x3-x1); numerator=cross*cross; denominator=q12*q13",
+    "division_required": false,
+    "cross_mod_p": 9,
+    "spread_num_mod_p": 12,
+    "quadrance_ab": 2,
+    "quadrance_ac": 6,
+    "spread_den_mod_p": 12
+  },
+  "qa_compatibility": {
+    "field": "F_23",
+    "p": 23,
+    "char_not_2_or_3": true,
+    "integer_arithmetic_only": true,
+    "nonzero_unit_witnesses": [1, 2, 3, 5, 10, 12]
+  },
+  "source_attribution": "Wildberger, Neuberg cubics over finite fields, arXiv:0806.2495, 2008; Will Dale + Claude packaging 2026-04-14",
+  "fail_ledger": [{"fail_type": "POINT_COUNT_WRONG", "detail": "Synthetic fixture changes the projective point count from 28 to 27"}]
+}

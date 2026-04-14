@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Fuller VE Diagonal Decomposition Cert family [217]: Fuller's cuboctahedral / vector-equilibrium shell count S_n = 10n^2 + 2 (n >= 1: 12, 42, 92, 162, 252, 362, ...). Structural claim: shells with n not divisible by 3 sit exactly on the b=e diagonal D_1 (the QA canonical Sierpinski/STF diagonal) with tuple (S_n/3, S_n/3, 2*S_n/3, S_n); shells with n divisible by 3 sit off D_1 on a sibling odd-divisor diagonal D_k where 2k+1 divides S_n. Mod-3 selection pattern is itself QA-natural (the triune). Proof: S_n mod 3 = n^2 + 2 mod 3 = 0 iff n^2 = 1 mod 3 iff n not divisible by 3. Cross-ref [217 foundation: b=e canonical diagonal ↔ Briddell STF, docs/theory/QA_SIERPINSKI_SELF_SIMILAR_DIAGONAL.md]. Source: Will Dale + Claude 2026-04-13, Buckminster Fuller, Synergetics (1975). Checks FVDD_1+FORMULA/MOD3/DIAGONAL/OFFDIAGONAL/COMPUTATIONAL/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

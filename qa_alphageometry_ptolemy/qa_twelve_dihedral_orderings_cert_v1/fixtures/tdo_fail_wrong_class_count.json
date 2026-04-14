@@ -1,0 +1,54 @@
+{
+  "schema_version": "QA_TWELVE_DIHEDRAL_ORDERINGS_CERT.v1",
+  "result": "FAIL",
+  "object_set": [0, 1, 2, 3, 4],
+  "dihedral_group": {
+    "object_count": 5,
+    "rotation_count": 5,
+    "reflection_count": 5,
+    "order": 10
+  },
+  "permutation_count": 120,
+  "dihedral_class_count": 11,
+  "canonical_reps": [
+    [0, 1, 2, 3, 4],
+    [0, 1, 2, 4, 3],
+    [0, 1, 3, 2, 4],
+    [0, 1, 3, 4, 2],
+    [0, 1, 4, 2, 3],
+    [0, 1, 4, 3, 2],
+    [0, 2, 1, 3, 4],
+    [0, 2, 1, 4, 3],
+    [0, 2, 3, 1, 4],
+    [0, 2, 4, 1, 3],
+    [0, 3, 1, 2, 4],
+    [0, 3, 2, 1, 4]
+  ],
+  "class_sizes": [
+    {"canonical": [0, 1, 2, 3, 4], "size": 10},
+    {"canonical": [0, 1, 2, 4, 3], "size": 10},
+    {"canonical": [0, 1, 3, 2, 4], "size": 10},
+    {"canonical": [0, 1, 3, 4, 2], "size": 10},
+    {"canonical": [0, 1, 4, 2, 3], "size": 10},
+    {"canonical": [0, 1, 4, 3, 2], "size": 10},
+    {"canonical": [0, 2, 1, 3, 4], "size": 10},
+    {"canonical": [0, 2, 1, 4, 3], "size": 10},
+    {"canonical": [0, 2, 3, 1, 4], "size": 10},
+    {"canonical": [0, 2, 4, 1, 3], "size": 10},
+    {"canonical": [0, 3, 1, 2, 4], "size": 10},
+    {"canonical": [0, 3, 2, 1, 4], "size": 10}
+  ],
+  "quotient_formula": {
+    "factorial_5": 120,
+    "dihedral_order": 10,
+    "quotient": 12,
+    "expression": "5!/(2*5)"
+  },
+  "qa_connections": {
+    "g2_non_identity_root_count": 12,
+    "cuboctahedral_shell_s1": 12,
+    "icosahedral_vertex_count": 12
+  },
+  "source_attribution": "Le + Wildberger, Pentagrammum Mysticum, Twelve Special Conics and the Twisted Icosahedron, J. Geom. Graphics 24(2):175-191, 2020; Will Dale + Claude packaging 2026-04-14",
+  "fail_ledger": [{"fail_type": "CLASS_COUNT_WRONG", "detail": "Synthetic fixture changes the exhaustive dihedral class count from 12 to 11"}]
+}

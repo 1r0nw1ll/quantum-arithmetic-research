@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Neuberg Cubic F23 Cert family [242]: packages the pre-verified Wildberger finite-field Neuberg bridge. The validator exhaustively counts E(F_23) for y^2=x^3+x+1 as 27 affine points plus one point at infinity, checks two Weierstrass tangent-conic witnesses by enumerating F_23 point sets and requiring identical or disjoint relation only, records an integer-polynomial spread pair, and asserts p=23 compatibility with char not 2 or 3. Source: Wildberger, Neuberg cubics over finite fields, arXiv:0806.2495, 2008; Will Dale + Claude 2026-04-14. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

@@ -27,31 +27,36 @@ import json
 import os
 import sys
 from math import gcd
+from pathlib import Path
+
+# Canonical element computation lives in qa_alphageometry_ptolemy/qa_elements.py.
+# Cert-local reimplementation is forbidden by ELEM-2; use qa_elements.qa_elements()
+# exclusively. This cert addresses equilateral-triangle impossibility in QA;
+# the underlying element field set is canonical.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from qa_elements import qa_elements
 
 
 SCHEMA = "QA_EQUILATERAL_TRIANGLE_CERT.v1"
 
 
-def compute_all(d, e):
+def compute_equilateral_elements(d, e):
+    """Cert wrapper: parameterized by (d, e) per cert convention.
+
+    Recovers b = d - e (forced by A2: d = b+e), then delegates all
+    element computation to canonical qa_elements(). The Y_CE alias
+    (C + E) and the dict shape are kept because the cert's identity
+    checks (ET_DUAL: Y = A-D = C+E) reference both forms.
+    """
     b = d - e
-    a = d + e
-    A = a * a
-    B = b * b
-    C = 2 * d * e
-    D = d * d
-    E = e * e
-    F = b * a
-    G = d * d + e * e
-    X = d * e
-    K = a * d
-    W = X + K          # d(e+a)
-    Y_AD = A - D       # a²-d²
-    Y_CE = C + E       # 2de+e²
-    Z = E + K          # e²+ad
+    elem = qa_elements(b, e)
     return {
-        "b": b, "a": a, "A": A, "B": B, "C": C, "D": D, "E": E,
-        "F": F, "G": G, "X": X, "K": K, "W": W,
-        "Y_AD": Y_AD, "Y_CE": Y_CE, "Z": Z,
+        "b": elem.b, "a": elem.a,
+        "A": elem.A, "B": elem.B, "C": elem.C, "D": elem.D, "E": elem.E,
+        "F": elem.F, "G": elem.G, "X": elem.X, "K": elem.K, "W": elem.W,
+        "Y_AD": elem.Y,            # A - D
+        "Y_CE": elem.C + elem.E,   # 2de + e² — same identity, distinct algebraic form
+        "Z": elem.Z,
     }
 
 
@@ -77,7 +82,7 @@ def validate(cert, *, collect_errors=True):
             err("ET_DEF", f"direction[{i}] ({d_val},{e_val}): need d>e>0")
             continue
 
-        comp = compute_all(d_val, e_val)
+        comp = compute_equilateral_elements(d_val, e_val)
         decl = dr.get("identities", {})
 
         # ET_DEF — W, Y, Z computed correctly

@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=fibonacci_resonance_fixtures"
-"""QA Fibonacci Resonance Cert family [162] — certifies that mean-motion
+"""QA Fibonacci Resonance Cert family [219] — certifies that mean-motion
 resonances preferentially select Fibonacci ratios.
 
 TIER 2→3 — CROSS-VALIDATED EMPIRICAL PATTERN:

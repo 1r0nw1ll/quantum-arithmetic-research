@@ -1,0 +1,104 @@
+{
+  "schema_version": "QA_MADELUNG_ANOMALY_BOUNDARY_CERT.v1",
+  "certificate_id": "qa.cert.madelung_anomaly_boundary.pass.20_anomalies.v1",
+  "cert_type": "qa_madelung_anomaly_boundary_cert",
+  "title": "All 20 known atomic Madelung anomalies lie in QA d-class boundary zone |Δd| ≤ 1",
+  "created_utc": "2026-04-13T00:00:00Z",
+  "result": "PASS",
+
+  "_fixture_purpose": "Verifies that the 20 known atomic Madelung anomalies in neutral-atom ground states (Cr, Cu, Nb, Mo, Ru, Rh, Pd, Ag, La, Ce, Gd, Pt, Au, Ac, Th, Pa, U, Np, Cm, Lr) all satisfy |d(source) - d(destination)| <= 1 under QA identification (b, e) = (n, l). Validator independently checks each row's arithmetic and computes the null enrichment statistic against uniform random pair picks.",
+
+  "source_attribution": "Will Dale + Claude 2026-04-13. Ground-state configurations: NIST Atomic Spectra Database (https://www.nist.gov/pml/atomic-spectra-database). Lr 7p^1 measurement: Sato, T. K. et al. (2015). Nature 520, 209-211. Standard quantum chemistry references for aufbau anomaly list.",
+
+  "structural_claim": {
+    "mapping": "(b, e) = (n, l); d = b + e = n + l",
+    "boundary_zone": "|d(source) - d(destination)| <= 1",
+    "necessity": "all known Madelung anomalies lie in zone (20/20)",
+    "sufficiency": "zone is NOT sufficient; many zone members follow Madelung (Ti, V, Mn, Fe, Co, Ni, Ta, W, Re, Os, Ir, etc.)",
+    "falsifiability": "any neutral-atom anomaly with |Δd| >= 2 breaks the claim"
+  },
+
+  "anomalies": [
+    {"Z": 24,  "symbol": "Cr", "source": {"n": 4, "l": 0, "d": 4}, "destination": {"n": 3, "l": 2, "d": 5}, "delta_d": 1, "description": "3d5 4s1 vs 3d4 4s2"},
+    {"Z": 29,  "symbol": "Cu", "source": {"n": 4, "l": 0, "d": 4}, "destination": {"n": 3, "l": 2, "d": 5}, "delta_d": 1, "description": "3d10 4s1 vs 3d9 4s2"},
+    {"Z": 41,  "symbol": "Nb", "source": {"n": 5, "l": 0, "d": 5}, "destination": {"n": 4, "l": 2, "d": 6}, "delta_d": 1, "description": "4d4 5s1 vs 4d3 5s2"},
+    {"Z": 42,  "symbol": "Mo", "source": {"n": 5, "l": 0, "d": 5}, "destination": {"n": 4, "l": 2, "d": 6}, "delta_d": 1, "description": "4d5 5s1 vs 4d4 5s2"},
+    {"Z": 44,  "symbol": "Ru", "source": {"n": 5, "l": 0, "d": 5}, "destination": {"n": 4, "l": 2, "d": 6}, "delta_d": 1, "description": "4d7 5s1 vs 4d6 5s2"},
+    {"Z": 45,  "symbol": "Rh", "source": {"n": 5, "l": 0, "d": 5}, "destination": {"n": 4, "l": 2, "d": 6}, "delta_d": 1, "description": "4d8 5s1 vs 4d7 5s2"},
+    {"Z": 46,  "symbol": "Pd", "source": {"n": 5, "l": 0, "d": 5}, "destination": {"n": 4, "l": 2, "d": 6}, "delta_d": 1, "description": "4d10 5s0 vs 4d8 5s2 (two-electron)"},
+    {"Z": 47,  "symbol": "Ag", "source": {"n": 5, "l": 0, "d": 5}, "destination": {"n": 4, "l": 2, "d": 6}, "delta_d": 1, "description": "4d10 5s1 vs 4d9 5s2"},
+    {"Z": 57,  "symbol": "La", "source": {"n": 4, "l": 3, "d": 7}, "destination": {"n": 5, "l": 2, "d": 7}, "delta_d": 0, "description": "5d1 6s2 vs 4f1 6s2"},
+    {"Z": 58,  "symbol": "Ce", "source": {"n": 4, "l": 3, "d": 7}, "destination": {"n": 5, "l": 2, "d": 7}, "delta_d": 0, "description": "4f1 5d1 6s2 vs 4f2 6s2"},
+    {"Z": 64,  "symbol": "Gd", "source": {"n": 4, "l": 3, "d": 7}, "destination": {"n": 5, "l": 2, "d": 7}, "delta_d": 0, "description": "4f7 5d1 6s2 vs 4f8 6s2"},
+    {"Z": 78,  "symbol": "Pt", "source": {"n": 6, "l": 0, "d": 6}, "destination": {"n": 5, "l": 2, "d": 7}, "delta_d": 1, "description": "5d9 6s1 vs 5d8 6s2"},
+    {"Z": 79,  "symbol": "Au", "source": {"n": 6, "l": 0, "d": 6}, "destination": {"n": 5, "l": 2, "d": 7}, "delta_d": 1, "description": "5d10 6s1 vs 5d9 6s2"},
+    {"Z": 89,  "symbol": "Ac", "source": {"n": 5, "l": 3, "d": 8}, "destination": {"n": 6, "l": 2, "d": 8}, "delta_d": 0, "description": "6d1 7s2 vs 5f1 7s2"},
+    {"Z": 90,  "symbol": "Th", "source": {"n": 5, "l": 3, "d": 8}, "destination": {"n": 6, "l": 2, "d": 8}, "delta_d": 0, "description": "6d2 7s2 vs 5f2 7s2"},
+    {"Z": 91,  "symbol": "Pa", "source": {"n": 5, "l": 3, "d": 8}, "destination": {"n": 6, "l": 2, "d": 8}, "delta_d": 0, "description": "5f2 6d1 7s2 vs 5f3 7s2"},
+    {"Z": 92,  "symbol": "U",  "source": {"n": 5, "l": 3, "d": 8}, "destination": {"n": 6, "l": 2, "d": 8}, "delta_d": 0, "description": "5f3 6d1 7s2 vs 5f4 7s2"},
+    {"Z": 93,  "symbol": "Np", "source": {"n": 5, "l": 3, "d": 8}, "destination": {"n": 6, "l": 2, "d": 8}, "delta_d": 0, "description": "5f4 6d1 7s2 vs 5f5 7s2"},
+    {"Z": 96,  "symbol": "Cm", "source": {"n": 5, "l": 3, "d": 8}, "destination": {"n": 6, "l": 2, "d": 8}, "delta_d": 0, "description": "5f7 6d1 7s2 vs 5f8 7s2"},
+    {"Z": 103, "symbol": "Lr", "source": {"n": 6, "l": 2, "d": 8}, "destination": {"n": 7, "l": 1, "d": 8}, "delta_d": 0, "description": "5f14 7s2 7p1 vs 5f14 6d1 7s2 (Sato 2015)"}
+  ],
+
+  "distribution": {
+    "delta_d_0": 10,
+    "delta_d_1": 10,
+    "delta_d_ge_2": 0,
+    "total": 20
+  },
+
+  "null_test": {
+    "procedure": "Enumerate all ordered pairs (i, j) with i != j from the first 20 Madelung subshell positions; compute |d_i - d_j|; count fraction with |Δd| <= 1.",
+    "n_positions": 20,
+    "total_pairs": 380,
+    "zone_pairs": 140,
+    "baseline_zone_rate": 0.368,
+    "observed_zone_rate": 1.0,
+    "enrichment_factor": 2.71,
+    "binomial_p_value": 2.12e-9,
+    "note": "p-value computed via binomial tail for 20 successes out of 20 trials under p=0.368 baseline."
+  },
+
+  "counterexamples_in_zone_but_no_anomaly": [
+    {"Z": 22, "symbol": "Ti",     "zone_pair": "4s (d=4) ↔ 3d (d=5)", "configuration": "3d2 4s2",  "note": "follows Madelung"},
+    {"Z": 23, "symbol": "V",      "zone_pair": "4s ↔ 3d",              "configuration": "3d3 4s2",  "note": "follows Madelung"},
+    {"Z": 25, "symbol": "Mn",     "zone_pair": "4s ↔ 3d",              "configuration": "3d5 4s2",  "note": "follows Madelung"},
+    {"Z": 26, "symbol": "Fe",     "zone_pair": "4s ↔ 3d",              "configuration": "3d6 4s2",  "note": "follows Madelung"},
+    {"Z": 73, "symbol": "Ta",     "zone_pair": "6s ↔ 5d",              "configuration": "5d3 6s2",  "note": "follows Madelung"},
+    {"Z": 74, "symbol": "W",      "zone_pair": "6s ↔ 5d",              "configuration": "5d4 6s2",  "note": "follows Madelung"}
+  ],
+
+  "witnesses": [
+    {
+      "kind": "zone_coverage",
+      "description": "All 20 known Madelung anomalies satisfy |Δd| ≤ 1, with 10 at |Δd|=0 and 10 at |Δd|=1.",
+      "coverage": "20/20",
+      "verification": "validator independently computes d_src and d_dst from (n, l) and checks |Δd| for each row."
+    },
+    {
+      "kind": "null_significance",
+      "description": "Boundary zone contains 36.8% of random 2-subshell pairs; observing 20/20 anomalies in-zone has binomial p = 2.1e-9.",
+      "baseline": 0.368,
+      "observed": 1.0,
+      "p_value": 2.12e-9,
+      "verification": "binomial tail sum with p=baseline, n=20, k=20."
+    },
+    {
+      "kind": "necessity_not_sufficiency",
+      "description": "Zone is necessary but not sufficient: Ti, V, Mn, Fe, Co, Ni at d=4↔5 and Ta, W, Re, Os, Ir at d=6↔7 lie in zone but follow Madelung.",
+      "counterexample_count": 6,
+      "verification": "QA claims only boundary structure; specific stabilisation mechanism (exchange, relativistic) lives in semantic layer."
+    }
+  ],
+
+  "cross_references": {
+    "foundation_note": "docs/theory/QA_MADELUNG_ANOMALY_BOUNDARY.md",
+    "prior_cert": "docs/families/220_qa_madelung_d_ordering_cert.md (axiomatic backbone)",
+    "companion_nuclear": "docs/families/221_qa_nuclear_magic_spin_extension_cert.md (nuclear analogue)",
+    "qa_syntax_svp_semantics": "docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+    "related_certs": ["[217]", "[218]", "[219]", "[220]", "[221]"]
+  },
+
+  "fail_ledger": []
+}

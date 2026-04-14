@@ -1,0 +1,25 @@
+{
+  "certificate_id": "resonance_bin_correspondence_v1_fail_001",
+  "schema": "QA_RESONANCE_BIN_CORRESPONDENCE_CERT.v1",
+  "version": "1.0.0",
+  "timestamp": "2026-04-12T00:00:00Z",
+  "claim": "Bin/resonance correspondence asserted WITHOUT Hensel-lift narrowing witness — validator must reject.",
+  "moduli_tested": [9, 24],
+  "witnesses": {
+    "arnold_tongue": {
+      "description": "Same as pass fixture",
+      "params": {"delta": 0.05, "n_steps": 6000, "dt": 0.01, "seed": 0}
+    },
+    "integer_roundtrip": {
+      "description": "Same as pass fixture",
+      "n_samples": 500,
+      "moduli": [9, 24]
+    }
+  },
+  "hensel_reference": {},
+  "integer_only_invariant": true,
+  "source": {
+    "authors": ["Will Dale", "Claude"],
+    "date": "2026-04-12"
+  }
+}

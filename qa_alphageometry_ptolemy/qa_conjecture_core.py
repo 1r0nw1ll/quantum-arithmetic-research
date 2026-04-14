@@ -1,3 +1,4 @@
+# noqa: DECL-1 (infrastructure — data model / serialization for cert conjectures; not an empirical script)
 """
 qa_conjecture_core.py
 

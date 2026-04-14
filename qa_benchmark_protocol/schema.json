@@ -1,0 +1,118 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_BENCHMARK_PROTOCOL.v1",
+  "type": "object",
+  "required": [
+    "protocol_version",
+    "benchmark_id",
+    "qa_method",
+    "baselines",
+    "datasets",
+    "parity_contract",
+    "calibration_provenance",
+    "framework_inheritance",
+    "metrics"
+  ],
+  "properties": {
+    "protocol_version": {
+      "type": "string",
+      "minLength": 1,
+      "const": "QA_BENCHMARK_PROTOCOL.v1"
+    },
+    "benchmark_id": { "type": "string", "minLength": 1 },
+    "qa_method": {
+      "type": "object",
+      "required": ["name", "description", "observer_projection"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "description": { "type": "string", "minLength": 1 },
+        "observer_projection": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "baselines": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "implementation_ref"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "implementation_ref": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "datasets": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["name", "source"],
+        "properties": {
+          "name": { "type": "string", "minLength": 1 },
+          "source": { "type": "string", "minLength": 1 }
+        },
+        "additionalProperties": false
+      }
+    },
+    "parity_contract": {
+      "type": "object",
+      "required": [
+        "same_seed_all_methods",
+        "same_data_split",
+        "same_preprocessing"
+      ],
+      "properties": {
+        "same_seed_all_methods": { "type": "boolean" },
+        "same_data_split": { "type": "boolean" },
+        "same_preprocessing": { "type": "boolean" }
+      },
+      "additionalProperties": false
+    },
+    "calibration_provenance": {
+      "type": "object",
+      "required": ["learned_on", "procedure", "domain_of_origin"],
+      "properties": {
+        "learned_on": { "type": "string", "minLength": 1 },
+        "procedure": { "type": "string", "minLength": 1 },
+        "domain_of_origin": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "framework_inheritance": {
+      "type": "object",
+      "required": ["mode"],
+      "properties": {
+        "mode": {
+          "type": "string",
+          "minLength": 1,
+          "enum": ["inherit", "ported", "novel"]
+        },
+        "prior_cert": { "type": "string", "minLength": 1 },
+        "diffs": {
+          "type": "array",
+          "items": { "type": "string" }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "mode": { "enum": ["inherit", "ported"] }
+            },
+            "required": ["mode"]
+          },
+          "then": { "required": ["prior_cert"] }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "metrics": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "type": "string", "minLength": 1 }
+    }
+  },
+  "additionalProperties": false
+}

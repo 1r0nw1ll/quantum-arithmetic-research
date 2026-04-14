@@ -1,0 +1,39 @@
+{
+  "schema_version": "QA_PUDELKO_MODULAR_PERIODICITY_CERT.v1",
+  "result": "PASS",
+  "status": "PARTIALLY_VERIFIED",
+  "orbit_family_counts": [
+    {"modulus": 3, "families": 3},
+    {"modulus": 9, "families": 9},
+    {"modulus": 27, "families": 27}
+  ],
+  "fractal_self_similarity": {
+    "pattern": "3^k families for mod-3^k",
+    "satellite_invariant": true,
+    "singularity_invariant": true,
+    "cosmos_scales": true
+  },
+  "weight_preservation": {
+    "non_singularity_weight_preserved": true
+  },
+  "verification_status": {
+    "V1": "VERIFIED",
+    "V2": "NEEDS_REFINEMENT",
+    "V3": "VERIFIED",
+    "V4": "VERIFIED",
+    "V5": "OPEN",
+    "V6": "VERIFIED",
+    "V7": "VERIFIED",
+    "V8": "VERIFIED"
+  },
+  "source_attribution": "Pudelko arXiv 2510.24882 plus local qa_hensel_selforg_experiment.py, qa_hensel_orbit_cycling_experiment.py, and qa_bateson_coupling_experiment.py results documented 2026-04-08.",
+  "witnesses": [
+    {"kind": "orbit_count", "claim": "m=3,9,27 family counts are 3,9,27"},
+    {"kind": "self_similarity", "claim": "satellite and singularity families remain invariant while cosmos scales"},
+    {"kind": "weight", "claim": "non-singularity weight is preserved across the tower"}
+  ],
+  "fail_ledger": [
+    {"claim": "Legendre bridge", "status": "needs refinement for A1 step convention"},
+    {"claim": "mirror symmetry", "status": "open"}
+  ]
+}

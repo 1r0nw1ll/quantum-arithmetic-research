@@ -39,55 +39,31 @@ import json
 import sys
 from pathlib import Path
 
+# Canonical element computation lives in qa_alphageometry_ptolemy/qa_elements.py.
+# All C/F/G derivation and structural invariant assertions (chromogeometry,
+# F identity, d>e, F>0) are enforced there. Cert-local reimplementation is
+# forbidden by ELEM-2; use qa_elements.qa_elements() exclusively.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from qa_elements import qa_elements
+
 SCHEMA_VERSION = "QA_CIRCLE_IMPOSSIBILITY_CERT.v1"
 
 
-# -----------------------------------------------------------------------------
-# QA primitives (integer-only, axiom-compliant)
-# -----------------------------------------------------------------------------
-
-def qa_raw_derived(b, e):
-    """Compute RAW derived coordinates d, a from (b, e).
-
-    Elements are computed from raw (un-reduced) coordinates.
-    d = b + e (A2), a = b + 2e (A2). No modular reduction.
-    """
-    d = b + e
-    a = b + 2 * e
-    return d, a
-
-
-def compute_C(d, e):
-    """C = 2de. Always >= 4 for d >= 2, e >= 1."""
-    return 2 * d * e
-
-
-def compute_F_de(d, e):
-    """F = d*d - e*e = (d-e)(d+e). Always > 0 when d > e."""
-    return d * d - e * e
-
-
-def compute_F_ba(b, a):
-    """F = b*a. Equivalent to d*d - e*e for raw d,e."""
-    return b * a
-
-
 def verify_all_C_ge_4(m):
-    """Exhaustively verify C >= 4 for all states (b,e) in {1..m} x {1..m}."""
+    """Exhaustively verify C >= 4 for all states (b,e) in {1..m} x {1..m}.
+
+    Element computation, F identity, d>e, and chromogeometry are asserted
+    inside qa_elements(); this function only checks the C >= 4 bound and
+    tracks the minimizer.
+    """
     min_C = None
     min_states = []
     all_ge_4 = True
 
     for b in range(1, m + 1):
         for e in range(1, m + 1):
-            d, a = qa_raw_derived(b, e)
-            C = compute_C(d, e)
-            F_de = compute_F_de(d, e)
-            F_ba = compute_F_ba(b, a)
-            # Verify F identity: d*d - e*e == b*a
-            assert F_de == F_ba, f"F identity broken at ({b},{e}): {F_de} != {F_ba}"
-            # Verify d > e (no degenerate conics)
-            assert d > e, f"d not > e at ({b},{e}): d={d}, e={e}"
+            elem = qa_elements(b, e)
+            C = elem.C
             if C < 4:
                 all_ge_4 = False
             if min_C is None or C < min_C:
@@ -191,15 +167,13 @@ def _run_checks(fixture):
                 if d_claimed is not None and d_actual != d_claimed:
                     results["CI_WITNESS"] = False
                     break
-                # Verify C = 2*d*e
-                if d_claimed is not None and e_w is not None and C_claimed is not None:
-                    if compute_C(d_claimed, e_w) != C_claimed:
+                # Verify C and F via canonical element computation
+                if C_claimed is not None or F_claimed is not None:
+                    elem = qa_elements(b_val, e_val)
+                    if C_claimed is not None and elem.C != C_claimed:
                         results["CI_WITNESS"] = False
                         break
-                # Verify F = b*a = d*d - e*e
-                if F_claimed is not None:
-                    a_actual = b_val + 2 * e_val
-                    if compute_F_ba(b_val, a_actual) != F_claimed:
+                    if F_claimed is not None and elem.F != F_claimed:
                         results["CI_WITNESS"] = False
                         break
 

@@ -19,6 +19,21 @@ Based on QA_OS_SPEC.v1 security layer.
 
 from __future__ import annotations
 
+# QA_COMPLIANCE declaration (DECL-1)
+# qa_guardrail is a RUNTIME QA LAYER: it gates tool-use decisions against the
+# QA failure algebra. Unlike empirical experiment scripts, the "observer" here
+# is the policy evaluator and the "state alphabet" is the set of QA failure
+# types used to classify denied moves. This block declares both.
+QA_COMPLIANCE = {
+    "observer": "POLICY_GUARD_EVAL",
+    "state_alphabet": "QA failure types: ALLOW, DENY, INSTRUCTION_CONTENT_FAIL, "
+                      "GENERATOR_UNAUTHORIZED, CARRIER_VIOLATION, "
+                      "PROVENANCE_FAIL, CAPABILITY_FAIL",
+    "rationale": "Guardrail is a runtime gate using QA failure algebra per "
+                 "QA_OS_SPEC.v1; it emits fail_records with typed obstructions "
+                 "rather than doing integer arithmetic on (b,e) state.",
+}
+
 import json
 import os
 import sys

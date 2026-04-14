@@ -1,0 +1,29 @@
+{
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "benchmark_id": "example_invalid_calibration",
+  "qa_method": {
+    "name": "qa_detect.QADetector",
+    "description": "PCA-1 induced ordering.",
+    "observer_projection": "quantile binning -> (b,e) in {1..24}^2"
+  },
+  "baselines": [
+    {"name": "IsolationForest", "implementation_ref": "sklearn.ensemble.IsolationForest"}
+  ],
+  "datasets": [
+    {"name": "satellite", "source": "pyod"}
+  ],
+  "parity_contract": {
+    "same_seed_all_methods": true,
+    "same_data_split": true,
+    "same_preprocessing": true
+  },
+  "calibration_provenance": {
+    "learned_on": "",
+    "procedure": "",
+    "domain_of_origin": ""
+  },
+  "framework_inheritance": {
+    "mode": "novel"
+  },
+  "metrics": ["AUROC"]
+}

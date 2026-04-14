@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Hyper-Catalan Diagonal Correspondence Cert family [231]: packages the pre-verified Wildberger-Rubine hyper-Catalan mapping with b := V_m - 1 and e := F_m. The derived QA coordinate d=b+e equals E_m exactly; Euler V_m - E_m + F_m = 1 follows; single-type m_k=n lies on the sibling diagonal b=(k-1)e+1; Catalan/Fuss single-type values match OEIS A000108, A001764, A002293, and A002294; and single-type cases k in [2,7], n in [0,9] are disjoint from D_1. Source: Wildberger and Rubine, A Hyper-Catalan Series Solution to Polynomial Equations, and the Geode, Amer. Math. Monthly 132(5):383-402, 2025; Will Dale + Claude 2026-04-13. Checks HCD_1+EULER/OEIS/FUSS/SINGLE_DIAGONAL/D1_DISJOINT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

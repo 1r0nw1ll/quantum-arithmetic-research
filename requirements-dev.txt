@@ -3,3 +3,4 @@ jsonschema>=4.0
 numpy>=1.26
 networkx>=3.0
 scikit-learn>=1.4
+sympy>=1.12

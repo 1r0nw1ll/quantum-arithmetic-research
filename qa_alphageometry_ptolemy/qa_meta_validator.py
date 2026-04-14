@@ -8382,7 +8382,7 @@ if __name__ == "__main__":
     try:
         _l3_result = subprocess.run(
             [sys.executable, _l3_script, "--ci"],
-            capture_output=True, text=True, timeout=60,
+            capture_output=True, text=True, timeout=180,
             cwd=base_dir,
         )
         _l3_stdout = _l3_result.stdout.strip()

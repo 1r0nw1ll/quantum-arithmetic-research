@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1",
+  "family": "qa_formal_conjecture_resolution_cert",
+  "case": "mnist_rot_invented_featurizer_vs_sota",
+  "conjecture_id": "QA-HIST-2026-04-14A",
+  "source_claim": "QA mod-9 featurizer applied to MNIST-Rot rotation-invariance task should approach SOTA (Cohen-Welling 2016 G-CNN 97.9%); implementation dated 2026-04-14.",
+  "qa_translation": "Encode MNIST-Rot images via pixel-intensity + gradient histogram on mod-9 residue bins; classify with generator partition at n=9; compare to Cohen-Welling 97.9%, Bruna-Mallat 97.4%, Weiler-Cesa 98.9%.",
+  "candidate_kind": "bridge",
+  "formal_backend": "qa_exhaustive",
+  "proof_status": "generator_insufficient",
+  "failure_mode": "Invented pixel-intensity/gradient histogram featurizer from scratch at m=9 without reading SOTA primary sources first. Achieved 22-25% vs SOTA 97-99% — ~20x accuracy gap. Violation of 'map best-performing to QA' rule: recognized at plan-time, violated at implementation-time. Failure is generator_insufficient: the invented featurizer does not span the rotation-equivariant function class that SOTA architectures access via group convolution (Cohen-Welling 2016 C_n-convolution + coset pooling). Subsequent correction landed as cert [247] QA_G_EQUIVARIANT_CNN_STRUCTURAL_CERT.v1 built on the Cohen-Welling 2016 primary source with phi bijection + additive preservation, which is structurally sound.",
+  "generator_set": ["pixel-intensity histogram bins", "gradient histogram", "mod-9 residue encoding"],
+  "nt_compliance": true,
+  "witness_path": "symbolic_inline",
+  "verdict": "CONTRADICTS",
+  "source_attribution": "Will Dale + Claude 2026-04-14; triggering incident for QA coding guardrail architecture; OB ec46f601-bcc4-49df-bbd7-0485edc40471; primary source arXiv:1602.07576 (Cohen and Welling 2016)"
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1",
+  "family": "qa_formal_conjecture_resolution_cert",
+  "case": "wildberger_e8_excluded_claim_retrieval_gap",
+  "conjecture_id": "QA-HIST-2026-04-14B",
+  "primary_source": "(Wildberger, 2003) A Combinatorial Construction for Simply-Laced Lie Algebras, Advances in Applied Mathematics 30:385-396; (Wildberger, 2020) The Mutation Game, Coxeter-Dynkin Graphs, and Generalized Root Systems, Algebra Colloquium 27.",
+  "source_claim": "Initial Tier-1 triage reading (pre-correction) claimed E_8 is excluded from Wildberger's integer simply-laced Lie algebra constructions per Theorem 2.1 of (Wildberger, 2003), which requires a two-neighbourly maximal X-heap and lists only A_n, D_n, E_6, E_7.",
+  "qa_translation": "Test whether the (Wildberger, 2003) minuscule-poset Lie algebra construction extends to E_8 via QA integer populations on a Coxeter-Dynkin graph.",
+  "candidate_kind": "bridge",
+  "formal_backend": "qa_exhaustive",
+  "proof_status": "formal_gap",
+  "failure_mode": "Initial theory doc docs/theory/QA_WILDBERGER_E8_RECONCILIATION.md (pre-correction) concluded E_8 was excluded from Wildberger integer constructions. Claim stood until 2026-04-14 post-commit primary-source find: the (Wildberger, 2020) Mutation Game paper (Algebra Colloquium 27, 79pp) extends the 2003 framework via mutations on bidirected multigraphs and INCLUDES E_8 per Theorem 0.1/0.3 and the 120-element R+(E_8,7) poset of integer-coefficient vectors. Initial reading missed the later paper — a retrieval gap, not a mathematical obstruction. Correction landed as cert [244] QA_MUTATION_GAME_ROOT_LATTICE_CERT.v1 using the 2020 construction with 240-root orbit, Cartan determinant 1, and Weyl braid witnesses.",
+  "generator_set": ["(Wildberger, 2003) simply-laced construction", "minuscule-poset Lie algebra mapping", "two-neighbourly X-heap classification"],
+  "nt_compliance": true,
+  "witness_path": "symbolic_inline",
+  "verdict": "PARTIAL",
+  "source_attribution": "Will Dale + Claude 2026-04-14; corrected by discovery of the (Wildberger, 2020) Mutation Game paper; superseded by cert [244] which uses the 2020 construction"
+}

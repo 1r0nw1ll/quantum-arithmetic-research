@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1",
+  "family": "qa_formal_conjecture_resolution_cert",
+  "case": "bateson_learning_levels_on_mitre_attck_techniques",
+  "conjecture_id": "QA-HIST-2026-04-05A",
+  "primary_source": "Bateson, Steps to an Ecology of Mind (University of Chicago Press, 1972), ISBN: 978-0226039053; MITRE ATT&CK Enterprise v15 (2024), https://attack.mitre.org.",
+  "source_claim": "Cert [191] Bateson Learning Levels filtration applied to 691 MITRE ATT&CK techniques via mod-9 encoding should show H1 (dynamics-invariance) coherent with H2 (orbit-family invariance); pre-registered seed + permutation test.",
+  "qa_translation": "Apply QA orbit-family-modulus filtration (singularity subset family subset modulus subset ambient) to ATT&CK technique indices under mod-9 encoding; test H2 orbit-family invariance by permutation and H1 dynamics preservation by w-statistic with direction declared in pre-registration.",
+  "candidate_kind": "bridge",
+  "formal_backend": "qa_exhaustive",
+  "proof_status": "formal_gap",
+  "failure_mode": "H2 orbit-family invariance p approx 0 — filtration structure confirmed. H1 dynamics w=0.528 with permutation p=0.001 but FLIPPED DIRECTION from pre-registration. NULL verdict declared per pre-reg. Collision artifact suspected in the mod-9 encoding of 691 technique IDs (structural coincidence between technique numbering and QA orbit classes). Hard rule recorded: do not rerun same configuration. Next attempt should use an encoding independent of the MITRE technique ID numbering (e.g. tactic embedding + mod-9 of a different hash).",
+  "generator_set": ["[191] Bateson Learning Levels filtration", "mod-9 encoding of technique IDs", "orbit-family-modulus invariant set", "permutation null test"],
+  "nt_compliance": true,
+  "witness_path": "symbolic_inline",
+  "verdict": "PARTIAL",
+  "source_attribution": "Will Dale + Claude 2026-04-05; see OB project_bateson_attck_null_with_flip and MEMORY.md hard rule 'never declare QA dead on a null — implementation bug first'"
+}

@@ -1,0 +1,18 @@
+{
+  "schema_version": "QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1",
+  "family": "qa_formal_conjecture_resolution_cert",
+  "case": "bearden_phase_conjugate_text_domain_attempt_3",
+  "conjecture_id": "QA-HIST-2026-04-05B",
+  "primary_source": "Bearden, Energy from the Vacuum: Concepts and Principles (Cheniere Press, 2002), ISBN: 978-0972514620; cert [155] QA_BEARDEN_PHASE_CONJUGATE_CERT.v1.",
+  "source_claim": "Cert [155] Bearden phase-conjugate formalism applied to text domain via character-entropy observer projection should yield sign-consistent label-entropy negative correlation with pre-registered magnitude threshold; attempt-3 run 2026-04-05.",
+  "qa_translation": "Map text to QA state via char-entropy + mod-24 observer projection (raw ord%24, window=7, single-stream). Test attempt-3 char-entropy sign consistency against deepset and xtram1 correlations with permutation magnitude null.",
+  "candidate_kind": "bridge",
+  "formal_backend": "qa_exhaustive",
+  "proof_status": "generator_insufficient",
+  "failure_mode": "Attempt-3 achieved sign-consistent negative correlation (deepset r=-0.087, xtram1 r=-0.076) — label-entropy sign inversion mechanism STRUCTURALLY CONFIRMED. But formal NULL on magnitude per pre-reg threshold. Architectural diagnosis (2026-04-05): text weakness is FRAMEWORK-LIMITED not domain-limited — attempt-3 observer projection used raw ord%24 + window=7 + same-stream global, whereas the finance framework that achieves significant magnitude uses k-means k=6 on 6D standardized features + window=63 + separate global feature stream. generator_insufficient classification: the attempt-3 observer projection does not span the feature class required to surface Bearden-style phase-conjugate coupling at statistical magnitude. [155] not amended; next experiment is finance-style text port.",
+  "generator_set": ["[155] Bearden phase conjugate", "char-entropy observer projection (raw ord%24)", "window=7 single-stream", "deepset + xtram1 correlation", "permutation magnitude null"],
+  "nt_compliance": true,
+  "witness_path": "symbolic_inline",
+  "verdict": "PARTIAL",
+  "source_attribution": "Will Dale + Claude 2026-04-05; see MEMORY.md project_bearden_injection_domain_pilot and feedback_qa_never_dead_implementation_first"
+}

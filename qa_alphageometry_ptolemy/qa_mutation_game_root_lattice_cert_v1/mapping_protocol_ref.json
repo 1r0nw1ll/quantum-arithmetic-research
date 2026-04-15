@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Mutation Game Root Lattice Cert family [244]: packages Wildberger's integer-only Mutation Game on the E_8 root lattice, with E_8 Dynkin adjacency, Cartan determinant 1, 240-root orbit closure, sign split 120+120, and Weyl involution/braid checks. Source: Wildberger, The Mutation Game, Coxeter–Dynkin Graphs, and Generalized Root Systems, Algebra Colloquium 27 (2020), pp. 10-11; theory note docs/theory/QA_MUTATION_GAME_ROOT_LATTICE.md; checks MGR_1+CARTAN_DEFN/BFS_240/ROOT_NORM/SIGN_SPLIT/INVOLUTION_BRAID/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

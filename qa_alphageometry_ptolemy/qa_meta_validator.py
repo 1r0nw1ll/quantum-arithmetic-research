@@ -6847,6 +6847,28 @@ def _validate_neuberg_cubic_f23_cert_family(base_dir):
     return None
 
 
+def _validate_mutation_game_root_lattice_cert_family(base_dir):
+    """QA Mutation Game Root Lattice Cert family [244] - Wildberger integer Mutation Game on the E_8 root lattice: Cartan determinant 1, BFS orbit closure of size 240, sign split 120+120, every root has norm 2 under G=2I-A, and Weyl involution/braid relations hold on integer populations. Uses only tuple/set BFS, exact Cartan determinant, and integer quadratic form checks. Source: Wildberger 2020 pp.10-11; Will Dale + Claude 2026-04-14. Checks MGR_1+CARTAN/BFS/ROOT_NORM/SIGN_SPLIT/INVOLUTION_BRAID/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_mutation_game_root_lattice_cert_v1")
+    validator = os.path.join(fam_dir, "qa_mutation_game_root_lattice_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_mutation_game_root_lattice_cert_v1/qa_mutation_game_root_lattice_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_mutation_game_root_lattice_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_mutation_game_root_lattice_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_mutation_game_root_lattice_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_signal_generator_inference_cert_family(base_dir: str) -> Optional[str]:
     """QA Signal Generator Inference Cert family [209] — for any m-valued time series, e_t = ((b_{t+1} - b_t - 1) % m) + 1 is the unique A1-compliant generator. The signal IS the orbit; the generator IS the dynamics. b (amplitude state) and e (transition generator) are role-distinct per [208]. Cross-series generator synchrony measures coupling per [207]. Supersedes hardcoded CMAP/MICROSTATE_STATES lookups. EEG chb01: DR2=+0.157 p=0.0003 beyond delta; DR2=+0.085 p=0.024 beyond Observer 3. Source: Will Dale + Claude 2026-04-08. Checks SGI_1+CLOSURE/UNIQUE/ROLE/SYNC/EMPIRICAL/SUPERSEDE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -7737,12 +7759,12 @@ FAMILY_SWEEPS = [
      "qa_chromogeometry_pythagorean_identity_cert_v1", True),
     (223, "QA Experiment Protocol family",
      _validate_experiment_protocol_family_if_present,
-     "Enforceable design contract for empirical QA studies. Validates QA_EXPERIMENT_PROTOCOL.v1 JSON against five gates: schema validity, null-independence declared (addresses 2026-04-01 circularity rule), pre-registration complete (seed+date+n_trials), decision-rules complete (accept+reject+on_unsupportive enum), observer-projection declared. Harvested from MEMORY.md Hard Rules (Adversarial Testing 2026-04-01, No Stochastic 2026-04-02, QA Always Applies 2026-04-08, Primary Sources 2026-04-10). Linter gate EXP-1 requires EXPERIMENT_PROTOCOL_REF or sibling experiment_protocol.json on any script with statistical-test call sites. Authority: EXPERIMENT_AXIOMS_BLOCK.md Part A (E1-E6) + Part C (N1-N3). Source: Will Dale + Claude 2026-04-13. schema + validator + fixtures; self-test ok",
+     "Enforceable design contract for empirical QA studies. Validates QA_EXPERIMENT_PROTOCOL.v1 JSON against nine gates: schema validity, null design (generating process + held-fixed + permuted + independence), pre-registration, decision rules, observer projection, real-data status, source-mapping cross-reference, ablation declaration, reproducibility manifest. Harvested from MEMORY.md Hard Rules (Adversarial Testing 2026-04-01, No Stochastic 2026-04-02, QA Always Applies 2026-04-08, Primary Sources 2026-04-10) and hardened after 2026-04-13 design-gate audit. Linter gate EXP-1 requires EXPERIMENT_PROTOCOL_REF or sibling experiment_protocol.json on any script with statistical-test call sites. Authority: EXPERIMENT_AXIOMS_BLOCK.md Part A (E1-E6) + Part C (N1-N3). Source: Will Dale + Claude + Codex 2026-04-14. schema + validator + fixtures; self-test ok",
      "223_qa_experiment_protocol",
      "../qa_experiment_protocol", True),
     (224, "QA Benchmark Protocol family",
      _validate_benchmark_protocol_family_if_present,
-     "Enforceable design contract for benchmarks comparing a QA method against baseline methods. Validates QA_BENCHMARK_PROTOCOL.v1 JSON against five gates: schema validity, baseline parity (same seed/split/preprocessing, non-empty baselines), calibration provenance (procedure+learned_on+domain_of_origin — addresses 2026-04-13 cmap-tuned-for-finance silent failure), framework inheritance (inherit/ported/novel; prior_cert required if not novel — addresses 2026-04-05 Bearden observer-framework port lesson), metrics declared. Linter gate BENCH-1 requires BENCHMARK_PROTOCOL_REF or sibling benchmark_protocol.json on scripts importing sklearn baselines alongside metric calls or declaring baselines/methods structures. Authority: EXPERIMENT_AXIOMS_BLOCK.md Part B (B1-B4). Source: Will Dale + Claude 2026-04-13. schema + validator + fixtures; self-test ok",
+     "Enforceable design contract for benchmarks comparing a QA method against baseline methods. Validates QA_BENCHMARK_PROTOCOL.v1 JSON against nine gates: schema validity, baseline parity, calibration provenance, framework inheritance, metrics, source-mapping cross-reference, SOTA/null-result baseline, ablation declaration, reproducibility manifest. Addresses 2026-04-13 cmap-tuned-for-finance silent failure, 2026-04-05 Bearden observer-framework port lesson, and benchmark overclaim risk where a null result is accepted without an explicit threshold or reason. Linter gate BENCH-1 requires BENCHMARK_PROTOCOL_REF or sibling benchmark_protocol.json on scripts importing sklearn baselines alongside metric calls or declaring baselines/methods structures. Authority: EXPERIMENT_AXIOMS_BLOCK.md Part B (B1-B4). Source: Will Dale + Claude + Codex 2026-04-14. schema + validator + fixtures; self-test ok",
      "224_qa_benchmark_protocol",
      "../qa_benchmark_protocol", True),
     (235, "QA Super Catalan Diagonal Cert family",
@@ -7780,6 +7802,11 @@ FAMILY_SWEEPS = [
      "Wildberger Neuberg finite-field bridge over F_23: E:y^2=x^3+x+1 has 27 affine points plus infinity; tangent-conic witnesses enumerate F_23 point sets and are identical or disjoint; spread witness is integer-polynomial and QA-compatible for char not 2 or 3. Checks NCF23_1+POINT_COUNT/TANGENT_CONIC_DICHOTOMY/SPREAD_POLYNOMIAL/QA_COMPAT/SRC/F; 1 PASS + 1 FAIL; self-test ok",
      "242_qa_neuberg_cubic_f23_cert",
      "qa_neuberg_cubic_f23_cert_v1", True),
+    (244, "QA Mutation Game Root Lattice Cert family",
+     _validate_mutation_game_root_lattice_cert_family,
+     "Wildberger integer Mutation Game on the E_8 root lattice: Cartan determinant 1, BFS orbit closure of size 240, sign split 120+120, every root has norm 2 under G=2I-A, and Weyl involution/braid relations hold on integer populations. Checks MGR_1+CARTAN/BFS/ROOT_NORM/SIGN_SPLIT/INVOLUTION_BRAID/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "244_qa_mutation_game_root_lattice_cert",
+     "qa_mutation_game_root_lattice_cert_v1", True),
     (245, "QA SL3 Hexagonal Ring Identity Cert family",
      _validate_sl3_hexagonal_ring_identity_cert_family,
      "Wildberger sl3 diamond follow-up: ring(a,b)=dim pi[a,b]-dim pi[a-1,b-1]=T_{d+1}+a*b under QA coordinates; verifies symbolic expansion, 196/196 grid entries, QA coordinate form, and known multiplicities. Checks SHR_1+ALGEBRAIC_EXPANSION/EXHAUSTIVE/QA_COORD_FORM/KNOWN_MULTIPLICITIES/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",

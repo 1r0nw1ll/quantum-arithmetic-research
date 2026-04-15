@@ -1,0 +1,49 @@
+{
+  "protocol_version": "QA_EXPERIMENT_PROTOCOL.v1",
+  "experiment_id": "qa_experiment_protocol_canonical_v1",
+  "hypothesis": "A canonical placeholder hypothesis used by ref-form experiments that share this design.",
+  "null_model": {
+    "description": "Row-permuted surrogate under the same observer projection.",
+    "generating_process": "Permute response rows after the observer projection is fixed.",
+    "held_fixed": ["observer projection", "state alphabet", "feature matrix"],
+    "permuted": ["response row assignment"],
+    "independence_argument": "Permutation acts on the response axis only; the (b,e) mapping of the design matrix is preserved, so the null inherits no structural coupling from the clustered positive arm.",
+    "surrogate_types": ["row_permuted"]
+  },
+  "pre_registration": {
+    "seed": 42,
+    "date_utc": "2026-04-13T00:00:00Z",
+    "n_trials": 100
+  },
+  "decision_rules": {
+    "accept_criterion": "Observed test statistic exceeds 99th percentile of the null distribution across >=80% of trials.",
+    "reject_criterion": "Observed test statistic within 95th percentile of null in a majority of trials.",
+    "on_unsupportive": "investigate_observer"
+  },
+  "observer_projection": {
+    "description": "Canonical QA primitives (b,e) with derived (d=b+e, a=b+2e).",
+    "state_alphabet": "(b,e) in {1..m}^2",
+    "source_domain": "integer_lattice"
+  },
+  "real_data_status": "pending",
+  "reproduces": "none",
+  "primary_sources": [],
+  "source_mapping": {
+    "theory_doc": "../EXPERIMENT_AXIOMS_BLOCK.md",
+    "primary_source": "Part C — Null-Model Axioms",
+    "mapping_rationale": "The canonical protocol is a shared design contract for null independence, pre-registration, decision rules, and observer projection."
+  },
+  "ablation": {
+    "callable": "run_ablation",
+    "destroyed_structure": "randomize the QA observer labels while preserving the input data and decision rule",
+    "expected_direction": "claim metric should drop toward the null distribution"
+  },
+  "reproducibility": {
+    "seed": 42,
+    "data_sha256": "pending",
+    "package_versions": {
+      "python": "declared_at_runtime"
+    },
+    "results_ledger": "results/qa_experiment_runs.jsonl"
+  }
+}

@@ -20,6 +20,7 @@ from __future__ import annotations
 import argparse
 import json
 import os
+import re
 from datetime import datetime
 from dataclasses import dataclass
 from enum import Enum
@@ -71,6 +72,10 @@ def _is_nonempty_str(x: Any) -> bool:
     return isinstance(x, str) and bool(x.strip())
 
 
+def _nonempty_str_list(x: Any) -> bool:
+    return isinstance(x, list) and bool(x) and all(_is_nonempty_str(v) for v in x)
+
+
 def _is_iso_datetime(value: Any) -> bool:
     if not _is_nonempty_str(value):
         return False
@@ -95,6 +100,74 @@ def _real_data_status_ok(value: Any, base_dir: Optional[str]) -> bool:
     return os.path.exists(path)
 
 
+def _resolve_path(value: str, base_dir: Optional[str]) -> str:
+    path = os.path.expanduser(value)
+    if not os.path.isabs(path):
+        path = os.path.join(base_dir or os.getcwd(), path)
+    return os.path.abspath(path)
+
+
+def _source_mapping_ok(value: Any, base_dir: Optional[str]) -> tuple[bool, Dict[str, Any]]:
+    if not isinstance(value, dict):
+        return False, {"reason": "source_mapping must be an object"}
+
+    theory_doc = value.get("theory_doc")
+    primary_source = value.get("primary_source")
+    rationale = value.get("mapping_rationale")
+    fields_ok = all(_is_nonempty_str(v) for v in (theory_doc, primary_source, rationale))
+    if not fields_ok:
+        return False, {"reason": "theory_doc, primary_source, and mapping_rationale must be non-empty"}
+
+    theory_path = _resolve_path(theory_doc, base_dir)
+    if not os.path.exists(theory_path):
+        return False, {"reason": "theory_doc does not exist", "theory_doc": theory_path}
+
+    with open(theory_path, "r", encoding="utf-8", errors="replace") as handle:
+        haystack = handle.read()
+    if primary_source not in haystack:
+        return False, {
+            "reason": "primary_source is not present in theory_doc",
+            "theory_doc": theory_path,
+            "primary_source": primary_source,
+        }
+
+    return True, {"theory_doc": theory_path, "primary_source": primary_source}
+
+
+def _ablation_ok(value: Any) -> tuple[bool, Dict[str, Any]]:
+    if not isinstance(value, dict):
+        return False, {"reason": "ablation must be an object"}
+    callable_ok = _is_nonempty_str(value.get("callable"))
+    destroyed_ok = _is_nonempty_str(value.get("destroyed_structure"))
+    direction_ok = _is_nonempty_str(value.get("expected_direction"))
+    return (
+        callable_ok and destroyed_ok and direction_ok,
+        {"callable": callable_ok, "destroyed_structure": destroyed_ok, "expected_direction": direction_ok},
+    )
+
+
+def _reproducibility_ok(value: Any) -> tuple[bool, Dict[str, Any]]:
+    if not isinstance(value, dict):
+        return False, {"reason": "reproducibility must be an object"}
+    seed_ok = isinstance(value.get("seed"), int) and value.get("seed") >= 0
+    data_sha = value.get("data_sha256")
+    data_ok = (
+        data_sha in _REAL_DATA_SENTINELS
+        or (_is_nonempty_str(data_sha) and bool(re.fullmatch(r"[0-9a-f]{64}", data_sha)))
+    )
+    packages = value.get("package_versions")
+    packages_ok = (
+        isinstance(packages, dict)
+        and bool(packages)
+        and all(_is_nonempty_str(k) and _is_nonempty_str(v) for k, v in packages.items())
+    )
+    ledger_ok = _is_nonempty_str(value.get("results_ledger"))
+    return (
+        seed_ok and data_ok and packages_ok and ledger_ok,
+        {"seed": seed_ok, "data_sha256": data_ok, "package_versions": packages_ok, "results_ledger": ledger_ok},
+    )
+
+
 def validate_experiment(obj: Dict[str, Any], *, base_dir: Optional[str] = None) -> List[GateResult]:
     results: List[GateResult] = []
 
@@ -108,16 +181,27 @@ def validate_experiment(obj: Dict[str, Any], *, base_dir: Optional[str] = None) 
                                   f"Schema validation failed: {e}"))
         return results
 
-    # Gate 2 — Null Independence Defined
+    # Gate 2 — Null Design Defined
     null = obj.get("null_model", {})
-    indep = null.get("independence_argument") if isinstance(null, dict) else None
-    if _is_nonempty_str(indep):
-        results.append(GateResult("gate_2_null_independence", GateStatus.PASS,
-                                  "Null independence argument present"))
+    null_ok = (
+        isinstance(null, dict)
+        and _is_nonempty_str(null.get("generating_process"))
+        and _nonempty_str_list(null.get("held_fixed"))
+        and _nonempty_str_list(null.get("permuted"))
+        and _is_nonempty_str(null.get("independence_argument"))
+    )
+    if null_ok:
+        results.append(GateResult("gate_2_null_design", GateStatus.PASS,
+                                  "Null generating process, held-fixed set, permuted set, and independence argument present"))
     else:
-        results.append(GateResult("gate_2_null_independence", GateStatus.FAIL,
-                                  "Null independence_argument missing/empty — "
-                                  "see EXPERIMENT_AXIOMS_BLOCK.md N1"))
+        results.append(GateResult("gate_2_null_design", GateStatus.FAIL,
+                                  "Null design incomplete — declare generating_process, held_fixed, permuted, and independence_argument",
+                                  {
+                                      "generating_process": isinstance(null, dict) and _is_nonempty_str(null.get("generating_process")),
+                                      "held_fixed": isinstance(null, dict) and _nonempty_str_list(null.get("held_fixed")),
+                                      "permuted": isinstance(null, dict) and _nonempty_str_list(null.get("permuted")),
+                                      "independence_argument": isinstance(null, dict) and _is_nonempty_str(null.get("independence_argument")),
+                                  }))
 
     # Gate 3 — Pre-Registration Complete
     pre = obj.get("pre_registration", {})
@@ -176,6 +260,37 @@ def validate_experiment(obj: Dict[str, Any], *, base_dir: Optional[str] = None) 
                                   "or a path that exists",
                                   {"real_data_status": real_data_status,
                                    "base_dir": base_dir or os.getcwd()}))
+
+    # Gate 7 — Source Mapping Cross-Reference
+    source_ok, source_details = _source_mapping_ok(obj.get("source_mapping"), base_dir)
+    if source_ok:
+        results.append(GateResult("gate_7_source_mapping", GateStatus.PASS,
+                                  "source_mapping.primary_source is present in source_mapping.theory_doc",
+                                  source_details))
+    else:
+        results.append(GateResult("gate_7_source_mapping", GateStatus.FAIL,
+                                  "source_mapping must point at a theory_doc containing the declared primary_source",
+                                  source_details))
+
+    # Gate 8 — Ablation Declared
+    ablation_ok, ablation_details = _ablation_ok(obj.get("ablation"))
+    if ablation_ok:
+        results.append(GateResult("gate_8_ablation", GateStatus.PASS,
+                                  "Ablation callable and destroyed QA structure declared"))
+    else:
+        results.append(GateResult("gate_8_ablation", GateStatus.FAIL,
+                                  "ablation must declare callable, destroyed_structure, and expected_direction",
+                                  ablation_details))
+
+    # Gate 9 — Reproducibility Manifest Declared
+    repro_ok, repro_details = _reproducibility_ok(obj.get("reproducibility"))
+    if repro_ok:
+        results.append(GateResult("gate_9_reproducibility", GateStatus.PASS,
+                                  "Reproducibility seed, data hash status, package versions, and ledger path declared"))
+    else:
+        results.append(GateResult("gate_9_reproducibility", GateStatus.FAIL,
+                                  "reproducibility manifest incomplete",
+                                  repro_details))
 
     return results
 

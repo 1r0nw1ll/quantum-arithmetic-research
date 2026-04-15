@@ -3,8 +3,9 @@
 ## One-line summary
 
 An enforceable design contract for benchmarks that compare a QA method
-against baseline methods on named datasets with declared metrics —
-validated by a five-gate JSON-schema validator and enforced at file
+against baseline methods on named datasets with declared metrics,
+source mapping, SOTA/null-result expectations, ablation, and runtime
+reproducibility — validated by a nine-gate JSON-schema validator and enforced at file
 level by the linter rule `BENCH-1`.
 
 ## Why
@@ -29,7 +30,7 @@ were spent before the framework-vs-domain split was identified. Gate
 
 For every benchmark script there exists a concrete object
 
-`B = (Q, L, D, P, C, F, M)`
+`B = (Q, L, D, P, C, F, M, S, T, A, R)`
 
 with
 
@@ -40,6 +41,12 @@ with
 - `C` calibration provenance (`learned_on`, `procedure`, `domain_of_origin`)
 - `F` framework inheritance (`inherit` | `ported` | `novel`; `prior_cert` required if not novel)
 - `M` non-empty metric list
+- `S` source mapping (`theory_doc`, `primary_source`, rationale), with
+  `primary_source` required to appear in `theory_doc`
+- `T` SOTA baseline: numeric threshold or explicit null-result acceptance
+- `A` ablation contract naming the callable and the QA structure destroyed
+- `R` reproducibility manifest (seed, data hash/status, package versions,
+  results ledger)
 
 ## Gates (validator)
 
@@ -48,6 +55,10 @@ with
 3. Calibration Provenance — `procedure` + `learned_on` + `domain_of_origin` non-empty
 4. Framework Inheritance — `mode` declared; `prior_cert` required if `inherit` or `ported`
 5. Metrics Non-Empty — metrics list ≥ 1 with non-empty strings
+6. Source Mapping — declared primary source appears in the referenced theory doc
+7. SOTA Baseline — numeric threshold, or explicit `null_result_acceptable=true` with reason
+8. Ablation — callable, destroyed structure, and expected direction declared
+9. Reproducibility — seed, data hash/status, package versions, and ledger path declared
 
 ## How to run
 

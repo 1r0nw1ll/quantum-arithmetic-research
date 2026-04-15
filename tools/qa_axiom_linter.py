@@ -20,13 +20,17 @@ Rule groups:
     T2-D  — Theorem NT: design-level violations (stochastic/random graph generators,
               continuous distributions as QA data sources). Added 2026-04-02 after
               repeated violations using SBM/random models to test QA hypotheses.
-              Use # noqa: T2-D-N if the random process is an explicit observer
-              projection (null model, noise annealing, measurement simulation).
+              These must be routed through an explicit observer projection or
+              removed; inline suppression is ignored for T2-D rules.
     A1    — No-Zero axiom
     A2    — Derived coordinates
     S1    — No x**2
     S2    — No float state
     DECL  — Missing QA_COMPLIANCE declaration
+    EXP   — Experiment protocol compliance (EXPERIMENT_AXIOMS_BLOCK.md):
+              EXP-1   empirical experiment script missing QA_EXPERIMENT_PROTOCOL.v1 ref → ERROR
+    BENCH — Benchmark protocol compliance (EXPERIMENT_AXIOMS_BLOCK.md):
+              BENCH-1 benchmark script missing QA_BENCHMARK_PROTOCOL.v1 ref → ERROR
     ELEM  — Element computation enforcement (raw vs mod-reduced):
               ELEM-1  Modular reduction inside element (C/F/G) computation → ERROR
               ELEM-4  norm_f() or invariant from mod-reduced input → WARNING
@@ -40,10 +44,13 @@ Rule groups:
               ORBIT-6  STATE_ALPHABET declared without audit_alphabet call (whole-file) → WARNING
 """
 
+import ast
+import json
 import sys
 import re
 import os
 import subprocess
+import warnings
 from pathlib import Path
 from typing import NamedTuple
 
@@ -75,6 +82,20 @@ QA_INDICATOR_PATTERNS = [
                r'fail_records|FAIL_RECORD|fail_record\(|add_fail\(|add_warning\(|'
                r'LOOP_TO_MEV|FST_PROTON|FST_STF_|FST_FERMION|FST_QUARK|FST_LOOP_MASS'),
 ]
+
+# UN-DISMISSABLE axiom rules — added 2026-04-13 and expanded after the
+# suppression mechanism was used to silence violations instead of fixing them.
+# These rules ignore inline noqa comments. Warnings in this set still make the
+# linter exit non-zero.
+UNDISMISSABLE_RULE_IDS = frozenset({
+    "A1-1", "A1-2", "A1-3", "A1-4",
+    "A2-1", "A2-2",
+    "S1-1", "S1-2",
+    "S2-1", "S2-2",
+    "T2-b-1", "T2-b-2", "T2-b-3", "T2-b-4",
+    "T2-D-1", "T2-D-2", "T2-D-3", "T2-D-4", "T2-D-5", "T2-D-6",
+    "ELEM-1", "ELEM-2",
+})
 
 RULES: list[ViolationRule] = [
     # T2-b: Continuous state injection — the primary violation
@@ -109,7 +130,14 @@ RULES: list[ViolationRule] = [
         id="T2-b-4",
         axiom="T2-b",
         description="Signal injection into QA state variable (direct float into b or e)",
-        pattern=re.compile(r'(?:self\.)?[Bb]\s*=\s*[^=].*\+.*(?:signal|inject|continuous|float)'),
+        # Full identifier match for b/e and B/E. The injection marker may appear
+        # anywhere on the RHS and does not require a plus operator.
+        pattern=re.compile(
+            r'^\s*(?:self\.)?[bBeE]\s*=\s*(?!=)'
+            r'(?!.*\.astype\s*\(\s*(?:int\b|np\.(?:int|uint)\d*\b))'
+            r'(?!\s*np\.(?:zeros|ones|empty|full|asarray)\s*\()'
+            r'[^#\n]*(?:signal|inject|continuous|\bfloat\b)'
+        ),
         severity="ERROR",
         qa_file_only=True,
     ),
@@ -166,12 +194,24 @@ RULES: list[ViolationRule] = [
         qa_file_only=True,
     ),
 
-    # S2: Float in QA layer
+    # S2: Float in QA layer.
+    # Fires on `b = np.zeros(...)`, `e = np.empty(...)`, etc. UNLESS the
+    # construction is explicitly integer-typed via `.astype(int)` chain OR
+    # `dtype=int`/`dtype=np.int*`/`dtype=np.uint*` in the call.
+    # Negative lookahead matches both forms.
     ViolationRule(
         id="S2-1",
         axiom="S2",
         description="numpy float array used as QA state (b or e must be int or Fraction)",
-        pattern=re.compile(r'(?:self\.)?[be]\s*=\s*np\.(?:zeros|ones|random\.rand|full|empty)\s*\(.*\)(?!\s*\.astype\s*\(\s*int)'),
+        pattern=re.compile(
+            r'^\s*(?:self\.)?[be]\s*=\s*(?:'
+            r'np\.(?:zeros|ones|random\.rand|full|empty)\s*'
+            r'\((?![^)]*dtype\s*=\s*(?:int\b|np\.(?:int|uint)\d*\b))[^)]*\)'
+            r'(?!\s*\.astype\s*\(\s*int)'
+            r'|np\.random\.default_rng\s*\([^)]*\)(?:\.\w+\s*\([^)]*\))?'
+            r'|np\.asarray\s*\([^)]*dtype\s*=\s*(?:float\b|np\.float\d*\b)'
+            r')'
+        ),
         severity="ERROR",
         qa_file_only=True,
     ),
@@ -324,8 +364,8 @@ RULES: list[ViolationRule] = [
         axiom="T2-D",
         description="stochastic_block_model generates random graphs — T2 design violation: "
                     "use QA-native graph construction (generator moves, harmonic edges) for "
-                    "testing QA hypotheses. If used as a NULL MODEL, add # noqa: T2-D-1 and "
-                    "declare as observer projection in QA_COMPLIANCE",
+                    "testing QA hypotheses. If used as a NULL MODEL, declare the "
+                    "observer projection in QA_COMPLIANCE",
         pattern=re.compile(r'stochastic_block_model\s*\('),
         severity="ERROR",
         qa_file_only=True,
@@ -335,7 +375,7 @@ RULES: list[ViolationRule] = [
         axiom="T2-D",
         description="erdos_renyi_graph generates random graphs — T2 design violation: "
                     "no QA structure to test. Use QA-native graph construction or declare "
-                    "as observer projection with # noqa: T2-D-2",
+                    "the observer projection",
         pattern=re.compile(r'erdos_renyi_graph\s*\(|gnp_random_graph\s*\(|gnm_random_graph\s*\('),
         severity="ERROR",
         qa_file_only=True,
@@ -344,8 +384,8 @@ RULES: list[ViolationRule] = [
         id="T2-D-3",
         axiom="T2-D",
         description="barabasi_albert_graph generates random graphs — T2 design violation: "
-                    "preferential attachment is a continuous process. Declare as observer "
-                    "projection with # noqa: T2-D-3",
+                    "preferential attachment is a continuous process. Declare the observer "
+                    "projection",
         pattern=re.compile(r'barabasi_albert_graph\s*\('),
         severity="ERROR",
         qa_file_only=True,
@@ -363,7 +403,7 @@ RULES: list[ViolationRule] = [
         axiom="T2-D",
         description="np.random used for QA state/graph generation — T2 design violation: "
                     "random processes are observer projections, not QA inputs. If used for "
-                    "noise annealing or measurement simulation, add # noqa: T2-D-5",
+                    "noise annealing or measurement simulation, declare the projection",
         pattern=re.compile(r'np\.random\.(?:normal|randn|standard_normal|multivariate_normal)\s*\('),
         severity="WARNING",
         qa_file_only=True,
@@ -373,7 +413,7 @@ RULES: list[ViolationRule] = [
         axiom="T2-D",
         description="scipy.stats continuous distribution used in QA context — continuous "
                     "functions are observer projections only (Theorem NT). Declare as such "
-                    "or add # noqa: T2-D-6",
+                    "with an explicit projection boundary",
         pattern=re.compile(r'scipy\.stats\.(?:norm|t|chi2|f|gamma|beta|uniform)\.(?:rvs|pdf|cdf)\s*\('),
         severity="WARNING",
         qa_file_only=True,
@@ -513,6 +553,45 @@ _APPLY_PI_IMPORT_PATTERN = re.compile(
 # and multi-line:           QA_COMPLIANCE = (\n  "..."\n)
 QA_COMPLIANCE_DECLARATION = re.compile(r'QA_COMPLIANCE\s*=\s*[\'\"{(]')
 
+# EXP-1 / BENCH-1 — Experiment and Benchmark protocol references.
+# Mirrors qa_mapping_protocol/ Gate-0: a file that looks like an empirical
+# experiment (hypothesis testing) or a benchmark (method-vs-baseline
+# comparison) must either declare a PROTOCOL_REF pointing at a validated
+# JSON, or a sibling JSON must exist in the same directory.
+#
+# Authority: EXPERIMENT_AXIOMS_BLOCK.md (E1, B1).
+EXPERIMENT_PROTOCOL_REF = re.compile(r'EXPERIMENT_PROTOCOL_REF\s*=\s*[\'\"]([^\'\"]+)[\'\"]')
+BENCHMARK_PROTOCOL_REF  = re.compile(r'BENCHMARK_PROTOCOL_REF\s*=\s*[\'\"]([^\'\"]+)[\'\"]')
+MAIN_GUARD_PATTERN = re.compile(r'if\s+__name__\s*==\s*[\'\"]__main__[\'\"]\s*:')
+
+# Indicators that a file is performing hypothesis-testing work.
+# EXP-1 triggers when a statistical-test CALL SITE is present.
+# String-key cert-artifact field checks (e.g. `cert.get("pre_registered")`)
+# are excluded — those are cert validators, not experiments.
+EXPERIMENT_INDICATOR_PATTERNS = [
+    re.compile(r'\b(?:ttest_\w+|ks_2samp|mannwhitneyu|permutation_test|'
+               r'wilcoxon|kruskal|ranksums|pearsonr|spearmanr|'
+               r'chi2_contingency|chi2|fisher_exact|kendalltau|bartlett|'
+               r'levene|shapiro|anderson|jarque_bera|binomtest|anova|'
+               r'f_oneway)\s*\('),
+    re.compile(r'\bscipy\.stats\.\w+\s*\('),
+]
+
+# Indicators that a file is performing benchmark work (method-vs-baseline
+# comparison). Requires both sklearn-baseline import AND a metric call
+# OR explicit "baselines" variable structure.
+BENCHMARK_BASELINE_IMPORT = re.compile(
+    r'(?:from\s+sklearn\.(?:ensemble|neighbors|svm|linear_model|naive_bayes|'
+    r'tree|cluster)\s+import|import\s+sklearn(?:\.[A-Za-z_]\w*)*(?:\s+as\s+\w+)?)'
+)
+BENCHMARK_METRIC_CALL = re.compile(
+    r'\b(?:roc_auc_score|adjusted_rand_score|normalized_mutual_info_score|'
+    r'f1_score|accuracy_score|precision_recall_fscore_support)\s*\('
+)
+BENCHMARK_STRUCTURAL_PATTERN = re.compile(
+    r'\b(?:baselines\s*=|methods\s*=\s*\{)'
+)
+
 # ── Whole-file orbit-rule patterns ────────────────────────────────────────────
 
 # ORBIT-4: local orbit_family reimplementation
@@ -618,6 +697,176 @@ def strip_triple_quoted_strings(content: str) -> str:
             i += 1
     return ''.join(out)
 
+
+def _is_qa_package_interior(path: Path) -> bool:
+    """True for qa_*/qa_*/*.py package interiors, not arbitrary declarations."""
+    try:
+        parent = path.parent.name
+        grandparent = path.parent.parent.name
+    except Exception:
+        return False
+    return path.suffix == ".py" and parent.startswith("qa_") and grandparent.startswith("qa_")
+
+
+def _resolve_protocol_path(source_path: Path, match: re.Match[str]) -> Path:
+    ref = Path(match.group(1))
+    if ref.is_absolute():
+        return ref
+    return (source_path.parent / ref).resolve()
+
+
+def _protocol_validator_path(kind: str) -> Path:
+    root = Path(__file__).resolve().parent.parent
+    if kind == "experiment":
+        return root / "qa_experiment_protocol" / "validator.py"
+    if kind == "benchmark":
+        return root / "qa_benchmark_protocol" / "validator.py"
+    raise ValueError(f"unknown protocol kind: {kind}")
+
+
+def _validate_protocol_json(kind: str, protocol_path: Path) -> str | None:
+    """Return None when the protocol JSON validates, else a concise error."""
+    validator = _protocol_validator_path(kind)
+    if not validator.exists():
+        return f"missing validator: {validator}"
+    if not protocol_path.exists():
+        return f"missing protocol JSON: {protocol_path}"
+
+    proc = subprocess.run(
+        [sys.executable, str(validator), str(protocol_path), "--json"],
+        capture_output=True,
+        text=True,
+        cwd=Path(__file__).resolve().parent.parent,
+        timeout=30,
+    )
+    if proc.returncode == 0:
+        return None
+    detail = (proc.stdout or proc.stderr or "").strip().splitlines()
+    summary = detail[0] if detail else f"validator exited {proc.returncode}"
+    return f"{protocol_path} failed {kind} protocol validation: {summary}"
+
+
+def _load_protocol_json(protocol_path: Path) -> dict | None:
+    try:
+        with protocol_path.open("r", encoding="utf-8") as handle:
+            obj = json.load(handle)
+    except Exception:
+        return None
+    return obj if isinstance(obj, dict) else None
+
+
+def _parse_ast(content: str) -> ast.AST | None:
+    try:
+        with warnings.catch_warnings():
+            warnings.simplefilter("ignore", SyntaxWarning)
+            return ast.parse(content)
+    except SyntaxError:
+        return None
+
+
+def _has_function_def(tree: ast.AST | None, name: str) -> bool:
+    if tree is None:
+        return False
+    return any(
+        isinstance(node, (ast.FunctionDef, ast.AsyncFunctionDef))
+        and node.name == name
+        for node in ast.walk(tree)
+    )
+
+
+def _call_name(node: ast.AST) -> str | None:
+    if isinstance(node, ast.Name):
+        return node.id
+    if isinstance(node, ast.Attribute):
+        return node.attr
+    return None
+
+
+def _has_call(tree: ast.AST | None, name: str) -> bool:
+    if tree is None:
+        return False
+    for node in ast.walk(tree):
+        if isinstance(node, ast.Call) and _call_name(node.func) == name:
+            return True
+    return False
+
+
+def _qa_reproducibility_bindings(tree: ast.AST | None) -> tuple[set[str], set[str]]:
+    """Return direct log_run bindings and qa_reproducibility module aliases."""
+    direct: set[str] = set()
+    modules: set[str] = set()
+    if tree is None:
+        return direct, modules
+
+    for node in ast.walk(tree):
+        if isinstance(node, ast.ImportFrom) and node.module in (
+            "qa_reproducibility",
+            "qa_reproducibility.runtime",
+        ):
+            for alias in node.names:
+                if alias.name == "log_run":
+                    direct.add(alias.asname or alias.name)
+                elif node.module == "qa_reproducibility" and alias.name == "runtime":
+                    modules.add(alias.asname or alias.name)
+        elif isinstance(node, ast.Import):
+            for alias in node.names:
+                if alias.name == "qa_reproducibility":
+                    modules.add(alias.asname or alias.name)
+    return direct, modules
+
+
+def _has_qarepro_log_run_call(tree: ast.AST | None) -> bool:
+    """True only when log_run is called through an import from qa_reproducibility."""
+    if tree is None:
+        return False
+
+    direct, modules = _qa_reproducibility_bindings(tree)
+    for node in ast.walk(tree):
+        if not isinstance(node, ast.Call):
+            continue
+        func = node.func
+        if isinstance(func, ast.Name) and func.id in direct:
+            return True
+        if (
+            isinstance(func, ast.Attribute)
+            and func.attr == "log_run"
+            and isinstance(func.value, ast.Name)
+            and func.value.id in modules
+        ):
+            return True
+    return False
+
+
+def _enforce_protocol_runtime_contract(
+    *,
+    content: str,
+    tree: ast.AST | None,
+    protocol_path: Path,
+    rule_prefix: str,
+) -> list[tuple[int, str, str, str]]:
+    """Check script-level obligations implied by an explicit protocol ref."""
+    out: list[tuple[int, str, str, str]] = []
+    protocol = _load_protocol_json(protocol_path)
+    if protocol is None:
+        return out
+
+    ablation = protocol.get("ablation")
+    callable_name = ablation.get("callable") if isinstance(ablation, dict) else None
+    if isinstance(callable_name, str) and callable_name.strip():
+        if not _has_function_def(tree, callable_name):
+            out.append((1, f"{rule_prefix}-ABLATION", rule_prefix,
+                f"Protocol declares ablation.callable={callable_name!r}, but this script does not define it"))
+        elif not _has_call(tree, callable_name):
+            out.append((1, f"{rule_prefix}-ABLATION", rule_prefix,
+                f"Protocol declares ablation.callable={callable_name!r}, but this script never calls it"))
+
+    if MAIN_GUARD_PATTERN.search(content) and not _has_qarepro_log_run_call(tree):
+        out.append((1, f"{rule_prefix}-RUNTIME", rule_prefix,
+            "Protocol-backed __main__ script must call qa_reproducibility.log_run(...) "
+            "so every run appends to the declared results_ledger"))
+
+    return out
+
 def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
     """
     Lint a single Python file.
@@ -638,6 +887,7 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
     # not trip the very rules they are explaining. Line numbers are preserved.
     masked_content = strip_triple_quoted_strings(content)
     masked_lines = masked_content.splitlines()
+    ast_tree = _parse_ast(content)
 
     # Check for required declaration block in QA files (hard gate — ERROR)
     # Exemptions (2026-04-11):
@@ -656,6 +906,74 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
             violations.append((1, "DECL-1", "DECL",
                 "Missing QA_COMPLIANCE declaration block — empirical QA scripts must declare "
                 "their observer and state alphabet (see QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md)"))
+
+        # EXP-1 / BENCH-1 — library modules declaring themselves as such
+        # are exempt (they host the machinery; the scripts that USE them are
+        # the empirical artifacts that need protocol refs).
+        is_library_module = bool(
+            re.search(r'QA_COMPLIANCE\s*=\s*[\'\"]library_module', content)
+            and _is_qa_package_interior(path)
+        )
+
+        # EXP-1 — empirical experiment scripts must reference a validated
+        # QA_EXPERIMENT_PROTOCOL.v1 JSON (inline REF or sibling file).
+        # Authority: EXPERIMENT_AXIOMS_BLOCK.md E1.
+        is_experiment = any(p.search(content) for p in EXPERIMENT_INDICATOR_PATTERNS)
+        if is_experiment and not is_test_file and not is_library_module:
+            inline_ref = EXPERIMENT_PROTOCOL_REF.search(content)
+            sibling_json = path.parent / "experiment_protocol.json"
+            protocol_path = _resolve_protocol_path(path, inline_ref) if inline_ref else sibling_json
+            if not inline_ref and not sibling_json.exists():
+                violations.append((1, "EXP-1", "EXP",
+                    "Experiment script missing QA_EXPERIMENT_PROTOCOL.v1 reference — "
+                    "add EXPERIMENT_PROTOCOL_REF = \"path/to/experiment_protocol.json\" "
+                    "or place experiment_protocol.json in the same directory. "
+                    "See EXPERIMENT_AXIOMS_BLOCK.md E1."))
+            else:
+                validation_error = _validate_protocol_json("experiment", protocol_path)
+                if validation_error is not None:
+                    violations.append((1, "EXP-1", "EXP",
+                        "Experiment script references invalid QA_EXPERIMENT_PROTOCOL.v1 JSON — "
+                        f"{validation_error}. See EXPERIMENT_AXIOMS_BLOCK.md E1."))
+                elif inline_ref:
+                    violations.extend(_enforce_protocol_runtime_contract(
+                        content=content,
+                        tree=ast_tree,
+                        protocol_path=protocol_path,
+                        rule_prefix="EXP",
+                    ))
+
+        # BENCH-1 — benchmark scripts (QA-vs-baselines) must reference a
+        # validated QA_BENCHMARK_PROTOCOL.v1 JSON.
+        # Authority: EXPERIMENT_AXIOMS_BLOCK.md B1.
+        is_benchmark = (
+            BENCHMARK_STRUCTURAL_PATTERN.search(content) is not None
+            or (BENCHMARK_BASELINE_IMPORT.search(content) is not None
+                and BENCHMARK_METRIC_CALL.search(content) is not None)
+        )
+        if is_benchmark and not is_test_file and not is_library_module:
+            inline_ref = BENCHMARK_PROTOCOL_REF.search(content)
+            sibling_json = path.parent / "benchmark_protocol.json"
+            protocol_path = _resolve_protocol_path(path, inline_ref) if inline_ref else sibling_json
+            if not inline_ref and not sibling_json.exists():
+                violations.append((1, "BENCH-1", "BENCH",
+                    "Benchmark script missing QA_BENCHMARK_PROTOCOL.v1 reference — "
+                    "add BENCHMARK_PROTOCOL_REF = \"path/to/benchmark_protocol.json\" "
+                    "or place benchmark_protocol.json in the same directory. "
+                    "See EXPERIMENT_AXIOMS_BLOCK.md B1."))
+            else:
+                validation_error = _validate_protocol_json("benchmark", protocol_path)
+                if validation_error is not None:
+                    violations.append((1, "BENCH-1", "BENCH",
+                        "Benchmark script references invalid QA_BENCHMARK_PROTOCOL.v1 JSON — "
+                        f"{validation_error}. See EXPERIMENT_AXIOMS_BLOCK.md B1."))
+                elif inline_ref:
+                    violations.extend(_enforce_protocol_runtime_contract(
+                        content=content,
+                        tree=ast_tree,
+                        protocol_path=protocol_path,
+                        rule_prefix="BENCH",
+                    ))
 
     # ORBIT-4: local orbit_family reimplementation (whole-file check)
     # Skip the canonical file itself.  Respect inline `# noqa: ORBIT-4`
@@ -739,20 +1057,24 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
     _is_canonical_elem = _is_qa_elements_file or _is_canonical_orbit_source(path)
 
     if not _is_canonical_elem and file_is_qa:
-        if _ELEM_REDEF_PATTERN.search(content) and not _ELEM_IMPORT_PATTERN.search(content):
+        if _ELEM_REDEF_PATTERN.search(content):
             m_elem = _ELEM_REDEF_PATTERN.search(content)
             lineno_elem = content[:m_elem.start()].count("\n") + 1
-            def_line_elem = lines[lineno_elem - 1] if lineno_elem <= len(lines) else ""
-            if "# noqa: ELEM-2" not in def_line_elem:
-                violations.append((lineno_elem, "ELEM-2", "ELEM",
-                    "Local reimplementation of element computation — import from "
-                    "qa_elements.py instead. Local copies diverge and cause axiom "
-                    "violations (C>=4 bound, raw d=b+e, F identity). "
-                    "Add # noqa: ELEM-2 if intentional."))
+            # ELEM-2 is UN-DISMISSABLE (axiom-class rule). The noqa suppression
+            # path was removed 2026-04-13 after it was used to silence drift
+            # instead of fixing it. The only valid resolution is to import
+            # from qa_elements.py and delete the local helper.
+            violations.append((lineno_elem, "ELEM-2", "ELEM",
+                "Local reimplementation of element computation — import from "
+                "qa_elements.py instead. Local copies diverge and cause axiom "
+                "violations (C>=4 bound, raw d=b+e, F identity). "
+                "This rule is UN-DISMISSABLE: delete the local definition "
+                "and call qa_elements.qa_elements()."))
 
     # Per-line rules
     # Use masked_lines (triple-quoted string bodies replaced with spaces)
     # for matching so docstrings cannot trip rules they describe.
+    #
     for lineno, (line, masked) in enumerate(zip(lines, masked_lines), 1):
         stripped = line.strip()
         if not stripped or stripped.startswith("#"):
@@ -767,7 +1089,8 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
             noqa_ids = {s.strip() for s in noqa_m.group(1).split(",")}
 
         for rule in RULES:
-            if rule.id in noqa_ids:
+            # Un-dismissable axiom rules ignore noqa suppression entirely.
+            if rule.id in noqa_ids and rule.id not in UNDISMISSABLE_RULE_IDS:
                 continue
             if rule.qa_file_only and not file_is_qa:
                 continue
@@ -845,6 +1168,7 @@ def print_report(results: dict) -> int:
 
     error_count = 0
     warning_count = 0
+    fatal_count = 0
 
     for path, violations in sorted(results.items()):
         print(f"\n{path}")
@@ -852,19 +1176,26 @@ def print_report(results: dict) -> int:
             severity = next((r.severity for r in RULES if r.id == rule_id), "WARNING")
             if rule_id.startswith("DECL-"):
                 severity = "ERROR"   # Hard gate — declaration is mandatory
+            if rule_id in ("EXP-1", "BENCH-1", "EXP-ABLATION", "BENCH-ABLATION",
+                           "EXP-RUNTIME", "BENCH-RUNTIME"):
+                severity = "ERROR"   # Hard gate — protocol reference is mandatory
             if rule_id in ("ORBIT-4", "ORBIT-5", "ORBIT-1"):
                 severity = "ERROR"   # Orbit reimplementation + v3==1 are hard errors
+            if rule_id == "ELEM-2":
+                severity = "ERROR"   # Element reimplementation is a hard gate
             icon = "✗" if severity == "ERROR" else "⚠"
             print(f"  {icon} line {lineno:4d}  [{rule_id}] [{axiom}]  {description}")
             if severity == "ERROR":
                 error_count += 1
             else:
                 warning_count += 1
+            if severity == "ERROR" or rule_id in UNDISMISSABLE_RULE_IDS:
+                fatal_count += 1
 
     print(f"\nqa_axiom_linter: {error_count} error(s), {warning_count} warning(s) in {len(results)} file(s)")
     print("Authority: QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1 | QA_AXIOMS_BLOCK.md")
 
-    return 1 if error_count > 0 else 0
+    return 1 if fatal_count > 0 else 0
 
 
 def main() -> int:

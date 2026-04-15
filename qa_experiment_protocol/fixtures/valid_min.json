@@ -4,6 +4,9 @@
   "hypothesis": "Rolling QCI predicts future volatility beyond realized-variance baseline.",
   "null_model": {
     "description": "Circular block-bootstrap of the return series.",
+    "generating_process": "Generate circular block-bootstrap surrogates from the observed return sequence.",
+    "held_fixed": ["feature schema", "observer projection", "block length"],
+    "permuted": ["block order"],
     "independence_argument": "Block bootstrap preserves local autocorrelation but destroys long-range coupling; no structure shared with positive-arm clustering.",
     "surrogate_types": ["block_bootstrap"]
   },
@@ -24,5 +27,23 @@
   },
   "real_data_status": "synthetic_only",
   "reproduces": "none",
-  "primary_sources": []
+  "primary_sources": [],
+  "source_mapping": {
+    "theory_doc": "../EXPERIMENT_AXIOMS_BLOCK.md",
+    "primary_source": "2026-04-13 cmap calibration bug",
+    "mapping_rationale": "This protocol gates empirical design before code so calibration and null-model assumptions are not invented inside the script."
+  },
+  "ablation": {
+    "callable": "run_ablation",
+    "destroyed_structure": "shuffle the (b,e) observer labels before scoring",
+    "expected_direction": "QA score should degrade relative to the intact observer projection"
+  },
+  "reproducibility": {
+    "seed": 7,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime"
+    },
+    "results_ledger": "results/qa_experiment_runs.jsonl"
+  }
 }

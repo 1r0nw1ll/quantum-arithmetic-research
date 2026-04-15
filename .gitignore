@@ -118,6 +118,10 @@ multi_ai_workspace/dataset_generator.py
 *.dat
 *.csv
 *.json
+!qa_experiment_protocol/*.json
+!qa_experiment_protocol/fixtures/*.json
+!qa_benchmark_protocol/*.json
+!qa_benchmark_protocol/fixtures/*.json
 !qa_alphageometry/core/results/**/*.json
 !qa_alphageometry_ptolemy/qa_ledger/**/*.json
 !qa_alphageometry_ptolemy/qa_*_cert_v1/**/*.json
@@ -263,3 +267,4 @@ qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_multibench_c
 
 # Playwright MCP temp data
 .playwright-mcp/
+private/upwork/

@@ -2,7 +2,8 @@
 
 Defines **QA_BENCHMARK_PROTOCOL.v1**: an enforceable contract for any
 benchmark that compares a QA method against baseline methods on named
-datasets with declared metrics.
+datasets with declared metrics, source mapping, SOTA/null-result
+expectations, ablation, and reproducibility.
 
 Authority: `EXPERIMENT_AXIOMS_BLOCK.md` (Part B, B1–B4).
 
@@ -10,7 +11,7 @@ Authority: `EXPERIMENT_AXIOMS_BLOCK.md` (Part B, B1–B4).
 
 Every benchmark must produce a concrete object:
 
-`B = (Q, L, D, P, C, F, M)` where
+`B = (Q, L, D, P, C, F, M, S, T, A, R)` where
 
 - `Q`: QA method (name, description, observer projection)
 - `L`: baseline list (non-empty, with implementation refs)
@@ -19,6 +20,10 @@ Every benchmark must produce a concrete object:
 - `C`: calibration provenance (learned-on, procedure, domain_of_origin)
 - `F`: framework inheritance (`inherit` | `ported` | `novel`; prior_cert required if not novel)
 - `M`: metrics (non-empty list)
+- `S`: source mapping cross-reference (`primary_source` must occur in `theory_doc`)
+- `T`: SOTA baseline threshold, or explicit null-result acceptance
+- `A`: ablation contract
+- `R`: reproducibility manifest
 
 ## Why this cert family exists
 
@@ -38,7 +43,7 @@ inheritance) makes that deviation explicit.
 ## Files
 
 - `schema.json` — JSON Schema for `QA_BENCHMARK_PROTOCOL.v1`
-- `validator.py` — Gate 1–5 validator
+- `validator.py` — Gate 1–9 validator
 - `canonical_benchmark_protocol.json` — canonical shared object
 - `fixtures/valid_min.json` — minimal passing fixture (qa_detect tabular)
 - `fixtures/invalid_missing_calibration_provenance.json` — intentionally failing fixture

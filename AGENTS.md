@@ -9,11 +9,13 @@
 
 | Agent | Primary responsibility | Does NOT do |
 |---|---|---|
-| **Claude** | Orchestration, architecture, analysis, cert design, spec writing | Write experiment code, write doc prose |
-| **Codex** | All Python writing, validators, fixtures, schema JSON | Architecture decisions, doc prose |
+| **Claude** | Orchestration, architecture, analysis, cert design, spec writing; `.py` writes under quarantine (Layer 3 guardrail) | Direct `.py` commits without Codex batch approval |
+| **Codex** | Python writing, validators, fixtures, schema JSON; **batched quarantine review at cert-submission** | Architecture decisions, doc prose |
 | **Gemini** | README, paper prose, human tract docs, markdown | Code, architecture decisions |
 | **Open Brain** | Observation capture, idea storage, prior result retrieval | — |
 | **Git** | Version control at stable checkpoints | — |
+
+**Coding guardrail:** `.py` writes are gated by the three-layer system in `docs/specs/QA_CODING_GUARDRAIL_ARCHITECTURE.md`. Layer 3 lets Claude Python writes land, records them as packets in `llm_qa_wrapper/quarantine/pending/`, and requires Codex to clear the batch at cert-submission time via `python tools/qa_codex_quarantine_review.py {list,approve,reject}`. `git commit` blocks with `CODEX_REVIEW_PENDING` while packets are pending.
 
 ---
 
@@ -49,7 +51,11 @@ path exists.
 
 ## Codex — Invocation Format
 
-Always provide a complete task spec:
+**Two roles:**
+1. **Implementation** — Python writes, validators, fixtures per task spec below.
+2. **Quarantine review** at cert-submission — batch-audit Claude's pending `.py` packets for ML-training-data bleed (softmax in T-operator position, grad-descent where orbit classification belongs), SOTA/primary-source fidelity vs. declared `QA_SOURCE_MAPPING`, and hidden continuous-time loops. CLI: `python tools/qa_codex_quarantine_review.py list --json` to inspect, `approve --all --notes "..."` or `reject --all --notes "..."` to clear. Every decision ledgered with `review_sha256`.
+
+Always provide a complete task spec for implementation:
 
 ```
 TASK: [verb] [specific object]

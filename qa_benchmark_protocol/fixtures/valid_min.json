@@ -34,5 +34,29 @@
       "cmap recalibrated per dataset"
     ]
   },
-  "metrics": ["AUROC", "runtime_s"]
+  "metrics": ["AUROC", "runtime_s"],
+  "source_mapping": {
+    "theory_doc": "../EXPERIMENT_AXIOMS_BLOCK.md",
+    "primary_source": "2026-04-13 cmap calibration bug",
+    "mapping_rationale": "Benchmark validity depends on declaring calibration provenance and parity before comparing QA against baseline methods."
+  },
+  "sota_baseline": {
+    "name": "IsolationForest",
+    "metric": "AUROC",
+    "threshold": 0.5
+  },
+  "ablation": {
+    "callable": "run_ablation",
+    "destroyed_structure": "shuffle QA observer labels before computing AUROC",
+    "expected_direction": "QA method should not retain its claimed advantage under shuffled observer labels"
+  },
+  "reproducibility": {
+    "seed": 7,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime"
+    },
+    "results_ledger": "results/qa_benchmark_runs.jsonl"
+  }
 }

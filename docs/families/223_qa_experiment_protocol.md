@@ -3,8 +3,9 @@
 ## One-line summary
 
 An enforceable design contract for empirical QA studies — hypothesis,
-surrogate model, pre-registration, decision rules, and observer
-projection — validated by a five-gate JSON-schema validator and
+surrogate model, source mapping, ablation, reproducibility,
+pre-registration, decision rules, and observer projection — validated
+by a nine-gate JSON-schema validator and
 enforced at file level by the linter rule `EXP-1`.
 
 ## Why
@@ -23,24 +24,35 @@ machine-checkable contract every empirical script must reference.
 
 For every empirical QA script there exists a concrete object
 
-`X = (H, N, P, D, O, R)`
+`X = (H, N, P, D, O, R, S, A, M)`
 
 with
 
 - `H` hypothesis (falsifiable)
-- `N` null model with explicit independence argument
+- `N` null model with generating process, held-fixed fields, permuted
+  fields, and explicit independence argument
 - `P` pre-registration (seed, UTC date, n_trials ≥ 1)
 - `D` decision rules (accept, reject, `on_unsupportive` enum)
 - `O` observer projection (description + state alphabet)
 - `R` real-data status (path | "pending" | "synthetic_only")
+- `S` source mapping (`theory_doc`, `primary_source`, rationale), with
+  `primary_source` required to appear in `theory_doc`
+- `A` ablation contract naming the callable and the QA structure destroyed
+- `M` reproducibility manifest (seed, data hash/status, package versions,
+  results ledger)
 
 ## Gates (validator)
 
 1. Schema Validity — conforms to `qa_experiment_protocol/schema.json`
-2. Null Independence Defined — non-empty `null_model.independence_argument`
+2. Null Design Defined — non-empty `generating_process`, `held_fixed`,
+   `permuted`, and `independence_argument`
 3. Pre-Registration Complete — seed + `date_utc` + `n_trials ≥ 1`
 4. Decision Rules Complete — `accept_criterion` + `reject_criterion` + `on_unsupportive` in {`investigate_observer`, `investigate_implementation`, `pre_registered_accept`}
 5. Observer Projection Declared — `description` + `state_alphabet` non-empty
+6. Real Data Status — pending, synthetic-only, or existing data path
+7. Source Mapping — declared primary source appears in the referenced theory doc
+8. Ablation — callable, destroyed structure, and expected direction declared
+9. Reproducibility — seed, data hash/status, package versions, and ledger path declared
 
 ## How to run
 

@@ -1,0 +1,60 @@
+{
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "benchmark_id": "qa_benchmark_protocol_canonical_v1",
+  "qa_method": {
+    "name": "QA-canonical",
+    "description": "Canonical placeholder QA method used by ref-form benchmarks that share this design.",
+    "observer_projection": "Canonical QA primitives (b,e) with derived (d=b+e, a=b+2e)."
+  },
+  "baselines": [
+    {
+      "name": "baseline_placeholder",
+      "implementation_ref": "sklearn.dummy.DummyClassifier"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "placeholder_dataset",
+      "source": "synthetic_generator_v1"
+    }
+  ],
+  "parity_contract": {
+    "same_seed_all_methods": true,
+    "same_data_split": true,
+    "same_preprocessing": true
+  },
+  "calibration_provenance": {
+    "learned_on": "training_split",
+    "procedure": "canonical identity — no observer calibration parameters.",
+    "domain_of_origin": "integer_lattice"
+  },
+  "framework_inheritance": {
+    "mode": "novel"
+  },
+  "metrics": ["accuracy"],
+  "source_mapping": {
+    "theory_doc": "../EXPERIMENT_AXIOMS_BLOCK.md",
+    "primary_source": "Part B — Benchmark Axioms",
+    "mapping_rationale": "The canonical benchmark protocol binds QA-vs-baseline claims to declared baselines, parity, calibration provenance, and metrics."
+  },
+  "sota_baseline": {
+    "name": "baseline_placeholder",
+    "metric": "accuracy",
+    "null_result_acceptable": true,
+    "null_result_reason": "Canonical placeholder protocol only; concrete benchmarks must provide a numeric SOTA threshold."
+  },
+  "ablation": {
+    "callable": "run_ablation",
+    "destroyed_structure": "shuffle QA observer labels before scoring",
+    "expected_direction": "claimed QA advantage should vanish under the ablation"
+  },
+  "reproducibility": {
+    "seed": 42,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime"
+    },
+    "results_ledger": "results/qa_benchmark_runs.jsonl"
+  }
+}

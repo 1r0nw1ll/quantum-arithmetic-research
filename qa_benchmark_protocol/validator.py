@@ -68,6 +68,90 @@ def _is_nonempty_str(x: Any) -> bool:
     return isinstance(x, str) and bool(x.strip())
 
 
+def _resolve_path(value: str, base_dir: Optional[str]) -> str:
+    path = os.path.expanduser(value)
+    if not os.path.isabs(path):
+        path = os.path.join(base_dir or os.getcwd(), path)
+    return os.path.abspath(path)
+
+
+def _source_mapping_ok(value: Any, base_dir: Optional[str]) -> tuple[bool, Dict[str, Any]]:
+    if not isinstance(value, dict):
+        return False, {"reason": "source_mapping must be an object"}
+
+    theory_doc = value.get("theory_doc")
+    primary_source = value.get("primary_source")
+    rationale = value.get("mapping_rationale")
+    fields_ok = all(_is_nonempty_str(v) for v in (theory_doc, primary_source, rationale))
+    if not fields_ok:
+        return False, {"reason": "theory_doc, primary_source, and mapping_rationale must be non-empty"}
+
+    theory_path = _resolve_path(theory_doc, base_dir)
+    if not os.path.exists(theory_path):
+        return False, {"reason": "theory_doc does not exist", "theory_doc": theory_path}
+
+    with open(theory_path, "r", encoding="utf-8", errors="replace") as handle:
+        haystack = handle.read()
+    if primary_source not in haystack:
+        return False, {
+            "reason": "primary_source is not present in theory_doc",
+            "theory_doc": theory_path,
+            "primary_source": primary_source,
+        }
+
+    return True, {"theory_doc": theory_path, "primary_source": primary_source}
+
+
+def _sota_baseline_ok(value: Any) -> tuple[bool, Dict[str, Any]]:
+    if not isinstance(value, dict):
+        return False, {"reason": "sota_baseline must be an object"}
+    name_ok = _is_nonempty_str(value.get("name"))
+    metric_ok = _is_nonempty_str(value.get("metric"))
+    threshold_ok = isinstance(value.get("threshold"), (int, float)) and not isinstance(value.get("threshold"), bool)
+    null_ok = value.get("null_result_acceptable") is True and _is_nonempty_str(value.get("null_result_reason"))
+    return (
+        name_ok and metric_ok and (threshold_ok or null_ok),
+        {"name": name_ok, "metric": metric_ok, "threshold": threshold_ok, "null_result_acceptable": null_ok},
+    )
+
+
+def _ablation_ok(value: Any) -> tuple[bool, Dict[str, Any]]:
+    if not isinstance(value, dict):
+        return False, {"reason": "ablation must be an object"}
+    callable_ok = _is_nonempty_str(value.get("callable"))
+    destroyed_ok = _is_nonempty_str(value.get("destroyed_structure"))
+    direction_ok = _is_nonempty_str(value.get("expected_direction"))
+    return (
+        callable_ok and destroyed_ok and direction_ok,
+        {"callable": callable_ok, "destroyed_structure": destroyed_ok, "expected_direction": direction_ok},
+    )
+
+
+_REAL_DATA_SENTINELS = frozenset({"pending", "synthetic_only"})
+
+
+def _reproducibility_ok(value: Any) -> tuple[bool, Dict[str, Any]]:
+    if not isinstance(value, dict):
+        return False, {"reason": "reproducibility must be an object"}
+    seed_ok = isinstance(value.get("seed"), int) and value.get("seed") >= 0
+    data_sha = value.get("data_sha256")
+    data_ok = (
+        data_sha in _REAL_DATA_SENTINELS
+        or (_is_nonempty_str(data_sha) and bool(re.fullmatch(r"[0-9a-f]{64}", data_sha)))
+    )
+    packages = value.get("package_versions")
+    packages_ok = (
+        isinstance(packages, dict)
+        and bool(packages)
+        and all(_is_nonempty_str(k) and _is_nonempty_str(v) for k, v in packages.items())
+    )
+    ledger_ok = _is_nonempty_str(value.get("results_ledger"))
+    return (
+        seed_ok and data_ok and packages_ok and ledger_ok,
+        {"seed": seed_ok, "data_sha256": data_ok, "package_versions": packages_ok, "results_ledger": ledger_ok},
+    )
+
+
 _DOTTED_REF = re.compile(r'^[A-Za-z_]\w*(?:\.[A-Za-z_]\w*)+$')
 
 
@@ -78,7 +162,7 @@ def _is_importable_dotted_ref(value: Any) -> bool:
     return importlib.util.find_spec(top_level) is not None
 
 
-def validate_benchmark(obj: Dict[str, Any]) -> List[GateResult]:
+def validate_benchmark(obj: Dict[str, Any], *, base_dir: Optional[str] = None) -> List[GateResult]:
     results: List[GateResult] = []
 
     # Gate 1 — Schema Validity
@@ -160,6 +244,47 @@ def validate_benchmark(obj: Dict[str, Any]) -> List[GateResult]:
         results.append(GateResult("gate_5_metrics", GateStatus.FAIL,
                                   "metrics array missing/empty"))
 
+    # Gate 6 — Source Mapping Cross-Reference
+    source_ok, source_details = _source_mapping_ok(obj.get("source_mapping"), base_dir)
+    if source_ok:
+        results.append(GateResult("gate_6_source_mapping", GateStatus.PASS,
+                                  "source_mapping.primary_source is present in source_mapping.theory_doc",
+                                  source_details))
+    else:
+        results.append(GateResult("gate_6_source_mapping", GateStatus.FAIL,
+                                  "source_mapping must point at a theory_doc containing the declared primary_source",
+                                  source_details))
+
+    # Gate 7 — SOTA / Null-Result Baseline Declared
+    sota_ok, sota_details = _sota_baseline_ok(obj.get("sota_baseline"))
+    if sota_ok:
+        results.append(GateResult("gate_7_sota_baseline", GateStatus.PASS,
+                                  "SOTA baseline has a numeric threshold or explicit null-result acceptance"))
+    else:
+        results.append(GateResult("gate_7_sota_baseline", GateStatus.FAIL,
+                                  "sota_baseline must declare name, metric, and either threshold or null_result_acceptable=true with reason",
+                                  sota_details))
+
+    # Gate 8 — Ablation Declared
+    ablation_ok, ablation_details = _ablation_ok(obj.get("ablation"))
+    if ablation_ok:
+        results.append(GateResult("gate_8_ablation", GateStatus.PASS,
+                                  "Ablation callable and destroyed QA structure declared"))
+    else:
+        results.append(GateResult("gate_8_ablation", GateStatus.FAIL,
+                                  "ablation must declare callable, destroyed_structure, and expected_direction",
+                                  ablation_details))
+
+    # Gate 9 — Reproducibility Manifest Declared
+    repro_ok, repro_details = _reproducibility_ok(obj.get("reproducibility"))
+    if repro_ok:
+        results.append(GateResult("gate_9_reproducibility", GateStatus.PASS,
+                                  "Reproducibility seed, data hash status, package versions, and ledger path declared"))
+    else:
+        results.append(GateResult("gate_9_reproducibility", GateStatus.FAIL,
+                                  "reproducibility manifest incomplete",
+                                  repro_details))
+
     return results
 
 
@@ -185,8 +310,8 @@ def self_test(as_json: bool) -> int:
     valid = _load_json(os.path.join(base, "fixtures", "valid_min.json"))
     invalid = _load_json(os.path.join(base, "fixtures", "invalid_missing_calibration_provenance.json"))
 
-    vr = validate_benchmark(valid)
-    ir = validate_benchmark(invalid)
+    vr = validate_benchmark(valid, base_dir=base)
+    ir = validate_benchmark(invalid, base_dir=base)
 
     ok = _report_ok(vr) and not _report_ok(ir)
     failed_gates = {r.gate for r in ir if r.status == GateStatus.FAIL}
@@ -225,7 +350,7 @@ def main(argv: Optional[List[str]] = None) -> int:
         return 2
 
     obj = _load_json(args.file)
-    results = validate_benchmark(obj)
+    results = validate_benchmark(obj, base_dir=os.path.dirname(os.path.abspath(args.file)))
     if args.json:
         _print_json(results)
     else:

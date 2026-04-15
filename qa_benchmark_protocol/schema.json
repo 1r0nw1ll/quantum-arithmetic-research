@@ -11,7 +11,11 @@
     "parity_contract",
     "calibration_provenance",
     "framework_inheritance",
-    "metrics"
+    "metrics",
+    "source_mapping",
+    "sota_baseline",
+    "ablation",
+    "reproducibility"
   ],
   "properties": {
     "protocol_version": {
@@ -112,6 +116,71 @@
       "type": "array",
       "minItems": 1,
       "items": { "type": "string", "minLength": 1 }
+    },
+    "source_mapping": {
+      "type": "object",
+      "required": ["theory_doc", "primary_source", "mapping_rationale"],
+      "properties": {
+        "theory_doc": { "type": "string", "minLength": 1 },
+        "primary_source": { "type": "string", "minLength": 1 },
+        "mapping_rationale": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "sota_baseline": {
+      "type": "object",
+      "required": ["name", "metric"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1 },
+        "metric": { "type": "string", "minLength": 1 },
+        "threshold": { "type": "number" },
+        "null_result_acceptable": { "type": "boolean" },
+        "null_result_reason": { "type": "string", "minLength": 1 }
+      },
+      "oneOf": [
+        { "required": ["threshold"] },
+        {
+          "required": ["null_result_acceptable", "null_result_reason"],
+          "properties": {
+            "null_result_acceptable": { "const": true }
+          }
+        }
+      ],
+      "additionalProperties": false
+    },
+    "ablation": {
+      "type": "object",
+      "required": ["callable", "destroyed_structure", "expected_direction"],
+      "properties": {
+        "callable": {
+          "type": "string",
+          "minLength": 1,
+          "pattern": "^[A-Za-z_]\\w*$"
+        },
+        "destroyed_structure": { "type": "string", "minLength": 1 },
+        "expected_direction": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
+    },
+    "reproducibility": {
+      "type": "object",
+      "required": ["seed", "data_sha256", "package_versions", "results_ledger"],
+      "properties": {
+        "seed": { "type": "integer", "minimum": 0 },
+        "data_sha256": {
+          "oneOf": [
+            { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+            { "type": "string", "enum": ["pending", "synthetic_only"] }
+          ]
+        },
+        "package_versions": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": { "type": "string", "minLength": 1 }
+        },
+        "results_ledger": { "type": "string", "minLength": 1 }
+      },
+      "additionalProperties": false
     }
   },
   "additionalProperties": false

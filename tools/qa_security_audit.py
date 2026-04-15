@@ -31,6 +31,10 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 RESULTS = {"pass": [], "fail": [], "warn": []}
 BRIDGE_FILE = ROOT / "qa_lab" / "qa_agents" / "cli" / "llm_bridge_agent.py"
+CERT_GATE_HOOK = ROOT / "llm_qa_wrapper" / "cert_gate_hook.py"
+CERT_GATE_HOOK_TEST = ROOT / "llm_qa_wrapper" / "tests" / "test_cert_gate_hook.py"
+PROJECT_STEERING_HOOK_TEST = ROOT / "llm_qa_wrapper" / "tests" / "test_project_steering_hooks.py"
+META_VALIDATOR_TRUST_AUDIT = ROOT / "tools" / "qa_meta_validator_trust_audit.py"
 
 
 def _run(cmd: str, cwd: str = None, timeout: int = 60) -> tuple:
@@ -157,6 +161,118 @@ def check_bridge_cert_runtime():
         RESULTS["fail"].append(
             f"Bridge cert runtime: {' + '.join(detail) or 'unknown failure'}"
         )
+
+
+def check_cert_gate_hook_static():
+    """Fail unless the live Claude PreToolUse hook is an enforcement gate."""
+    if not CERT_GATE_HOOK.exists():
+        RESULTS["fail"].append("PreTool cert gate: cert_gate_hook.py not found")
+        return
+
+    content = CERT_GATE_HOOK.read_text(encoding="utf-8")
+    forbidden_markers = [
+        "AUDIT ONLY",
+        "Always exits 0",
+        "do not block",
+        "LLM_QA_ALLOW_CLAUDE_PYTHON_EDIT",
+        "CLAUDE_PYTHON_WRITE_FORBIDDEN",
+    ]
+    forbidden = [marker for marker in forbidden_markers if marker in content]
+    required_markers = [
+        "EXIT_BLOCK = 2",
+        "CERT_LEDGER_FAILURE",
+        "CERT_COLLAB_MARKER_MISSING",
+        "DESTRUCTIVE_RM_RECURSIVE_FORCE",
+        "WRAPPER_SELF_MODIFICATION",
+        "GIT_FORCE_PUSH_FORBIDDEN",
+        "GIT_COMMIT_WITHOUT_COLLAB_MARKER",
+        "PROTECTED_TARGET_MUTATION",
+        "CLAUDE_PYTHON_WRITE_QUARANTINED",
+        "CODEX_REVIEW_PENDING",
+        "decision != \"ALLOW\"",
+        "_read_ledger_state",
+        "enforced.jsonl",
+    ]
+    missing = [marker for marker in required_markers if marker not in content]
+    if forbidden or missing:
+        detail = []
+        if forbidden:
+            detail.append(f"forbidden markers {forbidden}")
+        if missing:
+            detail.append(f"missing markers {missing}")
+        RESULTS["fail"].append(f"PreTool cert gate static: {'; '.join(detail)}")
+    else:
+        RESULTS["pass"].append("PreTool cert gate static: enforcement markers present")
+
+
+def check_cert_gate_hook_runtime():
+    """Run the PreToolUse hook regression suite."""
+    if not CERT_GATE_HOOK_TEST.exists():
+        RESULTS["fail"].append("PreTool cert gate runtime: test_cert_gate_hook.py not found")
+        return
+
+    rc, stdout, stderr = _run_argv(
+        [sys.executable, str(CERT_GATE_HOOK_TEST)],
+        timeout=60,
+    )
+    if rc == 0 and "18/18 tests passed" in stdout:
+        RESULTS["pass"].append("PreTool cert gate runtime: 18/18 PASS")
+    else:
+        RESULTS["fail"].append(
+            f"PreTool cert gate runtime: FAILED (rc={rc})"
+        )
+
+
+def check_project_steering_hooks_runtime():
+    """Run regression tests for legacy Claude steering hooks."""
+    if not PROJECT_STEERING_HOOK_TEST.exists():
+        RESULTS["fail"].append("Project steering hooks: test_project_steering_hooks.py not found")
+        return
+
+    rc, stdout, stderr = _run_argv(
+        [sys.executable, str(PROJECT_STEERING_HOOK_TEST)],
+        timeout=60,
+    )
+    if rc == 0 and "6/6 tests passed" in stdout:
+        RESULTS["pass"].append("Project steering hooks runtime: 6/6 PASS")
+    else:
+        RESULTS["fail"].append(
+            f"Project steering hooks runtime: FAILED (rc={rc})"
+        )
+
+
+def check_meta_validator_trust_audit():
+    """Run the meta-validator trust-boundary audit."""
+    if not META_VALIDATOR_TRUST_AUDIT.exists():
+        RESULTS["fail"].append("Meta-validator trust audit: qa_meta_validator_trust_audit.py not found")
+        return
+
+    rc, stdout, stderr = _run_argv(
+        [sys.executable, str(META_VALIDATOR_TRUST_AUDIT), "--json"],
+        timeout=60,
+    )
+    try:
+        payload = json.loads(stdout)
+    except json.JSONDecodeError:
+        RESULTS["fail"].append(
+            f"Meta-validator trust audit: non-JSON output (rc={rc})"
+        )
+        return
+
+    if rc == 0 and payload.get("ok") is True:
+        RESULTS["pass"].append(
+            f"Meta-validator trust audit: {payload.get('family_sweep_count')} families"
+        )
+        return
+
+    issue_counts = {}
+    for issue in payload.get("issues", []):
+        issue_counts[issue.get("code", "UNKNOWN")] = issue_counts.get(issue.get("code", "UNKNOWN"), 0) + 1
+    RESULTS["fail"].append(
+        "Meta-validator trust audit: "
+        f"{payload.get('fail_count', 0)} fail, {payload.get('warn_count', 0)} warn; "
+        f"codes={json.dumps(issue_counts, sort_keys=True)}"
+    )
 
 
 def check_collab_agents():
@@ -292,6 +408,10 @@ def main():
     check_agent_security()
     check_bridge_cert_static()
     check_bridge_cert_runtime()
+    check_cert_gate_hook_static()
+    check_cert_gate_hook_runtime()
+    check_project_steering_hooks_runtime()
+    check_meta_validator_trust_audit()
     check_collab_agents()
     check_event_log_secrets()
     check_guardrail_denials()

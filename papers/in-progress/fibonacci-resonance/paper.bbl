@@ -1,0 +1,89 @@
+\begin{thebibliography}{12}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi: #1}\else
+  \providecommand{\doi}{doi: \begingroup \urlstyle{rm}\Url}\fi
+
+\bibitem[Christiansen et~al.(2018)]{christiansen2018}
+Jessie~L. Christiansen et~al.
+\newblock The {K2-138} system: A near-resonant chain of five sub-{Neptune}
+  planets discovered by citizen scientists.
+\newblock \emph{The Astronomical Journal}, 155:\penalty0 57, 2018.
+\newblock \doi{10.3847/1538-3881/aa9be0}.
+
+\bibitem[Hara et~al.(2020)]{hara2020}
+Nathan~C. Hara et~al.
+\newblock The {SOPHIE} search for northern extrasolar planets. {XVI}.
+  {HD~158259}: A compact planetary system in a near-3:2 mean motion resonance
+  chain.
+\newblock \emph{Astronomy \& Astrophysics}, 636:\penalty0 L6, 2020.
+\newblock \doi{10.1051/0004-6361/201937254}.
+
+\bibitem[Leleu et~al.(2021)]{leleu2021}
+Ad{\'e}la{\"\i}de Leleu et~al.
+\newblock Six transiting planets and a chain of {Laplace} resonances in
+  {TOI-178}.
+\newblock \emph{Astronomy \& Astrophysics}, 649:\penalty0 A26, 2021.
+\newblock \doi{10.1051/0004-6361/202039767}.
+
+\bibitem[Luger et~al.(2017)]{luger2017}
+Rodrigo Luger et~al.
+\newblock A seven-planet resonant chain in {TRAPPIST-1}.
+\newblock \emph{Nature Astronomy}, 1:\penalty0 0129, 2017.
+\newblock \doi{10.1038/s41550-017-0129}.
+
+\bibitem[Luque et~al.(2024)]{luque2024}
+Rafael Luque et~al.
+\newblock The six-planet resonant chain of {HD~110067}.
+\newblock \emph{The Astrophysical Journal Letters}, 968:\penalty0 L12, 2024.
+\newblock \doi{10.3847/2041-8213/ad5796}.
+
+\bibitem[MacDonald et~al.(2016)]{macdonald2016}
+Mariah~G. MacDonald et~al.
+\newblock A dynamical analysis of the {Kepler-80} system of five transiting
+  planets.
+\newblock \emph{The Astronomical Journal}, 152:\penalty0 105, 2016.
+\newblock \doi{10.3847/0004-6256/152/4/105}.
+
+\bibitem[Mills et~al.(2016)]{mills2016}
+Sean~M. Mills et~al.
+\newblock A resonant chain of four transiting, sub-{Neptune} planets.
+\newblock \emph{Nature}, 533:\penalty0 509--512, 2016.
+\newblock \doi{10.1038/nature17445}.
+
+\bibitem[Murray and Dermott(1999)]{murray1999}
+Carl~D. Murray and Stanley~F. Dermott.
+\newblock \emph{Solar System Dynamics}.
+\newblock Cambridge University Press, 1999.
+\newblock \doi{10.1017/CBO9781139174817}.
+
+\bibitem[Peale(1976)]{peale1976}
+Stanton~J. Peale.
+\newblock Orbital resonances in the solar system.
+\newblock \emph{Annual Review of Astronomy and Astrophysics}, 14:\penalty0
+  215--246, 1976.
+\newblock \doi{10.1146/annurev.aa.14.090176.001243}.
+
+\bibitem[Rivera et~al.(2010)]{rivera2010}
+Eugenio~J. Rivera et~al.
+\newblock The {Lick-Carnegie} exoplanet survey: A {Uranus}-mass fourth planet
+  for {GJ~876} in an extrasolar {Laplace} configuration.
+\newblock \emph{The Astrophysical Journal}, 719:\penalty0 890--899, 2010.
+\newblock \doi{10.1088/0004-637X/719/1/890}.
+
+\bibitem[Thom(1962)]{thom1962}
+A.~Thom.
+\newblock The megalithic unit of length.
+\newblock \emph{Journal of the Royal Statistical Society: Series A},
+  125\penalty0 (2):\penalty0 243--267, 1962.
+\newblock \doi{10.2307/2982327}.
+
+\bibitem[Wall(1960)]{wall1960}
+D.~D. Wall.
+\newblock Fibonacci series modulo $m$.
+\newblock \emph{The American Mathematical Monthly}, 67\penalty0 (6):\penalty0
+  525--532, 1960.
+\newblock \doi{10.2307/2309169}.
+
+\end{thebibliography}

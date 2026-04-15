@@ -105,14 +105,25 @@ CERT_ADJACENT_EXACT = {
     "MEMORY.md",
     "docs/families/README.md",
 }
-MUTATING_BASH_PATTERN = re.compile(
-    r"(^|[;&|]\s*)(?:python3?|perl|ruby)\b.*(?:write_text|open\s*\([^)]*,\s*['\"][wa]|"
-    r"os\.remove|unlink|shutil\.rmtree)|"
-    r"(^|[;&|]\s*)(?:sed|perl)\s+-i\b|"
-    r"(^|[;&|]\s*)(?:mv|cp|rm|truncate|chmod|chown)\b|"
-    r">|>>",
+PYTHON_INLINE_MUTATION_PATTERN = re.compile(
+    r"(^|[;&|]\s*)(?:python3?|perl|ruby)\b.*"
+    r"(?:write_text|open\s*\([^)]*,\s*['\"][wa]|os\.remove|unlink|shutil\.rmtree)",
     re.I,
 )
+# Shell-token mutation patterns. Run against a quote-stripped view so that
+# `>` / `mv` / `rm` etc. inside quoted string payloads do not false-positive.
+SHELL_MUTATION_PATTERN = re.compile(
+    r"(^|[;&|]\s*)(?:sed|perl)\s+-i\b|"
+    r"(^|[;&|]\s*)(?:mv|cp|rm|truncate|chmod|chown)\b|"
+    r"(?<![\w<])>>?",
+    re.I,
+)
+# Kept as the union for callers / tests that want a single-check form.
+MUTATING_BASH_PATTERN = re.compile(
+    PYTHON_INLINE_MUTATION_PATTERN.pattern + "|" + SHELL_MUTATION_PATTERN.pattern,
+    re.I,
+)
+QUOTED_STRING_PATTERN = re.compile(r"'[^']*'|\"[^\"]*\"")
 HEREDOC_START_PATTERN = re.compile(r"<<-?\s*['\"]?([A-Za-z_][A-Za-z0-9_]*)['\"]?")
 PYTHON_PATH_PATTERN = re.compile(r"(?<![A-Za-z0-9_./-])[^;&|<>\s'\"]+\.py(?:\b|$)", re.I)
 # Fd-to-fd duplications and /dev/null sinks are not file mutations. Strip
@@ -150,8 +161,13 @@ def _strip_heredoc_bodies(command: str) -> str:
 def _bash_mutates_python_path(scan_command: str) -> bool:
     """Return true only for Bash commands that plausibly write Python files."""
     normalized = scan_command.replace("\\", "/")
-    stripped = FD_REDIRECT_PATTERN.sub("", scan_command)
-    if ".py" not in normalized or not MUTATING_BASH_PATTERN.search(stripped):
+    if ".py" not in normalized:
+        return False
+    fd_stripped = FD_REDIRECT_PATTERN.sub("", scan_command)
+    shell_scan = QUOTED_STRING_PATTERN.sub("", fd_stripped)
+    has_python_inline_mutation = bool(PYTHON_INLINE_MUTATION_PATTERN.search(scan_command))
+    has_shell_mutation = bool(SHELL_MUTATION_PATTERN.search(shell_scan))
+    if not (has_python_inline_mutation or has_shell_mutation):
         return False
     return PYTHON_PATH_PATTERN.search(normalized) is not None
 
@@ -371,7 +387,8 @@ def _deny_bash(tool_input: dict) -> list[str]:
         reason for reason, pattern in DANGEROUS_BASH_PATTERNS
         if pattern.search(scan_command)
     ]
-    if MUTATING_BASH_PATTERN.search(scan_command):
+    shell_scan = QUOTED_STRING_PATTERN.sub("", FD_REDIRECT_PATTERN.sub("", scan_command))
+    if PYTHON_INLINE_MUTATION_PATTERN.search(scan_command) or SHELL_MUTATION_PATTERN.search(shell_scan):
         normalized = scan_command.replace("\\", "/")
         if any(target in normalized for target in PROTECTED_BASH_TARGETS):
             reasons.append("PROTECTED_TARGET_MUTATION")

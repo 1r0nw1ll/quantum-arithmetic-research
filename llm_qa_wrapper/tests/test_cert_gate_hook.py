@@ -486,6 +486,79 @@ def t_bash_python_path_mutation_with_stderr_redirect_quarantines():
         _verify_chain(rows)
 
 
+@test("Bash git commit with <email> in message does not quarantine when body mentions .py")
+def t_allow_git_commit_email_bracket_with_py_in_body():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        # Write the collab marker so GIT_COMMIT_WITHOUT_COLLAB_MARKER does not fire.
+        (ledger_dir / "collab_marker").write_text("claude-main-test", encoding="utf-8")
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {
+                    "command": (
+                        "git commit -m \"docs: note about cert_gate_hook.py\n\n"
+                        "Co-Authored-By: Claude <noreply@anthropic.com>\""
+                    )
+                },
+            }),
+            extra_env={"QA_COLLAB_MARKER_PATH": str(ledger_dir / "collab_marker")},
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == []
+        assert not (ledger_dir / "quarantine" / "pending").exists()
+        _verify_chain(rows)
+
+
+@test("Bash python -c with > inside string literal does not quarantine")
+def t_allow_python_dash_c_with_redirect_in_string():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {
+                    "command": "python3 -c \"print('a > b in foo.py'); print(1)\""
+                },
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == []
+        assert not (ledger_dir / "quarantine" / "pending").exists()
+        _verify_chain(rows)
+
+
+@test("Bash python -c with os.remove on .py still quarantines")
+def t_python_dash_c_os_remove_still_quarantines():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "python3 -c \"import os; os.remove('foo.py')\""},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["enforcement_markers"] == ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
+        packets = sorted((ledger_dir / "quarantine" / "pending").glob("*.json"))
+        assert len(packets) == 1
+        _verify_chain(rows)
+
+
 @test("Bash combined stdout stderr devnull redirect does not quarantine")
 def t_allow_combined_devnull_redirect():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
@@ -762,6 +835,9 @@ def main() -> int:
         t_bash_redirect_to_python_path_quarantines,
         t_bash_cat_redirect_to_python_path_quarantines,
         t_bash_python_path_mutation_with_stderr_redirect_quarantines,
+        t_allow_git_commit_email_bracket_with_py_in_body,
+        t_allow_python_dash_c_with_redirect_in_string,
+        t_python_dash_c_os_remove_still_quarantines,
         t_allow_combined_devnull_redirect,
         t_allow_codex_delegation_heredoc_python_task_text,
         t_deny_bash_protected_mutation,

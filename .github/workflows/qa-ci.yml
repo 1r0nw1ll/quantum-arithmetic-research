@@ -88,6 +88,9 @@ jobs:
         with:
           python-version: "3.11"
 
+      - name: Install dependencies
+        run: pip install -r requirements-dev.txt
+
       - name: QA Axiom Compliance Gate
         run: |
           python tools/qa_axiom_linter.py --all

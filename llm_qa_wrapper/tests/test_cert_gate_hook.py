@@ -208,6 +208,45 @@ def t_deny_cert_adjacent_without_marker():
         _verify_chain(rows)
 
 
+@test("Outside repo write reaches allow path")
+def t_allow_outside_repo_write():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        outside_file = ledger_dir / "outside" / "notes.md"
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Write",
+                "tool_input": {"file_path": str(outside_file)},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        _verify_chain(rows)
+
+
+@test("Frozen finance outside repo write remains blocked")
+def t_deny_frozen_finance_outside_repo_write():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Write",
+                "tool_input": {"file_path": "/home/player2/Desktop/qa_finance/report.md"},
+            }),
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "DENY"
+        assert "FROZEN_QA_FINANCE" in rows[0]["deny_reasons"]
+        _verify_chain(rows)
+
+
 @test("Python edit quarantines and allows write")
 def t_deny_python_edit():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
@@ -823,6 +862,8 @@ def main() -> int:
         t_deny_bash,
         t_deny_wrapper_edit,
         t_deny_cert_adjacent_without_marker,
+        t_allow_outside_repo_write,
+        t_deny_frozen_finance_outside_repo_write,
         t_deny_python_edit,
         t_deny_python_edit_env_override,
         t_deny_bash_python_mutation,

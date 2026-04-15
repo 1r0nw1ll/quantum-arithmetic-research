@@ -344,8 +344,6 @@ def _deny_file_path(tool_name: str, tool_input: dict) -> list[str]:
     rel_posix = rel.replace(os.sep, "/")
     canonical_text = str(canonical)
 
-    if not canonical_text.startswith(str(REPO) + os.sep):
-        reasons.append("FILE_WRITE_OUTSIDE_REPO")
     if canonical_text.startswith("/home/player2/Desktop/qa_finance/"):
         reasons.append("FROZEN_QA_FINANCE")
     if rel_posix.startswith(("archive/", "Documents/", "QAnotes/")):

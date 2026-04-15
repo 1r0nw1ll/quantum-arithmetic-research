@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG infrastructure cert; validates internal graph invariants, not empirical claims -->",
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA-KG Consistency Cert family [225]: validates the QA-native memory graph (tools/qa_kg/) itself. Four invariants: (KG1) every Cosmos node has a provenance chain to Singularity via {validates, derived-from, extends, instantiates}; (KG2) no cycles in 'contradicts' edges; (KG3) Theorem NT firewall intact — no archive (Unassigned) → Cosmos causal edges without via_cert mediation; (KG4) orphan Satellite nodes aged beyond policy window (default 30d) flagged for review. Source: QA-MEM architecture spec, memory/project_qa_mem_architecture.md; CLAUDE.md QA Axiom Compliance; Theorem NT (Observer Projection Firewall)."
+}

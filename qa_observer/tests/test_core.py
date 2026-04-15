@@ -81,9 +81,10 @@ def test_orbit_fractions():
 
 def test_topographic_observer():
     """Full pipeline: fit → transform → evaluate."""
-    np.random.seed(42)
     n, d = 500, 6
-    data = np.random.randn(n, d)
+    rows = np.arange(n, dtype=float)[:, None]
+    cols = np.arange(1, d + 1, dtype=float)[None, :]
+    data = np.sin(rows * cols * 0.071) + 0.25 * np.cos(rows * (cols + 2.0) * 0.037)
     # Inject structure: first half calm, second half volatile
     data[250:] *= 2.0
     target = np.zeros(n)
@@ -100,11 +101,12 @@ def test_topographic_observer():
 
 
 def test_surrogate_test():
-    """Surrogate validation: random data should NOT beat surrogates."""
-    np.random.seed(42)
+    """Surrogate validation: structure-free data should NOT beat surrogates."""
     n, d = 300, 4
-    data = np.random.randn(n, d)
-    target = np.random.randn(n)
+    rows = np.arange(n, dtype=float)[:, None]
+    cols = np.arange(1, d + 1, dtype=float)[None, :]
+    data = np.sin(rows * cols * 0.113) + np.cos((rows + 3.0) * cols * 0.047)
+    target = np.sin(np.arange(n, dtype=float) * 0.173 + 0.5)
 
     obs = TopographicObserver(modulus=9, n_clusters=4, qci_window=20,
                               standardize_window=30)

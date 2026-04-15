@@ -84,16 +84,16 @@ def generate_synthetic_eeg_features(n_samples: int = 200, seed: int = 42) -> Tup
         features: (n_samples, 7) array of normalized features [0, 1]
         labels: (n_samples,) array of 0 (baseline) or 1 (seizure)
     """
-    np.random.seed(seed)
-
     n_baseline = n_samples // 2
     n_seizure = n_samples - n_baseline
 
     # Baseline: moderate activity, normal network balance
     baseline_mean = np.array([0.4, 0.4, 0.4, 0.4, 0.5, 0.6, 0.3])  # DMN high, LIM low
-    baseline_std = 0.1
+    baseline_idx = np.arange(n_baseline, dtype=float)[:, None]
+    network_phase = np.arange(1, 8, dtype=float)[None, :]
+    baseline_noise = 0.1 * np.sin((baseline_idx + seed + 1.0) * network_phase * 0.37)
     baseline_features = np.clip(
-        np.random.normal(baseline_mean, baseline_std, (n_baseline, 7)),
+        baseline_mean + baseline_noise,
         0, 1
     )
 
@@ -103,17 +103,18 @@ def generate_synthetic_eeg_features(n_samples: int = 200, seed: int = 42) -> Tup
     # - LIM elevated (limbic involvement in many seizures)
     # - DMN suppressed (disrupted resting state)
     seizure_mean = np.array([0.5, 0.7, 0.5, 0.7, 0.4, 0.3, 0.6])
-    seizure_std = 0.12
+    seizure_idx = np.arange(n_seizure, dtype=float)[:, None]
+    seizure_noise = 0.12 * np.cos((seizure_idx + seed + 3.0) * network_phase * 0.29)
     seizure_features = np.clip(
-        np.random.normal(seizure_mean, seizure_std, (n_seizure, 7)),
+        seizure_mean + seizure_noise,
         0, 1
     )
 
     features = np.vstack([baseline_features, seizure_features])
     labels = np.array([0] * n_baseline + [1] * n_seizure)
 
-    # Shuffle
-    idx = np.random.permutation(n_samples)
+    # Deterministic interleaving keeps the demo reproducible without a random observer.
+    idx = np.argsort(np.sin(np.arange(n_samples, dtype=float) * 12.9898 + seed))
     return features[idx], labels[idx]
 
 

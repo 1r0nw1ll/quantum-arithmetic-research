@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA ADE Mutation Game Cert family [250]: extends cert [244] to the full simply-laced ADE classification — A_5, D_5, E_6, E_7, E_8 — using the same integer Mutation Game BFS. Verifies for each type (i) Cartan determinant = order of center (6,4,3,2,1), (ii) Weyl orbit size = (30,40,72,126,240), (iii) every generated v ∈ ℤ^n satisfies v^T G v = 2, (iv) equal positive/negative split with R-=-R+. Primary sources (Wildberger, 2020) Algebra Colloquium 27; (Humphreys, 1972) Springer GTM 9 §9.3 Table 1. Companion file: ~/Downloads/MutationGameCoxeterGraphs.pdf. Theory: docs/theory/QA_E8_EMBEDDING_AND_ADE.md §B. Checks ADE_1+CARTAN_DETS/BFS_SIZES/ROOT_NORM/SIGN_SPLIT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

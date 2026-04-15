@@ -25,6 +25,8 @@
 | [244] | [QA Mutation Game Root Lattice](244_qa_mutation_game_root_lattice_cert.md) | Wildberger integer E_8 mutation game: 240-root orbit, exact Cartan determinant 1, positive/negative split, and Weyl braid witnesses | PASS |
 | [245] | [QA SL3 Hexagonal Ring Identity](245_qa_sl3_hexagonal_ring_identity_cert.md) | Wildberger sl(3) diamond follow-up: ring(a,b)=dim pi[a,b]-dim pi[a-1,b-1]=T(d+1)+a*b; 196/196 grid entries | PASS |
 | [246] | [QA Chromogeometric TQF Symmetry](246_qa_chromogeometric_tqf_symmetry_cert.md) | Triple Quad residues satisfy TQF_r=TQF_g=-TQF_b; symbolic proof, 3000 triangle sample, exhaustive collinearity invariant | PASS |
+| [249] | [QA E8 Embedding Orbit Classifier](249_qa_e8_embedding_orbit_classifier_cert.md) | Canonical (b,e,d,a)→ℤ^8 diagonal embedding into E_8 root lattice; m=9 T-orbit partition {1,8,24,24,24}; per-orbit min Q=(8,16,28,72,162) is 5-distinct complete classifier | PASS |
+| [250] | [QA ADE Mutation Game](250_qa_ade_mutation_game_cert.md) | Extends [244] to full simply-laced ADE: A_5 D_5 E_6 E_7 E_8 with orbit sizes (30,40,72,126,240) and Cartan det = order of center | PASS |
 | [223] | [QA Experiment Protocol](223_qa_experiment_protocol.md) | Schema + Validator + Fixtures; enforces study design, source mapping, ablation, reproducibility (linter EXP-1) | PASS |
 | [224] | [QA Benchmark Protocol](224_qa_benchmark_protocol.md) | Schema + Validator + Fixtures; enforces calibration provenance, SOTA/null baseline, ablation, reproducibility (linter BENCH-1) | PASS |
 

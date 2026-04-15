@@ -6913,6 +6913,50 @@ def _validate_mutation_game_root_lattice_cert_family(base_dir):
     return None
 
 
+def _validate_e8_embedding_orbit_classifier_cert_family(base_dir):
+    """QA E8 Embedding Orbit Classifier Cert family [249] - canonical (b,e,d,a)→ℤ^8 embedding into the Wildberger E_8 root lattice [244]; verifies m=9 T-orbit partition {1,8,24,24,24}, closed-form Q(E_diag(b,e))=2(b²+e²+d²+a²)-2(bd+ea+da) symbolic + exhaustive on [1..9]², per-orbit min Q under E_diag = (8,16,28,72,162) is a 5-distinct complete T-orbit classifier, and per-orbit Q-multisets are pairwise distinct under both E_diag and E_tri. E_diag canonical, E_tri recorded informationally. Source: Wildberger 2020 + cert [244]; Will Dale + Claude 2026-04-15. Checks E8E_1+CARTAN_LOAD/T_ORBITS/DIAG_FORMULA/DIAG_MIN_Q/DIAG_MULTISET/TRI_PROFILE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_e8_embedding_orbit_classifier_cert_v1")
+    validator = os.path.join(fam_dir, "qa_e8_embedding_orbit_classifier_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_e8_embedding_orbit_classifier_cert_v1/qa_e8_embedding_orbit_classifier_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_e8_embedding_orbit_classifier_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_e8_embedding_orbit_classifier_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_e8_embedding_orbit_classifier_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_ade_mutation_game_cert_family(base_dir):
+    """QA ADE Mutation Game Cert family [250] - extends [244] (E_8 only) to the full simply-laced ADE classification (A_5, D_5, E_6, E_7, E_8) using the same integer Wildberger 2020 Mutation Game BFS. Verifies for each type Cartan determinant = order of center (6,4,3,2,1), Weyl orbit size (30,40,72,126,240) per Humphreys GTM 9 §9.3 Table 1, exhaustive v^T G v = 2, and equal positive/negative split with R-=-R+. Source: Wildberger 2020 + Humphreys 1972 + cert [244]; Will Dale + Claude 2026-04-15. Checks ADE_1+CARTAN_DETS/BFS_SIZES/ROOT_NORM/SIGN_SPLIT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_ade_mutation_game_cert_v1")
+    validator = os.path.join(fam_dir, "qa_ade_mutation_game_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ade_mutation_game_cert_v1/qa_ade_mutation_game_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_ade_mutation_game_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_ade_mutation_game_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_ade_mutation_game_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_signal_generator_inference_cert_family(base_dir: str) -> Optional[str]:
     """QA Signal Generator Inference Cert family [209] — for any m-valued time series, e_t = ((b_{t+1} - b_t - 1) % m) + 1 is the unique A1-compliant generator. The signal IS the orbit; the generator IS the dynamics. b (amplitude state) and e (transition generator) are role-distinct per [208]. Cross-series generator synchrony measures coupling per [207]. Supersedes hardcoded CMAP/MICROSTATE_STATES lookups. EEG chb01: DR2=+0.157 p=0.0003 beyond delta; DR2=+0.085 p=0.024 beyond Observer 3. Source: Will Dale + Claude 2026-04-08. Checks SGI_1+CLOSURE/UNIQUE/ROLE/SYNC/EMPIRICAL/SUPERSEDE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -7871,6 +7915,16 @@ FAMILY_SWEEPS = [
      "QA-native record of conjecture-resolution attempts with typed obstruction (proved / formal_gap / qa_obstruction / generator_insufficient / inconclusive). QA contribution over Ju et al. (2026) Rethlas+Archon pipeline is the typed failure_mode layer that distinguishes formal_gap from qa_obstruction from generator_insufficient. Primary source: Ju, Gao, Jiang, Wu, Sun, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026), 'Automated Conjecture Resolution with Formal Verification,' arXiv:2604.03789. Theory: docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md. Checks FCR_1+SCHEMA/GENERATOR_SET/FAILURE_MODE/NT/VERDICT/WITNESS/LEAN4_STUB; 2 PASS (proved + formal_gap) + 1 FAIL (missing failure label); self-test ok",
      "248_qa_formal_conjecture_resolution_cert",
      "qa_formal_conjecture_resolution_cert_v1", True),
+    (249, "QA E8 Embedding Orbit Classifier Cert family",
+     _validate_e8_embedding_orbit_classifier_cert_family,
+     "Canonical (b,e,d,a)→ℤ^8 embedding into the Wildberger E_8 root lattice [244]; m=9 T-orbit partition {1,8,24,24,24}, closed-form Q(E_diag)=2(b²+e²+d²+a²)-2(bd+ea+da), per-orbit min Q under E_diag = (8,16,28,72,162) is a 5-distinct complete T-orbit classifier, Q-multisets pairwise distinct under both E_diag and E_tri. Source: Wildberger 2020 + cert [244]. Checks E8E_1+CARTAN_LOAD/T_ORBITS/DIAG_FORMULA/DIAG_MIN_Q/DIAG_MULTISET/TRI_PROFILE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "249_qa_e8_embedding_orbit_classifier_cert",
+     "qa_e8_embedding_orbit_classifier_cert_v1", True),
+    (250, "QA ADE Mutation Game Cert family",
+     _validate_ade_mutation_game_cert_family,
+     "Extends [244] to the full simply-laced ADE classification (A_5, D_5, E_6, E_7, E_8). Cartan determinants (6,4,3,2,1), Weyl orbit sizes (30,40,72,126,240) per Humphreys GTM 9 §9.3 Table 1, v^T G v = 2 exhaustive, equal positive/negative split with R-=-R+. Source: Wildberger 2020 + Humphreys 1972 + cert [244]. Checks ADE_1+CARTAN_DETS/BFS_SIZES/ROOT_NORM/SIGN_SPLIT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "250_qa_ade_mutation_game_cert",
+     "qa_ade_mutation_game_cert_v1", True),
 ]
 
 

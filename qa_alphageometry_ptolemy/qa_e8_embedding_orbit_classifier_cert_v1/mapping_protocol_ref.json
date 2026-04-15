@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA E8 Embedding Orbit Classifier Cert family [249]: canonical (b,e,d,a)→ℤ^8 embedding into Wildberger E_8 root lattice (cert [244]). Verifies (1) m=9 T-orbit partition {1,8,24,24,24} sum 81; (2) closed-form Q(E_diag(b,e))=2(b²+e²+d²+a²)-2(bd+ea+da) symbolic + exhaustive on [1..9]²; (3) per-orbit min Q under E_diag = (8,16,28,72,162) is a 5-distinct complete T-orbit classifier; (4) per-orbit Q-multisets pairwise distinct under both E_diag and E_tri. E_diag canonical, E_tri recorded informationally. Builds on (Wildberger, 2020) Mutation Game; companion file: ~/Downloads/MutationGameCoxeterGraphs.pdf. Theory: docs/theory/QA_E8_EMBEDDING_AND_ADE.md §A. Cross-refs (Wildberger, 2003) simply-laced and (Humphreys, 1972) GTM 9. Checks E8E_1+CARTAN_LOAD/T_ORBITS/DIAG_FORMULA/DIAG_MIN_Q/DIAG_MULTISET/TRI_PROFILE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

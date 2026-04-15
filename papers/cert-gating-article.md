@@ -172,7 +172,7 @@ Running three LLM backends in parallel on one repo teaches you things that singl
 
 The same cert-gating architecture scales beyond agent security to **mathematical verification**. The QA research platform maintains a parallel cert ecosystem where every mathematical claim — not just every tool call — requires a certificate backed by an independent validator.
 
-As of this writing, the ecosystem contains **214 certificate families**, each with a dedicated validator that recomputes its theorem from first principles. In a single session, five new families were shipped covering five dual views of the same mathematical object (a 4-tuple `(b, e, d, a)` with `d = b+e`, `a = b+2e`):
+As of this writing, the ecosystem contains **202 certificate families** (verify: `python qa_alphageometry_ptolemy/qa_meta_validator.py 2>&1 | grep 'Human-tract doc gate'`), each with a dedicated validator that recomputes its theorem from first principles. In a single session, five new families were shipped covering five dual views of the same mathematical object (a 4-tuple `(b, e, d, a)` with `d = b+e`, `a = b+2e`):
 
 | Cert | Theorem | Independent check |
 |---|---|---|
@@ -181,7 +181,7 @@ As of this writing, the ecosystem contains **214 certificate families**, each wi
 | [213] Causal DAG | A2 axiom IS a 4-node structural causal model | Pair bijectivity exhaustively checked on S_9 (81²) and S_24 (576²) |
 | [214] Norm-Flip | Eisenstein norm flips sign under T | Integer identity 81/81, orbit classification matches Pythagorean Families |
 
-Each validator runs as a subprocess with `--self-test`, outputs JSON `{"ok": true/false}`, and validates against both a PASS fixture (expected to pass) and a FAIL fixture (expected to catch a specific error). The meta-validator sweeps all 214 families on every CI run.
+Each validator runs as a subprocess with `--self-test`, outputs JSON `{"ok": true/false}`, and validates against both a PASS fixture (expected to pass) and a FAIL fixture (expected to catch a specific error). The meta-validator sweeps every family on every CI run.
 
 The practical payoff: a reanalysis of the Sixto Ramos timing graph used the norm-flip theorem from cert [214] to derive the machine's internal state — `(b, e) = (9, 4)` — from two independent physical measurements (outer radius and peak amplitude), both converging to sub-percent accuracy. The cert ecosystem made this possible because the theorem was already validated; the application was a matter of plugging in measurements.
 
@@ -196,6 +196,8 @@ This is the same philosophy as the security kernel: **no claim without a certifi
 **Budget limits matter more than TTL alone.** A 24-hour TTL on a capability token is necessary but not sufficient. An agent that goes haywire can do a lot of damage in 24 hours if it has unlimited executions. Budget limits (max_executions) put a hard ceiling on blast radius. When we set the Codex bridge to 200 executions per session, that is 200 tool calls and then it has to get a fresh token. Combined with TTL, this gives you both a time bound and an action bound.
 
 **Structured failure artifacts, not just log lines.** When the kernel blocks something, it does not just log "denied." It mints a `PROMPT_INJECTION_OBSTRUCTION.v1` with the attempted tool, the arguments, the specific invariant that failed, and a witness containing the provenance chain that triggered the failure. This turns "why was my agent blocked?" from a grep-through-logs exercise into a structured query.
+
+**Graduated authorship, not all-or-nothing.** When one agent's code-authorship privileges need to be bounded because its failure class is different from another's, the answer is not to cut authorship off. It is to route every Python write through a **quarantine packet** (`QA_CLAUDE_PYTHON_QUARANTINE.v1`) that the author's pre-commit hook stops at. A second agent reviews a batch of pending packets at cert-submission time — not per-write — and approves, rejects, or requests rework. Approved packets unlock commits. Rejected packets produce an automatic rollback: if the write created a new file, the file is removed; if it modified an existing file, the pre-write snapshot is restored. This amortises the review cost across many writes, and catches whole failure classes a static schema cannot see — for example, when one agent's literature-mapping work produces code that silently invents a SOTA baseline rather than reproducing one. The review layer sees the generated code, notices the baseline is wrong, and rejects. A recent live example: a patch authored under quarantine to fix a shell-redirect false positive in the Bash heuristic itself — one agent wrote the patch, the review agent hand-applied it after the git-apply format check rejected the fuzz, tests went from 27/27 to 30/30 passing, and the commit landed cleanly on `origin/main`. The full trail — write packet, review decision, commit hash — is in `llm_qa_wrapper/quarantine/rejected/` and `llm_qa_wrapper/ledger/live.jsonl`.
 
 ## Why this catches things surface-level gates miss
 

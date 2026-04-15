@@ -1,0 +1,51 @@
+{
+  "protocol_version": "QA_EXPERIMENT_PROTOCOL.v1",
+  "experiment_id": "qa_detect_tabular_anomaly_feature_pairing",
+  "hypothesis": "Feature-pairing heuristics for tabular anomaly detection can be evaluated under the shared benchmark protocol without changing the QA state alphabet.",
+  "null_model": {
+    "description": "Benchmark baselines and dataset splits are declared in benchmark_protocol.json; Spearman rank correlation is used only as an observer-side feature-pairing heuristic.",
+    "generating_process": "Compute feature-pairing statistics on the training split only, then compare against benchmark outputs declared in benchmark_protocol.json.",
+    "held_fixed": ["training split", "benchmark datasets", "observer projection"],
+    "permuted": ["feature-pair ranking labels for ablation"],
+    "independence_argument": "The pairing statistic is computed on the training split only and does not use anomaly labels from the test split.",
+    "surrogate_types": [
+      "training_split_pairing"
+    ]
+  },
+  "pre_registration": {
+    "seed": 42,
+    "date_utc": "2026-04-13T00:00:00Z",
+    "n_trials": 1
+  },
+  "decision_rules": {
+    "accept_criterion": "Variant results are interpreted through the parity and metrics declared in benchmark_protocol.json.",
+    "reject_criterion": "Reject any variant that violates the benchmark parity contract or lacks comparable AUROC/runtime output.",
+    "on_unsupportive": "investigate_observer"
+  },
+  "observer_projection": {
+    "description": "Training-only feature pairing followed by quantile binning onto (b,e) in {1..24}^2.",
+    "state_alphabet": "(b,e) in {1..24}^2",
+    "source_domain": "tabular_anomaly_detection"
+  },
+  "real_data_status": "pending",
+  "reproduces": "qa_detect/examples/benchmark_protocol.json",
+  "primary_sources": [],
+  "source_mapping": {
+    "theory_doc": "../../EXPERIMENT_AXIOMS_BLOCK.md",
+    "primary_source": "2026-04-13 cmap calibration bug",
+    "mapping_rationale": "The experiment only evaluates observer-side pairing after the benchmark protocol has fixed the datasets, baselines, and calibration provenance."
+  },
+  "ablation": {
+    "callable": "run_ablation",
+    "destroyed_structure": "shuffle feature-pair to QA-state assignments before scoring",
+    "expected_direction": "feature-pairing advantage should disappear or move toward the benchmark null"
+  },
+  "reproducibility": {
+    "seed": 42,
+    "data_sha256": "pending",
+    "package_versions": {
+      "python": "declared_at_runtime"
+    },
+    "results_ledger": "qa_detect/examples/results_ledger.jsonl"
+  }
+}

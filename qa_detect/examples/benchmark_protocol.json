@@ -1,0 +1,66 @@
+{
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "benchmark_id": "qa_detect_tabular_anomaly_suite",
+  "qa_method": {
+    "name": "qa_detect.QADetector",
+    "description": "PCA-1 induced ordering over tabular rows; QADetector scores each row's E_QA = 1 - QCI under a calibrated cmap permutation.",
+    "observer_projection": "quantile binning of feature pairs -> (b,e) in {1..m}^2; variants differ in pairing rule (adjacent/MI/orbit-concentration)"
+  },
+  "baselines": [
+    {"name": "IsolationForest", "implementation_ref": "sklearn.ensemble.IsolationForest"},
+    {"name": "LocalOutlierFactor", "implementation_ref": "sklearn.neighbors.LocalOutlierFactor"},
+    {"name": "OneClassSVM", "implementation_ref": "sklearn.svm.OneClassSVM"}
+  ],
+  "datasets": [
+    {"name": "satellite", "source": "pyod.utils.data"},
+    {"name": "shuttle", "source": "OpenML"},
+    {"name": "pendigits", "source": "OpenML"},
+    {"name": "mammography", "source": "OpenML"},
+    {"name": "cardio", "source": "OpenML"}
+  ],
+  "parity_contract": {
+    "same_seed_all_methods": true,
+    "same_data_split": true,
+    "same_preprocessing": true
+  },
+  "calibration_provenance": {
+    "learned_on": "training normals only",
+    "procedure": "quantile edges from training features; cmap permutation chosen by max-QCI over ~720 permutations on training transition triples (2026-04-13 fix — previously carried finance-tuned default)",
+    "domain_of_origin": "per-benchmark (recalibrated, not inherited from finance cert [154])"
+  },
+  "framework_inheritance": {
+    "mode": "ported",
+    "prior_cert": "cert [154] finance observer framework",
+    "diffs": [
+      "no temporal window (tabular has no intrinsic order)",
+      "PCA-1 induced ordering instead of calendar time",
+      "cmap recalibrated per dataset instead of inherited",
+      "Mahalanobis proxy variant replaced by E_QA = 1 - QCI in variant A/C'"
+    ]
+  },
+  "metrics": ["AUROC", "runtime_s"],
+  "source_mapping": {
+    "theory_doc": "../../EXPERIMENT_AXIOMS_BLOCK.md",
+    "primary_source": "2026-04-13 cmap calibration bug",
+    "mapping_rationale": "This benchmark exists specifically to prevent inherited calibration from being silently reused outside its source domain."
+  },
+  "sota_baseline": {
+    "name": "IsolationForest",
+    "metric": "AUROC",
+    "threshold": 0.5
+  },
+  "ablation": {
+    "callable": "run_ablation",
+    "destroyed_structure": "shuffle QA observer labels before computing AUROC",
+    "expected_direction": "QADetector should lose any advantage over baselines when the QA state assignment is destroyed"
+  },
+  "reproducibility": {
+    "seed": 42,
+    "data_sha256": "pending",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime"
+    },
+    "results_ledger": "qa_detect/examples/results_ledger.jsonl"
+  }
+}

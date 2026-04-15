@@ -133,6 +133,8 @@ multi_ai_workspace/dataset_generator.py
 !qa_alphageometry_ptolemy/examples/topology/*.json
 !qa_alphageometry_ptolemy/examples/graph_structure/*.json
 !qa_alphageometry_ptolemy/examples/elliptic_correspondence/*.json
+!qa_detect/examples/experiment_protocol.json
+!qa_detect/examples/benchmark_protocol.json
 !qa_agent_security/schemas/*.json
 !qa_alphageometry_ptolemy/tests/golden/*.json
 !qa_alphageometry_ptolemy/schemas/*.json

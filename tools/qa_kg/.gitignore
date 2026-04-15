@@ -1,0 +1,5 @@
+__pycache__/
+*.pyc
+qa_kg.db
+qa_kg.db-wal
+qa_kg.db-shm

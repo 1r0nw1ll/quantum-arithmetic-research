@@ -1,0 +1,56 @@
+{
+  "schema_version": "QA_G_EQUIVARIANT_CNN_STRUCTURAL_CERT.v1",
+  "result": "PASS",
+  "n": 9,
+  "phi_rule": "mod_n_residue",
+  "phi_inverse_rule": "n_if_zero_else_r",
+  "composition": {
+    "pair_count": 81,
+    "exception_count": 0,
+    "witnesses": [
+      {"b1": 1, "b2": 1, "lhs": 2, "rhs": 2},
+      {"b1": 9, "b2": 9, "lhs": 0, "rhs": 0}
+    ]
+  },
+  "orbit_partition": {
+    "pair_count": 81,
+    "family_counts": {
+      "singularity": 9,
+      "satellite": 18,
+      "cosmos": 54
+    },
+    "period_counts": {
+      "1": 9,
+      "3": 18,
+      "9": 54
+    },
+    "exception_count": 0,
+    "witnesses": [
+      {"b0": 1, "b_gen": 1, "orbit_length": 1, "family": "singularity"},
+      {"b0": 1, "b_gen": 4, "orbit_length": 3, "family": "satellite"},
+      {"b0": 1, "b_gen": 2, "orbit_length": 9, "family": "cosmos"}
+    ]
+  },
+  "equation_correspondence": [
+    {
+      "paper_equation": "Eq. 10",
+      "paper_role": "lifting",
+      "qa_role": "observer IN",
+      "note": "first-layer image -> group-indexed feature map"
+    },
+    {
+      "paper_equation": "Eq. 11",
+      "paper_role": "G-correlation",
+      "qa_role": "QA-layer resonance",
+      "note": "group-indexed coupling on the discrete rotation index"
+    },
+    {
+      "paper_equation": "§6.3",
+      "paper_role": "coset pooling",
+      "qa_role": "observer OUT",
+      "note": "quotient projection to an invariant output"
+    }
+  ],
+  "source_attribution": "Cohen and Welling (2016), arxiv.org/abs/1602.07576; Will Dale + Claude 2026-04-14",
+  "fail_ledger": []
+}

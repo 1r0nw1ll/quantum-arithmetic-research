@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA G-Equivariant CNN Structural Cert family [247]: closed-form algebraic certification of the Cohen-Welling rotation index map and orbit-family partition. C1 verifies the A1 residue bijection phi(b)=b mod n on {1,...,n}; C2 exhaustively checks phi(qa_step(b1,b2,n))=(phi(b1)+phi(b2)) mod n at n=9 and n=24; C3 exhaustively partitions the n=9 single-generator orbits into singularity/satellite/cosmos with zero exceptions; C4 records the static equation correspondence Eq. 10 lifting = observer IN, Eq. 11 G-correlation = QA-layer resonance, §6.3 coset pooling = observer OUT. Primary source: Cohen and Welling (2016), arxiv.org/abs/1602.07576; Will Dale + Claude 2026-04-14. Checks GECS_1+BIJECT/COMPOSE/ORBIT/CORR/SRC/F; 1 PASS + 1 FAIL; self-test ok"
+}

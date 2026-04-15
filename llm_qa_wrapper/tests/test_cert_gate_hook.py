@@ -357,6 +357,69 @@ def t_allow_read_only_python_path_reference():
         _verify_chain(rows)
 
 
+@test("Bash fd-to-fd redirect on Python read does not quarantine")
+def t_allow_fd_redirect_python_read():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "head foo.py 2>&1"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == []
+        assert not (ledger_dir / "quarantine" / "pending").exists()
+        _verify_chain(rows)
+
+
+@test("Bash stderr /dev/null redirect does not quarantine")
+def t_allow_stderr_devnull_redirect():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "ls dir/ 2>/dev/null"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == []
+        assert not (ledger_dir / "quarantine" / "pending").exists()
+        _verify_chain(rows)
+
+
+@test("Bash read-only python command with fd redirect does not quarantine")
+def t_allow_python_command_fd_redirect_read_only():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "python -c \"print(1)\" foo.py 2>&1"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == []
+        assert not (ledger_dir / "quarantine" / "pending").exists()
+        _verify_chain(rows)
+
+
 @test("Bash redirection to Python path still quarantines")
 def t_bash_redirect_to_python_path_quarantines():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
@@ -376,6 +439,71 @@ def t_bash_redirect_to_python_path_quarantines():
         assert rows[0]["enforcement_markers"] == ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
         packets = sorted((ledger_dir / "quarantine" / "pending").glob("*.json"))
         assert len(packets) == 1
+        _verify_chain(rows)
+
+
+@test("Bash cat redirect to Python path still quarantines")
+def t_bash_cat_redirect_to_python_path_quarantines():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "cat src.py > dst.py"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
+        packets = sorted((ledger_dir / "quarantine" / "pending").glob("*.json"))
+        assert len(packets) == 1
+        _verify_chain(rows)
+
+
+@test("Bash Python path mutation with stderr redirect still quarantines")
+def t_bash_python_path_mutation_with_stderr_redirect_quarantines():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "echo x > foo.py 2>&1"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
+        packets = sorted((ledger_dir / "quarantine" / "pending").glob("*.json"))
+        assert len(packets) == 1
+        _verify_chain(rows)
+
+
+@test("Bash combined stdout stderr devnull redirect does not quarantine")
+def t_allow_combined_devnull_redirect():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "command &>/dev/null"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == []
+        assert not (ledger_dir / "quarantine" / "pending").exists()
         _verify_chain(rows)
 
 
@@ -628,7 +756,13 @@ def main() -> int:
         t_deny_bash_python_mutation_env_override,
         t_git_add_commit_python_path_blocks_without_extra_quarantine,
         t_allow_read_only_python_path_reference,
+        t_allow_fd_redirect_python_read,
+        t_allow_stderr_devnull_redirect,
+        t_allow_python_command_fd_redirect_read_only,
         t_bash_redirect_to_python_path_quarantines,
+        t_bash_cat_redirect_to_python_path_quarantines,
+        t_bash_python_path_mutation_with_stderr_redirect_quarantines,
+        t_allow_combined_devnull_redirect,
         t_allow_codex_delegation_heredoc_python_task_text,
         t_deny_bash_protected_mutation,
         t_deny_force_push,

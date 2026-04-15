@@ -115,6 +115,14 @@ MUTATING_BASH_PATTERN = re.compile(
 )
 HEREDOC_START_PATTERN = re.compile(r"<<-?\s*['\"]?([A-Za-z_][A-Za-z0-9_]*)['\"]?")
 PYTHON_PATH_PATTERN = re.compile(r"(?<![A-Za-z0-9_./-])[^;&|<>\s'\"]+\.py(?:\b|$)", re.I)
+# Fd-to-fd duplications and /dev/null sinks are not file mutations. Strip
+# them before running MUTATING_BASH_PATTERN so stderr redirects like
+# `2>&1` and `2>/dev/null` don't false-positive the Python-write gate.
+FD_REDIRECT_PATTERN = re.compile(
+    r"\d*>&[\d-]"           # 2>&1, >&2, 1>&-
+    r"|&>\s*/dev/null"      # &>/dev/null
+    r"|\d*>\s*/dev/null",   # 2>/dev/null, >/dev/null
+)
 
 
 def _strip_heredoc_bodies(command: str) -> str:
@@ -142,7 +150,8 @@ def _strip_heredoc_bodies(command: str) -> str:
 def _bash_mutates_python_path(scan_command: str) -> bool:
     """Return true only for Bash commands that plausibly write Python files."""
     normalized = scan_command.replace("\\", "/")
-    if ".py" not in normalized or not MUTATING_BASH_PATTERN.search(scan_command):
+    stripped = FD_REDIRECT_PATTERN.sub("", scan_command)
+    if ".py" not in normalized or not MUTATING_BASH_PATTERN.search(stripped):
         return False
     return PYTHON_PATH_PATTERN.search(normalized) is not None
 

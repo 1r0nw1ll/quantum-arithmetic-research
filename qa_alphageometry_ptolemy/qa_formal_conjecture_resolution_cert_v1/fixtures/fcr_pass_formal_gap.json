@@ -1,0 +1,21 @@
+{
+  "schema_version": "QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1",
+  "family": "qa_formal_conjecture_resolution_cert",
+  "case": "ju_et_al_commutative_algebra_lean4_stub",
+  "conjecture_id": "QA-2026-002",
+  "source_claim": "Ju, Gao, Jiang, Wu, Sun, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026) demonstrated the Rethlas+Archon pipeline resolving a commutative-algebra open problem with a Lean 4 proof (arXiv:2604.03789).",
+  "qa_translation": "Reproduction of the paper's result inside QA requires a Lean 4 backend (formal/lean/ tree) that does not yet exist in this repo. The conjecture is recorded as an architectural placeholder: the QA cert system can describe the resolution event (generators, witness, verdict) but cannot independently re-verify the Lean proof.",
+  "candidate_kind": "external",
+  "formal_backend": "lean4_stub",
+  "proof_status": "formal_gap",
+  "failure_mode": "No Lean 4 backend is wired into this repo; the paper's Lean proof has not been reproduced inside QA. Cert records the paper's result with machine-checkable metadata but defers proof-closure to the original Lean artifacts.",
+  "generator_set": ["external: Rethlas candidate generator", "external: Archon formalizer", "external: Matlas retrieval", "external: LeanSearch retrieval"],
+  "nt_compliance": true,
+  "witness_path": "symbolic_inline",
+  "verdict": "PARTIAL",
+  "open_questions": [
+    "Lean 4 bridge scope in QA — see docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md §7 Q1",
+    "Retroactive application to existing cert families — §7 Q3"
+  ],
+  "source_attribution": "Will Dale + Claude 2026-04-15; placeholder for arXiv:2604.03789 bridge; see docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md"
+}

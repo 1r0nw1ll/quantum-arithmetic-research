@@ -6649,6 +6649,28 @@ def _validate_g_equivariant_cnn_structural_cert_family(base_dir):
     return None
 
 
+def _validate_formal_conjecture_resolution_cert_family(base_dir):
+    """QA Formal Conjecture Resolution Cert family [248] — QA-native record of conjecture-resolution attempts with typed obstruction (proved / formal_gap / qa_obstruction / generator_insufficient / inconclusive). Mirrors the Ju et al. (2026) Rethlas+Archon pipeline structure; QA contribution is the typed failure_mode layer that distinguishes formal_gap from qa_obstruction from generator_insufficient. Primary source: Ju, Gao, Jiang, Wu, Sun, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026), 'Automated Conjecture Resolution with Formal Verification,' arXiv:2604.03789. Theory: docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md. Checks FCR_1 schema, FCR_2 generator_set non-empty, FCR_3 typed failure_mode required when not proved, FCR_4 NT compliance, FCR_5 verdict vocabulary, FCR_6 witness path, FCR_7 lean4_stub open-questions; 2 PASS (proved + formal_gap) + 1 FAIL (missing failure label); self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_formal_conjecture_resolution_cert_v1")
+    validator = os.path.join(fam_dir, "qa_formal_conjecture_resolution_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_formal_conjecture_resolution_cert_v1/qa_formal_conjecture_resolution_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_formal_conjecture_resolution_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_formal_conjecture_resolution_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_formal_conjecture_resolution_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_chromogeometry_pythagorean_identity_cert_family(base_dir):
     """QA Chromogeometry Pythagorean Identity Cert family [234] — with Q_b=b*b+e*e, Q_r=b*b-e*e, and Q_g=2*b*e, Wildberger's chromogeometry identity Q_b square = Q_r square + Q_g square holds exhaustively over (b,e) in [1..19]^2 with zero failures; QA coordinate forms Q_r=(b-e)d, Q_g=2be, Q_b=b*b+e*e are verified. Source: Wildberger Chromogeometry 2008; Will Dale + Claude 2026-04-13. Checks CPI_1+SAMPLES/RANGE/FORMULAS/PLIMPTON/SRC/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -7844,6 +7866,11 @@ FAMILY_SWEEPS = [
      "Closed-form Cohen-Welling rotation-index algebra: phi(b)=b mod n bijects {1,...,n} to Z/nZ; qa_step preserves addition under phi exhaustively at n=9 and n=24; n=9 generator partition gives singularity/satellite/cosmos counts 9/18/54 with zero exceptions; Eq. 10 lifting = observer IN, Eq. 11 G-correlation = QA-layer resonance, §6.3 coset pooling = observer OUT. Primary source: Cohen and Welling 2016. Checks GECS_1+BIJECT/COMPOSE/ORBIT/CORR/SRC/F; 1 PASS + 1 FAIL; self-test ok",
      "247_qa_g_equivariant_cnn_structural_cert",
      "qa_g_equivariant_cnn_structural_cert_v1", True),
+    (248, "QA Formal Conjecture Resolution Cert family",
+     _validate_formal_conjecture_resolution_cert_family,
+     "QA-native record of conjecture-resolution attempts with typed obstruction (proved / formal_gap / qa_obstruction / generator_insufficient / inconclusive). QA contribution over Ju et al. (2026) Rethlas+Archon pipeline is the typed failure_mode layer that distinguishes formal_gap from qa_obstruction from generator_insufficient. Primary source: Ju, Gao, Jiang, Wu, Sun, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026), 'Automated Conjecture Resolution with Formal Verification,' arXiv:2604.03789. Theory: docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md. Checks FCR_1+SCHEMA/GENERATOR_SET/FAILURE_MODE/NT/VERDICT/WITNESS/LEAN4_STUB; 2 PASS (proved + formal_gap) + 1 FAIL (missing failure label); self-test ok",
+     "248_qa_formal_conjecture_resolution_cert",
+     "qa_formal_conjecture_resolution_cert_v1", True),
 ]
 
 

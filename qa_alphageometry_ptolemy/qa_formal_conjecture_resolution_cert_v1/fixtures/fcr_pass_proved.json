@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1",
+  "family": "qa_formal_conjecture_resolution_cert",
+  "case": "b_equals_e_diagonal_d_identity_mod9",
+  "conjecture_id": "QA-2026-001",
+  "source_claim": "Every QA tuple (b,e) with b=e in S_9={1,...,9} satisfies d=2b, and d mod 9 equals (2b-1) mod 9 + 1 under A1 no-zero reduction.",
+  "qa_translation": "For all b in {1,...,9} with e=b: d := b+e = 2b (derived by A2). Under A1 mod-9 reduction r(x) = ((x-1) mod 9) + 1, r(d) = r(2b). Exhaustive check across 9 diagonal points.",
+  "candidate_kind": "diagonal_class",
+  "formal_backend": "qa_exhaustive",
+  "proof_status": "proved",
+  "failure_mode": null,
+  "generator_set": ["A1 (no-zero)", "A2 (d=b+e)", "integer arithmetic mod 9"],
+  "nt_compliance": true,
+  "witness_path": "symbolic_inline",
+  "verdict": "CONSISTENT",
+  "source_attribution": "Will Dale + Claude 2026-04-15; mapping of Ju et al. (2026) arXiv:2604.03789 into QA cert format; see docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md"
+}

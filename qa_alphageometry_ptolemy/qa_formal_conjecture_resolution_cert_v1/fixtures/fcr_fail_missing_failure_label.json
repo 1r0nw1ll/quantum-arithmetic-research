@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1",
+  "family": "qa_formal_conjecture_resolution_cert",
+  "case": "invalid_missing_failure_label_when_not_proved",
+  "conjecture_id": "QA-INVALID-001",
+  "source_claim": "Synthetic invalid fixture: declares proof_status=formal_gap but omits failure_mode. Validator must reject per FCR_3.",
+  "qa_translation": "N/A (negative fixture).",
+  "candidate_kind": "orbit_invariant",
+  "formal_backend": "qa_symbolic",
+  "proof_status": "formal_gap",
+  "failure_mode": null,
+  "generator_set": ["A1", "A2"],
+  "nt_compliance": true,
+  "witness_path": "symbolic_inline",
+  "verdict": "INCONCLUSIVE",
+  "source_attribution": "Will Dale + Claude 2026-04-15; negative fixture — arXiv:2604.03789 mapping (FCR_3 rejection test)"
+}

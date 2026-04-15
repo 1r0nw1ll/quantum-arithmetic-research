@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Formal Conjecture Resolution Cert family [248]: QA-native record of conjecture-resolution attempts with typed obstruction (proved / formal_gap / qa_obstruction / generator_insufficient / inconclusive). Primary source: Ju et al. (2026), 'Automated Conjecture Resolution with Formal Verification,' arXiv:2604.03789. Theory note: docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md. Checks FCR_1 schema, FCR_2 generator_set non-empty, FCR_3 typed failure_mode, FCR_4 NT compliance, FCR_5 verdict vocabulary, FCR_6 witness path, FCR_7 lean4_stub open-questions; 2 PASS (proved + formal_gap) + 1 FAIL (missing failure label); self-test ok"
+}

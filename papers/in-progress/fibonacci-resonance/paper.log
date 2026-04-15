@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2025.10.14)  15 APR 2026 15:37
+This is pdfTeX, Version 3.141592653-2.6-1.40.28 (TeX Live 2025/Debian) (preloaded format=pdflatex 2025.10.14)  15 APR 2026 13:03
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -446,7 +446,7 @@ Underfull \hbox (badness 1946) in paragraph at lines 96--102
 
 
 
-<figure1_fibonacci_resonance.pdf, id=143, 715.25151pt x 315.65616pt>
+<figure1_fibonacci_resonance.pdf, id=139, 715.25151pt x 315.65616pt>
 File: figure1_fibonacci_resonance.pdf Graphic file (type pdf)
 <use figure1_fibonacci_resonance.pdf>
 Package pdftex.def Info: figure1_fibonacci_resonance.pdf  used on input line 14
@@ -490,54 +490,43 @@ LaTeX Warning: `h' float specifier changed to `ht'.
 
 
 
-Underfull \hbox (badness 1221) in paragraph at lines 367--367
-[]\OT1/cmr/bx/n/12 Weighted-Null Ro-bust-ness on the
- []
-
-
-Underfull \hbox (badness 1430) in paragraph at lines 370--377
-\OT1/cmr/m/n/10.95 Section []3.4[] showed that the primary-catalogue
- []
-
-
-Underfull \vbox (badness 1297) has occurred while \output is active []
-
-
 
 [4]
-
-
-Underfull \hbox (badness 1715) in paragraph at lines 478--496
+Underfull \hbox (badness 1715) in paragraph at lines 433--451
 \OT1/cmr/m/n/10.95 triples---are ex-actly the two small-est prim-i-tive
  []
 
 
-Underfull \hbox (badness 1237) in paragraph at lines 478--496
+Underfull \hbox (badness 1237) in paragraph at lines 433--451
 \OT1/cmr/m/n/10.95 all-Fibonacci quan-tum num-bers; yet me-galithic
  []
 
 
 
-[5] (./paper.bbl
+(./paper.bbl
 
-)
+[5])
 
-[6] [7] (./paper.aux)
+
+
+[6
+
+] [7] (./paper.aux)
  ***********
 LaTeX2e <2025-06-01> patch level 1
 L3 programming layer <2025-09-02>
  ***********
 Package rerunfilecheck Info: File `paper.out' has not changed.
-(rerunfilecheck)             Checksum: CB7F60587FE34F161AFA0440D68BBD1E;3677.
+(rerunfilecheck)             Checksum: BDB04B3D65E44C05894D322235FA2392;3354.
  ) 
 Here is how much of TeX's memory you used:
- 10683 strings out of 469729
- 159808 string characters out of 5477541
- 602987 words of memory out of 5000000
- 38938 multiletter control sequences out of 15000+600000
+ 10678 strings out of 469729
+ 159725 string characters out of 5477541
+ 602769 words of memory out of 5000000
+ 38935 multiletter control sequences out of 15000+600000
  637478 words of font info for 78 fonts, out of 8000000 for 9000
  14 hyphenation exceptions out of 8191
- 75i,13n,79p,465b,537s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 75i,13n,79p,465b,553s stack positions out of 10000i,1000n,20000p,200000b,200000s
 </usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.pfb></us
 r/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/shar
 e/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10.pfb></usr/share/texl
@@ -553,10 +542,10 @@ s/cm/cmr7.pfb></usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr
 hare/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.pfb></usr/share/te
 xlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10.pfb></usr/share/texlive/
 texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on paper.pdf (7 pages, 250207 bytes).
+Output written on paper.pdf (7 pages, 247979 bytes).
 PDF statistics:
- 407 PDF objects out of 1000 (max. 8388607)
- 292 compressed objects within 3 object streams
- 67 named destinations out of 1000 (max. 500000)
- 190 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 395 PDF objects out of 1000 (max. 8388607)
+ 281 compressed objects within 3 object streams
+ 65 named destinations out of 1000 (max. 500000)
+ 182 words of extra memory for PDF output out of 10000 (max. 10000000)
 

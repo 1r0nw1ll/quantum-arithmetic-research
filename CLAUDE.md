@@ -145,10 +145,9 @@ collab_broadcast(event_type="file_updated", data={"session": "<name>", "file": "
 
 ### Git Commit Rules for Parallel Sessions
 
-- **Sessions stage and commit their own work.** Don't wait for Will. Will does not want to run `git add`/`git commit` manually — the whole point of the agent stack is that agents handle the operational loop end-to-end.
+- **Sessions run the full operational loop end-to-end: stage, commit, push.** Don't wait for Will. The whole point of the agent stack is that agents handle this automatically. Asking Will to do `git add` / `git commit` / `git push` manually contradicts the premise.
 - **Before committing**: `collab_broadcast(event_type="commit_intent", data={"session": "<name>", "files": [...]})` then wait 5s for objections via `collab_wait_for_event(topic="commit_veto", timeout_s=5)`. If no veto, proceed.
-- **Never force-push from a parallel session.** Pushing to remote is still Will's call; commits are local.
-- **Never skip hooks** (`--no-verify`, `--no-gpg-sign`) unless Will explicitly asks.
+- **Never force-push from a parallel session** (non-forced push is fine). Never `--no-verify`, `--no-gpg-sign` unless Will explicitly asks.
 - **Sensitive-file guardrails still apply**: don't stage `.env`, `.odt`, `.pem`, `.key`, or anything in the `memory/feedback_no_secrets_in_commits.md` blocklist. If in doubt, ask.
 
 ### Session Shutdown

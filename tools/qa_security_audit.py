@@ -215,8 +215,8 @@ def check_cert_gate_hook_runtime():
         [sys.executable, str(CERT_GATE_HOOK_TEST)],
         timeout=60,
     )
-    if rc == 0 and "18/18 tests passed" in stdout:
-        RESULTS["pass"].append("PreTool cert gate runtime: 18/18 PASS")
+    if rc == 0 and "21/21 tests passed" in stdout:
+        RESULTS["pass"].append("PreTool cert gate runtime: 21/21 PASS")
     else:
         RESULTS["fail"].append(
             f"PreTool cert gate runtime: FAILED (rc={rc})"

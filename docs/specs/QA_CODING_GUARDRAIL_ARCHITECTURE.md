@@ -75,7 +75,7 @@ Every exemption is logged. Weekly review tallies exemption frequency — if usag
 
 - Layer 1: **live**, regression-tested (`tools/tests/test_qa_axiom_linter_protocols.py`: 9/9 pass).
 - Layer 2: **live**, [223]/[224] in meta-validator registry, 9 gates each.
-- Layer 3: **live**, `llm_qa_wrapper/tests/test_cert_gate_hook.py`: 18/18 pass including write-lands quarantine, grep-able ledger markers, commit blocking, and reject rollback tests.
+- Layer 3: **live**, `llm_qa_wrapper/tests/test_cert_gate_hook.py`: 21/21 pass including write-lands quarantine, grep-able ledger markers, commit blocking, reject rollback, and read-only/VCS Python-path noise regression tests.
 
 The `CLAUDE_PYTHON_WRITE_FORBIDDEN` hard block is intentionally removed from the active policy. Static audit now treats reintroduction of that marker as a regression; the active enforcement markers are `CLAUDE_PYTHON_WRITE_QUARANTINED` for Python writes and `CODEX_REVIEW_PENDING` for commit blocking.
 

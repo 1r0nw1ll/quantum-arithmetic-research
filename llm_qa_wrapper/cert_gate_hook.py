@@ -114,6 +114,7 @@ MUTATING_BASH_PATTERN = re.compile(
     re.I,
 )
 HEREDOC_START_PATTERN = re.compile(r"<<-?\s*['\"]?([A-Za-z_][A-Za-z0-9_]*)['\"]?")
+PYTHON_PATH_PATTERN = re.compile(r"(?<![A-Za-z0-9_./-])[^;&|<>\s'\"]+\.py(?:\b|$)", re.I)
 
 
 def _strip_heredoc_bodies(command: str) -> str:
@@ -136,6 +137,14 @@ def _strip_heredoc_bodies(command: str) -> str:
             out.append(lines[i])
             i += 1
     return "\n".join(out)
+
+
+def _bash_mutates_python_path(scan_command: str) -> bool:
+    """Return true only for Bash commands that plausibly write Python files."""
+    normalized = scan_command.replace("\\", "/")
+    if ".py" not in normalized or not MUTATING_BASH_PATTERN.search(scan_command):
+        return False
+    return PYTHON_PATH_PATTERN.search(normalized) is not None
 
 
 def _canonical_json(obj):
@@ -357,7 +366,7 @@ def _deny_bash(tool_input: dict) -> list[str]:
         normalized = scan_command.replace("\\", "/")
         if any(target in normalized for target in PROTECTED_BASH_TARGETS):
             reasons.append("PROTECTED_TARGET_MUTATION")
-        if ".py" in normalized:
+        if _bash_mutates_python_path(scan_command):
             quarantine_needed = True
         if re.search(r"(^|/)[^/ ]+\.png(?:\s|$)", normalized, re.I):
             reasons.append("GENERATED_BINARY_OUTPUT")
@@ -404,7 +413,7 @@ def _enforcement_markers(tool_name: str, tool_input: dict) -> list[str]:
                 return ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
     if tool_name == "Bash":
         command = tool_input.get("command")
-        if isinstance(command, str) and ".py" in _strip_heredoc_bodies(command).replace("\\", "/"):
+        if isinstance(command, str) and _bash_mutates_python_path(_strip_heredoc_bodies(command)):
             return ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
     return []
 

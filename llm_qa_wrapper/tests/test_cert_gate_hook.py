@@ -303,6 +303,82 @@ def t_deny_bash_python_mutation_env_override():
         _verify_chain(rows)
 
 
+@test("Bash git add and commit mentioning Python does not create extra quarantine packet")
+def t_git_add_commit_python_path_blocks_without_extra_quarantine():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        pending = ledger_dir / "quarantine" / "pending"
+        pending.mkdir(parents=True)
+        (pending / "pending.json").write_text(
+            json.dumps({
+                "schema_version": "QA_CLAUDE_PYTHON_QUARANTINE.v1",
+                "review_status": "pending_codex_review",
+            }),
+            encoding="utf-8",
+        )
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {
+                    "command": "git add tools/qa_guardrail_smoke.py && git commit -m smoke"
+                },
+            }),
+            marker_text="claude-test-session",
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "DENY"
+        assert "CODEX_REVIEW_PENDING" in rows[0]["deny_reasons"]
+        assert rows[0]["enforcement_markers"] == []
+        assert len(list(pending.glob("*.json"))) == 1
+        _verify_chain(rows)
+
+
+@test("Bash read-only Python path reference does not quarantine")
+def t_allow_read_only_python_path_reference():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "sed -n '1,20p' tools/qa_guardrail_smoke.py"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == []
+        assert not (ledger_dir / "quarantine" / "pending").exists()
+        _verify_chain(rows)
+
+
+@test("Bash redirection to Python path still quarantines")
+def t_bash_redirect_to_python_path_quarantines():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "printf 'x = 1\\n' > tools/qa_guardrail_smoke.py"},
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        assert rows[0]["enforcement_markers"] == ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
+        packets = sorted((ledger_dir / "quarantine" / "pending").glob("*.json"))
+        assert len(packets) == 1
+        _verify_chain(rows)
+
+
 @test("Codex delegation heredoc with Python task text reaches allow path")
 def t_allow_codex_delegation_heredoc_python_task_text():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
@@ -550,6 +626,9 @@ def main() -> int:
         t_deny_python_edit_env_override,
         t_deny_bash_python_mutation,
         t_deny_bash_python_mutation_env_override,
+        t_git_add_commit_python_path_blocks_without_extra_quarantine,
+        t_allow_read_only_python_path_reference,
+        t_bash_redirect_to_python_path_quarantines,
         t_allow_codex_delegation_heredoc_python_task_text,
         t_deny_bash_protected_mutation,
         t_deny_force_push,

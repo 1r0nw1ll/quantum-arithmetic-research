@@ -364,6 +364,51 @@ resonances: Fibonacci preference operates within the regime where
 resonances are physically strong enough to capture and retain orbiting
 bodies.
 
+\subsection{Weighted-Null Robustness on the Out-of-Sample Data}
+\label{sec:oos_weighted_null}
+
+Section~\ref{sec:weighted_null} showed that the primary-catalogue
+$33/43$ order-1 observation remains significant under every
+physics-motivated weighting of the null model
+(Murray and Dermott, 1999) (Peale, 1976).
+On the larger out-of-sample count $113/139$ ($n=139$), the same
+family of weightings gives the results in
+Table~\ref{tab:oos_weighted_null}.
+
+\begin{table}[h]
+\centering
+\small
+\caption{Binomial $P(X \geq 113 \mid n=139)$ on the out-of-sample
+order-1 data under the null weightings of
+Table~\ref{tab:weighted_null}.}
+\label{tab:oos_weighted_null}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{lrr}
+\toprule
+Weighting $w(p,q)$ & $\mathbb{E}[\text{Fib frac}]$ & $P(X \geq 113)$ \\
+\midrule
+Uniform (baseline) & 0.222 & $2.55 \times 10^{-49}$ \\
+Laplace, $\alpha^p$ with $\alpha = (q/p)^{2/3}$ & 0.199 & $1.99 \times 10^{-54}$ \\
+$1/p$ & 0.432 & $3.42 \times 10^{-20}$ \\
+$1/(p+q)$ & 0.471 & $9.03 \times 10^{-17}$ \\
+$\exp\!\left[-(p+q)/10\right]$ & 0.395 & $6.85 \times 10^{-24}$ \\
+$1/p^2$ & 0.657 & $3.66 \times 10^{-5}$ \\
+$\exp\!\left[-(p+q)/5\right]$ & 0.566 & $6.77 \times 10^{-10}$ \\
+$1/(p+q)^2$ & 0.724 & $1.01 \times 10^{-2}$ \\
+\bottomrule
+\end{tabular}
+}
+\end{table}
+
+Every weighting, including the aggressive $1/(p+q)^2$ and $1/p^2$
+that rendered the primary-catalogue effect non-significant on the
+smaller primary data, now reaches significance at the $n=139$
+sample size. The physics-motivated Laplace-coefficient weighting
+\citep{murray1999} further strengthens to $P = 2.0 \times 10^{-54}$.
+The Fibonacci preference therefore survives the cross-product of
+(a) an adversarial out-of-sample catalogue and (b) the full family
+of plausible alternative nulls simultaneously.
+
 % ══════════════════════════════════════════════════════════════
 \section{Caveats}
 \label{sec:caveats}

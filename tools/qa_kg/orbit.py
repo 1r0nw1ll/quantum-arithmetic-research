@@ -158,8 +158,13 @@ def edge_allowed(
     return True
 
 
-# Back-compat aliases — deprecated. Kept for one release cycle so callers
-# can migrate.
+# --- Back-compat aliases --------------------------------------------------
+# DEPRECATED. Removal target: cert [225] v3 / schema v3. Any session that
+# lands Phase 1 (epistemic-status fields) and bumps [225] to v3 MUST drop
+# these three names in the same commit. The regression test
+# `test_back_compat_aliases_scheduled_for_removal_in_v3` in
+# tools/qa_kg/tests/test_kg_basic.py enforces the pin: it will fail when
+# schema_version advances past 2, forcing the alias cleanup.
 Coord = Index
 compute_be = compute_index
 tier_for_coord = tier_for_index

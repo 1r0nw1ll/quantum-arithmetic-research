@@ -118,6 +118,39 @@ def test_firewall_violation_raised():
                             edge_type="validates", via_cert="cert:demo"))
 
 
+def test_back_compat_aliases_scheduled_for_removal_in_v3():
+    """PIN: back-compat aliases Coord / compute_be / tier_for_coord are
+    deprecated and scheduled for removal at [225] v3 / schema v3.
+
+    This test asserts two things:
+      (a) while schema_version == 2 (current), the aliases MUST still exist
+          (so in-flight callers don't break mid-Phase-0).
+      (b) when schema_version advances past 2, the aliases MUST be removed
+          in the same commit.
+
+    When this test fails under schema v3, the fix is to delete the aliases
+    from orbit.py and delete this test. Do NOT silence it; the failure IS
+    the forcing function."""
+    from tools.qa_kg.schema import SCHEMA_VERSION
+    from tools.qa_kg import orbit as _orbit_mod
+
+    if SCHEMA_VERSION == 2:
+        # In-flight Phase 0: aliases MUST be present so callers can migrate.
+        assert hasattr(_orbit_mod, "Coord"), "Coord alias removed too early"
+        assert hasattr(_orbit_mod, "compute_be"), "compute_be alias removed too early"
+        assert hasattr(_orbit_mod, "tier_for_coord"), "tier_for_coord alias removed too early"
+    elif SCHEMA_VERSION >= 3:
+        # v3+: aliases MUST be gone.
+        assert not hasattr(_orbit_mod, "Coord"), (
+            "Coord alias still present at schema v3 — delete from orbit.py")
+        assert not hasattr(_orbit_mod, "compute_be"), (
+            "compute_be alias still present at schema v3 — delete from orbit.py")
+        assert not hasattr(_orbit_mod, "tier_for_coord"), (
+            "tier_for_coord alias still present at schema v3 — delete from orbit.py")
+    else:
+        raise AssertionError(f"unexpected SCHEMA_VERSION={SCHEMA_VERSION}")
+
+
 def _stub_pred_ok() -> tuple[bool, str]:
     return True, "stub"
 
@@ -139,6 +172,7 @@ TESTS = [
     test_schema_roundtrip_candidate_f,
     test_firewall_violation_raised,
     test_predicate_runtime,
+    test_back_compat_aliases_scheduled_for_removal_in_v3,
 ]
 
 

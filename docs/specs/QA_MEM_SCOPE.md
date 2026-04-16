@@ -58,7 +58,13 @@ cert metadata.
 
 The `Index` type (formerly `Coord`) intentionally has no `.d` or `.a`
 attributes. Back-compat aliases `Coord / compute_be / tier_for_coord`
-retained one release cycle.
+retained during Phase 0 only.
+
+**Removal target: cert `[225]` v3 / schema v3.** The alias pin is enforced
+by `test_back_compat_aliases_scheduled_for_removal_in_v3` in
+`tools/qa_kg/tests/test_kg_basic.py`: under `SCHEMA_VERSION == 2` the
+aliases MUST exist; under `SCHEMA_VERSION >= 3` the aliases MUST be gone
+(test fails and forces cleanup in the same commit as the schema bump).
 
 ## Roadmap (deferred, NOT in scope here)
 

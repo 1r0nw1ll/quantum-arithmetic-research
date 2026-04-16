@@ -1,7 +1,18 @@
-# <!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG infrastructure validator; no external primary source required -->
-"""QA-KG Consistency Cert [225] validator.
+# <!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG AUDIT-ONLY v1 validator; do not run against current DB -->
+"""QA-KG Consistency Cert [225] v1 — FROZEN / AUDIT-ONLY.
 
-QA_COMPLIANCE = "cert_validator — validates KG structural invariants, no empirical QA state machine"
+!!! DO NOT RUN THIS VALIDATOR AGAINST A CURRENT DB !!!
+
+This is the Phase 0 pre-rename validator. It references columns
+coord_b / coord_e which no longer exist in schema v2. Attempting to
+run it against a current qa_kg.db will fail with 'no such column'.
+
+Current cert is qa_kg_consistency_cert_v2 (same repo, sibling dir).
+This v1 file is preserved unmodified for audit of the Phase 0 supersession.
+If a future session thinks v1 needs a fix, the correct action is a v3 bump
+(per docs/specs/QA_MEM_SCOPE.md), NOT in-place edits here.
+
+QA_COMPLIANCE = "cert_validator — AUDIT-ONLY; validates KG structural invariants, no empirical QA state machine"
 
 Invariants:
   KG1  Cosmos provenance: every Cosmos node reaches Singularity via

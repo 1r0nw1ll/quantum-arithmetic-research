@@ -1,7 +1,8 @@
 {
-  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG infrastructure cert; validates internal graph invariants, not empirical claims -->",
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG infrastructure cert; AUDIT-ONLY v1 retained for history; current implementation is v2 -->",
+  "_status": "FROZEN — AUDIT-ONLY. Current cert is qa_kg_consistency_cert_v2. Do not modify v1. Do not re-run v1 as a production gate. If a future session believes v1 needs a fix, the correct action is a v3 bump (per docs/specs/QA_MEM_SCOPE.md), not in-place edits to v1.",
   "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
   "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
   "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
-  "scope_note": "QA-KG Consistency Cert family [225]: validates the QA-native memory graph (tools/qa_kg/) itself. Four invariants: (KG1) every Cosmos node has a provenance chain to Singularity via {validates, derived-from, extends, instantiates}; (KG2) no cycles in 'contradicts' edges; (KG3) Theorem NT firewall intact — no archive (Unassigned) → Cosmos causal edges without via_cert mediation; (KG4) orphan Satellite nodes aged beyond policy window (default 30d) flagged for review. Source: QA-MEM architecture spec, memory/project_qa_mem_architecture.md; CLAUDE.md QA Axiom Compliance; Theorem NT (Observer Projection Firewall)."
+  "scope_note": "QA-KG Consistency Cert [225] v1 — FROZEN AS OF 2026-04-15 PHASE 0. Retained unmodified for audit of the pre-rename schema (coord_b/coord_e). Do not re-enable; do not modify. Current implementation is qa_kg_consistency_cert_v2. The v1 validator references columns (coord_b/coord_e) that no longer exist in schema v2 — attempting to run v1 against a schema v2 DB will fail with 'no such column'. This is intentional and documents the schema bump. Supersession trail: v1 → v2 (Phase 0 rename + KG1 no-self-vetting + KG3 tri-state + KG7 subject-coord)."
 }

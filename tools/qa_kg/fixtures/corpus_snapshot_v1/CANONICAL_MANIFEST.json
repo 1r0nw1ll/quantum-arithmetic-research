@@ -1,0 +1,19 @@
+{
+  "files": [
+    {
+      "bytes": 1064,
+      "path": "memory_md_sample.md",
+      "sha256": "daf7344afa84ac2000e5d901c568e472f89a9c87e5f165dcd8229138315c0845"
+    },
+    {
+      "bytes": 1105,
+      "path": "ob_sample.md",
+      "sha256": "fbb34cfaa7fa4560de716ae3cb509218857a4d3f6a28f2ca91804830a3e3d92e"
+    }
+  ],
+  "metadata": {
+    "captured_at_utc": "2026-04-16T20:20:34Z",
+    "qa_compliance": "memory_infra — Phase 5 determinism fixture; no secrets, no PII",
+    "repo_head": "91b601a2290cd3f859a8e12c119a5b051e6e8d2c"
+  }
+}

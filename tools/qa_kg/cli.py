@@ -3,13 +3,20 @@
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
 Usage:
-    python -m tools.qa_kg.cli build            # populate axioms + memory rules + certs
+    python -m tools.qa_kg.cli build [--fixture <path>] [--hash-only] [--validate]
     python -m tools.qa_kg.cli stats
     python -m tools.qa_kg.cli search "<query>" [--tier cosmos] [-k 10]
     python -m tools.qa_kg.cli search-ranked "<query>" \\
         [--min-authority internal] [--domain ""] [--valid-at 2026-04-16T00:00:00Z] [-k 10]
     python -m tools.qa_kg.cli digest [--tier cosmos] [-k 40]
     python -m tools.qa_kg.cli check [--tier singularity]
+    python -m tools.qa_kg.cli hash                    # Phase 5: print canonical graph_hash
+
+Phase 5 (build --fixture <path>):
+    Redirects MEMORY.md read to <path>/memory_md_sample.md and ingests
+    <path>/ob_sample.md (when present) as part of the build. Used for
+    deterministic rebuilds gated by cert [228]. Combine with --hash-only
+    for D3 subprocess determinism testing.
 """
 from __future__ import annotations
 
@@ -36,22 +43,54 @@ def _fmt(row) -> dict:
 
 
 def cmd_build(args) -> int:
+    """Populate the KG from registered sources.
+
+    Phase 5: when `--fixture <path>` is provided, overrides MEMORY.md and
+    (optionally) ingests OB markdown from the fixture. Combine with
+    `--hash-only` to emit only the canonical graph_hash to stdout — used
+    by cert [228] D3 subprocess determinism gate.
+    """
     kg = connect(args.db)
-    a = x_axioms.populate(kg)
-    r = x_rules.populate(kg)
-    c = x_certs.populate(kg, run_validator=args.validate)
-    # Phase 3 source-claim seed. Runs AFTER certs.populate so cert nodes
-    # (cert:fs:qa_kg_consistency_cert_v<N>) exist for the supersedes chain
-    # in the seed to attach to, and BEFORE edges.populate so keyword
-    # co-occurrence edges can link against SourceClaim bodies too.
-    sc = x_source_claims.populate(kg)
-    e = x_edges.populate(kg)
-    print(
-        f"axioms: {len(a)}  rules: {len(r)}  certs: {len(c)}  "
+    # Phase 5: fixture wiring. BuildContext threads overrides to the
+    # extractors; no module-level globals are mutated.
+    ctx = None
+    if getattr(args, "fixture", None):
+        from tools.qa_kg.build_context import BuildContext
+        ctx = BuildContext.from_fixture(Path(args.fixture))
+
+    from tools.qa_kg.build_context import run_pipeline
+    stats = run_pipeline(kg, ctx)
+
+    if getattr(args, "hash_only", False):
+        # D3 subprocess contract: ONLY the canonical hash goes to stdout.
+        from tools.qa_kg.canonicalize import graph_hash
+        print(graph_hash(kg.conn))
+        return 0
+
+    sc = stats["source_claims"]
+    msg = (
+        f"axioms: {stats['axioms']}  rules: {stats['rules']}  "
+        f"certs: {stats['certs']}  "
         f"source_claims: works={sc['works']} claims={sc['claims']} "
         f"observations={sc['observations']} contradicts={sc['contradicts']} "
-        f"supersedes={sc['supersedes']}  edges: {e}"
+        f"supersedes={sc['supersedes']}  edges: {stats['edges']}"
     )
+    if "ob" in stats:
+        ob_stats = stats["ob"]
+        msg += f"  ob: parsed={ob_stats.get('parsed', 0)} nodes={ob_stats.get('nodes', 0)}"
+    print(msg)
+    return 0
+
+
+def cmd_hash(args) -> int:
+    """Phase 5: print the canonical graph_hash of the current qa_kg.db.
+
+    No side effects. Output format: single SHA256 hex line. Useful for
+    diff investigation and manual invocation of the D5 contract.
+    """
+    from tools.qa_kg.canonicalize import graph_hash
+    kg = connect(args.db)
+    print(graph_hash(kg.conn))
     return 0
 
 
@@ -150,8 +189,16 @@ def main(argv: list[str] | None = None) -> int:
     p.add_argument("--db", default=None, help="override QA_KG_DB path")
     sub = p.add_subparsers(dest="cmd", required=True)
 
-    s = sub.add_parser("build"); s.add_argument("--validate", action="store_true")
+    s = sub.add_parser("build")
+    s.add_argument("--validate", action="store_true")
+    s.add_argument("--fixture", default=None,
+                   help="Phase 5: fixture dir (overrides MEMORY.md; ingests ob_sample.md if present)")
+    s.add_argument("--hash-only", action="store_true",
+                   help="Phase 5: emit only the canonical graph_hash to stdout (D3 contract)")
     s.set_defaults(fn=cmd_build)
+    s = sub.add_parser("hash",
+                       help="Phase 5: print canonical graph_hash of current qa_kg.db")
+    s.set_defaults(fn=cmd_hash)
     s = sub.add_parser("stats"); s.set_defaults(fn=cmd_stats)
     s = sub.add_parser("search"); s.add_argument("query"); s.add_argument("--tier")
     s.add_argument("-k", type=int, default=10); s.set_defaults(fn=cmd_search)

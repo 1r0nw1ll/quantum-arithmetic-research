@@ -43,6 +43,13 @@ PROMOTED_FROM_EDGE = "promoted-from"
 LEDGER_STALENESS_DAYS = 14
 BROADCAST_WINDOW_S = 60
 
+# Phase 5: the ledger entry for cert [228] QA_KG_DETERMINISM_CERT.v1
+# carries an optional `graph_hash` field. When present, kg.promote()
+# enforces it HARD — live canonical graph_hash must match. When absent
+# (pre-Phase-5 ledger), the existing Phase 2 timestamp+git_head checks
+# alone govern staleness. Additive, backward compatible.
+DETERMINISM_CERT_LEDGER_KEY = "228"
+
 _REPO = Path(__file__).resolve().parents[2]
 _META_DIR = _REPO / "qa_alphageometry_ptolemy"
 _LEDGER_PATH = _META_DIR / "_meta_ledger.json"
@@ -799,6 +806,25 @@ class KG:
                 f"via_cert {via_cert!r} ledger git_head={entry.get('git_head')!r} "
                 f"!= HEAD={current_head!r}"
             )
+
+        # Phase 5: graph_hash staleness check (D6). Additive — only fires
+        # when the ledger entry for cert [228] carries a graph_hash. Live
+        # canonical hash must match ledger's recorded hash; rebuild via
+        # `python qa_alphageometry_ptolemy/qa_meta_validator.py` refreshes
+        # the ledger. Pre-Phase-5 ledgers are silently compatible (entry
+        # absent → fall through).
+        p5_entry = ledger.get(DETERMINISM_CERT_LEDGER_KEY) or {}
+        p5_expected = p5_entry.get("graph_hash")
+        if p5_expected:
+            from tools.qa_kg.canonicalize import graph_hash as _gh
+            live_hash = _gh(self.conn)
+            if live_hash != p5_expected:
+                raise FirewallViolation(
+                    f"graph_hash drift vs cert [228] ledger entry: "
+                    f"ledger={p5_expected[:12]}… live={live_hash[:12]}…. "
+                    f"Rerun `python qa_alphageometry_ptolemy/qa_meta_validator.py` "
+                    f"to refresh ledger after DB-mutating extractor passes."
+                )
 
         # Broadcast corroboration: payload ts within ±60s of now
         bp_ts_raw = broadcast_payload.get("ts", "")

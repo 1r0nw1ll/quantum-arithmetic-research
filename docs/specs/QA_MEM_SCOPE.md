@@ -1,8 +1,8 @@
-<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v4, [226], [227], [252], [253], [254], and project-internal authority docs -->
-# QA-MEM Scope (through Phase 4)
+<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v4, [226], [227], [228], [252], [253], [254], and project-internal authority docs -->
+# QA-MEM Scope (through Phase 5)
 
-**Status:** Phases 0–4 landed; Phase 4.5+ deferred.
-**Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts) + `[254]` (authority-tiered ranker).
+**Status:** Phases 0–5 landed; Phase 4.5 + Phase 5.1 + Phase 6 deferred.
+**Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts) + `[254]` (authority-tiered ranker) + `[228]` (graph determinism).
 **Companion files:** `QA_AXIOMS_BLOCK.md`, `qa_orbit_rules.py`, `tools/qa_retrieval/schema.py`, `memory/project_qa_mem_architecture.md`.
 
 ## What QA-MEM IS (as of Phase 0)
@@ -275,6 +275,61 @@ and a Will-readable `rationale`. **No LLM-generated queries.**
 
 CLI: `python -m tools.qa_kg.cli search-ranked "<query>" [--min-authority …] [--domain …] [--valid-at …] [-k …]`.
 
+### Phase 5 — graph determinism
+
+Landed 2026-04-16. Canonical serialization of the KG (nodes + edges + a
+whitelisted `meta` slice) excludes build-time metadata (`created_ts`,
+`updated_ts`, `vetted_ts`, `last_check_*`), NFC-normalizes every string
+value, orders nodes by `id` and edges by `(src_id, dst_id, edge_type)`,
+and hashes the resulting JSONL byte-streams. Module:
+`tools/qa_kg/canonicalize.py`. Single helper: `graph_hash(conn)` returns
+the SHA256 hex of the canonical graph.
+
+`_meta_ledger.json` is extended with optional `graph_hash` and
+`fixture_hash` fields on the `[228]` entry (additive — all other
+entries unchanged). The Phase 5 section of `kg.promote()` enforces
+HARD staleness: when the ledger carries a `graph_hash`, a live mismatch
+raises `FirewallViolation` with `graph_hash drift` in the message. This
+is stronger than Phase 2's 14-day timestamp staleness; the operational
+contract is documented in `qa_kg_determinism_cert_v1/README.md` —
+after any DB-mutating extractor pass, `qa_meta_validator.py` must be
+rerun before subsequent `kg.promote()` calls succeed.
+
+Frozen corpus fixture: `tools/qa_kg/fixtures/corpus_snapshot_v1/` with
+`CANONICAL_MANIFEST.json` (hash over `files[]` only — metadata
+excluded per C#4), `memory_md_sample.md` (MEMORY.md snapshot; live
+MEMORY.md lives outside the repo at `~/.claude/...`), and `ob_sample.md`
+(6 thoughts exercising internal + agent authority + cert/axiom keyword
+edges). `BuildContext.from_fixture(path)` threads the fixture's
+`memory_md_path` and `ob_markdown_path` into the pipeline without
+monkey-patching. CLI exposes `build --fixture <dir>` and
+`build --hash-only` (D3 contract) and a new `hash` subcommand.
+
+Cert `[228] QA_KG_DETERMINISM_CERT.v1` gates:
+
+- D1 (HARD) fixture content hash matches `expected_hash.fixture_hash`
+- D1.5 (WARN) `manifest.repo_head` vs current HEAD (never blocks)
+- D2 (HARD) in-process rebuild twice gives byte-identical `graph_hash`
+- D3 (HARD) subprocess rebuild matches D2
+- D4 (SHOULD or N-A) Linux parity scaffolded; non-Linux N-A
+- D5 (HARD) ledger `graph_hash` matches live; bootstrap PASS on first
+  run with explicit rationale string (tri-state honesty from [254] R4)
+- D6 (HARD) `kg.promote()` rejects on `graph_hash` drift (ephemeral DB
+  test with sentinel mismatch)
+- D7 (HARD) no `except Exception: pass` / bare `except: pass` in Phase
+  5 modules (AST scan)
+
+Side-channel pattern: `[228]` validator publishes the live graph_hash
+to `_kg_graph_hash_by_fam_id["228"]` in `qa_meta_validator.py`; the
+ledger writer attaches it to the `[228]` entry. Fixture hash reads
+from `expected_hash.json` at ledger write time.
+
+C#1 call-site coverage: `arag.search` / `arag.promote_to_kg` accept
+`db_path=None` kwarg; `memory_rules.populate` accepts
+`memory_md_path=None`. `BuildContext` threads both to the extractors
+during fixture-driven builds. Unit test
+`test_arag_extractor_respects_db_path_override` guards regression.
+
 ## Roadmap (deferred, NOT in scope)
 
 - **Phase 4.5:** full primary-source corpus ingestion (Ben/Dale books,
@@ -284,16 +339,21 @@ CLI: `python -m tools.qa_kg.cli search-ranked "<query>" [--min-authority …] [-
   on real nodes; URL scheme in `tools/qa_kg/locators.py` resolver. Phase 3
   shipped the mechanism + minimum seed; Phase 4.5 is the scaled pass.
   **Ops item** (separate from corpus work): cert-gate Codex review
-  bridge has been dead at cert-submission time in Phase 2/3/4. Either
+  bridge has been dead at cert-submission time in Phase 2/3/4/5. Either
   `llm_qa_wrapper/cert_gate_hook.py` grows a pre-commit health-check
   that fails loudly with "bridge is dead, restart it" rather than the
   generic `CODEX_REVIEW_PENDING`, OR `tools/qa_security_audit.py`
   gains a line-item that fails when `qa_lab/logs/codex_bridge.log`
-  mtime > 24h. Phase 4 worked around with `codex exec --full-auto`
+  mtime > 24h. Phases 4+5 worked around with `codex exec --full-auto`
   one-shot; that pattern shouldn't become the default.
-- **Phase 5:** determinism — frozen corpus fixture, graph-hash cert `[228]`,
-  validators return structured results (replaces Phase 3 `[WARN]` stdout
-  scraping in `qa_meta_validator.py`).
+- **Phase 5.1:** pinned-source reproducibility — extend Phase 5's
+  determinism test so that D2/D3 rebuild uses extractor source pinned
+  at `manifest.repo_head` via `git archive`, decoupling reproducibility
+  from working-tree HEAD advances. `tools/qa_kg/build_context.py`
+  carries `BuildContext` + `run_pipeline`; Phase 5.1 adds
+  `materialize_pinned_repo` + harness-overlay list. Also: fixture
+  tooling (`cli fixture-refresh <dir>`) to regenerate manifest +
+  `expected_hash.json` atomically.
 - **Phase 6:** agent integration — `tools/qa_kg_mcp/server.py` exposes
   `search_authority_ranked` (and friends) as MCP tools; `[255]` cert
   enforces that the MCP surface cannot create non-AgentNote types and
@@ -301,8 +361,8 @@ CLI: `python -m tools.qa_kg.cli search-ranked "<query>" [--min-authority …] [-
 
 Per the alpha-bar rule (`memory/project_qa_mem_review_role.md`),
 QA-MEM still cannot be marketed as "agent memory" until Phases 4 + 5 + 6
-all PASS. Phase 4 ships the ranker primitives; Phases 5 + 6 remain
-gating.
+all PASS. Phases 4 + 5 ship; Phase 6 remains the gating increment
+before agent-facing alpha.
 
 ## References
 
@@ -324,6 +384,11 @@ gating.
   (`qa_alphageometry_ptolemy/qa_kg_source_claims_cert_v1/`)
 - Cert family [254] — Authority-tiered ranker (R1–R9; R3+R4 tri-state, R5 WARN)
   (`qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/`)
+- Cert family [228] — Graph determinism (D1–D7; D1.5 WARN, D4 Linux-only)
+  (`qa_alphageometry_ptolemy/qa_kg_determinism_cert_v1/`)
+- Canonicalizer module: `tools/qa_kg/canonicalize.py`
+- Build context: `tools/qa_kg/build_context.py` (BuildContext + run_pipeline)
+- Phase 5 fixture: `tools/qa_kg/fixtures/corpus_snapshot_v1/` (memory_md_sample.md, ob_sample.md, CANONICAL_MANIFEST.json, repo_head.txt)
 - Ranker module: `tools/qa_kg/ranker.py`
 - Ranker spec (single source of truth): `qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/ranker_spec.json`
 - 20-query benchmark: `qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/query_fixture.json`

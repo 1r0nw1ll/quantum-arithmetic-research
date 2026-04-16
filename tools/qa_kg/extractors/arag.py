@@ -21,16 +21,30 @@ from tools.qa_kg.kg import KG, Node
 ARAG_DB = Path("/home/player2/signal_experiments/_forensics/qa_retrieval.sqlite")
 
 
-def _arag_conn() -> sqlite3.Connection:
-    if not ARAG_DB.exists():
-        raise FileNotFoundError(f"A-RAG DB missing at {ARAG_DB}")
-    conn = sqlite3.connect(str(ARAG_DB))
+def _arag_conn(db_path: Path | str | None = None) -> sqlite3.Connection:
+    """Open an A-RAG sqlite connection.
+
+    Phase 5 C#1: `db_path` kwarg overrides the hardcoded default so
+    fixture-driven builds and unit tests can point at alternate DBs
+    without patching ARAG_DB at module scope. None == default == ARAG_DB.
+    """
+    path = Path(db_path) if db_path is not None else ARAG_DB
+    if not path.exists():
+        raise FileNotFoundError(f"A-RAG DB missing at {path}")
+    conn = sqlite3.connect(str(path))
     conn.row_factory = sqlite3.Row
     return conn
 
 
-def search(query: str, *, k: int = 10, source: str | None = None) -> list[dict]:
-    conn = _arag_conn()
+def search(
+    query: str,
+    *,
+    k: int = 10,
+    source: str | None = None,
+    db_path: Path | str | None = None,
+) -> list[dict]:
+    """Search A-RAG FTS5. `db_path` overrides the default DB (C#1)."""
+    conn = _arag_conn(db_path)
     base = """
     SELECT m.msg_id, m.source, m.role, m.conv_title, m.create_time_utc,
            m.b, m.e, substr(m.raw_text, 1, 300) AS preview,
@@ -54,10 +68,17 @@ def search(query: str, *, k: int = 10, source: str | None = None) -> list[dict]:
     } for r in rows]
 
 
-def promote_to_kg(kg: KG, msg_id: str, *, reason: str = "") -> str:
+def promote_to_kg(
+    kg: KG,
+    msg_id: str,
+    *,
+    reason: str = "",
+    db_path: Path | str | None = None,
+) -> str:
     """Persist an archive chunk as a Thought-typed node.
-    Candidate F recomputes (b,e) on the new title+body under Thought rank."""
-    conn = _arag_conn()
+    Candidate F recomputes (b,e) on the new title+body under Thought rank.
+    `db_path` overrides the default A-RAG DB (C#1)."""
+    conn = _arag_conn(db_path)
     row = conn.execute(
         "SELECT msg_id, source, role, conv_title, create_time_utc, raw_text "
         "FROM messages WHERE msg_id = ?", (msg_id,),

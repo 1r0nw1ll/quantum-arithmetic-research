@@ -7008,6 +7008,11 @@ def _validate_signal_generator_inference_cert_family(base_dir: str) -> Optional[
 # Stdout parsing is a Phase 3 expedient (§12a); Phase 5 switches validators
 # to structured returns and this text-scrape goes away.
 _kg_warn_lines_by_fam_id: dict[str, list[dict[str, str]]] = {}
+# Phase 5 side-channel — populated by [228] validator's D5 gate, consumed
+# by the ledger writer near the end of the sweep. Key = str(fam_id);
+# value = SHA256 hex string of the current canonical graph_hash at
+# validator-run time. Additive to the ledger shape per Phase 5 plan C#4.
+_kg_graph_hash_by_fam_id: dict[str, str] = {}
 import re as _kg_warn_re
 _KG_WARN_LINE = _kg_warn_re.compile(
     r"^\[WARN\]\s+(?P<code>\S+)\s+(?P<desc>.*?)\s+—\s+(?P<msg>.*)$"
@@ -7127,6 +7132,39 @@ def _validate_kg_authority_ranker_cert(base_dir):
     if proc.returncode != 0:
         raise RuntimeError(f"[254] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
     _capture_warn_lines(254, proc.stdout or "")
+    return None
+
+
+def _validate_kg_determinism_cert(base_dir):
+    """QA-KG Determinism Cert [228] v1: validates Phase 5 graph determinism. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg/canonicalize.py (Dale, 2026); memory/project_qa_mem_review_role.md (Dale, 2026). Canonical serialization excludes build-time timestamps and NFC-normalizes unicode; nodes ordered by id, edges ordered by (src_id,dst_id,edge_type). Gates: D1 (HARD) fixture content hash matches expected_hash.fixture_hash; D1.5 (WARN) manifest.repo_head drift; D2 (HARD) in-process rebuild idempotent; D3 (HARD) subprocess rebuild matches D2; D4 (SHOULD/N-A) cross-platform scaffold; D5 (HARD) ledger graph_hash matches live (bootstrap PASS first-run); D6 (HARD) promote() enforces graph_hash staleness; D7 (HARD) no except-pass swallows. Side-channel: validator D5 publishes live graph_hash to `_kg_graph_hash_by_fam_id['228']` for the ledger writer to pick up."""
+    import subprocess
+    validator = os.path.join(base_dir, "qa_kg_determinism_cert_v1", "qa_kg_determinism_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_kg_determinism_cert_v1/qa_kg_determinism_cert_validate.py"
+    db_path = os.path.join(os.path.dirname(base_dir), "tools", "qa_kg", "qa_kg.db")
+    if not os.path.exists(db_path):
+        return None  # DB not built yet — skip
+    # Invoke as a child process; also pre-populate the side-channel via a
+    # separate in-process hash computation so the ledger writer has the
+    # value even when the subprocess validator runs with its own _mv
+    # imported module (distinct globals).
+    try:
+        import sqlite3 as _sq
+        from tools.qa_kg.canonicalize import graph_hash as _gh
+        _c = _sq.connect(db_path)
+        _c.row_factory = _sq.Row
+        _kg_graph_hash_by_fam_id["228"] = _gh(_c)
+        _c.close()
+    except (ImportError, FileNotFoundError, OSError) as exc:
+        # Do NOT swallow silently — surface so D7/KG10 review can see it.
+        print(f"[WARN] 228  live graph_hash precompute failed — {exc}")
+    proc = subprocess.run(
+        [sys.executable, validator, "--db", db_path],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"[228] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    _capture_warn_lines(228, proc.stdout or "")
     return None
 
 
@@ -8106,6 +8144,11 @@ FAMILY_SWEEPS = [
      "Phase 4 authority-tiered retrieval ranker. Formula composes authority_weight × lifecycle_factor × bm25_norm × confidence × time_decay × contradiction × prov_decay; 20-query hand-curated benchmark. Checks R1/R2/R3/R4/R5/R6/R7/R8/R9 (R3+R4 tri-state, R5 WARN); validator runs against live qa_kg.db",
      "254_qa_kg_authority_ranker_cert_v1",
      "qa_kg_authority_ranker_cert_v1", True),
+    (228, "QA-KG Determinism Cert v1",
+     _validate_kg_determinism_cert,
+     "Phase 5 graph-hash determinism. Canonical serialization excludes build-time timestamps and NFC-normalizes unicode; frozen corpus fixture at tools/qa_kg/fixtures/corpus_snapshot_v1/. Checks D1/D1.5/D2/D3/D4/D5/D6/D7 (D1.5 WARN, D4 PASS on Linux / N-A else, D5 bootstrap-or-compare). Validator publishes live graph_hash to _kg_graph_hash_by_fam_id[228] side-channel; ledger writer attaches it to the [228] entry so kg.promote() D6 staleness check has ground truth",
+     "228_qa_kg_determinism_cert_v1",
+     "qa_kg_determinism_cert_v1", True),
 ]
 
 
@@ -8792,12 +8835,35 @@ if __name__ == "__main__":
         _warns_for_this = _kg_warn_lines_by_fam_id.get(_lk)
         if _warns_for_this:
             _ledger_results[_lk]["warns"] = _warns_for_this
+    # Phase 5: attach graph_hash (from [228] validator side-channel) and
+    # fixture_hash (from expected_hash.json) to the [228] ledger entry.
+    # Additive — pre-Phase-5 ledger consumers (Phase 2 kg.promote staleness
+    # check) ignore the new fields. kg.promote() D6 staleness check is
+    # the only consumer of graph_hash here.
+    _p5_hash = _kg_graph_hash_by_fam_id.get("228")
+    if _p5_hash and "228" in _ledger_results:
+        _ledger_results["228"]["graph_hash"] = _p5_hash
+    _p5_fixture_path = os.path.join(
+        base_dir, "qa_kg_determinism_cert_v1", "expected_hash.json"
+    )
+    if os.path.exists(_p5_fixture_path) and "228" in _ledger_results:
+        try:
+            with open(_p5_fixture_path, "r", encoding="utf-8") as _fxh:
+                _fx = json.load(_fxh)
+            _p5_fix = _fx.get("fixture_hash")
+            if _p5_fix:
+                _ledger_results["228"]["fixture_hash"] = _p5_fix
+        except (OSError, json.JSONDecodeError) as _exc:
+            # Surface without swallowing (D7 compliance).
+            print(f"[WARN] ledger  expected_hash.json read failed — {_exc}")
     _ledger_path = os.path.join(base_dir, "_meta_ledger.json")
     with open(_ledger_path, "w", encoding="utf-8") as _lf:
         json.dump(_ledger_results, _lf, indent=2, sort_keys=True)
     _n_with_warns = sum(1 for _v in _ledger_results.values() if _v.get("warns"))
+    _n_with_hash = sum(1 for _v in _ledger_results.values() if _v.get("graph_hash"))
     print(f"\n[LEDGER] Wrote {len(_ledger_results)} entries to _meta_ledger.json "
-          f"(git_head={_ledger_git_head[:10]}..., {_n_with_warns} with warns)")
+          f"(git_head={_ledger_git_head[:10]}..., {_n_with_warns} with warns, "
+          f"{_n_with_hash} with graph_hash)")
 
     # --- External validation: Level 3 recompute (real data + real weights) ---
     print("\n--- EXTERNAL VALIDATION ---")

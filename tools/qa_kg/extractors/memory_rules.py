@@ -34,12 +34,24 @@ def _extract_rules(text: str, source_file: str) -> list[tuple[str, str, str, str
     return results
 
 
-def populate(kg: KG) -> list[str]:
+def populate(
+    kg: KG,
+    *,
+    memory_md_path: Path | None = None,
+) -> list[str]:
+    """Populate Rule-typed nodes from MEMORY.md + CLAUDE.md Hard Rules.
+
+    Phase 5 C#1: `memory_md_path` overrides the hardcoded user-home path
+    so fixture-driven builds can freeze MEMORY.md content. None == default.
+    CLAUDE.md is always read from repo root (covered by pinned-repo
+    materialization in the determinism cert's D2/D3 gates).
+    """
     ids: list[str] = []
 
-    if _MEMORY_MD.exists():
-        text = _MEMORY_MD.read_text(encoding="utf-8")
-        for nid, title, body, src_loc in _extract_rules(text, str(_MEMORY_MD)):
+    mem_path = memory_md_path if memory_md_path is not None else _MEMORY_MD
+    if mem_path.exists():
+        text = mem_path.read_text(encoding="utf-8")
+        for nid, title, body, src_loc in _extract_rules(text, str(mem_path)):
             kg.upsert_node(Node(
                 id=nid, node_type="Rule", title=title, body=body,
                 source=str(_MEMORY_MD), vetted_by="MEMORY.md",

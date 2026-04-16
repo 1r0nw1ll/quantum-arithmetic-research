@@ -135,6 +135,10 @@ multi_ai_workspace/dataset_generator.py
 !qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/**/*.json
 !qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/*.json
 !tools/qa_kg/fixtures/*.json
+# Phase 5: nested fixture dirs (corpus_snapshot_v<N>/) carry the
+# CANONICAL_MANIFEST.json and other per-snapshot anchors that cert [228]
+# hashes; must be tracked.
+!tools/qa_kg/fixtures/**/*.json
 !qa_alphageometry_ptolemy/qa_fst/**/*.json
 !tools/*.json
 !qa_alphageometry_ptolemy/qa_fst/*.json

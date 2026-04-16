@@ -32,6 +32,7 @@
 | [252] | [QA-KG Epistemic Fields v1](252_qa_kg_epistemic_fields_cert_v1.md) | Phase 1 epistemic fields: 4 authority × 7 epistemic_status allowed matrix (source_work added in Phase 3); source_locator resolves; Axiom ⇒ primary+axiom | PASS |
 | [227] | [QA-KG Firewall Effective v1](227_qa_kg_firewall_effective_cert_v1.md) | Phase 2 Theorem NT firewall: DB-backed promoted-from, ledger staleness, broadcast provenance; FE1-FE6 gates | PASS |
 | [253] | [QA-KG Source Claims v1](253_qa_kg_source_claims_cert_v1.md) | Phase 3 SourceClaim / contradicts ingestion: SC1-SC8 gates; reason closed set {ocr, variant, typo, dispute, true}; SC8 endpoint whitelist forbids Axiom + agent | PASS |
+| [254] | [QA-KG Authority Ranker v1](254_qa_kg_authority_ranker_cert_v1.md) | Phase 4 authority-tiered retrieval ranker: 7-factor closed-form score (authority × lifecycle × bm25_norm × confidence × time_decay × contradiction × prov_decay); R1-R9 gates (R3+R4 tri-state, R5 WARN); 20-query hand-curated benchmark; two-pass candidate pool floors primary material | PASS |
 | [223] | [QA Experiment Protocol](223_qa_experiment_protocol.md) | Schema + Validator + Fixtures; enforces study design, source mapping, ablation, reproducibility (linter EXP-1) | PASS |
 | [224] | [QA Benchmark Protocol](224_qa_benchmark_protocol.md) | Schema + Validator + Fixtures; enforces calibration provenance, SOTA/null baseline, ablation, reproducibility (linter BENCH-1) | PASS |
 

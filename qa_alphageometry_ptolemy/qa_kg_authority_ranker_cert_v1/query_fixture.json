@@ -1,0 +1,171 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4 hand-curated benchmark fixture for cert [254]. expected_top_1_authority + expected_top_5_node_ids resolved against the live qa_kg.db at fixture-authoring time; per-query rationale documented so a reviewer can red-team each entry. NO LLM-generated queries; every entry hand-drafted. -->",
+  "phase": 4,
+  "description": "20 hand-curated queries for QA_KG_AUTHORITY_RANKER_CERT [254] v1. The `tags` field drives which gates each query exercises (R1 covers all queries; R2 per-query expected_top_1_authority; R3 contradicted_material; R4 valid_at_filter). DB scale at authoring time: 397 nodes, 113 edges, 0 agent nodes (R1 currently vacuous-PASS until agent extractors populate). Per plan: agent_excluded category dropped from this fixture because no agent nodes exist in the live DB; R1 gate still runs across every query and would catch a regression once agent material lands.",
+  "schema_version": 1,
+  "authoring_db_head": "to-be-filled-at-commit",
+  "queries": [
+    {
+      "id": "q01_zero_axiom_a1",
+      "query": "zero",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["axiom:A1"],
+      "rationale": "A1 (No-Zero) is the canonical axiom for state space {1..N}. Single-token query has weak BM25 against the axiom title 'A1 — No-Zero', but Pass-A primary floor (M2) plus authority_weight=10 forces axiom:A1 to top-1. M2 floor verification: this query specifically exercises the case where primary material would be demoted under raw BM25.",
+      "tags": ["primary_dominance", "M2_floor"]
+    },
+    {
+      "id": "q02_firewall_axiom_t2",
+      "query": "firewall",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["axiom:T2"],
+      "rationale": "T2 (Observer Firewall) is the primary axiom on the float×modulus boundary. axiom:T2 dominates derived firewall-related certs ([225] KG3, [227]).",
+      "tags": ["primary_dominance"]
+    },
+    {
+      "id": "q03_path_time_axiom_t1",
+      "query": "path time",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["axiom:T1"],
+      "rationale": "T1 (Path Time) is the canonical axiom on integer path length k. Two-token query matches title; primary axiom dominates.",
+      "tags": ["primary_dominance"]
+    },
+    {
+      "id": "q04_observer_projection_axiom_nt",
+      "query": "observer projection",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["axiom:NT"],
+      "rationale": "NT (Observer Projection Firewall) is the highest-priority axiom in CLAUDE.md. Phrase match favors the axiom title; authority_weight=10 ensures top-1.",
+      "tags": ["primary_dominance"]
+    },
+    {
+      "id": "q05_pond_source_work",
+      "query": "Pond",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["work:pond_svp_torus"],
+      "rationale": "Pond's SVP torus notes are seeded as a primary SourceWork. Verifies that SourceWork containers participate in authority ranking, not just SourceClaims.",
+      "tags": ["primary_dominance"]
+    },
+    {
+      "id": "q06_keely_cert_family",
+      "query": "Keely",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_keely_aggregation_cert_v1", "cert:fs:qa_keely_phenomenological_cert_v1", "cert:fs:qa_keely_triune_cert_v1"],
+      "rationale": "No primary 'Keely' SourceWork exists in the seed (Keely 40 Laws are referenced via certs, not directly ingested). Derived cert nodes top this query — honest baseline for the derived tier.",
+      "tags": ["derived_certified"]
+    },
+    {
+      "id": "q07_bateson_cert",
+      "query": "Bateson",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_bateson_learning_levels_cert_v1"],
+      "rationale": "[191] Bateson Learning Levels cert is the canonical authority on Bateson mapping. No primary Bateson source ingested in Phase 3.",
+      "tags": ["derived_certified"]
+    },
+    {
+      "id": "q08_aiq_bekar_cert",
+      "query": "Aiq Bekar",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:202"],
+      "rationale": "[202] is the canonical Aiq Bekar / Candidate F cert. Two-token query strongly disambiguates.",
+      "tags": ["derived_certified"]
+    },
+    {
+      "id": "q09_levin_cert",
+      "query": "Levin",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_levin_cognitive_lightcone_cert_v1"],
+      "rationale": "Levin 2026 corpus is referenced through derived certs. No primary Levin SourceWork ingested.",
+      "tags": ["derived_certified"]
+    },
+    {
+      "id": "q10_consistency_v4_lifecycle",
+      "query": "consistency",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_kg_consistency_cert_v4", "cert:225"],
+      "rationale": "[225] supersedes chain (v1 → v2 → v3 → v4) is the canonical lifecycle test. Without lifecycle_factor, raw BM25 + authority_weight tied at 4.0 for all four versions and the oldest (v1) won by id-sort. With lifecycle_factor=0.5 on superseded, v4 (current=1.0) → 4.0 cleanly beats v1/v2/v3 (superseded=0.5) → 2.0. Locks the deprecated/superseded down-weight semantics.",
+      "tags": ["derived_certified", "deprecated_lifecycle"]
+    },
+    {
+      "id": "q11_choromosomes_contradicted",
+      "query": "choromosomes",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:svp_choromosomes_ocr", "obs:verified_chromosomes"],
+      "rationale": "SVP wiki misspelling (Pond, 1998) → SourceClaim sc:svp_choromosomes_ocr; corrected by internal observation obs:verified_chromosomes via contradicts edge. R3: both endpoints surface in top-3, both labeled with contradiction_state != 'none'.",
+      "tags": ["contradicted_material", "primary_dominance"]
+    },
+    {
+      "id": "q12_diminsional_contradicted",
+      "query": "diminsional",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:svp_dim_ocr", "obs:verified_dimensional_spelling"],
+      "rationale": "Same pattern: SVP typo SourceClaim contradicted by an internal Verified observation. Validates the contradiction_factor 1.5 boost on a SourceClaim with no_path_factor.",
+      "tags": ["contradicted_material", "primary_dominance"]
+    },
+    {
+      "id": "q13_decinary_contradicted",
+      "query": "decinary",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:svp_decinary_typo", "obs:verified_decimal_notation"],
+      "rationale": "Third SVP wiki typo (decinary → decimal). Confirms R3 is not coincidence on a single example.",
+      "tags": ["contradicted_material", "primary_dominance"]
+    },
+    {
+      "id": "q14_F_never_prime_disputed",
+      "query": "F never prime",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:svp_F_never_prime", "obs:F_prime_in_unity_set"],
+      "rationale": "SVP's claim 'F is never prime' is technically contradicted by F=3 in the (1,1,2,3) unity set. Three-token query gives strong BM25 to the SourceClaim; contradicts edge surfaces the obs counterexample.",
+      "tags": ["contradicted_material", "primary_dominance"]
+    },
+    {
+      "id": "q15_stochastic_internal_rule",
+      "query": "stochastic",
+      "expected_top_1_authority": "internal",
+      "expected_top_5_node_ids": ["rule:no_stochastic_continuous_in_qa_experiments"],
+      "rationale": "Will-authored Hard Rule from MEMORY.md: 'No Stochastic/Continuous in QA Experiments'. Internal-authored material with no primary or derived competitor on this token. R1: even at min_authority='internal' an agent rule with the same body would NOT surface (R1 hard gate — there are 0 agent rules in the seed).",
+      "tags": ["internal_authority"]
+    },
+    {
+      "id": "q16_secrets_internal_rule",
+      "query": "secret",
+      "expected_top_1_authority": "internal",
+      "expected_top_5_node_ids": ["rule:no_secrets_in_commits"],
+      "rationale": "Will-authored Hard Rule 'No Secrets in Commits' (post-Supabase-leak). Single-token query unambiguously hits the rule node.",
+      "tags": ["internal_authority"]
+    },
+    {
+      "id": "q17_vocabulary_internal_rule",
+      "query": "vocabulary",
+      "expected_top_1_authority": "internal",
+      "expected_top_5_node_ids": ["rule:svp_vocabulary"],
+      "rationale": "Will-authored SVP Vocabulary Hard Rule (never invent SVP terminology). Third internal-authority probe — distinct from q15/q16 to ensure internal tier is consistently surfaced.",
+      "tags": ["internal_authority"]
+    },
+    {
+      "id": "q18_epistemic_fields_cert",
+      "query": "epistemic fields",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_kg_epistemic_fields_cert_v1", "cert:252"],
+      "rationale": "[252] is THE epistemic-fields cert. Two-token phrase match; verifies derived tier surfaces cleanly without primary contention on this query.",
+      "tags": ["derived_certified"]
+    },
+    {
+      "id": "q19_domain_filter_vacuous",
+      "query": "Keely",
+      "domain": "",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_keely_aggregation_cert_v1"],
+      "rationale": "domain_filter tag wires R4 / candidate-pool predicate; Phase 4 ships with domain='' on every node (no extractor populates domain yet). Empty-string domain is treated by the candidate-pool query as 'no filter' (the SQL guard `if domain` skips the WHERE clause). Vacuous today; will become discriminating once Phase 4.5 populates domain.",
+      "tags": ["derived_certified", "domain_filter"]
+    },
+    {
+      "id": "q20_valid_at_filter_vacuous",
+      "query": "Keely",
+      "valid_at": "2026-04-16T00:00:00Z",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_keely_aggregation_cert_v1"],
+      "rationale": "valid_at_filter tag exercises R4. Phase 4 DB has 0 nodes with valid_until populated → R4 reports N-A (tri-state, plan M4). The query still runs and respects the filter; the gate honestly reports 'no node carries valid_until — filter correctness pending Phase 4.5 corpus pass'. Locks the gate plumbing; does NOT vacuously claim PASS.",
+      "tags": ["derived_certified", "valid_at_filter"]
+    }
+  ]
+}

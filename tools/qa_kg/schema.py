@@ -2,6 +2,15 @@
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
+Schema v4 adds the four ranker-input columns (confidence, valid_from,
+valid_until, domain) per Phase 4 of the QA-MEM scope. These feed the
+authority-tiered ranker formula (see tools/qa_kg/ranker.py and cert
+[254] qa_kg_authority_ranker_cert_v1). Defaults: confidence=1.0,
+valid_from/valid_until/domain=''. Extractors that have measured signal
+(e.g., source_claims with extraction_method='ocr') set confidence
+explicitly; legacy nodes absorb the defaults on rebuild without
+behavioural change.
+
 Schema v3 adds epistemic fields (authority, epistemic_status, method,
 source_locator, lifecycle_state) per Phase 1 of the QA-MEM scope. These are
 ORTHOGONAL to the Candidate F retrieval-index columns (idx_b/idx_e): they
@@ -26,7 +35,7 @@ Phase 3: `source_work` added as the epistemic_status for primary-source
 containers (a book, paper, wiki page) to keep them structurally distinct
 from `source_claim` (a quoted fragment within a work). SCHEMA_VERSION
 stays at 3 — this is an additive enum extension, not a structural change.
-Old DBs rely on application-level `_validate_node_epistemic` in kg.py
+Old DBs rely on application-level `_validate_node_fields` in kg.py
 plus the [252] EF3 allowed-matrix gate for runtime enforcement. Fresh
 DBs get the updated CHECK constraint at DDL time. The canonical
 migration path for a stale DB is:
@@ -56,9 +65,15 @@ from pathlib import Path
 _log = logging.getLogger("qa_kg.schema")
 
 
-SCHEMA_VERSION = 3  # Phase 1: epistemic fields; alias removal atomic with this bump
+SCHEMA_VERSION = 4  # Phase 4: ranker-input columns (confidence, valid_from/until, domain)
 # Phase 3 (2026-04-16): added "source_work" to EPISTEMIC_STATUSES as an
-# additive enum extension. See module docstring; SCHEMA_VERSION stays 3.
+# additive enum extension. SCHEMA_VERSION stayed 3 for that change.
+# Phase 4 (2026-04-16): bumped to 4 for the four new columns. CHECK
+# constraints on ALTER TABLE ADD COLUMN are not enforced by SQLite, so
+# old DBs rely on application-level _validate_node_fields in kg.py +
+# cert [254] R6/R9 for runtime safety. _check_v4_columns_drift logs at
+# init_db. Canonical migration: rm tools/qa_kg/qa_kg.db && python -m
+# tools.qa_kg.cli build.
 
 AUTHORITIES = ("primary", "derived", "internal", "agent")
 EPISTEMIC_STATUSES = (
@@ -102,6 +117,11 @@ CREATE TABLE IF NOT EXISTS nodes (
     method           TEXT,
     source_locator   TEXT,
     lifecycle_state  TEXT NOT NULL DEFAULT 'current',
+    -- Phase 4 (schema v4) ranker-input fields
+    confidence       REAL NOT NULL DEFAULT 1.0,
+    valid_from       TEXT NOT NULL DEFAULT '',
+    valid_until      TEXT NOT NULL DEFAULT '',
+    domain           TEXT NOT NULL DEFAULT '',
     created_ts     TEXT NOT NULL,
     updated_ts     TEXT NOT NULL,
     CHECK (idx_b IS NULL OR idx_b BETWEEN 1 AND 9),
@@ -111,14 +131,17 @@ CREATE TABLE IF NOT EXISTS nodes (
     CHECK (tier IN ('singularity','cosmos','satellite','unassigned')),
     CHECK (authority IS NULL OR authority IN ({_AUTH_LIST})),
     CHECK (epistemic_status IS NULL OR epistemic_status IN ({_EPI_LIST})),
-    CHECK (lifecycle_state IN ({_LC_LIST}))
+    CHECK (lifecycle_state IN ({_LC_LIST})),
+    CHECK (confidence BETWEEN 0.0 AND 1.0)
 );
 
-CREATE INDEX IF NOT EXISTS idx_nodes_tier      ON nodes(tier);
-CREATE INDEX IF NOT EXISTS idx_nodes_idx_be    ON nodes(idx_b, idx_e);
-CREATE INDEX IF NOT EXISTS idx_nodes_type      ON nodes(node_type);
-CREATE INDEX IF NOT EXISTS idx_nodes_authority ON nodes(authority);
-CREATE INDEX IF NOT EXISTS idx_nodes_epistemic ON nodes(epistemic_status);
+CREATE INDEX IF NOT EXISTS idx_nodes_tier        ON nodes(tier);
+CREATE INDEX IF NOT EXISTS idx_nodes_idx_be      ON nodes(idx_b, idx_e);
+CREATE INDEX IF NOT EXISTS idx_nodes_type        ON nodes(node_type);
+CREATE INDEX IF NOT EXISTS idx_nodes_authority   ON nodes(authority);
+CREATE INDEX IF NOT EXISTS idx_nodes_epistemic   ON nodes(epistemic_status);
+CREATE INDEX IF NOT EXISTS idx_nodes_domain      ON nodes(domain);
+CREATE INDEX IF NOT EXISTS idx_nodes_valid_until ON nodes(valid_until);
 
 CREATE TABLE IF NOT EXISTS edges (
     src_id      TEXT NOT NULL,
@@ -184,7 +207,7 @@ def _check_epistemic_enum_drift(conn: sqlite3.Connection) -> None:
     Phase 3 adds 'source_work' as an additive enum value. SQLite cannot
     ALTER an existing CHECK constraint in place, so a DB created before
     this phase will still carry the old check string. Application-level
-    validation in kg._validate_node_epistemic and cert [252] EF3 cover
+    validation in kg._validate_node_fields and cert [252] EF3 cover
     runtime safety, but we log a loud warning so the user has a clean
     pointer to the rebuild path if they hit enum rejections at insert
     time.
@@ -235,13 +258,70 @@ def _migrate_to_v3(conn: sqlite3.Connection) -> None:
     )
 
 
+def _migrate_to_v4(conn: sqlite3.Connection) -> None:
+    """Idempotent ALTER TABLE migration for the four Phase 4 ranker columns.
+
+    SQLite cannot retroactively apply CHECK on ALTER TABLE ADD COLUMN —
+    application-level _validate_node_fields in kg.py catches confidence
+    out-of-range. _check_v4_columns_drift logs at init_db time pointing at
+    the rebuild path when the live nodes table is missing v4 columns.
+    """
+    cols = _column_names(conn, "nodes")
+    if "confidence" not in cols:
+        conn.execute(
+            "ALTER TABLE nodes ADD COLUMN confidence REAL NOT NULL DEFAULT 1.0"
+        )
+    if "valid_from" not in cols:
+        conn.execute(
+            "ALTER TABLE nodes ADD COLUMN valid_from TEXT NOT NULL DEFAULT ''"
+        )
+    if "valid_until" not in cols:
+        conn.execute(
+            "ALTER TABLE nodes ADD COLUMN valid_until TEXT NOT NULL DEFAULT ''"
+        )
+    if "domain" not in cols:
+        conn.execute(
+            "ALTER TABLE nodes ADD COLUMN domain TEXT NOT NULL DEFAULT ''"
+        )
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_nodes_domain ON nodes(domain)"
+    )
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_nodes_valid_until ON nodes(valid_until)"
+    )
+
+
+def _check_v4_columns_drift(conn: sqlite3.Connection) -> None:
+    """Detect old-DB lacking the Phase 4 ranker columns / CHECK constraint.
+
+    Mirrors _check_epistemic_enum_drift: logs a loud warning pointing to
+    the rebuild path. Application-level validation in kg.py covers the
+    runtime; this is operator-facing diagnostics.
+    """
+    row = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='nodes'"
+    ).fetchone()
+    if row is None or row[0] is None:
+        return
+    sql = row[0]
+    if "confidence" not in sql or "BETWEEN 0.0 AND 1.0" not in sql:
+        _log.warning(
+            "qa_kg.db nodes table is missing Phase 4 columns or CHECK on "
+            "confidence. Application-level validation still enforces ranges, "
+            "but DB-level CHECK will not. To align: "
+            "rm tools/qa_kg/qa_kg.db && python -m tools.qa_kg.cli build"
+        )
+
+
 def init_db(path: Path | str = DEFAULT_DB) -> sqlite3.Connection:
     conn = sqlite3.connect(str(path))
     conn.row_factory = sqlite3.Row
     conn.executescript("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
     conn.executescript(DDL)
     _migrate_to_v3(conn)
+    _migrate_to_v4(conn)
     _check_epistemic_enum_drift(conn)
+    _check_v4_columns_drift(conn)
     conn.execute(
         "INSERT OR REPLACE INTO meta(key, value) VALUES ('schema_version', ?)",
         (str(SCHEMA_VERSION),),

@@ -1,8 +1,8 @@
-<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v4, [226], [227], [252], [253], and project-internal authority docs -->
-# QA-MEM Scope (through Phase 3)
+<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v4, [226], [227], [252], [253], [254], and project-internal authority docs -->
+# QA-MEM Scope (through Phase 4)
 
-**Status:** Phases 0–3 landed; Phase 4+ deferred.
-**Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts).
+**Status:** Phases 0–4 landed; Phase 4.5+ deferred.
+**Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts) + `[254]` (authority-tiered ranker).
 **Companion files:** `QA_AXIOMS_BLOCK.md`, `qa_orbit_rules.py`, `tools/qa_retrieval/schema.py`, `memory/project_qa_mem_architecture.md`.
 
 ## What QA-MEM IS (as of Phase 0)
@@ -210,18 +210,91 @@ Cert `[227] QA_KG_FIREWALL_EFFECTIVE_CERT.v1` (FE1–FE6) validates:
 nodes. When agent nodes exist, checks both firewall layers (unassigned
 tier + agent authority). PASS = firewall silent in normal operation.
 
+### Phase 4 — authority-tiered retrieval ranker
+
+Landed 2026-04-16. `KG.search_authority_ranked()` is the agent-facing
+retrieval entry point; the legacy `kg.search()` stays available for
+cert-validator introspection but its docstring directs agent-facing
+callers away. Cert `[254]` enforces formula correctness, determinism,
+swallow-discipline, and coverage.
+
+Schema: bumped to v4 with four ranker-input columns (`confidence`,
+`valid_from`, `valid_until`, `domain`). Atomic delta — `_migrate_to_v4`
+idempotent ALTER ADD; `_check_v4_columns_drift` logs at `init_db`
+pointing at `rm tools/qa_kg/qa_kg.db && python -m tools.qa_kg.cli build`.
+Application-level `_validate_node_fields` covers confidence range on
+old DBs (mirrors Phase 3 source_work pattern).
+
+Closed-form score (single source of truth: `qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/ranker_spec.json`):
+
+    score = authority_weight[node.authority]      # primary 10, derived 8, internal 5, agent 1
+          × lifecycle_factor[node.lifecycle]       # current 1.0, deprecated/superseded 0.5
+          × bm25_norm                              # min-max across candidate pool, FTS5-sign-inverted
+          × node.confidence                        # measured signal; default 1.0
+          × time_decay                             # 1.0 for axiom/source_*/certified; exp(-Δdays/365) else
+          × contradiction_factor                   # 1.5 if contradicts edge present, else 1.0
+          × provenance_decay                       # exp(-depth/3) if rooted, no_path_factor (0.5) else
+
+Two-pass candidate pool (`KG._candidate_pool`) — Pass A: ALL FTS5
+matches with `authority IN {primary, derived}`, no BM25 cap (primary
+material is never silently demoted by low BM25); Pass B: top-K of
+remaining authorities by raw BM25. `lifecycle_state='withdrawn'`
+excluded entirely from the pool.
+
+Contradiction surfacing is **unconditional** on the public API; the
+`include_contradictions` parameter is intentionally absent so agents
+cannot opt out of dispute visibility. An internal
+`KG._export_clean_subset` exists for documentation export only.
+
+Tiebreak: score DESC, authority_weight DESC, node_id ASC. Deterministic
+under fixed `valid_at`. Default `valid_at=None` snapshots wall-clock
+once per call; cert `[254]` R7 exercises determinism by passing an
+explicit `valid_at`.
+
+Provenance depth materialization threshold: live recursive CTE per
+candidate is the Phase 4 implementation. **When nodes > 5,000 OR p95
+search latency > 200 ms**, materialize `depth_to_axiom INTEGER` on the
+nodes table updated on edge insert. Phase 4 scale (~400 nodes, 113
+edges) makes this a no-op; the threshold is documented so the next
+reviewer can monitor.
+
+Cert `[254]` gates: R1 (HARD) `min_authority='internal'` excludes agent;
+R2 (HARD) per-fixture-query `expected_top_1_authority`; R3 (tri-state)
+contradicted material in top-3; R4 (tri-state) `valid_at` filter
+correctness — N-A while no node carries `valid_until`; R5 (WARN)
+recall@5 vs A-RAG `retrieve_keyword`; R6 (HARD) formula correctness
+across ≥6 golden cases; R7 (HARD) determinism; R8 (HARD) no
+`except Exception: pass` in `ranker.py` / `search_authority_ranked`;
+R9 (HARD) coverage completeness on BOTH axes (`decay_status` ∪
+`decay_exempt_status` == `EPISTEMIC_STATUSES`; `authority_weight.keys()`
+== `AUTHORITIES`; `lifecycle_factor.keys()` == `LIFECYCLE_STATES \\ {'withdrawn'}`).
+
+Hand-curated 20-query benchmark at `query_fixture.json` — every entry
+carries `expected_top_1_authority`, `expected_top_5_node_ids`, `tags`,
+and a Will-readable `rationale`. **No LLM-generated queries.**
+
+CLI: `python -m tools.qa_kg.cli search-ranked "<query>" [--min-authority …] [--domain …] [--valid-at …] [-k …]`.
+
 ## Roadmap (deferred, NOT in scope)
 
-- **Phase 4:** authority-filtered retrieval + provenance-aware ranker.
 - **Phase 4.5:** full primary-source corpus ingestion (Ben/Dale books,
-  full Wildberger corpus, Levin 2026). Phase 3 shipped the mechanism +
-  minimum seed that validates every gate; Phase 4.5 is the scaled pass.
-  Also adds `url:` scheme to `tools/qa_kg/locators.py` resolver.
+  full Wildberger corpus, Levin 2026); extractor confidence-from-method
+  maps (e.g., `source_claims.populate` setting `confidence=0.7` on
+  `extraction_method='ocr'`); domain/valid_from/valid_until population
+  on real nodes; URL scheme in `tools/qa_kg/locators.py` resolver. Phase 3
+  shipped the mechanism + minimum seed; Phase 4.5 is the scaled pass.
 - **Phase 5:** determinism — frozen corpus fixture, graph-hash cert `[228]`,
   validators return structured results (replaces Phase 3 `[WARN]` stdout
   scraping in `qa_meta_validator.py`).
-- **Phase 6:** agent integration — shadow-mode parallel to A-RAG before any
-  replacement.
+- **Phase 6:** agent integration — `tools/qa_kg_mcp/server.py` exposes
+  `search_authority_ranked` (and friends) as MCP tools; `[255]` cert
+  enforces that the MCP surface cannot create non-AgentNote types and
+  that direct DB writes outside the MCP path are detected.
+
+Per the alpha-bar rule (`memory/project_qa_mem_review_role.md`),
+QA-MEM still cannot be marketed as "agent memory" until Phases 4 + 5 + 6
+all PASS. Phase 4 ships the ranker primitives; Phases 5 + 6 remain
+gating.
 
 ## References
 
@@ -241,6 +314,11 @@ tier + agent authority). PASS = firewall silent in normal operation.
   (`qa_alphageometry_ptolemy/qa_kg_consistency_cert_v4/`)
 - Cert family [253] — SourceClaim / contradicts contracts (SC1–SC8)
   (`qa_alphageometry_ptolemy/qa_kg_source_claims_cert_v1/`)
+- Cert family [254] — Authority-tiered ranker (R1–R9; R3+R4 tri-state, R5 WARN)
+  (`qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/`)
+- Ranker module: `tools/qa_kg/ranker.py`
+- Ranker spec (single source of truth): `qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/ranker_spec.json`
+- 20-query benchmark: `qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/query_fixture.json`
 - `docs/theory/svp_wiki_qa_elements_snapshot.md` — SVP wiki primary-source
   snapshot (2026-04-16 fetch), locator target for Phase 3 SourceClaims
 - `QA_AXIOMS_BLOCK.md` (Dale 2026) — canonical QA axiom set A/T/S/F groups

@@ -33,6 +33,9 @@ from tools.qa_kg.orbit import (
 from tools.qa_kg.schema import (
     AUTHORITIES, DEFAULT_DB, EPISTEMIC_STATUSES, LIFECYCLE_STATES, init_db,
 )
+from tools.qa_kg.ranker import (
+    RankedHit, RankerSpec, compose_score, load_spec, normalize_bm25,
+)
 
 _log = logging.getLogger("qa_kg")
 
@@ -97,6 +100,20 @@ class Node:
       method           — extraction pathway (cert_validator/ob_capture/...)
       source_locator   — schemed pointer (file:<path>, ob:<id>, cert:<id>)
       lifecycle_state  — current/deprecated/superseded/withdrawn
+
+    Phase 4 ranker-input fields (defaults absorb existing extractors):
+      confidence  — measured signal in [0,1]; default 1.0. Set explicitly
+                    by extractors that have actual measurement uncertainty
+                    (e.g., source_claims with extraction_method='ocr').
+                    DO NOT default by authority — that double-counts the
+                    authority_weight in the ranker formula (see plan M1).
+      valid_from  — ISO-8601 timestamp the claim becomes valid. Empty
+                    string means "no explicit start date"; ranker falls
+                    back to created_ts for time_decay anchor.
+      valid_until — ISO-8601 timestamp the claim expires. Empty = no
+                    expiry. Cert [254] R4 filters when populated.
+      domain      — optional domain tag (Phase 4.5 will populate; ranker
+                    accepts None for "no filter").
     """
     id: str
     node_type: str
@@ -113,6 +130,10 @@ class Node:
     method: str | None = None
     source_locator: str | None = None
     lifecycle_state: str = "current"
+    confidence: float = 1.0
+    valid_from: str = ""
+    valid_until: str = ""
+    domain: str = ""
 
     def content(self) -> str:
         return (self.title or "") + ("\n" + self.body if self.body else "")
@@ -210,8 +231,14 @@ class FirewallViolation(RuntimeError):
     """Theorem NT firewall blocked an unauthorized edge."""
 
 
-def _validate_node_epistemic(node: Node) -> None:
-    """Application-layer CHECK for authority/epistemic_status/lifecycle_state."""
+def _validate_node_fields(node: Node) -> None:
+    """Application-layer CHECK for Phase 1 + Phase 4 enum / range fields.
+
+    SQLite cannot retroactively enforce CHECK constraints added via ALTER
+    TABLE ADD COLUMN, so Phase 1 (authority/epistemic_status/lifecycle)
+    and Phase 4 (confidence range) all live here as the runtime safety net
+    for any DB created before the matching schema version.
+    """
     if node.authority is not None and node.authority not in AUTHORITIES:
         raise ValueError(
             f"authority={node.authority!r} not in {AUTHORITIES}"
@@ -224,6 +251,10 @@ def _validate_node_epistemic(node: Node) -> None:
         raise ValueError(
             f"lifecycle_state={node.lifecycle_state!r} not in {LIFECYCLE_STATES}"
         )
+    if not (0.0 <= node.confidence <= 1.0):
+        raise ValueError(
+            f"confidence={node.confidence!r} not in [0.0, 1.0]"
+        )
 
 
 class KG:
@@ -231,7 +262,7 @@ class KG:
         self.conn = conn
 
     def upsert_node(self, node: Node) -> None:
-        _validate_node_epistemic(node)
+        _validate_node_fields(node)
         idx = node.resolved_index()
         tier = node.resolved_tier()
         cb = idx.idx_b if idx else None
@@ -245,8 +276,9 @@ class KG:
                                source, vetted_by, vetted_ts, predicate_ref,
                                authority, epistemic_status, method,
                                source_locator, lifecycle_state,
+                               confidence, valid_from, valid_until, domain,
                                created_ts, updated_ts)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             ON CONFLICT(id) DO UPDATE SET
                 node_type=excluded.node_type,
                 title=excluded.title,
@@ -266,6 +298,10 @@ class KG:
                 method=excluded.method,
                 source_locator=excluded.source_locator,
                 lifecycle_state=excluded.lifecycle_state,
+                confidence=excluded.confidence,
+                valid_from=excluded.valid_from,
+                valid_until=excluded.valid_until,
+                domain=excluded.domain,
                 updated_ts=excluded.updated_ts
             """,
             (node.id, node.node_type, node.title, node.body, tier.value,
@@ -273,6 +309,7 @@ class KG:
              node.source, node.vetted_by, node.vetted_ts, node.predicate_ref,
              node.authority, node.epistemic_status, node.method,
              node.source_locator, node.lifecycle_state,
+             node.confidence, node.valid_from, node.valid_until, node.domain,
              now, now),
         )
         self.conn.commit()
@@ -322,6 +359,15 @@ class KG:
     def search(self, query: str, *, tier: str | None = None,
                authority: list[str] | None = None,
                k: int = 10) -> list[sqlite3.Row]:
+        """Low-level FTS5/BM25 wrapper. NO authority awareness.
+
+        DO NOT use for agent-facing queries — agents must call
+        search_authority_ranked() (Phase 4 cert [254] enforces formula
+        correctness; Phase 6 cert [255] will enforce the MCP boundary).
+
+        This entry point stays available for cert validators that want raw
+        FTS5 introspection (e.g., [225]/[252]/[253] consistency checks).
+        """
         base = (
             "SELECT nodes.* FROM nodes_fts "
             "JOIN nodes ON nodes.rowid = nodes_fts.rowid WHERE nodes_fts MATCH ?"
@@ -337,6 +383,279 @@ class KG:
         base += " ORDER BY bm25(nodes_fts) LIMIT ?"
         args.append(k)
         return list(self.conn.execute(base, args).fetchall())
+
+    # ---------------------------------------------------------------------
+    # Phase 4: authority-tiered retrieval ranker
+    # ---------------------------------------------------------------------
+
+    _MIN_AUTHORITY_LADDER: tuple[tuple[str, frozenset[str]], ...] = (
+        ("primary",  frozenset({"primary"})),
+        ("derived",  frozenset({"primary", "derived"})),
+        ("internal", frozenset({"primary", "derived", "internal"})),
+        ("agent",    frozenset({"primary", "derived", "internal", "agent"})),
+    )
+
+    @staticmethod
+    def _resolve_min_authority(min_authority: str) -> frozenset[str]:
+        ladder = dict(KG._MIN_AUTHORITY_LADDER)
+        if min_authority not in ladder:
+            raise ValueError(
+                f"min_authority={min_authority!r} not in {sorted(ladder)}"
+            )
+        return ladder[min_authority]
+
+    def _candidate_pool(
+        self,
+        query: str,
+        allowed_authorities: frozenset[str],
+        domain: str | None,
+        valid_at_iso: str | None,
+        k_pool: int,
+    ) -> list[tuple[sqlite3.Row, float]]:
+        """Two-pass candidate selection (plan M2).
+
+        Pass A — ALL FTS5 matches with authority IN {primary, derived} ∩
+        allowed_authorities. No BM25 cap; primary material is never
+        silently demoted by low BM25.
+
+        Pass B — top-(k_pool - len(A)) FTS5 matches with authority IN
+        allowed_authorities \\ {primary, derived}, ordered by raw BM25.
+        Skipped entirely when Pass A already meets or exceeds k_pool.
+
+        Filters applied to BOTH passes:
+          - lifecycle_state != 'withdrawn'
+          - domain = ? (when domain is not None and not '')
+          - valid_until = '' OR valid_until >= valid_at_iso (when given)
+        """
+        primary_set = frozenset({"primary", "derived"}) & allowed_authorities
+        secondary_set = allowed_authorities - primary_set
+
+        def _build(authorities: frozenset[str], limit: int | None) -> list[tuple[sqlite3.Row, float]]:
+            if not authorities:
+                return []
+            placeholders = ",".join("?" * len(authorities))
+            sql = (
+                "SELECT nodes.*, bm25(nodes_fts) AS _bm25_raw "
+                "FROM nodes_fts "
+                "JOIN nodes ON nodes.rowid = nodes_fts.rowid "
+                "WHERE nodes_fts MATCH ? "
+                f"  AND nodes.authority IN ({placeholders}) "
+                "  AND nodes.lifecycle_state != 'withdrawn' "
+            )
+            args: list = [query, *sorted(authorities)]
+            if domain:
+                sql += " AND nodes.domain = ? "
+                args.append(domain)
+            if valid_at_iso:
+                sql += " AND (nodes.valid_until = '' OR nodes.valid_until >= ?) "
+                args.append(valid_at_iso)
+            sql += " ORDER BY bm25(nodes_fts) "
+            if limit is not None:
+                sql += " LIMIT ? "
+                args.append(limit)
+            rows = list(self.conn.execute(sql, args).fetchall())
+            return [(r, float(r["_bm25_raw"])) for r in rows]
+
+        pass_a = _build(primary_set, limit=None)
+        if len(pass_a) >= k_pool:
+            if len(pass_a) > 200:
+                _log.warning(
+                    "candidate_pool Pass A returned %d primary/derived matches "
+                    "for query=%r — consider tightening the query or "
+                    "raising candidate_pool_k", len(pass_a), query
+                )
+            return pass_a
+        remaining = k_pool - len(pass_a)
+        pass_b = _build(secondary_set, limit=remaining)
+        # Dedup by id in case a node somehow surfaces in both (shouldn't,
+        # but cheap insurance against future authority-set overlaps).
+        seen: set[str] = {row["id"] for row, _ in pass_a}
+        merged = list(pass_a)
+        for row, score in pass_b:
+            if row["id"] in seen:
+                continue
+            seen.add(row["id"])
+            merged.append((row, score))
+        return merged
+
+    def _contradiction_states(self, node_ids: list[str]) -> dict[str, str]:
+        """Map each id → 'none'|'src'|'dst'|'both' based on contradicts edges."""
+        if not node_ids:
+            return {}
+        state: dict[str, str] = {nid: "none" for nid in node_ids}
+        placeholders = ",".join("?" * len(node_ids))
+        rows = self.conn.execute(
+            f"SELECT src_id, dst_id FROM edges WHERE edge_type='contradicts' "
+            f"  AND (src_id IN ({placeholders}) OR dst_id IN ({placeholders}))",
+            (*node_ids, *node_ids),
+        ).fetchall()
+        for r in rows:
+            sid, did = r["src_id"], r["dst_id"]
+            if sid in state:
+                state[sid] = "both" if state[sid] == "dst" else "src"
+            if did in state:
+                state[did] = "both" if state[did] == "src" else "dst"
+        return state
+
+    _PROVENANCE_EDGE_TYPES = (
+        "validates", "derived-from", "extends", "instantiates",
+    )
+
+    def _provenance_depth_to_axiom(
+        self, node_id: str, max_depth: int = 5,
+    ) -> int:
+        """Min hops from node_id to a node with epistemic_status='axiom'.
+
+        Recursive CTE over structural+non-keyword edges only (mirrors
+        kg.why()). Returns -1 if no path within max_depth. Plan D2 uses
+        live CTE; threshold for materialization to a column is documented
+        in docs/specs/QA_MEM_SCOPE.md (nodes > 5,000 OR p95 > 200ms).
+        """
+        edge_types = self._PROVENANCE_EDGE_TYPES
+        placeholders = ",".join("?" * len(edge_types))
+        sql = f"""
+        WITH RECURSIVE chain(target, depth) AS (
+            SELECT dst_id, 1 FROM edges
+              WHERE src_id = ?
+                AND edge_type IN ({placeholders})
+                AND method != 'keyword'
+            UNION
+            SELECT e.dst_id, c.depth + 1 FROM edges e
+              JOIN chain c ON e.src_id = c.target
+              WHERE c.depth < ?
+                AND e.edge_type IN ({placeholders})
+                AND e.method != 'keyword'
+        )
+        SELECT MIN(c.depth) AS d
+          FROM chain c
+          JOIN nodes n ON n.id = c.target
+         WHERE n.epistemic_status = 'axiom'
+        """
+        args = [node_id, *edge_types, max_depth, *edge_types]
+        # If the node IS an axiom, depth is 0 (self-rooted).
+        self_row = self.conn.execute(
+            "SELECT epistemic_status FROM nodes WHERE id = ?", (node_id,)
+        ).fetchone()
+        if self_row is not None and self_row["epistemic_status"] == "axiom":
+            return 0
+        row = self.conn.execute(sql, args).fetchone()
+        if row is None or row["d"] is None:
+            return -1
+        return int(row["d"])
+
+    def search_authority_ranked(
+        self,
+        query: str,
+        *,
+        min_authority: str = "internal",
+        domain: str | None = None,
+        valid_at: _dt.datetime | None = None,
+        k: int = 10,
+        spec: RankerSpec | None = None,
+    ) -> list[RankedHit]:
+        """Authority-tiered retrieval. Phase 4 cert [254].
+
+        Pipeline (see plan §Architecture):
+          1. Resolve min_authority to allowed set.
+          2. Two-pass candidate pool (plan M2).
+          3. Contradiction state lookup.
+          4. Provenance depth per candidate.
+          5. BM25 normalize across the union.
+          6. Compose scores via ranker.compose_score.
+          7. Sort + tiebreak (deterministic).
+          8. Trim to k.
+
+        Contradiction surfacing is unconditional (plan M3) — there is no
+        `include_contradictions` parameter on the public API. For clean
+        export use the internal `_export_clean_subset` helper.
+        """
+        spec = spec if spec is not None else load_spec()
+        allowed = self._resolve_min_authority(min_authority)
+        # Snapshot wall-clock once per call when valid_at is unspecified, so
+        # all candidates in a single call see the same "now" and the
+        # composed scores are internally consistent. Cross-call determinism
+        # under valid_at=None depends on the wall clock; cert [254] R7
+        # exercises determinism by passing an explicit valid_at.
+        effective_valid_at = (
+            valid_at if valid_at is not None
+            else _dt.datetime.now(_dt.timezone.utc)
+        )
+        valid_at_iso = (
+            valid_at.astimezone(_dt.timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
+            if valid_at is not None else None
+        )
+
+        pool = self._candidate_pool(
+            query, allowed, domain, valid_at_iso, spec.candidate_pool_k,
+        )
+        if not pool:
+            return []
+
+        node_ids = [row["id"] for row, _ in pool]
+        contradiction_map = self._contradiction_states(node_ids)
+        depth_map = {nid: self._provenance_depth_to_axiom(nid) for nid in node_ids}
+        bm_norms = normalize_bm25([raw for _, raw in pool])
+
+        hits: list[RankedHit] = []
+        for (row, _raw_bm25), bm_norm in zip(pool, bm_norms):
+            authority = row["authority"]
+            if authority is None:
+                # Defense-in-depth: this should never happen because the
+                # candidate-pool query filters on authority IN allowed.
+                continue
+            score, breakdown = compose_score(
+                authority=authority,
+                bm25_norm=bm_norm,
+                confidence=float(row["confidence"]),
+                epistemic_status=row["epistemic_status"],
+                created_ts=row["created_ts"] or "",
+                valid_from=row["valid_from"] or "",
+                valid_at=effective_valid_at,
+                contradiction_state=contradiction_map[row["id"]],
+                provenance_depth=depth_map[row["id"]],
+                lifecycle_state=row["lifecycle_state"] or "current",
+                spec=spec,
+            )
+            hits.append(RankedHit(
+                node=row,
+                score=score,
+                authority=authority,
+                contradiction_state=contradiction_map[row["id"]],
+                provenance_depth=depth_map[row["id"]],
+                score_breakdown=breakdown,
+            ))
+
+        # Deterministic tiebreak: score DESC, authority_weight DESC, id ASC.
+        def _sort_key(h: RankedHit) -> tuple[float, float, str]:
+            aw = spec.authority_weight.get(h.authority, 0.0)
+            # Negate so default ascending sort = descending value.
+            return (-h.score, -aw, h.node["id"])
+
+        hits.sort(key=_sort_key)
+        return hits[:k]
+
+    def _export_clean_subset(
+        self,
+        query: str,
+        *,
+        min_authority: str = "internal",
+        domain: str | None = None,
+        valid_at: _dt.datetime | None = None,
+        k: int = 10,
+        spec: RankerSpec | None = None,
+    ) -> list[RankedHit]:
+        """INTERNAL — strips contradicted hits for documentation export.
+
+        DO NOT use for agent queries. Surfacing contradictions is a Phase 4
+        design intent (cert [254] R3); agent-facing callers MUST use
+        search_authority_ranked.
+        """
+        hits = self.search_authority_ranked(
+            query, min_authority=min_authority, domain=domain,
+            valid_at=valid_at, k=k * 2, spec=spec,
+        )
+        clean = [h for h in hits if h.contradiction_state == "none"]
+        return clean[:k]
 
     def neighbors(self, node_id: str, *, edge_types: Iterable[str] | None = None,
                   direction: str = "both") -> list[sqlite3.Row]:

@@ -6,6 +6,8 @@ Usage:
     python -m tools.qa_kg.cli build            # populate axioms + memory rules + certs
     python -m tools.qa_kg.cli stats
     python -m tools.qa_kg.cli search "<query>" [--tier cosmos] [-k 10]
+    python -m tools.qa_kg.cli search-ranked "<query>" \\
+        [--min-authority internal] [--domain ""] [--valid-at 2026-04-16T00:00:00Z] [-k 10]
     python -m tools.qa_kg.cli digest [--tier cosmos] [-k 40]
     python -m tools.qa_kg.cli check [--tier singularity]
 """
@@ -66,6 +68,38 @@ def cmd_search(args) -> int:
     return 0
 
 
+def cmd_search_ranked(args) -> int:
+    """Phase 4 authority-tiered ranker entry point. Prints score_breakdown."""
+    import datetime as _dt
+    kg = connect(args.db)
+    valid_at = None
+    if args.valid_at:
+        s = args.valid_at.strip()
+        if s.endswith("Z"):
+            s = s[:-1] + "+00:00"
+        valid_at = _dt.datetime.fromisoformat(s)
+    domain = args.domain if args.domain else None
+    hits = kg.search_authority_ranked(
+        args.query, min_authority=args.min_authority,
+        domain=domain, valid_at=valid_at, k=args.k,
+    )
+    out = []
+    for h in hits:
+        out.append({
+            "id": h.node["id"],
+            "title": h.node["title"],
+            "authority": h.authority,
+            "lifecycle_state": h.node["lifecycle_state"],
+            "epistemic_status": h.node["epistemic_status"],
+            "score": h.score,
+            "contradiction_state": h.contradiction_state,
+            "provenance_depth": h.provenance_depth,
+            "score_breakdown": h.score_breakdown,
+        })
+    print(json.dumps(out, indent=2, default=str))
+    return 0
+
+
 def cmd_digest(args) -> int:
     kg = connect(args.db)
     rows = kg.digest(tier=args.tier, limit=args.k)
@@ -121,6 +155,14 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("stats"); s.set_defaults(fn=cmd_stats)
     s = sub.add_parser("search"); s.add_argument("query"); s.add_argument("--tier")
     s.add_argument("-k", type=int, default=10); s.set_defaults(fn=cmd_search)
+    s = sub.add_parser("search-ranked", help="Phase 4 authority-tiered ranker")
+    s.add_argument("query")
+    s.add_argument("--min-authority", default="internal",
+                   choices=("primary", "derived", "internal", "agent"))
+    s.add_argument("--domain", default="", help="exact domain filter (empty = no filter)")
+    s.add_argument("--valid-at", default="", help="ISO-8601 timestamp; default = now")
+    s.add_argument("-k", type=int, default=10)
+    s.set_defaults(fn=cmd_search_ranked)
     s = sub.add_parser("digest"); s.add_argument("--tier", default="cosmos")
     s.add_argument("-k", type=int, default=40); s.set_defaults(fn=cmd_digest)
     s = sub.add_parser("check"); s.add_argument("--tier"); s.set_defaults(fn=cmd_check)

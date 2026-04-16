@@ -7111,6 +7111,25 @@ def _validate_kg_firewall_effective_cert(base_dir):
     return None
 
 
+def _validate_kg_authority_ranker_cert(base_dir):
+    """QA-KG Authority Ranker Cert [254] v1: validates Phase 4 authority-tiered retrieval ranker (tools/qa_kg/kg.py::KG.search_authority_ranked). Gates: R1 min_authority='internal' excludes agent, R2 per-query expected_top_1_authority, R3 (tri-state) contradicted material in top-3, R4 (tri-state) valid_at filter excludes expired, R5 WARN recall@5 vs A-RAG, R6 compose_score formula correctness across ≥6 golden cases (authority/decay/contradiction/depth/valid_from/lifecycle dims), R7 determinism under fixed valid_at, R8 no except-Exception-pass swallows in ranker.py / search_authority_ranked (AST scan), R9 coverage completeness on BOTH axes against qa_kg_epistemic_fields_cert_v1/allowed_matrix.json (decay status + authority + lifecycle). Single source of truth for formula constants: ranker_spec.json. Source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg/ranker.py; qa_kg_authority_ranker_cert_v1/query_fixture.json."""
+    import subprocess
+    validator = os.path.join(base_dir, "qa_kg_authority_ranker_cert_v1", "qa_kg_authority_ranker_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_kg_authority_ranker_cert_v1/qa_kg_authority_ranker_cert_validate.py"
+    db_path = os.path.join(os.path.dirname(base_dir), "tools", "qa_kg", "qa_kg.db")
+    if not os.path.exists(db_path):
+        return None  # DB not built yet — skip
+    proc = subprocess.run(
+        [sys.executable, validator, "--db", db_path],
+        capture_output=True, text=True, timeout=60,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"[254] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    _capture_warn_lines(254, proc.stdout or "")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -8082,6 +8101,11 @@ FAMILY_SWEEPS = [
      "Phase 2 Theorem NT firewall effectiveness. DB-backed promoted-from, ledger staleness, broadcast provenance. Checks FE1/FE2/FE3/FE4/FE5/FE6; validator runs against live qa_kg.db",
      "227_qa_kg_firewall_effective_cert_v1",
      "qa_kg_firewall_effective_cert_v1", True),
+    (254, "QA-KG Authority Ranker Cert v1",
+     _validate_kg_authority_ranker_cert,
+     "Phase 4 authority-tiered retrieval ranker. Formula composes authority_weight × lifecycle_factor × bm25_norm × confidence × time_decay × contradiction × prov_decay; 20-query hand-curated benchmark. Checks R1/R2/R3/R4/R5/R6/R7/R8/R9 (R3+R4 tri-state, R5 WARN); validator runs against live qa_kg.db",
+     "254_qa_kg_authority_ranker_cert_v1",
+     "qa_kg_authority_ranker_cert_v1", True),
 ]
 
 

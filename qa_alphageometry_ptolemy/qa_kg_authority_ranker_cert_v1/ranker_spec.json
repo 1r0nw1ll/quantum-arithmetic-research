@@ -1,0 +1,22 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4 ranker formula constants. Single source of truth shared by tools/qa_kg/ranker.py and the [254] validator. Closed-set: do not edit ad-hoc; any change must keep R6 golden cases + R9 coverage gates green. authority_weight keys must equal AUTHORITIES from tools/qa_kg/schema.py; decay_exempt_status ∪ decay_status must equal EPISTEMIC_STATUSES (R9 enforces). -->",
+  "authority_weight": {
+    "primary":  10.0,
+    "derived":   8.0,
+    "internal":  5.0,
+    "agent":     1.0
+  },
+  "lifecycle_factor": {
+    "current":     1.0,
+    "deprecated":  0.5,
+    "superseded":  0.5
+  },
+  "decay_exempt_status": ["axiom", "source_claim", "source_work", "certified"],
+  "decay_status":        ["observation", "interpretation", "conjecture"],
+  "halflife_days":      365.0,
+  "halflife_hops":        3.0,
+  "no_path_factor":       0.5,
+  "contradiction_prior":  1.5,
+  "candidate_pool_k":    50,
+  "bm25_normalization": "min_max_per_query"
+}

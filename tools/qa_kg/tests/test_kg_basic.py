@@ -1,4 +1,5 @@
-"""Basic QA-KG tests — schema round-trip, firewall, coord math, predicate runtime.
+# <!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG test harness -->
+"""Candidate F [202] — basic QA-KG tests.
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
@@ -8,21 +9,29 @@ from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-import os
 import sys
 import tempfile
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
-from tools.qa_kg.kg import Edge, FirewallViolation, KG, Node, connect
-from tools.qa_kg.orbit import Coord, Tier, coord_for, edge_allowed, qa_step
+from tools.qa_kg import (
+    Coord, Tier, NODE_TYPE_RANK, compute_be, dr, char_ord_sum,
+    tier_for_coord, connect,
+)
+from tools.qa_kg.kg import Edge, FirewallViolation, Node
+from tools.qa_kg.orbit import qa_step, edge_allowed
 from tools.qa_kg.predicate import run as run_predicate
 
 
-def test_coord_constraints():
-    c = Coord(3, 7)
-    assert c.d == 10 and c.a == 17, "A2 raw derivation"
+def test_index_a1():
+    """Phase 0: Index (formerly Coord) enforces A1 bounds on idx_b/idx_e and
+    has no .d/.a properties — those would imply a QA state derivation which
+    a retrieval index does not support. See orbit.py module docstring."""
+    c = Coord(3, 7)  # Coord is a back-compat alias for Index
+    assert c.idx_b == 3 and c.idx_e == 7
+    assert not hasattr(c, "d")
+    assert not hasattr(c, "a")
     try:
         Coord(0, 3)
     except ValueError:
@@ -32,59 +41,81 @@ def test_coord_constraints():
 
 
 def test_qa_step_a1():
-    # A1: result in {1..9}, never 0
     for b in range(1, 10):
         for e in range(1, 10):
             r = qa_step(b, e, 9)
-            assert 1 <= r <= 9, f"A1 violated: qa_step({b},{e})={r}"
+            assert 1 <= r <= 9
 
 
-def test_coord_for_stable():
-    assert coord_for("cert:225") == coord_for("cert:225")
-    assert coord_for("cert:225") != coord_for("cert:226")
+def test_dr_a1():
+    for n in (1, 9, 10, 18, 27, 100, 1000):
+        assert 1 <= dr(n) <= 9
+
+
+def test_candidate_f_deterministic():
+    c1 = compute_be("hello world", "Cert")
+    c2 = compute_be("hello world", "Cert")
+    assert c1 == c2
+    # Same content, different type → different e
+    c3 = compute_be("hello world", "Axiom")
+    assert c1.idx_b == c3.idx_b
+    assert c1.idx_e != c3.idx_e
+    # Integrity
+    assert c1.idx_e == NODE_TYPE_RANK["Cert"]
+    assert c3.idx_e == NODE_TYPE_RANK["Axiom"]
+
+
+def test_candidate_f_matches_arag_formula():
+    """Our compute_be must produce the same (b=dr(char_ord_sum), e=type_rank) shape as A-RAG."""
+    text = "Quantum Arithmetic has canonical orbits"
+    c = compute_be(text, "Thought")
+    assert c.idx_b == dr(char_ord_sum(text))
+    assert c.idx_e == NODE_TYPE_RANK["Thought"]
+
+
+def test_tier_unassigned_on_none():
+    assert tier_for_coord(None, None) is Tier.UNASSIGNED
 
 
 def test_firewall_archive_to_cosmos():
     assert not edge_allowed(Tier.UNASSIGNED, Tier.COSMOS, "validates", via_cert=False)
     assert edge_allowed(Tier.UNASSIGNED, Tier.COSMOS, "validates", via_cert=True)
-    assert edge_allowed(Tier.UNASSIGNED, Tier.COSMOS, "cites", via_cert=False)  # non-causal
-    assert edge_allowed(Tier.SATELLITE, Tier.COSMOS, "validates", via_cert=False)  # in-flight ok
+    assert edge_allowed(Tier.UNASSIGNED, Tier.COSMOS, "cites", via_cert=False)
 
 
-def test_schema_roundtrip():
+def test_schema_roundtrip_candidate_f():
     with tempfile.TemporaryDirectory() as tmp:
         db = Path(tmp) / "t.db"
         kg = connect(db)
         kg.upsert_node(Node(id="axiom:A1", node_type="Axiom", title="No-Zero",
-                            tier=Tier.SINGULARITY, coord=Coord(9, 9)))
-        kg.upsert_node(Node(id="cert:demo", node_type="Cert", title="Demo cert",
-                            tier=Tier.COSMOS))
-        kg.upsert_edge(Edge(src_id="cert:demo", dst_id="axiom:A1", edge_type="derived-from"))
-        row = kg.get("cert:demo")
-        assert row is not None and row["title"] == "Demo cert"
-        ns = kg.neighbors("cert:demo")
-        assert len(ns) == 1 and ns[0]["edge_type"] == "derived-from"
-        st = kg.stats()
-        assert st.get("singularity") == 1 and st.get("cosmos") == 1
+                            body="States in {1..N}"))
+        kg.upsert_node(Node(id="cert:demo", node_type="Cert", title="Demo",
+                            body="Demo body"))
+        # Empty content → unassigned
+        kg.upsert_node(Node(id="empty:x", node_type="Thought", title="", body=""))
+        a = kg.get("axiom:A1")
+        assert a["idx_e"] == NODE_TYPE_RANK["Axiom"]
+        assert a["idx_b"] == dr(a["char_ord_sum"])
+        c = kg.get("cert:demo")
+        assert c["idx_e"] == NODE_TYPE_RANK["Cert"]
+        u = kg.get("empty:x")
+        assert u["tier"] == "unassigned" and u["idx_b"] is None
 
 
 def test_firewall_violation_raised():
     with tempfile.TemporaryDirectory() as tmp:
         db = Path(tmp) / "t.db"
         kg = connect(db)
-        kg.upsert_node(Node(id="arch:old", node_type="Thought", title="archive",
-                            tier=Tier.UNASSIGNED))
-        kg.upsert_node(Node(id="cos:new", node_type="Cert", title="canonical",
-                            tier=Tier.COSMOS))
+        kg.upsert_node(Node(id="arch:old", node_type="Thought", title="", body=""))
+        kg.upsert_node(Node(id="cos:new", node_type="Cert", title="X", body="body"))
         try:
             kg.upsert_edge(Edge(src_id="arch:old", dst_id="cos:new", edge_type="validates"))
         except FirewallViolation:
             pass
         else:
-            raise AssertionError("Theorem NT firewall must block archive→cosmos 'validates'")
-        # With via_cert, allowed.
-        kg.upsert_edge(Edge(src_id="arch:old", dst_id="cos:new", edge_type="validates",
-                            via_cert="cert:demo"))
+            raise AssertionError("Theorem NT must block archive→canonical 'validates'")
+        kg.upsert_edge(Edge(src_id="arch:old", dst_id="cos:new",
+                            edge_type="validates", via_cert="cert:demo"))
 
 
 def _stub_pred_ok() -> tuple[bool, str]:
@@ -92,19 +123,20 @@ def _stub_pred_ok() -> tuple[bool, str]:
 
 
 def test_predicate_runtime():
-    # Build a reference to this module's stub
-    mod = __name__
-    ref = f"{mod}:_stub_pred_ok"
+    ref = f"{__name__}:_stub_pred_ok"
     res = run_predicate(ref)
     assert res.ok and res.msg == "stub"
 
 
 TESTS = [
-    test_coord_constraints,
+    test_index_a1,
     test_qa_step_a1,
-    test_coord_for_stable,
+    test_dr_a1,
+    test_candidate_f_deterministic,
+    test_candidate_f_matches_arag_formula,
+    test_tier_unassigned_on_none,
     test_firewall_archive_to_cosmos,
-    test_schema_roundtrip,
+    test_schema_roundtrip_candidate_f,
     test_firewall_violation_raised,
     test_predicate_runtime,
 ]

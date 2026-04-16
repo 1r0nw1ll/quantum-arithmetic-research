@@ -1,6 +1,10 @@
-"""QA-KG main API: upsert, search, traverse, digest.
+"""QA-KG main API.
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
+
+Schema v2: column names `idx_b/idx_e` reflect that these are Candidate F
+retrieval-index coordinates (not QA states). QA state subjects live in
+`subject_b/subject_e`, populated only from cert metadata.
 """
 from __future__ import annotations
 
@@ -8,11 +12,13 @@ QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA
 
 import sqlite3
 import time
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
-from tools.qa_kg.orbit import Coord, Tier, coord_for, edge_allowed
+from tools.qa_kg.orbit import (
+    Index, Tier, char_ord_sum, compute_index, edge_allowed, tier_for_index,
+)
 from tools.qa_kg.schema import DEFAULT_DB, init_db
 
 
@@ -22,22 +28,37 @@ def _now() -> str:
 
 @dataclass
 class Node:
+    """Knowledge graph node.
+
+    Candidate F produces `idx_b/idx_e` (retrieval-index, not QA state).
+    `subject_b/subject_e` optionally declare the QA STATE the node is ABOUT
+    — populated only from cert metadata, never by Candidate F.
+    """
     id: str
     node_type: str
     title: str
     body: str = ""
-    tier: Tier = Tier.SATELLITE
-    coord: Coord | None = None
     source: str = ""
     vetted_by: str = ""
+    vetted_ts: str = ""
     predicate_ref: str = ""
+    subject_b: int | None = None
+    subject_e: int | None = None
 
-    def resolved_coord(self) -> Coord:
-        if self.coord is not None:
-            return self.coord
-        if self.tier is Tier.SINGULARITY:
-            return Coord(9, 9)
-        return coord_for(self.id)
+    def content(self) -> str:
+        return (self.title or "") + ("\n" + self.body if self.body else "")
+
+    def resolved_index(self) -> Index | None:
+        text = self.content()
+        if not text:
+            return None
+        return compute_index(text, self.node_type)
+
+    def resolved_tier(self) -> Tier:
+        idx = self.resolved_index()
+        if idx is None:
+            return Tier.UNASSIGNED
+        return tier_for_index(idx.idx_b, idx.idx_e)
 
 
 @dataclass
@@ -46,42 +67,52 @@ class Edge:
     dst_id: str
     edge_type: str
     confidence: float = 1.0
+    method: str = ""            # 'keyword' | 'cert_registry' | 'structural' | ''
     provenance: str = ""
     via_cert: str = ""
 
 
 class FirewallViolation(RuntimeError):
-    """Raised when an edge violates Theorem NT structural firewall."""
+    """Unassigned → canonical causal edge attempted without via_cert."""
 
 
 class KG:
     def __init__(self, conn: sqlite3.Connection):
         self.conn = conn
 
-    # ---- writes -------------------------------------------------------------
-
     def upsert_node(self, node: Node) -> None:
-        coord = node.resolved_coord()
+        idx = node.resolved_index()
+        tier = node.resolved_tier()
+        cb = idx.idx_b if idx else None
+        ce = idx.idx_e if idx else None
+        cos = char_ord_sum(node.content()) if node.content() else None
         now = _now()
         self.conn.execute(
             """
-            INSERT INTO nodes (id, node_type, title, body, tier, coord_b, coord_e,
-                               source, vetted_by, predicate_ref, created_ts, updated_ts)
-            VALUES (?,?,?,?,?,?,?,?,?,?,?,?)
+            INSERT INTO nodes (id, node_type, title, body, tier, idx_b, idx_e,
+                               char_ord_sum, subject_b, subject_e,
+                               source, vetted_by, vetted_ts, predicate_ref,
+                               created_ts, updated_ts)
+            VALUES (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)
             ON CONFLICT(id) DO UPDATE SET
                 node_type=excluded.node_type,
                 title=excluded.title,
                 body=excluded.body,
                 tier=excluded.tier,
-                coord_b=excluded.coord_b,
-                coord_e=excluded.coord_e,
+                idx_b=excluded.idx_b,
+                idx_e=excluded.idx_e,
+                char_ord_sum=excluded.char_ord_sum,
+                subject_b=excluded.subject_b,
+                subject_e=excluded.subject_e,
                 source=excluded.source,
                 vetted_by=excluded.vetted_by,
+                vetted_ts=excluded.vetted_ts,
                 predicate_ref=excluded.predicate_ref,
                 updated_ts=excluded.updated_ts
             """,
-            (node.id, node.node_type, node.title, node.body, node.tier.value,
-             coord.b, coord.e, node.source, node.vetted_by, node.predicate_ref,
+            (node.id, node.node_type, node.title, node.body, tier.value,
+             cb, ce, cos, node.subject_b, node.subject_e,
+             node.source, node.vetted_by, node.vetted_ts, node.predicate_ref,
              now, now),
         )
         self.conn.commit()
@@ -95,24 +126,23 @@ class KG:
         dst_tier = Tier(dst["tier"])
         if not edge_allowed(src_tier, dst_tier, edge.edge_type, bool(edge.via_cert)):
             raise FirewallViolation(
-                f"Theorem NT: {src_tier.value}→{dst_tier.value} via '{edge.edge_type}' "
-                f"requires via_cert (archive→canonical without cert mediation forbidden)"
+                f"{src_tier.value}→{dst_tier.value} via '{edge.edge_type}' requires via_cert"
             )
         self.conn.execute(
             """
-            INSERT INTO edges (src_id, dst_id, edge_type, confidence, provenance, via_cert, created_ts)
-            VALUES (?,?,?,?,?,?,?)
+            INSERT INTO edges (src_id, dst_id, edge_type, confidence, method,
+                               provenance, via_cert, created_ts)
+            VALUES (?,?,?,?,?,?,?,?)
             ON CONFLICT(src_id, dst_id, edge_type) DO UPDATE SET
                 confidence=excluded.confidence,
+                method=excluded.method,
                 provenance=excluded.provenance,
                 via_cert=excluded.via_cert
             """,
             (edge.src_id, edge.dst_id, edge.edge_type, edge.confidence,
-             edge.provenance, edge.via_cert, _now()),
+             edge.method, edge.provenance, edge.via_cert, _now()),
         )
         self.conn.commit()
-
-    # ---- reads --------------------------------------------------------------
 
     def get(self, node_id: str) -> sqlite3.Row | None:
         return self.conn.execute("SELECT * FROM nodes WHERE id=?", (node_id,)).fetchone()
@@ -120,8 +150,7 @@ class KG:
     def search(self, query: str, *, tier: str | None = None, k: int = 10) -> list[sqlite3.Row]:
         base = (
             "SELECT nodes.* FROM nodes_fts "
-            "JOIN nodes ON nodes.rowid = nodes_fts.rowid "
-            "WHERE nodes_fts MATCH ?"
+            "JOIN nodes ON nodes.rowid = nodes_fts.rowid WHERE nodes_fts MATCH ?"
         )
         args: list = [query]
         if tier:
@@ -136,40 +165,60 @@ class KG:
         clauses: list[str] = []
         args: list = []
         if direction in ("out", "both"):
-            c = "(src_id = ?)"
-            args.append(node_id)
-            clauses.append(c)
+            clauses.append("(src_id = ?)"); args.append(node_id)
         if direction in ("in", "both"):
-            c = "(dst_id = ?)"
-            args.append(node_id)
-            clauses.append(c)
+            clauses.append("(dst_id = ?)"); args.append(node_id)
         where = " OR ".join(clauses)
         if edge_types:
             types = list(edge_types)
             where = f"({where}) AND edge_type IN ({','.join('?' * len(types))})"
             args.extend(types)
-        q = f"SELECT * FROM edges WHERE {where}"
+        return list(self.conn.execute(f"SELECT * FROM edges WHERE {where}", args).fetchall())
+
+    def idx_neighborhood(self, idx: Index, tier: str | None = None) -> list[sqlite3.Row]:
+        """All nodes at a given retrieval-index cell.
+
+        NOTE: same retrieval-index does NOT imply semantic similarity.
+        Candidate F is uniform by construction. Use edges for structure.
+        """
+        q = "SELECT * FROM nodes WHERE idx_b=? AND idx_e=?"
+        args: list = [idx.idx_b, idx.idx_e]
+        if tier:
+            q += " AND tier=?"; args.append(tier)
         return list(self.conn.execute(q, args).fetchall())
 
-    def coord_neighborhood(self, coord: Coord, tier: str | None = None) -> list[sqlite3.Row]:
-        """All nodes sharing this (b,e) coord — structural connection, no search needed."""
-        q = "SELECT * FROM nodes WHERE coord_b=? AND coord_e=?"
-        args: list = [coord.b, coord.e]
-        if tier:
-            q += " AND tier=?"
-            args.append(tier)
-        return list(self.conn.execute(q, args).fetchall())
+    def idx_b_column(self, idx_b: int) -> list[sqlite3.Row]:
+        return list(self.conn.execute(
+            "SELECT * FROM nodes WHERE idx_b = ? ORDER BY idx_e, id", (idx_b,)
+        ).fetchall())
+
+    def idx_e_row(self, idx_e: int) -> list[sqlite3.Row]:
+        return list(self.conn.execute(
+            "SELECT * FROM nodes WHERE idx_e = ? ORDER BY idx_b, id", (idx_e,)
+        ).fetchall())
 
     def why(self, node_id: str, *, max_depth: int = 5) -> list[sqlite3.Row]:
-        """Provenance chain — walk 'validates'/'derived-from'/'extends' edges toward Singularity."""
+        """Provenance chain via structural edges only.
+
+        Filters to edge_type ∈ {validates, derived-from, extends, instantiates}
+        AND method ≠ 'keyword'. Under Phase 0 this means keyword-regex edges
+        are excluded from provenance — chains only traverse real structural
+        links. Empty results here are honest: we have no authoritative proof
+        graph yet (Phase 3 work).
+        """
         q = """
-        WITH RECURSIVE chain(src, dst, edge_type, depth) AS (
-            SELECT src_id, dst_id, edge_type, 0 FROM edges
-              WHERE src_id = ? AND edge_type IN ('validates','derived-from','extends','instantiates')
+        WITH RECURSIVE chain(src, dst, edge_type, method, depth) AS (
+            SELECT src_id, dst_id, edge_type, method, 0 FROM edges
+              WHERE src_id = ?
+                AND edge_type IN ('validates','derived-from','extends','instantiates')
+                AND method != 'keyword'
             UNION ALL
-            SELECT e.src_id, e.dst_id, e.edge_type, chain.depth + 1 FROM edges e
+            SELECT e.src_id, e.dst_id, e.edge_type, e.method, chain.depth + 1
+              FROM edges e
               JOIN chain ON e.src_id = chain.dst
-              WHERE chain.depth < ? AND e.edge_type IN ('validates','derived-from','extends','instantiates')
+              WHERE chain.depth < ?
+                AND e.edge_type IN ('validates','derived-from','extends','instantiates')
+                AND e.method != 'keyword'
         )
         SELECT * FROM chain
         """
@@ -182,16 +231,14 @@ class KG:
         ).fetchall())
 
     def digest(self, *, tier: str = "cosmos", limit: int = 40) -> list[sqlite3.Row]:
-        """Session-start digest — hot nodes in a tier, ranked by recency + query telemetry."""
-        q = """
-        SELECT nodes.*,
-               COALESCE((SELECT COUNT(*) FROM query_log ql WHERE ql.node_id = nodes.id), 0) AS hits
-        FROM nodes
-        WHERE tier = ?
-        ORDER BY hits DESC, updated_ts DESC
-        LIMIT ?
-        """
-        return list(self.conn.execute(q, (tier, limit)).fetchall())
+        return list(self.conn.execute(
+            """
+            SELECT nodes.*,
+                   COALESCE((SELECT COUNT(*) FROM query_log ql WHERE ql.node_id = nodes.id), 0) AS hits
+            FROM nodes WHERE tier = ?
+            ORDER BY hits DESC, updated_ts DESC LIMIT ?
+            """, (tier, limit),
+        ).fetchall())
 
     def stats(self) -> dict[str, int]:
         rows = self.conn.execute(

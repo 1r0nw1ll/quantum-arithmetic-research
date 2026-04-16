@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG v2 infrastructure cert; validates internal graph invariants after Phase 0 rename -->",
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA-KG Consistency Cert family [225] v2: validates the QA-KG graph under schema v2 (Phase 0 rename coord_b/coord_e → idx_b/idx_e; edges.method column). Supersedes v1 which used column names that could be mistaken for QA state coordinates. Invariants: (KG1) no self-vetting — every classified non-Axiom node's vetted_by, if set, is a DIFFERENT node id; (KG2) no 'contradicts' cycles; (KG3) Theorem NT firewall guard is reported as PASS only if at least one Unassigned node existed during build (the guard's precondition); if no Unassigned nodes exist, KG3 is reported N/A to prevent trivial-truth passes; (KG4) orphan Satellite aging WARN; (KG5) tier ≡ canonical qa_orbit_rules.orbit_family(idx_b, idx_e); (KG6) Candidate F integrity — idx_b == dr(char_ord_sum), idx_e == NODE_TYPE_RANK[node_type]; (KG7) subject_b/subject_e, if present, are in {1..9}. Source: QA-MEM architecture spec in memory/project_qa_mem_architecture.md; CLAUDE.md; Theorem NT; cert [226] (semantic coord invariants)."
+}

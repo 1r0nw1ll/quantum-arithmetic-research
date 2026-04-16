@@ -16,6 +16,7 @@ QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA
 import argparse
 import json
 import sys
+from pathlib import Path
 
 from tools.qa_kg.kg import connect
 from tools.qa_kg.predicate import check_all
@@ -23,6 +24,8 @@ from tools.qa_kg.extractors import axioms as x_axioms
 from tools.qa_kg.extractors import memory_rules as x_rules
 from tools.qa_kg.extractors import certs as x_certs
 from tools.qa_kg.extractors import edges as x_edges
+from tools.qa_kg.extractors import ob as x_ob
+from tools.qa_kg.extractors import arag as x_arag
 
 
 def _fmt(row) -> dict:
@@ -70,6 +73,33 @@ def cmd_check(args) -> int:
     return 0 if not fails else 2
 
 
+def cmd_arag_search(args) -> int:
+    rows = x_arag.search(args.query, k=args.k, source=args.source)
+    for r in rows:
+        print(f"[archive/{r['source']}] ({r['coord'][0]},{r['coord'][1]}) {r['msg_id']}  score={r['score']:.2f}")
+        print(f"    {r['conv_title']} ({r['ts']})")
+        print(f"    {r['preview'][:200]}")
+    return 0
+
+
+def cmd_arag_promote(args) -> int:
+    kg = connect(args.db)
+    nid = x_arag.promote(kg, args.msg_id, reason=args.reason)
+    print(f"promoted to node: {nid} (tier=unassigned)")
+    return 0
+
+
+def cmd_ingest_ob(args) -> int:
+    kg = connect(args.db)
+    if args.file:
+        text = args.file.read_text(encoding="utf-8")
+    else:
+        text = sys.stdin.read()
+    stats = x_ob.ingest_markdown(kg, text)
+    print(json.dumps(stats, indent=2))
+    return 0
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser(prog="qa_kg")
     p.add_argument("--db", default=None, help="override QA_KG_DB path")
@@ -83,6 +113,14 @@ def main(argv: list[str] | None = None) -> int:
     s = sub.add_parser("digest"); s.add_argument("--tier", default="cosmos")
     s.add_argument("-k", type=int, default=40); s.set_defaults(fn=cmd_digest)
     s = sub.add_parser("check"); s.add_argument("--tier"); s.set_defaults(fn=cmd_check)
+    s = sub.add_parser("ingest-ob"); s.add_argument("--file", type=Path, default=None,
+        help="Path to markdown file from mcp__open-brain__recent_thoughts; defaults to stdin")
+    s.set_defaults(fn=cmd_ingest_ob)
+    s = sub.add_parser("arag-search"); s.add_argument("query")
+    s.add_argument("-k", type=int, default=10); s.add_argument("--source")
+    s.set_defaults(fn=cmd_arag_search)
+    s = sub.add_parser("arag-promote"); s.add_argument("msg_id")
+    s.add_argument("--reason", default=""); s.set_defaults(fn=cmd_arag_promote)
 
     args = p.parse_args(argv)
     return args.fn(args)

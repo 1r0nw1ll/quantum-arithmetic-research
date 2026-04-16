@@ -1,14 +1,21 @@
-"""Deterministic edge extractors.
+"""Keyword-based edge extraction — low confidence, clearly labeled.
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-Three passes:
-1. cert → axiom 'derived-from' — every cert depends on at least {A1, A2, T2, NT}.
-   Additional axioms added by keyword match in cert body.
-2. rule → axiom 'instantiates' — Hard Rules enforce specific axioms, by keyword match.
-3. cert → cert 'extends' — parse [N] references in cert body (pass_desc).
+Phase 0: all keyword-matched edges emit `edge_type="keyword-co-occurs"` with
+`method="keyword"` and `confidence=0.3`. These edges represent BODY-TOKEN
+CO-OCCURRENCE, not derivation, instantiation, or proof.
 
-No LLM. All reversible (idempotent upsert).
+The previous implementation wrote `derived-from` at 0.9 confidence from a
+baseline auto-link ({A1, A2, T2, NT} for every cert) plus keyword matches.
+Both produced near-uninformative saturation (the same four axioms reached
+from every cert). They are removed here. `derived-from` edges are reserved
+for structural proof links, which will be populated by a Phase 3 extractor
+that reads actual cert proof artifacts — NOT body text.
+
+Extractors:
+  1. cert → axiom / rule → axiom / cert → cert — via `[N]` cert-id refs
+     and axiom code tokens in the source's body. All tagged keyword-co-occurs.
 """
 from __future__ import annotations
 
@@ -19,79 +26,48 @@ import re
 from tools.qa_kg.kg import KG, Edge
 
 
-# ---- axiom linkage rules ------------------------------------------------------
-
-# Every cert transitively depends on these (state rep + firewall).
-BASELINE_AXIOMS = ("A1", "A2", "T2", "NT")
-
-# Keyword → extra axiom id.
-AXIOM_KEYWORDS = {
-    "S1": [r"\bb\*b\b", r"square", r"quadrat"],
-    "S2": [r"float state", r"no float", r"np\.zeros", r"np\.random"],
-    "T1": [r"path time", r"path length", r"integer time", r"discrete time"],
-    "T2": [r"observer projection", r"float cast", r"modulus", r"firewall"],
-    "A2": [r"derived coord", r"d = b\+e", r"a = b\+2e", r"raw d"],
-    "NT": [r"theorem nt", r"observer projection", r"continuous", r"firewall"],
-}
-
-# Keyword → Hard Rule.  rule titles are lower-cased, underscored.
-RULE_AXIOM_KEYWORDS = {
-    # rule title substring → axiom codes
-    "stochastic": ["T2", "NT", "S2"],
-    "continuous": ["T2", "NT"],
-    "raw": ["A2"],
-    "mod_reduced": ["A2"],
-    "qa_always_applies": ["A1", "A2"],
-    "theorem_nt": ["NT", "T2"],
-    "observer": ["NT", "T2"],
-    "primary_sources": [],  # epistemic, not axiomatic
-    "no_arxiv": [],
-    "no_secrets": [],
-    "adversarial": [],
-}
-
+AXIOM_CODES = ("A1", "A2", "A3", "A4", "T1", "T2", "S1", "S2", "NT")
+_AXIOM_RE = re.compile(r"\b(" + "|".join(AXIOM_CODES) + r")\b")
 _CERT_REF_RE = re.compile(r"\[(\d+)\]")
 
 
-def _all_cert_ids(kg: KG) -> list[str]:
-    rows = kg.conn.execute(
+def _all_cert_ids(kg: KG) -> set[str]:
+    return {r["id"] for r in kg.conn.execute(
         "SELECT id FROM nodes WHERE node_type = 'Cert'"
-    ).fetchall()
-    return [r["id"] for r in rows]
+    ).fetchall()}
 
 
 def _all_rule_ids(kg: KG) -> list[tuple[str, str]]:
-    rows = kg.conn.execute(
-        "SELECT id, title FROM nodes WHERE node_type = 'Rule'"
-    ).fetchall()
-    return [(r["id"], r["title"]) for r in rows]
+    return [(r["id"], (r["title"] or "").lower())
+            for r in kg.conn.execute(
+                "SELECT id, title FROM nodes WHERE node_type = 'Rule'"
+            ).fetchall()]
 
 
 def _cert_body(kg: KG, cert_id: str) -> str:
-    row = kg.conn.execute("SELECT body, title FROM nodes WHERE id=?", (cert_id,)).fetchone()
+    row = kg.conn.execute(
+        "SELECT title, body FROM nodes WHERE id=?", (cert_id,)
+    ).fetchone()
     if not row:
         return ""
     return (row["title"] or "") + "\n" + (row["body"] or "")
 
 
-def extract_cert_axiom_edges(kg: KG) -> int:
-    """Emit cert→axiom 'derived-from' edges. Returns edge count."""
+def extract_cert_axiom_cooccurrences(kg: KG) -> int:
+    """Emit keyword-co-occurs edges cert→axiom ONLY when an axiom code
+    literally appears in the cert's body. No baseline auto-link."""
+    axiom_ids = {c: f"axiom:{c}" for c in AXIOM_CODES}
     count = 0
-    axiom_ids = {code: f"axiom:{code}" for code in ("A1", "A2", "T2", "S1", "S2", "T1", "NT")}
     for cert_id in _all_cert_ids(kg):
-        body = _cert_body(kg, cert_id).lower()
-        linked: set[str] = set(BASELINE_AXIOMS)
-        for code, patterns in AXIOM_KEYWORDS.items():
-            for pat in patterns:
-                if re.search(pat, body, re.I):
-                    linked.add(code)
-                    break
-        for code in linked:
+        body = _cert_body(kg, cert_id)
+        for code in set(_AXIOM_RE.findall(body)):
             try:
                 kg.upsert_edge(Edge(
                     src_id=cert_id, dst_id=axiom_ids[code],
-                    edge_type="derived-from", confidence=0.9,
-                    provenance="extractors.edges.cert_axiom_keywords",
+                    edge_type="keyword-co-occurs",
+                    confidence=0.3,
+                    method="keyword",
+                    provenance=f"extractors.edges.cert_axiom:{code}",
                 ))
                 count += 1
             except Exception:
@@ -99,23 +75,20 @@ def extract_cert_axiom_edges(kg: KG) -> int:
     return count
 
 
-def extract_rule_axiom_edges(kg: KG) -> int:
-    """Emit rule→axiom 'instantiates' edges."""
+def extract_rule_axiom_cooccurrences(kg: KG) -> int:
+    axiom_ids = {c: f"axiom:{c}" for c in AXIOM_CODES}
     count = 0
-    axiom_ids = {code: f"axiom:{code}" for code in ("A1", "A2", "T2", "S1", "S2", "T1", "NT")}
-    for rule_id, title in _all_rule_ids(kg):
-        key = rule_id.replace("rule:", "").lower()
-        title_key = (title or "").lower()
-        linked: set[str] = set()
-        for fragment, codes in RULE_AXIOM_KEYWORDS.items():
-            if fragment in key or fragment in title_key:
-                linked.update(codes)
-        for code in linked:
+    for rid, _title in _all_rule_ids(kg):
+        row = kg.conn.execute("SELECT title, body FROM nodes WHERE id=?", (rid,)).fetchone()
+        text = (row["title"] or "") + "\n" + (row["body"] or "")
+        for code in set(_AXIOM_RE.findall(text)):
             try:
                 kg.upsert_edge(Edge(
-                    src_id=rule_id, dst_id=axiom_ids[code],
-                    edge_type="instantiates", confidence=0.85,
-                    provenance="extractors.edges.rule_axiom_keywords",
+                    src_id=rid, dst_id=axiom_ids[code],
+                    edge_type="keyword-co-occurs",
+                    confidence=0.3,
+                    method="keyword",
+                    provenance=f"extractors.edges.rule_axiom:{code}",
                 ))
                 count += 1
             except Exception:
@@ -124,11 +97,15 @@ def extract_rule_axiom_edges(kg: KG) -> int:
 
 
 def extract_cert_cross_refs(kg: KG) -> int:
-    """Emit cert→cert 'extends' edges where a cert body references [N] for another cert."""
+    """`[N]` references in a cert's body emit keyword-co-occurs cert→cert.
+    This is co-occurrence only — the citation may mean extends, cites, or
+    coincidence; we do not claim to know which."""
     count = 0
-    cert_ids = set(_all_cert_ids(kg))
+    cert_ids = set()
+    for r in kg.conn.execute("SELECT id FROM nodes WHERE node_type='Cert'").fetchall():
+        cert_ids.add(r["id"])
     for cert_id in cert_ids:
-        if not cert_id.startswith("cert:") or cert_id.startswith("cert:fs:"):
+        if cert_id.startswith("cert:fs:"):
             continue
         try:
             this_num = int(cert_id.split(":", 1)[1])
@@ -144,8 +121,10 @@ def extract_cert_cross_refs(kg: KG) -> int:
             try:
                 kg.upsert_edge(Edge(
                     src_id=cert_id, dst_id=tgt,
-                    edge_type="extends", confidence=0.7,
-                    provenance="extractors.edges.cert_cross_refs",
+                    edge_type="keyword-co-occurs",
+                    confidence=0.3,
+                    method="keyword",
+                    provenance="extractors.edges.cert_cross",
                 ))
                 count += 1
             except Exception:
@@ -155,7 +134,7 @@ def extract_cert_cross_refs(kg: KG) -> int:
 
 def populate(kg: KG) -> dict[str, int]:
     return {
-        "cert_axiom": extract_cert_axiom_edges(kg),
-        "rule_axiom": extract_rule_axiom_edges(kg),
+        "cert_axiom": extract_cert_axiom_cooccurrences(kg),
+        "rule_axiom": extract_rule_axiom_cooccurrences(kg),
         "cert_cross": extract_cert_cross_refs(kg),
     }

@@ -1,105 +1,154 @@
-"""Orbit math, tier classification, (b,e) coord assignment.
+"""QA-KG retrieval index — Candidate F [family 202].
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-Singularity (9,9) — axioms + Theorem NT (immutable).
-Cosmos 24-cycle — canonical (passing certs, MEMORY Hard Rules, frozen papers).
-Satellite 8-cycle — working (OB thoughts, drafts, uncertified claims).
-Unassigned — archive (A-RAG, old exports); cannot form causal edges into Cosmos
-without passing through a Cert node. Enforced in kg.upsert_edge.
+THIS IS NOT A QA STATE CLASSIFIER. The fields `idx_b` and `idx_e` produced
+here are a RETRIEVAL INDEX PARTITION, computed exactly as A-RAG computes
+its sector prefilter per cert [202] (tools/qa_retrieval/schema.py::compute_be):
 
-QA axioms respected:
-- A1: states in {1..m}; qa_step = ((b+e-1) % m) + 1
-- A2: d = b+e, a = b+2e (derived, raw for elements; mod only via T-operator)
-- S1: no **2
-- S2: int state only
+    idx_b = dr(char_ord_sum(content))    # content invariant (Aiq Bekar)
+    idx_e = NODE_TYPE_RANK[node_type]    # KG analog of A-RAG ROLE_RANK
+
+Candidate F is designed for uniform distribution across {1..9} (that is why
+A-RAG uses it: it partitions 58k messages into roughly equal retrieval
+sectors). The tier produced by `qa_orbit_rules.orbit_family` on (idx_b, idx_e)
+is a PARTITION of the lattice, not a canonicity judgment. Under Candidate F
+most KG nodes land in Cosmos by construction (72/81 of the lattice is Cosmos).
+
+**Do not treat `idx_b/idx_e` as a QA state.** A QA state is (b,e) with
+derived d=b+e, a=b+2e. Computing d=idx_b+idx_e produces meaningless values
+because idx_b is a UTF-8 byte-sum digital root and idx_e is a node-type
+ordinal. QA states for knowledge nodes live in `subject_b/subject_e` (see
+schema.py) and are populated ONLY from cert metadata that declares a subject
+state — never from Candidate F output.
+
+Structural / semantic / causal relationships between nodes live in the
+`edges` table (validates / derived-from / extends / contradicts / etc.),
+not in idx co-location.
+
+Tier = canonical `qa_orbit_rules.orbit_family(idx_b, idx_e)` (required by
+axiom linter ORBIT-4/5). The wrapper below adds the Unassigned case for
+nodes with no declared content (no observer projection yet).
 """
 from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-import hashlib
+import sys
 from dataclasses import dataclass
 from enum import Enum
+from pathlib import Path
+
+# Canonical orbit rule — required import per axiom linter rule ORBIT-5.
+_REPO = Path(__file__).resolve().parents[2]
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+from qa_orbit_rules import orbit_family as _canonical_orbit_family
 
 
-MOD = 9  # QA mod-9 for the memory graph; mod-24 reserved for applied work
+MOD = 9
+
+
+def dr(n: int) -> int:
+    """Aiq Bekar digital root, A1-compliant [family 202]. Mirrors
+    tools/qa_retrieval/schema.py::dr exactly."""
+    if n <= 0:
+        return 9
+    return 1 + ((n - 1) % 9)
+
+
+# A-RAG ROLE_RANK (user=1, assistant=2, tool=3, system=4, thought=5, note=6)
+# extended to cover KG node types (7, 8, 9).
+NODE_TYPE_RANK: dict[str, int] = {
+    "Claim":    1,
+    "Cert":     2,
+    "Generator":3,
+    "Axiom":    4,
+    "Thought":  5,
+    "Rule":     6,
+    "Concept":  7,
+    "Person":   8,
+    "Work":     9,
+}
 
 
 class Tier(str, Enum):
     SINGULARITY = "singularity"
-    COSMOS = "cosmos"
-    SATELLITE = "satellite"
-    UNASSIGNED = "unassigned"
+    SATELLITE   = "satellite"
+    COSMOS      = "cosmos"
+    UNASSIGNED  = "unassigned"  # no content observed yet
 
 
 def qa_step(b: int, e: int, m: int = MOD) -> int:
-    """A1-compliant step: result in {1..m}, never 0."""
+    """A1-compliant step: result in {1..m}, never 0. Kept for QA state
+    arithmetic (not applied to retrieval-index idx_b/idx_e)."""
     return ((b + e - 1) % m) + 1
 
 
 @dataclass(frozen=True)
-class Coord:
-    b: int
-    e: int
+class Index:
+    """Retrieval-index pair (idx_b, idx_e) — NOT a QA state.
+
+    No `.d` or `.a` properties: those are QA state derivations (d=b+e,
+    a=b+2e) which are meaningless on a retrieval-index hash × node-type
+    rank. If code elsewhere needs QA state derivations, it must use the
+    node's `subject_b/subject_e` (populated from cert metadata) — not
+    this index.
+    """
+    idx_b: int
+    idx_e: int
 
     def __post_init__(self) -> None:
-        if not (1 <= self.b <= MOD and 1 <= self.e <= MOD):
-            raise ValueError(f"Coord ({self.b},{self.e}) violates A1: must be in [1,{MOD}]")
-
-    @property
-    def d(self) -> int:
-        return self.b + self.e  # A2 raw
-
-    @property
-    def a(self) -> int:
-        return self.b + 2 * self.e  # A2 raw
-
-    @property
-    def is_singularity(self) -> bool:
-        return self.b == 9 and self.e == 9
+        if not (1 <= self.idx_b <= MOD and 1 <= self.idx_e <= MOD):
+            raise ValueError(
+                f"Index({self.idx_b},{self.idx_e}) violates A1: must be in [1,{MOD}]"
+            )
 
     def __str__(self) -> str:
-        return f"({self.b},{self.e})"
+        return f"idx({self.idx_b},{self.idx_e})"
 
 
-def coord_for(key: str) -> Coord:
-    """Deterministic (b,e) coord from a stable key.
+def tier_for_index(idx_b: int | None, idx_e: int | None, m: int = MOD) -> Tier:
+    """Thin typed wrapper around canonical qa_orbit_rules.orbit_family.
 
-    Hash key → two independent digits in [1..9]. Reserves (9,9) for Singularity:
-    any key that would land there gets deflected to (9,8).
+    Unassigned when either coordinate is None (pre-observation). Otherwise
+    delegates verbatim to the canonical classifier.
     """
-    h = hashlib.sha256(key.encode("utf-8")).digest()
-    b = (h[0] % MOD) + 1
-    e = (h[1] % MOD) + 1
-    if b == 9 and e == 9:
-        e = 8
-    return Coord(b, e)
-
-
-def tier_for(
-    *,
-    is_axiom: bool = False,
-    vetted_by_cert: bool = False,
-    is_memory_hard_rule: bool = False,
-    is_frozen_paper: bool = False,
-    is_archive: bool = False,
-) -> Tier:
-    """Classify a node into an orbit tier by its provenance flags."""
-    if is_axiom:
-        return Tier.SINGULARITY
-    if vetted_by_cert or is_memory_hard_rule or is_frozen_paper:
-        return Tier.COSMOS
-    if is_archive:
+    if idx_b is None or idx_e is None:
         return Tier.UNASSIGNED
-    return Tier.SATELLITE
+    return Tier(_canonical_orbit_family(idx_b, idx_e, m))
 
 
-def edge_allowed(src_tier: Tier, dst_tier: Tier, edge_type: str, via_cert: bool) -> bool:
-    """Theorem NT firewall — structural, not policy.
+def char_ord_sum(text: str) -> int:
+    return sum(ord(c) for c in text)
 
-    Archive (UNASSIGNED) cannot form causal edges into COSMOS or SINGULARITY
-    unless the edge is mediated by a Cert node (via_cert=True).
+
+def compute_index(content: str, node_type: str) -> Index:
+    """Candidate F [family 202] — retrieval-index computation.
+
+    Returns an Index, not a QA state. See module docstring.
+    """
+    if not isinstance(content, str) or len(content) == 0:
+        raise ValueError("compute_index requires non-empty content")
+    if node_type not in NODE_TYPE_RANK:
+        raise ValueError(
+            f"node_type must be canonical, got {node_type!r}. "
+            f"Valid: {sorted(NODE_TYPE_RANK)}"
+        )
+    return Index(dr(char_ord_sum(content)), NODE_TYPE_RANK[node_type])
+
+
+def edge_allowed(
+    src_tier: Tier, dst_tier: Tier, edge_type: str, via_cert: bool
+) -> bool:
+    """Structural firewall guard on Unassigned → canonical causal edges.
+
+    NOTE: under Candidate F any node with non-empty content gets a tier.
+    Therefore the Unassigned tier is effectively unoccupied in practice,
+    and this guard rarely fires. A more meaningful firewall (authority-
+    level, AgentNote → canonical) is Phase 2 work; this guard is retained
+    for shape correctness on the Unassigned precondition and does NOT
+    constitute the full Theorem NT firewall the system ultimately needs.
     """
     causal = {"validates", "extends", "derived-from", "maps-to", "instantiates"}
     if edge_type not in causal:
@@ -107,3 +156,10 @@ def edge_allowed(src_tier: Tier, dst_tier: Tier, edge_type: str, via_cert: bool)
     if src_tier is Tier.UNASSIGNED and dst_tier in (Tier.COSMOS, Tier.SINGULARITY):
         return via_cert
     return True
+
+
+# Back-compat aliases — deprecated. Kept for one release cycle so callers
+# can migrate.
+Coord = Index
+compute_be = compute_index
+tier_for_coord = tier_for_index

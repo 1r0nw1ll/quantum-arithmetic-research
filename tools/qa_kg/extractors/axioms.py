@@ -1,17 +1,15 @@
-"""Populate Singularity — the six QA axioms + Theorem NT.
+"""Populate axioms as Axiom-typed nodes.
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-Every axiom carries a runnable predicate that re-checks the axiom invariant
-against the repo at check-time. Failures diagnose the mapping/implementation,
-never QA itself (Hard Rule 2026-04-15).
+Coord falls out of Candidate F: b = dr(char_ord_sum(title+body)), e = NODE_TYPE_RANK['Axiom'] = 4.
+Axioms land wherever the formula puts them. No (9,9) override.
 """
 from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
 from tools.qa_kg.kg import KG, Node
-from tools.qa_kg.orbit import Coord, Tier
 
 
 AXIOMS = [
@@ -34,19 +32,18 @@ AXIOMS = [
 
 
 def populate(kg: KG) -> list[str]:
-    """Insert axioms as Singularity nodes. Returns list of node ids."""
     ids: list[str] = []
     for code, title, body, pred in AXIOMS:
         nid = f"axiom:{code}"
+        # Axioms' authority is the axiom system itself. Represented by node_type='Axiom'
+        # and source pointing at the authority docs — not a self-vetted edge.
         kg.upsert_node(Node(
             id=nid,
             node_type="Axiom",
             title=f"{code} — {title}",
             body=body,
-            tier=Tier.SINGULARITY,
-            coord=Coord(9, 9),
-            source="CLAUDE.md",
-            vetted_by=nid,  # axioms are self-vetting
+            source="CLAUDE.md + QA_AXIOMS_BLOCK.md",
+            vetted_by="",
             predicate_ref=pred,
         ))
         ids.append(nid)

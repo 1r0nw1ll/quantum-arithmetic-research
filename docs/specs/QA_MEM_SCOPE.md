@@ -283,6 +283,14 @@ CLI: `python -m tools.qa_kg.cli search-ranked "<query>" [--min-authority …] [-
   `extraction_method='ocr'`); domain/valid_from/valid_until population
   on real nodes; URL scheme in `tools/qa_kg/locators.py` resolver. Phase 3
   shipped the mechanism + minimum seed; Phase 4.5 is the scaled pass.
+  **Ops item** (separate from corpus work): cert-gate Codex review
+  bridge has been dead at cert-submission time in Phase 2/3/4. Either
+  `llm_qa_wrapper/cert_gate_hook.py` grows a pre-commit health-check
+  that fails loudly with "bridge is dead, restart it" rather than the
+  generic `CODEX_REVIEW_PENDING`, OR `tools/qa_security_audit.py`
+  gains a line-item that fails when `qa_lab/logs/codex_bridge.log`
+  mtime > 24h. Phase 4 worked around with `codex exec --full-auto`
+  one-shot; that pattern shouldn't become the default.
 - **Phase 5:** determinism — frozen corpus fixture, graph-hash cert `[228]`,
   validators return structured results (replaces Phase 3 `[WARN]` stdout
   scraping in `qa_meta_validator.py`).

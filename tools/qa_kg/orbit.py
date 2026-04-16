@@ -155,15 +155,16 @@ def edge_allowed(
     Layer 1 (Phase 0): Unassigned → Cosmos/Singularity causal edges need
     via_cert. Under Candidate F, Unassigned is effectively unoccupied.
 
-    Layer 2 (Phase 1, partial): authority=agent → any causal edge is blocked
-    without via_cert. The full Phase 2 firewall (promote() protocol with
-    ledger + broadcast corroboration) is not yet active — this layer catches
-    the obvious case of an agent node trying to emit causal edges directly.
+    Layer 2 (Phase 2): authority=agent → causal edges ALWAYS blocked at
+    policy level. The only bypass is a DB-backed promoted-from edge check
+    in kg.upsert_edge(). This prevents callers from passing a via_cert
+    string to circumvent the firewall — only kg.promote() can create the
+    promoted-from edge that upsert_edge queries for.
     """
     if edge_type not in CAUSAL_EDGE_TYPES:
         return True
     if src_tier is Tier.UNASSIGNED and dst_tier in (Tier.COSMOS, Tier.SINGULARITY):
         return via_cert
-    if src_authority == "agent" and not via_cert:
-        return False
+    if src_authority == "agent":
+        return False  # DB-backed promoted-from check required (kg.upsert_edge)
     return True

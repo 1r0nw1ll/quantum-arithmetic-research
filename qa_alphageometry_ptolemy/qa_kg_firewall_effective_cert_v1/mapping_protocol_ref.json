@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA-KG Firewall Effective Cert family [227] v1: validates that the Phase 2 Theorem NT firewall (agent authority + promote protocol) is effective. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg/kg.py (promote protocol). Gates: (FE1) no unpromoted agent causal edges in DB; (FE2) via_cert on promoted-from edges resolves to PASS in _meta_ledger.json within staleness (14d + git_head match); (FE3) no promoted-from cycles; (FE4) ephemeral test DB with real-shape fixtures — FirewallViolation on unauthorized agent causal, success after promote; (FE5) WARN oldest unpromoted agent note; (FE6) promoted-from provenance contains broadcast_payload_snapshot with required keys."
+}

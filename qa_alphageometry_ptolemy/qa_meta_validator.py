@@ -7037,6 +7037,24 @@ def _validate_kg_epistemic_fields_cert(base_dir):
     return None
 
 
+def _validate_kg_firewall_effective_cert(base_dir):
+    """QA-KG Firewall Effective Cert [227] v1: validates Phase 2 Theorem NT firewall effectiveness. DB-backed promoted-from check, _meta_ledger.json staleness, broadcast corroboration provenance. Gates: FE1 no unpromoted agent causal edges, FE2 via_cert ledger freshness, FE3 no promoted-from cycles, FE4 ephemeral firewall test, FE5 oldest unpromoted WARN, FE6 provenance snapshot. Source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg/kg.py (promote protocol)."""
+    import subprocess
+    validator = os.path.join(base_dir, "qa_kg_firewall_effective_cert_v1", "qa_kg_firewall_effective_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_kg_firewall_effective_cert_v1/qa_kg_firewall_effective_cert_validate.py"
+    db_path = os.path.join(os.path.dirname(base_dir), "tools", "qa_kg", "qa_kg.db")
+    if not os.path.exists(db_path):
+        return None  # DB not built yet — skip
+    proc = subprocess.run(
+        [sys.executable, validator, "--db", db_path],
+        capture_output=True, text=True, timeout=60,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"[227] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -7998,6 +8016,11 @@ FAMILY_SWEEPS = [
      "Authority/epistemic_status/method/source_locator/lifecycle_state correctness per Phase 1 QA-MEM. Allowed matrix enforced. Checks EF1/EF2/EF3/EF4/EF5/EF6; validator runs against live qa_kg.db",
      "252_qa_kg_epistemic_fields_cert_v1",
      "qa_kg_epistemic_fields_cert_v1", True),
+    (227, "QA-KG Firewall Effective Cert v1",
+     _validate_kg_firewall_effective_cert,
+     "Phase 2 Theorem NT firewall effectiveness. DB-backed promoted-from, ledger staleness, broadcast provenance. Checks FE1/FE2/FE3/FE4/FE5/FE6; validator runs against live qa_kg.db",
+     "227_qa_kg_firewall_effective_cert_v1",
+     "qa_kg_firewall_effective_cert_v1", True),
 ]
 
 
@@ -8629,6 +8652,7 @@ if __name__ == "__main__":
                 sys.exit(1)
 
     _mapping_protocol_cache: Dict[str, Tuple[str, str]] = {}
+    _ledger_results: Dict[str, Dict[str, str]] = {}  # {cert_id: {status, ts}}
     for fam_id, label, validator_fn, pass_desc, doc_slug, family_root_rel, _must_have_dedicated_root in FAMILY_SWEEPS:
         print(f"\n--- {label.upper()} ---")
         try:
@@ -8649,8 +8673,10 @@ if __name__ == "__main__":
             if skip_reason is None:
                 print(f"[{fam_id}] {label}: PASS ({pass_desc})")
                 _doc_gate_families.append((fam_id, doc_slug))
+                _ledger_results[str(fam_id)] = {"status": "PASS", "ts": utc_now_iso()}
             else:
                 print(f"[{fam_id}] {label}: SKIPPED ({skip_reason})")
+                _ledger_results[str(fam_id)] = {"status": "SKIP", "ts": utc_now_iso()}
         except MetaValidationError as e:
             diff = json.dumps({
                 "check": "gate_0_mapping_protocol",
@@ -8664,6 +8690,23 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"[{fam_id}] {label}: FAIL ({e})")
             sys.exit(1)
+
+    # --- Write _meta_ledger.json (Phase 2 — consumed by kg.promote staleness check) ---
+    try:
+        import subprocess as _ledger_sp
+        _ledger_git_head = _ledger_sp.run(
+            ["git", "rev-parse", "HEAD"], capture_output=True, text=True,
+            cwd=_repo_root, timeout=5,
+        ).stdout.strip() or "UNKNOWN"
+    except Exception:
+        _ledger_git_head = "UNKNOWN"
+    for _lk in _ledger_results:
+        _ledger_results[_lk]["git_head"] = _ledger_git_head
+    _ledger_path = os.path.join(base_dir, "_meta_ledger.json")
+    with open(_ledger_path, "w", encoding="utf-8") as _lf:
+        json.dump(_ledger_results, _lf, indent=2, sort_keys=True)
+    print(f"\n[LEDGER] Wrote {len(_ledger_results)} entries to _meta_ledger.json "
+          f"(git_head={_ledger_git_head[:10]}...)")
 
     # --- External validation: Level 3 recompute (real data + real weights) ---
     print("\n--- EXTERNAL VALIDATION ---")

@@ -89,14 +89,40 @@ Phase 1 also adds a partial authority firewall: `authority=agent` nodes
 cannot emit causal edges without `via_cert`, enforced at `edge_allowed()`
 and in `kg.upsert_edge()`.
 
-### Phase 2 (pending) — full Theorem NT firewall
+### Phase 2 — full Theorem NT firewall (AgentNote)
 
-Not yet landed. Will add:
-- `kg.promote()` protocol with `_meta_ledger.json` staleness guard and
-  collab-bus broadcast corroboration.
-- `extractors/agent_notes.py` — OB-with-originSessionId + collab events.
-- Cert `[227] QA_KG_FIREWALL_EFFECTIVE` (FE1–FE6).
-- [225] v3 KG3 upgrade from tri-state to "precondition occupied."
+Landed 2026-04-15. The agent-authority firewall is now DB-backed: `edge_allowed`
+returns `False` unconditionally for `authority=agent` + causal edge types, and
+the only bypass is a `promoted-from` edge in the DB created by `kg.promote()`.
+Callers cannot circumvent the firewall by passing a `via_cert` string directly.
+
+`kg.promote(agent_note_id, via_cert, promoter_node_id, broadcast_payload)`:
+- Validates agent identity (`authority=agent`) and promoter authority
+  (`primary`, `derived`, or `internal`).
+- Checks `_meta_ledger.json` staleness: `via_cert` must resolve to PASS
+  within 14 days and `git_head` must match current HEAD.
+- Validates broadcast payload timestamp within ±60s window.
+- Creates `promoted-from` edge with full provenance snapshot.
+
+`_meta_ledger.json` is written by `qa_meta_validator.py` after the family
+sweep loop, recording per-cert actual status (PASS/SKIP), timestamp, and
+git HEAD. It is gitignored (runtime-derived artifact).
+
+`extractors/agent_notes.py` ingests collab-bus events (session_handoff_note,
+kg_promotion), collab_log_activity rows, and OB thoughts with explicit
+originSessionId. All produce `authority=agent` Thought nodes.
+
+Cert `[227] QA_KG_FIREWALL_EFFECTIVE_CERT.v1` (FE1–FE6) validates:
+- FE1: no unpromoted agent causal edges in DB
+- FE2: via_cert on promoted-from edges resolves to PASS in ledger
+- FE3: no promoted-from cycles
+- FE4: ephemeral test DB with real-shape fixtures
+- FE5: WARN oldest unpromoted agent note
+- FE6: promoted-from provenance contains broadcast_payload_snapshot
+
+[225] v3 KG3 upgraded to "precondition occupied": N/A only when 0 agent
+nodes. When agent nodes exist, checks both firewall layers (unassigned
+tier + agent authority). PASS = firewall silent in normal operation.
 
 ## Roadmap (deferred, NOT in scope)
 
@@ -120,6 +146,8 @@ Not yet landed. Will add:
   (`qa_alphageometry_ptolemy/qa_semantic_coord_cert_v1/`)
 - Cert family [252] — Epistemic fields correctness (EF1–EF6)
   (`qa_alphageometry_ptolemy/qa_kg_epistemic_fields_cert_v1/`)
+- Cert family [227] — Firewall effectiveness (FE1–FE6)
+  (`qa_alphageometry_ptolemy/qa_kg_firewall_effective_cert_v1/`)
 - `QA_AXIOMS_BLOCK.md` (Dale 2026) — canonical QA axiom set A/T/S/F groups
 - `qa_orbit_rules.py` — canonical `orbit_family` classifier
 - `tools/qa_retrieval/schema.py` — A-RAG Candidate F reference implementation

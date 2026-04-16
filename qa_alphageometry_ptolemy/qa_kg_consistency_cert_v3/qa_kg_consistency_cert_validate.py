@@ -8,8 +8,11 @@ Supersedes v2. Schema v3: epistemic fields + alias removal.
 Gates:
   KG1  (HARD) No self-vetting.
   KG2  (HARD) No contradicts cycles.
-  KG3  (HARD-or-NA) Theorem NT firewall — tri-state preserved from v2.
-       Will upgrade to "precondition occupied" in Phase 2 once agent nodes exist.
+  KG3  (HARD-or-NA) Theorem NT firewall — precondition occupied (Phase 2).
+       N/A only when 0 agent nodes exist. Checks both layers:
+       (a) Unassigned→Cosmos/Singularity causal without via_cert
+       (b) authority=agent causal without DB-backed promoted-from edge.
+       PASS = firewall silent in normal operation (no violations).
   KG4  (WARN) Satellite orphan aging > 30d.
   KG5  (HARD) tier ≡ orbit_family(idx_b, idx_e).
   KG6  (HARD) Candidate F integrity [202].
@@ -94,17 +97,28 @@ def check_kg2_no_contradicts_cycles(conn: sqlite3.Connection) -> tuple[bool, str
 def check_kg3_firewall_with_precondition(
     conn: sqlite3.Connection,
 ) -> tuple[str, str, list[str]]:
-    n_unassigned = conn.execute(
-        "SELECT COUNT(*) n FROM nodes WHERE tier = 'unassigned'"
+    """Phase 2: precondition occupied — checks both firewall layers when
+    agent nodes exist. N/A only when 0 agent nodes.
+
+    Layer 1: Unassigned → Cosmos/Singularity causal without via_cert.
+    Layer 2: authority=agent causal without DB-backed promoted-from edge.
+
+    PASS = firewall silent in normal operation (no violations detected).
+    """
+    n_agent = conn.execute(
+        "SELECT COUNT(*) n FROM nodes WHERE authority = 'agent'"
     ).fetchone()["n"]
-    if n_unassigned == 0:
+    if n_agent == 0:
         return (
             "N/A",
-            "0 Unassigned nodes — firewall precondition absent; cannot meaningfully verify",
+            "0 agent nodes — firewall precondition absent",
             [],
         )
+    viols: list[str] = []
     types = ",".join(f"'{t}'" for t in CAUSAL_EDGE_TYPES)
-    q = f"""
+
+    # Layer 1: Unassigned → Cosmos/Singularity causal without via_cert
+    q1 = f"""
     SELECT e.src_id, e.dst_id, e.edge_type FROM edges e
     JOIN nodes src ON src.id = e.src_id
     JOIN nodes dst ON dst.id = e.dst_id
@@ -113,11 +127,28 @@ def check_kg3_firewall_with_precondition(
       AND dst.tier IN ('cosmos','singularity')
       AND (e.via_cert = '' OR e.via_cert IS NULL)
     """
-    viols = [f"{r['src_id']} --{r['edge_type']}--> {r['dst_id']}"
-             for r in conn.execute(q).fetchall()]
+    for r in conn.execute(q1).fetchall():
+        viols.append(f"L1: {r['src_id']} --{r['edge_type']}--> {r['dst_id']}")
+
+    # Layer 2: agent causal without promoted-from edge in DB
+    q2 = f"""
+    SELECT e.src_id, e.dst_id, e.edge_type FROM edges e
+    JOIN nodes src ON src.id = e.src_id
+    WHERE e.edge_type IN ({types})
+      AND src.authority = 'agent'
+      AND NOT EXISTS (
+          SELECT 1 FROM edges pf
+          WHERE pf.src_id = e.src_id
+            AND pf.edge_type = 'promoted-from'
+            AND pf.via_cert != ''
+      )
+    """
+    for r in conn.execute(q2).fetchall():
+        viols.append(f"L2: {r['src_id']} --{r['edge_type']}--> {r['dst_id']} (no promoted-from)")
+
     if viols:
         return "FAIL", f"{len(viols)} firewall violation(s)", viols
-    return "PASS", f"0 violations across {n_unassigned} Unassigned node(s)", []
+    return "PASS", f"firewall silent across {n_agent} agent node(s)", []
 
 
 def check_kg4_orphan_aging(conn: sqlite3.Connection) -> tuple[bool, str, list[str]]:

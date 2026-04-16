@@ -79,6 +79,10 @@ Cargo.lock
 # README in chat_data/ confirms "local only". Hard rule from memory.
 chat_data/
 
+# --- QA-KG runtime artifacts (derived, regenerable) ---
+tools/qa_kg/qa_kg.db
+qa_alphageometry_ptolemy/_meta_ledger.json
+
 # --- Large regenerable ML blobs ---
 # Workspaces that hold .pt torch checkpoints + .npy embeddings: we commit
 # the JSON result files (conjectures, reports) but skip the binary blobs,

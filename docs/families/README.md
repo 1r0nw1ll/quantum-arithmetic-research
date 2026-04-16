@@ -30,6 +30,7 @@
 | [251] | [QA G_2 Mutation Game](251_qa_g2_mutation_game_cert.md) | First non-simply-laced mutation cert: G_2 via directed edges A(0→1)=3, A(1→0)=1 for Cartan [[2,-1],[-3,2]]; 12 roots (6+/6-), 3 short + 3 long under Humphreys Gram, (s_0 s_1)^6 = I strictly | PASS |
 | [225] | [QA-KG Consistency v3](225_qa_kg_consistency_cert_v3.md) | Schema v3 graph consistency: KG1-KG10 gates (epistemic non-null, frozen-not-in-sweeps, axiom-codes canonical, no-swallow); supersedes v2 | PASS |
 | [252] | [QA-KG Epistemic Fields v1](252_qa_kg_epistemic_fields_cert_v1.md) | Phase 1 epistemic fields: 4 authority x 6 epistemic_status allowed matrix; source_locator resolves; Axiom ⇒ primary+axiom | PASS |
+| [227] | [QA-KG Firewall Effective v1](227_qa_kg_firewall_effective_cert_v1.md) | Phase 2 Theorem NT firewall: DB-backed promoted-from, ledger staleness, broadcast provenance; FE1-FE6 gates | PASS |
 | [223] | [QA Experiment Protocol](223_qa_experiment_protocol.md) | Schema + Validator + Fixtures; enforces study design, source mapping, ablation, reproducibility (linter EXP-1) | PASS |
 | [224] | [QA Benchmark Protocol](224_qa_benchmark_protocol.md) | Schema + Validator + Fixtures; enforces calibration provenance, SOTA/null baseline, ablation, reproducibility (linter BENCH-1) | PASS |
 

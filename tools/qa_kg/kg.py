@@ -5,20 +5,30 @@ QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA
 Schema v3: epistemic fields (authority, epistemic_status, method,
 source_locator, lifecycle_state) added per Phase 1. Authority drives the
 Theorem NT firewall alongside tier.
+
+Phase 2: kg.promote() + DB-backed agent firewall. Agent causal edges are
+blocked at the policy level (edge_allowed returns False unconditionally for
+authority=agent). The only bypass is a promoted-from edge in the DB,
+queried by upsert_edge at insert time. promote() creates that edge after
+validating _meta_ledger.json staleness + broadcast corroboration.
 """
 from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
+import datetime as _dt
+import json
 import logging
 import sqlite3
+import subprocess
 import time
 from dataclasses import dataclass
 from pathlib import Path
 from typing import Iterable
 
 from tools.qa_kg.orbit import (
-    Index, Tier, char_ord_sum, compute_index, edge_allowed, tier_for_index,
+    CAUSAL_EDGE_TYPES, Index, Tier, char_ord_sum, compute_index,
+    edge_allowed, tier_for_index,
 )
 from tools.qa_kg.schema import (
     AUTHORITIES, DEFAULT_DB, EPISTEMIC_STATUSES, LIFECYCLE_STATES, init_db,
@@ -26,9 +36,51 @@ from tools.qa_kg.schema import (
 
 _log = logging.getLogger("qa_kg")
 
+PROMOTED_FROM_EDGE = "promoted-from"
+LEDGER_STALENESS_DAYS = 14
+BROADCAST_WINDOW_S = 60
+
+_REPO = Path(__file__).resolve().parents[2]
+_META_DIR = _REPO / "qa_alphageometry_ptolemy"
+_LEDGER_PATH = _META_DIR / "_meta_ledger.json"
+
+_PROMOTER_AUTHORITIES = frozenset({"primary", "derived", "internal"})
+
 
 def _now() -> str:
     return time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+
+
+_git_head_cache: str | None = None
+
+
+def _current_git_head() -> str:
+    """Return current git HEAD sha. Cached per process. Falls back to UNKNOWN."""
+    global _git_head_cache
+    if _git_head_cache is not None:
+        return _git_head_cache
+    try:
+        result = subprocess.run(
+            ["git", "rev-parse", "HEAD"],
+            capture_output=True, text=True, timeout=5,
+            cwd=str(_REPO),
+        )
+        _git_head_cache = result.stdout.strip() or "UNKNOWN"
+    except (subprocess.SubprocessError, FileNotFoundError):
+        _git_head_cache = "UNKNOWN"
+    return _git_head_cache
+
+
+def _load_ledger(path: Path | None = None) -> dict:
+    """Load _meta_ledger.json. Returns {} if missing or unparseable."""
+    p = path or _LEDGER_PATH
+    if not p.exists():
+        return {}
+    try:
+        return json.loads(p.read_text(encoding="utf-8"))
+    except (json.JSONDecodeError, OSError) as exc:
+        _log.warning("Failed to load ledger at %s: %s", p, exc)
+        return {}
 
 
 @dataclass
@@ -170,10 +222,19 @@ class KG:
         src_authority = src["authority"]
         if not edge_allowed(src_tier, dst_tier, edge.edge_type,
                             bool(edge.via_cert), src_authority=src_authority):
-            raise FirewallViolation(
-                f"{src_tier.value}(authority={src_authority})→{dst_tier.value} "
-                f"via '{edge.edge_type}' blocked by Theorem NT firewall"
-            )
+            # Phase 2: DB-backed promoted-from bypass for agent nodes.
+            # edge_allowed returns False unconditionally for agent + causal.
+            # The only way through is a promoted-from edge in the DB created
+            # by kg.promote(). Callers cannot fake this with a via_cert string.
+            if (src_authority == "agent"
+                    and edge.edge_type in CAUSAL_EDGE_TYPES
+                    and self._has_promoted_from(edge.src_id)):
+                pass  # promoted agent — allow the causal edge
+            else:
+                raise FirewallViolation(
+                    f"{src_tier.value}(authority={src_authority})→{dst_tier.value} "
+                    f"via '{edge.edge_type}' blocked by Theorem NT firewall"
+                )
         self.conn.execute(
             """
             INSERT INTO edges (src_id, dst_id, edge_type, confidence, method,
@@ -274,6 +335,125 @@ class KG:
             "SELECT * FROM edges WHERE edge_type='contradicts' AND (src_id=? OR dst_id=?)",
             (node_id, node_id),
         ).fetchall())
+
+    # --- Phase 2: promote protocol ---
+
+    def _has_promoted_from(self, node_id: str) -> bool:
+        """DB query: does this node have a promoted-from edge with via_cert?"""
+        row = self.conn.execute(
+            "SELECT 1 FROM edges WHERE src_id=? AND edge_type=? AND via_cert != ''",
+            (node_id, PROMOTED_FROM_EDGE),
+        ).fetchone()
+        return row is not None
+
+    def promote(
+        self,
+        agent_note_id: str,
+        via_cert: str,
+        promoter_node_id: str,
+        broadcast_payload: dict,
+        *,
+        ledger_path: Path | str | None = None,
+    ) -> None:
+        """Promote an agent note so it can emit causal edges.
+
+        Creates a promoted-from edge from agent_note_id → promoter_node_id
+        with provenance containing the broadcast payload snapshot.
+
+        Validates:
+          1. agent_note_id exists with authority=agent
+          2. promoter_node_id exists with authority ∈ {primary, derived, internal}
+          3. via_cert resolves to PASS in _meta_ledger.json within staleness
+          4. broadcast_payload timestamp within ±60s of now
+        """
+        agent_row = self.conn.execute(
+            "SELECT authority FROM nodes WHERE id=?", (agent_note_id,)
+        ).fetchone()
+        if agent_row is None:
+            raise ValueError(f"agent_note_id {agent_note_id!r} not found")
+        if agent_row["authority"] != "agent":
+            raise ValueError(
+                f"agent_note_id {agent_note_id!r} has authority="
+                f"{agent_row['authority']!r}, expected 'agent'"
+            )
+
+        promoter_row = self.conn.execute(
+            "SELECT authority FROM nodes WHERE id=?", (promoter_node_id,)
+        ).fetchone()
+        if promoter_row is None:
+            raise ValueError(f"promoter_node_id {promoter_node_id!r} not found")
+        if promoter_row["authority"] not in _PROMOTER_AUTHORITIES:
+            raise ValueError(
+                f"promoter_node_id {promoter_node_id!r} has authority="
+                f"{promoter_row['authority']!r}, expected one of "
+                f"{sorted(_PROMOTER_AUTHORITIES)}"
+            )
+
+        # Ledger staleness check
+        lpath = Path(ledger_path) if ledger_path else _LEDGER_PATH
+        ledger = _load_ledger(lpath)
+        if via_cert not in ledger:
+            raise FirewallViolation(
+                f"via_cert {via_cert!r} not in ledger at {lpath}"
+            )
+        entry = ledger[via_cert]
+        if entry.get("status") != "PASS":
+            raise FirewallViolation(
+                f"via_cert {via_cert!r} ledger status={entry.get('status')!r}, "
+                f"expected 'PASS'"
+            )
+        entry_ts = _dt.datetime.fromisoformat(entry["ts"].replace("Z", "+00:00"))
+        age = _dt.datetime.now(_dt.timezone.utc) - entry_ts
+        if age.days > LEDGER_STALENESS_DAYS:
+            raise FirewallViolation(
+                f"via_cert {via_cert!r} ledger stale: {age.days}d > "
+                f"{LEDGER_STALENESS_DAYS}d"
+            )
+        current_head = _current_git_head()
+        if current_head != "UNKNOWN" and entry.get("git_head") != current_head:
+            raise FirewallViolation(
+                f"via_cert {via_cert!r} ledger git_head={entry.get('git_head')!r} "
+                f"!= HEAD={current_head!r}"
+            )
+
+        # Broadcast corroboration: payload ts within ±60s of now
+        bp_ts_raw = broadcast_payload.get("ts", "")
+        if not bp_ts_raw:
+            raise FirewallViolation(
+                "broadcast_payload missing 'ts' field"
+            )
+        bp_ts = _dt.datetime.fromisoformat(bp_ts_raw.replace("Z", "+00:00"))
+        bp_age = abs((_dt.datetime.now(_dt.timezone.utc) - bp_ts).total_seconds())
+        if bp_age > BROADCAST_WINDOW_S:
+            raise FirewallViolation(
+                f"broadcast_payload ts {bp_ts_raw!r} is {bp_age:.0f}s from now, "
+                f"exceeds ±{BROADCAST_WINDOW_S}s window"
+            )
+
+        # Write promoted-from edge (bypasses edge_allowed — it's not causal)
+        provenance = json.dumps({
+            "session": broadcast_payload.get("session", ""),
+            "signed_ts": _now(),
+            "promoter_node_id": promoter_node_id,
+            "broadcast_payload_snapshot": broadcast_payload,
+        })
+        self.conn.execute(
+            """
+            INSERT INTO edges (src_id, dst_id, edge_type, confidence, method,
+                               provenance, via_cert, created_ts)
+            VALUES (?,?,?,?,?,?,?,?)
+            ON CONFLICT(src_id, dst_id, edge_type) DO UPDATE SET
+                confidence=excluded.confidence,
+                method=excluded.method,
+                provenance=excluded.provenance,
+                via_cert=excluded.via_cert
+            """,
+            (agent_note_id, promoter_node_id, PROMOTED_FROM_EDGE,
+             1.0, "promote", provenance, via_cert, _now()),
+        )
+        self.conn.commit()
+        _log.info("promoted %s via %s (promoter=%s)",
+                   agent_note_id, via_cert, promoter_node_id)
 
     def digest(self, *, tier: str = "cosmos", limit: int = 40) -> list[sqlite3.Row]:
         return list(self.conn.execute(

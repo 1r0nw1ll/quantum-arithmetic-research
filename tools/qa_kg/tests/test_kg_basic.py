@@ -1,5 +1,5 @@
 # <!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG test harness -->
-"""Candidate F [202] + Phase 1 epistemic fields — basic QA-KG tests.
+"""Candidate F [202] + Phase 1 epistemic fields + Phase 2 promote — QA-KG tests.
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
@@ -9,17 +9,19 @@ from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
+import json
 import sys
 import tempfile
+import time
 from pathlib import Path
 
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 from tools.qa_kg import (
     Tier, NODE_TYPE_RANK, compute_index, dr, char_ord_sum,
-    tier_for_index, connect, Index,
+    tier_for_index, connect, Index, PROMOTED_FROM_EDGE,
 )
-from tools.qa_kg.kg import Edge, FirewallViolation, Node
+from tools.qa_kg.kg import Edge, FirewallViolation, Node, _now
 from tools.qa_kg.orbit import qa_step, edge_allowed
 from tools.qa_kg.predicate import run as run_predicate
 from tools.qa_kg.schema import SCHEMA_VERSION
@@ -80,19 +82,23 @@ def test_firewall_archive_to_cosmos():
 
 
 def test_firewall_agent_authority_blocked():
-    """Phase 1: authority=agent blocks causal edges without via_cert."""
+    """Phase 2: authority=agent blocks causal edges unconditionally at policy level.
+    via_cert alone is NOT sufficient — DB-backed promoted-from is required."""
     assert not edge_allowed(
         Tier.COSMOS, Tier.COSMOS, "validates", via_cert=False,
         src_authority="agent",
     )
-    assert edge_allowed(
+    # Phase 2 change: via_cert=True is NO LONGER sufficient for agent
+    assert not edge_allowed(
         Tier.COSMOS, Tier.COSMOS, "validates", via_cert=True,
         src_authority="agent",
     )
+    # Non-causal edges still pass for agent
     assert edge_allowed(
         Tier.COSMOS, Tier.COSMOS, "keyword-co-occurs", via_cert=False,
         src_authority="agent",
     )
+    # Non-agent authorities still pass with via_cert
     assert edge_allowed(
         Tier.COSMOS, Tier.COSMOS, "validates", via_cert=False,
         src_authority="derived",
@@ -187,7 +193,8 @@ def test_firewall_violation_raised():
 
 
 def test_firewall_agent_edge_blocked():
-    """Phase 1: agent-authority node causal edge blocked without via_cert."""
+    """Phase 2: agent causal edges blocked even with via_cert string.
+    Only a DB-backed promoted-from edge allows agent causal edges."""
     with tempfile.TemporaryDirectory() as tmp:
         db = Path(tmp) / "t.db"
         kg = connect(db)
@@ -201,6 +208,7 @@ def test_firewall_agent_edge_blocked():
             title="Target cert", body="body here",
             authority="derived", epistemic_status="certified",
         ))
+        # Without via_cert — blocked
         try:
             kg.upsert_edge(Edge(
                 src_id="agent:note1", dst_id="cert:target",
@@ -210,11 +218,37 @@ def test_firewall_agent_edge_blocked():
             pass
         else:
             raise AssertionError("agent → causal without via_cert must be blocked")
+        # With via_cert but NO promoted-from in DB — STILL blocked (Phase 2 fix)
+        try:
+            kg.upsert_edge(Edge(
+                src_id="agent:note1", dst_id="cert:target",
+                edge_type="validates", via_cert="cert:252",
+            ))
+        except FirewallViolation:
+            pass
+        else:
+            raise AssertionError("agent → causal with via_cert but no promoted-from must be blocked")
+        # Non-causal edge still allowed
         kg.upsert_edge(Edge(
             src_id="agent:note1", dst_id="cert:target",
             edge_type="keyword-co-occurs",
             confidence=0.3, method="keyword",
         ))
+        # After inserting promoted-from edge, causal edge is allowed
+        kg.upsert_node(Node(
+            id="rule:promoter1", node_type="Rule",
+            title="Promoter rule", body="internal rule",
+            authority="internal", epistemic_status="interpretation",
+        ))
+        kg.conn.execute(
+            """INSERT INTO edges (src_id, dst_id, edge_type, confidence, method,
+                                  provenance, via_cert, created_ts)
+               VALUES (?,?,?,?,?,?,?,?)""",
+            ("agent:note1", "rule:promoter1", PROMOTED_FROM_EDGE,
+             1.0, "promote", '{"test": true}', "cert:252", _now()),
+        )
+        kg.conn.commit()
+        # NOW the causal edge should succeed
         kg.upsert_edge(Edge(
             src_id="agent:note1", dst_id="cert:target",
             edge_type="validates", via_cert="cert:252",
@@ -268,6 +302,158 @@ def test_predicate_runtime():
     assert res.ok and res.msg == "stub"
 
 
+def _make_promote_fixtures(tmp):
+    """Shared fixture builder for promote tests. Returns (kg, ledger_path)."""
+    db = Path(tmp) / "t.db"
+    kg = connect(db)
+    kg.upsert_node(Node(
+        id="agent:note_promo", node_type="Thought",
+        title="Agent thought for promotion", body="test content",
+        authority="agent", epistemic_status="observation",
+    ))
+    kg.upsert_node(Node(
+        id="rule:promoter_promo", node_type="Rule",
+        title="Internal rule", body="this is a rule",
+        authority="internal", epistemic_status="interpretation",
+    ))
+    kg.upsert_node(Node(
+        id="cert:target_promo", node_type="Cert",
+        title="Target cert", body="certified thing",
+        authority="derived", epistemic_status="certified",
+    ))
+    ledger_path = Path(tmp) / "_meta_ledger.json"
+    now_iso = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+    from tools.qa_kg.kg import _current_git_head
+    ledger = {
+        "225": {"status": "PASS", "ts": now_iso, "git_head": _current_git_head()},
+    }
+    ledger_path.write_text(json.dumps(ledger), encoding="utf-8")
+    return kg, ledger_path
+
+
+def _fresh_broadcast() -> dict:
+    return {
+        "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+        "session": "test-session",
+        "event_type": "kg_promotion",
+    }
+
+
+def test_promote_happy_path():
+    """promote() with valid ledger + promoter succeeds, creates promoted-from edge."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        kg.promote(
+            agent_note_id="agent:note_promo",
+            via_cert="225",
+            promoter_node_id="rule:promoter_promo",
+            broadcast_payload=_fresh_broadcast(),
+            ledger_path=lpath,
+        )
+        edge = kg.conn.execute(
+            "SELECT * FROM edges WHERE src_id=? AND edge_type=?",
+            ("agent:note_promo", PROMOTED_FROM_EDGE),
+        ).fetchone()
+        assert edge is not None, "promoted-from edge must exist"
+        assert edge["via_cert"] == "225"
+        prov = json.loads(edge["provenance"])
+        assert prov["promoter_node_id"] == "rule:promoter_promo"
+        assert prov["broadcast_payload_snapshot"] is not None
+        # Now agent can emit causal edges
+        kg.upsert_edge(Edge(
+            src_id="agent:note_promo", dst_id="cert:target_promo",
+            edge_type="validates", via_cert="225",
+        ))
+
+
+def test_promote_rejects_non_agent():
+    """promote() raises ValueError when target is not authority=agent."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        try:
+            kg.promote(
+                agent_note_id="rule:promoter_promo",
+                via_cert="225",
+                promoter_node_id="rule:promoter_promo",
+                broadcast_payload=_fresh_broadcast(),
+                ledger_path=lpath,
+            )
+        except ValueError as e:
+            assert "authority=" in str(e)
+        else:
+            raise AssertionError("must reject non-agent target")
+
+
+def test_promote_rejects_bad_promoter():
+    """promote() raises ValueError when promoter is authority=agent."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        kg.upsert_node(Node(
+            id="agent:other", node_type="Thought",
+            title="Another agent", body="x",
+            authority="agent", epistemic_status="observation",
+        ))
+        try:
+            kg.promote(
+                agent_note_id="agent:note_promo",
+                via_cert="225",
+                promoter_node_id="agent:other",
+                broadcast_payload=_fresh_broadcast(),
+                ledger_path=lpath,
+            )
+        except ValueError as e:
+            assert "agent" in str(e)
+        else:
+            raise AssertionError("must reject agent promoter")
+
+
+def test_promote_rejects_stale_ledger():
+    """promote() raises FirewallViolation when ledger entry is >14d old."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        # Overwrite ledger with stale timestamp
+        import datetime as dt
+        old_ts = (dt.datetime.now(dt.timezone.utc) - dt.timedelta(days=20)).strftime(
+            "%Y-%m-%dT%H:%M:%SZ"
+        )
+        from tools.qa_kg.kg import _current_git_head
+        ledger = {"225": {"status": "PASS", "ts": old_ts, "git_head": _current_git_head()}}
+        lpath.write_text(json.dumps(ledger), encoding="utf-8")
+        try:
+            kg.promote(
+                agent_note_id="agent:note_promo",
+                via_cert="225",
+                promoter_node_id="rule:promoter_promo",
+                broadcast_payload=_fresh_broadcast(),
+                ledger_path=lpath,
+            )
+        except FirewallViolation as e:
+            assert "stale" in str(e)
+        else:
+            raise AssertionError("must reject stale ledger")
+
+
+def test_promote_rejects_mismatched_git_head():
+    """promote() raises FirewallViolation when ledger git_head != HEAD."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        now_iso = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+        ledger = {"225": {"status": "PASS", "ts": now_iso, "git_head": "deadbeef"}}
+        lpath.write_text(json.dumps(ledger), encoding="utf-8")
+        try:
+            kg.promote(
+                agent_note_id="agent:note_promo",
+                via_cert="225",
+                promoter_node_id="rule:promoter_promo",
+                broadcast_payload=_fresh_broadcast(),
+                ledger_path=lpath,
+            )
+        except FirewallViolation as e:
+            assert "git_head" in str(e)
+        else:
+            raise AssertionError("must reject mismatched git_head")
+
+
 TESTS = [
     test_index_a1,
     test_qa_step_a1,
@@ -284,6 +470,11 @@ TESTS = [
     test_search_with_authority_filter,
     test_back_compat_aliases_scheduled_for_removal_in_v3,
     test_predicate_runtime,
+    test_promote_happy_path,
+    test_promote_rejects_non_agent,
+    test_promote_rejects_bad_promoter,
+    test_promote_rejects_stale_ledger,
+    test_promote_rejects_mismatched_git_head,
 ]
 
 

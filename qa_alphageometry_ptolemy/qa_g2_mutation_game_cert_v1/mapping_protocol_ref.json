@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA G2 Mutation Game Cert family [251]: first non-simply-laced Mutation Game certificate, extending cert [244] E_8 and cert [250] ADE to G_2 using directed multigraph edge counts A(0→1)=3 and A(1→0)=1 for Cartan [[2,-1],[-3,2]]. Verifies (i) BFS from δ_0=(1,0), δ_1=(0,1) closes at exactly 12 integer populations under s_0(p_0,p_1)=(p_1-p_0,p_1) and s_1(p_0,p_1)=(p_0,3p_0-p_1), (ii) six positive and six negative populations with R-=-R+, (iii) Humphreys coordinate swap (p_0,p_1)↦(p_1,p_0) maps positives to §12.1 G_2 roots with three short and three long norms under G_sr=[[2,-3],[-3,6]], (iv) s_0^2=s_1^2=I, and (v) (s_0 s_1)^6=I strictly. Primary sources: (Wildberger, 2020) Algebra Colloquium 27; (Humphreys, 1972) Springer GTM 9 §12.1. Companion file: ~/Downloads/MutationGameCoxeterGraphs.pdf. Theory: docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1+BFS/G2M_2_SIGN_SPLIT/G2M_3_HUMPHREYS/G2M_4_INVOLUTION/G2M_5_COXETER/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"
+}

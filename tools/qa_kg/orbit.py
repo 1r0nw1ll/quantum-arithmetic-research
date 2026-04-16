@@ -52,6 +52,22 @@ CAUSAL_EDGE_TYPES = frozenset({
     "validates", "extends", "derived-from", "maps-to", "instantiates",
 })
 
+# Phase 3 structural edge types — FK / lifecycle metadata, NOT derivations.
+# The Theorem NT firewall does NOT apply: a `quoted-from` pointer is an FK
+# (SourceClaim→SourceWork), and `supersedes` is lifecycle metadata
+# (newer→older). Keeping them non-causal lets agent-authored nodes cite
+# SourceWorks without needing to go through kg.promote() for the citation
+# itself; any causal claim BUILT on that citation still has to promote.
+STRUCTURAL_EDGE_TYPES = frozenset({
+    "quoted-from", "supersedes", "promoted-from",
+})
+
+# Sanity: no overlap between causal and structural — regression guard for
+# any future refactor that moves an edge type between categories.
+assert CAUSAL_EDGE_TYPES.isdisjoint(STRUCTURAL_EDGE_TYPES), (
+    "Phase 3 invariant violated: causal/structural edge-type sets overlap"
+)
+
 
 def dr(n: int) -> int:
     """Aiq Bekar digital root, A1-compliant [family 202]. Mirrors

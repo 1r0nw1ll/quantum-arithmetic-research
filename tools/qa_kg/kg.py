@@ -129,6 +129,71 @@ class Node:
             return Tier.UNASSIGNED
         return tier_for_index(idx.idx_b, idx.idx_e)
 
+    # --- Phase 3 factories: pin authority/epistemic_status combinations ---
+
+    @classmethod
+    def source_work(
+        cls,
+        *,
+        work_id: str,
+        title: str,
+        source_locator: str,
+        body: str = "",
+        extraction_method: str = "manual",
+    ) -> "Node":
+        """Factory for a primary-source container (book / paper / wiki page).
+
+        Pins authority='primary', epistemic_status='source_work',
+        node_type='Work'. Extractors should prefer this over constructing
+        Node directly — it guarantees the SourceWork invariants that
+        [225] v4 KG11 and [253] SC2 check at cert time.
+        """
+        return cls(
+            id=f"work:{work_id}",
+            node_type="Work",
+            title=title,
+            body=body,
+            authority="primary",
+            epistemic_status="source_work",
+            method=extraction_method,
+            source_locator=source_locator,
+        )
+
+    @classmethod
+    def source_claim(
+        cls,
+        *,
+        claim_id: str,
+        quote: str,
+        source_locator: str,
+        extraction_method: str,
+        title: str | None = None,
+    ) -> "Node":
+        """Factory for a verbatim quote from a primary source.
+
+        Pins authority='primary', epistemic_status='source_claim',
+        node_type='Claim'. `body` carries the verbatim quote (this is
+        what [253] SC1 checks for non-empty). extraction_method must be
+        in {manual, ocr, llm, script} per [253] SC3.
+        """
+        if not quote:
+            raise ValueError("source_claim requires non-empty quote")
+        if extraction_method not in ("manual", "ocr", "llm", "script"):
+            raise ValueError(
+                f"extraction_method={extraction_method!r} not in "
+                f"{{manual, ocr, llm, script}}"
+            )
+        return cls(
+            id=f"sc:{claim_id}",
+            node_type="Claim",
+            title=title or f"SourceClaim {claim_id}",
+            body=quote,
+            authority="primary",
+            epistemic_status="source_claim",
+            method=extraction_method,
+            source_locator=source_locator,
+        )
+
 
 @dataclass
 class Edge:

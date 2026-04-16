@@ -1,0 +1,7 @@
+{
+  "_status": "frozen",
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA-KG Consistency Cert [225] v3 — FROZEN. Superseded by v4 (Phase 3, 2026-04-16). Original schema v3 (Phase 1 epistemic fields + alias removal) gate set: (KG1) no self-vetting; (KG2) no contradicts cycles; (KG3) Theorem NT firewall tri-state; (KG4) Satellite orphan aging WARN; (KG5) tier matches canonical orbit classifier; (KG6) Candidate F integrity [202]; (KG7) authority and epistemic_status non-null on every node; (KG8) frozen cert dirs not in FAMILY_SWEEPS; (KG9) AXIOM_CODES canonical — edges.py set equals CLAUDE.md parsed set; (KG10) no except-Exception-continue patterns in extractors. Do not re-run v3 as a production gate; [225] v4 (qa_kg_consistency_cert_v4/) adds KG11 SourceWork invariants, KG12 SourceClaim quoted-from FK, KG13 supersedes DAG + lifecycle consistency. Kept in place for audit symmetry with v1 and v2."
+}

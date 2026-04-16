@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA-KG Consistency Cert [225] v4: schema v3 (Phase 1) + Phase 3 SourceWork / SourceClaim / supersedes invariants. Supersedes v3 (frozen). Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); QA_AXIOMS_BLOCK.md (Dale, 2026); CLAUDE.md (Dale, 2026); cert [226] semantic coord invariants; cert [253] source-claim contracts. Gates: (KG1) no self-vetting; (KG2) no contradicts cycles; (KG3) Theorem NT firewall tri-state; (KG4) Satellite orphan aging WARN; (KG5) tier matches canonical orbit classifier; (KG6) Candidate F integrity [202]; (KG7) authority and epistemic_status non-null on every node; (KG8) frozen cert dirs not in FAMILY_SWEEPS; (KG9) AXIOM_CODES canonical — edges.py set equals CLAUDE.md parsed set; (KG10) no except-Exception-continue patterns in extractors; (KG11) every SourceWork node has authority=primary AND epistemic_status=source_work; (KG12) every SourceClaim has a quoted-from edge to an existing SourceWork; (KG13) supersedes edges form a DAG with lifecycle_state consistency — superseded nodes have >=1 incoming supersedes, deprecated exempt."
+}

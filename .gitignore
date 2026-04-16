@@ -130,6 +130,11 @@ multi_ai_workspace/dataset_generator.py
 !qa_alphageometry_ptolemy/qa_ledger/**/*.json
 !qa_alphageometry_ptolemy/qa_*_cert_v1/**/*.json
 !qa_alphageometry_ptolemy/qa_*_cert_v1/*.json
+# Phase 3 QA-MEM: allow newer cert versions (v2/v3/v4/...) to track their
+# mapping_protocol_ref.json + closed_sets.json + fixtures.
+!qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/**/*.json
+!qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/*.json
+!tools/qa_kg/fixtures/*.json
 !qa_alphageometry_ptolemy/qa_fst/**/*.json
 !tools/*.json
 !qa_alphageometry_ptolemy/qa_fst/*.json

@@ -11,6 +11,7 @@ QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA
 
 import json
 import os
+import re
 import sys
 from pathlib import Path
 
@@ -47,18 +48,72 @@ def _discover_filesystem_families() -> list[tuple[int | None, str, str]]:
     return out
 
 
+_SIBLING_VERSION_RE = re.compile(r"^(.+)_v(\d+)$")
+
+
 def _is_frozen(cert_dir: Path) -> bool:
-    """Check if a cert directory has _status: frozen in its mapping_protocol_ref.json."""
+    """True if the cert dir's mapping protocol has a `_status` value that
+    begins with 'frozen' (case-insensitive). Accepts both the canonical
+    short form `"frozen"` and longer banner strings like
+    `"FROZEN — AUDIT-ONLY. ..."` (historical v1 pattern)."""
     for fname in ("mapping_protocol_ref.json", "mapping_protocol.json"):
         mp = cert_dir / fname
         if mp.exists():
             try:
                 data = json.loads(mp.read_text(encoding="utf-8"))
-                if data.get("_status") == "frozen":
+                status = data.get("_status")
+                if isinstance(status, str) and status.strip().lower().startswith("frozen"):
                     return True
             except (json.JSONDecodeError, OSError):
                 pass
     return False
+
+
+def _has_successor_sibling(cert_dir: Path) -> bool:
+    """True if a sibling directory matching <base>_v<N+1> exists next to
+    `cert_dir` where `cert_dir.name` matches `<base>_v<N>`. Used by the
+    Phase 3 lifecycle bridge (§6a) to distinguish frozen-with-successor
+    (→ 'superseded') from frozen-without-successor (→ 'deprecated')."""
+    m = _SIBLING_VERSION_RE.match(cert_dir.name)
+    if not m:
+        return False
+    base, n_str = m.group(1), m.group(2)
+    try:
+        n = int(n_str)
+    except ValueError:
+        return False
+    parent = cert_dir.parent
+    for sibling in parent.iterdir():
+        if not sibling.is_dir():
+            continue
+        sm = _SIBLING_VERSION_RE.match(sibling.name)
+        if sm and sm.group(1) == base:
+            try:
+                if int(sm.group(2)) > n:
+                    return True
+            except ValueError:
+                continue
+    return False
+
+
+def _lifecycle_for_status(cert_dir: Path | None) -> str:
+    """Translate `_status` file marker to `lifecycle_state` column value.
+
+    Phase 3 §6a lifecycle bridge. Keeps KG8 (file-level frozen) aligned
+    with KG13 (node-level lifecycle_state) so the two mechanisms don't
+    drift.
+
+      frozen + successor sibling exists  → 'superseded'
+      frozen + no successor sibling      → 'deprecated'
+      not frozen (missing _status or current) → 'current'
+    """
+    if cert_dir is None:
+        return "current"
+    if not _is_frozen(cert_dir):
+        return "current"
+    if _has_successor_sibling(cert_dir):
+        return "superseded"
+    return "deprecated"
 
 
 def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
@@ -84,7 +139,7 @@ def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
                 f"pass_desc: {str(pass_desc)[:400]}",
             ])
             cert_dir = META_DIR / root_rel if root_rel and root_rel != "." else None
-            frozen = _is_frozen(cert_dir) if cert_dir else False
+            lifecycle = _lifecycle_for_status(cert_dir)
             source_loc = (
                 f"file:qa_alphageometry_ptolemy/{root_rel}"
                 if root_rel and root_rel != "."
@@ -99,7 +154,7 @@ def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
                 epistemic_status="certified",
                 method="cert_validator",
                 source_locator=source_loc,
-                lifecycle_state="deprecated" if frozen else "current",
+                lifecycle_state=lifecycle,
             ))
             ids.append(nid)
 
@@ -109,7 +164,7 @@ def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
             continue
         seen.add(nid)
         cert_dir = META_DIR / rel
-        frozen = _is_frozen(cert_dir)
+        lifecycle = _lifecycle_for_status(cert_dir)
         kg.upsert_node(Node(
             id=nid, node_type="Cert", title=label,
             body=f"filesystem-discovered; family_root_rel: {rel}",
@@ -119,7 +174,7 @@ def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
             epistemic_status="certified",
             method="cert_validator",
             source_locator=f"file:qa_alphageometry_ptolemy/{rel}",
-            lifecycle_state="deprecated" if frozen else "current",
+            lifecycle_state=lifecycle,
         ))
         ids.append(nid)
 

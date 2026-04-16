@@ -1,0 +1,267 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 3 seed corpus; all quote fields below are verbatim from primary sources (SVP wiki snapshot at docs/theory/svp_wiki_qa_elements_snapshot.md and Pond's SVP torus notes at private/svp_propositions_qa_mapping.md). Observation bodies are Will-authored / cert-derived corrections. Do not edit quote fields to make them 'nicer'; they are the record of what the primary sources actually say, including typos. -->",
+  "phase": 3,
+  "description": "Phase 3 seed populating SourceWork + SourceClaim + contradicts + supersedes. Covers all 5 contradicts reason values (typo/ocr/variant/true/dispute) on real-data exemplars. Volk PDF not located in Documents/wildberger_corpus/ — using SVP-internal variant exemplar instead (per plan §4 Volk-absent fallback).",
+
+  "works": [
+    {
+      "id": "svp_wiki_qa_elements",
+      "title": "SVP Wiki: Quantum Arithmetic Elements",
+      "body": "Primary source: Dale Pond's 'Unpublished Notes' (December 1998), published at svpwiki.com/Quantum+Arithmetic+Elements. Canonical reference for the QA identity letters (A–Z) and the 16 parity laws. Author credits Ben Iverson as originator of Quantum Arithmetic.",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md"
+    },
+    {
+      "id": "pond_svp_torus",
+      "title": "Pond — SVP Propositions / QA Mapping notes",
+      "body": "Will-transcribed fragments of Dale Pond's SVP proposition notes mapping QA identities to torus geometry (H=outer, I=inner, C=center, F=tube, G=RMS(H,I)). Transcription method: manual; authority=primary because the statements are Pond's.",
+      "source_locator": "file:private/svp_propositions_qa_mapping.md"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "svp_dim_ocr",
+      "work": "svp_wiki_qa_elements",
+      "quote": "a 3-diminsional Quantum Arithmetic,(QA), will include the number \"5\" also being required",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L50",
+      "extraction_method": "manual",
+      "title": "SVP wiki: '3-diminsional' spelling"
+    },
+    {
+      "id": "svp_decinary_typo",
+      "work": "svp_wiki_qa_elements",
+      "quote": "If the number (in the decinary notation), ends with a \"0\" or a \"5\", the number is divisible by \"5\".",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L52",
+      "extraction_method": "manual",
+      "title": "SVP wiki: 'decinary' misspelling"
+    },
+    {
+      "id": "svp_choromosomes_ocr",
+      "work": "svp_wiki_qa_elements",
+      "quote": "the \"2\" and \"4\" may be considered to represent the two x choromosomes.",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L66",
+      "extraction_method": "manual",
+      "title": "SVP wiki: 'choromosomes' OCR-style typo"
+    },
+    {
+      "id": "svp_law12e_first_fourth",
+      "work": "svp_wiki_qa_elements",
+      "quote": "(e) Twice the sum of the square of the first and fourth roots will equal the difference between the diagonal and the altitude of this unique triangle.",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L80",
+      "extraction_method": "manual",
+      "title": "SVP wiki: Law 12(e) 'first and fourth' root claim"
+    },
+    {
+      "id": "svp_law13_labels",
+      "work": "svp_wiki_qa_elements",
+      "quote": "(a) The difference between the base and hypotenuse of the triangle is equal to the square of the first Root.(b) (b) The sum of the base and the hypotenuse of the triangle is equal to the square of the fourth Root.(a)",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L86",
+      "extraction_method": "manual",
+      "title": "SVP wiki: Laws 13(a)/(b) parenthetical (b)/(a) labels"
+    },
+    {
+      "id": "svp_C_identity_a2_h2",
+      "work": "svp_wiki_qa_elements",
+      "quote": "C = (a2 - h2)/2",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L172",
+      "extraction_method": "manual",
+      "title": "SVP wiki: C = (a² − h²)/2"
+    },
+    {
+      "id": "svp_F_never_prime",
+      "work": "svp_wiki_qa_elements",
+      "quote": "The number values which can be used for F are never prime numbers because F = ab and a and b are prime to each other.",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L308",
+      "extraction_method": "manual",
+      "title": "SVP wiki: 'F are never prime numbers'"
+    },
+    {
+      "id": "svp_L_CF_over_12",
+      "work": "svp_wiki_qa_elements",
+      "quote": "13) L = C*F/12",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L385",
+      "extraction_method": "manual",
+      "title": "SVP wiki: L = C·F/12 (under ellipse measurements list)"
+    },
+    {
+      "id": "svp_I_must_be_positive",
+      "work": "svp_wiki_qa_elements",
+      "quote": "15) I = C-F (result must be a positive number)",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L389",
+      "extraction_method": "manual",
+      "title": "SVP wiki: 'I must be positive' claim"
+    },
+    {
+      "id": "svp_h_semi_minor_no_sqrt",
+      "work": "svp_wiki_qa_elements",
+      "quote": "21) h = d(a*b) = Half height of ellipse",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L406",
+      "extraction_method": "manual",
+      "title": "SVP wiki: h = d(a·b) — missing sqrt"
+    },
+    {
+      "id": "svp_L_FC_over_2_variant",
+      "work": "svp_wiki_qa_elements",
+      "quote": "L = FC/2",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L546",
+      "extraction_method": "manual",
+      "title": "SVP wiki: L = FC/2 (under L identity block)"
+    },
+    {
+      "id": "svp_music_major_third",
+      "work": "svp_wiki_qa_elements",
+      "quote": "| Major Third | 5:4 | G:F",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L675",
+      "extraction_method": "manual",
+      "title": "SVP wiki: Major Third = G:F"
+    },
+    {
+      "id": "svp_music_perfect_twelfth",
+      "work": "svp_wiki_qa_elements",
+      "quote": "| Perfect Twelfth | 3:1 | C:L",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L681",
+      "extraction_method": "manual",
+      "title": "SVP wiki: Perfect Twelfth = C:L"
+    },
+    {
+      "id": "svp_music_double_octave",
+      "work": "svp_wiki_qa_elements",
+      "quote": "| Double Octave | 4:1 | F:L",
+      "source_locator": "file:docs/theory/svp_wiki_qa_elements_snapshot.md#L685",
+      "extraction_method": "manual",
+      "title": "SVP wiki: Double Octave = F:L"
+    },
+    {
+      "id": "pond_torus_parameters",
+      "work": "pond_svp_torus",
+      "quote": "Dale torus parameters: center=C, tube=F, outer=H=C+F, inner=|I|=|C-F|, with G=RMS(H,I) and the bridge identity C²+F²=G².",
+      "source_locator": "file:private/svp_propositions_qa_mapping.md",
+      "extraction_method": "manual",
+      "title": "Pond: Dale torus parameterization (C,F,H,I,G)"
+    }
+  ],
+
+  "observations": [
+    {
+      "id": "obs:verified_dimensional_spelling",
+      "title": "Verified: 3-dimensional (standard spelling)",
+      "body": "The standard English form is 'dimensional'. SVP wiki line 50 has 'diminsional' — single-character OCR-style drop.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:verified_decimal_notation",
+      "title": "Verified: decimal notation (not 'decinary')",
+      "body": "Standard English 'decimal' (base-10). 'decinary' is not a standard term. Context of SVP wiki line 52 confirms base-10 is intended.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:verified_chromosomes",
+      "title": "Verified: 'chromosomes' (standard spelling)",
+      "body": "Standard spelling is 'chromosomes'. SVP wiki line 66 has 'choromosomes' with inserted 'o' — OCR-style typo.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:verified_law12e_second_root",
+      "title": "Verified: Law 12(e) should reference the second (intermediate) root",
+      "body": "On the 3:4:5 triangle (b=1,e=1,d=2,a=3): diagonal G=5, altitude F=3, so G−F=2. 2×(first² + fourth²) = 2×(1+9)=20 ≠ 2. The correct statement per Law 12(d) analog is: 2×(second root)² = 2e² = G−F. Wiki's 'first and fourth roots' is a typo for 'second root'.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:verified_law13_parenthetical_labels",
+      "title": "Unresolved: Laws 13(a)/(b) parenthetical identity tags",
+      "body": "Wiki line 86 Law 13(a) ends with '(b)' and Law 13(b) ends with '(a)'. Whether these parentheticals are the intended mapping (first root → B identity, fourth root → A identity) or are transposed labels is not explicit in the source. Convention not confirmed by Dale; flagged as dispute pending resolution.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:verified_C_identity_a2_b2",
+      "title": "Verified: C = (a² − b²)/2 (not a² − h²)",
+      "body": "Expanding C = 2de using a=b+2e, b=b: a²−b² = (b+2e)²−b² = 4be+4e² = 4e(b+e) = 4ed. So C = (a²−b²)/2 = 2de ✓. Substituting 'h' instead of 'b' is incoherent — h = d√(ab) is half-height of ellipse, not a root. SVP wiki line 172 has h where b is intended.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:F_prime_in_unity_set",
+      "title": "Verified: F=3 in the Unity set (1,1,2,3) IS prime",
+      "body": "Unity set roots are (b,e,d,a)=(1,1,2,3). F = a·b = 3·1 = 3. 3 is prime. Therefore SVP wiki's claim 'F are never prime numbers' is FALSE for Unity. Wiki's justification (F=ab, a and b coprime) does not preclude F itself being prime when b=1.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:I_can_be_negative",
+      "title": "Verified: I may be negative (hyperbolic regime, cert [140])",
+      "body": "I = C − F. Cert family [140] (QA conic discriminant) establishes that I<0 corresponds to the hyperbolic regime, I=0 parabolic, I>0 elliptic. Forcing I positive at source level excludes the hyperbolic half of the conic classification.",
+      "source_locator": "cert:140",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:h_with_sqrt",
+      "title": "Verified: h = d·√(a·b) (with square root)",
+      "body": "Semi-minor of the QA ellipse is h = d·√(a·b). Squaring: h² = d²·ab = D·F. SVP wiki line 406 'h = d(a*b)' is missing the radical.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:music_major_third_is_G_over_C",
+      "title": "Verified: Major Third ratio on QA 3:4:5 is G:C (5:4), not G:F",
+      "body": "On 3:4:5 (C=4, F=3, G=5): G/F=5/3 (Major Sixth). G/C=5/4 (Major Third). SVP wiki line 675 attributes Major Third to G:F, which is actually Major Sixth.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    },
+    {
+      "id": "obs:music_twelfth_is_F_over_L",
+      "title": "Verified: Perfect Twelfth (3:1) on QA triangle is F:L, not C:L",
+      "body": "L = C·F/12 (line 385). On 3:4:5: C=4, F=3, L=C·F/12 = 4·3/12 = 1. F/L = 3/1 = 3 (Twelfth). C/L = 4/1 = 4 (Double Octave). SVP wiki lines 681 & 685 have Twelfth (C:L) and Double Octave (F:L) swapped.",
+      "source_locator": "file:docs/theory/QA_SYNTAX_SVP_SEMANTICS.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal"
+    }
+  ],
+
+  "contradicts": [
+    {"src": "sc:svp_dim_ocr",               "dst": "obs:verified_dimensional_spelling", "reason": "ocr"},
+    {"src": "sc:svp_decinary_typo",         "dst": "obs:verified_decimal_notation",     "reason": "typo"},
+    {"src": "sc:svp_choromosomes_ocr",      "dst": "obs:verified_chromosomes",          "reason": "ocr"},
+    {"src": "sc:svp_law12e_first_fourth",   "dst": "obs:verified_law12e_second_root",   "reason": "typo"},
+    {"src": "sc:svp_law13_labels",          "dst": "obs:verified_law13_parenthetical_labels", "reason": "dispute"},
+    {"src": "sc:svp_C_identity_a2_h2",      "dst": "obs:verified_C_identity_a2_b2",     "reason": "typo"},
+    {"src": "sc:svp_F_never_prime",         "dst": "obs:F_prime_in_unity_set",          "reason": "true"},
+    {"src": "sc:svp_I_must_be_positive",    "dst": "obs:I_can_be_negative",             "reason": "true"},
+    {"src": "sc:svp_h_semi_minor_no_sqrt",  "dst": "obs:h_with_sqrt",                   "reason": "typo"},
+    {"src": "sc:svp_L_FC_over_2_variant",   "dst": "sc:svp_L_CF_over_12",               "reason": "variant"},
+    {"src": "sc:svp_music_major_third",     "dst": "obs:music_major_third_is_G_over_C", "reason": "typo"},
+    {"src": "sc:svp_music_perfect_twelfth", "dst": "obs:music_twelfth_is_F_over_L",     "reason": "typo"},
+    {"src": "sc:svp_music_double_octave",   "dst": "obs:music_twelfth_is_F_over_L",     "reason": "typo"}
+  ],
+
+  "supersedes": [
+    {"src": "cert:fs:qa_kg_consistency_cert_v4", "dst": "cert:fs:qa_kg_consistency_cert_v3"},
+    {"src": "cert:fs:qa_kg_consistency_cert_v3", "dst": "cert:fs:qa_kg_consistency_cert_v2"},
+    {"src": "cert:fs:qa_kg_consistency_cert_v2", "dst": "cert:fs:qa_kg_consistency_cert_v1"}
+  ]
+}

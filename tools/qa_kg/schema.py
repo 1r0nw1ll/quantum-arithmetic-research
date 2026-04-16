@@ -17,13 +17,27 @@ Authority values (locked — 4 crisp):
   - agent     = Claude/Codex/OpenCode outputs (OB with originSessionId,
                 collab-bus events with session:* identity).
 
-Epistemic_status values: axiom, source_claim, certified, observation,
-interpretation, conjecture. The allowed authority × epistemic_status matrix
-is enforced by cert [252] EF3; see
+Epistemic_status values: axiom, source_claim, source_work, certified,
+observation, interpretation, conjecture. The allowed authority ×
+epistemic_status matrix is enforced by cert [252] EF3; see
 qa_alphageometry_ptolemy/qa_kg_epistemic_fields_cert_v1/allowed_matrix.json.
 
-Lifecycle_state ∈ {current, deprecated, superseded, withdrawn}. Reserved in
-v3 but not yet a firewall driver — Phase 3+ work.
+Phase 3: `source_work` added as the epistemic_status for primary-source
+containers (a book, paper, wiki page) to keep them structurally distinct
+from `source_claim` (a quoted fragment within a work). SCHEMA_VERSION
+stays at 3 — this is an additive enum extension, not a structural change.
+Old DBs rely on application-level `_validate_node_epistemic` in kg.py
+plus the [252] EF3 allowed-matrix gate for runtime enforcement. Fresh
+DBs get the updated CHECK constraint at DDL time. The canonical
+migration path for a stale DB is:
+    rm tools/qa_kg/qa_kg.db && python -m tools.qa_kg.cli populate
+init_db emits a logged warning if an existing DB's CHECK constraint
+does not contain 'source_work' — pointing at this rebuild path.
+
+Lifecycle_state ∈ {current, deprecated, superseded, withdrawn}. Phase 3
+activates `supersedes` edges alongside `lifecycle_state` and introduces
+the extractor bridge translating `_status: frozen` file markers to
+`lifecycle_state` on cert nodes (see tools/qa_kg/extractors/certs.py).
 
 Back-compat aliases (Coord/compute_be/tier_for_coord) removed in v3 per the
 Phase-0 pin; forward-failing test
@@ -34,16 +48,21 @@ from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
+import logging
 import os
 import sqlite3
 from pathlib import Path
 
+_log = logging.getLogger("qa_kg.schema")
+
 
 SCHEMA_VERSION = 3  # Phase 1: epistemic fields; alias removal atomic with this bump
+# Phase 3 (2026-04-16): added "source_work" to EPISTEMIC_STATUSES as an
+# additive enum extension. See module docstring; SCHEMA_VERSION stays 3.
 
 AUTHORITIES = ("primary", "derived", "internal", "agent")
 EPISTEMIC_STATUSES = (
-    "axiom", "source_claim", "certified",
+    "axiom", "source_claim", "source_work", "certified",
     "observation", "interpretation", "conjecture",
 )
 LIFECYCLE_STATES = ("current", "deprecated", "superseded", "withdrawn")
@@ -159,6 +178,35 @@ def _column_names(conn: sqlite3.Connection, table: str) -> set[str]:
     return {r[1] for r in conn.execute(f"PRAGMA table_info({table})").fetchall()}
 
 
+def _check_epistemic_enum_drift(conn: sqlite3.Connection) -> None:
+    """Detect old-DB CHECK-constraint drift against current EPISTEMIC_STATUSES.
+
+    Phase 3 adds 'source_work' as an additive enum value. SQLite cannot
+    ALTER an existing CHECK constraint in place, so a DB created before
+    this phase will still carry the old check string. Application-level
+    validation in kg._validate_node_epistemic and cert [252] EF3 cover
+    runtime safety, but we log a loud warning so the user has a clean
+    pointer to the rebuild path if they hit enum rejections at insert
+    time.
+    """
+    row = conn.execute(
+        "SELECT sql FROM sqlite_master WHERE type='table' AND name='nodes'"
+    ).fetchone()
+    if row is None or row[0] is None:
+        return
+    sql = row[0]
+    missing = [s for s in EPISTEMIC_STATUSES if f"'{s}'" not in sql]
+    if missing:
+        _log.warning(
+            "qa_kg.db CHECK constraint is missing epistemic_status values %s. "
+            "Application-level validation still enforces the current enum, but "
+            "DB-level CHECK will not. To align the DB CHECK with the current "
+            "schema, rebuild: rm tools/qa_kg/qa_kg.db && "
+            "python -m tools.qa_kg.cli populate",
+            missing,
+        )
+
+
 def _migrate_to_v3(conn: sqlite3.Connection) -> None:
     """Idempotent ALTER TABLE migration for DBs created under earlier versions.
 
@@ -193,6 +241,7 @@ def init_db(path: Path | str = DEFAULT_DB) -> sqlite3.Connection:
     conn.executescript("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
     conn.executescript(DDL)
     _migrate_to_v3(conn)
+    _check_epistemic_enum_drift(conn)
     conn.execute(
         "INSERT OR REPLACE INTO meta(key, value) VALUES ('schema_version', ?)",
         (str(SCHEMA_VERSION),),

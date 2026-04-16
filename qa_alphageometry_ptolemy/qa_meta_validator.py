@@ -7001,12 +7001,46 @@ def _validate_signal_generator_inference_cert_family(base_dir: str) -> Optional[
     return None
 
 
-def _validate_kg_consistency_cert_v3(base_dir):
-    """QA-KG Consistency Cert [225] v3: validates graph consistency after Phase 1 epistemic fields + alias removal. Schema v3 (epistemic columns authority/epistemic_status/method/source_locator/lifecycle_state). Gates: KG1 no self-vetting, KG2 no contradicts cycles, KG3 Theorem NT firewall tri-state, KG4 satellite orphan aging WARN, KG5 tier ≡ canonical orbit classifier, KG6 Candidate F integrity [202], KG7 epistemic fields non-null, KG8 frozen certs not in FAMILY_SWEEPS, KG9 AXIOM_CODES canonical, KG10 no except-Exception-continue swallows. Source: docs/specs/QA_MEM_SCOPE.md; QA_AXIOMS_BLOCK.md (Dale 2026); CLAUDE.md; cert [226]. Supersedes v2 (frozen)."""
+# Phase 3 WARN-capture side-channel — populated by the KG cert validator_fns
+# below, consumed by the `_meta_ledger.json` writer near the end of the
+# meta-validator sweep. Key = str(fam_id); value = list of
+# {"code": "...", "msg": "..."} dicts parsed from `[WARN]` stdout lines.
+# Stdout parsing is a Phase 3 expedient (§12a); Phase 5 switches validators
+# to structured returns and this text-scrape goes away.
+_kg_warn_lines_by_fam_id: dict[str, list[dict[str, str]]] = {}
+import re as _kg_warn_re
+_KG_WARN_LINE = _kg_warn_re.compile(
+    r"^\[WARN\]\s+(?P<code>\S+)\s+(?P<desc>.*?)\s+—\s+(?P<msg>.*)$"
+)
+
+
+def _capture_warn_lines(fam_id: int, stdout: str) -> None:
+    """Parse `[WARN] CODE  desc — msg` lines from a cert validator's stdout
+    and stash them for the _meta_ledger.json writer.
+
+    Matches both em-dash (—) and regular hyphen-with-spaces (-) as a
+    separator tolerance. Non-matching WARN lines fall back to
+    {'code': 'UNSTRUCTURED', 'msg': <full line>}.
+    """
+    warns: list[dict[str, str]] = []
+    for line in (stdout or "").splitlines():
+        if not line.startswith("[WARN]"):
+            continue
+        m = _KG_WARN_LINE.match(line)
+        if m:
+            warns.append({"code": m.group("code"), "msg": m.group("msg")})
+        else:
+            warns.append({"code": "UNSTRUCTURED", "msg": line[len("[WARN]"):].strip()})
+    if warns:
+        _kg_warn_lines_by_fam_id[str(fam_id)] = warns
+
+
+def _validate_kg_consistency_cert_v4(base_dir):
+    """QA-KG Consistency Cert [225] v4: validates graph consistency after Phase 3 SourceWork/SourceClaim/supersedes invariants (schema v3 stable). Gates: KG1 no self-vetting, KG2 no contradicts cycles, KG3 Theorem NT firewall tri-state, KG4 satellite orphan aging WARN, KG5 tier ≡ canonical orbit classifier, KG6 Candidate F integrity [202], KG7 epistemic fields non-null, KG8 frozen certs not in FAMILY_SWEEPS, KG9 AXIOM_CODES canonical, KG10 no except-Exception-continue swallows, KG11 SourceWork primary+source_work, KG12 SourceClaim quoted-from FK, KG13 supersedes DAG + lifecycle consistency. Source: docs/specs/QA_MEM_SCOPE.md; QA_AXIOMS_BLOCK.md (Dale 2026); CLAUDE.md; cert [226]; cert [253]. Supersedes v3 (frozen)."""
     import subprocess
-    validator = os.path.join(base_dir, "qa_kg_consistency_cert_v3", "qa_kg_consistency_cert_validate.py")
+    validator = os.path.join(base_dir, "qa_kg_consistency_cert_v4", "qa_kg_consistency_cert_validate.py")
     if not os.path.exists(validator):
-        return "missing qa_kg_consistency_cert_v3/qa_kg_consistency_cert_validate.py"
+        return "missing qa_kg_consistency_cert_v4/qa_kg_consistency_cert_validate.py"
     db_path = os.path.join(os.path.dirname(base_dir), "tools", "qa_kg", "qa_kg.db")
     if not os.path.exists(db_path):
         return None  # DB not built yet — skip
@@ -7015,7 +7049,27 @@ def _validate_kg_consistency_cert_v3(base_dir):
         capture_output=True, text=True, timeout=60,
     )
     if proc.returncode != 0:
-        raise RuntimeError(f"[225] v3 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+        raise RuntimeError(f"[225] v4 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    _capture_warn_lines(225, proc.stdout or "")
+    return None
+
+
+def _validate_kg_source_claims_cert(base_dir):
+    """QA-KG Source Claims Cert [253] v1: validates Phase 3 SourceClaim / SourceWork / contradicts ingestion. Gates: SC1 quote + locator resolves, SC2 quoted-from FK to SourceWork, SC3 extraction_method closed set {manual,ocr,llm,script}, SC4 locator-conflict rule (same locator + different body requires contradicts edge), SC5 reason closed set {ocr,variant,typo,dispute,true} on contradicts edges, SC6 no contradicts cycles (scoped), SC7 WARN unresolved disputes count, SC8 contradicts endpoint whitelist (Axiom + agent forbidden). Source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg/extractors/source_claims.py; tools/qa_kg/fixtures/source_claims_phase3.json."""
+    import subprocess
+    validator = os.path.join(base_dir, "qa_kg_source_claims_cert_v1", "qa_kg_source_claims_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_kg_source_claims_cert_v1/qa_kg_source_claims_cert_validate.py"
+    db_path = os.path.join(os.path.dirname(base_dir), "tools", "qa_kg", "qa_kg.db")
+    if not os.path.exists(db_path):
+        return None  # DB not built yet — skip
+    proc = subprocess.run(
+        [sys.executable, validator, "--db", db_path],
+        capture_output=True, text=True, timeout=60,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"[253] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    _capture_warn_lines(253, proc.stdout or "")
     return None
 
 
@@ -7034,6 +7088,7 @@ def _validate_kg_epistemic_fields_cert(base_dir):
     )
     if proc.returncode != 0:
         raise RuntimeError(f"[252] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    _capture_warn_lines(252, proc.stdout or "")
     return None
 
 
@@ -7052,6 +7107,7 @@ def _validate_kg_firewall_effective_cert(base_dir):
     )
     if proc.returncode != 0:
         raise RuntimeError(f"[227] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    _capture_warn_lines(227, proc.stdout or "")
     return None
 
 
@@ -8006,16 +8062,21 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
-    (225, "QA-KG Consistency Cert v3",
-     _validate_kg_consistency_cert_v3,
-     "Graph consistency under schema v3: epistemic fields + alias removal. KG1-KG10 gates. Supersedes v2 (frozen). Checks KG1/KG2/KG3/KG4/KG5/KG6/KG7/KG8/KG9/KG10; validator runs against live qa_kg.db",
-     "225_qa_kg_consistency_cert_v3",
-     "qa_kg_consistency_cert_v3", True),
+    (225, "QA-KG Consistency Cert v4",
+     _validate_kg_consistency_cert_v4,
+     "Graph consistency under schema v3 (Phase 3: SourceWork/SourceClaim/supersedes invariants). KG1-KG13 gates. Supersedes v3 (frozen). Checks KG1/KG2/KG3/KG4/KG5/KG6/KG7/KG8/KG9/KG10/KG11/KG12/KG13; validator runs against live qa_kg.db",
+     "225_qa_kg_consistency_cert_v4",
+     "qa_kg_consistency_cert_v4", True),
     (252, "QA-KG Epistemic Fields Cert v1",
      _validate_kg_epistemic_fields_cert,
      "Authority/epistemic_status/method/source_locator/lifecycle_state correctness per Phase 1 QA-MEM. Allowed matrix enforced. Checks EF1/EF2/EF3/EF4/EF5/EF6; validator runs against live qa_kg.db",
      "252_qa_kg_epistemic_fields_cert_v1",
      "qa_kg_epistemic_fields_cert_v1", True),
+    (253, "QA-KG Source Claims Cert v1",
+     _validate_kg_source_claims_cert,
+     "SourceClaim / SourceWork / contradicts ingestion per Phase 3 QA-MEM. Reason closed set {ocr,variant,typo,dispute,true}; SourceClaim extraction_method closed set {manual,ocr,llm,script}. Checks SC1/SC2/SC3/SC4/SC5/SC6/SC7/SC8; validator runs against live qa_kg.db",
+     "253_qa_kg_source_claims_cert_v1",
+     "qa_kg_source_claims_cert_v1", True),
     (227, "QA-KG Firewall Effective Cert v1",
      _validate_kg_firewall_effective_cert,
      "Phase 2 Theorem NT firewall effectiveness. DB-backed promoted-from, ledger staleness, broadcast provenance. Checks FE1/FE2/FE3/FE4/FE5/FE6; validator runs against live qa_kg.db",
@@ -8702,11 +8763,17 @@ if __name__ == "__main__":
         _ledger_git_head = "UNKNOWN"
     for _lk in _ledger_results:
         _ledger_results[_lk]["git_head"] = _ledger_git_head
+        # Phase 3 (§12a): attach WARN lines captured from KG cert stdout.
+        # Missing = no warns (backward compatible with Phase 2 consumers).
+        _warns_for_this = _kg_warn_lines_by_fam_id.get(_lk)
+        if _warns_for_this:
+            _ledger_results[_lk]["warns"] = _warns_for_this
     _ledger_path = os.path.join(base_dir, "_meta_ledger.json")
     with open(_ledger_path, "w", encoding="utf-8") as _lf:
         json.dump(_ledger_results, _lf, indent=2, sort_keys=True)
+    _n_with_warns = sum(1 for _v in _ledger_results.values() if _v.get("warns"))
     print(f"\n[LEDGER] Wrote {len(_ledger_results)} entries to _meta_ledger.json "
-          f"(git_head={_ledger_git_head[:10]}...)")
+          f"(git_head={_ledger_git_head[:10]}..., {_n_with_warns} with warns)")
 
     # --- External validation: Level 3 recompute (real data + real weights) ---
     print("\n--- EXTERNAL VALIDATION ---")

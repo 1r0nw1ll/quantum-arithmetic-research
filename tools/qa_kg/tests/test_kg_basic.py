@@ -454,6 +454,371 @@ def test_promote_rejects_mismatched_git_head():
             raise AssertionError("must reject mismatched git_head")
 
 
+# =========================================================================
+# Phase 3 tests — SourceWork / SourceClaim / contradicts / supersedes /
+# locators / certs lifecycle bridge. All use real-shape ephemeral DBs,
+# matching the Phase 2 FE4 no-mocks standard.
+# =========================================================================
+
+
+def test_source_work_constructor_and_upsert():
+    """Node.source_work builds a (primary, source_work, Work) node; upsert
+    + read-back preserves fields."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        n = Node.source_work(
+            work_id="unit_test_work",
+            title="Unit Test Work",
+            source_locator="file:docs/theory/svp_wiki_qa_elements_snapshot.md",
+            body="test body",
+        )
+        assert n.id == "work:unit_test_work"
+        assert n.node_type == "Work"
+        assert n.authority == "primary"
+        assert n.epistemic_status == "source_work"
+        kg.upsert_node(n)
+        row = kg.conn.execute(
+            "SELECT * FROM nodes WHERE id=?", (n.id,)
+        ).fetchone()
+        assert row["authority"] == "primary"
+        assert row["epistemic_status"] == "source_work"
+        assert row["node_type"] == "Work"
+
+
+def test_source_claim_constructor_and_upsert():
+    """Node.source_claim builds a (primary, source_claim, Claim) node;
+    factory rejects empty quote and invalid extraction_method."""
+    sc = Node.source_claim(
+        claim_id="sctest",
+        quote="L = FC/2",
+        source_locator="file:docs/theory/svp_wiki_qa_elements_snapshot.md#L546",
+        extraction_method="manual",
+    )
+    assert sc.id == "sc:sctest"
+    assert sc.node_type == "Claim"
+    assert sc.authority == "primary"
+    assert sc.epistemic_status == "source_claim"
+    assert sc.body == "L = FC/2"
+
+    try:
+        Node.source_claim(
+            claim_id="x", quote="",
+            source_locator="file:foo", extraction_method="manual",
+        )
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("factory must reject empty quote")
+
+    try:
+        Node.source_claim(
+            claim_id="x", quote="a",
+            source_locator="file:foo", extraction_method="nonsense",
+        )
+    except ValueError:
+        pass
+    else:
+        raise AssertionError("factory must reject bad extraction_method")
+
+
+def test_source_claim_must_have_quoted_from_edge():
+    """SC2 catches SourceClaim without quoted-from edge (checked via live
+    DB query pattern that [253] SC2 uses)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node.source_claim(
+            claim_id="orphan",
+            quote="orphan quote",
+            source_locator="file:docs/theory/svp_wiki_qa_elements_snapshot.md",
+            extraction_method="manual",
+        ))
+        # No quoted-from edge. SC2's query should find 0 edges.
+        edges = kg.conn.execute(
+            "SELECT * FROM edges WHERE src_id=? AND edge_type='quoted-from'",
+            ("sc:orphan",),
+        ).fetchall()
+        assert len(edges) == 0, "SC2 precondition: orphan has no quoted-from edges"
+
+
+def test_quoted_from_is_non_causal():
+    """Scenario: an agent-authored Thought cites a SourceWork it referenced
+    while reasoning. Emitting agent-thought --quoted-from--> source-work
+    must NOT raise FirewallViolation — quoted-from is structural metadata,
+    not a causal derivation. If this started firing the firewall, the
+    structural/causal split in orbit.py would be silently broken and
+    agents would lose the ability to cite sources without promoting first."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="agent:thinker", node_type="Thought",
+            title="agent thought", body="a thinking agent",
+            authority="agent", epistemic_status="observation",
+        ))
+        kg.upsert_node(Node.source_work(
+            work_id="cited_work", title="Cited Work",
+            source_locator="file:CLAUDE.md",
+        ))
+        # Non-causal edge from agent to SourceWork — must succeed.
+        kg.upsert_edge(Edge(
+            src_id="agent:thinker", dst_id="work:cited_work",
+            edge_type="quoted-from", confidence=1.0,
+        ))
+        row = kg.conn.execute(
+            "SELECT 1 FROM edges WHERE src_id='agent:thinker' AND "
+            "dst_id='work:cited_work' AND edge_type='quoted-from'"
+        ).fetchone()
+        assert row is not None
+        # And agent causal edges STILL blocked (regression guard).
+        try:
+            kg.upsert_edge(Edge(
+                src_id="agent:thinker", dst_id="work:cited_work",
+                edge_type="validates",
+            ))
+        except FirewallViolation:
+            pass
+        else:
+            raise AssertionError(
+                "regression: agent causal edge passed without promote"
+            )
+
+
+def test_contradicts_accepts_valid_reason():
+    """A contradicts edge with reason in closed set round-trips via
+    provenance JSON."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node.source_work(
+            work_id="w", title="W", source_locator="file:CLAUDE.md",
+        ))
+        kg.upsert_node(Node.source_claim(
+            claim_id="a", quote="X", source_locator="file:CLAUDE.md#L1",
+            extraction_method="manual",
+        ))
+        kg.upsert_node(Node.source_claim(
+            claim_id="b", quote="Y", source_locator="file:CLAUDE.md#L1",
+            extraction_method="manual",
+        ))
+        kg.upsert_edge(Edge(
+            src_id="sc:a", dst_id="sc:b",
+            edge_type="contradicts",
+            provenance=json.dumps({"reason": "typo", "extractor": "t"}),
+        ))
+        row = kg.conn.execute(
+            "SELECT provenance FROM edges WHERE src_id='sc:a' "
+            "AND dst_id='sc:b' AND edge_type='contradicts'"
+        ).fetchone()
+        prov = json.loads(row["provenance"])
+        assert prov["reason"] == "typo"
+
+
+def test_supersedes_dag_cycle_detection():
+    """KG13's cycle detection catches A→B→A supersedes loop."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="cert:A", node_type="Cert", title="A", body="a",
+            authority="derived", epistemic_status="certified",
+            lifecycle_state="superseded",
+        ))
+        kg.upsert_node(Node(
+            id="cert:B", node_type="Cert", title="B", body="b",
+            authority="derived", epistemic_status="certified",
+            lifecycle_state="superseded",
+        ))
+        kg.upsert_edge(Edge(src_id="cert:A", dst_id="cert:B",
+                            edge_type="supersedes"))
+        kg.upsert_edge(Edge(src_id="cert:B", dst_id="cert:A",
+                            edge_type="supersedes"))
+        # Import KG13 checker and verify it flags this.
+        import importlib.util as _iu
+        spec_path = (
+            Path(__file__).resolve().parents[3]
+            / "qa_alphageometry_ptolemy"
+            / "qa_kg_consistency_cert_v4"
+            / "qa_kg_consistency_cert_validate.py"
+        )
+        spec = _iu.spec_from_file_location("_kg_v4_validator", spec_path)
+        mod = _iu.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        ok, msg, detail = mod.check_kg13_supersedes_dag_and_lifecycle(kg.conn)
+        assert not ok, "KG13 must flag A→B→A cycle"
+        assert any("cycle" in d for d in detail)
+
+
+def test_supersedes_lifecycle_consistency():
+    """A superseded node with 0 incoming supersedes edges fails KG13."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="cert:orphan_v1", node_type="Cert", title="orphan",
+            body="o", authority="derived", epistemic_status="certified",
+            lifecycle_state="superseded",  # claims superseded, but...
+        ))
+        # ...nobody supersedes it. KG13 fires.
+        import importlib.util as _iu
+        spec_path = (
+            Path(__file__).resolve().parents[3]
+            / "qa_alphageometry_ptolemy"
+            / "qa_kg_consistency_cert_v4"
+            / "qa_kg_consistency_cert_validate.py"
+        )
+        spec = _iu.spec_from_file_location("_kg_v4_validator2", spec_path)
+        mod = _iu.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        ok, _msg, detail = mod.check_kg13_supersedes_dag_and_lifecycle(kg.conn)
+        assert not ok
+        assert any("cert:orphan_v1" in d and "no incoming" in d for d in detail)
+
+
+def test_phase3_extractor_idempotent():
+    """Running source_claims.populate twice yields stable node + edge counts."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        # Seed the cert nodes the fixture's supersedes chain points at.
+        for vN in (1, 2, 3, 4):
+            kg.upsert_node(Node(
+                id=f"cert:fs:qa_kg_consistency_cert_v{vN}",
+                node_type="Cert",
+                title=f"stub v{vN}",
+                body=f"stub {vN}",
+                authority="derived",
+                epistemic_status="certified",
+            ))
+        from tools.qa_kg.extractors import source_claims
+        r1 = source_claims.populate(kg)
+        r2 = source_claims.populate(kg)
+        for k in ("works", "claims", "observations", "contradicts", "supersedes"):
+            assert r1[k] == r2[k], f"{k} count drifted: {r1[k]} vs {r2[k]}"
+        # Also confirm node count doesn't double.
+        n_total_1 = kg.conn.execute("SELECT COUNT(*) n FROM nodes").fetchone()["n"]
+        source_claims.populate(kg)
+        n_total_2 = kg.conn.execute("SELECT COUNT(*) n FROM nodes").fetchone()["n"]
+        assert n_total_1 == n_total_2
+
+
+def test_ef3_allows_primary_source_work():
+    """[252] EF3 allowed_matrix accepts (primary, source_work)."""
+    import importlib.util as _iu
+    spec_path = (
+        Path(__file__).resolve().parents[3]
+        / "qa_alphageometry_ptolemy"
+        / "qa_kg_epistemic_fields_cert_v1"
+        / "qa_kg_epistemic_fields_cert_validate.py"
+    )
+    spec = _iu.spec_from_file_location("_ef_validator", spec_path)
+    mod = _iu.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    matrix = mod._load_allowed_matrix()
+    assert "source_work" in matrix["primary"], (
+        "allowed_matrix must contain (primary, source_work) after Phase 3"
+    )
+    # Also verify EF3 passes on a real primary+source_work node.
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node.source_work(
+            work_id="ef3_test", title="EF3 Test",
+            source_locator="file:CLAUDE.md",
+        ))
+        ok, _msg, viols = mod.check_ef3(kg.conn, matrix)
+        assert ok, f"EF3 must pass on SourceWork node: {viols}"
+
+
+def test_sc8_rejects_axiom_endpoint():
+    """[253] SC8 rejects contradicts edge with Axiom src or dst."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="axiom:A1", node_type="Axiom",
+            title="A1", body="A1: No-Zero",
+            authority="primary", epistemic_status="axiom",
+        ))
+        kg.upsert_node(Node.source_work(
+            work_id="w", title="W", source_locator="file:CLAUDE.md",
+        ))
+        kg.upsert_node(Node.source_claim(
+            claim_id="s", quote="x", source_locator="file:CLAUDE.md",
+            extraction_method="manual",
+        ))
+        kg.upsert_edge(Edge(
+            src_id="axiom:A1", dst_id="sc:s",
+            edge_type="contradicts",
+            provenance=json.dumps({"reason": "typo"}),
+        ))
+        import importlib.util as _iu
+        spec_path = (
+            Path(__file__).resolve().parents[3]
+            / "qa_alphageometry_ptolemy"
+            / "qa_kg_source_claims_cert_v1"
+            / "qa_kg_source_claims_cert_validate.py"
+        )
+        spec = _iu.spec_from_file_location("_sc_validator", spec_path)
+        mod = _iu.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        ok, _msg, detail = mod.check_sc8_contradicts_endpoint_whitelist(
+            kg.conn, {"Axiom"}, {"agent"},
+        )
+        assert not ok
+        assert any("Axiom" in d for d in detail)
+
+
+def test_sc8_rejects_agent_endpoint():
+    """[253] SC8 rejects contradicts edge with agent-authority src — the
+    contradicts channel must not be used as a back door for unpromoted
+    agent dissent."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="agent:dissenter", node_type="Thought",
+            title="agent dissent", body="I disagree",
+            authority="agent", epistemic_status="conjecture",
+        ))
+        kg.upsert_node(Node(
+            id="obs:target", node_type="Claim",
+            title="target obs", body="observation",
+            authority="internal", epistemic_status="observation",
+        ))
+        # Insert contradicts edge directly; contradicts is not causal so
+        # the firewall doesn't block it at upsert_edge time. SC8 is what
+        # catches the agent endpoint later.
+        kg.upsert_edge(Edge(
+            src_id="agent:dissenter", dst_id="obs:target",
+            edge_type="contradicts",
+            provenance=json.dumps({"reason": "dispute"}),
+        ))
+        import importlib.util as _iu
+        spec_path = (
+            Path(__file__).resolve().parents[3]
+            / "qa_alphageometry_ptolemy"
+            / "qa_kg_source_claims_cert_v1"
+            / "qa_kg_source_claims_cert_validate.py"
+        )
+        spec = _iu.spec_from_file_location("_sc_validator2", spec_path)
+        mod = _iu.module_from_spec(spec)
+        spec.loader.exec_module(mod)
+        ok, _msg, detail = mod.check_sc8_contradicts_endpoint_whitelist(
+            kg.conn, {"Axiom"}, {"agent"},
+        )
+        assert not ok
+        assert any("agent" in d for d in detail)
+
+
+def test_certs_extractor_translates_frozen_to_superseded():
+    """§6a lifecycle bridge: frozen with sibling _v<N+1> → superseded;
+    frozen without successor → deprecated; not frozen → current."""
+    from tools.qa_kg.extractors.certs import _lifecycle_for_status
+    repo = Path(__file__).resolve().parents[3]
+    meta = repo / "qa_alphageometry_ptolemy"
+    # v1 is frozen (banner-style _status), v2/v3 exist as successors:
+    # expect superseded.
+    assert _lifecycle_for_status(meta / "qa_kg_consistency_cert_v1") == "superseded"
+    # v3 is now frozen by Phase 3, v4 exists: expect superseded.
+    assert _lifecycle_for_status(meta / "qa_kg_consistency_cert_v3") == "superseded"
+    # v4 is current (no successor sibling yet): expect current.
+    assert _lifecycle_for_status(meta / "qa_kg_consistency_cert_v4") == "current"
+    # EpistemicFields v1 has no sibling pattern: expect current.
+    assert _lifecycle_for_status(meta / "qa_kg_epistemic_fields_cert_v1") == "current"
+
+
 TESTS = [
     test_index_a1,
     test_qa_step_a1,
@@ -475,6 +840,19 @@ TESTS = [
     test_promote_rejects_bad_promoter,
     test_promote_rejects_stale_ledger,
     test_promote_rejects_mismatched_git_head,
+    # Phase 3 additions
+    test_source_work_constructor_and_upsert,
+    test_source_claim_constructor_and_upsert,
+    test_source_claim_must_have_quoted_from_edge,
+    test_quoted_from_is_non_causal,
+    test_contradicts_accepts_valid_reason,
+    test_supersedes_dag_cycle_detection,
+    test_supersedes_lifecycle_consistency,
+    test_phase3_extractor_idempotent,
+    test_ef3_allows_primary_source_work,
+    test_sc8_rejects_axiom_endpoint,
+    test_sc8_rejects_agent_endpoint,
+    test_certs_extractor_translates_frozen_to_superseded,
 ]
 
 

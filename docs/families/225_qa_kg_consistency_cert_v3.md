@@ -1,6 +1,10 @@
 # [225] QA-KG Consistency Cert v3
 
-**Status:** PASS (KG1–KG10; meta-validator registered)
+> **FROZEN — superseded by v4.** See [225_qa_kg_consistency_cert_v4.md](225_qa_kg_consistency_cert_v4.md).
+> Phase 3 (2026-04-16) added gates KG11/KG12/KG13 for SourceWork / SourceClaim /
+> supersedes invariants; v3 is retained here for audit symmetry with v1 and v2.
+
+**Status:** FROZEN (was PASS KG1–KG10; no longer run as a production gate)
 **Created:** 2026-04-15
 **Supersedes:** [225] v2 (frozen)
 **Source:** Will Dale + Claude; docs/specs/QA_MEM_SCOPE.md; QA_AXIOMS_BLOCK.md (Dale, 2026); CLAUDE.md; cert [226].

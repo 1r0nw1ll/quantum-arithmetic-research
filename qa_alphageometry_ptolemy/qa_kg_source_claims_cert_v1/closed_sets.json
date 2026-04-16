@@ -1,0 +1,9 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 3 internal infrastructure closed-set declarations; grounds in docs/specs/QA_MEM_SCOPE.md §Phase 3 -->",
+  "reasons": ["ocr", "variant", "typo", "dispute", "true"],
+  "contradicts_endpoints": {
+    "forbidden_node_types":  ["Axiom"],
+    "forbidden_authorities": ["agent"]
+  },
+  "extraction_methods": ["manual", "ocr", "llm", "script"]
+}

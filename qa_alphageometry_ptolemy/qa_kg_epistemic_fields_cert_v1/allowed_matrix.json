@@ -1,7 +1,7 @@
 {
-  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 1 internal infrastructure; single source of truth for EF3 authority × epistemic_status allowed matrix -->",
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 1 internal infrastructure; single source of truth for EF3 authority × epistemic_status allowed matrix. Phase 3 (2026-04-16) added 'source_work' under primary for SourceWork container nodes (a book / paper / wiki page as distinct from a SourceClaim which is a quoted fragment within it). -->",
   "allowed": {
-    "primary":  ["axiom", "source_claim"],
+    "primary":  ["axiom", "source_claim", "source_work"],
     "derived":  ["certified", "observation"],
     "internal": ["interpretation", "observation"],
     "agent":    ["conjecture", "observation"]

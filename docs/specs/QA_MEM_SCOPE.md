@@ -1,8 +1,8 @@
-<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v2, [226], and project-internal authority docs -->
-# QA-MEM Scope (Phase 0)
+<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v4, [226], [227], [252], [253], and project-internal authority docs -->
+# QA-MEM Scope (through Phase 3)
 
-**Status:** Phase 0 — landmine fixes landed; Phase 1+ deferred.
-**Authority:** cert families `[225] v2` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root).
+**Status:** Phases 0–3 landed; Phase 4+ deferred.
+**Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts).
 **Companion files:** `QA_AXIOMS_BLOCK.md`, `qa_orbit_rules.py`, `tools/qa_retrieval/schema.py`, `memory/project_qa_mem_architecture.md`.
 
 ## What QA-MEM IS (as of Phase 0)
@@ -89,6 +89,92 @@ Phase 1 also adds a partial authority firewall: `authority=agent` nodes
 cannot emit causal edges without `via_cert`, enforced at `edge_allowed()`
 and in `kg.upsert_edge()`.
 
+### Phase 3 — contradictions + SourceClaim ingestion
+
+Landed 2026-04-16. First-class representation of quoted material from
+primary sources, plus machine-checkable contradictions and supersedes
+lifecycle.
+
+Schema: `EPISTEMIC_STATUSES` gains `"source_work"` as an additive enum
+value (SCHEMA_VERSION stays 3). Enforcement is application-level on
+old DBs + DB-level on fresh DBs; `[252]` EF3 allowed-matrix is the
+runtime safety net during the transition. `qa_kg.db` is gitignored and
+rebuildable (`python -m tools.qa_kg.cli build`).
+
+Edge types: `quoted-from` (SourceClaim → SourceWork, FK) and
+`supersedes` (newer → older, lifecycle) added to
+`orbit.STRUCTURAL_EDGE_TYPES`. Both are non-causal — the Theorem NT
+firewall does not apply, which is correct: a Work is an external fact
+and supersession is lifecycle metadata, not derivation. Regression
+guard asserts `CAUSAL_EDGE_TYPES.isdisjoint(STRUCTURAL_EDGE_TYPES)`.
+
+Node factories (`Node.source_work`, `Node.source_claim`) pin the
+`(node_type, authority, epistemic_status)` triple so extractors cannot
+mis-configure. SourceClaim IDs are `sc:<sha1(locator+quote)[:16]>` =
+64 bits, collision-safe at Phase 4.5 corpus scale.
+
+Contradicts: edge provenance is JSON with a `reason` in the closed set
+`{ocr, variant, typo, dispute, true}`. The forbidden endpoint set is
+`{node_type=Axiom, authority=agent}`: axioms don't contradict (rule-system
+bug) and agent dissent must flow through `kg.promote()` first. Both
+closed sets live in `qa_kg_source_claims_cert_v1/closed_sets.json`.
+
+Lifecycle bridge: `extractors/certs.py::_lifecycle_for_status` now
+translates the file-level `_status: frozen` marker to node-level
+`lifecycle_state ∈ {superseded, deprecated}` depending on whether a
+sibling `_v<N+1>` directory exists. Keeps KG8 (file) and KG13 (graph)
+aligned.
+
+Shared locator resolver: `tools/qa_kg/locators.py` provides
+`resolve_file_locator` / `resolve_pdf_locator` / `resolve_cert_locator`
+/ `resolve_any`. `[252]` EF4 and `[253]` SC1 both import from it — no
+divergence when Phase 4.5 adds URL scheme. `[252]`'s
+`mapping_protocol_ref.json` is unchanged (gate semantics unchanged);
+audit-trail SHA on the validator file reflects implementation
+re-organisation only.
+
+WARN capture: `qa_meta_validator.py` now scrapes `[WARN]` stdout
+lines from the four QA-KG certs and appends them as a `warns` list on
+each `_meta_ledger.json` entry. Additive — existing consumers
+(`kg.promote` freshness check) ignore the new field. Stdout parsing
+is a Phase 3 expedient; Phase 5+ switches to structured validator
+returns.
+
+New cert families:
+
+- **[253] QA_KG_SOURCE_CLAIMS_CERT.v1** — SC1 quote+locator, SC2
+  quoted-from FK to SourceWork, SC3 extraction_method closed set,
+  SC4 locator-conflict rule, SC5 reason closed set, SC6 no
+  contradicts cycles, SC7 WARN unresolved disputes, SC8 endpoint
+  whitelist (no Axiom, no agent).
+
+Cert bumps:
+
+- **[225] v4** — adds KG11 (SourceWork primary+source_work), KG12
+  (SourceClaim quoted-from FK), KG13 (supersedes DAG + lifecycle
+  consistency; superseded requires ≥1 incoming, deprecated exempt).
+  [225] v3 is frozen; v3 directory and doc retained for audit.
+
+Seed corpus:
+
+- `docs/theory/svp_wiki_qa_elements_snapshot.md` — verbatim SVP wiki
+  page, fetched 2026-04-16.
+- `tools/qa_kg/fixtures/source_claims_phase3.json` — 2 SourceWorks,
+  15 SourceClaims, 11 Observations, 13 contradicts edges covering all
+  5 `reason` values on real-data exemplars, 3 supersedes edges
+  forming the `[225] v4 → v3 → v2 → v1` chain. Volk PDF not located
+  under `Documents/wildberger_corpus/`; per plan §4 Volk-absent
+  fallback, reason=variant exemplar uses SVP-internal
+  L=FC/2 vs L=C·F/12 self-contradiction.
+
+Allowed matrix: `{primary}` now includes `source_work` alongside
+`axiom` and `source_claim`.
+
+Gates (all real-data, no mocks): `[225]` v4 KG1–KG13 PASS (KG3 N/A
+while agent nodes = 0); `[252]` v1 EF1–EF6 PASS; `[253]` v1 SC1–SC8
+PASS (SC7 WARN = 1 unresolved dispute: Law 13 parenthetical labels);
+`[227]` v1 FE1–FE6 PASS/N-A; tests 20+/20+ PASS; linter CLEAN.
+
 ### Phase 2 — full Theorem NT firewall (AgentNote)
 
 Landed 2026-04-15. The agent-authority firewall is now DB-backed: `edge_allowed`
@@ -126,11 +212,14 @@ tier + agent authority). PASS = firewall silent in normal operation.
 
 ## Roadmap (deferred, NOT in scope)
 
-- **Phase 3:** contradictions + sources — SourceClaim nodes with quote+locator,
-  seed `contradicts` for SVP wiki typos and Volk/Dale reconciliations.
-  `supersedes` edge type for lifecycle_state transitions.
 - **Phase 4:** authority-filtered retrieval + provenance-aware ranker.
-- **Phase 5:** determinism — frozen corpus fixture, graph-hash cert `[228]`.
+- **Phase 4.5:** full primary-source corpus ingestion (Ben/Dale books,
+  full Wildberger corpus, Levin 2026). Phase 3 shipped the mechanism +
+  minimum seed that validates every gate; Phase 4.5 is the scaled pass.
+  Also adds `url:` scheme to `tools/qa_kg/locators.py` resolver.
+- **Phase 5:** determinism — frozen corpus fixture, graph-hash cert `[228]`,
+  validators return structured results (replaces Phase 3 `[WARN]` stdout
+  scraping in `qa_meta_validator.py`).
 - **Phase 6:** agent integration — shadow-mode parallel to A-RAG before any
   replacement.
 
@@ -148,6 +237,12 @@ tier + agent authority). PASS = firewall silent in normal operation.
   (`qa_alphageometry_ptolemy/qa_kg_epistemic_fields_cert_v1/`)
 - Cert family [227] — Firewall effectiveness (FE1–FE6)
   (`qa_alphageometry_ptolemy/qa_kg_firewall_effective_cert_v1/`)
+- Cert family [225] v4 — current; KG1–KG13 (Phase 3 adds KG11–KG13)
+  (`qa_alphageometry_ptolemy/qa_kg_consistency_cert_v4/`)
+- Cert family [253] — SourceClaim / contradicts contracts (SC1–SC8)
+  (`qa_alphageometry_ptolemy/qa_kg_source_claims_cert_v1/`)
+- `docs/theory/svp_wiki_qa_elements_snapshot.md` — SVP wiki primary-source
+  snapshot (2026-04-16 fetch), locator target for Phase 3 SourceClaims
 - `QA_AXIOMS_BLOCK.md` (Dale 2026) — canonical QA axiom set A/T/S/F groups
 - `qa_orbit_rules.py` — canonical `orbit_family` classifier
 - `tools/qa_retrieval/schema.py` — A-RAG Candidate F reference implementation

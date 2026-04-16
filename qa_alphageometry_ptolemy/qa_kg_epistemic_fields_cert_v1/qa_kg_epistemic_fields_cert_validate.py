@@ -31,6 +31,12 @@ _MATRIX_FILE = _CERT_DIR / "allowed_matrix.json"
 if str(_REPO) not in sys.path:
     sys.path.insert(0, str(_REPO))
 
+# Phase 3 refactor: locator resolution moved to tools.qa_kg.locators so
+# [253] SC1 shares the exact same implementation. EF4 passes conn=None
+# to the cert-scheme resolver to preserve pre-Phase-3 vacuous cert:
+# semantics — [252] gate behavior is unchanged by this refactor.
+from tools.qa_kg.locators import resolve_any as _resolve_any_locator
+
 
 def _db_path_default() -> Path:
     override = os.environ.get("QA_KG_DB")
@@ -53,25 +59,14 @@ def _load_allowed_matrix() -> dict[str, list[str]]:
 
 
 def _resolve_source_locator(loc: str) -> tuple[bool, str]:
-    """Check that a source_locator resolves.
-    Schemes: file:<path>[:<line>], pdf:<path>#page=N, cert:<id>."""
-    if not loc:
-        return False, "empty source_locator"
-    if loc.startswith("file:"):
-        path_part = loc[5:].split(":")[0].split("#")[0]
-        full = _REPO / path_part
-        if full.exists():
-            return True, f"file exists: {path_part}"
-        return False, f"file not found: {full}"
-    if loc.startswith("pdf:"):
-        path_part = loc[4:].split("#")[0]
-        full = _REPO / path_part
-        if full.exists():
-            return True, f"pdf exists: {path_part}"
-        return False, f"pdf not found: {full}"
-    if loc.startswith("cert:"):
-        return True, "cert scheme (not file-resolved)"
-    return False, f"unknown scheme in {loc!r}"
+    """Thin pass-through to tools.qa_kg.locators.resolve_any.
+
+    Phase 3: resolution logic lives in the shared module (see header
+    comment). EF4 preserves its pre-Phase-3 cert: semantics by passing
+    conn=None — cert: scheme is treated as vacuous pass-through here,
+    not as a DB-backed node existence check.
+    """
+    return _resolve_any_locator(loc, repo_root=_REPO, conn=None)
 
 
 def check_ef1(conn: sqlite3.Connection) -> tuple[bool, str, list[str]]:

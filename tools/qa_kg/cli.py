@@ -26,6 +26,7 @@ from tools.qa_kg.extractors import certs as x_certs
 from tools.qa_kg.extractors import edges as x_edges
 from tools.qa_kg.extractors import ob as x_ob
 from tools.qa_kg.extractors import arag as x_arag
+from tools.qa_kg.extractors import source_claims as x_source_claims
 
 
 def _fmt(row) -> dict:
@@ -37,8 +38,18 @@ def cmd_build(args) -> int:
     a = x_axioms.populate(kg)
     r = x_rules.populate(kg)
     c = x_certs.populate(kg, run_validator=args.validate)
+    # Phase 3 source-claim seed. Runs AFTER certs.populate so cert nodes
+    # (cert:fs:qa_kg_consistency_cert_v<N>) exist for the supersedes chain
+    # in the seed to attach to, and BEFORE edges.populate so keyword
+    # co-occurrence edges can link against SourceClaim bodies too.
+    sc = x_source_claims.populate(kg)
     e = x_edges.populate(kg)
-    print(f"axioms: {len(a)}  rules: {len(r)}  certs: {len(c)}  edges: {e}")
+    print(
+        f"axioms: {len(a)}  rules: {len(r)}  certs: {len(c)}  "
+        f"source_claims: works={sc['works']} claims={sc['claims']} "
+        f"observations={sc['observations']} contradicts={sc['contradicts']} "
+        f"supersedes={sc['supersedes']}  edges: {e}"
+    )
     return 0
 
 

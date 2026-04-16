@@ -6957,6 +6957,28 @@ def _validate_ade_mutation_game_cert_family(base_dir):
     return None
 
 
+def _validate_g2_mutation_game_cert_family(base_dir):
+    """QA G2 Mutation Game Cert family [251] - first non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 using directed edge counts A(0->1)=3, A(1->0)=1 for Cartan [[2,-1],[-3,2]]. Verifies BFS closure at 12 integer populations, six positive plus six negative with R-=-R+, Humphreys §12.1 coordinate swap with three short and three long positive roots under G_sr=[[2,-3],[-3,6]], s0^2=s1^2=I, and strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f; Will Dale + Claude 2026-04-15. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_g2_mutation_game_cert_v1")
+    validator = os.path.join(fam_dir, "qa_g2_mutation_game_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_g2_mutation_game_cert_v1/qa_g2_mutation_game_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"qa_g2_mutation_game_cert self-test failed:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(f"qa_g2_mutation_game_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
+    if payload.get("ok") is not True:
+        raise RuntimeError(f"qa_g2_mutation_game_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
 def _validate_signal_generator_inference_cert_family(base_dir: str) -> Optional[str]:
     """QA Signal Generator Inference Cert family [209] — for any m-valued time series, e_t = ((b_{t+1} - b_t - 1) % m) + 1 is the unique A1-compliant generator. The signal IS the orbit; the generator IS the dynamics. b (amplitude state) and e (transition generator) are role-distinct per [208]. Cross-series generator synchrony measures coupling per [207]. Supersedes hardcoded CMAP/MICROSTATE_STATES lookups. EEG chb01: DR2=+0.157 p=0.0003 beyond delta; DR2=+0.085 p=0.024 beyond Observer 3. Source: Will Dale + Claude 2026-04-08. Checks SGI_1+CLOSURE/UNIQUE/ROLE/SYNC/EMPIRICAL/SUPERSEDE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -6976,6 +6998,42 @@ def _validate_signal_generator_inference_cert_family(base_dir: str) -> Optional[
         raise RuntimeError(f"qa_signal_generator_inference_cert self-test returned non-JSON:\nerror={exc}\nstdout={(proc.stdout or '').strip()}")
     if payload.get("ok") is not True:
         raise RuntimeError(f"qa_signal_generator_inference_cert self-test ok=false:\n{json.dumps(payload, indent=2, sort_keys=True)}")
+    return None
+
+
+def _validate_kg_consistency_cert_v3(base_dir):
+    """QA-KG Consistency Cert [225] v3: validates graph consistency after Phase 1 epistemic fields + alias removal. Schema v3 (epistemic columns authority/epistemic_status/method/source_locator/lifecycle_state). Gates: KG1 no self-vetting, KG2 no contradicts cycles, KG3 Theorem NT firewall tri-state, KG4 satellite orphan aging WARN, KG5 tier ≡ canonical orbit classifier, KG6 Candidate F integrity [202], KG7 epistemic fields non-null, KG8 frozen certs not in FAMILY_SWEEPS, KG9 AXIOM_CODES canonical, KG10 no except-Exception-continue swallows. Source: docs/specs/QA_MEM_SCOPE.md; QA_AXIOMS_BLOCK.md (Dale 2026); CLAUDE.md; cert [226]. Supersedes v2 (frozen)."""
+    import subprocess
+    validator = os.path.join(base_dir, "qa_kg_consistency_cert_v3", "qa_kg_consistency_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_kg_consistency_cert_v3/qa_kg_consistency_cert_validate.py"
+    db_path = os.path.join(os.path.dirname(base_dir), "tools", "qa_kg", "qa_kg.db")
+    if not os.path.exists(db_path):
+        return None  # DB not built yet — skip
+    proc = subprocess.run(
+        [sys.executable, validator, "--db", db_path],
+        capture_output=True, text=True, timeout=60,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"[225] v3 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
+    return None
+
+
+def _validate_kg_epistemic_fields_cert(base_dir):
+    """QA-KG Epistemic Fields Cert [252] v1: validates authority/epistemic_status/method/source_locator/lifecycle_state correctness per Phase 1 QA-MEM. Single source of truth for the allowed authority × epistemic_status matrix is allowed_matrix.json. Gates: EF1 authority non-null, EF2 epistemic_status non-null, EF3 matrix enforcement, EF4 primary source_locator resolves, EF5 agent-authority count (WARN), EF6 Axiom ⇒ primary+axiom. Source: docs/specs/QA_MEM_SCOPE.md; QA_AXIOMS_BLOCK.md (Dale 2026); CLAUDE.md."""
+    import subprocess
+    validator = os.path.join(base_dir, "qa_kg_epistemic_fields_cert_v1", "qa_kg_epistemic_fields_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_kg_epistemic_fields_cert_v1/qa_kg_epistemic_fields_cert_validate.py"
+    db_path = os.path.join(os.path.dirname(base_dir), "tools", "qa_kg", "qa_kg.db")
+    if not os.path.exists(db_path):
+        return None  # DB not built yet — skip
+    proc = subprocess.run(
+        [sys.executable, validator, "--db", db_path],
+        capture_output=True, text=True, timeout=60,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"[252] v1 FAIL:\n{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}")
     return None
 
 
@@ -7925,6 +7983,21 @@ FAMILY_SWEEPS = [
      "Extends [244] to the full simply-laced ADE classification (A_5, D_5, E_6, E_7, E_8). Cartan determinants (6,4,3,2,1), Weyl orbit sizes (30,40,72,126,240) per Humphreys GTM 9 §9.3 Table 1, v^T G v = 2 exhaustive, equal positive/negative split with R-=-R+. Source: Wildberger 2020 + Humphreys 1972 + cert [244]. Checks ADE_1+CARTAN_DETS/BFS_SIZES/ROOT_NORM/SIGN_SPLIT/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "250_qa_ade_mutation_game_cert",
      "qa_ade_mutation_game_cert_v1", True),
+    (251, "QA G2 Mutation Game Cert family",
+     _validate_g2_mutation_game_cert_family,
+     "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "251_qa_g2_mutation_game_cert",
+     "qa_g2_mutation_game_cert_v1", True),
+    (225, "QA-KG Consistency Cert v3",
+     _validate_kg_consistency_cert_v3,
+     "Graph consistency under schema v3: epistemic fields + alias removal. KG1-KG10 gates. Supersedes v2 (frozen). Checks KG1/KG2/KG3/KG4/KG5/KG6/KG7/KG8/KG9/KG10; validator runs against live qa_kg.db",
+     "225_qa_kg_consistency_cert_v3",
+     "qa_kg_consistency_cert_v3", True),
+    (252, "QA-KG Epistemic Fields Cert v1",
+     _validate_kg_epistemic_fields_cert,
+     "Authority/epistemic_status/method/source_locator/lifecycle_state correctness per Phase 1 QA-MEM. Allowed matrix enforced. Checks EF1/EF2/EF3/EF4/EF5/EF6; validator runs against live qa_kg.db",
+     "252_qa_kg_epistemic_fields_cert_v1",
+     "qa_kg_epistemic_fields_cert_v1", True),
 ]
 
 

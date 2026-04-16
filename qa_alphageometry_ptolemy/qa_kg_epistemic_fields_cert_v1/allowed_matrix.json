@@ -1,0 +1,9 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 1 internal infrastructure; single source of truth for EF3 authority × epistemic_status allowed matrix -->",
+  "allowed": {
+    "primary":  ["axiom", "source_claim"],
+    "derived":  ["certified", "observation"],
+    "internal": ["interpretation", "observation"],
+    "agent":    ["conjecture", "observation"]
+  }
+}

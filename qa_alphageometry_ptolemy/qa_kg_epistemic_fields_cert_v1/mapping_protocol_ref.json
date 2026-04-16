@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA-KG Epistemic Fields Cert family [252] v1: validates authority/epistemic_status/method/source_locator/lifecycle_state correctness per Phase 1 of QA-MEM. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); QA_AXIOMS_BLOCK.md (Dale, 2026); CLAUDE.md (Dale, 2026). Single source of truth for the allowed authority x epistemic_status matrix is allowed_matrix.json in this directory. Gates: (EF1) every node has non-null authority; (EF2) every node has non-null epistemic_status; (EF3) authority x epistemic_status in allowed_matrix.json; (EF4) authority=primary implies source_locator present + scheme in {file,pdf,cert} + file resolver succeeds; (EF5) count of authority=agent nodes (WARN — pressure sensor); (EF6) node_type=Axiom implies authority=primary and epistemic_status=axiom."
+}

@@ -1,5 +1,5 @@
 # <!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG test harness -->
-"""Candidate F [202] — basic QA-KG tests.
+"""Candidate F [202] + Phase 1 epistemic fields — basic QA-KG tests.
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
@@ -16,24 +16,23 @@ from pathlib import Path
 sys.path.insert(0, str(Path(__file__).resolve().parents[3]))
 
 from tools.qa_kg import (
-    Coord, Tier, NODE_TYPE_RANK, compute_be, dr, char_ord_sum,
-    tier_for_coord, connect,
+    Tier, NODE_TYPE_RANK, compute_index, dr, char_ord_sum,
+    tier_for_index, connect, Index,
 )
 from tools.qa_kg.kg import Edge, FirewallViolation, Node
 from tools.qa_kg.orbit import qa_step, edge_allowed
 from tools.qa_kg.predicate import run as run_predicate
+from tools.qa_kg.schema import SCHEMA_VERSION
 
 
 def test_index_a1():
-    """Phase 0: Index (formerly Coord) enforces A1 bounds on idx_b/idx_e and
-    has no .d/.a properties — those would imply a QA state derivation which
-    a retrieval index does not support. See orbit.py module docstring."""
-    c = Coord(3, 7)  # Coord is a back-compat alias for Index
+    """Index enforces A1 bounds on idx_b/idx_e and has no .d/.a properties."""
+    c = Index(3, 7)
     assert c.idx_b == 3 and c.idx_e == 7
     assert not hasattr(c, "d")
     assert not hasattr(c, "a")
     try:
-        Coord(0, 3)
+        Index(0, 3)
     except ValueError:
         pass
     else:
@@ -53,28 +52,25 @@ def test_dr_a1():
 
 
 def test_candidate_f_deterministic():
-    c1 = compute_be("hello world", "Cert")
-    c2 = compute_be("hello world", "Cert")
+    c1 = compute_index("hello world", "Cert")
+    c2 = compute_index("hello world", "Cert")
     assert c1 == c2
-    # Same content, different type → different e
-    c3 = compute_be("hello world", "Axiom")
+    c3 = compute_index("hello world", "Axiom")
     assert c1.idx_b == c3.idx_b
     assert c1.idx_e != c3.idx_e
-    # Integrity
     assert c1.idx_e == NODE_TYPE_RANK["Cert"]
     assert c3.idx_e == NODE_TYPE_RANK["Axiom"]
 
 
 def test_candidate_f_matches_arag_formula():
-    """Our compute_be must produce the same (b=dr(char_ord_sum), e=type_rank) shape as A-RAG."""
     text = "Quantum Arithmetic has canonical orbits"
-    c = compute_be(text, "Thought")
+    c = compute_index(text, "Thought")
     assert c.idx_b == dr(char_ord_sum(text))
     assert c.idx_e == NODE_TYPE_RANK["Thought"]
 
 
 def test_tier_unassigned_on_none():
-    assert tier_for_coord(None, None) is Tier.UNASSIGNED
+    assert tier_for_index(None, None) is Tier.UNASSIGNED
 
 
 def test_firewall_archive_to_cosmos():
@@ -83,31 +79,103 @@ def test_firewall_archive_to_cosmos():
     assert edge_allowed(Tier.UNASSIGNED, Tier.COSMOS, "cites", via_cert=False)
 
 
-def test_schema_roundtrip_candidate_f():
+def test_firewall_agent_authority_blocked():
+    """Phase 1: authority=agent blocks causal edges without via_cert."""
+    assert not edge_allowed(
+        Tier.COSMOS, Tier.COSMOS, "validates", via_cert=False,
+        src_authority="agent",
+    )
+    assert edge_allowed(
+        Tier.COSMOS, Tier.COSMOS, "validates", via_cert=True,
+        src_authority="agent",
+    )
+    assert edge_allowed(
+        Tier.COSMOS, Tier.COSMOS, "keyword-co-occurs", via_cert=False,
+        src_authority="agent",
+    )
+    assert edge_allowed(
+        Tier.COSMOS, Tier.COSMOS, "validates", via_cert=False,
+        src_authority="derived",
+    )
+
+
+def test_schema_roundtrip_epistemic():
+    """Phase 1: epistemic fields (authority/epistemic_status/method/source_locator)
+    round-trip through upsert_node → get."""
     with tempfile.TemporaryDirectory() as tmp:
         db = Path(tmp) / "t.db"
         kg = connect(db)
-        kg.upsert_node(Node(id="axiom:A1", node_type="Axiom", title="No-Zero",
-                            body="States in {1..N}"))
-        kg.upsert_node(Node(id="cert:demo", node_type="Cert", title="Demo",
-                            body="Demo body"))
-        # Empty content → unassigned
-        kg.upsert_node(Node(id="empty:x", node_type="Thought", title="", body=""))
+        kg.upsert_node(Node(
+            id="axiom:A1", node_type="Axiom",
+            title="No-Zero", body="States in {1..N}",
+            authority="primary", epistemic_status="axiom",
+            method="axioms_block", source_locator="file:QA_AXIOMS_BLOCK.md#A1",
+        ))
         a = kg.get("axiom:A1")
+        assert a["authority"] == "primary"
+        assert a["epistemic_status"] == "axiom"
+        assert a["method"] == "axioms_block"
+        assert a["source_locator"] == "file:QA_AXIOMS_BLOCK.md#A1"
+        assert a["lifecycle_state"] == "current"
         assert a["idx_e"] == NODE_TYPE_RANK["Axiom"]
         assert a["idx_b"] == dr(a["char_ord_sum"])
+
+        kg.upsert_node(Node(
+            id="cert:demo", node_type="Cert",
+            title="Demo", body="Demo body",
+            authority="derived", epistemic_status="certified",
+            method="cert_validator", source_locator="file:qa_alphageometry_ptolemy/demo",
+        ))
         c = kg.get("cert:demo")
+        assert c["authority"] == "derived"
         assert c["idx_e"] == NODE_TYPE_RANK["Cert"]
+
+        kg.upsert_node(Node(
+            id="empty:x", node_type="Thought",
+            title="", body="",
+            authority="internal", epistemic_status="observation",
+        ))
         u = kg.get("empty:x")
         assert u["tier"] == "unassigned" and u["idx_b"] is None
+
+
+def test_epistemic_validation_rejects_bad_values():
+    """Application-layer CHECK rejects invalid authority/epistemic_status."""
+    with tempfile.TemporaryDirectory() as tmp:
+        db = Path(tmp) / "t.db"
+        kg = connect(db)
+        try:
+            kg.upsert_node(Node(
+                id="bad:1", node_type="Cert", title="X", body="Y",
+                authority="bogus",
+            ))
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("must reject invalid authority")
+        try:
+            kg.upsert_node(Node(
+                id="bad:2", node_type="Cert", title="X", body="Y",
+                authority="derived", epistemic_status="bogus",
+            ))
+        except ValueError:
+            pass
+        else:
+            raise AssertionError("must reject invalid epistemic_status")
 
 
 def test_firewall_violation_raised():
     with tempfile.TemporaryDirectory() as tmp:
         db = Path(tmp) / "t.db"
         kg = connect(db)
-        kg.upsert_node(Node(id="arch:old", node_type="Thought", title="", body=""))
-        kg.upsert_node(Node(id="cos:new", node_type="Cert", title="X", body="body"))
+        kg.upsert_node(Node(
+            id="arch:old", node_type="Thought", title="", body="",
+            authority="internal", epistemic_status="observation",
+        ))
+        kg.upsert_node(Node(
+            id="cos:new", node_type="Cert", title="X", body="body",
+            authority="derived", epistemic_status="certified",
+        ))
         try:
             kg.upsert_edge(Edge(src_id="arch:old", dst_id="cos:new", edge_type="validates"))
         except FirewallViolation:
@@ -118,29 +186,68 @@ def test_firewall_violation_raised():
                             edge_type="validates", via_cert="cert:demo"))
 
 
+def test_firewall_agent_edge_blocked():
+    """Phase 1: agent-authority node causal edge blocked without via_cert."""
+    with tempfile.TemporaryDirectory() as tmp:
+        db = Path(tmp) / "t.db"
+        kg = connect(db)
+        kg.upsert_node(Node(
+            id="agent:note1", node_type="Thought",
+            title="Agent observation", body="something",
+            authority="agent", epistemic_status="observation",
+        ))
+        kg.upsert_node(Node(
+            id="cert:target", node_type="Cert",
+            title="Target cert", body="body here",
+            authority="derived", epistemic_status="certified",
+        ))
+        try:
+            kg.upsert_edge(Edge(
+                src_id="agent:note1", dst_id="cert:target",
+                edge_type="validates",
+            ))
+        except FirewallViolation:
+            pass
+        else:
+            raise AssertionError("agent → causal without via_cert must be blocked")
+        kg.upsert_edge(Edge(
+            src_id="agent:note1", dst_id="cert:target",
+            edge_type="keyword-co-occurs",
+            confidence=0.3, method="keyword",
+        ))
+        kg.upsert_edge(Edge(
+            src_id="agent:note1", dst_id="cert:target",
+            edge_type="validates", via_cert="cert:252",
+        ))
+
+
+def test_search_with_authority_filter():
+    with tempfile.TemporaryDirectory() as tmp:
+        db = Path(tmp) / "t.db"
+        kg = connect(db)
+        kg.upsert_node(Node(
+            id="a:1", node_type="Axiom", title="No-Zero test",
+            body="states in 1..N", authority="primary", epistemic_status="axiom",
+        ))
+        kg.upsert_node(Node(
+            id="r:1", node_type="Rule", title="No-Zero rule",
+            body="hard rule about zero", authority="internal",
+            epistemic_status="interpretation",
+        ))
+        primary_only = kg.search("zero", authority=["primary"])
+        assert all(r["authority"] == "primary" for r in primary_only)
+        all_results = kg.search("zero")
+        assert len(all_results) >= len(primary_only)
+
+
 def test_back_compat_aliases_scheduled_for_removal_in_v3():
-    """PIN: back-compat aliases Coord / compute_be / tier_for_coord are
-    deprecated and scheduled for removal at [225] v3 / schema v3.
+    """PIN: back-compat aliases removed at schema v3.
 
-    This test asserts two things:
-      (a) while schema_version == 2 (current), the aliases MUST still exist
-          (so in-flight callers don't break mid-Phase-0).
-      (b) when schema_version advances past 2, the aliases MUST be removed
-          in the same commit.
-
-    When this test fails under schema v3, the fix is to delete the aliases
-    from orbit.py and delete this test. Do NOT silence it; the failure IS
-    the forcing function."""
-    from tools.qa_kg.schema import SCHEMA_VERSION
+    This test asserts aliases MUST be absent at v3+. The Phase 0 pin is
+    honored: this commit bumps SCHEMA_VERSION to 3 AND removes aliases."""
     from tools.qa_kg import orbit as _orbit_mod
 
-    if SCHEMA_VERSION == 2:
-        # In-flight Phase 0: aliases MUST be present so callers can migrate.
-        assert hasattr(_orbit_mod, "Coord"), "Coord alias removed too early"
-        assert hasattr(_orbit_mod, "compute_be"), "compute_be alias removed too early"
-        assert hasattr(_orbit_mod, "tier_for_coord"), "tier_for_coord alias removed too early"
-    elif SCHEMA_VERSION >= 3:
-        # v3+: aliases MUST be gone.
+    if SCHEMA_VERSION >= 3:
         assert not hasattr(_orbit_mod, "Coord"), (
             "Coord alias still present at schema v3 — delete from orbit.py")
         assert not hasattr(_orbit_mod, "compute_be"), (
@@ -169,10 +276,14 @@ TESTS = [
     test_candidate_f_matches_arag_formula,
     test_tier_unassigned_on_none,
     test_firewall_archive_to_cosmos,
-    test_schema_roundtrip_candidate_f,
+    test_firewall_agent_authority_blocked,
+    test_schema_roundtrip_epistemic,
+    test_epistemic_validation_rejects_bad_values,
     test_firewall_violation_raised,
-    test_predicate_runtime,
+    test_firewall_agent_edge_blocked,
+    test_search_with_authority_filter,
     test_back_compat_aliases_scheduled_for_removal_in_v3,
+    test_predicate_runtime,
 ]
 
 

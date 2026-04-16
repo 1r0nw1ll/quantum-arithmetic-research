@@ -48,6 +48,10 @@ from qa_orbit_rules import orbit_family as _canonical_orbit_family
 
 MOD = 9
 
+CAUSAL_EDGE_TYPES = frozenset({
+    "validates", "extends", "derived-from", "maps-to", "instantiates",
+})
+
 
 def dr(n: int) -> int:
     """Aiq Bekar digital root, A1-compliant [family 202]. Mirrors
@@ -139,32 +143,27 @@ def compute_index(content: str, node_type: str) -> Index:
 
 
 def edge_allowed(
-    src_tier: Tier, dst_tier: Tier, edge_type: str, via_cert: bool
+    src_tier: Tier,
+    dst_tier: Tier,
+    edge_type: str,
+    via_cert: bool,
+    *,
+    src_authority: str | None = None,
 ) -> bool:
-    """Structural firewall guard on Unassigned → canonical causal edges.
+    """Theorem NT firewall guard — two layers.
 
-    NOTE: under Candidate F any node with non-empty content gets a tier.
-    Therefore the Unassigned tier is effectively unoccupied in practice,
-    and this guard rarely fires. A more meaningful firewall (authority-
-    level, AgentNote → canonical) is Phase 2 work; this guard is retained
-    for shape correctness on the Unassigned precondition and does NOT
-    constitute the full Theorem NT firewall the system ultimately needs.
+    Layer 1 (Phase 0): Unassigned → Cosmos/Singularity causal edges need
+    via_cert. Under Candidate F, Unassigned is effectively unoccupied.
+
+    Layer 2 (Phase 1, partial): authority=agent → any causal edge is blocked
+    without via_cert. The full Phase 2 firewall (promote() protocol with
+    ledger + broadcast corroboration) is not yet active — this layer catches
+    the obvious case of an agent node trying to emit causal edges directly.
     """
-    causal = {"validates", "extends", "derived-from", "maps-to", "instantiates"}
-    if edge_type not in causal:
+    if edge_type not in CAUSAL_EDGE_TYPES:
         return True
     if src_tier is Tier.UNASSIGNED and dst_tier in (Tier.COSMOS, Tier.SINGULARITY):
         return via_cert
+    if src_authority == "agent" and not via_cert:
+        return False
     return True
-
-
-# --- Back-compat aliases --------------------------------------------------
-# DEPRECATED. Removal target: cert [225] v3 / schema v3. Any session that
-# lands Phase 1 (epistemic-status fields) and bumps [225] to v3 MUST drop
-# these three names in the same commit. The regression test
-# `test_back_compat_aliases_scheduled_for_removal_in_v3` in
-# tools/qa_kg/tests/test_kg_basic.py enforces the pin: it will fail when
-# schema_version advances past 2, forcing the alias cleanup.
-Coord = Index
-compute_be = compute_index
-tier_for_coord = tier_for_index

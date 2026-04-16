@@ -9,6 +9,7 @@ from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
+import json
 import os
 import sys
 from pathlib import Path
@@ -46,6 +47,20 @@ def _discover_filesystem_families() -> list[tuple[int | None, str, str]]:
     return out
 
 
+def _is_frozen(cert_dir: Path) -> bool:
+    """Check if a cert directory has _status: frozen in its mapping_protocol_ref.json."""
+    for fname in ("mapping_protocol_ref.json", "mapping_protocol.json"):
+        mp = cert_dir / fname
+        if mp.exists():
+            try:
+                data = json.loads(mp.read_text(encoding="utf-8"))
+                if data.get("_status") == "frozen":
+                    return True
+            except (json.JSONDecodeError, OSError):
+                pass
+    return False
+
+
 def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
     sweeps = _import_family_sweeps()
     ids: list[str] = []
@@ -68,15 +83,23 @@ def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
                 f"family_root_rel: {root_rel}",
                 f"pass_desc: {str(pass_desc)[:400]}",
             ])
-            # vetted_by intentionally empty: self-vetting is tautological.
-            # Real attribution comes from a CertFamily registration chain (Phase 1).
-            # FAMILY_SWEEPS membership IS a form of attribution but not captured
-            # as a graph edge yet — tracked only via the source field.
+            cert_dir = META_DIR / root_rel if root_rel and root_rel != "." else None
+            frozen = _is_frozen(cert_dir) if cert_dir else False
+            source_loc = (
+                f"file:qa_alphageometry_ptolemy/{root_rel}"
+                if root_rel and root_rel != "."
+                else "file:qa_alphageometry_ptolemy/qa_meta_validator.py"
+            )
             kg.upsert_node(Node(
                 id=nid, node_type="Cert", title=str(label), body=body,
                 source=(f"qa_alphageometry_ptolemy/{root_rel}" if root_rel and root_rel != "."
                         else "qa_alphageometry_ptolemy/qa_meta_validator.py:FAMILY_SWEEPS"),
                 vetted_by="",
+                authority="derived",
+                epistemic_status="certified",
+                method="cert_validator",
+                source_locator=source_loc,
+                lifecycle_state="deprecated" if frozen else "current",
             ))
             ids.append(nid)
 
@@ -85,11 +108,18 @@ def populate(kg: KG, *, run_validator: bool = False) -> list[str]:
         if nid in seen:
             continue
         seen.add(nid)
+        cert_dir = META_DIR / rel
+        frozen = _is_frozen(cert_dir)
         kg.upsert_node(Node(
             id=nid, node_type="Cert", title=label,
             body=f"filesystem-discovered; family_root_rel: {rel}",
             source=f"qa_alphageometry_ptolemy/{rel}",
             vetted_by="",
+            authority="derived",
+            epistemic_status="certified",
+            method="cert_validator",
+            source_locator=f"file:qa_alphageometry_ptolemy/{rel}",
+            lifecycle_state="deprecated" if frozen else "current",
         ))
         ids.append(nid)
 

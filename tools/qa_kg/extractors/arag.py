@@ -54,7 +54,7 @@ def search(query: str, *, k: int = 10, source: str | None = None) -> list[dict]:
     } for r in rows]
 
 
-def promote(kg: KG, msg_id: str, *, reason: str = "") -> str:
+def promote_to_kg(kg: KG, msg_id: str, *, reason: str = "") -> str:
     """Persist an archive chunk as a Thought-typed node.
     Candidate F recomputes (b,e) on the new title+body under Thought rank."""
     conn = _arag_conn()
@@ -74,5 +74,9 @@ def promote(kg: KG, msg_id: str, *, reason: str = "") -> str:
     kg.upsert_node(Node(
         id=nid, node_type="Thought", title=str(title)[:150], body=body,
         source=f"arag:{msg_id}",
+        authority="internal",
+        epistemic_status="source_claim",
+        method="arag_message",
+        source_locator=f"ob:{msg_id}",
     ))
     return nid

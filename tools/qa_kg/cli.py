@@ -59,7 +59,7 @@ def cmd_digest(args) -> int:
     kg = connect(args.db)
     rows = kg.digest(tier=args.tier, limit=args.k)
     for r in rows:
-        print(f"[{r['tier']}] ({r['coord_b']},{r['coord_e']}) {r['id']} — {r['title']}")
+        print(f"[{r['tier']}] ({r['idx_b']},{r['idx_e']}) {r['id']} — {r['title']}")
     return 0
 
 
@@ -76,7 +76,7 @@ def cmd_check(args) -> int:
 def cmd_arag_search(args) -> int:
     rows = x_arag.search(args.query, k=args.k, source=args.source)
     for r in rows:
-        print(f"[archive/{r['source']}] ({r['coord'][0]},{r['coord'][1]}) {r['msg_id']}  score={r['score']:.2f}")
+        print(f"[archive/{r['source']}] ({r['arag_coord'][0]},{r['arag_coord'][1]}) {r['msg_id']}  score={r['score']:.2f}")
         print(f"    {r['conv_title']} ({r['ts']})")
         print(f"    {r['preview'][:200]}")
     return 0

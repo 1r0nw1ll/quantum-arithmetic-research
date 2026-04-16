@@ -3,25 +3,30 @@
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-Phase 0: all edges extracted here use `edge_type="keyword-co-occurs"` with
-method="keyword" and confidence=0.3. A mention of `[N]` in a thought body
-indicates the thought TEXT names cert N; it is not derivation, not
-instantiation, not authoritative provenance.
+Phase 1: authority branching on originSessionId presence.
+  - With originSessionId → authority=agent (Claude/Codex output)
+  - Without → authority=internal (Will-captured thought)
+
+Edges: keyword-co-occurs only, method='keyword', confidence=0.3.
 """
 from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
 import hashlib
+import logging
 import re
 from dataclasses import dataclass
 from typing import Iterable
 
-from tools.qa_kg.kg import KG, Edge, Node
+from tools.qa_kg.kg import KG, Edge, FirewallViolation, Node
+from tools.qa_kg.extractors.axioms import CANONICAL_AXIOM_CODES
 
 
+_log = logging.getLogger("qa_kg.extractors.ob")
 _CERT_REF_RE = re.compile(r"\[(\d+)\]")
-_AXIOM_RE = re.compile(r"\b(A1|A2|T2|S1|S2|T1|NT)\b")
+_AXIOM_RE = re.compile(r"\b(" + "|".join(CANONICAL_AXIOM_CODES) + r")\b")
+_SESSION_RE = re.compile(r"(?:session|claude|codex|opencode)[-_]", re.I)
 
 
 @dataclass
@@ -64,6 +69,23 @@ def parse_markdown(text: str) -> list[OBThought]:
     return thoughts
 
 
+def _has_session_origin(body: str) -> bool:
+    """Heuristic: does this OB thought have session attribution?"""
+    return bool(_SESSION_RE.search(body))
+
+
+def _try_edge(kg: KG, edge: Edge) -> bool:
+    try:
+        kg.upsert_edge(edge)
+        return True
+    except FirewallViolation as exc:
+        _log.warning("FirewallViolation in OB edge: %s", exc)
+        return False
+    except ValueError as exc:
+        _log.debug("Edge skipped (unknown node): %s", exc)
+        return False
+
+
 def ingest(kg: KG, thoughts: Iterable[OBThought]) -> dict[str, int]:
     cert_ids = {r["id"] for r in kg.conn.execute(
         "SELECT id FROM nodes WHERE node_type='Cert'"
@@ -71,7 +93,7 @@ def ingest(kg: KG, thoughts: Iterable[OBThought]) -> dict[str, int]:
     rule_idx = [(r["id"], (r["title"] or "").lower()) for r in kg.conn.execute(
         "SELECT id, title FROM nodes WHERE node_type='Rule'"
     ).fetchall()]
-    axiom_ids = {c: f"axiom:{c}" for c in ("A1", "A2", "T2", "S1", "S2", "T1", "NT")}
+    axiom_ids = {c: f"axiom:{c}" for c in CANONICAL_AXIOM_CODES}
 
     nodes = 0
     edges = 0
@@ -79,48 +101,48 @@ def ingest(kg: KG, thoughts: Iterable[OBThought]) -> dict[str, int]:
         title = (t.body.split("\n", 1)[0] or "")[:120]
         tags_str = ",".join(t.tags)
         body_short = t.body[:2000]
+
+        is_agent = _has_session_origin(t.body)
         kg.upsert_node(Node(
             id=t.id, node_type="Thought",
             title=title or f"OB {t.ts}",
             body=f"ts: {t.ts}\ntype: {t.thought_type}\ntags: {tags_str}\n---\n{body_short}",
             source=f"open_brain:{t.ts}",
+            authority="agent" if is_agent else "internal",
+            epistemic_status="observation",
+            method="ob_capture",
+            source_locator=f"ob:{t.id.removeprefix('ob:')}",
         ))
         nodes += 1
 
         for n in _CERT_REF_RE.findall(t.body):
             tgt = f"cert:{n}"
             if tgt in cert_ids:
-                try:
-                    kg.upsert_edge(Edge(
-                        src_id=t.id, dst_id=tgt,
-                        edge_type="keyword-co-occurs",
-                        confidence=0.3, method="keyword",
-                        provenance="extractors.ob.cert_ref",
-                    )); edges += 1
-                except Exception:
-                    pass
-        for code in set(_AXIOM_RE.findall(t.body)):
-            try:
-                kg.upsert_edge(Edge(
-                    src_id=t.id, dst_id=axiom_ids[code],
+                if _try_edge(kg, Edge(
+                    src_id=t.id, dst_id=tgt,
                     edge_type="keyword-co-occurs",
                     confidence=0.3, method="keyword",
-                    provenance=f"extractors.ob.axiom_code:{code}",
-                )); edges += 1
-            except Exception:
-                pass
+                    provenance="extractors.ob.cert_ref",
+                )):
+                    edges += 1
+        for code in set(_AXIOM_RE.findall(t.body)):
+            if _try_edge(kg, Edge(
+                src_id=t.id, dst_id=axiom_ids[code],
+                edge_type="keyword-co-occurs",
+                confidence=0.3, method="keyword",
+                provenance=f"extractors.ob.axiom_code:{code}",
+            )):
+                edges += 1
         body_lower = t.body.lower()
         for rid, rtitle in rule_idx:
             if rtitle and rtitle in body_lower:
-                try:
-                    kg.upsert_edge(Edge(
-                        src_id=t.id, dst_id=rid,
-                        edge_type="keyword-co-occurs",
-                        confidence=0.3, method="keyword",
-                        provenance="extractors.ob.rule_title_match",
-                    )); edges += 1
-                except Exception:
-                    pass
+                if _try_edge(kg, Edge(
+                    src_id=t.id, dst_id=rid,
+                    edge_type="keyword-co-occurs",
+                    confidence=0.3, method="keyword",
+                    provenance="extractors.ob.rule_title_match",
+                )):
+                    edges += 1
 
     return {"nodes": nodes, "edges": edges}
 

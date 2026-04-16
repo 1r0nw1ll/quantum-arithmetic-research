@@ -1,5 +1,7 @@
 {
   "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG v2 infrastructure cert; validates internal graph invariants after Phase 0 rename -->",
+  "_status": "frozen",
+  "_frozen_note": "Superseded by [225] v3 (qa_kg_consistency_cert_v3/). v2 references columns and invariants from schema v2 only. DO NOT modify; future fixes go to v3+.",
   "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
   "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
   "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",

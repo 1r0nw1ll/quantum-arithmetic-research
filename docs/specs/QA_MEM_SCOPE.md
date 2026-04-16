@@ -66,14 +66,43 @@ by `test_back_compat_aliases_scheduled_for_removal_in_v3` in
 aliases MUST exist; under `SCHEMA_VERSION >= 3` the aliases MUST be gone
 (test fails and forces cleanup in the same commit as the schema bump).
 
-## Roadmap (deferred, NOT in scope here)
+## Landed phases
 
-- **Phase 1:** epistemic fields — `authority`, `epistemic_status`, `method`;
-  split node types; backfill from `MEMORY.md` / `CLAUDE.md` / `QA_AXIOMS_BLOCK.md`.
-- **Phase 2:** real firewall — `AgentNote → *` requires `promoted-from` with
-  `via_cert`; cert `[227] QA_KG_FIREWALL_EFFECTIVE`.
+### Phase 1 (schema v3) — epistemic fields
+
+Landed 2026-04-15. Schema v3 adds `authority`, `epistemic_status`, `method`,
+`source_locator`, `lifecycle_state` to the nodes table. The authority axis
+(primary / derived / internal / agent) records WHO produced the knowledge.
+The epistemic axis (axiom / source_claim / certified / observation /
+interpretation / conjecture) records WHAT KIND of claim. An allowed matrix
+(4×6) is enforced by cert [252] EF3 and lives in
+`qa_kg_epistemic_fields_cert_v1/allowed_matrix.json`.
+
+Back-compat aliases (Coord / compute_be / tier_for_coord) removed per the
+Phase 0 pin, atomic with the v3 bump.
+
+N1/N2/N3 carry-forward fixes from Phase 0 re-audit landed as [225] v3 gates
+KG8 (frozen-not-in-sweeps), KG9 (axiom-codes canonical — parsed from
+CLAUDE.md, not hardcoded), KG10 (no except-Exception-continue swallows).
+
+Phase 1 also adds a partial authority firewall: `authority=agent` nodes
+cannot emit causal edges without `via_cert`, enforced at `edge_allowed()`
+and in `kg.upsert_edge()`.
+
+### Phase 2 (pending) — full Theorem NT firewall
+
+Not yet landed. Will add:
+- `kg.promote()` protocol with `_meta_ledger.json` staleness guard and
+  collab-bus broadcast corroboration.
+- `extractors/agent_notes.py` — OB-with-originSessionId + collab events.
+- Cert `[227] QA_KG_FIREWALL_EFFECTIVE` (FE1–FE6).
+- [225] v3 KG3 upgrade from tri-state to "precondition occupied."
+
+## Roadmap (deferred, NOT in scope)
+
 - **Phase 3:** contradictions + sources — SourceClaim nodes with quote+locator,
   seed `contradicts` for SVP wiki typos and Volk/Dale reconciliations.
+  `supersedes` edge type for lifecycle_state transitions.
 - **Phase 4:** authority-filtered retrieval + provenance-aware ranker.
 - **Phase 5:** determinism — frozen corpus fixture, graph-hash cert `[228]`.
 - **Phase 6:** agent integration — shadow-mode parallel to A-RAG before any
@@ -83,10 +112,14 @@ aliases MUST exist; under `SCHEMA_VERSION >= 3` the aliases MUST be gone
 
 - Cert family [202] — Aiq Bekar digital root A1-compliance
   (`tools/qa_retrieval/schema.py::dr`, `compute_be`)
-- Cert family [225] v2 — QA-KG consistency invariants
+- Cert family [225] v3 — QA-KG consistency invariants (KG1–KG10)
+  (`qa_alphageometry_ptolemy/qa_kg_consistency_cert_v3/`)
+- Cert family [225] v2 — FROZEN, superseded by v3
   (`qa_alphageometry_ptolemy/qa_kg_consistency_cert_v2/`)
 - Cert family [226] — Candidate F classifier correctness
   (`qa_alphageometry_ptolemy/qa_semantic_coord_cert_v1/`)
+- Cert family [252] — Epistemic fields correctness (EF1–EF6)
+  (`qa_alphageometry_ptolemy/qa_kg_epistemic_fields_cert_v1/`)
 - `QA_AXIOMS_BLOCK.md` (Dale 2026) — canonical QA axiom set A/T/S/F groups
 - `qa_orbit_rules.py` — canonical `orbit_family` classifier
 - `tools/qa_retrieval/schema.py` — A-RAG Candidate F reference implementation

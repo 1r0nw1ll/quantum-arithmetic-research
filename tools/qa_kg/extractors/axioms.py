@@ -2,15 +2,40 @@
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-Coord falls out of Candidate F: b = dr(char_ord_sum(title+body)), e = NODE_TYPE_RANK['Axiom'] = 4.
-Axioms land wherever the formula puts them. No (9,9) override.
+Canonical axiom source: CLAUDE.md §"QA Axiom Compliance" (has the codes
+A1/A2/T2/S1/S2/T1/NT). This is the single source of truth for KG9 —
+edges.py imports CANONICAL_AXIOM_CODES from here.
 """
 from __future__ import annotations
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
+import re
+from pathlib import Path
+
 from tools.qa_kg.kg import KG, Node
 
+
+_REPO = Path(__file__).resolve().parents[3]
+_CLAUDE_MD = _REPO / "CLAUDE.md"
+_AXIOMS_BLOCK = _REPO / "QA_AXIOMS_BLOCK.md"
+
+
+def _parse_axiom_codes_from_claude_md() -> tuple[str, ...]:
+    """Parse axiom codes from CLAUDE.md — the canonical source per KG9."""
+    if not _CLAUDE_MD.exists():
+        return ("A1", "A2", "T2", "S1", "S2", "T1", "NT")
+    text = _CLAUDE_MD.read_text(encoding="utf-8")
+    codes: list[str] = []
+    for m in re.finditer(r"^\s*-\s+\*\*([A-Z][A-Z0-9]+)\s+\(", text, re.M):
+        codes.append(m.group(1))
+    nt_match = re.search(r"\*\*Theorem\s+NT\b", text)
+    if nt_match and "NT" not in codes:
+        codes.append("NT")
+    return tuple(dict.fromkeys(codes))
+
+
+CANONICAL_AXIOM_CODES = _parse_axiom_codes_from_claude_md()
 
 AXIOMS = [
     ("A1", "No-Zero", "States in {1..N}, never {0..N-1}. qa_step = ((b+e-1) % m) + 1.",
@@ -33,10 +58,9 @@ AXIOMS = [
 
 def populate(kg: KG) -> list[str]:
     ids: list[str] = []
+    source_locator = "file:QA_AXIOMS_BLOCK.md" if _AXIOMS_BLOCK.exists() else "file:CLAUDE.md"
     for code, title, body, pred in AXIOMS:
         nid = f"axiom:{code}"
-        # Axioms' authority is the axiom system itself. Represented by node_type='Axiom'
-        # and source pointing at the authority docs — not a self-vetted edge.
         kg.upsert_node(Node(
             id=nid,
             node_type="Axiom",
@@ -45,6 +69,10 @@ def populate(kg: KG) -> list[str]:
             source="CLAUDE.md + QA_AXIOMS_BLOCK.md",
             vetted_by="",
             predicate_ref=pred,
+            authority="primary",
+            epistemic_status="axiom",
+            method="axioms_block",
+            source_locator=f"{source_locator}#{code}",
         ))
         ids.append(nid)
     return ids

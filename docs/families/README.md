@@ -27,6 +27,9 @@
 | [246] | [QA Chromogeometric TQF Symmetry](246_qa_chromogeometric_tqf_symmetry_cert.md) | Triple Quad residues satisfy TQF_r=TQF_g=-TQF_b; symbolic proof, 3000 triangle sample, exhaustive collinearity invariant | PASS |
 | [249] | [QA E8 Embedding Orbit Classifier](249_qa_e8_embedding_orbit_classifier_cert.md) | Canonical (b,e,d,a)→ℤ^8 diagonal embedding into E_8 root lattice; m=9 T-orbit partition {1,8,24,24,24}; per-orbit min Q=(8,16,28,72,162) is 5-distinct complete classifier | PASS |
 | [250] | [QA ADE Mutation Game](250_qa_ade_mutation_game_cert.md) | Extends [244] to full simply-laced ADE: A_5 D_5 E_6 E_7 E_8 with orbit sizes (30,40,72,126,240) and Cartan det = order of center | PASS |
+| [251] | [QA G_2 Mutation Game](251_qa_g2_mutation_game_cert.md) | First non-simply-laced mutation cert: G_2 via directed edges A(0→1)=3, A(1→0)=1 for Cartan [[2,-1],[-3,2]]; 12 roots (6+/6-), 3 short + 3 long under Humphreys Gram, (s_0 s_1)^6 = I strictly | PASS |
+| [225] | [QA-KG Consistency v3](225_qa_kg_consistency_cert_v3.md) | Schema v3 graph consistency: KG1-KG10 gates (epistemic non-null, frozen-not-in-sweeps, axiom-codes canonical, no-swallow); supersedes v2 | PASS |
+| [252] | [QA-KG Epistemic Fields v1](252_qa_kg_epistemic_fields_cert_v1.md) | Phase 1 epistemic fields: 4 authority x 6 epistemic_status allowed matrix; source_locator resolves; Axiom ⇒ primary+axiom | PASS |
 | [223] | [QA Experiment Protocol](223_qa_experiment_protocol.md) | Schema + Validator + Fixtures; enforces study design, source mapping, ablation, reproducibility (linter EXP-1) | PASS |
 | [224] | [QA Benchmark Protocol](224_qa_benchmark_protocol.md) | Schema + Validator + Fixtures; enforces calibration provenance, SOTA/null baseline, ablation, reproducibility (linter BENCH-1) | PASS |
 

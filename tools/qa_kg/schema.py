@@ -2,17 +2,33 @@
 
 QA_COMPLIANCE = "memory_infra — graph over project artifacts, not empirical QA state"
 
-Candidate F retrieval index. Column names `idx_b/idx_e` intentionally differ
-from QA state names `(b,e)`: these are a content-hash × node-type-rank
-retrieval partition, NOT a QA state. A QA state pair is derived via d=b+e,
-a=b+2e; attempting that on idx_b/idx_e produces nonsense. The reserved
-`subject_b/subject_e` columns are the only ones that encode declared QA
-state subjects, populated exclusively from cert metadata.
+Schema v3 adds epistemic fields (authority, epistemic_status, method,
+source_locator, lifecycle_state) per Phase 1 of the QA-MEM scope. These are
+ORTHOGONAL to the Candidate F retrieval-index columns (idx_b/idx_e): they
+record HOW we know a node, not WHERE it sits on the lattice.
 
-Edges carry a `method` field to record HOW the edge was established:
-  - "keyword": regex / body-token match (confidence ≤ 0.3)
-  - "cert_registry": from FAMILY_SWEEPS membership
-  - "structural": derived by a validator-emitted proof link
+Authority values (locked — 4 crisp):
+  - primary   = external canon predating QA project (Dale/Ben/Keely/Pond/
+                Wildberger/Levin/Briddell, plus QA_AXIOMS_BLOCK.md source).
+  - derived   = outputs of the cert machinery (validator results, structural
+                provenance).
+  - internal  = Will-authored project material (MEMORY.md, CLAUDE.md Hard
+                Rules, repo docs, Will-captured OB without originSessionId).
+  - agent     = Claude/Codex/OpenCode outputs (OB with originSessionId,
+                collab-bus events with session:* identity).
+
+Epistemic_status values: axiom, source_claim, certified, observation,
+interpretation, conjecture. The allowed authority × epistemic_status matrix
+is enforced by cert [252] EF3; see
+qa_alphageometry_ptolemy/qa_kg_epistemic_fields_cert_v1/allowed_matrix.json.
+
+Lifecycle_state ∈ {current, deprecated, superseded, withdrawn}. Reserved in
+v3 but not yet a firewall driver — Phase 3+ work.
+
+Back-compat aliases (Coord/compute_be/tier_for_coord) removed in v3 per the
+Phase-0 pin; forward-failing test
+tools/qa_kg/tests/test_kg_basic.py::test_back_compat_aliases_scheduled_for_removal_in_v3
+flips from expect-present to expect-absent at SCHEMA_VERSION >= 3.
 """
 from __future__ import annotations
 
@@ -23,7 +39,14 @@ import sqlite3
 from pathlib import Path
 
 
-SCHEMA_VERSION = 2  # Phase 0 rename: coord_b/coord_e → idx_b/idx_e; method on edges
+SCHEMA_VERSION = 3  # Phase 1: epistemic fields; alias removal atomic with this bump
+
+AUTHORITIES = ("primary", "derived", "internal", "agent")
+EPISTEMIC_STATUSES = (
+    "axiom", "source_claim", "certified",
+    "observation", "interpretation", "conjecture",
+)
+LIFECYCLE_STATES = ("current", "deprecated", "superseded", "withdrawn")
 
 DEFAULT_DB = Path(os.environ.get(
     "QA_KG_DB",
@@ -31,45 +54,59 @@ DEFAULT_DB = Path(os.environ.get(
 ))
 
 
-DDL = """
+_AUTH_LIST = ",".join(f"'{a}'" for a in AUTHORITIES)
+_EPI_LIST = ",".join(f"'{s}'" for s in EPISTEMIC_STATUSES)
+_LC_LIST = ",".join(f"'{s}'" for s in LIFECYCLE_STATES)
+
+DDL = f"""
 CREATE TABLE IF NOT EXISTS nodes (
     id             TEXT PRIMARY KEY,
     node_type      TEXT NOT NULL,
     title          TEXT NOT NULL,
     body           TEXT NOT NULL DEFAULT '',
     tier           TEXT NOT NULL,
-    idx_b          INTEGER,                     -- Candidate F retrieval-index b (hash partition)
-    idx_e          INTEGER,                     -- Candidate F retrieval-index e (node_type rank)
-    char_ord_sum   INTEGER,                     -- [202] observable that drives idx_b
-    subject_b      INTEGER,                     -- declared SUBJECT state (nullable); only populated
-    subject_e      INTEGER,                     -- from cert metadata — this is the QA state the
-                                                -- node is ABOUT, not the node's own position
+    idx_b          INTEGER,
+    idx_e          INTEGER,
+    char_ord_sum   INTEGER,
+    subject_b      INTEGER,
+    subject_e      INTEGER,
     source         TEXT NOT NULL DEFAULT '',
-    vetted_by      TEXT NOT NULL DEFAULT '',    -- must be a DIFFERENT node id (not self)
+    vetted_by      TEXT NOT NULL DEFAULT '',
     vetted_ts      TEXT NOT NULL DEFAULT '',
     predicate_ref  TEXT NOT NULL DEFAULT '',
     last_check_ts  TEXT NOT NULL DEFAULT '',
     last_check_ok  INTEGER,
     last_check_msg TEXT NOT NULL DEFAULT '',
+    -- Phase 1 (schema v3) epistemic fields
+    authority        TEXT,
+    epistemic_status TEXT,
+    method           TEXT,
+    source_locator   TEXT,
+    lifecycle_state  TEXT NOT NULL DEFAULT 'current',
     created_ts     TEXT NOT NULL,
     updated_ts     TEXT NOT NULL,
     CHECK (idx_b IS NULL OR idx_b BETWEEN 1 AND 9),
     CHECK (idx_e IS NULL OR idx_e BETWEEN 1 AND 9),
     CHECK (subject_b IS NULL OR subject_b BETWEEN 1 AND 9),
     CHECK (subject_e IS NULL OR subject_e BETWEEN 1 AND 9),
-    CHECK (tier IN ('singularity','cosmos','satellite','unassigned'))
+    CHECK (tier IN ('singularity','cosmos','satellite','unassigned')),
+    CHECK (authority IS NULL OR authority IN ({_AUTH_LIST})),
+    CHECK (epistemic_status IS NULL OR epistemic_status IN ({_EPI_LIST})),
+    CHECK (lifecycle_state IN ({_LC_LIST}))
 );
 
-CREATE INDEX IF NOT EXISTS idx_nodes_tier   ON nodes(tier);
-CREATE INDEX IF NOT EXISTS idx_nodes_idx_be ON nodes(idx_b, idx_e);
-CREATE INDEX IF NOT EXISTS idx_nodes_type   ON nodes(node_type);
+CREATE INDEX IF NOT EXISTS idx_nodes_tier      ON nodes(tier);
+CREATE INDEX IF NOT EXISTS idx_nodes_idx_be    ON nodes(idx_b, idx_e);
+CREATE INDEX IF NOT EXISTS idx_nodes_type      ON nodes(node_type);
+CREATE INDEX IF NOT EXISTS idx_nodes_authority ON nodes(authority);
+CREATE INDEX IF NOT EXISTS idx_nodes_epistemic ON nodes(epistemic_status);
 
 CREATE TABLE IF NOT EXISTS edges (
     src_id      TEXT NOT NULL,
     dst_id      TEXT NOT NULL,
     edge_type   TEXT NOT NULL,
     confidence  REAL NOT NULL DEFAULT 1.0,
-    method      TEXT NOT NULL DEFAULT '',      -- 'keyword' | 'cert_registry' | 'structural' | ''
+    method      TEXT NOT NULL DEFAULT '',
     provenance  TEXT NOT NULL DEFAULT '',
     via_cert    TEXT NOT NULL DEFAULT '',
     created_ts  TEXT NOT NULL,
@@ -118,11 +155,44 @@ CREATE TABLE IF NOT EXISTS meta (
 """
 
 
+def _column_names(conn: sqlite3.Connection, table: str) -> set[str]:
+    return {r[1] for r in conn.execute(f"PRAGMA table_info({table})").fetchall()}
+
+
+def _migrate_to_v3(conn: sqlite3.Connection) -> None:
+    """Idempotent ALTER TABLE migration for DBs created under earlier versions.
+
+    SQLite CHECK constraints on ALTER TABLE ADD COLUMN are not enforced
+    retroactively, so kg.py also validates authority/epistemic_status/
+    lifecycle_state at insert time.
+    """
+    cols = _column_names(conn, "nodes")
+    if "authority" not in cols:
+        conn.execute("ALTER TABLE nodes ADD COLUMN authority TEXT")
+    if "epistemic_status" not in cols:
+        conn.execute("ALTER TABLE nodes ADD COLUMN epistemic_status TEXT")
+    if "method" not in cols:
+        conn.execute("ALTER TABLE nodes ADD COLUMN method TEXT")
+    if "source_locator" not in cols:
+        conn.execute("ALTER TABLE nodes ADD COLUMN source_locator TEXT")
+    if "lifecycle_state" not in cols:
+        conn.execute(
+            "ALTER TABLE nodes ADD COLUMN lifecycle_state TEXT NOT NULL DEFAULT 'current'"
+        )
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_nodes_authority ON nodes(authority)"
+    )
+    conn.execute(
+        "CREATE INDEX IF NOT EXISTS idx_nodes_epistemic ON nodes(epistemic_status)"
+    )
+
+
 def init_db(path: Path | str = DEFAULT_DB) -> sqlite3.Connection:
     conn = sqlite3.connect(str(path))
     conn.row_factory = sqlite3.Row
     conn.executescript("PRAGMA journal_mode=WAL; PRAGMA foreign_keys=ON;")
     conn.executescript(DDL)
+    _migrate_to_v3(conn)
     conn.execute(
         "INSERT OR REPLACE INTO meta(key, value) VALUES ('schema_version', ?)",
         (str(SCHEMA_VERSION),),

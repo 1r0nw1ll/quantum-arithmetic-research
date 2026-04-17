@@ -270,6 +270,23 @@ class KG:
 
     def upsert_node(self, node: Node) -> None:
         _validate_node_fields(node)
+        # Phase 6 W5 — authority is immutable once set. Blocks both directions:
+        # accidental upgrade (agent→internal/derived/primary) AND silent
+        # downgrade (primary→agent from a buggy extractor re-run). Real
+        # authority corrections require explicit delete+recreate so the
+        # change is auditable, not a silent overwrite.
+        if node.authority:
+            existing = self.conn.execute(
+                "SELECT authority FROM nodes WHERE id=?", (node.id,),
+            ).fetchone()
+            if (existing is not None
+                    and existing["authority"]
+                    and existing["authority"] != node.authority):
+                raise FirewallViolation(
+                    f"authority_immutable: {existing['authority']}→"
+                    f"{node.authority} on {node.id}. Authority changes "
+                    f"require explicit delete+recreate, not silent overwrite."
+                )
         idx = node.resolved_index()
         tier = node.resolved_tier()
         cb = idx.idx_b if idx else None
@@ -745,6 +762,8 @@ class KG:
         broadcast_payload: dict,
         *,
         ledger_path: Path | str | None = None,
+        mcp_session: str | None = None,
+        agent_writes_path: Path | str | None = None,
     ) -> None:
         """Promote an agent note so it can emit causal edges.
 
@@ -756,6 +775,14 @@ class KG:
           2. promoter_node_id exists with authority ∈ {primary, derived, internal}
           3. via_cert resolves to PASS in _meta_ledger.json within staleness
           4. broadcast_payload timestamp within ±60s of now
+
+        Phase 6: when ``mcp_session`` is provided (non-empty string), the
+        per-session write counter in ``_agent_writes.json`` is incremented
+        under flock before the promoted-from edge is written. Over-cap
+        attempts raise RateLimitExceeded (subclass of RuntimeError via
+        tools.qa_kg_mcp.rate_limit). ``mcp_session=None`` preserves the
+        Phase 2 call shape for extractor-bus and fixture callers so the
+        counter is agent-write-path-specific, not blanket.
         """
         agent_row = self.conn.execute(
             "SELECT authority FROM nodes WHERE id=?", (agent_note_id,)
@@ -838,6 +865,16 @@ class KG:
             raise FirewallViolation(
                 f"broadcast_payload ts {bp_ts_raw!r} is {bp_age:.0f}s from now, "
                 f"exceeds ±{BROADCAST_WINDOW_S}s window"
+            )
+
+        # Phase 6: per-session rate limit. Only fires when mcp_session is set
+        # (the MCP server is the caller). Increment happens AFTER staleness
+        # validation so that a stale-ledger rejection does NOT burn a count.
+        if mcp_session:
+            from tools.qa_kg_mcp.rate_limit import increment as _rl_increment
+            _rl_increment(
+                mcp_session,
+                ledger_path=Path(agent_writes_path) if agent_writes_path else None,
             )
 
         # Write promoted-from edge (bypasses edge_allowed — it's not causal)

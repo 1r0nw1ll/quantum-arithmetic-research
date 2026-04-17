@@ -82,6 +82,9 @@ chat_data/
 # --- QA-KG runtime artifacts (derived, regenerable) ---
 tools/qa_kg/qa_kg.db
 qa_alphageometry_ptolemy/_meta_ledger.json
+qa_alphageometry_ptolemy/_agent_writes.json
+qa_alphageometry_ptolemy/_agent_writes.json.lock
+qa_alphageometry_ptolemy/_agent_writes.json.tmp
 
 # --- Large regenerable ML blobs ---
 # Workspaces that hold .pt torch checkpoints + .npy embeddings: we commit

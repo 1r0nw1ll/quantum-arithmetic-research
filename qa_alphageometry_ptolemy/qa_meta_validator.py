@@ -7135,6 +7135,28 @@ def _validate_kg_authority_ranker_cert(base_dir):
     return None
 
 
+def _validate_kg_agent_write_surface_cert(base_dir):
+    """QA-KG Agent Write Surface Cert [255] v1: validates Phase 6 MCP agent-integration firewall. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg_mcp/server.py (Dale, 2026); memory/project_qa_mem_review_role.md (Dale, 2026). Gates W1 (MCP surface = 4 tools via AST), W2 (agent upserts confined to extractor/tests/cert-validators), W3a (direct-DB-write detector scans wrapper ledger), W3b (promoted-from edges must carry mcp_session marker), W4 (rate_limit.increment raises at cap), W5 (authority immutable both directions), W6 (READ_ONLY capability omits promote from tools/list), W7 (every MCP tool call logs to query_log), W8 (no except-pass swallows in tools/qa_kg_mcp/ + tools/qa_kg/_audit.py). All gates HARD. Landing this cert flips the alpha-bar from 'NOT agent memory' to 'alpha agent memory + authoritative project memory' per memory/project_qa_mem_review_role.md."""
+    import subprocess
+    validator = os.path.join(
+        base_dir, "qa_kg_agent_write_surface_cert_v1",
+        "qa_kg_agent_write_surface_cert_validate.py",
+    )
+    if not os.path.exists(validator):
+        return "missing qa_kg_agent_write_surface_cert_v1/qa_kg_agent_write_surface_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"[255] v1 FAIL:\n{(proc.stdout or '').strip()}\n"
+            f"{(proc.stderr or '').strip()}"
+        )
+    _capture_warn_lines(255, proc.stdout or "")
+    return None
+
+
 def _validate_kg_determinism_cert(base_dir):
     """QA-KG Determinism Cert [228] v1: validates Phase 5 graph determinism. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg/canonicalize.py (Dale, 2026); memory/project_qa_mem_review_role.md (Dale, 2026). Canonical serialization excludes build-time timestamps and NFC-normalizes unicode; nodes ordered by id, edges ordered by (src_id,dst_id,edge_type). Gates: D1 (HARD) fixture content hash matches expected_hash.fixture_hash; D1.5 (WARN) manifest.repo_head drift; D2 (HARD) in-process rebuild idempotent; D3 (HARD) subprocess rebuild matches D2; D4 (SHOULD/N-A) cross-platform scaffold; D5 (HARD) ledger graph_hash matches live (bootstrap PASS first-run); D6 (HARD) promote() enforces graph_hash staleness; D7 (HARD) no except-pass swallows. Side-channel: validator D5 publishes live graph_hash to `_kg_graph_hash_by_fam_id['228']` for the ledger writer to pick up."""
     import subprocess
@@ -8149,6 +8171,11 @@ FAMILY_SWEEPS = [
      "Phase 5 graph-hash determinism. Canonical serialization excludes build-time timestamps and NFC-normalizes unicode; frozen corpus fixture at tools/qa_kg/fixtures/corpus_snapshot_v1/. Checks D1/D1.5/D2/D3/D4/D5/D6/D7 (D1.5 WARN, D4 PASS on Linux / N-A else, D5 bootstrap-or-compare). Validator publishes live graph_hash to _kg_graph_hash_by_fam_id[228] side-channel; ledger writer attaches it to the [228] entry so kg.promote() D6 staleness check has ground truth",
      "228_qa_kg_determinism_cert_v1",
      "qa_kg_determinism_cert_v1", True),
+    (255, "QA-KG Agent Write Surface Cert v1",
+     _validate_kg_agent_write_surface_cert,
+     "Phase 6 MCP agent-integration firewall. Validates MCP surface = exactly 4 tools (qa_kg_search, qa_kg_get_node, qa_kg_neighbors, qa_kg_promote_agent_note), agent-write path cannot create non-AgentNote types, direct DB writes to qa_kg.db bypassing MCP are surfaced via qa_security_audit, per-session rate limit fires at cap, authority is immutable both directions, and every MCP tool call writes to query_log. Gates W1-W8 all HARD.",
+     "255_qa_kg_agent_write_surface_cert_v1",
+     "qa_kg_agent_write_surface_cert_v1", True),
 ]
 
 

@@ -802,6 +802,145 @@ def test_sc8_rejects_agent_endpoint():
         assert any("agent" in d for d in detail)
 
 
+# =========================================================================
+# Phase 6 tests — W5 authority-immutable + promote() rate-limit integration
+# =========================================================================
+
+
+def test_w5_authority_immutable_blocks_upgrade():
+    """Phase 6 W5: agent → internal upsert raises FirewallViolation."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="x:1", node_type="Thought", title="t", body="b",
+            authority="agent", epistemic_status="observation",
+        ))
+        try:
+            kg.upsert_node(Node(
+                id="x:1", node_type="Thought", title="t", body="b",
+                authority="internal", epistemic_status="observation",
+            ))
+        except FirewallViolation as e:
+            assert "authority_immutable" in str(e)
+        else:
+            raise AssertionError("agent→internal must be blocked")
+
+
+def test_w5_authority_immutable_blocks_silent_downgrade():
+    """Phase 6 W5: primary → agent is also blocked (silent-downgrade guard)."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="sc:primary", node_type="Claim", title="p", body="quoted",
+            authority="primary", epistemic_status="source_claim",
+            method="manual", source_locator="file:CLAUDE.md",
+        ))
+        try:
+            kg.upsert_node(Node(
+                id="sc:primary", node_type="Claim", title="p", body="quoted",
+                authority="agent", epistemic_status="observation",
+            ))
+        except FirewallViolation as e:
+            assert "authority_immutable" in str(e)
+        else:
+            raise AssertionError("primary→agent must be blocked")
+
+
+def test_w5_same_authority_idempotent_upsert_passes():
+    """Phase 6 W5: re-upserting with the same authority is a no-op pass."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg = connect(Path(tmp) / "t.db")
+        kg.upsert_node(Node(
+            id="x:2", node_type="Thought", title="t", body="b",
+            authority="agent", epistemic_status="observation",
+        ))
+        # Same authority, updated body — must succeed.
+        kg.upsert_node(Node(
+            id="x:2", node_type="Thought", title="t", body="b2",
+            authority="agent", epistemic_status="observation",
+        ))
+        row = kg.get("x:2")
+        assert row["body"] == "b2"
+        assert row["authority"] == "agent"
+
+
+def test_promote_rate_limit_integration():
+    """Phase 6: mcp_session passed to promote() increments _agent_writes.json
+    and raises RateLimitExceeded at the cap. Bypassing promote (kg.upsert_edge
+    + promoted-from directly) does NOT burn a count — the counter is
+    scoped to the MCP-authored write path per plan M1."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        awpath = Path(tmp) / "_agent_writes.json"
+        # First promote via MCP session succeeds + increments counter.
+        kg.promote(
+            agent_note_id="agent:note_promo",
+            via_cert="225",
+            promoter_node_id="rule:promoter_promo",
+            broadcast_payload=_fresh_broadcast(),
+            ledger_path=lpath,
+            mcp_session="test-session",
+            agent_writes_path=awpath,
+        )
+        data = json.loads(awpath.read_text())
+        assert data["test-session"]["count"] == 1
+
+
+def test_promote_rate_limit_raises_at_cap():
+    """Simulate the cap — 3 allowed, 4th raises. Uses cap=3 via env override
+    pattern: direct rate_limit.increment exercises cap; here we bolt on a
+    small-cap test by monkey-patching MAX for the duration."""
+    import tools.qa_kg_mcp.rate_limit as rl
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        awpath = Path(tmp) / "_agent_writes.json"
+        old_cap = rl.MAX_WRITES_PER_SESSION
+        rl.MAX_WRITES_PER_SESSION = 3
+        try:
+            for _ in range(3):
+                kg.promote(
+                    agent_note_id="agent:note_promo",
+                    via_cert="225",
+                    promoter_node_id="rule:promoter_promo",
+                    broadcast_payload=_fresh_broadcast(),
+                    ledger_path=lpath,
+                    mcp_session="cap-session",
+                    agent_writes_path=awpath,
+                )
+            try:
+                kg.promote(
+                    agent_note_id="agent:note_promo",
+                    via_cert="225",
+                    promoter_node_id="rule:promoter_promo",
+                    broadcast_payload=_fresh_broadcast(),
+                    ledger_path=lpath,
+                    mcp_session="cap-session",
+                    agent_writes_path=awpath,
+                )
+            except rl.RateLimitExceeded as e:
+                assert "cap-session" in str(e)
+            else:
+                raise AssertionError("4th promote must raise RateLimitExceeded")
+        finally:
+            rl.MAX_WRITES_PER_SESSION = old_cap
+
+
+def test_promote_without_mcp_session_does_not_touch_counter():
+    """Extractor-path callers (no mcp_session) must not increment counter."""
+    with tempfile.TemporaryDirectory() as tmp:
+        kg, lpath = _make_promote_fixtures(tmp)
+        awpath = Path(tmp) / "_agent_writes.json"
+        kg.promote(
+            agent_note_id="agent:note_promo",
+            via_cert="225",
+            promoter_node_id="rule:promoter_promo",
+            broadcast_payload=_fresh_broadcast(),
+            ledger_path=lpath,
+            # no mcp_session — extractor-path call
+        )
+        assert not awpath.exists() or json.loads(awpath.read_text()) == {}
+
+
 def test_certs_extractor_translates_frozen_to_superseded():
     """§6a lifecycle bridge: frozen with sibling _v<N+1> → superseded;
     frozen without successor → deprecated; not frozen → current."""
@@ -853,6 +992,13 @@ TESTS = [
     test_sc8_rejects_axiom_endpoint,
     test_sc8_rejects_agent_endpoint,
     test_certs_extractor_translates_frozen_to_superseded,
+    # Phase 6 additions
+    test_w5_authority_immutable_blocks_upgrade,
+    test_w5_authority_immutable_blocks_silent_downgrade,
+    test_w5_same_authority_idempotent_upsert_passes,
+    test_promote_rate_limit_integration,
+    test_promote_rate_limit_raises_at_cap,
+    test_promote_without_mcp_session_does_not_touch_counter,
 ]
 
 

@@ -357,6 +357,129 @@ def check_topic_acl():
         RESULTS["fail"].append("Topic ACL: NOT present in collab MCP server — llm_request.* topics unprotected")
 
 
+def check_qa_kg_db_direct_writes():
+    """Phase 6 W3a: scan the LLM wrapper ledger for any Bash invocation
+    that wrote directly to tools/qa_kg/qa_kg.db (sqlite3 INSERT/UPDATE/
+    DELETE/etc.) instead of going through the MCP server.
+
+    The cert_gate_hook itself is WRAPPER_SELF_MODIFICATION-protected, so
+    direct-write detection lives here in the audit layer. The wrapper
+    ledger (llm_qa_wrapper/ledger/enforced.jsonl) records every tool call
+    Claude has made, so a forensic scan over it is sufficient — and is
+    exactly what qa_security_audit is for. cert_gate_hook is welcome to
+    grow a complementary in-line block in the future, but it is not
+    required by [255] W3a.
+    """
+    import re as _re
+    pattern = _re.compile(
+        r"\bsqlite3\b[^;&|]*\bqa_kg\.db\b[^;&|]*"
+        r"\b(?:INSERT|UPDATE|DELETE|REPLACE|DROP|ALTER)\b",
+        _re.I,
+    )
+    ledger = ROOT / "llm_qa_wrapper" / "ledger" / "enforced.jsonl"
+    if not ledger.exists():
+        RESULTS["warn"].append(
+            "qa_kg.db direct-write scan: enforced ledger missing, "
+            "skipped (Phase 6 baseline)"
+        )
+        return
+    hits: list[str] = []
+    with ledger.open("r", encoding="utf-8") as f:
+        for line in f:
+            line = line.strip()
+            if not line:
+                continue
+            try:
+                rec = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            if rec.get("tool") != "Bash":
+                continue
+            if rec.get("decision") != "ALLOW":
+                continue
+            tool_input = (rec.get("policy_payload") or {}).get("tool_input") or {}
+            cmd = tool_input.get("command", "") if isinstance(tool_input, dict) else ""
+            if isinstance(cmd, str) and pattern.search(cmd):
+                hits.append(rec.get("ts", "?"))
+    if hits:
+        head = ", ".join(hits[:3])
+        more = "" if len(hits) <= 3 else f" (+{len(hits)-3} more)"
+        RESULTS["fail"].append(
+            f"qa_kg.db direct-write: {len(hits)} ALLOWed Bash call(s) "
+            f"matching INSERT/UPDATE/DELETE on qa_kg.db — these bypass "
+            f"the MCP server's audit + provenance stamping. ts: "
+            f"{head}{more}"
+        )
+    else:
+        RESULTS["pass"].append(
+            "qa_kg.db direct-write: no ALLOWed direct-write Bash calls "
+            "in wrapper ledger"
+        )
+
+
+def check_mcp_provenance():
+    """Phase 6 W3b: forensic check that promoted-from edges authored by
+    agent sessions carry the mcp_session marker stamped by the MCP server.
+
+    Direct writes to qa_kg.db that bypass the MCP server (e.g., a
+    rogue script invoking kg.promote with mcp_session=None or a raw
+    INSERT into the edges table) leave the provenance.broadcast_payload_snapshot
+    without an mcp_session field. This check surfaces them.
+
+    Read-only — never mutates the DB.
+    """
+    db_path = ROOT / "tools" / "qa_kg" / "qa_kg.db"
+    if not db_path.exists():
+        RESULTS["warn"].append(
+            "MCP provenance: qa_kg.db not present, check skipped"
+        )
+        return
+    import sqlite3 as _sql
+    conn = _sql.connect(str(db_path))
+    conn.row_factory = _sql.Row
+    try:
+        rows = conn.execute(
+            "SELECT src_id, dst_id, provenance FROM edges "
+            "WHERE edge_type='promoted-from'"
+        ).fetchall()
+    except _sql.OperationalError as exc:
+        RESULTS["warn"].append(
+            f"MCP provenance: could not read edges ({exc})"
+        )
+        conn.close()
+        return
+    conn.close()
+
+    missing_marker: list[str] = []
+    for row in rows:
+        try:
+            prov = json.loads(row["provenance"] or "{}")
+        except json.JSONDecodeError:
+            missing_marker.append(f"{row['src_id']}→{row['dst_id']} (bad json)")
+            continue
+        snap = prov.get("broadcast_payload_snapshot") or {}
+        if "mcp_session" not in snap:
+            missing_marker.append(f"{row['src_id']}→{row['dst_id']}")
+
+    if not rows:
+        RESULTS["pass"].append(
+            "MCP provenance: no promoted-from edges (Phase 6 baseline)"
+        )
+    elif missing_marker:
+        head = ", ".join(missing_marker[:3])
+        more = "" if len(missing_marker) <= 3 else f" (+{len(missing_marker)-3} more)"
+        RESULTS["fail"].append(
+            f"MCP provenance: {len(missing_marker)} promoted-from edge(s) "
+            f"missing mcp_session marker — likely direct DB write bypassing "
+            f"MCP server: {head}{more}"
+        )
+    else:
+        RESULTS["pass"].append(
+            f"MCP provenance: all {len(rows)} promoted-from edge(s) "
+            f"carry mcp_session marker"
+        )
+
+
 def check_bridge_processes():
     """Check bridge liveness via shared heartbeat files, not process namespace state."""
     bridge_root = ROOT / "qa_lab" / "logs" / "bridge_security"
@@ -416,6 +539,8 @@ def main():
     check_event_log_secrets()
     check_guardrail_denials()
     check_topic_acl()
+    check_qa_kg_db_direct_writes()
+    check_mcp_provenance()
     check_bridge_processes()
 
     print()

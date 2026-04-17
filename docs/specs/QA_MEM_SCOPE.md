@@ -1,8 +1,8 @@
-<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v4, [226], [227], [228], [252], [253], [254], and project-internal authority docs -->
-# QA-MEM Scope (through Phase 5)
+<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG internal scope document; grounds in cert families [202], [225] v4, [226], [227], [228], [252], [253], [254], [255], and project-internal authority docs -->
+# QA-MEM Scope (through Phase 6)
 
-**Status:** Phases 0–5 landed; Phase 4.5 + Phase 5.1 + Phase 6 deferred.
-**Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts) + `[254]` (authority-tiered ranker) + `[228]` (graph determinism).
+**Status:** Phases 0–6 landed. **Alpha bar achieved 2026-04-16** — QA-MEM is now alpha agent memory AND authoritative project memory per the original three-cert bar ([228] + [254] + [255]). Phase 4.5 (corpus scale) and Phase 5.1 (pinned-source D2/D3) reclassified as operational hardening; not gating.
+**Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts) + `[254]` (authority-tiered ranker) + `[228]` (graph determinism) + `[255]` (agent write surface).
 **Companion files:** `QA_AXIOMS_BLOCK.md`, `qa_orbit_rules.py`, `tools/qa_retrieval/schema.py`, `memory/project_qa_mem_architecture.md`.
 
 ## What QA-MEM IS (as of Phase 0)
@@ -330,7 +330,75 @@ C#1 call-site coverage: `arag.search` / `arag.promote_to_kg` accept
 during fixture-driven builds. Unit test
 `test_arag_extractor_respects_db_path_override` guards regression.
 
-## Roadmap (deferred, NOT in scope)
+### Phase 6 — agent integration (MCP write surface)
+
+Landed 2026-04-16. `tools/qa_kg_mcp/server.py` is a stdlib-only stdio
+JSON-RPC server (no `mcp` SDK dependency) exposing EXACTLY four tools:
+
+- `qa_kg_search` — delegates to `kg.search_authority_ranked`. READ ONLY.
+- `qa_kg_get_node` — single-node lookup + epistemic fields + lifecycle.
+  READ ONLY. Miss → `{error: "not_found"}`, never raises.
+- `qa_kg_neighbors` — in/out edges with `edge_types` + `direction`.
+  READ ONLY.
+- `qa_kg_promote_agent_note` — escalates an existing AgentNote via
+  `kg.promote()`. READ_WRITE only. Rate-limited + tamper-evident.
+
+Capability is declared at server spawn via `--cap {read_only,read_write}`.
+A READ_ONLY session's `tools/list` response OMITS `qa_kg_promote_agent_note`
+entirely — agents cannot discover or self-elevate to the write tool.
+
+The write surface ONLY promotes existing AgentNotes. It cannot create
+nodes. AgentNote rows are written exclusively by
+`tools/qa_kg/extractors/agent_notes.py` (from collab-bus events / OB
+thoughts with `originSessionId` / `collab_log_activity` rows).
+
+Per-session rate limit (`MAX_WRITES_PER_SESSION=50`, configurable via
+`QA_KG_MCP_MAX_WRITES` env var) lives in
+`qa_alphageometry_ptolemy/_agent_writes.json` under flock.
+**File is parallel to `_meta_ledger.json`, never shares its flock.**
+This was plan v2 M1 — the two writers (meta-validator sweep vs.
+rate_limit per-promote) never race. Counter decays on explicit
+`session_done` broadcast; crashed sessions recovered via
+`python -m tools.qa_kg_mcp.cli reset-writes <session>`.
+
+`broadcast_payload` is deep-copied by the MCP server and
+`mcp_session` stamped AFTER the copy, so any spoofed `mcp_session` key
+in the agent-provided dict is OVERWRITTEN, not preserved. The
+`qa_security_audit.check_mcp_provenance` check flags `promoted-from`
+edges whose provenance lacks the stamp — catching direct-write
+bypass attempts.
+
+`qa_security_audit.check_qa_kg_db_direct_writes` scans the LLM-wrapper
+ledger for ALLOWed Bash calls matching `sqlite3 ... qa_kg.db ...
+INSERT/UPDATE/DELETE/...`. Any match is FAIL. The hook itself
+(`llm_qa_wrapper/cert_gate_hook.py`) is `WRAPPER_SELF_MODIFICATION`-
+protected, so the W3a forensic detection lives in the audit layer.
+
+W5 authority is IMMUTABLE in both directions: `kg.upsert_node` raises
+`FirewallViolation("authority_immutable")` on agent → internal
+(upgrade) AND primary → agent (silent downgrade). Real authority
+corrections require explicit delete + recreate.
+
+Every MCP tool call writes to `query_log`:
+- Reads: one row per returned node, `rank >= 0`.
+- Writes: one row, `rank = -1` sentinel.
+
+No new schema columns; `query_log` is reused verbatim (schema v4 stays).
+
+New cert family:
+
+- **[255] QA_KG_AGENT_WRITE_SURFACE_CERT.v1** — W1 MCP surface = 4 tools
+  (AST), W2 agent-authority upserts confined to extractor + tests +
+  cert validators, W3a direct-write detector fires, W3b MCP provenance
+  detector fires, W4 rate limit raises at cap, W5 authority immutable
+  both directions, W6 READ_ONLY hides promote from `tools/list`, W7
+  every MCP tool call audited, W8 no except-Exception-pass swallows.
+  All HARD.
+
+Alpha-bar flipped: QA-MEM is alpha agent memory + authoritative
+project memory per the original three-cert bar.
+
+## Roadmap (deferred, operational hardening — NOT alpha-bar items)
 
 - **Phase 4.5:** full primary-source corpus ingestion (Ben/Dale books,
   full Wildberger corpus, Levin 2026); extractor confidence-from-method
@@ -338,13 +406,14 @@ during fixture-driven builds. Unit test
   `extraction_method='ocr'`); domain/valid_from/valid_until population
   on real nodes; URL scheme in `tools/qa_kg/locators.py` resolver. Phase 3
   shipped the mechanism + minimum seed; Phase 4.5 is the scaled pass.
+  Not alpha-bar — corpus scale is post-alpha polish.
   **Ops item** (separate from corpus work): cert-gate Codex review
-  bridge has been dead at cert-submission time in Phase 2/3/4/5. Either
+  bridge has been dead at cert-submission time in Phase 2/3/4/5/6. Either
   `llm_qa_wrapper/cert_gate_hook.py` grows a pre-commit health-check
   that fails loudly with "bridge is dead, restart it" rather than the
   generic `CODEX_REVIEW_PENDING`, OR `tools/qa_security_audit.py`
   gains a line-item that fails when `qa_lab/logs/codex_bridge.log`
-  mtime > 24h. Phases 4+5 worked around with `codex exec --full-auto`
+  mtime > 24h. Phase 6 again worked around with `codex exec --full-auto`
   one-shot; that pattern shouldn't become the default.
 - **Phase 5.1:** pinned-source reproducibility — extend Phase 5's
   determinism test so that D2/D3 rebuild uses extractor source pinned
@@ -354,15 +423,14 @@ during fixture-driven builds. Unit test
   `materialize_pinned_repo` + harness-overlay list. Also: fixture
   tooling (`cli fixture-refresh <dir>`) to regenerate manifest +
   `expected_hash.json` atomically.
-- **Phase 6:** agent integration — `tools/qa_kg_mcp/server.py` exposes
-  `search_authority_ranked` (and friends) as MCP tools; `[255]` cert
-  enforces that the MCP surface cannot create non-AgentNote types and
-  that direct DB writes outside the MCP path are detected.
+  Not alpha-bar — adding a new cert family shifts the fixture rebuild
+  hash legitimately (Phase 6 refreshed expected_hash.json once); the
+  pinned-source harness eliminates this work in later cert additions.
 
-Per the alpha-bar rule (`memory/project_qa_mem_review_role.md`),
-QA-MEM still cannot be marketed as "agent memory" until Phases 4 + 5 + 6
-all PASS. Phases 4 + 5 ship; Phase 6 remains the gating increment
-before agent-facing alpha.
+Per `memory/project_qa_mem_review_role.md`, the alpha bar is
+`[228] + [254] + [255]` — all three have PASSed as of 2026-04-16.
+QA-MEM may be described as "alpha agent memory" and "authoritative
+project memory" from this commit forward.
 
 ## References
 

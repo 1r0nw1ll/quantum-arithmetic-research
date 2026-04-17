@@ -11,7 +11,7 @@
 
 **Location:** `corpus/wildberger_text/aff_proj_metrical.txt` (arXiv:math/0612499v1)
 
-### #abstract
+### #wildberger-2006-aff-proj-abstract
 
 > "By recasting metrical geometry in a purely algebraic setting, both Euclidean and non-Euclidean geometries can be studied over a general field with an arbitrary quadratic form. Both an affine and a projective version of this new theory are introduced here, and the main formulas extend those of rational trigonometry in the plane. This gives a unified, computational model of both spherical and hyperbolic geometries"
 
@@ -25,7 +25,7 @@
 
 **Location:** `corpus/wildberger_text/diamonds.txt` (Wildberger 2003)
 
-### #abstract
+### #wildberger-2003-diamonds-abstract
 
 > "A new model for the irreducible representations of sl3 is presented which is constructed over the integers. This model utilizes the combinatorial geometry of certain polytopes in three dimensional space which we call diamonds. These are not Gelfand-Tsetlin polytopes, but share some of their properties."
 
@@ -53,7 +53,7 @@
 
 **Location:** `corpus/wildberger_text/tetrahedron_vec.txt` (arXiv:1909.08814v3)
 
-### #abstract
+### #notowidigdo-wildberger-2019-tetrahedron-abstract
 
 > "We study the general rational trigonometry of a tetrahedron, based on quadrances, spreads and solid spreads, using vector products associated to an arbitrary symmetric bilinear form over a general field, not of characteristic two. This gives us algebraic analogs of many classical formulas, as well as new insights and results. In particular we derive original relations for a tri-rectangular tetrahedron."
 
@@ -63,7 +63,7 @@
 
 **Location:** `Documents/wildberger_corpus/UHG_I_trigonometry_0909.1377.pdf` (arXiv:0909.1377v1, 47pp)
 
-### #abstract
+### #wildberger-2009-uhg-i-abstract
 
 > "Hyperbolic geometry is developed in a purely algebraic fashion from first principles, without a prior development of differential geometry. The natural connection with the geometry of Lorentz, Einstein and Minkowski comes from a projective point of view, with trigonometric laws that extend to 'points at infinity', here called 'null points', and beyond to 'ideal points' associated to a hyperboloid of one sheet."
 
@@ -77,7 +77,7 @@
 
 **Location:** `Documents/wildberger_corpus/chromogeometry_2008.pdf` (arXiv:0806.3617v1, 15pp)
 
-### #abstract
+### #wildberger-2008-chromogeometry-abstract
 
 > "Chromogeometry brings together Euclidean geometry (called blue) and two relativistic geometries (called red and green), in a surprising three-fold symmetry. We show how the red and green 'Euler lines' and 'nine-point circles' of a triangle interact with the usual blue ones, and how the three orthocenters form an associated triangle with interesting collinearities."
 
@@ -91,7 +91,7 @@
 
 **Location:** `Documents/wildberger_corpus/simply_laced_JLT.pdf` (J. Lie Theory 13 (2003) 155–165)
 
-### #abstract
+### #wildberger-2003-g2-abstract
 
 > "We show how to construct the simple exceptional Lie algebra of type G2 by explicitly constructing its 7 dimensional representation. Technically no knowledge of Lie theory is required. The structure constants have a combinatorial meaning involving convex subsets of a partially ordered multiset of six elements. These arise from playing the Numbers and Mutation games on a certain directed multigraph."
 
@@ -101,7 +101,7 @@
 
 **Location:** `Documents/wildberger_corpus/pell_no_irrationals.pdf` (arXiv:0806.2490v2)
 
-### #abstract
+### #wildberger-2008-pell-abstract
 
 > "We give a simple way to generate an infinite number of solutions to Pell's equation x² − Dy² = 1, requiring only basic matrix arithmetic and no knowledge of irrational numbers. We illustrate the method for D = 2, 7 and 61. Connections to the Stern-Brocot tree and universal geometry are also discussed."
 
@@ -111,7 +111,7 @@
 
 **Location:** `Documents/wildberger_corpus/UHG_II_1012.0880.pdf` (arXiv:1012.0880v1)
 
-### #abstract
+### #wildberger-2010-uhg-ii-abstract
 
 > "This article provides a simple pictorial introduction to universal hyperbolic geometry. We explain how to understand the subject using only elementary projective geometry, augmented by a distinguished circle. This provides a completely algebraic framework for hyperbolic geometry, valid over the rational numbers (and indeed any field not of characteristic two), and gives us many new and beautiful theorems."
 

@@ -3,7 +3,6 @@
   "phase": "4.6",
   "source_class": "wildberger",
   "description": "Wildberger corpus primary-source claims grounding shipped certs [231]-[237], [239]-[242], [245]-[246] (per memory/project_qa_mem_phase_4_5.md follow-ups). domain=geometry across all. Papers span rational trigonometry (Chromogeometry, UHG I+II, aff-proj universal geom), hyper-Catalan / Geode (Wildberger-Rubine 2025 + Rubine/Amdeberhan-Zeilberger/Mukewar follow-ups), exceptional Lie (G2 construction, sl3 diamonds), Pell without irrationals, Mutation Game / Coxeter, and tetrahedron vector products.",
-
   "works": [
     {
       "id": "wildberger_2006_aff_proj_universal",
@@ -126,13 +125,12 @@
       "domain": "geometry"
     }
   ],
-
   "claims": [
     {
       "id": "wildberger_2006_aff_proj_abstract",
       "work": "wildberger_2006_aff_proj_universal",
       "quote": "By recasting metrical geometry in a purely algebraic setting, both Euclidean and non-Euclidean geometries can be studied over a general field with an arbitrary quadratic form. Both an affine and a projective version of this new theory are introduced here, and the main formulas extend those of rational trigonometry in the plane. This gives a unified, computational model of both spherical and hyperbolic geometries",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#wildberger-2006-aff-proj-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2006-12-18",
@@ -154,7 +152,7 @@
       "id": "wildberger_2003_diamonds_abstract",
       "work": "wildberger_2003_diamonds_sl3",
       "quote": "A new model for the irreducible representations of sl3 is presented which is constructed over the integers. This model utilizes the combinatorial geometry of certain polytopes in three dimensional space which we call diamonds. These are not Gelfand-Tsetlin polytopes, but share some of their properties.",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#wildberger-2003-diamonds-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2003-10-15",
@@ -198,7 +196,7 @@
       "id": "notowidigdo_wildberger_2019_tetrahedron_abstract",
       "work": "notowidigdo_wildberger_2019_tetrahedron",
       "quote": "We study the general rational trigonometry of a tetrahedron, based on quadrances, spreads and solid spreads, using vector products associated to an arbitrary symmetric bilinear form over a general field, not of characteristic two. This gives us algebraic analogs of many classical formulas, as well as new insights and results. In particular we derive original relations for a tri-rectangular tetrahedron.",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#notowidigdo-wildberger-2019-tetrahedron-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2019-09-19",
@@ -209,7 +207,7 @@
       "id": "wildberger_2009_uhg_i_abstract",
       "work": "wildberger_2009_uhg_i",
       "quote": "Hyperbolic geometry is developed in a purely algebraic fashion from first principles, without a prior development of differential geometry. The natural connection with the geometry of Lorentz, Einstein and Minkowski comes from a projective point of view, with trigonometric laws that extend to 'points at infinity', here called 'null points', and beyond to 'ideal points' associated to a hyperboloid of one sheet.",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#wildberger-2009-uhg-i-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2009-09-08",
@@ -231,7 +229,7 @@
       "id": "wildberger_2008_chromogeometry_abstract",
       "work": "wildberger_2008_chromogeometry",
       "quote": "Chromogeometry brings together Euclidean geometry (called blue) and two relativistic geometries (called red and green), in a surprising three-fold symmetry. We show how the red and green 'Euler lines' and 'nine-point circles' of a triangle interact with the usual blue ones, and how the three orthocenters form an associated triangle with interesting collinearities.",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#wildberger-2008-chromogeometry-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2008-06-23",
@@ -253,7 +251,7 @@
       "id": "wildberger_2003_g2_abstract",
       "work": "wildberger_2003_g2_combinatorial",
       "quote": "We show how to construct the simple exceptional Lie algebra of type G2 by explicitly constructing its 7 dimensional representation. Technically no knowledge of Lie theory is required. The structure constants have a combinatorial meaning involving convex subsets of a partially ordered multiset of six elements. These arise from playing the Numbers and Mutation games on a certain directed multigraph.",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#wildberger-2003-g2-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2003-01-01",
@@ -264,7 +262,7 @@
       "id": "wildberger_2008_pell_abstract",
       "work": "wildberger_2008_pell_no_irrationals",
       "quote": "We give a simple way to generate an infinite number of solutions to Pell's equation x² − Dy² = 1, requiring only basic matrix arithmetic and no knowledge of irrational numbers. We illustrate the method for D = 2, 7 and 61. Connections to the Stern-Brocot tree and universal geometry are also discussed.",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#wildberger-2008-pell-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2008-06-16",
@@ -275,7 +273,7 @@
       "id": "wildberger_2010_uhg_ii_abstract",
       "work": "wildberger_2010_uhg_ii_pictorial",
       "quote": "This article provides a simple pictorial introduction to universal hyperbolic geometry. We explain how to understand the subject using only elementary projective geometry, augmented by a distinguished circle. This provides a completely algebraic framework for hyperbolic geometry, valid over the rational numbers (and indeed any field not of characteristic two), and gives us many new and beautiful theorems.",
-      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#wildberger-2010-uhg-ii-abstract",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2010-12-04",

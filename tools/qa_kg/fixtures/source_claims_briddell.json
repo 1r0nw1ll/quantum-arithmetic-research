@@ -1,31 +1,281 @@
 {
-  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.6 Briddell FST observation-only fixture. Phase 4.5 deferred Briddell on 'AI-summary not primary' — Phase 4.6 per-file classification confirms: the 5 files under field-structure-theory/ are Perplexity and ChatGPT chat-export artefacts, NOT Briddell primary manuscript material. The authoritative Briddell FST source is the Frontiers in Physics ms 1850870 (Briddell + Will, submitted 2026-04-08), which is not in the repo. This fixture emits no SourceWorks or SourceClaims — only observation nodes recording the classification outcome and the pointer to the off-repo primary source. Do not edit observation bodies. -->",
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.6 Briddell/FST primary-source corpus. CORRECTED 2026-04-17 after Phase 4.6 initial commit 6d40c37 wrongly claimed Briddell was off-repo: the co-authored v2 paper IS on disk at qa_alphageometry_ptolemy/qa_fst/qa_fst_completion_paper.tex (Will Dale + Don Briddell, April 2026 Revision v2 of Frontiers in Physics ms 1850870), plus addendum qa_fst_addendum_b_equals_e_diagonal.tex. Also references Briddell's 2020 monograph (off-repo). Analysis context includes the 2026-04-11 v1→v2 re-map audit (OB a02808105) and the 2026-04-13 STF↔QA b=e diagonal cross-validation (OB). Locators resolve against docs/theory/briddell_fst_v2_excerpts.md. Do not edit quote fields. -->",
   "phase": "4.6",
   "source_class": "briddell",
-  "description": "Briddell FST observation-only fixture. Phase 4.6 per-file P2 classification of the 5 field-structure-theory/ files confirmed Phase 4.5's deferral: all 5 are AI-chat-export artefacts (Perplexity on file #1, ChatGPT on files #2-5 per nexus-ai-chat-importer frontmatter). No SourceWork or SourceClaim nodes are emitted for them. Instead, two observations are recorded: (a) the per-file classification outcome, (b) the pointer to the off-repo Frontiers ms 1850870 (Briddell + Will) as the authoritative primary source for Phase 4.7+ ingestion.",
+  "description": "Briddell FST primary-source claims. CORRECTION fixture replacing the empty observation-only fixture from Phase 4.6 commit 6d40c37. Covers: (1) the co-authored v2 completion-layer paper (Will Dale + Don Briddell, Frontiers ms 1850870 revision v2) with 14 structural claims, (2) the 3pp addendum proving STF {3,9,27,81,243,729,2187} = first 7 a-values of the QA b=e diagonal orbit, and (3) Briddell's 2020 monograph as a referenced SourceWork. Observations capture the 2026-04-11 v1→v2 re-map audit outcome and the 2026-04-13 addendum-hold decision. domain=physics for FST theoretical content; qa_core for b=e diagonal structural claim. The qa_fst module is subprocess-validated by meta_validator (cert ID [13]) but is NOT registered as a FAMILY_SWEEPS cert:fs:* node, so no derived_from edges attach from this fixture.",
+
+  "works": [
+    {
+      "id": "dale_briddell_2026_qa_completion_layer_v2",
+      "title": "Dale & Briddell (2026) — A Quantum Arithmetic Completion Layer for Field Structure Theory (v2)",
+      "body": "Will Dale (Quantum Arithmetic Research Group, corresponding author) & Don Briddell (Field Structure Institute, Mt. Airy, Maryland). Revision v2 (April 2026) of the manuscript originally submitted 2026-04-08 as Frontiers in Physics manuscript 1850870. 1105 lines of LaTeX, compiled PDF at qa_fst_completion_paper.pdf. Presents QA as a completion layer for FST: formalizes five Briddell-primary claims (STF proton decomposition 1836=729+729+243+81+27+27, lambda-to-proton decay 2187-243-81-27=1836, Postulate P1 1-loop=m_e calibration, three-cluster geometric partition distinct from SM flavors, fermion six-loop chiral invariant |Rspin|=|Aspin|=3). Validator passes with 3 warnings (1 lambda drift 0.168%, 2 Briddell Ch.2 typos). Theorem NT firewall crossings = 7 per v2 run (one per calibration row).",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics"
+    },
+    {
+      "id": "dale_briddell_2026_fst_diagonal_addendum",
+      "title": "Dale & Briddell (2026) — Addendum: STF Iteration Sequence as the Canonical b=e Diagonal Orbit of QA",
+      "body": "Will Dale + Don Briddell, April 2026, 3pp structural addendum to the v2 completion-layer paper. Proves that Briddell's STF iteration sequence {3,9,27,81,243,729,2187} is the unique self-similar orbit of the QA element rule a=b+2e along the diagonal b=e (Proposition: on D={(b,e):b=e}, d=2b and a=3b, so b_{n+1}=a_n=3b_n gives a_n=3^{n+1}). Strengthens companion paper from postulate-and-certify to derivation-and-certify on the integer side of the firewall. Decision (OB 2026-04-13): HOLD submission as supplementary pending Frontiers reviewer round on ms 1850870. No change to validator, P1, Π, or firewall-crossing count. File at qa_alphageometry_ptolemy/qa_fst/qa_fst_addendum_b_equals_e_diagonal.tex.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-13",
+      "domain": "qa_core"
+    },
+    {
+      "id": "briddell_2020_structural_physics",
+      "title": "Briddell (2020) — Structural Physics (monograph, primary FST source)",
+      "body": "Don Briddell, *Structural Physics* (book-length treatment of Field Structure Theory). Primary source referenced throughout the Dale-Briddell 2026 v2 completion-layer paper as briddellbook2020. Chapter 2 contains the two in-source arithmetic typos flagged in the v2 paper's corrigendum (MS line 1286 proton sum missing 81 term; MS line 1292 lambda-decay-product count 378 should be 351). Chapter 15 contains the STF hierarchy {3,9,27,81,243,729,2187} mapping to first-generation particles. Not on disk in this repo; referenced by the v2 paper's bibliography.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#briddellbook2020-external",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2020-01-01",
+      "domain": "physics"
+    }
+  ],
 
   "observations": [
     {
-      "id": "obs:briddell_phase4_6_classification",
-      "title": "Phase 4.6 Briddell FST file classification — none are primary manuscript",
-      "body": "The 5 files under field-structure-theory/01-core-theory/fst-fundamentals/ and field-structure-theory/03-integration-frameworks/qa-fst-integration/ are chat-export artefacts, not Don Briddell's primary manuscript: (1) fst-briddell-background-qa-analysis.txt = Perplexity AI answer citing Amazon book pages and YouTube videos (line 22 says 'Answer from Perplexity: pplx.ai/share'); (2) FST and QA Comparison.md = ChatGPT 2025-05-25 conversation export (nexus-ai-chat-importer frontmatter, conversation_id 6833487f-...); (3) Quantum Arithmetic and FST.md = ChatGPT 2025-03-15 export, user turn contains Will's QA synthesis but downstream is AI dialogue; (4) Field structure translation.md = ChatGPT 2025-10-09 export, user turn contains Hawkins→Grant lineage (provenance of user text unverified — could be Will's own writing or pasted from elsewhere); (5) Reframing using FST.md = ChatGPT 2025-08-23 export, user turn pastes Will's own QA paper for reframing. Phase 4.5 deferred on 'AI-summary not primary' — Phase 4.6 confirms this was correct for Briddell primary-source grounding. Files remain on disk for contextual reference but contribute no primary-source SourceClaims.",
-      "source_locator": "file:field-structure-theory/",
-      "method": "manual",
-      "epistemic_status": "observation",
-      "authority": "internal",
-      "domain": "physics",
-      "valid_from": "2026-04-17"
-    },
-    {
-      "id": "obs:briddell_frontiers_ms_1850870_authoritative",
-      "title": "Briddell FST authoritative primary source: Frontiers in Physics ms 1850870 (off-repo)",
-      "body": "Per memory/project_field_structure_theory_briddell.md, the authoritative Briddell FST primary-source manuscript is the 2-part FST paper co-authored by Don Briddell and Will Dale, Part 2 titled 'A Quantum Arithmetic Completion Layer for Field Structure Theory', submitted 2026-04-08 to Frontiers in Physics (Nuclear Physics section) under manuscript ID 1850870. This PDF is not in the repo as of 2026-04-17. Phase 4.7 acquisition path: (a) ask Will for the submission PDF directly, or (b) acquire from Frontiers submission portal after acceptance/publication. Until then, any cert family that wishes to ground in Briddell's FST primary text must note the dependency as 'external-pending' rather than emit a derived-from edge into this graph.",
+      "id": "obs:dale_briddell_v1_to_v2_remap_audit",
+      "title": "2026-04-11 FST v1→v2 re-map audit: 5 v1 violations fixed in v2",
+      "body": "Will requested a critical review of the FST Completion Layer paper (Frontiers ms 1850870, submitted 2026-04-08). Review surfaced 5 v1 violations: (1) hexagonal symmetry witness [2,2,2,0,0,0] invented by LLM session, not in Briddell primary; (2) u/d quark ratio certification at tolerance 10^-3 was tautological by construction since Briddell's MeV values were back-fit to the 378/729 ratio; (3) v1 assignment u=378/d=729 inverted the cluster sizes — uud sums to 1485, not 1836; (4) proton mass via subtraction path 1115.683-124.173-41.391-13.797=936.322 selected the worse of two available numbers vs direct Π(1836)·m_e=938.194 MeV; (5) float MeV compared to int loop ratios without declared firewall — Theorem NT / T2-b code-level violation. v2 resolution: removed unsourced witness, restored STF-consistent partition {729,729,378} as geometric-only (no SM flavor claim), reframed loop-mass bridge as explicit Postulate P1 routed through declared Π, declared firewall crossings counted (=7). Also added witness-audit script tools/qa_witness_audit.py (would have caught the v1 hexagon witness as DERIVATIVE_ONLY) and hardened linter with FIREWALL-1/FIREWALL-2 rules for cert-module files. OB capture 2026-04-11T22:17:28.819Z session.",
       "source_locator": "file:memory/project_field_structure_theory_briddell.md",
       "method": "manual",
       "epistemic_status": "observation",
       "authority": "internal",
       "domain": "physics",
-      "valid_from": "2026-04-08"
+      "valid_from": "2026-04-11"
+    },
+    {
+      "id": "obs:dale_briddell_stf_qa_diagonal_cross_validation",
+      "title": "2026-04-13 FST/STF cross-validation: STF = first 7 a-values of QA b=e diagonal",
+      "body": "Briddell's STF iteration loop counts {3,9,27,81,243,729,2187} (FST paper §2.3, citing briddellbook2020 Chap. 15) are exactly the first seven a-values of the QA b=e diagonal orbit (1,1,2,3) → (3,3,6,9) → (9,9,18,27) → (27,27,54,81) → (81,81,162,243) → (243,243,486,729) → (729,729,1458,2187). All integer claims in FST Certificates I & II live on this diagonal: proton 1836=729+729+243+81+27+27 (all 3^k), lambda→proton 2187-243-81-27=1836, three-cluster {729,729,378} where 378=243+81+27+27. Structural upgrade: Briddell posits {3^n}; QA DERIVES it from a=b+2e with b=e. Sibling diagonals e=kb give ratio 2k+1 (odd only); Sierpinski (k=1) is QA-minimal forced choice. Addendum drafted at qa_fst/qa_fst_addendum_b_equals_e_diagonal.tex (3pp, PDF compiled). Decision (OB 2026-04-13): HOLD submission as supplementary pending Frontiers reviewer round on ms 1850870. Trigger to revisit: Frontiers reviewer comments arrive OR Will decides to use the structural result in a separate venue. Candidate follow-up cert family: QA_STF_DIAGONAL_CERT (one orbit, seven points, b_{n+1}=a_n closure).",
+      "source_locator": "file:docs/theory/QA_SIERPINSKI_SELF_SIMILAR_DIAGONAL.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "qa_core",
+      "valid_from": "2026-04-13"
+    },
+    {
+      "id": "obs:briddell_chap2_line1286_typo",
+      "title": "Briddell 2020 Chap.2 MS line 1286: Fig.2.64 caption formula missing 81 term",
+      "body": "Briddell's Chapter 2 at MS line 1286 writes the proton decomposition as '(729+729+243+27+27=1836)'. The actual sum 729+729+243+27+27 = 1755, not 1836 — the 81 term is missing from the parenthetical arithmetic. The STF-correct formula is 729+729+243+81+27+27=1836. The geometry drawn in Fig.2.64 is correct; only the in-caption arithmetic has the omission. Flagged as Corrigendum Item 1 in the Dale-Briddell 2026 v2 paper §11. The v2 validator logs this under SOURCE_INTERNAL_INCONSISTENCY rather than silently correcting.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#corrigendum-item-1",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "physics",
+      "valid_from": "2026-04-11"
+    },
+    {
+      "id": "obs:briddell_chap2_line1292_typo",
+      "title": "Briddell 2020 Chap.2 MS line 1292: lambda decay product count 378 should be 351",
+      "body": "Briddell's Chapter 2 at MS line 1292 states 'Missing are 378 loops, which are the other decay products of the lambda.' Direct subtraction: 2187-1836 = 351, not 378. 351 decomposes cleanly in the STF basis as 243+81+27 (iterations 5, 4, 3). The value 378 is the loop count of the down-quark cluster described earlier on the same page; the two quantities appear to have been accidentally interchanged. Flagged as Corrigendum Item 2 in the Dale-Briddell 2026 v2 paper §11. Validator logs under SOURCE_INTERNAL_INCONSISTENCY.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#corrigendum-item-2",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "physics",
+      "valid_from": "2026-04-11"
     }
+  ],
+
+  "claims": [
+    {
+      "id": "dale_briddell_v2_abstract_completion_layer_definition",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "We present Quantum Arithmetic (QA) as a completion layer: a framework that formalizes state spaces, generators, invariants, and failure modes without introducing new physical assumptions, and applies them to the verification of an external target theory.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#abstract-completion-layer",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 (Abstract): QA as completion layer, not new physics"
+    },
+    {
+      "id": "dale_briddell_v2_five_claims_list",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "We formalize five explicit claims from the FST primary text: (i) the Sierpinski Triangle Fractal (STF) decomposition of the proton's 1836 loops into integer clusters; (ii) the lambda-to-proton decay bookkeeping 2187 - 243 - 81 - 27 = 1836 as exact integer arithmetic; (iii) a calibration postulate P_1 identifying one loop with one electron rest mass as the sanctioned bridge between the discrete QA layer and the continuous observer layer; (iv) a purely geometric three-cluster quark partition that does not assert Standard-Model flavor identification; and (v) the six-loop chiral pair structure of first-generation fermions.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#abstract-five-claims",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 (Abstract): five formalized FST claims"
+    },
+    {
+      "id": "dale_briddell_v2_firewall_crossings_count",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "All validation satisfies the QA Observer Projection Firewall (Theorem NT): the discrete state layer is integer-only, and the continuous observer layer is crossed exactly once per calibration row via the declared projection Π.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#abstract-firewall",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 (Abstract): Theorem NT firewall once per calibration row"
+    },
+    {
+      "id": "dale_briddell_v2_three_levels_engagement",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "We distinguish three levels of engagement with a theoretical proposal: (1) Acceptance: believing the theory is physically true. (2) Verification: confirming that stated claims are internally consistent and reproducible. (3) Falsification: identifying specific, bounded conditions under which a claim fails. Quantum Arithmetic, as used here, operates at levels (2) and (3). It does not address level (1) — physical truth is outside its scope.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#three-levels-engagement",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §1.2: QA operates at verification + falsification, not acceptance"
+    },
+    {
+      "id": "dale_briddell_v2_plenum_core_elements",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "FST posits a non-local, space-filling structural potential called the Plenum, composed of continuous action loops. Particles form when these loops organize into stable structures through entanglement, rotation, and condensation. Two complementary loop types operate simultaneously: Rspin (counter-clockwise, anti-matter) and Aspin (clockwise, real-matter). Rspin loops remain deployed and dynamically rotating; Aspin loops may condense to form interaction boundaries.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#plenum-core-elements",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §2.1: Plenum / Rspin / Aspin / condensation core elements"
+    },
+    {
+      "id": "dale_briddell_v2_structor_definition",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "The minimal space-defining unit is the Structor: a six-loop nucleus formed from three deployed Rspin loops enclosed by three condensed Aspin loops.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#structor-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §2.1: Structor = 3 Rspin + 3 Aspin loops (fermion nucleus)"
+    },
+    {
+      "id": "dale_briddell_v2_observer_projection_firewall_definition",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "An observer projection is a function Π: S → R^n that maps an integer state in the QA layer to a real-valued output in the observer layer. The observer projection firewall (Theorem NT in the QA axiom block) asserts: Π is the only direction of information flow between the two layers. Continuous values are never causal inputs to the QA layer; they may only be outputs. Any attempt to feed a float-typed value back into QA state, a QA generator, or a QA invariant is a Type-2b axiom violation.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#observer-projection-firewall",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §3.2: Observer Projection Firewall (Theorem NT) formal definition"
+    },
+    {
+      "id": "dale_briddell_v2_postulate_p1",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "Postulate (P_1: Loop-mass calibration). One loop (one 'Love') is calibrated to one electron rest mass: 1 Love := m_e = 0.510998950 69 MeV/c^2. P_1 is declared, not derived. It is the sole bridge between the integer loop counts in the QA layer and MeV values in the observer layer.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#postulate-p1",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §4: Postulate P1 — 1 Love = m_e = 0.510998950 69 MeV"
+    },
+    {
+      "id": "dale_briddell_v2_cert1_proton_decomposition",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "Briddell's Fig. 2.64 presents the proton's 1836 loops as a Sierpinski-triangle decomposition: two bottom sub-triangles of 729 loops each, plus a top cluster of 378 loops, where 378 = 243 + 81 + 27 + 27. The formal integer claim is: 1836 = 729 + 729 + 243 + 81 + 27 + 27.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#cert1-proton-decomposition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §5 (Cert I): 1836 = 729+729+243+81+27+27 STF decomposition"
+    },
+    {
+      "id": "dale_briddell_v2_cert2_lambda_decay",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "The lambda hyperon is STF iteration 7 at 2187 loops. The proton is obtained from the lambda by removing three smaller nested STF sub-triangles corresponding to iterations 5, 4, and 3 (243, 81, and 27 loops respectively): 2187 - 243 - 81 - 27 = 1836.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#cert2-lambda-decay",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §6 (Cert II): lambda→proton decay bookkeeping 2187-243-81-27=1836"
+    },
+    {
+      "id": "dale_briddell_v2_cert3_proton_mass_prediction",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "The direct-read proton-mass calibration Π(1836) = 938.194 MeV differs from the PDG 2024 proton mass by 0.078 MeV (0.0083%) ... the v2 direct-read Π(1836) = 938.194 MeV has drift 0.078 MeV, a 25× improvement [over v1 subtraction-path], and has a cleaner epistemic status: it is the direct application of the declared postulate rather than an indirect chain of source numbers that propagates Briddell's own rounding.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#cert3-proton-mass-prediction",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §7 (Cert III): Π(1836)=938.194 MeV vs PDG drift 0.0083%"
+    },
+    {
+      "id": "dale_briddell_v2_cert4_no_sm_flavor",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "Under Postulate P_1, the Briddell clusters correspond to masses Π(729) = 372.5 MeV and Π(378) = 193.2 MeV. These do not match the Standard Model current-quark masses (m_u ≈ 2.16 MeV, m_d ≈ 4.67 MeV per PDG 2024) by three orders of magnitude, and they also do not match Standard Model constituent-quark masses (both approximately 336 MeV in non-relativistic quark models). The FST clusters are geometric constructs of Briddell's decomposition, not Standard-Model quark-flavor objects, and we do not certify any identification between them.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#cert4-no-sm-flavor",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §8 (Cert IV): three-cluster geometric partition ≠ SM quark flavors"
+    },
+    {
+      "id": "dale_briddell_v2_cert5_six_loop_chiral",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "Briddell states: 'A fermion mass is composed of six loops, three of which are Rspin real-loop quarks and three are Aspin anti-loops quarks' [line 795]. We formalize this as a type-level invariant on the FST state packet. Every first-generation fermion state must carry |Rspin| = |Aspin| = 3 as a type-level constraint.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#cert5-six-loop-chiral",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §9 (Cert V): fermion six-loop invariant |Rspin|=|Aspin|=3"
+    },
+    {
+      "id": "dale_briddell_v2_what_qa_does_not_do",
+      "work": "dale_briddell_2026_qa_completion_layer_v2",
+      "quote": "It is important to state explicitly what the QA completion layer does not claim: It does not propose alternative physics. The Plenum, loops, STF hierarchy, Rspin/Aspin sectors, and cloaking mechanism are all Briddell's constructs, used here exactly as stated. It does not reinterpret FST concepts. It does not 'correct' the theory. It does not certify Standard-Model flavor identifications that Briddell's own text does not support.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#what-qa-does-not-do",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-14",
+      "domain": "physics",
+      "title": "Dale+Briddell 2026 v2 §13.1: four non-claims of the completion layer"
+    },
+    {
+      "id": "dale_briddell_addendum_diagonal_proposition",
+      "work": "dale_briddell_2026_fst_diagonal_addendum",
+      "quote": "The orbit of (1,1) under b_{n+1} = a_n on D is (1,1,2,3) → (3,3,6,9) → (9,9,18,27) → (27,27,54,81) → (81,81,162,243) → (243,243,486,729) → (729,729,1458,2187) → ··· The a-sequence is a_n = 3^{n+1}.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#addendum-diagonal-proposition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-13",
+      "domain": "qa_core",
+      "title": "Dale+Briddell 2026 Addendum Prop.1: b=e diagonal orbit a_n = 3^(n+1)"
+    },
+    {
+      "id": "dale_briddell_addendum_stf_identification",
+      "work": "dale_briddell_2026_fst_diagonal_addendum",
+      "quote": "The first seven a-values of the b=e diagonal orbit are {3, 9, 27, 81, 243, 729, 2187}, which is the STF iteration sequence used in Section 2.3 of the companion paper, citing Briddell [Chap. 15].",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#addendum-stf-identification",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-13",
+      "domain": "qa_core",
+      "title": "Dale+Briddell 2026 Addendum Cor.1: STF sequence = first 7 a-values of b=e diagonal"
+    },
+    {
+      "id": "dale_briddell_addendum_structural_upgrade",
+      "work": "dale_briddell_2026_fst_diagonal_addendum",
+      "quote": "This is a structural addendum to our companion paper ... The companion paper takes Briddell's STF iteration sequence {3, 9, 27, 81, 243, 729, 2187} as a postulate inherited from the FST primary text and certifies the integer claims that depend on it. Here we observe that this sequence is not free: it is the unique self-similar orbit of the QA element rule a = b + 2e along the diagonal b = e. Consequently every integer claim in Certificates I and II of the companion paper lives on a single QA orbit, and the choice of base 3 is forced — not selected — by QA structure.",
+      "source_locator": "file:docs/theory/briddell_fst_v2_excerpts.md#addendum-structural-upgrade",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-13",
+      "domain": "qa_core",
+      "title": "Dale+Briddell 2026 Addendum Abstract: base-3 forced by QA structure, not selected"
+    }
+  ],
+
+  "contradicts": [
+    {"src": "sc:dale_briddell_v2_cert1_proton_decomposition", "dst": "obs:briddell_chap2_line1286_typo", "reason": "typo"},
+    {"src": "sc:dale_briddell_v2_cert2_lambda_decay",        "dst": "obs:briddell_chap2_line1292_typo", "reason": "typo"}
   ]
 }

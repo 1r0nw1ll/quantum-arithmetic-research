@@ -72,10 +72,10 @@
     {
       "id": "q09_levin_cert",
       "query": "Levin",
-      "expected_top_1_authority": "derived",
-      "expected_top_5_node_ids": ["cert:fs:qa_levin_cognitive_lightcone_cert_v1"],
-      "rationale": "Levin 2026 corpus is referenced through derived certs. No primary Levin SourceWork ingested.",
-      "tags": ["derived_certified"]
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["work:chisciure_levin_2025_atwd_2_0"],
+      "rationale": "Phase 4.6 ingested 4 Levin primary SourceWorks under corpus/levin/ (Computational Boundary 2019, TAME 2022, BraiNCA 2026, Cognition ATWD 2.0 2025). Primary-tier authority now outranks the derived cert for the 'Levin' query per the authority-tiered design. The top-1 primary work varies with BM25 ordering across the 4 works; chisciure_levin_2025_atwd_2_0 wins on the 'Levin' token match. Pre-Phase-4.6 top-1 was cert:fs:qa_levin_cognitive_lightcone_cert_v1 (derived).",
+      "tags": ["primary_dominance", "phase_4_6_update"]
     },
     {
       "id": "q10_consistency_v4_lifecycle",

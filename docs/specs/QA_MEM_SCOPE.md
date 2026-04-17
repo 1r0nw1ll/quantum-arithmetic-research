@@ -661,17 +661,24 @@ Tiebreak order puts gate 6 last; 5 of 5 higher-priority gates pass.
 **Q3 — next work: corpus or ranker tuning?** Ranker tuning (Phase 4.7)
 recommended. 6 of 8 misses (P01, P02, P04, P06, C03, C07, T2) classified
 as `real_ranker_miss`; X04 NDCG loss reflects grader-vs-ranker frame
-asymmetry (pre-committed). Concrete Phase 4.7 items:
+asymmetry (pre-committed). Concrete Phase 4.7 items (revised post-critical-review):
 
 1. Graph-expansion post-step on P-category: when top-1 is a derived cert
    with `derived-from` edges to unsurfaced SourceClaims, promote those
    SCs into top-5. Target: P-category recall@5 ≥ 4/6 (up from 2/6).
-2. Contradicts-aware authority relaxation on C-pairs: transiently cap the
-   authority-weight differential when a top-K node has a `contradicts`
-   edge. Target: C-pair recall ≥ 7/8 without regressing gate 1.
-3. Head-to-head reframing for Beta-C: A-RAG cert READMEs indexing OR
-   decision-matrix split of gate 6 into per-system gates. Not a Beta-B
-   patch per decision-matrix §"No post-hoc threshold adjustment".
+2. **Authority differential cap — general, not contradicts-specific.** The
+   10:5 primary:internal weight ratio cannot be closed by the 1.5×
+   contradiction boost and underlies C03 / C07 / T2 / part of P-category.
+   Triggers to consider: contradicts-edge, provenance-chain membership,
+   lexically-tight internal observations. Target: C-pair recall ≥ 7/8
+   AND P-category recall@5 ≥ 4/6 without regressing gates 1 or 3.
+3. Head-to-head reframing for Beta-C — split by failure class:
+   - **3a (T1, fixture/framing):** A-RAG cert-READMEs indexing OR score T1
+     as QA-MEM-only capability (A-RAG comparison → appendix). Decision-
+     matrix revision for Beta-C; not a Beta-B patch.
+   - **3b (T2, ranker defect):** same authority-overweighting mechanism as
+     C03/C07; fully covered by widened item 2. Should pass in Beta-C without
+     any fixture change if item 2 ships.
 
 **Latency**: p50 5 ms / p95 32 ms / p99 35 ms on the 521-node live graph;
 p95 27 ms on a synthetic 5 000-node configuration (latency-only; ranking
@@ -691,6 +698,25 @@ commit — no N1-scope changes required during Beta-B execution.
 insert/delete roundtrip). Synthetic inserts occur under a direct-SQL path
 with `method=script` and are idempotently cleaned on cleanup, so the
 `[228] v1 D1-fixture-hash` remains valid.
+
+**Beta-B known limitations (post-run, metric-design level — Beta-C scope):**
+
+1. Q1 `factor_dominance` catches single-factor dominance only. Actual
+   picture is two-factor: `authority 0.744 + prov_decay 0.218 = 0.962`.
+   A proper "ranker well-tuned" test would also threshold top-2 share or
+   require each covered factor to reach a minimum mean-share under
+   sufficient corpus variance.
+2. Authority @3 = 8/8 is partly lexical-tautology on curator-specified
+   gold (query tokens appear verbatim in gold IDs); does not independently
+   validate authority discrimination under equal lexical competition.
+3. Gate 2 at boundary (6/8 = threshold). C03/C07 share T2's mechanism;
+   authority-differential work must ship before Beta-C or gate 2 is
+   fragile under the current prereg.
+4. Gate 6 conflates T1 framing with T2 ranker defect; split into 3a/3b
+   above.
+5. α=1.5 Pareto-optimal per prereg letter only — on rank-position signals
+   α=1.75/2.0 dominate 1.5 on 3 of 8 pairs (C01, C02, C08 shift from
+   rank 2/3 to rank 1/2). Beta-C metric choice matters here.
 
 ## References
 

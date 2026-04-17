@@ -51,17 +51,23 @@ See `figures/factor_decomposition.png`.
 
 Five settings of `contradiction_prior` ∈ {1.0, 1.25, 1.5, 1.75, 2.0}:
 
-| α | contradiction_recall_per_pair | graph_structural_pass_rate |
-|---|---|---|
-| 1.00 | 0.625 (5/8) | 0.857 (24/28) |
-| 1.25 | 0.750 (6/8) | 0.857 (24/28) |
-| **1.50** | **0.750 (6/8)** | **0.857 (24/28)** |
-| 1.75 | 0.750 (6/8) | 0.857 (24/28) |
-| 2.00 | 0.750 (6/8) | 0.857 (24/28) |
+Full per-α table (prereg-strict axes + per-pair rank detail):
 
-`prior=1.0` strictly dominated (contradiction recall drops to 5/8); 1.5 is **weakly** the best, tied with 1.25 / 1.75 / 2.00 on both axes. Pareto-optimality holds (no alternative strictly beats on any axis). See `figures/contradiction_boost_ablation.png`.
+| α | contradiction_recall_per_pair | graph_structural_pass_rate | src-ranks (8 pairs) |
+|---|---|---|---|
+| 1.00 | 0.625 (5/8) | 0.857 (24/28) | 4, 2, −1, 1, 1, 1, −1, 5 |
+| 1.25 | 0.750 (6/8) | 0.857 (24/28) | 2, 2, −1, 1, 1, 1, −1, 3 |
+| **1.50** | **0.750 (6/8)** | **0.857 (24/28)** | **2, 2, −1, 1, 1, 1, −1, 3** |
+| 1.75 | 0.750 (6/8) | 0.857 (24/28) | 1, 1, −1, 1, 1, 1, −1, 2 |
+| 2.00 | 0.750 (6/8) | 0.857 (24/28) | 1, 1, −1, 1, 1, 1, −1, 2 |
 
-**Secondary finding.** The contradicts pair recall is capped at 6/8 regardless of α in [1.25, 2.0] — two pairs (C03, C07) are not moved by the contradiction boost because the missing endpoint is an `authority=internal` observation that is demoted by `authority_weight[internal]=5` (vs primary=10), and the 1.5× contradiction boost cannot close that gap. This is a Phase 4.7 interaction-between-factors tuning signal, not a ranker defect: moving the internal authority weight alone would break `[254] R9` coverage on the weight map.
+(dst-ranks are 0 at every α — the primary-authority endpoint always wins rank 0.)
+
+**Prereg-strict Pareto call.** Per the decision-matrix definition (axes: `contradiction_recall_per_pair`, `graph_structural_pass_rate`), α=1.5 is Pareto-optimal: `prior=1.0` strictly dominated (5/8 → 6/8); 1.25 / 1.75 / 2.0 tied with 1.5 on both prereg axes; no alternative strictly better. **Q1 PASS holds per prereg letter.**
+
+**Richer-signal caveat (beyond the prereg axes).** Looking at src-rank positions rather than only binary-in-top-5 recall, α=1.75 and α=2.0 dominate α=1.5 on 3 of the 8 pairs (C01, C02, C08 move from rank 2/3 to rank 1/2 under stronger boost). This finer-grained view is NOT a prereg metric — the decision matrix pre-committed to the two binary axes above — and cannot change the Q1 verdict. It is, however, relevant for Phase 4.7 tuning: if the Beta-C prereg measures src-rank distribution, α=1.5 would no longer be uniquely optimal and would likely shift to 1.75 or 2.0.
+
+**Secondary finding — the 6/8 ceiling.** The contradicts pair recall is capped at 6/8 regardless of α in [1.25, 2.0] because two pairs (C03, C07) have `src_rank = -1` (not in the top-10 candidate pool) at **every** α setting. The missing endpoint is an `authority=internal` observation that is demoted by `authority_weight[internal]=5` (vs primary=10), and the 1.5× contradiction boost cannot close a 2× authority gap. **This is not a contradicts-specific defect.** The same mechanism explains the T2 head-to-head failure below and is implicated in P-category misses where the cert ranks above its own `derived-from` SourceClaims. Phase 4.7 item 2 is widened to cover the general authority-differential question, not only contradicts-conditioned cases.
 
 **Q1 = PASS.** Both sub-gates pass.
 
@@ -185,10 +191,12 @@ The empty svp / biology / svp×internal cells are candidate **Phase 4.8 corpus-e
 ### Phase 4.7 concrete action items (per decision matrix §"Lower-tier failure")
 
 1. **Graph-expansion post-step for P-category queries** — when the top-1 cert is derived and has `derived-from` edges to SourceClaims that did not surface in top-k, promote those SCs into top-5 via a `why()` traversal expansion pass. Measurable target: P-category recall@5 ≥ 4/6 (up from 2/6).
-2. **Contradicts-aware authority relaxation on C-pairs** — when a node has a `contradicts` edge to a top-K node, transiently boost it toward the contradicted partner's authority tier (or cap the differential). Measurable target: C-pair recall ≥ 7/8 without regressing gate 1.
-3. **Head-to-head reframing** — either (a) extend A-RAG to index cert family READMEs so the object-space mismatch can be honestly resolved, or (b) split the Q2 gate 6 into "T1: QA-MEM-only capability" + "T2: QA-MEM-only capability" with pass = QA-MEM surfaces the target. This is a **decision-matrix revision for Beta-C**, never a Beta-B patch.
+2. **Authority differential cap — general, not only contradicts-triggered.** Revisit the `authority_weight` ratio (currently primary:derived:internal:agent = 10:8:5:1). A 2× gap between primary and internal cannot be closed by the 1.5× contradiction boost and, more importantly, is not contradicts-specific: it explains C03/C07 (contradicts misses), T2 (head-to-head miss), and likely a portion of the P-category misses where a derived cert outranks its own primary `derived-from` SourceClaims. Triggers to consider: contradicts-edge presence (former item 2), provenance-chain membership (P-category), and lexically-tight internal observations. Measurable target: C-pair recall ≥ 7/8 **and** P-category recall@5 ≥ 4/6, without regressing gates 1 or 3.
+3. **Head-to-head reframing — split by failure class.** T1 and T2 fail for distinct reasons and need distinct remediations.
+   - **3a (T1 — fixture/framing).** T1 is an A-RAG/QA-MEM object-space mismatch (chat-corpus has no cert-filesystem index). Remediation: either (i) extend A-RAG to index cert-family READMEs + SourceClaim bodies so the head-to-head becomes an apples-to-apples comparison, or (ii) revise the decision matrix for Beta-C to score T1 as a QA-MEM-only capability gate (pass = QA-MEM surfaces both targets; A-RAG comparison moves to appendix). This is a **decision-matrix revision for Beta-C**, never a Beta-B patch.
+   - **3b (T2 — ranker defect).** T2 is the same authority-overweighting mechanism as C03/C07 — the `obs:…vibes_structural_reclassification` endpoint is `authority=internal` and cannot clear the primary-weight wall. Remediation is fully covered by widened item 2 above. If item 2 ships, Beta-C's T2 should pass without any fixture or decision-matrix change.
 
-Owner: next session. Target phase: 4.7 (items 1–2) / 4.8 discussion (item 3).
+Owner: next session. Target phase: 4.7 (items 1, 2, 3b) / 4.8 discussion (item 3a).
 
 ---
 
@@ -204,6 +212,22 @@ Synthetic nodes: 5 000 `method=script` `SourceClaim` rows with uniform `confiden
 Latency p95 is well under the 200 ms threshold at which `kg.py` would materialize `depth_to_axiom` per the Phase 4 spec. The materialization threshold is not yet crossed.
 
 ---
+
+## Known limitations (metric-design caveats surfaced post-run)
+
+Prereg discipline is intact — every gate below PASSes or FAILs honestly per the letter of the pre-committed decision matrix. The following observations are about what the gates do and do not actually test; they belong to Beta-C metric design, not Beta-B results.
+
+1. **Q1 `factor_dominance` catches the wrong failure mode.** The metric thresholds *single-factor* dominance (>80% share on >50% of queries), and at 0.083 it passes cleanly. But the actual factor picture is `authority = 0.744 + prov_decay = 0.218 = 0.962` — the ranker is effectively **two-factor** on this corpus. Confidence, time_decay and lifecycle contribute ≈ 0 because the corpus is flat on those dimensions (uniform confidence, empty valid_until, only 3 superseded nodes). A proper "ranker well-tuned" test would also threshold top-2-factor share, or require each covered factor to reach some minimum mean-share given sufficient corpus variance. Q1 PASS holds per prereg letter; the claim "ranker well-tuned" is not fully supported by the evidence on its own.
+
+2. **Authority @3 = 8/8 is partly lexical-tautology.** Curator-specified gold IDs contain the query tokens verbatim (e.g., A01 "Wildberger chromogeometry transcends Klein" → `sc:wildberger_2008_chromogeometry_transcends_klein`). BM25 alone would retrieve the gold. The 8/8 result validates *that the candidate pool surfaces the right lexical target* but does not validate *that authority weighting correctly promotes it over competing lower-authority nodes with equal lexical strength*. v3 review flagged this as I3 (curator-specified ≠ mechanical gold); Beta-A pre-committed to it anyway, honouring prereg. The honest authority-discrimination test needs Beta-C queries where multiple authority tiers compete on equal lexical footing.
+
+3. **Gate 2 sits at the boundary (6/8 = threshold).** C03 and C07 misses share the same authority-overweighting mechanism as T2 (item 1 of the widened Phase 4.7 scope). If that mechanism causes one additional pair to drop below top-5 in Beta-C, gate 2 flips to 5/8 and FAILs — then the tiebreak order becomes load-bearing (contradiction recall ranks second). The contradicts-aware / authority-differential work must ship before Beta-C, or gate 2 is fragile even under the current prereg.
+
+4. **Gate 6 conflates two distinct failures under one label.** T1 is a fixture/framing issue (A-RAG object-space mismatch, pre-flagged by the decision matrix itself). T2 is a ranker defect (authority overweighting, same mechanism as C03/C07). Lumping them as "head-to-head fail → reframe" risks Beta-C passing gate 6 by reframing T1 alone while leaving the underlying authority-overweighting defect unresolved. Phase 4.7 item 3 is therefore split into 3a (T1 framing) and 3b (T2 ranker, covered by widened item 2) above.
+
+5. **"α=1.5 Pareto-optimal" holds per prereg only.** On the two prereg axes, 1.5 is Pareto-optimal by being tied-with-best on both; on finer-grained rank-position signals, α=1.75 / 2.0 dominate 1.5 on 3 of 8 pairs. Beta-C's prereg should either (a) reaffirm the binary-recall axes and accept the tie or (b) extend to rank-position distribution — the latter would likely shift the optimum to 1.75 / 2.0.
+
+These limitations are reported inside the Beta-B commit so future readers do not need to re-derive them from the raw results.
 
 ## Consistency (reporting only — non-gate)
 

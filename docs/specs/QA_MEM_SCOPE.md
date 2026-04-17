@@ -622,6 +622,76 @@ rollback.
 Execution moved to Beta-B. Beta-A is methodology + fixtures only; no
 findings, no memory milestone at this commit.
 
+### Beta-B Execution (2026-04-17)
+
+**Status**: benchmark executed; decision matrix applied; 5 of 6 Q2 gates PASS,
+1 FAIL (head-to-head). Rollback NOT triggered (requires ≥ 3 gate fails).
+Full report at `docs/specs/QA_MEM_BETA_REPORT.md`; raw output at
+`tools/qa_kg/analysis/beta_results.json`; figures at
+`tools/qa_kg/analysis/figures/*.png`.
+
+**Q1 — ranker formula well-tuned?** PASS.
+- `dominated_fraction = 0.083` (gate ≤ 0.50). Authority (mean share 0.74) +
+  provenance decay (0.22) dominate; confidence / time_decay / lifecycle sit
+  at share ≈ 0 because the current corpus has no discriminating values
+  (flat confidence, empty valid_until, only 3 superseded nodes). Structural
+  liveness of those factors is separately gated by `[254]` R9.
+- `contradiction_prior=1.5` Pareto-optimal over {1.0, 1.25, 1.75, 2.0};
+  prior=1.0 strictly dominated on contradiction recall (5/8 → 6/8 from 1.25
+  upward; graph-structural pass unchanged at 24/28 across all five priors).
+
+**Q2 — design claims validated?** FAIL on 1 of 6 gates.
+
+| # | Gate | Value | Threshold | Result |
+|---|---|---|---|---|
+| 1 | Graph-structural hit@5 | 24/28 (85.7%) | ≥ 80% | PASS |
+| 2 | Contradiction recall per-pair | 6/8 | ≥ 6/8 | PASS |
+| 3 | Authority presence @3 | 8/8 | ≥ 6/8 | PASS |
+| 4 | Lifecycle ordering | 2/2 | 2/2 | PASS |
+| 5 | NDCG@10 cross-domain wins vs BM25 | 3/4 | ≥ 3/4 | PASS |
+| 6 | Head-to-head T1 + T2 both pass | 0/2 | 2/2 | FAIL |
+
+Gate 6 failure decomposes as: T1 QA-MEM hits both targets in top-10 but
+A-RAG (chat/doc index) has no cert-filesystem coverage and fails its
+lexical marker test; T2 QA-MEM misses the `obs:…_vibes_structural_reclassification`
+endpoint in top-10 (same demotion mechanism as C03/C07 — `authority=internal`
+loses to primary-token-sharing neighbours under the weight differential).
+Tiebreak order puts gate 6 last; 5 of 5 higher-priority gates pass.
+
+**Q3 — next work: corpus or ranker tuning?** Ranker tuning (Phase 4.7)
+recommended. 6 of 8 misses (P01, P02, P04, P06, C03, C07, T2) classified
+as `real_ranker_miss`; X04 NDCG loss reflects grader-vs-ranker frame
+asymmetry (pre-committed). Concrete Phase 4.7 items:
+
+1. Graph-expansion post-step on P-category: when top-1 is a derived cert
+   with `derived-from` edges to unsurfaced SourceClaims, promote those
+   SCs into top-5. Target: P-category recall@5 ≥ 4/6 (up from 2/6).
+2. Contradicts-aware authority relaxation on C-pairs: transiently cap the
+   authority-weight differential when a top-K node has a `contradicts`
+   edge. Target: C-pair recall ≥ 7/8 without regressing gate 1.
+3. Head-to-head reframing for Beta-C: A-RAG cert READMEs indexing OR
+   decision-matrix split of gate 6 into per-system gates. Not a Beta-B
+   patch per decision-matrix §"No post-hoc threshold adjustment".
+
+**Latency**: p50 5 ms / p95 32 ms / p99 35 ms on the 521-node live graph;
+p95 27 ms on a synthetic 5 000-node configuration (latency-only; ranking
+quality not claimed; nodes inserted and deleted under a transaction,
+`graph_hash_after == graph_hash_before`).
+
+**Alpha bar unchanged.** Structural certs (`[228] + [254] + [255]`) remain
+PASSing; Beta-B tests the empirical design claims on pre-registered
+queries, not cert-level correctness. The `UNVALIDATED` banner on MCP docs
+is NOT applied (rollback threshold not met).
+
+**No fixture edits.** `beta_prereg_deviations.json` unchanged from Beta-A
+commit — no N1-scope changes required during Beta-B execution.
+
+**Determinism spot check.** `graph_hash` stable across the full run
+(pre-benchmark == post-benchmark, including the synthetic 5 000-node
+insert/delete roundtrip). Synthetic inserts occur under a direct-SQL path
+with `method=script` and are idempotently cleaned on cleanup, so the
+`[228] v1 D1-fixture-hash` remains valid.
+
 ## References
 
 - Cert family [202] — Aiq Bekar digital root A1-compliance

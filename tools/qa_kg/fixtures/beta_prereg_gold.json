@@ -1,0 +1,892 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=mechanical gold output from derive_gold.py against live qa_kg.db; reproducible via `python -m tools.qa_kg.analysis.derive_gold`; graph_hash pins the DB state. -->",
+  "phase": "beta_a",
+  "schema_version": 1,
+  "derived_ts": "2026-04-17T14:49:57Z",
+  "graph_hash": "c41eb8f9388c795164d9c3a2172348cba6692b6138aacccd78e5ddece981c8a6",
+  "queries_fixture_name": "beta_prereg_queries.json",
+  "gold_entries": [
+    {
+      "id": "P01",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:haramein_2013_holographic_mass_eq9",
+        "sc:haramein_2013_phi_scale_constant_eq44",
+        "sc:haramein_2013_proton_mass_eq24"
+      ],
+      "axioms_stripped": [],
+      "edges_traversed": [
+        [
+          "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+          "sc:haramein_2013_phi_scale_constant_eq44",
+          "derived-from"
+        ],
+        [
+          "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+          "sc:haramein_2013_holographic_mass_eq9",
+          "derived-from"
+        ],
+        [
+          "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+          "sc:haramein_2013_proton_mass_eq24",
+          "derived-from"
+        ]
+      ]
+    },
+    {
+      "id": "P02",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:keely_law_18_atomic_pitch"
+      ],
+      "axioms_stripped": [
+        "axiom:A2"
+      ],
+      "edges_traversed": [
+        [
+          "cert:fs:qa_keely_structural_ratio_cert_v1",
+          "sc:keely_law_18_atomic_pitch",
+          "derived-from"
+        ],
+        [
+          "cert:fs:qa_keely_structural_ratio_cert_v1",
+          "axiom:A2",
+          "derived-from"
+        ]
+      ]
+    },
+    {
+      "id": "P03",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:keely_law_11_triune_force"
+      ],
+      "axioms_stripped": [
+        "axiom:A1"
+      ],
+      "edges_traversed": [
+        [
+          "cert:fs:qa_keely_triune_cert_v1",
+          "sc:keely_law_11_triune_force",
+          "derived-from"
+        ],
+        [
+          "cert:fs:qa_keely_triune_cert_v1",
+          "axiom:A1",
+          "derived-from"
+        ]
+      ]
+    },
+    {
+      "id": "P04",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:keely_law_11_triune_force",
+        "sc:keely_law_1_matter_force_atomoles"
+      ],
+      "axioms_stripped": [],
+      "edges_traversed": [
+        [
+          "cert:fs:qa_keely_dominant_control_cert_v1",
+          "sc:keely_law_1_matter_force_atomoles",
+          "derived-from"
+        ],
+        [
+          "cert:fs:qa_keely_dominant_control_cert_v1",
+          "sc:keely_law_11_triune_force",
+          "derived-from"
+        ]
+      ]
+    },
+    {
+      "id": "P05",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:levin_2019_computational_surface",
+        "sc:levin_2019_scale_free_cognition"
+      ],
+      "axioms_stripped": [],
+      "edges_traversed": [
+        [
+          "cert:fs:qa_levin_cognitive_lightcone_cert_v1",
+          "sc:levin_2019_computational_surface",
+          "derived-from"
+        ],
+        [
+          "cert:fs:qa_levin_cognitive_lightcone_cert_v1",
+          "sc:levin_2019_scale_free_cognition",
+          "derived-from"
+        ]
+      ]
+    },
+    {
+      "id": "P06",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:parker_prop_vii_circumference_radius"
+      ],
+      "axioms_stripped": [],
+      "edges_traversed": [
+        [
+          "cert:fs:qa_sixteen_identities_cert_v1",
+          "sc:parker_prop_vii_circumference_radius",
+          "derived-from"
+        ]
+      ]
+    },
+    {
+      "id": "C01",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:keely_law_17_vibes_structural_reclassification",
+        "sc:keely_law_17_transformation_21_octaves"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "17",
+          "dispute",
+          "keely",
+          "law",
+          "reclassification",
+          "structural",
+          "transformation"
+        ],
+        "per_endpoint": {
+          "obs:keely_law_17_vibes_structural_reclassification": {
+            "shared_tokens": [
+              "17",
+              "keely",
+              "law",
+              "structural"
+            ],
+            "shared_count": 4,
+            "pass": true
+          },
+          "sc:keely_law_17_transformation_21_octaves": {
+            "shared_tokens": [
+              "17",
+              "keely",
+              "law",
+              "transformation"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "dispute"
+    },
+    {
+      "id": "C02",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:pi_transcendental_lindemann_1882",
+        "sc:hull_quadrature_pi_20612_6561"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "20612",
+          "6561",
+          "hull",
+          "lindemann",
+          "pi",
+          "transcendental"
+        ],
+        "per_endpoint": {
+          "obs:pi_transcendental_lindemann_1882": {
+            "shared_tokens": [
+              "20612",
+              "6561",
+              "hull",
+              "lindemann",
+              "transcendental"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:hull_quadrature_pi_20612_6561": {
+            "shared_tokens": [
+              "20612",
+              "6561",
+              "hull",
+              "pi"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "dispute"
+    },
+    {
+      "id": "C03",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:F_prime_in_unity_set",
+        "sc:svp_F_never_prime"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "f",
+          "never",
+          "prime",
+          "roots",
+          "set",
+          "unity"
+        ],
+        "per_endpoint": {
+          "obs:F_prime_in_unity_set": {
+            "shared_tokens": [
+              "f",
+              "never",
+              "prime",
+              "roots",
+              "set",
+              "unity"
+            ],
+            "shared_count": 6,
+            "pass": true
+          },
+          "sc:svp_F_never_prime": {
+            "shared_tokens": [
+              "f",
+              "never",
+              "prime"
+            ],
+            "shared_count": 3,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "true"
+    },
+    {
+      "id": "C04",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:verified_law13_parenthetical_labels",
+        "sc:svp_law13_labels"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "13",
+          "labels",
+          "law",
+          "mapping",
+          "parenthetical",
+          "svp"
+        ],
+        "per_endpoint": {
+          "obs:verified_law13_parenthetical_labels": {
+            "shared_tokens": [
+              "13",
+              "labels",
+              "law",
+              "mapping",
+              "parenthetical"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:svp_law13_labels": {
+            "shared_tokens": [
+              "13",
+              "labels",
+              "parenthetical",
+              "svp"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "dispute"
+    },
+    {
+      "id": "C05",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:verified_chromosomes",
+        "sc:svp_choromosomes_ocr"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "choromosomes",
+          "chromosomes",
+          "ocr",
+          "svp",
+          "typo"
+        ],
+        "per_endpoint": {
+          "obs:verified_chromosomes": {
+            "shared_tokens": [
+              "choromosomes",
+              "chromosomes",
+              "ocr",
+              "svp",
+              "typo"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:svp_choromosomes_ocr": {
+            "shared_tokens": [
+              "choromosomes",
+              "ocr",
+              "svp",
+              "typo"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "ocr"
+    },
+    {
+      "id": "C06",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:philomath_25920_precession_correction",
+        "sc:philomath_72_year_precession"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "25920",
+          "72",
+          "correction",
+          "philomath",
+          "precession",
+          "year"
+        ],
+        "per_endpoint": {
+          "obs:philomath_25920_precession_correction": {
+            "shared_tokens": [
+              "25920",
+              "72",
+              "correction",
+              "philomath",
+              "precession",
+              "year"
+            ],
+            "shared_count": 6,
+            "pass": true
+          },
+          "sc:philomath_72_year_precession": {
+            "shared_tokens": [
+              "25920",
+              "72",
+              "philomath",
+              "precession",
+              "year"
+            ],
+            "shared_count": 5,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "typo"
+    },
+    {
+      "id": "C07",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:verified_C_identity_a2_b2",
+        "sc:svp_C_identity_a2_h2"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "a2",
+          "b2",
+          "c",
+          "h2",
+          "identity",
+          "svp",
+          "verified"
+        ],
+        "per_endpoint": {
+          "obs:verified_C_identity_a2_b2": {
+            "shared_tokens": [
+              "a2",
+              "b2",
+              "c",
+              "h2",
+              "svp",
+              "verified"
+            ],
+            "shared_count": 6,
+            "pass": true
+          },
+          "sc:svp_C_identity_a2_h2": {
+            "shared_tokens": [
+              "a2",
+              "c",
+              "h2",
+              "svp"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "typo"
+    },
+    {
+      "id": "C08",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "obs:briddell_chap2_line1286_typo",
+        "sc:dale_briddell_v2_cert1_proton_decomposition"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "1836",
+          "729",
+          "briddell",
+          "decomposition",
+          "proton",
+          "typo"
+        ],
+        "per_endpoint": {
+          "obs:briddell_chap2_line1286_typo": {
+            "shared_tokens": [
+              "1836",
+              "729",
+              "briddell",
+              "decomposition",
+              "proton"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:dale_briddell_v2_cert1_proton_decomposition": {
+            "shared_tokens": [
+              "1836",
+              "729",
+              "briddell",
+              "decomposition",
+              "proton"
+            ],
+            "shared_count": 5,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "typo"
+    },
+    {
+      "id": "D01",
+      "category": "domain",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:levin_2019_computational_surface",
+        "sc:levin_2019_scale_free_cognition",
+        "sc:levin_2019_self_as_epistemic_agent",
+        "sc:levin_2022_deep_symmetry_problem_solving",
+        "sc:levin_2022_tame_definition",
+        "sc:piolopez_2026_brainca_abstract"
+      ],
+      "count": 6,
+      "derivation_sql": "SELECT id FROM nodes WHERE domain=? AND epistemic_status='source_claim'"
+    },
+    {
+      "id": "D02",
+      "category": "domain",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:amdeberhan_zeilberger_2025_intro",
+        "sc:hull_quadrature_pi_20612_6561",
+        "sc:notowidigdo_wildberger_2019_tetrahedron_abstract",
+        "sc:parker_prop_iii_circle_primary",
+        "sc:parker_prop_vii_circumference_radius",
+        "sc:rubine_2025_geode_factorization",
+        "sc:rubine_2025_hyper_catalan_definition",
+        "sc:wildberger_2003_diamonds_abstract",
+        "sc:wildberger_2003_diamonds_quark_triples",
+        "sc:wildberger_2003_g2_abstract",
+        "sc:wildberger_2006_aff_proj_abstract",
+        "sc:wildberger_2006_subjective_algebraic",
+        "sc:wildberger_2008_chromogeometry_abstract",
+        "sc:wildberger_2008_chromogeometry_transcends_klein",
+        "sc:wildberger_2008_pell_abstract",
+        "sc:wildberger_2009_uhg_i_abstract",
+        "sc:wildberger_2009_uhg_i_projective_relativistic",
+        "sc:wildberger_2010_uhg_ii_abstract",
+        "sc:wildberger_mutation_coxeter_def",
+        "sc:wildberger_mutation_game_problem"
+      ],
+      "count": 20,
+      "derivation_sql": "SELECT id FROM nodes WHERE domain=? AND epistemic_status='source_claim'"
+    },
+    {
+      "id": "D03",
+      "category": "domain",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:dale_briddell_v2_abstract_completion_layer_definition",
+        "sc:dale_briddell_v2_cert1_proton_decomposition",
+        "sc:dale_briddell_v2_cert2_lambda_decay",
+        "sc:dale_briddell_v2_cert3_proton_mass_prediction",
+        "sc:dale_briddell_v2_cert4_no_sm_flavor",
+        "sc:dale_briddell_v2_cert5_six_loop_chiral",
+        "sc:dale_briddell_v2_firewall_crossings_count",
+        "sc:dale_briddell_v2_five_claims_list",
+        "sc:dale_briddell_v2_observer_projection_firewall_definition",
+        "sc:dale_briddell_v2_plenum_core_elements",
+        "sc:dale_briddell_v2_postulate_p1",
+        "sc:dale_briddell_v2_structor_definition",
+        "sc:dale_briddell_v2_three_levels_engagement",
+        "sc:dale_briddell_v2_what_qa_does_not_do",
+        "sc:philomath_72_year_precession"
+      ],
+      "count": 15,
+      "derivation_sql": "SELECT id FROM nodes WHERE domain=? AND epistemic_status='source_claim'"
+    },
+    {
+      "id": "D04",
+      "category": "domain",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:dale_briddell_addendum_diagonal_proposition",
+        "sc:dale_briddell_addendum_stf_identification",
+        "sc:dale_briddell_addendum_structural_upgrade",
+        "sc:iverson_pyth3_fermat_3d_cubes",
+        "sc:iverson_pyth3_trig_identities",
+        "sc:iverson_qa2_female_roots_parity",
+        "sc:iverson_qa2_halley_qn",
+        "sc:iverson_qa2_replaces_trig_calc",
+        "sc:iverson_qa_vol_ii_synchronous_harmonics_name",
+        "sc:philomath_base10_is_base9",
+        "sc:philomath_digital_root_definition",
+        "sc:philomath_nine_is_zero_of_dspace",
+        "sc:philomath_prime_digital_root_constraint",
+        "sc:philomath_prime_form_6k_pm_1",
+        "sc:philomath_prime_square_mod_24",
+        "sc:philomath_septenary_cycle",
+        "sc:philomath_vedic_square_mirror",
+        "sc:philomath_wave_replicates_mult_6"
+      ],
+      "count": 18,
+      "derivation_sql": "SELECT id FROM nodes WHERE domain=? AND epistemic_status='source_claim'"
+    },
+    {
+      "id": "D05",
+      "category": "domain",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:haramein_2013_coupling_eq52",
+        "sc:haramein_2013_holographic_mass_eq9",
+        "sc:haramein_2013_phi_scale_constant_eq44",
+        "sc:haramein_2013_proton_mass_eq24",
+        "sc:haramein_2013_proton_radius_eq30",
+        "sc:haramein_2013_psu_definition",
+        "sc:haramein_2013_psu_volume_eq5",
+        "sc:haramein_bvb_2016_hubble_in_proton_eq5",
+        "sc:haramein_bvb_2016_psu_density_eq2",
+        "sc:haramein_bvb_2016_spacememory_definition",
+        "sc:haramein_bvb_2016_spacetime_equals_spacememory",
+        "sc:haramein_bvb_2016_wormhole_count_eta",
+        "sc:valbaker_2019_atomic_number_Z_eq16",
+        "sc:valbaker_2019_electron_mass_eq14",
+        "sc:valbaker_2019_rydberg_geometric_eq19"
+      ],
+      "count": 15,
+      "derivation_sql": "SELECT id FROM nodes WHERE domain=? AND epistemic_status='source_claim'"
+    },
+    {
+      "id": "D06",
+      "category": "domain",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:keely_law_11_triune_force",
+        "sc:keely_law_17_transformation_21_octaves",
+        "sc:keely_law_18_atomic_pitch",
+        "sc:keely_law_1_matter_force_atomoles",
+        "sc:keely_law_6_sympathetic_oscillation"
+      ],
+      "count": 5,
+      "derivation_sql": "SELECT id FROM nodes WHERE domain=? AND epistemic_status='source_claim'"
+    },
+    {
+      "id": "A01",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:wildberger_2008_chromogeometry_transcends_klein"
+      ],
+      "validation": {
+        "id": "sc:wildberger_2008_chromogeometry_transcends_klein",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "geometry",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "A02",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:haramein_2013_holographic_mass_eq9"
+      ],
+      "validation": {
+        "id": "sc:haramein_2013_holographic_mass_eq9",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "rsf",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "A03",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:keely_law_1_matter_force_atomoles"
+      ],
+      "validation": {
+        "id": "sc:keely_law_1_matter_force_atomoles",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "svp",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "A04",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:iverson_qa2_halley_qn"
+      ],
+      "validation": {
+        "id": "sc:iverson_qa2_halley_qn",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "qa_core",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "A05",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:dale_briddell_v2_plenum_core_elements"
+      ],
+      "validation": {
+        "id": "sc:dale_briddell_v2_plenum_core_elements",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "physics",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "A06",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:parker_prop_iii_circle_primary"
+      ],
+      "validation": {
+        "id": "sc:parker_prop_iii_circle_primary",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "geometry",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "A07",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:levin_2022_tame_definition"
+      ],
+      "validation": {
+        "id": "sc:levin_2022_tame_definition",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "biology",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "A08",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "sc:philomath_digital_root_definition"
+      ],
+      "validation": {
+        "id": "sc:philomath_digital_root_definition",
+        "authority": "primary",
+        "epistemic_status": "source_claim",
+        "domain": "qa_core",
+        "is_primary_source_claim": true
+      }
+    },
+    {
+      "id": "L01",
+      "category": "lifecycle",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "cert:fs:qa_kg_consistency_cert_v4"
+      ],
+      "anti_gold_ids": [
+        "cert:fs:qa_kg_consistency_cert_v1",
+        "cert:fs:qa_kg_consistency_cert_v2",
+        "cert:fs:qa_kg_consistency_cert_v3"
+      ],
+      "all_versions": [
+        "cert:fs:qa_kg_consistency_cert_v1",
+        "cert:fs:qa_kg_consistency_cert_v2",
+        "cert:fs:qa_kg_consistency_cert_v3",
+        "cert:fs:qa_kg_consistency_cert_v4"
+      ],
+      "gate": "gold[0] rank in top-5 < min(anti_gold ranks)"
+    },
+    {
+      "id": "L02",
+      "category": "lifecycle",
+      "gold_source": "graph_structural",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [
+        "cert:fs:qa_kg_consistency_cert_v4"
+      ],
+      "anti_gold_ids": [
+        "cert:fs:qa_kg_consistency_cert_v1",
+        "cert:fs:qa_kg_consistency_cert_v2",
+        "cert:fs:qa_kg_consistency_cert_v3"
+      ],
+      "all_versions": [
+        "cert:fs:qa_kg_consistency_cert_v1",
+        "cert:fs:qa_kg_consistency_cert_v2",
+        "cert:fs:qa_kg_consistency_cert_v3",
+        "cert:fs:qa_kg_consistency_cert_v4"
+      ],
+      "gate": "gold[0] rank in top-5 < min(anti_gold ranks)"
+    },
+    {
+      "id": "X01",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": null,
+      "note": "deferred to blind_label_prompt.py (llm_blind)"
+    },
+    {
+      "id": "X02",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": null,
+      "note": "deferred to blind_label_prompt.py (llm_blind)"
+    },
+    {
+      "id": "X03",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": null,
+      "note": "deferred to blind_label_prompt.py (llm_blind)"
+    },
+    {
+      "id": "X04",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": null,
+      "note": "deferred to blind_label_prompt.py (llm_blind)"
+    },
+    {
+      "id": "E01",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [],
+      "expected_predicate": "results == []"
+    },
+    {
+      "id": "E02",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [],
+      "expected_predicate": "results == []"
+    },
+    {
+      "id": "E03",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [],
+      "expected_predicate": "all(hit.authority == 'primary' for hit in results[:5]) OR results == []"
+    },
+    {
+      "id": "E04",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "derived_ts": "2026-04-17T14:49:57Z",
+      "gold_ids": [],
+      "expected_predicate": "results_with_valid_at == results_without_valid_at (all valid_until='' \u2192 filter passes all)"
+    }
+  ],
+  "summary": {
+    "derived": 38,
+    "contradiction_lex_fails": 0,
+    "errors": []
+  }
+}

@@ -1,0 +1,303 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=Beta-A pilot-run output. -->",
+  "phase": "beta_a_pilot",
+  "schema_version": 1,
+  "derived_ts": "2026-04-17T14:59:16Z",
+  "graph_hash": "c41eb8f9388c795164d9c3a2172348cba6692b6138aacccd78e5ddece981c8a6",
+  "pilot_query_count": 10,
+  "per_query": [
+    {
+      "id": "P01",
+      "category": "provenance",
+      "query_text": "What primary sources ground the Haramein scaling diagonal cert?",
+      "classification": "real_ranker_miss",
+      "gold_ids": [
+        "sc:haramein_2013_holographic_mass_eq9",
+        "sc:haramein_2013_phi_scale_constant_eq44",
+        "sc:haramein_2013_proton_mass_eq24"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+        "cert:218",
+        "cert:131",
+        "sc:svp_law12e_first_fourth",
+        "cert:73"
+      ],
+      "top5_authorities": [
+        "derived",
+        "derived",
+        "derived",
+        "primary",
+        "derived"
+      ]
+    },
+    {
+      "id": "P02",
+      "category": "provenance",
+      "query_text": "What primary source grounds the Keely structural ratio cert?",
+      "classification": "real_ranker_miss",
+      "gold_ids": [
+        "sc:keely_law_18_atomic_pitch"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "cert:fs:qa_keely_structural_ratio_cert_v1",
+        "cert:184",
+        "work:briddell_2020_structural_physics",
+        "work:keely_40_laws_sympathetic_physics",
+        "cert:247"
+      ],
+      "top5_authorities": [
+        "derived",
+        "derived",
+        "primary",
+        "primary",
+        "derived"
+      ]
+    },
+    {
+      "id": "C04",
+      "category": "contradiction",
+      "query_text": "SVP Law 13 parenthetical labels mapping",
+      "classification": "hit",
+      "gold_ids": [
+        "obs:verified_law13_parenthetical_labels",
+        "sc:svp_law13_labels"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "sc:svp_law13_labels",
+        "obs:verified_law13_parenthetical_labels",
+        "sc:svp_L_CF_over_12",
+        "work:pond_svp_torus",
+        "sc:svp_law12e_first_fourth"
+      ],
+      "top5_authorities": [
+        "primary",
+        "internal",
+        "primary",
+        "primary",
+        "primary"
+      ]
+    },
+    {
+      "id": "C07",
+      "category": "contradiction",
+      "query_text": "SVP C identity a\u00b2 h\u00b2 versus a\u00b2 b\u00b2 verified",
+      "classification": "hit",
+      "gold_ids": [
+        "obs:verified_C_identity_a2_b2",
+        "sc:svp_C_identity_a2_h2"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "sc:svp_C_identity_a2_h2",
+        "sc:svp_L_FC_over_2_variant",
+        "sc:svp_music_perfect_twelfth",
+        "sc:svp_L_CF_over_12",
+        "sc:svp_I_must_be_positive"
+      ],
+      "top5_authorities": [
+        "primary",
+        "primary",
+        "primary",
+        "primary",
+        "primary"
+      ]
+    },
+    {
+      "id": "D06",
+      "category": "domain",
+      "query_text": "Keely SVP source claims sympathetic physics",
+      "classification": "hit",
+      "gold_ids": [
+        "sc:keely_law_11_triune_force",
+        "sc:keely_law_17_transformation_21_octaves",
+        "sc:keely_law_18_atomic_pitch",
+        "sc:keely_law_1_matter_force_atomoles",
+        "sc:keely_law_6_sympathetic_oscillation"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 7,
+      "top5_ids": [
+        "work:keely_40_laws_sympathetic_physics",
+        "sc:keely_law_6_sympathetic_oscillation",
+        "obs:keely_law_17_vibes_structural_reclassification",
+        "sc:keely_law_18_atomic_pitch",
+        "sc:keely_law_11_triune_force"
+      ],
+      "top5_authorities": [
+        "primary",
+        "primary",
+        "internal",
+        "primary",
+        "primary"
+      ]
+    },
+    {
+      "id": "A03",
+      "category": "authority",
+      "query_text": "Keely atomoles Law 1 matter force",
+      "classification": "hit",
+      "gold_ids": [
+        "sc:keely_law_1_matter_force_atomoles"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "sc:keely_law_1_matter_force_atomoles",
+        "sc:keely_law_11_triune_force",
+        "sc:keely_law_17_transformation_21_octaves",
+        "sc:keely_law_18_atomic_pitch",
+        "sc:dale_briddell_v2_plenum_core_elements"
+      ],
+      "top5_authorities": [
+        "primary",
+        "primary",
+        "primary",
+        "primary",
+        "primary"
+      ]
+    },
+    {
+      "id": "L01",
+      "category": "lifecycle",
+      "query_text": "KG consistency invariants current version",
+      "classification": "hit",
+      "gold_ids": [
+        "cert:fs:qa_kg_consistency_cert_v4"
+      ],
+      "anti_gold_ids": [
+        "cert:fs:qa_kg_consistency_cert_v1",
+        "cert:fs:qa_kg_consistency_cert_v2",
+        "cert:fs:qa_kg_consistency_cert_v3"
+      ],
+      "result_count": 10,
+      "top5_ids": [
+        "cert:225",
+        "cert:fs:qa_kg_consistency_cert_v4",
+        "cert:fs:qa_kg_consistency_cert_v1",
+        "cert:fs:qa_kg_consistency_cert_v2",
+        "cert:fs:qa_kg_consistency_cert_v3"
+      ],
+      "top5_authorities": [
+        "derived",
+        "derived",
+        "derived",
+        "derived",
+        "derived"
+      ]
+    },
+    {
+      "id": "X04",
+      "category": "cross_domain",
+      "query_text": "Digital root Philomath vs chromogeometry Wildberger \u2014 arithmetic vs geometric structure",
+      "classification": "hit",
+      "gold_ids": null,
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "work:grant_ghannam_philomath_2019",
+        "sc:philomath_digital_root_definition",
+        "sc:philomath_prime_digital_root_constraint",
+        "work:wildberger_2008_chromogeometry",
+        "work:dale_briddell_2026_qa_completion_layer_v2"
+      ],
+      "top5_authorities": [
+        "primary",
+        "primary",
+        "primary",
+        "primary",
+        "primary"
+      ]
+    },
+    {
+      "id": "E01",
+      "category": "edge_case",
+      "query_text": "xyzqrstuvw_no_such_token_exists_anywhere_in_corpus",
+      "classification": "hit",
+      "gold_ids": [],
+      "anti_gold_ids": null,
+      "result_count": 0,
+      "top5_ids": [],
+      "top5_authorities": []
+    },
+    {
+      "id": "E02",
+      "category": "edge_case",
+      "query_text": "Keely",
+      "classification": "hit",
+      "gold_ids": [],
+      "anti_gold_ids": null,
+      "result_count": 0,
+      "top5_ids": [],
+      "top5_authorities": []
+    }
+  ],
+  "miss_count": 2,
+  "misses": [
+    {
+      "id": "P01",
+      "category": "provenance",
+      "query_text": "What primary sources ground the Haramein scaling diagonal cert?",
+      "classification": "real_ranker_miss",
+      "gold_ids": [
+        "sc:haramein_2013_holographic_mass_eq9",
+        "sc:haramein_2013_phi_scale_constant_eq44",
+        "sc:haramein_2013_proton_mass_eq24"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+        "cert:218",
+        "cert:131",
+        "sc:svp_law12e_first_fourth",
+        "cert:73"
+      ],
+      "top5_authorities": [
+        "derived",
+        "derived",
+        "derived",
+        "primary",
+        "derived"
+      ]
+    },
+    {
+      "id": "P02",
+      "category": "provenance",
+      "query_text": "What primary source grounds the Keely structural ratio cert?",
+      "classification": "real_ranker_miss",
+      "gold_ids": [
+        "sc:keely_law_18_atomic_pitch"
+      ],
+      "anti_gold_ids": null,
+      "result_count": 10,
+      "top5_ids": [
+        "cert:fs:qa_keely_structural_ratio_cert_v1",
+        "cert:184",
+        "work:briddell_2020_structural_physics",
+        "work:keely_40_laws_sympathetic_physics",
+        "cert:247"
+      ],
+      "top5_authorities": [
+        "derived",
+        "derived",
+        "primary",
+        "primary",
+        "derived"
+      ]
+    }
+  ],
+  "summary": {
+    "hit": 8,
+    "real_ranker_miss": 2,
+    "n_a": 0,
+    "deferred": 0
+  }
+}

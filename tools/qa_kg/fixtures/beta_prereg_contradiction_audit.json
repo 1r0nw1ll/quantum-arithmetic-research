@@ -1,0 +1,357 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=Beta-A contradiction lexical pre-flight output. -->",
+  "derived_ts": "2026-04-17T14:49:57Z",
+  "graph_hash": "c41eb8f9388c795164d9c3a2172348cba6692b6138aacccd78e5ddece981c8a6",
+  "audit": [
+    {
+      "id": "C01",
+      "query_text": "Keely Law 17 transformation structural reclassification dispute",
+      "target_edge": [
+        "sc:keely_law_17_transformation_21_octaves",
+        "obs:keely_law_17_vibes_structural_reclassification"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "17",
+          "dispute",
+          "keely",
+          "law",
+          "reclassification",
+          "structural",
+          "transformation"
+        ],
+        "per_endpoint": {
+          "obs:keely_law_17_vibes_structural_reclassification": {
+            "shared_tokens": [
+              "17",
+              "keely",
+              "law",
+              "structural"
+            ],
+            "shared_count": 4,
+            "pass": true
+          },
+          "sc:keely_law_17_transformation_21_octaves": {
+            "shared_tokens": [
+              "17",
+              "keely",
+              "law",
+              "transformation"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "dispute"
+    },
+    {
+      "id": "C02",
+      "query_text": "Hull pi 20612 6561 Lindemann transcendental",
+      "target_edge": [
+        "sc:hull_quadrature_pi_20612_6561",
+        "obs:pi_transcendental_lindemann_1882"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "20612",
+          "6561",
+          "hull",
+          "lindemann",
+          "pi",
+          "transcendental"
+        ],
+        "per_endpoint": {
+          "obs:pi_transcendental_lindemann_1882": {
+            "shared_tokens": [
+              "20612",
+              "6561",
+              "hull",
+              "lindemann",
+              "transcendental"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:hull_quadrature_pi_20612_6561": {
+            "shared_tokens": [
+              "20612",
+              "6561",
+              "hull",
+              "pi"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "dispute"
+    },
+    {
+      "id": "C03",
+      "query_text": "F never prime unity set roots",
+      "target_edge": [
+        "sc:svp_F_never_prime",
+        "obs:F_prime_in_unity_set"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "f",
+          "never",
+          "prime",
+          "roots",
+          "set",
+          "unity"
+        ],
+        "per_endpoint": {
+          "obs:F_prime_in_unity_set": {
+            "shared_tokens": [
+              "f",
+              "never",
+              "prime",
+              "roots",
+              "set",
+              "unity"
+            ],
+            "shared_count": 6,
+            "pass": true
+          },
+          "sc:svp_F_never_prime": {
+            "shared_tokens": [
+              "f",
+              "never",
+              "prime"
+            ],
+            "shared_count": 3,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "true"
+    },
+    {
+      "id": "C04",
+      "query_text": "SVP Law 13 parenthetical labels mapping",
+      "target_edge": [
+        "sc:svp_law13_labels",
+        "obs:verified_law13_parenthetical_labels"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "13",
+          "labels",
+          "law",
+          "mapping",
+          "parenthetical",
+          "svp"
+        ],
+        "per_endpoint": {
+          "obs:verified_law13_parenthetical_labels": {
+            "shared_tokens": [
+              "13",
+              "labels",
+              "law",
+              "mapping",
+              "parenthetical"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:svp_law13_labels": {
+            "shared_tokens": [
+              "13",
+              "labels",
+              "parenthetical",
+              "svp"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "dispute"
+    },
+    {
+      "id": "C05",
+      "query_text": "SVP choromosomes chromosomes OCR typo",
+      "target_edge": [
+        "sc:svp_choromosomes_ocr",
+        "obs:verified_chromosomes"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "choromosomes",
+          "chromosomes",
+          "ocr",
+          "svp",
+          "typo"
+        ],
+        "per_endpoint": {
+          "obs:verified_chromosomes": {
+            "shared_tokens": [
+              "choromosomes",
+              "chromosomes",
+              "ocr",
+              "svp",
+              "typo"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:svp_choromosomes_ocr": {
+            "shared_tokens": [
+              "choromosomes",
+              "ocr",
+              "svp",
+              "typo"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "ocr"
+    },
+    {
+      "id": "C06",
+      "query_text": "Philomath 72-year precession 25920 correction",
+      "target_edge": [
+        "sc:philomath_72_year_precession",
+        "obs:philomath_25920_precession_correction"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "25920",
+          "72",
+          "correction",
+          "philomath",
+          "precession",
+          "year"
+        ],
+        "per_endpoint": {
+          "obs:philomath_25920_precession_correction": {
+            "shared_tokens": [
+              "25920",
+              "72",
+              "correction",
+              "philomath",
+              "precession",
+              "year"
+            ],
+            "shared_count": 6,
+            "pass": true
+          },
+          "sc:philomath_72_year_precession": {
+            "shared_tokens": [
+              "25920",
+              "72",
+              "philomath",
+              "precession",
+              "year"
+            ],
+            "shared_count": 5,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "typo"
+    },
+    {
+      "id": "C07",
+      "query_text": "SVP C identity a\u00b2 h\u00b2 versus a\u00b2 b\u00b2 verified",
+      "target_edge": [
+        "sc:svp_C_identity_a2_h2",
+        "obs:verified_C_identity_a2_b2"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "a2",
+          "b2",
+          "c",
+          "h2",
+          "identity",
+          "svp",
+          "verified"
+        ],
+        "per_endpoint": {
+          "obs:verified_C_identity_a2_b2": {
+            "shared_tokens": [
+              "a2",
+              "b2",
+              "c",
+              "h2",
+              "svp",
+              "verified"
+            ],
+            "shared_count": 6,
+            "pass": true
+          },
+          "sc:svp_C_identity_a2_h2": {
+            "shared_tokens": [
+              "a2",
+              "c",
+              "h2",
+              "svp"
+            ],
+            "shared_count": 4,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "typo"
+    },
+    {
+      "id": "C08",
+      "query_text": "Briddell proton decomposition 1836 729 typo",
+      "target_edge": [
+        "sc:dale_briddell_v2_cert1_proton_decomposition",
+        "obs:briddell_chap2_line1286_typo"
+      ],
+      "lexical_audit": {
+        "query_tokens": [
+          "1836",
+          "729",
+          "briddell",
+          "decomposition",
+          "proton",
+          "typo"
+        ],
+        "per_endpoint": {
+          "obs:briddell_chap2_line1286_typo": {
+            "shared_tokens": [
+              "1836",
+              "729",
+              "briddell",
+              "decomposition",
+              "proton"
+            ],
+            "shared_count": 5,
+            "pass": true
+          },
+          "sc:dale_briddell_v2_cert1_proton_decomposition": {
+            "shared_tokens": [
+              "1836",
+              "729",
+              "briddell",
+              "decomposition",
+              "proton"
+            ],
+            "shared_count": 5,
+            "pass": true
+          }
+        },
+        "both_pass": true
+      },
+      "reason": "typo"
+    }
+  ],
+  "fail_count": 0,
+  "total_contradictions": 8
+}

@@ -543,6 +543,85 @@ Per `memory/project_qa_mem_review_role.md`, the alpha bar is
 QA-MEM may be described as "alpha agent memory" and "authoritative
 project memory" from this commit forward.
 
+### Beta-A Pre-Registration (2026-04-17)
+
+**Status**: methodology + fixtures committed; benchmark execution
+deferred to Beta-B. Beta-A is a pre-registration protocol — gold
+labels are derived BEFORE the ranker is run on the 38-query fixture,
+thresholds are pre-committed in `docs/specs/QA_MEM_BETA_DECISION_MATRIX.md`,
+and fixture changes after benchmark execution are forbidden by the N1
+constraint logged in `beta_prereg_deviations.json`.
+
+**T2 observer-firewall declaration**: `tools/qa_kg/ranker.py` and
+`tools/qa_kg/kg.py` operate strictly in the observer layer per Theorem
+NT. The float constants in `ranker_spec.json` (`halflife_days=365.0`,
+`halflife_hops=3.0`, `no_path_factor=0.5`, `contradiction_prior=1.5`,
+`confidence ∈ [0, 1]`) are observer-side calibration for ordering. The
+composed score is a ranking key, never re-ingested as QA state `(b, e)`.
+The `tools/qa_kg/analysis/` package (derive_gold, blind_label_prompt,
+metrics, pilot_validate, agent_tasks) is pure observer-layer analysis
+over ranker output — no QA state input or output. Verification:
+`python tools/qa_axiom_linter.py --paths tools/qa_kg/ranker.py
+tools/qa_kg/kg.py` → CLEAN (0 violations) as of the Beta-A commit.
+
+**Fixtures** (all SHA-committed atomically):
+- `tools/qa_kg/fixtures/beta_prereg_queries.json` — 38 queries
+  distributed as provenance(6) + contradiction(8) + domain(6) +
+  authority(8) + lifecycle(2) + cross_domain(4) + edge_case(4).
+- `tools/qa_kg/fixtures/beta_prereg_gold.json` — gold derived from
+  the live graph (`graph_hash` pinned): BFS via derived-from for
+  provenance (axioms stripped — ranker cannot surface axioms via
+  query text, they are tested only in T3), edge endpoints for
+  contradiction, SQL filter for domain, curator-specified primary
+  IDs for authority, supersedes chain for lifecycle, mechanical
+  predicates for edge cases. Cross-domain gold deferred to
+  `beta_blind_gold.json`.
+- `tools/qa_kg/fixtures/beta_prereg_contradiction_audit.json` —
+  lexical pre-flight of each contradicts pair; NFKD-normalized
+  tokens; all 8 pairs pass the ≥2-shared-tokens bar.
+- `tools/qa_kg/fixtures/beta_blind_gold.json` — Opus-4.7 relevance
+  grades (integer 1–5) for cross-domain queries. Candidates
+  anonymized to `candidate_NN` to prevent ID-prefix authority
+  leakage. Labeler invoked via `claude -p` with tools blocked
+  + system prompt overridden, giving SDK-equivalent blindness
+  without installing the anthropic package or exposing a key.
+  Raw responses committed for audit reproducibility.
+- `tools/qa_kg/fixtures/beta_pilot_report.json` — 10-query pilot
+  result. 8 hit, 2 miss (P01/P02 — ranker surfaces cert-at-top but
+  not the cert's derived-from SourceClaims in top-5). Misses are
+  genuine design-test signals for Beta-B, not N1 fixture bugs.
+- `tools/qa_kg/fixtures/beta_prereg_deviations.json` — N1 fixture-fix
+  log. Empty at Beta-A commit.
+
+**Decision matrix** (pre-committed in
+`docs/specs/QA_MEM_BETA_DECISION_MATRIX.md`):
+
+- **Q1 — ranker formula well-tuned?** factor dominance
+  (`dominated_fraction ≤ 0.50`) + contradiction-boost ablation
+  (`prior=1.5` Pareto-optimal vs {1.0, 1.25, 1.75, 2.0}).
+- **Q2 — authority + provenance design claims?** graph_structural
+  hit@5 pass rate ≥ 80% (≥23/28), contradiction recall per-pair ≥ 6/8,
+  authority presence in top-3 ≥ 6/8, lifecycle ordering 2/2, NDCG@10
+  cross-domain ≥ 3/4, head-to-head T1+T2 both pass.
+- **Q3 — next work: corpus or ranker tuning?** editorial only.
+
+**Tiebreak order**: graph_structural > contradiction > authority >
+lifecycle > NDCG > factor_dominance.
+
+**Lower-tier failure = Phase 4.7 action item**, not rollback.
+**Rollback** (UNVALIDATED banner on MCP docs, scope status revert,
+corpus expansion pause) triggers only when ≥ 3 Q2 gates fail;
+infrastructure (schema, firewall, certs) stays untouched even under
+rollback.
+
+**Agent tasks** (spec at `tools/qa_kg/analysis/agent_tasks.py`):
+- T1, T2 — head-to-head content-graded (QA-MEM vs A-RAG)
+- T3, T4, T5 — QA-MEM internal consistency (provenance traversal,
+  domain filter purity, min_authority exclusion)
+
+Execution moved to Beta-B. Beta-A is methodology + fixtures only; no
+findings, no memory milestone at this commit.
+
 ## References
 
 - Cert family [202] — Aiq Bekar digital root A1-compliance

@@ -1,0 +1,619 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=Beta-A blind-label gold for cross-domain queries; grades produced via `claude -p` with all tools blocked and system prompt overridden so the labeler sees only title+body of anonymized candidates. Raw responses committed for audit reproducibility. -->",
+  "phase": "beta_a",
+  "schema_version": 1,
+  "derived_ts": "2026-04-17T14:57:54Z",
+  "graph_hash": "c41eb8f9388c795164d9c3a2172348cba6692b6138aacccd78e5ddece981c8a6",
+  "model": "claude-opus-4-7",
+  "anonymization": "candidate_NN assigned in ranker order",
+  "results": [
+    {
+      "id": "X01",
+      "query_text": "What primary sources connect QA integer structure to biological cognition?",
+      "model": "claude-opus-4-7",
+      "candidates": [
+        {
+          "real_id": "axiom:T1",
+          "title": "T1 \u2014 Path Time",
+          "body": "QA time = integer path length k. No continuous time in QA logic.",
+          "candidate_id": "candidate_01"
+        },
+        {
+          "real_id": "sc:levin_2019_self_as_epistemic_agent",
+          "title": "Levin 2019 (Abstract): Self = integrated multi-subunit epistemic agent",
+          "body": "All epistemic agents physically consist of parts that must somehow comprise an integrated cognitive self. Biological individuals consist of subunits (organs, cells, and molecular networks) that are themselves complex and competent in their own native contexts.",
+          "candidate_id": "candidate_02"
+        },
+        {
+          "real_id": "sc:dale_briddell_addendum_structural_upgrade",
+          "title": "Dale+Briddell 2026 Addendum Abstract: base-3 forced by QA structure, not selected",
+          "body": "This is a structural addendum to our companion paper ... The companion paper takes Briddell's STF iteration sequence {3, 9, 27, 81, 243, 729, 2187} as a postulate inherited from the FST primary text and certifies the integer claims that depend on it. Here we observe that this sequence is not free: it is the unique self-similar orbit of the QA element rule a = b + 2e along the diagonal b = e. Conse\u2026",
+          "candidate_id": "candidate_03"
+        },
+        {
+          "real_id": "cert:fs:qa_cognition_space_morphospace_cert_v1",
+          "title": "qa_cognition_space_morphospace_cert_v1",
+          "body": "filesystem-discovered; family_root_rel: qa_cognition_space_morphospace_cert_v1",
+          "candidate_id": "candidate_04"
+        },
+        {
+          "real_id": "cert:194",
+          "title": "QA Cognition Space Morphospace Cert family",
+          "body": "fam_id: 194\ndoc_slug: 194_qa_cognition_space_morphospace_cert\nfamily_root_rel: qa_cognition_space_morphospace_cert_v1\npass_desc: Sole/Seoane et al. qualitative morphospace realized as QA exact discrete morphospace; three clusters (basal/neural/human-AI) = three orbits; voids algebraically necessary (missing divisors {2,3,4,6,12}); agency = |orbit|/81; constructive enumerable cognition space; sourc\u2026",
+          "candidate_id": "candidate_05"
+        },
+        {
+          "real_id": "work:chisciure_levin_2025_atwd_2_0",
+          "title": "Chis-Ciure & Levin (2025) \u2014 Cognition All the Way Down 2.0",
+          "body": "R\u0103zvan Chis-Ciure, Michael Levin. Synthese 206(257), 2025. PhilSci-Archive deposit 26866. 2.8MB .docx source acquired under OA licence to corpus/levin/cognition_atwd_2_0_chis_ciure_levin_2025.docx. Text-extraction (verbatim-quote SourceClaims) deferred to Phase 4.7 pending a .docx-to-text pipeline \u2014 pypdf only handles PDFs. This work node is a placeholder so cert derived-from edges can attach now.",
+          "candidate_id": "candidate_06"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_five_claims_list",
+          "title": "Dale+Briddell 2026 v2 (Abstract): five formalized FST claims",
+          "body": "We formalize five explicit claims from the FST primary text: (i) the Sierpinski Triangle Fractal (STF) decomposition of the proton's 1836 loops into integer clusters; (ii) the lambda-to-proton decay bookkeeping 2187 - 243 - 81 - 27 = 1836 as exact integer arithmetic; (iii) a calibration postulate P_1 identifying one loop with one electron rest mass as the sanctioned bridge between the discrete QA\u2026",
+          "candidate_id": "candidate_07"
+        },
+        {
+          "real_id": "sc:levin_2022_tame_definition",
+          "title": "Levin 2022: TAME framework definition",
+          "body": "I introduce TAME\u2014Technological Approach to Mind Everywhere\u2014a framework for understanding and manipulating cognition in unconventional substrates. TAME formalizes a non-binary (continuous), empirically-based approach to strongly embodied agency.",
+          "candidate_id": "candidate_08"
+        },
+        {
+          "real_id": "cert:76",
+          "title": "QA Failure Algebra Structure Cert family",
+          "body": "fam_id: 76\ndoc_slug: 76_failure_algebra_structure_cert\nfamily_root_rel: ../qa_failure_algebra_structure_cert_v1\npass_desc: schema + validator + fixtures (finite poset + join-semilattice + monotone composition + propagation law)",
+          "candidate_id": "candidate_09"
+        },
+        {
+          "real_id": "cert:28",
+          "title": "QA Graph Structure bundle",
+          "body": "fam_id: 28\ndoc_slug: 28_graph_structure\nfamily_root_rel: .\npass_desc: bundle manifest verified",
+          "candidate_id": "candidate_10"
+        },
+        {
+          "real_id": "sc:iverson_qa2_female_roots_parity",
+          "title": "Iverson QA-2 Ch.1 Doubling: female-root 2-par / 4-par parity law",
+          "body": "If the first integer is 2-par, the fourth integer will be 4-par. If the first integer is 4-par, then the fourth will be 2-par.",
+          "candidate_id": "candidate_11"
+        },
+        {
+          "real_id": "sc:haramein_bvb_2016_spacetime_equals_spacememory",
+          "title": "Haramein+Brown+Val Baker 2016 (p.11): spacetime = spacememory",
+          "body": "the function of information on the structure of space during the universal evolution (spacetime = spacememory, i.e. no memory = no time)",
+          "candidate_id": "candidate_12"
+        },
+        {
+          "real_id": "cert:88",
+          "title": "QA Failure Algebra Structure Classification Cert family",
+          "body": "fam_id: 88\ndoc_slug: 88_failure_algebra_structure_classification_cert\nfamily_root_rel: ../qa_failure_algebra_structure_classification_cert_v1\npass_desc: schema + validator (form-indexed semigroup/monoid classification with identity/absorber/commutativity and optional monotonicity checks) + 5 fixtures (pass_classify_from_family87_tables, fail_identity_claim_wrong, fail_absorber_claim_wrong, fail_co\u2026",
+          "candidate_id": "candidate_13"
+        },
+        {
+          "real_id": "work:levin_2022_tame_mind_everywhere",
+          "title": "Levin (2022) \u2014 Technological Approach to Mind Everywhere (TAME)",
+          "body": "Michael Levin, Tufts+Harvard. Frontiers in Systems Neuroscience 16:768201 (2022-03-24). Introduces TAME \u2014 a non-binary, empirically-grounded framework for strongly embodied agency across unconventional substrates. Morphogenesis as basal cognition; deep symmetry across anatomical, physiological, transcriptional, and 3D behavioral problem-spaces. PDF at corpus/levin/technological_approach_mind_every\u2026",
+          "candidate_id": "candidate_14"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_cert1_proton_decomposition",
+          "title": "Dale+Briddell 2026 v2 \u00a75 (Cert I): 1836 = 729+729+243+81+27+27 STF decomposition",
+          "body": "Briddell's Fig. 2.64 presents the proton's 1836 loops as a Sierpinski-triangle decomposition: two bottom sub-triangles of 729 loops each, plus a top cluster of 378 loops, where 378 = 243 + 81 + 27 + 27. The formal integer claim is: 1836 = 729 + 729 + 243 + 81 + 27 + 27.",
+          "candidate_id": "candidate_15"
+        },
+        {
+          "real_id": "work:levin_2019_computational_boundary",
+          "title": "Levin (2019) \u2014 The Computational Boundary of a 'Self'",
+          "body": "Michael Levin, Allen Discovery Center Tufts + Wyss Institute Harvard. Frontiers in Psychology 10:2688 (2019-12-13). Introduces the Scale-Free Cognition hypothesis and the 'cognitive light cone' construct: any Self is demarcated by a computational surface \u2014 the spatio-temporal boundary of events it can measure, model, and try to affect. Grounds cert [179] qa_levin_cognitive_lightcone_cert_v1. PDF a\u2026",
+          "candidate_id": "candidate_16"
+        },
+        {
+          "real_id": "cert:214",
+          "title": "QA Norm-Flip Signed-Temporal Cert family",
+          "body": "fam_id: 214\ndoc_slug: 214_qa_norm_flip_signed_cert\nfamily_root_rel: qa_norm_flip_signed_cert_v1\npass_desc: The Eisenstein quadratic form f(b,e) = b*b + b*e - e*e satisfies the integer identity f(e,b+e) = -f(b,e) where T(b,e)=(e,b+e). Corollary: T^2 preserves f mod m, giving T-orbit graph of S_m a signed-temporal structure. On S_9, 5 T-orbits decompose into 3 signed cosmos orbits with norm pairs {1\u2026",
+          "candidate_id": "candidate_17"
+        },
+        {
+          "real_id": "work:wildberger_mutation_game",
+          "title": "Wildberger \u2014 The Mutation Game, Coxeter Graphs, and Partially Ordered Multisets",
+          "body": "N. J. Wildberger, UNSW. Introduces the 'Mutation Game' on directed multigraphs (Martians vs anti-Martians mutating under graph-local rules). Root populations under the mutation dynamics correspond to Coxeter-graph structure. Grounds [215] qa_graph_cayley_wildberger_mutation cert family. Text extract at corpus/wildberger_text/mutation_game_2020.txt.",
+          "candidate_id": "candidate_18"
+        },
+        {
+          "real_id": "work:dale_briddell_2026_qa_completion_layer_v2",
+          "title": "Dale & Briddell (2026) \u2014 A Quantum Arithmetic Completion Layer for Field Structure Theory (v2)",
+          "body": "Will Dale (Quantum Arithmetic Research Group, corresponding author) & Don Briddell (Field Structure Institute, Mt. Airy, Maryland). Revision v2 (April 2026) of the manuscript originally submitted 2026-04-08 as Frontiers in Physics manuscript 1850870. 1105 lines of LaTeX, compiled PDF at qa_fst_completion_paper.pdf. Presents QA as a completion layer for FST: formalizes five Briddell-primary claims\u2026",
+          "candidate_id": "candidate_19"
+        },
+        {
+          "real_id": "sc:wildberger_mutation_coxeter_def",
+          "title": "Wildberger Mutation Game: Coxeter graph definition",
+          "body": "A Coxeter graph is an undirected graph with all its edges labelled with either an integer k \u2265 3, or \u221e. By convention edges labelled with 3 are unmarked.",
+          "candidate_id": "candidate_20"
+        }
+      ],
+      "prompt": "QUERY: What primary sources connect QA integer structure to biological cognition?\n\nCANDIDATES:\n--- candidate_01 ---\nTitle: T1 \u2014 Path Time\nBody: QA time = integer path length k. No continuous time in QA logic.\n\n--- candidate_02 ---\nTitle: Levin 2019 (Abstract): Self = integrated multi-subunit epistemic agent\nBody: All epistemic agents physically consist of parts that must somehow comprise an integrated cognitive self. Biological individuals consist of subunits (organs, cells, and molecular networks) that are themselves complex and competent in their own native contexts.\n\n--- candidate_03 ---\nTitle: Dale+Briddell 2026 Addendum Abstract: base-3 forced by QA structure, not selected\nBody: This is a structural addendum to our companion paper ... The companion paper takes Briddell's STF iteration sequence {3, 9, 27, 81, 243, 729, 2187} as a postulate inherited from the FST primary text and certifies the integer claims that depend on it. Here we observe that this sequence is not free: it is the unique self-similar orbit of the QA element rule a = b + 2e along the diagonal b = e. Conse\u2026\n\n--- candidate_04 ---\nTitle: qa_cognition_space_morphospace_cert_v1\nBody: filesystem-discovered; family_root_rel: qa_cognition_space_morphospace_cert_v1\n\n--- candidate_05 ---\nTitle: QA Cognition Space Morphospace Cert family\nBody: fam_id: 194\ndoc_slug: 194_qa_cognition_space_morphospace_cert\nfamily_root_rel: qa_cognition_space_morphospace_cert_v1\npass_desc: Sole/Seoane et al. qualitative morphospace realized as QA exact discrete morphospace; three clusters (basal/neural/human-AI) = three orbits; voids algebraically necessary (missing divisors {2,3,4,6,12}); agency = |orbit|/81; constructive enumerable cognition space; sourc\u2026\n\n--- candidate_06 ---\nTitle: Chis-Ciure & Levin (2025) \u2014 Cognition All the Way Down 2.0\nBody: R\u0103zvan Chis-Ciure, Michael Levin. Synthese 206(257), 2025. PhilSci-Archive deposit 26866. 2.8MB .docx source acquired under OA licence to corpus/levin/cognition_atwd_2_0_chis_ciure_levin_2025.docx. Text-extraction (verbatim-quote SourceClaims) deferred to Phase 4.7 pending a .docx-to-text pipeline \u2014 pypdf only handles PDFs. This work node is a placeholder so cert derived-from edges can attach now.\n\n--- candidate_07 ---\nTitle: Dale+Briddell 2026 v2 (Abstract): five formalized FST claims\nBody: We formalize five explicit claims from the FST primary text: (i) the Sierpinski Triangle Fractal (STF) decomposition of the proton's 1836 loops into integer clusters; (ii) the lambda-to-proton decay bookkeeping 2187 - 243 - 81 - 27 = 1836 as exact integer arithmetic; (iii) a calibration postulate P_1 identifying one loop with one electron rest mass as the sanctioned bridge between the discrete QA\u2026\n\n--- candidate_08 ---\nTitle: Levin 2022: TAME framework definition\nBody: I introduce TAME\u2014Technological Approach to Mind Everywhere\u2014a framework for understanding and manipulating cognition in unconventional substrates. TAME formalizes a non-binary (continuous), empirically-based approach to strongly embodied agency.\n\n--- candidate_09 ---\nTitle: QA Failure Algebra Structure Cert family\nBody: fam_id: 76\ndoc_slug: 76_failure_algebra_structure_cert\nfamily_root_rel: ../qa_failure_algebra_structure_cert_v1\npass_desc: schema + validator + fixtures (finite poset + join-semilattice + monotone composition + propagation law)\n\n--- candidate_10 ---\nTitle: QA Graph Structure bundle\nBody: fam_id: 28\ndoc_slug: 28_graph_structure\nfamily_root_rel: .\npass_desc: bundle manifest verified\n\n--- candidate_11 ---\nTitle: Iverson QA-2 Ch.1 Doubling: female-root 2-par / 4-par parity law\nBody: If the first integer is 2-par, the fourth integer will be 4-par. If the first integer is 4-par, then the fourth will be 2-par.\n\n--- candidate_12 ---\nTitle: Haramein+Brown+Val Baker 2016 (p.11): spacetime = spacememory\nBody: the function of information on the structure of space during the universal evolution (spacetime = spacememory, i.e. no memory = no time)\n\n--- candidate_13 ---\nTitle: QA Failure Algebra Structure Classification Cert family\nBody: fam_id: 88\ndoc_slug: 88_failure_algebra_structure_classification_cert\nfamily_root_rel: ../qa_failure_algebra_structure_classification_cert_v1\npass_desc: schema + validator (form-indexed semigroup/monoid classification with identity/absorber/commutativity and optional monotonicity checks) + 5 fixtures (pass_classify_from_family87_tables, fail_identity_claim_wrong, fail_absorber_claim_wrong, fail_co\u2026\n\n--- candidate_14 ---\nTitle: Levin (2022) \u2014 Technological Approach to Mind Everywhere (TAME)\nBody: Michael Levin, Tufts+Harvard. Frontiers in Systems Neuroscience 16:768201 (2022-03-24). Introduces TAME \u2014 a non-binary, empirically-grounded framework for strongly embodied agency across unconventional substrates. Morphogenesis as basal cognition; deep symmetry across anatomical, physiological, transcriptional, and 3D behavioral problem-spaces. PDF at corpus/levin/technological_approach_mind_every\u2026\n\n--- candidate_15 ---\nTitle: Dale+Briddell 2026 v2 \u00a75 (Cert I): 1836 = 729+729+243+81+27+27 STF decomposition\nBody: Briddell's Fig. 2.64 presents the proton's 1836 loops as a Sierpinski-triangle decomposition: two bottom sub-triangles of 729 loops each, plus a top cluster of 378 loops, where 378 = 243 + 81 + 27 + 27. The formal integer claim is: 1836 = 729 + 729 + 243 + 81 + 27 + 27.\n\n--- candidate_16 ---\nTitle: Levin (2019) \u2014 The Computational Boundary of a 'Self'\nBody: Michael Levin, Allen Discovery Center Tufts + Wyss Institute Harvard. Frontiers in Psychology 10:2688 (2019-12-13). Introduces the Scale-Free Cognition hypothesis and the 'cognitive light cone' construct: any Self is demarcated by a computational surface \u2014 the spatio-temporal boundary of events it can measure, model, and try to affect. Grounds cert [179] qa_levin_cognitive_lightcone_cert_v1. PDF a\u2026\n\n--- candidate_17 ---\nTitle: QA Norm-Flip Signed-Temporal Cert family\nBody: fam_id: 214\ndoc_slug: 214_qa_norm_flip_signed_cert\nfamily_root_rel: qa_norm_flip_signed_cert_v1\npass_desc: The Eisenstein quadratic form f(b,e) = b*b + b*e - e*e satisfies the integer identity f(e,b+e) = -f(b,e) where T(b,e)=(e,b+e). Corollary: T^2 preserves f mod m, giving T-orbit graph of S_m a signed-temporal structure. On S_9, 5 T-orbits decompose into 3 signed cosmos orbits with norm pairs {1\u2026\n\n--- candidate_18 ---\nTitle: Wildberger \u2014 The Mutation Game, Coxeter Graphs, and Partially Ordered Multisets\nBody: N. J. Wildberger, UNSW. Introduces the 'Mutation Game' on directed multigraphs (Martians vs anti-Martians mutating under graph-local rules). Root populations under the mutation dynamics correspond to Coxeter-graph structure. Grounds [215] qa_graph_cayley_wildberger_mutation cert family. Text extract at corpus/wildberger_text/mutation_game_2020.txt.\n\n--- candidate_19 ---\nTitle: Dale & Briddell (2026) \u2014 A Quantum Arithmetic Completion Layer for Field Structure Theory (v2)\nBody: Will Dale (Quantum Arithmetic Research Group, corresponding author) & Don Briddell (Field Structure Institute, Mt. Airy, Maryland). Revision v2 (April 2026) of the manuscript originally submitted 2026-04-08 as Frontiers in Physics manuscript 1850870. 1105 lines of LaTeX, compiled PDF at qa_fst_completion_paper.pdf. Presents QA as a completion layer for FST: formalizes five Briddell-primary claims\u2026\n\n--- candidate_20 ---\nTitle: Wildberger Mutation Game: Coxeter graph definition\nBody: A Coxeter graph is an undirected graph with all its edges labelled with either an integer k \u2265 3, or \u221e. By convention edges labelled with 3 are unmarked.\n\nOutput relevance grades, one line per candidate, in the format '<candidate_id> <grade>'.",
+      "raw_response": "candidate_01 1\ncandidate_02 5\ncandidate_03 2\ncandidate_04 4\ncandidate_05 4\ncandidate_06 5\ncandidate_07 1\ncandidate_08 5\ncandidate_09 1\ncandidate_10 1\ncandidate_11 2\ncandidate_12 2\ncandidate_13 1\ncandidate_14 5\ncandidate_15 1\ncandidate_16 5\ncandidate_17 2\ncandidate_18 2\ncandidate_19 2\ncandidate_20 1\n",
+      "parsed_grades": {
+        "axiom:T1": 1,
+        "sc:levin_2019_self_as_epistemic_agent": 5,
+        "sc:dale_briddell_addendum_structural_upgrade": 2,
+        "cert:fs:qa_cognition_space_morphospace_cert_v1": 4,
+        "cert:194": 4,
+        "work:chisciure_levin_2025_atwd_2_0": 5,
+        "sc:dale_briddell_v2_five_claims_list": 1,
+        "sc:levin_2022_tame_definition": 5,
+        "cert:76": 1,
+        "cert:28": 1,
+        "sc:iverson_qa2_female_roots_parity": 2,
+        "sc:haramein_bvb_2016_spacetime_equals_spacememory": 2,
+        "cert:88": 1,
+        "work:levin_2022_tame_mind_everywhere": 5,
+        "sc:dale_briddell_v2_cert1_proton_decomposition": 1,
+        "work:levin_2019_computational_boundary": 5,
+        "cert:214": 2,
+        "work:wildberger_mutation_game": 2,
+        "work:dale_briddell_2026_qa_completion_layer_v2": 2,
+        "sc:wildberger_mutation_coxeter_def": 1
+      },
+      "n_graded": 20
+    },
+    {
+      "id": "X02",
+      "query_text": "How do Keely's sympathetic-physics laws relate to Haramein's scaling framework?",
+      "model": "claude-opus-4-7",
+      "candidates": [
+        {
+          "real_id": "work:keely_40_laws_sympathetic_physics",
+          "title": "Keely \u2014 Forty Laws of Sympathetic Vibratory Physics (c.1893)",
+          "body": "John Ernst Worrell Keely (1827\u20131898), Forty Laws of Sympathetic Vibratory Physics. Transmitted via Clara Bloomfield-Moore, 'Keely and His Discoveries' (1893), and transcribed on svpwiki.com/Laws-of-Being-Propositions by Dale Pond. Structural, sympathetic-transfer, dominant/control, aggregation/disintegration, and phenomenological laws spanning atomic pitch, resonance, catalysis, dissociation, and\u2026",
+          "candidate_id": "candidate_01"
+        },
+        {
+          "real_id": "cert:185",
+          "title": "QA Keely Sympathetic Transfer Cert family",
+          "body": "fam_id: 185\ndoc_slug: 185_qa_keely_sympathetic_transfer_cert\nfamily_root_rel: qa_keely_sympathetic_transfer_cert_v1\npass_desc: Keely's 7 sympathetic transfer laws (5,6,7,8,17,37,40) \u2192 QA reachability/path structure; Category 2 Vibes framework; orbit co-membership=sympathy, discord=obstruction, triad concordance; checks KST_1+LAWS/REACH/BLOCK/PATH/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok",
+          "candidate_id": "candidate_02"
+        },
+        {
+          "real_id": "cert:188",
+          "title": "QA Keely Phenomenological Cert family",
+          "body": "fam_id: 188\ndoc_slug: 188_qa_keely_phenomenological_cert\nfamily_root_rel: qa_keely_phenomenological_cert_v1\npass_desc: Keely's 17 phenomenological laws (13-15,19-26,30-32,36,38,39) \u2192 Theorem NT observer projections; Category 5 Vibes framework; 42.5% of laws; continuous measurements reveal but never feed back into QA; checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok",
+          "candidate_id": "candidate_03"
+        },
+        {
+          "real_id": "cert:186",
+          "title": "QA Keely Dominant Control Cert family",
+          "body": "fam_id: 186\ndoc_slug: 186_qa_keely_dominant_control_cert\nfamily_root_rel: qa_keely_dominant_control_cert_v1\npass_desc: Keely's 3 dominant/control laws (1,11,16) \u2192 QA orbit hierarchy; Category 3 Vibes framework; invariant substrate, triune generator, singularity=neutral center; checks KDC_1+LAWS/SUB/TRIUNE/SING/W/F; 1 PASS + 1 FAIL; self-test ok",
+          "candidate_id": "candidate_04"
+        },
+        {
+          "real_id": "cert:187",
+          "title": "QA Keely Aggregation Cert family",
+          "body": "fam_id: 187\ndoc_slug: 187_qa_keely_aggregation_cert\nfamily_root_rel: qa_keely_aggregation_cert_v1\npass_desc: Keely's 5 aggregation/disintegration laws (3,12,28,34,35) \u2192 QA state composition/decomposition; Category 4 Vibes framework; coupling tension, orbit density, discord dissociation, deterministic synthesis; checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok",
+          "candidate_id": "candidate_05"
+        },
+        {
+          "real_id": "cert:184",
+          "title": "QA Keely Structural Ratio Cert family",
+          "body": "fam_id: 184\ndoc_slug: 184_qa_keely_structural_ratio_cert\nfamily_root_rel: qa_keely_structural_ratio_cert_v1\npass_desc: Keely's 8 structural ratio laws (2,4,9,10,18,27,29,33) \u2192 QA modular invariants; Category 1 Vibes framework; pitch=f-value, period 1|8|24, concordance, chromogeometry C*C+F*F=G*G; checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO/CLOSURE/W/F; 1 PASS + 1 FAIL; self-test ok",
+          "candidate_id": "candidate_06"
+        },
+        {
+          "real_id": "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+          "title": "qa_haramein_scaling_diagonal_cert_v1",
+          "body": "filesystem-discovered; family_root_rel: qa_haramein_scaling_diagonal_cert_v1",
+          "candidate_id": "candidate_07"
+        },
+        {
+          "real_id": "cert:fs:qa_keely_sympathetic_transfer_cert_v1",
+          "title": "qa_keely_sympathetic_transfer_cert_v1",
+          "body": "filesystem-discovered; family_root_rel: qa_keely_sympathetic_transfer_cert_v1",
+          "candidate_id": "candidate_08"
+        },
+        {
+          "real_id": "cert:218",
+          "title": "QA Haramein Scaling Diagonal Cert family",
+          "body": "fam_id: 218\ndoc_slug: 218_qa_haramein_scaling_diagonal_cert\nfamily_root_rel: qa_haramein_scaling_diagonal_cert_v1\npass_desc: Haramein-Rauscher-Hyson 2008 Table 1 (Big Bang/Planck, Atomic, Stellar Solar, Galactic G1, Galactic G2, Universe) encoded as integer (log10 R cm, log10 nu Hz) sits on QA fixed-d hyperbola (b+e = const, Schwarzschild line R*nu=c after decade-rounding). Four structural segment\u2026",
+          "candidate_id": "candidate_09"
+        },
+        {
+          "real_id": "work:briddell_2020_structural_physics",
+          "title": "Briddell (2020) \u2014 Structural Physics (monograph, primary FST source)",
+          "body": "Don Briddell, *Structural Physics* (book-length treatment of Field Structure Theory). Primary source referenced throughout the Dale-Briddell 2026 v2 completion-layer paper as briddellbook2020. Chapter 2 contains the two in-source arithmetic typos flagged in the v2 paper's corrigendum (MS line 1286 proton sum missing 81 term; MS line 1292 lambda-decay-product count 378 should be 351). Chapter 15 co\u2026",
+          "candidate_id": "candidate_10"
+        },
+        {
+          "real_id": "sc:keely_law_6_sympathetic_oscillation",
+          "title": "Keely Law 6 (Sympathetic Oscillation): co-pitch entrainment",
+          "body": "Coherent aggregates immersed in a medium pulsating at their natural pitch simultaneously oscillate with the same frequency, whether the pitch of the medium be a unison, or any harmonic of the fundamental pitch.",
+          "candidate_id": "candidate_11"
+        },
+        {
+          "real_id": "work:svp_wiki_qa_elements",
+          "title": "SVP Wiki: Quantum Arithmetic Elements",
+          "body": "Primary source: Dale Pond's 'Unpublished Notes' (December 1998), published at svpwiki.com/Quantum+Arithmetic+Elements. Canonical reference for the QA identity letters (A\u2013Z) and the 16 parity laws. Author credits Ben Iverson as originator of Quantum Arithmetic.",
+          "candidate_id": "candidate_12"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_abstract_completion_layer_definition",
+          "title": "Dale+Briddell 2026 v2 (Abstract): QA as completion layer, not new physics",
+          "body": "We present Quantum Arithmetic (QA) as a completion layer: a framework that formalizes state spaces, generators, invariants, and failure modes without introducing new physical assumptions, and applies them to the verification of an external target theory.",
+          "candidate_id": "candidate_13"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_what_qa_does_not_do",
+          "title": "Dale+Briddell 2026 v2 \u00a713.1: four non-claims of the completion layer",
+          "body": "It is important to state explicitly what the QA completion layer does not claim: It does not propose alternative physics. The Plenum, loops, STF hierarchy, Rspin/Aspin sectors, and cloaking mechanism are all Briddell's constructs, used here exactly as stated. It does not reinterpret FST concepts. It does not 'correct' the theory. It does not certify Standard-Model flavor identifications that Bridd\u2026",
+          "candidate_id": "candidate_14"
+        },
+        {
+          "real_id": "work:haramein_brown_valbaker_2016",
+          "title": "Haramein, Brown & Val Baker (2016) \u2014 The Unified Spacememory Network",
+          "body": "Nassim Haramein, William David Brown, Amira Val Baker, *The Unified Spacememory Network: from Cosmogenesis to Consciousness*. 2016. Extends the 2013 holographic framework with the 'spacememory' concept (recursive Planckian wormhole-network feedback) and derives the scale-duality identity R_\u03c1 \u2248 Hubble mass (interior of a proton \u2261 observable universe). PDF acquired via OSF dj7a4 zip (USMN.pdf, 1.4MB\u2026",
+          "candidate_id": "candidate_15"
+        },
+        {
+          "real_id": "sc:haramein_2013_coupling_eq52",
+          "title": "Haramein 2013 eq.(52): strong/gravity coupling = 4\u03c6\u00b2",
+          "body": "F_g / F_s = G m_p m_p' / c \u0127 = 4 \u03c6^2 = 5.897264 \u00d7 10^-39 ... Where 4\u03c6\u00b2 is the exact value for the coupling constant between gravitation and confinement at the proton scale or the strong interaction.",
+          "candidate_id": "candidate_16"
+        },
+        {
+          "real_id": "cert:153",
+          "title": "QA Keely Triune Cert family",
+          "body": "fam_id: 153\ndoc_slug: 153_qa_keely_triune_cert\nfamily_root_rel: qa_keely_triune_cert_v1\npass_desc: Keely triune (Enharmonic/Dominant/Harmonic) \u2192 QA orbits (Satellite/Singularity/Cosmos); {0,3,6}=singularity=Tesla 3-6-9; LCM(1,8,24)=24; Brinton Laws of Being; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok",
+          "candidate_id": "candidate_17"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_cert1_proton_decomposition",
+          "title": "Dale+Briddell 2026 v2 \u00a75 (Cert I): 1836 = 729+729+243+81+27+27 STF decomposition",
+          "body": "Briddell's Fig. 2.64 presents the proton's 1836 loops as a Sierpinski-triangle decomposition: two bottom sub-triangles of 729 loops each, plus a top cluster of 378 loops, where 378 = 243 + 81 + 27 + 27. The formal integer claim is: 1836 = 729 + 729 + 243 + 81 + 27 + 27.",
+          "candidate_id": "candidate_18"
+        },
+        {
+          "real_id": "work:valbaker_haramein_alirol_2019",
+          "title": "Val Baker, Haramein & Alirol (2019) \u2014 The Electron and the Holographic Mass Solution",
+          "body": "A. K. F. Val Baker, N. Haramein, O. Alirol, *The Electron and the Holographic Mass Solution*. Physics Essays 32(2):255-262, June 2019. Extends the holographic mass scheme to the electron: m_e = (1/2)\u03b1 (\u03b7_e/R_e) m_l matches CODATA 2014 within 1\u03c3. Also derives Z (atomic number) as the integer ratio at radius a_0/N and the Rydberg constant as R\u221e = 1/(8\u03c0 a_0). PDF acquired via assets.website-files.com\u2026",
+          "candidate_id": "candidate_19"
+        },
+        {
+          "real_id": "cert:236",
+          "title": "QA Spread Polynomial Composition Cert family",
+          "body": "fam_id: 236\ndoc_slug: 236_qa_spread_polynomial_composition_cert\nfamily_root_rel: qa_spread_polynomial_composition_cert_v1\npass_desc: Goh-Wildberger spread polynomials satisfy S_n composed with S_m = S_{n*m}; exact SymPy composition verifies pairs (2,3), (3,2), (2,4), (4,3), (3,3), (2,5); S_2=4*s*(1-s) logistic map and integer closed forms S_2/S_3/S_4 match. Checks SPC_1+COMPOSITION/CLOSED_FORMS/LO\u2026",
+          "candidate_id": "candidate_20"
+        }
+      ],
+      "prompt": "QUERY: How do Keely's sympathetic-physics laws relate to Haramein's scaling framework?\n\nCANDIDATES:\n--- candidate_01 ---\nTitle: Keely \u2014 Forty Laws of Sympathetic Vibratory Physics (c.1893)\nBody: John Ernst Worrell Keely (1827\u20131898), Forty Laws of Sympathetic Vibratory Physics. Transmitted via Clara Bloomfield-Moore, 'Keely and His Discoveries' (1893), and transcribed on svpwiki.com/Laws-of-Being-Propositions by Dale Pond. Structural, sympathetic-transfer, dominant/control, aggregation/disintegration, and phenomenological laws spanning atomic pitch, resonance, catalysis, dissociation, and\u2026\n\n--- candidate_02 ---\nTitle: QA Keely Sympathetic Transfer Cert family\nBody: fam_id: 185\ndoc_slug: 185_qa_keely_sympathetic_transfer_cert\nfamily_root_rel: qa_keely_sympathetic_transfer_cert_v1\npass_desc: Keely's 7 sympathetic transfer laws (5,6,7,8,17,37,40) \u2192 QA reachability/path structure; Category 2 Vibes framework; orbit co-membership=sympathy, discord=obstruction, triad concordance; checks KST_1+LAWS/REACH/BLOCK/PATH/TRIAD/W/F; 1 PASS + 1 FAIL; self-test ok\n\n--- candidate_03 ---\nTitle: QA Keely Phenomenological Cert family\nBody: fam_id: 188\ndoc_slug: 188_qa_keely_phenomenological_cert\nfamily_root_rel: qa_keely_phenomenological_cert_v1\npass_desc: Keely's 17 phenomenological laws (13-15,19-26,30-32,36,38,39) \u2192 Theorem NT observer projections; Category 5 Vibes framework; 42.5% of laws; continuous measurements reveal but never feed back into QA; checks KPH_1+LAWS/NT/OBS/DISC/W/F; 1 PASS + 1 FAIL; self-test ok\n\n--- candidate_04 ---\nTitle: QA Keely Dominant Control Cert family\nBody: fam_id: 186\ndoc_slug: 186_qa_keely_dominant_control_cert\nfamily_root_rel: qa_keely_dominant_control_cert_v1\npass_desc: Keely's 3 dominant/control laws (1,11,16) \u2192 QA orbit hierarchy; Category 3 Vibes framework; invariant substrate, triune generator, singularity=neutral center; checks KDC_1+LAWS/SUB/TRIUNE/SING/W/F; 1 PASS + 1 FAIL; self-test ok\n\n--- candidate_05 ---\nTitle: QA Keely Aggregation Cert family\nBody: fam_id: 187\ndoc_slug: 187_qa_keely_aggregation_cert\nfamily_root_rel: qa_keely_aggregation_cert_v1\npass_desc: Keely's 5 aggregation/disintegration laws (3,12,28,34,35) \u2192 QA state composition/decomposition; Category 4 Vibes framework; coupling tension, orbit density, discord dissociation, deterministic synthesis; checks KAG_1+LAWS/COUPLE/DENSITY/DISSOC/SYNTH/W/F; 1 PASS + 1 FAIL; self-test ok\n\n--- candidate_06 ---\nTitle: QA Keely Structural Ratio Cert family\nBody: fam_id: 184\ndoc_slug: 184_qa_keely_structural_ratio_cert\nfamily_root_rel: qa_keely_structural_ratio_cert_v1\npass_desc: Keely's 8 structural ratio laws (2,4,9,10,18,27,29,33) \u2192 QA modular invariants; Category 1 Vibes framework; pitch=f-value, period 1|8|24, concordance, chromogeometry C*C+F*F=G*G; checks KSR_1+LAWS/PERIOD/FVAL/LCM/CHROMO/CLOSURE/W/F; 1 PASS + 1 FAIL; self-test ok\n\n--- candidate_07 ---\nTitle: qa_haramein_scaling_diagonal_cert_v1\nBody: filesystem-discovered; family_root_rel: qa_haramein_scaling_diagonal_cert_v1\n\n--- candidate_08 ---\nTitle: qa_keely_sympathetic_transfer_cert_v1\nBody: filesystem-discovered; family_root_rel: qa_keely_sympathetic_transfer_cert_v1\n\n--- candidate_09 ---\nTitle: QA Haramein Scaling Diagonal Cert family\nBody: fam_id: 218\ndoc_slug: 218_qa_haramein_scaling_diagonal_cert\nfamily_root_rel: qa_haramein_scaling_diagonal_cert_v1\npass_desc: Haramein-Rauscher-Hyson 2008 Table 1 (Big Bang/Planck, Atomic, Stellar Solar, Galactic G1, Galactic G2, Universe) encoded as integer (log10 R cm, log10 nu Hz) sits on QA fixed-d hyperbola (b+e = const, Schwarzschild line R*nu=c after decade-rounding). Four structural segment\u2026\n\n--- candidate_10 ---\nTitle: Briddell (2020) \u2014 Structural Physics (monograph, primary FST source)\nBody: Don Briddell, *Structural Physics* (book-length treatment of Field Structure Theory). Primary source referenced throughout the Dale-Briddell 2026 v2 completion-layer paper as briddellbook2020. Chapter 2 contains the two in-source arithmetic typos flagged in the v2 paper's corrigendum (MS line 1286 proton sum missing 81 term; MS line 1292 lambda-decay-product count 378 should be 351). Chapter 15 co\u2026\n\n--- candidate_11 ---\nTitle: Keely Law 6 (Sympathetic Oscillation): co-pitch entrainment\nBody: Coherent aggregates immersed in a medium pulsating at their natural pitch simultaneously oscillate with the same frequency, whether the pitch of the medium be a unison, or any harmonic of the fundamental pitch.\n\n--- candidate_12 ---\nTitle: SVP Wiki: Quantum Arithmetic Elements\nBody: Primary source: Dale Pond's 'Unpublished Notes' (December 1998), published at svpwiki.com/Quantum+Arithmetic+Elements. Canonical reference for the QA identity letters (A\u2013Z) and the 16 parity laws. Author credits Ben Iverson as originator of Quantum Arithmetic.\n\n--- candidate_13 ---\nTitle: Dale+Briddell 2026 v2 (Abstract): QA as completion layer, not new physics\nBody: We present Quantum Arithmetic (QA) as a completion layer: a framework that formalizes state spaces, generators, invariants, and failure modes without introducing new physical assumptions, and applies them to the verification of an external target theory.\n\n--- candidate_14 ---\nTitle: Dale+Briddell 2026 v2 \u00a713.1: four non-claims of the completion layer\nBody: It is important to state explicitly what the QA completion layer does not claim: It does not propose alternative physics. The Plenum, loops, STF hierarchy, Rspin/Aspin sectors, and cloaking mechanism are all Briddell's constructs, used here exactly as stated. It does not reinterpret FST concepts. It does not 'correct' the theory. It does not certify Standard-Model flavor identifications that Bridd\u2026\n\n--- candidate_15 ---\nTitle: Haramein, Brown & Val Baker (2016) \u2014 The Unified Spacememory Network\nBody: Nassim Haramein, William David Brown, Amira Val Baker, *The Unified Spacememory Network: from Cosmogenesis to Consciousness*. 2016. Extends the 2013 holographic framework with the 'spacememory' concept (recursive Planckian wormhole-network feedback) and derives the scale-duality identity R_\u03c1 \u2248 Hubble mass (interior of a proton \u2261 observable universe). PDF acquired via OSF dj7a4 zip (USMN.pdf, 1.4MB\u2026\n\n--- candidate_16 ---\nTitle: Haramein 2013 eq.(52): strong/gravity coupling = 4\u03c6\u00b2\nBody: F_g / F_s = G m_p m_p' / c \u0127 = 4 \u03c6^2 = 5.897264 \u00d7 10^-39 ... Where 4\u03c6\u00b2 is the exact value for the coupling constant between gravitation and confinement at the proton scale or the strong interaction.\n\n--- candidate_17 ---\nTitle: QA Keely Triune Cert family\nBody: fam_id: 153\ndoc_slug: 153_qa_keely_triune_cert\nfamily_root_rel: qa_keely_triune_cert_v1\npass_desc: Keely triune (Enharmonic/Dominant/Harmonic) \u2192 QA orbits (Satellite/Singularity/Cosmos); {0,3,6}=singularity=Tesla 3-6-9; LCM(1,8,24)=24; Brinton Laws of Being; checks KT_1+MAP/PART/PERIOD/369/LCM/W; 2 PASS; self-test ok\n\n--- candidate_18 ---\nTitle: Dale+Briddell 2026 v2 \u00a75 (Cert I): 1836 = 729+729+243+81+27+27 STF decomposition\nBody: Briddell's Fig. 2.64 presents the proton's 1836 loops as a Sierpinski-triangle decomposition: two bottom sub-triangles of 729 loops each, plus a top cluster of 378 loops, where 378 = 243 + 81 + 27 + 27. The formal integer claim is: 1836 = 729 + 729 + 243 + 81 + 27 + 27.\n\n--- candidate_19 ---\nTitle: Val Baker, Haramein & Alirol (2019) \u2014 The Electron and the Holographic Mass Solution\nBody: A. K. F. Val Baker, N. Haramein, O. Alirol, *The Electron and the Holographic Mass Solution*. Physics Essays 32(2):255-262, June 2019. Extends the holographic mass scheme to the electron: m_e = (1/2)\u03b1 (\u03b7_e/R_e) m_l matches CODATA 2014 within 1\u03c3. Also derives Z (atomic number) as the integer ratio at radius a_0/N and the Rydberg constant as R\u221e = 1/(8\u03c0 a_0). PDF acquired via assets.website-files.com\u2026\n\n--- candidate_20 ---\nTitle: QA Spread Polynomial Composition Cert family\nBody: fam_id: 236\ndoc_slug: 236_qa_spread_polynomial_composition_cert\nfamily_root_rel: qa_spread_polynomial_composition_cert_v1\npass_desc: Goh-Wildberger spread polynomials satisfy S_n composed with S_m = S_{n*m}; exact SymPy composition verifies pairs (2,3), (3,2), (2,4), (4,3), (3,3), (2,5); S_2=4*s*(1-s) logistic map and integer closed forms S_2/S_3/S_4 match. Checks SPC_1+COMPOSITION/CLOSED_FORMS/LO\u2026\n\nOutput relevance grades, one line per candidate, in the format '<candidate_id> <grade>'.",
+      "raw_response": "candidate_01 4\ncandidate_02 4\ncandidate_03 3\ncandidate_04 3\ncandidate_05 3\ncandidate_06 3\ncandidate_07 4\ncandidate_08 4\ncandidate_09 5\ncandidate_10 2\ncandidate_11 3\ncandidate_12 2\ncandidate_13 3\ncandidate_14 2\ncandidate_15 4\ncandidate_16 3\ncandidate_17 4\ncandidate_18 2\ncandidate_19 3\ncandidate_20 1\n",
+      "parsed_grades": {
+        "work:keely_40_laws_sympathetic_physics": 4,
+        "cert:185": 4,
+        "cert:188": 3,
+        "cert:186": 3,
+        "cert:187": 3,
+        "cert:184": 3,
+        "cert:fs:qa_haramein_scaling_diagonal_cert_v1": 4,
+        "cert:fs:qa_keely_sympathetic_transfer_cert_v1": 4,
+        "cert:218": 5,
+        "work:briddell_2020_structural_physics": 2,
+        "sc:keely_law_6_sympathetic_oscillation": 3,
+        "work:svp_wiki_qa_elements": 2,
+        "sc:dale_briddell_v2_abstract_completion_layer_definition": 3,
+        "sc:dale_briddell_v2_what_qa_does_not_do": 2,
+        "work:haramein_brown_valbaker_2016": 4,
+        "sc:haramein_2013_coupling_eq52": 3,
+        "cert:153": 4,
+        "sc:dale_briddell_v2_cert1_proton_decomposition": 2,
+        "work:valbaker_haramein_alirol_2019": 3,
+        "cert:236": 1
+      },
+      "n_graded": 20
+    },
+    {
+      "id": "X03",
+      "query_text": "Integer bounds in both Wildberger's geometry and Briddell's field-structure physics",
+      "model": "claude-opus-4-7",
+      "candidates": [
+        {
+          "real_id": "work:briddell_2020_structural_physics",
+          "title": "Briddell (2020) \u2014 Structural Physics (monograph, primary FST source)",
+          "body": "Don Briddell, *Structural Physics* (book-length treatment of Field Structure Theory). Primary source referenced throughout the Dale-Briddell 2026 v2 completion-layer paper as briddellbook2020. Chapter 2 contains the two in-source arithmetic typos flagged in the v2 paper's corrigendum (MS line 1286 proton sum missing 81 term; MS line 1292 lambda-decay-product count 378 should be 351). Chapter 15 co\u2026",
+          "candidate_id": "candidate_01"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_cert1_proton_decomposition",
+          "title": "Dale+Briddell 2026 v2 \u00a75 (Cert I): 1836 = 729+729+243+81+27+27 STF decomposition",
+          "body": "Briddell's Fig. 2.64 presents the proton's 1836 loops as a Sierpinski-triangle decomposition: two bottom sub-triangles of 729 loops each, plus a top cluster of 378 loops, where 378 = 243 + 81 + 27 + 27. The formal integer claim is: 1836 = 729 + 729 + 243 + 81 + 27 + 27.",
+          "candidate_id": "candidate_02"
+        },
+        {
+          "real_id": "work:wildberger_2008_pell_no_irrationals",
+          "title": "Wildberger (2008) \u2014 Pell's Equation Without Irrational Numbers",
+          "body": "N. J. Wildberger. arXiv:0806.2490v2. Generates an infinite number of integer solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1 using only basic matrix arithmetic, without irrational numbers or continued fractions. Worked examples for D = 2, 7, 61. Connects to Stern-Brocot tree and universal geometry. PDF at Documents/wildberger_corpus/pell_no_irrationals.pdf.",
+          "candidate_id": "candidate_03"
+        },
+        {
+          "real_id": "work:wildberger_2009_uhg_i",
+          "title": "Wildberger (2009) \u2014 Universal Hyperbolic Geometry I: Trigonometry",
+          "body": "N. J. Wildberger. arXiv:0909.1377v1. Hyperbolic geometry developed purely algebraically, without differential geometry. Connects directly with the geometry of Lorentz/Einstein/Minkowski via the projective viewpoint: 'hyperbolic geometry is precisely projective relativistic geometry'. Works over any field not of characteristic 2; trigonometric laws extend to null points and ideal points. PDF at Doc\u2026",
+          "candidate_id": "candidate_04"
+        },
+        {
+          "real_id": "work:dale_briddell_2026_qa_completion_layer_v2",
+          "title": "Dale & Briddell (2026) \u2014 A Quantum Arithmetic Completion Layer for Field Structure Theory (v2)",
+          "body": "Will Dale (Quantum Arithmetic Research Group, corresponding author) & Don Briddell (Field Structure Institute, Mt. Airy, Maryland). Revision v2 (April 2026) of the manuscript originally submitted 2026-04-08 as Frontiers in Physics manuscript 1850870. 1105 lines of LaTeX, compiled PDF at qa_fst_completion_paper.pdf. Presents QA as a completion layer for FST: formalizes five Briddell-primary claims\u2026",
+          "candidate_id": "candidate_05"
+        },
+        {
+          "real_id": "work:wildberger_2010_uhg_ii_pictorial",
+          "title": "Wildberger (2010) \u2014 Universal Hyperbolic Geometry II: A Pictorial Overview",
+          "body": "N. J. Wildberger. arXiv:1012.0880v1. Pictorial companion to UHG I. Introduces universal hyperbolic geometry using only elementary projective geometry plus a distinguished circle \u2014 no transcendental functions. Valid over any field not of characteristic 2. PDF at Documents/wildberger_corpus/UHG_II_1012.0880.pdf.",
+          "candidate_id": "candidate_06"
+        },
+        {
+          "real_id": "work:wildberger_2008_chromogeometry",
+          "title": "Wildberger (2008) \u2014 Chromogeometry",
+          "body": "N. J. Wildberger. arXiv:0806.3617v1. Three-fold symmetric geometry combining Euclidean (blue) and two relativistic (red, green) planar metrical systems. Each geometry has its own Euler line, nine-point circle, and orthocenter; they interact via algebraic identities. Transcends Klein's Erlangen program. PDF at Documents/wildberger_corpus/chromogeometry_2008.pdf.",
+          "candidate_id": "candidate_07"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_what_qa_does_not_do",
+          "title": "Dale+Briddell 2026 v2 \u00a713.1: four non-claims of the completion layer",
+          "body": "It is important to state explicitly what the QA completion layer does not claim: It does not propose alternative physics. The Plenum, loops, STF hierarchy, Rspin/Aspin sectors, and cloaking mechanism are all Briddell's constructs, used here exactly as stated. It does not reinterpret FST concepts. It does not 'correct' the theory. It does not certify Standard-Model flavor identifications that Bridd\u2026",
+          "candidate_id": "candidate_08"
+        },
+        {
+          "real_id": "sc:dale_briddell_addendum_structural_upgrade",
+          "title": "Dale+Briddell 2026 Addendum Abstract: base-3 forced by QA structure, not selected",
+          "body": "This is a structural addendum to our companion paper ... The companion paper takes Briddell's STF iteration sequence {3, 9, 27, 81, 243, 729, 2187} as a postulate inherited from the FST primary text and certifies the integer claims that depend on it. Here we observe that this sequence is not free: it is the unique self-similar orbit of the QA element rule a = b + 2e along the diagonal b = e. Conse\u2026",
+          "candidate_id": "candidate_09"
+        },
+        {
+          "real_id": "work:wildberger_2006_aff_proj_universal",
+          "title": "Wildberger (2006) \u2014 Affine and Projective Universal Geometry",
+          "body": "N. J. Wildberger. arXiv:math/0612499v1. Recasts metrical geometry as purely algebraic over a general field with arbitrary symmetric bilinear form. Unifies spherical and hyperbolic trigonometry; the main laws have affine and projective versions that hold simultaneously across elliptic, hyperbolic, and general bilinear-form geometries. Text extract at corpus/wildberger_text/aff_proj_metrical.txt.",
+          "candidate_id": "candidate_10"
+        },
+        {
+          "real_id": "sc:wildberger_2010_uhg_ii_abstract",
+          "title": "Wildberger 2010 UHG II pictorial: projective geometry + distinguished circle",
+          "body": "This article provides a simple pictorial introduction to universal hyperbolic geometry. We explain how to understand the subject using only elementary projective geometry, augmented by a distinguished circle. This provides a completely algebraic framework for hyperbolic geometry, valid over the rational numbers (and indeed any field not of characteristic two), and gives us many new and beautiful t\u2026",
+          "candidate_id": "candidate_11"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_five_claims_list",
+          "title": "Dale+Briddell 2026 v2 (Abstract): five formalized FST claims",
+          "body": "We formalize five explicit claims from the FST primary text: (i) the Sierpinski Triangle Fractal (STF) decomposition of the proton's 1836 loops into integer clusters; (ii) the lambda-to-proton decay bookkeeping 2187 - 243 - 81 - 27 = 1836 as exact integer arithmetic; (iii) a calibration postulate P_1 identifying one loop with one electron rest mass as the sanctioned bridge between the discrete QA\u2026",
+          "candidate_id": "candidate_12"
+        },
+        {
+          "real_id": "sc:wildberger_2006_aff_proj_abstract",
+          "title": "Wildberger 2006: affine+projective unify spherical & hyperbolic over arbitrary field",
+          "body": "By recasting metrical geometry in a purely algebraic setting, both Euclidean and non-Euclidean geometries can be studied over a general field with an arbitrary quadratic form. Both an affine and a projective version of this new theory are introduced here, and the main formulas extend those of rational trigonometry in the plane. This gives a unified, computational model of both spherical and hyperb\u2026",
+          "candidate_id": "candidate_13"
+        },
+        {
+          "real_id": "work:pond_svp_torus",
+          "title": "Pond \u2014 SVP Propositions / QA Mapping notes",
+          "body": "Will-transcribed fragments of Dale Pond's SVP proposition notes mapping QA identities to torus geometry (H=outer, I=inner, C=center, F=tube, G=RMS(H,I)). Transcription method: manual; authority=primary because the statements are Pond's.",
+          "candidate_id": "candidate_14"
+        },
+        {
+          "real_id": "cert:236",
+          "title": "QA Spread Polynomial Composition Cert family",
+          "body": "fam_id: 236\ndoc_slug: 236_qa_spread_polynomial_composition_cert\nfamily_root_rel: qa_spread_polynomial_composition_cert_v1\npass_desc: Goh-Wildberger spread polynomials satisfy S_n composed with S_m = S_{n*m}; exact SymPy composition verifies pairs (2,3), (3,2), (2,4), (4,3), (3,3), (2,5); S_2=4*s*(1-s) logistic map and integer closed forms S_2/S_3/S_4 match. Checks SPC_1+COMPOSITION/CLOSED_FORMS/LO\u2026",
+          "candidate_id": "candidate_15"
+        },
+        {
+          "real_id": "sc:wildberger_2008_pell_abstract",
+          "title": "Wildberger 2008 Pell: infinite solutions via matrix arithmetic, no irrationals",
+          "body": "We give a simple way to generate an infinite number of solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1, requiring only basic matrix arithmetic and no knowledge of irrational numbers. We illustrate the method for D = 2, 7 and 61. Connections to the Stern-Brocot tree and universal geometry are also discussed.",
+          "candidate_id": "candidate_16"
+        },
+        {
+          "real_id": "sc:wildberger_2009_uhg_i_projective_relativistic",
+          "title": "Wildberger 2009 UHG I: hyperbolic \u2261 projective relativistic",
+          "body": "hyperbolic geometry is precisely projective relativistic geometry. This is a fundamental understanding.",
+          "candidate_id": "candidate_17"
+        },
+        {
+          "real_id": "sc:wildberger_2008_chromogeometry_transcends_klein",
+          "title": "Wildberger 2008 Chromogeometry: transcends Klein's Erlangen program",
+          "body": "The three geometries support each other and interact in a rich way. This transcends Klein's Erlangen program, since there are now three groups acting on a space. Remarkable algebraic identities lie at the heart of the explanations.",
+          "candidate_id": "candidate_18"
+        },
+        {
+          "real_id": "sc:wildberger_2003_diamonds_abstract",
+          "title": "Wildberger 2003 sl3 diamonds: integer-valued irreducible rep model",
+          "body": "A new model for the irreducible representations of sl3 is presented which is constructed over the integers. This model utilizes the combinatorial geometry of certain polytopes in three dimensional space which we call diamonds. These are not Gelfand-Tsetlin polytopes, but share some of their properties.",
+          "candidate_id": "candidate_19"
+        },
+        {
+          "real_id": "sc:rubine_2025_geode_factorization",
+          "title": "Rubine 2025: Geode factorization S \u2212 1 = (t\u2082+t\u2083+...)G recurrence",
+          "body": "Wildberger notes the factorization S \u2212 1 = (t2 + t3 + t4 + ...)G, where the factor G is called the Geode. We derive a recurrence that let us express the Geode coefficients in terms of other hyper-Catalan and Geode coefficients, and ultimately in terms of hyper-Catalans alone.",
+          "candidate_id": "candidate_20"
+        }
+      ],
+      "prompt": "QUERY: Integer bounds in both Wildberger's geometry and Briddell's field-structure physics\n\nCANDIDATES:\n--- candidate_01 ---\nTitle: Briddell (2020) \u2014 Structural Physics (monograph, primary FST source)\nBody: Don Briddell, *Structural Physics* (book-length treatment of Field Structure Theory). Primary source referenced throughout the Dale-Briddell 2026 v2 completion-layer paper as briddellbook2020. Chapter 2 contains the two in-source arithmetic typos flagged in the v2 paper's corrigendum (MS line 1286 proton sum missing 81 term; MS line 1292 lambda-decay-product count 378 should be 351). Chapter 15 co\u2026\n\n--- candidate_02 ---\nTitle: Dale+Briddell 2026 v2 \u00a75 (Cert I): 1836 = 729+729+243+81+27+27 STF decomposition\nBody: Briddell's Fig. 2.64 presents the proton's 1836 loops as a Sierpinski-triangle decomposition: two bottom sub-triangles of 729 loops each, plus a top cluster of 378 loops, where 378 = 243 + 81 + 27 + 27. The formal integer claim is: 1836 = 729 + 729 + 243 + 81 + 27 + 27.\n\n--- candidate_03 ---\nTitle: Wildberger (2008) \u2014 Pell's Equation Without Irrational Numbers\nBody: N. J. Wildberger. arXiv:0806.2490v2. Generates an infinite number of integer solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1 using only basic matrix arithmetic, without irrational numbers or continued fractions. Worked examples for D = 2, 7, 61. Connects to Stern-Brocot tree and universal geometry. PDF at Documents/wildberger_corpus/pell_no_irrationals.pdf.\n\n--- candidate_04 ---\nTitle: Wildberger (2009) \u2014 Universal Hyperbolic Geometry I: Trigonometry\nBody: N. J. Wildberger. arXiv:0909.1377v1. Hyperbolic geometry developed purely algebraically, without differential geometry. Connects directly with the geometry of Lorentz/Einstein/Minkowski via the projective viewpoint: 'hyperbolic geometry is precisely projective relativistic geometry'. Works over any field not of characteristic 2; trigonometric laws extend to null points and ideal points. PDF at Doc\u2026\n\n--- candidate_05 ---\nTitle: Dale & Briddell (2026) \u2014 A Quantum Arithmetic Completion Layer for Field Structure Theory (v2)\nBody: Will Dale (Quantum Arithmetic Research Group, corresponding author) & Don Briddell (Field Structure Institute, Mt. Airy, Maryland). Revision v2 (April 2026) of the manuscript originally submitted 2026-04-08 as Frontiers in Physics manuscript 1850870. 1105 lines of LaTeX, compiled PDF at qa_fst_completion_paper.pdf. Presents QA as a completion layer for FST: formalizes five Briddell-primary claims\u2026\n\n--- candidate_06 ---\nTitle: Wildberger (2010) \u2014 Universal Hyperbolic Geometry II: A Pictorial Overview\nBody: N. J. Wildberger. arXiv:1012.0880v1. Pictorial companion to UHG I. Introduces universal hyperbolic geometry using only elementary projective geometry plus a distinguished circle \u2014 no transcendental functions. Valid over any field not of characteristic 2. PDF at Documents/wildberger_corpus/UHG_II_1012.0880.pdf.\n\n--- candidate_07 ---\nTitle: Wildberger (2008) \u2014 Chromogeometry\nBody: N. J. Wildberger. arXiv:0806.3617v1. Three-fold symmetric geometry combining Euclidean (blue) and two relativistic (red, green) planar metrical systems. Each geometry has its own Euler line, nine-point circle, and orthocenter; they interact via algebraic identities. Transcends Klein's Erlangen program. PDF at Documents/wildberger_corpus/chromogeometry_2008.pdf.\n\n--- candidate_08 ---\nTitle: Dale+Briddell 2026 v2 \u00a713.1: four non-claims of the completion layer\nBody: It is important to state explicitly what the QA completion layer does not claim: It does not propose alternative physics. The Plenum, loops, STF hierarchy, Rspin/Aspin sectors, and cloaking mechanism are all Briddell's constructs, used here exactly as stated. It does not reinterpret FST concepts. It does not 'correct' the theory. It does not certify Standard-Model flavor identifications that Bridd\u2026\n\n--- candidate_09 ---\nTitle: Dale+Briddell 2026 Addendum Abstract: base-3 forced by QA structure, not selected\nBody: This is a structural addendum to our companion paper ... The companion paper takes Briddell's STF iteration sequence {3, 9, 27, 81, 243, 729, 2187} as a postulate inherited from the FST primary text and certifies the integer claims that depend on it. Here we observe that this sequence is not free: it is the unique self-similar orbit of the QA element rule a = b + 2e along the diagonal b = e. Conse\u2026\n\n--- candidate_10 ---\nTitle: Wildberger (2006) \u2014 Affine and Projective Universal Geometry\nBody: N. J. Wildberger. arXiv:math/0612499v1. Recasts metrical geometry as purely algebraic over a general field with arbitrary symmetric bilinear form. Unifies spherical and hyperbolic trigonometry; the main laws have affine and projective versions that hold simultaneously across elliptic, hyperbolic, and general bilinear-form geometries. Text extract at corpus/wildberger_text/aff_proj_metrical.txt.\n\n--- candidate_11 ---\nTitle: Wildberger 2010 UHG II pictorial: projective geometry + distinguished circle\nBody: This article provides a simple pictorial introduction to universal hyperbolic geometry. We explain how to understand the subject using only elementary projective geometry, augmented by a distinguished circle. This provides a completely algebraic framework for hyperbolic geometry, valid over the rational numbers (and indeed any field not of characteristic two), and gives us many new and beautiful t\u2026\n\n--- candidate_12 ---\nTitle: Dale+Briddell 2026 v2 (Abstract): five formalized FST claims\nBody: We formalize five explicit claims from the FST primary text: (i) the Sierpinski Triangle Fractal (STF) decomposition of the proton's 1836 loops into integer clusters; (ii) the lambda-to-proton decay bookkeeping 2187 - 243 - 81 - 27 = 1836 as exact integer arithmetic; (iii) a calibration postulate P_1 identifying one loop with one electron rest mass as the sanctioned bridge between the discrete QA\u2026\n\n--- candidate_13 ---\nTitle: Wildberger 2006: affine+projective unify spherical & hyperbolic over arbitrary field\nBody: By recasting metrical geometry in a purely algebraic setting, both Euclidean and non-Euclidean geometries can be studied over a general field with an arbitrary quadratic form. Both an affine and a projective version of this new theory are introduced here, and the main formulas extend those of rational trigonometry in the plane. This gives a unified, computational model of both spherical and hyperb\u2026\n\n--- candidate_14 ---\nTitle: Pond \u2014 SVP Propositions / QA Mapping notes\nBody: Will-transcribed fragments of Dale Pond's SVP proposition notes mapping QA identities to torus geometry (H=outer, I=inner, C=center, F=tube, G=RMS(H,I)). Transcription method: manual; authority=primary because the statements are Pond's.\n\n--- candidate_15 ---\nTitle: QA Spread Polynomial Composition Cert family\nBody: fam_id: 236\ndoc_slug: 236_qa_spread_polynomial_composition_cert\nfamily_root_rel: qa_spread_polynomial_composition_cert_v1\npass_desc: Goh-Wildberger spread polynomials satisfy S_n composed with S_m = S_{n*m}; exact SymPy composition verifies pairs (2,3), (3,2), (2,4), (4,3), (3,3), (2,5); S_2=4*s*(1-s) logistic map and integer closed forms S_2/S_3/S_4 match. Checks SPC_1+COMPOSITION/CLOSED_FORMS/LO\u2026\n\n--- candidate_16 ---\nTitle: Wildberger 2008 Pell: infinite solutions via matrix arithmetic, no irrationals\nBody: We give a simple way to generate an infinite number of solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1, requiring only basic matrix arithmetic and no knowledge of irrational numbers. We illustrate the method for D = 2, 7 and 61. Connections to the Stern-Brocot tree and universal geometry are also discussed.\n\n--- candidate_17 ---\nTitle: Wildberger 2009 UHG I: hyperbolic \u2261 projective relativistic\nBody: hyperbolic geometry is precisely projective relativistic geometry. This is a fundamental understanding.\n\n--- candidate_18 ---\nTitle: Wildberger 2008 Chromogeometry: transcends Klein's Erlangen program\nBody: The three geometries support each other and interact in a rich way. This transcends Klein's Erlangen program, since there are now three groups acting on a space. Remarkable algebraic identities lie at the heart of the explanations.\n\n--- candidate_19 ---\nTitle: Wildberger 2003 sl3 diamonds: integer-valued irreducible rep model\nBody: A new model for the irreducible representations of sl3 is presented which is constructed over the integers. This model utilizes the combinatorial geometry of certain polytopes in three dimensional space which we call diamonds. These are not Gelfand-Tsetlin polytopes, but share some of their properties.\n\n--- candidate_20 ---\nTitle: Rubine 2025: Geode factorization S \u2212 1 = (t\u2082+t\u2083+...)G recurrence\nBody: Wildberger notes the factorization S \u2212 1 = (t2 + t3 + t4 + ...)G, where the factor G is called the Geode. We derive a recurrence that let us express the Geode coefficients in terms of other hyper-Catalan and Geode coefficients, and ultimately in terms of hyper-Catalans alone.\n\nOutput relevance grades, one line per candidate, in the format '<candidate_id> <grade>'.",
+      "raw_response": "candidate_01 4\ncandidate_02 5\ncandidate_03 5\ncandidate_04 3\ncandidate_05 5\ncandidate_06 2\ncandidate_07 3\ncandidate_08 3\ncandidate_09 4\ncandidate_10 3\ncandidate_11 2\ncandidate_12 5\ncandidate_13 3\ncandidate_14 2\ncandidate_15 3\ncandidate_16 4\ncandidate_17 2\ncandidate_18 2\ncandidate_19 4\ncandidate_20 2\n",
+      "parsed_grades": {
+        "work:briddell_2020_structural_physics": 4,
+        "sc:dale_briddell_v2_cert1_proton_decomposition": 5,
+        "work:wildberger_2008_pell_no_irrationals": 5,
+        "work:wildberger_2009_uhg_i": 3,
+        "work:dale_briddell_2026_qa_completion_layer_v2": 5,
+        "work:wildberger_2010_uhg_ii_pictorial": 2,
+        "work:wildberger_2008_chromogeometry": 3,
+        "sc:dale_briddell_v2_what_qa_does_not_do": 3,
+        "sc:dale_briddell_addendum_structural_upgrade": 4,
+        "work:wildberger_2006_aff_proj_universal": 3,
+        "sc:wildberger_2010_uhg_ii_abstract": 2,
+        "sc:dale_briddell_v2_five_claims_list": 5,
+        "sc:wildberger_2006_aff_proj_abstract": 3,
+        "work:pond_svp_torus": 2,
+        "cert:236": 3,
+        "sc:wildberger_2008_pell_abstract": 4,
+        "sc:wildberger_2009_uhg_i_projective_relativistic": 2,
+        "sc:wildberger_2008_chromogeometry_transcends_klein": 2,
+        "sc:wildberger_2003_diamonds_abstract": 4,
+        "sc:rubine_2025_geode_factorization": 2
+      },
+      "n_graded": 20
+    },
+    {
+      "id": "X04",
+      "query_text": "Digital root Philomath vs chromogeometry Wildberger \u2014 arithmetic vs geometric structure",
+      "model": "claude-opus-4-7",
+      "candidates": [
+        {
+          "real_id": "work:grant_ghannam_philomath_2019",
+          "title": "Grant & Ghannam \u2014 *Philomath: The Geometric Unification of Science and Art Through Number*",
+          "body": "Robert Edward Grant & Talal Ghannam, *Philomath: The Geometric Unification of Science and Art Through Number*. 398pp. 16MB PDF at ~/Downloads/PHILOMATH_The_Geometric_Unification_of_Science_Art_Through_Number_Robert_Edward_Grant_Talal_Ghannam.pdf. Ingestion manifest qa_ingestion_sources/qa_philomath_corpus_manifest.json tracks triage. QA-relevant chapters: digital root (Ch.1 Pt.I), prime distributi\u2026",
+          "candidate_id": "candidate_01"
+        },
+        {
+          "real_id": "sc:philomath_digital_root_definition",
+          "title": "Philomath p.16: digital root / mod-9 definition",
+          "body": "The digital root, also known as modular math, is one important branch of number theory... In simple words, what the digital root operation does is to reduce a number down to a single digit. This is done by continuously summing the number's individual digits.",
+          "candidate_id": "candidate_02"
+        },
+        {
+          "real_id": "sc:philomath_prime_digital_root_constraint",
+          "title": "Philomath p.29-30: primes p>3 avoid D-roots {3,6,9}",
+          "body": "In the D-space, with the exception of number 3, the digital root of any known prime number is anything but 3, 6, or 9... no prime number can have a digital root of 3, 6, or 9.",
+          "candidate_id": "candidate_03"
+        },
+        {
+          "real_id": "work:wildberger_2008_chromogeometry",
+          "title": "Wildberger (2008) \u2014 Chromogeometry",
+          "body": "N. J. Wildberger. arXiv:0806.3617v1. Three-fold symmetric geometry combining Euclidean (blue) and two relativistic (red, green) planar metrical systems. Each geometry has its own Euler line, nine-point circle, and orthocenter; they interact via algebraic identities. Transcends Klein's Erlangen program. PDF at Documents/wildberger_corpus/chromogeometry_2008.pdf.",
+          "candidate_id": "candidate_04"
+        },
+        {
+          "real_id": "work:dale_briddell_2026_qa_completion_layer_v2",
+          "title": "Dale & Briddell (2026) \u2014 A Quantum Arithmetic Completion Layer for Field Structure Theory (v2)",
+          "body": "Will Dale (Quantum Arithmetic Research Group, corresponding author) & Don Briddell (Field Structure Institute, Mt. Airy, Maryland). Revision v2 (April 2026) of the manuscript originally submitted 2026-04-08 as Frontiers in Physics manuscript 1850870. 1105 lines of LaTeX, compiled PDF at qa_fst_completion_paper.pdf. Presents QA as a completion layer for FST: formalizes five Briddell-primary claims\u2026",
+          "candidate_id": "candidate_05"
+        },
+        {
+          "real_id": "sc:dale_briddell_v2_five_claims_list",
+          "title": "Dale+Briddell 2026 v2 (Abstract): five formalized FST claims",
+          "body": "We formalize five explicit claims from the FST primary text: (i) the Sierpinski Triangle Fractal (STF) decomposition of the proton's 1836 loops into integer clusters; (ii) the lambda-to-proton decay bookkeeping 2187 - 243 - 81 - 27 = 1836 as exact integer arithmetic; (iii) a calibration postulate P_1 identifying one loop with one electron rest mass as the sanctioned bridge between the discrete QA\u2026",
+          "candidate_id": "candidate_06"
+        },
+        {
+          "real_id": "work:wildberger_mutation_game",
+          "title": "Wildberger \u2014 The Mutation Game, Coxeter Graphs, and Partially Ordered Multisets",
+          "body": "N. J. Wildberger, UNSW. Introduces the 'Mutation Game' on directed multigraphs (Martians vs anti-Martians mutating under graph-local rules). Root populations under the mutation dynamics correspond to Coxeter-graph structure. Grounds [215] qa_graph_cayley_wildberger_mutation cert family. Text extract at corpus/wildberger_text/mutation_game_2020.txt.",
+          "candidate_id": "candidate_07"
+        },
+        {
+          "real_id": "sc:wildberger_2008_chromogeometry_abstract",
+          "title": "Wildberger 2008 Chromogeometry: blue/red/green 3-fold planar metrical trio",
+          "body": "Chromogeometry brings together Euclidean geometry (called blue) and two relativistic geometries (called red and green), in a surprising three-fold symmetry. We show how the red and green 'Euler lines' and 'nine-point circles' of a triangle interact with the usual blue ones, and how the three orthocenters form an associated triangle with interesting collinearities.",
+          "candidate_id": "candidate_08"
+        },
+        {
+          "real_id": "sc:philomath_nine_is_zero_of_dspace",
+          "title": "Philomath p.19: 9 as additive identity of D-space (QA Singularity orbit)",
+          "body": "Even though number 9 is the last and largest number of the D-space, it behaves in this finite space as number 0 does in the regular infinite numerical space. For example, adding 9 to any number will not change its digital root... This property of number 9, being the largest and smallest at the same time, is unique to the D-space.",
+          "candidate_id": "candidate_09"
+        },
+        {
+          "real_id": "work:wildberger_2003_g2_combinatorial",
+          "title": "Wildberger (2003) \u2014 A Combinatorial Construction of G\u2082",
+          "body": "N. J. Wildberger. Journal of Lie Theory 13:155-165. Explicit construction of the exceptional Lie algebra G\u2082 via its 7-dim representation without requiring Lie theory background. Structure constants have combinatorial meaning as convex subsets of a partially ordered multiset of 6 elements, arising from Numbers/Mutation games on a directed multigraph. PDF at Documents/wildberger_corpus/simply_laced_\u2026",
+          "candidate_id": "candidate_10"
+        },
+        {
+          "real_id": "sc:wildberger_2008_chromogeometry_transcends_klein",
+          "title": "Wildberger 2008 Chromogeometry: transcends Klein's Erlangen program",
+          "body": "The three geometries support each other and interact in a rich way. This transcends Klein's Erlangen program, since there are now three groups acting on a space. Remarkable algebraic identities lie at the heart of the explanations.",
+          "candidate_id": "candidate_11"
+        },
+        {
+          "real_id": "work:wildberger_2008_pell_no_irrationals",
+          "title": "Wildberger (2008) \u2014 Pell's Equation Without Irrational Numbers",
+          "body": "N. J. Wildberger. arXiv:0806.2490v2. Generates an infinite number of integer solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1 using only basic matrix arithmetic, without irrational numbers or continued fractions. Worked examples for D = 2, 7, 61. Connects to Stern-Brocot tree and universal geometry. PDF at Documents/wildberger_corpus/pell_no_irrationals.pdf.",
+          "candidate_id": "candidate_12"
+        },
+        {
+          "real_id": "cert:125",
+          "title": "QA Chromogeometry Cert family",
+          "body": "fam_id: 125\ndoc_slug: 125_qa_chromogeometry\nfamily_root_rel: qa_chromogeometry_cert_v1\npass_desc: Wildberger chromogeometric quadrances: C=Q_green(d,e)=2de, F=Q_red(d,e)=d\u00b2-e\u00b2=ab, G=Q_blue(d,e)=d\u00b2+e\u00b2; C\u00b2+F\u00b2=G\u00b2 (Wildberger Thm 6); I=|C-F| conic discriminant; checks CG1-CG7 (schema, green/red/blue quadrance, Pythagoras, semi-latus, conic type); 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2\u2026",
+          "candidate_id": "candidate_13"
+        },
+        {
+          "real_id": "sc:wildberger_2008_pell_abstract",
+          "title": "Wildberger 2008 Pell: infinite solutions via matrix arithmetic, no irrationals",
+          "body": "We give a simple way to generate an infinite number of solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1, requiring only basic matrix arithmetic and no knowledge of irrational numbers. We illustrate the method for D = 2, 7 and 61. Connections to the Stern-Brocot tree and universal geometry are also discussed.",
+          "candidate_id": "candidate_14"
+        },
+        {
+          "real_id": "sc:svp_dim_ocr",
+          "title": "SVP wiki: '3-diminsional' spelling",
+          "body": "a 3-diminsional Quantum Arithmetic,(QA), will include the number \"5\" also being required",
+          "candidate_id": "candidate_15"
+        },
+        {
+          "real_id": "cert:234",
+          "title": "QA Chromogeometry Pythagorean Identity Cert family",
+          "body": "fam_id: 234\ndoc_slug: 234_qa_chromogeometry_pythagorean_identity_cert\nfamily_root_rel: qa_chromogeometry_pythagorean_identity_cert_v1\npass_desc: Wildberger chromogeometry under QA coordinates Q_b=b*b+e*e, Q_r=b*b-e*e, Q_g=2*b*e satisfies Q_b square = Q_r square + Q_g square exhaustively on (b,e) in [1..19]^2 with zero failures; QA coordinate formulas and five Pythagorean triples verified. Checks C\u2026",
+          "candidate_id": "candidate_16"
+        },
+        {
+          "real_id": "sc:philomath_72_year_precession",
+          "title": "Philomath p.19-20: 72-year precession / 25920-year full cycle [KNOWN TYPO 28920]",
+          "body": "Every 72 years (D = 9), the zodiacs move one degree from their previous year's position. For a full cycle, it takes around 25920 years (360\u00d772), and D(28920) = 9.",
+          "candidate_id": "candidate_17"
+        },
+        {
+          "real_id": "cert:fs:qa_chromogeometry_cert_v1",
+          "title": "qa_chromogeometry_cert_v1",
+          "body": "filesystem-discovered; family_root_rel: qa_chromogeometry_cert_v1",
+          "candidate_id": "candidate_18"
+        },
+        {
+          "real_id": "cert:fs:qa_philomath_bridge",
+          "title": "qa_philomath_bridge",
+          "body": "filesystem-discovered; family_root_rel: qa_philomath_bridge",
+          "candidate_id": "candidate_19"
+        },
+        {
+          "real_id": "cert:fs:qa_chromogeometry_pythagorean_identity_cert_v1",
+          "title": "qa_chromogeometry_pythagorean_identity_cert_v1",
+          "body": "filesystem-discovered; family_root_rel: qa_chromogeometry_pythagorean_identity_cert_v1",
+          "candidate_id": "candidate_20"
+        }
+      ],
+      "prompt": "QUERY: Digital root Philomath vs chromogeometry Wildberger \u2014 arithmetic vs geometric structure\n\nCANDIDATES:\n--- candidate_01 ---\nTitle: Grant & Ghannam \u2014 *Philomath: The Geometric Unification of Science and Art Through Number*\nBody: Robert Edward Grant & Talal Ghannam, *Philomath: The Geometric Unification of Science and Art Through Number*. 398pp. 16MB PDF at ~/Downloads/PHILOMATH_The_Geometric_Unification_of_Science_Art_Through_Number_Robert_Edward_Grant_Talal_Ghannam.pdf. Ingestion manifest qa_ingestion_sources/qa_philomath_corpus_manifest.json tracks triage. QA-relevant chapters: digital root (Ch.1 Pt.I), prime distributi\u2026\n\n--- candidate_02 ---\nTitle: Philomath p.16: digital root / mod-9 definition\nBody: The digital root, also known as modular math, is one important branch of number theory... In simple words, what the digital root operation does is to reduce a number down to a single digit. This is done by continuously summing the number's individual digits.\n\n--- candidate_03 ---\nTitle: Philomath p.29-30: primes p>3 avoid D-roots {3,6,9}\nBody: In the D-space, with the exception of number 3, the digital root of any known prime number is anything but 3, 6, or 9... no prime number can have a digital root of 3, 6, or 9.\n\n--- candidate_04 ---\nTitle: Wildberger (2008) \u2014 Chromogeometry\nBody: N. J. Wildberger. arXiv:0806.3617v1. Three-fold symmetric geometry combining Euclidean (blue) and two relativistic (red, green) planar metrical systems. Each geometry has its own Euler line, nine-point circle, and orthocenter; they interact via algebraic identities. Transcends Klein's Erlangen program. PDF at Documents/wildberger_corpus/chromogeometry_2008.pdf.\n\n--- candidate_05 ---\nTitle: Dale & Briddell (2026) \u2014 A Quantum Arithmetic Completion Layer for Field Structure Theory (v2)\nBody: Will Dale (Quantum Arithmetic Research Group, corresponding author) & Don Briddell (Field Structure Institute, Mt. Airy, Maryland). Revision v2 (April 2026) of the manuscript originally submitted 2026-04-08 as Frontiers in Physics manuscript 1850870. 1105 lines of LaTeX, compiled PDF at qa_fst_completion_paper.pdf. Presents QA as a completion layer for FST: formalizes five Briddell-primary claims\u2026\n\n--- candidate_06 ---\nTitle: Dale+Briddell 2026 v2 (Abstract): five formalized FST claims\nBody: We formalize five explicit claims from the FST primary text: (i) the Sierpinski Triangle Fractal (STF) decomposition of the proton's 1836 loops into integer clusters; (ii) the lambda-to-proton decay bookkeeping 2187 - 243 - 81 - 27 = 1836 as exact integer arithmetic; (iii) a calibration postulate P_1 identifying one loop with one electron rest mass as the sanctioned bridge between the discrete QA\u2026\n\n--- candidate_07 ---\nTitle: Wildberger \u2014 The Mutation Game, Coxeter Graphs, and Partially Ordered Multisets\nBody: N. J. Wildberger, UNSW. Introduces the 'Mutation Game' on directed multigraphs (Martians vs anti-Martians mutating under graph-local rules). Root populations under the mutation dynamics correspond to Coxeter-graph structure. Grounds [215] qa_graph_cayley_wildberger_mutation cert family. Text extract at corpus/wildberger_text/mutation_game_2020.txt.\n\n--- candidate_08 ---\nTitle: Wildberger 2008 Chromogeometry: blue/red/green 3-fold planar metrical trio\nBody: Chromogeometry brings together Euclidean geometry (called blue) and two relativistic geometries (called red and green), in a surprising three-fold symmetry. We show how the red and green 'Euler lines' and 'nine-point circles' of a triangle interact with the usual blue ones, and how the three orthocenters form an associated triangle with interesting collinearities.\n\n--- candidate_09 ---\nTitle: Philomath p.19: 9 as additive identity of D-space (QA Singularity orbit)\nBody: Even though number 9 is the last and largest number of the D-space, it behaves in this finite space as number 0 does in the regular infinite numerical space. For example, adding 9 to any number will not change its digital root... This property of number 9, being the largest and smallest at the same time, is unique to the D-space.\n\n--- candidate_10 ---\nTitle: Wildberger (2003) \u2014 A Combinatorial Construction of G\u2082\nBody: N. J. Wildberger. Journal of Lie Theory 13:155-165. Explicit construction of the exceptional Lie algebra G\u2082 via its 7-dim representation without requiring Lie theory background. Structure constants have combinatorial meaning as convex subsets of a partially ordered multiset of 6 elements, arising from Numbers/Mutation games on a directed multigraph. PDF at Documents/wildberger_corpus/simply_laced_\u2026\n\n--- candidate_11 ---\nTitle: Wildberger 2008 Chromogeometry: transcends Klein's Erlangen program\nBody: The three geometries support each other and interact in a rich way. This transcends Klein's Erlangen program, since there are now three groups acting on a space. Remarkable algebraic identities lie at the heart of the explanations.\n\n--- candidate_12 ---\nTitle: Wildberger (2008) \u2014 Pell's Equation Without Irrational Numbers\nBody: N. J. Wildberger. arXiv:0806.2490v2. Generates an infinite number of integer solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1 using only basic matrix arithmetic, without irrational numbers or continued fractions. Worked examples for D = 2, 7, 61. Connects to Stern-Brocot tree and universal geometry. PDF at Documents/wildberger_corpus/pell_no_irrationals.pdf.\n\n--- candidate_13 ---\nTitle: QA Chromogeometry Cert family\nBody: fam_id: 125\ndoc_slug: 125_qa_chromogeometry\nfamily_root_rel: qa_chromogeometry_cert_v1\npass_desc: Wildberger chromogeometric quadrances: C=Q_green(d,e)=2de, F=Q_red(d,e)=d\u00b2-e\u00b2=ab, G=Q_blue(d,e)=d\u00b2+e\u00b2; C\u00b2+F\u00b2=G\u00b2 (Wildberger Thm 6); I=|C-F| conic discriminant; checks CG1-CG7 (schema, green/red/blue quadrance, Pythagoras, semi-latus, conic type); 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2\u2026\n\n--- candidate_14 ---\nTitle: Wildberger 2008 Pell: infinite solutions via matrix arithmetic, no irrationals\nBody: We give a simple way to generate an infinite number of solutions to Pell's equation x\u00b2 \u2212 Dy\u00b2 = 1, requiring only basic matrix arithmetic and no knowledge of irrational numbers. We illustrate the method for D = 2, 7 and 61. Connections to the Stern-Brocot tree and universal geometry are also discussed.\n\n--- candidate_15 ---\nTitle: SVP wiki: '3-diminsional' spelling\nBody: a 3-diminsional Quantum Arithmetic,(QA), will include the number \"5\" also being required\n\n--- candidate_16 ---\nTitle: QA Chromogeometry Pythagorean Identity Cert family\nBody: fam_id: 234\ndoc_slug: 234_qa_chromogeometry_pythagorean_identity_cert\nfamily_root_rel: qa_chromogeometry_pythagorean_identity_cert_v1\npass_desc: Wildberger chromogeometry under QA coordinates Q_b=b*b+e*e, Q_r=b*b-e*e, Q_g=2*b*e satisfies Q_b square = Q_r square + Q_g square exhaustively on (b,e) in [1..19]^2 with zero failures; QA coordinate formulas and five Pythagorean triples verified. Checks C\u2026\n\n--- candidate_17 ---\nTitle: Philomath p.19-20: 72-year precession / 25920-year full cycle [KNOWN TYPO 28920]\nBody: Every 72 years (D = 9), the zodiacs move one degree from their previous year's position. For a full cycle, it takes around 25920 years (360\u00d772), and D(28920) = 9.\n\n--- candidate_18 ---\nTitle: qa_chromogeometry_cert_v1\nBody: filesystem-discovered; family_root_rel: qa_chromogeometry_cert_v1\n\n--- candidate_19 ---\nTitle: qa_philomath_bridge\nBody: filesystem-discovered; family_root_rel: qa_philomath_bridge\n\n--- candidate_20 ---\nTitle: qa_chromogeometry_pythagorean_identity_cert_v1\nBody: filesystem-discovered; family_root_rel: qa_chromogeometry_pythagorean_identity_cert_v1\n\nOutput relevance grades, one line per candidate, in the format '<candidate_id> <grade>'.",
+      "raw_response": "candidate_01 5\ncandidate_02 5\ncandidate_03 4\ncandidate_04 5\ncandidate_05 2\ncandidate_06 2\ncandidate_07 3\ncandidate_08 5\ncandidate_09 4\ncandidate_10 3\ncandidate_11 4\ncandidate_12 3\ncandidate_13 5\ncandidate_14 2\ncandidate_15 2\ncandidate_16 5\ncandidate_17 3\ncandidate_18 4\ncandidate_19 4\ncandidate_20 4\n",
+      "parsed_grades": {
+        "work:grant_ghannam_philomath_2019": 5,
+        "sc:philomath_digital_root_definition": 5,
+        "sc:philomath_prime_digital_root_constraint": 4,
+        "work:wildberger_2008_chromogeometry": 5,
+        "work:dale_briddell_2026_qa_completion_layer_v2": 2,
+        "sc:dale_briddell_v2_five_claims_list": 2,
+        "work:wildberger_mutation_game": 3,
+        "sc:wildberger_2008_chromogeometry_abstract": 5,
+        "sc:philomath_nine_is_zero_of_dspace": 4,
+        "work:wildberger_2003_g2_combinatorial": 3,
+        "sc:wildberger_2008_chromogeometry_transcends_klein": 4,
+        "work:wildberger_2008_pell_no_irrationals": 3,
+        "cert:125": 5,
+        "sc:wildberger_2008_pell_abstract": 2,
+        "sc:svp_dim_ocr": 2,
+        "cert:234": 5,
+        "sc:philomath_72_year_precession": 3,
+        "cert:fs:qa_chromogeometry_cert_v1": 4,
+        "cert:fs:qa_philomath_bridge": 4,
+        "cert:fs:qa_chromogeometry_pythagorean_identity_cert_v1": 4
+      },
+      "n_graded": 20
+    }
+  ]
+}

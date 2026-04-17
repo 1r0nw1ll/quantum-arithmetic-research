@@ -1,0 +1,358 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Beta-A pre-registered query fixture; committed BEFORE any benchmark runs; gold labels derived mechanically by tools/qa_kg/analysis/derive_gold.py (category=graph_structural|curator_specified|mechanical) or by blind LLM (category=llm_blind, cross_domain only); thresholds pre-committed at docs/specs/QA_MEM_BETA_DECISION_MATRIX.md; no changes to gold after seeing results (N1 constraint). -->",
+  "phase": "beta_a",
+  "schema_version": 1,
+  "authoring_date": "2026-04-17",
+  "authoring_db_head": "to-be-filled-at-commit",
+  "description": "38 pre-registered queries for Beta-A validation. Category distribution: provenance(6), contradiction(8), domain(6), authority(8), lifecycle(2), cross_domain(4), edge_case(4). Gold source per category: provenance/contradiction/domain/lifecycle=graph_structural (derive_gold.py BFS/SQL); authority=curator_specified (expected primary ID hand-picked per query, committed here); cross_domain=llm_blind (anonymized-ID prompt graded by Claude Haiku/Opus via SDK); edge_case=mechanical (empty result / vacuous exclusion / filter plumbing).",
+  "gold_source_enum": ["graph_structural", "curator_specified", "llm_blind", "mechanical"],
+  "queries": [
+    {
+      "id": "P01",
+      "query_text": "What primary sources ground the Haramein scaling diagonal cert?",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "target_id": "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+      "tags": ["provenance", "rsf"],
+      "rationale": "BFS via derived-from from target cert; node_type='Axiom' filtered. Expect 3 sc:haramein_2013_* SourceClaims. Tests that primary material grounding a cert is surfaced when queried with cert-descriptive text."
+    },
+    {
+      "id": "P02",
+      "query_text": "What primary source grounds the Keely structural ratio cert?",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "target_id": "cert:fs:qa_keely_structural_ratio_cert_v1",
+      "tags": ["provenance", "svp", "axiom_stripped"],
+      "rationale": "derive_gold strips axiom:A2 (search cannot surface axioms via query text). Residual gold = sc:keely_law_18_atomic_pitch. If derive_gold output has only axioms after stripping, this query becomes N-A and gets flagged."
+    },
+    {
+      "id": "P03",
+      "query_text": "What primary source grounds the Keely triune-force cert?",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "target_id": "cert:fs:qa_keely_triune_cert_v1",
+      "tags": ["provenance", "svp", "axiom_stripped"],
+      "rationale": "derive_gold strips axiom:A1. Residual gold = sc:keely_law_11_triune_force."
+    },
+    {
+      "id": "P04",
+      "query_text": "What does the Keely dominant-control cert build on?",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "target_id": "cert:fs:qa_keely_dominant_control_cert_v1",
+      "tags": ["provenance", "svp"],
+      "rationale": "No axiom endpoints on this cert's derived-from edges. Gold = sc:keely_law_1_matter_force_atomoles + sc:keely_law_11_triune_force."
+    },
+    {
+      "id": "P05",
+      "query_text": "What primary claims ground the Levin cognitive-lightcone cert?",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "target_id": "cert:fs:qa_levin_cognitive_lightcone_cert_v1",
+      "tags": ["provenance", "biology"],
+      "rationale": "Gold = sc:levin_2019_computational_surface + sc:levin_2019_scale_free_cognition. Biology-domain provenance."
+    },
+    {
+      "id": "P06",
+      "query_text": "Provenance of the sixteen-identities cert?",
+      "category": "provenance",
+      "gold_source": "graph_structural",
+      "target_id": "cert:fs:qa_sixteen_identities_cert_v1",
+      "tags": ["provenance", "geometry"],
+      "rationale": "Single derived-from edge. Gold = sc:parker_prop_vii_circumference_radius."
+    },
+
+    {
+      "id": "C01",
+      "query_text": "Keely Law 17 transformation structural reclassification dispute",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:keely_law_17_transformation_21_octaves", "obs:keely_law_17_vibes_structural_reclassification"],
+      "tags": ["contradiction", "dispute"],
+      "rationale": "Query tokens 'Keely Law 17 transformation' match sc title (21-octave compass); 'Law 17 structural reclassification' matches obs body (Vibes Category 2 → Category 1). Lexical pre-flight: both sides ≥ 2 shared non-stopword tokens."
+    },
+    {
+      "id": "C02",
+      "query_text": "Hull pi 20612 6561 Lindemann transcendental",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:hull_quadrature_pi_20612_6561", "obs:pi_transcendental_lindemann_1882"],
+      "tags": ["contradiction", "dispute", "geometry"],
+      "rationale": "'20612 6561' specific to sc; 'Lindemann transcendental' specific to obs; 'pi' shared. Both endpoints surface."
+    },
+    {
+      "id": "C03",
+      "query_text": "F never prime unity set roots",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:svp_F_never_prime", "obs:F_prime_in_unity_set"],
+      "tags": ["contradiction", "true"],
+      "rationale": "'F never prime' → sc body; 'unity set' + 'F prime' → obs body. reason=true exemplar."
+    },
+    {
+      "id": "C04",
+      "query_text": "SVP Law 13 parenthetical labels mapping",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:svp_law13_labels", "obs:verified_law13_parenthetical_labels"],
+      "tags": ["contradiction", "dispute"],
+      "rationale": "All four tokens present in both title and both bodies. Cleanest lexical match of the 8 pairs."
+    },
+    {
+      "id": "C05",
+      "query_text": "SVP choromosomes chromosomes OCR typo",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:svp_choromosomes_ocr", "obs:verified_chromosomes"],
+      "tags": ["contradiction", "ocr"],
+      "rationale": "Misspelling 'choromosomes' in sc; correct 'chromosomes' + 'OCR' in obs. Classic OCR-error pair."
+    },
+    {
+      "id": "C06",
+      "query_text": "Philomath 72-year precession 25920 correction",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:philomath_72_year_precession", "obs:philomath_25920_precession_correction"],
+      "tags": ["contradiction", "typo"],
+      "rationale": "'72' + '25920' + 'precession' shared. obs body has '28920' typo the correction identifies."
+    },
+    {
+      "id": "C07",
+      "query_text": "SVP C identity a² h² versus a² b² verified",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:svp_C_identity_a2_h2", "obs:verified_C_identity_a2_b2"],
+      "tags": ["contradiction", "typo"],
+      "rationale": "sc body literal 'a2 - h2'; obs body 'a²−b²' (NFKD → a2,b2). Pre-flight uses NFKD normalization so query 'a² h² b²' matches both. Query retains superscripts — FTS5 unicode61 strips them similarly."
+    },
+    {
+      "id": "C08",
+      "query_text": "Briddell proton decomposition 1836 729 typo",
+      "category": "contradiction",
+      "gold_source": "graph_structural",
+      "target_edge": ["sc:dale_briddell_v2_cert1_proton_decomposition", "obs:briddell_chap2_line1286_typo"],
+      "tags": ["contradiction", "typo", "physics"],
+      "rationale": "'Briddell' + 'proton decomposition' + '1836' + '729' present in both. obs adds 'line 1286' + 'typo'."
+    },
+
+    {
+      "id": "D01",
+      "query_text": "Levin biology source claims cognition",
+      "category": "domain",
+      "domain_filter": "biology",
+      "gold_source": "graph_structural",
+      "tags": ["domain_filter", "biology"],
+      "rationale": "Gold = all source_claim nodes with domain=biology (6 expected). Tests the candidate-pool domain filter (Phase 4.5 R10) on biology subcorpus."
+    },
+    {
+      "id": "D02",
+      "query_text": "Wildberger Parker Hull geometry source claims",
+      "category": "domain",
+      "domain_filter": "geometry",
+      "gold_source": "graph_structural",
+      "tags": ["domain_filter", "geometry"],
+      "rationale": "Gold = all source_claim nodes with domain=geometry (20 expected). Large gold set; per-query hit@5 binary because k=5 cannot fit 20 items."
+    },
+    {
+      "id": "D03",
+      "query_text": "Briddell FST physics source claims",
+      "category": "domain",
+      "domain_filter": "physics",
+      "gold_source": "graph_structural",
+      "tags": ["domain_filter", "physics"],
+      "rationale": "Gold = all source_claim nodes with domain=physics (15 expected). Primarily Briddell Part 2 claims."
+    },
+    {
+      "id": "D04",
+      "query_text": "Iverson Philomath qa_core source claims",
+      "category": "domain",
+      "domain_filter": "qa_core",
+      "gold_source": "graph_structural",
+      "tags": ["domain_filter", "qa_core"],
+      "rationale": "Gold = all source_claim nodes with domain=qa_core (18 expected). Iverson + Philomath + Briddell addendum corpus."
+    },
+    {
+      "id": "D05",
+      "query_text": "Haramein RSF source claims holographic mass",
+      "category": "domain",
+      "domain_filter": "rsf",
+      "gold_source": "graph_structural",
+      "tags": ["domain_filter", "rsf"],
+      "rationale": "Gold = all source_claim nodes with domain=rsf (15 expected). Haramein 2013 equations corpus."
+    },
+    {
+      "id": "D06",
+      "query_text": "Keely SVP source claims sympathetic physics",
+      "category": "domain",
+      "domain_filter": "svp",
+      "gold_source": "graph_structural",
+      "tags": ["domain_filter", "svp"],
+      "rationale": "Gold = all source_claim nodes with domain=svp (5 expected). Smallest domain; full gold fits in top-5 if filter works."
+    },
+
+    {
+      "id": "A01",
+      "query_text": "Wildberger chromogeometry transcends Klein",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:wildberger_2008_chromogeometry_transcends_klein",
+      "tags": ["authority", "primary_dominance", "geometry"],
+      "rationale": "Curator anchor: specific Wildberger 2008 claim. Primary SourceClaim should appear in top-3."
+    },
+    {
+      "id": "A02",
+      "query_text": "Haramein holographic mass equation 9",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:haramein_2013_holographic_mass_eq9",
+      "tags": ["authority", "primary_dominance", "rsf"],
+      "rationale": "Curator anchor: specific equation citation. Primary should beat any derived cert mentioning 'holographic'."
+    },
+    {
+      "id": "A03",
+      "query_text": "Keely atomoles Law 1 matter force",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:keely_law_1_matter_force_atomoles",
+      "tags": ["authority", "primary_dominance", "svp"],
+      "rationale": "'atomoles' is a Keely-specific coinage; unique token should strongly disambiguate."
+    },
+    {
+      "id": "A04",
+      "query_text": "Iverson Halley comet quantum number worked example",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:iverson_qa2_halley_qn",
+      "tags": ["authority", "primary_dominance", "qa_core"],
+      "rationale": "Curator anchor: specific Iverson QA-2 worked example."
+    },
+    {
+      "id": "A05",
+      "query_text": "Briddell plenum core elements FST",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:dale_briddell_v2_plenum_core_elements",
+      "tags": ["authority", "primary_dominance", "physics"],
+      "rationale": "Curator anchor: specific Briddell Part 2 claim about plenum."
+    },
+    {
+      "id": "A06",
+      "query_text": "Parker proposition III circle geometry",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:parker_prop_iii_circle_primary",
+      "tags": ["authority", "primary_dominance", "geometry"],
+      "rationale": "Curator anchor: Parker 1874 Prop III. Tests primary-domain surfacing when a derived cert (circle_impossibility) competes."
+    },
+    {
+      "id": "A07",
+      "query_text": "Levin 2022 TAME technological approach mind everywhere",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:levin_2022_tame_definition",
+      "tags": ["authority", "primary_dominance", "biology"],
+      "rationale": "Curator anchor: Levin 2022 TAME definition. Tests that a new corpus addition ranks above a derived cert alias."
+    },
+    {
+      "id": "A08",
+      "query_text": "Philomath digital root definition base 10 nine",
+      "category": "authority",
+      "gold_source": "curator_specified",
+      "expected_primary_id": "sc:philomath_digital_root_definition",
+      "tags": ["authority", "primary_dominance", "qa_core"],
+      "rationale": "Curator anchor: Philomath's digital-root definition. Tests that domain=qa_core primary wins over derived [202] cert."
+    },
+
+    {
+      "id": "L01",
+      "query_text": "KG consistency invariants current version",
+      "category": "lifecycle",
+      "gold_source": "graph_structural",
+      "target_topic": "qa_kg_consistency_cert",
+      "tags": ["lifecycle", "supersedes"],
+      "rationale": "Gold (current) = cert:fs:qa_kg_consistency_cert_v4. Anti-gold (superseded) = v1/v2/v3. Gate: v4 rank < min(v1,v2,v3) rank in top-5. Tests lifecycle_factor=0.5 on superseded."
+    },
+    {
+      "id": "L02",
+      "query_text": "Graph consistency certificate KG1 KG13 gates",
+      "category": "lifecycle",
+      "gold_source": "graph_structural",
+      "target_topic": "qa_kg_consistency_cert",
+      "tags": ["lifecycle", "supersedes"],
+      "rationale": "Same target_topic as L01; different phrasing exercises lifecycle ordering under query variation (KG11/12/13 tokens are v4-only in body text, biasing FTS5 toward v4 even before lifecycle_factor — gate still checks v4 outranks superseded)."
+    },
+
+    {
+      "id": "X01",
+      "query_text": "What primary sources connect QA integer structure to biological cognition?",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "tags": ["cross_domain", "llm_blind", "qa_core_biology"],
+      "rationale": "Bridges qa_core (Iverson/Philomath QA framework) and biology (Levin cognition). No single graph edge spans this relationship — requires semantic judgment. Graded blind by LLM on title+body with anonymized IDs."
+    },
+    {
+      "id": "X02",
+      "query_text": "How do Keely's sympathetic-physics laws relate to Haramein's scaling framework?",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "tags": ["cross_domain", "llm_blind", "svp_rsf"],
+      "rationale": "Bridges svp (Keely) and rsf (Haramein). Tests whether ranker surfaces both author-canonical primary claims when the query spans both."
+    },
+    {
+      "id": "X03",
+      "query_text": "Integer bounds in both Wildberger's geometry and Briddell's field-structure physics",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "tags": ["cross_domain", "llm_blind", "geometry_physics"],
+      "rationale": "Bridges geometry and physics domains. 'Integer bounds' is a QA-mapped semantic theme, not a domain column."
+    },
+    {
+      "id": "X04",
+      "query_text": "Digital root Philomath vs chromogeometry Wildberger — arithmetic vs geometric structure",
+      "category": "cross_domain",
+      "gold_source": "llm_blind",
+      "tags": ["cross_domain", "llm_blind", "qa_core_geometry"],
+      "rationale": "Bridges qa_core (Philomath digital root) and geometry (Wildberger chromogeometry). Structural domain split does not capture the semantic cross-cut."
+    },
+
+    {
+      "id": "E01",
+      "query_text": "xyzqrstuvw_no_such_token_exists_anywhere_in_corpus",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "expected_result": "empty",
+      "tags": ["edge_case", "empty_result"],
+      "rationale": "Zero FTS5 matches expected; ranker must return []. Tests empty-pool path."
+    },
+    {
+      "id": "E02",
+      "query_text": "Keely",
+      "domain_filter": "nonexistent_domain",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "expected_result": "empty",
+      "tags": ["edge_case", "domain_filter_mismatch"],
+      "rationale": "Valid query token with invalid domain filter. candidate_pool SQL AND domain=? excludes all; ranker returns []. Tests filter plumbing without corpus interference."
+    },
+    {
+      "id": "E03",
+      "query_text": "Bateson learning levels cognition",
+      "min_authority": "primary",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "expected_result": "no_derived_in_top_k",
+      "tags": ["edge_case", "min_authority_filter"],
+      "rationale": "No primary Bateson SourceClaim in corpus (derived-only). With min_authority='primary' the derived cert:fs:qa_bateson_learning_levels_cert_v1 must be EXCLUDED. Expected: empty or primary-only top-5. Tests min_authority ladder."
+    },
+    {
+      "id": "E04",
+      "query_text": "Keely",
+      "valid_at": "2099-01-01T00:00:00Z",
+      "category": "edge_case",
+      "gold_source": "mechanical",
+      "expected_result": "valid_at_passthrough",
+      "tags": ["edge_case", "valid_at_filter"],
+      "rationale": "valid_at filter with far-future date. All Keely nodes have valid_until='' — should all pass. Expected: same result set as no valid_at filter. Tests R4 plumbing even while no valid_until populated anywhere (honestly N-A for discrimination)."
+    }
+  ]
+}

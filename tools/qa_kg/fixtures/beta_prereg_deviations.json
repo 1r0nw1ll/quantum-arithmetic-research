@@ -1,0 +1,8 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=Beta-A fixture-fix log under N1 constraints. -->",
+  "phase": "beta_a",
+  "schema_version": 1,
+  "created_ts": "2026-04-17T14:59:16Z",
+  "deviations": [],
+  "n1_constraint": "Only (i) syntactic JSON errors, (ii) nonexistent node IDs, (iii) malformed domain values, (iv) zero-FTS5-match rephrasing. Gold-label changes after seeing ranker results are FORBIDDEN."
+}

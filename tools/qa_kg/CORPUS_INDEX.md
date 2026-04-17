@@ -147,6 +147,30 @@ Legend: ✓ = SourceWork ingested; ⏳ = deferred; ⚠ = misfiled (non-Wildberge
 
 ---
 
+## HeartMath corpus (Phase 4.8 KICKOFF)
+
+**Corpus root:** `Documents/heartmath_corpus/`
+**Domain:** `""` (pending) — candidate `psychophysiology` extension of `domain_taxonomy.json` deferred to Phase 4.8 body.
+**Theory docs:** `docs/theory/heartmath_phase4_8_excerpts.md` (stub — verbatim claim extraction pending)
+**Origin search:** `scholar.google.com/scholar?start=130&q=heartmath&hl=en&as_sdt=4007` (results 131–140)
+**QA-research grounding:** OB agenda 2026-03-25 (completeness audit, Thread 3: HeartMath / McCraty / Radin) — HRV coherence ratio ↔ QA HI; brain–heart cross-coherence ↔ QA Markovian coupling; Schumann 7.83 Hz ↔ mod-9 / mod-24 orbit harmonics.
+**Ingress note:** `Documents/heartmath_corpus/` is NOT yet in `DOCUMENTS_PDF_INGRESS_PREFIXES` in `llm_qa_wrapper/cert_gate_hook.py` / `.claude/hooks/pretool_guard.sh`. Phase 4.8 kickoff PDFs written via cwd-scoped downloads (no `Documents/` substring in the Bash command). Extending the allowlist is a WRAPPER_SELF_MODIFICATION edit routed through Codex quarantine review — deferred while Codex bridge is dead.
+
+| Path | Author | Topic tags | Domain | SourceWork | Status |
+|---|---|---|---|---|---|
+| `Documents/heartmath_corpus/tomasino_1997_water_em_storage.pdf` | Tomasino 1997 | water liquid-crystal, EM storage, subtle energy, HeartMath Pub 97 | "" (pending) | `tomasino_1997_water_em_storage` | ✓ (kickoff — claims pending) |
+| `Documents/heartmath_corpus/danielson_2014_hospital_wellness.pdf` | Danielson+Jeffers+Kaiser et al 2014 | HeartMath mastery, hospital wellness, population health, PMC3923282 | "" (pending) | `danielson_2014_hospital_wellness` | ✓ (kickoff — claims pending) |
+| `Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf` | Oschman+Oschman 2015 | scalar field antenna, Rein resonance, Whittaker decomposition, bidirectional | "" (pending) | `oschman_2015_heart_bidirectional_scalar_antenna` | ✓ (kickoff — claims pending) |
+| `Documents/heartmath_corpus/edwards_2018_cfp_heartmath_psychology.pdf` | Edwards 2018 | HeartMath psychology CFP, Journal of Psychology in Africa | "" (pending) | `edwards_2018_cfp_heartmath_psychology` | ✓ (kickoff — claims pending) |
+| **NOT ON DISK** | Institute of HeartMath 2012 | EmWave Desktop product citation | — | — | [CITATION] — no paper |
+| **NOT ON DISK** | Edwards+David+Hermann et al 2023 | HeartMath meditation, longer breath cycle, *Dialogo* | — | — | ⏳ EBSCO paywall |
+| **NOT ON DISK** | Simmons 2010 | heart-generated coherence, distilled water, plant growth | — | — | [CITATION] — thesis, no PDF indexed |
+| **NOT ON DISK** | Childre+Martin+Beech 1999 | *The HeartMath Solution* (Harper) | — | — | Published book, no PDF |
+| **NOT ON DISK** | 명화숙 et al 2014 | HeartMath psychoeducation, Korean caregivers | — | — | ⏳ foreign-journal paywall |
+| **NOT ON DISK** | Böckeler+Cornforth+Drummond et al 2020 | paced breathing vs game-biofeedback, HRV, IEEE EMBC | — | — | ⏳ IEEE Xplore paywall |
+
+---
+
 ## Cross-reference index (topic → file)
 
 Looking up by **topic or keyword** rather than author — this catches the "missed qa_fst because I grep'd briddell" class of failure.
@@ -174,6 +198,9 @@ Looking up by **topic or keyword** rather than author — this catches the "miss
 | **Philomath / digital root / base-9 / mod-24** | `~/Downloads/PHILOMATH_...pdf`, `qa_ingestion_sources/qa_philomath_*.json` |
 | **Whittaker / Treatise / Interference** | `~/Downloads/A_Treatise_on_Electricity_and_Magnetism.pdf`, `~/Downloads/Interference.pdf` |
 | **Parker / quadrature** | `~/Downloads/quadraturecircl00parkgoog.pdf`, `~/Downloads/00_QuadraturePRINT.pdf` |
+| **HeartMath / McCraty / cardiac coherence / HRV** | `Documents/heartmath_corpus/` (4 files: tomasino 1997, danielson 2014, oschman 2015, edwards 2018) |
+| **Oschman / scalar antenna / Rein resonance** | `Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf` |
+| **water EM structuring / liquid crystal lattice** | `Documents/heartmath_corpus/tomasino_1997_water_em_storage.pdf` |
 
 ---
 
@@ -181,7 +208,7 @@ Looking up by **topic or keyword** rather than author — this catches the "miss
 
 1. Add `Haramein 2008 Scale Unification` SourceWork to close the Phase 4.6 hole (currently grandfathered in cert [218] fixtures but no SourceWork node).
 2. Ingest `Wildberger+Rubine 2025 hyper_catalan_exercises_2507.13045.pdf` (currently indexed but no SourceWork).
-3. Extend the Documents/ carve-out to `Documents/levin_corpus/` + `Documents/whittaker/` if Will wants Levin and Whittaker PDFs under the same Documents/ umbrella (currently in `corpus/` repo-root unprotected).
+3. Extend the Documents/ carve-out to `Documents/levin_corpus/` + `Documents/whittaker/` + `Documents/heartmath_corpus/` (Phase 4.8 kickoff) if Will wants Levin/Whittaker/HeartMath PDFs under the same Documents/ umbrella (currently Levin in `corpus/` repo-root unprotected, Whittaker in `~/Downloads/`, HeartMath under Documents/ but not yet in ingress allowlist).
 4. Write `tools/qa_kg/tests/test_corpus_index.py` to enforce index ↔ fixture ↔ on-disk consistency:
    - Every `✓` row's SourceWork ID resolves to a node in `qa_kg.db`.
    - Every SourceWork node has exactly one index row.

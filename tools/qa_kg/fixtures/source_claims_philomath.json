@@ -1,0 +1,150 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.6 Philomath primary-source corpus. 10 verbatim quotes from Grant & Ghannam, *Philomath: The Geometric Unification of Science and Art Through Number*, 398pp PDF at ~/Downloads/. Locators resolve against docs/theory/philomath_excerpts.md. One documented typo (72-year-precession entry) is represented as a SourceClaim + observation + contradicts edge per the Phase 3 typo pattern. Do not edit quote fields. -->",
+  "phase": "4.6",
+  "source_class": "philomath",
+  "description": "Grant/Ghannam *Philomath* primary-source claims. Covers digital root / base-9, septenary cycle, 72-year precession (with typo flag), prime 6k±1 and p²=24f+1 laws, prime digital-root constraint, and wave-replication-every-6 scaling. 10 claims across Parts I (math) and III (music/sound). domain=qa_core on pure arithmetic claims, physics on cosmological/harmonic.",
+
+  "works": [
+    {
+      "id": "grant_ghannam_philomath_2019",
+      "title": "Grant & Ghannam — *Philomath: The Geometric Unification of Science and Art Through Number*",
+      "body": "Robert Edward Grant & Talal Ghannam, *Philomath: The Geometric Unification of Science and Art Through Number*. 398pp. 16MB PDF at ~/Downloads/PHILOMATH_The_Geometric_Unification_of_Science_Art_Through_Number_Robert_Edward_Grant_Talal_Ghannam.pdf. Ingestion manifest qa_ingestion_sources/qa_philomath_corpus_manifest.json tracks triage. QA-relevant chapters: digital root (Ch.1 Pt.I), prime distribution (Ch.2 Pt.I), mod-24 wave (Ch.4 Pt.I), harmonic number geometry (Pt.III). Known typos include 'D(28920) = 9' where the intended number is 25920.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core"
+    }
+  ],
+
+  "observations": [
+    {
+      "id": "obs:philomath_25920_precession_correction",
+      "title": "Correction: Philomath p.19-20 'D(28920)=9' is a typo for D(25920)=9",
+      "body": "The passage gives 360×72=25920 (correct Platonic year / precession cycle) and then asserts 'D(28920)=9'. D(25920)=2+5+9+2+0=18, D(18)=9 ✓. D(28920)=2+8+9+2+0=21, D(21)=3 ≠ 9. The referent is 25920; '28920' is a typo (transposed digits 5→8). This does not affect the QA-core content (the 72-year / full-precession link) but the printed equality is literally false as written.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#72-year-precession",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "qa_core",
+      "valid_from": "2026-04-17"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "philomath_digital_root_definition",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "The digital root, also known as modular math, is one important branch of number theory... In simple words, what the digital root operation does is to reduce a number down to a single digit. This is done by continuously summing the number's individual digits.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#digital-root-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.16: digital root / mod-9 definition"
+    },
+    {
+      "id": "philomath_base10_is_base9",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "In this book, however, we concentrate mainly on base-10 (which is actually base-9, as explained below.) ... The possible outcome of this operation can be any number from 1 to 9 only (this is why we suggested it is more of a base-9 rather than base-10).",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#base10-is-base9",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.16: D-space range {1,...,9} (A1 No-Zero parallel)"
+    },
+    {
+      "id": "philomath_nine_is_zero_of_dspace",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "Even though number 9 is the last and largest number of the D-space, it behaves in this finite space as number 0 does in the regular infinite numerical space. For example, adding 9 to any number will not change its digital root... This property of number 9, being the largest and smallest at the same time, is unique to the D-space.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#nine-is-zero-of-dspace",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.19: 9 as additive identity of D-space (QA Singularity orbit)"
+    },
+    {
+      "id": "philomath_septenary_cycle",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "Dividing by 7 is a special case, where the result is always a repetitive sequence of the numbers: [1, 4, 2, 8, 5, 7]. These six digits [1, 4, 2, 8, 5, 7] are called the Septenary Numbers, and we will be encountering them a lot throughout the book.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#septenary-cycle",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.19: Septenary cycle {1,4,2,8,5,7}"
+    },
+    {
+      "id": "philomath_72_year_precession",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "Every 72 years (D = 9), the zodiacs move one degree from their previous year's position. For a full cycle, it takes around 25920 years (360×72), and D(28920) = 9.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#72-year-precession",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "physics",
+      "title": "Philomath p.19-20: 72-year precession / 25920-year full cycle [KNOWN TYPO 28920]"
+    },
+    {
+      "id": "philomath_prime_form_6k_pm_1",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "Mathematically, prime numbers always come in the form of [6k±1], where k is any integer from 1 to infinity... From this formula, it appears that number 6 is a pivot or a center number around which prime numbers emerge. This specific role of number 6 is so fundamental that it will be at the core of some of this book's most important theories.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#prime-form-6k-pm-1",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.29: primes > 3 have form 6k±1"
+    },
+    {
+      "id": "philomath_prime_square_mod_24",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "One such interesting property is that for any prime number p, its square is always a multiple of 24, plus 1 (p^2 = 24f + 1)... If we combine [the coefficient] into a single factor f, we retrieve the desired equation: p^2 = 24f + 1.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#prime-square-mod-24",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.29: p² ≡ 1 (mod 24) for primes p > 3"
+    },
+    {
+      "id": "philomath_prime_digital_root_constraint",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "In the D-space, with the exception of number 3, the digital root of any known prime number is anything but 3, 6, or 9... no prime number can have a digital root of 3, 6, or 9.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#prime-digital-root-constraint",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.29-30: primes p>3 avoid D-roots {3,6,9}"
+    },
+    {
+      "id": "philomath_vedic_square_mirror",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "Shapes that correspond to numbers adding up to 9, as [2, 7], [1, 8], etc., are mirror images of each other. Tracing number 9 generates a square, which is its own mirror image.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#vedic-square-mirror",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.31: Vedic-square mirror on additive-inverse pairs mod 9"
+    },
+    {
+      "id": "philomath_wave_replicates_mult_6",
+      "work": "grant_ghannam_philomath_2019",
+      "quote": "As explained in Part I, the wave pattern replicates every multiple of 6, which doubles into 12, then 24, etc. Number 12 is unique in particular, as it can be found on all levels of the natural world.",
+      "source_locator": "file:docs/theory/philomath_excerpts.md#wave-replicates-mult-6",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "domain": "qa_core",
+      "title": "Philomath p.273: wave scales 6 → 12 → 24"
+    }
+  ],
+
+  "contradicts": [
+    {"src": "sc:philomath_72_year_precession", "dst": "obs:philomath_25920_precession_correction", "reason": "typo"}
+  ]
+}

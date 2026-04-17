@@ -1,0 +1,31 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.6 Briddell FST observation-only fixture. Phase 4.5 deferred Briddell on 'AI-summary not primary' — Phase 4.6 per-file classification confirms: the 5 files under field-structure-theory/ are Perplexity and ChatGPT chat-export artefacts, NOT Briddell primary manuscript material. The authoritative Briddell FST source is the Frontiers in Physics ms 1850870 (Briddell + Will, submitted 2026-04-08), which is not in the repo. This fixture emits no SourceWorks or SourceClaims — only observation nodes recording the classification outcome and the pointer to the off-repo primary source. Do not edit observation bodies. -->",
+  "phase": "4.6",
+  "source_class": "briddell",
+  "description": "Briddell FST observation-only fixture. Phase 4.6 per-file P2 classification of the 5 field-structure-theory/ files confirmed Phase 4.5's deferral: all 5 are AI-chat-export artefacts (Perplexity on file #1, ChatGPT on files #2-5 per nexus-ai-chat-importer frontmatter). No SourceWork or SourceClaim nodes are emitted for them. Instead, two observations are recorded: (a) the per-file classification outcome, (b) the pointer to the off-repo Frontiers ms 1850870 (Briddell + Will) as the authoritative primary source for Phase 4.7+ ingestion.",
+
+  "observations": [
+    {
+      "id": "obs:briddell_phase4_6_classification",
+      "title": "Phase 4.6 Briddell FST file classification — none are primary manuscript",
+      "body": "The 5 files under field-structure-theory/01-core-theory/fst-fundamentals/ and field-structure-theory/03-integration-frameworks/qa-fst-integration/ are chat-export artefacts, not Don Briddell's primary manuscript: (1) fst-briddell-background-qa-analysis.txt = Perplexity AI answer citing Amazon book pages and YouTube videos (line 22 says 'Answer from Perplexity: pplx.ai/share'); (2) FST and QA Comparison.md = ChatGPT 2025-05-25 conversation export (nexus-ai-chat-importer frontmatter, conversation_id 6833487f-...); (3) Quantum Arithmetic and FST.md = ChatGPT 2025-03-15 export, user turn contains Will's QA synthesis but downstream is AI dialogue; (4) Field structure translation.md = ChatGPT 2025-10-09 export, user turn contains Hawkins→Grant lineage (provenance of user text unverified — could be Will's own writing or pasted from elsewhere); (5) Reframing using FST.md = ChatGPT 2025-08-23 export, user turn pastes Will's own QA paper for reframing. Phase 4.5 deferred on 'AI-summary not primary' — Phase 4.6 confirms this was correct for Briddell primary-source grounding. Files remain on disk for contextual reference but contribute no primary-source SourceClaims.",
+      "source_locator": "file:field-structure-theory/",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "physics",
+      "valid_from": "2026-04-17"
+    },
+    {
+      "id": "obs:briddell_frontiers_ms_1850870_authoritative",
+      "title": "Briddell FST authoritative primary source: Frontiers in Physics ms 1850870 (off-repo)",
+      "body": "Per memory/project_field_structure_theory_briddell.md, the authoritative Briddell FST primary-source manuscript is the 2-part FST paper co-authored by Don Briddell and Will Dale, Part 2 titled 'A Quantum Arithmetic Completion Layer for Field Structure Theory', submitted 2026-04-08 to Frontiers in Physics (Nuclear Physics section) under manuscript ID 1850870. This PDF is not in the repo as of 2026-04-17. Phase 4.7 acquisition path: (a) ask Will for the submission PDF directly, or (b) acquire from Frontiers submission portal after acceptance/publication. Until then, any cert family that wishes to ground in Briddell's FST primary text must note the dependency as 'external-pending' rather than emit a derived-from edge into this graph.",
+      "source_locator": "file:memory/project_field_structure_theory_briddell.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "physics",
+      "valid_from": "2026-04-08"
+    }
+  ]
+}

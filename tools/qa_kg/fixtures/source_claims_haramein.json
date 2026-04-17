@@ -1,0 +1,225 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.6 Haramein primary-source corpus. 15 verbatim quotes from three papers: Haramein 2013 (Quantum Gravity and the Holographic Mass, PSIJ 3(4):270-292), Haramein/Brown/Val Baker 2016 (Unified Spacememory Network, NeuroQuantology), Val Baker/Haramein/Alirol 2019 (Electron and Holographic Mass Solution, Physics Essays 32(2):255-262). Locators resolve against docs/theory/haramein_corpus_excerpts.md. Do not edit quote fields. -->",
+  "phase": "4.6",
+  "source_class": "haramein",
+  "description": "Haramein / RSF primary-source claims grounding [218] qa_haramein_scaling_diagonal_cert_v1. domain=rsf on all. PDFs on disk under Documents/haramein_rsf/ (2013 + 2016 via OSF zips; 2019 via assets.website-files direct).",
+
+  "works": [
+    {
+      "id": "haramein_2013",
+      "title": "Haramein (2013) — Quantum Gravity and the Holographic Mass",
+      "body": "Nassim Haramein, *Quantum Gravity and the Holographic Mass*. Physical Science International Journal 3(4):270-292, 2013. Introduces the Planck Spherical Unit (PSU), derives the holographic gravitational mass equivalence to Schwarzschild mass via surface/volume PSU ratio, and predicts proton mass and charge radius. The 4φ² strong-gravity coupling identity and the μ-proton charge radius prediction are the two most-cited results. PDF re-acquired via OSF 5ed8c zip (QGHM.pdf, 345KB, 22pp).",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf"
+    },
+    {
+      "id": "haramein_brown_valbaker_2016",
+      "title": "Haramein, Brown & Val Baker (2016) — The Unified Spacememory Network",
+      "body": "Nassim Haramein, William David Brown, Amira Val Baker, *The Unified Spacememory Network: from Cosmogenesis to Consciousness*. 2016. Extends the 2013 holographic framework with the 'spacememory' concept (recursive Planckian wormhole-network feedback) and derives the scale-duality identity R_ρ ≈ Hubble mass (interior of a proton ≡ observable universe). PDF acquired via OSF dj7a4 zip (USMN.pdf, 1.4MB, 15pp).",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2016-07-01",
+      "domain": "rsf"
+    },
+    {
+      "id": "valbaker_haramein_alirol_2019",
+      "title": "Val Baker, Haramein & Alirol (2019) — The Electron and the Holographic Mass Solution",
+      "body": "A. K. F. Val Baker, N. Haramein, O. Alirol, *The Electron and the Holographic Mass Solution*. Physics Essays 32(2):255-262, June 2019. Extends the holographic mass scheme to the electron: m_e = (1/2)α (η_e/R_e) m_l matches CODATA 2014 within 1σ. Also derives Z (atomic number) as the integer ratio at radius a_0/N and the Rydberg constant as R∞ = 1/(8π a_0). PDF acquired via assets.website-files.com (Resonant Technologies Group, 480KB, 16pp).",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-06-01",
+      "domain": "rsf"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "haramein_2013_psu_definition",
+      "work": "haramein_2013",
+      "quote": "we generalize the holographic principle by utilizing a spherical Planck unit rather than a surface area Planck unit, as a minimum-size vacuum energy oscillator on which information encodes, which we term 'Planck spherical unit' (PSU)",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#psu-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf",
+      "title": "Haramein 2013 (p.272): PSU as minimum-size vacuum oscillator"
+    },
+    {
+      "id": "haramein_2013_psu_volume_eq5",
+      "work": "haramein_2013",
+      "quote": "a spherical PSU of radius l_r has a volume of V_ls = (4/3) π l_r^3 ... or V_ls = 2.210462 × 10^-99 cm^3",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#psu-volume-eq5",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf",
+      "title": "Haramein 2013 eq.(5): PSU volume 2.210e-99 cm^3"
+    },
+    {
+      "id": "haramein_2013_holographic_mass_eq9",
+      "work": "haramein_2013",
+      "quote": "m_h = (R/η) m_l ... We find that a simple relationship of the internal PSUs within a given volume, to the discrete 'pixelation' of the holographic membrane surface horizon of the black hole yields what we term the holographic gravitational mass of the object which is equivalent to its classical Schwarzschild mass.",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#holographic-mass-eq9",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf",
+      "title": "Haramein 2013 eq.(9): m_h = (R/η) m_l = Schwarzschild mass"
+    },
+    {
+      "id": "haramein_2013_proton_mass_eq24",
+      "work": "haramein_2013",
+      "quote": "m_p' = η/R · m_l = 1.6714213 × 10^-24 gm ... the proton rest mass is extrapolated from the mass of PSUs on the surface divided by the number of PSUs in the interior",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#proton-mass-eq24",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf",
+      "title": "Haramein 2013 eq.(24): proton mass from surface/volume PSU ratio"
+    },
+    {
+      "id": "haramein_2013_proton_radius_eq30",
+      "work": "haramein_2013",
+      "quote": "r_p' = 4 l · m_l / m_p = 0.841236 × 10^-13 cm ... a difference of 0.000604 × 10^-13 cm from the muonic measurement of the proton charge radius",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#proton-radius-eq30",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf",
+      "title": "Haramein 2013 eq.(30): proton charge radius 0.841236e-13 cm"
+    },
+    {
+      "id": "haramein_2013_phi_scale_constant_eq44",
+      "work": "haramein_2013",
+      "quote": "φ = ρ/R_ρ = η/R = 3.839682 × 10^-20 ... φ acts as a fundamental constant relating the background Planck vacuum fluctuation field to the cosmological and quantum scale",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#phi-scale-constant-eq44",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf",
+      "title": "Haramein 2013 eq.(44): φ scale bridge constant 3.84e-20"
+    },
+    {
+      "id": "haramein_2013_coupling_eq52",
+      "work": "haramein_2013",
+      "quote": "F_g / F_s = G m_p m_p' / c ħ = 4 φ^2 = 5.897264 × 10^-39 ... Where 4φ² is the exact value for the coupling constant between gravitation and confinement at the proton scale or the strong interaction.",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#coupling-eq52",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2013-01-01",
+      "domain": "rsf",
+      "title": "Haramein 2013 eq.(52): strong/gravity coupling = 4φ²"
+    },
+    {
+      "id": "haramein_bvb_2016_spacememory_definition",
+      "work": "haramein_brown_valbaker_2016",
+      "quote": "the recursive information encoding feedback processes of the quantum spacetime micro-wormhole network, which we refer to as spacememory, enables memory and learning in physical systems across all scales",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#spacememory-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2016-07-01",
+      "domain": "rsf",
+      "title": "Haramein+Brown+Val Baker 2016 (Abstract): spacememory definition"
+    },
+    {
+      "id": "haramein_bvb_2016_psu_density_eq2",
+      "work": "haramein_brown_valbaker_2016",
+      "quote": "ρ = m_l / V_ls = 9.86 × 10^93 g/cm^3 ... The mass-energy density of any spherical body can therefore be considered in terms of its PSU packing, and can be defined as a fundamental ratio, R, of any spherical volume, V, to PSU, R = V/V_ls",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#psu-density-eq2",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2016-07-01",
+      "domain": "rsf",
+      "title": "Haramein+Brown+Val Baker 2016 eq.(1-3): PSU packing density 9.86e93 g/cm³"
+    },
+    {
+      "id": "haramein_bvb_2016_hubble_in_proton_eq5",
+      "work": "haramein_brown_valbaker_2016",
+      "quote": "R_ρ = R m_l = 2.46 × 10^55 g ... which is equivalent to the mass of the Hubble volume (observable universe), N_edd m_p = 2.62602 × 10^55 g ... indicating that the mass-energy of all the protons in the Hubble volume may be stored in the virtual mass-energy density of any one proton.",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#hubble-in-proton-eq5",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2016-07-01",
+      "domain": "rsf",
+      "title": "Haramein+Brown+Val Baker 2016 eq.(5-6): Hubble mass ≡ proton virtual density"
+    },
+    {
+      "id": "haramein_bvb_2016_wormhole_count_eta",
+      "work": "haramein_brown_valbaker_2016",
+      "quote": "we can conclude that there are ~ 4.33 × 10^40 (η) wormhole terminations over the area of the surface horizon of the proton",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#wormhole-count-eta",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2016-07-01",
+      "domain": "rsf",
+      "title": "Haramein+Brown+Val Baker 2016 (p.7): η ≈ 4.33e40 wormhole terminations on proton surface"
+    },
+    {
+      "id": "haramein_bvb_2016_spacetime_equals_spacememory",
+      "work": "haramein_brown_valbaker_2016",
+      "quote": "the function of information on the structure of space during the universal evolution (spacetime = spacememory, i.e. no memory = no time)",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#spacetime-equals-spacememory",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2016-07-01",
+      "domain": "rsf",
+      "title": "Haramein+Brown+Val Baker 2016 (p.11): spacetime = spacememory"
+    },
+    {
+      "id": "valbaker_2019_electron_mass_eq14",
+      "work": "valbaker_haramein_alirol_2019",
+      "quote": "m_e = (1/2) α η_e / R_e · m_l ... we find a mass of, m_e = 9.10938(30) × 10^-28 g, which compared to the measured CODATA 2014 value is accurate within 1σ and with a precision of 10^-5",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#electron-mass-eq14",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-06-01",
+      "domain": "rsf",
+      "title": "Val Baker+Haramein+Alirol 2019 eq.(14): electron mass from α·η_e/R_e"
+    },
+    {
+      "id": "valbaker_2019_atomic_number_Z_eq16",
+      "work": "valbaker_haramein_alirol_2019",
+      "quote": "r m_r = N · (1/2) α m_l η_e ... we could recognize N as being the atomic number Z ... the atomic mass number Z could be a natural consequence of the holographic solution",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#atomic-number-Z-eq16",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-06-01",
+      "domain": "rsf",
+      "title": "Val Baker+Haramein+Alirol 2019 eq.(16): Z as integer holographic ratio"
+    },
+    {
+      "id": "valbaker_2019_rydberg_geometric_eq19",
+      "work": "valbaker_haramein_alirol_2019",
+      "quote": "R∞ = 1/(8 π a_0) = 1.097373(36) × 10^5 cm^-1 ... This definition offers a geometric solution for the Rydberg constant in agreement with the experimentally determined CODATA 2014 value.",
+      "source_locator": "file:docs/theory/haramein_corpus_excerpts.md#rydberg-geometric-eq19",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-06-01",
+      "domain": "rsf",
+      "title": "Val Baker+Haramein+Alirol 2019 eq.(19): Rydberg = 1/(8π a_0)"
+    }
+  ],
+
+  "derived_from": [
+    {
+      "src": "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+      "dst": "sc:haramein_2013_phi_scale_constant_eq44",
+      "rationale": "Cert [218] scaling diagonal grounds in Haramein's φ = η/R fundamental scale-bridge constant from 2013 eq.(44)"
+    },
+    {
+      "src": "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+      "dst": "sc:haramein_2013_holographic_mass_eq9",
+      "rationale": "Cert [218] grounds in the m_h = (R/η)m_l Schwarzschild-equivalent holographic mass identity (2013 eq.9)"
+    },
+    {
+      "src": "cert:fs:qa_haramein_scaling_diagonal_cert_v1",
+      "dst": "sc:haramein_2013_proton_mass_eq24",
+      "rationale": "Cert [218] diagonal scaling predicts the proton-mass relation η/R · m_l = m_p' (2013 eq.24)"
+    }
+  ]
+}

@@ -1,0 +1,319 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.6 Wildberger primary-source corpus. 16 verbatim quotes across 10 works: 7 Wildberger-authored (or Wildberger+Notowidigdo co-authored), 1 Rubine solo on Wildberger conjectures, 1 Amdeberhan+Zeilberger proving Wildberger conjectures, 1 Mukewar student interpretation of Wildberger-Rubine. All PDFs under Documents/wildberger_corpus/. Locators resolve against docs/theory/wildberger_phase4_6_excerpts.md. See WILDBERGER_CORPUS_CLEANUP.md for /tmp/wild/ misfile audit. Do not edit quote fields. -->",
+  "phase": "4.6",
+  "source_class": "wildberger",
+  "description": "Wildberger corpus primary-source claims grounding shipped certs [231]-[237], [239]-[242], [245]-[246] (per memory/project_qa_mem_phase_4_5.md follow-ups). domain=geometry across all. Papers span rational trigonometry (Chromogeometry, UHG I+II, aff-proj universal geom), hyper-Catalan / Geode (Wildberger-Rubine 2025 + Rubine/Amdeberhan-Zeilberger/Mukewar follow-ups), exceptional Lie (G2 construction, sl3 diamonds), Pell without irrationals, Mutation Game / Coxeter, and tetrahedron vector products.",
+
+  "works": [
+    {
+      "id": "wildberger_2006_aff_proj_universal",
+      "title": "Wildberger (2006) — Affine and Projective Universal Geometry",
+      "body": "N. J. Wildberger. arXiv:math/0612499v1. Recasts metrical geometry as purely algebraic over a general field with arbitrary symmetric bilinear form. Unifies spherical and hyperbolic trigonometry; the main laws have affine and projective versions that hold simultaneously across elliptic, hyperbolic, and general bilinear-form geometries. Text extract at corpus/wildberger_text/aff_proj_metrical.txt.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2006-12-18",
+      "domain": "geometry"
+    },
+    {
+      "id": "wildberger_2003_diamonds_sl3",
+      "title": "Wildberger (2003) — Quarks, Diamonds, and Representations of sl₃",
+      "body": "N. J. Wildberger, UNSW. Integer-valued model for irreducible sl₃ representations using 3D polytopes ('diamonds'). Matrix coefficients computable via maximal ladders of edges. The generic diamond is the vector sum of dilates of quark / anti-quark fundamental diamonds — simultaneously classical and quantum. Text extract at corpus/wildberger_text/diamonds.txt.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2003-10-15",
+      "domain": "geometry"
+    },
+    {
+      "id": "wildberger_mutation_game",
+      "title": "Wildberger — The Mutation Game, Coxeter Graphs, and Partially Ordered Multisets",
+      "body": "N. J. Wildberger, UNSW. Introduces the 'Mutation Game' on directed multigraphs (Martians vs anti-Martians mutating under graph-local rules). Root populations under the mutation dynamics correspond to Coxeter-graph structure. Grounds [215] qa_graph_cayley_wildberger_mutation cert family. Text extract at corpus/wildberger_text/mutation_game_2020.txt.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2020-01-01",
+      "domain": "geometry"
+    },
+    {
+      "id": "notowidigdo_wildberger_2019_tetrahedron",
+      "title": "Notowidigdo & Wildberger (2019) — Generalised Vector Products and Metrical Trigonometry of a Tetrahedron",
+      "body": "G. A. Notowidigdo & N. J. Wildberger, UNSW. arXiv:1909.08814v3. General rational trigonometry of a tetrahedron using quadrances, spreads, solid spreads, and generalised vector products over arbitrary symmetric bilinear forms. Derives original relations for tri-rectangular tetrahedra. Text extract at corpus/wildberger_text/tetrahedron_vec.txt.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-09-19",
+      "domain": "geometry"
+    },
+    {
+      "id": "wildberger_2009_uhg_i",
+      "title": "Wildberger (2009) — Universal Hyperbolic Geometry I: Trigonometry",
+      "body": "N. J. Wildberger. arXiv:0909.1377v1. Hyperbolic geometry developed purely algebraically, without differential geometry. Connects directly with the geometry of Lorentz/Einstein/Minkowski via the projective viewpoint: 'hyperbolic geometry is precisely projective relativistic geometry'. Works over any field not of characteristic 2; trigonometric laws extend to null points and ideal points. PDF at Documents/wildberger_corpus/UHG_I_trigonometry_0909.1377.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2009-09-08",
+      "domain": "geometry"
+    },
+    {
+      "id": "wildberger_2008_chromogeometry",
+      "title": "Wildberger (2008) — Chromogeometry",
+      "body": "N. J. Wildberger. arXiv:0806.3617v1. Three-fold symmetric geometry combining Euclidean (blue) and two relativistic (red, green) planar metrical systems. Each geometry has its own Euler line, nine-point circle, and orthocenter; they interact via algebraic identities. Transcends Klein's Erlangen program. PDF at Documents/wildberger_corpus/chromogeometry_2008.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2008-06-23",
+      "domain": "geometry"
+    },
+    {
+      "id": "wildberger_2003_g2_combinatorial",
+      "title": "Wildberger (2003) — A Combinatorial Construction of G₂",
+      "body": "N. J. Wildberger. Journal of Lie Theory 13:155-165. Explicit construction of the exceptional Lie algebra G₂ via its 7-dim representation without requiring Lie theory background. Structure constants have combinatorial meaning as convex subsets of a partially ordered multiset of 6 elements, arising from Numbers/Mutation games on a directed multigraph. PDF at Documents/wildberger_corpus/simply_laced_JLT.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2003-01-01",
+      "domain": "geometry"
+    },
+    {
+      "id": "wildberger_2008_pell_no_irrationals",
+      "title": "Wildberger (2008) — Pell's Equation Without Irrational Numbers",
+      "body": "N. J. Wildberger. arXiv:0806.2490v2. Generates an infinite number of integer solutions to Pell's equation x² − Dy² = 1 using only basic matrix arithmetic, without irrational numbers or continued fractions. Worked examples for D = 2, 7, 61. Connects to Stern-Brocot tree and universal geometry. PDF at Documents/wildberger_corpus/pell_no_irrationals.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2008-06-16",
+      "domain": "geometry"
+    },
+    {
+      "id": "wildberger_2010_uhg_ii_pictorial",
+      "title": "Wildberger (2010) — Universal Hyperbolic Geometry II: A Pictorial Overview",
+      "body": "N. J. Wildberger. arXiv:1012.0880v1. Pictorial companion to UHG I. Introduces universal hyperbolic geometry using only elementary projective geometry plus a distinguished circle — no transcendental functions. Valid over any field not of characteristic 2. PDF at Documents/wildberger_corpus/UHG_II_1012.0880.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2010-12-04",
+      "domain": "geometry"
+    },
+    {
+      "id": "rubine_2025_hyper_catalan_geode_rec",
+      "title": "Rubine (2025) — Hyper-Catalan and Geode Recurrences and Three Conjectures of Wildberger",
+      "body": "Dean Rubine. arXiv:2507.04552v1. Derives a recurrence for hyper-Catalan numbers from the Wildberger-Rubine 2025 generating-series result (polygon subdivision → polynomial solution). Derives Geode coefficient recurrence and proves three Wildberger conjectures for special Geode closed forms. Solo-author by Rubine, extending the Wildberger-Rubine 2025 AMM paper. PDF at Documents/wildberger_corpus/hyper_catalan_recurrences_2507.04552.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2025-07-06",
+      "domain": "geometry"
+    },
+    {
+      "id": "amdeberhan_zeilberger_2025_geode_conjectures",
+      "title": "Amdeberhan & Zeilberger (2025) — Proofs of Three Geode Conjectures",
+      "body": "Tewodros Amdeberhan & Doron Zeilberger. arXiv:2506.17862v1. Independent proof of the three Geode-array conjectures posed by Wildberger & Rubine in the May 2025 AMM article. Uses the multinomial theorem, constant-term extraction, Wilf-Zeilberger (WZ) algorithmic proof theory, and Lagrange Inversion. PDF at Documents/wildberger_corpus/geode_conjectures_2506.17862.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2025-06-22",
+      "domain": "geometry"
+    },
+    {
+      "id": "mukewar_2025_finite_interp",
+      "title": "Mukewar (2025) — Finite Interpretations of a Hyper-Catalan Series Solution",
+      "body": "Pratham Mukewar. arXiv:2507.20003, March 2025. Interprets the Wildberger-Rubine 2025 infinite-series polynomial solution as a finite identity at each truncation level (bounded by polygon vertex, edge, or face count). Illustrates with Python-generated figures. Student-authored reprise; primary novelty is the level-wise finiteness proof. PDF at Documents/wildberger_corpus/finite_interp_2507.20003.pdf.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2025-03-20",
+      "domain": "geometry"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "wildberger_2006_aff_proj_abstract",
+      "work": "wildberger_2006_aff_proj_universal",
+      "quote": "By recasting metrical geometry in a purely algebraic setting, both Euclidean and non-Euclidean geometries can be studied over a general field with an arbitrary quadratic form. Both an affine and a projective version of this new theory are introduced here, and the main formulas extend those of rational trigonometry in the plane. This gives a unified, computational model of both spherical and hyperbolic geometries",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2006-12-18",
+      "domain": "geometry",
+      "title": "Wildberger 2006: affine+projective unify spherical & hyperbolic over arbitrary field"
+    },
+    {
+      "id": "wildberger_2006_subjective_algebraic",
+      "work": "wildberger_2006_aff_proj_universal",
+      "quote": "Metrical geometry is here presented as fundamentally an algebraic subject rather than an analytic one, and the main division in the subject is not between Euclidean and non-Euclidean, but rather between affine and projective. Elliptic and hyperbolic geometries should be considered as projective theories.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#subjective-orientation",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2006-12-18",
+      "domain": "geometry",
+      "title": "Wildberger 2006: main division is affine vs projective, not Euclidean vs non-"
+    },
+    {
+      "id": "wildberger_2003_diamonds_abstract",
+      "work": "wildberger_2003_diamonds_sl3",
+      "quote": "A new model for the irreducible representations of sl3 is presented which is constructed over the integers. This model utilizes the combinatorial geometry of certain polytopes in three dimensional space which we call diamonds. These are not Gelfand-Tsetlin polytopes, but share some of their properties.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2003-10-15",
+      "domain": "geometry",
+      "title": "Wildberger 2003 sl3 diamonds: integer-valued irreducible rep model"
+    },
+    {
+      "id": "wildberger_2003_diamonds_quark_triples",
+      "work": "wildberger_2003_diamonds_sl3",
+      "quote": "We show that the generic diamond is the vector sum of dilates of the fundamental diamonds associated to quark and anti-quark triples, and is simultaneously both a classical and quantum object.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#generic-diamond",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2003-10-15",
+      "domain": "geometry",
+      "title": "Wildberger 2003 sl3 diamonds: quark/anti-quark triples, classical & quantum"
+    },
+    {
+      "id": "wildberger_mutation_game_problem",
+      "work": "wildberger_mutation_game",
+      "quote": "Show that if X is a simple graph then any root population consists entirely of Martians or entirely of anti-Martians.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#mutation-problem",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2020-01-01",
+      "domain": "geometry",
+      "title": "Wildberger Mutation Game: sign-homogeneity of root populations"
+    },
+    {
+      "id": "wildberger_mutation_coxeter_def",
+      "work": "wildberger_mutation_game",
+      "quote": "A Coxeter graph is an undirected graph with all its edges labelled with either an integer k ≥ 3, or ∞. By convention edges labelled with 3 are unmarked.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#coxeter-graph-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2020-01-01",
+      "domain": "geometry",
+      "title": "Wildberger Mutation Game: Coxeter graph definition"
+    },
+    {
+      "id": "notowidigdo_wildberger_2019_tetrahedron_abstract",
+      "work": "notowidigdo_wildberger_2019_tetrahedron",
+      "quote": "We study the general rational trigonometry of a tetrahedron, based on quadrances, spreads and solid spreads, using vector products associated to an arbitrary symmetric bilinear form over a general field, not of characteristic two. This gives us algebraic analogs of many classical formulas, as well as new insights and results. In particular we derive original relations for a tri-rectangular tetrahedron.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-09-19",
+      "domain": "geometry",
+      "title": "Notowidigdo+Wildberger 2019: tetrahedron rational trigonometry over arbitrary fields"
+    },
+    {
+      "id": "wildberger_2009_uhg_i_abstract",
+      "work": "wildberger_2009_uhg_i",
+      "quote": "Hyperbolic geometry is developed in a purely algebraic fashion from first principles, without a prior development of differential geometry. The natural connection with the geometry of Lorentz, Einstein and Minkowski comes from a projective point of view, with trigonometric laws that extend to 'points at infinity', here called 'null points', and beyond to 'ideal points' associated to a hyperboloid of one sheet.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2009-09-08",
+      "domain": "geometry",
+      "title": "Wildberger 2009 UHG I: algebraic hyperbolic geometry from first principles"
+    },
+    {
+      "id": "wildberger_2009_uhg_i_projective_relativistic",
+      "work": "wildberger_2009_uhg_i",
+      "quote": "hyperbolic geometry is precisely projective relativistic geometry. This is a fundamental understanding.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#projective-relativistic",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2009-09-08",
+      "domain": "geometry",
+      "title": "Wildberger 2009 UHG I: hyperbolic ≡ projective relativistic"
+    },
+    {
+      "id": "wildberger_2008_chromogeometry_abstract",
+      "work": "wildberger_2008_chromogeometry",
+      "quote": "Chromogeometry brings together Euclidean geometry (called blue) and two relativistic geometries (called red and green), in a surprising three-fold symmetry. We show how the red and green 'Euler lines' and 'nine-point circles' of a triangle interact with the usual blue ones, and how the three orthocenters form an associated triangle with interesting collinearities.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2008-06-23",
+      "domain": "geometry",
+      "title": "Wildberger 2008 Chromogeometry: blue/red/green 3-fold planar metrical trio"
+    },
+    {
+      "id": "wildberger_2008_chromogeometry_transcends_klein",
+      "work": "wildberger_2008_chromogeometry",
+      "quote": "The three geometries support each other and interact in a rich way. This transcends Klein's Erlangen program, since there are now three groups acting on a space. Remarkable algebraic identities lie at the heart of the explanations.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#three-geometries-interact",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2008-06-23",
+      "domain": "geometry",
+      "title": "Wildberger 2008 Chromogeometry: transcends Klein's Erlangen program"
+    },
+    {
+      "id": "wildberger_2003_g2_abstract",
+      "work": "wildberger_2003_g2_combinatorial",
+      "quote": "We show how to construct the simple exceptional Lie algebra of type G2 by explicitly constructing its 7 dimensional representation. Technically no knowledge of Lie theory is required. The structure constants have a combinatorial meaning involving convex subsets of a partially ordered multiset of six elements. These arise from playing the Numbers and Mutation games on a certain directed multigraph.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2003-01-01",
+      "domain": "geometry",
+      "title": "Wildberger 2003 G₂ combinatorial: 7-dim rep from Numbers/Mutation games on 6-multiset"
+    },
+    {
+      "id": "wildberger_2008_pell_abstract",
+      "work": "wildberger_2008_pell_no_irrationals",
+      "quote": "We give a simple way to generate an infinite number of solutions to Pell's equation x² − Dy² = 1, requiring only basic matrix arithmetic and no knowledge of irrational numbers. We illustrate the method for D = 2, 7 and 61. Connections to the Stern-Brocot tree and universal geometry are also discussed.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2008-06-16",
+      "domain": "geometry",
+      "title": "Wildberger 2008 Pell: infinite solutions via matrix arithmetic, no irrationals"
+    },
+    {
+      "id": "wildberger_2010_uhg_ii_abstract",
+      "work": "wildberger_2010_uhg_ii_pictorial",
+      "quote": "This article provides a simple pictorial introduction to universal hyperbolic geometry. We explain how to understand the subject using only elementary projective geometry, augmented by a distinguished circle. This provides a completely algebraic framework for hyperbolic geometry, valid over the rational numbers (and indeed any field not of characteristic two), and gives us many new and beautiful theorems.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2010-12-04",
+      "domain": "geometry",
+      "title": "Wildberger 2010 UHG II pictorial: projective geometry + distinguished circle"
+    },
+    {
+      "id": "rubine_2025_hyper_catalan_definition",
+      "work": "rubine_2025_hyper_catalan_geode_rec",
+      "quote": "The hyper-Catalan number C[m2, m3, m4, ...] counts the number of subdivisions of a roofed polygon into m2 triangles, m3 quadrilaterals, m4 pentagons, etc.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#hyper-catalan-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2025-07-06",
+      "domain": "geometry",
+      "title": "Rubine 2025: hyper-Catalan C[m2,m3,m4,...] = polygon subdivision count"
+    },
+    {
+      "id": "rubine_2025_geode_factorization",
+      "work": "rubine_2025_hyper_catalan_geode_rec",
+      "quote": "Wildberger notes the factorization S − 1 = (t2 + t3 + t4 + ...)G, where the factor G is called the Geode. We derive a recurrence that let us express the Geode coefficients in terms of other hyper-Catalan and Geode coefficients, and ultimately in terms of hyper-Catalans alone.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#geode-factorization",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2025-07-06",
+      "domain": "geometry",
+      "title": "Rubine 2025: Geode factorization S − 1 = (t₂+t₃+...)G recurrence"
+    },
+    {
+      "id": "amdeberhan_zeilberger_2025_intro",
+      "work": "amdeberhan_zeilberger_2025_geode_conjectures",
+      "quote": "In a recent captivating Monthly article, by Norman J. Wildberger and Dean Rubine, the authors utilize a generating series to solve the general univariate polynomial equation. They also explored a 'curious factorization' of this hyper-Catalan generating series, and in the penultimate section, they made three conjectures about this algebraic object that they termed the Geode array. In this note, we prove these three conjectures.",
+      "source_locator": "file:docs/theory/wildberger_phase4_6_excerpts.md#introduction-geode",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2025-06-22",
+      "domain": "geometry",
+      "title": "Amdeberhan+Zeilberger 2025: prove three Wildberger-Rubine Geode conjectures"
+    }
+  ]
+}

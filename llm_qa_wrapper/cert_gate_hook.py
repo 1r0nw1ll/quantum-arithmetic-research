@@ -82,11 +82,14 @@ PROTECTED_BASH_TARGETS = (
     ".claude/hooks/",
     ".claude/settings.local.json",
     "archive/",
-    "Documents/",
     "QAnotes/",
     "llm_qa_wrapper/cert_gate_hook.py",
     "llm_qa_wrapper/kernel/",
     "llm_qa_wrapper/ledger/",
+)
+DOCUMENTS_PDF_INGRESS_PREFIXES = (
+    "Documents/wildberger_corpus/",
+    "Documents/haramein_rsf/",
 )
 CERT_ADJACENT_PREFIXES = (
     "qa_alphageometry_ptolemy/",
@@ -170,6 +173,41 @@ def _bash_mutates_python_path(scan_command: str) -> bool:
     if not (has_python_inline_mutation or has_shell_mutation):
         return False
     return PYTHON_PATH_PATTERN.search(normalized) is not None
+
+
+def _is_allowed_documents_pdf(rel_posix: str) -> bool:
+    """Allow primary-source PDF ingress only in the two corpus directories.
+
+    The rest of Documents/ remains protected. This preserves the historical
+    "Do Not Touch" rule for drafts/exports/chat migrations while allowing the
+    Phase 4.5 primary-source workflow to add or replace canonical PDFs.
+    """
+    return (
+        rel_posix.lower().endswith(".pdf")
+        and any(rel_posix.startswith(prefix) for prefix in DOCUMENTS_PDF_INGRESS_PREFIXES)
+    )
+
+
+def _bash_mentions_protected_project_target(scan_command: str) -> bool:
+    """Detect protected project-directory mutation targets in Bash text.
+
+    Existing hook logic intentionally avoids a full shell parser. For
+    Documents/, strip the narrow allowed PDF targets before checking the
+    remaining command text so `cp /tmp/p.pdf Documents/haramein_rsf/p.pdf`
+    can pass, while `rm Documents/foo.md` and directory-level operations stay
+    denied.
+    """
+    normalized = scan_command.replace("\\", "/")
+    if any(target in normalized for target in PROTECTED_BASH_TARGETS):
+        return True
+    docs_stripped = normalized
+    for prefix in DOCUMENTS_PDF_INGRESS_PREFIXES:
+        pattern = re.compile(
+            re.escape(prefix) + r"[^;&|<>\s'\"\)]*\.pdf\b",
+            re.I,
+        )
+        docs_stripped = pattern.sub("", docs_stripped)
+    return "Documents/" in docs_stripped
 
 
 def _canonical_json(obj):
@@ -346,7 +384,9 @@ def _deny_file_path(tool_name: str, tool_input: dict) -> list[str]:
 
     if canonical_text.startswith("/home/player2/Desktop/qa_finance/"):
         reasons.append("FROZEN_QA_FINANCE")
-    if rel_posix.startswith(("archive/", "Documents/", "QAnotes/")):
+    if rel_posix.startswith(("archive/", "QAnotes/")):
+        reasons.append("PROTECTED_PROJECT_DIRECTORY")
+    if rel_posix.startswith("Documents/") and not _is_allowed_documents_pdf(rel_posix):
         reasons.append("PROTECTED_PROJECT_DIRECTORY")
     if rel_posix.lower().endswith(".png"):
         reasons.append("GENERATED_BINARY_OUTPUT")
@@ -388,7 +428,7 @@ def _deny_bash(tool_input: dict) -> list[str]:
     shell_scan = QUOTED_STRING_PATTERN.sub("", FD_REDIRECT_PATTERN.sub("", scan_command))
     if PYTHON_INLINE_MUTATION_PATTERN.search(scan_command) or SHELL_MUTATION_PATTERN.search(shell_scan):
         normalized = scan_command.replace("\\", "/")
-        if any(target in normalized for target in PROTECTED_BASH_TARGETS):
+        if _bash_mentions_protected_project_target(scan_command):
             reasons.append("PROTECTED_TARGET_MUTATION")
         if _bash_mutates_python_path(scan_command):
             quarantine_needed = True

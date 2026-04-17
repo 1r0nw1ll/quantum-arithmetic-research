@@ -36,7 +36,9 @@ Checks: guardrail E2E (12 tests), agent security kernel (14 tests), collab bus a
 
 These directories/files are off-limits — never modify, delete, or reorganize:
 - `archive/` — historical session logs, handoffs, zips
-- `Documents/` — working drafts, ODT exports, chat migrations
+- `Documents/` — working drafts, ODT exports, chat migrations. Exception:
+  primary-source PDF ingress/replacement is allowed only under
+  `Documents/wildberger_corpus/` and `Documents/haramein_rsf/`.
 - `QAnotes/` — Obsidian vault (100+ research notes)
 - `~/Desktop/qa_finance/` — private finance scripts (frozen hashes)
 - `*.png` images in repo root — generated experiment outputs

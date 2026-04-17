@@ -661,6 +661,92 @@ def t_deny_bash_protected_mutation():
         _verify_chain(rows)
 
 
+@test("Documents corpus PDF Write is allowed")
+def t_allow_documents_corpus_pdf_write():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Write",
+                "tool_input": {
+                    "file_path": str(REPO / "Documents" / "haramein_rsf" / "new_primary.pdf"),
+                    "content": "%PDF-1.4\n",
+                },
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        _verify_chain(rows)
+
+
+@test("Documents non-PDF Write remains denied")
+def t_deny_documents_non_pdf_write():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Write",
+                "tool_input": {
+                    "file_path": str(REPO / "Documents" / "haramein_rsf" / "notes.md"),
+                    "content": "not allowed",
+                },
+            }),
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "DENY"
+        assert "PROTECTED_PROJECT_DIRECTORY" in rows[0]["deny_reasons"]
+        _verify_chain(rows)
+
+
+@test("Documents corpus PDF Bash mutation is allowed")
+def t_allow_documents_corpus_pdf_bash_mutation():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {
+                    "command": "cp /tmp/volk.pdf Documents/wildberger_corpus/volk_primary.pdf",
+                },
+            }),
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["deny_reasons"] == []
+        _verify_chain(rows)
+
+
+@test("Documents directory-level Bash mutation remains denied")
+def t_deny_documents_directory_bash_mutation():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {
+                    "command": "rm -rf Documents/haramein_rsf",
+                },
+            }),
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "DENY"
+        assert "PROTECTED_TARGET_MUTATION" in rows[0]["deny_reasons"]
+        _verify_chain(rows)
+
+
 @test("git force push exits 2")
 def t_deny_force_push():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
@@ -882,6 +968,10 @@ def main() -> int:
         t_allow_combined_devnull_redirect,
         t_allow_codex_delegation_heredoc_python_task_text,
         t_deny_bash_protected_mutation,
+        t_allow_documents_corpus_pdf_write,
+        t_deny_documents_non_pdf_write,
+        t_allow_documents_corpus_pdf_bash_mutation,
+        t_deny_documents_directory_bash_mutation,
         t_deny_force_push,
         t_deny_commit_without_marker,
         t_allow_commit_with_marker,

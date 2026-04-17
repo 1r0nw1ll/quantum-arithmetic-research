@@ -1,0 +1,145 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.6 Levin primary-source corpus. 6 verbatim quotes from 3 OA Levin-lab papers (2019 Frontiers Psychology, 2022 Frontiers Systems Neuroscience, 2026 arXiv BraiNCA) plus 1 placeholder SourceWork for the 2025 Synthese Cognition ATWD 2.0 (docx source, claim extraction deferred to Phase 4.7). Per-paper gap observations document the 5 paywalled / title-mismatched papers from the OB 2026-04-06 9-paper mega-mapping. Files on disk under corpus/levin/ (repo-root, since carve-out only covers Documents/wildberger_corpus and Documents/haramein_rsf). Do not edit quote fields. -->",
+  "phase": "4.6",
+  "source_class": "levin",
+  "description": "Levin-lab primary-source claims — OA only, no paywall access. Covers the Computational Boundary / Cognitive Lightcone 2019 paper (grounds cert [179] qa_levin_cognitive_lightcone_cert_v1), the TAME 2022 framework, and the BraiNCA 2026 NCA paper. 4th work (Chis-Ciure & Levin ATWD 2.0 2025) has a SourceWork + 0 claims — docx acquisition complete but text extraction needs a docx-to-text pipeline deferred to Phase 4.7. domain=biology across all.",
+
+  "works": [
+    {
+      "id": "levin_2019_computational_boundary",
+      "title": "Levin (2019) — The Computational Boundary of a 'Self'",
+      "body": "Michael Levin, Allen Discovery Center Tufts + Wyss Institute Harvard. Frontiers in Psychology 10:2688 (2019-12-13). Introduces the Scale-Free Cognition hypothesis and the 'cognitive light cone' construct: any Self is demarcated by a computational surface — the spatio-temporal boundary of events it can measure, model, and try to affect. Grounds cert [179] qa_levin_cognitive_lightcone_cert_v1. PDF at corpus/levin/computational_boundary_self_2019.pdf (2.3MB).",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-12-13",
+      "domain": "biology"
+    },
+    {
+      "id": "levin_2022_tame_mind_everywhere",
+      "title": "Levin (2022) — Technological Approach to Mind Everywhere (TAME)",
+      "body": "Michael Levin, Tufts+Harvard. Frontiers in Systems Neuroscience 16:768201 (2022-03-24). Introduces TAME — a non-binary, empirically-grounded framework for strongly embodied agency across unconventional substrates. Morphogenesis as basal cognition; deep symmetry across anatomical, physiological, transcriptional, and 3D behavioral problem-spaces. PDF at corpus/levin/technological_approach_mind_everywhere_2022.pdf (15.6MB).",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-03-24",
+      "domain": "biology"
+    },
+    {
+      "id": "piolopez_hartl_levin_2026_brainca",
+      "title": "Pio-Lopez, Hartl & Levin (2026) — BraiNCA: Brain-Inspired Neural Cellular Automata",
+      "body": "Léo Pio-Lopez, Benedikt Hartl, Michael Levin. arXiv:2604.01932. Brain-inspired neural cellular automaton with attention layer, long-range connections, and complex topology. Shows improved robustness and learning speed vs vanilla NCAs on morphogenesis + motor control tasks — attention-based message selection + explicit long-range edges → more sample-efficient and damage-tolerant self-organization. Data/code at https://github.com/LPioL/BraiNCA. PDF at corpus/levin/brainca_2604.01932.pdf (3.2MB).",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-02",
+      "domain": "biology"
+    },
+    {
+      "id": "chisciure_levin_2025_atwd_2_0",
+      "title": "Chis-Ciure & Levin (2025) — Cognition All the Way Down 2.0",
+      "body": "Răzvan Chis-Ciure, Michael Levin. Synthese 206(257), 2025. PhilSci-Archive deposit 26866. 2.8MB .docx source acquired under OA licence to corpus/levin/cognition_atwd_2_0_chis_ciure_levin_2025.docx. Text-extraction (verbatim-quote SourceClaims) deferred to Phase 4.7 pending a .docx-to-text pipeline — pypdf only handles PDFs. This work node is a placeholder so cert derived-from edges can attach now.",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2025-01-01",
+      "domain": "biology"
+    }
+  ],
+
+  "observations": [
+    {
+      "id": "obs:levin_paywall_gap_phase4_6",
+      "title": "Levin corpus: 5 of 9 OB mega-mapping papers deferred (paywall or title mismatch)",
+      "body": "OB 2026-04-06 mega-mapping (memory/project_levin_2026_corpus_mapping.md) lists 9 Levin papers. Phase 4.6 acquired 4 OA: Computational Boundary 2019, TAME 2022, BraiNCA 2026, Cognition ATWD 2.0 2025 (docx). Five gaps: (1) Fields & Levin 'Intelligence Beyond Neurons' 2022 — title does not appear verbatim on drmichaellevin.org/publications or tufts biology publications page as of 2026-04-17; (2) Fields & Levin 'Non-Duality' 2023 — same; (3) Levin 'Cognition All the Way Down' v1 2022 — only v2.0 2025 is on PhilSci-Archive; (4) Pezzulo & Levin 'Bootstrapping Cognition' — exact title not found on lab sites (likely renamed); (5) 'Engineered Living Machines' — lab site lists several xenobot papers, none with this exact title. No paywall bypass attempted (primary-source gate + 'don't pirate' per user sign-off). Phase 4.7: manually verify each title against current Levin-lab publication list and acquire OA where available, flag paywalled-only as external-only.",
+      "source_locator": "file:memory/project_levin_2026_corpus_mapping.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "biology",
+      "valid_from": "2026-04-17"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "levin_2019_self_as_epistemic_agent",
+      "work": "levin_2019_computational_boundary",
+      "quote": "All epistemic agents physically consist of parts that must somehow comprise an integrated cognitive self. Biological individuals consist of subunits (organs, cells, and molecular networks) that are themselves complex and competent in their own native contexts.",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md#self-as-epistemic-agent",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-12-13",
+      "domain": "biology",
+      "title": "Levin 2019 (Abstract): Self = integrated multi-subunit epistemic agent"
+    },
+    {
+      "id": "levin_2019_scale_free_cognition",
+      "work": "levin_2019_computational_boundary",
+      "quote": "I propose a fundamental definition of an Individual based on the ability to pursue goals at an appropriate level of scale and organization and suggest a formalism for defining and comparing the cognitive capacities of highly diverse types of agents.",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md#scale-free-cognition-hypothesis",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-12-13",
+      "domain": "biology",
+      "title": "Levin 2019: Individual defined via scale-appropriate goal pursuit"
+    },
+    {
+      "id": "levin_2019_computational_surface",
+      "work": "levin_2019_computational_boundary",
+      "quote": "Any Self is demarcated by a computational surface – the spatio-temporal boundary of events that it can measure, model, and try to affect. This surface sets a functional boundary - a cognitive 'light cone' which defines the goals a system can pursue.",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md#computational-surface-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-12-13",
+      "domain": "biology",
+      "title": "Levin 2019: cognitive light cone = computational surface"
+    },
+    {
+      "id": "levin_2022_tame_definition",
+      "work": "levin_2022_tame_mind_everywhere",
+      "quote": "I introduce TAME—Technological Approach to Mind Everywhere—a framework for understanding and manipulating cognition in unconventional substrates. TAME formalizes a non-binary (continuous), empirically-based approach to strongly embodied agency.",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md#tame-framework-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-03-24",
+      "domain": "biology",
+      "title": "Levin 2022: TAME framework definition"
+    },
+    {
+      "id": "levin_2022_deep_symmetry_problem_solving",
+      "work": "levin_2022_tame_mind_everywhere",
+      "quote": "The deep symmetry between problem-solving in anatomical, physiological, transcriptional, and 3D (traditional behavioral) spaces drives specific hypotheses by which cognitive capacities can increase during evolution.",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md#deep-symmetry-problem-solving",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-03-24",
+      "domain": "biology",
+      "title": "Levin 2022: deep symmetry across anatomical / physiological / transcriptional / 3D spaces"
+    },
+    {
+      "id": "piolopez_2026_brainca_abstract",
+      "work": "piolopez_hartl_levin_2026_brainca",
+      "quote": "We introduce BraiNCA, a brain-inspired NCA with an attention layer, long-range connections and complex topology. BraiNCAs shows better results in terms of robustness and speed of learning on the two tasks compared to Vanilla NCAs establishing that incorporating attention-based message selection together with explicit long-range edges can yield more sample-efficient and damage-tolerant self-organization than purely local, grid-based update rules.",
+      "source_locator": "file:docs/theory/levin_phase4_6_excerpts.md#brainca-abstract",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-02",
+      "domain": "biology",
+      "title": "Pio-Lopez+Hartl+Levin 2026 BraiNCA: attention + long-range + complex topology"
+    }
+  ],
+
+  "derived_from": [
+    {
+      "src": "cert:fs:qa_levin_cognitive_lightcone_cert_v1",
+      "dst": "sc:levin_2019_computational_surface",
+      "rationale": "Cert [179] qa_levin_cognitive_lightcone_cert_v1 grounds in Levin 2019's computational-surface / cognitive-light-cone definition"
+    },
+    {
+      "src": "cert:fs:qa_levin_cognitive_lightcone_cert_v1",
+      "dst": "sc:levin_2019_scale_free_cognition",
+      "rationale": "Cert [179] grounds Individual definition in Levin 2019's scale-appropriate goal-pursuit formalism"
+    }
+  ]
+}

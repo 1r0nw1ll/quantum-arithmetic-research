@@ -1,0 +1,14 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4.5 extraction-confidence map. Single source of truth for extractors/source_claims.populate + [253] SC9. Do not edit ad-hoc; any change must keep SC9 green. -->",
+  "methods": {
+    "manual": 1.0,
+    "ocr":    0.7,
+    "llm":    0.5,
+    "script": 0.9
+  },
+  "override_policy": {
+    "requires_field":  "confidence_override",
+    "requires_reason": "confidence_override_reason",
+    "description": "A per-claim override may replace the method default. Both fields must be present on the fixture entry; SC9 fails if one is present without the other. Override values must be in [0.0, 1.0]."
+  }
+}

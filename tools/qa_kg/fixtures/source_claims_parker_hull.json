@@ -1,0 +1,89 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4.5 classical-geometry primary-source seed. Parker's 19th-century propositions (transcribed on svpwiki.com/Propositions-of-Geometry by Dale Pond) + Hull's 1994 Quadrature of the Circle restatement. domain=geometry on all. Hull's π=20612/6561 claim is contradicted by an internal observation citing Lindemann 1882 π-transcendence (reason=dispute). 16-identities cert [qa_sixteen_identities_cert_v1] derived-from Parker Prop VII (circumference × radius as area basis). Do not edit quote fields. -->",
+  "phase": "4.5",
+  "source_class": "parker_hull",
+  "description": "Parker + Hull 3-claim seed in geometry domain. 2 SourceWorks (Parker Propositions + Hull Quadrature). 2 Parker claims + 1 Hull claim. 1 derived-from edge (16-identities cert → Parker Prop VII). 1 dispute contradicts (Hull π vs Lindemann).",
+
+  "works": [
+    {
+      "id": "parker_geometry_propositions",
+      "title": "Parker — Propositions Demonstrating the Relative Properties of Straight and Curved Lines (c.1874)",
+      "body": "John A. Parker, 19th-century propositions on the foundational relationships between circles, squares, and triangles. Transcribed on svpwiki.com/Propositions-of-Geometry by Dale Pond; verbatim quote bodies mirrored at private/svp_propositions_qa_mapping.md (Will-transcribed). Parker argues the circle is prior to the square (QA-aligned) and that π has an exact rational value (disputed by mainstream since Lindemann 1882).",
+      "source_locator": "file:docs/theory/parker_geometry_propositions_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1874-01-01",
+      "domain": "geometry"
+    },
+    {
+      "id": "hull_quadrature",
+      "title": "Hull — Quadrature of the Circle: Revealing the True Value of Pi (c.1994)",
+      "body": "George R. Hull, Quadrature of the Circle: Revealing the True Value of Pi. Published by Delta Spectrum Research. c.1994. Inspired by and dedicated to John A. Parker. Hull restates Parker's central claim that π has the exact value 20612/6561, explicitly rejecting the polygon-approximation tradition and the transcendence result.",
+      "source_locator": "file:docs/theory/hull_quadrature_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1994-01-01",
+      "domain": "geometry"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "parker_prop_iii_circle_primary",
+      "work": "parker_geometry_propositions",
+      "quote": "The circle is the natural basis or beginning of all area, and the square being made so in mathematical science, is artificial and arbitrary.",
+      "source_locator": "file:docs/theory/parker_geometry_propositions_excerpts.md#prop-iii",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1874-01-01",
+      "domain": "geometry",
+      "title": "Parker Prop III: circle is natural basis of area; square is artificial"
+    },
+    {
+      "id": "parker_prop_vii_circumference_radius",
+      "work": "parker_geometry_propositions",
+      "quote": "Because the circle is the primary shape in nature... circumference and radius, and not the square of diameter, are the only natural and legitimate elements of area.",
+      "source_locator": "file:docs/theory/parker_geometry_propositions_excerpts.md#prop-vii",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1874-01-01",
+      "domain": "geometry",
+      "title": "Parker Prop VII: circumference × radius, not diameter², are the natural area elements"
+    },
+    {
+      "id": "hull_quadrature_pi_20612_6561",
+      "work": "hull_quadrature",
+      "quote": "Pi has the correct and exact value of 20,612 parts of circumference to 6,561 parts of diameter.",
+      "source_locator": "file:docs/theory/hull_quadrature_excerpts.md#introduction",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1994-01-01",
+      "domain": "geometry",
+      "title": "Hull Quadrature: π = 20612/6561 rational-exact claim"
+    }
+  ],
+
+  "observations": [
+    {
+      "id": "obs:pi_transcendental_lindemann_1882",
+      "title": "Verified: π is transcendental (Lindemann, 1882)",
+      "body": "Ferdinand von Lindemann proved in 1882 that π is transcendental (Mathematische Annalen 20, pp. 213–225). Transcendence rules out any rational p/q representation of π, including Parker/Hull's 20612/6561 = 3.1415942... which differs from π (3.1415926535...) starting at the 6th decimal. Lindemann's proof is a direct corollary of the Hermite-Lindemann theorem applied to e^{iπ} = −1. Independent of the axiomatic question about discrete-vs-continuous primacy, π cannot be both the transcendental analytic constant AND a rational ratio; Parker/Hull and standard analysis are in genuine disagreement.",
+      "source_locator": "file:docs/theory/hull_quadrature_excerpts.md",
+      "method": "manual",
+      "epistemic_status": "observation",
+      "authority": "internal",
+      "domain": "geometry"
+    }
+  ],
+
+  "contradicts": [
+    {"src": "sc:hull_quadrature_pi_20612_6561", "dst": "obs:pi_transcendental_lindemann_1882", "reason": "dispute"}
+  ],
+
+  "supersedes": [],
+
+  "derived_from": [
+    {"src": "cert:fs:qa_sixteen_identities_cert_v1", "dst": "sc:parker_prop_vii_circumference_radius",
+     "rationale": "The 16-identities cert uses L = CF/12 as an area element, taking circumference-class (C) and radius-class (F) as primitives per Parker Prop VII, rather than diameter-squared."}
+  ]
+}

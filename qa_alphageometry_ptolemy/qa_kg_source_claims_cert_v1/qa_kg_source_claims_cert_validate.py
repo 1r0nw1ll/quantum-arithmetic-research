@@ -3,8 +3,8 @@
 
 QA_COMPLIANCE = "cert_validator — validates KG SourceClaim / contradicts invariants, no empirical QA state machine"
 
-Phase 3. Validates that SourceClaim ingestion is well-formed in the live
-qa_kg.db graph:
+Phase 3 + Phase 4.5. Validates that SourceClaim ingestion is well-formed
+in the live qa_kg.db graph:
 
   SC1 (HARD) every SourceClaim has non-empty quote (body) AND
        source_locator that resolves via tools.qa_kg.locators.resolve_any.
@@ -22,10 +22,19 @@ qa_kg.db graph:
        capture §12a).
   SC8 (HARD) no contradicts edge has endpoints with node_type=Axiom or
        authority=agent.
+  SC9 (HARD, Phase 4.5) every SourceClaim/SourceWork's `confidence` equals
+       `extraction_confidence.json[method]` OR the fixture entry declares
+       a valid override (both `confidence_override` and
+       `confidence_override_reason` present; override in [0,1]; reason
+       non-empty). Scans every tools/qa_kg/fixtures/source_claims_*.json
+       to verify the policy at the fixture level, then spot-checks DB
+       nodes against the declared values.
 
 Closed sets live in closed_sets.json (single source of truth). Locator
 resolution reuses tools.qa_kg.locators.resolve_any (same as EF4) to avoid
-divergence.
+divergence. Confidence-method map at tools/qa_kg/extraction_confidence.json
+is the single source of truth for SC9 (same file is also used by
+extractors/source_claims.populate).
 """
 from __future__ import annotations
 
@@ -326,6 +335,139 @@ def check_sc8_contradicts_endpoint_whitelist(
     return len(viols) == 0, f"{len(viols)} SC8 endpoint violation(s)", viols
 
 
+# --- SC9: confidence-method map + override policy (Phase 4.5) ---
+
+_EXTRACTION_CONFIDENCE_FILE = (
+    _REPO / "tools" / "qa_kg" / "extraction_confidence.json"
+)
+
+_FIXTURES_DIR = _REPO / "tools" / "qa_kg" / "fixtures"
+_FIXTURE_GLOB = "source_claims_*.json"
+
+
+def _load_extraction_confidence_map() -> dict[str, float]:
+    """Read extraction_confidence.json — single source of truth for SC9."""
+    if not _EXTRACTION_CONFIDENCE_FILE.exists():
+        raise FileNotFoundError(
+            f"extraction_confidence.json not found at "
+            f"{_EXTRACTION_CONFIDENCE_FILE} — Phase 4.5 [253] SC9 requires it."
+        )
+    data = json.loads(_EXTRACTION_CONFIDENCE_FILE.read_text(encoding="utf-8"))
+    methods = data.get("methods") or {}
+    return {k: float(v) for k, v in methods.items()}
+
+
+def check_sc9_confidence_map(
+    conn: sqlite3.Connection,
+) -> tuple[bool, str, list[str]]:
+    """SC9: fixture-level + DB-level confidence consistency.
+
+    Rules:
+      - Every fixture entry for a SourceClaim/SourceWork either omits
+        `confidence` (accepts the map default) OR provides `confidence` ==
+        map[method], UNLESS `confidence_override` + `confidence_override_reason`
+        are BOTH present.
+      - When override is present: value ∈ [0, 1]; reason is a non-empty
+        string; no `confidence` field is required (override supersedes).
+      - DB-level spot check: for every fixture entry without override, the
+        corresponding DB node (by sc:<id> or work:<id>) has confidence ==
+        map[method].
+    """
+    conf_map = _load_extraction_confidence_map()
+    viols: list[str] = []
+    total_entries = 0
+    override_entries = 0
+
+    if not _FIXTURES_DIR.exists():
+        return True, f"fixtures dir {_FIXTURES_DIR} missing — 0 entries to check", []
+
+    fixture_paths = sorted(_FIXTURES_DIR.glob(_FIXTURE_GLOB))
+    for fp in fixture_paths:
+        try:
+            data = json.loads(fp.read_text(encoding="utf-8"))
+        except json.JSONDecodeError as exc:
+            viols.append(f"{fp.name}: JSON parse error: {exc}")
+            continue
+
+        for kind, id_prefix in (("works", "work:"), ("claims", "sc:")):
+            for entry in data.get(kind, []):
+                total_entries += 1
+                eid = entry.get("id", "<missing id>")
+                full_id = f"{id_prefix}{eid}" if not eid.startswith(id_prefix) else eid
+                method = entry.get("extraction_method", "manual")
+                if method not in conf_map:
+                    viols.append(
+                        f"{fp.name}:{full_id}: method={method!r} not in "
+                        f"extraction_confidence map (keys: {sorted(conf_map)})"
+                    )
+                    continue
+                default = conf_map[method]
+                has_override = "confidence_override" in entry
+                has_reason = "confidence_override_reason" in entry
+
+                if has_override or has_reason:
+                    if not (has_override and has_reason):
+                        viols.append(
+                            f"{fp.name}:{full_id}: override partially declared "
+                            f"(override={has_override}, reason={has_reason}) "
+                            f"— both fields must be present together"
+                        )
+                        continue
+                    override_entries += 1
+                    ov = entry["confidence_override"]
+                    if not isinstance(ov, (int, float)) or not (0.0 <= float(ov) <= 1.0):
+                        viols.append(
+                            f"{fp.name}:{full_id}: confidence_override={ov!r} "
+                            f"not a float in [0.0, 1.0]"
+                        )
+                    rs = entry["confidence_override_reason"]
+                    if not isinstance(rs, str) or not rs.strip():
+                        viols.append(
+                            f"{fp.name}:{full_id}: "
+                            f"confidence_override_reason must be a non-empty string"
+                        )
+                    # DB spot-check: node confidence should equal the override
+                    row = conn.execute(
+                        "SELECT confidence FROM nodes WHERE id=?", (full_id,)
+                    ).fetchone()
+                    if row is not None:
+                        db_conf = float(row["confidence"])
+                        if abs(db_conf - float(ov)) > 1e-9:
+                            viols.append(
+                                f"{fp.name}:{full_id}: fixture override={ov} "
+                                f"but DB confidence={db_conf} — extractor drift"
+                            )
+                else:
+                    # No override → fixture `confidence` must match default
+                    # OR be omitted
+                    if "confidence" in entry:
+                        fx = float(entry["confidence"])
+                        if abs(fx - default) > 1e-9:
+                            viols.append(
+                                f"{fp.name}:{full_id}: confidence={fx} "
+                                f"differs from method-default {default} "
+                                f"(method={method!r}) but no "
+                                f"confidence_override_reason present"
+                            )
+                    # DB spot-check: node confidence must equal default
+                    row = conn.execute(
+                        "SELECT confidence FROM nodes WHERE id=?", (full_id,)
+                    ).fetchone()
+                    if row is not None:
+                        db_conf = float(row["confidence"])
+                        if abs(db_conf - default) > 1e-9:
+                            viols.append(
+                                f"{fp.name}:{full_id}: no override in fixture "
+                                f"but DB confidence={db_conf} ≠ default={default}"
+                            )
+    return (
+        len(viols) == 0,
+        f"{len(viols)} SC9 violation(s) across {total_entries} fixture entries "
+        f"({override_entries} override(s))",
+        viols,
+    )
+
+
 def main(argv: list[str] | None = None) -> int:
     p = argparse.ArgumentParser()
     p.add_argument("--db", type=Path, default=None)
@@ -394,6 +536,8 @@ def main(argv: list[str] | None = None) -> int:
              lambda: check_sc8_contradicts_endpoint_whitelist(
                  conn, forbidden_node_types, forbidden_authorities
              ), True)
+    run_bool("SC9", "Confidence-method map + override policy (Phase 4.5)",
+             lambda: check_sc9_confidence_map(conn), True)
 
     if hard_fail:
         print("[FAIL] QA-KG source claims cert [253] v1")

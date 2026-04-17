@@ -1,9 +1,13 @@
 {
-  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 3 internal infrastructure closed-set declarations; grounds in docs/specs/QA_MEM_SCOPE.md §Phase 3 -->",
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 3+4.5 internal infrastructure closed-set declarations; grounds in docs/specs/QA_MEM_SCOPE.md §Phase 3 and §Phase 4.5 -->",
   "reasons": ["ocr", "variant", "typo", "dispute", "true"],
   "contradicts_endpoints": {
     "forbidden_node_types":  ["Axiom"],
     "forbidden_authorities": ["agent"]
   },
-  "extraction_methods": ["manual", "ocr", "llm", "script"]
+  "extraction_methods": ["manual", "ocr", "llm", "script"],
+  "extraction_confidence_map_ref": "tools/qa_kg/extraction_confidence.json",
+  "_notes": {
+    "extraction_confidence_map_ref": "Single source of truth for SC9 (Phase 4.5). The map lives outside closed_sets.json because it is also consumed by extractors/source_claims.populate at ingest time; keeping it in a shared location prevents drift between extractor defaults and cert validation."
+  }
 }

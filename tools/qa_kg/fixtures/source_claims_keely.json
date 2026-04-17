@@ -1,0 +1,113 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4.5 Keely 40-Laws primary-source seed. Verbatim Keely law texts from c.1893, transmitted via Bloomfield-Moore and the SVP wiki, transcribed in private/keely_40_laws_classification.md. domain=svp on all. Contains 5 derived-from edges from shipped Keely cert families to their primary-source claims — this is the FIRST populated derived-from content in the QA-KG graph. Do not edit quote fields. -->",
+  "phase": "4.5",
+  "source_class": "keely",
+  "description": "Keely 5-claim seed. 1 SourceWork (Keely 40 Laws). 5 SourceClaims tied to shipped Keely cert families via new derived-from edges. One dispute-contradicts edge to an internal observation documenting the Vibes 2026-04-05 Law-17 structural reclassification.",
+
+  "works": [
+    {
+      "id": "keely_40_laws_sympathetic_physics",
+      "title": "Keely — Forty Laws of Sympathetic Vibratory Physics (c.1893)",
+      "body": "John Ernst Worrell Keely (1827–1898), Forty Laws of Sympathetic Vibratory Physics. Transmitted via Clara Bloomfield-Moore, 'Keely and His Discoveries' (1893), and transcribed on svpwiki.com/Laws-of-Being-Propositions by Dale Pond. Structural, sympathetic-transfer, dominant/control, aggregation/disintegration, and phenomenological laws spanning atomic pitch, resonance, catalysis, dissociation, and molecular synthesis.",
+      "source_locator": "file:docs/theory/keely_40_laws_primary_text_snapshot.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1893-01-01",
+      "domain": "svp"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "keely_law_1_matter_force_atomoles",
+      "work": "keely_40_laws_sympathetic_physics",
+      "quote": "There exists an infinite and unchangeable quantity of atomoles, the base of all matter; these are in a state of constant vibratory motion.",
+      "source_locator": "file:docs/theory/keely_40_laws_primary_text_snapshot.md#law-1",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1893-01-01",
+      "domain": "svp",
+      "title": "Keely Law 1 (Matter and Force): infinite atomoles in constant vibratory motion"
+    },
+    {
+      "id": "keely_law_6_sympathetic_oscillation",
+      "work": "keely_40_laws_sympathetic_physics",
+      "quote": "Coherent aggregates immersed in a medium pulsating at their natural pitch simultaneously oscillate with the same frequency, whether the pitch of the medium be a unison, or any harmonic of the fundamental pitch.",
+      "source_locator": "file:docs/theory/keely_40_laws_primary_text_snapshot.md#law-6",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1893-01-01",
+      "domain": "svp",
+      "title": "Keely Law 6 (Sympathetic Oscillation): co-pitch entrainment"
+    },
+    {
+      "id": "keely_law_11_triune_force",
+      "work": "keely_40_laws_sympathetic_physics",
+      "quote": "Energy manifests itself in three forms: Creative (vibrating aggregate), Transmissive (propagation of isochronous waves), Attractive (action upon other aggregates capable of vibrating in unisons or harmony).",
+      "source_locator": "file:docs/theory/keely_40_laws_primary_text_snapshot.md#law-11",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1893-01-01",
+      "domain": "svp",
+      "title": "Keely Law 11 (Force): Creative / Transmissive / Attractive triune"
+    },
+    {
+      "id": "keely_law_17_transformation_21_octaves",
+      "work": "keely_40_laws_sympathetic_physics",
+      "quote": "All forces are different forms of Universal Energy unlike in their period-frequency, merging into each other by imperceptible increments; each form representing the compass of 21 octaves.",
+      "source_locator": "file:docs/theory/keely_40_laws_primary_text_snapshot.md#law-17",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1893-01-01",
+      "domain": "svp",
+      "title": "Keely Law 17 (Transformation of Forces): 21-octave compass"
+    },
+    {
+      "id": "keely_law_18_atomic_pitch",
+      "work": "keely_40_laws_sympathetic_physics",
+      "quote": "Atoms have each a different and definite pitch, at which they naturally vibrate.",
+      "source_locator": "file:docs/theory/keely_40_laws_primary_text_snapshot.md#law-18",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1893-01-01",
+      "domain": "svp",
+      "title": "Keely Law 18 (Atomic Pitch): each atom has definite natural pitch"
+    }
+  ],
+
+  "observations": [
+    {
+      "id": "obs:keely_law_17_vibes_structural_reclassification",
+      "title": "Verified: Law 17 '21 octaves' is structural, not empirical (Vibes 2026-04-05)",
+      "body": "Vibes' response to Will dated 2026-04-05 (OB a9307705) promotes Law 17 from Category 2 (Sympathetic transfer) to Category 1 (Structural ratio). The number 21 resolves as 7 × 3: seven = septenary subdivision (certified in [150] QA_SEPTENARY_CERT.v1 for the (Z/9Z)* action), three = triune nature of force (certified in [153] QA_KEELY_TRIUNE_CERT.v1). 'This reflects a complete subdivision of vibratory states rather than a conventional musical octave system.' Treating the 21 as empirical-octave count misreads the structural-integer derivation.",
+      "source_locator": "file:private/keely_40_laws_classification.md",
+      "method": "manual",
+      "epistemic_status": "interpretation",
+      "authority": "internal",
+      "domain": "svp"
+    }
+  ],
+
+  "contradicts": [
+    {"src": "sc:keely_law_17_transformation_21_octaves", "dst": "obs:keely_law_17_vibes_structural_reclassification", "reason": "dispute"}
+  ],
+
+  "supersedes": [],
+
+  "derived_from": [
+    {"src": "cert:fs:qa_keely_dominant_control_cert_v1", "dst": "sc:keely_law_1_matter_force_atomoles",
+     "rationale": "[186] Dominant-control cert formalizes the invariant-substrate-with-motion structure asserted by Keely Law 1."},
+    {"src": "cert:fs:qa_keely_sympathetic_transfer_cert_v1", "dst": "sc:keely_law_6_sympathetic_oscillation",
+     "rationale": "[185] Sympathetic-transfer cert formalizes the co-orbit entrainment mechanism Keely Law 6 describes."},
+    {"src": "cert:fs:qa_keely_triune_cert_v1", "dst": "sc:keely_law_11_triune_force",
+     "rationale": "[153] Triune cert formalizes the Creative/Transmissive/Attractive decomposition from Keely Law 11."},
+    {"src": "cert:fs:qa_keely_dominant_control_cert_v1", "dst": "sc:keely_law_11_triune_force",
+     "rationale": "[186] Dominant-control cert uses Law 11's triune structure as one of its ingredients."},
+    {"src": "cert:fs:qa_keely_structural_ratio_cert_v1", "dst": "sc:keely_law_18_atomic_pitch",
+     "rationale": "[184] Structural-ratio cert formalizes the definite-pitch-per-atom invariant from Keely Law 18."},
+    {"src": "cert:fs:qa_keely_structural_ratio_cert_v1", "dst": "axiom:A2",
+     "rationale": "[184] Structural-ratio cert uses the QA derived-coords law d=b+e, a=b+2e (axiom A2) to form ratios between elements; the cert cannot state its ratios without the A2 derivation rule."},
+    {"src": "cert:fs:qa_keely_triune_cert_v1", "dst": "axiom:A1",
+     "rationale": "[153] Triune cert partitions the non-zero QA state space (axiom A1: states in {1..N}) into three invariant categories; the triune decomposition is well-defined only because the zero state is excluded by A1."}
+  ]
+}

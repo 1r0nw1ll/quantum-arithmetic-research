@@ -1,7 +1,7 @@
 {
-  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4 hand-curated benchmark fixture for cert [254]. expected_top_1_authority + expected_top_5_node_ids resolved against the live qa_kg.db at fixture-authoring time; per-query rationale documented so a reviewer can red-team each entry. NO LLM-generated queries; every entry hand-drafted. -->",
-  "phase": 4,
-  "description": "20 hand-curated queries for QA_KG_AUTHORITY_RANKER_CERT [254] v1. The `tags` field drives which gates each query exercises (R1 covers all queries; R2 per-query expected_top_1_authority; R3 contradicted_material; R4 valid_at_filter). DB scale at authoring time: 397 nodes, 113 edges, 0 agent nodes (R1 currently vacuous-PASS until agent extractors populate). Per plan: agent_excluded category dropped from this fixture because no agent nodes exist in the live DB; R1 gate still runs across every query and would catch a regression once agent material lands.",
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4+4.5 hand-curated benchmark fixture for cert [254]. expected_top_1_authority + expected_top_5_node_ids resolved against the live qa_kg.db at fixture-authoring time; per-query rationale documented so a reviewer can red-team each entry. NO LLM-generated queries; every entry hand-drafted. -->",
+  "phase": "4.5",
+  "description": "31 hand-curated queries for QA_KG_AUTHORITY_RANKER_CERT [254]. Phase 4 shipped q01-q20; Phase 4.5 adds q21-q31 exercising the newly populated schema-v4 columns (confidence/valid_from/domain) and the first real derived-from chains (cert → axiom, cert → SourceClaim). `tags` drives per-gate coverage: R1 covers all; R2 per-query expected_top_1_authority; R3 contradicted_material; R4 valid_at_filter; R10 (new Phase 4.5) domain_taxonomy. Phase 4.5 also updates q06/q10/q18 where new primary material changed the top-5 composition. Authoring DB at fixture time: 425 nodes, 135 edges (Phase 4.5 post-ingest); 0 agent nodes still — R1 remains vacuous-PASS but R1 gate still runs.",
   "schema_version": 1,
   "authoring_db_head": "to-be-filled-at-commit",
   "queries": [
@@ -49,9 +49,9 @@
       "id": "q06_keely_cert_family",
       "query": "Keely",
       "expected_top_1_authority": "derived",
-      "expected_top_5_node_ids": ["cert:fs:qa_keely_aggregation_cert_v1", "cert:fs:qa_keely_phenomenological_cert_v1", "cert:fs:qa_keely_triune_cert_v1"],
-      "rationale": "No primary 'Keely' SourceWork exists in the seed (Keely 40 Laws are referenced via certs, not directly ingested). Derived cert nodes top this query — honest baseline for the derived tier.",
-      "tags": ["derived_certified"]
+      "expected_top_5_node_ids": ["cert:fs:qa_keely_triune_cert_v1", "cert:fs:qa_keely_structural_ratio_cert_v1", "cert:fs:qa_keely_aggregation_cert_v1", "cert:fs:qa_keely_phenomenological_cert_v1", "cert:fs:qa_keely_dominant_control_cert_v1"],
+      "rationale": "Phase 4.5 added work:keely_40_laws_sympathetic_physics (primary) and 7 derived-from edges. Two Keely certs now have axiom-rooted derived-from chains (triune→A1, structural_ratio→A2) with provenance_depth=1; the other three Keely certs stay orphan (depth=-1). Top-1 authority stays 'derived' — the rooted certs' provenance_decay=exp(-1/3)≈0.717 × authority_weight=8 outscores the primary work's authority_weight=10 × no_path_factor=0.5 on the bare 'Keely' token because the cert title matches more tightly. Post-4.5 top-5 is two rooted Keely certs followed by the three orphan ones, not the Phase 4 order.",
+      "tags": ["derived_certified", "provenance_depth"]
     },
     {
       "id": "q07_bateson_cert",
@@ -163,9 +163,99 @@
       "query": "Keely",
       "valid_at": "2026-04-16T00:00:00Z",
       "expected_top_1_authority": "derived",
-      "expected_top_5_node_ids": ["cert:fs:qa_keely_aggregation_cert_v1"],
-      "rationale": "valid_at_filter tag exercises R4. Phase 4 DB has 0 nodes with valid_until populated → R4 reports N-A (tri-state, plan M4). The query still runs and respects the filter; the gate honestly reports 'no node carries valid_until — filter correctness pending Phase 4.5 corpus pass'. Locks the gate plumbing; does NOT vacuously claim PASS.",
+      "expected_top_5_node_ids": ["cert:fs:qa_keely_triune_cert_v1"],
+      "rationale": "valid_at_filter tag exercises R4. Phase 4.5 populates valid_from but no node yet carries valid_until → R4 stays honestly N-A (tri-state, plan M4). The query still runs; R4 reports 'no node carries valid_until — filter correctness pending post-4.5 expiry exemplar'. Locks the gate plumbing; does NOT vacuously claim PASS. Post-4.5 top-1 is the rooted triune cert (see q06 rationale).",
       "tags": ["derived_certified", "valid_at_filter"]
+    },
+    {
+      "id": "q21_iverson_halley_primary",
+      "query": "Halley",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:iverson_qa2_halley_qn"],
+      "rationale": "Phase 4.5 Iverson QA-2 (1993) worked-example claim: Halley's Comet QN=(1,29,30,59). Unambiguous token; primary dominance via authority_weight=10 plus bm25 exact match. domain=qa_core populated (exercises R10 implicitly — non-empty domain passes).",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_populated"]
+    },
+    {
+      "id": "q22_iverson_transposable_primary",
+      "query": "transposable",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:iverson_pyth3_trig_identities"],
+      "rationale": "Phase 4.5 Iverson Pyth-3 (2006) trig-identity transposition claim (Tan=F/C, Sin=F/G). Unique token; primary SourceClaim top-1 with no contention. domain=qa_core. valid_from=2006-01-01 populated.",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_populated"]
+    },
+    {
+      "id": "q23_keely_atomoles_primary",
+      "query": "atomoles",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:keely_law_1_matter_force_atomoles"],
+      "rationale": "Phase 4.5 Keely Law 1 primary claim. 'atomoles' is a Keely-specific coinage — unique token. Verifies that Keely primary SourceClaims surface cleanly in the svp domain.",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_populated"]
+    },
+    {
+      "id": "q24_parker_primary_geometry",
+      "query": "Parker",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["work:parker_geometry_propositions", "work:hull_quadrature", "sc:parker_prop_iii_circle_primary", "sc:parker_prop_vii_circumference_radius", "obs:pi_transcendental_lindemann_1882"],
+      "rationale": "Phase 4.5 Parker geometry SourceWork + Hull work (dedicated to Parker) + Parker's two propositions + the Lindemann contradiction observation. Tests that geometry-domain primary material surfaces across work + claim + observation levels. obs:pi_transcendental_lindemann_1882 appears with contradiction_state=dst due to the Hull-vs-Lindemann dispute edge (R3 wiring).",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_populated"]
+    },
+    {
+      "id": "q25_hull_quadrature_contradicted",
+      "query": "quadrature pi",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["work:hull_quadrature", "sc:hull_quadrature_pi_20612_6561"],
+      "rationale": "Phase 4.5 Hull Quadrature primary + the specific π=20612/6561 claim. sc:hull_quadrature_pi_20612_6561 is marked contradiction_state=src (contradicts the Lindemann obs); R3 exercises this as a new contradicted_material exemplar beyond the Phase 3 SVP typo set. Dispute reason (not typo/ocr/variant), broadens R3 coverage.",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "contradicted_material", "domain_populated"]
+    },
+    {
+      "id": "q26_iverson_enneagram_primary",
+      "query": "enneagram",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["work:iverson_pyth3_enneagram"],
+      "rationale": "Phase 4.5 Iverson Pyth-3 SourceWork. Unique title token; primary work tops. Exercises the valid_from=2006-01-01 field without triggering decay (source_work is decay_exempt).",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_populated"]
+    },
+    {
+      "id": "q27_synchronous_harmonics_cert_wins",
+      "query": "Synchronous Harmonics",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_synchronous_harmonics_cert_v1", "sc:iverson_qa_vol_ii_synchronous_harmonics_name", "work:iverson_qa_vol_ii_synchronous_harmonics", "cert:147", "work:iverson_qa2_natural_arithmetic"],
+      "rationale": "Two-token query with a pre-existing derived cert (cert:fs:qa_synchronous_harmonics_cert_v1) whose title is exactly the query. The Phase 4.5 Iverson Vol.II SourceWork + SourceClaim also match but the cert's BM25 advantage on the exact-title match wins despite authority_weight 8 < 10. Verifies that primary-dominance is conditional on BM25 being reasonable, not absolute — matches the Phase 4 Pass-A semantics (primary never silently demoted, but also not force-floored).",
+      "tags": ["derived_certified", "phase_4_5_corpus"]
+    },
+    {
+      "id": "q28_domain_filter_geometry",
+      "query": "circle",
+      "domain": "geometry",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["sc:parker_prop_iii_circle_primary", "work:hull_quadrature", "sc:parker_prop_vii_circumference_radius", "work:parker_geometry_propositions"],
+      "rationale": "R10 + R4 domain-filter test. WITHOUT domain filter, 'circle' returns cert:fs:qa_circle_impossibility_cert_v1 / cert:fs:qa_dale_circle_cert_v1 (domain='') at top. WITH domain='geometry', candidate pool excludes all non-geometry nodes; Parker Prop III (primary) tops cleanly. This is the FIRST query in the fixture where the domain filter is non-vacuous (Phase 4 q19 was domain='' which the SQL skips entirely). Contrasts with q19.",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_filter"]
+    },
+    {
+      "id": "q29_provenance_rooted_structural_ratio",
+      "query": "structural ratio",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_keely_structural_ratio_cert_v1", "cert:184", "obs:keely_law_17_vibes_structural_reclassification"],
+      "rationale": "cert:fs:qa_keely_structural_ratio_cert_v1 has a derived-from edge to axiom:A2 (Phase 4.5 F1). provenance_decay = exp(-1/3) ≈ 0.717 vs orphan no_path_factor = 0.5. The rooted cert (score ≈ 5.732) outscores the orphan alias cert:184 (3.258). Exercises provenance_depth discrimination on real derived-from chains — this is the FIRST query where provenance_depth meaningfully drives the top-1 ranking.",
+      "tags": ["derived_certified", "phase_4_5_corpus", "provenance_depth"]
+    },
+    {
+      "id": "q30_provenance_rooted_triune",
+      "query": "triune",
+      "expected_top_1_authority": "derived",
+      "expected_top_5_node_ids": ["cert:fs:qa_keely_triune_cert_v1", "cert:153", "cert:186", "sc:keely_law_11_triune_force", "obs:keely_law_17_vibes_structural_reclassification"],
+      "rationale": "cert:fs:qa_keely_triune_cert_v1 has a derived-from edge to axiom:A1 (Phase 4.5 F1). Same mechanism as q29 — rooted cert outscores orphan alias cert:153. Confirms provenance_depth discrimination across two different axiom roots (A1 here, A2 in q29), not a single-root artifact.",
+      "tags": ["derived_certified", "phase_4_5_corpus", "provenance_depth"]
+    },
+    {
+      "id": "q31_keely_domain_filter_svp",
+      "query": "Keely",
+      "domain": "svp",
+      "expected_top_1_authority": "primary",
+      "expected_top_5_node_ids": ["work:keely_40_laws_sympathetic_physics", "sc:keely_law_17_transformation_21_octaves", "sc:keely_law_18_atomic_pitch", "sc:keely_law_11_triune_force", "sc:keely_law_1_matter_force_atomoles"],
+      "rationale": "Compare with q06 (no domain filter) which tops with derived rooted certs. Adding domain='svp' EXCLUDES cert nodes (domain='' on all Phase 4 cert entries since the certs extractor doesn't set domain). Only Keely primary SourceWork + SourceClaims (all domain='svp') survive the filter. Top-1 authority flips from derived → primary. Second instance of domain-filter semantic change in this fixture (q28 was the first), on a different domain.",
+      "tags": ["primary_dominance", "phase_4_5_corpus", "domain_filter"]
     }
   ]
 }

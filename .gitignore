@@ -142,6 +142,11 @@ multi_ai_workspace/dataset_generator.py
 # CANONICAL_MANIFEST.json and other per-snapshot anchors that cert [228]
 # hashes; must be tracked.
 !tools/qa_kg/fixtures/**/*.json
+# Phase 4.5: top-level QA-KG config files (single-source-of-truth maps)
+# shared between extractors and cert validators. extraction_confidence.json
+# drives [253] SC9; domain_taxonomy.json drives [254] R10.
+!tools/qa_kg/extraction_confidence.json
+!tools/qa_kg/domain_taxonomy.json
 !qa_alphageometry_ptolemy/qa_fst/**/*.json
 !tools/*.json
 !qa_alphageometry_ptolemy/qa_fst/*.json

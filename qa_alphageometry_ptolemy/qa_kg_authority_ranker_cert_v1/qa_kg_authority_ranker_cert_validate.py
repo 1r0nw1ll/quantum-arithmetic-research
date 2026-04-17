@@ -118,6 +118,27 @@ def check_r1_min_authority_excludes_agent(
 # R2 — per-query expected_top_1_authority
 # =============================================================================
 
+def _run_fixture_query(kg: KG, q: dict, *, k: int = 5):
+    """Execute a fixture query honoring domain/valid_at/min_authority kwargs.
+
+    Phase 4.5: fixture entries may carry `domain` (closed set from
+    domain_taxonomy.json) and `valid_at` (ISO-8601 timestamp). Both thread
+    through to KG.search_authority_ranked. `min_authority` defaults to
+    'internal' (the cert [254] R1 contract); entries may override.
+    """
+    kwargs: dict = {
+        "min_authority": q.get("min_authority", "internal"),
+        "k": k,
+    }
+    if q.get("domain"):
+        kwargs["domain"] = q["domain"]
+    if q.get("valid_at"):
+        kwargs["valid_at"] = _dt.datetime.fromisoformat(
+            q["valid_at"].replace("Z", "+00:00")
+        )
+    return kg.search_authority_ranked(q["query"], **kwargs)
+
+
 def check_r2_top1_authority(
     kg: KG, fixture: dict,
 ) -> tuple[bool, str, list[str]]:
@@ -128,9 +149,7 @@ def check_r2_top1_authority(
         if not expected:
             viols.append(f"query={q['id']!r} missing expected_top_1_authority")
             continue
-        hits = kg.search_authority_ranked(
-            q["query"], min_authority=q.get("min_authority", "internal"), k=5,
-        )
+        hits = _run_fixture_query(kg, q, k=5)
         if not hits:
             viols.append(f"query={q['id']!r} returned 0 hits (expected {expected})")
             continue
@@ -164,9 +183,7 @@ def check_r3_contradiction_surfacing(
     runnable = 0
     viols: list[str] = []
     for q in queries:
-        hits = kg.search_authority_ranked(
-            q["query"], min_authority=q.get("min_authority", "internal"), k=10,
-        )
+        hits = _run_fixture_query(kg, q, k=10)
         # Find any node in the top-10 hits that has a contradicts edge.
         # The cert requires that the contradicting node be in top-3.
         contradicted_in_pool = [
@@ -536,6 +553,67 @@ def check_r9_coverage_completeness(
 
 
 # =============================================================================
+# R10 — domain taxonomy closed-set (Phase 4.5)
+# =============================================================================
+
+_DOMAIN_TAXONOMY_FILE = (
+    _REPO / "tools" / "qa_kg" / "domain_taxonomy.json"
+)
+
+
+def _load_domain_taxonomy() -> set[str]:
+    """Read the closed domain set from tools/qa_kg/domain_taxonomy.json.
+
+    Single source of truth shared with extractors. Phase 4.5 ships the
+    file; R10 raises when the file is missing (configuration error, not
+    silent fallback). Empty-string domain (= unclassified) is always
+    legal; R10 enforces only non-empty values against the closed set.
+    """
+    if not _DOMAIN_TAXONOMY_FILE.exists():
+        raise FileNotFoundError(
+            f"domain_taxonomy.json not found at {_DOMAIN_TAXONOMY_FILE} — "
+            f"Phase 4.5 [254] R10 requires this single-source-of-truth file."
+        )
+    data = json.loads(_DOMAIN_TAXONOMY_FILE.read_text(encoding="utf-8"))
+    domains = data.get("domains")
+    if not isinstance(domains, list) or not all(isinstance(d, str) for d in domains):
+        raise ValueError(
+            f"domain_taxonomy.json malformed: 'domains' must be a list of "
+            f"strings (got {type(domains).__name__})"
+        )
+    return set(domains)
+
+
+def check_r10_domain_taxonomy(
+    kg: KG,
+) -> tuple[bool, str, list[str]]:
+    """Every node with domain != '' must have domain ∈ closed taxonomy set.
+
+    Empty-string domain is always legal (unclassified / not domain-scoped).
+    This gate protects against typos, stale domain labels, and divergence
+    between the extractor, fixture entries, and the ranker's domain filter.
+    """
+    taxonomy = _load_domain_taxonomy()
+    viols: list[str] = []
+    total_populated = 0
+    for row in kg.conn.execute(
+        "SELECT id, domain FROM nodes WHERE domain != '' ORDER BY id"
+    ):
+        total_populated += 1
+        if row["domain"] not in taxonomy:
+            viols.append(
+                f"node {row['id']!r} has domain={row['domain']!r} not in "
+                f"taxonomy {sorted(taxonomy)}"
+            )
+    return (
+        len(viols) == 0,
+        f"{len(viols)} R10 violation(s) across {total_populated} "
+        f"domain-populated nodes (taxonomy size: {len(taxonomy)})",
+        viols,
+    )
+
+
+# =============================================================================
 # Main
 # =============================================================================
 
@@ -609,6 +687,8 @@ def main(argv: list[str] | None = None) -> int:
              lambda: check_r8_no_silent_swallows(), True)
     run_bool("R9", "coverage completeness on BOTH axes",
              lambda: check_r9_coverage_completeness(spec), True)
+    run_bool("R10", "domain taxonomy closed-set (Phase 4.5)",
+             lambda: check_r10_domain_taxonomy(kg), True)
 
     if hard_fail:
         print("[FAIL] QA-KG authority ranker cert [254] v1")

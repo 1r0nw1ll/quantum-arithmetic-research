@@ -5,9 +5,10 @@
 **Authority:** cert families `[225] v4` (graph consistency) + `[226]` (Candidate F classifier invariants) + `[202]` (Aiq Bekar digital root) + `[227]` (firewall effectiveness) + `[252]` (epistemic fields) + `[253]` (source-claim contracts) + `[254]` (authority-tiered ranker) + `[228]` (graph determinism) + `[255]` (agent write surface).
 **Companion files:** `QA_AXIOMS_BLOCK.md`, `qa_orbit_rules.py`, `tools/qa_retrieval/schema.py`, `memory/project_qa_mem_architecture.md`.
 
-## What QA-MEM IS (as of Phase 0)
+## What QA-MEM IS (as of Phase 6, alpha achieved)
 
-An indexed, firewalled view over repo artifacts:
+An indexed, firewalled, authority-ranked, deterministic knowledge graph over
+repo artifacts. Alpha bar per `[228]` + `[254]` + `[255]` PASSed 2026-04-16.
 
 - **Candidate F retrieval index** per cert `[202]`:
   `idx_b = dr(char_ord_sum(content))`, `idx_e = NODE_TYPE_RANK[node_type]`.
@@ -17,36 +18,73 @@ An indexed, firewalled view over repo artifacts:
   singularity/satellite/cosmos/unassigned. Under Candidate F most nodes land
   in Cosmos (72/81 of the lattice is Cosmos); this is a partition, not a
   canonicity judgment.
-- **Keyword-co-occurrence edges** (`edge_type="keyword-co-occurs"`,
-  `method="keyword"`, `confidence=0.3`) from body-token matches: `[N]` cert
-  references, axiom codes, rule-title substrings. These are NOT derivations,
-  NOT proofs, NOT authoritative provenance.
+- **Epistemic fields** (Phase 1, schema v3): every node carries
+  `authority ∈ {primary, derived, internal, agent}` +
+  `epistemic_status ∈ {axiom, source_claim, source_work, certified,
+  observation, interpretation, conjecture}` + `lifecycle_state` + `method` +
+  `source_locator`. The allowed authority × epistemic_status matrix is
+  enforced by cert `[252]` EF3.
+- **Ranker-input fields** (Phase 4, schema v4): `confidence`, `valid_from`,
+  `valid_until`, `domain`. Feed the 7-factor closed-form score in cert `[254]`.
+- **Authority-tiered ranker** (Phase 4): `KG.search_authority_ranked()` is
+  the agent-facing entry point. Score combines authority_weight ×
+  lifecycle_factor × bm25_norm × confidence × time_decay ×
+  contradiction_factor × provenance_decay. Single source of truth for
+  constants at
+  `qa_alphageometry_ptolemy/qa_kg_authority_ranker_cert_v1/ranker_spec.json`.
+- **SourceWork / SourceClaim ingestion** (Phase 3; scaled in Phase 4.5):
+  verbatim quotes from primary sources as first-class nodes. `quoted-from`
+  FK edges link claims to their source works. `extraction_method ∈
+  {manual, ocr, llm, script}`. SourceClaim IDs are deterministic
+  (`sc:<sha1(locator+quote)[:16]>` when not explicit).
+- **Contradictions** (Phase 3): `contradicts` edges carry provenance with
+  `reason ∈ {ocr, variant, typo, dispute, true}` per `[253]` closed set.
+  Forbidden endpoints: `node_type=Axiom`, `authority=agent`.
+- **Supersedes lifecycle** (Phase 3): newer → older structural edges with
+  an application-level bridge from file-level `_status: frozen` markers to
+  `lifecycle_state ∈ {superseded, deprecated}` per sibling-version presence.
+- **Structural provenance** (Phase 4.5): `derived-from` edges populated
+  between cert nodes and the primary SourceClaims they formalize.
+  `provenance_decay = exp(-depth/3)` rewards rooted certs; orphans receive
+  `no_path_factor = 0.5`.
+- **Theorem NT firewall — two layers**:
+  - Layer 1 (Phase 0 shape): Unassigned → Cosmos/Singularity causal edges
+    blocked without `via_cert`. Under Candidate F, Unassigned is effectively
+    unoccupied, so this layer rarely fires.
+  - Layer 2 (Phase 2, DB-backed): `authority=agent` causal edges are blocked
+    unconditionally by `edge_allowed()`; the only bypass is a DB-backed
+    `promoted-from` edge created by `kg.promote()`. Callers cannot circumvent
+    via a `via_cert` string.
+- **Graph-hash determinism** (Phase 5): `canonicalize.graph_hash(conn)`
+  returns SHA256 over canonical nodes/edges/meta JSONL with build-time
+  metadata excluded. Frozen fixtures at
+  `tools/qa_kg/fixtures/corpus_snapshot_v<N>/`. `kg.promote()` rejects on
+  graph_hash drift per cert `[228]` D6.
+- **MCP agent-write surface** (Phase 6): stdio JSON-RPC server exposing
+  exactly 4 tools — `qa_kg_search` / `qa_kg_get_node` / `qa_kg_neighbors`
+  (READ_ONLY) + `qa_kg_promote_agent_note` (READ_WRITE, rate-limited).
+  Enforced by cert `[255]` W1–W8 (all HARD).
 - **Subject coord columns** `subject_b/subject_e` — optional, populated only
   from cert metadata that explicitly declares a QA state subject. THIS is
   the field agents should use to identify which QA state a node is about.
-- **Firewall guard**: `kg.upsert_edge` raises `FirewallViolation` when an
-  Unassigned source attempts a causal edge to a Cosmos/Singularity target
-  without `via_cert`. Under Candidate F, Unassigned is effectively unoccupied,
-  so this guard rarely fires. It is shape-correct but does not yet implement
-  the full Theorem NT firewall.
 
-## What QA-MEM IS NOT (explicit non-goals)
+## What QA-MEM IS NOT (Phase 6 reality)
 
 - **Not a canonicity judgment.** Tier is a lattice partition derived from a
-  content hash × node-type rank.
-- **Not an authority ranker.** `kg.search()` returns FTS5/BM25-ordered rows.
-  Do NOT treat results as "what the project believes."
-- **Not a provenance graph.** `kg.why()` filters keyword edges OUT; no Phase 0
-  extractor emits structural `derived-from`. `why()` returns empty for every
-  cert until Phase 3.
-- **Not a contradiction system.** `contradicts` is supported but unpopulated.
-- **Not an epistemic-status system.** No `SourceClaim/Interpretation/
-  Observation/Conjecture` distinctions yet; Phase 1 adds them.
-- **Not a memory substrate for agent reasoning.** A-RAG remains corpus
-  backbone. Agents must not take QA-MEM as authoritative until Phase 2
-  (AgentNote firewall) lands.
-- **Not deterministic across sessions.** OB markdown snapshots depend on
-  capture time; Phase 5 adds frozen fixtures + graph-hash cert `[228]`.
+  content hash × node-type rank. Vetting is `vetted_by` attribution,
+  orthogonal to tier.
+- **Not a generic citation system.** SourceClaim quotes must be verbatim,
+  bounded by locator resolution (`[253]` SC1), and run the closed-set
+  `extraction_method` gate (SC3) + the closed-set `confidence` map (SC9
+  from Phase 4.5). This is not a bibliographic notebook.
+- **Not an autonomous agent memory substrate.** Agent writes are confined
+  to the MCP promotion pathway. Direct `authority=agent` causal edges are
+  blocked at `edge_allowed()`; the W3a/W3b audit detectors fire if a
+  wrapper or direct-SQL bypass is attempted.
+- **Not pinned to working-tree HEAD.** Phase 5 fixtures freeze a specific
+  `repo_head`; Phase 5.1 (deferred) adds `git archive`-based source pinning
+  so the extractor module itself is held at the fixture's HEAD rather than
+  the working tree.
 
 ## Do not do on `idx_b/idx_e`
 
@@ -398,23 +436,96 @@ New cert family:
 Alpha-bar flipped: QA-MEM is alpha agent memory + authoritative
 project memory per the original three-cert bar.
 
-## Roadmap (deferred, operational hardening — NOT alpha-bar items)
+### Phase 4.5 — primary-source corpus pass + ranker activation
 
-- **Phase 4.5:** full primary-source corpus ingestion (Ben/Dale books,
-  full Wildberger corpus, Levin 2026); extractor confidence-from-method
-  maps (e.g., `source_claims.populate` setting `confidence=0.7` on
-  `extraction_method='ocr'`); domain/valid_from/valid_until population
-  on real nodes; URL scheme in `tools/qa_kg/locators.py` resolver. Phase 3
-  shipped the mechanism + minimum seed; Phase 4.5 is the scaled pass.
-  Not alpha-bar — corpus scale is post-alpha polish.
-  **Ops item** (separate from corpus work): cert-gate Codex review
-  bridge has been dead at cert-submission time in Phase 2/3/4/5/6. Either
-  `llm_qa_wrapper/cert_gate_hook.py` grows a pre-commit health-check
-  that fails loudly with "bridge is dead, restart it" rather than the
-  generic `CODEX_REVIEW_PENDING`, OR `tools/qa_security_audit.py`
-  gains a line-item that fails when `qa_lab/logs/codex_bridge.log`
-  mtime > 24h. Phase 6 again worked around with `codex exec --full-auto`
-  one-shot; that pattern shouldn't become the default.
+Landed 2026-04-16. The ranker formula shipped in Phase 4 was structurally
+complete but empirically degenerate: pre-4.5 the live DB had 0 nodes with
+non-default `confidence`, 0 with `valid_from`, 0 with `domain`, and 0
+`derived-from` edges. Four of the seven ranker factors contributed no
+information. Phase 4.5 activates all four on real material.
+
+New primary-source ingestion (bounded, minimum-that-exercises-every-gate
+pattern — same discipline as Phases 1–6): 6 new SourceWorks + 14
+SourceClaims spanning Iverson `QA-2` / `Pyth-3 Enneagram` / `QA Vol.II
+Synchronous Harmonics`, Keely 40 Laws, Parker geometry propositions, and
+Hull's *Quadrature of the Circle*. Quote excerpts extracted into in-repo
+snapshots under `docs/theory/*_excerpts.md` (Phase 3 SVP-wiki-snapshot
+pattern), so `file:` locators resolve without a URL scheme.
+
+`domain` closed taxonomy at `tools/qa_kg/domain_taxonomy.json` declares 5
+values (qa_core, svp, geometry, biology, physics). Phase 4.5 populates 3
+of them on real material (qa_core, svp, geometry). `valid_from` populated
+from source publication dates (Iverson 1991–2006, Keely 1893, Parker 1874,
+Hull 1994). `valid_until` stays empty — no expired claims surfaced this
+pass; cert `[254]` R4 honestly N-A with the same rationale as Phase 4.
+
+Scope deferred to Phase 4.6 (primary-source access gap, not a design
+decision):
+
+- Wildberger / Philomath PDFs on disk lack OCR text layers; verbatim
+  extraction blocked until OCR tooling lands.
+- Levin 2026 papers not available on local disk; the cert families
+  (`qa_levin_cognitive_lightcone_cert_v1`,
+  `qa_pezzulo_levin_bootstrap_cert_v1`) document the mapping, but primary
+  SourceClaims from the papers themselves require the PDFs.
+- The Briddell FST text file on disk
+  (`field-structure-theory/01-core-theory/fst-fundamentals/fst-briddell-background-qa-analysis.txt`)
+  is an AI-generated summary, not Briddell-authored; the primary
+  manuscript (Frontiers in Physics ms ID 1850870) is not in the repo.
+
+Per `memory/feedback_primary_sources_vs_consensus.md`, fabricating quotes
+to hit a target count is worse than a bounded scope. Phase 4.6 picks up
+these four sources once OCR / paper access lands.
+
+Confidence-from-method map lives at `tools/qa_kg/extraction_confidence.json`
+(manual=1.0, ocr=0.7, llm=0.5, script=0.9) — single source of truth shared
+by `extractors/source_claims.py` and cert `[253]` SC9. One
+`confidence_override` entry on a paraphrase-span exercises the override
+path end-to-end; override requires both `confidence_override` and
+`confidence_override_reason` or SC9 fails.
+
+Structural provenance — first populated this pass: 5 `derived-from` edges
+(Keely certs `[184]/[185]/[186]/[153]` + 16-identities cert → their primary
+SourceClaims), `method=structural`, `confidence=0.9`. `provenance_decay`
+now discriminates rooted certs from orphans in ranker scoring.
+
+Contradicts expansion: +3 edges bringing the graph to ~16. New reasons on
+real material: Keely Law 17 vs Vibes 2026-04-05 structural reclassification
+(dispute); Hull π=20612/6561 vs Lindemann 1882 transcendence (dispute);
+Philomath typo (typo).
+
+Per-source fixture split: `tools/qa_kg/fixtures/source_claims_phase3.json`
+frozen as baseline; new per-source fixtures at
+`source_claims_{iverson,wildberger,svp_extension,keely,levin,philomath,
+briddell}.json`. `extractors/source_claims.populate` iterates via
+deterministic filename-asc glob.
+
+Cert updates:
+- `[253]` gains SC9 (HARD): `confidence` equals `extraction_confidence[method]`
+  unless both `confidence_override` and `confidence_override_reason` are
+  present on the SourceClaim / SourceWork node.
+- `[254]` gains R10 (HARD): every node with `domain != ''` has
+  `domain ∈ domain_taxonomy.json["domains"]`.
+- `[254]` R2 query fixture extended from 20 → 30+ entries exercising
+  domain filter, provenance-depth discrimination, lifecycle, and the new
+  corpus material. R4 stays N-A pending first real `valid_until` case.
+
+Determinism: `tools/qa_kg/fixtures/corpus_snapshot_v1/` stays frozen.
+New `corpus_snapshot_v2/` captures the 4.5 corpus subset; `[228]` D1
+`fixture_hash` regenerated atomically with the ingest commit. D2/D3 verify
+against v2. All other `[228]` gates unchanged.
+
+Phase 4.5 is operational hardening, not an alpha-bar addition — alpha
+remains `[228] + [254] + [255]`. The **ops follow-up** remains open:
+cert-gate Codex bridge health — `llm_qa_wrapper/cert_gate_hook.py` should
+grow a pre-commit health-check that fails with "bridge is dead, restart
+it" rather than the generic `CODEX_REVIEW_PENDING`, OR
+`tools/qa_security_audit.py` should gain a line-item that fails when
+`qa_lab/logs/codex_bridge.log` mtime > 24h. Phase 4.5 again worked around
+with `codex exec --full-auto` one-shot; that pattern remains the fallback,
+not the default.
+
+## Roadmap (deferred, operational hardening — NOT alpha-bar items)
 - **Phase 5.1:** pinned-source reproducibility — extend Phase 5's
   determinism test so that D2/D3 rebuild uses extractor source pinned
   at `manifest.repo_head` via `git archive`, decoupling reproducibility

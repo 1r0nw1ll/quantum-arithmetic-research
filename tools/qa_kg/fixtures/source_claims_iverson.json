@@ -1,0 +1,114 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 4.5 Iverson primary-source seed. Verbatim quotes from Ben Iverson's QA-2 (1993), Pyth-3 Enneagram (2006 w/ Carl Elkins), and QA Vol.II Synchronous Harmonics (Feb 1991). Locators resolve against docs/theory/iverson_*_excerpts.md snapshots. Do not edit quote fields. -->",
+  "phase": "4.5",
+  "source_class": "iverson",
+  "description": "Iverson 6-claim seed. 3 SourceWorks (QA-2 / Pyth-3 Enneagram / QA Vol.II). domain=qa_core on all. valid_from per source publication year. Claim sc:iverson_pyth3_fermat_3d_cubes carries a confidence_override on the stitched two-sentence paraphrase span, exercising the [253] SC9 override path.",
+
+  "works": [
+    {
+      "id": "iverson_qa2_natural_arithmetic",
+      "title": "Iverson — Quantum Arithmetic Book 2: Natural Arithmetic (1993)",
+      "body": "Ben Iverson, Quantum Arithmetic Book 2: Natural Arithmetic. Published by ITAM / Delta Spectrum Research, La Junta CO. November 1993. ISBN 1-883401-07-0 (individual); 1-883401-05-4 (4-volume set). Second book in Iverson's QA textbook series — covers doubling, double parity, the Quantum Ellipse, slicing the ellipse, Synchronous Harmonics, and equilateral/isosceles triangles.",
+      "source_locator": "file:docs/theory/iverson_qa2_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1993-11-01",
+      "domain": "qa_core"
+    },
+    {
+      "id": "iverson_pyth3_enneagram",
+      "title": "Iverson & Elkins — Pythagoras and the Quantum World Volume III: Enneagram (2006)",
+      "body": "Ben Iverson & Carl Elkins, Pythagoras and the Quantum World Volume III: Enneagram. Published by Delta Spectrum Research, 921 Santa Fe Avenue, La Junta CO. 2006. ESBN 1-883401-03-0. Third volume in the Pythagoras series; extends QA with the 9-pointed enneagram and Fermat-style 3D cube identities.",
+      "source_locator": "file:docs/theory/iverson_pyth3_enneagram_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2006-01-01",
+      "domain": "qa_core"
+    },
+    {
+      "id": "iverson_qa_vol_ii_synchronous_harmonics",
+      "title": "Iverson — QA Volume II Books 3 & 4: New Wave Theory — Synchronous Harmonics (1991/2005)",
+      "body": "Ben Iverson, Quantum Arithmetic Volume II: Books 3 & 4 — New Wave Theory / Synchronous Harmonics. Originally February 1991 ('long lost book — now found 11/10/05'). Republished by Delta Spectrum Research, 921 Santa Fé Avenue, La Junta CO, 2005. Dynamic phase of QA; Synchronous Harmonics model where wavelets combine via the seven prime numbers in a Quantum Number.",
+      "source_locator": "file:docs/theory/iverson_qa_vol_ii_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1991-02-01",
+      "domain": "qa_core"
+    }
+  ],
+
+  "claims": [
+    {
+      "id": "iverson_qa2_replaces_trig_calc",
+      "work": "iverson_qa2_natural_arithmetic",
+      "quote": "Quantum Arithmetic is not a replacement for conventional mathematics courses, however it does replace most Trigonometry, some Algebra, and all Calculus.",
+      "source_locator": "file:docs/theory/iverson_qa2_excerpts.md#introduction",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1993-11-01",
+      "domain": "qa_core",
+      "title": "Iverson QA-2 (1993): QA replaces most trig, some algebra, all calculus"
+    },
+    {
+      "id": "iverson_qa2_female_roots_parity",
+      "work": "iverson_qa2_natural_arithmetic",
+      "quote": "If the first integer is 2-par, the fourth integer will be 4-par. If the first integer is 4-par, then the fourth will be 2-par.",
+      "source_locator": "file:docs/theory/iverson_qa2_excerpts.md#ch1-doubling",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1993-11-01",
+      "domain": "qa_core",
+      "title": "Iverson QA-2 Ch.1 Doubling: female-root 2-par / 4-par parity law"
+    },
+    {
+      "id": "iverson_qa2_halley_qn",
+      "work": "iverson_qa2_natural_arithmetic",
+      "quote": "The Quantum Number for the orbit of Halley's Comet is 1, 29, 30, 59. Its ratio between the perigee and apogee is 1:59. This is a much elongated elliptical orbit.",
+      "source_locator": "file:docs/theory/iverson_qa2_excerpts.md#ch1-doubling-p7",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1993-11-01",
+      "domain": "qa_core",
+      "title": "Iverson QA-2 Ch.1 Doubling: Halley's Comet QN=(1,29,30,59)"
+    },
+    {
+      "id": "iverson_pyth3_trig_identities",
+      "work": "iverson_pyth3_enneagram",
+      "quote": "All trigonometric formulae are transposable into any trigonometric function. Tan=F/C, or Tan=ab/2de. Sin=F/G or Sin=ab/(d²+e²) = b.",
+      "source_locator": "file:docs/theory/iverson_pyth3_enneagram_excerpts.md#introduction-trig-identities",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2006-01-01",
+      "domain": "qa_core",
+      "title": "Iverson Pyth-3 Introduction: Tan=F/C, Sin=F/G QA identity transposition"
+    },
+    {
+      "id": "iverson_pyth3_fermat_3d_cubes",
+      "work": "iverson_pyth3_enneagram",
+      "quote": "In the case of 'Fermat's Last Theorem', the sum of two squares, one even and one odd, will be an odd square. The extension of this to third dimension is 'The sum of three cubes can be equal to the cube.' (3²+4²=5²) and (3³+4³+5³=6³)",
+      "source_locator": "file:docs/theory/iverson_pyth3_enneagram_excerpts.md#introduction-fermat-3d",
+      "extraction_method": "manual",
+      "confidence_override": 0.85,
+      "confidence_override_reason": "stitched two-sentence paraphrase span: source prints the Fermat framing and the 3D extension on consecutive but non-contiguous lines; quoted material is verbatim but assembled into one claim body for readability. Flagged for re-extraction in Phase 4.6 with a line-accurate locator.",
+      "valid_from": "2006-01-01",
+      "domain": "qa_core",
+      "title": "Iverson Pyth-3 Introduction: Fermat sum-of-squares extended to 3D cubes"
+    },
+    {
+      "id": "iverson_qa_vol_ii_synchronous_harmonics_name",
+      "work": "iverson_qa_vol_ii_synchronous_harmonics",
+      "quote": "Quantum Arithmetic - Volume II / Books 3 & 4 / New Wave Theory - Synchronous Harmonics / by Ben Iverson / February, 1991 / (long lost book - now found 11/10/05)",
+      "source_locator": "file:docs/theory/iverson_qa_vol_ii_excerpts.md#frontmatter",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1991-02-01",
+      "domain": "qa_core",
+      "title": "Iverson QA Vol.II title page: Synchronous Harmonics naming (1991/2005)"
+    }
+  ],
+
+  "observations": [],
+  "contradicts": [],
+  "supersedes": [],
+  "derived_from": []
+}

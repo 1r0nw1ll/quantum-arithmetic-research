@@ -168,6 +168,10 @@ class Node:
         source_locator: str,
         body: str = "",
         extraction_method: str = "manual",
+        confidence: float = 1.0,
+        valid_from: str = "",
+        valid_until: str = "",
+        domain: str = "",
     ) -> "Node":
         """Factory for a primary-source container (book / paper / wiki page).
 
@@ -175,6 +179,11 @@ class Node:
         node_type='Work'. Extractors should prefer this over constructing
         Node directly — it guarantees the SourceWork invariants that
         [225] v4 KG11 and [253] SC2 check at cert time.
+
+        Phase 4.5 fields (confidence/valid_from/valid_until/domain) flow
+        into the schema v4 columns and feed the [254] ranker. `confidence`
+        default of 1.0 matches the extraction_confidence map for
+        method=manual; [253] SC9 checks consistency at cert time.
         """
         return cls(
             id=f"work:{work_id}",
@@ -185,6 +194,10 @@ class Node:
             epistemic_status="source_work",
             method=extraction_method,
             source_locator=source_locator,
+            confidence=confidence,
+            valid_from=valid_from,
+            valid_until=valid_until,
+            domain=domain,
         )
 
     @classmethod
@@ -196,6 +209,10 @@ class Node:
         source_locator: str,
         extraction_method: str,
         title: str | None = None,
+        confidence: float = 1.0,
+        valid_from: str = "",
+        valid_until: str = "",
+        domain: str = "",
     ) -> "Node":
         """Factory for a verbatim quote from a primary source.
 
@@ -203,6 +220,12 @@ class Node:
         node_type='Claim'. `body` carries the verbatim quote (this is
         what [253] SC1 checks for non-empty). extraction_method must be
         in {manual, ocr, llm, script} per [253] SC3.
+
+        Phase 4.5 fields (confidence/valid_from/valid_until/domain) flow
+        into the schema v4 columns and feed the [254] ranker. `confidence`
+        default of 1.0 matches extraction_method=manual; the canonical
+        map lives at tools/qa_kg/extraction_confidence.json and [253] SC9
+        checks consistency at cert time.
         """
         if not quote:
             raise ValueError("source_claim requires non-empty quote")
@@ -220,6 +243,10 @@ class Node:
             epistemic_status="source_claim",
             method=extraction_method,
             source_locator=source_locator,
+            confidence=confidence,
+            valid_from=valid_from,
+            valid_until=valid_until,
+            domain=domain,
         )
 
 

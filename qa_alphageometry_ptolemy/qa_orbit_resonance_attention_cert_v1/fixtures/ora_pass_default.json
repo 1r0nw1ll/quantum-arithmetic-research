@@ -1,0 +1,57 @@
+{
+  "schema_version": "QA_ORBIT_RESONANCE_ATTENTION_CERT.v1",
+  "certificate_id": "qa.cert.orbit_resonance_attention.pass.default.v1",
+  "cert_type": "qa_orbit_resonance_attention_cert",
+  "title": "QA Orbit-Resonance Attention: three rules certified orbit-invariant under T on S_9",
+
+  "created_utc": "2026-04-19T00:00:00Z",
+
+  "source_attribution": "GLM-5 Team, 'GLM-5: from Vibe Coding to Agentic Engineering', arXiv:2602.15763 [cs.LG], Feb 2026 — empirical target whose DSA non-deterministic-topk entropy-collapse failure mode this cert's operator eliminates by construction. Reference prototype at qa_lab/qa_orbit_resonance_attention.py. Design doc at docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md. Connects cert [214] (QA Norm-Flip Signed-Temporal — Eisenstein norm classification of five T-orbit families on S_9), cert [234] (QA Chromogeometry Pythagorean Identity — cross-pair bilinear resonance form), cert [209] (QA Signal Generator Inference — T-operator canonical). Will Dale + Claude 2026-04-19.",
+
+  "theorem_statement": "Define three resonance rules on token tuples (b, e) in {1..9}^2: family_match (same T-orbit family among Fibonacci/Lucas/Phibonacci/Tribonacci/Ninbonacci), norm_match (same Eisenstein norm f(b,e)=b*b+b*e-e*e mod 9), chromogeometry (cross-pair C_i*C_j + F_i*F_j == G_i*G_j mod 9 with (C,F,G)=(2de, ba, e*e+d*d) computed raw). All three are deterministic functions of integer tuples with no learned parameters. All three are orbit-invariant under T evolution on S_9: the attention matrix at integer path-time t equals the matrix at t=0 for every t.",
+
+  "modulus": 9,
+
+  "canonical_witness_tokens": [[1, 1], [1, 2], [1, 3], [1, 4], [3, 3], [9, 9], [2, 5], [5, 4], [7, 2], [4, 6]],
+
+  "family_labels_expected": ["fibonacci", "fibonacci", "lucas", "phibonacci", "tribonacci", "ninbonacci", "phibonacci", "phibonacci", "lucas", "lucas"],
+
+  "determinism": {
+    "repeats": 100,
+    "bitwise_identical": true,
+    "note": "Same input tuples produce bitwise-identical attention matrix across 100 invocations for every rule. Structurally ensured: deterministic integer functions on integer input; no learned parameters, no stochastic operators, no float state."
+  },
+
+  "orbit_invariance_s9": {
+    "steps_tested": 24,
+    "family_match_invariant": true,
+    "norm_match_invariant": true,
+    "chromogeometry_invariant": true,
+    "note": "Verified by independent recomputation in validator: at every step k in 0..24, attention(T^k(tokens)) == attention(tokens) for each of the three rules. Structural reasons: (i) T preserves orbit membership so family is pointwise invariant; (ii) Eisenstein norm flips sign simultaneously across all tokens under T (cert [214]) preserving pairwise equality; (iii) the cross-pair Pythagorean bilinear identity is T-preserved on S_9."
+  },
+
+  "granularity_crosscut": {
+    "family_without_norm": [[1, 1], [1, 2]],
+    "norm_without_family": [[3, 3], [9, 9]],
+    "note": "family_match and norm_match crosscut on S_9. (1,1) and (1,2) are both Fibonacci-family but have Eisenstein norms 1 and 8 respectively — family_match includes them, norm_match excludes. (3,3) is Tribonacci (satellite), (9,9) is Ninbonacci (singularity), both norm 0 — norm_match includes them, family_match excludes."
+  },
+
+  "cross_references": [
+    {"family": 209, "name": "QA Signal Generator Inference", "relation": "t_operator_canonical"},
+    {"family": 214, "name": "QA Norm-Flip Signed-Temporal", "relation": "eisenstein_norm_family_classification"},
+    {"family": 234, "name": "QA Chromogeometry Pythagorean Identity", "relation": "cross_pair_resonance_form"}
+  ],
+
+  "witnesses": [
+    {"family": "fibonacci", "representative": [1, 1], "eisenstein_norm_mod9": 1},
+    {"family": "lucas", "representative": [1, 3], "eisenstein_norm_mod9": 4},
+    {"family": "phibonacci", "representative": [1, 4], "eisenstein_norm_mod9": 7},
+    {"family": "tribonacci", "representative": [3, 3], "eisenstein_norm_mod9": 0},
+    {"family": "ninbonacci", "representative": [9, 9], "eisenstein_norm_mod9": 0}
+  ],
+
+  "design_claim_context": "This operator is the QA-native replacement for DSA's learned-scoring-plus-top-k attention. GLM-5 reported that non-deterministic torch.topk caused entropy collapse within a few RL steps; they patched by forcing deterministic topk and freezing the indexer during RL. Here the failure mode is structurally impossible — there is no scoring function and no top-k. Attention is a deterministic function of integer orbit structure, orbit-invariant under evolution.",
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

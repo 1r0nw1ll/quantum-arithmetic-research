@@ -7135,6 +7135,37 @@ def _validate_kg_authority_ranker_cert(base_dir):
     return None
 
 
+def _validate_orbit_resonance_attention_cert_family(base_dir):
+    """QA Orbit-Resonance Attention Cert family [256] — certifies a QA-native attention operator where attention is a deterministic pairwise resonance relation on T-orbit tuples (no scoring function, no top-k, no learned parameters). Three rules (family_match, norm_match, chromogeometry) are orbit-invariant under T evolution on S_9. Eliminates the GLM-5 DSA non-deterministic-torch.topk entropy-collapse failure mode (arXiv:2602.15763, Feb 2026) by construction. Connects [214] norm-flip, [234] chromogeometry, [209] signal generator. Reference: qa_lab/qa_orbit_resonance_attention.py. Design: docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md. Checks ORA_1+DET/A1/INV_FAM/INV_NORM/INV_CHR/GRAN/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_orbit_resonance_attention_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_resonance_attention_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_resonance_attention_cert_v1/qa_orbit_resonance_attention_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_resonance_attention_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_resonance_attention_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_resonance_attention_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_kg_agent_write_surface_cert(base_dir):
     """QA-KG Agent Write Surface Cert [255] v1: validates Phase 6 MCP agent-integration firewall. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg_mcp/server.py (Dale, 2026); memory/project_qa_mem_review_role.md (Dale, 2026). Gates W1 (MCP surface = 4 tools via AST), W2 (agent upserts confined to extractor/tests/cert-validators), W3a (direct-DB-write detector scans wrapper ledger), W3b (promoted-from edges must carry mcp_session marker), W4 (rate_limit.increment raises at cap), W5 (authority immutable both directions), W6 (READ_ONLY capability omits promote from tools/list), W7 (every MCP tool call logs to query_log), W8 (no except-pass swallows in tools/qa_kg_mcp/ + tools/qa_kg/_audit.py). All gates HARD. Landing this cert flips the alpha-bar from 'NOT agent memory' to 'alpha agent memory + authoritative project memory' per memory/project_qa_mem_review_role.md."""
     import subprocess
@@ -8176,6 +8207,11 @@ FAMILY_SWEEPS = [
      "Phase 6 MCP agent-integration firewall. Validates MCP surface = exactly 4 tools (qa_kg_search, qa_kg_get_node, qa_kg_neighbors, qa_kg_promote_agent_note), agent-write path cannot create non-AgentNote types, direct DB writes to qa_kg.db bypassing MCP are surfaced via qa_security_audit, per-session rate limit fires at cap, authority is immutable both directions, and every MCP tool call writes to query_log. Gates W1-W8 all HARD.",
      "255_qa_kg_agent_write_surface_cert_v1",
      "qa_kg_agent_write_surface_cert_v1", True),
+    (256, "QA Orbit-Resonance Attention Cert family",
+     _validate_orbit_resonance_attention_cert_family,
+     "Certifies a QA-native attention operator: attention is a deterministic pairwise resonance relation on T-orbit tuples, no learned parameters, no stochastic top-k. Three resonance rules (family_match, norm_match, chromogeometry) are orbit-invariant under T evolution on S_9: attention matrix at path-time t equals matrix at t=0 for every t. Independently recomputed over 24 T-steps on 10 diverse tokens covering all 5 families (Fibonacci/Lucas/Phibonacci/Tribonacci/Ninbonacci). Structurally eliminates the GLM-5 DSA non-deterministic-torch.topk entropy-collapse failure mode (arXiv:2602.15763, Feb 2026) by construction. Connects [214] Norm-Flip Signed-Temporal (orbit family classification), [234] Chromogeometry Pythagorean Identity (cross-pair resonance), [209] Signal Generator Inference (T-operator canonical). Reference prototype qa_lab/qa_orbit_resonance_attention.py. Design doc docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md. Will Dale + Claude 2026-04-19. Checks ORA_1+DET/A1/INV_FAM/INV_NORM/INV_CHR/GRAN/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
+     "256_qa_orbit_resonance_attention_cert",
+     "qa_orbit_resonance_attention_cert_v1", True),
 ]
 
 

@@ -227,3 +227,157 @@ All five runs are reproducible from the files committed in this directory. Run 4
 The QA semantic layer (σ, μ, λ generators; `(b,e,d,a,qtag,fail)` state space; first-class failure algebra per `docs/specs/QA_TLA_PLUS.md` §2–4) is **now formally model-checked for the first time**, bounded to `CAP = 20, KSet = {2,3}`. Five structural invariants hold across 504 reachable states. Non-vacuity proved for `Inv_TupleClosed`. Generator-set differential answers the 2025 ChatGPT question: σ-OOB is invariant across generator sets; λ-OOB, σ-FQ, λ-FQ are not, reflecting reachability loss rather than structural failure-class change. One parse bug (`\o` without `Sequences`) caught and fixed by the first run of a 111-day-old spec.
 
 This is the QA analog of `llm_qa_wrapper/spec/TLC_PROOF_LEDGER.md` for the protocol layer — the *semantic* layer now has its own proof record.
+
+---
+
+# Lane 2 — QA Axioms as TLA+ temporal invariants (2026-04-20)
+
+**Session:** `cert-qa-axioms-tla` / claude-main-1740
+**Authority:** `docs/specs/QA_TLA_PLUS_AUDIT.md` §5 Lane 2; `CLAUDE.md` "QA Axiom Compliance" section; `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md` (Theorem NT).
+**New artifacts:** `QARM_v02_Failures_A1.{tla,cfg}`, `QAAxioms.{tla,cfg}`, `QAAxioms_negative_{A1,A2,S2,T1,T2,NT}.{tla,cfg}`.
+
+This section records the first TLC encoding of the six QA axioms (A1/A2/T2/S1/S2/T1) plus Theorem NT as temporal invariants over the QARM generator algebra. The encoding lifts the axioms from lint-level enforcement (`tools/qa_axiom_linter.py` on source text) to model-checker-level enforcement (TLC over the reachable state graph).
+
+Authoring discipline (per audit §5 Lane 2 and prompt scope):
+- Do NOT modify `QARM_v02_Failures.tla` in place — the Dec-30 Lane 1 baseline is preserved.
+- Author `QARM_v02_Failures_A1.tla` as the A1-corrected variant (`b, e \in 1..CAP`) and re-baseline TLC against it (Run 6).
+- `QAAxioms.tla` EXTENDS `QARM_v02_Failures_A1` and adds observer-layer variables + seven named invariants.
+- One axiom per invariant (no conflation). S1 is structural — no runtime check but explicit state-predicate marker.
+- Six negative specs, one per runtime-checkable invariant, mirroring the wrapper `cert_gate_negative_*` pattern.
+
+## Run 6 — `QARM_v02_Failures_A1` (A1-corrected positive baseline)
+
+**Purpose:** record the A1-corrected baseline separately from Lane 1's 121-inits / 504-states result, so both are citable artifacts.
+
+**Config:** `CAP = 20, KSet = {2, 3}`, INIT Init, NEXT Next (same as Run 1).
+
+**Delta vs Run 1:**
+- Initial states: **121 → 90** (−31, all-zero and half-zero initial states eliminated by `b, e \in 1..CAP`)
+- Distinct states: **504 → 374** (−130)
+- Total states generated: 1012 → 752
+- Depth: 2 (unchanged); all 5 structural invariants still hold; wall time 1 s.
+
+**Result:** `Model checking completed. No error has been found.`
+
+**Interpretation:** removing initial states with `b = 0` or `e = 0` (31 such states out of 121) cascades through the successor graph to eliminate 130 downstream states, a 4.2× amplification factor. The A1 variant is the canonical QARM base for Lane 2; Run 1's 121/504 remains the apples-to-apples comparison point for generator-set differentials (Runs 3–5).
+
+## Run 7 — `QAAxioms` (positive, all 7 invariants)
+
+**Purpose:** verify that the seven axiom invariants (A1, A2, S1, S2, T1, T2, NT) hold over the QA + observer-layer reachable state graph.
+
+**Observer-layer design (first-try, works):**
+- Two new variables: `obs_float` (observer scalar; 0 at Init, projected value `a` post-Project) and `obs_cross_count` (boundary tally; 1 at Init, 2 after Project).
+- New `Project` action: unique QA → observer output crossing. `obs_float' = a`, `obs_cross_count' = 2`, UNCHANGED on all QA-layer vars.
+- Post-project absorbing stutter: freezes ext state after the output crossing.
+- `QA_firewalled == obs_cross_count = 1 /\ Next /\ UNCHANGED obs_vars` — every base-spec Next move carries UNCHANGED on observer variables by construction. This is where T2 is enforced structurally.
+
+**Config:** `CAP = 20, KSet = {2, 3}`, INIT Init_ext, NEXT Next_ext. Invariants: A1, A2, S1, S2, T1, T2, NT.
+
+**Result:** `Model checking completed. No error has been found.`
+- Initial states: **90** (inherited from A1 base)
+- Distinct states: **470** (+96 vs Run 6: the Project action + post-project stutter add observer-layer successor states for each reachable QA state)
+- Total states generated: 944
+- Depth: **3** (Run 6 was depth 2; Project adds a third layer: QA → QA → Project)
+- Wall time: 1 s
+- All seven invariants confirmed hold.
+
+**Interpretation:** all six QA axioms plus Theorem NT are consistent with the QARM generator algebra on the bounded model. The 6-fold invariant stack passes over the full 470-state reachable graph. The depth-3 result reflects the intended temporal structure: discrete QA steps followed by at most one output-boundary crossing.
+
+## Run 8 — `QAAxioms_negative_A1` (non-vacuity of `Inv_A1_NoZero`)
+
+**Spec:** standalone module; single action `BrokenA1` writes `b' = 0`.
+**Expected:** `Inv_A1_NoZero` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_A1_NoZero is violated.`
+- State 1: b=1, e=1 (legal A1 Init).
+- State 2: b=0 (BrokenA1 fires).
+- 2 states generated, 2 distinct, depth 2, 1 s.
+
+## Run 9 — `QAAxioms_negative_A2` (non-vacuity of `Inv_A2_DerivedCoords`)
+
+**Spec:** writes `d' = 99` while `b' + e' = 4`, breaking `d = b + e`.
+**Expected:** `Inv_A2_DerivedCoords` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_A2_DerivedCoords is violated.`
+- State 2: b=2, e=2, d=99 (should be 4).
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Run 10 — `QAAxioms_negative_S2` (non-vacuity of `Inv_S2_IntegerState`)
+
+**Spec:** writes `b' = "ghost"` (a string, non-Nat).
+**Expected:** `Inv_S2_IntegerState` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_S2_IntegerState is violated.`
+- State 2: b="ghost" (not in Nat).
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Run 11 — `QAAxioms_negative_T1` (non-vacuity of `Inv_T1_IntegerPathTime`)
+
+**Spec:** writes `lastMove' = "t_continuous"`, outside the finite generator alphabet.
+**Expected:** `Inv_T1_IntegerPathTime` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_T1_IntegerPathTime is violated.`
+- State 2: lastMove="t_continuous" (not in {"NONE","σ","μ","λ"}).
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Run 12 — `QAAxioms_negative_T2` (non-vacuity of `Inv_T2_FirewallRespected`)
+
+**Spec:** QA-layer pseudo-step that writes `obs_float' = 42` while `obs_cross_count` remains 1. Simulates a continuous output leaking back as QA state — the T2 violation class.
+**Expected:** `Inv_T2_FirewallRespected` (`(obs_cross_count = 1) => (obs_float = 0)`) violated.
+**Actual:** `Error: Invariant Inv_T2_FirewallRespected is violated.`
+- State 2: obs_cross_count=1, obs_float=42 (broke firewall).
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Run 13 — `QAAxioms_negative_NT` (non-vacuity of `Inv_NT_NoObserverFeedback`)
+
+**Spec:** writes `obs_cross_count' = 3`, representing a third boundary crossing (observer output feeding back into QA as a causal input — the Theorem NT violation class).
+**Expected:** `Inv_NT_NoObserverFeedback` (`obs_cross_count \in {1, 2}`) violated.
+**Actual:** `Error: Invariant Inv_NT_NoObserverFeedback is violated.`
+- State 2: obs_cross_count=3.
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Lane 2 proof-pair summary
+
+| Run | Spec | Purpose | States | Result |
+|---|---|---|---|---|
+| 6 | `QARM_v02_Failures_A1` | A1-corrected positive baseline | 90 init / 374 distinct | no error, 5 invariants hold |
+| 7 | `QAAxioms` | All 7 axiom invariants positive | 90 init / 470 distinct | no error, A1+A2+S1+S2+T1+T2+NT hold |
+| 8 | `QAAxioms_negative_A1` | Non-vacuity of Inv_A1_NoZero | 2 | invariant violated as expected |
+| 9 | `QAAxioms_negative_A2` | Non-vacuity of Inv_A2_DerivedCoords | 2 | invariant violated as expected |
+| 10 | `QAAxioms_negative_S2` | Non-vacuity of Inv_S2_IntegerState | 2 | invariant violated as expected |
+| 11 | `QAAxioms_negative_T1` | Non-vacuity of Inv_T1_IntegerPathTime | 2 | invariant violated as expected |
+| 12 | `QAAxioms_negative_T2` | Non-vacuity of Inv_T2_FirewallRespected | 2 | invariant violated as expected |
+| 13 | `QAAxioms_negative_NT` | Non-vacuity of Inv_NT_NoObserverFeedback | 2 | invariant violated as expected |
+
+**Claim:** the six QA axioms (A1/A2/T2/S1/S2/T1) plus Theorem NT are now encoded as TLA+ temporal invariants, model-checked positively on the QARM generator algebra (Run 7: 470 states, 0 errors, CAP=20/KSet={2,3}), and each runtime-checkable invariant has a dedicated non-vacuity test with a ≤2-state counterexample (Runs 8–13). S1 is documented as structural (syntactic predicate over module text, not reachable-state predicate) and lifted to a trivially-true state formula `b * b >= 0` that locks in the `b*b` convention at the module level.
+
+## Lane 2 scope limitations (honest statement)
+
+1. **Bounded model only.** Same CAP=20, KSet={2,3} bound as Lane 1. All Lane 2 invariants apply to the 470-state reachable set; extending to CAP=24 (applied mod-24 domain) is scheduled next.
+
+2. **S1 is structural, not runtime.** TLA+ has no `^2` operator on the state variables used in this module; the S1 axiom's runtime check is a tautology (`b * b >= 0`). Syntactic enforcement over module TEXT is the responsibility of `tools/qa_axiom_linter.py` and pre-commit grep. This is noted in the `Inv_S1_NoSquareOperator` docstring.
+
+3. **Theorem NT is encoded at the spatial + temporal level, not the syntactic level.** The invariants `Inv_T2_FirewallRespected` (spatial: observer state immutable while `obs_cross_count = 1`) and `Inv_NT_NoObserverFeedback` (temporal: at most two boundary crossings per trace) together enforce "continuous functions are observer projections only." A fully syntactic encoding — "the NEXT action of a QA move does not syntactically reference observer variables on the RHS" — is not expressible as a TLC state invariant. The present encoding is the tightest runtime-checkable approximation.
+
+4. **Observer-layer variable is abstract.** `obs_float` is bounded (`0..(3*CAP)`) and represents "the observer scalar" generically rather than a specific continuous function. Domain-specific Lane 2 extensions (e.g., "the observer projection is cosine similarity") would subclass this module.
+
+5. **Negative specs do not stress the extended Next relation.** Each negative spec is a minimal standalone module with a single violating action, mirroring the wrapper `cert_gate_negative_*` pattern. They do not try to find counterexamples to the axioms via the QAAxioms.Next_ext action algebra itself (the positive Run 7 already covers reachable violations, of which there are none).
+
+6. **Lane 2 is first-try on Theorem NT.** The prompt allowed up to two tries before falling back to a design memo. The encoding above (obs_float + obs_cross_count + Project action) was first-try, produced a clean model-check, and demonstrably distinguishes T2 (spatial firewall) from NT (temporal bound) via separate invariants and separate negative specs. No design memo required.
+
+## Updated proof-inventory totals
+
+| Layer | Runs | Artifacts |
+|---|---|---|
+| Lane 1 (QARM + non-vacuity Inv_TupleClosed + generator differential) | 1–5 | 5 specs |
+| Lane 2 (A1 base + QA axioms + 6 non-vacuity tests) | 6–13 | 8 specs |
+
+Eight new `.tla` files + eight new `.cfg` files authored 2026-04-20 under session `cert-qa-axioms-tla`. All runs reproducible from the spec and `.cfg` files in this directory via the invocation pattern documented at the top of this ledger.
+
+## External contribution readiness
+
+`QAAxioms.tla` is authored in the self-contained style of the Paxos / Raft exemplars under `github.com/tlaplus/examples`: one module + cfg + paired non-vacuity tests per runtime-checkable invariant + prose comments that explain the framing. Submittable upstream as a single directory after repo-specific identifiers are generalized (the base QARM spec would accompany it).
+
+## Next steps (post-Lane 2)
+
+1. Author non-vacuity specs for the remaining 4 Lane 1 invariants (InBounds, QDef, FailDomain, MoveDomain).
+2. Model-check `QACertificateSpine.tla` — still no `.cfg`, still 111+ days dormant.
+3. Scale QAAxioms to CAP=24 (applied mod-24 domain). Expect 4×–5× state-count growth; should remain tractable.
+4. Open externalization: submit `QAAxioms.tla` + documentation to `tlaplus/examples`.
+

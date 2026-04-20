@@ -20,7 +20,7 @@ This places QA in a specific lineage and fills a specific gap:
 | System | Specifies |
 |---|---|
 | Hoare logic | Pre/post-conditions on program states |
-| TLA+ / Lamport | Behaviors of distributed systems over time |
+| TLA+ / Lamport | Behaviors of distributed systems over time — see `docs/specs/QA_TLA_PLUS.md` for QA↔TLA+ integration + `docs/specs/QA_TLA_PLUS_AUDIT.md` for state audit |
 | Lean / Coq | Types as propositions; proofs as programs |
 | **QA** | **Reachable vs unreachable structure in modular dynamical systems + failure algebra** |
 

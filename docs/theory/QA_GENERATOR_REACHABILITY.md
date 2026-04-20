@@ -37,12 +37,49 @@ Reachability set = closure of `{seed}` under the listed generators. States count
 
 5. **`{μ, ν}` without σ is weak**: 6–12 states from a cosmos seed (ν has period 6, μ is an involution, their joint closure is a dihedral-like small group). σ is essential.
 
-## Upshot
+## Upshot (on mod 9)
 
 ChatGPT's framing "ν collapses torus → full connectivity" is accurate *in effect but not in uniqueness*: ν is one of two sufficient bridges alongside σ (μ is the other, and simpler). The correct minimal statement is:
 
-> `{σ, μ}` or `{σ, ν}` → full within-class reachability on D₉².
+> On mod 9: `{σ, μ}` or `{σ, ν}` → full within-class reachability on D₉².
 > The 3-class partition (Cosmos / Satellite / Singularity) is invariant under the full generator group `⟨σ, μ, ν⟩`.
+
+## Does it generalize to mod 24? No.
+
+A review follow-up asked whether this should be elevated to a "QA Connectivity Theorem." The claim was tested against mod 24 and **fails**.
+
+**mod 24 structure (directly measured):**
+- Cosmos = 567, Satellite = 8, Singularity = 1 (total = 576 = 24²)
+- σ alone partitions Cosmos into **28 components** (orbits of size 24 with a tail of smaller periods — e.g., there's a period-12 orbit)
+- `{σ, μ}` collapses those 28 σ-orbits into **6 components** of sizes:
+
+  | component | size |
+  |-----------|-----:|
+  | 1         | 384  |
+  | 2         |  96  |
+  | 3         |  48  |
+  | 4         |  24  |
+  | 5         |  12  |
+  | 6         |   3  |
+  | **sum**   | **567** ✓ |
+
+- The largest component contains the σ-orbit of (1,1). From (1,1), `{σ,μ}` reaches 384/567 ≈ 68% of Cosmos. The remaining 32% live in 5 other components that `{σ,μ}` cannot reach from this seed.
+
+**ν is not defined on mod 24.** ν was `(b,e) → (qa_mod(5·b), qa_mod(5·e))` on mod 9 because `5 = 2⁻¹ (mod 9)` — i.e. ν = componentwise halving. On mod 24, `gcd(2, 24) = 2`, so 2 has no multiplicative inverse. The "halving" interpretation does not transfer. Any mod-24 analogue of ν would require choosing a different unit in `(Z/24Z)*`, and its reachability behaviour would need to be measured separately, not assumed.
+
+## Corrected statement
+
+> **On mod 9 (only):** `{σ, μ}` and `{σ, ν}` both generate a single Cosmos component, with Satellite and Singularity preserved as separate classes.
+>
+> **On mod 24:** `{σ, μ}` generates 6 distinct Cosmos components of sizes {384, 96, 48, 24, 12, 3}. The "full within-class connectivity" property is mod-9 specific, not a general QA invariant.
+>
+> **What IS general:** the 3-class partition (Cosmos / Satellite / Singularity) is preserved by σ, μ, and any ν-analogue for every m where these are defined. Reachability happens within a class, never across.
+
+## Open questions
+
+1. **Structure of the 6 mod-24 components**: what distinguishes them? Likely a finer invariant than the 3-class partition — perhaps a mod-3 or mod-8 sub-invariant, or the σ-orbit period (which ranges in {3, 6, 12, 24} per `qa_orbit_rules.py` docstring).
+2. **Can a different generator bridge the 6 mod-24 components?** Needs empirical test with candidate generators (e.g., scalar multiplication by units of (Z/24Z)* = {1, 5, 7, 11, 13, 17, 19, 23}).
+3. **Is the mod-9 "full connectivity" related to 9 = 3² having a unique prime factor?** Plausible conjecture: connectivity of `{σ, μ}` depends on the structure of `(Z/m Z)*`, not just the alphabet size.
 
 ## Reproduce
 

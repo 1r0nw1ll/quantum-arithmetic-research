@@ -486,11 +486,80 @@ The theorem was aspirational (per its comment: "every decision layer admits a fi
 
 ---
 
-## Next steps (post-Lane 2 follow-up)
+---
 
-1. Author non-vacuity specs for the remaining 4 Lane 1 invariants (InBounds, QDef, FailDomain, MoveDomain).
+# Lane 1 Non-Vacuity Sweep — Runs 17–20 (2026-04-20)
+
+**Session:** `cert-lane1-nonvacuity` / claude-main-1740
+**Authority:** closes QARM_PROOF_LEDGER.md §"Scope limitations" item 2 and §"Next steps" item 1. Mirrors Lane 1 Run 2 pattern (QARM_v02_Failures_negative.tla).
+
+Lane 1 shipped with only one non-vacuity spec (Inv_TupleClosed, Run 2). The other four structural invariants (InBounds, QDef, FailDomain, MoveDomain) were listed as open non-vacuity work. This sweep closes that gap — each Lane 1 invariant now has a paired non-vacuity test.
+
+## Run 17 — `QARM_v02_Failures_negative_bounds` (non-vacuity of `Inv_InBounds`)
+
+**Spec:** writes `b' = 99`, `d' = 100`, `a' = 101` — all outside `0..CAP` for the production `CAP = 20`.
+**Expected:** `Inv_InBounds` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_InBounds is violated.`
+- State 2: b=99, d=100, a=101 — outside 0..20.
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Run 18 — `QARM_v02_Failures_negative_qdef` (non-vacuity of `Inv_QDef`)
+
+**Spec:** writes `qtag' = 9999` while `(b',e',d',a') = (2,2,4,6)` whose canonical duo-modular tag is `QDef(2,2,4,6) = 24·Phi9(6) + Phi24(6) = 24·6 + 6 = 150`.
+**Expected:** `Inv_QDef` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_QDef is violated.`
+- State 2: b=2, e=2, d=4, a=6, qtag=9999 — does not equal QDef(2,2,4,6)=150.
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Run 19 — `QARM_v02_Failures_negative_faildomain` (non-vacuity of `Inv_FailDomain`)
+
+**Spec:** writes `fail' = "PANIC"` — outside the declared fail alphabet `{OK, OUT_OF_BOUNDS, FIXED_Q_VIOLATION, ILLEGAL}`.
+**Expected:** `Inv_FailDomain` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_FailDomain is violated.`
+- State 2: fail="PANIC" — unknown fail class.
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Run 20 — `QARM_v02_Failures_negative_movedomain` (non-vacuity of `Inv_MoveDomain`)
+
+**Spec:** writes `lastMove' = "γ"` — γ is not in `{NONE, σ, μ, λ}`.
+**Expected:** `Inv_MoveDomain` violated, 2-state counterexample.
+**Actual:** `Error: Invariant Inv_MoveDomain is violated.`
+- State 2: lastMove="γ" — outside the generator alphabet.
+- 2 states, 2 distinct, depth 2, 1 s.
+
+## Lane 1 non-vacuity completion summary
+
+All five Lane 1 structural invariants now have dedicated non-vacuity specs:
+
+| Invariant | Negative spec | Run |
+|---|---|---|
+| Inv_TupleClosed | `QARM_v02_Failures_negative.tla` | 2 |
+| Inv_InBounds | `QARM_v02_Failures_negative_bounds.tla` | 17 |
+| Inv_QDef | `QARM_v02_Failures_negative_qdef.tla` | 18 |
+| Inv_FailDomain | `QARM_v02_Failures_negative_faildomain.tla` | 19 |
+| Inv_MoveDomain | `QARM_v02_Failures_negative_movedomain.tla` | 20 |
+
+**Claim:** Run 1's "no error" on `QARM_v02_Failures` over 504 reachable states now has full non-vacuity backing. Every one of the five structural invariants has been independently confirmed to fire on a minimal 2-state counterexample, so the positive result is not vacuous on any single invariant — each actively detects its violation class. Parity with the wrapper layer's four-invariant non-vacuity coverage (`cert_gate_negative_{chain,bind,composition}.tla` plus the original `cert_gate_negative.tla`) is now matched at the QA-semantic layer.
+
+---
+
+# Cumulative summary — 20 TLC runs total
+
+- Lane 1 positives + differentials: 5 runs (Runs 1–5)
+- Lane 2 QA axioms (A1/A2/S1/S2/T1/T2/NT): 8 runs (Runs 6–13)
+- Lane 2 follow-up (CAP=24 + QACertificateSpine): 3 runs (Runs 14–16)
+- Lane 1 non-vacuity sweep: 4 runs (Runs 17–20)
+
+All 20 runs reproducible from the spec + `.cfg` files in this directory.
+
+---
+
+## Next steps (post-Lane 1 non-vacuity sweep)
+
+1. *Completed 2026-04-20 Runs 17–20 — non-vacuity for InBounds, QDef, FailDomain, MoveDomain.*
 2. *Completed 2026-04-20 Runs 15–16 — QACertificateSpine first-ever model-check. Theorem falsified; fix is a design decision for Will.*
 3. *Completed 2026-04-20 Run 14 — CAP=24 scale of QAAxioms. 686 distinct states, 1.46× growth vs CAP=20, all 7 invariants hold.*
-4. Open externalization: submit `QAAxioms.tla` + documentation to `tlaplus/examples`.
-5. **New:** decide fix direction for `FailureFirstClass` — narrow `CertificateStatus` (A) or introduce `WellFormedCertificate` subtype (B). Both are author's-choice semantic decisions; TLC findings are agnostic.
+4. Open externalization: submit `QAAxioms.tla` + documentation to `tlaplus/examples` (planned for fresh session).
+5. Decide fix direction for `FailureFirstClass` — narrow `CertificateStatus` (A) or introduce `WellFormedCertificate` subtype (B). Both are author's-choice semantic decisions; TLC findings are agnostic.
+6. Scale QAAxioms beyond CAP=24 (e.g., 48, 72) to locate TLC's strain point.
 

@@ -44,42 +44,66 @@ ChatGPT's framing "ν collapses torus → full connectivity" is accurate *in eff
 > On mod 9: `{σ, μ}` or `{σ, ν}` → full within-class reachability on D₉².
 > The 3-class partition (Cosmos / Satellite / Singularity) is invariant under the full generator group `⟨σ, μ, ν⟩`.
 
-## Does it generalize to mod 24? No.
+## On mod 24: CRT factorization, not a refutation
 
-A review follow-up asked whether this should be elevated to a "QA Connectivity Theorem." The claim was tested against mod 24 and **fails**.
+Earlier revisions of this doc framed the mod-24 result as "theorem doesn't generalize." **Retracted.** That framing was methodologically wrong: mod-24 component counts are not comparable to mod-9 component counts without a specified morphism, and when we looked for one, the structure turned out to be CRT.
 
-**mod 24 structure (directly measured):**
-- Cosmos = 567, Satellite = 8, Singularity = 1 (total = 576 = 24²)
-- σ alone partitions Cosmos into **28 components** (orbits of size 24 with a tail of smaller periods — e.g., there's a period-12 orbit)
-- `{σ, μ}` collapses those 28 σ-orbits into **6 components** of sizes:
+### Semiconjugacy check (why `δ_A = qa_mod_9` isn't the right demodulation)
 
-  | component | size |
-  |-----------|-----:|
-  | 1         | 384  |
-  | 2         |  96  |
-  | 3         |  48  |
-  | 4         |  24  |
-  | 5         |  12  |
-  | 6         |   3  |
-  | **sum**   | **567** ✓ |
+| candidate δ : D_24² → · | σ semiconjugacy | μ semiconjugacy |
+|---|:---:|:---:|
+| componentwise qa_mod_9 (δ_A) | 276/576 ✗ | 576/576 ✓ |
+| componentwise qa_mod_3 (δ_B, common quotient) | 576/576 ✓ | ✓ |
 
-- The largest component contains the σ-orbit of (1,1). From (1,1), `{σ,μ}` reaches 384/567 ≈ 68% of Cosmos. The remaining 32% live in 5 other components that `{σ,μ}` cannot reach from this seed.
+`δ_A` fails on σ because it discards the mod-8 half of the CRT decomposition. Only `δ_B` (reducing all the way down to the common mod-3 quotient) semiconjugates both generators — but mod 3 has degenerate class structure (sat_div = 1 makes every non-(3,3) state formally "Satellite"), so it says nothing useful about Cosmos connectivity.
 
-**ν is not defined on mod 24.** ν was `(b,e) → (qa_mod(5·b), qa_mod(5·e))` on mod 9 because `5 = 2⁻¹ (mod 9)` — i.e. ν = componentwise halving. On mod 24, `gcd(2, 24) = 2`, so 2 has no multiplicative inverse. The "halving" interpretation does not transfer. Any mod-24 analogue of ν would require choosing a different unit in `(Z/24Z)*`, and its reachability behaviour would need to be measured separately, not assumed.
+### The real structure: CRT factorization
 
-## Corrected statement
+**Proposition (CRT factorization of `{σ, μ}` orbits — empirically verified for m ∈ {9, 24}).**
 
-> **On mod 9 (only):** `{σ, μ}` and `{σ, ν}` both generate a single Cosmos component, with Satellite and Singularity preserved as separate classes.
->
-> **On mod 24:** `{σ, μ}` generates 6 distinct Cosmos components of sizes {384, 96, 48, 24, 12, 3}. The "full within-class connectivity" property is mod-9 specific, not a general QA invariant.
->
-> **What IS general:** the 3-class partition (Cosmos / Satellite / Singularity) is preserved by σ, μ, and any ν-analogue for every m where these are defined. Reachability happens within a class, never across.
+Let `m = a · b` with `gcd(a, b) = 1`. Under the CRT isomorphism
+`(Z/mZ)² ≅ (Z/aZ)² × (Z/bZ)²`,
+the generators `σ(b,e) = (e, qa_mod(b+e))` and `μ(b,e) = (e, b)` are **coordinate-wise in the state pair**, and `σ` is **additive in the ambient ring**. Both act componentwise under CRT. Therefore the `⟨σ, μ⟩`-orbit decomposition on `(Z/mZ)²` is the Cartesian product of the decompositions on `(Z/aZ)²` and `(Z/bZ)²`.
+
+**Induced on Cosmos**: the product restricts to the Cosmos sub-fibers of each factor (since class membership is also componentwise under CRT).
+
+### Empirical verification table (m = 24 = 8 · 3)
+
+Direct enumeration: `{σ,μ}` on (Z/24Z)² yields **8 components**, each of which factors exactly as (mod-3 component) × (mod-8 component). No exceptions.
+
+| mod-24 comp | size | (mod-3 comp, mod-8 comp) | factored size | class on mod 24 |
+|---:|---:|:---:|:---|:---|
+| 0 | 384 | (c3=0, c8=0) | 8 × 48 | Cosmos |
+| 1 |  96 | (c3=0, c8=1) | 8 × 12 | Cosmos |
+| 2 |  48 | (c3=1, c8=0) | 1 × 48 | Cosmos |
+| 3 |  24 | (c3=0, c8=2) | 8 × 3  | Cosmos |
+| 4 |  12 | (c3=1, c8=1) | 1 × 12 | Cosmos |
+| 5 |   8 | (c3=0, c8=3) | 8 × 1  | Satellite |
+| 6 |   3 | (c3=1, c8=2) | 1 × 3  | Cosmos |
+| 7 |   1 | (c3=1, c8=3) | 1 × 1  | Singularity |
+| **sum** | **576** = 24² ✓ | | | |
+
+mod 3 has 2 `{σ,μ}`-components (size 8, size 1). mod 8 has 4 (sizes 48, 12, 3, 1). Product of counts: 2 × 4 = 8, matching the mod-24 count. Product of sizes pairwise: matches the mod-24 sizes exactly.
+
+### Contrast: why mod 9 has a single Cosmos component
+
+- **m = 9 = 3²** — a single prime power, so CRT gives no non-trivial factorization. `{σ,μ}` on (Z/9Z)² decomposes into the 2 components measured earlier: one size-72 Cosmos + one size-8 Satellite + singleton (9,9), giving 3 classes total (not components in the CRT sense, but the full decomposition).
+- **m = 24 = 8 · 3** — CRT splits. `{σ,μ}` on (Z/24Z)² gives 8 components = 2 (mod-3 factor) × 4 (mod-8 factor).
+- **No contradiction**: the mod-9 result does not "fail to generalize"; it is the m = 9 instance of the same CRT proposition. 24 and 9 are simply moduli with different prime-power factorizations.
+
+### "Class shift" retracted
+
+In the δ_A fiber analysis earlier, some mod-24 Cosmos components projected to mod-9 Satellite/Singularity. The previous draft called this "class shift" and asked whether it was signal or artifact. **Confirmed artifact**: δ_A discards mod-8 information, collapsing arithmetically distinct mod-24 states into the same mod-9 residue. The resulting class mismatch reflects what δ_A throws away, not a QA invariant.
+
+### ν is mod-9 specific (unchanged)
+
+ν was `(b,e) → (qa_mod(5·b), qa_mod(5·e))` because `5 = 2⁻¹ (mod 9)`. On mod 24, `gcd(2, 24) = 2`, so 2 has no inverse — the "halving" interpretation does not transfer. Any mod-24 analogue of ν would require choosing a different unit in `(Z/24Z)*`. Not measured.
 
 ## Open questions
 
-1. **Structure of the 6 mod-24 components**: what distinguishes them? Likely a finer invariant than the 3-class partition — perhaps a mod-3 or mod-8 sub-invariant, or the σ-orbit period (which ranges in {3, 6, 12, 24} per `qa_orbit_rules.py` docstring).
-2. **Can a different generator bridge the 6 mod-24 components?** Needs empirical test with candidate generators (e.g., scalar multiplication by units of (Z/24Z)* = {1, 5, 7, 11, 13, 17, 19, 23}).
-3. **Is the mod-9 "full connectivity" related to 9 = 3² having a unique prime factor?** Plausible conjecture: connectivity of `{σ, μ}` depends on the structure of `(Z/m Z)*`, not just the alphabet size.
+1. **Prove the CRT proposition in closed form.** The empirical verification on m ∈ {9, 24} is suggestive; the proof is straightforward (CRT iso is a ring isomorphism, σ and μ are ring-polynomial maps in the state coordinates) but should be written out.
+2. **Confirm on further moduli** — e.g., m = 45 = 9 · 5, m = 72 = 8 · 9, m = 15 = 3 · 5. Each should give components = (mod-a decomp) × (mod-b decomp).
+3. **Does ν have a universal definition across all m?** Requires a choice of unit in `(Z/mZ)*` whose interpretation is domain-meaningful. Open.
 
 ## Reproduce
 

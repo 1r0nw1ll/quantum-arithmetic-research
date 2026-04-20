@@ -1,49 +1,248 @@
 {
-  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.8 HeartMath corpus kickoff. 4 SourceWork nodes for PDFs on disk under Documents/heartmath_corpus/, sourced from Google Scholar results 131-140 of q=heartmath (scholar.google.com/scholar?start=130&q=heartmath&hl=en&as_sdt=4007). Claims extraction deferred until excerpt snapshots are built — see docs/theory/heartmath_phase4_8_excerpts.md. Domain=\"\" on all entries pending Phase 4.8 full-ingestion domain decision (candidate: psychophysiology extension of domain_taxonomy.json; empty string is legal under [254] R10). -->",
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.8 HeartMath primary-source corpus. 4 SourceWorks + 18 verbatim SourceClaims from PDFs on disk under Documents/heartmath_corpus/, sourced from Google Scholar results 131-140 of q=heartmath (scholar.google.com/scholar?start=130&q=heartmath&hl=en&as_sdt=4007). Locators resolve against docs/theory/heartmath_phase4_8_excerpts.md. Domain=psychophysiology on all entries (taxonomy extended in domain_taxonomy.json same commit). Do not edit quote fields. -->",
   "phase": "4.8",
   "source_class": "heartmath",
-  "description": "HeartMath primary-source claims (kickoff). Grounds the existing OB research agenda dated 2026-03-25 on HRV coherence / cardiac coherence / Schumann / global coherence (McCraty, Radin, Oschman). PDFs on disk under Documents/heartmath_corpus/; retrieval notes in docs/theory/heartmath_phase4_8_excerpts.md. Kickoff commit contains SourceWork nodes only (no claims) — excerpt extraction + domain-taxonomy extension follow in Phase 4.8 body.",
+  "description": "HeartMath primary-source claims. Grounds the OB 2026-03-25 research agenda thread on HRV coherence / cardiac coherence / Schumann / global coherence (McCraty, Radin, Oschman). PDFs on disk under Documents/heartmath_corpus/; retrieval notes + anchor index in docs/theory/heartmath_phase4_8_excerpts.md. Phase 4.8 body item 1+2+3 landed: excerpts extracted, claims populated, psychophysiology domain registered.",
   "works": [
     {
       "id": "tomasino_1997_water_em_storage",
       "title": "Tomasino (1997) — New technology provides scientific evidence of water's capacity to store and amplify weak electromagnetic and subtle energy fields",
-      "body": "Dana Tomasino, *Institute for HeartMath Publication No. 97*, 1997. Early HeartMath institutional report on water-structure experiments: water as liquid-crystal lattice with infinite capacity to store electromagnetic and subtle energy fields. Source URL: othernetworks.org/images/5/53/Water-Research-Report_Dana_Tomasino.pdf. PDF: 190KB, 4pp.",
+      "body": "Dana Tomasino, *Institute for HeartMath Publication No. 97-002*, 1997. Early HeartMath institutional report on water-structure experiments: water as liquid-crystal lattice with infinite capacity to store electromagnetic and subtle energy fields. Source URL: othernetworks.org/images/5/53/Water-Research-Report_Dana_Tomasino.pdf. PDF: 190KB, 4pp.",
       "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "1997-01-01",
-      "domain": ""
+      "domain": "psychophysiology"
     },
     {
       "id": "danielson_2014_hospital_wellness",
       "title": "Danielson, Jeffers, Kaiser et al. (2014) — Sustained Hospital-based Wellness Program [HeartMath]",
-      "body": "Kimberly Danielson, Kay Jeffers, Linda Kaiser et al., *Global Advances in Health and Medicine* 3(Suppl 1), 2014. PMC3923282. HeartMath mastery deployed across >1000 hospital-system employees as a sustained population-health intervention. PDF: 425KB via PMC gahmj.2014.BPA05.pdf.",
+      "body": "Karen Danielson, Katharine Jeffers, Leslie Kaiser, Lee McKinley, Thomas Kuhn, Gigi Voorhies, *Global Advances in Health and Medicine* 3(Suppl 1):BPA05, January 2014. PMC3923282. DOI 10.7453/gahmj.2014.BPA05. HeartMath mastery deployed across >1000 hospital-system employees as a sustained population-health intervention at IU Health Bloomington. PDF: 425KB via PMC gahmj.2014.BPA05.pdf.",
       "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md",
       "extraction_method": "manual",
       "confidence": 1.0,
       "valid_from": "2014-01-01",
-      "domain": ""
+      "domain": "psychophysiology"
     },
     {
       "id": "oschman_2015_heart_bidirectional_scalar_antenna",
       "title": "Oschman & Oschman (2015) — The Heart as a Bi-Directional Scalar Field Antenna",
-      "body": "James L. Oschman & Nora H. Oschman, *Journal of Vortex Science and Technology* 2(2), 2015. Cites HeartMath Institute confirmation of Rein's resonance hypothesis; proposes the heart as a scalar field antenna (Whittaker-style longitudinal decomposition) coupling to external subtle-energy fields. PDF: 510KB retrieved via web.archive.org snapshot of sparkleoflife.com.au (original host suspended).",
+      "body": "James L. Oschman & Nora H. Oschman, *Journal of Vortex Science and Technology* 2(2):121, October 2015. DOI 10.4172/2090-8369.1000121. Cites HeartMath Institute confirmation of Rein's resonance hypothesis; proposes the heart as a scalar field antenna (Whittaker-style longitudinal decomposition + triple-twisted-Möbius HVMB geometry) coupling to external subtle-energy fields. PDF: 510KB retrieved via web.archive.org snapshot of sparkleoflife.com.au (original host suspended).",
       "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md",
       "extraction_method": "manual",
       "confidence": 1.0,
-      "valid_from": "2015-01-01",
-      "domain": ""
+      "valid_from": "2015-10-02",
+      "domain": "psychophysiology"
     },
     {
       "id": "edwards_2018_cfp_heartmath_psychology",
       "title": "Edwards (2018) — Call for papers: Special section on HeartMath for Psychology",
-      "body": "S. Edwards, *Journal of Psychology in Africa* 28(5), 2018. Taylor & Francis. DOI 10.1080/14330237.2018.1528007. Editorial call for papers soliciting evaluation of psychological behaviour using HeartMath approaches, methods and techniques; references the HeartMath research library at heartmath.org/research/research-library. PDF: 499KB via tandfonline.com (browser-context fetch; curl blocked by Cloudflare).",
+      "body": "Prof. Steve D. Edwards, *Journal of Psychology in Africa* 28(5):432-433, 2018. Taylor & Francis. DOI 10.1080/14330237.2018.1528007. Editorial call for papers soliciting evaluation of psychological behaviour using HeartMath approaches, methods and techniques in African contexts; summarizes HeartMath's psychophysiological coherence programme and references the HeartMath research library at heartmath.org/research/research-library. PDF: 499KB via tandfonline.com (browser-context fetch; curl blocked by Cloudflare).",
       "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md",
       "extraction_method": "manual",
       "confidence": 1.0,
-      "valid_from": "2018-01-01",
-      "domain": ""
+      "valid_from": "2018-10-22",
+      "domain": "psychophysiology"
     }
   ],
-  "claims": []
+  "claims": [
+    {
+      "id": "tomasino_1997_liquid_crystal",
+      "work": "tomasino_1997_water_em_storage",
+      "quote": "Research has shown that water is a liquid crystal with a pliable lattice matrix that is capable of adopting many structural forms. The structure of water gives it an infinite capacity to store information within its matrix.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#tomasino-1997-liquid-crystal",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1997-01-01",
+      "domain": "psychophysiology",
+      "title": "Tomasino 1997 (p.1): water as liquid-crystal lattice with infinite information-storage capacity"
+    },
+    {
+      "id": "tomasino_1997_memory_transfer",
+      "work": "tomasino_1997_water_em_storage",
+      "quote": "A growing body of recent scientific evidence is now confirming traditional intuitive understandings of water's role as mediator between the energetic and material worlds and its function as an accumulator, transmitter and transducer of energy patterns and information.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#tomasino-1997-memory-transfer",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1997-01-01",
+      "domain": "psychophysiology",
+      "title": "Tomasino 1997 (p.1): water as accumulator/transmitter/transducer of energy patterns"
+    },
+    {
+      "id": "tomasino_1997_crystallization",
+      "work": "tomasino_1997_water_em_storage",
+      "quote": "We have shown that solutions of sodium chloride, sodium chloride and albumin, and cupric chloride to which a small quantity of the water of Mediugorje is added tend to crystallize in more finely divided, filamentary patterns than control solutions.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#tomasino-1997-crystallization",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1997-01-01",
+      "domain": "psychophysiology",
+      "title": "Tomasino 1997 (p.1): crystallization pattern shift in salt/albumin/cupric-chloride solutions under Marian-water dose"
+    },
+    {
+      "id": "tomasino_1997_em_amplification",
+      "work": "tomasino_1997_water_em_storage",
+      "quote": "the electromagnetic field produced by the human heart can be detected in a glass of water placed a number of feet away. We have shown that water exposed to a weak electromagnetic field has the property of amplifying the signal many times and that different types of water amplify the signal to different extents.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#tomasino-1997-em-amplification",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1997-01-01",
+      "domain": "psychophysiology",
+      "title": "Tomasino 1997 (p.2): water amplifies weak heart-generated EM fields at distance"
+    },
+    {
+      "id": "tomasino_1997_cellular_water",
+      "work": "tomasino_1997_water_em_storage",
+      "quote": "the water within living cells is highly structured, arranged in various intermolecular conformations held together by extensive hydrogen bonding networks, giving it quite different properties and behavior from bulk water. It appears, further, that the structuring of cellular water is critical to the healthy chemical functioning of the cell.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#tomasino-1997-cellular-water",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1997-01-01",
+      "domain": "psychophysiology",
+      "title": "Tomasino 1997 (p.2): cellular water is highly structured, distinct from bulk water"
+    },
+    {
+      "id": "danielson_2014_intro_grassroots",
+      "work": "danielson_2014_hospital_wellness",
+      "quote": "Beginning as a grassroots initiative, a community hospital employing 2800 celebrates the stress-transforming benefits of HeartMath for its employees and community. Initially introduced to address the deleterious effects of personal stress experienced by the high healthcare claimants of the organization, HeartMath was eventually introduced to every stratification of the organization's population health management.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#danielson-2014-intro-grassroots",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-01-01",
+      "domain": "psychophysiology",
+      "title": "Danielson 2014 (BPA05, p.8): HeartMath as hospital-wide grassroots wellness intervention"
+    },
+    {
+      "id": "danielson_2014_methods_stress",
+      "work": "danielson_2014_hospital_wellness",
+      "quote": "HeartMath was initiated as an intervention for transforming the stress of a workforce's highest healthcare claimants: those with the complexities of co-morbidities as well as challenging psychosocial and economic realities.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#danielson-2014-methods-stress",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-01-01",
+      "domain": "psychophysiology",
+      "title": "Danielson 2014 (BPA05, p.8): HeartMath targeted at highest-claimant workforce segment"
+    },
+    {
+      "id": "danielson_2014_mastery_1000",
+      "work": "danielson_2014_hospital_wellness",
+      "quote": "The critical mass of acquired HeartMath mastery by more than one thousand employees allowed the organization to introduce HeartMath's neutral technique as a non-pharmacological option for patients experiencing pain, anxiety, or sleeplessness.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#danielson-2014-mastery-1000",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-01-01",
+      "domain": "psychophysiology",
+      "title": "Danielson 2014 (BPA05, p.8): >1000-employee mastery threshold enabled patient-care deployment"
+    },
+    {
+      "id": "danielson_2014_survey_6pct",
+      "work": "danielson_2014_hospital_wellness",
+      "quote": "from 2009 to 2012 the response to the question regarding employees' perception of the organization's interest in creating a healthy workplace increased overall by 6% in the categories of excellent, high interest, and good interest.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#danielson-2014-survey-6pct",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-01-01",
+      "domain": "psychophysiology",
+      "title": "Danielson 2014 (BPA05, p.8): +6% survey shift 2009-2012 on healthy-workplace perception"
+    },
+    {
+      "id": "oschman_2015_hvmb_mobius",
+      "work": "oschman_2015_heart_bidirectional_scalar_antenna",
+      "quote": "the ventricle of the heart is a double helical structure, now known as the helical ventricular myocardial band (HVMB). Further work by Guasp and others revealed that this three-dimensional ventricular architecture can be regarded as a geometrically non-orientable surface, similar to a triple-twisted Möbius strip. This is one of several geometric arrangements used to document the Aharonov-Bohm effects, involving electromagnetic vortical potential or scalar fields.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#oschman-2015-hvmb-mobius",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2015-10-02",
+      "domain": "psychophysiology",
+      "title": "Oschman 2015 (p.1): HVMB as triple-twisted-Möbius / Aharonov-Bohm scalar geometry"
+    },
+    {
+      "id": "oschman_2015_heart_field_nonlocal",
+      "work": "oschman_2015_heart_bidirectional_scalar_antenna",
+      "quote": "Extraordinary yet compelling evidence has also indicated that the heart's energy fields, generated by vortical electrical flows through the heart and aortic arch, are coupled to fields of information that are not bound by the limits of time and space. These findings provide a potential basis for well-documented intuitive or clairvoyant phenomena.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#oschman-2015-heart-field-nonlocal",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2015-10-02",
+      "domain": "psychophysiology",
+      "title": "Oschman 2015 (p.1): heart energy fields coupled to non-local information fields"
+    },
+    {
+      "id": "oschman_2015_rein_coherence",
+      "work": "oschman_2015_heart_bidirectional_scalar_antenna",
+      "quote": "Rein's resonance hypothesis was confirmed in two studies at the Institute of HeartMath in collaboration with Rollin McCraty [14,15]. These studies demonstrated (a) coherence in the electrocardiographic (ECG) frequency spectra of individuals whose attention was focused in the heart area while generating positive emotions such as love, care or appreciation and (b) a correlation between the ECG coherent patterns and those also occurring in the brain and other parts of the body.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#oschman-2015-rein-coherence",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2015-10-02",
+      "domain": "psychophysiology",
+      "title": "Oschman 2015 (p.2): Rein/McCraty ECG coherence + heart-brain cross-coherence under positive-emotion attention"
+    },
+    {
+      "id": "oschman_2015_master_oscillator",
+      "work": "oschman_2015_heart_bidirectional_scalar_antenna",
+      "quote": "the heart acts as a master electrical oscillator capable of radiating coherent frequencies which promote the health and vitality of the entire human system",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#oschman-2015-master-oscillator",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2015-10-02",
+      "domain": "psychophysiology",
+      "title": "Oschman 2015 (p.2): heart as master electrical oscillator broadcasting coherent frequencies system-wide"
+    },
+    {
+      "id": "oschman_2015_scalar_antenna",
+      "work": "oschman_2015_heart_bidirectional_scalar_antenna",
+      "quote": "One of the most significant implications of these discoveries is their potential application to consciousness research. Conventional thinking is that the brain is the seat of consciousness and memory. Evidence summarized here opens the possibility that as a scalar field antenna the heart might be able to tap into so called 'empty' space, which appears to contain structure and energy and information in coherent holographic form",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#oschman-2015-scalar-antenna",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2015-10-02",
+      "domain": "psychophysiology",
+      "title": "Oschman 2015 (p.3): heart as scalar-field antenna into holographic vacuum structure"
+    },
+    {
+      "id": "oschman_2015_bidirectional_antenna",
+      "work": "oschman_2015_heart_bidirectional_scalar_antenna",
+      "quote": "From basic antenna theory we know that an antenna of a particular geometry will function for both transmission and reception of electromagnetic waves and, presumably, of potential waves.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#oschman-2015-bidirectional-antenna",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2015-10-02",
+      "domain": "psychophysiology",
+      "title": "Oschman 2015 (p.3, fn3): bi-directional antenna reciprocity extends to potential waves"
+    },
+    {
+      "id": "edwards_2018_coherence_patterns",
+      "work": "edwards_2018_cfp_heartmath_psychology",
+      "quote": "The HeartMath system has produced research mapping patterns of profound coherence, harmony, interconnectedness and consistency, typically evident in human populations.",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#edwards-2018-coherence-patterns",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-10-22",
+      "domain": "psychophysiology",
+      "title": "Edwards 2018 (p.432): HeartMath system maps population-scale coherence / harmony / interconnectedness patterns"
+    },
+    {
+      "id": "edwards_2018_heart_communication",
+      "work": "edwards_2018_cfp_heartmath_psychology",
+      "quote": "heart communication of electromagnetic, neurochemical, biophysical and hormonal information that are intimately related to psychophysiological personal, social and global health promotion",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#edwards-2018-heart-communication",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-10-22",
+      "domain": "psychophysiology",
+      "title": "Edwards 2018 (p.432): heart communicates EM/neurochemical/biophysical/hormonal information at personal/social/global scales"
+    },
+    {
+      "id": "edwards_2018_hrv_biofeedback",
+      "work": "edwards_2018_cfp_heartmath_psychology",
+      "quote": "practical, heart-based tools and techniques for people of all ages to use in the moment to relieve stress and promote health, creativity, intuitive insight and zoned performance (McCraty, 2016; McCraty & Zayas, 2014), as well as biofeedback technology to facilitate heart rate variability (HRV) and coherence feedback training",
+      "source_locator": "file:docs/theory/heartmath_phase4_8_excerpts.md#edwards-2018-hrv-biofeedback",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-10-22",
+      "domain": "psychophysiology",
+      "title": "Edwards 2018 (p.432): HRV + coherence feedback training as HeartMath biofeedback operational surface"
+    }
+  ]
 }

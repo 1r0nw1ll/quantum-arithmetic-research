@@ -6,14 +6,16 @@
     "geometry",
     "biology",
     "physics",
-    "rsf"
+    "rsf",
+    "psychophysiology"
   ],
   "descriptions": {
-    "qa_core":  "Ben Iverson's QA corpus, Dale Pond's QA textbooks, QA axioms, element definitions, worked (b,e,d,a) tuples",
-    "svp":      "Keely's 40 laws, Dale Pond SVP wiki, SVP propositions mapping, sympathetic vibratory physics",
-    "geometry": "Wildberger rational trigonometry / chromogeometry / UHG, Parker geometry propositions, Hull Quadrature",
-    "biology":  "Levin 2026 corpus, bioelectricity, xenobots, morphogenetic cognition",
-    "physics":  "Briddell Field Structure Theory, Grant/Ghannam Philomath physics chapters, Whittaker scalar decompositions",
-    "rsf":      "Resonance Science Foundation — Haramein holographic mass scaling, spacememory network, Val Baker electron/Rydberg derivations"
+    "qa_core":         "Ben Iverson's QA corpus, Dale Pond's QA textbooks, QA axioms, element definitions, worked (b,e,d,a) tuples",
+    "svp":             "Keely's 40 laws, Dale Pond SVP wiki, SVP propositions mapping, sympathetic vibratory physics",
+    "geometry":        "Wildberger rational trigonometry / chromogeometry / UHG, Parker geometry propositions, Hull Quadrature",
+    "biology":         "Levin 2026 corpus, bioelectricity, xenobots, morphogenetic cognition",
+    "physics":         "Briddell Field Structure Theory, Grant/Ghannam Philomath physics chapters, Whittaker scalar decompositions",
+    "rsf":             "Resonance Science Foundation — Haramein holographic mass scaling, spacememory network, Val Baker electron/Rydberg derivations",
+    "psychophysiology": "HeartMath corpus — HRV / cardiac coherence, heart-brain cross-coherence, biofeedback, scalar-field cardiology (Oschman), biophysical water-structure research (Tomasino), McCraty Global Coherence Initiative"
   }
 }

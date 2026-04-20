@@ -147,21 +147,21 @@ Legend: ✓ = SourceWork ingested; ⏳ = deferred; ⚠ = misfiled (non-Wildberge
 
 ---
 
-## HeartMath corpus (Phase 4.8 KICKOFF)
+## HeartMath corpus (Phase 4.8 BODY — items 1+2+3 landed)
 
 **Corpus root:** `Documents/heartmath_corpus/`
-**Domain:** `""` (pending) — candidate `psychophysiology` extension of `domain_taxonomy.json` deferred to Phase 4.8 body.
-**Theory docs:** `docs/theory/heartmath_phase4_8_excerpts.md` (stub — verbatim claim extraction pending)
+**Domain:** `psychophysiology` (extended in `domain_taxonomy.json` 2026-04-20; [254] R10 re-validated).
+**Theory docs:** `docs/theory/heartmath_phase4_8_excerpts.md` (18 verbatim anchors — 5 Tomasino + 4 Danielson + 6 Oschman + 3 Edwards)
 **Origin search:** `scholar.google.com/scholar?start=130&q=heartmath&hl=en&as_sdt=4007` (results 131–140)
 **QA-research grounding:** OB agenda 2026-03-25 (completeness audit, Thread 3: HeartMath / McCraty / Radin) — HRV coherence ratio ↔ QA HI; brain–heart cross-coherence ↔ QA Markovian coupling; Schumann 7.83 Hz ↔ mod-9 / mod-24 orbit harmonics.
-**Ingress note:** `Documents/heartmath_corpus/` is NOT yet in `DOCUMENTS_PDF_INGRESS_PREFIXES` in `llm_qa_wrapper/cert_gate_hook.py` / `.claude/hooks/pretool_guard.sh`. Phase 4.8 kickoff PDFs written via cwd-scoped downloads (no `Documents/` substring in the Bash command). Extending the allowlist is a WRAPPER_SELF_MODIFICATION edit routed through Codex quarantine review — deferred while Codex bridge is dead.
+**Ingress note:** `Documents/heartmath_corpus/` is NOT yet in `DOCUMENTS_PDF_INGRESS_PREFIXES` in `llm_qa_wrapper/cert_gate_hook.py` / `.claude/hooks/pretool_guard.sh`. Phase 4.8 kickoff PDFs written via cwd-scoped downloads (no `Documents/` substring in the Bash command). Extending the allowlist is a WRAPPER_SELF_MODIFICATION edit routed through Codex quarantine review — still deferred while Codex bridge is dead (Phase 4.8 body item 4).
 
 | Path | Author | Topic tags | Domain | SourceWork | Status |
 |---|---|---|---|---|---|
-| `Documents/heartmath_corpus/tomasino_1997_water_em_storage.pdf` | Tomasino 1997 | water liquid-crystal, EM storage, subtle energy, HeartMath Pub 97 | "" (pending) | `tomasino_1997_water_em_storage` | ✓ (kickoff — claims pending) |
-| `Documents/heartmath_corpus/danielson_2014_hospital_wellness.pdf` | Danielson+Jeffers+Kaiser et al 2014 | HeartMath mastery, hospital wellness, population health, PMC3923282 | "" (pending) | `danielson_2014_hospital_wellness` | ✓ (kickoff — claims pending) |
-| `Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf` | Oschman+Oschman 2015 | scalar field antenna, Rein resonance, Whittaker decomposition, bidirectional | "" (pending) | `oschman_2015_heart_bidirectional_scalar_antenna` | ✓ (kickoff — claims pending) |
-| `Documents/heartmath_corpus/edwards_2018_cfp_heartmath_psychology.pdf` | Edwards 2018 | HeartMath psychology CFP, Journal of Psychology in Africa | "" (pending) | `edwards_2018_cfp_heartmath_psychology` | ✓ (kickoff — claims pending) |
+| `Documents/heartmath_corpus/tomasino_1997_water_em_storage.pdf` | Tomasino 1997 | water liquid-crystal, EM storage, subtle energy, HeartMath Pub 97 | psychophysiology | `tomasino_1997_water_em_storage` | ✓ (5 claims) |
+| `Documents/heartmath_corpus/danielson_2014_hospital_wellness.pdf` | Danielson+Jeffers+Kaiser et al 2014 | HeartMath mastery, hospital wellness, population health, PMC3923282 | psychophysiology | `danielson_2014_hospital_wellness` | ✓ (4 claims) |
+| `Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf` | Oschman+Oschman 2015 | scalar field antenna, Rein resonance, Whittaker decomposition, bidirectional | psychophysiology | `oschman_2015_heart_bidirectional_scalar_antenna` | ✓ (6 claims) |
+| `Documents/heartmath_corpus/edwards_2018_cfp_heartmath_psychology.pdf` | Edwards 2018 | HeartMath psychology CFP, Journal of Psychology in Africa | psychophysiology | `edwards_2018_cfp_heartmath_psychology` | ✓ (3 claims) |
 | **NOT ON DISK** | Institute of HeartMath 2012 | EmWave Desktop product citation | — | — | [CITATION] — no paper |
 | **NOT ON DISK** | Edwards+David+Hermann et al 2023 | HeartMath meditation, longer breath cycle, *Dialogo* | — | — | ⏳ EBSCO paywall |
 | **NOT ON DISK** | Simmons 2010 | heart-generated coherence, distilled water, plant growth | — | — | [CITATION] — thesis, no PDF indexed |

@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QA Torus — mod-9 orbits with σ walk</title>
+<style>
+  body { margin: 0; background: #0b0d12; color: #cfd3dc; font-family: ui-monospace, monospace; overflow: hidden; }
+  #hud { position: absolute; top: 12px; left: 12px; font-size: 12px; line-height: 1.5; background: rgba(0,0,0,0.5); padding: 12px 14px; border: 1px solid #2a2f3a; border-radius: 6px; max-width: 340px; }
+  #hud h1 { font-size: 13px; margin: 0 0 6px; color: #e8ecf3; }
+  #hud h2 { font-size: 11px; letter-spacing: 2px; color: #8aa; text-transform: uppercase; margin: 10px 0 4px; }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: 6px; vertical-align: middle; }
+  #hud label { display: block; margin-top: 3px; cursor: pointer; user-select: none; }
+  #hud input[type=checkbox], #hud input[type=radio] { vertical-align: middle; margin-right: 4px; }
+  #hud input[type=number] { width: 40px; }
+  .telem { display: flex; justify-content: space-between; font-size: 11px; margin-top: 2px; color: #b8c4d6; }
+  .val { color: #fff; font-weight: 700; }
+  .btn { background: #111; color: #6ad; border: 1px solid #2a2f3a; padding: 4px 10px; cursor: pointer; margin-right: 4px; }
+  #tip { position: absolute; bottom: 10px; left: 12px; font-size: 11px; color: #7a8190; }
+</style>
+</head>
+<body>
+<div id="hud">
+  <h1>QA mod-9 torus</h1>
+  <div style="font-size:10px; color:#8aa;">θ = 2π(b−1)/9, φ = 2π(e−1)/9</div>
+
+  <h2>Orbit classes</h2>
+  <label><input type="checkbox" id="showCosmos" checked><span class="swatch" style="background:#4a90e2"></span>Cosmos (72)</label>
+  <label><input type="checkbox" id="showSatellite" checked><span class="swatch" style="background:#e25b5b"></span>Satellite (8) — 3∣b ∧ 3∣e</label>
+  <label><input type="checkbox" id="showSingularity" checked><span class="swatch" style="background:#f2c14e"></span>Singularity (1) — (9,9)</label>
+
+  <h2>Color mode</h2>
+  <label><input type="radio" name="colorMode" value="class" checked>by class</label>
+  <label><input type="radio" name="colorMode" value="orbit">by Cosmos orbit <span class="swatch" style="background:#5fa8ff"></span><span class="swatch" style="background:#c077ff"></span><span class="swatch" style="background:#50e0b8"></span></label>
+
+  <h2>σ walk (qa_step)</h2>
+  <label><input type="checkbox" id="walkOn">walk from seed</label>
+  <div style="display:flex; gap:6px; align-items:center; margin-top:4px; flex-wrap:wrap;">
+    <span>seed:</span>
+    <label>b<input type="number" id="seedB" min="1" max="9" value="1"></label>
+    <label>e<input type="number" id="seedE" min="1" max="9" value="1"></label>
+    <button class="btn" id="resetWalk">reset</button>
+    <button class="btn" id="muBtn" style="color:#d7f">μ</button>
+  </div>
+  <div class="telem"><span>step k</span><span class="val" id="t-k">0</span></div>
+  <div class="telem"><span>(b,e)</span><span class="val" id="t-be">—</span></div>
+  <div class="telem"><span>class</span><span class="val" id="t-cls">—</span></div>
+  <div class="telem"><span>period</span><span class="val" id="t-period">—</span></div>
+  <div class="telem"><span>closed</span><span class="val" id="t-closed">—</span></div>
+  <div class="telem"><span>norm_f</span><span class="val" id="t-f">—</span></div>
+  <div class="telem"><span>v₃(f)</span><span class="val" id="t-v3">—</span></div>
+  <div class="telem"><span>d (QA: b+e)</span><span class="val" id="t-dqa">—</span></div>
+  <div class="telem"><span>d' (DRTH-A: 2e−b)</span><span class="val" id="t-ddrth">—</span></div>
+</div>
+<div id="tip">drag to orbit · scroll to zoom</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import {
+  MOD, sigma, mu, classify, orbit_period, norm_f, v3,
+  cosmos_orbit_id, pickColor, PALETTE_CLASS, PALETTE_COSMOS_ORBITS,
+  qa_coord_d, drth_coord_A,
+} from './qa_core.js';
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x0b0d12);
+
+const camera = new THREE.PerspectiveCamera(45, innerWidth / innerHeight, 0.1, 100);
+camera.position.set(6, 4, 8);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(innerWidth, innerHeight);
+document.body.appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const keyLight = new THREE.DirectionalLight(0xffffff, 0.8);
+keyLight.position.set(5, 8, 6);
+scene.add(keyLight);
+
+const R = 2.4, r = 1.0;
+
+const torus = new THREE.Mesh(
+  new THREE.TorusGeometry(R, r, 48, 96),
+  new THREE.MeshStandardMaterial({
+    color: 0x2a3344, metalness: 0.1, roughness: 0.85,
+    transparent: true, opacity: 0.55, side: THREE.DoubleSide,
+  })
+);
+torus.rotation.x = Math.PI / 2;
+scene.add(torus);
+
+const wire = new THREE.Mesh(
+  new THREE.TorusGeometry(R, r, 9, 9),
+  new THREE.MeshBasicMaterial({ color: 0x4a5366, wireframe: true, transparent: true, opacity: 0.5 })
+);
+wire.rotation.x = Math.PI / 2;
+scene.add(wire);
+
+function toroidal(b, e) {
+  const theta = 2 * Math.PI * (b - 1) / MOD;
+  const phi   = 2 * Math.PI * (e - 1) / MOD;
+  const x = (R + r * Math.cos(phi)) * Math.cos(theta);
+  const y = (R + r * Math.cos(phi)) * Math.sin(theta);
+  const z = r * Math.sin(phi);
+  return new THREE.Vector3(x, z, -y);
+}
+
+const groups = {
+  cosmos: new THREE.Group(),
+  satellite: new THREE.Group(),
+  singularity: new THREE.Group(),
+};
+for (const g of Object.values(groups)) scene.add(g);
+
+const sizes = { cosmos: 0.07, satellite: 0.11, singularity: 0.16 };
+const meshByBE = new Map();
+const nodes = [];
+
+function getColorMode() {
+  return document.querySelector('input[name="colorMode"]:checked').value;
+}
+
+for (let b = 1; b <= MOD; b++) {
+  for (let e = 1; e <= MOD; e++) {
+    const cls = classify(b, e);
+    const color = pickColor(b, e, 'class');
+    const mesh = new THREE.Mesh(
+      new THREE.SphereGeometry(sizes[cls], 16, 12),
+      new THREE.MeshStandardMaterial({ color, emissive: color, emissiveIntensity: 0.35 })
+    );
+    mesh.position.copy(toroidal(b, e));
+    mesh.userData = { b, e, cls };
+    groups[cls].add(mesh);
+    meshByBE.set(b * 10 + e, mesh);
+    nodes.push(mesh);
+  }
+}
+
+function recolorAll() {
+  const mode = getColorMode();
+  for (const m of nodes) {
+    const { b, e } = m.userData;
+    const c = pickColor(b, e, mode);
+    m.material.color.setHex(c);
+    m.material.emissive.setHex(c);
+  }
+}
+for (const r2 of document.querySelectorAll('input[name="colorMode"]'))
+  r2.addEventListener('change', recolorAll);
+
+for (const [id, group] of [
+  ['showCosmos', groups.cosmos],
+  ['showSatellite', groups.satellite],
+  ['showSingularity', groups.singularity],
+]) {
+  const el = document.getElementById(id);
+  el.addEventListener('change', () => { group.visible = el.checked; });
+  group.visible = el.checked;
+}
+
+// ──────── σ walk + persistent trail ────────
+const trailGroup = new THREE.Group();
+scene.add(trailGroup);
+
+let walkB = 1, walkE = 1, seedB = 1, seedE = 1;
+let k = 0;
+let closedAt = null;
+const visited = [];  // Vector3s, in visitation order
+let trailLine = null;
+
+function rebuildTrail() {
+  while (trailGroup.children.length) trailGroup.remove(trailGroup.children[0]);
+  if (visited.length < 2) return;
+  const orbitIdx = cosmos_orbit_id(seedB, seedE);
+  const cls = classify(seedB, seedE);
+  let col = 0xffffff;
+  if (cls === 'satellite')   col = 0xe25b5b;
+  else if (cls === 'singularity') col = 0xf2c14e;
+  else col = PALETTE_COSMOS_ORBITS[orbitIdx];
+  const geo = new THREE.BufferGeometry().setFromPoints(visited);
+  const mat = new THREE.LineBasicMaterial({ color: col, linewidth: 3, transparent: true, opacity: 0.85 });
+  trailLine = new THREE.Line(geo, mat);
+  trailGroup.add(trailLine);
+}
+
+function highlightCurrent() {
+  for (const m of nodes) m.scale.set(1, 1, 1);
+  const cur = meshByBE.get(walkB * 10 + walkE);
+  if (cur) cur.scale.set(2.2, 2.2, 2.2);
+}
+
+function setText(id, v) { document.getElementById(id).textContent = v; }
+
+function updateTelem() {
+  const cls = classify(walkB, walkE);
+  const period = orbit_period(seedB, seedE);
+  const f = norm_f(walkB, walkE);
+  setText('t-k', k);
+  setText('t-be', `(${walkB},${walkE})`);
+  setText('t-cls', cls);
+  setText('t-period', period);
+  setText('t-closed', closedAt === null ? '…' : `✓ @ k=${closedAt}`);
+  setText('t-f', f);
+  setText('t-v3', v3(f) === Infinity ? '∞' : v3(f));
+  setText('t-dqa', qa_coord_d(walkB, walkE));
+  setText('t-ddrth', drth_coord_A(walkB, walkE));
+}
+
+function resetWalk() {
+  seedB = Math.min(9, Math.max(1, parseInt(document.getElementById('seedB').value) || 1));
+  seedE = Math.min(9, Math.max(1, parseInt(document.getElementById('seedE').value) || 1));
+  walkB = seedB; walkE = seedE;
+  k = 0;
+  closedAt = null;
+  visited.length = 0;
+  visited.push(toroidal(walkB, walkE));
+  highlightCurrent();
+  rebuildTrail();
+  updateTelem();
+  console.log('[qa_torus] walk reset', { seed: [seedB, seedE], class: classify(seedB, seedE), period: orbit_period(seedB, seedE) });
+}
+
+document.getElementById('resetWalk').addEventListener('click', resetWalk);
+document.getElementById('muBtn').addEventListener('click', () => {
+  [walkB, walkE] = mu(walkB, walkE);
+  seedB = walkB; seedE = walkE;
+  document.getElementById('seedB').value = walkB;
+  document.getElementById('seedE').value = walkE;
+  k = 0; closedAt = null;
+  visited.length = 0; visited.push(toroidal(walkB, walkE));
+  highlightCurrent(); rebuildTrail(); updateTelem();
+  console.log('[qa_torus] μ applied', { b: walkB, e: walkE });
+});
+
+const WALK_MS = 240;
+setInterval(() => {
+  if (!document.getElementById('walkOn').checked) return;
+  [walkB, walkE] = sigma(walkB, walkE);
+  k++;
+  visited.push(toroidal(walkB, walkE));
+  if (walkB === seedB && walkE === seedE && closedAt === null) {
+    closedAt = k;
+    console.log('[qa_torus] orbit closure', {
+      seed: [seedB, seedE], class: classify(seedB, seedE),
+      period: orbit_period(seedB, seedE), closure_step: k,
+      cosmos_orbit: cosmos_orbit_id(seedB, seedE),
+    });
+  }
+  highlightCurrent();
+  rebuildTrail();
+  updateTelem();
+}, WALK_MS);
+
+resetWalk();
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+(function loop() {
+  requestAnimationFrame(loop);
+  controls.update();
+  renderer.render(scene, camera);
+})();
+</script>
+</body>
+</html>

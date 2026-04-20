@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>QA Nucleus — 27×27 kernel (mapping of Chase's HSTM v28.0)</title>
+<style>
+  :root { --green:#00ff41; --cyan:#00ffff; --magenta:#ff00ff; --gold:#ffd700; --bg:#01010f; --glass:rgba(5,10,20,0.96); --border:rgba(0,255,255,0.5); }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body, html { width: 100%; height: 100%; background: var(--bg); color: var(--green); font-family: 'JetBrains Mono', Consolas, ui-monospace, monospace; overflow: hidden; }
+  #viewport { position: fixed; inset: 0; z-index: 1; background: radial-gradient(circle at center, #0a0a20 0%, #000 100%); }
+  .hud { position: absolute; z-index: 10; background: var(--glass); border: 1px solid var(--border); padding: 18px 20px; backdrop-filter: blur(40px); border-radius: 10px; font-size: 12px; line-height: 1.6; }
+  #hud-left  { top: 20px; left: 20px;  width: 380px; border-left: 4px solid var(--gold); }
+  #hud-right { top: 20px; right: 20px; width: 420px; border-right: 4px solid var(--magenta); }
+  h1 { font-size: 13px; letter-spacing: 4px; color: #fff; text-transform: uppercase; margin-bottom: 10px; }
+  h2 { font-size: 11px; letter-spacing: 3px; color: var(--gold); border-bottom: 1px solid var(--gold); padding-bottom: 6px; margin: 14px 0 8px; text-transform: uppercase; }
+  .metric { display: flex; justify-content: space-between; padding: 3px 0; border-bottom: 1px solid #1a1a1a; }
+  .val { color: #fff; text-shadow: 0 0 8px var(--green); font-weight: 700; }
+  .rat { color: var(--cyan); font-weight: 700; }
+  label { display: block; margin-top: 4px; cursor: pointer; user-select: none; color: #cfd3dc; }
+  input[type=checkbox] { vertical-align: middle; margin-right: 6px; }
+  .swatch { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin: 0 6px; vertical-align: middle; }
+  #tip { position: absolute; bottom: 10px; left: 20px; font-size: 10px; color: #7a8190; z-index: 5; }
+  .note { color: #7a8190; font-size: 10px; font-style: italic; }
+</style>
+</head>
+<body>
+<div id="viewport"></div>
+
+<div id="hud-left" class="hud">
+  <h1>QA Nucleus v1</h1>
+  <div class="note">port of Nucleus.html with all floats → rationals; see docs/theory/QA_NUCLEUS_MAPPING.md</div>
+
+  <h2>Kernel</h2>
+  <div class="metric"><span>base</span><span class="val">27 = 3³</span></div>
+  <div class="metric"><span>nodes</span><span class="val">27² = 729 = 3⁶</span></div>
+  <div class="metric"><span>b = x%9+1, e = y%9+1</span><span class="val">A1</span></div>
+  <div class="metric"><span>d = ((b+e−1)%9)+1</span><span class="val">A2 fixed</span></div>
+
+  <h2>Rationals (not floats)</h2>
+  <div class="metric"><span>si_gap (Keely/Volk)</span><span class="rat">10/9</span></div>
+  <div class="metric"><span>dia_gap (3D threshold)</span><span class="rat">50/9 = 5·(10/9)</span></div>
+  <div class="metric"><span>boost</span><span class="rat">729/1000 = 3⁶/10³</span></div>
+  <div class="metric"><span>feedback</span><span class="rat">9/20 (factor-5)</span></div>
+
+  <h2>Orbit classes (canonical)</h2>
+  <label><input type="checkbox" id="showCosmos" checked><span class="swatch" style="background:#4a90e2"></span>Cosmos (72)</label>
+  <label><input type="checkbox" id="showSatellite" checked><span class="swatch" style="background:#e25b5b"></span>Satellite (8) — 3∣b ∧ 3∣e</label>
+  <label><input type="checkbox" id="showSingularity" checked><span class="swatch" style="background:#f2c14e"></span>Singularity (1) — (9,9)</label>
+
+  <h2>Color mode</h2>
+  <label><input type="radio" name="colorMode" value="class" checked>by class</label>
+  <label><input type="radio" name="colorMode" value="orbit">by Cosmos orbit <span class="swatch" style="background:#5fa8ff"></span><span class="swatch" style="background:#c077ff"></span><span class="swatch" style="background:#50e0b8"></span> (3 × period-24)</label>
+
+  <h2>Walk mode</h2>
+  <label><input type="radio" name="walkMode" value="scan" checked>sequential scan (combinatorial Ω)</label>
+  <label><input type="radio" name="walkMode" value="orbit">qa_step orbit from seed (b,e)→(e, qa_mod(b+e))</label>
+  <label><input type="checkbox" id="running" checked>walking</label>
+
+  <div style="display:flex; gap:8px; margin-top:6px; align-items:center; flex-wrap:wrap;">
+    <span>seed:</span>
+    <label>b<input type="number" id="seedB" min="1" max="9" value="1" style="width:36px; margin-left:3px;"></label>
+    <label>e<input type="number" id="seedE" min="1" max="9" value="1" style="width:36px; margin-left:3px;"></label>
+    <button id="resetOrbit" style="background:#111; color:var(--cyan); border:1px solid var(--border); padding:4px 10px; cursor:pointer;">reset</button>
+    <button id="applyMu" title="apply μ: (b,e)→(e,b)" style="background:#111; color:var(--magenta); border:1px solid var(--border); padding:4px 10px; cursor:pointer;">μ swap</button>
+  </div>
+</div>
+
+<div id="hud-right" class="hud">
+  <h1>Telemetry</h1>
+  <div class="metric"><span>walk mode</span><span class="val" id="t-mode">scan</span></div>
+  <div class="metric"><span>path step k</span><span class="val" id="t-k">0</span></div>
+  <div class="metric"><span>halts</span><span class="val" id="t-halts">0</span></div>
+  <div class="metric"><span>Ω = halts / k</span><span class="val" id="t-omega">—</span></div>
+  <div class="metric"><span>expected (scan mode)</span><span class="rat">9/729 = 1/81 ≈ 0.01235</span></div>
+  <div class="metric"><span>orbit period (current seed)</span><span class="val" id="t-period">—</span></div>
+  <div class="metric"><span>orbit closed?</span><span class="val" id="t-closed">—</span></div>
+
+  <h2>Current tuple</h2>
+  <div class="metric"><span>b</span><span class="val" id="t-b">—</span></div>
+  <div class="metric"><span>e</span><span class="val" id="t-e">—</span></div>
+  <div class="metric"><span>d = qa_mod(b+e)</span><span class="val" id="t-d">—</span></div>
+  <div class="metric"><span>a = qa_mod(b+2e)</span><span class="val" id="t-a">—</span></div>
+  <div class="metric"><span>class</span><span class="val" id="t-cls">—</span></div>
+
+  <h2>norm_f — Z[φ] quadratic invariant</h2>
+  <div class="note">f(b,e) = b² + be − e². Structural: v₃(f) ∈ {0} ∪ {≥2}, never 1 — this is why Satellite = 3∣b ∧ 3∣e.</div>
+  <div class="metric"><span>f(b,e)</span><span class="val" id="t-normf">—</span></div>
+  <div class="metric"><span>v₃(f)</span><span class="val" id="t-v3">—</span></div>
+  <div class="metric"><span>cosmos orbit</span><span class="val" id="t-orbit">—</span></div>
+  <div class="metric"><span>v₃(f) ≥ 2 ⇔ non-cosmos</span><span class="val" id="t-v3match">—</span></div>
+
+  <h2>QA vs DRTH-A — two third-coord completions</h2>
+  <div class="note">See docs/theory/QA_DRTH_MAPPING.md §2. Both extend (b,e) → D₉³ with a different linear rule.</div>
+  <div class="metric"><span>d  (QA: b + e)</span><span class="val" id="t-d-qa">—</span></div>
+  <div class="metric"><span>d' (DRTH-A: 2e − b)</span><span class="val" id="t-d-drth">—</span></div>
+  <div class="metric"><span>d + d'  (= qa_mod(3e))</span><span class="val" id="t-d-sum">—</span></div>
+  <div class="metric"><span>d = d'</span><span class="val" id="t-d-eq">—</span></div>
+</div>
+
+<div id="tip">drag to orbit · scroll to zoom · toggle classes in left HUD</div>
+
+<script type="importmap">
+{ "imports": {
+    "three": "https://unpkg.com/three@0.162.0/build/three.module.js",
+    "three/addons/": "https://unpkg.com/three@0.162.0/examples/jsm/"
+}}
+</script>
+
+<script type="module">
+import * as THREE from 'three';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import {
+  MOD, qa_mod, qa_step, sigma, mu, classify, orbit_period,
+  norm_f, v3, cosmos_orbit_id, pickColor,
+  qa_coord_d, drth_coord_A,
+  PALETTE_COSMOS_ORBITS,
+} from './qa_core.js';
+
+const BASE = 27;
+
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x01010f);
+
+const camera = new THREE.PerspectiveCamera(40, innerWidth / innerHeight, 0.1, 500);
+camera.position.set(34, 26, 44);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setPixelRatio(devicePixelRatio);
+renderer.setSize(innerWidth, innerHeight);
+document.getElementById('viewport').appendChild(renderer.domElement);
+
+const controls = new OrbitControls(camera, renderer.domElement);
+controls.enableDamping = true;
+
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const key = new THREE.DirectionalLight(0xffffff, 0.8);
+key.position.set(25, 35, 20);
+scene.add(key);
+
+const boxGeo = new THREE.BoxGeometry(0.75, 0.75, 0.75);
+const groups = {
+  cosmos:      new THREE.Group(),
+  satellite:   new THREE.Group(),
+  singularity: new THREE.Group(),
+};
+for (const g of Object.values(groups)) scene.add(g);
+
+const nodes = [];
+const orderedByIndex = [];
+// Index all 9 tiled copies of each (b,e) pair for orbit-mode highlighting.
+const nodesByBE = new Map();  // key = b*10+e → [mesh, mesh, ...] (9 copies)
+
+function getColorMode() {
+  return document.querySelector('input[name="colorMode"]:checked').value;
+}
+
+function recolorAll() {
+  const mode = getColorMode();
+  for (const m of nodes) {
+    const { b, e } = m.userData;
+    const c = pickColor(b, e, mode);
+    m.material.color.setHex(c);
+    m.material.emissive.setHex(c);
+    m.userData.baseColor = c;
+  }
+}
+
+for (let x = 0; x < BASE; x++) {
+  for (let y = 0; y < BASE; y++) {
+    const b = (x % MOD) + 1;
+    const e = (y % MOD) + 1;
+    const d = qa_mod(b + e);       // A2 — corrects Chase's off-by-one k
+    const a = qa_mod(b + 2 * e);
+    const cls = classify(b, e);
+    const color = pickColor(b, e, 'class');
+
+    const mat = new THREE.MeshStandardMaterial({
+      color, emissive: color, emissiveIntensity: 0.25,
+      metalness: 0.7, roughness: 0.35,
+    });
+    const mesh = new THREE.Mesh(boxGeo, mat);
+    mesh.position.set(x - BASE / 2 + 0.5, y - BASE / 2 + 0.5, 0);
+    mesh.userData = { b, e, d, a, cls, baseColor: color };
+    groups[cls].add(mesh);
+    nodes.push(mesh);
+    orderedByIndex.push(mesh);
+
+    const key = b * 10 + e;
+    if (!nodesByBE.has(key)) nodesByBE.set(key, []);
+    nodesByBE.get(key).push(mesh);
+  }
+}
+
+for (const r of document.querySelectorAll('input[name="colorMode"]')) {
+  r.addEventListener('change', recolorAll);
+}
+
+for (const id of ['showCosmos', 'showSatellite', 'showSingularity']) {
+  const el = document.getElementById(id);
+  const cls = id.replace('show', '').toLowerCase();
+  el.addEventListener('change', () => { groups[cls].visible = el.checked; });
+}
+
+let k = 0;
+let halts = 0;
+let cursor = 0;                 // scan-mode index
+let orbitB = 1, orbitE = 1;     // orbit-mode current state
+let orbitSeedB = 1, orbitSeedE = 1;
+let orbitReturned = false;
+let orbitClosureStep = null;
+let lastHighlightedBE = null;
+const TICK_MS = 90;
+
+function setText(id, v) { document.getElementById(id).textContent = v; }
+function getMode() {
+  return document.querySelector('input[name="walkMode"]:checked').value;
+}
+
+function clearHighlight() {
+  if (!lastHighlightedBE) return;
+  const key = lastHighlightedBE[0] * 10 + lastHighlightedBE[1];
+  for (const m of (nodesByBE.get(key) || [])) {
+    m.material.emissiveIntensity = 0.25;
+    m.scale.set(1, 1, 1);
+  }
+  lastHighlightedBE = null;
+}
+
+function highlightBE(b, e, intensity = 1.8, scale = 1.8) {
+  const key = b * 10 + e;
+  for (const m of (nodesByBE.get(key) || [])) {
+    m.material.emissiveIntensity = intensity;
+    m.scale.set(scale, scale, scale);
+  }
+  lastHighlightedBE = [b, e];
+}
+
+function resetOrbit() {
+  orbitSeedB = Math.min(9, Math.max(1, parseInt(document.getElementById('seedB').value) || 1));
+  orbitSeedE = Math.min(9, Math.max(1, parseInt(document.getElementById('seedE').value) || 1));
+  orbitB = orbitSeedB;
+  orbitE = orbitSeedE;
+  orbitReturned = false;
+  orbitClosureStep = null;
+  k = 0; halts = 0;
+  clearHighlight();
+}
+
+document.getElementById('resetOrbit').addEventListener('click', resetOrbit);
+document.getElementById('applyMu').addEventListener('click', () => {
+  [orbitB, orbitE] = mu(orbitB, orbitE);
+  orbitSeedB = orbitB; orbitSeedE = orbitE;
+  document.getElementById('seedB').value = orbitB;
+  document.getElementById('seedE').value = orbitE;
+  orbitReturned = false; orbitClosureStep = null;
+  k = 0; halts = 0;
+  clearHighlight();
+  console.log('[qa_nucleus] μ applied — new seed', { b: orbitB, e: orbitE,
+    class: classify(orbitB, orbitE),
+    period: orbit_period(orbitB, orbitE) });
+});
+for (const r of document.querySelectorAll('input[name="walkMode"]')) {
+  r.addEventListener('change', () => {
+    clearHighlight();
+    k = 0; halts = 0;
+    if (r.value === 'orbit') resetOrbit();
+  });
+}
+
+function tick() {
+  if (!document.getElementById('running').checked) return;
+  const mode = getMode();
+
+  let b, e, d, a, cls;
+
+  if (mode === 'scan') {
+    k++;
+    cursor = (cursor + 1) % orderedByIndex.length;
+    const n = orderedByIndex[cursor];
+    ({ b, e, d, a, cls } = n.userData);
+    if (cls === 'singularity') halts++;
+  } else {
+    // orbit mode: apply qa_step
+    k++;
+    [orbitB, orbitE] = qa_step(orbitB, orbitE);
+    b = orbitB; e = orbitE;
+    d = qa_mod(b + e); a = qa_mod(b + 2 * e);
+    cls = classify(b, e);
+    if (cls === 'singularity') halts++;
+    if (!orbitReturned && b === orbitSeedB && e === orbitSeedE) {
+      orbitReturned = true;
+      orbitClosureStep = k;
+    }
+  }
+
+  clearHighlight();
+  highlightBE(b, e);
+
+  const f = norm_f(b, e);
+  const v3f = v3(f);
+  const orbitIdx = cosmos_orbit_id(b, e);
+  const v3Consistent = (cls === 'cosmos') ? (v3f === 0) : (v3f >= 2);
+
+  setText('t-mode', mode === 'scan' ? 'sequential scan' : `orbit from (${orbitSeedB},${orbitSeedE})`);
+  setText('t-k', k);
+  setText('t-halts', halts);
+  setText('t-omega', k === 0 ? '—' : `${halts} / ${k} ≈ ${(halts / k).toFixed(5)}`);
+  setText('t-b', b);
+  setText('t-e', e);
+  setText('t-d', d);
+  setText('t-a', a);
+  setText('t-cls', cls);
+  setText('t-normf', f);
+  setText('t-v3', v3f === Infinity ? '∞' : v3f);
+  setText('t-orbit', orbitIdx === undefined ? '—' : orbitIdx);
+  setText('t-v3match', v3Consistent ? '✓' : '✗');
+
+  const dQA   = qa_coord_d(b, e);
+  const dDRTH = drth_coord_A(b, e);
+  setText('t-d-qa', dQA);
+  setText('t-d-drth', dDRTH);
+  setText('t-d-sum', `${qa_mod(dQA + dDRTH)}  (3e mod 9 = ${qa_mod(3 * e)})`);
+  setText('t-d-eq', dQA === dDRTH ? '✓' : '✗');
+
+  if (mode === 'orbit') {
+    const period = orbit_period(orbitSeedB, orbitSeedE);
+    setText('t-period', period);
+    setText('t-closed', orbitReturned ? `✓ @ k=${orbitClosureStep}` : '…');
+    if (orbitReturned && orbitClosureStep === k) {
+      console.log('[qa_nucleus] orbit closure', {
+        seed: [orbitSeedB, orbitSeedE],
+        class: classify(orbitSeedB, orbitSeedE),
+        period, closure_step: k,
+        cosmos_orbit: cosmos_orbit_id(orbitSeedB, orbitSeedE),
+      });
+    }
+  } else {
+    setText('t-period', '—');
+    setText('t-closed', '—');
+  }
+}
+setInterval(tick, TICK_MS);
+
+addEventListener('resize', () => {
+  camera.aspect = innerWidth / innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(innerWidth, innerHeight);
+});
+
+(function loop() {
+  requestAnimationFrame(loop);
+  controls.update();
+  renderer.render(scene, camera);
+})();
+</script>
+</body>
+</html>

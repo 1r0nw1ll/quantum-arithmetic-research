@@ -1,0 +1,48 @@
+{
+  "schema_version": "QA_INTEGER_STATE_PIPELINE_CERT.v1",
+  "certificate_id": "qa.cert.integer_state_pipeline.fail.retokenize.v1",
+  "cert_type": "qa_integer_state_pipeline_cert",
+  "title": "FAIL fixture: declares a re-tokenization interior stage and a non-integer-tuple sample",
+
+  "created_utc": "2026-04-19T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture exercising ISP_NO_REPROJECT (pipeline_stages includes a 'decode_then_encode' interior stage — illegal extra boundary crossing) and ISP_INT (interior_state_samples includes a float tuple). Validator must flag both.",
+
+  "source_attribution": "Negative fixture for [257] self-test. GLM-5 arXiv:2602.15763 TITO.",
+
+  "modulus": 9,
+
+  "input_boundary": {
+    "kind": "observer_projection_in",
+    "direction": "continuous_to_integer"
+  },
+
+  "output_boundary": {
+    "kind": "observer_projection_out",
+    "direction": "integer_to_continuous"
+  },
+
+  "pipeline_stages": [
+    {"kind": "input_observer", "state_type": "continuous"},
+    {"kind": "attention", "state_type": "integer_tuple"},
+    {"kind": "decode_then_encode_retokenize", "state_type": "integer_tuple"},
+    {"kind": "evolve", "state_type": "integer_tuple"},
+    {"kind": "output_observer", "state_type": "continuous"}
+  ],
+
+  "canonical_seed_tokens": [[1, 1]],
+  "canonical_steps": 3,
+
+  "interior_state_samples": [[1, 1], [1.5, 2.0]],
+
+  "determinism": {"repeats": 100, "bitwise_identical": true},
+
+  "witnesses": [
+    {"stage": "a", "representative": [1, 1]},
+    {"stage": "b", "representative": [1, 2]},
+    {"stage": "c", "representative": [2, 3]}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

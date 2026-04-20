@@ -1,0 +1,81 @@
+{
+  "schema_version": "QA_INTEGER_STATE_PIPELINE_CERT.v1",
+  "certificate_id": "qa.cert.integer_state_pipeline.pass.default.v1",
+  "cert_type": "qa_integer_state_pipeline_cert",
+  "title": "QA Integer-State Pipeline: two-crossings-only, integer interior, recomputed-deterministic",
+
+  "created_utc": "2026-04-19T00:00:00Z",
+
+  "source_attribution": "GLM-5 Team, arXiv:2602.15763 [cs.LG], Feb 2026 — §4.1.2 Token-In-Token-Out (TITO) gateway. Re-tokenization on the learner side corrupted action↔reward alignment. This cert certifies the QA-native structural guarantee: observer/QA boundary crossed exactly twice (Theorem NT), integer tuples throughout interior, no continuous intermediate — the TITO failure mode is structurally impossible. Reference prototype qa_lab/qa_orbit_resonance_attention.py provides the canonical input/evolve/output pipeline. Design doc docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md §Failure-Mode-2. Connects [256] QA Orbit-Resonance Attention (middle layer), [159] QA Observer Core (qa_mod determinism), [129] QA Projection Obstruction. Will Dale + Claude 2026-04-19.",
+
+  "theorem_statement": "A QA-native pipeline crosses the observer/QA boundary exactly twice. All interior state between the two crossings is an integer tuple (b, e) in {1..m}^2. No re-tokenization through a continuous intermediate occurs inside the pipeline. The pipeline output is deterministic: repeated invocations on identical input produce bitwise-identical integer interior traces.",
+
+  "modulus": 9,
+
+  "input_boundary": {
+    "kind": "observer_projection_in",
+    "direction": "continuous_to_integer",
+    "description": "Continuous input signal → integer tuples (b, e) in {1..m}^2 via domain-appropriate quantization. This is the first and only input-side boundary crossing."
+  },
+
+  "output_boundary": {
+    "kind": "observer_projection_out",
+    "direction": "integer_to_continuous",
+    "description": "Integer tuples → continuous output (e.g., float vector, decoded signal). Uses RAW d=b+e, a=b+2e per 2026-04-09 rule — elements use raw derived coords. This is the first and only output-side boundary crossing."
+  },
+
+  "pipeline_stages": [
+    {
+      "kind": "input_observer",
+      "state_type": "continuous",
+      "description": "Input continuous signal before tokenization"
+    },
+    {
+      "kind": "attention",
+      "state_type": "integer_tuple",
+      "description": "Orbit-resonance attention — deterministic pairwise resonance on T-orbit tuples, cert [256]"
+    },
+    {
+      "kind": "evolve",
+      "state_type": "integer_tuple",
+      "description": "T-operator evolution on integer path time (T1)"
+    },
+    {
+      "kind": "output_observer",
+      "state_type": "continuous",
+      "description": "Output observer projection to continuous"
+    }
+  ],
+
+  "canonical_seed_tokens": [[1, 1], [1, 3], [1, 4], [3, 3], [9, 9]],
+  "canonical_steps": 6,
+  "canonical_trace_length": 7,
+
+  "interior_state_samples": [
+    [1, 1], [1, 2], [2, 3], [3, 5], [5, 8]
+  ],
+
+  "determinism": {
+    "repeats": 100,
+    "bitwise_identical": true,
+    "note": "Repeated invocation on the canonical seed tokens produces bitwise-identical interior trace. Structural reason: integer arithmetic + deterministic T-operator; no stochastic ops, no float state, no Adam buffers across integer-state transitions."
+  },
+
+  "cross_references": [
+    {"family": 129, "name": "QA Projection Obstruction Cert", "relation": "layered_projection_framework"},
+    {"family": 159, "name": "QA Observer Core Cert", "relation": "qa_mod_A1_determinism"},
+    {"family": 256, "name": "QA Orbit-Resonance Attention", "relation": "interior_attention_layer"}
+  ],
+
+  "witnesses": [
+    {"stage": "input_observer_sample", "representative": {"continuous_in": "<domain-specific>", "integer_out": [1, 1]}},
+    {"stage": "interior_attention_tuple", "representative": [1, 2]},
+    {"stage": "interior_evolve_tuple", "representative": [2, 3]},
+    {"stage": "output_observer_sample", "representative": {"integer_in": [5, 8], "continuous_out": "<domain-specific>"}}
+  ],
+
+  "design_claim_context": "GLM-5's TITO gateway is engineering discipline on top of a continuous-learning substrate; re-tokenization drift is possible in principle and was observed in practice. The QA-native pipeline certified here has no continuous intermediate to re-project through. The two-boundary-crossing invariant of Theorem NT is structurally enforced, not just documented.",
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

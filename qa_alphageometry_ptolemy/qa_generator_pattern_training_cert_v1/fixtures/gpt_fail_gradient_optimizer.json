@@ -1,0 +1,46 @@
+{
+  "schema_version": "QA_GENERATOR_PATTERN_TRAINING_CERT.v1",
+  "certificate_id": "qa.cert.generator_pattern_training.fail.gradient.v1",
+  "cert_type": "qa_generator_pattern_training_cert",
+  "title": "FAIL fixture: declares gradient-based Adam optimizer + scalar loss + wrong trained generator + missing families",
+
+  "created_utc": "2026-04-19T00:00:00Z",
+
+  "_fixture_purpose": "Negative fixture exercising GPT_NO_GRAD (uses_gradients=true, optimizer.kind='adam', float_state non-empty), GPT_ORBIT_EVAL (scalar_loss_used=true, metric='mse'), GPT_DET (declared trained_generator contradicts recomputation), GPT_WIT (witnesses missing families). Validator must flag all four.",
+
+  "source_attribution": "Negative fixture for [258] self-test. GLM-5 arXiv:2602.15763.",
+
+  "modulus": 9,
+
+  "canonical_target_trace": [[1, 4], [4, 5], [5, 9], [9, 5]],
+  "trained_generator": [3, 3],
+  "declared_match_score": 0,
+
+  "training_path": {
+    "uses_gradients": true,
+    "search_space_size": 81,
+    "steps_enumerated": 81
+  },
+
+  "optimizer": {
+    "kind": "adam",
+    "float_state": ["m", "v", "lr", "beta1", "beta2"]
+  },
+
+  "evaluation": {
+    "metric": "mse",
+    "scalar_loss_used": true
+  },
+
+  "cross_references": [
+    {"family": 209, "name": "QA Signal Generator Inference", "relation": "canonical_integer_generator"}
+  ],
+
+  "witnesses": [
+    {"family": "fibonacci", "target_trace_start": [1, 1], "expected_generator": [1, 1]},
+    {"family": "tribonacci", "target_trace_start": [3, 3], "expected_generator": [3, 3]}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -1,0 +1,56 @@
+{
+  "schema_version": "QA_GENERATOR_PATTERN_TRAINING_CERT.v1",
+  "certificate_id": "qa.cert.generator_pattern_training.pass.default.v1",
+  "cert_type": "qa_generator_pattern_training_cert",
+  "title": "QA Generator-Pattern Training: discrete search recovers integer generator from target trace",
+
+  "created_utc": "2026-04-19T00:00:00Z",
+
+  "source_attribution": "GLM-5 Team, arXiv:2602.15763 [cs.LG], Feb 2026 — §4.1.2 asynchronous RL policy staleness / double-sided importance sampling / optimizer reset. The failure modes this cert eliminates by construction. There is no float policy to drift; training is discrete identification of an integer generator (b_0, e_0) via exhaustive search over m^2=81 starting tuples on S_9. Grounded in cert [209] (QA Signal Generator Inference — canonical integer generator e_t = ((b_{t+1}-b_t-1)%m)+1), cert [256] (QA Orbit-Resonance Attention — uses the trained generator as operating pattern), cert [257] (QA Integer-State Pipeline — training stays inside two-boundary invariant). Reference prototype qa_lab/qa_orbit_resonance_attention.py:identify_generator. Design doc docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md §Failure-Mode-3. Will Dale + Claude 2026-04-19.",
+
+  "theorem_statement": "Training in a QA-native architecture is identification of an integer generator pattern (b_0, e_0) in {1..m}^2 whose T-orbit best matches a target trace under exact tuple-equality count. The training procedure is exhaustive discrete search over m^2 starting tuples; no gradients, no float optimizer state (no Adam m/v buffers, no momentum, no EMA), no importance-sampling corrections, no policy-version staleness, no trust region, no optimizer reset. The trained generator is a deterministic function of the target trace: repeated training invocations on identical targets produce bitwise-identical trained generators.",
+
+  "modulus": 9,
+
+  "canonical_target_trace": [[1, 4], [4, 5], [5, 9], [9, 5]],
+  "trained_generator": [1, 4],
+  "declared_match_score": 4,
+
+  "training_path": {
+    "uses_gradients": false,
+    "search_space_size": 81,
+    "steps_enumerated": 81,
+    "note": "Exhaustive enumeration of all (b_0, e_0) in {1..9}^2; for each, simulate T-orbit of length len(target) and count exact matches; argmax with lexicographic tiebreak on (b_0, e_0)."
+  },
+
+  "optimizer": {
+    "kind": "discrete_search",
+    "float_state": [],
+    "note": "No Adam buffers, no momentum, no EMA, no learning rate. No continuous state at all. Deterministic integer enumeration."
+  },
+
+  "evaluation": {
+    "metric": "exact_match_count",
+    "scalar_loss_used": false,
+    "note": "Integer-valued: number of positions k where state_k (T^k applied to candidate generator) equals target_trace[k]. No soft similarity, no cross-entropy, no distance in a learned embedding."
+  },
+
+  "cross_references": [
+    {"family": 209, "name": "QA Signal Generator Inference", "relation": "canonical_integer_generator"},
+    {"family": 256, "name": "QA Orbit-Resonance Attention", "relation": "consumes_trained_generator"},
+    {"family": 257, "name": "QA Integer-State Pipeline", "relation": "training_stays_inside_two_boundary_invariant"}
+  ],
+
+  "witnesses": [
+    {"family": "fibonacci", "target_trace_start": [1, 1], "expected_generator": [1, 1], "note": "Fibonacci cosmos orbit trace starting at (1,1)"},
+    {"family": "lucas", "target_trace_start": [1, 3], "expected_generator": [1, 3], "note": "Lucas cosmos orbit trace starting at (1,3)"},
+    {"family": "phibonacci", "target_trace_start": [1, 4], "expected_generator": [1, 4], "note": "Phibonacci cosmos orbit trace starting at (1,4) — this is the canonical_target_trace source"},
+    {"family": "tribonacci", "target_trace_start": [3, 3], "expected_generator": [3, 3], "note": "Tribonacci satellite orbit trace starting at (3,3)"},
+    {"family": "ninbonacci", "target_trace_start": [9, 9], "expected_generator": [9, 9], "note": "Ninbonacci singularity orbit — T fixes (9,9)"}
+  ],
+
+  "design_claim_context": "GLM-5 async RL manages float policy drift via staleness bounds (|w_current - w_0| > delta dropped), double-sided importance sampling with trust region [1-eps, 1+h] and hard masking outside, and optimizer reset after each weight push to rollout engine. All of this apparatus exists to manage drift of a continuous object. Remove the float policy and the apparatus becomes unnecessary. Here the 'policy' is an integer generator pattern; there is no continuum of mostly-current policies, no off-policy bias, no gradient.",
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

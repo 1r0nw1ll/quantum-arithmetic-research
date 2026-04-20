@@ -7166,6 +7166,68 @@ def _validate_orbit_resonance_attention_cert_family(base_dir):
     return None
 
 
+def _validate_integer_state_pipeline_cert_family(base_dir):
+    """QA Integer-State Pipeline Cert family [257] — certifies the two-boundary-crossing invariant of Theorem NT as a structural pipeline property. Observer/QA boundary crossed exactly twice (input tokenization + output decoding); interior is integer tuples throughout; no re-tokenization through a continuous intermediate. Structurally eliminates the GLM-5 TITO misalignment failure mode (arXiv:2602.15763 §4.1.2). Prerequisites [129] projection obstruction, [159] observer core, [256] orbit-resonance attention. Reference: qa_lab/qa_orbit_resonance_attention.py. Design: docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md. Checks ISP_1+BOUND/INT/NO_REPROJECT/DET/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_integer_state_pipeline_cert_v1")
+    validator = os.path.join(fam_dir, "qa_integer_state_pipeline_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_integer_state_pipeline_cert_v1/qa_integer_state_pipeline_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_integer_state_pipeline_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_integer_state_pipeline_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_integer_state_pipeline_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_generator_pattern_training_cert_family(base_dir):
+    """QA Generator-Pattern Training Cert family [258] — certifies QA-native training as discrete-search identification of an integer generator pattern (b_0, e_0) over m^2=81 starting tuples on S_9. No gradients, no float optimizer state, no IS corrections, no staleness bounds, no trust region, no optimizer reset. Evaluation by exact orbit-trace match (integer-valued), not scalar loss. Structurally eliminates the GLM-5 async-RL policy-staleness failure class (arXiv:2602.15763 §4.1.2). Prerequisites [209] signal generator inference, [256] orbit-resonance attention, [257] integer-state pipeline. Reference: qa_lab/qa_orbit_resonance_attention.py (identify_generator, identify_family). Design: docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md. Checks GPT_1+INT_GEN/NO_GRAD/DISCRETE/ORBIT_EVAL/DET/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_generator_pattern_training_cert_v1")
+    validator = os.path.join(fam_dir, "qa_generator_pattern_training_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_generator_pattern_training_cert_v1/qa_generator_pattern_training_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_generator_pattern_training_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_generator_pattern_training_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_generator_pattern_training_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_kg_agent_write_surface_cert(base_dir):
     """QA-KG Agent Write Surface Cert [255] v1: validates Phase 6 MCP agent-integration firewall. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg_mcp/server.py (Dale, 2026); memory/project_qa_mem_review_role.md (Dale, 2026). Gates W1 (MCP surface = 4 tools via AST), W2 (agent upserts confined to extractor/tests/cert-validators), W3a (direct-DB-write detector scans wrapper ledger), W3b (promoted-from edges must carry mcp_session marker), W4 (rate_limit.increment raises at cap), W5 (authority immutable both directions), W6 (READ_ONLY capability omits promote from tools/list), W7 (every MCP tool call logs to query_log), W8 (no except-pass swallows in tools/qa_kg_mcp/ + tools/qa_kg/_audit.py). All gates HARD. Landing this cert flips the alpha-bar from 'NOT agent memory' to 'alpha agent memory + authoritative project memory' per memory/project_qa_mem_review_role.md."""
     import subprocess
@@ -8212,6 +8274,16 @@ FAMILY_SWEEPS = [
      "Certifies a QA-native attention operator: attention is a deterministic pairwise resonance relation on T-orbit tuples, no learned parameters, no stochastic top-k. Three resonance rules (family_match, norm_match, chromogeometry) are orbit-invariant under T evolution on S_9: attention matrix at path-time t equals matrix at t=0 for every t. Independently recomputed over 24 T-steps on 10 diverse tokens covering all 5 families (Fibonacci/Lucas/Phibonacci/Tribonacci/Ninbonacci). Structurally eliminates the GLM-5 DSA non-deterministic-torch.topk entropy-collapse failure mode (arXiv:2602.15763, Feb 2026) by construction. Connects [214] Norm-Flip Signed-Temporal (orbit family classification), [234] Chromogeometry Pythagorean Identity (cross-pair resonance), [209] Signal Generator Inference (T-operator canonical). Reference prototype qa_lab/qa_orbit_resonance_attention.py. Design doc docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md. Will Dale + Claude 2026-04-19. Checks ORA_1+DET/A1/INV_FAM/INV_NORM/INV_CHR/GRAN/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
      "256_qa_orbit_resonance_attention_cert",
      "qa_orbit_resonance_attention_cert_v1", True),
+    (257, "QA Integer-State Pipeline Cert family",
+     _validate_integer_state_pipeline_cert_family,
+     "Certifies the two-boundary-crossing invariant of Theorem NT as a structural pipeline property. Observer/QA boundary crossed exactly twice (input tokenization continuous→integer + output decoding integer→continuous); interior state is integer tuples throughout; no re-tokenization through continuous intermediate permitted. Validator independently recomputes a canonical 7-step trace from 5 seed tokens and verifies bitwise determinism. Structurally eliminates the GLM-5 TITO misalignment failure mode — re-tokenization on learner side corrupting action↔reward alignment, arXiv:2602.15763 §4.1.2 — by construction. Prerequisites [129] projection obstruction (layered projection framework), [159] observer core (qa_mod A1 determinism), [256] orbit-resonance attention (interior layer). Reference qa_lab/qa_orbit_resonance_attention.py. Design docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md §Failure-Mode-2. Will Dale + Claude 2026-04-19. Checks ISP_1+BOUND/INT/NO_REPROJECT/DET/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
+     "257_qa_integer_state_pipeline_cert",
+     "qa_integer_state_pipeline_cert_v1", True),
+    (258, "QA Generator-Pattern Training Cert family",
+     _validate_generator_pattern_training_cert_family,
+     "Certifies QA-native training as discrete search identifying an integer generator pattern (b_0, e_0) in {1..m}^2 via exhaustive enumeration over m^2=81 starting tuples on S_9. Trained object is an integer tuple, not a float weight tensor. No gradients, no float optimizer state (no Adam m/v, no momentum, no EMA), no importance sampling, no policy-version staleness, no trust region, no optimizer reset. Evaluation by exact orbit-trace match count (integer-valued metric), not scalar loss. Validator independently recomputes identify_generator(canonical_target_trace) twice and asserts declared trained_generator matches recomputation. Structurally eliminates the GLM-5 async-RL policy-staleness failure class — IS corrections, trust regions, staleness bounds, optimizer reset (arXiv:2602.15763 §4.1.2) — by construction. Prerequisites [209] signal generator inference (canonical e_t = ((b_{t+1}-b_t-1) mod m)+1), [256] orbit-resonance attention (consumes trained generator), [257] integer-state pipeline (training stays inside two-boundary invariant). Reference qa_lab/qa_orbit_resonance_attention.py identify_generator/identify_family. Design docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md §Failure-Mode-3. Will Dale + Claude 2026-04-19. Checks GPT_1+INT_GEN/NO_GRAD/DISCRETE/ORBIT_EVAL/DET/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
+     "258_qa_generator_pattern_training_cert",
+     "qa_generator_pattern_training_cert_v1", True),
 ]
 
 

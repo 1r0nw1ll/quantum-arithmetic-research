@@ -39,10 +39,12 @@ def parse_args():
     return p.parse_args(argv)
 
 
-def classify(b, e):
-    if b == 9 and e == 9:
+def classify(b, e, m=9):
+    """Canonical per qa_orbit_rules.py: Satellite = (m/3)|b ∧ (m/3)|e ∧ not (m,m)."""
+    sat_div = m // 3
+    if b == m and e == m:
         return "singularity"
-    if b == e:
+    if b % sat_div == 0 and e % sat_div == 0:
         return "satellite"
     return "cosmos"
 
@@ -157,13 +159,22 @@ def main():
             obj.data.materials.append(mats[cls])
             obj.name = f"pt_{b}_{e}_{cls}"
 
+    # Camera + TRACK_TO empty: guarantee full torus is framed regardless of R/r.
+    target = bpy.data.objects.new("cam_target", None)
+    target.location = (0, 0, 0)
+    scene.collection.objects.link(target)
+
     cam_data = bpy.data.cameras.new("Camera")
-    cam_data.lens = 55
+    cam_data.lens = 42   # wider FOV (was 55)
     cam = bpy.data.objects.new("Camera", cam_data)
     scene.collection.objects.link(cam)
-    cam.location = (6.0, -6.0, 5.5)
-    cam.rotation_euler = (math.radians(58), 0, math.radians(45))
+    # Pull back: torus outer radius = R + r = 3.4; 12 units distance gives plenty of margin.
+    cam.location = (8.5, -8.5, 7.2)
     scene.camera = cam
+    track = cam.constraints.new(type="TRACK_TO")
+    track.target = target
+    track.track_axis = "TRACK_NEGATIVE_Z"
+    track.up_axis = "UP_Y"
 
     # key / fill / rim lights to show torus 3D form
     for loc, energy, kind in [

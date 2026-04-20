@@ -374,10 +374,123 @@ Eight new `.tla` files + eight new `.cfg` files authored 2026-04-20 under sessio
 
 `QAAxioms.tla` is authored in the self-contained style of the Paxos / Raft exemplars under `github.com/tlaplus/examples`: one module + cfg + paired non-vacuity tests per runtime-checkable invariant + prose comments that explain the framing. Submittable upstream as a single directory after repo-specific identifiers are generalized (the base QARM spec would accompany it).
 
-## Next steps (post-Lane 2)
+---
+
+# Lane 2 Follow-up — CAP=24 scale + QACertificateSpine first run (2026-04-20)
+
+**Session:** `cert-qa-axioms-tla-followup` / claude-main-1740
+**Authority:** QARM_PROOF_LEDGER.md §"Next steps (post-Lane 2)" items (3) and (2); executed in sequence per Will's direction.
+
+## Run 14 — `QAAxioms` at CAP=24 (applied mod-24 domain)
+
+**Purpose:** verify the axiom stack is tractable + sound at the CAP used by applied QA experiments (mod-24 cosmos/satellite/singularity orbit geometry).
+
+**Artifact:** `QAAxioms_cap24.cfg` (new). Same spec file as Run 7 (`QAAxioms.tla`); only `CAP = 20 → 24` changes.
+
+**Result:** `Model checking completed. No error has been found.`
+- Initial states: **132** (vs 90 at CAP=20; 1.47× growth, matches analytic count: ∑_{e=1}^{11} max(0, 24−2e) = 132)
+- Distinct states: **686** (vs 470 at CAP=20; 1.46× growth)
+- Total states: 1378
+- Depth: 3 (unchanged)
+- Wall time: **5 s**
+
+**Interpretation:** all seven axiom invariants (A1/A2/S1/S2/T1/T2/NT) hold at the applied-domain bound. State-space growth (1.46×) is well under the Lane 2 prediction of 4×–5×, so the mod-24 encoding is comfortable for TLC and there is ample headroom for richer extensions (e.g., adding `K = 5` to KSet, or modeling longer observer projections). The axiom encoding carries forward without modification from CAP=20 to CAP=24 — zero per-domain glue code.
+
+## Runs 15–16 — `QACertificateSpine` first-ever TLC runs
+
+**Context:** `QACertificateSpine.tla` authored 2026-01-21, 13 KB, never TLC-checked (no `.cfg` on disk before today; confirmed in audit §1 Region B). Declares 7 certificate record types (Policy / MCTS / Exploration / Inference / Filter / RL / Imitation) + coherence rules + `FailureFirstClass` theorem.
+
+**Authoring:** `QACertificateSpine_check.tla` (new) — wrapper module that bounds the witness alphabet (`{"ok","w1","w2"}`, max length 2 → 4 bounded sequences) and instantiates `cert \in BoundedCertificate` as the single state variable. Two invariants checked: `Inv_NoSilentFailures == NoSilentFailures(cert)` and `Inv_ObstructionHasWitness == ObstructionHasWitness(cert)`. These are exactly the two predicates quoted in the theorem body:
+
+```
+THEOREM FailureFirstClass ==
+    \A cert \in Certificate:
+        NoSilentFailures(cert) /\ ObstructionHasWitness(cert)
+```
+
+Two `.cfg` files: `QACertificateSpine_check.cfg` (checks both invariants; TLC reports the first one to fire) and `QACertificateSpine_check_NSF.cfg` (checks only `Inv_NoSilentFailures` to surface the second counterexample).
+
+### Spec bugs caught by first parse (real findings, 111 days dormant)
+
+Before TLC could run, the spec's own parse failed twice:
+
+1. **Line 135:** `evidence: Variables -> STRING` was illegal TLA+ — function-type expressions need brackets. Fixed to `evidence: [Variables -> STRING]` (function-set notation per Lamport, 2002). This error would have been caught the first time the spec was parsed, but because it was never run, it sat for 111 days.
+
+2. **`NULL` used 4 times (lines 49/83/140/163/168/209/244/252/254/296) but never declared.** Four TLC errors of the form `Unknown operator: 'NULL'`. Fixed by adding `NULL` to the `CONSTANTS` block of `QACertificateSpine.tla` with a clarifying comment. The accompanying `.cfg` binds `NULL = "NULL"`, matching usage intent (sentinel for "no failure occurred" in `fail_type: PolicyFailType \cup {NULL}` record fields).
+
+Both fixes are *mechanical syntactic correctness*, not semantic change to QA legality. They unblock all downstream model-checking of this spec.
+
+### Run 15 — FailureFirstClass counterexample on `ObstructionHasWitness`
+
+**Config:** `QACertificateSpine_check.cfg` (both invariants active).
+
+**Result:** `Error: Invariant Inv_ObstructionHasWitness is violated by the initial state:`
+
+```
+cert = [status |-> "OBSTRUCTION", witness |-> <<>>, verifiable |-> FALSE]
+```
+
+- States generated: 8+ (TLC reports on first violation during initial-state enumeration)
+- Depth: 1 (violation at Init, no Next transition needed)
+- Wall time: 3 s
+
+**Interpretation:** the `Certificate` record type admits certificates with `status = "OBSTRUCTION"` AND `witness = <<>>` (empty sequence). The `ObstructionHasWitness` predicate requires `Len(witness) > 0` whenever `status = "OBSTRUCTION"`. TLC constructs exactly this counterexample within the bounded witness alphabet, proving that the universal quantification in `FailureFirstClass` is **false** over the `Certificate` type as defined.
+
+### Run 16 — FailureFirstClass counterexample on `NoSilentFailures`
+
+**Config:** `QACertificateSpine_check_NSF.cfg` (isolates `Inv_NoSilentFailures`).
+
+**Result:** `Error: Invariant Inv_NoSilentFailures is violated by the initial state:`
+
+```
+cert = [status |-> "INVALID", witness |-> <<>>, verifiable |-> FALSE]
+```
+
+- States generated: 16+
+- Depth: 1
+- Wall time: 4 s
+
+**Interpretation:** `CertificateStatus == {"SUCCESS", "OBSTRUCTION", "INVALID"}` admits `"INVALID"` as a legal status, but `NoSilentFailures(cert)` is defined as `cert.status \in {"SUCCESS", "OBSTRUCTION"}` — it explicitly rejects `"INVALID"`. A cert with `status = "INVALID"` is legal per the type and illegal per the invariant. Second counterexample to `FailureFirstClass`.
+
+### Finding: `FailureFirstClass` theorem is false over `Certificate`
+
+The dormant spec contains two design inconsistencies between the `Certificate` type and the `FailureFirstClass` theorem:
+
+| Issue | Type permits | Theorem forbids |
+|---|---|---|
+| (A) Silent-failure status | `status = "INVALID"` (in `CertificateStatus`) | `NoSilentFailures` requires `status ∈ {SUCCESS, OBSTRUCTION}` |
+| (B) Empty obstruction witness | `witness = <<>>` (in `Seq(STRING)`) paired with `status = "OBSTRUCTION"` | `ObstructionHasWitness` requires `Len(witness) > 0` when obstruction |
+
+The theorem was aspirational (per its comment: "every decision layer admits a finite, machine-checkable witness or obstruction"), but the TYPE domain of `Certificate` does not structurally enforce the aspiration. The theorem would hold if either:
+
+- (Fix-A) `CertificateStatus` were narrowed to `{"SUCCESS", "OBSTRUCTION"}`, OR
+- (Fix-B) A `WellFormedCertificate` subtype were introduced that constrains `(status = "OBSTRUCTION") => (Len(witness) > 0)` AND `status \neq "INVALID"`, and the theorem quantified over that subtype.
+
+**This finding is recorded, not fixed.** The fix is a design decision for the spec author (Will). The present ledger entry documents that TLC caught the inconsistency on the first run of an otherwise-dormant spec, exactly as Lane 1 promised.
+
+### Artifacts
+
+- `QACertificateSpine.tla` — 2 mechanical syntax fixes to unblock parsing (line 135 function-type brackets, CONSTANTS block extended with NULL).
+- `QACertificateSpine_check.tla` + `.cfg` — model-check wrapper (new).
+- `QACertificateSpine_check_NSF.cfg` — isolated NoSilentFailures check (new).
+
+## Lane 2 follow-up proof-pair summary
+
+| Run | Spec / Config | Purpose | States | Result |
+|---|---|---|---|---|
+| 14 | `QAAxioms` / `QAAxioms_cap24.cfg` | CAP=24 scale check | 132 init / 686 distinct | no error, 7 invariants hold at applied domain |
+| 15 | `QACertificateSpine_check` / `_check.cfg` | First TLC run of 111-day dormant spec | 8+ init | `Inv_ObstructionHasWitness` violated as predicted |
+| 16 | `QACertificateSpine_check` / `_check_NSF.cfg` | Isolate `NoSilentFailures` | 16+ init | `Inv_NoSilentFailures` violated as predicted |
+
+**Cumulative totals (Lanes 1 + 2 + follow-up):** 16 TLC runs recorded in this ledger. 2 specs caught parse bugs on first run (the `\o` Sequences bug in Lane 1 Run 4; the `->` function-type + missing `NULL` bugs in Lane 2 Runs 15/16). 1 dormant theorem caught being false (FailureFirstClass). All model-checks reproducible from files committed to this directory.
+
+---
+
+## Next steps (post-Lane 2 follow-up)
 
 1. Author non-vacuity specs for the remaining 4 Lane 1 invariants (InBounds, QDef, FailDomain, MoveDomain).
-2. Model-check `QACertificateSpine.tla` — still no `.cfg`, still 111+ days dormant.
-3. Scale QAAxioms to CAP=24 (applied mod-24 domain). Expect 4×–5× state-count growth; should remain tractable.
+2. *Completed 2026-04-20 Runs 15–16 — QACertificateSpine first-ever model-check. Theorem falsified; fix is a design decision for Will.*
+3. *Completed 2026-04-20 Run 14 — CAP=24 scale of QAAxioms. 686 distinct states, 1.46× growth vs CAP=20, all 7 invariants hold.*
 4. Open externalization: submit `QAAxioms.tla` + documentation to `tlaplus/examples`.
+5. **New:** decide fix direction for `FailureFirstClass` — narrow `CertificateStatus` (A) or introduce `WellFormedCertificate` subtype (B). Both are author's-choice semantic decisions; TLC findings are agnostic.
 

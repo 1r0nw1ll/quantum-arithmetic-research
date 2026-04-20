@@ -15,7 +15,10 @@ CONSTANTS
     Actions,          \* Set of all possible actions
     TargetClasses,    \* Set of target classes (goal specifications)
     Variables,        \* Set of random variables (for inference)
-    MaxHorizon        \* Maximum planning horizon
+    MaxHorizon,       \* Maximum planning horizon
+    NULL              \* Sentinel for absent / not-applicable fields
+                      \* (e.g., fail_type = NULL means "no failure")
+                      \* Supplied by the .cfg (typically NULL = "NULL")
 
 (****************************************************************************)
 (* CERTIFICATE VALIDITY                                                     *)
@@ -132,7 +135,7 @@ InferenceFailType == {"TREEWIDTH_TOO_HIGH", "MESSAGE_DIVERGENCE", "EVIDENCE_INCO
 \* Inference certificate structure
 InferenceCertificate == [
     query_vars: SUBSET Variables,
-    evidence: Variables -> STRING,  \* Variable -> value mapping
+    evidence: [Variables -> STRING],  \* Variable -> value mapping (function set)
     method: InferenceMethod,
     is_tree: BOOLEAN,               \* Factor graph is tree
     exact: BOOLEAN,                 \* Result is exact (not approximate)

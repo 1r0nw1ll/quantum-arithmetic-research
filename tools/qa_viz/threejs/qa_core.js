@@ -118,13 +118,26 @@ export const PALETTE_COSMOS_ORBITS = [
   0x50e0b8,  // orbit 2: teal
 ];
 
+// Archetype palette (DRTH §2.3 cosets Γ_G / Γ_R / Γ_B).
+// Distinct from PALETTE_CLASS to avoid visual collision.
+export const PALETTE_ARCHETYPE = {
+  1: 0x9ee27a,  // Γ_G (1,4,7): soft green
+  2: 0xffa94d,  // Γ_R (2,5,8): amber
+  3: 0xb78dff,  // Γ_B (3,6,9): lavender
+};
+
 // Choose color for a (b,e) given active color mode.
-//   'class'  — legacy: one color per class
-//   'orbit'  — color Cosmos by which of the 3 period-24 orbits it lives on
+//   'class'     — one color per orbit class (default)
+//   'orbit'     — color Cosmos by which of the 3 period-24 orbits it lives on
+//   'archetype' — color by archetype(d) where d = qa_mod(b+e); 3 bands per DRTH cosets
 export function pickColor(b, e, mode = 'class') {
   const cls = classify(b, e);
   if (mode === 'orbit' && cls === 'cosmos') {
     return PALETTE_COSMOS_ORBITS[cosmos_orbit_id(b, e)];
+  }
+  if (mode === 'archetype') {
+    const d = qa_mod(b + e);
+    return PALETTE_ARCHETYPE[archetype(d)];
   }
   return PALETTE_CLASS[cls];
 }

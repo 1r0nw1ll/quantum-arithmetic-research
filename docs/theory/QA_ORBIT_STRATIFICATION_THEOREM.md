@@ -177,17 +177,36 @@ All match prediction exactly.
 
 ### Case C — Ramified (p = 5)
 
-`x² − x − 1` has the double root `x ≡ 3 (mod 5)`; the discriminant equals p. F is not diagonalisable mod 5 — it is a Jordan block. Over `(ℤ/5^n ℤ)²` the structure is a Jordan filtration.
+The discriminant of `x² − x − 1` equals 5, so mod 5 it has a double root at `x ≡ 3`. F mod 5 is a Jordan block with eigenvalue 3 and geometric multiplicity 1.
 
-**Empirical** on mod 25 = 5², L_0:
+**Key identity**: let `ε := F − 3I = [[−3, 1], [1, −2]]`. By Cayley–Hamilton `F² = F + I`, so
 ```
-5 × π(25) + 5 × π(5)  =  5 × 100 + 5 × 20  =  600 = |L_0|
+ε² = F² − 6F + 9I = (F + I) − 6F + 9I = −5F + 10I = 5·(2I − F) = 5·η
 ```
-and on mod 25, L_1: `1 × 20 + 1 × 4 = 24 = |L_1|` where 4 = π(5)/5 and 20 = π(5).
+where `η := 2I − F = [[2, −1], [−1, 1]]` has `det η = 1`, so `η ∈ GL₂(ℤ/5^k ℤ)` for all `k`. **ε behaves like an element of valuation ½ in the ramified extension**: `ε² = 5 · unit`.
 
-Half the L_0 orbits live "at full depth" (length π(p^n)); the other half collapse to the reduced Pisano period π(p^{n−1}) because they lie on the Jordan generalised-eigenspace that reduces non-trivially mod p.
+**σ-orbit structure on L_0 of `(ℤ/5^k ℤ)²`** (direct enumeration, k ∈ {1, 2, 3}):
 
-A complete closed form requires tracking the Jordan filtration through `ker (F − 3I)^r` for `r = 0, 1, …, n`; deferred.
+| k  | \|L_0\|  | orbit structure                              | derivation                               |
+|---:|---:|----------------------------------------------|------------------------------------------|
+| 1  |   24 | `1×20 + 1×4`                                | `1 × π(5)` + `1 × ord_5(3) = 4` (eigenspace mod 5) |
+| 2  |  600 | `5×100 + 5×20`                              | `5 × π(25) + 5 × π(5)`                   |
+| 3  | 15000 | `25×500 + 25×100`                           | `25 × π(125) + 25 × π(25)`               |
+
+**Pattern for k ≥ 2**: exactly **two strata on L_0**, each with `5^{k−1}` orbits:
+
+- **Generic**: `5^{k−1}` orbits of length `π(5^k) = 4·5^k`.
+- **Depth-1 (Jordan-filtered)**: `5^{k−1}` orbits of length `π(5^{k−1}) = 4·5^{k−1}` — vectors reducing mod 5 into the 1-D eigenspace of `F mod 5`, lifted to `(ℤ/5^k ℤ)²`.
+
+The depth-1 stratum has size `(p−1) · 5^{2(k−1)} = 4 · 5^{2(k−1)}` (a 1-D F_5-line lifted to `(ℤ/5^{k−1} ℤ)²` with unit-coordinate constraint). Divided by `π(5^{k−1}) = 4·5^{k−1}` gives `5^{k−1}` orbits. ✓
+
+**No deeper strata on L_0 for k ≥ 2**: vectors in higher Jordan layers reduce mod 5 to the zero eigenspace, which puts them in `L_1` (not `L_0`). In particular, no length-4 orbits on L_0 of `(ℤ/5^k ℤ)²` for k ≥ 2 — the length-4 phenomenon only appears at k = 1 (where eigenspace ⊂ L_0 directly).
+
+**k = 1 as exception**: when k = 1 there is no "shallow lift" above the eigenspace, so the eigenspace itself carries the short-orbit contribution (length `ord_5(3) = 4`). For k ≥ 2, the eigenspace-over-F_5 requires a 5-lift to remain in L_0, and that lift promotes the orbit length to `π(5^{k−1})`.
+
+**L_j reduction**: `L_j` on mod `5^k` scales to `L_0` on mod `5^{k−j}` (Proposition B's scaling map intertwines σ). Applying the closed form above to the smaller modulus recovers the full `L_j` structure — e.g., `L_1` on mod 25 = `L_0` on mod 5 = `1×20 + 1×4`. Verified.
+
+**What μ does in Case C**: it identifies the two strata. Under `{σ, μ}` (Part I), the entire `L_0` of mod `5^k` becomes a single component (size `|L_0|`), collapsing both the generic and depth-1 σ-orbits. This is exactly what Proposition B predicts from the `GL₂(ℤ/5^k ℤ)`-action classification.
 
 ## Composite m via CRT
 

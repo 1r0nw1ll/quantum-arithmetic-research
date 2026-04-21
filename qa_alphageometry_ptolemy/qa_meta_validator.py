@@ -7228,6 +7228,37 @@ def _validate_generator_pattern_training_cert_family(base_dir):
     return None
 
 
+def _validate_heartmath_coherence_cert_family(base_dir):
+    """QA HeartMath Coherence Firewall Cert family [259] — Theorem NT (observer-projection firewall) applied to HeartMath-sourced cardiac-rhythm data. Rhythm states labeled as discrete orbit classes {Singularity, Satellite, Cosmos}; continuous coherence-ratio / HRV / LF-HF measurements admitted only as observer_projections with direction=output, never as causal QA state. Primary-source anchors: oschman_2015_master_oscillator (Cosmos broadcasting), oschman_2015_rein_coherence (Satellite heart-brain entrainment), oschman_2015_bidirectional_antenna (NT two-boundary symmetry), edwards_2018_coherence_patterns (population-scale pattern classification). Does NOT claim an HI <-> coherence-ratio numerical mapping (Phase 4.8 item 6 corpus expansion required). Primary source: Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf; claim IDs tools/qa_kg/fixtures/source_claims_heartmath.json; excerpts docs/theory/heartmath_phase4_8_excerpts.md; theory docs/theory/QA_HEARTMATH_COHERENCE.md. Will Dale + Claude 2026-04-20. Grounds Phase 4.8 item 5 of docs/specs/QA_MEM_PHASE_4_8_HANDOFF.md. Checks HMC_1+RHYTHM_LABELS/NO_FLOAT_STATE/BOUNDARY_CROSSINGS/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_heartmath_coherence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_heartmath_coherence_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_heartmath_coherence_cert_v1/qa_heartmath_coherence_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_heartmath_coherence_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_heartmath_coherence_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_heartmath_coherence_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_kg_agent_write_surface_cert(base_dir):
     """QA-KG Agent Write Surface Cert [255] v1: validates Phase 6 MCP agent-integration firewall. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg_mcp/server.py (Dale, 2026); memory/project_qa_mem_review_role.md (Dale, 2026). Gates W1 (MCP surface = 4 tools via AST), W2 (agent upserts confined to extractor/tests/cert-validators), W3a (direct-DB-write detector scans wrapper ledger), W3b (promoted-from edges must carry mcp_session marker), W4 (rate_limit.increment raises at cap), W5 (authority immutable both directions), W6 (READ_ONLY capability omits promote from tools/list), W7 (every MCP tool call logs to query_log), W8 (no except-pass swallows in tools/qa_kg_mcp/ + tools/qa_kg/_audit.py). All gates HARD. Landing this cert flips the alpha-bar from 'NOT agent memory' to 'alpha agent memory + authoritative project memory' per memory/project_qa_mem_review_role.md."""
     import subprocess
@@ -8284,6 +8315,11 @@ FAMILY_SWEEPS = [
      "Certifies QA-native training as discrete search identifying an integer generator pattern (b_0, e_0) in {1..m}^2 via exhaustive enumeration over m^2=81 starting tuples on S_9. Trained object is an integer tuple, not a float weight tensor. No gradients, no float optimizer state (no Adam m/v, no momentum, no EMA), no importance sampling, no policy-version staleness, no trust region, no optimizer reset. Evaluation by exact orbit-trace match count (integer-valued metric), not scalar loss. Validator independently recomputes identify_generator(canonical_target_trace) twice and asserts declared trained_generator matches recomputation. Structurally eliminates the GLM-5 async-RL policy-staleness failure class — IS corrections, trust regions, staleness bounds, optimizer reset (arXiv:2602.15763 §4.1.2) — by construction. Prerequisites [209] signal generator inference (canonical e_t = ((b_{t+1}-b_t-1) mod m)+1), [256] orbit-resonance attention (consumes trained generator), [257] integer-state pipeline (training stays inside two-boundary invariant). Reference qa_lab/qa_orbit_resonance_attention.py identify_generator/identify_family. Design docs/theory/QA_GLM5_ARCHITECTURE_MAPPING.md §Failure-Mode-3. Will Dale + Claude 2026-04-19. Checks GPT_1+INT_GEN/NO_GRAD/DISCRETE/ORBIT_EVAL/DET/SRC/WIT/F; 1 PASS + 1 FAIL; self-test ok",
      "258_qa_generator_pattern_training_cert",
      "qa_generator_pattern_training_cert_v1", True),
+    (259, "QA HeartMath Coherence Firewall Cert family",
+     _validate_heartmath_coherence_cert_family,
+     "Theorem NT (observer-projection firewall) applied to HeartMath-sourced cardiac-rhythm data. Rhythm states labeled as discrete orbit classes {Singularity, Satellite, Cosmos}; continuous coherence / HRV / LF-HF / cross-coherence measurements admitted only as observer_projections with direction=output, never as causal QA state variables (b, e, d, a). Each rhythm-trace state declares at most two observer/QA boundary crossings per Theorem NT — no interior re-projection through a continuous intermediate. Primary-source anchors (18 claims registered in tools/qa_kg/fixtures/source_claims_heartmath.json): oschman_2015_master_oscillator (heart as master electrical oscillator broadcasting coherent frequencies system-wide → Cosmos), oschman_2015_rein_coherence (ECG coherence under positive-emotion attention + heart-brain cross-coherence → Satellite, entrained), oschman_2015_bidirectional_antenna (antenna transmit-receive reciprocity = two-boundary-crossing symmetry in Theorem NT), edwards_2018_coherence_patterns (population-scale coherence patterns consistent with orbit-class as operational surface). Does NOT claim an HI ↔ HRV coherence-ratio numerical mapping (requires McCraty/Radin primary-source data, Phase 4.8 item 6, deferred). Does NOT do HRV measurement or biofeedback — QA describes what the coherence phenomenon reduces to when observer-projection is declared properly. Grounds Phase 4.8 item 5 of docs/specs/QA_MEM_PHASE_4_8_HANDOFF.md. Primary source: Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf. Excerpts: docs/theory/heartmath_phase4_8_excerpts.md. Theory: docs/theory/QA_HEARTMATH_COHERENCE.md. Will Dale + Claude 2026-04-20. Checks HMC_1+RHYTHM_LABELS/NO_FLOAT_STATE/BOUNDARY_CROSSINGS/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "259_qa_heartmath_coherence_cert",
+     "qa_heartmath_coherence_cert_v1", True),
 ]
 
 

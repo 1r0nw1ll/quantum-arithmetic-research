@@ -1,0 +1,76 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason='cert [259] PASS fixture; primary sources cited via claim_id witnesses tied to tools/qa_kg/fixtures/source_claims_heartmath.json' -->",
+  "schema_version": "QA_HEARTMATH_COHERENCE_CERT.v1",
+  "certificate_id": "qa_heartmath_coherence_cert_v1_pass_oschman_rein_coherence",
+  "result": "PASS",
+  "rhythm_trace": [
+    {
+      "name": "resting_baseline",
+      "description": "Resting cardiac rhythm before intervention — fixed point, no cyclical entrainment, no broadcasting.",
+      "orbit_class": "Singularity",
+      "qa_state": {"b": 9, "e": 9},
+      "observer_projections": [
+        {
+          "direction": "input",
+          "reading": {"raw_ecg_window_sec": 60, "sample_rate_hz": 256}
+        }
+      ]
+    },
+    {
+      "name": "entrained_cycle",
+      "description": "Subject in HeartMath-style positive-emotion focus; ECG-brain cross-coherence emerges (Oschman 2015 p.2 / oschman_2015_rein_coherence). Cyclical 8-phase entrainment, correlated across heart-brain pair.",
+      "orbit_class": "Satellite",
+      "qa_state": {"b": 3, "e": 6},
+      "observer_projections": [
+        {
+          "direction": "input",
+          "reading": {"raw_ecg_window_sec": 60, "sample_rate_hz": 256}
+        },
+        {
+          "direction": "output",
+          "reading": {"coherence_ratio": 0.78, "lf_hf": 1.9, "cross_coherence_heart_brain": 0.61}
+        }
+      ]
+    },
+    {
+      "name": "master_oscillator_broadcast",
+      "description": "Subject at sustained coherent radiating state — heart as master electrical oscillator broadcasting coherent frequencies system-wide (Oschman 2015 p.2 / oschman_2015_master_oscillator). 24-cycle Cosmos orbit.",
+      "orbit_class": "Cosmos",
+      "qa_state": {"b": 1, "e": 2},
+      "observer_projections": [
+        {
+          "direction": "input",
+          "reading": {"raw_ecg_window_sec": 60, "sample_rate_hz": 256}
+        },
+        {
+          "direction": "output",
+          "reading": {"coherence_ratio": 0.92, "lf_hf": 2.4, "cross_coherence_heart_brain": 0.74}
+        }
+      ]
+    }
+  ],
+  "source_attribution": "Oschman & Oschman 2015 (J Vortex Sci Technol 2:121) + Edwards 2018 (J Psych Africa 28:5) + HeartMath Institute; mapping by Will Dale + Claude 2026-04-20. Grounds Phase 4.8 item 5.",
+  "witnesses": [
+    {
+      "kind": "rhythm_label",
+      "claim_id": "oschman_2015_master_oscillator",
+      "note": "Cosmos broadcasting-state label grounded in the 'master electrical oscillator radiating coherent frequencies' quote."
+    },
+    {
+      "kind": "rhythm_label",
+      "claim_id": "oschman_2015_rein_coherence",
+      "note": "Satellite entrained-state label grounded in ECG/brain cross-coherence under positive-emotion attention."
+    },
+    {
+      "kind": "bidirectional_symmetry",
+      "claim_id": "oschman_2015_bidirectional_antenna",
+      "note": "Two-boundary-crossing symmetry per Theorem NT matches Oschman's antenna transmit/receive reciprocity."
+    },
+    {
+      "kind": "population_pattern",
+      "claim_id": "edwards_2018_coherence_patterns",
+      "note": "HeartMath literature maps population-scale coherence patterns — consistent with orbit-class classification as primary operational surface."
+    }
+  ],
+  "fail_ledger": []
+}

@@ -1,0 +1,43 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason='cert [259] FAIL fixture demonstrating a Theorem NT firewall breach; T2-b violation by injecting coherence_ratio as QA state' -->",
+  "schema_version": "QA_HEARTMATH_COHERENCE_CERT.v1",
+  "certificate_id": "qa_heartmath_coherence_cert_v1_fail_float_qa_state",
+  "result": "FAIL",
+  "rhythm_trace": [
+    {
+      "name": "entrained_cycle_INVALID_FLOAT_STATE",
+      "description": "DELIBERATE VIOLATION: coherence_ratio (float 0.89) injected as the QA state variable b. This is exactly the T2-b firewall breach the cert exists to catch — a continuous HRV-coherence measurement being cast as a causal input to QA dynamics rather than an observer projection output.",
+      "orbit_class": "Satellite",
+      "qa_state": {"b": 0.89, "e": 6},
+      "coherence_ratio": 0.89,
+      "observer_projections": []
+    }
+  ],
+  "source_attribution": "Oschman 2015 + HeartMath Institute; FAIL fixture authored by Will Dale + Claude 2026-04-20.",
+  "witnesses": [
+    {
+      "kind": "firewall_violation",
+      "claim_id": "oschman_2015_rein_coherence",
+      "note": "Coherence-ratio is the measured output of orbit-class dynamics per the Rein/McCraty result; casting it as input is the firewall breach."
+    },
+    {
+      "kind": "firewall_violation",
+      "claim_id": "oschman_2015_master_oscillator",
+      "note": "Master-oscillator broadcasting is the discrete generator; continuous output readings do not re-enter as state."
+    }
+  ],
+  "fail_ledger": [
+    {
+      "fail_type": "HMC_NO_FLOAT_STATE",
+      "fail_code": "T2_B_FIREWALL_BREACH",
+      "locus": "rhythm_trace[0].qa_state.b",
+      "reason": "QA state variable b was assigned a non-integer float value (0.89). Per Theorem NT, continuous coherence-ratio measurements are observer projections (output direction only), never causal QA state."
+    },
+    {
+      "fail_type": "HMC_NO_FLOAT_STATE",
+      "fail_code": "T2_B_FIREWALL_BREACH",
+      "locus": "rhythm_trace[0].coherence_ratio",
+      "reason": "Top-level rhythm-state field 'coherence_ratio' matches a known continuous-measurement alias; such measurements live in observer_projections[...].reading with direction=output."
+    }
+  ]
+}

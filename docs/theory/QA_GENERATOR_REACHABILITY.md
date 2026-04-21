@@ -44,66 +44,84 @@ ChatGPT's framing "ν collapses torus → full connectivity" is accurate *in eff
 > On mod 9: `{σ, μ}` or `{σ, ν}` → full within-class reachability on D₉².
 > The 3-class partition (Cosmos / Satellite / Singularity) is invariant under the full generator group `⟨σ, μ, ν⟩`.
 
-## On mod 24: CRT factorization, not a refutation
+## Beyond mod 9: full structure theorem via p-adic valuation + CRT
 
-Earlier revisions of this doc framed the mod-24 result as "theorem doesn't generalize." **Retracted.** That framing was methodologically wrong: mod-24 component counts are not comparable to mod-9 component counts without a specified morphism, and when we looked for one, the structure turned out to be CRT.
+Earlier drafts framed the mod-24 result as a counterexample to the mod-9 finding. **Retracted.** The right question is not "does mod 24 match mod 9?" but "what is the invariant that distinguishes `{σ,μ}`-components on any modulus?" The answer turns out to be clean: p-adic valuation stratification on each prime-power CRT factor.
 
-### Semiconjugacy check (why `δ_A = qa_mod_9` isn't the right demodulation)
+### Proposition A — prime-power invariant
 
-| candidate δ : D_24² → · | σ semiconjugacy | μ semiconjugacy |
-|---|:---:|:---:|
-| componentwise qa_mod_9 (δ_A) | 276/576 ✗ | 576/576 ✓ |
-| componentwise qa_mod_3 (δ_B, common quotient) | 576/576 ✓ | ✓ |
+On `(Z/p^k Z)²` with `p` prime, the function
+```
+J(b, e) := min(v_p(b), v_p(e))      (taking values in {0, 1, ..., k})
+```
+is invariant under `σ(b,e) = (e, qa_mod(b+e))` and `μ(b,e) = (e, b)`.
 
-`δ_A` fails on σ because it discards the mod-8 half of the CRT decomposition. Only `δ_B` (reducing all the way down to the common mod-3 quotient) semiconjugates both generators — but mod 3 has degenerate class structure (sat_div = 1 makes every non-(3,3) state formally "Satellite"), so it says nothing useful about Cosmos connectivity.
+**Proof.** μ swaps coordinates, so `J ∘ μ = J` trivially. For σ:
+- If `v_p(b) ≠ v_p(e)`, say `v_p(b) = j < ℓ = v_p(e)`, then `v_p(b+e) = j`. So `J(σ(b,e)) = min(ℓ, j) = j = J(b,e)`.
+- If `v_p(b) = v_p(e) = j`, write `b = p^j u, e = p^j v` with `u, v` units mod p. Then `b+e = p^j (u+v)`, so `v_p(b+e) ≥ j`. Hence `J(σ(b,e)) = min(j, v_p(b+e)) = j = J(b,e)`. ☐
 
-### The real structure: CRT factorization
+### Proposition B — level sets are exactly the components
 
-**Proposition (CRT factorization of `{σ, μ}` orbits — empirically verified for m ∈ {9, 24}).**
+On `(Z/p^k Z)²` for `p ∈ {2, 3}`, the `k+1` level sets `L_j := {(b,e) : J(b,e) = j}` for `j ∈ {0, 1, ..., k}` are exactly the `{σ,μ}`-orbit components. **Empirically verified** on (p, k) ∈ {(2, 3), (3, 2), (3, 3)}. No closed-form proof of transitivity within a level yet — left as open.
 
-Let `m = a · b` with `gcd(a, b) = 1`. Under the CRT isomorphism
-`(Z/mZ)² ≅ (Z/aZ)² × (Z/bZ)²`,
-the generators `σ(b,e) = (e, qa_mod(b+e))` and `μ(b,e) = (e, b)` are **coordinate-wise in the state pair**, and `σ` is **additive in the ambient ring**. Both act componentwise under CRT. Therefore the `⟨σ, μ⟩`-orbit decomposition on `(Z/mZ)²` is the Cartesian product of the decompositions on `(Z/aZ)²` and `(Z/bZ)²`.
+**Closed-form level sizes**: For `j < k`, `|L_j| = p^{2(k−j−1)} · (p² − 1)`. For `j = k`, `|L_k| = 1`.
 
-**Induced on Cosmos**: the product restricts to the Cosmos sub-fibers of each factor (since class membership is also componentwise under CRT).
+| (p, k) | level 0 | level 1 | level 2 | level 3 | sum = p^{2k} |
+|---|---:|---:|---:|---:|---:|
+| (2, 3) = mod 8  | 48  | 12  | 3   | 1 | 64 ✓ |
+| (3, 2) = mod 9  | 72  | 8   | 1   | — | 81 ✓ |
+| (3, 3) = mod 27 | 648 | 72  | 8   | 1 | 729 ✓ |
 
-### Empirical verification table (m = 24 = 8 · 3)
+### Proposition C — CRT factorization for composite m
 
-Direct enumeration: `{σ,μ}` on (Z/24Z)² yields **8 components**, each of which factors exactly as (mod-3 component) × (mod-8 component). No exceptions.
+Let `m = Π p_i^{k_i}`. Under the CRT isomorphism
+```
+(Z/mZ)² ≅ Π (Z/p_i^{k_i} Z)²
+```
+σ and μ act componentwise (σ is additive in the ambient ring, μ permutes the ordered pair; both structures are preserved by CRT). Therefore the `{σ,μ}`-orbit decomposition on `(Z/mZ)²` is the **Cartesian product** of the per-factor level-set decompositions from Proposition B. The total component count is `Π (k_i + 1)`.
 
-| mod-24 comp | size | (mod-3 comp, mod-8 comp) | factored size | class on mod 24 |
-|---:|---:|:---:|:---|:---|
-| 0 | 384 | (c3=0, c8=0) | 8 × 48 | Cosmos |
-| 1 |  96 | (c3=0, c8=1) | 8 × 12 | Cosmos |
-| 2 |  48 | (c3=1, c8=0) | 1 × 48 | Cosmos |
-| 3 |  24 | (c3=0, c8=2) | 8 × 3  | Cosmos |
-| 4 |  12 | (c3=1, c8=1) | 1 × 12 | Cosmos |
-| 5 |   8 | (c3=0, c8=3) | 8 × 1  | Satellite |
-| 6 |   3 | (c3=1, c8=2) | 1 × 3  | Cosmos |
-| 7 |   1 | (c3=1, c8=3) | 1 × 1  | Singularity |
-| **sum** | **576** = 24² ✓ | | | |
+**Empirical verification** (all match exactly):
 
-mod 3 has 2 `{σ,μ}`-components (size 8, size 1). mod 8 has 4 (sizes 48, 12, 3, 1). Product of counts: 2 × 4 = 8, matching the mod-24 count. Product of sizes pairwise: matches the mod-24 sizes exactly.
+| m   | factoring | expected count | found count | found sizes (sorted) |
+|---|---|---:|---:|---|
+| 15  | 3·5       | 2·2 = 4 | 4  | 192, 24, 8, 1 |
+| 24  | 8·3       | 4·2 = 8 | 8  | 384, 96, 48, 24, 12, 8, 3, 1 |
+| 45  | 9·5       | 3·2 = 6 | 6  | 1728, 192, 72, 24, 8, 1 |
+| 72  | 8·9       | 4·3 = 12 | 12 | 3456, 864, 384, 216, 96, 72, 48, 24, 12, 8, 3, 1 |
 
-### Contrast: why mod 9 has a single Cosmos component
-
-- **m = 9 = 3²** — a single prime power, so CRT gives no non-trivial factorization. `{σ,μ}` on (Z/9Z)² decomposes into the 2 components measured earlier: one size-72 Cosmos + one size-8 Satellite + singleton (9,9), giving 3 classes total (not components in the CRT sense, but the full decomposition).
-- **m = 24 = 8 · 3** — CRT splits. `{σ,μ}` on (Z/24Z)² gives 8 components = 2 (mod-3 factor) × 4 (mod-8 factor).
-- **No contradiction**: the mod-9 result does not "fail to generalize"; it is the m = 9 instance of the same CRT proposition. 24 and 9 are simply moduli with different prime-power factorizations.
+Each mod-m component factors as (level in factor 1) × (level in factor 2) × … with the size equal to the product of level sizes. The QA class partition inherits: `Cosmos / Satellite / Singularity` on each factor = `(level = 0) / (level = 1) / (level = k_i)`, and on composite m the classes combine via CRT.
 
 ### "Class shift" retracted
 
-In the δ_A fiber analysis earlier, some mod-24 Cosmos components projected to mod-9 Satellite/Singularity. The previous draft called this "class shift" and asked whether it was signal or artifact. **Confirmed artifact**: δ_A discards mod-8 information, collapsing arithmetically distinct mod-24 states into the same mod-9 residue. The resulting class mismatch reflects what δ_A throws away, not a QA invariant.
+In an earlier δ_A (mod-9 reduction) fiber analysis, some mod-24 Cosmos components projected to mod-9 Satellite/Singularity. I called this "class shift" and asked whether it was signal or artifact. **Confirmed artifact**: δ_A discards the mod-8 factor of the CRT decomposition, collapsing states with different `(level mod 8, level mod 3)` pairs onto the same mod-9 level. The resulting class mismatch reflects what δ_A throws away, not a QA invariant.
+
+### Semiconjugacy check (for the record)
+
+| candidate δ : (Z/24Z)² → · | σ semiconjugacy | μ semiconjugacy |
+|---|:---:|:---:|
+| componentwise qa_mod_9 (δ_A) | 276/576 ✗ | 576/576 ✓ |
+| componentwise qa_mod_3 (common quotient) | 576/576 ✓ | ✓ |
+
+δ_A fails σ because it is not a ring-homomorphism from Z/24 to Z/9 (9 ∤ 24). Only the common mod-3 quotient semiconjugates, but it projects to a modulus where class structure is degenerate.
 
 ### ν is mod-9 specific (unchanged)
 
-ν was `(b,e) → (qa_mod(5·b), qa_mod(5·e))` because `5 = 2⁻¹ (mod 9)`. On mod 24, `gcd(2, 24) = 2`, so 2 has no inverse — the "halving" interpretation does not transfer. Any mod-24 analogue of ν would require choosing a different unit in `(Z/24Z)*`. Not measured.
+ν was `(b,e) → (qa_mod(5·b), qa_mod(5·e))` because `5 = 2⁻¹ (mod 9)`. On mod 24, `gcd(2, 24) = 2` so 2 has no inverse; "halving" does not transfer. A mod-24 analogue would require a different unit in `(Z/24Z)*`, with its own domain-specific interpretation.
+
+## Corollary — QA class partition reinterpreted
+
+The canonical Cosmos / Satellite / Singularity partition from `qa_orbit_rules.py` is the **prime-power valuation stratification** applied to each CRT factor of `m`, combined via Cartesian product for composite moduli. On a pure prime power `m = p^k`:
+- Cosmos ≡ level 0 (at least one coordinate a unit)
+- Satellite ≡ level 1 (both divisible by p, at least one not by p²)
+- Singularity ≡ level k (both divisible by p^k — the single fixed state `(p^k, p^k)`)
+
+On composite m the class partition is the componentwise combination. For m = 24 = 2³·3: level in mod-8 is 2-adic, level in mod-3 is 3-adic, and the canonical Satellite rule `(m/3)|b ∧ (m/3)|e = 8|b ∧ 8|e` picks out states at **level-3-in-mod-8** (paired with any mod-3 level) — a specific corner of the full stratification.
 
 ## Open questions
 
-1. **Prove the CRT proposition in closed form.** The empirical verification on m ∈ {9, 24} is suggestive; the proof is straightforward (CRT iso is a ring isomorphism, σ and μ are ring-polynomial maps in the state coordinates) but should be written out.
-2. **Confirm on further moduli** — e.g., m = 45 = 9 · 5, m = 72 = 8 · 9, m = 15 = 3 · 5. Each should give components = (mod-a decomp) × (mod-b decomp).
-3. **Does ν have a universal definition across all m?** Requires a choice of unit in `(Z/mZ)*` whose interpretation is domain-meaningful. Open.
+1. **Formal proof of Proposition B** (transitivity of `{σ,μ}` within each level). Empirically holds for (p,k) ∈ {(2,3), (3,2), (3,3)}; needs a closed-form argument (likely using Pisano periodicity of Fibonacci mod p^k).
+2. **Primes other than 2 and 3** — verify on mod 25 = 5², mod 49 = 7², etc. The invariant and CRT structure should generalize, but empirical check would close the gap.
+3. **Does ν have a universal analogue across moduli?** For odd m, `ν = ×(m+1)/2` is always defined (since `2·((m+1)/2) = m+1 ≡ 1 mod m`). For even m, 2 is not invertible and a different "scale" unit is needed.
 
 ## Reproduce
 

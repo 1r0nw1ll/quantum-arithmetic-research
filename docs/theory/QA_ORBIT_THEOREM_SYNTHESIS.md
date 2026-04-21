@@ -5,6 +5,28 @@
 **Full derivation + proofs**: `docs/theory/QA_ORBIT_STRATIFICATION_THEOREM.md`.
 **Background + audit trail**: `docs/theory/QA_GENERATOR_REACHABILITY.md`.
 
+---
+
+## QA Orbit Theorem (Two-Layer Form)
+
+1. Under `⟨σ, μ⟩`, orbits on `(ℤ/mℤ)²` are exactly the **content-ideal classes** — classified at each prime-power factor `p^k` by `J(b,e) = min(v_p(b), v_p(e))`, and combined by CRT for composite `m`.
+
+2. Under σ alone, orbits refine by the splitting behaviour of `x² − x − 1` mod `p`: **inert**, **split**, or **ramified**, with explicit orbit structures in each case.
+
+3. **μ collapses the Part II refinement to the Part I classes.**
+
+```
+         σ-only structure  (fine: Frobenius / Jordan orbits)
+                │
+                │  μ collapse
+                ▼
+      content-ideal classes  (coarse: L_j = {J(b,e) = j})
+                │
+                │  CRT
+                ▼
+   product structure on composite m  (∏ per-prime-power strata)
+```
+
 ## Setup
 
 `(b, e) ∈ (ℤ/mℤ)²` under the QA generator pair

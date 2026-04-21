@@ -200,7 +200,7 @@ where `η := 2I − F = [[2, −1], [−1, 1]]` has `det η = 1`, so `η ∈ GL�
 
 The depth-1 stratum has size `(p−1) · 5^{2(k−1)} = 4 · 5^{2(k−1)}` (a 1-D F_5-line lifted to `(ℤ/5^{k−1} ℤ)²` with unit-coordinate constraint). Divided by `π(5^{k−1}) = 4·5^{k−1}` gives `5^{k−1}` orbits. ✓
 
-**No deeper strata on L_0 for k ≥ 2**: vectors in higher Jordan layers reduce mod 5 to the zero eigenspace, which puts them in `L_1` (not `L_0`). In particular, no length-4 orbits on L_0 of `(ℤ/5^k ℤ)²` for k ≥ 2 — the length-4 phenomenon only appears at k = 1 (where eigenspace ⊂ L_0 directly).
+**No additional σ-orbit strata on L_0 beyond the generic and depth-1 layers (for k ≥ 2).** The algebraic Jordan filtration `ker ε ⊂ ker ε² ⊂ …` still exists over `ℤ/5^k ℤ` and has depth ≥ 2 for k ≥ 2, but these deeper filtration layers do not produce new orbit *families* — they correspond to vectors that (a) fall into `L_1` or deeper levels under the `J = min(v_p(b), v_p(e))` invariant, and hence are not on `L_0`; or (b) share orbit lengths already accounted for by the depth-1 layer. In particular, no length-4 orbits appear on L_0 for k ≥ 2 — the length-4 orbit only exists at k = 1, where the eigenspace is contained in L_0 directly.
 
 **k = 1 as exception**: when k = 1 there is no "shallow lift" above the eigenspace, so the eigenspace itself carries the short-orbit contribution (length `ord_5(3) = 4`). For k ≥ 2, the eigenspace-over-F_5 requires a 5-lift to remain in L_0, and that lift promotes the orbit length to `π(5^{k−1})`.
 

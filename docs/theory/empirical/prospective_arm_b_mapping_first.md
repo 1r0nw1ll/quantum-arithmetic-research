@@ -56,6 +56,7 @@
 
 ## Artifact 2: validator.py (derived from mapping)
 
+{% raw %}
 ```python
 """qa_sequence_cert_v1 validator.
 
@@ -168,5 +169,6 @@ def validate(sequence):
 
     return {"pass": len(violations) == 0, "violations": violations, "checks_run": checks_run}
 ```
+{% endraw %}
 
 **Axioms selected by the mapping (one sentence):** A1, A2, T2, S2, T1 enforced; **S1 declared non-applicable with reason** ("validator inspects sequence data, not source code; computes no squares"); validator checks all trace to mapping fields via `mapping.applicable_axioms.*.checks` references.

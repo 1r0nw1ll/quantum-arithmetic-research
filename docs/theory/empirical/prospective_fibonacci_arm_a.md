@@ -6,6 +6,7 @@
 
 ## Artifact 1: validator.py
 
+{% raw %}
 ```python
 """QA Fibonacci Mod Cert v1 — validator.
 
@@ -149,6 +150,7 @@ if __name__ == "__main__":
         r = validate(s)
         print(name, r["pass"], r["violations"])
 ```
+{% endraw %}
 
 ## Artifact 2: mapping_protocol_ref.json (written after validator)
 

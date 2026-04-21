@@ -7,6 +7,7 @@
 
 ## Artifact 1: validator.py
 
+{% raw %}
 ```python
 """
 qa_sequence_cert_v1 — Validator for QA state-evolution sequences.
@@ -199,6 +200,7 @@ if __name__ == "__main__":
     demo = [(1, 2), (3, 5), (8, 4)]
     print(validate(demo))
 ```
+{% endraw %}
 
 ## Artifact 2: mapping_protocol_ref.json (written after validator)
 

@@ -1,3 +1,4 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=internal QA axiom authority spec; primary source is the repo itself (QA_PHYSICS_PROJECTION_V0.1_LOCKED.md + QA_AXIOMS_BLOCK.md) -->
 # QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1
 
 **Status**: ACTIVE — mandatory for all empirical QA work
@@ -300,6 +301,7 @@ Violation notes:
 
 ## Canonical NT-Compliant Empirical Script Skeleton
 
+{% raw %}
 ```python
 # =============================================================================
 # QA EMPIRICAL SCRIPT — Theorem NT Compliant Template
@@ -487,6 +489,7 @@ def validate_against_null(observables: dict, null_observables: dict) -> dict:
 # observables = project_to_observables(qa_results)
 # verdict = validate_against_null(observables, null_observables)
 ```
+{% endraw %}
 
 ---
 

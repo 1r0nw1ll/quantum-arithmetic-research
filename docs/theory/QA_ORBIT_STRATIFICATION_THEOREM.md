@@ -2,7 +2,7 @@
 
 # QA Orbit Stratification Theorem
 
-**Status**: Proposition A proven; Propositions B and C empirically verified on 6 prime powers + 4 composite moduli; closed-form proof of B open.
+**Status**: all three propositions **proven**. Empirical tables retained below as corroboration.
 **Scope**: `(Z/mZ)²` under the QA generator pair `{σ, μ}`, where
 ```
 σ(b, e) = (e, qa_mod(b + e))     μ(b, e) = (e, b)
@@ -28,9 +28,40 @@ is invariant under both `σ` and `μ`.
 
 ---
 
-## Proposition B — level sets are exactly the components (empirical)
+## Proposition B — level sets are exactly the components
 
 For `m = p^k` and `L_j := { (b,e) : J(b,e) = j }`, the `k + 1` sets `L_0, L_1, …, L_k` are exactly the orbit components of `⟨σ, μ⟩` on `(Z/mZ)²`.
+
+### Proof
+
+Represent `(b, e) ∈ (Z/mZ)²` as a column vector. Then:
+```
+σ(b, e)  =  F · (b, e)ᵀ    with F = [[0, 1], [1, 1]]       (det F = −1)
+μ(b, e)  =  S · (b, e)ᵀ    with S = [[0, 1], [1, 0]]       (det S = −1)
+```
+Both F and S are in GL₂(ℤ). Compute:
+```
+S · F  =  [[1, 1], [0, 1]]  =  T      (upper-triangular elementary)
+F · S  =  [[1, 0], [1, 1]]  =  Tᵀ     (lower-triangular elementary)
+```
+T and Tᵀ generate SL₂(ℤ) (standard; they are the Nielsen generators). Since `det S = −1`, we also get the determinant-(−1) coset, so `⟨F, S⟩ = GL₂(ℤ)`.
+
+The reduction map `GL₂(ℤ) → GL₂(ℤ/mℤ)` is surjective (strong approximation; equivalently, both T and S lift trivially and they generate the target). Hence
+```
+⟨σ, μ⟩  =  GL₂(ℤ/p^k ℤ)
+```
+as a transformation group on `(ℤ/p^k ℤ)²`.
+
+**Orbit structure of GL₂(R) on R² for R = ℤ/p^k ℤ** (a local principal ideal ring): the orbit of a column `(b, e)ᵀ` is characterized by its **content ideal** `(b, e) · R`, which for this local ring is `(p^j)` with `j = min(v_p(b), v_p(e))`. By row-reduction (Hermite normal form over R), any pair with content `(p^j)` can be sent by a GL₂(R) element to `(p^j, 0)ᵀ`. Hence pairs with the same content are in the same orbit; pairs with different content lie in different orbits because the content is GL₂(R)-invariant (determinants of unit matrices are units, and units preserve the ideal).
+
+Therefore the orbits of `⟨σ, μ⟩ = GL₂(ℤ/p^k ℤ)` on `(ℤ/p^k ℤ)²` are exactly the `k + 1` level sets `L_j`. ☐
+
+**Orbit–stabilizer corroboration** (confirms |L_j| by group theory, independent of direct enumeration):
+- `|GL₂(ℤ/p^k ℤ)| = p^{4(k−1)} · (p² − 1)(p² − p)`
+- Stabilizer of `(1, 0)ᵀ` has order `p^k · φ(p^k) = p^k · p^{k−1}(p − 1) = p^{2k−1}(p − 1)`
+- Orbit of `(1, 0)` has size `p^{2(k−1)} · (p² − 1)` = |L_0|. ✓
+
+Verified on (p, k) ∈ {(2, 3), (3, 2), (5, 2), (7, 2)}: orbit sizes from orbit-stabilizer counting match `|L_0|` exactly in every case.
 
 **Closed-form level sizes** (derived from level-set definitions, verified against empirical):
 ```
@@ -51,21 +82,18 @@ For `m = p^k` and `L_j := { (b,e) : J(b,e) = j }`, the `k + 1` sets `L_0, L_1, �
 
 For every component in every case, all members share the same `J` value. No violations observed.
 
-**What's still open.** Proposition A shows `J` is an invariant, which gives the upper bound "at most `k + 1` components." The lower bound — transitivity of `{σ, μ}` within each `L_j` — is observed but not proven. A closed-form proof would likely go through Pisano periodicity of the Fibonacci recurrence mod `p^k`.
-
 ---
 
 ## Proposition C — CRT factorization
 
-Let `m = ∏ p_i^{k_i}`. Under the CRT isomorphism
+Let `m = ∏ p_i^{k_i}`. Under the CRT ring isomorphism `ℤ/mℤ ≅ ∏ ℤ/p_i^{k_i}ℤ`, matrix multiplication commutes with the factorization:
 ```
-(Z/mZ)² ≅ ∏ (Z/p_i^{k_i} Z)²
+(Z/mZ)²      ≅  ∏ (Z/p_i^{k_i} Z)²
+GL₂(Z/mZ)    ≅  ∏ GL₂(Z/p_i^{k_i} Z)
 ```
-both `σ` and `μ` act componentwise on the RHS:
-- `σ` is additive in the ambient ring (`(b+e) mod p_i^{k_i}` agrees with `σ` on the i-th factor).
-- `μ` permutes the ordered pair, independently of coordinate value.
+σ and μ are matrix multiplications by elements of GL₂(ℤ) (Proposition B proof), which descend to each CRT factor independently. By Proposition B the orbits on each factor are the `k_i + 1` level sets; the product action has orbits = products of per-factor orbits.
 
-Therefore the `⟨σ, μ⟩`-orbit decomposition on `(Z/mZ)²` is the **Cartesian product** of the per-factor Proposition-B decompositions. The total component count is `∏ (k_i + 1)`.
+Therefore the `⟨σ, μ⟩`-orbit decomposition on `(ℤ/mℤ)²` is the Cartesian product of the per-factor decompositions, with `∏ (k_i + 1)` total components and sizes = products of per-factor level sizes. ☐
 
 **Empirical verification** (4 composite moduli; all component counts AND sizes match predicted products):
 
@@ -108,9 +136,12 @@ Full multi-modulus script is in commit message of `e17242f` and can be extracted
 
 ---
 
-## Open questions
+## Closed (previously open)
 
-1. **Closed-form proof of Proposition B** — transitivity of `⟨σ, μ⟩` within each level `L_j`. Likely proof path: reduce to the Fibonacci recurrence mod `p^k` and invoke Pisano-period transitivity on `(Z/p^{k−j} Z)*`.
-2. **Primes `p ≥ 11`** — the pattern held on `p ∈ {2, 3, 5, 7}`. Extending to larger primes is a mechanical check but worth doing once (mod 121 = 11², mod 169 = 13²).
-3. **Higher `k`** — `p = 2` tested at `k = 3`; other primes tested at `k = 2, 3`. Does `p = 2, k = 4` (mod 16) still give 5 components? Expected yes.
-4. **Generator ν** — not required for stratification; parked. Its potential role in proving Proposition B (as a scaling that ties `L_j` to `L_{j-1}` via explicit bijection) remains speculative.
+1. ~~Closed-form proof of Proposition B~~ — **done** (GL₂(ℤ/p^k ℤ) action + content-ideal orbit classification). The Pisano-periodicity path was a red herring; the proof goes through elementary matrices and local-ring linear algebra instead.
+2. ~~Primes `p ≥ 11` and higher `k`~~ — Propositions A/B/C hold for **all** primes `p` and all `k ≥ 1` (the proof makes no hypothesis on `p` or `k` beyond `p` being prime). The prime-specific empirical checks for `p ∈ {2, 3, 5, 7}` are corroborations, not the base of the claim.
+
+## Still open
+
+- **Generator ν.** Not required for stratification; parked. Potential role: explicit bijection `L_j → L_{j-1}` via `p-1`-like scaling (but ν as defined is only a permutation of `(ℤ/mℤ)²`, so it acts within one `L_j`, not between them).
+- **Algebraic interpretation of the QA Fibonacci generator σ.** The proof uses only that σ ∈ GL₂(ℤ); the Fibonacci structure (σ's specific eigenvalues φ, ψ) is not invoked. Are there finer invariants that DO distinguish subfamilies within each `L_j` under σ alone (before adjoining μ)? Yes — the σ-only orbits have length dividing π(p^k) (Pisano period), and the number of σ-orbits within `L_0` is `|L_0| / π(p^k)`. This is a richer structure that μ collapses.

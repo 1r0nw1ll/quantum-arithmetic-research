@@ -8,6 +8,7 @@ ROOT="/home/player2/signal_experiments/qa_alphageometry_ptolemy/rule30_submissio
 TARBALL="/home/player2/signal_experiments/qa_alphageometry_ptolemy/rule30_submission_package.tar.gz"
 EMAIL_TXT="$ROOT/rule30_submission_email.txt"
 
+: "${FROM:?set FROM=your@email.com before running (sender address for MIME From header)}"
 to="contact@wolframscience.com"
 subject="Bounded Non-Periodicity Certificate for Rule 30 Center Column"
 
@@ -30,7 +31,7 @@ boundary="----=_rule30_boundary_$(date +%s)"
 
 {
   echo "To: $to"
-  echo "From: th3r3dbull@gmail.com"
+  echo "From: $FROM"
   echo "Subject: $subject"
   echo "MIME-Version: 1.0"
   echo "Content-Type: multipart/mixed; boundary=\"$boundary\""

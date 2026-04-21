@@ -1,0 +1,183 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.8 item 6 Track A McCraty primary-source corpus. 3 SourceWorks + 13 verbatim SourceClaims from McCraty+Zayas 2014 Frontiers Psychology, McCraty 2017 Frontiers Public Health, Alabdulgader+McCraty et al 2018 Scientific Reports. Locators resolve against docs/theory/mccraty_item6_excerpts.md. Domain=psychophysiology on all. Do not edit quote fields. -->",
+  "phase": "4.8",
+  "source_class": "mccraty",
+  "description": "McCraty peer-reviewed open-access (CC-BY) primary-source claims acquired under QA-MEM Phase 4.8 item 6 Track A. Carries the formal HRV coherence-ratio definition (McCraty+Zayas 2014 §Heart-Brain Communication preamble — the [Peak Power/(Total Power - Peak Power)] formula in the 0.04-0.26 Hz LF band), the social-coherence / group-HRV hypotheses (McCraty 2017), and the Schumann-resonance / solar-geomagnetic ↔ HRV correlation numerics (Alabdulgader+McCraty 2018). Grounds the three numerical mapping targets identified in docs/specs/QA_MEM_PHASE_4_8_ITEM_6_ACQUISITION.md §'What the eventual cert needs from the data'.",
+  "works": [
+    {
+      "id": "mccraty_zayas_2014_cardiac_coherence",
+      "title": "McCraty & Zayas (2014) — Cardiac coherence, self-regulation, autonomic stability, and psychosocial well-being",
+      "body": "Rollin McCraty (Institute of HeartMath) & Maria A. Zayas (Brenau University), Frontiers in Psychology 5:1090, 29 September 2014 (Hypothesis and Theory). DOI 10.3389/fpsyg.2014.01090. CC-BY. Canonical open-access home of the HRV coherence-ratio formal definition [Peak Power/(Total Power - Peak Power)] in the 0.04-0.26 Hz LF band with a 0.03 Hz integration window. PDF: 886KB, 13pp, retrieved 2026-04-20 via frontiersin.org direct.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-09-29",
+      "domain": "psychophysiology"
+    },
+    {
+      "id": "mccraty_2017_social_coherence_frontiers",
+      "title": "McCraty (2017) — New frontiers in heart rate variability and social coherence research",
+      "body": "Rollin McCraty (Research, HeartMath Institute), Frontiers in Public Health 5:267, 12 October 2017 (Hypothesis and Theory). DOI 10.3389/fpubh.2017.00267. CC-BY. Group-HRV / social-coherence hypothesis paper: group coherence emerges from individual + collective HRV coherence feedback, mediated by heart's electromagnetic field (100× amplitude of brain's). Relevant to QA Markovian-coupling mapping (brain-heart / heart-heart cross-coherence). PDF: 1.4MB, 13pp, retrieved 2026-04-20 via frontiersin.org direct.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2017-10-12",
+      "domain": "psychophysiology"
+    },
+    {
+      "id": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "title": "Alabdulgader, McCraty, Atkinson, Dobyns, Vainoras, Ragulskis & Stolc (2018) — Long-term study of HRV responses to changes in the solar and geomagnetic environment",
+      "body": "A. Alabdulgader (Prince Sultan Cardiac Center), R. McCraty + M. Atkinson + Y. Dobyns (HeartMath Institute), A. Vainoras (LUHS Kaunas), M. Ragulskis (KUT Kaunas), V. Stolc (NASA Ames). Scientific Reports 8(1):2663, 2018. DOI 10.1038/s41598-018-20932-x. CC-BY. Primary numerical anchor for Schumann-resonance ↔ HRV / ANS coupling: ECG sampled at 1000 Hz, magnetometer at 130 Hz, Schumann Resonance Power band 3.5-36 Hz, 16 participants × 72-hr/week × 5 months. Reports Schumann↔cosmic-ray r=-0.58 (p<0.01) and a dense Z-score lag table for HRV vs environmental factors. PDF: 2.0MB, 14pp, retrieved 2026-04-20 via nature.com direct.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology"
+    }
+  ],
+  "claims": [
+    {
+      "id": "mccraty_zayas_2014_coherence_ratio_formula",
+      "work": "mccraty_zayas_2014_cardiac_coherence",
+      "quote": "Physiological coherence is reflected in more ordered and sine wave-like HRV patterns at a frequency of around 0.1 Hz (10 seconds rhythm). A coherent rhythm can be defined as 'a relatively harmonic (sine wave-like) signal with a very narrow, high-amplitude peak in the LF region of the HRV power spectrum with no major peaks in the VLF or HF regions. Coherence is assessed by identifying the maximum peak in the 0.04–0.26 Hz range of the HRV power spectrum, calculating the integral in a window 0.03 Hz wide centered on the highest peak in that region, and then calculating the total power of the entire spectrum. The coherence ratio is formulated as: [Peak Power/(Total Power - Peak Power)]'",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#mccraty-zayas-2014-coherence-ratio-formula",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-09-29",
+      "domain": "psychophysiology",
+      "title": "McCraty+Zayas 2014 (p.5): formal HRV coherence-ratio definition [Peak Power/(Total Power - Peak Power)] in 0.04-0.26 Hz LF band, 0.03 Hz window"
+    },
+    {
+      "id": "mccraty_zayas_2014_coherence_model_postulate_5",
+      "work": "mccraty_zayas_2014_cardiac_coherence",
+      "quote": "(5) Physiological or cardiac coherence is reflected in a more ordered sine wave-like heart rhythm pattern associated with increased vagally mediated HRV, entrainment between respiratory, blood pressure and heart rhythms, and increased synchronization between various rhythms in the EEG and the cardiac cycle.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#mccraty-zayas-2014-coherence-model-10-postulates",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-09-29",
+      "domain": "psychophysiology",
+      "title": "McCraty+Zayas 2014 (p.3): coherence-model postulate 5 — cardiac coherence as multi-system entrainment + EEG-cardiac synchronization"
+    },
+    {
+      "id": "mccraty_zayas_2014_clinical_191pct",
+      "work": "mccraty_zayas_2014_cardiac_coherence",
+      "quote": "In a study of returning veterans with chronic pain, the treatment group showed marked and statistically significant increases in coherence (191%) along with significant reductions in pain ratings (36%), stress perception (16%), negative emotions (49%), and physical activity limitations (42%) (Berry et al., 2014).",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#mccraty-zayas-2014-clinical-191pct-increase",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2014-09-29",
+      "domain": "psychophysiology",
+      "title": "McCraty+Zayas 2014 (p.4): clinical numerics — 191% coherence increase, 36% pain reduction in chronic-pain veterans"
+    },
+    {
+      "id": "mccraty_2017_abstract_group_coherence_hypothesis",
+      "work": "mccraty_2017_social_coherence_frontiers",
+      "quote": "Building on the extensive body of research showing that providing feedback of HRV coherence level at the individual level can improve self-regulation, we suggest the following hypotheses: (1) providing feedback of individual and collective HRV coherence and the degree of heart rhythm synchronization will increase group coherence, and heart rhythm synchronization among group members. (2) Training in techniques to increase group coherence and heart rhythm synchronization will correlate with increased prosocial behaviors, such as kindness and cooperation among individuals.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#mccraty-2017-abstract-group-coherence-hypothesis",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2017-10-12",
+      "domain": "psychophysiology",
+      "title": "McCraty 2017 (p.1): group-coherence hypotheses — HRV feedback → synchronization → prosocial behavior"
+    },
+    {
+      "id": "mccraty_2017_heart_mag_field_100x_brain",
+      "work": "mccraty_2017_social_coherence_frontiers",
+      "quote": "In the human body, the heart generates the largest rhythmic magnetic field, one that is about 100 times the amplitude produced by the brain. This field, which is measured in the nanotesla range, can be measured several feet outside the body with SQUID-based magnetometers. We have found that information reflecting one's emotional state not only is encoded in the patterns of the HRV waveform but also is contained in the heart's electromagnetic field radiated into the environment. When an individual is in a heart coherent state, the heart's magnetic field also has a more coherent structure. There is a direct mathematical relationship between the HRV patterns and the spectral information encoded in the magnetic field.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#mccraty-2017-heart-mag-field-100x-brain",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2017-10-12",
+      "domain": "psychophysiology",
+      "title": "McCraty 2017 (p.6): heart magnetic field 100× brain amplitude, nT-range; HRV ↔ field spectrum mathematical relation"
+    },
+    {
+      "id": "mccraty_2017_ecg_spectra_12_epochs",
+      "work": "mccraty_2017_social_coherence_frontiers",
+      "quote": "Figure 3 | ECG spectra during different emotional states. The above graphs show the average power spectral density (PSD) of 12 individual 10-s epochs of ECG data. The graph on the left is an example of a spectrum obtained during a period of high heart rhythm coherence generated during a sustained heartfelt experience of appreciation. The graph on the right is the spectrum of a disordered heart rhythm recorded during feelings of anger.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#mccraty-2017-ecg-spectra-12-epochs",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2017-10-12",
+      "domain": "psychophysiology",
+      "title": "McCraty 2017 (p.7 Fig. 3 caption): ECG PSD methodology — 12 × 10-s epochs averaged per emotional state"
+    },
+    {
+      "id": "alabdulgader_2018_schumann_fundamental_harmonics",
+      "work": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "quote": "In the 1950s Winfried Otto Schumann and Herbert Koenig first measured frequencies that were similar to a mathematical model that predicted a magnetic wave resonance between the Earth and ionosphere. The first Schumann resonance frequency is 7.83 hertz (Hz), with a (day/night) variation of around ± 0.5 Hz. The higher frequencies are ~14, 20, 26, 33, 39 and 45 Hz, all of which closely overlay with alpha (8–12 Hz), beta (12–30 Hz) and gamma (30–100 Hz) brain waves.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#alabdulgader-2018-schumann-fundamental-harmonics",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology",
+      "title": "Alabdulgader+McCraty 2018 (p.3): observed SR fundamental 7.83 Hz, harmonics ~14/20/26/33/39/45 Hz overlay alpha/beta/gamma EEG"
+    },
+    {
+      "id": "alabdulgader_2018_persinger_first_three_sr",
+      "work": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "quote": "Persinger et al. have also studied SR and EEG activity the in real-time and have shown that many of the SR frequencies can be observed in the power spectrums of most human brain activity. They have also shown that the spectral profiles within the EEG activity displayed recurrent transient segments of real-time coherence (synchronization) with the first three resonant frequencies of the SRs (7–8 Hz, 13–14 Hz, and 19–20 Hz).",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#alabdulgader-2018-persinger-first-three-sr",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology",
+      "title": "Alabdulgader+McCraty 2018 (p.3): first three observed SR harmonics (7-8 / 13-14 / 19-20 Hz) show recurrent EEG-SR coherence"
+    },
+    {
+      "id": "alabdulgader_2018_methods_1000hz_72hr",
+      "work": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "quote": "All participants underwent weekly 24–72 hour ambulatory HRV recordings with Bodyguard HRV recorders (Firstbeat Technologies Ltd, Finland). The recorder samples the ECG at 1000 Hz and calculates the inter-beat-interval (IBI), which is the time in milliseconds between consecutive heartbeats. IBI data was stored locally in the device memory and uploaded loaded to an FTP site at the end of each week. Participant recordings were generally 72-hours in length and were scheduled once a week over a 5-month period between April and the end of August 2012. A total of 960 twenty-four hour long HRV recordings were obtained.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#alabdulgader-2018-methods-1000hz-72hr",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology",
+      "title": "Alabdulgader+McCraty 2018 (p.3): ECG sampled at 1000 Hz, 72-hr/week × 5 months, N=16 → 960 24-hr HRV recordings"
+    },
+    {
+      "id": "alabdulgader_2018_measures_freq_bands",
+      "work": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "quote": "The HRV measures used in this study were the IBI, Total Power, LF, and HF power, and the LF/HF ratio. … Daily recordings were processed in consecutive 5 minute segments in accordance with the standards established by the HRV Task Force. Any 5 minute segment with >10% of the IBIs either missing or removed in editing were excluded from analysis.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#alabdulgader-2018-measures-freq-bands",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology",
+      "title": "Alabdulgader+McCraty 2018 (p.4): HRV metric set + 5-min segment processing per HRV Task Force standard"
+    },
+    {
+      "id": "alabdulgader_2018_schumann_magnetometer_130hz",
+      "work": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "quote": "Power in the time varying magnetic field in two frequency bands, Schumann Resonance Power (SRP), 3.5 to 36 Hz and ULF power, 2 mHz to 3.5 Hz were obtained from a recording site located in Boulder Creek, California. … The HeartMath Institute maintains a network of highly sensitive induction coil magnetometers (Zonge ANT-4; sensitivity 10−12 T) as part of a special project called the Global Coherence Initiative. Each site includes two magnetometers positioned in the north-south and east-west axis to detect local time varying magnetic field strengths over a relatively wide frequency range (0.001–50 Hz) while maintaining a flat frequency response. … Each magnetometer is continuously sampled at a rate of 130 Hz.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#alabdulgader-2018-schumann-magnetometer-130hz",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology",
+      "title": "Alabdulgader+McCraty 2018 (p.4): GCI Zonge ANT-4 magnetometer 10⁻¹² T sensitivity, 0.001-50 Hz flat, sampled at 130 Hz"
+    },
+    {
+      "id": "alabdulgader_2018_schumann_cosmic_ray_corr",
+      "work": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "quote": "The Schumann Resonance Power was negatively and highly correlated with cosmic ray counts (r −0.58, p < 0.01). ULF power was positively correlated with solar wind speed (r 0.44, p < 0.01), Kp (r 0.58, p < 0.01), Ap (r 0.61, p < 0.01) and PC(N) (r 0.43, p < 0.01) indexes.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#alabdulgader-2018-schumann-cosmic-ray-corr",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology",
+      "title": "Alabdulgader+McCraty 2018 (p.7, Table 3): SRP↔cosmic-ray r=-0.58; ULF↔Kp r=0.58, Ap r=0.61 (all p<0.01)"
+    },
+    {
+      "id": "alabdulgader_2018_abstract_main_finding",
+      "work": "alabdulgader_mccraty_2018_hrv_solar_geomagnetic",
+      "quote": "Overall, the study confirms that daily ANS activity responds to changes in geomagnetic and solar activity during periods of normal undisturbed activity and it is initiated at different times after the changes in the various environmental factors and persist over varying time periods. Increase in solar wind intensity was correlated with increases in heart rate, which we interpret as a biological stress response. Increase in cosmic rays, solar radio flux, and Schumann resonance power was all associated with increased HRV and parasympathetic activity.",
+      "source_locator": "file:docs/theory/mccraty_item6_excerpts.md#alabdulgader-2018-abstract-main-finding",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2018-02-08",
+      "domain": "psychophysiology",
+      "title": "Alabdulgader+McCraty 2018 (p.1, abstract): main finding — ANS responds to solar/geomagnetic changes with variable lag; SR power ↔ increased parasympathetic HRV"
+    }
+  ]
+}

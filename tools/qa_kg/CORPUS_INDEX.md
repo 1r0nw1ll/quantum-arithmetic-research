@@ -147,11 +147,11 @@ Legend: ✓ = SourceWork ingested; ⏳ = deferred; ⚠ = misfiled (non-Wildberge
 
 ---
 
-## HeartMath corpus (Phase 4.8 BODY — items 1+2+3 landed)
+## HeartMath corpus (Phase 4.8 BODY items 1+2+3 + Phase 4.8 ITEM 6 Track A landed)
 
 **Corpus root:** `Documents/heartmath_corpus/`
 **Domain:** `psychophysiology` (extended in `domain_taxonomy.json` 2026-04-20; [254] R10 re-validated).
-**Theory docs:** `docs/theory/heartmath_phase4_8_excerpts.md` (18 verbatim anchors — 5 Tomasino + 4 Danielson + 6 Oschman + 3 Edwards)
+**Theory docs:** `docs/theory/heartmath_phase4_8_excerpts.md` (18 verbatim anchors — 5 Tomasino + 4 Danielson + 6 Oschman + 3 Edwards); `docs/theory/mccraty_item6_excerpts.md` (13 verbatim anchors — 3 McCraty+Zayas 2014 + 3 McCraty 2017 + 7 Alabdulgader+McCraty 2018)
 **Origin search:** `scholar.google.com/scholar?start=130&q=heartmath&hl=en&as_sdt=4007` (results 131–140)
 **QA-research grounding:** OB agenda 2026-03-25 (completeness audit, Thread 3: HeartMath / McCraty / Radin) — HRV coherence ratio ↔ QA HI; brain–heart cross-coherence ↔ QA Markovian coupling; Schumann 7.83 Hz ↔ mod-9 / mod-24 orbit harmonics.
 **Ingress note:** `Documents/heartmath_corpus/` is NOT yet in `DOCUMENTS_PDF_INGRESS_PREFIXES` in `llm_qa_wrapper/cert_gate_hook.py` / `.claude/hooks/pretool_guard.sh`. Phase 4.8 kickoff PDFs written via cwd-scoped downloads (no `Documents/` substring in the Bash command). Extending the allowlist is a WRAPPER_SELF_MODIFICATION edit routed through Codex quarantine review — still deferred while Codex bridge is dead (Phase 4.8 body item 4).
@@ -162,12 +162,40 @@ Legend: ✓ = SourceWork ingested; ⏳ = deferred; ⚠ = misfiled (non-Wildberge
 | `Documents/heartmath_corpus/danielson_2014_hospital_wellness.pdf` | Danielson+Jeffers+Kaiser et al 2014 | HeartMath mastery, hospital wellness, population health, PMC3923282 | psychophysiology | `danielson_2014_hospital_wellness` | ✓ (4 claims) |
 | `Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf` | Oschman+Oschman 2015 | scalar field antenna, Rein resonance, Whittaker decomposition, bidirectional | psychophysiology | `oschman_2015_heart_bidirectional_scalar_antenna` | ✓ (6 claims) |
 | `Documents/heartmath_corpus/edwards_2018_cfp_heartmath_psychology.pdf` | Edwards 2018 | HeartMath psychology CFP, Journal of Psychology in Africa | psychophysiology | `edwards_2018_cfp_heartmath_psychology` | ✓ (3 claims) |
+| `Documents/heartmath_corpus/mccraty_zayas_2014_frontiers_psychology_cardiac_coherence.pdf` | McCraty+Zayas 2014 | cardiac coherence ratio definition [Peak Power/(Total-Peak Power)], LF 0.04-0.26 Hz, psychophysiological coherence model, DOI 10.3389/fpsyg.2014.01090 | psychophysiology | `mccraty_zayas_2014_cardiac_coherence` | ✓ (3 claims, item 6 Track A) |
+| `Documents/heartmath_corpus/mccraty_2017_frontiers_public_health_hrv_social_coherence.pdf` | McCraty 2017 | social coherence, group HRV synchronization, heart magnetic field 100× brain, DOI 10.3389/fpubh.2017.00267 | psychophysiology | `mccraty_2017_social_coherence_frontiers` | ✓ (3 claims, item 6 Track A) |
+| `Documents/heartmath_corpus/alabdulgader_mccraty_2018_scirep_hrv_solar_geomagnetic.pdf` | Alabdulgader+McCraty+Atkinson+Dobyns+Vainoras+Ragulskis+Stolc 2018 | Schumann resonance harmonics (7.83/14/20/26/33/39/45 Hz), HRV↔solar/geomagnetic coupling, GCI Boulder Creek magnetometer, DOI 10.1038/s41598-018-20932-x | psychophysiology | `alabdulgader_mccraty_2018_hrv_solar_geomagnetic` | ✓ (7 claims, item 6 Track A) |
 | **NOT ON DISK** | Institute of HeartMath 2012 | EmWave Desktop product citation | — | — | [CITATION] — no paper |
 | **NOT ON DISK** | Edwards+David+Hermann et al 2023 | HeartMath meditation, longer breath cycle, *Dialogo* | — | — | ⏳ EBSCO paywall |
 | **NOT ON DISK** | Simmons 2010 | heart-generated coherence, distilled water, plant growth | — | — | [CITATION] — thesis, no PDF indexed |
 | **NOT ON DISK** | Childre+Martin+Beech 1999 | *The HeartMath Solution* (Harper) | — | — | Published book, no PDF |
 | **NOT ON DISK** | 명화숙 et al 2014 | HeartMath psychoeducation, Korean caregivers | — | — | ⏳ foreign-journal paywall |
 | **NOT ON DISK** | Böckeler+Cornforth+Drummond et al 2020 | paced breathing vs game-biofeedback, HRV, IEEE EMBC | — | — | ⏳ IEEE Xplore paywall |
+
+---
+
+## Schumann resonance corpus (Phase 4.8 ITEM 6 — Track C)
+
+**Corpus root:** `Documents/schumann_resonance/`
+**Domain:** `physics` (no taxonomy change — already in `domain_taxonomy.json`).
+**Theory docs:** `docs/theory/schumann_1952_excerpts.md`
+**Fixture:** `tools/qa_kg/fixtures/source_claims_schumann.json` (1 SourceWork, 6 claims).
+**QA-research grounding:** OB agenda 2026-03-25 Thread 3 mapping 3 — Schumann harmonics (7.83 / 14.3 / 20.8 / 27.3 / 33.8 Hz observed; √(n(n+1))·c/R theoretical) ↔ mod-9 / mod-24 orbit-harmonic integer ratios. Spec: `docs/specs/QA_MEM_PHASE_4_8_ITEM_6_ACQUISITION.md` §C.
+**Ingress note:** `Documents/schumann_resonance/` is NOT yet in `DOCUMENTS_PDF_INGRESS_PREFIXES` in `llm_qa_wrapper/cert_gate_hook.py` / `.claude/hooks/pretool_guard.sh`. PDF written via cwd-scoped download (no `Documents/` substring in the Bash command body). Allowlist extension deferred until Codex bridge recovers.
+
+| Path | Author | Topic tags | Domain | SourceWork | Status |
+|---|---|---|---|---|---|
+| `Documents/schumann_resonance/schumann_1952_zfn_7a_149.pdf` | Schumann 1952 | Earth-ionosphere cavity, eigenfrequency, Schumann resonance, √(n(n+1)) harmonic law, 11 Hz theoretical fundamental, DOI 10.1515/zna-1952-0202 | physics | `schumann_1952_zfn_7a_149` | ✓ (6 claims) |
+| **NOT ON DISK** | Williams 1992 Science 256:1184 | Schumann resonance, global tropical thermometer, lightning-climate coupling, DOI 10.1126/science.256.5060.1184 | physics | — | ⏳ AAAS Science paywall (closed per Unpaywall + Semantic Scholar 2026-04-20; defer to institutional-access or author-page session) |
+
+**Primary numerical substrate (for future `qa_heartmath_mapping_cert_v1`):** Schumann 1952 derives the closed-form harmonic series `m_n = √(n(n+1)) = ω_ei · R/c` (anchor `#schumann-1952-harmonic-series-sqrt-nnp1`). The canonical lowest theoretical eigenfrequency is `ω_ei ≈ √2·c/R ≈ 70 rad/s` (`f_ei ≈ 11 Hz`), corresponding to vacuum wavelength `λ ≈ 27 300 km`. Observed NOAA fundamental is 7.83 Hz with harmonics 14.3 / 20.8 / 27.3 / 33.8 Hz; the ≈ 30 % offset from Schumann's 11 Hz is the Earth-cavity damping correction flagged in §II of Schumann 1952. Any mapping cert must declare which harmonic family (theoretical √(n(n+1)) vs observed) it certifies against — both are present in the primary literature.
+
+---
+
+## Radin / IONS corpus (Phase 4.8 ITEM 6 — Track B, PLACEHOLDER)
+
+**Corpus root:** `Documents/radin_ions/` (directory exists, no PDFs landed in this session).
+**Status:** Track B acquisition deferred in the 2026-04-20 item-6 session after Schumann (Track C) + McCraty open-access (Track A). See `docs/specs/QA_MEM_PHASE_4_8_ITEM_6_ACQUISITION.md` §B for the 4 target papers (Radin 2004 JACM, Mossbridge+Tressoldi+Utts 2012 Frontiers Psych, Nelson 2015 EXPLORE, Bem 2011 JPSP). Mossbridge+Tressoldi+Utts 2012 (Frontiers CC-BY) is the cleanest starting point when this track resumes.
 
 ---
 
@@ -201,6 +229,8 @@ Looking up by **topic or keyword** rather than author — this catches the "miss
 | **HeartMath / McCraty / cardiac coherence / HRV** | `Documents/heartmath_corpus/` (4 files: tomasino 1997, danielson 2014, oschman 2015, edwards 2018) |
 | **Oschman / scalar antenna / Rein resonance** | `Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf` |
 | **water EM structuring / liquid crystal lattice** | `Documents/heartmath_corpus/tomasino_1997_water_em_storage.pdf` |
+| **Schumann resonance / 7.83 Hz / Earth-ionosphere cavity / eigenfrequency** | `Documents/schumann_resonance/schumann_1952_zfn_7a_149.pdf`, `docs/theory/schumann_1952_excerpts.md`, `tools/qa_kg/fixtures/source_claims_schumann.json` |
+| **Radin / IONS / presentiment / global consciousness** | `Documents/radin_ions/` (dir only; no PDFs — deferred per Phase 4.8 item 6 spec §B) |
 
 ---
 

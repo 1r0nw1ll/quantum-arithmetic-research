@@ -1,0 +1,86 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM Phase 4.8 item 6 Track C Schumann primary-source corpus. 1 SourceWork + 6 verbatim SourceClaims from Schumann 1952 Z. Naturforschg. 7a:149-154. Locators resolve against docs/theory/schumann_1952_excerpts.md. Claims are the verbatim German text; English glosses live in the excerpts file, not in the fixture. Domain=physics. Do not edit quote fields. -->",
+  "phase": "4.8",
+  "source_class": "schumann",
+  "description": "Schumann 1952 primary-source claims — the canonical original derivation for the Earth-ionosphere cavity eigenfrequency (≈ 11 Hz theoretical) and the closed-form √(n(n+1)) harmonic series that any future qa_heartmath_mapping_cert_v1 Schumann-harmonic ↔ orbit-harmonic-ratio mapping must key on. Grounds the Schumann track of OB 2026-03-25 research-agenda thread 3 (HeartMath/McCraty/Radin). PDF on disk under Documents/schumann_resonance/; anchors in docs/theory/schumann_1952_excerpts.md.",
+  "works": [
+    {
+      "id": "schumann_1952_zfn_7a_149",
+      "title": "Schumann (1952) — Über die strahlungslosen Eigenschwingungen einer leitenden Kugel, die von einer Luftschicht und einer Ionosphärenhülle umgeben ist",
+      "body": "Winfried Otto Schumann, Elektrophysikalisches Institut der Technischen Hochschule München. Zeitschrift für Naturforschung 7a:149-154, 1952; received 1 October 1951. DOI 10.1515/zna-1952-0202. The canonical original derivation of the Earth-ionosphere cavity resonances invoked throughout the HeartMath / McCraty / Oschman literature as 7.83 Hz. Derives a closed-form lowest eigenfrequency ω_ei ≈ √2·c/R ≈ 70 rad/s (f ≈ 11 Hz) for Earth dimensions, excited by lightning, and a theoretical harmonic-series law m_n = √(n(n+1)). PDF: 5.1MB, 6pp, retrieved 2026-04-20 via degruyterbrill.com/document/doi/10.1515/zna-1952-0202/pdf.",
+      "source_locator": "file:docs/theory/schumann_1952_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1952-02-01",
+      "domain": "physics"
+    }
+  ],
+  "claims": [
+    {
+      "id": "schumann_1952_title_and_author",
+      "work": "schumann_1952_zfn_7a_149",
+      "quote": "Über die strahlungslosen Eigenschwingungen einer leitenden Kugel, die von einer Luftschicht und einer Ionosphärenhülle umgeben ist. Von W. 0. SCHUMANN. AVIS dem Elektrophysikalischen Institut der Technischen Hochschule München. (Z. Naturforschg. 7a, 149-154 [1952]; eingegangen am 1. Oktober 1951)",
+      "source_locator": "file:docs/theory/schumann_1952_excerpts.md#schumann-1952-title-and-author",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1952-02-01",
+      "domain": "physics",
+      "title": "Schumann 1952 (p.149): full title / author / journal citation"
+    },
+    {
+      "id": "schumann_1952_abstract_eleven_cps",
+      "work": "schumann_1952_zfn_7a_149",
+      "quote": "Die tiefste Eigenfrequenz ungedämpfter Schwingungen ωei liegt zwischen Null und ωei = √2 c/r je nach der relativen Dicke der Luftschicht und der Plasmaeigenfrequenz ω₀. Für irdische Dimensionen liegt ωei nahe dem oberen Wert und ergibt eine Frequenz von ≈ 11 Per/sec.",
+      "source_locator": "file:docs/theory/schumann_1952_excerpts.md#schumann-1952-abstract-eleven-cps",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1952-02-01",
+      "domain": "physics",
+      "title": "Schumann 1952 (p.149, abstract): ωei between 0 and √2·c/r; Earth dimensions give ≈ 11 Hz"
+    },
+    {
+      "id": "schumann_1952_earth_numerical_calc",
+      "work": "schumann_1952_zfn_7a_149",
+      "quote": "Setzen wir für die Erde R = 6000 km und c = 300 000 km/sec, so ist ωei = 50 √2 ≈ 70 sec⁻¹ und die sekundliche Frequenz f_ei max ≈ 11 sec⁻¹. Durch eine stoßartige Erregung dieses 'Hohlraumes', z. B. durch eine Blitzentladung, sind als tiefste erregte Schwingungen Frequenzen dieser Größe zu erwarten.",
+      "source_locator": "file:docs/theory/schumann_1952_excerpts.md#schumann-1952-earth-numerical-calc",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1952-02-01",
+      "domain": "physics",
+      "title": "Schumann 1952 (p.152): Earth R=6000km, c=300000km/s → ωei=50√2≈70 s⁻¹, f_ei_max≈11 Hz, lightning excitation"
+    },
+    {
+      "id": "schumann_1952_harmonic_series_sqrt_nnp1",
+      "work": "schumann_1952_zfn_7a_149",
+      "quote": "Für ma' → ∞ ist m₁ = √(n(n+1)) = ωei R/c. Es sind dies die zonalen Oberschwingungen geringer Ordnung für 'sehr große Plasmadichte' R/c · ω₀ » 1, aber auch zugleich die Oberschwingungen einer von zwei unendlich guten Leitern begrenzten Kugelschale aus Luft.",
+      "source_locator": "file:docs/theory/schumann_1952_excerpts.md#schumann-1952-harmonic-series-sqrt-nnp1",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1952-02-01",
+      "domain": "physics",
+      "title": "Schumann 1952 (p.153): closed-form harmonic series m_n = √(n(n+1)) = ωei·R/c for large plasma density"
+    },
+    {
+      "id": "schumann_1952_vacuum_wavelength_27300km",
+      "work": "schumann_1952_zfn_7a_149",
+      "quote": "Der berechneten Frequenz von f_ei = 11 sec⁻¹ entspricht eine Vakuumwellenlänge freier Wellen von λ_ei = 27 300 km.",
+      "source_locator": "file:docs/theory/schumann_1952_excerpts.md#schumann-1952-vacuum-wavelength-27300km",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1952-02-01",
+      "domain": "physics",
+      "title": "Schumann 1952 (p.153): f_ei=11 Hz ↔ λ_ei = 27 300 km vacuum wavelength"
+    },
+    {
+      "id": "schumann_1952_phase_velocity_sqrt2c",
+      "work": "schumann_1952_zfn_7a_149",
+      "quote": "Die Winkelgeschwindigkeit dieser Wellen längs des Kugelumfangs ist dθ/dt = ω und die Lineargeschwindigkeit v = R dθ/dt = ω R. Für ωei = √2 c/R wird v = √2 c.",
+      "source_locator": "file:docs/theory/schumann_1952_excerpts.md#schumann-1952-phase-velocity-sqrt2c",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "1952-02-01",
+      "domain": "physics",
+      "title": "Schumann 1952 (p.153): surface phase velocity v = ωR; at ωei = √2·c/R, v = √2·c"
+    }
+  ]
+}

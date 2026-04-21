@@ -213,7 +213,7 @@ This is a more honest reading than "mapping-frame always wins." The retrospectiv
 - Single foundation model across all 10 subagents (Claude). Cross-model replication remains future work.
 - Raw outputs preserved: `docs/theory/empirical/prospective_{sequence,fibonacci,triple_table,orbit,grid}_arm_{a,b}.md`.
 
-## Bottom line (updated)
+## Bottom line
 
 Retrospective (N=127, p=0.0002 + p<10⁻⁶) + prospective (N=5, paired t=3.52 p=0.024, 27% size reduction, 5/5 direction, qualitative differences concentrated on ambiguous-applicability concepts) together support:
 
@@ -223,11 +223,7 @@ Implication for the MSR "Art of Building Verifiers" reframe: exposing observer-p
 
 ### Raw outputs
 
-Both subagent outputs (full validator + mapping for each arm) are recorded in the conversation transcript for commit `[pending]`. For follow-up, extract from git commit message or conversation export.
-
-## Bottom line
-
-Retrospective (N=127) + prospective (N=1) both point the same direction: **when the decision surface is "declare the observer projection/mapping first," the downstream validator is smaller, more scope-disciplined, and better integrated with the enforcement structure** than when the decision surface is "author the rubric first." The magnitude of the effect (~22-35% size reduction, principled vs forced axiom selection) is meaningful but not gigantic — Gate-0 is a real improvement, not a panacea. The MSR paper's 70%/5% AI-recreation gap is a candidate analogue: predicted to collapse if their setup re-exposes the projection-selection decision instead of the rubric. That prediction remains untested against their artifact directly.
+Full validator + mapping artifacts for each arm are saved under `docs/theory/empirical/prospective_{sequence,fibonacci,triple_table,orbit,grid}_arm_{a,b}.md`.
 
 ## References
 

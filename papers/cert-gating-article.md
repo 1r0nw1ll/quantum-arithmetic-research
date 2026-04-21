@@ -187,6 +187,51 @@ The practical payoff: a reanalysis of the Sixto Ramos timing graph used the norm
 
 This is the same philosophy as the security kernel: **no claim without a certificate, no certificate without an independent validator, no validator without a failure fixture**. Whether the claim is "this tool call is safe" or "this integer identity holds on S_9," the gate is the same.
 
+## Empirical validation: Gate-0 as the mapping layer
+
+The cert-gating architecture above imposes a structural discipline: every claim or tool call must declare its **mapping** — its observer projection from the continuous or natural-language domain into the discrete verifiable one — *before* the validator is authored. On the security side the mapping is "here is what counts as trusted input, here is what gates pass." On the mathematical side the mapping is `mapping_protocol_ref.json`: which axioms apply, how inputs encode into `(b, e)` tuples, which failure modes the validator must detect.
+
+This raises an empirical question. Does forcing the mapping declaration as a first-class artifact actually produce better enforcement code, or is it documentation theatre?
+
+### Result
+
+Two independent measurements, both in this repository, both pointing the same direction.
+
+**Retrospective natural experiment, N = 127 cert families.** Classify each family by commit order: `SAME` if mapping and validator landed in the same commit (Gate-0 enforced as a bundle, n = 92), `VAL_FIRST` if the validator existed first and the mapping was backfilled later (n = 35). Measure validator line count and axiom coverage, age-stratified.
+
+- Bundled validators: median 189 lines vs backfilled median 256 lines. Welch's t = 3.78, **p ≈ 0.0002**. ~35% smaller, controlling for family age.
+- Bundled validators reference 2.00 axioms on average vs backfilled 0.77. Welch's t = 5.60, **p < 10⁻⁶**. 2.6× more axiom coverage per file.
+- Follow-up commit counts are identical (1.12 vs 1.11). Bundled validators are **authored tighter from the start**, not fixed less.
+
+**Prospective A/B, N = 5 concept pairs.** Ten fresh subagents given identical context — cert concept, the six-axiom spec, required output files. The only difference is artifact ordering: Arm A writes the validator first and documents the mapping after; Arm B writes the mapping first and derives the validator from it.
+
+- 5/5 pairs: Arm B validator smaller than Arm A. Paired t = 3.52, df = 4, **p = 0.024**, 27.1% mean reduction.
+- The size gap correlates with applicability-judgment difficulty: 9% on concepts with obvious axiom non-applicability (Fibonacci mod), 42% on ambiguous ones (sequence cert, where Arm A invented a `b_squared` payload field to force an S1 check that did not belong to the concept).
+- Mapping-first arms consistently produced a 3-tier applicability taxonomy (`enforced` / `declarative` / `vacuous`) with reason strings. Rubric-first arms labeled all axioms "enforced" and padded the validator with checks to justify the label.
+
+Full findings, methods, and raw per-pair outputs: `docs/theory/QA_GATE0_VALIDATOR_EMPIRICAL.md` plus `docs/theory/empirical/prospective_*.md`.
+
+### Interpretation
+
+The naive read is "Gate-0 is a better filter." It is not. A filter reduces accepted inputs; Gate-0 reduces the reachable *authorship trajectory* of the enforcement artifact itself. The mapping declaration bounds what the validator *can* enforce before a line of it is written. Rubric-first authoring has no such bound, so it expands scope to "enforce everything the axiom list mentions," including cases where the axiom does not apply. The result is code that is simultaneously larger and less discriminating.
+
+This lines up with an independent result from Liu, Zhao, Shang, and Shen's architectural analysis of Claude Code ([arXiv:2604.14228](https://arxiv.org/abs/2604.14228)): the paper's thesis is that in agentic systems, *the infrastructure dominates the reasoning* — the harness that constrains what a model can do measurably determines what it does do. Gate-0 is the same pattern, one stack lower: the mapping constrains what the validator can check, and that constraint measurably changes what the validator does check.
+
+### Bridge
+
+Recent agent platforms (notably Anthropic's Managed Agents, launched 2026-04-08) expose the **rubric layer**: operators specify quality criteria and judgment rules. Cert-gating exposes a layer below that — the **mapping layer**: operators specify the observer projection that determines which rubric items even apply. The empirical data here is evidence that the mapping layer, not the rubric layer, is where the enforcement budget actually buys correctness.
+
+### Constraints
+
+The effect is real but bounded.
+
+- The retrospective's N = 127 is the entire cert population, so there is no selection issue, but it is observational — authors of SAME bundles may share confounding traits with the Gate-0 discipline itself.
+- The prospective's N = 5 is small. It confirms direction (5/5 pairs, all favoring mapping-first) at marginal significance (p = 0.024) but does not settle magnitude beyond that.
+- All ten subagents used the same foundation model; cross-model replication is explicit future work.
+- Rosset et al.'s "Art of Building Verifiers" paper ([arXiv:2604.06240](https://arxiv.org/abs/2604.06240)) reports a 70%/5% AI-recreation gap on their CUA verifier. I predict that gap to shrink if their decision surface is reframed as observer-projection selection rather than rubric authoring. The prediction is falsifiable and has not been tested against their artifact.
+
+What the data does support: inside a 127-family cert ecosystem, mapping-first authoring produces measurably smaller and more axiom-discriminating validators than rubric-first authoring, and the size gap concentrates exactly where theory says it should — on ambiguous applicability decisions.
+
 ## Design choices and tradeoffs
 
 **Zero dependencies.** The entire security kernel is Python 3.10+ stdlib. No pip install required for the core. This is a deliberate choice: the thing that validates whether your agents can execute code should not itself have a dependency chain you cannot audit. You can read every line in an afternoon.

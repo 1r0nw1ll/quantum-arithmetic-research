@@ -1,0 +1,124 @@
+{
+  "schema_version": "QA_ORBIT_DIRAC_BRACKET_CERT.v1",
+  "certificate_id": "qa.cert.orbit_dirac_bracket.pass.m9_b1_i1.v1",
+  "cert_type": "qa_orbit_dirac_bracket_cert",
+  "title": "QA Orbit-Dirac Bracket: second-class constraints on S_9 physical subspace {b=1, b^2-be-e^2=1}; X invertible, [b,e]_orbit=0, strong-zero verified",
+
+  "created_utc": "2026-04-21T05:00:00Z",
+
+  "source_attribution": "Blaschke, D.N., Gieres, F., 'On the canonical formulation of gauge field theories and Poincare transformations,' Nucl. Phys. B 965 (2021), arXiv:2004.14406, eqs (5.32)-(5.39) — Dirac-bracket construction from second-class constraints, canonical source for the {F,G}_D formula. Mannheim, P.D., 'Equivalence of light-front quantization and instant-time quantization,' Phys. Rev. D 102 025020 (2020), arXiv:1909.03548 — slice/path (observer/invariant) framing that motivates the QA-side firewall reading. Cross-map docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.2 (MC-3, MC-4). Prior-art audit docs/theory/QA_QFT_COMMUTATORS_PRIOR_ART.md §5b — C3 tuple wedge recast as symplectic lift base bracket. Preliminary T-invariant docs/theory/empirical/etcr_t_invariant_check.py: I(b,e) = (b^2-be-e^2)^2 mod m, Cassini-squared. Paper section papers/in-progress/qft-etcr-orbit-quotient/section.md §4.4. Substrate: [191] Tiered Reachability. Will Dale + Claude 2026-04-21.",
+
+  "modulus": 9,
+
+  "dynamics": {
+    "step_operator": "T_F(b,e) = (a1(b+e), b)",
+    "a1_definition": "a1(x) = ((x - 1) mod m) + 1",
+    "note": "Fibonacci-like QA step. Under T_F the unsquared Cassini b^2-be-e^2 flips sign per step, so the squared scalar I = (b^2-be-e^2)^2 is T-invariant."
+  },
+
+  "base_bracket": {
+    "name": "symplectic_lift_of_tuple_wedge",
+    "formula": "[F, G] := (d_b F)(d_e G) - (d_e F)(d_b G)",
+    "note": "Symplectic lift of the tuple wedge {(b1,e1),(b2,e2)} = b1*e2 - b2*e1 (prior-art C3 recast). Equivalent to the standard 2D Poisson bracket with {b, e} = 1, extended to polynomial functions in Z[b, e] via formal partial derivatives."
+  },
+
+  "physical_subspace": {
+    "description": "Subset of H_raw = {1..9}^2 defined by simultaneous vanishing of phi_1 and phi_2 mod 9. Selects two points (1,8), (1,9) on the +1 branch of the Cassini-squared level I=1 (Cosmos orbit).",
+    "intersects_orbit_class": "Cosmos (period-24)",
+    "cassini_squared_level": 1,
+    "cassini_branch": "+1"
+  },
+
+  "constraint_polynomials": [
+    {
+      "name": "phi_1",
+      "label": "cassini_level_plus1_branch",
+      "formula": "b^2 - b*e - e^2 - 1",
+      "terms": [
+        [1, 2, 0],
+        [-1, 1, 1],
+        [-1, 0, 2],
+        [-1, 0, 0]
+      ],
+      "role": "first-class-like level-set constraint (T-flips to -phi_1 mod sign squared)"
+    },
+    {
+      "name": "phi_2",
+      "label": "gauge_fix_b_equals_1",
+      "formula": "b - 1",
+      "terms": [
+        [1, 1, 0],
+        [-1, 0, 0]
+      ],
+      "role": "gauge-fix picking b=1 representative"
+    }
+  ],
+
+  "x_matrix_symbolic": {
+    "X_11": "0",
+    "X_12": "b + 2*e",
+    "X_21": "-(b + 2*e)",
+    "X_22": "0",
+    "det_X_symbolic": "(b + 2*e)^2",
+    "note": "Recomputed by validator symbolically from phi_1, phi_2 via [phi_a, phi_b] := (d_b phi_a)(d_e phi_b) - (d_e phi_a)(d_b phi_b)."
+  },
+
+  "witnesses": [
+    {
+      "point": [1, 8],
+      "cassini_unsquared_mod9": 1,
+      "cassini_squared_mod9": 1,
+      "X_matrix_mod_m": [[0, 8], [1, 0]],
+      "det_X_mod_m": 1,
+      "det_is_unit": true,
+      "bracket_b_e_orbit_mod_m": 0,
+      "note": "(1,8): b+2e = 17 = 8 mod 9 (unit). phi_1(1,8) = 1 - 8 - 64 - 1 = -72 = 0 mod 9. phi_2(1,8) = 0."
+    },
+    {
+      "point": [1, 9],
+      "cassini_unsquared_mod9": 1,
+      "cassini_squared_mod9": 1,
+      "X_matrix_mod_m": [[0, 1], [8, 0]],
+      "det_X_mod_m": 1,
+      "det_is_unit": true,
+      "bracket_b_e_orbit_mod_m": 0,
+      "note": "(1,9): b+2e = 19 = 1 mod 9 (unit). phi_1(1,9) = 1 - 9 - 81 - 1 = -90 = 0 mod 9. phi_2(1,9) = 0."
+    }
+  ],
+
+  "strong_zero_declarations": {
+    "description": "Validator independently recomputes [phi_a, F]_orbit for a in {1,2} and F in {b, e} at every witness; all must equal 0 mod 9. Parallels Blaschke-Gieres eq (5.38) — constraint functions become strong invariants under the Dirac bracket.",
+    "pairs_checked_per_witness": [
+      ["phi_1", "b"],
+      ["phi_1", "e"],
+      ["phi_2", "b"],
+      ["phi_2", "e"]
+    ]
+  },
+
+  "bracket_b_e_instantiation": {
+    "description": "MC-4 deliverable 5: [F, G]_orbit instantiated for F=b and G=e on the physical subspace. Value must equal 0 mod m at every witness — reflects that b and e are not independent in the Dirac-bracket quotient (constraints reduce the effective degrees of freedom).",
+    "target_value_mod_m": 0
+  },
+
+  "cross_references": [
+    {"family": 191, "name": "QA Tiered Reachability Theorem", "relation": "substrate_orbit_classifier"},
+    {"family": 234, "name": "QA Chromogeometry Pythagorean Identity", "relation": "complementary_symmetric_form_C3_is_antisymmetric"},
+    {"family": 256, "name": "QA Orbit-Resonance Attention", "relation": "shared_orbit_invariance_framework"}
+  ],
+
+  "scope_boundaries": {
+    "version": "v1",
+    "covered": "m=9, T_F dynamics, two-constraint family, +1 Cassini branch of I=1 Cosmos orbit",
+    "not_covered": [
+      "m=24 — requires mixed I-level + period-n constraint family (see CROSSMAP §4.2 last paragraph)",
+      "Other QA step operators beyond T_F — T-invariance of I depends on the Fibonacci-like step",
+      "-1 branch of I=1 level set — symmetric construction; not included in v1",
+      "Satellite and Singularity orbits (both at I=0) — would require auxiliary fixed-point constraint",
+      "Unequal-k CCR invariant (cert-C) — follow-up cert, depends on cert-D stability"
+    ]
+  },
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -7259,6 +7259,37 @@ def _validate_heartmath_coherence_cert_family(base_dir):
     return None
 
 
+def _validate_orbit_dirac_bracket_cert_family(base_dir):
+    """QA Orbit-Dirac Bracket Cert family [260] — explicit QA-native Dirac-bracket construction on S_9, backfilling the ETCR/Dirac cross-map thread (commit aa2053c). Primary-source anchors: Blaschke & Gieres (Nucl. Phys. B 965, 2021, arXiv:2004.14406) eqs (5.32)-(5.39) — Dirac-bracket from second-class constraints; Mannheim (Phys. Rev. D 102 025020, 2020, arXiv:1909.03548) — slice/path firewall framing. Cross-map docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.2 (MC-3, MC-4); paper section papers/in-progress/qft-etcr-orbit-quotient/section.md §4.4; preliminary T-invariant docs/theory/empirical/etcr_t_invariant_check.py. Substrate: [191] Tiered Reachability. Delivers MC-4: constraint family phi_1 = b^2-be-e^2-1, phi_2 = b-1, symplectic-lift base bracket (tuple-wedge recast), X-matrix = [[0, b+2e], [-(b+2e), 0]] with det X = (b+2e)^2, invertibility as coprime-to-m, [b,e]_orbit = 0 on physical subspace, strong-zero [phi_a, F]_orbit = 0 for F in {b,e}. Scope v1: m=9, T_F dynamics, two-constraint family on +1 Cassini branch of I=1 Cosmos orbit (witnesses (1,8),(1,9)). m=24 + cert-C (unequal-k CCR invariant) deferred. Will Dale + Claude 2026-04-21. Checks ODB_1+PHI/WIT_A1/WIT_PHYSICAL/X_MATRIX/INV/DB_BE_ZERO/STRONG_ZERO/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_orbit_dirac_bracket_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_dirac_bracket_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_dirac_bracket_cert_v1/qa_orbit_dirac_bracket_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_dirac_bracket_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_dirac_bracket_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_dirac_bracket_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_kg_agent_write_surface_cert(base_dir):
     """QA-KG Agent Write Surface Cert [255] v1: validates Phase 6 MCP agent-integration firewall. Primary source: docs/specs/QA_MEM_SCOPE.md (Dale, 2026); tools/qa_kg_mcp/server.py (Dale, 2026); memory/project_qa_mem_review_role.md (Dale, 2026). Gates W1 (MCP surface = 4 tools via AST), W2 (agent upserts confined to extractor/tests/cert-validators), W3a (direct-DB-write detector scans wrapper ledger), W3b (promoted-from edges must carry mcp_session marker), W4 (rate_limit.increment raises at cap), W5 (authority immutable both directions), W6 (READ_ONLY capability omits promote from tools/list), W7 (every MCP tool call logs to query_log), W8 (no except-pass swallows in tools/qa_kg_mcp/ + tools/qa_kg/_audit.py). All gates HARD. Landing this cert flips the alpha-bar from 'NOT agent memory' to 'alpha agent memory + authoritative project memory' per memory/project_qa_mem_review_role.md."""
     import subprocess
@@ -8320,6 +8351,11 @@ FAMILY_SWEEPS = [
      "Theorem NT (observer-projection firewall) applied to HeartMath-sourced cardiac-rhythm data. Rhythm states labeled as discrete orbit classes {Singularity, Satellite, Cosmos}; continuous coherence / HRV / LF-HF / cross-coherence measurements admitted only as observer_projections with direction=output, never as causal QA state variables (b, e, d, a). Each rhythm-trace state declares at most two observer/QA boundary crossings per Theorem NT — no interior re-projection through a continuous intermediate. Primary-source anchors (18 claims registered in tools/qa_kg/fixtures/source_claims_heartmath.json): oschman_2015_master_oscillator (heart as master electrical oscillator broadcasting coherent frequencies system-wide → Cosmos), oschman_2015_rein_coherence (ECG coherence under positive-emotion attention + heart-brain cross-coherence → Satellite, entrained), oschman_2015_bidirectional_antenna (antenna transmit-receive reciprocity = two-boundary-crossing symmetry in Theorem NT), edwards_2018_coherence_patterns (population-scale coherence patterns consistent with orbit-class as operational surface). Does NOT claim an HI ↔ HRV coherence-ratio numerical mapping (requires McCraty/Radin primary-source data, Phase 4.8 item 6, deferred). Does NOT do HRV measurement or biofeedback — QA describes what the coherence phenomenon reduces to when observer-projection is declared properly. Grounds Phase 4.8 item 5 of docs/specs/QA_MEM_PHASE_4_8_HANDOFF.md. Primary source: Documents/heartmath_corpus/oschman_2015_heart_bidirectional_scalar_antenna.pdf. Excerpts: docs/theory/heartmath_phase4_8_excerpts.md. Theory: docs/theory/QA_HEARTMATH_COHERENCE.md. Will Dale + Claude 2026-04-20. Checks HMC_1+RHYTHM_LABELS/NO_FLOAT_STATE/BOUNDARY_CROSSINGS/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "259_qa_heartmath_coherence_cert",
      "qa_heartmath_coherence_cert_v1", True),
+    (260, "QA Orbit-Dirac Bracket Cert family",
+     _validate_orbit_dirac_bracket_cert_family,
+     "Explicit QA-native Dirac-bracket construction on S_9. Backfills the ETCR / Dirac-bracket cross-map thread (commit aa2053c, 2026-04-20), delivering MC-4 of docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.2. Constraint family {phi_1 = b^2 - b*e - e^2 - 1, phi_2 = b - 1} on pair space {1..9}^2. Base bracket = symplectic lift of tuple wedge {(b1,e1),(b2,e2)} = b1*e2 - b2*e1 (prior-art C3 recast, §QA_QFT_COMMUTATORS_PRIOR_ART.md). X_{ab} = [phi_a, phi_b] computed symbolically via Z[b,e] polynomial partial derivatives: X_12 = b + 2e, X_21 = -(b + 2e), diagonals 0; det X = (b + 2e)^2. Invertibility verified at every witness as coprime-to-m (unit mod 9); X^-1 via Python's built-in pow(x, -1, m). Orbit-Dirac bracket [F, G]_orbit := [F, G] - [F, phi_a] (X^-1)^{ab} [phi_b, G]. Instantiation for observable pair F=b, G=e: [b, e]_orbit = 0 mod 9 at every physical-subspace point. Strong-zero verification: [phi_a, F]_orbit = 0 mod 9 for a in {1,2}, F in {b, e}, at every witness (parallels Blaschke-Gieres eq 5.38). Primary sources: Blaschke & Gieres Nucl. Phys. B 965 (2021) arXiv:2004.14406 eqs (5.32)-(5.39) — Dirac-bracket canonical formulation; Mannheim Phys. Rev. D 102 025020 (2020) arXiv:1909.03548 — slice/path firewall framing. Substrate: [191] Tiered Reachability. Cross-map docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.2; paper section papers/in-progress/qft-etcr-orbit-quotient/section.md §4.4; preliminary T-invariant docs/theory/empirical/etcr_t_invariant_check.py (Cassini-squared I = (b^2-be-e^2)^2 T-invariant under T_F(b,e) = (a1(b+e), b)). Scope v1: m=9 only, T_F dynamics, +1 Cassini branch of I=1 Cosmos orbit (witnesses (1,8), (1,9)). Deferred to v2: m=24 (needs mixed I-level + period-n family), cert-C unequal-k CCR invariant. Will Dale + Claude 2026-04-21. Checks ODB_1+PHI/WIT_A1/WIT_PHYSICAL/X_MATRIX/INV/DB_BE_ZERO/STRONG_ZERO/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "260_qa_orbit_dirac_bracket_cert",
+     "qa_orbit_dirac_bracket_cert_v1", True),
 ]
 
 

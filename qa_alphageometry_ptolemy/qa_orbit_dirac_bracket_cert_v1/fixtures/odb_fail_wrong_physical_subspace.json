@@ -1,0 +1,83 @@
+{
+  "schema_version": "QA_ORBIT_DIRAC_BRACKET_CERT.v1",
+  "certificate_id": "qa.cert.orbit_dirac_bracket.fail.wrong_physical_subspace.v1",
+  "cert_type": "qa_orbit_dirac_bracket_cert",
+  "title": "FAIL fixture: witness (1,4) does NOT satisfy phi_1 = 0 mod 9; declared X_matrix mismatches recomputed",
+
+  "created_utc": "2026-04-21T05:00:00Z",
+
+  "_fixture_purpose": "Negative fixture. Witness (1,4) is in {1..9}^2 (passes A1) but fails the physical-subspace test: phi_1(1,4) = 1 - 4 - 16 - 1 = -20 = 7 mod 9, not 0. Validator must flag ODB_WIT_PHYSICAL. Declared X_matrix is also wrong (declared [[0,0],[0,0]] vs recomputed [[0,0],[0,0]]... wait — at (1,4), b+2e=9=0 mod 9 so X is actually [[0,0],[0,0]] and det=0 is NOT a unit — hits ODB_INV instead). The fixture also declares bracket_b_e_orbit_mod_m=0 which is meaningless when X is singular.",
+
+  "source_attribution": "Negative fixture for [260] self-test. Blaschke-Gieres arXiv:2004.14406. Mannheim arXiv:1909.03548.",
+
+  "modulus": 9,
+
+  "dynamics": {
+    "step_operator": "T_F(b,e) = (a1(b+e), b)",
+    "a1_definition": "a1(x) = ((x - 1) mod m) + 1"
+  },
+
+  "base_bracket": {
+    "name": "symplectic_lift_of_tuple_wedge",
+    "formula": "[F, G] := (d_b F)(d_e G) - (d_e F)(d_b G)"
+  },
+
+  "physical_subspace": {
+    "description": "Claims (1,4) is on the physical subspace but it is not.",
+    "intersects_orbit_class": "Cosmos",
+    "cassini_squared_level": 1
+  },
+
+  "constraint_polynomials": [
+    {
+      "name": "phi_1",
+      "formula": "b^2 - b*e - e^2 - 1",
+      "terms": [
+        [1, 2, 0],
+        [-1, 1, 1],
+        [-1, 0, 2],
+        [-1, 0, 0]
+      ]
+    },
+    {
+      "name": "phi_2",
+      "formula": "b - 1",
+      "terms": [
+        [1, 1, 0],
+        [-1, 0, 0]
+      ]
+    }
+  ],
+
+  "x_matrix_symbolic": {
+    "X_11": "0",
+    "X_12": "b + 2*e",
+    "X_21": "-(b + 2*e)",
+    "X_22": "0"
+  },
+
+  "witnesses": [
+    {
+      "point": [1, 4],
+      "_bug": "NOT in physical subspace: phi_1(1,4) = -20 = 7 mod 9, not 0. Also b+2e=9=0 mod 9 so X is singular.",
+      "X_matrix_mod_m": [[0, 0], [0, 0]],
+      "det_X_mod_m": 0,
+      "det_is_unit": false,
+      "bracket_b_e_orbit_mod_m": 0
+    },
+    {
+      "point": [1, 8],
+      "X_matrix_mod_m": [[0, 8], [1, 0]],
+      "det_X_mod_m": 1,
+      "det_is_unit": true,
+      "bracket_b_e_orbit_mod_m": 0
+    }
+  ],
+
+  "bracket_b_e_instantiation": {
+    "target_value_mod_m": 0
+  },
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

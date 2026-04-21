@@ -75,6 +75,19 @@ export function orbit_period(b0, e0, cap = MOD * MOD + 1) {
   return seen.size;
 }
 
+// σ-only orbit length = length of the cycle (b,e) → σ(b,e) → σ²(b,e) → ….
+// On mod 9 (inert Case A of QA Orbit Theorem Part II, since (5|3) = −1), orbit
+// length is uniform per class: 24 on Cosmos (= π(9)), 8 on Satellite (= π(3)),
+// 1 on Singularity. See docs/theory/QA_ORBIT_THEOREM_SYNTHESIS.md.
+export function sigma_orbit_length(b0, e0, cap = MOD * MOD + 1) {
+  let b = b0, e = e0;
+  for (let k = 1; k <= cap; k++) {
+    [b, e] = sigma(b, e);
+    if (b === b0 && e === e0) return k;
+  }
+  return -1;
+}
+
 // Partition the 72 Cosmos states into their 3 period-24 orbits under σ.
 // Returns { orbitId: Map('b,e' → 0|1|2), orbits: Array<Array<[b,e]>> }.
 function _partitionCosmos() {

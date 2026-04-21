@@ -90,6 +90,11 @@
   <div class="metric"><span>cosmos orbit</span><span class="val" id="t-orbit">—</span></div>
   <div class="metric"><span>v₃(f) ≥ 2 ⇔ non-cosmos</span><span class="val" id="t-v3match">—</span></div>
 
+  <h2>Part II — σ-only orbit length</h2>
+  <div class="note">On mod 9 (inert case, (5∣3)=−1): uniform per class — 24 on Cosmos, 8 on Satellite, 1 on Singularity. See QA_ORBIT_THEOREM_SYNTHESIS.md.</div>
+  <div class="metric"><span>σ-orbit length of (b,e)</span><span class="val" id="t-sigma-len">—</span></div>
+  <div class="metric"><span>expected for class</span><span class="val" id="t-sigma-exp">—</span></div>
+
   <h2>QA vs DRTH-A — two third-coord completions</h2>
   <div class="note">See docs/theory/QA_DRTH_MAPPING.md §2. Both extend (b,e) → D₉³ with a different linear rule.</div>
   <div class="metric"><span>d  (QA: b + e)</span><span class="val" id="t-d-qa">—</span></div>
@@ -112,6 +117,7 @@ import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import {
   MOD, qa_mod, qa_step, sigma, mu, classify, orbit_period,
+  sigma_orbit_length,
   norm_f, v3, cosmos_orbit_id, pickColor,
   qa_coord_d, drth_coord_A,
   PALETTE_COSMOS_ORBITS,
@@ -315,6 +321,11 @@ function tick() {
   setText('t-v3', v3f === Infinity ? '∞' : v3f);
   setText('t-orbit', orbitIdx === undefined ? '—' : orbitIdx);
   setText('t-v3match', v3Consistent ? '✓' : '✗');
+
+  const sigmaLen = sigma_orbit_length(b, e);
+  const expectedLen = cls === 'cosmos' ? 24 : (cls === 'satellite' ? 8 : 1);
+  setText('t-sigma-len', sigmaLen);
+  setText('t-sigma-exp', `${expectedLen} ${sigmaLen === expectedLen ? '✓' : '✗'}`);
 
   const dQA   = qa_coord_d(b, e);
   const dDRTH = drth_coord_A(b, e);

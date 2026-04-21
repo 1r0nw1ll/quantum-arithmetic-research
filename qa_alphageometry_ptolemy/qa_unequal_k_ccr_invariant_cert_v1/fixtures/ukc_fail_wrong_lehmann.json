@@ -1,0 +1,53 @@
+{
+  "schema_version": "QA_UNEQUAL_K_CCR_INVARIANT_CERT.v1",
+  "certificate_id": "qa.cert.unequal_k_ccr_invariant.fail.wrong_lehmann.v1",
+  "cert_type": "qa_unequal_k_ccr_invariant_cert",
+  "title": "FAIL fixture: declared lehmann_trace_formula values disagree with recomputation; also missing Singularity witness",
+
+  "created_utc": "2026-04-21T05:30:00Z",
+
+  "_fixture_purpose": "Negative fixture. Declares wrong trace at Delta_k=8 (18 instead of 9) and Delta_k=24 (80 instead of 81). Witnesses list misses the Singularity class. Validator must flag UKC_LEHMANN (twice) and UKC_WITNESS.",
+
+  "source_attribution": "Negative fixture for [261] self-test. Mannheim arXiv:1909.03548. Cross-map docs/theory/QA_QFT_ETCR_CROSSMAP.md. Companion [260].",
+
+  "modulus": 9,
+
+  "dynamics": {
+    "step_operator": "T_F(b, e) = (a1(b+e), b)",
+    "a1_definition": "a1(x) = ((x - 1) mod m) + 1"
+  },
+
+  "propagator_definition": {
+    "name": "i_Delta_QA",
+    "formula": "i_Delta_QA(Delta_k; (b,e), (b',e')) := 1 if T^|Delta_k|(b,e) = (b',e') else 0"
+  },
+
+  "lehmann_trace_formula": {
+    "formula": "Tr i_Delta_QA(Delta_k) = 72 * 1[24 | Delta_k] + 8 * 1[8 | Delta_k] + 1",
+    "delta_k_0": 81,
+    "delta_k_8": 18,
+    "delta_k_24": 80
+  },
+
+  "witnesses": [
+    {
+      "orbit_class": "Cosmos",
+      "start_point": [1, 1],
+      "orbit_period": 24
+    },
+    {
+      "orbit_class": "Satellite",
+      "start_point": [3, 3],
+      "orbit_period": 8
+    },
+    {
+      "orbit_class": "Cosmos",
+      "start_point": [1, 3],
+      "orbit_period": 24,
+      "_bug": "Two Cosmos witnesses; missing Singularity class"
+    }
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

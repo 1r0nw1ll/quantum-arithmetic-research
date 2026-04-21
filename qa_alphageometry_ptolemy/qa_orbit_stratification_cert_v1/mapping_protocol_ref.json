@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Orbit Stratification Cert family [261, pending registration]: machine-checkable form of the two-layer QA Orbit Stratification Theorem proven 2026-04-20. Part I: ⟨σ,μ⟩-orbits on (Z/mZ)² equal content-ideal classes L_j = {(b,e) : min(v_p(b), v_p(e)) = j}, CRT-factored for composite m. Part II: σ-only orbits refine by Legendre symbol (5|p) — inert / split / ramified. Bridge: μ is the collapse operator from Part II's Frobenius/Jordan structure to Part I's content-ideal classes. Primary sources: (Nielsen, 1924) generation of GL₂(ℤ) by elementary matrices T and Tᵀ; (Lang, 2002) Algebra ch. III local-ring module classification via elementary divisors; (Wall, 1960) Fibonacci Pisano periodicity π(p^k). Companion files: docs/theory/QA_ORBIT_STRATIFICATION_THEOREM.md (proofs), docs/theory/QA_ORBIT_THEOREM_SYNTHESIS.md (synthesis), docs/theory/QA_GENERATOR_REACHABILITY.md (audit trail). Source: Will Dale + Claude 2026-04-20. Checks QOS_1+A/B_SZ/B_CC/C/II_A/II_B/II_C/F; 1 PASS + 1 FAIL fixture; self-test ok. Meta-validator registration deferred."
+}

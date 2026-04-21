@@ -1,0 +1,7 @@
+{
+  "schema_version": "QA_ORBIT_STRATIFICATION_CERT.v1_WRONG",
+  "fixture_id": "qos_fail_wrong_schema",
+  "description": "Intentional FAIL fixture: wrong schema_version triggers QOS_1.\nPrimary sources: (Nielsen, 1924); (Lang, 2002); (Wall, 1960).",
+  "prime_power_moduli": [9],
+  "composite_moduli": []
+}

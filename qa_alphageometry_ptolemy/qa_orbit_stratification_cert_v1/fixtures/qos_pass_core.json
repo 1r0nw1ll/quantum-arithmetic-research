@@ -1,0 +1,22 @@
+{
+  "schema_version": "QA_ORBIT_STRATIFICATION_CERT.v1",
+  "fixture_id": "qos_pass_core",
+  "description": "Canonical PASS fixture validating Props A/B/C plus Part II Cases A/B/C across a representative spread of moduli.\nPrimary sources: (Nielsen, 1924) Nielsen generators of SL_2(Z); (Lang, 2002) Algebra ch. III, elementary-divisor orbit classification on local rings; (Wall, 1960) Pisano periodicity pi(p^k).",
+  "prime_power_moduli": [8, 9, 25, 27, 11, 13, 49, 125],
+  "composite_moduli": [15, 24, 45, 72],
+  "notes": {
+    "8":   "p=2, k=3, Case A (inert): uniform pi(8)=12 on L_0",
+    "9":   "p=3, k=2, Case A: uniform pi(9)=24 on L_0",
+    "25":  "p=5, k=2, Case C (ramified): 5x100 + 5x20 on L_0",
+    "27":  "p=3, k=3, Case A: uniform pi(27)=72 on L_0",
+    "11":  "p=11, k=1, Case B (split): 1x10 + 2x5 + 10x10 on L_0",
+    "13":  "p=13, k=1, Case A: uniform pi(13)=28 on L_0",
+    "49":  "p=7, k=2, Case A: uniform pi(49)=112 on L_0",
+    "125": "p=5, k=3, Case C: 25x500 + 25x100 on L_0",
+    "15":  "CRT 3*5: 4 components from 2x2 level product",
+    "24":  "CRT 8*3: 8 components from 4x2 level product",
+    "45":  "CRT 9*5: 6 components from 3x2 level product",
+    "72":  "CRT 8*9: 12 components from 4x3 level product"
+  },
+  "fail_ledger": []
+}

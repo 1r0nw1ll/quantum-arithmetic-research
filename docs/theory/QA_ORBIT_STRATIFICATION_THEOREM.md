@@ -136,6 +136,71 @@ Full multi-modulus script is in commit message of `e17242f` and can be extracted
 
 ---
 
+---
+
+# Part II — σ-only sub-stratification within each `L_j`
+
+Once μ is removed, `⟨σ⟩ = ⟨F⟩ ≤ GL₂(ℤ/mℤ)` is cyclic of order π(m) (the Pisano period). The orbits of σ alone within each level set `L_j` stratify more finely than the `{σ, μ}` orbits. The classification is governed by **how the Fibonacci characteristic polynomial `x² − x − 1` factors mod p**, equivalently by the Legendre symbol `(5 | p)`.
+
+## Reduction to L_0
+
+Every `(b, e) ∈ L_j` has the form `(p^j · b', p^j · e')` with `(b', e') ∈ L_0` of `(ℤ/p^{k−j} ℤ)²`, and σ is compatible with this scaling: `σ(p^j b', p^j e') = (p^j e', p^j (b' + e'))`. So the σ-orbit of `(b,e)` in `L_j^{(p^k)}` ↔ σ-orbit of `(b', e')` in `L_0^{(p^{k−j})}`. **It suffices to classify σ-orbits on L_0 of (ℤ/p^n ℤ)² for all prime powers p^n.**
+
+## Trichotomy by `(5 | p)`
+
+The characteristic polynomial of F = [[0,1],[1,1]] is `x² − x − 1`, with discriminant 5. Its behaviour mod p determines three cases:
+
+### Case A — Inert (p = 2 or `(5 | p) = −1`, i.e., p ≡ ±2 mod 5)
+
+`x² − x − 1` is irreducible over `F_p`. F has no `F_p`-eigenvectors; its eigenvalues live in `F_{p²}`. On L_0 of `(ℤ/p^n ℤ)²`, every orbit has the uniform length π(p^n), and the number of orbits is `|L_0| / π(p^n)`.
+
+**Verified** on (p, n) ∈ {(2, 3), (3, 2), (3, 3), (7, 2), (13, 1), (13, 2)}: all orbit lengths equal π(p^n).
+
+### Case B — Split (`(5 | p) = +1`, i.e., p ≡ ±1 mod 5)
+
+`x² − x − 1` has two distinct roots `φ, ψ ∈ F_p*` with `φ · ψ = −1`. F is diagonalisable over `F_p`; its two 1-dimensional eigenspaces, lifted to `(ℤ/p^n ℤ)²`, contribute:
+- φ-eigenspace: `(p − 1) · p^{n−1} / ord_{p^n}(φ)` orbits of length `ord_{p^n}(φ)`
+- ψ-eigenspace: `(p − 1) · p^{n−1} / ord_{p^n}(ψ)` orbits of length `ord_{p^n}(ψ)`
+
+The remaining (non-eigenspace) vectors form **generic orbits of length π(p^n) = lcm(ord φ, ord ψ)**.
+
+**Verified on split primes** (p ≡ ±1 mod 5):
+
+| m = p^n | φ (ord) | ψ (ord) | π(p^n) | measured L_0 orbit structure |
+|---|---|---|---:|---|
+| 11    | 8 (10) | 4 (5)   | 10 | 1×10 (φ) + 2×5 (ψ) + 10×10 (generic) |
+| 19    | 5 (9)  | 15 (18) | 18 | 2×9 (φ) + 1×18 (ψ) + 18×18 (generic) |
+| 29    | 6 (14) | 24 (7)  | 14 | 2×14 (φ) + 4×7 (ψ) + 56×14 (generic) |
+| 121 = 11² | — | — | 110 | 2×55 (short eigen) + 131×110 (everything else) |
+
+All match prediction exactly.
+
+### Case C — Ramified (p = 5)
+
+`x² − x − 1` has the double root `x ≡ 3 (mod 5)`; the discriminant equals p. F is not diagonalisable mod 5 — it is a Jordan block. Over `(ℤ/5^n ℤ)²` the structure is a Jordan filtration.
+
+**Empirical** on mod 25 = 5², L_0:
+```
+5 × π(25) + 5 × π(5)  =  5 × 100 + 5 × 20  =  600 = |L_0|
+```
+and on mod 25, L_1: `1 × 20 + 1 × 4 = 24 = |L_1|` where 4 = π(5)/5 and 20 = π(5).
+
+Half the L_0 orbits live "at full depth" (length π(p^n)); the other half collapse to the reduced Pisano period π(p^{n−1}) because they lie on the Jordan generalised-eigenspace that reduces non-trivially mod p.
+
+A complete closed form requires tracking the Jordan filtration through `ker (F − 3I)^r` for `r = 0, 1, …, n`; deferred.
+
+## Composite m via CRT
+
+Exactly as in Proposition C, σ-only orbits on `(ℤ/mℤ)²` factor by CRT into per-prime-power σ-only orbits. Each factor uses Case A/B/C per Legendre symbol. Orbit lengths on composite m are **lcm of per-factor orbit lengths**; orbit counts multiply.
+
+## Upshot — what μ collapses
+
+The `{σ, μ}` theorem (Part I) says orbits are labelled by `J = min(v_p(b), v_p(e))`. The σ-only theorem (Part II) refines each `L_j` further by the `(5 | p)` trichotomy, with eigenspace orbits carrying shorter-than-generic lengths when they exist.
+
+μ collapses all of these substructures into a single `L_j` component per level. Concretely: **μ is the one generator that identifies the two `F_p`-eigenspaces** (in the Split case) and **mixes the Jordan strata** (in the Ramified case).
+
+---
+
 ## Closed (previously open)
 
 1. ~~Closed-form proof of Proposition B~~ — **done** (GL₂(ℤ/p^k ℤ) action + content-ideal orbit classification). The Pisano-periodicity path was a red herring; the proof goes through elementary matrices and local-ring linear algebra instead.

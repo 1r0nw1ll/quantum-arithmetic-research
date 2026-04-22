@@ -94,13 +94,25 @@ Every reproduction result gets one or more tags. Tags are not mutually exclusive
 | `proof-gap` | Mapping is sound but the QA proof/enumeration is incomplete |
 | `qa-stronger-than-tla` | QA forbids states TLA+ allowed (may be a real QA refinement OR an encoding error — flag for review) |
 | `qa-weaker-than-tla` | QA allows states TLA+ refuted (encoding lost information) |
-| `ornamental-overlay` | Benchmark was solved, but the QA layer was pasted on top — axioms satisfied syntactically, no discriminating power, orbit/derived/firewall machinery contributes nothing |
+| `ornamental-overlay` | Benchmark was solved, but **this reproducer's chosen encoding** was pasted on top — axioms satisfied syntactically, no discriminating power, orbit/derived/firewall machinery in the chosen encoding contributes nothing |
 
-`ornamental-overlay` is the failure mode that distinguishes "QA works" from
-"QA is compatible with working." An attempt can reproduce all invariants
-(Recovery 2/2) and still be entirely ornamental (Contribution 0). Flagging
-this explicitly blocks the drift from "reproduced the invariants" to
-"validated QA."
+`ornamental-overlay` is a property of the **encoding**, not of QA as a theory.
+An attempt can reproduce all invariants (Recovery 2/2) and still be entirely
+ornamental in its QA dressing (Contribution 0). Flagging this explicitly
+blocks the drift from "reproduced the invariants" to "validated QA."
+
+**Interpretation rule (HARD).** A low Contribution score measures the
+encoding-fit of *one attempt*. It does NOT measure whether QA itself applies
+to the problem domain. The failure mode `ornamental-overlay` means "this
+encoding was decorative" — possibly because the wrong primitives were
+chosen, the wrong objects identified, or the reproducer had no way to
+recover the right structure from the blinded prompt. Concluding "QA is
+decorative on domain X" from repeated `ornamental-overlay` scores is a
+category error, flagged in `memory/feedback_qa_always_applies.md`. The
+honest reading is "our current encoding family under the blind-discovery
+protocol has not recovered strong QA structure on domain X yet." See
+§Benchmark modes below for the two distinct experiments this distinction
+enables.
 
 ## Two-axis scoring
 
@@ -156,6 +168,44 @@ control-theorem signature):
 - Monotonicity under generator expansion (adding Σ can only merge, not split)
 
 If none of these are present, Contribution ≤ 1, even if Recovery is full.
+
+## Benchmark modes (two distinct experiments)
+
+Low Contribution scores in blind-discovery mode mean "the reproducer did not
+find the right encoding from the prompt alone." They do NOT mean "no right
+encoding exists for this domain." Two distinct experiments separate these
+questions:
+
+### Mode A — Blind-discovery benchmark (current default)
+
+Given only the problem statement, does a fresh reproducer FIND the right
+QA-native representation? Scores under this mode conflate two things:
+
+- whether a strong QA encoding exists for the domain, AND
+- whether the reproducer can recover such an encoding from the prompt.
+
+When Mode A returns Contribution ≤ 1 repeatedly on a domain, the honest
+read is: *under the blind-discovery protocol, no attempt has yet found
+strong QA structure on this domain*. This is evidence about the discovery
+protocol and the encoding family tried so far — not about the domain's
+compatibility with QA as a theory.
+
+### Mode B — Fit benchmark (pre-defined object model)
+
+Pre-specify the QA-native object model for a domain (e.g., QA as geometric
+algebra: grades, rotors, bivectors; or QA as generator-algebra-on-lattices;
+or QA as category-theoretic Kleisli composition) in a published artifact.
+Then ask the reproducer to encode one spec against that model.
+
+Mode B scores measure how well the pre-defined model captures the TLA+
+spec's invariants — decoupled from whether the model was discoverable.
+
+**When to use which.** Mode A is the default for spec-by-spec testing.
+When Mode A returns repeated low scores on a domain (e.g., distributed
+protocols), pause Mode A and design a Mode B experiment for that domain
+before continuing scale-out. Running more Mode A experiments on the same
+domain without first trying Mode B is theater — it produces more data on
+the same conflated question.
 
 ## Scope ladder
 

@@ -1,0 +1,10 @@
+{
+  "status": "empirically_supported",
+  "method": ["tarjan_scc_enumeration"],
+  "enumeration_range": "N in {1,2,3,4,5,6,30}",
+  "proof_complete": false,
+  "verifier_artifact": "verify_extension.py",
+  "proof_sketch_artifact": "PROOF_SKETCH.md",
+  "reviewer": null,
+  "review_date": null
+}

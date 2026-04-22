@@ -137,6 +137,8 @@ multi_ai_workspace/dataset_generator.py
 # mapping_protocol_ref.json + closed_sets.json + fixtures.
 !qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/**/*.json
 !qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/*.json
+# qa_tla_blind benchmark: candidate status JSONs + Lane C fixtures must be tracked
+!qa_tla_blind/**/*.json
 !tools/qa_kg/fixtures/*.json
 # Phase 5: nested fixture dirs (corpus_snapshot_v<N>/) carry the
 # CANONICAL_MANIFEST.json and other per-snapshot anchors that cert [228]
@@ -295,3 +297,6 @@ qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_multibench_c
 # Playwright MCP temp data
 .playwright-mcp/
 private/upwork/
+
+# QA-TLA blind-reproduction ground truth (must not leak into main context)
+qa_tla_blind/ground_truth/

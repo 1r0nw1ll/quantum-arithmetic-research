@@ -352,7 +352,122 @@ Wildberger bundle member. It is included because TwoPhase and Paxos both
 required it and no Wildberger-native primitive can cover it. Benchmark
 honesty demands we flag it rather than force a bogus geometric rendition.
 
-### Primitive B', D, E — explicitly deferred
+### Primitive D (Augmentation v2, 2026-04-22) — Projective subspace lattice in P^{k-1}(Z)
+
+**Purpose.** Paxos Mode B capped at Contribution 2 because the v1 object model
+only covered P²(Z) (lines and points). Paxos's quorum intersection is a
+Wildberger-adjacent projective-dimension question, but for N≥4 acceptors it
+lives in higher projective spaces. This primitive generalizes the
+intersection calculus from P² to arbitrary P^{k-1}(Z).
+
+**Provenance caveat.** This IS in the spirit of Wildberger's higher-dim UHG
+work (his series on projective metrical geometry extends beyond the plane),
+but is not verified by any specific cert in the ecosystem as of 2026-04-22.
+Treat as **Wildberger-framework-consistent extension**, not cert-backed.
+
+**Object.** The projective space `P^{k-1}(Z) = (Z^k \\ {0}) / ~`, where `~`
+is the integer-coefficient scaling equivalence. A *projective subspace of
+dimension d* is the projectivization of a (d+1)-dim linear subspace of `Z^k`
+(equivalently the projectivization of the `Z`-span of d+1 linearly
+independent points).
+
+Key dimensions:
+
+- `P^0(Z)` = a single point.
+- `P^1(Z)` = a projective line (1-dim).
+- `P^{k-1}(Z)` = full ambient (k-1-dim).
+- A *hyperplane* is a (k-2)-dim projective subspace = codim-1.
+
+**Legal operations.**
+
+- **Span** `span(S)` for a set of points `S ⊆ P^{k-1}(Z)`: the smallest
+  projective subspace containing every point in S. Dimension = (rank of
+  the matrix of homogeneous coords) − 1. Integer-exact: rank over `Z`.
+- **Meet / intersection** `V ∩ W` for two projective subspaces: pointwise
+  intersection; again a projective subspace. Dimension computable via
+  linear-algebra rank over `Z`.
+- **Join / sum** `V + W`: smallest subspace containing both; equals
+  `span(V ∪ W)`. Dimension = `dim V + dim W − dim(V ∩ W)` (the standard
+  dimension formula).
+
+**Dimension formula (the algebraic kernel).**
+
+```
+dim(V + W) + dim(V ∩ W) = dim(V) + dim(W)
+```
+
+Rearranged: `dim(V ∩ W) = dim(V) + dim(W) − dim(V + W) ≥ dim(V) + dim(W) − (k − 1)`.
+
+This bound is the primitive's chief algebraic content. If two subspaces
+satisfy `dim(V) + dim(W) ≥ k − 1`, they must intersect (i.e., `V ∩ W` has
+dimension `≥ 0`, i.e., is at least one projective point). This is
+**Grassmann's formula** applied to projective subspaces.
+
+**Grassmann's formula over Z.** Grassmann's formula is typically stated
+over a field, but it transfers exactly to the integer-span submodules of
+`Z^k`: those submodules are free (every submodule of a free Z-module is
+free), and the rank of a matrix of integer column vectors equals its rank
+over `Q` (Smith normal form makes this exact). So
+`dim_Z(V ∩ W) = dim_Q(V_Q ∩ W_Q)` where `V_Q, W_Q` are the rational
+extensions, and the dimension formula holds over `Z` by passing to `Q`
+and back. QA's integer-exact philosophy is preserved — no `Q`-valued
+quantity appears in the primitive's operations.
+
+**Usage for quorum intersection.**
+
+Encoding: N acceptors as N points in general position in `P^{k-1}(Z)` for a
+chosen k. Each quorum `Q ⊆ {acceptors}` with `|Q| = q` spans a projective
+subspace `span(Q)` of dimension `q − 1` (assuming general position).
+
+For two quorums `Q₁`, `Q₂`:
+
+```
+dim(span(Q₁) ∩ span(Q₂))  ≥  (q₁ − 1) + (q₂ − 1) − (k − 1)
+                          =  q₁ + q₂ − k − 1
+```
+
+Paxos's pigeonhole bound: `|Q₁ ∩ Q₂| ≥ q₁ + q₂ − N`.
+
+**Comparison.** The projective-intersection bound gives a non-empty
+`span(Q₁) ∩ span(Q₂)` whenever `q₁ + q₂ ≥ k`. The pigeonhole bound gives
+non-empty `Q₁ ∩ Q₂` (as sets) whenever `q₁ + q₂ > N`. These are different
+quantities: projective dimension of an abstract subspace vs cardinality of a
+set of named acceptors.
+
+**Correspondence that works cleanly** — when `k = N` (ambient `P^{N-1}`,
+one dimension per acceptor) and acceptors are the standard basis points
+`e_i = [0 : ... : 1 : ... : 0]`. Then `span(Q)` is *exactly* the coordinate
+subspace indexed by `Q`, and `span(Q₁) ∩ span(Q₂) = span(Q₁ ∩ Q₂)`. The
+projective-dimension bound reduces *exactly* to the pigeonhole bound:
+`dim(span(Q₁) ∩ span(Q₂)) = |Q₁ ∩ Q₂| − 1 ≥ q₁ + q₂ − N − 1`, matching
+the pigeonhole statement up to the `-1` offset from projectivization.
+
+**This means the projective-subspace encoding captures Paxos quorum
+intersection EXACTLY for arbitrary N, provided acceptors are placed at the
+standard basis of P^{N-1}(Z).**
+
+For N=3, standard basis in P²(Z): `e_1 = [1:0:0], e_2 = [0:1:0], e_3 = [0:0:1]`.
+Quorums = 2-subsets. Spans = lines through two basis points. Two lines in
+P² intersect in exactly one point: the third basis point IS missing, so the
+intersection point is... actually the line through `e_1, e_2` is
+`{[a:b:0] : (a,b) ≠ 0}`; the line through `e_1, e_3` is `{[a:0:c]}`;
+intersection is `{[a:0:0]} = {e_1}`. Matches pigeonhole: `|{e_1,e_2} ∩ {e_1,e_3}| = 1`.
+
+**QA axiom compliance.**
+
+- A1 (No-Zero): homogeneous coords exclude the zero vector. Projective
+  points are equivalence classes; the representative point can be shifted
+  via A1 scaling as needed.
+- A2 (Derived coords): dimension is a derived integer.
+- T1 (Path-time): operations are single-step.
+- T2/NT: no continuous layer.
+- S1 / S2: integer linear algebra; no `**2`, no floats.
+
+**Note on the v1 `P²(Z)` case.** The v1 object model's §Points "or projective
+class `[x : y : z] ∈ P²(Z)`" is the k=3 special case of this primitive. The
+generalization to arbitrary k subsumes it; v1's P² treatment stays valid.
+
+### Primitive B', E — explicitly deferred
 
 Three other gaps from TwoPhase/Paxos (guarded-translation / idempotent-
 projection, hyperplane-intersection in P^{k-1} for k > 3, structured-

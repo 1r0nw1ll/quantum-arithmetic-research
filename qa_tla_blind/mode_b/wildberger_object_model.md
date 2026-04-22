@@ -250,6 +250,126 @@ The four contribution markers remain the same:
 - closed-form counts (triangular `T_n`, ring decomposition `T_{d+1} + b·e`)
 - failure-class algebra (null-cone, OOB, parity)
 
+## Augmentation v1 (post-TwoPhase + Paxos Mode B, 2026-04-22)
+
+**Purpose.** Close two confirmed bundle gaps identified by consecutive Mode B
+distributed-protocol runs (TwoPhase at Contribution 2, Paxos at Contribution
+2). Both runs produced a load-bearing geometric primitive on the *safety*
+axis (Q_r null-cone; P² line-meets) but hit gaps on the *dynamics* axis
+(monotone message pools, conditional updates, argmax-receive). These two
+primitives target the dynamics side directly.
+
+**Provenance caveat.** These primitives are **not lifted from Wildberger's
+published bundle**. They are benchmark-derived: each fills a specific gap
+observed empirically. They are included in this object model because they
+are QA-axiom-compliant and integer-exact, not because Wildberger states them.
+Scorers must treat them as `augmentation-primitives` and flag any claim that
+they are Wildberger-native as a misattribution. A future audit against a
+broader Wildberger corpus review may relocate one or both to the cert-backed
+tier; for now they sit in their own tier.
+
+### Primitive A — Monotone integer multiset
+
+**Object.** A finite multiset `M : X → ℤ≥₁` over a discrete base set `X`
+(after A1 shift; the native `ℤ≥₀` form is A1-shifted to `ℤ≥₁` with `1 =
+"zero count"` sentinel). `M(x)` is the count of `x` in `M`.
+
+**Legal transforms (the monotone-add monoid).**
+
+- `add(M, x)`: `M(x) → M(x) + 1`; all other counts unchanged. Unconditional.
+- `add_all(M, S)`: apply `add(-, x)` for each `x ∈ S`; the set action extends
+  the point action pointwise.
+- No `remove`, no `subtract`. The monoid is *free commutative strictly
+  monotone* — think of it as the natural numbers on each axis with addition
+  only.
+
+**QA axiom compliance.**
+
+- A1 (No-Zero): `M(x) ∈ ℤ≥₁`; `M(x) = 1` represents "absent" (shifted).
+- A2 (Derived coords): the total count `|M| = Σ M(x)` is a natural derived
+  coordinate. `|M|` is strictly non-decreasing under `add`.
+- T1 (Path-time): step count is the number of `add` applications; a single
+  path through the monoid.
+- T2/NT (Firewall): no continuous layer.
+- S1 / S2: integers only, no `**2`, no float state.
+
+**Reachability lattice.** The reachable set of multisets from `M₀ = {1}^X`
+(the empty multiset, A1-shifted) under `add` is the product lattice
+`∏_{x ∈ X} ℤ≥₁` with the pointwise order — and under `add` dynamics, the
+reachable subset is the *upward closure* of `M₀`, i.e. *every* multiset is
+reachable. The order itself is the `≤` relation on each coordinate. This
+is a free commutative monoid equipped with a dominance order.
+
+**Invariants expressible in the Monotone-multiset algebra.**
+
+- Monotonicity: `∀ x. M'(x) ≥ M(x)` — trivially an invariant of the monoid.
+- Inclusion: `M₁ ⊆ M₂ ⟺ ∀ x. M₁(x) ≤ M₂(x)` — the lattice order.
+- Quantity thresholds: `|M| ≥ k` or `M(x) ≥ k` — closed-form in counts.
+- **Message-pool invariants for distributed protocols** (TwoPhase `msgs`,
+  Paxos `msgs`) are all monotonicity + threshold statements over this
+  algebra.
+
+### Primitive C — Lattice-lub / argmax over a finite subset
+
+**Object.** A finite subset `S ⊆ T` where `(T, ≤)` is a totally ordered set.
+Two operations:
+
+- `lub(S) := max_{t ∈ S} t` — the least upper bound / maximum. Defined when
+  `S ≠ ∅`.
+- `argmax(S, f) := t* ∈ S` where `f(t*) = lub({ f(t) : t ∈ S })`, with a
+  tie-breaking rule (e.g. lowest-index tie-break). `f : S → U` maps into
+  another totally ordered `U`; `argmax` returns the element `t*` of `S`
+  whose `f`-image is the max.
+
+**QA axiom compliance.**
+
+- A1 (No-Zero): `T, U` are integer sets after A1 shift; `lub` stays in `T`.
+- A2 (Derived coords): `lub(S)` is a derived integer, a "height coordinate"
+  of `S`.
+- T1 (Path-time): `lub` / `argmax` are single-step operations; they do not
+  consume path-time beyond their invocation.
+- T2/NT: pure integer; no continuous layer.
+- S1 / S2: integer comparison only, no `**2` or float state.
+
+**Legal transforms (lub monoid).**
+
+- `lub(S ∪ {t}) = max(lub(S), t)` — insertion is monotone.
+- `lub(S₁ ∪ S₂) = max(lub(S₁), lub(S₂))` — associative, commutative.
+- `(T, max)` is an idempotent commutative monoid (a **sup-semilattice**).
+
+**Invariants expressible with lub / argmax.**
+
+- "Last value received at highest ballot": `argmax({(b, v) ∈ Promises}, (b,v) ↦ b)` — Paxos `showsSafe` condition.
+- "Monotone height": `lub(S_t)` is non-decreasing as `S_t` grows under
+  Primitive A.
+- "Guard by current max": an action conditioned on `t > maxBal` uses a
+  `lub`-comparison with A-side multiset tracking.
+
+**Note on chromogeometric flavor.** `lub` is not a geometric primitive in
+Wildberger's sense — it is order-theoretic. This primitive is therefore
+**clearly labeled an order-theoretic augmentation** and is not claimed as a
+Wildberger bundle member. It is included because TwoPhase and Paxos both
+required it and no Wildberger-native primitive can cover it. Benchmark
+honesty demands we flag it rather than force a bogus geometric rendition.
+
+### Primitive B', D, E — explicitly deferred
+
+Three other gaps from TwoPhase/Paxos (guarded-translation / idempotent-
+projection, hyperplane-intersection in P^{k-1} for k > 3, structured-
+message payload) are **NOT** added in Augmentation v1. The scope choice is
+deliberate:
+
+- **B (guarded-translation):** subsumed by `add(M, x)` over Primitive A
+  when the condition is expressible as a multiset membership test — most
+  of TwoPhase's and Paxos's guards are of this form. The remaining strict-
+  guard cases may still require B, but we try A+C first.
+- **D (hyperplane-intersection in P^{k-1}):** genuine Wildberger-framework
+  extension that would require review of Wildberger's higher-dimensional
+  projective work. Out of scope for a minimal augmentation. If Paxos stays
+  at 2 with A+C, this is the next augmentation to try.
+- **E (structured-message payload):** likely expressible as a product of
+  Primitive A multisets over a tuple base set. Defer to empirical need.
+
 ## What this model DOES NOT include
 
 - **Continuous / transcendental primitives.** No angles in radians, no

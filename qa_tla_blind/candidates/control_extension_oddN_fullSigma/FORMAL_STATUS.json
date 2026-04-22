@@ -1,10 +1,18 @@
 {
-  "status": "empirically_supported",
-  "method": ["tarjan_scc_enumeration"],
-  "enumeration_range": "N in {1,2,3,4,5,6,30}",
+  "status": "proof_sketch_provided",
+  "ladder_status": "formally_supported_candidate",
+  "promotion_gate_cleared": false,
+  "decision_artifact": "DECISION_PENDING.md",
+  "method": ["tarjan_scc_enumeration", "structural_proof_sketch"],
+  "enumeration_range": "N in {1,2,3,4,5,6,7,8,9,10,15,16,20,30,31,64,65}",
+  "enumeration_result": "17/17 pass; all edge counts and failure counts match paper's Theorem 3; all SCC sizes and structural decompositions match CLAIM.md",
   "proof_complete": false,
+  "proof_gaps": [
+    "Even-N reverse-reachability (every state reaches (1,1)) is sketched in PROOF_SKETCH.md §Completeness gap but not rigorously closed. Odd-N case is structurally complete, conditional on the even-N claim for N-1."
+  ],
   "verifier_artifact": "verify_extension.py",
   "proof_sketch_artifact": "PROOF_SKETCH.md",
-  "reviewer": null,
-  "review_date": null
+  "reviewer": "lane-c-main-session-fallback",
+  "independence_note": "Lane C was intended to be a fresh subagent; quota exhaustion forced main-session authorship. Degraded independence — the script is deterministic and re-runnable by any future reviewer, so the enumerative result is reproducible. The proof sketch is author-signed and should be re-reviewed when quota allows a fresh subagent pass.",
+  "review_date": "2026-04-22"
 }

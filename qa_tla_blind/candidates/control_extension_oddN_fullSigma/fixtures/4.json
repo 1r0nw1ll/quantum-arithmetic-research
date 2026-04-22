@@ -1,0 +1,36 @@
+{
+  "N": 4,
+  "num_nodes": 16,
+  "num_sccs": 1,
+  "scc_sizes_desc": [
+    16
+  ],
+  "expected_sizes_desc": [
+    16
+  ],
+  "sizes_match": true,
+  "structural_match": true,
+  "structural_notes": [],
+  "edge_counts": {
+    "sigma": 12,
+    "mu": 16,
+    "lam2": 4,
+    "nu": 4
+  },
+  "failure_counts": {
+    "sigma_OOB": 4,
+    "lam2_OOB": 12,
+    "nu_PARITY": 12
+  },
+  "expected_structural": {
+    "type": "giant",
+    "size": 16
+  },
+  "representative_nodes_per_component": [
+    [
+      1,
+      1
+    ]
+  ],
+  "passed": true
+}

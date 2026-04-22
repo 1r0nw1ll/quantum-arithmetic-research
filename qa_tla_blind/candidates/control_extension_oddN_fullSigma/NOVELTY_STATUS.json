@@ -1,8 +1,24 @@
 {
-  "status": "unchecked",
-  "checked_sources": [],
-  "reviewer": null,
-  "review_date": null,
-  "verdict": null,
-  "audit_artifact": "NOVELTY_AUDIT.md"
+  "status": "partially_present",
+  "ladder_status": "formally_supported_candidate",
+  "checked_sources": [
+    "/home/player2/signal_experiments/Formalizing tuple drift in quantum-native learning/paper1_qa_control.tex",
+    "/home/player2/signal_experiments/Formalizing tuple drift in quantum-native learning/files/paper1_qa_control.tex",
+    "/home/player2/signal_experiments/QA_CONTROL_THEOREMS.md",
+    "/home/player2/signal_experiments/qa_alphageometry_ptolemy/QARM_v02_Stats.tla",
+    "/home/player2/signal_experiments/qa_alphageometry_ptolemy/QARM_v02_Stats.cfg",
+    "/home/player2/signal_experiments/qa_alphageometry_ptolemy/ALL_INVARIANTS_VALIDATED.md"
+  ],
+  "reviewer": "lane-b-novelty-auditor",
+  "review_date": "2026-04-22",
+  "verdict": "partially_present",
+  "per_part_verdicts": {
+    "A_even_N_universal": "partially_present_as_instances",
+    "B_odd_N_counts": "not_found",
+    "C_odd_N_structural_decomposition": "not_found"
+  },
+  "audit_artifact": "NOVELTY_AUDIT.md",
+  "confidence": "high",
+  "promotion_gate_cleared": false,
+  "decision_artifact": "DECISION_PENDING.md"
 }

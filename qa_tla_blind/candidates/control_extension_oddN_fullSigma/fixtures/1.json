@@ -1,0 +1,35 @@
+{
+  "N": 1,
+  "num_nodes": 1,
+  "num_sccs": 1,
+  "scc_sizes_desc": [
+    1
+  ],
+  "expected_sizes_desc": [
+    1
+  ],
+  "sizes_match": true,
+  "structural_match": true,
+  "structural_notes": [],
+  "edge_counts": {
+    "sigma": 0,
+    "mu": 1,
+    "lam2": 0,
+    "nu": 0
+  },
+  "failure_counts": {
+    "sigma_OOB": 1,
+    "lam2_OOB": 1,
+    "nu_PARITY": 1
+  },
+  "expected_structural": {
+    "type": "singleton_only"
+  },
+  "representative_nodes_per_component": [
+    [
+      1,
+      1
+    ]
+  ],
+  "passed": true
+}

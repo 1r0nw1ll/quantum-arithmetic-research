@@ -1,0 +1,61 @@
+{
+  "N": 3,
+  "num_nodes": 9,
+  "num_sccs": 4,
+  "scc_sizes_desc": [
+    4,
+    2,
+    2,
+    1
+  ],
+  "expected_sizes_desc": [
+    4,
+    2,
+    2,
+    1
+  ],
+  "sizes_match": true,
+  "structural_match": true,
+  "structural_notes": [],
+  "edge_counts": {
+    "sigma": 6,
+    "mu": 9,
+    "lam2": 1,
+    "nu": 1
+  },
+  "failure_counts": {
+    "sigma_OOB": 3,
+    "lam2_OOB": 8,
+    "nu_PARITY": 8
+  },
+  "expected_structural": {
+    "type": "parity_decomposition",
+    "inner_size": 4,
+    "inner_domain": "Caps(2, 2)",
+    "border_count": 2,
+    "border_pattern": "{(N, k), (k, N)} for k in 1..N-1",
+    "singleton": [
+      3,
+      3
+    ]
+  },
+  "representative_nodes_per_component": [
+    [
+      1,
+      1
+    ],
+    [
+      1,
+      3
+    ],
+    [
+      2,
+      3
+    ],
+    [
+      3,
+      3
+    ]
+  ],
+  "passed": true
+}

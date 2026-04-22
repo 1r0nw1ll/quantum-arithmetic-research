@@ -11,6 +11,8 @@
 
 Both are registered in `qa_alphageometry_ptolemy/qa_meta_validator.py` and pass 1 PASS + 1 FAIL fixture under the standard self-test harness. Artifacts under `qa_alphageometry_ptolemy/qa_orbit_dirac_bracket_cert_v1/` and `qa_alphageometry_ptolemy/qa_unequal_k_ccr_invariant_cert_v1/`.
 
+All explicit constructions referenced here are validated in the QA cert system ([260], [262]); the paper includes only the minimal formulas required for conceptual completeness, with full machine-verified proofs living in the cert layer.
+
 ---
 
 ## 1. Introduction

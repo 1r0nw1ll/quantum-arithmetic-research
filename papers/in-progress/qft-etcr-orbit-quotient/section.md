@@ -2,7 +2,14 @@
 
 ## Two QFT Convergences with QA's Structural Firewall
 
-**Draft status**: Pre-cert section, FST Part 3 candidate. Author: Will Dale. Primary-source-grounded; mapping claims flagged as such. Certs backfill planned (orbit-Dirac bracket cert, then unequal-`k` CCR cert).
+**Draft status**: Cert-backed section, FST Part 3 candidate. Author: Will Dale. Primary-source-grounded; mapping claims flagged as *structural* throughout. Certs [260] and [262] shipped 2026-04-21 (see §6).
+
+**Cert-backfill complete.** The two supporting cert families are in the ledger:
+
+- **[260] QA Orbit-Dirac Bracket Cert v1** — delivers the MC-3 / MC-4 construction on the Blaschke-Gieres side (§4).
+- **[262] QA Unequal-k CCR Invariant Cert v1** — delivers the MC-1 / MC-2 construction on the Mannheim side (§3).
+
+Both are registered in `qa_alphageometry_ptolemy/qa_meta_validator.py` and pass 1 PASS + 1 FAIL fixture under the standard self-test harness. Artifacts under `qa_alphageometry_ptolemy/qa_orbit_dirac_bracket_cert_v1/` and `qa_alphageometry_ptolemy/qa_unequal_k_ccr_invariant_cert_v1/`.
 
 ---
 
@@ -189,7 +196,7 @@ I(b, e) := (b² − be − e²)²  mod m,
 
 whose invariance follows from the Cassini sign-flip identity under `T_F`. For m = 9, `I` separates the three Cosmos orbits by value (I ∈ {1, 4, 7}); Singularity and Satellite share `I = 0` and would require an auxiliary constraint (e.g., the fixed-point constraint above). For m = 24, `I` is coarser — four distinct values across 30 orbits — so a full formulation at that modulus will combine `I`-level constraints with period constraints `ϕ_n(b, e) = T^n(b, e) − (b, e)` inside each level set.
 
-This computational evidence suggests that the required constraint-function family can likely be made explicit for the chosen discrete dynamics, supporting the feasibility of the orbit-Dirac-bracket formulation. The result is preliminary and scoped to `T_F`; cert-D will live or die on the exact operator choice. Full validation — `X`-matrix invertibility, strong-zero on constraints, instantiation on an observable pair — is deferred to the cert.
+This computational evidence suggested the required constraint-function family could be made explicit for the chosen discrete dynamics, and cert [260] `qa_orbit_dirac_bracket_cert_v1` has since delivered the construction on the Cassini +1 branch of the I=1 Cosmos orbit at m=9. The cert verifies, at witnesses (1, 8) and (1, 9), that the X-matrix is invertible (`det X ≡ 1 mod 9`, a unit), that `[b, e]_orbit = 0` on the physical subspace, and that the strong-zero property `[ϕ_a, F]_orbit = 0` holds for `F ∈ {b, e}` and `a ∈ {1, 2}` — Blaschke-Gieres eq (5.38) in its QA-native form. The result is scoped to `T_F` dynamics and one branch of one orbit at m=9; m=24 and the remaining branches / orbits are open extensions.
 
 Given a constraint-function family `{ϕ_a}`, the **QA Dirac bracket** is
 
@@ -216,16 +223,53 @@ Neither paper cites QA or any similar discrete framework. Both arrive independen
 
 The QA-side prediction — that this same failure-and-fix should appear in any canonical formulation where a boundary between discrete physical structure and continuous observer projection is being drawn implicitly — can now be tested by looking at other canonical QFT constructions and asking: *where is the slice-dependent observer object, and what is its unequal-time / quotient-corrected invariant?* BRST, path integral, covariant canonical — each is a candidate for the same map.
 
+**Synthesis, stated carefully.** The three components of the structural correspondence are:
+
+- **QFT-side result.** The unequal-time dynamical commutator is the invariant object; the equal-time commutator is representation-dependent across quantization schemes [Mannheim eqs (1.2)/(1.4) vs. (2.2), (8.9), (8.16)]. The canonical Poisson bracket is gauge-redundant; the Dirac-bracket construction on second-class constraints is the quotient-corrected version that produces the correct translation algebra [Blaschke-Gieres eq (5.37)].
+- **QA-side result.** The unequal-`k` propagator `i∆_QA(Δk; (b, e), (b', e'))` is the certifiable object ([262]); its equal-`k` limit is the stipulated observer-side δ-function CCR. The orbit-Dirac bracket `[F, G]_orbit` is the certifiable quotient-corrected bracket ([260]); the unquotiented tuple-wedge bracket on pair space is the observer-side raw form.
+- **Synthesis.** The two sides are bridged by a cert-backed structural correspondence, not an identity or a derivation. QFT chooses its path-invariant / quotient-corrected object as the physical one; QA carries both sides natively by Theorem NT and certifies them with integer arithmetic throughout.
+
+This is the sense in which QA and canonical QFT converge: not that Mannheim or Blaschke-Gieres confirm QA (they do not cite it and are not concerned with integer modular dynamics), but that the *shape* of the observer/invariant distinction is the same on both sides, and QA's shape is now anchored in cert ledger rather than carried by words.
+
 ---
 
-## 6. Limits and Cert-Backfill
+## 6. Limits and Cert Backfill
 
-This section establishes structural analogy, not identity. Two cert families are planned to harden the mapping:
+This section establishes a structural analogy, not an identity or a derivation. The two cert families that back it have shipped:
 
-- **cert-D (orbit-Dirac bracket).** Primary deliverable: explicit construction of a constraint-function family `{ϕ_a}` on `ℋ_raw`, computation of the `X`-matrix, invertibility check, instantiation of `[F, G]_orbit` for a simple observable pair (e.g., `F = b`, `G = e`), and verification of the strong-zero property for the constraint functions. Substrate: [191] tiered reachability + existing orbit classifier. Primary open question: does a non-trivial T-invariant scalar exist on `ℋ_raw`? If so, cert-D uses level-set constraints; if not, it uses period constraints.
-- **cert-C (unequal-`k` CCR invariant).** Primary deliverable: explicit construction of the unequal-`k` propagator `i∆_QA(k₁, k₂; (b,e) ↦ (b',e'))` as an orbit-trajectory sum; proof that the equal-`k` limit recovers a proposed δ-function CCR; sketch of a QA Lehmann-type representation as a sum over orbit classes weighted by class-density. Substrate: cert-D's orbit-Dirac machinery plus the proposed observer-side CCR encoding. Explicitly NOT a derivation of canonical quantization from QA primitives — the CCR is a stipulated boundary condition, and the cert only certifies its unequal-`k` invariant.
+- **[260] `qa_orbit_dirac_bracket_cert_v1`** (Blaschke-Gieres side, MC-3 / MC-4). Constraint family `ϕ_1 = b² − b·e − e² − 1` (Cassini +1 branch) and `ϕ_2 = b − 1` (gauge fix) on `ℋ_raw = {1, …, 9}²`. Base bracket: the symplectic lift of the tuple wedge `{(b₁, e₁), (b₂, e₂)} := b₁ e₂ − b₂ e₁` (prior-art C3 recast). X-matrix entries computed symbolically via `ℤ[b, e]` partial derivatives:
 
-Both certs are planned to ship after this section draft stabilizes. Neither is required for the mapping claims above to stand as structural analogues.
+  ```
+  X = [[0, b + 2e], [−(b + 2e), 0]],     det X = (b + 2e)².
+  ```
+
+  Verified at witnesses (1, 8) and (1, 9): `det X ≡ 1 mod 9` (unit), `[b, e]_orbit = 0` on the physical subspace, and `[ϕ_a, F]_orbit = 0` for every `a ∈ {1, 2}` and `F ∈ {b, e}` — the strong-zero property from eq (5.38). Pure integer arithmetic throughout; `X⁻¹` via `pow(x, −1, m)`.
+
+- **[262] `qa_unequal_k_ccr_invariant_cert_v1`** (Mannheim side, MC-1 / MC-2). Propagator definition and verified properties:
+
+  ```
+  i∆_QA(Δk; (b, e), (b', e')) := 1 if T^|Δk|(b, e) = (b', e') else 0.
+  ```
+
+  Integer-valued, slice-independent. Equal-`k` limit `i∆_QA(0; w, w') = δ_{w, w'}` verified exhaustively over `{1, …, 9}² × {1, …, 9}²` (all 6561 pairs). Cross-orbit propagator vanishes. Periodicity at the full-propagator level for each witness. The Lehmann-type trace formula
+
+  ```
+  Tr i∆_QA(Δk) = Σ_O |O| · 1[period(O) | Δk]
+               = 72 · 1[24 | Δk] + 8 · 1[8 | Δk] + 1
+  ```
+
+  verified at `Δk ∈ {0, 1, 2, 3, 4, 6, 8, 12, 16, 24}`. The Singularity contributes 1 at every `Δk` (period 1 divides everything); the Satellite adds 8 when 8 divides `Δk`; the Cosmos adds 72 when 24 divides `Δk`. Witnesses: Fibonacci Cosmos (1, 1), Tribonacci Satellite (3, 3), Ninbonacci Singularity (9, 9) — one per orbit class.
+
+The stipulated equal-`k` δ-function CCR is an observer-side canonical encoding (cross-map §4.1 precision guardrail); neither cert derives it from QA primitives.
+
+**Explicit limits of the cert-backed mapping.**
+
+- Both certs are scoped to m = 9 and the Fibonacci-like step `T_F(b, e) = (a1(b + e), b)`. m = 24 needs a mixed I-level + period-n constraint family on the cert-D side (Cassini² is invariant but too coarse at m = 24, with only four distinct values across 30 orbits), and a six-term Lehmann trace on the cert-C side (period set `{1, 3, 6, 8, 12, 24}`).
+- Cert-D covers only the +1 branch of the I = 1 Cosmos orbit. The −1 branch, the I ∈ {4, 7} Cosmos orbits, the Satellite, and the Singularity each admit analogous constructions with different constraint-function choices; none is in v1.
+- Alternative step operators (Lucas, Tribonacci, other QA generators) each define their own orbit structure. Slice-independence *across* the choice of step operator is a deeper invariant and not addressed here.
+- The interacting Lehmann representation — Mannheim's `ρ(σ²)` integral form eqs (8.9) / (8.16) — corresponds on the QA side to a non-trivial orbit-period spectrum that is not captured by the free-case discrete formula above. A QA interacting analog is open work.
+
+These are future-cert extensions. The mapping claims in §3 and §4 stand as certified structural analogues on the scope stated.
 
 ---
 
@@ -237,8 +281,10 @@ Both certs are planned to ship after this section draft stabilizes. Neither is r
 - Dale, W. *Quantum Arithmetic: Observer Projection Compliance Specification.* docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md.
 - Dale, W. (with Briddell, D.) *A Quantum Arithmetic Completion Layer for Field Structure Theory.* Frontiers in Physics, Nuclear Physics, manuscript 1850870, submitted 2026-04-08.
 - *QA Tiered Reachability Theorem.* Certificate family [191], `qa_alphageometry_ptolemy/`.
+- *QA Orbit-Dirac Bracket Cert v1.* Certificate family [260], `qa_alphageometry_ptolemy/qa_orbit_dirac_bracket_cert_v1/`. Delivers MC-3 / MC-4.
+- *QA Unequal-k CCR Invariant Cert v1.* Certificate family [262], `qa_alphageometry_ptolemy/qa_unequal_k_ccr_invariant_cert_v1/`. Delivers MC-1 / MC-2.
 - *QA Cross-Map Notes for this section.* `docs/theory/QA_QFT_ETCR_CROSSMAP.md`; audit `docs/theory/QA_QFT_COMMUTATORS_PRIOR_ART.md`.
 
 ---
 
-**Draft status**: single-pass draft. Review pending. Cert-D scoping open.
+**Draft status**: cert-backed synthesis pass. Certs [260] + [262] shipped 2026-04-21. Review-ready; polish pass 2026-04-22.

@@ -145,6 +145,21 @@ collab_broadcast(event_type="file_updated", data={"session": "<name>", "file": "
 - Files inside your exclusive scope directory when no other session claims that scope
 - Read-only access (reading never conflicts)
 
+### Cert Family-ID Collision Avoidance (REQUIRED before claiming a new `[NNN]`)
+
+Two parallel sessions picking the same next-free family ID will collide silently. The registry grows append-only, but pick-order is first-commit-wins; the second session has to renumber late (file moves, scope_note edits, re-bootstrap of `qa_kg_determinism_cert_v1/expected_hash.json`, extra codex reviews). Observed 2026-04-21: cert-etcr-unequal-k-ccr collided with cert-stratification on [261]; cert-C renumbered to [262] mid-commit.
+
+**Before claiming a new family ID**, check:
+
+1. `grep -nE '^\s*\([0-9]+,' qa_alphageometry_ptolemy/qa_meta_validator.py | tail -5` — last few registered entries.
+2. `git log --all --oneline -50 | grep -iE 'cert\s*[:(]\s*\[?[0-9]+|feat\(cert\)'` — recent cert commits (may include IDs not yet merged to main).
+3. `ls qa_alphageometry_ptolemy | grep _cert_v1 | tail -10` — cert directories that exist on disk but may not yet be registered.
+4. `collab_broadcast(event_type="family_id_claim", data={"session": "<name>", "family_id": NNN, "scope": "..."})` — announce intent, wait 5s for a counter-claim via `collab_wait_for_event(topic="family_id_veto", timeout_s=5)`.
+
+If steps 1-3 show a higher `NNN` than you planned, pick the next slot above it. If a claim collides with someone else's broadcast, back off and pick the next free slot — do not contest.
+
+**If collision happens mid-work** (you have a validator at `[NNN]` and another session commits `[NNN]` first): rename your scope_note, docstrings, registry entry, and `docs/families/NNN_*.md` file name to the next free ID. This is a cosmetic-string fix, not a scope change. Refresh `qa_kg_determinism_cert_v1/expected_hash.json` on any FAMILY_SWEEPS edit.
+
 ### Git Commit Rules for Parallel Sessions
 
 - **Sessions run the full operational loop end-to-end: stage, commit, push.** Don't wait for Will. The whole point of the agent stack is that agents handle this automatically. Asking Will to do `git add` / `git commit` / `git push` manually contradicts the premise.

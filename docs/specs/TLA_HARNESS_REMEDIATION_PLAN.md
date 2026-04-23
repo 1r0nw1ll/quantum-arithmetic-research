@@ -120,7 +120,20 @@
   - automated adversarial evidence findings now lower admissibility when grounding or repo-fit support is weak
   - human approval removed as a required truth gate and treated as an optional audit/override artifact
 
-## 8. Open Risks
+## 8. Pass 6 — Evidence-Quality Calibration
+- Goal: Stress-test the evidence-backed gate and blind scorer against plausible but misleading evidence rather than only missing evidence.
+- Focus:
+  - overstated or cherry-picked source excerpts
+  - style-only or adjacent-class comparables used to overclaim repository fit
+  - borderline cases that should be `revise` rather than auto-`accept` or auto-`reject`
+- Status: Complete
+- Outputs:
+  - a distinct deception benchmark layer under `evals/tla_blind/deception_corpus/`
+  - expected decision and score-range labels for evidence-deception cases
+  - runner and current-system executor integration for the deception layer
+  - calibration checks showing the recreated polished-bad incident class remains blocked while sparse-faithful cases still pass
+
+## 9. Open Risks
 - Internal consistency may still be overweighted relative to external intelligibility.
 - Skeptical review may degrade into template-filling instead of adversarial critique.
 - Repo-fit review may become ceremonial.
@@ -128,7 +141,7 @@
 - TLC success and non-vacuity bookkeeping may still bias judgment more than they should.
 - QA-private terminology may continue to leak into public-facing formal artifacts without translation.
 
-## 9. Decisions
+## 10. Decisions
 - Confirmed:
   - Pass 1 is the minimal patch set, not the full idealized design.
   - Phase 1 will fail closed on a small required artifact set rather than waiting for a full source-grounding schema.
@@ -139,6 +152,8 @@
   - Pass 3 execution should treat `accept` as a high bar; artifacts with substantive clarity defects should default to `revise`, not `accept`.
   - Pass 4 should add source-grounding and comparable-evidence scoring before attempting broader redesign.
   - Pass 5 should require authoritative evidence artifacts rather than letting human approval stand in for source fidelity or repo fit.
+  - Pass 6 should be a distinct deception layer, not a remix of missing-evidence tests.
+  - Pass 6 should include both false-accept pressure and sparse-but-faithful false-reject protection.
   - TLC success alone must never dominate public-submission judgment.
   - Public formal-methods submission requires stricter controls than internal cert readiness.
   - Pass 2 hardened validators against content-free review artifacts instead of treating mere file presence as sufficient.
@@ -154,7 +169,7 @@
   - CI vs manual enforcement boundary for the blind eval harness.
   - Whether optional human override artifacts should be normalized to one filename instead of several aliases.
 
-## 10. Remaining Gaps
+## 11. Remaining Gaps
 - Phase 1 still uses heuristic outsider-translation and vacuity checks rather than a deeper semantic analyzer.
 - Pass 1 does not yet distinguish templated skeptical review from genuinely adversarial review.
  - Pass 2 has not yet attacked renamed submission-prose filenames outside the current `submission/pr/cover_letter` set.
@@ -164,16 +179,17 @@
 - Pass 4 uses a deterministic generation executor, not the full live agent stack.
 - Pass 5 still relies on heuristic excerpt/interpretation checks rather than full semantic entailment.
 - Pass 5 still approximates target-repo comparability; it does not yet mine comparables automatically from the target repository.
+- Pass 6 still uses handcrafted deception fixtures rather than mined real-world misleading evidence packets.
 
-## 11. Success Criteria
+## 12. Success Criteria
 - A public-facing TLA+/formal-methods artifact cannot be committed or pushed toward submission without explicit external-fit clearance.
 - Mechanical bypass attempts fail or are detected.
 - Blind review can reliably reject polished nonsense.
 - Blind generation improves outsider readability and semantics clarity.
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
-## 12. Current Status Snapshot
-- Current phase: Pass 5 — Evidence Automation
-- Last completed milestone: Source fidelity and repo-appropriateness evidence artifacts are enforced in the formal-publication gate; human approval is downgraded to optional audit/override status.
-- Next action: Expand the blind corpus, add automatic comparable mining, and wire execution into CI or pre-submission review so future judgment regressions are visible.
-- Owner / executor: Codex evidence-automation pass.
+## 13. Current Status Snapshot
+- Current phase: Pass 6 — Evidence-Quality Calibration
+- Last completed milestone: Deception-oriented TLA+ fixtures now verify that the harness can reject polished misleading evidence and still accept sparse-but-faithful support.
+- Next action: Expand deception cases beyond handcrafted fixtures, then generalize the blind-eval pattern to a second domain such as Lean 4.
+- Owner / executor: Codex evidence-calibration pass.

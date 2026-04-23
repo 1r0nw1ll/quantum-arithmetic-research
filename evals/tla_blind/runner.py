@@ -17,11 +17,13 @@ VISIBLE_FILES = {
     "generation": ("prompt.md",),
     "review": ("case.md",),
     "repair": ("case.md",),
+    "deception": ("case.md",),
 }
 CASE_ROOTS = {
     "generation": ROOT / "tasks" / "generation",
     "review": ROOT / "review_corpus",
     "repair": ROOT / "repair_cases",
+    "deception": ROOT / "deception_corpus",
 }
 
 
@@ -92,7 +94,7 @@ def _blank_scorecard(layer: str, case_id: str) -> dict[str, Any]:
 
 def _self_test() -> dict[str, Any]:
     cases = _list_cases()
-    required = {"generation", "review", "repair"}
+    required = {"generation", "review", "repair", "deception"}
     present = {row["layer"] for row in cases}
     ok = required.issubset(present)
     return {

@@ -33,6 +33,25 @@ def _load_json(path: Path) -> dict[str, Any]:
     return data
 
 
+def _score_ranges_match(
+    observed: dict[str, int],
+    expected_ranges: dict[str, list[int] | tuple[int, int]],
+) -> tuple[bool, list[str]]:
+    errors: list[str] = []
+    for score_name, bounds in expected_ranges.items():
+        if score_name not in observed:
+            errors.append(f"missing scored field {score_name}")
+            continue
+        if not isinstance(bounds, (list, tuple)) or len(bounds) != 2:
+            errors.append(f"invalid expected range for {score_name}")
+            continue
+        lower, upper = int(bounds[0]), int(bounds[1])
+        value = int(observed[score_name])
+        if value < lower or value > upper:
+            errors.append(f"{score_name}={value} outside expected range [{lower}, {upper}]")
+    return (not errors, errors)
+
+
 def _decision_from_scores(scores: dict[str, int]) -> str:
     if (
         (scores["external_admissibility_score"] <= 0 and (
@@ -439,6 +458,27 @@ def _evaluate_generation_case(case_dir: Path) -> dict[str, Any]:
     }
 
 
+def _evaluate_deception_case(case_dir: Path) -> dict[str, Any]:
+    case = _load_json(case_dir / "case.json")
+    label = _load_json(case_dir / "hidden_label" / "expected_outcome.json")
+    report = score_bundle(case_dir / "artifact", require_artifacts=True)
+    ranges_ok, range_errors = _score_ranges_match(report["scores"], label.get("score_ranges", {}))
+    result = {
+        "layer": "deception",
+        "case_id": case["case_id"],
+        "title": case["title"],
+        "decision": _decision_from_scores(report["scores"]),
+        "scores": report["scores"],
+        "errors": report["errors"],
+        "expected_decision": label["decision"],
+        "expected_score_ranges": label.get("score_ranges", {}),
+        "score_range_errors": range_errors,
+    }
+    result["matches_expected_decision"] = result["decision"] == result["expected_decision"]
+    result["matches_expected_score_ranges"] = ranges_ok
+    return result
+
+
 def execute() -> dict[str, Any]:
     results: list[dict[str, Any]] = []
     RESULTS_ROOT.mkdir(parents=True, exist_ok=True)
@@ -451,11 +491,18 @@ def execute() -> dict[str, Any]:
     for case_dir in sorted((ROOT / "repair_cases").iterdir()):
         if case_dir.is_dir():
             results.append(_evaluate_repair_case(case_dir))
+    for case_dir in sorted((ROOT / "deception_corpus").iterdir()):
+        if case_dir.is_dir():
+            results.append(_evaluate_deception_case(case_dir))
 
     executed = [row for row in results if "scores" in row]
     fv = Counter(row["scores"]["formal_validity_score"] for row in executed)
     ea = Counter(row["scores"]["external_admissibility_score"] for row in executed)
-    mismatches = [row for row in executed if row.get("matches_expected_decision") is False]
+    mismatches = [
+        row for row in executed
+        if row.get("matches_expected_decision") is False
+        or row.get("matches_expected_score_ranges") is False
+    ]
     return {
         "ok": True,
         "results": results,
@@ -468,6 +515,7 @@ def execute() -> dict[str, Any]:
                 "decision": row["decision"],
                 "expected_decision": row["expected_decision"],
                 "errors": row["errors"],
+                "score_range_errors": row.get("score_range_errors", []),
             }
             for row in mismatches
         ],

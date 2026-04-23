@@ -20,6 +20,8 @@ The harness is intentionally lightweight. It provides:
   initializes blank scorecards
 - a deterministic current-system generation executor that writes result bundles
   under `evals/tla_blind/results/current_system/`
+- a distinct deception corpus for Pass 6, where the evidence is present and
+  polished but materially misleading
 
 ## Layout
 
@@ -40,6 +42,12 @@ evals/tla_blind/
 ├── repair_cases/
 │   ├── reject_projection_slop/
 │   └── revise_bounds_mixup/
+├── deception_corpus/
+│   ├── overstated_source_excerpt/
+│   ├── mixed_source_inference/
+│   ├── style_only_comparables_internal/
+│   ├── adjacent_class_overclaim/
+│   └── sparse_faithful_counter/
 └── results/
     └── README.md
 ```
@@ -82,6 +90,20 @@ The system receives a flawed artifact bundle and must:
 - diagnose the problems
 - propose or apply repairs
 - decide whether the bundle should still be rejected after repair
+
+### 4. Evidence-quality deception
+
+The system reviews bundles where:
+
+- `source_grounding.json` exists and looks polished but overstates or cherry-picks
+  its excerpts
+- `repo_comparables.json` exists and looks precise but supports only style,
+  adjacent artifact classes, or the wrong repository norm
+- the artifact may be formally decent while still being externally inadmissible
+
+This layer is separate from the missing-evidence checks in Pass 1/Pass 5. It is
+meant to probe whether the harness can detect misleading evidence, not only
+absent evidence.
 
 ## Required Score Axes
 
@@ -135,3 +157,9 @@ and Pass 2:
 
 That separation is deliberate. Passing Pass 1 and Pass 2 is not evidence that
 the system's judgment is trustworthy. Pass 3 is the trust probe.
+
+Pass 6 extends that trust probe:
+
+- Pass 5 asks whether evidence artifacts exist and satisfy baseline quality bars.
+- Pass 6 asks whether the harness can detect polished but misleading evidence
+  packets that still should not justify public submission.

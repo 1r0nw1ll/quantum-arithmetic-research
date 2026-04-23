@@ -59,6 +59,16 @@ SKEPTICAL_KEYWORDS = {
 TEXT_EXTENSIONS = {".md", ".txt", ".rst", ".adoc", ".json", ".yaml", ".yml", ".tla", ".cfg"}
 AUTHORITATIVE_SOURCE_TIERS = {"target_repo", "formalism", "canonical"}
 NON_AUTHORITATIVE_SOURCE_TIERS = {"internal", "private", "generated", "summary", "self"}
+LIMITING_EXCERPT_MARKERS = (
+    "terminology only",
+    "does not define semantics",
+    "illustrative only",
+    "not a semantic commitment",
+    "for naming only",
+    "example notation",
+    "does not justify",
+    "not intended as a full model",
+)
 PROJECT_PRIVATE_JARGON = (
     "observer projection firewall",
     "qa legality",
@@ -269,6 +279,7 @@ def _validate_source_grounding(path: Path, bundle_root: Path) -> list[str]:
         source_ref = str(entry["source_ref"]).strip()
         excerpt = str(entry["source_excerpt"]).strip()
         interpretation = str(entry["interpretation"]).strip()
+        modeled_consequence = str(entry["modeled_consequence"]).strip()
         artifact_element = str(entry["artifact_element"]).strip()
         tier = str(entry.get("authority_tier", "")).strip().lower()
         if len(excerpt) < 24:
@@ -283,6 +294,15 @@ def _validate_source_grounding(path: Path, bundle_root: Path) -> list[str]:
             overlap = interpretation_words & excerpt_words
             if len(overlap) < max(2, min(len(interpretation_words), 4) // 2):
                 errors.append(f"source_grounding.json entry {idx} interpretation appears to overreach the excerpt")
+        lowered_excerpt = excerpt.lower()
+        lowered_interpretation = interpretation.lower()
+        lowered_consequence = modeled_consequence.lower()
+        if any(marker in lowered_excerpt for marker in LIMITING_EXCERPT_MARKERS):
+            if any(
+                token in (lowered_interpretation + " " + lowered_consequence)
+                for token in ("semantic", "justify", "prove", "ground", "repository fit", "maintainer")
+            ):
+                errors.append(f"source_grounding.json entry {idx} cherry-picks a limiting excerpt while overstating its consequence")
         if artifact_element.startswith("variable:"):
             covered_variables.add(artifact_element.split(":", 1)[1].strip())
         if artifact_element.startswith("action:"):
@@ -317,6 +337,7 @@ def _validate_repo_comparables(path: Path, bundle_root: Path) -> list[str]:
     if not isinstance(comparables, list) or len(comparables) < 2:
         return errors + ["repo_comparables.json must contain at least 2 comparable entries"]
     comparable_axes: set[str] = set()
+    style_only_norms = True
     for idx, item in enumerate(comparables):
         if not isinstance(item, dict):
             errors.append(f"repo_comparables.json comparable {idx} must be an object")
@@ -330,10 +351,22 @@ def _validate_repo_comparables(path: Path, bundle_root: Path) -> list[str]:
             errors.append(f"repo_comparables.json comparable {idx} must include non-empty similarity_axes")
         else:
             comparable_axes.update(axis.strip().lower() for axis in axes)
+        norm_supported = str(item.get("norm_supported", "")).lower()
+        if any(token in norm_supported for token in ("semantic", "purpose", "scope", "audience", "behavior")):
+            style_only_norms = False
+        elif not any(token in norm_supported for token in ("style", "format", "readme", "layout", "structure")):
+            style_only_norms = False
     if not comparable_axes.intersection({"structure", "semantics", "readme", "audience"}):
         errors.append("repo_comparables.json comparables do not support structural or semantic similarity")
     if "scope" not in " ".join(_normalized_words(str(in_scope_rationale).lower())) and "audience" not in str(in_scope_rationale).lower():
         errors.append("repo_comparables.json in_scope_rationale should explain scope or audience fit explicitly")
+    joined_text = _joined_explanatory_text(bundle_root).lower()
+    candidate_text = f"{candidate_scope} {in_scope_rationale} {joined_text}".lower()
+    if style_only_norms and not comparable_axes.intersection({"semantics", "audience"}):
+        errors.append("repo_comparables.json comparables support style only and do not justify semantic or audience fit")
+    if any(token in candidate_text for token in ("internal", "research", "certification", "ledger", "calibration", "theorem")):
+        if not comparable_axes.intersection({"semantics", "audience"}) or style_only_norms:
+            errors.append("repo_comparables.json comparables do not justify the candidate's research/internal scope")
     return errors
 
 

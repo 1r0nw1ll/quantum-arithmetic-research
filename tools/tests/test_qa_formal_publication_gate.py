@@ -530,6 +530,110 @@ def t_adversarial_checker_lowers_admissibility():
         assert report["scores"]["external_admissibility_score"] <= 1
 
 
+@test("rejects cherry-picked limiting excerpts with overstated semantics")
+def t_cherry_picked_limiting_excerpt():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        _write_json(
+            bundle_root / "source_grounding.json",
+            {
+                "entries": [
+                    {
+                        "claim": "The variable x models a counter term from the source.",
+                        "artifact_element": "variable:x",
+                        "source_ref": "formalism::counter glossary",
+                        "source_excerpt": "The term counter is used for terminology only and does not define semantics.",
+                        "interpretation": "This excerpt justifies the full public semantics of x and the repository fit.",
+                        "modeled_consequence": "The counter semantics and maintainer value are fully grounded here.",
+                        "authority_tier": "formalism",
+                    },
+                    {
+                        "claim": "Next names the main transition.",
+                        "artifact_element": "action:Next",
+                        "source_ref": "formalism::counter glossary",
+                        "source_excerpt": "The word next is illustrative only and not a semantic commitment.",
+                        "interpretation": "This proves the semantic meaning of Next.",
+                        "modeled_consequence": "The model's semantics are proved by this naming note.",
+                        "authority_tier": "formalism",
+                    },
+                    {
+                        "claim": "The semantics are grounded.",
+                        "artifact_element": "semantics:intrinsic",
+                        "source_ref": "formalism::counter glossary",
+                        "source_excerpt": "The notation is for naming only and not intended as a full model.",
+                        "interpretation": "This excerpt grounds the complete semantics.",
+                        "modeled_consequence": "The full model semantics are justified by the naming excerpt.",
+                        "authority_tier": "formalism",
+                    },
+                ]
+            },
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("cherry-picks a limiting excerpt" in err for err in payload["reports"][0]["errors"])
+
+
+@test("rejects style-only comparables for research-scope claims")
+def t_style_only_comparables_for_research_scope():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a small calibration monitor in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the calibration monitor evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+            extra_markdown=(
+                "## Repository fit\n"
+                "This research calibration ledger is claimed to fit an examples repository.\n"
+            ),
+        )
+        _write_json(
+            bundle_root / "repo_comparables.json",
+            {
+                "target_repo": "tlaplus/examples",
+                "candidate_scope": "Research calibration ledger for public certification",
+                "in_scope_rationale": "The artifact should fit because it uses the same README format and style as examples.",
+                "comparables": [
+                    {
+                        "artifact_name": "Clock.tla",
+                        "artifact_ref": "tlaplus/examples/Clock.tla",
+                        "norm_supported": "Supports README style and layout only.",
+                        "similarity_axes": ["structure", "readme"],
+                    },
+                    {
+                        "artifact_name": "Timer.tla",
+                        "artifact_ref": "tlaplus/examples/Timer.tla",
+                        "norm_supported": "Supports formatting style only.",
+                        "similarity_axes": ["structure", "readme"],
+                    },
+                ],
+            },
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("style only" in err.lower() or "research/internal scope" in err.lower() for err in payload["reports"][0]["errors"])
+
+
 @test("rejects publication claims in unexpected text files")
 def t_publication_claim_in_unexpected_text_file():
     with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:

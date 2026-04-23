@@ -818,10 +818,25 @@ def intrinsic_decision_from_scores(scores: dict[str, int]) -> str:
 
 
 def bundle_completeness_decision_from_scores(scores: dict[str, int]) -> str:
+    """Completeness-axis decision mirroring the evidence-layer portion of the
+    original TLA reject criteria.
+
+    Pre-Pass-7 behavior (tla_blind executor) rejected when
+    external_admissibility hit 0 with any weak dimension, or when reviewer
+    rejection risk saturated with weak evidence fidelity. Preserving that
+    exact threshold here ensures deception fixtures that were reject under
+    the combined monolithic scorer still reject under combined Pass-7.
+    """
     sg = scores.get("source_grounding_score", 3)
     sf = scores.get("source_fidelity_score", 3)
     rce = scores.get("repo_comparables_evidence_score", 3)
     rcs = scores.get("repo_comparable_support_score", 3)
+    ea = scores.get("external_admissibility_score", 3)
+    rrr = scores.get("reviewer_rejection_risk_score", 0)
+    if ea <= 0 and (sf <= 1 or rcs <= 1):
+        return "reject"
+    if rrr >= 3 and sf <= 1:
+        return "reject"
     if sg <= 0 or sf <= 0:
         return "reject"
     if sg < 2 or sf < 2 or rce < 2 or rcs < 2:

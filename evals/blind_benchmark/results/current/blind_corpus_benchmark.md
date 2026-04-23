@@ -78,10 +78,10 @@
 - none
 
 ### Score Distributions
-- `external_admissibility_score`: {'0': 2, '2': 1, '3': 2}
-- `formal_validity_score`: {'0': 2, '3': 3}
+- `external_admissibility_score`: {'1': 2, '2': 1, '3': 2}
+- `formal_validity_score`: {'1': 2, '3': 3}
 - `math_explanation_quality_score`: {'1': 1, '3': 4}
 - `proof_correctness_score`: {'0': 2, '3': 3}
 - `reviewer_rejection_risk_score`: {'0': 2, '1': 1, '3': 2}
-- `source_fidelity_score`: {'1': 2, '3': 3}
-- `theorem_statement_fidelity_score`: {'0': 2, '3': 3}
+- `source_fidelity_score`: {'3': 5}
+- `theorem_statement_fidelity_score`: {'2': 2, '3': 3}

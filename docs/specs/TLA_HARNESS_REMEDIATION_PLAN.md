@@ -32,11 +32,11 @@
   - `repo_fit_review.json`
   - `skeptical_review.json`
   - `human_approval.json`
-- Status: Not started
+- Status: In progress
 - Outputs:
-  - hook and gate changes
-  - regression tests
-  - workflow/policy doc updates
+  - hook and gate changes for formal artifact quarantine and commit/push blocking
+  - regression tests for gate failures and premature publication claims
+  - workflow/policy doc updates adding `external-fit-cleared`
 
 ## 4. Pass 2 — Bypass Audit
 - Goal: Try to evade or spoof the new controls mechanically.
@@ -106,6 +106,7 @@
 ## 8. Decisions
 - Confirmed:
   - Pass 1 is the minimal patch set, not the full idealized design.
+  - Phase 1 will fail closed on a small required artifact set rather than waiting for a full source-grounding schema.
   - Pass 2 remains adversarial and mechanical.
   - Pass 3 remains blind and evaluative.
   - Blind evals must report `formal_validity_score` and `external_admissibility_score` separately.
@@ -123,13 +124,11 @@
   - Who is authorized to issue `human_approval.json`.
 
 ## 9. Remaining Gaps
-- No live public-formal-methods gate.
-- No formal-artifact quarantine path.
-- No enforced skeptical-review artifact on the ship path.
-- No enforced repository-fit artifact on the ship path.
-- No anti-vacuity lint for TLA+ invariants and negative tests.
-- No blind generation/review/repair benchmark set.
-- No regression tests for the recent rejection pattern.
+- Phase 1 still uses heuristic outsider-translation and vacuity checks rather than a deeper semantic analyzer.
+- No bypass audit has been run yet against renamed, nested, or content-free artifacts.
+- No blind generation/review/repair benchmark set exists yet.
+- No source-grounding artifact is enforced yet.
+- Pass 1 does not yet distinguish templated skeptical review from genuinely adversarial review.
 
 ## 10. Success Criteria
 - A public-facing TLA+/formal-methods artifact cannot be committed or pushed toward submission without explicit external-fit clearance.
@@ -139,7 +138,7 @@
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
 ## 11. Current Status Snapshot
-- Current phase: Planning / tracker established
-- Last completed milestone: Incident audit completed; remediation sequence split into Guardrails, Bypass Audit, Blind Evals, and Post-Eval Tightening.
-- Next action: Implement Pass 1 minimal patch set.
-- Owner / executor: Codex implementation pass, followed by adversarial Codex audit and blind-eval build pass.
+- Current phase: Pass 1 — Guardrails
+- Last completed milestone: Minimal formal-publication gate, formal-artifact quarantine, and workflow-stage updates implemented locally.
+- Next action: Run Pass 1 regressions, then start Pass 2 bypass audit against the new hook and gate.
+- Owner / executor: Codex implementation pass, followed by adversarial Codex bypass audit.

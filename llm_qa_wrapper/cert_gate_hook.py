@@ -31,6 +31,7 @@ import re
 import sys
 import time
 import base64
+import subprocess
 from pathlib import Path
 
 REPO = Path(os.environ.get(
@@ -55,6 +56,7 @@ QUARANTINE_DIR = Path(os.environ.get(
 )).resolve()
 QUARANTINE_PENDING_DIR = QUARANTINE_DIR / "pending"
 QUARANTINE_LEDGER_FILE = QUARANTINE_DIR / "codex_reviews.jsonl"
+FORMAL_PUBLICATION_GATE = REPO / "tools" / "qa_formal_publication_gate.py"
 
 GENESIS = bytes(32)
 AGENT = "claude"
@@ -137,6 +139,25 @@ FD_REDIRECT_PATTERN = re.compile(
     r"|&>\s*/dev/null"      # &>/dev/null
     r"|\d*>\s*/dev/null",   # 2>/dev/null, >/dev/null
 )
+FORMAL_WRITE_PATTERN = re.compile(
+    r"(?<![A-Za-z0-9_./-])(?:"
+    r"[^;&|<>\s'\"]+\.tla|"
+    r"[^;&|<>\s'\"]+\.cfg|"
+    r"[^;&|<>\s'\"]*README\.md|"
+    r"[^;&|<>\s'\"]*QARM_PROOF_LEDGER\.md|"
+    r"[^;&|<>\s'\"]*ARTIFACT_MANIFEST\.md"
+    r")(?:\b|$)",
+    re.I,
+)
+FORMAL_REVIEW_MARKER = "CLAUDE_FORMAL_PUBLICATION_WRITE_QUARANTINED"
+PYTHON_REVIEW_MARKER = "CLAUDE_PYTHON_WRITE_QUARANTINED"
+FORMAL_REQUIRED_ARTIFACTS = (
+    "audience_translation.md",
+    "semantics_boundary.md",
+    "repo_fit_review.json",
+    "skeptical_review.json",
+    "human_approval.json",
+)
 
 
 def _strip_heredoc_bodies(command: str) -> str:
@@ -173,6 +194,42 @@ def _bash_mutates_python_path(scan_command: str) -> bool:
     if not (has_python_inline_mutation or has_shell_mutation):
         return False
     return PYTHON_PATH_PATTERN.search(normalized) is not None
+
+
+def _formal_readme_path(canonical: Path, rel_posix: str) -> bool:
+    if Path(rel_posix).name != "README.md":
+        return False
+    if "formal" in rel_posix.lower() or rel_posix.startswith("qa_alphageometry_ptolemy/"):
+        return True
+    parent = canonical.parent
+    if not parent.exists() or not parent.is_dir():
+        return False
+    try:
+        return any(child.suffix.lower() in {".tla", ".cfg"} for child in parent.iterdir())
+    except OSError:
+        return False
+
+
+def _is_formal_publication_path(canonical: Path, rel_posix: str) -> bool:
+    if rel_posix.lower().endswith((".tla", ".cfg")):
+        return True
+    if Path(rel_posix).name in {"QARM_PROOF_LEDGER.md", "ARTIFACT_MANIFEST.md"}:
+        return True
+    return _formal_readme_path(canonical, rel_posix)
+
+
+def _bash_mutates_formal_publication_path(scan_command: str) -> bool:
+    normalized = scan_command.replace("\\", "/")
+    if not any(
+        token in normalized.lower()
+        for token in (".tla", ".cfg", "readme.md", "qarm_proof_ledger.md", "artifact_manifest.md")
+    ):
+        return False
+    fd_stripped = FD_REDIRECT_PATTERN.sub("", scan_command)
+    shell_scan = QUOTED_STRING_PATTERN.sub("", fd_stripped)
+    if not (PYTHON_INLINE_MUTATION_PATTERN.search(scan_command) or SHELL_MUTATION_PATTERN.search(shell_scan)):
+        return False
+    return FORMAL_WRITE_PATTERN.search(normalized) is not None
 
 
 def _is_allowed_documents_pdf(rel_posix: str) -> bool:
@@ -305,13 +362,25 @@ def _repo_relative(file_path: str) -> tuple[Path, str]:
 
 def _quarantine_payload_hash(packet_payload: dict) -> str:
     return hashlib.sha256(
-        b"QA_CLAUDE_PYTHON_QUARANTINE.v1\x00" + _canonical_json(packet_payload)
+        packet_payload["schema_version"].encode("utf-8") + b"\x00" + _canonical_json(packet_payload)
     ).hexdigest()
 
 
-def _write_quarantine_packet(tool_name: str, tool_input: dict, reasons: list[str]) -> str | None:
-    """Persist a Python mutation attempt for batched Codex review."""
+def _write_quarantine_packet(
+    tool_name: str,
+    tool_input: dict,
+    reasons: list[str],
+    *,
+    schema_version: str,
+    review_marker: str,
+) -> str | None:
+    """Persist a mutation attempt for batched review.
+
+    Python and formal-publication writes share the same quarantine queue so the
+    submission path can block on unresolved review packets across both classes.
+    """
     packet_payload = {
+        "schema_version": schema_version,
         "agent": AGENT,
         "tool_name": tool_name,
         "tool_input": tool_input,
@@ -319,12 +388,13 @@ def _write_quarantine_packet(tool_name: str, tool_input: dict, reasons: list[str
     }
     digest = _quarantine_payload_hash(packet_payload)
     packet = {
-        "schema_version": "QA_CLAUDE_PYTHON_QUARANTINE.v1",
+        "schema_version": schema_version,
         "ts": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
         "agent": AGENT,
         "tool_name": tool_name,
         "payload_sha256": digest,
         "review_status": "pending_codex_review",
+        "review_marker": review_marker,
         "deny_reasons": sorted(set(reasons)),
         "tool_input": tool_input,
     }
@@ -357,23 +427,109 @@ def _write_quarantine_packet(tool_name: str, tool_input: dict, reasons: list[str
     return str(out)
 
 
-def _quarantine_attempt(tool_name: str, tool_input: dict, reasons: list[str]) -> None:
+def _quarantine_attempt(
+    tool_name: str,
+    tool_input: dict,
+    reasons: list[str],
+    *,
+    schema_version: str,
+    review_marker: str,
+) -> None:
     try:
-        _write_quarantine_packet(tool_name, tool_input, reasons)
+        _write_quarantine_packet(
+            tool_name,
+            tool_input,
+            reasons,
+            schema_version=schema_version,
+            review_marker=review_marker,
+        )
     except Exception:
         reasons.append("QUARANTINE_WRITE_FAILURE")
 
 
-def _pending_quarantine_count() -> int:
+def _pending_quarantine_count(review_marker: str | None = None) -> int:
     try:
-        return sum(1 for p in QUARANTINE_PENDING_DIR.glob("*.json") if p.is_file())
+        total = 0
+        for packet_path in QUARANTINE_PENDING_DIR.glob("*.json"):
+            if not packet_path.is_file():
+                continue
+            if review_marker is None:
+                total += 1
+                continue
+            try:
+                packet = json.loads(packet_path.read_text(encoding="utf-8"))
+            except (OSError, json.JSONDecodeError):
+                continue
+            if packet.get("review_marker") == review_marker:
+                total += 1
+        return total
     except OSError:
         return 0
 
 
+def _formal_changed_paths() -> list[str]:
+    if "LLM_QA_FORMAL_CHANGED_PATHS" in os.environ:
+        override = os.environ.get("LLM_QA_FORMAL_CHANGED_PATHS", "")
+        candidates = [
+            p.strip().replace("\\", "/")
+            for p in re.split(r"[\n,]", override)
+            if p.strip()
+        ]
+    else:
+        git_commands = (
+            ["git", "-C", str(REPO), "diff", "--cached", "--name-only", "--diff-filter=ACMRTUXB"],
+            ["git", "-C", str(REPO), "diff", "--name-only", "--diff-filter=ACMRTUXB"],
+            ["git", "-C", str(REPO), "ls-files", "--others", "--exclude-standard"],
+        )
+        candidates: list[str] = []
+        for command in git_commands:
+            result = subprocess.run(
+                command,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+            if result.returncode != 0:
+                continue
+            for line in result.stdout.splitlines():
+                if line.strip():
+                    candidates.append(line.strip().replace("\\", "/"))
+    seen: set[str] = set()
+    out: list[str] = []
+    for rel_posix in candidates:
+        canonical = (REPO / rel_posix).resolve(strict=False)
+        if _is_formal_publication_path(canonical, rel_posix) and rel_posix not in seen:
+            seen.add(rel_posix)
+            out.append(rel_posix)
+    return out
+
+
+def _formal_publication_gate_passes(changed_paths: list[str]) -> bool:
+    if not changed_paths:
+        return True
+    if not FORMAL_PUBLICATION_GATE.exists():
+        return False
+    result = subprocess.run(
+        [
+            sys.executable,
+            str(FORMAL_PUBLICATION_GATE),
+            "--repo-root",
+            str(REPO),
+            "--paths",
+            *changed_paths,
+            "--json",
+        ],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    return result.returncode == 0
+
+
 def _deny_file_path(tool_name: str, tool_input: dict) -> list[str]:
     reasons: list[str] = []
-    quarantine_needed = False
+    quarantine_marker = ""
+    schema_version = ""
     file_path = tool_input.get("file_path")
     if not isinstance(file_path, str) or not file_path.strip():
         return [f"{tool_name.upper()}_MISSING_FILE_PATH"]
@@ -393,7 +549,11 @@ def _deny_file_path(tool_name: str, tool_input: dict) -> list[str]:
     if rel_posix.startswith("llm_qa_wrapper/ledger/"):
         reasons.append("LEDGER_DIRECT_EDIT")
     if rel_posix.endswith(".py"):
-        quarantine_needed = True
+        quarantine_marker = PYTHON_REVIEW_MARKER
+        schema_version = "QA_CLAUDE_PYTHON_QUARANTINE.v1"
+    elif _is_formal_publication_path(canonical, rel_posix):
+        quarantine_marker = FORMAL_REVIEW_MARKER
+        schema_version = "QA_CLAUDE_FORMAL_PUBLICATION_QUARANTINE.v1"
     if rel_posix in {
         ".claude/settings.local.json",
         "llm_qa_wrapper/cert_gate_hook.py",
@@ -409,8 +569,14 @@ def _deny_file_path(tool_name: str, tool_input: dict) -> list[str]:
             marker_ok = False
         if not marker_ok:
             reasons.append("CERT_COLLAB_MARKER_MISSING")
-    if quarantine_needed:
-        _quarantine_attempt(tool_name, tool_input, reasons + ["CLAUDE_PYTHON_WRITE_QUARANTINED"])
+    if quarantine_marker:
+        _quarantine_attempt(
+            tool_name,
+            tool_input,
+            reasons + [quarantine_marker],
+            schema_version=schema_version,
+            review_marker=quarantine_marker,
+        )
     return reasons
 
 
@@ -420,7 +586,8 @@ def _deny_bash(tool_input: dict) -> list[str]:
         return ["BASH_MISSING_COMMAND"]
 
     scan_command = _strip_heredoc_bodies(command)
-    quarantine_needed = False
+    quarantine_marker = ""
+    schema_version = ""
     reasons = [
         reason for reason, pattern in DANGEROUS_BASH_PATTERNS
         if pattern.search(scan_command)
@@ -431,9 +598,20 @@ def _deny_bash(tool_input: dict) -> list[str]:
         if _bash_mentions_protected_project_target(scan_command):
             reasons.append("PROTECTED_TARGET_MUTATION")
         if _bash_mutates_python_path(scan_command):
-            quarantine_needed = True
+            quarantine_marker = PYTHON_REVIEW_MARKER
+            schema_version = "QA_CLAUDE_PYTHON_QUARANTINE.v1"
+        elif _bash_mutates_formal_publication_path(scan_command):
+            quarantine_marker = FORMAL_REVIEW_MARKER
+            schema_version = "QA_CLAUDE_FORMAL_PUBLICATION_QUARANTINE.v1"
         if re.search(r"(^|/)[^/ ]+\.png(?:\s|$)", normalized, re.I):
             reasons.append("GENERATED_BINARY_OUTPUT")
+    if re.search(r"\bgit\s+(commit|push)\b", scan_command, re.I):
+        changed_formal_paths = _formal_changed_paths()
+        if changed_formal_paths:
+            if _pending_quarantine_count(FORMAL_REVIEW_MARKER) > 0:
+                reasons.append("FORMAL_REVIEW_PENDING")
+            if not _formal_publication_gate_passes(changed_formal_paths):
+                reasons.append("FORMAL_PUBLICATION_GATE_REQUIRED")
     if re.search(r"\bgit\s+commit\b", scan_command, re.I):
         try:
             marker_ok = COLLAB_MARKER.read_text(encoding="utf-8").strip() != ""
@@ -443,8 +621,14 @@ def _deny_bash(tool_input: dict) -> list[str]:
             reasons.append("GIT_COMMIT_WITHOUT_COLLAB_MARKER")
         if _pending_quarantine_count() > 0:
             reasons.append("CODEX_REVIEW_PENDING")
-    if quarantine_needed:
-        _quarantine_attempt("Bash", tool_input, reasons + ["CLAUDE_PYTHON_WRITE_QUARANTINED"])
+    if quarantine_marker:
+        _quarantine_attempt(
+            "Bash",
+            tool_input,
+            reasons + [quarantine_marker],
+            schema_version=schema_version,
+            review_marker=quarantine_marker,
+        )
     return reasons
 
 
@@ -472,13 +656,20 @@ def _enforcement_markers(tool_name: str, tool_input: dict) -> list[str]:
     if tool_name in EDIT_TOOLS:
         file_path = tool_input.get("file_path")
         if isinstance(file_path, str) and file_path.strip():
-            _, rel = _repo_relative(file_path)
-            if rel.replace(os.sep, "/").endswith(".py"):
-                return ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
+            canonical, rel = _repo_relative(file_path)
+            rel_posix = rel.replace(os.sep, "/")
+            if rel_posix.endswith(".py"):
+                return [PYTHON_REVIEW_MARKER]
+            if _is_formal_publication_path(canonical, rel_posix):
+                return [FORMAL_REVIEW_MARKER]
     if tool_name == "Bash":
         command = tool_input.get("command")
-        if isinstance(command, str) and _bash_mutates_python_path(_strip_heredoc_bodies(command)):
-            return ["CLAUDE_PYTHON_WRITE_QUARANTINED"]
+        if isinstance(command, str):
+            scan_command = _strip_heredoc_bodies(command)
+            if _bash_mutates_python_path(scan_command):
+                return [PYTHON_REVIEW_MARKER]
+            if _bash_mutates_formal_publication_path(scan_command):
+                return [FORMAL_REVIEW_MARKER]
     return []
 
 

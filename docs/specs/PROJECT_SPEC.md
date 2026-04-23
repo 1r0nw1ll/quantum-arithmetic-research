@@ -301,8 +301,16 @@ verify script PASS  → verify_[name].py passes (stdlib only, <1s)
     ↓
 review-ready        → docs/families/README.md updated, no TODOs
     ↓
+external-fit-cleared → formal_publication_gate PASS, repo-fit review PASS,
+                       skeptical review PASS, human approval recorded
+    ↓
 submitted           → papers/ready-for-submission/[name]/
 ```
+
+Public-facing formal-methods contributions use the same stage model, but they
+may not enter `submitted` or a public `git push` path until
+`external-fit-cleared` is satisfied. Internal TLC success or proof-ledger
+completeness is not sufficient for this transition.
 
 **Claim certification requirement:** Any quantitative claim that is central to
 a paper's contribution must be backed by either:

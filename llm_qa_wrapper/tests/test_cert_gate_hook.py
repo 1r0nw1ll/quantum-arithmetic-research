@@ -92,10 +92,12 @@ def _run_hook(
     *,
     marker_text: str | None = None,
     extra_env: dict[str, str] | None = None,
+    repo_root: Path | None = None,
 ) -> subprocess.CompletedProcess[str]:
     env = os.environ.copy()
     env["LLM_QA_WRAPPER_LEDGER_DIR"] = str(ledger_dir)
-    env["LLM_QA_WRAPPER_REPO"] = str(REPO)
+    repo = repo_root or REPO
+    env["LLM_QA_WRAPPER_REPO"] = str(repo)
     env["LLM_QA_WRAPPER_QUARANTINE_DIR"] = str(ledger_dir / "quarantine")
     marker = ledger_dir / "collab_marker"
     if marker_text is not None:
@@ -109,7 +111,7 @@ def _run_hook(
         text=True,
         capture_output=True,
         env=env,
-        cwd=str(REPO),
+        cwd=str(repo),
     )
 
 
@@ -276,6 +278,33 @@ def t_deny_python_edit():
         _verify_chain(rows)
 
 
+@test("TLA edit quarantines and allows write")
+def t_quarantine_tla_edit():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        ledger_dir = Path(tmp)
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Write",
+                "tool_input": {
+                    "file_path": str(REPO / "qa_alphageometry_ptolemy" / "Spec.tla")
+                },
+            }),
+            marker_text="claude-test-session",
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert rows[0]["enforcement_markers"] == ["CLAUDE_FORMAL_PUBLICATION_WRITE_QUARANTINED"]
+        packets = sorted((ledger_dir / "quarantine" / "pending").glob("*.json"))
+        assert len(packets) == 1
+        packet = json.loads(packets[0].read_text(encoding="utf-8"))
+        assert packet["schema_version"] == "QA_CLAUDE_FORMAL_PUBLICATION_QUARANTINE.v1"
+        assert packet["review_marker"] == "CLAUDE_FORMAL_PUBLICATION_WRITE_QUARANTINED"
+        _verify_chain(rows)
+
+
 @test("Python edit env override also quarantines and allows write")
 def t_deny_python_edit_env_override():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
@@ -372,6 +401,147 @@ def t_git_add_commit_python_path_blocks_without_extra_quarantine():
         assert "CODEX_REVIEW_PENDING" in rows[0]["deny_reasons"]
         assert rows[0]["enforcement_markers"] == []
         assert len(list(pending.glob("*.json"))) == 1
+        _verify_chain(rows)
+
+
+def _init_temp_git_repo(repo_root: Path) -> None:
+    subprocess.run(["git", "init"], cwd=repo_root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.name", "QA Hook Test"], cwd=repo_root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "config", "user.email", "qa-hook@example.com"], cwd=repo_root, check=True, capture_output=True, text=True)
+    (repo_root / "README.md").write_text("seed\n", encoding="utf-8")
+    subprocess.run(["git", "add", "README.md"], cwd=repo_root, check=True, capture_output=True, text=True)
+    subprocess.run(["git", "commit", "-m", "seed"], cwd=repo_root, check=True, capture_output=True, text=True)
+
+
+def _write_minimal_formal_bundle(bundle_root: Path) -> None:
+    bundle_root.mkdir(parents=True, exist_ok=True)
+    (bundle_root / "Spec.tla").write_text(
+        "---- MODULE Spec ----\nVARIABLE x\nInit == x = 0\nNext == x' = x + 1\nInv_Semantic == x >= 0\n====\n",
+        encoding="utf-8",
+    )
+    (bundle_root / "audience_translation.md").write_text(
+        "What is modeled: a bounded counter state machine in TLA+.\n"
+        "Why useful: it shows the modeled state and why an outsider should care.\n"
+        "This is written for formal-methods readers and explains the mapping.\n",
+        encoding="utf-8",
+    )
+    (bundle_root / "semantics_boundary.md").write_text(
+        "Intrinsic semantics: the counter evolves by Next and the invariant constrains states.\n"
+        "TLC bounds: model checking may bound the search depth or state cap, but those bounds are not semantics.\n",
+        encoding="utf-8",
+    )
+    (bundle_root / "repo_fit_review.json").write_text(
+        json.dumps({
+            "target_repo": "tlaplus/examples",
+            "comparables": ["Counter.tla", "Clock.tla"],
+            "why_belongs": "Matches small illustrative examples",
+            "maintainer_value": "Shows a minimal outsider-readable transition system",
+        }, sort_keys=True, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    (bundle_root / "skeptical_review.json").write_text(
+        json.dumps({
+            "reviewer": "hostile-maintainer-sim",
+            "recommendation": "revise",
+            "rejection_arguments": ["Need clearer semantics wording"],
+        }, sort_keys=True, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    (bundle_root / "human_approval.json").write_text(
+        json.dumps({
+            "approved": True,
+            "approver": "will",
+            "approved_at": "2026-04-23",
+            "scope": "formal publication",
+            "justification": "Read the skeptical review and repo fit notes",
+        }, sort_keys=True, separators=(",", ":")),
+        encoding="utf-8",
+    )
+
+
+@test("git commit blocks formal changes when required artifacts are absent")
+def t_git_commit_blocks_without_formal_gate():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_repo_") as tmp_repo, tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        repo_root = Path(tmp_repo)
+        ledger_dir = Path(tmp)
+        _init_temp_git_repo(repo_root)
+        bundle_root = repo_root / "qa_alphageometry_ptolemy"
+        bundle_root.mkdir(parents=True, exist_ok=True)
+        (bundle_root / "Spec.tla").write_text("---- MODULE Spec ----\n====\n", encoding="utf-8")
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "git commit -m formal"},
+            }),
+            marker_text="claude-test-session",
+            extra_env={"LLM_QA_FORMAL_CHANGED_PATHS": "qa_alphageometry_ptolemy/Spec.tla"},
+            repo_root=repo_root,
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert rows[0]["decision"] == "DENY"
+        assert "FORMAL_PUBLICATION_GATE_REQUIRED" in rows[0]["deny_reasons"]
+        _verify_chain(rows)
+
+
+@test("git push blocks formal changes when required artifacts are absent")
+def t_git_push_blocks_without_formal_gate():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_repo_") as tmp_repo, tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        repo_root = Path(tmp_repo)
+        ledger_dir = Path(tmp)
+        _init_temp_git_repo(repo_root)
+        bundle_root = repo_root / "qa_alphageometry_ptolemy"
+        bundle_root.mkdir(parents=True, exist_ok=True)
+        (bundle_root / "Spec.tla").write_text("---- MODULE Spec ----\n====\n", encoding="utf-8")
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "git push origin HEAD"},
+            }),
+            marker_text="claude-test-session",
+            extra_env={"LLM_QA_FORMAL_CHANGED_PATHS": "qa_alphageometry_ptolemy/Spec.tla"},
+            repo_root=repo_root,
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert rows[0]["decision"] == "DENY"
+        assert "FORMAL_PUBLICATION_GATE_REQUIRED" in rows[0]["deny_reasons"]
+        _verify_chain(rows)
+
+
+@test("git commit blocks formal changes while formal quarantine review is pending")
+def t_git_commit_blocks_pending_formal_review():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_repo_") as tmp_repo, tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        repo_root = Path(tmp_repo)
+        ledger_dir = Path(tmp)
+        _init_temp_git_repo(repo_root)
+        _write_minimal_formal_bundle(repo_root / "qa_alphageometry_ptolemy")
+        pending = ledger_dir / "quarantine" / "pending"
+        pending.mkdir(parents=True)
+        (pending / "formal_pending.json").write_text(
+            json.dumps({
+                "schema_version": "QA_CLAUDE_FORMAL_PUBLICATION_QUARANTINE.v1",
+                "review_status": "pending_codex_review",
+                "review_marker": "CLAUDE_FORMAL_PUBLICATION_WRITE_QUARANTINED",
+            }),
+            encoding="utf-8",
+        )
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "git commit -m formal"},
+            }),
+            marker_text="claude-test-session",
+            extra_env={"LLM_QA_FORMAL_CHANGED_PATHS": "qa_alphageometry_ptolemy/Spec.tla"},
+            repo_root=repo_root,
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert rows[0]["decision"] == "DENY"
+        assert "FORMAL_REVIEW_PENDING" in rows[0]["deny_reasons"]
         _verify_chain(rows)
 
 
@@ -542,7 +712,10 @@ def t_allow_git_commit_email_bracket_with_py_in_body():
                     )
                 },
             }),
-            extra_env={"QA_COLLAB_MARKER_PATH": str(ledger_dir / "collab_marker")},
+            extra_env={
+                "QA_COLLAB_MARKER_PATH": str(ledger_dir / "collab_marker"),
+                "LLM_QA_FORMAL_CHANGED_PATHS": "",
+            },
         )
         assert proc.returncode == 0, proc.stderr
         rows = _records(ledger_dir)
@@ -796,6 +969,7 @@ def t_allow_commit_with_marker():
                 "tool_input": {"command": "git commit -m test"},
             }),
             marker_text="claude-test-session",
+            extra_env={"LLM_QA_FORMAL_CHANGED_PATHS": ""},
         )
         assert proc.returncode == 0, proc.stderr
         rows = _records(ledger_dir)

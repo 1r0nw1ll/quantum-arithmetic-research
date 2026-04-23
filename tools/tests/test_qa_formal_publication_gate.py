@@ -1,0 +1,227 @@
+# noqa: DECL-1 (test harness — not empirical QA code)
+"""
+Executable regression tests for tools/qa_formal_publication_gate.py.
+
+Phase 1 only needs a small set of failure-mode fixtures:
+  - tautological invariant
+  - missing audience translation
+  - semantics/bounds conflation
+  - premature publication-ready claim
+"""
+from __future__ import annotations
+
+import json
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+
+REPO_ROOT = Path(__file__).resolve().parent.parent.parent
+GATE = REPO_ROOT / "tools" / "qa_formal_publication_gate.py"
+_results: list[tuple[str, bool, str]] = []
+
+
+def test(name: str):
+    def decorator(fn):
+        def runner():
+            try:
+                fn()
+                _results.append((name, True, ""))
+                print(f"[PASS] {name}")
+            except AssertionError as exc:
+                _results.append((name, False, str(exc)))
+                print(f"[FAIL] {name}: {exc}")
+            except Exception as exc:
+                _results.append((name, False, f"{type(exc).__name__}: {exc}"))
+                print(f"[FAIL] {name}: {type(exc).__name__}: {exc}")
+        return runner
+    return decorator
+
+
+def _run_gate(repo_root: Path, *paths: str) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(GATE), "--repo-root", str(repo_root), "--paths", *paths, "--json"],
+        capture_output=True,
+        text=True,
+        cwd=str(REPO_ROOT),
+    )
+
+
+def _write_json(path: Path, payload: dict) -> None:
+    path.write_text(
+        json.dumps(payload, sort_keys=True, separators=(",", ":"), ensure_ascii=False),
+        encoding="utf-8",
+    )
+
+
+def _seed_bundle(
+    repo_root: Path,
+    *,
+    audience_translation: str | None = None,
+    semantics_boundary: str | None = None,
+    tla_text: str | None = None,
+    extra_markdown: str | None = None,
+) -> Path:
+    bundle_root = repo_root / "qa_alphageometry_ptolemy"
+    bundle_root.mkdir(parents=True, exist_ok=True)
+    (bundle_root / "Spec.tla").write_text(
+        tla_text or (
+            "---- MODULE Spec ----\n"
+            "VARIABLE x\n"
+            "Init == x = 0\n"
+            "Next == x' = x + 1\n"
+            "Inv_Semantic == x >= 0\n"
+            "====\n"
+        ),
+        encoding="utf-8",
+    )
+    if audience_translation is not None:
+        (bundle_root / "audience_translation.md").write_text(audience_translation, encoding="utf-8")
+    if semantics_boundary is not None:
+        (bundle_root / "semantics_boundary.md").write_text(semantics_boundary, encoding="utf-8")
+    _write_json(
+        bundle_root / "repo_fit_review.json",
+        {
+            "target_repo": "tlaplus/examples",
+            "comparables": ["Counter.tla", "Clock.tla"],
+            "why_belongs": "Matches small explanatory examples",
+            "maintainer_value": "Readable outsider-facing example",
+        },
+    )
+    _write_json(
+        bundle_root / "skeptical_review.json",
+        {
+            "reviewer": "hostile-maintainer-sim",
+            "recommendation": "revise",
+            "rejection_arguments": ["Clarify one semantics note"],
+        },
+    )
+    _write_json(
+        bundle_root / "human_approval.json",
+        {
+            "approved": True,
+            "approver": "will",
+            "approved_at": "2026-04-23",
+            "scope": "formal publication",
+            "justification": "Reviewed repo fit and skeptical review",
+        },
+    )
+    if extra_markdown is not None:
+        (bundle_root / "QARM_PROOF_LEDGER.md").write_text(extra_markdown, encoding="utf-8")
+    return bundle_root
+
+
+@test("self-test returns ok=true")
+def t_self_test():
+    proc = subprocess.run(
+        [sys.executable, str(GATE), "--self-test"],
+        capture_output=True,
+        text=True,
+        cwd=str(REPO_ROOT),
+    )
+    assert proc.returncode == 0, proc.stderr
+    payload = json.loads(proc.stdout)
+    assert payload["ok"] is True
+
+
+@test("rejects missing audience translation")
+def t_missing_audience_translation():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        _seed_bundle(
+            repo_root,
+            audience_translation=None,
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("audience_translation.md" in err for err in payload["reports"][0]["errors"])
+
+
+@test("rejects semantics and bounds conflation")
+def t_semantics_bounds_conflation():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary="The semantics are the TLC cap of 24 states and the search bound.",
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("intrinsic semantics" in err.lower() for err in payload["reports"][0]["errors"])
+
+
+@test("rejects tautological invariants")
+def t_tautological_invariant():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+            tla_text=(
+                "---- MODULE Spec ----\n"
+                "VARIABLE b\n"
+                "Init == b = 0\n"
+                "Next == b' = b + 1\n"
+                "Inv_S1_NoSquareOperator == b * b >= 0\n"
+                "====\n"
+            ),
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("tautological" in err.lower() for err in payload["reports"][0]["errors"])
+
+
+@test("rejects premature publication claims")
+def t_premature_publication_claim():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+            extra_markdown="This bundle is publication-ready and submittable upstream.\n",
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("publication-ready" in err.lower() or "submittable upstream" in err.lower() for err in payload["reports"][0]["errors"])
+
+
+def main() -> int:
+    for name, fn in list(globals().items()):
+        if name.startswith("t_") and callable(fn):
+            fn()
+    failures = [entry for entry in _results if not entry[1]]
+    print(f"{len(_results) - len(failures)}/{len(_results)} checks passed")
+    return 0 if not failures else 1
+
+
+if __name__ == "__main__":
+    sys.exit(main())

@@ -133,7 +133,24 @@
   - runner and current-system executor integration for the deception layer
   - calibration checks showing the recreated polished-bad incident class remains blocked while sparse-faithful cases still pass
 
-## 9. Open Risks
+## 9. Pass 7 — Corpus Benchmark Sweep
+- Goal: Measure corpus-level blind performance across all currently labeled blind-eval fixtures rather than relying on starter-case spot checks.
+- Focus:
+  - confusion matrices by domain
+  - false accept / false reject tracking
+  - score-distribution summaries
+  - cross-domain error-pattern detection
+- Status: Complete
+- Outputs:
+  - benchmark runner under `evals/blind_benchmark/benchmark_current_corpus.py`
+  - machine-readable report: `evals/blind_benchmark/results/current/blind_corpus_benchmark.json`
+  - human-readable report: `evals/blind_benchmark/results/current/blind_corpus_benchmark.md`
+  - current measured status:
+    - TLA+: 9 labeled fixtures, 100% decision accuracy, 0 false accepts, 0 false rejects, status call `balanced`
+    - Lean 4: 5 labeled fixtures, 100% decision accuracy, 0 false accepts, 0 false rejects, status call `balanced`
+    - cross-domain: 14 labeled fixtures, 100% decision accuracy on the current labeled corpora
+
+## 10. Open Risks
 - Internal consistency may still be overweighted relative to external intelligibility.
 - Skeptical review may degrade into template-filling instead of adversarial critique.
 - Repo-fit review may become ceremonial.
@@ -141,7 +158,7 @@
 - TLC success and non-vacuity bookkeeping may still bias judgment more than they should.
 - QA-private terminology may continue to leak into public-facing formal artifacts without translation.
 
-## 10. Decisions
+## 11. Decisions
 - Confirmed:
   - Pass 1 is the minimal patch set, not the full idealized design.
   - Phase 1 will fail closed on a small required artifact set rather than waiting for a full source-grounding schema.
@@ -154,6 +171,7 @@
   - Pass 5 should require authoritative evidence artifacts rather than letting human approval stand in for source fidelity or repo fit.
   - Pass 6 should be a distinct deception layer, not a remix of missing-evidence tests.
   - Pass 6 should include both false-accept pressure and sparse-but-faithful false-reject protection.
+  - Pass 7 should benchmark the entire labeled corpus by domain before more threshold tuning.
   - TLC success alone must never dominate public-submission judgment.
   - Public formal-methods submission requires stricter controls than internal cert readiness.
   - Pass 2 hardened validators against content-free review artifacts instead of treating mere file presence as sufficient.
@@ -169,7 +187,7 @@
   - CI vs manual enforcement boundary for the blind eval harness.
   - Whether optional human override artifacts should be normalized to one filename instead of several aliases.
 
-## 11. Remaining Gaps
+## 12. Remaining Gaps
 - Phase 1 still uses heuristic outsider-translation and vacuity checks rather than a deeper semantic analyzer.
 - Pass 1 does not yet distinguish templated skeptical review from genuinely adversarial review.
  - Pass 2 has not yet attacked renamed submission-prose filenames outside the current `submission/pr/cover_letter` set.
@@ -180,16 +198,17 @@
 - Pass 5 still relies on heuristic excerpt/interpretation checks rather than full semantic entailment.
 - Pass 5 still approximates target-repo comparability; it does not yet mine comparables automatically from the target repository.
 - Pass 6 still uses handcrafted deception fixtures rather than mined real-world misleading evidence packets.
+- Pass 7 currently covers only the available labeled corpora; zero observed errors here should trigger corpus expansion, not complacency.
 
-## 12. Success Criteria
+## 13. Success Criteria
 - A public-facing TLA+/formal-methods artifact cannot be committed or pushed toward submission without explicit external-fit clearance.
 - Mechanical bypass attempts fail or are detected.
 - Blind review can reliably reject polished nonsense.
 - Blind generation improves outsider readability and semantics clarity.
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
-## 13. Current Status Snapshot
-- Current phase: Pass 6 — Evidence-Quality Calibration
-- Last completed milestone: Deception-oriented TLA+ fixtures now verify that the harness can reject polished misleading evidence and still accept sparse-but-faithful support.
-- Next action: Expand deception cases beyond handcrafted fixtures; the blind-eval pattern has now been generalized into a parallel Lean 4 starter suite under `evals/lean4_blind/`.
-- Owner / executor: Codex evidence-calibration pass.
+## 14. Current Status Snapshot
+- Current phase: Pass 7 — Corpus Benchmark Sweep
+- Last completed milestone: Cross-domain benchmark sweep over the full current labeled TLA+ and Lean 4 corpora reports 100% decision accuracy with 0 false accepts and 0 false rejects on 14 labeled fixtures.
+- Next action: Expand the labeled corpora, especially deception and borderline cases, before retuning thresholds or extracting shared blind-eval infrastructure.
+- Owner / executor: Codex corpus-benchmark pass.

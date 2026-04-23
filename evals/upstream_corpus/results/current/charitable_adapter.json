@@ -1,0 +1,688 @@
+{
+  "rows": [
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: flag, max, num, nxt, pc, previous, unchecked",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "Bakery-Boulangerie",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 14761,
+      "source_path": "specifications/Bakery-Boulangerie"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: numMeetings"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: chameneoses, meetingPlace, numMeetings"
+      ],
+      "case_id": "Chameneos",
+      "delta": "still_revise",
+      "extracted_bytes": 1186,
+      "source_path": "specifications/Chameneos"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "CheckpointCoordination",
+      "delta": "still_revise",
+      "extracted_bytes": 5260,
+      "source_path": "specifications/CheckpointCoordination"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: dealer",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "CigaretteSmokers",
+      "delta": "still_revise",
+      "extracted_bytes": 714,
+      "source_path": "specifications/CigaretteSmokers"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: ringbuffer",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "Disruptor",
+      "delta": "still_revise",
+      "extracted_bytes": 4409,
+      "source_path": "specifications/Disruptor"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: cLogs"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: cLogs, executed"
+      ],
+      "case_id": "FiniteMonotonic",
+      "delta": "still_revise",
+      "extracted_bytes": 11801,
+      "source_path": "specifications/FiniteMonotonic"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: grid"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: grid"
+      ],
+      "case_id": "GameOfLife",
+      "delta": "still_revise",
+      "extracted_bytes": 94,
+      "source_path": "specifications/GameOfLife"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: Keys, missed, ops, pc, read_keys, snapshotStore, tx, write_keys",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "KeyValueStore",
+      "delta": "still_revise",
+      "extracted_bytes": 12284,
+      "source_path": "specifications/KeyValueStore"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: state",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "KnuthYao",
+      "delta": "still_revise",
+      "extracted_bytes": 2076,
+      "source_path": "specifications/KnuthYao"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: j, pc",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "LeastCircularSubstring",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 2223,
+      "source_path": "specifications/LeastCircularSubstring"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: high, low, pc, result, seq0, val"
+      ],
+      "case_id": "LoopInvariance",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 13761,
+      "source_path": "specifications/LoopInvariance"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: cnt"
+      ],
+      "case_id": "Majority",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 1843,
+      "source_path": "specifications/Majority"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: msgs, observed, pc, pending",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "MultiPaxos-SMR",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 14811,
+      "source_path": "specifications/MultiPaxos-SMR"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: chosen, maxBal, maxVBal, maxVal, msgs, votes"
+      ],
+      "case_id": "PaxosHowToWinATuringAward",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 26967,
+      "source_path": "specifications/PaxosHowToWinATuringAward"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: cValue, decision, maxBallot, maxVBallot, maxValue",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "SimplifiedFastPaxos",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 8531,
+      "source_path": "specifications/SimplifiedFastPaxos"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "SlidingPuzzles",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 2109,
+      "source_path": "specifications/SlidingPuzzles"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: Edges, mom"
+      ],
+      "case_id": "SpanningTree",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 9231,
+      "source_path": "specifications/SpanningTree"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: pc",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "TeachingConcurrency",
+      "delta": "still_revise",
+      "extracted_bytes": 7623,
+      "source_path": "specifications/TeachingConcurrency"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: incoming, mailbox"
+      ],
+      "case_id": "YoYo",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 12034,
+      "source_path": "specifications/YoYo"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: nSntE",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: nSntE",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "aba-asyn-byz",
+      "delta": "still_revise",
+      "extracted_bytes": 1891,
+      "source_path": "specifications/aba-asyn-byz"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "acp",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 9584,
+      "source_path": "specifications/acp"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: gate_1, gate_2, pc, rdv"
+      ],
+      "case_id": "barriers",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 6250,
+      "source_path": "specifications/barriers"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: Faulty, pc, rcvd, sent",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "bcastByz",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 10154,
+      "source_path": "specifications/bcastByz"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "bcastFolklore",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 3163,
+      "source_path": "specifications/bcastFolklore"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: pc"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: pc, rcvd, sent"
+      ],
+      "case_id": "bosco",
+      "delta": "still_revise",
+      "extracted_bytes": 3928,
+      "source_path": "specifications/bosco"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "braf",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 6174,
+      "source_path": "specifications/braf"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: root"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: op, root",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "btree",
+      "delta": "still_revise",
+      "extracted_bytes": 1714,
+      "source_path": "specifications/btree"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: vState",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "byihive",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 24365,
+      "source_path": "specifications/byihive"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: 2avSent, bmsgs, chosen, knowsSent, maxBal, maxVBal, maxVVal, msgs, votes",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "byzpaxos",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 55187,
+      "source_path": "specifications/byzpaxos"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: bcastMsg, dValue, pc, rcvdMsg"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: bcastMsg, dValue, pc, rcvdMsg"
+      ],
+      "case_id": "c1cs",
+      "delta": "still_revise",
+      "extracted_bytes": 3096,
+      "source_path": "specifications/c1cs"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: dval, nCrash, pc, rcvdMsgs, sntMsgs"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: dval, nCrash, pc, rcvdMsgs, sntMsgs"
+      ],
+      "case_id": "cbc_max",
+      "delta": "still_revise",
+      "extracted_bytes": 2059,
+      "source_path": "specifications/cbc_max"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: nSnt0",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "cf1s-folklore",
+      "delta": "still_revise",
+      "extracted_bytes": 1479,
+      "source_path": "specifications/cf1s-folklore"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: initiator, msgs, pc, state",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "chang_roberts",
+      "delta": "still_revise",
+      "extracted_bytes": 2000,
+      "source_path": "specifications/chang_roberts"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: log, round, vs"
+      ],
+      "case_id": "dag-consensus",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 8407,
+      "source_path": "specifications/dag-consensus"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: delta, fromLastHeard, inTransit, localClock, outgoingMessages, suspected",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "detector_chan96",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 17687,
+      "source_path": "specifications/detector_chan96"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: allInput, blocksRead, chosen, dblock, disksWritten, output, phase",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: allInput, blocksRead, chosen, dblock, disksWritten, input, output, phase",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "diskpaxos",
+      "delta": "still_revise",
+      "extracted_bytes": 798,
+      "source_path": "specifications/diskpaxos"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: activeSons, terminationDetected"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: active, activeSons, parent, terminationDetected",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "ewd687a",
+      "delta": "still_revise",
+      "extracted_bytes": 22931,
+      "source_path": "specifications/ewd687a"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: active, color, history, tcolor, tpos",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "ewd840",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 9429,
+      "source_path": "specifications/ewd840"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: pc, vars",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "locks_auxiliary_vars",
+      "delta": "still_revise",
+      "extracted_bytes": 8656,
+      "source_path": "specifications/locks_auxiliary_vars"
+    },
+    {
+      "adapted_decision": "accept",
+      "adapted_findings": [],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: pc"
+      ],
+      "case_id": "nbacc_ray97",
+      "delta": "flipped_to_accept",
+      "extracted_bytes": 1701,
+      "source_path": "specifications/nbacc_ray97"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: nSntNo",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: nSntNo",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "nbacg_guer01",
+      "delta": "still_revise",
+      "extracted_bytes": 2745,
+      "source_path": "specifications/nbacg_guer01"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: msg, prnt, rpt"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: msg, prnt, rpt"
+      ],
+      "case_id": "spanning",
+      "delta": "still_revise",
+      "extracted_bytes": 267,
+      "source_path": "specifications/spanning"
+    }
+  ],
+  "summary": {
+    "flipped_cases": [
+      "Bakery-Boulangerie",
+      "LeastCircularSubstring",
+      "LoopInvariance",
+      "Majority",
+      "MultiPaxos-SMR",
+      "PaxosHowToWinATuringAward",
+      "SimplifiedFastPaxos",
+      "SlidingPuzzles",
+      "SpanningTree",
+      "YoYo",
+      "acp",
+      "barriers",
+      "bcastByz",
+      "bcastFolklore",
+      "braf",
+      "byihive",
+      "byzpaxos",
+      "dag-consensus",
+      "detector_chan96",
+      "ewd840",
+      "nbacc_ray97"
+    ],
+    "flipped_to_accept": 21,
+    "provenance": {
+      "tla": {
+        "repo": "tlaplus/Examples",
+        "sha": "d9ce4db7c770cc82e662870bce168ff8f59aff24"
+      }
+    },
+    "regressed": 0,
+    "regressed_cases": [],
+    "still_revise": 21,
+    "still_revise_cases": [
+      "Chameneos",
+      "CheckpointCoordination",
+      "CigaretteSmokers",
+      "Disruptor",
+      "FiniteMonotonic",
+      "GameOfLife",
+      "KeyValueStore",
+      "KnuthYao",
+      "TeachingConcurrency",
+      "aba-asyn-byz",
+      "bosco",
+      "btree",
+      "c1cs",
+      "cbc_max",
+      "cf1s-folklore",
+      "chang_roberts",
+      "diskpaxos",
+      "ewd687a",
+      "locks_auxiliary_vars",
+      "nbacg_guer01",
+      "spanning"
+    ],
+    "top_remaining_revise_reasons": [
+      {
+        "count": 12,
+        "finding": "README does not map action names into outsider-facing prose"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: numMeetings"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: cLogs"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: grid"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: nSntE"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: pc"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: root"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: bcastMsg, dValue, pc, rcvdMsg"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: dval, nCrash, pc, rcvdMsgs, sntMsgs"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: allInput, blocksRead, chosen, dblock, disksWritten, output, phase"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: activeSons, terminationDetected"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: nSntNo"
+      },
+      {
+        "count": 1,
+        "finding": "README does not explain all state variables: msg, prnt, rpt"
+      }
+    ],
+    "total_revise_cases_at_baseline": 42
+  }
+}

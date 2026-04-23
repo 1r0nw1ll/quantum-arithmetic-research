@@ -1,0 +1,1 @@
+{"entries":[{"claim":"The theorem states n + 0 = n for naturals.","interpretation":"The Lean theorem add_zero_right exactly states that adding zero on the right leaves n unchanged.","modeled_consequence":"The theorem statement exactly matches the task statement.","source_excerpt":"Show that adding zero on the right leaves a natural number unchanged."}]}

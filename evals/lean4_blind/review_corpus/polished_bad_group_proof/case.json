@@ -1,0 +1,17 @@
+{
+  "case_id": "polished_bad_group_proof",
+  "title": "Polished Bad Group Proof Case",
+  "difficulty": "medium",
+  "target_context": "Lean 4 theorem starter corpus",
+  "visible_files": [
+    "case.md",
+    "artifact/BadGroup.lean",
+    "artifact/README.md",
+    "artifact/source_grounding.json",
+    "artifact/theorem_fit_review.json"
+  ],
+  "hidden_files": [
+    "hidden_label/expected_scorecard.json"
+  ]
+}
+

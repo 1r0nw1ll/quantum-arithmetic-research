@@ -1,0 +1,16 @@
+{
+  "decision": "reject",
+  "scores": {
+    "formal_validity_score": 1,
+    "external_admissibility_score": 0,
+    "proof_correctness_score": 0,
+    "theorem_statement_fidelity_score": 0,
+    "source_fidelity_score": 1,
+    "math_explanation_quality_score": 1,
+    "reviewer_rejection_risk_score": 3
+  },
+  "notes": [
+    "Proof-shaped slop: theorem mismatch plus sorry placeholder."
+  ]
+}
+

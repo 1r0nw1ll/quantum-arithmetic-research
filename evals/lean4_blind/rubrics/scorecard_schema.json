@@ -1,0 +1,50 @@
+{
+  "schema_version": "lean4_blind_scorecard.v1",
+  "scale": {
+    "min": 0,
+    "max": 3
+  },
+  "decision_values": [
+    "accept",
+    "revise",
+    "reject"
+  ],
+  "score_fields": [
+    {
+      "name": "formal_validity_score",
+      "required": true,
+      "description": "Overall defensibility of the Lean artifact as formal work."
+    },
+    {
+      "name": "external_admissibility_score",
+      "required": true,
+      "description": "Likelihood that an external Lean maintainer or reviewer would consider the artifact legitimate and appropriate."
+    },
+    {
+      "name": "proof_correctness_score",
+      "required": true,
+      "description": "Whether the proof structure appears to support the stated theorem rather than only looking proof-shaped."
+    },
+    {
+      "name": "theorem_statement_fidelity_score",
+      "required": true,
+      "description": "Whether the Lean theorem statement matches the natural-language claim or cited source."
+    },
+    {
+      "name": "source_fidelity_score",
+      "required": true,
+      "description": "Whether the grounding faithfully supports the theorem and proof choices."
+    },
+    {
+      "name": "math_explanation_quality_score",
+      "required": true,
+      "description": "Whether the README explains the theorem and proof idea in mathematically honest language."
+    },
+    {
+      "name": "reviewer_rejection_risk_score",
+      "required": true,
+      "description": "Higher means higher risk of external rejection."
+    }
+  ]
+}
+

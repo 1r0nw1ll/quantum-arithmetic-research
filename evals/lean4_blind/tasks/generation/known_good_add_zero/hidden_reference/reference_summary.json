@@ -1,0 +1,5 @@
+{
+  "theorem_shape": "Nat right-add-zero identity",
+  "proof_hint": "simp or exact Nat.add_zero _"
+}
+

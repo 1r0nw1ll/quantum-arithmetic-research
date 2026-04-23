@@ -1,0 +1,17 @@
+{
+  "case_id": "sparse_legit_even_double",
+  "title": "Sparse Legitimate Even-Double Case",
+  "difficulty": "easy",
+  "target_context": "Lean 4 theorem starter corpus",
+  "visible_files": [
+    "case.md",
+    "artifact/DoubleEven.lean",
+    "artifact/README.md",
+    "artifact/source_grounding.json",
+    "artifact/theorem_fit_review.json"
+  ],
+  "hidden_files": [
+    "hidden_label/expected_scorecard.json"
+  ]
+}
+

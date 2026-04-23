@@ -1,0 +1,16 @@
+{
+  "decision": "accept",
+  "scores": {
+    "formal_validity_score": 3,
+    "external_admissibility_score": 3,
+    "proof_correctness_score": 3,
+    "theorem_statement_fidelity_score": 3,
+    "source_fidelity_score": 3,
+    "math_explanation_quality_score": 3,
+    "reviewer_rejection_risk_score": 0
+  },
+  "notes": [
+    "Sparse-but-legitimate protection case."
+  ]
+}
+

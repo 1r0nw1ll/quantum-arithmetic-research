@@ -1,0 +1,11 @@
+{
+  "entries": [
+    {
+      "claim": "The theorem is just add-zero-right for naturals.",
+      "source_excerpt": "Show that adding zero on the right leaves a natural number unchanged.",
+      "interpretation": "This permits restating the theorem in a general group-theoretic form.",
+      "modeled_consequence": "The stronger theorem statement should still be accepted."
+    }
+  ]
+}
+

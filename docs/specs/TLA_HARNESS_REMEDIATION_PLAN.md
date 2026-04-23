@@ -191,5 +191,5 @@
 ## 13. Current Status Snapshot
 - Current phase: Pass 6 — Evidence-Quality Calibration
 - Last completed milestone: Deception-oriented TLA+ fixtures now verify that the harness can reject polished misleading evidence and still accept sparse-but-faithful support.
-- Next action: Expand deception cases beyond handcrafted fixtures, then generalize the blind-eval pattern to a second domain such as Lean 4.
+- Next action: Expand deception cases beyond handcrafted fixtures; the blind-eval pattern has now been generalized into a parallel Lean 4 starter suite under `evals/lean4_blind/`.
 - Owner / executor: Codex evidence-calibration pass.

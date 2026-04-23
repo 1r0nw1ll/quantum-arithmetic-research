@@ -1,0 +1,17 @@
+{
+  "case_id": "revise_induction_explanation",
+  "title": "Repair Case That Should Become Revise",
+  "difficulty": "medium",
+  "target_context": "Lean 4 theorem starter corpus",
+  "visible_files": [
+    "case.md",
+    "input/AddZeroInduction.lean",
+    "input/README.md",
+    "input/source_grounding.json",
+    "input/theorem_fit_review.json"
+  ],
+  "hidden_files": [
+    "hidden_label/expected_outcome.json"
+  ]
+}
+

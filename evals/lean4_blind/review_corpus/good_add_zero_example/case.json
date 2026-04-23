@@ -1,0 +1,17 @@
+{
+  "case_id": "good_add_zero_example",
+  "title": "Good Lean Add-Zero Review Case",
+  "difficulty": "easy",
+  "target_context": "Lean 4 theorem starter corpus",
+  "visible_files": [
+    "case.md",
+    "artifact/AddZero.lean",
+    "artifact/README.md",
+    "artifact/source_grounding.json",
+    "artifact/theorem_fit_review.json"
+  ],
+  "hidden_files": [
+    "hidden_label/expected_scorecard.json"
+  ]
+}
+

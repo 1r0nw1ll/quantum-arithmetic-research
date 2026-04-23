@@ -1,0 +1,29 @@
+{
+  "case_id": "sparse_double_even",
+  "title": "Sparse Legitimate Double-Even Proof",
+  "difficulty": "easy",
+  "target_context": "Lean 4 theorem starter corpus",
+  "generation_spec": {
+    "module_name": "SparseDoubleEven",
+    "theorem_summary": "for every natural number n, there exists k such that n + n = 2 * k",
+    "proof_idea": "Choose k := n and simplify the arithmetic identity.",
+    "why_belongs": "This is a sparse but legitimate elementary theorem with an explicit witness.",
+    "maintainer_value": "A reviewer gets a simple existential proof that is easy to inspect.",
+    "lean_text": "theorem double_is_even (n : Nat) : ∃ k : Nat, n + n = 2 * k := by\n  refine ⟨n, ?_⟩\n  simp [two_mul, Nat.add_comm]\n",
+    "source_grounding": [
+      {
+        "claim": "The theorem states that doubling a natural number is even.",
+        "source_excerpt": "Show that every doubled natural number can be written as 2 times some natural.",
+        "interpretation": "The theorem double_is_even matches the source by providing an existential witness k with n + n = 2 * k.",
+        "modeled_consequence": "The theorem statement exactly matches the visible task."
+      }
+    ]
+  },
+  "visible_files": [
+    "prompt.md"
+  ],
+  "hidden_files": [
+    "hidden_reference/reference_summary.json"
+  ]
+}
+

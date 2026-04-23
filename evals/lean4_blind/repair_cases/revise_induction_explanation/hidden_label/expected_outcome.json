@@ -1,0 +1,7 @@
+{
+  "repair_expectation": "Keep the theorem and proof, but add explanation of the induction proof idea.",
+  "final_decision": "revise",
+  "notes": [
+    "The proof is acceptable, but the external explanation is too thin."
+  ]
+}

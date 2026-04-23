@@ -1,0 +1,11 @@
+{
+  "entries": [
+    {
+      "claim": "The theorem is just the add-zero natural identity.",
+      "source_excerpt": "Show that adding zero on the right leaves a natural number unchanged.",
+      "interpretation": "This also justifies lifting the theorem into an ambient group-theoretic formulation.",
+      "modeled_consequence": "The stronger theorem statement is externally appropriate."
+    }
+  ]
+}
+

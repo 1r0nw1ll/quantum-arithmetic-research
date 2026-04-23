@@ -1,0 +1,8 @@
+{
+  "repair_expectation": "The theorem scope is mismatched; cleanup should still end in reject.",
+  "final_decision": "reject",
+  "notes": [
+    "Reject because the theorem statement does not faithfully match the source claim."
+  ]
+}
+

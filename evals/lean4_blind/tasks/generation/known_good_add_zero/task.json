@@ -1,0 +1,29 @@
+{
+  "case_id": "known_good_add_zero",
+  "title": "Known-Good Lean Add-Zero Proof",
+  "difficulty": "easy",
+  "target_context": "Lean 4 theorem starter corpus",
+  "generation_spec": {
+    "module_name": "KnownGoodAddZero",
+    "theorem_summary": "for every natural number n, n + 0 = n",
+    "proof_idea": "Use simp on Nat.add_zero to match the task exactly.",
+    "why_belongs": "This is a compact foundational theorem with a direct proof and a clear theorem statement.",
+    "maintainer_value": "A reviewer gets a minimal correct theorem/proof pair with explicit grounding.",
+    "lean_text": "theorem add_zero_right (n : Nat) : n + 0 = n := by\n  simp\n",
+    "source_grounding": [
+      {
+        "claim": "The theorem states n + 0 = n for naturals.",
+        "source_excerpt": "Show that adding zero on the right leaves a natural number unchanged.",
+        "interpretation": "The Lean theorem add_zero_right exactly states that adding zero on the right leaves n unchanged.",
+        "modeled_consequence": "The theorem statement exactly matches the task statement."
+      }
+    ]
+  },
+  "visible_files": [
+    "prompt.md"
+  ],
+  "hidden_files": [
+    "hidden_reference/reference_summary.json"
+  ]
+}
+

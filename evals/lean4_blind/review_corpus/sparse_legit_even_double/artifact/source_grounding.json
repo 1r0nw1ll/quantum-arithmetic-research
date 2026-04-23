@@ -1,0 +1,11 @@
+{
+  "entries": [
+    {
+      "claim": "The theorem states that every doubled natural is even.",
+      "source_excerpt": "Show that every doubled natural number can be written as 2 times some natural.",
+      "interpretation": "The theorem double_is_even matches the task by producing an existential witness.",
+      "modeled_consequence": "The theorem statement exactly matches the task."
+    }
+  ]
+}
+

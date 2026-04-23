@@ -305,6 +305,31 @@ def t_quarantine_tla_edit():
         _verify_chain(rows)
 
 
+@test("nested README above descendant TLA quarantines and allows write")
+def t_quarantine_nested_formal_readme():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_repo_") as tmp_repo, tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        repo_root = Path(tmp_repo)
+        ledger_dir = Path(tmp)
+        nested_dir = repo_root / "docs" / "examples" / "formal_case"
+        (nested_dir / "spec").mkdir(parents=True, exist_ok=True)
+        (nested_dir / "spec" / "Spec.tla").write_text("---- MODULE Spec ----\n====\n", encoding="utf-8")
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Write",
+                "tool_input": {"file_path": str(nested_dir / "README.md")},
+            }),
+            marker_text="claude-test-session",
+            repo_root=repo_root,
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert rows[0]["enforcement_markers"] == ["CLAUDE_FORMAL_PUBLICATION_WRITE_QUARANTINED"]
+        packets = sorted((ledger_dir / "quarantine" / "pending").glob("*.json"))
+        assert len(packets) == 1
+        _verify_chain(rows)
+
+
 @test("Python edit env override also quarantines and allows write")
 def t_deny_python_edit_env_override():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
@@ -502,6 +527,32 @@ def t_git_push_blocks_without_formal_gate():
             }),
             marker_text="claude-test-session",
             extra_env={"LLM_QA_FORMAL_CHANGED_PATHS": "qa_alphageometry_ptolemy/Spec.tla"},
+            repo_root=repo_root,
+        )
+        assert proc.returncode == 2
+        rows = _records(ledger_dir)
+        assert rows[0]["decision"] == "DENY"
+        assert "FORMAL_PUBLICATION_GATE_REQUIRED" in rows[0]["deny_reasons"]
+        _verify_chain(rows)
+
+
+@test("git commit blocks formal submission text changes when required artifacts are absent")
+def t_git_commit_blocks_submission_text_without_gate():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_repo_") as tmp_repo, tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        repo_root = Path(tmp_repo)
+        ledger_dir = Path(tmp)
+        _init_temp_git_repo(repo_root)
+        bundle_root = repo_root / "qa_alphageometry_ptolemy"
+        bundle_root.mkdir(parents=True, exist_ok=True)
+        (bundle_root / "submission.txt").write_text("publication-ready\n", encoding="utf-8")
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "git commit -m formal submission"},
+            }),
+            marker_text="claude-test-session",
+            extra_env={"LLM_QA_FORMAL_CHANGED_PATHS": "qa_alphageometry_ptolemy/submission.txt"},
             repo_root=repo_root,
         )
         assert proc.returncode == 2
@@ -1125,6 +1176,8 @@ def main() -> int:
         t_allow_outside_repo_write,
         t_deny_frozen_finance_outside_repo_write,
         t_deny_python_edit,
+        t_quarantine_tla_edit,
+        t_quarantine_nested_formal_readme,
         t_deny_python_edit_env_override,
         t_deny_bash_python_mutation,
         t_deny_bash_python_mutation_env_override,
@@ -1150,6 +1203,10 @@ def main() -> int:
         t_deny_commit_without_marker,
         t_allow_commit_with_marker,
         t_deny_commit_with_pending_quarantine,
+        t_git_commit_blocks_without_formal_gate,
+        t_git_push_blocks_without_formal_gate,
+        t_git_commit_blocks_pending_formal_review,
+        t_git_commit_blocks_submission_text_without_gate,
         t_reject_review_restores_original_file,
         t_reject_review_removes_new_file,
         t_deny_malformed_json,

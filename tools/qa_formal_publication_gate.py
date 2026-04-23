@@ -27,6 +27,30 @@ BLOCKED_PUBLICATION_CLAIMS = (
     "publication-ready",
     "submittable upstream",
 )
+PLACEHOLDER_TOKENS = {
+    "tbd",
+    "todo",
+    "n/a",
+    "na",
+    "none",
+    "unknown",
+    "placeholder",
+    "fill me in",
+    "coming soon",
+}
+SKEPTICAL_KEYWORDS = {
+    "reject",
+    "maintainer",
+    "coherence",
+    "semantic",
+    "invariant",
+    "fit",
+    "repository",
+    "outsider",
+    "grounding",
+    "vacuous",
+}
+TEXT_EXTENSIONS = {".md", ".txt", ".rst", ".adoc", ".json", ".yaml", ".yml", ".tla", ".cfg"}
 TAUTOLOGY_PATTERNS = (
     re.compile(r"^\s*TRUE\s*$", re.I | re.M),
     re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*\1\s*$", re.I | re.M),
@@ -48,6 +72,15 @@ def _bundle_root_for_path(repo_root: Path, rel_path: str) -> Path:
 
 def _read_text(path: Path) -> str:
     return path.read_text(encoding="utf-8")
+
+
+def _is_placeholder_text(value: Any, *, min_length: int = 12) -> bool:
+    if not isinstance(value, str):
+        return True
+    lowered = " ".join(value.lower().split())
+    if len(lowered) < min_length:
+        return True
+    return lowered in PLACEHOLDER_TOKENS or any(token in lowered for token in ("auto-generated", "template", "lorem ipsum"))
 
 
 def _load_json(path: Path) -> dict[str, Any]:
@@ -94,9 +127,13 @@ def _validate_repo_fit(path: Path) -> list[str]:
         value = data.get(key)
         if not isinstance(value, str) or not value.strip():
             errors.append(f"repo_fit_review.json missing non-empty {key}")
+        elif _is_placeholder_text(value, min_length=18):
+            errors.append(f"repo_fit_review.json {key} is content-free")
     comparables = data.get("comparables")
     if not isinstance(comparables, list) or len(comparables) < 2:
         errors.append("repo_fit_review.json must list at least 2 target-repo comparables")
+    elif not all(isinstance(item, str) and not _is_placeholder_text(item, min_length=4) for item in comparables):
+        errors.append("repo_fit_review.json comparables must be specific non-placeholder entries")
     return errors
 
 
@@ -109,9 +146,19 @@ def _validate_skeptical_review(path: Path) -> list[str]:
     arguments = data.get("rejection_arguments")
     if not isinstance(arguments, list) or not arguments or not all(isinstance(x, str) and x.strip() for x in arguments):
         errors.append("skeptical_review.json must include non-empty rejection_arguments")
+    else:
+        if len(arguments) < 2:
+            errors.append("skeptical_review.json must include at least 2 rejection_arguments")
+        substantive_arguments = [arg for arg in arguments if len(arg.strip()) >= 24 and not _is_placeholder_text(arg, min_length=24)]
+        if len(substantive_arguments) != len(arguments):
+            errors.append("skeptical_review.json rejection_arguments must be substantive, not templated")
+        elif not any(any(keyword in arg.lower() for keyword in SKEPTICAL_KEYWORDS) for arg in substantive_arguments):
+            errors.append("skeptical_review.json must articulate an adversarial rejection risk")
     reviewer = data.get("reviewer")
     if not isinstance(reviewer, str) or not reviewer.strip():
         errors.append("skeptical_review.json missing reviewer")
+    elif any(token in reviewer.lower() for token in ("template", "auto", "bot", "generated")):
+        errors.append("skeptical_review.json reviewer must not look automated or templated")
     return errors
 
 
@@ -124,12 +171,24 @@ def _validate_human_approval(path: Path) -> list[str]:
             errors.append(f"human_approval.json missing non-empty {key}")
     if data.get("approved") is not True:
         errors.append("human_approval.json must set approved=true")
+    approver = data.get("approver")
+    if isinstance(approver, str) and any(token in approver.lower() for token in ("auto", "bot", "system", "template", "generated")):
+        errors.append("human_approval.json approver must identify a human, not automation")
+    justification = data.get("justification")
+    if isinstance(justification, str):
+        if _is_placeholder_text(justification, min_length=40):
+            errors.append("human_approval.json justification is content-free")
+        if any(token in justification.lower() for token in ("auto-generated", "mechanically generated", "generated automatically")):
+            errors.append("human_approval.json justification admits mechanical generation")
     return errors
 
 
-def _collect_markdown_texts(bundle_root: Path) -> list[tuple[str, str]]:
+def _collect_texts(bundle_root: Path, extensions: set[str] | None = None) -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
-    for path in sorted(bundle_root.rglob("*.md")):
+    allowed = TEXT_EXTENSIONS if extensions is None else extensions
+    for path in sorted(bundle_root.rglob("*")):
+        if path.suffix.lower() not in allowed or not path.is_file():
+            continue
         try:
             out.append((str(path.relative_to(bundle_root)), _read_text(path)))
         except OSError:
@@ -138,14 +197,7 @@ def _collect_markdown_texts(bundle_root: Path) -> list[tuple[str, str]]:
 
 
 def _collect_tla_texts(bundle_root: Path) -> list[tuple[str, str]]:
-    out: list[tuple[str, str]] = []
-    for suffix in ("*.tla", "*.cfg"):
-        for path in sorted(bundle_root.rglob(suffix)):
-            try:
-                out.append((str(path.relative_to(bundle_root)), _read_text(path)))
-            except OSError:
-                continue
-    return out
+    return _collect_texts(bundle_root, extensions={".tla", ".cfg"})
 
 
 def _check_tautological_invariants(bundle_root: Path) -> list[str]:
@@ -163,7 +215,7 @@ def _check_tautological_invariants(bundle_root: Path) -> list[str]:
 
 def _check_negative_tests(bundle_root: Path) -> list[str]:
     findings: list[str] = []
-    for rel_path, text in _collect_markdown_texts(bundle_root) + _collect_tla_texts(bundle_root):
+    for rel_path, text in _collect_texts(bundle_root, extensions={".md", ".txt", ".tla", ".cfg"}):
         lowered = text.lower()
         if "negative test" in lowered and "malformed literal" in lowered:
             findings.append(f"{rel_path} describes a malformed-literal negative test")
@@ -174,7 +226,7 @@ def _check_negative_tests(bundle_root: Path) -> list[str]:
 
 def _check_publication_claims(bundle_root: Path) -> list[str]:
     findings: list[str] = []
-    for rel_path, text in _collect_markdown_texts(bundle_root):
+    for rel_path, text in _collect_texts(bundle_root):
         lowered = text.lower()
         for phrase in BLOCKED_PUBLICATION_CLAIMS:
             if phrase in lowered:

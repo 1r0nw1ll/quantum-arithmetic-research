@@ -158,6 +158,15 @@ FORMAL_REQUIRED_ARTIFACTS = (
     "skeptical_review.json",
     "human_approval.json",
 )
+FORMAL_SUBMISSION_DOC_BASENAMES = {
+    "submission.md",
+    "submission.txt",
+    "pr.txt",
+    "pr.md",
+    "pull_request.md",
+    "cover_letter.md",
+    "cover_letter.txt",
+}
 
 
 def _strip_heredoc_bodies(command: str) -> str:
@@ -201,11 +210,34 @@ def _formal_readme_path(canonical: Path, rel_posix: str) -> bool:
         return False
     if "formal" in rel_posix.lower() or rel_posix.startswith("qa_alphageometry_ptolemy/"):
         return True
-    parent = canonical.parent
-    if not parent.exists() or not parent.is_dir():
+    return _path_has_nearby_formal_artifact(canonical.parent)
+
+
+def _path_has_nearby_formal_artifact(start_dir: Path) -> bool:
+    candidate_dirs = [start_dir]
+    parent = start_dir.parent
+    if parent != start_dir:
+        candidate_dirs.append(parent)
+    for directory in candidate_dirs:
+        if not directory.exists() or not directory.is_dir():
+            continue
+        try:
+            for path in directory.rglob("*"):
+                if path.is_file() and path.suffix.lower() in {".tla", ".cfg"}:
+                    return True
+        except OSError:
+            continue
+    return False
+
+
+def _formal_submission_doc_path(canonical: Path, rel_posix: str) -> bool:
+    basename = Path(rel_posix).name.lower()
+    if basename not in FORMAL_SUBMISSION_DOC_BASENAMES:
         return False
+    if rel_posix.startswith("qa_alphageometry_ptolemy/") or "formal" in rel_posix.lower():
+        return True
     try:
-        return any(child.suffix.lower() in {".tla", ".cfg"} for child in parent.iterdir())
+        return _path_has_nearby_formal_artifact(canonical.parent)
     except OSError:
         return False
 
@@ -215,14 +247,29 @@ def _is_formal_publication_path(canonical: Path, rel_posix: str) -> bool:
         return True
     if Path(rel_posix).name in {"QARM_PROOF_LEDGER.md", "ARTIFACT_MANIFEST.md"}:
         return True
-    return _formal_readme_path(canonical, rel_posix)
+    if _formal_readme_path(canonical, rel_posix):
+        return True
+    return _formal_submission_doc_path(canonical, rel_posix)
 
 
 def _bash_mutates_formal_publication_path(scan_command: str) -> bool:
     normalized = scan_command.replace("\\", "/")
     if not any(
         token in normalized.lower()
-        for token in (".tla", ".cfg", "readme.md", "qarm_proof_ledger.md", "artifact_manifest.md")
+        for token in (
+            ".tla",
+            ".cfg",
+            "readme.md",
+            "qarm_proof_ledger.md",
+            "artifact_manifest.md",
+            "submission.md",
+            "submission.txt",
+            "pull_request.md",
+            "cover_letter.md",
+            "cover_letter.txt",
+            "pr.md",
+            "pr.txt",
+        )
     ):
         return False
     fd_stripped = FD_REDIRECT_PATTERN.sub("", scan_command)

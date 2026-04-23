@@ -32,7 +32,7 @@
   - `repo_fit_review.json`
   - `skeptical_review.json`
   - `human_approval.json`
-- Status: In progress
+- Status: Complete
 - Outputs:
   - hook and gate changes for formal artifact quarantine and commit/push blocking
   - regression tests for gate failures and premature publication claims
@@ -53,11 +53,16 @@
   - fake skeptical review
   - fake human approval
   - submission prose outside expected locations
-- Status: Not started
+- Status: Complete
 - Outputs:
   - bypass report
   - targeted fixes
   - regression tests for each closed bypass
+  - findings from the first bypass round:
+    - critical: `repo_fit_review.json`, `skeptical_review.json`, and `human_approval.json` accepted content-free or automated-looking payloads
+    - major: blocked `publication-ready` / `submittable upstream` wording was only scanned in Markdown, so `submission.txt` passed
+    - major: nested `README.md` above descendant `.tla` content was not always classified as formal-publication material
+    - no bypass confirmed in this round for direct `git commit` / `git push` once formal paths were correctly classified
 
 ## 5. Pass 3 — Blind Evals
 - Goal: Test whether the post-remediation harness can distinguish legitimate formalization from polished nonsense under uncertainty.
@@ -112,6 +117,9 @@
   - Blind evals must report `formal_validity_score` and `external_admissibility_score` separately.
   - TLC success alone must never dominate public-submission judgment.
   - Public formal-methods submission requires stricter controls than internal cert readiness.
+  - Pass 2 hardened validators against content-free review artifacts instead of treating mere file presence as sufficient.
+  - Pass 2 widened publication-claim scanning beyond Markdown to close submission-text bypasses.
+  - Pass 2 widened README/formal-doc detection to cover nested formal trees rather than only sibling `.tla` / `.cfg` files.
   - Current repo findings supporting this split:
     - `qa_alphageometry_ptolemy/QARM_PROOF_LEDGER.md` labels `QAAxioms.tla` “submittable upstream”.
     - `qa_alphageometry_ptolemy/TLC_FAILURE_ANALYSIS_REPORT.md` labels a QA/QARM spec “publication-ready”.
@@ -125,10 +133,11 @@
 
 ## 9. Remaining Gaps
 - Phase 1 still uses heuristic outsider-translation and vacuity checks rather than a deeper semantic analyzer.
-- No bypass audit has been run yet against renamed, nested, or content-free artifacts.
 - No blind generation/review/repair benchmark set exists yet.
 - No source-grounding artifact is enforced yet.
 - Pass 1 does not yet distinguish templated skeptical review from genuinely adversarial review.
+ - Pass 2 has not yet attacked renamed submission-prose filenames outside the current `submission/pr/cover_letter` set.
+ - Pass 2 has not yet tested content-free artifacts that are syntactically rich but semantically hollow.
 
 ## 10. Success Criteria
 - A public-facing TLA+/formal-methods artifact cannot be committed or pushed toward submission without explicit external-fit clearance.
@@ -138,7 +147,7 @@
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
 ## 11. Current Status Snapshot
-- Current phase: Pass 1 — Guardrails
-- Last completed milestone: Minimal formal-publication gate, formal-artifact quarantine, and workflow-stage updates implemented locally.
-- Next action: Run Pass 1 regressions, then start Pass 2 bypass audit against the new hook and gate.
-- Owner / executor: Codex implementation pass, followed by adversarial Codex bypass audit.
+- Current phase: Pass 2 — Bypass Audit
+- Last completed milestone: First bypass round completed; content-free review artifacts, unexpected submission text, and nested formal README classification were hardened with regressions.
+- Next action: Start Pass 3 blind eval harness after any additional narrow bypass probes.
+- Owner / executor: Codex adversarial audit pass, followed by blind-eval build pass.

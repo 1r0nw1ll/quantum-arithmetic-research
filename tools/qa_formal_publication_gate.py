@@ -21,7 +21,13 @@ REQUIRED_FILES = (
     "semantics_boundary.md",
     "repo_fit_review.json",
     "skeptical_review.json",
+    "source_grounding.json",
+    "repo_comparables.json",
+)
+OPTIONAL_REVIEW_FILES = (
     "human_approval.json",
+    "human_override.json",
+    "human_audit.json",
 )
 BLOCKED_PUBLICATION_CLAIMS = (
     "publication-ready",
@@ -51,6 +57,8 @@ SKEPTICAL_KEYWORDS = {
     "vacuous",
 }
 TEXT_EXTENSIONS = {".md", ".txt", ".rst", ".adoc", ".json", ".yaml", ".yml", ".tla", ".cfg"}
+AUTHORITATIVE_SOURCE_TIERS = {"target_repo", "formalism", "canonical"}
+NON_AUTHORITATIVE_SOURCE_TIERS = {"internal", "private", "generated", "summary", "self"}
 PROJECT_PRIVATE_JARGON = (
     "observer projection firewall",
     "qa legality",
@@ -106,6 +114,40 @@ def _load_json(path: Path) -> dict[str, Any]:
     return data
 
 
+def _normalized_words(text: str) -> set[str]:
+    return {
+        token for token in re.findall(r"[A-Za-z][A-Za-z0-9_+-]*", text.lower())
+        if len(token) >= 4
+    }
+
+
+def _looks_self_referential_source(source_ref: str) -> bool:
+    lowered = source_ref.lower()
+    return any(
+        marker in lowered for marker in (
+            "readme.md",
+            ".tla",
+            "artifact_manifest",
+            "qarm_proof_ledger",
+            "audience_translation",
+            "semantics_boundary",
+            "skeptical_review",
+            "repo_fit_review",
+            "source_grounding",
+            "repo_comparables",
+        )
+    )
+
+
+def _artifact_elements(bundle_root: Path) -> tuple[list[str], list[str]]:
+    variables: list[str] = []
+    actions: list[str] = []
+    for _, text in _collect_tla_texts(bundle_root):
+        variables.extend(_extract_state_variables(text))
+        actions.extend(_extract_action_names(text))
+    return sorted(set(variables)), sorted(set(actions))
+
+
 def _validate_audience_translation(path: Path) -> list[str]:
     text = _read_text(path).strip()
     errors: list[str] = []
@@ -139,7 +181,12 @@ def _validate_semantics_boundary(path: Path) -> list[str]:
 def _validate_repo_fit(path: Path) -> list[str]:
     data = _load_json(path)
     errors: list[str] = []
-    for key in ("target_repo", "why_belongs", "maintainer_value"):
+    target_repo = data.get("target_repo")
+    if not isinstance(target_repo, str) or not target_repo.strip():
+        errors.append("repo_fit_review.json missing non-empty target_repo")
+    elif _is_placeholder_text(target_repo, min_length=6) and "/" not in target_repo:
+        errors.append("repo_fit_review.json target_repo is content-free")
+    for key in ("why_belongs", "maintainer_value"):
         value = data.get(key)
         if not isinstance(value, str) or not value.strip():
             errors.append(f"repo_fit_review.json missing non-empty {key}")
@@ -199,6 +246,97 @@ def _validate_human_approval(path: Path) -> list[str]:
     return errors
 
 
+def _validate_source_grounding(path: Path, bundle_root: Path) -> list[str]:
+    data = _load_json(path)
+    errors: list[str] = []
+    entries = data.get("entries")
+    if not isinstance(entries, list) or not entries:
+        return ["source_grounding.json must contain a non-empty entries list"]
+    variables, actions = _artifact_elements(bundle_root)
+    covered_variables: set[str] = set()
+    covered_actions: set[str] = set()
+    authoritative_semantics = 0
+    for idx, entry in enumerate(entries):
+        if not isinstance(entry, dict):
+            errors.append(f"source_grounding.json entry {idx} must be an object")
+            continue
+        for field in ("claim", "artifact_element", "source_ref", "source_excerpt", "interpretation", "modeled_consequence"):
+            value = entry.get(field)
+            if not isinstance(value, str) or not value.strip():
+                errors.append(f"source_grounding.json entry {idx} missing non-empty {field}")
+        if errors and any(f"entry {idx}" in err for err in errors):
+            continue
+        source_ref = str(entry["source_ref"]).strip()
+        excerpt = str(entry["source_excerpt"]).strip()
+        interpretation = str(entry["interpretation"]).strip()
+        artifact_element = str(entry["artifact_element"]).strip()
+        tier = str(entry.get("authority_tier", "")).strip().lower()
+        if len(excerpt) < 24:
+            errors.append(f"source_grounding.json entry {idx} source_excerpt is too short to support the claim")
+        if _looks_self_referential_source(source_ref):
+            errors.append(f"source_grounding.json entry {idx} is self-referential or cites generated bundle prose")
+        if tier in NON_AUTHORITATIVE_SOURCE_TIERS:
+            errors.append(f"source_grounding.json entry {idx} relies on non-authoritative source tier '{tier}'")
+        excerpt_words = _normalized_words(excerpt)
+        interpretation_words = _normalized_words(interpretation)
+        if interpretation_words and excerpt_words:
+            overlap = interpretation_words & excerpt_words
+            if len(overlap) < max(2, min(len(interpretation_words), 4) // 2):
+                errors.append(f"source_grounding.json entry {idx} interpretation appears to overreach the excerpt")
+        if artifact_element.startswith("variable:"):
+            covered_variables.add(artifact_element.split(":", 1)[1].strip())
+        if artifact_element.startswith("action:"):
+            covered_actions.add(artifact_element.split(":", 1)[1].strip())
+        claim_text = str(entry["claim"]).lower()
+        if "semantic" in claim_text and tier in AUTHORITATIVE_SOURCE_TIERS:
+            authoritative_semantics += 1
+    missing_variables = [name for name in variables if name not in covered_variables]
+    missing_actions = [name for name in actions if name not in covered_actions]
+    if missing_variables:
+        errors.append("source_grounding.json does not cite all state variables: " + ", ".join(missing_variables))
+    if missing_actions:
+        errors.append("source_grounding.json does not cite all actions: " + ", ".join(missing_actions))
+    if authoritative_semantics == 0:
+        errors.append("source_grounding.json has no semantics claim grounded in an authoritative source tier")
+    return errors
+
+
+def _validate_repo_comparables(path: Path, bundle_root: Path) -> list[str]:
+    data = _load_json(path)
+    errors: list[str] = []
+    target_repo = data.get("target_repo")
+    if not isinstance(target_repo, str) or not target_repo.strip():
+        errors.append("repo_comparables.json missing non-empty target_repo")
+    candidate_scope = data.get("candidate_scope")
+    if not isinstance(candidate_scope, str) or _is_placeholder_text(candidate_scope, min_length=18):
+        errors.append("repo_comparables.json missing substantive candidate_scope")
+    in_scope_rationale = data.get("in_scope_rationale")
+    if not isinstance(in_scope_rationale, str) or _is_placeholder_text(in_scope_rationale, min_length=24):
+        errors.append("repo_comparables.json missing substantive in_scope_rationale")
+    comparables = data.get("comparables")
+    if not isinstance(comparables, list) or len(comparables) < 2:
+        return errors + ["repo_comparables.json must contain at least 2 comparable entries"]
+    comparable_axes: set[str] = set()
+    for idx, item in enumerate(comparables):
+        if not isinstance(item, dict):
+            errors.append(f"repo_comparables.json comparable {idx} must be an object")
+            continue
+        for field in ("artifact_name", "artifact_ref", "norm_supported"):
+            value = item.get(field)
+            if not isinstance(value, str) or _is_placeholder_text(value, min_length=12):
+                errors.append(f"repo_comparables.json comparable {idx} missing substantive {field}")
+        axes = item.get("similarity_axes")
+        if not isinstance(axes, list) or not axes or not all(isinstance(axis, str) and axis.strip() for axis in axes):
+            errors.append(f"repo_comparables.json comparable {idx} must include non-empty similarity_axes")
+        else:
+            comparable_axes.update(axis.strip().lower() for axis in axes)
+    if not comparable_axes.intersection({"structure", "semantics", "readme", "audience"}):
+        errors.append("repo_comparables.json comparables do not support structural or semantic similarity")
+    if "scope" not in " ".join(_normalized_words(str(in_scope_rationale).lower())) and "audience" not in str(in_scope_rationale).lower():
+        errors.append("repo_comparables.json in_scope_rationale should explain scope or audience fit explicitly")
+    return errors
+
+
 def _collect_texts(bundle_root: Path, extensions: set[str] | None = None) -> list[tuple[str, str]]:
     out: list[tuple[str, str]] = []
     allowed = TEXT_EXTENSIONS if extensions is None else extensions
@@ -220,9 +358,12 @@ def _extract_state_variables(tla_text: str) -> list[str]:
     variables: list[str] = []
     for line in tla_text.splitlines():
         stripped = line.strip()
-        if not stripped.startswith("VARIABLE"):
+        if not (stripped.startswith("VARIABLE ") or stripped.startswith("VARIABLES ")):
             continue
-        _, names = stripped.split("VARIABLE", 1)
+        if stripped.startswith("VARIABLES "):
+            names = stripped[len("VARIABLES "):]
+        else:
+            names = stripped[len("VARIABLE "):]
         for token in re.split(r"[\s,]+", names.strip()):
             if token:
                 variables.append(token)
@@ -420,16 +561,21 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
     repo_fit_hit = "repository-fit" in lowered or "repository fit" in lowered
     source_hit = "where the semantics come from" in lowered or "what is being modeled" in lowered or "justify the chosen variables/actions" in lowered
     comparables_hit = "comparable evidence" in lowered
+    fidelity_hit = "source_grounding.json" in lowered or "authoritative source tier" in lowered or "overreach the excerpt" in lowered
+    comparable_support_hit = "repo_comparables.json" in lowered or "comparable entries" in lowered or "similarity" in lowered
+    adversarial_hit = "adversarial check" in lowered
     scores = {
         "formal_validity_score": 3,
         "external_admissibility_score": 3,
         "semantic_adequacy_score": 3,
         "source_grounding_score": 3,
+        "source_fidelity_score": 3,
         "outsider_comprehensibility_score": 3,
         "invariant_non_vacuity_score": 3,
         "semantics_vs_bounds_clarity_score": 3,
         "repository_fit_plausibility_score": 3,
         "repo_comparables_evidence_score": 3,
+        "repo_comparable_support_score": 3,
         "reviewer_rejection_risk_score": 0,
     }
     if tautology_count:
@@ -461,17 +607,34 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
         scores["reviewer_rejection_risk_score"] += 1
     if source_hit:
         scores["source_grounding_score"] -= 2
+        scores["source_fidelity_score"] -= 1
         scores["semantic_adequacy_score"] -= 1
         scores["external_admissibility_score"] -= 1
         scores["reviewer_rejection_risk_score"] += 1
     if comparables_hit:
         scores["repo_comparables_evidence_score"] -= 2
+        scores["repo_comparable_support_score"] -= 1
         scores["repository_fit_plausibility_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if fidelity_hit:
+        scores["source_fidelity_score"] -= 2
+        scores["source_grounding_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if comparable_support_hit:
+        scores["repo_comparable_support_score"] -= 2
+        scores["repo_comparables_evidence_score"] -= 1
+        scores["repository_fit_plausibility_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if adversarial_hit:
         scores["external_admissibility_score"] -= 1
         scores["reviewer_rejection_risk_score"] += 1
     if readme_missing:
         scores["semantic_adequacy_score"] -= 1
         scores["source_grounding_score"] -= 1
+        scores["source_fidelity_score"] -= 1
         scores["outsider_comprehensibility_score"] -= 1
         scores["external_admissibility_score"] -= 1
     for key in list(scores):
@@ -480,6 +643,22 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
         else:
             scores[key] = max(0, min(3, scores[key]))
     return scores
+
+
+def _adversarial_evidence_findings(
+    bundle_root: Path,
+    source_grounding_errors: list[str],
+    repo_comparables_errors: list[str],
+) -> list[str]:
+    findings: list[str] = []
+    joined_text = _joined_explanatory_text(bundle_root).lower()
+    if source_grounding_errors:
+        findings.append("Adversarial check: claimed grounding does not robustly support the artifact")
+    if repo_comparables_errors:
+        findings.append("Adversarial check: repository-fit claim is overstated relative to the comparable set")
+    if any(term in joined_text for term in PROJECT_PRIVATE_JARGON) and not any(marker in joined_text for marker in ("translated as", "means", "i.e.", "ordinary tla+", "outsider")):
+        findings.append("Adversarial check: project-private theory appears to leak into public-facing prose without enough translation")
+    return findings
 
 
 def score_bundle(bundle_root: Path, *, require_artifacts: bool = True) -> dict[str, Any]:
@@ -494,8 +673,11 @@ def score_bundle(bundle_root: Path, *, require_artifacts: bool = True) -> dict[s
             "semantics_boundary.md": _validate_semantics_boundary,
             "repo_fit_review.json": _validate_repo_fit,
             "skeptical_review.json": _validate_skeptical_review,
-            "human_approval.json": _validate_human_approval,
+            "source_grounding.json": lambda path: _validate_source_grounding(path, bundle_root),
+            "repo_comparables.json": lambda path: _validate_repo_comparables(path, bundle_root),
         }
+        source_grounding_errors: list[str] = []
+        repo_comparables_errors: list[str] = []
         for required_name in REQUIRED_FILES:
             artifact_path = bundle_root / required_name
             artifact_errors: list[str] = []
@@ -511,6 +693,20 @@ def score_bundle(bundle_root: Path, *, require_artifacts: bool = True) -> dict[s
                 "errors": artifact_errors,
             }
             findings.extend(artifact_errors)
+            if required_name == "source_grounding.json":
+                source_grounding_errors = artifact_errors
+            if required_name == "repo_comparables.json":
+                repo_comparables_errors = artifact_errors
+        for optional_name in OPTIONAL_REVIEW_FILES:
+            artifact_path = bundle_root / optional_name
+            if artifact_path.exists():
+                artifact_errors = _validate_human_approval(artifact_path)
+                report["required_artifacts"][optional_name] = {
+                    "present": True,
+                    "errors": artifact_errors,
+                }
+                findings.extend(artifact_errors)
+        findings.extend(_adversarial_evidence_findings(bundle_root, source_grounding_errors, repo_comparables_errors))
     findings.extend(_check_tautological_invariants(bundle_root))
     findings.extend(_check_negative_tests(bundle_root))
     findings.extend(_check_publication_claims(bundle_root))

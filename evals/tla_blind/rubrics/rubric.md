@@ -46,6 +46,11 @@ Does the artifact explain:
 Project-private theory without target-community translation should score poorly
 here.
 
+### `source_fidelity_score`
+
+Does the cited evidence faithfully support the interpretation, or does the
+artifact overreach, self-cite, or rely on non-authoritative source tiers?
+
 ### `outsider_comprehensibility_score`
 
 Could a TLA+ maintainer or technically literate outsider understand the model
@@ -69,6 +74,11 @@ Would the claimed target repository plausibly want this artifact?
 
 Does the artifact support repository-fit claims with comparable accepted
 artifact classes or example names, rather than bare assertions?
+
+### `repo_comparable_support_score`
+
+Are the comparables themselves specific, in-scope, and structurally similar
+enough to justify the repository-fit claim?
 
 ### `reviewer_rejection_risk_score`
 

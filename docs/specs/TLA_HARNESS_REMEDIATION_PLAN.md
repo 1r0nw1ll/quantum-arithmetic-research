@@ -106,7 +106,21 @@
   - tightened scoring for visible semantics/TLC conflation, source grounding, and repository-fit comparable evidence
   - starter-corpus execution now rejects the recreated polished-bad TLA+ fixture before any PR-draft path
 
-## 7. Open Risks
+## 7. Pass 5 — Evidence Automation
+- Goal: Replace the remaining human-legitimacy dependencies with evidence-backed automation for source fidelity and target-repo appropriateness.
+- Focus:
+  - machine-readable source grounding
+  - machine-readable comparable-evidence
+  - adversarial evidence checks
+  - downgrade human approval to audit/override status
+- Status: Complete
+- Outputs:
+  - `source_grounding.json` and `repo_comparables.json` added to the formal-publication gate as required evidence artifacts
+  - source-fidelity and comparable-support checks added to blind and gate scoring
+  - automated adversarial evidence findings now lower admissibility when grounding or repo-fit support is weak
+  - human approval removed as a required truth gate and treated as an optional audit/override artifact
+
+## 8. Open Risks
 - Internal consistency may still be overweighted relative to external intelligibility.
 - Skeptical review may degrade into template-filling instead of adversarial critique.
 - Repo-fit review may become ceremonial.
@@ -114,7 +128,7 @@
 - TLC success and non-vacuity bookkeeping may still bias judgment more than they should.
 - QA-private terminology may continue to leak into public-facing formal artifacts without translation.
 
-## 8. Decisions
+## 9. Decisions
 - Confirmed:
   - Pass 1 is the minimal patch set, not the full idealized design.
   - Phase 1 will fail closed on a small required artifact set rather than waiting for a full source-grounding schema.
@@ -124,6 +138,7 @@
   - Pass 3 will keep hidden labels and reference answers physically separate from model-visible prompts.
   - Pass 3 execution should treat `accept` as a high bar; artifacts with substantive clarity defects should default to `revise`, not `accept`.
   - Pass 4 should add source-grounding and comparable-evidence scoring before attempting broader redesign.
+  - Pass 5 should require authoritative evidence artifacts rather than letting human approval stand in for source fidelity or repo fit.
   - TLC success alone must never dominate public-submission judgment.
   - Public formal-methods submission requires stricter controls than internal cert readiness.
   - Pass 2 hardened validators against content-free review artifacts instead of treating mere file presence as sufficient.
@@ -136,30 +151,29 @@
     - `docs/specs/QA_CRITICAL_REVIEW_AGENT_SPEC.md` exists as policy but is not wired into the public formal-methods ship path.
 - Pending:
   - Exact path set for “formal-methods README/docs”.
-  - Whether `source_grounding.json` is Phase 1 or deferred to a later pass.
   - CI vs manual enforcement boundary for the blind eval harness.
-  - Who is authorized to issue `human_approval.json`.
+  - Whether optional human override artifacts should be normalized to one filename instead of several aliases.
 
-## 9. Remaining Gaps
+## 10. Remaining Gaps
 - Phase 1 still uses heuristic outsider-translation and vacuity checks rather than a deeper semantic analyzer.
-- No source-grounding artifact is enforced yet.
 - Pass 1 does not yet distinguish templated skeptical review from genuinely adversarial review.
  - Pass 2 has not yet attacked renamed submission-prose filenames outside the current `submission/pr/cover_letter` set.
  - Pass 2 has not yet tested content-free artifacts that are syntactically rich but semantically hollow.
 - Pass 3 is currently a starter corpus, not a large benchmark set.
 - Pass 3 has scaffolded result handling but has not yet been wired into CI or pre-submission automation.
 - Pass 4 uses a deterministic generation executor, not the full live agent stack.
-- Source grounding is scored in blind evals but still not enforced as a required submission artifact.
+- Pass 5 still relies on heuristic excerpt/interpretation checks rather than full semantic entailment.
+- Pass 5 still approximates target-repo comparability; it does not yet mine comparables automatically from the target repository.
 
-## 10. Success Criteria
+## 11. Success Criteria
 - A public-facing TLA+/formal-methods artifact cannot be committed or pushed toward submission without explicit external-fit clearance.
 - Mechanical bypass attempts fail or are detected.
 - Blind review can reliably reject polished nonsense.
 - Blind generation improves outsider readability and semantics clarity.
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
-## 11. Current Status Snapshot
-- Current phase: Pass 4 — Post-Eval Tightening
-- Last completed milestone: Blind generation execution, source-grounding scoring, comparable-evidence scoring, and starter-corpus post-eval tightening are implemented; the recreated polished-bad TLA+ fixture is rejected by the current blind runner.
-- Next action: Expand the blind corpus and wire execution into CI or pre-submission review so future judgment regressions are visible.
-- Owner / executor: Codex post-eval tightening pass.
+## 12. Current Status Snapshot
+- Current phase: Pass 5 — Evidence Automation
+- Last completed milestone: Source fidelity and repo-appropriateness evidence artifacts are enforced in the formal-publication gate; human approval is downgraded to optional audit/override status.
+- Next action: Expand the blind corpus, add automatic comparable mining, and wire execution into CI or pre-submission review so future judgment regressions are visible.
+- Owner / executor: Codex evidence-automation pass.

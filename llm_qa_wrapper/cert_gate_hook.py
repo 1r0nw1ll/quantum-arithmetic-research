@@ -156,7 +156,8 @@ FORMAL_REQUIRED_ARTIFACTS = (
     "semantics_boundary.md",
     "repo_fit_review.json",
     "skeptical_review.json",
-    "human_approval.json",
+    "source_grounding.json",
+    "repo_comparables.json",
 )
 FORMAL_SUBMISSION_DOC_BASENAMES = {
     "submission.md",

@@ -99,13 +99,59 @@ def _seed_bundle(
         },
     )
     _write_json(
-        bundle_root / "human_approval.json",
+        bundle_root / "source_grounding.json",
         {
-            "approved": True,
-            "approver": "will",
-            "approved_at": "2026-04-23",
-            "scope": "formal publication",
-            "justification": "Reviewed repo fit and skeptical review",
+            "entries": [
+                {
+                    "claim": "The module models a simple counter.",
+                    "artifact_element": "variable:x",
+                    "source_ref": "visible task statement::counter",
+                    "source_excerpt": "The task describes a bounded counter value.",
+                    "interpretation": "The variable x tracks the current counter value.",
+                    "modeled_consequence": "The model state includes the counter value.",
+                    "authority_tier": "formalism",
+                },
+                {
+                    "claim": "The module has a transition action.",
+                    "artifact_element": "action:Next",
+                    "source_ref": "visible task statement::counter",
+                    "source_excerpt": "The task describes counter transitions.",
+                    "interpretation": "The action Next advances the counter semantics.",
+                    "modeled_consequence": "The model transitions update the counter value.",
+                    "authority_tier": "formalism",
+                },
+                {
+                    "claim": "The intrinsic semantics come from the task statement.",
+                    "artifact_element": "semantics:intrinsic",
+                    "source_ref": "visible task statement::counter",
+                    "source_excerpt": "The task states the semantics of the counter transitions.",
+                    "interpretation": "The semantics are the stated counter transitions.",
+                    "modeled_consequence": "The model meaning follows the task transitions rather than an internal note.",
+                    "authority_tier": "formalism",
+                },
+            ]
+        },
+    )
+    _write_json(
+        bundle_root / "repo_comparables.json",
+        {
+            "target_repo": "tlaplus/examples",
+            "candidate_scope": "Small outsider-readable counter example",
+            "in_scope_rationale": "The example matches the scope and audience of small teaching examples.",
+            "comparables": [
+                {
+                    "artifact_name": "Clock.tla",
+                    "artifact_ref": "tlaplus/examples/Clock.tla",
+                    "norm_supported": "Shows simple state-machine style and outsider-facing README expectations.",
+                    "similarity_axes": ["structure", "audience", "readme"],
+                },
+                {
+                    "artifact_name": "CounterExample.tla",
+                    "artifact_ref": "tlaplus/examples/CounterExample.tla",
+                    "norm_supported": "Shows bounded-state educational example scope.",
+                    "similarity_axes": ["structure", "semantics"],
+                },
+            ],
         },
     )
     if extra_markdown is not None:
@@ -307,6 +353,181 @@ def t_mechanical_human_approval():
         assert proc.returncode == 1
         payload = json.loads(proc.stdout)
         assert any("human_approval.json" in err for err in payload["reports"][0]["errors"])
+
+
+@test("rejects unsupported source grounding")
+def t_unsupported_source_grounding():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        _write_json(
+            bundle_root / "source_grounding.json",
+            {
+                "entries": [
+                    {
+                        "claim": "The semantics come from an internal theorem note.",
+                        "artifact_element": "semantics:intrinsic",
+                        "source_ref": "private/qa_internal_note.md",
+                        "source_excerpt": "internal note excerpt",
+                        "interpretation": "The semantics definitely prove the public model and extra observer claims.",
+                        "modeled_consequence": "The public model inherits the private theorem.",
+                        "authority_tier": "internal",
+                    }
+                ]
+            },
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("source_grounding.json" in err for err in payload["reports"][0]["errors"])
+
+
+@test("rejects self-referential source grounding")
+def t_self_referential_source_grounding():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        _write_json(
+            bundle_root / "source_grounding.json",
+            {
+                "entries": [
+                    {
+                        "claim": "The variable is justified by the README.",
+                        "artifact_element": "variable:x",
+                        "source_ref": "README.md",
+                        "source_excerpt": "The README says x is the variable.",
+                        "interpretation": "The README fully grounds the semantics.",
+                        "modeled_consequence": "The model is grounded by itself.",
+                        "authority_tier": "self",
+                    },
+                    {
+                        "claim": "The action is justified by the README.",
+                        "artifact_element": "action:Next",
+                        "source_ref": "README.md",
+                        "source_excerpt": "The README says Next updates the state.",
+                        "interpretation": "The README fully grounds the action.",
+                        "modeled_consequence": "The model is grounded by itself.",
+                        "authority_tier": "self",
+                    },
+                    {
+                        "claim": "The semantics are justified by the README.",
+                        "artifact_element": "semantics:intrinsic",
+                        "source_ref": "README.md",
+                        "source_excerpt": "The README states the semantics.",
+                        "interpretation": "The README fully grounds the semantics.",
+                        "modeled_consequence": "The model is grounded by itself.",
+                        "authority_tier": "self",
+                    },
+                ]
+            },
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("self-referential" in err.lower() for err in payload["reports"][0]["errors"])
+
+
+@test("rejects weak repo comparables")
+def t_weak_repo_comparables():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        _write_json(
+            bundle_root / "repo_comparables.json",
+            {
+                "target_repo": "tlaplus/examples",
+                "candidate_scope": "small example",
+                "in_scope_rationale": "fits",
+                "comparables": [
+                    {
+                        "artifact_name": "Example",
+                        "artifact_ref": "somewhere",
+                        "norm_supported": "generic",
+                        "similarity_axes": ["misc"],
+                    },
+                    {
+                        "artifact_name": "Another",
+                        "artifact_ref": "somewhere-else",
+                        "norm_supported": "generic",
+                        "similarity_axes": ["misc"],
+                    },
+                ],
+            },
+        )
+        proc = _run_gate(repo_root, "qa_alphageometry_ptolemy/Spec.tla")
+        assert proc.returncode == 1
+        payload = json.loads(proc.stdout)
+        assert any("repo_comparables.json" in err for err in payload["reports"][0]["errors"])
+
+
+@test("adversarial checker lowers admissibility when evidence is weak")
+def t_adversarial_checker_lowers_admissibility():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a theorem-facing observer projection firewall.\n"
+                "Why useful: useful for public review.\n"
+                "This uses formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the observer projection firewall is maintained.\n"
+                "TLC bounds: the model checking cap is separate.\n"
+            ),
+        )
+        _write_json(
+            bundle_root / "source_grounding.json",
+            {
+                "entries": [
+                    {
+                        "claim": "The semantics come from a private theorem note.",
+                        "artifact_element": "semantics:intrinsic",
+                        "source_ref": "private/theorem_note.md",
+                        "source_excerpt": "private theorem note excerpt supporting semantics",
+                        "interpretation": "The excerpt proves the public semantics and extra observer obligations.",
+                        "modeled_consequence": "The public model inherits the observer theory.",
+                        "authority_tier": "internal",
+                    }
+                ]
+            },
+        )
+        report = score_bundle(bundle_root, require_artifacts=True)
+        assert any("Adversarial check" in err for err in report["errors"])
+        assert report["scores"]["external_admissibility_score"] <= 1
 
 
 @test("rejects publication claims in unexpected text files")

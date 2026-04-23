@@ -301,8 +301,9 @@ verify script PASS  → verify_[name].py passes (stdlib only, <1s)
     ↓
 review-ready        → docs/families/README.md updated, no TODOs
     ↓
-external-fit-cleared → formal_publication_gate PASS, repo-fit review PASS,
-                       skeptical review PASS, human approval recorded
+external-fit-cleared → formal_publication_gate PASS, source grounding PASS,
+                       comparable-evidence PASS, skeptical review PASS,
+                       human override/audit recorded only if used
     ↓
 submitted           → papers/ready-for-submission/[name]/
 ```
@@ -311,6 +312,16 @@ Public-facing formal-methods contributions use the same stage model, but they
 may not enter `submitted` or a public `git push` path until
 `external-fit-cleared` is satisfied. Internal TLC success or proof-ledger
 completeness is not sufficient for this transition.
+
+For formal-methods contributions, automated evidence-backed checks are the
+primary legitimacy gate:
+
+- source fidelity must be grounded in authoritative sources rather than
+  project-private prose alone
+- target-repo appropriateness must be supported by comparable accepted artifact
+  classes, not only by assertion
+- human review is narrowed to audit, override, and ambiguity-resolution roles;
+  it does not create legitimacy by itself
 
 **Claim certification requirement:** Any quantitative claim that is central to
 a paper's contribution must be backed by either:

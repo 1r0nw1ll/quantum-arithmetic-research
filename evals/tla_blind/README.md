@@ -91,11 +91,13 @@ Every scorecard must include:
 - `external_admissibility_score`
 - `semantic_adequacy_score`
 - `source_grounding_score`
+- `source_fidelity_score`
 - `outsider_comprehensibility_score`
 - `invariant_non_vacuity_score`
 - `semantics_vs_bounds_clarity_score`
 - `repository_fit_plausibility_score`
 - `repo_comparables_evidence_score`
+- `repo_comparable_support_score`
 - `reviewer_rejection_risk_score`
 
 See [scorecard_schema.json](/home/player2/signal_experiments/evals/tla_blind/rubrics/scorecard_schema.json) and [rubric.md](/home/player2/signal_experiments/evals/tla_blind/rubrics/rubric.md).

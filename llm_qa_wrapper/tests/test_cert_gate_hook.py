@@ -468,17 +468,66 @@ def _write_minimal_formal_bundle(bundle_root: Path) -> None:
         json.dumps({
             "reviewer": "hostile-maintainer-sim",
             "recommendation": "revise",
-            "rejection_arguments": ["Need clearer semantics wording"],
+            "rejection_arguments": [
+                "A maintainer may ask for clearer semantics wording and explicit outsider translation.",
+                "Repository fit should be tied to example norms rather than asserted by style alone.",
+            ],
         }, sort_keys=True, separators=(",", ":")),
         encoding="utf-8",
     )
-    (bundle_root / "human_approval.json").write_text(
+    (bundle_root / "source_grounding.json").write_text(
         json.dumps({
-            "approved": True,
-            "approver": "will",
-            "approved_at": "2026-04-23",
-            "scope": "formal publication",
-            "justification": "Read the skeptical review and repo fit notes",
+            "entries": [
+                {
+                    "claim": "The module models a bounded counter.",
+                    "artifact_element": "variable:x",
+                    "source_ref": "visible task statement::counter",
+                    "source_excerpt": "The task describes a bounded counter value and its state.",
+                    "interpretation": "The variable x tracks the current counter value.",
+                    "modeled_consequence": "The model state includes the current counter value.",
+                    "authority_tier": "formalism",
+                },
+                {
+                    "claim": "The module uses a state transition.",
+                    "artifact_element": "action:Next",
+                    "source_ref": "visible task statement::counter",
+                    "source_excerpt": "The task describes the counter transition relation.",
+                    "interpretation": "The Next action advances the counter state.",
+                    "modeled_consequence": "The model transition updates the counter.",
+                    "authority_tier": "formalism",
+                },
+                {
+                    "claim": "The intrinsic semantics come from the task statement.",
+                    "artifact_element": "semantics:intrinsic",
+                    "source_ref": "visible task statement::counter",
+                    "source_excerpt": "The task states the meaning of the counter transitions.",
+                    "interpretation": "The intrinsic semantics are the counter transitions given in the task.",
+                    "modeled_consequence": "The model meaning comes from the visible task statement.",
+                    "authority_tier": "formalism",
+                },
+            ],
+        }, sort_keys=True, separators=(",", ":")),
+        encoding="utf-8",
+    )
+    (bundle_root / "repo_comparables.json").write_text(
+        json.dumps({
+            "target_repo": "tlaplus/examples",
+            "candidate_scope": "Small outsider-readable bounded counter example",
+            "in_scope_rationale": "The example matches the scope and audience of small public teaching examples.",
+            "comparables": [
+                {
+                    "artifact_name": "Clock.tla",
+                    "artifact_ref": "tlaplus/examples/Clock.tla",
+                    "norm_supported": "Supports simple state-machine structure and outsider-readable README norms.",
+                    "similarity_axes": ["structure", "audience", "readme"],
+                },
+                {
+                    "artifact_name": "CounterExample.tla",
+                    "artifact_ref": "tlaplus/examples/CounterExample.tla",
+                    "norm_supported": "Supports bounded-state educational example scope.",
+                    "similarity_axes": ["structure", "semantics"],
+                },
+            ],
         }, sort_keys=True, separators=(",", ":")),
         encoding="utf-8",
     )

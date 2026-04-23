@@ -18,6 +18,8 @@ The harness is intentionally lightweight. It provides:
   `formal_validity_score` and `external_admissibility_score`
 - a small runner that lists cases, prints model-visible prompts, and
   initializes blank scorecards
+- a deterministic current-system generation executor that writes result bundles
+  under `evals/tla_blind/results/current_system/`
 
 ## Layout
 
@@ -88,10 +90,12 @@ Every scorecard must include:
 - `formal_validity_score`
 - `external_admissibility_score`
 - `semantic_adequacy_score`
+- `source_grounding_score`
 - `outsider_comprehensibility_score`
 - `invariant_non_vacuity_score`
 - `semantics_vs_bounds_clarity_score`
 - `repository_fit_plausibility_score`
+- `repo_comparables_evidence_score`
 - `reviewer_rejection_risk_score`
 
 See [scorecard_schema.json](/home/player2/signal_experiments/evals/tla_blind/rubrics/scorecard_schema.json) and [rubric.md](/home/player2/signal_experiments/evals/tla_blind/rubrics/rubric.md).

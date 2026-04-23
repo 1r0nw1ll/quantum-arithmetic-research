@@ -59,6 +59,14 @@ PROJECT_PRIVATE_JARGON = (
     "observer-ready",
     "lane-two",
 )
+COMPARABLE_EVIDENCE_MARKERS = (
+    "similar to",
+    "in the style of",
+    "comparable to",
+    "compare to",
+    "comparable examples",
+    "examples like",
+)
 TAUTOLOGY_PATTERNS = (
     re.compile(r"^\s*TRUE\s*$", re.I | re.M),
     re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*\1\s*$", re.I | re.M),
@@ -299,10 +307,17 @@ def _readme_text(bundle_root: Path) -> str:
     return ""
 
 
+def _joined_explanatory_text(bundle_root: Path) -> str:
+    parts: list[str] = []
+    for _, text in _collect_texts(bundle_root, extensions={".md", ".txt"}):
+        parts.append(text)
+    return "\n".join(parts)
+
+
 def _check_variable_action_mapping(bundle_root: Path) -> list[str]:
     findings: list[str] = []
-    readme = _readme_text(bundle_root)
-    if not readme:
+    readme = _joined_explanatory_text(bundle_root)
+    if not readme.strip():
         return ["README explanation missing or unreadable"]
     lowered = readme.lower()
     variables: list[str] = []
@@ -350,14 +365,42 @@ def _check_visible_semantics_bounds_conflation(bundle_root: Path) -> list[str]:
 
 
 def _check_repository_fit_signal(bundle_root: Path) -> list[str]:
-    readme = _readme_text(bundle_root)
-    if not readme:
+    readme = _joined_explanatory_text(bundle_root)
+    if not readme.strip():
         return []
     lowered = readme.lower()
     if "repository fit" in lowered or "examples repository" in lowered or "tlaplus/examples" in lowered:
         return []
     if "publication-ready" in lowered or "public formal-methods contribution" in lowered:
         return ["README asserts public readiness without an explicit repository-fit argument"]
+    return []
+
+
+def _check_source_grounding(bundle_root: Path) -> list[str]:
+    text = " ".join(_joined_explanatory_text(bundle_root).lower().split())
+    findings: list[str] = []
+    if not text:
+        return ["No explanatory text available for source grounding"]
+    if "what is modeled" not in text and "models" not in text and "modeled" not in text:
+        findings.append("Explanatory text does not clearly state what is being modeled")
+    if not any(marker in text for marker in ("comes from", "derived from", "based on", "source", "visible task", "task statement")):
+        findings.append("Explanatory text does not say where the semantics come from")
+    if not any(marker in text for marker in ("justified by", "tracks", "purpose", "chosen variable", "chosen action")):
+        findings.append("Explanatory text does not justify the chosen variables/actions")
+    return findings
+
+
+def _check_repo_comparables_evidence(bundle_root: Path) -> list[str]:
+    text = " ".join(_joined_explanatory_text(bundle_root).lower().split())
+    if not text:
+        return []
+    mentions_repo_fit = any(marker in text for marker in ("repository fit", "tlaplus/examples", "examples repository", "belongs in"))
+    mentions_comparable = any(marker in text for marker in COMPARABLE_EVIDENCE_MARKERS)
+    mentions_example_name = any(
+        token in text for token in (".tla", "counter-style example", "small bounded-state examples", "finite-state monitoring examples")
+    )
+    if mentions_repo_fit and not (mentions_comparable or mentions_example_name):
+        return ["Repository-fit claim lacks comparable evidence"]
     return []
 
 
@@ -375,14 +418,18 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
     stuttering_hit = "stuttering-only" in lowered
     readme_missing = "readme explanation missing" in lowered
     repo_fit_hit = "repository-fit" in lowered or "repository fit" in lowered
+    source_hit = "where the semantics come from" in lowered or "what is being modeled" in lowered or "justify the chosen variables/actions" in lowered
+    comparables_hit = "comparable evidence" in lowered
     scores = {
         "formal_validity_score": 3,
         "external_admissibility_score": 3,
         "semantic_adequacy_score": 3,
+        "source_grounding_score": 3,
         "outsider_comprehensibility_score": 3,
         "invariant_non_vacuity_score": 3,
         "semantics_vs_bounds_clarity_score": 3,
         "repository_fit_plausibility_score": 3,
+        "repo_comparables_evidence_score": 3,
         "reviewer_rejection_risk_score": 0,
     }
     if tautology_count:
@@ -395,6 +442,7 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
         scores["reviewer_rejection_risk_score"] += 1
     if mapping_hit:
         scores["semantic_adequacy_score"] -= 2
+        scores["source_grounding_score"] -= 1
         scores["outsider_comprehensibility_score"] -= 2
         scores["external_admissibility_score"] -= 1
         scores["reviewer_rejection_risk_score"] += 1
@@ -411,8 +459,19 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
         scores["repository_fit_plausibility_score"] -= 2
         scores["external_admissibility_score"] -= 1
         scores["reviewer_rejection_risk_score"] += 1
+    if source_hit:
+        scores["source_grounding_score"] -= 2
+        scores["semantic_adequacy_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if comparables_hit:
+        scores["repo_comparables_evidence_score"] -= 2
+        scores["repository_fit_plausibility_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
     if readme_missing:
         scores["semantic_adequacy_score"] -= 1
+        scores["source_grounding_score"] -= 1
         scores["outsider_comprehensibility_score"] -= 1
         scores["external_admissibility_score"] -= 1
     for key in list(scores):
@@ -460,6 +519,8 @@ def score_bundle(bundle_root: Path, *, require_artifacts: bool = True) -> dict[s
     findings.extend(_check_project_private_jargon(bundle_root))
     findings.extend(_check_visible_semantics_bounds_conflation(bundle_root))
     findings.extend(_check_repository_fit_signal(bundle_root))
+    findings.extend(_check_source_grounding(bundle_root))
+    findings.extend(_check_repo_comparables_evidence(bundle_root))
     scores = _score_from_findings(findings)
     report["errors"] = findings
     report["scores"] = scores

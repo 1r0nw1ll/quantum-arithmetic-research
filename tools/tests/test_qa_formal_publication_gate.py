@@ -391,6 +391,65 @@ def t_stuttering_check_avoids_real_transitions():
         assert not any("stuttering-only" in err for err in report["errors"])
 
 
+@test("scoring rewards source grounding and comparables evidence")
+def t_scoring_rewards_source_grounding_and_comparables():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        (bundle_root / "README.md").write_text(
+            "# Counter Example\n\n"
+            "This module models a single bounded counter.\n\n"
+            "## Source grounding\n"
+            "The semantics come directly from the visible task statement.\n"
+            "The chosen variable `x` tracks the current value and the chosen action names are justified by the task transitions.\n\n"
+            "## Repository fit\n"
+            "This belongs in tlaplus/examples, similar to Clock.tla and other small counter-style examples.\n",
+            encoding="utf-8",
+        )
+        report = score_bundle(bundle_root, require_artifacts=False)
+        assert report["scores"]["source_grounding_score"] >= 2
+        assert report["scores"]["repo_comparables_evidence_score"] >= 2
+
+
+@test("scoring penalizes bare repository fit claims without comparables")
+def t_scoring_penalizes_bare_repo_fit_claim():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        (bundle_root / "README.md").write_text(
+            "# Counter Example\n\n"
+            "This module models a single bounded counter.\n\n"
+            "## Repository fit\n"
+            "This belongs in tlaplus/examples.\n",
+            encoding="utf-8",
+        )
+        report = score_bundle(bundle_root, require_artifacts=False)
+        assert any("comparable evidence" in err.lower() for err in report["errors"])
+        assert report["scores"]["repo_comparables_evidence_score"] <= 1
+
+
 def main() -> int:
     for name, fn in list(globals().items()):
         if name.startswith("t_") and callable(fn):

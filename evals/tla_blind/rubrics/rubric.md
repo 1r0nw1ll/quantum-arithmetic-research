@@ -35,6 +35,17 @@ This is the primary score that guards against the recent failure mode.
 Does the artifact explain what is actually modeled and why the chosen state and
 actions are necessary?
 
+### `source_grounding_score`
+
+Does the artifact explain:
+
+- what is being modeled
+- where the semantics come from
+- why the chosen variables and actions are justified
+
+Project-private theory without target-community translation should score poorly
+here.
+
 ### `outsider_comprehensibility_score`
 
 Could a TLA+ maintainer or technically literate outsider understand the model
@@ -53,6 +64,11 @@ model-checking choices?
 ### `repository_fit_plausibility_score`
 
 Would the claimed target repository plausibly want this artifact?
+
+### `repo_comparables_evidence_score`
+
+Does the artifact support repository-fit claims with comparable accepted
+artifact classes or example names, rather than bare assertions?
 
 ### `reviewer_rejection_risk_score`
 

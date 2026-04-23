@@ -99,7 +99,12 @@
   - polish-for-legitimacy confusion
   - weak outsider translation
   - weak repository-fit judgment
-- Status: Not started
+- Status: Complete
+- Outputs:
+  - deterministic blind-generation execution path writing result bundles under `evals/tla_blind/results/current_system/`
+  - added `source_grounding_score` and `repo_comparables_evidence_score` to the blind rubric/schema
+  - tightened scoring for visible semantics/TLC conflation, source grounding, and repository-fit comparable evidence
+  - starter-corpus execution now rejects the recreated polished-bad TLA+ fixture before any PR-draft path
 
 ## 7. Open Risks
 - Internal consistency may still be overweighted relative to external intelligibility.
@@ -118,6 +123,7 @@
   - Blind evals must report `formal_validity_score` and `external_admissibility_score` separately.
   - Pass 3 will keep hidden labels and reference answers physically separate from model-visible prompts.
   - Pass 3 execution should treat `accept` as a high bar; artifacts with substantive clarity defects should default to `revise`, not `accept`.
+  - Pass 4 should add source-grounding and comparable-evidence scoring before attempting broader redesign.
   - TLC success alone must never dominate public-submission judgment.
   - Public formal-methods submission requires stricter controls than internal cert readiness.
   - Pass 2 hardened validators against content-free review artifacts instead of treating mere file presence as sufficient.
@@ -142,7 +148,8 @@
  - Pass 2 has not yet tested content-free artifacts that are syntactically rich but semantically hollow.
 - Pass 3 is currently a starter corpus, not a large benchmark set.
 - Pass 3 has scaffolded result handling but has not yet been wired into CI or pre-submission automation.
- - Pass 3 generation tasks still have no automated generator wired into blind execution; they are currently scaffold-only prompts.
+- Pass 4 uses a deterministic generation executor, not the full live agent stack.
+- Source grounding is scored in blind evals but still not enforced as a required submission artifact.
 
 ## 10. Success Criteria
 - A public-facing TLA+/formal-methods artifact cannot be committed or pushed toward submission without explicit external-fit clearance.
@@ -153,6 +160,6 @@
 
 ## 11. Current Status Snapshot
 - Current phase: Pass 4 — Post-Eval Tightening
-- Last completed milestone: Starter blind corpus executed against the current heuristic judgment layer; the initial false-accept on semantics/TLC conflation was closed by tightening visible-review heuristics and the blind accept threshold.
+- Last completed milestone: Blind generation execution, source-grounding scoring, comparable-evidence scoring, and starter-corpus post-eval tightening are implemented; the recreated polished-bad TLA+ fixture is rejected by the current blind runner.
 - Next action: Expand the blind corpus and wire execution into CI or pre-submission review so future judgment regressions are visible.
 - Owner / executor: Codex post-eval tightening pass.

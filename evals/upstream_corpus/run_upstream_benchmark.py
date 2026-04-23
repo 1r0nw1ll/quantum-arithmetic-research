@@ -1,24 +1,26 @@
 #!/usr/bin/env python3
 # noqa: DECL-1 (benchmark utility — not empirical QA code)
 """
-Pass (a) upstream-corpus benchmark.
+Pass-a + Pass-7 upstream-corpus benchmark.
 
 Scores every upstream-approved artifact in the TLA+ (`tlaplus/Examples`) and
-Lean 4 (`mathematics_in_lean` solutions) corpora with the as-is formal-
-publication-gate harness. No evidence files are synthesized. The adapter
-performs only file discovery and provenance tracking.
+Lean 4 (`mathematics_in_lean` solutions) corpora. Each case is scored on both
+axes:
 
-Report:
-- acceptance rate on upstream approved corpus
-- false reject rate on upstream approved corpus
-- top rejection reasons
-- finding-bucket breakdown:
-    missing_required_artifact
-    missing_explicit_evidence
-    weak_outsider_translation
-    weak_repo_fit_signal
-    jargon_private_theory
-    substantive_issue
+- intrinsic legitimacy (does the artifact itself look legitimate?)
+- submission-bundle completeness (does it satisfy our local bundle format?)
+
+The adapter only performs file discovery and provenance tracking — it does
+not synthesize evidence files. Missing local bundle files are reported as
+completeness findings, not patched around.
+
+Output:
+- per-case: intrinsic decision + completeness decision + combined (worse of the two)
+- per-domain: acceptance / false-reject rates under each axis
+- delta: how many cases flip from reject (pass-a combined) to accept under
+  intrinsic-only — i.e. how much of the pass-a 100% false-reject rate was
+  bundle-dependence noise, vs deeper intrinsic overfit.
+- finding-bucket breakdown per axis.
 """
 from __future__ import annotations
 
@@ -38,7 +40,7 @@ TLA_ROOT = Path("/home/player2/upstream_corpora/tlaplus_examples")
 LEAN_ROOT = Path("/home/player2/upstream_corpora/mathematics_in_lean")
 
 sys.path.insert(0, str(REPO_ROOT / "tools"))
-from qa_formal_publication_gate import score_bundle as score_tla_bundle  # noqa: E402
+import qa_formal_publication_gate as tla_gate  # noqa: E402
 
 
 def _load_lean_scorer():
@@ -46,42 +48,7 @@ def _load_lean_scorer():
     spec = importlib.util.spec_from_file_location("lean4_blind_executor", path)
     mod = importlib.util.module_from_spec(spec)
     spec.loader.exec_module(mod)
-    return mod._score_bundle, mod._decision_from_scores
-
-
-def _tla_decision_from_scores(scores: dict[str, int]) -> str:
-    """Mirror of evals/tla_blind/execute_current_system.py::_decision_from_scores."""
-    if (
-        (scores["external_admissibility_score"] <= 0 and (
-            scores["formal_validity_score"] <= 1
-            or scores["outsider_comprehensibility_score"] <= 1
-            or scores["source_fidelity_score"] <= 1
-            or scores["repo_comparable_support_score"] <= 1
-        ))
-        or (
-            scores["reviewer_rejection_risk_score"] >= 3
-            and (
-                scores["formal_validity_score"] <= 1
-                or scores["outsider_comprehensibility_score"] <= 1
-                or scores["source_fidelity_score"] <= 1
-            )
-        )
-    ):
-        return "reject"
-    if (
-        scores["formal_validity_score"] < 3
-        or scores["external_admissibility_score"] < 3
-        or scores["semantic_adequacy_score"] < 3
-        or scores["source_grounding_score"] < 2
-        or scores["source_fidelity_score"] < 2
-        or scores["semantics_vs_bounds_clarity_score"] < 2
-        or scores["repository_fit_plausibility_score"] < 2
-        or scores["repo_comparables_evidence_score"] < 2
-        or scores["repo_comparable_support_score"] < 2
-        or scores["reviewer_rejection_risk_score"] > 0
-    ):
-        return "revise"
-    return "accept"
+    return mod
 
 
 def _git_head(repo: Path) -> str:
@@ -101,12 +68,14 @@ BUCKET_RULES = [
     ("substantive_issue", [
         "tautological",
         "stuttering-only",
-        "sorry",
-        "admit",
+        "deceptive sorry",
+        "pedagogical sorry",
         "group-level claims for a natural-number",
+        "scope creep",
         "publication-ready",
         "submittable upstream",
         "malformed-literal",
+        "overclaims source support",
     ]),
     ("jargon_private_theory", [
         "jargon",
@@ -159,6 +128,18 @@ def _bucket_for_finding(finding: str) -> str:
     return "other"
 
 
+def _combined_decision(intrinsic: str, completeness: str) -> str:
+    """Combined submission decision: worse of the two axes.
+
+    Used only for the 'outbound submission path' simulation — NOT for judging
+    upstream artifacts, where only the intrinsic axis is meaningful.
+    """
+    order = {"accept": 0, "revise": 1, "reject": 2}
+    if order[intrinsic] >= order[completeness]:
+        return intrinsic
+    return completeness
+
+
 # --- Corpus discovery -------------------------------------------------------
 
 def _discover_tla_cases() -> list[dict[str, Any]]:
@@ -198,7 +179,7 @@ def _discover_lean_cases() -> list[dict[str, Any]]:
             "case_id": lean_path.stem,
             "domain": "lean4",
             "bundle_root": str(parent),
-            "lean_file": lean_path.name,
+            "lean_file": str(lean_path),
             "source_repo": "leanprover-community/mathematics_in_lean",
             "source_path": str(lean_path.relative_to(LEAN_ROOT)),
             "has_readme": (parent / "README.md").exists(),
@@ -211,127 +192,178 @@ def _discover_lean_cases() -> list[dict[str, Any]]:
 
 def _score_tla_case(case: dict[str, Any]) -> dict[str, Any]:
     bundle_root = Path(case["bundle_root"])
-    report = score_tla_bundle(bundle_root, require_artifacts=True)
-    decision = _tla_decision_from_scores(report["scores"])
+    intrinsic = tla_gate.score_intrinsic_legitimacy(bundle_root)
+    completeness = tla_gate.score_submission_bundle_completeness(bundle_root)
+    i_decision = tla_gate.intrinsic_decision_from_scores(intrinsic["scores"])
+    c_decision = tla_gate.bundle_completeness_decision_from_scores(completeness["scores"])
     return {
         "case_id": case["case_id"],
         "domain": "tla",
         "source_repo": case["source_repo"],
         "source_path": case["source_path"],
         "expected_decision": case["expected_decision"],
-        "decision": decision,
-        "scores": report["scores"],
-        "errors": report["errors"],
-        "finding_buckets": [_bucket_for_finding(f) for f in report["errors"]],
+        "intrinsic_decision": i_decision,
+        "bundle_completeness_decision": c_decision,
+        "combined_decision": _combined_decision(i_decision, c_decision),
+        "intrinsic_scores": intrinsic["scores"],
+        "intrinsic_findings": intrinsic["findings"],
+        "intrinsic_finding_buckets": [_bucket_for_finding(f) for f in intrinsic["findings"]],
+        "completeness_findings": completeness["findings"],
+        "completeness_finding_buckets": [_bucket_for_finding(f) for f in completeness["findings"]],
     }
 
 
-def _score_lean_case(case: dict[str, Any], scorer, decider) -> dict[str, Any]:
+def _score_lean_case(case: dict[str, Any], lean_mod) -> dict[str, Any]:
     bundle_root = Path(case["bundle_root"])
-    report = scorer(bundle_root)
-    decision = decider(report["scores"])
+    lean_file = Path(case["lean_file"])
+    intrinsic = lean_mod._score_intrinsic_legitimacy(bundle_root, lean_files=[lean_file])
+    completeness = lean_mod._score_submission_bundle_completeness(bundle_root, lean_files=[lean_file])
+    i_decision = lean_mod._intrinsic_decision_from_scores(intrinsic["scores"])
+    c_decision = lean_mod._completeness_decision_from_scores(completeness["scores"])
     return {
         "case_id": case["case_id"],
         "domain": "lean4",
         "source_repo": case["source_repo"],
         "source_path": case["source_path"],
         "expected_decision": case["expected_decision"],
-        "decision": decision,
-        "scores": report["scores"],
-        "errors": report["errors"],
-        "finding_buckets": [_bucket_for_finding(f) for f in report["errors"]],
+        "intrinsic_decision": i_decision,
+        "bundle_completeness_decision": c_decision,
+        "combined_decision": _combined_decision(i_decision, c_decision),
+        "intrinsic_scores": intrinsic["scores"],
+        "intrinsic_findings": intrinsic["errors"],
+        "intrinsic_finding_buckets": [_bucket_for_finding(f) for f in intrinsic["errors"]],
+        "completeness_findings": completeness["errors"],
+        "completeness_finding_buckets": [_bucket_for_finding(f) for f in completeness["errors"]],
     }
 
 
 # --- Aggregation -----------------------------------------------------------
 
-def _summarize_domain(rows: list[dict[str, Any]]) -> dict[str, Any]:
+def _axis_summary(rows: list[dict[str, Any]], decision_key: str, findings_key: str, buckets_key: str) -> dict[str, Any]:
     n = len(rows)
-    accept = sum(1 for r in rows if r["decision"] == "accept")
-    revise = sum(1 for r in rows if r["decision"] == "revise")
-    reject = sum(1 for r in rows if r["decision"] == "reject")
-    false_rejects = [r for r in rows if r["decision"] == "reject" and r["expected_decision"] == "accept"]
-    non_accept_predicts = [r for r in rows if r["decision"] != "accept"]
+    accept = sum(1 for r in rows if r[decision_key] == "accept")
+    revise = sum(1 for r in rows if r[decision_key] == "revise")
+    reject = sum(1 for r in rows if r[decision_key] == "reject")
+    false_rejects = [r for r in rows if r[decision_key] == "reject" and r["expected_decision"] == "accept"]
 
     bucket_counter: Counter[str] = Counter()
     cases_with_bucket: dict[str, set[str]] = {}
+    top_findings = Counter()
     for row in rows:
-        seen_in_case: set[str] = set()
-        for bucket in row["finding_buckets"]:
+        seen = set()
+        for f in row[findings_key]:
+            top_findings[f] += 1
+        for bucket in row[buckets_key]:
             bucket_counter[bucket] += 1
-            seen_in_case.add(bucket)
-        for bucket in seen_in_case:
+            seen.add(bucket)
+        for bucket in seen:
             cases_with_bucket.setdefault(bucket, set()).add(row["case_id"])
-
-    top_finding_strings = Counter()
-    for row in rows:
-        for f in row["errors"]:
-            top_finding_strings[f] += 1
-
-    # False reject decomposition: rejections driven purely by missing-artifact
-    # vs rejections with substantive/other content findings mixed in.
-    purely_missing = 0
-    mixed = 0
-    substantive_only = 0
-    for row in false_rejects:
-        buckets = set(row["finding_buckets"])
-        if buckets == {"missing_required_artifact"}:
-            purely_missing += 1
-        elif "substantive_issue" in buckets and "missing_required_artifact" not in buckets:
-            substantive_only += 1
-        else:
-            mixed += 1
 
     return {
         "total_cases": n,
         "decisions": {"accept": accept, "revise": revise, "reject": reject},
         "acceptance_rate": round(accept / n, 4) if n else 0.0,
         "false_reject_rate": round(len(false_rejects) / n, 4) if n else 0.0,
-        "nonaccept_rate": round(len(non_accept_predicts) / n, 4) if n else 0.0,
         "finding_bucket_totals": dict(bucket_counter.most_common()),
         "cases_touched_by_bucket": {k: len(v) for k, v in cases_with_bucket.items()},
-        "false_reject_decomposition": {
-            "total_false_rejects": len(false_rejects),
-            "purely_missing_required_artifact": purely_missing,
-            "substantive_findings_only": substantive_only,
-            "mixed_or_other": mixed,
-        },
         "top_finding_strings": [
             {"finding": f, "count": c, "bucket": _bucket_for_finding(f)}
-            for f, c in top_finding_strings.most_common(20)
+            for f, c in top_findings.most_common(15)
         ],
     }
 
 
+def _domain_summary(rows: list[dict[str, Any]]) -> dict[str, Any]:
+    intrinsic = _axis_summary(rows, "intrinsic_decision", "intrinsic_findings", "intrinsic_finding_buckets")
+    completeness = _axis_summary(rows, "bundle_completeness_decision", "completeness_findings", "completeness_finding_buckets")
+    combined = _axis_summary(rows, "combined_decision", "intrinsic_findings", "intrinsic_finding_buckets")
+
+    # Pass-7 headline: how many cases flip from reject (combined) to accept
+    # (intrinsic-only)? That measures how much of the pass-a 100% false-reject
+    # rate was pure bundle-dependence.
+    flipped = sum(
+        1 for r in rows
+        if r["combined_decision"] == "reject" and r["intrinsic_decision"] == "accept"
+    )
+    still_rejected_intrinsic = [
+        r for r in rows
+        if r["intrinsic_decision"] == "reject" and r["expected_decision"] == "accept"
+    ]
+    return {
+        "total_cases": len(rows),
+        "intrinsic": intrinsic,
+        "bundle_completeness": completeness,
+        "combined_submission_gate": combined,
+        "pass7_delta": {
+            "flipped_reject_to_accept_under_intrinsic_only": flipped,
+            "still_reject_under_intrinsic_count": len(still_rejected_intrinsic),
+            "still_reject_cases": [r["case_id"] for r in still_rejected_intrinsic],
+            "interpretation": (
+                f"{flipped}/{len(rows)} upstream-approved cases flip from reject (pass-a combined) "
+                f"to accept under intrinsic-only scoring. The remaining "
+                f"{len(still_rejected_intrinsic)} rejections are not bundle-dependence — "
+                f"they are deeper intrinsic heuristic overfit."
+            ),
+        },
+    }
+
+
 def _render_md(payload: dict[str, Any]) -> str:
-    lines = ["# Upstream-Approved-Corpus Benchmark (Pass a, as-is)", ""]
+    lines = ["# Upstream-Approved-Corpus Benchmark (Pass 7 — intrinsic vs bundle-completeness)", ""]
     lines.append("## Provenance")
     for key, p in payload["provenance"].items():
         lines.append(f"- **{key}**: `{p['repo']}` @ `{p['sha']}`")
     lines.append("")
+    lines.append("## Pass-7 Headlines")
+    for domain_key, summary in payload["domains"].items():
+        delta = summary["pass7_delta"]
+        lines.append(f"- **{domain_key.upper()}**: "
+                     f"pass-a combined accept rate **{summary['combined_submission_gate']['acceptance_rate']:.1%}**, "
+                     f"pass-7 intrinsic-only accept rate **{summary['intrinsic']['acceptance_rate']:.1%}**. "
+                     f"{delta['flipped_reject_to_accept_under_intrinsic_only']}/{summary['total_cases']} cases flipped "
+                     f"reject → accept after separating bundle-completeness.")
+    lines.append("")
     for domain_key, summary in payload["domains"].items():
         lines.append(f"## {domain_key.upper()}")
         lines.append(f"- Total cases: {summary['total_cases']}")
-        lines.append(f"- Decisions: {summary['decisions']}")
-        lines.append(f"- **Acceptance rate on upstream approved corpus: {summary['acceptance_rate']:.2%}**")
-        lines.append(f"- **False reject rate: {summary['false_reject_rate']:.2%}**")
-        lines.append(f"- Non-accept rate (revise+reject): {summary['nonaccept_rate']:.2%}")
         lines.append("")
-        lines.append("### Finding-bucket totals (count = total occurrences)")
-        for bucket, count in summary["finding_bucket_totals"].items():
-            touched = summary["cases_touched_by_bucket"].get(bucket, 0)
+        lines.append("### Axis 1: intrinsic legitimacy (artifact-only, no bundle requirements)")
+        i = summary["intrinsic"]
+        lines.append(f"- Decisions: {i['decisions']}")
+        lines.append(f"- **Acceptance rate: {i['acceptance_rate']:.2%}**")
+        lines.append(f"- **False reject rate: {i['false_reject_rate']:.2%}**")
+        lines.append("")
+        lines.append("#### Finding-bucket totals (intrinsic axis)")
+        for bucket, count in i["finding_bucket_totals"].items():
+            touched = i["cases_touched_by_bucket"].get(bucket, 0)
             lines.append(f"- `{bucket}`: {count} findings across {touched} cases")
         lines.append("")
-        fr = summary["false_reject_decomposition"]
-        lines.append("### False reject decomposition")
-        lines.append(f"- Total false rejects: {fr['total_false_rejects']}")
-        lines.append(f"- Driven purely by missing-required-artifact: {fr['purely_missing_required_artifact']}")
-        lines.append(f"- Driven by substantive findings only (no missing-artifact): {fr['substantive_findings_only']}")
-        lines.append(f"- Mixed / other: {fr['mixed_or_other']}")
-        lines.append("")
-        lines.append("### Top finding strings (verbatim, top 20)")
-        for entry in summary["top_finding_strings"]:
+        lines.append("#### Top intrinsic finding strings")
+        for entry in i["top_finding_strings"]:
             lines.append(f"- [{entry['bucket']}] `{entry['finding']}` — {entry['count']}")
+        lines.append("")
+
+        lines.append("### Axis 2: submission-bundle completeness (Codex bundle format)")
+        c = summary["bundle_completeness"]
+        lines.append(f"- Decisions: {c['decisions']}")
+        lines.append(f"- Acceptance rate: {c['acceptance_rate']:.2%}")
+        lines.append(f"- False reject rate: {c['false_reject_rate']:.2%}")
+        lines.append(f"- (Expected to reject all upstream by design — these files lack our local bundle shape.)")
+        lines.append("")
+
+        lines.append("### Pass-a vs Pass-7 delta")
+        d = summary["pass7_delta"]
+        lines.append(f"- {d['interpretation']}")
+        if d["still_reject_cases"]:
+            lines.append("- Cases still rejected under intrinsic-only:")
+            for cid in d["still_reject_cases"][:20]:
+                lines.append(f"  - `{cid}`")
+            if len(d["still_reject_cases"]) > 20:
+                lines.append(f"  - ... (+{len(d['still_reject_cases']) - 20} more)")
+        lines.append("")
+        lines.append("### Combined (submission-gate simulation)")
+        lines.append(f"- Decisions: {summary['combined_submission_gate']['decisions']}")
+        lines.append(f"- Acceptance rate: {summary['combined_submission_gate']['acceptance_rate']:.2%}")
         lines.append("")
     return "\n".join(lines).rstrip() + "\n"
 
@@ -339,14 +371,12 @@ def _render_md(payload: dict[str, Any]) -> str:
 def main() -> int:
     RESULTS_ROOT.mkdir(parents=True, exist_ok=True)
 
-    # TLA+
     tla_cases = _discover_tla_cases()
     tla_rows = [_score_tla_case(c) for c in tla_cases]
 
-    # Lean 4 (importlib-loaded to avoid copying ~80 lines of scoring logic)
-    lean_scorer, lean_decider = _load_lean_scorer()
+    lean_mod = _load_lean_scorer()
     lean_cases = _discover_lean_cases()
-    lean_rows = [_score_lean_case(c, lean_scorer, lean_decider) for c in lean_cases]
+    lean_rows = [_score_lean_case(c, lean_mod) for c in lean_cases]
 
     payload = {
         "provenance": {
@@ -358,8 +388,8 @@ def main() -> int:
             "lean4_case_count": len(lean_cases),
         },
         "domains": {
-            "tla": _summarize_domain(tla_rows),
-            "lean4": _summarize_domain(lean_rows),
+            "tla": _domain_summary(tla_rows),
+            "lean4": _domain_summary(lean_rows),
         },
         "rows": {
             "tla": tla_rows,
@@ -379,6 +409,10 @@ def main() -> int:
         "ok": True,
         "tla_cases": len(tla_cases),
         "lean4_cases": len(lean_cases),
+        "tla_intrinsic_accept_rate": payload["domains"]["tla"]["intrinsic"]["acceptance_rate"],
+        "lean4_intrinsic_accept_rate": payload["domains"]["lean4"]["intrinsic"]["acceptance_rate"],
+        "tla_combined_accept_rate": payload["domains"]["tla"]["combined_submission_gate"]["acceptance_rate"],
+        "lean4_combined_accept_rate": payload["domains"]["lean4"]["combined_submission_gate"]["acceptance_rate"],
         "json_report": str(json_path.relative_to(REPO_ROOT)),
         "markdown_report": str(md_path.relative_to(REPO_ROOT)),
     }, indent=2))

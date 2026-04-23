@@ -28,6 +28,10 @@ QA_COMPLIANCE = {
 
 REPO = Path(__file__).resolve().parents[1]
 DEFAULT_QUARANTINE_DIR = REPO / "llm_qa_wrapper" / "quarantine"
+SUPPORTED_PACKET_SCHEMAS = {
+    "QA_CLAUDE_PYTHON_QUARANTINE.v1",
+    "QA_CLAUDE_FORMAL_PUBLICATION_QUARANTINE.v1",
+}
 
 
 def _canonical_json(obj: Any) -> bytes:
@@ -65,7 +69,8 @@ def _load_packet(path: Path) -> dict[str, Any]:
         obj = json.load(handle)
     if not isinstance(obj, dict):
         raise ValueError(f"{path}: packet JSON must be an object")
-    if obj.get("schema_version") != "QA_CLAUDE_PYTHON_QUARANTINE.v1":
+    # The same Codex review flow clears Python and formal-publication packets.
+    if obj.get("schema_version") not in SUPPORTED_PACKET_SCHEMAS:
         raise ValueError(f"{path}: unexpected schema_version")
     return obj
 

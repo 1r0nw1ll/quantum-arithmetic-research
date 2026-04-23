@@ -92,6 +92,29 @@ TAUTOLOGY_PATTERNS = (
     re.compile(r"^\s*1\s*=\s*1\s*$", re.I | re.M),
 )
 
+# Score-axis classification for the Pass-7 intrinsic/completeness split.
+# intrinsic = can be judged from the artifact itself (spec text, prose, proof body)
+# completeness = depends on our local submission-bundle conventions
+# aggregate = combined dimensions that reflect both
+INTRINSIC_SCORE_KEYS = frozenset({
+    "formal_validity_score",
+    "semantic_adequacy_score",
+    "outsider_comprehensibility_score",
+    "invariant_non_vacuity_score",
+    "semantics_vs_bounds_clarity_score",
+    "repository_fit_plausibility_score",
+})
+BUNDLE_COMPLETENESS_SCORE_KEYS = frozenset({
+    "source_grounding_score",
+    "source_fidelity_score",
+    "repo_comparables_evidence_score",
+    "repo_comparable_support_score",
+})
+AGGREGATE_SCORE_KEYS = frozenset({
+    "external_admissibility_score",
+    "reviewer_rejection_risk_score",
+})
+
 
 def _json_dumps(obj: Any) -> str:
     return json.dumps(obj, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
@@ -488,11 +511,11 @@ def _joined_explanatory_text(bundle_root: Path) -> str:
     return "\n".join(parts)
 
 
-def _check_variable_action_mapping(bundle_root: Path) -> list[str]:
+def _check_variable_action_mapping(bundle_root: Path, *, tolerate_missing_readme: bool = False) -> list[str]:
     findings: list[str] = []
     readme = _joined_explanatory_text(bundle_root)
     if not readme.strip():
-        return ["README explanation missing or unreadable"]
+        return [] if tolerate_missing_readme else ["README explanation missing or unreadable"]
     lowered = readme.lower()
     variables: list[str] = []
     actions: list[str] = []
@@ -692,6 +715,118 @@ def _adversarial_evidence_findings(
     if any(term in joined_text for term in PROJECT_PRIVATE_JARGON) and not any(marker in joined_text for marker in ("translated as", "means", "i.e.", "ordinary tla+", "outsider")):
         findings.append("Adversarial check: project-private theory appears to leak into public-facing prose without enough translation")
     return findings
+
+
+def _gather_intrinsic_findings(bundle_root: Path) -> list[str]:
+    findings: list[str] = []
+    findings.extend(_check_tautological_invariants(bundle_root))
+    findings.extend(_check_negative_tests(bundle_root))
+    findings.extend(_check_publication_claims(bundle_root))
+    findings.extend(_check_stuttering_only_next(bundle_root))
+    findings.extend(_check_variable_action_mapping(bundle_root, tolerate_missing_readme=True))
+    findings.extend(_check_project_private_jargon(bundle_root))
+    findings.extend(_check_visible_semantics_bounds_conflation(bundle_root))
+    findings.extend(_check_repository_fit_signal(bundle_root))
+    return findings
+
+
+def _gather_completeness_findings(bundle_root: Path) -> list[str]:
+    findings: list[str] = []
+    validators = {
+        "audience_translation.md": _validate_audience_translation,
+        "semantics_boundary.md": _validate_semantics_boundary,
+        "repo_fit_review.json": _validate_repo_fit,
+        "skeptical_review.json": _validate_skeptical_review,
+        "source_grounding.json": lambda path: _validate_source_grounding(path, bundle_root),
+        "repo_comparables.json": lambda path: _validate_repo_comparables(path, bundle_root),
+    }
+    source_grounding_errors: list[str] = []
+    repo_comparables_errors: list[str] = []
+    for required_name in REQUIRED_FILES:
+        artifact_path = bundle_root / required_name
+        artifact_errors: list[str] = []
+        if not artifact_path.exists():
+            artifact_errors.append(f"missing required artifact {required_name}")
+        else:
+            try:
+                artifact_errors.extend(validators[required_name](artifact_path))
+            except (OSError, ValueError, json.JSONDecodeError) as exc:
+                artifact_errors.append(f"{required_name} invalid: {exc}")
+        findings.extend(artifact_errors)
+        if required_name == "source_grounding.json":
+            source_grounding_errors = artifact_errors
+        if required_name == "repo_comparables.json":
+            repo_comparables_errors = artifact_errors
+    for optional_name in OPTIONAL_REVIEW_FILES:
+        artifact_path = bundle_root / optional_name
+        if artifact_path.exists():
+            findings.extend(_validate_human_approval(artifact_path))
+    findings.extend(_adversarial_evidence_findings(bundle_root, source_grounding_errors, repo_comparables_errors))
+    findings.extend(_check_source_grounding(bundle_root))
+    findings.extend(_check_repo_comparables_evidence(bundle_root))
+    return findings
+
+
+def score_intrinsic_legitimacy(bundle_root: Path) -> dict[str, Any]:
+    """Pass-7 axis 1: judge the artifact from its own content.
+
+    Does not require our submission-bundle files. Does not penalize upstream work
+    for lacking Codex fixture phraseology. Produces only intrinsic + aggregate
+    score dimensions.
+    """
+    findings = _gather_intrinsic_findings(bundle_root)
+    raw_scores = _score_from_findings(findings)
+    scores = {k: raw_scores[k] for k in raw_scores if k in INTRINSIC_SCORE_KEYS or k in AGGREGATE_SCORE_KEYS}
+    return {
+        "bundle_root": str(bundle_root),
+        "findings": findings,
+        "scores": scores,
+        "ok": not findings,
+    }
+
+
+def score_submission_bundle_completeness(bundle_root: Path) -> dict[str, Any]:
+    """Pass-7 axis 2: judge whether the artifact satisfies our local bundle format.
+
+    This is the gate that still applies to our own outbound submission path.
+    Upstream corpora will almost always score 'reject' here by design.
+    """
+    findings = _gather_completeness_findings(bundle_root)
+    raw_scores = _score_from_findings(findings)
+    scores = {k: raw_scores[k] for k in raw_scores if k in BUNDLE_COMPLETENESS_SCORE_KEYS or k in AGGREGATE_SCORE_KEYS}
+    return {
+        "bundle_root": str(bundle_root),
+        "findings": findings,
+        "scores": scores,
+        "ok": not findings,
+    }
+
+
+def intrinsic_decision_from_scores(scores: dict[str, int]) -> str:
+    """Decision under Pass-7 intrinsic-only axis. No bundle-completeness dimensions consulted."""
+    fv = scores.get("formal_validity_score", 3)
+    iv = scores.get("invariant_non_vacuity_score", 3)
+    oc = scores.get("outsider_comprehensibility_score", 3)
+    sa = scores.get("semantic_adequacy_score", 3)
+    sb = scores.get("semantics_vs_bounds_clarity_score", 3)
+    rf = scores.get("repository_fit_plausibility_score", 3)
+    if fv <= 1 or iv <= 0:
+        return "reject"
+    if fv < 3 or iv < 3 or oc < 3 or sa < 3 or sb < 3 or rf < 3:
+        return "revise"
+    return "accept"
+
+
+def bundle_completeness_decision_from_scores(scores: dict[str, int]) -> str:
+    sg = scores.get("source_grounding_score", 3)
+    sf = scores.get("source_fidelity_score", 3)
+    rce = scores.get("repo_comparables_evidence_score", 3)
+    rcs = scores.get("repo_comparable_support_score", 3)
+    if sg <= 0 or sf <= 0:
+        return "reject"
+    if sg < 2 or sf < 2 or rce < 2 or rcs < 2:
+        return "revise"
+    return "accept"
 
 
 def score_bundle(bundle_root: Path, *, require_artifacts: bool = True) -> dict[str, Any]:

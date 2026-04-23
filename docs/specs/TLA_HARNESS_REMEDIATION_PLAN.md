@@ -89,6 +89,7 @@
   - rubric and score schema with mandatory `formal_validity_score` and `external_admissibility_score`
   - runner/scaffold for listing cases, showing model-visible prompts, and initializing blank scorecards
   - starter fixtures for generation, review, and repair
+  - execution scaffold for scoring the current heuristic judgment layer against hidden labels in the starter review/repair corpus
 
 ## 6. Pass 4 — Post-Eval Tightening
 - Goal: Use blind-eval failures to refine the gates, audits, and review logic.
@@ -116,6 +117,7 @@
   - Pass 3 remains blind and evaluative.
   - Blind evals must report `formal_validity_score` and `external_admissibility_score` separately.
   - Pass 3 will keep hidden labels and reference answers physically separate from model-visible prompts.
+  - Pass 3 execution should treat `accept` as a high bar; artifacts with substantive clarity defects should default to `revise`, not `accept`.
   - TLC success alone must never dominate public-submission judgment.
   - Public formal-methods submission requires stricter controls than internal cert readiness.
   - Pass 2 hardened validators against content-free review artifacts instead of treating mere file presence as sufficient.
@@ -138,8 +140,9 @@
 - Pass 1 does not yet distinguish templated skeptical review from genuinely adversarial review.
  - Pass 2 has not yet attacked renamed submission-prose filenames outside the current `submission/pr/cover_letter` set.
  - Pass 2 has not yet tested content-free artifacts that are syntactically rich but semantically hollow.
- - Pass 3 is currently a starter corpus, not a large benchmark set.
- - Pass 3 has scaffolded result handling but has not yet been wired into CI or pre-submission automation.
+- Pass 3 is currently a starter corpus, not a large benchmark set.
+- Pass 3 has scaffolded result handling but has not yet been wired into CI or pre-submission automation.
+ - Pass 3 generation tasks still have no automated generator wired into blind execution; they are currently scaffold-only prompts.
 
 ## 10. Success Criteria
 - A public-facing TLA+/formal-methods artifact cannot be committed or pushed toward submission without explicit external-fit clearance.
@@ -149,7 +152,7 @@
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
 ## 11. Current Status Snapshot
-- Current phase: Pass 3 — Blind Evals
-- Last completed milestone: Blind eval scaffold, rubric, score schema, runner, and starter generation/review/repair fixtures added under `evals/tla_blind/`.
-- Next action: Execute the starter blind cases against the current harness and use the failures to drive Pass 4 tightening.
-- Owner / executor: Codex blind-eval build pass, followed by post-eval tightening.
+- Current phase: Pass 4 — Post-Eval Tightening
+- Last completed milestone: Starter blind corpus executed against the current heuristic judgment layer; the initial false-accept on semantics/TLC conflation was closed by tightening visible-review heuristics and the blind accept threshold.
+- Next action: Expand the blind corpus and wire execution into CI or pre-submission review so future judgment regressions are visible.
+- Owner / executor: Codex post-eval tightening pass.

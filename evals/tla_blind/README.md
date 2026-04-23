@@ -114,6 +114,7 @@ python3 evals/tla_blind/runner.py list
 python3 evals/tla_blind/runner.py show generation known_good_counter
 python3 evals/tla_blind/runner.py init-scorecard review polished_bad_observer_firewall
 python3 evals/tla_blind/runner.py --self-test
+python3 evals/tla_blind/execute_current_system.py
 ```
 
 ## CI / Workflow Fit

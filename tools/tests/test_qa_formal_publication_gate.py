@@ -18,6 +18,8 @@ from pathlib import Path
 
 REPO_ROOT = Path(__file__).resolve().parent.parent.parent
 GATE = REPO_ROOT / "tools" / "qa_formal_publication_gate.py"
+sys.path.insert(0, str(REPO_ROOT / "tools"))
+from qa_formal_publication_gate import score_bundle  # noqa: E402
 _results: list[tuple[str, bool, str]] = []
 
 
@@ -331,6 +333,62 @@ def t_publication_claim_in_unexpected_text_file():
         assert proc.returncode == 1
         payload = json.loads(proc.stdout)
         assert any("submission.txt" in err for err in payload["reports"][0]["errors"])
+
+
+@test("review scoring catches visible semantics bounds conflation")
+def t_review_scoring_semantics_bounds_conflation():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+        )
+        (bundle_root / "README.md").write_text(
+            "# Counter Example\n\n"
+            "The semantics of this model are the TLC cap of 3 and the bounded search depth.\n",
+            encoding="utf-8",
+        )
+        report = score_bundle(bundle_root, require_artifacts=False)
+        assert any("conflates intrinsic semantics with TLC bounds" in err for err in report["errors"])
+        assert report["scores"]["semantics_vs_bounds_clarity_score"] <= 1
+
+
+@test("stuttering check does not false-positive real transitions")
+def t_stuttering_check_avoids_real_transitions():
+    with tempfile.TemporaryDirectory(prefix="qa_formal_gate_") as tmp:
+        repo_root = Path(tmp)
+        bundle_root = _seed_bundle(
+            repo_root,
+            audience_translation=(
+                "What is modeled: a simple counter in TLA+.\n"
+                "Why useful: it explains the state machine and why it matters to formal readers.\n"
+                "This uses outsider-facing formal vocabulary.\n"
+            ),
+            semantics_boundary=(
+                "Intrinsic semantics: the counter evolves by Next.\n"
+                "TLC bounds: the model checking bound is only a search cap.\n"
+            ),
+            tla_text=(
+                "---- MODULE Counter ----\n"
+                "EXTENDS Naturals\n"
+                "VARIABLE counter\n"
+                "Init == counter = 0\n"
+                "Next == \\/ /\\ counter < 3\n"
+                "           /\\ counter' = counter + 1\n"
+                "        \\/ /\\ counter' = 0\n"
+                "====\n"
+            ),
+        )
+        report = score_bundle(bundle_root, require_artifacts=False)
+        assert not any("stuttering-only" in err for err in report["errors"])
 
 
 def main() -> int:

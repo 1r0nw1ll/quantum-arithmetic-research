@@ -51,6 +51,14 @@ SKEPTICAL_KEYWORDS = {
     "vacuous",
 }
 TEXT_EXTENSIONS = {".md", ".txt", ".rst", ".adoc", ".json", ".yaml", ".yml", ".tla", ".cfg"}
+PROJECT_PRIVATE_JARGON = (
+    "observer projection firewall",
+    "qa legality",
+    "theorem nt",
+    "theorem-facing spine",
+    "observer-ready",
+    "lane-two",
+)
 TAUTOLOGY_PATTERNS = (
     re.compile(r"^\s*TRUE\s*$", re.I | re.M),
     re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*=\s*\1\s*$", re.I | re.M),
@@ -200,6 +208,30 @@ def _collect_tla_texts(bundle_root: Path) -> list[tuple[str, str]]:
     return _collect_texts(bundle_root, extensions={".tla", ".cfg"})
 
 
+def _extract_state_variables(tla_text: str) -> list[str]:
+    variables: list[str] = []
+    for line in tla_text.splitlines():
+        stripped = line.strip()
+        if not stripped.startswith("VARIABLE"):
+            continue
+        _, names = stripped.split("VARIABLE", 1)
+        for token in re.split(r"[\s,]+", names.strip()):
+            if token:
+                variables.append(token)
+    return variables
+
+
+def _extract_action_names(tla_text: str) -> list[str]:
+    actions: list[str] = []
+    for name, expr in re.findall(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*==\s*(.+)$", tla_text, re.M):
+        lower_name = name.lower()
+        if lower_name in {"init", "next", "spec"} or "inv" in lower_name or "type" in lower_name:
+            continue
+        if "'" in expr or "\\/" in expr or "/\\" in expr:
+            actions.append(name)
+    return actions
+
+
 def _check_tautological_invariants(bundle_root: Path) -> list[str]:
     findings: list[str] = []
     invariant_header = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*==\s*(.+)$", re.M)
@@ -234,40 +266,209 @@ def _check_publication_claims(bundle_root: Path) -> list[str]:
     return findings
 
 
-def validate_bundle(bundle_root: Path) -> dict[str, Any]:
+def _check_stuttering_only_next(bundle_root: Path) -> list[str]:
+    findings: list[str] = []
+    for rel_path, text in _collect_tla_texts(bundle_root):
+        variables = _extract_state_variables(text)
+        if not variables:
+            continue
+        next_match = re.search(r"^\s*Next\s*==\s*(.+?)(?:^\s*[A-Za-z_][A-Za-z0-9_]*\s*==|\Z)", text, re.M | re.S)
+        if not next_match:
+            continue
+        next_body = next_match.group(1)
+        stuttering_patterns = {
+            var: re.compile(rf"{re.escape(var)}'\s*=\s*{re.escape(var)}(?![A-Za-z0-9_])")
+            for var in variables
+        }
+        non_stuttering_patterns = {
+            var: re.compile(rf"{re.escape(var)}'\s*=\s*(?!{re.escape(var)}(?![A-Za-z0-9_]))")
+            for var in variables
+        }
+        if not all(pattern.search(next_body) for pattern in stuttering_patterns.values()):
+            continue
+        if any(pattern.search(next_body) for pattern in non_stuttering_patterns.values()):
+            continue
+        findings.append(f"{rel_path}:Next looks stuttering-only for all state variables")
+    return findings
+
+
+def _readme_text(bundle_root: Path) -> str:
+    for rel_path, text in _collect_texts(bundle_root, extensions={".md", ".txt"}):
+        if rel_path.lower().endswith("readme.md"):
+            return text
+    return ""
+
+
+def _check_variable_action_mapping(bundle_root: Path) -> list[str]:
+    findings: list[str] = []
+    readme = _readme_text(bundle_root)
+    if not readme:
+        return ["README explanation missing or unreadable"]
+    lowered = readme.lower()
+    variables: list[str] = []
+    actions: list[str] = []
+    for _, text in _collect_tla_texts(bundle_root):
+        variables.extend(_extract_state_variables(text))
+        actions.extend(_extract_action_names(text))
+    missing_variables = [name for name in variables if name.lower() not in lowered]
+    if variables and missing_variables:
+        findings.append("README does not explain all state variables: " + ", ".join(sorted(set(missing_variables))))
+    mentioned_actions = [name for name in actions if name.lower() in lowered]
+    if actions and not mentioned_actions:
+        findings.append("README does not map action names into outsider-facing prose")
+    return findings
+
+
+def _check_project_private_jargon(bundle_root: Path) -> list[str]:
+    findings: list[str] = []
+    for rel_path, text in _collect_texts(bundle_root, extensions={".md", ".txt"}):
+        lowered = text.lower()
+        for term in PROJECT_PRIVATE_JARGON:
+            if term not in lowered:
+                continue
+            if any(marker in lowered for marker in ("translated as", "means", "i.e.", "ordinary tla+", "outsider")):
+                continue
+            findings.append(f"{rel_path} uses project-private jargon without translation: '{term}'")
+    return findings
+
+
+def _check_visible_semantics_bounds_conflation(bundle_root: Path) -> list[str]:
+    findings: list[str] = []
+    for rel_path, text in _collect_texts(bundle_root, extensions={".md", ".txt"}):
+        lowered = " ".join(text.lower().split())
+        if "semantics" not in lowered:
+            continue
+        if "tlc" in lowered and any(token in lowered for token in ("cap", "bound", "search depth")):
+            if any(phrase in lowered for phrase in (
+                "semantics of this model are the tlc cap",
+                "semantics are the tlc cap",
+                "meaning of the model",
+                "cap is understood as the meaning",
+            )):
+                findings.append(f"{rel_path} conflates intrinsic semantics with TLC bounds")
+    return findings
+
+
+def _check_repository_fit_signal(bundle_root: Path) -> list[str]:
+    readme = _readme_text(bundle_root)
+    if not readme:
+        return []
+    lowered = readme.lower()
+    if "repository fit" in lowered or "examples repository" in lowered or "tlaplus/examples" in lowered:
+        return []
+    if "publication-ready" in lowered or "public formal-methods contribution" in lowered:
+        return ["README asserts public readiness without an explicit repository-fit argument"]
+    return []
+
+
+def _score_from_findings(findings: list[str]) -> dict[str, int]:
+    lowered = "\n".join(findings).lower()
+    tautology_count = sum("tautological" in item.lower() for item in findings)
+    jargon_hit = "jargon" in lowered
+    mapping_hit = "does not explain all state variables" in lowered or "does not map action names" in lowered
+    bounds_hit = (
+        "publication-ready" in lowered
+        or "submittable upstream" in lowered
+        or "malformed-literal" in lowered
+        or "conflates intrinsic semantics with tlc bounds" in lowered
+    )
+    stuttering_hit = "stuttering-only" in lowered
+    readme_missing = "readme explanation missing" in lowered
+    repo_fit_hit = "repository-fit" in lowered or "repository fit" in lowered
+    scores = {
+        "formal_validity_score": 3,
+        "external_admissibility_score": 3,
+        "semantic_adequacy_score": 3,
+        "outsider_comprehensibility_score": 3,
+        "invariant_non_vacuity_score": 3,
+        "semantics_vs_bounds_clarity_score": 3,
+        "repository_fit_plausibility_score": 3,
+        "reviewer_rejection_risk_score": 0,
+    }
+    if tautology_count:
+        scores["formal_validity_score"] -= 2
+        scores["invariant_non_vacuity_score"] -= 3
+        scores["reviewer_rejection_risk_score"] += 1
+    if stuttering_hit:
+        scores["formal_validity_score"] -= 1
+        scores["semantic_adequacy_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if mapping_hit:
+        scores["semantic_adequacy_score"] -= 2
+        scores["outsider_comprehensibility_score"] -= 2
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if jargon_hit:
+        scores["outsider_comprehensibility_score"] -= 2
+        scores["external_admissibility_score"] -= 2
+        scores["reviewer_rejection_risk_score"] += 1
+    if bounds_hit:
+        scores["semantics_vs_bounds_clarity_score"] -= 2
+        scores["repository_fit_plausibility_score"] -= 2
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if repo_fit_hit:
+        scores["repository_fit_plausibility_score"] -= 2
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+    if readme_missing:
+        scores["semantic_adequacy_score"] -= 1
+        scores["outsider_comprehensibility_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+    for key in list(scores):
+        if key == "reviewer_rejection_risk_score":
+            scores[key] = max(0, min(3, scores[key]))
+        else:
+            scores[key] = max(0, min(3, scores[key]))
+    return scores
+
+
+def score_bundle(bundle_root: Path, *, require_artifacts: bool = True) -> dict[str, Any]:
+    findings: list[str] = []
     report: dict[str, Any] = {
         "bundle_root": str(bundle_root),
-        "ok": True,
-        "errors": [],
         "required_artifacts": {},
     }
-    validators = {
-        "audience_translation.md": _validate_audience_translation,
-        "semantics_boundary.md": _validate_semantics_boundary,
-        "repo_fit_review.json": _validate_repo_fit,
-        "skeptical_review.json": _validate_skeptical_review,
-        "human_approval.json": _validate_human_approval,
-    }
-    for required_name in REQUIRED_FILES:
-        artifact_path = bundle_root / required_name
-        artifact_errors: list[str] = []
-        if not artifact_path.exists():
-            artifact_errors.append(f"missing required artifact {required_name}")
-        else:
-            try:
-                artifact_errors.extend(validators[required_name](artifact_path))
-            except (OSError, ValueError, json.JSONDecodeError) as exc:
-                artifact_errors.append(f"{required_name} invalid: {exc}")
-        report["required_artifacts"][required_name] = {
-            "present": artifact_path.exists(),
-            "errors": artifact_errors,
+    if require_artifacts:
+        validators = {
+            "audience_translation.md": _validate_audience_translation,
+            "semantics_boundary.md": _validate_semantics_boundary,
+            "repo_fit_review.json": _validate_repo_fit,
+            "skeptical_review.json": _validate_skeptical_review,
+            "human_approval.json": _validate_human_approval,
         }
-        report["errors"].extend(artifact_errors)
-    report["errors"].extend(_check_tautological_invariants(bundle_root))
-    report["errors"].extend(_check_negative_tests(bundle_root))
-    report["errors"].extend(_check_publication_claims(bundle_root))
-    report["ok"] = not report["errors"]
+        for required_name in REQUIRED_FILES:
+            artifact_path = bundle_root / required_name
+            artifact_errors: list[str] = []
+            if not artifact_path.exists():
+                artifact_errors.append(f"missing required artifact {required_name}")
+            else:
+                try:
+                    artifact_errors.extend(validators[required_name](artifact_path))
+                except (OSError, ValueError, json.JSONDecodeError) as exc:
+                    artifact_errors.append(f"{required_name} invalid: {exc}")
+            report["required_artifacts"][required_name] = {
+                "present": artifact_path.exists(),
+                "errors": artifact_errors,
+            }
+            findings.extend(artifact_errors)
+    findings.extend(_check_tautological_invariants(bundle_root))
+    findings.extend(_check_negative_tests(bundle_root))
+    findings.extend(_check_publication_claims(bundle_root))
+    findings.extend(_check_stuttering_only_next(bundle_root))
+    findings.extend(_check_variable_action_mapping(bundle_root))
+    findings.extend(_check_project_private_jargon(bundle_root))
+    findings.extend(_check_visible_semantics_bounds_conflation(bundle_root))
+    findings.extend(_check_repository_fit_signal(bundle_root))
+    scores = _score_from_findings(findings)
+    report["errors"] = findings
+    report["scores"] = scores
+    report["ok"] = not findings
     return report
+
+
+def validate_bundle(bundle_root: Path) -> dict[str, Any]:
+    return score_bundle(bundle_root, require_artifacts=True)
 
 
 def _parse_args(argv: list[str]) -> argparse.Namespace:
@@ -305,8 +506,8 @@ def main(argv: list[str] | None = None) -> int:
     payload = {
         "ok": ok,
         "reports": reports,
-        "formal_validity_score": 3 if ok else 0,
-        "external_admissibility_score": 3 if ok else 0,
+        "formal_validity_score": min(report["scores"]["formal_validity_score"] for report in reports),
+        "external_admissibility_score": min(report["scores"]["external_admissibility_score"] for report in reports),
     }
     if args.json:
         print(_json_dumps(payload))

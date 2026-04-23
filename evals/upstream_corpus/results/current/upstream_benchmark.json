@@ -1817,10 +1817,10 @@
         },
         "decisions": {
           "accept": 0,
-          "reject": 47,
-          "revise": 30
+          "reject": 77,
+          "revise": 0
         },
-        "false_reject_rate": 0.6104,
+        "false_reject_rate": 1.0,
         "finding_bucket_totals": {
           "missing_explicit_evidence": 215,
           "missing_required_artifact": 462,
@@ -1902,18 +1902,23 @@
         },
         "decisions": {
           "accept": 0,
-          "reject": 47,
-          "revise": 30
+          "reject": 77,
+          "revise": 0
         },
-        "false_reject_rate": 0.6104,
+        "false_reject_rate": 1.0,
         "finding_bucket_totals": {
-          "weak_outsider_translation": 65
+          "weak_outsider_translation": 64
         },
         "top_finding_strings": [
           {
             "bucket": "weak_outsider_translation",
             "count": 27,
             "finding": "README does not map action names into outsider-facing prose"
+          },
+          {
+            "bucket": "weak_outsider_translation",
+            "count": 2,
+            "finding": "README does not explain all state variables: pc"
           },
           {
             "bucket": "weak_outsider_translation",
@@ -1948,12 +1953,12 @@
           {
             "bucket": "weak_outsider_translation",
             "count": 1,
-            "finding": "README does not explain all state variables: Keys, \\*, data, keys, mapping, missed, ops, pc, read_keys, snapshotStore, tx, values., write_keys"
+            "finding": "README does not explain all state variables: Keys, missed, ops, pc, read_keys, snapshotStore, tx, write_keys"
           },
           {
             "bucket": "weak_outsider_translation",
             "count": 1,
-            "finding": "README does not explain all state variables: The, \\*, are, here, probability, state, we"
+            "finding": "README does not explain all state variables: state"
           },
           {
             "bucket": "weak_outsider_translation",
@@ -1979,11 +1984,6 @@
             "bucket": "weak_outsider_translation",
             "count": 1,
             "finding": "README does not explain all state variables: chosen, maxBal, maxVBal, maxVal, msgs, votes"
-          },
-          {
-            "bucket": "weak_outsider_translation",
-            "count": 1,
-            "finding": "README does not explain all state variables: Decided, Maximum, Set, Value, \\*, accepted., acceptor, acceptor., all, ballot, cValue, chosen, coordinator., decision, has, maxBallot, maxVBallot, maxValue, seen., sent., value"
           }
         ],
         "total_cases": 77
@@ -2000,13 +2000,18 @@
         },
         "false_reject_rate": 0.0,
         "finding_bucket_totals": {
-          "weak_outsider_translation": 65
+          "weak_outsider_translation": 64
         },
         "top_finding_strings": [
           {
             "bucket": "weak_outsider_translation",
             "count": 27,
             "finding": "README does not map action names into outsider-facing prose"
+          },
+          {
+            "bucket": "weak_outsider_translation",
+            "count": 2,
+            "finding": "README does not explain all state variables: pc"
           },
           {
             "bucket": "weak_outsider_translation",
@@ -2041,12 +2046,12 @@
           {
             "bucket": "weak_outsider_translation",
             "count": 1,
-            "finding": "README does not explain all state variables: Keys, \\*, data, keys, mapping, missed, ops, pc, read_keys, snapshotStore, tx, values., write_keys"
+            "finding": "README does not explain all state variables: Keys, missed, ops, pc, read_keys, snapshotStore, tx, write_keys"
           },
           {
             "bucket": "weak_outsider_translation",
             "count": 1,
-            "finding": "README does not explain all state variables: The, \\*, are, here, probability, state, we"
+            "finding": "README does not explain all state variables: state"
           },
           {
             "bucket": "weak_outsider_translation",
@@ -2072,18 +2077,13 @@
             "bucket": "weak_outsider_translation",
             "count": 1,
             "finding": "README does not explain all state variables: chosen, maxBal, maxVBal, maxVal, msgs, votes"
-          },
-          {
-            "bucket": "weak_outsider_translation",
-            "count": 1,
-            "finding": "README does not explain all state variables: Decided, Maximum, Set, Value, \\*, accepted., acceptor, acceptor., all, ballot, cValue, chosen, coordinator., decision, has, maxBallot, maxVBallot, maxValue, seen., sent., value"
           }
         ],
         "total_cases": 77
       },
       "pass7_delta": {
-        "flipped_reject_to_accept_under_intrinsic_only": 6,
-        "interpretation": "6/77 upstream-approved cases flip from reject (pass-a combined) to accept under intrinsic-only scoring. The remaining 0 rejections are not bundle-dependence \u2014 they are deeper intrinsic heuristic overfit.",
+        "flipped_reject_to_accept_under_intrinsic_only": 35,
+        "interpretation": "35/77 upstream-approved cases flip from reject (pass-a combined) to accept under intrinsic-only scoring. The remaining 0 rejections are not bundle-dependence \u2014 they are deeper intrinsic heuristic overfit.",
         "still_reject_cases": [],
         "still_reject_under_intrinsic_count": 0
       },
@@ -3702,9 +3702,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "CoffeeCan",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -3746,9 +3746,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "DieHard",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -3790,9 +3790,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "DiningPhilosophers",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -3886,9 +3886,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "EinsteinRiddle",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4030,9 +4030,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "Huang",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4111,7 +4111,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: Keys, \\*, data, keys, mapping, missed, ops, pc, read_keys, snapshotStore, tx, values., write_keys",
+          "README does not explain all state variables: Keys, missed, ops, pc, read_keys, snapshotStore, tx, write_keys",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -4165,7 +4165,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: The, \\*, are, here, probability, state, we",
+          "README does not explain all state variables: state",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -4182,9 +4182,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "LearnProofs",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4280,9 +4280,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "LevelChecking",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4428,9 +4428,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "MisraReachability",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4472,9 +4472,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "MissionariesAndCannibals",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4516,9 +4516,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "Moving_Cat_Puzzle",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4560,9 +4560,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "MultiCarElevator",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4654,9 +4654,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "N-Queens",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4698,9 +4698,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "NanoBlockchain",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4742,9 +4742,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "Paxos",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4786,9 +4786,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "PaxosHowToWinATuringAward",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4832,9 +4832,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "Prisoners",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -4924,9 +4924,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "ReadersWriters",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5005,7 +5005,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: Decided, Maximum, Set, Value, \\*, accepted., acceptor, acceptor., all, ballot, cValue, chosen, coordinator., decision, has, maxBallot, maxVBallot, maxValue, seen., sent., value",
+          "README does not explain all state variables: cValue, decision, maxBallot, maxVBallot, maxValue",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -5022,9 +5022,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "SingleLaneBridge",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5118,9 +5118,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "SlushProtocol",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5214,9 +5214,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "Stones",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5258,9 +5258,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "TLC",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5356,9 +5356,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "TransitiveClosure",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5400,9 +5400,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "TwoPhase",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5529,7 +5529,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: (*, *), ECHO, READY, are, messages, nSntE, number, sent, which",
+          "README does not explain all state variables: nSntE",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -5596,9 +5596,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "allocator",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -5725,7 +5725,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: (*, *), Faulty, all, control, each, faulty, messages, pc, process, processes, rcvd, received, sent, state",
+          "README does not explain all state variables: Faulty, pc, rcvd, sent",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -5773,11 +5773,9 @@
         "expected_decision": "accept",
         "intrinsic_decision": "revise",
         "intrinsic_finding_buckets": [
-          "weak_outsider_translation",
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: (*, *), processes, set",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -5979,7 +5977,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: \\*, state, v., vState, vState[v]",
+          "README does not explain all state variables: vState",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -6185,7 +6183,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: (*, *), by, correct, messages, nSnt0, nSnt1, processes, sent, the",
+          "README does not explain all state variables: nSnt0",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -6343,7 +6341,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: (*, *), All, are, delta, fromLastHeard, inTransit, localClock, messages, outgoingMessages, suspected, transit.",
+          "README does not explain all state variables: delta, fromLastHeard, inTransit, localClock, outgoingMessages, suspected",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -6360,9 +6358,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "dijkstra-mutex",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -6456,9 +6454,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "echo",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -6500,9 +6498,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "ewd426",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -6696,9 +6694,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "glowingRaccoon",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -6872,7 +6870,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: (*, *), counters, pc, program"
+          "README does not explain all state variables: pc"
         ],
         "intrinsic_scores": {
           "external_admissibility_score": 2,
@@ -6923,7 +6921,7 @@
           "weak_outsider_translation"
         ],
         "intrinsic_findings": [
-          "README does not explain all state variables: (*, *), YES, by, correct, messages, nSntNo, number, of, processes, sent, the",
+          "README does not explain all state variables: nSntNo",
           "README does not map action names into outsider-facing prose"
         ],
         "intrinsic_scores": {
@@ -7038,9 +7036,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "tcp",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",
@@ -7128,9 +7126,9 @@
         "source_repo": "tlaplus/Examples"
       },
       {
-        "bundle_completeness_decision": "revise",
+        "bundle_completeness_decision": "reject",
         "case_id": "transaction_commit",
-        "combined_decision": "revise",
+        "combined_decision": "reject",
         "completeness_finding_buckets": [
           "missing_required_artifact",
           "missing_required_artifact",

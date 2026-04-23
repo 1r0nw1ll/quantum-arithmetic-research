@@ -410,9 +410,23 @@ def _collect_tla_texts(bundle_root: Path) -> list[tuple[str, str]]:
     return _collect_texts(bundle_root, extensions={".tla", ".cfg"})
 
 
+def _strip_tla_comments(text: str) -> str:
+    """Remove TLA+ comments before token-level parsing.
+
+    Block comments `(* ... *)` and end-of-line `\\* ...` both carry prose
+    (including commas) that would otherwise be mis-parsed as variable or
+    action names. Stripping them is a no-op for the outsider-facing text
+    checks (which read the raw files) but cleans up structural extractors.
+    """
+    text = re.sub(r"\(\*.*?\*\)", " ", text, flags=re.DOTALL)
+    text = re.sub(r"\\\*.*$", " ", text, flags=re.M)
+    return text
+
+
 def _extract_state_variables(tla_text: str) -> list[str]:
     variables: list[str] = []
-    for line in tla_text.splitlines():
+    stripped_text = _strip_tla_comments(tla_text)
+    for line in stripped_text.splitlines():
         stripped = line.strip()
         if not (stripped.startswith("VARIABLE ") or stripped.startswith("VARIABLES ")):
             continue

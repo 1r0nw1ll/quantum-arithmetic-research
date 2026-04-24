@@ -127,11 +127,18 @@ def score_without_adapter(spec_dir: Path) -> dict[str, Any]:
     }
 
 
+def _tla_leaf_spec_dirs(root: Path) -> list[Path]:
+    seen: set[Path] = set()
+    for tla_path in root.rglob("*.tla"):
+        seen.add(tla_path.parent)
+    return sorted(seen)
+
+
 def _discover_revise_cases() -> list[Path]:
-    """Find all TLA upstream spec dirs whose baseline intrinsic decision is revise."""
+    """Find all TLA upstream leaf spec dirs whose baseline intrinsic decision is revise."""
     specs_root = TLA_ROOT / "specifications"
     out: list[Path] = []
-    for spec_dir in sorted(p for p in specs_root.iterdir() if p.is_dir()):
+    for spec_dir in _tla_leaf_spec_dirs(specs_root):
         if not any(spec_dir.glob("*.tla")):
             continue
         baseline = score_without_adapter(spec_dir)

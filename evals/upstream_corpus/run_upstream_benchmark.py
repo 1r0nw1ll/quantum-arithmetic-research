@@ -38,6 +38,7 @@ RESULTS_ROOT = ROOT / "results" / "current"
 
 TLA_ROOT = Path("/home/player2/upstream_corpora/tlaplus_examples")
 LEAN_ROOT = Path("/home/player2/upstream_corpora/mathematics_in_lean")
+MATHLIB_ROOT = Path("/home/player2/upstream_corpora/mathlib4")
 
 sys.path.insert(0, str(REPO_ROOT / "tools"))
 import qa_formal_publication_gate as tla_gate  # noqa: E402
@@ -142,10 +143,22 @@ def _combined_decision(intrinsic: str, completeness: str) -> str:
 
 # --- Corpus discovery -------------------------------------------------------
 
+def _tla_leaf_spec_dirs(root: Path) -> list[Path]:
+    """Return every directory under `root` that contains at least one .tla
+    file directly (not in a subdir). This picks up both top-level spec dirs
+    and nested leaves like SpecifyingSystems/HourClock, SDP_Verification/*."""
+    seen: set[Path] = set()
+    for tla_path in root.rglob("*.tla"):
+        parent = tla_path.parent
+        if parent not in seen:
+            seen.add(parent)
+    return sorted(seen)
+
+
 def _discover_tla_cases() -> list[dict[str, Any]]:
+    rows: list[dict[str, Any]] = []
     specs_root = TLA_ROOT / "specifications"
-    rows = []
-    for spec_dir in sorted(p for p in specs_root.iterdir() if p.is_dir()):
+    for spec_dir in _tla_leaf_spec_dirs(specs_root):
         tla_files = sorted(spec_dir.glob("*.tla"))
         if not tla_files:
             continue
@@ -156,12 +169,14 @@ def _discover_tla_cases() -> list[dict[str, Any]]:
                 tags = json.loads(manifest_path.read_text())["tags"]
             except Exception:
                 tags = []
+        rel = spec_dir.relative_to(TLA_ROOT)
+        case_id = "/".join(rel.parts[1:]) if len(rel.parts) > 1 else spec_dir.name
         rows.append({
-            "case_id": spec_dir.name,
+            "case_id": case_id,
             "domain": "tla",
             "bundle_root": str(spec_dir),
             "source_repo": "tlaplus/Examples",
-            "source_path": str(spec_dir.relative_to(TLA_ROOT)),
+            "source_path": str(rel),
             "tla_files": [p.name for p in tla_files],
             "has_readme": any((spec_dir / n).exists() for n in ("README", "README.md")),
             "has_manifest": manifest_path.exists(),
@@ -172,7 +187,8 @@ def _discover_tla_cases() -> list[dict[str, Any]]:
 
 
 def _discover_lean_cases() -> list[dict[str, Any]]:
-    rows = []
+    rows: list[dict[str, Any]] = []
+    # mathematics_in_lean: every completed Solutions_*.lean file
     for lean_path in sorted(LEAN_ROOT.rglob("Solutions_*.lean")):
         parent = lean_path.parent
         rows.append({
@@ -185,6 +201,21 @@ def _discover_lean_cases() -> list[dict[str, Any]]:
             "has_readme": (parent / "README.md").exists(),
             "expected_decision": "accept",
         })
+    # mathlib4 sample: Data/Nat basics — sparse-checkout-local subset
+    if MATHLIB_ROOT.exists():
+        nat_dir = MATHLIB_ROOT / "Mathlib" / "Data" / "Nat"
+        mathlib_files = sorted(nat_dir.rglob("*.lean")) if nat_dir.exists() else []
+        for lean_path in mathlib_files:
+            rows.append({
+                "case_id": f"mathlib/{lean_path.relative_to(MATHLIB_ROOT / 'Mathlib')}",
+                "domain": "lean4",
+                "bundle_root": str(lean_path.parent),
+                "lean_file": str(lean_path),
+                "source_repo": "leanprover-community/mathlib4",
+                "source_path": str(lean_path.relative_to(MATHLIB_ROOT)),
+                "has_readme": (lean_path.parent / "README.md").exists(),
+                "expected_decision": "accept",
+            })
     return rows
 
 
@@ -381,7 +412,8 @@ def main() -> int:
     payload = {
         "provenance": {
             "tla": {"repo": "tlaplus/Examples", "sha": _git_head(TLA_ROOT)},
-            "lean4": {"repo": "leanprover-community/mathematics_in_lean", "sha": _git_head(LEAN_ROOT)},
+            "lean4_mil": {"repo": "leanprover-community/mathematics_in_lean", "sha": _git_head(LEAN_ROOT)},
+            "lean4_mathlib": {"repo": "leanprover-community/mathlib4 (sparse: Data/Nat + select basics)", "sha": _git_head(MATHLIB_ROOT)},
         },
         "inventory": {
             "tla_case_count": len(tla_cases),

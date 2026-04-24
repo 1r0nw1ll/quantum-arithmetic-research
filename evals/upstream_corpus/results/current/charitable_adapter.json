@@ -192,6 +192,36 @@
       "source_path": "specifications/PaxosHowToWinATuringAward"
     },
     {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: FwState, SDPSvrState, aState, sState"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: Account, AclRuleSet, AgedRuleSet, AuthChannel, AuthKnowledge, CapAuthMsg, CapDataMsg, DataKnowledge, DropPackets, FwCtlChannel, FwDataChannel, FwState, Key, ReplayCount, ReplaySession, SDPSucSession, SDPSvrInfo, SDPSvrState, SpoofCount, SpoofSession, aChannel, aCounter, aIP, aSession, aState, aTCPLinkSet, sChannel, sState, sSvrInfo, sTCPLinkSet, sniffCount, uAuthSession, uChannel, uID, uIP, uSDPSvrInfo, uState, uSvrInfo, uTCPLinkSet, uTstamp",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "SDP_Attack_New_Solution_Spec",
+      "delta": "still_revise",
+      "extracted_bytes": 45989,
+      "source_path": "specifications/SDP_Verification/SDP_Attack_New_Solution_Spec"
+    },
+    {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "README does not explain all state variables: FwState, SDPSvrState, aState, sState"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "README does not explain all state variables: Account, AclRuleSet, AgedRuleSet, AuthChannel, AuthKnowledge, CapAuthMsg, CapDataMsg, DataKnowledge, DropPackets, FwCtlChannel, FwDataChannel, FwState, Key, ReplayCount, ReplaySession, SDPSucSession, SDPSvrInfo, SDPSvrState, SpoofCount, SpoofSession, aChannel, aCounter, aIP, aSession, aState, aTCPLinkSet, sChannel, sState, sSvrInfo, sTCPLinkSet, sniffCount, uAuthSession, uChannel, uID, uIP, uSDPSvrInfo, uState, uSvrInfo, uTCPLinkSet, uTstamp",
+        "README does not map action names into outsider-facing prose"
+      ],
+      "case_id": "SDP_Attack_Spec",
+      "delta": "still_revise",
+      "extracted_bytes": 44721,
+      "source_path": "specifications/SDP_Verification/SDP_Attack_Spec"
+    },
+    {
       "adapted_decision": "accept",
       "adapted_findings": [],
       "baseline_decision": "revise",
@@ -605,7 +635,7 @@
     },
     "regressed": 0,
     "regressed_cases": [],
-    "still_revise": 21,
+    "still_revise": 23,
     "still_revise_cases": [
       "Chameneos",
       "CheckpointCoordination",
@@ -615,6 +645,8 @@
       "GameOfLife",
       "KeyValueStore",
       "KnuthYao",
+      "SDP_Attack_New_Solution_Spec",
+      "SDP_Attack_Spec",
       "TeachingConcurrency",
       "aba-asyn-byz",
       "bosco",
@@ -633,6 +665,10 @@
       {
         "count": 12,
         "finding": "README does not map action names into outsider-facing prose"
+      },
+      {
+        "count": 2,
+        "finding": "README does not explain all state variables: FwState, SDPSvrState, aState, sState"
       },
       {
         "count": 1,
@@ -683,6 +719,6 @@
         "finding": "README does not explain all state variables: msg, prnt, rpt"
       }
     ],
-    "total_revise_cases_at_baseline": 42
+    "total_revise_cases_at_baseline": 44
   }
 }

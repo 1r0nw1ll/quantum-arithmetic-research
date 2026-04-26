@@ -22,6 +22,10 @@ DOMAINS = {
         "label": "Lean 4",
         "executor": REPO_ROOT / "evals" / "lean4_blind" / "execute_current_system.py",
     },
+    "upwork": {
+        "label": "Upwork-style",
+        "executor": REPO_ROOT / "evals" / "upwork_blind" / "execute_current_system.py",
+    },
 }
 
 

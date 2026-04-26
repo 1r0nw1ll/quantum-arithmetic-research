@@ -154,8 +154,46 @@ def _classify(expected: str, combined: str, known_gap: str | None) -> str:
     return "NEW_FALSE_REJECT"
 
 
+def _load_upwork_scorer():
+    path = REPO_ROOT / "evals" / "upwork_blind" / "execute_current_system.py"
+    spec = importlib.util.spec_from_file_location("upwork_blind_executor", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _load_expected_upwork(case_dir: Path) -> tuple[str | None, str | None]:
+    """Upwork uses expected_outcome.json/decision OR expected_scorecard.json/decision."""
+    return _load_expected(case_dir)
+
+
+def _load_case_manifest(case_dir: Path) -> dict[str, Any]:
+    """Read the Upwork case.json to pull task_spec keywords for requirement-coverage scoring."""
+    p = case_dir / "case.json"
+    if p.exists():
+        try:
+            return json.loads(p.read_text(encoding="utf-8"))
+        except Exception:
+            return {}
+    return {}
+
+
+def _score_upwork_case(bundle_root: Path, upwork_mod, task_spec: dict[str, Any] | None) -> dict[str, Any]:
+    report = upwork_mod._score_bundle(bundle_root, task_spec=task_spec)
+    decision = upwork_mod._decision_from_scores(report["scores"])
+    return {
+        "intrinsic_decision": decision,
+        "completeness_decision": None,
+        "combined_decision": decision,
+        "policy": "upwork_monolithic",
+        "intrinsic_findings": report["errors"],
+        "completeness_findings": [],
+    }
+
+
 def _sweep() -> list[dict[str, Any]]:
     lean_mod = _load_lean_scorer()
+    upwork_mod = _load_upwork_scorer()
     rows: list[dict[str, Any]] = []
 
     tla_roots = [
@@ -168,6 +206,11 @@ def _sweep() -> list[dict[str, Any]]:
         (Path("evals/lean4_blind/review_corpus"), "artifact", "lean4_blind_review"),
         (Path("evals/lean4_blind/repair_cases"), "input", "lean4_blind_repair"),
         (Path("evals/deception_regression/fixtures/lean"), "artifact", "pass7_deception_lean"),
+    ]
+    upwork_roots = [
+        (Path("evals/upwork_blind/review_corpus"), "artifact", "upwork_blind_review"),
+        (Path("evals/upwork_blind/repair_cases"), "input", "upwork_blind_repair"),
+        (Path("evals/upwork_blind/deception_corpus"), "artifact", "upwork_blind_deception"),
     ]
     for root, sub, suite in tla_roots:
         if not root.exists():
@@ -204,6 +247,28 @@ def _sweep() -> list[dict[str, Any]]:
             verdict = _classify(expected, scored["combined_decision"], known_gap) if expected else "NO_LABEL"
             rows.append({
                 "domain": "lean4",
+                "suite": suite,
+                "case": case.name,
+                "expected_decision": expected,
+                "known_gap": known_gap,
+                "verdict": verdict,
+                **scored,
+            })
+    for root, sub, suite in upwork_roots:
+        if not root.exists():
+            continue
+        for case in sorted(root.iterdir()):
+            if not case.is_dir():
+                continue
+            bundle = case / sub
+            if not bundle.exists():
+                continue
+            expected, known_gap = _load_expected_upwork(case)
+            task_spec = _load_case_manifest(case)
+            scored = _score_upwork_case(bundle, upwork_mod, task_spec)
+            verdict = _classify(expected, scored["combined_decision"], known_gap) if expected else "NO_LABEL"
+            rows.append({
+                "domain": "upwork",
                 "suite": suite,
                 "case": case.name,
                 "expected_decision": expected,

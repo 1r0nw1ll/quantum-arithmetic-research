@@ -208,7 +208,13 @@
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
 ## 14. Current Status Snapshot
-- Current phase: Pass 7 — Corpus Benchmark Sweep
-- Last completed milestone: Cross-domain benchmark sweep over the full current labeled TLA+ and Lean 4 corpora reports 100% decision accuracy with 0 false accepts and 0 false rejects on 14 labeled fixtures.
-- Next action: Expand the labeled corpora, especially deception and borderline cases, before retuning thresholds or extracting shared blind-eval infrastructure.
-- Owner / executor: Codex corpus-benchmark pass.
+- Current phase: Pass 7-d — Third Domain (Upwork-style)
+- Last completed milestones:
+  - Pass 7: intrinsic-legitimacy / submission-bundle-completeness split in `tools/qa_formal_publication_gate.py` (commit `e87b1d1`) — TLA intrinsic accept 45.5% on 77 upstream specs vs 0% under monolithic.
+  - Pass 7-c: deception regression suite (commit `c2bb195`) — 0 new false accepts, 0 new false rejects, 4 known gaps documented and tolerated.
+  - Pass 7-b: charitable comment-extraction adapter (commit `84be587`) — 50% of TLA revise load was extraction debt; 0 regressions.
+  - Pass 7-a: upstream corpus expansion (commit `1892e03`) — TLA 99 cases intrinsic-accept 55.6%, Lean 128 cases intrinsic-accept 100%; 50/50 extraction-vs-underexplanation split stable at scale.
+  - Pass 7-d (this pass): third blind domain `evals/upwork_blind/` added with 10 fixtures (2 generation + 3 review + 2 repair + 3 deception), wired into `evals/blind_benchmark/` (22/22 match expected) and `evals/deception_regression/` (26 cases, still exit-0).
+- Four tolerated known gaps (all from `evals/deception_regression/fixtures/`): `vacuous_typeok_bundled`, `readme_spec_misalignment`, `vacuous_premise`, `scope_overclaim_no_sorry`. Documented, regression-tracked, **non-blocking pending recurrence**. They did not reappear in the 99-TLA + 128-Lean expanded corpus. Tightening deferred until prevalence data justifies it.
+- Next action: observe how the Upwork-style suite behaves under live-agent stress (if/when the harness is run against a real agent's deliverables rather than the deterministic current-system generator). No further scorer tightening until new failure shapes appear.
+- Owner / executor: Claude (session claude-main-1533) + Codex (review + commit bridge).

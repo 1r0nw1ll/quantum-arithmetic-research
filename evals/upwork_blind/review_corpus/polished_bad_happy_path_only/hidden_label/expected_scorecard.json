@@ -1,0 +1,19 @@
+{
+  "decision": "reject",
+  "scores": {
+    "task_validity_score": 2,
+    "external_admissibility_score": 0,
+    "requirement_coverage_score": 2,
+    "deliverable_fit_score": 2,
+    "scope_honesty_score": 0,
+    "client_utility_score": 2,
+    "source_fidelity_score": 2,
+    "reviewer_rejection_risk_score": 3
+  },
+  "notes": [
+    "Code uses bracket-access on missing keys — crashes on rows without customer_id or cents.",
+    "README claims 'production-ready', 'comprehensive coverage', 'handles all inputs', 'battle-tested' — all unsupported.",
+    "README claims 'fully tested' and 'comprehensive coverage' but no test file present.",
+    "Scope honesty tank; reject."
+  ]
+}

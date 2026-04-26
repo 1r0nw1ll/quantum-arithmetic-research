@@ -1,0 +1,7 @@
+{
+  "case_id": "reject_stub_return_only",
+  "title": "Repair: deliverable is a stub claiming completion",
+  "task_class": "bugfix",
+  "difficulty": "medium",
+  "required_keywords": ["factorial"]
+}

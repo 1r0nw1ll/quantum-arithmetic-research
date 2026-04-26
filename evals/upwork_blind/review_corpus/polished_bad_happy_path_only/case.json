@@ -1,0 +1,7 @@
+{
+  "case_id": "polished_bad_happy_path_only",
+  "title": "Review: polished happy-path deliverable that crashes on edge cases",
+  "task_class": "data_transform",
+  "difficulty": "medium",
+  "required_keywords": ["orders", "customer", "total_cents", "order_count"]
+}

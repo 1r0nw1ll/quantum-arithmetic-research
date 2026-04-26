@@ -1,0 +1,7 @@
+{
+  "case_id": "sparse_legit_retry_fetch",
+  "title": "Review: sparse but correct retry-on-5xx fetch",
+  "task_class": "api",
+  "difficulty": "easy",
+  "required_keywords": ["retry", "backoff", "5xx"]
+}

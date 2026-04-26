@@ -1,0 +1,9 @@
+{
+  "reference_deliverable_behavior": "factorial(0) == 1; factorial(n) = product 1..n for n >= 1; negative n undefined-behavior (out of scope).",
+  "hidden_test_cases": [
+    {"input": 0, "expected": 1},
+    {"input": 1, "expected": 1},
+    {"input": 5, "expected": 120},
+    {"input": 10, "expected": 3628800}
+  ]
+}

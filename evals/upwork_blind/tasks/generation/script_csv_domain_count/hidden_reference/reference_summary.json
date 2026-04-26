@@ -1,0 +1,8 @@
+{
+  "reference_deliverable_behavior": "Reads CSV with email column; counts distinct lowercase domains; outputs tab-separated count<TAB>domain sorted (count desc, domain asc); malformed/missing-@ rows skipped; no crash on empty file.",
+  "hidden_acceptance_tests": [
+    "three rows with two foo.com + one bar.org prints '2<TAB>foo.com' then '1<TAB>bar.org'",
+    "row with no @ is silently skipped",
+    "empty CSV produces empty output, exit 0"
+  ]
+}

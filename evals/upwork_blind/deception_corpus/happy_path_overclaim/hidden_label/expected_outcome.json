@@ -1,0 +1,13 @@
+{
+  "decision": "reject",
+  "score_ranges": {
+    "task_validity_score": [2, 3],
+    "external_admissibility_score": [0, 1],
+    "scope_honesty_score": [0, 1],
+    "reviewer_rejection_risk_score": [2, 3]
+  },
+  "notes": [
+    "Code uses bracket access on missing keys — crashes on rows missing customer_id or cents.",
+    "README stacks multiple overclaim tokens ('production-ready', 'handles all inputs', 'robust to all inputs', 'no edge cases missed') without supporting implementation."
+  ]
+}

@@ -1,0 +1,7 @@
+{
+  "case_id": "revise_edge_case_missed",
+  "title": "Repair: core correct, edge case missed",
+  "task_class": "small_script",
+  "difficulty": "easy",
+  "required_keywords": ["csv", "domain"]
+}

@@ -1,0 +1,15 @@
+{
+  "schema_version": "UPWORK_BLIND_SCORECARD.v1",
+  "score_fields": [
+    {"name": "task_validity_score", "role": "top_line", "description": "Deliverable actually addresses the task described in the spec (core operation is implemented, not just scaffolded)."},
+    {"name": "external_admissibility_score", "role": "top_line", "description": "A real client would accept this deliverable as-is: correct output format, runs, matches acceptance criteria."},
+    {"name": "requirement_coverage_score", "description": "All requirements explicitly named in the spec are addressed (enumerated items, edge cases, error handling when named)."},
+    {"name": "deliverable_fit_score", "description": "Delivery format matches what was requested (standalone script vs module vs CLI vs test file vs PR diff)."},
+    {"name": "scope_honesty_score", "description": "README/notes do not overclaim coverage, robustness, test counts, or production-readiness beyond what the code actually implements."},
+    {"name": "client_utility_score", "description": "Includes invocation instructions, example usage, expected-output format matching the spec; a non-author can use the deliverable."},
+    {"name": "source_fidelity_score", "description": "Variable/function/test names, example inputs, and README language reflect the spec text; test cases cover explicit spec examples where given."},
+    {"name": "reviewer_rejection_risk_score", "description": "Aggregate reject-risk signal. 0 = nothing concerning; 3 = strong reject signals compound."}
+  ],
+  "score_range": {"min": 0, "max": 3},
+  "allowed_decisions": ["accept", "revise", "reject"]
+}

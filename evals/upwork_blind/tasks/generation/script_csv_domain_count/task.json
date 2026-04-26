@@ -1,0 +1,23 @@
+{
+  "case_id": "script_csv_domain_count",
+  "title": "CSV email-domain counter CLI",
+  "task_class": "small_script",
+  "difficulty": "easy",
+  "required_keywords": ["csv", "domain", "sorted"],
+  "generation_spec": {
+    "files": [
+      {
+        "path": "domain_count.py",
+        "content": "import csv\nimport sys\nfrom collections import Counter\n\n\ndef count_domains(path):\n    counts = Counter()\n    with open(path, newline='') as fh:\n        reader = csv.DictReader(fh)\n        for row in reader:\n            email = (row.get('email') or '').strip().lower()\n            if '@' not in email:\n                continue\n            domain = email.split('@', 1)[1]\n            if domain:\n                counts[domain] += 1\n    return counts\n\n\ndef main(argv):\n    if len(argv) != 2:\n        print('Usage: python3 domain_count.py <path-to-users.csv>', file=sys.stderr)\n        return 2\n    counts = count_domains(argv[1])\n    for domain, count in sorted(counts.items(), key=lambda item: (-item[1], item[0])):\n        print(f'{count}\\t{domain}')\n    return 0\n\n\nif __name__ == '__main__':\n    raise SystemExit(main(sys.argv))\n"
+      },
+      {
+        "path": "test_domain_count.py",
+        "content": "import csv\nimport tempfile\nimport os\nfrom domain_count import count_domains\n\n\ndef _write_csv(rows):\n    fd, path = tempfile.mkstemp(suffix='.csv')\n    os.close(fd)\n    with open(path, 'w', newline='') as fh:\n        writer = csv.DictWriter(fh, fieldnames=['email'])\n        writer.writeheader()\n        for r in rows:\n            writer.writerow({'email': r})\n    return path\n\n\ndef test_basic_counts():\n    path = _write_csv(['a@foo.com', 'b@foo.com', 'c@bar.org'])\n    c = count_domains(path)\n    assert c['foo.com'] == 2\n    assert c['bar.org'] == 1\n\n\ndef test_skips_malformed():\n    path = _write_csv(['noatsign', '', 'a@foo.com'])\n    c = count_domains(path)\n    assert sum(c.values()) == 1\n"
+      },
+      {
+        "path": "README.md",
+        "content": "# CSV email-domain counter\n\nReads a CSV with an `email` column and prints distinct domains with their\ncounts, sorted descending by count, then ascending by domain.\n\n## Usage\n\n```bash\npython3 domain_count.py users.csv\n```\n\nOutput is tab-separated `count<TAB>domain` on stdout.\n\n## Scope\n\n- CSV must have an `email` header.\n- Malformed rows (missing `@`) are skipped silently.\n- Domains are lowercased before counting.\n- Whitespace is trimmed from the email field.\n"
+      }
+    ]
+  }
+}

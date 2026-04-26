@@ -1,0 +1,7 @@
+{
+  "final_decision": "reject",
+  "notes": [
+    "Core function is `pass` + NotImplementedError; README claims 'delivered' and 'production-ready'.",
+    "Repair is not a trivial fix — there is no actual implementation. Reject even if scope is re-clarified."
+  ]
+}

@@ -1,0 +1,9 @@
+{
+  "final_decision": "revise",
+  "notes": [
+    "Core function is correct and covers the spec's malformed-row handling in code.",
+    "README does not document the scope or mention the malformed-row handling.",
+    "No test file. Missing invocation error guard (would crash on missing argv[1]).",
+    "Repair is cheap — revise, not reject."
+  ]
+}

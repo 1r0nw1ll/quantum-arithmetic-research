@@ -1,0 +1,7 @@
+{
+  "case_id": "good_json_summary_by_customer",
+  "title": "Review: JSON order summary by customer",
+  "task_class": "data_transform",
+  "difficulty": "easy",
+  "required_keywords": ["orders", "customer", "total_cents", "order_count"]
+}

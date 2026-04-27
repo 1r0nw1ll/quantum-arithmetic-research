@@ -1,0 +1,17 @@
+{
+  "schema_version": "QA_RUNTIME_ODD_MONITOR_CERT.v1",
+  "certificate_id": "qa.cert.runtime_odd_monitor.fail.bad_odd_label.v1",
+  "cert_type": "qa_runtime_odd_monitor_cert",
+  "title": "QA Runtime ODD Monitor FAIL — documents the bad-orbit-class-label failure mode that ODD_DECL is designed to catch",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Documented FAIL fixture (well-formed under the schema). Demonstrates the failure mode that ODD_DECL is designed to catch: a fixture declaring an ODD that contains a label not in the canonical orbit-class set {singularity, satellite, cosmos}. The body fields below intentionally encode the wrong claim so a reviewer can see what the ODD_DECL gate would have flagged. Mirrors cert [194] csm_fail_wrong_agency.json convention.",
+  "source_attribution": "(Kochenderfer, 2026) Algorithms for Validation §12.1; (Dale, 2026) cert [263] qa_failure_density_enumeration_cert.",
+  "declared_odd": ["cosmos", "totally_invalid_orbit_class", "yet_another_invalid"],
+  "fail_ledger": [
+    {
+      "check_id": "ODD_DECL",
+      "message": "Deliberately wrong: declared_odd contains 'totally_invalid_orbit_class' and 'yet_another_invalid' which are not in the canonical orbit-class set {singularity, satellite, cosmos}. If result were not FAIL, the validator would emit: 'ODD_DECL: declared_odd entry totally_invalid_orbit_class not in (singularity, satellite, cosmos)' and similar for the other invalid label."
+    }
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": "QA_RUNTIME_ODD_MONITOR_CERT.v1",
+  "certificate_id": "qa.cert.runtime_odd_monitor.pass.satellite_odd_boundary_comparison.v1",
+  "cert_type": "qa_runtime_odd_monitor_cert",
+  "title": "QA Runtime ODD Monitor PASS — declared ODD = {satellite}; classifier baseline leakage scales with σ on the satellite/cosmos boundary",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Secondary PASS fixture: declared ODD = {satellite} (8 states out of 81; lots of boundary surface). Focuses the ODD_CLF + ODD_LEAK gates on the satellite/cosmos boundary, which has more decision-boundary points than {cosmos}. Demonstrates that the classifier baseline FP+FN scales with σ as expected from (Kochenderfer, 2026) §12.1's superlevel-set definition: smaller σ gives small FP+FN concentrated near boundary points; larger σ gives larger FP+FN distributed across the unit square. The deterministic monitor remains at FP=0/FN=0 throughout. Witness states are picked specifically at the satellite/cosmos boundary to make the leakage visible.",
+  "source_attribution": "(Kochenderfer, 2026) Algorithms for Validation §12.1 'Operational Design Domain Monitoring' superlevel-set ODD construction; (Dale, 2026) cert [263] qa_failure_density_enumeration_cert + tools/qa_kg/orbit_failure_enumeration.py orbit_family_s9 utility. Bridge spec docs/specs/QA_KOCHENDERFER_BRIDGE.md §5 ODD-monitor row. Authored Will Dale + Claude 2026-04-27.",
+  "declared_odd": ["satellite"],
+  "exact_membership": {
+    "fp": 0,
+    "fn": 0,
+    "total": 81,
+    "method": "Deterministic orbit-family-membership monitor: in_ODD(b,e) := orbit_family_s9(b,e) == 'satellite'. The 8 satellite states (3,3), (3,6), (3,9), (6,3), (6,6), (6,9), (9,3), (9,6) are exactly identified; all other 73 states are correctly excluded."
+  },
+  "classifier_test_cases": [
+    {"sigma": 0.05, "seed": 42, "expected_classifier_fp": 3, "expected_classifier_fn": 1, "comment": "low-noise — 4 misclassifications, all at b%3==0 ∨ e%3==0 boundary edges"},
+    {"sigma": 0.1,  "seed": 42, "expected_classifier_fp": 5, "expected_classifier_fn": 5, "comment": "moderate-noise — 10 misclassifications symmetrically distributed (FP=FN); classifier near-chance at boundaries"},
+    {"sigma": 0.2,  "seed": 42, "expected_classifier_fp": 4, "expected_classifier_fn": 5, "comment": "high-noise — 9 misclassifications; FP/FN saturates as σ exceeds the 1/8 grid spacing; classifier label drifts to whichever class dominates the ε-ball"}
+  ],
+  "embedding": {
+    "definition": "(b, e) → ((b-1)/8, (e-1)/8) ∈ [0,1]² — same canonical observer-projection embedding as the primary fixture",
+    "rationale": "Same observer-projection construction as primary fixture; satellite boundary in this embedding is the union of horizontal and vertical lines at b ∈ {2/8, 5/8, 8/8} ∩ e ∈ {2/8, 5/8, 8/8} (the b%3==0 ∧ e%3==0 satellite condition); these are the points where the classifier most often confuses satellite with cosmos under noise."
+  },
+  "claim": "On S_9 with declared ODD = {satellite}, the classifier-superlevel-set baseline at σ=0.05 produces 4 misclassifications, at σ=0.1 produces 10 misclassifications, at σ=0.2 produces 9 misclassifications. The FP+FN count is non-monotonic in σ at the high end because once σ exceeds the 1/8 grid spacing, the 1-NN classifier label saturates toward the locally dominant class (cosmos = 72/81 of S_9). The deterministic orbit-family-membership monitor remains at FP=0/FN=0 throughout. This demonstrates the qualitative claim: deterministic QA-discrete ODD membership is exact; classifier baselines on the canonical observer projection are not.",
+  "claim_scope": "Same narrow scope as the primary fixture. Specific to the satellite ODD case and the canonical 1/8-spaced unit-square embedding.",
+  "witnesses": [
+    {
+      "orbit_class": "satellite",
+      "state": [3, 3],
+      "true_in_odd": true,
+      "monitor_predicts": true,
+      "comment": "satellite anchor at boundary corner; embed=(0.25, 0.25); 1/8 from cosmos neighbors (3,4)=(0.25, 0.375) and (4,3)=(0.375, 0.25)"
+    },
+    {
+      "orbit_class": "cosmos",
+      "state": [3, 4],
+      "true_in_odd": false,
+      "monitor_predicts": false,
+      "comment": "cosmos boundary state immediately adjacent to satellite (3,3); the classifier most often misclassifies this as satellite under noise σ ≥ 0.05"
+    },
+    {
+      "orbit_class": "singularity",
+      "state": [9, 9],
+      "true_in_odd": false,
+      "monitor_predicts": false,
+      "comment": "singularity isolated at (1.0, 1.0) embedding corner; never confused with satellite at any tested σ since the nearest satellite state (9,3) is at embedding distance √(0² + (6/8)²) = 0.75"
+    }
+  ],
+  "cross_references": [
+    {"family": 263, "name": "QA Failure Density Enumeration Cert", "relation": "utility provider"},
+    {"family": 194, "name": "QA Cognition Space Morphospace Cert", "relation": "canonical mod-9 orbit-family classifier; satellite = 8/81 ratio"},
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "L_2a operator class moves between satellite orbits — relates to satellite-internal ODD monitoring"}
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

@@ -263,12 +263,74 @@ def _score_bundle(bundle_root: Path, task_spec: dict[str, Any] | None = None) ->
         scores["external_admissibility_score"] -= 2
         scores["reviewer_rejection_risk_score"] += 3
 
-    # Requirement coverage: did the patch touch any file from the canonical patch?
+    # Requirement coverage: tiered (Pass-14a). Pre-14a was binary "must touch
+    # canonical file → -3 if not"; Pass 13c showed that codex's
+    # django/contrib/contenttypes/fields.py fix on django-11211 actually
+    # passes FAIL_TO_PASS even though the canonical fix is at
+    # django/db/models/fields/__init__.py. Multiple sites can resolve the
+    # same bug. The harness now grades the file-touch signal:
+    #
+    #   tier-1 (canonical): patch touches a canonical file → no penalty
+    #   tier-2 (same-area): same top-level package + matching basename
+    #     component (file name OR containing dir name) → no penalty,
+    #     finding emitted for visibility
+    #   tier-3 (issue-text): touched file path appears in problem text →
+    #     mild penalty
+    #   tier-4 (none of the above): existing -3 penalty
     if task_spec is not None:
         canonical_files = task_spec.get("canonical_files_touched") or []
         if canonical_files:
-            overlap = [f for f in touched if any(f.endswith(c) or c.endswith(f) for c in canonical_files)]
-            if not overlap:
+            tier1 = [f for f in touched if any(f.endswith(c) or c.endswith(f) for c in canonical_files)]
+            tier2: list[str] = []
+            tier3: list[str] = []
+            if not tier1:
+                # Pass-14a tier-2: same-area heuristic
+                def _file_components(p: str) -> tuple[str, str, str]:
+                    parts = p.split("/")
+                    top = parts[0] if parts else ""
+                    name = Path(p).stem if p else ""
+                    dirname = parts[-2] if len(parts) >= 2 else ""
+                    return top, name, dirname
+
+                for c in canonical_files:
+                    c_top, c_name, c_dir = _file_components(c)
+                    for t in touched:
+                        t_top, t_name, t_dir = _file_components(t)
+                        if t_top and t_top == c_top and (
+                            t_name == c_name
+                            or t_name == c_dir
+                            or t_dir == c_name
+                        ):
+                            if t not in tier2:
+                                tier2.append(t)
+                # Pass-14a tier-3: file path components appear in issue text
+                if not tier2:
+                    problem = (task_spec.get("problem_statement") or "").lower()
+                    for t in touched:
+                        t_top, t_name, t_dir = _file_components(t)
+                        if t_name and len(t_name) >= 4 and t_name.lower() in problem:
+                            tier3.append(t); continue
+                        if t_dir and len(t_dir) >= 4 and t_dir.lower() in problem:
+                            tier3.append(t); continue
+
+            if tier1:
+                pass  # tier-1: full credit, no finding
+            elif tier2:
+                findings.append(
+                    f"Patch touches no canonical file but stays in the same module hierarchy "
+                    f"as the canonical fix (touched={touched[:3]}; canonical={canonical_files[:3]}; "
+                    f"same-area-match={tier2[:2]}). Pass-14a: alternative location accepted."
+                )
+                # No score penalty — tier-2 is full credit per Pass 13c finding.
+            elif tier3:
+                findings.append(
+                    f"Patch path is referenced in the issue text but not in the canonical fix set "
+                    f"(touched={touched[:3]}; canonical={canonical_files[:3]}; "
+                    f"issue-text-match={tier3[:2]})"
+                )
+                scores["requirement_coverage_score"] -= 1
+                scores["reviewer_rejection_risk_score"] += 1
+            else:
                 findings.append(
                     f"Patch touches no file from the canonical fix's file set "
                     f"(touched={touched[:3]}; canonical={canonical_files[:3]})"

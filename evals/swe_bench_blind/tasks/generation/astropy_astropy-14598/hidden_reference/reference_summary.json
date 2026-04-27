@@ -1,0 +1,5 @@
+{
+  "instance_id": "astropy__astropy-14598",
+  "canonical_patch_summary": "Touches astropy/io/fits/card.py; FAIL_TO_PASS=[\"astropy/io/fits/tests/test_header.py::TestHeaderFunctions::test_long_string_value_with_quotes\"]; PASS_TO_PASS truncated=[\"astropy/io/fits/tests/test_header.py::test_shallow_copy\", \"astropy/io/fits/tests/test_header.py::test_init_with_header\", \"astropy/io/fits/tests/test_header.py::test_init_with_dict\", \"astropy/io/fits",
+  "canonical_patch_size": 963
+}

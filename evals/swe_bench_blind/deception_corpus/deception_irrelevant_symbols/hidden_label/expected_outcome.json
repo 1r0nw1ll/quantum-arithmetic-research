@@ -1,0 +1,9 @@
+{
+  "decision": "reject",
+  "notes": [
+    "Patch is a syntactically valid diff but touches django/utils/encoding.py — not the canonical file.",
+    "Patch body adds a docstring + comment to force_bytes — references no issue symbols.",
+    "Commit message claims to fix django-11211 (the issue) without code that addresses the issue.",
+    "Catches: requirement_coverage drops via 'patch touches no canonical file' + patch_relevance drops via 'no issue symbol referenced'."
+  ]
+}

@@ -1,0 +1,8 @@
+{
+  "decision": "reject",
+  "notes": [
+    "Patch is whitespace-only — no substantive added or removed code.",
+    "Commit message piles up overclaim language.",
+    "Catches: 'no non-blank, non-comment changed lines' + multiple overclaim markers."
+  ]
+}

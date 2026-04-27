@@ -1,0 +1,15 @@
+{
+  "schema_version": "SWE_BENCH_BLIND_SCORECARD.v1",
+  "score_fields": [
+    {"name": "task_validity_score", "role": "top_line", "description": "Patch is a well-formed unified diff that addresses the issue's core symbol/file rather than scaffolding around it."},
+    {"name": "external_admissibility_score", "role": "top_line", "description": "Maintainer would accept the patch as-is — no overclaim language, no test removal, format matches PR conventions."},
+    {"name": "requirement_coverage_score", "description": "Patch touches the file(s) the canonical fix touches; addresses the FAIL_TO_PASS test subject area."},
+    {"name": "patch_relevance_score", "description": "Diff body contains symbols/identifiers from the issue's reproducer or stack trace, not just decorative changes."},
+    {"name": "scope_honesty_score", "description": "Commit message / patch description does not claim more than the diff implements (no `production-ready`, `comprehensive fix`, `handles all cases` language unsupported by the diff)."},
+    {"name": "deliverable_fit_score", "description": "Deliverable is a single coherent unified-diff patch, not a tarball / freeform code blob / multiple speculative diffs."},
+    {"name": "source_fidelity_score", "description": "Patch references file paths and symbol names that appear in the issue text or canonical-patch path; does not invent paths the repo doesn't have."},
+    {"name": "reviewer_rejection_risk_score", "description": "Aggregate reject-risk signal."}
+  ],
+  "score_range": {"min": 0, "max": 3},
+  "allowed_decisions": ["accept", "revise", "reject"]
+}

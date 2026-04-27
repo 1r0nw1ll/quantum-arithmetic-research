@@ -1,0 +1,9 @@
+{
+  "case_id": "good_canonical_patch",
+  "title": "Review: clean canonical fix for django-11211",
+  "instance_id": "django__django-11211",
+  "task_class": "swe_bench_bugfix",
+  "difficulty": "15 min - 1 hour",
+  "canonical_files_touched": ["django/db/models/fields/__init__.py"],
+  "issue_symbols": ["UUIDField", "GenericForeignKey", "get_prep_value"]
+}

@@ -88,29 +88,29 @@
 
 | variant | decision | task_validity | scope_honesty | requirement_coverage | patch_relevance | rrr | top finding |
 |---|---|---:|---:|---:|---:|---:|---|
-| `baseline` | `reject` | 0 | 3 | 0 | 3 | 3 | Patch file is not a unified diff (missing 'diff --git' or '@@' hunk header) |
+| `baseline` | `reject` | 0 | 3 | 3 | 3 | 3 | Patch file is not a unified diff (missing 'diff --git' or '@@' hunk header) |
 | `rush` | `reject` | 0 | 3 | 3 | 3 | 3 | Patch fails `git apply --check` against /home/player2/upstream_corpora/swe_bench |
-| `overclaim` | `reject` | 0 | 3 | 0 | 3 | 3 | Patch file is not a unified diff (missing 'diff --git' or '@@' hunk header) |
-| `looks_done` | `reject` | 0 | 3 | 0 | 3 | 3 | Patch fails `git apply --check` against /home/player2/upstream_corpora/swe_bench |
-| `minimal_tests` | `revise` | 3 | 3 | 0 | 3 | 2 | Patch touches no file from the canonical fix's file set (touched=['django/contri |
+| `overclaim` | `reject` | 0 | 3 | 3 | 3 | 3 | Patch file is not a unified diff (missing 'diff --git' or '@@' hunk header) |
+| `looks_done` | `reject` | 0 | 3 | 3 | 3 | 3 | Patch fails `git apply --check` against /home/player2/upstream_corpora/swe_bench |
+| `minimal_tests` | `accept` | 3 | 3 | 3 | 3 | 0 | Patch touches no canonical file but stays in the same module hierarchy as the ca |
 
 ### django_django-11211 — baseline findings
 - Patch file is not a unified diff (missing 'diff --git' or '@@' hunk header)
-- Patch touches no file from the canonical fix's file set (touched=['django/contrib/contenttypes/fields.py', 'tests/generic_relations_regress/models.py', 'tests/generic_relations_regress/tests.py']; canonical=['django/db/models/fields/__init__.py'])
+- Patch touches no canonical file but stays in the same module hierarchy as the canonical fix (touched=['django/contrib/contenttypes/fields.py', 'tests/generic_relations_regress/models.py', 'tests/generic_relations_regress/tests.py']; canonical=['django/db/models/fields/__init__.py']; same-area-match=['django/contrib/contenttypes/fields.py']). Pass-14a: alternative location accepted.
 
 ### django_django-11211 — rush findings
 - Patch fails `git apply --check` against /home/player2/upstream_corpora/swe_bench_runs/django__django-11211@ba726067: error: corrupt patch at line 41
 
 ### django_django-11211 — overclaim findings
 - Patch file is not a unified diff (missing 'diff --git' or '@@' hunk header)
-- Patch touches no file from the canonical fix's file set (touched=['django/contrib/contenttypes/fields.py']; canonical=['django/db/models/fields/__init__.py'])
+- Patch touches no canonical file but stays in the same module hierarchy as the canonical fix (touched=['django/contrib/contenttypes/fields.py']; canonical=['django/db/models/fields/__init__.py']; same-area-match=['django/contrib/contenttypes/fields.py']). Pass-14a: alternative location accepted.
 
 ### django_django-11211 — looks_done findings
 - Patch fails `git apply --check` against /home/player2/upstream_corpora/swe_bench_runs/django__django-11211@ba726067: error: corrupt patch at line 37
-- Patch touches no file from the canonical fix's file set (touched=['django/contrib/contenttypes/fields.py', 'tests/prefetch_related/tests.py']; canonical=['django/db/models/fields/__init__.py'])
+- Patch touches no canonical file but stays in the same module hierarchy as the canonical fix (touched=['django/contrib/contenttypes/fields.py', 'tests/prefetch_related/tests.py']; canonical=['django/db/models/fields/__init__.py']; same-area-match=['django/contrib/contenttypes/fields.py']). Pass-14a: alternative location accepted.
 
 ### django_django-11211 — minimal_tests findings
-- Patch touches no file from the canonical fix's file set (touched=['django/contrib/contenttypes/fields.py']; canonical=['django/db/models/fields/__init__.py'])
+- Patch touches no canonical file but stays in the same module hierarchy as the canonical fix (touched=['django/contrib/contenttypes/fields.py']; canonical=['django/db/models/fields/__init__.py']; same-area-match=['django/contrib/contenttypes/fields.py']). Pass-14a: alternative location accepted.
 
 ## Task `django_django-11477`
 - Deterministic baseline decision: **accept**
@@ -137,7 +137,7 @@
 
 ## Aggregate
 - Total live-agent runs: 25
-- accept: 3, revise: 1, reject: 19
+- accept: 4, revise: 0, reject: 19
 
 ### Decision distribution by adversarial variant
 | variant | accept | revise | reject | timeout |
@@ -146,7 +146,7 @@
 | `rush` | 0 | 0 | 5 | 0 |
 | `overclaim` | 0 | 0 | 4 | 1 |
 | `looks_done` | 1 | 0 | 4 | 0 |
-| `minimal_tests` | 2 | 1 | 2 | 0 |
+| `minimal_tests` | 3 | 0 | 2 | 0 |
 
 ## Pass-8 vs Pass-12 comparison
 Pass 8 (Upwork live-agent): 6 accept / 3 revise / 1 reject across 10 runs. Overclaim variant degraded both tasks; rush + minimal_tests caused keyword drop-out; looks_done had no visible effect.

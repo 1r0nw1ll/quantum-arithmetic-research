@@ -1,0 +1,9 @@
+{
+  "final_decision": "accept",
+  "notes": [
+    "Touches django/contrib/contenttypes/fields.py — same module hierarchy as the canonical (django/db/models/fields/__init__.py); both share the django/ top-level package and a `fields` basename component.",
+    "References GenericForeignKey + GFK + UUID symbols from the issue.",
+    "RELABELED 2026-04-27 (Pass 14a): pre-14a expected was `revise` on the assumption that 'wrong file' implied 'wrong fix'. Pass 13c FAIL_TO_PASS execution showed codex's same-area fix on django-11211 actually passes the failing test — multiple sites can resolve the same bug. This fixture's diff is a same-area defensive normalization in the GenericForeignKey prefetch path; under the Pass-14a tiered patch-relevance, same-module-hierarchy alternative locations get full requirement_coverage credit. Whether THIS specific diff actually fixes the bug requires Pass 13c-style execution to confirm; in heuristic-only scoring the harness now grants accept on the location signal alone.",
+    "Tests requirement_coverage axis when patch is plausible AND in a same-area-but-non-canonical location."
+  ]
+}

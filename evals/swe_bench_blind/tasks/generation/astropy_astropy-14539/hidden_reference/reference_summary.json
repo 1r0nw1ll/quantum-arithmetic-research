@@ -1,0 +1,5 @@
+{
+  "instance_id": "astropy__astropy-14539",
+  "canonical_patch_summary": "Touches astropy/io/fits/diff.py; FAIL_TO_PASS=[\"astropy/io/fits/tests/test_diff.py::TestDiff::test_identical_tables\", \"astropy/io/fits/tests/test_diff.py::TestDiff::test_different_table_data\"]; PASS_TO_PASS truncated=[\"astropy/io/fits/tests/test_diff.py::TestDiff::test_identical_headers\", \"astropy/io/fits/tests/test_diff.py::TestDiff::test_slightly_different_headers\", \"astropy/io/fits/tests/test_diff.py::TestDiff:",
+  "canonical_patch_size": 481
+}

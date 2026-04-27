@@ -1,0 +1,8 @@
+{
+  "decision": "reject",
+  "notes": [
+    "Method body is `pass` with a TODO — placeholder.",
+    "Commit message overclaims with multiple markers.",
+    "Catches: placeholder hits + overclaim hits compound to saturate reviewer_rejection_risk."
+  ]
+}

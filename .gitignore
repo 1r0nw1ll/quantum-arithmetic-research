@@ -140,6 +140,16 @@ multi_ai_workspace/dataset_generator.py
 # qa_tla_blind benchmark: candidate status JSONs + Lane C fixtures must be tracked
 !qa_tla_blind/**/*.json
 !tools/qa_kg/fixtures/*.json
+# evals/ blind-eval suites: fixture metadata (case.json, task.json, hidden_label/*.json,
+# rubrics/scorecard_schema.json, hidden_reference/*.json) must be tracked. Result reports
+# under evals/*/results/ stay ignored — they're regenerated. Pass-14a fix: Pass 10's
+# SWE-Bench fixtures landed without their .json metadata under the global *.json rule;
+# this allowlist preserves the suite's reproducibility.
+!evals/**/case.json
+!evals/**/task.json
+!evals/**/hidden_label/*.json
+!evals/**/hidden_reference/*.json
+!evals/**/rubrics/*.json
 # Phase 5: nested fixture dirs (corpus_snapshot_v<N>/) carry the
 # CANONICAL_MANIFEST.json and other per-snapshot anchors that cert [228]
 # hashes; must be tracked.

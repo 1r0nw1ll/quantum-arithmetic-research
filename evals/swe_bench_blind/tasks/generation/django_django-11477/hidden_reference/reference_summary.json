@@ -1,0 +1,5 @@
+{
+  "instance_id": "django__django-11477",
+  "canonical_patch_summary": "Touches django/urls/resolvers.py; FAIL_TO_PASS=[\"test_re_path_with_optional_parameter (urlpatterns.tests.SimplifiedURLTests)\", \"test_two_variable_at_start_of_path_pattern (urlpatterns.tests.SimplifiedURLTests)\", \"test_translate_url_utility (i18n.patterns.tests.URLTranslationTests)\"]; PASS_TO_PASS truncated=[\"test_include_2_tuple (urlpatterns_reverse.tests.IncludeTests)\", \"test_include_2_tuple_namespace (urlpatterns_reverse.tests.IncludeTests)\", \"test_include_3_tuple (urlpatterns_reverse.tests.IncludeTes",
+  "canonical_patch_size": 610
+}

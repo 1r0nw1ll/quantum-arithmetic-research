@@ -1,0 +1,5 @@
+{
+  "instance_id": "django__django-11211",
+  "canonical_patch_summary": "Touches django/db/models/fields/__init__.py; FAIL_TO_PASS=[\"test_prefetch_GFK_uuid_pk (prefetch_related.tests.GenericRelationTests)\"]; PASS_TO_PASS truncated=[\"test_bug (prefetch_related.tests.Ticket21410Tests)\", \"test_basic (prefetch_related.tests.RawQuerySetTests)\", \"test_clear (prefetch_related.tests.RawQuerySetTests)\", \"test_prefetch_before_raw (prefet",
+  "canonical_patch_size": 527
+}

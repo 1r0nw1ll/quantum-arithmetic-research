@@ -1,0 +1,5 @@
+{
+  "instance_id": "astropy__astropy-13236",
+  "canonical_patch_summary": "Touches astropy/table/table.py; FAIL_TO_PASS=[\"astropy/table/tests/test_mixin.py::test_ndarray_mixin[False]\", \"astropy/table/tests/test_table.py::test_structured_masked_column\"]; PASS_TO_PASS truncated=[\"astropy/table/tests/test_mixin.py::test_attributes[arrayswap]\", \"astropy/table/tests/test_mixin.py::test_attributes[arraywrap]\", \"astropy/table/tests/test_mixin.py::test_attributes[cartesianrep]\", \"",
+  "canonical_patch_size": 853
+}

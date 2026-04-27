@@ -2,6 +2,8 @@
 
 # Algorithm Database — Front Door
 
+> **Adding work to this lane?** Read [`OPERATING_GUIDE.md`](OPERATING_GUIDE.md) first. It locks in lane boundaries (corpus / bridge / certs / database) and documents the add-an-entry checklist + anti-patterns. The guide exists specifically to prevent the scope-drift cycles that delayed this lane's completion in the 2026-04-26/27 work blocks.
+
 A queryable catalog of classical algorithms with their QA conversions. Each row is one algorithm; the columns are source location, classical formulation status, QA mapping status, and evidence pointer.
 
 **Scope discipline (per Will + ChatGPT, 2026-04-27):**

@@ -1,0 +1,189 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM ingestion of Kochenderfer/Wheeler/Wray 2022 'Algorithms for Decision Making' (MIT Press, CC-BY-NC-ND, 700pp). 1 SourceWork + 15 verbatim SourceClaims grounding the MDP/POMDP/multi-agent vocabulary that QA's reachability descent + orbit-graph cert family already operationalizes. domain='' (formal_methods slot still deferred). No contradicts/supersedes/derived-from edges in v1. Do not edit quote fields. -->",
+  "phase": "post-4.8",
+  "source_class": "kochenderfer",
+  "description": "Kochenderfer/Wheeler/Wray 2022 'Algorithms for Decision Making' primary-source claims. 1 SourceWork (dm.pdf) + 15 verbatim SourceClaims spanning: agent observe-act loop (§1.1), four uncertainty types (§1.1), maximum expected utility (§6.4), MDP definition + Markov assumption (§7.1), policy evaluation lookahead equation (§7.2), Bellman expectation equation (§7.2), Bellman backup / value iteration (§7.5), linear-program formulation (§7.7), forward search (§9.3), branch and bound (§9.4), discrete state filter (§19.2), belief-state MDP (§20.1), POMDP value iteration via alpha-vector pruning (§20.5), Markov games (§25.1), Dec-POMDP (§27.1). Bridge mapping (Kochenderfer concept ↔ existing QA artifact) extended additively in docs/specs/QA_KOCHENDERFER_BRIDGE.md §7. Companion textbook optimization.pdf queued for next session.",
+  "works": [
+    {
+      "id": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "title": "Kochenderfer, Wheeler, Wray (2022) — Algorithms for Decision Making",
+      "body": "Mykel J. Kochenderfer (Stanford), Tim A. Wheeler, Kyle H. Wray. Algorithms for Decision Making. MIT Press, 2022. Compiled 2025-09-21 (LuaHBTeX, TeX Live 2024). 700 PDF pages. Creative Commons CC-BY-NC-ND license. Comments to bugs@algorithmsbook.com. Companion repos under github.com/algorithmsbooks: decisionmaking, decisionmaking-code, decisionmaking-ancillaries, DecisionMakingProblems.jl. Second installment in the algorithmsbooks trilogy after Algorithms for Optimization (2019) and before Algorithms for Validation (Kochenderfer 2026). Five-part organization: Probabilistic Reasoning (Bayesian networks, inference, parameter learning, structure learning, simple decisions), Sequential Problems (MDP, value iteration, online planning, policy search, policy gradient), Model Uncertainty (exploration/exploitation, model-based and model-free RL, imitation learning), State Uncertainty (POMDP / beliefs / belief-state planning), Multiagent Systems (Markov games, POMG, Dec-POMDP). PDF on disk at Documents/kochenderfer_corpus/kochenderfer_wheeler_wray_2022_algorithms_for_decision_making.pdf (12.1 MB). Companion to (Kochenderfer, 2026) Algorithms for Validation already ingested as cert [263] anchor.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": ""
+    }
+  ],
+  "claims": [
+    {
+      "id": "dm_1_1_decision_making_observe_act_cycle",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "An agent is an entity that acts based on observations of its environment. Agents may be physical entities, like humans or robots, or they may be nonphysical entities, such as decision support systems that are implemented entirely in software. As shown in figure 1.1, the interaction between the agent and the environment follows an observe-act cycle or loop. The agent at time t receives an observation of the environment, denoted as o_t. The agent then chooses an action a_t through some decision-making process.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-1-1-decision-making-observe-act-cycle",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §1.1 (p.1): agent + environment interact in observe-act cycle; observation o_t at time t, action a_t chosen via decision-making process"
+    },
+    {
+      "id": "dm_1_1_four_uncertainties",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "Given the past sequence of observations, o_1, …, o_t, and knowledge of the environment, the agent must choose an action a_t that best achieves its objectives in the presence of various sources of uncertainty, including the following: outcome uncertainty, where the effects of our actions are uncertain; model uncertainty, where our model of the problem is uncertain; state uncertainty, where the true state of the environment is uncertain; and interaction uncertainty, where the behavior of the other agents interacting in the environment is uncertain. This book is organized around these four sources of uncertainty.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-1-1-four-uncertainties",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §1.1 (p.2): four uncertainty types — outcome, model, state, interaction; book is organized around these four"
+    },
+    {
+      "id": "dm_6_4_maximum_expected_utility",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "We are interested in the problem of making rational decisions with imperfect knowledge of the state of the world. Suppose that we have a probabilistic model P(s' | o, a), which represents the probability that the state of the world becomes s', given that we observe o and take action a. We have a utility function U(s') that encodes our preferences over the space of outcomes. Our expected utility of taking action a, given observation o, is given by EU(a | o) = Σ_{s'} P(s' | a, o) U(s'). The principle of maximum expected utility says that a rational agent should choose the action that maximizes expected utility: a* = arg max_a EU(a | o).",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-6-4-maximum-expected-utility",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §6.4 (p.116): MEU principle — rational agent chooses a* = arg max_a Σ P(s'|a,o) U(s'); central role across the book"
+    },
+    {
+      "id": "dm_7_1_mdp_definition",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "In an MDP (algorithm 7.1), we choose action a_t at time t based on observing state s_t. We then receive a reward r_t. The action space A is the set of possible actions, and the state space S is the set of possible states. Some of the algorithms assume that these sets are finite, but this is not required in general. The state evolves probabilistically based on the current state and action we take. The assumption that the next state depends only on the current state and action and not on any prior state or action is known as the Markov assumption. The state transition model T(s' | s, a) represents the probability of transitioning from state s to s' after executing action a. The reward function R(s, a) represents the expected reward received when executing action a from state s.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-7-1-mdp-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §7.1 (p.133): MDP = (S, A, T(s'|s,a), R(s,a), γ); Markov assumption (next state depends only on current); finite or infinite spaces"
+    },
+    {
+      "id": "dm_7_2_policy_evaluation_lookahead",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "The expected utility of executing π from state s is denoted as U^π(s). In the context of MDPs, U^π is often referred to as the value function. An optimal policy π* is a policy that maximizes expected utility: π*(s) = arg max_π U^π(s) for all states s. An optimal policy can be found by using a computational technique called dynamic programming, which involves simplifying a complicated problem by breaking it down into simpler subproblems in a recursive manner. Policy evaluation can be done iteratively. U^π_{k+1}(s) = R(s, π(s)) + γ Σ_{s'} T(s' | s, π(s)) U^π_k(s'). Convergence is guaranteed because the update in equation (7.5) is a contraction mapping.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-7-2-policy-evaluation-lookahead-equation",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §7.2 (p.136): policy evaluation via DP iterative lookahead U^π_{k+1}(s) = R + γ Σ T U^π_k; convergence guaranteed by contraction mapping"
+    },
+    {
+      "id": "dm_7_2_bellman_expectation_equation",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "At convergence, the following equality holds: U^π(s) = R(s, π(s)) + γ Σ_{s'} T(s' | s, π(s)) U^π(s'). This equality is called the Bellman expectation equation. Policy evaluation can be done without iteration by solving the system of equations in the Bellman expectation equation directly. Equation (7.6) defines a set of |S| linear equations with |S| unknowns corresponding to the values at each state. Solving for U^π in this way requires O(|S|^3) time.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-7-2-bellman-expectation-equation",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §7.2 (p.138): Bellman expectation equation U^π = R + γ T U^π; solvable as |S| linear equations in O(|S|^3)"
+    },
+    {
+      "id": "dm_7_5_value_iteration_bellman_backup",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "Value iteration is an alternative to policy iteration that is often used because of its simplicity. Unlike policy improvement, value iteration updates the value function directly. It begins with any bounded value function U, meaning that |U(s)| < ∞ for all s. The value function can be improved by applying the Bellman backup, also called the Bellman update: U_{k+1}(s) = max_a [ R(s, a) + γ Σ_{s'} T(s' | s, a) U_k(s') ]. Repeated application of this update is guaranteed to converge to the optimal value function. This optimal policy is guaranteed to satisfy the Bellman optimality equation: U*(s) = max_a [ R(s, a) + γ Σ_{s'} T(s' | s, a) U*(s') ].",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-7-5-value-iteration-bellman-backup",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §7.5 (p.141): value iteration via Bellman backup U_{k+1}(s) = max_a [R + γ Σ T U_k]; converges to optimal U* satisfying Bellman optimality equation"
+    },
+    {
+      "id": "dm_7_7_linear_program_formulation",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "The problem of finding an optimal policy can be formulated as a linear program, which is an optimization problem with a linear objective function and a set of linear equality or inequality constraints. minimize Σ_s U(s) subject to U(s) ≥ R(s, a) + γ Σ_{s'} T(s' | s, a) U(s') for all s and a. In the linear program shown in equation (7.20), the number of variables is equal to the number of states and the number of constraints is equal to the number of states times the number of actions. Because linear programs can be solved in polynomial time, MDPs can be solved in polynomial time as well.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-7-7-linear-program-formulation",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §7.7 (p.147): MDP optimal policy as LP — |S| variables, |S|·|A| constraints; polynomial-time solution (Khachiyan 1980)"
+    },
+    {
+      "id": "dm_9_3_forward_search",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "Forward search determines the best action to take from an initial state s by expanding all possible transitions up to depth d. These expansions form a search tree. Such search trees have a worst-case branching factor of |S| × |A|, yielding a computational complexity of O((|S| × |A|)^d). Figure 9.1 shows a search tree applied to a problem with three states and two actions. Figure 9.2 visualizes the states visited during forward search on the hex world problem. If we simply want to plan to the specified horizon, we set U(s) = 0.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-9-3-forward-search",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §9.3 (p.183): forward search = depth-d expansion of all transitions, branching factor |S|·|A|, worst case O((|S|·|A|)^d); search tree as DFS"
+    },
+    {
+      "id": "dm_9_4_branch_and_bound",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "Branch and bound (algorithm 9.3) attempts to avoid the exponential computational complexity of forward search. It prunes branches by reasoning about bounds on the value function. The algorithm requires knowing a lower bound on the value function U(s) and an upper bound on the action value function Q(s, a). The lower bound is used to evaluate the states at the maximum depth. This lower bound is propagated upward through the tree through Bellman updates. If we find that the upper bound of an action at a state is lower than the lower bound of a previously explored action from that state, then we need not explore that action, allowing us to prune the associated subtree from consideration.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-9-4-branch-and-bound",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §9.4 (p.185): branch and bound prunes forward-search subtrees via lower-bound U + upper-bound Q; same worst-case as forward search but better pruned"
+    },
+    {
+      "id": "dm_19_2_discrete_state_filter",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "In a POMDP, the agent does not directly observe the underlying state of the environment. Instead, the agent receives an observation, which belongs to some observation space O, at each time step. The probability of observing o, given that the agent took action a and transitioned to state s', is given by O(o | a, s'). A kind of inference known as recursive Bayesian estimation can be used to update our belief distribution over the current state, given the most recent action and observation. We use b(s) to represent the probability (or probability density for continuous state spaces) assigned to state s. When the state and observation spaces are finite, we can use a discrete state filter to perform this inference exactly. Beliefs for problems with discrete state spaces can be represented using categorical distributions, where a probability mass is assigned to each state.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-19-2-discrete-state-filter",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §19.2 (p.380): POMDP O(o|a,s'); discrete state filter computes belief b(s) exactly via recursive Bayesian estimation; categorical |S|-vector"
+    },
+    {
+      "id": "dm_20_1_belief_state_mdp",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "Any POMDP can be viewed as an MDP that uses beliefs as states, also called a belief-state MDP. The state space of a belief-state MDP is the set of all beliefs B. The action space is identical to that of the POMDP. The reward function for a belief-state MDP depends on the belief and action taken. It is simply the expected value of the reward. For a discrete state-space, it is given by R(b, a) = Σ_s R(s, a) b(s). Solving belief-state MDPs is challenging because the state space is continuous.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-20-1-belief-state-mdp",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §20.1 (p.407): POMDP-to-MDP reduction via belief states — belief-state MDP has continuous state space (probability simplex)"
+    },
+    {
+      "id": "dm_20_5_pomdp_value_iteration",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "The value iteration algorithm for MDPs can be adapted for POMDPs. POMDP value iteration (algorithm 20.8) begins by constructing all one-step plans. We prune any plans that are never optimal for any initial belief. Then, we expand all combinations of one-step plans to produce two-step plans. Again, we prune any suboptimal plans from consideration. This procedure of alternating between expansion and pruning is repeated until the desired horizon is reached.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-20-5-pomdp-value-iteration",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §20.5 (p.416): POMDP value iteration via alpha-vector pruning of conditional plans; expand-then-prune to horizon h"
+    },
+    {
+      "id": "dm_25_1_markov_games",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "An MG (algorithm 25.1) extends a simple game to include a shared state s ∈ S. The likelihood of transitioning from a state s to a state s' under a joint action a is given by the transition distribution T(s' | s, a). Each agent i receives a reward according to its own reward function R_i(s, a), which now also depends on the state. In an infinite-horizon discounted game, the utility for agent i from state s is U^π,i(s) = R_i(s, π(s)) + γ Σ_{s'} T(s' | s, π(s)) U^π,i(s').",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-25-1-markov-games",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §25.1 (p.517): Markov game = MDP with multiple agents and per-agent reward R_i(s,a); per-agent Bellman with joint policy π"
+    },
+    {
+      "id": "dm_27_1_dec_pomdp",
+      "work": "kochenderfer_wheeler_wray_2022_algorithms_for_decision_making",
+      "quote": "A Dec-POMDP (algorithm 27.1) is a POMG where all agents share the same objective. Each agent i ∈ I selects a local action a_i ∈ A_i based on a history of local observations o_i ∈ O_i. The true state of the system s ∈ S is shared by all agents. A single reward is generated by R(s, a) based on state s and joint action a. The goal of all agents is to maximize the shared expected reward over time under local partial observability. Both Dec-POMDP and Dec-MDP problems are NEXP-complete when the number of steps in the horizon is fewer than the number of states.",
+      "source_locator": "file:docs/theory/kochenderfer_decision_making_excerpts.md#dm-27-1-dec-pomdp",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2022-01-01",
+      "domain": "",
+      "title": "Kochenderfer 2022 §27.1 (p.545): Dec-POMDP = collaborative agents, shared reward R(s,a), local observations o_i; NEXP-complete for finite horizons"
+    }
+  ],
+  "observations": [],
+  "contradicts": [],
+  "supersedes": [],
+  "derived_from": []
+}

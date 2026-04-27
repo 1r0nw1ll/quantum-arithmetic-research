@@ -2,9 +2,11 @@
 
 # QA ↔ Kochenderfer/Wheeler Bridge — Controlled Mapping Index
 
-**Source corpus:** Kochenderfer, Wheeler, Katz, Corso, Moss (2026). *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. 441 pp. Companion textbooks (queued for future ingestion): *Algorithms for Optimization* (Kochenderfer + Wheeler 2019) and *Algorithms for Decision Making* (Kochenderfer + Wheeler + Wray 2022).
+**Source corpus:** Kochenderfer, Wheeler, Katz, Corso, Moss (2026). *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. 441 pp. Plus the companion textbook (Kochenderfer, Wheeler, Wray, 2022). *Algorithms for Decision Making*. MIT Press. 700 pp. (ingested 2026-04-27 — bridge §7 below). Optimization textbook (Kochenderfer + Wheeler 2019) queued.
 
-**On-disk:** `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf`. Excerpts: `docs/theory/kochenderfer_validation_excerpts.md` (15 verbatim anchors). Fixture: `tools/qa_kg/fixtures/source_claims_kochenderfer.json` (1 SourceWork, 15 SourceClaims).
+**On-disk:**
+- `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf` — excerpts: `docs/theory/kochenderfer_validation_excerpts.md` (15 anchors); fixture: `tools/qa_kg/fixtures/source_claims_kochenderfer.json` (1 SourceWork, 15 SourceClaims).
+- `Documents/kochenderfer_corpus/kochenderfer_wheeler_wray_2022_algorithms_for_decision_making.pdf` — excerpts: `docs/theory/kochenderfer_decision_making_excerpts.md` (15 anchors); fixture: `tools/qa_kg/fixtures/source_claims_dm.json` (1 SourceWork, 15 SourceClaims).
 
 **Purpose:** Translate Kochenderfer's external vocabulary for validation algorithms into QA terms, and document which QA artifacts (certs, validators, theorems, infrastructure) already implement Kochenderfer's concepts under different names. This bridge serves the Terminal Goal: making the QA cert ecosystem legible to skeptical technical readers who already know the Kochenderfer formalism.
 
@@ -65,7 +67,7 @@
 | Operational design domain (ODD) monitoring at runtime — flag inputs that fall outside the validated regime | (Ch. 12 §12.1, not anchored as quote — full chapter scope) | No QA artifact currently watches QA inputs at runtime to confirm they fall inside the orbit-class regime the cert was validated for. Cert validation is offline / fixture-based. The closest analogue is the qa-collab bus broadcast on cert FAIL, but that's reactive not predictive. | (none) | open | A `qa_runtime_odd_monitor_cert_v1` claim could establish: "Runtime monitoring of QA tuple inputs against a declared 'orbit-class ODD' detects outside-validated-regime inputs at zero variance (deterministic membership check), strictly dominating Kochenderfer §12.1's classifier-superlevel-set ODD on the QA-discrete side of the firewall." Falsifiable. |
 | Counterfactual explanations (Ch. 11 §11.5) — "smallest input change that flips the output" | (not anchored as quote — chapter scope) | No QA-native counterfactual machinery yet. QA could compute counterfactuals via reachability descent: "smallest generator-path that moves a tuple from PASS-orbit to FAIL-orbit." | (none) | open | A `qa_counterfactual_descent_cert_v1` claim could establish: "Counterfactual explanations for QA PASS/FAIL decisions are computed exactly by Dijkstra-shortest-path on the orbit graph with edge weight = generator-cost." Falsifiable. |
 
-## §6. Sections of *Algorithms for Validation* not mapped here
+## §6. Sections of *Algorithms for Validation* not mapped here (Validation book scope)
 
 For honesty: these chapters were not anchored in the v1 ingest because they are continuous-domain and cross the Theorem NT firewall. They become candidates only as observer projections (input boundary) or as off-QA baselines for empirical comparison.
 
@@ -75,6 +77,75 @@ For honesty: these chapters were not anchored in the v1 ingest because they are 
 - Ch. 9 — Reachability for Nonlinear Systems (interval arithmetic, Taylor models, optimization-based reachability, neural networks). Continuous domain; firewall-rejected as causal input.
 - Ch. 11 §11.1-§11.5 — Policy visualization, feature importance, surrogate models, counterfactual explanations. Mostly continuous; counterfactual is a candidate (see §5 above).
 - Ch. 12 §12.1, §12.3 — ODD monitoring, failure monitoring. Anchored conceptually in §5 above; specific runtime-monitor cert is open.
+
+---
+
+## §7. Decision Making bridge — added 2026-04-27
+
+This section was added when *Algorithms for Decision Making* (Kochenderfer, 2022) ingested into QA-MEM. Mirrors the §1-§5 structure of the Validation bridge: status-coded mapping rows + future sharp-claim cert candidates. Same scope discipline applies (no taxonomy certs).
+
+### §7.1 — MDP foundation (the QA-rich chapter)
+
+| Kochenderfer (DM 2022) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| MDP definition: `(S, A, T(s'\|s,a), R(s,a), γ)`, Markov assumption (next state depends only on current state + action) | `#dm-7-1-mdp-definition` | The QA orbit graph IS a deterministic MDP: state space `S = {1..m}²`, action space `A = {qa_step}` (single deterministic generator on the QA-discrete side), transition `T(s'\|s,a) = δ(s', qa_step(s,a))` (no randomness — Theorem NT firewall: stochasticity enters only as observer projection at the input boundary, never as causal QA dynamics), reward = orbit-class membership indicator `1{s ∈ ψ}`. | orbit-graph: `_validate_cayley_bateson_filtration_cert` ([211]); `_validate_bateson_learning_levels_cert` ([191]); `qa_reachability_descent_run_cert_v1` | established | — |
+| Bellman expectation equation `U^π(s) = R(s,π(s)) + γ Σ T(s'\|s,π(s)) U^π(s')`; convergence by contraction mapping; `O(\|S\|³)` direct solution via linear algebra | `#dm-7-2-bellman-expectation-equation`, `#dm-7-2-policy-evaluation-lookahead-equation` | On the QA orbit graph with deterministic T, the Bellman expectation equation collapses to `U^π(s) = R(s, π(s)) + γ U^π(qa_step(s, π(s)))` — a single-successor recursion. Convergence is bit-exact in `O(orbit_period(s))` integer steps; the contraction-mapping argument is unnecessary because there's no fixed-point iteration on a continuous space, just orbit traversal. | implicit in cert [191] tier-classification (each tier-i target is reachable in exactly i generator steps); cert [263] enumerates the analogous `p_fail = E[1{τ ∉ ψ}]` over the same finite graph | candidate | — (vocabulary alignment: rename "tier-i reachability" → "Bellman-backup-i value" in the [191] family doc to mirror Kochenderfer's terminology, no new cert needed) |
+| Bellman backup / value iteration `U_{k+1}(s) = max_a [ R(s,a) + γ Σ T(s'\|s,a) U_k(s') ]`; converges to optimal `U*` satisfying Bellman optimality equation | `#dm-7-5-value-iteration-bellman-backup` | On the QA orbit graph the `max_a` is a no-op (single deterministic generator), so value iteration on QA = forward-orbit traversal. The QA reachability descent cert `qa_reachability_descent_run_cert_v1` operationalizes exactly this for the `R(s,a) = 1{s ∈ ψ}` reward, with the integer-path-length witness as the `U*` analog. | `qa_reachability_descent_run_cert_v1/{validator.py, mapping_protocol.json, fixtures/}` | established | — |
+| Linear-program formulation: `min Σ U(s) s.t. U(s) ≥ R(s,a) + γ Σ T(s'\|s,a) U(s')` for all s,a; `\|S\|` variables, `\|S\|·\|A\|` constraints; polynomial-time by Khachiyan 1980 | `#dm-7-7-linear-program-formulation` | Not directly used by QA — the deterministic single-generator structure makes LP overkill. However, the LP framework is useful for *non-canonical* QA generators (e.g., the L_2a / L_2b / L_3 operator classes from cert [191]) where multiple actions exist; cert [191] already exhaustively enumerates all 81×81 pairs, which is the LP's all-constraints case. | (none beyond [191] enumeration) | rejected | — (LP is dominated by cert [191]'s enumeration on the QA-discrete side; importing LP machinery would add no falsifiable claim) |
+
+### §7.2 — Online planning
+
+| Kochenderfer (DM 2022) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Forward search: depth-d expansion of all transitions, search tree with worst-case branching `\|S\|·\|A\|`, complexity `O((\|S\|·\|A\|)^d)` | `#dm-9-3-forward-search` | The QA forward-reachability BFS at cert [191] performs *exactly this* on `S_9` for `\|A\|=1` (single deterministic generator), so the worst-case `O(\|S\|^d)` collapses to `O(\|S\|·d)` linear time. Result: 81+1712+3456+1312 = 6561 (s,s') pairs classified exhaustively at d=4. | `_validate_bateson_learning_levels_cert` ([191]) — uses the utility from cert [263] for the orbit-class enumeration | established | — |
+| Branch and bound: prune subtrees via `Q(s,a)_hi < Q(s,a*)_lo`; same worst-case as forward search but better pruned | `#dm-9-4-branch-and-bound` | No QA-native branch-and-bound implementation. The deterministic single-generator structure makes pruning trivial (each subtree is a single linear orbit chain), so QA enumeration is already optimal — branch-and-bound machinery would yield no speedup. For multi-generator settings (L_2a / L_2b / L_3 from [191]), branch-and-bound on `Q_hi`/`Q_lo` from the cert-[263] enumeration utility *would* prune productively, but no concrete QA cert claim hinges on this. | (none) | rejected | — (no falsifiable claim where QA branch-and-bound dominates QA enumeration; Kochenderfer's pruning advantage assumes stochastic transitions which QA-discrete doesn't have) |
+
+### §7.3 — POMDP / partial observability
+
+| Kochenderfer (DM 2022) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| POMDP observation function `O(o\|a,s')` and discrete state filter for finite spaces — recursive Bayesian estimation produces categorical belief vector `b(s)` of length `\|S\|`; `B ⊂ ℝ^\|S\|` is the probability simplex | `#dm-19-2-discrete-state-filter` | Direct map to Theorem NT input-boundary observer projection: continuous sensor readings → discrete-orbit-class belief (pmf over `{singularity, satellite, cosmos}` on `S_9`). The categorical-pmf representation is finite-dimensional and respects the firewall — `b(s) ∈ {0, 1/81, …, 81/81}` rationals only on the QA-discrete side. cert [259] qa_heartmath_coherence_cert already does this informally for cardiac-rhythm orbit-class labels under continuous HRV input. | `_validate_qa_heartmath_coherence_cert` ([259]); `qa_kg/observer_projection_*` predicates (Theorem NT firewall enforcement) | candidate | — (vocabulary alignment: re-frame [259]'s "orbit-class label assignment" as "QA-side discrete state filter" with reference to Kochenderfer §19.2; no new cert) |
+| Belief-state MDP — POMDP-to-MDP reduction with continuous belief simplex as state space; `R(b,a) = Σ R(s,a) b(s)` | `#dm-20-1-belief-state-mdp` | The continuous belief simplex is firewall-rejected as causal QA state (Theorem NT — float QA state = T2-b violation). However, the belief-pmf-as-rational-vector projection respects the firewall: instead of continuous belief simplex `b ∈ ℝ^\|S\|`, QA uses the *discrete pmf lattice* `b ∈ ℚ^\|S\|` with denominators bounded by the orbit-graph cardinality. cert [263]'s `Fraction`-based exact ratios are the correct primitive. | (no QA-specific belief-state cert yet) | open | A `qa_belief_state_lattice_cert_v1` claim could establish: "For QA-discrete POMDPs over orbit-class state spaces, the rational-pmf belief lattice `ℚ^\|S\|_d` (denominators ≤ d) is closed under recursive Bayesian update with a deterministic generator — no continuous belief simplex needed." Falsifiable on small-orbit POMDPs. |
+| POMDP value iteration via alpha-vector pruning of conditional plans; expand-then-prune to horizon h | `#dm-20-5-pomdp-value-iteration` | No QA artifact yet. The conditional-plan tree representation maps onto QA generator-sequence enumeration; the alpha-vector pruning maps onto orbit-class equivalence pruning. | (none) | open | A `qa_alpha_vector_orbit_pruning_cert_v1` claim could establish: "QA orbit-class equivalence prunes the conditional-plan tree at exactly the same rate as Kochenderfer alpha-vector pruning on the rational-pmf belief lattice." Falsifiable on small finite-horizon POMDPs. |
+
+### §7.4 — Multi-agent extensions
+
+| Kochenderfer (DM 2022) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Markov game: shared state `s ∈ S`, joint action transitions `T(s'\|s, a)`, per-agent reward `R_i(s, a)`; per-agent Bellman with joint policy | `#dm-25-1-markov-games` | No multi-agent QA cert exists. The structural map is: each agent is an `(b_i, e_i)` orbit position; joint state is the tuple `(s_1, ..., s_n)` ∈ `S^n`; deterministic per-agent generator means joint transition is a product of single-agent transitions. The product structure makes the QA multi-agent cardinality `81^n` — manageable for small `n`. | (none) | open | A `qa_multi_agent_orbit_product_cert_v1` claim could establish: "Joint QA orbits on `S^n` for `n` agents factor into per-agent orbits when generators commute; non-commutative cases yield novel coupled orbit families." Falsifiable on `n=2,3` cases at `m=9`. |
+| Dec-POMDP — collaborative agents, shared reward, local observations; NEXP-complete for finite horizons | `#dm-27-1-dec-pomdp` | The NEXP-completeness comes from belief-coordination across agents under partial observability. On the QA-discrete side the hard part is the *belief-coordination*; per-agent policies with shared reward over orbit-class targets are still tractable when the joint state space is `81^n`. | (none) | open | A `qa_dec_pomdp_orbit_coordination_cert_v1` claim could establish: "QA Dec-POMDPs with reward-independence (per Kochenderfer's reward-decomposition condition §27.2) admit polynomial-time joint-policy enumeration on `S^n` for orbit-class targets — the Kochenderfer P-complete subclass." Falsifiable. |
+
+### §7.5 — Foundation rows (book framing, not algorithm-specific)
+
+| Kochenderfer (DM 2022) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Decision-making framing: agent + environment + observe-act loop | `#dm-1-1-decision-making-observe-act-cycle` | The QA observer-projection firewall (Theorem NT) IS this loop with the projection direction declared at every boundary crossing. cert [257] qa_integer_state_pipeline already enforces "exactly two boundary crossings" as a structural invariant. | `_validate_integer_state_pipeline_cert` ([257]) | established | — |
+| Four uncertainty types: outcome, model, state, interaction — book is organized around these | `#dm-1-1-four-uncertainties` | Theorem NT partitions causality across the firewall: outcome uncertainty = stochastic input projection; model uncertainty = cert-coverage gaps; state uncertainty = belief-pmf rational lattice (see §7.3); interaction uncertainty = multi-agent (see §7.4). The four-axis partition is structurally compatible with QA's existing cert ecosystem boundary discipline. | (book-level structural mapping, not a single cert) | candidate | — (documentation alignment: reference Kochenderfer's four-uncertainty axis in `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md` as the canonical external taxonomy; no new cert) |
+| Maximum expected utility principle: rational agent chooses `a* = arg max_a Σ P(s'\|a,o) U(s')` | `#dm-6-4-maximum-expected-utility` | On the QA-discrete side with deterministic transitions, MEU collapses to `a* = arg max_a U(qa_step(s, a))` — a one-step lookahead. With multi-generator action spaces (L_2a / L_2b / L_3 from cert [191]), MEU recovers the canonical max-over-actions form. | implicit in cert [191] tier-classification (always-pick-cheapest-tier policy) | candidate | — (vocabulary alignment with [191] family doc) |
+
+### §7.6 — Sections of *Algorithms for Decision Making* not mapped here (DM book scope)
+
+For honesty: these chapters were not anchored because they are continuous-domain or off-QA baselines that cross the firewall.
+
+- Part I §2-§5 — Bayesian networks, inference, parameter learning, structure learning. Continuous-domain probabilistic graphical models; observer-projection candidates only.
+- Part II §8 — Approximate Value Functions (parametric, neural network, kernel smoothing). Continuous-domain function approximators; firewall-rejected as QA causal state.
+- Part II §10-§12 — Policy Search, Policy Gradient, Policy Gradient Optimization (gradient ascent, restricted/natural gradient, trust region, clamped surrogate). Continuous-domain; firewall-rejected.
+- Part II §13 — Actor-Critic methods (deep RL). Continuous-domain; off-QA baseline.
+- Part III §16-§18 — Exploration/Exploitation, Model-Based Methods, Model-Free Methods (Q-Learning, SARSA, eligibility traces). Continuous-domain on QA-discrete side; observer-projection only at input boundary if used.
+- Part III §19 — Imitation Learning (IRL, GAIL). Continuous-domain; off-QA baseline.
+- Part IV §19.3-§19.5 — Kalman filter, Extended/Unscented KF, Particle filter. Continuous belief representations; firewall-rejected (only the discrete state filter §19.2 maps to QA).
+- Part IV §21-§22 — Offline/Online Belief State Planning (point-based VI, MCTS over belief). Continuous belief simplex; observer-projection at input boundary only.
+- Part V §23-§24 — Multiagent Reasoning (Nash equilibrium, fictitious play in simple games). Foundational but non-sequential; bridge §7.4 already covers the sequential variants.
+
+### §7.7 — Open sharp-claim certs from §7
+
+Listed for the "no taxonomy cert, only sharp empirical claims" rule:
+- `qa_belief_state_lattice_cert_v1` — rational-pmf belief lattice on QA orbit graphs.
+- `qa_alpha_vector_orbit_pruning_cert_v1` — orbit-class equivalence pruning vs Kochenderfer alpha-vector pruning.
+- `qa_multi_agent_orbit_product_cert_v1` — joint orbits on `S^n` factor when generators commute.
+- `qa_dec_pomdp_orbit_coordination_cert_v1` — polynomial-time Dec-POMDP joint-policy enumeration under reward independence.
+
+Each is independent; none built yet. None requires the others. Same discipline as §1-§5 candidates.
 
 ---
 
@@ -100,6 +171,9 @@ For honesty: these chapters were not anchored in the v1 ingest because they are 
 |---|---|---|
 | Source PDF | `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf` | 13.9 MB; staged 2026-04-26 |
 | Verbatim excerpts | `docs/theory/kochenderfer_validation_excerpts.md` | 15 anchors |
-| QA-MEM fixture | `tools/qa_kg/fixtures/source_claims_kochenderfer.json` | 1 SourceWork + 15 SourceClaims |
+| QA-MEM fixture (Validation) | `tools/qa_kg/fixtures/source_claims_kochenderfer.json` | 1 SourceWork + 15 SourceClaims |
+| Source PDF (Decision Making) | `Documents/kochenderfer_corpus/kochenderfer_wheeler_wray_2022_algorithms_for_decision_making.pdf` | 12.1 MB; staged 2026-04-27 |
+| Verbatim excerpts (Decision Making) | `docs/theory/kochenderfer_decision_making_excerpts.md` | 15 anchors |
+| QA-MEM fixture (Decision Making) | `tools/qa_kg/fixtures/source_claims_dm.json` | 1 SourceWork + 15 SourceClaims |
 | Corpus index entry | `tools/qa_kg/CORPUS_INDEX.md` | section "Kochenderfer / algorithmsbooks corpus" |
-| This bridge | `docs/specs/QA_KOCHENDERFER_BRIDGE.md` | v1, 2026-04-26 |
+| This bridge | `docs/specs/QA_KOCHENDERFER_BRIDGE.md` | v2, §7 added 2026-04-27 |

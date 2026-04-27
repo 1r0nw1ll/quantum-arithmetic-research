@@ -216,8 +216,8 @@ Legend: ✓ = SourceWork ingested; ⏳ = deferred; ⚠ = misfiled (non-Wildberge
 | Path | Author | Topic tags | Domain | SourceWork | Status |
 |---|---|---|---|---|---|
 | `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf` | Kochenderfer+Wheeler+Katz+Corso+Moss 2026 | validation, verification, falsification, reachability, failure distribution, runtime monitoring, temporal logic, Büchi automaton, MIT Press | (unclassified) | `kochenderfer_wheeler_2026_algorithms_for_validation` | ✓ (15 claims) |
+| `Documents/kochenderfer_corpus/kochenderfer_wheeler_wray_2022_algorithms_for_decision_making.pdf` | Kochenderfer+Wheeler+Wray 2022 | MDP, POMDP, value iteration, Bellman backup, policy evaluation, forward search, branch and bound, belief-state MDP, alpha-vector pruning, Markov games, Dec-POMDP, MIT Press | (unclassified) | `kochenderfer_wheeler_wray_2022_algorithms_for_decision_making` | ✓ (15 claims) |
 | **NOT ON DISK YET** | Kochenderfer+Wheeler 2019 | *Algorithms for Optimization* (MIT Press) | (unclassified) | — | ⏳ ingress queued — `~/Downloads/optimization.pdf` (18.9 MB) + `~/Downloads/optimization-1e-1.pdf` (8.3 MB, 1st-edition errata) |
-| **NOT ON DISK YET** | Kochenderfer+Wheeler+Wray 2022 | *Algorithms for Decision Making* (MIT Press) | (unclassified) | — | ⏳ ingress queued — `~/Downloads/dm.pdf` (12.1 MB) |
 
 **Companion repos (GitHub `algorithmsbooks/`):** `validation`, `validation-code`, `validation-ancillaries`, `validation-figures`, `algforopt-notebooks`, `optimization`, `optimization-ancillaries`, `decisionmaking`, `decisionmaking-code`, `decisionmaking-ancillaries`, `DecisionMakingProblems.jl`. Optional ingestion target — primary text is sufficient for v1 mapping; code repos are useful only if a future cert wants empirical comparison against canonical Julia implementations.
 
@@ -265,6 +265,13 @@ Looking up by **topic or keyword** rather than author — this catches the "miss
 | **aleatoric vs epistemic uncertainty / runtime monitoring / ODD** | Kochenderfer 2026 §12.2 (`#val-12-2-aleatoric-vs-epistemic-uncertainty`) |
 | **failure distribution / p_fail / direct estimation / importance sampling** | Kochenderfer 2026 §6.1 + §7.1 (`#val-6-1-failure-distribution-conditional`, `#val-7-1-direct-estimation-pfail`) |
 | **alignment problem (specification-vs-deployment mismatch)** | Kochenderfer 2026 §1.1 (`#val-1-1-alignment-problem`) |
+| **Kochenderfer / Wheeler / Wray / decision making / MDP / POMDP / Markov games / Dec-POMDP** | `Documents/kochenderfer_corpus/kochenderfer_wheeler_wray_2022_algorithms_for_decision_making.pdf`, `docs/theory/kochenderfer_decision_making_excerpts.md`, `tools/qa_kg/fixtures/source_claims_dm.json`, `docs/specs/QA_KOCHENDERFER_BRIDGE.md` §7 |
+| **MDP / Bellman backup / Bellman expectation / value iteration / policy evaluation** | Kochenderfer 2022 §7.1+§7.2+§7.5+§7.7 (`#dm-7-1-mdp-definition`, `#dm-7-2-policy-evaluation-lookahead-equation`, `#dm-7-2-bellman-expectation-equation`, `#dm-7-5-value-iteration-bellman-backup`, `#dm-7-7-linear-program-formulation`) |
+| **forward search / branch and bound / online planning** | Kochenderfer 2022 §9.3+§9.4 (`#dm-9-3-forward-search`, `#dm-9-4-branch-and-bound`) |
+| **POMDP / belief-state MDP / discrete state filter / alpha vectors / belief simplex** | Kochenderfer 2022 §19.2+§20.1+§20.5 (`#dm-19-2-discrete-state-filter`, `#dm-20-1-belief-state-mdp`, `#dm-20-5-pomdp-value-iteration`) |
+| **Markov game / Dec-POMDP / multi-agent / Nash / NEXP-complete** | Kochenderfer 2022 §25.1+§27.1 (`#dm-25-1-markov-games`, `#dm-27-1-dec-pomdp`) |
+| **observe-act loop / four uncertainty types (outcome/model/state/interaction)** | Kochenderfer 2022 §1.1 (`#dm-1-1-decision-making-observe-act-cycle`, `#dm-1-1-four-uncertainties`) |
+| **maximum expected utility / MEU principle / utility theory** | Kochenderfer 2022 §6.4 (`#dm-6-4-maximum-expected-utility`) |
 
 ---
 

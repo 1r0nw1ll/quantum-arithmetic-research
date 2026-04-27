@@ -1,0 +1,124 @@
+{
+  "schema_version": "QA_COUNTERFACTUAL_DESCENT_CERT.v1",
+  "certificate_id": "qa.cert.counterfactual_descent.pass.s9_shortest_counterfactual_paths.v1",
+  "cert_type": "qa_counterfactual_descent_cert",
+  "title": "QA Counterfactual Descent PASS — declared PASS = {cosmos} on S_9; BFS shortest 1-step counterfactual paths via scalar_mult_3 from cosmos to satellite",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Primary PASS fixture for cert [265]. Declares PASS = {cosmos} (72 of 81 S_9 states). For each cosmos start state, the shortest counterfactual path under declared generators {qa_step, scalar_mult_2, scalar_mult_3} is a single scalar_mult_3 application that lands in satellite (3b mod 9 ∧ 3e mod 9 are both multiples of 3 → satellite). Demonstrates: (a) BFS reduces counterfactual computation to exact graph search; (b) the deterministic-generator-graph admits exact shortest-path certificates; (c) different cosmos starts give different terminal satellite states (counterfactuals are start-specific). Validator gates ODD_DECL/LEGAL/FLIP/MINIMAL run independently and must all PASS via independent BFS recomputation under fixed declared generator set.",
+  "source_attribution": "(Kochenderfer, 2026) Algorithms for Validation §11.5 'Counterfactual Explanations' (open-candidate-from-bridge framing); (Dale, 2026) cert [263] qa_failure_density_enumeration_cert utility tools/qa_kg/orbit_failure_enumeration.py orbit_family_s9 + cert [191] qa_bateson_learning_levels_cert tier hierarchy (qa_step = L_1, scalar_mult_2 = L_2a, scalar_mult_3 = L_2b) + cert [194] qa_cognition_space_morphospace_cert canonical mod-9 classifier. Bridge spec docs/specs/QA_KOCHENDERFER_BRIDGE.md §5 counterfactual-explanation row. Authored Will Dale + Claude 2026-04-27.",
+  "declared_pass_classes": ["cosmos"],
+  "declared_generators": ["qa_step", "scalar_mult_2", "scalar_mult_3"],
+  "counterfactual_test_cases": [
+    {
+      "name": "cosmos_anchor_(1,1)",
+      "start": [1, 1],
+      "start_class": "cosmos",
+      "start_in_pass": true,
+      "expected_path_length": 1,
+      "expected_terminal": [3, 3],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [1, 1], "generator": "scalar_mult_3", "to": [3, 3]}
+      ]
+    },
+    {
+      "name": "cosmos_(1,2)",
+      "start": [1, 2],
+      "start_class": "cosmos",
+      "start_in_pass": true,
+      "expected_path_length": 1,
+      "expected_terminal": [3, 6],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [1, 2], "generator": "scalar_mult_3", "to": [3, 6]}
+      ]
+    },
+    {
+      "name": "cosmos_(2,5)",
+      "start": [2, 5],
+      "start_class": "cosmos",
+      "start_in_pass": true,
+      "expected_path_length": 1,
+      "expected_terminal": [6, 6],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [2, 5], "generator": "scalar_mult_3", "to": [6, 6]}
+      ]
+    },
+    {
+      "name": "cosmos_(4,7)",
+      "start": [4, 7],
+      "start_class": "cosmos",
+      "start_in_pass": true,
+      "expected_path_length": 1,
+      "expected_terminal": [3, 3],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [4, 7], "generator": "scalar_mult_3", "to": [3, 3]}
+      ]
+    },
+    {
+      "name": "cosmos_(7,8)",
+      "start": [7, 8],
+      "start_class": "cosmos",
+      "start_in_pass": true,
+      "expected_path_length": 1,
+      "expected_terminal": [3, 6],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [7, 8], "generator": "scalar_mult_3", "to": [3, 6]}
+      ]
+    },
+    {
+      "name": "cosmos_(8,9)",
+      "start": [8, 9],
+      "start_class": "cosmos",
+      "start_in_pass": true,
+      "expected_path_length": 1,
+      "expected_terminal": [6, 9],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [8, 9], "generator": "scalar_mult_3", "to": [6, 9]}
+      ]
+    }
+  ],
+  "claim": "On S_9 with declared PASS = {cosmos} and declared generators {qa_step, scalar_mult_2, scalar_mult_3}, every cosmos start state has an exact 1-step counterfactual path computed by BFS — the application of scalar_mult_3 (the L_2b family-changing generator from cert [191] tier hierarchy). For all 6 declared cosmos starts {(1,1), (1,2), (2,5), (4,7), (7,8), (8,9)}, the BFS-recomputed shortest path length matches the declared length (=1) and the declared terminal state is reached by applying the declared generator to the start. The counterfactual distance from each cosmos state to spec-flip is exactly 1.",
+  "claim_scope": "Claim is narrow: the cert demonstrates that counterfactual explanations on QA finite orbit graphs reduce to BFS shortest-path search under declared legal generator sets. From satellite or singularity start states under the v1 declared generator set, NO counterfactual to cosmos exists — this is a structural feature of scalar multiplication on Z/9 (one-way contraction toward multiples of 3), documented in the satellite/singularity witnesses below. v2 may add an additive generator (e.g., add_one_b) to give bidirectional symmetry. v1 scope is sufficient to establish the BFS-reduction claim. Claim does NOT generalize to continuous feature-space counterfactual explanations.",
+  "structural_observations": {
+    "asymmetry": "Under the v1 declared generator set {qa_step, scalar_mult_2, scalar_mult_3}, scalar multiplication contracts toward multiples of 3. This means the orbit-class hierarchy {cosmos > satellite > singularity} is one-way reachable: cosmos states can move into satellite via scalar_mult_3, satellite states can move into singularity via scalar_mult_3 from {(3,3), (3,6), (6,3), (6,6), (3,9), (9,3), (6,9), (9,6)}, but no generator moves OUT of satellite or singularity to cosmos. This is documented in the satellite + singularity witnesses as 'no_counterfactual_under_v1_generators'.",
+    "generator_costs_unweighted": "v1 BFS uses unit cost per generator application; weighted Dijkstra deferred to v2 unless trivial (per Will + ChatGPT scoping 2026-04-27).",
+    "tier_hierarchy_alignment": "qa_step is L_1 (orbit-preserving) per cert [191]; scalar_mult_2 is L_2a (orbit-changing, family-preserving); scalar_mult_3 is L_2b (family-changing, the orbit-class bridging move that enables the counterfactual)."
+  },
+  "witnesses": [
+    {
+      "orbit_class": "cosmos",
+      "state": [1, 1],
+      "in_pass": true,
+      "counterfactual_exists": true,
+      "shortest_counterfactual_distance": 1,
+      "comment": "primary cosmos witness; canonical 1-step counterfactual via scalar_mult_3 to (3,3) satellite"
+    },
+    {
+      "orbit_class": "satellite",
+      "state": [3, 3],
+      "in_pass": false,
+      "counterfactual_exists": false,
+      "comment": "no_counterfactual_under_v1_generators: from satellite, all of {qa_step, scalar_mult_2, scalar_mult_3} keep the state in {satellite, singularity}; cosmos is unreachable under the declared generator set. Structural feature of scalar-multiplication contraction toward multiples of 3."
+    },
+    {
+      "orbit_class": "singularity",
+      "state": [9, 9],
+      "in_pass": false,
+      "counterfactual_exists": false,
+      "comment": "no_counterfactual_under_v1_generators: (9,9) is a fixed point of all 3 declared generators (qa_step(9,9)=(9,9), scalar_mult_2(9,9)=(9,9) since 18 mod 9=9, scalar_mult_3(9,9)=(9,9) since 27 mod 9=9). No flip possible from singularity."
+    }
+  ],
+  "cross_references": [
+    {"family": 263, "name": "QA Failure Density Enumeration Cert", "relation": "utility provider — orbit_family_s9 from tools/qa_kg/orbit_failure_enumeration.py"},
+    {"family": 264, "name": "QA Runtime ODD Monitor Cert", "relation": "complementary cert — [264] verifies orbit-class membership exactness; [265] verifies counterfactual-distance exactness on the same orbit graph"},
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "tier hierarchy aligns with declared generator labels: qa_step = L_1, scalar_mult_2 = L_2a, scalar_mult_3 = L_2b"},
+    {"family": 194, "name": "QA Cognition Space Morphospace Cert", "relation": "canonical mod-9 orbit-family classifier"}
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

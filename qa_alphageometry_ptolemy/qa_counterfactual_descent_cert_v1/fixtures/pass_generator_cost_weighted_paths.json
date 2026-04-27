@@ -1,0 +1,91 @@
+{
+  "schema_version": "QA_COUNTERFACTUAL_DESCENT_CERT.v1",
+  "certificate_id": "qa.cert.counterfactual_descent.pass.satellite_singularity_pass_inverted_spec.v1",
+  "cert_type": "qa_counterfactual_descent_cert",
+  "title": "QA Counterfactual Descent PASS — inverted spec PASS = {satellite, singularity}; same generator set, opposite-direction flip from cosmos to satellite via scalar_mult_3",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Secondary PASS fixture for cert [265]. Declares PASS = {satellite, singularity} (the 'lower' orbit-class subset; 9 of 81 states in_PASS). For each cosmos start state, the shortest counterfactual path under declared generators {qa_step, scalar_mult_2, scalar_mult_3} is the same scalar_mult_3 application as in the primary fixture — but now the flip is in the opposite direction (cosmos in_PASS=False → satellite in_PASS=True). Demonstrates that the cert's CFD_FLIP gate is direction-agnostic: the counterfactual is the boundary-crossing move regardless of which side of the boundary 'PASS' is. Same generator set as primary fixture; different declared spec; same BFS recomputation; same path lengths. Per Will + ChatGPT scoping 2026-04-27 (file slug retained as 'pass_generator_cost_weighted_paths' to match the planned filename, but v1 keeps the unweighted-BFS scope; weighted Dijkstra deferred to v2).",
+  "source_attribution": "(Kochenderfer, 2026) Algorithms for Validation §11.5 'Counterfactual Explanations'; (Dale, 2026) cert [263] qa_failure_density_enumeration_cert utility + cert [191] qa_bateson_learning_levels_cert tier hierarchy + cert [194] canonical mod-9 classifier.",
+  "declared_pass_classes": ["satellite", "singularity"],
+  "declared_generators": ["qa_step", "scalar_mult_2", "scalar_mult_3"],
+  "counterfactual_test_cases": [
+    {
+      "name": "cosmos_(1,1)_to_satellite",
+      "start": [1, 1],
+      "start_class": "cosmos",
+      "start_in_pass": false,
+      "expected_path_length": 1,
+      "expected_terminal": [3, 3],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [1, 1], "generator": "scalar_mult_3", "to": [3, 3]}
+      ],
+      "comment": "same scalar_mult_3 move as primary fixture; opposite-direction flip (cosmos out-of-PASS → satellite in-PASS)"
+    },
+    {
+      "name": "cosmos_(2,7)_to_satellite",
+      "start": [2, 7],
+      "start_class": "cosmos",
+      "start_in_pass": false,
+      "expected_path_length": 1,
+      "expected_terminal": [6, 3],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [2, 7], "generator": "scalar_mult_3", "to": [6, 3]}
+      ]
+    },
+    {
+      "name": "cosmos_(5,5)_to_satellite",
+      "start": [5, 5],
+      "start_class": "cosmos",
+      "start_in_pass": false,
+      "expected_path_length": 1,
+      "expected_terminal": [6, 6],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [5, 5], "generator": "scalar_mult_3", "to": [6, 6]}
+      ]
+    },
+    {
+      "name": "cosmos_(8,1)_to_satellite",
+      "start": [8, 1],
+      "start_class": "cosmos",
+      "start_in_pass": false,
+      "expected_path_length": 1,
+      "expected_terminal": [6, 3],
+      "expected_terminal_class": "satellite",
+      "path": [
+        {"from": [8, 1], "generator": "scalar_mult_3", "to": [6, 3]}
+      ]
+    }
+  ],
+  "claim": "On S_9 with the inverted declared PASS = {satellite, singularity} and the same v1 generator set as the primary fixture, every cosmos start state still has an exact 1-step counterfactual to satellite via scalar_mult_3. The CFD_FLIP gate verifies the direction-agnostic property: the counterfactual is the orbit-class boundary crossing in either direction. Path lengths are identical to the primary fixture (=1).",
+  "claim_scope": "Same narrow scope as primary fixture. Demonstrates the cert's flip-direction-agnosticism. Generator set unchanged; only declared spec inverted.",
+  "weighted_dijkstra_status": "deferred to v2 per Will + ChatGPT scoping 2026-04-27. v1 BFS unit-cost is sufficient to establish the BFS-reduction claim. Filename retained from the original ChatGPT spec for traceability; the 'cost_weighted' framing applies to v2.",
+  "witnesses": [
+    {
+      "orbit_class": "cosmos",
+      "state": [1, 1],
+      "in_pass": false,
+      "counterfactual_exists": true,
+      "shortest_counterfactual_distance": 1,
+      "comment": "cosmos witness under inverted PASS; same 1-step scalar_mult_3 move; flip direction reversed"
+    },
+    {
+      "orbit_class": "satellite",
+      "state": [3, 3],
+      "in_pass": true,
+      "counterfactual_exists": false,
+      "comment": "in_PASS=True under inverted spec; no counterfactual to cosmos exists under v1 generator set (same structural feature as primary fixture)"
+    },
+    {
+      "orbit_class": "singularity",
+      "state": [9, 9],
+      "in_pass": true,
+      "counterfactual_exists": false,
+      "comment": "fixed point of all v1 generators; no counterfactual exists in either spec direction"
+    }
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

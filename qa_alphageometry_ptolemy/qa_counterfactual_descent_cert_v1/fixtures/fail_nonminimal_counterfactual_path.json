@@ -1,0 +1,32 @@
+{
+  "schema_version": "QA_COUNTERFACTUAL_DESCENT_CERT.v1",
+  "certificate_id": "qa.cert.counterfactual_descent.fail.nonminimal_counterfactual_path.v1",
+  "cert_type": "qa_counterfactual_descent_cert",
+  "title": "QA Counterfactual Descent FAIL — documents the non-minimal-path failure mode that CFD_MINIMAL is designed to catch",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Documented FAIL fixture. Demonstrates the failure mode that CFD_MINIMAL is designed to catch: a fixture declares a counterfactual path that is legal AND flips the spec but is LONGER than the BFS-recomputed shortest path. The body fields below intentionally encode such a non-minimal path so a reviewer can see exactly what the CFD_MINIMAL gate would have flagged. The declared 3-step path qa_step→qa_step→scalar_mult_3 from (1,1) reaches a satellite state but is non-minimal: the 1-step scalar_mult_3 from (1,1) → (3,3) is the BFS-recomputed shortest path.",
+  "source_attribution": "(Kochenderfer, 2026) Algorithms for Validation §11.5; (Dale, 2026) cert [263] qa_failure_density_enumeration_cert.",
+  "declared_pass_classes": ["cosmos"],
+  "declared_generators": ["qa_step", "scalar_mult_2", "scalar_mult_3"],
+  "counterfactual_test_cases": [
+    {
+      "name": "nonminimal_3_step_path_from_(1,1)",
+      "start": [1, 1],
+      "start_class": "cosmos",
+      "expected_path_length": 3,
+      "path": [
+        {"from": [1, 1], "generator": "qa_step", "to": [1, 2]},
+        {"from": [1, 2], "generator": "qa_step", "to": [2, 3]},
+        {"from": [2, 3], "generator": "scalar_mult_3", "to": [6, 9]}
+      ],
+      "comment": "Deliberately non-minimal: this 3-step path reaches satellite (6,9) but the BFS-recomputed shortest from (1,1) is the 1-step scalar_mult_3 path to (3,3). All steps are individually legal, all successor states are correct, and the terminal flips PASS — but path length 3 > 1 = BFS-shortest, so CFD_MINIMAL gate would catch it."
+    }
+  ],
+  "fail_ledger": [
+    {
+      "check_id": "CFD_MINIMAL",
+      "message": "Deliberately wrong: declared 3-step path is legal (all generators in declared_generators, all successors correct) and flips PASS at the terminal state, but is non-minimal — the BFS-recomputed shortest path from (1,1) under {qa_step, scalar_mult_2, scalar_mult_3} with declared_pass_classes=['cosmos'] is the 1-step scalar_mult_3 path to (3,3). If result were not FAIL, the validator would emit: 'CFD_MINIMAL[0]: declared path length=3 != BFS-shortest length=1; declared path is non-minimal'."
+    }
+  ],
+  "result": "FAIL"
+}

@@ -9,7 +9,8 @@
 - **Anchors in QA-MEM**:
   - [`docs/theory/kochenderfer_decision_making_excerpts.md#dm-9-4-branch-and-bound`](../../../docs/theory/kochenderfer_decision_making_excerpts.md) (forward-search pruning)
   - [`docs/theory/kochenderfer_optimization_excerpts.md#opt-22-4-branch-and-bound-integer`](../../../docs/theory/kochenderfer_optimization_excerpts.md) (LP-relaxation + integer branch)
-- **Original code location** (when fetched): `algorithmsbooks/decisionmaking-code` Algorithm 9.3 + `algorithmsbooks/optimization` Algorithm 22.5 — NOT YET FETCHED.
+- **Original code location (DM context)**: `algorithmsbooks/decisionmaking-code` `decision_making_code.jl` L952-973 (section `online-approximations`); FETCHED 2026-04-27 v1.2. See [`sources/decisionmaking_code_inventory.md`](../../sources/decisionmaking_code_inventory.md). Julia signature: `function branch_and_bound(𝒫, s, d, Ulo, Qhi)` — matches book Algorithm 9.3.
+- **Original code location (Opt context)**: `algorithmsbooks/optimization` Algorithm 22.5 (LP-relaxation + integer branch variant) — NOT YET FETCHED. The DM-context Julia code already covers our v1 entry; Opt-context would only be needed for the LP-relaxation variant in v2+.
 
 ## Classical mathematical form
 

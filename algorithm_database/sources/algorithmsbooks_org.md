@@ -14,7 +14,7 @@ Hosts the source code, notebooks, and ancillary materials for the three textbook
 | `optimization` | Errata for *Algorithms for Optimization* | Useful for citation hygiene / source correction | NOT YET FETCHED |
 | `optimization-ancillaries` | Supporting materials for the optimization book | Likely figures, exercises, supplemental assets | NOT YET FETCHED |
 | `decisionmaking` | *Algorithms for Decision Making* textbook source | Very relevant to QA as control / reachability theory | NOT YET FETCHED |
-| `decisionmaking-code` | Typeset code blocks from *Algorithms for Decision Making* | Easier to extract algorithms than from notebooks | NOT YET FETCHED |
+| `decisionmaking-code` | Typeset code blocks from *Algorithms for Decision Making* | Easier to extract algorithms than from notebooks | **FETCHED + INVENTORIED 2026-04-27 (v1.2)** — see [`decisionmaking_code_inventory.md`](decisionmaking_code_inventory.md). Single Julia file (4593 lines), 195 chapter-sections, 253 functions. Backs v1's 4 DM-context entries (`iterative_policy_evaluation`, `value_iteration`, `forward_search`, `branch_and_bound`). |
 | `decisionmaking-ancillaries` | Ancillaries for the decision-making book | Supporting reference set | NOT YET FETCHED |
 | `DecisionMakingProblems.jl` | Julia package of decision-making problems | Strong candidate for benchmark harnesses | NOT YET FETCHED |
 | `validation` | *Algorithms for Validation* textbook source | Relevant to certs, empirical validation, benchmark design | NOT YET FETCHED |
@@ -26,7 +26,7 @@ Hosts the source code, notebooks, and ancillary materials for the three textbook
 
 ## Coverage status (v1 algorithm-database, 2026-04-27)
 
-In v1, **none of the org repos are fetched**. The PDFs of the three textbooks (Validation, Decision Making, Optimization 2e + 1e) are on disk under `Documents/kochenderfer_corpus/` and serve as the primary source for the v1 algorithm-database entries. Algorithm pseudocode is transcribed from the QA-MEM verbatim excerpts (`docs/theory/kochenderfer_*_excerpts.md`), which were extracted with proper attribution during the QA-MEM Phase 4.x ingestion.
+In v1, **none of the org repos are fetched**. The PDFs of the three textbooks (Validation, Decision Making, Optimization 2e + 1e) are on disk under `Documents/kochenderfer_corpus/` and serve as the primary source for the v1 algorithm-database entries. **v1.1 (2026-04-27)** added `algforopt-notebooks` (24 .ipynb), and **v1.2 (2026-04-27)** added `decisionmaking-code` (single 4593-line Julia file). Combined, v1.1 + v1.2 give code-repo backing for all 7 v1 entries. Algorithm pseudocode is transcribed from the QA-MEM verbatim excerpts (`docs/theory/kochenderfer_*_excerpts.md`), which were extracted with proper attribution during the QA-MEM Phase 4.x ingestion.
 
 ## Future-pass strategy
 

@@ -7,7 +7,7 @@
 - **Source**: (Kochenderfer 2022) *Algorithms for Decision Making*, MIT Press, CC-BY-NC-ND, 700 pp
 - **Chapter / section**: §9.3 Forward Search
 - **Anchor in QA-MEM**: [`docs/theory/kochenderfer_decision_making_excerpts.md#dm-9-3-forward-search`](../../../docs/theory/kochenderfer_decision_making_excerpts.md)
-- **Original code location** (when fetched): `algorithmsbooks/decisionmaking-code` Algorithm 9.2 — NOT YET FETCHED.
+- **Original code location**: `algorithmsbooks/decisionmaking-code` `decision_making_code.jl` L926-944 (section `online-approximations`); FETCHED 2026-04-27 v1.2. See [`sources/decisionmaking_code_inventory.md`](../../sources/decisionmaking_code_inventory.md). Julia signature: `function forward_search(𝒫, s, d, U)` — matches book Algorithm 9.2.
 
 ## Classical mathematical form
 

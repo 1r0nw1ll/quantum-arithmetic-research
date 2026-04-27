@@ -7,7 +7,7 @@
 - **Source**: (Kochenderfer 2022) *Algorithms for Decision Making*, MIT Press, CC-BY-NC-ND, 700 pp
 - **Chapter / section**: §7.5 Value Iteration
 - **Anchor in QA-MEM**: [`docs/theory/kochenderfer_decision_making_excerpts.md#dm-7-5-value-iteration-bellman-backup`](../../../docs/theory/kochenderfer_decision_making_excerpts.md)
-- **Original code location** (when fetched): `algorithmsbooks/decisionmaking-code` Algorithm 7.8 — NOT YET FETCHED.
+- **Original code location**: `algorithmsbooks/decisionmaking-code` `decision_making_code.jl` L617-635 (sections `exact-solutions 7` + `exact-solutions 8`); FETCHED 2026-04-27 v1.2. See [`sources/decisionmaking_code_inventory.md`](../../sources/decisionmaking_code_inventory.md). Julia: `function backup(𝒫::MDP, U, s)` + `struct ValueIteration` + `solve(M::ValueIteration, 𝒫::MDP)` — matches book Algorithms 7.7-7.8.
 
 ## Classical mathematical form
 

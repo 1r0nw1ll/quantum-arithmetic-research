@@ -7,7 +7,7 @@
 - **Source**: (Kochenderfer 2022) *Algorithms for Decision Making*, MIT Press, CC-BY-NC-ND, 700 pp
 - **Chapter / section**: §7.2 Policy Evaluation
 - **Anchor in QA-MEM**: [`docs/theory/kochenderfer_decision_making_excerpts.md#dm-7-2-policy-evaluation-lookahead-equation`](../../../docs/theory/kochenderfer_decision_making_excerpts.md)
-- **Original code location** (when fetched): `algorithmsbooks/decisionmaking-code` Algorithm 7.3 — NOT YET FETCHED in v1; pseudocode transcribed from book PDF via QA-MEM excerpt.
+- **Original code location**: `algorithmsbooks/decisionmaking-code` `decision_making_code.jl` L564-571 (section `exact-solutions 3`); FETCHED 2026-04-27 v1.2. See [`sources/decisionmaking_code_inventory.md`](../../sources/decisionmaking_code_inventory.md). Julia signature: `function iterative_policy_evaluation(𝒫::MDP, π, k_max)` — matches book Algorithm 7.3.
 
 ## Classical mathematical form
 

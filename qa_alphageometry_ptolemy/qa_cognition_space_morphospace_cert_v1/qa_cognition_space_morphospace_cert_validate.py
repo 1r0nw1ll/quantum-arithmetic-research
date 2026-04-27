@@ -36,6 +36,26 @@ import os
 import sys
 from pathlib import Path
 
+# Make the repo root importable so tools/qa_kg/orbit_failure_enumeration.py
+# is reachable regardless of CWD when meta_validator runs us. Mirrors the
+# pattern used by cert [263] qa_failure_density_enumeration_cert_v1.
+_HERE = Path(__file__).resolve().parent
+_REPO = _HERE.parent.parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+
+# Shared QA primitives + orbit-family classifier + class enumerator from
+# cert [263] qa_failure_density_enumeration_cert_v1's utility module. This
+# cert was the canonical mod-9 anchor that defined these primitives; the
+# utility now hosts them so [263], [191], [193], and this cert all share
+# one source of truth (refactor 2026-04-27).
+from tools.qa_kg.orbit_failure_enumeration import (  # noqa: E402
+    qa_mod,
+    qa_step,
+    orbit_family_s9,
+    enumerate_orbit_class_counts,
+)
+
 SCHEMA_VERSION = "QA_COGNITION_SPACE_MORPHOSPACE_CERT.v1"
 
 # Expected S_9 orbit family sizes
@@ -55,40 +75,33 @@ MISSING_DIVISORS = {2, 3, 4, 6, 12}
 
 
 # -----------------------------------------------------------------------------
-# QA primitives (integer-only, axiom-compliant)
+# QA primitives — qa_mod / qa_step / orbit_family_s9 imported from the shared
+# tools/qa_kg/orbit_failure_enumeration.py utility (cert [263] is the anchor).
+# count_families_s9 / enumerate_orbit_lengths_s9 below preserve their original
+# names + semantics for backwards compatibility with the rest of this file;
+# count_families_s9 now delegates to enumerate_orbit_class_counts(9).
 # -----------------------------------------------------------------------------
 
-def qa_mod(x, m):
-    """A1-compliant: result in {1,...,m}, never 0."""
-    return ((int(x) - 1) % m) + 1
-
-
-def qa_step(b, e, m):
-    """Fibonacci dynamic: (b,e) -> (e, b+e mod m). A1-compliant."""
-    return (e, qa_mod(b + e, m))
-
-
-def orbit_family_s9(b, e):
-    """Canonical S_9 orbit family classification."""
-    if b == 9 and e == 9:
-        return "singularity"
-    if (b % 3 == 0) and (e % 3 == 0):
-        return "satellite"
-    return "cosmos"
-
-
 def count_families_s9():
-    """Count states in each orbit family of S_9."""
-    counts = {"singularity": 0, "satellite": 0, "cosmos": 0}
-    for b in range(1, 10):
-        for e in range(1, 10):
-            fam = orbit_family_s9(b, e)
-            counts[fam] += 1
-    return counts
+    """Count states in each orbit family of S_9.
+
+    Thin wrapper around enumerate_orbit_class_counts(9) from the shared
+    utility. Returns the same {'singularity', 'satellite', 'cosmos'} dict
+    shape downstream code expects (the utility also returns 'total', which
+    downstream code ignores via direct key lookup).
+    """
+    return enumerate_orbit_class_counts(9)
 
 
 def enumerate_orbit_lengths_s9():
-    """Find all realized orbit lengths in S_9."""
+    """Find all realized orbit lengths in S_9.
+
+    NOTE: this is cycle-length enumeration (per starting point), not
+    orbit-class-population enumeration; left local because the utility
+    only exposes class-population enumeration. If a future cert wants
+    cycle-length enumeration as a shared primitive, lift this function
+    into orbit_failure_enumeration.py at that time.
+    """
     m = 9
     seen = set()
     lengths = set()

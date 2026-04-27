@@ -36,6 +36,25 @@ import os
 import sys
 from pathlib import Path
 
+# Make the repo root importable so tools/qa_kg/orbit_failure_enumeration.py
+# is reachable regardless of CWD when meta_validator runs us. Mirrors the
+# pattern used by cert [263] qa_failure_density_enumeration_cert_v1.
+# Source attribution unchanged: (Levin, 2026) Mind Everywhere; (Lyons, 2026)
+# Cancer to AI Alignment; (Dale, 2026) QA formalization.
+_HERE = Path(__file__).resolve().parent
+_REPO = _HERE.parent.parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+
+# Shared QA primitives + orbit-family classifier from cert [263]'s utility
+# module. Refactor 2026-04-27: replaces the previous local copies that
+# duplicated cert [194] qa_cognition_space_morphospace_cert_v1's primitives.
+from tools.qa_kg.orbit_failure_enumeration import (  # noqa: E402
+    qa_mod,
+    qa_step,
+    orbit_family_s9,
+)
+
 SCHEMA_VERSION = "QA_LEVIN_COGNITIVE_LIGHTCONE_CERT.v1"
 
 # Expected orbit cycle lengths in S_9
@@ -54,18 +73,11 @@ EXPECTED_FAMILY_SIZES = {
 
 
 # -----------------------------------------------------------------------------
-# QA primitives (integer-only, axiom-compliant)
+# QA primitives — qa_mod / qa_step / orbit_family_s9 imported from the
+# shared tools/qa_kg/orbit_failure_enumeration.py utility (cert [263] is the
+# anchor). orbit_length below is a Levin-cone-specific cycle-length helper
+# that the utility does not currently expose.
 # -----------------------------------------------------------------------------
-
-def qa_mod(x, m):
-    """A1-compliant: result in {1,...,m}, never 0."""
-    return ((int(x) - 1) % m) + 1
-
-
-def qa_step(b, e, m):
-    """Fibonacci dynamic: (b,e) -> (e, b+e mod m). A1-compliant."""
-    return (e, qa_mod(b + e, m))
-
 
 def orbit_length(b, e, m=9):
     """Compute the orbit length of (b,e) under T in S_m."""
@@ -76,15 +88,6 @@ def orbit_length(b, e, m=9):
         cur = qa_step(cur[0], cur[1], m)
         length += 1
     return length
-
-
-def orbit_family_s9(b, e):
-    """Canonical S_9 orbit family classification."""
-    if b == 9 and e == 9:
-        return "singularity"
-    if (b % 3 == 0) and (e % 3 == 0):
-        return "satellite"
-    return "cosmos"
 
 
 def verify_cycle_lengths():

@@ -80,4 +80,13 @@ Cert [194] `qa_cognition_space_morphospace_cert_v1` is the canonical mod-9 ancho
 
 - mod-24 extension once a canonical mod-24 orbit-family classifier is published.
 - Three other candidate sharp-claim certs flagged in the bridge spec but not built: `qa_discrete_robustness_cert_v1`, `qa_runtime_odd_monitor_cert_v1`, `qa_counterfactual_descent_cert_v1`.
-- Adopt the utility at certs [191] and [193] (replace hand-rolled enumeration with `orbit_failure_enumeration` calls) to make this cert load-bearing rather than ornamental.
+
+## Adoption status (2026-04-27)
+
+The utility module `tools/qa_kg/orbit_failure_enumeration.py` is now consumed by the existing certs that previously hand-rolled the same primitives:
+
+- ✅ [194] `qa_cognition_space_morphospace_cert_v1` — imports `qa_mod`, `qa_step`, `orbit_family_s9`, `enumerate_orbit_class_counts`. Local `count_families_s9` is now a thin wrapper around `enumerate_orbit_class_counts(9)`. `enumerate_orbit_lengths_s9` (cycle-length, not class-count) preserved locally.
+- ✅ [191] `qa_bateson_learning_levels_cert_v1` — imports `qa_mod`, `qa_step`, `orbit_family_s9`. `enumerate_orbits_s9` + `build_orbit_index` (Bateson-specific orbit-decomposition) preserved locally.
+- ✅ [193] `qa_levin_cognitive_lightcone_cert_v1` — imports `qa_mod`, `qa_step`, `orbit_family_s9`. Levin-cone-specific `orbit_length` (cycle-length helper) preserved locally.
+
+Behavior-preserving refactor — all four certs ([191], [193], [194], [263]) still PASS their self-tests with bit-exact ratios; the existing `EXPECTED_FAMILY_SIZES` / `EXPECTED_TIER_COUNTS_S9` / `EXPECTED_CYCLE_LENGTHS` constants are unchanged. This makes [263]'s utility load-bearing rather than ornamental: a future change to the orbit-family classifier (e.g., a published mod-24 classifier) will propagate to all four certs through one source of truth.

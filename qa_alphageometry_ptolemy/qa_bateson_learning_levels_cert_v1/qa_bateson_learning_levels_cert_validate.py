@@ -63,6 +63,25 @@ import os
 import sys
 from pathlib import Path
 
+# Make the repo root importable so tools/qa_kg/orbit_failure_enumeration.py
+# is reachable regardless of CWD when meta_validator runs us. Mirrors the
+# pattern used by cert [263] qa_failure_density_enumeration_cert_v1.
+# Source attribution unchanged: (Bateson, 1972) Steps to an Ecology of Mind;
+# (Ashby, 1956) Introduction to Cybernetics; (Dale, 2026) QA formalization.
+_HERE = Path(__file__).resolve().parent
+_REPO = _HERE.parent.parent
+if str(_REPO) not in sys.path:
+    sys.path.insert(0, str(_REPO))
+
+# Shared QA primitives + orbit-family classifier from cert [263]'s utility
+# module. Refactor 2026-04-27: replaces the previous local copies that
+# duplicated cert [194] qa_cognition_space_morphospace_cert_v1's primitives.
+from tools.qa_kg.orbit_failure_enumeration import (  # noqa: E402
+    qa_mod,
+    qa_step,
+    orbit_family_s9,
+)
+
 SCHEMA_VERSION = "QA_BATESON_LEARNING_LEVELS_CERT.v1"
 
 # Expected exhaustive tier counts on S_9 (verified 2026-04-04 via
@@ -77,31 +96,11 @@ EXPECTED_TOTAL_S9 = 6561  # 81 * 81
 
 
 # -----------------------------------------------------------------------------
-# QA primitives (integer-only, axiom-compliant)
+# QA primitives — qa_mod / qa_step / orbit_family_s9 imported from the
+# shared tools/qa_kg/orbit_failure_enumeration.py utility (cert [263] is the
+# anchor). Local enumerate_orbits_s9 + build_orbit_index below preserve
+# Bateson-specific orbit-decomposition semantics.
 # -----------------------------------------------------------------------------
-
-def qa_mod(x, m):
-    """A1-compliant: result in {1,...,m}, never 0."""
-    return ((int(x) - 1) % m) + 1
-
-
-def qa_step(b, e, m):
-    """Fibonacci dynamic: (b,e) -> (e, b+e mod m). A1-compliant."""
-    return (e, qa_mod(b + e, m))
-
-
-def orbit_family_s9(b, e):
-    """Canonical S_9 orbit family classification.
-
-    singularity : b == 9 AND e == 9
-    satellite   : 3|b AND 3|e (excludes singularity)
-    cosmos      : everything else
-    """
-    if b == 9 and e == 9:
-        return "singularity"
-    if (b % 3 == 0) and (e % 3 == 0):
-        return "satellite"
-    return "cosmos"
 
 
 def enumerate_orbits_s9():

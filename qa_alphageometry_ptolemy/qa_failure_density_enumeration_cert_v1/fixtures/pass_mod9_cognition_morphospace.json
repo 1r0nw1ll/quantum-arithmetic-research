@@ -1,0 +1,71 @@
+{
+  "schema_version": "QA_FAILURE_DENSITY_ENUMERATION_CERT.v1",
+  "certificate_id": "qa.cert.failure_density_enumeration.pass.mod9_cognition_morphospace.v1",
+  "cert_type": "qa_failure_density_enumeration_cert",
+  "title": "QA Failure Density Enumeration PASS — recasts cert [194] cognition-space morphospace ratios in Kochenderfer Ch. 7 vocabulary as exact mod-9 enumeration with zero variance, head-to-head with Kochenderfer Algorithm 7.1 direct sampling at N in {100, 1000, 10000} per (Kochenderfer, 2026)",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Primary PASS fixture for cert [263]. Reproduces cert [194] qa_cognition_space_morphospace_cert_v1 (Sole, 2026; arxiv:2601.12837) ratios |reachable_set|/|S_9| in {1/81, 8/81, 72/81} via the mod-9 orbit-class enumeration utility tools/qa_kg/orbit_failure_enumeration.py, then runs Kochenderfer-style direct sampling at three N levels per orbit class with seed=42. Validator gates: FDE_1 / FDE_RATIO / FDE_SAMPLING / FDE_STDERR / FDE_UTIL / FDE_SRC / FDE_WIT / FDE_F.",
+  "source_attribution": "Anchored at cert [194] qa_cognition_space_morphospace_cert_v1 (Dale, 2026; Sole, 2026; arxiv:2601.12837). Recast in (Kochenderfer, 2026) Algorithms for Validation Ch. 7 vocabulary: Kochenderfer Ch. 7 §7.1 direct estimation p_fail = E[1{tau not in psi}] = integral 1{tau not in psi} p(tau) d tau specializes to exact finite enumeration on QA mod-9 orbit graph; sigma_hat = sqrt(p (1 - p) / N) per Kochenderfer eq. 7.3. Bridge spec: docs/specs/QA_KOCHENDERFER_BRIDGE.md §3. Verbatim anchor: docs/theory/kochenderfer_validation_excerpts.md#val-7-1-direct-estimation-pfail. Authored Will Dale + Claude 2026-04-27.",
+  "exact_enumeration": {
+    "modulus": 9,
+    "counts": {
+      "singularity": 1,
+      "satellite": 8,
+      "cosmos": 72,
+      "total": 81
+    },
+    "ratios": {
+      "singularity": {"numerator": 1,  "denominator": 81},
+      "satellite":   {"numerator": 8,  "denominator": 81},
+      "cosmos":      {"numerator": 72, "denominator": 81}
+    },
+    "method": "exhaustive enumeration over (b, e) in {1..9} x {1..9}; classifier from cert [194] orbit_family_s9 (singularity = (9,9); satellite = b mod 3 = 0 AND e mod 3 = 0 AND not singularity; cosmos otherwise). Returns Fractions; no float in QA state path."
+  },
+  "sampling_test_cases": [
+    {"target_class": "singularity", "n_samples": 100,   "seed": 42, "expected_p_hat": 0.01,    "expected_n_in_target": 1,    "theoretical_sigma": 0.01104231099999896},
+    {"target_class": "singularity", "n_samples": 1000,  "seed": 42, "expected_p_hat": 0.012,   "expected_n_in_target": 12,   "theoretical_sigma": 0.003491885339192827},
+    {"target_class": "singularity", "n_samples": 10000, "seed": 42, "expected_p_hat": 0.0126,  "expected_n_in_target": 126,  "theoretical_sigma": 0.001104231099999896},
+    {"target_class": "satellite",   "n_samples": 100,   "seed": 42, "expected_p_hat": 0.1,     "expected_n_in_target": 10,   "theoretical_sigma": 0.029834681416282892},
+    {"target_class": "satellite",   "n_samples": 1000,  "seed": 42, "expected_p_hat": 0.084,   "expected_n_in_target": 84,   "theoretical_sigma": 0.00943455465409521},
+    {"target_class": "satellite",   "n_samples": 10000, "seed": 42, "expected_p_hat": 0.0965,  "expected_n_in_target": 965,  "theoretical_sigma": 0.002983468141628289},
+    {"target_class": "cosmos",      "n_samples": 100,   "seed": 42, "expected_p_hat": 0.89,    "expected_n_in_target": 89,   "theoretical_sigma": 0.031426968052735454},
+    {"target_class": "cosmos",      "n_samples": 1000,  "seed": 42, "expected_p_hat": 0.904,   "expected_n_in_target": 904,  "theoretical_sigma": 0.009938079899999067},
+    {"target_class": "cosmos",      "n_samples": 10000, "seed": 42, "expected_p_hat": 0.8909,  "expected_n_in_target": 8909, "theoretical_sigma": 0.0031426968052735453}
+  ],
+  "enumeration_error": 0,
+  "claim": "For QA reachability specifications on the finite mod-9 orbit graph, Kochenderfer Ch. 7 failure-probability estimation specializes to exact enumeration with zero variance. Cert [194]'s ratios 1/81, 8/81, 72/81 are reproduced bit-exact by the mod-9 orbit-class enumeration; Kochenderfer's direct-sampling estimator (Algorithm 7.1) at N in {100, 1000, 10000} per class produces estimates within the |error| <= 4 * sigma envelope predicted by Kochenderfer eq. 7.3 sigma_hat = sqrt(p (1 - p) / N).",
+  "claim_scope": "This cert does not prove that QA enumeration is novel as probability theory; it proves that an existing QA reachability cert ([194]) can be re-expressed in Kochenderfer's validation vocabulary and gains an exact finite-state estimator with zero sampling variance, while the corresponding direct estimator exhibits the expected Bernoulli sampling error.",
+  "witnesses": [
+    {
+      "orbit_class": "singularity",
+      "state": [9, 9],
+      "orbit_length": 1,
+      "exact_p_success": "1/81",
+      "kochenderfer_role": "rare-event target — N >= 1000 needed for 4-sigma envelope to fall under p_true",
+      "anchor": "(Sole, 2026) basal-cluster anchor via cert [194]"
+    },
+    {
+      "orbit_class": "satellite",
+      "state": [3, 3],
+      "orbit_length": 8,
+      "exact_p_success": "8/81",
+      "kochenderfer_role": "mid-rare event — illustrates Bernoulli p(1-p)/N decay clearly across N",
+      "anchor": "(Sole, 2026) neural-cluster anchor via cert [194]"
+    },
+    {
+      "orbit_class": "cosmos",
+      "state": [1, 1],
+      "orbit_length": 24,
+      "exact_p_success": "72/81",
+      "kochenderfer_role": "majority event — sampling concentrates fast; smallest 4-sigma envelope per N",
+      "anchor": "(Sole, 2026) human-AI-cluster anchor via cert [194]"
+    }
+  ],
+  "cross_references": [
+    {"family": 194, "name": "QA Cognition Space Morphospace Cert", "relation": "anchor — reproduces 1/81, 8/81, 72/81 ratios bit-exact"},
+    {"family": 191, "name": "QA Bateson Learning Levels Cert", "relation": "candidate consumer of orbit_failure_enumeration utility for tiered-reachability ratios"},
+    {"family": 193, "name": "QA Levin Cognitive Lightcone Cert", "relation": "candidate consumer for orbit-radius / agency ratios on cancer / Cosmos transitions"}
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

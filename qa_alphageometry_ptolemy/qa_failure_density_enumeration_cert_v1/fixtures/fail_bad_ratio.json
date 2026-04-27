@@ -1,0 +1,26 @@
+{
+  "schema_version": "QA_FAILURE_DENSITY_ENUMERATION_CERT.v1",
+  "certificate_id": "qa.cert.failure_density_enumeration.fail.bad_ratio.v1",
+  "cert_type": "qa_failure_density_enumeration_cert",
+  "title": "QA Failure Density Enumeration FAIL — documents the wrong-ratio failure mode that the FDE_RATIO gate would catch",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Documented FAIL fixture, well-formed under the schema. Demonstrates the failure mode that FDE_RATIO is designed to catch: a fixture declaring the wrong cosmos ratio (e.g., 8/81 instead of 72/81) — equivalent to the cert [194] CSM_AGENCY mismatch case, but expressed in this cert's vocabulary. The validator early-returns on result=FAIL (matching cert [194] convention csm_fail_wrong_agency.json) and only requires the fixture to be schema-conformant + carry a populated fail_ledger. The body fields below intentionally encode the wrong claim so a reviewer can see exactly what the FDE_RATIO gate would have flagged. This fixture is what a reviewer constructs to confirm a known failure mode is detectable by the validator without having to falsify the live FAIL_LEDGER.",
+  "source_attribution": "(Kochenderfer, 2026) Algorithms for Validation §7.1; cert [194] qa_cognition_space_morphospace_cert_v1 (Sole, 2026; arxiv:2601.12837 via Dale, 2026). Mirrors the csm_fail_wrong_agency.json convention from cert [194].",
+  "exact_enumeration": {
+    "modulus": 9,
+    "counts": {"singularity": 1, "satellite": 8, "cosmos": 72, "total": 81},
+    "ratios": {
+      "singularity": {"numerator": 1,  "denominator": 81},
+      "satellite":   {"numerator": 8,  "denominator": 81},
+      "cosmos":      {"numerator": 8,  "denominator": 81}
+    },
+    "method": "DELIBERATELY WRONG: cosmos numerator is set to 8 instead of 72 to demonstrate FDE_RATIO mismatch detection."
+  },
+  "fail_ledger": [
+    {
+      "check_id": "FDE_RATIO",
+      "message": "Deliberately wrong: cosmos ratio declared as 8/81 but exact enumeration on S_9 yields 72/81. If result were not FAIL, the validator would emit: 'FDE_RATIO: declared cosmos ratio=8/81, expected 72/81' and 'FDE_RATIO: declared cosmos count=8, computed 72'."
+    }
+  ],
+  "result": "FAIL"
+}

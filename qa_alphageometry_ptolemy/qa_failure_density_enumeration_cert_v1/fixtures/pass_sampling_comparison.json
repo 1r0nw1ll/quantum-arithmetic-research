@@ -1,0 +1,49 @@
+{
+  "schema_version": "QA_FAILURE_DENSITY_ENUMERATION_CERT.v1",
+  "certificate_id": "qa.cert.failure_density_enumeration.pass.sampling_comparison.v1",
+  "cert_type": "qa_failure_density_enumeration_cert",
+  "title": "QA Failure Density Enumeration PASS — sampling-comparison variance-decay demonstration on satellite class across 3 seeds × 3 N levels per (Kochenderfer, 2026) eq. 7.3",
+  "created_utc": "2026-04-27T00:00:00Z",
+  "_fixture_purpose": "Secondary PASS fixture: focuses the FDE_SAMPLING + FDE_STDERR gates on the mid-rare 'satellite' class (p_true = 8/81 ≈ 0.0988) across three independent seeds (42, 1337, 2024) and three sample sizes (100, 1000, 10000). Per (Kochenderfer, 2026) eq. 7.3 the empirical estimator standard error decays as sqrt(p(1-p)/N) ≈ 0.0298 / 0.00943 / 0.00298 across the three N. All nine seeded cases land inside the 4-sigma envelope, while the QA enumeration error remains identically 0. This decoupled fixture lets reviewers see the variance-decay pattern without the multi-class noise of the primary fixture.",
+  "source_attribution": "(Kochenderfer, 2026) Algorithms for Validation §7.1 direct-estimation MLE p̂_fail = n/m and eq. 7.3 sigma_hat = sqrt(p (1 - p) / N); anchored at docs/theory/kochenderfer_validation_excerpts.md#val-7-1-direct-estimation-pfail. Cert [194] qa_cognition_space_morphospace_cert_v1 supplies the mod-9 orbit-class definitions (Sole, 2026; arxiv:2601.12837 via Dale, 2026). Bridge spec: docs/specs/QA_KOCHENDERFER_BRIDGE.md §3. Authored Will Dale + Claude 2026-04-27.",
+  "exact_enumeration": {
+    "modulus": 9,
+    "counts": {"singularity": 1, "satellite": 8, "cosmos": 72, "total": 81},
+    "ratios": {
+      "singularity": {"numerator": 1,  "denominator": 81},
+      "satellite":   {"numerator": 8,  "denominator": 81},
+      "cosmos":      {"numerator": 72, "denominator": 81}
+    },
+    "method": "Same enumeration as primary fixture; declared here for FDE_RATIO completeness; the load-bearing claim of this fixture is the FDE_SAMPLING / FDE_STDERR gate, not FDE_RATIO."
+  },
+  "sampling_test_cases": [
+    {"target_class": "satellite", "n_samples": 100,   "seed": 42,   "expected_p_hat": 0.1,    "expected_n_in_target": 10,  "theoretical_sigma": 0.029834681416282892},
+    {"target_class": "satellite", "n_samples": 1000,  "seed": 42,   "expected_p_hat": 0.084,  "expected_n_in_target": 84,  "theoretical_sigma": 0.00943455465409521},
+    {"target_class": "satellite", "n_samples": 10000, "seed": 42,   "expected_p_hat": 0.0965, "expected_n_in_target": 965, "theoretical_sigma": 0.002983468141628289},
+    {"target_class": "satellite", "n_samples": 100,   "seed": 1337, "expected_p_hat": 0.09,   "expected_n_in_target": 9,   "theoretical_sigma": 0.029834681416282892},
+    {"target_class": "satellite", "n_samples": 1000,  "seed": 1337, "expected_p_hat": 0.085,  "expected_n_in_target": 85,  "theoretical_sigma": 0.00943455465409521},
+    {"target_class": "satellite", "n_samples": 10000, "seed": 1337, "expected_p_hat": 0.0943, "expected_n_in_target": 943, "theoretical_sigma": 0.002983468141628289},
+    {"target_class": "satellite", "n_samples": 100,   "seed": 2024, "expected_p_hat": 0.13,   "expected_n_in_target": 13,  "theoretical_sigma": 0.029834681416282892},
+    {"target_class": "satellite", "n_samples": 1000,  "seed": 2024, "expected_p_hat": 0.107,  "expected_n_in_target": 107, "theoretical_sigma": 0.00943455465409521},
+    {"target_class": "satellite", "n_samples": 10000, "seed": 2024, "expected_p_hat": 0.0962, "expected_n_in_target": 962, "theoretical_sigma": 0.002983468141628289}
+  ],
+  "enumeration_error": 0,
+  "variance_decay_demonstration": {
+    "p_true_satellite": 0.09876543209876543,
+    "p_true_satellite_exact_fraction": "8/81",
+    "sigma_at_N_100":   0.029834681416282892,
+    "sigma_at_N_1000":  0.00943455465409521,
+    "sigma_at_N_10000": 0.002983468141628289,
+    "decay_ratio_check": "sigma scales as 1/sqrt(N): sigma_100 / sigma_10000 = sqrt(100) = 10",
+    "kochenderfer_anchor": "Algorithms for Validation eq. 7.3"
+  },
+  "claim": "Across 3 independent seeds {42, 1337, 2024} and 3 sample sizes {100, 1000, 10000}, the seeded direct-sampling estimator p̂ for the satellite orbit class on S_9 falls within the |error| <= 4 * sigma envelope predicted by Kochenderfer eq. 7.3, while QA enumeration produces 8/81 exactly with variance 0. This is the load-bearing falsifiable empirical claim distinguishing this cert from a definition cert.",
+  "claim_scope": "This cert does not prove that QA enumeration is novel as probability theory; it proves that an existing QA reachability cert ([194]) can be re-expressed in Kochenderfer's validation vocabulary and gains an exact finite-state estimator with zero sampling variance, while the corresponding direct estimator exhibits the expected Bernoulli sampling error.",
+  "witnesses": [
+    {"orbit_class": "singularity", "state": [9, 9], "orbit_length": 1,  "exact_p_success": "1/81",  "kochenderfer_role": "minority anchor — included for FDE_WIT completeness",                       "anchor": "(Sole, 2026) basal-cluster anchor via cert [194]"},
+    {"orbit_class": "satellite",   "state": [3, 3], "orbit_length": 8,  "exact_p_success": "8/81",  "kochenderfer_role": "load-bearing class — the variance-decay sweep targets this class",        "anchor": "(Sole, 2026) neural-cluster anchor via cert [194]"},
+    {"orbit_class": "cosmos",      "state": [1, 1], "orbit_length": 24, "exact_p_success": "72/81", "kochenderfer_role": "majority anchor — included for FDE_WIT completeness",                       "anchor": "(Sole, 2026) human-AI-cluster anchor via cert [194]"}
+  ],
+  "fail_ledger": [],
+  "result": "PASS"
+}

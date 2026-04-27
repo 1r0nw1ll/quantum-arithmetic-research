@@ -26,6 +26,10 @@ DOMAINS = {
         "label": "Upwork-style",
         "executor": REPO_ROOT / "evals" / "upwork_blind" / "execute_current_system.py",
     },
+    "swe_bench": {
+        "label": "SWE-Bench Verified",
+        "executor": REPO_ROOT / "evals" / "swe_bench_blind" / "execute_current_system.py",
+    },
 }
 
 

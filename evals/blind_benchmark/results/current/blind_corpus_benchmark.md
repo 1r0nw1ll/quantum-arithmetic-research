@@ -1,7 +1,7 @@
 # Blind Corpus Benchmark Sweep
 
 ## Cross-Domain Summary
-- Total labeled fixtures: 22
+- Total labeled fixtures: 30
 - Overall accuracy: 100.00%
 - False accept count: 0
 - False reject count: 0
@@ -122,3 +122,40 @@
 - `scope_honesty_score`: {'0': 4, '1': 2, '3': 2}
 - `source_fidelity_score`: {'1': 1, '3': 7}
 - `task_validity_score`: {'0': 1, '1': 1, '2': 1, '3': 5}
+
+## SWE-Bench Verified
+- Labeled fixtures: 8
+- Overall decision accuracy: 100.00%
+- False accept rate: 0.00%
+- False reject rate: 0.00%
+- Status call: balanced
+
+### Label Counts
+- Expected: {'accept': 2, 'revise': 1, 'reject': 5}
+- Predicted: {'accept': 2, 'revise': 1, 'reject': 5}
+
+### Confusion Matrix
+| expected \ predicted | accept | revise | reject |
+|---|---:|---:|---:|
+| accept | 2 | 0 | 0 |
+| revise | 0 | 1 | 0 |
+| reject | 0 | 0 | 5 |
+
+### False Accepts
+- none
+
+### False Rejects
+- none
+
+### Wrong Transitions
+- none
+
+### Score Distributions
+- `deliverable_fit_score`: {'3': 8}
+- `external_admissibility_score`: {'0': 4, '1': 1, '2': 1, '3': 2}
+- `patch_relevance_score`: {'0': 2, '1': 2, '3': 4}
+- `requirement_coverage_score`: {'0': 3, '3': 5}
+- `reviewer_rejection_risk_score`: {'0': 2, '2': 1, '3': 5}
+- `scope_honesty_score`: {'0': 4, '3': 4}
+- `source_fidelity_score`: {'0': 2, '1': 1, '3': 5}
+- `task_validity_score`: {'0': 1, '1': 2, '3': 5}

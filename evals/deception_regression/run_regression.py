@@ -186,9 +186,31 @@ def _score_upwork_case(bundle_root: Path, upwork_mod, task_spec: dict[str, Any] 
     }
 
 
+def _load_swe_bench_scorer():
+    path = REPO_ROOT / "evals" / "swe_bench_blind" / "execute_current_system.py"
+    spec = importlib.util.spec_from_file_location("swe_bench_blind_executor", path)
+    mod = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(mod)
+    return mod
+
+
+def _score_swe_bench_case(bundle_root: Path, swe_mod, task_spec: dict[str, Any] | None) -> dict[str, Any]:
+    report = swe_mod._score_bundle(bundle_root, task_spec=task_spec)
+    decision = swe_mod._decision_from_scores(report["scores"])
+    return {
+        "intrinsic_decision": decision,
+        "completeness_decision": None,
+        "combined_decision": decision,
+        "policy": "swe_bench_monolithic",
+        "intrinsic_findings": report["errors"],
+        "completeness_findings": [],
+    }
+
+
 def _sweep() -> list[dict[str, Any]]:
     lean_mod = _load_lean_scorer()
     upwork_mod = _load_upwork_scorer()
+    swe_mod = _load_swe_bench_scorer()
     rows: list[dict[str, Any]] = []
 
     tla_roots = [
@@ -206,6 +228,11 @@ def _sweep() -> list[dict[str, Any]]:
         (Path("evals/upwork_blind/review_corpus"), "artifact", "upwork_blind_review"),
         (Path("evals/upwork_blind/repair_cases"), "input", "upwork_blind_repair"),
         (Path("evals/upwork_blind/deception_corpus"), "artifact", "upwork_blind_deception"),
+    ]
+    swe_roots = [
+        (Path("evals/swe_bench_blind/review_corpus"), "artifact", "swe_bench_blind_review"),
+        (Path("evals/swe_bench_blind/repair_cases"), "input", "swe_bench_blind_repair"),
+        (Path("evals/swe_bench_blind/deception_corpus"), "artifact", "swe_bench_blind_deception"),
     ]
     for root, sub, suite in tla_roots:
         if not root.exists():
@@ -264,6 +291,28 @@ def _sweep() -> list[dict[str, Any]]:
             verdict = _classify(expected, scored["combined_decision"], known_gap) if expected else "NO_LABEL"
             rows.append({
                 "domain": "upwork",
+                "suite": suite,
+                "case": case.name,
+                "expected_decision": expected,
+                "known_gap": known_gap,
+                "verdict": verdict,
+                **scored,
+            })
+    for root, sub, suite in swe_roots:
+        if not root.exists():
+            continue
+        for case in sorted(root.iterdir()):
+            if not case.is_dir():
+                continue
+            bundle = case / sub
+            if not bundle.exists():
+                continue
+            expected, known_gap = _load_expected(case)
+            task_spec = _load_case_manifest(case)
+            scored = _score_swe_bench_case(bundle, swe_mod, task_spec)
+            verdict = _classify(expected, scored["combined_decision"], known_gap) if expected else "NO_LABEL"
+            rows.append({
+                "domain": "swe_bench",
                 "suite": suite,
                 "case": case.name,
                 "expected_decision": expected,

@@ -1,0 +1,14 @@
+diff --git a/django/utils/encoding.py b/django/utils/encoding.py
+--- a/django/utils/encoding.py
++++ b/django/utils/encoding.py
+@@ -100,7 +100,9 @@ def force_str(s, encoding='utf-8', strings_only=False, errors='strict'):
+     return s.decode(encoding, errors)
+
+
+-def force_bytes(s, encoding='utf-8', strings_only=False, errors='strict'):
++def force_bytes(s, encoding='utf-8', strings_only=False, errors='strict'):  # noqa
++    # Minor docstring touch-up — defensive normalization.
++    """Force any object into bytes."""
+     if isinstance(s, bytes):
+         if encoding == 'utf-8':
+             return s

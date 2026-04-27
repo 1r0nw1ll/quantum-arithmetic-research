@@ -208,16 +208,18 @@
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
 ## 14. Current Status Snapshot
-- Current phase: Pass 9 — Shared Cross-Domain Core Extracted
+- Current phase: Pass 10 — SWE-Bench Verified pilot (fourth domain)
 - Last completed milestones:
-  - Pass 7: intrinsic-legitimacy / submission-bundle-completeness split in `tools/qa_formal_publication_gate.py` (commit `e87b1d1`) — TLA intrinsic accept 45.5% on 77 upstream specs vs 0% under monolithic.
-  - Pass 7-c: deception regression suite (commit `c2bb195`) — 0 new false accepts, 0 new false rejects, 4 known gaps documented and tolerated.
-  - Pass 7-b: charitable comment-extraction adapter (commit `84be587`) — 50% of TLA revise load was extraction debt; 0 regressions.
-  - Pass 7-a: upstream corpus expansion (commit `1892e03`) — TLA 99 cases intrinsic-accept 55.6%, Lean 128 cases intrinsic-accept 100%; 50/50 extraction-vs-underexplanation split stable at scale.
-  - Pass 7-d: third blind domain `evals/upwork_blind/` (commits `494ecd5`/`236e81e`/`80832f0`) — 10 fixtures, cross-domain sweep 22/22 match expected.
-  - Pass 8: live-agent stress on Upwork suite (commit `9fc9ca7`) — codex generation under 5 prompt variants; harness still detects operational deception under prompt pressure (overclaim variant degrades both tasks; rush + minimal_tests cause keyword drop-out).
-  - Pass 9 (this pass): shared cross-domain core extracted at `evals/_blind_core/`. ORDER + worst_of, BUCKET_RULES + bucket_for_finding, load_expected, bundle_present moved out of duplicating callers. Behavior preserved byte-identically: all 4 generated reports identical to pre-extraction baseline.
-- Cert-gate hook fix (commit `1394e97`) scopes formal-path scanning to staged set + explicit add targets; untracked worktree dirt no longer triggers FORMAL_PUBLICATION_GATE_REQUIRED on unrelated commits.
-- Four tolerated known gaps (all from `evals/deception_regression/fixtures/`): `vacuous_typeok_bundled`, `readme_spec_misalignment`, `vacuous_premise`, `scope_overclaim_no_sorry`. Documented, regression-tracked, **non-blocking pending recurrence**. They did not reappear in the 99-TLA + 128-Lean expanded corpus or the live-agent stress run. Tightening deferred until prevalence data justifies it.
-- Next action: SWE-Bench Verified comparison as a neutral external practical-task benchmark. With the shared core in place, integration of a fourth domain should reuse `_blind_core` directly rather than re-duplicating the bucket / decision / label-loading helpers.
-- Owner / executor: Claude (session claude-main-1533) + Codex (review + commit bridge until Pass 9 hook fix; Claude-side commits work directly now).
+  - Pass 7: intrinsic vs submission-bundle-completeness split (`e87b1d1`).
+  - Pass 7-c: deception regression suite (`c2bb195`) — 4 known gaps documented and tolerated.
+  - Pass 7-b: charitable comment-extraction adapter (`84be587`) — 50% of TLA revise was extraction debt.
+  - Pass 7-a: upstream corpus expansion (`1892e03`) — TLA 99 / Lean 128, intrinsic accept 55.6% / 100%.
+  - Pass 7-d: third blind domain `evals/upwork_blind/` (`494ecd5`/`236e81e`/`80832f0`) — cross-domain sweep 22/22.
+  - Pass 8: live-agent stress on Upwork suite (`86d8b3f`) — overclaim variant degraded both tasks; rush + minimal_tests caused keyword drop-out.
+  - Pass 9: shared cross-domain core extracted at `evals/_blind_core/` (`3c0b755`) — behavior preserved byte-identically.
+  - Pass 10 (this pass): fourth domain `evals/swe_bench_blind/` — SWE-Bench Verified pilot. 5 generation tasks + 8 review/repair/deception fixtures sourced from `princeton-nlp/SWE-bench_Verified`. Cross-domain blind-benchmark now **30/30** (was 22/22). Deception regression now **34 fixtures** (was 26), still exit-0. **Shared core `_blind_core` held without extension** — SWE-Bench scorer reused `bucket_for_finding` directly, `load_expected` reused for regression integration, no new BUCKET_RULES needed.
+- Cert-gate hook fix (`0de0e35`) scopes formal-path scanning to staged set + explicit add targets.
+- Four tolerated known gaps from Pass 7-c remain non-blocking pending recurrence. They did not reappear in Pass 10 either.
+- Pass 10 is text-heuristics-only — no SWE-Bench test-suite execution. Pass 10.5 would integrate FAIL_TO_PASS verification.
+- Next action options: (a) Pass 10.5 — wire SWE-Bench FAIL_TO_PASS test execution; (b) live-agent stress on the SWE-Bench suite; (c) revisit the 4 known gaps only if recurrence appears in the broader corpus or under live-agent stress.
+- Owner / executor: Claude (session claude-main-1533).

@@ -2,11 +2,15 @@
 
 # QA ↔ Kochenderfer/Wheeler Bridge — Controlled Mapping Index
 
-**Source corpus:** Kochenderfer, Wheeler, Katz, Corso, Moss (2026). *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. 441 pp. Plus the companion textbook (Kochenderfer, Wheeler, Wray, 2022). *Algorithms for Decision Making*. MIT Press. 700 pp. (ingested 2026-04-27 — bridge §7 below). Optimization textbook (Kochenderfer + Wheeler 2019) queued.
+**Source corpus (trilogy now complete, ingested 2026-04-27):**
+- (Kochenderfer, 2026) *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. 441 pp. — bridge §1-§5.
+- (Kochenderfer, 2022) *Algorithms for Decision Making*. MIT Press. CC-BY-NC-ND. 700 pp. — bridge §7.
+- (Kochenderfer, 2026) *Algorithms for Optimization* (2nd edition). MIT Press. CC-BY-NC-ND. 631 pp. — bridge §8. 1st edition (2019, 520 pp) registered as SourceWork witness with `supersedes` edge from 2e.
 
 **On-disk:**
 - `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf` — excerpts: `docs/theory/kochenderfer_validation_excerpts.md` (15 anchors); fixture: `tools/qa_kg/fixtures/source_claims_kochenderfer.json` (1 SourceWork, 15 SourceClaims).
 - `Documents/kochenderfer_corpus/kochenderfer_wheeler_wray_2022_algorithms_for_decision_making.pdf` — excerpts: `docs/theory/kochenderfer_decision_making_excerpts.md` (15 anchors); fixture: `tools/qa_kg/fixtures/source_claims_dm.json` (1 SourceWork, 15 SourceClaims).
+- `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_optimization_2e.pdf` + `kochenderfer_wheeler_2019_algorithms_for_optimization_1e.pdf` — excerpts: `docs/theory/kochenderfer_optimization_excerpts.md` (15 anchors); fixture: `tools/qa_kg/fixtures/source_claims_optimization.json` (2 SourceWorks, 15 SourceClaims, 1 supersedes edge 2e→1e).
 
 **Purpose:** Translate Kochenderfer's external vocabulary for validation algorithms into QA terms, and document which QA artifacts (certs, validators, theorems, infrastructure) already implement Kochenderfer's concepts under different names. This bridge serves the Terminal Goal: making the QA cert ecosystem legible to skeptical technical readers who already know the Kochenderfer formalism.
 
@@ -154,10 +158,91 @@ Each is independent; none built yet. None requires the others. Same discipline a
 
 ---
 
+## §8. Optimization bridge — added 2026-04-27
+
+This section was added when *Algorithms for Optimization* 2nd edition (Kochenderfer, 2026) ingested into QA-MEM, completing the Kochenderfer trilogy. Mirrors the §1-§5 (Validation) and §7 (Decision Making) structure: status-coded mapping rows + future sharp-claim cert candidates. Same scope discipline applies — no taxonomy certs, Theorem NT directionality preserved (Optimization vocabulary represents QA where appropriate; it does not redefine QA).
+
+### §8.1 — Optimization foundations
+
+| Kochenderfer (Opt 2e) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Optimization problem `minimize_x f(x) subject to x ∈ X`; design point, design variables, feasible set, objective function | `#opt-1-3-mathematical-formulation` | The QA cert ecosystem's PASS/FAIL admits a re-description as a constrained optimization: the cert is a Boolean specification (per Kochenderfer DM §3.1 metric vs spec mapping); the QA "objective" in this re-description is the discrete reachability indicator `1{s ∈ ψ}` over the integer state space `S = {1..m}²`. The bridge directionality remains: QA's primitive is reachability over generator-defined state evolution; optimization vocabulary re-describes the cert pass/fail as a feasibility check. | `qa_alphageometry_ptolemy/qa_meta_validator.py`; cert [263] qa_failure_density_enumeration_cert (uses exact discrete `p_fail = E[1{τ ∉ ψ}]` — already in optimization vocabulary) | established | — |
+| Global vs local minima; strong vs weak local minimizers; "global minimum hard to prove in general" | `#opt-1-5-minima-local-vs-global` | On the QA orbit graph the global optimum of `1{s ∈ ψ}` is decidable in `O(\|S\|)` exhaustive enumeration (cert [263] utility); the global-vs-local distinction collapses on finite orbit graphs, since the entire feasible set is enumerable. The Kochenderfer-vocabulary observation is that QA-discrete admits exact global-optimum proofs by enumeration where the continuous case cannot. | cert [263] enumeration utility | candidate | — (no new cert; this is a vocabulary alignment observation. The continuous-vs-discrete asymmetry is already captured by §3 row 1 of the Validation bridge.) |
+| First/second-order optimality conditions: univariate `f'=0, f''>0`; multivariate `∇f=0` and Hessian PSD | `#opt-1-6-optimality-conditions` | These conditions are continuous-domain — derivatives presuppose smoothness, which the QA-discrete layer rejects (Theorem NT firewall). The QA-side analog at `1{s ∈ ψ}` is "the indicator function has no derivative; the optimality condition is membership in the target set." | (none — firewall-rejected as QA-causal) | rejected | — (continuous calculus belongs at the observer/output boundary if used at all; never as causal QA dynamics.) |
+
+### §8.2 — Descent methods and HGD comparison targets
+
+| Kochenderfer (Opt 2e) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Canonical descent direction iteration `x^(k+1) ← x^(k) + α^(k) d^(k)`; descent direction methods as a 4-step procedure (terminate / direction / step factor / update) | `#opt-4-1-descent-direction-iteration` | The QA reachability-descent cert `qa_reachability_descent_run_cert_v1` admits a re-description as an instance of this 4-step procedure on the integer orbit graph: termination = target-orbit-class membership; direction `d^(k)` = generator choice from the available action set (cert [191] L_1/L_2a/L_2b/L_3 hierarchy); step factor `α^(k) = 1` (single generator application, integer-only); update = `qa_step(s, d^(k))`. | `qa_reachability_descent_run_cert_v1`; cert [191] tier hierarchy | established | — |
+| Line search `minimize_α f(x + αd)` as univariate optimization of step factor for a continuous objective | `#opt-4-3-line-search` | On the QA orbit graph, integer step factor is canonically `α=1` (single generator application). Line search is firewall-rejected as causal QA dynamics — there is no continuous step factor to optimize. The Kochenderfer-vocabulary form would be "discrete generator-count search" but the cert ecosystem already does this via tier-classification + path-length minimization. | cert [191] tier counts as integer path-length analog | rejected | — (continuous line search is observer-projection-only; integer path-length minimization is the QA-discrete analog and already covered.) |
+| Gradient descent steepest-direction `d^(k) = -g^(k)/‖g^(k)‖`; first-order Taylor approximation `f(x+αd) ≈ f + αd^T g` | `#opt-5-1-gradient-descent-steepest-direction` | Continuous-domain, firewall-rejected as QA-causal. However, the QA-discrete analog at the orbit-class boundary IS canonically defined: "the descent direction at state s is the generator that minimizes orbit-class distance to ψ" — cert [191] tier-classification computes exactly this. | cert [191] | candidate | — (vocabulary alignment: `gradient descent` in Optimization-vocabulary corresponds to `tier-1 generator selection` in QA-discrete vocabulary; documentation-only.) |
+| **Hypergradient Descent (Baydin et al. 2018, ICLR)** — meta-learning the **continuous float step factor** of a gradient method via `α^(k) = α^(k-1) + μ(g^(k))^T g^(k-1)` (eq. 5.38); reduces sensitivity to the hyperparameter | `#opt-5-9-hypergradient-descent-baydin-2018` | **Distinct mathematical object from any QA HGD.** Kochenderfer's HGD is a meta-learning algorithm operating on continuous gradient-method step factors. Any QA "HGD" (harmonic gradient descent, if and where defined) operates on integer orbit graphs and shares only the abbreviation. The bridge does NOT claim QA HGD = Kochenderfer HGD; sharing the acronym is a coincidence. **Action item**: pin the QA-side HGD definition to a canonical reference before treating this row as `candidate` for any sharp cert. | (none — QA-side HGD canonical reference not yet pinned in this bridge) | open | A `qa_hgd_descent_baseline_cert_v1` claim could establish, *after* the QA-side HGD definition is pinned: "QA harmonic gradient descent operates on integer orbit graphs; Kochenderfer hypergradient descent (Baydin 2018) operates on continuous float step factors; the two algorithms share an acronym but are mathematically distinct, and `qa_lab/qa_hgd_*.py` implements only the QA-discrete form." Falsifiable as a side-by-side comparison once the QA HGD definition is fixed. |
+| Newton's method second-order quadratic approximation; quadratic convergence rate | `#opt-6-1-newtons-method` | Continuous-domain second-order; firewall-rejected. The QA-discrete analog (if any) would be "two-step generator lookahead" which is just a depth-2 forward search (cert [191] / DM bridge §7.2 §9.3). | (none on QA-discrete; depth-2 forward search is already covered) | rejected | — |
+
+### §8.3 — Discrete / integer optimization and QA generator search
+
+| Kochenderfer (Opt 2e) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Branch-and-bound for integer programs: LP relaxation + integer branch on fractional component (`x_i ≤ ⌊x*⌋ ∨ x_i ≥ ⌈x*⌉`) + bound-pruning via priority queue | `#opt-22-4-branch-and-bound-integer` | The QA orbit graph admits a representation as a discrete state space already enumerated exhaustively at cert [191] (S_9 = 81 states; 6561 ordered pairs). Branch-and-bound is overkill for finite orbit graphs that small — the Kochenderfer machinery is justified for `\|S\|` in the millions+ where enumeration is infeasible; the QA cardinality is small enough that exhaustive enumeration dominates. For larger moduli (`m=24` would be 576 states; `m=72` would be 5184 states), branch-and-bound on a generator-tier prefix order COULD prune productively. | cert [191] enumerates exhaustively; cert [263] enumeration utility | candidate | A `qa_generator_search_vs_branch_and_bound_cert_v1` claim could establish: "On QA orbit graphs at modulus `m ∈ {9, 24, 72}`, exhaustive enumeration via cert [263]'s utility dominates Kochenderfer §22.4 LP-relaxation+branch-and-bound on every reachability target; B&B's pruning advantage assumes a non-trivial lower-bound oracle that QA-discrete does not have." Falsifiable. |
+| Cyclic coordinate search / direct / zero-order / pattern search / derivative-free methods alternating coordinate directions | `#opt-7-1-cyclic-coordinate-search` | Cert [191] tier-classification IS a generator-coordinate cyclic search: for each `(s, s')` pair, try L_1 generators first; if no L_1 path, try L_2a; if no L_2a path, try L_2b; etc. The directionality is QA-primitive (cert [191] published 2026-04-04, predating this bridge), and the Kochenderfer vocabulary re-describes it. | cert [191] tier hierarchy | candidate | — (vocabulary alignment: re-document cert [191]'s tier-classification as the QA-native cyclic generator search analog of Kochenderfer §7.1; no new cert.) |
+
+### §8.4 — Stochastic / derivative-free baselines
+
+| Kochenderfer (Opt 2e) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Simulated annealing: Metropolis criterion `accept iff Δy ≤ 0 ∨ rand() < e^{-Δy/t}`; exponential annealing schedule `t^(k+1) = γ t^(k)`; "escape from local minima when temperature is high" | `#opt-8-4-simulated-annealing` | Simulated annealing is firewall-rejected as causal QA dynamics (stochastic + continuous Metropolis criterion). On the QA-discrete side, the orbit graph has NO local minima outside of the orbit-class membership predicate — every (b,e) state is exactly one orbit-class. Simulated annealing would dominate QA enumeration only if the QA state space were too large for enumeration; for `m ∈ {9, 24, 72}` it is not. SA is an off-QA baseline that QA enumeration dominates by construction. | (none) | rejected | A future `qa_generator_search_vs_simulated_annealing_cert_v1` claim could establish: "On QA orbit graphs at any modulus where enumeration is feasible (`m ≤ 72` empirically), exact enumeration via cert [263]'s utility dominates Kochenderfer §8.4 simulated annealing in both wallclock and variance. SA's escape-local-minima advantage requires a non-trivial energy landscape, which QA orbit graphs do not have once the orbit-class indicator is the objective." Falsifiable; status open if QA wants to formalize the comparison. |
+
+### §8.5 — Surrogate optimization and QA observer-projection models
+
+| Kochenderfer (Opt 2e) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Surrogate model `f̂_θ` mimicking true `f`; `minimize_θ ‖y - ŷ‖_p` regression | `#opt-17-1-fitting-surrogate-models` | Continuous-domain regression; firewall-rejected as causal QA dynamics. Surrogate models can ONLY enter QA at the input boundary as observer projections (Theorem NT) — i.e., a regression model that maps continuous sensor inputs to discrete orbit-class labels. Cert [259] qa_heartmath_coherence does this informally for HRV → orbit-class. | cert [259] (HeartMath orbit-class projection) | candidate | — (vocabulary alignment: re-document [259]'s "continuous HRV → discrete orbit-class label" as a QA-side surrogate model with explicit `f̂_θ : ℝⁿ → {Sing, Sat, Cos}` form.) |
+| Bayesian optimization expected-improvement `E[I(y)] = (y_min - μ̂) P(y ≤ y_min) + σ̂² N(y_min \| μ̂, σ̂²)` over Gaussian-process surrogate | `#opt-19-5-expected-improvement` | Bayesian optimization machinery (Gaussian processes, expected-improvement acquisition) is observer-projection-only on the QA-discrete side. For finite orbit graphs where exhaustive enumeration is feasible, EI is dominated by enumeration. For larger moduli or hybrid-continuous problems, EI could be useful at the observer-projection input boundary. | (none) | rejected | — (Bayesian-optimization is continuous-domain; QA enumeration dominates on the QA-discrete side for the moduli where enumeration is feasible.) |
+
+### §8.6 — Multiobjective and uncertainty-aware optimization
+
+| Kochenderfer (Opt 2e) concept | Source anchor | QA counterpart | Current QA artifact | Status | Future cert claim |
+|---|---|---|---|---|---|
+| Pareto optimality + dominance `x dominates x' iff f_i(x) ≤ f_i(x') ∀i, ∃i: f_i(x) < f_i(x')` | `#opt-15-1-pareto-optimality` | The QA cert ecosystem already does multi-objective implicitly: each cert is a Boolean spec, the cert ecosystem returns a vector of PASS/FAIL per cert, and the meta-validator's "all certs PASS" is a Pareto-optimal point in the cert-product space. The Kochenderfer-vocabulary observation is that QA cert composition admits a re-description as multi-objective optimization, but with discrete `{PASS, FAIL}` per dimension instead of continuous `f_i(x)`. | `qa_meta_validator.py::FAMILY_SWEEPS` (vector PASS/FAIL output across cert families) | candidate | — (vocabulary alignment: re-document the cert ecosystem's "all certs PASS" as a Pareto-optimal point in the cert-product space; no new cert needed.) |
+| Set-based uncertainty / minimax `minimize_x maximize_z f(x, z)` with `z ∈ Z`; robust counterpart | `#opt-20-2-set-based-uncertainty-minimax` | Theorem NT's input-boundary uncertainty admits a re-description as Kochenderfer's set-based uncertainty: continuous sensor input `z ∈ Z` (the set of all possible noisy readings), discrete QA decision `x ∈ X` (the orbit-class label). The minimax form `min_x max_z f(x, z)` corresponds to "select the orbit-class label robust to the worst-case observer projection" — a structural invariant of cert [257] qa_integer_state_pipeline (two-boundary-crossing) but not previously named in optimization vocabulary. | cert [257] qa_integer_state_pipeline | candidate | A `qa_robust_orbit_classification_cert_v1` claim could establish: "QA orbit-class labels under continuous-input uncertainty admit a minimax representation per Kochenderfer §20.2; the cert verifies that the discrete orbit-class label is invariant to bounded perturbations of the continuous input within set Z." Falsifiable on (continuous_input, label) pairs from cert [259] HeartMath data. |
+
+### §8.7 — Open sharp-claim certs from §8
+
+Per the standing rule "no taxonomy certs, only sharp empirical claims":
+- `qa_hgd_descent_baseline_cert_v1` — QA harmonic gradient descent ≠ Kochenderfer hypergradient descent (Baydin 2018); side-by-side comparison after QA-side HGD canonical reference is pinned. (status: open; precondition not met yet.)
+- `qa_generator_search_vs_branch_and_bound_cert_v1` — QA enumeration dominates Kochenderfer §22.4 B&B on small finite orbit graphs; falsifiable on `m ∈ {9, 24, 72}`.
+- `qa_generator_search_vs_simulated_annealing_cert_v1` — QA enumeration dominates Kochenderfer §8.4 SA on small finite orbit graphs; falsifiable.
+- `qa_robust_orbit_classification_cert_v1` — minimax invariance of QA orbit-class labels under bounded continuous-input perturbation; falsifiable on cert [259] HeartMath data.
+
+These are NOT prioritized over the open candidates from §1-§5 and §7. The full cross-trilogy candidate list is enumerated in Standing Rule #2.
+
+### §8.8 — Sections of *Algorithms for Optimization* not mapped here
+
+For honesty: these chapters were not anchored because they are continuous-domain or off-QA baselines that cross the firewall. They become candidates only as observer projections (input boundary) or as off-QA baselines for empirical comparison.
+
+- Ch. 2 — Derivatives and Gradients (numerical / automatic differentiation, regression gradient, simultaneous perturbation stochastic gradient). Continuous-domain; observer-projection candidates only.
+- Ch. 3 — Bracketing (Fibonacci search, golden section, quadratic fit, Shubert-Piyavskii, bisection). Continuous-domain univariate optimization; firewall-rejected as QA-causal.
+- Ch. 5.2-§5.8 — Conjugate Gradient / Momentum / Nesterov / AdaGrad / RMSProp / Adadelta / Adam (excluding the §5.9 Hypergradient Descent anchor). Continuous-domain accelerated gradient methods; firewall-rejected.
+- Ch. 6.2-§6.5 — Secant / Levenberg-Marquardt / Quasi-Newton (BFGS, L-BFGS, etc.). Continuous-domain second-order; firewall-rejected.
+- Ch. 7.2-§7.6 — Powell / Hooke-Jeeves / Generalized Pattern Search / Nelder-Mead / Divided Rectangles. Continuous-domain direct methods; off-QA baselines if used at all.
+- Ch. 8.1-§8.3, §8.5-§8.8 — Noisy Descent, Mesh Adaptive, Memory-Efficient Zeroth-Order, Cross-Entropy, Proposal Distribution Descent, Information-Geometric, Covariance Matrix Adaptation. Continuous-domain stochastic; off-QA baselines.
+- Ch. 9 — Population Methods (Genetic Algorithms, Differential Evolution, Particle Swarm, Firefly, Cuckoo). Continuous-domain population optimization; off-QA baselines.
+- Ch. 10-§14 — Constraints, Duality, Linear Programming, Quadratic Programming, Disciplined Convex Programming. Continuous-domain optimization machinery; firewall-rejected as QA-causal.
+- Ch. 16 — Sampling Plans (Full Factorial, Random, Uniform Projection, Stratified, Space-Filling). Observer-projection candidates at the input boundary.
+- Ch. 18 — Probabilistic Surrogate Models (Gaussian processes). Continuous-domain; observer-projection candidates only.
+- Ch. 19.1-§19.4, §19.6 — Prediction-based / Error-based / Lower-Confidence-Bound / Probability of Improvement / Safe optimization. Continuous-domain Bayesian optimization variants; same as §8.5 — observer-projection at input boundary if used at all.
+- Ch. 21 — Uncertainty Propagation (Sampling Methods, Taylor Approximation, Polynomial Chaos, Bayesian Monte Carlo). Continuous-domain; observer-projection only.
+- Ch. 22.1-§22.3, §22.5-§22.6 — Integer Programs, Rounding, Cutting Planes, Dynamic Programming, Ant Colony Optimization. The discrete-optimization machinery beyond §22.4 B&B is admissible on the QA-discrete side as alternatives to enumeration; not anchored because the cert ecosystem currently uses enumeration only.
+- Ch. 23 — Expression Optimization (Grammars, Genetic Programming, Grammatical Evolution, Probabilistic Grammars, Probabilistic Prototype Trees). Observer-projection / off-QA territory; potential future scope if a cert family wants to optimize a generator-expression search space.
+- Ch. 24 — Multidisciplinary Optimization (Disciplinary Analyses, Interdisciplinary Compatibility, Architectures, MDF / Sequential / IDF / Collaborative / SAND). Engineering-design framework; off-QA scope.
+
+---
+
 ## Standing rules
 
 1. **No taxonomy cert** — there will be no `qa_kochenderfer_bridge_cert_v1` or similar that "validates the mapping" by classification. Such a cert would PASS by construction and prove nothing. (Per Will's directive 2026-04-26.)
-2. **One cert per sharp claim** — future Kochenderfer-derived certs land *only* when they make a falsifiable empirical claim that compares QA's discrete machinery against Kochenderfer's continuous machinery on a benchmark. Listed candidates above. **First sharp claim landed 2026-04-27**: cert [263] `qa_failure_density_enumeration_cert_v1` — see §3 row 1. Seven remaining open candidates total: from §1-§5 (Validation): `qa_discrete_robustness_cert_v1`, `qa_runtime_odd_monitor_cert_v1`, `qa_counterfactual_descent_cert_v1`; from §7 (Decision Making): `qa_belief_state_lattice_cert_v1`, `qa_alpha_vector_orbit_pruning_cert_v1`, `qa_multi_agent_orbit_product_cert_v1`, `qa_dec_pomdp_orbit_coordination_cert_v1`.
+2. **One cert per sharp claim** — future Kochenderfer-derived certs land *only* when they make a falsifiable empirical claim that compares QA's discrete machinery against Kochenderfer's continuous machinery on a benchmark. **First sharp claim landed 2026-04-27**: cert [263] `qa_failure_density_enumeration_cert_v1` — see §3 row 1. **Eleven remaining open candidates across the trilogy**: from §1-§5 (Validation): `qa_discrete_robustness_cert_v1`, `qa_runtime_odd_monitor_cert_v1`, `qa_counterfactual_descent_cert_v1`; from §7 (Decision Making): `qa_belief_state_lattice_cert_v1`, `qa_alpha_vector_orbit_pruning_cert_v1`, `qa_multi_agent_orbit_product_cert_v1`, `qa_dec_pomdp_orbit_coordination_cert_v1`; from §8 (Optimization): `qa_hgd_descent_baseline_cert_v1` (precondition: QA-side HGD canonical reference must be pinned first), `qa_generator_search_vs_branch_and_bound_cert_v1`, `qa_generator_search_vs_simulated_annealing_cert_v1`, `qa_robust_orbit_classification_cert_v1`. **Pick the next cert across the trilogy**, not within a single book — sharp-claim discipline transcends source organization.
 3. **Vocabulary alignment is preferred over new artifacts** — for `candidate`-status rows, the next move is a docs-only edit to the named QA artifact (rename a section, add a Kochenderfer cross-reference, update terminology). No new cert family.
 4. **This document evolves additively** — when subsequent ingestions land (`dm.pdf`, `optimization.pdf`), extend this bridge with §7+ sections rather than replacing the existing tables.
 
@@ -165,9 +250,9 @@ Each is independent; none built yet. None requires the others. Same discipline a
 
 ## References / Provenance
 
-- Kochenderfer, M. J., Wheeler, T. A., Katz, S., Corso, A., & Moss, R. J. (2026). *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. ISBN forthcoming. Companion repos: github.com/algorithmsbooks/{validation, validation-code, validation-ancillaries, validation-figures}.
-- Kochenderfer, M. J., & Wheeler, T. A. (2019). *Algorithms for Optimization*. MIT Press. (queued for ingestion)
+- Kochenderfer, M. J., Wheeler, T. A., Katz, S., Corso, A., & Moss, R. J. (2026). *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. 441 pp. ISBN forthcoming. Companion repos: github.com/algorithmsbooks/{validation, validation-code, validation-ancillaries, validation-figures}. **Ingested 2026-04-26** (commit `b4ec512`); see §1-§5 of this bridge.
 - Kochenderfer, M. J., Wheeler, T. A., & Wray, K. H. (2022). *Algorithms for Decision Making*. MIT Press. CC-BY-NC-ND. 700 pp. **Ingested 2026-04-27** (commit `0c0440e`); see §7 of this bridge.
+- Kochenderfer, M. J., & Wheeler, T. A. (2026). *Algorithms for Optimization*, 2nd edition. MIT Press. CC-BY-NC-ND. 631 pp. **Ingested 2026-04-27**; see §8 of this bridge. 1st edition (2019, 520 pp) registered as separate SourceWork witness with `supersedes` edge from 2e.
 - Reason, J. (2000). Human Error: Models and Management. *British Medical Journal*, 320(7237), 768–770. (Swiss cheese model citation — used in Kochenderfer §1.4)
 - Christian, B. (2020). *The Alignment Problem: Machine Learning and Human Values*. W. W. Norton & Company. (alignment-problem citation — used in Kochenderfer §1.1)
 - Bateson, G. (1972). *Steps to an Ecology of Mind*. (cited by QA cert [191] for learning-level filtration)
@@ -180,5 +265,8 @@ Each is independent; none built yet. None requires the others. Same discipline a
 | Source PDF (Decision Making) | `Documents/kochenderfer_corpus/kochenderfer_wheeler_wray_2022_algorithms_for_decision_making.pdf` | 12.1 MB; staged 2026-04-27 |
 | Verbatim excerpts (Decision Making) | `docs/theory/kochenderfer_decision_making_excerpts.md` | 15 anchors |
 | QA-MEM fixture (Decision Making) | `tools/qa_kg/fixtures/source_claims_dm.json` | 1 SourceWork + 15 SourceClaims |
-| Corpus index entry | `tools/qa_kg/CORPUS_INDEX.md` | section "Kochenderfer / algorithmsbooks corpus" |
-| This bridge | `docs/specs/QA_KOCHENDERFER_BRIDGE.md` | v2, §7 added 2026-04-27 |
+| Source PDFs (Optimization) | `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_optimization_2e.pdf` (18.9 MB, 631 pp) + `kochenderfer_wheeler_2019_algorithms_for_optimization_1e.pdf` (8.3 MB, 520 pp) | both staged 2026-04-27 |
+| Verbatim excerpts (Optimization) | `docs/theory/kochenderfer_optimization_excerpts.md` | 15 anchors (all from 2e, canonical) |
+| QA-MEM fixture (Optimization) | `tools/qa_kg/fixtures/source_claims_optimization.json` | 2 SourceWorks (1e + 2e) + 15 SourceClaims + 1 supersedes edge (2e → 1e) |
+| Corpus index entry | `tools/qa_kg/CORPUS_INDEX.md` | section "Kochenderfer / algorithmsbooks corpus" (now 4 SourceWorks across 3 books) |
+| This bridge | `docs/specs/QA_KOCHENDERFER_BRIDGE.md` | v3, §8 added 2026-04-27 (trilogy complete) |

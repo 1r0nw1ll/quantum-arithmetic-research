@@ -1,0 +1,202 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM ingestion of Kochenderfer/Wheeler 'Algorithms for Optimization' both editions (1st ed 2019/2022 print + 2nd ed 2026). 2 SourceWorks + 15 verbatim SourceClaims (all from 2nd ed; canonical anchor) + 1 supersedes edge (2e -> 1e). Domain='' consistent with val.pdf and dm.pdf fixtures. Do not edit quote fields. -->",
+  "phase": "post-4.8",
+  "source_class": "kochenderfer",
+  "description": "Kochenderfer/Wheeler 'Algorithms for Optimization' primary-source claims, both editions ingested per Phase 4.x discipline (do not collapse editions). 2 SourceWorks: kochenderfer_wheeler_2026_algorithms_for_optimization_2e (canonical, 631pp, MIT Press 2026) and kochenderfer_wheeler_2019_algorithms_for_optimization_1e (520pp, MIT Press 2019, PDF print 2022-05). 15 SourceClaims all anchored at the 2nd edition (the canonical, more-comprehensive version) covering: optimization problem mathematical formulation (§1.3), local vs global minima (§1.5), first/second-order necessary optimality conditions including multivariate gradient/Hessian PSD (§1.6), descent direction iteration x^(k+1)=x^(k)+α^(k)d^(k) (§4.1), line search minimize_α f(x+αd) (§4.3), gradient descent steepest-direction d^(k)=-g^(k)/||g^(k)|| (§5.1), Hypergradient Descent Baydin 2018 / α update (§5.9 — NB: distinct from any QA HGD), Newton's method second-order quadratic convergence (§6.1), cyclic coordinate search derivative-free (§7.1), simulated annealing Metropolis criterion + exponential schedule (§8.4), Pareto optimality multiobjective dominance (§15.1), surrogate models L_p regression (§17.1), expected improvement Bayesian optimization (§19.5), set-based uncertainty minimax minimize_x maximize_z f(x,z) (§20.2), discrete branch-and-bound LP-relaxation+integer-branch+prune (§22.4). 1 supersedes edge: 2e supersedes 1e (Phase 4.5 supersedes pattern, mirrors source_claims_iverson and source_claims_keely conventions). Bridge mapping (Optimization concept ↔ existing QA artifact) extended additively in docs/specs/QA_KOCHENDERFER_BRIDGE.md §8. Trilogy now complete: val.pdf (2026 Validation, 15 claims) + dm.pdf (2022 Decision Making, 15 claims) + optimization.pdf (2026 2e Optimization, 15 claims) + 1st ed witness.",
+  "works": [
+    {
+      "id": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "title": "Kochenderfer, Wheeler (2026) — Algorithms for Optimization (2nd edition)",
+      "body": "Mykel J. Kochenderfer (Stanford), Tim A. Wheeler. Algorithms for Optimization, 2nd edition. MIT Press, 2026. CC-BY-NC-ND. Compiled 2026-04-22 09:01:45-07:00 (LuaHBTeX, TeX Live 2024). 631 pages. Title page reads 'Algorithms for Optimization | second edition'. Companion repos under github.com/algorithmsbooks: algforopt-notebooks, optimization, optimization-ancillaries. Third installment in the algorithmsbooks trilogy ingested for QA-MEM, after Algorithms for Validation (Kochenderfer 2026) and Algorithms for Decision Making (Kochenderfer/Wheeler/Wray 2022). 24-chapter five-part organization spanning continuous and discrete optimization: Part I Foundations (Introduction, Derivatives, Bracketing); Part II Local & Population Methods (Local Descent, First-Order, Second-Order, Direct, Stochastic, Population); Part III Constraints & Duality (Constraints, Duality, LP, QP, DCP); Part IV Multiobjective & Sampling (Multiobjective, Sampling Plans, Surrogate Models, Probabilistic Surrogates, Surrogate Optimization, Optimization Under Uncertainty, Uncertainty Propagation); Part V Discrete Extensions (Discrete Optimization, Expression Optimization, Multidisciplinary Optimization). PDF on disk at Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_optimization_2e.pdf (18.9 MB). Most overlap with QA cert ecosystem: §4-§5 descent direction methods + §22 discrete optimization + §5.9 hypergradient descent (NB: Baydin et al. 2018 named algorithm — distinct from any QA HGD; cf bridge §8.2).",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": ""
+    },
+    {
+      "id": "kochenderfer_wheeler_2019_algorithms_for_optimization_1e",
+      "title": "Kochenderfer, Wheeler (2019) — Algorithms for Optimization (1st edition)",
+      "body": "Mykel J. Kochenderfer (Stanford), Tim A. Wheeler. Algorithms for Optimization, 1st edition. MIT Press, 2019. CC-BY-NC-ND. PDF print compiled 2022-05-22 (GPL Ghostscript 9.53.3). 520 pages. Title page reads 'Algorithms for Optimization' (no edition marker — it is the original 1st edition, distinct from the 2nd edition compiled 2026-04-22 with explicit 'second edition' marker). Kept as a separate SourceWork from the 2nd edition under the QA-MEM Phase 4.x rule 'do not collapse editions prematurely'. The 1st edition is the version most pre-2026 QA-side citations refer to (as in 'Kochenderfer + Wheeler 2019' in the original Algorithms for Validation bridge spec docstring). PDF on disk at Documents/kochenderfer_corpus/kochenderfer_wheeler_2019_algorithms_for_optimization_1e.pdf (8.3 MB). All claims in this fixture are anchored at the 2nd edition (canonical, more comprehensive); the 1st edition is registered as a SourceWork to support `supersedes` edge attribution.",
+      "source_locator": "file:Documents/kochenderfer_corpus/kochenderfer_wheeler_2019_algorithms_for_optimization_1e.pdf",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2019-01-01",
+      "valid_until": "2026-04-22",
+      "domain": ""
+    }
+  ],
+  "claims": [
+    {
+      "id": "opt_1_3_mathematical_formulation",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "An optimization problem can be formulated mathematically as follows: minimize_x f(x) subject to x ∈ X (1.1). Here, x is a design point, which can be represented as a vector of values corresponding to different design variables. The elements in this vector can be adjusted to minimize the objective function f. Any value of x in the feasible set X that minimizes the objective function is called a solution or minimizer. The feasible set X may be defined in terms of a set of constraints. Each constraint limits the set of possible solutions, and together the constraints define the feasible set X.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-1-3-mathematical-formulation",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §1.3 (p.5): optimization problem = minimize_x f(x) s.t. x ∈ X; design point + design variables + feasible set"
+    },
+    {
+      "id": "opt_1_5_minima_local_vs_global",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "When minimizing f, we wish to find a global minimizer, a value of x for which f(x) is minimized. A function may have at most one global minimum, but it may have multiple global minimizers. Unfortunately, it is generally difficult to prove that a given candidate point is at a global minimum. Often, the best we can do is check whether it is at a local minimum. A strong local minimizer, also known as a strict local minimizer, is a point that uniquely minimizes f within a neighborhood. A weak local minimizer is a local minimizer that is not a strong local minimizer.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-1-5-minima-local-vs-global",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §1.5 (p.10): global minimum vs local; strong vs weak local minimizers; global minimum hard to prove"
+    },
+    {
+      "id": "opt_1_6_optimality_conditions",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "In cases where the objective function is twice differentiable (at least at the minimizer), we can establish conditions for optimality. Univariate Conditions: A design point is guaranteed to be at a strong local minimum if the local derivative is zero and the second derivative is positive: 1. f'(x*) = 0, 2. f''(x*) > 0. Multivariate Conditions: 1. ∇f(x) = 0, the first-order necessary condition. 2. ∇²f(x) is positive semidefinite, the second-order necessary condition. The first-order necessary condition tells us that the function is not changing at x. The second-order necessary condition tells us that x is in a bowl.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-1-6-optimality-conditions",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §1.6 (p.10-12): first/second-order necessary optimality conditions; multivariate ∇f=0 + ∇²f PSD"
+    },
+    {
+      "id": "opt_4_1_descent_direction_iteration",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "A common approach to optimization is to incrementally improve a design point x by taking a step that attempts to minimize the objective value based on a local model. The local model may be obtained, for example, from a first- or second-order Taylor approximation. Optimization algorithms that follow this general approach are referred to as descent direction methods. They start with a design point x^(1) and then generate a sequence of points, sometimes called iterates, to converge to a local minimum. The iterative descent direction procedure involves the following steps: 1. Check whether x^(k) satisfies the termination conditions. 2. Determine the descent direction d^(k) using local information such as the gradient or Hessian. 3. Determine the step factor α^(k). 4. Compute the next design point according to: x^(k+1) ← x^(k) + α^(k) d^(k) (4.1).",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-4-1-descent-direction-iteration",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §4.1 (p.61-62): canonical descent direction iteration x^(k+1) = x^(k) + α^(k)d^(k); 4-step procedure"
+    },
+    {
+      "id": "opt_4_3_line_search",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "Instead of using a fixed or decaying step factor, we can use line search to directly optimize the step factor to minimize the objective function given a descent direction d: minimize_α f(x + αd) (4.6). Line search is a univariate optimization problem, a class of problems covered in chapter 3. To inform the search, we can use the derivative of the line search objective, which is simply the directional derivative along d at x + αd. One disadvantage of conducting a line search at each step is the computational cost of optimizing α to a high degree of precision. Instead, it is common to quickly find a reasonable value and then move on, selecting x^(k+1), and then picking a new direction d^(k+1).",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-4-3-line-search",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §4.3 (p.64): line search = univariate optimization minimize_α f(x+αd); approximate step factor common"
+    },
+    {
+      "id": "opt_5_1_gradient_descent_steepest_direction",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "The gradient descent method uses the gradient to select the next descent direction d. The motivation for gradient descent comes from the first-order Taylor series approximation about our current iterate x^(k): f(x^(k) + αd) ≈ f(x^(k)) + αd^T g^(k) (5.2). We can choose the direction d that minimizes this first-order approximation subject to the constraint that ‖d‖ = 1. The direction that minimizes this first-order approximation is the direction of steepest descent, which is simply the direction opposite the gradient: d^(k) = -g^(k)/‖g^(k)‖ (5.3). Following the direction of steepest descent is guaranteed to lead to improvement, provided that the objective function is smooth, the step factor α is sufficiently small, and we are not already at a point where the gradient is zero.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-5-1-gradient-descent-steepest-direction",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §5.1 (p.77-78): gradient descent = steepest descent direction d=-g/‖g‖; first-order Taylor justification"
+    },
+    {
+      "id": "opt_5_9_hypergradient_descent_baydin_2018",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "Hypergradient descent was developed with the understanding that the derivative of the step factor should be useful for improving optimizer performance. A hypergradient is a derivative taken with respect to a hyperparameter. Hypergradient algorithms reduce the sensitivity to the hyperparameter, allowing it to adapt more quickly. Hypergradient descent applies gradient descent to the step factor of an underlying descent method. The method requires the partial derivative of the objective function with respect to the step factor. The resulting update rule is: α^(k) = α^(k-1) - μ ∂f(x^(k))/∂α^(k-1) = α^(k-1) + μ(g^(k))^T g^(k-1) (5.38), where μ is the hypergradient step factor.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-5-9-hypergradient-descent-baydin-2018",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §5.9 (p.86-88): Baydin 2018 'Hypergradient Descent' = meta-learning the float step factor; α^(k)=α^(k-1)+μ(g^(k))^T g^(k-1). NB: distinct mathematical object from any QA HGD."
+    },
+    {
+      "id": "opt_6_1_newtons_method",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "Knowing the function value and gradient for a design point can help determine the direction to travel, but this first-order information does not directly help determine how far to step to reach a local minimum. Second-order information, on the other hand, allows us to make a quadratic approximation of the objective function and approximate the right step size to reach a local minimum. In univariate optimization, the quadratic approximation about a point x^(k) comes from the second-order Taylor expansion: q(x) = f(x^(k)) + (x - x^(k)) f'(x^(k)) + ((x - x^(k))² / 2) f''(x^(k)) (6.1). Setting the derivative to zero and solving for the root yields the update equation for Newton's method: x^(k+1) = x^(k) - f'(x^(k))/f''(x^(k)) (6.3). Newton's method does tend to converge quickly when in a bowl-like region that is sufficiently close to a local minimum. It has quadratic convergence.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-6-1-newtons-method",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §6.1 (p.95-96): Newton's method 2nd-order quadratic approximation; x^(k+1)=x^(k)-f'/f''; quadratic convergence"
+    },
+    {
+      "id": "opt_7_1_cyclic_coordinate_search",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "Direct methods rely solely on the objective function f. These methods are also called zero-order, black box, pattern search, or derivative-free methods. Direct methods do not rely on derivative information to guide them toward a local minimum or identify when they have reached a local minimum. They use other criteria to choose the next search direction and to judge when they have converged. Cyclic coordinate search, also known as coordinate descent or taxicab search, simply alternates between coordinate directions for its line search. This process is equivalent to doing a sequence of line searches along the set of n basis vectors. Like steepest descent, cyclic coordinate search is guaranteed either to improve or to remain the same with each iteration.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-7-1-cyclic-coordinate-search",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §7.1 (p.113-114): direct/zero-order methods + cyclic coordinate search alternating basis vectors"
+    },
+    {
+      "id": "opt_8_4_simulated_annealing",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "Simulated annealing borrows inspiration from metallurgy. Temperature is used to control the degree of stochasticity during the randomized search. The temperature starts high, allowing the process to freely move about the search space, with the hope that in this phase the process will find a good region with the best local minimum. The temperature is then slowly brought down, reducing the stochasticity and forcing the search to converge to a minimum. At every iteration, a candidate transition from x to x' is sampled from a transition distribution T and is accepted with probability { 1 if Δy ≤ 0; e^{-Δy/t} if Δy > 0 (8.6) where Δy = f(x') - f(x) is the difference in the objective and t > 0 is the temperature. This acceptance probability, known as the Metropolis criterion, allows the algorithm to escape from local minima when the temperature is high. An exponential annealing schedule, which is more common, uses a simple decay factor t^(k+1) = γt^(k) for some γ ∈ (0, 1).",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-8-4-simulated-annealing",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §8.4 (p.140-142): simulated annealing Metropolis acceptance + exponential annealing schedule t^(k+1)=γt^(k)"
+    },
+    {
+      "id": "opt_15_1_pareto_optimality",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "The notion of Pareto optimality is useful when discussing problems where there are multiple objectives. A design is Pareto optimal if it is impossible to improve in one objective without worsening at least one other objective. In multiobjective design optimization, we can generally focus our efforts on designs that are Pareto optimal without having to commit to a particular trade-off between objectives. In multiobjective optimization, our objective function f returns an m-dimensional vector of values y when evaluated at a design point x. The different dimensions of y correspond to different objectives, sometimes also referred to as metrics or criteria. We can objectively rank two design points x and x' only when one is better in at least one objective and no worse in any other. That is, x dominates x' if and only if f_i(x) ≤ f_i(x') for i in 1:m and f_i(x) < f_i(x') for some i (15.1).",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-15-1-pareto-optimality",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §15.1 (p.325-326): multiobjective optimization, Pareto optimality, dominance partial order"
+    },
+    {
+      "id": "opt_17_1_fitting_surrogate_models",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "A surrogate model f̂ parameterized by θ is designed to mimic the true objective function f. The parameters θ can be adjusted to fit the model based on samples collected from f. Fitting a model to a set of points requires tuning the parameters to minimize the difference between the true evaluations and those predicted by the model, typically according to an L_p norm: minimize_θ ‖y - ŷ‖_p (17.4). Equation (17.4) penalizes the deviation of the model only at the data points. There is no guarantee that the model will continue to fit well away from observed data, and model accuracy typically decreases the farther we go from the sampled points. This form of model fitting is called regression.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-17-1-fitting-surrogate-models",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §17.1 (p.365-366): surrogate model = parameterized f̂_θ mimicking f; minimize_θ L_p deviation = regression"
+    },
+    {
+      "id": "opt_19_5_expected_improvement",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "Optimization is concerned with finding the minimum of the objective function. While maximizing the probability of improvement will tend to decrease the objective function over time, it does not improve very much with each iteration. We can focus our exploration of points that maximize our expected improvement over the current best function value. We can calculate the expected improvement using the distribution predicted by the Gaussian process: E[I(y)] = (y_min - μ̂) P(y ≤ y_min) + σ̂² N(y_min | μ̂, σ̂²) (19.12).",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-19-5-expected-improvement",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §19.5 (p.414-415): Bayesian optimization expected-improvement acquisition E[I(y)] over Gaussian-process surrogate"
+    },
+    {
+      "id": "opt_20_2_set_based_uncertainty_minimax",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "Set-based uncertainty approaches assume that z belongs to a set Z, but these approaches make no assumptions about the relative likelihood of different points within that set. The set Z can be defined in different ways. In problems with set-based uncertainty, we often want to minimize the maximum possible value of the objective function. Such a minimax approach solves the optimization problem: minimize_{x ∈ X} maximize_{z ∈ Z} f(x, z) (20.1). In other words, we want to find an x that minimizes f, assuming the worst-case value for z. The minimax problem preserves convexity. In other words, if f(x, z) is convex in x for each fixed z, then f_mod(x) = maximize_{z ∈ Z} f(x, z) is also convex in x, allowing us to use convex optimization methods to solve the minimax problem.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-20-2-set-based-uncertainty-minimax",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §20.2 (p.429-431): set-based uncertainty minimax minimize_x maximize_z f(x,z); convexity-preserving"
+    },
+    {
+      "id": "opt_22_4_branch_and_bound_integer",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_optimization_2e",
+      "quote": "One method for finding the global optimum of a discrete problem, such as an integer program, is to enumerate all possible solutions. The branch and bound method guarantees that an optimal solution is found without having to evaluate all possible solutions. Many commercial integer program solvers use ideas from both the cutting plane method and branch and bound. The method gets its name from the branch operation that partitions the solution space and the bound operation that computes a lower bound for a partition. We branch by considering two new LPs, each one created by adding one of the following constraints to the dequeued LP: x_i ≤ ⌊x*_{i,c}⌋ or x_i ≥ ⌈x*_{i,c}⌉ (22.12). If either solution lowers the objective value when compared to the best integral solution seen so far, it is placed into the priority queue. Not placing solutions already known to be inferior to the best integral solution seen thus far allows branch and bound to prune the search space.",
+      "source_locator": "file:docs/theory/kochenderfer_optimization_excerpts.md#opt-22-4-branch-and-bound-integer",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-04-22",
+      "domain": "",
+      "title": "Kochenderfer 2026 2e §22.4 (p.471-472): branch-and-bound for discrete/integer programs; LP relaxation + integer branch + bound-pruning"
+    }
+  ],
+  "observations": [],
+  "contradicts": [],
+  "supersedes": [
+    {"src": "work:kochenderfer_wheeler_2026_algorithms_for_optimization_2e", "dst": "work:kochenderfer_wheeler_2019_algorithms_for_optimization_1e"}
+  ],
+  "derived_from": []
+}

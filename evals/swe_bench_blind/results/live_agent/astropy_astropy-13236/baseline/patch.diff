@@ -1,0 +1,60 @@
+diff --git a/astropy/table/table.py b/astropy/table/table.py
+--- a/astropy/table/table.py
++++ b/astropy/table/table.py
+@@ -1240,11 +1240,6 @@ class Table:
+                     raise TypeError('Mixin handler for object of type '
+                                     f'{fully_qualified_name} '
+                                     'did not return a valid mixin column')
+-
+-        # Structured ndarray gets viewed as a mixin unless already a valid
+-        # mixin class
+-        if (not isinstance(data, Column) and not data_is_mixin
+-                and isinstance(data, np.ndarray) and len(data.dtype) > 1):
+-            data = data.view(NdarrayMixin)
+-            data_is_mixin = True
+ 
+         # Get the final column name using precedence.  Some objects may not
+         # have an info attribute. Also avoid creating info as a side effect.
+diff --git a/astropy/table/tests/test_mixin.py b/astropy/table/tests/test_mixin.py
+--- a/astropy/table/tests/test_mixin.py
++++ b/astropy/table/tests/test_mixin.py
+@@ -703,9 +703,9 @@ def test_skycoord_representation():
+ 
+ def test_ndarray_mixin():
+     """
+-    Test directly adding a plain structured array into a table instead of the
+-    view as an NdarrayMixin.  Once added as an NdarrayMixin then all the previous
+-    tests apply.
++    Test that structured ndarray inputs stay regular columns, while explicit
++    NdarrayMixin inputs keep their mixin type.
++    Once added, the structured columns still behave like the original arrays.
+     """
+     a = np.array([(1, 'a'), (2, 'b'), (3, 'c'), (4, 'd')],
+                  dtype='<i4,' + ('|U1'))
+@@ -718,7 +718,9 @@ def test_ndarray_mixin():
+     t['c'] = c
+     t['d'] = d
+ 
+-    assert isinstance(t['a'], NdarrayMixin)
++    assert isinstance(t['a'], Column)
++    assert isinstance(t['b'], Column)
++    assert isinstance(t['c'], Column)
+ 
+     assert t['a'][1][1] == a[1][1]
+     assert t['a'][2][0] == a[2][0]
+@@ -726,14 +728,10 @@ def test_ndarray_mixin():
+     assert t[1]['a'][1] == a[1][1]
+     assert t[2]['a'][0] == a[2][0]
+ 
+-    assert isinstance(t['b'], NdarrayMixin)
+-
+     assert t['b'][1]['x'] == b[1]['x']
+     assert t['b'][1]['y'] == b[1]['y']
+ 
+     assert t[1]['b']['x'] == b[1]['x']
+     assert t[1]['b']['y'] == b[1]['y']
+-
+-    assert isinstance(t['c'], NdarrayMixin)
+ 
+     assert t['c'][1]['rx'] == c[1]['rx']
+     assert t['c'][1]['ry'] == c[1]['ry']

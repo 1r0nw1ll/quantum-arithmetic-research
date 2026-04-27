@@ -1,0 +1,33 @@
+diff --git a/astropy/io/fits/diff.py b/astropy/io/fits/diff.py
+--- a/astropy/io/fits/diff.py
++++ b/astropy/io/fits/diff.py
+@@ -1449,7 +1449,7 @@ class TableDataDiff(_BaseDiff):
+             if np.issubdtype(arra.dtype, np.floating) and np.issubdtype(
+                 arrb.dtype, np.floating
+             ):
+                 diffs = where_not_allclose(arra, arrb, rtol=self.rtol, atol=self.atol)
+-            elif "P" in col.format:
++            elif "P" in col.format or "Q" in col.format:
+                 diffs = (
+                     [
+                         idx
+diff --git a/astropy/io/fits/tests/test_diff.py b/astropy/io/fits/tests/test_diff.py
+--- a/astropy/io/fits/tests/test_diff.py
++++ b/astropy/io/fits/tests/test_diff.py
+@@ -780,3 +780,15 @@ def test_rawdatadiff_diff_with_rtol(tmp_path):
+ 
+     assert "...and at 1 more indices." in str1
+     assert "...and at 1 more indices." not in str2
++
++
++def test_fitsdiff_identical_vla_q_table(tmp_path):
++    """Regression test for FITSDiff on variable-length Q columns."""
++
++    path = tmp_path / "vla-q.fits"
++    col = fits.Column("a", format="QD", array=[[0], [0, 0]])
++    hdu = fits.BinTableHDU.from_columns([col])
++    hdu.writeto(path)
++
++    diff = FITSDiff(path, path)
++    assert diff.identical
++    assert "Column a data differs" not in diff.report()

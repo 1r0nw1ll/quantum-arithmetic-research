@@ -1,0 +1,32 @@
+--- a/astropy/io/fits/diff.py
++++ b/astropy/io/fits/diff.py
+@@ -1449,7 +1449,7 @@ class TableDataDiff(_BaseDiff):
+             if np.issubdtype(arra.dtype, np.floating) and np.issubdtype(
+                 arrb.dtype, np.floating
+             ):
+                 diffs = where_not_allclose(arra, arrb, rtol=self.rtol, atol=self.atol)
+-            elif "P" in col.format:
++            elif "P" in col.format or "Q" in col.format:
+                 diffs = (
+                     [
+                         idx
+--- a/astropy/io/fits/tests/test_diff.py
++++ b/astropy/io/fits/tests/test_diff.py
+@@ -420,6 +420,16 @@ class TestDiff(FitsTestCase):
+         diff = FITSDiff(hdula, hdulb)
+         assert diff.identical
+ 
++    def test_identical_files_with_q_variable_length_array_column(self):
++        col = Column("A", format="QD", array=[[0], [0, 0]])
++        hdu = BinTableHDU.from_columns([col])
++        path = self.temp("diffbug.fits")
++        hdu.writeto(path)
++
++        diff = FITSDiff(path, path)
++
++        assert diff.identical
++        assert "No differences found." in diff.report()
++
+     def test_ignore_table_fields(self):
+         c1 = Column("A", format="L", array=[True, False])
+         c2 = Column("B", format="X", array=[[0], [1]])

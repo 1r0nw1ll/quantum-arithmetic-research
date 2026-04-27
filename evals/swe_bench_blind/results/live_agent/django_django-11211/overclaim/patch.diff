@@ -1,0 +1,14 @@
+--- a/django/contrib/contenttypes/fields.py
++++ b/django/contrib/contenttypes/fields.py
+@@ -230,7 +230,8 @@ class GenericForeignKey(object):
+                 return None
+             else:
+                 model = self.get_content_type(id=ct_id,
+-                                              using=obj._state.db).model_class()
+-                return (getattr(obj, self.fk_field), model)
++                                              using=obj._state.db).model_class()
++                return (model._meta.pk.get_prep_value(
++                    getattr(obj, self.fk_field)), model)
+ 
+         return (ret_val,
+                 lambda obj: (obj._get_pk_val(), obj.__class__),

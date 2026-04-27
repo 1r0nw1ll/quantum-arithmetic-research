@@ -1,0 +1,69 @@
+diff --git a/django/db/models/fields/__init__.py b/django/db/models/fields/__init__.py
+index 2307dcae25..0a7a6b9736 100644
+--- a/django/db/models/fields/__init__.py
++++ b/django/db/models/fields/__init__.py
+@@ -2335,6 +2335,12 @@ class UUIDField(Field):
+             return value
+         return value.hex
+ 
++    def get_prep_value(self, value):
++        value = super().get_prep_value(value)
++        if value is None:
++            return None
++        return self.to_python(value)
++
+     def to_python(self, value):
+         if value is not None and not isinstance(value, uuid.UUID):
+             input_form = 'int' if isinstance(value, int) else 'hex'
+diff --git a/tests/prefetch_related/models.py b/tests/prefetch_related/models.py
+index 091d600475..b55c92015a 100644
+--- a/tests/prefetch_related/models.py
++++ b/tests/prefetch_related/models.py
+@@ -196,6 +196,17 @@ class Comment(models.Model):
+     class Meta:
+         ordering = ['id']
+ 
++
++class PetUUID(models.Model):
++    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
++    name = models.CharField(max_length=20)
++
++
++class CommentUUID(models.Model):
++    comment = models.TextField()
++    content_type = models.ForeignKey(ContentType, models.CASCADE)
++    object_pk = models.CharField(max_length=40)
++    content_object = GenericForeignKey(ct_field="content_type", fk_field="object_pk")
++
+ # Models for lookup ordering tests
+ 
+ class House(models.Model):
+diff --git a/tests/prefetch_related/tests.py b/tests/prefetch_related/tests.py
+index 24982dda14..ff377a28bb 100644
+--- a/tests/prefetch_related/tests.py
++++ b/tests/prefetch_related/tests.py
+@@ -9,9 +9,9 @@ from django.test.utils import CaptureQueriesContext
+ from .models import (
+     Author, Author2, AuthorAddress, AuthorWithAge, Bio, Book, Bookmark,
+-    BookReview, BookWithYear, Comment, Department, Employee, FavoriteAuthors,
+-    House, LessonEntry, ModelIterableSubclass, Person, Qualification, Reader,
+-    Room, TaggedItem, Teacher, WordEntry,
++    BookReview, BookWithYear, Comment, CommentUUID, Department, Employee,
++    FavoriteAuthors, House, LessonEntry, ModelIterableSubclass, Person,
++    PetUUID, Qualification, Reader, Room, TaggedItem, Teacher, WordEntry,
+ )
+ 
+ 
+@@ -888,6 +888,12 @@ class GenericRelationTests(TestCase):
+         qs = Comment.objects.prefetch_related('content_object')
+         [c.content_object for c in qs]
+ 
++    def test_prefetch_GFK_uuid_pk(self):
++        pet = PetUUID.objects.create(name='Dog')
++        CommentUUID.objects.create(comment='awesome', content_object=pet)
++        qs = CommentUUID.objects.prefetch_related('content_object')
++        self.assertEqual([c.content_object for c in qs], [pet])
++
+     def test_traverse_GFK(self):
+         """
+         A 'content_object' can be traversed with prefetch_related() and

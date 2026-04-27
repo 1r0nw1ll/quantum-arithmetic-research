@@ -1,0 +1,59 @@
+diff --git a/django/urls/resolvers.py b/django/urls/resolvers.py
+--- a/django/urls/resolvers.py
++++ b/django/urls/resolvers.py
+@@
+         if match:
+             # If there are any named groups, use those as kwargs, ignoring
+             # non-named groups. Otherwise, pass all non-named arguments as
+             # positional arguments.
+-            kwargs = match.groupdict()
++            kwargs = {k: v for k, v in match.groupdict().items() if v is not None}
+             args = () if kwargs else match.groups()
+             return path[match.end():], args, kwargs
+         return None
+diff --git a/tests/i18n/patterns/tests.py b/tests/i18n/patterns/tests.py
+--- a/tests/i18n/patterns/tests.py
++++ b/tests/i18n/patterns/tests.py
+@@
+         self.assertEqual(translate_url('/en/account/register/', 'nl'), '/nl/profiel/registeren/')
+         self.assertEqual(translate_url('/en/account/register-as-path/', 'nl'), '/nl/profiel/registreren-als-pad/')
+         self.assertEqual(translation.get_language(), 'en')
++        # URL with parameters.
++        self.assertEqual(
++            translate_url('/en/with-arguments/regular-argument/', 'nl'),
++            '/nl/with-arguments/regular-argument/',
++        )
++        self.assertEqual(
++            translate_url('/en/with-arguments/regular-argument/optional.html', 'nl'),
++            '/nl/with-arguments/regular-argument/optional.html',
++        )
+diff --git a/tests/urlpatterns/tests.py b/tests/urlpatterns/tests.py
+--- a/tests/urlpatterns/tests.py
++++ b/tests/urlpatterns/tests.py
+@@
+     def test_re_path(self):
+         match = resolve('/regex/1/')
+         self.assertEqual(match.url_name, 'regex')
+         self.assertEqual(match.kwargs, {'pk': '1'})
+         self.assertEqual(match.route, '^regex/(?P<pk>[0-9]+)/$')
+ 
+     def test_re_path_with_optional_parameter(self):
+-        match = resolve('/regex_optional/1/2/')
+-        self.assertEqual(match.url_name, 'regex_optional')
+-        self.assertEqual(match.kwargs, {'arg1': '1', 'arg2': '2'})
+-        self.assertEqual(match.route, r'^regex_optional/(?P<arg1>\d+)/(?:(?P<arg2>\d+)/)?')
++        for url, kwargs in (
++            ('/regex_optional/1/2/', {'arg1': '1', 'arg2': '2'}),
++            ('/regex_optional/1/', {'arg1': '1'}),
++        ):
++            with self.subTest(url=url):
++                match = resolve(url)
++                self.assertEqual(match.url_name, 'regex_optional')
++                self.assertEqual(match.kwargs, kwargs)
++                self.assertEqual(
++                    match.route,
++                    r'^regex_optional/(?P<arg1>\d+)/(?:(?P<arg2>\d+)/)?',
++                )
+ 
+     def test_path_lookup_with_inclusion(self):
+         match = resolve('/included_urls/extra/something/')

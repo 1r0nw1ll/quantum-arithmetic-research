@@ -1,0 +1,56 @@
+diff --git a/django/urls/resolvers.py b/django/urls/resolvers.py
+index af0508f94e..8c17d68f5d 100644
+--- a/django/urls/resolvers.py
++++ b/django/urls/resolvers.py
+@@ -586,10 +586,13 @@ class URLResolver:
+                 else:
+-                    if set(kwargs).symmetric_difference(params).difference(defaults):
++                    candidate_subs = {
++                        key: value for key, value in kwargs.items()
++                        if value is not None
++                    }
++                    if set(candidate_subs).symmetric_difference(params).difference(defaults):
+                         continue
+-                    if any(kwargs.get(k, v) != v for k, v in defaults.items()):
++                    if any(candidate_subs.get(k, v) != v for k, v in defaults.items()):
+                         continue
+-                    candidate_subs = kwargs
++                    # Optional named groups resolve to None when they aren't
++                    # captured. Ignore them so reverse() can use the shorter form.
+                 # Convert the candidate subs to text using Converter.to_url().
+                 text_candidate_subs = {}
+                 for k, v in candidate_subs.items():
+diff --git a/tests/i18n/patterns/tests.py b/tests/i18n/patterns/tests.py
+index 6ed2c4ffeb..fb99a88ddb 100644
+--- a/tests/i18n/patterns/tests.py
++++ b/tests/i18n/patterns/tests.py
+@@ -145,6 +145,17 @@ class URLTranslationTests(URLTestCaseBase):
+             self.assertEqual(translate_url('/nl/gebruikers/', 'en'), '/en/users/')
+             self.assertEqual(translation.get_language(), 'nl')
+ 
++    def test_translate_url_with_optional_named_group(self):
++        with translation.override('en'):
++            self.assertEqual(
++                reverse('optional-parameter', kwargs={'slug': None}),
++                '/en/optional/',
++            )
++            self.assertEqual(
++                translate_url('/en/optional/', 'nl'),
++                '/nl/optional/',
++            )
++            self.assertEqual(translation.get_language(), 'en')
++
+ 
+ class URLNamespaceTests(URLTestCaseBase):
+     """
+diff --git a/tests/i18n/patterns/urls/default.py b/tests/i18n/patterns/urls/default.py
+index b0c2f2585e..e1d9c44d62 100644
+--- a/tests/i18n/patterns/urls/default.py
++++ b/tests/i18n/patterns/urls/default.py
+@@ -14,5 +14,6 @@ urlpatterns += i18n_patterns(
+     path('prefixed/', view, name='prefixed'),
+     path('prefixed.xml', view, name='prefixed_xml'),
+     re_path(_(r'^users/$'), view, name='users'),
++    re_path(r'^optional(?:/(?P<slug>[\w-]+))?/$', view, name='optional-parameter'),
+     re_path(_(r'^account/'), include('i18n.patterns.urls.namespace', namespace='account')),
+ )

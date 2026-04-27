@@ -1,0 +1,59 @@
+diff --git a/astropy/io/fits/card.py b/astropy/io/fits/card.py
+index 1b3285ddce..0000000000 100644
+--- a/astropy/io/fits/card.py
++++ b/astropy/io/fits/card.py
+@@ -658,16 +658,20 @@ class Card(_Verify):
+                 if not m:
+                     return kw, vc
+ 
+-                value = m.group("strg") or ""
+-                value = value.rstrip().replace("''", "'")
+-                if value and value[-1] == "&":
++                value = (m.group("strg") or "").rstrip()
++                if value.endswith("&"):
+                     value = value[:-1]
+                 values.append(value)
+                 comment = m.group("comm")
+                 if comment:
+                     comments.append(comment.rstrip())
+ 
+             if keyword in self._commentary_keywords:
+                 valuecomment = "".join(values)
+             else:
+                 # CONTINUE card
+-                valuecomment = f"'{''.join(values)}' / {' '.join(comments)}"
++                value = "".join(values).replace("''", "'")
++                valuecomment = f"'{value}'"
++                if comments:
++                    valuecomment += f" / {' '.join(comments)}"
+             return keyword, valuecomment
+ 
+         if self.keyword in self._special_keywords:
+diff --git a/astropy/io/fits/tests/test_header.py b/astropy/io/fits/tests/test_header.py
+index 1bd887f1f9..0000000000 100644
+--- a/astropy/io/fits/tests/test_header.py
++++ b/astropy/io/fits/tests/test_header.py
+@@ -315,6 +315,22 @@ class TestHeaderFunctions(FitsTestCase):
+         assert str(h1) == str(h2)
+ 
+     def test_long_string_roundtrip_escaped_quotes(self):
++        """Regression tests for escaped quotes in CONTINUE cards."""
++
++        for n in range(60, 70):
++            value = "x" * n + "''"
++            card = fits.Card("CONFIG", value)
++            assert fits.Card.fromstring(str(card)).value == value
++
++        for n in range(50, 70):
++            value = "x" * n + "''" + "x" * 10
++            card = fits.Card("CONFIG", value)
++            assert fits.Card.fromstring(str(card)).value == value
++
++        value = "x" * 100 + "'' aaa"
++        card = fits.Card("CONFIG", value, "comment")
++        assert fits.Card.fromstring(card.image).value == value
++
++    def test_long_string_repr(self):
+         """Regression test for https://aeon.stsci.edu/ssb/trac/pyfits/ticket/193
+ 
+         Ensure that the __repr__() for cards represented with CONTINUE cards is

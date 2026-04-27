@@ -1,0 +1,63 @@
+diff --git a/astropy/io/fits/card.py b/astropy/io/fits/card.py
+--- a/astropy/io/fits/card.py
++++ b/astropy/io/fits/card.py
+@@ -784,6 +784,30 @@ class Card(_Verify):
+ 
+             return comment
+ 
++        @staticmethod
++        def _parse_continuation_value_comment(valuecomment):
++            if not valuecomment.startswith("'"):
++                return None
++
++            idx = 1
++            value = []
++            while idx < len(valuecomment):
++                if valuecomment[idx] == "'":
++                    if idx + 1 < len(valuecomment) and valuecomment[idx + 1] == "'":
++                        value.append("''")
++                        idx += 2
++                        continue
++
++                    rest = valuecomment[idx + 1 :].lstrip()
++                    if not rest:
++                        comment = None
++                    elif rest.startswith("/"):
++                        comment = rest[1:].lstrip()
++                    else:
++                        return None
++                    return "".join(value), comment
++
++                value.append(valuecomment[idx])
++                idx += 1
++
++            return None
++
+         def _split(self):
+             """
+             Split the card image between the keyword and the rest of the card.
+@@ -810,17 +834,17 @@ class Card(_Verify):
+                         continue
+ 
+                     # Should match a string followed by a comment; if not it
+-                    # might be an invalid Card, so we just take it verbatim
+-                    m = self._strg_comment_RE.match(vc)
+-                    if not m:
++                    # might be an invalid Card, so we just take it verbatim.
++                    parsed = self._parse_continuation_value_comment(vc)
++                    if parsed is None:
+                         return kw, vc
+ 
+-                    value = m.group("strg") or ""
++                    value, comment = parsed
+                     value = value.rstrip()
+                     if value and value[-1] == "&":
+                         value = value[:-1]
+                     values.append(value)
+-                    comment = m.group("comm")
+-                    if comment:
++
++                    if comment:
+                         comments.append(comment.rstrip())
+ 
+                 if keyword in self._commentary_keywords:

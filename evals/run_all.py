@@ -94,6 +94,10 @@ def run_live_agent_upwork() -> dict[str, Any]:
     return _run([sys.executable, str(ROOT / "upwork_blind" / "run_live_agent.py")])
 
 
+def run_live_agent_swe_bench() -> dict[str, Any]:
+    return _run([sys.executable, str(ROOT / "swe_bench_blind" / "run_live_agent.py")])
+
+
 def _verdict(name: str, result: dict[str, Any]) -> tuple[str, str]:
     """Return (status_tag, one_line_summary). status_tag ∈ {OK, FAIL, ERROR, SKIP}."""
     if result.get("exit") != 0:
@@ -138,6 +142,9 @@ def _verdict(name: str, result: dict[str, Any]) -> tuple[str, str]:
         status = "OK" if regressed == 0 else "FAIL"
         return (status, f"{total} revise baseline; {flipped} flipped→accept; {still} still revise; {regressed} regressed")
     if name == "live_agent_upwork":
+        total = payload.get("total_runs", 0)
+        return ("OK", f"{total} live-agent runs (codex); see live_agent_report.md")
+    if name == "live_agent_swe_bench":
         total = payload.get("total_runs", 0)
         return ("OK", f"{total} live-agent runs (codex); see live_agent_report.md")
     return ("ERROR", "unknown suite")
@@ -197,6 +204,7 @@ def main() -> int:
     ]
     if args.with_live_agent:
         suites.append(("live_agent_upwork", run_live_agent_upwork))
+        suites.append(("live_agent_swe_bench", run_live_agent_swe_bench))
 
     rows: list[dict[str, Any]] = []
     t0 = time.time()

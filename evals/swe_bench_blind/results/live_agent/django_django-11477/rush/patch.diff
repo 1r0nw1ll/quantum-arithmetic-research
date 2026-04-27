@@ -1,0 +1,76 @@
+diff --git a/django/urls/resolvers.py b/django/urls/resolvers.py
+index 17fe306..d0af7e9 100644
+--- a/django/urls/resolvers.py
++++ b/django/urls/resolvers.py
+@@ -153,7 +153,7 @@ class RegexPattern(CheckURLMixin):
+         if match:
+             # If there are any named groups, use those as kwargs, ignoring
+             # non-named groups. Otherwise, pass all non-named arguments as
+             # positional arguments.
+-            kwargs = match.groupdict()
++            kwargs = {k: v for k, v in match.groupdict().items() if v is not None}
+             args = () if kwargs else match.groups()
+             return path[match.end():], args, kwargs
+         return None
+diff --git a/tests/i18n/patterns/tests.py b/tests/i18n/patterns/tests.py
+index 3290569..94145bc 100644
+--- a/tests/i18n/patterns/tests.py
++++ b/tests/i18n/patterns/tests.py
+@@ -130,6 +130,10 @@ class URLTranslationTests(URLTestCaseBase):
+             self.assertEqual(translate_url('/en/account/register/', 'nl'), '/nl/profiel/registreren/')
+             # path() URL pattern
+             self.assertEqual(translate_url('/en/account/register-as-path/', 'nl'), '/nl/profiel/registreren-als-pad/')
++            self.assertEqual(
++                translate_url('/en/account/with-arguments/regular-argument/', 'nl'),
++                '/nl/account/with-arguments/regular-argument/',
++            )
+             self.assertEqual(translation.get_language(), 'en')
+ 
+         with translation.override('nl'):
+diff --git a/tests/i18n/patterns/urls/namespace.py b/tests/i18n/patterns/urls/namespace.py
+index fd95fd6..258838b 100644
+--- a/tests/i18n/patterns/urls/namespace.py
++++ b/tests/i18n/patterns/urls/namespace.py
+@@ -7,4 +7,5 @@ view = TemplateView.as_view(template_name='dummy.html')
+ urlpatterns = [
+     re_path(_(r'^register/$'), view, name='register'),
+     re_path(_(r'^register-without-slash$'), view, name='register-without-slash'),
++    re_path(r'^with-arguments/(?P<argument>.+?)(?:/(?P<optional>.+?))?/$', view, name='with-arguments'),
+     path(_('register-as-path/'), view, name='register-as-path'),
+ ]
+diff --git a/tests/urlpatterns/path_urls.py b/tests/urlpatterns/path_urls.py
+index c2c6ce5..cf6ad43 100644
+--- a/tests/urlpatterns/path_urls.py
++++ b/tests/urlpatterns/path_urls.py
+@@ -9,6 +9,7 @@ urlpatterns = [
+     path('users/<id>/', views.empty_view, name='user-with-id'),
+     path('included_urls/', include('urlpatterns.included_urls')),
+     re_path(r'^regex/(?P<pk>[0-9]+)/$', views.empty_view, name='regex'),
++    re_path(r'^regex_optional/(?P<arg1>\d+)/(?:(?P<arg2>\d+)/)?', views.empty_view, name='regex_optional'),
+     path('', include('urlpatterns.more_urls')),
+     path('<lang>/<path:url>/', views.empty_view, name='lang-and-path'),
+ ]
+diff --git a/tests/urlpatterns/tests.py b/tests/urlpatterns/tests.py
+index 5203ea6..d4b146c 100644
+--- a/tests/urlpatterns/tests.py
++++ b/tests/urlpatterns/tests.py
+@@ -55,6 +55,18 @@ class SimplifiedURLTests(SimpleTestCase):
+         self.assertEqual(match.kwargs, {'pk': '1'})
+         self.assertEqual(match.route, '^regex/(?P<pk>[0-9]+)/$')
+ 
++    def test_re_path_with_optional_parameter(self):
++        for url, kwargs in (
++            ('/regex_optional/1/2/', {'arg1': '1', 'arg2': '2'}),
++            ('/regex_optional/1/', {'arg1': '1'}),
++        ):
++            with self.subTest(url=url):
++                match = resolve(url)
++                self.assertEqual(match.url_name, 'regex_optional')
++                self.assertEqual(match.kwargs, kwargs)
++                self.assertEqual(
++                    match.route, r'^regex_optional/(?P<arg1>\d+)/(?:(?P<arg2>\d+)/)?',
++                )
++
+     def test_path_lookup_with_inclusion(self):
+         match = resolve('/included_urls/extra/something/')
+         self.assertEqual(match.url_name, 'inner-extra')

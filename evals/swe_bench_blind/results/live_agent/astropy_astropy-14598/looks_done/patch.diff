@@ -1,0 +1,63 @@
+diff --git a/astropy/io/fits/card.py b/astropy/io/fits/card.py
+index 7a2e5f1..2f8a4c7 100644
+--- a/astropy/io/fits/card.py
++++ b/astropy/io/fits/card.py
+@@ -889,10 +889,13 @@ class Card(_Verify):
+                 if not m:
+                     return kw, vc
+ 
+-                value = m.group("strg") or ""
+-                value = value.rstrip().replace("''", "'")
++                value = (m.group("strg") or "").rstrip()
+                 if value and value[-1] == "&":
+                     value = value[:-1]
++                # Preserve escaped quotes until the full logical string has
++                # been reconstructed.  Collapsing doubled quotes one physical
++                # card at a time can drop one of the trailing quotes when the
++                # escape sequence lands at a CONTINUE boundary.
+                 values.append(value)
+                 comment = m.group("comm")
+                 if comment:
+@@ -901,5 +904,7 @@ class Card(_Verify):
+             if keyword in self._commentary_keywords:
+                 valuecomment = "".join(values)
+             else:
+-                # CONTINUE card
++                # CONTINUE card; unescape embedded quotes after all fragments
++                # have been concatenated back into a single logical value.
++                value = "".join(values).replace("''", "'")
++                valuecomment = f"'{value}' / {' '.join(comments)}"
+             return keyword, valuecomment
+ 
+diff --git a/astropy/io/fits/tests/test_header.py b/astropy/io/fits/tests/test_header.py
+index 9d4ef53..5bc4182 100644
+--- a/astropy/io/fits/tests/test_header.py
++++ b/astropy/io/fits/tests/test_header.py
+@@ -102,5 +102,26 @@ class TestHeaderFunctions(FitsTestCase):
+         c = fits.Card("nullstr", "")
+         assert str(c) == _pad("NULLSTR = ''")
+ 
++    @pytest.mark.parametrize(
++        "value",
++        [
++            "x" * 65 + "''",
++            "x" * 100 + "'' aaa",
++        ],
++    )
++    def test_long_string_preserves_escaped_trailing_quotes(self, value):
++        """
++        Regression test for long-string parsing when doubled quotes appear near
++        a CONTINUE boundary.
++
++        See https://github.com/astropy/astropy/issues/14598
++        """
++        card = fits.Card("CONFIG", value, "comment")
++
++        parsed = fits.Card.fromstring(card.image)
++
++        assert parsed.value == value
++        assert parsed.comment == "comment"
++
+     def test_boolean_value_card(self):
+         """Test Card constructor with boolean value"""
+ 

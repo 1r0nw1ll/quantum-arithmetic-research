@@ -1,0 +1,76 @@
+diff --git a/django/contrib/contenttypes/fields.py b/django/contrib/contenttypes/fields.py
+index 1d4f8cb..9d2d9e4 100644
+--- a/django/contrib/contenttypes/fields.py
++++ b/django/contrib/contenttypes/fields.py
+@@ -253,8 +253,15 @@ class GenericForeignKey(FieldCacheMixin, Field):
+             # For doing the join in Python, we have to match both the FK val and the
+             # content type, so we use a callable that returns a (fk, class) pair.
+             def gfk_key(obj):
++                model = None
+                 ct_id = getattr(obj, ct_attname)
+                 if ct_id is None:
+                     return None
+                 else:
+-                    model = self.get_content_type(id=ct_id, using=obj._state.db).model_class()
++                    model = self.get_content_type(
++                        id=ct_id, using=obj._state.db
++                    ).model_class()
+                     return (
+                         model._meta.pk.get_prep_value(getattr(obj, self.fk_field)),
+                         model,
+                     )
++
++            def rel_obj_attr(obj):
++                # Normalize the related object primary key to the same prepared
++                # value used by the GenericForeignKey object_id field.
++                return (
++                    obj._meta.pk.get_prep_value(obj.pk),
++                    obj.__class__,
++                )
+             return (
+                 ret_val,
+-                lambda obj: (obj.pk, obj.__class__),
++                rel_obj_attr,
+                 gfk_key,
+                 True,
+                 self.name,
+diff --git a/tests/prefetch_related/tests.py b/tests/prefetch_related/tests.py
+index c153c0d..f0d9c42 100644
+--- a/tests/prefetch_related/tests.py
++++ b/tests/prefetch_related/tests.py
+@@ -13,6 +13,7 @@ from .models import (
+     Author,
+     Author2,
+     AuthorAddress,
++    Article,
+     Bio,
+     Book,
+     BookReview,
+@@ -22,6 +23,7 @@ from .models import (
+     Department,
+     Employee,
+     FavoriteAuthors,
++    Comment,
+     Flea,
+     House,
+     LessonEntry,
+@@ -1243,6 +1245,18 @@ class GenericRelationTests(TestCase):
+                     ],
+                 )
+ 
++    def test_prefetch_GFK_uuid_pk(self):
++        article = Article.objects.create(name="Django")
++        Comment.objects.create(
++            comment="uuid lookup",
++            content_object_uuid=article,
++        )
++
++        with self.assertNumQueries(2):
++            comment = Comment.objects.prefetch_related("content_object_uuid").get()
++
++        with self.assertNumQueries(0):
++            self.assertEqual(comment.content_object_uuid, article)
++
+ 
+ class MultiTableInheritanceTest(TestCase):
+     @classmethod

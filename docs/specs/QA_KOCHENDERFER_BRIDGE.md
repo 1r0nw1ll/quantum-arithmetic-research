@@ -14,6 +14,27 @@
 
 **Purpose:** Translate Kochenderfer's external vocabulary for validation algorithms into QA terms, and document which QA artifacts (certs, validators, theorems, infrastructure) already implement Kochenderfer's concepts under different names. This bridge serves the Terminal Goal: making the QA cert ecosystem legible to skeptical technical readers who already know the Kochenderfer formalism.
 
+---
+
+## Executive summary (consolidation pass, 2026-04-27)
+
+**What the trilogy contributes to QA-MEM:** three primary-source textbooks (4 SourceWorks: Validation, Decision Making, Optimization 2e + 1e witness) + 60 verbatim anchors in `docs/theory/kochenderfer_*_excerpts.md` + 4 fixtures in `tools/qa_kg/fixtures/source_claims_{kochenderfer, dm, optimization}.json` = 4 SourceWorks, 60 SourceClaims, 60 quoted-from edges, 1 supersedes edge in `qa_kg.db`. Together these give the QA cert ecosystem a single canonical external-vocabulary reference: when a Stanford/MIT-grade reader asks "what does this QA cert correspond to in standard validation/decision-theory/optimization vocabulary?", §1-§8 below answer them concretely.
+
+**Established mappings count:** ~30 rows across §1-§8 carry `established` status (e.g., MDP / Bellman / value iteration ↔ QA reachability descent + cert [191] tier filtering; Swiss-cheese safety case ↔ QA cert ecosystem layered design; reachability satisfiability ↔ QA cert PASS/FAIL set-intersection check; observer-projection input/output boundary discipline ↔ Theorem NT firewall). These rows are documentation alignments, not new claims; they document where QA artifacts already implement Kochenderfer concepts under different names.
+
+**Sharp certs landed (2 of 12 originally listed candidates):**
+
+| Cert | Source book concept | QA claim | Evidence | Scope limit |
+|---|---|---|---|---|
+| [263] `qa_failure_density_enumeration_cert_v1` (commit `9b8ff36`) | Kochenderfer Validation §7.1 direct estimation `p_fail = E[1{τ ∉ ψ}] = ∫1{τ∉ψ}p(τ)dτ` + Algorithm 7.1 sampling at N samples | On QA finite mod-9 orbit graph, `p_fail = \|{s ∈ S_m : s ∉ ψ}\| / \|S_m\|` exactly by enumeration; cert [194] ratios `1/81, 8/81, 72/81` reproduce bit-exact. Kochenderfer Algorithm 7.1 1-NN sampling at N ∈ {100, 1000, 10000} × seeds {42, 1337, 2024} (18 cases) lands inside `4σ = 4·sqrt(p(1-p)/N)` envelope per Kochenderfer eq. 7.3; QA enumeration variance = 0 exactly. | 18 sampling cases all PASS the 4σ envelope; deterministic enumeration reproduces cert [194]'s ratios bit-exact via `tools/qa_kg/orbit_failure_enumeration.py` utility | mod-9 only (cert [194] is the canonical mod-9 anchor); mod-24 deferred until a published mod-24 orbit-family classifier lands |
+| [264] `qa_runtime_odd_monitor_cert_v1` (commit `1d12229`) | Kochenderfer Validation §12.1 'Operational Design Domain Monitoring' superlevel-set ODD construction (`P(in_ODD\|x) > 0.5` threshold) | On QA finite mod-9 orbit graph with `declared_odd ⊆ {singularity, satellite, cosmos}`, deterministic monitor `in_ODD(b,e) := orbit_family_s9(b,e) ∈ declared_odd` achieves FP=0/FN=0 by construction. On continuous observer projection `(b,e) → ((b-1)/8, (e-1)/8) ∈ [0,1]²` with 1-NN classifier-superlevel-set baseline, FP+FN scales with input-noise σ. | Across 9 declared (σ, seed) cases at σ ∈ {0.05, 0.1, 0.2} × seeds {42, 1337}, classifier baseline produces 4-16 misclassifications per case across 81 S_9 test points; deterministic monitor stays at 0/0 throughout | mod-9 synthetic only; HeartMath (cert [259]) deferred to v2; claim does NOT generalize to all runtime ODD monitoring; claim does NOT say continuous classifiers are bad globally |
+
+**What remains open (10 candidate certs):** see Standing Rule #2 below for the full enumerated list across §1-§5 (Validation: 2 remaining), §7 (Decision Making: 4), §8 (Optimization: 4). Cert [264] subsumed §8.6 candidate `qa_robust_orbit_classification_cert_v1` in v1 synthetic scope; that candidate is revivable as a HeartMath-applied v2 variant if needed.
+
+**Do not overclaim.** These two certs do **not** prove QA globally superior to Kochenderfer methods. They show the narrower thing: when Kochenderfer validation/decision/optimization concepts are restricted to QA finite symbolic orbit systems on the QA-discrete side of the Theorem NT firewall, QA can provide exact discrete monitors/enumerators where the corresponding continuous-domain Kochenderfer machinery is variance-bound or boundary-leaky. The Kochenderfer machinery is dominant on its native continuous-domain regime; QA enumeration is dominant on its native finite-state regime; the two are not in competition globally — they are complementary partitions of the validation/decision/optimization design space along the Theorem NT firewall.
+
+---
+
 **Scope discipline (per Will, 2026-04-26):**
 - This is a *controlled mapping index*, not a prose dump.
 - No taxonomy / classification cert is created.

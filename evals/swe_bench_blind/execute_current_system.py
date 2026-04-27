@@ -15,6 +15,7 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import subprocess
 import sys
 from pathlib import Path
 from typing import Any
@@ -100,6 +101,45 @@ def _patch_files_touched(patch_text: str) -> list[str]:
     return FILE_PATH_RE.findall(patch_text)
 
 
+def _check_patch_applies(patch_text: str, repo_path: Path, base_commit: str | None) -> tuple[bool | None, str]:
+    """Run `git apply --check` against the cloned repo at `base_commit`.
+
+    Returns (applies, error_message). `applies` is None when no opinion
+    can be formed (repo doesn't exist, patch is empty, git fails for
+    infrastructure reasons). True/False otherwise; error_message is the
+    first stderr line on failure or "" on success/no-opinion.
+
+    This is the Pass-13b boundary check that catches structurally
+    malformed diffs (hunk-header count mismatches, non-ASCII whitespace
+    in hunk bodies) the text heuristics miss.
+    """
+    if not patch_text.strip():
+        return None, ""
+    if not repo_path.exists() or not (repo_path / ".git").exists():
+        return None, "repo not cloned"
+    # Reset working tree to base_commit before checking.
+    if base_commit:
+        proc = subprocess.run(
+            ["git", "checkout", "-q", base_commit, "--", "."],
+            cwd=str(repo_path), capture_output=True, text=True,
+        )
+        if proc.returncode != 0:
+            # Best-effort fallback: just clean and use HEAD.
+            subprocess.run(["git", "checkout", "-q", "."], cwd=str(repo_path), capture_output=True)
+    subprocess.run(["git", "clean", "-qfd"], cwd=str(repo_path), capture_output=True)
+    proc = subprocess.run(
+        ["git", "apply", "--check"],
+        cwd=str(repo_path),
+        input=patch_text,
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode == 0:
+        return True, ""
+    err = proc.stderr.strip().splitlines()[0] if proc.stderr.strip() else "git apply failed (no stderr)"
+    return False, err
+
+
 def _patch_added_lines(patch_text: str) -> list[str]:
     out: list[str] = []
     for line in patch_text.splitlines():
@@ -155,6 +195,23 @@ def _score_bundle(bundle_root: Path, task_spec: dict[str, Any] | None = None) ->
         scores["deliverable_fit_score"] -= 3
         scores["external_admissibility_score"] -= 2
         scores["reviewer_rejection_risk_score"] += 3
+
+    # Pass-13b boundary check: opt-in `git apply --check` against the cloned
+    # repo at base_commit. Catches structural malformations (hunk-header
+    # count mismatches, non-ASCII whitespace in hunk bodies) the text
+    # heuristics miss. Skipped silently when task_spec doesn't supply
+    # repo_path / base_commit (preserves existing fixture behavior).
+    if task_spec is not None and has_diff_header and has_hunk:
+        repo_path = task_spec.get("applies_against_repo")
+        base_commit = task_spec.get("applies_against_commit")
+        if repo_path:
+            applies, err = _check_patch_applies(patch_text, Path(repo_path), base_commit)
+            if applies is False:
+                findings.append(f"Patch fails `git apply --check` against {repo_path}@{base_commit[:8] if base_commit else 'HEAD'}: {err}")
+                scores["task_validity_score"] = 0
+                scores["deliverable_fit_score"] -= 2
+                scores["external_admissibility_score"] = 0
+                scores["reviewer_rejection_risk_score"] = 3
 
     added = _patch_added_lines(patch_text)
     removed = _patch_removed_lines(patch_text)

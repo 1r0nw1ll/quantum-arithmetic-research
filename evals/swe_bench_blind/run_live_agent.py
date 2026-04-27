@@ -313,23 +313,59 @@ def _render_report(rows: list[dict[str, Any]], baselines: dict[str, str]) -> str
     return "\n".join(lines).rstrip() + "\n"
 
 
+SWE_BENCH_RUNS_ROOT = Path("/home/player2/upstream_corpora/swe_bench_runs")
+
+
+def _augment_with_apply_check(task_json: dict[str, Any]) -> dict[str, Any]:
+    """Add applies_against_repo + applies_against_commit hints when the
+    cloned repo exists locally. Pass-13b: enables `git apply --check`
+    inside the scorer for live-agent rescoring."""
+    inst_id = task_json.get("instance_id")
+    if not inst_id:
+        return task_json
+    repo_dir = SWE_BENCH_RUNS_ROOT / inst_id
+    if not (repo_dir / ".git").exists():
+        return task_json
+    # Pull the base_commit from the upstream sample manifest.
+    sample_path = Path("/home/player2/upstream_corpora/swe_bench_verified/sample.json")
+    if not sample_path.exists():
+        return task_json
+    try:
+        sample = json.loads(sample_path.read_text(encoding="utf-8"))
+    except Exception:
+        return task_json
+    rec = next((r for r in sample if r.get("instance_id") == inst_id), None)
+    if not rec:
+        return task_json
+    augmented = dict(task_json)
+    augmented["applies_against_repo"] = str(repo_dir)
+    augmented["applies_against_commit"] = rec.get("base_commit", "")
+    return augmented
+
+
 def _rescore_from_saved_bundles(scorer_mod) -> tuple[list[dict[str, Any]], dict[str, str]]:
     """Walk the persisted live-agent bundles and rescore them in place.
 
     Used when codex hit a timeout mid-run and we want a report from the
     bundles that DID land, without re-issuing the entire 25-call sweep.
     Missing (task, variant) cells are emitted as `(timeout)` rows.
+
+    Pass-13b: when the SWE-Bench task's repo is cloned locally at the
+    correct base_commit (under SWE_BENCH_RUNS_ROOT), augment task_spec
+    with applies_against_repo + applies_against_commit so the scorer
+    runs `git apply --check` as a structural-validity gate.
     """
     rows: list[dict[str, Any]] = []
     baselines: dict[str, str] = {}
     task_dirs = sorted(p for p in TASK_ROOT.iterdir() if p.is_dir())
     for task_dir in task_dirs:
         task_json = json.loads((task_dir / "task.json").read_text(encoding="utf-8"))
+        task_spec = _augment_with_apply_check(task_json)
         baselines[task_dir.name] = _baseline_decision(task_dir, scorer_mod)
         for variant_name in VARIANTS:
             saved = RESULTS_ROOT / task_dir.name / variant_name
             if saved.exists() and any(saved.iterdir()):
-                report = scorer_mod._score_bundle(saved, task_spec=task_json)
+                report = scorer_mod._score_bundle(saved, task_spec=task_spec)
                 decision = scorer_mod._decision_from_scores(report["scores"])
                 rows.append({
                     "task": task_dir.name,

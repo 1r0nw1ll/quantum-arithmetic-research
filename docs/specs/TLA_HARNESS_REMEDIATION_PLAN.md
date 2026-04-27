@@ -226,9 +226,12 @@
   - Pass 8: live-agent stress on Upwork suite (`86d8b3f`) — overclaim variant degraded both tasks; rush + minimal_tests caused keyword drop-out.
   - Pass 9: shared cross-domain core extracted at `evals/_blind_core/` (`3c0b755`) — behavior preserved byte-identically.
   - Pass 10: fourth domain `evals/swe_bench_blind/` (`16f3118`) — SWE-Bench Verified pilot. Cross-domain blind-benchmark **30/30**. Deception regression **34 fixtures**, still exit-0. Shared core held without extension.
-  - Pass 11 (this pass): freeze + document. v1 doc, master runner, baseline report, tag.
+  - Pass 11: freeze + document. v1 doc, master runner, baseline report, tag.
+  - Pass 12: SWE-Bench live-agent stress (`d9c8553`) — 25 codex calls × 5 prompt variants. Codex resists overclaim framing on patches (unlike Upwork). Wrong-file routing surfaced on django-11211. 17/25 heuristic-accept.
+  - Pass 13a: SWE-Bench execution pilot (`b462f11`) — `git apply --check` against real cloned repos showed only 1 of 9 heuristic-accepted codex patches actually applies. 89% of accepts were structurally malformed (hunk-header count mismatches, non-ASCII whitespace).
+  - Pass 13b (this pass): added `git apply --check` boundary to SWE-Bench scorer (opt-in via `applies_against_repo` + `applies_against_commit` task_spec keys). Pass-12 live-agent rescored: accept rate **68% → 12%** (17 → 3). Existing fixtures unchanged (apply-check is opt-in; their task_specs don't supply repo info). Cross-domain 30/30 and deception 34 exit-0 both preserved.
 - Cert-gate hook fix (`0de0e35`) scopes formal-path scanning to staged set + explicit add targets.
-- Four tolerated known gaps from Pass 7-c remain non-blocking pending recurrence. They did not reappear in Pass 10. v1 deliberately does not tighten them.
-- Pass 10 is text-heuristics-only — no SWE-Bench test-suite execution. Pass 10.5+ would integrate FAIL_TO_PASS verification.
-- Next action options (post-v1 freeze): (a) **depth** — expand SWE-Bench + Upwork with more live-agent runs and larger corpora; (b) **rigor** — calibrated precision/recall dashboards, recurrence-driven tightening of the 4 known gaps; (c) **execution** — Pass 10.5 wire SWE-Bench FAIL_TO_PASS test execution.
+- Four tolerated known gaps from Pass 7-c remain non-blocking pending recurrence.
+- Pass 13b is a SCORER change behind opt-in flags; v1 baseline tag still represents the harness shape, but heuristic-accept SWE-Bench numbers from Pass 10/12 should be re-read in light of Pass 13b's stricter gate.
+- Next action options: (a) **Pass 13c / 10.5** — actual `pytest FAIL_TO_PASS` execution on the 3 surviving accepts + the 1 surviving revise; (b) **scale Pass 13b** — clone remaining repos for any future SWE-Bench expansion so apply-check works by default; (c) **depth** — broaden Upwork live-agent stress with the same kind of structural-gate question (does it have an analog?).
 - Owner / executor: Claude (session claude-main-1533).

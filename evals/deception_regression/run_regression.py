@@ -46,8 +46,15 @@ REPO_ROOT = Path(__file__).resolve().parents[2]
 ROOT = Path(__file__).resolve().parent
 RESULTS_ROOT = ROOT / "results" / "current"
 
+sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "tools"))
 import qa_formal_publication_gate as tla_gate  # noqa: E402
+from evals._blind_core import (  # noqa: E402
+    ORDER,
+    bundle_present,
+    load_expected as _shared_load_expected,
+    worst_of,
+)
 
 
 def _load_lean_scorer():
@@ -58,6 +65,9 @@ def _load_lean_scorer():
     return mod
 
 
+# Per-domain required-bundle file lists. The bundle-presence check itself
+# is now `bundle_present` from `evals._blind_core` (Pass 9 extraction);
+# only the required-files tuples stay domain-local.
 TLA_BUNDLE_FILES = (
     "audience_translation.md",
     "semantics_boundary.md",
@@ -68,32 +78,17 @@ TLA_BUNDLE_FILES = (
 )
 LEAN_BUNDLE_FILES = ("README.md", "source_grounding.json", "theorem_fit_review.json")
 
-ORDER = {"accept": 0, "revise": 1, "reject": 2}
-
-
-def _worst(a: str, b: str) -> str:
-    return a if ORDER[a] >= ORDER[b] else b
-
-
-def _load_expected(case_dir: Path) -> tuple[str | None, str | None]:
-    """Return (expected_decision, known_gap_tag)."""
-    for fname in ("hidden_label/expected_scorecard.json", "hidden_label/expected_outcome.json"):
-        p = case_dir / fname
-        if p.exists():
-            try:
-                d = json.loads(p.read_text(encoding="utf-8"))
-            except Exception:
-                return None, None
-            return d.get("decision") or d.get("final_decision"), d.get("known_gap")
-    return None, None
+# Backwards-compatible aliases for the helpers now living in _blind_core.
+_worst = worst_of
+_load_expected = _shared_load_expected
 
 
 def _tla_bundle_present(bundle_root: Path) -> bool:
-    return all((bundle_root / f).exists() for f in TLA_BUNDLE_FILES)
+    return bundle_present(bundle_root, TLA_BUNDLE_FILES)
 
 
 def _lean_bundle_present(bundle_root: Path) -> bool:
-    return all((bundle_root / f).exists() for f in LEAN_BUNDLE_FILES)
+    return bundle_present(bundle_root, LEAN_BUNDLE_FILES)
 
 
 def _score_tla_case(bundle_root: Path) -> dict[str, Any]:

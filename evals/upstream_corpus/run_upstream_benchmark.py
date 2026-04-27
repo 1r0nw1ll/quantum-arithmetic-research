@@ -40,8 +40,10 @@ TLA_ROOT = Path("/home/player2/upstream_corpora/tlaplus_examples")
 LEAN_ROOT = Path("/home/player2/upstream_corpora/mathematics_in_lean")
 MATHLIB_ROOT = Path("/home/player2/upstream_corpora/mathlib4")
 
+sys.path.insert(0, str(REPO_ROOT))
 sys.path.insert(0, str(REPO_ROOT / "tools"))
 import qa_formal_publication_gate as tla_gate  # noqa: E402
+from evals._blind_core import BUCKET_RULES, bucket_for_finding, combined_decision  # noqa: E402,F401
 
 
 def _load_lean_scorer():
@@ -61,72 +63,13 @@ def _git_head(repo: Path) -> str:
 
 
 # --- Finding classification -------------------------------------------------
+#
+# `BUCKET_RULES`, `bucket_for_finding`, and the worst-of-two combination
+# helper now live in `evals/_blind_core` (Pass 9 extraction). The local
+# aliases below preserve the original call sites without touching the rest
+# of this file.
 
-BUCKET_RULES = [
-    ("missing_required_artifact", [
-        "missing required artifact",
-    ]),
-    ("substantive_issue", [
-        "tautological",
-        "stuttering-only",
-        "deceptive sorry",
-        "pedagogical sorry",
-        "group-level claims for a natural-number",
-        "scope creep",
-        "publication-ready",
-        "submittable upstream",
-        "malformed-literal",
-        "overclaims source support",
-    ]),
-    ("jargon_private_theory", [
-        "jargon",
-        "project-private",
-    ]),
-    ("missing_explicit_evidence", [
-        "source_grounding",
-        "source excerpt",
-        "authoritative source tier",
-        "overreach the excerpt",
-        "grounding packet",
-        "where the semantics come from",
-        "what is being modeled",
-        "justify the chosen variables/actions",
-        "explicit excerpts",
-        "adversarial check: claimed grounding",
-        "no explanatory text available for source grounding",
-    ]),
-    ("weak_repo_fit_signal", [
-        "repository-fit",
-        "repository fit",
-        "repo_comparables",
-        "comparable evidence",
-        "comparable entries",
-        "similarity",
-        "worth external review",
-        "maintainer value",
-    ]),
-    ("weak_outsider_translation", [
-        "audience",
-        "outsider",
-        "does not explain all state variables",
-        "does not map action names",
-        "conflates intrinsic semantics with tlc bounds",
-        "readme explanation missing",
-        "theorem-statement fidelity",
-        "proof idea",
-        "math_explanation",
-        "does not explicitly state",
-    ]),
-]
-
-
-def _bucket_for_finding(finding: str) -> str:
-    lowered = finding.lower()
-    for bucket, patterns in BUCKET_RULES:
-        for pat in patterns:
-            if pat in lowered:
-                return bucket
-    return "other"
+_bucket_for_finding = bucket_for_finding
 
 
 def _combined_decision(intrinsic: str, completeness: str) -> str:
@@ -135,10 +78,7 @@ def _combined_decision(intrinsic: str, completeness: str) -> str:
     Used only for the 'outbound submission path' simulation — NOT for judging
     upstream artifacts, where only the intrinsic axis is meaningful.
     """
-    order = {"accept": 0, "revise": 1, "reject": 2}
-    if order[intrinsic] >= order[completeness]:
-        return intrinsic
-    return completeness
+    return combined_decision(intrinsic, completeness)
 
 
 # --- Corpus discovery -------------------------------------------------------

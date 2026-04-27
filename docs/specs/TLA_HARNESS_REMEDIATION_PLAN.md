@@ -208,13 +208,16 @@
 - The harness no longer treats internal formal structure as a proxy for external admissibility.
 
 ## 14. Current Status Snapshot
-- Current phase: Pass 7-d — Third Domain (Upwork-style)
+- Current phase: Pass 9 — Shared Cross-Domain Core Extracted
 - Last completed milestones:
   - Pass 7: intrinsic-legitimacy / submission-bundle-completeness split in `tools/qa_formal_publication_gate.py` (commit `e87b1d1`) — TLA intrinsic accept 45.5% on 77 upstream specs vs 0% under monolithic.
   - Pass 7-c: deception regression suite (commit `c2bb195`) — 0 new false accepts, 0 new false rejects, 4 known gaps documented and tolerated.
   - Pass 7-b: charitable comment-extraction adapter (commit `84be587`) — 50% of TLA revise load was extraction debt; 0 regressions.
   - Pass 7-a: upstream corpus expansion (commit `1892e03`) — TLA 99 cases intrinsic-accept 55.6%, Lean 128 cases intrinsic-accept 100%; 50/50 extraction-vs-underexplanation split stable at scale.
-  - Pass 7-d (this pass): third blind domain `evals/upwork_blind/` added with 10 fixtures (2 generation + 3 review + 2 repair + 3 deception), wired into `evals/blind_benchmark/` (22/22 match expected) and `evals/deception_regression/` (26 cases, still exit-0).
-- Four tolerated known gaps (all from `evals/deception_regression/fixtures/`): `vacuous_typeok_bundled`, `readme_spec_misalignment`, `vacuous_premise`, `scope_overclaim_no_sorry`. Documented, regression-tracked, **non-blocking pending recurrence**. They did not reappear in the 99-TLA + 128-Lean expanded corpus. Tightening deferred until prevalence data justifies it.
-- Next action: observe how the Upwork-style suite behaves under live-agent stress (if/when the harness is run against a real agent's deliverables rather than the deterministic current-system generator). No further scorer tightening until new failure shapes appear.
-- Owner / executor: Claude (session claude-main-1533) + Codex (review + commit bridge).
+  - Pass 7-d: third blind domain `evals/upwork_blind/` (commits `494ecd5`/`236e81e`/`80832f0`) — 10 fixtures, cross-domain sweep 22/22 match expected.
+  - Pass 8: live-agent stress on Upwork suite (commit `9fc9ca7`) — codex generation under 5 prompt variants; harness still detects operational deception under prompt pressure (overclaim variant degrades both tasks; rush + minimal_tests cause keyword drop-out).
+  - Pass 9 (this pass): shared cross-domain core extracted at `evals/_blind_core/`. ORDER + worst_of, BUCKET_RULES + bucket_for_finding, load_expected, bundle_present moved out of duplicating callers. Behavior preserved byte-identically: all 4 generated reports identical to pre-extraction baseline.
+- Cert-gate hook fix (commit `1394e97`) scopes formal-path scanning to staged set + explicit add targets; untracked worktree dirt no longer triggers FORMAL_PUBLICATION_GATE_REQUIRED on unrelated commits.
+- Four tolerated known gaps (all from `evals/deception_regression/fixtures/`): `vacuous_typeok_bundled`, `readme_spec_misalignment`, `vacuous_premise`, `scope_overclaim_no_sorry`. Documented, regression-tracked, **non-blocking pending recurrence**. They did not reappear in the 99-TLA + 128-Lean expanded corpus or the live-agent stress run. Tightening deferred until prevalence data justifies it.
+- Next action: SWE-Bench Verified comparison as a neutral external practical-task benchmark. With the shared core in place, integration of a fourth domain should reuse `_blind_core` directly rather than re-duplicating the bucket / decision / label-loading helpers.
+- Owner / executor: Claude (session claude-main-1533) + Codex (review + commit bridge until Pass 9 hook fix; Claude-side commits work directly now).

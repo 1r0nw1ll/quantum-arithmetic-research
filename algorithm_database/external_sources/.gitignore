@@ -1,0 +1,17 @@
+# external_sources/ — cloned upstream repos for the algorithm_database catalog.
+# Cloned content is local-only; only the inventory metadata in
+# algorithm_database/sources/<repo>_inventory.md enters git.
+#
+# This keeps the algorithm_database tree small and avoids vendoring
+# upstream code into the QA repo.
+algforopt-notebooks/
+decisionmaking-code/
+DecisionMakingProblems.jl/
+validation-code/
+optimization/
+optimization-ancillaries/
+decisionmaking/
+decisionmaking-ancillaries/
+validation/
+validation-ancillaries/
+validation-figures/

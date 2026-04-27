@@ -50,9 +50,27 @@ A queryable catalog of classical algorithms with their QA conversions. Each row 
 
 ## Sources represented
 
-- `sources/kochenderfer_trilogy_manifest.md` — pointers into the QA-MEM SourceWorks for the three textbooks (Validation, Decision Making, Optimization 2e + 1e).
-- `sources/algforopt_notebooks_manifest.md` — Jupyter-notebooks repo `github.com/algorithmsbooks/algforopt-notebooks` (NOT YET FETCHED; manifest documents what's there for future passes).
-- `sources/algorithmsbooks_org.md` — broader GitHub org `github.com/algorithmsbooks` (Decision-Making notebooks, Validation notebooks, ancillaries, `DecisionMakingProblems.jl`, etc.).
+- `sources/kochenderfer_trilogy_manifest.md` — pointers into the QA-MEM SourceWorks for the three textbooks (Validation, Decision Making, Optimization 2e + 1e). **FETCHED + INGESTED**.
+- `sources/algforopt_notebooks_manifest.md` — Jupyter-notebooks repo `github.com/algorithmsbooks/algforopt-notebooks`. **FETCHED + INVENTORIED 2026-04-27 (v1.1)**. See full inventory at `sources/algforopt_notebooks_inventory.md` (24 notebooks indexed).
+- `sources/algorithmsbooks_org.md` — broader GitHub org `github.com/algorithmsbooks` (Decision-Making notebooks, Validation notebooks, ancillaries, `DecisionMakingProblems.jl`, etc.). **NOT YET FETCHED**.
+
+## Notebook coverage (v1.1, 2026-04-27)
+
+Per `sources/algforopt_notebooks_inventory.md`, the 24 algforopt-notebooks map to v1's 7 entries as follows:
+
+| v1 entry | Notebook backing? | Notes |
+|---|---|---|
+| `gradient_descent` | ✓ `first-order.ipynb` (`GradientDescent` struct + `init!()`/`step!()`) | direct match |
+| `cyclic_coordinate_search` | partial — `direct.ipynb` has Divided Rectangles support structs | book Algorithm 7.2 stays canonical |
+| `simulated_annealing` | partial — `stochastic.ipynb` chapter; helper structs only | book Algorithm 8.5 stays canonical |
+| `branch_and_bound` | partial — `discrete.ipynb` chapter; viz-only | book Algorithm 22.5 stays canonical |
+| `iterative_policy_evaluation` | ✗ DM-book entry; not in Optimization-notebooks repo | needs `decisionmaking-code` fetch |
+| `value_iteration` | ✗ DM-book entry | needs `decisionmaking-code` fetch |
+| `forward_search` | ✗ DM-book entry | needs `decisionmaking-code` fetch |
+
+**No book-canonical algorithm body was lost or duplicated by the notebook fetch.** Notebooks are figure-rendering supplements. The earlier choice to anchor v1 entries at book sections (not notebooks) was confirmed correct.
+
+**v1.2 candidates from notebook inventory** (not added in v1.1; see `algforopt_notebooks_inventory.md` "Candidate v1.2 entries" for the full list of ~30 algorithms across 8 algorithm-bearing notebooks): `expected_improvement`, `pareto_optimality`, `dominates`, `linear_regression`, `newton_method`, `divided_rectangles`, `genetic_algorithm`, `simplex_algorithm`, etc.
 
 ## Connection to research-bridge artifacts
 

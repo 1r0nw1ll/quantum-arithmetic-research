@@ -6,9 +6,16 @@ GitHub: <https://github.com/algorithmsbooks/algforopt-notebooks>
 
 Companion Jupyter notebooks for *Algorithms for Optimization* (Kochenderfer + Wheeler). The repo provides Julia 1.0.1 + IJulia + PGFPlots.jl notebooks reproducing the figures and algorithms in the textbook.
 
-## Status: NOT YET FETCHED in this pass
+## Status: FETCHED + INVENTORIED (2026-04-27, v1.1)
 
-The algorithm-database v1 (2026-04-27) uses the **textbook PDFs** as the primary source; the Julia notebooks repo has not been cloned. This manifest documents the notebook inventory for future passes when fetching is greenlit.
+The algforopt-notebooks repo was fetched in algorithm-database v1.1 via `git clone --depth 1` into `algorithm_database/external_sources/algforopt-notebooks/` (gitignored — cloned content stays local-only; only inventory metadata enters git).
+
+**Full inventory**: see `algforopt_notebooks_inventory.md` (this directory). 24 .ipynb notebooks parsed; 8 contain algorithm code, 13 are figure-rendering, 3 are appendix/reference. Per the upstream README: *"These notebooks were generated from the Algorithms for Optimization source code... to aid with the development of lectures."* — i.e., the notebooks are **supplemental visualization** for the textbook, not the canonical source for algorithm bodies. The book PDF stays canonical.
+
+**Coverage of v1's 7 entries**: 
+- `gradient_descent` directly backed by `first-order.ipynb` `GradientDescent` struct
+- `cyclic_coordinate_search`, `simulated_annealing`, `branch_and_bound` are in chapters whose notebooks contain only viz/helpers (book PDF remains canonical)
+- `iterative_policy_evaluation`, `value_iteration`, `forward_search` are **DM-book entries; not in this Optimization-book repo** (would need `algorithmsbooks/decisionmaking-code` fetch — see `algorithmsbooks_org.md`)
 
 ## Notebook inventory (per ChatGPT's analysis 2026-04-26 in the original ingestion request)
 
@@ -29,15 +36,21 @@ The algorithm-database v1 (2026-04-27) uses the **textbook PDFs** as the primary
 
 (Source: ChatGPT 2026-04-26 analysis pasted in the algorithm-database ingestion request.)
 
-## Future-pass instructions (when fetching is greenlit)
+## Future-pass strategy (v1.2+)
 
-1. Clone the repo into a controlled local location (e.g., `~/Downloads/algforopt-notebooks/` or under `Documents/kochenderfer_corpus/`).
-2. Decide whether to ingest the notebooks as additional QA-MEM SourceWorks (one SourceWork per notebook? one per repo? per Phase 4.x discipline).
-3. For each notebook with QA-relevant algorithms (discrete/descent/stochastic), extract the algorithm bodies and create algorithm-database entries that link the notebook code to the existing book-level entries (the database row would have BOTH a book pseudocode AND a notebook code reference).
-4. Update `INDEX.md` with notebook-source rows or extend existing book-source rows with a "notebook code" column.
+Now that the repo is fetched and inventoried, the next steps when database expansion is greenlit:
 
-## Why we didn't fetch in this pass
+1. Add v1.2 entries from inventory candidates listed in `algforopt_notebooks_inventory.md` "Candidate v1.2 entries" section. Each new entry: copy `TEMPLATE/`, fill in source reference (now pointing at notebook OR book OR both), classical port (where notebook has runnable code), QA mapping (cite bridge spec row + cert evidence as available).
+2. Decide whether to ingest specific notebook content into QA-MEM as additional SourceWorks (per Phase 4.x discipline). Most notebooks are figure-rendering and shouldn't be ingested; the few with algorithm code (`first-order`, `multiobjective`, `sampling-plans`, `surrogate-models`, `surrogate-optimization`) are candidates if a future cert needs them as primary source.
+3. Fetch `algorithmsbooks/decisionmaking-code` to back the DM-book entries (`iterative_policy_evaluation`, `value_iteration`, `forward_search`) with notebook/code refs.
 
-Per Will + ChatGPT scoping discipline 2026-04-27: build the catalog scaffold first using the QA-MEM-anchored book pseudocode (which has proper attribution and is already on disk), then layer on notebook code as a second pass. The catalog structure does not depend on the notebooks being fetched; the entries point at the book sections via the QA-MEM excerpts file.
+## Reproducing the fetch
 
-This is consistent with the bridge spec's standing rule that the database is a "front-door / query layer over QA-MEM + bridge + certs, not a replacement for them" — the notebook fetch is a corpus-extension move, deferred to a focused session.
+```bash
+mkdir -p algorithm_database/external_sources
+cd algorithm_database/external_sources
+git clone --depth 1 https://github.com/algorithmsbooks/algforopt-notebooks.git
+# .gitignore at external_sources/.gitignore excludes the clone from git
+```
+
+Repo size after clone: ~836 KB. Julia 1.0.1 kernels; PGFPlots.jl-driven figures.

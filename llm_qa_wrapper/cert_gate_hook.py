@@ -28,6 +28,7 @@ import hashlib
 import json
 import os
 import re
+import shlex
 import sys
 import time
 import base64
@@ -515,7 +516,78 @@ def _pending_quarantine_count(review_marker: str | None = None) -> int:
         return 0
 
 
-def _formal_changed_paths() -> list[str]:
+def _git_paths_from_index() -> list[str]:
+    result = subprocess.run(
+        ["git", "-C", str(REPO), "diff", "--cached", "--name-only", "--diff-filter=ACMRTUXB"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if result.returncode != 0:
+        return []
+    return [
+        line.strip().replace("\\", "/")
+        for line in result.stdout.splitlines()
+        if line.strip()
+    ]
+
+
+def _git_paths_from_push_target() -> list[str]:
+    upstream = subprocess.run(
+        ["git", "-C", str(REPO), "rev-parse", "--abbrev-ref", "--symbolic-full-name", "@{upstream}"],
+        capture_output=True,
+        text=True,
+        check=False,
+    )
+    if upstream.returncode == 0 and upstream.stdout.strip():
+        diff_range = f"{upstream.stdout.strip()}..HEAD"
+        result = subprocess.run(
+            ["git", "-C", str(REPO), "diff", "--name-only", "--diff-filter=ACMRTUXB", diff_range],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    else:
+        result = subprocess.run(
+            ["git", "-C", str(REPO), "diff-tree", "--no-commit-id", "--name-only", "-r", "HEAD"],
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+    if result.returncode != 0:
+        return []
+    return [
+        line.strip().replace("\\", "/")
+        for line in result.stdout.splitlines()
+        if line.strip()
+    ]
+
+
+def _git_add_paths_from_command(scan_command: str) -> list[str]:
+    candidates: list[str] = []
+    for segment in re.split(r"\s*(?:&&|\|\||;)\s*", scan_command):
+        if "git add" not in segment.lower():
+            continue
+        try:
+            tokens = shlex.split(segment)
+        except ValueError:
+            continue
+        if len(tokens) < 3 or tokens[0] != "git" or tokens[1] != "add":
+            continue
+        saw_double_dash = False
+        for token in tokens[2:]:
+            if token == "--":
+                saw_double_dash = True
+                continue
+            if not saw_double_dash and token.startswith("-"):
+                continue
+            normalized = token.strip().replace("\\", "/")
+            if normalized:
+                candidates.append(normalized)
+    return candidates
+
+
+def _formal_changed_paths(scan_command: str) -> list[str]:
     if "LLM_QA_FORMAL_CHANGED_PATHS" in os.environ:
         override = os.environ.get("LLM_QA_FORMAL_CHANGED_PATHS", "")
         candidates = [
@@ -524,24 +596,17 @@ def _formal_changed_paths() -> list[str]:
             if p.strip()
         ]
     else:
-        git_commands = (
-            ["git", "-C", str(REPO), "diff", "--cached", "--name-only", "--diff-filter=ACMRTUXB"],
-            ["git", "-C", str(REPO), "diff", "--name-only", "--diff-filter=ACMRTUXB"],
-            ["git", "-C", str(REPO), "ls-files", "--others", "--exclude-standard"],
-        )
-        candidates: list[str] = []
-        for command in git_commands:
-            result = subprocess.run(
-                command,
-                capture_output=True,
-                text=True,
-                check=False,
-            )
-            if result.returncode != 0:
-                continue
-            for line in result.stdout.splitlines():
-                if line.strip():
-                    candidates.append(line.strip().replace("\\", "/"))
+        command_lower = scan_command.lower()
+        candidates = []
+        if re.search(r"\bgit\s+commit\b", command_lower):
+            candidates.extend(_git_paths_from_index())
+            # If the same shell invocation includes `git add ... && git commit`,
+            # include the explicit add targets instead of scanning unrelated dirt.
+            candidates.extend(_git_add_paths_from_command(scan_command))
+        elif re.search(r"\bgit\s+push\b", command_lower):
+            candidates.extend(_git_paths_from_push_target())
+        else:
+            candidates.extend(_git_paths_from_index())
     seen: set[str] = set()
     out: list[str] = []
     for rel_posix in candidates:
@@ -654,7 +719,7 @@ def _deny_bash(tool_input: dict) -> list[str]:
         if re.search(r"(^|/)[^/ ]+\.png(?:\s|$)", normalized, re.I):
             reasons.append("GENERATED_BINARY_OUTPUT")
     if re.search(r"\bgit\s+(commit|push)\b", scan_command, re.I):
-        changed_formal_paths = _formal_changed_paths()
+        changed_formal_paths = _formal_changed_paths(scan_command)
         if changed_formal_paths:
             if _pending_quarantine_count(FORMAL_REVIEW_MARKER) > 0:
                 reasons.append("FORMAL_REVIEW_PENDING")

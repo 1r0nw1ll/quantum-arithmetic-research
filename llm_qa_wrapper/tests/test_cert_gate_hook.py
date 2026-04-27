@@ -645,6 +645,39 @@ def t_git_commit_blocks_pending_formal_review():
         _verify_chain(rows)
 
 
+@test("git commit ignores unrelated untracked formal files when staged paths are non-formal")
+def t_git_commit_ignores_untracked_formal_dirt():
+    with tempfile.TemporaryDirectory(prefix="qa_hook_repo_") as tmp_repo, tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:
+        repo_root = Path(tmp_repo)
+        ledger_dir = Path(tmp)
+        _init_temp_git_repo(repo_root)
+
+        # Unrelated formal dirt should not block a non-formal commit.
+        bundle_root = repo_root / "qa_alphageometry_ptolemy"
+        bundle_root.mkdir(parents=True, exist_ok=True)
+        (bundle_root / "Spec.tla").write_text("---- MODULE Spec ----\n====\n", encoding="utf-8")
+
+        notes = repo_root / "notes.txt"
+        notes.write_text("ship non-formal change\n", encoding="utf-8")
+        subprocess.run(["git", "add", "notes.txt"], cwd=repo_root, check=True, capture_output=True, text=True)
+
+        proc = _run_hook(
+            ledger_dir,
+            json.dumps({
+                "tool_name": "Bash",
+                "tool_input": {"command": "git commit -m notes"},
+            }),
+            marker_text="claude-test-session",
+            repo_root=repo_root,
+        )
+        assert proc.returncode == 0, proc.stderr
+        rows = _records(ledger_dir)
+        assert len(rows) == 1
+        assert rows[0]["decision"] == "ALLOW"
+        assert "FORMAL_PUBLICATION_GATE_REQUIRED" not in rows[0]["deny_reasons"]
+        _verify_chain(rows)
+
+
 @test("Bash read-only Python path reference does not quarantine")
 def t_allow_read_only_python_path_reference():
     with tempfile.TemporaryDirectory(prefix="qa_hook_test_") as tmp:

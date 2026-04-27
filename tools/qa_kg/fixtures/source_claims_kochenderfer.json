@@ -1,0 +1,189 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-MEM ingestion of Kochenderfer/Wheeler/Katz/Corso/Moss 2026 'Algorithms for Validation' (MIT Press, CC-BY-NC-ND, 441pp). 1 SourceWork + 14 verbatim SourceClaims grounding the validation/specification/reachability/falsification/uncertainty vocabulary that the QA cert ecosystem already implements informally. domain='' (formal_methods slot deferred). No contradicts/supersedes/derived-from edges in v1 — those land via a follow-up bridge-spec session. Do not edit quote fields. -->",
+  "phase": "post-4.8",
+  "source_class": "kochenderfer",
+  "description": "Kochenderfer/Wheeler/Katz/Corso/Moss 2026 'Algorithms for Validation' primary-source claims. 1 SourceWork (val.pdf) + 14 verbatim SourceClaims spanning: validation definition (§1.1), alignment problem (§1.1), validation-algorithm I/O (§1.4), Swiss cheese safety case (§1.4), metric vs specification (§3.1), reachability specification ψ=◇R(s_t) (§3.6), reachability-as-canonical-form (§3.6), robustness-as-objective falsification (§4.5), failure distribution conditional p(τ|τ∉ψ) (§6.1), direct estimation p̂_fail=n/m (§7.1), discrete-graph formulation (§10.1), forward/backward reachable sets (§10.2), satisfiability via intersection (§10.3), failure-mode clustering (§11.6), aleatoric vs epistemic uncertainty (§12.2). Domain unclassified (empty string) — taxonomy extension to 'formal_methods' deferred to a focused R10-aware session. Bridge mapping (Kochenderfer concept ↔ existing QA artifact) lives in docs/specs/QA_KOCHENDERFER_BRIDGE.md, not as derived-from edges in this fixture. The companion textbooks `dm.pdf` (Decision Making) and `optimization.pdf` (Optimization) ingest in subsequent sessions.",
+  "works": [
+    {
+      "id": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "title": "Kochenderfer, Wheeler, Katz, Corso, Moss (2026) — Algorithms for Validation",
+      "body": "Mykel J. Kochenderfer (Stanford), Tim A. Wheeler, Sydney Katz, Anthony Corso, Robert J. Moss. Algorithms for Validation. MIT Press, 2026. Compiled 2026-02-08 (LuaHBTeX, TeX Live 2022). 441 PDF pages. Creative Commons CC-BY-NC-ND license. Comments to bugs@algorithmsbook.com. Companion repos under github.com/algorithmsbooks: validation, validation-code, validation-ancillaries, validation-figures. Third installment in the algorithmsbooks trilogy after 'Algorithms for Optimization' and 'Algorithms for Decision Making'. Defines a formal vocabulary for validation algorithms (system + specification → metrics), property specification (metrics, logical/temporal/reachability formulas), falsification (direct sampling, fuzzing, optimization, planning, MCTS, RL), failure distribution (rejection sampling, MCMC, probabilistic programming), failure probability estimation (direct, importance sampling, adaptive IS, SMC, multilevel splitting), reachability for linear / nonlinear / discrete systems, explainability (feature importance, surrogates, counterfactuals, failure-mode clustering), and runtime monitoring (ODD, uncertainty quantification, failure monitoring). PDF on disk at Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf (13.9 MB).",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": ""
+    }
+  ],
+  "claims": [
+    {
+      "id": "val_1_1_validation_definition",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "In this book, we define validation as the broad process of establishing confidence that a system will behave as desired when deployed in the real world. We define verification as a special type of validation that provides guarantees about the correctness of a system with respect to a specification. We define testing as a technique used for validation that involves evaluating the system on a discrete set of test cases.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-1-1-validation-definition",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §1.1 (p.1): validation = establishing deployment confidence; verification ⊂ validation provides specification-correctness guarantees; testing ⊂ validation evaluates on a discrete set"
+    },
+    {
+      "id": "val_1_1_alignment_problem",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "However, the models used to perform the optimization may be imperfect, the optimization objective may not perfectly capture the requirements, and the optimization process itself is often approximate. This misalignment can result in a mismatch between the desired behavior of the system and its actual behavior when deployed in the real world. We refer to this phenomenon as the alignment problem.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-1-1-alignment-problem",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §1.1 (p.2): alignment problem = mismatch between optimization-induced behavior and real-world desired behavior, due to imperfect model / imperfect objective / approximate optimization"
+    },
+    {
+      "id": "val_1_4_validation_algorithm_inputs",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "Validation algorithms require two inputs, as shown in figure 1.3. The first input is the system under test, which we will refer to as the system. The system represents a decision-making agent operating in an environment. The agent makes decisions based on information from the environment that it receives from sensors. The second input is a specification, which expresses an operating requirement for the system. Specifications often pertain to safety, but they may also address other key design objectives. Given these inputs, validation algorithms output metrics to help us understand the scenarios in which the system does or does not satisfy the specification.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-1-4-validation-algorithm-inputs",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §1.4 (p.8): validation algorithm signature = (system, specification) → metrics; system = (agent, environment, sensor); specification = operating requirement"
+    },
+    {
+      "id": "val_1_4_swiss_cheese_safety_case",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "In most real-world settings, we cannot guarantee that a system will behave as intended using a single validation algorithm or metric. Instead, we use a combination of these techniques to build a safety case. This idea is inspired by the Swiss cheese model of accident causation (figure 1.8). This model views validation algorithms as slices of Swiss cheese with holes, or limitations, that may cause us to miss potential failure modes. If we stack enough slices of Swiss cheese together, the holes in one slice will be covered by the cheese in another slice. By using a combination of validation algorithms, we increase our chances of catching potential failure modes before they could occur during operation.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-1-4-swiss-cheese-safety-case",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §1.4 (p.14): Swiss cheese / safety case = no single validation method is sufficient; combine many overlapping methods so each one's blind spot is covered by another's coverage (Reason 2000)"
+    },
+    {
+      "id": "val_3_1_metric_vs_specification",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "We describe the behavior of a system using metrics and specifications. A metric is a function that maps system behavior to a real number. A specification is a function that maps system behavior to a Boolean value. Therefore, specifications are always either true or false. Sometimes specifications can be derived from metrics. For example, given a metric that measures the probability of collision for an aircraft collision avoidance system, we can create a specification that requires the probability of collision to be less than a certain threshold.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-3-1-metric-vs-specification",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §3.1 (p.61): metric : behavior → ℝ; specification : behavior → {true, false}; specifications are derivable from metric thresholds"
+    },
+    {
+      "id": "val_3_6_reachability_spec_formula",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "A reachability specification is a special type of temporal logic specification that describes a state or set of states that a system should or should not reach during its execution. Let S_T ⊆ S represent the target set of states and define the predicate function R(s_t) to be true if s_t ∈ S_T and false otherwise. If our goal is to reach the target set, the reachability specification has the following form: ψ = ◇R(s_t)  (3.20). If our goal is to avoid the target set, we use the negation of the reachability specification as follows: ψ = ¬◇R(s_t) = □¬R(s_t)  (3.21)",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-3-6-reachability-spec-formula",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §3.6 (p.81): reachability spec ψ=◇R(s_t) for reach-target; ψ=¬◇R(s_t)=□¬R(s_t) for avoid-target; R(s_t)=[s_t∈S_T]"
+    },
+    {
+      "id": "val_3_6_reachability_as_canonical_form",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "Writing specifications in this form is useful because many algorithms related to formal methods and model checking are centered around reachability specifications. For example, the algorithms in chapters 8 to 10 determine whether a system could reach a target set. In general, it is possible to solve the model checking problem for other types of specifications by transforming the problem into a reachability problem using various techniques. For systems with LTL specifications, we can create a reachability problem by augmenting the state space of the system.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-3-6-reachability-as-canonical-form",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §3.6 (p.82): reachability is the canonical form for model checking; LTL reduces to reachability via state-space augmentation (Büchi automaton construction)"
+    },
+    {
+      "id": "val_4_5_objective_function_falsification",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "Objective functions guide the search for failure trajectories. In general, a good objective function should output lower values for trajectories that are closer to a failure. The specific measure of closeness used is dependent on the application. If ψ is specified using a temporal logic formula, we can use its robustness measure (see section 3.5.2) as an objective function such that f(τ) = ρ(τ, ψ).",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-4-5-objective-function-falsification",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §4.5 (p.101): falsification objective f(τ) = robustness ρ(τ,ψ); lower values mean closer-to-failure trajectories"
+    },
+    {
+      "id": "val_6_1_failure_distribution_conditional",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "The distribution over failures for a given system with specification ψ is represented by the conditional probability p(τ | τ ∉ ψ). We can write this probability as p(τ | τ ∉ ψ) = 1{τ ∉ ψ} · p(τ) / ∫ 1{τ ∉ ψ} p(τ) dτ  (6.1) where 1{·} is the indicator function and p(τ) is the probability density of the nominal trajectory distribution for trajectory τ. For most systems, the failure distribution is difficult to compute exactly because doing so requires solving the integral in the denominator of equation (6.1) to compute the normalizing constant. The value of this integral corresponds to the probability of failure for the system.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-6-1-failure-distribution-conditional",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §6.1 (p.139): failure distribution = p(τ|τ∉ψ) = 1{τ∉ψ}p(τ) / ∫1{τ∉ψ}p(τ)dτ; denominator = pfail = normalizing constant"
+    },
+    {
+      "id": "val_7_1_direct_estimation_pfail",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "The probability of failure for a given system and specification is defined mathematically as p_fail = E_{τ∼p(·)}[1{τ ∉ ψ}] = ∫ 1{τ ∉ ψ} p(τ) dτ  (7.1) where 1{·} is the indicator function. The maximum likelihood estimate of the probability of failure is p̂_fail = (1/m) Σ_{i=1}^m 1{τ_i ∉ ψ} = n/m  (7.2) where n is the number of samples that resulted in a failure and m is the total number of samples. In the limit of infinite samples, the variance approaches zero, so the estimator is consistent.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-7-1-direct-estimation-pfail",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §7.1 (p.159-160): p_fail = E[1{τ∉ψ}]; MLE p̂_fail = n/m (n failures out of m samples); unbiased + consistent estimator"
+    },
+    {
+      "id": "val_10_1_graph_formulation",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "Directed graphs are a natural way to represent the transitions of a discrete system. A directed graph consists of a set of nodes and a set of directed edges connecting the nodes. For discrete systems, each node represents a state of the system, and each edge represents a transition between states (figure 10.1). We can also associate a probability with each edge to represent the likelihood of the transition occurring. A graph of this form is called a finite automaton or finite-state machine.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-10-1-graph-formulation",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §10.1 (p.263): discrete system = directed graph (state=node, transition=edge); probabilistic edges → finite automaton / finite-state machine"
+    },
+    {
+      "id": "val_10_2_forward_backward_reachable_sets",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "To compute reachable sets, we ignore the probabilities associated with the edges of the graph and focus only on its connectivity. The reachable sets are represented as collections of discrete states. We focus on two types of reachability analysis: forward reachability and backward reachability. Forward reachability analysis determines the set of states that can be reached from a given set of initial states within a specified time horizon. Backward reachability analysis determines the set of states from which a given set of target states can be reached within a specified time horizon.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-10-2-forward-backward-reachable-sets",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §10.2 (p.265): forward reachability = BFS from S_1 within horizon h; backward reachability = reverse-BFS from S_T within horizon h; reachable sets are collections of discrete states"
+    },
+    {
+      "id": "val_10_3_satisfiability_via_intersection",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "We can use the forward and backward reachable sets of discrete systems to determine whether they satisfy a reachability specification (figure 10.6). For forward reachability, we check whether the target set intersects with the forward reachable set. For backward reachability, we check whether the initial set intersects with the backward reachable set. In both cases, these checks require us to compute the full forward or backward reachable set.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-10-3-satisfiability-via-intersection",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §10.3 (p.267): satisfiability check for ψ=◇R(s) is set-intersection: forward — S_T ∩ R_{1:h} ≠ ∅; backward — S_1 ∩ B_{1:h} ≠ ∅"
+    },
+    {
+      "id": "val_11_6_failure_mode_clustering",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "Another way to explain the behavior of a system is to characterize its failure modes. We can use clustering algorithms to create groupings of failure trajectories that are similar to one another. Identifying the similarities and differences between failures helps us understand their underlying causes.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-11-6-failure-mode-clustering",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §11.6 (p.315): failure-mode characterization via clustering of failure trajectories; similarity-based grouping reveals underlying causes (k-means as canonical example)"
+    },
+    {
+      "id": "val_12_2_aleatoric_vs_epistemic_uncertainty",
+      "work": "kochenderfer_wheeler_2026_algorithms_for_validation",
+      "quote": "We may encounter two different types of uncertainty when monitoring a system. The first type of uncertainty is output uncertainty, which occurs when a single input can lead to multiple different outputs. This type of uncertainty occurs due to inherent stochasticity in the real world and is also referred to as aleatoric uncertainty or irreducible uncertainty. The second type of uncertainty is model uncertainty, which arises due to limitations of the model we are using to predict system behavior. This type of uncertainty is also referred to as epistemic uncertainty or reducible uncertainty.",
+      "source_locator": "file:docs/theory/kochenderfer_validation_excerpts.md#val-12-2-aleatoric-vs-epistemic-uncertainty",
+      "extraction_method": "manual",
+      "confidence": 1.0,
+      "valid_from": "2026-02-08",
+      "domain": "",
+      "title": "Kochenderfer 2026 §12.2 (p.330): two uncertainty types — aleatoric/output/irreducible (stochastic input→output map) vs epistemic/model/reducible (limited training data); separable in runtime monitoring"
+    }
+  ],
+  "observations": [],
+  "contradicts": [],
+  "supersedes": [],
+  "derived_from": []
+}

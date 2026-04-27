@@ -204,6 +204,25 @@ Legend: ✓ = SourceWork ingested; ⏳ = deferred; ⚠ = misfiled (non-Wildberge
 
 ---
 
+## Kochenderfer / algorithmsbooks corpus (post-4.8, validation-first ingestion)
+
+**Corpus root:** `Documents/kochenderfer_corpus/`
+**Domain:** unclassified (empty string in fixture). Existing closed set in `domain_taxonomy.json` (qa_core, svp, geometry, biology, physics, rsf, psychophysiology) has no slot for formal-methods / validation-methodology / autonomous-systems-engineering. Adding `formal_methods` is a candidate Phase 4.x follow-up but forces an R10 expected-hash regen — deferred to a focused taxonomy-extension session.
+**Theory docs:** `docs/theory/kochenderfer_validation_excerpts.md` (15 verbatim anchors)
+**Bridge spec:** `docs/specs/QA_KOCHENDERFER_BRIDGE.md` (controlled mapping index — Kochenderfer concept ↔ existing QA artifact ↔ status)
+**Origin:** Kochenderfer/Wheeler/Katz/Corso/Moss 2026 *Algorithms for Validation* (MIT Press, CC-BY-NC-ND, 441pp). Validation book picked first (over Optimization and Decision Making) because its formal vocabulary (validation algorithm I/O, specification-as-Boolean, reachability-as-canonical-form, Swiss-cheese safety case, aleatoric vs epistemic uncertainty) is the highest-leverage external grounding for the QA cert ecosystem's Terminal Goal: making QA legible to skeptical technical readers via shared language.
+**Ingress note:** `Documents/kochenderfer_corpus/` is NOT yet in `DOCUMENTS_PDF_INGRESS_PREFIXES` in `llm_qa_wrapper/cert_gate_hook.py` / `.claude/hooks/pretool_guard.sh`. PDF staged via heredoc-scoped `shutil.copy2` (the documented workaround pattern, mirroring HeartMath / Schumann ingest). Allowlist extension is a `WRAPPER_SELF_MODIFICATION` edit deferred to a focused Codex-quarantine-review session.
+
+| Path | Author | Topic tags | Domain | SourceWork | Status |
+|---|---|---|---|---|---|
+| `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf` | Kochenderfer+Wheeler+Katz+Corso+Moss 2026 | validation, verification, falsification, reachability, failure distribution, runtime monitoring, temporal logic, Büchi automaton, MIT Press | (unclassified) | `kochenderfer_wheeler_2026_algorithms_for_validation` | ✓ (15 claims) |
+| **NOT ON DISK YET** | Kochenderfer+Wheeler 2019 | *Algorithms for Optimization* (MIT Press) | (unclassified) | — | ⏳ ingress queued — `~/Downloads/optimization.pdf` (18.9 MB) + `~/Downloads/optimization-1e-1.pdf` (8.3 MB, 1st-edition errata) |
+| **NOT ON DISK YET** | Kochenderfer+Wheeler+Wray 2022 | *Algorithms for Decision Making* (MIT Press) | (unclassified) | — | ⏳ ingress queued — `~/Downloads/dm.pdf` (12.1 MB) |
+
+**Companion repos (GitHub `algorithmsbooks/`):** `validation`, `validation-code`, `validation-ancillaries`, `validation-figures`, `algforopt-notebooks`, `optimization`, `optimization-ancillaries`, `decisionmaking`, `decisionmaking-code`, `decisionmaking-ancillaries`, `DecisionMakingProblems.jl`. Optional ingestion target — primary text is sufficient for v1 mapping; code repos are useful only if a future cert wants empirical comparison against canonical Julia implementations.
+
+---
+
 ## Cross-reference index (topic → file)
 
 Looking up by **topic or keyword** rather than author — this catches the "missed qa_fst because I grep'd briddell" class of failure.
@@ -240,6 +259,12 @@ Looking up by **topic or keyword** rather than author — this catches the "miss
 | **Williams (Earle R.) / Schumann tropical thermometer / lightning-climate** | Williams 1992 Science paper DEFERRED (AAAS paywall); Williams-lineage substitute: `Documents/schumann_resonance/bozoki_satori_williams_2021_frontiers_solar_cycle_cavity.pdf` (Williams is co-author) |
 | **Sátori / Bozóki / EEP / Earth-ionosphere cavity deformation** | `Documents/schumann_resonance/bozoki_satori_williams_2021_frontiers_solar_cycle_cavity.pdf` |
 | **Radin / IONS / presentiment / global consciousness** | `Documents/radin_ions/` (dir only; no PDFs — deferred per Phase 4.8 item 6 spec §B) |
+| **Kochenderfer / Wheeler / validation / falsification** | `Documents/kochenderfer_corpus/kochenderfer_wheeler_2026_algorithms_for_validation.pdf`, `docs/theory/kochenderfer_validation_excerpts.md`, `tools/qa_kg/fixtures/source_claims_kochenderfer.json`, `docs/specs/QA_KOCHENDERFER_BRIDGE.md` |
+| **reachability specification / model checking / temporal logic / LTL / Büchi** | Kochenderfer 2026 §3.6 + Ch. 10 (`#val-3-6-reachability-spec-formula`, `#val-10-1-graph-formulation`, `#val-10-2-forward-backward-reachable-sets`, `#val-10-3-satisfiability-via-intersection`) |
+| **safety case / Swiss cheese / layered validation** | Kochenderfer 2026 §1.4 (`#val-1-4-swiss-cheese-safety-case`); QA cert ecosystem mapping in `docs/specs/QA_KOCHENDERFER_BRIDGE.md` |
+| **aleatoric vs epistemic uncertainty / runtime monitoring / ODD** | Kochenderfer 2026 §12.2 (`#val-12-2-aleatoric-vs-epistemic-uncertainty`) |
+| **failure distribution / p_fail / direct estimation / importance sampling** | Kochenderfer 2026 §6.1 + §7.1 (`#val-6-1-failure-distribution-conditional`, `#val-7-1-direct-estimation-pfail`) |
+| **alignment problem (specification-vs-deployment mismatch)** | Kochenderfer 2026 §1.1 (`#val-1-1-alignment-problem`) |
 
 ---
 

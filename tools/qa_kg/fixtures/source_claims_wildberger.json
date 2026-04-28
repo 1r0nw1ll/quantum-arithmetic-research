@@ -313,5 +313,52 @@
       "domain": "geometry",
       "title": "Amdeberhan+Zeilberger 2025: prove three Wildberger-Rubine Geode conjectures"
     }
+  ],
+  "derived_from": [
+    {
+      "src": "cert:fs:qa_diamond_sl3_irrep_dimension_cert_v1",
+      "dst": "sc:wildberger_2003_diamonds_abstract",
+      "rationale": "Cert [240] formalizes Wildberger's integer-valued sl3 diamond irreducible-representation model with dim π[a,b]=(b+1)(e+1)(d+2)/2 — the integer-rep model from this paper is the cert's load-bearing premise."
+    },
+    {
+      "src": "cert:fs:qa_diamond_sl3_irrep_dimension_cert_v1",
+      "dst": "sc:wildberger_2003_diamonds_quark_triples",
+      "rationale": "Cert [240] body explicitly verifies '22 standard entries, adjoint dim 8, quark/anti-quark triples' — the quark/anti-quark triple decomposition from Wildberger 2003 is the cert's combinatorial premise."
+    },
+    {
+      "src": "cert:fs:qa_mutation_game_root_lattice_cert_v1",
+      "dst": "sc:wildberger_mutation_game_problem",
+      "rationale": "Cert [244] proves the sign split 120+120 on the E8 root lattice, making the Martians/anti-Martians sign-homogeneity statement of Wildberger's Mutation Game problem concrete."
+    },
+    {
+      "src": "cert:fs:qa_quadruple_coplanarity_cert_v1",
+      "dst": "sc:notowidigdo_wildberger_2019_tetrahedron_abstract",
+      "rationale": "Cert [241] formalizes a QA-side coplanarity invariant for tetrahedral metrical trigonometry; the rational-trig-of-tetrahedron framework over arbitrary fields from Notowidigdo+Wildberger 2019 is the source premise."
+    },
+    {
+      "src": "cert:fs:qa_uhg_null_cert_v1",
+      "dst": "sc:wildberger_2009_uhg_i_abstract",
+      "rationale": "Cert [127] verifies the UHG null condition F²+C²-G²=0 on QA triples (F,C,G)=(d²-e²,2de,d²+e²) — Wildberger 2009 UHG I's algebraic-from-first-principles content is the structural premise."
+    },
+    {
+      "src": "cert:fs:qa_chromogeometry_cert_v1",
+      "dst": "sc:wildberger_2008_chromogeometry_abstract",
+      "rationale": "Cert [125] literally implements Wildberger 2008's three-fold metrical trio C=Q_green=2de, F=Q_red=d²-e², G=Q_blue=d²+e² with C²+F²=G² (Wildberger Thm 6) — the chromogeometry abstract IS the cert's foundational premise."
+    },
+    {
+      "src": "cert:fs:qa_g2_mutation_game_cert_v1",
+      "dst": "sc:wildberger_2003_g2_abstract",
+      "rationale": "Cert [251] formalizes G₂ via Mutation Game with directed edge counts A(0→1)=3, A(1→0)=1; Wildberger 2003's combinatorial 7-dim-rep construction from Numbers/Mutation games on a 6-multiset is the construction the cert encodes."
+    },
+    {
+      "src": "cert:fs:qa_pell_norm_cert_v1",
+      "dst": "sc:wildberger_2008_pell_abstract",
+      "rationale": "Cert [141] uses M_B(d,e)=(2d+e,d) as a Pell-sign-flip in (x,y) space and chains from (2,1) to generate Pell solutions — Wildberger 2008's matrix-arithmetic-only mechanism is the cert's iteration premise."
+    },
+    {
+      "src": "cert:fs:qa_hyper_catalan_diagonal_cert_v1",
+      "dst": "sc:rubine_2025_hyper_catalan_definition",
+      "rationale": "Cert [231] maps hyper-Catalan multi-indices to QA coordinates b=V_m-1, e=F_m, d=E_m; Rubine 2025's polygon-subdivision count C[m2,m3,m4,...] is precisely the object the cert's correspondence maps."
+    }
   ]
 }

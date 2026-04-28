@@ -1,0 +1,59 @@
+diff --git a/sympy/core/mod.py b/sympy/core/mod.py
+--- a/sympy/core/mod.py
++++ b/sympy/core/mod.py
+@@ -40,6 +40,7 @@ class Mod(DefinedFunction):
+         from sympy.core.mul import Mul
+         from sympy.core.singleton import S
+         from sympy.core.exprtools import gcd_terms
++        from sympy.polys.polyerrors import PolynomialError
+         from sympy.polys.polytools import gcd
+ 
+         def doit(p, q):
+@@ -166,10 +167,13 @@ class Mod(DefinedFunction):
+         # XXX other possibilities?
+ 
+         # extract gcd; any further simplification should be done by the user
+-        G = gcd(p, q)
+-        if G != 1:
+-            p, q = [
+-                gcd_terms(i/G, clear=False, fraction=False) for i in (p, q)]
++        try:
++            G = gcd(p, q)
++            if G != 1:
++                p, q = [gcd_terms(i/G, clear=False, fraction=False)
++                        for i in (p, q)]
++        except PolynomialError:
++            G = S.One
+         pwas, qwas = p, q
+ 
+         # simplify terms
+diff --git a/sympy/core/tests/test_numbers.py b/sympy/core/tests/test_numbers.py
+--- a/sympy/core/tests/test_numbers.py
++++ b/sympy/core/tests/test_numbers.py
+@@ -23,10 +23,12 @@ from sympy.core.sympify import sympify
+ from sympy.functions.combinatorial.factorials import factorial
+ from sympy.functions.elementary.integers import floor
+ from sympy.functions.combinatorial.numbers import fibonacci
+ from sympy.functions.elementary.exponential import exp, log
++from sympy.functions.elementary.hyperbolic import sinh
+ from sympy.functions.elementary.miscellaneous import sqrt, cbrt
++from sympy.functions.elementary.piecewise import Piecewise
+ from sympy.functions.elementary.trigonometric import cos, sin
+ from sympy.polys.domains.realfield import RealField
+ from sympy.printing.latex import latex
+ from sympy.printing.repr import srepr
+@@ -123,6 +125,13 @@ def test_mod():
+     assert Integer(1) % Rational(2, 3) == Rational(1, 3)
+     assert Rational(7, 5) % Integer(1) == Rational(2, 5)
+     assert Integer(2) % 1.5 == 0.5
++
++    xr = Symbol('xr', real=True)
++    yr = Symbol('yr', real=True)
++    z = Symbol('z')
++    expr = exp(sinh(Piecewise((xr, yr > xr), (yr, True)) / z))
++    assert expr.subs({1: 1.0}) == exp(
++        sinh(Piecewise((xr, yr > xr), (yr, True)) / z**1.0))
+ 
+     assert Integer(3).__rmod__(Integer(10)) == Integer(1)
+     assert Integer(10) % 4 == Integer(2)
+     assert 15 % Integer(4) == Integer(3)

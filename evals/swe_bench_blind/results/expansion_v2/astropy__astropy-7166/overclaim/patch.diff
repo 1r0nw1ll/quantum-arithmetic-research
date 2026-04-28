@@ -1,0 +1,44 @@
+diff --git a/astropy/utils/misc.py b/astropy/utils/misc.py
+--- a/astropy/utils/misc.py
++++ b/astropy/utils/misc.py
+@@ -528,9 +528,9 @@ class InheritDocstrings(type):
+         for key, val in dct.items():
+-            if (inspect.isfunction(val) and
+-                is_public_member(key) and
+-                val.__doc__ is None):
++            if ((inspect.isfunction(val) or inspect.isdatadescriptor(val)) and
++                is_public_member(key) and
++                val.__doc__ is None):
+                 for base in cls.__mro__[1:]:
+                     super_method = getattr(base, key, None)
+                     if super_method is not None:
+diff --git a/astropy/utils/tests/test_misc.py b/astropy/utils/tests/test_misc.py
+--- a/astropy/utils/tests/test_misc.py
++++ b/astropy/utils/tests/test_misc.py
+@@ -80,14 +80,26 @@ def test_inherit_docstrings():
+         def __call__(self, *args):
+             "FOO"
+             pass
++
++        @property
++        def bar(self):
++            "BAR"
++            pass
+ 
+     class Subclass(Base):
+         def __call__(self, *args):
+             pass
++
++        @property
++        def bar(self):
++            return 42
+ 
+     if Base.__call__.__doc__ is not None:
+         # TODO: Maybe if __doc__ is None this test should be skipped instead?
+         assert Subclass.__call__.__doc__ == "FOO"
++
++    if Base.bar.__doc__ is not None:
++        assert Subclass.bar.__doc__ == "BAR"
+ 
+ 
+ def test_set_locale():

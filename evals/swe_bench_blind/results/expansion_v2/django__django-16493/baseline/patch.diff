@@ -1,0 +1,13 @@
+diff --git a/django/db/models/fields/files.py b/django/db/models/fields/files.py
+--- a/django/db/models/fields/files.py
++++ b/django/db/models/fields/files.py
+@@ -294,8 +294,8 @@ class FileField(Field):
+         if kwargs.get("max_length") == 100:
+             del kwargs["max_length"]
+         kwargs["upload_to"] = self.upload_to
+-        storage = getattr(self, "_storage_callable", self.storage)
+-        if storage is not default_storage:
++        storage = getattr(self, "_storage_callable", self.storage)
++        if storage is not getattr(self, "_storage_callable", default_storage):
+             kwargs["storage"] = storage
+         return name, path, args, kwargs

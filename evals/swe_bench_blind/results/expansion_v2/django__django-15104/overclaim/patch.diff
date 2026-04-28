@@ -1,0 +1,55 @@
+diff --git a/django/db/migrations/autodetector.py b/django/db/migrations/autodetector.py
+index 97977d72ef..0000000000 100644
+--- a/django/db/migrations/autodetector.py
++++ b/django/db/migrations/autodetector.py
+@@ -92,7 +92,7 @@ class MigrationAutodetector:
+         for name, field in sorted(fields.items()):
+             deconstruction = self.deep_deconstruct(field)
+             if field.remote_field and field.remote_field.model:
+-                del deconstruction[2]['to']
++                deconstruction[2].pop('to', None)
+             fields_def.append(deconstruction)
+         return fields_def
+ 
+diff --git a/tests/migrations/test_autodetector.py b/tests/migrations/test_autodetector.py
+index 3b46601145..0000000000 100644
+--- a/tests/migrations/test_autodetector.py
++++ b/tests/migrations/test_autodetector.py
+@@ -31,6 +31,19 @@ class DeconstructibleObject:
+         )
+ 
+ 
++class HardcodedForeignKey(models.ForeignKey):
++    def __init__(self, *args, **kwargs):
++        kwargs['to'] = 'testapp.Author'
++        super().__init__(*args, **kwargs)
++
++    def deconstruct(self):
++        name, path, args, kwargs = super().deconstruct()
++        del kwargs['to']
++        return name, path, args, kwargs
++
++
+ class AutodetectorTests(TestCase):
+     """
+     Tests the migration autodetector.
+@@ -1548,6 +1561,18 @@ class AutodetectorTests(TestCase):
+         self.assertOperationTypes(changes, 'otherapp', 0, ['AlterField'])
+         self.assertMigrationDependencies(changes, 'otherapp', 0, [('testapp', '__first__')])
+ 
++    def test_model_with_hardcoded_foreign_key_reference(self):
++        before = self.make_project_state([self.author_empty])
++        after = self.make_project_state([
++            self.author_empty,
++            ModelState('testapp', 'Book', [
++                ('id', models.AutoField(primary_key=True)),
++                ('author', HardcodedForeignKey(on_delete=models.CASCADE)),
++            ]),
++        ])
++        changes = MigrationAutodetector(before, after)._detect_changes()
++        self.assertNumberMigrations(changes, 'testapp', 1)
++        self.assertOperationTypes(changes, 'testapp', 0, ['CreateModel'])
++
+     def test_circular_dependency_mixed_addcreate(self):
+         """
+         #23315 - The dependency resolver knows to put all CreateModel

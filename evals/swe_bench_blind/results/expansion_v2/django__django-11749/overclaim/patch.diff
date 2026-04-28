@@ -1,0 +1,44 @@
+diff --git a/django/core/management/__init__.py b/django/core/management/__init__.py
+index b8f47fa..bd00ca0 100644
+--- a/django/core/management/__init__.py
++++ b/django/core/management/__init__.py
+@@ -122,7 +122,13 @@ def call_command(command_name, *args, **options):
+     # to parse_args().
+     parse_args += [
+         '{}={}'.format(min(opt.option_strings), arg_options[opt.dest])
+-        for opt in parser._actions if opt.required and opt.dest in options
++        for opt in parser._actions if opt.required and opt.dest in arg_options
++    ]
++    parse_args += [
++        '{}={}'.format(min(opt.option_strings), arg_options[opt.dest])
++        for group in parser._mutually_exclusive_groups
++        for opt in group._group_actions
++        if group.required and opt.dest in arg_options and not opt.required
+     ]
+     defaults = parser.parse_args(args=parse_args)
+     defaults = dict(defaults._get_kwargs(), **arg_options)
+diff --git a/tests/admin_scripts/tests.py b/tests/admin_scripts/tests.py
+index d6ea84d..b5b2c45 100644
+--- a/tests/admin_scripts/tests.py
++++ b/tests/admin_scripts/tests.py
+@@ -1533,6 +1533,20 @@ class CommandTypes(AdminScriptTestCase):
+         with self.assertRaisesMessage(CommandError, msg):
+             call_command(BaseCommand(no_color=True, force_color=True))
+ 
++    def test_mutually_exclusive_group_required_with_option(self):
++        class Command(BaseCommand):
++            requires_system_checks = False
++
++            def add_arguments(self, parser):
++                shop = parser.add_mutually_exclusive_group(required=True)
++                shop.add_argument('--shop-id', type=int, default=None)
++                shop.add_argument('--shop', default=None)
++
++            def handle(self, *args, **options):
++                return str(options['shop_id'])
++
++        self.assertEqual(call_command(Command(), shop_id=1), '1')
++
+     def test_custom_stdout(self):
+         class Command(BaseCommand):
+             requires_system_checks = False

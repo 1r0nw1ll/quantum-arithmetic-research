@@ -1,0 +1,100 @@
+--- a/astropy/timeseries/core.py
++++ b/astropy/timeseries/core.py
+@@ -54,13 +54,13 @@
+     _required_columns_relax = False
+ 
+     def _check_required_columns(self):
+-        def as_scalar_or_list_str(obj):
++        def as_scalar_or_list_str(obj, listify=False):
+             if not hasattr(obj, "__len__"):
+                 return f"'{obj}'"
+-            elif len(obj) == 1:
++            elif len(obj) == 1 and not listify:
+                 return f"'{obj[0]}'"
+             else:
+-                return str(obj)
++                return str(list(obj))
+ 
+         if not self._required_columns_enabled:
+             return
+@@ -75,17 +75,17 @@
+ 
+             if not self._required_columns_relax and len(self.colnames) == 0:
+                 raise ValueError(
+-                    f"{self.__class__.__name__} object is invalid - expected"
+-                    f" '{required_columns[0]}' as the first column{plural} but time"
+-                    " series has no columns"
++                    f"{self.__class__.__name__} object is invalid - required"
++                    f" {as_scalar_or_list_str(required_columns, listify=(len(required_columns) > 1))}"
++                    f" as the first column{plural} but time series has no columns"
+                 )
+ 
+             elif self.colnames[: len(required_columns)] != required_columns:
+                 raise ValueError(
+-                    f"{self.__class__.__name__} object is invalid - expected"
+-                    f" {as_scalar_or_list_str(required_columns)} as the first"
++                    f"{self.__class__.__name__} object is invalid - required"
++                    f" {as_scalar_or_list_str(required_columns, listify=(len(required_columns) > 1))} as the first"
+                     f" column{plural} but found"
+-                    f" {as_scalar_or_list_str(self.colnames[: len(required_columns)])}"
++                    f" {as_scalar_or_list_str(self.colnames[: len(required_columns)], listify=(len(required_columns) > 1))}"
+                 )
+ 
+             if (
+--- a/astropy/timeseries/tests/test_sampled.py
++++ b/astropy/timeseries/tests/test_sampled.py
+@@ -31,7 +31,7 @@
+     with pytest.raises(
+         ValueError,
+         match=(
+-            r"TimeSeries object is invalid - expected 'time' as the first column but"
++            r"TimeSeries object is invalid - required 'time' as the first column but"
+             r" found 'flux'"
+         ),
+     ):
+@@ -418,7 +418,7 @@
+     ts.copy()
+ 
+     MESSAGE = (
+-        r"TimeSeries object is invalid - expected 'time' as the first column but found"
++        r"TimeSeries object is invalid - required 'time' as the first column but found"
+         r" '{}'"
+     )
+ 
+@@ -444,7 +444,7 @@
+ 
+     # https://github.com/astropy/astropy/issues/13009
+     MESSAGE = (
+-        r"TimeSeries object is invalid - expected \['time', 'a'\] as the first columns"
++        r"TimeSeries object is invalid - required \['time', 'a'\] as the first columns"
+         r" but found \['time', 'b'\]"
+     )
+     ts_2cols_required = ts.copy()
+@@ -452,6 +452,16 @@
+     with pytest.raises(ValueError, match=MESSAGE):
+         ts_2cols_required.remove_column("a")
+ 
++    # https://github.com/astropy/astropy/issues/13033
++    MESSAGE = (
++        r"TimeSeries object is invalid - required \['time', 'a'\] as the first columns"
++        r" but found \['time'\]"
++    )
++    ts_1col_required = TimeSeries(time=INPUT_TIME, data=[[10, 2, 3]], names=["a"])
++    ts_1col_required._required_columns = ["time", "a"]
++    with pytest.raises(ValueError, match=MESSAGE):
++        ts_1col_required.remove_column("a")
++
+ 
+ @pytest.mark.parametrize("cls", [BoxLeastSquares, LombScargle])
+ def test_periodogram(cls):
+--- a/astropy/timeseries/tests/test_binned.py
++++ b/astropy/timeseries/tests/test_binned.py
+@@ -25,7 +25,7 @@
+     with pytest.raises(
+         ValueError,
+         match=(
+-            r"BinnedTimeSeries object is invalid - expected 'time_bin_start' as the"
++            r"BinnedTimeSeries object is invalid - required 'time_bin_start' as the"
+             r" first column but found 'flux'"
+         ),
+     ):

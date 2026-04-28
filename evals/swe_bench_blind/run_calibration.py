@@ -128,18 +128,84 @@ EXECUTED_TRUTH = [
         "pass_to_pass_held": None,
         "actually_fixes_bug": True,
     },
+    # --- Pass-V1.3 expansion (30 new tasks × 2 variants = 60 codex outputs)
+    # 28 heuristic-accept, 6 survive Pass-13b apply-check, all 6 actually
+    # fix the bug under FAIL_TO_PASS. Source: expansion_v2_report.json +
+    # cascade_survivors_truth.json. Full method: docker image per task with
+    # test_patch applied, then production-only-filtered codex patch
+    # (test-file hunks dropped because they conflict with test_patch's own
+    # test additions), then runtests.py / pytest with FAIL_TO_PASS test names.
+    {
+        "label": "django-14915/baseline",
+        "instance_id": "django__django-14915",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "1/1",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
+    {
+        "label": "django-14915/overclaim",
+        "instance_id": "django__django-14915",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "1/1",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
+    {
+        "label": "django-15375/baseline",
+        "instance_id": "django__django-15375",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "1/1",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
+    {
+        "label": "django-16136/baseline",
+        "instance_id": "django__django-16136",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "2/2",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
+    {
+        "label": "django-16136/overclaim",
+        "instance_id": "django__django-16136",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "2/2",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
+    {
+        "label": "django-16612/baseline",
+        "instance_id": "django__django-16612",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "2/2",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
 ]
 
 
 # Per-gate progression on the Pass-12 live-agent set (25 codex outputs).
 # Source: per-pass commit messages + live_agent_report.md history.
 GATE_PROGRESSION = [
-    {"stage": "pre-13b heuristic-only", "accept": 17, "revise": 2, "reject": 4, "timeout": 2,
+    {"stage": "pre-13b heuristic-only (Pass-12 sample, n=25)", "accept": 17, "revise": 2, "reject": 4, "timeout": 2,
      "note": "Heuristic alone — overstates real correctness; pure-text gates"},
-    {"stage": "post-13b + apply-check", "accept": 3, "revise": 1, "reject": 19, "timeout": 2,
+    {"stage": "post-13b + apply-check (Pass-12 sample)", "accept": 3, "revise": 1, "reject": 19, "timeout": 2,
      "note": "Adds `git apply --check` against base_commit. Catches malformed diffs (hunk-header count mismatch, non-ASCII whitespace) the heuristic missed."},
-    {"stage": "post-14a + tiered patch-relevance", "accept": 4, "revise": 0, "reject": 19, "timeout": 2,
+    {"stage": "post-14a + tiered patch-relevance (Pass-12 sample)", "accept": 4, "revise": 0, "reject": 19, "timeout": 2,
      "note": "Softens canonical-files-touched from binary to tier-1/2/3/4. Recovers django-11211/minimal_tests false-revise without opening any new false accepts."},
+    # Pass-V1.3 expansion: 60 codex outputs across 30 new tasks
+    {"stage": "Pass-V1.3 expansion heuristic-only (n=60)", "accept": 28, "revise": 4, "reject": 27, "timeout": 1,
+     "note": "30 new SWE-Bench Verified tasks × 2 prompt variants. 47% accept rate before apply-check is wired."},
+    {"stage": "Pass-V1.3 expansion + apply-check", "accept": 6, "revise": 4, "reject": 49, "timeout": 1,
+     "note": "Apply-check rejects 22/28 heuristic-accepts (79% structural malformation rate at scale — hunk-count mismatches, non-ASCII whitespace). Survivors are 6 codex patches across 4 unique django tasks."},
 ]
 
 
@@ -229,6 +295,13 @@ def _executed_truth_summary() -> dict[str, Any]:
         "astropy-14539/canonical": "accept",
         "astropy-14539/looks_done": "accept",
         "astropy-14539/minimal_tests": "accept",
+        # Pass-V1.3 expansion (cascade survivors that passed FAIL_TO_PASS)
+        "django-14915/baseline": "accept",
+        "django-14915/overclaim": "accept",
+        "django-15375/baseline": "accept",
+        "django-16136/baseline": "accept",
+        "django-16136/overclaim": "accept",
+        "django-16612/baseline": "accept",
     }
     rows: list[dict[str, Any]] = []
     for r in EXECUTED_TRUTH:

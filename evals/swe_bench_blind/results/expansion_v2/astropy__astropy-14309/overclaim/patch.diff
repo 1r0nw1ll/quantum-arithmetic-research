@@ -1,0 +1,23 @@
+diff --git a/astropy/io/fits/connect.py b/astropy/io/fits/connect.py
+--- a/astropy/io/fits/connect.py
++++ b/astropy/io/fits/connect.py
+@@ -68,5 +68,7 @@ def is_fits(origin, filepath, fileobj, *args, **kwargs):
+         return filepath.lower().endswith(
+             (".fits", ".fits.gz", ".fit", ".fit.gz", ".fts", ".fts.gz")
+         )
+-    return isinstance(args[0], (HDUList, TableHDU, BinTableHDU, GroupsHDU))
++    return bool(args) and isinstance(
++        args[0], (HDUList, TableHDU, BinTableHDU, GroupsHDU)
++    )
+diff --git a/astropy/io/fits/tests/test_connect.py b/astropy/io/fits/tests/test_connect.py
+--- a/astropy/io/fits/tests/test_connect.py
++++ b/astropy/io/fits/tests/test_connect.py
+@@ -1070,3 +1070,8 @@ def test_is_fits_gh_14305():
+     """Regression test for https://github.com/astropy/astropy/issues/14305"""
+     assert not connect.is_fits("", "foo.bar", None)
+ 
++
++def test_identify_format_write_no_fits_match_does_not_error():
++    formats = identify_format("write", Table, "bububu.ecsv", None, [], {})
++
++    assert "fits" not in formats

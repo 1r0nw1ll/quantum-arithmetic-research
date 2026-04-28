@@ -1,0 +1,32 @@
+--- a/astropy/modeling/separable.py
++++ b/astropy/modeling/separable.py
+@@ -214,7 +214,7 @@ def _cstack(left, right):
+         cright = _coord_matrix(right, 'right', noutp)
+     else:
+         cright = np.zeros((noutp, right.shape[1]))
+-        cright[-right.shape[0]:, -right.shape[1]:] = 1
++        cright[-right.shape[0]:, -right.shape[1]:] = right
+ 
+     return np.hstack([cleft, cright])
+ 
+--- a/astropy/modeling/tests/test_separable.py
++++ b/astropy/modeling/tests/test_separable.py
+@@ -135,6 +135,17 @@ def test_arith_oper():
+         _arith_oper(sh1, map1)
+ 
+ 
++def test_nested_compound_model_separability():
++    cm = models.Linear1D(10) & models.Linear1D(5)
++    expected = np.array(
++        [[True, True, False, False],
++         [True, True, False, False],
++         [False, False, True, False],
++         [False, False, False, True]]
++    )
++
++    assert_allclose(separability_matrix(models.Pix2Sky_TAN() & cm), expected)
++
++
+ @pytest.mark.parametrize(('compound_model', 'result'), compound_models.values())
+ def test_separable(compound_model, result):
+     assert_allclose(is_separable(compound_model), result[0])

@@ -1,0 +1,32 @@
+diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py
+--- a/django/template/defaultfilters.py
++++ b/django/template/defaultfilters.py
+@@ -128,8 +128,11 @@ def floatformat(text, arg=-1):
+             use_l10n = False
+             arg = arg[:-1] or -1
+     try:
+-        input_val = repr(text)
+-        d = Decimal(input_val)
++        if isinstance(text, Decimal):
++            input_val = str(text)
++            d = text
++        else:
++            input_val = repr(text)
++            d = Decimal(input_val)
+     except InvalidOperation:
+         try:
+             d = Decimal(str(float(text)))
+diff --git a/tests/template_tests/filter_tests/test_floatformat.py b/tests/template_tests/filter_tests/test_floatformat.py
+--- a/tests/template_tests/filter_tests/test_floatformat.py
++++ b/tests/template_tests/filter_tests/test_floatformat.py
+@@ -52,6 +52,10 @@ class FunctionTests(SimpleTestCase):
+         self.assertEqual(floatformat(1.5e-15, 20), "0.00000000000000150000")
+         self.assertEqual(floatformat(1.5e-15, -20), "0.00000000000000150000")
+         self.assertEqual(floatformat(1.00000000000000015, 16), "1.0000000000000002")
++        self.assertEqual(
++            floatformat(Decimal("42.12345678901234567890"), 20),
++            "42.12345678901234567890",
++        )
+ 
+     def test_force_grouping(self):
+         with translation.override("en"):

@@ -1,0 +1,54 @@
+diff --git a/django/utils/translation/trans_real.py b/django/utils/translation/trans_real.py
+--- a/django/utils/translation/trans_real.py
++++ b/django/utils/translation/trans_real.py
+@@ -32,7 +32,7 @@ language_code_re = _lazy_re_compile(
+     re.IGNORECASE
+ )
+ 
+-language_code_prefix_re = _lazy_re_compile(r'^/(\w+([@-]\w+)?)(/|$)')
++language_code_prefix_re = _lazy_re_compile(r'^/(\w+([@-]\w+){0,2})(/|$)')
+ 
+ 
+ @receiver(setting_changed)
+@@ -504,9 +504,14 @@ def get_language_from_path(path, strict=False):
+     lang_code = regex_match[1]
+     try:
+         return get_supported_language_variant(lang_code, strict=strict)
+-    except LookupError:
+-        return None
++    except LookupError:
++        pass
++    for supported_lang_code in get_languages():
++        if supported_lang_code.lower() == lang_code.lower():
++            return lang_code
++    return None
+ 
+ 
+ def get_language_from_request(request, check_path=False):
+diff --git a/tests/i18n/tests.py b/tests/i18n/tests.py
+--- a/tests/i18n/tests.py
++++ b/tests/i18n/tests.py
+@@ -901,6 +901,23 @@ class LocaleMiddlewareTests(TestCase):
+         response = self.client.get('/en/streaming/')
+         self.assertContains(response, "Yes/No")
+ 
++    @override_settings(
++        LANGUAGE_CODE='en-us',
++        LANGUAGES=[
++            ('en-us', 'English'),
++            ('en-Latn-US', 'Latin English'),
++        ],
++    )
++    def test_script_region_language_prefix(self):
++        response = self.client.get('/en-latn-us/simple/')
++        self.assertEqual(response.status_code, 200)
++
++        response = self.client.get('/en-Latn-US/simple/')
++        self.assertEqual(response.status_code, 200)
++
++        response = self.client.get('/en-latn-us/streaming/')
++        self.assertContains(response, "Yes/No")
++
+ 
+ @override_settings(
+     USE_I18N=True,

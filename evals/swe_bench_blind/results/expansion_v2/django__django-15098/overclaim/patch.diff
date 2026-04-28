@@ -1,0 +1,41 @@
+diff --git a/django/utils/translation/trans_real.py b/django/utils/translation/trans_real.py
+--- a/django/utils/translation/trans_real.py
++++ b/django/utils/translation/trans_real.py
+@@
+-language_code_prefix_re = _lazy_re_compile(r'^/(\w+([@-]\w+)?)(/|$)')
++language_code_prefix_re = _lazy_re_compile(r'^/(\w+([@-]\w+){0,2})(/|$)')
+diff --git a/tests/i18n/tests.py b/tests/i18n/tests.py
+--- a/tests/i18n/tests.py
++++ b/tests/i18n/tests.py
+@@
+     @override_settings(
+         LANGUAGES=[
+             ('en', 'English'),
+             ('de', 'German'),
+             ('de-at', 'Austrian German'),
+             ('pl', 'Polish'),
+         ],
+     )
+     def test_get_language_from_path_real(self):
+         g = trans_real.get_language_from_path
+         self.assertEqual(g('/pl/'), 'pl')
+         self.assertEqual(g('/pl'), 'pl')
+         self.assertIsNone(g('/xyz/'))
+         self.assertEqual(g('/en/'), 'en')
+         self.assertEqual(g('/en-gb/'), 'en')
+         self.assertEqual(g('/de/'), 'de')
+         self.assertEqual(g('/de-at/'), 'de-at')
+         self.assertEqual(g('/de-ch/'), 'de')
+         self.assertIsNone(g('/de-simple-page/'))
++
++    @override_settings(
++        LANGUAGES=[
++            ('en', 'English'),
++            ('en-latn-us', 'Latin English'),
++            ('en-Latn-US', 'BCP 47 case format'),
++        ],
++    )
++    def test_get_language_from_path_real_script_region(self):
++        g = trans_real.get_language_from_path
++        self.assertEqual(g('/en-latn-us/'), 'en-latn-us')
++        self.assertEqual(g('/en-Latn-US/'), 'en-Latn-US')

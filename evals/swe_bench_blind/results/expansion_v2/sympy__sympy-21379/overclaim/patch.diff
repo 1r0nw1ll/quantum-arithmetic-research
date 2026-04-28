@@ -1,0 +1,52 @@
+diff --git a/sympy/core/mod.py b/sympy/core/mod.py
+--- a/sympy/core/mod.py
++++ b/sympy/core/mod.py
+@@
+         from sympy.core.mul import Mul
+         from sympy.core.singleton import S
+         from sympy.core.exprtools import gcd_terms
++        from sympy.polys.polyerrors import PolynomialError
+         from sympy.polys.polytools import gcd
+@@
+         # XXX other possibilities?
+ 
+         # extract gcd; any further simplification should be done by the user
+-        G = gcd(p, q)
+-        if G != 1:
+-            p, q = [
+-                gcd_terms(i/G, clear=False, fraction=False) for i in (p, q)]
++        try:
++            G = gcd(p, q)
++            if G != 1:
++                p, q = [gcd_terms(i/G, clear=False, fraction=False)
++                        for i in (p, q)]
++        except PolynomialError:
++            G = S.One
+         pwas, qwas = p, q
+ 
+         # simplify terms
+diff --git a/sympy/core/tests/test_subs.py b/sympy/core/tests/test_subs.py
+--- a/sympy/core/tests/test_subs.py
++++ b/sympy/core/tests/test_subs.py
+@@
+-from sympy.functions.elementary.exponential import (exp, log)
++from sympy.functions.elementary.exponential import (exp, log)
++from sympy.functions.elementary.hyperbolic import sinh
+ from sympy.functions.elementary.miscellaneous import sqrt
+ from sympy.functions.elementary.piecewise import Piecewise
+@@
+ def test_subbug2():
+     # Ensure this does not cause infinite recursion
+     assert Float(7.7).epsilon_eq(abs(x).subs(x, -7.7))
+ 
+ 
++def test_issue_21379():
++    x, y, z = symbols('x y z', real=True)
++    expr = exp(sinh(Piecewise((x, y > x), (y, True)) / z))
++
++    assert expr.subs({1: 1.0}) == \
++        exp(sinh(Piecewise((x, y > x), (y, True)) / z**1.0))
++
++
+ def test_dict_set():
+     a, b, c = map(Wild, 'abc')

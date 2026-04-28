@@ -1,0 +1,24 @@
+diff --git a/django/template/defaultfilters.py b/django/template/defaultfilters.py
+--- a/django/template/defaultfilters.py
++++ b/django/template/defaultfilters.py
+@@ -123,7 +123,7 @@ def floatformat(text, arg=-1):
+     If the input float is infinity or NaN, display the string representation
+     of that value.
+     """
+     try:
+-        input_val = repr(text)
++        input_val = str(text) if isinstance(text, Decimal) else repr(text)
+         d = Decimal(input_val)
+     except InvalidOperation:
+         try:
+diff --git a/tests/template_tests/filter_tests/test_floatformat.py b/tests/template_tests/filter_tests/test_floatformat.py
+--- a/tests/template_tests/filter_tests/test_floatformat.py
++++ b/tests/template_tests/filter_tests/test_floatformat.py
+@@ -43,6 +43,7 @@ class FunctionTests(SimpleTestCase):
+         self.assertEqual(floatformat(001.3000, 2), '1.30')
+         self.assertEqual(floatformat(0.12345, 2), '0.12')
+         self.assertEqual(floatformat(Decimal('555.555'), 2), '555.56')
++        self.assertEqual(floatformat(Decimal('42.12345678901234567890'), 20), '42.12345678901234567890')
+         self.assertEqual(floatformat(Decimal('09.000')), '9')
+         self.assertEqual(floatformat('foo'), '')
+         self.assertEqual(floatformat(13.1031, 'bar'), '13.1031')

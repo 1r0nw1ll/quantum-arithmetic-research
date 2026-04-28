@@ -91,37 +91,42 @@ EXECUTED_TRUTH = [
         "pass_to_pass_held": "3/3",
         "actually_fixes_bug": True,
     },
-    # Astropy entries from Pass 13c — env unavailable on py313, surfaced in
-    # the dashboard as "untested" so the gap is visible.
+    # Astropy entries — Pass 14b ran them via the official SWE-Bench
+    # docker image (swebench/sweb.eval.x86_64.astropy_1776_astropy-14539:latest)
+    # which ships Python 3.11.5 + frozen numpy + cython 0.29.30. Workflow:
+    # apply test_patch (adds the c11 Q-format column to test_identical_tables),
+    # apply patch under test, run pytest. Sanity-checked: with test_patch
+    # applied and NO fix, both FAIL_TO_PASS tests fail with
+    # `ValueError: The truth value of an array with more than one element is
+    # ambiguous` — confirming the bug state. With each of the 3 patches all
+    # tests pass. Pass-14b commit: Pass-15 dashboard updated to reflect
+    # full executable coverage on the SWE-Bench sample.
     {
         "label": "astropy-14539/canonical",
         "instance_id": "astropy__astropy-14539",
         "patch_kind": "canonical",
         "applies_clean": True,
-        "fail_to_pass_passed": None,
-        "pass_to_pass_held": None,
-        "actually_fixes_bug": None,
-        "env_unavailable": "astropy@c0a24c1d build fails on py313 + numpy 2.x",
+        "fail_to_pass_passed": "2/2",
+        "pass_to_pass_held": None,  # not sampled in Pass 14b — dashboard only tracks FAIL_TO_PASS
+        "actually_fixes_bug": True,
     },
     {
         "label": "astropy-14539/looks_done",
         "instance_id": "astropy__astropy-14539",
         "patch_kind": "codex_live_agent",
         "applies_clean": True,
-        "fail_to_pass_passed": None,
+        "fail_to_pass_passed": "2/2",
         "pass_to_pass_held": None,
-        "actually_fixes_bug": None,
-        "env_unavailable": "astropy@c0a24c1d build fails on py313 + numpy 2.x",
+        "actually_fixes_bug": True,
     },
     {
         "label": "astropy-14539/minimal_tests",
         "instance_id": "astropy__astropy-14539",
         "patch_kind": "codex_live_agent",
         "applies_clean": True,
-        "fail_to_pass_passed": None,
+        "fail_to_pass_passed": "2/2",
         "pass_to_pass_held": None,
-        "actually_fixes_bug": None,
-        "env_unavailable": "astropy@c0a24c1d build fails on py313 + numpy 2.x",
+        "actually_fixes_bug": True,
     },
 ]
 

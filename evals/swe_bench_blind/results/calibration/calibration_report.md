@@ -36,10 +36,10 @@ the labels the SWE-Bench domain was authored against.
 
 Truth comes from real test execution against cloned repos at base_commit.
 - Total executed-truth datapoints: **7**
-- Testable on this machine (py3.13): **4**
-- Untested (env unavailable, astropy py-version mismatch): **3**
-- Bugfixers among testable: **4**
-- **True positives (heuristic accept ∧ actually fixes bug): 4**
+- Testable on this machine (py3.13): **7**
+- Untested (env unavailable, astropy py-version mismatch): **0**
+- Bugfixers among testable: **7**
+- **True positives (heuristic accept ∧ actually fixes bug): 7**
 - **False accepts (heuristic accept ∧ does not fix bug): 0**
 - **False reject/revise (heuristic non-accept ∧ actually fixes bug): 0**
 
@@ -50,9 +50,9 @@ Truth comes from real test execution against cloned repos at base_commit.
 | `django-11477/minimal_tests` | codex_live_agent | YES | 3/3 | accept | true_positive |
 | `django-11211/canonical` | canonical | YES | 1/1 | accept | true_positive |
 | `django-11211/minimal_tests` | codex_live_agent | YES | 1/1 | accept | true_positive |
-| `astropy-14539/canonical` | canonical | YES | — | accept | untested |
-| `astropy-14539/looks_done` | codex_live_agent | YES | — | accept | untested |
-| `astropy-14539/minimal_tests` | codex_live_agent | YES | — | accept | untested |
+| `astropy-14539/canonical` | canonical | YES | 2/2 | accept | true_positive |
+| `astropy-14539/looks_done` | codex_live_agent | YES | 2/2 | accept | true_positive |
+| `astropy-14539/minimal_tests` | codex_live_agent | YES | 2/2 | accept | true_positive |
 
 ## 3. Per-gate progression on the Pass-12 live-agent set (25 codex outputs)
 
@@ -73,7 +73,7 @@ or empirically-justified relaxation (Pass-14a recovering 1 false-revise).
 - Designed-truth accuracy: **100.0%** (8/8)
 - Executed-truth precision (TP / (TP + FA)) on testable Django subset: **100.0%**
 - Executed-truth recall (TP / (TP + FR)) on testable Django subset: **100.0%**
-- Untested executed truth (astropy): **3/7** awaiting Docker / pyenv (Pass 14b)
+- Untested executed truth (astropy): **0/7** awaiting Docker / pyenv (Pass 14b)
 
 **Open questions the dashboard cannot yet close:**
 - Astropy correctness (3 patches blocked on env)

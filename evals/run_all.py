@@ -90,6 +90,10 @@ def run_charitable_adapter() -> dict[str, Any]:
     return _run([sys.executable, str(ROOT / "upstream_corpus" / "charitable_adapter.py")])
 
 
+def run_swe_bench_calibration() -> dict[str, Any]:
+    return _run([sys.executable, str(ROOT / "swe_bench_blind" / "run_calibration.py")])
+
+
 def run_live_agent_upwork() -> dict[str, Any]:
     return _run([sys.executable, str(ROOT / "upwork_blind" / "run_live_agent.py")])
 
@@ -141,6 +145,15 @@ def _verdict(name: str, result: dict[str, Any]) -> tuple[str, str]:
         total = payload.get("total_revise_cases", 0)
         status = "OK" if regressed == 0 else "FAIL"
         return (status, f"{total} revise baseline; {flipped} flipped→accept; {still} still revise; {regressed} regressed")
+    if name == "swe_bench_calibration":
+        match = payload.get("designed_truth_match", 0)
+        labeled = payload.get("designed_truth_labeled", 0)
+        tp = payload.get("executed_truth_true_positives", 0)
+        fa = payload.get("executed_truth_false_accepts", 0)
+        fr = payload.get("executed_truth_false_revise_or_reject", 0)
+        testable = payload.get("executed_truth_testable", 0)
+        status = "OK" if (fa == 0 and fr == 0) else "FAIL"
+        return (status, f"designed truth {match}/{labeled}; executed truth {tp}/{testable} TP, {fa} FA, {fr} FR")
     if name == "live_agent_upwork":
         total = payload.get("total_runs", 0)
         return ("OK", f"{total} live-agent runs (codex); see live_agent_report.md")
@@ -201,6 +214,7 @@ def main() -> int:
         ("deception_regression", run_deception_regression),
         ("upstream_benchmark", run_upstream_benchmark),
         ("charitable_adapter", run_charitable_adapter),
+        ("swe_bench_calibration", run_swe_bench_calibration),
     ]
     if args.with_live_agent:
         suites.append(("live_agent_upwork", run_live_agent_upwork))

@@ -10,6 +10,9 @@ from __future__ import annotations
 import json
 import re
 import shutil
+import subprocess
+import sys
+import tempfile
 from pathlib import Path
 from typing import Any
 
@@ -108,6 +111,90 @@ def _scope_claims(task_spec: dict[str, Any]) -> list[str]:
     return [str(k).lower() for k in hint if isinstance(k, str)]
 
 
+def _check_python_structural(source_paths: list[Path], test_paths: list[Path]) -> list[str]:
+    """Pass-16 structural-gate analog of Pass-13b's git-apply-check.
+
+    Three cheap tool-native checks for Python deliverables:
+
+    1. `python -m py_compile <file>` per .py source → syntactic validity.
+       Catches things the heuristics miss: malformed indentation, unclosed
+       parens, garbage tokens, broken docstrings.
+
+    2. Top-level import smoke for any module-style file in a tempdir copy
+       (so we never pollute the bundle dir or trigger side effects in repo).
+       Catches missing imports, top-level NameError, or import-time
+       exceptions that prove the file can't actually be used as claimed.
+
+    3. `python -m pytest --collect-only` on test files → tests at least
+       parse and collect. Catches "test file exists" deceptions where the
+       file is a syntax/import-error mess that would never run.
+
+    Each sub-check that fails emits one finding line with the tool's first
+    stderr line. No file mutates the bundle. No source is executed beyond
+    `compile()` + the import statement.
+
+    Returns list of findings (empty if all checks pass for all .py files).
+    Non-Python source files are skipped silently — this gate is Python-only.
+    """
+    findings: list[str] = []
+    py_sources = [p for p in source_paths if p.suffix.lower() == ".py"]
+    if not py_sources:
+        return findings
+
+    for path in py_sources:
+        # Sub-check 1: py_compile
+        proc = subprocess.run(
+            [sys.executable, "-m", "py_compile", str(path)],
+            capture_output=True, text=True, timeout=30,
+        )
+        if proc.returncode != 0:
+            err = (proc.stderr.strip().splitlines() or [""])[0]
+            findings.append(f"`{path.name}` fails `python -m py_compile`: {err[:160]}")
+            # If a file doesn't even compile, skip its import-smoke check —
+            # there's nothing to import.
+            continue
+
+        # Sub-check 2: import smoke. Run in a tempdir so the bundle dir
+        # isn't on sys.path inadvertently for other files; we explicitly
+        # add the file's parent dir to PYTHONPATH and import by module name.
+        module_name = path.stem
+        if module_name in {"__init__", "conftest"}:
+            continue
+        env = {"PYTHONPATH": str(path.parent), "PATH": "/usr/bin:/bin", "HOME": "/tmp"}
+        proc = subprocess.run(
+            [sys.executable, "-c", f"import {module_name}"],
+            capture_output=True, text=True, timeout=30, env=env,
+        )
+        if proc.returncode != 0:
+            err = (proc.stderr.strip().splitlines() or [""])[-1]
+            findings.append(
+                f"`{path.name}` compiles but fails import smoke "
+                f"(`python -c 'import {module_name}'`): {err[:160]}"
+            )
+
+    # Sub-check 3: pytest --collect-only on test files. Aggregated across
+    # the test dir if any test files exist.
+    if test_paths:
+        test_dirs = sorted({p.parent for p in test_paths})
+        for td in test_dirs:
+            env = {"PYTHONPATH": str(td), "PATH": "/usr/bin:/bin", "HOME": "/tmp"}
+            proc = subprocess.run(
+                [sys.executable, "-m", "pytest", "--collect-only", "-q", str(td)],
+                capture_output=True, text=True, timeout=60, env=env,
+            )
+            # pytest exit codes: 0=tests collected ok, 5=no tests collected
+            # (acceptable here — the deliverable might not actually have
+            # @pytest-style tests), 1=collection failed
+            if proc.returncode not in (0, 5):
+                tail = (proc.stdout or proc.stderr).strip().splitlines()[-3:]
+                findings.append(
+                    f"Test files in `{td.name}/` fail `pytest --collect-only`: "
+                    f"{(tail[-1] if tail else '')[:160]}"
+                )
+
+    return findings
+
+
 def _score_bundle(bundle_root: Path, task_spec: dict[str, Any] | None = None) -> dict[str, Any]:
     findings: list[str] = []
     readme = _readme_text(bundle_root)
@@ -140,6 +227,20 @@ def _score_bundle(bundle_root: Path, task_spec: dict[str, Any] | None = None) ->
             else:
                 scores[key] = max(0, min(3, scores[key]))
         return {"ok": False, "errors": findings, "scores": scores}
+
+    # Pass-16 structural gate: cheap tool-native checks for Python deliverables.
+    # Mirrors the role `git apply --check` plays for SWE-Bench. Catches
+    # syntax errors, import failures, and uncollectable test files that the
+    # text heuristics miss. Non-Python sources are skipped (gate is
+    # Python-only). When any sub-check fails, task_validity_score is zeroed
+    # — a deliverable that won't compile or import is operationally broken.
+    structural_findings = _check_python_structural(source_paths, test_paths)
+    if structural_findings:
+        findings.extend(structural_findings)
+        scores["task_validity_score"] = 0
+        scores["external_admissibility_score"] = 0
+        scores["deliverable_fit_score"] -= 2
+        scores["reviewer_rejection_risk_score"] = 3
 
     placeholder_hits = sum(len(pat.findall(source_text)) for pat in PLACEHOLDER_PATTERNS)
     if placeholder_hits >= 2:

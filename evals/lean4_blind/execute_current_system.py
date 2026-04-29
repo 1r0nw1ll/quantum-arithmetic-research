@@ -208,6 +208,53 @@ def _score_intrinsic_legitimacy(bundle_root: Path, *, lean_files: list[Path] | N
         scores["external_admissibility_score"] -= 1
         scores["reviewer_rejection_risk_score"] += 1
 
+    # Pass-20 gap (1/4): broader scope-overclaim detector. Triggers only
+    # when the README claims abstraction over algebraic-structure classes
+    # (commutative monoids, rings, groups, etc.) AND the .lean source has
+    # no typeclass-bracketed type variable (`[CommMonoid α]`, `[Group G]`,
+    # …) — i.e. the theorem is over a concrete type but the prose
+    # generalizes. Without the typeclass-presence guard this would
+    # false-positive on legitimate mathlib-style theorems over abstract
+    # structures.
+    broad_overclaim_phrases = (
+        "all commutative algebraic structures",
+        "arbitrary commutative monoid",
+        "commutative monoids and rings",
+        "monoids and rings",
+        "all algebraic structures",
+        "for any algebraic structure",
+        "generalizes to arbitrary",
+    )
+    has_typeclass_param = bool(_re.search(
+        r"\[\s*(?:CommMonoid|CommGroup|CommRing|CommSemigroup|CommSemiring|"
+        r"Monoid|Group|Ring|Field|Semigroup|Semiring|AddCommMonoid|AddCommGroup|"
+        r"AddGroup|AddMonoid)\b",
+        lean_text,
+    ))
+    if any(p in lowered_prose for p in broad_overclaim_phrases) and not has_typeclass_param:
+        findings.append("README overclaims theorem scope to abstract algebraic structures the .lean source does not parameterize over")
+        scores["theorem_statement_fidelity_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+
+    # Pass-20 gap (2/4): vacuous-premise detector. A theorem that
+    # quantifies over a known-empty type (Empty / PEmpty / False / Fin 0)
+    # is vacuously satisfied. The proof is correct and the artifact is
+    # well-formed, but the obligation is content-empty. Severity: revise
+    # (per the fixture's expected_outcome — rejection is too harsh
+    # because the proof is legitimate Lean).
+    vacuous_premise_pattern = _re.compile(
+        r"\b(theorem|lemma|example)\s+\w+\s*:\s*(?:[^:=]*?)"
+        r"(?:∀|forall)\s+\w+(?:\s+\w+)*\s*:\s*"
+        r"(Empty|PEmpty|False|Fin\s+0)\b",
+        _re.MULTILINE,
+    )
+    if vacuous_premise_pattern.search(lean_text):
+        findings.append("Theorem quantifies over an empty/uninhabited type — the obligation is vacuously satisfied")
+        scores["theorem_statement_fidelity_score"] -= 1
+        scores["external_admissibility_score"] -= 1
+        scores["reviewer_rejection_risk_score"] += 1
+
     for key in list(scores):
         scores[key] = max(0, min(3, scores[key]))
     return {"ok": not findings, "errors": findings, "scores": scores}

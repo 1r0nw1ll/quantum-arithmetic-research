@@ -130,6 +130,20 @@
       "source_path": "specifications/KnuthYao"
     },
     {
+      "adapted_decision": "revise",
+      "adapted_findings": [
+        "AddTwo.tla:TypeOK is vacuously satisfied (only restates a state variable's already-declared domain)"
+      ],
+      "baseline_decision": "revise",
+      "baseline_findings": [
+        "AddTwo.tla:TypeOK is vacuously satisfied (only restates a state variable's already-declared domain)"
+      ],
+      "case_id": "LearnProofs",
+      "delta": "still_revise",
+      "extracted_bytes": 2863,
+      "source_path": "specifications/LearnProofs"
+    },
+    {
       "adapted_decision": "accept",
       "adapted_findings": [],
       "baseline_decision": "revise",
@@ -635,7 +649,7 @@
     },
     "regressed": 0,
     "regressed_cases": [],
-    "still_revise": 23,
+    "still_revise": 24,
     "still_revise_cases": [
       "Chameneos",
       "CheckpointCoordination",
@@ -645,6 +659,7 @@
       "GameOfLife",
       "KeyValueStore",
       "KnuthYao",
+      "LearnProofs",
       "SDP_Attack_New_Solution_Spec",
       "SDP_Attack_Spec",
       "TeachingConcurrency",
@@ -684,6 +699,10 @@
       },
       {
         "count": 1,
+        "finding": "AddTwo.tla:TypeOK is vacuously satisfied (only restates a state variable's already-declared domain)"
+      },
+      {
+        "count": 1,
         "finding": "README does not explain all state variables: nSntE"
       },
       {
@@ -719,6 +738,6 @@
         "finding": "README does not explain all state variables: msg, prnt, rpt"
       }
     ],
-    "total_revise_cases_at_baseline": 44
+    "total_revise_cases_at_baseline": 45
   }
 }

@@ -165,10 +165,11 @@ These are the things the dashboard cannot currently close:
   django + 3 astropy tasks. No sympy, no sphinx, no matplotlib, no
   scikit-learn execution data. Conclusions hold on django-shaped and
   astropy-shaped fixes, not on arbitrary SWE-Bench Verified shape.
-- **Tolerated gaps remain non-blocking.** 4 known gaps from Pass 7-c
-  (vacuous TypeOK in TLA+, scope-overclaim with no `sorry`, etc.) are
-  documented and tolerated pending recurrence; their non-recurrence is
-  empirical, not proved.
+- ~~**Tolerated gaps remain non-blocking.**~~ *Closed in Pass 20.* The
+  4 known gaps from Pass 7-c (TLA vacuous TypeOK, TLA README/spec
+  misalignment, Lean vacuous premise, Lean broad scope-overclaim) now
+  MATCH their expected outcomes via narrow regression-backed detectors.
+  Deception regression: 34/34 MATCH, 0 KNOWN_GAP_TOLERATED.
 
 ## 6. Next experiment options
 

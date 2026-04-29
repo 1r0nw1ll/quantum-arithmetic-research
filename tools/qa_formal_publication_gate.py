@@ -454,13 +454,55 @@ def _extract_action_names(tla_text: str) -> list[str]:
 def _check_tautological_invariants(bundle_root: Path) -> list[str]:
     findings: list[str] = []
     invariant_header = re.compile(r"^\s*([A-Za-z_][A-Za-z0-9_]*)\s*==\s*(.+)$", re.M)
+    # Pass-20 gap (3/4): vacuous-membership invariants. `TypeOK == counter \in Nat`
+    # restates the variable's already-declared domain and adds no constraint.
+    # We treat this as tautological at the same severity as the existing
+    # `x = x` / `TRUE` patterns. Conservative: trigger only when the entire
+    # invariant body is exactly one membership expression against a basic
+    # TLA+ type (Nat / Int / BOOLEAN / Real / STRING). Multi-conjunct
+    # invariants where each clause is also `\in Type` are also vacuous and
+    # are caught by the same pattern when joined.
+    vacuous_membership_single = re.compile(
+        r"^\s*[A-Za-z_][A-Za-z0-9_]*\s*\\in\s*(?:Nat|Int|BOOLEAN|Real|STRING)\s*$"
+    )
+    vacuous_membership_per_clause = re.compile(
+        r"[A-Za-z_][A-Za-z0-9_]*\s*\\in\s*(?:Nat|Int|BOOLEAN|Real|STRING)"
+    )
     for rel_path, text in _collect_tla_texts(bundle_root):
         for name, expr in invariant_header.findall(text):
-            if "inv" not in name.lower() and "invariant" not in name.lower():
+            lower_name = name.lower()
+            # Only flag invariant-style definitions: those named TypeOK / *Inv* /
+            # *Invariant*. Action and helper definitions are excluded.
+            is_invariant_name = (
+                "inv" in lower_name or "invariant" in lower_name
+                or lower_name == "typeok" or lower_name.endswith("typeok")
+                or lower_name.startswith("typeok")
+            )
+            if not is_invariant_name:
                 continue
             stripped = expr.strip()
             if any(pattern.search(stripped) for pattern in TAUTOLOGY_PATTERNS):
                 findings.append(f"{rel_path}:{name} looks tautological")
+                continue
+            # Single-clause membership. Distinct severity from
+            # `TRUE`/`x=x`: well-formed but uninformative — revise tier.
+            # The "vacuously" wording is matched separately in
+            # _score_from_findings so the existing strict tautology
+            # scoring does not over-penalize.
+            if vacuous_membership_single.search(stripped):
+                findings.append(
+                    f"{rel_path}:{name} is vacuously satisfied "
+                    f"(only restates a state variable's already-declared domain)"
+                )
+                continue
+            # Conjunction of memberships only — split on `/\` and check each.
+            clauses = [c.strip() for c in re.split(r"/\\", stripped) if c.strip()]
+            if (len(clauses) >= 2
+                    and all(vacuous_membership_per_clause.fullmatch(c) for c in clauses)):
+                findings.append(
+                    f"{rel_path}:{name} is vacuously satisfied "
+                    f"(every conjunct restates a variable's already-declared domain)"
+                )
     return findings
 
 
@@ -587,6 +629,96 @@ def _check_repository_fit_signal(bundle_root: Path) -> list[str]:
     return []
 
 
+# Pass-20 gap (4/4): README/spec semantic misalignment.
+#
+# Pattern: README claims a complex named protocol (two-phase commit, Paxos,
+# Raft, leader election, transaction processing, etc.) but the .tla file
+# has only trivial counter-style state — one variable, one increment-style
+# action, no protocol vocabulary.
+#
+# Conservative trigger (low false-positive risk on legitimate reduced models):
+#   - README contains 2+ phrases from PROTOCOL_CLAIM_MARKERS
+#   - .tla has ≤2 state variables AND ≤2 actions
+#   - .tla source contains zero matches for any of the README's claimed
+#     protocol vocabulary tokens (so a legitimate reduced model — one whose
+#     spec at least references the protocol concepts — does not trip)
+#
+# Severity: this is reject-level (per the deception_regression fixture
+# `readme_spec_misalignment` expected_outcome). The artifact misrepresents
+# what it models.
+PROTOCOL_CLAIM_MARKERS = (
+    "two-phase commit",
+    "two phase commit",
+    "2pc",
+    "paxos",
+    "raft",
+    "consensus protocol",
+    "consensus algorithm",
+    "leader election",
+    "byzantine",
+    "transaction processing",
+    "transaction commit",
+    "atomic commit",
+    "prepare-phase",
+    "prepare phase",
+    "commit-phase",
+    "commit phase",
+    "coordinator and resource manager",
+    "resource manager",
+    "distributed commit",
+)
+# Vocabulary that, if present anywhere in the .tla file (variables,
+# actions, comments), suggests the spec at least references the claimed
+# protocol — legitimate reduced models score themselves out of the gate.
+PROTOCOL_VOCABULARY_TOKENS = (
+    # Distinctive protocol vocabulary — tokens generic to many spec
+    # styles ("round", "phase", "step") are intentionally excluded so a
+    # round-counter spec masquerading as 2PC does not score itself out
+    # of the gate via incidental "round" presence.
+    "coord", "manager", "prepare", "commit", "abort", "decided",
+    "leader", "follower", "candidate", "consensus", "paxos", "raft",
+    "byzantine", "txn", "transaction", "ballot", "quorum",
+    "vote", "tally", "elect",
+)
+
+
+def _check_readme_spec_misalignment(bundle_root: Path) -> list[str]:
+    findings: list[str] = []
+    readme = _joined_explanatory_text(bundle_root)
+    if not readme.strip():
+        return findings
+    lowered_readme = readme.lower()
+    matched_markers = [m for m in PROTOCOL_CLAIM_MARKERS if m in lowered_readme]
+    if len(matched_markers) < 2:
+        return findings
+    for rel_path, raw_text in _collect_tla_texts(bundle_root):
+        # Only score actual spec modules: must be a `.tla` file with at
+        # least one state variable. Excludes TLC `.cfg` files and helper
+        # `.tla` files (Utils, Digraph, MC*) that have zero state — they
+        # are not the spec being judged.
+        if not rel_path.lower().endswith(".tla"):
+            continue
+        text = _strip_tla_comments(raw_text)
+        variables = _extract_state_variables(text)
+        actions = _extract_action_names(text)
+        if len(variables) == 0:
+            continue
+        if len(variables) > 2 or len(actions) > 2:
+            continue
+        lowered_spec = raw_text.lower()
+        spec_protocol_hits = sum(
+            1 for tok in PROTOCOL_VOCABULARY_TOKENS if tok in lowered_spec
+        )
+        if spec_protocol_hits == 0:
+            findings.append(
+                f"{rel_path}: README claims a {matched_markers[0]} protocol "
+                f"({', '.join(matched_markers[:3])}) but the spec has only "
+                f"{len(variables)} variable(s) / {len(actions)} action(s) and "
+                f"contains zero protocol vocabulary tokens"
+            )
+    return findings
+
+
 def _check_source_grounding(bundle_root: Path) -> list[str]:
     text = " ".join(_joined_explanatory_text(bundle_root).lower().split())
     findings: list[str] = []
@@ -648,9 +780,17 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
         "repo_comparable_support_score": 3,
         "reviewer_rejection_risk_score": 0,
     }
+    vacuous_membership_count = sum("is vacuously satisfied" in item.lower() for item in findings)
     if tautology_count:
         scores["formal_validity_score"] -= 2
         scores["invariant_non_vacuity_score"] -= 3
+        scores["reviewer_rejection_risk_score"] += 1
+    elif vacuous_membership_count:
+        # Pass-20 gap (3/4): well-formed-but-uninformative invariant.
+        # Lower severity than `TRUE`/`x=x`: revise, not reject.
+        # Penalty stays above 0 on invariant_non_vacuity_score so the
+        # decision rule (reject when iv <= 0) does not fire.
+        scores["invariant_non_vacuity_score"] -= 2
         scores["reviewer_rejection_risk_score"] += 1
     if stuttering_hit:
         scores["formal_validity_score"] -= 1
@@ -707,6 +847,20 @@ def _score_from_findings(findings: list[str]) -> dict[str, int]:
         scores["source_fidelity_score"] -= 1
         scores["outsider_comprehensibility_score"] -= 1
         scores["external_admissibility_score"] -= 1
+    # Pass-20 gap (4/4): README/spec misalignment finding signals the
+    # spec misrepresents what it models — reject-tier. Zero out the
+    # semantic-adequacy and external-admissibility scores; max out
+    # rejection risk.
+    misalignment_hit = (
+        "zero protocol vocabulary tokens" in lowered
+        or ("readme claims" in lowered and "but the spec has only" in lowered)
+    )
+    if misalignment_hit:
+        scores["semantic_adequacy_score"] = 0
+        scores["external_admissibility_score"] = 0
+        scores["formal_validity_score"] -= 2
+        scores["source_grounding_score"] -= 2
+        scores["reviewer_rejection_risk_score"] += 3
     for key in list(scores):
         if key == "reviewer_rejection_risk_score":
             scores[key] = max(0, min(3, scores[key]))
@@ -741,6 +895,7 @@ def _gather_intrinsic_findings(bundle_root: Path) -> list[str]:
     findings.extend(_check_project_private_jargon(bundle_root))
     findings.extend(_check_visible_semantics_bounds_conflation(bundle_root))
     findings.extend(_check_repository_fit_signal(bundle_root))
+    findings.extend(_check_readme_spec_misalignment(bundle_root))
     return findings
 
 
@@ -912,6 +1067,7 @@ def score_bundle(bundle_root: Path, *, require_artifacts: bool = True) -> dict[s
     findings.extend(_check_project_private_jargon(bundle_root))
     findings.extend(_check_visible_semantics_bounds_conflation(bundle_root))
     findings.extend(_check_repository_fit_signal(bundle_root))
+    findings.extend(_check_readme_spec_misalignment(bundle_root))
     findings.extend(_check_source_grounding(bundle_root))
     findings.extend(_check_repo_comparables_evidence(bundle_root))
     scores = _score_from_findings(findings)

@@ -4,11 +4,11 @@
 - **tlaplus/Examples** @ `d9ce4db7c770cc82e662870bce168ff8f59aff24`
 
 ## Measurement
-- Baseline Pass-7 intrinsic `revise` cases: **44**
+- Baseline Pass-7 intrinsic `revise` cases: **45**
 - Flipped `revise` → `accept` after charitable extraction: **21**
-- Remaining `revise` after extraction: **23**
+- Remaining `revise` after extraction: **24**
 - Regressed (revise → reject): **0**
-- Extraction-debt share: 47.7% of the revise load was extraction debt (comments already in the .tla file)
+- Extraction-debt share: 46.7% of the revise load was extraction debt (comments already in the .tla file)
 
 ## Extraction rules (strict)
 - Only extracts `(* block comments *)` and `\* line comments` already present in .tla files
@@ -48,6 +48,7 @@
 - `GameOfLife`
 - `KeyValueStore`
 - `KnuthYao`
+- `LearnProofs`
 - `SDP_Attack_New_Solution_Spec`
 - `SDP_Attack_Spec`
 - `TeachingConcurrency`
@@ -70,6 +71,7 @@
 - `README does not explain all state variables: numMeetings` — 1
 - `README does not explain all state variables: cLogs` — 1
 - `README does not explain all state variables: grid` — 1
+- `AddTwo.tla:TypeOK is vacuously satisfied (only restates a state variable's already-declared domain)` — 1
 - `README does not explain all state variables: nSntE` — 1
 - `README does not explain all state variables: pc` — 1
 - `README does not explain all state variables: root` — 1

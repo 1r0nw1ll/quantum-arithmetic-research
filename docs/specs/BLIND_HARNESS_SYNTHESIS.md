@@ -63,6 +63,17 @@ The harness was built reactively after a real failure:
 - **Pass 18** — engineered Upwork stress targeting Pass-16 sub-checks.
   Structural gate fired alone on **0/10** outputs because codex
   resisted every adversarial framing.
+- **Pass 19** — same 5 variants × 2 tasks, but agent is
+  `opencode/gpt-5-nano` (smallest gpt-5 variant). Gate fired on
+  **3/10** outputs (vs Pass 18's 0/10) — `nested_package` produced
+  unresolvable `from .` imports; `broken_parametrize` produced
+  uncollectable tests. The gate-only quadrant remains 0 because every
+  gate-firing coincides with a heuristic-firing for an *unrelated*
+  reason on the same output (missing README, missing required keyword,
+  placeholder marker). The gate's contribution under weaker craft is
+  thus **unique failure-mode coverage on shared outputs** plus
+  **decision strengthening** (3 outputs flip revise → reject), not
+  empty-quadrant rescue.
 
 ## 2. What each domain taught
 
@@ -139,10 +150,17 @@ These are the things the dashboard cannot currently close:
   uncooperative (sphinx, sympy, matplotlib, scikit-learn — none ended
   up as cascade survivors, but if any had, they'd have needed
   per-domain test runners we haven't built).
-- **Pass-16 contribution unmeasured on real outputs.** The Upwork
-  structural gate has not fired on any of 30 codex outputs (Pass 8 +
-  Pass 18). It is built and verified on synthetic fixtures but its
-  operational contribution is currently 0.
+- **Pass-16 contribution measured under weaker craft, not codex.**
+  The gate has not fired on any of 20 codex outputs (Pass 8 + Pass 18)
+  but fired on 3/10 `gpt-5-nano` outputs (Pass 19). The contribution
+  is real — the gate caught structural failures (broken `from .`
+  imports, uncollectable parametrize) the heuristic genuinely cannot
+  see — but the contribution lives in *unique-failure-mode coverage on
+  shared outputs* and *decision strengthening* (revise → reject), not
+  in catching outputs the heuristic misses entirely. The empty
+  `heur_pass × struct_fail` quadrant across 20 codex + 10 nano outputs
+  is real; it just under-counts the gate's value because it ignores
+  per-output failure-mode count.
 - **Executed-truth subset is small and skewed.** 13 patches across 5
   django + 3 astropy tasks. No sympy, no sphinx, no matplotlib, no
   scikit-learn execution data. Conclusions hold on django-shaped and
@@ -156,11 +174,12 @@ These are the things the dashboard cannot currently close:
 
 In rough order of information value:
 
-- **(a) Weaker model under Pass-18-style stress.** The Upwork
-  structural gate's contribution is 0 on codex. A cheap local LLM
-  would likely populate the `heur_pass × struct_fail` quadrant and
-  give the gate measured operational value. This is the strongest way
-  to prove the gate is not theatrical.
+- **(a) ~~Weaker model under Pass-18-style stress.~~** *Done — Pass 19.*
+  Result: gate fires on weaker craft (3/10 nano vs 0/10 codex) but
+  contribution is unique-failure-mode coverage on shared outputs, not
+  empty-quadrant rescue. The gate is not theatrical; the framing
+  "armed but unused" was wrong because it counted outputs, not
+  failure-modes-per-output.
 - **(b) Wire FAIL_TO_PASS docker truth as a default scorer flag**
   (currently invoked manually post-cascade). Would convert
   survivor-truth from a separate offline run into a first-class score.

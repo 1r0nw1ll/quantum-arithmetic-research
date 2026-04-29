@@ -31,6 +31,18 @@ PATCH_FILENAMES = ("patch.diff", "patch.patch", "fix.diff", "solution.diff")
 COMMIT_MSG_FILENAMES = ("commit_message.md", "COMMIT_MESSAGE.md", "PR_DESCRIPTION.md", "README.md")
 
 DIFF_HEADER_RE = re.compile(r"^diff --git ", re.M)
+# Pass-22 fix: `diff --git` is optional in a valid unified diff. Patches
+# emitted by `diff -u` or by `git diff --no-index` use only the
+# `--- a/` / `+++ b/` markers. The unified-diff sufficiency check is
+# `(diff_header OR (--- a/ AND +++ b/)) AND @@`. Pre-Pass-22, requiring
+# `diff_header` mis-rejected 2/3 measured Pass-21 false-rejects on
+# patches that apply cleanly under `git apply --check`.
+UNIFIED_DIFF_FILE_HEADERS_RE = re.compile(
+    r"^---\s+(a/|/dev/null)", re.M
+)
+UNIFIED_DIFF_NEW_FILE_HEADERS_RE = re.compile(
+    r"^\+\+\+\s+(b/|/dev/null)", re.M
+)
 HUNK_HEADER_RE = re.compile(r"^@@ ", re.M)
 FILE_PATH_RE = re.compile(r"^\+\+\+ b?/(.+)$", re.M)
 ADDED_LINE_RE = re.compile(r"^\+(?!\+\+)", re.M)
@@ -99,6 +111,60 @@ def _commit_message_text(bundle_root: Path) -> str:
 
 def _patch_files_touched(patch_text: str) -> list[str]:
     return FILE_PATH_RE.findall(patch_text)
+
+
+def _count_placeholders_in_production_hunks(patch_text: str) -> int:
+    """Count placeholder-pattern matches in non-test-file hunks only.
+
+    Walks the patch line-by-line tracking the current hunk's `+++ b/` path.
+    A `+pass` / `+raise NotImplementedError` / `+# TODO` / `+# FIXME`
+    occurrence inside a test-file hunk does not count: codex frequently
+    adds `pass`-bodied test scaffolds (e.g. an `@property def bar:
+    pass` placeholder showing docstring-inheritance behavior) where the
+    `pass` is the simplest valid Python body for a new test method, not
+    an incomplete production fix. Pass 21 measured 1/3 false-rejects
+    caused by this conflation.
+    """
+    total = 0
+    current_path: str | None = None
+    in_hunk = False
+    # Inline mini-parser. We re-detect file headers and hunk starts so
+    # we can drop matches inside test paths without re-running the full
+    # PLACEHOLDER_PATTERNS regex on per-file substrings (which would be
+    # equivalent but a bit clumsier).
+    for line in patch_text.splitlines():
+        if line.startswith("+++ "):
+            # `+++ b/path/to/file` or `+++ /dev/null`. Strip the `b/` prefix.
+            rest = line[4:].strip()
+            if rest.startswith("b/"):
+                current_path = rest[2:]
+            elif rest == "/dev/null":
+                current_path = None
+            else:
+                current_path = rest
+            in_hunk = False
+            continue
+        if line.startswith("--- "):
+            in_hunk = False
+            continue
+        if line.startswith("@@"):
+            in_hunk = True
+            continue
+        if not in_hunk or current_path is None:
+            continue
+        # Only consider added lines.
+        if not line.startswith("+") or line.startswith("+++"):
+            continue
+        # Skip test-file hunks.
+        if TEST_PATH_RE.search(current_path):
+            continue
+        # Match each PLACEHOLDER_PATTERNS regex against the single line
+        # (with the `+` re-prepended so the existing patterns still bind).
+        synthetic_line = line + "\n"
+        for pat in PLACEHOLDER_PATTERNS:
+            if pat.search(synthetic_line):
+                total += 1
+    return total
 
 
 def _check_patch_applies(patch_text: str, repo_path: Path, base_commit: str | None) -> tuple[bool | None, str]:
@@ -186,11 +252,20 @@ def _score_bundle(bundle_root: Path, task_spec: dict[str, Any] | None = None) ->
         scores["reviewer_rejection_risk_score"] = 3
         return _clamp_and_return(scores, findings)
 
-    # Format checks
+    # Format checks (Pass-22: accept either git-style `diff --git` header OR
+    # the bare `--- a/ +++ b/` form — both are valid unified diff).
     has_diff_header = bool(DIFF_HEADER_RE.search(patch_text))
+    has_unified_file_headers = bool(
+        UNIFIED_DIFF_FILE_HEADERS_RE.search(patch_text)
+        and UNIFIED_DIFF_NEW_FILE_HEADERS_RE.search(patch_text)
+    )
     has_hunk = bool(HUNK_HEADER_RE.search(patch_text))
-    if not has_diff_header or not has_hunk:
-        findings.append("Patch file is not a unified diff (missing 'diff --git' or '@@' hunk header)")
+    is_well_formed_diff = (has_diff_header or has_unified_file_headers) and has_hunk
+    if not is_well_formed_diff:
+        findings.append(
+            "Patch file is not a unified diff (needs `@@` hunk header plus "
+            "either `diff --git` or `--- a/ +++ b/` file headers)"
+        )
         scores["task_validity_score"] -= 3
         scores["deliverable_fit_score"] -= 3
         scores["external_admissibility_score"] -= 2
@@ -201,7 +276,7 @@ def _score_bundle(bundle_root: Path, task_spec: dict[str, Any] | None = None) ->
     # count mismatches, non-ASCII whitespace in hunk bodies) the text
     # heuristics miss. Skipped silently when task_spec doesn't supply
     # repo_path / base_commit (preserves existing fixture behavior).
-    if task_spec is not None and has_diff_header and has_hunk:
+    if task_spec is not None and is_well_formed_diff:
         repo_path = task_spec.get("applies_against_repo")
         base_commit = task_spec.get("applies_against_commit")
         if repo_path:
@@ -228,10 +303,14 @@ def _score_bundle(bundle_root: Path, task_spec: dict[str, Any] | None = None) ->
         scores["external_admissibility_score"] -= 2
         scores["reviewer_rejection_risk_score"] += 2
 
-    # Placeholder content in added lines
-    placeholder_hits = sum(len(pat.findall(patch_text)) for pat in PLACEHOLDER_PATTERNS)
+    # Placeholder content in added lines (Pass-22: only count occurrences
+    # in production-file hunks. A `+pass`-bodied test scaffold is not the
+    # same failure mode as a `pass`-bodied production stub. Pass-21
+    # measured 1/3 false-rejects driven by an added `pass` inside an
+    # added test method).
+    placeholder_hits = _count_placeholders_in_production_hunks(patch_text)
     if placeholder_hits >= 1:
-        findings.append(f"Patch adds {placeholder_hits} placeholder line(s) (pass / NotImplementedError / TODO / FIXME) — incomplete fix")
+        findings.append(f"Patch adds {placeholder_hits} placeholder line(s) (pass / NotImplementedError / TODO / FIXME) in production code — incomplete fix")
         scores["task_validity_score"] -= 2
         scores["patch_relevance_score"] -= 2
         scores["external_admissibility_score"] -= 1

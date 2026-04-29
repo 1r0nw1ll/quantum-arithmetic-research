@@ -189,6 +189,41 @@ EXECUTED_TRUTH = [
         "pass_to_pass_held": None,
         "actually_fixes_bug": True,
     },
+    # --- Pass 21 reject-sample executed truth ---
+    # Source: pass21_report.json. The cascade rejected these 13 codex
+    # outputs at heuristic time. Pass 21 ran apply-check + FAIL_TO_PASS
+    # against each. 10 fail apply-check (true rejects). 3 actually pass
+    # FAIL_TO_PASS — the false-rejects whose root cause was 2 narrow
+    # heuristic bugs (unified-diff regex too strict; placeholder
+    # detector ignored test-file context). Pass 22 fixes both bugs;
+    # current_decisions below reflects post-Pass-22 heuristic behavior.
+    {
+        "label": "astropy-14096/baseline",
+        "instance_id": "astropy__astropy-14096",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "FAIL_TO_PASS",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
+    {
+        "label": "astropy-7166/baseline",
+        "instance_id": "astropy__astropy-7166",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "FAIL_TO_PASS",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
+    {
+        "label": "django-15104/baseline",
+        "instance_id": "django__django-15104",
+        "patch_kind": "codex_live_agent_v2",
+        "applies_clean": True,
+        "fail_to_pass_passed": "FAIL_TO_PASS",
+        "pass_to_pass_held": None,
+        "actually_fixes_bug": True,
+    },
 ]
 
 
@@ -206,6 +241,8 @@ GATE_PROGRESSION = [
      "note": "30 new SWE-Bench Verified tasks × 2 prompt variants. 47% accept rate before apply-check is wired."},
     {"stage": "Pass-V1.3 expansion + apply-check", "accept": 6, "revise": 4, "reject": 49, "timeout": 1,
      "note": "Apply-check rejects 22/28 heuristic-accepts (79% structural malformation rate at scale — hunk-count mismatches, non-ASCII whitespace). Survivors are 6 codex patches across 4 unique django tasks."},
+    {"stage": "Pass-22 (post unified-diff + placeholder fixes, n=60)", "accept": 9, "revise": 4, "reject": 46, "timeout": 1,
+     "note": "Two narrow Pass-21-discovered heuristic bugs fixed: (1) unified-diff regex now accepts `--- a/ +++ b/` form without `diff --git` header; (2) placeholder counter ignores test-file hunks. 3 of 13 reject-sample patches recover to accept (validated under FAIL_TO_PASS). The 10 apply-check-fail patches stay reject. Cascade survivors: 9 codex patches across 7 unique tasks."},
 ]
 
 
@@ -302,6 +339,13 @@ def _executed_truth_summary() -> dict[str, Any]:
         "django-16136/baseline": "accept",
         "django-16136/overclaim": "accept",
         "django-16612/baseline": "accept",
+        # Pass-22 recoveries: previously rejected by the harness
+        # (Bug 1: unified-diff regex / Bug 2: placeholder file-context)
+        # but apply-check + FAIL_TO_PASS confirms they actually fix the
+        # bug. Pass 22 fixes both bugs → these now flip to accept.
+        "astropy-14096/baseline": "accept",
+        "astropy-7166/baseline": "accept",
+        "django-15104/baseline": "accept",
     }
     rows: list[dict[str, Any]] = []
     for r in EXECUTED_TRUTH:

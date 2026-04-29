@@ -152,25 +152,33 @@ layer changes which kinds of outputs slip through, not just how many.
 
 These are the things the dashboard cannot currently close:
 
-- ~~**Survivor-truth is not full-confusion truth.**~~ *Closed in Pass 21.*
-  Reject-sample FAIL_TO_PASS on the 13 V1.3 codex outputs the cascade
-  rejected (with patch.diff saved) gives full confusion truth on the
-  testable subset:
+- ~~**Survivor-truth is not full-confusion truth.**~~ *Closed in Pass 21,
+  recall recovered in Pass 22.*
 
-  | | actually_fixes | does_not_fix |
+  Pass 21 ran apply-check + FAIL_TO_PASS on the 13 V1.3 codex outputs
+  the cascade rejected, exposing 3 false-rejects (recall miss):
+
+  | (Pass 21) | actually_fixes | does_not_fix |
   |---|---:|---:|
   | cascade=accept | 6 (TP) | 0 (FA) |
   | cascade=reject/revise | **3 (FR)** | 10 (TN) |
 
-  Precision: 100% (6/6); **recall: 67% (6/9)**.
+  Pass 21 numbers: precision 100% (6/6); recall 67% (6/9).
 
-  Of 10 true-rejects, all 10 were `apply_check_failed` — the patches
-  literally won't apply. Of 3 patches that DID apply cleanly among the
-  reject sample, all 3 actually fix the bug. The 3 false-rejects map
-  to 2 specific heuristic bugs (unified-diff regex too strict;
-  placeholder detector ignores test-file context); both are fixable
-  without broad heuristic retuning. See
-  `evals/swe_bench_blind/results/pass21_reject_sample/pass21_report.md`.
+  Pass 22 fixed the 2 narrow heuristic bugs the false-rejects traced
+  to: (1) unified-diff recognition required `diff --git` (optional in
+  valid unified-diff format); (2) placeholder detector counted `+pass`
+  in test-file hunks the same as production-file hunks. Post-Pass-22
+  truth on the same testable subset:
+
+  | (Pass 22) | actually_fixes | does_not_fix |
+  |---|---:|---:|
+  | cascade=accept | **9 (TP)** | 0 (FA) |
+  | cascade=reject/revise | **0 (FR)** | 10 (TN) |
+
+  Post-Pass-22: precision 100% (9/9); **recall 100% (9/9)**. Master
+  runner reports "executed truth 16/16 TP" (9 codex + 7 canonical
+  controls). All 10 apply-check-fail patches still reject correctly.
 - **Truth coverage is partial.** Of 60 V1.3 codex outputs, 6 went to
   FAIL_TO_PASS. The other 54 are scored by the cascade but never
   executed. The 54 include all the rejects (above) plus expansion
@@ -242,9 +250,11 @@ In rough order of information value:
   on 30 observed Upwork outputs (Pass 8's 10 + Pass 18's 10 codex +
   Pass 19's 10 nano). Gate fires (in any quadrant) on 3/10 nano
   outputs but never alone.
-- **SWE-Bench full-confusion truth (Pass 21)**: precision 6/6 = 100%,
-  **recall 6/9 = 67%** on the testable subset. 3 measured false-rejects
-  trace to 2 specific fixable heuristic bugs.
+- **SWE-Bench full-confusion truth (Pass 21 → Pass 22)**: Pass 21
+  measured precision 100% (6/6) and recall 67% (6/9) on the testable
+  subset, with 3 false-rejects traceable to 2 fixable heuristic bugs.
+  Pass 22 fixed both bugs; recall recovered to 100% (9/9). Master
+  runner: 16/16 TP, 0 FA, 0 FR (9 codex + 7 canonical controls).
 
 The harness is a cascade. The cascade is sound on what it has been
 tested against. The previously-tolerated gaps are now measured

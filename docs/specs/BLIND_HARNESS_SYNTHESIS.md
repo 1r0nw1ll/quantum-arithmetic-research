@@ -74,6 +74,21 @@ The harness was built reactively after a real failure:
   thus **unique failure-mode coverage on shared outputs** plus
   **decision strengthening** (3 outputs flip revise → reject), not
   empty-quadrant rescue.
+- **Pass 20** — closed the 4 known tolerated deception-regression
+  gaps from Pass 7-c via narrow regression-backed detectors: TLA
+  vacuous TypeOK / membership-only invariant (revise); TLA README
+  vs spec semantic misalignment (reject); Lean vacuous-premise
+  theorem (revise); Lean broad scope-overclaim absent typeclass
+  parameter (revise). Closure was conservative — the misalignment
+  detector originally regressed 6 upstream Paxos/consensus specs
+  (revise → reject) when run under the charitable adapter because
+  `.cfg` files and 0-variable helper `.tla`s like `Utils.tla`/
+  `Digraph.tla` tripped the "0 vars / 0 actions" branch. Caught on
+  master-runner pre-commit verification, fixed by guarding to
+  `.tla`-only with `≥1 state variable`. Final state: deception
+  regression 34/34 MATCH / 0 known_gap, upstream TLA accept 54.5%
+  (unchanged), upstream Lean accept 100% (unchanged), charitable
+  adapter improved (21/45 flipped→accept, 0 regressed).
 
 ## 2. What each domain taught
 
@@ -195,20 +210,26 @@ In rough order of information value:
   small tasks. A small framework or scaffold-heavy task may exercise
   Pass-16 sub-checks codex's small-task craft sidesteps.
 
-## 7. Status as of v1.3
+## 7. Status as of v1.5
 
-- **Tags**: `v1-blind-harness`, `v1.1-blind-harness`,
-  `v1.2-blind-harness`, `v1.3-blind-harness`.
-- **Master runner**: `evals/run_all.py` — clean.
+- **Tags**: `v1-blind-harness`, `v1.1-`, `v1.2-`, `v1.3-`, `v1.4-`,
+  `v1.5-blind-harness`.
+- **Master runner**: `evals/run_all.py` — clean across all 6 suites.
 - **Calibration dashboard**:
   `evals/swe_bench_blind/results/calibration/calibration_report.md` —
   designed 8/8, executed 13/13 TP, 0 FA, 0 FR on testable subset.
-- **Deception regression**: 34 fixtures, 4 tolerated gaps, exit-0.
+- **Deception regression**: 34/34 MATCH, **0 KNOWN_GAP_TOLERATED**,
+  exit-0.
 - **Cross-domain blind benchmark**: 30/30 across 4 domains.
-- **Known silent layer**: Pass-16 Upwork structural gate
-  (heuristic-pass × structural-fail = 0 on every output observed to
-  date — Pass 8's 10 outputs and Pass 18's 10 engineered outputs).
+- **Upstream-corpus stability**: TLA intrinsic accept 54.5%, Lean
+  intrinsic accept 100% — both held steady through Pass 20.
+- **Charitable adapter**: 21/45 revise→accept (was 18 pre-Pass-20),
+  0 regressed.
+- **Pass-16 silent quadrant**: heuristic-pass × structural-fail = 0
+  on 30 observed Upwork outputs (Pass 8's 10 + Pass 18's 10 codex +
+  Pass 19's 10 nano). Gate fires (in any quadrant) on 3/10 nano
+  outputs but never alone.
 
 The harness is a cascade. The cascade is sound on what it has been
-tested against. The gaps in coverage are documented and bounded. None
-of the layers are decorative.
+tested against. The previously-tolerated gaps are now measured
+detections. None of the layers are decorative.

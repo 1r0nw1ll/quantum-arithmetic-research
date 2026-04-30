@@ -65,16 +65,50 @@ def _load_expected_hash() -> dict | None:
     return json.loads(_EXPECTED_HASH_PATH.read_text(encoding="utf-8"))
 
 
+def _expected_rebuild_hash_for_platform(expected: dict) -> str:
+    """Read fixture_rebuild_graph_hash for the current platform.
+
+    Supports both legacy string format (single-platform pin, treated as
+    Linux) and the platform-keyed dict format introduced when Mac was
+    promoted to canonical. Returns "" when no entry for the current
+    platform exists (caller treats as bootstrap).
+    """
+    raw = expected.get("fixture_rebuild_graph_hash", "")
+    if isinstance(raw, str):
+        # Legacy single-platform pin. Honor it for Linux only; other
+        # platforms fall through to bootstrap.
+        return raw if platform.system() == "Linux" else ""
+    if isinstance(raw, dict):
+        return raw.get(platform.system(), "")
+    return ""
+
+
 def _write_expected_hash(fixture_hash: str, fixture_rebuild_graph_hash: str) -> None:
-    """Bootstrap write: first-ever run records the expected hashes so
-    subsequent runs have something to compare against.
+    """Bootstrap / refresh write: records the expected hashes for the
+    CURRENT platform so subsequent same-platform runs can compare.
 
     The `_exempt` key carries the PRIMARY-SOURCE-EXEMPT header in-band so
     that any re-bootstrap (after someone deletes expected_hash.json to
     force a refresh) still satisfies the cert-gate primary-source check
-    on the next commit. Without this, the re-written file would fail
-    the gate and require a manual edit.
+    on the next commit.
+
+    fixture_rebuild_graph_hash is stored under a platform-keyed dict so
+    Linux and Darwin can each pin their own deterministic hash. The
+    canonicalize pipeline produces stable bytes within a platform but
+    differs across platforms (filesystem ordering / NFC edge cases handled
+    upstream don't fully eliminate cross-platform drift). Per-platform
+    entries let the cert attest within-platform determinism on both Mac
+    and Linux without one host's hash falsely failing the other.
     """
+    existing = _load_expected_hash() or {}
+    existing_rebuild = existing.get("fixture_rebuild_graph_hash", {})
+    if isinstance(existing_rebuild, str):
+        # Migrate legacy single-platform pin → Linux entry under dict.
+        existing_rebuild = {"Linux": existing_rebuild}
+    if not isinstance(existing_rebuild, dict):
+        existing_rebuild = {}
+    existing_rebuild[platform.system()] = fixture_rebuild_graph_hash
+
     payload = {
         "_exempt": (
             "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 5 determinism anchor; "
@@ -86,9 +120,9 @@ def _write_expected_hash(fixture_hash: str, fixture_rebuild_graph_hash: str) -> 
             "`python qa_alphageometry_ptolemy/qa_meta_validator.py`. -->"
         ),
         "fixture_hash": fixture_hash,
-        "fixture_rebuild_graph_hash": fixture_rebuild_graph_hash,
+        "fixture_rebuild_graph_hash": existing_rebuild,
         "captured_at_utc": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
-        "qa_compliance": "memory_infra — [228] Phase 5 determinism expected hashes",
+        "qa_compliance": "memory_infra — [228] Phase 5 determinism expected hashes (per-platform)",
     }
     _EXPECTED_HASH_PATH.write_text(
         json.dumps(payload, indent=2, sort_keys=True, ensure_ascii=False) + "\n",
@@ -213,14 +247,29 @@ def check_d2_in_process_idempotent() -> tuple[str, str]:
         return (
             "PASS",
             f"bootstrap: wrote expected_hash.json "
-            f"(fixture_hash={fh[:12]}… fixture_rebuild_graph_hash={hash_a[:12]}…)"
+            f"(fixture_hash={fh[:12]}… "
+            f"{platform.system()}.fixture_rebuild_graph_hash={hash_a[:12]}…)"
         )
-    want = expected.get("fixture_rebuild_graph_hash", "")
+    want = _expected_rebuild_hash_for_platform(expected)
+    if not want:
+        # First run on this platform — bootstrap the platform's entry.
+        manifest = _load_manifest()
+        fh = _compute_manifest_fixture_hash(manifest)
+        _write_expected_hash(fh, hash_a)
+        return (
+            "PASS",
+            f"bootstrap: added {platform.system()} entry "
+            f"(fixture_rebuild_graph_hash={hash_a[:12]}…)"
+        )
     if hash_a == want:
-        return "PASS", f"match: fixture_rebuild_graph_hash={hash_a[:12]}…"
+        return (
+            "PASS",
+            f"match: {platform.system()}.fixture_rebuild_graph_hash={hash_a[:12]}…"
+        )
     return (
         "FAIL",
-        f"drift vs expected_hash.json: want={want[:12]}… got={hash_a[:12]}… — "
+        f"drift vs expected_hash.json[{platform.system()}]: "
+        f"want={want[:12]}… got={hash_a[:12]}… — "
         f"pipeline output changed; refresh expected_hash.json if intentional"
     )
 
@@ -263,14 +312,24 @@ def check_d3_subprocess_reproducible() -> tuple[str, str]:
     expected = _load_expected_hash()
     if expected is None:
         return "FAIL", "expected_hash.json missing after D2 ran — ordering bug"
-    want = expected.get("fixture_rebuild_graph_hash", "")
+    want = _expected_rebuild_hash_for_platform(expected)
+    if not want:
+        return (
+            "FAIL",
+            f"expected_hash.json has no {platform.system()} entry after D2 ran — "
+            f"D2 bootstrap ordering bug"
+        )
     if hashes[0] != want:
         return (
             "FAIL",
-            f"subprocess hash != in-process hash: subprocess={hashes[0][:12]}… "
-            f"in-process={want[:12]}… — interpreter-state sensitivity"
+            f"subprocess hash != in-process hash on {platform.system()}: "
+            f"subprocess={hashes[0][:12]}… in-process={want[:12]}… — "
+            f"interpreter-state sensitivity"
         )
-    return "PASS", f"match: subprocess_graph_hash={hashes[0][:12]}…"
+    return (
+        "PASS",
+        f"match: {platform.system()}.subprocess_graph_hash={hashes[0][:12]}…"
+    )
 
 
 def check_d4_cross_platform_scaffold() -> tuple[str, str]:

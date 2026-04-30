@@ -21,16 +21,22 @@ REPO="/home/player2/signal_experiments"
 # Skip directories that don't contain QA logic
 REL="${FILE_PATH#$REPO/}"
 case "$REL" in
-  .claude/*|archive/*|Documents/*|QAnotes/*|qa_lab/*|*venv*|*__pycache__*|tools/qa_axiom_linter.py)
+  .claude/*|archive/*|Documents/*|QAnotes/*|qa_lab/*|*venv*|*__pycache__*|tools/qa_axiom_linter.py|tools/tests/linter_fixtures/*)
     # qa_lab/* is in the linter's _EXCLUDE_DIRS — mirror that here so
     # bulk scans and per-file hook checks agree.
+    # tools/tests/linter_fixtures/* contains INTENTIONALLY bad fixtures that
+    # the linter test harness exercises. Skipping here so edits to the
+    # fixtures themselves don't block; they are still scanned when the
+    # test harness test_qa_axiom_linter_firewall.py runs.
     exit 0
     ;;
 esac
 
 # Run the linter
 cd "$REPO"
-RESULT=$(python tools/qa_axiom_linter.py "$FILE_PATH" 2>&1)
+PYTHON="${REPO}/.venv/bin/python"
+[ ! -x "$PYTHON" ] && PYTHON=python3
+RESULT=$($PYTHON tools/qa_axiom_linter.py "$FILE_PATH" 2>&1)
 EXIT_CODE=$?
 
 if [ $EXIT_CODE -ne 0 ]; then

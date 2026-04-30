@@ -11,7 +11,7 @@ FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 
 [ -z "$FILE_PATH" ] && exit 0
 
-REPO="/home/player2/signal_experiments"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 VENV_PYTHON="${REPO}/.venv/bin/python"
 MARKER="/tmp/qa_collab_session_registered"
 

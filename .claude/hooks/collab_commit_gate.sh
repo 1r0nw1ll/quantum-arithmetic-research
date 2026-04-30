@@ -1,8 +1,9 @@
 #!/usr/bin/env bash
-# PreToolUse hook (Bash): enforce commit_intent broadcast before git commit
+# PreToolUse hook (Bash): broadcast commit_intent before git commit
 #
-# HARD GATE: If running `git commit`, must have broadcast commit_intent first.
-# Uses a marker file set by the broadcast hook.
+# cert_gate_hook.py blocks git commit unless a collab session marker
+# exists. This hook then broadcasts commit_intent and blocks only if a
+# veto is observed.
 
 set -euo pipefail
 
@@ -18,7 +19,7 @@ case "$COMMAND" in
     ;;
 esac
 
-REPO="/home/player2/signal_experiments"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 VENV_PYTHON="${REPO}/.venv/bin/python"
 MARKER="/tmp/qa_collab_session_registered"
 

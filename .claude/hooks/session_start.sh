@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 set -euo pipefail
-cd /home/player2/signal_experiments 2>/dev/null || exit 0
+cd "$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)" 2>/dev/null || exit 0
 
 echo "=== QA Session Start ==="
 echo "Branch: $(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo '?')"

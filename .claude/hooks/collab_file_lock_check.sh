@@ -16,9 +16,10 @@ FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 
 [ -z "$FILE_PATH" ] && exit 0
 
-REPO="/home/player2/signal_experiments"
+REPO="${QA_COLLAB_REPO:-$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)}"
 VENV_PYTHON="${REPO}/.venv/bin/python"
-MARKER="/tmp/qa_collab_session_registered"
+MARKER="${QA_COLLAB_MARKER:-/tmp/qa_collab_session_registered}"
+STATE_PORT="${QA_COLLAB_STATE_PORT:-5557}"
 SESSION_NAME=$(cat "$MARKER" 2>/dev/null || echo "unknown")
 
 # Only check shared files that ALWAYS require locking
@@ -34,13 +35,21 @@ case "$REL" in
     ;;
 esac
 
-# Check if bus is running
+# Check if bus is running. This is a hard gate for shared files:
+# without the bus, there is no authoritative lock state to check.
 if [ -f "${MARKER}.nobus" ]; then
-  exit 0  # No bus, skip lock check
+  echo "FILE LOCK: cannot edit $REL because collab bus is marked unavailable" >&2
+  exit 2
 fi
 
-if ! ss -tlnp 2>/dev/null | grep -q ":5557 "; then
-  exit 0  # State port not listening
+if [ ! -s "$MARKER" ]; then
+  echo "FILE LOCK: cannot edit $REL without collab session marker" >&2
+  exit 2
+fi
+
+if [ "${QA_COLLAB_FORCE_NO_BUS:-0}" = "1" ] || ! ss -tlnp 2>/dev/null | grep -q ":${STATE_PORT} "; then
+  echo "FILE LOCK: cannot edit $REL because collab bus state port ${STATE_PORT} is not listening" >&2
+  exit 2
 fi
 
 # Check lock
@@ -48,7 +57,7 @@ LOCK_CHECK=$("$VENV_PYTHON" -c "
 import zmq, json, time
 ctx = zmq.Context()
 req = ctx.socket(zmq.REQ)
-req.connect('tcp://127.0.0.1:5557')
+req.connect('tcp://127.0.0.1:${STATE_PORT}')
 req.setsockopt(zmq.RCVTIMEO, 2000)
 req.send_string(json.dumps({'action': 'get', 'key': 'file_locks'}))
 reply = json.loads(req.recv_string())
@@ -91,7 +100,7 @@ fi
 import zmq, json, time
 ctx = zmq.Context()
 req = ctx.socket(zmq.REQ)
-req.connect('tcp://127.0.0.1:5557')
+req.connect('tcp://127.0.0.1:${STATE_PORT}')
 req.setsockopt(zmq.RCVTIMEO, 2000)
 
 # Get current locks

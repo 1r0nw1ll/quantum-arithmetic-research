@@ -15,7 +15,7 @@ FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 [[ -z "$FILE_PATH" || "$FILE_PATH" != *.py ]] && exit 0
 
 # Skip files outside the repo
-REPO="/home/player2/signal_experiments"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 [[ "$FILE_PATH" != "$REPO"/* ]] && exit 0
 
 # Skip directories that don't contain QA logic

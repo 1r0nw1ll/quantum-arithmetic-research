@@ -1,28 +1,24 @@
 #!/usr/bin/env bash
-# SessionStart hook: enforce collab bus registration
+# SessionStart hook: collab bus heartbeat + optional registration
 #
-# HARD GATE: Session cannot proceed without registering on the collab bus.
-# Creates a session marker file that other hooks check.
+# HEARTBEAT ONLY (2026-04-12): report bus status, never block.
+# If bus is up, register. If bus is down, say so and move on.
 
-set -euo pipefail
-
-REPO="/home/player2/signal_experiments"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 MARKER="/tmp/qa_collab_session_registered"
 VENV_PYTHON="${REPO}/.venv/bin/python"
 
-# Check if collab bus is running
+# Heartbeat: is the bus listening?
 if ! ss -tlnp 2>/dev/null | grep -q ":5555 "; then
-  echo "COLLAB BUS NOT RUNNING — start it: cd qa_lab && bash start_collab_bus.sh"
-  echo "Proceeding without bus (hooks will skip bus operations)"
-  touch "${MARKER}.nobus"
+  echo "Collab bus: not running (port 5555 down)"
+  rm -f "${MARKER}"
   exit 0
 fi
 
-# Generate session name from branch + timestamp
+# Bus is up — try to register
 BRANCH=$(cd "$REPO" && git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
 SESSION_NAME="claude-${BRANCH}-$(date +%H%M)"
 
-# Register session on collab bus
 REGISTER_RESULT=$("$VENV_PYTHON" -c "
 import zmq, json, time
 ctx = zmq.Context()
@@ -49,8 +45,7 @@ if [ "$REGISTER_RESULT" = "ok" ]; then
   echo "$SESSION_NAME" > "$MARKER"
   echo "Collab bus: registered as ${SESSION_NAME}"
 else
-  echo "Collab bus: registration failed (${REGISTER_RESULT}), proceeding anyway"
-  echo "nobus" > "${MARKER}.nobus"
+  echo "Collab bus: registration failed (${REGISTER_RESULT}), continuing"
 fi
 
 exit 0

@@ -10,7 +10,7 @@ FILE_PATH=$(echo "$INPUT" | jq -r '.tool_input.file_path // empty')
 
 [ -z "$FILE_PATH" ] && exit 0
 
-REPO="/home/player2/signal_experiments"
+REPO="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 MARKER="/tmp/qa_collab_session_registered"
 
 # Resolve to relative path from repo root
@@ -21,7 +21,7 @@ REL=$(realpath --relative-to="$REPO" "$FILE_PATH" 2>/dev/null || echo "$FILE_PAT
 CANON=$(realpath -m "$FILE_PATH" 2>/dev/null || echo "$FILE_PATH")
 
 case "$CANON" in
-  /home/player2/Desktop/qa_finance/*)
+  /home/player2/Desktop/qa_finance/*|/Users/player3/Desktop/qa_finance/*|"$HOME/Desktop/qa_finance/"*)
     echo "BLOCKED: qa_finance is frozen (hashes in FROZEN_HASHES_30_42.txt)" >&2
     exit 2
     ;;

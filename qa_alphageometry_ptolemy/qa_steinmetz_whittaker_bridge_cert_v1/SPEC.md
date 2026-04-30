@@ -49,6 +49,7 @@ Top-level object:
 | `H` | number[] | Sampled magnetizing-field values. |
 | `B` | number[] | Sampled flux-density values. |
 | `theta` | number[] | Sampled unwrapped QA phase values. |
+| `pi_series` | number[] | Optional sampled \(\Pi(t)\) values. |
 | `expected_hysteresis_area` | number | Declared reference for \(\oint H\,dB\). |
 | `expected_curvature_proxy` | number | Declared reference for \(\oint \Pi\,d\theta\). |
 
@@ -70,9 +71,36 @@ Top-level object:
 4. `material_drive_convention` must be identical in calibration and evaluation sections.
 5. `calibration_constants` must be identical in calibration and evaluation sections.
 6. `H`, `B`, and `theta` must be same-length numeric arrays with at least two samples.
-7. The closed-loop trapezoid integral \(\oint H\,dB\) must match `expected_hysteresis_area` within `tolerance`.
-8. The QA curvature proxy \(\oint \Pi\,d\theta\) must match `expected_curvature_proxy` within `tolerance`.
-9. Hysteresis area and QA curvature proxy must match each other within `tolerance`.
+7. If `evaluation.pi_series` is present, it must be a numeric array with the same length as `theta`.
+8. The closed-loop trapezoid integral \(\oint H\,dB\) must match `expected_hysteresis_area` within `tolerance`.
+9. The QA curvature proxy \(\oint \Pi\,d\theta\) must match `expected_curvature_proxy` within `tolerance`.
+10. Hysteresis area and QA curvature proxy must match each other within `tolerance`.
+
+## Curvature Modes
+
+### Constant-Pi Mode
+
+If `evaluation.pi_series` is absent, the validator computes:
+
+\[
+\Pi = \alpha_X X+\alpha_J J+\alpha_K K
+\]
+
+and then:
+
+\[
+\oint \Pi\,d\theta \approx \sum_i \Pi(\theta_{i+1}-\theta_i)
+\]
+
+### Variable-Pi Mode
+
+If `evaluation.pi_series` is present, the validator treats it as sampled \(\Pi(t)\) and computes:
+
+\[
+\oint \Pi\,d\theta \approx \sum_i \frac{\Pi_i+\Pi_{i+1}}{2}(\theta_{i+1}-\theta_i)
+\]
+
+Tuple and invariant checks still run. Calibration immutability checks still run. The non-claim guardrail still applies.
 
 ## Failure Fixture
 
@@ -90,4 +118,3 @@ Normal fixture validation prints one line:
 ```json
 {"ok":true}
 ```
-

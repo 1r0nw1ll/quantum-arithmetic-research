@@ -123,9 +123,20 @@ def curvature_proxy(
     theta_values: list[float],
     invariants: dict[str, int],
     constants: dict[str, Any],
+    pi_series: list[float] | None = None,
 ) -> float:
     if len(theta_values) < 2:
         raise ValidationError("theta must contain at least two samples")
+    if pi_series is not None:
+        if len(pi_series) != len(theta_values):
+            raise ValidationError("pi_series and theta must have the same length")
+        total = 0.0
+        for idx in range(len(theta_values) - 1):
+            total += 0.5 * (pi_series[idx] + pi_series[idx + 1]) * (
+                theta_values[idx + 1] - theta_values[idx]
+            )
+        return total
+
     alpha_x = require_number(constants.get("alpha_X"), "calibration_constants.alpha_X")
     alpha_j = require_number(constants.get("alpha_J"), "calibration_constants.alpha_J")
     alpha_k = require_number(constants.get("alpha_K"), "calibration_constants.alpha_K")
@@ -177,7 +188,10 @@ def validate_fixture(data: dict[str, Any]) -> str:
     constants = require_mapping(
         calibration.get("calibration_constants"), "calibration.calibration_constants"
     )
-    curvature = curvature_proxy(theta_values, invariants, constants)
+    pi_series = None
+    if "pi_series" in evaluation:
+        pi_series = require_number_list(evaluation.get("pi_series"), "evaluation.pi_series")
+    curvature = curvature_proxy(theta_values, invariants, constants, pi_series)
 
     expected_area = require_number(
         evaluation.get("expected_hysteresis_area"),
@@ -208,9 +222,11 @@ def load_json(path: Path) -> dict[str, Any]:
 def run_self_test() -> int:
     base = Path(__file__).resolve().parent
     pass_fixture = load_json(base / "fixtures" / "pass_minimal_loop.json")
+    variable_pi_fixture = load_json(base / "fixtures" / "pass_variable_pi_loop.json")
     fail_fixture = load_json(base / "fixtures" / "fail_changed_calibration.json")
 
     validate_fixture(pass_fixture)
+    validate_fixture(variable_pi_fixture)
     try:
         validate_fixture(fail_fixture)
     except ValidationError as exc:

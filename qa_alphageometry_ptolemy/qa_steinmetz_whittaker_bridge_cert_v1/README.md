@@ -28,6 +28,7 @@ Passing this cert means only that the fixture's declared QA bridge data is inter
 | `SPEC.md` | Schema and validation contract. |
 | `validate.py` | Pure Python stdlib validator. |
 | `fixtures/pass_minimal_loop.json` | Minimal passing loop with reused calibration constants. |
+| `fixtures/pass_variable_pi_loop.json` | Passing loop with sampled time-varying `pi_series`. |
 | `fixtures/fail_changed_calibration.json` | Failing fixture where evaluation calibration mutates after calibration. |
 
 ## Validation Model
@@ -56,6 +57,12 @@ It computes the QA curvature proxy:
 \oint \Pi\,d\theta,\qquad \Pi=\alpha_X X+\alpha_J J+\alpha_K K
 \]
 
+For the minimal mode, \(\Pi\) is constant across the loop. If `evaluation.pi_series` is present, the validator instead treats it as sampled \(\Pi(t)\) and computes:
+
+\[
+\oint \Pi\,d\theta \approx \sum_i \frac{\Pi_i + \Pi_{i+1}}{2}(\theta_{i+1}-\theta_i)
+\]
+
 Calibration constants are fixture-declared in both `calibration` and `evaluation` sections and must match exactly.
 
 ## Usage
@@ -63,6 +70,9 @@ Calibration constants are fixture-declared in both `calibration` and `evaluation
 ```bash
 python3 qa_alphageometry_ptolemy/qa_steinmetz_whittaker_bridge_cert_v1/validate.py \
   qa_alphageometry_ptolemy/qa_steinmetz_whittaker_bridge_cert_v1/fixtures/pass_minimal_loop.json
+
+python3 qa_alphageometry_ptolemy/qa_steinmetz_whittaker_bridge_cert_v1/validate.py \
+  qa_alphageometry_ptolemy/qa_steinmetz_whittaker_bridge_cert_v1/fixtures/pass_variable_pi_loop.json
 
 python3 qa_alphageometry_ptolemy/qa_steinmetz_whittaker_bridge_cert_v1/validate.py \
   qa_alphageometry_ptolemy/qa_steinmetz_whittaker_bridge_cert_v1/fixtures/fail_changed_calibration.json

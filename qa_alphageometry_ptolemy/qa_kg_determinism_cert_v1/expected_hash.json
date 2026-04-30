@@ -1,10 +1,9 @@
 {
   "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 5 determinism anchor; bootstrap-written by qa_kg_determinism_cert_validate.py on first meta_validator run. Grounds in docs/specs/QA_MEM_SCOPE.md (Dale, 2026), tools/qa_kg/canonicalize.py (Dale, 2026), tools/qa_kg/fixtures/corpus_snapshot_v1/CANONICAL_MANIFEST.json (Dale, 2026). Any intentional refresh: delete this file and rerun `python qa_alphageometry_ptolemy/qa_meta_validator.py`. -->",
-  "captured_at_utc": "2026-04-30T03:20:22Z",
+  "captured_at_utc": "2026-04-30T03:40:00Z",
   "fixture_hash": "81ce926db27c3b1aadf182274d2d1b3fe893b29fb932ec298779cf183aa9db23",
   "fixture_rebuild_graph_hash": {
-    "Darwin": "e08393746bd667b0ed3fe3c53b4d236cb2cb405573407ab2bfd81905d372b82d",
-    "Linux": "058dbb332d9df047aafdf6f78d5a76b1a04de141f7f78429b7aa0e01cfd92d5d"
+    "Darwin": "22c68d982ade05471dfa7ca373f58c5ea31a520dc2bcd0bb280d2e3e54b721ce"
   },
-  "qa_compliance": "memory_infra — [228] Phase 5 determinism expected hashes (per-platform)"
+  "qa_compliance": "memory_infra — [228] Phase 5 determinism expected hashes (per-platform; both should be equal post-platform-path-leak fix in memory_rules.py)"
 }

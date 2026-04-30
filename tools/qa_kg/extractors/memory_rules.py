@@ -15,7 +15,27 @@ from tools.qa_kg.kg import KG, Node
 
 
 _REPO = Path(__file__).resolve().parents[3]
-_MEMORY_MD = Path.home() / ".claude/projects/-home-player2-signal-experiments/memory/MEMORY.md"
+
+
+def _default_memory_md_path() -> Path:
+    """Mirror Claude Code's per-project memory layout.
+
+    Claude Code stores per-project memory under
+    `~/.claude/projects/<slug>/memory/MEMORY.md` where `<slug>` is the
+    repo's absolute path with `/` replaced by `-` and a leading dash.
+    Computing this from `_REPO` rather than hardcoding the player2 slug
+    means Mac (`-Users-player3-signal-experiments`) and Linux
+    (`-home-player2-signal-experiments`) both find their actual memory
+    file in production builds without one machine silently extracting
+    zero MEMORY rules.
+    """
+    # Claude Code replaces both `/` and `_` in the absolute path with `-`
+    # to form the project slug (so `signal_experiments` → `signal-experiments`).
+    slug = "-" + str(_REPO).lstrip("/").replace("/", "-").replace("_", "-")
+    return Path.home() / ".claude" / "projects" / slug / "memory" / "MEMORY.md"
+
+
+_MEMORY_MD = _default_memory_md_path()
 _CLAUDE_MD = _REPO / "CLAUDE.md"
 _H3_HARD = re.compile(r"^###\s+(.+?)\s*\((?:HARD)(?:[^)]*)\)", re.M)
 
@@ -51,10 +71,19 @@ def populate(
     mem_path = memory_md_path if memory_md_path is not None else _MEMORY_MD
     if mem_path.exists():
         text = mem_path.read_text(encoding="utf-8")
-        for nid, title, body, src_loc in _extract_rules(text, str(mem_path)):
+        # Stable cross-platform identifier: store "MEMORY.md" rather than
+        # str(mem_path), since the latter encodes Path.home() ("/Users/..."
+        # on Mac vs "/home/..." on Linux) and the fixture worktree's
+        # absolute path. Those leaks were the entire source of [228] D2/D3
+        # cross-platform graph_hash divergence prior to this commit.
+        # The actual file location remains discoverable from the cert's
+        # _meta_ledger.json git_head + the manifest's repo_head, which is
+        # where it semantically belongs (build-time provenance, not graph
+        # row content).
+        for nid, title, body, src_loc in _extract_rules(text, "MEMORY.md"):
             kg.upsert_node(Node(
                 id=nid, node_type="Rule", title=title, body=body,
-                source=str(_MEMORY_MD), vetted_by="MEMORY.md",
+                source="MEMORY.md", vetted_by="MEMORY.md",
                 authority="internal",
                 epistemic_status="interpretation",
                 method="memory_rule",

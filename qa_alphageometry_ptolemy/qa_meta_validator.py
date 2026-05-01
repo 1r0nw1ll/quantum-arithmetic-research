@@ -7469,6 +7469,37 @@ def _validate_kg_determinism_cert(base_dir):
     return None
 
 
+def _validate_whittaker_rational_direction_s1_cert_family(base_dir):
+    """QA Whittaker Rational Direction S^1 Cert family [266] — Layer 1 of the Whittaker -> QA development ladder (docs/specs/QA_WHITTAKER_RATIONAL_DIRECTION_CERT_DRAFT.md sec. 8). Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem). CLAIM (narrow): the QA-rational direction set D_m on the unit circle S^1, defined by D_m = { (C/G, F/G) : (b,e) in {1..m}^2, gcd(b,e)=1, d=b+e raw, a=b+2e raw, C=2*d*e, F=a*b=d^2-e^2, G=d^2+e^2 }, is finite, exactly enumerable in integer arithmetic, and admits two structural theorems on the closed first quadrant: (W2) for any two distinct directions, sin(angular separation) >= 1/(G_i*G_j) >= 1/G_max(m)^2, proven from cross-product integrality (validator runs all-pairs check; n*(n-1)/2 = 1485, 64261, 5038725 at m=9, 24, 72); (W3) with virtual boundary anchors E_0=(1,0), E_inf=(0,1) added as observer-side anchors only (NOT QA seeds, NOT counted in |D_m|, NOT in W1, NOT in W2), nearest-neighbor sampling at D_m^+ := D_m union {E_0, E_inf} of any L-Lipschitz angular profile g on [0, pi/2] yields sup error <= L*Delta_max^+(m). Bit-exact predictions: |D_m| = 55, 359, 3175 at m = 9, 24, 72; G_max = 370, 2785, 25633; Delta_max^+ ~ 0.199, 0.080, 0.027 rad. Cert does NOT prove Whittaker's theorem, Maxwell's equations, electromagnetism, two-scalar-potential reductions (Whittaker 1904 deferred to Layer 4 cert [269] PROVISIONAL), gauge reduction, density/equidistribution as m -> infinity, or 3D S^2 coverage (Layer 2 cert [267] PROVISIONAL). Theorem NT compliance: integer + fractions.Fraction throughout construction; raw d=b+e and a=b+2e (no mod reduction in element computation per HARD rule); coprime seeds enforced; angular ordering via Fraction(F,C); floats observer-side only (Lipschitz test grid, sin/cos/identity test functions, pi/2 boundary, sup-error display); firewall crossed exactly twice. Will Dale + Claude 2026-04-30 (build) / 2026-05-01 (registration after Codex hostile review #2 + 4 mechanical fixes). Checks WRD_1+DECL/W1/W2/W3/HARD/SRC/WIT/F; 4 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_whittaker_rational_direction_s1_cert_v1")
+    validator = os.path.join(fam_dir, "qa_whittaker_rational_direction_s1_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_whittaker_rational_direction_s1_cert_v1/qa_whittaker_rational_direction_s1_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_whittaker_rational_direction_s1_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_whittaker_rational_direction_s1_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_whittaker_rational_direction_s1_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -8500,6 +8531,11 @@ FAMILY_SWEEPS = [
      "Explicit QA-native unequal-k propagator on S_9, delivering MC-1/MC-2 of docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.1. Companion to cert [260] QA Orbit-Dirac Bracket (MC-3/MC-4). Family ID [261] was claimed by the QA Orbit Stratification Theorem cert (commit 2d6ab64) during this session; cert-C renumbered to [262] without scope impact. Construction: i_Delta_QA(Delta_k; (b,e), (b',e')) := 1 if T^|Delta_k|(b,e) = (b',e') else 0 — the integer-valued T-orbit trajectory indicator. Depends on Delta_k only, slice-independent. Equal-k limit (Delta_k = 0) recovers stipulated delta-function CCR [a_{b,e}, a_dag_{b',e'}] = delta_{b,b'} delta_{e,e'} exhaustively over {1..9}^2 x {1..9}^2. Orbit-class decomposition: cross-orbit propagator vanishes for all Delta_k. Periodicity: propagator at Delta_k and Delta_k + period(orbit(w)) agree for all targets. Lehmann-type trace formula Tr i_Delta_QA(Delta_k) = 72*1[24|Delta_k] + 8*1[8|Delta_k] + 1 verified at Delta_k in {0,1,2,3,4,6,8,12,16,24}. The stipulated equal-k CCR is a proposed observer-side canonical encoding (cross-map §4.1 precision guardrail), NOT derived from QA primitives; cert certifies only the unequal-k invariant and its internal consistency. Primary source: Mannheim Phys. Rev. D 102 025020 (2020) arXiv:1909.03548 eqs (2.2) + (8.9)/(8.16). Substrate: [260] orbit-Dirac machinery + [191] Tiered Reachability + [214] orbit-family classification. Prior-art audit docs/theory/QA_QFT_COMMUTATORS_PRIOR_ART.md §5a identifies C10 equal-k CCR as slice-dependent and missing the unequal-k invariant — cert-C fixes that gap. Paper section papers/in-progress/qft-etcr-orbit-quotient/section.md §3 + §6. 3 witnesses, one per orbit class: Cosmos (1,1) Fibonacci period-24, Satellite (3,3) Tribonacci period-8, Singularity (9,9) Ninbonacci period-1. Scope v1: m=9, T_F dynamics. Deferred to v2: m=24, alternative step operators, interacting Lehmann spectral density rho(sigma^2). Will Dale + Claude 2026-04-21. Checks UKC_1+EQ_LIMIT/ORBIT_DECOMP/PERIODICITY/LEHMANN/A1/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "262_qa_unequal_k_ccr_invariant_cert",
      "qa_unequal_k_ccr_invariant_cert_v1", True),
+    (266, "QA Whittaker Rational Direction S^1 Cert family",
+     _validate_whittaker_rational_direction_s1_cert_family,
+     "Layer 1 of the Whittaker -> QA development ladder (docs/specs/QA_WHITTAKER_RATIONAL_DIRECTION_CERT_DRAFT.md sec. 8). Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem). CLAIM (narrow): the QA-rational direction set D_m on S^1, defined by D_m = { (C/G, F/G) : (b,e) in {1..m}^2, gcd(b,e)=1, d=b+e raw, a=b+2e raw, C=2*d*e, F=a*b=d^2-e^2, G=d^2+e^2 }, is finite, exactly enumerable in integer arithmetic, and admits two structural theorems on the closed first quadrant: (W2) for any two distinct directions, sin(angular separation) >= 1/(G_i*G_j) >= 1/G_max(m)^2, proven from cross-product integrality (validator runs all-pairs check); (W3) with virtual boundary anchors E_0=(1,0), E_inf=(0,1) added as observer-side anchors only (NOT QA seeds, NOT counted in |D_m|, NOT in W1, NOT in W2), nearest-neighbor sampling at D_m^+ := D_m union {E_0, E_inf} of any L-Lipschitz angular profile g on [0, pi/2] yields sup error <= L*Delta_max^+(m). Bit-exact predictions: |D_m| = 55, 359, 3175 at m = 9, 24, 72; G_max = 370, 2785, 25633; Delta_max^+ ~ 0.199, 0.080, 0.027 rad. All-pairs counts: 1485, 64261, 5038725. Cert does NOT prove Whittaker's theorem, Maxwell's equations, electromagnetism, two-scalar-potential reductions (Whittaker 1904 deferred to Layer 4 cert [269] PROVISIONAL), gauge reduction, density/equidistribution as m -> infinity, or 3D S^2 coverage (Layer 2 cert [267] PROVISIONAL). Theorem NT compliance: integer + fractions.Fraction throughout construction; raw d=b+e and a=b+2e (no mod reduction in element computation per HARD rule); coprime seeds enforced; angular ordering via Fraction(F,C); floats observer-side only (Lipschitz test grid, sin/cos/identity test functions, pi/2 boundary, sup-error display); firewall crossed exactly twice. Hostile review #2 by Codex 2026-05-01 found 4 mechanical blockers (stale W3 hull-only spec text, missing PROVISIONAL marks on Layer 2-5 IDs, stale _net_ filenames in spec build plan, bad expected_G witness in pass_d72); all fixed pre-registration. Will Dale + Claude 2026-04-30 build / 2026-05-01 registration. Checks WRD_1+DECL/W1/W2/W3/HARD/SRC/WIT/F; 4 PASS + 4 FAIL fixtures; self-test ok",
+     "266_qa_whittaker_rational_direction_s1_cert",
+     "qa_whittaker_rational_direction_s1_cert_v1", True),
 ]
 
 

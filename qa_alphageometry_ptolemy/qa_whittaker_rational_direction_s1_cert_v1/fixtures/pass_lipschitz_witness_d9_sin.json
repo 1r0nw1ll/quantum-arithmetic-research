@@ -1,0 +1,33 @@
+{
+  "schema_version": "QA_WHITTAKER_RATIONAL_DIRECTION_S1_CERT.v1",
+  "primary_source": "Whittaker, 1903. On the partial differential equations of mathematical physics. Math. Annalen 57:333-355. DOI: 10.1007/BF01444290.",
+  "certificate_id": "qa.cert.whittaker_rational_direction_s1.pass.lipschitz_witness_d9_sin.v1",
+  "cert_type": "qa_whittaker_rational_direction_s1_cert",
+  "title": "QA Whittaker Rational Direction S^1 PASS [266] - W3 Lipschitz witness g(theta)=sin(theta) at m=9",
+  "created_utc": "2026-04-30T00:00:00Z",
+  "_fixture_purpose": "W3 Lipschitz nearest-neighbor sampling witness at m=9. Test function g(theta) = sin(theta), Lipschitz constant L = 1 on [0, pi/2]. Validator must verify sup_{theta in [0, pi/2]} |g(theta) - g(NN(theta))| <= L * Delta_max^+(9). Empirically (validator computes): actual sup ~ 0.0522 rad; theorem bound L * Delta_max^+(9) ~ 0.1993 rad; ratio ~ 0.26. The fixture also declares a tighter claimed_sup_error_bound = 0.06 (still strictly above actual 0.0522), which validator must verify holds. Both checks pass; fixture is valid.",
+  "source_attribution": "(Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290.",
+  "m": 9,
+  "declared_count": 55,
+  "declared_g_max": 370,
+  "declared_delta_max_plus_upper_bound": 0.21,
+  "claimed_extra_seeds": [],
+  "claimed_d_overrides": [],
+  "run_w2_all_pairs": true,
+  "lipschitz_witness": {
+    "function_name": "sin",
+    "L": 1.0,
+    "test_grid_size": 2048,
+    "claimed_sup_error_bound": 0.06,
+    "_note": "Theorem bound L*Delta_max^+(9) ~ 0.1993; tighter empirical bound 0.06 also covers actual sup ~ 0.0522."
+  },
+  "witnesses": [
+    {
+      "name": "lipschitz_function_sin",
+      "function": "sin",
+      "L": 1,
+      "domain": "[0, pi/2]",
+      "rationale": "g(theta) = sin(theta) is 1-Lipschitz in the angular metric on [0, pi/2] since |sin(theta_1) - sin(theta_2)| <= |theta_1 - theta_2| (mean value theorem with |cos| <= 1)."
+    }
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema_version": "QA_WHITTAKER_RATIONAL_DIRECTION_S1_CERT.v1",
+  "primary_source": "Whittaker, 1903. On the partial differential equations of mathematical physics. Math. Annalen 57:333-355. DOI: 10.1007/BF01444290.",
+  "certificate_id": "qa.cert.whittaker_rational_direction_s1.pass.d72_canonical_net.v1",
+  "cert_type": "qa_whittaker_rational_direction_s1_cert",
+  "title": "QA Whittaker Rational Direction S^1 PASS [266] - canonical net at m=72",
+  "created_utc": "2026-04-30T00:00:00Z",
+  "_fixture_purpose": "PASS fixture at m=72 (m=24*3). |D_72|=3175; G_max=25633; Delta_max^+(72) bounded by 0.028 rad. W2 all-pairs validates 5,038,725 distinct pairs of cross-product integrality (~5M; pure integer arithmetic, fits in Python). Largest m in v1 scope. The factor 72 = 24 * 3 connects the applied mod-24 cycle to the 72-pair Cosmos count from cert architecture (CLAUDE.md core QA arch).",
+  "source_attribution": "(Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290.",
+  "m": 72,
+  "declared_count": 3175,
+  "declared_g_max": 25633,
+  "declared_delta_max_plus_upper_bound": 0.028,
+  "claimed_extra_seeds": [],
+  "claimed_d_overrides": [],
+  "run_w2_all_pairs": true,
+  "witnesses": [
+    {
+      "name": "canonical_seed_(1,2)",
+      "b": 1, "e": 2,
+      "expected_d": 3, "expected_a": 5,
+      "expected_C": 12, "expected_F": 5, "expected_G": 13
+    },
+    {
+      "name": "edge_seed_(1,72)",
+      "b": 1, "e": 72,
+      "expected_d": 73, "expected_a": 145,
+      "expected_C": 10512, "expected_F": 145, "expected_G": 10513,
+      "_note": "smallest-angle direction in D_72: d=73, e=72, C=2*d*e=10512, F=a*b=145*1=145, G=d^2+e^2=5329+5184=10513. Sanity: C^2+F^2 = 110502144+21025 = 110523169 = 10513^2."
+    },
+    {
+      "name": "edge_seed_(72,1)",
+      "b": 72, "e": 1,
+      "expected_d": 73, "expected_a": 74,
+      "expected_C": 146, "expected_F": 5328, "expected_G": 5330,
+      "_note": "largest-angle direction in D_72: d=73, e=1, C=2*d*e=146, F=a*b=74*72=5328, G=d^2+e^2=5329+1=5330. Sanity: C^2+F^2 = 21316+28387584 = 28408900 = 5330^2."
+    }
+  ]
+}

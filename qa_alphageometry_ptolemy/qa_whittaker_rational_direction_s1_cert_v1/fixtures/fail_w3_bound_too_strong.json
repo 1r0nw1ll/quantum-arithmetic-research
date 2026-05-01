@@ -1,0 +1,37 @@
+{
+  "schema_version": "QA_WHITTAKER_RATIONAL_DIRECTION_S1_CERT.v1",
+  "primary_source": "Whittaker, 1903. On the partial differential equations of mathematical physics. Math. Annalen 57:333-355. DOI: 10.1007/BF01444290.",
+  "certificate_id": "qa.cert.whittaker_rational_direction_s1.fail.w3_bound_too_strong.v1",
+  "cert_type": "qa_whittaker_rational_direction_s1_cert",
+  "title": "QA Whittaker Rational Direction S^1 FAIL [266] - W3 claimed sup-error bound too tight",
+  "created_utc": "2026-04-30T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: declares lipschitz_witness with claimed_sup_error_bound = 0.04 for g(theta)=sin(theta), L=1, m=9. The actual sup error (computed independently by validator on a 2048-point uniform test grid in [0, pi/2]) is approximately 0.0522 rad, which exceeds the claimed bound 0.04. Validator must produce a WRD_W3 error: 'declared sup_error_bound=0.04 too strong; actual sup ~ 0.0522'. The theorem bound L*Delta_max^+(9) ~ 0.1993 still holds (the THEOREM is fine); the specific OVERCLAIM in this fixture is rejected.",
+  "source_attribution": "(Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290.",
+  "m": 9,
+  "declared_count": 55,
+  "declared_g_max": 370,
+  "declared_delta_max_plus_upper_bound": 0.21,
+  "claimed_extra_seeds": [],
+  "claimed_d_overrides": [],
+  "run_w2_all_pairs": false,
+  "lipschitz_witness": {
+    "function_name": "sin",
+    "L": 1.0,
+    "test_grid_size": 2048,
+    "claimed_sup_error_bound": 0.04
+  },
+  "witnesses": [
+    {
+      "name": "overclaim_witness",
+      "function": "sin",
+      "L": 1,
+      "claimed_bound_value": 0.04,
+      "actual_sup_approximate": 0.0522,
+      "_note": "0.04 < 0.0522 actual; validator must catch this overclaim"
+    }
+  ],
+  "fail_ledger": {
+    "expected_failure_codes": ["WRD_W3"],
+    "rationale": "Empirical sup error of |sin(theta)-sin(NN(theta))| over 2048-point grid in [0, pi/2] with D_9^+ samples is ~0.0522 rad, which exceeds the claimed 0.04 bound. Validator independently recomputes and rejects."
+  }
+}

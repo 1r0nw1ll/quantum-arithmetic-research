@@ -1,0 +1,32 @@
+{
+  "schema_version": "QA_WHITTAKER_RATIONAL_DIRECTION_S1_CERT.v1",
+  "primary_source": "Whittaker, 1903. On the partial differential equations of mathematical physics. Math. Annalen 57:333-355. DOI: 10.1007/BF01444290.",
+  "certificate_id": "qa.cert.whittaker_rational_direction_s1.fail.nonqa_seed_form.v1",
+  "cert_type": "qa_whittaker_rational_direction_s1_cert",
+  "title": "QA Whittaker Rational Direction S^1 FAIL [266] - HARD-rule violation: d declared independently of b+e",
+  "created_utc": "2026-04-30T00:00:00Z",
+  "_fixture_purpose": "FAIL fixture: declares an explicit override claiming d=10 for seed (b=1, e=2). The HARD rule from CLAUDE.md and memory/feedback_raw_vs_mod_derived.md requires raw d=b+e (no independent assignment, no mod reduction in element computation). For (b=1, e=2), the only legal d is 1+2=3. Declaring d=10 violates the QA construction; validator must produce a WRD_HARD error rejecting the claim.",
+  "source_attribution": "(Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290.",
+  "m": 9,
+  "declared_count": 55,
+  "declared_g_max": 370,
+  "declared_delta_max_plus_upper_bound": 0.21,
+  "claimed_extra_seeds": [],
+  "claimed_d_overrides": [
+    {"b": 1, "e": 2, "claimed_d": 10}
+  ],
+  "run_w2_all_pairs": false,
+  "witnesses": [
+    {
+      "name": "hard_rule_violation",
+      "b": 1, "e": 2,
+      "raw_b_plus_e": 3,
+      "claimed_d_in_fixture": 10,
+      "_note": "Validator must reject claimed_d=10 because raw d=b+e=3 for any (b=1, e=2)"
+    }
+  ],
+  "fail_ledger": {
+    "expected_failure_codes": ["WRD_HARD"],
+    "rationale": "Element computation must use raw d=b+e per CLAUDE.md HARD rule. Declaring d=10 for (b=1, e=2) where b+e=3 is a Theorem NT-class violation (modifies derived coordinate); validator's claimed_d_overrides check produces WRD_HARD failure."
+  }
+}

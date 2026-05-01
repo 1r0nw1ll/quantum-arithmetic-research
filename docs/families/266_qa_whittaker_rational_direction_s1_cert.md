@@ -102,7 +102,7 @@ Standalone validation passed before registration. See bridge spec §9 for the fu
 
 **Layer ID convention.** `[266]` is definite once registered. Later Whittaker layer IDs are **unassigned** until each cert is built and reviewed. Do not reserve `[267]`-`[270]`: the current meta-validator already uses `[267]`-`[272]` for external-validation and doc/linter gate labels.
 
-- `qa_whittaker_rational_direction_s2_cert_v1` — 3D `S²` direction net (paired QA seeds or Wildberger 3D rational).
+- `qa_whittaker_rational_direction_s2_cert_v1` — 3D `S²` direction net; design draft at `docs/specs/QA_WHITTAKER_RATIONAL_DIRECTION_S2_CERT_DRAFT.md`.
 - `qa_whittaker_wave_kernel_bridge_cert_v1` — Whittaker 1903 angular wave-kernel approximation (claim type: discretization/approximation, not "QA proves Whittaker").
 - `qa_whittaker_two_scalar_potential_bridge_v1` — Whittaker 1904 Φ, Ψ scalar-potential mapping (rename Whittaker's scalars to avoid QA `F, G` collision).
 - `qa_maxwell_scalar_pair_reconstruction_cert_v1` — reconstruct EM field components from Layer 4's QA carrier pairs; initial framing must be guarded ("QA-compatible representation," NOT "QA derives EM").

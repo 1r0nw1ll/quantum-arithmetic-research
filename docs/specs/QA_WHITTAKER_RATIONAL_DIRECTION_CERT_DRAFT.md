@@ -262,6 +262,7 @@ The cert asserts only:
 
 ### Layer 2 — `qa_whittaker_rational_direction_s2_cert_v1` *(ID unassigned)*
 - 3D `S²` rational direction set: extend from one angular parameter to full direction cosines.
+- Design draft: `docs/specs/QA_WHITTAKER_RATIONAL_DIRECTION_S2_CERT_DRAFT.md`.
 - Construction options (decide at v2 design):
   - **Paired QA seeds** `((b₁,e₁), (b₂,e₂))` parameterizing two angular degrees of freedom.
   - **Wildberger 3D rational** — quadrance/spread on `S²` (see *Divine Proportions* §17–18).

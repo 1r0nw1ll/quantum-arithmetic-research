@@ -224,13 +224,39 @@ x_num*x_num + y_num*y_num + z_num*z_num == den*den
 
 Baseline table:
 
-| m | seed_count | raw_ratio_count | unique_R_count | raw_pair_count | unique_S2_direction_count | duplicate_count | z_sign_counts (+/0/-) | coordinate_plane_counts x0/y0/z0 | min_angle approx | min_cross_norm_sq_num |
-|---|-----------:|----------------:|---------------:|---------------:|--------------------------:|----------------:|----------------------:|---------------------------------:|-----------------:|----------------------:|
-| 3 | 7          | 14              | 10             | 100            | 100                       | 0               | 45/10/45              | 0/0/10                           | 0.283794109      | 49                    |
-| 5 | 19         | 38              | 26             | 676            | 676                       | 0               | 325/26/325            | 0/0/26                           | 0.283794109      | 49                    |
-| 9 | 55         | 110             | 74             | 5476           | 5476                      | 0               | 2701/74/2701          | 0/0/74                           | 0.283794109208   | 49                    |
+| m | seed_count | raw_ratio_count | unique_R_count | raw_pair_count | unique_S2_direction_count | duplicate_count | z_sign_counts (+/0/-) | coordinate_plane_counts x0/y0/z0 |
+|---|-----------:|----------------:|---------------:|---------------:|--------------------------:|----------------:|----------------------:|---------------------------------:|
+| 3 | 7          | 14              | 10             | 100            | 100                       | 0               | 45/10/45              | 0/0/10                           |
+| 5 | 19         | 38              | 26             | 676            | 676                       | 0               | 325/26/325            | 0/0/26                           |
+| 9 | 55         | 110             | 74             | 5476           | 5476                      | 0               | 2701/74/2701          | 0/0/74                           |
 
-Minimum separation witness for all three `m` values, using `S^2` rational points represented as `(x_num, y_num, z_num, den)`:
+Exact normalized spherical separation baseline:
+
+For distinct rational points `p_i=(x_i,y_i,z_i,den_i)` and `p_j=(x_j,y_j,z_j,den_j)`, v1 compares:
+
+```text
+sin_sq(theta_ij) =
+  cross_norm_sq_num / (den_i*den_i * den_j*den_j)
+```
+
+where:
+
+```text
+cross_norm_sq_num =
+  (y_i*z_j - z_i*y_j)*(y_i*z_j - z_i*y_j)
++ (z_i*x_j - x_i*z_j)*(z_i*x_j - x_i*z_j)
++ (x_i*y_j - y_i*x_j)*(x_i*y_j - y_i*x_j)
+```
+
+This is exact finite-set separation reporting, not an asymptotic lower-bound theorem.
+
+| m | unique_S2_direction_count | pair_count | true_min_normalized_sin_sq | observer_angle_for_true_min_sin_sq_witness approx | cross_norm_sq_num | witness p `(x_num,y_num,z_num,den)` | witness q `(x_num,y_num,z_num,den)` | dot |
+|---|--------------------------:|-----------:|----------------------------|-----------------------------------------:|------------------:|------------------------------------:|------------------------------------:|-----|
+| 3 | 100                       | 4950       | 187385728680000/271030516650563569 | 0.0262971822419 | 187385728680000 | (1200,1200,-527,1777) | (195000,202800,-81719,292969) | 520425913/520605913 |
+| 5 | 676                       | 228150     | 1187255997390145600/39768198848578581524641 | 0.00546394584372 | 1187255997390145600 | (7320,7320,-3479,10921) | (12204880,12304920,-5750199,18260201) | 199416678321/199419655121 |
+| 9 | 5476                      | 14990550   | 33955705631283190632000/39974350779836816952622268161 | 0.000921649372821 | 33955705631283190632000 | (65160,65160,-32039,97561) | (1368099360,1369989000,-671742071,2049342121) | 199935781750369/199935866666881 |
+
+Previous low-cross-numerator witness:
 
 ```text
 p = (3, 4, 0, 5)
@@ -238,6 +264,8 @@ q = (4, 3, 0, 5)
 dot = 24/25
 cross_norm_sq_num = 49
 ```
+
+This is a useful small integer witness, but it is **not** the true minimum spherical separation. Normalized separation depends on denominators.
 
 `R_m` provenance collision baseline:
 
@@ -254,7 +282,7 @@ Interpretation:
 - Therefore v1 should use pooled `R_m` for geometry, while fixtures preserve `C/F` channel provenance for audit lineage.
 - `z=0` equator points occur exactly from `r*r + s*s = 1`.
 - `x=0` and `y=0` are absent because the QA ratios used in v1 are positive.
-- W3D_4 should report exact separation data, not claim asymptotic lower-bound behavior.
+- W3D_4 should report exact normalized finite-set separation data, not claim asymptotic lower-bound behavior.
 
 ---
 
@@ -274,7 +302,7 @@ v1 includes:
 W3D_1 exact rational S^2 construction
 W3D_2 finite enumeration and duplicate accounting
 W3D_3 chart and coverage discipline
-W3D_4 exact non-equality and spherical separation data
+W3D_4 exact non-equality and normalized spherical separation reporting
 ```
 
 v1 defers:
@@ -290,7 +318,7 @@ Whittaker wave-kernel approximation
 Coverage claim for v1:
 
 ```text
-chart coverage only: rational north-stereographic chart generated from positive QA ratios R_m x R_m
+chart coverage only: rational inverse stereographic chart generated from positive QA ratios R_m x R_m, excluding the south pole in the full rational chart
 ```
 
 Pass/fail logic must use exact integer or `Fraction` construction only. Observer-side floats may appear only in optional reporting of spherical angles or approximate separation summaries, never in v1 pass/fail logic.
@@ -312,27 +340,40 @@ For declared `m`, the validator builds `R_m`, then `D_m^(2)`.
 The fixture must declare:
 
 ```text
-raw_parameter_count
+seed_count
+raw_ratio_count
+unique_R_count
 raw_pair_count
-unique_direction_count
+unique_S2_direction_count
 duplicate_count
+R_channel_provenance_collision_count
 ```
 
-The validator recomputes all four exactly.
+The validator recomputes all declared count fields exactly.
+
+Optional reporting fields:
+
+```text
+z_sign_counts
+coordinate_plane_counts
+separation_witness
+```
+
+Fixtures must preserve labeled `C/F` channel provenance as metadata, even though geometry uses pooled `R_m`.
 
 ### W3D_3 — Chart and Coverage Discipline
 
 The cert must declare which part of the sphere is covered:
 
 ```text
-chart: north_stereographic
+chart: inverse_stereographic_excluding_south_pole
 parameter_source: R_m x R_m
 coverage_claim: one rational chart image from positive QA ratios
 ```
 
-Sign reflections, antipodal closure, octant closure, or full-sphere closure are not automatic. If included, each must be declared and checked explicitly.
+The chart is the rational inverse stereographic chart from the parameter plane to `S^2`, excluding only the south pole in the full rational chart. Sign reflections, antipodal closure, octant closure, or full-sphere closure are not automatic. If included, each must be declared and checked explicitly.
 
-### W3D_4 — Exact Non-Equality and Spherical Separation Data
+### W3D_4 — Exact Non-Equality and Normalized Spherical Separation Reporting
 
 For distinct rational vectors `v_i`, `v_j`, compute exact dot and cross data:
 
@@ -351,7 +392,25 @@ cross = (
 )
 ```
 
-At minimum, v1 should validate exact non-equality after deduplication. A lower separation bound may be added only if the proof is clean and the declared bound is conservative.
+Then report exact normalized separation data:
+
+```text
+sin_sq(theta_ij) =
+  cross_norm_sq_num / (den_i*den_i * den_j*den_j)
+```
+
+v1 should validate exact non-equality after deduplication and report:
+
+```text
+dot_num
+dot_den
+cross_norm_sq_num
+normalized_sin_sq_num
+normalized_sin_sq_den
+witness_pair
+```
+
+No asymptotic, across-`m`, or density lower-bound claim is made unless separately proven.
 
 ### W3D_5 — Spherical Lipschitz Nearest-Neighbor Bound
 
@@ -454,7 +513,7 @@ Layer 2 claims only exact finite rational `S^2` geometry under declared QA-deriv
 
 Before implementation, choose:
 
-1. The exact declared counts for `m in {3, 5, 9}` after a read-only enumeration check.
-2. Whether W3D_4 includes a conservative exact lower-bound claim or only reports exact minimum separation data.
+1. Whether the recorded read-only counts for `m in {3, 5, 9}` are accepted as fixture targets.
+2. Whether W3D_4 fixture names use `normalized_sin_sq` or `spherical_separation` terminology.
 3. Whether fixture names should use `s2` or `w3d` prefixes.
 4. The next free cert-family ID at build time.

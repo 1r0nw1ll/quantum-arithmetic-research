@@ -167,7 +167,39 @@ This keeps the insight available without contaminating the exact rational `S^2` 
 
 ---
 
-## 6. Proposed Gates
+## 6. Geodesy Bridge
+
+Layer 2 also connects to existing QA geodesy and navigation work as a precedent for projection discipline:
+
+- `[164]` **QA Gnomonic RT Cert**: great-circle and projection geometry precedent.
+- `[165]` **QA Celestial Nav Cert**: spherical direction and sight-reduction precedent.
+- `[168]` **QA Ellipsoid Geodesic Cert**: ellipsoid/geodesic deformation precedent.
+- `[169]` **QA Ellipsoid Slice Cert**: latitude and meridian slice precedent.
+- `[176]` **QA Inertial Nav Cert**: observer-projection and navigation framing precedent.
+
+Key interpretation:
+
+```text
+Layer 2 certifies exact rational points on S^2.
+Existing QA geodesy/navigation certs show that QA already has a tested projection discipline from spherical direction geometry into navigation and ellipsoidal/geodesic contexts.
+Therefore the Whittaker S^2 layer should be treated as a spherical direction substrate.
+Ellipsoidal, focal, geodesic, or Earth-specific interpretations belong to later projection/deformation layers, not to the Layer 2 cert itself.
+```
+
+Guardrails:
+
+```text
+Do not claim Earth geodesy follows from Whittaker.
+Do not claim Whittaker proves geodesy.
+Do not claim the S^2 net is already an ellipsoid.
+Use the geodesy work only as QA precedent for projection discipline.
+```
+
+This bridge keeps the design aligned with the circle/ellipse and sphere/ellipsoid projection note: `S^2` is the symmetric/aligned-focus direction substrate; geodesy and ellipsoid models are deformation or observer-projection layers.
+
+---
+
+## 7. Proposed Gates
 
 ### W3D_1 — Exact Rational `S^2` Construction
 
@@ -245,7 +277,7 @@ This gate may be design-only in v1 if a deterministic spherical test grid is not
 
 ---
 
-## 7. Proposed Fixtures
+## 8. Proposed Fixtures
 
 Do not create these until build authorization.
 
@@ -262,7 +294,7 @@ Keep `m` small until the enumeration growth is measured. The raw pair count grow
 
 ---
 
-## 8. Validator Requirements
+## 9. Validator Requirements
 
 When built, the validator should be:
 
@@ -281,7 +313,7 @@ Exact construction should use integers and `fractions.Fraction`. Floating point 
 
 ---
 
-## 9. Non-Claims
+## 10. Non-Claims
 
 Layer 2 does not claim:
 
@@ -292,12 +324,15 @@ Layer 2 does not claim:
 - The rational `S^2` set is dense as `m -> infinity`.
 - Paired QA seed angles are identical to Whittaker's spherical coordinates.
 - Sphere/ellipsoid or circle/ellipse projection language proves a physical focal ontology.
+- Earth geodesy follows from Whittaker or from the `S^2` net.
+- Whittaker proves geodesy.
+- The `S^2` net is already an ellipsoid.
 
 Layer 2 claims only exact finite rational `S^2` geometry under declared QA-derived parameter sources.
 
 ---
 
-## 10. Next Decision Before Build
+## 11. Next Decision Before Build
 
 Before implementation, choose:
 
@@ -305,4 +340,3 @@ Before implementation, choose:
 2. Whether v1 includes only exact geometry gates W3D_1-W3D_4, or also includes W3D_5 observer-side Lipschitz sampling.
 3. Whether sign reflections or antipodal closure are included in v1 or deferred.
 4. The next free cert-family ID at build time.
-

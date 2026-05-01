@@ -248,13 +248,36 @@ cross_norm_sq_num =
 + (x_i*y_j - y_i*x_j)*(x_i*y_j - y_i*x_j)
 ```
 
-This is exact finite-set separation reporting, not an asymptotic lower-bound theorem.
+This gives both exact finite-set separation reporting and a finite rational separation theorem: for any two distinct generated directions with packet denominators `den_i` and `den_j`,
+
+```text
+sin_sq(theta_ij)
+= cross_norm_sq_num / (den_i*den_i * den_j*den_j)
+>= 1 / (den_i*den_i * den_j*den_j)
+>= 1 / (N_max(m)*N_max(m)*N_max(m)*N_max(m))
+```
+
+Equivalently:
+
+```text
+sin(theta_ij) >= 1 / (N_max(m)*N_max(m))
+```
+
+where `N_max(m)` is the maximum packet denominator in the generated finite set `D_m^(2)`. This is a finite denominator bound, not a density or equidistribution claim.
 
 | m | unique_S2_direction_count | pair_count | true_min_normalized_sin_sq | observer_angle_for_true_min_sin_sq_witness approx | cross_norm_sq_num | witness p `(x_num,y_num,z_num,den)` | witness q `(x_num,y_num,z_num,den)` | dot |
 |---|--------------------------:|-----------:|----------------------------|-----------------------------------------:|------------------:|------------------------------------:|------------------------------------:|-----|
 | 3 | 100                       | 4950       | 187385728680000/271030516650563569 | 0.0262971822419 | 187385728680000 | (1200,1200,-527,1777) | (195000,202800,-81719,292969) | 520425913/520605913 |
 | 5 | 676                       | 228150     | 1187255997390145600/39768198848578581524641 | 0.00546394584372 | 1187255997390145600 | (7320,7320,-3479,10921) | (12204880,12304920,-5750199,18260201) | 199416678321/199419655121 |
 | 9 | 5476                      | 14990550   | 33955705631283190632000/39974350779836816952622268161 | 0.000921649372821 | 33955705631283190632000 | (65160,65160,-32039,97561) | (1368099360,1369989000,-671742071,2049342121) | 199935781750369/199935866666881 |
+
+Finite denominator bound targets:
+
+| m | N_max(m) | N_max(m)*N_max(m) | N_max(m)^4 denominator bound |
+|---|---------:|------------------:|-----------------------------:|
+| 3 | 1260041  | 1587703321681     | 2520801837676880964665761    |
+| 5 | 175808753 | 30908717631415009 | 955348825618545044151819590470081 |
+| 9 | 32889577313 | 1081724295827804299969 | 1170127452184159071249130052757166133400961 |
 
 Previous low-cross-numerator witness:
 
@@ -282,7 +305,7 @@ Interpretation:
 - Therefore v1 should use pooled `R_m` for geometry, while fixtures preserve `C/F` channel provenance for audit lineage.
 - `z=0` equator points occur exactly from `r*r + s*s = 1`.
 - `x=0` and `y=0` are absent because the QA ratios used in v1 are positive.
-- W3D_4 should report exact normalized finite-set separation data, not claim asymptotic lower-bound behavior.
+- W3D_4 should prove the finite rational denominator lower bound, report exact normalized finite-set separation data, and avoid density/equidistribution or convergence claims.
 
 ---
 
@@ -302,7 +325,7 @@ v1 includes:
 W3D_1 exact rational S^2 construction
 W3D_2 finite enumeration and duplicate accounting
 W3D_3 chart and coverage discipline
-W3D_4 exact non-equality and normalized spherical separation reporting
+W3D_4 exact non-equality, finite denominator separation theorem, and normalized spherical separation reporting
 ```
 
 v1 defers:
@@ -373,7 +396,7 @@ coverage_claim: one rational chart image from positive QA ratios
 
 The chart is the rational inverse stereographic chart from the parameter plane to `S^2`, excluding only the south pole in the full rational chart. Sign reflections, antipodal closure, octant closure, or full-sphere closure are not automatic. If included, each must be declared and checked explicitly.
 
-### W3D_4 — Exact Non-Equality and Normalized Spherical Separation Reporting
+### W3D_4 — Finite Denominator Separation Theorem and Reporting
 
 For distinct rational vectors `v_i`, `v_j`, compute exact dot and cross data:
 
@@ -399,7 +422,39 @@ sin_sq(theta_ij) =
   cross_norm_sq_num / (den_i*den_i * den_j*den_j)
 ```
 
-v1 should validate exact non-equality after deduplication and report:
+Theorem:
+
+For any two distinct generated rational `S^2` directions `p_i` and `p_j`, represented as integer packets `(x_i,y_i,z_i,den_i)` and `(x_j,y_j,z_j,den_j)`:
+
+```text
+sin_sq(theta_ij)
+= cross_norm_sq_num / (den_i*den_i * den_j*den_j)
+>= 1 / (den_i*den_i * den_j*den_j)
+>= 1 / (N_max(m)*N_max(m)*N_max(m)*N_max(m))
+```
+
+Equivalently:
+
+```text
+sin(theta_ij) >= 1 / (N_max(m)*N_max(m))
+```
+
+Proof sketch:
+
+`cross_norm_sq_num` is a sum of integer squares, so it is a non-negative integer. It is zero exactly when the two integer direction packets are parallel. In this v1 chart, all generated ratios satisfy `r > 0` and `s > 0`, hence all generated packets have `x > 0` and `y > 0`; antipodal pairs are therefore absent from the generated set. Since every generated packet lies on the unit sphere and the set is deduplicated by rational direction, zero cross product implies the same direction. Therefore for distinct generated directions, `cross_norm_sq_num >= 1`. Substitution into the exact normalized `sin_sq` formula gives the per-pair denominator bound, and `den_i <= N_max(m)`, `den_j <= N_max(m)` gives the finite-set bound.
+
+Validator implication:
+
+W3D_4 should check all pairs for `m in {3, 5, 9}`:
+
+```text
+exact non-equality after deduplication
+cross_norm_sq_num >= 1
+normalized_sin_sq >= 1 / (den_i*den_i * den_j*den_j)
+normalized_sin_sq >= 1 / (N_max(m)*N_max(m)*N_max(m)*N_max(m))
+```
+
+Then report:
 
 ```text
 dot_num
@@ -407,10 +462,12 @@ dot_den
 cross_norm_sq_num
 normalized_sin_sq_num
 normalized_sin_sq_den
+N_max
+N_max_fourth_power
 witness_pair
 ```
 
-No asymptotic, across-`m`, or density lower-bound claim is made unless separately proven.
+This is a finite rational separation theorem for each generated `D_m^(2)`. It is not a density, equidistribution, or convergence claim.
 
 ### W3D_5 — Spherical Lipschitz Nearest-Neighbor Bound
 

@@ -2,7 +2,7 @@
 
 ## What this is
 
-**Layer 1** of the Whittaker → QA development ladder (see [bridge spec §8](../specs/QA_WHITTAKER_RATIONAL_DIRECTION_CERT_DRAFT.md)). Layer 1 establishes the QA-rational direction net on the unit circle as a finite, exactly-enumerable rational sample-net with two structural theorems on the closed first quadrant. Future layers extend to 3D (Layer 2 → cert [267]), Whittaker 1903 wave-kernel approximation (Layer 3 → cert [268]), Whittaker 1904 two-scalar-potential bridge (Layer 4 → cert [269]), and Maxwell scalar-pair reconstruction (Layer 5 → cert [270]).
+**Layer 1** of the Whittaker → QA development ladder (see [bridge spec §8](../specs/QA_WHITTAKER_RATIONAL_DIRECTION_CERT_DRAFT.md)). Layer 1 establishes the QA-rational direction net on the unit circle as a finite, exactly-enumerable rational sample-net with two structural theorems on the closed first quadrant. Future layers extend to 3D, Whittaker 1903 wave-kernel approximation, Whittaker 1904 two-scalar-potential bridge, and Maxwell scalar-pair reconstruction. Those later layer IDs are unassigned until build time.
 
 **Primary source**:
 - E. T. Whittaker (Whittaker, 1903). *On the partial differential equations of mathematical physics.* Math. Annalen 57:333–355. DOI: 10.1007/BF01444290. (Whittaker, 1903) is the **motivation** for studying QA-rational angular nets; the cert certifies only the QA-side discretization layer, not Whittaker's wave-equation theorem itself.
@@ -32,7 +32,7 @@ sup_{θ ∈ [0, π/2]} |g(θ) − g(θ_NN(θ))| ≤ L · Δ_max⁺(m)
 **Claim scope**:
 - Cert does **not** prove Whittaker's wave-equation theorem, Maxwell's equations, electromagnetism, two-scalar-potential reductions, or any physics.
 - Cert does **not** claim density of `D_m` in `S¹` as `m → ∞` (deferred to v2).
-- Cert does **not** cover 3D `S²` direction sets (Layer 2 / cert [267]).
+- Cert does **not** cover 3D `S²` direction sets (Layer 2; future ID unassigned).
 - Cert does **not** include the half-gap tighter constant `L · Δ_max⁺/2` (loose form is used; sharp-constant improvement reserved).
 
 ## Bit-exact predictions (verified)
@@ -100,10 +100,10 @@ Standalone validation passed before registration. See bridge spec §9 for the fu
 
 ## Future layers (research ladder)
 
-**Layer ID convention.** `[266]` is definite once registered. The IDs below are **PROVISIONAL** — reserved by intent, not yet claimed in the registry. If parallel work claims any of these IDs first, the corresponding layer renumbers cosmetically (per CLAUDE.md §Cert Family-ID Collision Avoidance).
+**Layer ID convention.** `[266]` is definite once registered. Later Whittaker layer IDs are **unassigned** until each cert is built and reviewed. Do not reserve `[267]`-`[270]`: the current meta-validator already uses `[267]`-`[272]` for external-validation and doc/linter gate labels.
 
-- **[267]** (PROVISIONAL) `qa_whittaker_rational_direction_s2_cert_v1` — 3D `S²` direction net (paired QA seeds or Wildberger 3D rational).
-- **[268]** (PROVISIONAL) `qa_whittaker_wave_kernel_bridge_cert_v1` — Whittaker 1903 angular wave-kernel approximation (claim type: discretization/approximation, not "QA proves Whittaker").
-- **[269]** (PROVISIONAL) `qa_whittaker_two_scalar_potential_bridge_v1` — Whittaker 1904 Φ, Ψ scalar-potential mapping (rename Whittaker's scalars to avoid QA `F, G` collision).
-- **[270]** (PROVISIONAL) `qa_maxwell_scalar_pair_reconstruction_cert_v1` — reconstruct EM field components from Layer 4's QA carrier pairs; initial framing must be guarded ("QA-compatible representation," NOT "QA derives EM").
+- `qa_whittaker_rational_direction_s2_cert_v1` — 3D `S²` direction net (paired QA seeds or Wildberger 3D rational).
+- `qa_whittaker_wave_kernel_bridge_cert_v1` — Whittaker 1903 angular wave-kernel approximation (claim type: discretization/approximation, not "QA proves Whittaker").
+- `qa_whittaker_two_scalar_potential_bridge_v1` — Whittaker 1904 Φ, Ψ scalar-potential mapping (rename Whittaker's scalars to avoid QA `F, G` collision).
+- `qa_maxwell_scalar_pair_reconstruction_cert_v1` — reconstruct EM field components from Layer 4's QA carrier pairs; initial framing must be guarded ("QA-compatible representation," NOT "QA derives EM").
 - **Layer 6 (research track, no cert ID)** — Hertz/Debye potentials, longitudinal/scalar interpretations, Bearden/Pond/SVP cross-references; primary-source-gated, hostile-reviewed; cert IDs assigned only after Layers 1–5 are stable.

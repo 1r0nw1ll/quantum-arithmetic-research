@@ -253,14 +253,14 @@ The cert asserts only:
 
 **v1 is the controlled seed crystal, not the endpoint.** The full research program is staged so the cert ecosystem does not overclaim before each layer is ready.
 
-**Layer ID convention.** `[266]` is definite now that it is registered in `qa_meta_validator.py`. Layer 2–5 IDs `[267]`–`[270]` below are **PROVISIONAL** — they are reserved by intent but not claimed in the registry until each cert is built and reviewed. If parallel work claims any of these IDs first, the corresponding layer renumbers cosmetically (per CLAUDE.md §Cert Family-ID Collision Avoidance).
+**Layer ID convention.** `[266]` is definite now that it is registered in `qa_meta_validator.py`. Layer 2-5 cert-family IDs are **unassigned** until each layer is built and reviewed. Do not reserve `[267]`-`[270]`: the current meta-validator already uses `[267]`-`[272]` for external-validation and doc/linter gate labels, so future Whittaker certs must claim the next free family ID at build time.
 
 ### Layer 1 — `[266]` `qa_whittaker_rational_direction_s1_cert_v1` *(this cert)*
 - 2D `S¹` rational direction net; finite, exactly enumerable.
 - Whittaker 1903-inspired angular decomposition; **no EM or wave claim** in this layer.
 - Status: build prep authorized 2026-04-30.
 
-### Layer 2 — `[267]` (PROVISIONAL) `qa_whittaker_rational_direction_s2_cert_v1`
+### Layer 2 — `qa_whittaker_rational_direction_s2_cert_v1` *(ID unassigned)*
 - 3D `S²` rational direction set: extend from one angular parameter to full direction cosines.
 - Construction options (decide at v2 design):
   - **Paired QA seeds** `((b₁,e₁), (b₂,e₂))` parameterizing two angular degrees of freedom.
@@ -268,17 +268,17 @@ The cert asserts only:
   - Hybrid: paired seeds with a Wildberger-style spread invariant.
 - Sharp-claim form: `D_m^{(2)} ⊂ S²` finite; angular separation lower bound from spherical cross-product integrality; spherical-cap nearest-neighbor Lipschitz error bound.
 
-### Layer 3 — `[268]` (PROVISIONAL) `qa_whittaker_wave_kernel_bridge_cert_v1`
+### Layer 3 — `qa_whittaker_wave_kernel_bridge_cert_v1` *(ID unassigned)*
 - Bridge from Layer 2's direction net to Whittaker 1903's full angular wave-kernel decomposition.
 - Sharp-claim form: a discrete superposition of plane-wave packets indexed by `D_m^{(2)}` approximates a smooth wave-equation solution `ψ` with sup error scaling explicitly in `m`.
 - Claim type: **discretization / approximation / observer-projection**, NOT "QA proves Whittaker."
 
-### Layer 4 — `[269]` (PROVISIONAL) `qa_whittaker_two_scalar_potential_bridge_v1`
+### Layer 4 — `qa_whittaker_two_scalar_potential_bridge_v1` *(ID unassigned)*
 - Whittaker 1904 two-scalar-potential reduction.
 - **Naming guardrail**: rename Whittaker's scalars to `Φ, Ψ` to avoid collision with QA-reserved `F = ab`, `G = d² + e²`.
 - Sharp-claim form: define a QA carrier-pair representation `(Φ_{(b,e,d,a)}, Ψ_{(b,e,d,a)})`; certify that the two-scalar form spans the same direction-indexed packet space as the four-scalar (potential + vector) form, *under the QA-restricted direction subset*.
 
-### Layer 5 — `[270]` (PROVISIONAL) `qa_maxwell_scalar_pair_reconstruction_cert_v1`
+### Layer 5 — `qa_maxwell_scalar_pair_reconstruction_cert_v1` *(ID unassigned)*
 - Reconstruct Maxwell field components from Layer 4's QA carrier pairs via derivative/projection operations.
 - **Initial framing must be guarded**:
   - ✅ "QA-compatible representation of scalar-potential-generated EM fields."

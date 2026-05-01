@@ -199,7 +199,66 @@ This bridge keeps the design aligned with the circle/ellipse and sphere/ellipsoi
 
 ---
 
-## 7. Proposed Gates
+## 7. Read-only Enumeration Baseline
+
+Read-only enumeration was run for `m in {3, 5, 9}` before any validator, fixture, registry, or ID work.
+
+Construction checked:
+
+```text
+R_m = { C/G, F/G : (b,e) in {1..m}^2, gcd(b,e)=1 }
+D_m^(2) = { S(r,s) : r in R_m, s in R_m }
+```
+
+Every generated `S^2` point was represented as:
+
+```text
+(x_num, y_num, z_num, den)
+```
+
+and checked exactly by:
+
+```text
+x_num*x_num + y_num*y_num + z_num*z_num == den*den
+```
+
+Baseline table:
+
+| m | seed_count | raw_ratio_count | unique_R_count | raw_pair_count | unique_S2_direction_count | duplicate_count | z_sign_counts (+/0/-) | coordinate_plane_counts x0/y0/z0 | min_angle approx | min_cross_norm_sq_num |
+|---|-----------:|----------------:|---------------:|---------------:|--------------------------:|----------------:|----------------------:|---------------------------------:|-----------------:|----------------------:|
+| 3 | 7          | 14              | 10             | 100            | 100                       | 0               | 45/10/45              | 0/0/10                           | 0.283794109      | 49                    |
+| 5 | 19         | 38              | 26             | 676            | 676                       | 0               | 325/26/325            | 0/0/26                           | 0.283794109      | 49                    |
+| 9 | 55         | 110             | 74             | 5476           | 5476                      | 0               | 2701/74/2701          | 0/0/74                           | 0.283794109208   | 49                    |
+
+Minimum separation witness for all three `m` values, using `S^2` rational points represented as `(x_num, y_num, z_num, den)`:
+
+```text
+p = (3, 4, 0, 5)
+q = (4, 3, 0, 5)
+dot = 24/25
+cross_norm_sq_num = 49
+```
+
+`R_m` provenance collision baseline:
+
+| m | ratio values seen in both C and F channels |
+|---|-------------------------------------------:|
+| 3 | 4                                          |
+| 5 | 12                                         |
+| 9 | 36                                         |
+
+Interpretation:
+
+- Unique `S^2` duplicates are zero for `m in {3, 5, 9}`. The v1 duplicate gate can be exact accounting, but duplicate handling should not be the main theorem.
+- `R_m` provenance collisions are real and QA-relevant: some rational parameter values are produced by both the `C/G` and `F/G` channels.
+- Therefore v1 should use pooled `R_m` for geometry, while fixtures preserve `C/F` channel provenance for audit lineage.
+- `z=0` equator points occur exactly from `r*r + s*s = 1`.
+- `x=0` and `y=0` are absent because the QA ratios used in v1 are positive.
+- W3D_4 should report exact separation data, not claim asymptotic lower-bound behavior.
+
+---
+
+## 8. Proposed Gates
 
 Layer 2 v1 should be an exact-geometry substrate cert only.
 
@@ -330,7 +389,7 @@ Layer 3      = Whittaker wave-kernel approximation
 
 ---
 
-## 8. Proposed Fixtures
+## 9. Proposed Fixtures
 
 Do not create these until build authorization.
 
@@ -353,7 +412,7 @@ Expected v1 fixture scope:
 
 ---
 
-## 9. Validator Requirements
+## 10. Validator Requirements
 
 When built, the validator should be:
 
@@ -372,7 +431,7 @@ Exact construction should use integers and `fractions.Fraction`. Floating point 
 
 ---
 
-## 10. Non-Claims
+## 11. Non-Claims
 
 Layer 2 does not claim:
 
@@ -391,7 +450,7 @@ Layer 2 claims only exact finite rational `S^2` geometry under declared QA-deriv
 
 ---
 
-## 11. Next Decision Before Build
+## 12. Next Decision Before Build
 
 Before implementation, choose:
 

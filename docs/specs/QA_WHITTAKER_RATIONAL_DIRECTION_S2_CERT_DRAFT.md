@@ -201,6 +201,41 @@ This bridge keeps the design aligned with the circle/ellipse and sphere/ellipsoi
 
 ## 7. Proposed Gates
 
+Layer 2 v1 should be an exact-geometry substrate cert only.
+
+v1 fixture moduli:
+
+```text
+m in {3, 5, 9}
+```
+
+v1 includes:
+
+```text
+W3D_1 exact rational S^2 construction
+W3D_2 finite enumeration and duplicate accounting
+W3D_3 chart and coverage discipline
+W3D_4 exact non-equality and spherical separation data
+```
+
+v1 defers:
+
+```text
+W3D_5 observer-side spherical Lipschitz sampling
+sign-reflection full-sphere closure
+antipodal closure
+density or equidistribution claims
+Whittaker wave-kernel approximation
+```
+
+Coverage claim for v1:
+
+```text
+chart coverage only: rational north-stereographic chart generated from positive QA ratios R_m x R_m
+```
+
+Pass/fail logic must use exact integer or `Fraction` construction only. Observer-side floats may appear only in optional reporting of spherical angles or approximate separation summaries, never in v1 pass/fail logic.
+
 ### W3D_1 — Exact Rational `S^2` Construction
 
 Every generated point satisfies:
@@ -261,6 +296,8 @@ At minimum, v1 should validate exact non-equality after deduplication. A lower s
 
 ### W3D_5 — Spherical Lipschitz Nearest-Neighbor Bound
 
+**Deferred from v1.**
+
 For an observer-side `L`-Lipschitz profile `g` on the covered spherical region, define:
 
 ```text
@@ -274,6 +311,22 @@ sup |g(omega) - g(NN(omega))| <= L * Delta_max_sphere
 ```
 
 This gate may be design-only in v1 if a deterministic spherical test grid is not yet settled. If implemented, all continuous grids and trigonometric functions must be tagged as observer-side checks.
+
+Why deferred:
+
+```text
+Layer 2 v1 should first freeze exact rational S^2 construction and duplicate/separation accounting.
+Spherical Lipschitz sampling requires a deterministic spherical test grid and observer-side numerical nearest-neighbor checks.
+That belongs after the exact S^2 substrate is validated.
+```
+
+Planned sequence:
+
+```text
+Layer 2 v1   = exact rational S^2 substrate
+Layer 2 v1.1 = spherical Lipschitz sampling
+Layer 3      = Whittaker wave-kernel approximation
+```
 
 ---
 
@@ -291,6 +344,12 @@ fixtures/fail_s2_overclaimed_full_sphere.json
 ```
 
 Keep `m` small until the enumeration growth is measured. The raw pair count grows as `|R_m|*|R_m|`.
+
+Expected v1 fixture scope:
+
+- `m=3`: smallest readable exact-sphere witness.
+- `m=5`: duplicate accounting and exact chart summary.
+- `m=9`: first nontrivial continuity with the Layer 1 certified grid scale.
 
 ---
 
@@ -336,7 +395,7 @@ Layer 2 claims only exact finite rational `S^2` geometry under declared QA-deriv
 
 Before implementation, choose:
 
-1. Small `m` values for v1 fixtures.
-2. Whether v1 includes only exact geometry gates W3D_1-W3D_4, or also includes W3D_5 observer-side Lipschitz sampling.
-3. Whether sign reflections or antipodal closure are included in v1 or deferred.
+1. The exact declared counts for `m in {3, 5, 9}` after a read-only enumeration check.
+2. Whether W3D_4 includes a conservative exact lower-bound claim or only reports exact minimum separation data.
+3. Whether fixture names should use `s2` or `w3d` prefixes.
 4. The next free cert-family ID at build time.

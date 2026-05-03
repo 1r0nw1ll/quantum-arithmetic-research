@@ -1,0 +1,50 @@
+{
+  "schema_version": "QA_WHITTAKER_SCALAR_ANGULAR_KERNEL_SAMPLING_CERT.v1",
+  "candidate_family_id": 274,
+  "cert_slug": "qa_whittaker_scalar_angular_kernel_sampling_cert_v1",
+  "expected_result": "FAIL",
+  "expected_error_code": "WKB_5",
+  "source_attribution": "Whittaker 1903, On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI 10.1007/BF01444290; motivation only.",
+  "non_claims": [
+    "Does not prove Whittaker kernel.",
+    "Does not prove spherical quadrature.",
+    "Does not prove density.",
+    "Does not prove convergence.",
+    "Does not prove Maxwell equations.",
+    "Does not prove electromagnetism.",
+    "Does not prove scalar-potential physics.",
+    "Does not reconstruct any physical field."
+  ],
+  "dependency": {
+    "family_id": 273,
+    "slug": "qa_whittaker_rational_direction_s2_cert_v1",
+    "chart": "inverse_stereographic_excluding_south_pole",
+    "registered": true
+  },
+  "m": 3,
+  "profile_name": "const",
+  "weight_rule": "uniform_points",
+  "pass_fail_basis": "exact_fraction_or_hash_witness",
+  "unique_S2_direction_count": 100,
+  "discrete_uniform_average_witness": {
+    "mode": "direct_fraction",
+    "numerator": "1",
+    "denominator": "1",
+    "numerator_digit_count": 1,
+    "denominator_digit_count": 1,
+    "canonical_fraction_sha256": "253d950f11ebdbeb4c2d54c57803deb69869b832a2e03010620d462a85d15290",
+    "canonical_fraction_sha256_16": "253d950f11ebdbeb",
+    "observer_float_display": 1.0
+  },
+  "observer_diagnostics": {
+    "display_only": true,
+    "uses_observer_float_for_pass_fail": false,
+    "claims_spherical_quadrature": true,
+    "claims_whittaker_kernel_error": false,
+    "claims_physics": false,
+    "claims_maxwell_em": false,
+    "claims_scalar_potential": false,
+    "claims_density": false,
+    "claims_convergence": false
+  }
+}

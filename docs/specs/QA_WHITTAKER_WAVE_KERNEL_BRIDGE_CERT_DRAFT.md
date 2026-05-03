@@ -191,8 +191,10 @@ Observer-side checks:
 ```text
 observer_float_discrete_uniform_average
 optional non-Whittaker, non-physical reference display
-optional convergence trend across m={3,5,9}
 ```
+
+Cross-m displays may be included only as non-pass/fail observer notes and
+must not be described as convergence.
 
 For the first build, the strongest exact target is not convergence. It is exact recomputation:
 
@@ -270,8 +272,18 @@ string:
 num/den
 ```
 
-and hash that canonical string. Observer floats are display only and must not
-be used for pass/fail.
+and compute:
+
+```text
+canonical_fraction_sha256 = sha256((num + "/" + den).encode("ascii")).hexdigest()
+```
+
+The full `canonical_fraction_sha256` is the pass/fail hash field. A truncated
+`canonical_fraction_sha256_16` may be used for display/reporting only unless a
+future build explicitly declares a truncated-hash rule. The
+`numerator_digit_count` and `denominator_digit_count` fields are also
+pass/fail witnesses. Observer floats are display only and must not be used for
+pass/fail.
 
 Read-only exact witness fingerprints:
 
@@ -378,10 +390,16 @@ fixtures/fail_wkb_bad_dependency_id.json
 fixtures/fail_wkb_unknown_profile.json
 fixtures/fail_wkb_wrong_sample_count.json
 fixtures/fail_wkb_wrong_superposition.json
+fixtures/fail_wkb_wrong_hash_witness.json
+fixtures/fail_wkb_wrong_digit_count.json
+fixtures/fail_wkb_float_used_as_pass_fail.json
 fixtures/fail_wkb_overclaimed_spherical_integral.json
+fixtures/fail_wkb_overclaimed_whittaker_error.json
 ```
 
-The last FAIL fixture is important: it should reject language claiming that `uniform_points` is a certified spherical area quadrature.
+The overclaim FAIL fixtures are important: they should reject language claiming
+that `uniform_points` is a certified spherical area quadrature, a Whittaker
+kernel error, or a physical error.
 
 ---
 

@@ -13,7 +13,7 @@ Dependencies:
 
 **Primary source anchor**: E. T. Whittaker, "On the partial differential equations of mathematical physics," *Math. Annalen* **57**:333-355, 1903. DOI 10.1007/BF01444290.
 
-**Purpose**: Design a controlled scalar wave-kernel approximation cert over the exact rational `S2` direction substrate certified by `[273]`.
+**Purpose**: Design a source-inspired scalar angular-kernel sampling cert over the exact rational `S2` direction substrate certified by `[273]`.
 
 This draft does **not** assign a cert ID, does **not** create a validator, does **not** create fixtures, and does **not** modify the registry.
 
@@ -29,9 +29,9 @@ Layer 2 certified exact rational directions on `S2`:
 D_m^(2) = { S(r,s) : r in R_m, s in R_m }
 ```
 
-Layer 3 should be the first bridge from exact direction geometry into a wave-kernel setting. The bridge must be narrow: it should test deterministic sampling and reconstruction over the certified `S2` substrate, not claim physics.
+Layer 3 should be the first bridge from exact direction geometry into a wave-kernel setting. The bridge must be narrow: it should test deterministic sampling and finite scalar averaging over the certified `S2` substrate, not claim physics.
 
-Layer 3 v1 should therefore use controlled scalar angular profiles before attempting Whittaker-form phase packets.
+Whittaker motivates angular superposition; `[273]` supplies the rational direction substrate; Layer 3 v1 certifies only exact finite scalar sampling over that substrate.
 
 ---
 
@@ -43,7 +43,7 @@ In v1, a wave-kernel bridge means:
 given an observer-side scalar angular profile h(omega) on a declared S2 chart,
 sample h on D_m^(2) from [273],
 construct a discrete angular superposition over those sampled directions,
-and validate deterministic provenance plus a declared reconstruction/error bound.
+and validate deterministic provenance plus exact recomputation of the declared finite scalar average.
 ```
 
 Here `omega` denotes a direction on `S2`. The certified input directions are not arbitrary floats; they are exact rational packets from `[273]`:
@@ -56,7 +56,7 @@ The values `h(omega_i)` are observer-side measurements/evaluations. The cert mus
 
 ```text
 QA substrate: exact rational directions and provenance from [273]
-Observer layer: scalar profile evaluation, weights, approximation error
+Observer layer: scalar profile evaluation, weights, optional display diagnostics
 ```
 
 ---
@@ -69,10 +69,8 @@ Allowed v1 profile families:
 
 ```text
 h_const(omega) = 1
-h_x(omega)     = x
-h_y(omega)     = y
 h_z(omega)     = z
-h_quad(omega)  = x*x + y*y - z*z
+h_z2(omega)    = z*z
 ```
 
 These profiles are useful because:
@@ -90,7 +88,7 @@ v1 should not use Maxwell fields, electric fields, magnetic fields, scalar poten
 
 ## 4. Deferred Whittaker-Form Phase Packets
 
-Whittaker 1903 motivates the direction sphere and later wave-kernel bridge. However, v1 should not yet certify a direct Whittaker phase-packet expansion.
+Whittaker 1903 is the source motivation for studying angular superposition over directions; v1 does not certify Whittaker's kernel.
 
 Deferred candidate form:
 
@@ -110,7 +108,7 @@ These are observer-side analytic kernels until a later cert defines:
 - exact domain;
 - phase convention;
 - sampling measure;
-- quadrature weights;
+- weighting convention;
 - allowable error metric;
 - source-grounded relationship to Whittaker 1903.
 
@@ -125,10 +123,8 @@ Inputs:
 ```text
 m in {3,5,9}
 D_m^(2) from [273]
-profile_name in {const, x, y, z, quad}
+profile_name in {const, z, z2}
 weight_rule
-target functional
-tolerance
 ```
 
 Direction source:
@@ -152,10 +148,10 @@ h_i = h(omega_i)
 
 For polynomial profiles, `h_i` can remain a `Fraction`.
 
-Discrete superposition:
+Discrete uniform average:
 
 ```text
-A_m[h] = sum_i w_i * h_i
+discrete_uniform_average[h] = sum_i w_i * h_i
 ```
 
 where the v1 `weight_rule` should be simple and explicit. Candidate choices:
@@ -193,22 +189,23 @@ superposition value is exactly recomputed
 Observer-side checks:
 
 ```text
-reported float approximation of A_m[h]
-optional comparison to a known analytic average
+observer_float_discrete_uniform_average
+optional non-Whittaker, non-physical reference display
 optional convergence trend across m={3,5,9}
 ```
 
-For the first build, the strongest exact target is not convergence. It is deterministic reconstruction:
+For the first build, the strongest exact target is not convergence. It is exact recomputation:
 
 ```text
-validator recomputes A_m[h] exactly and matches the declared rational value.
+validator recomputes `discrete_uniform_average[h]` exactly and matches the declared rational value.
 ```
 
-If an analytic comparison is included, it must be framed carefully:
+If a reference comparison is included, it must be framed carefully:
 
 ```text
-uniform_points average over D_m^(2) approximates, but is not equal to,
-the uniform spherical integral unless a quadrature theorem is added.
+uniform_points average over D_m^(2) is a finite-set diagnostic only.
+It is not a Whittaker-kernel error, not a physical error, and not a
+spherical quadrature error unless a separate quadrature theorem is added.
 ```
 
 ---
@@ -234,10 +231,8 @@ The fixture must declare one allowed v1 scalar profile:
 
 ```text
 const
-x
-y
 z
-quad
+z2
 ```
 
 No arbitrary Python expressions. No imported symbolic code. No empirical data.
@@ -259,21 +254,21 @@ For:
 
 ```text
 w_i = 1 / |D_m^(2)|
-A_m[h] = sum_i w_i*h_i
+discrete_uniform_average[h] = sum_i w_i*h_i
 ```
 
-the validator recomputes the exact rational `A_m[h]` and compares it to the declared fixture value.
+the validator recomputes the exact rational `discrete_uniform_average[h]` and compares it to the declared fixture value.
 
 ### WKB_5 — Guarded Observer Reporting
 
 If a fixture includes decimal approximations, they are observer-side only:
 
 ```text
-observer_float_A_m
-observer_abs_error_to_reference
+observer_float_discrete_uniform_average
+observer_reference_diagnostic
 ```
 
-They must not be used as the primary pass/fail basis unless a specific observer-side tolerance gate is declared.
+They must not be used as the primary pass/fail basis in v1. Any reference diagnostic must be explicitly non-Whittaker and non-physical. Do not call it quadrature error.
 
 ---
 
@@ -286,7 +281,7 @@ PASS candidates:
 ```text
 fixtures/pass_wkb_m3_const_uniform.json
 fixtures/pass_wkb_m5_z_uniform.json
-fixtures/pass_wkb_m9_quad_uniform.json
+fixtures/pass_wkb_m9_z2_uniform.json
 ```
 
 FAIL candidates:
@@ -316,7 +311,7 @@ Layer 3 v1 does not claim:
 - Any physical field has been reconstructed.
 - Geodesy or ellipsoid physics follows from Whittaker.
 
-Layer 3 v1 claims only deterministic scalar-profile sampling and exact finite superposition over the `[273]` direction substrate.
+Layer 3 v1 claims only deterministic scalar-profile sampling and exact finite scalar averaging over the `[273]` direction substrate.
 
 ---
 
@@ -324,10 +319,9 @@ Layer 3 v1 claims only deterministic scalar-profile sampling and exact finite su
 
 1. Whether v1 should import `[273]` validator logic or duplicate the minimal `[273]` construction locally.
 2. Whether `m={3,5,9}` is sufficient for v1 or whether `m=3` and `m=5` are enough for the first build.
-3. Whether `quad` should be `x*x + y*y - z*z` or a simpler profile such as `z*z`.
-4. Whether observer-side analytic references should be omitted entirely in v1.
-5. Whether fixture fields should use `A_m`, `uniform_average`, or `discrete_superposition` naming.
-6. The next free cert-family ID at build time.
+3. Whether observer-side reference diagnostics should be omitted entirely in v1.
+4. Whether fixture fields should use `discrete_uniform_average` or a shorter `uniform_average` naming.
+5. The next free cert-family ID at build time.
 
 ---
 

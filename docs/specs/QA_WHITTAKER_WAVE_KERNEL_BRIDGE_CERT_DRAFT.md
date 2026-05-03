@@ -210,7 +210,91 @@ spherical quadrature error unless a separate quadrature theorem is added.
 
 ---
 
-## 7. Proposed v1 Gates
+## 7. Read-only Scalar Average Baseline
+
+A read-only enumeration was run against the registered `[273]` `S2`
+construction for `m={3,5,9}`. The values below were recomputed from `[273]`
+rational packets, not copied from draft tables.
+
+```text
+weight_rule = uniform_points
+profiles    = {const, z, z2}
+```
+
+Observer-side decimal display:
+
+| m | profile | unique_S2_direction_count | discrete_uniform_average |
+|---:|---|---:|---:|
+| 3 | const | 100 | 1 |
+| 3 | z | 100 | 0.0441973802690126 |
+| 3 | z2 | 100 | 0.0539057319420647 |
+| 5 | const | 676 | 1 |
+| 5 | z | 676 | 0.0513573393223701 |
+| 5 | z2 | 676 | 0.0646401367652083 |
+| 9 | const | 5476 | 1 |
+| 9 | z | 5476 | 0.0549531745155562 |
+| 9 | z2 | 5476 | 0.0704289153271853 |
+
+Interpretation:
+
+- `const` averages to exactly `1` for all three moduli.
+- `z` averages are positive, not zero. The positive
+  inverse-stereographic chart is biased and should not be described as
+  full-sphere symmetric.
+- `z2` gives a useful nontrivial stress target, but exact rational payloads
+  grow quickly at `m=9`.
+- These are finite-set averages only. They are not spherical quadrature,
+  convergence, density, Whittaker-kernel, or physics claims.
+
+Exact-witness policy:
+
+- For small exact fractions, fixtures may store numerator and denominator
+  directly.
+- For huge exact fractions, fixtures should store exact recomputation
+  witnesses:
+
+```text
+profile_name
+m
+unique_S2_direction_count
+numerator_digit_count
+denominator_digit_count
+canonical_fraction_sha256
+observer_float_display
+```
+
+The validator must recompute the exact `Fraction`, form the canonical ASCII
+string:
+
+```text
+num/den
+```
+
+and hash that canonical string. Observer floats are display only and must not
+be used for pass/fail.
+
+Read-only exact witness fingerprints:
+
+| m | profile | numerator digits | denominator digits | canonical_fraction_sha256_16 |
+|---:|---|---:|---:|---|
+| 3 | z | 201 | 202 | `2bc60820e263e34a` |
+| 3 | z2 | 400 | 401 | `dbd910019ccb9c8f` |
+| 5 | z | 1616 | 1617 | `59f1778ee5019937` |
+| 5 | z2 | 3232 | 3233 | `9d7c14f745654f09` |
+| 9 | z | 15378 | 15379 | `72c8e9d33e2c01a1` |
+| 9 | z2 | 30755 | 30756 | `8d0c00cb98c2478f` |
+
+Fixture implication:
+
+- `m=3 const` is a simple sanity PASS fixture.
+- `m=5 z` is a useful chart-bias PASS fixture because the average is
+  nonzero.
+- `m=9 z2` is a useful stress fixture only if v1 intentionally supports
+  hash-style exact witnessing for large rationals.
+
+---
+
+## 8. Proposed v1 Gates
 
 ### WKB_1 — Dependency Provenance
 
@@ -272,7 +356,7 @@ They must not be used as the primary pass/fail basis in v1. Any reference diagno
 
 ---
 
-## 8. Initial Fixture Plan
+## 9. Initial Fixture Plan
 
 Do not create these until build authorization.
 
@@ -283,6 +367,9 @@ fixtures/pass_wkb_m3_const_uniform.json
 fixtures/pass_wkb_m5_z_uniform.json
 fixtures/pass_wkb_m9_z2_uniform.json
 ```
+
+The `m=9 z2` fixture should use the exact-witness policy above unless the
+build intentionally accepts very large numerator/denominator fields.
 
 FAIL candidates:
 
@@ -298,7 +385,7 @@ The last FAIL fixture is important: it should reject language claiming that `uni
 
 ---
 
-## 9. Non-Claims
+## 10. Non-Claims
 
 Layer 3 v1 does not claim:
 
@@ -315,17 +402,19 @@ Layer 3 v1 claims only deterministic scalar-profile sampling and exact finite sc
 
 ---
 
-## 10. Open Design Decisions Before Build
+## 11. Open Design Decisions Before Build
 
 1. Whether v1 should import `[273]` validator logic or duplicate the minimal `[273]` construction locally.
 2. Whether `m={3,5,9}` is sufficient for v1 or whether `m=3` and `m=5` are enough for the first build.
 3. Whether observer-side reference diagnostics should be omitted entirely in v1.
 4. Whether fixture fields should use `discrete_uniform_average` or a shorter `uniform_average` naming.
-5. The next free cert-family ID at build time.
+5. Whether large exact averages should be declared by numerator/denominator
+   fields or by `canonical_fraction_sha256` plus digit-count witnesses.
+6. The next free cert-family ID at build time.
 
 ---
 
-## 11. Recommended Build Boundary
+## 12. Recommended Build Boundary
 
 Recommended Layer 3 v1:
 

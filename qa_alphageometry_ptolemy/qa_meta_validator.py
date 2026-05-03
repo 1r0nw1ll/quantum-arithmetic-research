@@ -7500,6 +7500,37 @@ def _validate_whittaker_rational_direction_s1_cert_family(base_dir):
     return None
 
 
+def _validate_whittaker_rational_direction_s2_cert_family(base_dir):
+    """QA Whittaker Rational Direction S^2 Cert family [273] — Layer 2 of the Whittaker -> QA development ladder. Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem). CLAIM (narrow): the QA-derived rational parameter pool R_m = {C/G, F/G : (b,e) in {1..m}^2, gcd(b,e)=1, d=b+e raw, a=b+2e raw, C=2*d*e, F=a*b, G=d*d+e*e} generates a finite exact rational S^2 direction set D_m^(2) through the rational inverse stereographic chart S(r,s)=(2r/(1+r*r+s*s), 2s/(1+r*r+s*s), (1-r*r-s*s)/(1+r*r+s*s)). v1 moduli are m={3,5,9}. Gates W3D_1-W3D_4 verify exact sphere identity, finite enumeration and duplicate accounting, chart/coverage discipline, and a finite denominator separation theorem: for distinct generated packets p_i=(x_i,y_i,z_i,den_i), p_j=(x_j,y_j,z_j,den_j), sin_sq(theta_ij)=cross_norm_sq_num/(den_i*den_i*den_j*den_j) >= 1/(den_i*den_i*den_j*den_j) >= 1/N_max(m)^4. Bit-exact counts: |D_m^(2)|=100,676,5476; all-pairs counts=4950,228150,14990550; N_max=1260041,175808753,32889577313 at m=3,5,9. Geometry uses pooled R_m while preserving C/F channel provenance collision counts 4,12,36. The chart is inverse_stereographic_excluding_south_pole from positive QA ratios only; no full-sphere, antipodal, sign-reflection, density, or equidistribution claim is made. Cert does NOT prove Whittaker's theorem, Maxwell equations, electromagnetism, scalar-potential physics, geodesy, ellipsoid physics, convergence, or Whittaker wave-kernel approximation. W3D_5 spherical Lipschitz sampling is deferred. Checks W3D_1/W3D_2/W3D_3/W3D_4/SRC/F; 3 PASS + 5 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_whittaker_rational_direction_s2_cert_v1")
+    validator = os.path.join(fam_dir, "qa_whittaker_rational_direction_s2_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_whittaker_rational_direction_s2_cert_v1/qa_whittaker_rational_direction_s2_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_whittaker_rational_direction_s2_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_whittaker_rational_direction_s2_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_whittaker_rational_direction_s2_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -8536,6 +8567,11 @@ FAMILY_SWEEPS = [
      "Layer 1 of the Whittaker -> QA development ladder (docs/specs/QA_WHITTAKER_RATIONAL_DIRECTION_CERT_DRAFT.md sec. 8). Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem). CLAIM (narrow): the QA-rational direction set D_m on S^1, defined by D_m = { (C/G, F/G) : (b,e) in {1..m}^2, gcd(b,e)=1, d=b+e raw, a=b+2e raw, C=2*d*e, F=a*b=d^2-e^2, G=d^2+e^2 }, is finite, exactly enumerable in integer arithmetic, and admits two structural theorems on the closed first quadrant: (W2) for any two distinct directions, sin(angular separation) >= 1/(G_i*G_j) >= 1/G_max(m)^2, proven from cross-product integrality (validator runs all-pairs check); (W3) with virtual boundary anchors E_0=(1,0), E_inf=(0,1) added as observer-side anchors only (NOT QA seeds, NOT counted in |D_m|, NOT in W1, NOT in W2), nearest-neighbor sampling at D_m^+ := D_m union {E_0, E_inf} of any L-Lipschitz angular profile g on [0, pi/2] yields sup error <= L*Delta_max^+(m). Bit-exact predictions: |D_m| = 55, 359, 3175 at m = 9, 24, 72; G_max = 370, 2785, 25633; Delta_max^+ ~ 0.199, 0.080, 0.027 rad. All-pairs counts: 1485, 64261, 5038725. Cert does NOT prove Whittaker's theorem, Maxwell's equations, electromagnetism, two-scalar-potential reductions (Whittaker 1904 deferred to a future unassigned-ID layer), gauge reduction, density/equidistribution as m -> infinity, or 3D S^2 coverage (future unassigned-ID Layer 2). Theorem NT compliance: integer + fractions.Fraction throughout construction; raw d=b+e and a=b+2e (no mod reduction in element computation per HARD rule); coprime seeds enforced; angular ordering via Fraction(F,C); floats observer-side only (Lipschitz test grid, sin/cos/identity test functions, pi/2 boundary, sup-error display); firewall crossed exactly twice. Hostile review #2 by Codex 2026-05-01 found 4 mechanical blockers (stale W3 hull-only spec text, missing unassigned-ID guardrails on Layer 2-5, stale _net_ filenames in spec build plan, bad expected_G witness in pass_d72); all fixed pre-registration. Will Dale + Claude 2026-04-30 build / 2026-05-01 registration. Checks WRD_1+DECL/W1/W2/W3/HARD/SRC/WIT/F; 4 PASS + 4 FAIL fixtures; self-test ok",
      "266_qa_whittaker_rational_direction_s1_cert",
      "qa_whittaker_rational_direction_s1_cert_v1", True),
+    (273, "QA Whittaker Rational Direction S^2 Cert family",
+     _validate_whittaker_rational_direction_s2_cert_family,
+     "Layer 2 of the Whittaker -> QA development ladder. Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem). CLAIM (narrow): the QA-derived rational parameter pool R_m = {C/G, F/G : (b,e) in {1..m}^2, gcd(b,e)=1, d=b+e raw, a=b+2e raw, C=2*d*e, F=a*b, G=d*d+e*e} generates a finite exact rational S^2 direction set D_m^(2) through the rational inverse stereographic chart S(r,s)=(2r/(1+r*r+s*s), 2s/(1+r*r+s*s), (1-r*r-s*s)/(1+r*r+s*s)). v1 moduli are m={3,5,9}. Gates W3D_1-W3D_4 verify exact sphere identity, finite enumeration and duplicate accounting, chart/coverage discipline, and a finite denominator separation theorem: for distinct generated packets p_i=(x_i,y_i,z_i,den_i), p_j=(x_j,y_j,z_j,den_j), sin_sq(theta_ij)=cross_norm_sq_num/(den_i*den_i*den_j*den_j) >= 1/(den_i*den_i*den_j*den_j) >= 1/N_max(m)^4. Bit-exact counts: |D_m^(2)|=100,676,5476; all-pairs counts=4950,228150,14990550; N_max=1260041,175808753,32889577313 at m=3,5,9. Geometry uses pooled R_m while preserving C/F channel provenance collision counts 4,12,36. The chart is inverse_stereographic_excluding_south_pole from positive QA ratios only; no full-sphere, antipodal, sign-reflection, density, or equidistribution claim is made. Cert does NOT prove Whittaker's theorem, Maxwell equations, electromagnetism, scalar-potential physics, geodesy, ellipsoid physics, convergence, or Whittaker wave-kernel approximation. W3D_5 spherical Lipschitz sampling is deferred. Checks W3D_1/W3D_2/W3D_3/W3D_4/SRC/F; 3 PASS + 5 FAIL fixtures; self-test ok",
+     "273_qa_whittaker_rational_direction_s2_cert",
+     "qa_whittaker_rational_direction_s2_cert_v1", True),
 ]
 
 

@@ -1,0 +1,94 @@
+{
+  "R_channel_provenance": {
+    "collision_count": 12,
+    "mode": "pooled_R_with_labeled_C_F_channels",
+    "note": "Geometry uses pooled R_m; C/F channel labels are preserved for audit lineage."
+  },
+  "candidate_family_id": 273,
+  "cert_slug": "qa_whittaker_rational_direction_s2_cert_v1",
+  "chart": {
+    "claims_antipodal_closure": false,
+    "claims_density": false,
+    "claims_equidistribution": false,
+    "claims_full_sphere": false,
+    "claims_sign_reflection_closure": false,
+    "coverage_claim": "one rational inverse stereographic chart image from positive QA ratios only",
+    "name": "inverse_stereographic_excluding_south_pole",
+    "parameter_source": "R_m x R_m"
+  },
+  "claim_scope": "Exact finite rational S2 geometry only: W3D_1 through W3D_4.",
+  "coordinate_plane_counts": {
+    "x0": 0,
+    "y0": 0,
+    "z0": 26
+  },
+  "expected_counts": {
+    "R_channel_provenance_collision_count": 12,
+    "duplicate_count": 1,
+    "raw_pair_count": 676,
+    "raw_ratio_count": 38,
+    "seed_count": 19,
+    "unique_R_count": 26,
+    "unique_S2_direction_count": 676
+  },
+  "expected_separation": {
+    "N_max": 175808753,
+    "N_max_fourth_power": 955348825618545044151819590470081,
+    "claimed_min_normalized_sin_sq_bound": "1/955348825618545044151819590470081",
+    "observer_angle_for_true_min_sin_sq_witness": 0.005463945843720792,
+    "pair_count": 228150,
+    "true_min_normalized_sin_sq": "1187255997390145600/39768198848578581524641",
+    "witness_pair": {
+      "cross_norm_sq_num": 1187255997390145600,
+      "dot_den": 199419655121,
+      "dot_num": 199416678321,
+      "normalized_sin_sq": "1187255997390145600/39768198848578581524641",
+      "p": [
+        12204880,
+        12304920,
+        -5750199,
+        18260201
+      ],
+      "q": [
+        7320,
+        7320,
+        -3479,
+        10921
+      ]
+    }
+  },
+  "fail_ledger": {
+    "expected_failure_codes": [
+      "W3D_2"
+    ],
+    "rationale": "Duplicate count is intentionally wrong."
+  },
+  "m": 5,
+  "non_claims": [
+    "Does not prove the Whittaker 1903 theorem.",
+    "Does not prove Maxwell equations.",
+    "Does not prove electromagnetism.",
+    "Does not prove scalar-potential physics.",
+    "Does not prove density.",
+    "Does not prove equidistribution.",
+    "Does not prove geodesy.",
+    "Does not prove ellipsoid physics."
+  ],
+  "schema_version": "QA_WHITTAKER_RATIONAL_DIRECTION_S2_CERT.v1",
+  "source_attribution": "E. T. Whittaker, 1903, On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI 10.1007/BF01444290.",
+  "sphere_identity_witness": [
+    11,
+    60,
+    0,
+    61
+  ],
+  "witnesses": [
+    "sphere_identity_witness",
+    "expected_separation.witness_pair"
+  ],
+  "z_sign_counts": {
+    "negative": 325,
+    "positive": 325,
+    "zero": 26
+  }
+}

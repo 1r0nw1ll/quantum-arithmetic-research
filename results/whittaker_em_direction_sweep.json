@@ -1,0 +1,430 @@
+{
+  "dataset": {
+    "channel": "unwrapped measured S21 phase",
+    "doi": "10.17811/ruo_datasets.75973",
+    "name": "RUO microwave imaging measurements Escatt_meas",
+    "sample_count": 60434,
+    "source_url": "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/75973/Escatt_meas.zip?sequence=2&isAllowed=y"
+  },
+  "experiment": "whittaker_em_direction_sweep",
+  "interpretation": "If named directions have weak percentile ranks or do not beat raster, the measured EM phase structure is real but not yet specifically tied to the current Whittaker direction choices.",
+  "named_whittaker_directions": [
+    {
+      "cosmos_frac": 0.876143828702861,
+      "delta_vs_raster": {
+        "mean_return_time": -10.121528968445556,
+        "norm_f_entropy": -0.27649342296645507,
+        "singularity_frac": 0.0010093822911323297
+      },
+      "mean_return_time": 1.374246239480485,
+      "name": "omega0_7_24_0_25",
+      "norm_f_entropy": 4.6488697329638295,
+      "packet": [
+        7,
+        24,
+        0,
+        25
+      ],
+      "rank_vs_s2_m3": {
+        "mean_return_time_lower": 0.79,
+        "norm_f_entropy_lower": 0.81,
+        "singularity_frac_higher": 0.9
+      },
+      "satellite_frac": 0.08228947760329622,
+      "singularity_frac": 0.04156669369384277
+    },
+    {
+      "cosmos_frac": 0.883523902503599,
+      "delta_vs_raster": {
+        "mean_return_time": 23.063176467769335,
+        "norm_f_entropy": 0.1059552854013992,
+        "singularity_frac": -0.00023166150944020636
+      },
+      "mean_return_time": 34.558951675695376,
+      "name": "omega1_24_7_0_25",
+      "norm_f_entropy": 5.031318441331684,
+      "packet": [
+        24,
+        7,
+        0,
+        25
+      ],
+      "rank_vs_s2_m3": {
+        "mean_return_time_lower": 0.37,
+        "norm_f_entropy_lower": 0.41,
+        "singularity_frac_higher": 0.15
+      },
+      "satellite_frac": 0.07615044760313074,
+      "singularity_frac": 0.040325649893270234
+    },
+    {
+      "cosmos_frac": 0.8753495606704946,
+      "delta_vs_raster": {
+        "mean_return_time": -10.346826348525415,
+        "norm_f_entropy": -0.28326740619193913,
+        "singularity_frac": 0.001059024043155228
+      },
+      "mean_return_time": 1.1489488594006263,
+      "name": "omega2_1200_1200_neg527_1777",
+      "norm_f_entropy": 4.6420957497383455,
+      "packet": [
+        1200,
+        1200,
+        -527,
+        1777
+      ],
+      "rank_vs_s2_m3": {
+        "mean_return_time_lower": 0.9,
+        "norm_f_entropy_lower": 0.88,
+        "singularity_frac_higher": 0.97
+      },
+      "satellite_frac": 0.08303410388363973,
+      "singularity_frac": 0.04161633544586567
+    },
+    {
+      "cosmos_frac": 0.8756308639319577,
+      "delta_vs_raster": {
+        "mean_return_time": -10.260498631215142,
+        "norm_f_entropy": -0.28803253762647785,
+        "singularity_frac": 0.0009762877897837238
+      },
+      "mean_return_time": 1.235276576710899,
+      "name": "omega3_3_4_0_5",
+      "norm_f_entropy": 4.637330618303807,
+      "packet": [
+        3,
+        4,
+        0,
+        5
+      ],
+      "rank_vs_s2_m3": {
+        "mean_return_time_lower": 0.83,
+        "norm_f_entropy_lower": 0.92,
+        "singularity_frac_higher": 0.85
+      },
+      "satellite_frac": 0.08283553687554812,
+      "singularity_frac": 0.041533599192494164
+    },
+    {
+      "cosmos_frac": 0.8764251319643241,
+      "delta_vs_raster": {
+        "mean_return_time": -9.270272830641943,
+        "norm_f_entropy": -0.21267810193957892,
+        "singularity_frac": 0.0009762877897837238
+      },
+      "mean_return_time": 2.225502377284098,
+      "name": "omega4_4_3_0_5",
+      "norm_f_entropy": 4.712685053990706,
+      "packet": [
+        4,
+        3,
+        0,
+        5
+      ],
+      "rank_vs_s2_m3": {
+        "mean_return_time_lower": 0.76,
+        "norm_f_entropy_lower": 0.76,
+        "singularity_frac_higher": 0.85
+      },
+      "satellite_frac": 0.0820412688431817,
+      "singularity_frac": 0.041533599192494164
+    }
+  ],
+  "ok": true,
+  "question": "Do named Whittaker/[273] directions rank unusually against the exact S2 m=3 direction population?",
+  "raster_observables": {
+    "cosmos_frac": 0.8787417470587262,
+    "mean_return_time": 11.495775207926041,
+    "norm_f_entropy": 4.925363155930285,
+    "satellite_frac": 0.08070094153856337,
+    "singularity_frac": 0.04055731140271044
+  },
+  "s2_population": {
+    "count": 100,
+    "m": 3,
+    "top_10_highest_singularity_frac": [
+      {
+        "cosmos_frac": 0.8755977694306091,
+        "mean_return_time": 1.2726835975680466,
+        "name": "s2_m3_4",
+        "norm_f_entropy": 4.646941786983085,
+        "packet": [
+          8,
+          15,
+          0,
+          17
+        ],
+        "satellite_frac": 0.08275280062217663,
+        "singularity_frac": 0.04164942994721427
+      },
+      {
+        "cosmos_frac": 0.8752833716677973,
+        "mean_return_time": 1.085018968573464,
+        "name": "s2_m3_11",
+        "norm_f_entropy": 4.629833312434478,
+        "packet": [
+          40,
+          40,
+          -7,
+          57
+        ],
+        "satellite_frac": 0.08306719838498833,
+        "singularity_frac": 0.04164942994721427
+      },
+      {
+        "cosmos_frac": 0.8754488441745404,
+        "mean_return_time": 1.0897705624119938,
+        "name": "s2_m3_38",
+        "norm_f_entropy": 4.622957545048275,
+        "packet": [
+          6760,
+          7800,
+          -2079,
+          10529
+        ],
+        "satellite_frac": 0.08290172587824533,
+        "singularity_frac": 0.04164942994721427
+      },
+      {
+        "cosmos_frac": 0.8753330134198203,
+        "mean_return_time": 1.0834092603329744,
+        "name": "s2_m3_7",
+        "norm_f_entropy": 4.619784542696132,
+        "packet": [
+          20,
+          21,
+          0,
+          29
+        ],
+        "satellite_frac": 0.08305065113431404,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8753661079211689,
+        "mean_return_time": 1.0984377847356825,
+        "name": "s2_m3_10",
+        "norm_f_entropy": 4.633394340345339,
+        "packet": [
+          30,
+          30,
+          7,
+          43
+        ],
+        "satellite_frac": 0.08301755663296544,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8757632419373521,
+        "mean_return_time": 1.1817504100193827,
+        "name": "s2_m3_18",
+        "norm_f_entropy": 4.652669571535621,
+        "packet": [
+          375,
+          600,
+          -88,
+          713
+        ],
+        "satellite_frac": 0.08262042261678222,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8755315804279119,
+        "mean_return_time": 1.1144868715315166,
+        "name": "s2_m3_24",
+        "norm_f_entropy": 4.63007964269548,
+        "packet": [
+          1160,
+          1160,
+          41,
+          1641
+        ],
+        "satellite_frac": 0.08285208412622243,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8753495606704946,
+        "mean_return_time": 1.1489488594006263,
+        "name": "s2_m3_26",
+        "norm_f_entropy": 4.6420957497383455,
+        "packet": [
+          1200,
+          1200,
+          -527,
+          1777
+        ],
+        "satellite_frac": 0.08303410388363973,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8753330134198203,
+        "mean_return_time": 1.1131284684833926,
+        "name": "s2_m3_27",
+        "norm_f_entropy": 4.637872875154734,
+        "packet": [
+          1218,
+          1218,
+          -41,
+          1723
+        ],
+        "satellite_frac": 0.08305065113431404,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8756308639319577,
+        "mean_return_time": 1.1446557550858127,
+        "name": "s2_m3_20",
+        "norm_f_entropy": 4.641015936267642,
+        "packet": [
+          510,
+          510,
+          -161,
+          739
+        ],
+        "satellite_frac": 0.08278589512352523,
+        "singularity_frac": 0.04158324094451707
+      }
+    ],
+    "top_10_lowest_mean_return_time": [
+      {
+        "cosmos_frac": 0.8753661079211689,
+        "mean_return_time": 1.055099065668279,
+        "name": "s2_m3_25",
+        "norm_f_entropy": 4.6223297209001295,
+        "packet": [
+          1200,
+          1000,
+          -351,
+          1601
+        ],
+        "satellite_frac": 0.08313338738768554,
+        "singularity_frac": 0.041500504691145565
+      },
+      {
+        "cosmos_frac": 0.8753330134198203,
+        "mean_return_time": 1.0834092603329744,
+        "name": "s2_m3_7",
+        "norm_f_entropy": 4.619784542696132,
+        "packet": [
+          20,
+          21,
+          0,
+          29
+        ],
+        "satellite_frac": 0.08305065113431404,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8752833716677973,
+        "mean_return_time": 1.085018968573464,
+        "name": "s2_m3_11",
+        "norm_f_entropy": 4.629833312434478,
+        "packet": [
+          40,
+          40,
+          -7,
+          57
+        ],
+        "satellite_frac": 0.08306719838498833,
+        "singularity_frac": 0.04164942994721427
+      },
+      {
+        "cosmos_frac": 0.8754488441745404,
+        "mean_return_time": 1.0897705624119938,
+        "name": "s2_m3_38",
+        "norm_f_entropy": 4.622957545048275,
+        "packet": [
+          6760,
+          7800,
+          -2079,
+          10529
+        ],
+        "satellite_frac": 0.08290172587824533,
+        "singularity_frac": 0.04164942994721427
+      },
+      {
+        "cosmos_frac": 0.8753661079211689,
+        "mean_return_time": 1.0984377847356825,
+        "name": "s2_m3_10",
+        "norm_f_entropy": 4.633394340345339,
+        "packet": [
+          30,
+          30,
+          7,
+          43
+        ],
+        "satellite_frac": 0.08301755663296544,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8753330134198203,
+        "mean_return_time": 1.1131284684833926,
+        "name": "s2_m3_27",
+        "norm_f_entropy": 4.637872875154734,
+        "packet": [
+          1218,
+          1218,
+          -41,
+          1723
+        ],
+        "satellite_frac": 0.08305065113431404,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.8755315804279119,
+        "mean_return_time": 1.1144868715315166,
+        "name": "s2_m3_24",
+        "norm_f_entropy": 4.63007964269548,
+        "packet": [
+          1160,
+          1160,
+          41,
+          1641
+        ],
+        "satellite_frac": 0.08285208412622243,
+        "singularity_frac": 0.04161633544586567
+      },
+      {
+        "cosmos_frac": 0.875647411182632,
+        "mean_return_time": 1.118446119440073,
+        "name": "s2_m3_16",
+        "norm_f_entropy": 4.634230477408917,
+        "packet": [
+          350,
+          350,
+          527,
+          723
+        ],
+        "satellite_frac": 0.08281898962487383,
+        "singularity_frac": 0.041533599192494164
+      },
+      {
+        "cosmos_frac": 0.8757136001853292,
+        "mean_return_time": 1.1388267647399897,
+        "name": "s2_m3_15",
+        "norm_f_entropy": 4.6442076212272685,
+        "packet": [
+          312,
+          312,
+          -119,
+          457
+        ],
+        "satellite_frac": 0.08271970612082802,
+        "singularity_frac": 0.04156669369384277
+      },
+      {
+        "cosmos_frac": 0.8756308639319577,
+        "mean_return_time": 1.1446557550858127,
+        "name": "s2_m3_20",
+        "norm_f_entropy": 4.641015936267642,
+        "packet": [
+          510,
+          510,
+          -161,
+          739
+        ],
+        "satellite_frac": 0.08278589512352523,
+        "singularity_frac": 0.04158324094451707
+      }
+    ]
+  }
+}

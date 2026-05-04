@@ -1,0 +1,20 @@
+{
+  "schema_version": "QA_WHITTAKER_PHASE_PACKET_ALGEBRA_CERT.v1",
+  "candidate_family_id": 275,
+  "cert_slug": "qa_whittaker_phase_packet_algebra_cert_v1",
+  "expected_result": "FAIL",
+  "expected_error_code": "WPPA_8",
+  "source_attribution": "Whittaker 1903, On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI 10.1007/BF01444290; motivation only.",
+  "non_claims": ["Does not perform trigonometric evaluation.", "Does not perform numerical approximation.", "Does not prove the Whittaker 1903 theorem.", "Does not prove Maxwell equations.", "Does not prove electromagnetism.", "Does not prove scalar-potential physics.", "Does not reconstruct any physical field."],
+  "dependency": {"family_id": 273, "slug": "qa_whittaker_rational_direction_s2_cert_v1", "chart": "inverse_stereographic_excluding_south_pole", "registered": true},
+  "lineage_context": {"family_id": 274, "slug": "qa_whittaker_scalar_angular_kernel_sampling_cert_v1", "hard_dependency": false},
+  "m": 3,
+  "coefficient_source": "declared",
+  "forbidden_operations": [],
+  "numerical_policy": {"uses_trig_evaluation": false, "uses_float_pass_fail": false, "uses_numerical_approximation": false, "uses_fitted_coefficients": false},
+  "claim_policy": {"claims_full_whittaker_theorem": false, "claims_maxwell_em": true, "claims_scalar_potential_physics": false, "claims_physical_field_reconstruction": false, "claims_numerical_wave_kernel_approximation": false},
+  "packets": [{"packet_id": "P0", "packet_family": "phase_arg", "omega_packet": [7, 24, 0, 25], "k": {"num": 1, "den": 1}, "v": {"num": 1, "den": 1}, "weight": {"num": 1, "den": 1}}],
+  "target_composition": [{"packet_id": "P0", "weight": {"num": 1, "den": 1}}],
+  "evaluation_points": [{"point_id": "E0", "x": [{"num": 1, "den": 1}, {"num": 0, "den": 1}, {"num": 0, "den": 1}], "t": {"num": 0, "den": 1}, "split_label": "evaluation", "target_packet_ids": ["P0"], "phase_witnesses": {"P0": {"num": 7, "den": 25}}}],
+  "heldout_points": [{"point_id": "H0", "x": [{"num": 0, "den": 1}, {"num": 1, "den": 1}, {"num": 0, "den": 1}], "t": {"num": 0, "den": 1}, "split_label": "heldout", "target_packet_ids": ["P0"], "phase_witnesses": {"P0": {"num": 24, "den": 25}}}]
+}

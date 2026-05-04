@@ -7531,6 +7531,37 @@ def _validate_whittaker_rational_direction_s2_cert_family(base_dir):
     return None
 
 
+def _validate_whittaker_scalar_angular_kernel_sampling_cert_family(base_dir):
+    """QA Whittaker Scalar Angular-Kernel Sampling Cert family [274] — Layer 3 v1 of the Whittaker -> QA development ladder. Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem or wave kernel). Depends on registered [273] QA Whittaker Rational Direction S^2 Cert, which supplies exact rational D_m^(2) packets through inverse_stereographic_excluding_south_pole. CLAIM (narrow): for m in {3,5,9}, profile_name in {const,z,z2}, and weight_rule=uniform_points, the validator recomputes exact Fraction scalar samples over [273] packets and validates the exact finite-set discrete_uniform_average. Large exact averages are witnessed by full canonical_fraction_sha256 = sha256((num + '/' + den).encode('ascii')).hexdigest() plus numerator_digit_count and denominator_digit_count; observer floats are display-only and never pass/fail. PASS fixtures cover m=3 const direct fraction, m=5 z hash witness, and m=9 z2 hash witness. FAIL fixtures reject wrong provenance, wrong profile value, wrong hash witness, wrong digit count, float-as-pass/fail, spherical quadrature overclaim, and Whittaker-kernel-error overclaim. Cert does NOT prove Whittaker kernel approximation, spherical quadrature, density, convergence, Maxwell equations, electromagnetism, scalar-potential physics, geodesy, ellipsoid physics, or any physical field reconstruction. Checks WKB_1/WKB_2/WKB_3/WKB_4/WKB_5/SRC/F; 3 PASS + 7 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_whittaker_scalar_angular_kernel_sampling_cert_v1")
+    validator = os.path.join(fam_dir, "qa_whittaker_scalar_angular_kernel_sampling_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_whittaker_scalar_angular_kernel_sampling_cert_v1/qa_whittaker_scalar_angular_kernel_sampling_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_whittaker_scalar_angular_kernel_sampling_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_whittaker_scalar_angular_kernel_sampling_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_whittaker_scalar_angular_kernel_sampling_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -8572,6 +8603,11 @@ FAMILY_SWEEPS = [
      "Layer 2 of the Whittaker -> QA development ladder. Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem). CLAIM (narrow): the QA-derived rational parameter pool R_m = {C/G, F/G : (b,e) in {1..m}^2, gcd(b,e)=1, d=b+e raw, a=b+2e raw, C=2*d*e, F=a*b, G=d*d+e*e} generates a finite exact rational S^2 direction set D_m^(2) through the rational inverse stereographic chart S(r,s)=(2r/(1+r*r+s*s), 2s/(1+r*r+s*s), (1-r*r-s*s)/(1+r*r+s*s)). v1 moduli are m={3,5,9}. Gates W3D_1-W3D_4 verify exact sphere identity, finite enumeration and duplicate accounting, chart/coverage discipline, and a finite denominator separation theorem: for distinct generated packets p_i=(x_i,y_i,z_i,den_i), p_j=(x_j,y_j,z_j,den_j), sin_sq(theta_ij)=cross_norm_sq_num/(den_i*den_i*den_j*den_j) >= 1/(den_i*den_i*den_j*den_j) >= 1/N_max(m)^4. Bit-exact counts: |D_m^(2)|=100,676,5476; all-pairs counts=4950,228150,14990550; N_max=1260041,175808753,32889577313 at m=3,5,9. Geometry uses pooled R_m while preserving C/F channel provenance collision counts 4,12,36. The chart is inverse_stereographic_excluding_south_pole from positive QA ratios only; no full-sphere, antipodal, sign-reflection, density, or equidistribution claim is made. Cert does NOT prove Whittaker's theorem, Maxwell equations, electromagnetism, scalar-potential physics, geodesy, ellipsoid physics, convergence, or Whittaker wave-kernel approximation. W3D_5 spherical Lipschitz sampling is deferred. Checks W3D_1/W3D_2/W3D_3/W3D_4/SRC/F; 3 PASS + 5 FAIL fixtures; self-test ok",
      "273_qa_whittaker_rational_direction_s2_cert",
      "qa_whittaker_rational_direction_s2_cert_v1", True),
+    (274, "QA Whittaker Scalar Angular-Kernel Sampling Cert family",
+     _validate_whittaker_scalar_angular_kernel_sampling_cert_family,
+     "Layer 3 v1 of the Whittaker -> QA development ladder. Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem or wave kernel). Depends on registered [273] QA Whittaker Rational Direction S^2 Cert, which supplies exact rational D_m^(2) packets through inverse_stereographic_excluding_south_pole. CLAIM (narrow): for m in {3,5,9}, profile_name in {const,z,z2}, and weight_rule=uniform_points, the validator recomputes exact Fraction scalar samples over [273] packets and validates the exact finite-set discrete_uniform_average. Large exact averages are witnessed by full canonical_fraction_sha256 = sha256((num + '/' + den).encode('ascii')).hexdigest() plus numerator_digit_count and denominator_digit_count; observer floats are display-only and never pass/fail. PASS fixtures cover m=3 const direct fraction, m=5 z hash witness, and m=9 z2 hash witness. FAIL fixtures reject wrong provenance, wrong profile value, wrong hash witness, wrong digit count, float-as-pass/fail, spherical quadrature overclaim, and Whittaker-kernel-error overclaim. Cert does NOT prove Whittaker kernel approximation, spherical quadrature, density, convergence, Maxwell equations, electromagnetism, scalar-potential physics, geodesy, ellipsoid physics, or any physical field reconstruction. Checks WKB_1/WKB_2/WKB_3/WKB_4/WKB_5/SRC/F; 3 PASS + 7 FAIL fixtures; self-test ok",
+     "274_qa_whittaker_scalar_angular_kernel_sampling_cert",
+     "qa_whittaker_scalar_angular_kernel_sampling_cert_v1", True),
 ]
 
 

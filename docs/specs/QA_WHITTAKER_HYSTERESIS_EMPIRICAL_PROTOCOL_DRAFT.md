@@ -106,9 +106,17 @@ Hard requirements:
 
 ## 4. Dataset Targets
 
-### 4.1 Primary Target: Princeton/Dartmouth MagNet
+### 4.1 Primary Candidate: Princeton/Dartmouth MagNet
 
-Use MagNet first.
+Treat MagNet as the first dataset candidate to inspect.
+
+Important status note:
+
+```text
+MagNet file layout has not yet been inspected in this protocol track.
+Do not build a parser, fixture schema, or ingestion validator from summary
+claims alone.
+```
 
 The MagNet Challenge paper describes the training data as paired single-cycle
 `B(t)` and `H(t)` time sequences with 1024 steps, different switching
@@ -116,7 +124,7 @@ frequencies, and temperatures. It also states that `B-H` loop area determines
 volumetric core loss. The MagNet Challenge data comes from the
 Princeton-Dartmouth MagNet project.
 
-Initial accepted MagNet fields:
+Candidate MagNet fields to verify during file inspection:
 
 ```text
 B(t)
@@ -385,4 +393,3 @@ calibration and held-out evaluation.
    frequency, temperature, waveform, and available splits.
 4. Define the first fixture schema using real field names.
 5. Build only the ingestion/protocol validator first.
-

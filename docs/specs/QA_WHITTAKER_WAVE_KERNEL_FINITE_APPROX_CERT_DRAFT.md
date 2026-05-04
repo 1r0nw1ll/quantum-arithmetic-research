@@ -7,50 +7,43 @@ build from this draft until hostile review and Will sign-off.
 
 **Layer position**: Layer 3.1 of the Whittaker -> QA development ladder.
 
-This is a finite approximation cert draft. It is not a full Whittaker theorem
-proof and not Maxwell/EM/scalar-potential physics yet.
+This draft has a hard v1 boundary:
+
+```text
+Layer 3.1 v1 = exact finite Whittaker phase-packet algebra
+```
+
+Layer 3.1 v1 does not evaluate trigonometric functions. It certifies the
+exact algebraic phase-packet substrate required before any QA-native trig
+surrogate or observer-side numerical wave-kernel approximation is allowed.
 
 ---
 
 ## 1. Purpose
 
-Layer 3.1 tests whether finite Whittaker-inspired scalar phase packets over
-certified QA `S2` directions can approximate declared scalar wave targets
-under fixed packet conventions and held-out evaluation.
+Layer 3.1 v1 tests exact finite phase-packet algebra over the registered QA
+Whittaker substrate. It verifies that packet declarations, phase arguments,
+weights, and target packet compositions are exact and reviewable.
 
-This draft is empirical and test-oriented. The object being tested is finite
-wave-kernel behavior:
-
-```text
-declared finite packet family
-declared target generation
-declared coefficients
-declared evaluation points
-declared held-out points
-declared tolerance and precision
-```
-
-The draft should support failure. If the finite packet family does not recover
-the declared held-out target under the declared tolerance, the cert fails.
-
-v1 boundary:
+The purpose is not to avoid finite kernel claims. The purpose is to put the
+kernel claim on the correct QA foundation:
 
 ```text
-declared finite packet reconstruction/evaluation
+exact S2 direction provenance
+exact rational evaluation points
+exact rational phase arguments
+exact rational weights
+exact symbolic packet composition
 ```
 
-v1.1 boundary:
-
-```text
-fitted coefficient recovery from training points
-baseline competition
-```
+Numerical trigonometric approximation is deferred until after this exact
+phase-packet substrate is certified.
 
 ---
 
 ## 2. Dependencies
 
-Layer 3.1 depends on the registered QA substrate:
+Layer 3.1 v1 depends on the registered QA substrate:
 
 - `[273]` QA Whittaker Rational Direction `S2` Cert supplies exact rational
   directions `D_m^(2)`.
@@ -63,71 +56,107 @@ This draft extends `[274]` from scalar profiles:
 h(omega)
 ```
 
-to phase packets:
+to exact phase packets:
 
 ```text
-K(x,t; omega,k,v)
+phase_arg = k * (omega dot x - v*t)
 ```
 
 where `omega` is supplied by `[273]`.
 
 ---
 
-## 3. Packet Form
+## 3. Exact Phase-Packet Core
 
-Candidate finite packet families:
+The v1 packet core is:
 
 ```text
-K_cos(x,t; omega,k,v) = cos(k*(omega dot x - v*t))
-K_sin(x,t; omega,k,v) = sin(k*(omega dot x - v*t))
+phase_arg = k * (omega dot x - v*t)
+```
+
+where:
+
+```text
+omega = exact rational S2 direction from [273]
+x     = rational vector
+t     = rational time
+k     = rational wavenumber/frequency parameter
+v     = rational propagation speed parameter
+```
+
+The validator must compute:
+
+```text
+omega dot x
+phase_arg
+```
+
+as exact `Fraction` values.
+
+Weights are exact rational values. Packet declarations are exact.
+
+No v1 pass/fail check may use:
+
+```text
+math.cos
+math.sin
+numpy
+mpmath
+decimal trig approximations
+platform floating trig
+observer numerical approximation error
+```
+
+---
+
+## 4. Packet Families
+
+Allowed v1 symbolic packet families:
+
+```text
+phase_arg
+phase_pair
+formal_cos_symbol
+formal_sin_symbol
 ```
 
 Definitions:
 
-```text
-omega = exact rational S2 direction from [273]
-x     = declared finite evaluation point
-t     = declared finite time
-k     = declared wavenumber/frequency parameter
-v     = declared propagation speed parameter
-```
+- `phase_arg`: one exact rational phase argument.
+- `phase_pair`: declared pair of exact rational phase arguments.
+- `formal_cos_symbol`: symbolic label for `cos(phase_arg)`, not numerical
+  evaluation.
+- `formal_sin_symbol`: symbolic label for `sin(phase_arg)`, not numerical
+  evaluation.
 
-Weights are declared per packet.
-
-Arithmetic boundary:
-
-- `omega` is exact rational from `[273]`.
-- `x`, `t`, `k`, and `v` should be rational in v1 where possible.
-- `omega dot x` can be computed exactly when `x` is rational.
-- `cos` / `sin` evaluation is observer-side numerical unless a symbolic or
-  discrete surrogate is declared.
-- v1 pass/fail uses deterministic observer-side numerical evaluation with
-  `math.cos` / `math.sin`, declared platform note, declared tolerance, and
-  no claim of exact trigonometric arithmetic.
-
-The numerical boundary must be explicit. A fixture must not silently convert
-observer-side numerical evaluations into QA substrate state.
+`formal_cos_symbol` and `formal_sin_symbol` are symbolic packet labels only
+unless a later QA-native trig surrogate is defined. They do not permit
+numerical trig evaluation in v1.
 
 ---
 
-## 4. Declared Finite Packet Set
+## 5. Declared Finite Packet Set
 
 Fixture fields should include:
 
 ```text
 m
 direction_source = [273]
-packet_family in {cos, sin, cos_sin_pair}
-k_values
+packet_family in {phase_arg, phase_pair, formal_cos_symbol, formal_sin_symbol}
+packet_id
+omega_id
+x
+t
+k
 v
-weights
+weight
+phase_arg_num
+phase_arg_den
 coefficient_source = declared
 evaluation_points
 heldout_points
-target_function
-precision
-tolerance
-baseline_set_reporting_only
+target_packet_ids
+target_composition
 ```
 
 All packet parameters used to generate the target must be declared. v1 does
@@ -137,52 +166,42 @@ not permit fitted coefficients:
 coefficient_source = declared
 ```
 
-Any fixture that declares fitted coefficients belongs to v1.1 and must fail in
-v1.
-
 Point records should include:
 
 ```text
 x
 t
 split_label
-expected_value
 target_packet_ids
+expected_phase_arg_num
+expected_phase_arg_den
 ```
 
-`evaluation_points` are points where declared packets are evaluated.
+`evaluation_points` are points where exact phase arguments are evaluated.
 `heldout_points` are points not used to choose or construct the declared target
 packet set.
 
 ---
 
-## 5. Target Functions
+## 6. Exact Target Composition
 
-Start with synthetic scalar wave targets where the exact generating packets
-are known and declared.
+Start with synthetic symbolic targets where the exact generating packets are
+known and declared.
 
 Recommended v1 targets:
 
 ```text
-single_packet_cos
-two_packet_cos
-cos_sin_pair
+single_phase_arg
+two_phase_packet_composition
+formal_cos_sin_pair_symbolic
 ```
 
 Examples:
 
-- `single_packet_cos`: one known `omega`, `k`, `v`, and weight.
-- `two_packet_cos`: two known directions with known weights.
-- `cos_sin_pair`: phase-shifted packet pair with declared coefficients.
-
-Deferred:
-
-```text
-noisy_optional
-```
-
-Noise should be deferred unless deterministic seeded noise is used and the
-noise model is declared as part of the target.
+- `single_phase_arg`: one known `omega`, `k`, `v`, `x`, `t`, and weight.
+- `two_phase_packet_composition`: two known phase packets with known weights.
+- `formal_cos_sin_pair_symbolic`: symbolic pair of `formal_cos_symbol` and
+  `formal_sin_symbol` packets sharing or relating exact phase arguments.
 
 The target must be generated by declared packet parameters. Hidden generating
 packets make the result unreviewable and should fail.
@@ -195,85 +214,81 @@ v1.1 = recover/fix coefficients from training_points, then evaluate heldout_poin
 
 ---
 
-## 6. Held-out Evaluation
+## 7. Held-out Evaluation
 
 The cert must require declared evaluation and held-out point sets.
 
 ```text
-evaluation_points: points where declared packets are evaluated
+evaluation_points: points where exact phase arguments are evaluated
 heldout_points: points not used to choose or construct the declared target
 ```
 
 The cert passes only if:
 
-- held-out error satisfies the declared tolerance.
+- held-out packet identities match declared `target_packet_ids`; and
+- held-out exact `phase_arg` values match declared numerator/denominator
+  witnesses.
 
 Held-out points must not influence packet selection, declared weights,
-tolerance selection, precision selection, or reporting-baseline seed selection.
+phase-argument witnesses, or symbolic target composition.
 
 ---
 
-## 7. Baselines
+## 8. Deferred Numerical Approximation
 
-v1 baselines are reporting-only or minimal sanity checks. They must not turn
-v1 into a fitted-model competition.
-
-Reporting baselines:
+The following are not v1:
 
 ```text
-constant baseline
-low-degree polynomial baseline
-random/Fourier direction baseline with deterministic seed
+cos/sin numerical evaluation
+observer-side heldout approximation error
+baseline competition
+tolerance against real-valued wave targets
+platform math notes
 ```
 
-Optional baseline:
+These belong to:
 
 ```text
-nearest-direction ablation
+Layer 3.1 v2 = observer-side numerical wave-kernel approximation
 ```
 
-The random/Fourier baseline must be deterministic:
+or to an intermediate exact surrogate layer:
 
 ```text
-seed
-packet_count
-direction_source
-fit_method
-precision
+Layer 3.1 v1.1 = QA-native discrete/rational trig surrogate
 ```
 
-must all be declared.
-
-Full baseline competition is deferred:
-
-```text
-v1.1 = fitted coefficient recovery and baseline comparison
-```
+if such a surrogate is defined.
 
 ---
 
-## 8. Failure Condition
+## 9. Failure Condition
 
 The cert fails if:
 
-- held-out error exceeds tolerance;
-- target-generating packets are hidden or undeclared;
+- `[273]` direction provenance is missing or incorrect;
+- `[274]` dependency is missing or incorrect;
+- `omega dot x` is wrong;
+- `phase_arg` numerator/denominator is wrong;
+- packet declaration is incomplete;
+- declared weight is not exact rational;
+- target packet composition references hidden packet generators;
+- held-out packet identity or phase-argument equality fails;
 - fitted coefficients are declared in v1;
-- held-out points influence target construction;
-- random baseline is not deterministic;
-- observer numerical precision or tolerance is undeclared;
+- numerical trig is used in v1;
+- numerical approximation language is claimed in v1;
 - language claims full Whittaker theorem;
 - language claims Maxwell/EM;
 - language claims scalar-potential physics;
 - language claims physical field reconstruction.
 
-The failure condition is part of the physics discipline. The point is not to
-avoid finite kernel claims; the point is to make finite kernel claims fail when
-the packet family does not support them.
+The failure condition is part of the physics discipline. Exact phase-packet
+algebra is the substrate that makes later finite kernel approximation claims
+reviewable.
 
 ---
 
-## 9. Proposed Gates
+## 10. Proposed Gates
 
 `WKFA_1` dependency provenance:
 
@@ -284,42 +299,38 @@ the packet family does not support them.
 `WKFA_2` packet declaration:
 
 ```text
-finite packet set fully declared
+finite exact packet set fully declared
 ```
 
-`WKFA_3` target generation:
+`WKFA_3` exact phase algebra:
 
 ```text
-synthetic target generated from declared packets
+omega dot x recomputed exactly
+phase_arg recomputed exactly as Fraction
 ```
 
-`WKFA_4` evaluation/heldout separation:
+`WKFA_4` exact weights:
 
 ```text
-held-out points not used to choose or construct the declared target packet set
+weights are exact rational values
 ```
 
-`WKFA_5` deterministic numerical evaluation:
+`WKFA_5` target composition:
 
 ```text
-fixed numerical convention
-stdlib math.cos / math.sin in v1
-declared platform/tolerance boundary
-fixed seed if randomness is used
-no fitted coefficients in v1
+declared symbolic target composition references declared packet IDs only
 ```
 
-`WKFA_6` held-out error:
+`WKFA_6` held-out phase equality:
 
 ```text
-heldout_error <= tolerance
+held-out packet identity and phase_arg Fraction witnesses match
 ```
 
-`WKFA_7` baseline comparison:
+`WKFA_7` numerical firewall:
 
 ```text
-v1 baselines are reporting-only or minimal sanity checks
-full baseline competition deferred to v1.1
+reject float trig, numerical approximation pass/fail, fitted coefficients
 ```
 
 `WKFA_8` non-claim firewall:
@@ -330,44 +341,47 @@ reject Maxwell/EM/scalar-potential/full Whittaker theorem claims
 
 ---
 
-## 10. Proposed Fixtures
+## 11. Proposed Fixtures
 
 PASS:
 
 ```text
-fixtures/pass_wkfa_single_packet_declared_m3.json
-fixtures/pass_wkfa_two_packet_declared_m5.json
-fixtures/pass_wkfa_cos_sin_pair_declared_m5.json
+fixtures/pass_wkfa_single_phase_arg_m3.json
+fixtures/pass_wkfa_two_phase_packet_composition_m5.json
+fixtures/pass_wkfa_formal_cos_sin_pair_symbolic_m5.json
 ```
 
 FAIL:
 
 ```text
-fixtures/fail_wkfa_missing_packet_declaration.json
-fixtures/fail_wkfa_fitted_coefficients_in_v1.json
-fixtures/fail_wkfa_error_above_tolerance.json
-fixtures/fail_wkfa_heldout_leakage.json
-fixtures/fail_wkfa_precision_undeclared.json
+fixtures/fail_wkfa_float_trig_in_v1.json
+fixtures/fail_wkfa_missing_phase_arg.json
+fixtures/fail_wkfa_wrong_phase_arg_fraction.json
+fixtures/fail_wkfa_hidden_packet_generator.json
+fixtures/fail_wkfa_numeric_approximation_claim_in_v1.json
 fixtures/fail_wkfa_overclaimed_maxwell_em.json
 fixtures/fail_wkfa_overclaimed_full_whittaker_theorem.json
 ```
 
 ---
 
-## 11. Non-Claims
+## 12. Non-Claims
 
-This cert would not claim:
+Layer 3.1 v1 does not claim:
 
-- Whittaker 1903 theorem is proved.
-- Maxwell/EM is derived.
-- Scalar-potential physics is validated.
-- Physical fields are reconstructed.
-- Continuous completeness or density is proved.
-- The finite packet family is unique or physically complete.
+- numerical approximation;
+- trigonometric evaluation;
+- spherical quadrature;
+- Whittaker 1903 theorem is proved;
+- Maxwell/EM is derived;
+- scalar-potential physics is validated;
+- physical fields are reconstructed;
+- continuous completeness or density is proved;
+- the finite packet family is unique or physically complete.
 
 ---
 
-## 12. Ladder Placement
+## 13. Ladder Placement
 
 Registered base:
 
@@ -377,15 +391,17 @@ Registered base:
 [274] scalar angular-kernel sampling
 ```
 
-Next layer:
+Next exact layer:
 
 ```text
-Layer 3.1 finite Whittaker wave-kernel approximation
+Layer 3.1 v1 exact finite phase-packet algebra
 ```
 
 Later layers:
 
 ```text
+Layer 3.1 v1.1 QA-native discrete/rational trig surrogate
+Layer 3.1 v2 observer-side numerical wave-kernel approximation
 Layer 4 Whittaker 1904 scalar-potential bridge
 Layer 5 Maxwell/scalar-pair reconstruction
 ```

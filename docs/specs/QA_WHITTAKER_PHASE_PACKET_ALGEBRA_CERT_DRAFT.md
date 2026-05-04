@@ -1,9 +1,9 @@
-# QA Whittaker Wave-Kernel Finite Approximation Cert Draft
+# QA Whittaker Phase-Packet Algebra Cert Draft
 
 **Status**: Design draft only. No cert family ID assigned. Do not register or
 build from this draft until hostile review and Will sign-off.
 
-**Candidate slug**: `qa_whittaker_wave_kernel_finite_approx_cert_v1`
+**Candidate slug**: `qa_whittaker_phase_packet_algebra_cert_v1`
 
 **Layer position**: Layer 3.1 of the Whittaker -> QA development ladder.
 
@@ -25,8 +25,8 @@ Layer 3.1 v1 tests exact finite phase-packet algebra over the registered QA
 Whittaker substrate. It verifies that packet declarations, phase arguments,
 weights, and target packet compositions are exact and reviewable.
 
-The purpose is not to avoid finite kernel claims. The purpose is to put the
-kernel claim on the correct QA foundation:
+The purpose is to put later finite wave-kernel claims on the correct QA
+foundation:
 
 ```text
 exact S2 direction provenance
@@ -47,10 +47,11 @@ Layer 3.1 v1 depends on the registered QA substrate:
 
 - `[273]` QA Whittaker Rational Direction `S2` Cert supplies exact rational
   directions `D_m^(2)`.
-- `[274]` QA Whittaker Scalar Angular-Kernel Sampling Cert supplies exact
-  scalar sampling / finite averaging machinery.
+- `[274]` QA Whittaker Scalar Angular-Kernel Sampling Cert is lineage context
+  for the Layer 3 progression, but it is not a hard v1 validator dependency
+  unless build-time code explicitly reuses its finite sampling machinery.
 
-This draft extends `[274]` from scalar profiles:
+This draft extends the Layer 3 line from scalar profiles:
 
 ```text
 h(omega)
@@ -83,6 +84,15 @@ t     = rational time
 k     = rational wavenumber/frequency parameter
 v     = rational propagation speed parameter
 ```
+
+Rational scalar fields should use explicit numerator/denominator records:
+
+```text
+{"num": integer, "den": positive_integer}
+```
+
+Rational vectors should use one such record per coordinate. The validator
+should canonicalize signs and reduce fractions before comparing witnesses.
 
 The validator must compute:
 
@@ -267,7 +277,7 @@ if such a surrogate is defined.
 The cert fails if:
 
 - `[273]` direction provenance is missing or incorrect;
-- `[274]` dependency is missing or incorrect;
+- required `[273]` direction provenance is missing or incorrect;
 - `omega dot x` is wrong;
 - `phase_arg` numerator/denominator is wrong;
 - packet declaration is incomplete;
@@ -290,50 +300,50 @@ reviewable.
 
 ## 10. Proposed Gates
 
-`WKFA_1` dependency provenance:
+`WPPA_1` dependency provenance:
 
 ```text
-[273] and [274] present and registered
+[273] present and registered; [274] recorded as lineage context unless reused
 ```
 
-`WKFA_2` packet declaration:
+`WPPA_2` packet declaration:
 
 ```text
 finite exact packet set fully declared
 ```
 
-`WKFA_3` exact phase algebra:
+`WPPA_3` exact phase algebra:
 
 ```text
 omega dot x recomputed exactly
 phase_arg recomputed exactly as Fraction
 ```
 
-`WKFA_4` exact weights:
+`WPPA_4` exact weights:
 
 ```text
 weights are exact rational values
 ```
 
-`WKFA_5` target composition:
+`WPPA_5` target composition:
 
 ```text
 declared symbolic target composition references declared packet IDs only
 ```
 
-`WKFA_6` held-out phase equality:
+`WPPA_6` held-out phase equality:
 
 ```text
 held-out packet identity and phase_arg Fraction witnesses match
 ```
 
-`WKFA_7` numerical firewall:
+`WPPA_7` numerical firewall:
 
 ```text
 reject float trig, numerical approximation pass/fail, fitted coefficients
 ```
 
-`WKFA_8` non-claim firewall:
+`WPPA_8` non-claim firewall:
 
 ```text
 reject Maxwell/EM/scalar-potential/full Whittaker theorem claims
@@ -346,21 +356,21 @@ reject Maxwell/EM/scalar-potential/full Whittaker theorem claims
 PASS:
 
 ```text
-fixtures/pass_wkfa_single_phase_arg_m3.json
-fixtures/pass_wkfa_two_phase_packet_composition_m5.json
-fixtures/pass_wkfa_formal_cos_sin_pair_symbolic_m5.json
+fixtures/pass_wppa_single_phase_arg_m3.json
+fixtures/pass_wppa_two_phase_packet_composition_m5.json
+fixtures/pass_wppa_formal_cos_sin_pair_symbolic_m5.json
 ```
 
 FAIL:
 
 ```text
-fixtures/fail_wkfa_float_trig_in_v1.json
-fixtures/fail_wkfa_missing_phase_arg.json
-fixtures/fail_wkfa_wrong_phase_arg_fraction.json
-fixtures/fail_wkfa_hidden_packet_generator.json
-fixtures/fail_wkfa_numeric_approximation_claim_in_v1.json
-fixtures/fail_wkfa_overclaimed_maxwell_em.json
-fixtures/fail_wkfa_overclaimed_full_whittaker_theorem.json
+fixtures/fail_wppa_float_trig_in_v1.json
+fixtures/fail_wppa_missing_phase_arg.json
+fixtures/fail_wppa_wrong_phase_arg_fraction.json
+fixtures/fail_wppa_hidden_packet_generator.json
+fixtures/fail_wppa_numeric_approximation_claim_in_v1.json
+fixtures/fail_wppa_overclaimed_maxwell_em.json
+fixtures/fail_wppa_overclaimed_full_whittaker_theorem.json
 ```
 
 ---

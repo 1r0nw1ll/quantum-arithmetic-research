@@ -10,8 +10,8 @@ This is the same style as the repo's real-data quantization tests:
 5. compare against permutation and block-bootstrap nulls.
 
 The physical question here is not classifier accuracy. It is whether ordering
-measured microwave S21 amplitudes by exact Whittaker/QA phase-packet coordinates
-creates QA orbit structure beyond order-destroying nulls.
+measured microwave S21 channels by exact Whittaker/QA phase-packet coordinates
+create QA orbit structure beyond order-destroying nulls.
 """
 
 from __future__ import annotations
@@ -44,10 +44,11 @@ DATA_PATH = Path("/tmp/Escatt_meas.zip")
 OUT_PATH = Path("results/whittaker_em_qa_observer_null_test.json")
 
 M = 24
-N_PERMUTE = 60
-N_BLOCK = 30
+N_PERMUTE = 40
+N_BLOCK = 20
 BLOCK_SIZE = 250
 SEED = 42
+ALPHA = 0.05
 CLASS_ORDER = ("cosmos", "satellite", "singularity")
 OMEGA_PACKETS = (
     (7, 24, 0, 25),
@@ -69,6 +70,10 @@ class FieldSample:
     @property
     def amplitude(self) -> float:
         return math.hypot(self.real, self.imag)
+
+    @property
+    def wrapped_phase(self) -> float:
+        return math.atan2(self.imag, self.real)
 
 
 def ensure_data() -> None:
@@ -183,14 +188,42 @@ def whittaker_phase_key(sample: FieldSample, omega_idx: int, z_mm: int = 0) -> F
     return cycles - (cycles.numerator // cycles.denominator)
 
 
-def orderings(samples: list[FieldSample]) -> dict[str, list[float]]:
-    out = {
-        "raster_frequency_order": [sample.amplitude for sample in samples],
-    }
+def orderings(samples: list[FieldSample]) -> dict[str, list[FieldSample]]:
+    out = {"raster_frequency_order": samples[:]}
     for idx in range(len(OMEGA_PACKETS)):
         ordered = sorted(samples, key=lambda sample, i=idx: whittaker_phase_key(sample, i))
-        out[f"whittaker_phase_order_omega{idx}"] = [sample.amplitude for sample in ordered]
+        out[f"whittaker_phase_order_omega{idx}"] = ordered
     return out
+
+
+def wrap_pi(value: float) -> float:
+    while value <= -math.pi:
+        value += 2.0 * math.pi
+    while value > math.pi:
+        value -= 2.0 * math.pi
+    return value
+
+
+def unwrap_phases(samples: list[FieldSample]) -> list[float]:
+    if not samples:
+        return []
+    out = [samples[0].wrapped_phase]
+    for sample in samples[1:]:
+        delta = wrap_pi(sample.wrapped_phase - out[-1])
+        out.append(out[-1] + delta)
+    return out
+
+
+def channel_values(samples: list[FieldSample]) -> dict[str, list[float]]:
+    unwrapped = unwrap_phases(samples)
+    phase_steps = [abs(wrap_pi(samples[i].wrapped_phase - samples[i - 1].wrapped_phase)) for i in range(1, len(samples))]
+    return {
+        "amplitude": [sample.amplitude for sample in samples],
+        "real": [sample.real for sample in samples],
+        "imag": [sample.imag for sample in samples],
+        "unwrapped_phase": unwrapped,
+        "phase_step_abs": phase_steps,
+    }
 
 
 def shuffle_permute(values: list[float], rng: random.Random) -> list[float]:
@@ -249,15 +282,53 @@ def null_test(values: list[float], null_fn: Callable[[list[float], random.Random
     }
 
 
+def summarize_results(results: dict) -> dict:
+    summary = {
+        "alpha": ALPHA,
+        "block_bootstrap_rejects": [],
+        "permute_rejects": [],
+        "both_null_rejects": [],
+    }
+    for ordering, per_channel in results.items():
+        for channel, tests in per_channel.items():
+            for null_name in ("permute", "block_bootstrap"):
+                rejected = [
+                    obs for obs, p in tests[null_name]["p_values"].items() if p <= ALPHA
+                ]
+                if rejected:
+                    summary[f"{null_name}_rejects"].append(
+                        {"ordering": ordering, "channel": channel, "observables": rejected}
+                    )
+            both = sorted(
+                set(
+                    obs
+                    for obs, p in tests["permute"]["p_values"].items()
+                    if p <= ALPHA
+                )
+                & set(
+                    obs
+                    for obs, p in tests["block_bootstrap"]["p_values"].items()
+                    if p <= ALPHA
+                )
+            )
+            if both:
+                summary["both_null_rejects"].append(
+                    {"ordering": ordering, "channel": channel, "observables": both}
+                )
+    return summary
+
+
 def main() -> int:
     samples = load_samples()
     ordered = orderings(samples)
     results = {}
-    for name, values in ordered.items():
-        results[name] = {
-            "permute": null_test(values, shuffle_permute, N_PERMUTE),
-            "block_bootstrap": null_test(values, shuffle_block, N_BLOCK),
-        }
+    for name, ordered_samples in ordered.items():
+        results[name] = {}
+        for channel, values in channel_values(ordered_samples).items():
+            results[name][channel] = {
+                "permute": null_test(values, shuffle_permute, N_PERMUTE),
+                "block_bootstrap": null_test(values, shuffle_block, N_BLOCK),
+            }
     payload = {
         "ok": True,
         "experiment": "whittaker_em_qa_observer_null_test",
@@ -265,14 +336,14 @@ def main() -> int:
             "name": "RUO microwave imaging measurements Escatt_meas",
             "doi": "10.17811/ruo_datasets.75973",
             "source_url": DATA_URL,
-            "measurement": "measured scattered microwave S21 amplitudes",
+            "measurement": "measured scattered microwave complex S21 field",
             "sample_count": len(samples),
             "frequency_band_mhz": [12000, 18000],
         },
         "qa_observer_pattern": {
             "source_pattern": "phase2_5_quantization_compare real-data observer/null test",
             "m": M,
-            "b": "fixed quantile bin of measured S21 amplitude, edges calibrated per ordering before null draws",
+            "b": "fixed quantile bin of measured S21 channel values, edges calibrated per ordering/channel before null draws",
             "e": "((b_next - b - 1) % m) + 1",
             "observables": ["class_fracs", "norm_f_entropy", "mean_return_time"],
             "nulls": {
@@ -281,8 +352,10 @@ def main() -> int:
             },
         },
         "tested_orderings": list(ordered.keys()),
+        "tested_channels": ["amplitude", "real", "imag", "unwrapped_phase", "phase_step_abs"],
         "omega_packets": [list(packet) for packet in OMEGA_PACKETS],
         "results": results,
+        "summary": summarize_results(results),
     }
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)
     OUT_PATH.write_text(json.dumps(payload, indent=2, sort_keys=True) + "\n")

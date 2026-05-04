@@ -5,7 +5,7 @@
       12000,
       18000
     ],
-    "measurement": "measured scattered microwave S21 amplitudes",
+    "measurement": "measured scattered microwave complex S21 field",
     "name": "RUO microwave imaging measurements Escatt_meas",
     "sample_count": 60434,
     "source_url": "https://digibuo.uniovi.es/dspace/bitstream/handle/10651/75973/Escatt_meas.zip?sequence=2&isAllowed=y"
@@ -45,15 +45,15 @@
     ]
   ],
   "qa_observer_pattern": {
-    "b": "fixed quantile bin of measured S21 amplitude, edges calibrated per ordering before null draws",
+    "b": "fixed quantile bin of measured S21 channel values, edges calibrated per ordering/channel before null draws",
     "e": "((b_next - b - 1) % m) + 1",
     "m": 24,
     "nulls": {
       "block_bootstrap": {
         "block_size": 250,
-        "trials": 30
+        "trials": 20
       },
-      "permute": 60
+      "permute": 40
     },
     "observables": [
       "class_fracs",
@@ -64,366 +64,2153 @@
   },
   "results": {
     "raster_frequency_order": {
-      "block_bootstrap": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9763269516103232,
-            "satellite": 0.011075626451331777,
-            "singularity": 0.012597421938344944
+      "amplitude": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9766716859993713,
+              "satellite": 0.011070938063640725,
+              "singularity": 0.01225737593698807
+            },
+            "mean_return_time": 562.386613094542,
+            "norm_f_entropy": 7.640318124651337
           },
-          "mean_return_time": 562.3852888272605,
-          "norm_f_entropy": 7.639923308265463
-        },
-        "p_values": {
-          "class_chi2": 0.967741935483871,
-          "mean_return_time": 0.12903225806451613,
-          "norm_f_entropy": 0.6451612903225806
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9760064865222643,
-            "satellite": 0.011219035957175716,
-            "singularity": 0.012774477520559959
+          "p_values": {
+            "class_chi2": 0.9047619047619048,
+            "mean_return_time": 0.14285714285714285,
+            "norm_f_entropy": 0.6666666666666666
           },
-          "mean_return_time": 559.9375344571229,
-          "norm_f_entropy": 7.644834973698174
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9760064865222643,
+              "satellite": 0.011219035957175716,
+              "singularity": 0.012774477520559959
+            },
+            "mean_return_time": 559.9375344571229,
+            "norm_f_entropy": 7.644834973698174
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.0003045367863580489,
+            "class_chi2_real": 2.424914150266069e-05
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 0.00033102282924035687,
-          "class_chi2_real": 4.450583564392023e-06
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843140337232968,
+              "satellite": 0.013905482104148395,
+              "singularity": 0.0017804841725547302
+            },
+            "mean_return_time": 570.4728064386788,
+            "norm_f_entropy": 7.8509234750132775
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9760064865222643,
+              "satellite": 0.011219035957175716,
+              "singularity": 0.012774477520559959
+            },
+            "mean_return_time": 559.9375344571229,
+            "norm_f_entropy": 7.644834973698174
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.831738596788585e-05,
+            "class_chi2_real": 0.06847396227823313
+          }
         }
       },
-      "permute": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9843496103122467,
-            "satellite": 0.013897208478811245,
-            "singularity": 0.0017531812089421344
+      "imag": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9670387040193272,
+              "satellite": 0.013381761620306788,
+              "singularity": 0.019579534360366024
+            },
+            "mean_return_time": 450.5896787118386,
+            "norm_f_entropy": 7.250781377905406
           },
-          "mean_return_time": 570.471221689471,
-          "norm_f_entropy": 7.850837823295704
-        },
-        "p_values": {
-          "class_chi2": 0.01639344262295082,
-          "mean_return_time": 0.01639344262295082,
-          "norm_f_entropy": 0.01639344262295082
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9760064865222643,
-            "satellite": 0.011219035957175716,
-            "singularity": 0.012774477520559959
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.2857142857142857,
+            "norm_f_entropy": 0.5238095238095238
           },
-          "mean_return_time": 559.9375344571229,
-          "norm_f_entropy": 7.644834973698174
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9665745536379131,
+              "satellite": 0.013783859811692287,
+              "singularity": 0.019641586550394653
+            },
+            "mean_return_time": 442.51402758758894,
+            "norm_f_entropy": 7.259176692660414
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.0008736969806120147,
+            "class_chi2_real": 1.2501773909774152e-05
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 2.6246313778180114e-05,
-          "class_chi2_real": 0.06987172599523303
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843640891565867,
+              "satellite": 0.013903827379080965,
+              "singularity": 0.0017320834643324012
+            },
+            "mean_return_time": 570.5205214093589,
+            "norm_f_entropy": 7.851634320500379
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9665745536379131,
+              "satellite": 0.013783859811692287,
+              "singularity": 0.019641586550394653
+            },
+            "mean_return_time": 442.51402758758894,
+            "norm_f_entropy": 7.259176692660414
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.1626594840881226e-05,
+            "class_chi2_real": 0.18550431057236438
+          }
+        }
+      },
+      "phase_step_abs": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9831819234842467,
+              "satellite": 0.012429673020916071,
+              "singularity": 0.004388403494837172
+            },
+            "mean_return_time": 569.0754118217054,
+            "norm_f_entropy": 7.805438800826337
+          },
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.9047619047619048,
+            "norm_f_entropy": 0.3333333333333333
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.98327045274027,
+              "satellite": 0.012327905745300504,
+              "singularity": 0.004401641514429441
+            },
+            "mean_return_time": 569.0207832130446,
+            "norm_f_entropy": 7.809054236130783
+          },
+          "stats": {
+            "class_chi2_null_mean": 9.8757973942623e-05,
+            "class_chi2_real": 8.811192536164628e-07
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.984322047921631,
+              "satellite": 0.013959905348159916,
+              "singularity": 0.0017180467302091607
+            },
+            "mean_return_time": 570.5027027365678,
+            "norm_f_entropy": 7.850757667102185
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.98327045274027,
+              "satellite": 0.012327905745300504,
+              "singularity": 0.004401641514429441
+            },
+            "mean_return_time": 569.0207832130446,
+            "norm_f_entropy": 7.809054236130783
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.2030112915467772e-05,
+            "class_chi2_real": 0.004383698451137677
+          }
+        }
+      },
+      "real": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9677841576622044,
+              "satellite": 0.014633561133817617,
+              "singularity": 0.017582281203977958
+            },
+            "mean_return_time": 451.78441634609834,
+            "norm_f_entropy": 7.2466116688246185
+          },
+          "p_values": {
+            "class_chi2": 0.6190476190476191,
+            "mean_return_time": 0.38095238095238093,
+            "norm_f_entropy": 0.8571428571428571
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9657140966028495,
+              "satellite": 0.014710505849453114,
+              "singularity": 0.01957539754769745
+            },
+            "mean_return_time": 443.9491015964197,
+            "norm_f_entropy": 7.2494856650633075
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.0010111786446205045,
+            "class_chi2_real": 0.0002307707966771567
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843988383830027,
+              "satellite": 0.013885211722072377,
+              "singularity": 0.0017159498949249584
+            },
+            "mean_return_time": 570.4791511435589,
+            "norm_f_entropy": 7.850562474100339
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9657140966028495,
+              "satellite": 0.014710505849453114,
+              "singularity": 0.01957539754769745
+            },
+            "mean_return_time": 443.9491015964197,
+            "norm_f_entropy": 7.2494856650633075
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.4347031772537288e-05,
+            "class_chi2_real": 0.18628318333946
+          }
+        }
+      },
+      "unwrapped_phase": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.8861623616236163,
+              "satellite": 0.08093012096040243,
+              "singularity": 0.03290751741598134
+            },
+            "mean_return_time": 69.84042979986782,
+            "norm_f_entropy": 4.895664851766089
+          },
+          "p_values": {
+            "class_chi2": 0.7142857142857143,
+            "mean_return_time": 0.047619047619047616,
+            "norm_f_entropy": 0.2857142857142857
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8787417470587262,
+              "satellite": 0.08070094153856337,
+              "singularity": 0.04055731140271044
+            },
+            "mean_return_time": 11.495775207926041,
+            "norm_f_entropy": 4.925363155930285
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.008412745121330988,
+            "class_chi2_real": 0.00184108556728223
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9842887991660186,
+              "satellite": 0.013959260668839873,
+              "singularity": 0.0017519401651415617
+            },
+            "mean_return_time": 570.4827497201665,
+            "norm_f_entropy": 7.85143572621192
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8787417470587262,
+              "satellite": 0.08070094153856337,
+              "singularity": 0.04055731140271044
+            },
+            "mean_return_time": 11.495775207926041,
+            "norm_f_entropy": 4.925363155930285
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.6460713081174374e-05,
+            "class_chi2_real": 1.1899583986822022
+          }
         }
       }
     },
     "whittaker_phase_order_omega0": {
-      "block_bootstrap": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9829508160552457,
-            "satellite": 0.012944362627482777,
-            "singularity": 0.0041048213172714685
+      "amplitude": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9830092830076282,
+              "satellite": 0.012923402776628661,
+              "singularity": 0.004067314215743054
+            },
+            "mean_return_time": 570.0614840369548,
+            "norm_f_entropy": 7.828496721745246
           },
-          "mean_return_time": 570.1015765351866,
-          "norm_f_entropy": 7.828313909597506
-        },
-        "p_values": {
-          "class_chi2": 0.9354838709677419,
-          "mean_return_time": 0.3870967741935484,
-          "norm_f_entropy": 0.5806451612903226
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9829728790561448,
-            "satellite": 0.012989591779325864,
-            "singularity": 0.0040375291645293136
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.2857142857142857,
+            "norm_f_entropy": 0.6190476190476191
           },
-          "mean_return_time": 570.3878744340678,
-          "norm_f_entropy": 7.830560344442645
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9829728790561448,
+              "satellite": 0.012989591779325864,
+              "singularity": 0.0040375291645293136
+            },
+            "mean_return_time": 570.3878744340678,
+            "norm_f_entropy": 7.830560344442645
+          },
+          "stats": {
+            "class_chi2_null_mean": 4.709244457458336e-05,
+            "class_chi2_real": 5.584610561674743e-07
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 3.602786341487575e-05,
-          "class_chi2_real": 1.2616813323548392e-06
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844542716727617,
+              "satellite": 0.013875697052934654,
+              "singularity": 0.0016700312743037743
+            },
+            "mean_return_time": 570.5339755584142,
+            "norm_f_entropy": 7.850951925696703
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.5609756097560976,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9829728790561448,
+              "satellite": 0.012989591779325864,
+              "singularity": 0.0040375291645293136
+            },
+            "mean_return_time": 570.3878744340678,
+            "norm_f_entropy": 7.830560344442645
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.103429819511367e-05,
+            "class_chi2_real": 0.003415068342145079
+          }
         }
       },
-      "permute": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9844108351397415,
-            "satellite": 0.013904378954103442,
-            "singularity": 0.0016847859061550259
+      "imag": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9819287475385965,
+              "satellite": 0.013955123856171297,
+              "singularity": 0.004116128605232241
+            },
+            "mean_return_time": 569.310457423526,
+            "norm_f_entropy": 7.795575650102535
           },
-          "mean_return_time": 570.5152491215174,
-          "norm_f_entropy": 7.850778356418806
-        },
-        "p_values": {
-          "class_chi2": 0.01639344262295082,
-          "mean_return_time": 0.6065573770491803,
-          "norm_f_entropy": 0.01639344262295082
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9829728790561448,
-            "satellite": 0.012989591779325864,
-            "singularity": 0.0040375291645293136
+          "p_values": {
+            "class_chi2": 0.9523809523809523,
+            "mean_return_time": 0.7142857142857143,
+            "norm_f_entropy": 0.42857142857142855
           },
-          "mean_return_time": 570.3878744340678,
-          "norm_f_entropy": 7.830560344442645
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9818642132609667,
+              "satellite": 0.013949332318435292,
+              "singularity": 0.004186454420598017
+            },
+            "mean_return_time": 569.065138580283,
+            "norm_f_entropy": 7.798053104007783
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.8573108314773443e-05,
+            "class_chi2_real": 1.2081914682401752e-06
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 2.8993654084776266e-05,
-          "class_chi2_real": 0.0033478073100910526
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844952261181804,
+              "satellite": 0.013811162775304883,
+              "singularity": 0.0016936111065146528
+            },
+            "mean_return_time": 570.5128176320229,
+            "norm_f_entropy": 7.8507711019976725
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9818642132609667,
+              "satellite": 0.013949332318435292,
+              "singularity": 0.004186454420598017
+            },
+            "mean_return_time": 569.065138580283,
+            "norm_f_entropy": 7.798053104007783
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.489860520292072e-05,
+            "class_chi2_real": 0.0036776548038977104
+          }
+        }
+      },
+      "phase_step_abs": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9839431096108022,
+              "satellite": 0.013679011119936458,
+              "singularity": 0.0023778792692613184
+            },
+            "mean_return_time": 570.2684133587276,
+            "norm_f_entropy": 7.84165059678848
+          },
+          "p_values": {
+            "class_chi2": 0.9047619047619048,
+            "mean_return_time": 0.14285714285714285,
+            "norm_f_entropy": 0.42857142857142855
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9841143764892772,
+              "satellite": 0.013535875033095049,
+              "singularity": 0.002349748477627747
+            },
+            "mean_return_time": 569.8269513499065,
+            "norm_f_entropy": 7.845135147428878
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.595992218419442e-05,
+            "class_chi2_real": 1.8603686118965481e-06
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843865832671431,
+              "satellite": 0.013870135027799841,
+              "singularity": 0.0017432817050569236
+            },
+            "mean_return_time": 570.4758023422881,
+            "norm_f_entropy": 7.851411157674642
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9841143764892772,
+              "satellite": 0.013535875033095049,
+              "singularity": 0.002349748477627747
+            },
+            "mean_return_time": 569.8269513499065,
+            "norm_f_entropy": 7.845135147428878
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.222207834183338e-05,
+            "class_chi2_real": 0.00021911319837721263
+          }
+        }
+      },
+      "real": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9823689044065329,
+              "satellite": 0.01298380024158986,
+              "singularity": 0.004647295351877285
+            },
+            "mean_return_time": 569.1704971849574,
+            "norm_f_entropy": 7.797621734772319
+          },
+          "p_values": {
+            "class_chi2": 0.9523809523809523,
+            "mean_return_time": 0.8571428571428571,
+            "norm_f_entropy": 0.5238095238095238
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9822282527758013,
+              "satellite": 0.012973044528651565,
+              "singularity": 0.004798702695547135
+            },
+            "mean_return_time": 569.3100890455586,
+            "norm_f_entropy": 7.8002176579957245
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.48056314553028e-05,
+            "class_chi2_real": 4.9618490321276085e-06
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843152747670973,
+              "satellite": 0.013986977313719326,
+              "singularity": 0.0016977479191832277
+            },
+            "mean_return_time": 570.442979935513,
+            "norm_f_entropy": 7.851218678854257
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9822282527758013,
+              "satellite": 0.012973044528651565,
+              "singularity": 0.004798702695547135
+            },
+            "mean_return_time": 569.3100890455586,
+            "norm_f_entropy": 7.8002176579957245
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.495387272708601e-05,
+            "class_chi2_real": 0.005741853417293226
+          }
+        }
+      },
+      "unwrapped_phase": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.8833468469213841,
+              "satellite": 0.0855492859861334,
+              "singularity": 0.031103867092482584
+            },
+            "mean_return_time": 48.68947515967829,
+            "norm_f_entropy": 4.617048550599278
+          },
+          "p_values": {
+            "class_chi2": 0.5238095238095238,
+            "mean_return_time": 0.047619047619047616,
+            "norm_f_entropy": 0.19047619047619047
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.876143828702861,
+              "satellite": 0.08228947760329622,
+              "singularity": 0.04156669369384277
+            },
+            "mean_return_time": 1.374246239480485,
+            "norm_f_entropy": 4.6488697329638295
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.008516191042198518,
+            "class_chi2_real": 0.003702470178836612
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843868416262638,
+              "satellite": 0.013859149802260353,
+              "singularity": 0.0017540085714758493
+            },
+            "mean_return_time": 570.5553531750672,
+            "norm_f_entropy": 7.850358854494928
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.876143828702861,
+              "satellite": 0.08228947760329622,
+              "singularity": 0.04156669369384277
+            },
+            "mean_return_time": 1.374246239480485,
+            "norm_f_entropy": 4.6488697329638295
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.3890562007631435e-05,
+            "class_chi2_real": 1.2534537909961938
+          }
         }
       }
     },
     "whittaker_phase_order_omega1": {
-      "block_bootstrap": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9840037727731538,
-            "satellite": 0.014225671404696109,
-            "singularity": 0.0017705558221501499
+      "amplitude": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9840906458391938,
+              "satellite": 0.014147899326526898,
+              "singularity": 0.0017614548342792847
+            },
+            "mean_return_time": 570.3237048298445,
+            "norm_f_entropy": 7.842013660472657
           },
-          "mean_return_time": 570.3248820800686,
-          "norm_f_entropy": 7.842196121303771
-        },
-        "p_values": {
-          "class_chi2": 1.0,
-          "mean_return_time": 0.967741935483871,
-          "norm_f_entropy": 0.45161290322580644
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9839657140966028,
-            "satellite": 0.0142802773319213,
-            "singularity": 0.0017540085714758493
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 1.0,
+            "norm_f_entropy": 0.47619047619047616
           },
-          "mean_return_time": 570.3459912792155,
-          "norm_f_entropy": 7.844932711203819
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9839657140966028,
+              "satellite": 0.0142802773319213,
+              "singularity": 0.0017540085714758493
+            },
+            "mean_return_time": 570.3459912792155,
+            "norm_f_entropy": 7.844932711203819
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.9534767485247578e-05,
+            "class_chi2_real": 1.2859627393939706e-06
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 3.146927724709854e-05,
-          "class_chi2_real": 3.6572670282490594e-07
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843856005824632,
+              "satellite": 0.01388645276587295,
+              "singularity": 0.001727946651663826
+            },
+            "mean_return_time": 570.4953965283927,
+            "norm_f_entropy": 7.851274019850905
+          },
+          "p_values": {
+            "class_chi2": 0.7317073170731707,
+            "mean_return_time": 0.5853658536585366,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9839657140966028,
+              "satellite": 0.0142802773319213,
+              "singularity": 0.0017540085714758493
+            },
+            "mean_return_time": 570.3459912792155,
+            "norm_f_entropy": 7.844932711203819
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.8457778953822135e-05,
+            "class_chi2_real": 1.1741182452113657e-05
+          }
         }
       },
-      "permute": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9844593737417194,
-            "satellite": 0.013839293101451194,
-            "singularity": 0.0017013331568293262
+      "imag": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9840997468270647,
+              "satellite": 0.014236427117634403,
+              "singularity": 0.0016638260553009116
+            },
+            "mean_return_time": 570.3351220408641,
+            "norm_f_entropy": 7.848248262196725
           },
-          "mean_return_time": 570.4878064943672,
-          "norm_f_entropy": 7.850951041308965
-        },
-        "p_values": {
-          "class_chi2": 0.5245901639344263,
-          "mean_return_time": 0.5245901639344263,
-          "norm_f_entropy": 0.01639344262295082
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9839657140966028,
-            "satellite": 0.0142802773319213,
-            "singularity": 0.0017540085714758493
+          "p_values": {
+            "class_chi2": 0.9523809523809523,
+            "mean_return_time": 0.6666666666666666,
+            "norm_f_entropy": 0.19047619047619047
           },
-          "mean_return_time": 570.3459912792155,
-          "norm_f_entropy": 7.844932711203819
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9841311866033459,
+              "satellite": 0.0142802773319213,
+              "singularity": 0.0015885360647328447
+            },
+            "mean_return_time": 570.5045859297993,
+            "norm_f_entropy": 7.8526157585232195
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.8258082020605536e-05,
+            "class_chi2_real": 3.5430256194481343e-06
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 2.6850217042105167e-05,
-          "class_chi2_real": 1.5930252121677507e-05
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844431022785564,
+              "satellite": 0.013840534145251765,
+              "singularity": 0.0017163635761918157
+            },
+            "mean_return_time": 570.509027348514,
+            "norm_f_entropy": 7.850628039401005
+          },
+          "p_values": {
+            "class_chi2": 0.43902439024390244,
+            "mean_return_time": 1.0,
+            "norm_f_entropy": 0.43902439024390244
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9841311866033459,
+              "satellite": 0.0142802773319213,
+              "singularity": 0.0015885360647328447
+            },
+            "mean_return_time": 570.5045859297993,
+            "norm_f_entropy": 7.8526157585232195
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.0313532443598362e-05,
+            "class_chi2_real": 2.359045781170724e-05
+          }
+        }
+      },
+      "phase_step_abs": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843526608419382,
+              "satellite": 0.013970247550966375,
+              "singularity": 0.0016770916070955784
+            },
+            "mean_return_time": 570.3871550053461,
+            "norm_f_entropy": 7.8485119558802
+          },
+          "p_values": {
+            "class_chi2": 0.8095238095238095,
+            "mean_return_time": 0.5714285714285714,
+            "norm_f_entropy": 0.38095238095238093
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9842302091607096,
+              "satellite": 0.01414813343923749,
+              "singularity": 0.001621657400052952
+            },
+            "mean_return_time": 570.1922280139,
+            "norm_f_entropy": 7.851763762288533
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.880471784988924e-05,
+            "class_chi2_real": 4.112598249397166e-06
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843294943076517,
+              "satellite": 0.01395825059571088,
+              "singularity": 0.0017122550966375432
+            },
+            "mean_return_time": 570.5170977011494,
+            "norm_f_entropy": 7.850900557394567
+          },
+          "p_values": {
+            "class_chi2": 0.7804878048780488,
+            "mean_return_time": 0.12195121951219512,
+            "norm_f_entropy": 0.7073170731707317
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9842302091607096,
+              "satellite": 0.01414813343923749,
+              "singularity": 0.001621657400052952
+            },
+            "mean_return_time": 570.1922280139,
+            "norm_f_entropy": 7.851763762288533
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.279452673157759e-05,
+            "class_chi2_real": 7.386754703192267e-06
+          }
+        }
+      },
+      "real": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843727764631905,
+              "satellite": 0.013691195207916205,
+              "singularity": 0.0019360283288931545
+            },
+            "mean_return_time": 570.2986250563844,
+            "norm_f_entropy": 7.845958717466607
+          },
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.19047619047619047,
+            "norm_f_entropy": 0.5238095238095238
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9843959426141347,
+              "satellite": 0.013684576307646485,
+              "singularity": 0.001919481078218854
+            },
+            "mean_return_time": 570.8091451292247,
+            "norm_f_entropy": 7.848062511253168
+          },
+          "stats": {
+            "class_chi2_null_mean": 5.125062255738402e-05,
+            "class_chi2_real": 1.451745384017118e-07
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843640891565867,
+              "satellite": 0.013894312709943244,
+              "singularity": 0.0017415981334701239
+            },
+            "mean_return_time": 570.4760696326244,
+            "norm_f_entropy": 7.850617829323265
+          },
+          "p_values": {
+            "class_chi2": 0.5121951219512195,
+            "mean_return_time": 0.17073170731707318,
+            "norm_f_entropy": 0.2926829268292683
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9843959426141347,
+              "satellite": 0.013684576307646485,
+              "singularity": 0.001919481078218854
+            },
+            "mean_return_time": 570.8091451292247,
+            "norm_f_entropy": 7.848062511253168
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.618385720646836e-05,
+            "class_chi2_real": 2.133559500136508e-05
+          }
+        }
+      },
+      "unwrapped_phase": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.885326725464564,
+              "satellite": 0.07468849800605629,
+              "singularity": 0.039984776529379644
+            },
+            "mean_return_time": 75.70204233292863,
+            "norm_f_entropy": 5.0297450906465935
+          },
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.047619047619047616,
+            "norm_f_entropy": 1.0
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.883523902503599,
+              "satellite": 0.07615044760313074,
+              "singularity": 0.040325649893270234
+            },
+            "mean_return_time": 34.558951675695376,
+            "norm_f_entropy": 5.031318441331684
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.004871022095009982,
+            "class_chi2_real": 3.5193267553381475e-05
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843467145433786,
+              "satellite": 0.013898449522611819,
+              "singularity": 0.0017548359340095643
+            },
+            "mean_return_time": 570.4695211086422,
+            "norm_f_entropy": 7.8509251864156395
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.883523902503599,
+              "satellite": 0.07615044760313074,
+              "singularity": 0.040325649893270234
+            },
+            "mean_return_time": 34.558951675695376,
+            "norm_f_entropy": 5.031318441331684
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.9722293643291426e-05,
+            "class_chi2_real": 1.1369333063459648
+          }
         }
       }
     },
     "whittaker_phase_order_omega2": {
-      "block_bootstrap": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9830307944335048,
-            "satellite": 0.012183189096464956,
-            "singularity": 0.004786016470030171
+      "amplitude": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9830597521221849,
+              "satellite": 0.01227723263779723,
+              "singularity": 0.004663015240017871
+            },
+            "mean_return_time": 569.8010391432915,
+            "norm_f_entropy": 7.814236099345815
           },
-          "mean_return_time": 569.7785132343196,
-          "norm_f_entropy": 7.815164993251219
-        },
-        "p_values": {
-          "class_chi2": 0.8064516129032258,
-          "mean_return_time": 0.6129032258064516,
-          "norm_f_entropy": 0.3870967741935484
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9827743120480532,
-            "satellite": 0.01212913474426224,
-            "singularity": 0.005096553207684543
+          "p_values": {
+            "class_chi2": 0.7619047619047619,
+            "mean_return_time": 0.6190476190476191,
+            "norm_f_entropy": 0.23809523809523808
           },
-          "mean_return_time": 569.5911923417478,
-          "norm_f_entropy": 7.818541924266918
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9827743120480532,
+              "satellite": 0.01212913474426224,
+              "singularity": 0.005096553207684543
+            },
+            "mean_return_time": 569.5911923417478,
+            "norm_f_entropy": 7.818541924266918
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.00018711738888813233,
+            "class_chi2_real": 4.217700281095444e-05
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 0.00017670269091118397,
-          "class_chi2_real": 2.045566754226724e-05
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844579948041632,
+              "satellite": 0.013800820743633447,
+              "singularity": 0.0017411844522032664
+            },
+            "mean_return_time": 570.5354603471608,
+            "norm_f_entropy": 7.851440999322001
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9827743120480532,
+              "satellite": 0.01212913474426224,
+              "singularity": 0.005096553207684543
+            },
+            "mean_return_time": 569.5911923417478,
+            "norm_f_entropy": 7.818541924266918
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.4484845421757324e-05,
+            "class_chi2_real": 0.00667137043752235
+          }
         }
       },
-      "permute": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9844679231545679,
-            "satellite": 0.013784135599203525,
-            "singularity": 0.001747941246228606
+      "imag": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9797105885857065,
+              "satellite": 0.0127711680704251,
+              "singularity": 0.007518243343868416
+            },
+            "mean_return_time": 563.7054997744624,
+            "norm_f_entropy": 7.673653854634006
           },
-          "mean_return_time": 570.4991841667085,
-          "norm_f_entropy": 7.851343599219584
-        },
-        "p_values": {
-          "class_chi2": 0.01639344262295082,
-          "mean_return_time": 0.01639344262295082,
-          "norm_f_entropy": 0.01639344262295082
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9827743120480532,
-            "satellite": 0.01212913474426224,
-            "singularity": 0.005096553207684543
+          "p_values": {
+            "class_chi2": 0.9523809523809523,
+            "mean_return_time": 0.09523809523809523,
+            "norm_f_entropy": 0.5238095238095238
           },
-          "mean_return_time": 569.5911923417478,
-          "norm_f_entropy": 7.818541924266918
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9795806926679133,
+              "satellite": 0.012675194016514155,
+              "singularity": 0.007744113315572618
+            },
+            "mean_return_time": 565.06834622517,
+            "norm_f_entropy": 7.6764512917931045
+          },
+          "stats": {
+            "class_chi2_null_mean": 6.099630535818045e-05,
+            "class_chi2_real": 7.524250962888431e-06
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 3.610038554113884e-05,
-          "class_chi2_real": 0.006616713233526283
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843475419059123,
+              "satellite": 0.013905482104148395,
+              "singularity": 0.0017469759899392714
+            },
+            "mean_return_time": 570.4482604373758,
+            "norm_f_entropy": 7.851428489436996
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9795806926679133,
+              "satellite": 0.012675194016514155,
+              "singularity": 0.007744113315572618
+            },
+            "mean_return_time": 565.06834622517,
+            "norm_f_entropy": 7.6764512917931045
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.649850525328541e-05,
+            "class_chi2_real": 0.020719312559430988
+          }
+        }
+      },
+      "phase_step_abs": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9819226568705322,
+              "satellite": 0.012121889065395818,
+              "singularity": 0.005955454064072015
+            },
+            "mean_return_time": 570.0768536153435,
+            "norm_f_entropy": 7.811789115836708
+          },
+          "p_values": {
+            "class_chi2": 0.9523809523809523,
+            "mean_return_time": 0.9047619047619048,
+            "norm_f_entropy": 0.14285714285714285
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9818308181096108,
+              "satellite": 0.01216243050039714,
+              "singularity": 0.006006751389992057
+            },
+            "mean_return_time": 570.041115343491,
+            "norm_f_entropy": 7.815163378037761
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.6710871340157254e-05,
+            "class_chi2_real": 5.860294286484719e-07
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843522471538257,
+              "satellite": 0.013907780646015356,
+              "singularity": 0.0017399722001588563
+            },
+            "mean_return_time": 570.4728619520181,
+            "norm_f_entropy": 7.851101756789616
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.07317073170731707,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9818308181096108,
+              "satellite": 0.01216243050039714,
+              "singularity": 0.006006751389992057
+            },
+            "mean_return_time": 570.041115343491,
+            "norm_f_entropy": 7.815163378037761
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.636062711250965e-05,
+            "class_chi2_real": 0.010688533938512454
+          }
+        }
+      },
+      "real": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9796750119967568,
+              "satellite": 0.01228385153806695,
+              "singularity": 0.008041136465176311
+            },
+            "mean_return_time": 563.4356015169487,
+            "norm_f_entropy": 7.666552677437577
+          },
+          "p_values": {
+            "class_chi2": 0.7142857142857143,
+            "mean_return_time": 0.14285714285714285,
+            "norm_f_entropy": 0.7142857142857143
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.979018086144987,
+              "satellite": 0.012377343504376748,
+              "singularity": 0.008604570350636241
+            },
+            "mean_return_time": 564.32108191189,
+            "norm_f_entropy": 7.669249393213532
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.00011508087549404121,
+            "class_chi2_real": 4.063128242927869e-05
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844344149719524,
+              "satellite": 0.013829778432313472,
+              "singularity": 0.0017358065957341188
+            },
+            "mean_return_time": 570.5450160382245,
+            "norm_f_entropy": 7.850555902352548
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.979018086144987,
+              "satellite": 0.012377343504376748,
+              "singularity": 0.008604570350636241
+            },
+            "mean_return_time": 564.32108191189,
+            "norm_f_entropy": 7.669249393213532
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.8082625006616804e-05,
+            "class_chi2_real": 0.027362737319529994
+          }
+        }
+      },
+      "unwrapped_phase": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.883506527890391,
+              "satellite": 0.08542021743087386,
+              "singularity": 0.03107325467873513
+            },
+            "mean_return_time": 46.03442852100902,
+            "norm_f_entropy": 4.609337080587478
+          },
+          "p_values": {
+            "class_chi2": 0.5238095238095238,
+            "mean_return_time": 0.047619047619047616,
+            "norm_f_entropy": 0.23809523809523808
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8753495606704946,
+              "satellite": 0.08303410388363973,
+              "singularity": 0.04161633544586567
+            },
+            "mean_return_time": 1.1489488594006263,
+            "norm_f_entropy": 4.6420957497383455
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.008841638919285086,
+            "class_chi2_real": 0.0037192044305382668
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844517895851604,
+              "satellite": 0.013797511293498585,
+              "singularity": 0.0017506991213409894
+            },
+            "mean_return_time": 570.5187162737859,
+            "norm_f_entropy": 7.850168938770554
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8753495606704946,
+              "satellite": 0.08303410388363973,
+              "singularity": 0.04161633544586567
+            },
+            "mean_return_time": 1.1489488594006263,
+            "norm_f_entropy": 4.6420957497383455
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.5827821155056013e-05,
+            "class_chi2_real": 1.2673149634051644
+          }
         }
       }
     },
     "whittaker_phase_order_omega3": {
-      "block_bootstrap": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9834505430256096,
-            "satellite": 0.012696705442390746,
-            "singularity": 0.003852751531999625
+      "amplitude": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9834800522893122,
+              "satellite": 0.01262472490195754,
+              "singularity": 0.0038952228087303295
+            },
+            "mean_return_time": 570.1387523597908,
+            "norm_f_entropy": 7.830242634946062
           },
-          "mean_return_time": 570.1605532073664,
-          "norm_f_entropy": 7.830670813330324
-        },
-        "p_values": {
-          "class_chi2": 0.9354838709677419,
-          "mean_return_time": 0.6129032258064516,
-          "norm_f_entropy": 0.25806451612903225
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9833534658216537,
-            "satellite": 0.01280757202190856,
-            "singularity": 0.003838962156437708
+          "p_values": {
+            "class_chi2": 0.8571428571428571,
+            "mean_return_time": 0.6190476190476191,
+            "norm_f_entropy": 0.23809523809523808
           },
-          "mean_return_time": 570.3400604774713,
-          "norm_f_entropy": 7.834350105629667
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9833534658216537,
+              "satellite": 0.01280757202190856,
+              "singularity": 0.003838962156437708
+            },
+            "mean_return_time": 570.3400604774713,
+            "norm_f_entropy": 7.834350105629667
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.465561255328732e-05,
+            "class_chi2_real": 3.477115661039341e-06
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 3.575788599512451e-05,
-          "class_chi2_real": 1.0270138801132494e-06
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9842830076282825,
+              "satellite": 0.013949745999702149,
+              "singularity": 0.0017672463720152898
+            },
+            "mean_return_time": 570.4801013248241,
+            "norm_f_entropy": 7.851066926457658
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.5853658536585366,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9833534658216537,
+              "satellite": 0.01280757202190856,
+              "singularity": 0.003838962156437708
+            },
+            "mean_return_time": 570.3400604774713,
+            "norm_f_entropy": 7.834350105629667
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.035567991296929e-05,
+            "class_chi2_real": 0.0025230370949648924
+          }
         }
       },
-      "permute": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.984346576649623,
-            "satellite": 0.013899414778901152,
-            "singularity": 0.0017540085714758493
+      "imag": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9814728707825194,
+              "satellite": 0.012703324342660466,
+              "singularity": 0.005823804874820049
+            },
+            "mean_return_time": 568.1469610905992,
+            "norm_f_entropy": 7.754687973577593
           },
-          "mean_return_time": 570.4916253181193,
-          "norm_f_entropy": 7.851021282693671
-        },
-        "p_values": {
-          "class_chi2": 0.01639344262295082,
-          "mean_return_time": 0.5245901639344263,
-          "norm_f_entropy": 0.01639344262295082
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9833534658216537,
-            "satellite": 0.01280757202190856,
-            "singularity": 0.003838962156437708
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.6666666666666666,
+            "norm_f_entropy": 0.7142857142857143
           },
-          "mean_return_time": 570.3400604774713,
-          "norm_f_entropy": 7.834350105629667
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9813677957407376,
+              "satellite": 0.01279102477123426,
+              "singularity": 0.005841179488028064
+            },
+            "mean_return_time": 567.9199592361796,
+            "norm_f_entropy": 7.755864491317975
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.8686717363424334e-05,
+            "class_chi2_real": 6.685450436877595e-07
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 3.4070041624491394e-05,
-          "class_chi2_real": 0.0025651106903207283
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844393791471546,
+              "satellite": 0.013857495077192925,
+              "singularity": 0.0017031257756523754
+            },
+            "mean_return_time": 570.4619388709758,
+            "norm_f_entropy": 7.8509451506944625
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9813677957407376,
+              "satellite": 0.01279102477123426,
+              "singularity": 0.005841179488028064
+            },
+            "mean_return_time": 567.9199592361796,
+            "norm_f_entropy": 7.755864491317975
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.977479573823449e-05,
+            "class_chi2_real": 0.01014581293689213
+          }
+        }
+      },
+      "phase_step_abs": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9841218228752979,
+              "satellite": 0.013669909981466772,
+              "singularity": 0.002208267143235372
+            },
+            "mean_return_time": 570.2605979350441,
+            "norm_f_entropy": 7.844476127824135
+          },
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.5714285714285714,
+            "norm_f_entropy": 0.38095238095238093
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9840812814402965,
+              "satellite": 0.013734445326979084,
+              "singularity": 0.0021842732327243845
+            },
+            "mean_return_time": 570.416115343491,
+            "norm_f_entropy": 7.847739602370797
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.7999393782419134e-05,
+            "class_chi2_real": 5.670457380542563e-07
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9842939171299973,
+              "satellite": 0.01394294413555732,
+              "singularity": 0.001763138734445327
+            },
+            "mean_return_time": 570.4711503441592,
+            "norm_f_entropy": 7.851230346387895
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.6829268292682927,
+            "norm_f_entropy": 0.17073170731707318
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9840812814402965,
+              "satellite": 0.013734445326979084,
+              "singularity": 0.0021842732327243845
+            },
+            "mean_return_time": 570.416115343491,
+            "norm_f_entropy": 7.847739602370797
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.0655149772277498e-05,
+            "class_chi2_real": 0.00010375384669732047
+          }
+        }
+      },
+      "real": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9806968047258948,
+              "satellite": 0.013572055003061242,
+              "singularity": 0.005731140271043966
+            },
+            "mean_return_time": 567.7667950281505,
+            "norm_f_entropy": 7.76152329526644
+          },
+          "p_values": {
+            "class_chi2": 0.9047619047619048,
+            "mean_return_time": 0.2857142857142857,
+            "norm_f_entropy": 0.47619047619047616
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9806231694603942,
+              "satellite": 0.013535651051577781,
+              "singularity": 0.005841179488028064
+            },
+            "mean_return_time": 568.2266735720133,
+            "norm_f_entropy": 7.763756767423882
+          },
+          "stats": {
+            "class_chi2_null_mean": 5.3433732102437404e-05,
+            "class_chi2_real": 2.2159525824955915e-06
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843359588304403,
+              "satellite": 0.013931544023960418,
+              "singularity": 0.0017324971455992585
+            },
+            "mean_return_time": 570.5426470588235,
+            "norm_f_entropy": 7.850994226007897
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9806231694603942,
+              "satellite": 0.013535651051577781,
+              "singularity": 0.005841179488028064
+            },
+            "mean_return_time": 568.2266735720133,
+            "norm_f_entropy": 7.763756767423882
+          },
+          "stats": {
+            "class_chi2_null_mean": 3.0431341865847643e-05,
+            "class_chi2_real": 0.009769149448135617
+          }
+        }
+      },
+      "unwrapped_phase": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.8832881041814902,
+              "satellite": 0.08530273195108633,
+              "singularity": 0.03140916386742343
+            },
+            "mean_return_time": 46.1684673579244,
+            "norm_f_entropy": 4.605084752221818
+          },
+          "p_values": {
+            "class_chi2": 0.5238095238095238,
+            "mean_return_time": 0.047619047619047616,
+            "norm_f_entropy": 0.14285714285714285
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8756308639319577,
+              "satellite": 0.08283553687554812,
+              "singularity": 0.041533599192494164
+            },
+            "mean_return_time": 1.235276576710899,
+            "norm_f_entropy": 4.637330618303807
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.008744589902605687,
+            "class_chi2_real": 0.00340125121413522
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844236592590141,
+              "satellite": 0.013830192113580327,
+              "singularity": 0.0017461486274055564
+            },
+            "mean_return_time": 570.5156485457006,
+            "norm_f_entropy": 7.850201762960514
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8756308639319577,
+              "satellite": 0.08283553687554812,
+              "singularity": 0.041533599192494164
+            },
+            "mean_return_time": 1.235276576710899,
+            "norm_f_entropy": 4.637330618303807
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.71669525622349e-05,
+            "class_chi2_real": 1.2629135206944533
+          }
         }
       }
     },
     "whittaker_phase_order_omega4": {
-      "block_bootstrap": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9818283608845058,
-            "satellite": 0.012639893215075648,
-            "singularity": 0.005531745900418645
+      "amplitude": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.981767411844522,
+              "satellite": 0.012717389505733622,
+              "singularity": 0.005515198649744345
+            },
+            "mean_return_time": 569.7227450423509,
+            "norm_f_entropy": 7.8181016521210385
           },
-          "mean_return_time": 569.7449610460486,
-          "norm_f_entropy": 7.8177345793764
-        },
-        "p_values": {
-          "class_chi2": 0.967741935483871,
-          "mean_return_time": 0.967741935483871,
-          "norm_f_entropy": 0.6129032258064516
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9819469495143381,
-            "satellite": 0.012526268760445452,
-            "singularity": 0.005526781725216355
+          "p_values": {
+            "class_chi2": 0.9047619047619048,
+            "mean_return_time": 0.9523809523809523,
+            "norm_f_entropy": 0.7142857142857143
           },
-          "mean_return_time": 569.7340828975725,
-          "norm_f_entropy": 7.8199573007941225
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9819469495143381,
+              "satellite": 0.012526268760445452,
+              "singularity": 0.005526781725216355
+            },
+            "mean_return_time": 569.7340828975725,
+            "norm_f_entropy": 7.8199573007941225
+          },
+          "stats": {
+            "class_chi2_null_mean": 4.6967395535217886e-05,
+            "class_chi2_real": 2.929379190706686e-06
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 4.648634959716323e-05,
-          "class_chi2_real": 1.040188649993687e-06
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9843173431734318,
+              "satellite": 0.013914996773286118,
+              "singularity": 0.0017676600532821472
+            },
+            "mean_return_time": 570.4306050253103,
+            "norm_f_entropy": 7.850953822567467
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9819469495143381,
+              "satellite": 0.012526268760445452,
+              "singularity": 0.005526781725216355
+            },
+            "mean_return_time": 569.7340828975725,
+            "norm_f_entropy": 7.8199573007941225
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.0618143892794352e-05,
+            "class_chi2_real": 0.008138486227656455
+          }
         }
       },
-      "permute": {
-        "null_mean": {
-          "class_fracs": {
-            "cosmos": 0.9842506025957121,
-            "satellite": 0.01398987308258733,
-            "singularity": 0.0017595243217006162
+      "imag": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9801151688646931,
+              "satellite": 0.012479109096023695,
+              "singularity": 0.007405722039283173
+            },
+            "mean_return_time": 565.3421070217352,
+            "norm_f_entropy": 7.7002810891686595
           },
-          "mean_return_time": 570.4323994408896,
-          "norm_f_entropy": 7.851010537339033
-        },
-        "p_values": {
-          "class_chi2": 0.01639344262295082,
-          "mean_return_time": 0.01639344262295082,
-          "norm_f_entropy": 0.01639344262295082
-        },
-        "real": {
-          "class_fracs": {
-            "cosmos": 0.9819469495143381,
-            "satellite": 0.012526268760445452,
-            "singularity": 0.005526781725216355
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.6666666666666666,
+            "norm_f_entropy": 1.0
           },
-          "mean_return_time": 569.7340828975725,
-          "norm_f_entropy": 7.8199573007941225
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9801598464415138,
+              "satellite": 0.012443532507073949,
+              "singularity": 0.0073966210514123075
+            },
+            "mean_return_time": 565.6613595736505,
+            "norm_f_entropy": 7.700837211648743
+          },
+          "stats": {
+            "class_chi2_null_mean": 6.327413089598894e-05,
+            "class_chi2_real": 1.1464590832346499e-07
+          }
         },
-        "stats": {
-          "class_chi2_null_mean": 2.111044845572165e-05,
-          "class_chi2_real": 0.008224458425662875
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9842660466963414,
+              "satellite": 0.014018830771267355,
+              "singularity": 0.001715122532391243
+            },
+            "mean_return_time": 570.4425781445779,
+            "norm_f_entropy": 7.850960224704261
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9801598464415138,
+              "satellite": 0.012443532507073949,
+              "singularity": 0.0073966210514123075
+            },
+            "mean_return_time": 565.6613595736505,
+            "norm_f_entropy": 7.700837211648743
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.380203107423624e-05,
+            "class_chi2_real": 0.019014624656412866
+          }
+        }
+      },
+      "phase_step_abs": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9824670704262642,
+              "satellite": 0.013257049245432884,
+              "singularity": 0.004275880328302886
+            },
+            "mean_return_time": 569.9519630446405,
+            "norm_f_entropy": 7.814371054316256
+          },
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.14285714285714285,
+            "norm_f_entropy": 0.14285714285714285
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9824099814667726,
+              "satellite": 0.013271114641249668,
+              "singularity": 0.0043189038919777606
+            },
+            "mean_return_time": 570.3502405773858,
+            "norm_f_entropy": 7.818535869278862
+          },
+          "stats": {
+            "class_chi2_null_mean": 5.4987687246977975e-05,
+            "class_chi2_real": 4.5113997718197134e-07
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9844209193804607,
+              "satellite": 0.013887509928514693,
+              "singularity": 0.0016915706910246228
+            },
+            "mean_return_time": 570.4509205426357,
+            "norm_f_entropy": 7.850884447877604
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.6829268292682927,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9824099814667726,
+              "satellite": 0.013271114641249668,
+              "singularity": 0.0043189038919777606
+            },
+            "mean_return_time": 570.3502405773858,
+            "norm_f_entropy": 7.818535869278862
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.7775772907774638e-05,
+            "class_chi2_real": 0.0041122180586555
+          }
+        }
+      },
+      "real": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9795236046530869,
+              "satellite": 0.012484073271225986,
+              "singularity": 0.007992322075687125
+            },
+            "mean_return_time": 565.2378543862873,
+            "norm_f_entropy": 7.697358122865782
+          },
+          "p_values": {
+            "class_chi2": 1.0,
+            "mean_return_time": 0.5714285714285714,
+            "norm_f_entropy": 0.5714285714285714
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9795806926679133,
+              "satellite": 0.012542816011119753,
+              "singularity": 0.007876491320967021
+            },
+            "mean_return_time": 565.4067694672302,
+            "norm_f_entropy": 7.6990941815890865
+          },
+          "stats": {
+            "class_chi2_null_mean": 5.60895246044609e-05,
+            "class_chi2_real": 1.9584427024678378e-06
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.9842974864726226,
+              "satellite": 0.01393981764929757,
+              "singularity": 0.001762695878079857
+            },
+            "mean_return_time": 570.5169236680756,
+            "norm_f_entropy": 7.850935210848552
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.9795806926679133,
+              "satellite": 0.012542816011119753,
+              "singularity": 0.007876491320967021
+            },
+            "mean_return_time": 565.4067694672302,
+            "norm_f_entropy": 7.6990941815890865
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.7105246056197944e-05,
+            "class_chi2_real": 0.021367905768638683
+          }
+        }
+      },
+      "unwrapped_phase": {
+        "block_bootstrap": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.8846623533499909,
+              "satellite": 0.08429831383515629,
+              "singularity": 0.03103933281485281
+            },
+            "mean_return_time": 55.962544321328,
+            "norm_f_entropy": 4.6859879336277634
+          },
+          "p_values": {
+            "class_chi2": 0.5714285714285714,
+            "mean_return_time": 0.047619047619047616,
+            "norm_f_entropy": 0.2857142857142857
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8764251319643241,
+              "satellite": 0.0820412688431817,
+              "singularity": 0.041533599192494164
+            },
+            "mean_return_time": 2.225502377284098,
+            "norm_f_entropy": 4.712685053990706
+          },
+          "stats": {
+            "class_chi2_null_mean": 0.008731241475171075,
+            "class_chi2_real": 0.0036851960439580073
+          }
+        },
+        "permute": {
+          "null_mean": {
+            "class_fracs": {
+              "cosmos": 0.984418281402545,
+              "satellite": 0.013832674201181474,
+              "singularity": 0.001749044396273559
+            },
+            "mean_return_time": 570.4624764020916,
+            "norm_f_entropy": 7.850752183532405
+          },
+          "p_values": {
+            "class_chi2": 0.024390243902439025,
+            "mean_return_time": 0.024390243902439025,
+            "norm_f_entropy": 0.024390243902439025
+          },
+          "real": {
+            "class_fracs": {
+              "cosmos": 0.8764251319643241,
+              "satellite": 0.0820412688431817,
+              "singularity": 0.041533599192494164
+            },
+            "mean_return_time": 2.225502377284098,
+            "norm_f_entropy": 4.712685053990706
+          },
+          "stats": {
+            "class_chi2_null_mean": 2.3606350983922143e-05,
+            "class_chi2_real": 1.2531395868676056
+          }
         }
       }
     }
   },
+  "summary": {
+    "alpha": 0.05,
+    "block_bootstrap_rejects": [
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "raster_frequency_order"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega0"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega1"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega2"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega3"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega4"
+      }
+    ],
+    "both_null_rejects": [
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "raster_frequency_order"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega0"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega1"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega2"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega3"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega4"
+      }
+    ],
+    "permute_rejects": [
+      {
+        "channel": "amplitude",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "raster_frequency_order"
+      },
+      {
+        "channel": "real",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "raster_frequency_order"
+      },
+      {
+        "channel": "imag",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "raster_frequency_order"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "raster_frequency_order"
+      },
+      {
+        "channel": "phase_step_abs",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "raster_frequency_order"
+      },
+      {
+        "channel": "amplitude",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy"
+        ],
+        "ordering": "whittaker_phase_order_omega0"
+      },
+      {
+        "channel": "real",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega0"
+      },
+      {
+        "channel": "imag",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega0"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega0"
+      },
+      {
+        "channel": "phase_step_abs",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega0"
+      },
+      {
+        "channel": "amplitude",
+        "observables": [
+          "norm_f_entropy"
+        ],
+        "ordering": "whittaker_phase_order_omega1"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega1"
+      },
+      {
+        "channel": "amplitude",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega2"
+      },
+      {
+        "channel": "real",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega2"
+      },
+      {
+        "channel": "imag",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega2"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega2"
+      },
+      {
+        "channel": "phase_step_abs",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy"
+        ],
+        "ordering": "whittaker_phase_order_omega2"
+      },
+      {
+        "channel": "amplitude",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy"
+        ],
+        "ordering": "whittaker_phase_order_omega3"
+      },
+      {
+        "channel": "real",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega3"
+      },
+      {
+        "channel": "imag",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega3"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega3"
+      },
+      {
+        "channel": "phase_step_abs",
+        "observables": [
+          "class_chi2"
+        ],
+        "ordering": "whittaker_phase_order_omega3"
+      },
+      {
+        "channel": "amplitude",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega4"
+      },
+      {
+        "channel": "real",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega4"
+      },
+      {
+        "channel": "imag",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega4"
+      },
+      {
+        "channel": "unwrapped_phase",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy",
+          "mean_return_time"
+        ],
+        "ordering": "whittaker_phase_order_omega4"
+      },
+      {
+        "channel": "phase_step_abs",
+        "observables": [
+          "class_chi2",
+          "norm_f_entropy"
+        ],
+        "ordering": "whittaker_phase_order_omega4"
+      }
+    ]
+  },
+  "tested_channels": [
+    "amplitude",
+    "real",
+    "imag",
+    "unwrapped_phase",
+    "phase_step_abs"
+  ],
   "tested_orderings": [
     "raster_frequency_order",
     "whittaker_phase_order_omega0",

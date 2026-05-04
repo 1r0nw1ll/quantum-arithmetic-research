@@ -1,0 +1,256 @@
+{
+  "class_counts": {
+    "anatase": 42,
+    "calcite": 187,
+    "corundum": 137,
+    "diamond": 127,
+    "graphite": 24,
+    "hematite": 53,
+    "quartz": 113,
+    "rutile": 106,
+    "silicon": 16
+  },
+  "data_root": "qa_lab/qa_data/raman",
+  "experiment": "whittaker_phase_packet_raman_probe",
+  "min_spacing_cm": 8.0,
+  "n_spectra": 805,
+  "n_test": 272,
+  "n_train": 533,
+  "observer_boundary": "Raman decimal samples are observer input; peak extraction and classification are observer-side. Phase arguments are exact Fraction values; no trig functions are evaluated.",
+  "omega_packets": [
+    [
+      7,
+      24,
+      0,
+      25
+    ],
+    [
+      24,
+      7,
+      0,
+      25
+    ],
+    [
+      1200,
+      1200,
+      -527,
+      1777
+    ]
+  ],
+  "phase_packet_result": {
+    "accuracy": 0.5,
+    "confusion_top": [
+      {
+        "n": 29,
+        "pred": "quartz",
+        "true": "quartz"
+      },
+      {
+        "n": 28,
+        "pred": "calcite",
+        "true": "calcite"
+      },
+      {
+        "n": 25,
+        "pred": "rutile",
+        "true": "rutile"
+      },
+      {
+        "n": 18,
+        "pred": "diamond",
+        "true": "diamond"
+      },
+      {
+        "n": 15,
+        "pred": "corundum",
+        "true": "corundum"
+      },
+      {
+        "n": 12,
+        "pred": "anatase",
+        "true": "anatase"
+      },
+      {
+        "n": 12,
+        "pred": "hematite",
+        "true": "corundum"
+      },
+      {
+        "n": 9,
+        "pred": "diamond",
+        "true": "calcite"
+      },
+      {
+        "n": 8,
+        "pred": "corundum",
+        "true": "diamond"
+      },
+      {
+        "n": 6,
+        "pred": "rutile",
+        "true": "calcite"
+      },
+      {
+        "n": 6,
+        "pred": "graphite",
+        "true": "diamond"
+      },
+      {
+        "n": 6,
+        "pred": "hematite",
+        "true": "hematite"
+      },
+      {
+        "n": 6,
+        "pred": "calcite",
+        "true": "quartz"
+      },
+      {
+        "n": 5,
+        "pred": "quartz",
+        "true": "calcite"
+      },
+      {
+        "n": 5,
+        "pred": "rutile",
+        "true": "corundum"
+      },
+      {
+        "n": 5,
+        "pred": "diamond",
+        "true": "corundum"
+      },
+      {
+        "n": 5,
+        "pred": "calcite",
+        "true": "diamond"
+      },
+      {
+        "n": 5,
+        "pred": "hematite",
+        "true": "rutile"
+      },
+      {
+        "n": 4,
+        "pred": "hematite",
+        "true": "calcite"
+      },
+      {
+        "n": 4,
+        "pred": "graphite",
+        "true": "calcite"
+      }
+    ],
+    "correct": 136,
+    "n_test": 272
+  },
+  "raw_peak_baseline_result": {
+    "accuracy": 0.3897058823529412,
+    "confusion_top": [
+      {
+        "n": 29,
+        "pred": "rutile",
+        "true": "rutile"
+      },
+      {
+        "n": 27,
+        "pred": "quartz",
+        "true": "quartz"
+      },
+      {
+        "n": 25,
+        "pred": "rutile",
+        "true": "corundum"
+      },
+      {
+        "n": 24,
+        "pred": "quartz",
+        "true": "calcite"
+      },
+      {
+        "n": 18,
+        "pred": "calcite",
+        "true": "calcite"
+      },
+      {
+        "n": 15,
+        "pred": "corundum",
+        "true": "calcite"
+      },
+      {
+        "n": 13,
+        "pred": "diamond",
+        "true": "diamond"
+      },
+      {
+        "n": 10,
+        "pred": "anatase",
+        "true": "anatase"
+      },
+      {
+        "n": 10,
+        "pred": "calcite",
+        "true": "diamond"
+      },
+      {
+        "n": 7,
+        "pred": "corundum",
+        "true": "corundum"
+      },
+      {
+        "n": 7,
+        "pred": "rutile",
+        "true": "hematite"
+      },
+      {
+        "n": 6,
+        "pred": "corundum",
+        "true": "diamond"
+      },
+      {
+        "n": 6,
+        "pred": "quartz",
+        "true": "diamond"
+      },
+      {
+        "n": 6,
+        "pred": "rutile",
+        "true": "quartz"
+      },
+      {
+        "n": 5,
+        "pred": "hematite",
+        "true": "diamond"
+      },
+      {
+        "n": 5,
+        "pred": "quartz",
+        "true": "rutile"
+      },
+      {
+        "n": 4,
+        "pred": "silicon",
+        "true": "corundum"
+      },
+      {
+        "n": 4,
+        "pred": "anatase",
+        "true": "corundum"
+      },
+      {
+        "n": 4,
+        "pred": "hematite",
+        "true": "quartz"
+      },
+      {
+        "n": 3,
+        "pred": "silicon",
+        "true": "calcite"
+      }
+    ],
+    "correct": 106,
+    "n_test": 272
+  },
+  "status": "real_data_probe",
+  "top_peaks": 5
+}

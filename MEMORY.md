@@ -79,3 +79,30 @@ Last updated: 2026-03-29
 
 - Ben Iverson is treated in this project as the original originator of Quantum Arithmetic.
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
+
+## SOTA Scan Log
+
+### Scan #2 — 2026-05-04 (window: April 9 – May 4, 2026)
+Full report: `sota_scans/scan_2026-05-04.md`
+
+**Key finds:**
+- arXiv:2604.26383 + arXiv:2604.06947 (FQNM pair, Park/Ha/Kang, April 2026) — HIGH. "Quantised interaction rules" on integer state space = QA's T-operator architecture. Continuum emerges from reconstruction = Theorem NT. Independent PDE-side validation of QA's axiom set (T2, S2, T1).
+- arXiv:2604.25939 (qFHRR, April 16) — HIGH. Discrete phase indices + modular arithmetic binding = QA's Z/mZ 4-tuple as a modular VSA. Cert candidate: `qa_modular_vsa_cert_v1`.
+- arXiv:2604.22863 (Wave-Geometric Duality for HDC, April 23) — MEDIUM. Discrete → waveform bridge via unitary embedding; aliasing = modular arithmetic.
+- arXiv:2511.09708 (MCR modular composite representations, Nov 2025, missed) — MEDIUM.
+
+**Cert scaffolding candidates (new):**
+1. `qa_quantized_integer_dynamics_cert_v1` — formalizes QA step as antisymmetric integer-transfer operator (FQNM framework)
+2. `qa_modular_vsa_cert_v1` — formalizes QA 4-tuple as modular composite representation over Z/24Z
+
+**Carried-over scaffolding candidates (not yet built):**
+- `qa_cayley_spectral_cert_v1` (from scan #1, arXiv:2604.03634)
+- `qa_full_pisano_orbit_cert_v1` (from scan #1, arXiv:2510.24882)
+
+**Cert family gap found:** [261] `qa_orbit_stratification_cert_v1` missing human tract (docs/families/261_*.md).
+
+**Next scan due:** ~2026-05-18
+
+### Scan #1 — 2026-04-09 (window: ~March 26 – April 9, 2026)
+Full report: `sota_scans/scan_2026-04-09.md`
+HIGH finds: arXiv:2604.03634 (Cayley spectral), arXiv:2603.14999 (Fibonacci never collapses), arXiv:2510.24882 (all Pisano initializations).

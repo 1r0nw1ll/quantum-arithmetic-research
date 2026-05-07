@@ -99,6 +99,30 @@ Full report: `sota_scans/scan_2026-05-04.md`
 - `qa_cayley_spectral_cert_v1` (from scan #1, arXiv:2604.03634)
 - `qa_full_pisano_orbit_cert_v1` (from scan #1, arXiv:2510.24882)
 
+### Scan #3 — 2026-05-07 (window: May 4 – May 7, 2026)
+Full report: `sota_scans/scan_2026-05-07.md`
+
+**Key finds:**
+- arXiv:2505.18266 (Universal CRT algorithm for modular addition, May 2025 late catch) — HIGH. All NNs solving modular addition implement approximate CRT cosets = QA's A2 derivation rules exactly. Independent proof that QA's architecture is the unique natural structure for modular arithmetic computation.
+- arXiv:2602.16849 (Fourier Features, Lottery Ticket, Grokking, Feb 2026 late catch) — HIGH. Three-stage grokking maps to QA reachability phases; Fourier phase-symmetry voting = QA's resonance operator (einsum). Cyclic group Fourier modes = QA's orbit spectral decomposition.
+- arXiv:2604.11163 (Exact Noether conservation in discrete IBVPs, April 2026 late catch) — MEDIUM-HIGH. QA's A1+S2+T1 = Noether-charge-preserving discretization; T-operator = symplectic map on Z/mZ × Z/mZ; orbit class = Noether charge.
+- arXiv:2605.00452 (Graph Laplacians → String Partition Functions, May 2026) — MEDIUM. QA's three orbit graphs define three distinct spectral curves via period matrix construction. Observer projection = spectral curve continuum limit.
+- Scientific Reports 2026 (Lucas sequences in signal processing) — MEDIUM. λ-Lucas summability grounds QA noise-annealing parameter; connects to certs [163], [179], [192].
+
+**Cert scaffolding candidates (new):**
+1. `qa_modular_nn_universality_cert_v1` — CRT-coset universality of QA's A2 derivation rules (arXiv:2505.18266 + 2602.16849)
+2. `qa_discrete_noether_cert_v1` — QA axiom set as Noether-charge-preserving discretization (arXiv:2604.11163)
+
+**Gaps:**
+- [261] qa_orbit_stratification_cert_v1: DOUBLE GAP (machine tract exists at `qa_alphageometry_ptolemy/qa_orbit_stratification_cert_v1/`; NOT in meta-validator; NO docs/families file). Escalated from scan #2 single-gap report. Must be registered and human tract authored before next meta-validator run.
+- cs.LG is not currently in arXiv scan targets; 4 late catches this scan came from that category. Add for scan #4.
+
+**Carried-over scaffolding candidates (not yet built, cumulative):**
+- `qa_quantized_integer_dynamics_cert_v1` (scan #2, arXiv:2604.06947 + 2604.26383) — highest priority
+- `qa_modular_vsa_cert_v1` (scan #2, arXiv:2604.25939)
+- `qa_cayley_spectral_cert_v1` (scan #1, arXiv:2604.03634)
+- `qa_full_pisano_orbit_cert_v1` (scan #1, arXiv:2510.24882)
+
 **Cert family gap found:** [261] `qa_orbit_stratification_cert_v1` missing human tract (docs/families/261_*.md).
 
 **Next scan due:** ~2026-05-18

@@ -1,5 +1,7 @@
 # Session 2026-01-05: QA Physics Interface - Complete
 
+> Glossary: "Theorem NT" — i.e. the Observer Projection Firewall axiom (an invariant that bars float values from re-entering the QA discrete layer; see `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md`).
+
 **Date:** 2026-01-05
 **Session Duration:** Full implementation cycle
 **Status:** ✅ **PRODUCTION COMPLETE** - All deliverables validated

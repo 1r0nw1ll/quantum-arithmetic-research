@@ -1,0 +1,31 @@
+{
+  "target_repo": "Player3/signal_experiments",
+  "candidate_scope": "Internal three-layer enforcement of the six-axiom block plus Theorem NT firewall: text lint, TLA+ TLC verification, Python cert validators. The bundle's audience and scope are internal repository coherence between these three layers, not external upstream community distribution.",
+  "in_scope_rationale": "This bundle's audience is the project's own maintainers and any reviewer auditing the cert-family ecosystem. Its semantics scope is: confirm that the linter and TLA+ TLC verification agree on what 'QA legality' means at the generator-transition level. Out-of-scope: external TLA+ community submission, unbounded soundness proofs, observer-side projection formalism beyond the firewall invariant.",
+  "comparables": [
+    {
+      "artifact_name": "qa_axiom_linter.py",
+      "artifact_ref": "tools/qa_axiom_linter.py",
+      "norm_supported": "semantic enforcement of the same six-axiom dictionary at text-source level (regex + AST); shares the same audience (this repo's maintainers) and the same scope (QA-state legality)",
+      "similarity_axes": ["semantics", "audience", "scope"]
+    },
+    {
+      "artifact_name": "QACertificateSpine.tla",
+      "artifact_ref": "qa_alphageometry_ptolemy/QACertificateSpine.tla",
+      "norm_supported": "structural TLA+ spec inside the same bundle; same readme/structure conventions; consumes the axiom annotations that QARM_v02_Failures.tla establishes; semantics-aligned with this bundle's generator algebra",
+      "similarity_axes": ["structure", "semantics", "readme"]
+    },
+    {
+      "artifact_name": "qa_unequal_k_ccr_invariant_cert_v1",
+      "artifact_ref": "qa_alphageometry_ptolemy/qa_unequal_k_ccr_invariant_cert_v1/",
+      "norm_supported": "Python cert family that shares the axiom dictionary; structurally similar (mapping_protocol_ref + validator + fixtures); audience-aligned (this repo's reviewers); semantics-aligned (same QA legality predicate)",
+      "similarity_axes": ["structure", "semantics", "audience"]
+    },
+    {
+      "artifact_name": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md",
+      "artifact_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md",
+      "norm_supported": "prose specification of Theorem NT; same audience (this repo's maintainers); the bundle's Inv_NT is the runtime witness of this prose spec",
+      "similarity_axes": ["semantics", "audience"]
+    }
+  ]
+}

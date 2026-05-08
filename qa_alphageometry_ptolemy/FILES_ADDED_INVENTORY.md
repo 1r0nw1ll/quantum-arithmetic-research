@@ -1,5 +1,7 @@
 # Certificate System v1.0 - Complete File Inventory
 
+> Glossary: "Theorem NT" — i.e. the Observer Projection Firewall axiom (an invariant that bars float values from re-entering the QA discrete layer; see `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md`).
+
 **Date:** 2026-01-06
 **Commit:** 99871d7
 **Status:** Production-ready

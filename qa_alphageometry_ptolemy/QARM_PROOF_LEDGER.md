@@ -372,7 +372,7 @@ Eight new `.tla` files + eight new `.cfg` files authored 2026-04-20 under sessio
 
 ## External contribution readiness
 
-`QAAxioms.tla` is authored in the self-contained style of the Paxos / Raft exemplars under `github.com/tlaplus/examples`: one module + cfg + paired non-vacuity tests per runtime-checkable invariant + prose comments that explain the framing. Submittable upstream as a single directory after repo-specific identifiers are generalized (the base QARM spec would accompany it).
+`QAAxioms.tla` is authored in a self-contained module-plus-config style: one module file, paired non-vacuity tests per runtime-checkable invariant, prose comments that explain the framing for outside readers. Whether the artifact is appropriate to propose externally is an open question pending bundle-level review (audience translation, semantics-bounds boundary, repository-fit assessment); no external submission is claimed at this stage.
 
 ---
 

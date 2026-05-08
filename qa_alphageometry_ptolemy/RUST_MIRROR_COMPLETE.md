@@ -1,5 +1,7 @@
 # QARM v0.2 Rust Constitutional Mirror - COMPLETE
 
+> Glossary: "QA legality" — i.e. the conjunction of the six QA axioms (A1, A2, S1, S2, T1, T2) plus Theorem NT that defines well-formed QA states; the same predicate enforced text-side by `qa_axiom_linter.py` and runtime-side by the TLC invariant set in `qa_alphageometry_ptolemy/QAAxioms.tla`.
+
 **Date:** 2026-01-05
 **Task:** Option 1 - Rust Mirror Implementation
 **Status:** ✅ **COMPLETE - ALL TESTS PASSING**

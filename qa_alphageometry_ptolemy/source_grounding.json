@@ -1,0 +1,302 @@
+{
+  "summary": "Per-variable and per-action grounding for the QARM TLA+ bundle. Each entry cites either the TLA+ formalism (Lamport 1994/2002) for general TLA+ semantics, or the project specification documents in docs/specs/ for QA-specific predicates. Citations to bundle artifacts themselves (TLA+ modules, the proof ledger, the readme) are deliberately avoided because those would be self-referential per the gate convention.",
+  "entries": [
+    {
+      "claim": "State variable b is a TLA+ state component declared by the VARIABLES statement and constrained by Init to a value bounded by CAP, with semantic meaning fixed by the TLA+ formalism.",
+      "artifact_element": "variable:b",
+      "source_ref": "Lamport (2002) Specifying Systems Chapter 2 section on the VARIABLES statement and Init predicates. ISBN: 978-0-321-14306-8.",
+      "source_excerpt": "The VARIABLES statement declares the state components and Init describes their initial values; subsequent actions specify how variables change in subsequent states.",
+      "interpretation": "The VARIABLES statement declares b as a state component and Init constrains the initial state, matching the standard TLA+ formalism reading; b is a TLA+ state variable with values in the natural numbers.",
+      "modeled_consequence": "TLC verifies that b stays in the bounded reachable values defined by the actions and that the bound invariants hold across all reachable states.",
+      "authority_tier": "formalism"
+    },
+    {
+      "claim": "State variable e is a TLA+ state component paired with b to form the QA primitive coordinate (b, e), with semantic role fixed by the QA observer-projection spec.",
+      "artifact_element": "variable:e",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md sections A1 (No-Zero) and A2 (Derived Coords) of the project's six-axiom block.",
+      "source_excerpt": "QA primitive states are pairs (b, e) of natural numbers; derived coordinates d = b + e and a = b + 2*e are always derived from the primitive coordinates and never independently assigned.",
+      "interpretation": "The variable e is the second QA primitive coordinate paired with b, derived coordinates d and a are functions of (b, e), and the primitive role of e matches the project spec's six-axiom block.",
+      "modeled_consequence": "TLC checks the closure of derived coordinates against (b, e) and verifies that an independent assignment to a derived coordinate is caught by the closure invariant.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "State variable d is a derived QA coordinate computed as d = b + e and held closed under all reachable transitions; this is the semantic content of the project A2 axiom.",
+      "artifact_element": "variable:d",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md section A2 (Derived Coords) of the project's six-axiom block.",
+      "source_excerpt": "Derived coordinates d = b + e and a = b + 2*e are always derived from the primitive coordinates (b, e) and never independently assigned; this is axiom A2 (Derived Coords).",
+      "interpretation": "The derived coordinate d equals b + e at every reachable state, and an independent assignment to d is forbidden by axiom A2; the closure invariant in the bundle realizes this derived-coords axiom at the model-checking level.",
+      "modeled_consequence": "TLC verifies the closure invariant holds at every reachable state; the negative-test config produces a TLC FAIL on the closure invariant when d is independently assigned.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "State variable a is a derived QA coordinate computed as a = b + 2*e (equivalently a = d + e) and held closed under all reachable transitions; this is the semantic content of the project A2 axiom.",
+      "artifact_element": "variable:a",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md section A2 (Derived Coords) of the project's six-axiom block.",
+      "source_excerpt": "Derived coordinates d = b + e and a = b + 2*e are always derived from the primitive coordinates (b, e) and never independently assigned; this is axiom A2 (Derived Coords).",
+      "interpretation": "The derived coordinate a equals b + 2*e at every reachable state, and an independent assignment to a is forbidden by axiom A2; the closure invariant realizes this derived-coords axiom at the model-checking level.",
+      "modeled_consequence": "TLC verifies the closure invariant for a holds across every reachable state; the negative-test config produces a TLC FAIL on the closure invariant when a is independently assigned.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Auxiliary variable qtag is the duo-modular packing of the QA derived coordinate a, recording the modular signature of the current state via the project's Phi9 / Phi24 packing convention.",
+      "artifact_element": "variable:qtag",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on duo-modular packing (Phi9 / Phi24 convention).",
+      "source_excerpt": "The duo-modular packing computes phi9 (digital root) and phi24 (mod 24) of the QA derived coordinate, and packs them as a single integer signature qtag = 24 * phi9 + phi24.",
+      "interpretation": "qtag holds the duo-modular packing of the derived coordinate at every state; the modular packing is recomputed under each action so that the packing invariant catches stale values.",
+      "modeled_consequence": "TLC verifies the modular-packing invariant holds across the reachable state space; a stale qtag is caught by the negative-test config.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Auxiliary variable fail records the most recent failure-mode classifier from a closed semantic set with categories OK / OUT_OF_BOUNDS / FIXED_Q_VIOLATION / ILLEGAL.",
+      "artifact_element": "variable:fail",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the typed failure register.",
+      "source_excerpt": "The typed failure register fail belongs to a closed set of failure-mode classifiers and is set by each generator action when its precondition is violated; the closed set is OK, OUT_OF_BOUNDS, FIXED_Q_VIOLATION, ILLEGAL.",
+      "interpretation": "The fail register holds the most recent failure-mode classifier from the closed typed set; the closed-set invariant verifies that no out-of-set value is written by any action.",
+      "modeled_consequence": "TLC verifies the typed-set invariant on fail; the negative-test config produces a TLC FAIL on the invariant when an out-of-set value is written.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Auxiliary variable lastMove records the most recently fired generator name from a closed set, providing a one-step provenance trace.",
+      "artifact_element": "variable:lastMove",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the provenance register.",
+      "source_excerpt": "The provenance register lastMove belongs to a closed set of generator names (NONE, sigma, mu, lambda) and is set by each generator action to its own name when fired; this records the one-step provenance.",
+      "interpretation": "The lastMove register holds the most recent generator name from the closed set, written by the corresponding generator action; the closed-set invariant verifies no out-of-set name is written.",
+      "modeled_consequence": "TLC verifies the typed-set invariant on lastMove; the negative-test config produces a TLC FAIL on the invariant when an out-of-set name is written.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Variable cert in the QA Certificate Spine module holds the cert-family identifier that the spine forwards to a downstream cert validator; this is the spine's semantic output channel.",
+      "artifact_element": "variable:cert",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the cert-spine specification.",
+      "source_excerpt": "The cert-spine specification models how a cert request is routed across the spine, where the active family identifier is recorded, and which downstream validator the spine forwards the request to; the variable cert is the active family identifier.",
+      "interpretation": "The cert variable in the spine holds the active family identifier; the spine actions update cert as a request is routed and the downstream validator is forwarded the family identifier.",
+      "modeled_consequence": "TLC verifies cert is well-typed across all reachable states and that the spine actions write only valid family identifiers.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Variable obs_float is the float-valued observer register that the Project action writes to model the QA-to-observer crossing, with the firewall semantic content fixed by Theorem NT.",
+      "artifact_element": "variable:obs_float",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md Theorem NT (Observer Projection Firewall).",
+      "source_excerpt": "Continuous functions are observer projections only; QA-side variables never receive float feedback from observer-side variables; the boundary is crossed exactly twice per cert; this is Theorem NT.",
+      "interpretation": "The obs_float register is the float-valued observer side; the Project action writes obs_float from the QA side, and the firewall invariant verifies that QA-side variables never receive obs_float feedback.",
+      "modeled_consequence": "TLC verifies the firewall invariant holds across the reachable state space; the negative-test config produces a TLC FAIL on the firewall invariant when a QA-side variable receives obs_float feedback.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Variable obs_cross_count is an integer counter incremented by Project to record the number of observer-side crossings, supporting the audit semantic from the firewall spec.",
+      "artifact_element": "variable:obs_cross_count",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md section on the boundary crossing audit count.",
+      "source_excerpt": "The observer projection boundary is crossed at most twice per cert; the crossing count is recorded so an outsider auditor can verify the crossing discipline at a glance.",
+      "interpretation": "The obs_cross_count register holds the audit count of boundary crossings; Project increments it on each crossing, and the bounded-counter invariant verifies the count stays within the declared bound.",
+      "modeled_consequence": "TLC verifies the bounded-counter invariant holds across all reachable states; the audit count is reproducible from any TLC run record.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action Init / _init initializes the QARM state to a tuple in the bounded domain with all auxiliary variables in their sentinel values; the semantic content is fixed by the TLA+ formalism.",
+      "artifact_element": "action:_init",
+      "source_ref": "Lamport (2002) Specifying Systems Chapter 2 on Init predicates and initial states.",
+      "source_excerpt": "Init describes the initial values of the variables; every behavior must satisfy Init at the first state and every variable must have a value defined by the initial predicate.",
+      "interpretation": "Init constrains the first state of every behavior so that variables have well-defined initial values; the QARM Init initializes the bounded tuple and the auxiliary registers, matching the standard TLA+ formalism.",
+      "modeled_consequence": "TLC starts every behavior from a state satisfying Init; downstream invariants are checked against the initial state and all reachable successors.",
+      "authority_tier": "formalism"
+    },
+    {
+      "claim": "Action Next / _next is the disjunction of all generator actions and their explicit failure variants; the semantic content of disjunction is fixed by the TLA+ formalism.",
+      "artifact_element": "action:_next",
+      "source_ref": "Lamport (2002) Specifying Systems Chapter 2 on Next disjunctions and subactions.",
+      "source_excerpt": "Next is the disjunction of subactions describing each kind of step; every behavior takes a Next-step from each state or stutters with the state unchanged.",
+      "interpretation": "The Next disjunction in the QARM bundle combines the QA generator subactions with explicit failure subactions so every reachable kind of step is covered; the disjunction matches the standard TLA+ Next-disjunction reading.",
+      "modeled_consequence": "TLC explores every reachable Next-successor from each state and verifies invariants at each successor.",
+      "authority_tier": "formalism"
+    },
+    {
+      "claim": "Action Sigma models the QA succession step (b, e) -> (e, b + e) with explicit failure variants when the result exceeds the bound or the modular packing is held stale; the semantic content is fixed by the QA spec.",
+      "artifact_element": "action:Sigma",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the Sigma generator (succession step).",
+      "source_excerpt": "The Sigma generator (succession step) advances QA primitive coordinates from (b, e) to (e, b + e); the explicit failure variants tag the failure register when the succession violates a precondition such as the bounded domain or the modular packing freshness.",
+      "interpretation": "The Sigma action disjoins the success update with explicit failure variants; success advances coordinates from (b, e) to (e, b + e), and the failure variants tag fail with the corresponding failure-mode classifier.",
+      "modeled_consequence": "TLC verifies the post-Sigma state satisfies the closure invariants and the bound invariants; the negative-test config produces a TLC FAIL when a Sigma update violates a precondition.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action Mu models the QA coordinate involution (b, e) -> (e, b) with explicit failure variants; the involution is the canonical QA swap operation.",
+      "artifact_element": "action:Mu",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the Mu generator (coordinate involution).",
+      "source_excerpt": "The Mu generator (coordinate involution) swaps QA primitive coordinates from (b, e) to (e, b); explicit failure variants tag the failure register when the involution violates a precondition such as the bounded domain.",
+      "interpretation": "The Mu action disjoins the success update with explicit failure variants; success swaps coordinates from (b, e) to (e, b), and the failure variants tag fail with the corresponding failure-mode classifier.",
+      "modeled_consequence": "TLC verifies the post-Mu state satisfies the closure invariants and the bound invariants; the negative-test config produces a TLC FAIL when a Mu update violates a precondition.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action Lambda models the QA scaling step (b, e) -> (k*b, k*e) for some k in the scaling set, with explicit failure variants when the scaled result exceeds the bound.",
+      "artifact_element": "action:Lambda",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the Lambda generator (scaling).",
+      "source_excerpt": "The Lambda generator (scaling) multiplies QA primitive coordinates from (b, e) to (k*b, k*e) for some k in the bounded scaling set; explicit failure variants tag the failure register when the scaling exceeds the bounded domain.",
+      "interpretation": "The Lambda action disjoins the success update with explicit failure variants; success scales coordinates by k, and the failure variants tag fail with the corresponding failure-mode classifier.",
+      "modeled_consequence": "TLC verifies the post-Lambda state satisfies the closure invariants and the bound invariants under the verified scaling factors; out-of-bound scalings are correctly tagged.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action Project writes obs_float from the QA-side state and increments obs_cross_count, modeling the QA-to-observer crossing with one-way semantics from the firewall spec.",
+      "artifact_element": "action:Project",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md Theorem NT (Observer Projection Firewall).",
+      "source_excerpt": "The boundary between QA-side and observer-side is crossed at most twice per cert; the crossing is one-way (QA to observer); a count is recorded.",
+      "interpretation": "The Project action writes obs_float from the QA tuple and increments obs_cross_count without updating any QA-side variable; this realizes the firewall axiom: the crossing is one-way and counted.",
+      "modeled_consequence": "TLC verifies the firewall invariant holds across post-Project states and the negative-test config produces a TLC FAIL on the firewall invariant when the firewall is violated.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action PostProjectStutter is the explicit stuttering step that models the absence of a Project crossing in a behavior; the stuttering semantic content is fixed by the TLA+ formalism.",
+      "artifact_element": "action:PostProjectStutter",
+      "source_ref": "Lamport (2002) Specifying Systems Chapter 8 on stuttering invariance and stuttering steps.",
+      "source_excerpt": "Stuttering steps leave the state unchanged; allowing stuttering steps is required for hierarchical refinement and for distinguishing the case 'no observable step occurred' from the case 'a step occurred'.",
+      "interpretation": "The PostProjectStutter action is the stuttering step that allows behaviors with no Project crossings; the stuttering step does not update any state, matching the standard TLA+ stuttering invariance discipline.",
+      "modeled_consequence": "TLC explores the stuttering branch alongside the Project branch and verifies that the firewall invariant holds in both branches.",
+      "authority_tier": "formalism"
+    },
+    {
+      "claim": "Action QA_firewalled is the conjunction of QA-side state-update conditions that exclude obs_float from feeding back, capturing the semantic content of the firewall axiom at action level.",
+      "artifact_element": "action:QA_firewalled",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md Theorem NT (Observer Projection Firewall).",
+      "source_excerpt": "QA-side variables never receive float feedback from observer-side variables; the firewall is checked at the level of state updates rather than at the level of values; this is Theorem NT.",
+      "interpretation": "The QA_firewalled predicate expresses the firewall at action level; the firewall invariant verifies the predicate holds at every state update so that QA-side variables do not depend on obs_float in any reachable transition.",
+      "modeled_consequence": "TLC verifies the firewall invariant holds across all reachable states and the negative-test config produces a TLC FAIL when the firewall predicate is violated.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action StateOK is the conjunction of TupleClosed and InBounds and serves as the basic well-formedness predicate; the well-formedness semantic content is fixed by the QA spec.",
+      "artifact_element": "action:StateOK",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on basic well-formedness predicate StateOK.",
+      "source_excerpt": "The basic well-formedness predicate StateOK conjoins the closure invariant TupleClosed with the bound invariant InBounds; the generator actions guard their effects on StateOK so that mal-formed pre-states cannot generate well-formed successors.",
+      "interpretation": "The StateOK predicate conjoins closure with bound; the generator actions require StateOK as their pre-state guard so the well-formedness invariant is preserved across reachable transitions.",
+      "modeled_consequence": "TLC verifies StateOK holds across the reachable state space starting from Init; the closure and bound invariants are inductive under the generator actions.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action Spec / Spec_ext is the canonical TLA+ specification combining Init with the always-square-bracketed Next under the variable tuple plus appropriate fairness conditions; the semantic content of Spec is fixed by the TLA+ formalism.",
+      "artifact_element": "action:Spec_ext",
+      "source_ref": "Lamport (2002) Specifying Systems Chapter 2 on the canonical Spec form.",
+      "source_excerpt": "Spec is the conjunction of Init with always Next under the variable tuple plus appropriate fairness conditions; this is the canonical form of a TLA+ specification.",
+      "interpretation": "Spec_ext follows the canonical Spec form; fairness is restricted to the safety-only subset relevant for the bundled invariants, matching the standard TLA+ formalism reading of Spec.",
+      "modeled_consequence": "TLC checks the always invariants under Spec_ext and verifies the safety invariants across all reachable behaviors.",
+      "authority_tier": "formalism"
+    },
+    {
+      "claim": "Negative-test action BrokenA1 intentionally violates the No-Zero axiom A1 so that TLC produces a FAIL on the A1 invariant in the corresponding negative-test config.",
+      "artifact_element": "action:BrokenA1",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md axiom A1 (No-Zero).",
+      "source_excerpt": "States in QA must lie in the set 1..N and never include 0; this is axiom A1 (No-Zero), and any state that includes a 0 component violates A1.",
+      "interpretation": "BrokenA1 violates the No-Zero axiom A1 by writing 0 to a state component; the A1 invariant catches the violation as a non-vacuity witness so the No-Zero invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the A1 invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenA2 intentionally violates the Derived Coords axiom A2 by independently assigning a derived coordinate so that TLC produces a FAIL on the closure invariant.",
+      "artifact_element": "action:BrokenA2",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md axiom A2 (Derived Coords).",
+      "source_excerpt": "Derived coordinates are always derived from primitive coordinates and never independently assigned; this is axiom A2 (Derived Coords), and any independent assignment to a derived coordinate violates A2.",
+      "interpretation": "BrokenA2 violates the derived-coords axiom A2 by independently assigning d or a; the closure invariant catches the violation as a non-vacuity witness so the closure invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the closure invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenT1 intentionally violates the Path Time axiom T1 by introducing a non-integer step counter so that TLC produces a FAIL on the T1 invariant.",
+      "artifact_element": "action:BrokenT1",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md axiom T1 (Path Time).",
+      "source_excerpt": "QA path time is the integer step count and must remain integer; this is axiom T1 (Path Time), and any non-integer step counter violates T1.",
+      "interpretation": "BrokenT1 violates the path-time axiom T1 by writing a non-integer step counter; the T1 invariant catches the violation as a non-vacuity witness so the path-time invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the T1 invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenT2 intentionally violates the firewall axiom T2 (runtime cast form) so that TLC produces a FAIL on the firewall invariant in the corresponding negative-test config.",
+      "artifact_element": "action:BrokenT2",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md axiom T2 (firewall runtime cast form).",
+      "source_excerpt": "Float values from observer-side variables never feed back into QA-side state; the runtime cast form of this axiom is T2, and any QA-side update from an observer-side variable violates T2.",
+      "interpretation": "BrokenT2 violates the firewall axiom T2 by writing a QA-side variable from obs_float; the firewall invariant catches the violation as a non-vacuity witness so the firewall invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the firewall invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenS2 intentionally violates the No-Float-State axiom S2 by writing a non-Nat value to a QA-side variable so that TLC produces a FAIL on the integer-state invariant.",
+      "artifact_element": "action:BrokenS2",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md axiom S2 (No Float State).",
+      "source_excerpt": "QA-side state variables must remain integer; this is axiom S2 (No Float State), and any non-integer value written to a QA-side variable violates S2.",
+      "interpretation": "BrokenS2 violates the no-float-state axiom S2 by writing a non-Nat value to a QA-side variable; the integer-state invariant catches the violation as a non-vacuity witness so the integer-state invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the integer-state invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenNT intentionally violates the firewall by routing an observer-side write into a QA-side variable so that TLC produces a FAIL on the firewall invariant.",
+      "artifact_element": "action:BrokenNT",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md Theorem NT (Observer Projection Firewall).",
+      "source_excerpt": "QA-side variables never receive float feedback from observer-side variables; this is Theorem NT, and any QA-side update from an observer-side variable violates the firewall.",
+      "interpretation": "BrokenNT violates the firewall theorem by writing a QA-side variable from obs_float; the firewall invariant catches the violation as a non-vacuity witness so the firewall invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the firewall invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenQDef intentionally holds qtag stale after a QA-side update so that TLC produces a FAIL on the modular-packing invariant.",
+      "artifact_element": "action:BrokenQDef",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the modular-packing invariant freshness.",
+      "source_excerpt": "The modular-packing register must be recomputed under each QA-side update so the modular signature is fresh; any stale modular-packing register violates the freshness invariant.",
+      "interpretation": "BrokenQDef violates the modular-packing freshness by leaving qtag stale; the modular-packing invariant catches the violation as a non-vacuity witness so the packing invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the modular-packing invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenInBounds intentionally writes a value outside the bounded domain so that TLC produces a FAIL on the bound invariant.",
+      "artifact_element": "action:BrokenInBounds",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the bounded-domain invariant.",
+      "source_excerpt": "QA-side state variables must lie within the bounded domain set by CAP; any value outside the bounded domain violates the bound invariant.",
+      "interpretation": "BrokenInBounds violates the bound invariant by writing a value outside the bounded domain; the bound invariant catches the violation as a non-vacuity witness so the bound invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the bound invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenFailDomain intentionally writes a fail tag outside the closed domain so that TLC produces a FAIL on the closed-set invariant for fail.",
+      "artifact_element": "action:BrokenFailDomain",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the typed failure register closed set.",
+      "source_excerpt": "The typed failure register fail belongs to a closed set of failure-mode classifiers; any value outside the closed set violates the closed-set invariant for fail.",
+      "interpretation": "BrokenFailDomain violates the closed-set invariant by writing a tag outside the closed set; the closed-set invariant catches the violation as a non-vacuity witness so the closed-set invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the closed-set invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenMoveDomain intentionally writes a lastMove tag outside the closed domain so that TLC produces a FAIL on the closed-set invariant for lastMove.",
+      "artifact_element": "action:BrokenMoveDomain",
+      "source_ref": "docs/specs/QA_TLA_PLUS.md section on the provenance register closed set.",
+      "source_excerpt": "The provenance register lastMove belongs to a closed set of generator names; any value outside the closed set violates the closed-set invariant for lastMove.",
+      "interpretation": "BrokenMoveDomain violates the closed-set invariant by writing a name outside the closed set; the closed-set invariant catches the violation as a non-vacuity witness so the closed-set invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the closed-set invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Negative-test action BrokenTupleClosure intentionally violates the derived-coord closure so that TLC produces a FAIL on the closure invariant.",
+      "artifact_element": "action:BrokenTupleClosure",
+      "source_ref": "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md axiom A2 (Derived Coords).",
+      "source_excerpt": "Derived coordinates are derived from primitive coordinates and never independently assigned; any tuple where the derived-coord equation is violated fails the closure invariant.",
+      "interpretation": "BrokenTupleClosure violates the closure invariant by writing a tuple where the derived-coord equation does not hold; the closure invariant catches the violation as a non-vacuity witness so the closure invariant is doing real work.",
+      "modeled_consequence": "TLC produces a FAIL on the closure invariant in the negative-test config; the failure mode is the expected outcome of the non-vacuity test.",
+      "authority_tier": "target_repo"
+    },
+    {
+      "claim": "Action Init_ext is the QAAxioms extension of Init that additionally initializes obs_float and obs_cross_count and the firewall pre-state; the hierarchical extension semantic is fixed by the TLA+ formalism.",
+      "artifact_element": "action:Init_ext",
+      "source_ref": "Lamport (2002) Specifying Systems Chapter 9 on hierarchical specification extensions.",
+      "source_excerpt": "An extended specification adds new state components and re-initializes them in an Init that conjoins the base Init; this is the hierarchical extension pattern.",
+      "interpretation": "Init_ext adds initialization for obs_float and obs_cross_count to the base Init; the hierarchical extension pattern matches the standard TLA+ formalism so Init_ext is an extension of Init.",
+      "modeled_consequence": "TLC starts every behavior under the extension from Init_ext; the firewall pre-state is well-formed at every initial state.",
+      "authority_tier": "formalism"
+    },
+    {
+      "claim": "Action Next_ext is the QAAxioms extension of Next that includes Project and PostProjectStutter alongside the base generator actions; the hierarchical extension semantic is fixed by the TLA+ formalism.",
+      "artifact_element": "action:Next_ext",
+      "source_ref": "Lamport (2002) Specifying Systems Chapter 9 on hierarchical specification extensions.",
+      "source_excerpt": "An extended Next adds new subactions to the base Next disjunction; the extended specification verifies the union and the hierarchical extension pattern is the standard form.",
+      "interpretation": "Next_ext adds the Project crossing action and the PostProjectStutter action to the base Next; the hierarchical extension pattern matches the standard TLA+ formalism so Next_ext is an extension of Next.",
+      "modeled_consequence": "TLC explores the extended Next disjunction; both QA-side generator actions and observer-side crossings are reachable under the extension.",
+      "authority_tier": "formalism"
+    }
+  ]
+}

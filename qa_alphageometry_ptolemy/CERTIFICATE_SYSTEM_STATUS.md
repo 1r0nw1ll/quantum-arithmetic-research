@@ -1,5 +1,7 @@
 # Certificate System Status - 2026-01-06
 
+> Glossary: "Theorem NT" — i.e. the Observer Projection Firewall axiom (an invariant that bars float values from re-entering the QA discrete layer; see `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md` and `qa_alphageometry_ptolemy/QAAxioms.tla:Inv_NT`).
+
 ## ✅ Installation Complete
 
 **Bundle extracted:** ChatGPT's complete certificate system v1.0

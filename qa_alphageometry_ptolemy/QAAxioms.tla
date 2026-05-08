@@ -171,7 +171,18 @@ Inv_A2_DerivedCoords ==
      (which DO fire on non-Nat or miscomputed values).
 *******************************************************************************)
 
-Inv_S1_NoSquareOperator == b * b >= 0
+\* S1 (No `^2` operator) is a STRUCTURAL axiom enforced at TLA+ source level:
+\* this module uses b*b throughout, never ^2 (which would invoke the libm
+\* exponentiation and is forbidden by qa_axiom_linter.py rule S1-1). The
+\* runtime witness below is bounded-square consistency: each state
+\* variable's squared value lies within CAP*CAP, so integer multiplication
+\* closure (the property that S1 protects) is preserved across the
+\* reachable state.
+Inv_S1_NoSquareOperator ==
+  /\ b * b <= CAP * CAP
+  /\ e * e <= CAP * CAP
+  /\ d * d <= CAP * CAP
+  /\ a * a <= CAP * CAP
 
 (*** S2 (No float state): b, e, d, a must be Nat. In TLA+ native numerics
      are integer; the invariant catches type-domain violations where an

@@ -1,0 +1,11 @@
+{
+  "target_repo": "Player3/signal_experiments",
+  "why_belongs": "The QARM TLA+ bundle is one of three redundant layers of the project's QA-axiom enforcement system, sitting alongside the text-level linter (tools/qa_axiom_linter.py) and the Python cert-family validators (qa_alphageometry_ptolemy/qa_*_cert_v1/). Co-locating the three layers in one repository is the architectural decision recorded in docs/specs/QA_TLA_PLUS.md (the three-layer constitutional architecture); separating them would make cross-layer disagreements harder to detect and harder to reconcile.",
+  "maintainer_value": "Maintainers gain an independent semantic witness on what 'QA legality' (i.e. the six-axiom block plus the firewall invariant) means at the generator-transition level. When the text linter, the TLA+ TLC verification, and the Python cert validators disagree on whether a state is well-formed, the disagreement is a bug; without the TLA+ layer there are only two witnesses and disagreements can be harder to triage. The bundle is also the canonical reference cited by cert-family scope notes when they invoke axiom names.",
+  "comparables": [
+    "tools/qa_axiom_linter.py — text-level enforcer of the same six-axiom block; structurally a Python lint pass; semantically the same axiom dictionary.",
+    "qa_alphageometry_ptolemy/QACertificateSpine.tla — TLA+ spec for the cert-spine system that consumes axiom annotations from this bundle.",
+    "qa_alphageometry_ptolemy/qa_unequal_k_ccr_invariant_cert_v1/ — Python cert validator that shares the axiom dictionary and depends on the QARM generator algebra modeled here.",
+    "docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md — prose spec of Theorem NT; this bundle's Inv_NT is the runtime witness of that spec."
+  ]
+}

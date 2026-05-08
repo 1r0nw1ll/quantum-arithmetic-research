@@ -1,0 +1,13 @@
+{
+  "reviewer": "Will Dale (project lead, manual review pending)",
+  "recommendation": "revise",
+  "rejection_arguments": [
+    "TLC verification is bounded at CAP=20 and KSet={2,3}; the bundle does not prove soundness for unbounded QA states, but the audience translation should make this scope boundary unmistakable rather than asserting axiom universality from the bounded run alone — an outsider auditor would (rightly) reject any claim that bundled bounded TLC runs constitute upstream-quality semantic verification.",
+    "The claim that the linter, TLA+ spec, and Python cert validators are 'redundant' rests on the assertion that they enforce the same axiom dictionary; this assertion is asserted but not formally compared in the bundle's artifacts. An adversarial maintainer would request a structured table of which axiom-checks each layer catches versus skips, plus a list of cases where the layers disagree, before accepting the redundancy claim.",
+    "The repository-fit case currently leans on internal comparables only (other files in this repo); a stricter outsider review might call this overstating semantic generality and request external comparables or explicit acknowledgment that the artifacts are scoped to internal coherence between three project layers, not to general TLA+ community use."
+  ],
+  "open_concerns": [
+    "Inv_S1_NoSquareOperator was tautological in an earlier draft (b * b >= 0); now bounded by CAP*CAP. A reviewer should still ask whether the rewritten invariant captures the structural property S1 (no `^2` operator at TLA+ source level) in a manner an outsider can verify without reading the qa_axiom_linter.py source.",
+    "Several other markdown files in the bundle still reference internal jargon (theorem nt, qa legality) that has now been glossed at the top of each file but not deeply unpacked in their bodies. A revise pass should keep the glossary entries while substituting outsider-readable language in the running prose."
+  ]
+}

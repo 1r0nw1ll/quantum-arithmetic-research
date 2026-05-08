@@ -217,6 +217,6 @@ TLC model checking establishes:
 2. **Generator-local failure invariance** - Failure signatures are canonical
 3. **Epistemic separation** - Truth (legality) is distinct from exploration (reachability)
 
-The QA/QARM duo-modular specification is **publication-ready** with formal verification backing.
+The QA/QARM duo-modular specification has formal verification backing within the bounded state space (CAP=20) verified by TLC. Whether it is appropriate to propose externally is an open question pending bundle-level review; no publication or submission readiness is claimed at this stage.
 
 **Status:** ✅ Stage 2 Complete - Constitutional authority locked.

@@ -137,6 +137,8 @@ multi_ai_workspace/dataset_generator.py
 # mapping_protocol_ref.json + closed_sets.json + fixtures.
 !qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/**/*.json
 !qa_alphageometry_ptolemy/qa_*_cert_v[0-9]*/*.json
+# QA-ML experiment artifacts: protocol JSONs + benchmark results
+!experiments/qa_ml/*.json
 # qa_tla_blind benchmark: candidate status JSONs + Lane C fixtures must be tracked
 !qa_tla_blind/**/*.json
 !tools/qa_kg/fixtures/*.json
@@ -310,3 +312,13 @@ private/upwork/
 
 # QA-TLA blind-reproduction ground truth (must not leak into main context)
 qa_tla_blind/ground_truth/
+
+# Off-limits / large local trees that git must NOT walk on `status`.
+# CLAUDE.md declares archive/ + Documents/* as off-limits; an untracked
+# 13 GB archive/ caused a global OOM-kill on git status (2026-04-29).
+archive/
+Documents/open_brain_migration_*/
+Documents/open_brain_manual_future_work/
+Documents/wildberger_corpus/
+Documents/haramein_rsf/
+Documents/odt_exports/

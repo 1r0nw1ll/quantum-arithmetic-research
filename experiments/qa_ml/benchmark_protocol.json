@@ -1,0 +1,68 @@
+{
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "benchmark_id": "qa_ml_orbit_classifier_sample_efficiency_v1",
+  "qa_method": {
+    "name": "QA-expanded structural features",
+    "description": "Sklearn classifier (LogReg / RandomForest) fed the integer QA structural packet. Two QA variants share the experiment: qa_basic = (b, e, d, a, C, F, G) algebraic packet (d=b+e, a=b+2e, C=2*d*e, F=a*b, G=d*d+e*e); qa_full = qa_basic plus modular phase (phi_b, phi_e) where phi_b = b mod (m//3) and phi_e = e mod (m//3) — the satellite divisor under qa_orbit_rules. Computed by tools.qa_ml in raw integer arithmetic.",
+    "observer_projection": "(b, e) discrete state in {1,...,24}^2 -> integer 7- or 9-tuple packet -> sklearn classifier (float-side observer). Boundary crossed once on input, once on output (predicted orbit class). No float feedback into QA layer."
+  },
+  "baselines": [
+    {
+      "name": "raw_logreg",
+      "implementation_ref": "sklearn.linear_model.LogisticRegression"
+    },
+    {
+      "name": "raw_rf",
+      "implementation_ref": "sklearn.ensemble.RandomForestClassifier"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "qa_orbit_mod24_full_grid",
+      "source": "tools.qa_ml.build_dataset(24) — 576 (b,e) pairs; class counts cosmos=567 satellite=8 singularity=1; ground truth qa_orbit_rules.orbit_family"
+    }
+  ],
+  "parity_contract": {
+    "same_seed_all_methods": true,
+    "same_data_split": true,
+    "same_preprocessing": true
+  },
+  "calibration_provenance": {
+    "learned_on": "no calibration step — features are deterministic integer transforms with no learned thresholds or permutations",
+    "procedure": "n/a — QA packet is a fixed algebraic feature map; only the downstream sklearn classifier is fit",
+    "domain_of_origin": "self-contained (mod-24 full grid), no inheritance from another domain"
+  },
+  "framework_inheritance": {
+    "mode": "novel",
+    "diffs": [
+      "first QA-ML feature benchmark; no prior framework being ported",
+      "ground-truth labels from canonical qa_orbit_rules"
+    ]
+  },
+  "metrics": ["macro_f1", "balanced_accuracy"],
+  "source_mapping": {
+    "theory_doc": "../../qa_orbit_rules.py",
+    "primary_source": "0 errors against simulation for mod-9 and mod-24",
+    "mapping_rationale": "The QA structural packet (b, e, d, a, C, F, G) carries the algebraic relationships that determine orbit class (singularity at (m,m); satellite when (m//3) divides both b and e). The benchmark tests whether exposing these derived integer features improves a generic ML classifier's sample efficiency vs. the raw (b, e) input. Ground-truth labels come from qa_orbit_rules.orbit_family, the canonical algebraic classifier."
+  },
+  "sota_baseline": {
+    "name": "raw_rf",
+    "metric": "macro_f1",
+    "threshold": 0.0
+  },
+  "ablation": {
+    "callable": "feature_set_swap",
+    "destroyed_structure": "Cycle the input feature matrix between raw (b, e), qa = (b, e, d, a, C, F, G), and qa_full = (b, e, d, a, C, F, G, phi_b, phi_e) under identical seed/split/model. The raw -> qa -> qa_full progression isolates the contribution of QA algebraic columns and then the modular-phase columns.",
+    "expected_direction": "qa_full should dominate at small n_train because phi_b, phi_e expose the satellite divisor directly; qa should provide a smaller lift over raw via the polynomial structure (d, a, C, F, G); raw should lag until n_train is large enough for the model to recover the modular AND-predicate from coordinate splits."
+  },
+  "reproducibility": {
+    "seed": 0,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime",
+      "numpy": "declared_at_runtime"
+    },
+    "results_ledger": "results_ledger.jsonl"
+  }
+}

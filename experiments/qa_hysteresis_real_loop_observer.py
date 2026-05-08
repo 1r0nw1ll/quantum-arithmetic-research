@@ -27,10 +27,18 @@ import json
 import math
 import re
 import statistics
+import sys
 import zipfile
+from collections import Counter
 from dataclasses import dataclass
 from pathlib import Path
 
+
+REPO = Path(__file__).resolve().parents[1]
+if str(REPO) not in sys.path:
+    sys.path.insert(0, str(REPO))
+
+from qa_orbit_rules import norm_f, orbit_family  # noqa: E402
 
 ZIP_PATH = Path("/tmp/Ring35_Dataset_Txt.zip")
 OUT_PATH = Path("results/qa_hysteresis_real_loop_observer.json")
@@ -90,6 +98,24 @@ QA_RESIDUAL_RECONSTRUCTION_FIELDS = [
     "qa_residual_reconstruct_be_dir_energy_mj_per_kg",
     "qa_residual_reconstruct_be_branch_energy_mj_per_kg",
     "qa_residual_reconstruct_memory_full_energy_mj_per_kg",
+]
+QA_ORBIT_TOPOLOGY_FEATURES = [
+    "qa_orbit_cosmos_fraction",
+    "qa_orbit_satellite_fraction",
+    "qa_orbit_singularity_fraction",
+    "qa_orbit_norm_mod_entropy",
+    "qa_orbit_family_transition_entropy",
+    "qa_orbit_family_switch_fraction",
+    "qa_orbit_cosmos_to_satellite_fraction",
+    "qa_orbit_satellite_to_cosmos_fraction",
+    "qa_orbit_norm_signed_mean",
+    "qa_orbit_norm_signed_abs_mean",
+    "qa_orbit_norm_flip_fraction",
+]
+QA_ORBIT_RESIDUAL_RECONSTRUCTION_FIELDS = [
+    "qa_orbit_residual_reconstruct_family_energy_mj_per_kg",
+    "qa_orbit_residual_reconstruct_family_norm_energy_mj_per_kg",
+    "qa_orbit_residual_reconstruct_family_norm_branch_energy_mj_per_kg",
 ]
 
 
@@ -469,6 +495,72 @@ def qa_memory_contexts(
     return contexts
 
 
+def entropy_from_counter(counts: Counter) -> float:
+    total = sum(counts.values())
+    if total <= 0:
+        return 0.0
+    out = 0.0
+    for count in counts.values():
+        p = count / total
+        out -= p * math.log(p)
+    return out
+
+
+def orbit_topology_observables(b_seq: list[int], e_seq: list[int]) -> dict[str, float]:
+    families = [orbit_family(int(b), int(e), MODULUS) for b, e in zip(b_seq, e_seq)]
+    norms_mod = [norm_f(int(b), int(e)) % MODULUS for b, e in zip(b_seq, e_seq)]
+    signed_norms = []
+    for norm in norms_mod:
+        signed_norms.append(norm if norm <= MODULUS // 2 else norm - MODULUS)
+    family_counts = Counter(families)
+    norm_counts = Counter(norms_mod)
+    family_edges = Counter(zip(families, families[1:] + families[:1]))
+    total = len(families) or 1
+    switches = sum(1 for a, b in zip(families, families[1:] + families[:1]) if a != b)
+    norm_flips = sum(
+        1
+        for a, b in zip(signed_norms, signed_norms[1:] + signed_norms[:1])
+        if a * b < 0
+    )
+    return {
+        "qa_orbit_cosmos_fraction": family_counts["cosmos"] / total,
+        "qa_orbit_satellite_fraction": family_counts["satellite"] / total,
+        "qa_orbit_singularity_fraction": family_counts["singularity"] / total,
+        "qa_orbit_norm_mod_entropy": entropy_from_counter(norm_counts),
+        "qa_orbit_family_transition_entropy": entropy_from_counter(family_edges),
+        "qa_orbit_family_switch_fraction": switches / total,
+        "qa_orbit_cosmos_to_satellite_fraction": family_edges[("cosmos", "satellite")]
+        / total,
+        "qa_orbit_satellite_to_cosmos_fraction": family_edges[("satellite", "cosmos")]
+        / total,
+        "qa_orbit_norm_signed_mean": statistics.mean(signed_norms) if signed_norms else 0.0,
+        "qa_orbit_norm_signed_abs_mean": statistics.mean(abs(n) for n in signed_norms)
+        if signed_norms
+        else 0.0,
+        "qa_orbit_norm_flip_fraction": norm_flips / total,
+    }
+
+
+def qa_orbit_contexts(
+    b_seq: list[int], e_seq: list[int]
+) -> list[tuple[tuple[str], tuple[str, int], tuple[str, int, str, str]]]:
+    memory_contexts = qa_memory_contexts(b_seq, e_seq)
+    contexts = []
+    for b_state, e_state, _sb, _se, branch, lag in (
+        full_context for _be, _be_dir, _be_branch, full_context in memory_contexts
+    ):
+        family = orbit_family(int(b_state), int(e_state), MODULUS)
+        norm_mod = norm_f(int(b_state), int(e_state)) % MODULUS
+        contexts.append(
+            (
+                (family,),
+                (family, norm_mod),
+                (family, norm_mod, branch, lag),
+            )
+        )
+    return contexts
+
+
 def physical_energy_mj_per_kg(trace: LoopTrace) -> float:
     area_j_per_m3 = abs(line_integral_y_dx(trace.b_t, trace.h_a_per_m))
     return 1000.0 * area_j_per_m3 / DENSITY_KG_PER_M3
@@ -574,6 +666,7 @@ def build_global_calibration(
     dict[tuple[str, str], dict[int, float]],
     dict[str, dict[tuple, tuple[float, float]]],
     dict[str, dict[tuple, tuple[float, float]]],
+    dict[str, dict[tuple, tuple[float, float]]],
 ]:
     h_values: list[float] = []
     b_values: list[float] = []
@@ -600,12 +693,18 @@ def build_global_calibration(
         "be_branch": {},
         "memory_full": {},
     }
+    orbit_residual_values: dict[str, dict[tuple, list[tuple[float, float]]]] = {
+        "family": {},
+        "family_norm": {},
+        "family_norm_branch": {},
+    }
     for trace in traces:
         if trace.row.filename not in calibration_names:
             continue
         b_seq = bins(trace.h_a_per_m, h_edges)
         e_seq = bins(trace.b_t, b_edges)
         context_seq = qa_memory_contexts(b_seq, e_seq)
+        orbit_context_seq = qa_orbit_contexts(b_seq, e_seq)
         for h_value, b_value, b_state, e_state in zip(trace.h_a_per_m, trace.b_t, b_seq, e_seq):
             state_values.setdefault((b_state, e_state), []).append((h_value, b_value))
             vars_for_state = qa_vars(b_state, e_state)
@@ -630,6 +729,16 @@ def build_global_calibration(
                 ("be", "be_dir", "be_branch", "memory_full"), contexts
             ):
                 residual_reconstruction_values[family].setdefault(context, []).append(residual)
+        for h_value, b_value, b_state, e_state, contexts in zip(
+            trace.h_a_per_m, trace.b_t, b_seq, e_seq, orbit_context_seq
+        ):
+            h_shell = h_centers[b_state - 1]
+            b_shell = b_centers[e_state - 1]
+            residual = (h_value - h_shell, b_value - b_shell)
+            for family, context in zip(
+                ("family", "family_norm", "family_norm_branch"), contexts
+            ):
+                orbit_residual_values[family].setdefault(context, []).append(residual)
 
     state_centers = {
         state: (
@@ -662,6 +771,16 @@ def build_global_calibration(
         }
         for family, value_map in residual_reconstruction_values.items()
     }
+    orbit_residual_centers = {
+        family: {
+            context: (
+                statistics.mean(h_value for h_value, _ in values),
+                statistics.mean(b_value for _, b_value in values),
+            )
+            for context, values in value_map.items()
+        }
+        for family, value_map in orbit_residual_values.items()
+    }
     return (
         h_edges,
         b_edges,
@@ -671,6 +790,7 @@ def build_global_calibration(
         lifted_centers,
         reconstruction_centers,
         residual_reconstruction_centers,
+        orbit_residual_centers,
     )
 
 
@@ -684,6 +804,7 @@ def qa_observables(
     lifted_centers: dict[tuple[str, str], dict[int, float]],
     reconstruction_centers: dict[str, dict[tuple, tuple[float, float]]],
     residual_reconstruction_centers: dict[str, dict[tuple, tuple[float, float]]],
+    orbit_residual_centers: dict[str, dict[tuple, tuple[float, float]]],
 ) -> dict[str, float]:
     b_seq = bins(trace.h_a_per_m, h_edges)
     e_seq = bins(trace.b_t, b_edges)
@@ -820,6 +941,31 @@ def qa_observables(
         energy = 1000.0 * abs(line_integral_y_dx(b_hat, h_hat)) / DENSITY_KG_PER_M3
         return energy, unseen / len(context_seq)
 
+    orbit_context_seq = qa_orbit_contexts(b_seq, e_seq)
+
+    def orbit_residual_reconstructed_energy(
+        family: str, context_index: int
+    ) -> tuple[float, float]:
+        h_hat: list[float] = []
+        b_hat: list[float] = []
+        unseen = 0
+        family_map = orbit_residual_centers.get(family, {})
+        family_norm_map = orbit_residual_centers.get("family_norm", {})
+        family_only_map = orbit_residual_centers.get("family", {})
+        for b_state, e_state, contexts in zip(b_seq, e_seq, orbit_context_seq):
+            residual = family_map.get(contexts[context_index])
+            if residual is None:
+                residual = family_norm_map.get(contexts[1])
+            if residual is None:
+                residual = family_only_map.get(contexts[0])
+            if residual is None:
+                unseen += 1
+                residual = (0.0, 0.0)
+            h_hat.append(h_centers[b_state - 1] + residual[0])
+            b_hat.append(b_centers[e_state - 1] + residual[1])
+        energy = 1000.0 * abs(line_integral_y_dx(b_hat, h_hat)) / DENSITY_KG_PER_M3
+        return energy, unseen / len(orbit_context_seq)
+
     reconstruct_be, reconstruct_be_unseen = reconstructed_energy("be", 0)
     reconstruct_be_dir, reconstruct_be_dir_unseen = reconstructed_energy("be_dir", 1)
     reconstruct_be_branch, reconstruct_be_branch_unseen = reconstructed_energy(
@@ -839,6 +985,15 @@ def qa_observables(
     )
     residual_reconstruct_memory_full, residual_reconstruct_memory_full_unseen = (
         residual_reconstructed_energy("memory_full", 3)
+    )
+    orbit_residual_family, orbit_residual_family_unseen = (
+        orbit_residual_reconstructed_energy("family", 0)
+    )
+    orbit_residual_family_norm, orbit_residual_family_norm_unseen = (
+        orbit_residual_reconstructed_energy("family_norm", 1)
+    )
+    orbit_residual_family_norm_branch, orbit_residual_family_norm_branch_unseen = (
+        orbit_residual_reconstructed_energy("family_norm_branch", 2)
     )
 
     fixed = {
@@ -898,6 +1053,29 @@ def qa_observables(
     fixed.update(all_lifted_unseen)
     fixed.update(qa_transition_observables(b_seq, e_seq))
     fixed.update(qa_memory_observables(b_seq, e_seq))
+    fixed.update(orbit_topology_observables(b_seq, e_seq))
+    fixed.update(
+        {
+            "qa_orbit_residual_reconstruct_family_energy_mj_per_kg": (
+                orbit_residual_family
+            ),
+            "qa_orbit_residual_reconstruct_family_unseen_fraction": (
+                orbit_residual_family_unseen
+            ),
+            "qa_orbit_residual_reconstruct_family_norm_energy_mj_per_kg": (
+                orbit_residual_family_norm
+            ),
+            "qa_orbit_residual_reconstruct_family_norm_unseen_fraction": (
+                orbit_residual_family_norm_unseen
+            ),
+            "qa_orbit_residual_reconstruct_family_norm_branch_energy_mj_per_kg": (
+                orbit_residual_family_norm_branch
+            ),
+            "qa_orbit_residual_reconstruct_family_norm_branch_unseen_fraction": (
+                orbit_residual_family_norm_branch_unseen
+            ),
+        }
+    )
     return fixed
 
 
@@ -1078,6 +1256,7 @@ def build_records_for_split(
         lifted_centers,
         reconstruction_centers,
         residual_reconstruction_centers,
+        orbit_residual_centers,
     ) = build_global_calibration(traces, calibration_names)
     records: list[dict] = []
     for trace in traces:
@@ -1091,6 +1270,7 @@ def build_records_for_split(
             lifted_centers,
             reconstruction_centers,
             residual_reconstruction_centers,
+            orbit_residual_centers,
         )
         physical_from_loop = physical_energy_mj_per_kg(trace)
         rec = {
@@ -1158,6 +1338,21 @@ def direct_model_suite(
         ),
         "qa_residual_reconstruct_memory_full_direct": direct_prediction(
             records, heldout_names, "qa_residual_reconstruct_memory_full_energy_mj_per_kg"
+        ),
+        "qa_orbit_residual_reconstruct_family_direct": direct_prediction(
+            records,
+            heldout_names,
+            "qa_orbit_residual_reconstruct_family_energy_mj_per_kg",
+        ),
+        "qa_orbit_residual_reconstruct_family_norm_direct": direct_prediction(
+            records,
+            heldout_names,
+            "qa_orbit_residual_reconstruct_family_norm_energy_mj_per_kg",
+        ),
+        "qa_orbit_residual_reconstruct_family_norm_branch_direct": direct_prediction(
+            records,
+            heldout_names,
+            "qa_orbit_residual_reconstruct_family_norm_branch_energy_mj_per_kg",
         ),
     }
     models["qa_transition_only"] = fit_predict(
@@ -1385,6 +1580,15 @@ def summarize_transfer_split(
     residual_reconstruct_memory_full = models[
         "qa_residual_reconstruct_memory_full_direct"
     ]["heldout"]
+    orbit_residual_family = models["qa_orbit_residual_reconstruct_family_direct"][
+        "heldout"
+    ]
+    orbit_residual_family_norm = models[
+        "qa_orbit_residual_reconstruct_family_norm_direct"
+    ]["heldout"]
+    orbit_residual_family_norm_branch = models[
+        "qa_orbit_residual_reconstruct_family_norm_branch_direct"
+    ]["heldout"]
     return {
         "split": split_name,
         "calibration_count": len(calibration_names),
@@ -1446,6 +1650,18 @@ def summarize_transfer_split(
         ]
         < nonqa["rmse_mj_per_kg"],
         "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": residual_reconstruct_memory_full[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_orbit_residual_reconstruct_family_beats_nonqa_by_rmse": orbit_residual_family[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_orbit_residual_reconstruct_family_norm_beats_nonqa_by_rmse": orbit_residual_family_norm[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_orbit_residual_reconstruct_family_norm_branch_beats_nonqa_by_rmse": orbit_residual_family_norm_branch[
             "rmse_mj_per_kg"
         ]
         < nonqa["rmse_mj_per_kg"],
@@ -1538,6 +1754,9 @@ def main() -> int:
         "qa_residual_reconstruct_be_dir_direct",
         "qa_residual_reconstruct_be_branch_direct",
         "qa_residual_reconstruct_memory_full_direct",
+        "qa_orbit_residual_reconstruct_family_direct",
+        "qa_orbit_residual_reconstruct_family_norm_direct",
+        "qa_orbit_residual_reconstruct_family_norm_branch_direct",
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
@@ -1573,6 +1792,9 @@ def main() -> int:
         "qa_residual_reconstruct_be_dir_direct",
         "qa_residual_reconstruct_be_branch_direct",
         "qa_residual_reconstruct_memory_full_direct",
+        "qa_orbit_residual_reconstruct_family_direct",
+        "qa_orbit_residual_reconstruct_family_norm_direct",
+        "qa_orbit_residual_reconstruct_family_norm_branch_direct",
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
@@ -1668,6 +1890,21 @@ def main() -> int:
         for split in split_summaries
         if split["qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse"]
     )
+    orbit_residual_family_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_orbit_residual_reconstruct_family_beats_nonqa_by_rmse"]
+    )
+    orbit_residual_family_norm_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_orbit_residual_reconstruct_family_norm_beats_nonqa_by_rmse"]
+    )
+    orbit_residual_family_norm_branch_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_orbit_residual_reconstruct_family_norm_branch_beats_nonqa_by_rmse"]
+    )
     transition_family_scores = {
         "qa_transition_only": transition_only_rmse_wins,
         "qa_transition_plus_shell": transition_plus_shell_rmse_wins,
@@ -1707,6 +1944,18 @@ def main() -> int:
         residual_reconstruction_family_scores,
         key=lambda name: residual_reconstruction_family_scores[name],
     )
+    orbit_residual_family_scores = {
+        "qa_orbit_residual_reconstruct_family_direct": orbit_residual_family_rmse_wins,
+        "qa_orbit_residual_reconstruct_family_norm_direct": (
+            orbit_residual_family_norm_rmse_wins
+        ),
+        "qa_orbit_residual_reconstruct_family_norm_branch_direct": (
+            orbit_residual_family_norm_branch_rmse_wins
+        ),
+    }
+    best_orbit_residual_family = max(
+        orbit_residual_family_scores, key=lambda name: orbit_residual_family_scores[name]
+    )
     memory_result_interpretation = (
         f"Memory-only QA wins {memory_only_rmse_wins} of {len(split_summaries)} "
         f"RMSE transfer splits against non-QA shell; memory plus QA shell wins "
@@ -1737,6 +1986,16 @@ def main() -> int:
         f"{residual_reconstruct_memory_full_rmse_wins}/{len(split_summaries)} for "
         f"full memory context. Best residual reconstruction family: "
         f"{best_residual_reconstruction_family}."
+    )
+    orbit_residual_result_interpretation = (
+        "Established QA orbit-topology residual reconstruction wins against "
+        f"ordinary non-QA shell in {orbit_residual_family_rmse_wins}/"
+        f"{len(split_summaries)} splits for orbit family, "
+        f"{orbit_residual_family_norm_rmse_wins}/{len(split_summaries)} for "
+        f"orbit family + norm_f mod {MODULUS}, and "
+        f"{orbit_residual_family_norm_branch_rmse_wins}/{len(split_summaries)} "
+        "for orbit family + norm + branch/lag. Best orbit residual family: "
+        f"{best_orbit_residual_family}."
     )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
@@ -1792,8 +2051,10 @@ def main() -> int:
             ],
             "transition_features": QA_TRANSITION_FEATURES,
             "memory_features": QA_MEMORY_FEATURES,
+            "orbit_topology_features": QA_ORBIT_TOPOLOGY_FEATURES,
             "reconstruction_fields": QA_RECONSTRUCTION_FIELDS,
             "residual_reconstruction_fields": QA_RESIDUAL_RECONSTRUCTION_FIELDS,
+            "orbit_residual_reconstruction_fields": QA_ORBIT_RESIDUAL_RECONSTRUCTION_FIELDS,
             "reconstruction_contexts": [
                 "ctx_be=(b_t,e_t)",
                 "ctx_be_dir=(b_t,e_t,sb_t,se_t)",
@@ -1841,6 +2102,17 @@ def main() -> int:
             "residual_reconstruction_result_interpretation": (
                 residual_reconstruction_result_interpretation
             ),
+            "qa_orbit_residual_reconstruct_family_rmse_wins_vs_nonqa_shell": (
+                orbit_residual_family_rmse_wins
+            ),
+            "qa_orbit_residual_reconstruct_family_norm_rmse_wins_vs_nonqa_shell": (
+                orbit_residual_family_norm_rmse_wins
+            ),
+            "qa_orbit_residual_reconstruct_family_norm_branch_rmse_wins_vs_nonqa_shell": (
+                orbit_residual_family_norm_branch_rmse_wins
+            ),
+            "best_orbit_residual_family": best_orbit_residual_family,
+            "orbit_residual_result_interpretation": orbit_residual_result_interpretation,
             "lifted_pair_sweep_summary": lifted_pair_sweep_summary,
             "phase_pair_sweep_summary": phase_pair_sweep_summary,
         },
@@ -1913,6 +2185,7 @@ def main() -> int:
             "residual_reconstruction_result_interpretation": (
                 residual_reconstruction_result_interpretation
             ),
+            "orbit_residual_result_interpretation": orbit_residual_result_interpretation,
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "
                 "centers are fit on calibration loops only. Direct predictors use "

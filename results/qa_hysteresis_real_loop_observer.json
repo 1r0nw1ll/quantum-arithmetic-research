@@ -1552,6 +1552,60 @@
   },
   "interpretation": "A useful QA hysteresis mapping should improve held-out loss prediction over the mean baseline and should be evaluated against Steinmetz. The rank-only QA models test whether measured loop geometry maps into QA coordinates without physical scale. The dimensioned QA shell model keeps calibration-set H/B shell centers and directly approximates the hysteresis work integral.",
   "ok": true,
+  "orbit_bridge_comparison": [
+    {
+      "mae_mj_per_kg": 0.12276275257930101,
+      "mape": 0.002484926353649423,
+      "model": "raw_physical_hdb_direct",
+      "r2": 0.9999884743393127,
+      "rmse_mj_per_kg": 0.1630397439640567
+    },
+    {
+      "mae_mj_per_kg": 5.260998086038452,
+      "mape": 0.12068582088321632,
+      "model": "steinmetz_log_linear_baseline",
+      "r2": 0.9712875276649473,
+      "rmse_mj_per_kg": 8.137591119912768
+    },
+    {
+      "mae_mj_per_kg": 2.7127877102150237,
+      "mape": 0.04355785019483513,
+      "model": "nonqa_shell_hdb_direct",
+      "r2": 0.984934989508211,
+      "rmse_mj_per_kg": 5.894477155982403
+    },
+    {
+      "mae_mj_per_kg": 2.7173320434492045,
+      "mape": 0.04478165806068449,
+      "model": "qa_orbit_residual_reconstruct_family_direct",
+      "r2": 0.9849821607364264,
+      "rmse_mj_per_kg": 5.88524159240592
+    },
+    {
+      "mae_mj_per_kg": 2.7719377348716256,
+      "mape": 0.04518360989129478,
+      "model": "qa_orbit_residual_reconstruct_family_norm_direct",
+      "r2": 0.9847610886459004,
+      "rmse_mj_per_kg": 5.928400579666568
+    },
+    {
+      "mae_mj_per_kg": 2.771703404544414,
+      "mape": 0.04306315369815051,
+      "model": "qa_orbit_residual_reconstruct_family_norm_branch_direct",
+      "r2": 0.9839811158127221,
+      "rmse_mj_per_kg": 6.078223992109591
+    }
+  ],
+  "orbit_bridge_summary": {
+    "orbit_bridge_best_model_by_rmse": "raw_physical_hdb_direct",
+    "orbit_bridge_best_nonraw_model_by_rmse": "qa_orbit_residual_reconstruct_family_direct",
+    "orbit_bridge_result_interpretation": "Earlier ad hoc QA summaries failed to produce a stable advantage over ordinary calibrated H/B shell physics. Canonical QA orbit topology is the first established QA substrate in this experiment that matches and slightly beats the non-QA shell baseline on the main split: orbit-family residual delta RMSE=-0.009236 mJ/kg and delta R2=0.000047. The transfer result is promising but not conclusive at 6/12 RMSE wins. The norm_f and branch/lag variants are reported separately because adding them is not automatically better. The next hardening step is a significance/permutation test over orbit labels or bootstrap over loops.",
+    "orbit_family_norm_branch_transfer_wins_vs_nonqa_shell": 5,
+    "orbit_family_norm_transfer_wins_vs_nonqa_shell": 2,
+    "orbit_family_residual_delta_r2_vs_nonqa_shell": 4.717122821540354e-05,
+    "orbit_family_residual_delta_rmse_vs_nonqa_shell": -0.009235563576483585,
+    "orbit_family_residual_transfer_wins_vs_nonqa_shell": 6
+  },
   "physical_observable": {
     "loop_integral_check": "abs(integral H dB) / density converted to mJ/kg",
     "max_abs_table_vs_integral_error_mj_per_kg": 0.7006409952633135,
@@ -39663,6 +39717,7 @@
     "leakage_controls": "H/B quantile edges, marginal shell centers, and joint QA state centers are fit on calibration loops only. Direct predictors use no held-out loss labels and no fitted regression coefficient. Branch-local reconstruction lookup tables are fit separately per split on calibration traces only. Residual reconstruction lookup tables also use calibration traces only and fall back to (b,e) residuals or zero residual when a held-out context is unseen.",
     "lifted_pair_sweep_interpretation": "Best lifted pair by the predeclared transfer score is b/X, with RMSE wins in 4 of 12 splits and median RMSE ratio 1.507 relative to ordinary non-QA shell. This does not establish a stable QA-specific advantage yet.",
     "memory_result_interpretation": "Memory-only QA wins 1 of 12 RMSE transfer splits against non-QA shell; memory plus QA shell wins 2; non-QA shell plus QA memory wins 2; QA memory plus transition wins 0; non-QA shell plus transition plus memory wins 2. Best memory family: qa_memory_plus_qa_shell.",
+    "orbit_bridge_result_interpretation": "Earlier ad hoc QA summaries failed to produce a stable advantage over ordinary calibrated H/B shell physics. Canonical QA orbit topology is the first established QA substrate in this experiment that matches and slightly beats the non-QA shell baseline on the main split: orbit-family residual delta RMSE=-0.009236 mJ/kg and delta R2=0.000047. The transfer result is promising but not conclusive at 6/12 RMSE wins. The norm_f and branch/lag variants are reported separately because adding them is not automatically better. The next hardening step is a significance/permutation test over orbit labels or bootstrap over loops.",
     "orbit_residual_result_interpretation": "Established QA orbit-topology residual reconstruction wins against ordinary non-QA shell in 6/12 splits for orbit family, 2/12 for orbit family + norm_f mod 24, and 5/12 for orbit family + norm + branch/lag. Best orbit residual family: qa_orbit_residual_reconstruct_family_direct.",
     "phase_pair_sweep_interpretation": "Best phase/orientation-aware QA pair is b/X, with RMSE wins in 4 of 12 splits and median RMSE ratio 1.453 relative to ordinary non-QA shell.",
     "qa_adds_to_steinmetz_here": "The tested log Steinmetz+rank-QA shape model does not improve Steinmetz, but the physically dimensioned QA shell integral beats Steinmetz directly.",

@@ -117,6 +117,49 @@ def line_integral_y_dx(x: list[float], y: list[float]) -> float:
     return sum(0.5 * (y2[i] + y2[i + 1]) * (x2[i + 1] - x2[i]) for i in range(len(x)))
 
 
+def loop_components_mj_per_kg(x: list[float], y: list[float]) -> dict[str, float]:
+    x2 = close(x)
+    y2 = close(y)
+    signed = 0.0
+    positive = 0.0
+    negative_abs = 0.0
+    for i in range(len(x)):
+        term = 0.5 * (y2[i] + y2[i + 1]) * (x2[i + 1] - x2[i])
+        signed += term
+        if term >= 0.0:
+            positive += term
+        else:
+            negative_abs -= term
+    scale = 1000.0 / DENSITY_KG_PER_M3
+    return {
+        "signed_mj_per_kg": signed * scale,
+        "abs_mj_per_kg": abs(signed) * scale,
+        "positive_mj_per_kg": positive * scale,
+        "negative_abs_mj_per_kg": negative_abs * scale,
+        "total_variation_mj_per_kg": (positive + negative_abs) * scale,
+    }
+
+
+def phase_stats(x: list[float], y: list[float]) -> dict[str, float]:
+    angles = [math.atan2(yy, xx) for xx, yy in zip(x, y)]
+    if not angles:
+        return {"winding": 0.0, "total_variation": 0.0}
+    winding = 0.0
+    total_variation = 0.0
+    for a0, a1 in zip(close(angles), close(angles)[1:]):
+        delta = a1 - a0
+        while delta <= -math.pi:
+            delta += 2.0 * math.pi
+        while delta > math.pi:
+            delta -= 2.0 * math.pi
+        winding += delta
+        total_variation += abs(delta)
+    return {
+        "winding": winding / (2.0 * math.pi),
+        "total_variation": total_variation,
+    }
+
+
 def physical_energy_mj_per_kg(trace: LoopTrace) -> float:
     area_j_per_m3 = abs(line_integral_y_dx(trace.b_t, trace.h_a_per_m))
     return 1000.0 * area_j_per_m3 / DENSITY_KG_PER_M3
@@ -183,6 +226,21 @@ def qa_vars(b: int, e: int) -> dict[str, int]:
 
 def lifted_energy_field(h_var: str, b_var: str) -> str:
     return f"qa_lifted_{h_var.lower()}_{b_var.lower()}_shell_energy_mj_per_kg"
+
+
+def lifted_component_field(h_var: str, b_var: str, component: str) -> str:
+    return f"qa_lifted_{h_var.lower()}_{b_var.lower()}_shell_{component}"
+
+
+def lifted_component_features(h_var: str, b_var: str) -> list[str]:
+    return [
+        lifted_energy_field(h_var, b_var),
+        lifted_component_field(h_var, b_var, "positive_mj_per_kg"),
+        lifted_component_field(h_var, b_var, "negative_abs_mj_per_kg"),
+        lifted_component_field(h_var, b_var, "total_variation_mj_per_kg"),
+        lifted_component_field(h_var, b_var, "phase_winding"),
+        lifted_component_field(h_var, b_var, "phase_total_variation"),
+    ]
 
 
 def calibration_split(rows: list[LossRow]) -> tuple[set[str], set[str]]:
@@ -295,7 +353,7 @@ def qa_observables(
     for i in range(len(x_seq)):
         path_energy += 0.5 * (pi2[i] + pi2[i + 1]) * abs(x2[i + 1] - x2[i])
 
-    def lifted_shell_energy(h_var: str, b_var: str) -> tuple[float, float]:
+    def lifted_shell_components(h_var: str, b_var: str) -> tuple[dict[str, float], float]:
         h_map = lifted_centers.get(("H", h_var), {})
         b_map = lifted_centers.get(("B", b_var), {})
         h_lifted_seq: list[float] = []
@@ -314,16 +372,21 @@ def qa_observables(
                 b_value = b_centers[e - 1]
             h_lifted_seq.append(h_value)
             b_lifted_seq.append(b_value)
-        energy = 1000.0 * abs(line_integral_y_dx(b_lifted_seq, h_lifted_seq)) / DENSITY_KG_PER_M3
-        return energy, unseen / (2 * len(vars_seq))
+        components = loop_components_mj_per_kg(b_lifted_seq, h_lifted_seq)
+        phase = phase_stats(b_lifted_seq, h_lifted_seq)
+        components["phase_winding"] = phase["winding"]
+        components["phase_total_variation"] = phase["total_variation"]
+        return components, unseen / (2 * len(vars_seq))
 
     all_lifted: dict[str, float] = {}
     all_lifted_unseen: dict[str, float] = {}
     for h_var in QA_LIFTED_VARIABLES:
         for b_var in QA_LIFTED_VARIABLES:
-            energy, unseen_fraction = lifted_shell_energy(h_var, b_var)
+            components, unseen_fraction = lifted_shell_components(h_var, b_var)
             field = lifted_energy_field(h_var, b_var)
-            all_lifted[field] = energy
+            all_lifted[field] = components["abs_mj_per_kg"]
+            for component_name, component_value in components.items():
+                all_lifted[lifted_component_field(h_var, b_var, component_name)] = component_value
             all_lifted_unseen[field.replace("_energy_", "_unseen_")] = unseen_fraction
 
     lifted_jx = all_lifted[lifted_energy_field("J", "X")]
@@ -343,6 +406,11 @@ def qa_observables(
         lifted_energy_field("J", "Pi").replace("_energy_", "_unseen_")
     ]
 
+    nonqa_components = loop_components_mj_per_kg(nonqa_b_shell_seq, nonqa_h_shell_seq)
+    qa_components = loop_components_mj_per_kg(qa_b_shell_seq, qa_h_shell_seq)
+    nonqa_phase = phase_stats(nonqa_b_shell_seq, nonqa_h_shell_seq)
+    qa_phase = phase_stats(qa_b_shell_seq, qa_h_shell_seq)
+
     fixed = {
         "qa_be_loop_area": be_area,
         "qa_jx_loop_area": jx_area,
@@ -352,9 +420,21 @@ def qa_observables(
         "nonqa_shell_hdb_energy_mj_per_kg": 1000.0
         * abs(line_integral_y_dx(nonqa_b_shell_seq, nonqa_h_shell_seq))
         / DENSITY_KG_PER_M3,
+        "nonqa_shell_hdb_positive_mj_per_kg": nonqa_components["positive_mj_per_kg"],
+        "nonqa_shell_hdb_negative_abs_mj_per_kg": nonqa_components["negative_abs_mj_per_kg"],
+        "nonqa_shell_hdb_total_variation_mj_per_kg": nonqa_components[
+            "total_variation_mj_per_kg"
+        ],
+        "nonqa_shell_hdb_phase_winding": nonqa_phase["winding"],
+        "nonqa_shell_hdb_phase_total_variation": nonqa_phase["total_variation"],
         "qa_shell_hdb_energy_mj_per_kg": 1000.0
         * abs(line_integral_y_dx(qa_b_shell_seq, qa_h_shell_seq))
         / DENSITY_KG_PER_M3,
+        "qa_shell_hdb_positive_mj_per_kg": qa_components["positive_mj_per_kg"],
+        "qa_shell_hdb_negative_abs_mj_per_kg": qa_components["negative_abs_mj_per_kg"],
+        "qa_shell_hdb_total_variation_mj_per_kg": qa_components["total_variation_mj_per_kg"],
+        "qa_shell_hdb_phase_winding": qa_phase["winding"],
+        "qa_shell_hdb_phase_total_variation": qa_phase["total_variation"],
         "qa_lifted_jx_shell_energy_mj_per_kg": lifted_jx,
         "qa_lifted_jx_unseen_fraction": lifted_jx_unseen,
         "qa_lifted_kx_shell_energy_mj_per_kg": lifted_kx,
@@ -624,10 +704,47 @@ def lifted_pair_sweep(records: list[dict], heldout_names: set[str]) -> list[dict
     return rows
 
 
+def phase_pair_sweep(
+    records: list[dict], calibration_names: set[str], heldout_names: set[str]
+) -> list[dict]:
+    nonqa = direct_prediction(records, heldout_names, "nonqa_shell_hdb_energy_mj_per_kg")[
+        "heldout"
+    ]
+    rows: list[dict] = []
+    for h_var in QA_LIFTED_VARIABLES:
+        for b_var in QA_LIFTED_VARIABLES:
+            features = lifted_component_features(h_var, b_var)
+            result = fit_predict(records, calibration_names, heldout_names, features)["heldout"]
+            rows.append(
+                {
+                    "h_var": h_var,
+                    "b_var": b_var,
+                    "features": features,
+                    **result,
+                    "beats_nonqa_by_r2": result["r2"] > nonqa["r2"],
+                    "beats_nonqa_by_rmse": result["rmse_mj_per_kg"]
+                    < nonqa["rmse_mj_per_kg"],
+                    "beats_nonqa_by_mae": result["mae_mj_per_kg"]
+                    < nonqa["mae_mj_per_kg"],
+                    "rmse_ratio_to_nonqa": result["rmse_mj_per_kg"]
+                    / max(nonqa["rmse_mj_per_kg"], 1e-12),
+                }
+            )
+    return rows
+
+
 def summarize_lifted_pair_sweep(split_results: list[dict]) -> dict:
+    return summarize_pair_sweep(split_results, "lifted_pair_sweep")
+
+
+def summarize_phase_pair_sweep(split_results: list[dict]) -> dict:
+    return summarize_pair_sweep(split_results, "phase_pair_sweep")
+
+
+def summarize_pair_sweep(split_results: list[dict], sweep_key: str) -> dict:
     aggregates: dict[str, dict] = {}
     for split in split_results:
-        for row in split["lifted_pair_sweep"]:
+        for row in split[sweep_key]:
             key = f"{row['h_var']}/{row['b_var']}"
             bucket = aggregates.setdefault(
                 key,
@@ -708,6 +825,7 @@ def summarize_transfer_split(
     models = direct_model_suite(records, calibration_names, heldout_names)
     rows = direct_comparison_rows(models, comparison_order)
     pair_rows = lifted_pair_sweep(records, heldout_names)
+    phase_rows = phase_pair_sweep(records, calibration_names, heldout_names)
     best_by_rmse = min(rows, key=lambda row: row["rmse_mj_per_kg"])
     best_shell_by_rmse = min(
         [row for row in rows if row["model"] != "raw_physical_hdb_direct"],
@@ -726,6 +844,9 @@ def summarize_transfer_split(
         "best_lifted_pair_by_rmse": min(pair_rows, key=lambda row: row["rmse_mj_per_kg"]),
         "best_lifted_pair_by_r2": max(pair_rows, key=lambda row: row["r2"]),
         "lifted_pair_sweep": pair_rows,
+        "best_phase_pair_by_rmse": min(phase_rows, key=lambda row: row["rmse_mj_per_kg"]),
+        "best_phase_pair_by_r2": max(phase_rows, key=lambda row: row["r2"]),
+        "phase_pair_sweep": phase_rows,
         "models": {name: models[name]["heldout"] for name in comparison_order},
     }
 
@@ -826,7 +947,9 @@ def main() -> int:
         for name, cal, hold in transfer_splits(loss_rows)
     ]
     lifted_pair_sweep_summary = summarize_lifted_pair_sweep(split_summaries)
+    phase_pair_sweep_summary = summarize_phase_pair_sweep(split_summaries)
     best_sweep_pair = lifted_pair_sweep_summary["best_pair"]
+    best_phase_pair = phase_pair_sweep_summary["best_pair"]
     qa_j_pi_r2_wins = sum(
         1 for split in split_summaries if split["qa_lifted_j_pi_beats_nonqa_by_r2"]
     )
@@ -892,6 +1015,7 @@ def main() -> int:
             "qa_lifted_j_pi_r2_wins_vs_nonqa_shell": qa_j_pi_r2_wins,
             "qa_lifted_j_pi_rmse_wins_vs_nonqa_shell": qa_j_pi_rmse_wins,
             "lifted_pair_sweep_summary": lifted_pair_sweep_summary,
+            "phase_pair_sweep_summary": phase_pair_sweep_summary,
         },
         "verdict": {
             "qa_not_random": (
@@ -942,6 +1066,13 @@ def main() -> int:
                 f"and median RMSE ratio {best_sweep_pair['median_rmse_ratio_to_nonqa']:.3f} "
                 "relative to ordinary non-QA shell. This does not establish a stable "
                 "QA-specific advantage yet."
+            ),
+            "phase_pair_sweep_interpretation": (
+                f"Best phase/orientation-aware QA pair is {best_phase_pair['pair']}, "
+                f"with RMSE wins in {best_phase_pair['rmse_win_count']} of "
+                f"{len(split_summaries)} splits and median RMSE ratio "
+                f"{best_phase_pair['median_rmse_ratio_to_nonqa']:.3f} relative to "
+                "ordinary non-QA shell."
             ),
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "

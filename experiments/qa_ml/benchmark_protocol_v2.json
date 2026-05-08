@@ -1,0 +1,69 @@
+{
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "benchmark_id": "qa_ml_orbit_classifier_gnn_v2",
+  "qa_method": {
+    "name": "GCN over QA reachability graph",
+    "description": "Two-layer plain-torch GCN trained transductively on the full mod-24 (b,e) grid (576 nodes). Node features are the QA full packet (b, e, d, a, C, F, G, phi_b, phi_e) where phi_b = b mod (m//3), phi_e = e mod (m//3). Edges are produced by applying the QA generators sigma, mu, lambda_2, nu (tools.qa_ml.qa_generators) to every node and recording the (src, dst) pairs where the generator is defined. Adjacency is symmetrized and normalized as D^(-1/2) (A + I) D^(-1/2) (Kipf-Welling). Singularity (24, 24) is included in the graph but masked out of supervision and evaluation.",
+    "observer_projection": "Integer (b, e) discrete states -> integer feature packet -> float64 normalized adjacency -> torch GCN (float-side observer) -> orbit-class logits. Theorem NT boundary crossed once on input and once on output; no float feedback into the QA layer."
+  },
+  "baselines": [
+    {
+      "name": "raw_mlp",
+      "implementation_ref": "torch.nn.Module"
+    },
+    {
+      "name": "qa_full_logreg",
+      "implementation_ref": "sklearn.linear_model.LogisticRegression"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "qa_orbit_mod24_full_grid",
+      "source": "tools.qa_ml.build_dataset(24) -- 576 (b,e) pairs; class counts cosmos=567 satellite=8 singularity=1 (singularity masked from supervision); ground truth qa_orbit_rules.orbit_family"
+    }
+  ],
+  "parity_contract": {
+    "same_seed_all_methods": true,
+    "same_data_split": true,
+    "same_preprocessing": true
+  },
+  "calibration_provenance": {
+    "learned_on": "qa_full feature transform is deterministic; GCN weights initialized from torch default with fixed seed; adjacency is precomputed once",
+    "procedure": "no calibration step beyond per-fold z-score standardization of node features (mean/std fit on train mask only)",
+    "domain_of_origin": "self-contained mod-24 grid; no inheritance from another domain"
+  },
+  "framework_inheritance": {
+    "mode": "novel",
+    "diffs": [
+      "first QA-ML graph benchmark; no prior framework being ported",
+      "ground-truth labels from canonical qa_orbit_rules; generators sigma/mu/lambda_2/nu mirror qa_structural_algebra naming"
+    ]
+  },
+  "metrics": ["macro_f1", "balanced_accuracy"],
+  "source_mapping": {
+    "theory_doc": "../../qa_orbit_rules.py",
+    "primary_source": "0 errors against simulation for mod-9 and mod-24",
+    "mapping_rationale": "QA-ML v1 (orbit classifier sample-efficiency benchmark) showed that polynomial QA expansion alone is weak and that orbit learnability is controlled by modular phase. v2 tests whether the QA reachability graph -- whose edges are exactly the canonical generators sigma, mu, lambda_2, nu -- carries enough topological signal to lift orbit prediction further. A GCN's message-passing has access to neighbor labels through the same algebraic moves that define the orbit families, so this is a direct test of whether QA generator topology (not just QA features) is informative for ML."
+  },
+  "sota_baseline": {
+    "name": "qa_full_logreg",
+    "metric": "macro_f1",
+    "threshold": 0.0
+  },
+  "ablation": {
+    "callable": "feature_set_swap",
+    "destroyed_structure": "Replace the normalized QA-generator adjacency with the identity matrix; same node features, same model architecture, same seed. This collapses the GCN to a 2-layer MLP on qa_full features and isolates the contribution of the reachability graph.",
+    "expected_direction": "with_graph should outperform without_graph at small n_train because message passing along sigma/mu propagates labels within the satellite cluster and lambda_2/nu edges expose the modular phase structure that single-node MLPs can only learn from many examples."
+  },
+  "reproducibility": {
+    "seed": 0,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime",
+      "numpy": "declared_at_runtime",
+      "torch": "declared_at_runtime"
+    },
+    "results_ledger": "results_ledger_v2.jsonl"
+  }
+}

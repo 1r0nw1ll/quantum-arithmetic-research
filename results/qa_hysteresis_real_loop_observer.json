@@ -1255,6 +1255,649 @@
       "split": "calibration"
     }
   ],
+  "transfer_split_summary": {
+    "qa_lifted_j_pi_r2_wins_vs_nonqa_shell": 3,
+    "qa_lifted_j_pi_rmse_wins_vs_nonqa_shell": 3,
+    "split_count": 12,
+    "splits": [
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "qa_lifted_j_pi_shell_direct",
+        "calibration_count": 19,
+        "heldout_count": 9,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 47.634040935672516,
+            "mape": 4.616097934859647,
+            "r2": -0.06848639935318435,
+            "rmse_mj_per_kg": 49.64151977133722
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 2.7127877102150237,
+            "mape": 0.04355785019483513,
+            "r2": 0.984934989508211,
+            "rmse_mj_per_kg": 5.894477155982403
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 4.361375747714448,
+            "mape": 0.13149260526884807,
+            "r2": 0.9855528006749825,
+            "rmse_mj_per_kg": 5.772346622240178
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 5.55553555529826,
+            "mape": 0.17772708076322707,
+            "r2": 0.9780882098723025,
+            "rmse_mj_per_kg": 7.10885243847704
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 3.69346466119591,
+            "mape": 0.0489424809350431,
+            "r2": 0.9721929287371951,
+            "rmse_mj_per_kg": 8.0082605517487
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.12276275257930101,
+            "mape": 0.002484926353649423,
+            "r2": 0.9999884743393127,
+            "rmse_mj_per_kg": 0.1630397439640567
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 5.260998086038452,
+            "mape": 0.12068582088321632,
+            "r2": 0.9712875276649473,
+            "rmse_mj_per_kg": 8.137591119912768
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": true,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": true,
+        "split": "index_mod3_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "calibration_count": 21,
+        "heldout_count": 7,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 52.93309523809524,
+            "mape": 9.388492895744871,
+            "r2": -12.59763913826513,
+            "rmse_mj_per_kg": 54.99389292565053
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.7056816979705306,
+            "mape": 0.03703559274954774,
+            "r2": 0.9940657513929578,
+            "rmse_mj_per_kg": 1.1488559459385628
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 2.2358750455085796,
+            "mape": 0.09262732581749579,
+            "r2": 0.9541002155538607,
+            "rmse_mj_per_kg": 3.1951263073278677
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 2.9934593707816384,
+            "mape": 0.14333235980746878,
+            "r2": 0.9299188848037947,
+            "rmse_mj_per_kg": 3.948055144805752
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.7958984849219567,
+            "mape": 0.055016109009200106,
+            "r2": 0.9932540706684796,
+            "rmse_mj_per_kg": 1.2249083684061426
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.05234861552900275,
+            "mape": 0.002489246878451317,
+            "r2": 0.9999810670250692,
+            "rmse_mj_per_kg": 0.06489214619785051
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 8.810698261435045,
+            "mape": 0.4828647064909801,
+            "r2": 0.4978479629599901,
+            "rmse_mj_per_kg": 10.568182938158824
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "frequency_50Hz_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "calibration_count": 21,
+        "heldout_count": 7,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 36.318673469387754,
+            "mape": 5.13393942335972,
+            "r2": -0.8223386293989337,
+            "rmse_mj_per_kg": 41.65089515647414
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 1.8615161027989637,
+            "mape": 0.036420677640917234,
+            "r2": 0.9896861633157268,
+            "rmse_mj_per_kg": 3.133429473245341
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 3.3956016907743356,
+            "mape": 0.07687147748892327,
+            "r2": 0.9676173879777075,
+            "rmse_mj_per_kg": 5.552208124505641
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 6.4099213648449895,
+            "mape": 0.16175476192629223,
+            "r2": 0.9146646370556227,
+            "rmse_mj_per_kg": 9.013102685378438
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 1.9055065233178656,
+            "mape": 0.03833305736013971,
+            "r2": 0.9885353009583742,
+            "rmse_mj_per_kg": 3.303627923659434
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.10504077371211983,
+            "mape": 0.002672606630128818,
+            "r2": 0.9999817330795806,
+            "rmse_mj_per_kg": 0.13186892547172938
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 10.323931256909912,
+            "mape": 0.25726111924473244,
+            "r2": 0.8303168058250666,
+            "rmse_mj_per_kg": 12.709521918662526
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "frequency_400Hz_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "qa_lifted_j_pi_shell_direct",
+        "calibration_count": 21,
+        "heldout_count": 7,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 47.82999319727891,
+            "mape": 2.8367489495271587,
+            "r2": -0.02611073259616359,
+            "rmse_mj_per_kg": 57.17575430996808
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 4.412959098739283,
+            "mape": 0.037885148830028144,
+            "r2": 0.9793589078373275,
+            "rmse_mj_per_kg": 8.109258119185736
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 4.591690812218189,
+            "mape": 0.08413849749940874,
+            "r2": 0.9881695536805932,
+            "rmse_mj_per_kg": 6.139250474421091
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 8.837574099152889,
+            "mape": 0.17109627251087572,
+            "r2": 0.9567173670525793,
+            "rmse_mj_per_kg": 11.74279890494579
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 5.553599720973023,
+            "mape": 0.04787236126494009,
+            "r2": 0.9631984285603755,
+            "rmse_mj_per_kg": 10.82799308177165
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.1621350320815464,
+            "mape": 0.0024640762458199984,
+            "r2": 0.9999860484259198,
+            "rmse_mj_per_kg": 0.21082707942941825
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 5.475217180307742,
+            "mape": 0.11975315209662853,
+            "r2": 0.9838939593742781,
+            "rmse_mj_per_kg": 7.163234734419962
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": true,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": true,
+        "split": "frequency_1000Hz_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "calibration_count": 21,
+        "heldout_count": 7,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 88.4123469387755,
+            "mape": 1.441538819673394,
+            "r2": -0.5062486270843545,
+            "rmse_mj_per_kg": 123.83415315326359
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 29.09129185358888,
+            "mape": 0.13195169976678725,
+            "r2": 0.7214633964426695,
+            "rmse_mj_per_kg": 53.251671504130506
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 41.95334173219309,
+            "mape": 0.24059055535875537,
+            "r2": 0.5470304921921406,
+            "rmse_mj_per_kg": 67.90888354021145
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 46.76939856276891,
+            "mape": 0.2807982762190458,
+            "r2": 0.4561830434672137,
+            "rmse_mj_per_kg": 74.40780256859648
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 31.531372941161898,
+            "mape": 0.13954972850875763,
+            "r2": 0.6841393413595465,
+            "rmse_mj_per_kg": 56.70741817984234
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.27484744623325597,
+            "mape": 0.002419380668927828,
+            "r2": 0.9999867075550695,
+            "rmse_mj_per_kg": 0.367870143207127
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 40.98058597875054,
+            "mape": 0.2584264342212007,
+            "r2": 0.6184395256392914,
+            "rmse_mj_per_kg": 62.32665171372466
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "frequency_2000Hz_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "calibration_count": 24,
+        "heldout_count": 4,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 66.03520833333333,
+            "mape": 23.328332360974755,
+            "r2": -1768.6554447275437,
+            "rmse_mj_per_kg": 66.05387389000539
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.10669928101562176,
+            "mape": 0.042237467785985985,
+            "r2": 0.9934439942255822,
+            "rmse_mj_per_kg": 0.12713747980796583
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 0.2789711365902523,
+            "mape": 0.0920627333937294,
+            "r2": 0.9631330959015286,
+            "rmse_mj_per_kg": 0.30148955395166305
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 0.32744773382810677,
+            "mape": 0.09462021518780687,
+            "r2": 0.947624950316154,
+            "rmse_mj_per_kg": 0.35934876664610876
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.2159228105167048,
+            "mape": 0.07907947696727415,
+            "r2": 0.9718829571830385,
+            "rmse_mj_per_kg": 0.263292662197723
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.008557635574201916,
+            "mape": 0.002395133574598623,
+            "r2": 0.9999633085544065,
+            "rmse_mj_per_kg": 0.009511222599999177
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 0.4226435955338257,
+            "mape": 0.1404077962780419,
+            "r2": 0.8721108276275977,
+            "rmse_mj_per_kg": 0.5615272323611821
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "amplitude_0.20T_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "qa_shell_hdb_direct",
+        "calibration_count": 24,
+        "heldout_count": 4,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 55.90125,
+            "mape": 5.917886521280073,
+            "r2": -105.86261094370938,
+            "rmse_mj_per_kg": 56.164656766956206
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.5592878497257341,
+            "mape": 0.053350841414813145,
+            "r2": 0.9887390501724346,
+            "rmse_mj_per_kg": 0.5765510009300541
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 1.4924519344909404,
+            "mape": 0.14296131667716147,
+            "r2": 0.9217924999148579,
+            "rmse_mj_per_kg": 1.5194080415287423
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 3.090917270686034,
+            "mape": 0.2868903698776774,
+            "r2": 0.6606543195430803,
+            "rmse_mj_per_kg": 3.1649829981674986
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.4860024371782081,
+            "mape": 0.04793333460039753,
+            "r2": 0.9918171433963715,
+            "rmse_mj_per_kg": 0.49147642326214724
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.030546169230136755,
+            "mape": 0.0025241877455698756,
+            "r2": 0.9999629339136237,
+            "rmse_mj_per_kg": 0.033077949925502954
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 1.2212892327503098,
+            "mape": 0.13083050466202295,
+            "r2": 0.9384406685465658,
+            "rmse_mj_per_kg": 1.3480225772779615
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "amplitude_0.40T_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "calibration_count": 24,
+        "heldout_count": 4,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 40.557541666666665,
+            "mape": 2.330055787685982,
+            "r2": -11.449251558223258,
+            "rmse_mj_per_kg": 42.29165644419006
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.4683023900009804,
+            "mape": 0.01953851679165873,
+            "r2": 0.9981546646642531,
+            "rmse_mj_per_kg": 0.5148974288989913
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 2.092645365547602,
+            "mape": 0.10909509173626507,
+            "r2": 0.9568541392741795,
+            "rmse_mj_per_kg": 2.48973223850749
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 8.286105951227219,
+            "mape": 0.39897437793221346,
+            "r2": 0.5175432395469645,
+            "rmse_mj_per_kg": 8.325537329226979
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 0.9904910326335994,
+            "mape": 0.03742026247979807,
+            "r2": 0.9913073946498808,
+            "rmse_mj_per_kg": 1.117527079599402
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.06160636601310676,
+            "mape": 0.0024191617954235052,
+            "r2": 0.9999676600519658,
+            "rmse_mj_per_kg": 0.06816363356247905
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 2.9084695080078498,
+            "mape": 0.13437470047169597,
+            "r2": 0.9191756388118878,
+            "rmse_mj_per_kg": 3.4076439789615427
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "amplitude_0.60T_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "qa_shell_hdb_direct",
+        "calibration_count": 24,
+        "heldout_count": 4,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 26.560229166666666,
+            "mape": 1.0052499843375506,
+            "r2": -0.5890394725341452,
+            "rmse_mj_per_kg": 29.4254468495111
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 2.117109324506899,
+            "mape": 0.03971737353143812,
+            "r2": 0.9856255869092425,
+            "rmse_mj_per_kg": 2.798664150130505
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 9.488378590039925,
+            "mape": 0.20345430551488589,
+            "r2": 0.7765559198332826,
+            "rmse_mj_per_kg": 11.03418219087419
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 9.081470228557437,
+            "mape": 0.22426230027025937,
+            "r2": 0.8219684809564529,
+            "rmse_mj_per_kg": 9.84927294092631
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 2.2110510759166138,
+            "mape": 0.045622730418248096,
+            "r2": 0.9860836836178806,
+            "rmse_mj_per_kg": 2.7537079019731263
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.11450178318455961,
+            "mape": 0.0025694730631500282,
+            "r2": 0.9999697290942586,
+            "rmse_mj_per_kg": 0.12843057644757544
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 5.058545353367194,
+            "mape": 0.11993266390075796,
+            "r2": 0.9353098948661757,
+            "rmse_mj_per_kg": 5.93710394438769
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "amplitude_0.80T_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "qa_lifted_j_pi_shell_direct",
+        "calibration_count": 24,
+        "heldout_count": 4,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 35.05,
+            "mape": 0.57979430680055,
+            "r2": -0.1181176962336905,
+            "rmse_mj_per_kg": 42.89046286927462
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 10.016521008003103,
+            "mape": 0.09933227448666891,
+            "r2": 0.8612222718749096,
+            "rmse_mj_per_kg": 15.11043125543404
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 3.0475692794580818,
+            "mape": 0.06055598357668297,
+            "r2": 0.9892995708886915,
+            "rmse_mj_per_kg": 4.195826965415282
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 4.537038597440325,
+            "mape": 0.09046866838498346,
+            "r2": 0.9853305949828637,
+            "rmse_mj_per_kg": 4.912733688317787
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 13.623914243748823,
+            "mape": 0.14275271370131623,
+            "r2": 0.7547689254968346,
+            "rmse_mj_per_kg": 20.086520999594732
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.18228269893450122,
+            "mape": 0.0027517805871576364,
+            "r2": 0.9999762026021329,
+            "rmse_mj_per_kg": 0.1978707994387958
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 9.72719478837191,
+            "mape": 0.12860038135986446,
+            "r2": 0.9132450179256565,
+            "rmse_mj_per_kg": 11.947146379321076
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": true,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": true,
+        "split": "amplitude_1.00T_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "calibration_count": 24,
+        "heldout_count": 4,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 68.54581250000001,
+            "mape": 0.5180667534664161,
+            "r2": -0.7735302524197354,
+            "rmse_mj_per_kg": 91.6602247884306
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 12.695502839766963,
+            "mape": 0.10708523748149852,
+            "r2": 0.93939585643889,
+            "rmse_mj_per_kg": 16.94387647447852
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 15.691244252713783,
+            "mape": 0.1038374001222919,
+            "r2": 0.9041147682872037,
+            "rmse_mj_per_kg": 21.312651256331996
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 18.81004616977573,
+            "mape": 0.13422101602898817,
+            "r2": 0.8301928429555725,
+            "rmse_mj_per_kg": 28.36218026444437
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 12.717993700176315,
+            "mape": 0.10410641346123344,
+            "r2": 0.9305314554025631,
+            "rmse_mj_per_kg": 18.14077002225923
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.27828627463816424,
+            "mape": 0.002477035599305834,
+            "r2": 0.999976959065221,
+            "rmse_mj_per_kg": 0.33037841461328626
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 20.402495405072322,
+            "mape": 0.14121042158958258,
+            "r2": 0.7873876350324166,
+            "rmse_mj_per_kg": 31.73626958883069
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "amplitude_1.20T_holdout"
+      },
+      {
+        "best_model_by_rmse": "raw_physical_hdb_direct",
+        "best_nonraw_model_by_rmse": "steinmetz_log_linear_baseline",
+        "calibration_count": 24,
+        "heldout_count": 4,
+        "models": {
+          "mean_loss_baseline": {
+            "mae_mj_per_kg": 105.93495833333334,
+            "mape": 0.5285591806065726,
+            "r2": -1.246324214995207,
+            "rmse_mj_per_kg": 142.21978014972134
+          },
+          "nonqa_shell_hdb_direct": {
+            "mae_mj_per_kg": 40.57949282494829,
+            "mape": 0.21314749318363085,
+            "r2": 0.583467746278967,
+            "rmse_mj_per_kg": 61.24182182803763
+          },
+          "qa_lifted_j_pi_shell_direct": {
+            "mae_mj_per_kg": 55.227747945863754,
+            "mape": 0.30514375069270316,
+            "r2": 0.26636119949235804,
+            "rmse_mj_per_kg": 81.276488072284
+          },
+          "qa_lifted_jx_shell_direct": {
+            "mae_mj_per_kg": 61.61421444424151,
+            "mape": 0.3576789002907901,
+            "r2": 0.19886142303994825,
+            "rmse_mj_per_kg": 84.933223223461
+          },
+          "qa_shell_hdb_direct": {
+            "mae_mj_per_kg": 42.364086926879395,
+            "mape": 0.22196509865490702,
+            "r2": 0.5357107107420578,
+            "rmse_mj_per_kg": 64.65738202584784
+          },
+          "raw_physical_hdb_direct": {
+            "mae_mj_per_kg": 0.3643698406481981,
+            "mape": 0.0024425208756184307,
+            "r2": 0.9999798115874073,
+            "rmse_mj_per_kg": 0.4263584449157185
+          },
+          "steinmetz_log_linear_baseline": {
+            "mae_mj_per_kg": 35.446185411785585,
+            "mape": 0.15182092636289338,
+            "r2": 0.6531290333787947,
+            "rmse_mj_per_kg": 55.88660898457477
+          }
+        },
+        "qa_lifted_j_pi_beats_nonqa_by_r2": false,
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "split": "amplitude_1.35T_holdout"
+      }
+    ]
+  },
   "verdict": {
     "leakage_controls": "H/B quantile edges, marginal shell centers, and joint QA state centers are fit on calibration loops only. Direct predictors use no held-out loss labels and no fitted regression coefficient.",
     "qa_adds_to_steinmetz_here": "The tested log Steinmetz+rank-QA shape model does not improve Steinmetz, but the physically dimensioned QA shell integral beats Steinmetz directly.",
@@ -1262,6 +1905,7 @@
     "qa_beats_steinmetz_here": "YES: the direct dimensioned QA shell integral outperforms the log-linear Steinmetz baseline on this selected Ring35 SIN subset.",
     "qa_lifted_vs_nonqa_shell_here": "MIXED: calibrated QA J/Pi shells have higher held-out R2 than ordinary H/B shell binning, but worse MAE/RMSE. This is not yet a clean QA-specific win.",
     "qa_not_random": "YES: QA-only held-out models reduce error substantially relative to the mean-loss baseline on real measured loops.",
-    "shell_result_interpretation": "The raw physical loop integral is the expected upper-bound sanity check. Ordinary non-QA H/B shell binning explains most of the direct shell result and beats the joint (b,e) QA state shell by MAE/RMSE. A lifted QA J/Pi shell slightly beats non-QA by R2 but not by MAE/RMSE, so this run supports finite-shell hysteresis mapping and only a mixed, not decisive, QA-specific advantage."
+    "shell_result_interpretation": "The raw physical loop integral is the expected upper-bound sanity check. Ordinary non-QA H/B shell binning explains most of the direct shell result and beats the joint (b,e) QA state shell by MAE/RMSE. A lifted QA J/Pi shell slightly beats non-QA by R2 but not by MAE/RMSE, so this run supports finite-shell hysteresis mapping and only a mixed, not decisive, QA-specific advantage.",
+    "transfer_result_interpretation": "Across 12 index/frequency/amplitude transfer splits, QA J/Pi beats ordinary non-QA shell by R2 in 3 splits and by RMSE in 3 splits. This hardens the conclusion by checking family-heldout transfer."
   }
 }

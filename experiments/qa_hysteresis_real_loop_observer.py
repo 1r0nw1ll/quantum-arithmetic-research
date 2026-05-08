@@ -508,17 +508,9 @@ def direct_prediction(
     return {"prediction_field": prediction_field, "heldout": metrics(actual, predicted)}
 
 
-def main() -> int:
-    if not ZIP_PATH.exists():
-        raise SystemExit(
-            f"missing {ZIP_PATH}; download Ring35_Dataset_Txt.zip from {DATASET_RECORD}"
-        )
-
-    with zipfile.ZipFile(ZIP_PATH) as zf:
-        loss_rows = select_sin_rows(load_sin_loss_table(zf))
-        calibration_names, heldout_names = calibration_split(loss_rows)
-        traces = [load_loop_trace(zf, row) for row in loss_rows]
-
+def build_records_for_split(
+    traces: list[LoopTrace], calibration_names: set[str], heldout_names: set[str]
+) -> list[dict]:
     h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers = (
         build_global_calibration(traces, calibration_names)
     )
@@ -532,7 +524,7 @@ def main() -> int:
             "filename": trace.row.filename,
             "bp_t": trace.row.bp_t,
             "frequency_hz": trace.row.frequency_hz,
-            "split": "calibration" if trace.row.filename in calibration_names else "heldout",
+            "split": "heldout" if trace.row.filename in heldout_names else "calibration",
             "rows": len(trace.t_s),
             "energy_loss_mj_per_kg_table": trace.row.energy_loss_mj_per_kg,
             "energy_loss_mj_per_kg_from_integral": physical_from_loop,
@@ -540,6 +532,102 @@ def main() -> int:
         }
         rec.update(qa)
         records.append(rec)
+    return records
+
+
+def direct_model_suite(
+    records: list[dict], calibration_names: set[str], heldout_names: set[str]
+) -> dict:
+    return {
+        "mean_loss_baseline": mean_baseline(records, calibration_names, heldout_names),
+        "steinmetz_log_linear_baseline": fit_steinmetz(records, calibration_names, heldout_names),
+        "raw_physical_hdb_direct": direct_prediction(
+            records, heldout_names, "energy_loss_mj_per_kg_from_integral"
+        ),
+        "nonqa_shell_hdb_direct": direct_prediction(
+            records, heldout_names, "nonqa_shell_hdb_energy_mj_per_kg"
+        ),
+        "qa_shell_hdb_direct": direct_prediction(
+            records, heldout_names, "qa_shell_hdb_energy_mj_per_kg"
+        ),
+        "qa_lifted_jx_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_jx_shell_energy_mj_per_kg"
+        ),
+        "qa_lifted_kx_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_kx_shell_energy_mj_per_kg"
+        ),
+        "qa_lifted_k_minus_j_x_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg"
+        ),
+        "qa_lifted_j_pi_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_j_pi_shell_energy_mj_per_kg"
+        ),
+    }
+
+
+def direct_comparison_rows(heldout_models: dict, comparison_order: list[str]) -> list[dict]:
+    return [{"model": name, **heldout_models[name]["heldout"]} for name in comparison_order]
+
+
+def transfer_splits(loss_rows: list[LossRow]) -> list[tuple[str, set[str], set[str]]]:
+    all_names = {row.filename for row in loss_rows}
+    splits: list[tuple[str, set[str], set[str]]] = []
+    calibration_names, heldout_names = calibration_split(loss_rows)
+    splits.append(("index_mod3_holdout", calibration_names, heldout_names))
+
+    for frequency in sorted({row.frequency_hz for row in loss_rows}):
+        heldout = {row.filename for row in loss_rows if row.frequency_hz == frequency}
+        if 2 <= len(heldout) < len(all_names):
+            splits.append((f"frequency_{int(frequency)}Hz_holdout", all_names - heldout, heldout))
+
+    for bp_t in sorted({row.bp_t for row in loss_rows}):
+        heldout = {row.filename for row in loss_rows if row.bp_t == bp_t}
+        if 2 <= len(heldout) < len(all_names):
+            splits.append((f"amplitude_{bp_t:.2f}T_holdout", all_names - heldout, heldout))
+    return splits
+
+
+def summarize_transfer_split(
+    split_name: str,
+    traces: list[LoopTrace],
+    calibration_names: set[str],
+    heldout_names: set[str],
+    comparison_order: list[str],
+) -> dict:
+    records = build_records_for_split(traces, calibration_names, heldout_names)
+    models = direct_model_suite(records, calibration_names, heldout_names)
+    rows = direct_comparison_rows(models, comparison_order)
+    best_by_rmse = min(rows, key=lambda row: row["rmse_mj_per_kg"])
+    best_shell_by_rmse = min(
+        [row for row in rows if row["model"] != "raw_physical_hdb_direct"],
+        key=lambda row: row["rmse_mj_per_kg"],
+    )
+    nonqa = models["nonqa_shell_hdb_direct"]["heldout"]
+    qa_j_pi = models["qa_lifted_j_pi_shell_direct"]["heldout"]
+    return {
+        "split": split_name,
+        "calibration_count": len(calibration_names),
+        "heldout_count": len(heldout_names),
+        "best_model_by_rmse": best_by_rmse["model"],
+        "best_nonraw_model_by_rmse": best_shell_by_rmse["model"],
+        "qa_lifted_j_pi_beats_nonqa_by_r2": qa_j_pi["r2"] > nonqa["r2"],
+        "qa_lifted_j_pi_beats_nonqa_by_rmse": qa_j_pi["rmse_mj_per_kg"] < nonqa["rmse_mj_per_kg"],
+        "models": {name: models[name]["heldout"] for name in comparison_order},
+    }
+
+
+def main() -> int:
+    if not ZIP_PATH.exists():
+        raise SystemExit(
+            f"missing {ZIP_PATH}; download Ring35_Dataset_Txt.zip from {DATASET_RECORD}"
+        )
+
+    with zipfile.ZipFile(ZIP_PATH) as zf:
+        loss_rows = select_sin_rows(load_sin_loss_table(zf))
+        calibration_names, heldout_names = calibration_split(loss_rows)
+        traces = [load_loop_trace(zf, row) for row in loss_rows]
+
+    records = build_records_for_split(traces, calibration_names, heldout_names)
 
     qa_feature_sets = {
         "nonqa_shell_hdb_affine": ["nonqa_shell_hdb_energy_mj_per_kg"],
@@ -574,29 +662,7 @@ def main() -> int:
     }
 
     heldout_models = {
-        "mean_loss_baseline": mean_baseline(records, calibration_names, heldout_names),
-        "raw_physical_hdb_direct": direct_prediction(
-            records, heldout_names, "energy_loss_mj_per_kg_from_integral"
-        ),
-        "nonqa_shell_hdb_direct": direct_prediction(
-            records, heldout_names, "nonqa_shell_hdb_energy_mj_per_kg"
-        ),
-        "qa_shell_hdb_direct": direct_prediction(
-            records, heldout_names, "qa_shell_hdb_energy_mj_per_kg"
-        ),
-        "qa_lifted_jx_shell_direct": direct_prediction(
-            records, heldout_names, "qa_lifted_jx_shell_energy_mj_per_kg"
-        ),
-        "qa_lifted_kx_shell_direct": direct_prediction(
-            records, heldout_names, "qa_lifted_kx_shell_energy_mj_per_kg"
-        ),
-        "qa_lifted_k_minus_j_x_shell_direct": direct_prediction(
-            records, heldout_names, "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg"
-        ),
-        "qa_lifted_j_pi_shell_direct": direct_prediction(
-            records, heldout_names, "qa_lifted_j_pi_shell_energy_mj_per_kg"
-        ),
-        "steinmetz_log_linear_baseline": fit_steinmetz(records, calibration_names, heldout_names),
+        **direct_model_suite(records, calibration_names, heldout_names),
         "steinmetz_plus_qa_shape_log_model": fit_log_feature_model(
             records,
             calibration_names,
@@ -625,15 +691,32 @@ def main() -> int:
         "qa_lifted_packet",
         "steinmetz_plus_qa_shape_log_model",
     ]
-    direct_comparison = [
-        {"model": name, **heldout_models[name]["heldout"]} for name in comparison_order
-    ]
+    direct_comparison = direct_comparison_rows(heldout_models, comparison_order)
     qa_shell_r2 = heldout_models["qa_shell_hdb_direct"]["heldout"]["r2"]
     nonqa_shell_r2 = heldout_models["nonqa_shell_hdb_direct"]["heldout"]["r2"]
     qa_shell_mae = heldout_models["qa_shell_hdb_direct"]["heldout"]["mae_mj_per_kg"]
     nonqa_shell_mae = heldout_models["nonqa_shell_hdb_direct"]["heldout"]["mae_mj_per_kg"]
     lifted_j_pi_r2 = heldout_models["qa_lifted_j_pi_shell_direct"]["heldout"]["r2"]
     lifted_j_pi_mae = heldout_models["qa_lifted_j_pi_shell_direct"]["heldout"]["mae_mj_per_kg"]
+    transfer_order = [
+        "mean_loss_baseline",
+        "steinmetz_log_linear_baseline",
+        "raw_physical_hdb_direct",
+        "nonqa_shell_hdb_direct",
+        "qa_shell_hdb_direct",
+        "qa_lifted_jx_shell_direct",
+        "qa_lifted_j_pi_shell_direct",
+    ]
+    split_summaries = [
+        summarize_transfer_split(name, traces, cal, hold, transfer_order)
+        for name, cal, hold in transfer_splits(loss_rows)
+    ]
+    qa_j_pi_r2_wins = sum(
+        1 for split in split_summaries if split["qa_lifted_j_pi_beats_nonqa_by_r2"]
+    )
+    qa_j_pi_rmse_wins = sum(
+        1 for split in split_summaries if split["qa_lifted_j_pi_beats_nonqa_by_rmse"]
+    )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
     payload = {
@@ -687,6 +770,12 @@ def main() -> int:
         },
         "heldout_models": heldout_models,
         "direct_predictor_comparison": direct_comparison,
+        "transfer_split_summary": {
+            "split_count": len(split_summaries),
+            "splits": split_summaries,
+            "qa_lifted_j_pi_r2_wins_vs_nonqa_shell": qa_j_pi_r2_wins,
+            "qa_lifted_j_pi_rmse_wins_vs_nonqa_shell": qa_j_pi_rmse_wins,
+        },
         "verdict": {
             "qa_not_random": (
                 "YES: QA-only held-out models reduce error substantially relative "
@@ -720,6 +809,12 @@ def main() -> int:
                 "MAE/RMSE. A lifted QA J/Pi shell slightly beats non-QA by R2 but "
                 "not by MAE/RMSE, so this run supports finite-shell hysteresis "
                 "mapping and only a mixed, not decisive, QA-specific advantage."
+            ),
+            "transfer_result_interpretation": (
+                f"Across {len(split_summaries)} index/frequency/amplitude transfer "
+                f"splits, QA J/Pi beats ordinary non-QA shell by R2 in "
+                f"{qa_j_pi_r2_wins} splits and by RMSE in {qa_j_pi_rmse_wins} splits. "
+                "This hardens the conclusion by checking family-heldout transfer."
             ),
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "

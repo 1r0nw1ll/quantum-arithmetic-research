@@ -25,6 +25,92 @@
     "subset": "Ring35_Dataset_Txt/SIN selected grid",
     "title": "Dataset of Experimental Non-Standard Dynamic Hysteresis Loops"
   },
+  "direct_predictor_comparison": [
+    {
+      "mae_mj_per_kg": 47.634040935672516,
+      "mape": 4.616097934859647,
+      "model": "mean_loss_baseline",
+      "r2": -0.06848639935318435,
+      "rmse_mj_per_kg": 49.64151977133722
+    },
+    {
+      "mae_mj_per_kg": 5.260998086038452,
+      "mape": 0.12068582088321632,
+      "model": "steinmetz_log_linear_baseline",
+      "r2": 0.9712875276649473,
+      "rmse_mj_per_kg": 8.137591119912768
+    },
+    {
+      "mae_mj_per_kg": 0.12276275257930101,
+      "mape": 0.002484926353649423,
+      "model": "raw_physical_hdb_direct",
+      "r2": 0.9999884743393127,
+      "rmse_mj_per_kg": 0.1630397439640567
+    },
+    {
+      "mae_mj_per_kg": 2.7127877102150237,
+      "mape": 0.04355785019483513,
+      "model": "nonqa_shell_hdb_direct",
+      "r2": 0.984934989508211,
+      "rmse_mj_per_kg": 5.894477155982403
+    },
+    {
+      "mae_mj_per_kg": 3.69346466119591,
+      "mape": 0.0489424809350431,
+      "model": "qa_shell_hdb_direct",
+      "r2": 0.9721929287371951,
+      "rmse_mj_per_kg": 8.0082605517487
+    },
+    {
+      "mae_mj_per_kg": 5.55553555529826,
+      "mape": 0.17772708076322707,
+      "model": "qa_lifted_jx_shell_direct",
+      "r2": 0.9780882098723025,
+      "rmse_mj_per_kg": 7.10885243847704
+    },
+    {
+      "mae_mj_per_kg": 6.611459348010428,
+      "mape": 0.21591400999074642,
+      "model": "qa_lifted_kx_shell_direct",
+      "r2": 0.9668098582836073,
+      "rmse_mj_per_kg": 8.74913510675275
+    },
+    {
+      "mae_mj_per_kg": 23.639636404529092,
+      "mape": 0.5430180357961452,
+      "model": "qa_lifted_k_minus_j_x_shell_direct",
+      "r2": 0.6155451325324621,
+      "rmse_mj_per_kg": 29.777158427532918
+    },
+    {
+      "mae_mj_per_kg": 4.361375747714448,
+      "mape": 0.13149260526884807,
+      "model": "qa_lifted_j_pi_shell_direct",
+      "r2": 0.9855528006749825,
+      "rmse_mj_per_kg": 5.772346622240178
+    },
+    {
+      "mae_mj_per_kg": 22.082420282081628,
+      "mape": 2.1700316391287924,
+      "model": "qa_be_only",
+      "r2": 0.750762644995837,
+      "rmse_mj_per_kg": 23.975470386253217
+    },
+    {
+      "mae_mj_per_kg": 10.816030697575961,
+      "mape": 0.36821241829959084,
+      "model": "qa_lifted_packet",
+      "r2": 0.910129461553163,
+      "rmse_mj_per_kg": 14.396908402753926
+    },
+    {
+      "mae_mj_per_kg": 5.827158670576576,
+      "mape": 0.12681847945769814,
+      "model": "steinmetz_plus_qa_shape_log_model",
+      "r2": 0.9357983668753919,
+      "rmse_mj_per_kg": 12.168403643861424
+    }
+  ],
   "experiment": "qa_hysteresis_real_loop_observer",
   "heldout_models": {
     "mean_loss_baseline": {
@@ -35,6 +121,36 @@
         "r2": -0.06848639935318435,
         "rmse_mj_per_kg": 49.64151977133722
       }
+    },
+    "nonqa_shell_hdb_affine": {
+      "coefficients": [
+        64.15078943992063,
+        76.82285630757045
+      ],
+      "feature_means": [
+        63.206619502104815
+      ],
+      "feature_scales": [
+        72.56494787204083
+      ],
+      "features": [
+        "nonqa_shell_hdb_energy_mj_per_kg"
+      ],
+      "heldout": {
+        "mae_mj_per_kg": 3.8399854731719216,
+        "mape": 0.21089637765818522,
+        "r2": 0.9728527324792217,
+        "rmse_mj_per_kg": 7.912680518153078
+      }
+    },
+    "nonqa_shell_hdb_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 2.7127877102150237,
+        "mape": 0.04355785019483513,
+        "r2": 0.984934989508211,
+        "rmse_mj_per_kg": 5.894477155982403
+      },
+      "prediction_field": "nonqa_shell_hdb_energy_mj_per_kg"
     },
     "qa_be_only": {
       "coefficients": [
@@ -57,6 +173,36 @@
         "rmse_mj_per_kg": 23.975470386253217
       }
     },
+    "qa_lifted_j_pi_shell_affine": {
+      "coefficients": [
+        64.15078943992063,
+        76.43217478324712
+      ],
+      "feature_means": [
+        57.63397883395713
+      ],
+      "feature_scales": [
+        66.75144787017601
+      ],
+      "features": [
+        "qa_lifted_j_pi_shell_energy_mj_per_kg"
+      ],
+      "heldout": {
+        "mae_mj_per_kg": 7.563464469348594,
+        "mape": 0.22936669414180105,
+        "r2": 0.9384106060396523,
+        "rmse_mj_per_kg": 11.918278649706318
+      }
+    },
+    "qa_lifted_j_pi_shell_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 4.361375747714448,
+        "mape": 0.13149260526884807,
+        "r2": 0.9855528006749825,
+        "rmse_mj_per_kg": 5.772346622240178
+      },
+      "prediction_field": "qa_lifted_j_pi_shell_energy_mj_per_kg"
+    },
     "qa_lifted_jx_only": {
       "coefficients": [
         64.15078943992063,
@@ -78,18 +224,70 @@
         "rmse_mj_per_kg": 23.529026966635037
       }
     },
+    "qa_lifted_jx_shell_affine": {
+      "coefficients": [
+        64.15078943992063,
+        76.36932639529527
+      ],
+      "feature_means": [
+        53.49499502555095
+      ],
+      "feature_scales": [
+        61.30847828938449
+      ],
+      "features": [
+        "qa_lifted_jx_shell_energy_mj_per_kg"
+      ],
+      "heldout": {
+        "mae_mj_per_kg": 6.935854327215988,
+        "mape": 0.2663572383023735,
+        "r2": 0.9515727022993002,
+        "rmse_mj_per_kg": 10.568313493177124
+      }
+    },
+    "qa_lifted_jx_shell_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 5.55553555529826,
+        "mape": 0.17772708076322707,
+        "r2": 0.9780882098723025,
+        "rmse_mj_per_kg": 7.10885243847704
+      },
+      "prediction_field": "qa_lifted_jx_shell_energy_mj_per_kg"
+    },
+    "qa_lifted_k_minus_j_x_shell_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 23.639636404529092,
+        "mape": 0.5430180357961452,
+        "r2": 0.6155451325324621,
+        "rmse_mj_per_kg": 29.777158427532918
+      },
+      "prediction_field": "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg"
+    },
+    "qa_lifted_kx_shell_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 6.611459348010428,
+        "mape": 0.21591400999074642,
+        "r2": 0.9668098582836073,
+        "rmse_mj_per_kg": 8.74913510675275
+      },
+      "prediction_field": "qa_lifted_kx_shell_energy_mj_per_kg"
+    },
     "qa_lifted_packet": {
       "coefficients": [
         64.15078943992063,
-        87.70837844264382,
-        -4.537325627841199,
-        -4.537325771686735,
-        -4.537325771686735,
-        -0.9586170849743973,
-        3.2066638226065347
+        254.7579176179544,
+        -77.54233173748312,
+        -103.72670914930761,
+        2.653564275988736,
+        2.6535642759887352,
+        2.653564275988736,
+        5.172469854036561,
+        -10.798690696601547
       ],
       "feature_means": [
-        63.206619502104815,
+        63.60190032572206,
+        53.49499502555095,
+        57.63397883395713,
         314315.84210526315,
         314315.84210526315,
         628631.6842105263,
@@ -97,7 +295,9 @@
         67.15789473684211
       ],
       "feature_scales": [
-        72.56494787204083,
+        73.68753877415885,
+        61.30847828938449,
+        66.75144787017601,
         221714.77294156043,
         221714.77294156043,
         443429.54588312085,
@@ -106,6 +306,8 @@
       ],
       "features": [
         "qa_shell_hdb_energy_mj_per_kg",
+        "qa_lifted_jx_shell_energy_mj_per_kg",
+        "qa_lifted_j_pi_shell_energy_mj_per_kg",
         "qa_jx_loop_area",
         "qa_kx_loop_area",
         "qa_pi_x_loop_area",
@@ -113,54 +315,58 @@
         "qa_unique_states"
       ],
       "heldout": {
-        "mae_mj_per_kg": 4.583247866175763,
-        "mape": 0.13881856410814863,
-        "r2": 0.97382525549182,
-        "rmse_mj_per_kg": 7.769656078460303
+        "mae_mj_per_kg": 10.816030697575961,
+        "mape": 0.36821241829959084,
+        "r2": 0.910129461553163,
+        "rmse_mj_per_kg": 14.396908402753926
       }
     },
     "qa_shell_hdb_affine": {
       "coefficients": [
         64.15078943992063,
-        76.82285630757045
+        76.56393231761045
       ],
       "feature_means": [
-        63.206619502104815
+        63.60190032572206
       ],
       "feature_scales": [
-        72.56494787204083
+        73.68753877415885
       ],
       "features": [
         "qa_shell_hdb_energy_mj_per_kg"
       ],
       "heldout": {
-        "mae_mj_per_kg": 3.8399854731719216,
-        "mape": 0.21089637765818522,
-        "r2": 0.9728527324792217,
-        "rmse_mj_per_kg": 7.912680518153078
+        "mae_mj_per_kg": 4.081356472324863,
+        "mape": 0.15116515240182932,
+        "r2": 0.9630559915949034,
+        "rmse_mj_per_kg": 9.230656223714618
       }
     },
     "qa_shell_hdb_direct": {
       "heldout": {
-        "mae_mj_per_kg": 2.7127877102150237,
-        "mape": 0.04355785019483513,
-        "r2": 0.984934989508211,
-        "rmse_mj_per_kg": 5.894477155982403
+        "mae_mj_per_kg": 3.69346466119591,
+        "mape": 0.0489424809350431,
+        "r2": 0.9721929287371951,
+        "rmse_mj_per_kg": 8.0082605517487
       },
       "prediction_field": "qa_shell_hdb_energy_mj_per_kg"
     },
     "qa_with_drive_metadata": {
       "coefficients": [
-        64.15078943992062,
-        15.698851684552654,
-        47.21294384422267,
-        26.770470557486348,
-        26.770470783215284,
-        -37.814975523460824
+        64.1507894399206,
+        6.426173488694685,
+        40.072342296978874,
+        313.5532936301061,
+        -234.57270466033344,
+        -6.340692850884031,
+        -6.340692707510868,
+        -32.8836184659501
       ],
       "feature_means": [
         886.8421052631579,
         0.8026315789473685,
+        63.60190032572206,
+        57.63397883395713,
         314315.84210526315,
         314315.84210526315,
         4424957.7894736845
@@ -168,6 +374,8 @@
       "feature_scales": [
         750.7613863803721,
         0.39652227793341815,
+        73.68753877415885,
+        66.75144787017601,
         221714.77294156043,
         221714.77294156043,
         1896988.7518546078
@@ -175,16 +383,27 @@
       "features": [
         "frequency_hz",
         "bp_t",
+        "qa_shell_hdb_energy_mj_per_kg",
+        "qa_lifted_j_pi_shell_energy_mj_per_kg",
         "qa_jx_loop_area",
         "qa_kx_loop_area",
         "qa_pi_abs_path_energy"
       ],
       "heldout": {
-        "mae_mj_per_kg": 23.973186419295054,
-        "mape": 2.2623193931686294,
-        "r2": 0.6955099072367432,
-        "rmse_mj_per_kg": 26.50007804345117
+        "mae_mj_per_kg": 13.702136767263422,
+        "mape": 0.5481906435575303,
+        "r2": 0.8521176101981575,
+        "rmse_mj_per_kg": 18.46795466637196
       }
+    },
+    "raw_physical_hdb_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 0.12276275257930101,
+        "mape": 0.002484926353649423,
+        "r2": 0.9999884743393127,
+        "rmse_mj_per_kg": 0.1630397439640567
+      },
+      "prediction_field": "energy_loss_mj_per_kg_from_integral"
     },
     "steinmetz_log_linear_baseline": {
       "coefficients": [
@@ -264,13 +483,19 @@
     "m": 24,
     "observables": [
       "abs(integral b de)",
+      "abs(integral H_bin dB_bin) converted to mJ/kg",
       "abs(integral H_shell dB_shell) converted to mJ/kg",
+      "abs(integral H_J dB_X) converted to mJ/kg",
+      "abs(integral H_K dB_X) converted to mJ/kg",
+      "abs(integral H_(K-J) dB_X) converted to mJ/kg",
+      "abs(integral H_J dB_Pi) converted to mJ/kg",
       "abs(integral J dX)",
       "abs(integral K dX)",
       "abs(integral Pi dX)",
       "sum 0.5*(Pi_i+Pi_j)*abs(delta_X)",
       "unique (b,e) states"
-    ]
+    ],
+    "qa_state_centers": "global calibration-loop joint (b,e) state means only"
   },
   "records": [
     {
@@ -280,12 +505,22 @@
       "filename": "SIN_Bp_0p20T_f_50Hz",
       "frequency_hz": 50.0,
       "integral_vs_table_abs_error": 0.003790764716656403,
+      "nonqa_shell_hdb_energy_mj_per_kg": 1.734055979791957,
       "qa_be_loop_area": 13.0,
       "qa_jx_loop_area": 16596.0,
       "qa_kx_loop_area": 16596.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 1.715971042856429,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 1.5730909737775105,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 1.5163454442002309,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 0.5487388469101586,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 1901965.0,
       "qa_pi_x_loop_area": 33192.0,
-      "qa_shell_hdb_energy_mj_per_kg": 1.734055979791957,
+      "qa_shell_hdb_energy_mj_per_kg": 1.9421096967519333,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 26.0,
       "rows": 10001,
       "split": "calibration"
@@ -297,12 +532,22 @@
       "filename": "SIN_Bp_0p40T_f_50Hz",
       "frequency_hz": 50.0,
       "integral_vs_table_abs_error": 0.014073933080197776,
+      "nonqa_shell_hdb_energy_mj_per_kg": 5.642023185741893,
       "qa_be_loop_area": 40.0,
       "qa_jx_loop_area": 50824.0,
       "qa_kx_loop_area": 50824.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 4.765523849656587,
+      "qa_lifted_j_pi_unseen_fraction": 0.04329567043295671,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 4.0349231434131285,
+      "qa_lifted_jx_unseen_fraction": 0.0192980701929807,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 1.9794106724443554,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0192980701929807,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 4.524982168407722,
+      "qa_lifted_kx_unseen_fraction": 0.04329567043295671,
       "qa_pi_abs_path_energy": 2810015.0,
       "qa_pi_x_loop_area": 101648.0,
-      "qa_shell_hdb_energy_mj_per_kg": 5.642023185741893,
+      "qa_shell_hdb_energy_mj_per_kg": 5.9000236341866925,
+      "qa_shell_unseen_state_fraction": 0.06729327067293271,
       "qa_unique_states": 38.0,
       "rows": 10001,
       "split": "heldout"
@@ -314,12 +559,22 @@
       "filename": "SIN_Bp_0p60T_f_50Hz",
       "frequency_hz": 50.0,
       "integral_vs_table_abs_error": 0.024564138324569385,
+      "nonqa_shell_hdb_energy_mj_per_kg": 11.183760477846334,
       "qa_be_loop_area": 74.0,
       "qa_jx_loop_area": 97132.0,
       "qa_kx_loop_area": 97132.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 10.426753349642082,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 8.651859949876295,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 5.125602137143684,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 7.89508589657673,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 3703184.0,
       "qa_pi_x_loop_area": 194264.0,
-      "qa_shell_hdb_energy_mj_per_kg": 11.183760477846334,
+      "qa_shell_hdb_energy_mj_per_kg": 11.32362892257008,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 52.0,
       "rows": 10001,
       "split": "calibration"
@@ -331,12 +586,22 @@
       "filename": "SIN_Bp_0p80T_f_50Hz",
       "frequency_hz": 50.0,
       "integral_vs_table_abs_error": 0.04405804685239545,
+      "nonqa_shell_hdb_energy_mj_per_kg": 17.43676141440434,
       "qa_be_loop_area": 108.0,
       "qa_jx_loop_area": 145538.0,
       "qa_kx_loop_area": 145538.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 15.808142951638912,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 12.517910752751652,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 3.720125224910021,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 12.851336110916474,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 4451544.0,
       "qa_pi_x_loop_area": 291076.0,
-      "qa_shell_hdb_energy_mj_per_kg": 17.43676141440434,
+      "qa_shell_hdb_energy_mj_per_kg": 17.440283102230456,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 64.0,
       "rows": 10001,
       "split": "calibration"
@@ -348,12 +613,22 @@
       "filename": "SIN_Bp_1p00T_f_50Hz",
       "frequency_hz": 50.0,
       "integral_vs_table_abs_error": 0.07847363288707143,
+      "nonqa_shell_hdb_energy_mj_per_kg": 26.351434968424226,
       "qa_be_loop_area": 148.0,
       "qa_jx_loop_area": 201986.0,
       "qa_kx_loop_area": 201986.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 21.449416696996817,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 19.851598152912768,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 17.854235028823773,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 19.96059379852375,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 5406774.0,
       "qa_pi_x_loop_area": 403972.0,
-      "qa_shell_hdb_energy_mj_per_kg": 26.351434968424226,
+      "qa_shell_hdb_energy_mj_per_kg": 26.163923604865463,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 72.0,
       "rows": 10001,
       "split": "heldout"
@@ -365,12 +640,22 @@
       "filename": "SIN_Bp_1p20T_f_50Hz",
       "frequency_hz": 50.0,
       "integral_vs_table_abs_error": 0.08923302731529503,
+      "nonqa_shell_hdb_energy_mj_per_kg": 35.50028995591299,
       "qa_be_loop_area": 178.5,
       "qa_jx_loop_area": 245782.5,
       "qa_kx_loop_area": 245782.5,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 28.307343635713195,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 29.048372435692837,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 30.74022339154923,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 34.77344294538361,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 7026704.0,
       "qa_pi_x_loop_area": 491565.0,
-      "qa_shell_hdb_energy_mj_per_kg": 35.50028995591299,
+      "qa_shell_hdb_energy_mj_per_kg": 35.52076361255044,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 83.0,
       "rows": 10001,
       "split": "calibration"
@@ -382,12 +667,22 @@
       "filename": "SIN_Bp_1p35T_f_50Hz",
       "frequency_hz": 50.0,
       "integral_vs_table_abs_error": 0.11224676552683377,
+      "nonqa_shell_hdb_energy_mj_per_kg": 42.45101345250994,
       "qa_be_loop_area": 206.0,
       "qa_jx_loop_area": 286950.0,
       "qa_kx_loop_area": 286950.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 37.81724762048152,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 35.75954461951671,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 32.2496488686181,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 34.28613654984609,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 6952886.0,
       "qa_pi_x_loop_area": 573900.0,
-      "qa_shell_hdb_energy_mj_per_kg": 42.45101345250994,
+      "qa_shell_hdb_energy_mj_per_kg": 41.43871953400617,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 84.0,
       "rows": 10001,
       "split": "calibration"
@@ -399,12 +694,22 @@
       "filename": "SIN_Bp_0p20T_f_400Hz",
       "frequency_hz": 400.0,
       "integral_vs_table_abs_error": 0.006339159571130182,
+      "nonqa_shell_hdb_energy_mj_per_kg": 2.281857264072033,
       "qa_be_loop_area": 19.0,
       "qa_jx_loop_area": 24254.0,
       "qa_kx_loop_area": 24254.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 2.0623379942778874,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 1.866709033842862,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 1.2139799022661764,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 1.0751941087546797,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 1179500.0,
       "qa_pi_x_loop_area": 48508.0,
-      "qa_shell_hdb_energy_mj_per_kg": 2.281857264072033,
+      "qa_shell_hdb_energy_mj_per_kg": 2.364882961666822,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 28.0,
       "rows": 5001,
       "split": "heldout"
@@ -416,12 +721,22 @@
       "filename": "SIN_Bp_0p40T_f_400Hz",
       "frequency_hz": 400.0,
       "integral_vs_table_abs_error": 0.023376597650335285,
+      "nonqa_shell_hdb_energy_mj_per_kg": 9.434639193199967,
       "qa_be_loop_area": 73.0,
       "qa_jx_loop_area": 94906.0,
       "qa_kx_loop_area": 94906.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 9.008310043818438,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 8.227877846450946,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 4.834955735378534,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 8.395960479627066,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 2040300.0,
       "qa_pi_x_loop_area": 189812.0,
-      "qa_shell_hdb_energy_mj_per_kg": 9.434639193199967,
+      "qa_shell_hdb_energy_mj_per_kg": 9.410240623172504,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 44.0,
       "rows": 5001,
       "split": "calibration"
@@ -433,12 +748,22 @@
       "filename": "SIN_Bp_0p60T_f_400Hz",
       "frequency_hz": 400.0,
       "integral_vs_table_abs_error": 0.05008862638463896,
+      "nonqa_shell_hdb_energy_mj_per_kg": 18.63271625487655,
       "qa_be_loop_area": 137.0,
       "qa_jx_loop_area": 180668.0,
       "qa_kx_loop_area": 180668.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 17.587345608512777,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 14.64568646837194,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 7.993283049343335,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 14.850925892759903,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 2981137.0,
       "qa_pi_x_loop_area": 361336.0,
-      "qa_shell_hdb_energy_mj_per_kg": 18.63271625487655,
+      "qa_shell_hdb_energy_mj_per_kg": 18.803189496309923,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 56.0,
       "rows": 5001,
       "split": "calibration"
@@ -450,12 +775,22 @@
       "filename": "SIN_Bp_0p80T_f_400Hz",
       "frequency_hz": 400.0,
       "integral_vs_table_abs_error": 0.08545832639160622,
+      "nonqa_shell_hdb_energy_mj_per_kg": 32.90105798794825,
       "qa_be_loop_area": 209.0,
       "qa_jx_loop_area": 282534.0,
       "qa_kx_loop_area": 282534.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 25.14192440996038,
+      "qa_lifted_j_pi_unseen_fraction": 0.242751449710058,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 25.080498196036313,
+      "qa_lifted_jx_unseen_fraction": 0.17746450709858028,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 5.138006717863091,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.1739652069586083,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 27.470760002560972,
+      "qa_lifted_kx_unseen_fraction": 0.2594481103779244,
       "qa_pi_abs_path_energy": 4161476.0,
       "qa_pi_x_loop_area": 565068.0,
-      "qa_shell_hdb_energy_mj_per_kg": 32.90105798794825,
+      "qa_shell_hdb_energy_mj_per_kg": 32.41246887590632,
+      "qa_shell_unseen_state_fraction": 0.34493101379724056,
       "qa_unique_states": 68.0,
       "rows": 5001,
       "split": "heldout"
@@ -467,12 +802,22 @@
       "filename": "SIN_Bp_1p00T_f_400Hz",
       "frequency_hz": 400.0,
       "integral_vs_table_abs_error": 0.15789099041822396,
+      "nonqa_shell_hdb_energy_mj_per_kg": 50.10921737620818,
       "qa_be_loop_area": 274.0,
       "qa_jx_loop_area": 377428.0,
       "qa_kx_loop_area": 377428.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 44.96357675986345,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 43.04401699127323,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 15.808914900323254,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 32.940060514418754,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 4935883.0,
       "qa_pi_x_loop_area": 754856.0,
-      "qa_shell_hdb_energy_mj_per_kg": 50.10921737620818,
+      "qa_shell_hdb_energy_mj_per_kg": 50.454370077039634,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 76.0,
       "rows": 5001,
       "split": "calibration"
@@ -484,12 +829,22 @@
       "filename": "SIN_Bp_1p20T_f_400Hz",
       "frequency_hz": 400.0,
       "integral_vs_table_abs_error": 0.17894199479611927,
+      "nonqa_shell_hdb_energy_mj_per_kg": 73.27898654228937,
       "qa_be_loop_area": 334.0,
       "qa_jx_loop_area": 471784.0,
       "qa_kx_loop_area": 471784.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 69.16692163956169,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 63.736087248170634,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 41.62636824311406,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 59.369839233238096,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 5893984.0,
       "qa_pi_x_loop_area": 943568.0,
-      "qa_shell_hdb_energy_mj_per_kg": 73.27898654228937,
+      "qa_shell_hdb_energy_mj_per_kg": 72.57516731090934,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 84.0,
       "rows": 5001,
       "split": "calibration"
@@ -501,12 +856,22 @@
       "filename": "SIN_Bp_1p35T_f_400Hz",
       "frequency_hz": 400.0,
       "integral_vs_table_abs_error": 0.23318972077278488,
+      "nonqa_shell_hdb_energy_mj_per_kg": 92.78565765037536,
       "qa_be_loop_area": 369.0,
       "qa_jx_loop_area": 524498.0,
       "qa_kx_loop_area": 524498.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 92.81750669319788,
+      "qa_lifted_j_pi_unseen_fraction": 0.06908618276344732,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 83.99398921648063,
+      "qa_lifted_jx_unseen_fraction": 0.04899020195960808,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 53.806149483491176,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.04899020195960808,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 84.29799661222883,
+      "qa_lifted_kx_unseen_fraction": 0.06908618276344732,
       "qa_pi_abs_path_energy": 6159325.0,
       "qa_pi_x_loop_area": 1048996.0,
-      "qa_shell_hdb_energy_mj_per_kg": 92.78565765037536,
+      "qa_shell_hdb_energy_mj_per_kg": 91.91772417415481,
+      "qa_shell_unseen_state_fraction": 0.08918216356728655,
       "qa_unique_states": 88.0,
       "rows": 5001,
       "split": "heldout"
@@ -518,12 +883,22 @@
       "filename": "SIN_Bp_0p20T_f_1000Hz",
       "frequency_hz": 1000.0,
       "integral_vs_table_abs_error": 0.009145254274108172,
+      "nonqa_shell_hdb_energy_mj_per_kg": 3.6840290812778993,
       "qa_be_loop_area": 32.0,
       "qa_jx_loop_area": 40658.0,
       "qa_kx_loop_area": 40658.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 3.440697823217123,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 3.192981298087939,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 2.2783717216213506,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 2.91355071541353,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 1346553.0,
       "qa_pi_x_loop_area": 81316.0,
-      "qa_shell_hdb_energy_mj_per_kg": 3.6840290812778993,
+      "qa_shell_hdb_energy_mj_per_kg": 3.6000149789814633,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 32.0,
       "rows": 10001,
       "split": "calibration"
@@ -535,12 +910,22 @@
       "filename": "SIN_Bp_0p40T_f_1000Hz",
       "frequency_hz": 1000.0,
       "integral_vs_table_abs_error": 0.03777771530935503,
+      "nonqa_shell_hdb_energy_mj_per_kg": 13.582522537709355,
       "qa_be_loop_area": 110.0,
       "qa_jx_loop_area": 144750.0,
       "qa_kx_loop_area": 144750.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 12.30774104546297,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 11.309127850480172,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 6.51896370994539,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 9.326083943146555,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 2529755.0,
       "qa_pi_x_loop_area": 289500.0,
-      "qa_shell_hdb_energy_mj_per_kg": 13.582522537709355,
+      "qa_shell_hdb_energy_mj_per_kg": 13.35670662854176,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 52.0,
       "rows": 10001,
       "split": "calibration"
@@ -552,12 +937,22 @@
       "filename": "SIN_Bp_0p60T_f_1000Hz",
       "frequency_hz": 1000.0,
       "integral_vs_table_abs_error": 0.066913655382141,
+      "nonqa_shell_hdb_energy_mj_per_kg": 28.47339845915786,
       "qa_be_loop_area": 194.0,
       "qa_jx_loop_area": 260918.0,
       "qa_kx_loop_area": 260918.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 24.569450998182486,
+      "qa_lifted_j_pi_unseen_fraction": 0.09174082591740826,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 22.369039856532865,
+      "qa_lifted_jx_unseen_fraction": 0.06729327067293271,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 5.535708628136455,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.06729327067293271,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 20.597725950779505,
+      "qa_lifted_kx_unseen_fraction": 0.10813918608139186,
       "qa_pi_abs_path_energy": 3367054.0,
       "qa_pi_x_loop_area": 521836.0,
-      "qa_shell_hdb_energy_mj_per_kg": 28.47339845915786,
+      "qa_shell_hdb_energy_mj_per_kg": 28.785066007412382,
+      "qa_shell_unseen_state_fraction": 0.148985101489851,
       "qa_unique_states": 64.0,
       "rows": 10001,
       "split": "heldout"
@@ -569,12 +964,22 @@
       "filename": "SIN_Bp_0p80T_f_1000Hz",
       "frequency_hz": 1000.0,
       "integral_vs_table_abs_error": 0.12696049482055827,
+      "nonqa_shell_hdb_energy_mj_per_kg": 52.02168211506407,
       "qa_be_loop_area": 282.0,
       "qa_jx_loop_area": 388922.0,
       "qa_kx_loop_area": 388922.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 44.85501437876943,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 43.2352864742077,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 25.06003593649389,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 43.26226475164619,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 4633496.0,
       "qa_pi_x_loop_area": 777844.0,
-      "qa_shell_hdb_energy_mj_per_kg": 52.02168211506407,
+      "qa_shell_hdb_energy_mj_per_kg": 51.971118505678966,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 76.0,
       "rows": 10001,
       "split": "calibration"
@@ -586,12 +991,22 @@
       "filename": "SIN_Bp_1p00T_f_1000Hz",
       "frequency_hz": 1000.0,
       "integral_vs_table_abs_error": 0.20102624096969635,
+      "nonqa_shell_hdb_energy_mj_per_kg": 85.81191834981684,
       "qa_be_loop_area": 359.0,
       "qa_jx_loop_area": 504820.0,
       "qa_kx_loop_area": 504820.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 79.31343449419401,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 74.57927337958058,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 50.197055844719806,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 76.30177833849835,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 5530864.0,
       "qa_pi_x_loop_area": 1009640.0,
-      "qa_shell_hdb_energy_mj_per_kg": 85.81191834981684,
+      "qa_shell_hdb_energy_mj_per_kg": 84.94631010956095,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 84.0,
       "rows": 10001,
       "split": "calibration"
@@ -603,12 +1018,22 @@
       "filename": "SIN_Bp_1p20T_f_1000Hz",
       "frequency_hz": 1000.0,
       "integral_vs_table_abs_error": 0.28171998278510557,
+      "nonqa_shell_hdb_energy_mj_per_kg": 119.88429364263345,
       "qa_be_loop_area": 420.0,
       "qa_jx_loop_area": 598092.0,
       "qa_kx_loop_area": 598092.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 116.62425309256945,
+      "qa_lifted_j_pi_unseen_fraction": 0.09664033596640335,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 108.0333054889189,
+      "qa_lifted_jx_unseen_fraction": 0.06459354064593541,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 73.00920401117139,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.06459354064593541,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 102.4414451125161,
+      "qa_lifted_kx_unseen_fraction": 0.09664033596640335,
       "qa_pi_abs_path_energy": 6275601.0,
       "qa_pi_x_loop_area": 1196184.0,
-      "qa_shell_hdb_energy_mj_per_kg": 119.88429364263345,
+      "qa_shell_hdb_energy_mj_per_kg": 117.59568891462682,
+      "qa_shell_unseen_state_fraction": 0.12868713128687131,
       "qa_unique_states": 88.0,
       "rows": 10001,
       "split": "heldout"
@@ -620,12 +1045,22 @@
       "filename": "SIN_Bp_1p35T_f_1000Hz",
       "frequency_hz": 1000.0,
       "integral_vs_table_abs_error": 0.4114018810298603,
+      "nonqa_shell_hdb_energy_mj_per_kg": 184.29402447106912,
       "qa_be_loop_area": 464.0,
       "qa_jx_loop_area": 664462.0,
       "qa_kx_loop_area": 664462.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 175.10512316835843,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 163.92051352930255,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 103.51229286693794,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 162.88552966670125,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 6572044.0,
       "qa_pi_x_loop_area": 1328924.0,
-      "qa_shell_hdb_energy_mj_per_kg": 184.29402447106912,
+      "qa_shell_hdb_energy_mj_per_kg": 190.10945678395126,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 92.0,
       "rows": 10001,
       "split": "calibration"
@@ -637,12 +1072,22 @@
       "filename": "SIN_Bp_0p20T_f_2000Hz",
       "frequency_hz": 2000.0,
       "integral_vs_table_abs_error": 0.014955363734912908,
+      "nonqa_shell_hdb_energy_mj_per_kg": 6.124229120269654,
       "qa_be_loop_area": 57.0,
       "qa_jx_loop_area": 74256.0,
       "qa_kx_loop_area": 74256.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 6.0282058079180505,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 5.8543309712821,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 4.008525492848957,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 4.463624147039611,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 1551139.0,
       "qa_pi_x_loop_area": 148512.0,
-      "qa_shell_hdb_energy_mj_per_kg": 6.124229120269654,
+      "qa_shell_hdb_energy_mj_per_kg": 5.884778793426048,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 40.0,
       "rows": 10001,
       "split": "calibration"
@@ -654,12 +1099,22 @@
       "filename": "SIN_Bp_0p40T_f_2000Hz",
       "frequency_hz": 2000.0,
       "integral_vs_table_abs_error": 0.04695643088065893,
+      "nonqa_shell_hdb_energy_mj_per_kg": 20.853585125181862,
       "qa_be_loop_area": 154.0,
       "qa_jx_loop_area": 202266.0,
       "qa_kx_loop_area": 202266.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 16.830573633247823,
+      "qa_lifted_j_pi_unseen_fraction": 0.05069493050694931,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 17.02623743257324,
+      "qa_lifted_jx_unseen_fraction": 0.0357964203579642,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 8.853291804390473,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.028497150284971504,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 15.561812742859358,
+      "qa_lifted_kx_unseen_fraction": 0.0433956604339566,
       "qa_pi_abs_path_energy": 2638360.0,
       "qa_pi_x_loop_area": 404532.0,
-      "qa_shell_hdb_energy_mj_per_kg": 20.853585125181862,
+      "qa_shell_hdb_energy_mj_per_kg": 20.957451949676468,
+      "qa_shell_unseen_state_fraction": 0.05829417058294171,
       "qa_unique_states": 56.0,
       "rows": 10001,
       "split": "heldout"
@@ -671,12 +1126,22 @@
       "filename": "SIN_Bp_0p60T_f_2000Hz",
       "frequency_hz": 2000.0,
       "integral_vs_table_abs_error": 0.1048590439610777,
+      "nonqa_shell_hdb_energy_mj_per_kg": 42.4004308387836,
       "qa_be_loop_area": 246.0,
       "qa_jx_loop_area": 332560.0,
       "qa_kx_loop_area": 332560.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 40.02283451303738,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 35.97828943752215,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 21.358721076665994,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 35.21551914376805,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 3680925.0,
       "qa_pi_x_loop_area": 665120.0,
-      "qa_shell_hdb_energy_mj_per_kg": 42.4004308387836,
+      "qa_shell_hdb_energy_mj_per_kg": 42.543537667592695,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 68.0,
       "rows": 10001,
       "split": "calibration"
@@ -688,12 +1153,22 @@
       "filename": "SIN_Bp_0p80T_f_2000Hz",
       "frequency_hz": 2000.0,
       "integral_vs_table_abs_error": 0.20153026467367852,
+      "nonqa_shell_hdb_energy_mj_per_kg": 81.56067189224795,
       "qa_be_loop_area": 347.0,
       "qa_jx_loop_area": 483102.0,
       "qa_kx_loop_area": 483102.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 69.36750976078072,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 69.94893210529884,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 47.49119991526385,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 68.40331695433548,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 5012805.0,
       "qa_pi_x_loop_area": 966204.0,
-      "qa_shell_hdb_energy_mj_per_kg": 81.56067189224795,
+      "qa_shell_hdb_energy_mj_per_kg": 80.03315631499174,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 80.0,
       "rows": 10001,
       "split": "calibration"
@@ -705,12 +1180,22 @@
       "filename": "SIN_Bp_1p00T_f_2000Hz",
       "frequency_hz": 2000.0,
       "integral_vs_table_abs_error": 0.29173993146301314,
+      "nonqa_shell_hdb_energy_mj_per_kg": 150.73212929329503,
       "qa_be_loop_area": 418.0,
       "qa_jx_loop_area": 592868.0,
       "qa_kx_loop_area": 592868.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 146.33235571112357,
+      "qa_lifted_j_pi_unseen_fraction": 0.050844915508449155,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 131.98987948160496,
+      "qa_lifted_jx_unseen_fraction": 0.0385961403859614,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 84.09928611065129,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0385961403859614,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 138.38764462872476,
+      "qa_lifted_kx_unseen_fraction": 0.050844915508449155,
       "qa_pi_abs_path_energy": 5873831.0,
       "qa_pi_x_loop_area": 1185736.0,
-      "qa_shell_hdb_energy_mj_per_kg": 150.73212929329503,
+      "qa_shell_hdb_energy_mj_per_kg": 156.7265439291643,
+      "qa_shell_unseen_state_fraction": 0.06309369063093691,
       "qa_unique_states": 88.0,
       "rows": 10001,
       "split": "heldout"
@@ -722,12 +1207,22 @@
       "filename": "SIN_Bp_1p20T_f_2000Hz",
       "frequency_hz": 2000.0,
       "integral_vs_table_abs_error": 0.5632500936561371,
+      "nonqa_shell_hdb_energy_mj_per_kg": 226.36122000249998,
       "qa_be_loop_area": 484.0,
       "qa_jx_loop_area": 695806.0,
       "qa_kx_loop_area": 695806.0,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 210.50232455060487,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 190.02007914875944,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 124.22423937597111,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 195.37077633477944,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 6635164.0,
       "qa_pi_x_loop_area": 1391612.0,
-      "qa_shell_hdb_energy_mj_per_kg": 226.36122000249998,
+      "qa_shell_hdb_energy_mj_per_kg": 233.41912535861715,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 92.0,
       "rows": 10001,
       "split": "calibration"
@@ -739,20 +1234,34 @@
       "filename": "SIN_Bp_1p35T_f_2000Hz",
       "frequency_hz": 2000.0,
       "integral_vs_table_abs_error": 0.7006409952633135,
+      "nonqa_shell_hdb_energy_mj_per_kg": 245.32360148421333,
       "qa_be_loop_area": 506.5,
       "qa_jx_loop_area": 725880.5,
       "qa_kx_loop_area": 725880.5,
+      "qa_lifted_j_pi_shell_energy_mj_per_kg": 219.30109965075403,
+      "qa_lifted_j_pi_unseen_fraction": 0.0,
+      "qa_lifted_jx_shell_energy_mj_per_kg": 201.16164400506483,
+      "qa_lifted_jx_unseen_fraction": 0.0,
+      "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": 133.33342702728413,
+      "qa_lifted_k_minus_j_x_unseen_fraction": 0.0,
+      "qa_lifted_kx_shell_energy_mj_per_kg": 204.14843940166242,
+      "qa_lifted_kx_unseen_fraction": 0.0,
       "qa_pi_abs_path_energy": 6693866.0,
       "qa_pi_x_loop_area": 1451761.0,
-      "qa_shell_hdb_energy_mj_per_kg": 245.32360148421333,
+      "qa_shell_hdb_energy_mj_per_kg": 243.6634286718367,
+      "qa_shell_unseen_state_fraction": 0.0,
       "qa_unique_states": 91.0,
       "rows": 10001,
       "split": "calibration"
     }
   ],
   "verdict": {
+    "leakage_controls": "H/B quantile edges, marginal shell centers, and joint QA state centers are fit on calibration loops only. Direct predictors use no held-out loss labels and no fitted regression coefficient.",
     "qa_adds_to_steinmetz_here": "The tested log Steinmetz+rank-QA shape model does not improve Steinmetz, but the physically dimensioned QA shell integral beats Steinmetz directly.",
+    "qa_beats_nonqa_shell_here": "NO",
     "qa_beats_steinmetz_here": "YES: the direct dimensioned QA shell integral outperforms the log-linear Steinmetz baseline on this selected Ring35 SIN subset.",
-    "qa_not_random": "YES: QA-only held-out models reduce error substantially relative to the mean-loss baseline on real measured loops."
+    "qa_lifted_vs_nonqa_shell_here": "MIXED: calibrated QA J/Pi shells have higher held-out R2 than ordinary H/B shell binning, but worse MAE/RMSE. This is not yet a clean QA-specific win.",
+    "qa_not_random": "YES: QA-only held-out models reduce error substantially relative to the mean-loss baseline on real measured loops.",
+    "shell_result_interpretation": "The raw physical loop integral is the expected upper-bound sanity check. Ordinary non-QA H/B shell binning explains most of the direct shell result and beats the joint (b,e) QA state shell by MAE/RMSE. A lifted QA J/Pi shell slightly beats non-QA by R2 but not by MAE/RMSE, so this run supports finite-shell hysteresis mapping and only a mixed, not decisive, QA-specific advantage."
   }
 }

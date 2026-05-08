@@ -39,6 +39,7 @@ DATASET_RECORD = "https://zenodo.org/records/17579041"
 DATASET_TITLE = "Dataset of Experimental Non-Standard Dynamic Hysteresis Loops"
 DENSITY_KG_PER_M3 = 7632.0
 MODULUS = 24
+QA_LIFTED_VARIABLES = ("b", "e", "J", "X", "K", "Pi", "K_minus_J")
 
 
 @dataclass(frozen=True)
@@ -163,6 +164,23 @@ def bin_centers(values: list[float], edges: list[float], m: int = MODULUS) -> li
     return centers
 
 
+def qa_vars(b: int, e: int) -> dict[str, int]:
+    d = b + e
+    a = b + 2 * e
+    j = b * d
+    x = d * e
+    k = d * a
+    return {
+        "b": b,
+        "e": e,
+        "J": j,
+        "X": x,
+        "K": k,
+        "Pi": j + x + k,
+        "K_minus_J": k - j,
+    }
+
+
 def calibration_split(rows: list[LossRow]) -> tuple[set[str], set[str]]:
     calibration: set[str] = set()
     heldout: set[str] = set()
@@ -176,7 +194,14 @@ def calibration_split(rows: list[LossRow]) -> tuple[set[str], set[str]]:
 
 def build_global_calibration(
     traces: list[LoopTrace], calibration_names: set[str]
-) -> tuple[list[float], list[float], list[float], list[float]]:
+) -> tuple[
+    list[float],
+    list[float],
+    list[float],
+    list[float],
+    dict[tuple[int, int], tuple[float, float]],
+    dict[tuple[str, str], dict[int, float]],
+]:
     h_values: list[float] = []
     b_values: list[float] = []
     for trace in traces:
@@ -185,7 +210,36 @@ def build_global_calibration(
             b_values.extend(trace.b_t)
     h_edges = quantile_edges(h_values)
     b_edges = quantile_edges(b_values)
-    return h_edges, b_edges, bin_centers(h_values, h_edges), bin_centers(b_values, b_edges)
+    h_centers = bin_centers(h_values, h_edges)
+    b_centers = bin_centers(b_values, b_edges)
+
+    state_values: dict[tuple[int, int], list[tuple[float, float]]] = {}
+    lifted_values: dict[tuple[str, str], dict[int, list[float]]] = {}
+    for trace in traces:
+        if trace.row.filename not in calibration_names:
+            continue
+        b_seq = bins(trace.h_a_per_m, h_edges)
+        e_seq = bins(trace.b_t, b_edges)
+        for h_value, b_value, b_state, e_state in zip(trace.h_a_per_m, trace.b_t, b_seq, e_seq):
+            state_values.setdefault((b_state, e_state), []).append((h_value, b_value))
+            vars_for_state = qa_vars(b_state, e_state)
+            for var_name in QA_LIFTED_VARIABLES:
+                key = vars_for_state[var_name]
+                lifted_values.setdefault(("H", var_name), {}).setdefault(key, []).append(h_value)
+                lifted_values.setdefault(("B", var_name), {}).setdefault(key, []).append(b_value)
+
+    state_centers = {
+        state: (
+            statistics.mean(h_value for h_value, _ in values),
+            statistics.mean(b_value for _, b_value in values),
+        )
+        for state, values in state_values.items()
+    }
+    lifted_centers = {
+        target_var: {key: statistics.mean(values) for key, values in value_map.items()}
+        for target_var, value_map in lifted_values.items()
+    }
+    return h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers
 
 
 def qa_observables(
@@ -194,25 +248,38 @@ def qa_observables(
     b_edges: list[float],
     h_centers: list[float],
     b_centers: list[float],
+    state_centers: dict[tuple[int, int], tuple[float, float]],
+    lifted_centers: dict[tuple[str, str], dict[int, float]],
 ) -> dict[str, float]:
     b_seq = bins(trace.h_a_per_m, h_edges)
     e_seq = bins(trace.b_t, b_edges)
-    h_shell_seq = [h_centers[b - 1] for b in b_seq]
-    b_shell_seq = [b_centers[e - 1] for e in e_seq]
+    nonqa_h_shell_seq = [h_centers[b - 1] for b in b_seq]
+    nonqa_b_shell_seq = [b_centers[e - 1] for e in e_seq]
+    qa_h_shell_seq: list[float] = []
+    qa_b_shell_seq: list[float] = []
+    unseen_state_count = 0
+    for b, e in zip(b_seq, e_seq):
+        center = state_centers.get((b, e))
+        if center is None:
+            unseen_state_count += 1
+            center = (h_centers[b - 1], b_centers[e - 1])
+        qa_h_shell_seq.append(center[0])
+        qa_b_shell_seq.append(center[1])
     j_seq: list[float] = []
     x_seq: list[float] = []
     k_seq: list[float] = []
     pi_seq: list[float] = []
+    vars_seq: list[dict[str, int]] = []
     for b, e in zip(b_seq, e_seq):
-        d = b + e
-        a = b + 2 * e
-        j = b * d
-        x = d * e
-        k = d * a
+        vars_for_state = qa_vars(b, e)
+        j = vars_for_state["J"]
+        x = vars_for_state["X"]
+        k = vars_for_state["K"]
         j_seq.append(j)
         x_seq.append(x)
         k_seq.append(k)
-        pi_seq.append(j + x + k)
+        pi_seq.append(vars_for_state["Pi"])
+        vars_seq.append(vars_for_state)
 
     be_area = abs(line_integral_y_dx(e_seq, b_seq))
     jx_area = abs(line_integral_y_dx(x_seq, j_seq))
@@ -224,15 +291,54 @@ def qa_observables(
     for i in range(len(x_seq)):
         path_energy += 0.5 * (pi2[i] + pi2[i + 1]) * abs(x2[i + 1] - x2[i])
 
+    def lifted_shell_energy(h_var: str, b_var: str) -> tuple[float, float]:
+        h_map = lifted_centers.get(("H", h_var), {})
+        b_map = lifted_centers.get(("B", b_var), {})
+        h_lifted_seq: list[float] = []
+        b_lifted_seq: list[float] = []
+        unseen = 0
+        for b, e, vars_for_state in zip(b_seq, e_seq, vars_seq):
+            h_key = vars_for_state[h_var]
+            b_key = vars_for_state[b_var]
+            h_value = h_map.get(h_key)
+            b_value = b_map.get(b_key)
+            if h_value is None:
+                unseen += 1
+                h_value = h_centers[b - 1]
+            if b_value is None:
+                unseen += 1
+                b_value = b_centers[e - 1]
+            h_lifted_seq.append(h_value)
+            b_lifted_seq.append(b_value)
+        energy = 1000.0 * abs(line_integral_y_dx(b_lifted_seq, h_lifted_seq)) / DENSITY_KG_PER_M3
+        return energy, unseen / (2 * len(vars_seq))
+
+    lifted_jx, lifted_jx_unseen = lifted_shell_energy("J", "X")
+    lifted_kx, lifted_kx_unseen = lifted_shell_energy("K", "X")
+    lifted_k_minus_j_x, lifted_k_minus_j_x_unseen = lifted_shell_energy("K_minus_J", "X")
+    lifted_j_pi, lifted_j_pi_unseen = lifted_shell_energy("J", "Pi")
+
     return {
         "qa_be_loop_area": be_area,
         "qa_jx_loop_area": jx_area,
         "qa_kx_loop_area": kx_area,
         "qa_pi_x_loop_area": pi_x_area,
         "qa_pi_abs_path_energy": path_energy,
-        "qa_shell_hdb_energy_mj_per_kg": 1000.0
-        * abs(line_integral_y_dx(b_shell_seq, h_shell_seq))
+        "nonqa_shell_hdb_energy_mj_per_kg": 1000.0
+        * abs(line_integral_y_dx(nonqa_b_shell_seq, nonqa_h_shell_seq))
         / DENSITY_KG_PER_M3,
+        "qa_shell_hdb_energy_mj_per_kg": 1000.0
+        * abs(line_integral_y_dx(qa_b_shell_seq, qa_h_shell_seq))
+        / DENSITY_KG_PER_M3,
+        "qa_lifted_jx_shell_energy_mj_per_kg": lifted_jx,
+        "qa_lifted_jx_unseen_fraction": lifted_jx_unseen,
+        "qa_lifted_kx_shell_energy_mj_per_kg": lifted_kx,
+        "qa_lifted_kx_unseen_fraction": lifted_kx_unseen,
+        "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg": lifted_k_minus_j_x,
+        "qa_lifted_k_minus_j_x_unseen_fraction": lifted_k_minus_j_x_unseen,
+        "qa_lifted_j_pi_shell_energy_mj_per_kg": lifted_j_pi,
+        "qa_lifted_j_pi_unseen_fraction": lifted_j_pi_unseen,
+        "qa_shell_unseen_state_fraction": unseen_state_count / len(b_seq),
         "qa_unique_states": float(len(set(zip(b_seq, e_seq)))),
     }
 
@@ -413,10 +519,14 @@ def main() -> int:
         calibration_names, heldout_names = calibration_split(loss_rows)
         traces = [load_loop_trace(zf, row) for row in loss_rows]
 
-    h_edges, b_edges, h_centers, b_centers = build_global_calibration(traces, calibration_names)
+    h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers = (
+        build_global_calibration(traces, calibration_names)
+    )
     records: list[dict] = []
     for trace in traces:
-        qa = qa_observables(trace, h_edges, b_edges, h_centers, b_centers)
+        qa = qa_observables(
+            trace, h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers
+        )
         physical_from_loop = physical_energy_mj_per_kg(trace)
         rec = {
             "filename": trace.row.filename,
@@ -432,11 +542,16 @@ def main() -> int:
         records.append(rec)
 
     qa_feature_sets = {
+        "nonqa_shell_hdb_affine": ["nonqa_shell_hdb_energy_mj_per_kg"],
         "qa_shell_hdb_affine": ["qa_shell_hdb_energy_mj_per_kg"],
         "qa_be_only": ["qa_be_loop_area"],
         "qa_lifted_jx_only": ["qa_jx_loop_area"],
+        "qa_lifted_jx_shell_affine": ["qa_lifted_jx_shell_energy_mj_per_kg"],
+        "qa_lifted_j_pi_shell_affine": ["qa_lifted_j_pi_shell_energy_mj_per_kg"],
         "qa_lifted_packet": [
             "qa_shell_hdb_energy_mj_per_kg",
+            "qa_lifted_jx_shell_energy_mj_per_kg",
+            "qa_lifted_j_pi_shell_energy_mj_per_kg",
             "qa_jx_loop_area",
             "qa_kx_loop_area",
             "qa_pi_x_loop_area",
@@ -446,6 +561,8 @@ def main() -> int:
         "qa_with_drive_metadata": [
             "frequency_hz",
             "bp_t",
+            "qa_shell_hdb_energy_mj_per_kg",
+            "qa_lifted_j_pi_shell_energy_mj_per_kg",
             "qa_jx_loop_area",
             "qa_kx_loop_area",
             "qa_pi_abs_path_energy",
@@ -455,6 +572,68 @@ def main() -> int:
         name: fit_predict(records, calibration_names, heldout_names, features)
         for name, features in qa_feature_sets.items()
     }
+
+    heldout_models = {
+        "mean_loss_baseline": mean_baseline(records, calibration_names, heldout_names),
+        "raw_physical_hdb_direct": direct_prediction(
+            records, heldout_names, "energy_loss_mj_per_kg_from_integral"
+        ),
+        "nonqa_shell_hdb_direct": direct_prediction(
+            records, heldout_names, "nonqa_shell_hdb_energy_mj_per_kg"
+        ),
+        "qa_shell_hdb_direct": direct_prediction(
+            records, heldout_names, "qa_shell_hdb_energy_mj_per_kg"
+        ),
+        "qa_lifted_jx_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_jx_shell_energy_mj_per_kg"
+        ),
+        "qa_lifted_kx_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_kx_shell_energy_mj_per_kg"
+        ),
+        "qa_lifted_k_minus_j_x_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_k_minus_j_x_shell_energy_mj_per_kg"
+        ),
+        "qa_lifted_j_pi_shell_direct": direct_prediction(
+            records, heldout_names, "qa_lifted_j_pi_shell_energy_mj_per_kg"
+        ),
+        "steinmetz_log_linear_baseline": fit_steinmetz(records, calibration_names, heldout_names),
+        "steinmetz_plus_qa_shape_log_model": fit_log_feature_model(
+            records,
+            calibration_names,
+            heldout_names,
+            [
+                "frequency_hz",
+                "bp_t",
+                "qa_jx_loop_area",
+                "qa_pi_abs_path_energy",
+                "qa_unique_states",
+            ],
+        ),
+        **qa_models,
+    }
+    comparison_order = [
+        "mean_loss_baseline",
+        "steinmetz_log_linear_baseline",
+        "raw_physical_hdb_direct",
+        "nonqa_shell_hdb_direct",
+        "qa_shell_hdb_direct",
+        "qa_lifted_jx_shell_direct",
+        "qa_lifted_kx_shell_direct",
+        "qa_lifted_k_minus_j_x_shell_direct",
+        "qa_lifted_j_pi_shell_direct",
+        "qa_be_only",
+        "qa_lifted_packet",
+        "steinmetz_plus_qa_shape_log_model",
+    ]
+    direct_comparison = [
+        {"model": name, **heldout_models[name]["heldout"]} for name in comparison_order
+    ]
+    qa_shell_r2 = heldout_models["qa_shell_hdb_direct"]["heldout"]["r2"]
+    nonqa_shell_r2 = heldout_models["nonqa_shell_hdb_direct"]["heldout"]["r2"]
+    qa_shell_mae = heldout_models["qa_shell_hdb_direct"]["heldout"]["mae_mj_per_kg"]
+    nonqa_shell_mae = heldout_models["nonqa_shell_hdb_direct"]["heldout"]["mae_mj_per_kg"]
+    lifted_j_pi_r2 = heldout_models["qa_lifted_j_pi_shell_direct"]["heldout"]["r2"]
+    lifted_j_pi_mae = heldout_models["qa_lifted_j_pi_shell_direct"]["heldout"]["mae_mj_per_kg"]
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
     payload = {
@@ -483,6 +662,7 @@ def main() -> int:
             "m": MODULUS,
             "bin_edges": "global calibration-loop quantiles only",
             "bin_centers": "global calibration-loop shell means only",
+            "qa_state_centers": "global calibration-loop joint (b,e) state means only",
             "b": "bin(H_Aperm)",
             "e": "bin(B_T)",
             "d": "b+e",
@@ -492,7 +672,12 @@ def main() -> int:
             "K": "d*a",
             "observables": [
                 "abs(integral b de)",
+                "abs(integral H_bin dB_bin) converted to mJ/kg",
                 "abs(integral H_shell dB_shell) converted to mJ/kg",
+                "abs(integral H_J dB_X) converted to mJ/kg",
+                "abs(integral H_K dB_X) converted to mJ/kg",
+                "abs(integral H_(K-J) dB_X) converted to mJ/kg",
+                "abs(integral H_J dB_Pi) converted to mJ/kg",
                 "abs(integral J dX)",
                 "abs(integral K dX)",
                 "abs(integral Pi dX)",
@@ -500,26 +685,8 @@ def main() -> int:
                 "unique (b,e) states",
             ],
         },
-        "heldout_models": {
-            "mean_loss_baseline": mean_baseline(records, calibration_names, heldout_names),
-            "qa_shell_hdb_direct": direct_prediction(
-                records, heldout_names, "qa_shell_hdb_energy_mj_per_kg"
-            ),
-            "steinmetz_log_linear_baseline": fit_steinmetz(records, calibration_names, heldout_names),
-            "steinmetz_plus_qa_shape_log_model": fit_log_feature_model(
-                records,
-                calibration_names,
-                heldout_names,
-                [
-                    "frequency_hz",
-                    "bp_t",
-                    "qa_jx_loop_area",
-                    "qa_pi_abs_path_energy",
-                    "qa_unique_states",
-                ],
-            ),
-            **qa_models,
-        },
+        "heldout_models": heldout_models,
+        "direct_predictor_comparison": direct_comparison,
         "verdict": {
             "qa_not_random": (
                 "YES: QA-only held-out models reduce error substantially relative "
@@ -533,6 +700,31 @@ def main() -> int:
                 "The tested log Steinmetz+rank-QA shape model does not improve "
                 "Steinmetz, but the physically dimensioned QA shell integral beats "
                 "Steinmetz directly."
+            ),
+            "qa_beats_nonqa_shell_here": (
+                "YES"
+                if qa_shell_r2 > nonqa_shell_r2 and qa_shell_mae < nonqa_shell_mae
+                else "NO"
+            ),
+            "qa_lifted_vs_nonqa_shell_here": (
+                "MIXED: calibrated QA J/Pi shells have higher held-out R2 than "
+                "ordinary H/B shell binning, but worse MAE/RMSE. This is not yet "
+                "a clean QA-specific win."
+                if lifted_j_pi_r2 > nonqa_shell_r2 and lifted_j_pi_mae > nonqa_shell_mae
+                else "See direct_predictor_comparison."
+            ),
+            "shell_result_interpretation": (
+                "The raw physical loop integral is the expected upper-bound sanity "
+                "check. Ordinary non-QA H/B shell binning explains most of the "
+                "direct shell result and beats the joint (b,e) QA state shell by "
+                "MAE/RMSE. A lifted QA J/Pi shell slightly beats non-QA by R2 but "
+                "not by MAE/RMSE, so this run supports finite-shell hysteresis "
+                "mapping and only a mixed, not decisive, QA-specific advantage."
+            ),
+            "leakage_controls": (
+                "H/B quantile edges, marginal shell centers, and joint QA state "
+                "centers are fit on calibration loops only. Direct predictors use "
+                "no held-out loss labels and no fitted regression coefficient."
             ),
         },
         "records": records,

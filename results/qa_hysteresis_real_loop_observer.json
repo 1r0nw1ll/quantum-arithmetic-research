@@ -90,6 +90,27 @@
       "rmse_mj_per_kg": 5.772346622240178
     },
     {
+      "mae_mj_per_kg": 46.07739546766461,
+      "mape": 6.426041070463106,
+      "model": "qa_transition_only",
+      "r2": -0.9541876570894594,
+      "rmse_mj_per_kg": 67.13418216155151
+    },
+    {
+      "mae_mj_per_kg": 12.86406760813937,
+      "mape": 0.6740649734824415,
+      "model": "qa_transition_plus_shell",
+      "r2": 0.9047822909558793,
+      "rmse_mj_per_kg": 14.819018278957904
+    },
+    {
+      "mae_mj_per_kg": 10.458880724460345,
+      "mape": 0.6910027419455488,
+      "model": "nonqa_shell_plus_transition",
+      "r2": 0.9396055448549399,
+      "rmse_mj_per_kg": 11.802094928179702
+    },
+    {
       "mae_mj_per_kg": 22.082420282081628,
       "mape": 2.1700316391287924,
       "model": "qa_be_only",
@@ -151,6 +172,87 @@
         "rmse_mj_per_kg": 5.894477155982403
       },
       "prediction_field": "nonqa_shell_hdb_energy_mj_per_kg"
+    },
+    "nonqa_shell_plus_transition": {
+      "coefficients": [
+        64.15078943992066,
+        75.67944282543213,
+        306.0520758315116,
+        -5.239995946818059,
+        16.57354703919735,
+        50.05138131228342,
+        61.16555547346357,
+        11.584655125787547,
+        4.00290639792853,
+        -13.23371367134544,
+        100.03799626370491,
+        34.12806898926471,
+        -326.49705349851354,
+        -120.18368549743185,
+        0.0,
+        -6.489001716693094,
+        -23.075056495976746
+      ],
+      "feature_means": [
+        63.206619502104815,
+        137.21052631578948,
+        73.74424975037584,
+        3.924020206273421,
+        8807.631578947368,
+        0.4639762642037512,
+        0.0,
+        0.10526315789473684,
+        451.05263157894734,
+        959.2631578947369,
+        0.4441072901622988,
+        34.7899466132579,
+        532.4007759030518,
+        0.0,
+        76.3157894736842,
+        0.008998826487866584
+      ],
+      "feature_scales": [
+        72.56494787204083,
+        40.98084141255382,
+        36.35549731172917,
+        0.32341010359040295,
+        2033.2746264022455,
+        0.050617893499441985,
+        0.3244428422615251,
+        0.30689220499185793,
+        307.0245101966549,
+        286.61689855519006,
+        0.25529501757602663,
+        10.40483981851085,
+        117.42796295186174,
+        1.0,
+        22.405480136926435,
+        0.003244350422243678
+      ],
+      "features": [
+        "nonqa_shell_hdb_energy_mj_per_kg",
+        "qa_transition_unique_edges",
+        "qa_transition_edge_reuse_ratio",
+        "qa_transition_entropy",
+        "qa_transition_reversal_count",
+        "qa_transition_irreversible_edge_fraction",
+        "qa_transition_signed_flux",
+        "qa_transition_abs_flux",
+        "qa_transition_orientation_flux",
+        "qa_transition_abs_orientation_flux",
+        "qa_transition_branch_asymmetry",
+        "qa_transition_return_time_mean",
+        "qa_transition_return_time_std",
+        "qa_transition_loop_closure_defect",
+        "qa_transition_generator_distance_sum",
+        "qa_transition_generator_distance_mean"
+      ],
+      "heldout": {
+        "mae_mj_per_kg": 10.458880724460345,
+        "mape": 0.6910027419455488,
+        "r2": 0.9396055448549399,
+        "rmse_mj_per_kg": 11.802094928179702
+      }
     },
     "qa_be_only": {
       "coefficients": [
@@ -351,6 +453,164 @@
       },
       "prediction_field": "qa_shell_hdb_energy_mj_per_kg"
     },
+    "qa_transition_only": {
+      "coefficients": [
+        64.1507894399205,
+        -5.580795031607863,
+        -67.23155432894785,
+        -17.437652578703563,
+        90.05357445345311,
+        207.2657589413607,
+        13.043793293038213,
+        2.524320821745297,
+        271.6077875564869,
+        114.90523300673306,
+        -132.35819754147062,
+        -441.40960179684294,
+        -9.446259141888333,
+        0.0,
+        167.49238222759138,
+        62.68318981935397
+      ],
+      "feature_means": [
+        137.21052631578948,
+        73.74424975037584,
+        3.924020206273421,
+        8807.631578947368,
+        0.4639762642037512,
+        0.0,
+        0.10526315789473684,
+        451.05263157894734,
+        959.2631578947369,
+        0.4441072901622988,
+        34.7899466132579,
+        532.4007759030518,
+        0.0,
+        76.3157894736842,
+        0.008998826487866584
+      ],
+      "feature_scales": [
+        40.98084141255382,
+        36.35549731172917,
+        0.32341010359040295,
+        2033.2746264022455,
+        0.050617893499441985,
+        0.3244428422615251,
+        0.30689220499185793,
+        307.0245101966549,
+        286.61689855519006,
+        0.25529501757602663,
+        10.40483981851085,
+        117.42796295186174,
+        1.0,
+        22.405480136926435,
+        0.003244350422243678
+      ],
+      "features": [
+        "qa_transition_unique_edges",
+        "qa_transition_edge_reuse_ratio",
+        "qa_transition_entropy",
+        "qa_transition_reversal_count",
+        "qa_transition_irreversible_edge_fraction",
+        "qa_transition_signed_flux",
+        "qa_transition_abs_flux",
+        "qa_transition_orientation_flux",
+        "qa_transition_abs_orientation_flux",
+        "qa_transition_branch_asymmetry",
+        "qa_transition_return_time_mean",
+        "qa_transition_return_time_std",
+        "qa_transition_loop_closure_defect",
+        "qa_transition_generator_distance_sum",
+        "qa_transition_generator_distance_mean"
+      ],
+      "heldout": {
+        "mae_mj_per_kg": 46.07739546766461,
+        "mape": 6.426041070463106,
+        "r2": -0.9541876570894594,
+        "rmse_mj_per_kg": 67.13418216155151
+      }
+    },
+    "qa_transition_plus_shell": {
+      "coefficients": [
+        64.15078943992062,
+        70.74938878781431,
+        382.6179939407339,
+        -11.325252700085581,
+        22.83723859362959,
+        69.9128795936472,
+        78.08093394757333,
+        13.319366354885615,
+        4.0293361502753475,
+        7.231340771526584,
+        124.65422002600693,
+        27.740126873716015,
+        -406.4203110364761,
+        -164.43443969456104,
+        0.0,
+        -6.741420421791275,
+        -32.34820745503707
+      ],
+      "feature_means": [
+        63.60190032572206,
+        137.21052631578948,
+        73.74424975037584,
+        3.924020206273421,
+        8807.631578947368,
+        0.4639762642037512,
+        0.0,
+        0.10526315789473684,
+        451.05263157894734,
+        959.2631578947369,
+        0.4441072901622988,
+        34.7899466132579,
+        532.4007759030518,
+        0.0,
+        76.3157894736842,
+        0.008998826487866584
+      ],
+      "feature_scales": [
+        73.68753877415885,
+        40.98084141255382,
+        36.35549731172917,
+        0.32341010359040295,
+        2033.2746264022455,
+        0.050617893499441985,
+        0.3244428422615251,
+        0.30689220499185793,
+        307.0245101966549,
+        286.61689855519006,
+        0.25529501757602663,
+        10.40483981851085,
+        117.42796295186174,
+        1.0,
+        22.405480136926435,
+        0.003244350422243678
+      ],
+      "features": [
+        "qa_shell_hdb_energy_mj_per_kg",
+        "qa_transition_unique_edges",
+        "qa_transition_edge_reuse_ratio",
+        "qa_transition_entropy",
+        "qa_transition_reversal_count",
+        "qa_transition_irreversible_edge_fraction",
+        "qa_transition_signed_flux",
+        "qa_transition_abs_flux",
+        "qa_transition_orientation_flux",
+        "qa_transition_abs_orientation_flux",
+        "qa_transition_branch_asymmetry",
+        "qa_transition_return_time_mean",
+        "qa_transition_return_time_std",
+        "qa_transition_loop_closure_defect",
+        "qa_transition_generator_distance_sum",
+        "qa_transition_generator_distance_mean"
+      ],
+      "heldout": {
+        "mae_mj_per_kg": 12.86406760813937,
+        "mape": 0.6740649734824415,
+        "r2": 0.9047822909558793,
+        "rmse_mj_per_kg": 14.819018278957904
+      }
+    },
     "qa_with_drive_metadata": {
       "coefficients": [
         64.1507894399206,
@@ -493,9 +753,27 @@
       "abs(integral K dX)",
       "abs(integral Pi dX)",
       "sum 0.5*(Pi_i+Pi_j)*abs(delta_X)",
-      "unique (b,e) states"
+      "unique (b,e) states",
+      "closed-loop transition graph observables over state_t=(b_t,e_t)"
     ],
-    "qa_state_centers": "global calibration-loop joint (b,e) state means only"
+    "qa_state_centers": "global calibration-loop joint (b,e) state means only",
+    "transition_features": [
+      "qa_transition_unique_edges",
+      "qa_transition_edge_reuse_ratio",
+      "qa_transition_entropy",
+      "qa_transition_reversal_count",
+      "qa_transition_irreversible_edge_fraction",
+      "qa_transition_signed_flux",
+      "qa_transition_abs_flux",
+      "qa_transition_orientation_flux",
+      "qa_transition_abs_orientation_flux",
+      "qa_transition_branch_asymmetry",
+      "qa_transition_return_time_mean",
+      "qa_transition_return_time_std",
+      "qa_transition_loop_closure_defect",
+      "qa_transition_generator_distance_sum",
+      "qa_transition_generator_distance_mean"
+    ]
   },
   "records": [
     {
@@ -970,6 +1248,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 3.688849241382563,
       "qa_shell_hdb_total_variation_mj_per_kg": 5.435588786013193,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 796.0,
+      "qa_transition_branch_asymmetry": 0.032663316582914576,
+      "qa_transition_edge_reuse_ratio": 166.68333333333334,
+      "qa_transition_entropy": 3.137402802377584,
+      "qa_transition_generator_distance_mean": 0.0065993400659934,
+      "qa_transition_generator_distance_sum": 66.0,
+      "qa_transition_irreversible_edge_fraction": 0.3333333333333333,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 26.0,
+      "qa_transition_return_time_mean": 14.044102923508209,
+      "qa_transition_return_time_std": 350.22332040607137,
+      "qa_transition_reversal_count": 9919.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 60.0,
       "qa_unique_states": 26.0,
       "rows": 10001,
       "split": "calibration"
@@ -1446,6 +1739,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 7.0957396234650565,
       "qa_shell_hdb_total_variation_mj_per_kg": 8.29145561274342,
       "qa_shell_unseen_state_fraction": 0.06729327067293271,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 996.0,
+      "qa_transition_branch_asymmetry": 0.08032128514056225,
+      "qa_transition_edge_reuse_ratio": 119.05952380952381,
+      "qa_transition_entropy": 3.354212602644272,
+      "qa_transition_generator_distance_mean": 0.0081991800819918,
+      "qa_transition_generator_distance_sum": 82.0,
+      "qa_transition_irreversible_edge_fraction": 0.35714285714285715,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 80.0,
+      "qa_transition_return_time_mean": 20.029803646563813,
+      "qa_transition_return_time_std": 427.9306929675788,
+      "qa_transition_reversal_count": 9882.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 84.0,
       "qa_unique_states": 38.0,
       "rows": 10001,
       "split": "heldout"
@@ -1922,6 +2230,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 13.587158728402725,
       "qa_shell_hdb_total_variation_mj_per_kg": 15.850688534235367,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 994.0,
+      "qa_transition_branch_asymmetry": 0.1488933601609658,
+      "qa_transition_edge_reuse_ratio": 90.09909909909909,
+      "qa_transition_entropy": 3.6947368601466017,
+      "qa_transition_generator_distance_mean": 0.007599240075992401,
+      "qa_transition_generator_distance_sum": 76.0,
+      "qa_transition_irreversible_edge_fraction": 0.3963963963963964,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 148.0,
+      "qa_transition_return_time_mean": 27.036591478696742,
+      "qa_transition_return_time_std": 504.473172943776,
+      "qa_transition_reversal_count": 9884.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 111.0,
       "qa_unique_states": 52.0,
       "rows": 10001,
       "split": "calibration"
@@ -2398,6 +2721,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 20.738894297674378,
       "qa_shell_hdb_total_variation_mj_per_kg": 24.037505493118292,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1086.0,
+      "qa_transition_branch_asymmetry": 0.19889502762430938,
+      "qa_transition_edge_reuse_ratio": 73.53676470588235,
+      "qa_transition_entropy": 4.020762573326111,
+      "qa_transition_generator_distance_mean": 0.008799120087991202,
+      "qa_transition_generator_distance_sum": 88.0,
+      "qa_transition_irreversible_edge_fraction": 0.4117647058823529,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 216.0,
+      "qa_transition_return_time_mean": 33.08481292005216,
+      "qa_transition_return_time_std": 560.9808736981132,
+      "qa_transition_reversal_count": 9857.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 136.0,
       "qa_unique_states": 64.0,
       "rows": 10001,
       "split": "calibration"
@@ -2874,6 +3212,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 32.64709497045983,
       "qa_shell_hdb_total_variation_mj_per_kg": 39.1302663360542,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1282.0,
+      "qa_transition_branch_asymmetry": 0.23088923556942278,
+      "qa_transition_edge_reuse_ratio": 64.94155844155844,
+      "qa_transition_entropy": 4.0913026781623625,
+      "qa_transition_generator_distance_mean": 0.0105989401059894,
+      "qa_transition_generator_distance_sum": 106.0,
+      "qa_transition_irreversible_edge_fraction": 0.4025974025974026,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 296.0,
+      "qa_transition_return_time_mean": 37.10065228299047,
+      "qa_transition_return_time_std": 595.3593047570001,
+      "qa_transition_reversal_count": 9835.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 154.0,
       "qa_unique_states": 72.0,
       "rows": 10001,
       "split": "heldout"
@@ -3350,6 +3703,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 44.92429436685741,
       "qa_shell_hdb_total_variation_mj_per_kg": 54.327825121164366,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 1.0,
+      "qa_transition_abs_orientation_flux": 1521.0,
+      "qa_transition_branch_asymmetry": 0.23471400394477318,
+      "qa_transition_edge_reuse_ratio": 55.87150837988827,
+      "qa_transition_entropy": 4.257801401765241,
+      "qa_transition_generator_distance_mean": 0.011998800119988001,
+      "qa_transition_generator_distance_sum": 120.0,
+      "qa_transition_irreversible_edge_fraction": 0.3854748603351955,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 357.0,
+      "qa_transition_return_time_mean": 43.14483658818214,
+      "qa_transition_return_time_std": 643.1825194751672,
+      "qa_transition_reversal_count": 9812.0,
+      "qa_transition_signed_flux": -1.0,
+      "qa_transition_unique_edges": 179.0,
       "qa_unique_states": 83.0,
       "rows": 10001,
       "split": "calibration"
@@ -3826,6 +4194,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 48.758370759587734,
       "qa_shell_hdb_total_variation_mj_per_kg": 56.078021985169286,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1498.0,
+      "qa_transition_branch_asymmetry": 0.2750333778371162,
+      "qa_transition_edge_reuse_ratio": 55.25414364640884,
+      "qa_transition_entropy": 4.1224369827449845,
+      "qa_transition_generator_distance_mean": 0.0115988401159884,
+      "qa_transition_generator_distance_sum": 116.0,
+      "qa_transition_irreversible_edge_fraction": 0.39226519337016574,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 412.0,
+      "qa_transition_return_time_mean": 44.12014258459685,
+      "qa_transition_return_time_std": 646.8998148040803,
+      "qa_transition_reversal_count": 9795.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 181.0,
       "qa_unique_states": 84.0,
       "rows": 10001,
       "split": "calibration"
@@ -4302,6 +4685,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 2.845903596476914,
       "qa_shell_hdb_total_variation_mj_per_kg": 3.3269242312870064,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 350.0,
+      "qa_transition_branch_asymmetry": 0.10857142857142857,
+      "qa_transition_edge_reuse_ratio": 89.30357142857143,
+      "qa_transition_entropy": 3.168622959941906,
+      "qa_transition_generator_distance_mean": 0.005598880223955209,
+      "qa_transition_generator_distance_sum": 28.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 38.0,
+      "qa_transition_return_time_mean": 15.013835973531181,
+      "qa_transition_return_time_std": 259.572225659703,
+      "qa_transition_reversal_count": 4945.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 56.0,
       "qa_unique_states": 28.0,
       "rows": 5001,
       "split": "heldout"
@@ -4778,6 +5176,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 9.77986063259241,
       "qa_shell_hdb_total_variation_mj_per_kg": 10.149480642012312,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 550.0,
+      "qa_transition_branch_asymmetry": 0.26545454545454544,
+      "qa_transition_edge_reuse_ratio": 56.82954545454545,
+      "qa_transition_entropy": 3.630344775590322,
+      "qa_transition_generator_distance_mean": 0.008798240351929614,
+      "qa_transition_generator_distance_sum": 44.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 146.0,
+      "qa_transition_return_time_mean": 23.081542478409318,
+      "qa_transition_return_time_std": 327.7765368399368,
+      "qa_transition_reversal_count": 4913.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 88.0,
       "qa_unique_states": 44.0,
       "rows": 5001,
       "split": "calibration"
@@ -5254,6 +5667,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 19.882363128846336,
       "qa_shell_hdb_total_variation_mj_per_kg": 20.96153676138275,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 700.0,
+      "qa_transition_branch_asymmetry": 0.3914285714285714,
+      "qa_transition_edge_reuse_ratio": 44.651785714285715,
+      "qa_transition_entropy": 3.880781976902634,
+      "qa_transition_generator_distance_mean": 0.011197760447910418,
+      "qa_transition_generator_distance_sum": 56.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 274.0,
+      "qa_transition_return_time_mean": 29.148401367383872,
+      "qa_transition_return_time_std": 370.7870384011938,
+      "qa_transition_reversal_count": 4889.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 112.0,
       "qa_unique_states": 56.0,
       "rows": 5001,
       "split": "calibration"
@@ -5730,6 +6158,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 35.86531959742567,
       "qa_shell_hdb_total_variation_mj_per_kg": 39.31817031894501,
       "qa_shell_unseen_state_fraction": 0.34493101379724056,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 850.0,
+      "qa_transition_branch_asymmetry": 0.49176470588235294,
+      "qa_transition_edge_reuse_ratio": 36.77205882352941,
+      "qa_transition_entropy": 4.0156337064474865,
+      "qa_transition_generator_distance_mean": 0.013597280543891222,
+      "qa_transition_generator_distance_sum": 68.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 418.0,
+      "qa_transition_return_time_mean": 35.22417958526273,
+      "qa_transition_return_time_std": 409.2488296444323,
+      "qa_transition_reversal_count": 4865.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 136.0,
       "qa_unique_states": 68.0,
       "rows": 5001,
       "split": "heldout"
@@ -6206,6 +6649,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 53.409556197696176,
       "qa_shell_hdb_total_variation_mj_per_kg": 56.36474231835271,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 948.0,
+      "qa_transition_branch_asymmetry": 0.5780590717299579,
+      "qa_transition_edge_reuse_ratio": 32.901315789473685,
+      "qa_transition_entropy": 4.132739275225403,
+      "qa_transition_generator_distance_mean": 0.015196960607878424,
+      "qa_transition_generator_distance_sum": 76.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 548.0,
+      "qa_transition_return_time_mean": 39.27160991335886,
+      "qa_transition_return_time_std": 432.8685192069044,
+      "qa_transition_reversal_count": 4849.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 152.0,
       "qa_unique_states": 76.0,
       "rows": 5001,
       "split": "calibration"
@@ -6682,6 +7140,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 76.68841748391387,
       "qa_shell_hdb_total_variation_mj_per_kg": 80.80166765691838,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1050.0,
+      "qa_transition_branch_asymmetry": 0.6361904761904762,
+      "qa_transition_edge_reuse_ratio": 29.767857142857142,
+      "qa_transition_entropy": 4.1953368563236415,
+      "qa_transition_generator_distance_mean": 0.016796640671865627,
+      "qa_transition_generator_distance_sum": 84.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 668.0,
+      "qa_transition_return_time_mean": 43.3462391611212,
+      "qa_transition_return_time_std": 455.48656422005354,
+      "qa_transition_reversal_count": 4833.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 168.0,
       "qa_unique_states": 84.0,
       "rows": 5001,
       "split": "calibration"
@@ -7158,6 +7631,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 100.11987046514723,
       "qa_shell_hdb_total_variation_mj_per_kg": 108.32201675613965,
       "qa_shell_unseen_state_fraction": 0.08918216356728655,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1100.0,
+      "qa_transition_branch_asymmetry": 0.6709090909090909,
+      "qa_transition_edge_reuse_ratio": 28.414772727272727,
+      "qa_transition_entropy": 4.064209477954676,
+      "qa_transition_generator_distance_mean": 0.01759648070385923,
+      "qa_transition_generator_distance_sum": 88.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 738.0,
+      "qa_transition_return_time_mean": 45.33518257010289,
+      "qa_transition_return_time_std": 465.9114668857403,
+      "qa_transition_reversal_count": 4825.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 176.0,
       "qa_unique_states": 88.0,
       "rows": 5001,
       "split": "heldout"
@@ -7634,6 +8122,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 3.9519795343529998,
       "qa_shell_hdb_total_variation_mj_per_kg": 4.303944089724537,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 428.0,
+      "qa_transition_branch_asymmetry": 0.14953271028037382,
+      "qa_transition_edge_reuse_ratio": 153.86153846153846,
+      "qa_transition_entropy": 3.2555255579317413,
+      "qa_transition_generator_distance_mean": 0.0033996600339966003,
+      "qa_transition_generator_distance_sum": 34.0,
+      "qa_transition_irreversible_edge_fraction": 0.47692307692307695,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 64.0,
+      "qa_transition_return_time_mean": 17.000300450676015,
+      "qa_transition_return_time_std": 393.35326398205706,
+      "qa_transition_reversal_count": 9935.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 65.0,
       "qa_unique_states": 32.0,
       "rows": 10001,
       "split": "calibration"
@@ -8110,6 +8613,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 14.333071859960503,
       "qa_shell_hdb_total_variation_mj_per_kg": 15.309437091379241,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 716.0,
+      "qa_transition_branch_asymmetry": 0.30726256983240224,
+      "qa_transition_edge_reuse_ratio": 94.34905660377359,
+      "qa_transition_entropy": 3.8176248237097714,
+      "qa_transition_generator_distance_mean": 0.005599440055994401,
+      "qa_transition_generator_distance_sum": 56.0,
+      "qa_transition_irreversible_edge_fraction": 0.4716981132075472,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 220.0,
+      "qa_transition_return_time_mean": 27.059799498746866,
+      "qa_transition_return_time_std": 504.94767468360607,
+      "qa_transition_reversal_count": 9897.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 106.0,
       "qa_unique_states": 52.0,
       "rows": 10001,
       "split": "calibration"
@@ -8586,6 +9104,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 30.597471886823435,
       "qa_shell_hdb_total_variation_mj_per_kg": 32.4098777662345,
       "qa_shell_unseen_state_fraction": 0.148985101489851,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 838.0,
+      "qa_transition_branch_asymmetry": 0.4630071599045346,
+      "qa_transition_edge_reuse_ratio": 76.93076923076923,
+      "qa_transition_entropy": 4.03755975628732,
+      "qa_transition_generator_distance_mean": 0.006999300069993001,
+      "qa_transition_generator_distance_sum": 70.0,
+      "qa_transition_irreversible_edge_fraction": 0.47692307692307695,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 388.0,
+      "qa_transition_return_time_mean": 33.09629852542883,
+      "qa_transition_return_time_std": 561.2188221281476,
+      "qa_transition_reversal_count": 9865.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 130.0,
       "qa_unique_states": 64.0,
       "rows": 10001,
       "split": "heldout"
@@ -9062,6 +9595,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 54.53234628065357,
       "qa_shell_hdb_total_variation_mj_per_kg": 57.093574055628174,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 950.0,
+      "qa_transition_branch_asymmetry": 0.5936842105263158,
+      "qa_transition_edge_reuse_ratio": 65.79605263157895,
+      "qa_transition_entropy": 4.1728494515650745,
+      "qa_transition_generator_distance_mean": 0.007599240075992401,
+      "qa_transition_generator_distance_sum": 76.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 564.0,
+      "qa_transition_return_time_mean": 39.139616581351,
+      "qa_transition_return_time_std": 612.3734266523264,
+      "qa_transition_reversal_count": 9849.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 152.0,
       "qa_unique_states": 76.0,
       "rows": 10001,
       "split": "calibration"
@@ -9538,6 +10086,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 88.38362869228423,
       "qa_shell_hdb_total_variation_mj_per_kg": 91.8209472750075,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1050.0,
+      "qa_transition_branch_asymmetry": 0.6838095238095238,
+      "qa_transition_edge_reuse_ratio": 59.529761904761905,
+      "qa_transition_entropy": 4.272356884273724,
+      "qa_transition_generator_distance_mean": 0.008399160083991601,
+      "qa_transition_generator_distance_sum": 84.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 718.0,
+      "qa_transition_return_time_mean": 43.168842253238275,
+      "qa_transition_return_time_std": 644.1556017455267,
+      "qa_transition_reversal_count": 9833.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 168.0,
       "qa_unique_states": 84.0,
       "rows": 10001,
       "split": "calibration"
@@ -10014,6 +10577,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 127.22505899183304,
       "qa_shell_hdb_total_variation_mj_per_kg": 136.85442906903924,
       "qa_shell_unseen_state_fraction": 0.12868713128687131,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1100.0,
+      "qa_transition_branch_asymmetry": 0.7636363636363637,
+      "qa_transition_edge_reuse_ratio": 56.82386363636363,
+      "qa_transition_entropy": 4.194477989234568,
+      "qa_transition_generator_distance_mean": 0.008799120087991202,
+      "qa_transition_generator_distance_sum": 88.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 840.0,
+      "qa_transition_return_time_mean": 45.1886110274179,
+      "qa_transition_return_time_std": 659.5503613060754,
+      "qa_transition_reversal_count": 9825.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 176.0,
       "qa_unique_states": 88.0,
       "rows": 10001,
       "split": "heldout"
@@ -10490,6 +11068,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 195.83783006728004,
       "qa_shell_hdb_total_variation_mj_per_kg": 201.56620335060887,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1150.0,
+      "qa_transition_branch_asymmetry": 0.8069565217391305,
+      "qa_transition_edge_reuse_ratio": 54.650273224043715,
+      "qa_transition_entropy": 4.118180047635429,
+      "qa_transition_generator_distance_mean": 0.0091990800919908,
+      "qa_transition_generator_distance_sum": 92.0,
+      "qa_transition_irreversible_edge_fraction": 0.5027322404371585,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 928.0,
+      "qa_transition_return_time_mean": 47.19578101456555,
+      "qa_transition_return_time_std": 674.3975055722922,
+      "qa_transition_reversal_count": 9818.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 183.0,
       "qa_unique_states": 92.0,
       "rows": 10001,
       "split": "calibration"
@@ -10966,6 +11559,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 6.260176996619017,
       "qa_shell_hdb_total_variation_mj_per_kg": 6.635575199811985,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 528.0,
+      "qa_transition_branch_asymmetry": 0.2159090909090909,
+      "qa_transition_edge_reuse_ratio": 123.46913580246914,
+      "qa_transition_entropy": 3.529283578756868,
+      "qa_transition_generator_distance_mean": 0.004199580041995801,
+      "qa_transition_generator_distance_sum": 42.0,
+      "qa_transition_irreversible_edge_fraction": 0.48148148148148145,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 114.0,
+      "qa_transition_return_time_mean": 21.027903015729887,
+      "qa_transition_return_time_std": 441.51509574925353,
+      "qa_transition_reversal_count": 9919.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 81.0,
       "qa_unique_states": 40.0,
       "rows": 10001,
       "split": "calibration"
@@ -11442,6 +12050,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 22.5871561468946,
       "qa_shell_hdb_total_variation_mj_per_kg": 24.21686034411273,
       "qa_shell_unseen_state_fraction": 0.05829417058294171,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 782.0,
+      "qa_transition_branch_asymmetry": 0.3938618925831202,
+      "qa_transition_edge_reuse_ratio": 86.21551724137932,
+      "qa_transition_entropy": 3.818330338888671,
+      "qa_transition_generator_distance_mean": 0.006399360063993601,
+      "qa_transition_generator_distance_sum": 64.0,
+      "qa_transition_irreversible_edge_fraction": 0.4482758620689655,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 308.0,
+      "qa_transition_return_time_mean": 29.0722450616665,
+      "qa_transition_return_time_std": 524.4144472919968,
+      "qa_transition_reversal_count": 9889.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 116.0,
       "qa_unique_states": 56.0,
       "rows": 10001,
       "split": "heldout"
@@ -11918,6 +12541,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 43.91166227791428,
       "qa_shell_hdb_total_variation_mj_per_kg": 45.279786888235854,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 900.0,
+      "qa_transition_branch_asymmetry": 0.5466666666666666,
+      "qa_transition_edge_reuse_ratio": 72.47101449275362,
+      "qa_transition_entropy": 4.024270974168994,
+      "qa_transition_generator_distance_mean": 0.0071992800719928,
+      "qa_transition_generator_distance_sum": 72.0,
+      "qa_transition_irreversible_edge_fraction": 0.4782608695652174,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 492.0,
+      "qa_transition_return_time_mean": 35.11156817497743,
+      "qa_transition_return_time_std": 578.819611159718,
+      "qa_transition_reversal_count": 9865.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 138.0,
       "qa_unique_states": 68.0,
       "rows": 10001,
       "split": "calibration"
@@ -12394,6 +13032,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 83.87576983836813,
       "qa_shell_hdb_total_variation_mj_per_kg": 87.7183833617445,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1024.0,
+      "qa_transition_branch_asymmetry": 0.677734375,
+      "qa_transition_edge_reuse_ratio": 62.11801242236025,
+      "qa_transition_entropy": 4.145158602579115,
+      "qa_transition_generator_distance_mean": 0.0081991800819918,
+      "qa_transition_generator_distance_sum": 82.0,
+      "qa_transition_irreversible_edge_fraction": 0.4906832298136646,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 694.0,
+      "qa_transition_return_time_mean": 41.154301776930026,
+      "qa_transition_return_time_std": 628.48248168104,
+      "qa_transition_reversal_count": 9841.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 161.0,
       "qa_unique_states": 80.0,
       "rows": 10001,
       "split": "calibration"
@@ -12870,6 +13523,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 165.97492166501667,
       "qa_shell_hdb_total_variation_mj_per_kg": 175.22329940086905,
       "qa_shell_unseen_state_fraction": 0.06309369063093691,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1100.0,
+      "qa_transition_branch_asymmetry": 0.76,
+      "qa_transition_edge_reuse_ratio": 56.82386363636363,
+      "qa_transition_entropy": 4.257807427812163,
+      "qa_transition_generator_distance_mean": 0.008799120087991202,
+      "qa_transition_generator_distance_sum": 88.0,
+      "qa_transition_irreversible_edge_fraction": 0.5,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 836.0,
+      "qa_transition_return_time_mean": 45.1899166415587,
+      "qa_transition_return_time_std": 659.5551845486948,
+      "qa_transition_reversal_count": 9825.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 176.0,
       "qa_unique_states": 88.0,
       "rows": 10001,
       "split": "heldout"
@@ -13346,6 +14014,21 @@
       "qa_shell_hdb_positive_mj_per_kg": 241.22337440087742,
       "qa_shell_hdb_total_variation_mj_per_kg": 249.02762344313768,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 0.0,
+      "qa_transition_abs_orientation_flux": 1150.0,
+      "qa_transition_branch_asymmetry": 0.8417391304347827,
+      "qa_transition_edge_reuse_ratio": 54.650273224043715,
+      "qa_transition_entropy": 4.14978881078319,
+      "qa_transition_generator_distance_mean": 0.0091990800919908,
+      "qa_transition_generator_distance_sum": 92.0,
+      "qa_transition_irreversible_edge_fraction": 0.5027322404371585,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 968.0,
+      "qa_transition_return_time_mean": 47.20858864892014,
+      "qa_transition_return_time_std": 674.5734829982623,
+      "qa_transition_reversal_count": 9818.0,
+      "qa_transition_signed_flux": 0.0,
+      "qa_transition_unique_edges": 183.0,
       "qa_unique_states": 92.0,
       "rows": 10001,
       "split": "calibration"
@@ -13822,12 +14505,28 @@
       "qa_shell_hdb_positive_mj_per_kg": 250.46421057193174,
       "qa_shell_hdb_total_variation_mj_per_kg": 257.26499247202673,
       "qa_shell_unseen_state_fraction": 0.0,
+      "qa_transition_abs_flux": 1.0,
+      "qa_transition_abs_orientation_flux": 1187.0,
+      "qa_transition_branch_asymmetry": 0.8534119629317607,
+      "qa_transition_edge_reuse_ratio": 54.650273224043715,
+      "qa_transition_entropy": 3.999001683388572,
+      "qa_transition_generator_distance_mean": 0.0093990600939906,
+      "qa_transition_generator_distance_sum": 94.0,
+      "qa_transition_irreversible_edge_fraction": 0.4918032786885246,
+      "qa_transition_loop_closure_defect": 0.0,
+      "qa_transition_orientation_flux": 1013.0,
+      "qa_transition_return_time_mean": 46.66400482145548,
+      "qa_transition_return_time_std": 670.3182379386049,
+      "qa_transition_reversal_count": 9819.0,
+      "qa_transition_signed_flux": 1.0,
+      "qa_transition_unique_edges": 183.0,
       "qa_unique_states": 91.0,
       "rows": 10001,
       "split": "calibration"
     }
   ],
   "transfer_split_summary": {
+    "best_transition_family": "qa_transition_plus_shell",
     "lifted_pair_sweep_summary": {
       "best_pair": {
         "b_var": "X",
@@ -13954,6 +14653,7 @@
         }
       ]
     },
+    "nonqa_shell_plus_transition_rmse_wins_vs_nonqa_shell": 2,
     "phase_pair_sweep_summary": {
       "best_pair": {
         "b_var": "X",
@@ -14082,6 +14782,8 @@
     },
     "qa_lifted_j_pi_r2_wins_vs_nonqa_shell": 3,
     "qa_lifted_j_pi_rmse_wins_vs_nonqa_shell": 3,
+    "qa_transition_only_rmse_wins_vs_nonqa_shell": 0,
+    "qa_transition_plus_shell_rmse_wins_vs_nonqa_shell": 2,
     "split_count": 12,
     "splits": [
       {
@@ -14807,6 +15509,12 @@
             "r2": 0.984934989508211,
             "rmse_mj_per_kg": 5.894477155982403
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 10.458880724460345,
+            "mape": 0.6910027419455488,
+            "r2": 0.9396055448549399,
+            "rmse_mj_per_kg": 11.802094928179702
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 4.36137574771445,
             "mape": 0.1314926052688481,
@@ -14825,6 +15533,18 @@
             "r2": 0.9721929287371951,
             "rmse_mj_per_kg": 8.0082605517487
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 46.07739546766461,
+            "mape": 6.426041070463106,
+            "r2": -0.9541876570894594,
+            "rmse_mj_per_kg": 67.13418216155151
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 12.86406760813937,
+            "mape": 0.6740649734824415,
+            "r2": 0.9047822909558793,
+            "rmse_mj_per_kg": 14.819018278957904
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.12276275257930101,
             "mape": 0.002484926353649423,
@@ -14838,6 +15558,7 @@
             "rmse_mj_per_kg": 8.137591119912768
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -15822,6 +16543,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": true,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": true,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "index_mod3_holdout"
       },
       {
@@ -16547,6 +17270,12 @@
             "r2": 0.9940657513929578,
             "rmse_mj_per_kg": 1.1488559459385628
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 106.6947239003866,
+            "mape": 13.55908174056107,
+            "r2": -65.62190936536447,
+            "rmse_mj_per_kg": 121.72821276474008
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 2.235875045508579,
             "mape": 0.09262732581749582,
@@ -16565,6 +17294,18 @@
             "r2": 0.9932540706684796,
             "rmse_mj_per_kg": 1.2249083684061426
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 155.3171814983013,
+            "mape": 18.081303891789446,
+            "r2": -136.14946518540634,
+            "rmse_mj_per_kg": 174.6544949540743
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 116.39050853961119,
+            "mape": 14.601044291881852,
+            "r2": -78.23696118607926,
+            "rmse_mj_per_kg": 132.75369376451889
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.05234861552900275,
             "mape": 0.002489246878451317,
@@ -16578,6 +17319,7 @@
             "rmse_mj_per_kg": 10.568182938158824
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -17562,6 +18304,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "frequency_50Hz_holdout"
       },
       {
@@ -18287,6 +19031,12 @@
             "r2": 0.9896861633157268,
             "rmse_mj_per_kg": 3.133429473245341
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 2029.8633807933002,
+            "mape": 188.87926456505178,
+            "r2": -4330.727823981853,
+            "rmse_mj_per_kg": 2030.6747998059354
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 3.3956016907743383,
             "mape": 0.0768714774889233,
@@ -18305,6 +19055,18 @@
             "r2": 0.9885353009583742,
             "rmse_mj_per_kg": 3.303627923659434
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 14678.225350943521,
+            "mape": 1329.095288004928,
+            "r2": -226325.82463952634,
+            "rmse_mj_per_kg": 14678.369436415407
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 3818.818781196631,
+            "mape": 351.1824063471736,
+            "r2": -15323.007313797129,
+            "rmse_mj_per_kg": 3819.4073040799776
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.10504077371211983,
             "mape": 0.002672606630128818,
@@ -18318,6 +19080,7 @@
             "rmse_mj_per_kg": 12.709521918662526
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -19302,6 +20065,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "frequency_400Hz_holdout"
       },
       {
@@ -20027,6 +20792,12 @@
             "r2": 0.9793589078373275,
             "rmse_mj_per_kg": 8.109258119185736
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 22.335752859131755,
+            "mape": 1.9127724551867924,
+            "r2": 0.7754642937015715,
+            "rmse_mj_per_kg": 26.745917127253346
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 4.591690812218181,
             "mape": 0.08413849749940862,
@@ -20045,6 +20816,18 @@
             "r2": 0.9631984285603755,
             "rmse_mj_per_kg": 10.82799308177165
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 35.83300464280711,
+            "mape": 3.910994013043138,
+            "r2": 0.3302733053347,
+            "rmse_mj_per_kg": 46.191662433535186
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 25.658856695233492,
+            "mape": 2.0355983994225304,
+            "r2": 0.691219200706169,
+            "rmse_mj_per_kg": 31.364612862685057
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.1621350320815464,
             "mape": 0.0024640762458199984,
@@ -20058,6 +20841,7 @@
             "rmse_mj_per_kg": 7.163234734419962
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -21042,6 +21826,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": true,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": true,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "frequency_1000Hz_holdout"
       },
       {
@@ -21072,7 +21858,7 @@
           "rmse_ratio_to_nonqa": 1.0
         },
         "best_model_by_rmse": "raw_physical_hdb_direct",
-        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "best_nonraw_model_by_rmse": "nonqa_shell_plus_transition",
         "best_phase_pair_by_r2": {
           "b_var": "K",
           "beats_nonqa_by_mae": true,
@@ -21767,6 +22553,12 @@
             "r2": 0.7214633964426695,
             "rmse_mj_per_kg": 53.251671504130506
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 30.63699027853928,
+            "mape": 0.34033013749101776,
+            "r2": 0.7682843002552785,
+            "rmse_mj_per_kg": 48.57019382468577
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 41.95334173219307,
             "mape": 0.24059055535875526,
@@ -21785,6 +22577,18 @@
             "r2": 0.6841393413595465,
             "rmse_mj_per_kg": 56.70741817984234
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 39.11330048024915,
+            "mape": 0.4839149039904142,
+            "r2": 0.6959899853053256,
+            "rmse_mj_per_kg": 55.633457557527926
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 32.29209400927287,
+            "mape": 0.39147146949396383,
+            "r2": 0.7582776920532968,
+            "rmse_mj_per_kg": 49.60785770572805
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.27484744623325597,
             "mape": 0.002419380668927828,
@@ -21798,6 +22602,7 @@
             "rmse_mj_per_kg": 62.32665171372466
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": true,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -22782,6 +23587,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": true,
         "split": "frequency_2000Hz_holdout"
       },
       {
@@ -23507,6 +24314,12 @@
             "r2": 0.9934439942255822,
             "rmse_mj_per_kg": 0.12713747980796583
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 87.82246762706052,
+            "mape": 35.40897107673437,
+            "r2": -3735.4912295691806,
+            "rmse_mj_per_kg": 95.98114317138183
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 0.27897113659025163,
             "mape": 0.0920627333937293,
@@ -23525,6 +24338,18 @@
             "r2": 0.9718829571830385,
             "rmse_mj_per_kg": 0.263292662197723
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 147.52776340270637,
+            "mape": 61.862655055964204,
+            "r2": -12535.345954814522,
+            "rmse_mj_per_kg": 175.80831796936394
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 104.05426122864435,
+            "mape": 42.21355707765058,
+            "r2": -5328.2429361003815,
+            "rmse_mj_per_kg": 114.62693862767689
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.008557635574201916,
             "mape": 0.002395133574598623,
@@ -23538,6 +24363,7 @@
             "rmse_mj_per_kg": 0.5615272323611821
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -24522,6 +25348,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.20T_holdout"
       },
       {
@@ -25247,6 +26075,12 @@
             "r2": 0.9887390501724346,
             "rmse_mj_per_kg": 0.5765510009300541
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 35.04187450879183,
+            "mape": 4.966358158013958,
+            "r2": -77.08808692641348,
+            "rmse_mj_per_kg": 48.011205456634684
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 1.4924519344909395,
             "mape": 0.14296131667716144,
@@ -25265,6 +26099,18 @@
             "r2": 0.9918171433963715,
             "rmse_mj_per_kg": 0.49147642326214724
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 23.560718357062395,
+            "mape": 3.3653726291877617,
+            "r2": -40.82689118973812,
+            "rmse_mj_per_kg": 35.13807876175566
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 41.95833391740685,
+            "mape": 5.942963583462389,
+            "r2": -111.78459217341387,
+            "rmse_mj_per_kg": 57.699905971999264
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.030546169230136755,
             "mape": 0.0025241877455698756,
@@ -25278,6 +26124,7 @@
             "rmse_mj_per_kg": 1.3480225772779615
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -26262,6 +27109,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.40T_holdout"
       },
       {
@@ -26987,6 +27836,12 @@
             "r2": 0.9981546646642531,
             "rmse_mj_per_kg": 0.5148974288989913
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 5.530301637029366,
+            "mape": 0.32650526974878974,
+            "r2": 0.741067664867203,
+            "rmse_mj_per_kg": 6.099246957084968
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 2.092645365547602,
             "mape": 0.10909509173626505,
@@ -27005,6 +27860,18 @@
             "r2": 0.9913073946498808,
             "rmse_mj_per_kg": 1.117527079599402
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 7.103361276723911,
+            "mape": 0.2626040245717442,
+            "r2": 0.47487777798857467,
+            "rmse_mj_per_kg": 8.685868953790585
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 7.157115892161203,
+            "mape": 0.3865451509498552,
+            "r2": 0.6175347297280365,
+            "rmse_mj_per_kg": 7.412745277641532
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.06160636601310676,
             "mape": 0.0024191617954235052,
@@ -27018,6 +27885,7 @@
             "rmse_mj_per_kg": 3.4076439789615427
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -28002,6 +28870,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.60T_holdout"
       },
       {
@@ -28727,6 +29597,12 @@
             "r2": 0.9856255869092425,
             "rmse_mj_per_kg": 2.798664150130505
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 7.532553996094949,
+            "mape": 0.33462718412277986,
+            "r2": 0.8197114813904082,
+            "rmse_mj_per_kg": 9.91150853049519
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 9.488378590039918,
             "mape": 0.20345430551488575,
@@ -28745,6 +29621,18 @@
             "r2": 0.9860836836178806,
             "rmse_mj_per_kg": 2.7537079019731263
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 37.5267869969278,
+            "mape": 1.2480190520332661,
+            "r2": -2.0310452983882046,
+            "rmse_mj_per_kg": 40.63983512899752
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 11.699543744399383,
+            "mape": 0.48372870502875115,
+            "r2": 0.6197578591245375,
+            "rmse_mj_per_kg": 14.394144136927423
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.11450178318455961,
             "mape": 0.0025694730631500282,
@@ -28758,6 +29646,7 @@
             "rmse_mj_per_kg": 5.93710394438769
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -29742,6 +30631,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.80T_holdout"
       },
       {
@@ -30467,6 +31358,12 @@
             "r2": 0.8612222718749096,
             "rmse_mj_per_kg": 15.11043125543404
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 17.082719079082835,
+            "mape": 0.3712702670260228,
+            "r2": 0.7384042224865073,
+            "rmse_mj_per_kg": 20.745902735753617
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 3.047569279458096,
             "mape": 0.060555983576683084,
@@ -30485,6 +31382,18 @@
             "r2": 0.7547689254968346,
             "rmse_mj_per_kg": 20.086520999594732
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 16.279877848030345,
+            "mape": 0.508697316868305,
+            "r2": 0.6440079827693699,
+            "rmse_mj_per_kg": 24.20121123594494
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 21.742238787387762,
+            "mape": 0.46766715177878043,
+            "r2": 0.6025535974474203,
+            "rmse_mj_per_kg": 25.57150316288136
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.18228269893450122,
             "mape": 0.0027517805871576364,
@@ -30498,6 +31407,7 @@
             "rmse_mj_per_kg": 11.947146379321076
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -31482,6 +32392,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": true,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": true,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_1.00T_holdout"
       },
       {
@@ -32207,6 +33119,12 @@
             "r2": 0.93939585643889,
             "rmse_mj_per_kg": 16.94387647447852
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 11.865068148076247,
+            "mape": 0.10328523912785045,
+            "r2": 0.9242865599739692,
+            "rmse_mj_per_kg": 18.93861026534683
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 15.691244252713787,
             "mape": 0.10383740012229199,
@@ -32225,6 +33143,18 @@
             "r2": 0.9305314554025631,
             "rmse_mj_per_kg": 18.14077002225923
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 15.951434789221308,
+            "mape": 0.13884684434503514,
+            "r2": 0.9059635075023005,
+            "rmse_mj_per_kg": 21.10618927294581
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 15.894705465564483,
+            "mape": 0.14809114079066243,
+            "r2": 0.8935089985501096,
+            "rmse_mj_per_kg": 22.460430342418896
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.27828627463816424,
             "mape": 0.002477035599305834,
@@ -32238,6 +33168,7 @@
             "rmse_mj_per_kg": 31.73626958883069
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": false,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -33222,6 +34153,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_1.20T_holdout"
       },
       {
@@ -33252,7 +34185,7 @@
           "rmse_ratio_to_nonqa": 1.0000000000000004
         },
         "best_model_by_rmse": "raw_physical_hdb_direct",
-        "best_nonraw_model_by_rmse": "steinmetz_log_linear_baseline",
+        "best_nonraw_model_by_rmse": "nonqa_shell_plus_transition",
         "best_phase_pair_by_r2": {
           "b_var": "b",
           "beats_nonqa_by_mae": true,
@@ -33947,6 +34880,12 @@
             "r2": 0.583467746278967,
             "rmse_mj_per_kg": 61.24182182803763
           },
+          "nonqa_shell_plus_transition": {
+            "mae_mj_per_kg": 37.65818938944703,
+            "mape": 0.4034620331300416,
+            "r2": 0.8275031969640984,
+            "rmse_mj_per_kg": 39.410714527827245
+          },
           "qa_lifted_j_pi_shell_direct": {
             "mae_mj_per_kg": 55.227747945863754,
             "mape": 0.30514375069270316,
@@ -33965,6 +34904,18 @@
             "r2": 0.5357107107420578,
             "rmse_mj_per_kg": 64.65738202584784
           },
+          "qa_transition_only": {
+            "mae_mj_per_kg": 62.34752998870089,
+            "mape": 0.7073330476869052,
+            "r2": 0.38958968201219346,
+            "rmse_mj_per_kg": 74.1369502466317
+          },
+          "qa_transition_plus_shell": {
+            "mae_mj_per_kg": 42.206816310220056,
+            "mape": 0.46039364662552223,
+            "r2": 0.7732298176602874,
+            "rmse_mj_per_kg": 45.18733805648303
+          },
           "raw_physical_hdb_direct": {
             "mae_mj_per_kg": 0.3643698406481981,
             "mape": 0.0024425208756184307,
@@ -33978,6 +34929,7 @@
             "rmse_mj_per_kg": 55.88660898457477
           }
         },
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": true,
         "phase_pair_sweep": [
           {
             "b_var": "b",
@@ -34962,6 +35914,8 @@
         ],
         "qa_lifted_j_pi_beats_nonqa_by_r2": false,
         "qa_lifted_j_pi_beats_nonqa_by_rmse": false,
+        "qa_transition_only_beats_nonqa_by_rmse": false,
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": true,
         "split": "amplitude_1.35T_holdout"
       }
     ]
@@ -34976,6 +35930,7 @@
     "qa_lifted_vs_nonqa_shell_here": "MIXED: calibrated QA J/Pi shells have higher held-out R2 than ordinary H/B shell binning, but worse MAE/RMSE. This is not yet a clean QA-specific win.",
     "qa_not_random": "YES: QA-only held-out models reduce error substantially relative to the mean-loss baseline on real measured loops.",
     "shell_result_interpretation": "The raw physical loop integral is the expected upper-bound sanity check. Ordinary non-QA H/B shell binning explains most of the direct shell result and beats the joint (b,e) QA state shell by MAE/RMSE. A lifted QA J/Pi shell slightly beats non-QA by R2 but not by MAE/RMSE, so this run supports finite-shell hysteresis mapping and only a mixed, not decisive, QA-specific advantage.",
-    "transfer_result_interpretation": "Across 12 index/frequency/amplitude transfer splits, QA J/Pi beats ordinary non-QA shell by R2 in 3 splits and by RMSE in 3 splits. This hardens the conclusion by checking family-heldout transfer. The lifted-pair sweep reports whether another QA variable pair transfers more consistently."
+    "transfer_result_interpretation": "Across 12 index/frequency/amplitude transfer splits, QA J/Pi beats ordinary non-QA shell by R2 in 3 splits and by RMSE in 3 splits. This hardens the conclusion by checking family-heldout transfer. The lifted-pair sweep reports whether another QA variable pair transfers more consistently.",
+    "transition_result_interpretation": "Transition-only QA wins 0 of 12 RMSE transfer splits against non-QA shell; QA transition plus QA shell wins 2; non-QA shell plus QA transition wins 2. Best transition family: qa_transition_plus_shell."
   }
 }

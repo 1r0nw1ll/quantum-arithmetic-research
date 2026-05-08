@@ -40,6 +40,23 @@ DATASET_TITLE = "Dataset of Experimental Non-Standard Dynamic Hysteresis Loops"
 DENSITY_KG_PER_M3 = 7632.0
 MODULUS = 24
 QA_LIFTED_VARIABLES = ("b", "e", "J", "X", "K", "Pi", "K_minus_J")
+QA_TRANSITION_FEATURES = [
+    "qa_transition_unique_edges",
+    "qa_transition_edge_reuse_ratio",
+    "qa_transition_entropy",
+    "qa_transition_reversal_count",
+    "qa_transition_irreversible_edge_fraction",
+    "qa_transition_signed_flux",
+    "qa_transition_abs_flux",
+    "qa_transition_orientation_flux",
+    "qa_transition_abs_orientation_flux",
+    "qa_transition_branch_asymmetry",
+    "qa_transition_return_time_mean",
+    "qa_transition_return_time_std",
+    "qa_transition_loop_closure_defect",
+    "qa_transition_generator_distance_sum",
+    "qa_transition_generator_distance_mean",
+]
 
 
 @dataclass(frozen=True)
@@ -157,6 +174,104 @@ def phase_stats(x: list[float], y: list[float]) -> dict[str, float]:
     return {
         "winding": winding / (2.0 * math.pi),
         "total_variation": total_variation,
+    }
+
+
+def qa_transition_observables(b_seq: list[int], e_seq: list[int]) -> dict[str, float]:
+    states = list(zip(b_seq, e_seq))
+    closed_states = states + [states[0]]
+    edges = list(zip(closed_states[:-1], closed_states[1:]))
+    edge_counts: dict[tuple[tuple[int, int], tuple[int, int]], int] = {}
+    for edge in edges:
+        edge_counts[edge] = edge_counts.get(edge, 0) + 1
+
+    total_edges = len(edges)
+    unique_edges = len(edge_counts)
+    entropy = 0.0
+    for count in edge_counts.values():
+        p = count / total_edges
+        entropy -= p * math.log(p)
+
+    reversal_count = 0
+    for edge_a, edge_b in zip(edges, edges[1:] + edges[:1]):
+        if edge_a[0] == edge_b[1] and edge_a[1] == edge_b[0]:
+            reversal_count += 1
+
+    irreversible = 0
+    for edge in edge_counts:
+        reverse = (edge[1], edge[0])
+        if reverse not in edge_counts:
+            irreversible += 1
+
+    signed_flux = 0.0
+    abs_flux = 0.0
+    orientation_flux = 0.0
+    abs_orientation_flux = 0.0
+    positive_orientation = 0.0
+    negative_orientation = 0.0
+    generator_distance_sum = 0.0
+    for (b0, e0), (b1, e1) in edges:
+        db = b1 - b0
+        de = e1 - e0
+        flux = db * de
+        orientation = b0 * de - e0 * db
+        signed_flux += flux
+        abs_flux += abs(flux)
+        orientation_flux += orientation
+        abs_orientation_flux += abs(orientation)
+        if orientation >= 0:
+            positive_orientation += orientation
+        else:
+            negative_orientation -= orientation
+        generator_distance_sum += abs(db) + abs(de)
+
+    branch_denom = positive_orientation + negative_orientation
+    branch_asymmetry = (
+        (positive_orientation - negative_orientation) / branch_denom
+        if branch_denom > 0.0
+        else 0.0
+    )
+
+    last_seen: dict[tuple[int, int], int] = {}
+    return_times: list[int] = []
+    doubled = states + states
+    for idx, state in enumerate(doubled):
+        if state in last_seen:
+            delta = idx - last_seen[state]
+            if 0 < delta <= len(states):
+                return_times.append(delta)
+        last_seen[state] = idx
+    if return_times:
+        return_mean = statistics.mean(return_times)
+        return_std = statistics.pstdev(return_times) if len(return_times) > 1 else 0.0
+    else:
+        return_mean = float(len(states))
+        return_std = 0.0
+
+    first_b, first_e = states[0]
+    last_b, last_e = states[-1]
+    closure_defect = abs(last_b - first_b) + abs(last_e - first_e)
+
+    return {
+        "qa_transition_unique_edges": float(unique_edges),
+        "qa_transition_edge_reuse_ratio": total_edges / unique_edges if unique_edges else 0.0,
+        "qa_transition_entropy": entropy,
+        "qa_transition_reversal_count": float(reversal_count),
+        "qa_transition_irreversible_edge_fraction": irreversible / unique_edges
+        if unique_edges
+        else 0.0,
+        "qa_transition_signed_flux": signed_flux,
+        "qa_transition_abs_flux": abs_flux,
+        "qa_transition_orientation_flux": orientation_flux,
+        "qa_transition_abs_orientation_flux": abs_orientation_flux,
+        "qa_transition_branch_asymmetry": branch_asymmetry,
+        "qa_transition_return_time_mean": return_mean,
+        "qa_transition_return_time_std": return_std,
+        "qa_transition_loop_closure_defect": float(closure_defect),
+        "qa_transition_generator_distance_sum": generator_distance_sum,
+        "qa_transition_generator_distance_mean": generator_distance_sum / total_edges
+        if total_edges
+        else 0.0,
     }
 
 
@@ -448,6 +563,7 @@ def qa_observables(
     }
     fixed.update(all_lifted)
     fixed.update(all_lifted_unseen)
+    fixed.update(qa_transition_observables(b_seq, e_seq))
     return fixed
 
 
@@ -646,7 +762,7 @@ def build_records_for_split(
 def direct_model_suite(
     records: list[dict], calibration_names: set[str], heldout_names: set[str]
 ) -> dict:
-    return {
+    models = {
         "mean_loss_baseline": mean_baseline(records, calibration_names, heldout_names),
         "steinmetz_log_linear_baseline": fit_steinmetz(records, calibration_names, heldout_names),
         "raw_physical_hdb_direct": direct_prediction(
@@ -671,6 +787,22 @@ def direct_model_suite(
             records, heldout_names, "qa_lifted_j_pi_shell_energy_mj_per_kg"
         ),
     }
+    models["qa_transition_only"] = fit_predict(
+        records, calibration_names, heldout_names, QA_TRANSITION_FEATURES
+    )
+    models["qa_transition_plus_shell"] = fit_predict(
+        records,
+        calibration_names,
+        heldout_names,
+        ["qa_shell_hdb_energy_mj_per_kg"] + QA_TRANSITION_FEATURES,
+    )
+    models["nonqa_shell_plus_transition"] = fit_predict(
+        records,
+        calibration_names,
+        heldout_names,
+        ["nonqa_shell_hdb_energy_mj_per_kg"] + QA_TRANSITION_FEATURES,
+    )
+    return models
 
 
 def direct_comparison_rows(heldout_models: dict, comparison_order: list[str]) -> list[dict]:
@@ -833,6 +965,9 @@ def summarize_transfer_split(
     )
     nonqa = models["nonqa_shell_hdb_direct"]["heldout"]
     qa_j_pi = models["qa_lifted_j_pi_shell_direct"]["heldout"]
+    transition_only = models["qa_transition_only"]["heldout"]
+    transition_plus_shell = models["qa_transition_plus_shell"]["heldout"]
+    nonqa_plus_transition = models["nonqa_shell_plus_transition"]["heldout"]
     return {
         "split": split_name,
         "calibration_count": len(calibration_names),
@@ -841,6 +976,16 @@ def summarize_transfer_split(
         "best_nonraw_model_by_rmse": best_shell_by_rmse["model"],
         "qa_lifted_j_pi_beats_nonqa_by_r2": qa_j_pi["r2"] > nonqa["r2"],
         "qa_lifted_j_pi_beats_nonqa_by_rmse": qa_j_pi["rmse_mj_per_kg"] < nonqa["rmse_mj_per_kg"],
+        "qa_transition_only_beats_nonqa_by_rmse": transition_only["rmse_mj_per_kg"]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_transition_plus_shell_beats_nonqa_by_rmse": transition_plus_shell[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "nonqa_shell_plus_transition_beats_nonqa_by_rmse": nonqa_plus_transition[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
         "best_lifted_pair_by_rmse": min(pair_rows, key=lambda row: row["rmse_mj_per_kg"]),
         "best_lifted_pair_by_r2": max(pair_rows, key=lambda row: row["r2"]),
         "lifted_pair_sweep": pair_rows,
@@ -922,6 +1067,9 @@ def main() -> int:
         "qa_lifted_kx_shell_direct",
         "qa_lifted_k_minus_j_x_shell_direct",
         "qa_lifted_j_pi_shell_direct",
+        "qa_transition_only",
+        "qa_transition_plus_shell",
+        "nonqa_shell_plus_transition",
         "qa_be_only",
         "qa_lifted_packet",
         "steinmetz_plus_qa_shape_log_model",
@@ -941,6 +1089,9 @@ def main() -> int:
         "qa_shell_hdb_direct",
         "qa_lifted_jx_shell_direct",
         "qa_lifted_j_pi_shell_direct",
+        "qa_transition_only",
+        "qa_transition_plus_shell",
+        "nonqa_shell_plus_transition",
     ]
     split_summaries = [
         summarize_transfer_split(name, traces, cal, hold, transfer_order)
@@ -955,6 +1106,27 @@ def main() -> int:
     )
     qa_j_pi_rmse_wins = sum(
         1 for split in split_summaries if split["qa_lifted_j_pi_beats_nonqa_by_rmse"]
+    )
+    transition_only_rmse_wins = sum(
+        1 for split in split_summaries if split["qa_transition_only_beats_nonqa_by_rmse"]
+    )
+    transition_plus_shell_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_transition_plus_shell_beats_nonqa_by_rmse"]
+    )
+    nonqa_plus_transition_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["nonqa_shell_plus_transition_beats_nonqa_by_rmse"]
+    )
+    transition_family_scores = {
+        "qa_transition_only": transition_only_rmse_wins,
+        "qa_transition_plus_shell": transition_plus_shell_rmse_wins,
+        "nonqa_shell_plus_transition": nonqa_plus_transition_rmse_wins,
+    }
+    best_transition_family = max(
+        transition_family_scores, key=lambda name: transition_family_scores[name]
     )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
@@ -1005,7 +1177,9 @@ def main() -> int:
                 "abs(integral Pi dX)",
                 "sum 0.5*(Pi_i+Pi_j)*abs(delta_X)",
                 "unique (b,e) states",
+                "closed-loop transition graph observables over state_t=(b_t,e_t)",
             ],
+            "transition_features": QA_TRANSITION_FEATURES,
         },
         "heldout_models": heldout_models,
         "direct_predictor_comparison": direct_comparison,
@@ -1014,6 +1188,10 @@ def main() -> int:
             "splits": split_summaries,
             "qa_lifted_j_pi_r2_wins_vs_nonqa_shell": qa_j_pi_r2_wins,
             "qa_lifted_j_pi_rmse_wins_vs_nonqa_shell": qa_j_pi_rmse_wins,
+            "qa_transition_only_rmse_wins_vs_nonqa_shell": transition_only_rmse_wins,
+            "qa_transition_plus_shell_rmse_wins_vs_nonqa_shell": transition_plus_shell_rmse_wins,
+            "nonqa_shell_plus_transition_rmse_wins_vs_nonqa_shell": nonqa_plus_transition_rmse_wins,
+            "best_transition_family": best_transition_family,
             "lifted_pair_sweep_summary": lifted_pair_sweep_summary,
             "phase_pair_sweep_summary": phase_pair_sweep_summary,
         },
@@ -1073,6 +1251,13 @@ def main() -> int:
                 f"{len(split_summaries)} splits and median RMSE ratio "
                 f"{best_phase_pair['median_rmse_ratio_to_nonqa']:.3f} relative to "
                 "ordinary non-QA shell."
+            ),
+            "transition_result_interpretation": (
+                f"Transition-only QA wins {transition_only_rmse_wins} of "
+                f"{len(split_summaries)} RMSE transfer splits against non-QA shell; "
+                f"QA transition plus QA shell wins {transition_plus_shell_rmse_wins}; "
+                f"non-QA shell plus QA transition wins {nonqa_plus_transition_rmse_wins}. "
+                f"Best transition family: {best_transition_family}."
             ),
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "

@@ -79,6 +79,12 @@ QA_MEMORY_FEATURES = [
     "qa_memory_abs_orientation_flux",
     "qa_memory_lag_weighted_orientation_flux",
 ]
+QA_RECONSTRUCTION_FIELDS = [
+    "qa_reconstruct_be_energy_mj_per_kg",
+    "qa_reconstruct_be_dir_energy_mj_per_kg",
+    "qa_reconstruct_be_branch_energy_mj_per_kg",
+    "qa_reconstruct_memory_full_energy_mj_per_kg",
+]
 
 
 @dataclass(frozen=True)
@@ -430,6 +436,33 @@ def qa_memory_observables(b_seq: list[int], e_seq: list[int]) -> dict[str, float
     }
 
 
+def qa_memory_contexts(
+    b_seq: list[int], e_seq: list[int]
+) -> list[tuple[tuple[int, int], tuple[int, int, int, int], tuple[int, int, str, str], tuple[int, int, int, int, str, str]]]:
+    states = list(zip(b_seq, e_seq))
+    closed_states = states + [states[0]]
+    prior_nonzero_sb = 0
+    contexts = []
+    for (b0, e0), (b1, e1) in zip(closed_states[:-1], closed_states[1:]):
+        db = b1 - b0
+        de = e1 - e0
+        sb = sign(db)
+        se = sign(de)
+        branch = branch_label(sb, prior_nonzero_sb)
+        lag = lag_label(sb, se)
+        if sb != 0:
+            prior_nonzero_sb = sb
+        contexts.append(
+            (
+                (b0, e0),
+                (b0, e0, sb, se),
+                (b0, e0, branch, lag),
+                (b0, e0, sb, se, branch, lag),
+            )
+        )
+    return contexts
+
+
 def physical_energy_mj_per_kg(trace: LoopTrace) -> float:
     area_j_per_m3 = abs(line_integral_y_dx(trace.b_t, trace.h_a_per_m))
     return 1000.0 * area_j_per_m3 / DENSITY_KG_PER_M3
@@ -533,6 +566,7 @@ def build_global_calibration(
     list[float],
     dict[tuple[int, int], tuple[float, float]],
     dict[tuple[str, str], dict[int, float]],
+    dict[str, dict[tuple, tuple[float, float]]],
 ]:
     h_values: list[float] = []
     b_values: list[float] = []
@@ -547,11 +581,18 @@ def build_global_calibration(
 
     state_values: dict[tuple[int, int], list[tuple[float, float]]] = {}
     lifted_values: dict[tuple[str, str], dict[int, list[float]]] = {}
+    reconstruction_values: dict[str, dict[tuple, list[tuple[float, float]]]] = {
+        "be": {},
+        "be_dir": {},
+        "be_branch": {},
+        "memory_full": {},
+    }
     for trace in traces:
         if trace.row.filename not in calibration_names:
             continue
         b_seq = bins(trace.h_a_per_m, h_edges)
         e_seq = bins(trace.b_t, b_edges)
+        context_seq = qa_memory_contexts(b_seq, e_seq)
         for h_value, b_value, b_state, e_state in zip(trace.h_a_per_m, trace.b_t, b_seq, e_seq):
             state_values.setdefault((b_state, e_state), []).append((h_value, b_value))
             vars_for_state = qa_vars(b_state, e_state)
@@ -559,6 +600,13 @@ def build_global_calibration(
                 key = vars_for_state[var_name]
                 lifted_values.setdefault(("H", var_name), {}).setdefault(key, []).append(h_value)
                 lifted_values.setdefault(("B", var_name), {}).setdefault(key, []).append(b_value)
+        for b_state, e_state, contexts in zip(b_seq, e_seq, context_seq):
+            h_shell = h_centers[b_state - 1]
+            b_shell = b_centers[e_state - 1]
+            for family, context in zip(
+                ("be", "be_dir", "be_branch", "memory_full"), contexts
+            ):
+                reconstruction_values[family].setdefault(context, []).append((h_shell, b_shell))
 
     state_centers = {
         state: (
@@ -571,7 +619,25 @@ def build_global_calibration(
         target_var: {key: statistics.mean(values) for key, values in value_map.items()}
         for target_var, value_map in lifted_values.items()
     }
-    return h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers
+    reconstruction_centers = {
+        family: {
+            context: (
+                statistics.mean(h_value for h_value, _ in values),
+                statistics.mean(b_value for _, b_value in values),
+            )
+            for context, values in value_map.items()
+        }
+        for family, value_map in reconstruction_values.items()
+    }
+    return (
+        h_edges,
+        b_edges,
+        h_centers,
+        b_centers,
+        state_centers,
+        lifted_centers,
+        reconstruction_centers,
+    )
 
 
 def qa_observables(
@@ -582,6 +648,7 @@ def qa_observables(
     b_centers: list[float],
     state_centers: dict[tuple[int, int], tuple[float, float]],
     lifted_centers: dict[tuple[str, str], dict[int, float]],
+    reconstruction_centers: dict[str, dict[tuple, tuple[float, float]]],
 ) -> dict[str, float]:
     b_seq = bins(trace.h_a_per_m, h_edges)
     e_seq = bins(trace.b_t, b_edges)
@@ -680,6 +747,34 @@ def qa_observables(
     qa_components = loop_components_mj_per_kg(qa_b_shell_seq, qa_h_shell_seq)
     nonqa_phase = phase_stats(nonqa_b_shell_seq, nonqa_h_shell_seq)
     qa_phase = phase_stats(qa_b_shell_seq, qa_h_shell_seq)
+    context_seq = qa_memory_contexts(b_seq, e_seq)
+
+    def reconstructed_energy(family: str, context_index: int) -> tuple[float, float]:
+        h_hat: list[float] = []
+        b_hat: list[float] = []
+        unseen = 0
+        family_map = reconstruction_centers.get(family, {})
+        be_map = reconstruction_centers.get("be", {})
+        for b_state, e_state, contexts in zip(b_seq, e_seq, context_seq):
+            center = family_map.get(contexts[context_index])
+            if center is None:
+                center = be_map.get((b_state, e_state))
+            if center is None:
+                unseen += 1
+                center = (h_centers[b_state - 1], b_centers[e_state - 1])
+            h_hat.append(center[0])
+            b_hat.append(center[1])
+        energy = 1000.0 * abs(line_integral_y_dx(b_hat, h_hat)) / DENSITY_KG_PER_M3
+        return energy, unseen / len(context_seq)
+
+    reconstruct_be, reconstruct_be_unseen = reconstructed_energy("be", 0)
+    reconstruct_be_dir, reconstruct_be_dir_unseen = reconstructed_energy("be_dir", 1)
+    reconstruct_be_branch, reconstruct_be_branch_unseen = reconstructed_energy(
+        "be_branch", 2
+    )
+    reconstruct_memory_full, reconstruct_memory_full_unseen = reconstructed_energy(
+        "memory_full", 3
+    )
 
     fixed = {
         "qa_be_loop_area": be_area,
@@ -715,6 +810,14 @@ def qa_observables(
         "qa_lifted_j_pi_unseen_fraction": lifted_j_pi_unseen,
         "qa_shell_unseen_state_fraction": unseen_state_count / len(b_seq),
         "qa_unique_states": float(len(set(zip(b_seq, e_seq)))),
+        "qa_reconstruct_be_energy_mj_per_kg": reconstruct_be,
+        "qa_reconstruct_be_unseen_fraction": reconstruct_be_unseen,
+        "qa_reconstruct_be_dir_energy_mj_per_kg": reconstruct_be_dir,
+        "qa_reconstruct_be_dir_unseen_fraction": reconstruct_be_dir_unseen,
+        "qa_reconstruct_be_branch_energy_mj_per_kg": reconstruct_be_branch,
+        "qa_reconstruct_be_branch_unseen_fraction": reconstruct_be_branch_unseen,
+        "qa_reconstruct_memory_full_energy_mj_per_kg": reconstruct_memory_full,
+        "qa_reconstruct_memory_full_unseen_fraction": reconstruct_memory_full_unseen,
     }
     fixed.update(all_lifted)
     fixed.update(all_lifted_unseen)
@@ -891,13 +994,20 @@ def direct_prediction(
 def build_records_for_split(
     traces: list[LoopTrace], calibration_names: set[str], heldout_names: set[str]
 ) -> list[dict]:
-    h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers = (
+    h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers, reconstruction_centers = (
         build_global_calibration(traces, calibration_names)
     )
     records: list[dict] = []
     for trace in traces:
         qa = qa_observables(
-            trace, h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers
+            trace,
+            h_edges,
+            b_edges,
+            h_centers,
+            b_centers,
+            state_centers,
+            lifted_centers,
+            reconstruction_centers,
         )
         physical_from_loop = physical_energy_mj_per_kg(trace)
         rec = {
@@ -941,6 +1051,18 @@ def direct_model_suite(
         ),
         "qa_lifted_j_pi_shell_direct": direct_prediction(
             records, heldout_names, "qa_lifted_j_pi_shell_energy_mj_per_kg"
+        ),
+        "qa_reconstruct_be_direct": direct_prediction(
+            records, heldout_names, "qa_reconstruct_be_energy_mj_per_kg"
+        ),
+        "qa_reconstruct_be_dir_direct": direct_prediction(
+            records, heldout_names, "qa_reconstruct_be_dir_energy_mj_per_kg"
+        ),
+        "qa_reconstruct_be_branch_direct": direct_prediction(
+            records, heldout_names, "qa_reconstruct_be_branch_energy_mj_per_kg"
+        ),
+        "qa_reconstruct_memory_full_direct": direct_prediction(
+            records, heldout_names, "qa_reconstruct_memory_full_energy_mj_per_kg"
         ),
     }
     models["qa_transition_only"] = fit_predict(
@@ -1156,6 +1278,10 @@ def summarize_transfer_split(
     nonqa_plus_memory = models["nonqa_shell_plus_qa_memory"]["heldout"]
     memory_plus_transition = models["qa_memory_plus_transition"]["heldout"]
     nonqa_plus_transition_memory = models["nonqa_shell_plus_transition_plus_memory"]["heldout"]
+    reconstruct_be = models["qa_reconstruct_be_direct"]["heldout"]
+    reconstruct_be_dir = models["qa_reconstruct_be_dir_direct"]["heldout"]
+    reconstruct_be_branch = models["qa_reconstruct_be_branch_direct"]["heldout"]
+    reconstruct_memory_full = models["qa_reconstruct_memory_full_direct"]["heldout"]
     return {
         "split": split_name,
         "calibration_count": len(calibration_names),
@@ -1189,6 +1315,18 @@ def summarize_transfer_split(
         ]
         < nonqa["rmse_mj_per_kg"],
         "nonqa_shell_plus_transition_plus_memory_beats_nonqa_by_rmse": nonqa_plus_transition_memory[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_reconstruct_be_beats_nonqa_by_rmse": reconstruct_be["rmse_mj_per_kg"]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_reconstruct_be_dir_beats_nonqa_by_rmse": reconstruct_be_dir["rmse_mj_per_kg"]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_reconstruct_be_branch_beats_nonqa_by_rmse": reconstruct_be_branch[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_reconstruct_memory_full_beats_nonqa_by_rmse": reconstruct_memory_full[
             "rmse_mj_per_kg"
         ]
         < nonqa["rmse_mj_per_kg"],
@@ -1273,6 +1411,10 @@ def main() -> int:
         "qa_lifted_kx_shell_direct",
         "qa_lifted_k_minus_j_x_shell_direct",
         "qa_lifted_j_pi_shell_direct",
+        "qa_reconstruct_be_direct",
+        "qa_reconstruct_be_dir_direct",
+        "qa_reconstruct_be_branch_direct",
+        "qa_reconstruct_memory_full_direct",
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
@@ -1300,6 +1442,10 @@ def main() -> int:
         "qa_shell_hdb_direct",
         "qa_lifted_jx_shell_direct",
         "qa_lifted_j_pi_shell_direct",
+        "qa_reconstruct_be_direct",
+        "qa_reconstruct_be_dir_direct",
+        "qa_reconstruct_be_branch_direct",
+        "qa_reconstruct_memory_full_direct",
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
@@ -1357,6 +1503,24 @@ def main() -> int:
         for split in split_summaries
         if split["nonqa_shell_plus_transition_plus_memory_beats_nonqa_by_rmse"]
     )
+    reconstruct_be_rmse_wins = sum(
+        1 for split in split_summaries if split["qa_reconstruct_be_beats_nonqa_by_rmse"]
+    )
+    reconstruct_be_dir_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_reconstruct_be_dir_beats_nonqa_by_rmse"]
+    )
+    reconstruct_be_branch_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_reconstruct_be_branch_beats_nonqa_by_rmse"]
+    )
+    reconstruct_memory_full_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_reconstruct_memory_full_beats_nonqa_by_rmse"]
+    )
     transition_family_scores = {
         "qa_transition_only": transition_only_rmse_wins,
         "qa_transition_plus_shell": transition_plus_shell_rmse_wins,
@@ -1373,6 +1537,15 @@ def main() -> int:
         "nonqa_shell_plus_transition_plus_memory": nonqa_plus_transition_memory_rmse_wins,
     }
     best_memory_family = max(memory_family_scores, key=lambda name: memory_family_scores[name])
+    reconstruction_family_scores = {
+        "qa_reconstruct_be_direct": reconstruct_be_rmse_wins,
+        "qa_reconstruct_be_dir_direct": reconstruct_be_dir_rmse_wins,
+        "qa_reconstruct_be_branch_direct": reconstruct_be_branch_rmse_wins,
+        "qa_reconstruct_memory_full_direct": reconstruct_memory_full_rmse_wins,
+    }
+    best_reconstruction_family = max(
+        reconstruction_family_scores, key=lambda name: reconstruction_family_scores[name]
+    )
     memory_result_interpretation = (
         f"Memory-only QA wins {memory_only_rmse_wins} of {len(split_summaries)} "
         f"RMSE transfer splits against non-QA shell; memory plus QA shell wins "
@@ -1381,6 +1554,18 @@ def main() -> int:
         f"{memory_plus_transition_rmse_wins}; non-QA shell plus transition plus "
         f"memory wins {nonqa_plus_transition_memory_rmse_wins}. Best memory family: "
         f"{best_memory_family}."
+    )
+    reconstruction_result_interpretation = (
+        f"Branch-local lookup reconstruction wins against ordinary non-QA shell in "
+        f"{reconstruct_be_rmse_wins}/{len(split_summaries)} splits for (b,e), "
+        f"{reconstruct_be_dir_rmse_wins}/{len(split_summaries)} for (b,e,sb,se), "
+        f"{reconstruct_be_branch_rmse_wins}/{len(split_summaries)} for "
+        f"(b,e,branch,lag), and {reconstruct_memory_full_rmse_wins}/"
+        f"{len(split_summaries)} for full memory context. "
+        f"Best reconstruction family: {best_reconstruction_family}. Because the "
+        "declared reconstruction target is the marginal H/B shell center and every "
+        "tested context contains (b,e), this formulation collapses to ordinary "
+        "shell reconstruction rather than adding QA-specific branch information."
     )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
@@ -1432,9 +1617,17 @@ def main() -> int:
                 "sum 0.5*(Pi_i+Pi_j)*abs(delta_X)",
                 "unique (b,e) states",
                 "closed-loop transition graph observables over state_t=(b_t,e_t)",
+                "branch-local lookup reconstruction from QA contexts to H/B shell paths",
             ],
             "transition_features": QA_TRANSITION_FEATURES,
             "memory_features": QA_MEMORY_FEATURES,
+            "reconstruction_fields": QA_RECONSTRUCTION_FIELDS,
+            "reconstruction_contexts": [
+                "ctx_be=(b_t,e_t)",
+                "ctx_be_dir=(b_t,e_t,sb_t,se_t)",
+                "ctx_be_branch=(b_t,e_t,branch_t,lag_t)",
+                "ctx_memory_full=(b_t,e_t,sb_t,se_t,branch_t,lag_t)",
+            ],
         },
         "heldout_models": heldout_models,
         "direct_predictor_comparison": direct_comparison,
@@ -1454,6 +1647,12 @@ def main() -> int:
             "nonqa_shell_plus_transition_plus_memory_rmse_wins_vs_nonqa_shell": nonqa_plus_transition_memory_rmse_wins,
             "best_memory_family": best_memory_family,
             "memory_result_interpretation": memory_result_interpretation,
+            "qa_reconstruct_be_rmse_wins_vs_nonqa_shell": reconstruct_be_rmse_wins,
+            "qa_reconstruct_be_dir_rmse_wins_vs_nonqa_shell": reconstruct_be_dir_rmse_wins,
+            "qa_reconstruct_be_branch_rmse_wins_vs_nonqa_shell": reconstruct_be_branch_rmse_wins,
+            "qa_reconstruct_memory_full_rmse_wins_vs_nonqa_shell": reconstruct_memory_full_rmse_wins,
+            "best_reconstruction_family": best_reconstruction_family,
+            "reconstruction_result_interpretation": reconstruction_result_interpretation,
             "lifted_pair_sweep_summary": lifted_pair_sweep_summary,
             "phase_pair_sweep_summary": phase_pair_sweep_summary,
         },
@@ -1522,10 +1721,13 @@ def main() -> int:
                 f"Best transition family: {best_transition_family}."
             ),
             "memory_result_interpretation": memory_result_interpretation,
+            "reconstruction_result_interpretation": reconstruction_result_interpretation,
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "
                 "centers are fit on calibration loops only. Direct predictors use "
-                "no held-out loss labels and no fitted regression coefficient."
+                "no held-out loss labels and no fitted regression coefficient. "
+                "Branch-local reconstruction lookup tables are fit separately per "
+                "split on calibration traces only."
             ),
         },
         "records": records,

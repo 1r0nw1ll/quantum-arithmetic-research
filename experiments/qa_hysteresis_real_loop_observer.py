@@ -181,6 +181,10 @@ def qa_vars(b: int, e: int) -> dict[str, int]:
     }
 
 
+def lifted_energy_field(h_var: str, b_var: str) -> str:
+    return f"qa_lifted_{h_var.lower()}_{b_var.lower()}_shell_energy_mj_per_kg"
+
+
 def calibration_split(rows: list[LossRow]) -> tuple[set[str], set[str]]:
     calibration: set[str] = set()
     heldout: set[str] = set()
@@ -313,12 +317,33 @@ def qa_observables(
         energy = 1000.0 * abs(line_integral_y_dx(b_lifted_seq, h_lifted_seq)) / DENSITY_KG_PER_M3
         return energy, unseen / (2 * len(vars_seq))
 
-    lifted_jx, lifted_jx_unseen = lifted_shell_energy("J", "X")
-    lifted_kx, lifted_kx_unseen = lifted_shell_energy("K", "X")
-    lifted_k_minus_j_x, lifted_k_minus_j_x_unseen = lifted_shell_energy("K_minus_J", "X")
-    lifted_j_pi, lifted_j_pi_unseen = lifted_shell_energy("J", "Pi")
+    all_lifted: dict[str, float] = {}
+    all_lifted_unseen: dict[str, float] = {}
+    for h_var in QA_LIFTED_VARIABLES:
+        for b_var in QA_LIFTED_VARIABLES:
+            energy, unseen_fraction = lifted_shell_energy(h_var, b_var)
+            field = lifted_energy_field(h_var, b_var)
+            all_lifted[field] = energy
+            all_lifted_unseen[field.replace("_energy_", "_unseen_")] = unseen_fraction
 
-    return {
+    lifted_jx = all_lifted[lifted_energy_field("J", "X")]
+    lifted_jx_unseen = all_lifted_unseen[
+        lifted_energy_field("J", "X").replace("_energy_", "_unseen_")
+    ]
+    lifted_kx = all_lifted[lifted_energy_field("K", "X")]
+    lifted_kx_unseen = all_lifted_unseen[
+        lifted_energy_field("K", "X").replace("_energy_", "_unseen_")
+    ]
+    lifted_k_minus_j_x = all_lifted[lifted_energy_field("K_minus_J", "X")]
+    lifted_k_minus_j_x_unseen = all_lifted_unseen[
+        lifted_energy_field("K_minus_J", "X").replace("_energy_", "_unseen_")
+    ]
+    lifted_j_pi = all_lifted[lifted_energy_field("J", "Pi")]
+    lifted_j_pi_unseen = all_lifted_unseen[
+        lifted_energy_field("J", "Pi").replace("_energy_", "_unseen_")
+    ]
+
+    fixed = {
         "qa_be_loop_area": be_area,
         "qa_jx_loop_area": jx_area,
         "qa_kx_loop_area": kx_area,
@@ -341,6 +366,9 @@ def qa_observables(
         "qa_shell_unseen_state_fraction": unseen_state_count / len(b_seq),
         "qa_unique_states": float(len(set(zip(b_seq, e_seq)))),
     }
+    fixed.update(all_lifted)
+    fixed.update(all_lifted_unseen)
+    return fixed
 
 
 def solve_linear_least_squares(x_rows: list[list[float]], y: list[float]) -> list[float]:
@@ -569,6 +597,88 @@ def direct_comparison_rows(heldout_models: dict, comparison_order: list[str]) ->
     return [{"model": name, **heldout_models[name]["heldout"]} for name in comparison_order]
 
 
+def lifted_pair_sweep(records: list[dict], heldout_names: set[str]) -> list[dict]:
+    nonqa = direct_prediction(records, heldout_names, "nonqa_shell_hdb_energy_mj_per_kg")[
+        "heldout"
+    ]
+    rows: list[dict] = []
+    for h_var in QA_LIFTED_VARIABLES:
+        for b_var in QA_LIFTED_VARIABLES:
+            field = lifted_energy_field(h_var, b_var)
+            result = direct_prediction(records, heldout_names, field)["heldout"]
+            rows.append(
+                {
+                    "h_var": h_var,
+                    "b_var": b_var,
+                    "field": field,
+                    **result,
+                    "beats_nonqa_by_r2": result["r2"] > nonqa["r2"],
+                    "beats_nonqa_by_rmse": result["rmse_mj_per_kg"]
+                    < nonqa["rmse_mj_per_kg"],
+                    "beats_nonqa_by_mae": result["mae_mj_per_kg"]
+                    < nonqa["mae_mj_per_kg"],
+                    "rmse_ratio_to_nonqa": result["rmse_mj_per_kg"]
+                    / max(nonqa["rmse_mj_per_kg"], 1e-12),
+                }
+            )
+    return rows
+
+
+def summarize_lifted_pair_sweep(split_results: list[dict]) -> dict:
+    aggregates: dict[str, dict] = {}
+    for split in split_results:
+        for row in split["lifted_pair_sweep"]:
+            key = f"{row['h_var']}/{row['b_var']}"
+            bucket = aggregates.setdefault(
+                key,
+                {
+                    "h_var": row["h_var"],
+                    "b_var": row["b_var"],
+                    "r2_win_count": 0,
+                    "rmse_win_count": 0,
+                    "mae_win_count": 0,
+                    "rmse_ratios": [],
+                    "r2_values": [],
+                },
+            )
+            bucket["r2_win_count"] += int(row["beats_nonqa_by_r2"])
+            bucket["rmse_win_count"] += int(row["beats_nonqa_by_rmse"])
+            bucket["mae_win_count"] += int(row["beats_nonqa_by_mae"])
+            bucket["rmse_ratios"].append(row["rmse_ratio_to_nonqa"])
+            bucket["r2_values"].append(row["r2"])
+
+    scored = []
+    for key, bucket in aggregates.items():
+        scored.append(
+            {
+                "pair": key,
+                "h_var": bucket["h_var"],
+                "b_var": bucket["b_var"],
+                "r2_win_count": bucket["r2_win_count"],
+                "rmse_win_count": bucket["rmse_win_count"],
+                "mae_win_count": bucket["mae_win_count"],
+                "mean_rmse_ratio_to_nonqa": statistics.mean(bucket["rmse_ratios"]),
+                "median_rmse_ratio_to_nonqa": statistics.median(bucket["rmse_ratios"]),
+                "mean_r2": statistics.mean(bucket["r2_values"]),
+            }
+        )
+
+    scored.sort(
+        key=lambda row: (
+            -row["rmse_win_count"],
+            -row["mae_win_count"],
+            -row["r2_win_count"],
+            row["median_rmse_ratio_to_nonqa"],
+            row["mean_rmse_ratio_to_nonqa"],
+        )
+    )
+    return {
+        "pair_count": len(scored),
+        "top_by_transfer_score": scored[:10],
+        "best_pair": scored[0] if scored else None,
+    }
+
+
 def transfer_splits(loss_rows: list[LossRow]) -> list[tuple[str, set[str], set[str]]]:
     all_names = {row.filename for row in loss_rows}
     splits: list[tuple[str, set[str], set[str]]] = []
@@ -597,6 +707,7 @@ def summarize_transfer_split(
     records = build_records_for_split(traces, calibration_names, heldout_names)
     models = direct_model_suite(records, calibration_names, heldout_names)
     rows = direct_comparison_rows(models, comparison_order)
+    pair_rows = lifted_pair_sweep(records, heldout_names)
     best_by_rmse = min(rows, key=lambda row: row["rmse_mj_per_kg"])
     best_shell_by_rmse = min(
         [row for row in rows if row["model"] != "raw_physical_hdb_direct"],
@@ -612,6 +723,9 @@ def summarize_transfer_split(
         "best_nonraw_model_by_rmse": best_shell_by_rmse["model"],
         "qa_lifted_j_pi_beats_nonqa_by_r2": qa_j_pi["r2"] > nonqa["r2"],
         "qa_lifted_j_pi_beats_nonqa_by_rmse": qa_j_pi["rmse_mj_per_kg"] < nonqa["rmse_mj_per_kg"],
+        "best_lifted_pair_by_rmse": min(pair_rows, key=lambda row: row["rmse_mj_per_kg"]),
+        "best_lifted_pair_by_r2": max(pair_rows, key=lambda row: row["r2"]),
+        "lifted_pair_sweep": pair_rows,
         "models": {name: models[name]["heldout"] for name in comparison_order},
     }
 
@@ -711,6 +825,8 @@ def main() -> int:
         summarize_transfer_split(name, traces, cal, hold, transfer_order)
         for name, cal, hold in transfer_splits(loss_rows)
     ]
+    lifted_pair_sweep_summary = summarize_lifted_pair_sweep(split_summaries)
+    best_sweep_pair = lifted_pair_sweep_summary["best_pair"]
     qa_j_pi_r2_wins = sum(
         1 for split in split_summaries if split["qa_lifted_j_pi_beats_nonqa_by_r2"]
     )
@@ -775,6 +891,7 @@ def main() -> int:
             "splits": split_summaries,
             "qa_lifted_j_pi_r2_wins_vs_nonqa_shell": qa_j_pi_r2_wins,
             "qa_lifted_j_pi_rmse_wins_vs_nonqa_shell": qa_j_pi_rmse_wins,
+            "lifted_pair_sweep_summary": lifted_pair_sweep_summary,
         },
         "verdict": {
             "qa_not_random": (
@@ -814,7 +931,17 @@ def main() -> int:
                 f"Across {len(split_summaries)} index/frequency/amplitude transfer "
                 f"splits, QA J/Pi beats ordinary non-QA shell by R2 in "
                 f"{qa_j_pi_r2_wins} splits and by RMSE in {qa_j_pi_rmse_wins} splits. "
-                "This hardens the conclusion by checking family-heldout transfer."
+                "This hardens the conclusion by checking family-heldout transfer. "
+                "The lifted-pair sweep reports whether another QA variable pair "
+                "transfers more consistently."
+            ),
+            "lifted_pair_sweep_interpretation": (
+                f"Best lifted pair by the predeclared transfer score is "
+                f"{best_sweep_pair['pair']}, with RMSE wins in "
+                f"{best_sweep_pair['rmse_win_count']} of {len(split_summaries)} splits "
+                f"and median RMSE ratio {best_sweep_pair['median_rmse_ratio_to_nonqa']:.3f} "
+                "relative to ordinary non-QA shell. This does not establish a stable "
+                "QA-specific advantage yet."
             ),
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "

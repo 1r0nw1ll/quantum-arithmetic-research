@@ -57,6 +57,28 @@ QA_TRANSITION_FEATURES = [
     "qa_transition_generator_distance_sum",
     "qa_transition_generator_distance_mean",
 ]
+QA_MEMORY_FEATURES = [
+    "qa_memory_unique_states",
+    "qa_memory_unique_edges",
+    "qa_memory_entropy",
+    "qa_memory_branch_rising_fraction",
+    "qa_memory_branch_falling_fraction",
+    "qa_memory_branch_turning_fraction",
+    "qa_memory_lag_aligned_fraction",
+    "qa_memory_lag_opposed_fraction",
+    "qa_memory_lag_B_lags_H_fraction",
+    "qa_memory_lag_B_leads_H_fraction",
+    "qa_memory_branch_asymmetry",
+    "qa_memory_turning_density",
+    "qa_memory_irreversible_edge_fraction",
+    "qa_memory_return_time_mean",
+    "qa_memory_return_time_std",
+    "qa_memory_generator_distance_sum",
+    "qa_memory_generator_distance_mean",
+    "qa_memory_signed_orientation_flux",
+    "qa_memory_abs_orientation_flux",
+    "qa_memory_lag_weighted_orientation_flux",
+]
 
 
 @dataclass(frozen=True)
@@ -272,6 +294,139 @@ def qa_transition_observables(b_seq: list[int], e_seq: list[int]) -> dict[str, f
         "qa_transition_generator_distance_mean": generator_distance_sum / total_edges
         if total_edges
         else 0.0,
+    }
+
+
+def sign(value: int) -> int:
+    if value > 0:
+        return 1
+    if value < 0:
+        return -1
+    return 0
+
+
+def branch_label(sb: int, prior_nonzero_sb: int) -> str:
+    if sb == 0:
+        return "flat"
+    if prior_nonzero_sb and sb != prior_nonzero_sb:
+        return "turning"
+    return "rising" if sb > 0 else "falling"
+
+
+def lag_label(sb: int, se: int) -> str:
+    if sb == se and sb != 0:
+        return "aligned"
+    if sb != 0 and se == 0:
+        return "B_lags_H"
+    if sb == 0 and se != 0:
+        return "B_leads_H"
+    if sb * se < 0:
+        return "opposed"
+    return "flat"
+
+
+def qa_memory_observables(b_seq: list[int], e_seq: list[int]) -> dict[str, float]:
+    states = list(zip(b_seq, e_seq))
+    closed_states = states + [states[0]]
+    memory_states: list[tuple[int, int, int, int, str, str]] = []
+    branch_counts = {"rising": 0, "falling": 0, "turning": 0, "flat": 0}
+    lag_counts = {"aligned": 0, "opposed": 0, "B_lags_H": 0, "B_leads_H": 0, "flat": 0}
+    prior_nonzero_sb = 0
+    signed_orientation_flux = 0.0
+    abs_orientation_flux = 0.0
+    lag_weighted_orientation_flux = 0.0
+    generator_distance_sum = 0.0
+
+    for (b0, e0), (b1, e1) in zip(closed_states[:-1], closed_states[1:]):
+        db = b1 - b0
+        de = e1 - e0
+        sb = sign(db)
+        se = sign(de)
+        branch = branch_label(sb, prior_nonzero_sb)
+        lag = lag_label(sb, se)
+        if sb != 0:
+            prior_nonzero_sb = sb
+        branch_counts[branch] += 1
+        lag_counts[lag] += 1
+        memory_states.append((b0, e0, sb, se, branch, lag))
+        orientation = b0 * de - e0 * db
+        signed_orientation_flux += orientation
+        abs_orientation_flux += abs(orientation)
+        lag_weight = {
+            "aligned": 1.0,
+            "opposed": -1.0,
+            "B_lags_H": 0.5,
+            "B_leads_H": -0.5,
+            "flat": 0.0,
+        }[lag]
+        lag_weighted_orientation_flux += lag_weight * orientation
+        generator_distance_sum += abs(db) + abs(de)
+
+    edges = list(zip(memory_states, memory_states[1:] + memory_states[:1]))
+    edge_counts: dict[
+        tuple[tuple[int, int, int, int, str, str], tuple[int, int, int, int, str, str]], int
+    ] = {}
+    for edge in edges:
+        edge_counts[edge] = edge_counts.get(edge, 0) + 1
+
+    entropy = 0.0
+    total_edges = len(edges)
+    for count in edge_counts.values():
+        p = count / total_edges
+        entropy -= p * math.log(p)
+
+    irreversible = 0
+    for edge in edge_counts:
+        if (edge[1], edge[0]) not in edge_counts:
+            irreversible += 1
+
+    last_seen: dict[tuple[int, int, int, int, str, str], int] = {}
+    return_times: list[int] = []
+    doubled = memory_states + memory_states
+    for idx, state in enumerate(doubled):
+        if state in last_seen:
+            delta = idx - last_seen[state]
+            if 0 < delta <= len(memory_states):
+                return_times.append(delta)
+        last_seen[state] = idx
+    if return_times:
+        return_mean = statistics.mean(return_times)
+        return_std = statistics.pstdev(return_times) if len(return_times) > 1 else 0.0
+    else:
+        return_mean = float(len(memory_states))
+        return_std = 0.0
+
+    branch_denom = branch_counts["rising"] + branch_counts["falling"]
+    branch_asymmetry = (
+        (branch_counts["rising"] - branch_counts["falling"]) / branch_denom
+        if branch_denom
+        else 0.0
+    )
+
+    total = len(memory_states)
+    return {
+        "qa_memory_unique_states": float(len(set(memory_states))),
+        "qa_memory_unique_edges": float(len(edge_counts)),
+        "qa_memory_entropy": entropy,
+        "qa_memory_branch_rising_fraction": branch_counts["rising"] / total,
+        "qa_memory_branch_falling_fraction": branch_counts["falling"] / total,
+        "qa_memory_branch_turning_fraction": branch_counts["turning"] / total,
+        "qa_memory_lag_aligned_fraction": lag_counts["aligned"] / total,
+        "qa_memory_lag_opposed_fraction": lag_counts["opposed"] / total,
+        "qa_memory_lag_B_lags_H_fraction": lag_counts["B_lags_H"] / total,
+        "qa_memory_lag_B_leads_H_fraction": lag_counts["B_leads_H"] / total,
+        "qa_memory_branch_asymmetry": branch_asymmetry,
+        "qa_memory_turning_density": branch_counts["turning"] / total,
+        "qa_memory_irreversible_edge_fraction": irreversible / len(edge_counts)
+        if edge_counts
+        else 0.0,
+        "qa_memory_return_time_mean": return_mean,
+        "qa_memory_return_time_std": return_std,
+        "qa_memory_generator_distance_sum": generator_distance_sum,
+        "qa_memory_generator_distance_mean": generator_distance_sum / total if total else 0.0,
+        "qa_memory_signed_orientation_flux": signed_orientation_flux,
+        "qa_memory_abs_orientation_flux": abs_orientation_flux,
+        "qa_memory_lag_weighted_orientation_flux": lag_weighted_orientation_flux,
     }
 
 
@@ -564,6 +719,7 @@ def qa_observables(
     fixed.update(all_lifted)
     fixed.update(all_lifted_unseen)
     fixed.update(qa_transition_observables(b_seq, e_seq))
+    fixed.update(qa_memory_observables(b_seq, e_seq))
     return fixed
 
 
@@ -802,6 +958,33 @@ def direct_model_suite(
         heldout_names,
         ["nonqa_shell_hdb_energy_mj_per_kg"] + QA_TRANSITION_FEATURES,
     )
+    models["qa_memory_only"] = fit_predict(
+        records, calibration_names, heldout_names, QA_MEMORY_FEATURES
+    )
+    models["qa_memory_plus_qa_shell"] = fit_predict(
+        records,
+        calibration_names,
+        heldout_names,
+        ["qa_shell_hdb_energy_mj_per_kg"] + QA_MEMORY_FEATURES,
+    )
+    models["nonqa_shell_plus_qa_memory"] = fit_predict(
+        records,
+        calibration_names,
+        heldout_names,
+        ["nonqa_shell_hdb_energy_mj_per_kg"] + QA_MEMORY_FEATURES,
+    )
+    models["qa_memory_plus_transition"] = fit_predict(
+        records,
+        calibration_names,
+        heldout_names,
+        QA_MEMORY_FEATURES + QA_TRANSITION_FEATURES,
+    )
+    models["nonqa_shell_plus_transition_plus_memory"] = fit_predict(
+        records,
+        calibration_names,
+        heldout_names,
+        ["nonqa_shell_hdb_energy_mj_per_kg"] + QA_TRANSITION_FEATURES + QA_MEMORY_FEATURES,
+    )
     return models
 
 
@@ -968,6 +1151,11 @@ def summarize_transfer_split(
     transition_only = models["qa_transition_only"]["heldout"]
     transition_plus_shell = models["qa_transition_plus_shell"]["heldout"]
     nonqa_plus_transition = models["nonqa_shell_plus_transition"]["heldout"]
+    memory_only = models["qa_memory_only"]["heldout"]
+    memory_plus_shell = models["qa_memory_plus_qa_shell"]["heldout"]
+    nonqa_plus_memory = models["nonqa_shell_plus_qa_memory"]["heldout"]
+    memory_plus_transition = models["qa_memory_plus_transition"]["heldout"]
+    nonqa_plus_transition_memory = models["nonqa_shell_plus_transition_plus_memory"]["heldout"]
     return {
         "split": split_name,
         "calibration_count": len(calibration_names),
@@ -983,6 +1171,24 @@ def summarize_transfer_split(
         ]
         < nonqa["rmse_mj_per_kg"],
         "nonqa_shell_plus_transition_beats_nonqa_by_rmse": nonqa_plus_transition[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_memory_only_beats_nonqa_by_rmse": memory_only["rmse_mj_per_kg"]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_memory_plus_qa_shell_beats_nonqa_by_rmse": memory_plus_shell[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "nonqa_shell_plus_qa_memory_beats_nonqa_by_rmse": nonqa_plus_memory[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_memory_plus_transition_beats_nonqa_by_rmse": memory_plus_transition[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "nonqa_shell_plus_transition_plus_memory_beats_nonqa_by_rmse": nonqa_plus_transition_memory[
             "rmse_mj_per_kg"
         ]
         < nonqa["rmse_mj_per_kg"],
@@ -1070,6 +1276,11 @@ def main() -> int:
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
+        "qa_memory_only",
+        "qa_memory_plus_qa_shell",
+        "nonqa_shell_plus_qa_memory",
+        "qa_memory_plus_transition",
+        "nonqa_shell_plus_transition_plus_memory",
         "qa_be_only",
         "qa_lifted_packet",
         "steinmetz_plus_qa_shape_log_model",
@@ -1092,6 +1303,11 @@ def main() -> int:
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
+        "qa_memory_only",
+        "qa_memory_plus_qa_shell",
+        "nonqa_shell_plus_qa_memory",
+        "qa_memory_plus_transition",
+        "nonqa_shell_plus_transition_plus_memory",
     ]
     split_summaries = [
         summarize_transfer_split(name, traces, cal, hold, transfer_order)
@@ -1120,6 +1336,27 @@ def main() -> int:
         for split in split_summaries
         if split["nonqa_shell_plus_transition_beats_nonqa_by_rmse"]
     )
+    memory_only_rmse_wins = sum(
+        1 for split in split_summaries if split["qa_memory_only_beats_nonqa_by_rmse"]
+    )
+    memory_plus_shell_rmse_wins = sum(
+        1 for split in split_summaries if split["qa_memory_plus_qa_shell_beats_nonqa_by_rmse"]
+    )
+    nonqa_plus_memory_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["nonqa_shell_plus_qa_memory_beats_nonqa_by_rmse"]
+    )
+    memory_plus_transition_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_memory_plus_transition_beats_nonqa_by_rmse"]
+    )
+    nonqa_plus_transition_memory_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["nonqa_shell_plus_transition_plus_memory_beats_nonqa_by_rmse"]
+    )
     transition_family_scores = {
         "qa_transition_only": transition_only_rmse_wins,
         "qa_transition_plus_shell": transition_plus_shell_rmse_wins,
@@ -1127,6 +1364,23 @@ def main() -> int:
     }
     best_transition_family = max(
         transition_family_scores, key=lambda name: transition_family_scores[name]
+    )
+    memory_family_scores = {
+        "qa_memory_only": memory_only_rmse_wins,
+        "qa_memory_plus_qa_shell": memory_plus_shell_rmse_wins,
+        "nonqa_shell_plus_qa_memory": nonqa_plus_memory_rmse_wins,
+        "qa_memory_plus_transition": memory_plus_transition_rmse_wins,
+        "nonqa_shell_plus_transition_plus_memory": nonqa_plus_transition_memory_rmse_wins,
+    }
+    best_memory_family = max(memory_family_scores, key=lambda name: memory_family_scores[name])
+    memory_result_interpretation = (
+        f"Memory-only QA wins {memory_only_rmse_wins} of {len(split_summaries)} "
+        f"RMSE transfer splits against non-QA shell; memory plus QA shell wins "
+        f"{memory_plus_shell_rmse_wins}; non-QA shell plus QA memory wins "
+        f"{nonqa_plus_memory_rmse_wins}; QA memory plus transition wins "
+        f"{memory_plus_transition_rmse_wins}; non-QA shell plus transition plus "
+        f"memory wins {nonqa_plus_transition_memory_rmse_wins}. Best memory family: "
+        f"{best_memory_family}."
     )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
@@ -1180,6 +1434,7 @@ def main() -> int:
                 "closed-loop transition graph observables over state_t=(b_t,e_t)",
             ],
             "transition_features": QA_TRANSITION_FEATURES,
+            "memory_features": QA_MEMORY_FEATURES,
         },
         "heldout_models": heldout_models,
         "direct_predictor_comparison": direct_comparison,
@@ -1192,6 +1447,13 @@ def main() -> int:
             "qa_transition_plus_shell_rmse_wins_vs_nonqa_shell": transition_plus_shell_rmse_wins,
             "nonqa_shell_plus_transition_rmse_wins_vs_nonqa_shell": nonqa_plus_transition_rmse_wins,
             "best_transition_family": best_transition_family,
+            "qa_memory_only_rmse_wins_vs_nonqa_shell": memory_only_rmse_wins,
+            "qa_memory_plus_qa_shell_rmse_wins_vs_nonqa_shell": memory_plus_shell_rmse_wins,
+            "nonqa_shell_plus_qa_memory_rmse_wins_vs_nonqa_shell": nonqa_plus_memory_rmse_wins,
+            "qa_memory_plus_transition_rmse_wins_vs_nonqa_shell": memory_plus_transition_rmse_wins,
+            "nonqa_shell_plus_transition_plus_memory_rmse_wins_vs_nonqa_shell": nonqa_plus_transition_memory_rmse_wins,
+            "best_memory_family": best_memory_family,
+            "memory_result_interpretation": memory_result_interpretation,
             "lifted_pair_sweep_summary": lifted_pair_sweep_summary,
             "phase_pair_sweep_summary": phase_pair_sweep_summary,
         },
@@ -1259,6 +1521,7 @@ def main() -> int:
                 f"non-QA shell plus QA transition wins {nonqa_plus_transition_rmse_wins}. "
                 f"Best transition family: {best_transition_family}."
             ),
+            "memory_result_interpretation": memory_result_interpretation,
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "
                 "centers are fit on calibration loops only. Direct predictors use "

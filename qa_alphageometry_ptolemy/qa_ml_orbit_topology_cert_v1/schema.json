@@ -1,0 +1,33 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_ML_ORBIT_TOPOLOGY_CERT.v1",
+  "description": "Fixture schema for QA-ML Orbit Topology Cert [276]. Primary source for the GCN architecture under test: arxiv:1609.02907 (Kipf & Welling 2017). The cert validator uses this schema to verify each fixture declares modulus, training params, and the claimed graph_delta.",
+  "type": "object",
+  "required": [
+    "schema_version", "fixture_kind", "modulus", "train_fraction", "n_seeds",
+    "epochs", "hidden", "n_satellite", "n_pairs",
+    "with_graph_macro_f1_mean", "without_graph_macro_f1_mean",
+    "graph_delta", "passes_threshold"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "QA_ML_ORBIT_TOPOLOGY_CERT.v1"},
+    "fixture_kind": {"enum": ["pass", "fail"]},
+    "expected_fail_type": {"type": "string"},
+    "modulus": {"type": "integer", "minimum": 2},
+    "train_fraction": {"type": "number", "minimum": 0.0, "maximum": 1.0},
+    "n_seeds": {"type": "integer", "minimum": 1},
+    "epochs": {"type": "integer", "minimum": 1},
+    "hidden": {"type": "integer", "minimum": 1},
+    "n_satellite": {"type": "integer", "minimum": 0},
+    "n_pairs": {"type": "integer", "minimum": 1},
+    "with_graph_macro_f1_mean": {"type": "number"},
+    "without_graph_macro_f1_mean": {"type": "number"},
+    "graph_delta": {"type": "number"},
+    "passes_threshold": {"type": "boolean"},
+    "raw_mlp_macro_f1_mean": {"type": "number"},
+    "qa_full_logreg_macro_f1_mean": {"type": "number"},
+    "tolerance": {"type": "number", "minimum": 0.0, "maximum": 0.05},
+    "primary_source": {"type": "string"}
+  }
+}

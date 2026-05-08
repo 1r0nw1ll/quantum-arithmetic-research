@@ -1,0 +1,17 @@
+{
+  "primary_source": "Kipf & Welling 2017, Semi-Supervised Classification with Graph Convolutional Networks, ICLR; arxiv:1609.02907.",
+  "schema_version": "QA_ML_ORBIT_TOPOLOGY_CERT.v1",
+  "fixture_kind": "fail",
+  "expected_fail_type": "MISSING_FIELD",
+  "modulus": 24,
+  "train_fraction": 0.30,
+  "n_seeds": 20,
+  "epochs": 300,
+  "hidden": 32,
+  "n_satellite": 8,
+  "n_pairs": 576,
+  "with_graph_macro_f1_mean": 0.800,
+  "without_graph_macro_f1_mean": 0.576,
+  "passes_threshold": true,
+  "tolerance": 0.001
+}

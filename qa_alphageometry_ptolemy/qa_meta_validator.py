@@ -7562,6 +7562,37 @@ def _validate_whittaker_scalar_angular_kernel_sampling_cert_family(base_dir):
     return None
 
 
+def _validate_qa_ml_orbit_topology_cert_family(base_dir):
+    """QA-ML Orbit Topology Cert family [276]. Primary source for the GCN architecture under test: Kipf & Welling 2017, Semi-Supervised Classification with Graph Convolutional Networks, ICLR; arxiv:1609.02907. CLAIM (narrow, falsifiable): on QA orbit grids with a non-trivial satellite class (orbit period 8 under qa_orbit_rules.qa_step), a 2-layer plain-torch GCN over the symmetric-normalized QA generator adjacency built from sigma, mu, lambda_2, nu lifts node-classification macro F1 by at least +0.10 over an identity-adjacency ablation, holding node features (qa_full packet b,e,d,a,C,F,G,phi_b,phi_e with phi=mod m//3), architecture, seeds, and standardization fixed. Verified empirically for m in {9,12,15,18,21,24,27,30,36} at train_fraction=0.30, 20 seeds, 300 epochs, hidden=32, lr=0.01, weight_decay=5e-4. Sources: experiments/qa_ml/03_gnn_modulus_sweep.py + benchmark_protocol_v2_modulus_sweep.json + results_gnn_modulus_sweep.json (results_ledger_v2_modulus_sweep.jsonl); qa_orbit_rules.py (canonical orbit family + period via qa_step, A1-compliant); tools.qa_ml.qa_generators (sigma, mu, lambda_2, nu); tools.qa_ml.qa_graph (build_edges, dense_adjacency, gcn_normalize). Lineage: experiment v1 (qa_ml_orbit_classifier_sample_efficiency_v1) showed polynomial QA expansion alone is weak; v2 (qa_ml_orbit_classifier_gnn_v2) showed graph helps on mod-24; this cert grounds the multi-modulus sweep. Theorem NT compliance: integer features and integer-built adjacency on the QA side; torch GCN observer on the float side; no float feedback into the QA layer. Auxiliary boundary observation (NOT certified): qa_orbit_rules.orbit_family algebraic rule (m//3 divisor) under-counts period-8 pairs for m in {15, 30}. Cert does NOT prove orbit-class learnability for arbitrary m, does NOT certify GCN training stability, does NOT cover stochastic random graphs, and does NOT extend to non-period-8 satellite classes. Checks ORBT_1/ORBT_2/ORBT_3/ORBT_4/SRC/F; 2 PASS + 2 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_ml_orbit_topology_cert_v1")
+    validator = os.path.join(fam_dir, "qa_ml_orbit_topology_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ml_orbit_topology_cert_v1/qa_ml_orbit_topology_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_ml_orbit_topology_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_ml_orbit_topology_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_ml_orbit_topology_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)

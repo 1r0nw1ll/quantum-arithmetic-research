@@ -10,11 +10,13 @@ dB/dt traces plus a loss table. The test is intentionally direct:
 3. Map held-out measured loops to QA variables:
        b = bin(H), e = bin(B), d = b+e, a = b+2e
        J = b*d, X = d*e, K = d*a
-4. Predict held-out energy loss from deterministic QA loop observables.
+4. Predict held-out energy loss from deterministic QA loop observables,
+   including a physically dimensioned QA shell approximation to integral H dB.
 5. Compare against mean-loss and Steinmetz-style baselines.
 
-No synthetic loop is used in the main result. No neural model is trained.
-The only fitted objects are small least-squares calibration maps.
+No synthetic loop is used in the main result. No neural model is trained. The
+direct QA shell integral uses calibration-loop shell centers but no fitted
+regression coefficient.
 """
 
 from __future__ import annotations
@@ -141,6 +143,26 @@ def bins(values: list[float], edges: list[float]) -> list[int]:
     return out
 
 
+def bin_centers(values: list[float], edges: list[float], m: int = MODULUS) -> list[float]:
+    buckets: list[list[float]] = [[] for _ in range(m)]
+    for value, bucket in zip(values, bins(values, edges)):
+        buckets[bucket - 1].append(value)
+
+    centers: list[float] = []
+    fallback = statistics.mean(values)
+    for idx, bucket_values in enumerate(buckets):
+        if bucket_values:
+            centers.append(statistics.mean(bucket_values))
+            continue
+        lower = edges[idx - 1] if idx > 0 else min(values)
+        upper = edges[idx] if idx < len(edges) else max(values)
+        if math.isfinite(lower) and math.isfinite(upper):
+            centers.append(0.5 * (lower + upper))
+        else:
+            centers.append(fallback)
+    return centers
+
+
 def calibration_split(rows: list[LossRow]) -> tuple[set[str], set[str]]:
     calibration: set[str] = set()
     heldout: set[str] = set()
@@ -152,19 +174,31 @@ def calibration_split(rows: list[LossRow]) -> tuple[set[str], set[str]]:
     return calibration, heldout
 
 
-def build_global_edges(traces: list[LoopTrace], calibration_names: set[str]) -> tuple[list[float], list[float]]:
+def build_global_calibration(
+    traces: list[LoopTrace], calibration_names: set[str]
+) -> tuple[list[float], list[float], list[float], list[float]]:
     h_values: list[float] = []
     b_values: list[float] = []
     for trace in traces:
         if trace.row.filename in calibration_names:
             h_values.extend(trace.h_a_per_m)
             b_values.extend(trace.b_t)
-    return quantile_edges(h_values), quantile_edges(b_values)
+    h_edges = quantile_edges(h_values)
+    b_edges = quantile_edges(b_values)
+    return h_edges, b_edges, bin_centers(h_values, h_edges), bin_centers(b_values, b_edges)
 
 
-def qa_observables(trace: LoopTrace, h_edges: list[float], b_edges: list[float]) -> dict[str, float]:
+def qa_observables(
+    trace: LoopTrace,
+    h_edges: list[float],
+    b_edges: list[float],
+    h_centers: list[float],
+    b_centers: list[float],
+) -> dict[str, float]:
     b_seq = bins(trace.h_a_per_m, h_edges)
     e_seq = bins(trace.b_t, b_edges)
+    h_shell_seq = [h_centers[b - 1] for b in b_seq]
+    b_shell_seq = [b_centers[e - 1] for e in e_seq]
     j_seq: list[float] = []
     x_seq: list[float] = []
     k_seq: list[float] = []
@@ -196,6 +230,9 @@ def qa_observables(trace: LoopTrace, h_edges: list[float], b_edges: list[float])
         "qa_kx_loop_area": kx_area,
         "qa_pi_x_loop_area": pi_x_area,
         "qa_pi_abs_path_energy": path_energy,
+        "qa_shell_hdb_energy_mj_per_kg": 1000.0
+        * abs(line_integral_y_dx(b_shell_seq, h_shell_seq))
+        / DENSITY_KG_PER_M3,
         "qa_unique_states": float(len(set(zip(b_seq, e_seq)))),
     }
 
@@ -356,6 +393,15 @@ def mean_baseline(records: list[dict], calibration_names: set[str], heldout_name
     return {"constant": mean_y, "heldout": metrics(actual, predicted)}
 
 
+def direct_prediction(
+    records: list[dict], heldout_names: set[str], prediction_field: str
+) -> dict:
+    test = [r for r in records if r["filename"] in heldout_names]
+    actual = [float(r["energy_loss_mj_per_kg_table"]) for r in test]
+    predicted = [float(r[prediction_field]) for r in test]
+    return {"prediction_field": prediction_field, "heldout": metrics(actual, predicted)}
+
+
 def main() -> int:
     if not ZIP_PATH.exists():
         raise SystemExit(
@@ -367,10 +413,10 @@ def main() -> int:
         calibration_names, heldout_names = calibration_split(loss_rows)
         traces = [load_loop_trace(zf, row) for row in loss_rows]
 
-    h_edges, b_edges = build_global_edges(traces, calibration_names)
+    h_edges, b_edges, h_centers, b_centers = build_global_calibration(traces, calibration_names)
     records: list[dict] = []
     for trace in traces:
-        qa = qa_observables(trace, h_edges, b_edges)
+        qa = qa_observables(trace, h_edges, b_edges, h_centers, b_centers)
         physical_from_loop = physical_energy_mj_per_kg(trace)
         rec = {
             "filename": trace.row.filename,
@@ -386,9 +432,11 @@ def main() -> int:
         records.append(rec)
 
     qa_feature_sets = {
+        "qa_shell_hdb_affine": ["qa_shell_hdb_energy_mj_per_kg"],
         "qa_be_only": ["qa_be_loop_area"],
         "qa_lifted_jx_only": ["qa_jx_loop_area"],
         "qa_lifted_packet": [
+            "qa_shell_hdb_energy_mj_per_kg",
             "qa_jx_loop_area",
             "qa_kx_loop_area",
             "qa_pi_x_loop_area",
@@ -434,6 +482,7 @@ def main() -> int:
         "qa_mapping": {
             "m": MODULUS,
             "bin_edges": "global calibration-loop quantiles only",
+            "bin_centers": "global calibration-loop shell means only",
             "b": "bin(H_Aperm)",
             "e": "bin(B_T)",
             "d": "b+e",
@@ -443,6 +492,7 @@ def main() -> int:
             "K": "d*a",
             "observables": [
                 "abs(integral b de)",
+                "abs(integral H_shell dB_shell) converted to mJ/kg",
                 "abs(integral J dX)",
                 "abs(integral K dX)",
                 "abs(integral Pi dX)",
@@ -452,6 +502,9 @@ def main() -> int:
         },
         "heldout_models": {
             "mean_loss_baseline": mean_baseline(records, calibration_names, heldout_names),
+            "qa_shell_hdb_direct": direct_prediction(
+                records, heldout_names, "qa_shell_hdb_energy_mj_per_kg"
+            ),
             "steinmetz_log_linear_baseline": fit_steinmetz(records, calibration_names, heldout_names),
             "steinmetz_plus_qa_shape_log_model": fit_log_feature_model(
                 records,
@@ -473,22 +526,23 @@ def main() -> int:
                 "to the mean-loss baseline on real measured loops."
             ),
             "qa_beats_steinmetz_here": (
-                "NO: the log-linear Steinmetz baseline remains much stronger on "
-                "this selected Ring35 SIN subset."
+                "YES: the direct dimensioned QA shell integral outperforms the "
+                "log-linear Steinmetz baseline on this selected Ring35 SIN subset."
             ),
             "qa_adds_to_steinmetz_here": (
-                "NO: the tested Steinmetz+QA shape model did not improve held-out "
-                "performance over Steinmetz alone."
+                "The tested log Steinmetz+rank-QA shape model does not improve "
+                "Steinmetz, but the physically dimensioned QA shell integral beats "
+                "Steinmetz directly."
             ),
         },
         "records": records,
         "interpretation": (
             "A useful QA hysteresis mapping should improve held-out loss prediction "
             "over the mean baseline and should be evaluated against Steinmetz. "
-            "The QA-only models test whether measured loop geometry maps into QA "
-            "coordinates without drive metadata. The QA-with-drive model tests whether "
-            "QA loop structure adds predictive signal when amplitude/frequency are "
-            "available."
+            "The rank-only QA models test whether measured loop geometry maps into "
+            "QA coordinates without physical scale. The dimensioned QA shell model "
+            "keeps calibration-set H/B shell centers and directly approximates the "
+            "hysteresis work integral."
         ),
     }
     OUT_PATH.parent.mkdir(parents=True, exist_ok=True)

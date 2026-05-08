@@ -80,14 +80,16 @@
     },
     "qa_lifted_packet": {
       "coefficients": [
-        64.15078943992062,
-        39.05920336196308,
-        39.059211723504056,
-        39.05921172350405,
-        60.98609845782801,
-        -107.78613892129765
+        64.15078943992063,
+        87.70837844264382,
+        -4.537325627841199,
+        -4.537325771686735,
+        -4.537325771686735,
+        -0.9586170849743973,
+        3.2066638226065347
       ],
       "feature_means": [
+        63.206619502104815,
         314315.84210526315,
         314315.84210526315,
         628631.6842105263,
@@ -95,6 +97,7 @@
         67.15789473684211
       ],
       "feature_scales": [
+        72.56494787204083,
         221714.77294156043,
         221714.77294156043,
         443429.54588312085,
@@ -102,6 +105,7 @@
         20.5509973068148
       ],
       "features": [
+        "qa_shell_hdb_energy_mj_per_kg",
         "qa_jx_loop_area",
         "qa_kx_loop_area",
         "qa_pi_x_loop_area",
@@ -109,11 +113,41 @@
         "qa_unique_states"
       ],
       "heldout": {
-        "mae_mj_per_kg": 17.289651589713266,
-        "mape": 1.0707127917590358,
-        "r2": 0.821112169199571,
-        "rmse_mj_per_kg": 20.311919590515785
+        "mae_mj_per_kg": 4.583247866175763,
+        "mape": 0.13881856410814863,
+        "r2": 0.97382525549182,
+        "rmse_mj_per_kg": 7.769656078460303
       }
+    },
+    "qa_shell_hdb_affine": {
+      "coefficients": [
+        64.15078943992063,
+        76.82285630757045
+      ],
+      "feature_means": [
+        63.206619502104815
+      ],
+      "feature_scales": [
+        72.56494787204083
+      ],
+      "features": [
+        "qa_shell_hdb_energy_mj_per_kg"
+      ],
+      "heldout": {
+        "mae_mj_per_kg": 3.8399854731719216,
+        "mape": 0.21089637765818522,
+        "r2": 0.9728527324792217,
+        "rmse_mj_per_kg": 7.912680518153078
+      }
+    },
+    "qa_shell_hdb_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 2.7127877102150237,
+        "mape": 0.04355785019483513,
+        "r2": 0.984934989508211,
+        "rmse_mj_per_kg": 5.894477155982403
+      },
+      "prediction_field": "qa_shell_hdb_energy_mj_per_kg"
     },
     "qa_with_drive_metadata": {
       "coefficients": [
@@ -209,7 +243,7 @@
       "target_transform": "log"
     }
   },
-  "interpretation": "A useful QA hysteresis mapping should improve held-out loss prediction over the mean baseline and should be evaluated against Steinmetz. The QA-only models test whether measured loop geometry maps into QA coordinates without drive metadata. The QA-with-drive model tests whether QA loop structure adds predictive signal when amplitude/frequency are available.",
+  "interpretation": "A useful QA hysteresis mapping should improve held-out loss prediction over the mean baseline and should be evaluated against Steinmetz. The rank-only QA models test whether measured loop geometry maps into QA coordinates without physical scale. The dimensioned QA shell model keeps calibration-set H/B shell centers and directly approximates the hysteresis work integral.",
   "ok": true,
   "physical_observable": {
     "loop_integral_check": "abs(integral H dB) / density converted to mJ/kg",
@@ -223,12 +257,14 @@
     "X": "d*e",
     "a": "b+2*e",
     "b": "bin(H_Aperm)",
+    "bin_centers": "global calibration-loop shell means only",
     "bin_edges": "global calibration-loop quantiles only",
     "d": "b+e",
     "e": "bin(B_T)",
     "m": 24,
     "observables": [
       "abs(integral b de)",
+      "abs(integral H_shell dB_shell) converted to mJ/kg",
       "abs(integral J dX)",
       "abs(integral K dX)",
       "abs(integral Pi dX)",
@@ -249,6 +285,7 @@
       "qa_kx_loop_area": 16596.0,
       "qa_pi_abs_path_energy": 1901965.0,
       "qa_pi_x_loop_area": 33192.0,
+      "qa_shell_hdb_energy_mj_per_kg": 1.734055979791957,
       "qa_unique_states": 26.0,
       "rows": 10001,
       "split": "calibration"
@@ -265,6 +302,7 @@
       "qa_kx_loop_area": 50824.0,
       "qa_pi_abs_path_energy": 2810015.0,
       "qa_pi_x_loop_area": 101648.0,
+      "qa_shell_hdb_energy_mj_per_kg": 5.642023185741893,
       "qa_unique_states": 38.0,
       "rows": 10001,
       "split": "heldout"
@@ -281,6 +319,7 @@
       "qa_kx_loop_area": 97132.0,
       "qa_pi_abs_path_energy": 3703184.0,
       "qa_pi_x_loop_area": 194264.0,
+      "qa_shell_hdb_energy_mj_per_kg": 11.183760477846334,
       "qa_unique_states": 52.0,
       "rows": 10001,
       "split": "calibration"
@@ -297,6 +336,7 @@
       "qa_kx_loop_area": 145538.0,
       "qa_pi_abs_path_energy": 4451544.0,
       "qa_pi_x_loop_area": 291076.0,
+      "qa_shell_hdb_energy_mj_per_kg": 17.43676141440434,
       "qa_unique_states": 64.0,
       "rows": 10001,
       "split": "calibration"
@@ -313,6 +353,7 @@
       "qa_kx_loop_area": 201986.0,
       "qa_pi_abs_path_energy": 5406774.0,
       "qa_pi_x_loop_area": 403972.0,
+      "qa_shell_hdb_energy_mj_per_kg": 26.351434968424226,
       "qa_unique_states": 72.0,
       "rows": 10001,
       "split": "heldout"
@@ -329,6 +370,7 @@
       "qa_kx_loop_area": 245782.5,
       "qa_pi_abs_path_energy": 7026704.0,
       "qa_pi_x_loop_area": 491565.0,
+      "qa_shell_hdb_energy_mj_per_kg": 35.50028995591299,
       "qa_unique_states": 83.0,
       "rows": 10001,
       "split": "calibration"
@@ -345,6 +387,7 @@
       "qa_kx_loop_area": 286950.0,
       "qa_pi_abs_path_energy": 6952886.0,
       "qa_pi_x_loop_area": 573900.0,
+      "qa_shell_hdb_energy_mj_per_kg": 42.45101345250994,
       "qa_unique_states": 84.0,
       "rows": 10001,
       "split": "calibration"
@@ -361,6 +404,7 @@
       "qa_kx_loop_area": 24254.0,
       "qa_pi_abs_path_energy": 1179500.0,
       "qa_pi_x_loop_area": 48508.0,
+      "qa_shell_hdb_energy_mj_per_kg": 2.281857264072033,
       "qa_unique_states": 28.0,
       "rows": 5001,
       "split": "heldout"
@@ -377,6 +421,7 @@
       "qa_kx_loop_area": 94906.0,
       "qa_pi_abs_path_energy": 2040300.0,
       "qa_pi_x_loop_area": 189812.0,
+      "qa_shell_hdb_energy_mj_per_kg": 9.434639193199967,
       "qa_unique_states": 44.0,
       "rows": 5001,
       "split": "calibration"
@@ -393,6 +438,7 @@
       "qa_kx_loop_area": 180668.0,
       "qa_pi_abs_path_energy": 2981137.0,
       "qa_pi_x_loop_area": 361336.0,
+      "qa_shell_hdb_energy_mj_per_kg": 18.63271625487655,
       "qa_unique_states": 56.0,
       "rows": 5001,
       "split": "calibration"
@@ -409,6 +455,7 @@
       "qa_kx_loop_area": 282534.0,
       "qa_pi_abs_path_energy": 4161476.0,
       "qa_pi_x_loop_area": 565068.0,
+      "qa_shell_hdb_energy_mj_per_kg": 32.90105798794825,
       "qa_unique_states": 68.0,
       "rows": 5001,
       "split": "heldout"
@@ -425,6 +472,7 @@
       "qa_kx_loop_area": 377428.0,
       "qa_pi_abs_path_energy": 4935883.0,
       "qa_pi_x_loop_area": 754856.0,
+      "qa_shell_hdb_energy_mj_per_kg": 50.10921737620818,
       "qa_unique_states": 76.0,
       "rows": 5001,
       "split": "calibration"
@@ -441,6 +489,7 @@
       "qa_kx_loop_area": 471784.0,
       "qa_pi_abs_path_energy": 5893984.0,
       "qa_pi_x_loop_area": 943568.0,
+      "qa_shell_hdb_energy_mj_per_kg": 73.27898654228937,
       "qa_unique_states": 84.0,
       "rows": 5001,
       "split": "calibration"
@@ -457,6 +506,7 @@
       "qa_kx_loop_area": 524498.0,
       "qa_pi_abs_path_energy": 6159325.0,
       "qa_pi_x_loop_area": 1048996.0,
+      "qa_shell_hdb_energy_mj_per_kg": 92.78565765037536,
       "qa_unique_states": 88.0,
       "rows": 5001,
       "split": "heldout"
@@ -473,6 +523,7 @@
       "qa_kx_loop_area": 40658.0,
       "qa_pi_abs_path_energy": 1346553.0,
       "qa_pi_x_loop_area": 81316.0,
+      "qa_shell_hdb_energy_mj_per_kg": 3.6840290812778993,
       "qa_unique_states": 32.0,
       "rows": 10001,
       "split": "calibration"
@@ -489,6 +540,7 @@
       "qa_kx_loop_area": 144750.0,
       "qa_pi_abs_path_energy": 2529755.0,
       "qa_pi_x_loop_area": 289500.0,
+      "qa_shell_hdb_energy_mj_per_kg": 13.582522537709355,
       "qa_unique_states": 52.0,
       "rows": 10001,
       "split": "calibration"
@@ -505,6 +557,7 @@
       "qa_kx_loop_area": 260918.0,
       "qa_pi_abs_path_energy": 3367054.0,
       "qa_pi_x_loop_area": 521836.0,
+      "qa_shell_hdb_energy_mj_per_kg": 28.47339845915786,
       "qa_unique_states": 64.0,
       "rows": 10001,
       "split": "heldout"
@@ -521,6 +574,7 @@
       "qa_kx_loop_area": 388922.0,
       "qa_pi_abs_path_energy": 4633496.0,
       "qa_pi_x_loop_area": 777844.0,
+      "qa_shell_hdb_energy_mj_per_kg": 52.02168211506407,
       "qa_unique_states": 76.0,
       "rows": 10001,
       "split": "calibration"
@@ -537,6 +591,7 @@
       "qa_kx_loop_area": 504820.0,
       "qa_pi_abs_path_energy": 5530864.0,
       "qa_pi_x_loop_area": 1009640.0,
+      "qa_shell_hdb_energy_mj_per_kg": 85.81191834981684,
       "qa_unique_states": 84.0,
       "rows": 10001,
       "split": "calibration"
@@ -553,6 +608,7 @@
       "qa_kx_loop_area": 598092.0,
       "qa_pi_abs_path_energy": 6275601.0,
       "qa_pi_x_loop_area": 1196184.0,
+      "qa_shell_hdb_energy_mj_per_kg": 119.88429364263345,
       "qa_unique_states": 88.0,
       "rows": 10001,
       "split": "heldout"
@@ -569,6 +625,7 @@
       "qa_kx_loop_area": 664462.0,
       "qa_pi_abs_path_energy": 6572044.0,
       "qa_pi_x_loop_area": 1328924.0,
+      "qa_shell_hdb_energy_mj_per_kg": 184.29402447106912,
       "qa_unique_states": 92.0,
       "rows": 10001,
       "split": "calibration"
@@ -585,6 +642,7 @@
       "qa_kx_loop_area": 74256.0,
       "qa_pi_abs_path_energy": 1551139.0,
       "qa_pi_x_loop_area": 148512.0,
+      "qa_shell_hdb_energy_mj_per_kg": 6.124229120269654,
       "qa_unique_states": 40.0,
       "rows": 10001,
       "split": "calibration"
@@ -601,6 +659,7 @@
       "qa_kx_loop_area": 202266.0,
       "qa_pi_abs_path_energy": 2638360.0,
       "qa_pi_x_loop_area": 404532.0,
+      "qa_shell_hdb_energy_mj_per_kg": 20.853585125181862,
       "qa_unique_states": 56.0,
       "rows": 10001,
       "split": "heldout"
@@ -617,6 +676,7 @@
       "qa_kx_loop_area": 332560.0,
       "qa_pi_abs_path_energy": 3680925.0,
       "qa_pi_x_loop_area": 665120.0,
+      "qa_shell_hdb_energy_mj_per_kg": 42.4004308387836,
       "qa_unique_states": 68.0,
       "rows": 10001,
       "split": "calibration"
@@ -633,6 +693,7 @@
       "qa_kx_loop_area": 483102.0,
       "qa_pi_abs_path_energy": 5012805.0,
       "qa_pi_x_loop_area": 966204.0,
+      "qa_shell_hdb_energy_mj_per_kg": 81.56067189224795,
       "qa_unique_states": 80.0,
       "rows": 10001,
       "split": "calibration"
@@ -649,6 +710,7 @@
       "qa_kx_loop_area": 592868.0,
       "qa_pi_abs_path_energy": 5873831.0,
       "qa_pi_x_loop_area": 1185736.0,
+      "qa_shell_hdb_energy_mj_per_kg": 150.73212929329503,
       "qa_unique_states": 88.0,
       "rows": 10001,
       "split": "heldout"
@@ -665,6 +727,7 @@
       "qa_kx_loop_area": 695806.0,
       "qa_pi_abs_path_energy": 6635164.0,
       "qa_pi_x_loop_area": 1391612.0,
+      "qa_shell_hdb_energy_mj_per_kg": 226.36122000249998,
       "qa_unique_states": 92.0,
       "rows": 10001,
       "split": "calibration"
@@ -681,14 +744,15 @@
       "qa_kx_loop_area": 725880.5,
       "qa_pi_abs_path_energy": 6693866.0,
       "qa_pi_x_loop_area": 1451761.0,
+      "qa_shell_hdb_energy_mj_per_kg": 245.32360148421333,
       "qa_unique_states": 91.0,
       "rows": 10001,
       "split": "calibration"
     }
   ],
   "verdict": {
-    "qa_adds_to_steinmetz_here": "NO: the tested Steinmetz+QA shape model did not improve held-out performance over Steinmetz alone.",
-    "qa_beats_steinmetz_here": "NO: the log-linear Steinmetz baseline remains much stronger on this selected Ring35 SIN subset.",
+    "qa_adds_to_steinmetz_here": "The tested log Steinmetz+rank-QA shape model does not improve Steinmetz, but the physically dimensioned QA shell integral beats Steinmetz directly.",
+    "qa_beats_steinmetz_here": "YES: the direct dimensioned QA shell integral outperforms the log-linear Steinmetz baseline on this selected Ring35 SIN subset.",
     "qa_not_random": "YES: QA-only held-out models reduce error substantially relative to the mean-loss baseline on real measured loops."
   }
 }

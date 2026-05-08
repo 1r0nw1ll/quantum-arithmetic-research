@@ -85,6 +85,12 @@ QA_RECONSTRUCTION_FIELDS = [
     "qa_reconstruct_be_branch_energy_mj_per_kg",
     "qa_reconstruct_memory_full_energy_mj_per_kg",
 ]
+QA_RESIDUAL_RECONSTRUCTION_FIELDS = [
+    "qa_residual_reconstruct_be_energy_mj_per_kg",
+    "qa_residual_reconstruct_be_dir_energy_mj_per_kg",
+    "qa_residual_reconstruct_be_branch_energy_mj_per_kg",
+    "qa_residual_reconstruct_memory_full_energy_mj_per_kg",
+]
 
 
 @dataclass(frozen=True)
@@ -567,6 +573,7 @@ def build_global_calibration(
     dict[tuple[int, int], tuple[float, float]],
     dict[tuple[str, str], dict[int, float]],
     dict[str, dict[tuple, tuple[float, float]]],
+    dict[str, dict[tuple, tuple[float, float]]],
 ]:
     h_values: list[float] = []
     b_values: list[float] = []
@@ -582,6 +589,12 @@ def build_global_calibration(
     state_values: dict[tuple[int, int], list[tuple[float, float]]] = {}
     lifted_values: dict[tuple[str, str], dict[int, list[float]]] = {}
     reconstruction_values: dict[str, dict[tuple, list[tuple[float, float]]]] = {
+        "be": {},
+        "be_dir": {},
+        "be_branch": {},
+        "memory_full": {},
+    }
+    residual_reconstruction_values: dict[str, dict[tuple, list[tuple[float, float]]]] = {
         "be": {},
         "be_dir": {},
         "be_branch": {},
@@ -607,6 +620,16 @@ def build_global_calibration(
                 ("be", "be_dir", "be_branch", "memory_full"), contexts
             ):
                 reconstruction_values[family].setdefault(context, []).append((h_shell, b_shell))
+        for h_value, b_value, b_state, e_state, contexts in zip(
+            trace.h_a_per_m, trace.b_t, b_seq, e_seq, context_seq
+        ):
+            h_shell = h_centers[b_state - 1]
+            b_shell = b_centers[e_state - 1]
+            residual = (h_value - h_shell, b_value - b_shell)
+            for family, context in zip(
+                ("be", "be_dir", "be_branch", "memory_full"), contexts
+            ):
+                residual_reconstruction_values[family].setdefault(context, []).append(residual)
 
     state_centers = {
         state: (
@@ -629,6 +652,16 @@ def build_global_calibration(
         }
         for family, value_map in reconstruction_values.items()
     }
+    residual_reconstruction_centers = {
+        family: {
+            context: (
+                statistics.mean(h_value for h_value, _ in values),
+                statistics.mean(b_value for _, b_value in values),
+            )
+            for context, values in value_map.items()
+        }
+        for family, value_map in residual_reconstruction_values.items()
+    }
     return (
         h_edges,
         b_edges,
@@ -637,6 +670,7 @@ def build_global_calibration(
         state_centers,
         lifted_centers,
         reconstruction_centers,
+        residual_reconstruction_centers,
     )
 
 
@@ -649,6 +683,7 @@ def qa_observables(
     state_centers: dict[tuple[int, int], tuple[float, float]],
     lifted_centers: dict[tuple[str, str], dict[int, float]],
     reconstruction_centers: dict[str, dict[tuple, tuple[float, float]]],
+    residual_reconstruction_centers: dict[str, dict[tuple, tuple[float, float]]],
 ) -> dict[str, float]:
     b_seq = bins(trace.h_a_per_m, h_edges)
     e_seq = bins(trace.b_t, b_edges)
@@ -767,6 +802,24 @@ def qa_observables(
         energy = 1000.0 * abs(line_integral_y_dx(b_hat, h_hat)) / DENSITY_KG_PER_M3
         return energy, unseen / len(context_seq)
 
+    def residual_reconstructed_energy(family: str, context_index: int) -> tuple[float, float]:
+        h_hat: list[float] = []
+        b_hat: list[float] = []
+        unseen = 0
+        family_map = residual_reconstruction_centers.get(family, {})
+        be_map = residual_reconstruction_centers.get("be", {})
+        for b_state, e_state, contexts in zip(b_seq, e_seq, context_seq):
+            residual = family_map.get(contexts[context_index])
+            if residual is None:
+                residual = be_map.get((b_state, e_state))
+            if residual is None:
+                unseen += 1
+                residual = (0.0, 0.0)
+            h_hat.append(h_centers[b_state - 1] + residual[0])
+            b_hat.append(b_centers[e_state - 1] + residual[1])
+        energy = 1000.0 * abs(line_integral_y_dx(b_hat, h_hat)) / DENSITY_KG_PER_M3
+        return energy, unseen / len(context_seq)
+
     reconstruct_be, reconstruct_be_unseen = reconstructed_energy("be", 0)
     reconstruct_be_dir, reconstruct_be_dir_unseen = reconstructed_energy("be_dir", 1)
     reconstruct_be_branch, reconstruct_be_branch_unseen = reconstructed_energy(
@@ -774,6 +827,18 @@ def qa_observables(
     )
     reconstruct_memory_full, reconstruct_memory_full_unseen = reconstructed_energy(
         "memory_full", 3
+    )
+    residual_reconstruct_be, residual_reconstruct_be_unseen = residual_reconstructed_energy(
+        "be", 0
+    )
+    residual_reconstruct_be_dir, residual_reconstruct_be_dir_unseen = (
+        residual_reconstructed_energy("be_dir", 1)
+    )
+    residual_reconstruct_be_branch, residual_reconstruct_be_branch_unseen = (
+        residual_reconstructed_energy("be_branch", 2)
+    )
+    residual_reconstruct_memory_full, residual_reconstruct_memory_full_unseen = (
+        residual_reconstructed_energy("memory_full", 3)
     )
 
     fixed = {
@@ -818,6 +883,16 @@ def qa_observables(
         "qa_reconstruct_be_branch_unseen_fraction": reconstruct_be_branch_unseen,
         "qa_reconstruct_memory_full_energy_mj_per_kg": reconstruct_memory_full,
         "qa_reconstruct_memory_full_unseen_fraction": reconstruct_memory_full_unseen,
+        "qa_residual_reconstruct_be_energy_mj_per_kg": residual_reconstruct_be,
+        "qa_residual_reconstruct_be_unseen_fraction": residual_reconstruct_be_unseen,
+        "qa_residual_reconstruct_be_dir_energy_mj_per_kg": residual_reconstruct_be_dir,
+        "qa_residual_reconstruct_be_dir_unseen_fraction": residual_reconstruct_be_dir_unseen,
+        "qa_residual_reconstruct_be_branch_energy_mj_per_kg": residual_reconstruct_be_branch,
+        "qa_residual_reconstruct_be_branch_unseen_fraction": residual_reconstruct_be_branch_unseen,
+        "qa_residual_reconstruct_memory_full_energy_mj_per_kg": residual_reconstruct_memory_full,
+        "qa_residual_reconstruct_memory_full_unseen_fraction": (
+            residual_reconstruct_memory_full_unseen
+        ),
     }
     fixed.update(all_lifted)
     fixed.update(all_lifted_unseen)
@@ -994,9 +1069,16 @@ def direct_prediction(
 def build_records_for_split(
     traces: list[LoopTrace], calibration_names: set[str], heldout_names: set[str]
 ) -> list[dict]:
-    h_edges, b_edges, h_centers, b_centers, state_centers, lifted_centers, reconstruction_centers = (
-        build_global_calibration(traces, calibration_names)
-    )
+    (
+        h_edges,
+        b_edges,
+        h_centers,
+        b_centers,
+        state_centers,
+        lifted_centers,
+        reconstruction_centers,
+        residual_reconstruction_centers,
+    ) = build_global_calibration(traces, calibration_names)
     records: list[dict] = []
     for trace in traces:
         qa = qa_observables(
@@ -1008,6 +1090,7 @@ def build_records_for_split(
             state_centers,
             lifted_centers,
             reconstruction_centers,
+            residual_reconstruction_centers,
         )
         physical_from_loop = physical_energy_mj_per_kg(trace)
         rec = {
@@ -1063,6 +1146,18 @@ def direct_model_suite(
         ),
         "qa_reconstruct_memory_full_direct": direct_prediction(
             records, heldout_names, "qa_reconstruct_memory_full_energy_mj_per_kg"
+        ),
+        "qa_residual_reconstruct_be_direct": direct_prediction(
+            records, heldout_names, "qa_residual_reconstruct_be_energy_mj_per_kg"
+        ),
+        "qa_residual_reconstruct_be_dir_direct": direct_prediction(
+            records, heldout_names, "qa_residual_reconstruct_be_dir_energy_mj_per_kg"
+        ),
+        "qa_residual_reconstruct_be_branch_direct": direct_prediction(
+            records, heldout_names, "qa_residual_reconstruct_be_branch_energy_mj_per_kg"
+        ),
+        "qa_residual_reconstruct_memory_full_direct": direct_prediction(
+            records, heldout_names, "qa_residual_reconstruct_memory_full_energy_mj_per_kg"
         ),
     }
     models["qa_transition_only"] = fit_predict(
@@ -1282,6 +1377,14 @@ def summarize_transfer_split(
     reconstruct_be_dir = models["qa_reconstruct_be_dir_direct"]["heldout"]
     reconstruct_be_branch = models["qa_reconstruct_be_branch_direct"]["heldout"]
     reconstruct_memory_full = models["qa_reconstruct_memory_full_direct"]["heldout"]
+    residual_reconstruct_be = models["qa_residual_reconstruct_be_direct"]["heldout"]
+    residual_reconstruct_be_dir = models["qa_residual_reconstruct_be_dir_direct"]["heldout"]
+    residual_reconstruct_be_branch = models[
+        "qa_residual_reconstruct_be_branch_direct"
+    ]["heldout"]
+    residual_reconstruct_memory_full = models[
+        "qa_residual_reconstruct_memory_full_direct"
+    ]["heldout"]
     return {
         "split": split_name,
         "calibration_count": len(calibration_names),
@@ -1327,6 +1430,22 @@ def summarize_transfer_split(
         ]
         < nonqa["rmse_mj_per_kg"],
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": reconstruct_memory_full[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": residual_reconstruct_be[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": residual_reconstruct_be_dir[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": residual_reconstruct_be_branch[
+            "rmse_mj_per_kg"
+        ]
+        < nonqa["rmse_mj_per_kg"],
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": residual_reconstruct_memory_full[
             "rmse_mj_per_kg"
         ]
         < nonqa["rmse_mj_per_kg"],
@@ -1415,6 +1534,10 @@ def main() -> int:
         "qa_reconstruct_be_dir_direct",
         "qa_reconstruct_be_branch_direct",
         "qa_reconstruct_memory_full_direct",
+        "qa_residual_reconstruct_be_direct",
+        "qa_residual_reconstruct_be_dir_direct",
+        "qa_residual_reconstruct_be_branch_direct",
+        "qa_residual_reconstruct_memory_full_direct",
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
@@ -1446,6 +1569,10 @@ def main() -> int:
         "qa_reconstruct_be_dir_direct",
         "qa_reconstruct_be_branch_direct",
         "qa_reconstruct_memory_full_direct",
+        "qa_residual_reconstruct_be_direct",
+        "qa_residual_reconstruct_be_dir_direct",
+        "qa_residual_reconstruct_be_branch_direct",
+        "qa_residual_reconstruct_memory_full_direct",
         "qa_transition_only",
         "qa_transition_plus_shell",
         "nonqa_shell_plus_transition",
@@ -1521,6 +1648,26 @@ def main() -> int:
         for split in split_summaries
         if split["qa_reconstruct_memory_full_beats_nonqa_by_rmse"]
     )
+    residual_reconstruct_be_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_residual_reconstruct_be_beats_nonqa_by_rmse"]
+    )
+    residual_reconstruct_be_dir_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse"]
+    )
+    residual_reconstruct_be_branch_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse"]
+    )
+    residual_reconstruct_memory_full_rmse_wins = sum(
+        1
+        for split in split_summaries
+        if split["qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse"]
+    )
     transition_family_scores = {
         "qa_transition_only": transition_only_rmse_wins,
         "qa_transition_plus_shell": transition_plus_shell_rmse_wins,
@@ -1546,6 +1693,20 @@ def main() -> int:
     best_reconstruction_family = max(
         reconstruction_family_scores, key=lambda name: reconstruction_family_scores[name]
     )
+    residual_reconstruction_family_scores = {
+        "qa_residual_reconstruct_be_direct": residual_reconstruct_be_rmse_wins,
+        "qa_residual_reconstruct_be_dir_direct": residual_reconstruct_be_dir_rmse_wins,
+        "qa_residual_reconstruct_be_branch_direct": (
+            residual_reconstruct_be_branch_rmse_wins
+        ),
+        "qa_residual_reconstruct_memory_full_direct": (
+            residual_reconstruct_memory_full_rmse_wins
+        ),
+    }
+    best_residual_reconstruction_family = max(
+        residual_reconstruction_family_scores,
+        key=lambda name: residual_reconstruction_family_scores[name],
+    )
     memory_result_interpretation = (
         f"Memory-only QA wins {memory_only_rmse_wins} of {len(split_summaries)} "
         f"RMSE transfer splits against non-QA shell; memory plus QA shell wins "
@@ -1566,6 +1727,16 @@ def main() -> int:
         "declared reconstruction target is the marginal H/B shell center and every "
         "tested context contains (b,e), this formulation collapses to ordinary "
         "shell reconstruction rather than adding QA-specific branch information."
+    )
+    residual_reconstruction_result_interpretation = (
+        f"Residual branch-local reconstruction wins against ordinary non-QA shell in "
+        f"{residual_reconstruct_be_rmse_wins}/{len(split_summaries)} splits for "
+        f"(b,e), {residual_reconstruct_be_dir_rmse_wins}/{len(split_summaries)} "
+        f"for (b,e,sb,se), {residual_reconstruct_be_branch_rmse_wins}/"
+        f"{len(split_summaries)} for (b,e,branch,lag), and "
+        f"{residual_reconstruct_memory_full_rmse_wins}/{len(split_summaries)} for "
+        f"full memory context. Best residual reconstruction family: "
+        f"{best_residual_reconstruction_family}."
     )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
@@ -1622,6 +1793,7 @@ def main() -> int:
             "transition_features": QA_TRANSITION_FEATURES,
             "memory_features": QA_MEMORY_FEATURES,
             "reconstruction_fields": QA_RECONSTRUCTION_FIELDS,
+            "residual_reconstruction_fields": QA_RESIDUAL_RECONSTRUCTION_FIELDS,
             "reconstruction_contexts": [
                 "ctx_be=(b_t,e_t)",
                 "ctx_be_dir=(b_t,e_t,sb_t,se_t)",
@@ -1653,6 +1825,22 @@ def main() -> int:
             "qa_reconstruct_memory_full_rmse_wins_vs_nonqa_shell": reconstruct_memory_full_rmse_wins,
             "best_reconstruction_family": best_reconstruction_family,
             "reconstruction_result_interpretation": reconstruction_result_interpretation,
+            "qa_residual_reconstruct_be_rmse_wins_vs_nonqa_shell": (
+                residual_reconstruct_be_rmse_wins
+            ),
+            "qa_residual_reconstruct_be_dir_rmse_wins_vs_nonqa_shell": (
+                residual_reconstruct_be_dir_rmse_wins
+            ),
+            "qa_residual_reconstruct_be_branch_rmse_wins_vs_nonqa_shell": (
+                residual_reconstruct_be_branch_rmse_wins
+            ),
+            "qa_residual_reconstruct_memory_full_rmse_wins_vs_nonqa_shell": (
+                residual_reconstruct_memory_full_rmse_wins
+            ),
+            "best_residual_reconstruction_family": best_residual_reconstruction_family,
+            "residual_reconstruction_result_interpretation": (
+                residual_reconstruction_result_interpretation
+            ),
             "lifted_pair_sweep_summary": lifted_pair_sweep_summary,
             "phase_pair_sweep_summary": phase_pair_sweep_summary,
         },
@@ -1722,12 +1910,17 @@ def main() -> int:
             ),
             "memory_result_interpretation": memory_result_interpretation,
             "reconstruction_result_interpretation": reconstruction_result_interpretation,
+            "residual_reconstruction_result_interpretation": (
+                residual_reconstruction_result_interpretation
+            ),
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "
                 "centers are fit on calibration loops only. Direct predictors use "
                 "no held-out loss labels and no fitted regression coefficient. "
                 "Branch-local reconstruction lookup tables are fit separately per "
-                "split on calibration traces only."
+                "split on calibration traces only. Residual reconstruction lookup "
+                "tables also use calibration traces only and fall back to (b,e) "
+                "residuals or zero residual when a held-out context is unseen."
             ),
         },
         "records": records,

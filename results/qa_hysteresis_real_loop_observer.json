@@ -118,6 +118,34 @@
       "rmse_mj_per_kg": 5.894477155982403
     },
     {
+      "mae_mj_per_kg": 3.69346466119591,
+      "mape": 0.04894248093504308,
+      "model": "qa_residual_reconstruct_be_direct",
+      "r2": 0.9721929287371951,
+      "rmse_mj_per_kg": 8.0082605517487
+    },
+    {
+      "mae_mj_per_kg": 3.4631494145458976,
+      "mape": 0.056314468338248574,
+      "model": "qa_residual_reconstruct_be_dir_direct",
+      "r2": 0.9737925639679449,
+      "rmse_mj_per_kg": 7.77450660596561
+    },
+    {
+      "mae_mj_per_kg": 3.5215507633446554,
+      "mape": 0.053722198101117814,
+      "model": "qa_residual_reconstruct_be_branch_direct",
+      "r2": 0.973692447758526,
+      "rmse_mj_per_kg": 7.789342322641312
+    },
+    {
+      "mae_mj_per_kg": 3.5056739996454382,
+      "mape": 0.053998242738400835,
+      "model": "qa_residual_reconstruct_memory_full_direct",
+      "r2": 0.9737092199085534,
+      "rmse_mj_per_kg": 7.78685891319621
+    },
+    {
       "mae_mj_per_kg": 46.07739546766461,
       "mape": 6.426041070463106,
       "model": "qa_transition_only",
@@ -1139,6 +1167,42 @@
       },
       "prediction_field": "qa_reconstruct_memory_full_energy_mj_per_kg"
     },
+    "qa_residual_reconstruct_be_branch_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 3.5215507633446554,
+        "mape": 0.053722198101117814,
+        "r2": 0.973692447758526,
+        "rmse_mj_per_kg": 7.789342322641312
+      },
+      "prediction_field": "qa_residual_reconstruct_be_branch_energy_mj_per_kg"
+    },
+    "qa_residual_reconstruct_be_dir_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 3.4631494145458976,
+        "mape": 0.056314468338248574,
+        "r2": 0.9737925639679449,
+        "rmse_mj_per_kg": 7.77450660596561
+      },
+      "prediction_field": "qa_residual_reconstruct_be_dir_energy_mj_per_kg"
+    },
+    "qa_residual_reconstruct_be_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 3.69346466119591,
+        "mape": 0.04894248093504308,
+        "r2": 0.9721929287371951,
+        "rmse_mj_per_kg": 8.0082605517487
+      },
+      "prediction_field": "qa_residual_reconstruct_be_energy_mj_per_kg"
+    },
+    "qa_residual_reconstruct_memory_full_direct": {
+      "heldout": {
+        "mae_mj_per_kg": 3.5056739996454382,
+        "mape": 0.053998242738400835,
+        "r2": 0.9737092199085534,
+        "rmse_mj_per_kg": 7.78685891319621
+      },
+      "prediction_field": "qa_residual_reconstruct_memory_full_energy_mj_per_kg"
+    },
     "qa_shell_hdb_affine": {
       "coefficients": [
         64.15078943992063,
@@ -1507,6 +1571,12 @@
       "qa_reconstruct_be_dir_energy_mj_per_kg",
       "qa_reconstruct_be_branch_energy_mj_per_kg",
       "qa_reconstruct_memory_full_energy_mj_per_kg"
+    ],
+    "residual_reconstruction_fields": [
+      "qa_residual_reconstruct_be_energy_mj_per_kg",
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg",
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg",
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg"
     ],
     "transition_features": [
       "qa_transition_unique_edges",
@@ -2020,6 +2090,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 1.734055979791957,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 1.8658010010975419,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 1.87288831573569,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 1.9421096967519333,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 1.8681599424094508,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 1.9421096967519333,
       "qa_shell_hdb_negative_abs_mj_per_kg": 1.7467395446306304,
       "qa_shell_hdb_phase_total_variation": 6.333980712065035,
@@ -2539,6 +2617,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.06729327067293271,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 5.642023185741893,
       "qa_reconstruct_memory_full_unseen_fraction": 0.06729327067293271,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 6.019967251036753,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.06729327067293271,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 6.246267775608304,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.06729327067293271,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 5.900023634186692,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.06729327067293271,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 6.079620596907184,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.06729327067293271,
       "qa_shell_hdb_energy_mj_per_kg": 5.9000236341866925,
       "qa_shell_hdb_negative_abs_mj_per_kg": 1.1957159892783633,
       "qa_shell_hdb_phase_total_variation": 6.390519431720085,
@@ -3058,6 +3144,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 11.183760477846334,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 11.450769402723175,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 11.446793540730287,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 11.32362892257008,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 11.442638436424259,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 11.32362892257008,
       "qa_shell_hdb_negative_abs_mj_per_kg": 2.263529805832642,
       "qa_shell_hdb_phase_total_variation": 6.3242437951028085,
@@ -3577,6 +3671,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 17.43676141440434,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 17.706650799679995,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 17.676116698619776,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 17.440283102230456,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 17.67973061955281,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 17.440283102230456,
       "qa_shell_hdb_negative_abs_mj_per_kg": 3.298611195443916,
       "qa_shell_hdb_phase_total_variation": 6.3114078186818965,
@@ -4096,6 +4198,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 26.351434968424226,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 26.586050159736704,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 26.367675937278698,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 26.163923604865463,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 26.38350594057332,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 26.163923604865463,
       "qa_shell_hdb_negative_abs_mj_per_kg": 6.4831713655943695,
       "qa_shell_hdb_phase_total_variation": 6.3994165865201404,
@@ -4615,6 +4725,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 35.50028995591299,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 36.10544244597746,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 36.15905166723894,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 35.52076361255044,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 36.038116059328175,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 35.52076361255044,
       "qa_shell_hdb_negative_abs_mj_per_kg": 9.403530754306958,
       "qa_shell_hdb_phase_total_variation": 6.536836050061341,
@@ -5134,6 +5252,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 42.45101345250994,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 42.95767701916536,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 42.618608758710074,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 41.43871953400617,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 42.93748660877418,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 41.43871953400617,
       "qa_shell_hdb_negative_abs_mj_per_kg": 7.31965122558155,
       "qa_shell_hdb_phase_total_variation": 6.537976162559609,
@@ -5653,6 +5779,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 2.281857264072033,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 2.3002594223197455,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 2.2958455770163995,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 2.364882961666822,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 2.3002594223197455,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 2.364882961666822,
       "qa_shell_hdb_negative_abs_mj_per_kg": 0.4810206348100924,
       "qa_shell_hdb_phase_total_variation": 6.288647180924811,
@@ -6172,6 +6306,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 9.434639193199967,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 9.418644687711021,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 9.434623478755226,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 9.410240623172504,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 9.418644687711021,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 9.410240623172504,
       "qa_shell_hdb_negative_abs_mj_per_kg": 0.369620009419903,
       "qa_shell_hdb_phase_total_variation": 6.284886374490538,
@@ -6691,6 +6833,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 18.63271625487655,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 18.80873562780962,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 18.79826687427691,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 18.803189496309923,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 18.80873562780962,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 18.803189496309923,
       "qa_shell_hdb_negative_abs_mj_per_kg": 1.0791736325364094,
       "qa_shell_hdb_phase_total_variation": 6.2860003667089295,
@@ -7210,6 +7360,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.34493101379724056,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 32.90105798794825,
       "qa_reconstruct_memory_full_unseen_fraction": 0.34493101379724056,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 32.674869973222734,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.34493101379724056,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 32.589711255048776,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.34493101379724056,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 32.41246887590632,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.34493101379724056,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 32.674869973222734,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.34493101379724056,
       "qa_shell_hdb_energy_mj_per_kg": 32.41246887590632,
       "qa_shell_hdb_negative_abs_mj_per_kg": 3.4528507215193462,
       "qa_shell_hdb_phase_total_variation": 6.295324078664344,
@@ -7729,6 +7887,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 50.10921737620818,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 49.895006357880355,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 49.6802992927283,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 50.454370077039634,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 49.895006357880355,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 50.454370077039634,
       "qa_shell_hdb_negative_abs_mj_per_kg": 2.955186120656536,
       "qa_shell_hdb_phase_total_variation": 6.320112086330623,
@@ -8248,6 +8414,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 73.27898654228937,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 72.33183407404229,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 72.50525084710372,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 72.57516731090934,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 72.33183407404229,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 72.57516731090934,
       "qa_shell_hdb_negative_abs_mj_per_kg": 4.113250173004518,
       "qa_shell_hdb_phase_total_variation": 6.301683535592,
@@ -8767,6 +8941,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.08918216356728655,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 92.78565765037536,
       "qa_reconstruct_memory_full_unseen_fraction": 0.08918216356728655,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 93.10649774041043,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.08918216356728655,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 92.8144591773794,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.08918216356728655,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 91.91772417415481,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.08918216356728655,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 93.10649774041043,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.08918216356728655,
       "qa_shell_hdb_energy_mj_per_kg": 91.91772417415481,
       "qa_shell_hdb_negative_abs_mj_per_kg": 8.202146290992419,
       "qa_shell_hdb_phase_total_variation": 6.287926675070731,
@@ -9286,6 +9468,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 3.6840290812778993,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 3.8118173904319477,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 3.821202677666748,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 3.6000149789814633,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 3.8201381644514143,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 3.6000149789814633,
       "qa_shell_hdb_negative_abs_mj_per_kg": 0.351964555371537,
       "qa_shell_hdb_phase_total_variation": 6.285286285423938,
@@ -9805,6 +9995,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 13.582522537709355,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 13.402597847828872,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 13.382872455006437,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 13.35670662854176,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 13.402430532002699,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 13.35670662854176,
       "qa_shell_hdb_negative_abs_mj_per_kg": 0.9763652314187371,
       "qa_shell_hdb_phase_total_variation": 6.285380421654548,
@@ -10324,6 +10522,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.148985101489851,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 28.47339845915786,
       "qa_reconstruct_memory_full_unseen_fraction": 0.148985101489851,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 28.685588914035293,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.148985101489851,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 28.63561977014547,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.148985101489851,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 28.785066007412382,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.148985101489851,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 28.685588914035293,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.148985101489851,
       "qa_shell_hdb_energy_mj_per_kg": 28.785066007412382,
       "qa_shell_hdb_negative_abs_mj_per_kg": 1.812405879411065,
       "qa_shell_hdb_phase_total_variation": 6.407863740051058,
@@ -10843,6 +11049,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 52.02168211506407,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 51.0688124708144,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 51.195062291060346,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 51.971118505678966,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 51.0688124708144,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 51.971118505678966,
       "qa_shell_hdb_negative_abs_mj_per_kg": 2.561227774974601,
       "qa_shell_hdb_phase_total_variation": 6.292574782067091,
@@ -11362,6 +11576,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 85.81191834981684,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 85.49001097031702,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 85.4734243959507,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 84.94631010956095,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 85.49001097031702,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 84.94631010956095,
       "qa_shell_hdb_negative_abs_mj_per_kg": 3.4373185827232713,
       "qa_shell_hdb_phase_total_variation": 6.376251943426222,
@@ -11881,6 +12103,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.12868713128687131,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 119.88429364263345,
       "qa_reconstruct_memory_full_unseen_fraction": 0.12868713128687131,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 118.96656424783306,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.12868713128687131,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 119.03935350837966,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.12868713128687131,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 117.59568891462682,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.12868713128687131,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 118.96656424783306,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.12868713128687131,
       "qa_shell_hdb_energy_mj_per_kg": 117.59568891462682,
       "qa_shell_hdb_negative_abs_mj_per_kg": 9.629370077206207,
       "qa_shell_hdb_phase_total_variation": 6.298796406430555,
@@ -12400,6 +12630,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 184.29402447106912,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 190.7698930889209,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 191.0459501231257,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 190.10945678395123,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 190.7698930889209,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 190.10945678395126,
       "qa_shell_hdb_negative_abs_mj_per_kg": 5.728373283328829,
       "qa_shell_hdb_phase_total_variation": 6.286509875901876,
@@ -12919,6 +13157,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 6.124229120269654,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 5.8777165332656764,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 5.863486575449518,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 5.884778793426048,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 5.867301897113574,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 5.884778793426048,
       "qa_shell_hdb_negative_abs_mj_per_kg": 0.37539820319296796,
       "qa_shell_hdb_phase_total_variation": 6.283550960354667,
@@ -13438,6 +13684,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.05829417058294171,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 20.853585125181862,
       "qa_reconstruct_memory_full_unseen_fraction": 0.05829417058294171,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 20.842201411191734,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.05829417058294171,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 20.82120197671209,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.05829417058294171,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 20.957451949676468,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.05829417058294171,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 20.842201411191734,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.05829417058294171,
       "qa_shell_hdb_energy_mj_per_kg": 20.957451949676468,
       "qa_shell_hdb_negative_abs_mj_per_kg": 1.629704197218129,
       "qa_shell_hdb_phase_total_variation": 6.285741075874275,
@@ -13957,6 +14211,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 42.4004308387836,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 42.55756397061653,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 42.556207618649175,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 42.543537667592695,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 42.55756397061653,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 42.543537667592695,
       "qa_shell_hdb_negative_abs_mj_per_kg": 1.368124610321578,
       "qa_shell_hdb_phase_total_variation": 6.284716651147567,
@@ -14476,6 +14738,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 81.56067189224795,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 79.98749027597789,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 80.11510114698385,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 80.03315631499174,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 79.98749027597789,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 80.03315631499174,
       "qa_shell_hdb_negative_abs_mj_per_kg": 3.8426135233763627,
       "qa_shell_hdb_phase_total_variation": 6.336388383431002,
@@ -14995,6 +15265,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.06309369063093691,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 150.73212929329503,
       "qa_reconstruct_memory_full_unseen_fraction": 0.06309369063093691,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 156.37160509062105,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.06309369063093691,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 156.3546079241364,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.06309369063093691,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 156.7265439291643,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.06309369063093691,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 156.37160509062105,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.06309369063093691,
       "qa_shell_hdb_energy_mj_per_kg": 156.7265439291643,
       "qa_shell_hdb_negative_abs_mj_per_kg": 9.24837773585239,
       "qa_shell_hdb_phase_total_variation": 6.284704464957509,
@@ -15514,6 +15792,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 226.36122000249998,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 234.07256134420723,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 234.34861837841206,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 233.41912535861715,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 234.07256134420723,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 233.41912535861715,
       "qa_shell_hdb_negative_abs_mj_per_kg": 7.80424904226025,
       "qa_shell_hdb_phase_total_variation": 6.283185307179587,
@@ -16033,6 +16319,14 @@
       "qa_reconstruct_be_unseen_fraction": 0.0,
       "qa_reconstruct_memory_full_energy_mj_per_kg": 245.32360148421333,
       "qa_reconstruct_memory_full_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_branch_energy_mj_per_kg": 246.6334999015541,
+      "qa_residual_reconstruct_be_branch_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_dir_energy_mj_per_kg": 245.95271493675443,
+      "qa_residual_reconstruct_be_dir_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_be_energy_mj_per_kg": 243.6634286718367,
+      "qa_residual_reconstruct_be_unseen_fraction": 0.0,
+      "qa_residual_reconstruct_memory_full_energy_mj_per_kg": 246.6334999015541,
+      "qa_residual_reconstruct_memory_full_unseen_fraction": 0.0,
       "qa_shell_hdb_energy_mj_per_kg": 243.6634286718367,
       "qa_shell_hdb_negative_abs_mj_per_kg": 6.800781900095003,
       "qa_shell_hdb_phase_total_variation": 6.284811868257539,
@@ -16063,6 +16357,7 @@
   "transfer_split_summary": {
     "best_memory_family": "qa_memory_plus_qa_shell",
     "best_reconstruction_family": "qa_reconstruct_be_direct",
+    "best_residual_reconstruction_family": "qa_residual_reconstruct_be_dir_direct",
     "best_transition_family": "qa_transition_plus_shell",
     "lifted_pair_sweep_summary": {
       "best_pair": {
@@ -16329,9 +16624,14 @@
     "qa_reconstruct_be_dir_rmse_wins_vs_nonqa_shell": 0,
     "qa_reconstruct_be_rmse_wins_vs_nonqa_shell": 0,
     "qa_reconstruct_memory_full_rmse_wins_vs_nonqa_shell": 0,
+    "qa_residual_reconstruct_be_branch_rmse_wins_vs_nonqa_shell": 3,
+    "qa_residual_reconstruct_be_dir_rmse_wins_vs_nonqa_shell": 3,
+    "qa_residual_reconstruct_be_rmse_wins_vs_nonqa_shell": 2,
+    "qa_residual_reconstruct_memory_full_rmse_wins_vs_nonqa_shell": 3,
     "qa_transition_only_rmse_wins_vs_nonqa_shell": 0,
     "qa_transition_plus_shell_rmse_wins_vs_nonqa_shell": 2,
     "reconstruction_result_interpretation": "Branch-local lookup reconstruction wins against ordinary non-QA shell in 0/12 splits for (b,e), 0/12 for (b,e,sb,se), 0/12 for (b,e,branch,lag), and 0/12 for full memory context. Best reconstruction family: qa_reconstruct_be_direct. Because the declared reconstruction target is the marginal H/B shell center and every tested context contains (b,e), this formulation collapses to ordinary shell reconstruction rather than adding QA-specific branch information.",
+    "residual_reconstruction_result_interpretation": "Residual branch-local reconstruction wins against ordinary non-QA shell in 2/12 splits for (b,e), 3/12 for (b,e,sb,se), 3/12 for (b,e,branch,lag), and 3/12 for full memory context. Best residual reconstruction family: qa_residual_reconstruct_be_dir_direct.",
     "split_count": 12,
     "splits": [
       {
@@ -17128,6 +17428,30 @@
             "mape": 0.04355785019483513,
             "r2": 0.984934989508211,
             "rmse_mj_per_kg": 5.894477155982403
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 3.5215507633446554,
+            "mape": 0.053722198101117814,
+            "r2": 0.973692447758526,
+            "rmse_mj_per_kg": 7.789342322641312
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 3.4631494145458976,
+            "mape": 0.056314468338248574,
+            "r2": 0.9737925639679449,
+            "rmse_mj_per_kg": 7.77450660596561
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 3.69346466119591,
+            "mape": 0.04894248093504308,
+            "r2": 0.9721929287371951,
+            "rmse_mj_per_kg": 8.0082605517487
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 3.5056739996454382,
+            "mape": 0.053998242738400835,
+            "r2": 0.9737092199085534,
+            "rmse_mj_per_kg": 7.78685891319621
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 3.69346466119591,
@@ -18154,6 +18478,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "index_mod3_holdout"
@@ -18186,7 +18514,7 @@
           "rmse_ratio_to_nonqa": 1.0
         },
         "best_model_by_rmse": "raw_physical_hdb_direct",
-        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "best_nonraw_model_by_rmse": "qa_residual_reconstruct_be_dir_direct",
         "best_phase_pair_by_r2": {
           "b_var": "X",
           "beats_nonqa_by_mae": false,
@@ -18952,6 +19280,30 @@
             "mape": 0.03703559274954774,
             "r2": 0.9940657513929578,
             "rmse_mj_per_kg": 1.1488559459385628
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 0.5380079315949754,
+            "mape": 0.05377581916068431,
+            "r2": 0.998085204349408,
+            "rmse_mj_per_kg": 0.6525952737359035
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 0.5217079270312396,
+            "mape": 0.04932108675735257,
+            "r2": 0.9982569858070293,
+            "rmse_mj_per_kg": 0.622634483692518
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 0.7958984849219567,
+            "mape": 0.055016109009200106,
+            "r2": 0.9932540706684796,
+            "rmse_mj_per_kg": 1.2249083684061426
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 0.5262963971196798,
+            "mape": 0.04890111098178538,
+            "r2": 0.9981219204663363,
+            "rmse_mj_per_kg": 0.6463082475944714
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 0.7958984849219567,
@@ -19978,6 +20330,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": true,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "frequency_50Hz_holdout"
@@ -20010,7 +20366,7 @@
           "rmse_ratio_to_nonqa": 1.0000000000000009
         },
         "best_model_by_rmse": "raw_physical_hdb_direct",
-        "best_nonraw_model_by_rmse": "nonqa_shell_hdb_direct",
+        "best_nonraw_model_by_rmse": "qa_residual_reconstruct_be_branch_direct",
         "best_phase_pair_by_r2": {
           "b_var": "e",
           "beats_nonqa_by_mae": false,
@@ -20776,6 +21132,30 @@
             "mape": 0.036420677640917234,
             "r2": 0.9896861633157268,
             "rmse_mj_per_kg": 3.133429473245341
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 1.8412687804655228,
+            "mape": 0.045895000075390484,
+            "r2": 0.9909056178465536,
+            "rmse_mj_per_kg": 2.9423640035179415
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 1.8454847619585688,
+            "mape": 0.04534945779243909,
+            "r2": 0.9907075232332293,
+            "rmse_mj_per_kg": 2.9742367873247346
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 1.9055065233178634,
+            "mape": 0.038333057360139686,
+            "r2": 0.9885353009583742,
+            "rmse_mj_per_kg": 3.3036279236594326
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 1.8413985527258312,
+            "mape": 0.045945692364573555,
+            "r2": 0.990905543068726,
+            "rmse_mj_per_kg": 2.942376100169042
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 1.9055065233178656,
@@ -21802,6 +22182,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": true,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "frequency_400Hz_holdout"
@@ -22600,6 +22984,30 @@
             "mape": 0.037885148830028144,
             "r2": 0.9793589078373275,
             "rmse_mj_per_kg": 8.109258119185736
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 6.482043815996881,
+            "mape": 0.0554907127696347,
+            "r2": 0.9462907772944744,
+            "rmse_mj_per_kg": 13.080948065749144
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 6.435615786029624,
+            "mape": 0.05509060828938688,
+            "r2": 0.9450470900439029,
+            "rmse_mj_per_kg": 13.231532115199219
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 5.553599720973023,
+            "mape": 0.04787236126494009,
+            "r2": 0.9631984285603755,
+            "rmse_mj_per_kg": 10.82799308177165
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 6.493234361362842,
+            "mape": 0.05559454405531914,
+            "r2": 0.9463654215831943,
+            "rmse_mj_per_kg": 13.071855050585583
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 5.553599720973023,
@@ -23626,6 +24034,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "frequency_1000Hz_holdout"
@@ -24424,6 +24836,30 @@
             "mape": 0.13195169976678725,
             "r2": 0.7214633964426695,
             "rmse_mj_per_kg": 53.251671504130506
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 30.757583668606895,
+            "mape": 0.1392682917206938,
+            "r2": 0.6998457146672534,
+            "rmse_mj_per_kg": 55.27953492733551
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 30.69969446454998,
+            "mape": 0.13909340311594814,
+            "r2": 0.7000197443186892,
+            "rmse_mj_per_kg": 55.2635070484572
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 31.531372941161898,
+            "mape": 0.13954972850875763,
+            "r2": 0.6841393413595465,
+            "rmse_mj_per_kg": 56.70741817984234
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 30.756322545162647,
+            "mape": 0.13905396074784362,
+            "r2": 0.6998457848623922,
+            "rmse_mj_per_kg": 55.279528463401725
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 31.531372941161898,
@@ -25450,6 +25886,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": true,
         "split": "frequency_2000Hz_holdout"
@@ -26248,6 +26688,30 @@
             "mape": 0.042237467785985985,
             "r2": 0.9934439942255822,
             "rmse_mj_per_kg": 0.12713747980796583
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 0.1918255641953311,
+            "mape": 0.06995318982733104,
+            "r2": 0.9812928576769244,
+            "rmse_mj_per_kg": 0.21476210882882846
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 0.1894267259920432,
+            "mape": 0.07205729629646071,
+            "r2": 0.978993191902988,
+            "rmse_mj_per_kg": 0.22757993480053315
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 0.21592281051670503,
+            "mape": 0.07907947696727419,
+            "r2": 0.9718829571830385,
+            "rmse_mj_per_kg": 0.2632926621977231
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 0.19818620635516676,
+            "mape": 0.07369456871829387,
+            "r2": 0.9780074496291964,
+            "rmse_mj_per_kg": 0.23285830523766965
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 0.2159228105167048,
@@ -27274,6 +27738,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.20T_holdout"
@@ -28072,6 +28540,30 @@
             "mape": 0.053350841414813145,
             "r2": 0.9887390501724346,
             "rmse_mj_per_kg": 0.5765510009300541
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 0.4939083009057761,
+            "mape": 0.047043018893456565,
+            "r2": 0.9914726048714219,
+            "rmse_mj_per_kg": 0.5017165326685803
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 0.5107842587699367,
+            "mape": 0.05016116888885257,
+            "r2": 0.9909851498524388,
+            "rmse_mj_per_kg": 0.5158571740108209
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 0.4860024371782081,
+            "mape": 0.04793333460039753,
+            "r2": 0.9918171433963715,
+            "rmse_mj_per_kg": 0.49147642326214724
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 0.4952568120246501,
+            "mape": 0.047221395415693306,
+            "r2": 0.9914354832111876,
+            "rmse_mj_per_kg": 0.5028073889715858
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 0.4860024371782081,
@@ -29098,6 +29590,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": true,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.40T_holdout"
@@ -29896,6 +30392,30 @@
             "mape": 0.01953851679165873,
             "r2": 0.9981546646642531,
             "rmse_mj_per_kg": 0.5148974288989913
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 0.9728087403314425,
+            "mape": 0.0361740209619712,
+            "r2": 0.9912176630052298,
+            "rmse_mj_per_kg": 1.1232802502970671
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 0.963859396170399,
+            "mape": 0.03627978570834596,
+            "r2": 0.9915039051856266,
+            "rmse_mj_per_kg": 1.1048231085937732
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 0.9904910326335994,
+            "mape": 0.03742026247979807,
+            "r2": 0.9913073946498808,
+            "rmse_mj_per_kg": 1.117527079599402
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 0.9782141740245622,
+            "mape": 0.03667540440582155,
+            "r2": 0.9912115081584102,
+            "rmse_mj_per_kg": 1.1236737905929068
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 0.9904910326335994,
@@ -30922,6 +31442,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.60T_holdout"
@@ -31720,6 +32244,30 @@
             "mape": 0.03971737353143812,
             "r2": 0.9856255869092425,
             "rmse_mj_per_kg": 2.798664150130505
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 2.4270201518906394,
+            "mape": 0.048180759985109116,
+            "r2": 0.9835765262878817,
+            "rmse_mj_per_kg": 2.991494672880525
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 2.4298430240278313,
+            "mape": 0.04881405875152646,
+            "r2": 0.9837103305724408,
+            "rmse_mj_per_kg": 2.9792836929453554
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 2.2110510759166138,
+            "mape": 0.045622730418248096,
+            "r2": 0.9860836836178806,
+            "rmse_mj_per_kg": 2.7537079019731263
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 2.4426277544292194,
+            "mape": 0.04906755558389207,
+            "r2": 0.9835559878596757,
+            "rmse_mj_per_kg": 2.9933646001249308
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 2.2110510759166138,
@@ -32746,6 +33294,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": true,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_0.80T_holdout"
@@ -33544,6 +34096,30 @@
             "mape": 0.09933227448666891,
             "r2": 0.8612222718749096,
             "rmse_mj_per_kg": 15.11043125543404
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 12.707095223771343,
+            "mape": 0.13659386491683329,
+            "r2": 0.7993495347487707,
+            "rmse_mj_per_kg": 18.169252406075785
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 12.859526419008116,
+            "mape": 0.1380405710304452,
+            "r2": 0.7954592212949637,
+            "rmse_mj_per_kg": 18.344544185002142
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 13.623914243748823,
+            "mape": 0.14275271370131623,
+            "r2": 0.7547689254968346,
+            "rmse_mj_per_kg": 20.086520999594732
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 12.709707802307271,
+            "mape": 0.13634898911813942,
+            "r2": 0.7993098592377943,
+            "rmse_mj_per_kg": 18.171048660922402
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 13.623914243748823,
@@ -34570,6 +35146,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_1.00T_holdout"
@@ -35368,6 +35948,30 @@
             "mape": 0.10708523748149852,
             "r2": 0.93939585643889,
             "rmse_mj_per_kg": 16.94387647447852
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 13.246314822438741,
+            "mape": 0.12595176733021216,
+            "r2": 0.901933542515822,
+            "rmse_mj_per_kg": 21.553701360307986
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 13.430433114227446,
+            "mape": 0.130004099887667,
+            "r2": 0.8983732875515541,
+            "rmse_mj_per_kg": 21.941461686884814
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 12.717993700176315,
+            "mape": 0.10410641346123344,
+            "r2": 0.9305314554025631,
+            "rmse_mj_per_kg": 18.14077002225923
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 13.245748236892949,
+            "mape": 0.12593578015341214,
+            "r2": 0.901934490197001,
+            "rmse_mj_per_kg": 21.553597216205166
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 12.717993700176315,
@@ -36394,6 +36998,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": false,
         "split": "amplitude_1.20T_holdout"
@@ -37192,6 +37800,30 @@
             "mape": 0.21314749318363085,
             "r2": 0.583467746278967,
             "rmse_mj_per_kg": 61.24182182803763
+          },
+          "qa_residual_reconstruct_be_branch_direct": {
+            "mae_mj_per_kg": 39.65022650329129,
+            "mape": 0.204441673624717,
+            "r2": 0.5728120848775202,
+            "rmse_mj_per_kg": 62.02021432554005
+          },
+          "qa_residual_reconstruct_be_dir_direct": {
+            "mae_mj_per_kg": 39.14655199751809,
+            "mape": 0.19923387824688019,
+            "r2": 0.5772629280117205,
+            "rmse_mj_per_kg": 61.69627605138311
+          },
+          "qa_residual_reconstruct_be_direct": {
+            "mae_mj_per_kg": 42.364086926879395,
+            "mape": 0.22196509865490702,
+            "r2": 0.5357107107420578,
+            "rmse_mj_per_kg": 64.65738202584784
+          },
+          "qa_residual_reconstruct_memory_full_direct": {
+            "mae_mj_per_kg": 39.667886973433184,
+            "mape": 0.2048272734094745,
+            "r2": 0.5727805564508781,
+            "rmse_mj_per_kg": 62.022502971391724
           },
           "qa_shell_hdb_direct": {
             "mae_mj_per_kg": 42.364086926879395,
@@ -38218,6 +38850,10 @@
         "qa_reconstruct_be_branch_beats_nonqa_by_rmse": false,
         "qa_reconstruct_be_dir_beats_nonqa_by_rmse": false,
         "qa_reconstruct_memory_full_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_branch_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_be_dir_beats_nonqa_by_rmse": false,
+        "qa_residual_reconstruct_memory_full_beats_nonqa_by_rmse": false,
         "qa_transition_only_beats_nonqa_by_rmse": false,
         "qa_transition_plus_shell_beats_nonqa_by_rmse": true,
         "split": "amplitude_1.35T_holdout"
@@ -38225,7 +38861,7 @@
     ]
   },
   "verdict": {
-    "leakage_controls": "H/B quantile edges, marginal shell centers, and joint QA state centers are fit on calibration loops only. Direct predictors use no held-out loss labels and no fitted regression coefficient. Branch-local reconstruction lookup tables are fit separately per split on calibration traces only.",
+    "leakage_controls": "H/B quantile edges, marginal shell centers, and joint QA state centers are fit on calibration loops only. Direct predictors use no held-out loss labels and no fitted regression coefficient. Branch-local reconstruction lookup tables are fit separately per split on calibration traces only. Residual reconstruction lookup tables also use calibration traces only and fall back to (b,e) residuals or zero residual when a held-out context is unseen.",
     "lifted_pair_sweep_interpretation": "Best lifted pair by the predeclared transfer score is b/X, with RMSE wins in 4 of 12 splits and median RMSE ratio 1.507 relative to ordinary non-QA shell. This does not establish a stable QA-specific advantage yet.",
     "memory_result_interpretation": "Memory-only QA wins 1 of 12 RMSE transfer splits against non-QA shell; memory plus QA shell wins 2; non-QA shell plus QA memory wins 2; QA memory plus transition wins 0; non-QA shell plus transition plus memory wins 2. Best memory family: qa_memory_plus_qa_shell.",
     "phase_pair_sweep_interpretation": "Best phase/orientation-aware QA pair is b/X, with RMSE wins in 4 of 12 splits and median RMSE ratio 1.453 relative to ordinary non-QA shell.",
@@ -38235,6 +38871,7 @@
     "qa_lifted_vs_nonqa_shell_here": "MIXED: calibrated QA J/Pi shells have higher held-out R2 than ordinary H/B shell binning, but worse MAE/RMSE. This is not yet a clean QA-specific win.",
     "qa_not_random": "YES: QA-only held-out models reduce error substantially relative to the mean-loss baseline on real measured loops.",
     "reconstruction_result_interpretation": "Branch-local lookup reconstruction wins against ordinary non-QA shell in 0/12 splits for (b,e), 0/12 for (b,e,sb,se), 0/12 for (b,e,branch,lag), and 0/12 for full memory context. Best reconstruction family: qa_reconstruct_be_direct. Because the declared reconstruction target is the marginal H/B shell center and every tested context contains (b,e), this formulation collapses to ordinary shell reconstruction rather than adding QA-specific branch information.",
+    "residual_reconstruction_result_interpretation": "Residual branch-local reconstruction wins against ordinary non-QA shell in 2/12 splits for (b,e), 3/12 for (b,e,sb,se), 3/12 for (b,e,branch,lag), and 3/12 for full memory context. Best residual reconstruction family: qa_residual_reconstruct_be_dir_direct.",
     "shell_result_interpretation": "The raw physical loop integral is the expected upper-bound sanity check. Ordinary non-QA H/B shell binning explains most of the direct shell result and beats the joint (b,e) QA state shell by MAE/RMSE. A lifted QA J/Pi shell slightly beats non-QA by R2 but not by MAE/RMSE, so this run supports finite-shell hysteresis mapping and only a mixed, not decisive, QA-specific advantage.",
     "transfer_result_interpretation": "Across 12 index/frequency/amplitude transfer splits, QA J/Pi beats ordinary non-QA shell by R2 in 3 splits and by RMSE in 3 splits. This hardens the conclusion by checking family-heldout transfer. The lifted-pair sweep reports whether another QA variable pair transfers more consistently.",
     "transition_result_interpretation": "Transition-only QA wins 0 of 12 RMSE transfer splits against non-QA shell; QA transition plus QA shell wins 2; non-QA shell plus QA transition wins 2. Best transition family: qa_transition_plus_shell."

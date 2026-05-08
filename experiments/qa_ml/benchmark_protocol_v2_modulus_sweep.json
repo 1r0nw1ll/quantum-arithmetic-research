@@ -1,0 +1,72 @@
+{
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "benchmark_id": "qa_ml_orbit_classifier_gnn_modulus_sweep_v2",
+  "qa_method": {
+    "name": "GCN over QA reachability graph (modulus-sweep boundary test)",
+    "description": "Same two-layer plain-torch GCN as benchmark v2 (qa_ml_orbit_classifier_gnn_v2), now run across moduli m in {9, 12, 15, 18, 21, 24, 27, 30, 36}. For each m, nodes = full {1,...,m}^2 grid; node features = qa_packet_full (b, e, d, a, C, F, G, b mod (m//3), e mod (m//3)); edges = applications of sigma, mu, lambda_2, nu where defined; adjacency is symmetrized and normalized D^(-1/2)(A+I)D^(-1/2). Labels are derived from qa_orbit_rules.orbit_period: period 1 -> singularity (masked); period 8 -> satellite (1); else -> cosmos (0). Algebraic rule from orbit_family is recorded for agreement comparison.",
+    "observer_projection": "Integer (b, e) discrete state -> integer feature packet -> float64 normalized adjacency -> torch GCN -> orbit-class logits. Same Theorem NT boundary structure as v2."
+  },
+  "baselines": [
+    {
+      "name": "raw_mlp",
+      "implementation_ref": "torch.nn.Module"
+    },
+    {
+      "name": "qa_full_logreg",
+      "implementation_ref": "sklearn.linear_model.LogisticRegression"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "qa_orbit_modulus_sweep",
+      "source": "tools.qa_ml.qa_dataset.all_pairs(m) for m in {9, 12, 15, 18, 21, 24, 27, 30, 36}; labels via qa_orbit_rules.orbit_period; ground truth qa_orbit_rules.orbit_family for agreement check"
+    }
+  ],
+  "parity_contract": {
+    "same_seed_all_methods": true,
+    "same_data_split": true,
+    "same_preprocessing": true
+  },
+  "calibration_provenance": {
+    "learned_on": "qa_full features deterministic; GCN init from torch default with fixed seed; per-fold z-score on train mask only; no other calibration",
+    "procedure": "no calibration step beyond per-fold standardization",
+    "domain_of_origin": "self-contained QA orbit grids; no inheritance"
+  },
+  "framework_inheritance": {
+    "mode": "ported",
+    "prior_cert": "experiments/qa_ml/benchmark_protocol_v2.json (qa_ml_orbit_classifier_gnn_v2)",
+    "diffs": [
+      "ported from single-modulus mod-24 benchmark to a 9-modulus sweep",
+      "labels switched from algebraic orbit_family to empirical orbit_period (period 1 -> singularity, period 8 -> satellite, else -> cosmos)",
+      "train fraction (0.30) replaces fixed n_train=160 to scale across grid sizes",
+      "modulus-level PASS/FAIL on graph_delta >= 0.10 added"
+    ]
+  },
+  "metrics": ["macro_f1", "balanced_accuracy"],
+  "source_mapping": {
+    "theory_doc": "../../qa_orbit_rules.py",
+    "primary_source": "0 errors against simulation for mod-9 and mod-24",
+    "mapping_rationale": "QA-ML v2 showed graph topology beats feature-only baselines on mod-24. Before claiming a cert, this sweep tests whether the advantage is mod-24-specific or generalizes to other moduli where the satellite class (orbit period 8) is non-trivial. The qa_orbit_rules verification on m in {9, 24} is the primary source for the orbit-class definition; the sweep extends the test domain by classifying empirically via orbit_period and recording where algebraic and empirical labels agree."
+  },
+  "sota_baseline": {
+    "name": "qa_full_logreg",
+    "metric": "macro_f1",
+    "threshold": 0.0
+  },
+  "ablation": {
+    "callable": "feature_set_swap",
+    "destroyed_structure": "Replace the QA-generator normalized adjacency with the identity matrix per modulus; same node features, architecture, seed. Holds everything constant except the message-passing edges, isolating the graph contribution at every m.",
+    "expected_direction": "with_graph - without_graph >= +0.10 macro F1 for moduli with a non-trivial satellite class. If the advantage collapses for some m (PASS_MODULI vs FAIL_MODULI), that boundary is the cert claim's scope rather than a refutation."
+  },
+  "reproducibility": {
+    "seed": 0,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime",
+      "numpy": "declared_at_runtime",
+      "torch": "declared_at_runtime"
+    },
+    "results_ledger": "results_ledger_v2_modulus_sweep.jsonl"
+  }
+}

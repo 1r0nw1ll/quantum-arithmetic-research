@@ -1,0 +1,12 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_ORBIT_NO_3_DIVISOR_OVERCLAIM_CERT.v1",
+  "fixture_kind": "pass",
+  "modulus": 10,
+  "expected_canonical_satellites": 0,
+  "expected_shortcut_satellites": 9,
+  "expected_overclaims": 9,
+  "expected_missed": 0,
+  "expected_overclaim_grid": [[3,3],[3,6],[3,9],[6,3],[6,6],[6,9],[9,3],[9,6],[9,9]],
+  "causal_scope": "no_3_divisor"
+}

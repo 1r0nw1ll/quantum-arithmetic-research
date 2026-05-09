@@ -1,0 +1,45 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_ORBIT_NO_3_DIVISOR_OVERCLAIM_CERT.v1",
+  "description": "Fixture schema for QA Orbit No-3-Divisor Overclaim Cert [278]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, Amer. Math. Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541; doi.org/10.1080/00029890.1960.11989541; arxiv:1609.02907 (Kipf-Welling 2017 GCN companion reference for the cert chain context). Each fixture declares modulus, expected canonical satellite count, expected shortcut satellite count, expected overclaim count, expected missed count, and (optionally) the causal_scope label and the explicit overclaim grid.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "fixture_kind",
+    "modulus",
+    "expected_canonical_satellites",
+    "expected_shortcut_satellites",
+    "expected_overclaims",
+    "expected_missed"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "QA_ORBIT_NO_3_DIVISOR_OVERCLAIM_CERT.v1"},
+    "fixture_kind": {"enum": ["pass", "fail"]},
+    "expected_fail_type": {
+      "enum": [
+        "M8_BOUNDARY",
+        "WRONG_OVERCLAIM",
+        "FIVE_FACTOR_CAUSAL",
+        "SHORTCUT_AS_CANONICAL",
+        "MISSING_FIELD"
+      ]
+    },
+    "modulus": {"type": "integer", "minimum": 2},
+    "expected_canonical_satellites": {"type": "integer", "minimum": 0},
+    "expected_shortcut_satellites": {"type": "integer", "minimum": 0},
+    "expected_overclaims": {"type": "integer", "minimum": 0},
+    "expected_missed": {"type": "integer", "minimum": 0},
+    "expected_overclaim_grid": {
+      "type": "array",
+      "items": {
+        "type": "array",
+        "minItems": 2,
+        "maxItems": 2,
+        "items": {"type": "integer", "minimum": 1}
+      }
+    },
+    "causal_scope": {"enum": ["no_3_divisor", "5_factor"]},
+    "primary_source": {"type": "string"}
+  }
+}

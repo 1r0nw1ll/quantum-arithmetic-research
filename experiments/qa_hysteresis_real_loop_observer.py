@@ -25,6 +25,7 @@ import csv
 import io
 import json
 import math
+import random
 import re
 import statistics
 import sys
@@ -1290,6 +1291,199 @@ def build_records_for_split(
     return records
 
 
+def shuffled_state_map(
+    states: list[tuple[int, int]], values: list, seed: int, domain: str
+) -> dict[tuple[int, int], object]:
+    rng = random.Random(f"{domain}:{seed}")
+    shuffled = list(values)
+    rng.shuffle(shuffled)
+    return dict(zip(states, shuffled))
+
+
+def mean_pair_map(
+    values: dict[tuple, list[tuple[float, float]]]
+) -> dict[tuple, tuple[float, float]]:
+    return {
+        key: (
+            statistics.mean(h_value for h_value, _ in pairs),
+            statistics.mean(b_value for _, b_value in pairs),
+        )
+        for key, pairs in values.items()
+    }
+
+
+def permutation_split_metrics(
+    traces: list[LoopTrace],
+    calibration_names: set[str],
+    heldout_names: set[str],
+    null_kind: str,
+    seed: int,
+) -> dict[str, float | bool]:
+    h_values: list[float] = []
+    b_values: list[float] = []
+    for trace in traces:
+        if trace.row.filename in calibration_names:
+            h_values.extend(trace.h_a_per_m)
+            b_values.extend(trace.b_t)
+    h_edges = quantile_edges(h_values)
+    b_edges = quantile_edges(b_values)
+    h_centers = bin_centers(h_values, h_edges)
+    b_centers = bin_centers(b_values, b_edges)
+
+    binned: dict[str, tuple[list[int], list[int]]] = {}
+    observed_states: set[tuple[int, int]] = set()
+    for trace in traces:
+        b_seq = bins(trace.h_a_per_m, h_edges)
+        e_seq = bins(trace.b_t, b_edges)
+        binned[trace.row.filename] = (b_seq, e_seq)
+        observed_states.update(zip(b_seq, e_seq))
+
+    states = sorted(observed_states)
+    canonical_families = [orbit_family(b_state, e_state, MODULUS) for b_state, e_state in states]
+    canonical_norms = [norm_f(b_state, e_state) % MODULUS for b_state, e_state in states]
+    canonical_pairs = list(zip(canonical_families, canonical_norms))
+
+    if null_kind == "orbit_family_shuffle_null":
+        family_map = shuffled_state_map(states, canonical_families, seed, null_kind)
+        norm_map = dict(zip(states, canonical_norms))
+        context_mode = "family"
+    elif null_kind == "norm_f_shuffle_null":
+        family_map = dict(zip(states, canonical_families))
+        norm_map = shuffled_state_map(states, canonical_norms, seed, null_kind)
+        context_mode = "family_norm"
+    elif null_kind == "family_norm_joint_shuffle_null":
+        pair_map = shuffled_state_map(states, canonical_pairs, seed, null_kind)
+        family_map = {state: pair_map[state][0] for state in states}
+        norm_map = {state: pair_map[state][1] for state in states}
+        context_mode = "family_norm"
+    else:
+        raise ValueError(f"unknown null kind: {null_kind}")
+
+    family_residual_values: dict[tuple, list[tuple[float, float]]] = {}
+    family_norm_residual_values: dict[tuple, list[tuple[float, float]]] = {}
+    for trace in traces:
+        if trace.row.filename not in calibration_names:
+            continue
+        b_seq, e_seq = binned[trace.row.filename]
+        for h_value, b_value, b_state, e_state in zip(
+            trace.h_a_per_m, trace.b_t, b_seq, e_seq
+        ):
+            state = (b_state, e_state)
+            residual = (
+                h_value - h_centers[b_state - 1],
+                b_value - b_centers[e_state - 1],
+            )
+            family_key = (family_map[state],)
+            family_norm_key = (family_map[state], norm_map[state])
+            family_residual_values.setdefault(family_key, []).append(residual)
+            family_norm_residual_values.setdefault(family_norm_key, []).append(residual)
+
+    family_centers = mean_pair_map(family_residual_values)
+    family_norm_centers = mean_pair_map(family_norm_residual_values)
+
+    actual: list[float] = []
+    null_predicted: list[float] = []
+    nonqa_predicted: list[float] = []
+    for trace in traces:
+        if trace.row.filename not in heldout_names:
+            continue
+        b_seq, e_seq = binned[trace.row.filename]
+        h_hat: list[float] = []
+        b_hat: list[float] = []
+        nonqa_h_shell = [h_centers[b_state - 1] for b_state in b_seq]
+        nonqa_b_shell = [b_centers[e_state - 1] for e_state in e_seq]
+        for b_state, e_state in zip(b_seq, e_seq):
+            state = (b_state, e_state)
+            family_key = (family_map[state],)
+            family_norm_key = (family_map[state], norm_map[state])
+            if context_mode == "family":
+                residual = family_centers.get(family_key)
+            else:
+                residual = family_norm_centers.get(family_norm_key)
+                if residual is None:
+                    residual = family_centers.get(family_key)
+            if residual is None:
+                residual = (0.0, 0.0)
+            h_hat.append(h_centers[b_state - 1] + residual[0])
+            b_hat.append(b_centers[e_state - 1] + residual[1])
+        actual.append(trace.row.energy_loss_mj_per_kg)
+        null_predicted.append(
+            1000.0 * abs(line_integral_y_dx(b_hat, h_hat)) / DENSITY_KG_PER_M3
+        )
+        nonqa_predicted.append(
+            1000.0
+            * abs(line_integral_y_dx(nonqa_b_shell, nonqa_h_shell))
+            / DENSITY_KG_PER_M3
+        )
+
+    null_metrics = metrics(actual, null_predicted)
+    nonqa_metrics = metrics(actual, nonqa_predicted)
+    return {
+        "beats_nonqa_by_rmse": (
+            null_metrics["rmse_mj_per_kg"] < nonqa_metrics["rmse_mj_per_kg"]
+        ),
+        "delta_rmse_vs_nonqa_shell": (
+            null_metrics["rmse_mj_per_kg"] - nonqa_metrics["rmse_mj_per_kg"]
+        ),
+        "delta_r2_vs_nonqa_shell": null_metrics["r2"] - nonqa_metrics["r2"],
+        "rmse_mj_per_kg": null_metrics["rmse_mj_per_kg"],
+        "r2": null_metrics["r2"],
+        "nonqa_rmse_mj_per_kg": nonqa_metrics["rmse_mj_per_kg"],
+        "nonqa_r2": nonqa_metrics["r2"],
+    }
+
+
+def orbit_bridge_permutation_tests(
+    traces: list[LoopTrace],
+    loss_rows: list[LossRow],
+    observed_transfer_wins: int,
+    observed_main_delta_rmse: float,
+    observed_main_delta_r2: float,
+    seed_count: int = 200,
+) -> dict:
+    split_defs = transfer_splits(loss_rows)
+    null_names = [
+        "orbit_family_shuffle_null",
+        "norm_f_shuffle_null",
+        "family_norm_joint_shuffle_null",
+    ]
+    nulls: dict[str, dict] = {}
+    for null_name in null_names:
+        transfer_wins: list[int] = []
+        main_delta_rmse: list[float] = []
+        main_delta_r2: list[float] = []
+        for seed in range(seed_count):
+            wins = 0
+            for split_name, calibration_names, heldout_names in split_defs:
+                split_result = permutation_split_metrics(
+                    traces, calibration_names, heldout_names, null_name, seed
+                )
+                wins += int(split_result["beats_nonqa_by_rmse"])
+                if split_name == "index_mod3_holdout":
+                    main_delta_rmse.append(float(split_result["delta_rmse_vs_nonqa_shell"]))
+                    main_delta_r2.append(float(split_result["delta_r2_vs_nonqa_shell"]))
+            transfer_wins.append(wins)
+        p_value = sum(1 for wins in transfer_wins if wins >= observed_transfer_wins) / len(
+            transfer_wins
+        )
+        nulls[null_name] = {
+            "seeds": seed_count,
+            "mean_transfer_wins": statistics.mean(transfer_wins),
+            "max_transfer_wins": max(transfer_wins),
+            "p_value_transfer_wins_ge_observed": p_value,
+            "mean_main_delta_rmse": statistics.mean(main_delta_rmse),
+            "min_main_delta_rmse": min(main_delta_rmse),
+            "mean_main_delta_r2": statistics.mean(main_delta_r2),
+            "max_main_delta_r2": max(main_delta_r2),
+        }
+    return {
+        "observed_transfer_wins": observed_transfer_wins,
+        "observed_main_split_delta_rmse": observed_main_delta_rmse,
+        "observed_main_split_delta_r2": observed_main_delta_r2,
+        "nulls": nulls,
+    }
+
+
 def direct_model_suite(
     records: list[dict], calibration_names: set[str], heldout_names: set[str]
 ) -> dict:
@@ -2040,6 +2234,37 @@ def main() -> int:
         "because adding them is not automatically better. The next hardening step "
         "is a significance/permutation test over orbit labels or bootstrap over loops."
     )
+    orbit_bridge_permutation = orbit_bridge_permutation_tests(
+        traces,
+        loss_rows,
+        orbit_residual_family_rmse_wins,
+        orbit_family_delta_rmse,
+        orbit_family_delta_r2,
+    )
+    null_pieces = []
+    for null_name, null_result in orbit_bridge_permutation["nulls"].items():
+        null_pieces.append(
+            f"{null_name}: p={null_result['p_value_transfer_wins_ge_observed']:.3f}, "
+            f"max_wins={null_result['max_transfer_wins']}"
+        )
+    if all(
+        null_result["p_value_transfer_wins_ge_observed"] < 0.05
+        for null_result in orbit_bridge_permutation["nulls"].values()
+    ):
+        null_verdict = "above all shuffled-label nulls at the 0.05 empirical level"
+    elif all(
+        null_result["p_value_transfer_wins_ge_observed"] < 0.10
+        for null_result in orbit_bridge_permutation["nulls"].values()
+    ):
+        null_verdict = "above all shuffled-label nulls at the 0.10 empirical level"
+    else:
+        null_verdict = "not cleanly above all shuffled-label nulls"
+    orbit_bridge_permutation_interpretation = (
+        f"Observed canonical orbit-family transfer wins: "
+        f"{orbit_residual_family_rmse_wins}/{len(split_summaries)}. Shuffled-label "
+        f"null summary: {'; '.join(null_pieces)}. The observed signal is "
+        f"{null_verdict}; interpret the bridge accordingly."
+    )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
     payload = {
@@ -2127,6 +2352,10 @@ def main() -> int:
                 orbit_residual_family_norm_branch_rmse_wins
             ),
             "orbit_bridge_result_interpretation": orbit_bridge_result_interpretation,
+            "orbit_bridge_permutation_tests": orbit_bridge_permutation,
+            "orbit_bridge_permutation_interpretation": (
+                orbit_bridge_permutation_interpretation
+            ),
         },
         "transfer_split_summary": {
             "split_count": len(split_summaries),
@@ -2251,6 +2480,9 @@ def main() -> int:
             ),
             "orbit_residual_result_interpretation": orbit_residual_result_interpretation,
             "orbit_bridge_result_interpretation": orbit_bridge_result_interpretation,
+            "orbit_bridge_permutation_interpretation": (
+                orbit_bridge_permutation_interpretation
+            ),
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "
                 "centers are fit on calibration loops only. Direct predictors use "

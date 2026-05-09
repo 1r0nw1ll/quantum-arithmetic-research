@@ -1599,6 +1599,44 @@
   "orbit_bridge_summary": {
     "orbit_bridge_best_model_by_rmse": "raw_physical_hdb_direct",
     "orbit_bridge_best_nonraw_model_by_rmse": "qa_orbit_residual_reconstruct_family_direct",
+    "orbit_bridge_permutation_interpretation": "Observed canonical orbit-family transfer wins: 6/12. Shuffled-label null summary: orbit_family_shuffle_null: p=0.510, max_wins=9; norm_f_shuffle_null: p=0.105, max_wins=7; family_norm_joint_shuffle_null: p=0.225, max_wins=8. The observed signal is not cleanly above all shuffled-label nulls; interpret the bridge accordingly.",
+    "orbit_bridge_permutation_tests": {
+      "nulls": {
+        "family_norm_joint_shuffle_null": {
+          "max_main_delta_r2": 0.0014597269538617619,
+          "max_transfer_wins": 8,
+          "mean_main_delta_r2": -0.0007301211811028125,
+          "mean_main_delta_rmse": 0.1394445638519099,
+          "mean_transfer_wins": 4.35,
+          "min_main_delta_rmse": -0.29284781527210413,
+          "p_value_transfer_wins_ge_observed": 0.225,
+          "seeds": 200
+        },
+        "norm_f_shuffle_null": {
+          "max_main_delta_r2": 0.0006180321114448439,
+          "max_transfer_wins": 7,
+          "mean_main_delta_r2": -0.0006244293505160575,
+          "mean_main_delta_rmse": 0.1197739397995206,
+          "mean_transfer_wins": 3.89,
+          "min_main_delta_rmse": -0.12217467288940931,
+          "p_value_transfer_wins_ge_observed": 0.105,
+          "seeds": 200
+        },
+        "orbit_family_shuffle_null": {
+          "max_main_delta_r2": 0.0005556274926229454,
+          "max_transfer_wins": 9,
+          "mean_main_delta_r2": -6.612695023523796e-05,
+          "mean_main_delta_rmse": 0.01264996304006889,
+          "mean_transfer_wins": 5.45,
+          "min_main_delta_rmse": -0.10972119755930088,
+          "p_value_transfer_wins_ge_observed": 0.51,
+          "seeds": 200
+        }
+      },
+      "observed_main_split_delta_r2": 4.717122821540354e-05,
+      "observed_main_split_delta_rmse": -0.009235563576483585,
+      "observed_transfer_wins": 6
+    },
     "orbit_bridge_result_interpretation": "Earlier ad hoc QA summaries failed to produce a stable advantage over ordinary calibrated H/B shell physics. Canonical QA orbit topology is the first established QA substrate in this experiment that matches and slightly beats the non-QA shell baseline on the main split: orbit-family residual delta RMSE=-0.009236 mJ/kg and delta R2=0.000047. The transfer result is promising but not conclusive at 6/12 RMSE wins. The norm_f and branch/lag variants are reported separately because adding them is not automatically better. The next hardening step is a significance/permutation test over orbit labels or bootstrap over loops.",
     "orbit_family_norm_branch_transfer_wins_vs_nonqa_shell": 5,
     "orbit_family_norm_transfer_wins_vs_nonqa_shell": 2,
@@ -39717,6 +39755,7 @@
     "leakage_controls": "H/B quantile edges, marginal shell centers, and joint QA state centers are fit on calibration loops only. Direct predictors use no held-out loss labels and no fitted regression coefficient. Branch-local reconstruction lookup tables are fit separately per split on calibration traces only. Residual reconstruction lookup tables also use calibration traces only and fall back to (b,e) residuals or zero residual when a held-out context is unseen.",
     "lifted_pair_sweep_interpretation": "Best lifted pair by the predeclared transfer score is b/X, with RMSE wins in 4 of 12 splits and median RMSE ratio 1.507 relative to ordinary non-QA shell. This does not establish a stable QA-specific advantage yet.",
     "memory_result_interpretation": "Memory-only QA wins 1 of 12 RMSE transfer splits against non-QA shell; memory plus QA shell wins 2; non-QA shell plus QA memory wins 2; QA memory plus transition wins 0; non-QA shell plus transition plus memory wins 2. Best memory family: qa_memory_plus_qa_shell.",
+    "orbit_bridge_permutation_interpretation": "Observed canonical orbit-family transfer wins: 6/12. Shuffled-label null summary: orbit_family_shuffle_null: p=0.510, max_wins=9; norm_f_shuffle_null: p=0.105, max_wins=7; family_norm_joint_shuffle_null: p=0.225, max_wins=8. The observed signal is not cleanly above all shuffled-label nulls; interpret the bridge accordingly.",
     "orbit_bridge_result_interpretation": "Earlier ad hoc QA summaries failed to produce a stable advantage over ordinary calibrated H/B shell physics. Canonical QA orbit topology is the first established QA substrate in this experiment that matches and slightly beats the non-QA shell baseline on the main split: orbit-family residual delta RMSE=-0.009236 mJ/kg and delta R2=0.000047. The transfer result is promising but not conclusive at 6/12 RMSE wins. The norm_f and branch/lag variants are reported separately because adding them is not automatically better. The next hardening step is a significance/permutation test over orbit labels or bootstrap over loops.",
     "orbit_residual_result_interpretation": "Established QA orbit-topology residual reconstruction wins against ordinary non-QA shell in 6/12 splits for orbit family, 2/12 for orbit family + norm_f mod 24, and 5/12 for orbit family + norm + branch/lag. Best orbit residual family: qa_orbit_residual_reconstruct_family_direct.",
     "phase_pair_sweep_interpretation": "Best phase/orientation-aware QA pair is b/X, with RMSE wins in 4 of 12 splits and median RMSE ratio 1.453 relative to ordinary non-QA shell.",

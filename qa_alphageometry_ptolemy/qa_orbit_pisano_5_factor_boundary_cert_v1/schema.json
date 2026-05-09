@@ -1,0 +1,31 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_ORBIT_PISANO_5_FACTOR_BOUNDARY_CERT.v1",
+  "description": "Fixture schema for QA Orbit Pisano 5-Factor Boundary Cert [277]. Primary source for the Pisano-period framing: arxiv:1609.02907 placeholder (replaced by Wall 1960 DOI 10.1080/00029890.1960.11989541 in the mapping_protocol_ref). The fixture declares modulus, shortcut undercount expectation, overclaim expectation, and (for PASS fixtures) the gcd-signature decomposition of the missed pairs.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "fixture_kind",
+    "modulus",
+    "expected_shortcut_undercount",
+    "expected_overclaims"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "QA_ORBIT_PISANO_5_FACTOR_BOUNDARY_CERT.v1"},
+    "fixture_kind": {"enum": ["pass", "fail"]},
+    "expected_fail_type": {"type": "string"},
+    "modulus": {"type": "integer", "minimum": 2},
+    "k": {"type": "integer", "minimum": 1},
+    "expected_shortcut_undercount": {"type": "integer", "minimum": 0},
+    "expected_overclaims": {"type": "integer", "minimum": 0},
+    "expected_signatures": {
+      "type": "object",
+      "patternProperties": {
+        "^[0-9]+,[0-9]+$": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "primary_source": {"type": "string"}
+  }
+}

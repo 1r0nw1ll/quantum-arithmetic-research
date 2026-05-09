@@ -270,6 +270,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--demo", action="store_true", help="print config and exit")
     parser.add_argument("--smoke", action="store_true",
                         help="re-run a small m=9 GCN benchmark (requires torch)")
+    parser.add_argument("--self-test", action="store_true",
+                        help="emit JSON {ok, errors, ...} for the meta-validator")
     args = parser.parse_args(argv)
 
     cert_dir = Path(__file__).resolve().parent
@@ -306,6 +308,21 @@ def main(argv: list[str] | None = None) -> int:
         smoke_errs = _smoke_run(cert_dir)
         if smoke_errs:
             all_errors.extend(smoke_errs)
+
+    ok = not all_errors
+    if args.self_test:
+        payload = {
+            "ok": ok,
+            "family_id": CANDIDATE_FAMILY_ID,
+            "slug": CERT_SLUG,
+            "schema_version": SCHEMA_VERSION,
+            "threshold": ORBT_THRESHOLD,
+            "pass_fixtures": len(pass_files),
+            "fail_fixtures": len(fail_files),
+            "errors": all_errors,
+        }
+        print(json.dumps(payload, sort_keys=True))
+        return 0 if ok else 1
 
     if all_errors:
         print(f"FAIL [{CERT_SLUG}]: {len(all_errors)} error(s)")

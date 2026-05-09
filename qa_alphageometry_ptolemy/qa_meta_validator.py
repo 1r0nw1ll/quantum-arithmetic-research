@@ -7593,6 +7593,37 @@ def _validate_qa_ml_orbit_topology_cert_family(base_dir):
     return None
 
 
+def _validate_qa_orbit_pisano_5_factor_boundary_cert_family(base_dir):
+    """QA Orbit Pisano 5-Factor Boundary Cert family [277]. Primary source for the Pisano-period framing: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for m = 15k with k in K_verified = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20} (14 empirically verified values), the algebraic divisor shortcut orbit_family_divisor_shortcut(b, e, m) under-counts the canonical period-based orbit_family(b, e, m) satellite class by exactly 32 pairs and never over-claims; the 32 missed pairs partition by (gcd(b, m), gcd(e, m)) into three signatures (k, 3k) with 8 pairs, (k, k) with 16 pairs, and (3k, k) with 8 pairs. Validator recomputes both classifiers on each fixture's modulus and compares against expected_shortcut_undercount, expected_overclaims, and expected_signatures. Lineage: surfaced by qa-ml v2 modulus sweep (cert [276] in experiments/qa_ml/03_gnn_modulus_sweep.py) as a follow-up boundary observation; canonical replacement of orbit_family landed at commit e7b2af0; design draft at docs/specs/QA_ORBIT_PISANO_5_FACTOR_BOUNDARY_CERT_DRAFT.md. Cert does NOT claim a universal theorem 5|m implies undercount = 32 (only 14 verified k values), does NOT cover the adjacent regime 5|m AND 3 not divides m (separate future cert candidate qa_orbit_5_factor_no_3_overclaim_cert_v1, where canonical satellites = 0 and shortcut over-claims by 9 at the tested moduli {10, 20, 25, 35, 50, 100}), and does NOT formalize the full Pisano-period structure of qa_step. Theorem NT compliance: integer arithmetic throughout the validator on (b, e, m). Checks PISANO_1/PISANO_2/PISANO_3/SRC/F; 7 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_orbit_pisano_5_factor_boundary_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_pisano_5_factor_boundary_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_pisano_5_factor_boundary_cert_v1/qa_orbit_pisano_5_factor_boundary_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_pisano_5_factor_boundary_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_pisano_5_factor_boundary_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_pisano_5_factor_boundary_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -8639,6 +8670,16 @@ FAMILY_SWEEPS = [
      "Layer 3 v1 of the Whittaker -> QA development ladder. Anchored at (Whittaker, 1903) On the partial differential equations of mathematical physics, Math. Annalen 57:333-355, DOI: 10.1007/BF01444290 (motivation only; cert does NOT prove Whittaker's wave-equation theorem or wave kernel). Depends on registered [273] QA Whittaker Rational Direction S^2 Cert, which supplies exact rational D_m^(2) packets through inverse_stereographic_excluding_south_pole. CLAIM (narrow): for m in {3,5,9}, profile_name in {const,z,z2}, and weight_rule=uniform_points, the validator recomputes exact Fraction scalar samples over [273] packets and validates the exact finite-set discrete_uniform_average. Large exact averages are witnessed by full canonical_fraction_sha256 = sha256((num + '/' + den).encode('ascii')).hexdigest() plus numerator_digit_count and denominator_digit_count; observer floats are display-only and never pass/fail. PASS fixtures cover m=3 const direct fraction, m=5 z hash witness, and m=9 z2 hash witness. FAIL fixtures reject wrong provenance, wrong profile value, wrong hash witness, wrong digit count, float-as-pass/fail, spherical quadrature overclaim, and Whittaker-kernel-error overclaim. Cert does NOT prove Whittaker kernel approximation, spherical quadrature, density, convergence, Maxwell equations, electromagnetism, scalar-potential physics, geodesy, ellipsoid physics, or any physical field reconstruction. Checks WKB_1/WKB_2/WKB_3/WKB_4/WKB_5/SRC/F; 3 PASS + 7 FAIL fixtures; self-test ok",
      "274_qa_whittaker_scalar_angular_kernel_sampling_cert",
      "qa_whittaker_scalar_angular_kernel_sampling_cert_v1", True),
+    (276, "QA-ML Orbit Topology Cert family",
+     _validate_qa_ml_orbit_topology_cert_family,
+     "QA-ML Orbit Topology Cert family [276]. Primary source for the GCN architecture under test: Kipf & Welling 2017, Semi-Supervised Classification with Graph Convolutional Networks, ICLR; arxiv:1609.02907. CLAIM (narrow, falsifiable): on QA orbit grids with a non-trivial satellite class (orbit period 8 under qa_orbit_rules.qa_step), a 2-layer plain-torch GCN over the symmetric-normalized QA generator adjacency built from sigma, mu, lambda_2, nu lifts node-classification macro F1 by at least +0.10 over an identity-adjacency ablation, holding node features (qa_full packet b,e,d,a,C,F,G,phi_b,phi_e with phi=mod m//3), architecture, seeds, and standardization fixed. Verified empirically for m in {9,12,15,18,21,24,27,30,36} at train_fraction=0.30, 20 seeds, 300 epochs, hidden=32, lr=0.01, weight_decay=5e-4. Sources: experiments/qa_ml/03_gnn_modulus_sweep.py + benchmark_protocol_v2_modulus_sweep.json + results_gnn_modulus_sweep.json (results_ledger_v2_modulus_sweep.jsonl); qa_orbit_rules.py (canonical orbit family + period via qa_step, A1-compliant); tools.qa_ml.qa_generators (sigma, mu, lambda_2, nu); tools.qa_ml.qa_graph (build_edges, dense_adjacency, gcn_normalize). Lineage: experiment v1 sample-efficiency benchmark showed polynomial QA expansion alone is weak; v2 GCN benchmark showed graph helps on mod-24; this cert grounds the multi-modulus sweep. Theorem NT compliance: integer features and integer-built adjacency on the QA side; torch GCN observer on the float side; no float feedback into the QA layer. Auxiliary boundary observation NOT certified here, certified separately in cert [277]: qa_orbit_rules.orbit_family algebraic divisor shortcut under-counts period-8 pairs for m in {15, 30}. Cert does NOT prove orbit-class learnability for arbitrary m, does NOT certify GCN training stability, does NOT cover stochastic random graphs, and does NOT extend to non-period-8 satellite classes. Checks ORBT_1/ORBT_2/ORBT_3/ORBT_4/SRC/F; 2 PASS + 2 FAIL fixtures; self-test ok",
+     "276_qa_ml_orbit_topology",
+     "qa_ml_orbit_topology_cert_v1", True),
+    (277, "QA Orbit Pisano 5-Factor Boundary Cert family",
+     _validate_qa_orbit_pisano_5_factor_boundary_cert_family,
+     "QA Orbit Pisano 5-Factor Boundary Cert family [277]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for m = 15k with k in K_verified = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20} (14 empirically verified values), the algebraic divisor shortcut orbit_family_divisor_shortcut(b, e, m) under-counts the canonical period-based orbit_family(b, e, m) satellite class by exactly 32 pairs and never over-claims; the 32 missed pairs partition by (gcd(b, m), gcd(e, m)) into three signatures (k, 3k) with 8 pairs, (k, k) with 16 pairs, and (3k, k) with 8 pairs. Surfaced by cert [276] modulus sweep; canonical orbit_family replacement landed at commit e7b2af0; design draft docs/specs/QA_ORBIT_PISANO_5_FACTOR_BOUNDARY_CERT_DRAFT.md. Cert does NOT claim universal 5|m theorem (only 14 verified k), does NOT cover adjacent 5|m AND 3 not divides m regime (separate future cert candidate qa_orbit_5_factor_no_3_overclaim_cert_v1; canonical = 0, shortcut over-claims 9 at {10, 20, 25, 35, 50, 100}), does NOT formalize full Pisano structure of qa_step. Theorem NT compliance: integer arithmetic on (b, e, m). Checks PISANO_1/PISANO_2/PISANO_3/SRC/F; 7 PASS + 4 FAIL fixtures; self-test ok",
+     "277_qa_orbit_pisano_5_factor_boundary",
+     "qa_orbit_pisano_5_factor_boundary_cert_v1", True),
 ]
 
 

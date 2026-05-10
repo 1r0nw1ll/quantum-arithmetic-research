@@ -1600,6 +1600,108 @@ def direct_comparison_rows(heldout_models: dict, comparison_order: list[str]) ->
     return [{"model": name, **heldout_models[name]["heldout"]} for name in comparison_order]
 
 
+def split_regime(split_name: str) -> tuple[str, float | str | None]:
+    if split_name == "index_mod3_holdout":
+        return "index", None
+    if split_name.startswith("frequency_") and split_name.endswith("Hz_holdout"):
+        value = split_name.removeprefix("frequency_").removesuffix("Hz_holdout")
+        return "frequency_hz", float(value)
+    if split_name.startswith("amplitude_") and split_name.endswith("T_holdout"):
+        value = split_name.removeprefix("amplitude_").removesuffix("T_holdout")
+        return "amplitude_t", float(value)
+    return "other", split_name
+
+
+def summarize_rows_by_regime(rows: list[dict]) -> dict[str, dict]:
+    grouped: dict[str, list[dict]] = {}
+    for row in rows:
+        grouped.setdefault(row["regime_type"], []).append(row)
+    out: dict[str, dict] = {}
+    for regime_type, regime_rows in grouped.items():
+        deltas = [row["orbit_family_delta_rmse_vs_nonqa_shell"] for row in regime_rows]
+        out[regime_type] = {
+            "split_count": len(regime_rows),
+            "orbit_family_wins": sum(
+                int(row["orbit_family_beats_nonqa_by_rmse"]) for row in regime_rows
+            ),
+            "mean_orbit_family_delta_rmse": statistics.mean(deltas),
+            "median_orbit_family_delta_rmse": statistics.median(deltas),
+            "min_orbit_family_delta_rmse": min(deltas),
+            "max_orbit_family_delta_rmse": max(deltas),
+            "winning_splits": [
+                row["split"]
+                for row in regime_rows
+                if row["orbit_family_beats_nonqa_by_rmse"]
+            ],
+            "losing_splits": [
+                row["split"]
+                for row in regime_rows
+                if not row["orbit_family_beats_nonqa_by_rmse"]
+            ],
+        }
+    return out
+
+
+def orbit_bridge_regime_diagnosis(split_summaries: list[dict]) -> dict:
+    rows: list[dict] = []
+    for split in split_summaries:
+        regime_type, regime_value = split_regime(split["split"])
+        models = split["models"]
+        nonqa = models["nonqa_shell_hdb_direct"]
+        family = models["qa_orbit_residual_reconstruct_family_direct"]
+        family_norm = models["qa_orbit_residual_reconstruct_family_norm_direct"]
+        family_norm_branch = models[
+            "qa_orbit_residual_reconstruct_family_norm_branch_direct"
+        ]
+        row = {
+            "split": split["split"],
+            "regime_type": regime_type,
+            "regime_value": regime_value,
+            "heldout_count": split["heldout_count"],
+            "nonqa_shell_rmse": nonqa["rmse_mj_per_kg"],
+            "nonqa_shell_r2": nonqa["r2"],
+            "orbit_family_rmse": family["rmse_mj_per_kg"],
+            "orbit_family_r2": family["r2"],
+            "orbit_family_delta_rmse_vs_nonqa_shell": (
+                family["rmse_mj_per_kg"] - nonqa["rmse_mj_per_kg"]
+            ),
+            "orbit_family_delta_r2_vs_nonqa_shell": family["r2"] - nonqa["r2"],
+            "orbit_family_beats_nonqa_by_rmse": (
+                family["rmse_mj_per_kg"] < nonqa["rmse_mj_per_kg"]
+            ),
+            "orbit_family_norm_rmse": family_norm["rmse_mj_per_kg"],
+            "orbit_family_norm_delta_rmse_vs_nonqa_shell": (
+                family_norm["rmse_mj_per_kg"] - nonqa["rmse_mj_per_kg"]
+            ),
+            "orbit_family_norm_beats_nonqa_by_rmse": (
+                family_norm["rmse_mj_per_kg"] < nonqa["rmse_mj_per_kg"]
+            ),
+            "orbit_family_norm_branch_rmse": family_norm_branch["rmse_mj_per_kg"],
+            "orbit_family_norm_branch_delta_rmse_vs_nonqa_shell": (
+                family_norm_branch["rmse_mj_per_kg"] - nonqa["rmse_mj_per_kg"]
+            ),
+            "orbit_family_norm_branch_beats_nonqa_by_rmse": (
+                family_norm_branch["rmse_mj_per_kg"] < nonqa["rmse_mj_per_kg"]
+            ),
+        }
+        rows.append(row)
+    strongest_win = min(rows, key=lambda row: row["orbit_family_delta_rmse_vs_nonqa_shell"])
+    strongest_loss = max(rows, key=lambda row: row["orbit_family_delta_rmse_vs_nonqa_shell"])
+    grouped = summarize_rows_by_regime(rows)
+    return {
+        "rows": rows,
+        "by_regime_type": grouped,
+        "strongest_orbit_family_win": {
+            "split": strongest_win["split"],
+            "delta_rmse": strongest_win["orbit_family_delta_rmse_vs_nonqa_shell"],
+        },
+        "strongest_orbit_family_loss": {
+            "split": strongest_loss["split"],
+            "delta_rmse": strongest_loss["orbit_family_delta_rmse_vs_nonqa_shell"],
+        },
+    }
+
+
 def lifted_pair_sweep(records: list[dict], heldout_names: set[str]) -> list[dict]:
     nonqa = direct_prediction(records, heldout_names, "nonqa_shell_hdb_energy_mj_per_kg")[
         "heldout"
@@ -2265,6 +2367,26 @@ def main() -> int:
         f"null summary: {'; '.join(null_pieces)}. The observed signal is "
         f"{null_verdict}; interpret the bridge accordingly."
     )
+    orbit_regime_diagnosis = orbit_bridge_regime_diagnosis(split_summaries)
+    regime_groups = orbit_regime_diagnosis["by_regime_type"]
+    frequency_group = regime_groups.get("frequency_hz", {})
+    amplitude_group = regime_groups.get("amplitude_t", {})
+    orbit_bridge_regime_interpretation = (
+        "Regime diagnosis localizes the canonical orbit-family signal instead of "
+        "treating 6/12 wins as uniform. Frequency-heldout wins are "
+        f"{frequency_group.get('orbit_family_wins', 0)}/"
+        f"{frequency_group.get('split_count', 0)} with winning splits "
+        f"{frequency_group.get('winning_splits', [])}. Amplitude-heldout wins are "
+        f"{amplitude_group.get('orbit_family_wins', 0)}/"
+        f"{amplitude_group.get('split_count', 0)} with winning splits "
+        f"{amplitude_group.get('winning_splits', [])}. Strongest orbit-family win: "
+        f"{orbit_regime_diagnosis['strongest_orbit_family_win']['split']} "
+        f"(delta RMSE "
+        f"{orbit_regime_diagnosis['strongest_orbit_family_win']['delta_rmse']:.6f}); "
+        f"strongest loss: {orbit_regime_diagnosis['strongest_orbit_family_loss']['split']} "
+        f"(delta RMSE "
+        f"{orbit_regime_diagnosis['strongest_orbit_family_loss']['delta_rmse']:.6f})."
+    )
 
     table_errors = [r["integral_vs_table_abs_error"] for r in records]
     payload = {
@@ -2355,6 +2477,10 @@ def main() -> int:
             "orbit_bridge_permutation_tests": orbit_bridge_permutation,
             "orbit_bridge_permutation_interpretation": (
                 orbit_bridge_permutation_interpretation
+            ),
+            "orbit_bridge_regime_diagnosis": orbit_regime_diagnosis,
+            "orbit_bridge_regime_interpretation": (
+                orbit_bridge_regime_interpretation
             ),
         },
         "transfer_split_summary": {
@@ -2483,6 +2609,7 @@ def main() -> int:
             "orbit_bridge_permutation_interpretation": (
                 orbit_bridge_permutation_interpretation
             ),
+            "orbit_bridge_regime_interpretation": orbit_bridge_regime_interpretation,
             "leakage_controls": (
                 "H/B quantile edges, marginal shell centers, and joint QA state "
                 "centers are fit on calibration loops only. Direct predictors use "

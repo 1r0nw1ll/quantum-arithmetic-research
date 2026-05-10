@@ -1,6 +1,18 @@
 # QA Orbit Period Spectrum Cert — Draft
 
-> Status: **DESIGN DRAFT ONLY**. Not registered as a cert family.
+> **Status: PARKED 2026-05-09.** Do not promote until orbit-period
+> theory is synthesized. The m=75 max-period doubling shows the
+> spectrum is not yet theoretically understood — qa_step's A1
+> correction interacts with Pisano periods in a way that the cert
+> can only tabulate, not explain. Future work should first explain
+> the qa_step A1-correction interaction with Pisano periods (where
+> does the 200 vs π(75)=100 doubling come from structurally?), then
+> the cert can claim either the full spectrum or a theoretically-
+> grounded sub-claim. Until then, [277] and [278] adequately
+> document the divisor-shortcut failure surface and the canonical
+> orbit_family is fixed at commit `e7b2af0`. Cert chain stops here.
+
+> Earlier status: **DESIGN DRAFT ONLY**. Not registered as a cert family.
 > Will Dale directive 2026-05-09: build the spectrum table, do not
 > certify a universal theorem yet.
 

@@ -82,22 +82,34 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
-### Scan #2 — 2026-05-04 (window: April 9 – May 4, 2026)
-Full report: `sota_scans/scan_2026-05-04.md`
+### Scan #4 — 2026-05-14 (window: May 7 – May 14, 2026)
+Full report: `sota_scans/scan_2026-05-14.md`
 
 **Key finds:**
-- arXiv:2604.26383 + arXiv:2604.06947 (FQNM pair, Park/Ha/Kang, April 2026) — HIGH. "Quantised interaction rules" on integer state space = QA's T-operator architecture. Continuum emerges from reconstruction = Theorem NT. Independent PDE-side validation of QA's axiom set (T2, S2, T1).
-- arXiv:2604.25939 (qFHRR, April 16) — HIGH. Discrete phase indices + modular arithmetic binding = QA's Z/mZ 4-tuple as a modular VSA. Cert candidate: `qa_modular_vsa_cert_v1`.
-- arXiv:2604.22863 (Wave-Geometric Duality for HDC, April 23) — MEDIUM. Discrete → waveform bridge via unitary embedding; aliasing = modular arithmetic.
-- arXiv:2511.09708 (MCR modular composite representations, Nov 2025, missed) — MEDIUM.
+- arXiv:2605.00965 (Coupled Arnold cat maps on circulant graphs, May 1) — HIGH. Finite toroidal phase space (Z/NZ)^2n + symplectic evolution + Fibonacci periods + circulant coupling = QA's full orbit architecture confirmed independently.
+- arXiv:2605.06352 (Topological Signatures of Grokking, May 7) — HIGH. H₁ persistent homology = cyclic orbit structure signature in modular arithmetic models; direct validation of cert [276].
+- arXiv:2605.08237 (Distributional Spectral Diagnostics for Grokking, May 7) — MEDIUM-HIGH. Hankel DMD + Wasserstein predicts grokking transition = QA orbit capture; AUROC 0.93.
+- arXiv:2605.03338 (Symmetry-Protected Lyapunov Neutral Modes, May 2026) — MEDIUM. Lyapunov stability framework for QA orbit classes.
 
 **Cert scaffolding candidates (new):**
-1. `qa_quantized_integer_dynamics_cert_v1` — formalizes QA step as antisymmetric integer-transfer operator (FQNM framework)
-2. `qa_modular_vsa_cert_v1` — formalizes QA 4-tuple as modular composite representation over Z/24Z
+1. `qa_circulant_symplectic_orbit_cert_v1` — symplectic Z/mZ map + circulant coupling + finite torus period spectrum (arXiv:2605.00965)
+2. `qa_tda_orbit_grokking_cert_v1` — TDA-H₁ orbit class signature + DMD grokking prediction (arXiv:2605.06352 + 2605.08237)
 
-**Carried-over scaffolding candidates (not yet built):**
-- `qa_cayley_spectral_cert_v1` (from scan #1, arXiv:2604.03634)
-- `qa_full_pisano_orbit_cert_v1` (from scan #1, arXiv:2510.24882)
+**Cert gaps (escalated):**
+- [261] qa_orbit_stratification_cert_v1: TRIPLE GAP (third scan, still unresolved — needs registry entry, docs/families file, README.md, SPEC.md)
+- qa_steinmetz_whittaker_bridge_cert_v1: NEW — complete machine tract on disk, no registry entry, no docs/families file (assign next free ID = 279)
+- qa_whittaker_rational_direction_s1_cert_v1 [266]: cert dir missing README.md/SPEC.md
+- qa_wgs84_ellipse_cert_v1 [156]: cert dir missing README.md/SPEC.md
+
+**Carried-over scaffolding candidates (cumulative, not yet built):**
+- `qa_quantized_integer_dynamics_cert_v1` (scan #2) — highest priority
+- `qa_modular_vsa_cert_v1` (scan #2)
+- `qa_cayley_spectral_cert_v1` (scan #1)
+- `qa_full_pisano_orbit_cert_v1` (scan #1)
+- `qa_modular_nn_universality_cert_v1` (scan #3)
+- `qa_discrete_noether_cert_v1` (scan #3)
+
+**Next scan due:** ~2026-05-28
 
 ### Scan #3 — 2026-05-07 (window: May 4 – May 7, 2026)
 Full report: `sota_scans/scan_2026-05-07.md`
@@ -126,6 +138,23 @@ Full report: `sota_scans/scan_2026-05-07.md`
 **Cert family gap found:** [261] `qa_orbit_stratification_cert_v1` missing human tract (docs/families/261_*.md).
 
 **Next scan due:** ~2026-05-18
+
+### Scan #2 — 2026-05-04 (window: April 9 – May 4, 2026)
+Full report: `sota_scans/scan_2026-05-04.md`
+
+**Key finds:**
+- arXiv:2604.26383 + arXiv:2604.06947 (FQNM pair, Park/Ha/Kang, April 2026) — HIGH. "Quantised interaction rules" on integer state space = QA's T-operator architecture. Continuum emerges from reconstruction = Theorem NT. Independent PDE-side validation of QA's axiom set (T2, S2, T1).
+- arXiv:2604.25939 (qFHRR, April 16) — HIGH. Discrete phase indices + modular arithmetic binding = QA's Z/mZ 4-tuple as a modular VSA. Cert candidate: `qa_modular_vsa_cert_v1`.
+- arXiv:2604.22863 (Wave-Geometric Duality for HDC, April 23) — MEDIUM. Discrete → waveform bridge via unitary embedding; aliasing = modular arithmetic.
+- arXiv:2511.09708 (MCR modular composite representations, Nov 2025, missed) — MEDIUM.
+
+**Cert scaffolding candidates (new):**
+1. `qa_quantized_integer_dynamics_cert_v1` — formalizes QA step as antisymmetric integer-transfer operator (FQNM framework)
+2. `qa_modular_vsa_cert_v1` — formalizes QA 4-tuple as modular composite representation over Z/24Z
+
+**Carried-over scaffolding candidates (not yet built):**
+- `qa_cayley_spectral_cert_v1` (from scan #1, arXiv:2604.03634)
+- `qa_full_pisano_orbit_cert_v1` (from scan #1, arXiv:2510.24882)
 
 ### Scan #1 — 2026-04-09 (window: ~March 26 – April 9, 2026)
 Full report: `sota_scans/scan_2026-04-09.md`

@@ -1,0 +1,149 @@
+{
+  "m_train": [
+    9,
+    10,
+    11,
+    12,
+    15,
+    18,
+    20,
+    21,
+    24,
+    25,
+    27,
+    30,
+    36,
+    45,
+    60,
+    90
+  ],
+  "m_test": [
+    7,
+    8,
+    13,
+    33,
+    75,
+    105,
+    120
+  ],
+  "seed": 0,
+  "n_train_states": 19687,
+  "n_test_states": 32421,
+  "feature_names": [
+    "b",
+    "e",
+    "d",
+    "a",
+    "C",
+    "F",
+    "G",
+    "phi_b",
+    "phi_e",
+    "psi_b",
+    "psi_e",
+    "gcd_b_m",
+    "gcd_e_m",
+    "is_singularity",
+    "m",
+    "m_div_3",
+    "m_mod_3",
+    "m_mod_5",
+    "fac_2",
+    "fac_3",
+    "fac_5",
+    "fac_7",
+    "fac_11"
+  ],
+  "models": [
+    {
+      "model": "qa_full_logreg",
+      "macro_f1": 0.5181311484673133,
+      "balanced_acc": 0.5761759878607705,
+      "per_class_recall": {
+        "correct": 0.738944630248978,
+        "undercount_missed_sat": 0.3229166666666667,
+        "overclaim_false_sat": 0.6666666666666666
+      },
+      "rediscover_277_undercount": 0.3229166666666667,
+      "rediscover_278_overclaim": 1.0,
+      "m8_overclaim_recall": 0.26666666666666666,
+      "m75_undercount_recall": 0.34375,
+      "n_test": 32421,
+      "test_class_counts": {
+        "0": 32292,
+        "2": 33,
+        "1": 96
+      },
+      "pred_class_counts": {
+        "0": 23938,
+        "2": 30,
+        "1": 8453
+      }
+    },
+    {
+      "model": "decision_tree",
+      "macro_f1": 0.69855019784465,
+      "balanced_acc": 0.7602244105867294,
+      "per_class_recall": {
+        "correct": 0.9890065650935216,
+        "undercount_missed_sat": 0.2916666666666667,
+        "overclaim_false_sat": 1.0
+      },
+      "rediscover_277_undercount": 0.2916666666666667,
+      "rediscover_278_overclaim": 1.0,
+      "m8_overclaim_recall": 1.0,
+      "m75_undercount_recall": 0.0,
+      "n_test": 32421,
+      "test_class_counts": {
+        "0": 32292,
+        "2": 33,
+        "1": 96
+      },
+      "pred_class_counts": {
+        "0": 32005,
+        "2": 34,
+        "1": 382
+      }
+    }
+  ],
+  "decision_tree_summary": {
+    "depth": 12,
+    "node_count": 67,
+    "leaf_count": 34,
+    "top_importances": [
+      [
+        "fac_3",
+        0.4748710213585218
+      ],
+      [
+        "gcd_b_m",
+        0.13334016935269746
+      ],
+      [
+        "phi_e",
+        0.0639633539118489
+      ],
+      [
+        "m",
+        0.05702676541859976
+      ],
+      [
+        "psi_b",
+        0.05683411463953988
+      ],
+      [
+        "fac_5",
+        0.05574259129445393
+      ],
+      [
+        "gcd_e_m",
+        0.05433644514261926
+      ],
+      [
+        "m_div_3",
+        0.04325455185763357
+      ]
+    ]
+  },
+  "decision_tree_path": "results_v3_option_a_decision_tree.txt"
+}

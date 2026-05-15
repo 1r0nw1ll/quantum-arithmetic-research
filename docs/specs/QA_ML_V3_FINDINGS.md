@@ -180,6 +180,122 @@ optional follow-ups.
   cleanly; trying more methods on the same target is redundant.
 - A wider orbit-period sweep. The [279] draft remains parked.
 
+## Update 2026-05-15: Option A null result + sharper diagnosis
+
+**Option A** (extended `M_train` to k ∈ {1, 2, 3, 4, 6} in the m=15k
+family, held out k=5 (m=75), k=7 (m=105), k=8 (m=120)) did **not**
+improve [277] rediscovery. `rediscover_277` went from 0.417 to 0.292
+across the new test moduli; `m=75` undercount remained 0; [278] stayed
+at 1.000.
+
+Inspecting the Option A tree text
+(`results_v3_option_a_decision_tree.txt`) revealed the structural cause:
+
+```text
+|--- fac_3 <= 0.50          (3 ∤ m — the [278] regime)
+|   |--- phi_e <= 0.50
+|   |   |--- phi_b <= 0.50
+|   |   |   |--- class: 2   ← [278] rule, perfect
+|--- fac_3 >  0.50          (3 | m — the [277] regime)
+|   |--- psi_b <= 0.50
+|   |   |--- class: 0
+|   |--- psi_b >  0.50
+|   |   |--- fac_5 <= 0.50
+|   |   |   |--- class: 0
+|   |   |--- fac_5 >  0.50
+|   |   |   |--- m <= 52.50  ← splits per modulus, not parametrically
+|   |   |   |   |--- ...complex per-feature thresholds...
+```
+
+The tree's split **`m <= 52.50`** is the smoking gun. At max_depth=12,
+CART literally branches on absolute modulus value to handle the [277]
+regime — it memorizes per-modulus thresholds rather than learning the
+parametric `(k, 3k), (k, k), (3k, k)` signature shape. Adding more `k`
+values to training gave the tree more reference points to memorize,
+not a parametric rule to abstract.
+
+The model failed at m=75 specifically because m=75 has `fac_5=2`
+(the only 5²·3 modulus in the dataset), and the tree learned that
+`fac_5=1` cases work one way while `fac_5=2` was out of distribution.
+The Option A run validated this: the tree partially extrapolated to
+m=105 and m=120 (`fac_5=1`) but completely failed at m=75 (`fac_5=2`).
+
+### Refined v3 thesis
+
+The original v3 thesis ("ML can rediscover certified rules from data")
+needs qualification:
+
+> **Refined thesis (2026-05-15):** A simple feature-distillation
+> approach (sklearn CART with the v3 packet) can rediscover
+> **non-parametric structural rules** that decompose into a small
+> Boolean combination of feature-threshold tests — exactly the form of
+> [278]. The same approach cannot rediscover **parametric rules** that
+> are quantified over a continuous index (k = m/15 in [277]) because
+> CART cannot express parametric quantification over numerical features.
+
+[278] is `∀ m. 3 ∤ m ∧ m ≥ 7 ∧ m ≠ 8 → (the 9 false satellites are
+exactly {a·m//3, b·m//3 : a, b ∈ {1, 2, 3}})`. The tree captures the
+universal quantifier as a feature-threshold conjunction.
+
+[277] is `∀ k. 0 < k ≤ K_max → (32 missed satellites at m=15k partition
+by gcd-signature as (k, 3k):8, (k, k):16, (3k, k):8)`. The tree cannot
+express "the 32 missed states sit at gcd values that are integer
+multiples of k" because k is a parameter relative to m, not a feature
+of (b, e).
+
+## Pepe (2025) connection — context worth capturing
+
+The user pointed to *Machine Learning with Geometric Algebra* (Pepe,
+PhD thesis, Cambridge, August 2025, `/Users/player3/Downloads/2025-pepe.pdf`,
+228 pages). The thesis's premise directly addresses what QA-ML v3.0
+just discovered:
+
+> "if, as it is often said, ML is a clever rebranding of linear algebra,
+> then geometric problems in ML deserve to be tackled with GA, an
+> extension of linear algebra designed to represent geometric objects
+> and perform transformations on them naturally and compactly."
+
+By analogy: **QA problems in ML deserve to be tackled with QA-native
+features** that embed the algebraic structure (orbit period, generator
+graph, k-relative gcd signatures), not just generic integer features.
+Cert [276] showed this for graph topology (GCN beats MLP). v3.0 just
+showed it for [278] (the right feature combination distills the rule).
+v3.0's [277] failure points at the next gap: **embed `k = m // 15` as a
+first-class feature, not as a learned threshold**.
+
+Pepe's chapters 2, 4, 5 (rotations as rotors, pose estimation, PDE
+solving with STA) all share this pattern: embed the right algebra into
+the model architecture, get lower errors and interpretable
+intermediates. The QA analog is what cert [276] already did
+(generator-graph adjacency as a fixed structural input). For [277]
+rediscovery, the QA analog would be a **k-quotient feature transform**
+that exposes the parametric ratio directly.
+
+## v3.1 recommendation (sharpened)
+
+Given the Option A null result and the Pepe-style structural lesson,
+the right next step is **NOT** to add another model class or more
+training data. It's to **add k-quotient features** to the v3 packet
+and re-test:
+
+```text
+gcd_b_m_over_k = gcd(b, m) // (m // 15)     where m // 15 == k for m=15k
+gcd_e_m_over_k = gcd(e, m) // (m // 15)
+gcd_ratio_signature = (gcd_b_m_over_k, gcd_e_m_over_k)
+```
+
+For m = 15k missed-satellite pairs, this signature equals exactly
+{(1, 3), (1, 1), (3, 1)} regardless of k. The decision tree could
+then express the [277] rule as a single feature-threshold combination
+on these k-quotient features.
+
+If `rediscover_277 ≥ 0.95` after adding these features, the v3 thesis
+is confirmed in its refined form: **non-parametric rules are
+distillable directly; parametric rules become distillable after the
+right invariant features are exposed**. This makes the rule-extraction
+workflow a two-stage discovery: (i) find the parametric invariant
+from theory or graph structure, (ii) distill the rule from data.
+
 ## Lineage
 
 ```text
@@ -188,8 +304,22 @@ e7b2af0  fix(qa_orbit_rules): canonical orbit_family via orbit_period
 [278]    No-3-divisor over-claim boundary
 418b73c  docs(orbit): park [279], write synthesis closing the cert chain
 b48cafd  docs(qa_ml): v3 structure-discovery plan
-<this>   experiments/qa_ml/04_orbit_structure_discovery.py + this findings note
+aa6adb1  feat(qa_ml): v3 pilot — rediscovers [278] from data
+<this>   v3 Option A run + Pepe synthesis + v3.1 k-quotient proposal
 ```
+
+## External references added
+
+- **Pepe, A. (2025).** *Machine Learning with Geometric Algebra:
+  Multivectors for Modelling, Understanding and Computing.* PhD
+  thesis, University of Cambridge, Department of Engineering, Darwin
+  College. 228 pp. (companion file
+  `/Users/player3/Downloads/2025-pepe.pdf`). Establishes the broader
+  pattern: embedding the right algebra into ML architecture gives
+  lower errors, equivariance, and interpretable intermediates. The
+  QA-ML chain's [276] (graph topology), [277]/[278] (algebraic rule
+  rediscovery), and v3.1 (k-quotient feature transform) are all
+  instances of this pattern applied to QA's modular structure.
 
 ## References
 

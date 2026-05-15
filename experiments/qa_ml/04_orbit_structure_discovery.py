@@ -50,11 +50,28 @@ from tools.qa_ml.qa_features_v3 import FEATURE_NAMES_V3  # noqa: E402
 from qa_reproducibility import log_run  # noqa: E402
 
 
-M_TRAIN = [9, 10, 12, 15, 18, 20, 21, 24, 25, 30]
-M_TEST = [7, 8, 11, 30, 45, 75]
+import os
+
+_OPTION_A = os.environ.get("QA_ML_V3_OPTION_A", "0") == "1"
+
+if _OPTION_A:
+    # Option A: wider k coverage in m = 15k space (training has k=1,2,3,4,6);
+    # held-out [277] test uses k=5 (m=75 — in K_verified), k=7 (m=105), k=8
+    # (m=120) for extrapolation beyond K_verified. Tests whether tree learns
+    # the parametric (k, 3k) signatures rather than memorizing per-k values.
+    M_TRAIN = [9, 10, 11, 12, 15, 18, 20, 21, 24, 25, 27, 30, 36, 45, 60, 90]
+    M_TEST = [7, 8, 13, 33, 75, 105, 120]
+    OUT_NAME = "results_v3_option_a.json"
+    TREE_NAME = "results_v3_option_a_decision_tree.txt"
+else:
+    M_TRAIN = [9, 10, 12, 15, 18, 20, 21, 24, 25, 30]
+    M_TEST = [7, 8, 11, 30, 45, 75]
+    OUT_NAME = "results_v3_structure_discovery.json"
+    TREE_NAME = "results_v3_decision_tree.txt"
+
 SEED = 0
 PROTOCOL_PATH = Path(__file__).parent / "benchmark_protocol_v3.json"
-OUT_PATH = Path(__file__).parent / "results_v3_structure_discovery.json"
+OUT_PATH = Path(__file__).parent / OUT_NAME
 
 
 def _rediscovery_score(predictions, ground_truth):
@@ -181,7 +198,7 @@ def main() -> None:
 
     # ---- T3: dump the tree's structure for inspection ----
     tree_text = export_text(tree, feature_names=list(FEATURE_NAMES_V3), max_depth=10)
-    tree_path = Path(__file__).parent / "results_v3_decision_tree.txt"
+    tree_path = Path(__file__).parent / TREE_NAME
     tree_path.write_text(tree_text, encoding="utf-8")
     n_nodes = tree.tree_.node_count
     n_leaves = sum(1 for is_leaf in (tree.tree_.children_left == -1) if is_leaf)

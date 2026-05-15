@@ -36,6 +36,8 @@ FEATURE_NAMES_V3: tuple[str, ...] = (
     "m", "m_div_3", "m_mod_3", "m_mod_5",                          # modulus
     "fac_2", "fac_3", "fac_5", "fac_7", "fac_11",                  # factorization
     "gcd_b_m_over_k", "gcd_e_m_over_k",                            # v3.1 k-quotient
+    "canonical_b", "canonical_e", "canonical_m", "canonical_g",    # v3.2 canonical
+    "canonical_k",                                                  # v3.2 canonical k
 )
 
 
@@ -77,13 +79,24 @@ def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
 
     # v3.1 k-quotient features. For m = 15k the [277] missed-satellite gcd
     # signatures are (k, 3k), (k, k), (3k, k); dividing by max(1, m // 15)
-    # collapses these to (1, 3), (1, 1), (3, 1) regardless of k, exposing
-    # the parametric invariant as a fixed feature value. For m < 15 the
-    # divisor is set to 1 so the feature is still well-defined (and the
-    # tree can choose to ignore it).
+    # collapses these to (1, 3), (1, 1), (3, 1) regardless of k.
     k_div = max(1, m // 15)
     gcd_b_m_over_k = gcd_b // k_div
     gcd_e_m_over_k = gcd_e // k_div
+
+    # v3.2 canonical features. The orbit_period is fully equivariant under
+    # (b, e, m) -> (cb, ce, cm); the canonical representative is the
+    # gcd-quotient (b/g, e/g, m/g) where g = gcd(b, e, m). Predictions
+    # depending on orbit_period (cert [277] regime) are invariant under
+    # this map. Predictions depending on the divisor-shortcut's `m // 3`
+    # (cert [278] regime) are NOT — included anyway so the model can
+    # decide when to use them.
+    g_all = gcd(gcd_b, e)
+    g_all = gcd(g_all, m)
+    canonical_b = b // g_all
+    canonical_e = e // g_all
+    canonical_m = m // g_all
+    canonical_k = canonical_m // 15 if (canonical_m % 15 == 0) else 0
 
     return (
         *base,
@@ -93,6 +106,8 @@ def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
         m, m_div_3, m_mod_3, m_mod_5,
         fac_2, fac_3, fac_5, fac_7, fac_11,
         gcd_b_m_over_k, gcd_e_m_over_k,
+        canonical_b, canonical_e, canonical_m, g_all,
+        canonical_k,
     )
 
 

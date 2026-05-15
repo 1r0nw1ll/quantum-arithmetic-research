@@ -1,0 +1,232 @@
+|--- canonical_m <= 26.00
+|   |--- canonical_k <= 0.50
+|   |   |--- canonical_g <= 4.50
+|   |   |   |--- canonical_e <= 2.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- canonical_e >  2.50
+|   |   |   |   |--- canonical_b <= 2.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |   |--- canonical_b >  2.50
+|   |   |   |   |   |--- canonical_m <= 11.50
+|   |   |   |   |   |   |--- canonical_g <= 2.50
+|   |   |   |   |   |   |   |--- canonical_b <= 9.50
+|   |   |   |   |   |   |   |   |--- canonical_e <= 9.50
+|   |   |   |   |   |   |   |   |   |--- canonical_m <= 9.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_m <= 5.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_m >  5.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |--- canonical_m >  9.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |--- canonical_e >  9.50
+|   |   |   |   |   |   |   |   |   |--- canonical_g <= 1.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |--- canonical_g >  1.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |--- canonical_b >  9.50
+|   |   |   |   |   |   |   |   |--- canonical_e <= 3.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_e >  3.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |--- canonical_g >  2.50
+|   |   |   |   |   |   |   |--- canonical_m <= 5.50
+|   |   |   |   |   |   |   |   |--- canonical_b <= 3.50
+|   |   |   |   |   |   |   |   |   |--- canonical_g <= 3.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |--- canonical_g >  3.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_b >  3.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |--- canonical_m >  5.50
+|   |   |   |   |   |   |   |   |--- canonical_g <= 3.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_g >  3.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |--- canonical_m >  11.50
+|   |   |   |   |   |   |--- canonical_m <= 24.50
+|   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |--- canonical_m >  24.50
+|   |   |   |   |   |   |   |--- canonical_b <= 7.50
+|   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |--- canonical_b >  7.50
+|   |   |   |   |   |   |   |   |--- canonical_e <= 7.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_e >  7.50
+|   |   |   |   |   |   |   |   |   |--- canonical_e <= 24.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 24.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  24.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |--- canonical_e >  24.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |--- canonical_g >  4.50
+|   |   |   |--- canonical_m <= 1.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- canonical_m >  1.50
+|   |   |   |   |--- class: 0
+|   |--- canonical_k >  0.50
+|   |   |--- canonical_b <= 14.50
+|   |   |   |--- canonical_e <= 14.50
+|   |   |   |   |--- canonical_e <= 4.50
+|   |   |   |   |   |--- canonical_b <= 10.50
+|   |   |   |   |   |   |--- canonical_b <= 9.50
+|   |   |   |   |   |   |   |--- canonical_b <= 4.50
+|   |   |   |   |   |   |   |   |--- canonical_e <= 2.50
+|   |   |   |   |   |   |   |   |   |--- canonical_b <= 1.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |--- canonical_b >  1.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |--- canonical_e >  2.50
+|   |   |   |   |   |   |   |   |   |--- canonical_b <= 3.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 2.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  2.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 1
+|   |   |   |   |   |   |   |   |   |--- canonical_b >  3.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |--- canonical_b >  4.50
+|   |   |   |   |   |   |   |   |--- canonical_b <= 6.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_b >  6.50
+|   |   |   |   |   |   |   |   |   |--- canonical_e <= 2.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |--- canonical_e >  2.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  3.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |--- canonical_b >  9.50
+|   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |--- canonical_b >  10.50
+|   |   |   |   |   |   |--- canonical_b <= 12.50
+|   |   |   |   |   |   |   |--- canonical_e <= 3.50
+|   |   |   |   |   |   |   |   |--- canonical_e <= 2.50
+|   |   |   |   |   |   |   |   |   |--- canonical_e <= 1.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 11.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  11.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 1
+|   |   |   |   |   |   |   |   |   |--- canonical_e >  1.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_e >  2.50
+|   |   |   |   |   |   |   |   |   |--- class: 1
+|   |   |   |   |   |   |   |--- canonical_e >  3.50
+|   |   |   |   |   |   |   |   |--- canonical_g <= 1.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_g >  1.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |--- canonical_b >  12.50
+|   |   |   |   |   |   |   |--- canonical_e <= 1.50
+|   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |--- canonical_e >  1.50
+|   |   |   |   |   |   |   |   |--- canonical_e <= 3.50
+|   |   |   |   |   |   |   |   |   |--- canonical_b <= 13.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |--- canonical_b >  13.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 2.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 1
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  2.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_e >  3.50
+|   |   |   |   |   |   |   |   |   |--- canonical_b <= 13.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 1
+|   |   |   |   |   |   |   |   |   |--- canonical_b >  13.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_g <= 1.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |   |--- canonical_g >  1.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |--- canonical_e >  4.50
+|   |   |   |   |   |--- canonical_e <= 5.50
+|   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |--- canonical_e >  5.50
+|   |   |   |   |   |   |--- canonical_e <= 10.50
+|   |   |   |   |   |   |   |--- canonical_e <= 9.50
+|   |   |   |   |   |   |   |   |--- canonical_b <= 5.50
+|   |   |   |   |   |   |   |   |   |--- canonical_b <= 4.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |--- canonical_b >  4.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 6.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  6.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_b >  5.50
+|   |   |   |   |   |   |   |   |   |--- canonical_b <= 9.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |--- canonical_b >  9.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 6.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  6.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |--- canonical_e >  9.50
+|   |   |   |   |   |   |   |   |--- canonical_b <= 1.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_b >  1.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |--- canonical_e >  10.50
+|   |   |   |   |   |   |   |--- canonical_b <= 4.50
+|   |   |   |   |   |   |   |   |--- canonical_b <= 2.50
+|   |   |   |   |   |   |   |   |   |--- canonical_e <= 13.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 11.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  11.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |--- canonical_e >  13.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 1.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  1.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_b >  2.50
+|   |   |   |   |   |   |   |   |   |--- canonical_e <= 11.50
+|   |   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |   |--- canonical_e >  11.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e <= 12.50
+|   |   |   |   |   |   |   |   |   |   |   |--- class: 1
+|   |   |   |   |   |   |   |   |   |   |--- canonical_e >  12.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |--- canonical_b >  4.50
+|   |   |   |   |   |   |   |   |--- canonical_b <= 5.50
+|   |   |   |   |   |   |   |   |   |--- class: 0
+|   |   |   |   |   |   |   |   |--- canonical_b >  5.50
+|   |   |   |   |   |   |   |   |   |--- canonical_b <= 10.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  8.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |--- canonical_b >  10.50
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b <= 12.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |   |   |   |   |   |   |   |--- canonical_b >  12.50
+|   |   |   |   |   |   |   |   |   |   |   |--- truncated branch of depth 2
+|   |   |   |--- canonical_e >  14.50
+|   |   |   |   |--- canonical_b <= 1.50
+|   |   |   |   |   |--- class: 0
+|   |   |   |   |--- canonical_b >  1.50
+|   |   |   |   |   |--- class: 0
+|   |   |--- canonical_b >  14.50
+|   |   |   |--- canonical_g <= 1.50
+|   |   |   |   |--- class: 0
+|   |   |   |--- canonical_g >  1.50
+|   |   |   |   |--- class: 0
+|--- canonical_m >  26.00
+|   |--- class: 0

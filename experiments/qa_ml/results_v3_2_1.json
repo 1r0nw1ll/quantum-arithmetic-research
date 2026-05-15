@@ -1,0 +1,145 @@
+{
+  "m_train": [
+    9,
+    10,
+    11,
+    12,
+    15,
+    18,
+    20,
+    21,
+    24,
+    25,
+    27,
+    30,
+    36,
+    45,
+    60,
+    90,
+    150
+  ],
+  "m_test": [
+    7,
+    8,
+    13,
+    33,
+    75,
+    105,
+    120
+  ],
+  "seed": 0,
+  "n_train_states": 42187,
+  "n_test_states": 32421,
+  "feature_names": [
+    "b",
+    "e",
+    "d",
+    "a",
+    "C",
+    "F",
+    "G",
+    "phi_b",
+    "phi_e",
+    "psi_b",
+    "psi_e",
+    "gcd_b_m",
+    "gcd_e_m",
+    "is_singularity",
+    "m",
+    "m_div_3",
+    "m_mod_3",
+    "m_mod_5",
+    "fac_2",
+    "fac_3",
+    "fac_5",
+    "fac_7",
+    "fac_11",
+    "gcd_b_m_over_k",
+    "gcd_e_m_over_k",
+    "canonical_b",
+    "canonical_e",
+    "canonical_m",
+    "canonical_g",
+    "canonical_k"
+  ],
+  "models": [
+    {
+      "model": "qa_full_logreg",
+      "macro_f1": 0.45141333380215093,
+      "balanced_acc": 0.9587964370573067,
+      "per_class_recall": {
+        "correct": 0.9672984020810108,
+        "undercount_missed_sat": 1.0,
+        "overclaim_false_sat": 0.9090909090909091
+      },
+      "rediscover_277_undercount": 1.0,
+      "rediscover_278_overclaim": 1.0,
+      "m8_overclaim_recall": 0.8,
+      "m75_undercount_recall": 1.0,
+      "n_test": 32421,
+      "test_class_counts": {
+        "0": 32292,
+        "2": 33,
+        "1": 96
+      },
+      "pred_class_counts": {
+        "2": 576,
+        "1": 609,
+        "0": 31236
+      }
+    },
+    {
+      "model": "decision_tree",
+      "macro_f1": 0.5327970053979741,
+      "balanced_acc": 0.6826158275433638,
+      "per_class_recall": {
+        "correct": 0.9872414220240308,
+        "undercount_missed_sat": 1.0,
+        "overclaim_false_sat": 0.06060606060606061
+      },
+      "rediscover_277_undercount": 1.0,
+      "rediscover_278_overclaim": 0.0,
+      "m8_overclaim_recall": 0.13333333333333333,
+      "m75_undercount_recall": 1.0,
+      "n_test": 32421,
+      "test_class_counts": {
+        "0": 32292,
+        "2": 33,
+        "1": 96
+      },
+      "pred_class_counts": {
+        "0": 31911,
+        "2": 282,
+        "1": 228
+      }
+    }
+  ],
+  "decision_tree_summary": {
+    "depth": 12,
+    "node_count": 199,
+    "leaf_count": 100,
+    "top_importances": [
+      [
+        "canonical_k",
+        0.47652306963333363
+      ],
+      [
+        "canonical_m",
+        0.44436670169987724
+      ],
+      [
+        "canonical_g",
+        0.03488112294347956
+      ],
+      [
+        "canonical_e",
+        0.024163253416463984
+      ],
+      [
+        "canonical_b",
+        0.020065852306845555
+      ]
+    ]
+  },
+  "decision_tree_path": "results_v3_2_1_decision_tree.txt"
+}

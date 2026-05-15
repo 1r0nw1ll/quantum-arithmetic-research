@@ -1,0 +1,157 @@
+{
+  "m_train": [
+    9,
+    10,
+    11,
+    12,
+    15,
+    18,
+    20,
+    21,
+    24,
+    25,
+    27,
+    30,
+    36,
+    45,
+    60,
+    90,
+    150
+  ],
+  "m_test": [
+    7,
+    8,
+    13,
+    33,
+    75,
+    105,
+    120
+  ],
+  "seed": 0,
+  "n_train_states": 42187,
+  "n_test_states": 32421,
+  "feature_names": [
+    "b",
+    "e",
+    "d",
+    "a",
+    "C",
+    "F",
+    "G",
+    "phi_b",
+    "phi_e",
+    "psi_b",
+    "psi_e",
+    "gcd_b_m",
+    "gcd_e_m",
+    "is_singularity",
+    "m",
+    "m_div_3",
+    "m_mod_3",
+    "m_mod_5",
+    "fac_2",
+    "fac_3",
+    "fac_5",
+    "fac_7",
+    "fac_11",
+    "gcd_b_m_over_k",
+    "gcd_e_m_over_k",
+    "canonical_b",
+    "canonical_e",
+    "canonical_m",
+    "canonical_g",
+    "canonical_k"
+  ],
+  "models": [
+    {
+      "model": "qa_full_logreg",
+      "macro_f1": 0.47199277043449345,
+      "balanced_acc": 0.9353580866262026,
+      "per_class_recall": {
+        "correct": 0.9519075932119411,
+        "undercount_missed_sat": 0.8541666666666666,
+        "overclaim_false_sat": 1.0
+      },
+      "rediscover_277_undercount": 0.8541666666666666,
+      "rediscover_278_overclaim": 1.0,
+      "m8_overclaim_recall": 1.0,
+      "m75_undercount_recall": 0.5625,
+      "n_test": 32421,
+      "test_class_counts": {
+        "0": 32292,
+        "2": 33,
+        "1": 96
+      },
+      "pred_class_counts": {
+        "0": 30753,
+        "2": 162,
+        "1": 1506
+      }
+    },
+    {
+      "model": "decision_tree",
+      "macro_f1": 0.7929825233439086,
+      "balanced_acc": 0.9901342953879185,
+      "per_class_recall": {
+        "correct": 0.9912362194970891,
+        "undercount_missed_sat": 0.9791666666666666,
+        "overclaim_false_sat": 1.0
+      },
+      "rediscover_277_undercount": 0.9791666666666666,
+      "rediscover_278_overclaim": 1.0,
+      "m8_overclaim_recall": 1.0,
+      "m75_undercount_recall": 1.0,
+      "n_test": 32421,
+      "test_class_counts": {
+        "0": 32292,
+        "2": 33,
+        "1": 96
+      },
+      "pred_class_counts": {
+        "0": 32011,
+        "2": 34,
+        "1": 376
+      }
+    }
+  ],
+  "decision_tree_summary": {
+    "depth": 12,
+    "node_count": 39,
+    "leaf_count": 20,
+    "top_importances": [
+      [
+        "m_mod_3",
+        0.4855767665778876
+      ],
+      [
+        "canonical_m",
+        0.4764909233381243
+      ],
+      [
+        "phi_e",
+        0.028951546662452657
+      ],
+      [
+        "phi_b",
+        0.00838752703942912
+      ],
+      [
+        "F",
+        0.000569731903145671
+      ],
+      [
+        "C",
+        2.3504478912590405e-05
+      ],
+      [
+        "e",
+        3.214453429357041e-14
+      ],
+      [
+        "psi_e",
+        1.5808362663832014e-14
+      ]
+    ]
+  },
+  "decision_tree_path": "results_v3_2_0_decision_tree.txt"
+}

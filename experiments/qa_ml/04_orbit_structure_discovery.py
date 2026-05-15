@@ -79,6 +79,19 @@ elif _OPTION == "v3_1":
     M_TEST = [7, 8, 13, 33, 75, 105, 120]
     OUT_NAME = "results_v3_1.json"
     TREE_NAME = "results_v3_1_decision_tree.txt"
+elif _OPTION in ("v3_2_0", "v3_2_1", "v3_2_2"):
+    # v3.2 (2026-05-15): canonical features in packet (qa_features_v3
+    # extended). Three phases:
+    #   v3_2_0 — add canonical features alongside the v3.1 ones, train
+    #            normal tree on ALL features.
+    #   v3_2_1 — train tree using ONLY canonical features (b', e', m',
+    #            g, canonical_k). Equivariance enforced by construction.
+    #   v3_2_2 — hybrid: route by regime. Uses the same script for now;
+    #            differentiation via the FEATURE_SUBSET variable below.
+    M_TRAIN = [9, 10, 11, 12, 15, 18, 20, 21, 24, 25, 27, 30, 36, 45, 60, 90, 150]
+    M_TEST = [7, 8, 13, 33, 75, 105, 120]
+    OUT_NAME = f"results_{_OPTION}.json"
+    TREE_NAME = f"results_{_OPTION}_decision_tree.txt"
 else:
     # Pilot (2026-05-15): the original v3 feasibility test. 10 training
     # moduli; small test set. With k-quotient features now in the packet,
@@ -182,11 +195,27 @@ def main() -> None:
     print(f"  train T1 class counts: {ds_train['class_counts_t1']}")
     print(f"  test  T1 class counts: {ds_test['class_counts_t1']}\n")
 
-    X_train = np.asarray(ds_train["X"], dtype=np.int64)
+    X_train_full = np.asarray(ds_train["X"], dtype=np.int64)
     y_train = np.asarray(ds_train["y_t1"], dtype=np.int64)
-    X_test = np.asarray(ds_test["X"], dtype=np.int64)
+    X_test_full = np.asarray(ds_test["X"], dtype=np.int64)
     y_test = np.asarray(ds_test["y_t1"], dtype=np.int64)
     triples_test = ds_test["triples"]
+
+    # v3.2.1: canonical-only feature subset enforces equivariance by
+    # construction (predictions never see non-canonical b, e, m).
+    if _OPTION == "v3_2_1":
+        canonical_names = {"canonical_b", "canonical_e", "canonical_m",
+                           "canonical_g", "canonical_k"}
+        feature_mask = [n in canonical_names for n in FEATURE_NAMES_V3]
+        X_train = X_train_full[:, feature_mask]
+        X_test = X_test_full[:, feature_mask]
+        active_feature_names = [n for n in FEATURE_NAMES_V3 if n in canonical_names]
+        print(f"  v3.2.1: canonical-only features active "
+              f"({len(active_feature_names)}/{len(FEATURE_NAMES_V3)}): {active_feature_names}")
+    else:
+        X_train = X_train_full
+        X_test = X_test_full
+        active_feature_names = list(FEATURE_NAMES_V3)
 
     # ---- Baseline 1: LogisticRegression on qa_full_v3 features ----
     print("Training qa_full_logreg ...")
@@ -216,7 +245,7 @@ def main() -> None:
     print(f"  trained in {time.time() - t0:.1f}s")
 
     # ---- T3: dump the tree's structure for inspection ----
-    tree_text = export_text(tree, feature_names=list(FEATURE_NAMES_V3), max_depth=10)
+    tree_text = export_text(tree, feature_names=list(active_feature_names), max_depth=10)
     tree_path = Path(__file__).parent / TREE_NAME
     tree_path.write_text(tree_text, encoding="utf-8")
     n_nodes = tree.tree_.node_count
@@ -224,7 +253,7 @@ def main() -> None:
     print(f"  tree depth={tree.get_depth()} nodes={n_nodes} leaves={n_leaves}")
 
     # Inspect feature importances
-    importances = list(zip(FEATURE_NAMES_V3, tree.feature_importances_))
+    importances = list(zip(active_feature_names, tree.feature_importances_))
     importances.sort(key=lambda kv: kv[1], reverse=True)
     print("  top 8 tree feature importances:")
     for feat, imp in importances[:8]:

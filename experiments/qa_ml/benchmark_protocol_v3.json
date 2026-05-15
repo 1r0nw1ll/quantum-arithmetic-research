@@ -1,0 +1,71 @@
+{
+  "protocol_version": "QA_BENCHMARK_PROTOCOL.v1",
+  "benchmark_id": "qa_ml_orbit_structure_discovery_v3_pilot",
+  "qa_method": {
+    "name": "QA-ML v3 pilot: feature-only T1 + decision-tree distillation",
+    "description": "Pilot scope: 3-class T1 shortcut failure-mode prediction (correct / undercount_missed_sat / overclaim_false_sat) across M_train = {9, 10, 12, 15, 18, 20, 21, 24, 25, 30} and held-out M_test = {7, 8, 11, 30, 45, 75}. Two baselines: sklearn LogisticRegression on the 23-feature qa_full_v3 packet (b, e, d, a, C, F, G, phi_b, phi_e, psi_b, psi_e, gcd_b_m, gcd_e_m, is_singularity, m, m_div_3, m_mod_3, m_mod_5, fac_2/3/5/7/11), and a max_depth=12 DecisionTreeClassifier that doubles as the T3 symbolic-extraction candidate. The pilot omits the qa_gcn baseline (v2 carry-over) and the rule_miner baseline (RIPPER/BRL) to test feasibility before scaling.",
+    "observer_projection": "Integer (b, e) discrete states in {1,...,m}^2 -> 23-int feature packet computed by tools.qa_ml.qa_features_v3 in raw integer arithmetic -> sklearn classifier (float-side observer). Boundary crossed once on input, once on output (predicted T1 class label). No float feedback into the QA layer."
+  },
+  "baselines": [
+    {
+      "name": "qa_full_logreg",
+      "implementation_ref": "sklearn.linear_model.LogisticRegression"
+    },
+    {
+      "name": "decision_tree",
+      "implementation_ref": "sklearn.tree.DecisionTreeClassifier"
+    }
+  ],
+  "datasets": [
+    {
+      "name": "qa_v3_train_test_split",
+      "source": "tools.qa_ml.qa_dataset_v3.build_v3_dataset; M_train = {9, 10, 12, 15, 18, 20, 21, 24, 25, 30}; M_test = {7, 8, 11, 30, 45, 75} (note m=30 appears in both since the pilot tests in-distribution generalization within the [277] regime); ground truth from qa_orbit_rules.orbit_family and qa_orbit_rules.orbit_family_divisor_shortcut"
+    }
+  ],
+  "parity_contract": {
+    "same_seed_all_methods": true,
+    "same_data_split": true,
+    "same_preprocessing": true
+  },
+  "calibration_provenance": {
+    "learned_on": "qa_full_v3 features are deterministic integer transforms with no learned thresholds; only the downstream sklearn classifiers are fit",
+    "procedure": "no calibration step",
+    "domain_of_origin": "self-contained mod-m grids; no inheritance"
+  },
+  "framework_inheritance": {
+    "mode": "ported",
+    "prior_cert": "experiments/qa_ml/benchmark_protocol_v2.json (cert [276] GCN benchmark) and benchmark_protocol.json (v1 sample-efficiency)",
+    "diffs": [
+      "extends per-state feature packet from qa_full (9 features) to qa_full_v3 (23 features) by adding mod-5 phase, gcd-with-modulus, factorization, and modulus-level fields",
+      "switches task from binary cosmos-vs-satellite to 3-class shortcut failure-mode prediction (correct / undercount / overclaim)",
+      "introduces decision-tree distillation as a T3 symbolic-extraction candidate alongside the LogReg baseline",
+      "omits the qa_gcn baseline in the pilot — to be added in v3.1 if pilot validates rediscovery"
+    ]
+  },
+  "metrics": ["macro_f1", "balanced_accuracy"],
+  "source_mapping": {
+    "theory_doc": "../../qa_orbit_rules.py",
+    "primary_source": "Verified to agree with the canonical orbit_family",
+    "mapping_rationale": "The v3 pilot tests whether feature-only learning + decision-tree distillation can rediscover the divisor-shortcut failure modes certified in [277] and [278]. Ground truth comes from qa_orbit_rules.orbit_family (canonical, period-based, fixed at commit e7b2af0) and orbit_family_divisor_shortcut (the algebraic helper whose failure surface [277] and [278] map). The pilot is a feasibility check for the broader v3 plan in docs/specs/QA_ML_V3_STRUCTURE_DISCOVERY_PLAN.md; success criterion is rediscover_277 and rediscover_278 each >= 0.95 on the held-out test moduli."
+  },
+  "sota_baseline": {
+    "name": "qa_full_logreg",
+    "metric": "macro_f1",
+    "threshold": 0.0
+  },
+  "ablation": {
+    "callable": "evaluate_predictor",
+    "destroyed_structure": "Two predictors with identical inputs and labels but different model class (LogisticRegression vs DecisionTreeClassifier with max_depth=12) — the tree's depth budget is the structural lever. A LogReg-as-strong-as-tree result indicates the failure modes are linearly separable in the v3 feature space; a tree-much-stronger-than-LogReg result indicates they require non-linear decisions and motivates the qa_gcn extension.",
+    "expected_direction": "Tree macro_f1 > LogReg macro_f1; tree rediscovery scores (>=0.95 target) on [277] and [278] regimes. If tree falls short, the v3 plan's success criterion (rule rediscovery via distillation) is not met by this pilot and v3.1 must escalate to qa_gcn + rule mining or symbolic regression."
+  },
+  "reproducibility": {
+    "seed": 0,
+    "data_sha256": "synthetic_only",
+    "package_versions": {
+      "python": "declared_at_runtime",
+      "scikit-learn": "declared_at_runtime",
+      "numpy": "declared_at_runtime"
+    },
+    "results_ledger": "results_ledger_v3.jsonl"
+  }
+}

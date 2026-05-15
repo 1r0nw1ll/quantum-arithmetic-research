@@ -52,18 +52,37 @@ from qa_reproducibility import log_run  # noqa: E402
 
 import os
 
-_OPTION_A = os.environ.get("QA_ML_V3_OPTION_A", "0") == "1"
+_OPTION = os.environ.get("QA_ML_V3_OPTION", "pilot")
+# Back-compat: old env var QA_ML_V3_OPTION_A=1 selects option_a
+if os.environ.get("QA_ML_V3_OPTION_A") == "1":
+    _OPTION = "option_a"
 
-if _OPTION_A:
-    # Option A: wider k coverage in m = 15k space (training has k=1,2,3,4,6);
-    # held-out [277] test uses k=5 (m=75 — in K_verified), k=7 (m=105), k=8
-    # (m=120) for extrapolation beyond K_verified. Tests whether tree learns
-    # the parametric (k, 3k) signatures rather than memorizing per-k values.
+if _OPTION == "option_a":
+    # Option A (2026-05-15): wider k coverage in m = 15k space (k=1,2,3,4,6
+    # in training); held-out [277] test uses k=5 (m=75 — in K_verified),
+    # k=7 (m=105), k=8 (m=120). Tests whether tree learns the parametric
+    # (k, 3k) signatures rather than memorizing per-k values. Result: NULL
+    # — tree memorizes per-modulus thresholds (m <= 52.50 split).
     M_TRAIN = [9, 10, 11, 12, 15, 18, 20, 21, 24, 25, 27, 30, 36, 45, 60, 90]
     M_TEST = [7, 8, 13, 33, 75, 105, 120]
     OUT_NAME = "results_v3_option_a.json"
     TREE_NAME = "results_v3_option_a_decision_tree.txt"
+elif _OPTION == "v3_1":
+    # v3.1 (2026-05-15): Option A's training + m=150 to give the tree at
+    # least one (fac_3>0, fac_5=2) modulus matching m=75's factor
+    # structure. Tests the refined hypothesis: rule rediscovery requires
+    # (a) k-quotient features in the packet (added in qa_features_v3
+    # commit) AND (b) training data that covers the test set's prime
+    # factor structures. Without (b), the k-quotient feature has nothing
+    # to extrapolate from on fac_5=2 test points.
+    M_TRAIN = [9, 10, 11, 12, 15, 18, 20, 21, 24, 25, 27, 30, 36, 45, 60, 90, 150]
+    M_TEST = [7, 8, 13, 33, 75, 105, 120]
+    OUT_NAME = "results_v3_1.json"
+    TREE_NAME = "results_v3_1_decision_tree.txt"
 else:
+    # Pilot (2026-05-15): the original v3 feasibility test. 10 training
+    # moduli; small test set. With k-quotient features now in the packet,
+    # this run is comparable to the original pilot.
     M_TRAIN = [9, 10, 12, 15, 18, 20, 21, 24, 25, 30]
     M_TEST = [7, 8, 11, 30, 45, 75]
     OUT_NAME = "results_v3_structure_discovery.json"

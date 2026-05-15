@@ -308,6 +308,117 @@ aa6adb1  feat(qa_ml): v3 pilot — rediscovers [278] from data
 <this>   v3 Option A run + Pepe synthesis + v3.1 k-quotient proposal
 ```
 
+## Update 2026-05-15 (round 2): v3.1 k-quotient run
+
+Added two features to the v3 packet per the round-1 v3.1 proposal:
+
+```python
+gcd_b_m_over_k = gcd(b, m) // max(1, m // 15)
+gcd_e_m_over_k = gcd(e, m) // max(1, m // 15)
+```
+
+Smoke test (`tools/qa_ml/qa_features_v3.py`) verifies the k-quotient
+invariance: for missed-satellite gcd signatures at m = 15k (k ∈
+{1, 2, 3, 5, 8}), the features collapse to fixed (1, 3), (1, 1), (3, 1)
+regardless of k. The packet grew from 23 to 25 features.
+
+### Run A: pilot training + k-quotient (no factor-structure fix)
+
+Re-ran original pilot config (M_train = 10 small moduli) with new
+features. `rediscover_277` = 0.333 (vs original pilot 0.417 — slightly
+worse). The features were available but the training set didn't
+expose the parametric invariant cleanly across k.
+
+### Run B: Option A training + k-quotient (Option A retest)
+
+Same Option A M_train (k=1, 2, 3, 4, 6 in m=15k space) with k-quotient
+in packet. `rediscover_277` went from 0.292 to 0.219; m=75 stayed at 0.
+Deeper trees (max_depth ∈ {18, 25, None}) made it worse (0.062, 0.042,
+0.021) — overfit per-modulus when given more capacity.
+
+**Diagnosis**: the `fac_3 > 0` branch of training had **zero**
+fac_5=2 examples. Train fac_5 distribution in the 3|m branch:
+`{1: 14850, 0: 3591}`. Test fac_5 distribution in 3|m: `{1: 25425,
+2: 5625, 0: 1089}` — the 5625 fac_5=2 test states all sit at m=75
+and are completely OOD on fac_5.
+
+### Run C: v3.1 = Option A training + m=150 + k-quotient features
+
+Added m=150 = 2·3·5² to training. m=150 has the **same prime factor
+structure as m=75** (both are 3¹·5²). Hypothesis: if training has at
+least one modulus with the test's factor pattern, the k-quotient
+features should enable parametric extrapolation across k.
+
+Result (verified 2026-05-15):
+
+```text
+                model  macro_f1  rediscover_277  rediscover_278  m75_under
+       qa_full_logreg     0.392           0.333           1.000      0.375
+        decision_tree     0.744           0.458           1.000      0.500
+```
+
+**m=75 undercount jumped from 0.000 → 0.500.** Overall
+`rediscover_277: 0.292 → 0.458`. The k-quotient features now sit at
+positions #2 (gcd_b_m_over_k: 0.282) and #4 (gcd_e_m_over_k: 0.117) in
+the tree's feature importance ranking — behind only m_mod_3 (0.492).
+
+LogReg also improved: `m=75 undercount: 0.000 → 0.375`. The
+representational fix helped both model classes.
+
+### v3.2 refined thesis
+
+```text
+ML rediscovers cert rules from data IF:
+  1. The parametric invariant is exposed as a feature (k-quotient).
+  2. Training covers the test set's prime factor structures.
+  3. The model class has enough depth to express the rule — but not so
+     much that it overfits the long tail (CART at "natural" depth).
+```
+
+Conditions 1+2 pushed m=75 rediscovery from 0 to 0.5. Conditions 1+2
+are sufficient for [278] (no parametric extrapolation needed). [277]
+requires all three plus diverse training across factor patterns.
+
+### Why rediscover_277 isn't 0.95 yet
+
+The remaining gap from 0.458 to 0.95 is OOD factor structure on m=105
+(only fac_7≥1 test point) and m=120 (only fac_2=3 test point with 3|m).
+Same pattern as m=75 before adding m=150: the tree can extrapolate
+WITHIN a factor structure it has seen, not BETWEEN factor structures.
+
+To reach `rediscover_277 ≥ 0.95`, training would need diverse fac_7,
+fac_2 examples. But that approach starts to feel like "make the
+training set look like the test set," which defeats the rule-
+rediscovery goal.
+
+### Honest v3.1 conclusion
+
+> Decision-tree distillation, even with the right k-quotient features,
+> cannot extrapolate across prime factor structures. It can only apply
+> within-structure rules learned from training. To go further, the
+> model class itself needs to express "ignore the prime structure of
+> m and apply the same parametric rule" — i.e. an **equivariant model
+> in the GA-style sense of Pepe (2025)**.
+
+This is a clean stopping point for the distillation thread. The v3
+deliverable is: (i) [278] rediscovered cleanly by distillation, (ii)
+[277] partially rediscovered with feature engineering, (iii) full
+[277] rediscovery requires an equivariant architecture, not more
+features or training data.
+
+### v3.2 proposal (NOT auto-promoted)
+
+If the user wants to chase `rediscover_277 ≥ 0.95`, the right v3.2 is
+a **modulus-factor-equivariant model**: predictions should be invariant
+under `(b, e, m) → (c·b, c·e, c·m)` for prime scalings c. Build it as
+an equivariant GCN over the QA generator graph with shared parameters
+across modulus orbits. This is the Pepe-thesis pattern (chapters
+2/3/4/5: rotors, GA-equivariant projector, sandwich product layers,
+STAResNet) applied to QA's modular structure.
+
+That's a v3.2 research project, not a 10-minute experiment. Flagged
+here; NOT auto-promoted without explicit user direction.
+
 ## External references added
 
 - **Pepe, A. (2025).** *Machine Learning with Geometric Algebra:

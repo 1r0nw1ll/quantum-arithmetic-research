@@ -35,6 +35,7 @@ FEATURE_NAMES_V3: tuple[str, ...] = (
     "is_singularity",                                              # boundary flag
     "m", "m_div_3", "m_mod_3", "m_mod_5",                          # modulus
     "fac_2", "fac_3", "fac_5", "fac_7", "fac_11",                  # factorization
+    "gcd_b_m_over_k", "gcd_e_m_over_k",                            # v3.1 k-quotient
 )
 
 
@@ -49,7 +50,8 @@ def _factor_count(n: int, p: int) -> int:
 def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
     """Full v3 feature vector for state (b, e) under modulus m.
 
-    Returns 23 integer features in the order of FEATURE_NAMES_V3.
+    Returns 25 integer features in the order of FEATURE_NAMES_V3
+    (v3.1 added gcd_b_m_over_k and gcd_e_m_over_k).
     """
     assert isinstance(b, int) and isinstance(e, int) and isinstance(m, int), (
         f"S2: b={b!r}, e={e!r}, m={m!r} must be Python int"
@@ -73,6 +75,16 @@ def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
     fac_7 = _factor_count(m, 7)
     fac_11 = _factor_count(m, 11)
 
+    # v3.1 k-quotient features. For m = 15k the [277] missed-satellite gcd
+    # signatures are (k, 3k), (k, k), (3k, k); dividing by max(1, m // 15)
+    # collapses these to (1, 3), (1, 1), (3, 1) regardless of k, exposing
+    # the parametric invariant as a fixed feature value. For m < 15 the
+    # divisor is set to 1 so the feature is still well-defined (and the
+    # tree can choose to ignore it).
+    k_div = max(1, m // 15)
+    gcd_b_m_over_k = gcd_b // k_div
+    gcd_e_m_over_k = gcd_e // k_div
+
     return (
         *base,
         psi_b, psi_e,
@@ -80,6 +92,7 @@ def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
         is_sing,
         m, m_div_3, m_mod_3, m_mod_5,
         fac_2, fac_3, fac_5, fac_7, fac_11,
+        gcd_b_m_over_k, gcd_e_m_over_k,
     )
 
 

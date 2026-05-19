@@ -31,7 +31,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | **QA quantization-BOUNDARY parity established; QA/continuous OPERATOR-quality parity NOT established.** Scripts 60–66 (packet, synthetic operator, AhmedML force, ShapeNet pressure-field, grid-packet, voxel-CNN, real 3D-FNO on a dense unsigned surface-distance representation) all show QA tracking continuous within the 0.03 band — but the continuous operator never escapes the surface-pressure floor (best R²≈0.41, FNO). Gaps are ~3 orders below the operator's own error, so this certifies the QA boundary, not solver quality. See the FNO section. | Volumetric pressure/velocity field (this Zenodo archive is surface-only); GPU-scale FNO. No further pressure smokes against this data source. |
+| Fengbo, 3D irregular CFD | **QA/continuous OPERATOR-quality parity ESTABLISHED (script 67) on the canonical Fengbo/GINO benchmark task.** On the trusted md5-pinned neuraloperator GINO record (Zenodo 13936501) with the authors' canonical press alignment, the continuous 3D-FNO reaches **R²=0.958 (relative-L2 0.173)** — a genuinely working operator — and QA tracks it to 7.7e-4 with the gap shrinking monotonically by modulus (3.5e-3→2.3e-4): a **non-degenerate** parity result, the first in the chain. **The earlier "hard ceiling R²≈0.41" claim (scripts 60–66) is RETRACTED:** it was a target-misalignment artifact (our "first-3586-of-3682" hack vs the authors' `concat(press[:16],press[112:])` fixup), not a real ceiling. The benchmark task itself is surface pressure — no volumetric velocity exists in any distribution — so the full volumetric Fengbo solver remains out of scope for lack of such data, not lack of operator. See the GINO section. | True volumetric pressure+velocity CFD data (does not exist in any trusted ML release of this benchmark); open3d signed SDF (vs the unsigned distance used here). |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -71,13 +71,17 @@ matching Pepe's construction.
    **Done.**
 8. Build a real pressure-only voxel/grid neural operator parity test.
    **Done — small 3D CNN (65) and then the published-class 3D FNO (66).**
-9. **CEILING REACHED on this data source.** The continuous operator floors at
-   R²≈0.41 regardless of class/capacity/data/distance input, so QA parity here is
-   boundary-only by construction. Do not add further pressure smokes against
-   the surface-only Zenodo archive. The only lawful continuation is acquiring
-   a *volumetric* pressure+velocity source (GINO/Fengbo formulation); only
-   then is a non-degenerate continuous baseline — and a real solver rung —
-   reachable. See the FNO section.
+9. **Non-degenerate operator parity ACHIEVED (script 67).** The "ceiling"
+   diagnosed at step 8/9 was a *target-misalignment artifact*, not a real
+   ceiling. Switching to the trusted canonical neuraloperator GINO record
+   (Zenodo 13936501) and applying the authors' canonical press alignment
+   `concat(press[:16],press[112:])` instead of our "first-3586" hack, the
+   continuous 3D-FNO reaches R²=0.958 (relative-L2 0.173) — a genuinely
+   working operator — and QA tracks it to 7.7e-4 with the gap shrinking by
+   modulus. This is the first non-degenerate QA/continuous operator-parity
+   rung. The benchmark task is surface pressure (no volumetric velocity in
+   any distribution); the full volumetric Fengbo solver is out of scope for
+   lack of such data, not lack of operator. See the GINO section.
 
 ## Parity Criterion
 
@@ -251,6 +255,15 @@ Fengbo solver rung. See the FNO section for the full ceiling analysis.
 
 ## Real ShapeNet-Car 3D-FNO Operator — and the Honest Ceiling
 
+> **⚠ RETRACTION (see the Canonical GINO Record section below).** The "hard
+> ceiling R²≈0.41" concluded in this section is **wrong**. It was a
+> target-misalignment artifact: scripts 64–66 paired mesh vertices with
+> pressure via a "first-3586-of-3682" truncation, while the dataset authors'
+> canonical fixup is `concat(press[:16], press[112:])`. With the correct
+> alignment (script 67) the same FNO reaches **R²=0.958**. The analysis below
+> is retained as the diagnostic record of the misaligned regime; its ceiling
+> conclusion does not hold.
+
 `66_pepe_ch5_real_shapenet_fno_pressure.py` replaces the local CNN with the
 published-class operator: a 3D Fourier Neural Operator (spectral convolution)
 trained on a dense geometry channel — an *unsigned* nearest-surface distance
@@ -302,6 +315,59 @@ Scripts 60–66 are valid as QA quantization-boundary parity checks; they are
 not Fengbo solver-quality reproduction, and the chain should not be extended
 with further pressure smokes against this data source.
 
+## Canonical GINO Record — Ceiling Retracted, Operator Parity Achieved
+
+`67_pepe_ch5_canonical_gino_carcfd_pressure.py` is the faithful continuation.
+A landscape pass established that **the Fengbo/GINO ShapeNet-Car benchmark has
+no volumetric velocity field in any distribution — trusted or mirror.** Every
+ML-ready release (Zenodo 13737721, Zenodo 13936501, neuraloperator
+`CarCFDDataset`) is a *surface-pressure* prediction task; the "velocity V
+packet" expectation in this chain was a framing error. The canonical record
+the published GINO pipeline actually uses is **Zenodo 13936501** (md5-pinned,
+trusted), which also carries the authors' documented press alignment
+`concat(press[:16], press[112:])` (drop indices 16:112 → 3586 = vertex count).
+
+Switching to that record + alignment, with the *same* 3D FNO, the picture
+inverts completely:
+
+| Setup | continuous relative-L2 | continuous R² | QA m=144 gap | status |
+|---|---:|---:|---:|---|
+| 64–66, "first-3586" misalignment | 0.51–0.57 | 0.26–0.41 | ~1e-3 | degenerate |
+| **67, canonical record + alignment** | **0.1734** | **0.9583** | **−7.7e-4** | operator parity |
+
+Operating point: trusted Zenodo 13936501, full official split (500 train /
+111 test), 24³ grid, FNO width 12 / 7 modes / 3 layers; QA quantization on
+distance channel **and** voxel placement. Continuous R²=0.958 is a genuinely
+working operator (published GINO is ≈0.07–0.10 relative-L2; 0.173 at CPU
+scale / 24³ / 15 epochs is solver-quality, not a mean-predictor). QA tracks it
+to 7.7e-4 with the absolute gap shrinking monotonically by modulus
+(3.5e-3 → 1.6e-3 → 7.7e-4 → 2.3e-4 for m=24/72/144/288).
+
+Verdict: `QA_OPERATOR_PARITY_OK__SURFACE_ONLY_NOT_FENGBO_SOLVER`. This is the
+**first non-degenerate QA/continuous operator-parity rung** in the chain —
+genuine discrete-fractional parity on a competent operator, on the real
+Fengbo/GINO benchmark task, with trusted provenance. It is *not* a green
+Fengbo solver PASS: the benchmark task is surface pressure, so the full
+volumetric Fengbo solver is out of scope for lack of any volumetric
+pressure+velocity data — not lack of operator capability.
+
+Honest residual caveats: (1) open3d is unavailable here, so this uses an
+unsigned nearest-surface distance instead of the authors' signed SDF —
+recorded, not hidden; (2) CPU scale, 24³ grid, 15 epochs — competent but not
+the published GINO training budget. Codex independently verified the alignment
+is faithful to neuraloperator source and that there is no train/test leakage
+(separate manifests, 0 overlap, train-only normalization, pressure never in
+the input). Reproducible: `python experiments/qa_ml/67_pepe_ch5_canonical_gino_carcfd_pressure.py`.
+
+### Lesson
+
+The validation-theater diagnosis of scripts 60–65 was correct (they *were*
+degenerate), but the attributed root cause — "surface-only data / operator too
+weak / hard ceiling" — was **wrong**. The real cause was an unverified target
+alignment vs the dataset authors' canonical preprocessing. "Verify reproduction
+matches the original before interpreting" applies to *data preprocessing*, not
+just code; the forceful ceiling claim violated that and is retracted.
+
 ## References
 
 - Pepe, A. (2025). *Machine Learning with Geometric Algebra: Multivectors and
@@ -309,5 +375,11 @@ with further pressure smokes against this data source.
   `corpus/pepe_2025/2025-pepe.pdf`.
 - Three-dimensional flow dataset over ShapeNet-Car (processed surface-pressure
   archive). Zenodo. DOI 10.5281/zenodo.13737721.
+- Three-dimensional flow dataset over ShapeNet-Car (canonical neuraloperator
+  GINO Car-CFD record; the one `neuralop.data.datasets.CarCFDDataset`
+  downloads). Zenodo. DOI 10.5281/zenodo.13936501.
+- Umetani, N. and Bickel, B. (2018). *Learning three-dimensional flow for
+  interactive aerodynamic design*. ACM Transactions on Graphics.
+  DOI 10.1145/3197517.3201325.
 - Li, Z., et al. (2023). *Geometry-Informed Neural Operator for Large-Scale 3D
   PDEs* (GINO/Fengbo). DOI 10.48550/arXiv.2309.00583.

@@ -17,6 +17,9 @@ First real-data smoke artifact:
 First real pressure-field artifact:
 `experiments/qa_ml/results_pepe_ch5_real_shapenet_pressure_field_smoke.json`.
 
+First real grid-packet pressure artifact:
+`experiments/qa_ml/results_pepe_ch5_real_shapenet_grid_packet_pressure.json`.
+
 ## Correction
 
 The Chapter 5 visual replica is a scaffold, not a PDE solver replication.
@@ -25,7 +28,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS; real ShapeNet-Car pressure-field smoke PASS | Velocity-field acquisition + stronger Fengbo operator |
+| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS; real ShapeNet-Car pressure-field smoke PASS; real ShapeNet-Car `P` grid-packet pressure smoke PASS | Velocity-field acquisition + stronger Clifford/FNO grid operator |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -61,8 +64,10 @@ matching Pepe's construction.
    **Done for AhmedML geometry metadata + Cd/Cl force coefficients only.**
 6. Acquire field/mesh pressure/velocity data and attempt a real-subset
    Fengbo field smoke. **Done for ShapeNet-Car pressure only.**
-7. Acquire velocity-field data or another public pressure+velocity source.
-8. Only after real-subset pressure+velocity parity, attempt the
+7. Build real `P` grid-packet pressure dataset with mesh vertices and normals.
+   **Done.**
+8. Acquire velocity-field data or another public pressure+velocity source.
+9. Only after real-subset pressure+velocity parity, attempt the
    full Pepe Fengbo reproduction.
 
 ## Parity Criterion
@@ -170,3 +175,42 @@ baseline is intentionally small and has high pressure error; the result
 validates real field acquisition plus QA geometry-boundary parity. Velocity
 remains pending because this Zenodo record is the processed pressure archive,
 not a pressure+velocity bundle.
+
+## Real ShapeNet-Car `P` Grid-Packet Pressure Smoke
+
+`64_pepe_ch5_real_shapenet_grid_packet_pressure.py` is the first real
+Fengbo-style pressure-packet gate. It uses mesh vertices, computed vertex
+normals, and direct pressure scalar targets from the processed ShapeNet-Car
+archive.
+
+The feature schema is the actual pressure packet boundary:
+
+```text
+P = mask + coordinate vector + normal-dual bivector
+```
+
+The matched operators are:
+
+- continuous: floating `P` features -> direct pressure scalar
+- QA: `P_QA` integer packets -> observer-decoded `P` features -> direct
+  pressure scalar
+
+At `m = 144` on 64 train cars, 16 test cars, and 256 sampled vertices per car:
+
+| Metric | Continuous | QA | QA - continuous |
+|---|---:|---:|---:|
+| pressure relative L2 | 0.7885834000 | 0.7885871486 | +0.0000037486 |
+| pressure MAE | 27.9786139148 | 27.9779144748 | -0.0006994400 |
+
+Verdict: `PASS_REAL_GRID_PACKET_PRESSURE_SMOKE`. The absolute parity gap
+shrinks from `0.0003071683` at `m = 24` to `0.0000002236` at `m = 288`.
+
+Archive caveat: pressure vectors contain 3682 entries while each mesh has 3586
+vertices. This smoke aligns by using the first `vertex_count` pressure entries
+and records the 96-entry pressure tail as unused. That keeps the test honest
+but means it is still a sampled packet-field smoke, not a full reproduction.
+
+This is much closer to Fengbo than the descriptor/PCA pressure smoke because
+the geometry boundary is now actual sampled `P` packets. It is still not full
+Fengbo because the operator is a small polynomial ridge model, not a 3D
+Clifford/FNO grid operator, and velocity `V` packets are not covered.

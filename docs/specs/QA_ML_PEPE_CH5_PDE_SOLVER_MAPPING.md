@@ -20,6 +20,9 @@ First real pressure-field artifact:
 First real grid-packet pressure artifact:
 `experiments/qa_ml/results_pepe_ch5_real_shapenet_grid_packet_pressure.json`.
 
+First real pressure grid-neural artifact:
+`experiments/qa_ml/results_pepe_ch5_real_shapenet_voxel_cnn_pressure.json`.
+
 ## Correction
 
 The Chapter 5 visual replica is a scaffold, not a PDE solver replication.
@@ -28,7 +31,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS; real ShapeNet-Car pressure-field smoke PASS; real ShapeNet-Car `P` grid-packet pressure smoke PASS | Velocity-field acquisition + stronger Clifford/FNO grid operator |
+| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS; real ShapeNet-Car pressure-field smoke PASS; real ShapeNet-Car `P` grid-packet pressure smoke PASS; real ShapeNet-Car pressure voxel-CNN parity PASS | Velocity-field acquisition + Clifford/FNO grid operator |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -66,8 +69,10 @@ matching Pepe's construction.
    Fengbo field smoke. **Done for ShapeNet-Car pressure only.**
 7. Build real `P` grid-packet pressure dataset with mesh vertices and normals.
    **Done.**
-8. Acquire velocity-field data or another public pressure+velocity source.
-9. Only after real-subset pressure+velocity parity, attempt the
+8. Build a real pressure-only voxel/grid neural operator parity test.
+   **Done with a small 3D CNN.**
+9. Acquire velocity-field data or another public pressure+velocity source.
+10. Only after real-subset pressure+velocity parity, attempt the
    full Pepe Fengbo reproduction.
 
 ## Parity Criterion
@@ -214,3 +219,29 @@ This is much closer to Fengbo than the descriptor/PCA pressure smoke because
 the geometry boundary is now actual sampled `P` packets. It is still not full
 Fengbo because the operator is a small polynomial ridge model, not a 3D
 Clifford/FNO grid operator, and velocity `V` packets are not covered.
+
+## Real ShapeNet-Car Pressure Voxel-CNN Smoke
+
+`65_pepe_ch5_real_shapenet_voxel_cnn_pressure.py` removes the polynomial-ridge
+operator from script 64. It voxelizes real mesh vertices and computed normals
+into sparse `P` tensors on a `24^3` grid, trains a small 3D CNN with
+occupied-voxel pressure loss, and compares the same architecture under
+continuous and QA-quantized inputs.
+
+At `m = 144` on 32 train cars and 8 test cars:
+
+| Metric | Continuous | QA | QA - continuous |
+|---|---:|---:|---:|
+| pressure relative L2 | 0.6310953054 | 0.6311423027 | +0.0000469973 |
+| pressure MAE | 20.6913278798 | 20.6941419761 | +0.0028140963 |
+
+Verdict: `PASS_REAL_VOXEL_CNN_PRESSURE_SMOKE`. The absolute parity gap is
+`0.0000469973` at `m = 144` and `0.0000174306` at `m = 288`, both far inside
+the declared `0.03` band.
+
+This is the current strongest pressure-only Fengbo rung: real mesh geometry,
+real pressure targets, actual voxel/grid tensors, actual neural operator, and
+matched continuous vs QA packet boundaries. It is still not full Fengbo because
+the neural operator is a small CNN rather than the thesis Clifford/FNO stack,
+and the public archive used here does not provide velocity targets for `V`
+packet parity.

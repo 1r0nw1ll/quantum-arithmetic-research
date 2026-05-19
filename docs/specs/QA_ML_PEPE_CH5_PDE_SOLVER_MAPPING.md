@@ -8,6 +8,9 @@ Machine artifact:
 First primitive artifact:
 `experiments/qa_ml/results_pepe_ch5_qa_fengbo_packet_parity.json`.
 
+First operator artifact:
+`experiments/qa_ml/results_pepe_ch5_qa_fengbo_operator_parity.json`.
+
 ## Correction
 
 The Chapter 5 visual replica is a scaffold, not a PDE solver replication.
@@ -16,7 +19,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | Mapped; packet parity smoke PASS; neural operator pending | QA-Fengbo operator over quantized geometry packets |
+| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real data pending | ShapeNet/Ahmed acquisition + real-subset Fengbo smoke |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -45,8 +48,11 @@ matching Pepe's construction.
    packets matching Pepe's `P` and `V`. **Done as packet smoke.**
 3. Build a synthetic mini-Fengbo operator benchmark: sphere/ellipsoid/car-like voxel
    masks with analytic pressure-like scalar and velocity-like vector fields.
+   **Done.**
 4. Run continuous mini-Fengbo and QA-quantized mini-Fengbo head-to-head.
-5. Only after mini parity, acquire ShapeNet Car / Ahmed Body and attempt the
+   **Done.**
+5. Acquire ShapeNet Car / Ahmed Body and attempt a real-subset Fengbo smoke.
+6. Only after real-subset parity, attempt the
    full Pepe Fengbo reproduction.
 
 ## Parity Criterion
@@ -75,3 +81,22 @@ At `m = 144`:
 
 Both errors decrease monotonically across the tested moduli. This validates
 the QA packet mapping, not the learned Fengbo neural operator.
+
+## Synthetic Operator Parity
+
+`61_pepe_ch5_qa_fengbo_operator_parity.py` trains the same deterministic
+mini-Fengbo operator on the same synthetic shape split:
+
+- continuous Fengbo-style geometry packets
+- QA-dequantized Fengbo-style geometry packets
+
+At `m = 144`:
+
+| Metric | Continuous | QA | QA - continuous |
+|---|---:|---:|---:|
+| pressure relative L2 | 0.0000000017 | 0.0016336911 | +0.0016336894 |
+| velocity relative L2 | 0.0000032558 | 0.0027234740 | +0.0027202182 |
+
+The pressure and velocity gaps decrease monotonically over the tested moduli.
+This validates controlled mini-operator parity, not ShapeNet/Ahmed or full
+Clifford-FNO Fengbo replication.

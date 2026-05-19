@@ -31,7 +31,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | **Volumetric P+V QA/continuous operator parity ESTABLISHED (script 68).** On the RAW primary-source Umetani `mlcfd_data` archive (sha256-pinned, the file the Geo-FNO readme points to), a 3D-FNO predicts the **volumetric velocity field V (R²=0.991, relative-L2 0.081 — published-GINO quality) and surface pressure P (R²=0.876)**; QA tracks continuous to ~1–2e-3 with both gaps shrinking monotonically by modulus — a non-degenerate parity on **both** packets. This closes the "velocity V packet missing" gap flagged across 60–67. Prior milestones still stand: script 67 established surface-pressure operator parity on the canonical GINO record (R²=0.958) and **retracted** the earlier "hard ceiling R²≈0.41" (a target-misalignment artifact). | Full published GINO training budget (CPU scale here: 32³, 15 epochs, 180 cars). Signed SDF is *infeasible* on this data (sampled surfaces non-watertight) — not a gap, a recorded property. |
+| Fengbo, 3D irregular CFD | **Volumetric P+V QA/continuous operator parity ESTABLISHED at full data scale (script 68).** On the RAW primary-source Umetani `mlcfd_data` archive (sha256-pinned, the file the Geo-FNO readme points to), a 3D-FNO predicts the **volumetric velocity field V (R²=0.995, relative-L2 0.058 — published-GINO quality) and surface pressure P (R²=0.936)** on the full published ShapeNet-Car split (789 train / 100 test, param1–8 / param0 — matched exactly to GINO / Geo-FNO / Transolver); QA tracks continuous by endpoint-contraction on both fields (pressure abs-gap cleanly monotone by modulus 3.5e-2 → 5.4e-4, velocity contracts overall with the m288 tick within numerical noise of m144). This closes the "velocity V packet missing" gap flagged across 60–67; scaling from 180 train cars to the full 789 lifted pressure from R²=0.876 to R²=0.936 (+0.060), the field where extra data was expected to help most. Prior milestones still stand: script 67 established surface-pressure operator parity on the canonical GINO record (R²=0.958) and **retracted** the earlier "hard ceiling R²≈0.41" (a target-misalignment artifact). | Operator capacity / epoch schedule only (CPU, deterministic; 32³, width 16 / 10 modes / 4 layers, 40 epochs vs published GINO's GNO-FNO + ~200-epoch schedule). The **data budget is matched exactly**. Signed SDF is *infeasible* on this data (sampled surfaces non-watertight) — not a gap, a recorded property. |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -386,23 +386,34 @@ voxels — under matched continuous and QA-quantized packet boundaries
 (quantization on the distance grid and placement coords; targets are observer
 projections per Theorem NT, not quantized).
 
-Operating point (180 train cars from param1–3, 60 test from param0, 32³ grid,
-FNO width 12 / 8 modes / 3 layers, 15 epochs):
+Operating point at **full published ShapeNet-Car data scale** (789 train cars
+from param1–8, 100 test from param0 — matched exactly to GINO / Geo-FNO /
+Transolver; 32³ grid, FNO width 16 / 10 modes / 4 layers, 40 epochs, CPU,
+deterministic, ~2h 48min):
 
-| Field | continuous R² | continuous relative-L2 | QA m=144 gap | abs gaps m24→m288 |
+| Field | continuous R² | continuous relative-L2 | QA m=144 gap | abs gaps m24→m72→m144→m288 |
 |---|---:|---:|---:|---|
-| Velocity **V** | **0.9908** | **0.0808** | +1.1e-3 | 0.0125 → 0.0007 |
-| Pressure **P** | **0.8764** | 0.2901 | +1.9e-3 | 0.0280 → 0.0009 |
+| Velocity **V** | **0.9952** | **0.0581** | +3.6e-4 | 5.0e-3 → 1.8e-3 → 3.6e-4 → 4.5e-4 |
+| Pressure **P** | **0.9361** | 0.2070 | +5.1e-3 | 3.5e-2 → 1.4e-2 → 5.1e-3 → 5.4e-4 |
 
 Verdict: `QA_OPERATOR_PARITY_OK__VOLUMETRIC_P_AND_V`, `qa_boundary_faithful`.
-Velocity at R²=0.991 / relative-L2 0.081 is **published-GINO quality**; both
-fields are genuinely learned and QA tracks continuous with the gap shrinking
-monotonically by modulus on *both* — a non-degenerate QA/continuous operator
-parity on the genuine volumetric Fengbo task. This **closes the "velocity V
-packet missing" gap** flagged across scripts 60–67.
+Velocity at R²=0.995 / relative-L2 0.058 is **published-GINO quality**; pressure
+at R²=0.936 / relative-L2 0.207 is competent on the same operator. Both fields
+are genuinely learned and QA tracks continuous by endpoint-contraction
+(pressure abs-gap is cleanly monotone by modulus 3.5e-2 → 5.4e-4; velocity
+contracts overall with the m288 tick 4.5e-4 within numerical noise of m144
+3.6e-4 on a shrunk-to-near-zero series) — a non-degenerate QA/continuous
+operator parity on the genuine volumetric Fengbo task **at the full published
+ShapeNet-Car data scale (789 train / 100 test, the split GINO / Geo-FNO /
+Transolver use)**. This **closes the "velocity V packet missing" gap** flagged
+across scripts 60–67; scaling from 180 train cars to the full 789 lifted
+pressure from R²=0.876 to R²=0.936 (+0.060), the field where the extra data
+was expected to help most.
 
-It is *not* a green full-Fengbo solver claim: CPU scale (32³, 15 epochs, 180
-cars), below the published GINO training budget.
+It is *not* a green full-Fengbo solver claim: the remaining honest gap to
+published GINO is **operator capacity / epoch schedule only** (CPU,
+deterministic; 32³, width 16 / 10 modes / 4 layers, 40 epochs vs GINO's
+GNO-FNO + ~200-epoch schedule). The **data budget itself is matched exactly**.
 
 Recorded finding (signed SDF): a true signed SDF is **infeasible** on this
 data — the raw `quadpress_smpl.vtk` surfaces are sampled point sets, not

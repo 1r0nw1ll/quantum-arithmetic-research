@@ -31,7 +31,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS; real ShapeNet-Car pressure-field smoke PASS; real ShapeNet-Car `P` grid-packet pressure smoke PASS; real ShapeNet-Car pressure voxel-CNN parity PASS | Velocity-field acquisition + Clifford/FNO grid operator |
+| Fengbo, 3D irregular CFD | **QA quantization-BOUNDARY parity established; QA/continuous OPERATOR-quality parity NOT established.** Scripts 60–66 (packet, synthetic operator, AhmedML force, ShapeNet pressure-field, grid-packet, voxel-CNN, real 3D-FNO on a dense unsigned surface-distance representation) all show QA tracking continuous within the 0.03 band — but the continuous operator never escapes the surface-pressure floor (best R²≈0.41, FNO). Gaps are ~3 orders below the operator's own error, so this certifies the QA boundary, not solver quality. See the FNO section. | Volumetric pressure/velocity field (this Zenodo archive is surface-only); GPU-scale FNO. No further pressure smokes against this data source. |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -70,10 +70,14 @@ matching Pepe's construction.
 7. Build real `P` grid-packet pressure dataset with mesh vertices and normals.
    **Done.**
 8. Build a real pressure-only voxel/grid neural operator parity test.
-   **Done with a small 3D CNN.**
-9. Acquire velocity-field data or another public pressure+velocity source.
-10. Only after real-subset pressure+velocity parity, attempt the
-   full Pepe Fengbo reproduction.
+   **Done — small 3D CNN (65) and then the published-class 3D FNO (66).**
+9. **CEILING REACHED on this data source.** The continuous operator floors at
+   R²≈0.41 regardless of class/capacity/data/distance input, so QA parity here is
+   boundary-only by construction. Do not add further pressure smokes against
+   the surface-only Zenodo archive. The only lawful continuation is acquiring
+   a *volumetric* pressure+velocity source (GINO/Fengbo formulation); only
+   then is a non-degenerate continuous baseline — and a real solver rung —
+   reachable. See the FNO section.
 
 ## Parity Criterion
 
@@ -239,9 +243,69 @@ Verdict: `PASS_REAL_VOXEL_CNN_PRESSURE_SMOKE`. The absolute parity gap is
 `0.0000469973` at `m = 144` and `0.0000174306` at `m = 288`, both far inside
 the declared `0.03` band.
 
-This is the current strongest pressure-only Fengbo rung: real mesh geometry,
-real pressure targets, actual voxel/grid tensors, actual neural operator, and
-matched continuous vs QA packet boundaries. It is still not full Fengbo because
-the neural operator is a small CNN rather than the thesis Clifford/FNO stack,
-and the public archive used here does not provide velocity targets for `V`
-packet parity.
+It is matched continuous vs QA packet boundaries on a real neural operator —
+but see the FNO section below: the continuous CNN here is itself a weak
+operator, so this is QA boundary parity, not solver-quality parity.
+
+## Real ShapeNet-Car 3D-FNO Operator — and the Honest Ceiling
+
+`66_pepe_ch5_real_shapenet_fno_pressure.py` replaces the local CNN with the
+published-class operator: a 3D Fourier Neural Operator (spectral convolution)
+trained on a dense geometry channel — an *unsigned* nearest-surface distance
+field (GINO/Fengbo use a true signed SDF; the archive provides surface meshes
+only, so this is the unsigned approximation), on the full 500-car official
+ShapeNet-Car split, under matched continuous and QA-quantized packet
+boundaries. QA quantization is applied to both the distance channel and voxel
+placement, so the QA perturbation is not understated.
+
+The public archive is heterogeneous (Open3D-emitted double/uchar meshes and
+meshio-emitted float/uint8/int32 meshes); the parser handles both. The
+official train/test split this script loads is empirically 100% double/uchar
+and parsed exactly, so the result below is valid; the float-path robustness is
+covered by the self-test and matters only for non-manifest meshes.
+
+A capacity × data × regularization sweep (96–500 cars, with test-curve
+tracking to separate underfit / overfit / true ceiling), plus a
+distance-channel ablation, established a hard empirical ceiling: the
+continuous operator — **regardless of class (ridge, point-MLP, CNN, FNO),
+capacity, data, or the dense distance input** — does not escape a
+surface-pressure mean-residual relative-L2 floor of ≈0.77 (R²≈0.41) on this
+data at CPU scale.
+
+Operating-point run (500 train / 80 test cars, 24³ grid, FNO width 12 / 7
+modes / 3 layers; QA quantization on distance channel **and** placement):
+
+| Metric | Continuous | QA m=144 | QA − continuous |
+|---|---:|---:|---:|
+| pressure relative L2 | 0.5103559 | 0.5091642 | −0.0011917 |
+| pressure R² | 0.4059 | — | — |
+
+Verdict: `QA_BOUNDARY_PARITY_OK__CONTINUOUS_OPERATOR_WEAK`. With the QA boundary
+applied to placement too, the QA gap is a non-trivial 8.8e-3 at coarse m=24
+and converges monotonically toward continuous as the modulus rises
+(4.0e-3 at m=72 → 1.2e-3 at m=144 → 1.5e-3 at m=288), all far inside the 0.03
+band — **but the continuous FNO's own error (relative-L2 ≈0.51, R²≈0.41) is
+still ~2–3 orders of magnitude larger than that gap.** The parity therefore
+certifies the QA packet *boundary* (and its convergence with modulus), not
+solver-quality *operator* parity. This is deliberately not a green Fengbo
+PASS under any branch.
+
+**Root cause (stated plainly, not hedged):** the bottleneck is the data
+source, not the operator or the encoding. The public Zenodo archive is
+surface-pressure-only; GINO/Fengbo (Li et al., 2023, DOI
+10.48550/arXiv.2309.00583) learn the smooth *volumetric* field at GPU scale,
+of which the surface is a slice. The volumetric formulation is not available
+from this archive, so no non-degenerate Fengbo solver rung is reachable here.
+Scripts 60–66 are valid as QA quantization-boundary parity checks; they are
+not Fengbo solver-quality reproduction, and the chain should not be extended
+with further pressure smokes against this data source.
+
+## References
+
+- Pepe, A. (2025). *Machine Learning with Geometric Algebra: Multivectors and
+  Neural Networks*, PhD thesis, University of Cambridge. Local PDF:
+  `corpus/pepe_2025/2025-pepe.pdf`.
+- Three-dimensional flow dataset over ShapeNet-Car (processed surface-pressure
+  archive). Zenodo. DOI 10.5281/zenodo.13737721.
+- Li, Z., et al. (2023). *Geometry-Informed Neural Operator for Large-Scale 3D
+  PDEs* (GINO/Fengbo). DOI 10.48550/arXiv.2309.00583.

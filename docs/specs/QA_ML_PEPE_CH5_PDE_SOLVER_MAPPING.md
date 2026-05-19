@@ -14,6 +14,9 @@ First operator artifact:
 First real-data smoke artifact:
 `experiments/qa_ml/results_pepe_ch5_real_ahmedml_source_smoke.json`.
 
+First real pressure-field artifact:
+`experiments/qa_ml/results_pepe_ch5_real_shapenet_pressure_field_smoke.json`.
+
 ## Correction
 
 The Chapter 5 visual replica is a scaffold, not a PDE solver replication.
@@ -22,7 +25,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS | Field/mesh acquisition + pressure/velocity Fengbo smoke |
+| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS; real ShapeNet-Car pressure-field smoke PASS | Velocity-field acquisition + stronger Fengbo operator |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -57,8 +60,9 @@ matching Pepe's construction.
 5. Acquire ShapeNet Car / Ahmed Body and attempt a real-subset Fengbo smoke.
    **Done for AhmedML geometry metadata + Cd/Cl force coefficients only.**
 6. Acquire field/mesh pressure/velocity data and attempt a real-subset
-   Fengbo field smoke.
-7. Only after real-subset field parity, attempt the
+   Fengbo field smoke. **Done for ShapeNet-Car pressure only.**
+7. Acquire velocity-field data or another public pressure+velocity source.
+8. Only after real-subset pressure+velocity parity, attempt the
    full Pepe Fengbo reproduction.
 
 ## Parity Criterion
@@ -138,3 +142,31 @@ The next unmapped step is field-level data acquisition: pressure/velocity
 volumes or meshes from NVIDIA PhysicsNeMo Ahmed Body, ShapeNet-Car/GINO, or an
 equivalent public source, followed by continuous Fengbo vs QA-Fengbo on the
 same field split.
+
+## Real ShapeNet-Car Pressure-Field Smoke
+
+`63_pepe_ch5_real_shapenet_pressure_field_smoke.py` is the first field-level
+gate. It uses the public Zenodo `processed-car-pressure-data.zip` archive for
+the processed ShapeNet-Car pressure dataset. The archive provides official
+train/test manifests, watertight car meshes, and fixed-length pressure vectors.
+
+The smoke trains matched operators on the same official-manifest subset:
+
+- continuous: mesh descriptors -> pressure PCA coefficients -> pressure field
+- QA: quantized/dequantized mesh descriptors -> same pressure PCA target form
+
+At `m = 144` on 64 train cars and 16 test cars:
+
+| Metric | Continuous | QA | QA - continuous |
+|---|---:|---:|---:|
+| pressure relative L2 | 0.8059375308 | 0.7926530780 | -0.0132844528 |
+| mean per-car relative L2 | 0.6315384962 | 0.6218258170 | -0.0097126791 |
+
+Verdict: `PASS_REAL_PRESSURE_FIELD_SMOKE`. The absolute parity gap shrinks
+from `0.1818438059` at `m = 24` to `0.0049611482` at `m = 288`.
+
+This must not be described as a full Fengbo or solver-quality result. The
+baseline is intentionally small and has high pressure error; the result
+validates real field acquisition plus QA geometry-boundary parity. Velocity
+remains pending because this Zenodo record is the processed pressure archive,
+not a pressure+velocity bundle.

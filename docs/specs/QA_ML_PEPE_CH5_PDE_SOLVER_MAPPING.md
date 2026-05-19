@@ -230,22 +230,24 @@ Clifford/FNO grid operator, and velocity `V` packets are not covered.
 operator from script 64. It voxelizes real mesh vertices and computed normals
 into sparse `P` tensors on a `24^3` grid, trains a small 3D CNN with
 occupied-voxel pressure loss, and compares the same architecture under
-continuous and QA-quantized inputs.
+continuous and QA-quantized inputs. **Hardened to the script-66 standard:**
+heterogeneous-archive PLY parser, QA quantization applied to feature channels
+**and** voxel placement, honest verdict (no green Fengbo PASS).
 
-At `m = 144` on 32 train cars and 8 test cars:
+Operating-point run (500 train / 80 test cars, 24³ grid, hidden 16, 15
+epochs; QA on channels and placement):
 
-| Metric | Continuous | QA | QA - continuous |
+| Metric | Continuous | QA m=144 | QA − continuous |
 |---|---:|---:|---:|
-| pressure relative L2 | 0.6310953054 | 0.6311423027 | +0.0000469973 |
-| pressure MAE | 20.6913278798 | 20.6941419761 | +0.0028140963 |
+| pressure relative L2 | 0.570853 | 0.565877 | −0.004976 |
+| pressure R² | 0.2568 | — | — |
 
-Verdict: `PASS_REAL_VOXEL_CNN_PRESSURE_SMOKE`. The absolute parity gap is
-`0.0000469973` at `m = 144` and `0.0000174306` at `m = 288`, both far inside
-the declared `0.03` band.
-
-It is matched continuous vs QA packet boundaries on a real neural operator —
-but see the FNO section below: the continuous CNN here is itself a weak
-operator, so this is QA boundary parity, not solver-quality parity.
+Verdict: `QA_BOUNDARY_PARITY_OK__CONTINUOUS_OPERATOR_WEAK`. The QA boundary is
+faithful (abs gaps 2.0e-3 at m=24 → 9.6e-4 at m=288, all far inside the 0.03
+band) **but the continuous CNN is an even weaker operator than the FNO
+(R²≈0.26 vs 0.41)** — it does not escape the surface-pressure floor either.
+This is QA quantization-boundary parity, not solver-quality parity, and not a
+Fengbo solver rung. See the FNO section for the full ceiling analysis.
 
 ## Real ShapeNet-Car 3D-FNO Operator — and the Honest Ceiling
 

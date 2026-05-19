@@ -31,7 +31,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | **QA/continuous OPERATOR-quality parity ESTABLISHED (script 67) on the canonical Fengbo/GINO benchmark task.** On the trusted md5-pinned neuraloperator GINO record (Zenodo 13936501) with the authors' canonical press alignment, the continuous 3D-FNO reaches **R²=0.958 (relative-L2 0.173)** — a genuinely working operator — and QA tracks it to 7.7e-4 with the gap shrinking monotonically by modulus (3.5e-3→2.3e-4): a **non-degenerate** parity result, the first in the chain. **The earlier "hard ceiling R²≈0.41" claim (scripts 60–66) is RETRACTED:** it was a target-misalignment artifact (our "first-3586-of-3682" hack vs the authors' `concat(press[:16],press[112:])` fixup), not a real ceiling. The benchmark task itself is surface pressure — no volumetric velocity exists in any distribution — so the full volumetric Fengbo solver remains out of scope for lack of such data, not lack of operator. See the GINO section. | True volumetric pressure+velocity CFD data (does not exist in any trusted ML release of this benchmark); open3d signed SDF (vs the unsigned distance used here). |
+| Fengbo, 3D irregular CFD | **Volumetric P+V QA/continuous operator parity ESTABLISHED (script 68).** On the RAW primary-source Umetani `mlcfd_data` archive (sha256-pinned, the file the Geo-FNO readme points to), a 3D-FNO predicts the **volumetric velocity field V (R²=0.991, relative-L2 0.081 — published-GINO quality) and surface pressure P (R²=0.876)**; QA tracks continuous to ~1–2e-3 with both gaps shrinking monotonically by modulus — a non-degenerate parity on **both** packets. This closes the "velocity V packet missing" gap flagged across 60–67. Prior milestones still stand: script 67 established surface-pressure operator parity on the canonical GINO record (R²=0.958) and **retracted** the earlier "hard ceiling R²≈0.41" (a target-misalignment artifact). | Full published GINO training budget (CPU scale here: 32³, 15 epochs, 180 cars). Signed SDF is *infeasible* on this data (sampled surfaces non-watertight) — not a gap, a recorded property. |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -368,6 +368,51 @@ alignment vs the dataset authors' canonical preprocessing. "Verify reproduction
 matches the original before interpreting" applies to *data preprocessing*, not
 just code; the forceful ceiling claim violated that and is retracted.
 
+## Volumetric Fengbo — V *and* P Packets (the rung the chain was building toward)
+
+`68_pepe_ch5_volumetric_fengbo_pv.py`. A second landscape correction: the
+claim "no volumetric velocity exists in any distribution" was **wrong**. The
+Geo-FNO readme canonically points to the RAW primary-source archive
+`http://www.nobuyuki-umetani.com/publication/mlcfd_data.zip` (2.03 GB,
+sha256-pinned `f4c89976…e34b3`). Per car it ships the surface mesh + `press`
+**and the volumetric sample grid + `velo` (29498×3 velocity field)** — the
+real V packet. Raw alignment is clean 1:1 (surface 3682↔press, volume
+29498↔velo); the 3682-vs-3586 mismatch was purely a Zenodo *processing*
+artifact, independently confirming the retracted ceiling.
+
+A 3D FNO maps a dense surface-distance grid to a 4-channel output —
+volumetric velocity (vx,vy,vz) on volume voxels + surface pressure on surface
+voxels — under matched continuous and QA-quantized packet boundaries
+(quantization on the distance grid and placement coords; targets are observer
+projections per Theorem NT, not quantized).
+
+Operating point (180 train cars from param1–3, 60 test from param0, 32³ grid,
+FNO width 12 / 8 modes / 3 layers, 15 epochs):
+
+| Field | continuous R² | continuous relative-L2 | QA m=144 gap | abs gaps m24→m288 |
+|---|---:|---:|---:|---|
+| Velocity **V** | **0.9908** | **0.0808** | +1.1e-3 | 0.0125 → 0.0007 |
+| Pressure **P** | **0.8764** | 0.2901 | +1.9e-3 | 0.0280 → 0.0009 |
+
+Verdict: `QA_OPERATOR_PARITY_OK__VOLUMETRIC_P_AND_V`, `qa_boundary_faithful`.
+Velocity at R²=0.991 / relative-L2 0.081 is **published-GINO quality**; both
+fields are genuinely learned and QA tracks continuous with the gap shrinking
+monotonically by modulus on *both* — a non-degenerate QA/continuous operator
+parity on the genuine volumetric Fengbo task. This **closes the "velocity V
+packet missing" gap** flagged across scripts 60–67.
+
+It is *not* a green full-Fengbo solver claim: CPU scale (32³, 15 epochs, 180
+cars), below the published GINO training budget.
+
+Recorded finding (signed SDF): a true signed SDF is **infeasible** on this
+data — the raw `quadpress_smpl.vtk` surfaces are sampled point sets, not
+closed watertight manifolds (`pysdf` sentinels ~61% of grid points; open3d's
+signed distance would hit the same non-manifold condition). The robust
+unsigned nearest-surface distance used in scripts 66/67/68 is therefore the
+**principled** representation here, not a shortcut. Codex independently
+verified no train/test leakage and correct V/P voxelization. Reproducible:
+`python experiments/qa_ml/68_pepe_ch5_volumetric_fengbo_pv.py`.
+
 ## References
 
 - Pepe, A. (2025). *Machine Learning with Geometric Algebra: Multivectors and
@@ -383,3 +428,8 @@ just code; the forceful ceiling claim violated that and is retracted.
   DOI 10.1145/3197517.3201325.
 - Li, Z., et al. (2023). *Geometry-Informed Neural Operator for Large-Scale 3D
   PDEs* (GINO/Fengbo). DOI 10.48550/arXiv.2309.00583.
+- Umetani, N. & Bickel, B. (2018) raw CFD archive `mlcfd_data.zip`
+  (`http://www.nobuyuki-umetani.com/publication/mlcfd_data.zip`,
+  sha256 `f4c899769c92cdf17c997d2b0b0d0686fe11d753a691214ee5eb7d88580e34b3`),
+  canonically referenced by the Geo-FNO repository
+  (`https://github.com/neuraloperator/Geo-FNO`).

@@ -13,6 +13,8 @@ Feature groups:
   modulus    — (m, m_div_3, m_mod_3, m_mod_5, factor count of 2/3/5/7/11)
                — these features are constant per-modulus but let the model
                key off m's structure
+  canonical — gcd-quotient representative plus canonical residue/phase
+               features; exposes [277]'s finite rule after scaling
 
 Integer arithmetic throughout; observer-side cast happens at the model
 input boundary.
@@ -38,6 +40,11 @@ FEATURE_NAMES_V3: tuple[str, ...] = (
     "gcd_b_m_over_k", "gcd_e_m_over_k",                            # v3.1 k-quotient
     "canonical_b", "canonical_e", "canonical_m", "canonical_g",    # v3.2 canonical
     "canonical_k",                                                  # v3.2 canonical k
+    "canonical_psi_b_5", "canonical_psi_e_5",                       # v3.3 canonical residues
+    "canonical_psi_b_3", "canonical_psi_e_3",
+    "canonical_phase_5", "canonical_mod3_exclusion",
+    "canonical_phase5_aligned", "canonical_m_is_15",                 # v3.3 boundary basis
+    "canonical_pisano5_boundary_candidate",
 )
 
 
@@ -52,8 +59,7 @@ def _factor_count(n: int, p: int) -> int:
 def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
     """Full v3 feature vector for state (b, e) under modulus m.
 
-    Returns 25 integer features in the order of FEATURE_NAMES_V3
-    (v3.1 added gcd_b_m_over_k and gcd_e_m_over_k).
+    Returns integer features in the order of FEATURE_NAMES_V3.
     """
     assert isinstance(b, int) and isinstance(e, int) and isinstance(m, int), (
         f"S2: b={b!r}, e={e!r}, m={m!r} must be Python int"
@@ -97,6 +103,25 @@ def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
     canonical_e = e // g_all
     canonical_m = m // g_all
     canonical_k = canonical_m // 15 if (canonical_m % 15 == 0) else 0
+    canonical_psi_b_5 = canonical_b % 5
+    canonical_psi_e_5 = canonical_e % 5
+    canonical_psi_b_3 = canonical_b % 3
+    canonical_psi_e_3 = canonical_e % 3
+    canonical_phase_5 = (canonical_e - 3 * canonical_b) % 5
+    canonical_mod3_exclusion = (
+        1 if (canonical_psi_b_3 == 0 and canonical_psi_e_3 == 0) else 0
+    )
+    canonical_phase5_aligned = 1 if canonical_phase_5 == 0 else 0
+    canonical_m_is_15 = 1 if canonical_m == 15 else 0
+    canonical_pisano5_boundary_candidate = (
+        1
+        if (
+            canonical_m_is_15 == 1
+            and canonical_phase5_aligned == 1
+            and canonical_mod3_exclusion == 0
+        )
+        else 0
+    )
 
     return (
         *base,
@@ -108,6 +133,11 @@ def qa_packet_v3(b: int, e: int, m: int) -> tuple[int, ...]:
         gcd_b_m_over_k, gcd_e_m_over_k,
         canonical_b, canonical_e, canonical_m, g_all,
         canonical_k,
+        canonical_psi_b_5, canonical_psi_e_5,
+        canonical_psi_b_3, canonical_psi_e_3,
+        canonical_phase_5, canonical_mod3_exclusion,
+        canonical_phase5_aligned, canonical_m_is_15,
+        canonical_pisano5_boundary_candidate,
     )
 
 

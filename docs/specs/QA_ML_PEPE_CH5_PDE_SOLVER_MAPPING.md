@@ -11,6 +11,9 @@ First primitive artifact:
 First operator artifact:
 `experiments/qa_ml/results_pepe_ch5_qa_fengbo_operator_parity.json`.
 
+First real-data smoke artifact:
+`experiments/qa_ml/results_pepe_ch5_real_ahmedml_source_smoke.json`.
+
 ## Correction
 
 The Chapter 5 visual replica is a scaffold, not a PDE solver replication.
@@ -19,7 +22,7 @@ The honest status is:
 | Pepe solver | Current QA status | Next required primitive |
 |---|---|---|
 | GA-ReLU, 2D Navier-Stokes | Mapped; solver replica pending | QA-GA-ReLU over quantized vector phase packets |
-| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real data pending | ShapeNet/Ahmed acquisition + real-subset Fengbo smoke |
+| Fengbo, 3D irregular CFD | Mapped; packet parity PASS; synthetic operator parity PASS; real AhmedML metadata/force smoke PASS | Field/mesh acquisition + pressure/velocity Fengbo smoke |
 | STAResNet, Maxwell | Mapped; solver replica pending | QA Faraday/STA residual packet |
 
 ## Fengbo Is Not A Dead End
@@ -52,7 +55,10 @@ matching Pepe's construction.
 4. Run continuous mini-Fengbo and QA-quantized mini-Fengbo head-to-head.
    **Done.**
 5. Acquire ShapeNet Car / Ahmed Body and attempt a real-subset Fengbo smoke.
-6. Only after real-subset parity, attempt the
+   **Done for AhmedML geometry metadata + Cd/Cl force coefficients only.**
+6. Acquire field/mesh pressure/velocity data and attempt a real-subset
+   Fengbo field smoke.
+7. Only after real-subset field parity, attempt the
    full Pepe Fengbo reproduction.
 
 ## Parity Criterion
@@ -100,3 +106,35 @@ At `m = 144`:
 The pressure and velocity gaps decrease monotonically over the tested moduli.
 This validates controlled mini-operator parity, not ShapeNet/Ahmed or full
 Clifford-FNO Fengbo replication.
+
+## Real AhmedML Metadata/Force Smoke
+
+`62_pepe_ch5_real_ahmedml_source_smoke.py` is the first real-data gate. It
+downloads a small fixed public AhmedML subset:
+
+- `run_i/geo_parameters_i.csv`: eight Ahmed-body geometry parameters
+- `run_i/force_mom_i.csv`: Cd/Cl force coefficients
+
+It trains matched continuous and QA-quantized degree-2 ridge regressors on
+runs 1-64 with the same deterministic train/test split. This is intentionally
+not a pressure/velocity field solver and not a full Fengbo reproduction.
+
+At `m = 144`:
+
+| Metric | Continuous | QA | QA - continuous |
+|---|---:|---:|---:|
+| joint Cd/Cl relative L2 | 1.1951471828 | 1.0570075062 | -0.1381396766 |
+| Cd relative L2 | 0.2224478212 | 0.2414403658 | +0.0189925447 |
+| Cl relative L2 | 1.9550267988 | 1.7191958029 | -0.2358309960 |
+
+Verdict: `PASS_REAL_METADATA_FORCE_SMOKE` under the pre-declared parity
+criterion. The negative joint/Cl gap should not be framed as a QA win; on this
+small metadata-only split the continuous Cl error is high, so the likely
+interpretation is quantization acting as mild regularization. The result only
+establishes that public real AhmedML geometry/force data can pass through the
+QA-Fengbo packet boundary without destroying a matched baseline.
+
+The next unmapped step is field-level data acquisition: pressure/velocity
+volumes or meshes from NVIDIA PhysicsNeMo Ahmed Body, ShapeNet-Car/GINO, or an
+equivalent public source, followed by continuous Fengbo vs QA-Fengbo on the
+same field split.

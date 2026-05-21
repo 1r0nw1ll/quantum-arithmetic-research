@@ -82,6 +82,42 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #5 — 2026-05-21 (window: May 14 – May 21, 2026)
+Full report: `sota_scans/scan_2026-05-21.md`
+
+**Key finds:**
+- arXiv:2605.11589 (Unification of Signal Transform Theory, ~May 16) — HIGH. Unifies DFT/DCT/WHT/Haar/KLT as eigenbases of group-covariance invariants; cyclic group Z/24Z → DFT = QA Cosmos natural transform; Z/8Z → DCT = Satellite. Certifies QA's spectral decomposition as the provably correct matched-group transform. Supersedes `qa_cayley_spectral_cert_v1`.
+- arXiv:2605.20440 (Group-Algebraic Tensors, May 19) — HIGH. ⋆G tensor algebra with Eckart-Young optimality guarantee + 600-line Lean 4 proof. QA's Z/24Z orbit structure = canonical G-module; Lean 4 opens formal cert verification pathway.
+- arXiv:2605.15075 (Non-crystallographic integer systems over composition algebras, May 14) — MEDIUM-HIGH. Golden ring ℤ[φ] as natural coefficient ring for H₂/H₄ non-crystallographic root shells; H₄ icosian → E8 = QA's 4D→8D E8 projection formalized as ℤ[φ]-module map. Bridges Fibonacci/Pisano orbit structure to E8 alignment arithmetic.
+- arXiv:2605.09333 + 2605.09458 (Corradetti E8 cluster, May 10, slipped scan #4) — MEDIUM-HIGH. Okubo/Coxeter-Dickson Z-order on E8; integral shell polytope = Gosset polytope (240 E8 roots = QA's alignment targets). Grounds QA's E8 alignment as arithmetic, not just geometric.
+- arXiv:2504.16513 (updated May 16, E8 bracket via triality) — MEDIUM. Explicit E8 bracket; triality = QA's three orbit classes. Enables bracket-based QA E8 invariants.
+
+**Cert scaffolding candidates (new):**
+1. `qa_transform_unification_cert_v1` — matched-group transform certification for QA orbits (arXiv:2605.11589; supersedes `qa_cayley_spectral_cert_v1`)
+2. `qa_star_g_tensor_cert_v1` — ⋆G tensor algebra + Lean 4 formal verification (arXiv:2605.20440)
+3. `qa_e8_integral_arithmetic_cert_v1` — E8 Coxeter-Dickson Z-order + Gosset polytope (arXiv:2605.09333 + 2605.09458 + 2605.15075)
+4. `qa_golden_ring_orbit_cert_v1` — ℤ[φ] golden ring for QA Fibonacci/Pisano orbit periods (arXiv:2605.15075)
+
+**Cert gaps (escalated):**
+- [261] qa_orbit_stratification_cert_v1: **QUADRUPLE GAP** (4th scan, still unresolved — needs registry entry, docs/families file, README.md, SPEC.md in cert dir)
+- qa_steinmetz_whittaker_bridge_cert_v1: **2nd scan unregistered** — needs ID=279, docs/families file
+- qa_whittaker_phase_packet_algebra_cert_v1: **NEW DOUBLE GAP** — complete on disk but no registry entry, no docs/families file; needs ID=280
+- qa_whittaker_rational_direction_s1_cert_v1 [266]: cert dir still missing README.md/SPEC.md (2nd scan)
+- qa_wgs84_ellipse_cert_v1 [156]: cert dir still missing README.md/SPEC.md (2nd scan)
+
+**Key cross-domain connection:** E8 arithmetic surge — 4 papers in 10 days (2605.09333 + 2605.09458 + 2605.15075 + 2504.16513) from same author cluster, directly under QA's harmonic index computation. Group-theoretic transform consolidation chain (2605.11589 + 2604.19983 + 2604.03634) completes a certifiable framework for QA orbit spectral decomposition.
+
+**Carried-over scaffolding candidates (cumulative, not yet built):**
+- `qa_quantized_integer_dynamics_cert_v1` (scan #2) — highest priority
+- `qa_modular_vsa_cert_v1` (scan #2)
+- `qa_full_pisano_orbit_cert_v1` (scan #1)
+- `qa_modular_nn_universality_cert_v1` (scan #3)
+- `qa_discrete_noether_cert_v1` (scan #3)
+- `qa_circulant_symplectic_orbit_cert_v1` (scan #4)
+- `qa_tda_orbit_grokking_cert_v1` (scan #4)
+
+---
+
 ### Scan #4 — 2026-05-14 (window: May 7 – May 14, 2026)
 Full report: `sota_scans/scan_2026-05-14.md`
 

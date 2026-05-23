@@ -207,6 +207,11 @@ multi_ai_workspace/dataset_generator.py
 !qa_artexplorer_scene_adapter_v2/*.json
 !Documents/QA_MAPPING_PROTOCOL__*.json
 
+# QA-ML benchmark artifacts: script + result JSONs must be tracked.
+# Runtime venv and HF cache are ignored separately below.
+!experiments/registry.json
+!experiments/qa_ml/*.json
+
 # Future-proof: allow canonical QA family JSON artifacts
 !qa_*/schema.json
 !qa_*/**/schema.json
@@ -314,6 +319,14 @@ qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_multibench_c
 # Playwright MCP temp data
 .playwright-mcp/
 private/upwork/
+
+# QA-ML benchmark runtime: local venv (~150M) + HF model cache (~350M).
+# Script + result JSONs are tracked; venv is regenerable from
+# `python3 -m venv --system-site-packages experiments/qa_ml/hf_bench_env`
+# then `experiments/qa_ml/hf_bench_env/bin/pip install transformers
+# huggingface_hub tokenizers safetensors`.
+experiments/qa_ml/hf_bench_env/
+experiments/qa_ml/hf_cache/
 
 # QA-TLA blind-reproduction ground truth (must not leak into main context)
 qa_tla_blind/ground_truth/

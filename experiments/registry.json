@@ -1,0 +1,638 @@
+{
+  "experiments": [
+    {
+      "artifacts": [
+        "results/qa_prime_local_certificate_neighborhood_scaling_experiment_jump2.json"
+      ],
+      "captured_utc": "2026-03-30T14:11:53Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "The local certificate-neighborhood asymmetry remains stable under one more scale jump: for endpoints {20000,50000}, full-horizon exact overall coverage stays 1.0 and the first strict local radius with composite advantage remains 2.",
+      "id": "qa_prime_local_certificate_neighborhood_scaling_jump2_20000_50000_2026-03-30",
+      "notes": "PASS. On endpoints {20000,50000}, full-horizon exact overall coverage remained 1.0 and first_radius_with_composite_advantage remained 2 at both endpoints. The radius-2 composite-vs-prime exact-coverage gap was 0.561968 and 0.556413 respectively. Median local exact radius stayed 2 for composites, rose to 5 then 7 for semiprimes, and rose to 89 then 151 for primes. Honest interpretation: the locality asymmetry still holds at this scale, but the radius-2 gap now shows a mild downward slope while prime locality continues to worsen with N.",
+      "open_brain_id": "a19961e4-be20-4ba0-b57d-170c4d7ced23",
+      "result": "PASS",
+      "script": "experiments/qa_prime_local_certificate_neighborhood_scaling_experiment.py",
+      "success_criteria": "PASS if both tested endpoints have full-horizon exact overall coverage 1.0, first_radius_with_composite_advantage = 2, and composite_advantage_gap_at_first_radius > 0."
+    },
+    {
+      "artifacts": [
+        "results/qa_prime_local_certificate_neighborhood_scaling_experiment_extended.json"
+      ],
+      "captured_utc": "2026-03-30T14:07:10Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "The local certificate-neighborhood asymmetry remains stable on a larger tested range: for endpoints {2000,5000,10000}, full-horizon exact overall coverage stays 1.0 and the first strict local radius with composite advantage remains 2.",
+      "id": "qa_prime_local_certificate_neighborhood_scaling_extended_2000_5000_10000_2026-03-30",
+      "notes": "PASS. On endpoints {2000,5000,10000}, full-horizon exact overall coverage remained 1.0 and first_radius_with_composite_advantage remained 2 in every case. The composite-vs-prime exact-coverage gap at radius 2 was 0.575832, 0.571157, and 0.566757 respectively. Median local exact radius stayed 2.0 for composites, rose to 5 for semiprimes, and rose to 29, 47, and 67 for primes. Honest interpretation: the locality asymmetry survives the larger tested scale; the immediate composite-local advantage remains stable while prime certification becomes progressively less local.",
+      "open_brain_id": "b452c36d-2f22-45a3-a918-a95544e0795f",
+      "result": "PASS",
+      "script": "experiments/qa_prime_local_certificate_neighborhood_scaling_experiment.py",
+      "success_criteria": "PASS if all tested endpoints have full-horizon exact overall coverage 1.0, first_radius_with_composite_advantage = 2, and composite_advantage_gap_at_first_radius > 0."
+    },
+    {
+      "artifacts": [
+        "results/qa_prime_local_certificate_neighborhood_scaling_experiment.json"
+      ],
+      "captured_utc": "2026-03-30T13:47:40Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "Across tested intervals [2,N], the locality asymmetry in the factor-certificate graph remains stable: the full horizon yields exact classification, and the first strict local radius where exact composite coverage exceeds exact prime coverage remains 2.",
+      "id": "qa_prime_local_certificate_neighborhood_scaling_100_250_500_1000_2026-03-30",
+      "notes": "PASS. On tested endpoints {100,250,500,1000}, full-horizon exact overall coverage was 1.0 in every case and the first strict local radius with composite advantage was always 2. The composite-vs-prime exact-coverage gap at radius 2 was 0.502162, 0.557181, 0.574231, and 0.576672 respectively. Median local exact radius stayed 2 for composites and 3 for semiprimes across the sweep, while prime median radius grew 5 -> 7 -> 13 -> 19. Honest interpretation: the locality asymmetry appears stable on the tested intervals; composites are locally visible almost immediately, while exact primehood remains a full no-witness-horizon statement.",
+      "open_brain_id": "f3d3ea21-bb48-4b2e-bf8e-5308ebe696c1",
+      "result": "PASS",
+      "script": "experiments/qa_prime_local_certificate_neighborhood_scaling_experiment.py",
+      "success_criteria": "PASS if every tested endpoint has full-horizon exact overall coverage 1.0, first_radius_with_composite_advantage = 2, and composite_advantage_gap_at_first_radius > 0."
+    },
+    {
+      "artifacts": [
+        "results/qa_prime_local_certificate_neighborhood_experiment.json"
+      ],
+      "captured_utc": "2026-03-30T08:24:24Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "Compositehood should often be visible in small local certificate neighborhoods, while primehood should require the full no-witness horizon up to the largest prime <= sqrt(n).",
+      "id": "qa_prime_local_certificate_neighborhood_interval_2_500_2026-03-30",
+      "notes": "PASS. On interval [2,500], the full horizon prime_max=19 yielded exact classification for every integer. The first strict local radius with composite advantage was 2: exact composite coverage 0.6163366336633663 versus exact prime coverage 0.042105263157894736, gap 0.574231. Median local exact radius was composite=2.0, semiprime=3, prime=13. Honest interpretation: this quantifies a locality asymmetry in the certificate graph, not a new prime theorem; composites are often resolved by nearby witnesses, while primes require the full no-witness horizon.",
+      "open_brain_id": "7b4d4fea-ca53-4a75-8bdb-73c6ee37504d",
+      "result": "PASS",
+      "script": "experiments/qa_prime_local_certificate_neighborhood_experiment.py",
+      "success_criteria": "PASS if the full tested horizon yields exact classification on the whole interval and at least one strictly smaller neighborhood radius yields higher exact coverage for composites than for primes."
+    },
+    {
+      "artifacts": [
+        "results/qa_prime_bounded_certificate_scaling_experiment.json"
+      ],
+      "captured_utc": "2026-03-30T07:10:08Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "For interval [2,N], the minimal bounded witness cap needed for exact prime/composite separation in the factor-certificate graph is the largest prime <= sqrt(N).",
+      "id": "qa_prime_bounded_certificate_scaling_100_250_500_1000_2026-03-30",
+      "notes": "PASS. Tested endpoints {100,250,500,1000}. At every endpoint, the observed minimal passing prime_max matched the predicted largest prime <= sqrt(N): 100->7, 250->13, 500->19, 1000->31. Honest interpretation: on the tested intervals, the bounded-witness threshold follows the expected smallest-factor barrier exactly. This remains empirical rather than a proof, but it is stronger than the single-point [2,500] result because the match holds across four endpoints.",
+      "open_brain_id": "43f0783a-2c69-4572-95f5-5e3c6c5950c4",
+      "result": "PASS",
+      "script": "experiments/qa_prime_bounded_certificate_scaling_experiment.py",
+      "success_criteria": "PASS if the observed minimal passing prime_max matches the largest prime <= sqrt(N) for every tested endpoint."
+    },
+    {
+      "artifacts": [
+        "results/qa_prime_bounded_certificate_sweep.json"
+      ],
+      "captured_utc": "2026-03-30T07:06:40Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "Exact prime/composite separation in the factor-certificate graph should survive under a bounded witness set if the bound still includes enough small prime divisibility witnesses to resolve every composite in the tested interval.",
+      "id": "qa_prime_bounded_certificate_sweep_interval_2_500_2026-03-30",
+      "notes": "PASS. Swept prime caps {2,3,5,7,11,13,17,19} on interval [2,500]. Minimal passing bound was prime_max=19. prime_terminal_exact stayed true for every cap, but composite_positive_depth_exact and semiprime_depth_exact both failed for caps 2 through 17 and both became true at 19. Honest interpretation: full unrestricted factor witnesses are not required on [2,500]; small-prime certificate generators up through 19 are sufficient, and anything smaller leaves some composites unresolved.",
+      "open_brain_id": "bdfdb0c5-98e7-4b39-a38d-a7a1e4d32529",
+      "result": "PASS",
+      "script": "experiments/qa_prime_bounded_certificate_sweep.py",
+      "success_criteria": "Report the smallest prime_max that still yields PASS under the exact certificate-graph checks; FAIL if no tested bound yields PASS."
+    },
+    {
+      "artifacts": [
+        "results/qa_prime_certificate_graph_experiment.json"
+      ],
+      "captured_utc": "2026-03-30T07:02:08Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "If explicit divisibility witnesses are added as lawful graph generators, then primes should become exactly the zero-depth terminals of the factor-certificate graph, while composites admit positive-depth certificate paths and semiprimes occupy depth 1.",
+      "id": "qa_prime_certificate_graph_interval_2_500_2026-03-30",
+      "notes": "Positive exact-certificate result. On interval [2,500], the factor-certificate graph separated classes exactly as expected: every prime was a zero-depth terminal with no outgoing certificate edges, every composite had positive certificate depth with at least one outgoing witness edge, and every semiprime had depth 1. Summary: prime_count=95, semiprime_count=153, composite_count=404, median decomposition depth prime=0 / semiprime=1 / composite=2. Honest interpretation: this is not a new residue-only QA prime theorem; it is an exact certificate-graph result obtained by adding divisibility witnesses, so the graph becomes a primality/decomposition certificate structure.",
+      "open_brain_id": "0480b3dd-2040-4216-8325-d179bd835f52",
+      "result": "PASS",
+      "script": "experiments/qa_prime_certificate_graph_experiment.py",
+      "success_criteria": "PASS if every prime is a zero-depth terminal with no outgoing certificate edges, every composite has positive certificate depth with at least one outgoing witness edge, and every semiprime has depth 1."
+    },
+    {
+      "artifacts": [
+        "results/qa_prime_path_prediction_experiment.json"
+      ],
+      "captured_utc": "2026-03-30T06:56:51Z",
+      "cert_id": null,
+      "domain": "number_theory",
+      "hypothesis": "If QA reachability/path-length carries exact prime structure rather than only residue-class structure, then at least one tested modulus/generator configuration should assign all primes in the interval to QA path signatures not shared by semiprimes or other composites.",
+      "id": "qa_prime_path_prediction_interval_2_500_2026-03-30",
+      "notes": "Negative result. Ran experiments/qa_prime_path_prediction_experiment.py on interval [2,500] with moduli {24,72} and generator sets {Q}, {T}, {Q,T}. Every tested configuration failed: prime_coverage_ratio = 0.0 and prime_exclusive_signature_count = 0 in all six cases. Short smoke interval [2,60] gave an apparent PASS, but the wider preregistered run falsified that signal as a small-range artifact. Honest interpretation: the current QA residue/path-profile encoding organizes residue and orbit structure but does not yield an exact prime-prediction law.",
+      "open_brain_id": "d1920a97-2374-40f6-bb46-232edd368b8e",
+      "result": "FAIL",
+      "script": "experiments/qa_prime_path_prediction_experiment.py",
+      "success_criteria": "PASS if any tested configuration yields prime_coverage_ratio = 1.0 with zero non-prime collisions; PARTIAL if some but not all primes occupy exclusive signatures; FAIL if every prime signature is shared with non-primes."
+    },
+    {
+      "artifacts": [
+        "results/qa_compression_benchmark_real_kernel.json"
+      ],
+      "captured_utc": "2026-03-29T13:51:07Z",
+      "cert_id": null,
+      "domain": "forensics",
+      "hypothesis": "Segmented QA compression should show an advantage on at least one real repo-native kernel_orbit trace slice if lawful-span structure is strong enough.",
+      "id": "qa_compression_real_kernel_pilot_2026-03-29",
+      "notes": "Pilot used three real ordered slices from qa_lab/kernel/results_log.jsonl: full trace, ok=true subset, and orbit_family=cosmos subset. No slice beat the strongest general-purpose baseline.",
+      "open_brain_id": "bb6074dd-be14-4b93-bfed-17303070a4d6",
+      "result": "FAIL",
+      "script": "qa_compression_benchmark.py",
+      "success_criteria": "Best QA codec beats the best general-purpose baseline on at least one ordered kernel_orbit trace slice extracted from qa_lab/kernel/results_log.jsonl."
+    },
+    {
+      "artifacts": [
+        "results/qa_real_step_trace_sequences.json",
+        "results/qa_compression_benchmark_real_step_traces_qstep.json"
+      ],
+      "captured_utc": "2026-03-29T14:14:23Z",
+      "cert_id": null,
+      "domain": "forensics",
+      "hypothesis": "When the codec generator family matches the real trace generator family, real lawful qa_step chains should compress to their law description and beat generic byte compressors.",
+      "id": "qa_compression_real_qstep_step_chains_2026-03-29",
+      "notes": "Generated four real exact-integer kernel/query-agent qa_step chains of 193 states each. With the matched qa_step codec, each chain compressed to 11 bytes and beat brotli baselines of 17-38 bytes. This corrected the earlier generator-family mismatch against the {sigma, mu, lambda2, nu} codec.",
+      "open_brain_id": "b9137d47-3715-4022-9829-6900ad6650b3",
+      "result": "PASS",
+      "script": "qa_lab/qa_real_step_trace_experiment.py + qa_compression_benchmark.py",
+      "success_criteria": "On real kernel/query-agent qa_step chains, a qa_step-native codec beats the best general-purpose baseline on at least one chain."
+    },
+    {
+      "artifacts": [
+        "results/qa_real_reachability_trace_sequences.json",
+        "results/qa_compression_benchmark_real_reachability_traces.json"
+      ],
+      "captured_utc": "2026-03-29T14:44:11Z",
+      "cert_id": null,
+      "domain": "forensics",
+      "hypothesis": "Deterministic reachability-descent runs generated from family [40] semantics on Caps(30,30) with generator set {sigma, mu, lambda2, nu} should yield large lawful exact-integer corpora where the matched QA codec beats strong generic baselines.",
+      "id": "qa_compression_real_reachability_family40_2026-03-29",
+      "notes": "Generated 900 exact deterministic reachability-descent runs of 257 states each plus an aggregate concatenation of 231300 states from family [40] validator semantics. The aggregate corpus had 99.9% lawful adjacent transitions and the matched QA codec won strongly: qa_codec+zstd = 546 B versus best baseline xz_9e = 2920 B. Individual 257-state runs lost to tiny brotli baselines because header overhead dominated on short two-cycle traces.",
+      "open_brain_id": "c3606b6b-2120-495c-bedd-e3f6b888778d",
+      "result": "PASS",
+      "script": "qa_lab/qa_real_reachability_trace_experiment.py + qa_compression_benchmark.py",
+      "success_criteria": "Generate at least one corpus with >=128 states and observe at least one QA codec advantage over the best general-purpose baseline."
+    },
+    {
+      "artifacts": [
+        "results/qa_compression_benchmark_real_reachability_traces_microtrace.json"
+      ],
+      "captured_utc": "2026-03-29T14:58:00Z",
+      "cert_id": null,
+      "domain": "forensics",
+      "hypothesis": "The tiny-trace QA compression loss is mainly packaging overhead; a minimal exact microtrace law form and QA break-even selector should match or beat strong generic baselines on tiny lawful traces while preserving the large-corpus QA win.",
+      "id": "qa_compression_tiny_trace_break_even_family40_2026-03-29",
+      "notes": "Added a minimal varint-based qa_microtrace codec and qa_break_even selector. All five 257-state representative lawful reachability runs beat brotli baselines, while the aggregate 231300-state corpus preserved the earlier qa_codec+zstd win.",
+      "open_brain_id": "98ce2f2b-dda5-48e0-871a-c76db44ed598",
+      "result": "PASS",
+      "script": "qa_compression_benchmark.py",
+      "success_criteria": "On the real family [40] representative 257-state runs, at least one QA microtrace or break-even codec matches or beats the best general-purpose baseline, and the aggregate lawful corpus retains a QA advantage."
+    },
+    {
+      "id": "qa_fractional_observer_projection_scaffold_2026-03-29",
+      "script": "qa_lab/qa_fractional_observer_projection_scaffold.py",
+      "domain": "forensics",
+      "hypothesis": "An exact-rational no-float scaffold corpus for the observer-projection compression track can be generated cleanly and used as substrate for later fractional QA decomposition tests.",
+      "success_criteria": "Emit a stable JSON corpus of exact Fraction-sampled signals with no floats and with explicit function-spec versus raw-stream size baselines.",
+      "result": "PASS",
+      "open_brain_id": "bb6074dd-be14-4b93-bfed-17303070a4d6",
+      "cert_id": null,
+      "captured_utc": "2026-03-29T15:00:00Z",
+      "artifacts": [
+        "results/qa_fractional_observer_projection_scaffold.json"
+      ],
+      "notes": "Generated three exact-rational sampled signal families (affine, quadratic, reciprocal-shift) using fractions.Fraction only. This is setup infrastructure for the observer-projection track and does not yet claim any QA lawful-component decomposition result."
+    },
+    {
+      "id": "qa_fractional_affine_drift_candidate_2026-03-29",
+      "script": "qa_lab/qa_fractional_affine_drift_experiment.py",
+      "domain": "forensics",
+      "hypothesis": "A narrow exact-rational affine-drift candidate law should decompose affine sampled signals with zero residual and smaller combined law-plus-residual size than the raw exact stream, while non-affine signals retain explicit residual debt.",
+      "success_criteria": "Affine dataset has all_zero residuals and combined bytes smaller than raw; non-affine datasets retain nonzero residual counts.",
+      "result": "PASS",
+      "open_brain_id": "9d5853a3-165d-47ed-b2a5-d8457c6e45c8",
+      "cert_id": null,
+      "captured_utc": "2026-03-29T16:12:41Z",
+      "artifacts": [
+        "results/qa_fractional_affine_drift_experiment.json"
+      ],
+      "notes": "Affine signal passed exactly under the candidate law with combined bytes 2011 vs raw 2197 and residual all_zero=true. Quadratic and reciprocal-shift signals retained 30 nonzero residual samples each, showing the residual ledger behaves as intended. This is a narrow candidate-family result, not a general observer-projection theorem."
+    },
+    {
+      "id": "qa_fractional_projective_axis_drift_candidate_2026-03-29",
+      "script": "qa_lab/qa_fractional_projective_axis_drift_experiment.py",
+      "domain": "forensics",
+      "hypothesis": "The QA-shaped projective axis-drift candidate family with projection y=e/b should capture affine signals exactly via direct_axis_drift and reciprocal-shift signals exactly via inverse_axis_drift, while quadratic signals remain outside the family.",
+      "success_criteria": "Affine and reciprocal datasets each get an exact zero-residual candidate with combined bytes smaller than raw values, and quadratic does not get a zero-residual exact fit.",
+      "result": "PASS",
+      "open_brain_id": "37778286-19d3-4bf9-8550-5a7907fa4001",
+      "cert_id": null,
+      "captured_utc": "2026-03-29T16:44:10Z",
+      "artifacts": [
+        "results/qa_fractional_projective_axis_drift_experiment.json"
+      ],
+      "notes": "With projective observation y=e/b, affine samples were captured exactly by direct_axis_drift and reciprocal-shift samples were captured exactly by inverse_axis_drift, both with zero residual payload and much smaller law encodings than the raw value stream (117 vs 1121 bytes for affine; 116 vs 1080 bytes for reciprocal). Quadratic samples had no exact candidate under this family. Narrow candidate-family support only."
+    },
+    {
+      "id": "qa_fractional_projective_observable_matrix_2026-03-29",
+      "script": "qa_lab/qa_fractional_projective_observable_matrix_experiment.py",
+      "domain": "forensics",
+      "hypothesis": "Comparing exact projective observer laws across e/b and d/a should reveal distinct capture domains rather than one observable subsuming all rational signal families.",
+      "success_criteria": "e/b family exactly captures affine and reciprocal-shift signals, d/a family exactly captures at least one bounded-ratio family generated from d/a itself, and quadratic remains outside the exact candidate set.",
+      "result": "PASS",
+      "open_brain_id": "526f2ca5-c898-4e0d-889f-73ef3468011d",
+      "cert_id": null,
+      "captured_utc": "2026-03-29T17:05:54Z",
+      "artifacts": [
+        "results/qa_fractional_projective_observable_matrix_experiment.json"
+      ],
+      "notes": "The e/b observer family captured affine via direct_axis_drift and reciprocal-shift via inverse_axis_drift. The d/a observer family captured both bounded-ratio signal families generated from d/a itself. All four exact captures had zero residual payload and compact law encodings (115-121 bytes), while quadratic had no exact candidate. This is strong narrow support for an observable-relative family structure, not a general observer-projection theorem."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_chbmit_scale_results.json"
+      ],
+      "captured_utc": "2026-03-29T16:05:44Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "HI 2.0 improves seizure-vs-baseline discrimination over HI 1.0 across the locally available CHB-MIT patient set, not only on balanced chb01.",
+      "id": "eeg_hi2_0_chbmit_scale_5patient_slice_2026-03-29",
+      "notes": "Ran a reduced-pressure 5-patient CHB-MIT slice (chb01-chb05) with balanced 64-vs-64 segments per patient and single-threaded numerical backends to avoid overloading the machine. Aggregate result passed the predeclared criteria: mean F1 delta = +0.0240, median F1 delta = +0.0330, with non-negative F1 delta in 4/5 patients. Patient deltas: chb01 +0.0180, chb02 -0.0246, chb03 +0.0468, chb04 +0.0468, chb05 +0.0330. Honest scope: promising multi-patient signal, but this is a 5-patient slice rather than the full local corpus.",
+      "open_brain_id": "c908e5a0-ef7b-4681-84eb-718ada9e17b3",
+      "result": "PASS",
+      "script": "eeg_hi2_0_chbmit_scale.py",
+      "success_criteria": "PASS if at least 5 patients are evaluable locally, mean F1 delta is positive, and at least 60% of evaluable patients show non-negative F1 delta; PARTIAL if evidence is mixed or underpowered; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_chbmit_scale_results_10patients.json",
+        "results/eeg_hi2_0_chbmit_scale_results_batch_b.json"
+      ],
+      "captured_utc": "2026-03-29T17:12:11Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "Positive HI 2.0 seizure-detection gain persists across the first 10 locally available CHB-MIT patients under reduced-pressure balanced evaluation.",
+      "id": "eeg_hi2_0_chbmit_scale_10patient_combined_2026-03-29",
+      "notes": "Combined the first two reduced-pressure 5-patient CHB-MIT slices. Aggregate 10-patient verdict remained PASS, but only modestly: mean F1 delta = +0.01445, median F1 delta = +0.04033, non-negative F1 delta in 8/10 patients. The first slice (chb01-chb05) was stronger; the second slice (chb06-chb10) was weaker because chb08 was strongly negative. Honest interpretation: HI 2.0 has a real but non-uniform multi-patient signal; counterexamples now matter more than additional blind scaling.",
+      "open_brain_id": "b4138b3b-70b4-4509-9958-b6bc1c9b5a88",
+      "result": "PASS",
+      "script": "eeg_hi2_0_chbmit_scale.py",
+      "success_criteria": "PASS if mean F1 delta remains positive and at least 60% of patients have non-negative F1 delta; PARTIAL if mixed; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_chromogeometry_audit_chb07_chb08.json"
+      ],
+      "captured_utc": "2026-03-29T17:16:58Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "The negative patient chb08 differs from positive patients in canonical chromogeometric HI 2.0 structure, not just in classifier score noise.",
+      "id": "eeg_hi2_0_chromogeometry_audit_chb07_chb08_2026-03-29",
+      "notes": "Focused audit comparing positive patient chb07 to negative patient chb08. chb07 had F1 delta +0.0645 and seizure windows preserved or slightly increased net HI 2.0 because H_radial increased despite a small angular drop. chb08 had F1 delta -0.1667 and seizure windows contracted C, F, G, I and H_radial enough to drive HI 2.0 down by -0.0513. Honest interpretation: chromogeometry is useful here as a failure-diagnostic lens; the current HI 2.0 weighting is not patient-uniform.",
+      "open_brain_id": "4e2c23ea-c2c2-4cc1-89e2-a1ee9f25dfc3",
+      "result": "PASS",
+      "script": "eeg_hi2_0_chromogeometry_audit.py",
+      "success_criteria": "PASS if the negative patient shows a materially different chromogeometric or HI subcomponent pattern rather than only a classifier-score regression."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_weight_stability_sweep_10patients.json"
+      ],
+      "captured_utc": "2026-03-29T17:27:59Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "If the HI 2.0 gain is QA-stable rather than a single-point artifact, multiple mixed angular/radial weight settings should preserve a positive mean F1 delta and a mostly non-negative patient-level sign pattern across the reduced-pressure 10-patient CHB-MIT slice.",
+      "id": "eeg_hi2_0_weight_stability_sweep_10patients_2026-03-29",
+      "notes": "Reduced-pressure chromogeometric weight sweep over the first 10 CHB-MIT patients kept the balanced patient datasets and splits fixed, then scanned five QA-native angular/radial settings. Cross-config verdict was PASS: mixed settings 0.75/0.25, 0.50/0.50, and 0.25/0.75 all preserved a positive mean F1 delta against HI 1.0, with 7/10, 8/10, and 8/10 non-negative patient deltas respectively. Honest interpretation: the HI 2.0 gain is not a single-point artifact, but it is not patient-universal either. chb02 and chb08 remained negative across every setting, while chb01 changed sign across settings and the other seven positive patients were stable.",
+      "open_brain_id": "ffc3c87b-df9e-4df3-aaa3-66d23e6ab18e",
+      "result": "PASS",
+      "script": "eeg_hi2_0_weight_stability_sweep.py",
+      "success_criteria": "PASS if at least two mixed angular/radial settings achieve mean F1 delta > 0 and at least 70% non-negative patient deltas; PARTIAL if only a narrower subset stays positive; FAIL if no mixed setting preserves the gain."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_counterexample_regime_audit.json"
+      ],
+      "captured_utc": "2026-03-29T17:44:37Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "The hard-negative HI 2.0 patients identified by the weight-stability sweep occupy a distinct seizure regime from the stable-positive patients, with opposite-signed HI 2.0 response and weaker radial/primitivity response rather than merely lower classifier luck.",
+      "id": "eeg_hi2_0_counterexample_regime_audit_2026-03-29",
+      "notes": "This audit falsified the easy mean-regime explanation. The classifier split held by cohort, with mean patient F1 delta +0.0454 for stable positives versus -0.0956 for hard negatives, but the preregistered chromogeometric mean-delta axes went the wrong way: stable positives had mean HI 2.0 delta -0.0070 and mean H_radial delta -0.0199, while hard negatives had mean HI 2.0 delta +0.0137 and mean H_radial delta +0.0151. Honest interpretation: the counterexamples are real, but they are not explained by a simple cohort-level mean shift in canonical chromogeometric quantities. The next experiment should target distributional separation or feature interactions instead of only average seizure-baseline deltas.",
+      "open_brain_id": "3a4cb225-3f58-4edf-ab59-627b5271e6f3",
+      "result": "FAIL",
+      "script": "eeg_hi2_0_counterexample_regime_audit.py",
+      "success_criteria": "PASS if the cohorts separate on the preregistered classifier, HI 2.0, radial, and primitivity axes; PARTIAL if only a subset separates; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_feature_ablation_audit.json"
+      ],
+      "captured_utc": "2026-03-29T17:59:37Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "Stable-positive HI 2.0 patients depend more on chromogeometric structure while hard-negative patients depend more on raw b/e coordinates or coordinate-geometry interactions.",
+      "id": "eeg_hi2_0_feature_ablation_audit_2026-03-29",
+      "notes": "Feature-ablation audit on the cohorts derived from the weight-stability sweep passed 3 of 4 preregistered contrasts. Stable positives had full mean F1 0.7296, geometry_only 0.7151, no_geometry 0.6934, and coords_only 0.7089. Hard negatives had full mean F1 0.6439, geometry_only 0.5992, no_geometry 0.6995, and coords_only 0.7396. Honest interpretation: stable-positive patients genuinely use chromogeometric structure, while the hard-negative cohort is strongly coordinate-dominated; removing geometry improves the hard-negative cohort on average.",
+      "open_brain_id": "db50be47-5493-4aee-b7fc-9483080867e0",
+      "result": "PASS",
+      "script": "eeg_hi2_0_feature_ablation_audit.py",
+      "success_criteria": "PASS if most preregistered ablation contrasts support a geometry-vs-coordinate cohort split; PARTIAL if mixed; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_family_gated_classifier.json"
+      ],
+      "captured_utc": "2026-03-29T18:18:50Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "A training-selected family gate over HI 2.0 feature sets improves seizure-detection F1 over the fixed global full HI 2.0 representation on the reduced-pressure 10-patient CHB-MIT slice.",
+      "id": "eeg_hi2_0_family_gated_classifier_2026-03-29",
+      "notes": "The first unrestricted family gate was informative but not yet strong enough. It rerouted chb08 to coords_only and improved that patient from F1 0.500 to 0.667, but aggregate mean gated F1 was 0.7006 versus 0.7062 for fixed full HI 2.0, because several stable-positive patients were over-routed away from the full feature family. Honest interpretation: the regime signal is real, but unrestricted per-patient family selection is too noisy; the next step is a conservative override gate rather than full family free-selection.",
+      "open_brain_id": "ac8ed760-65ab-4d13-8c4a-08b927fb5e72",
+      "result": "PARTIAL",
+      "script": "eeg_hi2_0_family_gated_classifier.py",
+      "success_criteria": "PASS if mean gated-minus-full F1 is positive, at least 60% of patients are non-negative, and at least one hard-negative patient is rerouted to a coordinate-dominant family with improvement; PARTIAL if mixed; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_override_gated_classifier.json",
+        "results/eeg_hi2_0_regime_detector_decisions.json",
+        "local_resource_profile.json"
+      ],
+      "captured_utc": "2026-03-29T19:04:29Z",
+      "cert_id": "qa.cert.empirical.eeg_hi2_override_gate_consistent.v1",
+      "domain": "eeg",
+      "hypothesis": "A conservative override gate that defaults to full HI 2.0 and reroutes only when a coordinate-dominant family wins validation by margin under weak-full conditions improves aggregate F1 over fixed full HI 2.0.",
+      "id": "eeg_hi2_0_override_gated_classifier_2026-03-29",
+      "notes": "This override gate passed and fixed the failure mode of the unrestricted family gate. Rule: keep full HI 2.0 unless coords_only or no_geometry beats full by at least 0.08 validation F1 and full validation F1 is at most 0.55. The override triggered only on chb01 and chb08, routing both to coords_only. Aggregate result improved from mean full HI 2.0 F1 0.7062 to mean override-gated F1 0.7247, with mean override-minus-full +0.0186 and non-negative change in 10/10 patients. The result was reconstructed from saved feature-ablation and gated-classifier artifacts rather than rerunning raw EDF extraction, because the host is a low-resource 4-thread / ~8 GB RAM laptop and artifact reuse was the QA-correct way to finish safely. The rule is now operationalized in eeg_hi2_0_regime_detector.py with a reusable decision artifact for the current 10-patient slice.",
+      "open_brain_id": "fbdd7dd1-9edf-417c-93cd-d69d1784a173",
+      "result": "PASS",
+      "script": "eeg_hi2_0_override_gate_from_artifacts.py",
+      "success_criteria": "PASS if mean override-minus-full F1 is positive, at least 80% of patients are non-negative, and at least one hard-negative patient is rerouted with improvement; PARTIAL if mixed; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_override_gate_threshold_sweep.json",
+        "qa_alphageometry_ptolemy/qa_empirical_observation_cert/results/eoc_pass_eeg_override_gate_threshold_stable.json"
+      ],
+      "captured_utc": "2026-03-29T19:27:59Z",
+      "cert_id": "qa.cert.empirical.eeg_hi2_override_gate_threshold_stable.v1",
+      "domain": "eeg",
+      "hypothesis": "The passing conservative EEG HI 2.0 override gate around margin=0.08 and full_weak_threshold=0.55 lies in a stable threshold region rather than being a single fragile tuning point.",
+      "id": "eeg_hi2_0_override_gate_threshold_sweep_2026-03-29",
+      "notes": "Artifact-only threshold sweep over the conservative override gate evaluated 25 threshold pairs across override_margin in {0.00, 0.04, 0.08, 0.12, 0.16} and full_weak_threshold in {0.45, 0.50, 0.55, 0.60, 0.65}. Honest verdict: PASS. All 25/25 threshold pairs satisfied the preregistered pass rule. The anchor operational pair margin=0.08 and full_weak_threshold=0.55 remained positive with mean override-minus-full F1 +0.0186, 10/10 non-negative patients, and hard-negative reroute success on chb08. Interpretation: the override rule is not a knife-edge tuning artifact on the current 10-patient slice; it lies inside a stable threshold region. This result was derived entirely from saved artifacts to respect the low-resource host profile and avoid unnecessary EDF reruns.",
+      "open_brain_id": "4946ad45-5ebf-4d31-a82d-41ccf1fb90df",
+      "result": "PASS",
+      "script": "eeg_hi2_0_override_gate_threshold_sweep.py",
+      "success_criteria": "PASS if multiple nearby threshold pairs preserve positive mean override-minus-full F1 and a successful hard-negative reroute; PARTIAL if only a narrow subset works; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_override_gate_patient_stability_audit.json",
+        "results/eeg_hi2_0_regime_detector_decisions.json"
+      ],
+      "captured_utc": "2026-03-29T19:31:08Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "chb08 is a robust coordinate-dominant override across the full passing threshold region, chb01 is a borderline override that only triggers in a subset of the passing region, and the remaining patients are stable full defaults.",
+      "id": "eeg_hi2_0_override_gate_patient_stability_audit_2026-03-29",
+      "notes": "Artifact-only patient-level audit over the saved override-gate threshold sweep passed cleanly. The passing threshold region separated into one robust coordinate-dominant override patient (chb08, trigger rate 25/25, mean override-minus-full +0.1667), one borderline coordinate-dominant override patient (chb01, trigger rate 12/25, mean override-minus-full +0.0190 when triggered), and eight stable full-default patients with zero trigger frequency. The reusable regime detector now includes these stability labels directly in results/eeg_hi2_0_regime_detector_decisions.json.",
+      "open_brain_id": "d8913060-8561-47b6-ac58-df556485f695",
+      "result": "PASS",
+      "script": "eeg_hi2_0_override_gate_patient_stability_audit.py",
+      "success_criteria": "PASS if the audit separates at least one robust override patient, at least one borderline override patient, and a stable full-default cohort with zero trigger frequency; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_robust_only_override_policy_audit.json",
+        "results/eeg_hi2_0_regime_detector_robust_only_decisions.json"
+      ],
+      "captured_utc": "2026-03-29T21:54:18Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "A stability-aware robust_only policy retains at least 80% of the anchor override gain while using fewer overrides than the anchor policy.",
+      "id": "eeg_hi2_0_robust_only_override_policy_audit_2026-03-29",
+      "notes": "Artifact-only audit of a stricter robust_only override policy passed. The policy kept only the robust coordinate-dominant case chb08, left borderline chb01 on full, reduced overrides from 2 to 1, and still improved mean F1 over full HI 2.0 from 0.7062 to 0.7228. Relative to the anchor override gain +0.0186, robust_only retained +0.0167, or 89.7% of the anchor gain. The regime detector now supports policy_mode=robust_only and emits a dedicated decision artifact for that stricter setting.",
+      "open_brain_id": "96dc42ca-43f6-4fb7-a4db-3d32819779f8",
+      "result": "PASS",
+      "script": "eeg_hi2_0_robust_only_override_policy_audit.py",
+      "success_criteria": "PASS if robust_only mean gain over full is positive, uses fewer overrides, and retains at least 80% of the anchor mean gain; PARTIAL if positive but below 80%; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_stability_threshold_policy_sweep.json",
+        "results/eeg_hi2_0_regime_detector_threshold_0p5_decisions.json"
+      ],
+      "captured_utc": "2026-03-29T22:03:31Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "There is a stable minimum-trigger-rate threshold region at or above 0.50 where mean gain over full remains positive, override count is below the anchor policy, and retained gain stays at least 80% of the anchor gain.",
+      "id": "eeg_hi2_0_stability_threshold_policy_sweep_2026-03-29",
+      "notes": "Artifact-only stability-threshold sweep passed with a real region, not a single lucky point. Thresholds 0.50, 0.75, and 1.00 all preserved positive mean gain over full HI 2.0 (+0.0167), used fewer overrides than the anchor policy (1 instead of 2), and retained 89.7% of the anchor gain. Operational consequence: the regime detector and the main CHB-MIT runner now support an explicit minimum_trigger_rate parameter. A chb01 smoke run with regime-policy=stability_threshold and min-trigger-rate=0.5 behaved as expected, keeping chb01 on full rather than rerouting it.",
+      "open_brain_id": "3ed552b8-42f3-42f8-af9a-5669630dd817",
+      "result": "PASS",
+      "script": "eeg_hi2_0_stability_threshold_policy_sweep.py",
+      "success_criteria": "PASS if multiple thresholds satisfy the rule; PARTIAL if only one threshold does; FAIL otherwise."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_live_slice_anchor.json",
+        "results/eeg_hi2_0_live_slice_threshold_0p5.json",
+        "results/eeg_hi2_0_live_policy_slice_compare.json",
+        "qa_alphageometry_ptolemy/qa_empirical_observation_cert/results/eoc_pass_eeg_live_policy_slice_threshold_consistent.json"
+      ],
+      "captured_utc": "2026-03-29T23:08:58Z",
+      "cert_id": "qa.cert.empirical.eeg_hi2_live_policy_slice_threshold_consistent.v1",
+      "domain": "eeg",
+      "hypothesis": "On a live three-patient slice spanning borderline, stable-full, and robust-override regimes, threshold-0.5 should reroute only the robust case while preserving positive mean gate gain and reducing override count versus anchor.",
+      "id": "eeg_hi2_0_live_policy_slice_compare_2026-03-29",
+      "notes": "Live prospective validation on chb01, chb03, and chb08 passed. Under anchor, chb01 and chb08 rerouted while chb03 stayed on full, with mean gate gain over full +0.0619. Under stability_threshold with min_trigger_rate=0.5, only chb08 rerouted, chb01 and chb03 stayed on full, and mean gate gain over full remained positive at +0.0556. This confirms in a real capped runner invocation that the threshold policy preserves the intended regime split while reducing overrides.",
+      "open_brain_id": "d0f5030d-4795-4552-8b45-509e40a10fb7",
+      "result": "PASS",
+      "script": "eeg_hi2_0_live_policy_slice_compare.py",
+      "success_criteria": "PASS if anchor reroutes chb01 and chb08, threshold-0.5 reroutes only chb08, chb03 stays on full under both, and threshold-0.5 keeps positive mean gate gain while reducing override count."
+    },
+    {
+      "artifacts": [
+        "results/eeg_hi2_0_live_slice3_memsafe_anchor.json",
+        "results/eeg_hi2_0_live_slice3_memsafe_threshold_0p5.json",
+        "results/eeg_hi2_0_live_slice3_memsafe_compare.json",
+        "local_resource_profile.json"
+      ],
+      "captured_utc": "2026-03-29T23:40:08Z",
+      "cert_id": null,
+      "domain": "eeg",
+      "hypothesis": "On the hardened live EEG runner with max_segments_per_class=48 and memory_limit_mb=3072, the threshold policy should remain safer than anchor and avoid harmful borderline reroutes on the capped three-patient slice.",
+      "id": "eeg_hi2_0_live_slice3_memsafe_policy_compare_2026-03-29",
+      "notes": "This memory-safe live three-patient validation produced a corrective result relative to the earlier higher-cap slice. Under max_segments_per_class=48 and memory_limit_mb=3072, the anchor policy rerouted only chb01 and that reroute was harmful, giving mean gate delta vs full -0.0158 on the slice. The stability_threshold policy with min_trigger_rate=0.5 rerouted nobody, preserved the full-HI-2.0 result exactly, and avoided the harmful borderline override. Operational consequence: the live runner default on this host was changed to regime_policy=stability_threshold and max_segments_per_class=48.",
+      "open_brain_id": "ae6c00fc-1614-4098-99f5-712d7f68a5c9",
+      "result": "PARTIAL",
+      "script": "eeg_hi2_0_live_policy_slice_compare.py",
+      "success_criteria": "PASS if both runs exit 0 without host failure, anchor reroutes chb01 and chb08, threshold reroutes only chb08, chb03 stays on full under both, and threshold keeps positive mean gate gain over full while reducing override count."
+    },
+    {
+      "id": "arto_ternary_logic_experiment_2026-03-29",
+      "script": "experiments/arto_ternary_logic_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "Arto Heino's discrete ternary-logic claims contain a solid engineering core: the 2-input ternary gate count should equal 19,683 exactly, and ternary should show a real state-space density advantage over binary for equal wire count.",
+      "success_criteria": "PASS if brute-force enumeration matches 19,683 and if ternary state-space strictly exceeds binary state-space for equal wire count.",
+      "result": "PASS",
+      "open_brain_id": "aaec4084-a1dd-4fd5-99f1-2265c7e54a1f",
+      "cert_id": null,
+      "captured_utc": "2026-03-29T23:52:47Z",
+      "artifacts": [
+        "results/arto_ternary_logic_experiment.json"
+      ],
+      "notes": "Brute-force enumeration confirmed 19,683 ternary 2-input gates exactly. Equal-wire comparisons also confirmed the expected combinatorial density advantage of ternary over binary. The experiment does not claim any real-world hardware superiority in speed, power, or noise tolerance. Preregistration Open Brain capture: 3664a8db-91ca-4acf-bbfb-e929ef85c874."
+    },
+    {
+      "id": "arto_ternary_7segment_experiment_2026-03-29",
+      "script": "experiments/arto_ternary_7segment_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "The 0..9 branch of Arto Heino's ternary 7-segment circuit is a coherent balanced-ternary-coded decimal design with unique 3-trit codes and standard 7-segment decimal glyphs.",
+      "success_criteria": "PASS if software reconstruction yields a one-to-one 3-trit encoding for 10 digits, exact standard 7-segment outputs for 0..9, and 17 unused states from the full 3-trit input space.",
+      "result": "PASS",
+      "open_brain_id": "f70aadb8-dcee-4866-ac4d-3b2da9773891",
+      "cert_id": null,
+      "captured_utc": "2026-03-30T00:00:09Z",
+      "artifacts": [
+        "results/arto_ternary_7segment_experiment.json"
+      ],
+      "notes": "Software reconstruction of the published 0..9 decoder branch passed under the explicit assumption that the visible code table is balanced ternary. The reconstruction produced unique 3-trit codes for digits 0..9, exact standard 7-segment decimal glyphs, and 17 unused states from the 27-state input space. This validates the software-visible mapping, not the exact diode-level implementation. Preregistration Open Brain capture: 3a19ce6e-e614-401b-85a8-0cdc8776619a."
+    },
+    {
+      "id": "arto_ternary_adder_experiment_2026-03-30",
+      "script": "experiments/arto_ternary_adder_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "A balanced-ternary full adder gives an exact local decomposition of x+y+carry_in into sum_digit + 3*carry_out, and a ripple adder built from that slice exactly reproduces integer addition across the full in-range representable space.",
+      "success_criteria": "PASS if all 27 one-digit full-adder input triples satisfy exact decomposition and the fixed-width ripple adder exhaustively matches integer addition over all in-range cases.",
+      "result": "PASS",
+      "open_brain_id": "a8d2334f-564f-4392-8ab5-c8f1a5020f89",
+      "cert_id": null,
+      "captured_utc": "2026-03-30T00:03:41Z",
+      "artifacts": [
+        "results/arto_ternary_adder_experiment.json"
+      ],
+      "notes": "Balanced-ternary addition passed at both levels. All 27 one-digit full-adder input triples decomposed exactly into sum_digit + 3*carry_out with outputs in {-1,0,+1}. A 4-trit ripple adder then matched integer addition exhaustively for all 4,921 in-range operand pairs across the representable range [-40,40]. This validates arithmetic coherence in software, not gate-level efficiency or hardware speed. Preregistration Open Brain capture: 6723548f-7696-4d2e-8ef5-d4b41b86a383."
+    },
+    {
+      "id": "arto_ternary_gate_cost_experiment_2026-03-30",
+      "script": "experiments/arto_ternary_gate_cost_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "Under a decoded-state multi-valued PLA cost model, balanced-ternary addition may or may not retain an implementation advantage once explicit combinational logic cost is counted.",
+      "success_criteria": "Produce an explicit gate-cost comparison under stated assumptions for a balanced-ternary adder slice versus a binary full-adder slice, and propagate that comparison to equal-range ripple adders.",
+      "result": "PASS",
+      "open_brain_id": "62aab915-d340-4065-a38c-d72adc51348e",
+      "cert_id": null,
+      "captured_utc": "2026-03-30T00:13:59Z",
+      "artifacts": [
+        "results/arto_ternary_gate_cost_experiment.json"
+      ],
+      "notes": "Under the explicit assumptions that input state predicates are already available, primitive gates are only 2-input AND/OR, fan-in is built as trees, and outputs use signed-rail Boolean functions synthesized as minimized multi-valued PLA covers, the ternary adder lost on combinational cost. Binary slice total cost was 16 while ternary slice total cost was 70. For equal-range ripple adders covering at least [-40,40], the 4-trit ternary design estimated cost 280 versus 112 for the minimum 7-bit signed binary design, ratio 2.5x. Honest limitation: this experiment was not preregistered in Open Brain before execution; the recorded Open Brain capture is the post-run observation only."
+    },
+    {
+      "id": "arto_ternary_native_gate_cost_experiment_2026-03-30",
+      "script": "experiments/arto_ternary_native_gate_cost_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "A more native ternary primitive basis using Arto-style unary selectors plus TONLY and diode merges may narrow or overturn the negative cost result from the decoded-state PLA model.",
+      "success_criteria": "Produce an explicit equal-range slice and ripple-adder cost comparison under stated native primitive assumptions and record whether the ternary cost gap narrows, disappears, or reverses.",
+      "result": "PASS",
+      "open_brain_id": "1641b8a7-12e5-4763-8068-4698bbeeada7",
+      "cert_id": null,
+      "captured_utc": "2026-03-30T00:19:17Z",
+      "artifacts": [
+        "results/arto_ternary_native_gate_cost_experiment.json"
+      ],
+      "notes": "Under the more favorable native-primitive model, ternary still lost. The model treated true ternary wires as native inputs, counted any one-input subset selector as a single unary primitive from the 27-gate family, used INC/DEC/MAX for singleton selectors, USR for arbitrary subset selectors, TONLY trees for positive-rail conjunction, and diode merges for output aggregation. That yielded ternary native slice cost 83 versus binary native full-adder slice cost 5. For equal-range ripple adders covering at least [-40,40], the 4-trit ternary estimate was 332 versus 35 for the minimum 7-bit binary baseline, ratio about 9.49x. Preregistration Open Brain capture: 4b2ac1ab-43ef-43c8-b7b1-e6d53fadf36f."
+    },
+    {
+      "id": "arto_ternary_topology_part_count_experiment_2026-03-30",
+      "script": "experiments/arto_ternary_topology_part_count_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "Even at the level of actual published circuit topologies, Arto's ternary 7-segment design will likely have much higher raw part count than a standard binary packaged baseline, though it may carry more symbol capacity per input code space.",
+      "success_criteria": "Extract explicit ternary published counts from the 2A and 2B schematics, compare them against a standard binary packaged baseline under stated assumptions, and record whether ternary wins on raw part count, code-space utilization, or neither.",
+      "result": "PASS",
+      "open_brain_id": "0e7ef187-966c-4b95-8723-0eda4190301f",
+      "cert_id": null,
+      "captured_utc": "2026-03-30T00:25:13Z",
+      "artifacts": [
+        "results/arto_ternary_topology_part_count_experiment.json"
+      ],
+      "notes": "Using the printed counts on Arto Heino's published 7-segment schematics, the 2A decimal circuit uses 32 unary gates plus 34 diodes for 66 total logic primitives plus diodes, while the 2B extended circuit uses 41 unary gates plus 91 diodes for 132 total logic primitives plus diodes. Against a standard packaged binary BCD-to-7-segment baseline of one decoder IC plus one display core package, ternary loses badly on raw published part count: about 33x for 2A and 66x for 2B. Ternary 2B does beat the binary baseline on raw code-space utilization (18/27 ≈ 0.667 vs 10/16 = 0.625), but 2A does not. Preregistration Open Brain capture: 873fb4be-ee41-42a9-9932-d99cbc38d93d."
+    },
+    {
+      "id": "arto_ternary_qa_interpretation_experiment_2026-03-30",
+      "script": "experiments/arto_ternary_qa_interpretation_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "Arto Heino's ternary line should be interpretable in QA terms as a lawful native symbolic arithmetic with explicit projection obstructions, rather than as a simple success/failure engineering race against binary.",
+      "success_criteria": "Use the existing Arto artifacts to identify at least one native preserved invariant and at least one explicit projection obstruction with quantitative debt markers.",
+      "result": "PASS",
+      "open_brain_id": "7a42044d-0e76-4695-8d61-6514df98a77c",
+      "cert_id": "qa.cert.empirical.arto_ternary_projection_obstruction_partial.v1",
+      "captured_utc": "2026-03-30T00:38:04Z",
+      "artifacts": [
+        "results/arto_ternary_qa_interpretation_experiment.json",
+        "qa_alphageometry_ptolemy/qa_empirical_observation_cert/results/eoc_pass_arto_ternary_projection_obstruction_partial.json"
+      ],
+      "notes": "This is the QA-native interpretation layer for the Arto ternary sequence. The result reframes the earlier mixed positive/negative findings as a lawful native arithmetic plus projection obstruction. Supported native invariants: ternary gate-universe closure, state-density gain, exact local additive conservation, and coherent decimal symbol encoding. Supported obstruction ledger: display projection residual (17 unused 3-trit states), selector and merge debt under rail/cover realization (equal-range ripple ratios 2.5x and 9.4857x under two explicit models), and published topology part-count debt (2A 33x, 2B 66x vs binary packaged baseline). Open Brain capture written successfully after the local artifact and cert were validated."
+    },
+    {
+      "id": "arto_ternary_physical_realization_proxy_experiment_2026-03-30",
+      "script": "experiments/arto_ternary_physical_realization_proxy_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "Arto's published ternary hardware notes are sufficient to build a first physical_realization witness at the level of analytic proxy: the hardware line explicitly targets 3 electrical states, even though timing and measured margins remain uncharacterized.",
+      "success_criteria": "Extract enough source-grounded hardware information to justify a non-INCONCLUSIVE physical assessment without claiming bench-measured performance.",
+      "result": "PASS",
+      "open_brain_id": "f2b1905a-0303-4847-8a7b-b78224407697",
+      "cert_id": "qa.cert.projection_obstruction.arto_ternary.v1",
+      "captured_utc": "2026-03-30T23:10:09Z",
+      "artifacts": [
+        "results/arto_ternary_physical_realization_proxy_experiment.json",
+        "qa_alphageometry_ptolemy/qa_projection_obstruction_cert/results/ppo_pass_arto_ternary_cert.json"
+      ],
+      "notes": "First physical_realization witness for the Arto ternary line. The witness is analytic-proxy only, not a bench measurement. Source basis: Arto's published ternary hardware notes explicitly use three nominal voltage states (+5, 0, -5) and describe relay/Photo-MOS hardware. That is enough to upgrade the physical layer from INCONCLUSIVE to PARTIAL: stable_state_count=3 satisfies the minimum ternary state requirement, while timing remains uncharacterized and therefore yields TIMING_UNVERIFIED rather than full device consistency."
+    },
+    {
+      "id": "arto_ternary_physical_timing_witness_experiment_2026-03-30",
+      "script": "experiments/arto_ternary_physical_timing_witness_experiment.py",
+      "domain": "electronics",
+      "hypothesis": "A narrow executable device model grounded in Arto's published +5/0/-5 ternary coding and official OptoMOS switching data should support three stable states and a characterized single-load propagation delay, allowing TIMING_UNVERIFIED to clear without claiming bench hardware performance.",
+      "success_criteria": "PASS if the executable model preserves all three ternary states under the declared noise band, supports the required single-load fanout, and yields a characterized worst-case stable arrival time with no physical obstruction tags.",
+      "result": "PASS",
+      "open_brain_id": "913ff0ac-397f-4180-87b9-4342155ee88c",
+      "cert_id": "qa.cert.projection_obstruction.arto_ternary.v1",
+      "captured_utc": "2026-03-30T23:22:37Z",
+      "artifacts": [
+        "results/arto_ternary_physical_timing_witness_experiment.json",
+        "qa_alphageometry_ptolemy/qa_projection_obstruction_cert/results/ppo_pass_arto_ternary_cert.json"
+      ],
+      "notes": "Executable single-load physical timing witness for the Arto ternary line. Grounded in Arto's published +5/0/-5 ternary voltage coding plus official Littelfuse / IXYS OptoMOS switching data (3 ms on/off, 25 pF output capacitance, 35 ohm on-resistance). The model supported all three ternary states, measured minimum threshold margin 2.5 V, measured minimum noise margin about 2.5 V, and characterized worst-case stable arrival at 3.001 ms across all six symbol transitions. Honest limitation: this is still an executable device model rather than bench hardware, and it only certifies a declared single-load witness."
+    },
+    {
+      "artifacts": [
+        "experiments/qa_ml/72_hf_tiny_lm_qa_packet_quant.py",
+        "experiments/qa_ml/results_hf_tiny_lm_qa_packet_quant.json"
+      ],
+      "captured_utc": "2026-05-22T21:42:36Z",
+      "cert_id": null,
+      "domain": "qa_ml",
+      "hypothesis": "Using a real Hugging Face causal LM, QA packet-family quantization should beat GPTQ/AWQ-style activation-aware post-training baselines on at least one low-bit setting for eval loss, logit MSE, and/or calibration-weighted reconstruction MSE.",
+      "id": "qa_ml_hf_distilgpt2_qa_packet_quant_2026-05-22",
+      "notes": "Full calibration-aware QA packet selector run on distilgpt2. GPT-2 Conv1D projection hooks are included and token/position embeddings are skipped, so the comparison targets transformer block weights. The script now tries QA Lloyd, unweighted Lloyd, affine residual, symmetric packet, and a tensor-wise calibration-loss selector against GPTQ/AWQ-shaped activation-aware proxies. FP32 eval loss on six held-out prompts was 7.8300. 2-bit: best QA loss qa_calibrated_packet_selector 8.985 vs GPTQ proxy 10.285; best QA logit MSE qa_lloyd 157.58 vs proxy 1510.83; best QA weighted MSE qa_lloyd 0.03015 vs proxy 0.11234. 3-bit: GPTQ proxy still wins loss 7.883 vs best QA selector 8.008, but QA wins logit MSE 50.76 vs 199.09 and weighted MSE 0.01048 vs 0.03132. 4-bit: QA now wins eval loss too: qa_affine_residual 7.7255 vs GPTQ proxy 7.8452; QA also wins logit MSE via qa_unweighted_lloyd 20.06 vs 29.82 and weighted MSE 0.004512 vs best proxy 0.007421. Honest verdict: real-HF distilgpt2 proxy rung shows QA packet-family wins at 2-bit and 4-bit on loss/logit/MSE, with 3-bit still losing loss but winning logit and weighted reconstruction. Still proxy GPTQ/AWQ, not auto-gptq/awq library evidence. Cross-platform reproduction 2026-05-22: re-ran on Linux x86_64 (player2) with python 3.13 + torch 2.11.0+cu130 (CPU); reproduced the same status PASS_REAL_HF_LOSS_LOGIT_AND_WMSE and the same per-bit best-method picks. Numeric deltas match player3 macOS Apple Silicon to 4-5 sig figs (fp32_eval_loss 7.830014 vs 7.830003; 2-bit loss Δ -1.29968 vs -1.29972; 4-bit loss Δ -0.11969 vs -0.11967). Linux artifact is now the canonical results_hf_tiny_lm_qa_packet_quant.json; macOS reference preserved separately at results_hf_tiny_lm_qa_packet_quant_distilgpt2_player3mac.json. Also corroborated on sshleifer/tiny-gpt2: results_hf_tiny_lm_qa_packet_quant_tiny_gpt2_player2.json shows PASS at all three bit widths but tiny margins (fp32_eval_loss 10.83; deltas O(1e-4 to 1e-3)).",
+      "open_brain_id": "cac3988e-fb2e-4a5f-a345-f9531aeaae4e",
+      "result": "PASS_REAL_HF_DISTILGPT2_QA_PACKET_2BIT_4BIT_WIN_3BIT_PARTIAL",
+      "script": "experiments/qa_ml/72_hf_tiny_lm_qa_packet_quant.py",
+      "success_criteria": "PASS_REAL_HF_LOSS_LOGIT_AND_WMSE if QA packet quantization beats the best GPTQ/AWQ-style proxy on eval loss, logit MSE, and weighted MSE for at least one bit width each; report per-bit losses honestly."
+    },
+    {
+      "artifacts": [
+        "experiments/qa_ml/results_auto_gptq_awq_library_audit.json"
+      ],
+      "captured_utc": "2026-05-22T22:09:33Z",
+      "cert_id": null,
+      "domain": "qa_ml",
+      "hypothesis": "Actual auto-gptq and autoawq library execution should be attempted locally to determine whether the prior distilgpt2 proxy result can be upgraded to real library evidence.",
+      "id": "qa_ml_auto_gptq_awq_local_library_audit_2026-05-22",
+      "notes": "Actual auto-gptq/autoawq library audit on local macOS/Apple Silicon machine. auto-gptq could not run in the Python 3.13 venv. A Python 3.11 micromamba env was created at experiments/qa_ml/gptq_awq_env; torch 2.12.0 + transformers/HF stack installed; auto-gptq installed only with BUILD_CUDA_EXT=0 --no-build-isolation plus transformers pinned to 4.45.2 and peft pinned to 0.7.1. Import succeeds, but actual quantization via AutoGPTQForCausalLM.from_pretrained(...).quantize(...) fails with: OSError: Load pretrained model to do quantization requires CUDA available. autoawq cannot install in either Python 3.13 or Python 3.11 env because all candidate versions require triton and no triton wheel is available for this platform. Honest verdict: actual auto-gptq/autoawq library benchmark is platform-blocked here (no CUDA/triton). Prior distilgpt2 results remain GPTQ/AWQ-shaped proxy evidence, not auto-gptq/autoawq library evidence.",
+      "open_brain_id": "8a26430d-b0b1-40a4-81dd-29e5d2ec60f3",
+      "result": "BLOCKED_PLATFORM_NO_CUDA_OR_TRITON",
+      "script": null,
+      "success_criteria": "PASS if actual auto-gptq or autoawq quantization can run locally; BLOCKED if installation/import/runtime reaches a platform requirement not available on this machine."
+    }
+  ]
+}

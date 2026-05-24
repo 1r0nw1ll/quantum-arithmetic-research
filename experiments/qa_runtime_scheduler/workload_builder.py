@@ -176,29 +176,66 @@ def build_workload(
         return tasks
 
     elif workload_mode == "adversarial_trap":
-        # QA state + generators, but fail cells are randomly scattered (not orbit-aligned).
-        # QA scheduler's orbit avoidance targets fail_orbit_9=None → no avoidance benefit.
-        # Actual fails come from specific (b,e) cells not predictable from orbit.
+        # Bait-and-trap: exploits QA's return_distance-first selection.
+        #
+        # Bait tasks (90%): target_orbit = initial_orbit (dist=0), priority=1, generous deadline.
+        #   QA score ≈ 0 - 10 + bait_deadline → small → QA drains bait first.
+        #
+        # Trap tasks (10%): target = (init+3)%9 (dist=3), priority=9, tight deadline.
+        #   QA score ≈ 3000 - 90 + trap_deadline → large → QA defers trap.
+        #   Priority urgency = 9×100 - trap_deadline → large → priority handles trap first.
+        #
+        # Result: QA drains bait before touching trap → trap misses tight deadlines.
+        # Priority drains trap immediately → no deadline misses.
+        n_trap = max(1, n_tasks // 10)
+        n_bait = n_tasks - n_trap
+        trap_deadline = n_trap * 5   # priority drains trap in ≈n_trap*3 ticks; QA cannot
+        bait_deadline = n_tasks * 5  # generous: never a constraint
         tasks = []
-        # Generate ~N/5 trap cells scattered across domain
-        trap_cells: list[tuple[int, int]] = []
-        seen_cells: set[tuple[int, int]] = set()
-        n_traps = max(5, N // 5)
-        while len(trap_cells) < n_traps:
-            tb, te = rng.randint(1, N), rng.randint(1, N)
-            if (tb, te) not in seen_cells:
-                seen_cells.add((tb, te))
-                trap_cells.append((tb, te))
-        fc_frozen = frozenset(trap_cells)
-        for i in range(n_tasks):
-            t = _build_qa_task(
-                f"t{i:04d}", rng, N, deps[i], rng.randint(25, 50),
-                fail_orbit_9=None,     # no orbit-based fail → QA avoidance useless
-                fail_cells=trap_cells,
-                workload_type="adversarial_trap",
-            )
-            t["fail_cells_frozen"] = fc_frozen
-            tasks.append(t)
+        for i in range(n_bait):
+            b, e = rng.randint(1, N), rng.randint(1, N)
+            init_orbit = (b + e) % 9
+            tasks.append({
+                "task_id": f"t{i:04d}",
+                "workload_type": "adversarial_trap",
+                "dependency_ids": [],
+                "deadline_steps": bait_deadline,
+                "priority": 1,
+                "resource_cost": 1,
+                "recovery_window_k": 6,
+                "allowed_generators": _ALL_GENERATORS,
+                "initial_b": b,
+                "initial_e": e,
+                "target_orbit_9": init_orbit,        # dist=0: already at target
+                "fail_orbit_9": None,
+                "fail_cells": [],
+                "fail_cells_frozen": frozenset(),
+                "opaque_initial": 0,
+                "opaque_target": -1,
+                "opaque_fail_set": set(),
+            })
+        for i in range(n_bait, n_tasks):
+            b, e = rng.randint(1, N), rng.randint(1, N)
+            init_orbit = (b + e) % 9
+            tasks.append({
+                "task_id": f"t{i:04d}",
+                "workload_type": "adversarial_trap",
+                "dependency_ids": [],
+                "deadline_steps": trap_deadline,
+                "priority": 9,
+                "resource_cost": 1,
+                "recovery_window_k": 6,
+                "allowed_generators": _ALL_GENERATORS,
+                "initial_b": b,
+                "initial_e": e,
+                "target_orbit_9": (init_orbit + 3) % 9,  # dist=3: needs generator steps
+                "fail_orbit_9": None,
+                "fail_cells": [],
+                "fail_cells_frozen": frozenset(),
+                "opaque_initial": 0,
+                "opaque_target": -1,
+                "opaque_fail_set": set(),
+            })
         return tasks
 
     else:

@@ -16,7 +16,7 @@ if _HERE not in sys.path:
 
 from scheduler_core import (
     TaskState, run_simulation,
-    execute_qa_step_random, execute_opaque_step,
+    execute_qa_step_random, execute_qa_step_informed, execute_opaque_step,
 )
 
 
@@ -31,7 +31,11 @@ def _select(ready: list[TaskState], tick: int, rng: random.Random) -> TaskState:
 
 
 def _execute(state: TaskState, rng: random.Random, N: int) -> None:
-    if state.workload_type in ("qa_lawful", "adversarial_trap"):
+    if state.workload_type == "adversarial_trap":
+        # Use greedy execution so adversarial_trap isolates task-selection order,
+        # not execution quality. All schedulers use the same moves here.
+        execute_qa_step_informed(state, rng, N)
+    elif state.workload_type == "qa_lawful":
         execute_qa_step_random(state, rng, N)
     else:
         execute_opaque_step(state, rng, N)

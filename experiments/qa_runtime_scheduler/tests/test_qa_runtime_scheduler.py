@@ -211,11 +211,22 @@ class TestWorkloadBuilder:
             assert t["opaque_target"] >= 0
             assert len(t["opaque_fail_set"]) == 6
 
-    def test_adversarial_trap_no_orbit_fail(self):
-        tasks = build_workload(N=20, n_tasks=10, seed=7, workload_mode="adversarial_trap")
+    def test_adversarial_trap_structure(self):
+        tasks = build_workload(N=20, n_tasks=20, seed=7, workload_mode="adversarial_trap")
+        # All tasks: no orbit fail, no fail cells (adversarial is scheduling, not orbit/cells)
         for t in tasks:
             assert t["fail_orbit_9"] is None
-            assert len(t["fail_cells"]) > 0
+            assert t["fail_cells"] == []
+        # 90% bait (dist=0): target == initial orbit
+        bait = [t for t in tasks if t["priority"] == 1]
+        trap = [t for t in tasks if t["priority"] == 9]
+        assert len(bait) > len(trap)
+        for t in bait:
+            assert (t["initial_b"] + t["initial_e"]) % 9 == t["target_orbit_9"]
+        # Trap tasks have tighter deadlines than bait
+        for tb in trap:
+            for ba in bait:
+                assert tb["deadline_steps"] < ba["deadline_steps"]
 
     def test_seed_determinism(self):
         t1 = build_workload(N=20, n_tasks=10, seed=99, workload_mode="qa_lawful")
@@ -364,7 +375,7 @@ class TestH3RandomOpaque:
         )
 
 
-# ── H4: QA advantage disappears on adversarial_trap ──────────────────────────
+# ── H4: QA selection exploitable by bait-and-trap ────────────────────────────
 
 class TestH4AdversarialTrap:
     N = 20
@@ -374,15 +385,27 @@ class TestH4AdversarialTrap:
         tasks = build_workload(N=self.N, n_tasks=50, seed=23, workload_mode="adversarial_trap")
         return {
             "fifo": fifo_scheduler.run(tasks, N=self.N, seed=23, workload_mode="adversarial_trap"),
+            "priority": priority_scheduler.run(tasks, N=self.N, seed=23, workload_mode="adversarial_trap"),
             "qa": qa_scheduler.run(tasks, N=self.N, seed=23, workload_mode="adversarial_trap"),
         }
 
-    def test_qa_advantage_small(self, results):
-        qa_r = sum(1 for r in results["qa"] if r.unrecoverable) / len(results["qa"])
-        fi_r = sum(1 for r in results["fifo"] if r.unrecoverable) / len(results["fifo"])
-        # QA advantage < 12% (orbit avoidance useless for cell-based traps)
-        assert abs(qa_r - fi_r) < 0.12, (
-            f"QA should not dominate on adversarial_trap: qa={qa_r:.3f} fi={fi_r:.3f}"
+    def test_qa_deadline_miss_higher_than_priority(self, results):
+        # QA's return_distance-first selection drains bait (dist=0) before trap → trap misses deadline.
+        # Priority's urgency metric processes trap (high priority, tight deadline) first → no misses.
+        qa_dl = sum(1 for r in results["qa"] if r.deadline_missed) / len(results["qa"])
+        pr_dl = sum(1 for r in results["priority"] if r.deadline_missed) / len(results["priority"])
+        assert qa_dl > pr_dl + 0.05, (
+            f"QA should miss more deadlines than priority on adversarial_trap: "
+            f"qa_dl={qa_dl:.3f}  priority_dl={pr_dl:.3f}"
+        )
+
+    def test_qa_no_better_than_fifo_on_deadlines(self, results):
+        # Both QA and FIFO defer trap tasks; neither has urgency awareness.
+        qa_dl = sum(1 for r in results["qa"] if r.deadline_missed) / len(results["qa"])
+        fi_dl = sum(1 for r in results["fifo"] if r.deadline_missed) / len(results["fifo"])
+        assert abs(qa_dl - fi_dl) < 0.08, (
+            f"QA and FIFO should perform similarly on adversarial_trap: "
+            f"qa_dl={qa_dl:.3f}  fifo_dl={fi_dl:.3f}"
         )
 
 

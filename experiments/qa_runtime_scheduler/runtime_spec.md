@@ -44,31 +44,32 @@ return_distance computation is overhead with no benefit.
 *H3 is a structural falsifier of QA overclaiming*: if QA beats FIFO on random
 tasks, that is evidence of an implementation bug (the comparison is unfair).
 
-**H4 (adversarial_trap mode)**: QA advantage significantly diminishes when
-fail states are cell-based (random scatter, not orbit-aligned). Mechanism:
-fail_orbit_9=None disables orbit avoidance; QA's greedy-toward-target movement
-still reduces average path length but cannot predict scattered trap cells.
+**H4 (adversarial_trap mode)**: QA's return_distance-first task selection is
+exploitable by a bait-and-trap workload. Bait tasks (dist=0, prio=1, generous
+deadline) have low QA score → QA drains them first. Trap tasks (dist=3, prio=9,
+tight deadline) have high QA score → QA defers them until past their deadline.
+Priority's urgency metric (`priority×100 - remaining`) handles trap tasks first,
+meeting all deadlines. All schedulers use greedy (informed) execution on
+adversarial_trap to isolate task-selection order, not execution quality.
 
-*What would falsify H4*: QA advantage remains large (fail_rate gap > 20%) on
-adversarial_trap. This would indicate QA's path efficiency alone is enough to
-dominate, making H4 a weak falsifier. In the benchmark, QA reduces failures by
-~75% even on adversarial_trap — the claim is "advantage reduced," not
-"advantage zero."
+*What would falsify H4*: QA deadline_miss_rate < priority deadline_miss_rate +
+0.05 on adversarial_trap. This would indicate QA's distance-based selection
+adapts to deadline pressure quickly enough to avoid deferring urgent tasks.
 
 ## Benchmark Results (N=100, 500 tasks, seed=42)
 
-| Mode | Scheduler | fail | unrec | wasted | steps |
-|------|-----------|------|-------|--------|-------|
-| qa_lawful | fifo | 79 | 0 | 0.40 | 8.9 |
-| qa_lawful | priority | 76 | 0 | 0.40 | 8.6 |
-| qa_lawful | qa_scheduler | **0** | 0 | **0.00** | **2.8** |
-| random_opaque | fifo | 1 | 1 | 0.00 | 17.7 |
-| random_opaque | priority | 1 | 1 | 0.00 | 17.7 |
-| random_opaque | qa_scheduler | 1 | 1 | 0.00 | 17.7 |
-| deadline_only | all | 0 | 3 | 0.00 | 17.9 |
-| adversarial_trap | fifo | 4 | 0 | 0.02 | 9.0 |
-| adversarial_trap | priority | 6 | 0 | 0.02 | 9.1 |
-| adversarial_trap | qa_scheduler | 1 | 0 | 0.00 | 2.8 |
+| Mode | Scheduler | fail | unrec | wasted | steps | dl_miss |
+|------|-----------|------|-------|--------|-------|---------|
+| qa_lawful | fifo | 79 | 0 | 0.40 | 8.9 | — |
+| qa_lawful | priority | 76 | 0 | 0.40 | 8.6 | — |
+| qa_lawful | qa_scheduler | **0** | 0 | **0.00** | **2.8** | — |
+| random_opaque | fifo | 1 | 1 | 0.00 | 17.7 | — |
+| random_opaque | priority | 1 | 1 | 0.00 | 17.7 | — |
+| random_opaque | qa_scheduler | 1 | 1 | 0.00 | 17.7 | — |
+| deadline_only | all | 0 | 3 | 0.00 | 17.9 | — |
+| adversarial_trap | fifo | 0 | 0 | 0.00 | 1.2 | **0.100** |
+| adversarial_trap | priority | 0 | 0 | 0.00 | 1.2 | **0.000** |
+| adversarial_trap | qa_scheduler | 0 | 0 | 0.00 | 1.2 | 0.080 |
 
 ## Where QA Wins
 
@@ -83,8 +84,14 @@ dominate, making H4 a weak falsifier. In the benchmark, QA reduces failures by
   LCG transitions have no QA structure; BFS overhead is pure cost.
 - **deadline_only**: All schedulers equally constrained by tight deadlines. 3 tasks
   timeout regardless. QA adds no deadline-awareness advantage.
-- **adversarial_trap**: QA still reduces failures (1 vs 4) but advantage is from path
-  efficiency, not orbit avoidance (fail_orbit_9=None). Not a clean structural win.
+- **adversarial_trap**: Priority dominates (dl_miss=0.000 vs QA=0.080 vs FIFO=0.100).
+  QA's return_distance-first selection drains dist=0 bait tasks before dist=3 trap
+  tasks, causing trap tasks to miss tight deadlines. Priority's urgency metric
+  (`priority×100 - remaining`) correctly identifies and processes urgent trap tasks
+  first. QA's score formula lacks pure urgency weighting — the `remaining` component
+  is additive, not multiplicative with priority. QA is slightly better than FIFO
+  (0.08 vs 0.10) because `remaining` decreases as trap deadline approaches, but
+  this is too weak to match priority's explicit urgency ordering.
 
 ## What This Does Not Claim
 

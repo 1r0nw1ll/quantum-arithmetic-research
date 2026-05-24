@@ -148,21 +148,18 @@ def _print_hypotheses(all_summaries, sched_names: list[str]) -> None:
     else:
         print("H3: missing data")
 
-    # H4: QA advantage disappears on adversarial_trap
-    qa_unrec_adv = _get("adversarial_trap", "qa_scheduler", "unrecoverable_tasks")
-    fi_unrec_adv = _get("adversarial_trap", "fifo", "unrecoverable_tasks")
-    qa_waste_adv = _get("adversarial_trap", "qa_scheduler", "mean_wasted_steps")
-    fi_waste_adv = _get("adversarial_trap", "fifo", "mean_wasted_steps")
-    if qa_unrec_adv is not None and fi_unrec_adv is not None:
-        tot = _get("adversarial_trap", "qa_scheduler", "total_tasks")
-        qa_rate_adv = qa_unrec_adv / tot
-        fi_rate_adv = fi_unrec_adv / tot
-        # H4 confirmed: QA does NOT significantly outperform FIFO on adversarial_trap
-        h4 = abs(qa_rate_adv - fi_rate_adv) < 0.08
-        print(f"H4 (QA advantage disappears on adversarial_trap): "
+    # H4: QA selection exploitable by bait-and-trap; priority handles urgency correctly.
+    # Bait tasks (dist=0, prio=1) absorb QA's attention; trap tasks (dist=3, prio=9, tight
+    # deadline) miss their deadlines under QA. Priority drains trap first → no deadline misses.
+    qa_dl = _get("adversarial_trap", "qa_scheduler", "deadline_miss_rate")
+    pr_dl = _get("adversarial_trap", "priority", "deadline_miss_rate")
+    fi_dl = _get("adversarial_trap", "fifo", "deadline_miss_rate")
+    if qa_dl is not None and pr_dl is not None:
+        # H4 confirmed: QA misses trap deadlines significantly more than priority
+        h4 = qa_dl > pr_dl + 0.05
+        print(f"H4 (QA selection exploitable; priority handles urgency): "
               f"{'CONFIRMED' if h4 else 'NOT CONFIRMED'}  "
-              f"qa_unrec={qa_rate_adv:.3f}  fifo_unrec={fi_rate_adv:.3f}  "
-              f"qa_waste={qa_waste_adv:.2f}  fifo_waste={fi_waste_adv:.2f}")
+              f"qa_dl={qa_dl:.3f}  priority_dl={pr_dl:.3f}  fifo_dl={fi_dl:.3f}")
     else:
         print("H4: missing data")
 

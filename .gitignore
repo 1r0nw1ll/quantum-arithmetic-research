@@ -313,6 +313,11 @@ ag2_guardrails_poc/data/secret.txt
 # corpus/pepe_pose/7scenes/ (see experiments/qa_ml/69_*).
 experiments/qa_ml/cache_pepe_ch4_pose1_table_4_2_heads/
 
+# POSE-1 Table 4.2 multi-scene cache (~30 GB of extracted 7-Scenes frames +
+# per-scene InceptionV3 features). Re-buildable from the 7 sha256-pinned
+# zips in corpus/pepe_pose/7scenes/ (see experiments/qa_ml/70_*).
+experiments/qa_ml/cache_pepe_ch4_pose1_table_4_2_7scenes/
+
 # Large raw data files (>100MB — GitHub limit)
 qa_alphageometry_ptolemy/external_validation_certs/prompt_injection_multibench_cases.jsonl
 

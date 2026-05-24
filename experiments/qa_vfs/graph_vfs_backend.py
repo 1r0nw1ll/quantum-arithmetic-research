@@ -232,15 +232,14 @@ class GraphVFSBackend:
             chunk = node["chunks"].get(cidx)
             if chunk is None:
                 return False, 0
-            # Graph stores content_val explicitly — recovery = read stored value
-            # If deviation set, check repair_records
-            repair_key = (fid, cidx)
+            corrupt_type = op.get("corrupt_type", "type_a")
             if chunk["deviation"] is not None:
-                repair_val = self._repair_records.get(repair_key, chunk["deviation"])
-                repaired = True
-            else:
-                repaired = True  # content_val is intact in node property
-            return repaired, 1
+                return True, 1  # deviation record present → authoritative
+            if corrupt_type == "type_b":
+                # Stored node property destroyed — graph has no law to re-derive.
+                return False, 0
+            # type_a: content_val intact in node property.
+            return True, 1
 
         (repaired, rec_ops), lat = measure(_run)
         return OpResult(

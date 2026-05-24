@@ -247,12 +247,20 @@ class TestBackendOperations:
                 r = backend.run_corruption_recovery(op)
                 assert r.latency_ns > 0
 
-    def test_corruption_recovery_repairs_non_deviated_chunks(self, backends, files):
-        ops = build_corruption_ops(files, n_ops=10, seed=11)
-        for name, backend in backends.items():
-            results = [backend.run_corruption_recovery(op) for op in ops]
-            repair_rate = sum(1 for r in results if r.repaired) / len(results)
-            assert repair_rate > 0, f"{name}: no chunks repaired"
+    def test_qa_repairs_type_b_sqlite_does_not(self, backends, files):
+        # Force all ops to type_b (stored record destroyed) — QA re-derives by law,
+        # SQLite/graph have no law and cannot repair.
+        ops = build_corruption_ops(files, n_ops=20, seed=11)
+        type_b_ops = [{**op, "corrupt_type": "type_b"} for op in ops]
+        qa_rate = sum(
+            1 for op in type_b_ops if backends["qa_vfs"].run_corruption_recovery(op).repaired
+        ) / len(type_b_ops)
+        sql_rate = sum(
+            1 for op in type_b_ops if backends["sqlite"].run_corruption_recovery(op).repaired
+        ) / len(type_b_ops)
+        assert qa_rate >= 0.85, f"QA type_b repair_rate={qa_rate:.2f}, expected >=0.85"
+        assert sql_rate < 0.15, f"SQLite type_b repair_rate={sql_rate:.2f}, expected ~0"
+        assert qa_rate > sql_rate + 0.7, f"QA advantage gap too small: qa={qa_rate:.2f} sql={sql_rate:.2f}"
 
     def test_storage_bytes_positive(self, backends):
         for name, backend in backends.items():

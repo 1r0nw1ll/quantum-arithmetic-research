@@ -240,17 +240,19 @@ class QAVFSBackend:
             if f is None:
                 return False, 0
             cidx = op["chunk_idx"]
-            # Deviation record: if present, that IS the content — use it directly (O(1)).
+            corrupt_type = op.get("corrupt_type", "type_a")
+            # Deviation record: always authoritative (arbitrary mutation content).
             deviation = self._deviations.get(fid, {}).get(cidx)
             if deviation is not None:
-                return True, 1  # deviation record is authoritative; 1 lookup
-            # No deviation → re-derive from law via BFS from root.
-            # Cost = cidx+1 BFS steps; SQLite would need to read stored content_val.
+                return True, 1
+            # type_a or type_b: QA re-derives from root seed by law.
+            # The root (b, e) is the only record QA stores per file; chunk content
+            # is never stored.  type_b (record destroyed) makes no difference — law
+            # re-derivation works regardless.
             seq = derive_chunk_sequence(f.root_b, f.root_e, cidx + 1, self.N)
             if cidx >= len(seq):
                 return False, 0
-            # Reconstruction ops = BFS depth
-            return True, cidx + 1
+            return True, cidx + 1  # cidx+1 BFS steps regardless of corrupt_type
 
         (repaired, rec_ops), lat = measure(_run)
         return OpResult(

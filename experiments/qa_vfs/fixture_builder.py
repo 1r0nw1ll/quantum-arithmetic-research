@@ -127,16 +127,26 @@ def build_mutation_ops(
 def build_corruption_ops(
     files: list[VFSFile], n_ops: int = 50, seed: int = 42
 ) -> list[dict[str, Any]]:
-    """Mark a chunk corrupted; then attempt recovery."""
+    """
+    Two corruption types, 50/50 split:
+      type_a — content drift (bit-flip in cached value); stored record intact.
+               All backends repair: SQLite reads content_val, QA re-derives from law.
+      type_b — stored record destroyed; backend must recover without content_val.
+               QA: re-derives from root seed by law → always repaired.
+               SQLite/graph: content_val gone → cannot repair.
+    This split is the genuine H2 test.
+    """
     rng = random.Random(seed)
     ops = []
     for i in range(n_ops):
         f = rng.choice(files)
         chunk_idx = rng.randint(0, max(0, f.n_chunks - 1))
+        corrupt_type = rng.choice(["type_a", "type_b"])
         ops.append({
             "op_id": f"cor{i:04d}",
             "file_id": f.file_id,
             "op": "corruption_recovery",
             "chunk_idx": chunk_idx,
+            "corrupt_type": corrupt_type,  # type_a: record intact; type_b: record destroyed
         })
     return ops

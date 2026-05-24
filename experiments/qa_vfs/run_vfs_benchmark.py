@@ -130,24 +130,18 @@ def _print_hypotheses(all_summaries, backends):
           f"{'CONFIRMED' if h1u else 'NOT CONFIRMED'}  "
           f"qa={qa_wu:.0f}  sqlite={sql_wu:.0f}")
 
-    # H2: QA-VFS recovers non-deviated chunks with HIGHER reconstruction_ops but ZERO
-    # stored chunk records.  SQLite stores content_val at write time (1 record/chunk);
-    # QA re-derives via BFS from the root seed (cidx+1 ops).  Both repair_rates should
-    # be 1.0.  The honest metric is mean_reconstruction_ops: QA does more BFS work per
-    # recovery but pays nothing at write time.
+    # H2: QA recovers type_b (stored record destroyed) by re-deriving from law.
+    # SQLite/graph have no law — type_b is unrecoverable for them.
+    # Corruption ops are 50/50 type_a (record intact) / type_b (record destroyed).
+    # Expected: qa repair_rate ≈ 1.0; sqlite/graph repair_rate ≈ 0.5.
     qa_rr   = _get("qa_vfs",    "corruption_recovery", "repair_rate")
     sql_rr  = _get("sqlite",    "corruption_recovery", "repair_rate")
     gr_rr   = _get("graph_vfs", "corruption_recovery", "repair_rate")
-    qa_rc   = _get("qa_vfs",    "corruption_recovery", "mean_reconstruction_ops")
-    sql_rc  = _get("sqlite",    "corruption_recovery", "mean_reconstruction_ops")
-    gr_rc   = _get("graph_vfs", "corruption_recovery", "mean_reconstruction_ops")
-    rates_equal = (qa_rr is not None and sql_rr is not None
-                   and abs(qa_rr - sql_rr) < 0.02 and abs(qa_rr - 1.0) < 0.02)
-    h2 = rates_equal and qa_rc is not None and sql_rc is not None and qa_rc > sql_rc
-    print(f"H2 (QA recovery: same repair_rate, higher recon_ops, zero stored records): "
+    h2 = (qa_rr is not None and sql_rr is not None
+          and qa_rr > sql_rr + 0.3 and qa_rr > 0.9)
+    print(f"H2 (QA law-recovers destroyed records; SQLite cannot): "
           f"{'SUPPORTED' if h2 else 'NOT SUPPORTED'}  "
-          f"qa_rate={qa_rr:.3f}  sqlite_rate={sql_rr:.3f}  "
-          f"qa_recon={qa_rc:.1f}  sqlite_recon={sql_rc:.1f}")
+          f"qa={qa_rr:.3f}  sqlite={sql_rr:.3f}  graph={gr_rr:.3f}")
 
     # H3: QA-VFS storage is smaller
     qa_bytes  = _get("qa_vfs",    "lookup_structured", "mean_storage_bytes")

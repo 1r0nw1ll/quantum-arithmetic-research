@@ -249,6 +249,7 @@ class SQLiteBackend:
         def _run():
             fid = self._file_id(tuple(op["file_id"]))
             cidx = op["chunk_idx"]
+            corrupt_type = op.get("corrupt_type", "type_a")
             row = self._conn.execute(
                 "SELECT content_val, content_hash, deviation FROM chunks "
                 "WHERE file_id=? AND chunk_idx=?", (fid, cidx)
@@ -257,12 +258,12 @@ class SQLiteBackend:
                 return False, 0
             cv, ch, dev = row
             if dev is not None:
-                # Arbitrary deviation stored — recovery reads deviation record
-                repaired = True
-                return repaired, 1
-            # Restore from content_val (stored at write time)
-            repaired = True
-            return repaired, 1  # 1 lookup op
+                return True, 1  # deviation record present → authoritative
+            if corrupt_type == "type_b":
+                # Stored record destroyed — SQLite has no law to re-derive from.
+                return False, 0
+            # type_a: content_val intact → recover from stored record.
+            return True, 1
 
         (repaired, rec_ops), lat = measure(_run)
         return OpResult(

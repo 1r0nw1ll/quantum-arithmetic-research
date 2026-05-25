@@ -345,3 +345,8 @@ Documents/open_brain_manual_future_work/
 Documents/wildberger_corpus/
 Documents/haramein_rsf/
 Documents/odt_exports/
+
+# POSE-1 Table 4.2 Cambridge Landmarks cache (~25 GB of extracted scenes +
+# per-scene InceptionV3 features). Re-buildable from the 6 sha256-pinned
+# zips in corpus/pepe_pose/cambridge_landmarks/ (see experiments/qa_ml/71_*).
+experiments/qa_ml/cache_pepe_ch4_pose1_table_4_2_cambridge_landmarks/

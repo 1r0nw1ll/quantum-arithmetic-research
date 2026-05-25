@@ -82,6 +82,46 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #6 — 2026-05-25 (window: May 21 – May 25, 2026)
+Full report: `sota_scans/scan_2026-05-25.md`
+
+**Key finds:**
+- arXiv:2604.00165 (Symmetric Nonlinear CAs as Algebraic References for Rule 30, March 31) — MEDIUM. **Slipped all prev scans.** Establishes S₃ symmetry framework for Rule 22 → Rule 30: support-set cardinality formula, two-step recursive construction, continuous limit = parabolic PDE (= QA Observer Projection / Theorem NT). Power-law symmetry-breaking from Rule 22 to Rule 30. Directly maps to repo's active `qa_rule30` cert + submission package.
+- arXiv:2502.14663 (RIP for Measurements from Group Orbits, Feb 2025 / rev Sep 2025) — MEDIUM. **Slipped all prev scans.** Generalizes RIP from random circulants to random orbits of any finite group G representation. Certifies that QA's Z/24Z Cosmos and Z/8Z Satellite orbit measurement matrices satisfy the Restricted Isometry Property. Closes the RIP-orbit-transform chain with scan #5's arXiv:2605.11589 and scan #1's arXiv:2604.03634.
+- arXiv:2605.19277 (Universal Cycles on Affine Lines, May 19) — LOW-MEDIUM. Ucycles over AG(n,q); affine line = coset of 1D subspace ≈ QA orbit class. Combinatorial, not dynamical overlap.
+- arXiv:2603.05228 (Geometric Inductive Bias of Grokking, March 2026) — LOW-MEDIUM. **Slipped.** Spherical normalization reduces grokking 20× on Z/pZ tasks = S2 axiom analogue. Incremental addition to grokking chain.
+- No HIGH finds this window. Quiet after May 10–21 E8/transform surge.
+
+**Cert scaffolding candidates (new):**
+1. `qa_rule30_symmetry_bridge_cert_v1` — Rule 30 algebraic framework via arXiv:2604.00165 (grounds `qa_rule30` cert system)
+2. `qa_orbit_rip_cert_v1` — RIP certificate for Z/24Z and Z/8Z orbit measurements (arXiv:2502.14663)
+
+**Cert gaps (escalated):**
+- [261] qa_orbit_stratification_cert_v1: **QUINTUPLE GAP** (5th scan — CRITICAL: still no registry, no docs/families, no README/SPEC in cert dir)
+- qa_steinmetz_whittaker_bridge_cert_v1: **3rd scan unregistered** — needs ID=279, docs/families file
+- qa_whittaker_phase_packet_algebra_cert_v1: **2nd scan unregistered** — needs ID=280, docs/families file
+- qa_whittaker_rational_direction_s1_cert_v1 [266]: **3rd scan** missing README.md/SPEC.md in cert dir
+- qa_wgs84_ellipse_cert_v1 [156]: **3rd scan** missing README.md/SPEC.md in cert dir
+
+**No new cert families created since scan #5.**
+
+**Key cross-domain connection:** Rule 30 algebraic chain — arXiv:2604.00165 provides the missing external grounding for repo's active Rule 30 submission package (`RULE30_SUBMISSION_READY.md`). Check for citation opportunity.
+
+**Carried-over scaffolding candidates (cumulative, not yet built):**
+- `qa_quantized_integer_dynamics_cert_v1` (scan #2) — highest priority
+- `qa_transform_unification_cert_v1` (scan #5) — HIGH, cleanest next new cert
+- `qa_star_g_tensor_cert_v1` (scan #5) — HIGH, Lean 4 pathway
+- `qa_circulant_symplectic_orbit_cert_v1` (scan #4) — HIGH
+- `qa_tda_orbit_grokking_cert_v1` (scan #4) — HIGH
+- `qa_modular_vsa_cert_v1` (scan #2) — HIGH
+- `qa_modular_nn_universality_cert_v1` (scan #3) — HIGH
+- `qa_full_pisano_orbit_cert_v1` (scan #1) — HIGH
+- `qa_discrete_noether_cert_v1` (scan #3) — MEDIUM
+- `qa_e8_integral_arithmetic_cert_v1` (scan #5) — MEDIUM-HIGH
+- `qa_golden_ring_orbit_cert_v1` (scan #5) — MEDIUM-HIGH
+
+---
+
 ### Scan #5 — 2026-05-21 (window: May 14 – May 21, 2026)
 Full report: `sota_scans/scan_2026-05-21.md`
 

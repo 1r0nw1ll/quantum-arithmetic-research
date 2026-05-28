@@ -82,6 +82,41 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #7 — 2026-05-28 (window: May 25 – May 28, 2026)
+Full report: `sota_scans/scan_2026-05-28.md`
+
+**Key finds:**
+- arXiv:2604.13514 (Automated Tactics for Polynomial Reasoning in Lean 4, April 2026) — MEDIUM. **Slipped all prev scans.** SageMath/SymPy-backed Lean 4 polynomial tactics via certificate-based approach. Provides the automated algebraic verification engine for `qa_star_g_tensor_cert_v1` Lean 4 cert formalization pathway (identified in scan #5 via arXiv:2605.20440). Together: theoretical framework (⋆G tensor) + automated proof engine (polynomial tactics) = complete Lean 4 cert pipeline.
+- arXiv:2512.16190 (Ramanujan Sums in Signal Recovery, Dec 2025) — LOW-MEDIUM. **Slipped 6 scans.** Perfect reconstruction + erasure robustness for Ramanujan filter banks; uncertainty principle via φ(q). For q=24: φ(24)=8 modes (Cosmos); q=8: φ(8)=4 modes (Satellite). Quantifies Theorem NT observer projection firewall information-theoretically. Subsumed by scan #5 transform unification (arXiv:2605.11589) at the structural level.
+- arXiv:2602.19533 (Grokking Finite-Dimensional Algebra, Feb 2026) — LOW-MEDIUM. **Slipped 6 scans.** Extends grokking from group operations to general FDA (bilinear products over finite fields). QA's T-algebra is a commutative, associative, unital FDA over Z/mZ — easiest FDA grokking regime. Extends `qa_modular_nn_universality_cert_v1` (scan #3) candidate scope.
+- arXiv:2605.27169 (Jacobi sums / cyclotomic matrices, May 26) — LOW. New in window. Arithmetic products of real parts of Jacobi sums over F_q; cyclotomic matrix connections. Pure number theory; no orbit dynamics or discrete-to-continuous bridge. Keyword proximity only.
+- arXiv:2604.04655 (Grokking as Dimensional Phase Transition / SOC, April 2026) — LOW. Slipped. SOC/dimensional phase transition view of grokking. Fourth grokking-phase-transition paper; incremental add to existing chain.
+
+**No HIGH finds this window (3-day early trigger, quiet after May 10–21 surge).**
+
+**Cert scaffolding candidates (new):**
+*(None standalone — arXiv:2604.13514 informs `qa_star_g_tensor_cert_v1` design; arXiv:2602.19533 extends `qa_modular_nn_universality_cert_v1` scope.)*
+
+**Cert gaps (escalated):**
+- [261] qa_orbit_stratification_cert_v1: **SEXTUPLE GAP** (6th scan — CRITICAL: still no registry, no docs/families, no README/SPEC in cert dir)
+- qa_steinmetz_whittaker_bridge_cert_v1: **4th scan unregistered** — needs ID=279, docs/families file
+- qa_whittaker_phase_packet_algebra_cert_v1: **3rd scan unregistered** — needs ID=280, docs/families file
+- qa_whittaker_rational_direction_s1_cert_v1 [266]: **4th scan** missing README.md/SPEC.md in cert dir
+- qa_wgs84_ellipse_cert_v1 [156]: **4th scan** missing README.md/SPEC.md in cert dir
+
+**No new cert families created since scan #6.**
+
+**Cross-domain connections (new):**
+- Lean 4 automation chain: arXiv:2604.13514 (tactic engine) + arXiv:2605.20440 (scan #5, ⋆G framework) = complete Lean 4 cert verification pipeline for QA axioms
+- Grokking FDA chain: arXiv:2602.19533 closes grokking coverage from group operations to general bilinear algebras over finite fields; QA's T-algebra is in scope
+
+**Carried-over scaffolding candidates (cumulative, not yet built):**
+See scan_2026-05-28.md for full ranked list. Top priorities: `qa_quantized_integer_dynamics_cert_v1` (scan #2), `qa_transform_unification_cert_v1` (scan #5), `qa_star_g_tensor_cert_v1` (scan #5 + this scan).
+
+**📌 Scan hygiene note:** arXiv:2512.16190 and arXiv:2602.19533 both slipped 6 scans (Dec 2025 / Feb 2026 respectively). Root cause: eess.SP published-journal papers and Feb 2026 cs.LG cohort not systematically covered. Add explicit sweep of 2602.19xxx–2603.xxxx cs.LG to next scan.
+
+---
+
 ### Scan #6 — 2026-05-25 (window: May 21 – May 25, 2026)
 Full report: `sota_scans/scan_2026-05-25.md`
 

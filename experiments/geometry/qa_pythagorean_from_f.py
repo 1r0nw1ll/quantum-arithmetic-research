@@ -1189,11 +1189,13 @@ def select_mpqs_a_values(
     roots_by_prime: dict[int, list[int]],
     F: int,
     limit: int,
+    half_width: int = 128,
 ) -> list[tuple[int, list[int]]]:
     odd_primes = [
         prime for prime in factor_base if prime != 2 and prime in roots_by_prime
     ]
-    target = max(3, math.isqrt(F))
+    # Silverman optimal: A ≈ sqrt(2F) / M so |q(x)| ≤ sqrt(F/2)*M over [-M, M]
+    target = max(3, math.isqrt(2 * F // max(half_width, 1)))
     max_a = max(target * 8, 64)
     candidates: dict[int, list[int]] = {}
 
@@ -1302,7 +1304,7 @@ def derive_from_f_qa_mpqs(
         residual_log_limit = math.log(large_prime_bound) + log_tolerance
 
     for A, a_primes in select_mpqs_a_values(
-        factor_base, roots_by_prime, F, polynomial_count
+        factor_base, roots_by_prime, F, polynomial_count, half_width=half_width
     ):
         root_sets = [(prime, roots_by_prime[prime]) for prime in a_primes]
         b_roots = combine_roots_crt(root_sets, limit=64)

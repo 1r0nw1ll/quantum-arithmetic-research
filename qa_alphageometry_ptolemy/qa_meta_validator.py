@@ -7624,6 +7624,37 @@ def _validate_qa_orbit_pisano_5_factor_boundary_cert_family(base_dir):
     return None
 
 
+def _validate_qa_orbit_access_theorem_cert_family(base_dir):
+    """QA Orbit Access Theorem Cert family [279]. Primary source for Pisano-period framing: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. Canonical orbit classifier: qa_orbit_rules.orbit_family on (b, e, m), commit e7b2af0. CLAIM (narrow, falsifiable): for mod-9 route enumeration (all (b, e) with b+2e=a, b>=1, e>=1, A1-reduced), the orbit classes reachable for a are determined exclusively by gcd(a, 3): (1) coprime_to_3 (gcd(a,3)=1): all routes Cosmos, zero Satellite, zero Singularity; (2) mul_3_not_9 (3|a and 9 not divides a): Cosmos + Satellite, zero Singularity; (3) mul_9 (9|a): Cosmos + Satellite + Singularity. Algebraic mechanism: Satellite period=8=Pisano(3); Cosmos period=24=Pisano(9). Verified on corpus: coprime_to_3={8,13,28,50}, mul_3_not_9={12,15,21}, mul_9={9,27,126,144}. Application domains: nuclear magic numbers (a=126 uniquely Sat+Sing among {8,20,28,50,82,126,184}); Fibonacci (F_12=144 first Sing access); FST/Briddell (all STF powers of 3 and proton a=1836 in mul_9). Theorem NT compliance: integer arithmetic on (b, e). Checks OAT_1/OAT_2/OAT_3/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_orbit_access_theorem_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_access_theorem_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_access_theorem_cert_v1/qa_orbit_access_theorem_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_access_theorem_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_access_theorem_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_access_theorem_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     """QA Orbit No-3-Divisor Overclaim Cert family [278]. Primary source for the Pisano-period framing: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for every tested modulus m with 3 not divides m and m >= 7 excluding m = 8, the canonical period-based orbit_family on (b, e, m) finds zero period-8 satellite states while orbit_family_divisor_shortcut(b, e, m) over-claims exactly 9 false satellites; the 9 over-claimed pairs are exactly the 3 by 3 grid {(a*(m//3), b*(m//3)) : a, b in {1, 2, 3}}, disjoint from the singularity (m, m) when 3 not divides m and m >= 7. Causal scope is no_3_divisor, not 5_factor: although the original sweep entered through the 5|m and 3 not divides m intersection while certifying [277], a separate proof pass on non-5-multiple 3 not divides m moduli {7, 11, 13, 14, 16, 17, 19, 22, 23, 26, 28, 29, ...} showed identical 9-overclaim behavior. The boundary exception m = 8 is excluded from v1 because m // 3 = 2 yields a 4 by 4 grid (16 multiples of 2 in {1..8} including singularity), so shortcut overclaim is 15 not 9; future v2 may add an m = 8 sub-claim. Pairs with cert [277] (the under-count regime on m = 15k) to close the divisor shortcut's failure surface. Cert does NOT modify qa_orbit_rules.py (canonical replacement locked at commit e7b2af0), does NOT cover m in {1, 2, 3, 4, 5} (degenerate), does NOT cover m = 8 (boundary exception), does NOT cover 3 | m regime, does NOT formalize the full Pisano-period structure. Lineage: surfaced during [277] adjacent-regime investigation 2026-05-08; design draft docs/specs/QA_ORBIT_5_FACTOR_NO_3_OVERCLAIM_CERT_DRAFT.md (commit 73916f8) explicitly broadened scope from 5|m sub-family to no_3_divisor family per Will 2026-05-09 directive. Theorem NT compliance: integer arithmetic on (b, e, m). Checks NO3_1/NO3_2/NO3_3/NO3_4/SRC/F; 8 PASS + 4 FAIL fixtures; self-test ok"""
     import subprocess
@@ -8706,6 +8737,11 @@ FAMILY_SWEEPS = [
      "QA-ML Orbit Topology Cert family [276]. Primary source for the GCN architecture under test: Kipf & Welling 2017, Semi-Supervised Classification with Graph Convolutional Networks, ICLR; arxiv:1609.02907. CLAIM (narrow, falsifiable): on QA orbit grids with a non-trivial satellite class (orbit period 8 under qa_orbit_rules.qa_step), a 2-layer plain-torch GCN over the symmetric-normalized QA generator adjacency built from sigma, mu, lambda_2, nu lifts node-classification macro F1 by at least +0.10 over an identity-adjacency ablation, holding node features (qa_full packet b,e,d,a,C,F,G,phi_b,phi_e with phi=mod m//3), architecture, seeds, and standardization fixed. Verified empirically for m in {9,12,15,18,21,24,27,30,36} at train_fraction=0.30, 20 seeds, 300 epochs, hidden=32, lr=0.01, weight_decay=5e-4. Sources: experiments/qa_ml/03_gnn_modulus_sweep.py + benchmark_protocol_v2_modulus_sweep.json + results_gnn_modulus_sweep.json (results_ledger_v2_modulus_sweep.jsonl); qa_orbit_rules.py (canonical orbit family + period via qa_step, A1-compliant); tools.qa_ml.qa_generators (sigma, mu, lambda_2, nu); tools.qa_ml.qa_graph (build_edges, dense_adjacency, gcn_normalize). Lineage: experiment v1 sample-efficiency benchmark showed polynomial QA expansion alone is weak; v2 GCN benchmark showed graph helps on mod-24; this cert grounds the multi-modulus sweep. Theorem NT compliance: integer features and integer-built adjacency on the QA side; torch GCN observer on the float side; no float feedback into the QA layer. Auxiliary boundary observation NOT certified here, certified separately in cert [277]: qa_orbit_rules.orbit_family algebraic divisor shortcut under-counts period-8 pairs for m in {15, 30}. Cert does NOT prove orbit-class learnability for arbitrary m, does NOT certify GCN training stability, does NOT cover stochastic random graphs, and does NOT extend to non-period-8 satellite classes. Checks ORBT_1/ORBT_2/ORBT_3/ORBT_4/SRC/F; 2 PASS + 2 FAIL fixtures; self-test ok",
      "276_qa_ml_orbit_topology",
      "qa_ml_orbit_topology_cert_v1", True),
+    (279, "QA Orbit Access Theorem Cert family",
+     _validate_qa_orbit_access_theorem_cert_family,
+     "QA Orbit Access Theorem Cert family [279]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for mod-9 route enumeration (all (b,e) with b+2e=a, b>=1, e>=1, A1-reduced), orbit classes reachable for a are determined exclusively by gcd(a,3): (1) coprime_to_3: all Cosmos, zero Sat, zero Sing; (2) mul_3_not_9 (3|a, 9 not divides a): Cosmos+Sat, zero Sing; (3) mul_9 (9|a): Cosmos+Sat+Sing. Algebraic mechanism: Satellite period=8=Pisano(3); Cosmos period=24=Pisano(9). Verified on coprime_to_3={8,13,28,50}, mul_3_not_9={12,15,21}, mul_9={9,27,126,144}. Application: nuclear magic numbers — a=126 uniquely in mul_9 among {8,20,28,50,82,126,184}; Fibonacci F_12=144 first Sing access; FST/Briddell all powers-of-3 and proton a=1836 in mul_9. Cert does NOT claim route proportions, unique (b,e) pairs per orbit, or any Pythagorean F-value claim. Theorem NT compliance: integer arithmetic on (b,e). Checks OAT_1/OAT_2/OAT_3/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
+     "279_qa_orbit_access_theorem",
+     "qa_orbit_access_theorem_cert_v1", True),
     (278, "QA Orbit No-3-Divisor Overclaim Cert family",
      _validate_qa_orbit_no_3_divisor_overclaim_cert_family,
      "QA Orbit No-3-Divisor Overclaim Cert family [278]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for every tested modulus m with 3 not divides m and m >= 7 excluding m = 8, the canonical period-based orbit_family on (b, e, m) finds zero period-8 satellites while the algebraic divisor shortcut orbit_family_divisor_shortcut(b, e, m) over-claims exactly 9 false satellites forming the 3 by 3 grid {(a*(m//3), b*(m//3)) : a, b in {1, 2, 3}}. Causal scope is no_3_divisor (5-factor framing is incidental; non-5-multiple 3 not divides m moduli show the same 9-overclaim pattern). Boundary exception m = 8 excluded from v1 (m // 3 = 2 yields a 4 by 4 grid with 15 overclaims). Pairs with cert [277] to close the divisor shortcut's failure surface ([277] = under-count on 3|m + 5|m, [278] = over-claim on 3 not divides m). Lineage: surfaced during [277] adjacent-regime investigation 2026-05-08; design draft docs/specs/QA_ORBIT_5_FACTOR_NO_3_OVERCLAIM_CERT_DRAFT.md commit 73916f8; promotion under Scope B per Will 2026-05-09. Theorem NT compliance: integer arithmetic on (b, e, m). Checks NO3_1/NO3_2/NO3_3/NO3_4/SRC/F; 8 PASS + 4 FAIL fixtures; self-test ok",

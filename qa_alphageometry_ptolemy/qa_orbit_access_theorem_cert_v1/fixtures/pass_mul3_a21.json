@@ -1,0 +1,12 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_ORBIT_ACCESS_THEOREM_CERT.v1",
+  "fixture_kind": "pass",
+  "a_value": 21,
+  "divisibility_class": "mul_3_not_9",
+  "expected_total_routes": 10,
+  "expected_cosmos": 7,
+  "expected_satellite": 3,
+  "expected_singularity": 0,
+  "note": "a=21 is Fibonacci F_8; 3|21 but 9 not divides 21 (21 mod 9 = 3). Satellite opens but Singularity stays blocked. The 3 Satellite routes are (b=15,e=3), (b=9,e=6), (b=3,e=9) — all with bq in {3,6,9} and eq in {3,6,9} (the mul_3 mod-9 lattice)."
+}

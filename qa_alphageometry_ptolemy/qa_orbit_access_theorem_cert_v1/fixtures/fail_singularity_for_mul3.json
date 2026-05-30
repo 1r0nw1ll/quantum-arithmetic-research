@@ -1,0 +1,12 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_ORBIT_ACCESS_THEOREM_CERT.v1",
+  "fixture_kind": "fail",
+  "expected_fail_type": "SINGULARITY_FOR_MUL3",
+  "a_value": 21,
+  "divisibility_class": "mul_3_not_9",
+  "expected_total_routes": 10,
+  "expected_cosmos": 6,
+  "expected_satellite": 3,
+  "expected_singularity": 1
+}

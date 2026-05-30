@@ -1,0 +1,12 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_ORBIT_ACCESS_THEOREM_CERT.v1",
+  "fixture_kind": "pass",
+  "a_value": 126,
+  "divisibility_class": "mul_9",
+  "expected_total_routes": 62,
+  "expected_cosmos": 42,
+  "expected_satellite": 14,
+  "expected_singularity": 6,
+  "note": "a=126 is the neutron magic number for the last known stable nuclear shell. 9|126 (126=14*9) gives it Satellite and Singularity access; it is the only nuclear magic number in {8,20,28,50,82,126,184} with this property. All others are coprime to 3."
+}

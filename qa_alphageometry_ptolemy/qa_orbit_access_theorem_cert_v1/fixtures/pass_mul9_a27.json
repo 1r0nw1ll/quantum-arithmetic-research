@@ -1,0 +1,12 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_ORBIT_ACCESS_THEOREM_CERT.v1",
+  "fixture_kind": "pass",
+  "a_value": 27,
+  "divisibility_class": "mul_9",
+  "expected_total_routes": 13,
+  "expected_cosmos": 9,
+  "expected_satellite": 3,
+  "expected_singularity": 1,
+  "note": "a=27=3^3, a FST/STF structural integer. 9|27 opens all three orbit classes. The single Singularity route has bq=eq=9 (the fixed point of qa_step). Witnesses the FST baseline regime."
+}

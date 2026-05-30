@@ -1,0 +1,12 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_ORBIT_ACCESS_THEOREM_CERT.v1",
+  "fixture_kind": "pass",
+  "a_value": 28,
+  "divisibility_class": "coprime_to_3",
+  "expected_total_routes": 13,
+  "expected_cosmos": 13,
+  "expected_satellite": 0,
+  "expected_singularity": 0,
+  "note": "a=28 is a nuclear magic number (proton shell closure) coprime to 3 (28 mod 3 = 1); all 13 routes are pure Cosmos. Witnesses that nuclear shell closure does not by itself grant Satellite access."
+}

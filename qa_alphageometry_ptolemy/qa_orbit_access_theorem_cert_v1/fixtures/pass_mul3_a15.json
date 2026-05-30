@@ -1,0 +1,12 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_ORBIT_ACCESS_THEOREM_CERT.v1",
+  "fixture_kind": "pass",
+  "a_value": 15,
+  "divisibility_class": "mul_3_not_9",
+  "expected_total_routes": 7,
+  "expected_cosmos": 5,
+  "expected_satellite": 2,
+  "expected_singularity": 0,
+  "note": "a=15 (3|15, 9 not divides 15, 15 mod 9 = 6); Satellite opens, Singularity absent. Witnesses the mul_3_not_9 branch for 15 mod 9 = 6 (distinct from a=21 mod 9 = 3)."
+}

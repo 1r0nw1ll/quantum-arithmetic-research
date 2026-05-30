@@ -1,0 +1,38 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_ORBIT_ACCESS_THEOREM_CERT.v1",
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "description": "Fixture schema for QA Orbit Access Theorem Cert [279]. Each fixture declares a target a-value and the expected orbit counts from mod-9 route enumeration (all (b,e) with b+2e=a, b>=1, e>=1, A1-reduced). The claim is stratified by gcd(a,3): coprime_to_3 fixtures have zero Satellite and zero Singularity; mul_3_not_9 fixtures have positive Satellite and zero Singularity; mul_9 fixtures have positive Satellite and positive Singularity.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "fixture_kind",
+    "a_value",
+    "divisibility_class",
+    "expected_total_routes",
+    "expected_cosmos",
+    "expected_satellite",
+    "expected_singularity"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "QA_ORBIT_ACCESS_THEOREM_CERT.v1"},
+    "fixture_kind": {"enum": ["pass", "fail"]},
+    "expected_fail_type": {
+      "enum": [
+        "WRONG_SATELLITE_FOR_COPRIME",
+        "SINGULARITY_FOR_MUL3",
+        "ZERO_SATELLITE_FOR_MUL9",
+        "MISSING_FIELD"
+      ]
+    },
+    "a_value": {"type": "integer", "minimum": 3},
+    "divisibility_class": {"enum": ["coprime_to_3", "mul_3_not_9", "mul_9"]},
+    "expected_total_routes": {"type": "integer", "minimum": 0},
+    "expected_cosmos": {"type": "integer", "minimum": 0},
+    "expected_satellite": {"type": "integer", "minimum": 0},
+    "expected_singularity": {"type": "integer", "minimum": 0},
+    "primary_source": {"type": "string"},
+    "note": {"type": "string"}
+  }
+}

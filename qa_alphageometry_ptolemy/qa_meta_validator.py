@@ -7655,6 +7655,37 @@ def _validate_qa_nuclear_magic_orbit_cert_family(base_dir):
     return None
 
 
+def _validate_qa_rt_quadrance_orbit_cert_family(base_dir):
+    """QA RT Quadrance Orbit Divisibility Cert family [283]. Primary source: Wildberger, N. J. (2005). Divine Proportions: Rational Trigonometry to Universal Geometry. Wild Egg Books. ISBN 978-0-9757492-0-8. Chapter 1 defines quadrance Q = dx^2+dy^2. Mechanism: cert [279] (Orbit Access Theorem); orbit_family on (b, e, 9). CLAIM (narrow, falsifiable): for (b,e) in {1,...,9}^2, G = b^2+e^2 has v3(G)=0 (cosmos, G coprime to 3), v3(G)=2 (satellite, G=9k gcd(k,3)=1), v3(G)=4 (singularity, G=162=2*81). Equivalently: v3(G) = 2*v3(gcd(b,e)) for all 81 pairs. Corollary (scope boundary, not certified): spread s=(b1*e2-b2*e1)^2/(G1*G2) is 3-adic-orbit-class-invariant (scale invariance by Lagrange identity); spread denominators carry no orbit-class 3-adic signature. Cert does NOT certify spread denominators. Verified exhaustively all 81 pairs. Theorem NT: G=b*b+e*e is integer arithmetic; v3 and gcd are integer operations. Checks RTQ_1/RTQ_2/RTQ_3/RTQ_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_rt_quadrance_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_rt_quadrance_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_rt_quadrance_orbit_cert_v1/qa_rt_quadrance_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_rt_quadrance_orbit_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_rt_quadrance_orbit_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_rt_quadrance_orbit_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_orbit_index_cert_family(base_dir):
     """QA Fibonacci-Orbit Index Correspondence Cert family [282]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. Mechanism: cert [281] (Pisano-Orbit Correspondence) + cert [279] (Orbit Access Theorem). CLAIM (narrow, falsifiable): for n>=1, the mod-9 orbit class of F_n (as an a-value in route enumeration b+2e=a) is determined solely by n mod 12: mul_9 iff 12|n (9|F_n); mul_3_not_9 iff n==4 or 8 mod 12 (3|F_n, 9 not divides F_n); coprime_to_3 otherwise (3 not divides F_n). Wall (1960): rank of apparition alpha(3)=4 and alpha(9)=12. Verified exhaustively n=1..48 (two full Pisano periods). Cert does NOT claim the correspondence extends to Fibonacci numbers mod m for arbitrary m. Theorem NT: integer recurrence for F_n; mod 9 divisibility check is integer arithmetic. Checks FOI_1/FOI_2/FOI_3/FOI_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
     import subprocess
@@ -8830,6 +8861,11 @@ FAMILY_SWEEPS = [
      "QA-ML Orbit Topology Cert family [276]. Primary source for the GCN architecture under test: Kipf & Welling 2017, Semi-Supervised Classification with Graph Convolutional Networks, ICLR; arxiv:1609.02907. CLAIM (narrow, falsifiable): on QA orbit grids with a non-trivial satellite class (orbit period 8 under qa_orbit_rules.qa_step), a 2-layer plain-torch GCN over the symmetric-normalized QA generator adjacency built from sigma, mu, lambda_2, nu lifts node-classification macro F1 by at least +0.10 over an identity-adjacency ablation, holding node features (qa_full packet b,e,d,a,C,F,G,phi_b,phi_e with phi=mod m//3), architecture, seeds, and standardization fixed. Verified empirically for m in {9,12,15,18,21,24,27,30,36} at train_fraction=0.30, 20 seeds, 300 epochs, hidden=32, lr=0.01, weight_decay=5e-4. Sources: experiments/qa_ml/03_gnn_modulus_sweep.py + benchmark_protocol_v2_modulus_sweep.json + results_gnn_modulus_sweep.json (results_ledger_v2_modulus_sweep.jsonl); qa_orbit_rules.py (canonical orbit family + period via qa_step, A1-compliant); tools.qa_ml.qa_generators (sigma, mu, lambda_2, nu); tools.qa_ml.qa_graph (build_edges, dense_adjacency, gcn_normalize). Lineage: experiment v1 sample-efficiency benchmark showed polynomial QA expansion alone is weak; v2 GCN benchmark showed graph helps on mod-24; this cert grounds the multi-modulus sweep. Theorem NT compliance: integer features and integer-built adjacency on the QA side; torch GCN observer on the float side; no float feedback into the QA layer. Auxiliary boundary observation NOT certified here, certified separately in cert [277]: qa_orbit_rules.orbit_family algebraic divisor shortcut under-counts period-8 pairs for m in {15, 30}. Cert does NOT prove orbit-class learnability for arbitrary m, does NOT certify GCN training stability, does NOT cover stochastic random graphs, and does NOT extend to non-period-8 satellite classes. Checks ORBT_1/ORBT_2/ORBT_3/ORBT_4/SRC/F; 2 PASS + 2 FAIL fixtures; self-test ok",
      "276_qa_ml_orbit_topology",
      "qa_ml_orbit_topology_cert_v1", True),
+    (283, "QA RT Quadrance Orbit Divisibility Cert family",
+     _validate_qa_rt_quadrance_orbit_cert_family,
+     "QA RT Quadrance Orbit Divisibility Cert family [283]. Primary source: Wildberger (2005), Divine Proportions, Wild Egg Books, ISBN 978-0-9757492-0-8. Mechanism: cert [279] (Orbit Access Theorem). CLAIM (narrow, falsifiable): for (b,e) in {1,...,9}^2, G=b^2+e^2 has v3(G)=0 (cosmos), v3(G)=2 (satellite), v3(G)=4 (singularity). Equivalently v3(G)=2*v3(gcd(b,e)) for all 81 pairs. Note: spread s=(b1*e2-b2*e1)^2/(G1*G2) is orbit-class-invariant under 3-adic scaling (Lagrange identity); spread denominators carry no orbit-class 3-adic signature. Cert does NOT certify spread denominator structure. Verified exhaustively. Theorem NT: G=b*b+e*e integer; v3 and gcd are integer operations. Checks RTQ_1/RTQ_2/RTQ_3/RTQ_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
+     "283_qa_rt_quadrance_orbit",
+     "qa_rt_quadrance_orbit_cert_v1", True),
     (282, "QA Fibonacci-Orbit Index Correspondence Cert family",
      _validate_qa_fibonacci_orbit_index_cert_family,
      "QA Fibonacci-Orbit Index Correspondence Cert family [282]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. Mechanism: cert [281] (Pisano-Orbit) + cert [279] (Orbit Access). CLAIM (narrow, falsifiable): the mod-9 orbit class of F_n as an a-value is determined solely by n mod 12: mul_9 iff 12|n; mul_3_not_9 iff n==4 or 8 mod 12; coprime_to_3 otherwise. Wall (1960) rank of apparition: alpha(3)=4 (3|F_n iff 4|n), alpha(9)=12 (9|F_n iff 12|n). Corollary of cert [281]: Pisano period of 9 is 24; within each period mul_9 at pos==0 mod 12, mul_3_not_9 at pos==4 or 8 mod 12. Verified n=1..48. Notable cases: F_12=144=9x16 (first mul_9 Fibonacci); F_4=3 (first mul_3_not_9). Cert does NOT extend to arbitrary mod m. Theorem NT: integer recurrence F_n; integer divisibility check. Checks FOI_1/FOI_2/FOI_3/FOI_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",

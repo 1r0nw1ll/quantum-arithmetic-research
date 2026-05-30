@@ -1,0 +1,48 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "primary_source": "Wildberger, N. J. (2005). Divine Proportions: Rational Trigonometry to Universal Geometry. Wild Egg Books. ISBN 978-0-9757492-0-8.",
+  "title": "QA RT Quadrance Orbit Divisibility Cert fixture schema [283]",
+  "description": "Fixtures for qa_rt_quadrance_orbit_cert_v1. Each fixture specifies a QA direction pair (b,e), the quadrance G=b^2+e^2, the orbit family, and the expected 3-adic valuation v3(G). Claim: v3(G) = 2*v3(gcd(b,e)) = {0 for cosmos, 2 for satellite, 4 for singularity}.",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "b_value", "e_value", "expected_quadrance", "expected_family"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "QA_RT_QUADRANCE_ORBIT_CERT.v1"
+    },
+    "fixture_kind": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "primary_source": {
+      "type": "string"
+    },
+    "b_value": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9
+    },
+    "e_value": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 9
+    },
+    "expected_quadrance": {
+      "type": "integer",
+      "minimum": 2
+    },
+    "expected_family": {
+      "type": "string",
+      "enum": ["cosmos", "satellite", "singularity"]
+    },
+    "expected_fail_type": {
+      "type": "string",
+      "enum": [
+        "MISSING_FIELD",
+        "WRONG_FAMILY",
+        "WRONG_QUADRANCE"
+      ]
+    }
+  }
+}

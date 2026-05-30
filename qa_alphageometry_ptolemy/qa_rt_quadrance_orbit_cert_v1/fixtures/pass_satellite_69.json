@@ -1,0 +1,9 @@
+{
+  "primary_source": "Wildberger, N. J. (2005). Divine Proportions: Rational Trigonometry to Universal Geometry. Wild Egg Books. ISBN 978-0-9757492-0-8.",
+  "schema_version": "QA_RT_QUADRANCE_ORBIT_CERT.v1",
+  "fixture_kind": "pass",
+  "b_value": 6,
+  "e_value": 9,
+  "expected_quadrance": 117,
+  "expected_family": "satellite"
+}

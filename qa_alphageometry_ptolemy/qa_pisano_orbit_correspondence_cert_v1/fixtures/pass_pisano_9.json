@@ -1,0 +1,8 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly, 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_PISANO_ORBIT_CORRESPONDENCE_CERT.v1",
+  "fixture_kind": "pass",
+  "fixture_type": "pisano_period",
+  "pisano_k": 9,
+  "expected_pisano_period": 24
+}

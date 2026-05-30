@@ -7655,6 +7655,37 @@ def _validate_qa_nuclear_magic_orbit_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pisano_orbit_correspondence_cert_family(base_dir):
+    """QA Pisano-Orbit Correspondence Cert family [281]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. Mechanism: QA Orbit Access Theorem cert [279]. CLAIM (narrow, falsifiable): for m=9, under qa_step(b,e)=(e,((b+e-1)%9)+1), the orbit period of every (b,e) in {1,...,9}^2 is exactly: Singularity (fixed point (9,9)) period=1; Satellite (8 pairs) period=8=pi(3); Cosmos (72 pairs) period=24=pi(9). Pisano period pi(k) = smallest i>0 with F_i=0 and F_{i+1}=1 mod k (Wall 1960, Section 3). Verified exhaustively: all 81 pairs checked; pi(3)=8, pi(9)=24 confirmed via Fibonacci recurrence. Cert does NOT claim the correspondence extends to arbitrary m or certify mod-24 QA period structure. Grounding for cert [279]: orbit classes are reachable based on gcd(a,3); cert [281] explains WHY via Pisano periods. Theorem NT compliance: integer arithmetic on (b, e); Fibonacci recurrence mod k is integer. Checks POC_1/POC_2/POC_3/POC_4/POC_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_pisano_orbit_correspondence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pisano_orbit_correspondence_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pisano_orbit_correspondence_cert_v1/qa_pisano_orbit_correspondence_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pisano_orbit_correspondence_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_pisano_orbit_correspondence_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_pisano_orbit_correspondence_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_orbit_access_theorem_cert_family(base_dir):
     """QA Orbit Access Theorem Cert family [279]. Primary source for Pisano-period framing: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. Canonical orbit classifier: qa_orbit_rules.orbit_family on (b, e, m), commit e7b2af0. CLAIM (narrow, falsifiable): for mod-9 route enumeration (all (b, e) with b+2e=a, b>=1, e>=1, A1-reduced), the orbit classes reachable for a are determined exclusively by gcd(a, 3): (1) coprime_to_3 (gcd(a,3)=1): all routes Cosmos, zero Satellite, zero Singularity; (2) mul_3_not_9 (3|a and 9 not divides a): Cosmos + Satellite, zero Singularity; (3) mul_9 (9|a): Cosmos + Satellite + Singularity. Algebraic mechanism: Satellite period=8=Pisano(3); Cosmos period=24=Pisano(9). Verified on corpus: coprime_to_3={8,13,28,50}, mul_3_not_9={12,15,21}, mul_9={9,27,126,144}. Application domains: nuclear magic numbers (a=126 uniquely Sat+Sing among {8,20,28,50,82,126,184}); Fibonacci (F_12=144 first Sing access); FST/Briddell (all STF powers of 3 and proton a=1836 in mul_9). Theorem NT compliance: integer arithmetic on (b, e). Checks OAT_1/OAT_2/OAT_3/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
     import subprocess
@@ -8768,6 +8799,11 @@ FAMILY_SWEEPS = [
      "QA-ML Orbit Topology Cert family [276]. Primary source for the GCN architecture under test: Kipf & Welling 2017, Semi-Supervised Classification with Graph Convolutional Networks, ICLR; arxiv:1609.02907. CLAIM (narrow, falsifiable): on QA orbit grids with a non-trivial satellite class (orbit period 8 under qa_orbit_rules.qa_step), a 2-layer plain-torch GCN over the symmetric-normalized QA generator adjacency built from sigma, mu, lambda_2, nu lifts node-classification macro F1 by at least +0.10 over an identity-adjacency ablation, holding node features (qa_full packet b,e,d,a,C,F,G,phi_b,phi_e with phi=mod m//3), architecture, seeds, and standardization fixed. Verified empirically for m in {9,12,15,18,21,24,27,30,36} at train_fraction=0.30, 20 seeds, 300 epochs, hidden=32, lr=0.01, weight_decay=5e-4. Sources: experiments/qa_ml/03_gnn_modulus_sweep.py + benchmark_protocol_v2_modulus_sweep.json + results_gnn_modulus_sweep.json (results_ledger_v2_modulus_sweep.jsonl); qa_orbit_rules.py (canonical orbit family + period via qa_step, A1-compliant); tools.qa_ml.qa_generators (sigma, mu, lambda_2, nu); tools.qa_ml.qa_graph (build_edges, dense_adjacency, gcn_normalize). Lineage: experiment v1 sample-efficiency benchmark showed polynomial QA expansion alone is weak; v2 GCN benchmark showed graph helps on mod-24; this cert grounds the multi-modulus sweep. Theorem NT compliance: integer features and integer-built adjacency on the QA side; torch GCN observer on the float side; no float feedback into the QA layer. Auxiliary boundary observation NOT certified here, certified separately in cert [277]: qa_orbit_rules.orbit_family algebraic divisor shortcut under-counts period-8 pairs for m in {15, 30}. Cert does NOT prove orbit-class learnability for arbitrary m, does NOT certify GCN training stability, does NOT cover stochastic random graphs, and does NOT extend to non-period-8 satellite classes. Checks ORBT_1/ORBT_2/ORBT_3/ORBT_4/SRC/F; 2 PASS + 2 FAIL fixtures; self-test ok",
      "276_qa_ml_orbit_topology",
      "qa_ml_orbit_topology_cert_v1", True),
+    (281, "QA Pisano-Orbit Correspondence Cert family",
+     _validate_qa_pisano_orbit_correspondence_cert_family,
+     "QA Pisano-Orbit Correspondence Cert family [281]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. Mechanism: cert [279] (Orbit Access Theorem). CLAIM (narrow, falsifiable): for m=9, under qa_step(b,e)=(e,((b+e-1)%9)+1), orbit periods are: Singularity period=1; Satellite period=8=pi(3); Cosmos period=24=pi(9). pi(k)=smallest i>0 with F_i=0, F_{i+1}=1 mod k. Verified exhaustively on all 81 pairs in {1,...,9}^2; pi(3)=8 and pi(9)=24 confirmed via Fibonacci recurrence. Grounding for cert [279]: orbit classes are reachable by gcd(a,3) because the Satellite cycle IS the Pisano period of 3 and the Cosmos cycle IS the Pisano period of 9. Cert does NOT claim the correspondence extends to arbitrary m. Theorem NT: integer arithmetic on (b,e); Fibonacci recurrence mod k is integer. Checks POC_1/POC_2/POC_3/POC_4/POC_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
+     "281_qa_pisano_orbit_correspondence",
+     "qa_pisano_orbit_correspondence_cert_v1", True),
     (280, "QA Nuclear Magic Orbit Cert family",
      _validate_qa_nuclear_magic_orbit_cert_family,
      "QA Nuclear Magic Orbit Cert family [280]. Primary sources: Mayer (1949) DOI:10.1103/PhysRev.75.1969; Haxel/Jensen/Suess (1949) DOI:10.1103/PhysRev.75.1766.2. Mechanism: cert [279] (Wall 1960 Pisano). CLAIM (narrow, falsifiable): canonical nuclear magic numbers {2,8,20,28,50,82,126,184} partition into (A) a=2: zero routes; (B) {8,20,28,50,82,184}: coprime to 3, pure Cosmos, zero Sat, zero Sing; (C) a=126=14*9: 62 routes — 42 Cosmos, 14 Satellite, 6 Singularity — uniquely divisible by 3 in the set. Cert does NOT claim QA explains shell closure or predicts binding energy. Theorem NT: integer arithmetic on (b,e). Checks NMO_1/NMO_2/NMO_3/NMO_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",

@@ -595,6 +595,71 @@ def qa_fermat_factor(F: int, limit: int = 100000, use_pruning: bool = True) -> s
     return factors
 
 
+def qa_pollard_rho(F: int, limit: int = 50000, seed: int = 2, c: int = 1) -> set[int]:
+    """Pollard's rho (Brent variant) — finds one factor of F up to ~10^9 in microseconds.
+
+    Faster than MPQS for unbalanced F = p*q where p < 10^8 and p >> sqrt(F).
+    QA context: F is a Pythagorean semiprime; this bridges trial division and MPQS.
+    """
+    if F <= 1:
+        return set()
+    if F % 2 == 0:
+        return ({2, F // 2}) if F > 2 else set()
+
+    y = seed % F or 1
+    r = 1
+    q = 1
+    g = 1
+    ys = y
+    x = y
+    steps = 0
+
+    while g == 1:
+        x = y
+        for _ in range(r):
+            y = (y * y + c) % F
+        k = 0
+        while k < r and g == 1:
+            ys = y
+            m = min(128, r - k)
+            for _ in range(m):
+                y = (y * y + c) % F
+                q = q * abs(x - y) % F
+            g = math.gcd(q, F)
+            k += m
+            steps += m
+            if steps >= limit:
+                return set()
+        r *= 2
+
+    if g == F:
+        # q collapsed to 0 (gcd shortcut hit F); backtrack one step at a time
+        g = 1
+        while g == 1:
+            ys = (ys * ys + c) % F
+            g = math.gcd(abs(x - ys), F)
+            steps += 1
+            if steps >= limit:
+                return set()
+
+    if 1 < g < F:
+        return {g, F // g}
+    return set()
+
+
+def qa_pollard_factor(F: int, limit: int = 200000) -> set[int]:
+    """Try multiple (seed, c) pairs; seeds drawn from QA orbit residues for F%24."""
+    valid_residues = sorted(_VALID_D_RESIDUES.get(F % 24, frozenset(range(24))))
+    seeds = [r for r in valid_residues if r > 1][:4] or [2, 3, 5, 7]
+    per_attempt = max(1000, limit // (len(seeds) * 3))
+    for c in (1, 2, 5):
+        for seed in seeds:
+            result = qa_pollard_rho(F, limit=per_attempt, seed=seed, c=c)
+            if result:
+                return result
+    return set()
+
+
 def factor_over_base(value: int, factor_base: list[int]) -> tuple[bool, list[int], int]:
     remaining = value
     exponents = []
@@ -1790,7 +1855,8 @@ def derive_from_f_qa_mpqs_auto(
 ) -> dict[str, Any]:
     # QA-Fermat fast path: for Pythagorean F = d²-e² with balanced factors
     # (d ≈ sqrt(F)), this finds the answer in O(e / orbit_pruning_factor) steps.
-    fermat_factors = qa_fermat_factor(F, limit=500000)
+    # Limit 20000 keeps overhead < 4ms for unbalanced cases that fall through to Pollard.
+    fermat_factors = qa_fermat_factor(F, limit=20000)
     if fermat_factors:
         all_primes: list[int] = []
         for p in fermat_factors:
@@ -1806,6 +1872,32 @@ def derive_from_f_qa_mpqs_auto(
             "qa_engine": {
                 "factors_found": factors_sorted,
                 "fermat_fast_path": True,
+                "auto_attempts": [],
+                "auto_parameters": None,
+                "auto_success": True,
+            },
+            "primitive_only": primitive_only,
+        }
+
+    # Pollard's rho: fast for unbalanced F = p*q where p < ~10^9 and p >> sqrt(F).
+    # Fills the gap between trial division (≤50) and MPQS (all sizes, 0.3-1s+).
+    rho_factors = qa_pollard_factor(F, limit=200000)
+    if rho_factors:
+        all_primes: list[int] = []
+        for p in rho_factors:
+            if 1 < p < F:
+                all_primes.extend(prime_factors_trial(p))
+        factors_sorted = sorted(set(all_primes))
+        candidates = triples_from_factorization(F, factors_sorted, primitive_only, "qa_mpqs_auto")
+        return {
+            "F": F,
+            "candidate_count": len(candidates),
+            "candidates": candidates,
+            "method": "qa_mpqs_auto",
+            "qa_engine": {
+                "factors_found": factors_sorted,
+                "pollard_rho_fast_path": True,
+                "fermat_fast_path": False,
                 "auto_attempts": [],
                 "auto_parameters": None,
                 "auto_success": True,

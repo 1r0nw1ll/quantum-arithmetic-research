@@ -1,0 +1,40 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_NUCLEAR_MAGIC_ORBIT_CERT.v1",
+  "primary_source": "Mayer, M. G. (1949). On Closed Shells in Nuclei. Physical Review, 75(12), 1969-1970. DOI: 10.1103/PhysRev.75.1969. Haxel, O., Jensen, J. H. D., & Suess, H. E. (1949). On the Magic Numbers in Nuclear Structure. Physical Review, 75(11), 1766. DOI: 10.1103/PhysRev.75.1766.2.",
+  "description": "Fixture schema for QA Nuclear Magic Orbit Cert [280]. Each fixture identifies one or more nuclear magic numbers and their expected orbit counts under mod-9 route enumeration.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "fixture_kind",
+    "a_value",
+    "magic_number_class",
+    "expected_total_routes",
+    "expected_cosmos",
+    "expected_satellite",
+    "expected_singularity"
+  ],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": "QA_NUCLEAR_MAGIC_ORBIT_CERT.v1"},
+    "fixture_kind": {"enum": ["pass", "fail"]},
+    "expected_fail_type": {
+      "enum": [
+        "WRONG_SATELLITE_FOR_COPRIME",
+        "WRONG_COUNTS_FOR_MUL9",
+        "SINGULARITY_FOR_COPRIME",
+        "MISSING_FIELD"
+      ]
+    },
+    "a_value": {"type": "integer", "minimum": 1},
+    "magic_number_class": {
+      "enum": ["no_routes", "coprime_to_3", "mul_9"]
+    },
+    "expected_total_routes": {"type": "integer", "minimum": 0},
+    "expected_cosmos": {"type": "integer", "minimum": 0},
+    "expected_satellite": {"type": "integer", "minimum": 0},
+    "expected_singularity": {"type": "integer", "minimum": 0},
+    "primary_source": {"type": "string"},
+    "note": {"type": "string"}
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "primary_source": "Mayer, M. G. (1949). On Closed Shells in Nuclei. Physical Review, 75(12), 1969-1970. DOI: 10.1103/PhysRev.75.1969.",
+  "schema_version": "QA_NUCLEAR_MAGIC_ORBIT_CERT.v1",
+  "fixture_kind": "pass",
+  "a_value": 50,
+  "magic_number_class": "coprime_to_3",
+  "expected_total_routes": 24,
+  "expected_cosmos": 24,
+  "expected_satellite": 0,
+  "expected_singularity": 0,
+  "note": "a=50 is coprime to 3 (50 mod 3=2). 24 routes, all Cosmos. Note that 24 equals the Cosmos cycle length — the total route count coincidentally matches the Cosmos period for this value."
+}

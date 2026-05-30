@@ -1,0 +1,12 @@
+{
+  "primary_source": "Mayer, M. G. (1949). On Closed Shells in Nuclei. Physical Review, 75(12), 1969-1970. DOI: 10.1103/PhysRev.75.1969.",
+  "schema_version": "QA_NUCLEAR_MAGIC_ORBIT_CERT.v1",
+  "fixture_kind": "pass",
+  "a_value": 8,
+  "magic_number_class": "coprime_to_3",
+  "expected_total_routes": 3,
+  "expected_cosmos": 3,
+  "expected_satellite": 0,
+  "expected_singularity": 0,
+  "note": "a=8 is coprime to 3 (8 mod 3=2). 3 routes: (6,1),(4,2),(2,3). All Cosmos. The Satellite cycle length is 8, yet a=8 itself yields zero Satellite routes — the period governs dynamics, not route reachability."
+}

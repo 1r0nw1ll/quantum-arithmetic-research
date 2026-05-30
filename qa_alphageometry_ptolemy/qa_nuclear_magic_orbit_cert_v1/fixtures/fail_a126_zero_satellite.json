@@ -1,0 +1,12 @@
+{
+  "primary_source": "Mayer, M. G. (1949). On Closed Shells in Nuclei. Physical Review, 75(12), 1969-1970. DOI: 10.1103/PhysRev.75.1969.",
+  "schema_version": "QA_NUCLEAR_MAGIC_ORBIT_CERT.v1",
+  "fixture_kind": "fail",
+  "expected_fail_type": "WRONG_COUNTS_FOR_MUL9",
+  "a_value": 126,
+  "magic_number_class": "mul_9",
+  "expected_total_routes": 62,
+  "expected_cosmos": 62,
+  "expected_satellite": 0,
+  "expected_singularity": 0
+}

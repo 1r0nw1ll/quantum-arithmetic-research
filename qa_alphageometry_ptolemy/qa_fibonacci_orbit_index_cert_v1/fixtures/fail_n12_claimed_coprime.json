@@ -1,0 +1,9 @@
+{
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly, 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "schema_version": "QA_FIBONACCI_ORBIT_INDEX_CERT.v1",
+  "fixture_kind": "fail",
+  "expected_fail_type": "WRONG_CLASS_COPRIME",
+  "fibonacci_index": 12,
+  "fibonacci_value": 144,
+  "expected_class": "coprime_to_3"
+}

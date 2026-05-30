@@ -1,0 +1,43 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "primary_source": "Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly, 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541.",
+  "title": "QA Fibonacci-Orbit Index Correspondence Cert fixture schema [282]",
+  "description": "Fixtures for qa_fibonacci_orbit_index_cert_v1. Each fixture specifies a Fibonacci index n, the exact value F_n, and the expected orbit class under mod-9 route enumeration. Class is determined by n mod 12: mul_9 iff 12|n; mul_3_not_9 iff n==4 or 8 mod 12; coprime_to_3 otherwise.",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "fibonacci_index", "fibonacci_value", "expected_class"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {
+      "type": "string",
+      "const": "QA_FIBONACCI_ORBIT_INDEX_CERT.v1"
+    },
+    "fixture_kind": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "primary_source": {
+      "type": "string"
+    },
+    "fibonacci_index": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "fibonacci_value": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "expected_class": {
+      "type": "string",
+      "enum": ["coprime_to_3", "mul_3_not_9", "mul_9"]
+    },
+    "expected_fail_type": {
+      "type": "string",
+      "enum": [
+        "MISSING_FIELD",
+        "WRONG_CLASS_COPRIME",
+        "WRONG_CLASS_MUL3",
+        "WRONG_CLASS_MUL9"
+      ]
+    }
+  }
+}

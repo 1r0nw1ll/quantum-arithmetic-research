@@ -552,6 +552,49 @@ def derive_from_f_geometric_sieve(
     }
 
 
+# QA orbit pruning for Fermat sieve: which d%24 values can satisfy d²-e²≡F (mod 24)?
+_VALID_D_RESIDUES: dict[int, frozenset[int]] = {
+    f: frozenset(
+        d % 24
+        for d in range(24)
+        for e in range(24)
+        if (d * d - e * e) % 24 == f
+    )
+    for f in range(24)
+}
+
+
+def qa_fermat_factor(F: int, limit: int = 100000, use_pruning: bool = True) -> set[int]:
+    """QA-Fermat: find factors of F = d²-e² by scanning d from ceil(sqrt(F)).
+
+    Checks is_square(d²-F) for each candidate d. With QA orbit pruning, only
+    d values in the valid residue class for F%24 are checked — 2-12× fewer
+    candidates depending on F%24.
+    """
+    if F <= 1:
+        return set()
+    d = math.isqrt(F)
+    if d * d < F:
+        d += 1
+    valid = _VALID_D_RESIDUES.get(F % 24, frozenset(range(24))) if use_pruning else frozenset(range(24))
+    factors: set[int] = set()
+    checked = 0
+    while checked < limit:
+        if d % 24 in valid or not use_pruning:
+            v = d * d - F
+            if v > 0:
+                sq, e = is_square(v)
+                if sq:
+                    b, a = d - e, d + e
+                    if 1 < b < F:
+                        factors.add(b)
+                        factors.add(a)
+                        return factors
+            checked += 1
+        d += 1
+    return factors
+
+
 def factor_over_base(value: int, factor_base: list[int]) -> tuple[bool, list[int], int]:
     remaining = value
     exponents = []
@@ -852,6 +895,20 @@ def _expand_combo(nv: int, combo_matrix: list[int]) -> int:
     return result
 
 
+def prime_factors_trial(n: int) -> list[int]:
+    """Return all prime factors of n via trial division (small n only)."""
+    primes = []
+    d = 2
+    while d * d <= n:
+        while n % d == 0:
+            primes.append(d)
+            n //= d
+        d += 1
+    if n > 1:
+        primes.append(n)
+    return primes
+
+
 def divisors_from_known_factors(factors: list[int]) -> list[int]:
     divisors = {1}
     for factor in factors:
@@ -1027,6 +1084,45 @@ def derive_from_f_qa_qs(
     if F <= 1:
         raise ValueError("F must be an integer greater than 1")
 
+    # QA-Fermat fast path: d²-F = e² at d ≈ sqrt(F) solves Pythagorean problems
+    # in O(e / pruning_factor) steps; works instantly when factors are balanced.
+    fermat_factors = qa_fermat_factor(F, limit=interval)
+    if fermat_factors:
+        # Fully factor each discovered component so triples_from_factorization
+        # gets all prime factors, not just the top-level divisor pair.
+        all_primes: list[int] = []
+        for p in fermat_factors:
+            if 1 < p < F:
+                all_primes.extend(prime_factors_trial(p))
+        factors_sorted = sorted(set(all_primes))
+        candidates = triples_from_factorization(
+            F, factors_sorted, primitive_only, "qa_quadratic_sieve"
+        )
+        return {
+            "F": F,
+            "candidate_count": len(candidates),
+            "candidates": candidates,
+            "method": "qa_quadratic_sieve",
+            "qa_engine": {
+                "polynomial": "Q(d)=d*d-F",
+                "factor_base_bound": factor_base_bound,
+                "factor_base": [],
+                "direct_factors": factors_sorted,
+                "interval": interval,
+                "start_d": math.isqrt(F) + (0 if (math.isqrt(F) ** 2) >= F else 1),
+                "log_tolerance": log_tolerance,
+                "log_candidates": 0,
+                "skipped_by_log": 0,
+                "tested_after_sieve": 0,
+                "smooth_relations": 0,
+                "dependencies_checked": 0,
+                "factors_found": factors_sorted,
+                "fermat_fast_path": True,
+                "relation_sets": [],
+            },
+            "primitive_only": primitive_only,
+        }
+
     factor_base = []
     roots_by_prime = {}
     direct_factors = set()
@@ -1065,6 +1161,15 @@ def derive_from_f_qa_qs(
         d = start + index
         q_value = d*d - F
         if q_value <= 0:
+            continue
+        # Perfect squares (e.g. q=1 when d=ceil(sqrt(F))) have sieve_hits=0
+        # but are trivially smooth — handle them before the log gate.
+        sq, e_val = is_square(q_value)
+        if sq and e_val > 0:
+            b, a = d - e_val, d + e_val
+            if 1 < b < F:
+                direct_factors.add(b)
+                direct_factors.add(a)
             continue
         if sieve_hits[index] == 0:
             skipped_by_log += 1
@@ -1683,6 +1788,31 @@ def derive_from_f_qa_mpqs_auto(
     primitive_only: bool = False,
     log_tolerance: float = 1.5,
 ) -> dict[str, Any]:
+    # QA-Fermat fast path: for Pythagorean F = d²-e² with balanced factors
+    # (d ≈ sqrt(F)), this finds the answer in O(e / orbit_pruning_factor) steps.
+    fermat_factors = qa_fermat_factor(F, limit=500000)
+    if fermat_factors:
+        all_primes: list[int] = []
+        for p in fermat_factors:
+            if 1 < p < F:
+                all_primes.extend(prime_factors_trial(p))
+        factors_sorted = sorted(set(all_primes))
+        candidates = triples_from_factorization(F, factors_sorted, primitive_only, "qa_mpqs_auto")
+        return {
+            "F": F,
+            "candidate_count": len(candidates),
+            "candidates": candidates,
+            "method": "qa_mpqs_auto",
+            "qa_engine": {
+                "factors_found": factors_sorted,
+                "fermat_fast_path": True,
+                "auto_attempts": [],
+                "auto_parameters": None,
+                "auto_success": True,
+            },
+            "primitive_only": primitive_only,
+        }
+
     attempts = []
     last_result = None
     for profile in mpqs_parameter_profiles(F):

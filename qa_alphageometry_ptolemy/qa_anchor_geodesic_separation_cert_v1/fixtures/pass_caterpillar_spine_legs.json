@@ -1,0 +1,41 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 and Cormen (2009) Introduction to Algorithms MIT Press ISBN 978-0-262-03384-8 Ch.22 BFS. -->",
+  "description": "Caterpillar: spine S0-S1-S2-S3 with legs S1L0 and S2L0. Anchors S0/S3. Spine is on-path. Legs are off-path leaves (score=1).",
+  "adjacency": {
+    "S0": [
+      "S1"
+    ],
+    "S1": [
+      "S0",
+      "S2",
+      "S1L0"
+    ],
+    "S2": [
+      "S1",
+      "S3",
+      "S2L0"
+    ],
+    "S3": [
+      "S2"
+    ],
+    "S1L0": [
+      "S1"
+    ],
+    "S2L0": [
+      "S2"
+    ]
+  },
+  "anchor_L": "S0",
+  "anchor_R": "S3",
+  "on_path_nodes": [
+    "S0",
+    "S1",
+    "S2",
+    "S3"
+  ],
+  "off_path_nodes": [
+    "S1L0",
+    "S2L0"
+  ],
+  "expected": "PASS"
+}

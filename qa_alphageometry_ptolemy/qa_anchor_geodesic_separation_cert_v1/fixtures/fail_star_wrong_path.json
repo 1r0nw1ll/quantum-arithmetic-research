@@ -1,0 +1,40 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 and Cormen (2009) Introduction to Algorithms MIT Press ISBN 978-0-262-03384-8 Ch.22 BFS. -->",
+  "description": "Star with 5 leaves. Anchors L0/L4. Claims all leaves are on-path which is wrong (only L0, C, L4 are on-path). F check fails.",
+  "adjacency": {
+    "C": [
+      "L0",
+      "L1",
+      "L2",
+      "L3",
+      "L4"
+    ],
+    "L0": [
+      "C"
+    ],
+    "L1": [
+      "C"
+    ],
+    "L2": [
+      "C"
+    ],
+    "L3": [
+      "C"
+    ],
+    "L4": [
+      "C"
+    ]
+  },
+  "anchor_L": "L0",
+  "anchor_R": "L4",
+  "on_path_nodes": [
+    "L0",
+    "C",
+    "L1",
+    "L2",
+    "L3",
+    "L4"
+  ],
+  "off_path_nodes": [],
+  "expected": "FAIL"
+}

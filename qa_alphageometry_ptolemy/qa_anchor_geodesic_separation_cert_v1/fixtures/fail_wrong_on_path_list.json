@@ -1,0 +1,35 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 and Cormen (2009) Introduction to Algorithms MIT Press ISBN 978-0-262-03384-8 Ch.22 BFS. -->",
+  "description": "Claims B1 is on-path but it is off-path. Fixture F check must FAIL.",
+  "adjacency": {
+    "P0": [
+      "P1"
+    ],
+    "P1": [
+      "P0",
+      "P2",
+      "B1"
+    ],
+    "P2": [
+      "P1",
+      "P3"
+    ],
+    "P3": [
+      "P2"
+    ],
+    "B1": [
+      "P1"
+    ]
+  },
+  "anchor_L": "P0",
+  "anchor_R": "P3",
+  "on_path_nodes": [
+    "P0",
+    "P1",
+    "B1",
+    "P2",
+    "P3"
+  ],
+  "off_path_nodes": [],
+  "expected": "FAIL"
+}

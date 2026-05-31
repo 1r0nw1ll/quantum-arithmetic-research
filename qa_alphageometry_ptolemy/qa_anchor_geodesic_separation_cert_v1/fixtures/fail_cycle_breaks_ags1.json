@@ -1,0 +1,31 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 and Cormen (2009) Introduction to Algorithms MIT Press ISBN 978-0-262-03384-8 Ch.22 BFS. -->",
+  "description": "5-cycle P0-P1-P2-P3-P4-P0, anchors P0/P2. NOT a tree. Nodes P3 and P4 are equidistant from both anchors; edge P0-P4 has \u0394b=1, \u0394e=0 and edge P2-P3 has \u0394b=0, \u0394e=1. AGS_1 fails because \u0394 values include 0, violating the \u00b11 tree property.",
+  "adjacency": {
+    "P0": [
+      "P1",
+      "P4"
+    ],
+    "P1": [
+      "P0",
+      "P2"
+    ],
+    "P2": [
+      "P1",
+      "P3"
+    ],
+    "P3": [
+      "P2",
+      "P4"
+    ],
+    "P4": [
+      "P3",
+      "P0"
+    ]
+  },
+  "anchor_L": "P0",
+  "anchor_R": "P2",
+  "on_path_nodes": [],
+  "off_path_nodes": [],
+  "expected": "FAIL"
+}

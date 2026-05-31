@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [288] | [QA Anchor Geodesic Separation](288_qa_anchor_geodesic_separation.md) | In any tree, edge Δb·Δe=−1 iff on L-R path, +1 iff off path; qa_monotone_dir_score counts off-path incident edges; score=0 iff node is non-junction on-path; degree naturally embedded; drives AUROC=0.7779 on graph anomaly benchmark | PASS |
 | [287] | [QA Mod-24 Quadrance 2-adic Signature](287_qa_mod24_quadrance_v2_signature.md) | v₂(b²+e²) = 2·min(v₂(b),v₂(e)) + δ where δ=1 iff v₂(b)=v₂(e) (diagonal enhancement from odd squares ≡1 mod 8); orbit class separates: cosmos→v₂(G)≤5, satellite/singularity→v₂(G)≥6; contrasts mod-9 cert [283] where no δ term (1+1=2 coprime to 3); exhaustive 576 pairs | PASS |
 | [286] | [QA I Ching Hexagram Orbit](286_qa_iching_hexagram_orbit.md) | 64 hexagrams as code=lower+8×upper; 8≡−1 mod 9 gives code mod 9=(lower−upper) mod 9; doubled-trigram hexagrams (lower=upper) are the 7 Singularity-access codes; 1 A1-excluded + 7 Singularity + 14 Satellite + 42 Cosmos | PASS |
 | [285] | [QA I Ching Trigram Orbit](285_qa_iching_trigram_orbit.md) | 8 trigrams as 3-bit integers (LSB=bottom, solid=1): Kun=0 A1-excluded; Dui=3 and Xun=6 Satellite; max=7<9 so Singularity structurally absent; 5 codes Cosmos-only | PASS |

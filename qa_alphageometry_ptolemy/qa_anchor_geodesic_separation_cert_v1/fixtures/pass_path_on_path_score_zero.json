@@ -1,0 +1,16 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 and Cormen (2009) Introduction to Algorithms MIT Press ISBN 978-0-262-03384-8 Ch.22 BFS. -->",
+  "description": "Path P0-P1-P2-P3-P4, anchors P0/P4. All nodes on L-R path, all edges on-path (product=-1), all monotone_dir_scores=0.",
+  "adjacency": {
+    "P0": ["P1"],
+    "P1": ["P0", "P2"],
+    "P2": ["P1", "P3"],
+    "P3": ["P2", "P4"],
+    "P4": ["P3"]
+  },
+  "anchor_L": "P0",
+  "anchor_R": "P4",
+  "on_path_nodes": ["P0", "P1", "P2", "P3", "P4"],
+  "off_path_nodes": [],
+  "expected": "PASS"
+}

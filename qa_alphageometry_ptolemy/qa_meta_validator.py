@@ -7910,6 +7910,37 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_anchor_geodesic_separation_cert_family(base_dir):
+    """QA Anchor Geodesic Separation Cert family [288]. Primary sources: Wildberger, N.J. (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8; Cormen, T.H. et al. (2009) Introduction to Algorithms 3rd ed. MIT Press ISBN 978-0-262-03384-8 Ch.22. CLAIM: in any finite unweighted tree with anchors L and R, for edge (v,u): Δb*Δe=-1 iff on P_LR; Δb*Δe=+1 iff off P_LR. Corollary: qa_monotone_dir_score(v) = off-path incident edge count; score=0 iff all incident edges on P_LR. Checks AGS_1/AGS_2/AGS_3/AGS_4/AGS_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_anchor_geodesic_separation_cert_v1")
+    validator = os.path.join(fam_dir, "qa_anchor_geodesic_separation_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_anchor_geodesic_separation_cert_v1/qa_anchor_geodesic_separation_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_anchor_geodesic_separation_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_anchor_geodesic_separation_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_anchor_geodesic_separation_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     """QA Orbit No-3-Divisor Overclaim Cert family [278]. Primary source for the Pisano-period framing: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for every tested modulus m with 3 not divides m and m >= 7 excluding m = 8, the canonical period-based orbit_family on (b, e, m) finds zero period-8 satellite states while orbit_family_divisor_shortcut(b, e, m) over-claims exactly 9 false satellites; the 9 over-claimed pairs are exactly the 3 by 3 grid {(a*(m//3), b*(m//3)) : a, b in {1, 2, 3}}, disjoint from the singularity (m, m) when 3 not divides m and m >= 7. Causal scope is no_3_divisor, not 5_factor: although the original sweep entered through the 5|m and 3 not divides m intersection while certifying [277], a separate proof pass on non-5-multiple 3 not divides m moduli {7, 11, 13, 14, 16, 17, 19, 22, 23, 26, 28, 29, ...} showed identical 9-overclaim behavior. The boundary exception m = 8 is excluded from v1 because m // 3 = 2 yields a 4 by 4 grid (16 multiples of 2 in {1..8} including singularity), so shortcut overclaim is 15 not 9; future v2 may add an m = 8 sub-claim. Pairs with cert [277] (the under-count regime on m = 15k) to close the divisor shortcut's failure surface. Cert does NOT modify qa_orbit_rules.py (canonical replacement locked at commit e7b2af0), does NOT cover m in {1, 2, 3, 4, 5} (degenerate), does NOT cover m = 8 (boundary exception), does NOT cover 3 | m regime, does NOT formalize the full Pisano-period structure. Lineage: surfaced during [277] adjacent-regime investigation 2026-05-08; design draft docs/specs/QA_ORBIT_5_FACTOR_NO_3_OVERCLAIM_CERT_DRAFT.md (commit 73916f8) explicitly broadened scope from 5|m sub-family to no_3_divisor family per Will 2026-05-09 directive. Theorem NT compliance: integer arithmetic on (b, e, m). Checks NO3_1/NO3_2/NO3_3/NO3_4/SRC/F; 8 PASS + 4 FAIL fixtures; self-test ok"""
     import subprocess
@@ -9047,6 +9078,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (288, "QA Anchor Geodesic Separation Cert family",
+     _validate_qa_anchor_geodesic_separation_cert_family,
+     "QA Anchor Geodesic Separation Cert family [288]. Primary sources: Wildberger, N.J. (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA distance coordinates b=d(v,L)+1, e=d(v,R)+1); Cormen, T.H. et al. (2009) Introduction to Algorithms 3rd ed. MIT Press ISBN 978-0-262-03384-8 Ch.22 (BFS). CLAIM (narrow, falsifiable): in any finite unweighted tree T with distinct anchors L and R, for every edge (v,u) let Δb=d(u,L)-d(v,L) and Δe=d(u,R)-d(v,R). Then: (1) Δb,Δe each in {-1,+1} (AGS_1); (2) Δb*Δe=-1 iff edge is on the unique L-R path P_LR (AGS_2); (3) Δb*Δe=+1 iff edge is NOT on P_LR (AGS_3). Corollary: qa_monotone_dir_score(v) = count of incident edges with Δb*Δe > 0 = count of off-path incident edges (AGS_4); score=0 iff all incident edges are on P_LR (AGS_5). Proof: on-path edges separate L from R on removal (opposite signs); off-path edges share a foot B on P_LR so both distances increase simultaneously (same signs). Degree naturally embedded: no separate degree term needed; off-path interior body=2, off-path leaf=1, on-path non-junction=0. Drives qa_monotone_dir_score AUROC=0.7779 AP=0.7803 top-k=0.8262 beating koenig_gap on all three metrics (benchmark qa_koenig_graph_anomaly_benchmark_2026-05-31c). Theorem NT: all BFS distances and sign products are integer arithmetic. Checks AGS_1/AGS_2/AGS_3/AGS_4/AGS_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
+     "288_qa_anchor_geodesic_separation",
+     "qa_anchor_geodesic_separation_cert_v1", True),
 ]
 
 

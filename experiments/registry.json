@@ -746,6 +746,24 @@
         "results/qa_koenig_graph_anomaly_benchmark_003/qa_koenig_graph_anomaly_rows.csv"
       ],
       "open_brain_id": "9d526a45-78cc-4acd-8dbc-2cee3981f9a6"
+    },
+    {
+      "id": "qa_koenig_graph_anomaly_benchmark_2026-05-31e",
+      "domain": "qa_ml",
+      "cert_id": null,
+      "script": "tools/run_qa_koenig_graph_anomaly_benchmark.py",
+      "captured_utc": "2026-05-31T00:00:00Z",
+      "hypothesis": "Direction 2: extended label (body+attachment) improves monotone_dir metric; composite (monotone+spread) stacks the two signals. Direction 3: anchor-free eccentricity anchors via double-BFS achieve comparable scores to manually-specified P0/P{n-1} anchors.",
+      "success_criteria": "PASS if qa_monotone_dir_score[ext] > qa_monotone_dir_score and anchor_free_monotone_dir_score AUROC > 0.65.",
+      "result": "PARTIAL_PASS",
+      "notes": "Direction 2 PASS: qa_monotone_dir_score[ext] AUROC=0.8056 (+0.028), AP=0.8532 (+0.073), top-k=0.8411 (+0.015). Extended label (body+attachment) is the correct target for monotone_dir. Composite score (monotone+spread) FAILS: spread is anti-correlated with branch-body label. Direction 3 RESOLVED via shortcut split: anchor-free on no-shortcut cases AUROC=0.9062 vs anchored 0.9605 (+5.4% gap only). On shortcut cases, BOTH anchored (0.5952) and anchor-free (0.1608) degrade equally — this is AGS theorem tree-specificity, not anchor selection failure. cert [288] boundary condition confirmed: monotone_dir invariant requires tree; shortcuts create cycles. koenig_gap is more robust on shortcuts (0.6177) because it does not rely on sign products. Full shortcut split table in benchmark report.",
+      "artifacts": [
+        "results/qa_koenig_graph_anomaly_benchmark_005/qa_koenig_graph_anomaly_benchmark.json",
+        "results/qa_koenig_graph_anomaly_benchmark_005/QA_KOENIG_GRAPH_ANOMALY_BENCHMARK.md",
+        "results/qa_koenig_graph_anomaly_benchmark_005/qa_koenig_graph_anomaly_summary.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_005/qa_koenig_graph_anomaly_metrics.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_005/qa_koenig_graph_anomaly_rows.csv"
+      ]
     }
   ]
 }

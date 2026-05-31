@@ -1,0 +1,10 @@
+{
+  "schema_version": "QA_PARTICLE_MASS_COSMOS_CERT.v1",
+  "fixture_kind": "fail",
+  "primary_source": "CODATA 2018 (Mohr, Newell, Taylor, Tiesinga). DOI: 10.1103/RevModPhys.93.025010. Particle Data Group (2022). Review of Particle Physics. PTEP 2022, 083C01. DOI: 10.1093/ptep/ptac097.",
+  "particle": "kaon_plus",
+  "mass": 966,
+  "coord": "F",
+  "expected_class": "cosmos",
+  "expected_fail_type": "IMPOSSIBLE_COORD"
+}

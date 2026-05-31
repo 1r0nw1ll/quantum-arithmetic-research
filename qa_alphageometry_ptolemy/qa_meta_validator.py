@@ -7898,32 +7898,6 @@ def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     return None
 
 
-def _validate_qa_particle_mass_cosmos_cert_family(base_dir):
-    """QA Particle Mass Cosmos Orbit Cert family [290]. Primary sources: CODATA 2018 (Mohr, Newell, Taylor, Tiesinga) DOI:10.1103/RevModPhys.93.025010; PDG (2022) Review of Particle Physics PTEP 2022 083C01 DOI:10.1093/ptep/ptac097; Briddell (2024) FST. CLAIM: for every standard particle mass (CODATA 2018, integer-rounded, in electron-mass units) and every FST constellation value, every Pythagorean triple (d,e) with d^2-e^2=M (F-coord) or 2de=M (C-coord) has orbit class cosmos under qa_step mod 24. ≡2 mod 4 masses have 0 F-triples and ≥1 C-triples. Proton (1836) is C-primary (0 primitive F-triples, ≥1 primitive C-triples). Singularity and satellite blockade total across 38 values and 100+ triples. Checks PMC_1/PMC_2/PMC_3/PMC_4/PMC_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
-    import subprocess
-    fam_dir = os.path.join(base_dir, "qa_particle_mass_cosmos_cert_v1")
-    validator = os.path.join(fam_dir, "qa_particle_mass_cosmos_cert_validate.py")
-    if not os.path.exists(validator):
-        return "missing qa_particle_mass_cosmos_cert_v1/qa_particle_mass_cosmos_cert_validate.py"
-    proc = subprocess.run(
-        [sys.executable, validator, "--self-test"],
-        capture_output=True, text=True
-    )
-    try:
-        payload = json.loads(proc.stdout)
-    except Exception:
-        return (
-            f"qa_particle_mass_cosmos_cert self-test returned non-JSON:\n"
-            f"{proc.stdout[:400]}"
-        )
-    if not payload.get("ok"):
-        return (
-            f"qa_particle_mass_cosmos_cert self-test ok=false:\n"
-            f"{json.dumps(payload, indent=2, sort_keys=True)}"
-        )
-    return None
-
-
 # Populate FAMILY_SWEEPS now that all validator functions are defined.
 # To add a new family: add ONE entry here. That's it.
 # Format: (id, label, validator_fn, pass_description, doc_slug, family_root_rel, must_have_dedicated_root)
@@ -9025,11 +8999,6 @@ FAMILY_SWEEPS = [
      "QA I Ching Hexagram Orbit Cert family [286]. Primary sources: Iverson, B. (n.d.) 'Eight Keynotes' svpvril.com/svpweb39.html; Wilhelm, R. trans. Baynes (1950) The I Ching, Princeton UP, ISBN 0-691-09750-X. 64 hexagrams encoded as code=lower+8*upper (lower,upper in {0..7}, trigram 3-bit codes from [285]). Algebraic theorem: 8 equiv -1 mod 9 gives code mod 9=(lower-upper) mod 9; Singularity iff lower=upper (doubled trigrams). Partition: 1 A1-excluded + 7 Singularity + 14 Satellite + 42 Cosmos = 64. Checks KOH_1/KOH_2/KOH_3/KOH_4/KOH_5/KOH_6/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "286_qa_iching_hexagram_orbit",
      "qa_iching_hexagram_orbit_cert_v1", True),
-    (290, "QA Particle Mass Cosmos Orbit Cert family",
-     _validate_qa_particle_mass_cosmos_cert_family,
-     "QA Particle Mass Cosmos Orbit Cert family [290]. Primary sources: CODATA 2018 (Mohr et al.) DOI:10.1103/RevModPhys.93.025010; PDG 2022 Review DOI:10.1093/ptep/ptac097; Briddell (2024) FST. CLAIM: for every standard particle mass (CODATA 2018, integer-rounded, in mₑ units) and every FST constellation value, every Pythagorean triple (d,e) with d²-e²=M (F-coord) or 2de=M (C-coord) has orbit class cosmos under qa_step mod 24. ≡2 mod 4 masses have 0 F-triples / ≥1 C-triples. Proton (1836) is C-primary (0 primitive F, ≥1 primitive C). Singularity and satellite blockade total across 38 values and 100+ triples. Checks PMC_1/PMC_2/PMC_3/PMC_4/PMC_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
-     "290_qa_particle_mass_cosmos",
-     "qa_particle_mass_cosmos_cert_v1", True),
 ]
 
 

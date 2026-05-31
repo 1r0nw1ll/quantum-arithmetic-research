@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance and Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. -->",
+  "schema_version": "QA_MOD24_QUADRANCE_V2_CERT.v1",
+  "fixture_kind": "pass",
+  "b_value": 8,
+  "e_value": 16,
+  "expected_quadrance": 320,
+  "expected_v2_G": 6,
+  "expected_family": "satellite",
+  "_note": "Satellite with unequal v2: v2(8)=3, v2(16)=4. delta=0. Formula: 2*min(3,4)+0=6. No diagonal enhancement. 320=64*5."
+}

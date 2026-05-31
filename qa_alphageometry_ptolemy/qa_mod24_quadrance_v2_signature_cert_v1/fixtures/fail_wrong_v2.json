@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance and Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. -->",
+  "schema_version": "QA_MOD24_QUADRANCE_V2_CERT.v1",
+  "fixture_kind": "fail",
+  "expected_fail_type": "WRONG_V2",
+  "b_value": 4,
+  "e_value": 4,
+  "expected_quadrance": 32,
+  "expected_v2_G": 6,
+  "expected_family": "cosmos",
+  "_note": "Claims v2(G)=6 for (4,4) but actual v2(32)=5. Tests that the validator catches v2 errors."
+}

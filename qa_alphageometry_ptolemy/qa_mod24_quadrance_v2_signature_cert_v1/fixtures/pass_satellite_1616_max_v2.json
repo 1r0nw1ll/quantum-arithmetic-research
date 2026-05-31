@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture; grounded in Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance and Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. -->",
+  "schema_version": "QA_MOD24_QUADRANCE_V2_CERT.v1",
+  "fixture_kind": "pass",
+  "b_value": 16,
+  "e_value": 16,
+  "expected_quadrance": 512,
+  "expected_v2_G": 9,
+  "expected_family": "satellite",
+  "_note": "Satellite with v2(b)=v2(e)=4 (since 16=2^4). delta=1. Formula: 2*4+1=9. Highest v2(G) among all satellite pairs. 512=2^9."
+}

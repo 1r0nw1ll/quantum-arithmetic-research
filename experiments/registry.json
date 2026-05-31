@@ -553,7 +553,7 @@
       "artifacts": [
         "results/arto_ternary_topology_part_count_experiment.json"
       ],
-      "notes": "Using the printed counts on Arto Heino's published 7-segment schematics, the 2A decimal circuit uses 32 unary gates plus 34 diodes for 66 total logic primitives plus diodes, while the 2B extended circuit uses 41 unary gates plus 91 diodes for 132 total logic primitives plus diodes. Against a standard packaged binary BCD-to-7-segment baseline of one decoder IC plus one display core package, ternary loses badly on raw published part count: about 33x for 2A and 66x for 2B. Ternary 2B does beat the binary baseline on raw code-space utilization (18/27 ≈ 0.667 vs 10/16 = 0.625), but 2A does not. Preregistration Open Brain capture: 873fb4be-ee41-42a9-9932-d99cbc38d93d."
+      "notes": "Using the printed counts on Arto Heino's published 7-segment schematics, the 2A decimal circuit uses 32 unary gates plus 34 diodes for 66 total logic primitives plus diodes, while the 2B extended circuit uses 41 unary gates plus 91 diodes for 132 total logic primitives plus diodes. Against a standard packaged binary BCD-to-7-segment baseline of one decoder IC plus one display core package, ternary loses badly on raw published part count: about 33x for 2A and 66x for 2B. Ternary 2B does beat the binary baseline on raw code-space utilization (18/27 \u2248 0.667 vs 10/16 = 0.625), but 2A does not. Preregistration Open Brain capture: 873fb4be-ee41-42a9-9932-d99cbc38d93d."
     },
     {
       "id": "arto_ternary_qa_interpretation_experiment_2026-03-30",
@@ -613,7 +613,7 @@
       "domain": "qa_ml",
       "hypothesis": "Using a real Hugging Face causal LM, QA packet-family quantization should beat GPTQ/AWQ-style activation-aware post-training baselines on at least one low-bit setting for eval loss, logit MSE, and/or calibration-weighted reconstruction MSE.",
       "id": "qa_ml_hf_distilgpt2_qa_packet_quant_2026-05-22",
-      "notes": "Full calibration-aware QA packet selector run on distilgpt2. GPT-2 Conv1D projection hooks are included and token/position embeddings are skipped, so the comparison targets transformer block weights. The script now tries QA Lloyd, unweighted Lloyd, affine residual, symmetric packet, and a tensor-wise calibration-loss selector against GPTQ/AWQ-shaped activation-aware proxies. FP32 eval loss on six held-out prompts was 7.8300. 2-bit: best QA loss qa_calibrated_packet_selector 8.985 vs GPTQ proxy 10.285; best QA logit MSE qa_lloyd 157.58 vs proxy 1510.83; best QA weighted MSE qa_lloyd 0.03015 vs proxy 0.11234. 3-bit: GPTQ proxy still wins loss 7.883 vs best QA selector 8.008, but QA wins logit MSE 50.76 vs 199.09 and weighted MSE 0.01048 vs 0.03132. 4-bit: QA now wins eval loss too: qa_affine_residual 7.7255 vs GPTQ proxy 7.8452; QA also wins logit MSE via qa_unweighted_lloyd 20.06 vs 29.82 and weighted MSE 0.004512 vs best proxy 0.007421. Honest verdict: real-HF distilgpt2 proxy rung shows QA packet-family wins at 2-bit and 4-bit on loss/logit/MSE, with 3-bit still losing loss but winning logit and weighted reconstruction. Still proxy GPTQ/AWQ, not auto-gptq/awq library evidence. Cross-platform reproduction 2026-05-22: re-ran on Linux x86_64 (player2) with python 3.13 + torch 2.11.0+cu130 (CPU); reproduced the same status PASS_REAL_HF_LOSS_LOGIT_AND_WMSE and the same per-bit best-method picks. Numeric deltas match player3 macOS Apple Silicon to 4-5 sig figs (fp32_eval_loss 7.830014 vs 7.830003; 2-bit loss Δ -1.29968 vs -1.29972; 4-bit loss Δ -0.11969 vs -0.11967). Linux artifact is now the canonical results_hf_tiny_lm_qa_packet_quant.json; macOS reference preserved separately at results_hf_tiny_lm_qa_packet_quant_distilgpt2_player3mac.json. Also corroborated on sshleifer/tiny-gpt2: results_hf_tiny_lm_qa_packet_quant_tiny_gpt2_player2.json shows PASS at all three bit widths but tiny margins (fp32_eval_loss 10.83; deltas O(1e-4 to 1e-3)).",
+      "notes": "Full calibration-aware QA packet selector run on distilgpt2. GPT-2 Conv1D projection hooks are included and token/position embeddings are skipped, so the comparison targets transformer block weights. The script now tries QA Lloyd, unweighted Lloyd, affine residual, symmetric packet, and a tensor-wise calibration-loss selector against GPTQ/AWQ-shaped activation-aware proxies. FP32 eval loss on six held-out prompts was 7.8300. 2-bit: best QA loss qa_calibrated_packet_selector 8.985 vs GPTQ proxy 10.285; best QA logit MSE qa_lloyd 157.58 vs proxy 1510.83; best QA weighted MSE qa_lloyd 0.03015 vs proxy 0.11234. 3-bit: GPTQ proxy still wins loss 7.883 vs best QA selector 8.008, but QA wins logit MSE 50.76 vs 199.09 and weighted MSE 0.01048 vs 0.03132. 4-bit: QA now wins eval loss too: qa_affine_residual 7.7255 vs GPTQ proxy 7.8452; QA also wins logit MSE via qa_unweighted_lloyd 20.06 vs 29.82 and weighted MSE 0.004512 vs best proxy 0.007421. Honest verdict: real-HF distilgpt2 proxy rung shows QA packet-family wins at 2-bit and 4-bit on loss/logit/MSE, with 3-bit still losing loss but winning logit and weighted reconstruction. Still proxy GPTQ/AWQ, not auto-gptq/awq library evidence. Cross-platform reproduction 2026-05-22: re-ran on Linux x86_64 (player2) with python 3.13 + torch 2.11.0+cu130 (CPU); reproduced the same status PASS_REAL_HF_LOSS_LOGIT_AND_WMSE and the same per-bit best-method picks. Numeric deltas match player3 macOS Apple Silicon to 4-5 sig figs (fp32_eval_loss 7.830014 vs 7.830003; 2-bit loss \u0394 -1.29968 vs -1.29972; 4-bit loss \u0394 -0.11969 vs -0.11967). Linux artifact is now the canonical results_hf_tiny_lm_qa_packet_quant.json; macOS reference preserved separately at results_hf_tiny_lm_qa_packet_quant_distilgpt2_player3mac.json. Also corroborated on sshleifer/tiny-gpt2: results_hf_tiny_lm_qa_packet_quant_tiny_gpt2_player2.json shows PASS at all three bit widths but tiny margins (fp32_eval_loss 10.83; deltas O(1e-4 to 1e-3)).",
       "open_brain_id": "cac3988e-fb2e-4a5f-a345-f9531aeaae4e",
       "result": "PASS_REAL_HF_DISTILGPT2_QA_PACKET_2BIT_4BIT_WIN_3BIT_PARTIAL",
       "script": "experiments/qa_ml/72_hf_tiny_lm_qa_packet_quant.py",
@@ -633,6 +633,119 @@
       "result": "BLOCKED_PLATFORM_NO_CUDA_OR_TRITON",
       "script": null,
       "success_criteria": "PASS if actual auto-gptq or autoawq quantization can run locally; BLOCKED if installation/import/runtime reaches a platform requirement not available on this machine."
+    },
+    {
+      "artifacts": [
+        "results/qa_hsi_koenig_validation_sweep_001/qa_hsi_validation_sweep.json",
+        "results/qa_hsi_koenig_validation_sweep_001/QA_HSI_VALIDATION_SWEEP_001.md",
+        "results/qa_hsi_koenig_validation_sweep_001/qa_hsi_validation_sweep_summary.csv",
+        "results/qa_hsi_koenig_validation_sweep_001/qa_hsi_validation_sweep_deltas.csv"
+      ],
+      "captured_utc": "2026-05-31T17:06:44Z",
+      "cert_id": null,
+      "domain": "qa_ml",
+      "hypothesis": "Across Indian Pines and Pavia with seeds 0-4 at 10 percent train fraction, Koenig branch features should add positive mean OA over spectral RF alone, and spectral+XY+Koenig should be competitive with or better than spectral+XY+QA.",
+      "id": "qa_hsi_koenig_validation_sweep_indian_pines_pavia_2026-05-31",
+      "notes": "PASS. Koenig HSI validation sweep completed on Indian Pines and Pavia with seeds 0-4, train_frac=0.10, corners+centroids anchors, and 80 RF trees. Indian Pines mean OA: spectral 0.7484, spectral_koenig 0.9566 (delta +0.2082), spectral_qa 0.9548, spectral_qa_koenig 0.9567, spectral_xy 0.8439, spectral_xy_koenig 0.9601 (delta +0.1161). Pavia mean OA: spectral 0.8849, spectral_koenig 0.9928 (delta +0.1078), spectral_qa 0.9938, spectral_qa_koenig 0.9937, spectral_xy 0.9648, spectral_xy_koenig 0.9935 (delta +0.0288), spectral_xy_qa_koenig 0.9942. Honest verdict: Koenig branch features add robust observer-projection signal on two HSI scenes, while QA and Koenig are close and this should not be overclaimed as canonical QA semantics.",
+      "open_brain_id": "eb55511a-2966-4a66-9e41-49db4c0c66ce",
+      "result": "PASS_TWO_DATASET_KOENIG_OBSERVER_FEATURE_SIGNAL",
+      "script": "tools/run_qa_hsi_validation_sweep.py",
+      "success_criteria": "PASS if spectral_koenig and spectral_xy_koenig have positive mean OA deltas over their spectral and spectral_xy baselines on both Indian Pines and Pavia."
+    },
+    {
+      "artifacts": [
+        "results/qa_hsi_koenig_control_sweep_001/qa_hsi_validation_sweep.json",
+        "results/qa_hsi_koenig_control_sweep_001/QA_HSI_VALIDATION_SWEEP_001.md",
+        "results/qa_hsi_koenig_control_sweep_001/qa_hsi_validation_sweep_summary.csv",
+        "results/qa_hsi_koenig_control_sweep_001/qa_hsi_validation_sweep_deltas.csv",
+        "results/qa_hsi_koenig_control_sweep_001/qa_hsi_validation_sweep_control_deltas.csv"
+      ],
+      "captured_utc": "2026-05-31T17:13:25Z",
+      "cert_id": null,
+      "domain": "qa_ml",
+      "hypothesis": "If Koenig features carry row-aligned observer structure rather than only extra nonlinear feature capacity, real Koenig feature sets should beat split-preserving permuted Koenig controls on Indian Pines and Pavia over seeds 0-4.",
+      "id": "qa_hsi_koenig_permuted_control_sweep_indian_pines_pavia_2026-05-31",
+      "notes": "PASS. Permuted Koenig HSI control completed on Indian Pines and Pavia with seeds 0-4, train_frac=0.10, corners+centroids anchors, and 80 RF trees. Real Koenig beat split-preserving permuted Koenig controls: Indian Pines spectral_koenig minus permuted +0.2240 OA and spectral_xy_koenig minus permuted +0.1496 OA; Pavia +0.1212 OA and +0.0395 OA. With QA already present, the real-vs-permuted Koenig increment was small: Indian Pines +0.0048 / +0.0059 OA; Pavia +0.0003 / +0.0003 OA. Honest verdict: Koenig alignment matters as a derived QA feature layer. The small increment after adding Koenig on top of QA is expected because Koenig is computed from each QA/BEDA tuple's Pythagorean triangle packet, with I = abs(C - F), G as the triangle hypotenuse, and H = C + F.",
+      "open_brain_id": "56f252c9-7760-41d6-bcc6-7327e7156f54",
+      "result": "PASS_KOENIG_ALIGNMENT_BEATS_PERMUTED_CONTROL",
+      "script": "tools/run_qa_hsi_validation_sweep.py",
+      "success_criteria": "PASS if spectral_koenig and spectral_xy_koenig have positive mean OA deltas over split-preserving permuted Koenig controls on both Indian Pines and Pavia."
+    },
+    {
+      "artifacts": [
+        "results/qa_real_data_bridge_demo_001/qa_real_data_bridge_demo.json",
+        "results/qa_real_data_bridge_demo_001/QA_REAL_DATA_BRIDGE_DEMO_001.md",
+        "results/qa_real_data_bridge_demo_001/grid_quadrants_qa_features.csv",
+        "results/qa_real_data_bridge_demo_001/two_community_bridge_qa_features.csv",
+        "results/qa_real_data_bridge_demo_001/path_branch_anomaly_qa_features.csv"
+      ],
+      "captured_utc": "2026-05-31T17:31:09Z",
+      "cert_id": null,
+      "domain": "qa_ml",
+      "hypothesis": "Adding Koenig features derived from each graph-distance QA/BEDA packet should improve or match QA features on at least one existing bridge dataset, with strongest expected effect on path_branch_anomaly where QA already helps.",
+      "id": "qa_real_data_bridge_koenig_ablation_2026-05-31",
+      "notes": "PARTIAL/NEGATIVE. Added Koenig features to grid_quadrants, two_community_bridge, and path_branch_anomaly bridge demos. Raw centroid scores: grid baseline 256/256, QA 244/256, Koenig 152/256; two-community baseline 30/36, QA 25/36, Koenig 17/36; path anomaly baseline 26/38, QA 33/38, Koenig 33/38. Range-scaled scores: grid baseline+QA 252/256 vs baseline+Koenig 240/256; two-community baseline_scaled and baseline+QA_scaled 36/36 vs baseline+Koenig_scaled 35/36; path baseline_scaled 36/38, baseline+QA_scaled 34/38, baseline+Koenig_scaled 35/38. Strict success criterion was not met: Koenig did not improve beyond QA/base on these small centroid graph/path demos, though it matched QA on path anomaly and its high-gap ranking identifies branch anomaly nodes.",
+      "open_brain_id": "d413df8d-7d99-4529-b319-111e4a4762d7",
+      "result": "PARTIAL_NEGATIVE_KOENIG_NON_HSI_CENTROID_BRIDGE",
+      "script": "tools/run_qa_real_data_bridge_demo.py",
+      "success_criteria": "PASS if at least one dataset improves over baseline_plus_qa with baseline_plus_qa_koenig or improves over qa with koenig; PARTIAL if Koenig matches QA on path anomaly or yields useful explanation ranking without accuracy improvement."
+    },
+    {
+      "artifacts": [
+        "results/qa_koenig_graph_anomaly_benchmark_001/qa_koenig_graph_anomaly_benchmark.json",
+        "results/qa_koenig_graph_anomaly_benchmark_001/QA_KOENIG_GRAPH_ANOMALY_BENCHMARK_001.md",
+        "results/qa_koenig_graph_anomaly_benchmark_001/qa_koenig_graph_anomaly_summary.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_001/qa_koenig_graph_anomaly_metrics.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_001/qa_koenig_graph_anomaly_rows.csv"
+      ],
+      "captured_utc": "2026-05-31T17:38:51Z",
+      "cert_id": null,
+      "domain": "qa_ml",
+      "hypothesis": "On generated path-with-branch anomaly sweeps with varying path length, branch length, attachment point, decoy branches, and shortcut noise, row-aligned Koenig-derived scores should rank true branch anomaly nodes above baseline graph degree/distance controls and split-permuted Koenig controls.",
+      "id": "qa_koenig_graph_anomaly_benchmark_2026-05-31",
+      "notes": "QUALIFIED PASS. Ran 192 generated path-with-branch cases with decoys and shortcut controls. Koenig/QA gap score, the same 2*C*F square-gap law, achieved mean AUROC 0.6939, AP 0.3779, and top-k hit rate 0.3025. It beat split-permuted Koenig gap (AUROC 0.4999, AP 0.2324, top-k 0.1536) and distance_product baseline (AUROC 0.6344, AP 0.3272, top-k 0.2481). Degree had lower AUROC 0.4077 but higher top-k 0.4211. Koenig rank/depth row-set diagnostics had strong AP/top-k but are projection diagnostics, not independent graph invariants. Honest verdict: aligned Koenig/QA square-gap ranking helps versus permuted/distance controls, but this is not a universal top-k win and not independent from QA.",
+      "open_brain_id": "6dad6d4a-0de7-45bd-8ca4-c3f780bfaad6",
+      "result": "QUALIFIED_PASS_KOENIG_GAP_GRAPH_ANOMALY_RANKING",
+      "script": "tools/run_qa_koenig_graph_anomaly_benchmark.py",
+      "success_criteria": "PASS if mean AUROC for koenig_gap exceeds baseline_distance and permuted_koenig_gap, and top-k hit rate is positive across most generated cases; qualify if any graph baseline wins a secondary metric."
+    },
+    {
+      "id": "qa_koenig_graph_anomaly_benchmark_2026-05-31b",
+      "domain": "qa_ml",
+      "cert_id": null,
+      "script": "tools/run_qa_koenig_graph_anomaly_benchmark.py",
+      "captured_utc": "2026-05-31T18:00:00Z",
+      "hypothesis": "Wildberger rational spread s=(b0*e1-b1*e0)^2/(G0*G1) between anchor-pair QA direction vectors at each node captures angular anomaly at branch attachment points; qa_degree_score=degree*spread improves on pure degree by adding geometric signal.",
+      "success_criteria": "PASS if spread_score AUROC > permuted_koenig_gap (0.4999); STRONG if spread_score top-k > degree_score top-k (0.4211).",
+      "result": "FAIL_SPREAD_INVERTED_SIGNAL",
+      "notes": "NEGATIVE RESULT. Added spread_score (Wildberger rational spread between anchor-pair QA direction vectors) and qa_degree_score (degree * spread) to benchmark_001 set of 192 cases. Results: spread_score AUROC=0.4742 (BELOW permuted control 0.4999), AP=0.2055, top-k=0.1635. qa_degree_score AUROC=0.4485, AP=0.1705, top-k=0.0848 \u2014 WORSE than degree alone on all metrics. Row-level analysis shows branch nodes have LOWER mean spread (0.177) than normal nodes (0.198) \u2014 signal is inverted. Root cause: spread measures angular separation between QA direction vectors derived from PATH POSITION arithmetic, not structural role. Branch attachment is a topological phenomenon; the anchor-pair (b,e) assignments at a node do not systematically differ by angle at branch points vs path-interior points. To make spread useful, QA direction vectors would need to encode neighbor-relative geometry, not global path position. koenig_gap_score remains best unsupervised signal: AUROC=0.6939.",
+      "artifacts": [
+        "results/qa_koenig_graph_anomaly_benchmark_002/qa_koenig_graph_anomaly_benchmark.json",
+        "results/qa_koenig_graph_anomaly_benchmark_002/QA_KOENIG_GRAPH_ANOMALY_BENCHMARK_001.md",
+        "results/qa_koenig_graph_anomaly_benchmark_002/qa_koenig_graph_anomaly_summary.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_002/qa_koenig_graph_anomaly_metrics.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_002/qa_koenig_graph_anomaly_rows.csv"
+      ],
+      "open_brain_id": "f3eaeb80-5e3c-49a3-b41a-5f54115eeab6"
+    },
+    {
+      "id": "qa_koenig_graph_anomaly_benchmark_2026-05-31c",
+      "domain": "qa_ml",
+      "cert_id": null,
+      "script": "tools/run_qa_koenig_graph_anomaly_benchmark.py",
+      "captured_utc": "2026-05-31T18:20:00Z",
+      "hypothesis": "Local edge-direction QA scores \u2014 using \u0394=(d(u,L)-d(v,L), d(u,R)-d(v,R)) per incident edge \u2014 capture branch anomalies without explicit degree. qa_monotone_dir_score (count of same-sign \u0394b\u00b7\u0394e edges) detects branch body. local_edge_spread_score (sum of Wildberger spreads over incident edge pairs) detects the attachment corner.",
+      "success_criteria": "PASS if qa_monotone_dir_score AUROC > koenig_gap_score (0.6939) and top-k > degree_score (0.4211).",
+      "result": "STRONG_PASS_QA_MONOTONE_DIR",
+      "notes": "STRONG PASS. qa_monotone_dir_score: AUROC=0.7779, AP=0.7803, top-k=0.8262. Beats koenig_gap on all three metrics (+0.084 AUROC, +0.402 AP, +0.524 top-k). Best unsupervised score in the benchmark. The score counts incident edges where sign(\u0394b)==sign(\u0394e), i.e., where BOTH QA distances increase simultaneously \u2014 the defining algebraic property of a branch edge. Path interior edges always have opposite-sign deltas; branch edges have same-sign. Degree is naturally subsumed: branch body (degree 2) scores 2, leaf (degree 1) scores 1, path interior (degree 2) scores 0. No explicit degree multiplication needed. local_edge_spread_score: AUROC=0.3929 (inverted \u2014 correctly identifies attachment point P_attach as the geometric corner with spread=2, but that node has label=0 in the current construction). Design: branch BODY is labeled anomaly; the geometric corner is the ATTACHMENT point. Both are distinct QA-algebraic phenomena: monotone direction = body, corner spread = attachment. Node-level verification on path24_branch4_attach8: B1/B2/B3 monotone=2, B4 leaf=1, P8 attachment local_spread=2.000, all path interior 0. Exact match to algebraic prediction.",
+      "artifacts": [
+        "results/qa_koenig_graph_anomaly_benchmark_003/qa_koenig_graph_anomaly_benchmark.json",
+        "results/qa_koenig_graph_anomaly_benchmark_003/QA_KOENIG_GRAPH_ANOMALY_BENCHMARK_001.md",
+        "results/qa_koenig_graph_anomaly_benchmark_003/qa_koenig_graph_anomaly_summary.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_003/qa_koenig_graph_anomaly_metrics.csv",
+        "results/qa_koenig_graph_anomaly_benchmark_003/qa_koenig_graph_anomaly_rows.csv"
+      ],
+      "open_brain_id": "9d526a45-78cc-4acd-8dbc-2cee3981f9a6"
     }
   ]
 }

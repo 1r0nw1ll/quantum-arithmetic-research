@@ -1,6 +1,6 @@
 {
   "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
-  "ref_path": "qa_alphageometry_ptolemy/qa_pisano_orbit_correspondence_cert_v1/qa_pisano_orbit_correspondence_cert_validate.py",
-  "ref_sha256": "07a40039fe83ece91e332fd4c69d6f379855e25d401efb0da7035bf42fd54209",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
   "scope_note": "QA Pisano-Orbit Correspondence cert [281]. Primary source: Wall, D. D. (1960). Fibonacci series modulo m. American Mathematical Monthly, 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. Mechanism: QA Orbit Access Theorem cert [279]. CLAIM (narrow, falsifiable): for m=9, under qa_step(b,e)=(e,((b+e-1)%9)+1), the orbit period of every (b,e) in {1,...,9}^2 is exactly: Singularity (fixed point (9,9)) period=1; Satellite (8 pairs, period=8=Pisano period of 3); Cosmos (72 pairs, period=24=Pisano period of 9). Pisano period pi(k) defined as smallest i>0 with F_i=0 and F_{i+1}=1 mod k (Wall 1960, Section 3). Verified exhaustively across all 81 pairs in {1,...,9}^2 and confirmed: pi(3)=8, pi(9)=24. Cert does NOT claim the period-Pisano correspondence extends to arbitrary m. Cert does NOT certify the period structure under m=24 QA. Cert does NOT prove the Pisano identity algebraically (empirical verification only). Theorem NT compliance: integer arithmetic on (b, e); Fibonacci recurrence mod k is integer; no float feedback into QA layer. Lineage: cert [279] proved which orbit classes are reachable as a function of gcd(a,3); cert [281] proves WHY — the algebraic grounding via Pisano periods. Discovered 2026-05-30 during orbit fingerprint sweep."
 }

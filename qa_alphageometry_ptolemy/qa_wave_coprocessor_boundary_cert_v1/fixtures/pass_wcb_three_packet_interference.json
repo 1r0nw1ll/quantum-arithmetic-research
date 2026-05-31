@@ -1,0 +1,102 @@
+{
+  "schema_version": "QA_WAVE_COPROCESSOR_BOUNDARY_CERT.v1",
+  "cert_slug": "qa_wave_coprocessor_boundary_cert_v1",
+  "family_id": 284,
+  "expected_result": "PASS",
+  "source_attribution": "Ben Iverson Synchronous Harmonics as QA-side motivation; physical wave co-processor boundary is a candidate formal bridge only.",
+  "non_claims": [
+    "Does not claim unlimited parallel computation.",
+    "Does not claim computational complexity bypass.",
+    "Does not claim optical speedup.",
+    "Does not claim neural mechanism proof.",
+    "Does not prove Maxwell physics.",
+    "Does not prove reservoir universality.",
+    "Does not certify any physical implementation."
+  ],
+  "claim_policy": {
+    "claims_unlimited_parallelism": false,
+    "claims_complexity_bypass": false,
+    "claims_physical_speedup": false,
+    "claims_neural_mechanism": false,
+    "claims_maxwell_physics": false,
+    "claims_reservoir_universality": false
+  },
+  "coprocessor_boundary": {
+    "kind": "physical_wave_interference_coprocessor",
+    "role": "observer_coprocessor",
+    "continuous_state_allowed": true,
+    "continuous_state_is_qa_core": false,
+    "input_direction": "integer_phase_packet_to_continuous_wave",
+    "output_direction": "continuous_wave_readout_to_integer_bin"
+  },
+  "pipeline_stages": [
+    {
+      "stage_id": "encode",
+      "location": "qa_boundary_input",
+      "state_type": "integer_phase_packet"
+    },
+    {
+      "stage_id": "interfere",
+      "location": "coprocessor_boundary",
+      "state_type": "continuous_wave"
+    },
+    {
+      "stage_id": "decode",
+      "location": "qa_boundary_output",
+      "state_type": "integer_bin"
+    }
+  ],
+  "wave_packets": [
+    {
+      "packet_id": "P0",
+      "modulus": 8,
+      "phase_index": 0,
+      "phase_turns": {"num": 0, "den": 1},
+      "amplitude": {"num": 1, "den": 1},
+      "frequency": {"num": 1, "den": 1}
+    },
+    {
+      "packet_id": "P1",
+      "modulus": 8,
+      "phase_index": 4,
+      "phase_turns": {"num": 1, "den": 2},
+      "amplitude": {"num": 1, "den": 1},
+      "frequency": {"num": 1, "den": 1}
+    },
+    {
+      "packet_id": "P2",
+      "modulus": 8,
+      "phase_index": 2,
+      "phase_turns": {"num": 1, "den": 4},
+      "amplitude": {"num": 1, "den": 2},
+      "frequency": {"num": 1, "den": 1}
+    }
+  ],
+  "interference_witnesses": [
+    {
+      "left_packet_id": "P0",
+      "right_packet_id": "P0",
+      "phase_delta_turns": {"num": 0, "den": 1},
+      "expected_relation": "support"
+    },
+    {
+      "left_packet_id": "P1",
+      "right_packet_id": "P0",
+      "phase_delta_turns": {"num": 1, "den": 2},
+      "expected_relation": "oppose"
+    },
+    {
+      "left_packet_id": "P2",
+      "right_packet_id": "P0",
+      "phase_delta_turns": {"num": 1, "den": 4},
+      "expected_relation": "neutral"
+    }
+  ],
+  "readout_policy": {
+    "measurement_kind": "intensity_bins",
+    "decode_rule": "declared_threshold_bins",
+    "rejects_ambiguous_readout": true,
+    "sensor_noise_bound": {"num": 1, "den": 100},
+    "declared_bins": ["low", "mid", "high"]
+  }
+}

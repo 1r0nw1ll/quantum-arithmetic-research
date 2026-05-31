@@ -2,6 +2,8 @@
 
 **Recently added**
 
+| [285] | [QA I Ching Trigram Orbit](285_qa_iching_trigram_orbit.md) | 8 trigrams as 3-bit integers (LSB=bottom, solid=1): Kun=0 A1-excluded; Dui=3 and Xun=6 Satellite; max=7<9 so Singularity structurally absent; 5 codes Cosmos-only | PASS |
+| [284] | [QA Wave Co-processor Boundary](284_qa_wave_coprocessor_boundary_cert.md) | Boundary contract for physical wave interference as QA observer co-processor; exact rational phase packets, boundary-local continuous wave state, finite-bin readout, overclaim rejection | PASS |
 | [215] | [QA Resonance-Bin Correspondence](215_qa_resonance_bin_correspondence_cert.md) | Theorem + Arnold-tongue witness | PASS |
 | [216] | [QA EBM Equivalence](216_qa_ebm_equivalence_cert.md) | Theorem (5 EBM axioms) + exhaustive S_9 witness | PASS |
 | [217] | [QA Fuller VE Diagonal Decomposition](217_qa_fuller_ve_diagonal_decomposition_cert.md) | Fuller 10n²+2 shells decompose across D_1 and sibling diagonals by n mod 3; 2:1 density | PASS |

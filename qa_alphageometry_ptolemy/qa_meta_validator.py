@@ -7562,6 +7562,37 @@ def _validate_whittaker_scalar_angular_kernel_sampling_cert_family(base_dir):
     return None
 
 
+def _validate_wave_coprocessor_boundary_cert_family(base_dir):
+    """QA Wave Co-processor Boundary Cert family [284] — boundary contract for using a physical wave interference layer as a QA observer co-processor. CLAIM (narrow): exact QA phase packets may be encoded into a declared physical-wave co-processor boundary where continuous amplitudes interfere, but continuous wave state is not QA core state and readout must return to finite declared bins with ambiguity rejection. Gates WCB_0-WCB_7 verify schema/family id, exact rational packet phase phase_index/modulus, boundary role/direction, continuous-wave confinement to boundary stages, exact support/oppose/neutral phase-delta witnesses, finite readout policy, source/mapping ref, and explicit rejection of overclaims. Cert does NOT claim optical/neural/analog speedup, Maxwell physics, reservoir universality, physical implementation, unlimited parallelism, or computational complexity bypass. Roadmap: docs/specs/QA_WAVE_PARALLEL_COMPUTATION_ROADMAP.md. Checks WCB_0/WCB_1/WCB_2/WCB_3/WCB_4/WCB_5/WCB_6/WCB_7; 1 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_wave_coprocessor_boundary_cert_v1")
+    validator = os.path.join(fam_dir, "qa_wave_coprocessor_boundary_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_wave_coprocessor_boundary_cert_v1/qa_wave_coprocessor_boundary_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_wave_coprocessor_boundary_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_wave_coprocessor_boundary_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_wave_coprocessor_boundary_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_ml_orbit_topology_cert_family(base_dir):
     """QA-ML Orbit Topology Cert family [276]. Primary source for the GCN architecture under test: Kipf & Welling 2017, Semi-Supervised Classification with Graph Convolutional Networks, ICLR; arxiv:1609.02907. CLAIM (narrow, falsifiable): on QA orbit grids with a non-trivial satellite class (orbit period 8 under qa_orbit_rules.qa_step), a 2-layer plain-torch GCN over the symmetric-normalized QA generator adjacency built from sigma, mu, lambda_2, nu lifts node-classification macro F1 by at least +0.10 over an identity-adjacency ablation, holding node features (qa_full packet b,e,d,a,C,F,G,phi_b,phi_e with phi=mod m//3), architecture, seeds, and standardization fixed. Verified empirically for m in {9,12,15,18,21,24,27,30,36} at train_fraction=0.30, 20 seeds, 300 epochs, hidden=32, lr=0.01, weight_decay=5e-4. Sources: experiments/qa_ml/03_gnn_modulus_sweep.py + benchmark_protocol_v2_modulus_sweep.json + results_gnn_modulus_sweep.json (results_ledger_v2_modulus_sweep.jsonl); qa_orbit_rules.py (canonical orbit family + period via qa_step, A1-compliant); tools.qa_ml.qa_generators (sigma, mu, lambda_2, nu); tools.qa_ml.qa_graph (build_edges, dense_adjacency, gcn_normalize). Lineage: experiment v1 (qa_ml_orbit_classifier_sample_efficiency_v1) showed polynomial QA expansion alone is weak; v2 (qa_ml_orbit_classifier_gnn_v2) showed graph helps on mod-24; this cert grounds the multi-modulus sweep. Theorem NT compliance: integer features and integer-built adjacency on the QA side; torch GCN observer on the float side; no float feedback into the QA layer. Auxiliary boundary observation (NOT certified): qa_orbit_rules.orbit_family algebraic rule (m//3 divisor) under-counts period-8 pairs for m in {15, 30}. Cert does NOT prove orbit-class learnability for arbitrary m, does NOT certify GCN training stability, does NOT cover stochastic random graphs, and does NOT extend to non-period-8 satellite classes. Checks ORBT_1/ORBT_2/ORBT_3/ORBT_4/SRC/F; 2 PASS + 2 FAIL fixtures; self-test ok"""
     import subprocess
@@ -7774,6 +7805,37 @@ def _validate_qa_orbit_access_theorem_cert_family(base_dir):
     if payload.get("ok") is not True:
         raise RuntimeError(
             f"qa_orbit_access_theorem_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_qa_iching_trigram_orbit_cert_family(base_dir):
+    """QA I Ching Trigram Orbit Cert family [285]. Primary sources: Iverson, B. (n.d.). 'Eight Keynotes.' svpvril.com/svpweb39.html (establishes I Ching 8 trigrams as QA keynotes); Wilhelm, R. (trans. Baynes, C.F.) (1950). The I Ching or Book of Changes. Princeton University Press. ISBN 0-691-09750-X (standard binary encoding). Mechanism: QA Orbit Access Theorem cert [279]. CLAIM (narrow, falsifiable): for the 8 I Ching trigrams encoded as 3-bit integers (LSB=bottom line, solid=1, broken=0, Fuxi arrangement): (a) Kun=0 is A1-excluded (no valid QA state); (b) exactly Dui=3 and Xun=6 have Satellite access (divisible by 3, not by 9); (c) no code has Singularity access (max code=7<9 is structural impossibility); (d) codes 1=Zhen, 2=Kan, 4=Gen, 5=Li, 7=Qian are coprime to 3, Cosmos-only. Verified exhaustively for all 8 codes 0..7. Checks KOA_1/KOA_2/KOA_3/KOA_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_iching_trigram_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_iching_trigram_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_iching_trigram_orbit_cert_v1/qa_iching_trigram_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_iching_trigram_orbit_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_iching_trigram_orbit_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_iching_trigram_orbit_cert self-test ok=false:\n"
             f"{json.dumps(payload, indent=2, sort_keys=True)}"
         )
     return None
@@ -8896,6 +8958,16 @@ FAMILY_SWEEPS = [
      "QA Orbit Pisano 5-Factor Boundary Cert family [277]. Primary source: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for m = 15k with k in K_verified = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 15, 20} (14 empirically verified values), the algebraic divisor shortcut orbit_family_divisor_shortcut(b, e, m) under-counts the canonical period-based orbit_family on (b, e, m) satellite class by exactly 32 pairs and never over-claims; the 32 missed pairs partition by (gcd(b, m), gcd(e, m)) into three signatures (k, 3k) with 8 pairs, (k, k) with 16 pairs, and (3k, k) with 8 pairs. Surfaced by cert [276] modulus sweep; canonical orbit_family replacement landed at commit e7b2af0; design draft docs/specs/QA_ORBIT_PISANO_5_FACTOR_BOUNDARY_CERT_DRAFT.md. Cert does NOT claim universal 5|m theorem (only 14 verified k), does NOT cover adjacent 5|m AND 3 not divides m regime (separate future cert candidate qa_orbit_5_factor_no_3_overclaim_cert_v1; canonical = 0, shortcut over-claims 9 at {10, 20, 25, 35, 50, 100}), does NOT formalize full Pisano structure of qa_step. Theorem NT compliance: integer arithmetic on (b, e, m). Checks PISANO_1/PISANO_2/PISANO_3/SRC/F; 7 PASS + 4 FAIL fixtures; self-test ok",
      "277_qa_orbit_pisano_5_factor_boundary",
      "qa_orbit_pisano_5_factor_boundary_cert_v1", True),
+    (284, "QA Wave Co-processor Boundary Cert family",
+     _validate_wave_coprocessor_boundary_cert_family,
+     "QA Wave Co-processor Boundary Cert family [284]. Boundary contract for physical wave interference as a QA observer co-processor: exact rational phase packets may enter a declared continuous-wave boundary, but continuous wave state is not QA core state and readout returns to finite declared bins with ambiguity rejection. Checks WCB_0-WCB_7; 1 PASS + 4 FAIL fixtures; self-test ok. Does NOT claim optical/neural/analog speedup, Maxwell physics, reservoir universality, physical implementation, unlimited parallelism, or computational complexity bypass.",
+     "284_qa_wave_coprocessor_boundary_cert",
+     "qa_wave_coprocessor_boundary_cert_v1", True),
+    (285, "QA I Ching Trigram Orbit Cert family",
+     _validate_qa_iching_trigram_orbit_cert_family,
+     "QA I Ching Trigram Orbit Cert family [285]. Primary sources: Iverson, B. (n.d.) 'Eight Keynotes' svpvril.com/svpweb39.html (I Ching 8 trigrams as QA keynotes); Wilhelm, R. trans. Baynes (1950) The I Ching, Princeton UP, ISBN 0-691-09750-X (binary encoding). 8 trigrams as 3-bit integers (LSB=bottom, solid=1): Kun=0 A1-excluded; Dui=3 and Xun=6 have Satellite access; no code has Singularity access (max=7<9 structural impossibility); Zhen/Kan/Gen/Li/Qian are Cosmos-only. Checks KOA_1/KOA_2/KOA_3/KOA_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
+     "285_qa_iching_trigram_orbit",
+     "qa_iching_trigram_orbit_cert_v1", True),
 ]
 
 

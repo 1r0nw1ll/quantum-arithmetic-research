@@ -1,0 +1,8 @@
+{
+  "schema_version": "QA_ICHING_TRIGRAM_ORBIT_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "Iverson, B. (n.d.). Eight Keynotes. svpvril.com/svpweb39.html. Wilhelm, R. (trans. Baynes, C.F.) (1950). The I Ching or Book of Changes. Princeton University Press. ISBN 0-691-09750-X.",
+  "trigram_code": 0,
+  "trigram_name": "Kun",
+  "expected_class": "a1_excluded"
+}

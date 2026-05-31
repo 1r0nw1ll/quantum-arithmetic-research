@@ -1,0 +1,43 @@
+{
+  "_primary_source": "Iverson, B. (n.d.). Eight Keynotes. svpvril.com/svpweb39.html. Wilhelm, R. (trans. Baynes, C.F.) (1950). The I Ching or Book of Changes. Princeton University Press. ISBN 0-691-09750-X.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_ICHING_TRIGRAM_ORBIT_CERT.v1",
+  "description": "Fixture schema for QA I Ching Trigram Orbit Cert [285].",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "trigram_code", "trigram_name", "expected_class"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "schema_version": {
+      "type": "string",
+      "const": "QA_ICHING_TRIGRAM_ORBIT_CERT.v1"
+    },
+    "fixture_kind": {
+      "type": "string",
+      "enum": ["pass", "fail"]
+    },
+    "primary_source": {
+      "type": "string",
+      "minLength": 10
+    },
+    "trigram_code": {
+      "type": "integer",
+      "minimum": 0,
+      "maximum": 7,
+      "description": "3-bit integer encoding (LSB=bottom line, solid=1, broken=0)"
+    },
+    "trigram_name": {
+      "type": "string",
+      "description": "English name of the trigram (Kun, Zhen, Kan, Dui, Gen, Li, Xun, Qian)"
+    },
+    "expected_class": {
+      "type": "string",
+      "enum": ["a1_excluded", "coprime_to_3", "mul_3_not_9"],
+      "description": "a1_excluded=code 0; coprime_to_3=Cosmos-only; mul_3_not_9=Satellite access"
+    },
+    "expected_fail_type": {
+      "type": ["string", "null"],
+      "enum": ["MISSING_FIELD", "WRONG_CLASS", "OUT_OF_RANGE", null]
+    }
+  }
+}

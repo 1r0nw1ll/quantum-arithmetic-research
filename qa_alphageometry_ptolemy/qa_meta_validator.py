@@ -7841,6 +7841,32 @@ def _validate_qa_iching_trigram_orbit_cert_family(base_dir):
     return None
 
 
+def _validate_qa_iching_hexagram_orbit_cert_family(base_dir):
+    """QA I Ching Hexagram Orbit Cert family [286]. Primary sources: Iverson, B. (n.d.). 'Eight Keynotes.' svpvril.com/svpweb39.html; Wilhelm, R. (trans. Baynes, C.F.) (1950). The I Ching or Book of Changes. Princeton University Press. ISBN 0-691-09750-X. Mechanism: QA Orbit Access Theorem cert [279]; extends QA I Ching Trigram Orbit cert [285]. CLAIM: for hexagram code=lower+8*upper (lower,upper in {0..7}, trigram 3-bit encoding from [285]): (a) code=0 (Kun-Kun) A1-excluded; (b) code%9=0 iff lower=upper (doubled trigram) — exactly 7 hexagrams {9,18,27,36,45,54,63}; (c) code%3=0 not %9=0 iff lower equiv upper mod 3, lower!=upper — 14 Satellite hexagrams; (d) code coprime to 3 iff lower not equiv upper mod 3 — 42 Cosmos-only. Algebraic mechanism: 8 equiv -1 mod 9 so code mod 9=(lower-upper) mod 9; Singularity iff lower=upper. Partition: 1+7+14+42=64. Checks KOH_1/KOH_2/KOH_3/KOH_4/KOH_5/KOH_6/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_iching_hexagram_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_iching_hexagram_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_iching_hexagram_orbit_cert_v1/qa_iching_hexagram_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True
+    )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception:
+        return (
+            f"qa_iching_hexagram_orbit_cert self-test returned non-JSON:\n"
+            f"{proc.stdout[:400]}"
+        )
+    if not payload.get("ok"):
+        return (
+            f"qa_iching_hexagram_orbit_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     """QA Orbit No-3-Divisor Overclaim Cert family [278]. Primary source for the Pisano-period framing: Wall, D. D. (1960), Fibonacci series modulo m, American Mathematical Monthly 67(6), 525-532. DOI: 10.1080/00029890.1960.11989541. CLAIM (narrow, falsifiable): for every tested modulus m with 3 not divides m and m >= 7 excluding m = 8, the canonical period-based orbit_family on (b, e, m) finds zero period-8 satellite states while orbit_family_divisor_shortcut(b, e, m) over-claims exactly 9 false satellites; the 9 over-claimed pairs are exactly the 3 by 3 grid {(a*(m//3), b*(m//3)) : a, b in {1, 2, 3}}, disjoint from the singularity (m, m) when 3 not divides m and m >= 7. Causal scope is no_3_divisor, not 5_factor: although the original sweep entered through the 5|m and 3 not divides m intersection while certifying [277], a separate proof pass on non-5-multiple 3 not divides m moduli {7, 11, 13, 14, 16, 17, 19, 22, 23, 26, 28, 29, ...} showed identical 9-overclaim behavior. The boundary exception m = 8 is excluded from v1 because m // 3 = 2 yields a 4 by 4 grid (16 multiples of 2 in {1..8} including singularity), so shortcut overclaim is 15 not 9; future v2 may add an m = 8 sub-claim. Pairs with cert [277] (the under-count regime on m = 15k) to close the divisor shortcut's failure surface. Cert does NOT modify qa_orbit_rules.py (canonical replacement locked at commit e7b2af0), does NOT cover m in {1, 2, 3, 4, 5} (degenerate), does NOT cover m = 8 (boundary exception), does NOT cover 3 | m regime, does NOT formalize the full Pisano-period structure. Lineage: surfaced during [277] adjacent-regime investigation 2026-05-08; design draft docs/specs/QA_ORBIT_5_FACTOR_NO_3_OVERCLAIM_CERT_DRAFT.md (commit 73916f8) explicitly broadened scope from 5|m sub-family to no_3_divisor family per Will 2026-05-09 directive. Theorem NT compliance: integer arithmetic on (b, e, m). Checks NO3_1/NO3_2/NO3_3/NO3_4/SRC/F; 8 PASS + 4 FAIL fixtures; self-test ok"""
     import subprocess
@@ -8968,6 +8994,11 @@ FAMILY_SWEEPS = [
      "QA I Ching Trigram Orbit Cert family [285]. Primary sources: Iverson, B. (n.d.) 'Eight Keynotes' svpvril.com/svpweb39.html (I Ching 8 trigrams as QA keynotes); Wilhelm, R. trans. Baynes (1950) The I Ching, Princeton UP, ISBN 0-691-09750-X (binary encoding). 8 trigrams as 3-bit integers (LSB=bottom, solid=1): Kun=0 A1-excluded; Dui=3 and Xun=6 have Satellite access; no code has Singularity access (max=7<9 structural impossibility); Zhen/Kan/Gen/Li/Qian are Cosmos-only. Checks KOA_1/KOA_2/KOA_3/KOA_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "285_qa_iching_trigram_orbit",
      "qa_iching_trigram_orbit_cert_v1", True),
+    (286, "QA I Ching Hexagram Orbit Cert family",
+     _validate_qa_iching_hexagram_orbit_cert_family,
+     "QA I Ching Hexagram Orbit Cert family [286]. Primary sources: Iverson, B. (n.d.) 'Eight Keynotes' svpvril.com/svpweb39.html; Wilhelm, R. trans. Baynes (1950) The I Ching, Princeton UP, ISBN 0-691-09750-X. 64 hexagrams encoded as code=lower+8*upper (lower,upper in {0..7}, trigram 3-bit codes from [285]). Algebraic theorem: 8 equiv -1 mod 9 gives code mod 9=(lower-upper) mod 9; Singularity iff lower=upper (doubled trigrams). Partition: 1 A1-excluded + 7 Singularity + 14 Satellite + 42 Cosmos = 64. Checks KOH_1/KOH_2/KOH_3/KOH_4/KOH_5/KOH_6/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
+     "286_qa_iching_hexagram_orbit",
+     "qa_iching_hexagram_orbit_cert_v1", True),
 ]
 
 

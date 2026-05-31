@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [286] | [QA I Ching Hexagram Orbit](286_qa_iching_hexagram_orbit.md) | 64 hexagrams as code=lower+8×upper; 8≡−1 mod 9 gives code mod 9=(lower−upper) mod 9; doubled-trigram hexagrams (lower=upper) are the 7 Singularity-access codes; 1 A1-excluded + 7 Singularity + 14 Satellite + 42 Cosmos | PASS |
 | [285] | [QA I Ching Trigram Orbit](285_qa_iching_trigram_orbit.md) | 8 trigrams as 3-bit integers (LSB=bottom, solid=1): Kun=0 A1-excluded; Dui=3 and Xun=6 Satellite; max=7<9 so Singularity structurally absent; 5 codes Cosmos-only | PASS |
 | [284] | [QA Wave Co-processor Boundary](284_qa_wave_coprocessor_boundary_cert.md) | Boundary contract for physical wave interference as QA observer co-processor; exact rational phase packets, boundary-local continuous wave state, finite-bin readout, overclaim rejection | PASS |
 | [215] | [QA Resonance-Bin Correspondence](215_qa_resonance_bin_correspondence_cert.md) | Theorem + Arnold-tongue witness | PASS |

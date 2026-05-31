@@ -1,0 +1,9 @@
+{
+  "schema_version": "QA_ICHING_HEXAGRAM_ORBIT_CERT.v1",
+  "fixture_kind": "pass",
+  "primary_source": "Iverson, B. (n.d.). Eight Keynotes. svpvril.com/svpweb39.html. Wilhelm (1950). The I Ching. Princeton University Press. ISBN 0-691-09750-X.",
+  "hexagram_code": 63,
+  "lower_trigram_code": 7,
+  "upper_trigram_code": 7,
+  "expected_class": "mul_9"
+}

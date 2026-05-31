@@ -1,0 +1,34 @@
+{
+  "_primary_source": "Iverson, B. (n.d.). Eight Keynotes. svpvril.com/svpweb39.html. Wilhelm, R. (trans. Baynes, C.F.) (1950). The I Ching or Book of Changes. Princeton University Press. ISBN 0-691-09750-X.",
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "title": "QA_ICHING_HEXAGRAM_ORBIT_CERT.v1",
+  "type": "object",
+  "required": ["schema_version", "fixture_kind", "primary_source", "hexagram_code", "lower_trigram_code", "upper_trigram_code", "expected_class"],
+  "additionalProperties": false,
+  "properties": {
+    "_primary_source": {"type": "string"},
+    "schema_version": {"type": "string", "const": "QA_ICHING_HEXAGRAM_ORBIT_CERT.v1"},
+    "fixture_kind": {"type": "string", "enum": ["pass", "fail"]},
+    "primary_source": {"type": "string", "minLength": 10},
+    "hexagram_code": {
+      "type": "integer", "minimum": 0, "maximum": 63,
+      "description": "6-bit encoding: lower + 8*upper"
+    },
+    "lower_trigram_code": {
+      "type": "integer", "minimum": 0, "maximum": 7,
+      "description": "Lower (inner) trigram 3-bit code"
+    },
+    "upper_trigram_code": {
+      "type": "integer", "minimum": 0, "maximum": 7,
+      "description": "Upper (outer) trigram 3-bit code"
+    },
+    "expected_class": {
+      "type": "string",
+      "enum": ["a1_excluded", "coprime_to_3", "mul_3_not_9", "mul_9"]
+    },
+    "expected_fail_type": {
+      "type": ["string", "null"],
+      "enum": ["MISSING_FIELD", "WRONG_CLASS", "OUT_OF_RANGE", "CODE_MISMATCH", null]
+    }
+  }
+}

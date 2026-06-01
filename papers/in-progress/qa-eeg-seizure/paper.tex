@@ -134,9 +134,8 @@ chb20 & $+0.396$ & $1.4 \times 10^{-9}$ & * \\
 \bottomrule
 \end{tabular}
 \caption{Per-patient $\Delta R^2$ (augmented minus baseline McFadden pseudo-$R^2$)
-and likelihood-ratio $p$-value.
-% TODO: fill per-patient numbers from eeg_chbmit_scale.py / cert_batch_empirical_2026_04_04.py
-}
+and likelihood-ratio $p$-value ($*$ = $p < 0.05$).
+Source: \texttt{eeg\_chbmit\_scale\_results.json}.}
 \label{tab:results}
 \end{table}
 
@@ -145,14 +144,50 @@ and likelihood-ratio $p$-value.
 The sole exception (chb18, $\Delta R^2 = +0.048$) still shows positive gain.
 Fisher combined $p = 2.9 \times 10^{-33}$ is driven by the per-patient
 significance rather than any single outlier: the median per-patient
-$\Delta R^2$ is approximately $+0.18$.
+$\Delta R^2 = 0.197$, close to the mean.
 
-\paragraph{Feature ablation.}
-% TODO: pull from eeg_hi2_0_feature_ablation_audit.json
-Removing the orbit-type indicator (keeping only raw $b,e,d,a$ values)
-reduces mean $\Delta R^2$ to approximately $+0.09$,
-suggesting that roughly half the gain is attributable to the
-discrete orbit classification rather than the raw modular coordinates.
+\paragraph{Feature ablation (HI~2.0 classifier).}
+The following ablation applies to the binary HI~2.0 classifier experiment
+(F1-based, separate from the Observer~3 $\Delta R^2$ result above).
+The full HI~2.0 feature set comprises 10 features:
+harmonic-index scalars (HI$_{2.0}$, $H_\text{ang}$, $H_\text{rad}$, $H_\text{fam}$),
+Pythagorean chromogeometric elements ($C$, $F$, $G$, $\gcd$),
+and raw modular coordinates ($b$, $e$).
+Patients are split into two pre-defined cohorts:
+\emph{stable-positive} (consistently positive HI~2.0 gain) and
+\emph{hard-negative} (unreliable or negative gain).
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrr}
+\toprule
+& \multicolumn{2}{c}{\textbf{Stable-positive}} & \multicolumn{2}{c}{\textbf{Hard-negative}} \\
+\cmidrule(lr){2-3}\cmidrule(lr){4-5}
+\textbf{Feature set} & F1 & $\Delta$F1 & F1 & $\Delta$F1 \\
+\midrule
+Full (all 10 features)          & 0.730 & ---    & 0.644 & --- \\
+No geometry ($-C,F,G,\gcd$)     & 0.693 & $-0.036$ & 0.699 & $+0.056$ \\
+No coords ($-b,e$)              & 0.718 & $-0.011$ & 0.644 & $\pm 0.000$ \\
+Coords only ($b,e$)             & 0.709 & $-0.021$ & 0.740 & $+0.096$ \\
+Geometry only ($C,F,G,\gcd$)    & 0.715 & $-0.015$ & 0.599 & $-0.045$ \\
+\bottomrule
+\end{tabular}
+\caption{Feature ablation for the HI~2.0 binary classifier (mean F1 across patients
+in each cohort; $\Delta$F1 relative to the full feature set, positive = better than full).
+This is a separate experiment from the Observer~3 $\Delta R^2$ result in Table~\ref{tab:results}.}
+\label{tab:ablation}
+\end{table}
+
+The cohort split is the key finding.
+For \emph{stable-positive} patients, removing the Pythagorean geometry features ($C$, $F$, $G$)
+causes the largest drop ($\Delta$F1 $= -0.036$), indicating that the chromogeometric
+element structure carries signal beyond the raw coordinates.
+For \emph{hard-negative} patients the pattern reverses: the geometry features actively
+hurt performance, and raw coordinates alone ($b$, $e$) outperform the full feature set
+by $\Delta$F1 $= +0.096$.
+This suggests that the two cohorts differ not only in response to QA features generally
+but in \emph{which algebraic layer} carries the signal.
 
 % ====================================================================
 \section{Limitations and Replication Plan}\label{sec:limits}

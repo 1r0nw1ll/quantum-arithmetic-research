@@ -7910,6 +7910,37 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_sl2z_spine_cert_family(base_dir):
+    """QA SL(2,Z) Spine Cert family [294]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X (SL(2,Z), Euclidean algorithm, continued fractions); Stern (1858) J.Reine Angew.Math 55:193-220 (Stern-Brocot tree). CLAIM: L=[[1,0],[1,1]] and R=[[1,1],[0,1]] in SL(2,Z) (det=1); M=[[0,1],[1,1]] has det=-1 but M^2=L*R in SL(2,Z); every primitive (b,e) with gcd(b,e)=1 is unique word in {L,R}* computed by subtractive Euclidean algorithm; len(word)=Euclidean steps; Pell words follow period-4 descending pattern (R,L,L,R)^inf; w_{n+1}=('LR' if n odd else 'RL')+w_n. Checks DET_LR/STERN_PRIM/WORD_APPLY/WORD_UNIQ/EUCLID_LEN; 5 PASS + 2 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_sl2z_spine_cert_v1")
+    validator = os.path.join(fam_dir, "qa_sl2z_spine_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_sl2z_spine_cert_v1/qa_sl2z_spine_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_sl2z_spine_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_sl2z_spine_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_sl2z_spine_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_koenig_shell_structure_cert_family(base_dir):
     """QA Koenig Shell Structure Cert family [293]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.XIII (Pell, norm form b^2-2e^2, inert primes in Z[sqrt(2)]); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (Koenig I=|C-F|). CLAIM: S_k={(b,e): |b^2-2e^2|=k}: QA map (b+2e,b+e) preserves |I|=k with sign flip; Farey det |be'-b'e|=k; spread=k^2/(G*G'); empty shells at inert primes p≡±3(mod 8); k=1 unique tangent shell. Checks SHELL_I/SHELL_PRES/SIGN_FLIP/FAREY_K/SPREAD_K/SPREAD_DEV_K; 4 PASS + 2 FAIL fixtures; self-test ok"""
     import subprocess
@@ -9233,6 +9264,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (294, "QA SL(2,Z) Spine Cert family",
+     _validate_qa_sl2z_spine_cert_family,
+     "QA SL(2,Z) Spine Cert family [294]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X (SL(2,Z), Euclidean algorithm, continued fractions); Stern (1858) J.Reine Angew.Math 55:193-220 (Stern-Brocot tree); Brocot (1861) Revue Chronometrique 3:186-194. CLAIM: L=[[1,0],[1,1]], R=[[1,1],[0,1]] in SL(2,Z) (det=1); M=[[0,1],[1,1]] has det=-1 (NOT SL(2,Z)) but M^2=L*R (IS SL(2,Z)); every primitive (b,e) with gcd(b,e)=1 is unique word W in {L,R}* computed by subtractive Euclidean algorithm (prepend R if b>e else L); len(W)=number of subtraction steps; round-trip apply_word(sb_word(b,e))==(b,e) for all gcd=1 pairs in [1,19]^2; Pell words follow period-4 descending pattern (R,L,L,R)^inf; w_{n+1}=('LR' if n odd else 'RL')+w_n. Backbone of Ford arc [289-293]: SL(2,Z) action on (Z/9Z)^2 explains orbit periods 24/8/1. Checks DET_LR/STERN_PRIM/WORD_APPLY/WORD_UNIQ/EUCLID_LEN; 5 PASS + 2 FAIL fixtures; self-test ok",
+     "294_qa_sl2z_spine",
+     "qa_sl2z_spine_cert_v1", True),
     (293, "QA Koenig Shell Structure Cert family",
      _validate_qa_koenig_shell_structure_cert_family,
      "QA Koenig Shell Structure Cert family [293]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.XIII (Pell, norm b^2-2e^2, inert primes p≡±3(mod 8) in Z[sqrt(2)]); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (Koenig I=|C-F|). CLAIM: shell S_k={|b^2-2e^2|=k}: QA map (b+2e,b+e) preserves |I|=k (sign flips: b'^2-2e'^2=-(b^2-2e^2)); Farey det |be'-b'e|=k (algebraic: |b(b+e)-(b+2e)e|=|b^2-2e^2|); spread(d_n,d_{n+1})=k^2/(G_tilde*G_tilde'); empty shells for k with inert prime factor to odd power (k=3,5,6,10,11 verified empty b,e<=100); k=1 unique tangent shell; spread dev |s-1/3|=k/(3*G_tilde) [cert [292]]. Checks SHELL_I/SHELL_PRES/SIGN_FLIP/FAREY_K/SPREAD_K/SPREAD_DEV_K; 4 PASS + 2 FAIL fixtures; self-test ok",

@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.X (SL(2,Z), Euclidean algorithm) and Stern (1858) / Brocot (1861) (Stern-Brocot tree). -->",
+  "description": "(1,1): root of the Stern-Brocot tree. Empty word. The shared seed of all three classical subfamily chains (cert [290]).",
+  "state": [1, 1],
+  "word": "",
+  "expected": "PASS"
+}

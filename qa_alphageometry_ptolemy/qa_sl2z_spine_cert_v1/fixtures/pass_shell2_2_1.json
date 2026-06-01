@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.X (SL(2,Z), Euclidean algorithm) and Stern (1858) / Brocot (1861) (Stern-Brocot tree). -->",
+  "description": "(2,1): shell k=2 seed (cert [293]). Word 'R'. Apply: R(1,1)=(2,1). Euclidean: 2>1->R->(1,1). Steps=1.",
+  "state": [2, 1],
+  "word": "R",
+  "expected": "PASS"
+}

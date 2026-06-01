@@ -1,0 +1,8 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Wall (1960) DOI 10.1080/00029890.1960.11989541 (Pisano period) and Wildberger (2005) Divine Proportions ISBN 978-0-9757492-0-8 (QA orbits). -->",
+  "description": "State (2,3): 2 is not divisible by 3, so Cosmos type despite 3|e. Period = 24.",
+  "state": [2, 3],
+  "expected_period": 24,
+  "expected_orbit_type": "cosmos",
+  "expected": "PASS"
+}

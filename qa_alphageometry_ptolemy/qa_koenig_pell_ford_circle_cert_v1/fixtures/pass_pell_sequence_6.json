@@ -1,0 +1,6 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Hardy+Wright (2008) An Introduction to the Theory of Numbers Oxford ISBN 978-0-19-921986-5 Ch.III (Farey/Ford tangency) and Wildberger (2005) Divine Proportions ISBN 978-0-9757492-0-8 (Koenig I invariant). -->",
+  "description": "First 6 Pell solution pairs (b,e) satisfying |b^2-2e^2|=1 in alternating sign order. QA map (b,e)->(b+2e,b+e) generates each from the previous. All consecutive pairs are Farey neighbors. Koenig I=1 for all.",
+  "sequence": [[1,1],[3,2],[7,5],[17,12],[41,29],[99,70]],
+  "expected": "PASS"
+}

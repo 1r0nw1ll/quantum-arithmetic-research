@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Koenig Pell Ford Circle cert [289]. Primary sources: Hardy, G.H. and Wright, E.M. (2008) An Introduction to the Theory of Numbers Oxford University Press 6th ed. ISBN 978-0-19-921986-5 Ch.III (Farey sequences, Ford circles, tangency condition |pq'-p'q|=1); Wildberger, N.J. (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (BEDA tuples, Koenig I=|C-F| invariant). CLAIM (narrow, falsifiable): The Koenig I=1 BEDA sequence S = {(b,e) : |b^2 - 2e^2| = 1, b >= 1, e >= 1, ordered by e} equals the Pell equation solution set for x^2 - 2y^2 = +-1. Consecutive elements satisfy the Farey adjacency condition |b_n*e_{n+1} - b_{n+1}*e_n| = 1 (Ford circle tangency). The QA state map (b,e) -> (b+2e, b+e) = (a,d) generates the full sequence from seed (1,1). PROOF: Koenig I(b,e) = |C-F| = |2(b+e)e - (b+2e)b| = |2e^2 - b^2|, so I=1 iff Pell holds. Farey: |b_n*e_{n+1} - b_{n+1}*e_n| with next=(b+2e, b+e) gives |b(b+e)-(b+2e)e| = |b^2-2e^2| = 1. Theorem NT: all quantities integer; no float state. Mechanism chain: cert [288] (AGS anchor geodesic separation); Koenig HSI benchmark AUROC=0.9566 (OB 2026-05-31). Lineage: derived 2026-06-01."
+}

@@ -226,21 +226,48 @@ The two experiments should not be conflated.
 \section{Climate Regime Classification}\label{sec:climate}
 
 \paragraph{Claim.}
-ENSO phase (El Ni\~no vs.\ La Ni\~na) maps preferentially to distinct QA orbit
-families when sea-surface temperature anomalies are discretised by the QA projection.
+ENSO phase (El Ni\~no / La Ni\~na / Neutral) maps preferentially to distinct QA orbit
+families when a five-channel climate index is discretised via the QA observer projection.
 
 \paragraph{Observer projection.}
-Monthly Ni\~no 3.4 index values are mapped to QA state by binning into
-$m=24$ equal-width bins and reading off the orbit family of the resulting pair
-$(b \bmod 9 + 1,\, e \bmod 9 + 1)$.  The bin boundaries are fixed at the start
-of the analysis; the ENSO phase labels (from NOAA) are not used until the
-$\chi^2$ test.
+Monthly values of five NOAA climate indices (ONI, NAO, AO, PDO, AMO; 1950--2023,
+$n = 817$ months) are standardised and partitioned into train/test halves.
+$K=4$ clusters are fit to the training set via $k$-means; each monthly observation
+receives a cluster label.  The cluster centroid is mapped to QA state by taking
+$(b,e)$ from the two coordinates that explain the most variance and reducing
+modulo 9 ($b,e \in \{1,\dots,9\}$).  The orbit family (Cosmos, Satellite, or
+Singularity) is read from the resulting pair using the exact $m=9$ orbit decomposition.
+ENSO phase labels (El Ni\~no / La Ni\~na / Neutral) are determined independently
+from the Oceanic Ni\~no Index (ONI threshold $|\text{ONI}| \geq 0.5$\,K);
+they are not used in the clustering or orbit assignment.
 
 \paragraph{Results.}
-La Ni\~na episodes map to the Satellite orbit family 97\% of the time
-($\chi^2 = 95$, $p < 10^{-6}$, 1~degree of freedom).
-El Ni\~no episodes distribute across Cosmos and Satellite with no significant
-preference ($p = 0.31$).
+The orbit-by-ENSO-phase contingency table ($n=408$ test months) is:
+
+\begin{center}
+\small
+\begin{tabular}{lrrrl}
+\toprule
+\textbf{ENSO phase} & \textbf{Singularity} & \textbf{Satellite} & \textbf{Cosmos} & $n$ \\
+\midrule
+El Ni\~no  & 23.2\% & 37.4\% & 39.4\% & 99 \\
+La Ni\~na  &  3.3\% & 96.7\% &  0.0\% & 121 \\
+Neutral    & 11.2\% & 74.5\% & 14.4\% & 188 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+La Ni\~na months concentrate in the Satellite orbit at 96.7\% (117/121 months);
+El Ni\~no distributes across all three families with no dominant orbit.
+The overall chi-squared test of independence ($\chi^2 = 94.88$, $p = 1.2 \times 10^{-19}$,
+$\text{df} = 4$) rejects the null of orbit-phase independence decisively.
+
+A secondary test examines whether the QA Coherence Index (QCI) --- which measures
+how consistently consecutive orbit transitions follow the Fibonacci shift prediction ---
+partially correlates with future cross-index dispersion after conditioning on lagged ONI.
+This partial correlation is $r = -0.135$, $p = 0.007$.
+The primary test (orbit distribution) and secondary test (QCI forecasting) are
+separate hypotheses; the primary is the load-bearing claim.
 
 % ====================================================================
 \section{Cross-Domain Synthesis}\label{sec:synthesis}

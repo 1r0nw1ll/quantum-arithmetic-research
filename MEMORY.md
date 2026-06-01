@@ -82,6 +82,30 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #8 — 2026-06-01 (window: May 28 – June 1, 2026)
+Full report: `sota_scans/scan_2026-06-01.md`
+
+**Key finds:**
+- arXiv:2604.03634 (Algebraic Diversity: Group-Theoretic Spectral Estimation from Single Observations, April 3) — **HIGH. Slipped 7 scans.** General Replacement Theorem: single-snapshot group-averaging over Z/24Z recovers full orbit spectral structure. Formal implementation proof for Theorem NT (Observer Projection Firewall) discrete layer. Core paper for new cert candidate `qa_algebraic_diversity_observer_cert_v1`.
+- arXiv:2604.19983 (Algebraic Diversity: Principles of Group-Theoretic Signal Processing, April 21) — **HIGH. Slipped 6 scans.** Blind group matching (polynomial-time): Z/24Z identifiable as matched group from QA signal data. Transform manifold: DFT is the unique distinguished transform for Z/24Z. Structural capacity κ (Rényi-2) quantifies QA orbit information organization. Core paper for `qa_algebraic_diversity_observer_cert_v1`.
+- arXiv:2605.00848 (Continuous Algebraic Diversity: Lie Group Unification of Spectral/Wavelet/TF Analysis, ~May 1) — **HIGH. Slipped 3 scans.** Unification Theorem: Fourier=translation, wavelet=affine, TF=Heisenberg-Weyl. Duflo-Moore noise floor quantifies T2-b boundary crossing information loss. Formal continuous bridge for Theorem NT. Co-primary reference for `qa_transform_unification_cert_v1`.
+- arXiv:2504.16513 (The Bracket of E8, April 2026) — **MEDIUM-HIGH. Slipped all scans.** Explicit E8 bracket via triality/oct-octonions; E6/E7 subalgebras; F4 26D irrep. Extends `qa_e8_integral_arithmetic_cert_v1` candidate scope.
+- arXiv:2604.03725 (Quantum Algebraic Diversity: Single-Copy Density Matrix Estimation, April 4) — **MEDIUM-HIGH. Slipped 7 scans.** QAD Theorem; SIC-POVM = Heisenberg-Weyl AD; connects to E8 Coulomb branch.
+- arXiv:2510.24882 (Modular Periodicity of Random Initialized Recurrences, Oct 2025) — **MEDIUM. Slipped all scans.** Full m² initialization classification for Fibonacci mod m. External academic grounding for `qa_pisano_orbit_correspondence_cert_v1` [281] (just registered since scan #7).
+
+**3 HIGH finds (Algebraic Diversity cluster) — most significant multi-scan catch since scan #5.**
+
+**New cert scaffolding candidate:**
+- `qa_algebraic_diversity_observer_cert_v1` — HIGH priority. Certifies: (1) Z/24Z is the unique matched group for QA Cosmos-orbit signals (blind matching); (2) single-snapshot group-averaging over Z/24Z recovers full spectral structure (Replacement Theorem). Directly formalizes Theorem NT discrete layer.
+
+**Cert gaps (escalated):**
+- [261] qa_orbit_stratification_cert_v1: **SEPTUPLE GAP** (7th scan — CRITICAL: 4 weeks overdue)
+- qa_steinmetz_whittaker_bridge_cert_v1: **5th scan unregistered** — needs ID [289]
+- qa_whittaker_phase_packet_algebra_cert_v1: **5th scan unregistered** — needs ID [290]
+- **NEW: Documentation wave** — [284]–[288] (5 families) all missing README.md + SPEC.md; systematic from cert creation sprint
+
+**Search fix for scan #9:** Add "algebraic diversity," "matched group," "blind group matching," Thornton SMU to search battery.
+
 ### Scan #7 — 2026-05-28 (window: May 25 – May 28, 2026)
 Full report: `sota_scans/scan_2026-05-28.md`
 

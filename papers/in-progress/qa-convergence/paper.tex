@@ -170,25 +170,106 @@ teams (e.g.\ Clemson) score zero.
 
 \paragraph{Claim.}
 Among catalogued mean-motion resonances in planetary systems,
-first-order resonances occur at Fibonacci period ratios significantly more often
-than expected by a null model matched to the orbital period distribution.
+period ratios $p$:$q$ where both $p$ and $q$ are Fibonacci numbers
+are observed significantly more often than expected from a uniform or
+physically-motivated null model.
 
 \paragraph{Observer projection.}
-The period ratio $p/q$ of a resonance pair is mapped to its denominator $q \bmod 9$,
-classifying it as Cosmos (generic), Satellite (Fibonacci-adjacent), or Singularity.
-The QA prediction is that Satellite-class ratios correspond to
-deeper dynamical attractor basins (lower diffusion coefficient) and hence higher
-empirical frequency.
-This discretisation is fixed before examining the resonance catalog;
-it does not use the frequency data.
+A resonance pair with period ratio $p$:$q$ (with $p > q$, $\gcd(p,q)=1$)
+is classified as \emph{Fibonacci} if both $p$ and $q$ are Fibonacci numbers
+(i.e.\ members of $\{1,2,3,5,8,13,21,\ldots\}$), and \emph{non-Fibonacci} otherwise.
+This binary classification is the observer projection: it maps the continuous
+period ratio to a discrete label using only number-theoretic structure.
+The QA mechanism predicts that the Fibonacci shift $T$ (multiplication by
+$\varphi^2$ modulo $m$) generates resonance widths
+(measured by Laplace coefficients) that are maximised at Fibonacci-ratio
+commensurabilities, producing deeper attractor basins and hence higher
+empirical frequency.  No resonance frequency data enters this prediction.
 
-\paragraph{Results.}
-Among 60 catalogued first-order resonances across 8+ planetary systems,
-77\% involve Fibonacci period ratios, compared to a baseline rate of
-$\approx$38\% under a period-weighted null model ($p < 10^{-6}$, binomial test).
-Out-of-sample replication on 341 systems yields Fisher combined $p < 10^{-45}$.
-The Pisano period mechanism (period-24 attractor basin) predicts the Fibonacci
-preference without free parameters~\cite{dale2026fib}.
+\paragraph{Primary catalogue (8 systems, 60 resonances).}
+The primary dataset comprises 60 catalogued mean-motion resonances across
+8 multi-planet systems with known resonance chains (K2-138, Kepler-80,
+Kepler-223, TOI-178, GJ-876, HD~158259, and two solar-system subsystems).
+Order-stratified results:
+
+\begin{center}
+\small
+\begin{tabular}{cccccl}
+\toprule
+\textbf{Order} & $n_\text{Fib}$ & $n_\text{tot}$ & \% Fib & Exp.\ \% & \textbf{Ratios observed} \\
+\midrule
+0 & 1 & 1  & 100 & 100 & 1:1 \\
+1 & 33 & 43 & 77  & 22  & 2:1, 3:2, \textbf{4:3} \\
+2 & 6  & 6  & 100 & 50  & 3:1, 5:3 \\
+3 & 4  & 6  & 67  & 40  & 5:2, 8:5, \textbf{4:1}, \textbf{7:4} \\
+4 & 1  & 2  & 50  & 33  & 5:1, \textbf{7:3} \\
+5 & 0  & 2  & 0   & 25  & \textbf{7:2}, \textbf{9:4} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+All five statistical tests reject the uniform null (expected Fibonacci fraction
+22\% for first-order, 31\% overall):
+
+\begin{center}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Test} & \textbf{Observed} & $p$-value \\
+\midrule
+All instances (binomial)  & 45/60 (75\%)  & $< 10^{-6}$ \\
+First-order only          & 33/43 (77\%)  & $< 10^{-6}$ \\
+Exoplanet-only            & 24/31 (77\%)  & $< 10^{-6}$ \\
+Fisher combined           & $\chi^2 = 59.0$ & $< 10^{-6}$ \\
+Unique ratio types        & 8/14 (57\%)   & 0.040 \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The most conservative test (unique ratio types, which counts each ratio once
+regardless of how often it appears) gives $p = 0.040$.
+
+\paragraph{Robustness to null model choice.}
+The uniform null (22\% expected) may under-represent low-integer ratios.
+Five alternative null models spanning the plausible range of physical weighting:
+
+\begin{center}
+\small
+\begin{tabular}{lcc}
+\toprule
+\textbf{Null model} & Exp.\ Fib.\ frac.\ & $p$ (first-order) \\
+\midrule
+Uniform ($p \leq 10$, equal weight)          & 22\%  & $4.7 \times 10^{-14}$ \\
+Laplace coeff.\ $\alpha^p$, $\alpha=(q/p)^{2/3}$ & 20\% & $1.6\times10^{-15}$ \\
+$1/p$                                        & 43\%  & $8.0\times10^{-6}$  \\
+$1/(p+q)$                                   & 47\%  & $7.0\times10^{-5}$  \\
+$\exp[-(p+q)/10]$                            & 40\%  & $7.5\times10^{-7}$  \\
+$1/p^2$ (aggressively low-integer)           & 66\%  & 0.083 (n.s.)         \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The physics-motivated Laplace-coefficient weighting (derived from the
+disturbing-function expansion for first-order resonances under Kepler's
+third law; \cite{murray1999,peale1976}) makes the result \emph{more}
+significant than the uniform null ($p = 1.6\times10^{-15}$ vs.\ $4.7\times10^{-14}$),
+because it further down-weights high-$p$ non-Fibonacci ratios.
+Only the aggressively low-integer $1/p^2$ weighting renders the effect
+non-significant, and that weighting has no justification from standard
+perturbation theory (libration width is approximately constant
+across the ratio ladder at fixed eccentricity for first-order resonances).
+
+\paragraph{Out-of-sample replication (341 systems).}
+An independent replication using 341 additional planetary systems from the
+NASA Exoplanet Archive (raw period data, no resonance labels used in model
+building) finds order-1 Fibonacci rate $81.3\%$ ($n = 139$ first-order resonances,
+$p = 2.6\times10^{-49}$ vs.\ uniform null).
+Fisher's method combining original and replication results across
+resonance orders gives $\chi^2 = 288.1$, $p = 1.5\times10^{-54}$.
+The replication also shows order-dependence consistent with the QA mechanism:
+orders 1--3 remain significantly Fibonacci-enriched ($p < 0.007$);
+orders 4--5 are not ($p > 0.7$), matching the predicted fall-off of
+resonance width with order~\cite{dale2026fib}.
 
 % ====================================================================
 \section{EEG Seizure Prediction}\label{sec:eeg}
@@ -366,6 +447,16 @@ N.~J. Wildberger.
 A.~L. Goldberger et al.
 \newblock PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals.
 \newblock \emph{Circulation}, 101(23):e215--e220, 2000.
+
+\bibitem{murray1999}
+C.~D. Murray and S.~F. Dermott.
+\newblock \emph{Solar System Dynamics}.
+\newblock Cambridge University Press, 1999.
+
+\bibitem{peale1976}
+S.~J. Peale.
+\newblock Orbital resonances in the solar system.
+\newblock \emph{Annu.\ Rev.\ Astron.\ Astrophys.}, 14:215--246, 1976.
 
 \end{thebibliography}
 

@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.XIII (Pell/norm form) and Wildberger (2005) ISBN 978-0-9757492-0-8 (Koenig I). -->",
+  "description": "Shell k=7 seed (3,1). Successor (5,4). I=7, Farey det=7, spread=49/410. 7≡-1(mod 8) so 7 splits in Z[sqrt(2)] — non-empty shell.",
+  "state": [3, 1],
+  "shell_k": 7,
+  "expected": "PASS"
+}

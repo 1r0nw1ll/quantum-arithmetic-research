@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.XIII (Pell/norm form) and Wildberger (2005) ISBN 978-0-9757492-0-8 (Koenig I). -->",
+  "description": "Claims (2,1) is shell k=1. Wrong: I(2,1)=|4-2|=2, not 1. Farey det to successor (4,3) is 2 not 1.",
+  "state": [2, 1],
+  "shell_k": 1,
+  "expected": "FAIL"
+}

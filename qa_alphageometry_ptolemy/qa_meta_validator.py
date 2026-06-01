@@ -7910,6 +7910,37 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_koenig_shell_structure_cert_family(base_dir):
+    """QA Koenig Shell Structure Cert family [293]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.XIII (Pell, norm form b^2-2e^2, inert primes in Z[sqrt(2)]); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (Koenig I=|C-F|). CLAIM: S_k={(b,e): |b^2-2e^2|=k}: QA map (b+2e,b+e) preserves |I|=k with sign flip; Farey det |be'-b'e|=k; spread=k^2/(G*G'); empty shells at inert primes p≡±3(mod 8); k=1 unique tangent shell. Checks SHELL_I/SHELL_PRES/SIGN_FLIP/FAREY_K/SPREAD_K/SPREAD_DEV_K; 4 PASS + 2 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_koenig_shell_structure_cert_v1")
+    validator = os.path.join(fam_dir, "qa_koenig_shell_structure_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_koenig_shell_structure_cert_v1/qa_koenig_shell_structure_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_koenig_shell_structure_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_koenig_shell_structure_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_koenig_shell_structure_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_koenig_spread_optimality_cert_family(base_dir):
     """QA Koenig Spread Optimality Cert family [292]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (spread s=e^2/(b^2+e^2), blue quadrance G_tilde=b^2+e^2); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 (Pell equation, Diophantine approximation). CLAIM: I(b,e)=|b^2-2e^2|=3*G_tilde*|s-1/3| (exact identity); no integer (b,e) has s=1/3 (sqrt(2) irrational as spread condition); I=1 iff |s-1/3|=1/(3*G_tilde) (Pell=spread-optimal); consecutive Pell inter-direction spread=1/(G_n*G_{n+1}); spreads alternate above/below 1/3. Checks SPREAD_ID/I_MATCH/PELL_OPT; 4 PASS + 2 FAIL fixtures; self-test ok"""
     import subprocess
@@ -9202,6 +9233,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (293, "QA Koenig Shell Structure Cert family",
+     _validate_qa_koenig_shell_structure_cert_family,
+     "QA Koenig Shell Structure Cert family [293]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.XIII (Pell, norm b^2-2e^2, inert primes p≡±3(mod 8) in Z[sqrt(2)]); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (Koenig I=|C-F|). CLAIM: shell S_k={|b^2-2e^2|=k}: QA map (b+2e,b+e) preserves |I|=k (sign flips: b'^2-2e'^2=-(b^2-2e^2)); Farey det |be'-b'e|=k (algebraic: |b(b+e)-(b+2e)e|=|b^2-2e^2|); spread(d_n,d_{n+1})=k^2/(G_tilde*G_tilde'); empty shells for k with inert prime factor to odd power (k=3,5,6,10,11 verified empty b,e<=100); k=1 unique tangent shell; spread dev |s-1/3|=k/(3*G_tilde) [cert [292]]. Checks SHELL_I/SHELL_PRES/SIGN_FLIP/FAREY_K/SPREAD_K/SPREAD_DEV_K; 4 PASS + 2 FAIL fixtures; self-test ok",
+     "293_qa_koenig_shell_structure",
+     "qa_koenig_shell_structure_cert_v1", True),
     (292, "QA Koenig Spread Optimality Cert family",
      _validate_qa_koenig_spread_optimality_cert_family,
      "QA Koenig Spread Optimality Cert family [292]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (spread s=e^2/(b^2+e^2), blue quadrance G_tilde=b^2+e^2, rational trig); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 (Pell equation, Diophantine approximation). CLAIM: I(b,e)=|b^2-2e^2|=3*G_tilde*|s-1/3| (exact algebraic identity; eliminates sqrt(2)); no integer (b,e)>0 has s=1/3 (Pell b^2=2e^2 has no positive integer solution, i.e. sqrt(2) irrational, verified b,e<=50); I=1 iff |s-1/3|=1/(3*G_tilde) (Pell solutions are spread-optimal; I>=1 for all integer b,e>0); consecutive Pell inter-direction spread=1/(G_n*G_{n+1}) decreasing; Pell spreads alternate above/below 1/3. sqrt(2) cusp characterized purely as 'spread-1/3 direction'. Checks SPREAD_ID/I_MATCH/PELL_OPT; 4 PASS + 2 FAIL fixtures; self-test ok",

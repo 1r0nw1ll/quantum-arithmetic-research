@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [293] | [QA Koenig Shell Structure](293_qa_koenig_shell_structure.md) | S_k={I=k}: QA map preserves shell, sign flips; Farey det=k; spread=k²/(G̃G̃'); empty shells at k≡±3(mod 8) primes; k=1 unique tangent shell; stratifies Ford packing by angular depth from √2 cusp | PASS |
 | [292] | [QA Koenig Spread Optimality](292_qa_koenig_spread_optimality.md) | I=3G̃\|s−1/3\| (exact identity); Pell I=1 ↔ spread-optimal at scale G̃; no integer direction has spread 1/3 (√2 irrational as spread condition); inter-pair spread=1/(G̃_n·G̃_{n+1}); √2 cusp = "spread-1/3 direction" with no rational representative | PASS |
 | [291] | [QA Fibonacci Matrix Orbit Periods](291_qa_fibonacci_matrix_orbit_periods.md) | M=[[0,1],[1,1]] has order 24 in GL(2,Z/9Z) = Pisano period π(9); orbit types: Singularity period 1, Satellite (3\|b AND 3\|e) period 8, Cosmos period 24; five-families aligned: Fibonacci/Lucas/Phibonacci→Cosmos, Tribonacci→Satellite, Ninbonacci→Singularity | PASS |
 | [290] | [QA Classical Subfamily Ford Cusps](290_qa_classical_subfamily_ford_cusps.md) | Pythagoras (b=1)→cusp 0, Plato (e=1)→cusp ∞, Fermat (I=1)→cusp √2; all Farey-adjacent chains from seed (1,1); curvatures 2e² increasing/uniform/geometric | PASS |

@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.XIII (Pell/norm form) and Wildberger (2005) ISBN 978-0-9757492-0-8 (Koenig I). -->",
+  "description": "Shell k=2 interior element (10,7). I=|100-98|=2. Successor (24,17): I=|576-578|=2. Farey det=2.",
+  "state": [10, 7],
+  "shell_k": 2,
+  "expected": "PASS"
+}

@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.XIII (Pell/norm form) and Wildberger (2005) ISBN 978-0-9757492-0-8 (Koenig I). -->",
+  "description": "Shell k=1 seed (1,1). Successor (3,2). I=1, Farey det=1, spread=1/26. The I=1 shell is the Pell chain (cert [289]).",
+  "state": [1, 1],
+  "shell_k": 1,
+  "expected": "PASS"
+}

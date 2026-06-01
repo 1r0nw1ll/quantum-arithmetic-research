@@ -1,0 +1,9 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Lothaire (2002) ISBN 978-0-521-81220-7 Ch.2 (Sturmian complexity p(n)=n+1) and Hardy+Wright (2008) ISBN 978-0-19-921986-5. -->",
+  "description": "Claims (RLLR)^8 has Sturmian complexity p(2)=3. Wrong: p(2)=4 for this periodic word (RL,LL,LR,RR all appear). Period-4 words cannot be Sturmian.",
+  "check_type": "complexity_of_word",
+  "word": "RLLRRLLRRLLRRLLRRLLRRLLRRLLRRLLR",
+  "n": 2,
+  "expected_p_n": 3,
+  "expected": "FAIL"
+}

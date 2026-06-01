@@ -1,0 +1,8 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Lothaire (2002) Algebraic Combinatorics on Words ISBN 978-0-521-81220-7 Ch.2 (Sturmian complexity p(n)=n+1) and Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.X (continued fractions). -->",
+  "description": "Characteristic Sturmian word s_alpha with alpha=sqrt(2)-1 has complexity p(7)=8=7+1. Computed from s(n)=floor((n+1)*alpha)-floor(n*alpha), checked over 200-term window.",
+  "check_type": "complexity",
+  "n": 7,
+  "expected_p_n": 8,
+  "expected": "PASS"
+}

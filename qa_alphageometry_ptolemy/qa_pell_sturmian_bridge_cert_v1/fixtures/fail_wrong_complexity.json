@@ -1,0 +1,8 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Lothaire (2002) ISBN 978-0-521-81220-7 Ch.2 (Sturmian complexity p(n)=n+1) and Hardy+Wright (2008) ISBN 978-0-19-921986-5. -->",
+  "description": "Claims s_alpha has complexity p(5)=7. Wrong: p(5)=6=5+1 for any Sturmian word.",
+  "check_type": "complexity",
+  "n": 5,
+  "expected_p_n": 7,
+  "expected": "FAIL"
+}

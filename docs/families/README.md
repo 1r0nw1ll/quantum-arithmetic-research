@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [295] | [QA Pell Sturmian Bridge](295_qa_pell_sturmian_bridge.md) | s_α (α=√2-1) is aperiodic Sturmian (p(n)=n+1, gaps {2,3}); (RLLR)∞ is periodic NOT Sturmian (p(2)=4≠3); Pell e-values = CF denominators for [0;2̄] via shared recurrence; bridge between periodic SB encoding of √2 and aperiodic Sturmian encoding of √2-1 | PASS |
 | [294] | [QA SL(2,Z) Spine](294_qa_sl2z_spine.md) | L=[[1,0],[1,1]] and R=[[1,1],[0,1]] generate SL(2,Z); M²=L·R (det(M)=-1); every primitive (b,e) is unique word in {L,R}*; Pell words follow (R,L,L,R)∞ pattern; group-theoretic backbone of Ford arc [289-293] | PASS |
 | [293] | [QA Koenig Shell Structure](293_qa_koenig_shell_structure.md) | S_k={I=k}: QA map preserves shell, sign flips; Farey det=k; spread=k²/(G̃G̃'); empty shells at k≡±3(mod 8) primes; k=1 unique tangent shell; stratifies Ford packing by angular depth from √2 cusp | PASS |
 | [292] | [QA Koenig Spread Optimality](292_qa_koenig_spread_optimality.md) | I=3G̃\|s−1/3\| (exact identity); Pell I=1 ↔ spread-optimal at scale G̃; no integer direction has spread 1/3 (√2 irrational as spread condition); inter-pair spread=1/(G̃_n·G̃_{n+1}); √2 cusp = "spread-1/3 direction" with no rational representative | PASS |

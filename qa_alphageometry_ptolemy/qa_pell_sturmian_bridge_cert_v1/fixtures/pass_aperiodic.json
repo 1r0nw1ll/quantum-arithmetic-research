@@ -1,0 +1,8 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Lothaire (2002) ISBN 978-0-521-81220-7 Ch.2 (Sturmian aperiodicity) and Hardy+Wright (2008) ISBN 978-0-19-921986-5. -->",
+  "description": "s_alpha for alpha=sqrt(2)-1 has no period T with 1<=T<=50. Verified over 100-term window. Contrasts with (RLLR)^inf which has period 4.",
+  "check_type": "aperiodic",
+  "window": 100,
+  "max_period_checked": 50,
+  "expected": "PASS"
+}

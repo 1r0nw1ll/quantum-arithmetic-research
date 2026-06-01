@@ -1,0 +1,8 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Lothaire (2002) ISBN 978-0-521-81220-7 Ch.2 (3-distance theorem, gap structure of Sturmian words) and Hardy+Wright (2008) ISBN 978-0-19-921986-5. -->",
+  "description": "Consecutive 1-positions in s_alpha (first 300 terms) have gaps in {2,3} only. This follows from 1/(sqrt(2)-1)=sqrt(2)+1 whose floor=2 and ceil=3. Not specific to Pell denominators -- holds for all N.",
+  "check_type": "gap_sizes",
+  "word_length": 300,
+  "expected_gaps": [2, 3],
+  "expected": "PASS"
+}

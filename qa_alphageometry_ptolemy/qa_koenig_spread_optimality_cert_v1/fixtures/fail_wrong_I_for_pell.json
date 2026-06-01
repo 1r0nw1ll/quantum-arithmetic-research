@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Wildberger (2005) Divine Proportions ISBN 978-0-9757492-0-8 (spread/quadrance) and Hardy+Wright (2008) ISBN 978-0-19-921986-5 (Pell equation). -->",
+  "description": "Claims (3,2) has I=2. Wrong: |9-8|=1, not 2. SPREAD_ID would give 3*13*|4/13-1/3|=1, not 2.",
+  "state": [3, 2],
+  "expected_I": 2,
+  "expected": "FAIL"
+}

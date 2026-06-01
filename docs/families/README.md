@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [292] | [QA Koenig Spread Optimality](292_qa_koenig_spread_optimality.md) | I=3G̃\|s−1/3\| (exact identity); Pell I=1 ↔ spread-optimal at scale G̃; no integer direction has spread 1/3 (√2 irrational as spread condition); inter-pair spread=1/(G̃_n·G̃_{n+1}); √2 cusp = "spread-1/3 direction" with no rational representative | PASS |
 | [291] | [QA Fibonacci Matrix Orbit Periods](291_qa_fibonacci_matrix_orbit_periods.md) | M=[[0,1],[1,1]] has order 24 in GL(2,Z/9Z) = Pisano period π(9); orbit types: Singularity period 1, Satellite (3\|b AND 3\|e) period 8, Cosmos period 24; five-families aligned: Fibonacci/Lucas/Phibonacci→Cosmos, Tribonacci→Satellite, Ninbonacci→Singularity | PASS |
 | [290] | [QA Classical Subfamily Ford Cusps](290_qa_classical_subfamily_ford_cusps.md) | Pythagoras (b=1)→cusp 0, Plato (e=1)→cusp ∞, Fermat (I=1)→cusp √2; all Farey-adjacent chains from seed (1,1); curvatures 2e² increasing/uniform/geometric | PASS |
 | [289] | [QA Koenig Pell Ford Circle](289_qa_koenig_pell_ford_circle.md) | Koenig I=1 BEDA sequence = Pell equation solutions; consecutive pairs are Farey neighbors (\|b·e'−b'·e\|=1 = Ford tangency); QA map (b,e)→(b+2e,b+e) generates sequence converging to √2; I=\|b²−2e²\| is the Pell discriminant | PASS |

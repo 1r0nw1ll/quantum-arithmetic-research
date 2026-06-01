@@ -7910,6 +7910,37 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_classical_subfamily_ford_cusps_cert_family(base_dir):
+    """QA Classical Subfamily Ford Cusps Cert family [290]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (Pythagoras b=1, Plato e=1, Fermat I=|C-F|=1); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.III (Ford circles, Farey). CLAIM: three classical subfamilies form three Farey-adjacent Ford circle chains from seed (1,1): Pythagoras->cusp 0, Plato->cusp inf, Fermat->cusp sqrt(2). Checks PYTH_COND/FAREY/CURV; PLATO_COND/FAREY/CURV; FERMAT_PELL/FAREY/MAP; 3 PASS + 3 FAIL fixtures; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_classical_subfamily_ford_cusps_cert_v1")
+    validator = os.path.join(fam_dir, "qa_classical_subfamily_ford_cusps_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_classical_subfamily_ford_cusps_cert_v1/qa_classical_subfamily_ford_cusps_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_classical_subfamily_ford_cusps_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_classical_subfamily_ford_cusps_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_classical_subfamily_ford_cusps_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_koenig_pell_ford_circle_cert_family(base_dir):
     """QA Koenig Pell Ford Circle Cert family [289]. Primary sources: Hardy+Wright (2008) An Introduction to the Theory of Numbers Oxford ISBN 978-0-19-921986-5 Ch.III (Farey/Ford tangency); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (Koenig I=|C-F|). CLAIM: Koenig I=1 BEDA sequence = Pell equation solutions {(b,e): |b^2-2e^2|=1}; consecutive elements Farey-adjacent |b_n*e_{n+1}-b_{n+1}*e_n|=1 (Ford tangency); QA map (b,e)->(b+2e,b+e) generates sequence. Checks PELL_1/KOENIG_1/FAREY_1/ALT_1; 2 PASS + 2 FAIL fixtures; self-test ok"""
     import subprocess
@@ -9109,6 +9140,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (290, "QA Classical Subfamily Ford Cusps Cert family",
+     _validate_qa_classical_subfamily_ford_cusps_cert_family,
+     "QA Classical Subfamily Ford Cusps Cert family [290]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (Pythagoras b=1, Plato e=1, Fermat I=|C-F|=1 classical subfamilies); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.III (Ford circles, Farey adjacency). CLAIM: three classical subfamilies form three distinct Farey-adjacent Ford circle chains from seed (1,1): (A) Pythagoras (b=1)->(1,2),(1,3),... curvatures 2e^2 strictly increasing, cusp 0; (B) Plato (e=1)->(2,1),(3,1),... curvatures 2*1^2=2 uniform, cusp inf; (C) Fermat (I=1)->Pell chain, curvatures growing geometrically, cusp sqrt(2) [cert [289]]. Proofs: Pythagoras Farey: |1*(e+1)-1*e|=1; Plato Farey: |b*1-(b+1)*1|=1; Fermat Farey: |b^2-2e^2|=1 [289]. Checks PYTH_COND/FAREY/CURV; PLATO_COND/FAREY/CURV; FERMAT_PELL/FAREY/MAP; 3 PASS + 3 FAIL fixtures; self-test ok",
+     "290_qa_classical_subfamily_ford_cusps",
+     "qa_classical_subfamily_ford_cusps_cert_v1", True),
     (289, "QA Koenig Pell Ford Circle Cert family",
      _validate_qa_koenig_pell_ford_circle_cert_family,
      "QA Koenig Pell Ford Circle Cert family [289]. Primary sources: Hardy+Wright (2008) An Introduction to the Theory of Numbers Oxford ISBN 978-0-19-921986-5 Ch.III (Farey sequences, Ford circles, tangency condition |pq'-p'q|=1); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (BEDA tuples, Koenig I=|C-F| invariant). CLAIM (narrow, falsifiable): Koenig I=1 BEDA sequence = Pell equation solution set {(b,e): |b^2-2e^2|=1}. Consecutive elements satisfy Farey adjacency |b_n*e_{n+1}-b_{n+1}*e_n|=1 = Ford circle tangency condition. QA state map (b,e)->(b+2e,b+e)=(a,d) generates sequence from seed (1,1) via multiplication by (1+sqrt(2)) in Z[sqrt(2)]. Key identity: I=|C-F|=|2e^2-b^2|=Pell discriminant. Farey proof: |b*e'-b'*e| with (b',e')=(b+2e,b+e) gives |b^2-2e^2|=1. Theorem NT: all integer. Checks PELL_1/KOENIG_1/FAREY_1/ALT_1; 2 PASS + 2 FAIL fixtures; self-test ok",

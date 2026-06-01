@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [290] | [QA Classical Subfamily Ford Cusps](290_qa_classical_subfamily_ford_cusps.md) | Pythagoras (b=1)→cusp 0, Plato (e=1)→cusp ∞, Fermat (I=1)→cusp √2; all Farey-adjacent chains from seed (1,1); curvatures 2e² increasing/uniform/geometric | PASS |
 | [289] | [QA Koenig Pell Ford Circle](289_qa_koenig_pell_ford_circle.md) | Koenig I=1 BEDA sequence = Pell equation solutions; consecutive pairs are Farey neighbors (\|b·e'−b'·e\|=1 = Ford tangency); QA map (b,e)→(b+2e,b+e) generates sequence converging to √2; I=\|b²−2e²\| is the Pell discriminant | PASS |
 | [288] | [QA Anchor Geodesic Separation](288_qa_anchor_geodesic_separation.md) | In any tree, edge Δb·Δe=−1 iff on L-R path, +1 iff off path; qa_monotone_dir_score counts off-path incident edges; score=0 iff node is non-junction on-path; degree naturally embedded; drives AUROC=0.7779 on graph anomaly benchmark | PASS |
 | [287] | [QA Mod-24 Quadrance 2-adic Signature](287_qa_mod24_quadrance_v2_signature.md) | v₂(b²+e²) = 2·min(v₂(b),v₂(e)) + δ where δ=1 iff v₂(b)=v₂(e) (diagonal enhancement from odd squares ≡1 mod 8); orbit class separates: cosmos→v₂(G)≤5, satellite/singularity→v₂(G)≥6; contrasts mod-9 cert [283] where no δ term (1+1=2 coprime to 3); exhaustive 576 pairs | PASS |

@@ -1,0 +1,7 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA cert fixture grounded in Wildberger (2005) Divine Proportions ISBN 978-0-9757492-0-8 (Plato subfamily e=1) and Hardy+Wright (2008) ISBN 978-0-19-921986-5 Ch.III (Ford circles/Farey). -->",
+  "description": "Sequence (1,1),(2,2),(3,3): e increases with b. e=2 at index 1 violates Plato condition e=1. Also curvatures 2,8,18 are not uniform.",
+  "chain_type": "plato",
+  "sequence": [[1,1],[2,2],[3,3]],
+  "expected": "FAIL"
+}

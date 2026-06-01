@@ -417,40 +417,173 @@ separate hypotheses; the primary is the load-bearing claim.
 % ====================================================================
 \section{Cross-Domain Synthesis}\label{sec:synthesis}
 
-\subsection{The shared structure}
+\subsection{Summary across domains}
 
-All four applications use the same algebraic object: the orbit decomposition
-of $T$ at $m=24$ (equivalently $m=9$, since orbit type is $m=9$-determined
-and $m=24$ is its Pisano period).  No domain-specific tuning enters the
-algebraic layer.  The observer projections differ (BFS distances, period ratios,
-spectral centroids, SST anomaly bins), but the QA computation downstream is identical.
+Table~\ref{tab:domains} collects the four applications.
+The left columns describe what changes between domains (the observer projection
+and the outcome metric); the right columns describe what stays fixed
+(the algebraic computation and the modulus).
 
-\subsection{Why $m = 24$?}
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{p{2cm}p{3.2cm}p{2.5cm}p{2cm}l}
+\toprule
+\textbf{Domain} & \textbf{Observer projection} & \textbf{Primary result} & \textbf{Effect} & \textbf{Replicated?} \\
+\midrule
+Graph networks &
+  BFS distances to two anchors $\to$ $(\Delta b, \Delta e)$ sign product &
+  AGS theorem (exact) &
+  AUROC $0.960$ &
+  Theorem \\[4pt]
+Planetary resonances &
+  Period ratio $p$:$q$ $\to$ Fibonacci label (both integers Fibonacci?) &
+  Binomial + Fisher combined &
+  $p = 1.5\!\times\!10^{-54}$ &
+  Yes ($n=341$) \\[4pt]
+EEG seizure &
+  23-ch PSD $\to$ $k$-means ($k=9$) $\to$ PCA $\to$ mod-9 $\to$ $(b,e,d,a)$ &
+  $\Delta R^2$ vs delta-band baseline &
+  $+0.210$ (SE $0.029$) &
+  No \\[4pt]
+Climate (ENSO) &
+  5 climate indices $\to$ $k$-means ($K=4$) $\to$ mod-9 $\to$ orbit family &
+  $\chi^2$ test of orbit $\times$ phase independence &
+  $p = 1.2\!\times\!10^{-19}$ &
+  No \\
+\bottomrule
+\end{tabular}
+\caption{The four domains.  The algebraic layer (Fibonacci shift $T$ at $m=9$,
+orbit classification into Cosmos/Satellite/Singularity) is identical across rows.
+Only the observer projection and outcome metric change.}
+\label{tab:domains}
+\end{table}
 
-The modulus $m=24$ satisfies two domain-independent properties:
-(a) it is the Pisano period $\pi(9)$, meaning Fibonacci sequences
-return to their initial values after exactly 24 steps modulo 9;
-(b) $24 \mid 2CF$ for every primitive Pythagorean triple $(C,F,G)$,
-making it the fundamental quantum of the Koenig step in triple generation.
-Both properties constrain $m=24$ without reference to planetary mechanics,
-neural signals, or climate.
+\subsection{What is literally shared}
 
-\subsection{Alternative explanation}
+The following are identical across all four applications, with no domain-specific
+adjustment:
 
-The most conservative alternative is that the QA orbit classifier is an
-efficient nonlinear feature extractor whose cross-domain success is
-domain-specific and coincidental: the mod-24 binning happens to
-align with physical periodicities (24-month ENSO cycle, 24-channel EEG grids,
-resonance denominator arithmetic) by construction, not by deep structural necessity.
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{The map $T$}: $T(b,e) = (e,\, ((b+e-1)\bmod 9)+1)$.
+  \item \textbf{The orbit partition}: Cosmos (72 states, period 24),
+        Satellite (8 states, period 8), Singularity (the fixed point $(9,9)$).
+  \item \textbf{The modulus $m = 9$} for orbit classification
+        and $m = 24$ for the derived coordinates $d$ and $a$.
+  \item \textbf{The sign product} $\Delta b \cdot \Delta e \in \{-1,+1\}$
+        as the graph-theoretic discriminant (a direct read of the QA step direction).
+\end{enumerate}
 
-This alternative cannot be ruled out by the current evidence.
-The AGS theorem for trees is an exact mathematical result that does not depend
-on coincidence; the three empirical results could in principle be explained
-by alignment artifacts.  Distinguishing the two hypotheses requires:
-(a) adversarial testing with null models that preserve the frequency structure
-but destroy the orbit alignment, and
-(b) out-of-sample replication on datasets collected after the analysis was designed.
-The planetary result has passed (b); the EEG and climate results have not.
+What differs is the \emph{observer projection}: the function that maps
+domain data (period ratios, voltage amplitudes, SST anomalies, graph distances)
+into a pair $(b,e) \in \{1,\dots,9\}^2$.  Each observer projection is
+defined once, before examining outcome labels, and is not adjusted
+post-hoc to improve fit.
+
+\subsection{Why $m = 9$ and $m = 24$ are not free parameters}
+
+Both moduli are constrained by properties that predate any of the four
+empirical domains:
+
+\paragraph{Pisano period.}
+The Fibonacci sequence modulo 9 is periodic with period $\pi(9) = 24$:
+the pair $(F_k \bmod 9,\, F_{k+1} \bmod 9)$ returns to $(1,1)$ after exactly
+24 steps~\cite{wall1960}.  No other single-digit modulus $m \leq 9$ has a
+shorter Pisano period relative to the number of distinct states.
+At $m=9$, the 72-state Cosmos orbit has period exactly $\pi(9) = 24$,
+the Satellite has period $8 \mid 24$, and the Singularity is fixed.
+The period-24 structure arises from the arithmetic of $\mathbb{Z}[\varphi]/9\mathbb{Z}[\varphi]$,
+not from fitting to any domain.
+
+\paragraph{Pythagorean divisibility.}
+For every primitive Pythagorean triple $(C,F,G)$ with $C = 2de$,
+$F = d^2-e^2$, $G = d^2+e^2$, one has $24 \mid 2CF$~\cite{carmichael1910}.
+This is a theorem of elementary number theory: one of $d,e$ is even,
+one of $d-e, d+e$ is divisible by 3, and one of $d,e,d-e,d+e$ is
+divisible by 4, giving $2CF = 4de(d-e)(d+e)$ divisible by
+$4 \cdot 2 \cdot 3 = 24$.  The modulus 24 is therefore the
+\emph{natural quantum of the Pythagorean step}, independent of any
+empirical application.
+
+Neither derivation involves planetary mechanics, neural signals, climate,
+or graph topology.  The fact that $m=24$ is also the length of the
+ENSO climatological cycle and the number of standard EEG channels is
+a coincidence that the alignment-artifact hypothesis must explain.
+
+\subsection{Alignment artifact audit}
+
+For each domain we identify the specific modelling choice that a skeptic
+would point to as a potential alignment artifact:
+
+\paragraph{Graph networks.}
+No free parameters exist: the AGS theorem holds for \emph{any} choice of
+anchors $L,R$ in \emph{any} finite unweighted tree.  The AUROC $= 0.960$
+result on synthetic benchmarks is a consequence of the theorem, not a
+tuning outcome.  This domain is \textbf{artifact-free by proof}.
+
+\paragraph{Planetary resonances.}
+The Fibonacci label (``both $p$ and $q$ are Fibonacci numbers'') is a
+binary predicate with no free threshold.  The uniform null rate
+(22\% for first-order) is determined by counting coprime ratios with $p \leq 10$,
+a standard convention independent of the data.
+The tougher null models (Section~\ref{sec:planetary}) show the result
+is robust up to the $1/p^2$ weighting; only a physically unjustified
+penalty renders it non-significant.
+\textbf{Artifact risk: low.}
+The out-of-sample replication ($n=341$ systems, $p = 2.6\times10^{-49}$)
+provides independent confirmation.
+
+\paragraph{EEG.}
+The choice $k=9$ clusters aligns with the modulus $m=9$, which is not
+a coincidence: it was set to match the modulus.  This is a \emph{design
+choice}, not a post-hoc tuning, but it means the EEG result cannot be
+used to independently validate $m=9$ as the correct modulus.
+The result validates that, \emph{given} $k=9$, the 4-tuple features
+carry information beyond the spectral baseline.
+Separately, all 10 $\Delta R^2$ values are positive; the probability of
+this occurring by chance is $(0.5)^{10} \approx 0.001$ under a sign-randomisation
+null, suggesting the gain is systematic.
+\textbf{Artifact risk: moderate.}  $k=9$ is a confounded choice; held-out
+replication with $k \in \{7, 9, 11\}$ would bracket the sensitivity.
+
+\paragraph{Climate.}
+The $K=4$ cluster count has no alignment argument with $m=9$ or $m=24$.
+The orbit assignment uses a mod-9 reduction of the centroid coordinates,
+which does align with the modulus.
+The 24-month ENSO cycle does align with $m=24$, but the QCI window in
+the secondary test (24 months) was set before the primary chi-squared result
+was examined.
+\textbf{Artifact risk: moderate.}  The primary chi-squared result
+($p=1.2\times10^{-19}$) depends on the centroid-to-orbit assignment,
+which is the modulus-aligned step.  A version using $m=7$ or $m=11$
+as a placebo would test whether the effect is modulus-specific.
+
+\subsection{Replication scorecard}
+
+\begin{center}
+\small
+\begin{tabular}{lll}
+\toprule
+\textbf{Domain} & \textbf{Current status} & \textbf{What would close the loop} \\
+\midrule
+Graph (AGS)          & Proven (theorem)       & Extension to bounded-treewidth graphs \\
+Planetary            & Out-of-sample replicated ($n=341$) & Prospective catalogue update \\
+EEG                  & 10 patients, all positive & Pre-registered on held-out 13 patients \\
+Climate              & Single dataset, 1950--2023 & Placebo moduli ($m=7, 11$); ERA5 hold-out \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The joint prior probability that all four results arise by chance (treating
+domains as independent) is the product of the individual probabilities,
+which is negligible.  However, the four domains are not independent tests
+of the same hypothesis in the strict statistical sense: they share the
+same analyst, the same algebraic framework, and partly overlapping
+design choices.  The appropriate weight to place on the cross-domain
+pattern therefore lies between ``four independent replications''
+and ``one result tested four ways.''
+The planetary out-of-sample replication and the AGS theorem are the
+two load-bearing results that are least susceptible to this criticism.
 
 % ====================================================================
 \section{Open Questions}\label{sec:open}

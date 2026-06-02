@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [304] | [QA Polyphase Sum Structure](304_qa_polyphase_sum_structure.md) | M^k+M^(k+12)=0 (grade-inversion pairing via M¹²=−I); 6-phase and 12-phase sums=0; all even n\|24 sums=0; n=3 unique non-zero (3I); 12 sextets / 6 dodecaplets; observer balance is Theorem NT only | PASS |
 | [303] | [QA Three-Phase Cosmos Cancellation](303_qa_three_phase_cosmos_cancellation.md) | M⁰+M⁸+M¹⁶≡3I mod 9; det(M⁸)=+1 (8-step is even-grade rotor, T¹ is odd-grade versor); M⁸ order 3; 72 Cosmos states form 24 disjoint T⁸-triads; observer sum 1−½−½=0 is Theorem NT boundary only | PASS |
 | [302] | [QA Pisano mod-8 CRT](302_qa_pisano_mod8_crt.md) | π(8)=12; M^6≡5I mod 8 (2-adic scalar); π(24)=lcm(12,8)=24 (CRT); M^12≡17I mod 24; grade scalars −1/5/17 at mod 9/8/24 form CRT triple; order 24 exact | PASS |
 | [301] | [QA 3-Adic Filtration](301_qa_3adic_filtration.md) | μ₃ maps Cosmos→Satellite→Singularity (9-to-1 then 8-to-1); T₀∘μ₃=μ₃∘T₀ (equivariant); x²−x−1 irred. over GF(3); M mod 3 order 8; Cosmos reduces 9-to-1 onto (Z/3Z)²\{0} | PASS |

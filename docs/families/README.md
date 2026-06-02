@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [299] | [QA Cayley-Hamilton Fibonacci-Lucas](299_qa_cayley_hamilton_fibonacci_lucas.md) | M²=M+I (Cayley-Hamilton); M^k=Fibonacci matrix; Tr(M^k)=L(k) (Lucas); det(M^k)=(−1)^k; L(12)=322≡7=Tr(−I) mod 9 ([298] corollary) | PASS |
 | [298] | [QA Orbit Grade Decomposition](298_qa_orbit_grade_decomposition.md) | v₃(gcd(b,e)) is T-invariant (gcd(e,b+e)=gcd(b,e)); v₃=2/1/0 gives Singularity/Satellite/Cosmos; periods 1/8/24; even/odd split 12+12/4+4; M^12≡−I mod 9 (grade inversion) | PASS |
 | [297] | [QA Pell Rotor Eigenspread](297_qa_pell_rotor_eigenspread.md) | A=[[1,2],[1,1]] (det=−1, Pell step versor); Pell chain bₙ²−2eₙ²=(−1)^(n+1); \|sₙ−1/3\|=1/(3G̃ₙ) ([292] formula at I=1); √2 irrational (no b²=2e² integer sol); A²=RLLR matrix from [296] | PASS |
 | [296] | [QA SL(2,Z) Versor Isomorphism](296_qa_sl2z_versor_isomorphism.md) | Stern-Brocot bijection primitive (b,e)↔{L,R}*; T-op=Fibonacci M (det=−1, odd-grade operator); M²=L·R (rotor, det=+1); (9,9) unique T-fixpoint; orbit partition 1+8+72; all SB words in SL(2,Z) | PASS |

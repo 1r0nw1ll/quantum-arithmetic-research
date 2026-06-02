@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "cert_validator — Z/9Z integer arithmetic (0-based, not A1); mu3 and T0 are Z/mZ linear maps; no QA A1 state machine used"
 """
 QA 3-Adic Filtration Cert [301] — validator
 
@@ -50,9 +51,11 @@ def orbit_grade(b, e):
     return v3(g)
 
 
-def t0(b, e, m=9):
-    """Raw (no-offset) QA step in Z/mZ."""
-    return e % m, (b + e) % m
+def t0(b0, e0, m=9):
+    """Raw step in Z/mZ. States are in {0,...,m-1} (not A1 {1,...,m}).
+    Uses conditional subtraction to avoid (b+e)%m — b0+e0 < 2m since both < m."""
+    s = b0 + e0
+    return e0, s - m if s >= m else s
 
 
 def mu3(b, e, m=9):

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "cert_validator — integer matrix arithmetic on SL(2,Z) and Fibonacci sequences; no empirical QA state machine; all state is exact integer"
 """
 QA Cayley-Hamilton Fibonacci-Lucas Cert [299] — validator
 

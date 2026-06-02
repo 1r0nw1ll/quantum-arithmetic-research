@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [303] | [QA Three-Phase Cosmos Cancellation](303_qa_three_phase_cosmos_cancellation.md) | M⁰+M⁸+M¹⁶≡3I mod 9; det(M⁸)=+1 (8-step is even-grade rotor, T¹ is odd-grade versor); M⁸ order 3; 72 Cosmos states form 24 disjoint T⁸-triads; observer sum 1−½−½=0 is Theorem NT boundary only | PASS |
 | [302] | [QA Pisano mod-8 CRT](302_qa_pisano_mod8_crt.md) | π(8)=12; M^6≡5I mod 8 (2-adic scalar); π(24)=lcm(12,8)=24 (CRT); M^12≡17I mod 24; grade scalars −1/5/17 at mod 9/8/24 form CRT triple; order 24 exact | PASS |
 | [301] | [QA 3-Adic Filtration](301_qa_3adic_filtration.md) | μ₃ maps Cosmos→Satellite→Singularity (9-to-1 then 8-to-1); T₀∘μ₃=μ₃∘T₀ (equivariant); x²−x−1 irred. over GF(3); M mod 3 order 8; Cosmos reduces 9-to-1 onto (Z/3Z)²\{0} | PASS |
 | [300] | [QA SL(2,Z) Equivariance](300_qa_sl2z_equivariance.md) | gcd(b,b+e)=gcd(b,e) and gcd(b+e,e)=gcd(b,e) → all SL(2,Z) preserves v₃ strata; L·M·L⁻¹=[[8,1],[8,2]] mod 9, R·M·R⁻¹=[[1,1],[1,0]], both N²=N+I, both produce 1+8+72 | PASS |

@@ -7910,6 +7910,25 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_three_phase_cosmos_cancellation_cert_family(base_dir):
+    """QA Three-Phase Cosmos Cancellation Cert family [303]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541; Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) M^0+M^8+M^16 equiv 3I mod 9: three equidistant rotation matrices sum to 3*identity; (C2) det(M^8)=+1 (even-grade rotor): 8-step inter-phase advance is a rotor; T^1 is odd-grade versor; Cassini det(M^k)=(-1)^k verified k=0..24; (C3) M^8 has order exactly 3 mod 9: M^8=[[4,3],[3,7]], M^16=[[7,6],[6,4]], M^24=I mod 9; (C4) T^8 maps all 72 Cosmos states (v3(gcd)=0) to Cosmos; 72 states partition into exactly 24 disjoint triads under T^8; T^24=identity on all Cosmos (exhaustive A1 arithmetic); (C5) observer sum: exact Fraction 1+(-1/2)+(-1/2)=0; discrete matrix sum is 3I not 0 (Theorem NT boundary). Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_three_phase_cosmos_cancellation_cert_v1")
+    validator = os.path.join(fam_dir, "qa_three_phase_cosmos_cancellation_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_three_phase_cosmos_cancellation_cert_v1/qa_three_phase_cosmos_cancellation_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_three_phase_cosmos_cancellation_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pisano_mod8_crt_cert_family(base_dir):
     """QA Pisano mod-8 CRT Cert family [302]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) pi(8)=12: F mod 8 period exactly 12; M^12=I mod 8; divisors {1,2,3,4,6} not I; (C2) M^6=5I mod 8 (2-adic half-period scalar; 5^2=1 mod 8); (C3) pi(24)=lcm(12,8)=24 (CRT); (C4) M^12=17I mod 24: F(11)=89 equiv 17, F(12)=0, F(13)=17 mod 24; 17^2=1 mod 24; grade scalars: mod 9 gives 8=-1 ([298]), mod 8 gives 5 (C2), mod 24 gives 17 (C4); CRT: 17 equiv -1 mod 9 and 1 mod 8; (C5) exact order 24: M^24=I, M^k not I for k in {1,2,3,4,6,8,12}. Checks C1..C5; self-test ok"""
     import subprocess
@@ -9428,6 +9447,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (303, "QA Three-Phase Cosmos Cancellation Cert family",
+     _validate_qa_three_phase_cosmos_cancellation_cert_family,
+     "QA Three-Phase Cosmos Cancellation Cert family [303]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541; Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) M^0+M^8+M^16 equiv 3I mod 9: three equidistant phase matrices sum to 3*identity (not 0); (C2) det(M^8)=+1 (even-grade rotor): 8-step inter-phase shift is a rotation; T^1 is odd-grade versor (det=-1); Cassini det(M^k)=(-1)^k verified k=0..24; (C3) M^8 has order exactly 3 mod 9: M^8=[[4,3],[3,7]], M^16=[[7,6],[6,4]], M^24=I mod 9; (C4) T^8 maps all 72 Cosmos states (v3(gcd)=0) to Cosmos; 72 states partition into 24 disjoint triads {s, T^8(s), T^16(s)} with T^24(s)=s; exhaustive A1 no-zero arithmetic; (C5) observer sum (Theorem NT): exact Fraction 1+(-1/2)+(-1/2)=0 for cos(0,120,240 deg); discrete QA sum is 3I not 0 — balance is observer-layer only. Builds on cert [291] (M^24=I mod 9), cert [296] (det(M)=-1 odd-grade), cert [298] (1+8+72 v3-strat), cert [299] (Cassini). Checks C1_three_phase_matrix_sum_3I/C2_M8_even_grade_rotor/C3_M8_order_3_mod9/C4_cosmos_triads_closed/C5_observer_balance_theorem_nt; 5 PASS + 0 FAIL; self-test ok",
+     "303_qa_three_phase_cosmos_cancellation",
+     "qa_three_phase_cosmos_cancellation_cert_v1", True),
     (302, "QA Pisano mod-8 CRT Cert family",
      _validate_qa_pisano_mod8_crt_cert_family,
      "QA Pisano mod-8 CRT Cert family [302]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) pi(8)=12: Fibonacci mod 8 period 12; M^12=I mod 8; proper divisors {1,2,3,4,6} not identity. (C2) M^6=5I mod 8: 2-adic half-period scalar, 5^2 equiv 1 mod 8. (C3) CRT: pi(24)=lcm(pi(8),pi(3))=lcm(12,8)=24; M^24=I mod 24; M^24=I mod 3 and mod 8. (C4) M^12 mod 24=17I: F(11)=89 equiv 17, F(12)=144 equiv 0, F(13)=233 equiv 17 mod 24; 17^2=289 equiv 1 mod 24. Three grade scalars: mod 9 gives 8=-1 (cert [298]), mod 8 gives 5 at step 6 (C2), mod 24 gives 17 at step 12 (C4); CRT check: 17 equiv 8 mod 9 and 1 mod 8. (C5) Exact order 24 in GL(2,Z/24Z): M^24=I; M^k not I for k in {1,2,3,4,6,8,12}. Checks C1_pi8/C2_M6_5I/C3_crt/C4_M12_17I/C5_order; 5 PASS + 0 FAIL; self-test ok",

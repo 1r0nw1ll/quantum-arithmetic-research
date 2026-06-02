@@ -3,7 +3,7 @@
   "captured_at_utc": "2026-06-02T13:49:22Z",
   "fixture_hash": "81ce926db27c3b1aadf182274d2d1b3fe893b29fb932ec298779cf183aa9db23",
   "fixture_rebuild_graph_hash": {
-    "Darwin": "4c9fa93317662f593825e7ae30fa656542f156b21ed979b569c3d5c01fb847ac"
+    "Darwin": "81d45caec4d5116e14ee653742281c118b3514d952ac533f488c1c42d012639e"
   },
   "qa_compliance": "memory_infra \u2014 [228] Phase 5 determinism expected hashes (per-platform)"
 }

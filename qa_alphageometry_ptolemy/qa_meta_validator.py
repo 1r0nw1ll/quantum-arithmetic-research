@@ -7910,6 +7910,25 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_sl2z_equivariance_cert_family(base_dir):
+    """QA SL(2,Z) Equivariance Cert family [300]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.V+X; Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) L preserves gcd: gcd(b,b+e)=gcd(b,e) exhaustive + algebraic; (C2) R preserves gcd: gcd(b+e,e)=gcd(b,e); (C3) all W in {L,R}* len 1..8 preserve gcd(W*v)=gcd(v) for all 81 states; (C4) sandwich: L*M*L^{-1}=[[-1,1],[-1,2]] (mod 9 [[8,1],[8,2]]), R*M*R^{-1}=[[1,1],[1,0]], both trace=1 det=-1 char poly x^2-x-1; (C5) both sandwiches produce orbit partition 1+8+72 on {1,...,9}^2. Checks C1_L_preserves_gcd/C2_R_preserves_gcd/C3_full_equivariance/C4_sandwich_char_poly/C5_sandwich_orbit_partition; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_sl2z_equivariance_cert_v1")
+    validator = os.path.join(fam_dir, "qa_sl2z_equivariance_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_sl2z_equivariance_cert_v1/qa_sl2z_equivariance_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_sl2z_equivariance_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_cayley_hamilton_fibonacci_lucas_cert_family(base_dir):
     """QA Cayley-Hamilton Fibonacci-Lucas Cert family [299]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X; Lucas (1878) Amer. J. Math. 1(2):184-196 DOI 10.2307/2369308; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) M^2=M+I (Cayley-Hamilton, char poly x^2-x-1); (C2) M^k=[[F(k-1),F(k)],[F(k),F(k+1)]] exactly k=0..40; (C3) Tr(M^k)=L(k) (Lucas number) k=1..40; (C4) det(M^k)=(-1)^k; (C5) L(12)=322, 322 mod 9=7=Tr(-I mod 9) [corollary of cert [298] M^12=-I mod 9]; L(24) mod 9=2=Tr(I mod 9). Checks C1_cayley_hamilton/C2_fibonacci_entries/C3_lucas_trace/C4_alternating_det/C5_mod9_corollary; self-test ok"""
     import subprocess
@@ -9371,6 +9390,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (300, "QA SL(2,Z) Equivariance Cert family",
+     _validate_qa_sl2z_equivariance_cert_family,
+     "QA SL(2,Z) Equivariance Cert family [300]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.V+X; Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) gcd(b,b+e)=gcd(b,e) for all b,e>=1 (L-equivariance, algebraic + exhaustive {1,...,9}^2); (C2) gcd(b+e,e)=gcd(b,e) (R-equivariance); (C3) all W in {L,R}* length 1..8 preserve gcd(W*v)=gcd(v) for all 81 states in {1,...,9}^2; (C4) explicit sandwiches: L*M*L^{-1}=[[-1,1],[-1,2]] (mod 9 [[8,1],[8,2]]), R*M*R^{-1}=[[1,1],[1,0]]; both have trace=1, det=-1, char poly x^2-x-1 (same as M), each satisfies N^2=N+I; (C5) both conjugated operators produce orbit partition 1+8+72 on {1,...,9}^2 (same as M). Consequence: the orbit strata are SL(2,Z)-stable subsets; versor sandwich preserves orbit structure. Checks C1..C5; 5 PASS + 0 FAIL fixtures; self-test ok",
+     "300_qa_sl2z_equivariance",
+     "qa_sl2z_equivariance_cert_v1", True),
     (299, "QA Cayley-Hamilton Fibonacci-Lucas Cert family",
      _validate_qa_cayley_hamilton_fibonacci_lucas_cert_family,
      "QA Cayley-Hamilton Fibonacci-Lucas Cert family [299]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X; Lucas (1878) Amer. J. Math. 1(2):184-196 DOI 10.2307/2369308; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: M=[[0,1],[1,1]] (QA T-operator) satisfies: (C1) M^2=M+I (Cayley-Hamilton; char poly x^2-x-1); (C2) M^k=[[F(k-1),F(k)],[F(k),F(k+1)]] exactly for k=0..40, F=Fibonacci; (C3) Tr(M^k)=L(k) (k-th Lucas number) for k=1..40, L(k)=F(k-1)+F(k+1); (C4) det(M^k)=(-1)^k for k=0..40; (C5) corollary of cert [298]: L(12)=322, 322 mod 9=7=-2 mod 9=Tr(-I mod 9); L(24) mod 9=2=Tr(I mod 9); M^24=I mod 9. All five checks pass for k up to 40. Checks C1_cayley_hamilton/C2_fibonacci_entries/C3_lucas_trace/C4_alternating_det/C5_mod9_corollary; 5 PASS + 0 FAIL fixtures; self-test ok",

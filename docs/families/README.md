@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [300] | [QA SL(2,Z) Equivariance](300_qa_sl2z_equivariance.md) | gcd(b,b+e)=gcd(b,e) and gcd(b+e,e)=gcd(b,e) → all SL(2,Z) preserves v₃ strata; L·M·L⁻¹=[[8,1],[8,2]] mod 9, R·M·R⁻¹=[[1,1],[1,0]], both N²=N+I, both produce 1+8+72 | PASS |
 | [299] | [QA Cayley-Hamilton Fibonacci-Lucas](299_qa_cayley_hamilton_fibonacci_lucas.md) | M²=M+I (Cayley-Hamilton); M^k=Fibonacci matrix; Tr(M^k)=L(k) (Lucas); det(M^k)=(−1)^k; L(12)=322≡7=Tr(−I) mod 9 ([298] corollary) | PASS |
 | [298] | [QA Orbit Grade Decomposition](298_qa_orbit_grade_decomposition.md) | v₃(gcd(b,e)) is T-invariant (gcd(e,b+e)=gcd(b,e)); v₃=2/1/0 gives Singularity/Satellite/Cosmos; periods 1/8/24; even/odd split 12+12/4+4; M^12≡−I mod 9 (grade inversion) | PASS |
 | [297] | [QA Pell Rotor Eigenspread](297_qa_pell_rotor_eigenspread.md) | A=[[1,2],[1,1]] (det=−1, Pell step versor); Pell chain bₙ²−2eₙ²=(−1)^(n+1); \|sₙ−1/3\|=1/(3G̃ₙ) ([292] formula at I=1); √2 irrational (no b²=2e² integer sol); A²=RLLR matrix from [296] | PASS |

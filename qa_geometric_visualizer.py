@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: parametric geometry visualization
 QA Geometric Visualizer — See what Ben sees.
 
 Renders the complete geometric picture of a QA number (b, e, d, a):

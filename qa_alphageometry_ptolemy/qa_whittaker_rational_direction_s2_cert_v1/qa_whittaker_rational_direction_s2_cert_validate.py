@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """QA Whittaker Rational Direction S2 Cert validator.
+# RT1_OBSERVER_FILE: Whittaker rational direction — classical trig as verification for RT claims
 
 Candidate family ID: [273], unregistered until hostile review.
 

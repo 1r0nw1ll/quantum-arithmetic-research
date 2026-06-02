@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: covariance test signal generation
 QA Covariant Observable — Pre-Registered Validation
 
 PRE-REGISTRATION (locked before running QCI):

@@ -1,4 +1,5 @@
 """QA-ML v3.3 CGA motor primitive (dual-quaternion form).
+# RT1_OBSERVER_FILE: motor algebra ML — rotation representation observer layer
 
 A CGA motor M = T·R encodes a rigid SE(3) transformation as a single
 element of the even subalgebra of Cl(4,1). In the compact dual-quaternion

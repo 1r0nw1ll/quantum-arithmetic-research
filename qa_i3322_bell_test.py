@@ -33,7 +33,7 @@ def E_N(s, t, N):
     Returns:
         Correlation value between -1 and 1
     """
-    return np.cos(2 * np.pi * (s - t) / N)
+    return np.cos(2 * np.pi * (s - t) / N)  # noqa: RT1 — observer-projection: Bell inequality quantum correlations
 
 # ============================================================================
 # I₃₃₂₂ Bell Inequality
@@ -382,16 +382,16 @@ def compare_chsh_vs_i3322():
     # Circle for 8|N (CHSH)
     r1 = 1.0
     x1, y1 = 0.5, 0
-    circle1_x = x1 + r1 * np.cos(theta)
-    circle1_y = y1 + r1 * np.sin(theta)
+    circle1_x = x1 + r1 * np.cos(theta)  # noqa: RT1 — observer-projection: Bell inequality quantum correlations
+    circle1_y = y1 + r1 * np.sin(theta)  # noqa: RT1 — observer-projection: Bell inequality quantum correlations
     ax1.plot(circle1_x, circle1_y, 'b-', linewidth=3, label='8|N (CHSH)')
     ax1.fill(circle1_x, circle1_y, 'blue', alpha=0.2)
 
     # Circle for 6|N (I₃₃₂₂)
     r2 = 1.0
     x2, y2 = -0.5, 0
-    circle2_x = x2 + r2 * np.cos(theta)
-    circle2_y = y2 + r2 * np.sin(theta)
+    circle2_x = x2 + r2 * np.cos(theta)  # noqa: RT1 — observer-projection: Bell inequality quantum correlations
+    circle2_y = y2 + r2 * np.sin(theta)  # noqa: RT1 — observer-projection: Bell inequality quantum correlations
     ax1.plot(circle2_x, circle2_y, 'r-', linewidth=3, label='6|N (I₃₃₂₂)')
     ax1.fill(circle2_x, circle2_y, 'red', alpha=0.2)
 

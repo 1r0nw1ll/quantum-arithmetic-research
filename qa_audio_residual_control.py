@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: audio signal synthesis
 qa_audio_residual_control.py
 ==============================
 Closes the audio file: is there any QA orbit signal BEYOND lag-1 autocorrelation?

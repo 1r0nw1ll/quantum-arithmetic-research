@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: number-theoretic parametric visualization
 QA Number Visualizer — See what Ben sees.
 
 Given a QA tuple (b, e, d, a), renders:

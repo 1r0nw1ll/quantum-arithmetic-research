@@ -1,5 +1,6 @@
 QA_COMPLIANCE = "test_module — validates qa_observer package"
 """Tests for qa_observer package."""
+# RT1_OBSERVER_FILE: observer layer unit tests — trig in test signal generation
 
 import numpy as np
 import sys

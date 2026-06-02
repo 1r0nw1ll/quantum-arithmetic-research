@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=dead_reckoning_fixtures"
 """QA Dead Reckoning Cert family [163] — certifies the QA T-operator as an
+# RT1_OBSERVER_FILE: dead reckoning navigation — observer coordinate layer
 exact dead reckoning engine on a mod-m lattice with zero computational drift.
 
 TIER 2 — STRUCTURAL + COMPUTATIONAL:

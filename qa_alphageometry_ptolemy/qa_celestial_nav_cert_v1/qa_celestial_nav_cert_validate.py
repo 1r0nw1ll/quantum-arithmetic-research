@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=celestial_nav_fixtures"
 """QA Celestial Nav Cert family [165] — certifies celestial navigation sight
+# RT1_OBSERVER_FILE: celestial navigation — spherical trig at observer/coordinate layer
 reduction as rational trigonometry (spreads, crosses, and discrete orientation).
 
 TIER 1 — EXACT REFORMULATION:

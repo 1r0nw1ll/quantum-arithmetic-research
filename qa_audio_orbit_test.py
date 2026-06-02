@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: audio signal synthesis
 qa_audio_orbit_test.py
 
 Tests the hypothesis:

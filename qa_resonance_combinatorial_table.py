@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: resonance signal synthesis table
 qa_resonance_combinatorial_table.py
 =====================================
 Computes the exact Fib_hits(π_k, m) table for all (k, m) pairs.

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: EEG demo visualization — parametric display observer layer
 EEG Seizure Detection: Practical "QA Learning on Real Data" Demo
 
 This demo shows QA-RML applied to REAL CLINICAL DATA:

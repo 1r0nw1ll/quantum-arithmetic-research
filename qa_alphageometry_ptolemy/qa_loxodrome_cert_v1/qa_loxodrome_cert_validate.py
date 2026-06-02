@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=loxodrome_fixtures"
 """QA Loxodrome Cert family [166] — certifies that loxodromes (rhumb lines)
+# RT1_OBSERVER_FILE: loxodrome rhumb line — spherical trig at observer layer
 arise from QA T-operator iteration on a mod-m lattice.
 
 TIER 2 — STRUCTURAL:

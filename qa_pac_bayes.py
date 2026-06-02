@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: PAC-Bayes test signal generation
 PAC-Bayesian Learning Theory for Quantum Arithmetic Systems
 
 This module implements the D_QA divergence metric and PAC-Bayesian generalization bounds

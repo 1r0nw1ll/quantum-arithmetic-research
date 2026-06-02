@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: resonance parity signal synthesis
 qa_resonance_parity_test.py
 ============================
 Targeted test of the alternating elevation/suppression pattern in OFR at

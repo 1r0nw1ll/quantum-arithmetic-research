@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=historical_nav_fixtures"
 """QA Historical Nav Cert family [167] — certifies structural correspondence
+# RT1_OBSERVER_FILE: historical navigation — observer coordinate layer
 between historical navigation systems and QA integer arithmetic.
 
 TIER 2 — STRUCTURAL CORRESPONDENCE:

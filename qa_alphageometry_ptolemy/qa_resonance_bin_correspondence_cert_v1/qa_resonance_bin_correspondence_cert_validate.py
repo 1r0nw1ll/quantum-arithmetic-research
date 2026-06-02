@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=resonance_bin_cert_validator, state_alphabet=qa_integer_bin_equivalence_class"
 """
+# RT1_OBSERVER_FILE: resonance bin — FFT/spectral observer layer
 qa_resonance_bin_correspondence_cert_validate.py
 
 Validator for QA_RESONANCE_BIN_CORRESPONDENCE_CERT.v1

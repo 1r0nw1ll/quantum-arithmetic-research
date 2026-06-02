@@ -1,4 +1,5 @@
 """QA mod-9 torus — Blender bpy render script.
+# RT1_OBSERVER_FILE: Blender torus visualization
 
 Run:
     blender -b -P tools/qa_viz/blender/qa_torus.py -- --out /tmp/qa_torus.png

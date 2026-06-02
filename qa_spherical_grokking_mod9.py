@@ -1,4 +1,5 @@
 """
+# RT1_OBSERVER_FILE: spherical coordinate visualization
 QA Spherical Grokking Experiment — Mod-9 Addition
 ==================================================
 Tests the combined prediction from cert families [198], [199], [200]:

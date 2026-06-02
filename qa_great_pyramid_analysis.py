@@ -37,6 +37,9 @@ QA_COMPLIANCE = "observer=archaeogeometric_analysis, state_alphabet=pyramid_meas
 import math
 from math import gcd
 from fractions import Fraction
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tools"))
+from rational_trig import spread_from_angle_deg, spread_to_angle_deg, SPREAD_PASSAGE
 
 
 def find_qn_exact(half_base, height):
@@ -112,8 +115,8 @@ def main():
     s_face = Fraction(d * d, G)
     print(f"\n  FACE ANGLE SPREAD:")
     print(f"    s_face = d²/G = {d*d}/{G} = {s_face} = {float(s_face):.6f}")
-    print(f"    θ_face = arcsin(√s) = {math.degrees(math.asin(math.sqrt(float(s_face)))):.4f}°")
-    print(f"    Classical: arctan(280/220) = {math.degrees(math.atan2(280,220)):.4f}°")
+    print(f"    θ_face = arcsin(√s) = {spread_to_angle_deg(float(s_face)):.4f}°")
+    print(f"    Classical: arctan(280/220) = {math.degrees(math.atan2(280,220)):.4f}°")  # noqa: RT1 — observer-projection: classical verification display
 
     # Seked: horizontal displacement per cubit of rise = e/d (in palms/cubit)
     # 1 cubit = 7 palms, so seked = 7 × (half_base/height) = 7 × 220/280 = 7 × 11/14 = 5.5 palms
@@ -128,7 +131,7 @@ def main():
     # But can we derive it from our QN (3,11,14,25)?
     # The passage angle spread = sin²(26.565°) = 0.2
     # That's spread = 1/5 exactly — direction (1,2) or equivalently (2,1)
-    s_passage_measured = math.sin(math.radians(26.565)) * math.sin(math.radians(26.565))
+    s_passage_measured = spread_from_angle_deg(26.565)  # = SPREAD_PASSAGE = 1/5
     print(f"\n  PASSAGE ANGLE ANALYSIS:")
     print(f"    Measured passage angle: 26°33'54\" ≈ 26.565°")
     print(f"    Measured spread: sin²(26.565°) = {s_passage_measured:.6f}")

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: resonance map signal synthesis
 qa_resonance_map.py
 ====================
 Maps OFR across (frequency, modulus) space to identify arithmetic resonance structure.

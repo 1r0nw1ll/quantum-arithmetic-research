@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: resonance spectral experiment signal synthesis
 QA Resonance ↔ Modular Geodesic Experiment (local, deterministic)
 
 Entry point: `python qa_resonance_spectral_experiment.py ...`

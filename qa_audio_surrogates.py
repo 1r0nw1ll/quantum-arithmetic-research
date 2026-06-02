@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: phase-randomized audio surrogates
 qa_audio_surrogates.py — Process-level surrogate validation for audio OFR
 ==========================================================================
 

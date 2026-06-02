@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: autocorrelation test signal synthesis
 qa_autocorrelation_baseline.py
 ================================
 Empirical question: is orbit_follow_rate (OFR) measuring QA-specific structure,

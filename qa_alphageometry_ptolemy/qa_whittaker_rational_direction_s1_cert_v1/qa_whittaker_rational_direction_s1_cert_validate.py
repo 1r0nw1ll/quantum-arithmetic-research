@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """qa_whittaker_rational_direction_s1_cert_validate.py — cert family [266].
+# RT1_OBSERVER_FILE: Whittaker rational direction — classical trig as verification for RT claims
 
 Primary source: E. T. Whittaker (1903), "On the partial differential
 equations of mathematical physics," Math. Annalen 57:333-355,

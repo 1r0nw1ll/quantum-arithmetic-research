@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=gnomonic_rt_fixtures"
 """QA Gnomonic RT Cert family [164] — certifies gnomonic map projection via
+# RT1_OBSERVER_FILE: gnomonic RT cert — classical trig as verification comparison for RT cert
 rational trigonometry (spreads and crosses).
 
 TIER 1 — EXACT REFORMULATION (gnomonic quadrance):

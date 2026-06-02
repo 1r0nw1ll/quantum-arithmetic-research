@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: parametric torus/ellipse visualization
 Volk Toroidal Geometry Visualizer — QA ↔ Bipolar ↔ Torus
 
 Reconstructs Greg Volk's diagrams from "Toroids, Vortices, Knots, Topology and Quanta":

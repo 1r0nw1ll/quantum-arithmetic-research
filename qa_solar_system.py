@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: orbital mechanics (continuous physics layer)
 QA Solar System — Quantum Numbers for all planets, major moons, and comets.
 
 For each body, finds the best QN (b,e,d,a) such that eccentricity e/d matches

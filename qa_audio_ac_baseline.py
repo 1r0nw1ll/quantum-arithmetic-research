@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: audio signal synthesis (observer input generation)
 qa_audio_ac_baseline.py
 ========================
 Baseline comparison: is orbit_follow_rate QA-specific or just lag-1 autocorrelation?

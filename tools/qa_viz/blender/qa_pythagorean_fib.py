@@ -1,4 +1,5 @@
 """Figure 3 — Primitive Pythagorean triples with hypotenuse c <= 100 in
+# RT1_OBSERVER_FILE: Blender parametric visualization
 Euclid generator space (m, n, c). Highlights the 3 all-Fibonacci triples
 (3:4:5, 5:12:13, 39:80:89) vs the 13 non-Fibonacci ones.
 

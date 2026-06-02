@@ -25,6 +25,9 @@ matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import numpy as np
 import math
+import sys, os
+sys.path.insert(0, os.path.join(os.path.dirname(__file__), "tools"))
+from rational_trig import spread_from_angle_deg, spread_to_angle_deg, SPREAD_TET
 
 
 def section_subatomic():
@@ -158,7 +161,7 @@ def section_molecular():
     print('  ' + '─' * 85)
 
     for mol, geom, angle, desc in molecules:
-        s = math.sin(math.radians(angle)) * math.sin(math.radians(angle))
+        s = spread_from_angle_deg(angle)
         c = 1 - s
 
         # Find closest rational approximation
@@ -182,10 +185,9 @@ def section_molecular():
     print('  (Wildberger Exercise 7.4: S(a,a,a) ≥ 0 iff a ≤ 3/4)')
     print()
 
-    tet_spread = 8/9
+    tet_spread = float(SPREAD_TET)  # exact: 8/9
     print(f'  Tetrahedral spread = 8/9 = {tet_spread:.10f}')
-    print(f'  sin²(109.4712°)   = {math.sin(math.radians(109.4712))**2:.10f}')
-    print(f'  cos(109.4712°)    = {math.cos(math.radians(109.4712)):.10f}')
+    print(f'  spread_from_angle_deg(109.4712) = {spread_from_angle_deg(109.4712):.10f}')
     print(f'  cos(tet) = -1/3, so spread = 1 - cos² = 1 - 1/9 = 8/9 ✓')
     print()
 
@@ -258,8 +260,8 @@ def section_crystal():
     for n in [1, 2, 3]:
         sin_theta = n * lam_cu / (2 * d_nacl)
         if abs(sin_theta) <= 1:
-            spread = sin_theta * sin_theta
-            theta = math.degrees(math.asin(sin_theta))
+            spread = sin_theta * sin_theta   # this IS the rational spread s = sin²θ
+            theta = spread_to_angle_deg(spread)  # observer output only
             # QA form
             Q_lam = lam_cu * lam_cu
             Q_d = d_nacl * d_nacl

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=ellipsoid_slice_fixtures"
 """QA Ellipsoid Slice Cert family [169] — certifies QA-style slicing of the
+# RT1_OBSERVER_FILE: ellipsoid slice — geodetic observer layer
 WGS84 quantum ellipse into latitude circles, meridian ellipses, and
 chromogeometric curve families.
 

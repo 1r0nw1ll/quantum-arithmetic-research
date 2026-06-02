@@ -530,6 +530,37 @@ RULES: list[ViolationRule] = [
         severity="ERROR",
         qa_file_only=True,
     ),
+
+    # ── RT1: Standard trigonometry in QA code ─────────────────────────────────
+    # Rational Trigonometry (Wildberger) replaces angle/distance with
+    # spread/quadrance: s = sin²θ, Q = d². These are algebraically exact,
+    # require no sqrt or transcendental functions, and integrate naturally
+    # with the QA discrete layer.
+    #
+    # Use tools/rational_trig.py instead of math.sin/cos/np.sin/np.cos etc.
+    # For legitimate observer projections (signal synthesis, WGS84 geodesy,
+    # parametric visualization, Hilbert-phase encoding), add:
+    #   # noqa: RT1 — observer-projection: <reason>
+    # For whole-file exemption (all trig is observer-layer), add anywhere in
+    # the first 20 lines:
+    #   # RT1_OBSERVER_FILE: <reason>
+    ViolationRule(
+        id="RT1",
+        axiom="RT1",
+        description=(
+            "Standard trig (sin/cos/tan/arc*) in QA code — use tools/rational_trig.py "
+            "instead: spread(v1,v2) replaces angle, quadrance(A,B) replaces distance². "
+            "For observer projections add # noqa: RT1 — observer-projection: <reason>. "
+            "For whole-file exemption add # RT1_OBSERVER_FILE: <reason> in first 20 lines."
+        ),
+        pattern=re.compile(
+            r'(?<!\w)(?:np|numpy)\.(?:sin|cos|tan|arcsin|arccos|arctan|arctan2|'
+            r'deg2rad|rad2deg|degrees|radians)\s*\('
+            r'|(?<!\w)math\.(?:sin|cos|tan|asin|acos|atan|atan2|degrees|radians)\s*\('
+        ),
+        severity="WARNING",
+        qa_file_only=True,
+    ),
 ]
 
 # ── FIREWALL-2: whole-file check ──────────────────────────────────────────────
@@ -1071,6 +1102,12 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
                 "This rule is UN-DISMISSABLE: delete the local definition "
                 "and call qa_elements.qa_elements()."))
 
+    # RT1_OBSERVER_FILE: whole-file exemption from RT1 trig rule.
+    # If the first 20 lines contain this marker, RT1 is skipped for every line.
+    rt1_observer_file = any(
+        "RT1_OBSERVER_FILE" in lines[i] for i in range(min(20, len(lines)))
+    )
+
     # Per-line rules
     # Use masked_lines (triple-quoted string bodies replaced with spaces)
     # for matching so docstrings cannot trip rules they describe.
@@ -1093,6 +1130,9 @@ def lint_file(path: Path) -> list[tuple[int, str, str, str]]:
             if rule.id in noqa_ids and rule.id not in UNDISMISSABLE_RULE_IDS:
                 continue
             if rule.qa_file_only and not file_is_qa:
+                continue
+            # RT1_OBSERVER_FILE whole-file exemption
+            if rule.id == "RT1" and rt1_observer_file:
                 continue
             m = rule.pattern.search(masked)
             if m and not is_comment_or_string(masked, m.start()):

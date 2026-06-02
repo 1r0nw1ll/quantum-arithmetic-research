@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cross_domain_general, state_alphabet=mod24"
 """
+# RT1_OBSERVER_FILE: cross-domain signal generation
 QA Cross-Domain Invariance Test — The Kill-or-Prove Experiment
 
 PRE-REGISTERED DESIGN (Tier 4 candidate):

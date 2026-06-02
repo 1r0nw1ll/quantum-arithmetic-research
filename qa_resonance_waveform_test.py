@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: resonance waveform synthesis
 qa_resonance_waveform_test.py
 ==============================
 Tests whether OFR resonance peaks at f = k*SR/m hold for non-sinusoidal

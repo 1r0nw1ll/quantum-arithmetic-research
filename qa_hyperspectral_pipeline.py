@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: hyperspectral signal processing (observer layer)
 QA Hyperspectral Imaging Pipeline
 Reconstructed from vault specifications (October 19, 2025 research)
 

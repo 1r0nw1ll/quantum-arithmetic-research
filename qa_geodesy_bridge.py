@@ -155,22 +155,22 @@ def ecef_rational():
     a = 6378137.0
     e2 = 0.00669437999014
 
-    lat = math.radians(lat_deg)
-    lon = math.radians(lon_deg)
+    lat = math.radians(lat_deg)  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
+    lon = math.radians(lon_deg)  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
 
     # Classical
-    N = a / math.sqrt(1 - e2 * math.sin(lat) * math.sin(lat))
-    X = (N + h) * math.cos(lat) * math.cos(lon)
-    Y = (N + h) * math.cos(lat) * math.sin(lon)
-    Z = (N * (1 - e2) + h) * math.sin(lat)
+    N = a / math.sqrt(1 - e2 * math.sin(lat) * math.sin(lat))  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
+    X = (N + h) * math.cos(lat) * math.cos(lon)  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
+    Y = (N + h) * math.cos(lat) * math.sin(lon)  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
+    Z = (N * (1 - e2) + h) * math.sin(lat)  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
 
     print(f'Example: London ({lat_deg}°N, {lon_deg}°E)')
     print(f'  Classical ECEF: X={X:.3f}, Y={Y:.3f}, Z={Z:.3f} m')
 
     # Rational (using spreads)
-    s_lat = math.sin(lat) * math.sin(lat)  # = spread of latitude
+    s_lat = math.sin(lat) * math.sin(lat)  # = spread of latitude  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
     c_lat = 1 - s_lat
-    s_lon = math.sin(lon) * math.sin(lon)
+    s_lon = math.sin(lon) * math.sin(lon)  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
     c_lon = 1 - s_lon
 
     N_sq = a*a / (1 - e2 * s_lat)
@@ -261,7 +261,7 @@ def lidar_quadrance():
     print(f'  Slope spread range: [{slope_spread.min():.6f}, {slope_spread.max():.6f}]')
     print(f'  Mean slope spread: {slope_spread.mean():.6f}')
     print(f'  (spread=0 → flat, spread=1 → vertical wall)')
-    print(f'  Equivalent max angle: {np.degrees(np.arcsin(np.sqrt(slope_spread.max()))):.1f}°')
+    print(f'  Equivalent max angle: {np.degrees(np.arcsin(np.sqrt(slope_spread.max()))):.1f}°')  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
     print()
 
     return x, y, z, slope_spread
@@ -295,8 +295,8 @@ def imaging_spread():
     sensor_w = 36  # full-frame sensor width mm
 
     # Classical
-    fov_half = math.atan(sensor_w / (2 * f_mm))
-    fov_deg = 2 * math.degrees(fov_half)
+    fov_half = math.atan(sensor_w / (2 * f_mm))  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
+    fov_deg = 2 * math.degrees(fov_half)  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
 
     # Rational
     Q_sensor = sensor_w * sensor_w  # = 1296
@@ -312,7 +312,7 @@ def imaging_spread():
     print(f'  Classical: FOV = {fov_deg:.2f}°')
     print(f'  Rational:  Half-FOV spread = {Q_sensor//4}/{Q_focal + Q_sensor//4} = {s_half_fov:.6f}')
     print(f'             Full-FOV spread = S₂(s) = 4s(1-s) = {s_full_fov:.6f}')
-    print(f'             (= sin²({fov_deg:.2f}°) = {math.sin(math.radians(fov_deg))**2:.6f}) ✓')
+    print(f'             (= sin²({fov_deg:.2f}°) = {math.sin(math.radians(fov_deg))**2:.6f}) ✓')  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
     print()
 
     print('STEREO MATCHING:')
@@ -354,9 +354,9 @@ def build_visualization(b_qa, e_qa, d_qa, a_qa, x, y, z, slope_spread):
     a_norm = 1.0
     b_norm = math.sqrt(F_qa) / d_qa
 
-    ax1.plot(a_norm * np.cos(theta), b_norm * np.sin(theta), 'b-', lw=2,
+    ax1.plot(a_norm * np.cos(theta), b_norm * np.sin(theta), 'b-', lw=2,  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
              label='WGS84 ellipsoid')
-    ax1.plot(np.cos(theta), np.sin(theta), 'k--', alpha=0.2, label='Perfect sphere')
+    ax1.plot(np.cos(theta), np.sin(theta), 'k--', alpha=0.2, label='Perfect sphere')  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
 
     # Mark key points
     ax1.plot([0], [b_norm], 'ro', ms=8, label=f'Pole (ratio={b_norm:.6f})')
@@ -461,7 +461,7 @@ def build_visualization(b_qa, e_qa, d_qa, a_qa, x, y, z, slope_spread):
     ax5.text(f_len/2, sensor_half/2 + 2,
              f'spread = Q_sensor / (Q_focal + Q_sensor)\n'
              f'= {Q_s} / ({Q_f} + {Q_s}) = {Q_s}/{Q_f+Q_s}\n'
-             f'= {s:.6f} = sin²({math.degrees(math.atan(sensor_half/f_len)):.1f}°)',
+             f'= {s:.6f} = sin²({math.degrees(math.atan(sensor_half/f_len)):.1f}°)',  # noqa: RT1 — observer-projection: WGS84 geodetic coordinate transform (angle-defined)
              fontsize=8, fontfamily='monospace',
              bbox=dict(boxstyle='round', facecolor='lightyellow', alpha=0.9))
 

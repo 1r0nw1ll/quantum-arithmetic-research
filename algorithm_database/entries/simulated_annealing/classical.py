@@ -1,4 +1,5 @@
 """Classical simulated annealing — Python port of Kochenderfer 2026 Opt Algorithm 8.5.
+# RT1_OBSERVER_FILE: simulated annealing algorithm — continuous energy landscape observer projection
 
 QA_COMPLIANCE = "classical-baseline port — stochastic + continuous Metropolis acceptance; firewall-rejected as causal QA dynamics per Theorem NT. Off-QA baseline only; not a QA-causal algorithm."
 

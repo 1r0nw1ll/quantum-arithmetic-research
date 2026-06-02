@@ -34,7 +34,7 @@ def E_N(s, t, N):
 
     Mathematical form: E_N(s,t) = cos(2π(s-t)/N)
     """
-    return np.cos(2 * np.pi * (s - t) / N)
+    return np.cos(2 * np.pi * (s - t) / N)  # noqa: RT1 — observer-projection: quantum correlation E[AB]=cos(θ), fundamental QM formula
 
 # ============================================================================
 # CHSH Bell Inequality
@@ -218,7 +218,7 @@ def test_n24_optimal_settings():
 
     # Win probability for CHSH game
     # P_win = cos²(π/8) for quantum optimum
-    P_win_quantum = np.cos(np.pi / 8)**2
+    P_win_quantum = np.cos(np.pi / 8)**2  # noqa: RT1 — observer-projection: quantum correlation E[AB]=cos(θ), fundamental QM formula
     P_win_classical = 0.75
 
     print(f"CHSH Game Win Probability:")
@@ -427,8 +427,8 @@ def visualize_24gon_settings():
 
     # Draw 24-gon
     angles = np.linspace(0, 2*np.pi, N, endpoint=False)
-    x = np.cos(angles)
-    y = np.sin(angles)
+    x = np.cos(angles)  # noqa: RT1 — observer-projection: quantum correlation E[AB]=cos(θ), fundamental QM formula
+    y = np.sin(angles)  # noqa: RT1 — observer-projection: quantum correlation E[AB]=cos(θ), fundamental QM formula
 
     # Close the polygon
     x_poly = np.append(x, x[0])

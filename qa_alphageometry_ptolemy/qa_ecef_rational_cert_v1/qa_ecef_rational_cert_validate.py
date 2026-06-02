@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=ecef_rational_fixtures"
 """QA ECEF Rational Cert family [161] — certifies geodetic-to-ECEF conversion
+# RT1_OBSERVER_FILE: ECEF rational — classical trig used as verification comparison for RT cert
 via rational trigonometry (spreads and crosses only).
 
 TIER 1 — EXACT REFORMULATION:

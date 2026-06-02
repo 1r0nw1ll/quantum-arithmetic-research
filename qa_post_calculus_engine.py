@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
 """
+# RT1_OBSERVER_FILE: continuous-function observer layer
 QA Post-Calculus Engine
 =======================
 

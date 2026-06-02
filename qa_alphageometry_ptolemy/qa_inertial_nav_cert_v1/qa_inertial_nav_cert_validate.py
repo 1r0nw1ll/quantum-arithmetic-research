@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=inertial_nav_fixtures"
 """QA Inertial Nav Cert family [170] — certifies zero computational drift
+# RT1_OBSERVER_FILE: inertial navigation — observer coordinate layer
 of QA T-operator navigation vs classical INS O(ε√N) error growth.
 
 TIER 1 — COMPUTATIONAL PROOF:

@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=ellipsoid_geodesic_fixtures"
 """QA Ellipsoid Geodesic Cert family [168] — certifies geodesic properties of
+# RT1_OBSERVER_FILE: ellipsoid geodesic — WGS84/GRS80 observer coordinate layer
 the WGS84 quantum ellipse in QN component arithmetic.
 
 TIER 1 — EXACT REFORMULATION:

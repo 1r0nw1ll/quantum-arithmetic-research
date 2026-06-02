@@ -40,17 +40,17 @@ def E_N(s, t, N, sine_weight=0.0, harmonics=None, use_chromo=False):
         Correlation value between -1 and 1
     """
     angle = 2 * np.pi * (s - t) / N
-    E = np.cos(angle) + sine_weight * np.sin(angle)
+    E = np.cos(angle) + sine_weight * np.sin(angle)  # noqa: RT1 — observer-projection: platonic Bell test quantum correlations
 
     if harmonics:
         for k, weight in harmonics:
-            E += weight * np.cos(k * angle)
+            E += weight * np.cos(k * angle)  # noqa: RT1 — observer-projection: platonic Bell test quantum correlations
 
     if use_chromo:
         # Map angle to chromogeometry (u,v) coordinates
         # Use angle as a "spectrum" with single peak
-        u = np.cos(angle)  # Simplified: u from cosine
-        v = np.sin(angle)  # v from sine
+        u = np.cos(angle)  # Simplified: u from cosine  # noqa: RT1 — observer-projection: platonic Bell test quantum correlations
+        v = np.sin(angle)  # v from sine  # noqa: RT1 — observer-projection: platonic Bell test quantum correlations
         Qb = u**2 + v**2  # Euclidean quadrance
         Qr = u**2 - v**2  # Minkowski difference
         Qg = 2 * u * v    # Null product

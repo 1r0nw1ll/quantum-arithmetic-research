@@ -7910,6 +7910,25 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pisano_mod24_cosmos_period_cert_family(base_dir):
+    """QA Pisano Mod-24 Applied Cosmos Period Cert family [306]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) Every orbit in {1,...,24}^2 under QA T-step has period dividing pi(24)=24; max period=24; spectrum={1,3,6,8,12,24}; histogram {1:1,3:3,6:12,8:8,12:48,24:504}; exhaustively verified. (C2) T(24,24)=(24,24): unique period-1 fixed point; characterized by 24|gcd(b,e) — applied Singularity. (C3) {8,16,24}^2 \\ {(24,24)} = 8 states all period 8; characterized by 8|gcd and 3 not|gcd — applied Satellite analog; parallel: mod-9 Satellite={3,6,9}^2 \\ {(9,9)}. (C4) Applied Cosmos=504 states period 24=21 orbits x 24; characterized by 3 not|gcd(b,e) AND 8 not|gcd(b,e); count=576-64-9+1=504 (inclusion-exclusion). (C5) Closing the loop: max orbit period=24=pi(24) (cert [302])=pi(9)=Cosmos period (cert [291]); applied modulus 24 is period-self-consistent. Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_pisano_mod24_cosmos_period_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pisano_mod24_cosmos_period_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pisano_mod24_cosmos_period_cert_v1/qa_pisano_mod24_cosmos_period_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pisano_mod24_cosmos_period_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_reactive_power_versor_coupling_cert_family(base_dir):
     """QA Reactive Power Versor Coupling Cert family [305]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8 (spread/quadrance); Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. Uses rational trig (not sin/cos/hyperbolic). CLAIM: (C1) det(M^k)=(-1)^k (Cassini cert [299]); odd k=reactive versor, even k=active rotor; k=0..24. (C2) s(b,e)=e*e/(b*b+e*e) in (0,1)∩Q for all A1 states; (1-s)+s=1 (Fraction); active=1-s=b*b/(b*b+e*e); replaces sin^2(phi). (C3) s(k,k)=1/2 for k=1..9; Singularity (9,9) at s=1/2; Satellite spreads={1/10,1/5,4/13,1/2,9/13,4/5,9/10} closed under s->1-s. (C4) s(e,b)=1-s(b,e) exactly for all (b,e); Cosmos closed under swap; min+max Cosmos spread=1. (C5) cs=(b*d-e*e)^2/(G*G') in [0,1]∩Q for all 72 Cosmos (b,e); d=A1_mod(b+e,9); Singularity cs=0. Checks C1..C5; self-test ok"""
     import subprocess
@@ -9485,6 +9504,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (306, "QA Pisano Mod-24 Applied Cosmos Period Cert family",
+     _validate_qa_pisano_mod24_cosmos_period_cert_family,
+     "QA Pisano Mod-24 Applied Cosmos Period Cert family [306]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) Every orbit in {1,...,24}^2 under QA T-step has period dividing pi(24)=24; max period=24; spectrum={1,3,6,8,12,24}; histogram {1:1,3:3,6:12,8:8,12:48,24:504}; exhaustively verified. (C2) T(24,24)=(24,24): unique period-1 fixed point; characterized by 24|gcd(b,e) — applied Singularity. (C3) {8,16,24}^2 \\ {(24,24)} = 8 states all period 8; characterized by 8|gcd and 3 not|gcd — applied Satellite analog; parallel: mod-9 Satellite={3,6,9}^2 \\ {(9,9)}. (C4) Applied Cosmos=504 states period 24=21 orbits x 24; characterized by 3 not|gcd(b,e) AND 8 not|gcd(b,e); count=576-64-9+1=504 (inclusion-exclusion). (C5) Closing the loop: max orbit period=24=pi(24) (cert [302])=pi(9)=Cosmos period (cert [291]); applied modulus 24 is period-self-consistent. Checks C1_period_ceiling_24/C2_applied_singularity/C3_applied_satellite_analog/C4_applied_cosmos_504_states/C5_closing_the_loop_pi24_eq_pi9; 5 PASS + 0 FAIL; self-test ok",
+     "306_qa_pisano_mod24_cosmos_period",
+     "qa_pisano_mod24_cosmos_period_cert_v1", True),
     (305, "QA Reactive Power Versor Coupling Cert family",
      _validate_qa_reactive_power_versor_coupling_cert_family,
      "QA Reactive Power Versor Coupling Cert family [305]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8 (rational trig — spread/quadrance replaces sin^2/cos^2); Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) det(M^k)=(-1)^k (Cassini cert [299]): odd k=reactive versor (det=-1), even k=active rotor (det=+1); 24-clock alternates reactive/active every T-step; verified k=0..24. (C2) Wildberger spread s(b,e)=e*e/(b*b+e*e) in (0,1)∩Q for all (b,e) in {1..9}^2; A1 guarantees s∉{0,1}; (1-s)+s=1 exact Fraction; active fraction 1-s=b*b/(b*b+e*e); rational-trig substitute for sin^2(phi). (C3) b=e diagonal = 45-degree locus: s(k,k)=1/2 for k=1..9; Singularity (9,9) at s=1/2; Satellite spreads {1/10,1/5,4/13,1/2,9/13,4/5,9/10} closed under s->1-s (reactive-active symmetry). (C4) Reactive complement (b,e)->(e,b): s(e,b)=1-s(b,e) exactly for all (b,e); Cosmos closed under swap (gcd symmetric); min Cosmos spread (9,1)=1/82 + max (1,9)=81/82 = 1. (C5) T-step cross-spread cs=(b*d-e*e)^2/(G*G') in [0,1]∩Q for all 72 Cosmos; d=A1_mod(b+e,9), G=b*b+e*e, G'=e*e+d*d; Singularity (9,9) cs=0 (self-coupling). Checks C1_grade_reactive_isomorphism/C2_rational_spread_power_factor/C3_45deg_locus_orbit_symmetry/C4_reactive_complement_closed/C5_T_step_cross_spread_rational; 5 PASS + 0 FAIL; self-test ok",

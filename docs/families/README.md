@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [306] | [QA Pisano Mod-24 Applied Cosmos Period](306_qa_pisano_mod24_cosmos_period.md) | max T-orbit period in {1,...,24}²=24=π(24)=π(9)=Cosmos period; Applied Cosmos=504 states (21 orbits×24); Satellite={8,16,24}²\{(24,24)}; spectrum {1,3,6,8,12,24}; mod-24 is period-self-consistent | PASS |
 | [305] | [QA Reactive Power Versor Coupling](305_qa_reactive_power_versor_coupling.md) | det(Mᵏ)=(−1)ᵏ: odd k=reactive versor, even k=active rotor; rational spread s=e²/G replaces sin²(φ); Singularity at s=½; Satellite spreads symmetric; Cosmos closed under reactive complement (b,e)→(e,b); T-step cross-spread exact Fraction | PASS |
 | [304] | [QA Polyphase Sum Structure](304_qa_polyphase_sum_structure.md) | M^k+M^(k+12)=0 (grade-inversion pairing via M¹²=−I); 6-phase and 12-phase sums=0; all even n\|24 sums=0; n=3 unique non-zero (3I); 12 sextets / 6 dodecaplets; observer balance is Theorem NT only | PASS |
 | [303] | [QA Three-Phase Cosmos Cancellation](303_qa_three_phase_cosmos_cancellation.md) | M⁰+M⁸+M¹⁶≡3I mod 9; det(M⁸)=+1 (8-step is even-grade rotor, T¹ is odd-grade versor); M⁸ order 3; 72 Cosmos states form 24 disjoint T⁸-triads; observer sum 1−½−½=0 is Theorem NT boundary only | PASS |

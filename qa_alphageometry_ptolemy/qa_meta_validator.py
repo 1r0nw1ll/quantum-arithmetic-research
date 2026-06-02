@@ -7910,6 +7910,25 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_reactive_power_versor_coupling_cert_family(base_dir):
+    """QA Reactive Power Versor Coupling Cert family [305]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8 (spread/quadrance); Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. Uses rational trig (not sin/cos/hyperbolic). CLAIM: (C1) det(M^k)=(-1)^k (Cassini cert [299]); odd k=reactive versor, even k=active rotor; k=0..24. (C2) s(b,e)=e*e/(b*b+e*e) in (0,1)∩Q for all A1 states; (1-s)+s=1 (Fraction); active=1-s=b*b/(b*b+e*e); replaces sin^2(phi). (C3) s(k,k)=1/2 for k=1..9; Singularity (9,9) at s=1/2; Satellite spreads={1/10,1/5,4/13,1/2,9/13,4/5,9/10} closed under s->1-s. (C4) s(e,b)=1-s(b,e) exactly for all (b,e); Cosmos closed under swap; min+max Cosmos spread=1. (C5) cs=(b*d-e*e)^2/(G*G') in [0,1]∩Q for all 72 Cosmos (b,e); d=A1_mod(b+e,9); Singularity cs=0. Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_reactive_power_versor_coupling_cert_v1")
+    validator = os.path.join(fam_dir, "qa_reactive_power_versor_coupling_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_reactive_power_versor_coupling_cert_v1/qa_reactive_power_versor_coupling_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_reactive_power_versor_coupling_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_polyphase_sum_structure_cert_family(base_dir):
     """QA Polyphase Sum Structure Cert family [304]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541; Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) Six-phase (n=6, step=4): M^0+M^4+M^8+M^12+M^16+M^20=0 mod 9; three antipodal pairs via M^12=-I. (C2) Twelve-phase (n=12, step=2): sum of 12 matrices=0 mod 9; six pairs. (C3) Universal: all n|24 sum is I (n=1), 3I (n=3), or 0 (all even n); grade-inversion pairing M^k+M^(k+12)=0 for all k (M^12=-I cert [298]); det(M^4-I)=4 mod 9 (invertible, n=6 forced zero); det(M^8-I)=0 mod 9 (non-invertible, n=3 can be non-zero). (C4) T^4 gives 12 sextets (size 6); T^2 gives 6 dodecaplets (size 12); orbit_size=24/gcd(step,24); cross-checks T^8=24 triads (cert [303]). (C5) observer sum 1+1/2-1/2-1-1/2+1/2=0 (Fraction); all n>=2 observer zero; n=3 discrete=3I vs observer=0 confirms Theorem NT boundary. Checks C1..C5; self-test ok"""
     import subprocess
@@ -9466,6 +9485,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (305, "QA Reactive Power Versor Coupling Cert family",
+     _validate_qa_reactive_power_versor_coupling_cert_family,
+     "QA Reactive Power Versor Coupling Cert family [305]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8 (rational trig — spread/quadrance replaces sin^2/cos^2); Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) det(M^k)=(-1)^k (Cassini cert [299]): odd k=reactive versor (det=-1), even k=active rotor (det=+1); 24-clock alternates reactive/active every T-step; verified k=0..24. (C2) Wildberger spread s(b,e)=e*e/(b*b+e*e) in (0,1)∩Q for all (b,e) in {1..9}^2; A1 guarantees s∉{0,1}; (1-s)+s=1 exact Fraction; active fraction 1-s=b*b/(b*b+e*e); rational-trig substitute for sin^2(phi). (C3) b=e diagonal = 45-degree locus: s(k,k)=1/2 for k=1..9; Singularity (9,9) at s=1/2; Satellite spreads {1/10,1/5,4/13,1/2,9/13,4/5,9/10} closed under s->1-s (reactive-active symmetry). (C4) Reactive complement (b,e)->(e,b): s(e,b)=1-s(b,e) exactly for all (b,e); Cosmos closed under swap (gcd symmetric); min Cosmos spread (9,1)=1/82 + max (1,9)=81/82 = 1. (C5) T-step cross-spread cs=(b*d-e*e)^2/(G*G') in [0,1]∩Q for all 72 Cosmos; d=A1_mod(b+e,9), G=b*b+e*e, G'=e*e+d*d; Singularity (9,9) cs=0 (self-coupling). Checks C1_grade_reactive_isomorphism/C2_rational_spread_power_factor/C3_45deg_locus_orbit_symmetry/C4_reactive_complement_closed/C5_T_step_cross_spread_rational; 5 PASS + 0 FAIL; self-test ok",
+     "305_qa_reactive_power_versor_coupling",
+     "qa_reactive_power_versor_coupling_cert_v1", True),
     (304, "QA Polyphase Sum Structure Cert family",
      _validate_qa_polyphase_sum_structure_cert_family,
      "QA Polyphase Sum Structure Cert family [304]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541; Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. CLAIM: (C1) Six-phase (n=6) sum M^0+M^4+M^8+M^12+M^16+M^20=0 mod 9; three antipodal pairs. (C2) Twelve-phase (n=12) sum=0 mod 9; six antipodal pairs. (C3) Universal n-phase: n|24 sum is I (n=1), 3I (n=3), 0 (all even n); grade-inversion pairing M^k+M^(k+12)=0 for all k (M^12=-I cert [298]); n=3 unique odd non-trivial divisor, det(M^8-I)=0 mod 9 (non-invertible), det(M^4-I)=4 mod 9 (invertible). (C4) T^4: 12 disjoint sextets (size 6); T^2: 6 disjoint dodecaplets (size 12); orbit_size=24/gcd(step,24); T^8 cross-check = 24 triads (cert [303]). (C5) observer (Theorem NT): six-phase rational sum=0 (Fraction); all n>=2 observer sums=0; discrete n=3 gives 3I, observer gives 0 — Theorem NT boundary. Checks C1_six_phase_sum_zero/C2_twelve_phase_sum_zero/C3_universal_n_phase_theorem/C4_orbit_sextets_and_dodecaplets/C5_observer_balance_theorem_nt; 5 PASS + 0 FAIL; self-test ok",

@@ -2,6 +2,9 @@
 
 **Recently added**
 
+| [309] | [QA Steinmetz Polyphase Hysteresis](309_qa_steinmetz_polyphase_hysteresis.md) | orbit coupling sum S=Σcs_k over 24-cycle exact Fraction; cs_max=(40/41)² at state (1,9); 3-phase sum=3·S exact (cert [303] triad symmetry); Steinmetz exponent n≈1.6 is observer layer only | PASS |
+| [308] | [QA Scott T-Transformer](308_qa_scott_t_transformer.md) | 3-phase subgroup {0,8,16}≤Z/24Z (M⁸ order 3); 2-phase {0,6,12,18} (M⁶ order 4); Scott-T word W=R⁻¹L⁻¹=M^{-2}=[[2,−1],[−1,1]]; M⁸·W=M⁶ mod 24; rational coeff 289/1250; √3/2 is observer | PASS |
+| [307] | [QA Induction Motor Slip](307_qa_induction_motor_slip.md) | slip=k/24 (Fraction); direction spread s_k is torque proxy; s_0=s_12=0 (synchronous/antipodal); pullout k\*=22, s(k\*)=16/41; T²²=(1,9) and T²³=(9,1) are maximum-deviation states | PASS |
 | [306] | [QA Pisano Mod-24 Applied Cosmos Period](306_qa_pisano_mod24_cosmos_period.md) | max T-orbit period in {1,...,24}²=24=π(24)=π(9)=Cosmos period; Applied Cosmos=504 states (21 orbits×24); Satellite={8,16,24}²\{(24,24)}; spectrum {1,3,6,8,12,24}; mod-24 is period-self-consistent | PASS |
 | [305] | [QA Reactive Power Versor Coupling](305_qa_reactive_power_versor_coupling.md) | det(Mᵏ)=(−1)ᵏ: odd k=reactive versor, even k=active rotor; rational spread s=e²/G replaces sin²(φ); Singularity at s=½; Satellite spreads symmetric; Cosmos closed under reactive complement (b,e)→(e,b); T-step cross-spread exact Fraction | PASS |
 | [304] | [QA Polyphase Sum Structure](304_qa_polyphase_sum_structure.md) | M^k+M^(k+12)=0 (grade-inversion pairing via M¹²=−I); 6-phase and 12-phase sums=0; all even n\|24 sums=0; n=3 unique non-zero (3I); 12 sextets / 6 dodecaplets; observer balance is Theorem NT only | PASS |

@@ -7929,6 +7929,63 @@ def _validate_qa_pisano_mod24_cosmos_period_cert_family(base_dir):
     return None
 
 
+def _validate_qa_induction_motor_slip_cert_family(base_dir):
+    """QA Induction Motor Slip Cert family [307]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Chapman (2011) McGraw-Hill ISBN 978-0-07-352954-7. CLAIM: (C1) det(M^k)=(-1)^k (Cassini cert [299]); slip=k/24 as Fraction; odd k=reactive (lagging) versor, even k=active rotor; k=0 synchronous, k=12 antipodal M^12=-I (cert [298]); verified k=0..23. (C2) direction spread s_k=(b0*e_k-e0*b_k)^2/(G0*G_k) Fraction-valued; s_0=0 (synchronous), s_12=0 (antipodal scalar multiple M^12=-I maps (1,1)->(8,8)); all other s_k in (0,1)cap Q; not monotone. (C3) Pullout T-step k*=22 from seed (1,1); s(k*)=16/41; symmetry s_22=s_23=16/41 (T^22=(1,9) and T^23=(9,1) maximum directional deviation). (C4) s_12=0 because T^12(1,1)=(8,8)=8*(1,1) mod 9 (scalar multiple); {k=0,k=12} partition orbit into two half-cycles. (C5) Theorem NT: slip k/24, torque proxy s_k/s_max, rotor speed 1-k/24 are observer projections (Fraction, never re-entering T-step); Kloss curve is observer layer. Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_induction_motor_slip_cert_v1")
+    validator = os.path.join(fam_dir, "qa_induction_motor_slip_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_induction_motor_slip_cert_v1/qa_induction_motor_slip_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_induction_motor_slip_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_qa_scott_t_transformer_cert_family(base_dir):
+    """QA Scott T-Transformer Cert family [308]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Serre (1973) Springer ISBN 978-0-387-90041-1; Chapman (2011) McGraw-Hill ISBN 978-0-07-352954-7. CLAIM: (C1) 3-phase subgroup {0,8,16} leq Z/24Z: M^8 order 3 (M^8 neq I, M^16 neq I, M^24=I mod 24); 8 T-steps=120deg. (C2) 2-phase subgroup {0,6,12,18} leq Z/24Z: M^6 order 4 (M^6,M^12,M^18 neq I, M^24=I mod 24); 6 T-steps=90deg. (C3) Scott-T word W=R^{-1}.L^{-1}=[[2,-1],[-1,1]]=M^{-2}; M^2.W=I (exact); M^8.W=M^6 mod 24; unique 2-step SL(2,Z) correction bridging 3-phase to 2-phase (offset 8-6=2). (C4) Rational Scott-T coefficient: s(T^6(1,1),T^8(1,1))=289/1250 (Fraction); T^6=(4,3), T^8=(7,1); s=(4*1-3*7)^2/(25*50)=289/1250; rational analog of sqrt(3)/2. (C5) Theorem NT: sqrt(3)/2 is observer; W=R^{-1}L^{-1} is exact SL(2,Z) word; no transcendental arithmetic. Builds on cert [291] (M^24=I), cert [294] (L,R generators), cert [296] (M^2=L.R), cert [303] (3-phase=3I). Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_scott_t_transformer_cert_v1")
+    validator = os.path.join(fam_dir, "qa_scott_t_transformer_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_scott_t_transformer_cert_v1/qa_scott_t_transformer_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_scott_t_transformer_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_qa_steinmetz_polyphase_hysteresis_cert_family(base_dir):
+    """QA Steinmetz Polyphase Hysteresis Cert family [309]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Steinmetz (1892) Trans. AIEE 9:3-64 DOI 10.1109/T-AIEE.1892.5570437. CLAIM: (C1) Single-cycle orbit sum S=sum_{k=0..23} cs(T^k(1,1)) exact Fraction; cs(b,e)=(b*d-e*e)^2/((b*b+e*e)*(e*e+d*d)); S=191484369324836748/23958756907457125 for seed (1,1). (C2) Max cs_k=1600/1681=(40/41)^2 at state (1,9) (k=22); G=G'=82 (symmetric); numerator=(1*1-81)^2=6400. (C3) Polyphase linearity: T^0=(1,1), T^8=(7,1), T^16=(4,1) each give sum S (cert [303] triads, bijection on orbit state-set); 3-phase total=3*S exact Fraction. (C4) Steinmetz n approx 1.6 is observer; QA orbit provides exact cs values without parameterization. (C5) Theorem NT: P_h=k_h*f*S_observer (float); k_h and B_max are material constants; S is Fraction; neither re-enters T-step. Builds on cert [303] (3-phase triads), cert [304] (polyphase orbit), cert [305] (cross-spread cs definition). Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_steinmetz_polyphase_hysteresis_cert_v1")
+    validator = os.path.join(fam_dir, "qa_steinmetz_polyphase_hysteresis_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_steinmetz_polyphase_hysteresis_cert_v1/qa_steinmetz_polyphase_hysteresis_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_steinmetz_polyphase_hysteresis_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_reactive_power_versor_coupling_cert_family(base_dir):
     """QA Reactive Power Versor Coupling Cert family [305]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8 (spread/quadrance); Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6. Uses rational trig (not sin/cos/hyperbolic). CLAIM: (C1) det(M^k)=(-1)^k (Cassini cert [299]); odd k=reactive versor, even k=active rotor; k=0..24. (C2) s(b,e)=e*e/(b*b+e*e) in (0,1)∩Q for all A1 states; (1-s)+s=1 (Fraction); active=1-s=b*b/(b*b+e*e); replaces sin^2(phi). (C3) s(k,k)=1/2 for k=1..9; Singularity (9,9) at s=1/2; Satellite spreads={1/10,1/5,4/13,1/2,9/13,4/5,9/10} closed under s->1-s. (C4) s(e,b)=1-s(b,e) exactly for all (b,e); Cosmos closed under swap; min+max Cosmos spread=1. (C5) cs=(b*d-e*e)^2/(G*G') in [0,1]∩Q for all 72 Cosmos (b,e); d=A1_mod(b+e,9); Singularity cs=0. Checks C1..C5; self-test ok"""
     import subprocess
@@ -9504,6 +9561,21 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (309, "QA Steinmetz Polyphase Hysteresis Cert family",
+     _validate_qa_steinmetz_polyphase_hysteresis_cert_family,
+     "QA Steinmetz Polyphase Hysteresis Cert family [309]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Steinmetz (1892) Trans. AIEE 9:3-64 DOI 10.1109/T-AIEE.1892.5570437. CLAIM: (C1) Orbit sum S=sum_{k=0..23} cs(T^k(1,1)) exact Fraction=191484369324836748/23958756907457125; cs in [0,1]cap Q. (C2) Max cs_k=(40/41)^2=1600/1681 at state (1,9) (k=22); G=G'=82 symmetric; numerator=(-80)^2=6400. (C3) Polyphase linearity: T^0=(1,1), T^8=(7,1), T^16=(4,1) triads (cert [303]) each give sum S (bijection on orbit set); 3-phase=3*S exact Fraction. (C4) Steinmetz n approx 1.6 observer; QA orbit gives exact cs values without exponent. (C5) Theorem NT: P_h=k_h*f*S observer (float); S is Fraction; k_h and B_max are material observer constants. Checks C1_orbit_coupling_sum_exact_fraction/C2_max_cross_spread_40_41_squared/C3_polyphase_linearity_3x_orbit_sum/C4_steinmetz_exponent_is_observer/C5_theorem_nt_ph_observer_layer; 5 PASS + 0 FAIL; self-test ok",
+     "309_qa_steinmetz_polyphase_hysteresis",
+     "qa_steinmetz_polyphase_hysteresis_cert_v1", True),
+    (308, "QA Scott T-Transformer Cert family",
+     _validate_qa_scott_t_transformer_cert_family,
+     "QA Scott T-Transformer Cert family [308]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Serre (1973) Springer ISBN 978-0-387-90041-1; Chapman (2011) McGraw-Hill ISBN 978-0-07-352954-7. CLAIM: (C1) 3-phase subgroup {0,8,16} leq Z/24Z: M^8 order 3 (M^8 neq I, M^16 neq I, M^24=I mod 24). (C2) 2-phase subgroup {0,6,12,18} leq Z/24Z: M^6 order 4 (M^6,M^12,M^18 neq I, M^24=I). (C3) Scott-T word W=R^{-1}.L^{-1}=[[2,-1],[-1,1]]=M^{-2}; M^2.W=I exact; M^8.W=M^6 mod 24; unique 2-step SL(2,Z) correction. (C4) s(T^6(1,1),T^8(1,1))=289/1250 exact Fraction; T^6=(4,3), T^8=(7,1); rational analog of sqrt(3)/2. (C5) Theorem NT: sqrt(3)/2 observer; W=R^{-1}L^{-1} exact SL(2,Z); no transcendental in QA. Checks C1_three_phase_subgroup_order3/C2_two_phase_subgroup_order4/C3_scott_t_sl2z_word_R_inv_L_inv/C4_rational_scott_t_coeff_289_1250/C5_theorem_nt_sl2z_exact_no_float; 5 PASS + 0 FAIL; self-test ok",
+     "308_qa_scott_t_transformer",
+     "qa_scott_t_transformer_cert_v1", True),
+    (307, "QA Induction Motor Slip Cert family",
+     _validate_qa_induction_motor_slip_cert_family,
+     "QA Induction Motor Slip Cert family [307]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Chapman (2011) McGraw-Hill ISBN 978-0-07-352954-7. CLAIM: (C1) det(M^k)=(-1)^k (Cassini cert [299]); slip=k/24 Fraction; odd k=reactive versor, even k=active rotor; k=0 synchronous, k=12 antipodal M^12=-I cert [298]. (C2) s_k=(b0*e_k-e0*b_k)^2/(G0*G_k) Fraction-valued; s_0=0 (synchronous), s_12=0 (antipodal); all others in (0,1)cap Q; not monotone. (C3) Pullout k*=22; s(k*)=16/41; s_22=s_23=16/41 symmetry (T^22=(1,9), T^23=(9,1)). (C4) s_12=0 because T^12(1,1)=(8,8)=8*(1,1) mod 9 (scalar, cert [298]). (C5) Theorem NT: slip/torque/rotor-speed are Fraction observer projections; Kloss curve is observer. Checks C1_grade_alternation_versor_phase_lag/C2_spread_profile_nontrivial/C3_pullout_tstep_k22_s16_41/C4_antipodal_symmetry_k12_8_8/C5_theorem_nt_observer_projections; 5 PASS + 0 FAIL; self-test ok",
+     "307_qa_induction_motor_slip",
+     "qa_induction_motor_slip_cert_v1", True),
     (306, "QA Pisano Mod-24 Applied Cosmos Period Cert family",
      _validate_qa_pisano_mod24_cosmos_period_cert_family,
      "QA Pisano Mod-24 Applied Cosmos Period Cert family [306]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) Every orbit in {1,...,24}^2 under QA T-step has period dividing pi(24)=24; max period=24; spectrum={1,3,6,8,12,24}; histogram {1:1,3:3,6:12,8:8,12:48,24:504}; exhaustively verified. (C2) T(24,24)=(24,24): unique period-1 fixed point; characterized by 24|gcd(b,e) — applied Singularity. (C3) {8,16,24}^2 \\ {(24,24)} = 8 states all period 8; characterized by 8|gcd and 3 not|gcd — applied Satellite analog; parallel: mod-9 Satellite={3,6,9}^2 \\ {(9,9)}. (C4) Applied Cosmos=504 states period 24=21 orbits x 24; characterized by 3 not|gcd(b,e) AND 8 not|gcd(b,e); count=576-64-9+1=504 (inclusion-exclusion). (C5) Closing the loop: max orbit period=24=pi(24) (cert [302])=pi(9)=Cosmos period (cert [291]); applied modulus 24 is period-self-consistent. Checks C1_period_ceiling_24/C2_applied_singularity/C3_applied_satellite_analog/C4_applied_cosmos_504_states/C5_closing_the_loop_pi24_eq_pi9; 5 PASS + 0 FAIL; self-test ok",

@@ -7910,6 +7910,25 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pisano_mod8_crt_cert_family(base_dir):
+    """QA Pisano mod-8 CRT Cert family [302]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) pi(8)=12: F mod 8 period exactly 12; M^12=I mod 8; divisors {1,2,3,4,6} not I; (C2) M^6=5I mod 8 (2-adic half-period scalar; 5^2=1 mod 8); (C3) pi(24)=lcm(12,8)=24 (CRT); (C4) M^12=17I mod 24: F(11)=89 equiv 17, F(12)=0, F(13)=17 mod 24; 17^2=1 mod 24; grade scalars: mod 9 gives 8=-1 ([298]), mod 8 gives 5 (C2), mod 24 gives 17 (C4); CRT: 17 equiv -1 mod 9 and 1 mod 8; (C5) exact order 24: M^24=I, M^k not I for k in {1,2,3,4,6,8,12}. Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_pisano_mod8_crt_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pisano_mod8_crt_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pisano_mod8_crt_cert_v1/qa_pisano_mod8_crt_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pisano_mod8_crt_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_3adic_filtration_cert_family(base_dir):
     """QA 3-Adic Filtration Cert family [301]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.IV+VII; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. NOTE: works in Z/9Z={0,...,8}, T_0(b,e)=(e,(b+e) mod 9). CLAIM: mu3(b,e)=(3b mod 9, 3e mod 9); (C1) mu3 maps all 72 Cosmos states to Satellite; (C2) mu3 maps all 8 Satellite states to (0,0)=Singularity; (C3) mu3 is 9-to-1 Cosmos->Satellite (each Satellite state has exactly 9 Cosmos preimages); (C4) T_0 o mu3 = mu3 o T_0 on all 81 states (linearity of T_0); (C5) x^2-x-1 irreducible over Z/3Z; M mod 3 order 8; Cosmos reduces 9-to-1 onto (Z/3Z)^2\\{(0,0)}. Checks C1..C5; 5 PASS + 0 FAIL; self-test ok"""
     import subprocess
@@ -9409,6 +9428,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (302, "QA Pisano mod-8 CRT Cert family",
+     _validate_qa_pisano_mod8_crt_cert_family,
+     "QA Pisano mod-8 CRT Cert family [302]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. CLAIM: (C1) pi(8)=12: Fibonacci mod 8 period 12; M^12=I mod 8; proper divisors {1,2,3,4,6} not identity. (C2) M^6=5I mod 8: 2-adic half-period scalar, 5^2 equiv 1 mod 8. (C3) CRT: pi(24)=lcm(pi(8),pi(3))=lcm(12,8)=24; M^24=I mod 24; M^24=I mod 3 and mod 8. (C4) M^12 mod 24=17I: F(11)=89 equiv 17, F(12)=144 equiv 0, F(13)=233 equiv 17 mod 24; 17^2=289 equiv 1 mod 24. Three grade scalars: mod 9 gives 8=-1 (cert [298]), mod 8 gives 5 at step 6 (C2), mod 24 gives 17 at step 12 (C4); CRT check: 17 equiv 8 mod 9 and 1 mod 8. (C5) Exact order 24 in GL(2,Z/24Z): M^24=I; M^k not I for k in {1,2,3,4,6,8,12}. Checks C1_pi8/C2_M6_5I/C3_crt/C4_M12_17I/C5_order; 5 PASS + 0 FAIL; self-test ok",
+     "302_qa_pisano_mod8_crt",
+     "qa_pisano_mod8_crt_cert_v1", True),
     (301, "QA 3-Adic Filtration Cert family",
      _validate_qa_3adic_filtration_cert_family,
      "QA 3-Adic Filtration Cert family [301]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.IV+VII; Wall (1960) Amer. Math. Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541. NOTE: Z/9Z=0..8, T_0(b,e)=(e,(b+e) mod 9). CLAIM: mu3(b,e)=(3b mod 9,3e mod 9) is multiplication-by-3; (C1) mu3 maps all 72 Cosmos states (v3(gcd)=0) to Satellite (v3=1); (C2) mu3 maps all 8 Satellite states to (0,0)=Singularity; (C3) mu3 is exactly 9-to-1 Cosmos->Satellite (each of 8 Satellite states has 9 Cosmos preimages, 72=8*9); (C4) T_0 o mu3 = mu3 o T_0 on all 81 states (T_0(3v)=3*T_0(v) mod 9, exhaustive); (C5) x^2-x-1 irreducible over Z/3Z (no roots in 0,1,2); M mod 3 order exactly 8 in GL(2,Z/3Z); Cosmos reduces 9-to-1 onto (Z/3Z)^2 minus zero. Filtration: Cosmos->Satellite->Singularity via x3; period tower 8->24=pi(3)->pi(9)=p->p^2 (Wall). Checks C1_cosmos_to_satellite/C2_satellite_to_singularity/C3_nine_to_one/C4_intertwining/C5_gf3_layer; 5 PASS + 0 FAIL fixtures; self-test ok",

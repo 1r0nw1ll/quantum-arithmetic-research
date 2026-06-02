@@ -407,14 +407,27 @@ def download_patient(pid: str) -> bool:
         url = f"{BASE_URL}/{pid}/{fname}"
         tmp = dest.with_suffix(dest.suffix + ".tmp")
         print(f"    Downloading {fname} ... ", end="", flush=True)
-        try:
-            urlretrieve(url, tmp)
-            tmp.rename(dest)
-            print(f"done ({dest.stat().st_size / 1e6:.1f} MB)")
-        except (URLError, HTTPError) as e:
-            print(f"FAILED: {e}")
-            if tmp.exists():
-                tmp.unlink()
+        ok = False
+        for attempt in range(3):
+            try:
+                import urllib.request, socket
+                with urllib.request.urlopen(url, timeout=120) as resp, open(tmp, "wb") as fh:
+                    while True:
+                        chunk = resp.read(1 << 16)
+                        if not chunk: break
+                        fh.write(chunk)
+                tmp.rename(dest)
+                print(f"done ({dest.stat().st_size / 1e6:.1f} MB)")
+                ok = True
+                break
+            except Exception as e:
+                if tmp.exists(): tmp.unlink()
+                if attempt < 2:
+                    print(f"retry({attempt+1}) ", end="", flush=True)
+                else:
+                    print(f"SKIP after 3 attempts: {type(e).__name__}")
+        if not ok:
+            print(f"    [{pid}] WARNING: {fname} unavailable — patient may be skipped")
 
     return True
 

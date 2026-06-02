@@ -1,0 +1,55 @@
+{
+  "patients": [
+    {
+      "patient": "chb08",
+      "delta_r2": 0.00129,
+      "p": 0.999646,
+      "fib_frac_ictal": 0.6093,
+      "fib_frac_inter": 0.6187,
+      "fib_ttest_p": 0.6353
+    },
+    {
+      "patient": "chb09",
+      "delta_r2": 0.00392,
+      "p": 0.999082,
+      "fib_frac_ictal": 0.6385,
+      "fib_frac_inter": 0.6462,
+      "fib_ttest_p": 0.7465
+    },
+    {
+      "patient": "chb10",
+      "delta_r2": 0.00122,
+      "p": 0.999779,
+      "fib_frac_ictal": 0.6683,
+      "fib_frac_inter": 0.6358,
+      "fib_ttest_p": 0.1145
+    },
+    {
+      "patient": "chb12",
+      "delta_r2": -0.00312,
+      "p": 1.0,
+      "fib_frac_ictal": 0.6705,
+      "fib_frac_inter": 0.6635,
+      "fib_ttest_p": 0.6089
+    },
+    {
+      "patient": "chb13",
+      "delta_r2": 0.00133,
+      "p": 0.999623,
+      "fib_frac_ictal": 0.6531,
+      "fib_frac_inter": 0.6762,
+      "fib_ttest_p": 0.1783
+    },
+    {
+      "patient": "chb14",
+      "delta_r2": 0.00046,
+      "p": 0.999996,
+      "fib_frac_ictal": 0.6444,
+      "fib_frac_inter": 0.6711,
+      "fib_ttest_p": 0.3568
+    }
+  ],
+  "mean_dr2": 0.00085,
+  "fisher_p": 1.0,
+  "n_fib_enriched": 2
+}

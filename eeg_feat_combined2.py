@@ -100,7 +100,7 @@ def f2_sat_frac(sig, fs, kms_orders):
 def analyse(pdir):
     pid = pdir.name
     windows = extract_windows(pdir)
-    if not windows or sum(w["label"]==1 for w in windows) < 4: return None
+    if not windows or sum(w["label"]==1 for w in windows) < 12: return None
     labels = np.array([w["label"] for w in windows])
     print(f"  [{pid}] Combined-2: {len(windows)} windows...")
 
@@ -124,17 +124,18 @@ def analyse(pdir):
         sig = feat_arr[tr_idx][inter_mask].std() + 1e-8
         feat_arr[:] = (feat_arr - mu) / sig  # in-place zscore
 
-    feats_z = np.column_stack([delta, np.abs(f0_sing), np.abs(f2_sat)])
+    # Signed z: LR per patient learns the correct direction for each patient
+    feats_z = np.column_stack([delta, f0_sing, f2_sat])
     dr2_z, p_z = eval_delta_r2(feats_z, labels)
 
     for lab, name in [(1,"ictal"),(0,"interictal")]:
         idx = np.where(labels==lab)[0]
         if len(idx):
-            print(f"  [{pid}] {name:12s}: f0_sing|z|={np.abs(f0_sing[idx]).mean():.3f}  "
-                  f"f2_sat|z|={np.abs(f2_sat[idx]).mean():.3f}")
+            print(f"  [{pid}] {name:12s}: f0_sing_z={f0_sing[idx].mean():+.3f}  "
+                  f"f2_sat_z={f2_sat[idx].mean():+.3f}")
 
     print(f"  [{pid}] raw ΔR²={dr2_raw:+.4f} p={p_raw:.4f}  "
-          f"z-score ΔR²={dr2_z:+.4f} p={p_z:.4f}")
+          f"signed-z ΔR²={dr2_z:+.4f} p={p_z:.4f}")
     return {"patient": pid,
             "dr2_raw": round(dr2_raw, 5), "p_raw": round(p_raw, 6),
             "dr2_z":   round(dr2_z,   5), "p_z":   round(p_z,   6)}
@@ -146,8 +147,8 @@ def main():
     if not results:
         print("No results"); return
     n = len(results)
-    for label, key_dr2, key_p in [("raw",     "dr2_raw", "p_raw"),
-                                   ("z-score", "dr2_z",   "p_z")]:
+    for label, key_dr2, key_p in [("raw",      "dr2_raw", "p_raw"),
+                                   ("signed-z", "dr2_z",   "p_z")]:
         vals = [r[key_dr2] for r in results]
         ps   = [r[key_p]   for r in results]
         chi2_f, p_f = fishers(ps)

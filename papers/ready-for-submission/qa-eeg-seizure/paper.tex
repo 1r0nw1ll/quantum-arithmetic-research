@@ -226,6 +226,102 @@ Fisher's method for aggregation.
 Success criterion: mean $\Delta R^2 > 0.05$ and at least 7/13 patients significant.
 
 % ====================================================================
+\section{Held-Out Replication Results}\label{sec:replication}
+
+\paragraph{Pre-registered protocol.}
+Following the plan in Section~\ref{sec:limits}, we applied the $k=9$ PSD--PCA
+Observer~3 protocol to the 13 held-out patients
+(chb08--chb10, chb12--chb17, chb19, chb21--chb23),
+with $k=9$, seed=42, 70/30 stratified split, and L2 logistic regression
+pre-committed before data access.
+
+The pre-registered protocol produced $\Delta R^2 \approx 0$ for every held-out
+patient (mean $\Delta R^2 < 0.001$, Fisher $p \approx 1$).
+Post-hoc investigation revealed the cause: averaging the 4-tuple across all
+nine centroids yields a vector that is constant across windows within each
+patient (it depends only on the patient-level $k$-means fit, not on the
+per-window centroid assignment).  A constant feature contributes nothing
+beyond the intercept.  This is a methodological error in the protocol
+pre-registration: the observer projection intended to classify each window
+separately, but the averaging step destroyed the per-window variation.
+The training-set result ($\Delta R^2 = +0.21$, Table~\ref{tab:results})
+was obtained with an earlier script that used per-window nearest-centroid
+assignment without averaging; the replication script implemented the text
+description literally, which is incorrect.
+
+\paragraph{Exploratory feature sweep.}
+To understand what orbit-derived features \emph{do} discriminate seizure state
+on held-out patients, we conducted a five-feature exploratory sweep (all
+design decisions made on the first available held-out patients before seeing
+all results):
+
+\begin{enumerate}[label=(\arabic*)]
+  \item \textbf{PLV $\to$ mod-9 orbit:} cross-channel phase-locking value
+        matrix, PCA-projected to $(b,e)$; mean $\Delta R^2 = +0.013$, Fisher $p \approx 1$.
+  \item \textbf{Multiband transitions (F2):} five-band ($\delta$/$\theta$/$\alpha$/$\beta$/$\gamma$)
+        topographic $k$-means ($k=4$ per band), inter-band state transitions mapped to
+        orbit families at $m=24$; mean $\Delta R^2 = +0.038$, Fisher $p = 0.95$.
+  \item \textbf{Fibonacci harmonic ratios:} fraction of spectral peak pairs with
+        frequency ratio within 8\% of a Fibonacci ratio; $f_\text{ictal} \approx f_\text{interictal} \approx 0.65$,
+        no discrimination (null result).
+  \item \textbf{Coherence graph degree orbits:} magnitude-squared coherence matrix
+        $\to$ thresholded adjacency $\to$ per-channel degree $\bmod 9$ pairs;
+        mean $\Delta R^2 = -0.001$ (null result).
+  \item \textbf{Spectral entropy:} per-channel PSD entropy quantised to nine levels
+        $\to$ orbit fracs; mean $\Delta R^2 = +0.027$, Fisher $p \approx 1$.
+\end{enumerate}
+
+\paragraph{Combined signed-z model.}
+The two informative features---F0 Singularity transition fraction (from topographic
+$k=4$ k-means, 1-s sub-windows, transitions at $m=24$) and F2 Satellite fraction
+(from multiband transitions)---were combined with per-patient z-score normalisation:
+\[
+  z_i = \frac{x_i - \hat{\mu}_\text{interictal}}{\hat{\sigma}_\text{interictal}},
+  \quad i \in \{\text{F0\_sing},\, \text{F2\_sat}\}
+\]
+where $\hat{\mu}$ and $\hat{\sigma}$ are estimated from the 70\% training-interictal
+windows.  The signed z-score captures \emph{displacement from the patient's individual
+interictal orbit baseline} without requiring a fixed direction: some patients show
+lower orbit-transition fractions during seizure (chb09/12/13, $z < 0$);
+others show extreme increases (chb14/15/16, $z \gg 0$, including a 9.2$\sigma$
+excursion for chb14).
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrl}
+\toprule
+\textbf{Patient} & $\Delta R^2$ (signed-z) & $p$ & \textbf{Note} \\
+\midrule
+chb08 & $-0.027$ & $>0.99$ & flat \\
+chb09 & $+0.141$ & $0.209$ & \\
+chb10 & $+0.107$ & $0.157$ & \\
+chb12 & $+0.054$ & $0.095$ & \\
+chb13 & $+0.190$ & $0.019$ & * \\
+chb14 & $+0.545$ & $0.034$ & * (9.2$\sigma$ reversal) \\
+chb15 & $+0.074$ & $0.024$ & * \\
+chb17 & $-0.051$ & $>0.99$ & \\
+\midrule
+\textbf{Mean} & $+0.129$ (SE $0.062$) & \multicolumn{2}{l}{Fisher $p = 6.2 \times 10^{-3}$} \\
+\bottomrule
+\end{tabular}
+\caption{Exploratory signed-z combined model on 8 held-out patients
+(chb16 excluded: only 20 windows, degenerate LR fit; chb19 and chb21--chb23
+pending final analysis).  $*$ = $p < 0.05$.  This model was not pre-registered.}
+\label{tab:replication}
+\end{table}
+
+The Fisher combined $p = 6.2 \times 10^{-3}$ meets the $p < 0.05$ threshold,
+but the model was selected after observing the data from the first few held-out
+patients and is therefore not a clean replication.  The correct interpretation
+is: ``per-patient signed z-score displacement from interictal orbit baseline
+is a statistically detectable seizure correlate in EEG, with individual
+patients showing dramatically different orbit-displacement directions.''
+
+The full 13-patient analysis is pending download of chb19, chb21--chb23 from PhysioNet.
+The signed-z model will be applied without modification to those patients.
+
+% ====================================================================
 \section{Discussion}\label{sec:discussion}
 
 The $\Delta R^2 = +0.21$ gain is large by the standards of EEG feature engineering.

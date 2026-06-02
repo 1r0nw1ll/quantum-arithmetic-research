@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [298] | [QA Orbit Grade Decomposition](298_qa_orbit_grade_decomposition.md) | v₃(gcd(b,e)) is T-invariant (gcd(e,b+e)=gcd(b,e)); v₃=2/1/0 gives Singularity/Satellite/Cosmos; periods 1/8/24; even/odd split 12+12/4+4; M^12≡−I mod 9 (grade inversion) | PASS |
 | [297] | [QA Pell Rotor Eigenspread](297_qa_pell_rotor_eigenspread.md) | A=[[1,2],[1,1]] (det=−1, Pell step versor); Pell chain bₙ²−2eₙ²=(−1)^(n+1); \|sₙ−1/3\|=1/(3G̃ₙ) ([292] formula at I=1); √2 irrational (no b²=2e² integer sol); A²=RLLR matrix from [296] | PASS |
 | [296] | [QA SL(2,Z) Versor Isomorphism](296_qa_sl2z_versor_isomorphism.md) | Stern-Brocot bijection primitive (b,e)↔{L,R}*; T-op=Fibonacci M (det=−1, odd-grade operator); M²=L·R (rotor, det=+1); (9,9) unique T-fixpoint; orbit partition 1+8+72; all SB words in SL(2,Z) | PASS |
 | [295] | [QA Pell Sturmian Bridge](295_qa_pell_sturmian_bridge.md) | s_α (α=√2-1) is aperiodic Sturmian (p(n)=n+1, gaps {2,3}); (RLLR)∞ is periodic NOT Sturmian (p(2)=4≠3); Pell e-values = CF denominators for [0;2̄] via shared recurrence; bridge between periodic SB encoding of √2 and aperiodic Sturmian encoding of √2-1 | PASS |

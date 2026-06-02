@@ -283,8 +283,7 @@ where $\hat{\mu}$ and $\hat{\sigma}$ are estimated from the 70\% training-interi
 windows.  The signed z-score captures \emph{displacement from the patient's individual
 interictal orbit baseline} without requiring a fixed direction: some patients show
 lower orbit-transition fractions during seizure (chb09/12/13, $z < 0$);
-others show extreme increases (chb14/15/16, $z \gg 0$, including a 9.2$\sigma$
-excursion for chb14).
+others show positive polarity reversals (chb14: $+9.2\sigma$; chb19: $+6.3\sigma$).
 
 \begin{table}[h]
 \centering
@@ -298,28 +297,33 @@ chb09 & $+0.141$ & $0.209$ & \\
 chb10 & $+0.107$ & $0.157$ & \\
 chb12 & $+0.054$ & $0.095$ & \\
 chb13 & $+0.190$ & $0.019$ & * \\
-chb14 & $+0.545$ & $0.034$ & * (9.2$\sigma$ reversal) \\
+chb14 & $+0.545$ & $0.034$ & * ($+9.2\sigma$ reversal) \\
 chb15 & $+0.074$ & $0.024$ & * \\
 chb17 & $-0.051$ & $>0.99$ & \\
+chb19 & $-0.181$ & $>0.99$ & ($+6.3\sigma$ reversal, too few windows) \\
+chb21 & $+0.323$ & $0.068$ & \\
+chb22 & $+0.002$ & $0.981$ & \\
+chb23 & $+0.223$ & $0.062$ & \\
 \midrule
-\textbf{Mean} & $+0.129$ (SE $0.062$) & \multicolumn{2}{l}{Fisher $p = 6.2 \times 10^{-3}$} \\
+\textbf{Mean} & $+0.117$ (SE $0.053$) & \multicolumn{2}{l}{Fisher $p = 6.6 \times 10^{-3}$} \\
 \bottomrule
 \end{tabular}
-\caption{Exploratory signed-z combined model on 8 held-out patients
-(chb16 excluded: only 20 windows, degenerate LR fit; chb19 and chb21--chb23
-pending final analysis).  $*$ = $p < 0.05$.  This model was not pre-registered.}
+\caption{Exploratory signed-z combined model on 12/13 held-out patients
+(chb16 excluded: only 20 windows total, degenerate LR fit).
+$*$ = $p < 0.05$.  This model was not pre-registered.}
 \label{tab:replication}
 \end{table}
 
-The Fisher combined $p = 6.2 \times 10^{-3}$ meets the $p < 0.05$ threshold,
-but the model was selected after observing the data from the first few held-out
+The Fisher combined $p = 6.6 \times 10^{-3}$ meets the $p < 0.05$ threshold,
+9/12 patients show positive $\Delta R^2$.
+However, the model was selected after observing the data from the first few held-out
 patients and is therefore not a clean replication.  The correct interpretation
 is: ``per-patient signed z-score displacement from interictal orbit baseline
 is a statistically detectable seizure correlate in EEG, with individual
 patients showing dramatically different orbit-displacement directions.''
-
-The full 13-patient analysis is pending download of chb19, chb21--chb23 from PhysioNet.
-The signed-z model will be applied without modification to those patients.
+The negative ΔR² for chb08, chb17, and chb19 are noted; chb19 in particular
+shows a strong ictal f0\_sing excursion ($+6.3\sigma$) but the small window count
+(44 windows, 30\% held out) produces an unstable LR fit.
 
 % ====================================================================
 \section{Discussion}\label{sec:discussion}

@@ -7910,6 +7910,25 @@ def _validate_qa_mod24_quadrance_v2_signature_cert_family(base_dir):
     return None
 
 
+def _validate_qa_sl2z_versor_isomorphism_cert_family(base_dir):
+    """QA SL(2,Z) Versor Isomorphism Cert family [296]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X; Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6; Brocot (1861) Revue Chronometrique 3:186-194. CLAIM: (C1) Stern-Brocot bijection W(b,e)*[1,1]^T=[b,e]^T, all W in SL(2,Z); (C2) T=(b,e)->(e,b+e) equals M=[[0,1],[1,1]] (det=-1, odd-grade operator); (C3) M^2=L*R; (C4) (9,9) unique T-fixpoint in {1,...,9}^2; (C5) orbit partition 1+8+72. Checks C1_bijection/C2_T_equals_M/C3_rotor/C4_singularity/C5_orbits; self-test ok"""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_sl2z_versor_isomorphism_cert_v1")
+    validator = os.path.join(fam_dir, "qa_sl2z_versor_isomorphism_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_sl2z_versor_isomorphism_cert_v1/qa_sl2z_versor_isomorphism_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_sl2z_versor_isomorphism_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pell_sturmian_bridge_cert_family(base_dir):
     """QA Pell Sturmian Bridge Cert family [295]. Primary sources: Lothaire (2002) Algebraic Combinatorics on Words Cambridge ISBN 978-0-521-81220-7 Ch.2 (Sturmian p(n)=n+1, characteristic word s_alpha, CF connection); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X (CF convergents). CLAIM: s_alpha for alpha=sqrt(2)-1=[0;2-bar]: (1) aperiodic (no period<=50 in 100-term window); (2) complexity p(n)=n+1 for n=1..11; (3) gap sizes in {2,3}; (4) Pell e-values = CF denominators q_n satisfying q_{n+1}=2q_n+q_{n-1} q_0=1 q_1=2; (5) (RLLR)^k is periodic (period=4) with p(2)=4 NOT Sturmian (Sturmian needs p(2)=3). Bridge: Pell e_n = q_n because same recurrence same ICs from period-2 CFs sqrt(2)=[1;2-bar] and sqrt(2)-1=[0;2-bar]. Checks COMPLEXITY_OK/RECURRENCE_OK/INIT_OK/CF_EQUAL_OK/GAP_SUBSET_OK/HAS_ONES/APERIODIC_OK; 4 PASS + 2 FAIL fixtures; self-test ok"""
     import subprocess
@@ -9295,6 +9314,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (296, "QA SL(2,Z) Versor Isomorphism Cert family",
+     _validate_qa_sl2z_versor_isomorphism_cert_family,
+     "QA SL(2,Z) Versor Isomorphism Cert family [296]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X (SL(2,Z), Euclidean algorithm); Hestenes+Sobczyk (1984) Reidel ISBN 978-90-277-1673-6 (versor algebra, Pin/Spin groups); Brocot (1861) Revue Chronometrique 3:186-194. CLAIM: (C1) Stern-Brocot bijection: every primitive (b,e) with gcd(b,e)=1 maps to unique word W in {L,R}* via W*[1,1]^T=[b,e]^T (left-accumulated; all W in SL(2,Z), det=+1). (C2) T-operator: QA T-step (b,e)->(e,b+e) equals M*[b,e]^T, M=[[0,1],[1,1]], det(M)=-1 (odd-grade versor operator). (C3) M^2=L*R exactly as integer matrices; two T-steps = one SL(2,Z) rotor. (C4) (9,9) is the unique fixed point of T in {1,...,9}^2 under QA A1 arithmetic. (C5) Orbit partition under T on {1,...,9}^2 is 1+8+72 (Singularity/Satellite/Cosmos). Note: operator M^k alternates grade (det(M^k)=(-1)^k) but SB words for states always have det=+1. Builds on [294] (SL(2,Z) Spine) and [291] (Fibonacci orbit periods). Checks C1_bijection/C2_T_equals_M/C3_rotor/C4_singularity/C5_orbits; 5 PASS + 0 FAIL fixtures; self-test ok",
+     "296_qa_sl2z_versor_isomorphism",
+     "qa_sl2z_versor_isomorphism_cert_v1", True),
     (295, "QA Pell Sturmian Bridge Cert family",
      _validate_qa_pell_sturmian_bridge_cert_family,
      "QA Pell Sturmian Bridge Cert family [295]. Primary sources: Lothaire (2002) Algebraic Combinatorics on Words Cambridge ISBN 978-0-521-81220-7 Ch.2 (Sturmian words p(n)=n+1, characteristic word, CF connection); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.X. CLAIM: characteristic Sturmian word s_alpha for alpha=sqrt(2)-1=[0;2-bar] is APERIODIC (no period<=50) with complexity p(n)=n+1 (verified n=1..11) and gap sizes in {2,3}. Pell e-values {1,2,5,12,29,...} = CF denominators q_n for alpha satisfying q_{n+1}=2q_n+q_{n-1} q_0=1 q_1=2. (RLLR)^inf is PERIODIC (period=4) with p(2)=4 -- NOT Sturmian (needs p(2)=3). Bridge: Pell e_n=q_n via shared period-2 CF recurrence from sqrt(2)=[1;2-bar] and sqrt(2)-1=[0;2-bar]. Corrects imprecise 'Sturmian' claim from cert [294]: SB path word (RLLR)_inf is periodic; s_alpha is the genuine Sturmian encoding. Checks COMPLEXITY_OK/RECURRENCE_OK/INIT_OK/CF_EQUAL_OK/GAP_SUBSET_OK/HAS_ONES/APERIODIC_OK; 4 PASS + 2 FAIL fixtures; self-test ok",

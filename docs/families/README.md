@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [311] | [QA Archaeogeometry Orbit Classification](311_qa_archaeogeometry_orbit.md) | all 5 Thom construction triangles Cosmos; 3-4-5 and 5-12-13 in Fibonacci ground state (|f|=1); 5 triangles span complete excitation ladder (2 Fib / 1 Luc / 2 Third); 4 integer-MY primitive hypotenuses: G∈{5,13}→Fibonacci, G∈{17,29}→Third | PASS |
 | [310] | [QA Rational Surveying](310_qa_rational_surveying.md) | C²+F²=G² (576 pairs); Area=6L exact; primitive iff gcd(b,e)=1 AND b odd; spreads s_P=F²/G², s_Q=C²/G² exact Fractions with s_P+s_Q=1; bearing arctan(F/C) is observer only | PASS |
 | [309] | [QA Steinmetz Polyphase Hysteresis](309_qa_steinmetz_polyphase_hysteresis.md) | orbit coupling sum S=Σcs_k over 24-cycle exact Fraction; cs_max=(40/41)² at state (1,9); 3-phase sum=3·S exact (cert [303] triad symmetry); Steinmetz exponent n≈1.6 is observer layer only | PASS |
 | [308] | [QA Scott T-Transformer](308_qa_scott_t_transformer.md) | 3-phase subgroup {0,8,16}≤Z/24Z (M⁸ order 3); 2-phase {0,6,12,18} (M⁶ order 4); Scott-T word W=R⁻¹L⁻¹=M^{-2}=[[2,−1],[−1,1]]; M⁸·W=M⁶ mod 24; rational coeff 289/1250; √3/2 is observer | PASS |

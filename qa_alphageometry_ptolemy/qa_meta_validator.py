@@ -7967,6 +7967,25 @@ def _validate_qa_scott_t_transformer_cert_family(base_dir):
     return None
 
 
+def _validate_qa_archaeogeometry_orbit_cert_family(base_dir):
+    """QA Archaeogeometry Orbit Classification Cert family [311]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Thom (1962) J.RSS DOI 10.2307/2982493; Thom (1967) Megalithic Sites in Britain Oxford ISBN 978-0-19-813148-8; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8. CLAIM: (C1) all 5 Thom construction Pythagorean triples are primitive and have Cosmos-family generators mod-9 and mod-24 (from cert [310] C3). (C2) rank-1 (3-4-5 -> (1,1)) and rank-2 (5-12-13 -> (1,2)) both in Fibonacci sub-orbit |f|=1 ground state; unique primitives with G<=13 and Fibonacci sub-orbit. (C3) 5 triangles span all 3 mod-9 Cosmos sub-orbits: 2/5 Fibonacci (rank 1,2), 1/5 Lucas (rank 4: 7-24-25 -> (1,3)), 2/5 Third (rank 3: 8-15-17 -> (3,1); rank 5: 12-35-37 -> (5,1)); sub-orbit by mod-9 canonical seed membership. (C4) among 31 distinct integer-MY diameters in Thom 1962 (84 circles, range 4-55 MY), exactly 4 are primitive Pythagorean hypotenuses G: {5,13,17,29}; all Cosmos; G={5,13} Fibonacci; G={17,29} Third; 0 Lucas. (C5) Theorem NT: diameter_ft is observer float; integer MY is QA layer; orbit_fam is discrete; all 5 spreads F^2/G^2 exact Fractions with s_F+s_C=1. Builds on cert [310] (squaring map, primitivity) and cert [178] (Thom MY quantum). Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_archaeogeometry_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_archaeogeometry_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_archaeogeometry_orbit_cert_v1/qa_archaeogeometry_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_archaeogeometry_orbit_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_rational_surveying_cert_family(base_dir):
     """QA Rational Surveying Cert family [310]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5, Ch.XIII. CLAIM: (C1) C^2+F^2=G^2 for all (b,e) in {1..24}^2 (576 pairs, unbounded d=b+e, exact integer). (C2) Area=6L: right-triangle area C*F/2=6*L where L=d*e*(d^2-e^2)/6; triangular parcel area = 6 times cubic QA identity L; C*F=12*L exactly. (C3) Primitivity: gcd(C,F,G)=1 iff gcd(b,e)=1 AND b is odd; Euclid in QA variables: gcd(d,e)=gcd(b,e) and d-e=b so different parity iff b odd; zero exceptions over all 576 pairs. (C4) Rational spreads: s_P=F^2/G^2 and s_Q=C^2/G^2 exact Fractions in (0,1) with s_P+s_Q=1; s_R=1; no pi or arcsin in QA layer. (C5) Theorem NT: bearing arctan(F/C) is transcendental float (observer); spread F^2/G^2 is exact Fraction (QA measurement layer); bearing never re-enters discrete integer logic. Builds on cert [305] (Wildberger spread). Checks C1..C5; self-test ok"""
     import subprocess
@@ -9580,6 +9599,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (311, "QA Archaeogeometry Orbit Classification Cert family",
+     _validate_qa_archaeogeometry_orbit_cert_family,
+     "QA Archaeogeometry Orbit Classification Cert family [311]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Thom (1962) DOI 10.2307/2982493; Thom (1967) Oxford ISBN 978-0-19-813148-8; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8. CLAIM: (C1) all 5 Thom construction Pythagorean triples Cosmos mod-9 and mod-24 from primitivity (cert [310]). (C2) rank-1,2 (3-4-5, 5-12-13) in Fibonacci sub-orbit |f|=1; unique primitives G<=13 with Fibonacci sub-orbit. (C3) 5 triangles span all 3 mod-9 sub-orbits: 2/5 Fibonacci (rank 1,2), 1/5 Lucas (rank 4), 2/5 Third (rank 3,5). (C4) exactly 4 of 31 distinct integer-MY Thom 1962 diameters are primitive hypotenuses {5,13,17,29}; 2 Fibonacci, 2 Third, 0 Lucas. (C5) Theorem NT: diameter_ft observer float; integer MY QA layer; spreads exact Fraction. Builds on cert [310] (squaring map) and cert [178] (Thom MY). Checks C1..C5; self-test ok",
+     "311_qa_archaeogeometry_orbit",
+     "qa_archaeogeometry_orbit_cert_v1", True),
     (310, "QA Rational Surveying Cert family",
      _validate_qa_rational_surveying_cert_family,
      "QA Rational Surveying Cert family [310]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5. CLAIM: (C1) C^2+F^2=G^2 for all (b,e) in {1..24}^2 exact integer. (C2) Area=6L: C*F=12*L exactly; triangular parcel area = 6 times cubic QA identity L. (C3) Primitivity: gcd(C,F,G)=1 iff gcd(b,e)=1 AND b is odd (Euclid in QA variables); zero exceptions over 576 pairs. (C4) Rational spreads: s_P=F^2/G^2 and s_Q=C^2/G^2 exact Fractions in (0,1) with s_P+s_Q=1; s_R=1; no pi. (C5) Theorem NT: bearing arctan(F/C) is transcendental observer projection; spread F^2/G^2 is exact Fraction QA layer. Builds on cert [305] (Wildberger spread). Checks C1_pythagorean_identity_C2_plus_F2_eq_G2/C2_area_equals_6L_triangle_cubic_identity/C3_primitivity_criterion_gcd1_and_b_odd/C4_exact_rational_spreads_sP_plus_sQ_eq_1/C5_theorem_nt_bearing_observer_spread_exact; 5 PASS + 0 FAIL; self-test ok",

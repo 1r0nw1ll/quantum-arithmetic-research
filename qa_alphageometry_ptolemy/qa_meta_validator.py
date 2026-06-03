@@ -7967,6 +7967,25 @@ def _validate_qa_scott_t_transformer_cert_family(base_dir):
     return None
 
 
+def _validate_qa_rational_surveying_cert_family(base_dir):
+    """QA Rational Surveying Cert family [310]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5, Ch.XIII. CLAIM: (C1) C^2+F^2=G^2 for all (b,e) in {1..24}^2 (576 pairs, unbounded d=b+e, exact integer). (C2) Area=6L: right-triangle area C*F/2=6*L where L=d*e*(d^2-e^2)/6; triangular parcel area = 6 times cubic QA identity L; C*F=12*L exactly. (C3) Primitivity: gcd(C,F,G)=1 iff gcd(b,e)=1 AND b is odd; Euclid in QA variables: gcd(d,e)=gcd(b,e) and d-e=b so different parity iff b odd; zero exceptions over all 576 pairs. (C4) Rational spreads: s_P=F^2/G^2 and s_Q=C^2/G^2 exact Fractions in (0,1) with s_P+s_Q=1; s_R=1; no pi or arcsin in QA layer. (C5) Theorem NT: bearing arctan(F/C) is transcendental float (observer); spread F^2/G^2 is exact Fraction (QA measurement layer); bearing never re-enters discrete integer logic. Builds on cert [305] (Wildberger spread). Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_rational_surveying_cert_v1")
+    validator = os.path.join(fam_dir, "qa_rational_surveying_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_rational_surveying_cert_v1/qa_rational_surveying_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_rational_surveying_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_steinmetz_polyphase_hysteresis_cert_family(base_dir):
     """QA Steinmetz Polyphase Hysteresis Cert family [309]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Steinmetz (1892) Trans. AIEE 9:3-64 DOI 10.1109/T-AIEE.1892.5570437. CLAIM: (C1) Single-cycle orbit sum S=sum_{k=0..23} cs(T^k(1,1)) exact Fraction; cs(b,e)=(b*d-e*e)^2/((b*b+e*e)*(e*e+d*d)); S=191484369324836748/23958756907457125 for seed (1,1). (C2) Max cs_k=1600/1681=(40/41)^2 at state (1,9) (k=22); G=G'=82 (symmetric); numerator=(1*1-81)^2=6400. (C3) Polyphase linearity: T^0=(1,1), T^8=(7,1), T^16=(4,1) each give sum S (cert [303] triads, bijection on orbit state-set); 3-phase total=3*S exact Fraction. (C4) Steinmetz n approx 1.6 is observer; QA orbit provides exact cs values without parameterization. (C5) Theorem NT: P_h=k_h*f*S_observer (float); k_h and B_max are material constants; S is Fraction; neither re-enters T-step. Builds on cert [303] (3-phase triads), cert [304] (polyphase orbit), cert [305] (cross-spread cs definition). Checks C1..C5; self-test ok"""
     import subprocess
@@ -9561,6 +9580,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (310, "QA Rational Surveying Cert family",
+     _validate_qa_rational_surveying_cert_family,
+     "QA Rational Surveying Cert family [310]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5. CLAIM: (C1) C^2+F^2=G^2 for all (b,e) in {1..24}^2 exact integer. (C2) Area=6L: C*F=12*L exactly; triangular parcel area = 6 times cubic QA identity L. (C3) Primitivity: gcd(C,F,G)=1 iff gcd(b,e)=1 AND b is odd (Euclid in QA variables); zero exceptions over 576 pairs. (C4) Rational spreads: s_P=F^2/G^2 and s_Q=C^2/G^2 exact Fractions in (0,1) with s_P+s_Q=1; s_R=1; no pi. (C5) Theorem NT: bearing arctan(F/C) is transcendental observer projection; spread F^2/G^2 is exact Fraction QA layer. Builds on cert [305] (Wildberger spread). Checks C1_pythagorean_identity_C2_plus_F2_eq_G2/C2_area_equals_6L_triangle_cubic_identity/C3_primitivity_criterion_gcd1_and_b_odd/C4_exact_rational_spreads_sP_plus_sQ_eq_1/C5_theorem_nt_bearing_observer_spread_exact; 5 PASS + 0 FAIL; self-test ok",
+     "310_qa_rational_surveying",
+     "qa_rational_surveying_cert_v1", True),
     (309, "QA Steinmetz Polyphase Hysteresis Cert family",
      _validate_qa_steinmetz_polyphase_hysteresis_cert_family,
      "QA Steinmetz Polyphase Hysteresis Cert family [309]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Steinmetz (1892) Trans. AIEE 9:3-64 DOI 10.1109/T-AIEE.1892.5570437. CLAIM: (C1) Orbit sum S=sum_{k=0..23} cs(T^k(1,1)) exact Fraction=191484369324836748/23958756907457125; cs in [0,1]cap Q. (C2) Max cs_k=(40/41)^2=1600/1681 at state (1,9) (k=22); G=G'=82 symmetric; numerator=(-80)^2=6400. (C3) Polyphase linearity: T^0=(1,1), T^8=(7,1), T^16=(4,1) triads (cert [303]) each give sum S (bijection on orbit set); 3-phase=3*S exact Fraction. (C4) Steinmetz n approx 1.6 observer; QA orbit gives exact cs values without exponent. (C5) Theorem NT: P_h=k_h*f*S observer (float); S is Fraction; k_h and B_max are material observer constants. Checks C1_orbit_coupling_sum_exact_fraction/C2_max_cross_spread_40_41_squared/C3_polyphase_linearity_3x_orbit_sum/C4_steinmetz_exponent_is_observer/C5_theorem_nt_ph_observer_layer; 5 PASS + 0 FAIL; self-test ok",

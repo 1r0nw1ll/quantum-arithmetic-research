@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [310] | [QA Rational Surveying](310_qa_rational_surveying.md) | C²+F²=G² (576 pairs); Area=6L exact; primitive iff gcd(b,e)=1 AND b odd; spreads s_P=F²/G², s_Q=C²/G² exact Fractions with s_P+s_Q=1; bearing arctan(F/C) is observer only | PASS |
 | [309] | [QA Steinmetz Polyphase Hysteresis](309_qa_steinmetz_polyphase_hysteresis.md) | orbit coupling sum S=Σcs_k over 24-cycle exact Fraction; cs_max=(40/41)² at state (1,9); 3-phase sum=3·S exact (cert [303] triad symmetry); Steinmetz exponent n≈1.6 is observer layer only | PASS |
 | [308] | [QA Scott T-Transformer](308_qa_scott_t_transformer.md) | 3-phase subgroup {0,8,16}≤Z/24Z (M⁸ order 3); 2-phase {0,6,12,18} (M⁶ order 4); Scott-T word W=R⁻¹L⁻¹=M^{-2}=[[2,−1],[−1,1]]; M⁸·W=M⁶ mod 24; rational coeff 289/1250; √3/2 is observer | PASS |
 | [307] | [QA Induction Motor Slip](307_qa_induction_motor_slip.md) | slip=k/24 (Fraction); direction spread s_k is torque proxy; s_0=s_12=0 (synchronous/antipodal); pullout k\*=22, s(k\*)=16/41; T²²=(1,9) and T²³=(9,1) are maximum-deviation states | PASS |

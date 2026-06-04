@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_ennead_orbit_partition_cert_family(base_dir):
+    """QA Egyptian Ennead Orbit Partition Cert family [314]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Budge (1904) The Gods of the Egyptians, Methuen, Vol. 1, pp.86-105; Wilkinson (2003) Thames & Hudson ISBN 978-0-500-05120-7, pp.74-81. CLAIM: (C1) |Satellite|+|Singularity|=8+1=9 (Ennead cardinality); partition counts {1,8,72} cover all 81 states in {1,...,9}^2. (C2) (9,9) is the unique T-fixed point in {1,...,9}^2; T((9,9))=(9,9); no other state satisfies T(b,e)=(b,e). (C3) Orbit from (3,3) has period 8 and visits all 8 Satellite states (3,3)->(3,6)->(6,9)->(9,6)->(6,6)->(6,3)->(3,9)->(9,3)->(3,3). (C4) (b,e) in Satellite iff 3|b and 3|e and (b,e)!=(9,9); 3-divisibility characterization exact over all 81 pairs. (C5) Theorem NT: deity attributes (domain, iconography) are observer projections; orbit_family(b,e) and T-period are integer claims; no float state. Builds on cert [298] (orbit grade decomposition 1+8+72 v3-stratification). Checks C1_ennead_count_satellite8_singularity1_total9/C2_singularity_unique_t_fixed_point/C3_satellite_8cycle_period8_visits_all8_states/C4_3divisibility_partition_counts_1_8_72_total81/C5_theorem_nt_periods_int_satellite8_sing1_cosmos24; 5 PASS + 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_ennead_orbit_partition_cert_v1")
+    validator = os.path.join(fam_dir, "qa_ennead_orbit_partition_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ennead_orbit_partition_cert_v1/qa_ennead_orbit_partition_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_ennead_orbit_partition_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_salient_pole_reluctance_cert_family(base_dir):
     """QA Salient-Pole Reluctance Torque Cert family [313]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Chapman (2011) McGraw-Hill ISBN 978-0-07-352954-7. CLAIM: (C1) d-q saliency ratio s8/s6=(9/25)/(1/50)=18 exact Fraction; T^8=(7,1) d-axis, T^6=(4,3) q-axis from cert [308] Scott-T word. (C2) Rational double-spread 4*sk*(1-sk) in (0,1)cap Q for k neq 0,12; Delta0=Delta12=0; all Deltak exact Fraction; Wildberger analog of sin^2(2delta). (C3) argmin Deltak=9; Deltamin=-479993/515450; T^9=(1,8) maximum-braking position. (C4) Sign partition: Deltak>0 for exactly k in {4,10,11,13,14} (5 near-Singularity acceleration zones); zero for {0,12}; negative 17 positions; argmax k=11 Deltamax=324551/862025. (C5) Theorem NT: reluctance torque T_r prop Deltak observer; X_d-X_q and sin(2delta) observer projections. Builds on cert [305] (rational spread), cert [307] (slip), cert [308] (d-q axis). Checks C1..C5; self-test ok"""
     import subprocess
@@ -9637,6 +9656,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (314, "QA Egyptian Ennead Orbit Partition Cert family",
+     _validate_qa_ennead_orbit_partition_cert_family,
+     "QA Egyptian Ennead Orbit Partition Cert family [314]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Budge (1904) The Gods of the Egyptians, Methuen, Vol. 1, pp.86-105; Wilkinson (2003) Thames & Hudson ISBN 978-0-500-05120-7, pp.74-81. CLAIM: (C1) |Satellite|+|Singularity|=8+1=9 (Ennead cardinality); partition {1,8,72} covers all 81 states in {1,...,9}^2. (C2) (9,9) is the unique T-fixed point; no other state satisfies T(b,e)=(b,e). (C3) Orbit from (3,3) has period 8 visiting all 8 Satellite states (3,3)->(3,6)->(6,9)->(9,6)->(6,6)->(6,3)->(3,9)->(9,3). (C4) (b,e) in Satellite iff 3|b and 3|e and (b,e)!=(9,9); 3-divisibility partition verified exhaustively. (C5) Theorem NT: deity attributes observer; orbit_family and T-period are integer claims. Builds on cert [298]. Checks C1_ennead_count_satellite8_singularity1_total9/C2_singularity_unique_t_fixed_point/C3_satellite_8cycle_period8_visits_all8_states/C4_3divisibility_partition_counts_1_8_72_total81/C5_theorem_nt_periods_int_satellite8_sing1_cosmos24; 5 PASS + 0 FAIL; self-test ok",
+     "314_qa_ennead_orbit_partition",
+     "qa_ennead_orbit_partition_cert_v1", True),
     (313, "QA Salient-Pole Reluctance Torque Cert family",
      _validate_qa_salient_pole_reluctance_cert_family,
      "QA Salient-Pole Reluctance Torque Cert family [313]. Primary sources: Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5; Wildberger (2005) Wild Egg Books ISBN 978-0-9757492-0-8; Chapman (2011) McGraw-Hill ISBN 978-0-07-352954-7. CLAIM: (C1) d-q saliency ratio s8/s6=(9/25)/(1/50)=18 exact integer; T^8=(7,1) d-axis, T^6=(4,3) q-axis (cert [308]). (C2) Double-spread 4sk(1-sk) in (0,1)cap Q for k neq 0,12; Delta0=Delta12=0; all Deltak exact Fraction. (C3) argmin k=9; Deltamin=-479993/515450; T^9=(1,8) maximum-braking. (C4) Sign partition: Deltak>0 for exactly k in {4,10,11,13,14}; zero {0,12}; negative 17; argmax k=11 Deltamax=324551/862025. (C5) Theorem NT: T_r prop Deltak observer; X_d-X_q and sin(2delta) observer. Checks C1_dq_saliency_ratio_18/C2_rational_double_spread_delta0_delta12_zero/C3_min_defect_k9_minus479993_515450/C4_sign_partition_pos4_10_11_13_14/C5_theorem_nt_defect_fraction_observer; 5 PASS + 0 FAIL; self-test ok",

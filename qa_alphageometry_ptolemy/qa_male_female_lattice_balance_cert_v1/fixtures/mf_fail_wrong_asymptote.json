@@ -1,0 +1,39 @@
+{
+  "schema_version": "QA_MF_LATTICE_BALANCE_CERT.v1",
+  "certificate_id": "qa.cert.mf_lattice_balance.fail.wrong_asymptote.v1",
+  "cert_type": "qa_mf_lattice_balance_cert",
+  "title": "MF FAIL: wrong asymptote (2/3 claimed as limit, not 1-sqrt(2)/4)",
+  "created_utc": "2026-06-04T00:00:00Z",
+  "tier": "Tier 1 — exact reformulation",
+
+  "_fixture_purpose": "FAIL fixture: claims the asymptotic male fraction is 2/3 (the m=9 exact value), which is wrong — the true limit is 1-sqrt(2)/4 approx 0.6464. Also gap is declared 0.0 instead of sqrt(2)/4-1/3 approx 0.0202. Validates MF_ASY and MF_GAP fail paths. Sources: Iverson (1975-1996) QA-1/QA-2 ISBN none (unpublished); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5.",
+
+  "exact_moduli": [3, 6, 9],
+
+  "asymptote_male_fraction": 0.6666666666666666,
+
+  "gap_two_thirds_minus_asymptote": 0.0,
+
+  "mod9_orbit_splits": {
+    "fibonacci":   {"male": 17, "female":  7, "total": 24, "norm_f": 1},
+    "lucas":       {"male": 17, "female":  7, "total": 24, "norm_f": 5},
+    "third":       {"male": 14, "female": 10, "total": 24, "norm_f": 11},
+    "satellite":   {"male":  5, "female":  3, "total":  8},
+    "singularity": {"male":  1, "female":  0, "total":  1}
+  },
+
+  "test_moduli_below_two_thirds": [10, 12, 24],
+
+  "theorem_nt_satisfied": true,
+
+  "sources": [
+    "Ben Iverson, Pythagoras and the Quantum World Vol.1-2 (QA-1/QA-2, 1975-1996)",
+    "Hardy, G.H. and Wright, E.M. (2008) An Introduction to the Theory of Numbers, Oxford ISBN 978-0-19-921986-5"
+  ],
+
+  "fail_ledger": [
+    {"check_id": "MF_ASY", "reason": "declared asymptote=2/3=0.6667 but true value is 1-sqrt(2)/4=0.6464; off by 0.0202"},
+    {"check_id": "MF_GAP", "reason": "declared gap=0.0 but true gap=sqrt(2)/4-1/3=0.0202"}
+  ],
+  "result": "FAIL"
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Male/Female Lattice Balance Cert family [312]. Primary sources: Iverson (1975-1996) QA-1/QA-2 (male/female: I=C-F, b/e vs sqrt(2)); Hardy+Wright (2008) Oxford ISBN 978-0-19-921986-5 Ch.VI (Beatty sequences, floor(n*sqrt(2)) counting). CLAIM: (C1) m in {3,6,9} are the only positive integers where {1,...,m}^2 has exactly 2/3 male states (b^2<2*e^2); verified exhaustively to m=10000. (C2) Asymptote = 1-sqrt(2)/4 = integral_0^1 min(1,y*sqrt(2)) dy; all m>=10 strictly below 2/3. (C3) Gap = sqrt(2)/4 - 1/3 approx 0.0202 — the boundary irrational sqrt(2) appears in its own asymptotic density. (C4) Fibonacci and Lucas mod-9 Cosmos orbits share identical 17:7 male/female split; Third orbit is 14:10. (C5) Theorem NT: b^2<2*e^2 is observer projection, never re-enters T-step. Tier 1: exact reformulation + Beatty-sequence counting."
+}

@@ -1,0 +1,77 @@
+{
+  "schema_version": "QA_MF_LATTICE_BALANCE_CERT.v1",
+  "certificate_id": "qa.cert.mf_lattice_balance.pass.default.v1",
+  "cert_type": "qa_mf_lattice_balance_cert",
+  "title": "QA Male/Female Lattice Balance — m=9 is the last exact 2/3 modulus",
+  "created_utc": "2026-06-04T00:00:00Z",
+  "tier": "Tier 1 — exact reformulation",
+
+  "_fixture_purpose": "Anchor fixture certifying that m in {3,6,9} are the only positive integers where {1,...,m}^2 has exactly 2/3 male states (b^2 < 2*e^2). The continuous-limit male fraction is 1-sqrt(2)/4 approx 0.64645. The gap between exact 2/3 and the asymptote is sqrt(2)/4 - 1/3 approx 0.02022. mod-9 orbit splits: Fibonacci 17:7, Lucas 17:7, Third 14:10, Satellite 5:3, Singularity 1:0; total 54:27 = 2:1 exact. All m >= 10 fall strictly below 2/3, verified to m=10000.",
+
+  "exact_moduli": [3, 6, 9],
+  "_exact_moduli_note": "Verified exhaustive to m=10000. m=3: 6/9=2/3. m=6: 24/36=2/3. m=9: 54/81=2/3.",
+
+  "asymptote_male_fraction": 0.6464466094067263,
+  "_asymptote_derivation": "integral_0^1 min(1, y*sqrt(2)) dy = sqrt(2)/2 * (1/sqrt(2))^2 + (1 - 1/sqrt(2)) = 1 - sqrt(2)/4",
+
+  "gap_two_thirds_minus_asymptote": 0.020220057260607735,
+  "_gap_formula": "sqrt(2)/4 - 1/3; the boundary irrational sqrt(2) appears in its own asymptotic density formula",
+
+  "mod9_orbit_splits": {
+    "fibonacci": {"male": 17, "female":  7, "total": 24, "norm_f": 1,  "ratio": "17:7"},
+    "lucas":     {"male": 17, "female":  7, "total": 24, "norm_f": 5,  "ratio": "17:7",
+                  "_note": "Fibonacci and Lucas share identical 17:7 split — unit and ramified prime in Z[phi]"},
+    "third":     {"male": 14, "female": 10, "total": 24, "norm_f": 11, "ratio": "14:10",
+                  "_note": "Third orbit |f|=11 (split prime in Z[phi]) has different distribution"},
+    "satellite": {"male":  5, "female":  3, "total":  8, "ratio": "5:3"},
+    "singularity": {"male": 1, "female": 0, "total":  1,
+                    "_note": "(9,9): b^2=81 < 2*e^2=162, male"}
+  },
+
+  "mod9_totals": {
+    "male": 54, "female": 27, "total": 81,
+    "fraction": 0.6666666666666666,
+    "exact_two_thirds": true
+  },
+
+  "test_moduli_below_two_thirds": [10, 12, 15, 18, 24, 36, 48, 72, 100, 144, 200, 500, 1000],
+
+  "convergence_samples": {
+    "m=12":  {"male": 95,   "total": 144,  "fraction": 0.659722},
+    "m=24":  {"male": 376,  "total": 576,  "fraction": 0.652778},
+    "m=72":  {"male": 3362, "total": 5184, "fraction": 0.648534},
+    "m=1000":{"male": 646593, "total": 1000000, "fraction": 0.646593}
+  },
+
+  "theorem_nt_satisfied": true,
+  "_theorem_nt": "b^2 < 2*e^2 is a classification of (b,e) states — an observer output. It is never used as a QA state input or modular arithmetic operand. The T-step qa_step(b,e,m) = (e, ((b+e-1)%m)+1) makes no reference to the male/female classification.",
+
+  "qa_connections": {
+    "boundary": "b/e = sqrt(2) is the male/female boundary; equivalent to I = C-F = 2de - ba = 0 (Iverson)",
+    "koenig": "Male states have I > 0 (inner Koenig radius positive); female states have I < 0",
+    "pell": "Pell convergents to sqrt(2) straddle the boundary: (1,1)male, (3,2)female, (7,5)male, (17,12)female alternating with |I|=1 (minimum)",
+    "z_sqrt2": "g(b,e) = b^2 - 2*e^2 = -I is the Z[sqrt(2)] Pell indicator; male iff g < 0",
+    "m9_special": "m=9 is the LAST modulus where the discrete Beatty-sqrt(2) count exactly tiles 2/3; beyond m=9 the irrational nature of sqrt(2) prevents exact rational partition"
+  },
+
+  "sources": [
+    "Ben Iverson, Pythagoras and the Quantum World Vol.1-2 (QA-1/QA-2, 1975-1996): I=C-F, male/female classification",
+    "Hardy, G.H. and Wright, E.M. (2008) An Introduction to the Theory of Numbers, 6th ed. Oxford ISBN 978-0-19-921986-5: Beatty sequences Ch.VI",
+    "Dale, W. (2026) QA Male/Female Lattice Balance — computational discovery, signal_experiments session 2026-06-04"
+  ],
+
+  "validation_checks": [
+    {"check_id": "MF_1",   "description": "schema_version correct",                    "passed": true},
+    {"check_id": "MF_M9",  "description": "m=9 has exactly 54 male, 27 female",        "passed": true},
+    {"check_id": "MF_M3",  "description": "m=3 has 6 male, m=6 has 24 male",           "passed": true},
+    {"check_id": "MF_ASY", "description": "asymptote = 1-sqrt(2)/4 within 1e-10",      "passed": true},
+    {"check_id": "MF_GAP", "description": "gap = sqrt(2)/4-1/3 within 1e-10",          "passed": true},
+    {"check_id": "MF_ORB", "description": "mod-9 orbit splits sum to 54:27",           "passed": true},
+    {"check_id": "MF_MON", "description": "all test_moduli have male_fraction < 2/3",  "passed": true},
+    {"check_id": "MF_THM", "description": "theorem_nt_satisfied declared true",        "passed": true},
+    {"check_id": "MF_F",   "description": "fail_ledger empty for PASS result",         "passed": true}
+  ],
+
+  "fail_ledger": [],
+  "result": "PASS"
+}

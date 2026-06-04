@@ -82,6 +82,32 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #9 — 2026-06-04 (window: June 1 – June 4, 2026)
+Full report: `sota_scans/scan_2026-06-04.md`
+
+**Key finds:**
+- arXiv:2512.25060 (On the geometry and topology of representations: manifolds of modular addition, Dec 2025) — **MEDIUM-HIGH. Slipped all 8 scans.** TDA tools on Z/pZ modular arithmetic representations; universal closed-form manifold for modular addition; architecture-independent topological structure. Primary reference for `qa_tda_orbit_grokking_cert_v1`. Strongest find this scan.
+- arXiv:2605.24504 (Orbit decomposition statistics: Cesàro mean + large deviation principle, May 23, 2026) — **MEDIUM. Slipped scans #7–8.** Prime orbit counting for algebraic group endomorphisms (Z/24Z in scope); universal Poisson rate function. Statistical grounding for `qa_pisano_orbit_correspondence_cert_v1` [281].
+- arXiv:2506.05190 (Categorical foundations of discrete dynamical systems, June 2025) — **MEDIUM. Slipped all 8 scans (1 year).** Cycle set concept for attractor decomposition; formal language for QA's orbit stratification. Reference for `qa_orbit_stratification_cert_v1` [261].
+- arXiv:2603.19343 (Universal identity for powers in quadratic algebras, March 2026) — **MEDIUM. Slipped 5 scans.** Cayley-Hamilton + Fibonacci/Lucas closed-form. External grounding for `qa_cayley_hamilton_fibonacci_lucas_cert_v1` [299].
+
+**No HIGH finds this window — quietest scan since #7.**
+
+**Cert registry update (critical):**
+- Registry grew [288] → [311] in 3 days (23 new families: Koenig/Pell/SL(2,Z)/Ford cluster [289–297], Algebra/Pisano cluster [298–302], AC Power/Steinmetz cluster [303–309], Rational Surveying [310], Archaeogeometry Orbit Classification [311])
+- Documentation backlog: **28 families** [284]–[311] ALL missing README.md + SPEC.md
+- [261] qa_orbit_stratification_cert_v1: **OCTUPLE GAP** (8th scan — 5 weeks overdue)
+- qa_steinmetz_whittaker_bridge_cert_v1: **6th scan unregistered** — needs [312]; IDs [289]–[311] consumed
+- qa_whittaker_phase_packet_algebra_cert_v1: **6th scan unregistered** — needs [313]
+- qa_koenig_twisted_squares_cert_v1 and qa_pell_norm_cert_v1: on disk, registry status unverified
+
+**New cross-domain connections:**
+- Topology chain: arXiv:2512.25060 + arXiv:2605.06352 (scan #4) + arXiv:2605.20440 (scan #5) = complete TDA → H₁ → G-module chain for QA orbit topology
+- AC Power / Steinmetz cluster [303–309]: first QA systematic electrical engineering application domain; bridges to Steinmetz phasor method (1893)
+- SL(2,Z)/Koenig/Ford cluster [289–300]: new QA-as-modular-group-arithmetic research direction
+
+**Search fix for scan #10:** Add "modular addition topology manifold TDA", "categorical discrete dynamical attractor cycle", "orbit decomposition algebraic group finite field" to search battery.
+
 ### Scan #8 — 2026-06-01 (window: May 28 – June 1, 2026)
 Full report: `sota_scans/scan_2026-06-01.md`
 

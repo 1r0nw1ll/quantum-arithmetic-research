@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [315] | [QA Rhind 2/n Unit Fraction](315_qa_rhind_2n_unit_fraction.md) | All 50 Rhind 2/n sums exact Fraction; Satellite 3\|n → always 2-term via 2/(3k)=1/(2k)+1/(6k); 4-term decompositions Cosmos-only ({29,43,61,73,79,83,89,101}); scribal implicit orbit classification | PASS |
 | [314] | [QA Egyptian Ennead Orbit Partition](314_qa_ennead_orbit_partition.md) | \|Sat\|+\|Sing\|=8+1=9 (Ennead cardinality); Singularity (9,9) = unique T-fixed point; Satellite 8-cycle (3,3)→…→(9,3); 3-divisibility partition {1,8,72}=81; deity attributes observer only | PASS |
 | [313] | [QA Salient-Pole Reluctance Torque](313_qa_salient_pole_reluctance.md) | d-q saliency ratio s₈/s₆=18 (exact integer); Δ_k=s_{2k}−4s_k(1−s_k); 5 acceleration zones {4,10,11,13,14}; argmin k=9 Δ=−479993/515450; sin(2δ) observer only | PASS |
 | [312] | [QA Male/Female Lattice Balance](312_male_female_lattice_balance.md) | m∈{3,6,9} only moduli with exactly 2/3 male states (b²<2e²); asymptote=1−√2/4≈0.6464; gap=√2/4−1/3; Fibonacci and Lucas orbits share 17:7 split; Third orbit 14:10; Theorem NT: boundary is observer projection | PASS |

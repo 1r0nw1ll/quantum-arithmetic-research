@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_rhind_2n_unit_fraction_cert_family(base_dir):
+    """QA Rhind 2/n Unit Fraction Cert family [315]. Primary sources: Chace (1927) Rhind Mathematical Papyrus, MAA Vol.1-2, pp.7-13; Gillings (1972) Mathematics in the Time of the Pharaohs, MIT Press ISBN 978-0-486-24315-3, Ch.6 pp.45-80; Iverson (1975-1996) QA-1/QA-2. CLAIM: (C1) all 50 Rhind 2/n entries (n=3..101 odd) sum to exactly 2/n as Fraction; no float. (C2) all 17 Satellite/Singularity n (3|n) have exactly 2 unit fractions in the Rhind decomposition. (C3) for all 17 n=3k, Rhind denominators are exactly (2k,6k); formula 2/(3k)=1/(2k)+1/(6k) matches identically. (C4) 4-term decompositions for exactly 8 Cosmos n {29,43,61,73,79,83,89,101}; zero Satellite/Singularity n has 4 terms. (C5) Theorem NT: unit fraction notation and hieroglyphic form observer; orbit_family, Fraction sums, term count, 3-divisor formula are QA claims. Builds on cert [314] (Egyptian Ennead, 3-divisibility). Checks C1_exact_fraction_all_50_entries/C2_satellite_2term_17_entries/C3_3divisor_formula_2over3k_eq_1over2k_plus_1over6k/C4_4term_cosmos_only_8_entries_29_43_61_73_79_83_89_101/C5_theorem_nt_all_denominators_int_orbit_str_sum_fraction; 5 PASS + 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_rhind_2n_unit_fraction_cert_v1")
+    validator = os.path.join(fam_dir, "qa_rhind_2n_unit_fraction_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_rhind_2n_unit_fraction_cert_v1/qa_rhind_2n_unit_fraction_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_rhind_2n_unit_fraction_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_ennead_orbit_partition_cert_family(base_dir):
     """QA Egyptian Ennead Orbit Partition Cert family [314]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Budge (1904) The Gods of the Egyptians, Methuen, Vol. 1, pp.86-105; Wilkinson (2003) Thames & Hudson ISBN 978-0-500-05120-7, pp.74-81. CLAIM: (C1) |Satellite|+|Singularity|=8+1=9 (Ennead cardinality); partition counts {1,8,72} cover all 81 states in {1,...,9}^2. (C2) (9,9) is the unique T-fixed point in {1,...,9}^2; T((9,9))=(9,9); no other state satisfies T(b,e)=(b,e). (C3) Orbit from (3,3) has period 8 and visits all 8 Satellite states (3,3)->(3,6)->(6,9)->(9,6)->(6,6)->(6,3)->(3,9)->(9,3)->(3,3). (C4) (b,e) in Satellite iff 3|b and 3|e and (b,e)!=(9,9); 3-divisibility characterization exact over all 81 pairs. (C5) Theorem NT: deity attributes (domain, iconography) are observer projections; orbit_family(b,e) and T-period are integer claims; no float state. Builds on cert [298] (orbit grade decomposition 1+8+72 v3-stratification). Checks C1_ennead_count_satellite8_singularity1_total9/C2_singularity_unique_t_fixed_point/C3_satellite_8cycle_period8_visits_all8_states/C4_3divisibility_partition_counts_1_8_72_total81/C5_theorem_nt_periods_int_satellite8_sing1_cosmos24; 5 PASS + 0 FAIL; self-test ok"""
     import subprocess
@@ -9656,6 +9675,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (315, "QA Rhind 2/n Unit Fraction Cert family",
+     _validate_qa_rhind_2n_unit_fraction_cert_family,
+     "QA Rhind 2/n Unit Fraction Cert family [315]. Primary sources: Chace (1927) Rhind Mathematical Papyrus MAA Vol.1-2 pp.7-13; Gillings (1972) MIT Press ISBN 978-0-486-24315-3 Ch.6 pp.45-80; Iverson (1975-1996) QA-1/QA-2. CLAIM: (C1) all 50 Rhind 2/n entries sum to exactly 2/n as Fraction; no float. (C2) all 17 Satellite/Singularity n (3|n) have exactly 2 unit fractions. (C3) for all 17 n=3k, Rhind denominators exactly (2k,6k); 3-divisor formula matches identically. (C4) 4-term decompositions for exactly 8 Cosmos n {29,43,61,73,79,83,89,101}; zero Satellite/Singularity. (C5) Theorem NT: notation/hieroglyphics observer; orbit_family, Fraction sums, term count QA claims. Builds on cert [314]. Checks C1_exact_fraction_all_50_entries/C2_satellite_2term_17_entries/C3_3divisor_formula_2over3k_eq_1over2k_plus_1over6k/C4_4term_cosmos_only_8_entries_29_43_61_73_79_83_89_101/C5_theorem_nt_all_denominators_int_orbit_str_sum_fraction; 5 PASS + 0 FAIL; self-test ok",
+     "315_qa_rhind_2n_unit_fraction",
+     "qa_rhind_2n_unit_fraction_cert_v1", True),
     (314, "QA Egyptian Ennead Orbit Partition Cert family",
      _validate_qa_ennead_orbit_partition_cert_family,
      "QA Egyptian Ennead Orbit Partition Cert family [314]. Primary sources: Iverson (1975-1996) QA-1/QA-2; Budge (1904) The Gods of the Egyptians, Methuen, Vol. 1, pp.86-105; Wilkinson (2003) Thames & Hudson ISBN 978-0-500-05120-7, pp.74-81. CLAIM: (C1) |Satellite|+|Singularity|=8+1=9 (Ennead cardinality); partition {1,8,72} covers all 81 states in {1,...,9}^2. (C2) (9,9) is the unique T-fixed point; no other state satisfies T(b,e)=(b,e). (C3) Orbit from (3,3) has period 8 visiting all 8 Satellite states (3,3)->(3,6)->(6,9)->(9,6)->(6,6)->(6,3)->(3,9)->(9,3). (C4) (b,e) in Satellite iff 3|b and 3|e and (b,e)!=(9,9); 3-divisibility partition verified exhaustively. (C5) Theorem NT: deity attributes observer; orbit_family and T-period are integer claims. Builds on cert [298]. Checks C1_ennead_count_satellite8_singularity1_total9/C2_singularity_unique_t_fixed_point/C3_satellite_8cycle_period8_visits_all8_states/C4_3divisibility_partition_counts_1_8_72_total81/C5_theorem_nt_periods_int_satellite8_sing1_cosmos24; 5 PASS + 0 FAIL; self-test ok",

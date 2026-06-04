@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_equilateral_triangle_series_cert_family(base_dir):
+    """QA Equilateral Triangle Series Cert family [319]. Primary source: Iverson (1993) QA-2, ITAM Portland, ISBN 1-883401-07-0, Ch.7 pp.99-117. Companion: cert [152] (W/Y/Z definitions, Eisenstein norms). CLAIM: (C1) b=1 series (e=1..10) exact match Iverson p.106 table. (C2) fractal nesting F(b+1)=W(b) for e=1 series b=1..24; closed form W(b)=(b+1)(b+3). (C3) every-third-3: gcd(W,F,Y,Z) div 3 iff 3|b for e=1 series b=1..24. (C4) F=ab shared between equilateral base segment and Pythagorean odd-leg; verified {1..9}^2. (C5) Theorem NT: W(b)=(b+1)(b+3) exact integer; geometric figures observer; 'This Book completes the BASIC part of QA' p.114. Builds on cert [152] and cert [310]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_equilateral_triangle_series_cert_v1")
+    validator = os.path.join(fam_dir, "qa_equilateral_triangle_series_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_equilateral_triangle_series_cert_v1/qa_equilateral_triangle_series_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_equilateral_triangle_series_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_sh_5040_ceiling_cert_family(base_dir):
     """QA Synchronous Harmonics Ceiling Cert family [318]. Primary source: Iverson (1993) QA-2, ITAM Portland, ISBN 1-883401-07-0, Ch.6 pp.84-99. Companion: cert [147] (wavelet sync + par rules). CLAIM: (C1) 5040=2^4*3^2*5*7, tau=60, extremal (max tau below=48), div 1-10, 5039 prime, 5041=71^2. (C2) 21 harmonic fractions {k/d*5040} all positive integers, range 720-4320. (C3) min 5-prime QW=2310=2*3*5*7*11, min 7-prime QW=510510, both div 6. (C4) 5041-5045 not div 6; 5046=2*3*29^2 only 3 distinct primes. (C5) Theorem NT; Samekh open per Iverson QA-2 p.83. Builds on cert [147]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9732,6 +9751,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (319, "QA Equilateral Triangle Series Cert family",
+     _validate_qa_equilateral_triangle_series_cert_family,
+     "QA Equilateral Triangle Series Cert family [319]. Primary source: Iverson (1993) QA-2, ITAM Portland, Ch.7 pp.99-117. CLAIM: (C1) b=1 series e=1..10 exact Iverson p.106 table. (C2) fractal nesting F(b+1)=W(b) for e=1 series b=1..24; W=(b+1)(b+3). (C3) every-third-3: gcd div 3 iff 3|b. (C4) F=ab shared equilateral+Pythagorean {1..9}^2. (C5) Theorem NT; QA-2 completion. Builds on cert [152] and cert [310]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "319_qa_equilateral_triangle_series",
+     "qa_equilateral_triangle_series_cert_v1", True),
     (318, "QA Synchronous Harmonics Ceiling Cert family",
      _validate_qa_sh_5040_ceiling_cert_family,
      "QA Synchronous Harmonics Ceiling Cert family [318]. Primary source: Iverson (1993) QA-2, ITAM Portland, ISBN 1-883401-07-0, Ch.6 pp.84-99. CLAIM: (C1) 5040=2^4*3^2*5*7, tau=60, extremal (max tau below=48), div 1-10, 5039 prime, 5041=71^2. (C2) 21 harmonic fractions {k/d*5040} all integers, range 720-4320. (C3) min 5-prime QW=2310, min 7-prime QW=510510, both primorials+div6. (C4) 5041-5045 not div6; 5046 only 3 distinct primes. (C5) Theorem NT; Samekh open per Iverson. Builds on cert [147]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

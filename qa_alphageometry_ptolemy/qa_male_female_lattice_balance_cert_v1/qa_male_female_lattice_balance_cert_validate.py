@@ -57,7 +57,7 @@ GAP = SQRT2 / 4.0 - 1.0 / 3.0
 
 def _male_count(m: int) -> int:
     """Count male states in {1,...,m}^2. Observer output only."""
-    return sum(min(m, int(i * SQRT2)) for i in range(1, m + 1))
+    return sum(min(m, math.isqrt(2 * i * i - 1)) for i in range(1, m + 1))
 
 
 def validate(cert: dict, *, collect_errors: bool = True) -> list[str]:

@@ -93,18 +93,18 @@ def f_norm(b, e):
 
 def generator_from_triple(a_side, b_side, c_hyp):
     """Given a Pythagorean triple (a,b,c), return QA generator (b_qa, e_qa)."""
-    C, F = (a_side, b_side) if a_side % 2 == 0 else (b_side, a_side)
-    G = c_hyp
-    d_sq = (G + F) // 2
-    e_sq = (G - F) // 2
-    if (G + F) % 2 != 0 or (G - F) % 2 != 0:
+    even_leg, odd_leg = (a_side, b_side) if a_side % 2 == 0 else (b_side, a_side)
+    hyp = c_hyp
+    d_sq = (hyp + odd_leg) // 2
+    e_sq = (hyp - odd_leg) // 2
+    if (hyp + odd_leg) % 2 != 0 or (hyp - odd_leg) % 2 != 0:
         return None, None
-    d = isqrt(d_sq)
-    e = isqrt(e_sq)
-    if d * d != d_sq or e * e != e_sq:
+    d_root = isqrt(d_sq)
+    e_root = isqrt(e_sq)
+    if d_root * d_root != d_sq or e_root * e_root != e_sq:
         return None, None
-    b_qa = d - e
-    return b_qa, e
+    b_qa = d_root - e_root
+    return b_qa, e_root
 
 
 def generators_for_G(D):
@@ -112,15 +112,15 @@ def generators_for_G(D):
     gens = []
     for e in range(1, isqrt(D)):
         d_sq = D - e * e
-        d = isqrt(d_sq)
-        if d * d != d_sq or d <= e:
+        d_root = isqrt(d_sq)
+        if d_root * d_root != d_sq or d_root <= e:
             continue
-        if gcd(d, e) != 1:
+        if gcd(d_root, e) != 1:
             continue
-        if (d + e) % 2 == 0:
+        if (d_root + e) % 2 == 0:
             continue
-        b = d - e
-        gens.append((b, e, d))
+        b = d_root - e
+        gens.append((b, e, d_root))
     return gens
 
 

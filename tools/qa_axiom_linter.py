@@ -250,6 +250,10 @@ RULES: list[ViolationRule] = [
             r'\s*b\s*\+\s*e|'
             r'\s*b\+e|'
             r'\s*qa_mod\s*\(|'           # QA mod-wrapper of b+e (A2-compliant)
+            r'\s*a1\s*\(|'               # A1-step wrapper (a1(b+e))
+            r'\s*a1_mod\s*\(|'           # A1 modular wrapper
+            r'\s*det\s*\(|'              # matrix determinant — never a QA coord
+            r'\s*isqrt\s*\(|'            # integer square root (Quantize inverse)
             r'\s*int\s*\(|'              # int cast wrapper
             r'\s*Fraction\s*\(|'         # Fraction wrapper
             r'\s*\{|'
@@ -268,7 +272,8 @@ RULES: list[ViolationRule] = [
             r'\s*-?[0-9]+(?:\.[0-9]*)?\s*[,)\]}]|'
             r'\s*\w+\s*=\s*|'
             r'\s*\w+\s*\.\s*\w+|'
-            r'\s*\w+\s*\[|'                     # d = result[key]
+            r'\s*\w+\s*\(.*\)\s*\[|'            # d = func(...)[n] — subscript on call result
+            r'\s*\w+\s*\[|'                      # d = result[key]
             r'\s*True\b|\s*False\b|\s*None\b'
             r')'
         ),
@@ -287,6 +292,8 @@ RULES: list[ViolationRule] = [
             r'\s*d\s*\+\s*e|'            # a = d+e is algebraically equivalent when d=b+e
             r'\s*d\+e|'
             r'\s*qa_mod\s*\(|'           # QA mod-wrapper (A2-compliant)
+            r'\s*a1\s*\(|'               # A1-step wrapper (a1(b+2*e))
+            r'\s*a1_mod\s*\(|'           # A1 modular wrapper
             r'\s*int\s*\(|'
             r'\s*Fraction\s*\(|'
             r'\s*\{|'
@@ -305,6 +312,7 @@ RULES: list[ViolationRule] = [
             r'\s*-?[0-9]+(?:\.[0-9]*)?\s*[,)\]}]|'
             r'\s*\w+\s*=\s*|'
             r'\s*\w+\s*\.\s*\w+|'
+            r'\s*\w+\s*\(.*\)\s*\[|'
             r'\s*\w+\s*\[|'
             r'\s*True\b|\s*False\b|\s*None\b'
             r')'

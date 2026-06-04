@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [320] | [QA Quantize Algorithm](320_qa_quantize_algorithm.md) | Midpoint identity b+a=2d all 81 pairs; DO=d² theorem 72 Cosmos; lossless reconstruction; fingerprint uniqueness; Satellite extension; Theorem NT two-crossing bridge | PASS |
 | [319] | [QA Equilateral Triangle Series](319_qa_equilateral_triangle_series.md) | b=1 table exact match p.106; fractal nesting F(b+1)=W(b), W=(b+1)(b+3); every-third-3 rule; F=ab shared with Pythagorean; QA-2 synthesis completion | PASS |
 | [318] | [QA Synchronous Harmonics Ceiling](318_qa_sh_5040_ceiling.md) | 5040=2⁴·3²·5·7, τ=60, extremal (max below=48), divisible 1-10; 21 harmonic fractions 720-4320; min 5-prime QW=2310, 7-prime=510510; 5041-5045 gap; Samekh open per Iverson | PASS |
 | [317] | [QA Diadic Inner Structure](317_qa_diadic_inner_structure.md) | Generator n=2L−Σ(L/cᵢ) for 7 of 8 four-term entries; female Fibonacci seed BEDA(2,1,3,4) covers 5 entries via {b,C,F}/{a,F,G}/{d,a,G}/{a,C,G}/{b,d,C}; n=101 inner sum=1 unique; all 8 entries BEDA-sourced | PASS |

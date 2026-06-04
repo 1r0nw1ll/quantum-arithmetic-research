@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [317] | [QA Diadic Inner Structure](317_qa_diadic_inner_structure.md) | Generator n=2L−Σ(L/cᵢ) for 7 of 8 four-term entries; female Fibonacci seed BEDA(2,1,3,4) covers 5 entries via {b,C,F}/{a,F,G}/{d,a,G}/{a,C,G}/{b,d,C}; n=101 inner sum=1 unique; all 8 entries BEDA-sourced | PASS |
 | [316] | [QA Double Quantum Number for Diadic Fractions](316_qa_double_quantum_number.md) | General 3-term formula k=d₁n/(C₁−a₁); male QN 7 Rhind matches; double-female (2,8,10,18) for 2/71; all 8 four-term entries two-level verified; n=29 BEDA closure n=2p−2a−p/a; 4-term inner QN open per Iverson | PASS |
 | [315] | [QA Rhind 2/n Unit Fraction](315_qa_rhind_2n_unit_fraction.md) | All 50 Rhind 2/n sums exact Fraction; Satellite 3\|n → always 2-term via 2/(3k)=1/(2k)+1/(6k); 4-term decompositions Cosmos-only ({29,43,61,73,79,83,89,101}); scribal implicit orbit classification | PASS |
 | [314] | [QA Egyptian Ennead Orbit Partition](314_qa_ennead_orbit_partition.md) | \|Sat\|+\|Sing\|=8+1=9 (Ennead cardinality); Singularity (9,9) = unique T-fixed point; Satellite 8-cycle (3,3)→…→(9,3); 3-divisibility partition {1,8,72}=81; deity attributes observer only | PASS |

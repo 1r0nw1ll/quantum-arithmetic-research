@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_diadic_inner_structure_cert_family(base_dir):
+    """QA Diadic Inner Structure Cert family [317]. Primary sources: Iverson (1975-1996) QA-1 pp.53-56 (open frontier); Chace (1927) Rhind Mathematical Papyrus MAA; Gillings (1972) MIT Press ISBN 978-0-486-24315-3. Discovery: continuation of cert [316] open frontier. CLAIM: (C1) generator n=2*lcm(c1,c2,c3)-sum(lcm//ci) for 7 standard 4-term entries; 2/n exact Fraction. (C2) BEDA(2,1,3,4)=female of Fibonacci seed (1,1,2,3) via (b,e,d,a)->(2e,b,a,2d); its elements {2,1,3,4,6,8,10} generate 5 inner sets {n=29 {b,C,F}, n=61 {a,F,G}, n=79 {d,a,G}, n=89 {a,C,G}, n=101 {b,d,C}}. (C3) male (3,2,5,7)->n=43 {b,e,a}={2,3,7}; female (4,3,7,10)->n=79 {b,e,a}={3,4,10}; BEDA(1,1,2,3) and (3,1,4,5) both give n=73 {3,4,5}; female (4,1,5,6)->n=83 {4,5,6}. (C4) n=101: inner sum=1, unique 3-distinct-unit-fraction rep. (C5) Theorem NT. Builds on cert [316]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_diadic_inner_structure_cert_v1")
+    validator = os.path.join(fam_dir, "qa_diadic_inner_structure_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_diadic_inner_structure_cert_v1/qa_diadic_inner_structure_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_diadic_inner_structure_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_double_quantum_number_cert_family(base_dir):
     """QA Double Quantum Number for Diadic Fractions Cert family [316]. Primary sources: Iverson (1975-1996) QA-1 pp.2-3,53-56; Chace (1927) Rhind Mathematical Papyrus MAA; Gillings (1972) MIT Press ISBN 978-0-486-24315-3. CLAIM: (C1) general formula k=d1*n/(C1-a1), 2/n=1/(e1*k)+1/(e1*n)+1/(d1*n) exact Fraction for all male matches and double-female 2/71. (C2) exactly 7 Rhind 3-term Cosmos entries match male QN (C1=a1+n,k=d1); 2/97 has two valid chains m=56 and m=60. (C3) female transform (b,e,d,a)->(2e,b,a,2d) is valid BEDA; double-female (2,8,10,18) gives k=5 and 2/71=1/40+1/568+1/710 (Rhind). (C4) all 8 four-term Rhind entries two-level verified; n=29 BEDA closure: BEDA(4,2,6,8), p=C1=24, inner {e,d,a}={2,6,8}, n=2p-2a-p/a=29. (C5) Theorem NT: scribal notation observer; QN chain, k, Fraction sums QA; inner QN for 4-term n!=29 open per Iverson. Builds on cert [315] (Rhind 2/n). Checks C1..C5; self-test ok"""
     import subprocess
@@ -9694,6 +9713,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (317, "QA Diadic Inner Structure Cert family",
+     _validate_qa_diadic_inner_structure_cert_family,
+     "QA Diadic Inner Structure Cert family [317]. Primary sources: Iverson (1975-1996) QA-1 pp.53-56; Chace (1927) Rhind Mathematical Papyrus MAA; Gillings (1972) MIT Press ISBN 978-0-486-24315-3. CLAIM: (C1) generator n=2*lcm-sum(lcm//ci) exact for 7 standard 4-term entries. (C2) BEDA(2,1,3,4)=female Fibonacci seed covers 5 inner sets. (C3) male-female pairs cover n=43,79,83; n=73 dual-BEDA. (C4) n=101 unique inner sum=1. (C5) Theorem NT. Builds on cert [316]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "317_qa_diadic_inner_structure",
+     "qa_diadic_inner_structure_cert_v1", True),
     (316, "QA Double Quantum Number for Diadic Fractions Cert family",
      _validate_qa_double_quantum_number_cert_family,
      "QA Double Quantum Number for Diadic Fractions Cert family [316]. Primary sources: Iverson (1975-1996) QA-1 pp.2-3,53-56; Chace (1927) Rhind Mathematical Papyrus MAA; Gillings (1972) MIT Press ISBN 978-0-486-24315-3. CLAIM: (C1) general 3-term formula k=d1*n/(C1-a1) exact Fraction; (C2) 7 male QN Rhind matches; 2/97 two chains. (C3) female transform valid; double-female (2,8,10,18) k=5 for 2/71 (Rhind). (C4) all 8 four-term two-level verified; n=29 BEDA closure. (C5) Theorem NT. Builds on cert [315]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_double_quantum_number_cert_family(base_dir):
+    """QA Double Quantum Number for Diadic Fractions Cert family [316]. Primary sources: Iverson (1975-1996) QA-1 pp.2-3,53-56; Chace (1927) Rhind Mathematical Papyrus MAA; Gillings (1972) MIT Press ISBN 978-0-486-24315-3. CLAIM: (C1) general formula k=d1*n/(C1-a1), 2/n=1/(e1*k)+1/(e1*n)+1/(d1*n) exact Fraction for all male matches and double-female 2/71. (C2) exactly 7 Rhind 3-term Cosmos entries match male QN (C1=a1+n,k=d1); 2/97 has two valid chains m=56 and m=60. (C3) female transform (b,e,d,a)->(2e,b,a,2d) is valid BEDA; double-female (2,8,10,18) gives k=5 and 2/71=1/40+1/568+1/710 (Rhind). (C4) all 8 four-term Rhind entries two-level verified; n=29 BEDA closure: BEDA(4,2,6,8), p=C1=24, inner {e,d,a}={2,6,8}, n=2p-2a-p/a=29. (C5) Theorem NT: scribal notation observer; QN chain, k, Fraction sums QA; inner QN for 4-term n!=29 open per Iverson. Builds on cert [315] (Rhind 2/n). Checks C1..C5; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_double_quantum_number_cert_v1")
+    validator = os.path.join(fam_dir, "qa_double_quantum_number_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_double_quantum_number_cert_v1/qa_double_quantum_number_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_double_quantum_number_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_rhind_2n_unit_fraction_cert_family(base_dir):
     """QA Rhind 2/n Unit Fraction Cert family [315]. Primary sources: Chace (1927) Rhind Mathematical Papyrus, MAA Vol.1-2, pp.7-13; Gillings (1972) Mathematics in the Time of the Pharaohs, MIT Press ISBN 978-0-486-24315-3, Ch.6 pp.45-80; Iverson (1975-1996) QA-1/QA-2. CLAIM: (C1) all 50 Rhind 2/n entries (n=3..101 odd) sum to exactly 2/n as Fraction; no float. (C2) all 17 Satellite/Singularity n (3|n) have exactly 2 unit fractions in the Rhind decomposition. (C3) for all 17 n=3k, Rhind denominators are exactly (2k,6k); formula 2/(3k)=1/(2k)+1/(6k) matches identically. (C4) 4-term decompositions for exactly 8 Cosmos n {29,43,61,73,79,83,89,101}; zero Satellite/Singularity n has 4 terms. (C5) Theorem NT: unit fraction notation and hieroglyphic form observer; orbit_family, Fraction sums, term count, 3-divisor formula are QA claims. Builds on cert [314] (Egyptian Ennead, 3-divisibility). Checks C1_exact_fraction_all_50_entries/C2_satellite_2term_17_entries/C3_3divisor_formula_2over3k_eq_1over2k_plus_1over6k/C4_4term_cosmos_only_8_entries_29_43_61_73_79_83_89_101/C5_theorem_nt_all_denominators_int_orbit_str_sum_fraction; 5 PASS + 0 FAIL; self-test ok"""
     import subprocess
@@ -9675,6 +9694,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (316, "QA Double Quantum Number for Diadic Fractions Cert family",
+     _validate_qa_double_quantum_number_cert_family,
+     "QA Double Quantum Number for Diadic Fractions Cert family [316]. Primary sources: Iverson (1975-1996) QA-1 pp.2-3,53-56; Chace (1927) Rhind Mathematical Papyrus MAA; Gillings (1972) MIT Press ISBN 978-0-486-24315-3. CLAIM: (C1) general 3-term formula k=d1*n/(C1-a1) exact Fraction; (C2) 7 male QN Rhind matches; 2/97 two chains. (C3) female transform valid; double-female (2,8,10,18) k=5 for 2/71 (Rhind). (C4) all 8 four-term two-level verified; n=29 BEDA closure. (C5) Theorem NT. Builds on cert [315]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "316_qa_double_quantum_number",
+     "qa_double_quantum_number_cert_v1", True),
     (315, "QA Rhind 2/n Unit Fraction Cert family",
      _validate_qa_rhind_2n_unit_fraction_cert_family,
      "QA Rhind 2/n Unit Fraction Cert family [315]. Primary sources: Chace (1927) Rhind Mathematical Papyrus MAA Vol.1-2 pp.7-13; Gillings (1972) MIT Press ISBN 978-0-486-24315-3 Ch.6 pp.45-80; Iverson (1975-1996) QA-1/QA-2. CLAIM: (C1) all 50 Rhind 2/n entries sum to exactly 2/n as Fraction; no float. (C2) all 17 Satellite/Singularity n (3|n) have exactly 2 unit fractions. (C3) for all 17 n=3k, Rhind denominators exactly (2k,6k); 3-divisor formula matches identically. (C4) 4-term decompositions for exactly 8 Cosmos n {29,43,61,73,79,83,89,101}; zero Satellite/Singularity. (C5) Theorem NT: notation/hieroglyphics observer; orbit_family, Fraction sums, term count QA claims. Builds on cert [314]. Checks C1_exact_fraction_all_50_entries/C2_satellite_2term_17_entries/C3_3divisor_formula_2over3k_eq_1over2k_plus_1over6k/C4_4term_cosmos_only_8_entries_29_43_61_73_79_83_89_101/C5_theorem_nt_all_denominators_int_orbit_str_sum_fraction; 5 PASS + 0 FAIL; self-test ok",

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Koenig Series and Tree of Life cert [364]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.VII pp.73-86. Text: '(d+e)^2+(d-e)^2=2G, or A+B=2G'; 'the first main branch maintains b=1: I=1,7,17,31,49,...'; 'the second branch maintains e=1: I=1,7,23,47,...'; '49 is both functionally prime and prime by the definition used in QA since it is a power of a prime'; 'the notable exception of 2,3,11,19,43 never appear as H or I values'. (C1) A+B=2G for all prime pairs; proof A+B=2(d^2+e^2)=2G. (C2) I(1,e)=2e^2-1; sequence 1,7,17,31,49,71. (C3) I(b,1)=b^2-2 (b=1 case: I=1=|1-2|); sequence 1,7,23,47,79. (C4) Primes p≡3,5(mod 8) never appear as H,I values; QR condition 2∈QR(p) iff p≡±1(mod 8). (C5) 49=7^2 is QA-functionally-prime; I(1,5)=49; first composite in b=1 branch. DOI: primary text, no external DOI."
+}

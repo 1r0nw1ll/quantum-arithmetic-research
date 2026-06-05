@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [364] | [QA Pyth-1 Koenig Series and Tree of Life](364_qa_pyth1_koenig_series.md) | A+B=2G (G=mean of A,B); I(1,e)=2e²−1 (seq 1,7,17,31,49,71); I(b,1)=b²−2 (seq 1,7,23,47,79); primes p≡3,5(mod 8) excluded from H,I; 49=7² QA-functionally-prime=I(1,5) | PASS |
 | [363] | [QA Pyth-1 External Relationships](363_qa_pyth1_external_relationships.md) | Column step F(b,e+1)−F=2b; row step C(b+2,e)−C=4e; G−F=2E; G−C=B; A(b,e)=B(b+2e,e); D(b,e)=E(b,e+b); 2-par absent from A,B,C,D,E,F,G,H,I | PASS |
 | [362] | [QA Pyth-1 Internal Relationships](362_qa_pyth1_internal_relationships.md) | Three mean trios (b-d-a, F-D-G, I²-G²-H²); 2D+2E=A+B; I,G,H pairwise coprime; J+K=C+2J=2D; F−C=b²−2e² (dichotomy condition) | PASS |
 | [361] | [QA Pyth-1 Primeness, Parity and Shape](361_qa_pyth1_primeness_parity_shape.md) | C=2be+2e²; C²=4E²+4EF (gnomon); F²=G²-C²; G has no prime factor <5; H,I have no prime factor <7 (2∉QR mod 3,5); F 5-par iff a≡b(mod 4) | PASS |

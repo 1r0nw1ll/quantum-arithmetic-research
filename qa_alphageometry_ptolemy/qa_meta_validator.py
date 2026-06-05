@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth1_koenig_series_cert_family(base_dir):
+    """QA Pyth-1 Koenig Series and Tree of Life cert [364]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.VII pp.73-86. CLAIM: (C1) A+B=2G; G=arithmetic mean of A and B. (C2) I(1,e)=2e^2-1; b=1 branch sequence 1,7,17,31,49,71. (C3) I(b,1)=b^2-2; e=1 branch sequence 1,7,23,47,79,119. (C4) Primes p≡3,5(mod 8) never appear as H,I values; only p≡±1(mod 8) can. (C5) 49=7^2 is QA-functionally-prime; I(1,5)=49; first composite in b=1 branch. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth1_koenig_series_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth1_koenig_series_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth1_koenig_series_cert_v1/qa_pyth1_koenig_series_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth1_koenig_series_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth1_external_relationships_cert_family(base_dir):
     """QA Pyth-1 External Relationships cert [363]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.VI pp.67-71. CLAIM: (C1) Column step F(b,e+1)-F(b,e)=2b; row step C(b+2,e)-C(b,e)=4e. (C2) G-F=2E; G-C=B. (C3) A(b,e)=B(b+2e,e). (C4) D(b,e)=E(b,e+b). (C5) 2-par (≡2 mod 4) only in {e,d,J,K}; never in {A,B,C,D,E,F,G,H,I}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10592,6 +10611,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (364, "QA Pyth-1 Koenig Series and Tree of Life Cert family",
+     _validate_qa_pyth1_koenig_series_cert_family,
+     "QA Pyth-1 Koenig Series and Tree of Life Cert [364]. Source: Iverson (1993) Pyth Arith Vol I Ch.VII pp.73-86. CLAIM: (C1) A+B=2G; G is arithmetic mean of A and B. (C2) I(1,e)=2e^2-1; b=1 branch sequence 1,7,17,31,49,71. (C3) I(b,1)=b^2-2; e=1 branch sequence 1,7,23,47,79,119. (C4) Primes p≡3,5(mod 8) never appear as H,I values; only p≡±1(mod 8) can. (C5) 49=7^2 is QA-functionally-prime; I(1,5)=49; first composite in b=1 branch. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "364_qa_pyth1_koenig_series",
+     "qa_pyth1_koenig_series_cert_v1", True),
     (363, "QA Pyth-1 External Relationships Cert family",
      _validate_qa_pyth1_external_relationships_cert_family,
      "QA Pyth-1 External Relationships Cert [363]. Source: Iverson (1993) Pyth Arith Vol I Ch.VI pp.67-71. CLAIM: (C1) Column step F(b,e+1)-F(b,e)=2b; row step C(b+2,e)-C(b,e)=4e. (C2) G-F=2E=2e^2 along rows; G-C=B=b^2 along columns. (C3) A(b,e)=B(b+2e,e). (C4) D(b,e)=E(b,e+b). (C5) 2-par (≡2 mod 4) only in {e,d,J,K}; never in {A,B,C,D,E,F,G,H,I}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_quantize_to_one_cert_family(base_dir):
+    """QA Quantize-to-ONE Cert family [321]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.3 (Quantizing to ONE). CLAIM: (C1) Cosmos ratio b/a in (0,1) for all 72 pairs (perigee<apogee). (C2) Satellite canonical ratio 1/3 for all 8 Satellite pairs; no Cosmos pair achieves 1/3. (C3) Within-d-class monotonicity: ratio b/(2d-b) strictly increasing in b for fixed d. (C4) 7-prime factorization bound: omega(b*e*d*a)<=5<=7 for all 72 Cosmos pairs; empirical max 5 at (5,8) product 10920=2^3*3*5*7*13. (C5) Theorem NT round-trip: 2dr/(1+r) gives exact integer b for all 72 Cosmos pairs via midpoint identity a+b=2d. Builds on cert [320]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_quantize_to_one_cert_v1")
+    validator = os.path.join(fam_dir, "qa_quantize_to_one_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_quantize_to_one_cert_v1/qa_quantize_to_one_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_quantize_to_one_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_quantize_algorithm_cert_family(base_dir):
     """QA Quantize Algorithm Cert family [320]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.1 (Quantize). CLAIM: (C1) midpoint identity b+a=2d for all 81 pairs in {1..9}^2. (C2) DO=d^2 theorem: (d*b+d*a)//2==d*d for all 72 Cosmos pairs. (C3) Quantize reconstruction lossless: isqrt(d^2)=d, b=(d*b)//d, e=d-b recovers original for all 72 Cosmos pairs. (C4) Fingerprint uniqueness: all 72 Cosmos (d^2,d*b) encodings distinct. (C5) Satellite extension: midpoint identity + lossless reconstruction for all 8 Satellite pairs. Theorem NT: (JO,KO,DO) are observer-layer projections; (b,e) is the QA causal layer. Builds on cert [319] (QA-2 completion), cert [314] (Egyptian Ennead, mod-9 structure). Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9770,6 +9789,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (321, "QA Quantize-to-ONE Cert family",
+     _validate_qa_quantize_to_one_cert_family,
+     "QA Quantize-to-ONE Cert family [321]. Primary source: Iverson (1995) QA-3, ITAM Portland, Ch.3. CLAIM: (C1) Cosmos ratio b/a in (0,1) 72 pairs. (C2) Satellite canonical ratio 1/3 distinct from all Cosmos. (C3) Within-d-class ratio monotonicity. (C4) omega(b*e*d*a)<=5<=7 for 72 Cosmos pairs. (C5) Round-trip ratio reconstruction 2dr/(1+r)=b exact for 72 Cosmos pairs. Builds on cert [320]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "321_qa_quantize_to_one",
+     "qa_quantize_to_one_cert_v1", True),
     (320, "QA Quantize Algorithm Cert family",
      _validate_qa_quantize_algorithm_cert_family,
      "QA Quantize Algorithm Cert family [320]. Primary source: Iverson (1995) QA-3, ITAM Portland, ISBN 1-883401-08-9, Ch.1 (Quantize). CLAIM: (C1) midpoint identity b+a=2d all 81 pairs. (C2) DO=d^2 theorem 72 Cosmos pairs. (C3) Quantize reconstruction lossless 72 Cosmos pairs. (C4) fingerprint uniqueness (d^2,d*b) injective on Cosmos. (C5) Satellite extension 8 pairs. Theorem NT: (JO,KO,DO) observer projections; (b,e) QA causal layer. Builds on cert [319], cert [314]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

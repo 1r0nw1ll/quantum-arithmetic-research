@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_koenig_circle_nesting_cert_family(base_dir):
+    """QA Koenig Circle Nesting Cert family [334]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, Ch.7 pp.55-70 'THE KOENIG SERIES AND THE TREE OF LIFE'. CLAIM: (C1) H^2-G^2=G^2-I^2=2CF for 7 prime Pythagorean triangles. (C2) Annular area=24L; CF divisible by 12; L=CF/12. (C3) Nesting H_n=I_{n+1}: chain (1,5,7)->(7,13,17)->(17,25,31). (C4) Identity holds for all 32 primitive triples G<=200. (C5) Extended nesting: I=7 has 5 options incl. (7,13,17); I=17 has 4 incl. (17,25,31); I=31 has 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_koenig_circle_nesting_cert_v1")
+    validator = os.path.join(fam_dir, "qa_koenig_circle_nesting_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_koenig_circle_nesting_cert_v1/qa_koenig_circle_nesting_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_koenig_circle_nesting_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_female_qn_parity_derivation_cert_family(base_dir):
     """QA Female QN Derivation: First-Fourth Parity Cert family [333]. Primary sources: Iverson (1991) QA Vol I p.27 Ch.2 Ex.8 + Iverson (1993) QA-2 Ch.1 Doubling. CLAIM: (C1) female=(2e,b,a,2d) from male(b,e,d,a); d_f=2e+b=d, a_f=2e+2b=2d verified 8 pairs. (C2) gcd(e,d)=gcd(b,e)=1; e and d have opposite parities for all male QNs. (C3) e odd => b_f=2e is 2-par, a_f=2d is 4-par. (C4) e even, b odd => b_f=2e is 4-par, a_f=2d is 2-par. (C5) First-fourth parity swap holds for all 230 male QNs in {1..23}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10017,6 +10036,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (334, "QA Koenig Circle Nesting Cert family",
+     _validate_qa_koenig_circle_nesting_cert_family,
+     "QA Koenig Circle Nesting Cert family [334]. Source: Iverson (1993) Pyth Arith Vol I, Ch.7 pp.55-70. CLAIM: (C1) H^2-G^2=G^2-I^2=2CF for 7 triangles. (C2) area=24L; L=CF/12; CF div by 12. (C3) Nesting H_n=I_{n+1}: (1,5,7)->(7,13,17)->(17,25,31). (C4) Identity holds for 32 primitive triples G<=200. (C5) I=7 gives 5 continuations; I=17 gives 4; I=31 gives 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "334_qa_koenig_circle_nesting",
+     "qa_koenig_circle_nesting_cert_v1", True),
     (333, "QA Female QN Parity Derivation Cert family",
      _validate_qa_female_qn_parity_derivation_cert_family,
      "QA Female QN Parity Derivation Cert family [333]. Sources: Iverson (1991) QA Vol I p.27 + Iverson (1993) QA-2 Ch.1. CLAIM: (C1) female=(2e,b,a,2d) from male(b,e,d,a). (C2) gcd(e,d)=1; e,d opposite parities. (C3) e odd => b_f 2-par, a_f 4-par. (C4) e even => b_f 4-par, a_f 2-par. (C5) First-fourth parity swap for all 230 male QNs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

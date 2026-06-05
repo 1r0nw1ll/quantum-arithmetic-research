@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Koenig Circle Nesting cert [334]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I, Ch.7 pp.55-70 'THE KOENIG SERIES AND THE TREE OF LIFE', Delta Spectrum Research, La Junta CO. For a prime Pythagorean triangle (C,F,G): I=C-F, G=hypotenuse, H=C+F form three concentric circles. (C1) Equal annular areas: H^2-G^2=G^2-I^2=2*C*F for 7 triangles. (C2) Annular area=24L where L=C*F/12; CF always divisible by 12 (one leg div by 4, other by 3). (C3) Nesting H_n=I_{n+1}: chain (1,5,7)->(7,13,17)->(17,25,31). (C4) H^2-G^2=G^2-I^2=2CF and area div by 24 for all 32 primitive triples with G<=200. (C5) Extended nesting: I=7 gives 5 triple options incl. (7,13,17); I=17 gives 4 options incl. (17,25,31); I=31 gives 3 continuation options. DOI: primary text, no external DOI."
+}

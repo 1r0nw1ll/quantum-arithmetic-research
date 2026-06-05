@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [355] | [QA Pythagorean Formal Proof Statements](355_qa_pythagorean_formal_proofs.md) | Exactly one of (d,e) is even (b odd parity flip); factor 3 in every bead set (9 tri-residue cases); C=2de divisible by 4; CF/2 (area) divisible by 6; G-C=b² (odd perfect square) | PASS |
 | [354] | [QA Pyth-3 Myriad Structure and Fibonacci Strings](354_qa_pyth3_myriad_fibonacci.md) | 8 creative QN tuples with all bead values ≤7; 5040=7! and 5041=71²; secondary groups (k,k,2k,3k); male/female Fibonacci strings terminate at first non-prime-power | PASS |
 | [353] | [QA Pythagorean External Table Laws](353_qa_pythagorean_external_table.md) | G-F=2e² across rows; G-C=b² down columns; A→B e-block transfer; D→E b-block transfer; F/C step sizes 2b/4e; b=1 col and e=1,2 rows always prime | PASS |
 | [352] | [QA Pythagorean Concentric Circle Area Divisibility](352_qa_pythagorean_concentric_areas.md) | Three arithmetic-mean trios (b-d-a, F-D-G, I²-G²-H²); H²+I²=2G²; H²-G²=G²-I²=24L (3-4-5: both=24); 2D+2E=A+B; J+K=C+2J=2D | PASS |

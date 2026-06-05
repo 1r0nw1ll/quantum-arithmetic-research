@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean Formal Proof Statements cert [355]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I Chapter IX pp.94-100. Text: 13 numbered formal proof statements. (C1) Statement 1: exactly one of (d,e) is even. (C2) Statement 4: factor 3 in every bead set; proof via all 9 tri-residue combinations. (C3) Statement 8: C=2de divisible by 4 (4-par). (C4) Statement 9: CF/2 (area) divisible by 6; proof 12|CF from 4|C and 3|(C or F). (C5) Statement 13: G-C=b^2 (odd perfect square); proof G-C=(d-e)^2=b^2. DOI: primary text, no external DOI."
+}

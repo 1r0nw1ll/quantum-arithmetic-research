@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pythagorean_formal_proofs_cert_family(base_dir):
+    """QA Pythagorean Formal Proof Statements cert [355]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IX pp.94-100. CLAIM: (C1) Statement 1: exactly one of (d,e) is even; b odd forces parity flip. (C2) Statement 4: factor 3 in every bead set; all 9 tri-residue combinations yield 3|bead. (C3) Statement 8: C=2de divisible by 4 (4-par). (C4) Statement 9: CF/2 (area) divisible by 6; proof 4|C and 3|(C or F) → 12|CF. (C5) Statement 13: G-C=b^2 (odd perfect square); proof G-C=(d-e)^2=b^2. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pythagorean_formal_proofs_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pythagorean_formal_proofs_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_formal_proofs_cert_v1/qa_pythagorean_formal_proofs_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pythagorean_formal_proofs_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth3_myriad_fibonacci_cert_family(base_dir):
     """QA Pyth-3 Myriad Structure and Fibonacci Strings cert [354]. Primary source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.13-14 pp.74-89. CLAIM: (C1) 8 creative QN tuples with all values <=7. (C2) 5040=7!; 5041=71^2. (C3) (k,k,2k,3k) groups k=1..13; scalar cycles 3,6,9. (C4) Male Fib string 1,1,2,3,5,8,13,21; 21=3*7 first non-prime-power. (C5) Female Fib 2,1,3,4,7,11,18; 18=2*3^2 first. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10421,6 +10440,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (355, "QA Pythagorean Formal Proof Statements Cert family",
+     _validate_qa_pythagorean_formal_proofs_cert_family,
+     "QA Pythagorean Formal Proofs Cert [355]. Source: Iverson (1993) Pyth Arith Vol I Ch.IX pp.94-100. CLAIM: (C1) Exactly one of (d,e) is even; b odd forces parity flip. (C2) Factor 3 in every bead set; all 9 tri-residue combos yield 3|bead. (C3) C=2de divisible by 4 (4-par). (C4) CF/2 (area) divisible by 6; proof 12|CF from 4|C and 3|(C or F). (C5) G-C=b^2 (odd perfect square); proof (d-e)^2=b^2. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "355_qa_pythagorean_formal_proofs",
+     "qa_pythagorean_formal_proofs_cert_v1", True),
     (354, "QA Pyth-3 Myriad Structure and Fibonacci Strings Cert family",
      _validate_qa_pyth3_myriad_fibonacci_cert_family,
      "QA Pyth-3 Myriad Fibonacci Cert [354]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.13-14 pp.74-89. CLAIM: (C1) 8 creative QN tuples all values <=7. (C2) 5040=7!; 5041=71^2. (C3) k*(1,1,2,3)=(k,k,2k,3k); scalar cycles 3,6,9. (C4) Male Fib 1,1,2,3,5,8,13,21; 21=3*7 first non-prime-power. (C5) Female Fib 2,1,3,4,7,11,18; 18 first. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth2_synchronous_harmonics_lcm_cert_family(base_dir):
+    """QA Pyth-2 Synchronous Harmonics LCM cert [368]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIII pp.38-70+. CLAIM: (C1) LCM of pairwise-coprime integers = product; lcm(2,3,5)=30; lcm(3,5,7)=105; lcm(2,3,5,7)=210. (C2) c|lcm(a,b) → lcm(a,b,c)=lcm(a,b); lcm(2,3,6)=6. (C3) LCM associativity; pairwise-coprime triple lcm=product. (C4) QA sine=F/G exact Fraction; F<G always. (C5) All-odd LCM is odd (midpoint half-integer); even-factor LCM is even. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth2_synchronous_harmonics_lcm_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth2_synchronous_harmonics_lcm_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth2_synchronous_harmonics_lcm_cert_v1/qa_pyth2_synchronous_harmonics_lcm_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth2_synchronous_harmonics_lcm_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth2_prime_number_symmetry_cert_family(base_dir):
     """QA Pyth-2 Prime Number Symmetry cert [367]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XII pp.28-37. CLAIM: (C1) Coprime-to-30 bracket {n:gcd(n,30)=1,1<=n<30}={1,7,11,13,17,19,23,29}; phi(30)=8; 4 pairs summing to 30. (C2) Coprime-to-60 bracket has 16 elements in 8 pairs summing to 60; 49=7^2 in bracket. (C3) Pairing identity gcd(M-n,M)=gcd(n,M). (C4) All primes in (5,30) have gcd(p,30)=1. (C5) I(1,5)=49, gcd(49,60)=1, partner=11, 11+49=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10668,6 +10687,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (368, "QA Pyth-2 Synchronous Harmonics LCM Cert family",
+     _validate_qa_pyth2_synchronous_harmonics_lcm_cert_family,
+     "QA Pyth-2 Synchronous Harmonics LCM Cert [368]. Source: Iverson (1993) Pyth Arith Vol II Ch.XIII pp.38-70+. CLAIM: (C1) LCM of pairwise-coprime integers=product; lcm(2,3,5)=30; lcm(3,5,7)=105; lcm(2,3,5,7)=210. (C2) c|lcm(a,b) → lcm(a,b,c)=lcm(a,b); lcm(2,3,6)=6. (C3) LCM associativity; pairwise-coprime triple lcm=product. (C4) QA sine=F/G exact Fraction; F<G. (C5) All-odd LCM is odd; even-factor LCM is even. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "368_qa_pyth2_synchronous_harmonics_lcm",
+     "qa_pyth2_synchronous_harmonics_lcm_cert_v1", True),
     (367, "QA Pyth-2 Prime Number Symmetry Cert family",
      _validate_qa_pyth2_prime_number_symmetry_cert_family,
      "QA Pyth-2 Prime Number Symmetry Cert [367]. Source: Iverson (1993) Pyth Arith Vol II Ch.XII pp.28-37. CLAIM: (C1) Coprime-to-30 bracket {n:gcd(n,30)=1,1<=n<30}={1,7,11,13,17,19,23,29}; phi(30)=8; 4 pairs summing to 30. (C2) Coprime-to-60 bracket 16 elements, 8 pairs summing to 60; 49=7^2 in bracket. (C3) Pairing identity gcd(M-n,M)=gcd(n,M). (C4) Primes in (5,30) all coprime to 30. (C5) I(1,5)=49 in coprime-to-60 bracket; partner=11; 11+49=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [368] | [QA Pyth-2 Synchronous Harmonics LCM](368_qa_pyth2_synchronous_harmonics_lcm.md) | LCM of coprime cycles=product; lcm(2,3,5)=30; lcm(3,5,7)=105; c\|lcm(a,b)→lcm(a,b,c)=lcm(a,b); sine=F/G; all-odd LCM odd (midpoint half-integer) | PASS |
 | [367] | [QA Pyth-2 Prime Number Symmetry](367_qa_pyth2_prime_number_symmetry.md) | Coprime-to-30 bracket {1,7,11,13,17,19,23,29} φ=8; 4 pairs summing to 30; coprime-to-60 bracket 16 elements 8 pairs (incl 49=7²); pairing identity gcd(M−n,M)=gcd(n,M); 11+49=60 | PASS |
 | [366] | [QA Pyth-1 Proofs: Bead Arithmetic Laws](366_qa_pyth1_proofs_bead_arithmetic.md) | Exactly one of {d,e} even; a always odd; factor 3 in every {b,e,d,a} (6 mod-3 cases); area=CF/2 divisible by 6; all four beads pairwise coprime (6 gcds=1) | PASS |
 | [365] | [QA Pyth-1 Ellipse of Archimedes](365_qa_pyth1_ellipse_archimedes.md) | 2D=J+K=F+G=C+2J; K−J=C; K+J=2D; semiminor²=DF (D²−(C/2)²=D(D−E)=DF); eccentricity=2D/C=d/e; J·K=DF; K/J=a/b | PASS |

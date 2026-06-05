@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 Synchronous Harmonics LCM cert [368]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIII pp.38-70+. Text: 'cycle of 3 and 5 will coincide every 15 units'; 'cycles of 2, 3, and 5 will coincide every 30 units'; 'complete cycle for 3, 5, and 7 would be 105 units'; 'addition of a 6-cycle does not change the overall cycle because 6 is not prime to 2 or 3'; 'sine is represented as F/G'. (C1) LCM of pairwise-coprime integers = product; lcm(2,3)=6; lcm(2,3,5)=30; lcm(3,5,7)=105; lcm(2,3,5,7)=210; verified 705 coprime pairs. (C2) Non-coprime extension: lcm(2,3,6)=lcm(2,3)=6; c|lcm(a,b) → lcm(a,b,c)=lcm(a,b). (C3) LCM associativity; pairwise coprime triple lcm=product. (C4) QA sine=F/G exact Fraction; F<G always; F^2+C^2=G^2. (C5) Half-cycle: all-odd LCM is odd (midpoint half-integer); even-factor LCM is even (integer midpoint). DOI: primary text, no external DOI."
+}

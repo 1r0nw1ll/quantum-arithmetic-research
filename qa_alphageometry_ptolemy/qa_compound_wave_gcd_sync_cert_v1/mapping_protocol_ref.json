@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Compound Wave GCD Sync Count cert [332]. Primary source: Iverson, B. (1991) Quantum Arithmetic Volume II -- Books 3 & 4: New Wave Theory / Synchronous Harmonics. Delta Spectrum Research, La Junta CO. Book 3 pp.15-19: 'COMPOUND WAVES', 'COMPLEX WAVES'. When two waves of periods p and q combine, their sync events in one product-cycle (p*q time units) number exactly gcd(p,q); in one lcm-cycle there is always exactly 1 sync. (C1) Coprime pairs: lcm=p*q; sync_in_lcm=sync_in_product=1; verified for 7 coprime pairs. (C2) Non-coprime pairs: sync_in_product=gcd(p,q); sync_in_lcm=1 always; lcm=p*q/gcd is the waiting time; verified for 6 pairs. (C3) Identity: lcm(p,q)*gcd(p,q)=p*q for all 105 pairs in {2..15}^2; equivalently sync_in_product=gcd verified exhaustively. (C4) QA mod-24 structure: gcd determines sync multiplicity in product-cycle; lcm determines waiting time between syncs. (C5) Pairwise-coprime triples (p,q,r): lcm(p,q,r)=p*q*r; exactly 1 triple-sync per lcm-cycle; verified 6 triples. Generalizes cert [327] (harmonic cycle lcm) and cert [331] (phasing in). DOI: primary text, no external DOI."
+}

@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [351] | [QA Pythagorean G,H,I Exclusion Laws](351_qa_pythagorean_g_exclusion.md) | G first 7 values {5,13,17,25,29,37,41}; p≡3 mod 4 → p∤G (Fermat two-square theorem); H,I always odd, coprime to {2,3}; composite H,I min factor ≥7; H,I never divisible by {11,19,43} | PASS |
 | [350] | [QA Quantum Number Definition and Law of Harmonics](350_qa_qn_harmonics.md) | QN=integer with 4-7 prime factors; Law of Harmonics (same prime factors except one → resonance); LCM(2310,2730)=30030=210×11×13; male odd-ended; female even-ended; universal 2×3 inclusion | PASS |
 | [349] | [QA Twin Prime Mod-6 Structure](349_qa_twin_prime_mod6.md) | Iverson twin pairs (6k-1,6k+1) midpoints div 6; primes >3 ≡ ±1 mod 6; prime squares ≡ 1 mod 6; two-prime products ≡ ±1 mod 6; Euclid VII.28 → QA bead mutual coprimality | PASS |
 | [348] | [QA Fibonacci Divisibility Period Laws](348_qa_fibonacci_divisibility_period.md) | F(3k) even; F(4k) div 3; F(5k) div 5; F(6k) div 4; coprime pair counts 15,13,35,18 | PASS |

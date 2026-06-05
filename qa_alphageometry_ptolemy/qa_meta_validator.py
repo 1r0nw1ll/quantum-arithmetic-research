@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pythagorean_g_exclusion_cert_family(base_dir):
+    """QA Pythagorean G,H,I Exclusion Laws cert [351]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IV pp.39-41. CLAIM: (C1) G first 7 values {5,13,17,25,29,37,41}; 3-par primes {11,19,23,31} absent; G≡1 mod 4. (C2) G coprime to {2,3,11,19,43}; all p≡3 mod 4 ≤100 never divide G. (C3) H,I always odd and coprime to {2,3}. (C4) Composite H,I min factor ≥ 7; 196 cases. (C5) H,I never divisible by {11,19,43}; 369 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pythagorean_g_exclusion_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pythagorean_g_exclusion_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_g_exclusion_cert_v1/qa_pythagorean_g_exclusion_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pythagorean_g_exclusion_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_qn_harmonics_cert_family(base_dir):
     """QA Quantum Number Definition and Law of Harmonics cert [350]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.5 pp.20-21,24-25,30-31. CLAIM: (C1) QN=2310 has 5 prime factors (in [4,7]); aboriginal 6,24 have 2 each. (C2) pf(2310) and pf(2730) share {2,3,5,7}; differ in {11} vs {13}; ratio 11/13. (C3) LCM(2310,2730)=30030=210×11×13; 13+11 aliquot cycles. (C4) Male (1,1,2,3) odd-ended; female (2,1,3,4) even-ended; ratio 24/6=4. (C5) All QN products contain 2 and 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10345,6 +10364,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (351, "QA Pythagorean G,H,I Exclusion Laws Cert family",
+     _validate_qa_pythagorean_g_exclusion_cert_family,
+     "QA Pythagorean G Exclusion Cert [351]. Source: Iverson (1993) Pyth Arith Vol I Ch.IV pp.39-41. CLAIM: (C1) G first 7 values {5,13,17,25,29,37,41}; 3-par primes absent. (C2) G coprime to {2,3,11,19,43}; p≡3 mod 4 → p∤G. (C3) H,I always odd and coprime to {2,3}. (C4) Composite H,I min factor ≥7. (C5) H,I never div by {11,19,43}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "351_qa_pythagorean_g_exclusion",
+     "qa_pythagorean_g_exclusion_cert_v1", True),
     (350, "QA Quantum Number Definition and Law of Harmonics Cert family",
      _validate_qa_qn_harmonics_cert_family,
      "QA QN Harmonics Cert [350]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.5 pp.20-31. CLAIM: (C1) QN=2310 has 5 prime factors in [4,7]; aboriginal 6,24 have 2. (C2) pf(2310) and pf(2730) share {2,3,5,7}; differ {11} vs {13}. (C3) LCM=30030=210×11×13. (C4) Male odd-ended; female even-ended; ratio 4. (C5) All QN products have factors 2 and 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

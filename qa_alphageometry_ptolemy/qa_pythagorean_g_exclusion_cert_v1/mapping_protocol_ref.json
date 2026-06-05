@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean G,H,I Exclusion Laws cert [351]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I Chapter IV pp.39-41. Text p.39-40: 'G must always be a 5-par (4n+1) number...no divisor smaller than 5. For some unknown reason, it seems that G may not have factors of 11, 19, or 43.' First 7 G-values: 5,13,17,25,29,37,41. Text p.40: 'H and I are not actually prime, they may have no factor less than 7, and also may not have 11, 19, or 43 as a factor.' (C1) G first 7 values and 3-par prime absence. (C2) G coprime to 3-par primes; p≡3 mod 4 → p∤G. (C3) H,I always odd and coprime to {2,3}. (C4) Composite H,I have min factor ≥ 7. (C5) H,I never divisible by 11, 19, or 43. DOI: primary text, no external DOI."
+}

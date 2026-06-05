@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [358] | [QA Pyth-3 Myriad and Octave Structure](358_qa_pyth3_myriad_structure.md) | Myriad=10000=2^4×5^4; 7 octaves=2^7=128; 7×7=49=7² (Singularity mod 24); bugle 3:4:5:6 unique primitive QA octave chain; doubling scales quadratic×4, L×16 | PASS |
 | [357] | [QA Pyth-3 Twenty Identities and Equilateral Triangle Parameters](357_qa_pyth3_twenty_identities.md) | W=de+K, Y=C+E, W=F+Y equilateral check; Z=G+de (Z<W, Z>F, Z>Y); H²-I²=48L=4CF; female (b even) C≡2(mod 4) not 4-par; female seed (2,1,3,4) verified | PASS |
 | [356] | [QA Pyth-1 Conclusions and Objectives](356_qa_pyth1_conclusions.md) | (59,1,60,61)→C=120,F=3599,G=3601; C²+F²=G²; J=3540,K=3660; quantum year 360=24×15; 4^4=256 song structure maps to (b,e,d,a); all 11 identities integer; L=abde/6 always integer | PASS |
 | [355] | [QA Pythagorean Formal Proof Statements](355_qa_pythagorean_formal_proofs.md) | Exactly one of (d,e) is even (b odd parity flip); factor 3 in every bead set (9 tri-residue cases); C=2de divisible by 4; CF/2 (area) divisible by 6; G-C=b² (odd perfect square) | PASS |

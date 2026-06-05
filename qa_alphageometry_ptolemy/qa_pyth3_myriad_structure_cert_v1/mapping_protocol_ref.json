@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Myriad and Octave Structure cert [358]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.1 pp.1-3 and Ch.4 pp.13-19. Text: 'Myriad=1..10000 divided into seven octaves each double the frequency below it; 7 Myriads * 7 octaves = 49 sub-levels; four primary notes of a bugle are C, F, A, C.' (C1) Myriad=10000=2^4*5^4; 10000 mod 24=16. (C2) 7 octaves=2^7=128 ratio; 7 is first prime not dividing QA year 360. (C3) 7*7=49=7^2 total levels; 49 mod 24=1 Singularity class. (C4) Bugle C:F:A:C ratios 3:4:5:6; unique primitive QA chain (b,d,a,a+e)=(3,4,5,6) with octave a+e=2b; 3^2+4^2=5^2. (C5) Doubling (b,e): quadratic identities scale by 4, quartic L scales by 16. DOI: primary text, no external DOI."
+}

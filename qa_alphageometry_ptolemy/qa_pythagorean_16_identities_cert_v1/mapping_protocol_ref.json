@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean 16 Identities: Sum-Difference Squares cert [336]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I, pp.12-13 Ch.1 Preview: 'a base C=2de; altitude F=ab; hypotenuse G=d^2+e^2. The sum of hyp+base=a^2; diff hyp-base=b^2; sum hyp+alt=2d^2; diff hyp-alt=2e^2; sum and diff of alt+base are H and I.' (C1) C=2de, F=ab, G=d^2+e^2; C^2+F^2=G^2 verified for 8 pairs. (C2) G+C=a^2 and G-C=b^2 for 13 bead pairs. (C3) G+F=2d^2 and G-F=2e^2 for 13 bead pairs. (C4) All six identities + L=abde/6=CF/12 hold simultaneously for 8 pairs. (C5) Algebraic proof: G+C=(d+e)^2=a^2 from d=b+e and a=d+e; G-C=(d-e)^2=b^2; G+F=2d^2; G-F=2e^2; proven symbolically + 20+ verification pairs. DOI: primary text, no external DOI."
+}

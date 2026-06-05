@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 Fibonacci Coprime Structure cert [371]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XV pp.87-102. Text: p.99 '128 combinations if b considered odd; 255 if b may be even or odd; for only the first 20 integers'; p.99 Euclid Prop 28: 'sum coprime to both; difference coprime to both'; p.103-104: 2/97 has three bead-set decompositions; p.104: Lucas-type series 1,3,4,7,11,18 from doubled Fibonacci. (C1) Euclid Prop 28: gcd(a,b)=1 → gcd(a+b,a)=gcd(a+b,b)=gcd(|a-b|,a)=gcd(|a-b|,b)=1; 6007 coprime pairs verified. (C2) 128 pairs b odd [1,17]; 255 pairs any b [1,20]. (C3) gcd(b,e)=1 and b odd → all 6 pairwise gcds of {b,e,b+e,b+2e}=1; 1009 pairs verified. (C4) a(n)=F(n)+F(n+2) gives 1,3,4,7,11,18,29,47; Fibonacci recurrence holds; equals L(n+1). (C5) 2/97 has exactly 3 BABTHE2 decompositions; (N,O) in {(1,7),(17,3),(31,2)}; three lower bead sets pairwise disjoint. DOI: primary text, no external DOI."
+}

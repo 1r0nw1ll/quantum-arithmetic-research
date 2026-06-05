@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [371] | [QA Pyth-2 Fibonacci Coprime Structure](371_qa_pyth2_fibonacci_coprime_structure.md) | Euclid Prop 28: gcd(a+b,a)=1; 128 pairs b odd [1,17]; 255 any b [1,20]; 4-bead coprimeness generalized; Lucas a(n)=F(n)+F(n+2)=L(n+1); 2/97 has exactly 3 decompositions | PASS |
 | [370] | [QA Pyth-2 BABTHE Dual Bead Chain](370_qa_pyth2_babthe_dual_bead_chain.md) | 2/T=1/S+1/(OT)+1/(PT); T+Q=2S; dual bead chain {N,O,P,Q}/{Q,R,S,T}; O+P=S−R; R=N+(O−2)P; T=2OP−(O+P); 29 multi-decomposition T values | PASS |
 | [369] | [QA Pyth-2 Wave Quarter Points](369_qa_pyth2_wave_quarter_points.md) | 4-par W: W/4,W/2,3W/4 all integers; 2-par W: W/2 integer, W/4 half-integer; odd W: W/2 half-integer, W/4 quarter-integer; 5-par quarter=k+1/4; 3-par quarter=k+3/4; coincidences at lcm | PASS |
 | [368] | [QA Pyth-2 Synchronous Harmonics LCM](368_qa_pyth2_synchronous_harmonics_lcm.md) | LCM of coprime cycles=product; lcm(2,3,5)=30; lcm(3,5,7)=105; c\|lcm(a,b)→lcm(a,b,c)=lcm(a,b); sine=F/G; all-odd LCM odd (midpoint half-integer) | PASS |

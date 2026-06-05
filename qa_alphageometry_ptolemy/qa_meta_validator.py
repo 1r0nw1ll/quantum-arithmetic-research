@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth2_fibonacci_coprime_structure_cert_family(base_dir):
+    """QA Pyth-2 Fibonacci Coprime Structure cert [371]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XV pp.87-102. CLAIM: (C1) Euclid Prop 28: gcd(a,b)=1 → gcd(a+b,a)=gcd(a+b,b)=1. (C2) 128 pairs b odd [1,17]; 255 any b [1,20]. (C3) 4-bead coprimeness generalized. (C4) a(n)=F(n)+F(n+2)=1,3,4,7,11,18; recurrence holds; equals L(n+1). (C5) 2/97 has 3 BABTHE2 decompositions; 3 pairwise disjoint lower bead sets. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth2_fibonacci_coprime_structure_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth2_fibonacci_coprime_structure_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth2_fibonacci_coprime_structure_cert_v1/qa_pyth2_fibonacci_coprime_structure_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120
+    )
+    if proc.returncode != 0:
+        return (
+            f"qa_pyth2_fibonacci_coprime_structure_cert self-test failed:\n"
+            f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}"
+        )
+    return None
+
+
 def _validate_qa_pyth2_babthe_dual_bead_chain_cert_family(base_dir):
     """QA Pyth-2 BABTHE Dual Bead Chain cert [370]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIV pp.78-96. CLAIM: (C1) 2/T=1/S+1/(OT)+1/(PT); T+Q=2S. (C2) Dual bead chain {N,O,P,Q}/{Q,R,S,T}; shared Q=O+P. (C3) O+P=S-R bridge. (C4) R=N+(O-2)*P; O=2→R=N; O=3→R=N+P. (C5) T=2OP-(O+P); 29 multi-decomposition T values. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10725,6 +10744,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (371, "QA Pyth-2 Fibonacci Coprime Structure Cert family",
+     _validate_qa_pyth2_fibonacci_coprime_structure_cert_family,
+     "QA Pyth-2 Fibonacci Coprime Structure Cert [371]. Source: Iverson (1993) Pyth Arith Vol II Ch.XV pp.87-102. CLAIM: (C1) Euclid Prop 28: gcd(a,b)=1 → gcd(a+b,a)=gcd(a+b,b)=gcd(|a-b|,a)=gcd(|a-b|,b)=1; 6007 pairs. (C2) 128 coprime pairs b odd [1,17]; 255 any b [1,20]. (C3) gcd(b,e)=1 and b odd → all 6 pairwise gcds of {b,e,b+e,b+2e}=1; 1009 pairs. (C4) a(n)=F(n)+F(n+2)=1,3,4,7,11,18; Fibonacci recurrence; equals L(n+1). (C5) 2/97 exactly 3 BABTHE2 decompositions; (N,O)=(1,7),(17,3),(31,2); pairwise disjoint lower sets. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "371_qa_pyth2_fibonacci_coprime_structure",
+     "qa_pyth2_fibonacci_coprime_structure_cert_v1", True),
     (370, "QA Pyth-2 BABTHE Dual Bead Chain Cert family",
      _validate_qa_pyth2_babthe_dual_bead_chain_cert_family,
      "QA Pyth-2 BABTHE Dual Bead Chain Cert [370]. Source: Iverson (1993) Pyth Arith Vol II Ch.XIV pp.78-96. CLAIM: (C1) 2/T=1/S+1/(OT)+1/(PT); T+Q=2S; 2/7=1/6+1/14+1/21; 2/97=1/56+1/679+1/776. (C2) Dual bead chain {N,O,P=N+O,Q=O+P}/{Q,R=S-Q,S=OP,T=R+S}; shared Q. (C3) O+P=S-R. (C4) R=N+(O-2)P; O=2: R=N; O=3: R=N+P; O=4: R=N+2P; O=5: R=N+3P. (C5) T=2OP-(O+P)=2S-Q; 29 multi-decomp T values. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

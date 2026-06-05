@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Halley Comet Quantum Number cert [335]. Primary source: Iverson, B. (1993) Quantum Arithmetic Book 2: Natural Arithmetic, Chapter 1 'Doubling', page 7: 'The Quantum Number for the orbit of Halley's Comet is 1, 29, 30, 59. Its ratio between the perigee and apogee is 1:59. This is a much elongated elliptical orbit.' (C1) QN (1,29,30,59): d=b+e=30, a=b+2e=59, gcd(1,29)=1. (C2) b:a=1:59; b=1 unit base; a=59 prime; e=29 prime. (C3) d=30=2*3*5 (5-smooth); lcm(2,3,5)=30. (C4) mod-24 orbit: (1,29) -> (1,5,6,11); cosmos family. (C5) Among b=1 QNs with a<=60, (1,29,30,59) is maximally elongated; next is (1,28,29,57). DOI: primary text, no external DOI."
+}

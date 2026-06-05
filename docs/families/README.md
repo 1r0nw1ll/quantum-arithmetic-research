@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [335] | [QA Halley's Comet Quantum Number](335_qa_halley_comet_qn.md) | QN=(1,29,30,59); d=30=lcm(2,3,5); a=59 prime; b:a=1:59; mod-24 (1,5,6,11) Cosmos; maximally elongated b=1 QN with a≤60 | PASS |
 | [334] | [QA Koenig Circle Nesting](334_qa_koenig_circle_nesting.md) | H²-G²=G²-I²=2CF for any prime Pythagorean triple; area=24L=24×CF/12; nesting H_n=I_{n+1}: chain (1,5,7)→(7,13,17)→(17,25,31); 32 triples exhaustive G≤200 | PASS |
 | [333] | [QA Female QN Parity Derivation](333_qa_female_qn_parity_derivation.md) | female=(2e,b,a,2d) from male(b,e,d,a); gcd(e,d)=1; e odd→b_f 2-par,a_f 4-par; e even→b_f 4-par,a_f 2-par; first-fourth parity swap for 230 male QNs | PASS |
 | [332] | [QA Compound Wave GCD Sync Count](332_qa_compound_wave_gcd_sync.md) | Coprime pairs: lcm=p×q, 1 sync per cycle; non-coprime: sync_in_product=gcd(p,q), sync_in_lcm=1; identity lcm×gcd=p×q; pairwise-coprime triples: lcm=p×q×r | PASS |

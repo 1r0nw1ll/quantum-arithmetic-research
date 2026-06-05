@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_halley_comet_qn_cert_family(base_dir):
+    """QA Halley Comet Quantum Number Cert family [335]. Primary source: Iverson (1993) QA Book 2 Ch.1 p.7 'The QN for Halley's Comet is 1,29,30,59; ratio 1:59; much elongated elliptical orbit.' CLAIM: (C1) QN=(1,29,30,59); d=b+e=30; a=b+2e=59; gcd=1. (C2) b:a=1:59; a=59 prime; e=29 prime. (C3) d=30=2*3*5=lcm(2,3,5). (C4) mod-24 -> (1,5,6,11); Cosmos. (C5) Among b=1 QNs a<=60, (1,29,30,59) is maximally elongated. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_halley_comet_qn_cert_v1")
+    validator = os.path.join(fam_dir, "qa_halley_comet_qn_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_halley_comet_qn_cert_v1/qa_halley_comet_qn_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_halley_comet_qn_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_koenig_circle_nesting_cert_family(base_dir):
     """QA Koenig Circle Nesting Cert family [334]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, Ch.7 pp.55-70 'THE KOENIG SERIES AND THE TREE OF LIFE'. CLAIM: (C1) H^2-G^2=G^2-I^2=2CF for 7 prime Pythagorean triangles. (C2) Annular area=24L; CF divisible by 12; L=CF/12. (C3) Nesting H_n=I_{n+1}: chain (1,5,7)->(7,13,17)->(17,25,31). (C4) Identity holds for all 32 primitive triples G<=200. (C5) Extended nesting: I=7 has 5 options incl. (7,13,17); I=17 has 4 incl. (17,25,31); I=31 has 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10036,6 +10055,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (335, "QA Halley Comet Quantum Number Cert family",
+     _validate_qa_halley_comet_qn_cert_family,
+     "QA Halley Comet QN Cert [335]. Source: Iverson (1993) QA-2 Ch.1 p.7. CLAIM: (C1) QN=(1,29,30,59); d=30; a=59; gcd=1. (C2) b:a=1:59; a=59 prime; e=29 prime. (C3) d=30=2*3*5=lcm(2,3,5). (C4) mod-24 (1,5,6,11); Cosmos. (C5) Maximally elongated b=1 QN with a<=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "335_qa_halley_comet_qn",
+     "qa_halley_comet_qn_cert_v1", True),
     (334, "QA Koenig Circle Nesting Cert family",
      _validate_qa_koenig_circle_nesting_cert_family,
      "QA Koenig Circle Nesting Cert family [334]. Source: Iverson (1993) Pyth Arith Vol I, Ch.7 pp.55-70. CLAIM: (C1) H^2-G^2=G^2-I^2=2CF for 7 triangles. (C2) area=24L; L=CF/12; CF div by 12. (C3) Nesting H_n=I_{n+1}: (1,5,7)->(7,13,17)->(17,25,31). (C4) Identity holds for 32 primitive triples G<=200. (C5) I=7 gives 5 continuations; I=17 gives 4; I=31 gives 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

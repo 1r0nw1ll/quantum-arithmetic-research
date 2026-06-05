@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean Divisibility Laws cert [342]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I, Chapter IX pp.95-99, Statements (1)-(9) and (11) with proofs. (C1) Exactly one of d,e is even; a is always odd: 161 coprime pairs b,e<20. (C2) Factor 3 in {b,e,d,a}: at least one bead divisible by 3, exhaustive tri-classification proof; 361 pairs b,e<30. (C3) C always divisible by 4 (4-par): C=2de, one of d,e even gives factor 4; 361 pairs. (C4) G always 5-par (G≡1 mod 4): G=d^2+e^2=4-par+5-par=5-par; 361 pairs. (C5) Area CF/2 divisible by 6: C*F divisible by 12; 361 pairs. DOI: primary text, no external DOI."
+}

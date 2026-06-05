@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pythagorean_divisibility_laws_cert_family(base_dir):
+    """QA Pythagorean Divisibility Laws cert [342]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, Chapter IX pp.95-99. CLAIM: (C1) Exactly one of d,e even; a always odd: 161 pairs. (C2) Factor 3 in {b,e,d,a}: 361 pairs. (C3) C always 4-par (divisible by 4): 361 pairs. (C4) G always 5-par (G≡1 mod 4): 361 pairs. (C5) Area CF/2 divisible by 6 (C*F divisible by 12): 361 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pythagorean_divisibility_laws_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pythagorean_divisibility_laws_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_divisibility_laws_cert_v1/qa_pythagorean_divisibility_laws_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pythagorean_divisibility_laws_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_ellipse_semiminor_df_cert_family(base_dir):
     """QA Ellipse Semiminor Squared = D*F cert [341]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, Chapter VIII pp.91-93. CLAIM: (C1) (C/2)^2=DE: C/2=de exact integer; (de)^2=D*E. (C2) D-E=F: d^2-e^2=ab=F. (C3) (df)^2=D^2-(C/2)^2=D(D-E)=DF; 78 pairs. (C4) Eccentricity c=d/e=2D/C: cross-multiply d*C=2*D*e. (C5) J=D-de=bd; K=D+de=ad; J+K=2D; K-J=C. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10174,6 +10193,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (342, "QA Pythagorean Divisibility Laws Cert family",
+     _validate_qa_pythagorean_divisibility_laws_cert_family,
+     "QA Pythagorean Divisibility Laws Cert [342]. Source: Iverson (1993) Pyth Arith Vol I Ch.IX pp.95-99. CLAIM: (C1) Exactly one of d,e even; a always odd. (C2) Factor 3 in {b,e,d,a}. (C3) C always 4-par. (C4) G always 5-par. (C5) Area CF/2 divisible by 6. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "342_qa_pythagorean_divisibility_laws",
+     "qa_pythagorean_divisibility_laws_cert_v1", True),
     (341, "QA Ellipse Semiminor Squared = D*F Cert family",
      _validate_qa_ellipse_semiminor_df_cert_family,
      "QA Ellipse Semiminor DF Cert [341]. Source: Iverson (1993) Pyth Arith Vol I Ch.VIII pp.91-93. CLAIM: (C1) (C/2)^2=DE; (C2) D-E=F; (C3) (df)^2=D^2-(C/2)^2=DF; (C4) eccentricity c=d/e=2D/C cross-multiply; (C5) J=D-de=bd; K=D+de=ad; J+K=2D; K-J=C. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

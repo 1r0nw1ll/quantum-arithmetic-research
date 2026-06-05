@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [346] | [QA Fibonacci-Lucas Bridge](346_qa_fibonacci_lucas_bridge.md) | Lucas 1,3,4,7,11,18,... satisfies recurrence; L(n+1)=F(n)+F(n+2); two consecutive Fibonacci quadruples as phi-bead proxies; gcd(L,F) coprimeness | PASS |
 | [345] | [QA BABTHE Dual Bead Chain Identity](345_qa_babthe_dual_bead_chain.md) | Two nested Fibonacci quadruples (N,O,P,Q)+(Q,R,S,T) joined at junction Q; S=O·P product; 2/T=1/S+1/(OT)+1/(PT); Iverson's 2/97=1/56+1/679+1/776 | PASS |
 | [344] | [QA Prime Residue Symmetry mod 30/60](344_qa_prime_residue_symmetry.md) | φ(30)=8 residues {1,7,11,13,17,19,23,29}; 4 pairs summing 30; lcm(p,q)=p·q coprime primes; lcm(2,3,5)=30; lcm(3,5,7)=105; φ(60)=16 with 8 pairs summing 60 | PASS |
 | [343] | [QA Fibonacci Bead Number Quadruple](343_qa_fibonacci_bead_quadruple.md) | (b,e,d,a) Fibonacci-type b+e=d,e+d=a; all 6 pairwise gcds=1; (I,min(C,F),max(C,F),H) Fibonacci-type; 20 consecutive Fibonacci pairs valid | PASS |

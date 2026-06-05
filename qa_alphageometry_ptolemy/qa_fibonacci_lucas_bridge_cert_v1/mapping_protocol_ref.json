@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Fibonacci-Lucas Bridge cert [346]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol II, Chapter XV pp.99-107. p.105: 'The series will run: 1, 3, 4, 7, 11, 18,...'; 'g(2n-1)-g(2n-1) and g(2n)+g(2n)'; 'This same series will also result from the addition of two standard Fibonacci series, with one series moved two integers to the right from the other.' p.104: two Golden Section bead quadruples (phi^2,phi,1,phi') and (phi,1,phi',phi'^2). (C1) Lucas 1,3,4,7,11,18,... satisfies recurrence; 20 terms. (C2) L(n+1)=F(n)+F(n+2). (C3) Two consecutive Fibonacci quadruples as integer proxies for phi-bead quadruples. (C4) gcd(L(n),F(n+1)) in {1,2} for n=1..20. DOI: primary text, no external DOI."
+}

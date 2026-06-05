@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Ellipse J,K Parameters and 2D Triple Decomposition cert [337]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I, pp.37-38 and 43-44: 'J=D-C/2 and K=D+C/2. As related to the parametric numbers they are: J=bd and K=ad.' And: 'F+G = J+K = 2J+C = 2D (each equals 2d^2).' (C1) J=bd=D-C/2 and K=ad=D+C/2 verified for all test pairs. (C2) J+K=2D=2d^2 via a+b=2d; verified 10 pairs. (C3) 2J+C=2D=2d^2; 2bd+2de=2d(b+e)=2d^2. (C4) F+G=J+K=2J+C=2D simultaneously for 8 pairs. (C5) Algebraic proof: d-e=b implies J=d(d-e)=bd; d+e=a implies K=d(d+e)=ad; proven symbolically for all coprime pairs up to b,e<15. DOI: primary text, no external DOI."
+}

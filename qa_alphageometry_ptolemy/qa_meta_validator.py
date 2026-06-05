@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_harmonic_aliquot_structure_cert_family(base_dir):
+    """QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: (C1) 20 harmonic dyads among 15 distinct Cosmos d-values {3..17}; all aliquot parts 7-smooth. (C2) Direction law: d1<d2 implies p2>p1 for all dyads — higher harmonic carries larger unique prime, confirming Ben's reversal 'higher harmonics CREATE the lower tone' (p.43). (C3) Aliquot spectrum exactly {1,2,3,5}; no aliquot > 5 in mod-9 Cosmos. (C4) 5040=2^4*3^2*5*7 has omega=4; all Cosmos d <= 17 < 5040 (definite quantum configuration range). (C5) Exactly 3 tonal identity d-values {11,13,17} are primes > 7; each forms 5 harmonic dyads. Theory of Harmony: two d-values harmonic iff gcd=A, d1/A and d2/A are distinct primes, gcd(A,p1*p2)=1. Builds on certs [318][320][321]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_harmonic_aliquot_structure_cert_v1")
+    validator = os.path.join(fam_dir, "qa_harmonic_aliquot_structure_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_harmonic_aliquot_structure_cert_v1/qa_harmonic_aliquot_structure_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_harmonic_aliquot_structure_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_quantize_to_one_cert_family(base_dir):
     """QA Quantize-to-ONE Cert family [321]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.3 (Quantizing to ONE). CLAIM: (C1) Cosmos ratio b/a in (0,1) for all 72 pairs (perigee<apogee). (C2) Satellite canonical ratio 1/3 for all 8 Satellite pairs; no Cosmos pair achieves 1/3. (C3) Within-d-class monotonicity: ratio b/(2d-b) strictly increasing in b for fixed d. (C4) 7-prime factorization bound: omega(b*e*d*a)<=5<=7 for all 72 Cosmos pairs; empirical max 5 at (5,8) product 10920=2^3*3*5*7*13. (C5) Theorem NT round-trip: 2dr/(1+r) gives exact integer b for all 72 Cosmos pairs via midpoint identity a+b=2d. Builds on cert [320]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9789,6 +9808,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (322, "QA Harmonic Aliquot Structure Cert family",
+     _validate_qa_harmonic_aliquot_structure_cert_family,
+     "QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson (1995) QA-3, ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: (C1) 20 harmonic dyads among 15 distinct Cosmos d-values {3..17}; all aliquot parts 7-smooth. (C2) Direction law: d1<d2 implies p2>p1 for all dyads — higher harmonic creates lower tone. (C3) Aliquot spectrum exactly {1,2,3,5}. (C4) 5040=2^4*3^2*5*7 omega=4; all Cosmos d <= 17 < 5040. (C5) Tonal identity d-values {11,13,17} each form 5 harmonic dyads. Builds on certs [318][320][321]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "322_qa_harmonic_aliquot_structure",
+     "qa_harmonic_aliquot_structure_cert_v1", True),
     (321, "QA Quantize-to-ONE Cert family",
      _validate_qa_quantize_to_one_cert_family,
      "QA Quantize-to-ONE Cert family [321]. Primary source: Iverson (1995) QA-3, ITAM Portland, Ch.3. CLAIM: (C1) Cosmos ratio b/a in (0,1) 72 pairs. (C2) Satellite canonical ratio 1/3 distinct from all Cosmos. (C3) Within-d-class ratio monotonicity. (C4) omega(b*e*d*a)<=5<=7 for 72 Cosmos pairs. (C5) Round-trip ratio reconstruction 2dr/(1+r)=b exact for 72 Cosmos pairs. Builds on cert [320]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

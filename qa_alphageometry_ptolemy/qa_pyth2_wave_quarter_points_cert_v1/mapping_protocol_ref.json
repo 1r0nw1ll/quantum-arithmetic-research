@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 Wave Quarter Points cert [369]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIII pp.43-56+. Text: 'Any wavelength which is measured by a 4-par number will find each of these points falling at an integer'; 'If the wavelength is measured by a 2-par number, only the beginning, the middle, and the end will fall at an integer'; 'in the case where a wavelength is measured by an odd number, only the beginning and the ending will be at an integer. The midpoint will fall at a half-integer and the quarter points will fall at a quarter integer.' (C1) 4-par W (W%4==0): W/4, W/2, 3W/4 all integers; verified 124 values W in [4,496]. (C2) 2-par W (W%4==2): W/2 integer, W/4 half-integer (denom=2); verified 125 values. (C3) Odd W: W/2 half-integer (denom=2), W/4 quarter-integer (denom=4); 250 odd values. (C4) 5-par (W%4==1): quarter=k+1/4; 3-par (W%4==3): quarter=k+3/4; complementary fractions sum to 1. (C5) Two-wave integer coincidences = multiples of lcm(W1,W2); verified all pairs in [2,24]. DOI: primary text, no external DOI."
+}

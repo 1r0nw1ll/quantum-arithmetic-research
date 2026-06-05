@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth2_wave_quarter_points_cert_family(base_dir):
+    """QA Pyth-2 Wave Quarter Points cert [369]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIII pp.43-56+. CLAIM: (C1) 4-par W: W/4,W/2,3W/4 all integers. (C2) 2-par W: W/2 integer, W/4 half-integer. (C3) Odd W: W/2 half-integer, W/4 quarter-integer. (C4) 5-par quarter=k+1/4; 3-par quarter=k+3/4; complementary. (C5) Two-wave coincidences=multiples of lcm. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth2_wave_quarter_points_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth2_wave_quarter_points_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth2_wave_quarter_points_cert_v1/qa_pyth2_wave_quarter_points_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120
+    )
+    if proc.returncode != 0:
+        return (
+            f"qa_pyth2_wave_quarter_points_cert self-test failed:\n"
+            f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}"
+        )
+    return None
+
+
 def _validate_qa_pyth2_synchronous_harmonics_lcm_cert_family(base_dir):
     """QA Pyth-2 Synchronous Harmonics LCM cert [368]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIII pp.38-70+. CLAIM: (C1) LCM of pairwise-coprime integers = product; lcm(2,3,5)=30; lcm(3,5,7)=105; lcm(2,3,5,7)=210. (C2) c|lcm(a,b) → lcm(a,b,c)=lcm(a,b); lcm(2,3,6)=6. (C3) LCM associativity; pairwise-coprime triple lcm=product. (C4) QA sine=F/G exact Fraction; F<G always. (C5) All-odd LCM is odd (midpoint half-integer); even-factor LCM is even. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10687,6 +10706,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (369, "QA Pyth-2 Wave Quarter Points Cert family",
+     _validate_qa_pyth2_wave_quarter_points_cert_family,
+     "QA Pyth-2 Wave Quarter Points Cert [369]. Source: Iverson (1993) Pyth Arith Vol II Ch.XIII pp.43-56+. CLAIM: (C1) 4-par W (W%4==0): W/4,W/2,3W/4 all integers. (C2) 2-par W (W%4==2): W/2 integer, W/4 half-integer. (C3) Odd W: W/2 half-integer, W/4 quarter-integer (denom=4). (C4) 5-par (W%4==1): quarter=k+1/4; 3-par (W%4==3): quarter=k+3/4; complementary (sum=1). (C5) Two-wave integer coincidences=multiples of lcm(W1,W2); verified all pairs in [2,24]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "369_qa_pyth2_wave_quarter_points",
+     "qa_pyth2_wave_quarter_points_cert_v1", True),
     (368, "QA Pyth-2 Synchronous Harmonics LCM Cert family",
      _validate_qa_pyth2_synchronous_harmonics_lcm_cert_family,
      "QA Pyth-2 Synchronous Harmonics LCM Cert [368]. Source: Iverson (1993) Pyth Arith Vol II Ch.XIII pp.38-70+. CLAIM: (C1) LCM of pairwise-coprime integers=product; lcm(2,3,5)=30; lcm(3,5,7)=105; lcm(2,3,5,7)=210. (C2) c|lcm(a,b) → lcm(a,b,c)=lcm(a,b); lcm(2,3,6)=6. (C3) LCM associativity; pairwise-coprime triple lcm=product. (C4) QA sine=F/G exact Fraction; F<G. (C5) All-odd LCM is odd; even-factor LCM is even. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

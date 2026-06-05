@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Nightside Energy cert [359]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.3 pp.10-12. Text: 'even-even, even-odd, odd-even, odd-odd integers named 4-par, 2-par, 3-par, 5-par; product of two 3-par is 5-par; product of two 5-par is 5-par; sum of two 3-par or two 5-par is 2-par; sum of 3-par and 5-par is 4-par; product of 3-par and 5-par is 3-par; nightside quantum number begins with 4 or 2.' (C1) 4-way partition mod 4; 6 of each in {1..24}. (C2) Product rules: 3*3=5, 5*5=5, 3*5=3 (mod-4 proofs). (C3) Sum rules: 3+3=2, 5+5=2, 3+5=4. (C4) Female nightside: b≡2(mod 4) ↔ a≡0(mod 4); proof a=b+2e, e odd. (C5) C parity discriminates male vs female: C≡0(mod 4) iff male. DOI: primary text, no external DOI."
+}

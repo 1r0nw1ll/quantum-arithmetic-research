@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
+    """QA Pyth-3 Nightside Energy cert [359]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.3 pp.10-12. CLAIM: (C1) 4-way partition mod 4: 4-par/2-par/3-par/5-par; 6 of each in {1..24}. (C2) Product rules: 3*3=5-par, 5*5=5-par, 3*5=3-par (mod-4 proofs). (C3) Sum rules: 3+3=2-par, 5+5=2-par, 3+5=4-par. (C4) Female nightside: b≡2(mod 4) ↔ a≡0(mod 4); proof a=b+2e, e odd. (C5) C parity discriminates male/female: C≡0(mod 4) iff male. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth3_nightside_energy_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth3_nightside_energy_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_nightside_energy_cert_v1/qa_pyth3_nightside_energy_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth3_nightside_energy_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth3_myriad_structure_cert_family(base_dir):
     """QA Pyth-3 Myriad and Octave Structure cert [358]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.1 pp.1-3 and Ch.4 pp.13-19. CLAIM: (C1) Myriad=10000=2^4*5^4; 10000 mod 24=16. (C2) 7 octaves=2^7=128 ratio; 7 first prime not dividing 360. (C3) 7*7=49=7^2 total levels; 49 mod 24=1 Singularity class. (C4) Bugle C,F,A,C ratios 3:4:5:6; unique primitive QA chain (b,d,a,a+e) with octave a+e=2b; 3^2+4^2=5^2. (C5) Doubling (b,e): quadratic identities scale by 4, quartic L scales by 16. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10497,6 +10516,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (359, "QA Pyth-3 Nightside Energy 4-Way Integer Partition Cert family",
+     _validate_qa_pyth3_nightside_energy_cert_family,
+     "QA Pyth-3 Nightside Energy Cert [359]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.3 pp.10-12. CLAIM: (C1) 4-way partition mod 4; 6 of each class in {1..24}. (C2) 3*3=5-par; 5*5=5-par; 3*5=3-par (proofs). (C3) 3+3=2-par; 5+5=2-par; 3+5=4-par. (C4) Female nightside: b≡2(mod 4) ↔ a≡0(mod 4). (C5) C≡0(mod 4) iff male; C≡2(mod 4) iff female. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "359_qa_pyth3_nightside_energy",
+     "qa_pyth3_nightside_energy_cert_v1", True),
     (358, "QA Pyth-3 Myriad and Octave Structure Cert family",
      _validate_qa_pyth3_myriad_structure_cert_family,
      "QA Pyth-3 Myriad and Octave Structure Cert [358]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.1+Ch.4. CLAIM: (C1) Myriad=10000=2^4*5^4; 10000 mod 24=16. (C2) 7 octaves=2^7=128; 7 first prime not dividing 360=2^3*3^2*5. (C3) 7*7=49=7^2; 49 mod 24=1 Singularity class. (C4) Bugle C,F,A,C just-intonation ratios 3:4:5:6; unique primitive QA chain with octave a+e=2b; 3^2+4^2=5^2. (C5) Doubling (b,e): quadratic identities scale by 4, quartic L scales by 16. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

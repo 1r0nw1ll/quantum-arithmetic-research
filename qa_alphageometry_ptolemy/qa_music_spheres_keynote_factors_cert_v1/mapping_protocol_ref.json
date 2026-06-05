@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Music of the Spheres Keynote Factoring cert [330]. Primary source: Iverson, B. (1991) Quantum Arithmetic Volume II -- Books 3 & 4: New Wave Theory / Synchronous Harmonics. Delta Spectrum Research, La Junta CO. Book 3 Part II pp.20-21: 'MUSIC OF THE SPHERES', 'A MUSICAL SCALE?'. Iverson states four male keynote integers (891, 1580, 1602, 2226) with factorizations: 891=3^4*11, 1580=2^2*5*79, 1602=2*3^2*89, 2226=2*3*7*53. Four female keynote approximations: 754.95383->756=2^2*3^3*7, 1050.7297->1050=2*3*5^2*7, 1197.965->1197=3^2*7*19, 1547.4254->1548=2^2*3^2*43. (C1) Male factorizations verified exactly against Iverson. (C2) Each male has exactly one prime factor in (7,100): {11,79,89,53}; all four are distinct. (C3) Female factorizations verified; 756 and 1050 are 7-smooth, 1197 and 1548 each have one large prime (19 and 43). (C4) All 8 keynotes: prime factors subset of {2,3,5,7} union {one prime in (7,100)}; at most one large prime per note. (C5) Collectively: small prime factors of male notes cover {2,3,5,7}; same for female notes. Builds on cert [329] aliquot minima and musical intervals. DOI: primary text, no external DOI."
+}

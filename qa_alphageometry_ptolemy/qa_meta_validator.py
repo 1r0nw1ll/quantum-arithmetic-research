@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_music_spheres_keynote_factors_cert_family(base_dir):
+    """QA Music of the Spheres Keynote Factoring Cert family [330]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.20-21 'MUSIC OF THE SPHERES', 'A MUSICAL SCALE?'. CLAIM: (C1) Male keynotes: 891=3^4*11, 1580=2^2*5*79, 1602=2*3^2*89, 2226=2*3*7*53; match Iverson exactly. (C2) Each male has exactly one prime in (7,100): {11,79,89,53}; all distinct. (C3) Female keynotes: 756=2^2*3^3*7, 1050=2*3*5^2*7 (7-smooth), 1197=3^2*7*19, 1548=2^2*3^2*43 (large primes 19,43). (C4) All 8 notes: factors subset {2,3,5,7} plus at most one prime in (7,100). (C5) Male and female groups each collectively cover {2,3,5,7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_music_spheres_keynote_factors_cert_v1")
+    validator = os.path.join(fam_dir, "qa_music_spheres_keynote_factors_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_music_spheres_keynote_factors_cert_v1/qa_music_spheres_keynote_factors_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_music_spheres_keynote_factors_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_platonic_crt_aliquot_minima_cert_family(base_dir):
     """QA Book 4 Synthesis: Platonic Edges, CRT Triple Uniqueness, Aliquot Minima Cert family [329]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.53-65 'ALIQUOT PARTS', 'PAR TYPES', 'PLATONIC SOLIDS', 'PARAMETERS'. CLAIM: (C1) Platonic E=F*epf/2 all 5 solids. (C2) Euler V-E+F=2; face types triangle/square/pentagon. (C3) Triple (n mod 3, n mod 4, n mod 5) unique in {1..60} by CRT; lcm(3,4,5)=60; 37=(1,1,2), 32=(2,0,2). (C4) Smallest aliquot parts: 30=lcm(2,3,5), 42=lcm(2,3,7), 210=lcm(2,3,5,7); divisible by 6. (C5) Musical intervals: 5:4, 3:2, 15:8; 15:8=5/4*3/2; all 7-smooth. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9941,6 +9960,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (330, "QA Music of the Spheres Keynote Factoring Cert family",
+     _validate_qa_music_spheres_keynote_factors_cert_family,
+     "QA Music of the Spheres Keynote Factoring Cert family [330]. Source: Iverson (1991) QA Vol II Books 3&4, pp.20-21. CLAIM: (C1) Male keynotes 891=3^4*11,1580=2^2*5*79,1602=2*3^2*89,2226=2*3*7*53 match Iverson. (C2) Each male has one prime in (7,100); all distinct {11,79,89,53}. (C3) Female: 756=2^2*3^3*7, 1050=2*3*5^2*7 (7-smooth), 1197=3^2*7*19, 1548=2^2*3^2*43. (C4) All 8: factors subset {2,3,5,7} plus at most one prime in (7,100). (C5) Male and female each collectively cover {2,3,5,7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "330_qa_music_spheres_keynote_factors",
+     "qa_music_spheres_keynote_factors_cert_v1", True),
     (329, "QA Book 4 Synthesis: Platonic Edges CRT Triple Aliquot Minima Cert family",
      _validate_qa_platonic_crt_aliquot_minima_cert_family,
      "QA Book 4 Synthesis Cert family [329]. Source: Iverson (1991) QA Vol II Books 3&4, pp.53-65. CLAIM: (C1) Platonic E=F*epf/2 all 5 solids. (C2) Euler V-E+F=2; triangle/square/pentagon face types. (C3) Triple (n mod 3,mod 4,mod 5) unique in {1..60} by CRT; lcm=60. (C4) Smallest aliquots: 30,42,210=lcm({2,3,5},{2,3,7},{2,3,5,7}). (C5) Musical intervals 5:4, 3:2, 15:8; 7-smooth. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

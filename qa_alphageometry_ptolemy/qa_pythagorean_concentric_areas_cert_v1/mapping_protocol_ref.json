@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean Concentric Circle Area Divisibility cert [352]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I Chapter V pp.53-64. Text p.54: 'b-d-a, F-D-G, and I^2-G^2-H^2, where the center term is the mean of the other two.' Text p.54-55: 'In every case, these remaining areas are divisible by 24. In the case of the first triangle, the 3-4-5 triangle, these remaining areas are, in fact, 24.' Text p.57: '2D+2E=A+B.' Text p.59: 'J+K=C+2J=2D.' (C1) Three arithmetic-mean trios: b-d-a diff=e; F-D-G diff=e^2; I^2-G^2-H^2 diff=24L. (C2) H^2+I^2=2G^2. (C3) H^2-G^2=G^2-I^2=24L; 3-4-5 gaps=24. (C4) 2D+2E=A+B. (C5) J+K=C+2J=2D. DOI: primary text, no external DOI."
+}

@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pythagorean_concentric_areas_cert_family(base_dir):
+    """QA Pythagorean Concentric Circle Area Divisibility cert [352]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.V pp.53-64. CLAIM: (C1) Three arithmetic-mean trios: b-d-a diff=e; F-D-G diff=e^2; I^2-G^2-H^2 diff=24L. (C2) H^2+I^2=2G^2. (C3) H^2-G^2=G^2-I^2=24L; 3-4-5 gaps=24. (C4) 2D+2E=A+B. (C5) J+K=C+2J=2D. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pythagorean_concentric_areas_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pythagorean_concentric_areas_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_concentric_areas_cert_v1/qa_pythagorean_concentric_areas_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pythagorean_concentric_areas_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pythagorean_g_exclusion_cert_family(base_dir):
     """QA Pythagorean G,H,I Exclusion Laws cert [351]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IV pp.39-41. CLAIM: (C1) G first 7 values {5,13,17,25,29,37,41}; 3-par primes {11,19,23,31} absent; G≡1 mod 4. (C2) G coprime to {2,3,11,19,43}; all p≡3 mod 4 ≤100 never divide G. (C3) H,I always odd and coprime to {2,3}. (C4) Composite H,I min factor ≥ 7; 196 cases. (C5) H,I never divisible by {11,19,43}; 369 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10364,6 +10383,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (352, "QA Pythagorean Concentric Circle Area Divisibility Cert family",
+     _validate_qa_pythagorean_concentric_areas_cert_family,
+     "QA Pythagorean Concentric Areas Cert [352]. Source: Iverson (1993) Pyth Arith Vol I Ch.V pp.53-64. CLAIM: (C1) Three arithmetic-mean trios: b-d-a diff=e; F-D-G diff=e^2; I^2-G^2-H^2 diff=24L. (C2) H^2+I^2=2G^2; 3-4-5: 7^2+1^2=2*5^2. (C3) H^2-G^2=G^2-I^2=24L; 3-4-5 gaps=24. (C4) 2D+2E=A+B. (C5) J+K=C+2J=2D. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "352_qa_pythagorean_concentric_areas",
+     "qa_pythagorean_concentric_areas_cert_v1", True),
     (351, "QA Pythagorean G,H,I Exclusion Laws Cert family",
      _validate_qa_pythagorean_g_exclusion_cert_family,
      "QA Pythagorean G Exclusion Cert [351]. Source: Iverson (1993) Pyth Arith Vol I Ch.IV pp.39-41. CLAIM: (C1) G first 7 values {5,13,17,25,29,37,41}; 3-par primes absent. (C2) G coprime to {2,3,11,19,43}; p≡3 mod 4 → p∤G. (C3) H,I always odd and coprime to {2,3}. (C4) Composite H,I min factor ≥7. (C5) H,I never div by {11,19,43}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

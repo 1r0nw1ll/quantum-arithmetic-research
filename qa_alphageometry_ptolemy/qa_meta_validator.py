@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
+    """QA BABTHE Dual Bead Chain Identity cert [345]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Chapter XIV pp.74-85. CLAIM: (C1) (N,O,P=N+O,Q=O+P) Fibonacci-type. (C2) (Q,R=S-Q,S=O*P,T=R+S) Fibonacci-type. (C3) Q is shared junction: Q=O+P=S-R. (C4) S=O*P product relation. (C5) 2/T=1/S+1/(OT)+1/(PT) unit fraction identity. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_babthe_dual_bead_chain_cert_v1")
+    validator = os.path.join(fam_dir, "qa_babthe_dual_bead_chain_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_babthe_dual_bead_chain_cert_v1/qa_babthe_dual_bead_chain_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_babthe_dual_bead_chain_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_prime_residue_symmetry_cert_family(base_dir):
     """QA Prime Residue Symmetry and Cycle Coincidence cert [344]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Ch.XII-XIII pp.26-50. CLAIM: (C1) φ(30)=8: {1,7,11,13,17,19,23,29}. (C2) 4 pairs sum=30: 1+29,7+23,11+19,13+17. (C3) lcm(p,q)=p*q for coprime primes; 6 named+36 prime pairs. (C4) lcm(2,3,5)=30; lcm(3,5,7)=105. (C5) φ(60)=16: 8 pairs sum=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10231,6 +10250,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (345, "QA BABTHE Dual Bead Chain Cert family",
+     _validate_qa_babthe_dual_bead_chain_cert_family,
+     "QA BABTHE Dual Bead Chain Cert [345]. Source: Iverson (1993) Pyth Arith Vol II Ch.XIV pp.74-85. CLAIM: (C1) (N,O,P,Q) Fibonacci-type. (C2) (Q,R,S,T) Fibonacci-type. (C3) Q shared junction. (C4) S=O*P. (C5) 2/T=1/S+1/(OT)+1/(PT). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "345_qa_babthe_dual_bead_chain",
+     "qa_babthe_dual_bead_chain_cert_v1", True),
     (344, "QA Prime Residue Symmetry Cert family",
      _validate_qa_prime_residue_symmetry_cert_family,
      "QA Prime Residue Symmetry Cert [344]. Source: Iverson (1993) Pyth Arith Vol II Ch.XII-XIII pp.26-50. CLAIM: (C1) φ(30)=8. (C2) 4 pairs sum=30. (C3) lcm(p,q)=p*q for coprime primes. (C4) lcm(2,3,5)=30; lcm(3,5,7)=105. (C5) φ(60)=16; 8 pairs sum=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

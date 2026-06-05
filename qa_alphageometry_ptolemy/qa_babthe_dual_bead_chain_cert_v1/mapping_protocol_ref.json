@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA BABTHE Dual Bead Chain Identity cert [345]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol II, Chapter XIV pp.74-85. p.77: 'the first set is assigned the identities N, O, P, Q and the second set is assigned the identities Q, R, S, T'; 'the third number, S, of the higher bead numbers is also the product of the two intermediate numbers of the lower bead numbers'; p.78: 'O+P was equal to S-R'. BABTHE2 program: 2/T=1/S+1/(OT)+1/(PT), S=OP, R=S-Q, T=R+S. (C1) First quadruple (N,O,P=N+O,Q=O+P) Fibonacci-type. (C2) Second quadruple (Q,R=S-Q,S=O*P,T=R+S) Fibonacci-type. (C3) Q shared junction element. (C4) S=O*P product relation. (C5) 2/T=1/S+1/(OT)+1/(PT). DOI: primary text, no external DOI."
+}

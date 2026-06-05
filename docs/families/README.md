@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [345] | [QA BABTHE Dual Bead Chain Identity](345_qa_babthe_dual_bead_chain.md) | Two nested Fibonacci quadruples (N,O,P,Q)+(Q,R,S,T) joined at junction Q; S=O·P product; 2/T=1/S+1/(OT)+1/(PT); Iverson's 2/97=1/56+1/679+1/776 | PASS |
 | [344] | [QA Prime Residue Symmetry mod 30/60](344_qa_prime_residue_symmetry.md) | φ(30)=8 residues {1,7,11,13,17,19,23,29}; 4 pairs summing 30; lcm(p,q)=p·q coprime primes; lcm(2,3,5)=30; lcm(3,5,7)=105; φ(60)=16 with 8 pairs summing 60 | PASS |
 | [343] | [QA Fibonacci Bead Number Quadruple](343_qa_fibonacci_bead_quadruple.md) | (b,e,d,a) Fibonacci-type b+e=d,e+d=a; all 6 pairwise gcds=1; (I,min(C,F),max(C,F),H) Fibonacci-type; 20 consecutive Fibonacci pairs valid | PASS |
 | [342] | [QA Pythagorean Divisibility Laws](342_qa_pythagorean_divisibility_laws.md) | d or e even; a always odd; factor 3 in {b,e,d,a}; C always 4-par; G always 5-par; area CF/2 divisible by 6 | PASS |

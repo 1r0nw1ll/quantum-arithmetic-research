@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [327] | [QA Harmonic Cycle Platonic Inscription](327_qa_harmonic_cycle_platonic.md) | 60=lcm(3,4,5)=3×4×5; pair (3,4)→5 sync points=pentagon; (3,5)→4=square; (4,5)→3=triangle; four fundamental harmonic cycles 30,42,60,105 | PASS |
 | [326] | [QA Euclid Four Par Types](326_qa_euclid_four_par_types.md) | Four par types (4n/4n+1/4n+2/4n+3) partition {1..24} into 4×6; coprime lcm=product; quarter-harmonic at ⌊pq/4⌋; 3×3=5-par mult table; 2-par/4-par never coprime | PASS |
 | [325] | [QA To-Be-Prime Euclid Prop 28](325_qa_to_be_prime_euclid_prop28.md) | gcd(n,n+1)=1; odd gcd(n,n+2)=1; Euclid VII Prop 28 SUM+DIFF verified ~1500 pairs; BEDA coprimeness chain from Prop 28 applied twice; first QA-4 cert | PASS |
 | [324] | [QA Music of the Spheres Scale](324_qa_music_spheres_scale.md) | 8 Satellite states = 8 keynotes (4 male + 4 female); 17 reduced fractions q≤7 + keynote = 18 notes per key; 144 = 8×18 total notes; 7-smooth denominators; Farey mediant property at all 16 adjacent scale pairs | PASS |

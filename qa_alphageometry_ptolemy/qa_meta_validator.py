@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_harmonic_cycle_platonic_cert_family(base_dir):
+    """QA Harmonic Cycle Platonic Inscription Cert family [327]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.10-12 'MULTIPLE WAVES', 'THE HARMONIC CYCLE', 'OTHER CYCLES', 'MOST BASIC MULTIPLE CYCLE'. CLAIM: (C1) 60-unit harmonic cycle = lcm(3,4,5) = 3x4x5; waves pairwise coprime. (C2) Pair (3,4): sync points {12,24,36,48,60} = 5 equally spaced -> pentagon. (C3) Pair (3,5): sync points {15,30,45,60} = 4 equally spaced -> square. (C4) Pair (4,5): sync points {20,40,60} = 3 equally spaced -> equilateral triangle. (C5) Four fundamental harmonic cycles: 30=lcm(2,3,5), 42=lcm(2,3,7), 60=lcm(3,4,5), 105=lcm(3,5,7). Builds on cert [326]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_harmonic_cycle_platonic_cert_v1")
+    validator = os.path.join(fam_dir, "qa_harmonic_cycle_platonic_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_harmonic_cycle_platonic_cert_v1/qa_harmonic_cycle_platonic_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_harmonic_cycle_platonic_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_euclid_four_par_types_cert_family(base_dir):
     """QA Euclid Four Par Types Cert family [326]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, p.8 'EUCLID'S 4 NUMBER TYPES'; pp.5-7 'TIME SYNCHRONIZATION', 'EVEN NUMBERS', 'GRAPHICS'. CLAIM: (C1) Four par types (4n,4n+1,4n+2,4n+3) partition {1..24} into 4 equal groups of 6. (C2) Coprime p,q: lcm=p*q; non-coprime: lcm<p*q; Ben's (4,6)->lcm=12<24. (C3) Quarter-harmonic at floor(p*q/4) and 3*floor(p*q/4) for coprime odd p,q; (3,7)->(5,15), (5,9)->(11,33). (C4) Odd par-type mult table: 3-par*3-par=5-par, 5-par*5-par=5-par, 3-par*5-par=3-par (mod 4 arithmetic). (C5) 2-par has v2=1; 4-par has v2>=2; no 2-par/4-par pair coprime. Builds on cert [325]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9884,6 +9903,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (327, "QA Harmonic Cycle Platonic Inscription Cert family",
+     _validate_qa_harmonic_cycle_platonic_cert_family,
+     "QA Harmonic Cycle Platonic Inscription Cert family [327]. Primary source: Iverson (1991) QA Vol II Books 3&4, pp.10-12 'THE HARMONIC CYCLE'. CLAIM: (C1) 60=lcm(3,4,5)=3x4x5; pairwise coprime. (C2) Pair (3,4): 5 sync points in 60-cycle -> pentagon. (C3) Pair (3,5): 4 sync points -> square. (C4) Pair (4,5): 3 sync points -> equilateral triangle. (C5) 30=lcm(2,3,5), 42=lcm(2,3,7), 60=lcm(3,4,5), 105=lcm(3,5,7). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "327_qa_harmonic_cycle_platonic",
+     "qa_harmonic_cycle_platonic_cert_v1", True),
     (326, "QA Euclid Four Par Types Cert family",
      _validate_qa_euclid_four_par_types_cert_family,
      "QA Euclid Four Par Types Cert family [326]. Primary source: Iverson (1991) QA Vol II Books 3&4, p.8 'EUCLID'S 4 NUMBER TYPES'. CLAIM: (C1) 4-par/5-par/2-par/3-par partition {1..24} into 4 equal groups of 6. (C2) Coprime lcm=product; non-coprime lcm<product; (4,6)->lcm=12. (C3) Quarter-harmonic at floor(p*q/4); (3,7)->(5,15), (5,9)->(11,33). (C4) Odd par-type mult table mod 4. (C5) 2-par/4-par never coprime (v2 mismatch). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

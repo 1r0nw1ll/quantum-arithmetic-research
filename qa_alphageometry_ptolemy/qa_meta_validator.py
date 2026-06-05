@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth1_prime_triangle_structure_cert_family(base_dir):
+    """QA Pyth-1 Prime Triangle Structure cert [360]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.II pp.33-38. CLAIM: (C1) G=d^2+e^2 always 5-par (≡1 mod 4); proof one of (d,e) even. (C2) G+C=A=a^2, G-C=B=b^2; A+B=2G, A-B=2C. (C3) a=d+e always odd; A=a^2 always 5-par. (C4) a|{A,F,K}; b|{B,F,J}; d|{C,D,J,K}; e|{C,E}; abde divisible by 6. (C5) A,B,G all 5-par; C 4-par; F spans 3-par and 5-par only. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth1_prime_triangle_structure_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth1_prime_triangle_structure_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth1_prime_triangle_structure_cert_v1/qa_pyth1_prime_triangle_structure_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth1_prime_triangle_structure_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     """QA Pyth-3 Nightside Energy cert [359]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.3 pp.10-12. CLAIM: (C1) 4-way partition mod 4: 4-par/2-par/3-par/5-par; 6 of each in {1..24}. (C2) Product rules: 3*3=5-par, 5*5=5-par, 3*5=3-par (mod-4 proofs). (C3) Sum rules: 3+3=2-par, 5+5=2-par, 3+5=4-par. (C4) Female nightside: b≡2(mod 4) ↔ a≡0(mod 4); proof a=b+2e, e odd. (C5) C parity discriminates male/female: C≡0(mod 4) iff male. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10516,6 +10535,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (360, "QA Pyth-1 Prime Triangle Structure Cert family",
+     _validate_qa_pyth1_prime_triangle_structure_cert_family,
+     "QA Pyth-1 Prime Triangle Structure Cert [360]. Source: Iverson (1993) Pyth Arith Vol I Ch.II pp.33-38. CLAIM: (C1) G always 5-par (≡1 mod 4). (C2) G+C=A=a^2, G-C=B=b^2; A+B=2G, A-B=2C. (C3) a=d+e always odd; A=a^2 always 5-par. (C4) a|{A,F,K}; b|{B,F,J}; d|{C,D,J,K}; e|{C,E}; abde div by 6. (C5) A,B,G all 5-par; C 4-par; F spans 3-par and 5-par. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "360_qa_pyth1_prime_triangle_structure",
+     "qa_pyth1_prime_triangle_structure_cert_v1", True),
     (359, "QA Pyth-3 Nightside Energy 4-Way Integer Partition Cert family",
      _validate_qa_pyth3_nightside_energy_cert_family,
      "QA Pyth-3 Nightside Energy Cert [359]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.3 pp.10-12. CLAIM: (C1) 4-way partition mod 4; 6 of each class in {1..24}. (C2) 3*3=5-par; 5*5=5-par; 3*5=3-par (proofs). (C3) 3+3=2-par; 5+5=2-par; 3+5=4-par. (C4) Female nightside: b≡2(mod 4) ↔ a≡0(mod 4). (C5) C≡0(mod 4) iff male; C≡2(mod 4) iff female. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

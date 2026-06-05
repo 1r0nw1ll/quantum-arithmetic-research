@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [360] | [QA Pyth-1 Prime Triangle Structure](360_qa_pyth1_prime_triangle_structure.md) | G always 5-par; G+C=A=a², G-C=B=b²; A+B=2G; a always odd; a\|{A,F,K}, b\|{B,F,J}, d\|{C,D,J,K}, e\|{C,E}; A,B,G all 5-par; C 4-par | PASS |
 | [359] | [QA Pyth-3 Nightside Energy: 4-Way Integer Partition](359_qa_pyth3_nightside_energy.md) | 4-par/2-par/3-par/5-par mod 4; 6 of each in {1..24}; 3×3=5-par, 5×5=5-par, 3×5=3-par; 3+5=4-par; b≡2(mod 4) ↔ a≡0(mod 4) for female; C parity = male/female discriminant | PASS |
 | [358] | [QA Pyth-3 Myriad and Octave Structure](358_qa_pyth3_myriad_structure.md) | Myriad=10000=2^4×5^4; 7 octaves=2^7=128; 7×7=49=7² (Singularity mod 24); bugle 3:4:5:6 unique primitive QA octave chain; doubling scales quadratic×4, L×16 | PASS |
 | [357] | [QA Pyth-3 Twenty Identities and Equilateral Triangle Parameters](357_qa_pyth3_twenty_identities.md) | W=de+K, Y=C+E, W=F+Y equilateral check; Z=G+de (Z<W, Z>F, Z>Y); H²-I²=48L=4CF; female (b even) C≡2(mod 4) not 4-par; female seed (2,1,3,4) verified | PASS |

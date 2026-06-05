@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Prime Triangle Structure cert [360]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.II pp.33-38. Text: 'hypotenuse G of every prime Pythagorean triangle must be 5-par (4n+1); difference G-C=B=b^2; sum G+C=A=a^2; B and A must be p^(2n) for odd prime p; a is common factor of A,F,K; b of B,F,J; d of C,D,J,K; e of C,E.' (C1) G=d^2+e^2 always 5-par; proof one of (d,e) even. (C2) G+C=A=a^2, G-C=B=b^2; A+B=2G, A-B=2C. (C3) a=d+e always odd; A=a^2 always 5-par. (C4) Common factor structure a|{A,F,K}; b|{B,F,J}; d|{C,D,J,K}; e|{C,E}; abde divisible by 6. (C5) A, B, G all 5-par; C 4-par; F spans 3-par and 5-par only. DOI: primary text, no external DOI."
+}

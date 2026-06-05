@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_aliquot_parts_structure_cert_family(base_dir):
+    """QA Aliquot Parts Structure Cert family [328]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.13-14 'ALIQUOT PARTS', 'EXAMPLE', 'QUESTIONS'. CLAIM: (C1) Integers coprime-to-30 in (0,30)={1,7,11,13,17,19,23,29}; 8 values; pairs sum to 30; 5^2+5=3^3+3=2^5-2=30. (C2) Aliquot candidates from {32,3,5,7,11}: valid={3360,5280,7392}, invalid={1155,12320}. (C3) Wave gear sync: shared aliquot A=18330, unique primes 53 and 7 -> sync at 6800430; X completes 7 cycles, Y completes 53. (C4) Three forms of 30: 5^2+5=3^3+3=2^5-2=30. (C5) aliquot count=n; valid requires {2,3,5-or-7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_aliquot_parts_structure_cert_v1")
+    validator = os.path.join(fam_dir, "qa_aliquot_parts_structure_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_aliquot_parts_structure_cert_v1/qa_aliquot_parts_structure_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_aliquot_parts_structure_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_harmonic_cycle_platonic_cert_family(base_dir):
     """QA Harmonic Cycle Platonic Inscription Cert family [327]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.10-12 'MULTIPLE WAVES', 'THE HARMONIC CYCLE', 'OTHER CYCLES', 'MOST BASIC MULTIPLE CYCLE'. CLAIM: (C1) 60-unit harmonic cycle = lcm(3,4,5) = 3x4x5; waves pairwise coprime. (C2) Pair (3,4): sync points {12,24,36,48,60} = 5 equally spaced -> pentagon. (C3) Pair (3,5): sync points {15,30,45,60} = 4 equally spaced -> square. (C4) Pair (4,5): sync points {20,40,60} = 3 equally spaced -> equilateral triangle. (C5) Four fundamental harmonic cycles: 30=lcm(2,3,5), 42=lcm(2,3,7), 60=lcm(3,4,5), 105=lcm(3,5,7). Builds on cert [326]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9903,6 +9922,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (328, "QA Aliquot Parts Structure Cert family",
+     _validate_qa_aliquot_parts_structure_cert_family,
+     "QA Aliquot Parts Structure Cert family [328]. Primary source: Iverson (1991) QA Vol II Books 3&4, pp.13-14 'ALIQUOT PARTS'. CLAIM: (C1) coprime-to-30 in (0,30)={1,7,11,13,17,19,23,29}; pairs sum to 30; 5^2+5=3^3+3=2^5-2=30. (C2) candidates from {32,3,5,7,11}: valid {3360,5280,7392}, invalid {1155,12320}. (C3) gear sync: A=18330, p=53,q=7 -> sync at 6800430. (C4) 5^2+5=3^3+3=2^5-2=30. (C5) count=n; valid needs {2,3,5-or-7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "328_qa_aliquot_parts_structure",
+     "qa_aliquot_parts_structure_cert_v1", True),
     (327, "QA Harmonic Cycle Platonic Inscription Cert family",
      _validate_qa_harmonic_cycle_platonic_cert_family,
      "QA Harmonic Cycle Platonic Inscription Cert family [327]. Primary source: Iverson (1991) QA Vol II Books 3&4, pp.10-12 'THE HARMONIC CYCLE'. CLAIM: (C1) 60=lcm(3,4,5)=3x4x5; pairwise coprime. (C2) Pair (3,4): 5 sync points in 60-cycle -> pentagon. (C3) Pair (3,5): 4 sync points -> square. (C4) Pair (4,5): 3 sync points -> equilateral triangle. (C5) 30=lcm(2,3,5), 42=lcm(2,3,7), 60=lcm(3,4,5), 105=lcm(3,5,7). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

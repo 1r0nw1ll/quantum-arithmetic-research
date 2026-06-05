@@ -2,6 +2,8 @@
 
 **Recently added**
 
+| [326] | [QA Euclid Four Par Types](326_qa_euclid_four_par_types.md) | Four par types (4n/4n+1/4n+2/4n+3) partition {1..24} into 4×6; coprime lcm=product; quarter-harmonic at ⌊pq/4⌋; 3×3=5-par mult table; 2-par/4-par never coprime | PASS |
+| [325] | [QA To-Be-Prime Euclid Prop 28](325_qa_to_be_prime_euclid_prop28.md) | gcd(n,n+1)=1; odd gcd(n,n+2)=1; Euclid VII Prop 28 SUM+DIFF verified ~1500 pairs; BEDA coprimeness chain from Prop 28 applied twice; first QA-4 cert | PASS |
 | [324] | [QA Music of the Spheres Scale](324_qa_music_spheres_scale.md) | 8 Satellite states = 8 keynotes (4 male + 4 female); 17 reduced fractions q≤7 + keynote = 18 notes per key; 144 = 8×18 total notes; 7-smooth denominators; Farey mediant property at all 16 adjacent scale pairs | PASS |
 | [323] | [QA Harmonic Chemistry LCM](323_qa_harmonic_chemistry_lcm.md) | LCM=harmonic cycle for 20 dyads; 3-wave composite LCM; C(7,2)=21 pairing law; L=b·e·d·a wavelength product min=24/max=31824; b·e·d·a divisible by 6 for all 72 pairs | PASS |
 | [322] | [QA Harmonic Aliquot Structure](322_qa_harmonic_aliquot_structure.md) | 20 harmonic dyads among 15 Cosmos d-values; direction law (higher d → larger unique prime); aliquot spectrum {1,2,3,5}; 5040=2⁴·3²·5·7 threshold; tonal identity {11,13,17} | PASS |

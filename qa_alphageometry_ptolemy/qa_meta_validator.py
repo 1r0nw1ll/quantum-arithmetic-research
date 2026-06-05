@@ -7986,6 +7986,44 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_euclid_four_par_types_cert_family(base_dir):
+    """QA Euclid Four Par Types Cert family [326]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, p.8 'EUCLID'S 4 NUMBER TYPES'; pp.5-7 'TIME SYNCHRONIZATION', 'EVEN NUMBERS', 'GRAPHICS'. CLAIM: (C1) Four par types (4n,4n+1,4n+2,4n+3) partition {1..24} into 4 equal groups of 6. (C2) Coprime p,q: lcm=p*q; non-coprime: lcm<p*q; Ben's (4,6)->lcm=12<24. (C3) Quarter-harmonic at floor(p*q/4) and 3*floor(p*q/4) for coprime odd p,q; (3,7)->(5,15), (5,9)->(11,33). (C4) Odd par-type mult table: 3-par*3-par=5-par, 5-par*5-par=5-par, 3-par*5-par=3-par (mod 4 arithmetic). (C5) 2-par has v2=1; 4-par has v2>=2; no 2-par/4-par pair coprime. Builds on cert [325]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_euclid_four_par_types_cert_v1")
+    validator = os.path.join(fam_dir, "qa_euclid_four_par_types_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_euclid_four_par_types_cert_v1/qa_euclid_four_par_types_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_euclid_four_par_types_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_qa_to_be_prime_euclid_prop28_cert_family(base_dir):
+    """QA To-Be-Prime / Euclid VII Prop 28 Coprimeness Chain Cert family [325]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.2-3 'TO BE PRIME'. CLAIM: (C1) gcd(n,n+1)=1 for n in {1..100} (neighbor coprimeness). (C2) gcd(odd n, n+2)=1 for odd n in {1..99}; gcd(2,4)=2 confirms qualifier. (C3) Euclid VII Prop 28 SUM: coprime a,b -> gcd(a+b,a)=gcd(a+b,b)=1; verified ~1500 pairs in {1..50}^2. (C4) BEDA coprimeness chain: gcd(b,e)=1 -> gcd(d,b)=gcd(d,e)=1 (d=b+e) -> gcd(a,d)=gcd(a,e)=1 (a=d+e) for all coprime Cosmos pairs in mod-9. (C5) Euclid VII Prop 28 DIFF: coprime a>b -> gcd(a-b,a)=gcd(a-b,b)=1; verified {1..50}. First QA-4 cert. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_to_be_prime_euclid_prop28_cert_v1")
+    validator = os.path.join(fam_dir, "qa_to_be_prime_euclid_prop28_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_to_be_prime_euclid_prop28_cert_v1/qa_to_be_prime_euclid_prop28_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_to_be_prime_euclid_prop28_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_music_spheres_scale_cert_family(base_dir):
     """QA Music of the Spheres Scale Cert family [324]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.6 (THE MYRIAD OF SOUND). CLAIM: (C1) 8 keynotes = 8 Satellite states (b=e, b in {1..8}): the 4 male + 4 female I-Ching / Cattle Problem structure maps exactly to the mod-9 Satellite orbit. (C2) Exactly 17 reduced fractions p/q with gcd(p,q)=1, 1<=p<q<=7 exist in (0,1); + keynote = 18 notes per key (Iverson p.82). (C3) 144 = 8 keynotes * 18 notes total ('144 different notes in eight keys', Iverson p.82). (C4) All 17 scale denominators 7-smooth; 4 distinct prime denominators {2,3,5,7} (Iverson p.91: 'harmony depends on fractional relationships from halves to sevenths'). (C5) Farey mediant property: all 16 adjacent fraction pairs in sorted scale satisfy |p1*q2 - p2*q1| = 1, making them Farey neighbors. Builds on certs [322][323][314]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9846,6 +9884,16 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (326, "QA Euclid Four Par Types Cert family",
+     _validate_qa_euclid_four_par_types_cert_family,
+     "QA Euclid Four Par Types Cert family [326]. Primary source: Iverson (1991) QA Vol II Books 3&4, p.8 'EUCLID'S 4 NUMBER TYPES'. CLAIM: (C1) 4-par/5-par/2-par/3-par partition {1..24} into 4 equal groups of 6. (C2) Coprime lcm=product; non-coprime lcm<product; (4,6)->lcm=12. (C3) Quarter-harmonic at floor(p*q/4); (3,7)->(5,15), (5,9)->(11,33). (C4) Odd par-type mult table mod 4. (C5) 2-par/4-par never coprime (v2 mismatch). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "326_qa_euclid_four_par_types",
+     "qa_euclid_four_par_types_cert_v1", True),
+    (325, "QA To-Be-Prime Euclid Prop 28 Cert family",
+     _validate_qa_to_be_prime_euclid_prop28_cert_family,
+     "QA To-Be-Prime / Euclid VII Prop 28 Coprimeness Chain Cert family [325]. Primary source: Iverson (1991) QA Vol II Books 3&4, pp.2-3 'TO BE PRIME'. CLAIM: (C1) gcd(n,n+1)=1 n=1..100. (C2) gcd(odd n, n+2)=1; gcd(2,4)=2 qualifier. (C3) Prop 28 SUM: coprime a,b -> gcd(a+b,a)=gcd(a+b,b)=1 ~1500 pairs. (C4) BEDA coprimeness chain for coprime Cosmos pairs. (C5) Prop 28 DIFF: coprime a>b -> gcd(a-b,a)=gcd(a-b,b)=1. First QA-4 cert. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "325_qa_to_be_prime_euclid_prop28",
+     "qa_to_be_prime_euclid_prop28_cert_v1", True),
     (324, "QA Music of the Spheres Scale Cert family",
      _validate_qa_music_spheres_scale_cert_family,
      "QA Music of the Spheres Scale Cert family [324]. Primary source: Iverson (1995) QA-3, ITAM Portland, Ch.6 (THE MYRIAD OF SOUND). CLAIM: (C1) 8 Satellite states = 8 keynotes (4 male + 4 female I-Ching / Cattle Problem). (C2) 17 reduced fractions q<=7 in (0,1); + keynote = 18 notes per key. (C3) 144 = 8 * 18 total notes. (C4) All denominators 7-smooth; prime factors {2,3,5,7}. (C5) Farey mediant property at all 16 adjacent fraction pairs. Builds on certs [322][323]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

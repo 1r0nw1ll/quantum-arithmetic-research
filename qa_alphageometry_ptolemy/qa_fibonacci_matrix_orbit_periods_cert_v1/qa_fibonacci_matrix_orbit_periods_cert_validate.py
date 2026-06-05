@@ -1,5 +1,6 @@
 # <!-- PRIMARY-SOURCE-EXEMPT: reason=mathematical proof from first principles; sources cited in mapping_protocol_ref.json (Wall 1960 DOI 10.1080/00029890.1960.11989541; Wildberger 2005 ISBN 978-0-9757492-0-8) -->
-QA_COMPLIANCE = "cert_validator — integer matrix arithmetic on SL(2,Z) and Fibonacci sequences; no empirical QA state machine; all state is exact integer"
+from __future__ import annotations
+
 QA_COMPLIANCE = "cert_validator — integer matrix arithmetic on SL(2,Z) and Fibonacci sequences; no empirical QA state machine; all state is exact integer"
 """Cert [291]: QA Fibonacci Matrix Orbit Periods.
 
@@ -25,8 +26,6 @@ FIVE-FAMILIES ALIGNMENT:
   Tribonacci pairs -> period 8 (Satellite: 3|b AND 3|e)
   Ninbonacci pair  -> period 1 (Singularity: (9,9) = (0,0) mod 9)
 """
-
-from __future__ import annotations
 
 from typing import List, Tuple
 

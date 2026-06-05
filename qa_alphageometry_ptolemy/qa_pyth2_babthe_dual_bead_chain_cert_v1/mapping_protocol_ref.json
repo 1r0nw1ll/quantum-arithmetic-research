@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 BABTHE Dual Bead Chain cert [370]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XIV pp.78-96. Text: BABTHE2 program 2/T=1/S+1/(OT)+1/(PT) where S=O*P, Q=O+P, R=S-Q, T=R+S; p.86: 'O+P was equal to S-R'; p.85: 'S is the product of the two intermediate numbers of the lower bead numbers'; Fig.23 notes N=R when O=2, R=N+P when O=3, R=N+2P when O=4, R=N+3P when O=5. (C1) 2/T=1/S+1/(OT)+1/(PT); key: T+Q=2S; verified 200 coprime pairs; examples 2/7=1/6+1/14+1/21 and 2/97=1/56+1/679+1/776. (C2) Dual bead chain: lower {N,O,P=N+O,Q=O+P}; upper {Q,R=S-Q,S=O*P,T=R+S}; shared Q. (C3) O+P=S-R (bridge identity). (C4) R=N+(O-2)*P; proof: R=OP-O-P=N(O-1)+O(O-2)=N+(O-2)P; covers O=2,3,4,5 special cases. (C5) T=2*O*P-(O+P)=2S-Q; 29 T-values have multiple decompositions. DOI: primary text, no external DOI."
+}

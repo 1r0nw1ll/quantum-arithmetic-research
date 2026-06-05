@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean External Table Laws cert [353]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I Chapter VI pp.67-71. Text p.62-63: 'The difference between F and G remains constant in the blocks across the page, and the difference between C and G remains constant, progressing down the columns.' Text p.62: 'the value of A becomes the value of B in the next block in succession across the page.' Text p.62: 'the value of D becomes the value of E in the next block down the column.' Text p.62: 'F increases by 2b units at each step'; 'C increases by 4e units at each step.' Text p.62: 'no empty, nonprime blocks in the column where b=1 or in the lines where e=1 and e=2.' (C1) G-F=2e^2 across rows; G-C=b^2 down columns. (C2) A(b,e)=B(b+2e,e). (C3) D(b,e)=E(b,e+b). (C4) F step=2b; C step=4e. (C5) b=1 col and e=1,2 rows have no empty blocks. DOI: primary text, no external DOI."
+}

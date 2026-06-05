@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_platonic_crt_aliquot_minima_cert_family(base_dir):
+    """QA Book 4 Synthesis: Platonic Edges, CRT Triple Uniqueness, Aliquot Minima Cert family [329]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.53-65 'ALIQUOT PARTS', 'PAR TYPES', 'PLATONIC SOLIDS', 'PARAMETERS'. CLAIM: (C1) Platonic E=F*epf/2 all 5 solids. (C2) Euler V-E+F=2; face types triangle/square/pentagon. (C3) Triple (n mod 3, n mod 4, n mod 5) unique in {1..60} by CRT; lcm(3,4,5)=60; 37=(1,1,2), 32=(2,0,2). (C4) Smallest aliquot parts: 30=lcm(2,3,5), 42=lcm(2,3,7), 210=lcm(2,3,5,7); divisible by 6. (C5) Musical intervals: 5:4, 3:2, 15:8; 15:8=5/4*3/2; all 7-smooth. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_platonic_crt_aliquot_minima_cert_v1")
+    validator = os.path.join(fam_dir, "qa_platonic_crt_aliquot_minima_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_platonic_crt_aliquot_minima_cert_v1/qa_platonic_crt_aliquot_minima_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_platonic_crt_aliquot_minima_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_aliquot_parts_structure_cert_family(base_dir):
     """QA Aliquot Parts Structure Cert family [328]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.13-14 'ALIQUOT PARTS', 'EXAMPLE', 'QUESTIONS'. CLAIM: (C1) Integers coprime-to-30 in (0,30)={1,7,11,13,17,19,23,29}; 8 values; pairs sum to 30; 5^2+5=3^3+3=2^5-2=30. (C2) Aliquot candidates from {32,3,5,7,11}: valid={3360,5280,7392}, invalid={1155,12320}. (C3) Wave gear sync: shared aliquot A=18330, unique primes 53 and 7 -> sync at 6800430; X completes 7 cycles, Y completes 53. (C4) Three forms of 30: 5^2+5=3^3+3=2^5-2=30. (C5) aliquot count=n; valid requires {2,3,5-or-7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9922,6 +9941,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (329, "QA Book 4 Synthesis: Platonic Edges CRT Triple Aliquot Minima Cert family",
+     _validate_qa_platonic_crt_aliquot_minima_cert_family,
+     "QA Book 4 Synthesis Cert family [329]. Source: Iverson (1991) QA Vol II Books 3&4, pp.53-65. CLAIM: (C1) Platonic E=F*epf/2 all 5 solids. (C2) Euler V-E+F=2; triangle/square/pentagon face types. (C3) Triple (n mod 3,mod 4,mod 5) unique in {1..60} by CRT; lcm=60. (C4) Smallest aliquots: 30,42,210=lcm({2,3,5},{2,3,7},{2,3,5,7}). (C5) Musical intervals 5:4, 3:2, 15:8; 7-smooth. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "329_qa_platonic_crt_aliquot_minima",
+     "qa_platonic_crt_aliquot_minima_cert_v1", True),
     (328, "QA Aliquot Parts Structure Cert family",
      _validate_qa_aliquot_parts_structure_cert_family,
      "QA Aliquot Parts Structure Cert family [328]. Primary source: Iverson (1991) QA Vol II Books 3&4, pp.13-14 'ALIQUOT PARTS'. CLAIM: (C1) coprime-to-30 in (0,30)={1,7,11,13,17,19,23,29}; pairs sum to 30; 5^2+5=3^3+3=2^5-2=30. (C2) candidates from {32,3,5,7,11}: valid {3360,5280,7392}, invalid {1155,12320}. (C3) gear sync: A=18330, p=53,q=7 -> sync at 6800430. (C4) 5^2+5=3^3+3=2^5-2=30. (C5) count=n; valid needs {2,3,5-or-7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

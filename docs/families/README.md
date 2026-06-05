@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [329] | [QA Book 4 Synthesis: Platonic Edges, CRT Triple, Aliquot Minima](329_qa_platonic_crt_aliquot_minima.md) | Platonic E=F×epf/2; Euler V-E+F=2; triple (n mod 3,4,5) unique in {1..60} by CRT=lcm(3,4,5)=60; 30,42,210 smallest aliquots; music intervals 5:4, 3:2, 15:8 | PASS |
 | [328] | [QA Aliquot Parts Structure](328_qa_aliquot_parts_structure.md) | coprime-to-30 set {1,7,11,13,17,19,23,29}; pairs sum to 30; 5²+5=3³+3=2⁵-2=30; aliquot validity {2,3,5-or-7}; gear synchronization law | PASS |
 | [327] | [QA Harmonic Cycle Platonic Inscription](327_qa_harmonic_cycle_platonic.md) | 60=lcm(3,4,5)=3×4×5; pair (3,4)→5 sync points=pentagon; (3,5)→4=square; (4,5)→3=triangle; four fundamental harmonic cycles 30,42,60,105 | PASS |
 | [326] | [QA Euclid Four Par Types](326_qa_euclid_four_par_types.md) | Four par types (4n/4n+1/4n+2/4n+3) partition {1..24} into 4×6; coprime lcm=product; quarter-harmonic at ⌊pq/4⌋; 3×3=5-par mult table; 2-par/4-par never coprime | PASS |

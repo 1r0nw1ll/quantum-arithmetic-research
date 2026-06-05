@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Ellipse of Archimedes cert [365]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.VIII pp.87-93. Text: 'The major diameter is 2D which is equal to J+K, and equal to C+2J, or to F+G'; '2D/C=d/e=c'; '(df)^2=D^2-(C/2)^2=D(D-E)=DF'; 'F can be a square number only when both of its parametric numbers (F=ab) are also square numbers'. (C1) 2D=J+K=F+G=C+2J; proof J+K=d(b+a)=2D; F+G=2d^2=2D; C+2J=2d(e+b)=2d^2=2D. (C2) K-J=C and K+J=2D; proof K-J=(a-b)d=2ed=C; K+J=(a+b)d=2D. (C3) semiminor^2=DF; proof D^2-(de)^2=D(D-E)=DF since D-E=F; semiminor integer iff F is a square. (C4) Eccentricity 2D/C=d/e (QA bead ratio); proof 2d^2/(2de)=d/e; always >1. (C5) J*K=DF; proof J*K=(bd)(ad)=ab*d^2=DF; also K/J=a/b. DOI: primary text, no external DOI."
+}

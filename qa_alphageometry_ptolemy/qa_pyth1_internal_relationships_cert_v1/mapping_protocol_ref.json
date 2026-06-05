@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Internal Relationships cert [362]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.V pp.54-65. Text: 'b-d-a, F-D-G, I^2-G^2-H^2: center term is mean of other two; H^2+I^2=2G^2; 2D+2E=A+B; I,G,H always coprime; J+K=C+2J=2D; dichotomy F>C iff b>e (correct form: F-C=b^2-2e^2).' (C1) Three mean trios: 2d=b+a; 2D=F+G; H^2+I^2=2G^2. (C2) A+B=2D+2E. (C3) I,G,H pairwise coprime. (C4) J+K=C+2J=2D. (C5) F-C=b^2-2e^2; F>C iff b^2>2e^2. DOI: primary text, no external DOI."
+}

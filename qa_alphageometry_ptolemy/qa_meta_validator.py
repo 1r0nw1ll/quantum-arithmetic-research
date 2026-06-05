@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth1_internal_relationships_cert_family(base_dir):
+    """QA Pyth-1 Internal Relationships cert [362]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.V pp.54-65. CLAIM: (C1) Three arithmetic mean trios: 2d=b+a; 2D=F+G; H^2+I^2=2G^2. (C2) A+B=2D+2E; proof (d+e)^2+(d-e)^2=2d^2+2e^2. (C3) I,G,H pairwise coprime: gcd(I,G)=gcd(I,H)=gcd(G,H)=1. (C4) J+K=C+2J=2D; proof J+K=d(b+a)=2d^2=2D. (C5) F-C=b^2-2e^2 exactly; F>C iff b^2>2e^2. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth1_internal_relationships_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth1_internal_relationships_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth1_internal_relationships_cert_v1/qa_pyth1_internal_relationships_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth1_internal_relationships_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth1_primeness_parity_shape_cert_family(base_dir):
     """QA Pyth-1 Primeness, Parity and Shape cert [361]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IV pp.42-49. CLAIM: (C1) C=2be+2e^2; C^2=4E^2+4EF (gnomon identity). (C2) F^2=G^2-C^2; F=d^2-e^2=(d-e)(d+e)=ab. (C3) G has no prime factor <5; proof 2∤G (G≡1 mod 4), 3∤G (gcd(d,e)=1). (C4) H,I have no prime factor <7; proof H,I odd; 2∉QR(mod 3 and mod 5). (C5) F 5-par iff a≡b(mod 4); F 3-par iff a≢b(mod 4). Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10554,6 +10573,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (362, "QA Pyth-1 Internal Relationships Cert family",
+     _validate_qa_pyth1_internal_relationships_cert_family,
+     "QA Pyth-1 Internal Relationships Cert [362]. Source: Iverson (1993) Pyth Arith Vol I Ch.V pp.54-65. CLAIM: (C1) Three mean trios: 2d=b+a; 2D=F+G; H^2+I^2=2G^2. (C2) A+B=2D+2E. (C3) I,G,H pairwise coprime. (C4) J+K=C+2J=2D. (C5) F-C=b^2-2e^2 exactly; F>C iff b^2>2e^2 (dichotomy). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "362_qa_pyth1_internal_relationships",
+     "qa_pyth1_internal_relationships_cert_v1", True),
     (361, "QA Pyth-1 Primeness Parity and Shape Cert family",
      _validate_qa_pyth1_primeness_parity_shape_cert_family,
      "QA Pyth-1 Primeness, Parity and Shape Cert [361]. Source: Iverson (1993) Pyth Arith Vol I Ch.IV pp.42-49. CLAIM: (C1) C=2be+2e^2; C^2=4E^2+4EF. (C2) F^2=G^2-C^2; F=d^2-e^2=(d-e)(d+e)=ab. (C3) G has no prime factor <5; proof 2∤G (G≡1 mod 4), 3∤G (gcd(d,e)=1 blocks 3|d and 3|e). (C4) H,I have no prime factor <7; H,I odd; 2∉QR(mod 3 and mod 5) → 3,5∤C±F. (C5) F 5-par iff a≡b(mod 4); F 3-par iff a≢b(mod 4). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

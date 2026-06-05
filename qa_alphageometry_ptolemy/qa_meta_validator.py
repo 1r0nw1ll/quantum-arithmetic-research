@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_bead_quadruple_cert_family(base_dir):
+    """QA Fibonacci Bead Number Quadruple cert [343]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Chapter XV pp.199-212. CLAIM: (C1) (b,e,d,a) Fibonacci-type: b+e=d and e+d=a; 161 pairs. (C2) All 6 pairwise gcds in {b,e,d,a}=1 (Euclid VII.28); 161 pairs. (C3) (I,min(C,F),max(C,F),H) Fibonacci-type; 161 pairs. (C4) b=1,e=1 → (1,1,2,3) → (C,F,G)=(4,3,5). (C5) Consecutive Fibonacci pairs give 20 valid coprime bead numbers. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_fibonacci_bead_quadruple_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_bead_quadruple_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_bead_quadruple_cert_v1/qa_fibonacci_bead_quadruple_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_bead_quadruple_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pythagorean_divisibility_laws_cert_family(base_dir):
     """QA Pythagorean Divisibility Laws cert [342]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, Chapter IX pp.95-99. CLAIM: (C1) Exactly one of d,e even; a always odd: 161 pairs. (C2) Factor 3 in {b,e,d,a}: 361 pairs. (C3) C always 4-par (divisible by 4): 361 pairs. (C4) G always 5-par (G≡1 mod 4): 361 pairs. (C5) Area CF/2 divisible by 6 (C*F divisible by 12): 361 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10193,6 +10212,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (343, "QA Fibonacci Bead Number Quadruple Cert family",
+     _validate_qa_fibonacci_bead_quadruple_cert_family,
+     "QA Fibonacci Bead Quadruple Cert [343]. Source: Iverson (1993) Pyth Arith Vol II Ch.XV pp.199-212. CLAIM: (C1) (b,e,d,a) Fibonacci-type b+e=d,e+d=a. (C2) All 6 pairwise gcds=1 (Euclid VII.28). (C3) (I,min(C,F),max(C,F),H) Fibonacci-type. (C4) b=1,e=1→(1,1,2,3)→(4,3,5). (C5) Consecutive Fibonacci pairs give 20 valid bead pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "343_qa_fibonacci_bead_quadruple",
+     "qa_fibonacci_bead_quadruple_cert_v1", True),
     (342, "QA Pythagorean Divisibility Laws Cert family",
      _validate_qa_pythagorean_divisibility_laws_cert_family,
      "QA Pythagorean Divisibility Laws Cert [342]. Source: Iverson (1993) Pyth Arith Vol I Ch.IX pp.95-99. CLAIM: (C1) Exactly one of d,e even; a always odd. (C2) Factor 3 in {b,e,d,a}. (C3) C always 4-par. (C4) G always 5-par. (C5) Area CF/2 divisible by 6. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

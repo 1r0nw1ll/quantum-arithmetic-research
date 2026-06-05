@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Fibonacci Bead Number Quadruple cert [343]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol II, Chapter XV pp.199-212: 'In the order b,e,d,a, these numbers are Fibonacci type numbers. The sum of two of them is equal to the following number.' And: 'it uses the first four Fibonacci numbers, as its bead numbers.' And: 'I, C, F, H, forms a Fibonacci bead number' (Koenig Series). (C1) (b,e,d,a) Fibonacci-type: b+e=d and e+d=a; 161 pairs. (C2) All 6 pairwise gcds in {b,e,d,a}=1 (Euclid VII.28); 161 pairs. (C3) (I,min(C,F),max(C,F),H) Fibonacci-type; 161 pairs. (C4) b=1,e=1 → (1,1,2,3) → (C,F,G)=(4,3,5). (C5) Consecutive Fibonacci pairs give 20 valid coprime bead numbers. DOI: primary text, no external DOI."
+}

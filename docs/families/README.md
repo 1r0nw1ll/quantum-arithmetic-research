@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [343] | [QA Fibonacci Bead Number Quadruple](343_qa_fibonacci_bead_quadruple.md) | (b,e,d,a) Fibonacci-type b+e=d,e+d=a; all 6 pairwise gcds=1; (I,min(C,F),max(C,F),H) Fibonacci-type; 20 consecutive Fibonacci pairs valid | PASS |
 | [342] | [QA Pythagorean Divisibility Laws](342_qa_pythagorean_divisibility_laws.md) | d or e even; a always odd; factor 3 in {b,e,d,a}; C always 4-par; G always 5-par; area CF/2 divisible by 6 | PASS |
 | [341] | [QA Ellipse Semiminor Squared = D·F](341_qa_ellipse_semiminor_df.md) | (C/2)²=DE; D-E=F; (df)²=DF; eccentricity c=d/e=2D/C; J=D-de=bd; K=D+de=ad; J+K=2D | PASS |
 | [340] | [QA Pythagorean A+B=2G and a+b=2d Bead Median Identities](340_qa_pythagorean_ab_2g_median.md) | a+b=2d; A+B=2G; F+G=2D — three simultaneous bead median identities; algebraic proof for 78 coprime pairs | PASS |

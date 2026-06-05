@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pythagorean A+B=2G and a+b=2d Bead Median Identities cert [340]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I, Chapter VII pp.62-64: '(d+e)^2+(d-e)^2=2G. But since d+e=a and d-e=b the formula reduces to a^2+b^2=2G, or A+B=2G.' And 'the value of G is the median value between A and B.' (C1) a+b=2d: d is the bead median of a and b. (C2) A+B=2G: G=(A+B)/2 is the mediant square. (C3) Algebraic proof: A+B=(b+2e)^2+b^2=2b^2+4be+4e^2=2(d^2+e^2)=2G for all coprime pairs b,e<14. (C4) F+G=2D: D is the mediant of F and G. (C5) All three median identities hold simultaneously for 15 coprime pairs. DOI: primary text, no external DOI."
+}

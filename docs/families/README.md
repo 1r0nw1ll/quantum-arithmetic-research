@@ -2,6 +2,8 @@
 
 **Recently added**
 
+| [341] | [QA Ellipse Semiminor Squared = D·F](341_qa_ellipse_semiminor_df.md) | (C/2)²=DE; D-E=F; (df)²=DF; eccentricity c=d/e=2D/C; J=D-de=bd; K=D+de=ad; J+K=2D | PASS |
+| [340] | [QA Pythagorean A+B=2G and a+b=2d Bead Median Identities](340_qa_pythagorean_ab_2g_median.md) | a+b=2d; A+B=2G; F+G=2D — three simultaneous bead median identities; algebraic proof for 78 coprime pairs | PASS |
 | [339] | [QA Pythagorean H,I Median Identity](339_qa_pythagorean_hi_median.md) | H=C+F; I=|C-F|; H²+I²=2G² (G is median); {H+I,H-I}={2C,2F}; algebraic proof; gcd(H,G)=gcd(I,G)=1 | PASS |
 | [338] | [QA Pythagorean Gnomon and Square Identities](338_qa_pythagorean_gnomon_square.md) | F=d²-e²=(d+e)(d-e)=ab; C=2be+2e²; C²=4E²+4EF; A,B are 5-par; D,E have opposite par-types | PASS |
 | [337] | [QA Ellipse J,K Parameters and 2D Triple Decomposition](337_qa_ellipse_jk_2d_triple.md) | J=bd=D-C/2; K=ad=D+C/2; triple equality F+G=J+K=2J+C=2D=2d²; algebraic proof d-e=b, d+e=a | PASS |

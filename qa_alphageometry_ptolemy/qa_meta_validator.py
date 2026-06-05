@@ -7986,6 +7986,44 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_ellipse_semiminor_df_cert_family(base_dir):
+    """QA Ellipse Semiminor Squared = D*F cert [341]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, Chapter VIII pp.91-93. CLAIM: (C1) (C/2)^2=DE: C/2=de exact integer; (de)^2=D*E. (C2) D-E=F: d^2-e^2=ab=F. (C3) (df)^2=D^2-(C/2)^2=D(D-E)=DF; 78 pairs. (C4) Eccentricity c=d/e=2D/C: cross-multiply d*C=2*D*e. (C5) J=D-de=bd; K=D+de=ad; J+K=2D; K-J=C. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_ellipse_semiminor_df_cert_v1")
+    validator = os.path.join(fam_dir, "qa_ellipse_semiminor_df_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ellipse_semiminor_df_cert_v1/qa_ellipse_semiminor_df_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_ellipse_semiminor_df_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
+def _validate_qa_pythagorean_ab_2g_median_cert_family(base_dir):
+    """QA Pythagorean A+B=2G and a+b=2d Bead Median Identities cert [340]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, Chapter VII pp.62-64. CLAIM: (C1) a+b=2d: d is the bead median. (C2) A+B=2G: G is the mediant square. (C3) Algebraic proof: A+B=(b+2e)^2+b^2=2G for 78 pairs. (C4) F+G=2D: D is the mediant. (C5) All three median identities hold simultaneously. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pythagorean_ab_2g_median_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pythagorean_ab_2g_median_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_ab_2g_median_cert_v1/qa_pythagorean_ab_2g_median_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pythagorean_ab_2g_median_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pythagorean_hi_median_cert_family(base_dir):
     """QA Pythagorean H,I Median Identity cert [339]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, pp.12, 32-33. CLAIM: (C1) H=C+F and I=|C-F| verified for 11 pairs. (C2) H^2+I^2=2G^2 (G is median: G^2=(H^2+I^2)/2) verified for 12 pairs. (C3) {H+I,H-I}={2C,2F}: H+I=2*max(C,F) and H-I=2*min(C,F). (C4) Algebraic proof: (C+F)^2+(C-F)^2=2(C^2+F^2)=2G^2 for all coprime pairs b,e<12. (C5) gcd(H,G)=1 and gcd(I,G)=1 (H,I coprime to hypotenuse G) for 12 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10136,6 +10174,16 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (341, "QA Ellipse Semiminor Squared = D*F Cert family",
+     _validate_qa_ellipse_semiminor_df_cert_family,
+     "QA Ellipse Semiminor DF Cert [341]. Source: Iverson (1993) Pyth Arith Vol I Ch.VIII pp.91-93. CLAIM: (C1) (C/2)^2=DE; (C2) D-E=F; (C3) (df)^2=D^2-(C/2)^2=DF; (C4) eccentricity c=d/e=2D/C cross-multiply; (C5) J=D-de=bd; K=D+de=ad; J+K=2D; K-J=C. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "341_qa_ellipse_semiminor_df",
+     "qa_ellipse_semiminor_df_cert_v1", True),
+    (340, "QA Pythagorean A+B=2G and a+b=2d Bead Median Identities Cert family",
+     _validate_qa_pythagorean_ab_2g_median_cert_family,
+     "QA Pythagorean A+B=2G Median Cert [340]. Source: Iverson (1993) Pyth Arith Vol I Ch.VII pp.62-64. CLAIM: (C1) a+b=2d; (C2) A+B=2G; (C3) Algebraic proof A+B=2G for 78 pairs; (C4) F+G=2D; (C5) All three median identities simultaneously. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "340_qa_pythagorean_ab_2g_median",
+     "qa_pythagorean_ab_2g_median_cert_v1", True),
     (339, "QA Pythagorean H,I Median Identity Cert family",
      _validate_qa_pythagorean_hi_median_cert_family,
      "QA Pythagorean H,I Median Identity Cert [339]. Source: Iverson (1993) Pyth Arith Vol I pp.12,32-33. CLAIM: (C1) H=C+F and I=|C-F|. (C2) H^2+I^2=2G^2 (G is median). (C3) {H+I,H-I}={2C,2F}. (C4) Algebraic proof: (C+F)^2+(C-F)^2=2G^2. (C5) gcd(H,G)=gcd(I,G)=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

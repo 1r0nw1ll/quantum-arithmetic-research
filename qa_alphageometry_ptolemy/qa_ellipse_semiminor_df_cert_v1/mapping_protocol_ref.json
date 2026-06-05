@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Ellipse Semiminor Squared = D*F cert [341]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I, Chapter VIII pp.91-93: 'D^2-(C/2)^2=(df)^2'; '(C/2)^2=d^2*e^2=DE'; 'So (df)^2=D^2-DE=D(D-E)=DF'. And: 'the eccentricity of the ellipse is c=d/e=2D/C'. (C1) (C/2)^2=DE: since C/2=de, (de)^2=D*E. (C2) D-E=F: d^2-e^2=ab=F. (C3) (df)^2=D^2-(C/2)^2=D(D-E)=DF for 78 coprime pairs b,e<14. (C4) Eccentricity c=d/e=2D/C verified cross-multiply: d*C=2*D*e. (C5) J=D-de=bd; K=D+de=ad; J+K=2D; K-J=C. DOI: primary text, no external DOI."
+}

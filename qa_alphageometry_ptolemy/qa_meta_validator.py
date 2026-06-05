@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth2_cattle_problem_cert_family(base_dir):
+    """QA Pyth-2 Cattle Problem cert [372]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XVI pp.112-122+. CLAIM: (C1) 1/m+1/(m+1)=(2m+1)/(m(m+1)); m=2..6→5/6,7/12,9/20,11/30,13/42. (C2) W1=2226,X1=1602,Y1=891,Z1=1580 satisfies all 3 bull equations. (C3) 6|X1,20|Z1,42|W1; 5|(W1-Y1),9|(X1-Y1),13|(Z1-Y1). (C4) 1/6*X1+11/20*Z1+29/42*W1=3*Y1=2673. (C5) Minimum integer solution Y1=891; lcm(denoms)=891. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth2_cattle_problem_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth2_cattle_problem_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth2_cattle_problem_cert_v1/qa_pyth2_cattle_problem_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120
+    )
+    if proc.returncode != 0:
+        return (
+            f"qa_pyth2_cattle_problem_cert self-test failed:\n"
+            f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}"
+        )
+    return None
+
+
 def _validate_qa_pyth2_fibonacci_coprime_structure_cert_family(base_dir):
     """QA Pyth-2 Fibonacci Coprime Structure cert [371]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XV pp.87-102. CLAIM: (C1) Euclid Prop 28: gcd(a,b)=1 → gcd(a+b,a)=gcd(a+b,b)=1. (C2) 128 pairs b odd [1,17]; 255 any b [1,20]. (C3) 4-bead coprimeness generalized. (C4) a(n)=F(n)+F(n+2)=1,3,4,7,11,18; recurrence holds; equals L(n+1). (C5) 2/97 has 3 BABTHE2 decompositions; 3 pairwise disjoint lower bead sets. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10744,6 +10763,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (372, "QA Pyth-2 Cattle Problem Integer Structure Cert family",
+     _validate_qa_pyth2_cattle_problem_cert_family,
+     "QA Pyth-2 Cattle Problem Cert [372]. Source: Iverson (1993) Pyth Arith Vol II Ch.XVI pp.112-122+. CLAIM: (C1) 1/m+1/(m+1)=(2m+1)/(m(m+1)); m=2..6→5/6,7/12,9/20,11/30,13/42. (C2) W1=2226,X1=1602,Y1=891,Z1=1580 satisfies W1=Y1+5/6*X1; X1=Y1+9/20*Z1; Z1=Y1+13/42*W1. (C3) 6|X1,20|Z1,42|W1; 5|(W1-Y1),9|(X1-Y1),13|(Z1-Y1). (C4) 1/6*X1+11/20*Z1+29/42*W1=3*Y1=267+869+1537=2673. (C5) Min integer Y1=891; alpha=742/297,beta=178/99,gamma=1580/891; lcm=891. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "372_qa_pyth2_cattle_problem",
+     "qa_pyth2_cattle_problem_cert_v1", True),
     (371, "QA Pyth-2 Fibonacci Coprime Structure Cert family",
      _validate_qa_pyth2_fibonacci_coprime_structure_cert_family,
      "QA Pyth-2 Fibonacci Coprime Structure Cert [371]. Source: Iverson (1993) Pyth Arith Vol II Ch.XV pp.87-102. CLAIM: (C1) Euclid Prop 28: gcd(a,b)=1 → gcd(a+b,a)=gcd(a+b,b)=gcd(|a-b|,a)=gcd(|a-b|,b)=1; 6007 pairs. (C2) 128 coprime pairs b odd [1,17]; 255 any b [1,20]. (C3) gcd(b,e)=1 and b odd → all 6 pairwise gcds of {b,e,b+e,b+2e}=1; 1009 pairs. (C4) a(n)=F(n)+F(n+2)=1,3,4,7,11,18; Fibonacci recurrence; equals L(n+1). (C5) 2/97 exactly 3 BABTHE2 decompositions; (N,O)=(1,7),(17,3),(31,2); pairwise disjoint lower sets. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

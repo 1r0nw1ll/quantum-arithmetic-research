@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 Cattle Problem cert [372]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XVI pp.112-122+. Text: p.117 'X1 must be mod 6(0); Z1 mod 20(0); W1 mod 42(0)'; '1/6*X1+11/20*Z1+29/42*W1=3*Y1'; p.115-116 solution W1=2226,X1=1602,Y1=891,Z1=1580; p.113-114 cattle equations W1=Y1+5/6*X1; X1=Y1+9/20*Z1; Z1=Y1+13/42*W1 with fraction coefficients 1/m+1/(m+1). (C1) 1/m+1/(m+1)=(2m+1)/(m(m+1)); m=2,3,4,5,6→5/6,7/12,9/20,11/30,13/42. (C2) Bull solution: W1=2226,X1=1602,Y1=891,Z1=1580 satisfies all 3 equations exactly (Fraction arithmetic). (C3) 6|X1,20|Z1,42|W1; 5|(W1-Y1),9|(X1-Y1),13|(Z1-Y1). (C4) 1/6*X1+11/20*Z1+29/42*W1=3*Y1=2673 (267+869+1537). (C5) Minimum integer solution Y1=891; alpha=742/297, beta=178/99, gamma=1580/891; lcm(denoms)=891. DOI: primary text, no external DOI."
+}

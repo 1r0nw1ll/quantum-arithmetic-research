@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Primeness, Parity and Shape cert [361]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IV pp.42-49. Text: 'C=2be+2e^2; C^2=4E^2+4EF; G can have no divisor smaller than 5; H and I can have no divisor less than 7; F is 3-par or 5-par when a,b opposite or same quaternary parity.' (C1) C=2be+2e^2; C^2=4E^2+4EF. (C2) F^2=G^2-C^2; F=d^2-e^2. (C3) G has no prime factor <5; proof 2∤G (G≡1 mod 4), 3∤G (gcd(d,e)=1). (C4) H,I have no prime factor <7; proof H,I odd; 2∉QR(mod 3 and mod 5). (C5) F 5-par iff a≡b(mod 4); F 3-par iff a≢b(mod 4). DOI: primary text, no external DOI."
+}

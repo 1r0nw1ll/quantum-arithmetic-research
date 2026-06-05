@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth1_primeness_parity_shape_cert_family(base_dir):
+    """QA Pyth-1 Primeness, Parity and Shape cert [361]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IV pp.42-49. CLAIM: (C1) C=2be+2e^2; C^2=4E^2+4EF (gnomon identity). (C2) F^2=G^2-C^2; F=d^2-e^2=(d-e)(d+e)=ab. (C3) G has no prime factor <5; proof 2∤G (G≡1 mod 4), 3∤G (gcd(d,e)=1). (C4) H,I have no prime factor <7; proof H,I odd; 2∉QR(mod 3 and mod 5). (C5) F 5-par iff a≡b(mod 4); F 3-par iff a≢b(mod 4). Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth1_primeness_parity_shape_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth1_primeness_parity_shape_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth1_primeness_parity_shape_cert_v1/qa_pyth1_primeness_parity_shape_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth1_primeness_parity_shape_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth3_myriad_structure_cert_family(base_dir):
     """QA Pyth-3 Myriad and Octave Structure cert [358]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.1 pp.1-3 and Ch.4 pp.13-19. CLAIM: (C1) Myriad=10000=2^4*5^4; 10000 mod 24=16. (C2) 7 octaves=2^7=128 ratio; 7 first prime not dividing 360. (C3) 7*7=49=7^2 total levels; 49 mod 24=1 Singularity class. (C4) Bugle C,F,A,C ratios 3:4:5:6; unique primitive QA chain (b,d,a,a+e) with octave a+e=2b; 3^2+4^2=5^2. (C5) Doubling (b,e): quadratic identities scale by 4, quartic L scales by 16. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10535,6 +10554,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (361, "QA Pyth-1 Primeness Parity and Shape Cert family",
+     _validate_qa_pyth1_primeness_parity_shape_cert_family,
+     "QA Pyth-1 Primeness, Parity and Shape Cert [361]. Source: Iverson (1993) Pyth Arith Vol I Ch.IV pp.42-49. CLAIM: (C1) C=2be+2e^2; C^2=4E^2+4EF. (C2) F^2=G^2-C^2; F=d^2-e^2=(d-e)(d+e)=ab. (C3) G has no prime factor <5; proof 2∤G (G≡1 mod 4), 3∤G (gcd(d,e)=1 blocks 3|d and 3|e). (C4) H,I have no prime factor <7; H,I odd; 2∉QR(mod 3 and mod 5) → 3,5∤C±F. (C5) F 5-par iff a≡b(mod 4); F 3-par iff a≢b(mod 4). Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "361_qa_pyth1_primeness_parity_shape",
+     "qa_pyth1_primeness_parity_shape_cert_v1", True),
     (360, "QA Pyth-1 Prime Triangle Structure Cert family",
      _validate_qa_pyth1_prime_triangle_structure_cert_family,
      "QA Pyth-1 Prime Triangle Structure Cert [360]. Source: Iverson (1993) Pyth Arith Vol I Ch.II pp.33-38. CLAIM: (C1) G always 5-par (≡1 mod 4). (C2) G+C=A=a^2, G-C=B=b^2; A+B=2G, A-B=2C. (C3) a=d+e always odd; A=a^2 always 5-par. (C4) a|{A,F,K}; b|{B,F,J}; d|{C,D,J,K}; e|{C,E}; abde div by 6. (C5) A,B,G all 5-par; C 4-par; F spans 3-par and 5-par. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

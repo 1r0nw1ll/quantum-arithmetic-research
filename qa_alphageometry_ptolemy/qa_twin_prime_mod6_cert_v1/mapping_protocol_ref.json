@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Twin Prime Mod-6 Structure cert [349]. Primary source: Iverson, B. & Elkins, C. (2006) Pythagorean Arithmetic Vol III Chapter 5 pp.24-25. Text p.24: 'all so-called prime numbers are one of a pair of twin primes...5-7, 11-13,...101-103. The intervening integer between the twin primes is always divisible by 3.' Powers of primes (25,49,121) and products of two primes (35,55,65,77,85,91,95) included as exceptions. Text p.25 (Euclid VII.28): 'The sum of two numbers which are prime to each other, are also prime to them.' (C1) midpoints divisible by 6. (C2) primes >3 ≡ ±1 mod 6. (C3) prime squares ≡ 1 mod 6. (C4) two-prime products ≡ ±1 mod 6. (C5) Euclid VII.28 QA bead mutual coprimality. DOI: primary text, no external DOI."
+}

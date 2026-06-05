@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [349] | [QA Twin Prime Mod-6 Structure](349_qa_twin_prime_mod6.md) | Iverson twin pairs (6k-1,6k+1) midpoints div 6; primes >3 ≡ ±1 mod 6; prime squares ≡ 1 mod 6; two-prime products ≡ ±1 mod 6; Euclid VII.28 → QA bead mutual coprimality | PASS |
 | [348] | [QA Fibonacci Divisibility Period Laws](348_qa_fibonacci_divisibility_period.md) | F(3k) even; F(4k) div 3; F(5k) div 5; F(6k) div 4; coprime pair counts 15,13,35,18 | PASS |
 | [347] | [QA Cattle Problem Bull Modular Structure](347_qa_cattle_problem_bull.md) | (2226,1602,891,1580) satisfies 3 bull equations; X1 mod 6=0; W1 mod 42=0; Z1 mod 20=0; remainder identity ⅙X1+11/20·Z1+29/42·W1=3Y1=2673 | PASS |
 | [346] | [QA Fibonacci-Lucas Bridge](346_qa_fibonacci_lucas_bridge.md) | Lucas 1,3,4,7,11,18,... satisfies recurrence; L(n+1)=F(n)+F(n+2); two consecutive Fibonacci quadruples as phi-bead proxies; gcd(L,F) coprimeness | PASS |

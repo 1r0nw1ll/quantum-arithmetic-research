@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_twin_prime_mod6_cert_family(base_dir):
+    """QA Twin Prime Mod-6 Structure cert [349]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.5 pp.24-25. CLAIM: (C1) Iverson twin pairs (6k-1,6k+1) midpoints divisible by 6; k=1..17. (C2) Primes >3 ≡ ±1 mod 6; 93 primes in (3,500]. (C3) Prime squares ≡ 1 mod 6: 25,49,121. (C4) Two-prime products ≡ ±1 mod 6: 35,55,65,77,85,91,95. (C5) Euclid VII.28: gcd(b,e)=1, b odd → (b,e,d,a) mutually coprime; 161 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_twin_prime_mod6_cert_v1")
+    validator = os.path.join(fam_dir, "qa_twin_prime_mod6_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_twin_prime_mod6_cert_v1/qa_twin_prime_mod6_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_twin_prime_mod6_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_prime_residue_symmetry_cert_family(base_dir):
     """QA Prime Residue Symmetry and Cycle Coincidence cert [344]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Ch.XII-XIII pp.26-50. CLAIM: (C1) φ(30)=8: {1,7,11,13,17,19,23,29}. (C2) 4 pairs sum=30: 1+29,7+23,11+19,13+17. (C3) lcm(p,q)=p*q for coprime primes; 6 named+36 prime pairs. (C4) lcm(2,3,5)=30; lcm(3,5,7)=105. (C5) φ(60)=16: 8 pairs sum=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10307,6 +10326,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (349, "QA Twin Prime Mod-6 Structure Cert family",
+     _validate_qa_twin_prime_mod6_cert_family,
+     "QA Twin Prime Mod-6 Cert [349]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.5 pp.24-25. CLAIM: (C1) Twin pairs (6k-1,6k+1) midpoints div 6; k=1..17. (C2) Primes >3 ≡ ±1 mod 6. (C3) Prime squares ≡ 1 mod 6: 25,49,121. (C4) Two-prime products ≡ ±1 mod 6. (C5) Euclid VII.28 QA bead mutual coprimality b odd. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "349_qa_twin_prime_mod6",
+     "qa_twin_prime_mod6_cert_v1", True),
     (348, "QA Fibonacci Divisibility Period Laws Cert family",
      _validate_qa_fibonacci_divisibility_period_cert_family,
      "QA Fibonacci Divisibility Cert [348]. Source: Iverson (1993) Pyth Arith Vol II Ch.XV pp.107-110. CLAIM: (C1) F(3k) even. (C2) F(4k) div 3. (C3) F(5k) div 5. (C4) F(6k) div 4. (C5) Coprime counts 15,13,35,18. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

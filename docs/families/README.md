@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [333] | [QA Female QN Parity Derivation](333_qa_female_qn_parity_derivation.md) | female=(2e,b,a,2d) from male(b,e,d,a); gcd(e,d)=1; e odd→b_f 2-par,a_f 4-par; e even→b_f 4-par,a_f 2-par; first-fourth parity swap for 230 male QNs | PASS |
 | [332] | [QA Compound Wave GCD Sync Count](332_qa_compound_wave_gcd_sync.md) | Coprime pairs: lcm=p×q, 1 sync per cycle; non-coprime: sync_in_product=gcd(p,q), sync_in_lcm=1; identity lcm×gcd=p×q; pairwise-coprime triples: lcm=p×q×r | PASS |
 | [331] | [QA Phasing In: Odd-Wave Half-Integer Half-Cycle](331_qa_phasing_in_odd_wave.md) | Odd period p: no integer half-cycle (2⌊p/2⌋≠p); even p: exact half-cycle; coprime odd pairs: lcm=p×q (odd); par-types 2-par/4-par allow half-cycle, 3-par/5-par do not | PASS |
 | [330] | [QA Music of the Spheres Keynote Factoring](330_qa_music_spheres_keynote_factors.md) | Male keynotes 891=3⁴×11, 1580=2²×5×79, 1602=2×3²×89, 2226=2×3×7×53; each has one prime in (7,100); female 756,1050 are 7-smooth; 1197=3²×7×19, 1548=2²×3²×43; all 8 collectively cover {2,3,5,7} | PASS |

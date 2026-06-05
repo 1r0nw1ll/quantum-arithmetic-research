@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Female QN Derivation: First-Fourth Parity cert [333]. Primary sources: Iverson, B. (1991) Quantum Arithmetic Vol I, p.27 Ch.2 Exercise 8: 'the female number can be derived directly from the male number. It is done by doubling the two intermediate numbers of the male Quantum Number and placing them at the two ends.' Iverson, B. (1993) QA Book 2: Natural Arithmetic, Ch.1 Doubling: 'If the first integer is 2-par, the fourth integer will be 4-par. If the first integer is 4-par, then the fourth will be 2-par.' From male (b,e,d,a) with d=b+e and a=b+2e (raw, A2): female = (2e, b, a, 2d). Derived coords verify: d_f=2e+b=d, a_f=2e+2b=2d. (C1) Derivation formula verified for 8 male pairs. (C2) gcd(e,d)=gcd(b,e)=1 and e,d have opposite parities for all male pairs (b odd). (C3) e odd implies b_f=2e is 2-par and a_f=2d is 4-par; d=b+e is even so 2d=0 mod 4. (C4) e even (b odd) implies b_f=2e is 4-par and a_f=2d is 2-par; d=b+e is odd so 2d=2 mod 4. (C5) First-fourth parity swap (2-par <-> 4-par) holds for all 230 male QNs with b,e in {1..23}. DOI: primary text, no external DOI."
+}

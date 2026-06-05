@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_divisibility_period_cert_family(base_dir):
+    """QA Fibonacci Divisibility Period Laws cert [348]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Chapter XV pp.107-110. CLAIM: (C1) F(3k) even. (C2) F(4k) div 3. (C3) F(5k) div 5. (C4) F(6k) div 4; odd-3rds are 2-par. (C5) Coprime pair counts 15,13,35,18. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_fibonacci_divisibility_period_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_divisibility_period_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_divisibility_period_cert_v1/qa_fibonacci_divisibility_period_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_divisibility_period_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_cattle_problem_bull_cert_family(base_dir):
     """QA Cattle Problem Bull Modular Structure cert [347]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Chapter XVI pp.104-109. CLAIM: (C1) (2226,1602,891,1580) satisfies 3 bull equations. (C2) X1 mod 6=0; Z1 mod 20=0; W1 mod 42=0. (C3) Differences mod 5,9,13. (C4) 1/6*X1+11/20*Z1+29/42*W1=3*Y1. (C5) Remainders 267,869,1537. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10288,6 +10307,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (348, "QA Fibonacci Divisibility Period Laws Cert family",
+     _validate_qa_fibonacci_divisibility_period_cert_family,
+     "QA Fibonacci Divisibility Cert [348]. Source: Iverson (1993) Pyth Arith Vol II Ch.XV pp.107-110. CLAIM: (C1) F(3k) even. (C2) F(4k) div 3. (C3) F(5k) div 5. (C4) F(6k) div 4. (C5) Coprime counts 15,13,35,18. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "348_qa_fibonacci_divisibility_period",
+     "qa_fibonacci_divisibility_period_cert_v1", True),
     (347, "QA Cattle Problem Bull Modular Structure Cert family",
      _validate_qa_cattle_problem_bull_cert_family,
      "QA Cattle Problem Bull Cert [347]. Source: Iverson (1993) Pyth Arith Vol II Ch.XVI pp.104-109. CLAIM: (C1) (2226,1602,891,1580) satisfies 3 bull equations. (C2) Mod 6/20/42 divisibility. (C3) Differences mod 5/9/13. (C4) Remainder identity =3Y1. (C5) Remainders 267,869,1537. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

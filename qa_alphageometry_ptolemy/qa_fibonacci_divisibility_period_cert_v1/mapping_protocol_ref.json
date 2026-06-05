@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Fibonacci Divisibility Period Laws cert [348]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol II, Chapter XV pp.107-110. Text p.107: 'every third number is an even number...every sixth number is a 4-par number...every fourth integer is a 3-tri number...every fifth integer is a 5-pent number.' Q&A p.110 answers: Q3=every 3rd; Q4=every 4th; Q5=every 6th; Q6=every 5th; Q7=15,13,35 pairs; Q8=18 pairs. (C1) F(3k) even. (C2) F(4k) div 3. (C3) F(5k) div 5. (C4) F(6k) div 4. (C5) Coprime pair counts 15,13,35,18. DOI: primary text, no external DOI."
+}

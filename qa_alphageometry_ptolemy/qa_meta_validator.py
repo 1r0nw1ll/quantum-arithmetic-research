@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pythagorean_gnomon_square_cert_family(base_dir):
+    """QA Pythagorean Gnomon and Square Identities Cert family [338]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=(d+e)(d-e)=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2=2e(b+e). (C3) C^2=4E^2+4EF where E=e^2. (C4) A=a^2 and B=b^2 are 5-par. (C5) D=d^2 and E=e^2 have opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pythagorean_gnomon_square_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pythagorean_gnomon_square_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_gnomon_square_cert_v1/qa_pythagorean_gnomon_square_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pythagorean_gnomon_square_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_ellipse_jk_2d_triple_cert_family(base_dir):
     """QA Ellipse J,K Parameters and 2D Triple Decomposition Cert family [337]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, pp.37-38 and 43-44. CLAIM: (C1) J=bd=D-C/2; K=ad=D+C/2. (C2) J+K=2D=2d^2 via a+b=2d. (C3) 2J+C=2D=2d^2. (C4) F+G=J+K=2J+C=2D simultaneously. (C5) Algebraic proof: d-e=b and d+e=a. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10093,6 +10112,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (338, "QA Pythagorean Gnomon and Square Identities Cert family",
+     _validate_qa_pythagorean_gnomon_square_cert_family,
+     "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "338_qa_pythagorean_gnomon_square",
+     "qa_pythagorean_gnomon_square_cert_v1", True),
     (337, "QA Ellipse J,K Parameters and 2D Triple Decomposition Cert family",
      _validate_qa_ellipse_jk_2d_triple_cert_family,
      "QA Ellipse J,K 2D Triple Cert [337]. Source: Iverson (1993) Pyth Arith Vol I pp.37-38,43-44. CLAIM: (C1) J=bd=D-C/2; K=ad=D+C/2. (C2) J+K=2D. (C3) 2J+C=2D. (C4) F+G=J+K=2J+C=2D. (C5) d-e=b; d+e=a algebraic proof. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

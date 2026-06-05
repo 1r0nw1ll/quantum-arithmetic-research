@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [338] | [QA Pythagorean Gnomon and Square Identities](338_qa_pythagorean_gnomon_square.md) | F=d²-e²=(d+e)(d-e)=ab; C=2be+2e²; C²=4E²+4EF; A,B are 5-par; D,E have opposite par-types | PASS |
 | [337] | [QA Ellipse J,K Parameters and 2D Triple Decomposition](337_qa_ellipse_jk_2d_triple.md) | J=bd=D-C/2; K=ad=D+C/2; triple equality F+G=J+K=2J+C=2D=2d²; algebraic proof d-e=b, d+e=a | PASS |
 | [336] | [QA Pythagorean 16 Identities: Sum-Difference Squares](336_qa_pythagorean_16_identities.md) | C=2de, F=ab, G=d²+e²; G+C=a², G-C=b², G+F=2d², G-F=2e²; L=abde/6=CF/12; algebraic proof from d=b+e | PASS |
 | [335] | [QA Halley's Comet Quantum Number](335_qa_halley_comet_qn.md) | QN=(1,29,30,59); d=30=lcm(2,3,5); a=59 prime; b:a=1:59; mod-24 (1,5,6,11) Cosmos; maximally elongated b=1 QN with a≤60 | PASS |

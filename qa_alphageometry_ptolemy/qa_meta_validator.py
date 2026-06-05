@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_cattle_problem_bull_cert_family(base_dir):
+    """QA Cattle Problem Bull Modular Structure cert [347]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Chapter XVI pp.104-109. CLAIM: (C1) (2226,1602,891,1580) satisfies 3 bull equations. (C2) X1 mod 6=0; Z1 mod 20=0; W1 mod 42=0. (C3) Differences mod 5,9,13. (C4) 1/6*X1+11/20*Z1+29/42*W1=3*Y1. (C5) Remainders 267,869,1537. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_cattle_problem_bull_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cattle_problem_bull_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cattle_problem_bull_cert_v1/qa_cattle_problem_bull_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_cattle_problem_bull_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_lucas_bridge_cert_family(base_dir):
     """QA Fibonacci-Lucas Bridge cert [346]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II, Chapter XV pp.99-107. CLAIM: (C1) Lucas 1,3,4,7,11,18,... satisfies recurrence; 20 terms. (C2) L(n+1)=F(n)+F(n+2). (C3) Two consecutive Fibonacci quadruples as phi-bead integer proxies. (C4) gcd(L(n),F(n+1)) in {1,2} for n=1..20. Checks C1..C4; 4 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10269,6 +10288,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (347, "QA Cattle Problem Bull Modular Structure Cert family",
+     _validate_qa_cattle_problem_bull_cert_family,
+     "QA Cattle Problem Bull Cert [347]. Source: Iverson (1993) Pyth Arith Vol II Ch.XVI pp.104-109. CLAIM: (C1) (2226,1602,891,1580) satisfies 3 bull equations. (C2) Mod 6/20/42 divisibility. (C3) Differences mod 5/9/13. (C4) Remainder identity =3Y1. (C5) Remainders 267,869,1537. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "347_qa_cattle_problem_bull",
+     "qa_cattle_problem_bull_cert_v1", True),
     (346, "QA Fibonacci-Lucas Bridge Cert family",
      _validate_qa_fibonacci_lucas_bridge_cert_family,
      "QA Fibonacci-Lucas Bridge Cert [346]. Source: Iverson (1993) Pyth Arith Vol II Ch.XV pp.99-107. CLAIM: (C1) Lucas 1,3,4,7,11,18,... recurrence; 20 terms. (C2) L(n+1)=F(n)+F(n+2). (C3) Consecutive Fibonacci quadruples as phi-bead proxies. (C4) gcd(L(n),F(n+1)) in {1,2}. Checks C1..C4; 4 PASS 0 FAIL; self-test ok",

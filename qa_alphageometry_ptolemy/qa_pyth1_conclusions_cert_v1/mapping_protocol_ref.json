@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Conclusions and Objectives cert [356]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol I Chapter X pp.95-108. Text: philosophical conclusions embedding verifiable arithmetic claims. (C1) 120-3599-3601 triangle with bead numbers (b=59,e=1,d=60,a=61); C=120, F=3599, G=3601; C^2+F^2=G^2; J=3540, K=3660, K-J=C. (C2) QA year 360=24*15 (15 Cosmos cycles); 360 mod 24=0; 365 mod 24=5. (C3) Song structure 4^4=256=4*4*4*4 notes/verse; maps to (b,e,d,a). (C4) All 11 primary identities (A..K) are positive integers for all primitive pairs. (C5) L=abde/6=CF/12 always integer; L=1 for 3-4-5; first 10 values verified. DOI: primary text, no external DOI."
+}

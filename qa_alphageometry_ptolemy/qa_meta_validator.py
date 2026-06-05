@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth1_conclusions_cert_family(base_dir):
+    """QA Pyth-1 Conclusions and Objectives cert [356]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.X pp.95-108. CLAIM: (C1) (b=59,e=1,d=60,a=61) → C=120,F=3599,G=3601; C^2+F^2=G^2; J=3540,K=3660,K-J=C. (C2) 360=24*15 quantum year; 360 mod 24=0; 365 mod 24=5. (C3) 4^4=256 song structure; 4 verses=1024; maps to (b,e,d,a). (C4) All 11 primary identities positive integers for 161 primitive pairs. (C5) L=abde/6=CF/12 always integer; L=1 for 3-4-5. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pyth1_conclusions_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pyth1_conclusions_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pyth1_conclusions_cert_v1/qa_pyth1_conclusions_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth1_conclusions_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pythagorean_formal_proofs_cert_family(base_dir):
     """QA Pythagorean Formal Proof Statements cert [355]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IX pp.94-100. CLAIM: (C1) Statement 1: exactly one of (d,e) is even; b odd forces parity flip. (C2) Statement 4: factor 3 in every bead set; all 9 tri-residue combinations yield 3|bead. (C3) Statement 8: C=2de divisible by 4 (4-par). (C4) Statement 9: CF/2 (area) divisible by 6; proof 4|C and 3|(C or F) → 12|CF. (C5) Statement 13: G-C=b^2 (odd perfect square); proof G-C=(d-e)^2=b^2. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10440,6 +10459,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (356, "QA Pyth-1 Conclusions and Objectives Cert family",
+     _validate_qa_pyth1_conclusions_cert_family,
+     "QA Pyth-1 Conclusions Cert [356]. Source: Iverson (1993) Pyth Arith Vol I Ch.X pp.95-108. CLAIM: (C1) (59,1,60,61) → C=120,F=3599,G=3601; C^2+F^2=G^2; J=3540,K=3660,K-J=C. (C2) QA year 360=24*15; 360 mod 24=0; 365 mod 24=5. (C3) 4^4=256 song structure → (b,e,d,a) mapping. (C4) All 11 primary identities positive integers. (C5) L=abde/6=CF/12 always integer. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "356_qa_pyth1_conclusions",
+     "qa_pyth1_conclusions_cert_v1", True),
     (355, "QA Pythagorean Formal Proof Statements Cert family",
      _validate_qa_pythagorean_formal_proofs_cert_family,
      "QA Pythagorean Formal Proofs Cert [355]. Source: Iverson (1993) Pyth Arith Vol I Ch.IX pp.94-100. CLAIM: (C1) Exactly one of (d,e) is even; b odd forces parity flip. (C2) Factor 3 in every bead set; all 9 tri-residue combos yield 3|bead. (C3) C=2de divisible by 4 (4-par). (C4) CF/2 (area) divisible by 6; proof 12|CF from 4|C and 3|(C or F). (C5) G-C=b^2 (odd perfect square); proof (d-e)^2=b^2. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

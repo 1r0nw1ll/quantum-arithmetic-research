@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [356] | [QA Pyth-1 Conclusions and Objectives](356_qa_pyth1_conclusions.md) | (59,1,60,61)→C=120,F=3599,G=3601; C²+F²=G²; J=3540,K=3660; quantum year 360=24×15; 4^4=256 song structure maps to (b,e,d,a); all 11 identities integer; L=abde/6 always integer | PASS |
 | [355] | [QA Pythagorean Formal Proof Statements](355_qa_pythagorean_formal_proofs.md) | Exactly one of (d,e) is even (b odd parity flip); factor 3 in every bead set (9 tri-residue cases); C=2de divisible by 4; CF/2 (area) divisible by 6; G-C=b² (odd perfect square) | PASS |
 | [354] | [QA Pyth-3 Myriad Structure and Fibonacci Strings](354_qa_pyth3_myriad_fibonacci.md) | 8 creative QN tuples with all bead values ≤7; 5040=7! and 5041=71²; secondary groups (k,k,2k,3k); male/female Fibonacci strings terminate at first non-prime-power | PASS |
 | [353] | [QA Pythagorean External Table Laws](353_qa_pythagorean_external_table.md) | G-F=2e² across rows; G-C=b² down columns; A→B e-block transfer; D→E b-block transfer; F/C step sizes 2b/4e; b=1 col and e=1,2 rows always prime | PASS |

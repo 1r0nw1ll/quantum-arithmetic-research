@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_phasing_in_odd_wave_cert_family(base_dir):
+    """QA Phasing In: Odd-Wave Half-Integer Half-Cycle Structure Cert family [331]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.8, 11-12 'PHASING IN', 'OTHER CYCLES'. CLAIM: (C1) Odd periods {3,5,7,9,11,13,15}: 2*floor(p/2) != p (no integer half-cycle). (C2) Even periods {2,4,6,8,10,12}: 2*(p//2) == p (exact integer half-cycle). (C3) Coprime odd pairs: lcm(p,q)=p*q; lcm is odd -- no half-cycle at full sync either. (C4) Par-types: 2-par (mod 4==2) and 4-par (mod 4==0) have integer half-cycles; 3-par (mod 4==3) and 5-par (mod 4==1) do not. (C5) Odd p: no k in {1..p-1} with 2k=p (half-cycle sync impossible before full period). Builds on certs [325] (to-be-prime) and [326] (four par types). Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_phasing_in_odd_wave_cert_v1")
+    validator = os.path.join(fam_dir, "qa_phasing_in_odd_wave_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_phasing_in_odd_wave_cert_v1/qa_phasing_in_odd_wave_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_phasing_in_odd_wave_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_music_spheres_keynote_factors_cert_family(base_dir):
     """QA Music of the Spheres Keynote Factoring Cert family [330]. Primary source: Iverson (1991) QA Volume II Books 3 & 4, Delta Spectrum Research, pp.20-21 'MUSIC OF THE SPHERES', 'A MUSICAL SCALE?'. CLAIM: (C1) Male keynotes: 891=3^4*11, 1580=2^2*5*79, 1602=2*3^2*89, 2226=2*3*7*53; match Iverson exactly. (C2) Each male has exactly one prime in (7,100): {11,79,89,53}; all distinct. (C3) Female keynotes: 756=2^2*3^3*7, 1050=2*3*5^2*7 (7-smooth), 1197=3^2*7*19, 1548=2^2*3^2*43 (large primes 19,43). (C4) All 8 notes: factors subset {2,3,5,7} plus at most one prime in (7,100). (C5) Male and female groups each collectively cover {2,3,5,7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9960,6 +9979,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (331, "QA Phasing In: Odd-Wave Half-Integer Half-Cycle Structure Cert family",
+     _validate_qa_phasing_in_odd_wave_cert_family,
+     "QA Phasing In Cert family [331]. Source: Iverson (1991) QA Vol II Books 3&4, pp.8,11-12. CLAIM: (C1) Odd p: 2*floor(p/2)!=p (no integer half-cycle). (C2) Even p: exact integer half-cycle. (C3) Coprime odd pairs: lcm=p*q (odd); no half-cycle at full sync. (C4) Par-types: 2-par/4-par have integer half-cycles; 3-par/5-par do not. (C5) Odd p: no k<p with 2k=p. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "331_qa_phasing_in_odd_wave",
+     "qa_phasing_in_odd_wave_cert_v1", True),
     (330, "QA Music of the Spheres Keynote Factoring Cert family",
      _validate_qa_music_spheres_keynote_factors_cert_family,
      "QA Music of the Spheres Keynote Factoring Cert family [330]. Source: Iverson (1991) QA Vol II Books 3&4, pp.20-21. CLAIM: (C1) Male keynotes 891=3^4*11,1580=2^2*5*79,1602=2*3^2*89,2226=2*3*7*53 match Iverson. (C2) Each male has one prime in (7,100); all distinct {11,79,89,53}. (C3) Female: 756=2^2*3^3*7, 1050=2*3*5^2*7 (7-smooth), 1197=3^2*7*19, 1548=2^2*3^2*43. (C4) All 8: factors subset {2,3,5,7} plus at most one prime in (7,100). (C5) Male and female each collectively cover {2,3,5,7}. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

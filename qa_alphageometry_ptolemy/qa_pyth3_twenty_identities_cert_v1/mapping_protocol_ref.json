@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Twenty Identities cert [357]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.2 pp.4-9. Text: Table 2 combined male+female triangles with 20-entry blocks. (C1) W=de+K, Y=C+E, W=F+Y equilateral check; algebraic proof W=d(d+2e). (C2) Z=G+de dividing line; Z<W (Z-W=-eb), Z>F (e(2e+d)), Z>Y (db). (C3) H^2-I^2=48L; proof 4CF=48*(CF/12). (C4) Female (b even, e odd, gcd=1): d odd, a even, C≡2(mod 4) not divisible by 4. (C5) Female seed (2,1,3,4): W=15=F+Y, H^2-I^2=192=48L, Z=13<W. DOI: primary text, no external DOI."
+}

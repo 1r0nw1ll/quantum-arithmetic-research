@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_twenty_identities_cert_family(base_dir):
+    """QA Pyth-3 Twenty Identities cert [357]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.2 pp.4-9. CLAIM: (C1) W=de+K, Y=C+E, W=F+Y equilateral check; W=d(d+2e). (C2) Z=G+de; Z<W, Z>F, Z>Y; algebraic proofs. (C3) H^2-I^2=48L; proof 4CF=48*(CF/12). (C4) Female (b even): d odd, a even, C≡2(mod 4) not 4-par. (C5) Female seed (2,1,3,4): W=15=F+Y, H^2-I^2=192=48L, Z=13<W. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pyth3_twenty_identities_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pyth3_twenty_identities_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_twenty_identities_cert_v1/qa_pyth3_twenty_identities_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth3_twenty_identities_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth1_conclusions_cert_family(base_dir):
     """QA Pyth-1 Conclusions and Objectives cert [356]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.X pp.95-108. CLAIM: (C1) (b=59,e=1,d=60,a=61) → C=120,F=3599,G=3601; C^2+F^2=G^2; J=3540,K=3660,K-J=C. (C2) 360=24*15 quantum year; 360 mod 24=0; 365 mod 24=5. (C3) 4^4=256 song structure; 4 verses=1024; maps to (b,e,d,a). (C4) All 11 primary identities positive integers for 161 primitive pairs. (C5) L=abde/6=CF/12 always integer; L=1 for 3-4-5. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10459,6 +10478,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (357, "QA Pyth-3 Twenty Identities and Equilateral Triangle Parameters Cert family",
+     _validate_qa_pyth3_twenty_identities_cert_family,
+     "QA Pyth-3 Twenty Identities Cert [357]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.2 pp.4-9. CLAIM: (C1) W=de+K, Y=C+E, W=F+Y (equilateral check). (C2) Z=G+de; Z<W, Z>F, Z>Y. (C3) H^2-I^2=48L=4CF. (C4) Female (b even): C≡2(mod 4) not 4-par; d,e odd; a,b even. (C5) Female seed (2,1,3,4): W=15=F+Y, H^2-I^2=192=48L, Z<W. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "357_qa_pyth3_twenty_identities",
+     "qa_pyth3_twenty_identities_cert_v1", True),
     (356, "QA Pyth-1 Conclusions and Objectives Cert family",
      _validate_qa_pyth1_conclusions_cert_family,
      "QA Pyth-1 Conclusions Cert [356]. Source: Iverson (1993) Pyth Arith Vol I Ch.X pp.95-108. CLAIM: (C1) (59,1,60,61) → C=120,F=3599,G=3601; C^2+F^2=G^2; J=3540,K=3660,K-J=C. (C2) QA year 360=24*15; 360 mod 24=0; 365 mod 24=5. (C3) 4^4=256 song structure → (b,e,d,a) mapping. (C4) All 11 primary identities positive integers. (C5) L=abde/6=CF/12 always integer. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Prime Residue Symmetry and Cycle Coincidence cert [344]. Primary source: Iverson, B. (1993) Pythagorean Arithmetic Vol II, Chapters XII-XIII pp.26-50. Ch.XII: '1+29=30, 7+23=30, 11+19=30, and 13+17=30'; '1+59=60, 7+53=60, ..., 29+31=60'. Ch.XIII: 'The cycles of prime numbers, when combined will make a cycle which is equal to their product.' (C1) φ(30)=8: exactly 8 coprime residues mod 30. (C2) 4 pairs each summing to 30. (C3) lcm(p,q)=p*q for coprime primes; verified 6 named pairs + 36 prime pairs. (C4) lcm(2,3,5)=30, lcm(3,5,7)=105. (C5) φ(60)=16: 8 pairs each summing to 60. DOI: primary text, no external DOI."
+}

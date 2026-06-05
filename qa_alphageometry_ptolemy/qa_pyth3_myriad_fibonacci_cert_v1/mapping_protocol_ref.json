@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Myriad Structure and Fibonacci Strings cert [354]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Chapters 13-14 pp.74-89. Ch.13 p.75: 9 listed 'creative' QNs (8 valid under standard QA: all values in {1..7}); 5040=7! working Myriad max; 5041=71^2 boundary. Ch.14 pp.80-87: secondary creative groups (k,k,2k,3k) for k=1..13; male Fibonacci string 1,1,2,3,5,8,13,21 from seed (1,1); female Fibonacci string 2,1,3,4,7,11,18 from seed (2,1); both terminate at first non-prime non-prime-power (21=3*7; 18=2*3^2). (C1) 8 creative QN tuples with all bead values <=7. (C2) 5040=7!; 5041=71^2. (C3) (k,k,2k,3k) groups. (C4) Male Fibonacci recurrence and termination. (C5) Female Fibonacci recurrence and termination. DOI: primary text, no external DOI."
+}

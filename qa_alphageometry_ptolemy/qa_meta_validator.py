@@ -8062,6 +8062,25 @@ def _validate_qa_babthe_dual_bead_chain_cert_family(base_dir):
     return None
 
 
+def _validate_qa_qn_harmonics_cert_family(base_dir):
+    """QA Quantum Number Definition and Law of Harmonics cert [350]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.5 pp.20-21,24-25,30-31. CLAIM: (C1) QN=2310 has 5 prime factors (in [4,7]); aboriginal 6,24 have 2 each. (C2) pf(2310) and pf(2730) share {2,3,5,7}; differ in {11} vs {13}; ratio 11/13. (C3) LCM(2310,2730)=30030=210×11×13; 13+11 aliquot cycles. (C4) Male (1,1,2,3) odd-ended; female (2,1,3,4) even-ended; ratio 24/6=4. (C5) All QN products contain 2 and 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_qn_harmonics_cert_v1")
+    validator = os.path.join(fam_dir, "qa_qn_harmonics_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_qn_harmonics_cert_v1/qa_qn_harmonics_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_qn_harmonics_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_twin_prime_mod6_cert_family(base_dir):
     """QA Twin Prime Mod-6 Structure cert [349]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.5 pp.24-25. CLAIM: (C1) Iverson twin pairs (6k-1,6k+1) midpoints divisible by 6; k=1..17. (C2) Primes >3 ≡ ±1 mod 6; 93 primes in (3,500]. (C3) Prime squares ≡ 1 mod 6: 25,49,121. (C4) Two-prime products ≡ ±1 mod 6: 35,55,65,77,85,91,95. (C5) Euclid VII.28: gcd(b,e)=1, b odd → (b,e,d,a) mutually coprime; 161 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10326,6 +10345,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (350, "QA Quantum Number Definition and Law of Harmonics Cert family",
+     _validate_qa_qn_harmonics_cert_family,
+     "QA QN Harmonics Cert [350]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.5 pp.20-31. CLAIM: (C1) QN=2310 has 5 prime factors in [4,7]; aboriginal 6,24 have 2. (C2) pf(2310) and pf(2730) share {2,3,5,7}; differ {11} vs {13}. (C3) LCM=30030=210×11×13. (C4) Male odd-ended; female even-ended; ratio 4. (C5) All QN products have factors 2 and 3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "350_qa_qn_harmonics",
+     "qa_qn_harmonics_cert_v1", True),
     (349, "QA Twin Prime Mod-6 Structure Cert family",
      _validate_qa_twin_prime_mod6_cert_family,
      "QA Twin Prime Mod-6 Cert [349]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.5 pp.24-25. CLAIM: (C1) Twin pairs (6k-1,6k+1) midpoints div 6; k=1..17. (C2) Primes >3 ≡ ±1 mod 6. (C3) Prime squares ≡ 1 mod 6: 25,49,121. (C4) Two-prime products ≡ ±1 mod 6. (C5) Euclid VII.28 QA bead mutual coprimality b odd. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

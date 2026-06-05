@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Quantum Number Definition and Law of Harmonics cert [350]. Primary source: Iverson, B. & Elkins, C. (2006) Pythagorean Arithmetic Vol III Chapter 5 pp.20-21,24-25,30-31. Text p.24: 'A quantum number is an integer which has at least four co-prime factors, and not more than seven prime numbers.' Law of Harmonics p.24-25: 'When two Quantum Numbers have the same prime factors, EXCEPTING ONE PRIME FACTOR, they will be in the state of harmonic resonance.' Worked example p.30-31: QN1=2310=2x3x5x7x11, QN2=2730=2x3x5x7x13, common=210, LCM=30030. Aboriginal male (1,1,2,3) product=6; female (2,1,3,4) product=24. (C1) QN 4-7 prime factors. (C2) Law of Harmonics structure. (C3) LCM coincidence 30030. (C4) Male/female parity. (C5) Universal 2x3 inclusion. DOI: primary text, no external DOI."
+}

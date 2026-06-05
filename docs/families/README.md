@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [339] | [QA Pythagorean H,I Median Identity](339_qa_pythagorean_hi_median.md) | H=C+F; I=|C-F|; H²+I²=2G² (G is median); {H+I,H-I}={2C,2F}; algebraic proof; gcd(H,G)=gcd(I,G)=1 | PASS |
 | [338] | [QA Pythagorean Gnomon and Square Identities](338_qa_pythagorean_gnomon_square.md) | F=d²-e²=(d+e)(d-e)=ab; C=2be+2e²; C²=4E²+4EF; A,B are 5-par; D,E have opposite par-types | PASS |
 | [337] | [QA Ellipse J,K Parameters and 2D Triple Decomposition](337_qa_ellipse_jk_2d_triple.md) | J=bd=D-C/2; K=ad=D+C/2; triple equality F+G=J+K=2J+C=2D=2d²; algebraic proof d-e=b, d+e=a | PASS |
 | [336] | [QA Pythagorean 16 Identities: Sum-Difference Squares](336_qa_pythagorean_16_identities.md) | C=2de, F=ab, G=d²+e²; G+C=a², G-C=b², G+F=2d², G-F=2e²; L=abde/6=CF/12; algebraic proof from d=b+e | PASS |

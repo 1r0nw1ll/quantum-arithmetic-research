@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pythagorean_hi_median_cert_family(base_dir):
+    """QA Pythagorean H,I Median Identity cert [339]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, pp.12, 32-33. CLAIM: (C1) H=C+F and I=|C-F| verified for 11 pairs. (C2) H^2+I^2=2G^2 (G is median: G^2=(H^2+I^2)/2) verified for 12 pairs. (C3) {H+I,H-I}={2C,2F}: H+I=2*max(C,F) and H-I=2*min(C,F). (C4) Algebraic proof: (C+F)^2+(C-F)^2=2(C^2+F^2)=2G^2 for all coprime pairs b,e<12. (C5) gcd(H,G)=1 and gcd(I,G)=1 (H,I coprime to hypotenuse G) for 12 pairs. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_pythagorean_hi_median_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pythagorean_hi_median_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pythagorean_hi_median_cert_v1/qa_pythagorean_hi_median_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pythagorean_hi_median_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pythagorean_gnomon_square_cert_family(base_dir):
     """QA Pythagorean Gnomon and Square Identities Cert family [338]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I, pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=(d+e)(d-e)=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2=2e(b+e). (C3) C^2=4E^2+4EF where E=e^2. (C4) A=a^2 and B=b^2 are 5-par. (C5) D=d^2 and E=e^2 have opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10117,6 +10136,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (339, "QA Pythagorean H,I Median Identity Cert family",
+     _validate_qa_pythagorean_hi_median_cert_family,
+     "QA Pythagorean H,I Median Identity Cert [339]. Source: Iverson (1993) Pyth Arith Vol I pp.12,32-33. CLAIM: (C1) H=C+F and I=|C-F|. (C2) H^2+I^2=2G^2 (G is median). (C3) {H+I,H-I}={2C,2F}. (C4) Algebraic proof: (C+F)^2+(C-F)^2=2G^2. (C5) gcd(H,G)=gcd(I,G)=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "339_qa_pythagorean_hi_median",
+     "qa_pythagorean_hi_median_cert_v1", True),
     (337, "QA Ellipse J,K Parameters and 2D Triple Decomposition Cert family",
      _validate_qa_ellipse_jk_2d_triple_cert_family,
      "QA Ellipse J,K 2D Triple Cert [337]. Source: Iverson (1993) Pyth Arith Vol I pp.37-38,43-44. CLAIM: (C1) J=bd=D-C/2; K=ad=D+C/2. (C2) J+K=2D. (C3) 2J+C=2D. (C4) F+G=J+K=2J+C=2D. (C5) d-e=b; d+e=a algebraic proof. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -7986,6 +7986,25 @@ def _validate_qa_male_female_lattice_balance_cert_family(base_dir):
     return None
 
 
+def _validate_qa_harmonic_chemistry_lcm_cert_family(base_dir):
+    """QA Harmonic Chemistry LCM Cert family [323]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.5 (CHEMISTRY). CLAIM: (C1) LCM harmonic cycle identity: lcm(d1,d2)=d1*p2=d2*p1=A*p1*p2 for all 20 Cosmos harmonic dyads. (C2) 3-wave LCM=product for all C(6,3)=20 3-subsets of prime Cosmos d-values {3,5,7,11,13,17}. (C3) C(n,2)=n(n-1)/2 pairing law; C(7,2)=21 (Iverson p.68 '21 different pairs'); mod-9 max mutual-harmonic group=6. (C4) L=b*e*d*a: all 72 Cosmos L positive, min=24, max=31824. (C5) Universal 2*3 bond: b*e*d*a divisible by 6 for all 72 Cosmos pairs. Builds on certs [322][318]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_harmonic_chemistry_lcm_cert_v1")
+    validator = os.path.join(fam_dir, "qa_harmonic_chemistry_lcm_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_harmonic_chemistry_lcm_cert_v1/qa_harmonic_chemistry_lcm_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_harmonic_chemistry_lcm_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_harmonic_aliquot_structure_cert_family(base_dir):
     """QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson, B. (1995) Quantum Arithmetic Book 3 (QA-3), ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: (C1) 20 harmonic dyads among 15 distinct Cosmos d-values {3..17}; all aliquot parts 7-smooth. (C2) Direction law: d1<d2 implies p2>p1 for all dyads — higher harmonic carries larger unique prime, confirming Ben's reversal 'higher harmonics CREATE the lower tone' (p.43). (C3) Aliquot spectrum exactly {1,2,3,5}; no aliquot > 5 in mod-9 Cosmos. (C4) 5040=2^4*3^2*5*7 has omega=4; all Cosmos d <= 17 < 5040 (definite quantum configuration range). (C5) Exactly 3 tonal identity d-values {11,13,17} are primes > 7; each forms 5 harmonic dyads. Theory of Harmony: two d-values harmonic iff gcd=A, d1/A and d2/A are distinct primes, gcd(A,p1*p2)=1. Builds on certs [318][320][321]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -9808,6 +9827,11 @@ FAMILY_SWEEPS = [
      "QA Mod-24 Quadrance 2-adic Signature Cert family [287]. Primary sources: Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 Ch1 quadrance G=b^2+e^2; Wall (1960) DOI 10.1080/00029890.1960.11989541 orbit periods. Mechanism: cert [279] (Orbit Access Theorem); cert [283] (mod-9 v3 quadrance signature). CLAIM (narrow, falsifiable): for (b,e) in {1,...,24}^2, v2(b^2+e^2) = 2*min(v2(b),v2(e)) + delta where delta=1 if v2(b)=v2(e) else 0. Equivalently: orbit class separates v2(G): cosmos -> v2(G)<=5; satellite/singularity -> v2(G)>=6. Diagonal enhancement (delta=1) arises because odd squares satisfy x^2 ≡ 1 (mod 8), so their sum ≡ 2 (mod 8), giving one extra factor of 2. CONTRASTS with mod-9 cert [283] where v3(G)=2*v3(gcd(b,e)) has no delta (1+1=2 coprime to 3). Tightness: cosmos max v2(G)=5 at (4,4); satellite min v2(G)=6 at (8,16). Verified exhaustively all 576 pairs. Checks V2Q_1/V2Q_2/V2Q_3/V2Q_4/V2Q_5/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok",
      "287_qa_mod24_quadrance_v2_signature",
      "qa_mod24_quadrance_v2_signature_cert_v1", True),
+    (323, "QA Harmonic Chemistry LCM Cert family",
+     _validate_qa_harmonic_chemistry_lcm_cert_family,
+     "QA Harmonic Chemistry LCM Cert family [323]. Primary source: Iverson (1995) QA-3, ITAM Portland, Ch.5 (CHEMISTRY). CLAIM: (C1) lcm(d1,d2)=d1*p2=d2*p1=A*p1*p2 for all 20 Cosmos harmonic dyads. (C2) 3-wave LCM=product for C(6,3)=20 triples of prime Cosmos d-values {3,5,7,11,13,17}. (C3) C(7,2)=21; mod-9 max mutual group=6. (C4) L=b*e*d*a: min=24, max=31824. (C5) b*e*d*a divisible by 6 for all 72 Cosmos pairs. Builds on cert [322]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "323_qa_harmonic_chemistry_lcm",
+     "qa_harmonic_chemistry_lcm_cert_v1", True),
     (322, "QA Harmonic Aliquot Structure Cert family",
      _validate_qa_harmonic_aliquot_structure_cert_family,
      "QA Harmonic Aliquot Structure Cert family [322]. Primary source: Iverson (1995) QA-3, ITAM Portland, ISBN 1-883401-08-9, Ch.4 (HARMONICS). CLAIM: (C1) 20 harmonic dyads among 15 distinct Cosmos d-values {3..17}; all aliquot parts 7-smooth. (C2) Direction law: d1<d2 implies p2>p1 for all dyads — higher harmonic creates lower tone. (C3) Aliquot spectrum exactly {1,2,3,5}. (C4) 5040=2^4*3^2*5*7 omega=4; all Cosmos d <= 17 < 5040. (C5) Tonal identity d-values {11,13,17} each form 5 harmonic dyads. Builds on certs [318][320][321]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

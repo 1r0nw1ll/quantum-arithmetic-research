@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [323] | [QA Harmonic Chemistry LCM](323_qa_harmonic_chemistry_lcm.md) | LCM=harmonic cycle for 20 dyads; 3-wave composite LCM; C(7,2)=21 pairing law; L=b·e·d·a wavelength product min=24/max=31824; b·e·d·a divisible by 6 for all 72 pairs | PASS |
 | [322] | [QA Harmonic Aliquot Structure](322_qa_harmonic_aliquot_structure.md) | 20 harmonic dyads among 15 Cosmos d-values; direction law (higher d → larger unique prime); aliquot spectrum {1,2,3,5}; 5040=2⁴·3²·5·7 threshold; tonal identity {11,13,17} | PASS |
 | [321] | [QA Quantize-to-ONE](321_qa_quantize_to_one.md) | Cosmos ratio b/a ∈ (0,1) 72 pairs; Satellite canonical ratio 1/3 absent from Cosmos; within-d-class monotonicity; ω(beda)≤5≤7 seven-prime bound; round-trip 2dr/(1+r)=b exact | PASS |
 | [320] | [QA Quantize Algorithm](320_qa_quantize_algorithm.md) | Midpoint identity b+a=2d all 81 pairs; DO=d² theorem 72 Cosmos; lossless reconstruction; fingerprint uniqueness; Satellite extension; Theorem NT two-crossing bridge | PASS |

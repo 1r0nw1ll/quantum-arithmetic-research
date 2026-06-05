@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Proofs: Bead Arithmetic Laws cert [366]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IX pp.94-100. Text Stmt (1): 'Either d or e must be an even number.' Stmt (2): 'The value of a is always an odd number.' Stmt (4): 'The factor 3 will be represented in every set of bead numbers.' Stmt (9): 'The area of every prime Pythagorean triangle is divisible by 6.' Stmt (12): 'd is prime to b and e. And a is prime to b, d, and e.' (C1) Exactly one of {d,e} is even; proof: b odd, d=b+e flips parity of e. (C2) a is always odd; proof: a=d+e, one of {d,e} even and one odd. (C3) Factor 3 in {b,e,d,a}; proof: 6 mod-3 cases all yield one divisible-by-3 element. (C4) Area=CF/2 divisible by 6; proof: 4|C and 3|some-bead implies 6|area. (C5) All four beads pairwise coprime; proof: each gcd reduces to gcd(b,e)=1. DOI: primary text, no external DOI."
+}

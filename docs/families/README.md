@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [366] | [QA Pyth-1 Proofs: Bead Arithmetic Laws](366_qa_pyth1_proofs_bead_arithmetic.md) | Exactly one of {d,e} even; a always odd; factor 3 in every {b,e,d,a} (6 mod-3 cases); area=CF/2 divisible by 6; all four beads pairwise coprime (6 gcds=1) | PASS |
 | [365] | [QA Pyth-1 Ellipse of Archimedes](365_qa_pyth1_ellipse_archimedes.md) | 2D=J+K=F+G=C+2J; K−J=C; K+J=2D; semiminor²=DF (D²−(C/2)²=D(D−E)=DF); eccentricity=2D/C=d/e; J·K=DF; K/J=a/b | PASS |
 | [364] | [QA Pyth-1 Koenig Series and Tree of Life](364_qa_pyth1_koenig_series.md) | A+B=2G (G=mean of A,B); I(1,e)=2e²−1 (seq 1,7,17,31,49,71); I(b,1)=b²−2 (seq 1,7,23,47,79); primes p≡3,5(mod 8) excluded from H,I; 49=7² QA-functionally-prime=I(1,5) | PASS |
 | [363] | [QA Pyth-1 External Relationships](363_qa_pyth1_external_relationships.md) | Column step F(b,e+1)−F=2b; row step C(b+2,e)−C=4e; G−F=2E; G−C=B; A(b,e)=B(b+2e,e); D(b,e)=E(b,e+b); 2-par absent from A,B,C,D,E,F,G,H,I | PASS |

@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth1_proofs_bead_arithmetic_cert_family(base_dir):
+    """QA Pyth-1 Proofs: Bead Arithmetic Laws cert [366]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IX pp.94-100. CLAIM: (C1) Exactly one of {d,e} is even for every primitive pair. (C2) a is always odd (b and a both odd; {d,e} split even/odd). (C3) Factor 3 divides at least one of {b,e,d,a}; 6 mod-3 cases exhaustive. (C4) Area=CF/2 divisible by 6; 4|C and 3|some-bead. (C5) All four beads pairwise coprime; all 6 pairwise gcds=1 reduce to gcd(b,e)=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth1_proofs_bead_arithmetic_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth1_proofs_bead_arithmetic_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth1_proofs_bead_arithmetic_cert_v1/qa_pyth1_proofs_bead_arithmetic_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth1_proofs_bead_arithmetic_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth1_ellipse_archimedes_cert_family(base_dir):
     """QA Pyth-1 Ellipse of Archimedes cert [365]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.VIII pp.87-93. CLAIM: (C1) 2D=J+K=F+G=C+2J (major diameter equalities). (C2) K-J=C and K+J=2D (focal-chord identities). (C3) semiminor^2=DF; integer semiminor iff F is a perfect square. (C4) QA eccentricity=2D/C=d/e (bead ratio, always >1). (C5) J*K=DF; K/J=a/b. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10630,6 +10649,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (366, "QA Pyth-1 Proofs Bead Arithmetic Laws Cert family",
+     _validate_qa_pyth1_proofs_bead_arithmetic_cert_family,
+     "QA Pyth-1 Proofs: Bead Arithmetic Laws Cert [366]. Source: Iverson (1993) Pyth Arith Vol I Ch.IX pp.94-100. CLAIM: (C1) Exactly one of {d,e} is even for every primitive pair. (C2) a is always odd; b and a both odd, {d,e} split even/odd. (C3) Factor 3 in {b,e,d,a}; 6 mod-3 cases exhaustive. (C4) Area=CF/2 divisible by 6; 4|C and 3|some-bead. (C5) All four beads pairwise coprime; all 6 pairwise gcds=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "366_qa_pyth1_proofs_bead_arithmetic",
+     "qa_pyth1_proofs_bead_arithmetic_cert_v1", True),
     (365, "QA Pyth-1 Ellipse of Archimedes Cert family",
      _validate_qa_pyth1_ellipse_archimedes_cert_family,
      "QA Pyth-1 Ellipse of Archimedes Cert [365]. Source: Iverson (1993) Pyth Arith Vol I Ch.VIII pp.87-93. CLAIM: (C1) 2D=J+K=F+G=C+2J (three equal forms for major ellipse diameter). (C2) K-J=C and K+J=2D (focal-chord identities). (C3) semiminor^2=DF; D^2-(C/2)^2=D(D-E)=DF since D-E=F; integer semiminor iff F is a square. (C4) QA eccentricity=2D/C=d/e (bead ratio, always >1). (C5) J*K=DF; K/J=a/b. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 External Relationships cert [363]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.VI pp.67-71. Text: 'F increases by 2b per step down columns; C increases by 4e per step across rows; G-F constant along rows; G-C constant along columns; A becomes B moving e-blocks right; D becomes E at b-blocks down; complete absence of all 2-par numbers except e,d,J,K.' (C1) Column step F(b,e+1)-F(b,e)=2b; row step C(b+2,e)-C(b,e)=4e. (C2) G-F=2E; G-C=B. (C3) A(b,e)=B(b+2e,e). (C4) D(b,e)=E(b,e+b). (C5) 2-par only in {e,d,J,K}, never in {A,B,C,D,E,F,G,H,I}. DOI: primary text, no external DOI."
+}

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 Prime Number Symmetry cert [367]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XII pp.28-37. Text: '1+29=30, 7+23=30, 11+19=30, 13+17=30'; '1+59=60, 7+53=60, 11+49=60, 13+47=60, 17+43=60, 19+41=60, 23+37=60, 29+31=60'; '49 is included ... it is a prime because it has a single factor of 7'. (C1) Coprime-to-30 bracket {n:gcd(n,30)=1, 1<=n<30}={1,7,11,13,17,19,23,29}; φ(30)=8; 4 pairs summing to 30. (C2) Coprime-to-60 bracket {n:gcd(n,60)=1, 1<=n<60} has 16 elements in 8 pairs summing to 60; 49∈bracket. (C3) Pairing identity gcd(M-n,M)=gcd(n,M); verified M in [2,99]. (C4) All primes p∈(5,30)={7,11,13,17,19,23,29} satisfy gcd(p,30)=1. (C5) I(1,5)=49=7², gcd(49,60)=1, partner=11, 11+49=60. DOI: primary text, no external DOI."
+}

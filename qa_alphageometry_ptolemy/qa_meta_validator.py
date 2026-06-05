@@ -8100,6 +8100,25 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth2_prime_number_symmetry_cert_family(base_dir):
+    """QA Pyth-2 Prime Number Symmetry cert [367]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XII pp.28-37. CLAIM: (C1) Coprime-to-30 bracket {n:gcd(n,30)=1,1<=n<30}={1,7,11,13,17,19,23,29}; phi(30)=8; 4 pairs summing to 30. (C2) Coprime-to-60 bracket has 16 elements in 8 pairs summing to 60; 49=7^2 in bracket. (C3) Pairing identity gcd(M-n,M)=gcd(n,M). (C4) All primes in (5,30) have gcd(p,30)=1. (C5) I(1,5)=49, gcd(49,60)=1, partner=11, 11+49=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth2_prime_number_symmetry_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth2_prime_number_symmetry_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth2_prime_number_symmetry_cert_v1/qa_pyth2_prime_number_symmetry_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pyth2_prime_number_symmetry_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    return None
+
+
 def _validate_qa_pyth1_proofs_bead_arithmetic_cert_family(base_dir):
     """QA Pyth-1 Proofs: Bead Arithmetic Laws cert [366]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.IX pp.94-100. CLAIM: (C1) Exactly one of {d,e} is even for every primitive pair. (C2) a is always odd (b and a both odd; {d,e} split even/odd). (C3) Factor 3 divides at least one of {b,e,d,a}; 6 mod-3 cases exhaustive. (C4) Area=CF/2 divisible by 6; 4|C and 3|some-bead. (C5) All four beads pairwise coprime; all 6 pairwise gcds=1 reduce to gcd(b,e)=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10649,6 +10668,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (367, "QA Pyth-2 Prime Number Symmetry Cert family",
+     _validate_qa_pyth2_prime_number_symmetry_cert_family,
+     "QA Pyth-2 Prime Number Symmetry Cert [367]. Source: Iverson (1993) Pyth Arith Vol II Ch.XII pp.28-37. CLAIM: (C1) Coprime-to-30 bracket {n:gcd(n,30)=1,1<=n<30}={1,7,11,13,17,19,23,29}; phi(30)=8; 4 pairs summing to 30. (C2) Coprime-to-60 bracket 16 elements, 8 pairs summing to 60; 49=7^2 in bracket. (C3) Pairing identity gcd(M-n,M)=gcd(n,M). (C4) Primes in (5,30) all coprime to 30. (C5) I(1,5)=49 in coprime-to-60 bracket; partner=11; 11+49=60. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "367_qa_pyth2_prime_number_symmetry",
+     "qa_pyth2_prime_number_symmetry_cert_v1", True),
     (366, "QA Pyth-1 Proofs Bead Arithmetic Laws Cert family",
      _validate_qa_pyth1_proofs_bead_arithmetic_cert_family,
      "QA Pyth-1 Proofs: Bead Arithmetic Laws Cert [366]. Source: Iverson (1993) Pyth Arith Vol I Ch.IX pp.94-100. CLAIM: (C1) Exactly one of {d,e} is even for every primitive pair. (C2) a is always odd; b and a both odd, {d,e} split even/odd. (C3) Factor 3 in {b,e,d,a}; 6 mod-3 cases exhaustive. (C4) Area=CF/2 divisible by 6; 4|C and 3|some-bead. (C5) All four beads pairwise coprime; all 6 pairwise gcds=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

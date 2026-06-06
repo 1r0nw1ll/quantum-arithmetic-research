@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [383] | [QA Pyth-2 Basics](383_qa_pyth2_basics.md) | Plato Atlantis 9600yr mod24=0=400×24; 9600-9400=200%24=8; Ishango 7000BC mod24=16=Myriad; 8 primes to 19=φ(30); sea 100m mod24=4=portal; 529-505=24=QA modulus; 4 elements=tuple; 600yr%24=0 | PASS |
 | [382] | [QA Pyth-1 Recovery of Knowledge](382_qa_pyth1_recovery_knowledge.md) | Pythagoras 580 BC mod24=4=portal; Atlantis 9400yr mod24=16=Myriad; 1548 BC mod24=12=chromatic; 340 gen mod24=4; 529=23² mod24=1 Singularity; 3 stages 600/400/300 all distinct residues | PASS |
 | [381] | [QA Pyth-3 Two Forms of Energy](381_qa_pyth3_two_forms_energy.md) | 180° phase 180%24=12=chromatic; film 1/16=2⁴ Myriad; TV 1/32=2⁵; 7×7=49=7² 49%24=1 Singularity-class; 3+3=6=seed; 3×3=9 mod9=0; 13000ft/400mph both mod24=16=Myriad | PASS |
 | [380] | [QA Pyth-3 Pitfalls of Invention](380_qa_pyth3_pitfalls_invention.md) | 5kW VTA threshold=QN seed[2]=5-par; 5000%24=8=2³; pyramid $10→$160 4 doublings=tuple ratio=2=octave; $40000%24=16=Myriad; $3000/page=24×5³; Searl 1948%24=4=portal | PASS |

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 Basics cert [383]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XI pp.1-27. (C1) Plato Atlantis 9600yr mod24=0=400*24; 9600-9400=200 mod24=8=2^3. (C2) Ishango bone 7000BC mod24=16=Myriad; 8 primes to 19=8=2^3=phi(30). (C3) Sea level 100m mod24=4=portal; 100=4*5^2; gcd(100,24)=4. (C4) School 529-505=24=QA modulus; both mod24=1=Singularity-class; 505=5*101. (C5) 600yr destruction mod24=0; 4 elements=QA tuple; 600/4=150 mod24=6=seed. DOI: primary text, no external DOI."
+}

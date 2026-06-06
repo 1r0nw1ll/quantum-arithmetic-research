@@ -72,6 +72,7 @@ MICROSTATE_STATES = {
     "C_right":     (11, 19),
     "D_baseline":  (24, 24),
 }
+MICROSTATE_STATES_INT = {0: (8, 3), 1: (5, 16), 2: (11, 19), 3: (24, 24)}
 TRANSITION_TABLE = {
     (s1, s2): orbit_fam(MICROSTATE_STATES[s1][0], MICROSTATE_STATES[s2][1], m=24)
     for s1 in MICROSTATE_STATES for s2 in MICROSTATE_STATES
@@ -79,18 +80,31 @@ TRANSITION_TABLE = {
 
 # ── Siena annotation parser ───────────────────────────────────────────────────
 
+_TIME_RE = re.compile(r'\b(\d{1,2})[.:](\d{2})[.:](\d{2})\b')
+
 def _hms_to_sec(s):
-    """'HH.MM.SS' or 'HH:MM:SS' → total seconds."""
-    parts = re.split(r'[.:]', s.strip())
-    h, m, sec = int(parts[0]), int(parts[1]), int(parts[2])
-    return h * 3600 + m * 60 + sec
+    """Extract first H[H].MM.SS or H[H]:MM:SS pattern from a line, return seconds.
+    Uses regex so trailing garbage (e.g. 'opure 11.40.43') and stray chars
+    (e.g. '1 6.49.25' typo) are handled gracefully. Returns None if no match."""
+    m = _TIME_RE.search(s)
+    if not m:
+        return None
+    h, mn, sc = int(m.group(1)), int(m.group(2)), int(m.group(3))
+    return h * 3600 + mn * 60 + sc
 
 def _norm_fname(s):
     """Lowercase + fix PNOx→PN0x typo in PN06 annotation."""
     return re.sub(r'pno(\d)', r'pn0\1', s.strip().lower())
 
 def parse_siena_summary(path):
-    """Return {edf_filename: [{start_s, end_s}, ...]} from Seizures-list-PNxx.txt."""
+    """Return {edf_filename: [{start_s, end_s}, ...]} from Seizures-list-PNxx.txt.
+
+    Handles dataset quirks:
+      - 'Start time:' / 'End time:' as well as 'Seizure start/end time:'
+      - Trailing garbage after timestamp ('opure', clinical notes, etc.)
+      - Typo '1 6.49.25' — regex skips stray leading chars
+      - 'PN01.edf' annotation name vs 'PN01-1.edf' on disk (resolved in extract_windows)
+    """
     ann = {}
     cur_file = None
     reg_start = None
@@ -102,28 +116,35 @@ def parse_siena_summary(path):
                 cur_file = _norm_fname(m.group(1))
                 reg_start = None
                 continue
-            m = re.match(r'Registration start time:\s*([\d.:]+)', line, re.I)
+            m = re.match(r'Registration start time:', line, re.I)
             if m and cur_file is not None:
-                reg_start = _hms_to_sec(m.group(1))
+                t = _hms_to_sec(line)
+                if t is not None:
+                    reg_start = t
                 continue
-            m = re.match(r'Seizure start time:\s*([\d.:]+)', line, re.I)
+            # Accept both 'Seizure start time:' and bare 'Start time:'
+            m = re.match(r'(?:Seizure\s+)?start\s+time:', line, re.I)
             if m and cur_file is not None and reg_start is not None:
-                offset = _hms_to_sec(m.group(1)) - reg_start
-                if offset < 0:
-                    offset += 86400   # midnight crossing
-                if cur_file not in ann:
-                    ann[cur_file] = []
-                ann[cur_file].append({"start_s": offset, "end_s": None})
+                t = _hms_to_sec(line)
+                if t is not None:
+                    offset = t - reg_start
+                    if offset < 0:
+                        offset += 86400
+                    if cur_file not in ann:
+                        ann[cur_file] = []
+                    ann[cur_file].append({"start_s": offset, "end_s": None})
                 continue
-            m = re.match(r'Seizure end time:\s*([\d.:]+)', line, re.I)
+            m = re.match(r'(?:Seizure\s+)?end\s+time:', line, re.I)
             if m and cur_file is not None and reg_start is not None:
-                offset = _hms_to_sec(m.group(1)) - reg_start
-                if offset < 0:
-                    offset += 86400
-                for a in reversed(ann.get(cur_file, [])):
-                    if a["end_s"] is None:
-                        a["end_s"] = offset
-                        break
+                t = _hms_to_sec(line)
+                if t is not None:
+                    offset = t - reg_start
+                    if offset < 0:
+                        offset += 86400
+                    for a in reversed(ann.get(cur_file, [])):
+                        if a["end_s"] is None:
+                            a["end_s"] = offset
+                            break
     return {k: [a for a in v if a["end_s"] is not None] for k, v in ann.items() if v}
 
 # ── EDF reader ────────────────────────────────────────────────────────────────
@@ -160,12 +181,13 @@ def extract_windows(patient_dir):
     rng = np.random.default_rng(SEED)
 
     for fname, seqs in ann.items():
-        # Try the normalised fname, then case-insensitive search
-        candidates = list(patient_dir.glob(fname)) + list(patient_dir.glob(fname.upper()))
+        # Try exact normalised name first
+        candidates = [p for p in patient_dir.glob("*.edf") if p.name.lower() == fname]
         if not candidates:
-            # fallback: match basename ignoring case
-            candidates = [p for p in patient_dir.glob("*.edf")
-                          if p.name.lower() == fname]
+            # Annotation may say 'PN01.edf' when disk has 'PN01-1.edf' — prefix match
+            stem = fname.replace(".edf", "")
+            candidates = [p for p in sorted(patient_dir.glob("*.edf"))
+                          if p.name.lower().startswith(stem)]
         if not candidates:
             continue
         edf = candidates[0]
@@ -275,22 +297,33 @@ def band_topo_fv(sig, fs, low, high):
     return rms / norm if norm > 1e-9 else rms
 
 def fit_band_kms(windows):
-    kms = []
+    """Return list of (km, order) per band. order[cluster_id] → rank 0-3 by RMS norm."""
+    result = []
     for (_, (lo, hi)) in BAND_LIST:
-        fvs = np.array([band_topo_fv(w["sig"], w["fs"], lo, hi) for w in windows])
-        kms.append(KMeans(n_clusters=4, random_state=SEED, n_init=10).fit(fvs))
-    return kms
+        fvs   = np.array([band_topo_fv(w["sig"], w["fs"], lo, hi) for w in windows])
+        km    = KMeans(n_clusters=4, random_state=SEED, n_init=10).fit(fvs)
+        norms = np.linalg.norm(km.cluster_centers_, axis=1)
+        rank  = np.argsort(norms)
+        order = np.empty(4, dtype=int)
+        for i, cid in enumerate(rank):
+            order[cid] = i
+        result.append((km, order))
+    return result
 
-def f2_sat_frac(sig, fs, band_kms):
-    total = sat = 0
-    for bi, (_, (lo, hi)) in enumerate(BAND_LIST):
-        fv     = band_topo_fv(sig, fs, lo, hi).reshape(1, -1)
-        label  = int(band_kms[bi].predict(fv)[0])
-        b0, e0 = (label + 1, label + 2)   # simple mapping (same for all patients)
-        if orbit_fam(b0 % 24 + 1, e0 % 24 + 1, m=24) == "Satellite":
-            sat += 1
-        total += 1
-    return sat / total if total else 0.0
+def f2_sat_frac(sig, fs, kms_orders):
+    """Satellite fraction across adjacent-band microstate transitions.
+    Identical logic to CHB-MIT combined-2: rank-ordered KMeans label →
+    MICROSTATE_STATES_INT → orbit_fam on cross-band (b_i, e_{i+1}) pairs."""
+    assignments = [
+        int(order[int(km.predict(band_topo_fv(sig, fs, lo, hi).reshape(1, -1))[0])])
+        for (_, (lo, hi)), (km, order) in zip(BAND_LIST, kms_orders)
+    ]
+    orbits = [
+        orbit_fam(MICROSTATE_STATES_INT[assignments[i]][0],
+                  MICROSTATE_STATES_INT[assignments[i + 1]][1], m=24)
+        for i in range(len(assignments) - 1)
+    ]
+    return orbits.count("Satellite") / len(orbits) if orbits else 0.0
 
 # ── Logistic regression evaluation ───────────────────────────────────────────
 
@@ -330,14 +363,14 @@ def fishers(ps):
 
 # ── Per-patient analysis ──────────────────────────────────────────────────────
 
-def analyse_patient(patient_dir):
+def analyse_patient(patient_dir, min_ictal=MIN_ICTAL):
     name = patient_dir.name
     windows, reason = extract_windows(patient_dir)
     if not windows:
         return {"patient": name, "status": f"skip: {reason}"}
 
     ictal_n = sum(1 for w in windows if w["label"] == 1)
-    if ictal_n < MIN_ICTAL:
+    if ictal_n < min_ictal:
         return {"patient": name, "status": f"skip: only {ictal_n} ictal windows"}
 
     labels = np.array([w["label"] for w in windows])
@@ -349,12 +382,12 @@ def analyse_patient(patient_dir):
 
     # Fit microstate models on training-interictal
     km_topo, state_order = fit_topo_km(interictal_train)
-    km_bands             = fit_band_kms(interictal_train)
+    kms_orders           = fit_band_kms(interictal_train)
 
     # Extract raw features for all windows
     f0_raw = np.array([f0_sing_frac(w["sig"], w["fs"], km_topo, state_order)
                        for w in windows])
-    f2_raw = np.array([f2_sat_frac(w["sig"], w["fs"], km_bands)
+    f2_raw = np.array([f2_sat_frac(w["sig"], w["fs"], kms_orders)
                        for w in windows])
 
     # Per-patient z-score using training-interictal mean/std
@@ -408,49 +441,51 @@ def main():
         print("Run:  bash eeg_siena_download.sh")
         sys.exit(1)
 
+    # Run analysis at both thresholds; cache per-patient work
     results = []
     for pd in patient_dirs:
         print(f"\n--- {pd.name} ---")
-        r = analyse_patient(pd)
+        r = analyse_patient(pd, min_ictal=MIN_ICTAL)
+        # Also compute at threshold=6 if it passed threshold=6 but not 12
+        r6 = analyse_patient(pd, min_ictal=6)
+        r["result_t6"] = {k: v for k, v in r6.items()} if r6["status"] == "ok" else None
         results.append(r)
         if r["status"] == "ok":
             print(f"  ΔR²={r['delta_r2']:+.3f}  p={r['p_lr']:.4f}  "
                   f"f0_z={r['f0_ictal_z']:+.1f}  f2_z={r['f2_ictal_z']:+.1f}")
+        elif r6["status"] == "ok":
+            print(f"  (t6) ΔR²={r6['delta_r2']:+.3f}  p={r6['p_lr']:.4f}  "
+                  f"f0_z={r6['f0_ictal_z']:+.1f}  f2_z={r6['f2_ictal_z']:+.1f}")
         else:
             print(f"  {r['status']}")
 
-    included = [r for r in results if r["status"] == "ok"]
-    print(f"\n{'='*55}")
-    print(f"Included: {len(included)}/{len(results)} patients")
-
-    if included:
-        dr2s = [r["delta_r2"] for r in included]
-        ps   = [r["p_lr"]     for r in included]
+    def summarise(label, pool, prereg):
+        print(f"\n{'='*55}")
+        print(f"{label}  —  Included: {len(pool)}/{len(results)} patients")
+        if not pool:
+            return None
+        dr2s = [r["delta_r2"] for r in pool]
+        ps   = [r["p_lr"]     for r in pool]
         mean_dr2 = np.mean(dr2s)
         se_dr2   = np.std(dr2s, ddof=1) / np.sqrt(len(dr2s))
         chi2_stat, fisher_p = fishers(ps)
         n_pos = sum(1 for d in dr2s if d > 0)
-
         print(f"Mean ΔR²: {mean_dr2:+.3f}  SE: {se_dr2:.3f}")
-        print(f"Fisher χ²: {chi2_stat:.1f}  p = {fisher_p:.2e}  (df={2*len(included)})")
-        print(f"Positive ΔR²: {n_pos}/{len(included)}")
-        print()
-
-        if fisher_p < 0.05 and n_pos > len(included) / 2:
+        print(f"Fisher χ²: {chi2_stat:.1f}  p = {fisher_p:.2e}  (df={2*len(pool)})")
+        print(f"Positive ΔR²: {n_pos}/{len(pool)}")
+        if fisher_p < 0.05 and n_pos > len(pool) / 2:
             verdict = "REPLICATION_PASS"
         elif fisher_p < 0.05:
             verdict = "SIGNIFICANT_REVERSED_POLARITY"
-        elif n_pos > len(included) / 2:
+        elif n_pos > len(pool) / 2:
             verdict = "TREND_ONLY"
         else:
             verdict = "NON_REPLICATION"
         print(f"Verdict: {verdict}")
-
-        payload = {
-            "prereg_sha":      prereg_sha,
-            "dataset":         "siena-scalp-eeg/1.0.0",
-            "protocol":        "combined2_signed_z_preregistered",
-            "n_included":      len(included),
+        return {
+            "label":           label,
+            "prereg":          prereg,
+            "n_included":      len(pool),
             "n_total":         len(results),
             "mean_delta_r2":   round(float(mean_dr2), 4),
             "se_delta_r2":     round(float(se_dr2), 4),
@@ -458,16 +493,21 @@ def main():
             "fisher_p":        float(fisher_p),
             "n_positive_dr2":  n_pos,
             "verdict":         verdict,
-            "per_patient":     results,
-        }
-    else:
-        payload = {
-            "prereg_sha": prereg_sha,
-            "dataset":    "siena-scalp-eeg/1.0.0",
-            "error":      "no patients passed inclusion threshold",
-            "per_patient": results,
         }
 
+    included_t12 = [r for r in results if r["status"] == "ok"]
+    included_t6  = [r["result_t6"] for r in results if r.get("result_t6") is not None]
+
+    s12 = summarise("PRE-REGISTERED (threshold=12)", included_t12, prereg=True)
+    s6  = summarise("POST-HOC sensitivity (threshold=6, declared)", included_t6, prereg=False)
+
+    payload = {
+        "prereg_sha":        prereg_sha,
+        "dataset":           "siena-scalp-eeg/1.0.0",
+        "preregistered":     s12,
+        "posthoc_t6":        s6,
+        "per_patient":       results,
+    }
     with open(RESULTS_OUT, "w") as fh:
         json.dump(payload, fh, indent=2)
     print(f"\nResults written to {RESULTS_OUT}")

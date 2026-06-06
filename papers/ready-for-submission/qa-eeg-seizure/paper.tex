@@ -326,6 +326,66 @@ shows a strong ictal f0\_sing excursion ($+6.3\sigma$) but the small window coun
 (44 windows, 30\% held out) produces an unstable LR fit.
 
 % ====================================================================
+\section{Independent Dataset Replication (Siena Scalp EEG)}\label{sec:siena}
+
+To test whether the combined-2 result generalises beyond CHB-MIT,
+we applied the identical signed-z protocol to the Siena Scalp EEG
+Database~\cite{siena} (PhysioNet, DOI: 10.13026/5d4a-j060),
+14 patients, 512~Hz, pre-registered before any EDF signal data was read
+(git commit \texttt{85e58f94}, 2026-06-02;
+see \texttt{docs/specs/EEG\_SIENA\_PREREGISTRATION.md}).
+
+\subsection*{Result}
+
+With the pre-registered inclusion gate ({\bf $\geq 12$ ictal windows}),
+9/14 patients were included; the remaining 5 were excluded due to short
+seizure durations (Siena records 60--120~s per seizure vs.\ CHB-MIT's
+multi-hour continuous sessions).
+
+\begin{center}
+\small
+\begin{tabular}{lrrl}
+\toprule
+\textbf{Patient} & $\Delta R^2$ & $p$ & \textbf{Note} \\
+\midrule
+PN00 & $-0.030$ & $>0.99$ & \\
+PN03 & $-0.043$ & $>0.99$ & \\
+PN06 & $+0.007$ & $0.921$ & \\
+PN09 & $+0.060$ & $0.605$ & \\
+PN10 & $+0.119$ & $0.245$ & \\
+PN12 & $+0.168$ & $0.222$ & \\
+PN13 & $+0.073$ & $0.470$ & \\
+PN16 & $-0.010$ & $>0.99$ & \\
+PN17 & $+0.000$ & $>0.99$ & \\
+\midrule
+\textbf{Mean} & $+0.038$ (SE $0.024$) &
+  \multicolumn{2}{l}{Fisher $p = 0.97$, $5/9$ positive} \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\noindent\textbf{Verdict (pre-registered): TREND\_ONLY.}
+Fisher combined $p = 0.97$; the pre-registered primary endpoint ($p < 0.05$) is not met.
+A declared post-hoc sensitivity analysis lowering the gate to $\geq 6$ ictal windows
+(13/14 patients) gives mean $\Delta R^2 = +0.065$ (SE $0.051$),
+Fisher $p = 0.97$, $8/13$ positive --- also TREND\_ONLY.
+
+\subsection*{Interpretation}
+
+The Siena result does not replicate the CHB-MIT signal at conventional significance,
+but is not a clean refutation either.
+The structural difference between datasets is substantial: Siena's short
+per-seizure recordings yield small per-patient effect sizes and low power.
+Two explanations are consistent with the data:
+\begin{enumerate}[nosep]
+  \item The mechanism generalises but requires longer baseline recordings to detect
+        (dataset mismatch, not non-replication).
+  \item The CHB-MIT result was a dataset-specific artifact.
+\end{enumerate}
+Distinguishing these requires a third dataset with long continuous monitoring
+(e.g., Temple University Hospital EEG Corpus~\cite{tueg}).
+
+% ====================================================================
 \section{Discussion}\label{sec:discussion}
 
 The $\Delta R^2 = +0.21$ gain is large by the standards of EEG feature engineering.
@@ -372,6 +432,16 @@ W.~Dale.
 W.~Dale.
 \newblock Fibonacci preference in mean-motion resonances: evidence from solar and exoplanetary systems.
 \newblock Preprint, 2026.
+
+\bibitem{siena}
+P.~Detti, G.~B.~Lanteri, N.~Rinaldi.
+\newblock Siena Scalp EEG Database.
+\newblock PhysioNet, DOI: 10.13026/5d4a-j060, 2020.
+
+\bibitem{tueg}
+I.~Obeid and J.~Picone.
+\newblock The Temple University Hospital EEG Data Corpus.
+\newblock \emph{Frontiers in Neuroscience}, 10:196, 2016.
 
 \end{thebibliography}
 

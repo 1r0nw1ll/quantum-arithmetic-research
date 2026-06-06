@@ -1,0 +1,271 @@
+{
+  "prereg_sha": "85e58f946cdf11acbc136618822db7d7ab6fb6b8",
+  "dataset": "siena-scalp-eeg/1.0.0",
+  "preregistered": {
+    "label": "PRE-REGISTERED (threshold=12)",
+    "prereg": true,
+    "n_included": 9,
+    "n_total": 14,
+    "mean_delta_r2": 0.0383,
+    "se_delta_r2": 0.0239,
+    "fisher_chi2": 8.5,
+    "fisher_p": 0.9702830550505723,
+    "n_positive_dr2": 5,
+    "verdict": "TREND_ONLY"
+  },
+  "posthoc_t6": {
+    "label": "POST-HOC sensitivity (threshold=6, declared)",
+    "prereg": false,
+    "n_included": 13,
+    "n_total": 14,
+    "mean_delta_r2": 0.0651,
+    "se_delta_r2": 0.0506,
+    "fisher_chi2": 13.89,
+    "fisher_p": 0.9744362815089398,
+    "n_positive_dr2": 8,
+    "verdict": "TREND_ONLY"
+  },
+  "per_patient": [
+    {
+      "patient": "PN00",
+      "status": "ok",
+      "n_windows": 90,
+      "n_ictal": 45,
+      "delta_r2": -0.0303,
+      "p_lr": 1.0,
+      "f0_ictal_z": -0.06,
+      "f2_ictal_z": 0.48,
+      "result_t6": {
+        "patient": "PN00",
+        "status": "ok",
+        "n_windows": 90,
+        "n_ictal": 45,
+        "delta_r2": -0.0303,
+        "p_lr": 1.0,
+        "f0_ictal_z": -0.06,
+        "f2_ictal_z": 0.48
+      }
+    },
+    {
+      "patient": "PN01",
+      "status": "skip: only 10 ictal windows",
+      "result_t6": {
+        "patient": "PN01",
+        "status": "ok",
+        "n_windows": 20,
+        "n_ictal": 10,
+        "delta_r2": 0.6129,
+        "p_lr": 0.0782,
+        "f0_ictal_z": -0.66,
+        "f2_ictal_z": 0.4
+      }
+    },
+    {
+      "patient": "PN03",
+      "status": "ok",
+      "n_windows": 40,
+      "n_ictal": 20,
+      "delta_r2": -0.0431,
+      "p_lr": 1.0,
+      "f0_ictal_z": -0.08,
+      "f2_ictal_z": -0.1,
+      "result_t6": {
+        "patient": "PN03",
+        "status": "ok",
+        "n_windows": 40,
+        "n_ictal": 20,
+        "delta_r2": -0.0431,
+        "p_lr": 1.0,
+        "f0_ictal_z": -0.08,
+        "f2_ictal_z": -0.1
+      }
+    },
+    {
+      "patient": "PN05",
+      "status": "skip: only 9 ictal windows",
+      "result_t6": {
+        "patient": "PN05",
+        "status": "ok",
+        "n_windows": 18,
+        "n_ictal": 9,
+        "delta_r2": -0.1537,
+        "p_lr": 1.0,
+        "f0_ictal_z": -0.44,
+        "f2_ictal_z": -0.73
+      }
+    },
+    {
+      "patient": "PN06",
+      "status": "ok",
+      "n_windows": 52,
+      "n_ictal": 26,
+      "delta_r2": 0.0075,
+      "p_lr": 0.9205,
+      "f0_ictal_z": -0.07,
+      "f2_ictal_z": 0.04,
+      "result_t6": {
+        "patient": "PN06",
+        "status": "ok",
+        "n_windows": 52,
+        "n_ictal": 26,
+        "delta_r2": 0.0075,
+        "p_lr": 0.9205,
+        "f0_ictal_z": -0.07,
+        "f2_ictal_z": 0.04
+      }
+    },
+    {
+      "patient": "PN07",
+      "status": "skip: only 6 ictal windows",
+      "result_t6": {
+        "patient": "PN07",
+        "status": "ok",
+        "n_windows": 12,
+        "n_ictal": 6,
+        "delta_r2": 0.0285,
+        "p_lr": 0.9241,
+        "f0_ictal_z": -0.38,
+        "f2_ictal_z": -0.3
+      }
+    },
+    {
+      "patient": "PN09",
+      "status": "ok",
+      "n_windows": 38,
+      "n_ictal": 19,
+      "delta_r2": 0.0603,
+      "p_lr": 0.6054,
+      "f0_ictal_z": -0.55,
+      "f2_ictal_z": -1.33,
+      "result_t6": {
+        "patient": "PN09",
+        "status": "ok",
+        "n_windows": 38,
+        "n_ictal": 19,
+        "delta_r2": 0.0603,
+        "p_lr": 0.6054,
+        "f0_ictal_z": -0.55,
+        "f2_ictal_z": -1.33
+      }
+    },
+    {
+      "patient": "PN10",
+      "status": "ok",
+      "n_windows": 54,
+      "n_ictal": 27,
+      "delta_r2": 0.1195,
+      "p_lr": 0.2453,
+      "f0_ictal_z": 0.16,
+      "f2_ictal_z": 0.17,
+      "result_t6": {
+        "patient": "PN10",
+        "status": "ok",
+        "n_windows": 54,
+        "n_ictal": 27,
+        "delta_r2": 0.1195,
+        "p_lr": 0.2453,
+        "f0_ictal_z": 0.16,
+        "f2_ictal_z": 0.17
+      }
+    },
+    {
+      "patient": "PN11",
+      "status": "skip: only 5 ictal windows",
+      "result_t6": null
+    },
+    {
+      "patient": "PN12",
+      "status": "ok",
+      "n_windows": 42,
+      "n_ictal": 21,
+      "delta_r2": 0.1676,
+      "p_lr": 0.2224,
+      "f0_ictal_z": 0.87,
+      "f2_ictal_z": -0.05,
+      "result_t6": {
+        "patient": "PN12",
+        "status": "ok",
+        "n_windows": 42,
+        "n_ictal": 21,
+        "delta_r2": 0.1676,
+        "p_lr": 0.2224,
+        "f0_ictal_z": 0.87,
+        "f2_ictal_z": -0.05
+      }
+    },
+    {
+      "patient": "PN13",
+      "status": "ok",
+      "n_windows": 50,
+      "n_ictal": 25,
+      "delta_r2": 0.0729,
+      "p_lr": 0.4699,
+      "f0_ictal_z": 0.41,
+      "f2_ictal_z": -0.4,
+      "result_t6": {
+        "patient": "PN13",
+        "status": "ok",
+        "n_windows": 50,
+        "n_ictal": 25,
+        "delta_r2": 0.0729,
+        "p_lr": 0.4699,
+        "f0_ictal_z": 0.41,
+        "f2_ictal_z": -0.4
+      }
+    },
+    {
+      "patient": "PN14",
+      "status": "skip: only 11 ictal windows",
+      "result_t6": {
+        "patient": "PN14",
+        "status": "ok",
+        "n_windows": 22,
+        "n_ictal": 11,
+        "delta_r2": 0.0143,
+        "p_lr": 0.9338,
+        "f0_ictal_z": -0.5,
+        "f2_ictal_z": 0.28
+      }
+    },
+    {
+      "patient": "PN16",
+      "status": "ok",
+      "n_windows": 40,
+      "n_ictal": 20,
+      "delta_r2": -0.0101,
+      "p_lr": 1.0,
+      "f0_ictal_z": 0.19,
+      "f2_ictal_z": 0.13,
+      "result_t6": {
+        "patient": "PN16",
+        "status": "ok",
+        "n_windows": 40,
+        "n_ictal": 20,
+        "delta_r2": -0.0101,
+        "p_lr": 1.0,
+        "f0_ictal_z": 0.19,
+        "f2_ictal_z": 0.13
+      }
+    },
+    {
+      "patient": "PN17",
+      "status": "ok",
+      "n_windows": 30,
+      "n_ictal": 15,
+      "delta_r2": 0.0,
+      "p_lr": 1.0,
+      "f0_ictal_z": -0.05,
+      "f2_ictal_z": -0.27,
+      "result_t6": {
+        "patient": "PN17",
+        "status": "ok",
+        "n_windows": 30,
+        "n_ictal": 15,
+        "delta_r2": 0.0,
+        "p_lr": 1.0,
+        "f0_ictal_z": -0.05,
+        "f2_ictal_z": -0.27
+      }
+    }
+  ]
+}

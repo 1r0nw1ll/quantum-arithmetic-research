@@ -8100,6 +8100,20 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_qa_energy_cert_family(base_dir):
+    """QA Pyth-3 QA and Energy cert [374]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.5 pp.20-27. CLAIM: (C1) QN definition >=4 prime factors; seed products (1,1,2,3)->6 and (2,1,3,4)->24; ratio=4=2*2 two octaves. (C2) Sympathetic Harmonics 2310=2*3*5*7*11 and 2730=2*3*5*7*13; GCD=210; ratio 11:13; LCM=30030. (C3) Two-octave law female product=4*male; (1,2,3,5)->30 and (4,1,5,6)->120. (C4) Non-virtual QN male(5,8,13,21) primes={2,3,5,7,13} product=10920; female(16,5,21,26) product=43680=4*10920. (C5) PI=20612/6561; 6561=3^8=81*81; 20612=4*5153(prime); gcd=1; |approx-pi|<1e-4. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth3_qa_energy_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth3_qa_energy_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_qa_energy_cert_v1/qa_pyth3_qa_energy_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return (f"qa_pyth3_qa_energy_cert self-test failed:\n"
+                f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}")
+    return None
+
+
 def _validate_qa_pyth2_closing_ode_cert_family(base_dir):
     """QA Pyth-2 Closing Ode cert [373]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XVII pp.142-146. CLAIM: (C1) Ch.XVII = 17th final chapter; 4 numbered stanzas + 5-line closing couplet. (C2) 4 historical anchors: Eratosthenes/Euclid/Pythagoras/Samekh. (C3) Four-number declension = QA (b,e,d=b+e,a=b+2e); A2 derivation confirmed. (C4) Samekh ordinal=15 gematria=60 phi(60)=16; Synchronous=Ch.XIII-XVI. (C5) phi(30)=8 phi(60)=16; BABTHE N=1 O=7 chain; 2/97 identity. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10782,6 +10796,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (374, "QA Pyth-3 QA and Energy Cert family",
+     _validate_qa_pyth3_qa_energy_cert_family,
+     "QA Pyth-3 QA and Energy Cert [374]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.5 pp.20-27. CLAIM: (C1) QN def >=4 prime factors; (1,1,2,3)->6 (2,1,3,4)->24 ratio=4=2*2. (C2) 2310=2*3*5*7*11; 2730=2*3*5*7*13; GCD=210; ratio 11:13; LCM=30030. (C3) female product=4*male; (1,2,3,5)->30 (4,1,5,6)->120. (C4) male(5,8,13,21) primes={2,3,5,7,13} product=10920; female(16,5,21,26) 43680=4*10920. (C5) PI=20612/6561; 6561=3^8=81*81; 20612=4*5153(prime); gcd=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "374_qa_pyth3_qa_energy",
+     "qa_pyth3_qa_energy_cert_v1", True),
     (373, "QA Pyth-2 Closing Ode Cert family",
      _validate_qa_pyth2_closing_ode_cert_family,
      "QA Pyth-2 Closing Ode Cert [373]. Source: Iverson (1993) Pyth Arith Vol II Ch.XVII pp.142-146. CLAIM: (C1) Ch.XVII = 17th final chapter; 4 stanzas + 5-line closing. (C2) 4 historical anchors: Eratosthenes/Euclid/Pythagoras/Samekh. (C3) 'four-number declension'=QA (b,e,d=b+e,a=b+2e); A2 derivation. (C4) Samekh ordinal=15 gematria=60 phi(60)=16; Synchronous=Ch.XIII-XVI. (C5) phi(30)=8 phi(60)=16; BABTHE N=1 O=7 chain (1,7,8,15,41,56,97); 2/97=1/56+1/679+1/776. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

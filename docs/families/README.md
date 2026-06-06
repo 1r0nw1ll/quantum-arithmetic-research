@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [380] | [QA Pyth-3 Pitfalls of Invention](380_qa_pyth3_pitfalls_invention.md) | 5kW VTA threshold=QN seed[2]=5-par; 5000%24=8=2³; pyramid $10→$160 4 doublings=tuple ratio=2=octave; $40000%24=16=Myriad; $3000/page=24×5³; Searl 1948%24=4=portal | PASS |
 | [379] | [QA Pyth-3 Human Spirit](379_qa_pyth3_human_spirit.md) | 6 Talmud books=seed product 1*1*2*3=6 perfect; 600/1200 yr Christ Spirit gaps mod24=0 octave ratio=2; 10000/70000 yr both mod24=16=Myriad; 200%24=8=2³; 3000=24×5³ mod24=0 | PASS |
 | [378] | [QA Pyth-3 Billy's Story](378_qa_pyth3_billys_story.md) | 3×3=9 mod9=0(Singularity); 4 castles=QA tuple; 3000=24×5³ mod24=0; 10000%24=16=Myriad; 11000%24=8; (16+16)%24=8; 9men%9=0; 4 lives=tuple; 4+4=8=2³ | PASS |
 | [377] | [QA Pyth-3 Children and Past Lives](377_qa_pyth3_children_past_lives.md) | 7_acres=3+4; 3×4=12; 3²+4²=25 mod 24=1 Singularity; 1hr/3hr ratio=3; 1+3=4=tuple; Billy 4→15 diff=11(prime); walk-in 16→70 diff=54=2×3³; 2000%24=8000%24=8=2³ | PASS |

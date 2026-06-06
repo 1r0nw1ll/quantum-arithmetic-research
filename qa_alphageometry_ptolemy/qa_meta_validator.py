@@ -8100,6 +8100,20 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_pitfalls_invention_cert_family(base_dir):
+    """QA Pyth-3 Pitfalls of Invention cert [380]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.11 pp.60-64. CLAIM: (C1) 5kW=5-par QN_seed[2]; 5000%24=8=2^3. (C2) pyramid $10->$20->$40->$80->$160; 4_steps=QA_tuple; ratio=2=octave; residues=[10,20,16,8,16]; 160/10=2^4. (C3) lab $40000 %24=16=Myriad; gcd=8. (C4) $3000/page 3000=24*5^3; 3000/600=5. (C5) Searl 1948%24=4=portal-4-par; 3 stages; 3*4=12=chromatic. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth3_pitfalls_invention_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth3_pitfalls_invention_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_pitfalls_invention_cert_v1/qa_pyth3_pitfalls_invention_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return (f"qa_pyth3_pitfalls_invention_cert self-test failed:\n"
+                f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}")
+    return None
+
+
 def _validate_qa_pyth3_human_spirit_cert_family(base_dir):
     """QA Pyth-3 Human Spirit cert [379]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.10 pp.56-59. CLAIM: (C1) 6 Talmud books=male seed product 1*1*2*3=6; 6 perfect (1+2+3=6); 6%24=6. (C2) 600yr Jesus-Mohammed mod24=0=25*24; 1200yr Mohammed-Smith mod24=0=50*24; 1200/600=2=octave; 1800%24=0. (C3) 10000%24=16=70000%24=16=Myriad; gap 60000%24=0. (C4) 200yr memory 200%24=8=2^3; 200=8*5^2; gcd(200,24)=8. (C5) 3000yr 3000%24=0=24*5^3; 1000%24=16=Myriad. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10866,6 +10880,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (380, "QA Pyth-3 Pitfalls of Invention Cert family",
+     _validate_qa_pyth3_pitfalls_invention_cert_family,
+     "QA Pyth-3 Pitfalls of Invention Cert [380]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.11 pp.60-64. CLAIM: (C1) 5kW=QN_seed[2]=5-par; 5000%24=8=2^3. (C2) $10->$20->$40->$80->$160 4_steps=tuple ratio=2=octave residues=[10,20,16,8,16] 160/10=2^4. (C3) $40000%24=16=Myriad gcd=8. (C4) $3000/page 3000=24*5^3 %24=0 3000/600=5. (C5) Searl 1948%24=4=portal-4-par 3_stages*4=12=chromatic. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "380_qa_pyth3_pitfalls_invention",
+     "qa_pyth3_pitfalls_invention_cert_v1", True),
     (379, "QA Pyth-3 Human Spirit Cert family",
      _validate_qa_pyth3_human_spirit_cert_family,
      "QA Pyth-3 Human Spirit Cert [379]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.10 pp.56-59. CLAIM: (C1) 6_books=seed_product_1*1*2*3=6; perfect(1+2+3=6); 6%24=6. (C2) 600%24=0(25*24); 1200%24=0(50*24); 1200/600=2(octave); 1800%24=0(75*24). (C3) 10000%24=16=70000%24=16=Myriad; gap 60000%24=0. (C4) 200%24=8=2^3; 200=8*5^2; gcd(200,24)=8. (C5) 3000%24=0=24*5^3; 1000%24=16=Myriad. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

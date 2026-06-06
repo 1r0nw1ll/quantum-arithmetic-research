@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Two Forms of Energy cert [381]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.12 pp.65-73. (C1) Dayside/Nightside 180deg phase 180%24=12=chromatic; 360%24=0; 2 forms 2=QA prime. (C2) Film 1/16s=2^4 mod24=16=Myriad; TV 1/32s=2^5 mod24=8=2^3; ratio=2=octave. (C3) 7octaves*7Myriads=49=7^2; 49%24=1=Singularity-class. (C4) 3 primary+3 secondary colors; 3+3=6=seed; 3*3=9 mod9=0. (C5) 13000ft%24=16=Myriad; 400mph%24=16=Myriad; both Myriad-class; product 5200000%24=16. DOI: primary text, no external DOI."
+}

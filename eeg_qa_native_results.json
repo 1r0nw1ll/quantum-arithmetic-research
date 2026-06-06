@@ -1,0 +1,94 @@
+{
+  "n": 12,
+  "mean_dr2": 0.27488,
+  "se_dr2": 0.07431,
+  "fisher_chi2": 143.3,
+  "fisher_p": 5.763117559477119e-19,
+  "n_positive": 11,
+  "patients": [
+    {
+      "patient": "chb08",
+      "dr2": 0.14258,
+      "p": 0.051572,
+      "sing_ictal_z": 4.076,
+      "sat_ictal_z": -2.037
+    },
+    {
+      "patient": "chb09",
+      "dr2": 0.32368,
+      "p": 0.027606,
+      "sing_ictal_z": 3.728,
+      "sat_ictal_z": -2.407
+    },
+    {
+      "patient": "chb10",
+      "dr2": 0.39342,
+      "p": 0.001103,
+      "sing_ictal_z": 3.822,
+      "sat_ictal_z": -2.409
+    },
+    {
+      "patient": "chb12",
+      "dr2": 0.02057,
+      "p": 0.407319,
+      "sing_ictal_z": 0.346,
+      "sat_ictal_z": -0.4
+    },
+    {
+      "patient": "chb13",
+      "dr2": 0.29188,
+      "p": 0.002312,
+      "sing_ictal_z": 1.633,
+      "sat_ictal_z": -0.665
+    },
+    {
+      "patient": "chb14",
+      "dr2": 0.00555,
+      "p": 0.966245,
+      "sing_ictal_z": -2.078,
+      "sat_ictal_z": 3.723
+    },
+    {
+      "patient": "chb15",
+      "dr2": 0.57991,
+      "p": 0.0,
+      "sing_ictal_z": 1.887,
+      "sat_ictal_z": -1.52
+    },
+    {
+      "patient": "chb17",
+      "dr2": 0.41522,
+      "p": 0.007593,
+      "sing_ictal_z": 1.883,
+      "sat_ictal_z": -2.113
+    },
+    {
+      "patient": "chb19",
+      "dr2": -0.20897,
+      "p": 1.0,
+      "sing_ictal_z": 1.558,
+      "sat_ictal_z": -0.632
+    },
+    {
+      "patient": "chb21",
+      "dr2": 0.67833,
+      "p": 0.003545,
+      "sing_ictal_z": 2.459,
+      "sat_ictal_z": -1.896
+    },
+    {
+      "patient": "chb22",
+      "dr2": 0.47341,
+      "p": 0.019493,
+      "sing_ictal_z": 4.683,
+      "sat_ictal_z": -3.766
+    },
+    {
+      "patient": "chb23",
+      "dr2": 0.18299,
+      "p": 0.101971,
+      "sing_ictal_z": 6.004,
+      "sat_ictal_z": -3.059
+    }
+  ]
+}

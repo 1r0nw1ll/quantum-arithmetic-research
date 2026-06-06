@@ -8100,6 +8100,20 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_spirituality_cert_family(base_dir):
+    """QA Pyth-3 Spirituality cert [375]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.6 pp.28-36. CLAIM: (C1) 7 Myriads 3+1+3; 7 mod 24=7; 7 first prime not dividing 360. (C2) Light 7 colors 4 primary 3 secondary; Music 4 bugle notes; both 4 primary=QA tuple size. (C3) Bugle 3:4:5:6 -> b=3 e=1 diff=4=F apex=5=A; upper C=2*lower C octave; 3^2+4^2=5^2. (C4) 7*7=49=7^2; 49 mod 24=1 Singularity class. (C5) Mother 61+37=98=2*7^2; 61 mod 24=37 mod 24=13; 98 mod 24=2; 70 mod 24=22. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth3_spirituality_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth3_spirituality_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_spirituality_cert_v1/qa_pyth3_spirituality_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return (f"qa_pyth3_spirituality_cert self-test failed:\n"
+                f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}")
+    return None
+
+
 def _validate_qa_pyth3_qa_energy_cert_family(base_dir):
     """QA Pyth-3 QA and Energy cert [374]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.5 pp.20-27. CLAIM: (C1) QN definition >=4 prime factors; seed products (1,1,2,3)->6 and (2,1,3,4)->24; ratio=4=2*2 two octaves. (C2) Sympathetic Harmonics 2310=2*3*5*7*11 and 2730=2*3*5*7*13; GCD=210; ratio 11:13; LCM=30030. (C3) Two-octave law female product=4*male; (1,2,3,5)->30 and (4,1,5,6)->120. (C4) Non-virtual QN male(5,8,13,21) primes={2,3,5,7,13} product=10920; female(16,5,21,26) product=43680=4*10920. (C5) PI=20612/6561; 6561=3^8=81*81; 20612=4*5153(prime); gcd=1; |approx-pi|<1e-4. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10796,6 +10810,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (375, "QA Pyth-3 Spirituality Cert family",
+     _validate_qa_pyth3_spirituality_cert_family,
+     "QA Pyth-3 Spirituality Cert [375]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.6 pp.28-36. CLAIM: (C1) 7 Myriads 3+1+3=7; 7%24=7; 7 first prime not dividing 360. (C2) Light 7 colors 4 primary; Music 4 bugle notes; both 4 primary=QA tuple size. (C3) Bugle 3:4:5:6 b=3 e=1 diff=4 apex=5; c_high=2*c_low; 3^2+4^2=5^2. (C4) 7*7=49=7^2; 49%24=1 Singularity. (C5) 61+37=98=2*7^2; 61%24=37%24=13; 98%24=2; 70%24=22. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "375_qa_pyth3_spirituality",
+     "qa_pyth3_spirituality_cert_v1", True),
     (374, "QA Pyth-3 QA and Energy Cert family",
      _validate_qa_pyth3_qa_energy_cert_family,
      "QA Pyth-3 QA and Energy Cert [374]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.5 pp.20-27. CLAIM: (C1) QN def >=4 prime factors; (1,1,2,3)->6 (2,1,3,4)->24 ratio=4=2*2. (C2) 2310=2*3*5*7*11; 2730=2*3*5*7*13; GCD=210; ratio 11:13; LCM=30030. (C3) female product=4*male; (1,2,3,5)->30 (4,1,5,6)->120. (C4) male(5,8,13,21) primes={2,3,5,7,13} product=10920; female(16,5,21,26) 43680=4*10920. (C5) PI=20612/6561; 6561=3^8=81*81; 20612=4*5153(prime); gcd=1. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

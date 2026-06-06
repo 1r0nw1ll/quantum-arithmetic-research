@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [375] | [QA Pyth-3 Spirituality](375_qa_pyth3_spirituality.md) | 7 Myriads 3+1+3=7; Light 7 colors 4 primary; Music 4 bugle notes; 4 primary=QA tuple; bugle 3:4:5:6 b=3 e=1 diff=4=F apex=5=A octave 2:1; 7×7=49 mod 24=1 Singularity; 61+37=98=2×7² mod 24=2 | PASS |
 | [374] | [QA Pyth-3 QA and Energy](374_qa_pyth3_qa_energy.md) | QN definition >=4 prime factors; seed products (1,1,2,3)->6 (2,1,3,4)->24 ratio=4=2²; Sympathetic Harmonics 2310=210×11 2730=210×13 GCD=210 ratio 11:13 LCM=30030; female=4×male product; male(5,8,13,21)/female(16,5,21,26) 5-prime non-virtual; PI=20612/6561 6561=3⁸=81² | PASS |
 | [373] | [QA Pyth-2 Closing Ode Structural](373_qa_pyth2_closing_ode.md) | Ch.XVII final chapter ode; 4 anchors Eratosthenes/Euclid/Pythagoras/Samekh; four-number declension=(b,e,d=b+e,a=b+2e) A2; Samekh ordinal=15 gematria=60 phi(60)=16; phi(30)=8; BABTHE N=1,O=7 chain; 2/97=1/56+1/679+1/776 | PASS |
 | [372] | [QA Pyth-2 Cattle Problem Integer Structure](372_qa_pyth2_cattle_problem.md) | 1/m+1/(m+1)=(2m+1)/(m(m+1)); W1=2226,X1=1602,Y1=891,Z1=1580; 6\|X1,20\|Z1,42\|W1; 1/6*X1+11/20*Z1+29/42*W1=3*Y1=2673; min integer Y1=891 | PASS |

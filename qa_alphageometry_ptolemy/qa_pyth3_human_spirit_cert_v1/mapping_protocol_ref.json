@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Human Spirit cert [379]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.10 pp.56-59. (C1) 6 Talmud books = male seed product 1*1*2*3=6; 6 is perfect (1+2+3=6); 6 mod 24=6. (C2) 600 yr gap Jesus-Mohammed mod24=0=25*24; 1200 yr gap Mohammed-Smith mod24=0=50*24; 1200/600=2=octave; total=1800 mod24=0. (C3) Ancient civilizations 10000-70000 yr ago; 10000%24=16=70000%24=16=Myriad; gap 60000 mod24=0. (C4) 200 yr memory context; 200%24=8=2^3; 200=8*5^2; gcd(200,24)=8. (C5) 3000 yr mathematics; 3000=24*5^3; 3000%24=0; 1000%24=16=Myriad. DOI: primary text, no external DOI."
+}

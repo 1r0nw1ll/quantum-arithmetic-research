@@ -8100,6 +8100,20 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_human_spirit_cert_family(base_dir):
+    """QA Pyth-3 Human Spirit cert [379]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.10 pp.56-59. CLAIM: (C1) 6 Talmud books=male seed product 1*1*2*3=6; 6 perfect (1+2+3=6); 6%24=6. (C2) 600yr Jesus-Mohammed mod24=0=25*24; 1200yr Mohammed-Smith mod24=0=50*24; 1200/600=2=octave; 1800%24=0. (C3) 10000%24=16=70000%24=16=Myriad; gap 60000%24=0. (C4) 200yr memory 200%24=8=2^3; 200=8*5^2; gcd(200,24)=8. (C5) 3000yr 3000%24=0=24*5^3; 1000%24=16=Myriad. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth3_human_spirit_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth3_human_spirit_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_human_spirit_cert_v1/qa_pyth3_human_spirit_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return (f"qa_pyth3_human_spirit_cert self-test failed:\n"
+                f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}")
+    return None
+
+
 def _validate_qa_pyth3_billys_story_cert_family(base_dir):
     """QA Pyth-3 Billy's Story cert [378]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.9 pp.48-55. CLAIM: (C1) 3*3=9 mod9=0(Singularity) mod24=9; 3+3=6; both 3-par. (C2) 4_castles=QA_tuple_size; 4%24=4(4-par); 4%4=0. (C3) 3000=24*5^3; 3000%24=0; 1000%24=16=Myriad. (C4) 10000%24=16; 11000%24=8; 1000%24=16; (16+16)%24=8; 9men%9=0(Singularity). (C5) 4_lives=tuple_size; start_age=4; 4+4=8=2^3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10852,6 +10866,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (379, "QA Pyth-3 Human Spirit Cert family",
+     _validate_qa_pyth3_human_spirit_cert_family,
+     "QA Pyth-3 Human Spirit Cert [379]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.10 pp.56-59. CLAIM: (C1) 6_books=seed_product_1*1*2*3=6; perfect(1+2+3=6); 6%24=6. (C2) 600%24=0(25*24); 1200%24=0(50*24); 1200/600=2(octave); 1800%24=0(75*24). (C3) 10000%24=16=70000%24=16=Myriad; gap 60000%24=0. (C4) 200%24=8=2^3; 200=8*5^2; gcd(200,24)=8. (C5) 3000%24=0=24*5^3; 1000%24=16=Myriad. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "379_qa_pyth3_human_spirit",
+     "qa_pyth3_human_spirit_cert_v1", True),
     (378, "QA Pyth-3 Billy's Story Cert family",
      _validate_qa_pyth3_billys_story_cert_family,
      "QA Pyth-3 Billy's Story Cert [378]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.9 pp.48-55. CLAIM: (C1) 3*3=9 mod9=0(Singularity) mod24=9; 3+3=6; both 3-par. (C2) 4_castles=QA_tuple_size; 4%24=4(4-par); 4%4=0. (C3) 3000=24*5^3; 3000%24=0; 1000%24=16=Myriad. (C4) 10000%24=16; 11000%24=8; 1000%24=16; (16+16)%24=8; 9men%9=0(Singularity). (C5) 4_lives=tuple_size; start_age=4; 4+4=8=2^3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

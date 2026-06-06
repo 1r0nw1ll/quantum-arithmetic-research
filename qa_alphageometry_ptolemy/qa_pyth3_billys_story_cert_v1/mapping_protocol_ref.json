@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Billy's Story cert [378]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.9 pp.48-55. (C1) 3 cannons + 3 targets; 3*3=9 mod 9=0 Singularity; 9 mod 24=9; 3+3=6. (C2) 4 nice castles=QA 4-tuple size; 4 mod 24=4 (4-par); portal_octave 52%24=4. (C3) 3000 berry tasters=24*5^3; 3000%24=0; 1000%24=16=Myriad residue. (C4) Atlantis 10000 BC mod 24=16=Myriad; 11000 BC mod 24=8; gap 1000 mod 24=16; (16+16)%24=8; 9 men 9%9=0 Singularity. (C5) 4 past lives soldier/Lord/hunter/Atlantis=QA tuple size; Billy_age=4=count; 4+4=8=2^3. DOI: primary text, no external DOI."
+}

@@ -8100,6 +8100,20 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_billys_story_cert_family(base_dir):
+    """QA Pyth-3 Billy's Story cert [378]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.9 pp.48-55. CLAIM: (C1) 3*3=9 mod9=0(Singularity) mod24=9; 3+3=6; both 3-par. (C2) 4_castles=QA_tuple_size; 4%24=4(4-par); 4%4=0. (C3) 3000=24*5^3; 3000%24=0; 1000%24=16=Myriad. (C4) 10000%24=16; 11000%24=8; 1000%24=16; (16+16)%24=8; 9men%9=0(Singularity). (C5) 4_lives=tuple_size; start_age=4; 4+4=8=2^3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth3_billys_story_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth3_billys_story_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_billys_story_cert_v1/qa_pyth3_billys_story_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return (f"qa_pyth3_billys_story_cert self-test failed:\n"
+                f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}")
+    return None
+
+
 def _validate_qa_pyth3_children_past_lives_cert_family(base_dir):
     """QA Pyth-3 Children and Past Lives cert [377]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.8 pp.43-47. CLAIM: (C1) 7-acre farm=3+4; 3*4=12; 3^2+4^2=25 25%24=1 Singularity. (C2) 10yr=1hr; older=3hr; ratio=3; 1+3=4=tuple size; apex_seed=3. (C3) Billy 4->15; diff=11(prime); 4%24=4; (4+11)%24=15. (C4) Walk-in 16->70; diff=54=2*3^3; 16=2^4; gcd=2; 54%24=6 70%24=22. (C5) Memories 2000-8000yr: both %24=8=2^3; span=6000 %24=0. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10838,6 +10852,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (378, "QA Pyth-3 Billy's Story Cert family",
+     _validate_qa_pyth3_billys_story_cert_family,
+     "QA Pyth-3 Billy's Story Cert [378]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.9 pp.48-55. CLAIM: (C1) 3*3=9 mod9=0(Singularity) mod24=9; 3+3=6; both 3-par. (C2) 4_castles=QA_tuple_size; 4%24=4(4-par); 4%4=0. (C3) 3000=24*5^3; 3000%24=0; 1000%24=16=Myriad. (C4) 10000%24=16; 11000%24=8; 1000%24=16; (16+16)%24=8; 9men%9=0(Singularity). (C5) 4_lives=tuple_size; start_age=4; 4+4=8=2^3. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "378_qa_pyth3_billys_story",
+     "qa_pyth3_billys_story_cert_v1", True),
     (377, "QA Pyth-3 Children and Past Lives Cert family",
      _validate_qa_pyth3_children_past_lives_cert_family,
      "QA Pyth-3 Children and Past Lives Cert [377]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.8 pp.43-47. CLAIM: (C1) 7_acres=3+4; 3*4=12; 3^2+4^2=25 %24=1 Singularity. (C2) 10yr=1hr; older=3hr; ratio=3; 1+3=4; apex_seed=3. (C3) Billy 4->15 diff=11(prime); 4%24=4 (4+11)%24=15. (C4) walk-in 16->70 diff=54=2*3^3; 16=2^4; gcd=2; 54%24=6 70%24=22. (C5) 2000%24=8000%24=8=2^3; span=6000 %24=0. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

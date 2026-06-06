@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [378] | [QA Pyth-3 Billy's Story](378_qa_pyth3_billys_story.md) | 3×3=9 mod9=0(Singularity); 4 castles=QA tuple; 3000=24×5³ mod24=0; 10000%24=16=Myriad; 11000%24=8; (16+16)%24=8; 9men%9=0; 4 lives=tuple; 4+4=8=2³ | PASS |
 | [377] | [QA Pyth-3 Children and Past Lives](377_qa_pyth3_children_past_lives.md) | 7_acres=3+4; 3×4=12; 3²+4²=25 mod 24=1 Singularity; 1hr/3hr ratio=3; 1+3=4=tuple; Billy 4→15 diff=11(prime); walk-in 16→70 diff=54=2×3³; 2000%24=8000%24=8=2³ | PASS |
 | [376] | [QA Pyth-3 Metaphysics Myriad](376_qa_pyth3_metaphysics_myriad.md) | UV=50(2-par) astral=51(3-par) portal=52(4-par); 5040=7! mod 24=0; 5040/144=35=5×7; 4896 primes {2,3,17}; hierarchy 5040→144→7→4; 4:7 ratio; spirit 52-58 residues [4..10] | PASS |
 | [375] | [QA Pyth-3 Spirituality](375_qa_pyth3_spirituality.md) | 7 Myriads 3+1+3=7; Light 7 colors 4 primary; Music 4 bugle notes; 4 primary=QA tuple; bugle 3:4:5:6 b=3 e=1 diff=4=F apex=5=A octave 2:1; 7×7=49 mod 24=1 Singularity; 61+37=98=2×7² mod 24=2 | PASS |

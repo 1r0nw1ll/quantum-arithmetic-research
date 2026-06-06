@@ -57,12 +57,12 @@ def check_c1() -> tuple[bool, str]:
     test_pairs = [(1, 2), (1, 4), (1, 6), (1, 7), (3, 4), (3, 8), (5, 6)]
     for N, O in test_pairs:
         assert gcd(N, O) == 1, f"gcd({N},{O}) != 1"
-        d = _dual_chain(N, O)
-        assert d["N"] + d["O"] == d["P"], (
-            f"N={N} O={O}: N+O={N+O} != P={d['P']}"
+        chain = _dual_chain(N, O)
+        assert chain["N"] + chain["O"] == chain["P"], (
+            f"N={N} O={O}: N+O={N+O} != P={chain['P']}"
         )
-        assert d["O"] + d["P"] == d["Q"], (
-            f"N={N} O={O}: O+P={d['O']+d['P']} != Q={d['Q']}"
+        assert chain["O"] + chain["P"] == chain["Q"], (
+            f"N={N} O={O}: O+P={chain['O']+chain['P']} != Q={chain['Q']}"
         )
     return True, (
         f"First quadruple (N,O,P,Q) Fibonacci-type N+O=P, O+P=Q "
@@ -74,8 +74,8 @@ def check_c2() -> tuple[bool, str]:
     """(Q, R, S, T) is Fibonacci-type: Q+R=S, R+S=T."""
     test_pairs = [(1, 2), (1, 4), (1, 6), (1, 7), (3, 4), (3, 8), (5, 6)]
     for N, O in test_pairs:
-        d = _dual_chain(N, O)
-        Q, R, S, T = d["Q"], d["R"], d["S"], d["T"]
+        chain = _dual_chain(N, O)
+        Q, R, S, T = chain["Q"], chain["R"], chain["S"], chain["T"]
         assert Q + R == S, f"N={N} O={O}: Q+R={Q+R} != S={S}"
         assert R + S == T, f"N={N} O={O}: R+S={R+S} != T={T}"
         # All four must be positive
@@ -93,24 +93,24 @@ def check_c3() -> tuple[bool, str]:
     test_pairs = [(1, 2), (1, 4), (1, 6), (1, 7), (3, 4), (3, 8), (5, 6)]
     iverson_example = None
     for N, O in test_pairs:
-        d = _dual_chain(N, O)
+        chain = _dual_chain(N, O)
         # Q as 4th of first set: Q = O+P
-        Q_from_first = d["O"] + d["P"]
+        Q_from_first = chain["O"] + chain["P"]
         # Q as 1st of second set: implies Q+R=S → Q = S-R
-        Q_from_second = d["S"] - d["R"]
-        assert Q_from_first == Q_from_second == d["Q"], (
-            f"N={N} O={O}: junction mismatch: O+P={Q_from_first}, S-R={Q_from_second}, Q={d['Q']}"
+        Q_from_second = chain["S"] - chain["R"]
+        assert Q_from_first == Q_from_second == chain["Q"], (
+            f"N={N} O={O}: junction mismatch: O+P={Q_from_first}, S-R={Q_from_second}, Q={chain['Q']}"
         )
         if (N, O) == (1, 7):
-            iverson_example = d
+            iverson_example = chain
     assert iverson_example is not None
     # Iverson's canonical: N=1,O=7 → (1,7,8,15) and (15,41,56,97)
-    d = iverson_example
-    assert (d["N"], d["O"], d["P"], d["Q"]) == (1, 7, 8, 15), (
-        f"Iverson's first quadruple: expected (1,7,8,15), got {(d['N'],d['O'],d['P'],d['Q'])}"
+    chain = iverson_example
+    assert (chain["N"], chain["O"], chain["P"], chain["Q"]) == (1, 7, 8, 15), (
+        f"Iverson's first quadruple: expected (1,7,8,15), got {(chain['N'],chain['O'],chain['P'],chain['Q'])}"
     )
-    assert (d["Q"], d["R"], d["S"], d["T"]) == (15, 41, 56, 97), (
-        f"Iverson's second quadruple: expected (15,41,56,97), got {(d['Q'],d['R'],d['S'],d['T'])}"
+    assert (chain["Q"], chain["R"], chain["S"], chain["T"]) == (15, 41, 56, 97), (
+        f"Iverson's second quadruple: expected (15,41,56,97), got {(chain['Q'],chain['R'],chain['S'],chain['T'])}"
     )
     return True, (
         "Junction Q is shared 4th/1st element: Q=O+P=S-R for all 7 pairs; "
@@ -122,14 +122,14 @@ def check_c4() -> tuple[bool, str]:
     """S = O*P: product of inner pair of first set = sum-element of second set."""
     test_pairs = [(1, 2), (1, 4), (1, 6), (1, 7), (3, 4), (3, 8), (5, 6)]
     for N, O in test_pairs:
-        d = _dual_chain(N, O)
-        assert d["S"] == d["O"] * d["P"], (
-            f"N={N} O={O}: S={d['S']} != O*P={d['O']*d['P']}"
+        chain = _dual_chain(N, O)
+        assert chain["S"] == chain["O"] * chain["P"], (
+            f"N={N} O={O}: S={chain['S']} != O*P={chain['O']*chain['P']}"
         )
         # Also verify R = (O-1)*(P-1) - 1
-        O, P, R = d["O"], d["P"], d["R"]
+        O, P, R = chain["O"], chain["P"], chain["R"]
         assert R == (O - 1) * (P - 1) - 1, (
-            f"N={d['N']} O={O}: R={R} != (O-1)(P-1)-1={(O-1)*(P-1)-1}"
+            f"N={chain['N']} O={O}: R={R} != (O-1)(P-1)-1={(O-1)*(P-1)-1}"
         )
     return True, (
         "S=O*P (product relation) verified for all 7 pairs; "
@@ -141,17 +141,17 @@ def check_c5() -> tuple[bool, str]:
     """2/T = 1/S + 1/(OT) + 1/(PT): unit fraction decomposition."""
     test_pairs = [(1, 2), (1, 4), (1, 6), (1, 7), (3, 4), (3, 8), (5, 6)]
     for N, O in test_pairs:
-        d = _dual_chain(N, O)
-        S, T, P = d["S"], d["T"], d["P"]
+        chain = _dual_chain(N, O)
+        S, T, P = chain["S"], chain["T"], chain["P"]
         # Compute using Fraction for exact arithmetic
         lhs = Fraction(2, T)
         rhs = Fraction(1, S) + Fraction(1, O * T) + Fraction(1, P * T)
         assert lhs == rhs, (
             f"N={N} O={O}: 2/{T} = {lhs} but 1/{S}+1/{O*T}+1/{P*T} = {rhs}"
-        )
+    )
     # Algebraic proof: R+Q=S → (R+S+Q)/(ST)=S/(ST)=1/T → *2 gives 2/T
     # Direct verification of Iverson's example:
-    d = _dual_chain(1, 7)
+    chain = _dual_chain(1, 7)
     assert Fraction(2, 97) == Fraction(1, 56) + Fraction(1, 679) + Fraction(1, 776), (
         "Iverson's 2/97 = 1/56 + 1/679 + 1/776 failed"
     )

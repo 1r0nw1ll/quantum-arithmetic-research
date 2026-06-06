@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-2 Closing Ode cert [373]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol II Ch.XVII pp.142-146. Text: 'AN ODE TO A NODE ON THE ROAD UNKNOWED'; stanzas 1-4 + 5-line closing. (C1) Ch.XVII = 17th and final chapter; 4 numbered stanzas + 5-line closing couplet. (C2) 4 historical anchors: Eratosthenes/Sieve/primes; Euclid/Lemma/coprimality; Pythagoras/triangles/beads; Samekh/Hebrew-15/harmonic-remainders. (C3) 'four-number declension/independent dimension' = QA 4-tuple (b,e,d=b+e,a=b+2e); d and a always derived (A2). (C4) 'From Samekh to Synchronous': Samekh ordinal=15 gematria=60 phi(60)=16; Synchronous=Ch.XIII-XVI (4 chapters). (C5) 'Euler's great function'=phi(n): phi(30)=8 phi(60)=16; 'aliphatic chains'=BABTHE N=1 O=7 chain (1,7,8,15,41,56,97); 2/97=1/56+1/679+1/776. DOI: primary text, no external DOI."
+}

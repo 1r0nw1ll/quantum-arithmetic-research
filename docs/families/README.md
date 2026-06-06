@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [373] | [QA Pyth-2 Closing Ode Structural](373_qa_pyth2_closing_ode.md) | Ch.XVII final chapter ode; 4 anchors Eratosthenes/Euclid/Pythagoras/Samekh; four-number declension=(b,e,d=b+e,a=b+2e) A2; Samekh ordinal=15 gematria=60 phi(60)=16; phi(30)=8; BABTHE N=1,O=7 chain; 2/97=1/56+1/679+1/776 | PASS |
 | [372] | [QA Pyth-2 Cattle Problem Integer Structure](372_qa_pyth2_cattle_problem.md) | 1/m+1/(m+1)=(2m+1)/(m(m+1)); W1=2226,X1=1602,Y1=891,Z1=1580; 6\|X1,20\|Z1,42\|W1; 1/6*X1+11/20*Z1+29/42*W1=3*Y1=2673; min integer Y1=891 | PASS |
 | [371] | [QA Pyth-2 Fibonacci Coprime Structure](371_qa_pyth2_fibonacci_coprime_structure.md) | Euclid Prop 28: gcd(a+b,a)=1; 128 pairs b odd [1,17]; 255 any b [1,20]; 4-bead coprimeness generalized; Lucas a(n)=F(n)+F(n+2)=L(n+1); 2/97 has exactly 3 decompositions | PASS |
 | [370] | [QA Pyth-2 BABTHE Dual Bead Chain](370_qa_pyth2_babthe_dual_bead_chain.md) | 2/T=1/S+1/(OT)+1/(PT); T+Q=2S; dual bead chain {N,O,P,Q}/{Q,R,S,T}; O+P=S−R; R=N+(O−2)P; T=2OP−(O+P); 29 multi-decomposition T values | PASS |

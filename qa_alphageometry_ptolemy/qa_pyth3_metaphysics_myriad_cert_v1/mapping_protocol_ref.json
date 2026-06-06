@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Metaphysics Myriad cert [376]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.7 pp.37-42. (C1) UV=50th octave; astral=51st; spirit portal=52nd; 50%24=2 51%24=3 52%24=4 (consecutive 2-par->3-par->4-par). (C2) 5040 frequencies per octave=7!=7*720; 5040 mod 24=0; 5040/24=210=2*3*5*7. (C3) 144 strong=12^2=2^4*3^2; 5040/144=35=5*7; 4896=5040-144 prime factors {2,3,17}; all mod 24=0. (C4) Hierarchy 5040->144->7->4; 4:7 ratio same as Light/Music; 12-18 range brackets 7; 144/12=12(chromatic). (C5) Spirit world octaves 52-58 span=7; residues mod 24=[4..10]; starts at 4-par. DOI: primary text, no external DOI."
+}

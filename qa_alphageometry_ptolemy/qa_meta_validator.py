@@ -8100,6 +8100,20 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth3_metaphysics_myriad_cert_family(base_dir):
+    """QA Pyth-3 Metaphysics Myriad cert [376]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.7 pp.37-42. CLAIM: (C1) UV=50th octave; astral=51st; portal=52nd; 50%24=2, 51%24=3, 52%24=4 (consecutive 2-par->3-par->4-par). (C2) 5040=7!=7*720; 5040 mod 24=0; 5040/24=210=2*3*5*7. (C3) 144=12^2; 5040/144=35=5*7; 4896=5040-144 primes {2,3,17}; all mod 24=0. (C4) Hierarchy 5040->144->7->4; 4:7 primary ratio; 144/12=12. (C5) Spirit 52-58 span=7; residues=[4..10]; starts 4-par. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth3_metaphysics_myriad_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth3_metaphysics_myriad_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth3_metaphysics_myriad_cert_v1/qa_pyth3_metaphysics_myriad_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return (f"qa_pyth3_metaphysics_myriad_cert self-test failed:\n"
+                f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}")
+    return None
+
+
 def _validate_qa_pyth3_spirituality_cert_family(base_dir):
     """QA Pyth-3 Spirituality cert [375]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.6 pp.28-36. CLAIM: (C1) 7 Myriads 3+1+3; 7 mod 24=7; 7 first prime not dividing 360. (C2) Light 7 colors 4 primary 3 secondary; Music 4 bugle notes; both 4 primary=QA tuple size. (C3) Bugle 3:4:5:6 -> b=3 e=1 diff=4=F apex=5=A; upper C=2*lower C octave; 3^2+4^2=5^2. (C4) 7*7=49=7^2; 49 mod 24=1 Singularity class. (C5) Mother 61+37=98=2*7^2; 61 mod 24=37 mod 24=13; 98 mod 24=2; 70 mod 24=22. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10810,6 +10824,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (376, "QA Pyth-3 Metaphysics Myriad Cert family",
+     _validate_qa_pyth3_metaphysics_myriad_cert_family,
+     "QA Pyth-3 Metaphysics Myriad Cert [376]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.7 pp.37-42. CLAIM: (C1) UV=50(mod24=2) astral=51(mod24=3) portal=52(mod24=4) consecutive 2-par->3-par->4-par. (C2) 5040=7!=7*720; mod24=0; /24=210=2*3*5*7. (C3) 144=12^2; 5040/144=35=5*7; 4896 primes {2,3,17}; all mod24=0. (C4) 5040->144->7->4; 4:7 ratio; 144/12=12. (C5) spirit 52-58 span=7 residues [4..10]. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "376_qa_pyth3_metaphysics_myriad",
+     "qa_pyth3_metaphysics_myriad_cert_v1", True),
     (375, "QA Pyth-3 Spirituality Cert family",
      _validate_qa_pyth3_spirituality_cert_family,
      "QA Pyth-3 Spirituality Cert [375]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.6 pp.28-36. CLAIM: (C1) 7 Myriads 3+1+3=7; 7%24=7; 7 first prime not dividing 360. (C2) Light 7 colors 4 primary; Music 4 bugle notes; both 4 primary=QA tuple size. (C3) Bugle 3:4:5:6 b=3 e=1 diff=4 apex=5; c_high=2*c_low; 3^2+4^2=5^2. (C4) 7*7=49=7^2; 49%24=1 Singularity. (C5) 61+37=98=2*7^2; 61%24=37%24=13; 98%24=2; 70%24=22. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

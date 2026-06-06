@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [377] | [QA Pyth-3 Children and Past Lives](377_qa_pyth3_children_past_lives.md) | 7_acres=3+4; 3×4=12; 3²+4²=25 mod 24=1 Singularity; 1hr/3hr ratio=3; 1+3=4=tuple; Billy 4→15 diff=11(prime); walk-in 16→70 diff=54=2×3³; 2000%24=8000%24=8=2³ | PASS |
 | [376] | [QA Pyth-3 Metaphysics Myriad](376_qa_pyth3_metaphysics_myriad.md) | UV=50(2-par) astral=51(3-par) portal=52(4-par); 5040=7! mod 24=0; 5040/144=35=5×7; 4896 primes {2,3,17}; hierarchy 5040→144→7→4; 4:7 ratio; spirit 52-58 residues [4..10] | PASS |
 | [375] | [QA Pyth-3 Spirituality](375_qa_pyth3_spirituality.md) | 7 Myriads 3+1+3=7; Light 7 colors 4 primary; Music 4 bugle notes; 4 primary=QA tuple; bugle 3:4:5:6 b=3 e=1 diff=4=F apex=5=A octave 2:1; 7×7=49 mod 24=1 Singularity; 61+37=98=2×7² mod 24=2 | PASS |
 | [374] | [QA Pyth-3 QA and Energy](374_qa_pyth3_qa_energy.md) | QN definition >=4 prime factors; seed products (1,1,2,3)->6 (2,1,3,4)->24 ratio=4=2²; Sympathetic Harmonics 2310=210×11 2730=210×13 GCD=210 ratio 11:13 LCM=30030; female=4×male product; male(5,8,13,21)/female(16,5,21,26) 5-prime non-virtual; PI=20612/6561 6561=3⁸=81² | PASS |

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-3 Children and Past Lives cert [377]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.8 pp.43-47. (C1) 7-acre farm=3orchard+4forest; 3+4=7; 3*4=12(chromatic); 3^2+4^2=5^2 25%24=1 Singularity. (C2) 10-year-old QA in 1hr; older siblings 3hr; 3/1=3; 1+3=4=QA tuple size; apex_seed=3. (C3) Billy age 4 to 15: diff=11(prime); 4%24=4(4-par); (4+11)%24=15. (C4) Walk-in at 16, now 70: diff=54; 16=2^4; 54=2*3^3; 16%24=16 54%24=6 70%24=22. (C5) Memories 2000-8000yr: 2000%24=8000%24=8=2^3; span=6000 6000%24=0 6000/24=250. DOI: primary text, no external DOI."
+}

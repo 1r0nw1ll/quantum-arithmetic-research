@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Pyth-1 Recovery of Knowledge cert [382]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.I pp.16-28. (C1) Pythagoras 580 BC mod24=4=portal-4-par; Atlantis 9400yr mod24=16=Myriad; 9400=24*391+16; 391=17*23. (C2) 1548 BC earthquake mod24=12=chromatic; 1548=64*24+12; 1000yr mod24=16=Myriad. (C3) 340 generations mod24=4=portal; 340=4*5*17; same residue as 580. (C4) 529 BC Crotona=23^2 mod24=1=Singularity-class; 30yr travel mod24=6=seed. (C5) 3 stages 6th/4th/3rd cent; 600%24=0; 400%24=16=Myriad; 300%24=12=chromatic; 3*12=36%24=12. DOI: primary text, no external DOI."
+}

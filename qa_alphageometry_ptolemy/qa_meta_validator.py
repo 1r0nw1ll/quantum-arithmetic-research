@@ -8100,6 +8100,20 @@ def _validate_qa_pyth3_nightside_energy_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pyth1_recovery_knowledge_cert_family(base_dir):
+    """QA Pyth-1 Recovery of Knowledge cert [382]. Primary source: Iverson (1993) Pythagorean Arithmetic Vol I Ch.I pp.16-28. CLAIM: (C1) 580BC%24=4=portal; 9400yr%24=16=Myriad; 9400=24*391+16; 391=17*23. (C2) 1548BC%24=12=chromatic; 1548=64*24+12; 1000yr%24=16=Myriad. (C3) 340gen%24=4=portal; 340=4*5*17; same_as_580. (C4) 529BC=23^2 %24=1=Singularity-class; 30yr%24=6=seed. (C5) 3stages 600%24=0; 400%24=16; 300%24=12; 3*12=36%24=12. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.abspath(os.path.join(base_dir, "qa_pyth1_recovery_knowledge_cert_v1"))
+    validator = os.path.abspath(os.path.join(fam_dir, "qa_pyth1_recovery_knowledge_cert_validate.py"))
+    if not os.path.exists(validator):
+        return "missing qa_pyth1_recovery_knowledge_cert_v1/qa_pyth1_recovery_knowledge_cert_validate.py"
+    proc = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=120)
+    if proc.returncode != 0:
+        return (f"qa_pyth1_recovery_knowledge_cert self-test failed:\n"
+                f"STDOUT: {proc.stdout[-500:]}\nSTDERR: {proc.stderr[-300:]}")
+    return None
+
+
 def _validate_qa_pyth3_two_forms_energy_cert_family(base_dir):
     """QA Pyth-3 Two Forms of Energy cert [381]. Primary source: Iverson & Elkins (2006) Pythagorean Arithmetic Vol III Ch.12 pp.65-73. CLAIM: (C1) 180deg%24=12=chromatic; 360%24=0; 2_forms=QA_prime. (C2) film_16=2^4 mod24=16=Myriad; TV_32=2^5 mod24=8=2^3; ratio=2=octave. (C3) 7oct*7myr=49=7^2; 49%24=1=Singularity-class. (C4) 3+3=6=seed; 3*3=9 mod9=0. (C5) 13000%24=16=Myriad; 400%24=16=Myriad; 5200000%24=16. Checks C1..C5; 5 PASS 0 FAIL; self-test ok"""
     import subprocess
@@ -10894,6 +10908,11 @@ FAMILY_SWEEPS = [
      "QA Pythagorean Gnomon Square Cert [338]. Source: Iverson (1993) Pyth Arith Vol I pp.37-39,43-46. CLAIM: (C1) F=d^2-e^2=ab; b=d-e; a=d+e. (C2) C=2de=2be+2e^2. (C3) C^2=4E^2+4EF. (C4) A,B are 5-par. (C5) D,E opposite par-types. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "338_qa_pythagorean_gnomon_square",
      "qa_pythagorean_gnomon_square_cert_v1", True),
+    (382, "QA Pyth-1 Recovery of Knowledge Cert family",
+     _validate_qa_pyth1_recovery_knowledge_cert_family,
+     "QA Pyth-1 Recovery of Knowledge Cert [382]. Source: Iverson (1993) Pyth Arith Vol I Ch.I pp.16-28. CLAIM: (C1) 580BC%24=4=portal; 9400yr%24=16=Myriad; 391=17*23. (C2) 1548BC%24=12=chromatic; 1000yr%24=16=Myriad. (C3) 340gen%24=4=portal=340=4*5*17. (C4) 529BC=23^2 %24=1=Singularity-class; 30yr%24=6=seed. (C5) 3stages 600%24=0 400%24=16=Myriad 300%24=12=chromatic 3*12=36%24=12. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
+     "382_qa_pyth1_recovery_knowledge",
+     "qa_pyth1_recovery_knowledge_cert_v1", True),
     (381, "QA Pyth-3 Two Forms of Energy Cert family",
      _validate_qa_pyth3_two_forms_energy_cert_family,
      "QA Pyth-3 Two Forms of Energy Cert [381]. Source: Iverson & Elkins (2006) Pyth Arith Vol III Ch.12 pp.65-73. CLAIM: (C1) 180deg%24=12=chromatic; 360%24=0; 2_forms=QA_prime. (C2) film_16=2^4%24=16=Myriad; TV_32=2^5%24=8=2^3; ratio=2=octave. (C3) 7*7=49=7^2; 49%24=1=Singularity-class. (C4) 3+3=6=seed; 3*3=9 mod9=0. (C5) 13000%24=16=Myriad; 400%24=16=Myriad; 5200000%24=16. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

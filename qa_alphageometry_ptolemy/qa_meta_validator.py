@@ -7822,6 +7822,37 @@ def _validate_qa_orbit_access_theorem_cert_family(base_dir):
     return None
 
 
+def _validate_qa_orbit_theorem_map_cert_family(base_dir):
+    """QA Orbit Theorem Map Cert family [384]. CLAIM (narrow, falsifiable): exported QA orbit theorem-map JSON is internally exact for the declared finite orbit grids. The validator recomputes orbit-family labels from integer qa_step dynamics, recomputes multibase features, replays declared theorem-map leaf paths, and compares recomputed train/test confusion matrices against the exported declarations. Current v1 artifact covers moduli {9,12,15,18,21,24,27,30} with per-prime-factor-regime exact trees; the 2^1*3^1*5^1 regime is rooted at qa.v2_gcd_ge_m_and_r5_line_3=1 and validates at 301/301 held-out rows. Cert does NOT prove infinite-modulus generalization, does NOT certify the model-selection process, and does NOT claim the global one-tree model is zero-error. Checks TM_SCHEMA/TM_PATH/TM_ROOT/TM_EVAL/TM_COVER/SRC/F; 1 PASS + 1 FAIL fixture; self-test ok"""
+    import subprocess
+    fam_dir = os.path.normpath(os.path.join(base_dir, "..", "qa_orbit_theorem_map_cert_v1"))
+    validator = os.path.join(fam_dir, "qa_orbit_theorem_map_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_theorem_map_cert_v1/qa_orbit_theorem_map_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_theorem_map_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_theorem_map_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_theorem_map_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_iching_trigram_orbit_cert_family(base_dir):
     """QA I Ching Trigram Orbit Cert family [285]. Primary sources: Iverson, B. (n.d.). 'Eight Keynotes.' svpvril.com/svpweb39.html (establishes I Ching 8 trigrams as QA keynotes); Wilhelm, R. (trans. Baynes, C.F.) (1950). The I Ching or Book of Changes. Princeton University Press. ISBN 0-691-09750-X (standard binary encoding). Mechanism: QA Orbit Access Theorem cert [279]. CLAIM (narrow, falsifiable): for the 8 I Ching trigrams encoded as 3-bit integers (LSB=bottom line, solid=1, broken=0, Fuxi arrangement): (a) Kun=0 is A1-excluded (no valid QA state); (b) exactly Dui=3 and Xun=6 have Satellite access (divisible by 3, not by 9); (c) no code has Singularity access (max code=7<9 is structural impossibility); (d) codes 1=Zhen, 2=Kan, 4=Gen, 5=Li, 7=Qian are coprime to 3, Cosmos-only. Verified exhaustively for all 8 codes 0..7. Checks KOA_1/KOA_2/KOA_3/KOA_4/SRC/F; 6 PASS + 4 FAIL fixtures; self-test ok"""
     import subprocess
@@ -10927,6 +10958,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (384, "QA Orbit Theorem Map Cert family",
+     _validate_qa_orbit_theorem_map_cert_family,
+     "QA Orbit Theorem Map Cert [384]. CLAIM: exported QA orbit theorem-map JSON is internally exact for declared finite orbit grids. Validator recomputes orbit-family labels from integer qa_step dynamics, recomputes exact multibase features, replays declared leaf paths, and compares recomputed train/test confusion matrices against declarations. v1 covers moduli {9,12,15,18,21,24,27,30}; per-regime held-out result is 1142/1142 with 0 errors; 2^1*3^1*5^1 root predicate is qa.v2_gcd_ge_m_and_r5_line_3=1. Does NOT prove infinite-modulus generalization or certify model-selection. Checks TM_SCHEMA/TM_PATH/TM_ROOT/TM_EVAL/TM_COVER/SRC/F; 1 PASS + 1 FAIL; self-test ok",
+     "384_qa_orbit_theorem_map",
+     "../qa_orbit_theorem_map_cert_v1", True),
     (382, "QA Pyth-1 Recovery of Knowledge Cert family",
      _validate_qa_pyth1_recovery_knowledge_cert_family,
      "QA Pyth-1 Recovery of Knowledge Cert [382]. Source: Iverson (1993) Pyth Arith Vol I Ch.I pp.16-28. CLAIM: (C1) 580BC%24=4=portal; 9400yr%24=16=Myriad; 391=17*23. (C2) 1548BC%24=12=chromatic; 1000yr%24=16=Myriad. (C3) 340gen%24=4=portal=340=4*5*17. (C4) 529BC=23^2 %24=1=Singularity-class; 30yr%24=6=seed. (C5) 3stages 600%24=0 400%24=16=Myriad 300%24=12=chromatic 3*12=36%24=12. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",

@@ -82,6 +82,28 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #10 — 2026-06-08 (window: June 4 – June 8, 2026)
+Full report: `sota_scans/scan_2026-06-08.md`
+
+**Key finds:**
+- arXiv:2606.02621 (Fibonacci theorem for Collatz trajectories via modular graph structure, May 28) — **MEDIUM.** φ spectral radius emerges from Collatz mod-6 directed graph after orbit exclusion; F(m+1) orbit count via modular directed graph bijection. Independent golden ring / φ corroboration for `qa_golden_ring_orbit_cert_v1` and cert [291]. Root cause of scan gap: "Collatz" + "Fibonacci" not in search battery.
+- arXiv:2605.01148 (Arithmetic in the Wild: Llama uses Base-10 Addition to Reason About Cyclic Concepts, May 1) — **LOW-MEDIUM. Slipped scans #4–9.** LLMs fail to use period-specific orbit geometry for cyclic concepts (days of week, months) — empirical Theorem NT / T2 instantiation. Add to `qa_algebraic_diversity_observer_cert_v1` human tract.
+- arXiv:2605.31497 (Assign and Add: Compositional Arithmetic, May 29) — **LOW. Slipped scans #8–9.** Transformer modular addition module reuse; incremental grokking chain.
+
+**No HIGH finds — second consecutive quiet window.**
+
+**Registry explosion:** [311] → **[384]** in 4 days (73 new families). Full Pyth-1/2/3 Iverson corpus ingested as cert families [330]–[384] + new Pythagorean/Ancient/Diadic cluster [312]–[329].
+
+**Cert registry update (CRITICAL):**
+- Documentation backlog: **~101 families** [284]–[384] ALL missing README.md + SPEC.md (up from 28 in scan #9)
+- [384] `qa_orbit_theorem_map_cert_v1`: also missing docs/families entry
+- [261] qa_orbit_stratification_cert_v1: **NINE-TUPLE GAP** (9th scan — 5+ weeks overdue)
+- `qa_steinmetz_whittaker_bridge_cert_v1`: **SEVEN-TUPLE GAP** — IDs [312], [313], [330], [331] all consumed; assign **[385]**
+- `qa_whittaker_phase_packet_algebra_cert_v1`: **SEVEN-TUPLE GAP** — assign **[386]**
+- [266] + [156]: SEVEN-TUPLE GAP each (README/SPEC missing)
+
+**Search fix for scan #11:** Add "Collatz modular Fibonacci spectral orbit" + "cyclic submodule Z/mZ automorphism" + "Pisano period" explicit sweeps. Continue Thornton AD series monitoring.
+
 ### Scan #9 — 2026-06-04 (window: June 1 – June 4, 2026)
 Full report: `sota_scans/scan_2026-06-04.md`
 

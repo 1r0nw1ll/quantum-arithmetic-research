@@ -164,23 +164,28 @@ def gini(y: np.ndarray, n_classes: int) -> float:
 def best_split(X: np.ndarray, y: np.ndarray, n_classes: int) -> tuple[int, int, float]:
     n = len(y)
     parent_g = gini(y, n_classes)
+    y_oh = (y[:, None] == np.arange(1, n_classes+1, dtype=np.int32)[None, :]).astype(np.float32)
+    total_counts = y_oh.sum(axis=0)
     best_gain = 0.0; best_band = -1; best_t = -1
     for b in range(X.shape[1]):
-        vals = X[:, b]
+        vals  = X[:, b]
         order = np.argsort(vals, kind="stable")
-        sv = vals[order]; sy = y[order]
-        lc = np.zeros(n_classes + 1, dtype=np.int64)
-        rc = np.bincount(sy, minlength=n_classes + 1).astype(np.int64)
-        for i in range(n - 1):
-            c = int(sy[i]); lc[c] += 1; rc[c] -= 1
-            if sv[i] == sv[i + 1]:
-                continue
-            nl, nr = i + 1, n - i - 1
-            pl = lc[1:] / nl; pr = rc[1:] / nr
-            gain = parent_g - (nl/n * float(1-np.dot(pl,pl)) +
-                               nr/n * float(1-np.dot(pr,pr)))
-            if gain > best_gain:
-                best_gain = gain; best_band = b; best_t = int(sv[i])
+        sv    = vals[order]; sy_oh = y_oh[order]
+        lc = np.cumsum(sy_oh, axis=0)
+        rc = total_counts - lc
+        nl = np.arange(1, n+1, dtype=np.float32)
+        nr = (n - nl).clip(1e-9)
+        pl = lc / nl[:, None]; pr = rc / nr[:, None]
+        gain_vec = (parent_g
+                    - nl/n * (1.0 - (pl*pl).sum(axis=1))
+                    - nr/n * (1.0 - (pr*pr).sum(axis=1)))
+        gain_vec[-1] = -np.inf
+        dup = np.empty(n, dtype=bool); dup[-1] = False
+        dup[:-1] = sv[:-1] == sv[1:]
+        gain_vec[dup] = -np.inf
+        idx = int(np.argmax(gain_vec)); g = float(gain_vec[idx])
+        if g > best_gain:
+            best_gain = g; best_band = b; best_t = int(sv[idx])
     return best_band, best_t, best_gain
 
 
@@ -206,8 +211,20 @@ def predict_tree(tree, x):
     return tree["class"]
 
 
-def predict_all(tree, X):
-    return np.array([predict_tree(tree, X[i]) for i in range(len(X))])
+def predict_all(tree: dict, X: np.ndarray) -> np.ndarray:
+    n = len(X)
+    result = np.zeros(n, dtype=np.int32)
+    stack = [(tree, np.arange(n))]
+    while stack:
+        node, idx = stack.pop()
+        if node["leaf"]:
+            result[idx] = node["class"]
+            continue
+        vals = X[idx, node["band"]]
+        lm = vals <= node["threshold"]; rm = ~lm
+        if lm.any(): stack.append((node["left"],  idx[lm]))
+        if rm.any(): stack.append((node["right"], idx[rm]))
+    return result
 
 
 def count_leaves(tree) -> int:

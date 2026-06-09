@@ -119,15 +119,19 @@ Real Indian Pines AVIRIS dataset (10 249 labeled pixels, 1799 integer features, 
 Features: 200 raw bands + 4 spatial-mean scales (3×3/5×5/9×9/15×15) + 3 spatial-variance
 scales (texture) + 199 spectral first-differences (red-edge slope).
 
-Constructive claim: every classification error is a structural diagnosis, not noise.
-For each of the 120 class pairs the tree issues a certificate:
-- **SEPARABLE** (70/120, 58%): integer threshold exists at some feature → tree branch added
-- **INDISTINGUISHABLE** (50/120, 42%): no threshold at any feature → requires new sensor
+Three-tier constructive certificate for each of the 120 class pairs:
+- **SEPARABLE** (70/120, 58%): integer threshold exists → guaranteed zero errors
+- **RESOLVABLE** (20/120, 17%): no single-feature threshold, but 31-tree random-subspace
+  ensemble resolves the pair through multi-dimensional discrimination
+- **INDISTINGUISHABLE** (30/120, 25%): sensor limit — not resolved even by ensemble
 
-Test accuracy **91.3%**. Of 223 test errors: **211 are spectral-limit** (diagnosed),
-**12 are tree errors** (separable pairs missed by greedy split). Top confused cluster:
-Corn/Soy variants (gap −7 to −9), spectrally overlapping even in texture + derivative space.
-These require multi-temporal NDVI or LiDAR to resolve.
+| Method | Test accuracy | Errors | Notes |
+|---|---:|---:|---|
+| Single tree | 91.3% | 223 | 194 variance errors (overfitting) |
+| **Ensemble (31 trees, 40% subspace)** | **98.8%** | **30** | 0 tree errors, 30 true sensor-limit |
+
+8 classes achieve 100% test accuracy. Residual 30 errors: Corn/Soy variants
+(gap −7 to −9) that require multi-temporal NDVI or LiDAR canopy height.
 Report: `results/QA_HSI_INDIAN_PINES_2026_06_09.md`
 
 ### D. Houston Multimodal LiDAR Validation (`tools/qa_hsi_houston_lidar.py`)

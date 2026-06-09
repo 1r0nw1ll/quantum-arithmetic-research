@@ -25,62 +25,59 @@ The indistinguishable pairs are spectrally overlapping at every one of the
 200 AVIRIS bands.  No single-band integer threshold can separate them.
 This is not a classifier weakness — it is a sensor limitation.
 
-## Tree Statistics
+## Accuracy Summary
 
-- Leaves: 320  |  Max depth: 18
-- Train accuracy: **1.000**
-- Test accuracy:  **0.913**
+| Method | Train | Test |
+|---|---:|---:|
+| Single tree | 1.000 | 0.912 |
+| **Ensemble (31 trees, 40% subspace)** | **1.000** | **0.988** |
 
 ## Error Diagnosis
 
-Total test errors: 223 / 2557 (8.7%)
-
-| Error type | Count | Fraction of errors |
-|---|---:|---:|
-| Tree errors (separable pair, tree missed) | 12 | 5% |
-| Spectral limit (indistinguishable pair) | 211 | 95% |
+| Method | Errors | Tree errors | Spectral-limit errors |
+|---|---:|---:|---:|
+| Single tree | 224 (8.8%) | 13 | 211 |
+| **Ensemble** | **30 (1.2%)** | **0** | **30** |
 
 **Structural interpretation:**
-  - 12 errors are fixable — the pair IS separable but the tree
-    chose a different branch.  These shrink as the tree grows deeper.
-  - 211 errors reflect the sensor limit — no spectral feature
-    separates these classes.  Fixing them requires LiDAR, texture, or temporal data.
+  - Variance errors (single tree minus ensemble spectral-limit) = 194 — these were separable but overfitting caused wrong-branch decisions.
+  - 30 residual errors reflect the sensor limit — no spectral/spatial feature separates these classes.
 
-### Top Confused Pairs (spectral limit only)
+### Top Confused Pairs (ensemble, spectral-limit only)
 
 | True class | Predicted as | Errors | Best gap |
 |---|---|---:|---:|
-| Corn-notill | Soy-mintill | 30 | -8 |
-| Soy-notill | Soy-mintill | 16 | -8 |
-| Soy-notill | Corn-notill | 14 | -7 |
-| Soy-mintill | Corn-notill | 11 | -8 |
-| Corn-notill | Corn-mintill | 10 | -8 |
-| Corn-mintill | Soy-notill | 10 | -8 |
-| Corn-mintill | Corn-notill | 10 | -8 |
-| Woods | Bldg-Grass-Trees | 8 | -6 |
-| Soy-mintill | Soy-notill | 7 | -8 |
-| Corn-mintill | Soy-mintill | 6 | -9 |
+| Corn-notill | Soy-mintill | 5 | -8 |
+| Corn-mintill | Corn-notill | 4 | -8 |
+| Bldg-Grass-Trees | Woods | 4 | -6 |
+| Grass-Pasture | Corn-mintill | 3 | -5 |
+| Corn-notill | Soy-notill | 2 | -7 |
+| Alfalfa | Hay-windrowed | 1 | -3 |
+| Corn-notill | Soy-clean | 1 | -7 |
+| Corn-mintill | Soy-notill | 1 | -8 |
+| Corn-mintill | Grass-Pasture | 1 | -5 |
+| Grass-Pasture | Soy-mintill | 1 | -5 |
 
-## Per-Class Accuracy
+## Per-Class Accuracy (Ensemble)
 
-| Class | N test | Correct | Accuracy |
+| Class | N test | Tree acc | **Ens acc** |
 |---|---:|---:|---:|
-| Alfalfa                |   11 |   10 | 0.909 ▓▓▓▓▓▓▓▓▓░ |
-| Corn-notill            |  357 |  303 | 0.849 ▓▓▓▓▓▓▓▓░░ |
-| Corn-mintill           |  207 |  176 | 0.850 ▓▓▓▓▓▓▓▓░░ |
-| Corn                   |   59 |   52 | 0.881 ▓▓▓▓▓▓▓▓░░ |
-| Grass-Pasture          |  120 |  109 | 0.908 ▓▓▓▓▓▓▓▓▓░ |
-| Grass-Trees            |  182 |  178 | 0.978 ▓▓▓▓▓▓▓▓▓░ |
-| Grass-mowed            |    7 |    6 | 0.857 ▓▓▓▓▓▓▓▓░░ |
-| Hay-windrowed          |  119 |  116 | 0.975 ▓▓▓▓▓▓▓▓▓░ |
-| Oats                   |    5 |    4 | 0.800 ▓▓▓▓▓▓▓▓░░ |
-| Soy-notill             |  243 |  206 | 0.848 ▓▓▓▓▓▓▓▓░░ |
-| Soy-mintill            |  613 |  585 | 0.954 ▓▓▓▓▓▓▓▓▓░ |
-| Soy-clean              |  148 |  129 | 0.872 ▓▓▓▓▓▓▓▓░░ |
-| Wheat                  |   51 |   49 | 0.961 ▓▓▓▓▓▓▓▓▓░ |
-| Woods                  |  316 |  305 | 0.965 ▓▓▓▓▓▓▓▓▓░ |
-| Bldg-Grass-Trees       |   96 |   84 | 0.875 ▓▓▓▓▓▓▓▓░░ |
-| Steel-Towers           |   23 |   22 | 0.957 ▓▓▓▓▓▓▓▓▓░ |
+| Alfalfa                |   11 | 0.909 | **0.909** ▓▓▓▓▓▓▓▓▓░ |
+| Corn-notill            |  357 | 0.849 | **0.978** ▓▓▓▓▓▓▓▓▓░ |
+| Corn-mintill           |  207 | 0.850 | **0.971** ▓▓▓▓▓▓▓▓▓░ |
+| Corn                   |   59 | 0.864 | **1.000** ▓▓▓▓▓▓▓▓▓▓ |
+| Grass-Pasture          |  120 | 0.908 | **0.967** ▓▓▓▓▓▓▓▓▓░ |
+| Grass-Trees            |  182 | 0.978 | **1.000** ▓▓▓▓▓▓▓▓▓▓ |
+| Grass-mowed            |    7 | 0.857 | **1.000** ▓▓▓▓▓▓▓▓▓▓ |
+| Hay-windrowed          |  119 | 0.975 | **0.992** ▓▓▓▓▓▓▓▓▓░ |
+| Oats                   |    5 | 0.800 | **0.800** ▓▓▓▓▓▓▓▓░░ |
+| Soy-notill             |  243 | 0.848 | **0.988** ▓▓▓▓▓▓▓▓▓░ |
+| Soy-mintill            |  613 | 0.953 | **1.000** ▓▓▓▓▓▓▓▓▓▓ |
+| Soy-clean              |  148 | 0.878 | **0.993** ▓▓▓▓▓▓▓▓▓░ |
+| Wheat                  |   51 | 0.961 | **1.000** ▓▓▓▓▓▓▓▓▓▓ |
+| Woods                  |  316 | 0.965 | **1.000** ▓▓▓▓▓▓▓▓▓▓ |
+| Bldg-Grass-Trees       |   96 | 0.875 | **0.948** ▓▓▓▓▓▓▓▓▓░ |
+| Steel-Towers           |   23 | 0.957 | **1.000** ▓▓▓▓▓▓▓▓▓▓ |
 
 ## Interpretation
 

@@ -119,19 +119,25 @@ Real Indian Pines AVIRIS dataset (10 249 labeled pixels, 1799 integer features, 
 Features: 200 raw bands + 4 spatial-mean scales (3×3/5×5/9×9/15×15) + 3 spatial-variance
 scales (texture) + 199 spectral first-differences (red-edge slope).
 
-Three-tier constructive certificate for each of the 120 class pairs:
-- **SEPARABLE** (70/120, 58%): integer threshold exists → guaranteed zero errors
-- **RESOLVABLE** (20/120, 17%): no single-feature threshold, but 31-tree random-subspace
-  ensemble resolves the pair through multi-dimensional discrimination
-- **INDISTINGUISHABLE** (30/120, 25%): sensor limit — not resolved even by ensemble
+**120/120 class pairs SEPARABLE** — every pair has at least one integer feature
+with gap ≥ 0. Zero spectral-limit errors. 11 residual errors are pure tree errors
+(ensemble vote wrong; separator exists but isn't reliably found in every random subspace).
 
-| Method | Test accuracy | Errors | Notes |
-|---|---:|---:|---|
-| Single tree | 91.3% | 223 | 194 variance errors (overfitting) |
-| **Ensemble (31 trees, 40% subspace)** | **98.8%** | **30** | 0 tree errors, 30 true sensor-limit |
+Feature set (3997 integer features): raw bands + 6 spatial-mean scales (3×3…31×31) +
+4 spatial-variance scales + cross-scale contrast + dual-scale directional anisotropy
+(1×21, 21×1, 1×31, 31×1 strip means and their H−V differences) + spectral first- and
+second-differences.
 
-8 classes achieve 100% test accuracy. Residual 30 errors: Corn/Soy variants
-(gap −7 to −9) that require multi-temporal NDVI or LiDAR canopy height.
+| Method | Test accuracy | Errors | Sensor-limit errors |
+|---|---:|---:|---:|
+| Spectral only, single tree | 70.7% | 749 | 745 |
+| +spatial features, single tree | 91.3% | 223 | 211 |
+| +ensemble (31 trees) | 98.8% | 30 | 30 |
+| +larger windows, 101 trees bagged | 99.5% | 14 | 14 |
+| **+anisotropy+curvature, 201 trees** | **99.6%** | **11** | **0** |
+
+10 classes achieve 100% test accuracy. Residual 11 errors: barely-separable Corn/Soy
+pixels where the ensemble vote goes wrong (gap +1 to +3 after feature addition).
 Report: `results/QA_HSI_INDIAN_PINES_2026_06_09.md`
 
 ### D. Houston Multimodal LiDAR Validation (`tools/qa_hsi_houston_lidar.py`)

@@ -78,29 +78,47 @@ def _neighbourhood_var(cube: np.ndarray, size: int) -> np.ndarray:
 
 
 def _band_differences(cube: np.ndarray) -> np.ndarray:
-    """Integer first-derivative along the spectral axis (199 features).
-
-    diff[:,:,i] = cube[:,:,i+1] - cube[:,:,i]
-    The red-edge slope (~bands 30-50) discriminates Corn vs Soy where
-    absolute reflectance overlaps but the derivative shape differs.
-    """
+    """Integer first-derivative along the spectral axis (199 features)."""
     return (cube[:, :, 1:].astype(np.int64) -
             cube[:, :, :-1].astype(np.int64))
+
+
+def _band_second_differences(cube: np.ndarray) -> np.ndarray:
+    """Integer second-derivative (spectral curvature, 198 features).
+
+    diff2[:,:,i] = band[i+2] - 2*band[i+1] + band[i]
+    The red-edge curvature (~bands 35-48) is a classical corn/soy
+    discriminator: soy has a sharper inflection at the red edge.
+    All integer — no division or casting required.
+    """
+    c = cube.astype(np.int64)
+    return c[:, :, 2:] - 2 * c[:, :, 1:-1] + c[:, :, :-2]
 
 
 def load_indian_pines() -> tuple[np.ndarray, np.ndarray]:
     """Load spectral + spatial mean + spatial variance + band-difference features.
 
-    Feature layout (1799 total per pixel):
+    Feature layout (~4394 total per pixel):
       0-199    raw spectral bands
       200-399  3×3  neighbourhood integer mean
       400-599  5×5  neighbourhood integer mean
       600-799  9×9  neighbourhood integer mean
       800-999  15×15 neighbourhood integer mean
-      1000-1199 3×3  neighbourhood integer variance  (texture)
-      1200-1399 5×5  neighbourhood integer variance
-      1400-1599 9×9  neighbourhood integer variance
-      1600-1798 spectral first-differences (band[i+1]-band[i], 199 values)
+      1000-1199 21×21 neighbourhood integer mean  (~63m patch)
+      1200-1399 31×31 neighbourhood integer mean  (~93m patch)
+      1400-1599 3×3  neighbourhood integer variance
+      1600-1799 5×5  neighbourhood integer variance
+      1800-1999 9×9  neighbourhood integer variance
+      2000-2199 15×15 neighbourhood integer variance
+      2200-2399 cross-scale contrast: 3×3 − 31×31 mean
+      2400-2599 1×21 horizontal strip mean
+      2600-2799 21×1 vertical strip mean
+      2800-2999 21-pixel signed anisotropy H−V
+      3000-3199 1×31 horizontal strip mean
+      3200-3399 31×1 vertical strip mean
+      3400-3599 31-pixel signed anisotropy H−V
+      3600-3798 spectral first-differences (199 values)
+      3800-3997 spectral second-differences / curvature (198 values)
     """
     def _key(mat): return [k for k in mat if not k.startswith("__")][0]
     data = sio.loadmat(DATA_DIR / "Indian_pines_corrected.mat")
@@ -110,24 +128,44 @@ def load_indian_pines() -> tuple[np.ndarray, np.ndarray]:
     G    = gt[_key(gt)].astype(np.int32)        # (145, 145)
 
     blocks: list[np.ndarray] = [cube]
-    for size in (3, 5, 9, 15):
+    for size in (3, 5, 9, 15, 21, 31):
         print(f"Computing {size}×{size} spatial means...", flush=True)
         blocks.append(_neighbourhood_mean(cube, size=size))
 
-    for size in (3, 5, 9):
+    for size in (3, 5, 9, 15):
         print(f"Computing {size}×{size} spatial variances...", flush=True)
         blocks.append(_neighbourhood_var(cube, size=size))
 
-    print("Computing spectral band differences...", flush=True)
-    diff = _band_differences(cube)   # (145, 145, 199)
-    diff_padded = np.concatenate(
-        [diff, np.zeros((*diff.shape[:2], 1), dtype=np.int64)], axis=2
+    # Cross-scale high-frequency: 3×3 mean − 31×31 mean (local contrast)
+    print("Computing cross-scale contrast (3×3 − 31×31)...", flush=True)
+    blocks.append(blocks[1] - blocks[6])   # means[0]=3x3, means[5]=31x31
+
+    # Directional strip means at two scales — captures row-crop anisotropy
+    print("Computing directional strip means (1×21, 21×1, 1×31, 31×1)...", flush=True)
+    cf = cube.astype(np.float64)
+    h21 = ndimage.uniform_filter(cf, size=(1, 21, 1), mode="reflect").astype(np.int64)
+    v21 = ndimage.uniform_filter(cf, size=(21, 1, 1), mode="reflect").astype(np.int64)
+    h31 = ndimage.uniform_filter(cf, size=(1, 31, 1), mode="reflect").astype(np.int64)
+    v31 = ndimage.uniform_filter(cf, size=(31, 1, 1), mode="reflect").astype(np.int64)
+    blocks.extend([h21, v21, h21 - v21,   # 21-pixel anisotropy
+                   h31, v31, h31 - v31])   # 31-pixel anisotropy
+
+    print("Computing spectral band differences + curvature...", flush=True)
+    diff = _band_differences(cube)        # (145, 145, 199)
+    diff2 = _band_second_differences(cube)  # (145, 145, 198)
+    diff_padded  = np.concatenate(
+        [diff,  np.zeros((*diff.shape[:2],  1), dtype=np.int64)], axis=2
+    )
+    diff2_padded = np.concatenate(
+        [diff2, np.zeros((*diff2.shape[:2], 2), dtype=np.int64)], axis=2
     )
     blocks.append(diff_padded)
+    blocks.append(diff2_padded)
 
     H, W = G.shape
     X_all = np.concatenate([b.reshape(-1, 200) for b in blocks], axis=1)
-    X_all = X_all[:, :-1]   # drop padded zero column: 1800 → 1799
+    # Drop the 3 padded zero columns (1 from diff, 2 from diff2)
+    X_all = X_all[:, :-3]
 
     G_all = G.flatten().astype(np.int32)
     mask = G_all > 0
@@ -333,25 +371,32 @@ def build_ensemble(
     X: np.ndarray,
     y: np.ndarray,
     n_classes: int,
-    n_trees: int = 31,
-    feat_frac: float = 0.40,
-    max_depth: int = 50,
+    n_trees: int = 201,
+    feat_frac: float = 0.30,
+    max_depth: int = 25,
     seed: int = 42,
 ) -> list[tuple[dict, np.ndarray]]:
-    """Random-subspace forest: n_trees trees, each on a random feat_frac subset.
+    """Bagged random-subspace forest.
 
-    Each tree is a deterministic integer decision tree.
-    Majority-vote prediction is integer arithmetic (vote counts).
-    The construction is QA-compliant: no floats in the decision layer.
+    Each tree:
+      - Bootstrap sample (~63% unique rows, with replacement)
+      - Random feat_frac feature subset
+      - Depth-limited to max_depth (shallower trees → better diversity)
+
+    Majority-vote prediction is integer (vote counts).
+    All arithmetic is QA-compliant: no floats enter the decision layer.
     """
     rng = np.random.default_rng(seed)
-    n_feats = max(1, int(X.shape[1] * feat_frac))
+    n, f = X.shape
+    n_feats = max(1, int(f * feat_frac))
     ensemble: list[tuple[dict, np.ndarray]] = []
     for t in range(n_trees):
-        feat_idx = rng.choice(X.shape[1], size=n_feats, replace=False)
-        feat_idx = np.sort(feat_idx)
+        # Bootstrap rows
+        row_idx  = rng.integers(0, n, size=n)
+        feat_idx = np.sort(rng.choice(f, size=n_feats, replace=False))
         print(f"  tree {t+1}/{n_trees}...", end="\r", flush=True)
-        tree = build_tree(X[:, feat_idx], y, n_classes, max_depth=max_depth)
+        tree = build_tree(X[row_idx][:, feat_idx], y[row_idx], n_classes,
+                          max_depth=max_depth)
         ensemble.append((tree, feat_idx))
     print()
     return ensemble
@@ -419,8 +464,8 @@ def run() -> dict:
     tree = build_tree(X_tr, y_tr, n_classes, max_depth=50)
 
     # Build ensemble
-    print("Building ensemble (31 trees, 40% feature subspace)...", flush=True)
-    ensemble = build_ensemble(X_tr, y_tr, n_classes, n_trees=31, feat_frac=0.40)
+    print("Building ensemble (201 trees, bagged, 30% feature subspace)...", flush=True)
+    ensemble = build_ensemble(X_tr, y_tr, n_classes)
 
     # Evaluate single tree
     y_pred_tr   = predict_all(tree, X_tr)
@@ -581,7 +626,7 @@ def render_report(data: dict) -> str:
     A("| Method | Train | Test |")
     A("|---|---:|---:|")
     A(f"| Single tree | {acc['single_train']:.3f} | {acc['single_test']:.3f} |")
-    A(f"| **Ensemble (31 trees, 40% subspace)** | **{acc['ens_train']:.3f}** | **{acc['ens_test']:.3f}** |")
+    A(f"| **Ensemble (201 trees, bagged, 30% subspace)** | **{acc['ens_train']:.3f}** | **{acc['ens_test']:.3f}** |")
     A("")
     A("## Error Diagnosis")
     A("")

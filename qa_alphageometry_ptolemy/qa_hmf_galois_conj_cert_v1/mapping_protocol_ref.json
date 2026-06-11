@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA HMF Galois Conjugation Symmetry cert [390]. Primary sources: Shimura (1978) ISBN 978-0-691-08090-5 §9-10 (Hecke operators for HMFs); Blasius & Rogawski (1993) doi.org/10.2307/2152776 (HMF and RM abelian varieties); van der Geer (1988) ISBN 978-3-540-17659-9 (HMFs over Q(sqrt(5))); LMFDB doi.org/10.1112/jlms.12687 (forms 2.2.5.1-31.1-a and 2.2.5.1-31.2-a, data fetched 2026-06-11). CLAIM: For the Galois-conjugate pair {f1=2.2.5.1-31.1-a, f2=2.2.5.1-31.2-a} of weight [2,2] HMFs over Q(sqrt(5)), the Hecke eigenvalues satisfy: (A) at inert primes p (p≡±2 mod 5): a_{f1}(p)=a_{f2}(p); (B) at split primes p (p≡±1 mod 5): {a_{f1}(p1),a_{f1}(p2)}={a_{f2}(p1),a_{f2}(p2)} as multisets; (C) QA connection: the permutation in (B) mirrors r1<->r2 swap under phi->psi=1-phi (Galois automorphism of Q(sqrt(5))); (D) ramified prime p=5: eigenvalues equal. Verified for 34 prime ideals with N≤151. Checks: INERT_EQUAL/RAMIFIED_EQUAL/SPLIT_PERMUTED/QA_SWAP_MIRRORS_GALOIS/WEIL_BOUND; 5 PASS + 7 fixtures (6 PASS 1 FAIL designed). Extends certs [388] (split eigenspace at level p) and [386] (prime classification by x^2-x-1). Derived 2026-06-11."
+}

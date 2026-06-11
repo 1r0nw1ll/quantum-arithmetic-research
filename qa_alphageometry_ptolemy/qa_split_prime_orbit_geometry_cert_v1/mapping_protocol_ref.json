@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Split Prime Orbit Geometry cert [388]. Primary sources: Wall (1960) doi.org/10.1080/00029890.1960.11989541 (Pisano periods, orders of roots of x^2-x-1 mod p); Neukirch (1999) Algebraic Number Theory ISBN 978-3-540-65399-8 §I.8 (prime splitting); Ireland & Rosen (1990) ISBN 978-0-387-97329-6 Ch.5 (primitive roots, orders mod p). CLAIM (narrow, falsifiable): for sigma(a,b)=(a+b mod p, a) acting on F_p x F_p: (C1) split primes p in {11,19,29,31} with unequal root orders have orbit periods {1, ord_min, pi(p)} — three distinct sizes; (C2) period-ord_min orbits = eigenspace of sigma for eigenvalue r_min = {(r_min*c, c): c in F*_p}; (C3) orbit counts: 1 + (p-1)/ord_min + (p^2-p)/pi(p) = p^2; (C4) split p=41 with equal root orders has only {1, pi(p)} — no intermediate; (C5) inert primes {3,7,13,17} have only {1, pi(p)} — intermediate period is a split signature. Theorem NT: all arithmetic exact integer mod p; no float state. orbit_family on (b, e, m) not called directly; orbit periods computed from sigma dynamics. Extends certs [386] (inert/split classification) and [387] (Witt carry sub-orbit). Derived 2026-06-11."
+}

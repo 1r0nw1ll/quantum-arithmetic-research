@@ -9842,6 +9842,37 @@ def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_orbit_refinement_cert_family(base_dir):
+    """Cert [389]: QA Witt Tower Orbit Refinement — period law at level p^2."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_orbit_refinement_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_orbit_refinement_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_witt_tower_orbit_refinement_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_witt_tower_orbit_refinement_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_witt_tower_orbit_refinement_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_witt_tower_orbit_refinement_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_split_prime_orbit_geometry_cert_family(base_dir):
     """Cert [388]: QA Split Prime Orbit Geometry — intermediate period for split primes."""
     import subprocess
@@ -11082,6 +11113,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (389, "QA Witt Tower Orbit Refinement Cert family",
+     _validate_qa_witt_tower_orbit_refinement_cert_family,
+     "QA Witt Tower Orbit Refinement Cert [389]. CLAIM: for sigma on Z[phi]/(p^2), periods = {1} u Periods_nt(p) u p*Periods_nt(p); Witt multiplier is exactly p; period-p (zero) does NOT lift; tier count at p^2: inert/split-equal=3, split-unequal=5 — finer discriminant than level-p test. Checks WITT_REFINEMENT_LAW/TIER_COUNTS/WITT_MULTIPLIER_IS_P/ZERO_DOES_NOT_LIFT/ORBIT_COUNTS_P4; 5 PASS + 6 fixtures (5 PASS, 1 FAIL); self-test ok",
+     "389_witt_tower_orbit_refinement",
+     "qa_witt_tower_orbit_refinement_cert_v1", True),
     (388, "QA Split Prime Orbit Geometry Cert family",
      _validate_qa_split_prime_orbit_geometry_cert_family,
      "QA Split Prime Orbit Geometry Cert [388]. CLAIM: for sigma(a,b)=(a+b,a) on F_p x F_p: split primes {11,19,29,31} with unequal root orders -> orbit periods {1,ord_min,pi(p)}; period-ord_min orbits = eigenspace {(r_min*c,c)} of sigma for r_min; split p=41 equal orders -> only {1,40}; inert {3,7,13,17} -> only {1,pi(p)} — intermediate period is a split signature of non-locality. Checks SPLIT_THREE_PERIODS/EIGENSPACE_IDENTIFICATION/ORBIT_COUNTS/EQUAL_ORDER_CASE/INERT_CONTRAST; 5 PASS + 6 fixtures (5 PASS, 1 FAIL); self-test ok",

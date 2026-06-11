@@ -18,6 +18,21 @@ Mathematical research project: **Quantum Arithmetic (QA) System** — a modular 
 Manual scan: `python tools/qa_axiom_linter.py --all`
 Authority: `docs/specs/QA_OBSERVER_PROJECTION_COMPLIANCE_SPEC.v1.md` | `QA_AXIOMS_BLOCK.md`
 
+## LaCie External Drive — Large Data Storage
+
+Internal drive was 97% full (2026-06-11). Large datasets/caches moved to LaCie with symlinks in place.
+
+**Layout doc**: `docs/specs/LACIE_DATA_LAYOUT.md`
+
+**Rule**: Files > 500 MB (`.edf`, `.npy`, `.h5`, `.db`, `.pt`, `.pth`, `.ckpt`, corpus zips, conda envs) go to `/Volumes/lacie/signal_experiments_offload/`, not the internal drive.
+
+```python
+from pathlib import Path
+LACIE = Path("/Volumes/lacie/signal_experiments_offload")
+```
+
+Paths under `corpus/`, `experiments/qa_ml/cache_*`, `qa_lab/data/`, `archive/phase_artifacts/phase2_data/eeg/`, `.venv`, `~/.cache/torch` are symlinks pointing to LaCie. They work transparently when LaCie is mounted.
+
 ## Smoke Test (run to verify nothing is broken)
 
 ```bash

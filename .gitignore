@@ -80,6 +80,7 @@ Cargo.lock
 chat_data/
 
 # --- QA-KG runtime artifacts (derived, regenerable) ---
+qa_kg.db
 tools/qa_kg/qa_kg.db
 qa_alphageometry_ptolemy/_meta_ledger.json
 qa_alphageometry_ptolemy/_agent_writes.json
@@ -350,3 +351,9 @@ Documents/odt_exports/
 # per-scene InceptionV3 features). Re-buildable from the 6 sha256-pinned
 # zips in corpus/pepe_pose/cambridge_landmarks/ (see experiments/qa_ml/71_*).
 experiments/qa_ml/cache_pepe_ch4_pose1_table_4_2_cambridge_landmarks/
+
+# POSE-1 Table 4.2 full13 fine-tune cache (streaming per-scene extracted
+# data; live disk peaks at ~12 GB during runs, cleared between scenes).
+# Re-buildable from the sha256-pinned zips in corpus/pepe_pose/7scenes/ +
+# corpus/pepe_pose/cambridge_landmarks/ (see experiments/qa_ml/72_*).
+experiments/qa_ml/cache_pepe_ch4_pose1_table_4_2_finetuned_full13/

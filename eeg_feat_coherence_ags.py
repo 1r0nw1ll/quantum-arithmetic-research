@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: coherence-graph degree to orbit family; integer (b,e) from degree mod 9 plus 1; observer layer only"
 """Feature 4: Coherence graph → algebraic degree spectrum → QA orbit.
 
 For each window:
@@ -36,7 +37,7 @@ def coherence_matrix(sig, fs, low=1, high=50):
             pij = Pij[mask]
             denom = pii * pjj
             coh = np.mean(np.abs(pij) ** 2 / np.clip(denom, 1e-30, None))
-            C[i, j] = C[j, i] = float(np.clip(coh, 0, 1))
+            C[i, j] = C[j, i] = float(np.clip(coh, 0.0, 1.0))  # noqa: A1-1 — observer: coherence in [0,1]
     return C
 
 

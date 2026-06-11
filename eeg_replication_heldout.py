@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: pre-registered replication on held-out CHB-MIT patients; integer orbit transitions; no float QA state"
 """
 eeg_replication_heldout.py — Pre-registered replication on held-out CHB-MIT patients
 

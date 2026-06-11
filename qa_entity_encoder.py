@@ -71,8 +71,8 @@ def hash_to_qa_tuple(name: str, modulus: int = 24) -> Tuple[int, int, int, int]:
     h = hashlib.sha256(name.encode("utf-8")).digest()
     b = int.from_bytes(h[0:4], "big") % modulus
     e = int.from_bytes(h[4:8], "big") % modulus
-    d = (b + e) % modulus
-    a = (b + 2 * e) % modulus
+    d = ((b + e - 1) % modulus) + 1
+    a = ((b + 2 * e - 1) % modulus) + 1
     return int(b), int(e), int(d), int(a)
 
 
@@ -162,8 +162,8 @@ def main(argv: Optional[List[str]] = None) -> int:
             continue
         b, e, d, a = hash_to_qa_tuple(name)
         b, e = apply_overrides(name, b, e, overrides)
-        d = (b + e) % 24
-        a = (b + 2 * e) % 24
+        d = ((b + e - 1) % 24) + 1
+        a = ((b + 2 * e - 1) % 24) + 1
         # simple deterministic loss from triangle residual, normalized
         tri_res = triangle_residual(b, e, d, a)
         scale = 1.0 + (b*b + e*e + d*d + a*a)

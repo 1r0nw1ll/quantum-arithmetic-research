@@ -12,13 +12,13 @@ MODULUS = 24
 E8_ROOTS = None
 
 def get_qa_tuples_vectorized(b, e, mod=MODULUS):
-    d = (b + e) % mod; a = (b + 2 * e) % mod
+    d = ((b + e - 1) % mod) + 1; a = ((b + 2 * e - 1) % mod) + 1
     return np.stack([b, e, d, a], axis=1)
 
 def get_node_harmonic_loss(b, e, d, a, mod=MODULUS):
-    lhs = np.mod(a**2, mod); rhs = np.mod(d**2 + 2*d*e + e**2, mod)
+    lhs = np.mod(a*a, mod); rhs = np.mod(d*d + 2*d*e + e*e, mod)
     diff = np.abs(lhs - rhs); diff = np.minimum(diff, mod - diff)
-    return diff**2
+    return diff*diff
 
 def qa_inner_product_matrix(tuples, mod=MODULUS):
     return np.mod(np.einsum('ni,mi->nm', tuples.astype(int), tuples.astype(int)), mod)

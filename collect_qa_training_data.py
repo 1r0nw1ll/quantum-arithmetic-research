@@ -135,7 +135,7 @@ class QADatasetCurator:
             X = e * d
 
             # Check ellipse constraint
-            inner_ellipse_valid = (a**2 == d**2 + 2*d*e + e**2)
+            inner_ellipse_valid = (a*a == d*d + 2*d*e + e*e)
 
             example = {
                 'type': 'synthetic_qa',

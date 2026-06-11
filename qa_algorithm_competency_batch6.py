@@ -45,7 +45,7 @@ P1   = "pyth_1__ocr__pyth1.md"
 P2   = "pyth_2__ocr__pyth2.md"
 WB   = "qa_workbook__ocr__workbook.md"
 
-def qa_step(b, e, m=MODULUS): return e % m, (b + e) % m
+def qa_step(b, e, m=MODULUS): return e, ((b + e - 1) % m) + 1
 def qa_orbit_family(b, e, m=MODULUS, max_steps=500):
     seen, state = {}, (b % m, e % m)
     for t in range(max_steps):

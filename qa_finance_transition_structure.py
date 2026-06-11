@@ -113,11 +113,11 @@ def equalize_quantize(returns: np.ndarray, m: int) -> np.ndarray:
     n = len(returns)
     ranks = np.argsort(np.argsort(returns))
     states = (ranks * m // n).astype(int)
-    return np.clip(states, 0, m - 1)
+    return np.clip(states + 1, 1, m)
 
 def qa_legal_transition(b: int, e: int, b_next: int, e_next: int, m: int) -> bool:
     """Is (b,e)→(b_next,e_next) a QA-legal orbit-following step?"""
-    t_b, t_e = e, (b + e) % m
+    t_b, t_e = e, ((b + e - 1) % m) + 1
     return b_next == t_b and e_next == t_e
 
 def orbit_family_mod(b: int, e: int, m: int) -> str:
@@ -157,7 +157,7 @@ def qa_legal_rate(states: np.ndarray, m: int) -> float:
     e  = states[1:-1]
     bp = states[1:-1]
     ep = states[2:]
-    legal = np.sum((bp == e) & (ep == (b + e) % m))
+    legal = np.sum((bp == e) & (ep == ((b + e - 1) % m) + 1))
     return float(legal) / (n - 2)
 
 # ---------------------------------------------------------------------------

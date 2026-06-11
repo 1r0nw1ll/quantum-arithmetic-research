@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: multi-band k-means inter-band transition orbits; integer cluster labels to (b,e); observer projection"
 """Feature 2: Multi-band spatial k-means — inter-band transition orbits."""
 import json, sys
 import numpy as np

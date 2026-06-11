@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: deep structural analysis of QA orbit patterns; integer orbit counts; observer projections only"
 """
 eeg_structure_analysis.py — Deep structural analysis of QA orbit patterns in EEG
 

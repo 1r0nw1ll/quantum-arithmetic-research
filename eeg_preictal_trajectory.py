@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: pre-ictal trajectory with transition orbit features; k=4 topographic transitions; integer (b,e) in {1..24}^2"
 """
 eeg_preictal_trajectory.py — Pre-ictal trajectory with correct transition orbit features
 

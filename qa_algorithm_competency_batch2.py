@@ -29,7 +29,7 @@ QA4  = "qa-4__00_qa_books_3_&_4_all_pages__pdf.md"
 QUAD = "quadrature__00_quadratureprint__pdf.md"
 P3   = "pyth-3__pythagoras_vol3_enneagram__docx.md"
 
-def qa_step(b,e,m=MODULUS): return e%m,(b+e)%m
+def qa_step(b,e,m=MODULUS): return e,((b+e-1)%m)+1
 def qa_orbit_family(b,e,m=MODULUS,max_steps=500):
     seen,state={},((b%m),(e%m))
     for t in range(max_steps):

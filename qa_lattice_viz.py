@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "visualisation: QA lattice three-panel orbit map; integer (b,e) in mod-9/mod-24; no float state; qa_step A1-compliant"
 """
 QA Lattice Visualization — three-panel orbit map.
 

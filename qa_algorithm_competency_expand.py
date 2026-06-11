@@ -39,7 +39,7 @@ from typing import List, Dict, Optional
 MODULUS = 9
 
 def qa_step(b: int, e: int, m: int = MODULUS):
-    return e % m, (b + e) % m
+    return e, ((b + e - 1) % m) + 1
 
 def qa_orbit_family(b: int, e: int, m: int = MODULUS, max_steps: int = 500) -> str:
     seen = {}

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: spectral entropy to orbit family; quantised entropy levels in {1..9}; integer QA state"
 """Feature 5: Spectral entropy baseline-deviation → QA orbit.
 
 For each window:

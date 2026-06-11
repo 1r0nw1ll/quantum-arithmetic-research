@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: harmonic ratio peak pairs to orbit family; integer (b,e) from peak indices; no float state"
 """Feature 3: Harmonic ratio structure — do seizure frequencies follow Fibonacci ratios?
 
 For each window:

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: transition-based orbit observer; k=4 topographic k-means, 1s sub-windows; integer (b,e) in {1..24}^2"
 """
 eeg_transition_orbit.py — Correct implementation of the transition-based orbit observer
 

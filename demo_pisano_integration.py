@@ -23,8 +23,8 @@ class MockQASystem:
         self.modulus = modulus
 
         # Initialize with mixed Pisano families
-        self.b = np.zeros(N)
-        self.e = np.zeros(N)
+        self.b = np.ones(N, dtype=int)
+        self.e = np.ones(N, dtype=int)
 
         # Distribute nodes across different families
         # First 8 nodes: Fibonacci-like (1,1,2,3)
@@ -47,13 +47,7 @@ class MockQASystem:
             self.b[i] = 3
             self.e[i] = 3 + (i - 20)
 
-        # Add some noise to make it realistic
-        self.b += np.random.randn(N) * 0.1
-        self.e += np.random.randn(N) * 0.1
-
-        # Ensure positive values
-        self.b = np.abs(self.b)
-        self.e = np.abs(self.e)
+        # b, e remain integer arrays — no float noise (S2: no float QA state)
 
 
 # =============================================================================

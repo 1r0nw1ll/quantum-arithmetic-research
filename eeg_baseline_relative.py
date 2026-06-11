@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = "EEG seizure: baseline-relative orbit deviation observer; quantile-binned (b,e) in {1..24}^2; no float QA state"
 """
 eeg_baseline_relative.py — Baseline-relative orbit deviation features
 

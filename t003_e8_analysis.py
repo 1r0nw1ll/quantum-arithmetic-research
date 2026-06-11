@@ -92,8 +92,8 @@ def generate_qa_parameter_space(modulus=24, sample_size=10000):
     # Generate random samples
     b = np.random.randint(1, modulus, sample_size)
     e = np.random.randint(1, modulus, sample_size)
-    d = (b + e) % modulus
-    a = (b + 2*e) % modulus
+    d = ((b + e - 1) % modulus) + 1
+    a = ((b + 2*e - 1) % modulus) + 1
 
     tuples_4d = np.stack([b, e, d, a], axis=1)
 

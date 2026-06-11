@@ -64,8 +64,8 @@ def hash_to_qa_tuple(text: str, modulus: int = 24) -> Tuple[int, int, int, int]:
     h = hashlib.sha256(text.encode("utf-8")).digest()
     b = int.from_bytes(h[0:4], "big") % modulus
     e = int.from_bytes(h[4:8], "big") % modulus
-    d = (b + e) % modulus
-    a = (b + 2 * e) % modulus
+    d = ((b + e - 1) % modulus) + 1
+    a = ((b + 2 * e - 1) % modulus) + 1
     return int(b), int(e), int(d), int(a)
 
 

@@ -28,45 +28,18 @@ QA_COMPLIANCE = {
     'coupling': 'none (static element relationships)',
 }
 
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parent / "qa_alphageometry_ptolemy"))
+from qa_elements import qa_elements as _qa_elements_canonical  # noqa: E402
 from itertools import combinations
 from fractions import Fraction
 
 # ─── QA Element System ────────────────────────────────────────────────
-# All elements derived from a Pythagorean-Fibonacci triple (b, e, d)
-# where d = b + e. The 16 standard elements:
 
-def compute_elements(b, e):
-    """
-    Compute all QA elements from generators (b, e).
-    A2-compliant: d and a are DERIVED.
-    """
-    d = b + e          # A2: d = b + e
-    a = b + 2 * e      # A2: a = b + 2e
-
-    A = a * a           # S1: a*a not a**2
-    B = b * b           # S1
-    C = 2 * d * e       # 4-par
-    D = d * d           # S1
-    E = e * e           # S1
-    F = a * b           # semi-latus, 5-par
-    G = d * d + e * e   # S1: d*d + e*e
-    H = C + F           # = 2de + ab
-    I_val = C - F       # = 2de - ab (can be negative)
-    J = b * d           # perigee
-    K = a * d           # apogee
-    L = C * F // 12     # = abde/6 (integer for valid triples)
-    X = e * d           # = C/2
-    W = d * (e + a)     # = X + K
-    Y = A - D           # = a*a - d*d
-    Z = E + K           # = e*e + ad
-
-    return {
-        'A': A, 'B': B, 'C': C, 'D': D, 'E': E, 'F': F, 'G': G,
-        'H': H, 'I': I_val, 'J': J, 'K': K, 'L': L, 'X': X,
-        'W': W, 'Y': Y, 'Z': Z,
-        # Also store generators for reference
-        'b': b, 'e': e, 'd': d, 'a': a,
-    }
+def _elem_dict(b, e):
+    """Return canonical QA elements as a dict (delegates to qa_elements.py)."""
+    return _qa_elements_canonical(b, e)._asdict()
 
 
 def reconstruct_from_pair(name1, val1, name2, val2):
@@ -145,7 +118,7 @@ total_inconsistent = 0
 degenerate_pairs = set()
 
 for b, e in test_triples:
-    elems = compute_elements(b, e)
+    elems = _elem_dict(b, e)
 
     # For every pair of elements, check: can we find ANOTHER (b', e') ≠ (b, e)
     # that produces the same pair values? If not → reconstruction is unique.
@@ -166,7 +139,7 @@ for b, e in test_triples:
             for ep in search_range:
                 if (bp, ep) == (b, e):
                     continue
-                alt = compute_elements(bp, ep)
+                alt = _elem_dict(bp, ep)
                 if alt[name1] == val1 and alt[name2] == val2:
                     found_alternative = True
                     break
@@ -205,7 +178,7 @@ n_gluing_tests = 0
 n_gluing_pass = 0
 
 for b, e in test_triples[:6]:  # Use first 6 for speed
-    elems = compute_elements(b, e)
+    elems = _elem_dict(b, e)
 
     # Create overlapping covers of size 3 with overlap 1
     covers = []

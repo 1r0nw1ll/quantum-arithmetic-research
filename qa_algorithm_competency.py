@@ -42,8 +42,8 @@ MODULUS = 9
 
 
 def qa_step(b: int, e: int, m: int = MODULUS):
-    """One step of the Q map: (b, e) -> (e, (b+e) % m)."""
-    return e % m, (b + e) % m
+    """One step of the Q map: (b, e) -> (e, ((b+e-1) % m) + 1)."""
+    return e, ((b + e - 1) % m) + 1
 
 
 def qa_orbit_family(b: int, e: int, m: int = MODULUS, max_steps: int = 500) -> str:
@@ -84,7 +84,7 @@ def orbit_follow_rate(traj: List[tuple], m: int = MODULUS) -> float:
     for i in range(len(traj) - 2):
         b, e = traj[i]
         tb, te = traj[i + 1]
-        if tb == e % m and te == (b + e) % m:
+        if tb == e and te == ((b + e - 1) % m) + 1:
             follow += 1
     return follow / (len(traj) - 2)
 

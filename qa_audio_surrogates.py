@@ -98,7 +98,7 @@ def equalize_quantize(samples, m=MODULUS):
     n = len(samples)
     ranks = np.argsort(np.argsort(samples))
     states = (ranks * m // n).astype(int)
-    return np.clip(states, 0, m - 1)
+    return np.clip(states, 1, m)
 
 
 def lag1_ac(states):
@@ -136,7 +136,7 @@ def orbit_follow_rate_altmod(states, m_alt):
     n = len(states)
     ranks = np.argsort(np.argsort(states[:len(states)]))
     states_alt = (ranks * m_alt // n).astype(int)
-    states_alt = np.clip(states_alt, 0, m_alt - 1)
+    states_alt = np.clip(states_alt, 1, m_alt)
     b, e = states_alt[:-1], states_alt[1:]
     follow = sum(1 for i in range(len(b) - 1)
                  if b[i + 1] == e[i] and e[i + 1] == (b[i] + e[i]) % m_alt)
@@ -216,7 +216,7 @@ def main():
             n = len(sig)
             ranks = np.argsort(np.argsort(sig))
             states_alt = (ranks * m_alt // n).astype(int)
-            states_alt = np.clip(states_alt, 0, m_alt - 1)
+            states_alt = np.clip(states_alt, 1, m_alt)
             b, e = states_alt[:-1], states_alt[1:]
             follow = sum(1 for j in range(len(b) - 1)
                          if b[j + 1] == e[j] and e[j + 1] == (b[j] + e[j]) % m_alt)

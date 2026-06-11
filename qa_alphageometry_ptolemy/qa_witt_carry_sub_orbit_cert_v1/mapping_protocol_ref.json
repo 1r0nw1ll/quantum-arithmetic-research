@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Witt Carry Sub-Orbit Invariant cert [387]. Primary sources: Serre (1979) Local Fields doi.org/10.1007/978-1-4757-5673-9 Ch.II §4 (Witt vectors, Teichmuller representatives, 1-unit group of local fields); Neukirch (1999) Algebraic Number Theory ISBN 978-3-540-65399-8 §II.5 (formal groups and Witt vectors, p-adic unit groups); Wall (1960) doi.org/10.1080/00029890.1960.11989541 (Pisano periods). CLAIM (narrow, falsifiable): in Z[phi]/(9) = W_2(GF(9)), the 72 Cosmos units decompose into exactly 3 sigma-orbits of period 24; phi=(0,1) has order 24; (Z[phi]/9)^* = T x U_1 (T=Teichmuller subgroup order 8, U_1=1-unit group order 9, exponent 3); the sub-orbit invariant J(a,b) = coset_idx((b,a)) is constant on each orbit and takes distinct values {0,1,2}; all 3 orbits hit each of the 8 Teichmuller classes exactly 3 times (T-class sequence identical across orbits; J distinguishes them). Five sub-claims verified; 6 fixtures (5 PASS, 1 FAIL). Theorem NT: all arithmetic on exact integers; no float state. orbit_family on (b, e, m) not called directly in this cert. Extends certs [385] and [386]. Derived 2026-06-11."
+}

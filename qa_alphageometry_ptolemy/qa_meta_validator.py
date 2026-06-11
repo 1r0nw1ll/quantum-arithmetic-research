@@ -9842,6 +9842,37 @@ def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_carry_sub_orbit_cert_family(base_dir):
+    """Cert [387]: QA Witt Carry Sub-Orbit Invariant — Teichmuller coset structure."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_carry_sub_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_carry_sub_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_witt_carry_sub_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_witt_carry_sub_orbit_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_witt_carry_sub_orbit_cert self-test non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_witt_carry_sub_orbit_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_inert_split_ramified_primes_cert_family(base_dir):
     """Cert [386]: QA Inert/Split/Ramified Prime Classification — Z[phi] prime splitting trichotomy."""
     import subprocess
@@ -11020,6 +11051,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (387, "QA Witt Carry Sub-Orbit Invariant Cert family",
+     _validate_qa_witt_carry_sub_orbit_cert_family,
+     "QA Witt Carry Sub-Orbit Invariant Cert [387]. CLAIM: in Z[phi]/(9)=W_2(GF(9)), Cosmos=3 sigma-orbits of period 24; ord(phi)=24; (Z[phi]/9)^*=T x U_1 (T order-8, U_1 order-9 exponent-3); J(a,b)=coset_idx((b,a)) constant on each sigma-orbit, values {0,1,2}; all 3 orbits hit each T-class 3 times — T-class identical across orbits, J (Witt carry) is the complete distinguishing invariant. Checks THREE_SUB_ORBITS/PHI_ORDER_24/DIRECT_PRODUCT/WITT_CARRY_INVARIANT/TEICHMULLER_HIT; 5 PASS + 6 fixtures (5 PASS, 1 FAIL); self-test ok",
+     "387_witt_carry_sub_orbit",
+     "qa_witt_carry_sub_orbit_cert_v1", True),
     (386, "QA Inert/Split/Ramified Prime Classification Cert family",
      _validate_qa_inert_split_ramified_primes_cert_family,
      "QA Inert/Split/Ramified Prime Classification Cert [386]. CLAIM: for Z[phi]=O_{Q(sqrt(5))}, every prime p classifies as inert/split/ramified by root count of x^2-x-1 mod p; (C1) exhaustive classification primes<=50; (C2) inert <-> p mod 5 in {2,3} for all primes<=200; (C3) phi is primitive in GF(4) and GF(9); (C4) CRT idempotents for split p=11: Z[phi]/(11)=F_11xF_11; (C5) nilpotent (2,1)^2=0 for ramified p=5. Explains why cert [385] 3-orbit structure exists (inert => local ring) and when it fails (split => not local). Checks POLY_CLASSIFY/MOD5_CRITERION/INERT_PRIMITIVE_ELEMENT/SPLIT_IDEMPOTENTS/RAMIFIED_NILPOTENT; 5 PASS + 6 fixtures (5 PASS, 1 FAIL); self-test ok",

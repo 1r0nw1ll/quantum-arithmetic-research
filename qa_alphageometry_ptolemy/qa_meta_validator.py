@@ -9688,7 +9688,7 @@ def _validate_qa_koenig_spread_optimality_cert_family(base_dir):
 
 
 def _validate_qa_fibonacci_matrix_orbit_periods_cert_family(base_dir):
-    """QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly DOI 10.1080/00029890.1960.11989541 (Pisano period = order of Fibonacci matrix in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA orbits). CLAIM: M=[[0,1],[1,1]] has order 24 in GL(2,Z/9Z); period distribution 1/8/72; satellite={3|b,3|e}\\{(0,0)}; Fibonacci pairs period-24; Tribonacci period-8; Ninbonacci period-1. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE; 4 PASS + 2 FAIL fixtures; self-test ok"""
+    """QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly DOI 10.1080/00029890.1960.11989541 (Pisano period = order of Fibonacci matrix in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA orbits). CLAIM: M=[[0,1],[1,1]] has order 24 in GL(2,Z/9Z); period distribution 1/8/72; satellite={3|b,3|e}\\{(0,0)}; Fibonacci pairs period-24; Tribonacci period-8; Ninbonacci period-1. Extended theorem-map predicate: T^4-I=[[1,3],[3,4]], T^8-I=[[12,21],[21,33]], and period8_fixed AND NOT period4_fixed -> Satellite, period1_fixed -> Singularity, otherwise Cosmos has 0 errors on m={9,12,15,18,21,24,27,30}. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE/EXACT_PERIOD_KERNELS/CROSS_MODULUS_RULE/COUNTS; 5 PASS + 3 FAIL fixtures; self-test ok"""
     import subprocess
     fam_dir = os.path.join(base_dir, "qa_fibonacci_matrix_orbit_periods_cert_v1")
     validator = os.path.join(fam_dir, "qa_fibonacci_matrix_orbit_periods_cert_validate.py")
@@ -9837,6 +9837,37 @@ def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     if payload.get("ok") is not True:
         raise RuntimeError(
             f"qa_orbit_no_3_divisor_overclaim_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
+def _validate_qa_orbit_prime_ideal_filtration_cert_family(base_dir):
+    """Cert [385]: QA Orbit Prime Ideal Filtration — Z[phi]/(9) prime ideal filtration."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_orbit_prime_ideal_filtration_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_prime_ideal_filtration_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_prime_ideal_filtration_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_prime_ideal_filtration_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_prime_ideal_filtration_cert self-test non-JSON output: "
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_prime_ideal_filtration_cert self-test ok=false:\n"
             f"{json.dumps(payload, indent=2, sort_keys=True)}"
         )
     return None
@@ -10958,6 +10989,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (385, "QA Orbit Prime Ideal Filtration Cert family",
+     _validate_qa_orbit_prime_ideal_filtration_cert_family,
+     "QA Orbit Prime Ideal Filtration Cert [385]. CLAIM: under f(b,e)=(b mod 9)+(e mod 9)*phi in Z[phi]/(9) where phi^2=phi+1, the QA orbit partition {Cosmos, Satellite, Singularity} coincides exactly with the prime ideal filtration {(Z[phi]/9)^*, (3)/(9)\\{0}, {0}} induced by the unique inert prime (3) over 3 in Z[phi]=O_{Q(sqrt(5))}. Sub-claims: (C1) x^2-x-1 irreducible mod 3 => 3 inert => Z[phi]/(9) local; (C2) |units|=72, |m|=9; (C3) Cosmos 72 pairs = (Z[phi]/9)^*; (C4) Satellite 8 pairs = (3)\\{0}, Singularity (9,9) -> {0}; (C5) periods 24/8/1 = Pisano pi(9)/pi(3)/1 => real multiplication by Z[phi] (Nikolaev 2024 Lemma 3.3). Exhaustive all 81 states. Checks IRREDUCIBLE_MOD3/LOCAL_RING/COSMOS_UNITS/IDEAL_STRATA/NIKOLAEV_RM; 5 PASS + 5 fixtures (4 PASS, 1 FAIL); self-test ok",
+     "385_orbit_prime_ideal_filtration",
+     "qa_orbit_prime_ideal_filtration_cert_v1", True),
     (384, "QA Orbit Theorem Map Cert family",
      _validate_qa_orbit_theorem_map_cert_family,
      "QA Orbit Theorem Map Cert [384]. CLAIM: exported QA orbit theorem-map JSON is internally exact for declared finite orbit grids. Validator recomputes orbit-family labels from integer qa_step dynamics, recomputes exact multibase features, replays declared leaf paths, and compares recomputed train/test confusion matrices against declarations. v1 covers moduli {9,12,15,18,21,24,27,30}; per-regime held-out result is 1142/1142 with 0 errors; 2^1*3^1*5^1 root predicate is qa.v2_gcd_ge_m_and_r5_line_3=1. Does NOT prove infinite-modulus generalization or certify model-selection. Checks TM_SCHEMA/TM_PATH/TM_ROOT/TM_EVAL/TM_COVER/SRC/F; 1 PASS + 1 FAIL; self-test ok",
@@ -11415,7 +11451,7 @@ FAMILY_SWEEPS = [
      "qa_koenig_spread_optimality_cert_v1", True),
     (291, "QA Fibonacci Matrix Orbit Periods Cert family",
      _validate_qa_fibonacci_matrix_orbit_periods_cert_family,
-     "QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541 (Pisano period pi(m) = order of Fibonacci matrix [[0,1],[1,1]] in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA T-operator, BEDA tuples, orbit classification). CLAIM: M=[[0,1],[1,1]] has order exactly 24 in GL(2,Z/9Z) (no proper divisor k of 24 gives M^k=I); three orbit types partition (Z/9Z)^2: Singularity {(0,0)} period 1, Satellite {3|b AND 3|e}\\{(0,0)} 8 states period 8, Cosmos 72 states period 24; M^12=-I (order not dividing 12); pi(9)=pi(3^2)=3*pi(3)=3*8=24. Five-families alignment: Fibonacci/Lucas/Phibonacci->Cosmos period-24; Tribonacci->Satellite period-8; Ninbonacci->(0,0) period-1. Exhaustive: all 81 states verified. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE; 4 PASS + 2 FAIL fixtures; self-test ok",
+     "QA Fibonacci Matrix Orbit Periods Cert family [291]. Primary sources: Wall (1960) American Mathematical Monthly 67(6):525-532 DOI 10.1080/00029890.1960.11989541 (Pisano period pi(m) = order of Fibonacci matrix [[0,1],[1,1]] in GL(2,Z/mZ)); Wildberger (2005) Divine Proportions Wild Egg Books ISBN 978-0-9757492-0-8 (QA T-operator, BEDA tuples, orbit classification). CLAIM: M=[[0,1],[1,1]] has order exactly 24 in GL(2,Z/9Z); three orbit types partition (Z/9Z)^2: Singularity {(0,0)} period 1, Satellite {3|b AND 3|e}\\{(0,0)} 8 states period 8, Cosmos 72 states period 24. Extended theorem-map predicate: T^4-I=[[1,3],[3,4]], T^8-I=[[12,21],[21,33]], and period8_fixed AND NOT period4_fixed -> Satellite, period1_fixed -> Singularity, otherwise Cosmos has 0 errors on m={9,12,15,18,21,24,27,30}. Checks FMO_PISANO_24/MIN/SAT_CHAR/PARTITION/ORBIT/TYPE/EXACT_PERIOD_KERNELS/CROSS_MODULUS_RULE/COUNTS; 5 PASS + 3 FAIL fixtures; self-test ok",
      "291_qa_fibonacci_matrix_orbit_periods",
      "qa_fibonacci_matrix_orbit_periods_cert_v1", True),
     (290, "QA Classical Subfamily Ford Cusps Cert family",

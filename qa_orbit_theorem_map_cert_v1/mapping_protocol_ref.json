@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Orbit Theorem Map Cert family. Falsifiable validator for exported QA orbit theorem-map JSON. The validator recomputes orbit-family labels over declared train/test moduli, recomputes exact multibase features using integer arithmetic, replays declared leaf paths, and compares recomputed train/test confusion matrices against the theorem-map declarations. It certifies only internal exactness of the exported theorem map for the declared finite orbit grids; it does not prove infinite-modulus generalization."
+}

@@ -82,6 +82,31 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #11 — 2026-06-11 (window: June 8 – June 11, 2026)
+Full report: `sota_scans/scan_2026-06-11.md`
+
+**Key finds:**
+- Tao/Davis SAIR Foundation "Modular Arithmetic Challenge" Stage 2 (June 8, 2026) — **MEDIUM-HIGH.** Lean 4 proof infrastructure for modular arithmetic equational theories (ETP background: 22M universal algebra problems). Directly enables QA cert formalization pathway; completes Lean 4 ecosystem with arXiv:2605.20440 + arXiv:2604.13514.
+- arXiv:2606.10193 (Modular Structure Theorem for Minimal Periodic Decompositions, June 8) — **MEDIUM.** Kari-Szabados Z/mℤ Laurent polynomial algebra; ℤ₊ alphabet + low complexity → ℤ-minimal periodic decomposition (Nivat's conjecture P_η(4,n)). Grounds QA orbit classification in periodic structure forcing theory. New cert candidate: `qa_periodic_decomposition_complexity_cert_v1`.
+- arXiv:2506.23679 (Learning Modular Exponentiation with Transformers, June 2025) — **LOW-MEDIUM. MEGA-SLIPPED all 10 scans (12+ months).** Grokking on a^b mod c; sudden generalization across related moduli via shared cyclic group structure. NeurIPS'25 workshop paper — not in cs.LG main sweep. Fix: add workshop proceedings sweep.
+- arXiv:2606.00045 (Universal Quantum Transformer, ~June 1) — **LOW-MEDIUM. Slipped scan #10.** Quantum circuits perfectly learn Z/11Z cyclic arithmetic; classical NNs fundamentally fail. Further Theorem NT empirical layer.
+
+**No HIGH finds — third consecutive quiet window.**
+
+**New cert candidate:** `qa_periodic_decomposition_complexity_cert_v1` (MEDIUM priority; arXiv:2606.10193).
+
+**New cross-domain connection:** Z/mℤ Periodic Structure Theorem Chain — arXiv:2506.05190 (categorical DS) + arXiv:2512.25060 (universal manifold) + arXiv:2606.10193 (periodicity forcing) = complete theoretical chain for QA orbit classification grounding.
+
+**New Lean 4 ecosystem:** ⋆G tensor framework (arXiv:2605.20440) + polynomial tactics (arXiv:2604.13514) + ETP/SAIR modular arithmetic challenge = complete Lean 4 infrastructure for QA cert formalization. `qa_star_g_tensor_cert_v1` is now highest-readiness new cert.
+
+**Cert registry:** [384] (unchanged). [385] → `qa_steinmetz_whittaker_bridge_cert_v1`, [386] → `qa_whittaker_phase_packet_algebra_cert_v1` urgently needed (8th scan, still unassigned).
+
+**[261] orbit stratification: TEN-TUPLE GAP (10th scan — 6+ weeks overdue).**
+
+**Documentation backlog: ~101 families [284]–[384] all missing README/SPEC (unchanged from scan #10).**
+
+**Search fix for scan #12:** Add NeurIPS/ICML/ICLR workshop proceedings sweep; add Tao blog + SAIR Foundation to standard sweep; add "Kari-Szabados" + "periodic decomposition" explicit search.
+
 ### Scan #10 — 2026-06-08 (window: June 4 – June 8, 2026)
 Full report: `sota_scans/scan_2026-06-08.md`
 

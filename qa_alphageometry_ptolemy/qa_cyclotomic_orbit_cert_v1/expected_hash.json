@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Washington (1997) ISBN 978-0-387-94762-4 (cyclotomic fields, Z[zeta_5]), Ireland & Rosen (1990) ISBN 978-0-387-97329-6 Ch.14, Lang (1994) ISBN 978-1-4612-0853-2 §I.5 -->
+{
+  "expected_sha256": "5f1c408c16307cffad2a3b60955911a681c5de5fe02f74d9d5ffa461f2160109",
+  "description": "SHA-256 of stdout from qa_cyclotomic_orbit_cert_validate.py (all checks PASS, 5 checks: C1 5-periodicity, C2 Galois order 4, C3 norm form, C4 5-orbit structure, C5 partial trace)"
+}

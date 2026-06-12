@@ -9904,6 +9904,37 @@ def _validate_qa_weil_bound_cassini_cert_family(base_dir):
     return None
 
 
+def _validate_qa_cyclotomic_orbit_cert_family(base_dir):
+    """Cert [396]: QA Degree-4 Cyclotomic Orbit over Z[zeta_5] — C^5=I, G^4=I, norm form, 5-orbit, partial trace."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_cyclotomic_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cyclotomic_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cyclotomic_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_cyclotomic_orbit_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_cyclotomic_orbit_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_cyclotomic_orbit_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_beda_hard_problem_cert_family(base_dir):
     """Cert [393]: QA BEDA Hard Problem Analysis."""
     import subprocess
@@ -11299,6 +11330,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (396, "QA Degree-4 Cyclotomic Orbit Cert family",
+     _validate_qa_cyclotomic_orbit_cert_family,
+     "QA Degree-4 Cyclotomic Orbit over Z[zeta_5] Cert [396]. CLAIM: (C1) Companion matrix C of Phi_5(x)=x^4+x^3+x^2+x+1 satisfies C^5=I_4 (exact integer arithmetic, exact order 5); (C2) Galois matrix G (sigma: zeta_5->zeta_5^2) satisfies G^4=I_4 (Galois group Z/4Z acts faithfully); (C3) Quartic norm form N(a+b*zeta_5)=a^4-a^3b+a^2b^2-ab^3+b^4 recovers prime norms for generators at p in {11,31,61,181}; (C4) C-orbit of each prime generator has period exactly 5 (5 distinct Z^4 elements); (C5) Partial trace Tr_{Q(zeta_5)/Q(sqrt(5))}(a+b*zeta_5)=(2a-b)+b*phi takes values in Z[phi]. Theorem NT: all arithmetic is exact integer matrix ops; no floats in QA layer. Extends [391] (sigma=phi-mult on Z[phi]), [394] (GL_1 Frobenius), [395] (Weil bound discriminant sign flip). Infrastructure for cert [397] FUTURE (CM Hecke character a_f from Z[zeta_5] orbit). The 5-periodicity C^5=I is the degree-4 analog of det(M^k)=(-1)^k (Cassini, cert [391]). 5 checks PASS; self-test ok",
+     "396_cyclotomic_orbit",
+     "qa_cyclotomic_orbit_cert_v1", True),
     (395, "QA Weil Bound from Cassini Cert family",
      _validate_qa_weil_bound_cassini_cert_family,
      "QA Weil Bound from Cassini Cert [395]. CLAIM: |a_f(p)|^2 < 4*N(p) for all 34 prime ideals of Z[phi] with N(p)<=151, using LMFDB eigenvalues from cert [390]. STRUCTURAL: Fibonacci Frobenius char poly x^2-L_p*x-1 has det(M^p)=(-1)^p=-1 (Cassini, weight-0) and discriminant Delta_Fib=L_p^2+4>0 (real eigenvalues). GL_2 Frobenius char poly x^2-a_f*x+p has det=p (weight-2) and discriminant Delta_GL2=a_f^2-4p<0 (complex eigenvalues). The sign flip Delta_Fib>0 -> Delta_GL2<0 is the discriminant signature of the weight-0 to weight-2 transition; Weil bound is equivalent to Delta_GL2<=0. C1: |a_f|^2<=4N for all 34 ideals. C2: strict (<, not =, non-CM). C3: Delta_Fib>0 for 10 primes. C4: Delta_GL2<0 for all 34 ideals. C5: det(M^p)=-1 spot-check (Cassini). Extends [391] (Cassini identity) [394] (GL_1 Frobenius) [390] (LMFDB data source). 5 checks PASS; self-test ok",

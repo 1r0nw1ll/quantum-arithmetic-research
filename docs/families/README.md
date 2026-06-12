@@ -422,3 +422,4 @@ Before shipping any family:
 - [ ] Release notes in `QA_MAP_CANONICAL.md` updated
 | [394](394_qa_fibonacci_frobenius_character.md) | QA Fibonacci Frobenius Character | F_p ≡ (5/p) mod p — GL_1 Frobenius character via QA sigma-orbit | [386] [391] [390] |
 | [395](395_qa_weil_bound_cassini.md) | QA Weil Bound from Cassini | \|a_f(𝔭)\|² < 4·N(𝔭) — discriminant sign flip: Cassini weight-0 → GL_2 Weil weight-2 | [391] [394] [390] |
+| [396](396_qa_cyclotomic_orbit.md) | QA Degree-4 Cyclotomic Orbit | C^5=I, G^4=I, quartic norm form, 5-orbit, partial trace to ℤ[φ] — ℤ[ζ₅] infrastructure for CM cert [397] | [391] [394] [395] |

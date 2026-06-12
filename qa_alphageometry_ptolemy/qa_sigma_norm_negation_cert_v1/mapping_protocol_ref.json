@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA sigma-Norm Negation cert [391]. Primary sources: Ireland & Rosen (1990) ISBN 978-0-387-97329-6 Ch.13 (norm forms of quadratic extensions, discriminant of Q(sqrt(5))); Neukirch (1999) ISBN 978-3-540-65399-8 Ch.I §7 (algebraic norm, discriminant, different); Wall (1960) doi.org/10.1080/00029890.1960.11989541 (Fibonacci matrix and Pisano periods). CLAIM: sigma(a,b)=(a+b,a) IS phi-multiplication on Z[phi] under (a,b)<->a*phi+b; N(phi)=-1; N(sigma(a,b))=-N(a,b) where N(a,b)=b^2+ab-a^2; norm-zero locus mod p = sigma-eigenline union at split/ramified primes; anisotropic at inert primes; disc(N)=5=disc(Q(sqrt(5))/Q); sigma^k(1,0)=(F_{k+1},F_k). 7 checks PASS + 8 fixtures (7 PASS, 1 FAIL designed). Algebraic foundation underlying certs [385]-[390]. Derived 2026-06-11."
+}

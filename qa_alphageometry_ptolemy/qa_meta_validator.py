@@ -9842,6 +9842,37 @@ def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     return None
 
 
+def _validate_qa_sigma_norm_negation_cert_family(base_dir):
+    """Cert [391]: QA σ-Norm Negation and Eigenline Zero Set."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_sigma_norm_negation_cert_v1")
+    validator = os.path.join(fam_dir, "qa_sigma_norm_negation_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_sigma_norm_negation_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_sigma_norm_negation_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_sigma_norm_negation_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_sigma_norm_negation_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_hmf_galois_conj_cert_family(base_dir):
     """Cert [390]: QA HMF Galois Conjugation Symmetry."""
     import subprocess
@@ -11144,6 +11175,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (391, "QA Sigma Norm Negation Cert family",
+     _validate_qa_sigma_norm_negation_cert_family,
+     "QA sigma-Norm Negation Cert [391]. CLAIM: sigma(a,b)=(a+b,a) IS phi-multiplication on Z[phi] under (a,b)<->a*phi+b; N(phi)=-1; N(sigma(a,b))=-N(a,b) where N(a,b)=b^2+ab-a^2; norm-zero locus mod p = sigma-eigenline union at split/ramified primes, empty at inert; disc(N)=5=disc(Q(sqrt(5))/Q); sigma^k(1,0)=(F_{k+1},F_k). Algebraic foundation for certs [385]-[390]. 7 checks PASS + 8 fixtures (7 PASS, 1 FAIL designed); self-test ok",
+     "391_sigma_norm_negation",
+     "qa_sigma_norm_negation_cert_v1", True),
     (390, "QA HMF Galois Conj Cert family",
      _validate_qa_hmf_galois_conj_cert_family,
      "QA HMF Galois Conjugation Symmetry Cert [390]. CLAIM: For Galois-conjugate pair {f1=2.2.5.1-31.1-a, f2=2.2.5.1-31.2-a} weight [2,2] HMFs over Q(sqrt(5)): (A) inert primes: a_{f1}(p)=a_{f2}(p); (B) split primes: {a_{f1}(p1),a_{f1}(p2)}={a_{f2}(p1),a_{f2}(p2)} as multisets; (C) QA: r1<->r2 swap under phi->psi=1-phi mirrors permutation; (D) p=5: equal. Verified 34 prime ideals N<=151. Checks INERT_EQUAL/RAMIFIED_EQUAL/SPLIT_PERMUTED/QA_SWAP_MIRRORS_GALOIS/WEIL_BOUND; 5 PASS + 7 fixtures (6 PASS 1 FAIL designed); self-test ok",

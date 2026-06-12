@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Weil (1949) doi.org/10.1090/S0002-9904-1949-09219-4, Deligne (1974) doi.org/10.1007/BF02684373, Diamond & Shurman (2005) ISBN 978-0-387-27226-9 -->
+{
+  "expected_sha256": "357d57d5bb2561d645acb49794bb6fbd75ce2d896afb58e9118e93845410d0cb",
+  "description": "SHA-256 of stdout from qa_weil_bound_cassini_cert_validate.py (all checks PASS)"
+}

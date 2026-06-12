@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Ireland & Rosen (1990) ISBN 978-0-387-97329-6, Wall (1960) doi.org/10.1080/00029890.1960.11989541, Neukirch (1999) ISBN 978-3-540-65399-8, Serre (1973) ISBN 978-0-387-90041-7 -->
+{
+  "expected_sha256": "01911e7607dc3324f38e5c20d479e0361ff843bf0f40a92959f90a4fdb6f754a",
+  "description": "SHA-256 of stdout from qa_fibonacci_frobenius_character_cert_validate.py (all checks PASS)"
+}

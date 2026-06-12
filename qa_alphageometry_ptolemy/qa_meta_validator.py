@@ -9842,6 +9842,37 @@ def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_frobenius_character_cert_family(base_dir):
+    """Cert [394]: QA Fibonacci Frobenius Character — F_p ≡ (5/p) mod p (GL_1 Langlands)."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_frobenius_character_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_frobenius_character_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_frobenius_character_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_frobenius_character_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_frobenius_character_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_frobenius_character_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_beda_hard_problem_cert_family(base_dir):
     """Cert [393]: QA BEDA Hard Problem Analysis."""
     import subprocess
@@ -11237,6 +11268,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (394, "QA Fibonacci Frobenius Character Cert family",
+     _validate_qa_fibonacci_frobenius_character_cert_family,
+     "QA Fibonacci Frobenius Character Cert [394]. CLAIM: sigma^p(1,0)[e] == (5/p) mod p for all primes p!=5, where (5/p) is the Legendre symbol. Equivalently F_p == (5/p) mod p. This is the GL_1 Frobenius character: the QA sigma-orbit at prime p computes the Frobenius element of Gal(Q(sqrt(5))/Q) directly, without table lookup. C1: 94 primes <=500 all pass. C2: 45 split primes give F_p==+1. C3: 49 inert primes give F_p==-1. C4: ramified p=5 gives F_5==0. C5: fast-path spot-check at 5 large primes (1009,2003,4999,7919,9973) agrees. GL_1 base case for the Langlands ladder; extends [386] (classification) and [391] (sigma=phi-mult); bridges to [390] (GL_2 HMF eigenvalue symmetry). 5 checks PASS; self-test ok",
+     "394_fibonacci_frobenius_character",
+     "qa_fibonacci_frobenius_character_cert_v1", True),
     (393, "QA BEDA Hard Problem Cert family",
      _validate_qa_beda_hard_problem_cert_family,
      "QA BEDA Hard Problem Cert [393]. CLAIM: (A) BEDA-toy (mod 9 Cosmos x Satellite) has keyspace 192, brute-forced in O(192); (B) BEDA-DLP (Fibonacci orbit mod prime p) is classically hard when pi(p) has large prime factor (tested p=2017, pi=4036, LPF=1009), but NOT post-quantum (Shor 1994 applies to all cyclic groups of known order); (C) PQC extension requires Module-LWE over Z[phi]^k with k>=128, currently uninstantiated. 7 checks PASS + 8 fixtures (7 PASS, 1 FAIL designed); self-test ok",

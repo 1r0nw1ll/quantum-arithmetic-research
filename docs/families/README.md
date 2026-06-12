@@ -420,3 +420,4 @@ Before shipping any family:
 - [ ] `docs/families/[NN]_<slug>.md` written
 - [ ] This README index updated
 - [ ] Release notes in `QA_MAP_CANONICAL.md` updated
+| [394](394_qa_fibonacci_frobenius_character.md) | QA Fibonacci Frobenius Character | F_p ≡ (5/p) mod p — GL_1 Frobenius character via QA sigma-orbit | [386] [391] [390] |

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+from __future__ import annotations
 """
 eeg_hi2_0_chbmit_scale.py
 =========================
@@ -17,9 +18,6 @@ Default data root is the canonical local archive path used elsewhere in the repo
 """
 
 QA_COMPLIANCE = "empirical_observer — EEG signal is observer input; QA discrete orbit is the classifier state"
-
-
-from __future__ import annotations
 
 import argparse
 import gc
@@ -166,10 +164,13 @@ def read_edf_all_channels(edf_path: Path) -> tuple[np.ndarray, int, list[str]]:
 
         record_duration = float(header[244:252].decode("ascii").strip())
         n_records = int(header[236:244].decode("ascii").strip())
+        if record_duration == 0:
+            raise ValueError("EDF record_duration is zero")
         sample_rate = int(n_samp[0] / record_duration)
 
         gains = [
             (phys_maxs[i] - phys_mins[i]) / (dig_maxs[i] - dig_mins[i])
+            if dig_maxs[i] != dig_mins[i] else 1.0
             for i in range(ns)
         ]
         offsets = [phys_maxs[i] - gains[i] * dig_maxs[i] for i in range(ns)]

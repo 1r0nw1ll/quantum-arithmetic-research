@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Wall (1960) doi.org/10.1080/00029890.1960.11989541 (Pisano periods); Dale (2026) Pythagorean Five Families paper Theorem 2 (Complete Partition) -->
+{
+  "expected_sha256": "ca8ec43e694619c5505166f16310f5ee098774e9f7bc0e002f83f967f98cc80d",
+  "description": "SHA-256 of stdout from qa_five_families_partition_cert_validate.py (all checks PASS, 5 checks: C1 orbit closure, C2 no premature closure, C3 pairwise disjoint, C4 complete coverage, C5 table match)"
+}

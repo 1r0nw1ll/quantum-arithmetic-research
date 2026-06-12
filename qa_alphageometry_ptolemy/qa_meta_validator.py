@@ -9966,6 +9966,37 @@ def _validate_qa_cm_relative_norm_cert_family(base_dir):
     return None
 
 
+def _validate_qa_five_families_partition_cert_family(base_dir):
+    """Cert [398]: QA Five Families Complete Partition — 24+24+24+8+1=81, pairwise disjoint."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_five_families_partition_cert_v1")
+    validator = os.path.join(fam_dir, "qa_five_families_partition_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_five_families_partition_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_five_families_partition_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_five_families_partition_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_five_families_partition_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_beda_hard_problem_cert_family(base_dir):
     """Cert [393]: QA BEDA Hard Problem Analysis."""
     import subprocess
@@ -11361,6 +11392,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (398, "QA Five Families Complete Partition Cert family",
+     _validate_qa_five_families_partition_cert_family,
+     "QA Five Families Complete Partition Cert [398]. CLAIM (= Theorem 2 of the Pythagorean Five Families paper): the five Fibonacci-like families with seeds (1,1),(2,1),(3,1),(3,3),(9,9) under digital-root T-step T(b,e)=(e,dr(b+e)) with dr(n)=((n-1)%9)+1 produce orbits of sizes 24,24,24,8,1; the orbits are pairwise disjoint; their union is all 81 digital-root pairs {1,...,9}^2; the 9x9 classification table matches the paper's Table 1 exactly. (C1) orbit closure: each seed's orbit has exactly the stated period; (C2) no premature closure: minimum period equals stated size; (C3) pairwise disjoint: 10 intersections all empty; (C4) complete coverage: union=81={1,...,9}^2; (C5) table match: all 81 cells match paper Table 1. QA structure: Fibonacci+Lucas+Phibonacci=Cosmos(72), Tribonacci=Satellite(8), Ninbonacci=Singularity(1). Pisano connection: Cosmos period 24=pi(9), Satellite period 8=pi(3). Extends [281] (Pisano-Orbit Correspondence), [212] (Fibonacci Hypergraph orbit multiset), [211] (Cayley Bateson components). Theorem NT: T-step is pure integer, dr is pure integer mod-9 map. 5 checks PASS; self-test ok",
+     "398_five_families_partition",
+     "qa_five_families_partition_cert_v1", True),
     (397, "QA CM Relative Norm and Tower Law Cert family",
      _validate_qa_cm_relative_norm_cert_family,
      "QA CM Relative Norm and Tower Law Cert [397]. CLAIM: For pi=a+b*zeta_5 in Z[zeta_5] with N_{K/Q}(pi)=p (prime, p ≡ 1 mod 5), K=Q(zeta_5), F=Q(sqrt(5)): (C1) N_{K/F}(a+b*zeta_5)=(a^2-ab+b^2)+ab*phi in Z[phi] (relative norm formula, exact integers); (C2) N_{F/Q}(N_{K/F}(pi))=N_{K/Q}(pi)=p (tower law N_{K/Q}=N_{F/Q}∘N_{K/F}); (C3) N_{K/F}(pi)*sigma_F(N_{K/F}(pi))=p (CM norm factoring: N_{K/F} and its F/Q-conjugate are the two halves of p); (C4) CM min poly X^2-Tr_{K/F}*X+N_{K/F} with Tr=(2a-b)+b*phi in Z[phi][X]; (C5) discriminant Tr^2-4*N_rel=-b^2*(2+phi) is TOTALLY NEGATIVE (both Z[phi] components negative, N_{F/Q}(disc)=5*b^4>0). Totally-negative discriminant iff CM min poly has no real roots in either embedding of F iff Weil bound holds at every real place: this is the degree-4/CM analog of cert [395]'s sign flip (Delta_{GL2}<0). Extends [396] (Z[zeta_5] infra; partial trace=Tr_{K/F} identified as CM eigenvalue candidate). 5 checks PASS; self-test ok",

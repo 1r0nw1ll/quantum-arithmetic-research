@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA BEDA Hard Problem cert [393]. Primary sources: Stinson (2006) ISBN 978-1-58488-508-5 (key exchange security reductions); Boneh & Shoup (2023) https://toc.cryptobook.us (DLP hardness, Shor reduction); Wall (1960) doi.org/10.1080/00029890.1960.11989541 (Fibonacci group order). CLAIM: (A) BEDA-toy (mod 9 Cosmos x Satellite) has keyspace 192, brute-forced in O(192); (B) BEDA-DLP (Fibonacci orbit mod prime p) is classically hard when pi(p) has large prime factor, but NOT post-quantum (Shor 1994 applies to all cyclic groups of known order); (C) PQC extension requires Module-LWE over Z[phi]^k with k>=128, currently uninstantiated. 7 checks PASS + 8 fixtures (7 PASS, 1 designed FAIL). Derived 2026-06-11."
+}

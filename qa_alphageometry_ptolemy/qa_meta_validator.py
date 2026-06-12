@@ -9842,6 +9842,37 @@ def _validate_qa_orbit_no_3_divisor_overclaim_cert_family(base_dir):
     return None
 
 
+def _validate_qa_beda_hard_problem_cert_family(base_dir):
+    """Cert [393]: QA BEDA Hard Problem Analysis."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_beda_hard_problem_cert_v1")
+    validator = os.path.join(fam_dir, "qa_beda_hard_problem_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_beda_hard_problem_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_beda_hard_problem_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_beda_hard_problem_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_beda_hard_problem_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_phi_adic_period_tower_cert_family(base_dir):
     """Cert [392]: QA φ-adic Period Tower (Cassini-Witt)."""
     import subprocess
@@ -11206,6 +11237,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (393, "QA BEDA Hard Problem Cert family",
+     _validate_qa_beda_hard_problem_cert_family,
+     "QA BEDA Hard Problem Cert [393]. CLAIM: (A) BEDA-toy (mod 9 Cosmos x Satellite) has keyspace 192, brute-forced in O(192); (B) BEDA-DLP (Fibonacci orbit mod prime p) is classically hard when pi(p) has large prime factor (tested p=2017, pi=4036, LPF=1009), but NOT post-quantum (Shor 1994 applies to all cyclic groups of known order); (C) PQC extension requires Module-LWE over Z[phi]^k with k>=128, currently uninstantiated. 7 checks PASS + 8 fixtures (7 PASS, 1 FAIL designed); self-test ok",
+     "393_beda_hard_problem",
+     "qa_beda_hard_problem_cert_v1", True),
     (392, "QA Phi-adic Period Tower Cert family",
      _validate_qa_phi_adic_period_tower_cert_family,
      "QA phi-adic Period Tower Cert [392]. CLAIM: (A) N(sigma^k(1,0))=(-1)^(k+1) for all k (Cassini via norm multiplicativity of [391]); (B) pi(p^n)=p^(n-1)*pi(p) for inert {3,7,13,17}, split {11,19,29,41}, ramified {5}, n=1..3+; (C) Witt multiplier=p exactly for all tested primes; (D) carries (F_pi/p, (F_pi+1-1)/p) mod p non-zero for {3,7,11,19,29} — no Wall-Sun-Sun prime in test set. 7 checks PASS + 8 fixtures (7 PASS, 1 FAIL designed); self-test ok",

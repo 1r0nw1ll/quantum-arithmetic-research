@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Neukirch (1999) ISBN 978-3-540-65399-8 §II.10 (CM fields, Hecke chars, relative norm), Washington (1997) ISBN 978-0-387-94762-4, Lang (1994) ISBN 978-1-4612-0853-2 §VIII.2 -->
+{
+  "expected_sha256": "c53e176a26a6f7e365ed7c2c0a0ccccd98d97abdd67e39017a4dd2e761875c39",
+  "description": "SHA-256 of stdout from qa_cm_relative_norm_cert_validate.py (all checks PASS, 5 checks: C1 relative norm, C2 tower law, C3 CM norm factoring, C4 CM min poly, C5 totally-negative discriminant)"
+}

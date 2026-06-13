@@ -10090,6 +10090,37 @@ def _validate_qa_gl4_rankin_selberg_cert_family(base_dir):
     return None
 
 
+def _validate_qa_gl6_exterior_square_cert_family(base_dir):
+    """Cert [406]: QA Langlands GL6 Exterior Square — ∧²(AI_{Q(sqrt5)/Q}(f)) Euler Factor."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_gl6_exterior_square_cert_v1")
+    validator = os.path.join(fam_dir, "qa_gl6_exterior_square_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_gl6_exterior_square_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_gl6_exterior_square_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_gl6_exterior_square_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_gl6_exterior_square_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_octave_orbit_permutation_cert_family(base_dir):
     """Cert [402]: QA Octave Orbit Permutation — σ(b,e)=(dr(2e),b) has cycle type (1,4^2,12^6), order 12."""
     import subprocess
@@ -11624,6 +11655,11 @@ FAMILY_SWEEPS = [
      "QA Langlands GL4 Rankin-Selberg (Tensor Product) Cert [405]. CLAIM: For f=2.2.5.1-125.1-a and split prime p≡1(mod5) with eigenvalue a_p=(u,v) in Z[phi], the tensor product pi_{p}⊗pi_{pbar} of the two GL_2 local components has Euler polynomial R_p(Y)=1-N*Y+p(T^2-2N-2p)*Y^2-p^2*N*Y^3+p^4*Y^4 where T=2u+v and N=u^2+uv-v^2. (C1) integer coefficients: -N, p(T^2-2N-2p), -p^2*N, p^4 all in Z for all 22 split primes p<=500 (immediate from T,N in Z; 22/22 PASS); (C2) weight-2 palindrome: R_p(Y)=p^4*Y^4*R_p(1/(p^2*Y)), i.e. a3=p^2*a1 and a4=p^4*a0 (22/22 PASS); (C3) algebraic derivation: R_p=Q_2(alpha_1*Y)*Q_2(alpha_2*Y) where alpha_1,alpha_2 are Satake params of Q_1=1-sigma_1(a_p)*X+p*X^2; by Vieta: alpha_1*alpha_2=p, sigma_1(a_p)*sigma_2(a_p)=N, sigma_1^2+sigma_2^2=T^2-2N; product gives integer coefficients (22/22 PASS). Relation to wedge2: ∧^2(AI(f))_p = (1-p*Y)^2 * R_p(Y) where (1-p*Y)^2 comes from det(pi_1)*det(pi_2) each with Satake param p. Primary sources: Jacquet-PS-Shalika (1983) doi:10.2307/2374264; Shahidi (1981) doi:10.2307/2374219. Langlands ladder [403]->[404]->[405]. 3 checks PASS; self-test ok",
      "405_qa_gl4_rankin_selberg",
      "qa_gl4_rankin_selberg_cert_v1", True),
+    (406, "QA Langlands GL6 Exterior Square Cert family",
+     _validate_qa_gl6_exterior_square_cert_family,
+     "QA Langlands GL6 Exterior Square Cert [406]. CLAIM: For f=2.2.5.1-125.1-a and split prime p≡1(mod5), the full exterior square GL_6 Euler polynomial of AI_{Q(sqrt5)/Q}(f) is: W_p(Y)=1-(N+2p)*Y+p(T^2-p)*Y^2-2p^2(T^2-N-2p)*Y^3+p^3(T^2-p)*Y^4-p^4(N+2p)*Y^5+p^6*Y^6. Decomposition: ∧^2(V_1+V_2)=∧^2(V_1)+(V_1⊗V_2)+∧^2(V_2) => W_p=(1-pY)^2*R_p(Y) where (1-pY)^2 from det(pi_1)*det(pi_2) and R_p from cert [405]. (C1) all 7 coefficients in Z for 22 split primes (22/22 PASS); (C2) weight-2 palindrome a5=p^4*a1, a4=p^2*a2, a6=p^6 (22/22 PASS); (C3) middle a3=-2p^2*(T^2-N-2p) divisible by 2p^2 — double multiplicity signature (22/22 PASS); (C4) W_p=(1-pY)^2*R_p(Y) direct multiplication match (22/22 PASS). Primary sources: Kim-Shahidi (2002) doi:10.4007/annals.2002.155.837; Cogdell (2004) ISBN 978-0-8218-3516-0. Langlands ladder [403]->[404]->[405]->[406]. 4 checks PASS; self-test ok",
+     "406_qa_gl6_exterior_square",
+     "qa_gl6_exterior_square_cert_v1", True),
     (402, "QA Octave Orbit Permutation Cert family",
      _validate_qa_octave_orbit_permutation_cert_family,
      "QA Octave Orbit Permutation Cert [402]. CLAIM: the digital-root octave map sigma:(b,e)->(dr(2e),b) with dr(n)=((n-1)%9)+1 is a permutation of {1,...,9}^2 with cycle type (1, 4^2, 12^6) and order 12; sigma maps each QA orbit class to itself (Cosmos->Cosmos, Satellite->Satellite, Singularity fixed). (C1) sigma bijective: 81 distinct images; (C2) orbit preservation: Cosmos 72 pairs -> Cosmos, Satellite 8 pairs -> Satellite, Singularity (9,9) fixed; algebraic reason: gcd(2,9)=1 so 3|dr(2e) iff 3|e, preserving satellite/singularity divisibility; (C3) cycle type {1:1, 4:2, 12:6}: Singularity 1 fixed, Satellite splits into 2 four-cycles, Cosmos splits into 6 twelve-cycles; (C4) order=12: sigma^k != identity for k in {1,2,3,4,6}, sigma^12=identity (M=[[0,2],[1,0]] mod 9, ord(M)=12 since 2^6=64=1 mod 9 combined with alternating b/e); (C5) Satellite 4-cycles: {(3,3),(6,3),(6,6),(3,6)} and {(6,9),(9,6),(3,9),(9,3)}. Mirroring: cycle type (1,4^2,12^6) mirrors orbit sizes (1,8,72) = (1,2x4,6x12). Extends [401] (octave transform), [398] (Five Families Table 1 = the 9x9 grid). 5 checks PASS; self-test ok",

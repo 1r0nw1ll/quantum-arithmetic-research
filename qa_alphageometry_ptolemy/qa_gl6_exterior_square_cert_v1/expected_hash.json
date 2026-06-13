@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Kim-Shahidi (2002) doi:10.4007/annals.2002.155.837, Cogdell (2004) ISBN 978-0-8218-3516-0 -->
+{
+  "expected_sha256": "02bc6005a2a7f3202cd474830392135610eed6ca3a32d509bd100e026a483a92",
+  "description": "SHA-256 of stdout (JSON) from qa_gl6_exterior_square_cert_validate.py (4 checks PASS). W_p(Y)=1-(N+2p)Y+p(T^2-p)Y^2-2p^2(T^2-N-2p)Y^3+p^3(T^2-p)Y^4-p^4(N+2p)Y^5+p^6*Y^6. Full GL6 exterior square of AI_{Q(sqrt5)/Q}(f). Langlands ladder [403]->[404]->[405]->[406]."
+}

@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Shimura (1975) doi:10.1007/BF01403156, Gelbart-Jacquet (1978) doi:10.2307/1971237 -->
+{
+  "expected_sha256": "9f231fcfc46f704ec4667890a3428b12099fb93c1c68d0a5588f7f8efa465b54",
+  "description": "SHA-256 of stdout (JSON) from qa_sym2_euler_factor_cert_validate.py (4 checks PASS). Sigma_p=1-SY+(Q+2p^2)Y^2-p^2*SY^3+p^4Y^4 with S=T^2-2N-4p and Q=(N+2p)^2-2pT^2. GL3/F Sym^2 reduced factor. Langlands ladder [403]->[404]->[407]."
+}

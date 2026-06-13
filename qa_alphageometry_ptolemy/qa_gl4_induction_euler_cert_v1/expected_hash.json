@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Arthur-Clozel (1989) ISBN 978-0-691-08517-3, Langlands (1980) ISBN 978-0-691-08258-5 -->
+{
+  "expected_sha256": "92b34ac83f8954cd337ce68e99808b5498f51ec6b083a327dc6858f49fcf264c",
+  "description": "SHA-256 of stdout (JSON) from qa_gl4_induction_euler_cert_validate.py (all 4 checks PASS). C1: T=-1 mod 5 for 22 split primes p<=500. C2: Z[phi]-factorization P_p(Y)=(1-a_p*Y+pY^2)(1-sigma(a_p)*Y+pY^2) gives integer coefficients [1,-T,N+2p,-pT,p^2]. C3: palindrome a4=p^2, a3=p*a1. C4: GL4 Ramanujan all 4 roots have |root|=p^{-1/2}. Langlands ladder rung [404] above [403]."
+}

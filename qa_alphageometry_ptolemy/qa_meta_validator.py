@@ -10028,6 +10028,37 @@ def _validate_qa_langlands_cap_frobenius_cert_family(base_dir):
     return None
 
 
+def _validate_qa_gl4_induction_euler_cert_family(base_dir):
+    """Cert [404]: QA Langlands GL4 Induction — AI_{Q(sqrt5)/Q}(f) Euler Factors."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_gl4_induction_euler_cert_v1")
+    validator = os.path.join(fam_dir, "qa_gl4_induction_euler_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_gl4_induction_euler_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_gl4_induction_euler_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_gl4_induction_euler_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_gl4_induction_euler_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_octave_orbit_permutation_cert_family(base_dir):
     """Cert [402]: QA Octave Orbit Permutation — σ(b,e)=(dr(2e),b) has cycle type (1,4^2,12^6), order 12."""
     import subprocess
@@ -11552,6 +11583,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Cap — CM Frobenius Ramanujan Equality Cert [403]. CLAIM: For the CM Hilbert modular form f=2.2.5.1-125.1-a over F=Q(sqrt(5)), the Hecke character factorization L(s,f)=L(s,psi)*L(s,psibar) implies Ramanujan EQUALITY at every split prime p≡1(mod5): the Frobenius char. poly. X^2-a_p*X+p has discriminant Delta=a_p^2-4p strictly negative at BOTH real embeddings sigma_1,sigma_2 of Q(sqrt(5))/Q (roots are complex with |alpha|=|alphabar|=sqrt(p) exactly). (C1) CM zero pattern: a_p=0 for all p not ≡ 1 mod 5 (10 primes verified, 0 failures); (C2) eigenvalue field: a_p in Z[phi] for all 5 split primes (11,31,41,61,71); (C3) Ramanujan equality: Delta<0 at sigma_1 and sigma_2 for all 5 split primes (most extreme: p=31 s2=-1.008); (C4) norm bound: N_{Q(sqrt5)/Q}(a_p) correct and |N(a_p)|<=4p for all split primes: (11,-31),(31,-1),(41,-11),(61,-31),(71,59); eigenvalues Frobenius-derived: a41=7-5phi, a61=2-5phi=sigma_F(a11); (C5) discriminant resonance: eigenvalue e=-3+5*phi satisfies e^2+e-31=0 and disc(e/Q)=Tr(e)^2-4*N(e)=1+124=125=level_norm=disc(Q(zeta5)/Q); (C6) Universal Pell: M^2-20k^2=T^2*D for all 22 split primes p<=500 where T=Tr(a_p), D=disc(a_p/Q)=m^2*125 with m in {1,4,5}, M=8p-(T^2+D)/2; disc classes {125,2000,3125}={1,4,5}^2*125; Pell discriminant 20=4*F5, stepping unit (9,2) solving X^2-20Y^2=1 universal across all eigenvalue classes. Caps Langlands ladder: [394]->[395]->[396]->[397]->[399]->[403]. 6 checks PASS; self-test ok",
      "403_qa_langlands_cap_frobenius",
      "qa_langlands_cap_frobenius_cert_v1", True),
+    (404, "QA Langlands GL4 Induction Euler Cert family",
+     _validate_qa_gl4_induction_euler_cert_family,
+     "QA Langlands GL4 Induction Euler Cert [404]. CLAIM: For f=2.2.5.1-125.1-a (GL_2/Q(sqrt5), CM by Q(zeta_5)), the GL_4/Q automorphic induction AI_{Q(sqrt5)/Q}(f) has Euler polynomial at each split prime p≡1(mod5): P_p(Y)=(1-a_p*Y+p*Y^2)(1-sigma_F(a_p)*Y+p*Y^2)=1-T*Y+(N+2p)*Y^2-p*T*Y^3+p^2*Y^4. (C1) T≡-1≡4 mod 5 for all 22 split primes p<=500: conductor arithmetic Frobenius pi≡1 mod lambda^3 forces Tr_{K/Q}(pi)=4*1=4≡-1 mod 5 (22/22 PASS); (C2) Z[phi]-factorization: product over Z[phi][Y] gives integer coefficients [1,-T,N+2p,-pT,p^2] because sum(a_p,sigma(a_p))=(T,0) and prod(a_p,sigma(a_p))=(N,0) are rational (22/22 PASS); (C3) palindrome/functional-equation purity: a4=p^2*a0=p^2 and a3=p*a1=-pT (22/22 PASS); (C4) GL4 Ramanujan: all 4 roots of P_p(Y) have |root|=p^{-1/2}, inherited from cert [403]: disc_i=sigma_i(a_p)^2-4p<0 at both real embeddings (22/22 PASS). Langlands ladder rung [404] above [403]. Primary sources: Arthur-Clozel (1989) ISBN 978-0-691-08517-3; Langlands (1980) ISBN 978-0-691-08258-5. 4 checks PASS; self-test ok",
+     "404_qa_gl4_induction_euler",
+     "qa_gl4_induction_euler_cert_v1", True),
     (402, "QA Octave Orbit Permutation Cert family",
      _validate_qa_octave_orbit_permutation_cert_family,
      "QA Octave Orbit Permutation Cert [402]. CLAIM: the digital-root octave map sigma:(b,e)->(dr(2e),b) with dr(n)=((n-1)%9)+1 is a permutation of {1,...,9}^2 with cycle type (1, 4^2, 12^6) and order 12; sigma maps each QA orbit class to itself (Cosmos->Cosmos, Satellite->Satellite, Singularity fixed). (C1) sigma bijective: 81 distinct images; (C2) orbit preservation: Cosmos 72 pairs -> Cosmos, Satellite 8 pairs -> Satellite, Singularity (9,9) fixed; algebraic reason: gcd(2,9)=1 so 3|dr(2e) iff 3|e, preserving satellite/singularity divisibility; (C3) cycle type {1:1, 4:2, 12:6}: Singularity 1 fixed, Satellite splits into 2 four-cycles, Cosmos splits into 6 twelve-cycles; (C4) order=12: sigma^k != identity for k in {1,2,3,4,6}, sigma^12=identity (M=[[0,2],[1,0]] mod 9, ord(M)=12 since 2^6=64=1 mod 9 combined with alternating b/e); (C5) Satellite 4-cycles: {(3,3),(6,3),(6,6),(3,6)} and {(6,9),(9,6),(3,9),(9,3)}. Mirroring: cycle type (1,4^2,12^6) mirrors orbit sizes (1,8,72) = (1,2x4,6x12). Extends [401] (octave transform), [398] (Five Families Table 1 = the 9x9 grid). 5 checks PASS; self-test ok",

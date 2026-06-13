@@ -429,4 +429,5 @@ Before shipping any family:
 | [400](400_qa_beda_classical_subfamilies.md) | QA BEDA Classical Subfamilies | Fermat: \|C−F\|=1 ↔ \|b²−2e²\|=1 (Pell); Pythagoras: (d−e)²=1 ↔ b=1; Plato: \|G−F\|=2 ↔ e=1 — Thm 3 of Five Families paper | [398] |
 | [401](401_qa_octave_transformation.md) | QA Octave Transformation | (b,e,d,a)→(2e,b,a,2d): female=(2F,2C,2G), gcd=2; b²+a²=2G; 169/169 primitives verified — Thm 4 of Five Families paper | [398] [400] |
 | [403](403_qa_langlands_cap_frobenius.md) | QA Langlands Cap Frobenius | CM form 2.2.5.1-125.1-a: Frobenius Δ=a𝔭²−4p<0 at both ℝ-embeddings (Ramanujan equality); disc(e)=125=level norm; caps Langlands ladder [394]→[403] | [394] [395] [396] [397] [399] |
+| [404](404_qa_gl4_induction_euler.md) | QA Langlands GL₄ Induction Euler | AI_{ℚ(√5)/ℚ}(f): GL₄ Euler poly P_p(Y)=(1−a_p Y+pY²)(1−σ_F(a_p)Y+pY²); T≡−1 mod 5; palindrome; GL₄ Ramanujan | [403] [396] [398] |
 | [402](402_qa_octave_orbit_permutation.md) | QA Octave Orbit Permutation | σ:(b,e)→(dr(2e),b) permutes {1..9}²; cycle type (1,4²,12⁶); order 12; Satellite splits into 2 four-cycles; mirrors orbit sizes (1,8,72) | [398] [401] |

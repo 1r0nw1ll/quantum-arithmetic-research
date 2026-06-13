@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Hecke (1920) doi:10.1007/BF01458074, Shimura (1971) ISBN 978-0-691-08092-5, Weil (1967) ISBN 978-0-387-90420-7 -->
+{
+  "expected_sha256": "8a93ee5c476c5c07b64824714e5693f1bb2e56b756555c7e60fff40f51aa0a78",
+  "description": "SHA-256 of stdout (JSON) from qa_langlands_cap_frobenius_cert_validate.py (all checks PASS, 5 checks: C1 zero pattern, C2 Z[phi] membership, C3 Frobenius discriminant < 0 at both embeddings, C4 field norms + Ramanujan bound, C5 discriminant resonance 125 = level norm)"
+}

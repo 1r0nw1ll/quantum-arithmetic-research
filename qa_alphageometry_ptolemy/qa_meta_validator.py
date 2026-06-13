@@ -9997,6 +9997,37 @@ def _validate_qa_five_families_partition_cert_family(base_dir):
     return None
 
 
+def _validate_qa_langlands_cap_frobenius_cert_family(base_dir):
+    """Cert [403]: QA Langlands Cap — CM Frobenius Ramanujan Equality for 2.2.5.1-125.1-a."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_langlands_cap_frobenius_cert_v1")
+    validator = os.path.join(fam_dir, "qa_langlands_cap_frobenius_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_langlands_cap_frobenius_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_langlands_cap_frobenius_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_langlands_cap_frobenius_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_langlands_cap_frobenius_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_octave_orbit_permutation_cert_family(base_dir):
     """Cert [402]: QA Octave Orbit Permutation — σ(b,e)=(dr(2e),b) has cycle type (1,4^2,12^6), order 12."""
     import subprocess
@@ -11516,6 +11547,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (403, "QA Langlands Cap Frobenius Cert family",
+     _validate_qa_langlands_cap_frobenius_cert_family,
+     "QA Langlands Cap — CM Frobenius Ramanujan Equality Cert [403]. CLAIM: For the CM Hilbert modular form f=2.2.5.1-125.1-a over F=Q(sqrt(5)), the Hecke character factorization L(s,f)=L(s,psi)*L(s,psibar) implies Ramanujan EQUALITY at every split prime p≡1(mod5): the Frobenius char. poly. X^2-a_p*X+p has discriminant Delta=a_p^2-4p strictly negative at BOTH real embeddings sigma_1,sigma_2 of Q(sqrt(5))/Q (roots are complex with |alpha|=|alphabar|=sqrt(p) exactly). (C1) CM zero pattern: a_p=0 for all p not ≡ 1 mod 5 (10 primes verified, 0 failures); (C2) eigenvalue field: a_p in Z[phi] for all 5 split primes (11,31,41,61,71); (C3) Ramanujan equality: Delta<0 at sigma_1 and sigma_2 for all 5 split primes (most extreme: p=31 s2=-1.008); (C4) norm bound: N_{Q(sqrt5)/Q}(a_p) correct and |N(a_p)|<=4p for all split primes: (11,-31),(31,-1),(41,-19),(61,-121),(71,59); (C5) discriminant resonance: eigenvalue e=-3+5*phi satisfies e^2+e-31=0 and disc(e/Q)=Tr(e)^2-4*N(e)=1+124=125=level_norm=disc(Q(zeta5)/Q). Caps Langlands ladder: [394]->[395]->[396]->[397]->[399]->[403]. 5 checks PASS; self-test ok",
+     "403_qa_langlands_cap_frobenius",
+     "qa_langlands_cap_frobenius_cert_v1", True),
     (402, "QA Octave Orbit Permutation Cert family",
      _validate_qa_octave_orbit_permutation_cert_family,
      "QA Octave Orbit Permutation Cert [402]. CLAIM: the digital-root octave map sigma:(b,e)->(dr(2e),b) with dr(n)=((n-1)%9)+1 is a permutation of {1,...,9}^2 with cycle type (1, 4^2, 12^6) and order 12; sigma maps each QA orbit class to itself (Cosmos->Cosmos, Satellite->Satellite, Singularity fixed). (C1) sigma bijective: 81 distinct images; (C2) orbit preservation: Cosmos 72 pairs -> Cosmos, Satellite 8 pairs -> Satellite, Singularity (9,9) fixed; algebraic reason: gcd(2,9)=1 so 3|dr(2e) iff 3|e, preserving satellite/singularity divisibility; (C3) cycle type {1:1, 4:2, 12:6}: Singularity 1 fixed, Satellite splits into 2 four-cycles, Cosmos splits into 6 twelve-cycles; (C4) order=12: sigma^k != identity for k in {1,2,3,4,6}, sigma^12=identity (M=[[0,2],[1,0]] mod 9, ord(M)=12 since 2^6=64=1 mod 9 combined with alternating b/e); (C5) Satellite 4-cycles: {(3,3),(6,3),(6,6),(3,6)} and {(6,9),(9,6),(3,9),(9,3)}. Mirroring: cycle type (1,4^2,12^6) mirrors orbit sizes (1,8,72) = (1,2x4,6x12). Extends [401] (octave transform), [398] (Five Families Table 1 = the 9x9 grid). 5 checks PASS; self-test ok",

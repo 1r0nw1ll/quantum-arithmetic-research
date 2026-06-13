@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Iverson (1993) Pythagorean Arithmetic Vols I-III, Wall (1960) doi:10.1080/00029890.1960.11989541 -->
+{
+  "expected_sha256": "220da0d451b289fcb23af997a49c8df2c682e54f8d226218bfa8d0ecd0183eca",
+  "description": "SHA-256 of stdout from qa_octave_orbit_permutation_cert_validate.py (all checks PASS, 5 checks: C1 bijection, C2 orbit preservation, C3 cycle type (1,4^2,12^6), C4 order=12, C5 Satellite 4-cycles identified)"
+}

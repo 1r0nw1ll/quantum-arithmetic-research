@@ -1,3 +1,4 @@
+% PRIMARY-SOURCE-EXEMPT: reason=primary research paper; citations in bibliography: Wall (1960) doi:10.1080/00029890.1960.11989541, Fibonacci (1202) Liber Abaci, Sierpinski (1962) ISBN 978-0-486-43293-4
 \documentclass[12pt]{article}
 \usepackage{amsmath, amssymb, amsthm}
 \usepackage{geometry}
@@ -14,6 +15,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{proposition}[theorem]{Proposition}
 \newtheorem{corollary}[theorem]{Corollary}
+\newtheorem{conjecture}[theorem]{Conjecture}
 \newtheorem{definition}{Definition}
 \newtheorem{remark}{Remark}
 \newtheorem{example}{Example}
@@ -29,7 +31,7 @@
 \maketitle
 
 \begin{abstract}
-We present a comprehensive hierarchical classification of Pythagorean triples based on three nested taxonomic layers. The foundation is a partition into five disjoint families---Fibonacci, Lucas, Phibonacci, Tribonacci, and Ninbonacci---derived from generalized Fibonacci sequences and their Pisano periods under modulo 9 arithmetic (24, 24, 24, 8, and 1 respectively), creating a 72-8-1 orbital structure. We then introduce a primitive/non-primitive dichotomy based on greatest common divisor analysis, followed by a classification of primitive triples into three classical subfamilies: Fermat ($|C-F|=1$), Pythagoras ($(d-e)^2=1$), and Plato ($|G-F|=2$). We further reveal a ``gender'' classification distinguishing male tuples (primitive or $\gcd \neq 2$) from female tuples ($\gcd=2$, octave harmonics) and establish a remarkable correspondence between this taxonomy and the E8 exceptional Lie algebra: primitive subfamilies embed into the E8 root system, while female tuples map to the first weight shell. This unified framework connects classical number theory, modular arithmetic, Lie algebras, and harmonic analysis, with applications to cryptography, signal processing, and quantum arithmetic systems.
+We present a comprehensive hierarchical classification of Pythagorean triples based on three nested taxonomic layers. The foundation is a partition into five disjoint families---Fibonacci, Lucas, Phibonacci, Tribonacci, and Ninbonacci---derived from generalized Fibonacci sequences and their Pisano periods under modulo 9 arithmetic (24, 24, 24, 8, and 1 respectively), creating a 72-8-1 orbital structure. We then introduce a primitive/non-primitive dichotomy based on greatest common divisor analysis, followed by a classification of primitive triples into three classical subfamilies: Fermat ($|C-F|=1$), Pythagoras ($(d-e)^2=1$), and Plato ($|G-F|=2$). We further record a ``gender'' classification distinguishing male tuples (primitive or $\gcd \neq 2$) from female tuples ($\gcd=2$, octave harmonics). Finally, we identify conjectural directions relating this exact integer taxonomy to E8-style lattice features and quantum-arithmetic signal metrics. These latter connections are stated as validation targets, not as consequences of the classification theorem.
 \end{abstract}
 
 \section{Introduction}
@@ -212,20 +214,15 @@ A Pythagorean triple $(C, F, G)$ is \emph{primitive} if $\gcd(C, F, G) = 1$. Oth
 
 Every non-primitive triple is a positive integer multiple of a unique primitive triple. For example, $(6, 8, 10) = 2 \cdot (3, 4, 5)$ and $(9, 12, 15) = 3 \cdot (3, 4, 5)$ are both non-primitive, derived from the primitive triple $(3, 4, 5)$.
 
-\begin{proposition}[Family Membership Under Scaling]
-If a primitive triple $(C, F, G)$ belongs to family $\mathcal{F}$, then all non-primitive multiples $k \cdot (C, F, G)$ for $k \geq 2$ also belong to family $\mathcal{F}$ (as determined by the digital roots of their generating BEDA parameters).
+\begin{proposition}[Scaling and Family Labels]
+Primitive parentage and digital-root family membership are distinct classifications. Scaling a primitive BEDA tuple by $k$ preserves the underlying similarity class of the Pythagorean triple, producing a $k^2$ multiple of the triple, but it need not preserve the named digital-root family label.
 \end{proposition}
 
 \begin{proof}
-Consider a primitive triple $(C, F, G)$ generated from BEDA tuple $(b, e, d, a)$ belonging to family $\mathcal{F}$. The scaled triple $k \cdot (C, F, G)$ can be generated from the BEDA tuple $(kb, ke, kd, ka)$. Since:
-\begin{align*}
-\text{dr}(kb) \bmod 9 &\equiv k \cdot \text{dr}(b) \bmod 9\\
-\text{dr}(ke) \bmod 9 &\equiv k \cdot \text{dr}(e) \bmod 9
-\end{align*}
-the digital root pair $(\text{dr}(kb), \text{dr}(ke))$ remains in the same family orbit as $(\text{dr}(b), \text{dr}(e))$ under the action of the Pisano period dynamics.
+The scaled BEDA tuple $(kb,ke,kd,ka)$ generates $k^2(C,F,G)$, so it has the same primitive parent after dividing by the common factor. However, the digital-root pair changes from $(\mathrm{dr}(b),\mathrm{dr}(e))$ to $(\mathrm{dr}(kb),\mathrm{dr}(ke))$, which may lie in a different named family. For example, $(b,e)=(1,1)$ is Fibonacci and gives $(C,F,G)=(4,3,5)$, while its double $(2,2)$ gives $(16,12,20)=4(4,3,5)$ but has digital-root pair $(2,2)$, a Lucas cell in Table~\ref{tab:classification}. Thus the primitive parent is preserved by BEDA scaling, but the named digital-root family label is not.
 \end{proof}
 
-This result establishes that family membership is preserved under scaling, making the classification naturally hierarchical: the five families partition primitive triples, and non-primitives inherit their family from their primitive ``parent.''
+This distinction is important: the five-family partition classifies BEDA residue pairs, while primitivity classifies the Pythagorean triple itself. Non-primitives should therefore record both their current digital-root family and their primitive parent.
 
 \begin{table}[h!]
 \centering
@@ -234,13 +231,13 @@ This result establishes that family membership is preserved under scaling, makin
 \small
 \begin{tabular}{lcccc}
 \toprule
-\textbf{Family} & \textbf{$(b,e)$} & \textbf{Primitive $(C,F,G)$} & \textbf{$\gcd$} & \textbf{Non-Prim. ($k=2$)} \\
+\textbf{Family} & \textbf{Primitive example} & \textbf{Primitive $(C,F,G)$} & \textbf{Non-primitive example} & \textbf{Parent} \\
 \midrule
-Fibonacci & $(1,1)$ & $(4,3,5)$ & 1 & $(8,6,10)$ \\
-Fibonacci & $(2,3)$ & $(30,16,34)$ & 2 & $(60,32,68)$ \\
-Lucas & $(2,1)$ & $(6,8,10)$ & 2 & $(12,16,20)$ \\
-Phibonacci & $(3,1)$ & $(8,15,17)$ & 1 & $(16,30,34)$ \\
-Tribonacci & $(3,3)$ & $(36,27,45)$ & 9 & $(72,54,90)$ \\
+Fibonacci & $(1,1)$ & $(4,3,5)$ & $(2,3)\mapsto(30,16,34)$ & $2(15,8,17)$ \\
+Lucas & $(1,3)$ & $(24,7,25)$ & $(2,2)\mapsto(16,12,20)$ & $4(4,3,5)$ \\
+Phibonacci & $(1,4)$ & $(40,9,41)$ & $(4,2)\mapsto(24,32,40)$ & $8(3,4,5)$ \\
+Tribonacci & none in primitive layer & --- & $(3,3)\mapsto(36,27,45)$ & $9(4,3,5)$ \\
+Ninbonacci & none in primitive layer & --- & $(9,9)\mapsto(324,243,405)$ & $81(4,3,5)$ \\
 \bottomrule
 \end{tabular}
 \end{table}
@@ -293,14 +290,22 @@ The BEDA framework reveals elegant algebraic characterizations of these classica
 Let $(C, F, G)$ be a primitive Pythagorean triple generated from BEDA tuple $(b, e, d, a)$ via equations \eqref{eq:pyth1}--\eqref{eq:pyth3}. Then:
 
 \begin{enumerate}
-\item $(C, F, G) \in$ \textbf{Fermat} $\iff |C - F| = |2de - ab| = 1$
-\item $(C, F, G) \in$ \textbf{Pythagoras} $\iff (d - e)^2 = 1 \iff |d - e| = 1$
-\item $(C, F, G) \in$ \textbf{Plato} $\iff |G - F| = |e^2 + d^2 - ab| = 2$
+\item $(C, F, G) \in$ \textbf{Fermat} $\iff |C - F| = |2e^2-b^2| = |b^2-2e^2| = 1$
+\item $(C, F, G) \in$ \textbf{Pythagoras} $\iff (d - e)^2 = 1 \iff b = 1$
+\item $(C, F, G) \in$ \textbf{Plato} $\iff |G - F| = 2 \iff e = 1$; with the primitive restriction this is $e=1$ and $b$ odd
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
-These characterizations follow directly from the BEDA-to-Pythagorean transformation \eqref{eq:pyth1}--\eqref{eq:pyth3}. The Pythagoras family condition $(d-e)^2 = 1$ is particularly elegant: since $d = b + e$, this becomes $(b+e-e)^2 = b^2 = 1$, which occurs when $b = 1$. Thus Pythagoras family members are generated by BEDA tuples with $b = 1$ and $d = e \pm 1$, corresponding to points one step off the main diagonal in the $(e, d)$ lattice.
+These characterizations follow directly from the BEDA-to-Pythagorean transformation \eqref{eq:pyth1}--\eqref{eq:pyth3}. For Fermat,
+\[
+C-F = 2de-ab = 2e(b+e)-b(b+2e)=2e^2-b^2,
+\]
+so $|C-F|=1$ is the Pell-boundary condition $|b^2-2e^2|=1$. The Pythagoras family condition $(d-e)^2 = 1$ is particularly elegant: since $d = b + e$, this becomes $(b+e-e)^2 = b^2 = 1$, which occurs when $b = 1$ for positive BEDA tuples. Finally,
+\[
+G-F=(d^2+e^2)-(d^2-e^2)=2e^2,
+\]
+so $|G-F|=2$ occurs exactly when $e=1$; imposing primitivity further requires $d-e=b$ odd.
 \end{proof}
 
 \subsection{Examples of Classical Subfamilies}
@@ -315,16 +320,19 @@ These characterizations follow directly from the BEDA-to-Pythagorean transformat
 \textbf{Subfamily} & \textbf{Five Family} & \textbf{$(b,e)$} & \textbf{$(C,F,G)$} & \textbf{Property} \\
 \midrule
 Fermat & Fibonacci & $(1,1)$ & $(4,3,5)$ & $4-3=1$ \\
-Fermat & Phibonacci & $(5,8)$ & $(208,205,293)$ & $208-205=3$ \\
-Pythagoras & Phibonacci & $(3,1)$ & $(8,15,17)$ & $(d-e)^2=(4-1)^2=9$ \\
+Fermat & Phibonacci & $(3,2)$ & $(20,21,29)$ & $|20-21|=1$ \\
+Fermat & Lucas & $(7,5)$ & $(120,119,169)$ & $120-119=1$ \\
+Pythagoras & Fibonacci & $(1,1)$ & $(4,3,5)$ & $(d-e)^2=(2-1)^2=1$ \\
 Pythagoras & Fibonacci & $(1,2)$ & $(12,5,13)$ & $(d-e)^2=(3-2)^2=1$ \\
-Plato & Lucas & $(7,4)$ & $(88,77,117)$ & $117-77=40$ \\
-Plato & Phibonacci & $(15,8)$ & $(368,345,505)$ & $505-345=160$ \\
+Pythagoras & Lucas & $(1,3)$ & $(24,7,25)$ & $(d-e)^2=(4-3)^2=1$ \\
+Plato & Fibonacci & $(1,1)$ & $(4,3,5)$ & $5-3=2$ \\
+Plato & Phibonacci & $(3,1)$ & $(8,15,17)$ & $17-15=2$ \\
+Plato & Fibonacci & $(7,1)$ & $(16,63,65)$ & $65-63=2$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-Note that the classical subfamilies \emph{cut across} the five families: members of the Fermat subfamily can be found in Fibonacci, Lucas, and Phibonacci families. This demonstrates that the five-family partition (Layer 0) and the classical subfamily structure (Layer 2) are orthogonal classification schemes.
+Note that the classical subfamilies \emph{cut across} the five families, but not uniformly across all five in small bounded domains. In the examples above, Fermat appears in Fibonacci, Phibonacci, and Lucas classes; Pythagoras appears in Fibonacci and Lucas classes; primitive Plato appears in Fibonacci and Phibonacci classes. This demonstrates that the five-family partition (Layer 0) and the classical subfamily structure (Layer 2) are distinct classification schemes.
 
 \begin{remark}[The Elegance of $(d-e)^2=1$]
 The Pythagoras family characterization $(d-e)^2 = 1$ provides a beautiful geometric insight: these triples correspond to BEDA tuples lying exactly one unit off the diagonal $d = e$ in the integer lattice. This ``1-step-off-diagonal'' property makes them particularly amenable to computational generation and analysis.
@@ -368,7 +376,7 @@ A remarkable pattern emerges when we examine non-primitive triples with $\gcd = 
 For a Pythagorean triple $(C, F, G)$ with $\gcd(C, F, G) = k$, we define:
 
 \begin{enumerate}
-\item \textbf{Male tuple}: Primitive ($k = 1$) or non-primitive with $k \neq 2^j$ for any $j \geq 1$
+\item \textbf{Male tuple}: Primitive ($k = 1$) or non-primitive with $k \neq 2$
 \item \textbf{Female tuple}: Non-primitive with $k = 2$ (exactly)
 \item \textbf{Composite male}: Non-primitive with $k > 2$ and $k$ has odd prime factors
 \end{enumerate}
@@ -399,11 +407,15 @@ F' &= a'b' = (2d)(2e) = 4de = 2(2de) = 2C\\
 G' &= (e')^2 + (d')^2 = b^2 + a^2
 \end{align*}
 
-Since the original triple $(C, F, G) = (2de, ab, e^2 + d^2)$ was primitive, $\gcd(C, F, G) = 1$. The female triple $(2ab, 4de, b^2+a^2)$ has $\gcd = 2$ by construction, as all components are even (since at least one of $b, e$ must be even for primitivity).
+Since the original triple $(C, F, G) = (2de, ab, e^2 + d^2)$ was primitive, $\gcd(C, F, G) = 1$. The female triple is
+\[
+(C',F',G')=(2ab,4de,b^2+a^2)=(2F,2C,2G),
+\]
+because $b^2+a^2=b^2+(b+2e)^2=2(d^2+e^2)=2G$. Hence $\gcd(C',F',G')=2$ exactly. The transformation produces the first octave multiple of the primitive triple, with the two legs interchanged.
 \end{proof}
 
 \begin{example}[Male-Female Pairs]
-Consider the primitive male tuple $(b,e) = (1,1)$ generating $(C,F,G) = (4,3,5)$ (actually has gcd=1, this is male-primitive). The female transformation gives:
+Consider the primitive male tuple $(b,e) = (1,1)$ generating $(C,F,G) = (4,3,5)$. The female transformation gives:
 \begin{align*}
 (b', e', d', a') &= (2 \cdot 1, 1, 3, 2 \cdot 2) = (2, 1, 3, 4)\\
 (C', F', G') &= (2 \cdot 3 \cdot 1, 4 \cdot 2, 1^2 + 3^2) = (6, 8, 10)
@@ -413,7 +425,7 @@ Indeed, $(6,8,10) = 2 \cdot (3,4,5)$, confirming the octave relationship.
 
 \subsection{Harmonic Interpretation}
 
-The gender classification has deep connections to harmonic analysis:
+The gender classification admits a simple harmonic interpretation:
 
 \begin{itemize}
 \item \textbf{Male tuples} represent fundamental frequencies
@@ -421,7 +433,7 @@ The gender classification has deep connections to harmonic analysis:
 \item \textbf{Composite male} tuples represent higher-order harmonics with complex factorization
 \end{itemize}
 
-This harmonic structure emerges naturally from the BEDA framework and has applications in signal processing, where octave relationships are fundamental to frequency analysis.
+This harmonic structure emerges naturally from the BEDA framework. Its usefulness as a signal-processing feature remains an empirical question.
 
 \begin{table}[h!]
 \centering
@@ -432,17 +444,17 @@ This harmonic structure emerges naturally from the BEDA framework and has applic
 \toprule
 \textbf{Family} & \textbf{Male $(b,e)$} & \textbf{Male $(C,F,G)$} & \textbf{Female $(b',e')$} & \textbf{Female $(C',F',G')$} \\
 \midrule
-Fibonacci & $(1,1)$ & $(4,3,5)$ & $(2,1)$ & $(8,6,10)$ \\
-Phibonacci & $(3,1)$ & $(8,15,17)$ & $(2,3)$ & $(16,30,34)$ \\
-Lucas & $(1,2)$ & $(12,5,13)$ & $(4,1)$ & $(24,10,26)$ \\
-Fibonacci & $(2,3)$ & $(30,16,34)$ & $(6,2)$ & $(60,32,68)$ \\
+Fibonacci & $(1,1)$ & $(4,3,5)$ & $(2,1)$ & $(6,8,10)$ \\
+Phibonacci & $(3,1)$ & $(8,15,17)$ & $(2,3)$ & $(30,16,34)$ \\
+Lucas & $(1,2)$ & $(12,5,13)$ & $(4,1)$ & $(10,24,26)$ \\
+Lucas & $(1,3)$ & $(24,7,25)$ & $(6,1)$ & $(14,48,50)$ \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\section{Correspondence with the E8 Exceptional Lie Algebra}
+\section{Conjectural E8 and Harmonicity Directions}
 
-One of the most striking discoveries in the study of Pythagorean triples via the BEDA framework is a deep connection to the E8 exceptional Lie algebra, one of the most symmetric mathematical structures known.
+The exact classifications above suggest possible comparisons with highly symmetric lattice structures. This section records those comparisons as conjectural directions. The present paper does not prove an embedding of the BEDA taxonomy into the E8 root system.
 
 \subsection{Background: The E8 Root System}
 
@@ -455,49 +467,46 @@ The E8 lattice admits a weight lattice structure with concentric shells:
 \item \textbf{Higher weight shells}: Additional concentric shells at increasing distances
 \end{itemize}
 
-\subsection{BEDA Embedding into E8}
+\subsection{BEDA Feature Embedding}
 
-While BEDA tuples are 4-dimensional $(b, e, d, a)$, they can be naturally embedded into 8-dimensional space via the mapping:
+While BEDA tuples are 4-dimensional $(b, e, d, a)$, they can be doubled into an 8-dimensional feature vector via the mapping:
 \begin{equation}
 \phi: (b, e, d, a) \mapsto (b, e, d, a, b, e, d, a) \in \mathbb{R}^8
 \end{equation}
 
-This embedding, while simple, reveals a remarkable correspondence.
+This map is a feature embedding only. By itself it is not an isometry into the E8 lattice, does not prove E8 shell membership, and does not identify BEDA tuples with E8 roots.
 
-\begin{theorem}[E8 Correspondence]\label{thm:e8}
-Let $(C, F, G)$ be a Pythagorean triple with $\gcd(C, F, G) = k$ generated from BEDA tuple $(b, e, d, a)$. Under appropriate normalization and the embedding $\phi$, the following correspondence holds:
+\begin{conjecture}[E8 Alignment Program]\label{conj:e8}
+Let $(C, F, G)$ be a Pythagorean triple with $\gcd(C, F, G) = k$ generated from BEDA tuple $(b, e, d, a)$. There may exist a normalization and a lattice embedding, extending or replacing the feature map $\phi$, under which the following comparisons become meaningful test targets:
 
 \begin{enumerate}
-\item \textbf{Primitive male tuples} ($k=1$): Embed near the E8 root shell (240 vectors)
-\item \textbf{Female tuples} ($k=2$): Embed near the first weight shell (2160 vectors, $2 \times$ root vectors)
-\item \textbf{Composite male tuples} ($k>2$): Embed into higher weight shells ($k \times$ root vectors)
+\item \textbf{Primitive male tuples} ($k=1$): candidate alignment with a primitive shell or root-like layer
+\item \textbf{Female tuples} ($k=2$): candidate alignment with a first doubled or octave shell
+\item \textbf{Composite male tuples} ($k>2$): candidate alignment with higher scaled shells
 \end{enumerate}
-\end{theorem}
+\end{conjecture}
 
-\begin{proof}[Proof sketch]
-The correspondence follows from the scaling behavior of the BEDA embedding. A primitive tuple $(b, e, d, a)$ with $\gcd(b,e,d,a) = 1$ maps to a point in the fundamental domain. When scaled by $k$, the tuple $(kb, ke, kd, ka)$ maps to a point at distance $\sqrt{k}$ times the original distance from the origin, matching the shell structure of the E8 weight lattice.
+\paragraph{Validation requirements.}
+Conjecture~\ref{conj:e8} is not proved here. A proof or disproof would require an explicit normalization, a specified lattice map, exact shell-membership predicates, and counterexample searches over BEDA-generated triples. The simple scaling identity $(b,e,d,a) \mapsto (kb,ke,kd,ka)$ changes Euclidean feature-vector length by $k$ and changes the associated triple by $k^2$, so scaling alone is not evidence for E8 shell membership.
 
-The female tuples, characterized by $k=2$, thus map to points at distance $\sqrt{2}$ times the primitive distance, precisely matching the first weight shell of E8. This is not coincidental: the octave transformation $(b,e,d,a) \to (2e, b, a, 2d)$ preserves the BEDA structure while doubling the normalization, mirroring the E8 weight shell construction.
-\end{proof}
+\subsection{Interpretive Hypotheses for Geometric Harmonicity}
 
-\subsection{Implications for Geometric Harmonicity}
-
-The E8 correspondence provides a geometric interpretation of the gender classification:
+If a valid lattice embedding is later found, it could provide a geometric interpretation of the gender classification:
 
 \begin{itemize}
-\item \textbf{Primitive males} are fundamental geometric units aligned with E8 roots
-\item \textbf{Females} are systematic octave doublings forming the next symmetric shell
-\item \textbf{Composite males} continue the harmonic series into higher shells
+\item \textbf{Primitive males} would serve as candidate fundamental geometric units
+\item \textbf{Females} would mark a systematic octave relation to primitive parents
+\item \textbf{Composite males} would continue the scaling hierarchy into higher layers
 \end{itemize}
 
-This reveals that the Pythagorean triple taxonomy inherits its structure from one of the most symmetric objects in mathematics.
+These are hypotheses for future work. The proven content in this paper is the integer taxonomy and the BEDA formulas, not an E8 inheritance theorem.
 
 \begin{remark}[Connection to Quantum Arithmetic]
-The E8 correspondence becomes particularly powerful in the context of quantum arithmetic (QA) systems, where modular arithmetic dynamics on BEDA parameter space exhibit E8 alignment metrics. The classification presented here provides the number-theoretic foundation for QA signal processing applications, where Pythagorean triples serve as harmonic classifiers for audio signals, financial time series, and neural network optimization landscapes.
+In quantum arithmetic (QA) systems, the BEDA taxonomy can be used as an exact source of modular and harmonic features. Whether these features improve signal classifiers, lattice-quality metrics, or other empirical systems is a separate experimental question.
 \end{remark}
 
-\begin{corollary}[Harmonic Index and E8 Alignment]
-For a Pythagorean triple $(C, F, G)$ generated from BEDA tuple $(b, e, d, a)$, the \emph{Harmonicity Index} can be defined as:
+\begin{definition}[Candidate Harmonicity Index]
+For a Pythagorean triple $(C, F, G)$ generated from BEDA tuple $(b, e, d, a)$, one possible \emph{Harmonicity Index} feature score is:
 \begin{equation}
 HI_2 = w_{\text{ang}} \cdot H_{\text{angular}} + w_{\text{rad}} \cdot H_{\text{radial}} + w_{\text{fam}} \cdot H_{\text{family}}
 \end{equation}
@@ -508,22 +517,18 @@ where:
 \item $H_{\text{family}}$: Membership in Fermat/Pythagoras/Plato classical subfamilies
 \end{itemize}
 
-This metric encodes E8 shell membership and provides a quantitative measure of harmonic coherence.
-\end{corollary}
+This is a proposed feature bundle. No claim is made here that it encodes E8 shell membership or predicts signal behavior without separate empirical validation.
+\end{definition}
 
-\section{Applications}
-
-\subsection{Cryptography}
-
-The orbital structure of the five families has applications in cryptographic key exchange. The difficulty of determining which orbit a given digital root pair belongs to (the \emph{orbit decomposition problem}) can form the basis of a novel asymmetric encryption scheme, which we term BEDA cryptography.
+\section{Potential Applications and Validation Targets}
 
 \subsection{Computational Number Theory}
 
-The classification provides an efficient algorithm for:
+The classification provides exact algorithms for:
 \begin{itemize}
 \item Generating Pythagorean triples by family
 \item Classifying existing triples into families
-\item Predicting properties of large Pythagorean triples via digital root analysis
+\item Filtering and summarizing large Pythagorean-triple datasets via digital-root analysis
 \end{itemize}
 
 \subsection{Dynamical Systems}
@@ -532,26 +537,20 @@ The 72-8-1 orbital structure arises naturally in discrete dynamical systems gove
 
 \subsection{Quantum Arithmetic and Signal Processing}
 
-The hierarchical classification presented here provides the theoretical foundation for Quantum Arithmetic (QA) systems---a novel modular arithmetic framework for signal processing. In QA applications:
+The hierarchical classification presented here supplies exact feature labels that can be tested inside QA signal-processing experiments. Candidate features include:
 
 \begin{itemize}
-\item \textbf{Harmonicity Index 2.0} (based on primitive/female/classical subfamily structure) serves as a signal classification metric
-\item \textbf{E8 alignment} provides a geometric quality measure for audio signals, brain signals (EEG), and seismic data
-\item \textbf{Gender-aware divergence measures} enable tighter PAC-Bayesian generalization bounds
-\item \textbf{Fermat/Pythagoras/Plato subfamily membership} correlates with signal harmonic content
+\item \textbf{Harmonicity Index 2.0}: a feature score based on primitivity, gender, and classical subfamily structure
+\item \textbf{Lattice-style alignment scores}: optional geometric features requiring independent validation
+\item \textbf{Family-aware divergence measures}: candidate comparison metrics for empirical datasets
+\item \textbf{Fermat/Pythagoras/Plato subfamily membership}: exact labels whose empirical relevance must be measured case by case
 \end{itemize}
 
-Applications include audio chord classification, EEG seizure detection, financial regime identification, and neural network learning rate optimization.
+No empirical performance claim is made in this paper.
 
-\subsection{Lattice-Based Cryptography and E8}
+\subsection{Cryptographic Caution}
 
-The E8 correspondence opens new avenues for lattice-based cryptography. The gender classification provides a natural two-level security scheme:
-\begin{itemize}
-\item \textbf{Public layer}: Female tuples (gcd=2, first weight shell)
-\item \textbf{Private layer}: Primitive males (E8 roots)
-\end{itemize}
-
-The octave transformation can serve as a trapdoor function, where recovery of the primitive parent from a female tuple requires solving the discrete logarithm problem in the BEDA parameter space.
+The modular orbit structure may be useful for constructing toy protocols or test problems. However, this paper makes no cryptographic security claim, proposes no trapdoor function, and does not reduce any family-classification problem to a standard hard problem.
 
 \section{Conclusion and Future Work}
 
@@ -559,25 +558,25 @@ We have presented a comprehensive hierarchical taxonomy of Pythagorean triples o
 
 \begin{enumerate}
 \item \textbf{Layer 0: Five Families} (Fibonacci, Lucas, Phibonacci, Tribonacci, Ninbonacci) partitioning all 81 digital root pairs via Pisano periods 24-24-24-8-1, creating a 72-8-1 orbital structure
-\item \textbf{Layer 1: Primitive/Non-Primitive Dichotomy} based on $\gcd(C,F,G)$, establishing that non-primitives inherit family membership from their unique primitive parent
+\item \textbf{Layer 1: Primitive/Non-Primitive Dichotomy} based on $\gcd(C,F,G)$, distinguishing primitive parentage from the current digital-root family label of a BEDA tuple
 \item \textbf{Layer 2: Classical Subfamilies} (Fermat, Pythagoras, Plato) cutting across the five families with elegant BEDA characterizations
 \end{enumerate}
 
 Beyond this static classification, we introduced a \textbf{gender classification} distinguishing male tuples (primitive or $\gcd \neq 2$), female tuples ($\gcd = 2$, octave harmonics), and composite males ($\gcd > 2$), revealing systematic generative relationships via the octave transformation $(b,e,d,a) \to (2e, b, a, 2d)$.
 
-Most remarkably, we established a \textbf{correspondence with the E8 exceptional Lie algebra}: primitive male tuples embed near the E8 root system (240 vectors), female tuples map to the first weight shell (2160 vectors at $\sqrt{2} \times$ distance), and composite males continue into higher shells. This connection reveals that the Pythagorean triple taxonomy inherits its structure from one of the most symmetric objects in mathematics.
+We also identified a conjectural \textbf{E8 alignment program}: the BEDA feature embedding and octave hierarchy suggest possible comparisons with lattice shells, but a genuine E8 correspondence requires a separate exact embedding theorem and counterexample search.
 
-The unified framework connects classical number theory, modular arithmetic, Fibonacci sequences, Lie algebras, and harmonic analysis, with applications spanning cryptography, signal processing, quantum arithmetic systems, and lattice-based security protocols.
+The unified framework connects classical number theory, modular arithmetic, Fibonacci sequences, and harmonic integer features. Proposed links to lattice geometry, QA signal processing, and cryptographic constructions remain future validation targets.
 
 Future research directions include:
 \begin{itemize}
 \item \textbf{Higher moduli}: Extending Pisano period analysis to $m > 9$ and discovering additional family structures
-\item \textbf{E8 embedding refinement}: Developing explicit isometries between primitive subfamilies and E8 root subsystems
+\item \textbf{E8 embedding tests}: Developing and falsifying explicit candidate maps between BEDA features and E8-style lattice shells
 \item \textbf{Modular forms connection}: Investigating relationships between the 72-8-1 structure and modular form weight spaces
-\item \textbf{Gender-aware cryptography}: Designing secure protocols exploiting the octave transformation as a trapdoor
-\item \textbf{Quantum arithmetic applications}: Implementing HI 2.0 in large-scale signal classification experiments
+\item \textbf{Security analysis}: Testing whether any family-based toy protocol has a credible hardness assumption
+\item \textbf{Quantum arithmetic applications}: Testing HI 2.0 and related exact features in controlled signal-classification experiments
 \item \textbf{Higher-dimensional generalizations}: Extending BEDA framework to Pythagorean quadruples, quintuples, and beyond
-\item \textbf{Computational verification}: Exhaustive computer-assisted proof of E8 correspondence for all primitive triples up to $10^{12}$
+\item \textbf{Computational verification}: Exhaustive exact testing of candidate lattice embeddings and family refinements over large BEDA domains
 \end{itemize}
 
 \section*{Acknowledgments}
@@ -619,7 +618,7 @@ H. S. M. Coxeter, ``Integral Cayley Numbers'', \emph{Duke Mathematical Journal},
 
 \section{Computational Verification}
 
-All results in this paper have been computationally verified using Python 3.x with NumPy. The complete source code, including:
+The arithmetic examples and finite-domain checks used in preparing this draft were verified using Python 3.x exact integer arithmetic. The complete source code, including:
 \begin{itemize}
 \item Generators for all five families
 \item Pisano period computation
@@ -627,6 +626,86 @@ All results in this paper have been computationally verified using Python 3.x wi
 \item Pythagorean triple generation and validation
 \end{itemize}
 
-is available at: [GitHub repository URL to be added]
+is available at: \url{https://github.com/1r0nw1ll/quantum-arithmetic-research}
+
+\noindent The four main theorems of this paper have independent machine-checkable certificate validators in the repository's QA certificate system:
+\begin{itemize}
+\item \textbf{Theorem \ref{thm:pisano}} (Pisano Periods): \texttt{qa\_alphageometry\_ptolemy/qa\_pisano\_orbit\_correspondence\_cert\_v1/}
+\item \textbf{Theorem \ref{thm:main}} (Complete Partition): \texttt{qa\_alphageometry\_ptolemy/qa\_five\_families\_partition\_cert\_v1/}
+\item \textbf{Theorem \ref{thm:classical_beda}} (BEDA Classical Subfamilies): \texttt{qa\_alphageometry\_ptolemy/qa\_beda\_classical\_subfamilies\_cert\_v1/}
+\item \textbf{Theorem \ref{thm:octave}} (Octave Transformation): \texttt{qa\_alphageometry\_ptolemy/qa\_octave\_transformation\_cert\_v1/}
+\end{itemize}
+
+Each validator runs self-contained Python 3 exact integer arithmetic, produces a JSON result with \texttt{"ok": true}, and has a pinned SHA-256 hash for reproducibility.
+
+\section{Generated Classical Slice Tables}
+
+The following appendix tables were generated from the exact BEDA laws using the script \texttt{tools/generate\_pythagorean\_classical\_tables.py}. The companion JSON evidence file is \texttt{results/pythagorean\_classical\_tables.json}.
+
+% Generated by tools/generate_pythagorean_classical_tables.py
+\begin{table}[h!]
+\centering
+\caption{Generated Fermat/Pell Boundary Rows}
+\label{tab:appendix_fermat_pell}
+\small
+\begin{tabular}{llcccl}
+\toprule
+\textbf{$(b,e)$} & \textbf{Family} & \textbf{$(C,F,G)$} & \textbf{$\gcd$} & \textbf{Primitive} & \textbf{Check} \\
+\midrule
+$(1,1)$ & Fibonacci & $(4,3,5)$ & 1 & yes & $b^2-2e^2=-1$ \\
+$(3,2)$ & Phibonacci & $(20,21,29)$ & 1 & yes & $b^2-2e^2=1$ \\
+$(7,5)$ & Lucas & $(120,119,169)$ & 1 & yes & $b^2-2e^2=-1$ \\
+$(17,12)$ & Phibonacci & $(696,697,985)$ & 1 & yes & $b^2-2e^2=1$ \\
+$(41,29)$ & Lucas & $(4060,4059,5741)$ & 1 & yes & $b^2-2e^2=-1$ \\
+$(99,70)$ & Lucas & $(23660,23661,33461)$ & 1 & yes & $b^2-2e^2=1$ \\
+$(239,169)$ & Phibonacci & $(137904,137903,195025)$ & 1 & yes & $b^2-2e^2=-1$ \\
+$(577,408)$ & Lucas & $(803760,803761,1136689)$ & 1 & yes & $b^2-2e^2=1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Generated Pythagoras Slice Rows ($b=1$)}
+\label{tab:appendix_pythagoras}
+\small
+\begin{tabular}{llcccl}
+\toprule
+\textbf{$(b,e)$} & \textbf{Family} & \textbf{$(C,F,G)$} & \textbf{$\gcd$} & \textbf{Primitive} & \textbf{Check} \\
+\midrule
+$(1,1)$ & Fibonacci & $(4,3,5)$ & 1 & yes & $b=1$ \\
+$(1,2)$ & Fibonacci & $(12,5,13)$ & 1 & yes & $b=1$ \\
+$(1,3)$ & Lucas & $(24,7,25)$ & 1 & yes & $b=1$ \\
+$(1,4)$ & Phibonacci & $(40,9,41)$ & 1 & yes & $b=1$ \\
+$(1,5)$ & Fibonacci & $(60,11,61)$ & 1 & yes & $b=1$ \\
+$(1,6)$ & Phibonacci & $(84,13,85)$ & 1 & yes & $b=1$ \\
+$(1,7)$ & Lucas & $(112,15,113)$ & 1 & yes & $b=1$ \\
+$(1,8)$ & Fibonacci & $(144,17,145)$ & 1 & yes & $b=1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
+
+\begin{table}[h!]
+\centering
+\caption{Generated Plato Slice Rows ($e=1$)}
+\label{tab:appendix_plato}
+\small
+\begin{tabular}{llcccl}
+\toprule
+\textbf{$(b,e)$} & \textbf{Family} & \textbf{$(C,F,G)$} & \textbf{$\gcd$} & \textbf{Primitive} & \textbf{Check} \\
+\midrule
+$(1,1)$ & Fibonacci & $(4,3,5)$ & 1 & yes & $e=1$ \\
+$(2,1)$ & Lucas & $(6,8,10)$ & 2 & no & $e=1$ \\
+$(3,1)$ & Phibonacci & $(8,15,17)$ & 1 & yes & $e=1$ \\
+$(4,1)$ & Fibonacci & $(10,24,26)$ & 2 & no & $e=1$ \\
+$(5,1)$ & Phibonacci & $(12,35,37)$ & 1 & yes & $e=1$ \\
+$(6,1)$ & Lucas & $(14,48,50)$ & 2 & no & $e=1$ \\
+$(7,1)$ & Fibonacci & $(16,63,65)$ & 1 & yes & $e=1$ \\
+$(8,1)$ & Fibonacci & $(18,80,82)$ & 2 & no & $e=1$ \\
+$(9,1)$ & Fibonacci & $(20,99,101)$ & 1 & yes & $e=1$ \\
+$(10,1)$ & Fibonacci & $(22,120,122)$ & 2 & no & $e=1$ \\
+\bottomrule
+\end{tabular}
+\end{table}
 
 \end{document}

@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Arthur-Clozel (1989) ISBN 978-0-691-08517-3, Shimura (1971) ISBN 978-0-691-08092-5 -->
+{
+  "expected_sha256": "40e2e658c2694a93a2584fe23c2985fe87f2614bf7ef2375838fa551e0dbc9fa",
+  "description": "SHA-256 of stdout (JSON) from qa_ai_inert_euler_cert_validate.py (4 checks PASS). P_p^{inert}=1+p^2*Y^4 for f=2.2.5.1-125.1-a at primes p≡2,3 mod 5. CM vanishing a_p=0. Langlands ladder inert branch [404]->[409]."
+}

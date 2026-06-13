@@ -10121,6 +10121,37 @@ def _validate_qa_gl6_exterior_square_cert_family(base_dir):
     return None
 
 
+def _validate_qa_ai_inert_euler_cert_family(base_dir):
+    """Cert [409]: QA Langlands AI Inert Prime Euler Factor — P_p = 1+p²Y⁴ at p≡2,3 mod 5."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_ai_inert_euler_cert_v1")
+    validator = os.path.join(fam_dir, "qa_ai_inert_euler_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ai_inert_euler_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_ai_inert_euler_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_ai_inert_euler_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_ai_inert_euler_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_sym2_full_euler_cert_family(base_dir):
     """Cert [408]: QA Langlands Sym² Full GL₆/Q Euler Factor — V_p = (1−pY)²·Σ_p at Split Primes."""
     import subprocess
@@ -11732,6 +11763,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Sym2 Full GL6/Q Euler Factor Cert [408]. CLAIM: For f=2.2.5.1-125.1-a and split prime p≡1(mod5), the full Sym^2 automorphic L-function Euler factor at p is V_p(Y)=(1-pY)^2*Sigma_p(Y) where Sigma_p is the degree-4 reduced factor from cert [407]. Expanded via convolution: V_p[k]=Sigma_p[k]-2p*Sigma_p[k-1]+p^2*Sigma_p[k-2]; integer coefficients from Sigma_p integer and 1-2pY+p^2Y^2 integer. The (1-pY)^2 factor comes from the two trivial GL_1/F components of Sym^2(f) at primes above p (CM norm = p at each). (C1) all 7 integer coefficients in Z for 22 split primes (22/22 PASS); (C2) weight-2 palindrome a6=p^6, a5=p^4*a1, a4=p^2*a2 — GL_6 functional equation (22/22 PASS); (C3) V_p=(1-pY)^2*Sigma_p verified by two independent convolution paths: sym2_full_poly function and manual polynomial multiplication (22/22 PASS); (C4) GL_6 Ramanujan: (1-pY)^2 roots at Y=1/p; Sigma_p quadratic factor roots have |root|=p^{-1} from cert [407] C4; all 6 roots of V_p have |root|=p^{-1} (22/22 PASS). Parallel branch: [406] W_p=(1-pY)^2*R_p (exterior square). Together [406]+[408] certify both tensor branches at split primes. Primary sources: Shimura (1975) doi:10.1007/BF01403156; Gelbart-Jacquet (1978) doi:10.2307/1971237; Kim-Shahidi (2002) doi:10.4007/annals.2002.155.837; Cogdell (2004) ISBN 978-0-8218-3516-0. Langlands ladder [403]->[404]->[407]->[408]. 4 checks PASS; self-test ok",
      "408_qa_sym2_full_euler",
      "qa_sym2_full_euler_cert_v1", True),
+    (409, "QA Langlands AI Inert Prime Euler Factor Cert family",
+     _validate_qa_ai_inert_euler_cert_family,
+     "QA Langlands AI Inert Prime Euler Factor Cert [409]. CLAIM: For f=2.2.5.1-125.1-a and prime p≡2 or 3 mod 5 (p inert in Q(sqrt5)/Q, p≠5), the GL_4/Q automorphic induction AI_{Q(sqrt5)/Q}(f) has Euler polynomial P_p^{inert}(Y)=1+p^2*Y^4. All middle coefficients a1=a2=a3=0. Three-step derivation: (1) CM vanishing: ord_{(Z/5Z)^times}(p)=4 for p≡2,3 mod 5 → P=(p) inert in K=Q(zeta_5) over F=Q(sqrt5) → a_P=0 by CM theory; (2) GL_2/F local factor Q_P(Z)=1+p^2*Z^2 (Z=p^{-2s}); (3) AI induction L_p(Y,AI)=L_P(Y^2,f)=1+p^2*Y^4 (Y=p^{-s}). Structural gap (C4): naive T=N=0 in split formula gives (1+pY^2)^2=1+2pY^2+p^2Y^4 (a2=2p) vs correct inert formula (a2=0); gap=2p for all inert p; proves inert≠split-with-zero-traces. Four checks, 22 inert primes p≤200: (C1) p≡2 or 3 mod 5 (22/22 PASS); (C2) palindrome a4=p^2, a1=a2=a3=0 (22/22 PASS); (C3) GL4 Ramanujan |Y|^4=p^{-2} → |root|=p^{-1/2} (22/22 PASS); (C4) structural gap=2p>0 (22/22 PASS). Together [404]+[409] classify all unramified GL_4/Q AI Euler factors. Primary sources: Arthur-Clozel (1989) ISBN 978-0-691-08517-3; Shimura (1971) ISBN 978-0-691-08092-5. 4 checks PASS; self-test ok",
+     "409_qa_ai_inert_euler",
+     "qa_ai_inert_euler_cert_v1", True),
     (402, "QA Octave Orbit Permutation Cert family",
      _validate_qa_octave_orbit_permutation_cert_family,
      "QA Octave Orbit Permutation Cert [402]. CLAIM: the digital-root octave map sigma:(b,e)->(dr(2e),b) with dr(n)=((n-1)%9)+1 is a permutation of {1,...,9}^2 with cycle type (1, 4^2, 12^6) and order 12; sigma maps each QA orbit class to itself (Cosmos->Cosmos, Satellite->Satellite, Singularity fixed). (C1) sigma bijective: 81 distinct images; (C2) orbit preservation: Cosmos 72 pairs -> Cosmos, Satellite 8 pairs -> Satellite, Singularity (9,9) fixed; algebraic reason: gcd(2,9)=1 so 3|dr(2e) iff 3|e, preserving satellite/singularity divisibility; (C3) cycle type {1:1, 4:2, 12:6}: Singularity 1 fixed, Satellite splits into 2 four-cycles, Cosmos splits into 6 twelve-cycles; (C4) order=12: sigma^k != identity for k in {1,2,3,4,6}, sigma^12=identity (M=[[0,2],[1,0]] mod 9, ord(M)=12 since 2^6=64=1 mod 9 combined with alternating b/e); (C5) Satellite 4-cycles: {(3,3),(6,3),(6,6),(3,6)} and {(6,9),(9,6),(3,9),(9,3)}. Mirroring: cycle type (1,4^2,12^6) mirrors orbit sizes (1,8,72) = (1,2x4,6x12). Extends [401] (octave transform), [398] (Five Families Table 1 = the 9x9 grid). 5 checks PASS; self-test ok",

@@ -425,3 +425,4 @@ Before shipping any family:
 | [396](396_qa_cyclotomic_orbit.md) | QA Degree-4 Cyclotomic Orbit | C^5=I, G^4=I, quartic norm form, 5-orbit, partial trace to ℤ[φ] — ℤ[ζ₅] infrastructure for CM cert [397] | [391] [394] [395] |
 | [397](397_qa_cm_relative_norm.md) | QA CM Relative Norm and Tower Law | N_{K/F}(a+bζ₅)=(a²−ab+b²)+ab·φ, tower law, CM factoring, totally-negative discriminant −b²(2+φ) | [394] [395] [396] |
 | [398](398_qa_five_families_partition.md) | QA Five Families Complete Partition | 24+24+24+8+1=81=9² — five Fibonacci seeds partition {1..9}² pairwise-disjoint; computational proof of Theorem 2 | [281] [212] [211] |
+| [399](399_qa_cm_form_identification.md) | QA CM Form Identification | LMFDB 2.2.5.1-125.1-a is CM form induced by K=ℚ(ζ₅)/F; level=125=5³=disc; e²+e−31=0 in ℤ[φ]; disc(e)=125; zero pattern 7/7 — closes Langlands ladder | [394] [395] [396] [397] |

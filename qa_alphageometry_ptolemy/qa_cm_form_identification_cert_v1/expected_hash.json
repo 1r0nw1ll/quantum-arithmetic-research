@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Hecke (1920) doi.org/10.1007/BF01458074, Shimura (1971) ISBN 978-0-691-08092-5, LMFDB (2024) label 2.2.5.1-125.1-a -->
+{
+  "expected_sha256": "0d2f9b8d2d20b278ade98a93a0f04681b718d460fc4d3759f5f6dfaf7236c7df",
+  "description": "SHA-256 of stdout from qa_cm_form_identification_cert_validate.py (all checks PASS, 5 checks: C1 level=125=5^3, C2 e^2+e-31=0, C3 conjugate trace=-1, C4 zero pattern, C5 disc resonance=125)"
+}

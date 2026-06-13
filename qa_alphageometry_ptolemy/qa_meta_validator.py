@@ -9997,6 +9997,37 @@ def _validate_qa_five_families_partition_cert_family(base_dir):
     return None
 
 
+def _validate_qa_cm_form_identification_cert_family(base_dir):
+    """Cert [399]: QA CM Form Identification — LMFDB 2.2.5.1-125.1-a identified as CM form induced by Q(zeta_5)/Q(sqrt(5))."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_cm_form_identification_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cm_form_identification_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cm_form_identification_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_cm_form_identification_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_cm_form_identification_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_cm_form_identification_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_beda_hard_problem_cert_family(base_dir):
     """Cert [393]: QA BEDA Hard Problem Analysis."""
     import subprocess
@@ -11392,6 +11423,11 @@ FAMILY_SWEEPS = [
      "QA Pyth-2 Basics Cert [383]. Source: Iverson (1993) Pyth Arith Vol II Ch.XI pp.1-27. CLAIM: (C1) Plato 9600yr%24=0=400*24; 9600-9400=200%24=8=2^3. (C2) Ishango 7000BC%24=16=Myriad; 8primes_to_19=2^3=phi(30). (C3) 100m_sea%24=4=portal; 100=4*5^2; gcd=4. (C4) 529-505=24=QA_mod; both%24=1=Singularity; 505=5*101. (C5) 600yr%24=0; 4elem=tuple; 600/4=150%24=6=seed. Checks C1..C5; 5 PASS 0 FAIL; self-test ok",
      "383_qa_pyth2_basics",
      "qa_pyth2_basics_cert_v1", True),
+    (399, "QA CM Form Identification Cert family",
+     _validate_qa_cm_form_identification_cert_family,
+     "QA CM Form Identification Cert [399]. CLAIM: LMFDB Hilbert cusp form 2.2.5.1-125.1-a (CM: yes, level norm 125) over F=Q(sqrt(5)) is the CM form induced by the CM extension K=Q(zeta_5)/F=Q(sqrt(5)), certified by 5 algebraic checks using exact Z[phi] arithmetic. (C1) Level 125 = 5^3 = disc(Q(zeta_5)/Q): level norm equals the absolute discriminant of Q(zeta_5)/Q. (C2) Eigenvalue element e = 5*phi-3 = (-3,5) in Z[phi] satisfies e^2+e-31=0: LMFDB eigenvalue field Q(e) with e^2+e-31=0 equals Q(sqrt(5))=F since disc(e^2+e-31)=125 implies sqrt(125)=5*sqrt(5) and Q(sqrt(125))=Q(sqrt(5)). (C3) Conjugate structure: sigma_F(e)=(2,-5) = -e-1; e+sigma_F(e)=(-1,0)=-1 rational; both values appear as LMFDB Hecke eigenvalues at the two primes above 11. (C4) Zero pattern: Hecke eigenvalue a_p=0 iff p is not ≡ 1 mod 5 (CM forces vanishing at primes not splitting completely in K): norms 4,5,9 (p=2,5,3 inert/ramified), norms 19,29 (p≡4 mod 5: splits in F but inert in K/F). Non-zero at norms 11,31 (p≡1 mod 5). 7 primes verified. (C5) Discriminant resonance: disc(e/Q)=Tr^2-4*N_F(e)=(-1)^2-4*(-31)=125=level norm: the eigenvalue generator algebraically witnesses the level, confirming the CM conductor formula. Closes the Langlands ladder over Q(sqrt(5)): [394] GL_1 Frobenius -> [395] GL_2 Weil bound -> [396] Z[zeta_5] infrastructure -> [397] CM relative norm -> [399] CM form LMFDB identification. 5 checks PASS; self-test ok",
+     "399_qa_cm_form_identification",
+     "qa_cm_form_identification_cert_v1", True),
     (398, "QA Five Families Complete Partition Cert family",
      _validate_qa_five_families_partition_cert_family,
      "QA Five Families Complete Partition Cert [398]. CLAIM (= Theorem 2 of the Pythagorean Five Families paper): the five Fibonacci-like families with seeds (1,1),(2,1),(3,1),(3,3),(9,9) under digital-root T-step T(b,e)=(e,dr(b+e)) with dr(n)=((n-1)%9)+1 produce orbits of sizes 24,24,24,8,1; the orbits are pairwise disjoint; their union is all 81 digital-root pairs {1,...,9}^2; the 9x9 classification table matches the paper's Table 1 exactly. (C1) orbit closure: each seed's orbit has exactly the stated period; (C2) no premature closure: minimum period equals stated size; (C3) pairwise disjoint: 10 intersections all empty; (C4) complete coverage: union=81={1,...,9}^2; (C5) table match: all 81 cells match paper Table 1. QA structure: Fibonacci+Lucas+Phibonacci=Cosmos(72), Tribonacci=Satellite(8), Ninbonacci=Singularity(1). Pisano connection: Cosmos period 24=pi(9), Satellite period 8=pi(3). Extends [281] (Pisano-Orbit Correspondence), [212] (Fibonacci Hypergraph orbit multiset), [211] (Cayley Bateson components). Theorem NT: T-step is pure integer, dr is pure integer mod-9 map. 5 checks PASS; self-test ok",

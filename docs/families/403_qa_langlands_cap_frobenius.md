@@ -45,22 +45,29 @@ This threefold coincidence (level, eigenvalue discriminant, cyclotomic discrimin
 
 ## Frobenius Discriminants at Split Primes
 
-| p | a_𝔭 in ℤ[φ] | Δ = a_𝔭² − 4p | σ₁(Δ) | σ₂(Δ) |
-|---|---|---|---|---|
-| 11 | −3 + 5φ | −10 − 5φ | −18.09 | −6.91 |
-| 31 | −8 + 5φ | −35 − 55φ | −124.0 | −1.01 |
-| 41 | 6 − 5φ | −103 − 35φ | −159.6 | −81.4 |
-| 61 | −3 + 10φ | −135 + 40φ | −70.3 | −159.7 |
-| 71 | 7 + 5φ | −210 + 95φ | −56.3 | −268.7 |
+Eigenvalues derived from explicit ℤ[ζ₅] Frobenius search: N_K/Q(π)=p², |σk(π)|=√p, v_{(ζ₅−1)}(π−1)≥3.
+
+| p | π ∈ ℤ[ζ₅] | a_𝔭 = Tr_{K/F}(π) | Δ = a_𝔭² − 4p | σ₁(Δ) | σ₂(Δ) | N(a_𝔭) |
+|---|---|---|---|---|---|---|
+| 11 | −1+ζ₅−ζ₅²−3ζ₅³ | −3 + 5φ | −10 − 5φ | −18.09 | −6.91 | −31 |
+| 31 | −6−4ζ₅−6ζ₅²−3ζ₅³ | −8 + 5φ | −35 − 55φ | −124.0 | −1.01 | −1 |
+| 41 | 2−3ζ₅−2ζ₅²+4ζ₅³ | 7 − 5φ | −90 − 45φ | −162.8 | −62.2 | −11 |
+| 61 | −2ζ₅−3ζ₅²+6ζ₅³ | 2 − 5φ | −215 + 5φ | −206.9 | −218.1 | −31 |
+| 71 | 3−ζ₅+ζ₅²−7ζ₅³ | 7 + 5φ | −210 + 95φ | −56.3 | −268.7 | 59 |
 
 All discriminants negative at both embeddings — Ramanujan equality confirmed.
+
+**Algebraic orbit structure**: The CM involution c: ζ₅↦ζ₅⁴ maps each π to its conjugate c(π),
+giving the eigenvalue at the complementary prime 𝔭₂: {−3+5φ, 2−5φ} are Galois conjugates
+(σ_F swaps them), as are {7−5φ, 2+5φ}. Notably σ_F(a₁₁) = σ_F(−3+5φ) = 2−5φ = a₆₁:
+the generator eigenvalue's Galois conjugate reappears as the eigenvalue at p=61.
 
 ## Checks
 
 - **C1**: a_𝔭 = 0 for all p ≢ 1 (mod 5) — pure CM zero pattern — PASS
 - **C2**: a_𝔭 ∈ ℤ[φ] (both coordinates integer) for all 5 split primes — PASS
 - **C3**: Δ = a_𝔭² − 4p < 0 at both real embeddings σ₁, σ₂ — Ramanujan equality — PASS
-- **C4**: N_{ℚ(√5)/ℚ}(a_𝔭) correct; |N(a_𝔭)| ≤ 4p (Ramanujan bound on field norm) — PASS
+- **C4**: N_{ℚ(√5)/ℚ}(a_𝔭) = {−31,−1,−11,−31,59} for p={11,31,41,61,71}; |N| ≤ 4p — PASS
 - **C5**: e² + e − 31 = 0; disc(e/ℚ) = 125 = level norm = disc(ℚ(ζ₅)/ℚ) — PASS
 
 ## Chain

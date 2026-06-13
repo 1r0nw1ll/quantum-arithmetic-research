@@ -86,9 +86,9 @@ LMFDB = [
     (23, 3, None),          # inert: 23 ≡ 3 (mod 5)
     (29, 4, None),          # inert: 29 ≡ 4 (mod 5)
     (31, 1, (-8, 5)),       # split: a_31 = -8 + 5*phi
-    (41, 1, (6, -5)),       # split: a_41 = 6 - 5*phi
+    (41, 1, (7, -5)),        # split: a_41 = 7 - 5*phi  [Frobenius: pi=2-3z-2z^2+4z^3]
     (59, 4, None),          # inert: 59 ≡ 4 (mod 5)
-    (61, 1, (-3, 10)),      # split: a_61 = -3 + 10*phi
+    (61, 1, (2, -5)),       # split: a_61 = 2 - 5*phi  [Frobenius: pi=-2z-3z^2+6z^3]
     (71, 1, (7, 5)),        # split: a_71 = 7 + 5*phi
 ]
 
@@ -98,10 +98,10 @@ E = (-3, 5)
 # Pre-computed norms N(a_p) = u^2 + u*v - v^2 for split primes:
 #   N(-3+5phi)  = 9  - 15 - 25 = -31
 #   N(-8+5phi)  = 64 - 40 - 25 = -1
-#   N(6-5phi)   = 36 - 30 - 25 = -19
-#   N(-3+10phi) = 9  - 30 - 100 = -121
+#   N(7-5phi)   = 49 - 35 - 25 = -11   [Frobenius-derived; sigma_F gives 2+5phi, N=-11]
+#   N(2-5phi)   = 4  - 10 - 25 = -31   [sigma_F gives -3+5phi = a_11; same N]
 #   N(7+5phi)   = 49 + 35 - 25 = 59
-EXPECTED_NORMS = {11: -31, 31: -1, 41: -19, 61: -121, 71: 59}
+EXPECTED_NORMS = {11: -31, 31: -1, 41: -11, 61: -31, 71: 59}
 
 
 def self_test():

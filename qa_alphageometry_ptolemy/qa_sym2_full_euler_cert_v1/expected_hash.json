@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Shimura (1975) doi:10.1007/BF01403156, Gelbart-Jacquet (1978) doi:10.2307/1971237 -->
+{
+  "expected_sha256": "f3a127366ca4d0d0a93f4f0e046705b7572e9b1c3dc089ebb6732418c8a5b228",
+  "description": "SHA-256 of stdout (JSON) from qa_sym2_full_euler_cert_validate.py (4 checks PASS). V_p=(1-pY)^2*Sigma_p; degree-6 GL6/Q Sym^2 full Euler polynomial. Langlands ladder [403]->[404]->[407]->[408]."
+}

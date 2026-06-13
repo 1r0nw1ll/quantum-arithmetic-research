@@ -433,4 +433,5 @@ Before shipping any family:
 | [405](405_qa_gl4_rankin_selberg.md) | QA Langlands GL₄ Rankin-Selberg | Tensor product π_𝔭⊗π_{𝔭̄}: R_p(Y)=1−NY+p(T²−2N−2p)Y²−p²NY³+p⁴Y⁴; Vieta derivation; weight-2 palindrome | [404] [403] |
 | [406](406_qa_gl6_exterior_square.md) | QA Langlands GL₆ Exterior Square | ∧²(AI(f))_p = (1−pY)²·R_p(Y) = W_p(Y); degree-6 palindrome; integer coefficients from T,N only | [405] [404] |
 | [407](407_qa_sym2_euler_factor.md) | QA Langlands Sym² Reduced Factor | Sym²(f) GL₃/F: Σ_p=1−SY+(Q+2p²)Y²−p²SY³+p⁴Y⁴; S=T²−2N−4p; Q=(N+2p)²−2pT²; Sym² Ramanujan | [404] [403] |
+| [408](408_qa_sym2_full_euler.md) | QA Langlands Sym² Full GL₆/Q Factor | V_p=(1−pY)²·Σ_p; degree-6 palindrome; GL₆ Ramanujan all 6 roots \|root\|=p⁻¹ | [407] [406] |
 | [402](402_qa_octave_orbit_permutation.md) | QA Octave Orbit Permutation | σ:(b,e)→(dr(2e),b) permutes {1..9}²; cycle type (1,4²,12⁶); order 12; Satellite splits into 2 four-cycles; mirrors orbit sizes (1,8,72) | [398] [401] |

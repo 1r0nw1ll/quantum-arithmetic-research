@@ -1,5 +1,5 @@
 <!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Hecke (1920) doi:10.1007/BF01458074, Shimura (1971) ISBN 978-0-691-08092-5, Weil (1967) ISBN 978-0-387-90420-7 -->
 {
-  "expected_sha256": "59181f66dcb8e6b35fa83dfef54c00bb2cd52aca1d5dac9a89f9c0a9fc49eba1",
-  "description": "SHA-256 of stdout (JSON) from qa_langlands_cap_frobenius_cert_validate.py (all checks PASS, 5 checks: C1 zero pattern, C2 Z[phi] membership, C3 Frobenius discriminant < 0 at both embeddings, C4 field norms + Ramanujan bound, C5 discriminant resonance 125 = level norm). Eigenvalues Frobenius-derived: a11=-3+5phi, a31=-8+5phi, a41=7-5phi, a61=2-5phi, a71=7+5phi."
+  "expected_sha256": "47fe5bac15902ea20f8332638b7ecb1213bb1f41712a7eccbd2eb9ec352ff186",
+  "description": "SHA-256 of stdout (JSON) from qa_langlands_cap_frobenius_cert_validate.py (all checks PASS, 6 checks: C1 zero pattern, C2 Z[phi] membership, C3 Frobenius discriminant < 0 at both embeddings, C4 field norms + Ramanujan bound, C5 discriminant resonance 125 = level norm, C6 Universal Pell M^2-20k^2=T^2*D for 22 split primes p<=500). Disc classes {125,2000,3125}={1,4,5}^2*125. Eigenvalues Frobenius-derived: a11=-3+5phi, a31=-8+5phi, a41=7-5phi, a61=2-5phi, a71=7+5phi."
 }

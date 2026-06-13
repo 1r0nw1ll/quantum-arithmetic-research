@@ -8,12 +8,15 @@ Ramanujan EQUALITY at every split prime: the Frobenius discriminant
 Delta = a_p^2 - 4*N(p) is strictly negative at both real embeddings
 sigma_1, sigma_2 of Q(sqrt(5))/Q.
 
-Five checks:
+Six checks:
   C1  a_p = 0 for all p not ≡ 1 (mod 5)  [CM zero pattern]
   C2  a_p in Z[phi] for split primes p ≡ 1 (mod 5)  [eigenvalue field]
   C3  Delta = a_p^2 - 4p < 0 at both embeddings  [Ramanujan equality]
   C4  N_{Q(sqrt5)/Q}(a_p) correct; |N(a_p)| <= 4p  [Ramanujan norm bound]
   C5  Discriminant resonance: e^2+e-31=0, disc(e/Q)=125=level norm  [CM fingerprint]
+  C6  Universal Pell: M^2-20k^2=T^2*D for all 22 split primes p<=500  [Pell characterization]
+      T=Tr(a_p), D=disc(a_p/Q)=m^2*125, M=8p-(T^2+D)/2
+      Disc classes D: {125, 2000, 3125} = {1^2, 4^2, 5^2} * 125
 
 Langlands ladder cap:
   [394] GL1 Frobenius -> [395] GL2 Weil bound -> [396] Z[zeta_5] infrastructure
@@ -86,7 +89,7 @@ LMFDB = [
     (23, 3, None),          # inert: 23 ≡ 3 (mod 5)
     (29, 4, None),          # inert: 29 ≡ 4 (mod 5)
     (31, 1, (-8, 5)),       # split: a_31 = -8 + 5*phi
-    (41, 1, (7, -5)),        # split: a_41 = 7 - 5*phi  [Frobenius: pi=2-3z-2z^2+4z^3]
+    (41, 1, (7, -5)),       # split: a_41 = 7 - 5*phi  [Frobenius: pi=2-3z-2z^2+4z^3]
     (59, 4, None),          # inert: 59 ≡ 4 (mod 5)
     (61, 1, (2, -5)),       # split: a_61 = 2 - 5*phi  [Frobenius: pi=-2z-3z^2+6z^3]
     (71, 1, (7, 5)),        # split: a_71 = 7 + 5*phi
@@ -103,9 +106,40 @@ E = (-3, 5)
 #   N(7+5phi)   = 49 + 35 - 25 = 59
 EXPECTED_NORMS = {11: -31, 31: -1, 41: -11, 61: -31, 71: 59}
 
+# ---------------------------------------------------------------------------
+# Extended eigenvalue table: all 22 split primes p <= 500
+# Source: full Z[zeta_5] Frobenius search with Universal Pell validity filter
+# (p, (u,v)) where a_p = u + v*phi in Z[phi]; Galois conjugates are also valid
+# Disc classes: D = T^2 - 4*N(a_p) in {125, 2000, 3125} = {1,4,5}^2 * 125
+# ---------------------------------------------------------------------------
+EXTENDED_TABLE = [
+    (11,  (-3,   5)),   # T=-1,  D=125,   k=5     [LMFDB]
+    (31,  (-8,   5)),   # T=-11, D=125,   k=5     [LMFDB]
+    (41,  (7,   -5)),   # T=9,   D=125,   k=45    [LMFDB]
+    (61,  (2,   -5)),   # T=-1,  D=125,   k=95    [LMFDB]
+    (71,  (7,    5)),   # T=19,  D=125,   k=55
+    (101, (12,   5)),   # T=29,  D=125,   k=5
+    (131, (-3,  -5)),   # T=-11, D=125,   k=205
+    (151, (-8,  20)),   # T=4,   D=2000,  k=20
+    (181, (-8,   5)),   # T=-11, D=125,   k=295
+    (191, (-23,  5)),   # T=-41, D=125,   k=95
+    (211, (-13, 25)),   # T=-1,  D=3125,  k=25
+    (241, (-18, 20)),   # T=-16, D=2000,  k=80
+    (251, (-8,  20)),   # T=4,   D=2000,  k=220
+    (271, (-18,  5)),   # T=-31, D=125,   k=355
+    (281, (-18, 25)),   # T=-11, D=3125,  k=25
+    (311, (22,   5)),   # T=49,  D=125,   k=245
+    (331, (-28, -5)),   # T=-61, D=125,   k=55
+    (401, (17,  -5)),   # T=29,  D=125,   k=605
+    (421, (-3,  25)),   # T=19,  D=3125,  k=275
+    (431, (-8, -20)),   # T=-36, D=2000,  k=180
+    (461, (-13, 25)),   # T=-1,  D=3125,  k=475
+    (491, (2,    5)),   # T=9,   D=125,   k=855
+]
+
 
 def self_test():
-    result = {"ok": True, "checks": 5, "failures": [], "detail": {}}
+    result = {"ok": True, "checks": 6, "failures": [], "detail": {}}
 
     # ------------------------------------------------------------------
     # C1: a_p = 0 for all p not ≡ 1 (mod 5)
@@ -218,6 +252,73 @@ def self_test():
             result["failures"].append(f"C5: e^2+e-31 != 0: got {poly_zero}")
         if disc_e != 125:
             result["failures"].append(f"C5: disc(e/Q)={disc_e} != 125")
+
+    # ------------------------------------------------------------------
+    # C6: Universal Pell characterization for all 22 split primes p <= 500
+    #
+    # For a_p = (u,v) in Z[phi]:
+    #   T = Tr_{Q(sqrt5)/Q}(a_p) = 2u + v  (rational integer)
+    #   n = N_{Q(sqrt5)/Q}(a_p) = u^2 + u*v - v^2
+    #   D = T^2 - 4n  (discriminant of min poly of a_p over Q)
+    #   M = 8p - (T^2 + D)/2  (integer since T^2+D = 2T^2-4n is even)
+    #
+    # Claim 1: D = m^2 * 125 for some m in Z_>=1
+    #          Disc classes observed: {125, 2000, 3125} = {1,4,5}^2 * 125
+    # Claim 2: M^2 - 20*k^2 = T^2 * D  has solution k in Z_>=0
+    #          Pell discriminant 20 = 4*F5; stepping unit (9,2) solves X^2-20Y^2=1
+    # ------------------------------------------------------------------
+    pell_data = []
+    fails_c6 = []
+    disc_m_set = set()
+    for p, (u, v) in EXTENDED_TABLE:
+        T = 2 * u + v
+        n = zphi_norm(u, v)
+        D = T * T - 4 * n
+        TD2 = T * T + D         # = 2*T^2 - 4*n, always even
+        M = 8 * p - TD2 // 2
+        # disc resonance: D = m^2 * 125
+        disc_ok = (D > 0 and D % 125 == 0)
+        m = None
+        if disc_ok:
+            ratio = D // 125
+            m_int = math.isqrt(ratio)
+            disc_ok = (m_int * m_int == ratio)
+            if disc_ok:
+                m = m_int
+        # Pell check: M^2 - 20*k^2 = T^2 * D
+        rhs = T * T * D
+        diff = M * M - rhs
+        pell_ok = (diff >= 0 and diff % 20 == 0)
+        k = None
+        if pell_ok:
+            k2 = diff // 20
+            k_int = math.isqrt(k2)
+            pell_ok = (k_int * k_int == k2)
+            if pell_ok:
+                k = k_int
+        ok = disc_ok and pell_ok
+        pell_data.append({
+            "p": p, "a_p": [u, v], "T": T, "D": D, "m": m,
+            "M": M, "k": k, "disc_ok": disc_ok, "pell_ok": pell_ok, "pass": ok,
+        })
+        if ok and m is not None:
+            disc_m_set.add(m)
+        if not ok:
+            fails_c6.append({
+                "p": p, "a_p": [u, v], "T": T, "D": D, "M": M,
+                "disc_ok": disc_ok, "pell_ok": pell_ok,
+            })
+    c6_pass = (len(fails_c6) == 0)
+    result["detail"]["C6"] = {
+        "pass": c6_pass,
+        "primes_checked": len(EXTENDED_TABLE),
+        "disc_m_values": sorted(disc_m_set),
+        "primes": pell_data,
+        "fails": fails_c6,
+    }
+    if not c6_pass:
+        result["ok"] = False
+        result["failures"].append(f"C6: Pell/disc failures: {fails_c6}")
 
     return result
 

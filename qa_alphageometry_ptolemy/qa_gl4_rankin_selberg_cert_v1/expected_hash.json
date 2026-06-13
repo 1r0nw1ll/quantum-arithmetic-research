@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Jacquet-PS-Shalika (1983) doi:10.2307/2374264, Shahidi (1981) doi:10.2307/2374219 -->
+{
+  "expected_sha256": "9a7e6a85cf1a5f8c33b16a7a873a8c1b3dca2e84ebc56cb4132a2244ffae0d3b",
+  "description": "SHA-256 of stdout (JSON) from qa_gl4_rankin_selberg_cert_validate.py (3 checks PASS). C1: integer coefficients -N, p(T^2-2N-2p), -p^2*N, p^4 for all 22 split primes. C2: weight-2 palindrome a3=p^2*a1 and a4=p^4. C3: Vieta derivation R_p = Q_2(alpha1*Y)*Q_2(alpha2*Y) via a1*a2=N and a1^2+a2^2=T^2-2N. Langlands ladder [403]->[404]->[405]."
+}

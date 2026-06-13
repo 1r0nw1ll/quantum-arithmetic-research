@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Iverson (1993) Pythagorean Arithmetic Vols I-III, Sierpinski (1962) ISBN 978-0-486-43293-4, Dale (2026) Five Families paper Theorem 3 -->
+{
+  "expected_sha256": "2bd19f9804aad3d6c8286b4616608214bb132e3404c42fd069ff6ed1220e6eb2",
+  "description": "SHA-256 of stdout from qa_beda_classical_subfamilies_cert_validate.py (all checks PASS, 5 checks: C1 Fermat identity C-F=2e²-b², C2 Pythagoras identity d-e=b, C3 Plato identity G-F=2e², C4 paper examples, C5 exhaustive b,e in {1..30})"
+}

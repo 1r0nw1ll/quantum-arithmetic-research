@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Iverson (1993) Pythagorean Arithmetic Vols I-III, Sierpinski (1962) ISBN 978-0-486-43293-4, Dale (2026) Five Families paper Theorem 4 -->
+{
+  "expected_sha256": "762b45cf577b969b8e27f148bf232a3d7f5ac41e3be8974b46d95faa8c966df5",
+  "description": "SHA-256 of stdout from qa_octave_transformation_cert_validate.py (all checks PASS, 5 checks: C1 BEDA structure preserved, C2 female=(2F,2C,2G), C3 gcd=2, C4 paper examples, C5 exhaustive {1..20}^2)"
+}

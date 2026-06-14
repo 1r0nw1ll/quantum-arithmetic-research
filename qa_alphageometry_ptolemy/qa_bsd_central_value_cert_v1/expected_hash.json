@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Birch-Swinnerton-Dyer (1965) doi:10.1515/crll.1965.218.79, Rohrlich (1984) doi:10.1007/BF01388742 -->
+{
+  "expected_sha256": "8768990a8d9c88e8e560e99fc3957b4e9b4693cb109383f5d59447750f613a4b",
+  "description": "SHA-256 of stdout (JSON) from qa_bsd_central_value_cert_validate.py (4 checks PASS). Center s=1/2 trichotomy: inert→2 (Fraction), ramified→1, split→irrational (T≠0). Inert partial product = Fraction(1, 2^22). Rational spine of L(1/2,AI(f))."
+}

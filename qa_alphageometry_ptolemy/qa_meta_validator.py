@@ -10152,6 +10152,37 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_bsd_central_value_cert_family(base_dir):
+    """Cert [413]: BSD Central Value Trichotomy at s=½ — inert→2, ramified→1, split→irrational."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_bsd_central_value_cert_v1")
+    validator = os.path.join(fam_dir, "qa_bsd_central_value_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_bsd_central_value_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_bsd_central_value_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_bsd_central_value_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_bsd_central_value_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_functional_equation_cert_family(base_dir):
     """Cert [412]: Global Functional Equation — N=5^8, d=4, w=1, Gamma shifts {1/2,3/2}×2."""
     import subprocess
@@ -11876,6 +11907,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (413, "QA BSD Central Value Trichotomy Cert family",
+     _validate_qa_bsd_central_value_cert_family,
+     "QA BSD Central Value Trichotomy Cert [413]. CLAIM: At s=1/2 the GL_4/Q AI Euler factors for f=2.2.5.1-125.1-a split into three arithmetic classes: (C1) INERT (p≡2,3 mod 5): P_p^{inert}(p^{-1/2}) = 1+p^2*(p^{-1/2})^4 = 1+p^2*Fraction(1,p^2) = Fraction(2) exactly; verified for 22 inert primes using Fraction arithmetic (no float, Theorem NT); each inert prime contributes local factor 1/2 at the center; (C2) RAMIFIED (p=5): P_5^{ram}(5^{-1/2}) = 1 (trivial polynomial from cert [411]); local factor at center = 1; (C3) SPLIT (p≡1,4 mod 5): P_p^{split}(p^{-1/2}) = Fraction(4p+N,p) - 2T/sqrt(p); rational part Fraction(4p+N,p) certifiable; irrational part -2T/sqrt(p) with T≠0 for all 22 split primes (integer check) and sqrt(p) irrational (p prime, not perfect square) => full center value irrational; therefore split prime contributions are continuous observer projections under Theorem NT; (C4) INERT PARTIAL PRODUCT: ∏_{p inert, p<=193} P_p(p^{-1/2})^{-1} = (1/2)^22 = Fraction(1, 2^22) = Fraction(1,4194304); computed with exact Fraction arithmetic; this is the rational spine of L(1/2,AI(f)) from inert primes. BSD CONNECTION: L(1/2) = L_rat × L_split × L_archimedean; L_rat = Fraction(1,4194304) (certified); L_split irrational (observer projection); Rohrlich (1984) non-vanishing for CM forms over Q(zeta_5) towers implies L(1/2)≠0 generically; BSD predicts rank A_f(Q)=0. The QA integer prediction is r_alg=0; all analytic evidence (L(1/2) itself, epsilon, Gamma values) are observer projections. Primary sources: Birch-Swinnerton-Dyer (1965) doi:10.1515/crll.1965.218.79; Rohrlich (1984) doi:10.1007/BF01388742. 4 checks PASS; self-test ok",
+     "413_qa_bsd_central_value",
+     "qa_bsd_central_value_cert_v1", True),
     (402, "QA Octave Orbit Permutation Cert family",
      _validate_qa_octave_orbit_permutation_cert_family,
      "QA Octave Orbit Permutation Cert [402]. CLAIM: the digital-root octave map sigma:(b,e)->(dr(2e),b) with dr(n)=((n-1)%9)+1 is a permutation of {1,...,9}^2 with cycle type (1, 4^2, 12^6) and order 12; sigma maps each QA orbit class to itself (Cosmos->Cosmos, Satellite->Satellite, Singularity fixed). (C1) sigma bijective: 81 distinct images; (C2) orbit preservation: Cosmos 72 pairs -> Cosmos, Satellite 8 pairs -> Satellite, Singularity (9,9) fixed; algebraic reason: gcd(2,9)=1 so 3|dr(2e) iff 3|e, preserving satellite/singularity divisibility; (C3) cycle type {1:1, 4:2, 12:6}: Singularity 1 fixed, Satellite splits into 2 four-cycles, Cosmos splits into 6 twelve-cycles; (C4) order=12: sigma^k != identity for k in {1,2,3,4,6}, sigma^12=identity (M=[[0,2],[1,0]] mod 9, ord(M)=12 since 2^6=64=1 mod 9 combined with alternating b/e); (C5) Satellite 4-cycles: {(3,3),(6,3),(6,6),(3,6)} and {(6,9),(9,6),(3,9),(9,3)}. Mirroring: cycle type (1,4^2,12^6) mirrors orbit sizes (1,8,72) = (1,2x4,6x12). Extends [401] (octave transform), [398] (Five Families Table 1 = the 9x9 grid). 5 checks PASS; self-test ok",

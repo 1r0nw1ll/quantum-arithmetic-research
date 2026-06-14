@@ -10152,6 +10152,37 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_ramified_euler_cert_family(base_dir):
+    """Cert [411]: Ramified Prime p=5 — Trivial GL₄/ℚ AI Euler Factor P_5^{ram}(Y)=1."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_ramified_euler_cert_v1")
+    validator = os.path.join(fam_dir, "qa_ramified_euler_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_ramified_euler_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_ramified_euler_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_ramified_euler_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_ramified_euler_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_ai_inert_euler_cert_family(base_dir):
     """Cert [409]: QA Langlands AI Inert Prime Euler Factor — P_p = 1+p²Y⁴ at p≡2,3 mod 5."""
     import subprocess
@@ -11804,6 +11835,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Dedekind Zeta Factorization Cert [410]. CLAIM: The Dedekind zeta function of F=Q(sqrt5) factors as zeta_F(s)=zeta(s)*L(s,chi5) where chi5 is the Kronecker symbol (5/p). At each unramified prime p: (C1) Kronecker symbol chi5(p)=+1 for p≡1,4 mod 5 (split, 22 primes) and chi5(p)=-1 for p≡2,3 mod 5 (inert, 22 primes) — computed purely from p%5 (integer arithmetic only, no floats); (C2) at split p the local numerator is (1-Y)^2=[1,-2,1] (ζ contributes 1/(1-Y), L contributes 1/(1-Y) when chi=+1); (C3) at inert p the local numerator is 1-Y^2=[1,0,-1] (ζ contributes 1/(1-Y), L contributes 1/(1+Y) when chi=-1); (C4) norm product identity: ∏_{P|p} N(P) = p^2 = p^[F:Q] for all 44 primes — split: N(P)*N(Pbar)=p*p=p^2; inert: N((p))=p^2 — matches a4(P_p)=p^2 universally in AI Euler factors [404]+[409]. Theorem NT: Kronecker symbol uses only p%5 (integer mod), no observer projection enters QA state. 44 primes total. 4 checks all PASS. Primary sources: Neukirch (1999) doi:10.1007/978-3-662-03983-0; Hecke (1920) doi:10.1007/BF01453601. Synthesizes [404]+[409] into unified ζ_F structure. 4 checks PASS; self-test ok",
      "410_qa_dedekind_zeta_factorization",
      "qa_dedekind_zeta_factorization_cert_v1", True),
+    (411, "QA Langlands Ramified Prime p=5 Euler Factor Cert family",
+     _validate_qa_ramified_euler_cert_family,
+     "QA Langlands Ramified Prime p=5 Euler Factor Cert [411]. CLAIM: For f=2.2.5.1-125.1-a (GL_2/F, F=Q(sqrt5), conductor P_5^3, level 125=5^3), the GL_4/Q automorphic induction AI(f) has trivial local Euler factor at p=5: P_5^{ram}(Y)=1 (degree 0). Derivation (3 steps): (1) RAMIFIED CLASSIFICATION: 5%5=0, distinct from split (p%5 in {1,4}) and inert (p%5 in {2,3}); partition {0}∪{1,4}∪{2,3}={0..4} complete and disjoint; [404]+[409]+[411] gives complete GL_4/Q AI Euler product classification; (2) SUPERCUSPIDAL TYPE: conductor exponent n=3≥2 at P_5 for GL_2/F form f; for GL_2 over p-adic field (Bushnell-Henniart §14): n=0→unramified; n=1→Steinberg; n≥2→supercuspidal; therefore π_{P_5} is supercuspidal; (3) TRIVIAL EULER FACTOR: supercuspidal→L(s,π_{P_5})=1 (no roots); under AI induction Ind_{W_{F_5}}^{W_{Q_5}}(ρ_{P_5}) has no Frobenius-fixed vectors → P_5^{ram}(Y)=1. CONDUCTOR EXPONENT (C4): Artin conductor formula for induced rep: a_5 = [F_5:Q_5]·n + dim(ρ_f)·f(F_5/Q_5) = 2·3 + 2·1 = 8; all inputs integer (Theorem NT). Four checks: (C1) 5%5=0; partition complete+disjoint (PASS); (C2) n=3≥2 supercuspidal, n≠0,1 (PASS); (C3) P_5^{ram}=[1], degree 0 < degree-4 unramified (PASS); (C4) 2·3+2·1=8, all int (PASS). Together [404]+[409]+[410]+[411] gives complete prime classification and ζ_{Q(sqrt5)} encoding for the Langlands ladder. Primary sources: Bushnell-Henniart (2006) doi:10.1007/978-3-540-31511-7; Arthur-Clozel (1989) ISBN 978-0-691-08517-3. 4 checks PASS; self-test ok",
+     "411_qa_ramified_euler",
+     "qa_ramified_euler_cert_v1", True),
     (402, "QA Octave Orbit Permutation Cert family",
      _validate_qa_octave_orbit_permutation_cert_family,
      "QA Octave Orbit Permutation Cert [402]. CLAIM: the digital-root octave map sigma:(b,e)->(dr(2e),b) with dr(n)=((n-1)%9)+1 is a permutation of {1,...,9}^2 with cycle type (1, 4^2, 12^6) and order 12; sigma maps each QA orbit class to itself (Cosmos->Cosmos, Satellite->Satellite, Singularity fixed). (C1) sigma bijective: 81 distinct images; (C2) orbit preservation: Cosmos 72 pairs -> Cosmos, Satellite 8 pairs -> Satellite, Singularity (9,9) fixed; algebraic reason: gcd(2,9)=1 so 3|dr(2e) iff 3|e, preserving satellite/singularity divisibility; (C3) cycle type {1:1, 4:2, 12:6}: Singularity 1 fixed, Satellite splits into 2 four-cycles, Cosmos splits into 6 twelve-cycles; (C4) order=12: sigma^k != identity for k in {1,2,3,4,6}, sigma^12=identity (M=[[0,2],[1,0]] mod 9, ord(M)=12 since 2^6=64=1 mod 9 combined with alternating b/e); (C5) Satellite 4-cycles: {(3,3),(6,3),(6,6),(3,6)} and {(6,9),(9,6),(3,9),(9,3)}. Mirroring: cycle type (1,4^2,12^6) mirrors orbit sizes (1,8,72) = (1,2x4,6x12). Extends [401] (octave transform), [398] (Five Families Table 1 = the 9x9 grid). 5 checks PASS; self-test ok",

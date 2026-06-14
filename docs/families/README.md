@@ -436,4 +436,5 @@ Before shipping any family:
 | [408](408_qa_sym2_full_euler.md) | QA Langlands Sym² Full GL₆/Q Factor | V_p=(1−pY)²·Σ_p; degree-6 palindrome; GL₆ Ramanujan all 6 roots \|root\|=p⁻¹ | [407] [406] |
 | [409](409_qa_ai_inert_euler.md) | QA Langlands AI Inert Prime Euler Factor | P_p^{inert}=1+p²Y⁴ for p≡2,3 mod 5; CM vanishing a_𝔭=0; structural gap 2p vs naive split; GL₄ Ramanujan \|root\|=p^{-½} | [404] [403] |
 | [410](410_qa_dedekind_zeta_factorization.md) | QA Langlands Dedekind Zeta Factorization | ζ_{ℚ(√5)}=ζ·L(s,χ₅); χ₅(p)=±1 from p%5; split→[1,−2,1], inert→[1,0,−1]; ∏N(𝔭)=p²=a₄(P_p) in [404]+[409] | [409] [404] |
+| [411](411_qa_ramified_euler.md) | QA Langlands Ramified p=5 Euler Factor | P_5^{ram}=1 (degree 0); n=3≥2→supercuspidal→trivial L-factor; a_5=2·3+2·1=8; [404]+[409]+[411] = complete AI Euler product | [410] [409] [404] |
 | [402](402_qa_octave_orbit_permutation.md) | QA Octave Orbit Permutation | σ:(b,e)→(dr(2e),b) permutes {1..9}²; cycle type (1,4²,12⁶); order 12; Satellite splits into 2 four-cycles; mirrors orbit sizes (1,8,72) | [398] [401] |

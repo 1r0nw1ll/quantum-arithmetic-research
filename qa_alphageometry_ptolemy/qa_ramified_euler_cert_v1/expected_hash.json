@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Bushnell-Henniart (2006) doi:10.1007/978-3-540-31511-7, Arthur-Clozel (1989) ISBN 978-0-691-08517-3 -->
+{
+  "expected_sha256": "0b937747ec825335cfbff4d704a1655cda4fbb9131c82edbf782dc5e7ccb56d3",
+  "description": "SHA-256 of stdout (JSON) from qa_ramified_euler_cert_validate.py (4 checks PASS). P_5^{ram}(Y)=1: conductor exponent n=3≥2 → supercuspidal → trivial GL₄/ℚ AI Euler factor at p=5. Artin formula a_5=2·3+2·1=8. Completes [404]+[409]+[411] prime classification."
+}

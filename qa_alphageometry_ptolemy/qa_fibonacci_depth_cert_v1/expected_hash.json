@@ -1,0 +1,7 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash ledger for cert [419]; primary sources cited in mapping_protocol_ref.json: Lucas (1878) American Journal of Mathematics 1(2), Wall (1960) doi:10.2307/2309169, Lehmer (1930) doi:10.2307/1968235 -->
+{
+  "expected_hash": "8bd00207af5596a12b122692231a9d5a36ec6c0881d545080ddc41b110af7e3f",
+  "validator": "qa_fibonacci_depth_cert_validate.py",
+  "cert_id": 419,
+  "description": "QA Fibonacci Depth Decomposition: delta(p)=F_{alpha}/p mod p decomposes by alpha parity; Fibonacci primes all have delta=1; non-Fibonacci delta=1 primes {41,193,1621} satisfy 2*alpha=p-(5/p)"
+}

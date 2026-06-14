@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_depth_cert_family(base_dir):
+    """Cert [419]: QA Fibonacci Depth Decomposition — delta(p) by alpha parity; delta=1 census."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_depth_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_depth_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_depth_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_depth_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_depth_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_depth_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_cassini_alpha_parity_cert_family(base_dir):
     """Cert [418]: QA Cassini Alpha Parity Gate — alpha(p) parity encodes -1 QR via Cassini."""
     import subprocess
@@ -12059,6 +12087,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (419, "QA Fibonacci Depth Decomposition Cert family",
+     _validate_qa_fibonacci_depth_cert_family,
+     "QA Fibonacci Depth Decomposition Cert [419]. CLAIM: The Fibonacci depth invariant delta(p)=F_{alpha(p)}/p mod p (cert [417]) decomposes by parity of alpha(p): (EVEN alpha) delta(p)=F_{alpha/2}*(L_{alpha/2}/p) mod p, where p ALWAYS divides L_{alpha/2} (corollary: F_{2n}=F_n*L_n with p|F_{alpha} and p notdivides F_{alpha/2} forces p|L_{alpha/2}, Lucas 1878); (ODD alpha) delta(p)=(F_k^2+F_{k-1}^2)/p mod p, k=(alpha+1)/2 (from F_{2k-1}=F_k^2+F_{k-1}^2, Lucas 1878). (C1) EVEN-ALPHA DECOMPOSITION: verified for all 62 even-alpha primes in [2,500]; Lucas divisibility p|L_{alpha/2} confirmed for all; decomposed delta matches direct delta for all 62; falsifiable: any prime with even alpha(p) where decomposed delta disagrees with direct delta refutes; (C2) ODD-ALPHA DECOMPOSITION: identity F_{2k-1}=F_k^2+F_{k-1}^2 mod p^2 confirmed; decomposed delta matches direct delta for all 33 odd-alpha primes in [2,500]; (C3) FIBONACCI PRIME SUBCLASS: for Fibonacci primes p=F_m in {2,3,5,13,89,233,1597} (all Fibonacci primes up to 2000): alpha(p)=m and F_{alpha(p)}=p exactly (F_m mod p^2=p since p=F_m<p^2); therefore delta(p)=p/p mod p=1; all 7 verified; (C4) FULL DELTA CENSUS: delta=1 primes up to 2000 are exactly {2,3,5,13,41,89,193,233,1597,1621} (verified for all 303 primes up to 2000); non-Fibonacci delta=1 primes are {41,193,1621}; each satisfies maximum-rank condition 2*alpha(p)=p-(5/p): p=41 alpha=20 2*20=40=41-1; p=193 alpha=97 2*97=194=193+1; p=1621 alpha=810 2*810=1620=1621-1; deeper characterization of non-Fibonacci delta=1 primes open (why does maximum rank yield delta=1 for p=41,1621 but not p=29,101,181?). CHAIN: [417] delta(p)=F_{alpha}/p mod p defined and nonzero -> [418] alpha(p) parity ↔ (-1) QR via Cassini -> [419] delta decomposition by parity, delta=1 census. All integer arithmetic, Theorem NT. Primary sources: Lucas (1878) American Journal of Mathematics 1(2) pp.184-240 (doubling F_{2n}=F_n*L_n, odd F_{2n-1}=F_n^2+F_{n-1}^2); Wall (1960) doi:10.2307/2309169; Lehmer (1930) doi:10.2307/1968235. 4 checks PASS; self-test ok",
+     "419_qa_fibonacci_depth",
+     "qa_fibonacci_depth_cert_v1", True),
     (418, "QA Cassini Alpha Parity Gate Cert family",
      _validate_qa_cassini_alpha_parity_cert_family,
      "QA Cassini Alpha Parity Gate Cert [418]. CLAIM: The parity of alpha(p) (QA T-step first-zero time, cert [416]) is constrained by the quadratic character of -1 mod p via the Cassini identity at n=alpha(p): F_{alpha(p)-1}^2 ≡ (-1)^{alpha(p)} mod p (Cassini Gate). Consequence: p≡3 mod 4 ⟹ alpha(p) is EVEN. Proof: if alpha(p) odd then C1 gives F_{alpha-1}^2≡-1 mod p, so -1 is a QR mod p, so p≡1 mod 4; contrapositive: p≡3 mod 4 → alpha even. (C1) CASSINI GATE: F_{alpha(p)-1}^2 ≡ (-1)^{alpha(p)} mod p for all 45 tested primes (22 split <=491, 22 inert <=193, p=5 ramified); proof: Cassini F_{n-1}*F_{n+1}-F_n^2=(-1)^n at n=alpha(p) with F_{alpha}≡0 gives F_{alpha-1}^2≡(-1)^alpha; verified computationally; (C2) PARITY CONSTRAINT: alpha(p) even for all 24 primes p≡3 mod 4 in test set (3,7,11,23,31,43,47,67,71,83,103,107,127,131,167,191,211,251,271,311,331,431,491 + one more); falsifiable: any prime p≡3 mod 4 with odd alpha(p) refutes; (C3) ODD-ALPHA SQRT(-1): for all 13 primes with odd alpha(p) (all satisfying p≡1 mod 4): F_{alpha(p)-1} is an explicit sqrt(-1) mod p computed by T-step iteration; witnesses: p=13 F_6=8 and 8^2=64≡-1 mod 13; p=17 alpha=9 F_8≡4 and 16≡-1 mod 17; p=193 alpha=97 F_96^2≡192=-1 mod 193; p=421 alpha=21 F_20^2≡-1 mod 421; no sqrt algorithm needed — T-step produces it; (C4) ORBIT PARITY READOUT: second component of T-orbit at step alpha(p) (= F_{alpha+1}≡F_{alpha-1} mod p) squared gives (-1)^{alpha} mod p; parity of alpha readable from orbit state; verified for p in {193 inert odd-alpha, 37 inert odd-alpha, 41 split even-alpha, 11 split even-alpha, 7 inert even-alpha}. NOTE delta(193)=1 (cert [417]): phi^{97} mod 193^2 has form i + 193*phi where i=F_96 is sqrt(-1) mod 193; the delta=1 class includes Fibonacci primes (F_alpha=p) and non-Fibonacci primes 41, 193; deeper characterization open. CHAIN: [416] alpha(p)|p-(5/p) -> [417] alpha(p^2)=p*alpha(p) -> [418] alpha(p) parity ↔ (-1) QR via Cassini. Primary sources: Cassini (1680) Histoire de l'Academie Royale des Sciences; Wall (1960) doi:10.2307/2309169; Lehmer (1930) doi:10.2307/1968235. 4 checks PASS; self-test ok",

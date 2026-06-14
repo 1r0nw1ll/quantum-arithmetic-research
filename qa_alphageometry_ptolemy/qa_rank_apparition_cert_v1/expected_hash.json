@@ -1,0 +1,7 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash ledger for cert [416]; primary source cited in mapping_protocol_ref.json: Wall (1960) doi:10.2307/2309169, Lucas (1878), Lehmer (1930) doi:10.2307/1968235 -->
+{
+  "expected_hash": "34d6f5f3f1ce8b08d934fc73ceef0d2b9ed8ff545491b3dc9e4b1993a0404827",
+  "validator": "qa_rank_apparition_cert_validate.py",
+  "cert_id": 416,
+  "description": "QA Rank of Apparition = Unified Prime Splitting Formula: alpha(p) | p - (5/p)"
+}

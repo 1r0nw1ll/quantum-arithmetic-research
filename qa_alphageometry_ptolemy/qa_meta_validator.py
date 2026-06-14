@@ -10152,6 +10152,37 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_rank_apparition_cert_family(base_dir):
+    """Cert [416]: QA rank of apparition = unified prime splitting formula alpha(p)|p-(5/p)."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_rank_apparition_cert_v1")
+    validator = os.path.join(fam_dir, "qa_rank_apparition_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_rank_apparition_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_rank_apparition_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_rank_apparition_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_rank_apparition_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_pisano_split_cert_family(base_dir):
     """Cert [415]: QA Pisano period = prime splitting criterion for Q(sqrt5)/Q."""
     import subprocess
@@ -11969,6 +12000,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (416, "QA Rank of Apparition = Unified Prime Splitting Formula Cert family",
+     _validate_qa_rank_apparition_cert_family,
+     "QA Rank of Apparition = Unified Prime Splitting Formula Cert [416]. CLAIM: The rank of apparition alpha(p) — smallest n>=1 with F_n≡0 mod p, computed by QA T-step iteration T(b,e)=(e,b+e) in pure integer arithmetic (Theorem NT) — satisfies alpha(p)|p-(5/p) where (5/p) is the Kronecker symbol: +1 for split (p%5 in {1,4}), -1 for inert (p%5 in {2,3}), 0 for ramified p=5. This UNIFIES the two-condition criterion of cert [415] (split: pi(p)|p-1; inert: pi(p)|2(p+1) and pi(p) not divides p-1) into ONE formula via the rank of apparition. (C1) UNIFIED FORMULA: alpha(p)|p-(5/p) for 45 primes (22 split <=491, 22 inert <=193, p=5): split target=p-1 (alpha|p-1, verified), inert target=p+1 (alpha|p+1, verified), ramified alpha(5)=5|5 (verified); falsifiable: any prime with alpha(p) not dividing p-(5/p) refutes; (C2) ALPHA DIVIDES PISANO: alpha(p)|pi(p) for all 45 primes (standard result Wall 1960, Lehmer 1930; rank of apparition always divides Pisano period); (C3) ENTRY QUOTIENT: pi(p)/alpha(p) in {1,2,4} for all 45 primes; secondary structure: inert primes with alpha=(p+1)/2 give quotient 4 (pi=2(p+1) exact), those with alpha=p+1 give quotient 2; split primes vary; (C4) QA ORBIT READING: alpha(p) is the step index at which the QA T-orbit of (0,1) mod p first returns zero in first component (F_alpha mod p=0); the Kronecker symbol then determines divisibility class; verified for 5 sample primes {11,41,3,7,5}. The Kronecker symbol (5/p) is the quadratic character of 5 mod p = splitting type of p in Q(sqrt5)/Q = number field whose ring Z[phi] has norm form f(a,b)=a^2+ab-b^2 = QA Eisenstein form (cert [414]). CHAIN: [133] T-step sign-flip -> [414] norm form = Z[phi] norm -> [415] pi(p) two conditions -> [416] alpha(p)|p-(5/p) one formula. Q(sqrt5) appears at algebraic level (norm form, [414]), Galois level (Kronecker splitting character, [416]), dynamical level (T-orbit period, [415]). All integer arithmetic. All independently falsifiable. Primary sources: Wall (1960) doi:10.2307/2309169; Lucas (1878) American Journal of Mathematics 1(2); Lehmer (1930) doi:10.2307/1968235. 4 checks PASS; self-test ok",
+     "416_qa_rank_apparition",
+     "qa_rank_apparition_cert_v1", True),
     (415, "QA Pisano Period = Prime Splitting Criterion Cert family",
      _validate_qa_pisano_split_cert_family,
      "QA Pisano Period = Prime Splitting Criterion Cert [415]. CLAIM: The Pisano period pi(p) (period of the Fibonacci sequence mod p = QA T-orbit period mod p, computed by pure integer T-step iteration) encodes the prime splitting class of p in Q(sqrt5)/Q: (C1) SPLIT (p%5 in {1,4}): pi(p) divides p-1; algebraic reason: Z[phi]/p = F_p x F_p => Fibonacci period divides |F_p*|=p-1 by Fermat; verified for 22 split primes <=491; (C2) INERT (p%5 in {2,3}): pi(p) divides 2(p+1) AND pi(p) does NOT divide p-1; algebraic reason: Z[phi]/p = F_{p^2} => combined period divides 2(p+1) by Frobenius order 2; non-divisibility distinguishes inert from split; verified for 22 inert primes <=193; (C3) RAMIFIED p=5: pi(5)=20=(p-1)*p=4*5; 20 does not divide p-1=4 or 2(p+1)=12; Z[phi]/5 = F_5[x]/(x-3)^2 (nilpotent, repeated root phi=3 mod 5); (C4) QA T-ORBIT: T(b,e)=(e,b+e) mod p applied to (0,1) has period pi(p); period of (1,1) (Fibonacci family/Cosmos seed) equals pi(p); verified for 7 sample primes (split 11,31,41; inert 2,3,7; ramified 5). CHAIN: [133] T-step sign-flip -> [414] norm form bridge -> [415] orbit period = prime class; QA T-step encodes prime splitting at three levels: algebraically ([414]), representationally ([414] C2-C3), dynamically ([415]). All integer arithmetic, all independently falsifiable. Primary sources: Wall (1960) doi:10.2307/2309169; Ribenboim (1996) ISBN 978-0-387-94457-9. 4 checks PASS; self-test ok",

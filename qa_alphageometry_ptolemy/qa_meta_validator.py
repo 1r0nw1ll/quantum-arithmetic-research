@@ -10152,6 +10152,37 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pisano_prime_square_cert_family(base_dir):
+    """Cert [417]: QA Pisano lift to prime squares — Wall-Sun-Sun regularity."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_pisano_prime_square_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pisano_prime_square_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pisano_prime_square_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pisano_prime_square_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_pisano_prime_square_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_pisano_prime_square_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_rank_apparition_cert_family(base_dir):
     """Cert [416]: QA rank of apparition = unified prime splitting formula alpha(p)|p-(5/p)."""
     import subprocess
@@ -12000,6 +12031,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (417, "QA Pisano Lift to Prime Squares — Wall-Sun-Sun Regularity Cert family",
+     _validate_qa_pisano_prime_square_cert_family,
+     "QA Pisano Lift to Prime Squares — Wall-Sun-Sun Regularity Cert [417]. CLAIM: The QA T-step T(b,e)=(e,b+e) modulo p^2 (integer modulus, Theorem NT) yields Pisano period pi(p^2)=p*pi(p) for all tested primes — the period lifts cleanly by factor p from mod p to mod p^2. Equivalently (Sun-Sun 1992): the Wall-Sun-Sun Fermat quotient w_F(p)=F_{p-(5/p)}/p mod p is non-zero for all tested primes, and the rank of apparition lifts alpha(p^2)=p*alpha(p) for all tested primes. All four equivalent Wall-Sun-Sun conditions (A)pi(p^2)=pi(p) (B)alpha(p^2)=alpha(p) (C)p^2|F_{alpha(p)} (D)w_F(p)=0 FAIL for every prime tested — consistent with no Wall-Sun-Sun prime existing (none known below 2e14, McIntosh-Roettger 2007). (C1) pi(p^2)=p*pi(p) for 15 primes <=47: direct T-step mod p^2; p=47: pi=32, pi^2=1504=47*32 PASS; (C2) w_F(p)!=0 for all 45 primes (22 split <=491, 22 inert <=193, p=5): cert [416] guarantees p|F_{p-(5/p)}; check p^2 does NOT divide F_{p-(5/p)}; notable: w_F(251)=250=-1 mod 251, w_F(193)=1, w_F(41)=39; (C3) alpha(p^2)=p*alpha(p) for all 45 primes: check F_{alpha(p)} mod p^2 != 0; requires only alpha(p)<=p+1 T-step iterations mod p^2; for p=421 F_{21}=10946=421*26 exactly (w-rank=26); for p=193 F_{97} mod 193^2=193 (w-rank=1); (C4) QA T-orbit mod p^2 has p sheets: at step alpha(p), first component ≡ 0 mod p but ≢ 0 mod p^2 (C3); at step p*alpha(p), first component ≡ 0 mod p^2 (by definition of alpha(p^2)); verified for p in {11,3,5,41,7}: F_{p*alpha(p)} mod p^2=0 in all cases. CHAIN: [415] T mod p, period pi(p) -> [416] alpha(p)|p-(5/p), rank lift -> [417] T mod p^2, period p*pi(p), second-order precision. Primary sources: Wall (1960) doi:10.2307/2309169; Sun-Sun (1992) Acta Arithmetica 60(3); McIntosh-Roettger (2007) doi:10.1090/S0025-5718-07-01955-2. 4 checks PASS; self-test ok",
+     "417_qa_pisano_prime_square",
+     "qa_pisano_prime_square_cert_v1", True),
     (416, "QA Rank of Apparition = Unified Prime Splitting Formula Cert family",
      _validate_qa_rank_apparition_cert_family,
      "QA Rank of Apparition = Unified Prime Splitting Formula Cert [416]. CLAIM: The rank of apparition alpha(p) — smallest n>=1 with F_n≡0 mod p, computed by QA T-step iteration T(b,e)=(e,b+e) in pure integer arithmetic (Theorem NT) — satisfies alpha(p)|p-(5/p) where (5/p) is the Kronecker symbol: +1 for split (p%5 in {1,4}), -1 for inert (p%5 in {2,3}), 0 for ramified p=5. This UNIFIES the two-condition criterion of cert [415] (split: pi(p)|p-1; inert: pi(p)|2(p+1) and pi(p) not divides p-1) into ONE formula via the rank of apparition. (C1) UNIFIED FORMULA: alpha(p)|p-(5/p) for 45 primes (22 split <=491, 22 inert <=193, p=5): split target=p-1 (alpha|p-1, verified), inert target=p+1 (alpha|p+1, verified), ramified alpha(5)=5|5 (verified); falsifiable: any prime with alpha(p) not dividing p-(5/p) refutes; (C2) ALPHA DIVIDES PISANO: alpha(p)|pi(p) for all 45 primes (standard result Wall 1960, Lehmer 1930; rank of apparition always divides Pisano period); (C3) ENTRY QUOTIENT: pi(p)/alpha(p) in {1,2,4} for all 45 primes; secondary structure: inert primes with alpha=(p+1)/2 give quotient 4 (pi=2(p+1) exact), those with alpha=p+1 give quotient 2; split primes vary; (C4) QA ORBIT READING: alpha(p) is the step index at which the QA T-orbit of (0,1) mod p first returns zero in first component (F_alpha mod p=0); the Kronecker symbol then determines divisibility class; verified for 5 sample primes {11,41,3,7,5}. The Kronecker symbol (5/p) is the quadratic character of 5 mod p = splitting type of p in Q(sqrt5)/Q = number field whose ring Z[phi] has norm form f(a,b)=a^2+ab-b^2 = QA Eisenstein form (cert [414]). CHAIN: [133] T-step sign-flip -> [414] norm form = Z[phi] norm -> [415] pi(p) two conditions -> [416] alpha(p)|p-(5/p) one formula. Q(sqrt5) appears at algebraic level (norm form, [414]), Galois level (Kronecker splitting character, [416]), dynamical level (T-orbit period, [415]). All integer arithmetic. All independently falsifiable. Primary sources: Wall (1960) doi:10.2307/2309169; Lucas (1878) American Journal of Mathematics 1(2); Lehmer (1930) doi:10.2307/1968235. 4 checks PASS; self-test ok",

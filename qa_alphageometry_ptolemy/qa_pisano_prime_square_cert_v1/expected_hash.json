@@ -1,0 +1,7 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash ledger for cert [417]; primary sources cited in mapping_protocol_ref.json: Wall (1960) doi:10.2307/2309169, Sun-Sun (1992) Acta Arithmetica 60(3), McIntosh-Roettger (2007) doi:10.1090/S0025-5718-07-01955-2 -->
+{
+  "expected_hash": "a74eaf8ce233ca1384fb3c6b2bd1ccfdf6aee8f49f72d70a596590ad4616a254",
+  "validator": "qa_pisano_prime_square_cert_validate.py",
+  "cert_id": 417,
+  "description": "QA Pisano Lift to Prime Squares: pi(p^2)=p*pi(p), alpha(p^2)=p*alpha(p), no Wall-Sun-Sun prime found"
+}

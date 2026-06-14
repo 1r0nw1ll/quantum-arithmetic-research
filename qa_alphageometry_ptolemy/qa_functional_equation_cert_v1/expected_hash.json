@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Godement-Jacquet (1972) doi:10.1007/BFb0070263, Cogdell (2004) ISBN 978-0-8218-3516-0 -->
+{
+  "expected_sha256": "5dadf92f5c15ddcd9b8b741eb72c1301899feb99c915ca49d67ada3f7f822a22",
+  "description": "SHA-256 of stdout (JSON) from qa_functional_equation_cert_validate.py (4 checks PASS). N=5^8=390625; degree 4; motivic weight 1; Gamma shifts {1/2,1/2,3/2,3/2}; complementarity mu+2-mu=2. Closes Langlands ladder [403]-[412]."
+}

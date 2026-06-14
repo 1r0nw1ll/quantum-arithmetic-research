@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_cassini_alpha_parity_cert_family(base_dir):
+    """Cert [418]: QA Cassini Alpha Parity Gate — alpha(p) parity encodes -1 QR via Cassini."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_cassini_alpha_parity_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cassini_alpha_parity_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_cassini_alpha_parity_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_cassini_alpha_parity_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_cassini_alpha_parity_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_cassini_alpha_parity_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_pisano_prime_square_cert_family(base_dir):
     """Cert [417]: QA Pisano lift to prime squares — Wall-Sun-Sun regularity."""
     import subprocess
@@ -12031,6 +12059,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (418, "QA Cassini Alpha Parity Gate Cert family",
+     _validate_qa_cassini_alpha_parity_cert_family,
+     "QA Cassini Alpha Parity Gate Cert [418]. CLAIM: The parity of alpha(p) (QA T-step first-zero time, cert [416]) is constrained by the quadratic character of -1 mod p via the Cassini identity at n=alpha(p): F_{alpha(p)-1}^2 ≡ (-1)^{alpha(p)} mod p (Cassini Gate). Consequence: p≡3 mod 4 ⟹ alpha(p) is EVEN. Proof: if alpha(p) odd then C1 gives F_{alpha-1}^2≡-1 mod p, so -1 is a QR mod p, so p≡1 mod 4; contrapositive: p≡3 mod 4 → alpha even. (C1) CASSINI GATE: F_{alpha(p)-1}^2 ≡ (-1)^{alpha(p)} mod p for all 45 tested primes (22 split <=491, 22 inert <=193, p=5 ramified); proof: Cassini F_{n-1}*F_{n+1}-F_n^2=(-1)^n at n=alpha(p) with F_{alpha}≡0 gives F_{alpha-1}^2≡(-1)^alpha; verified computationally; (C2) PARITY CONSTRAINT: alpha(p) even for all 24 primes p≡3 mod 4 in test set (3,7,11,23,31,43,47,67,71,83,103,107,127,131,167,191,211,251,271,311,331,431,491 + one more); falsifiable: any prime p≡3 mod 4 with odd alpha(p) refutes; (C3) ODD-ALPHA SQRT(-1): for all 13 primes with odd alpha(p) (all satisfying p≡1 mod 4): F_{alpha(p)-1} is an explicit sqrt(-1) mod p computed by T-step iteration; witnesses: p=13 F_6=8 and 8^2=64≡-1 mod 13; p=17 alpha=9 F_8≡4 and 16≡-1 mod 17; p=193 alpha=97 F_96^2≡192=-1 mod 193; p=421 alpha=21 F_20^2≡-1 mod 421; no sqrt algorithm needed — T-step produces it; (C4) ORBIT PARITY READOUT: second component of T-orbit at step alpha(p) (= F_{alpha+1}≡F_{alpha-1} mod p) squared gives (-1)^{alpha} mod p; parity of alpha readable from orbit state; verified for p in {193 inert odd-alpha, 37 inert odd-alpha, 41 split even-alpha, 11 split even-alpha, 7 inert even-alpha}. NOTE delta(193)=1 (cert [417]): phi^{97} mod 193^2 has form i + 193*phi where i=F_96 is sqrt(-1) mod 193; the delta=1 class includes Fibonacci primes (F_alpha=p) and non-Fibonacci primes 41, 193; deeper characterization open. CHAIN: [416] alpha(p)|p-(5/p) -> [417] alpha(p^2)=p*alpha(p) -> [418] alpha(p) parity ↔ (-1) QR via Cassini. Primary sources: Cassini (1680) Histoire de l'Academie Royale des Sciences; Wall (1960) doi:10.2307/2309169; Lehmer (1930) doi:10.2307/1968235. 4 checks PASS; self-test ok",
+     "418_qa_cassini_alpha_parity",
+     "qa_cassini_alpha_parity_cert_v1", True),
     (417, "QA Pisano Lift to Prime Squares — Wall-Sun-Sun Regularity Cert family",
      _validate_qa_pisano_prime_square_cert_family,
      "QA Pisano Lift to Prime Squares — Wall-Sun-Sun Regularity Cert [417]. CLAIM: The QA T-step T(b,e)=(e,b+e) modulo p^2 (integer modulus, Theorem NT) yields Pisano period pi(p^2)=p*pi(p) for all tested primes — the period lifts cleanly by factor p from mod p to mod p^2. Equivalently (Sun-Sun 1992): the Wall-Sun-Sun Fermat quotient w_F(p)=F_{p-(5/p)}/p mod p is non-zero for all tested primes, and the rank of apparition lifts alpha(p^2)=p*alpha(p) for all tested primes. All four equivalent Wall-Sun-Sun conditions (A)pi(p^2)=pi(p) (B)alpha(p^2)=alpha(p) (C)p^2|F_{alpha(p)} (D)w_F(p)=0 FAIL for every prime tested — consistent with no Wall-Sun-Sun prime existing (none known below 2e14, McIntosh-Roettger 2007). (C1) pi(p^2)=p*pi(p) for 15 primes <=47: direct T-step mod p^2; p=47: pi=32, pi^2=1504=47*32 PASS; (C2) w_F(p)!=0 for all 45 primes (22 split <=491, 22 inert <=193, p=5): cert [416] guarantees p|F_{p-(5/p)}; check p^2 does NOT divide F_{p-(5/p)}; notable: w_F(251)=250=-1 mod 251, w_F(193)=1, w_F(41)=39; (C3) alpha(p^2)=p*alpha(p) for all 45 primes: check F_{alpha(p)} mod p^2 != 0; requires only alpha(p)<=p+1 T-step iterations mod p^2; for p=421 F_{21}=10946=421*26 exactly (w-rank=26); for p=193 F_{97} mod 193^2=193 (w-rank=1); (C4) QA T-orbit mod p^2 has p sheets: at step alpha(p), first component ≡ 0 mod p but ≢ 0 mod p^2 (C3); at step p*alpha(p), first component ≡ 0 mod p^2 (by definition of alpha(p^2)); verified for p in {11,3,5,41,7}: F_{p*alpha(p)} mod p^2=0 in all cases. CHAIN: [415] T mod p, period pi(p) -> [416] alpha(p)|p-(5/p), rank lift -> [417] T mod p^2, period p*pi(p), second-order precision. Primary sources: Wall (1960) doi:10.2307/2309169; Sun-Sun (1992) Acta Arithmetica 60(3); McIntosh-Roettger (2007) doi:10.1090/S0025-5718-07-01955-2. 4 checks PASS; self-test ok",

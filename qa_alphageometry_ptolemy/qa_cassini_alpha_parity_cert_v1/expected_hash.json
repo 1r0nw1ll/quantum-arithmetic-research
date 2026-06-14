@@ -1,0 +1,7 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash ledger for cert [418]; primary sources cited in mapping_protocol_ref.json: Cassini (1680), Wall (1960) doi:10.2307/2309169, Lehmer (1930) doi:10.2307/1968235 -->
+{
+  "expected_hash": "506851a309f26ab24f28e9a83804bfd2767ba78deba4388f44ccdaca40231210",
+  "validator": "qa_cassini_alpha_parity_cert_validate.py",
+  "cert_id": 418,
+  "description": "QA Cassini Alpha Parity Gate: F_{alpha-1}^2 ≡ (-1)^alpha mod p; p≡3 mod 4 → alpha even"
+}

@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Wall (1960) doi:10.2307/2309169, Ribenboim (1996) ISBN 978-0-387-94457-9 -->
+{
+  "expected_sha256": "950904fb25b9c7d43235177c5484955b09e83a111845945731b8f0bb3868e5ab",
+  "description": "SHA-256 of stdout (JSON) from qa_pisano_split_cert_validate.py (4 checks PASS). QA Pisano period pi(p) encodes prime splitting in Q(sqrt5)/Q: split p%5 in {1,4} -> pi(p)|p-1 (22 verified); inert p%5 in {2,3} -> pi(p)|2(p+1) and pi(p) not divide p-1 (22 verified); ramified p=5 -> pi(5)=20=(p-1)*p (neither formula); QA T-orbit of (0,1) mod p has period pi(p) (7 verified)."
+}

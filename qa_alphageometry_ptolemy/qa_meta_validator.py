@@ -10152,6 +10152,37 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_pisano_split_cert_family(base_dir):
+    """Cert [415]: QA Pisano period = prime splitting criterion for Q(sqrt5)/Q."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_pisano_split_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pisano_split_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_pisano_split_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_pisano_split_cert self-test failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_pisano_split_cert non-JSON: error={exc}\n"
+            f"stdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_pisano_split_cert ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_qa_norm_form_split_cert_family(base_dir):
     """Cert [414]: QA Eisenstein form = Z[phi] norm form; split/inert/ramified trichotomy."""
     import subprocess
@@ -11938,6 +11969,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (415, "QA Pisano Period = Prime Splitting Criterion Cert family",
+     _validate_qa_pisano_split_cert_family,
+     "QA Pisano Period = Prime Splitting Criterion Cert [415]. CLAIM: The Pisano period pi(p) (period of the Fibonacci sequence mod p = QA T-orbit period mod p, computed by pure integer T-step iteration) encodes the prime splitting class of p in Q(sqrt5)/Q: (C1) SPLIT (p%5 in {1,4}): pi(p) divides p-1; algebraic reason: Z[phi]/p = F_p x F_p => Fibonacci period divides |F_p*|=p-1 by Fermat; verified for 22 split primes <=491; (C2) INERT (p%5 in {2,3}): pi(p) divides 2(p+1) AND pi(p) does NOT divide p-1; algebraic reason: Z[phi]/p = F_{p^2} => combined period divides 2(p+1) by Frobenius order 2; non-divisibility distinguishes inert from split; verified for 22 inert primes <=193; (C3) RAMIFIED p=5: pi(5)=20=(p-1)*p=4*5; 20 does not divide p-1=4 or 2(p+1)=12; Z[phi]/5 = F_5[x]/(x-3)^2 (nilpotent, repeated root phi=3 mod 5); (C4) QA T-ORBIT: T(b,e)=(e,b+e) mod p applied to (0,1) has period pi(p); period of (1,1) (Fibonacci family/Cosmos seed) equals pi(p); verified for 7 sample primes (split 11,31,41; inert 2,3,7; ramified 5). CHAIN: [133] T-step sign-flip -> [414] norm form bridge -> [415] orbit period = prime class; QA T-step encodes prime splitting at three levels: algebraically ([414]), representationally ([414] C2-C3), dynamically ([415]). All integer arithmetic, all independently falsifiable. Primary sources: Wall (1960) doi:10.2307/2309169; Ribenboim (1996) ISBN 978-0-387-94457-9. 4 checks PASS; self-test ok",
+     "415_qa_pisano_split",
+     "qa_pisano_split_cert_v1", True),
     (414, "QA Norm Form and Split Prime Trichotomy Cert family",
      _validate_qa_norm_form_split_cert_family,
      "QA Norm Form and Split Prime Trichotomy Cert [414]. CLAIM: The QA Eisenstein form f(a,b)=a²+ab-b² (derived in cert [133] from the QA T-step sign-flip identity f(e,b+e)=-f(b,e)) equals the algebraic norm form N_{Q(sqrt5)/Q}(a+b*phi) for Z[phi] (ring of integers of Q(sqrt5)). The equality is non-circular: cert [133] derives f from discrete QA dynamics; N is defined via algebraic field theory; both arrive at the same object independently. Five checks: (C1) algebraic identity N(a+b*phi)=a^2+ab-b^2 via phi+phi_bar=1 and phi*phi_bar=-1 (both integers; no float; Theorem NT); 25 (a,b) pairs verified; (C2) SPLIT primes (p%5 in {1,4}): primitive integer solution f(a,b)=+/-p EXISTS; verified for 22 split primes <=193; falsifiable by any inert prime with a solution; (C3) INERT primes (p%5 in {2,3}): NO primitive integer solution; verified for 22 inert primes <=193; falsifiable; (C4) RAMIFIED vs SPLIT integer test: for p=5, ratio (2+phi)/(3-phi) is in Z[phi] (=(1+phi)=phi^2, unit norm=1), so generators (2,1) and (3,-1) are unit-associates -> same ideal p_5 (ramified); for p=11 split, ratio (3+phi)/(4-phi) not in Z[phi] (numerator-real=10 not divisible by N(4,-1)=11) -> distinct ideals p and p_bar; all verified by exact integer arithmetic; (C5) THEOREM NT ZERO LOCUS: f(a,b)=0 over reals iff (2a+b)^2=5b^2 iff (2a+b)/b=+/-sqrt5 (irrational, observer projection); no integer solution with (a,b)!=(0,0) in |a|,|b|<=30; zero locus is the golden-ratio line b/a=(sqrt5-1)/2=1/phi; Theorem NT boundary (discrete vs continuous) aligns exactly with the number-theoretic split/inert/ramified boundary. Chain: [133] (Eisenstein form from QA T-step) -> [414] (norm form bridge) -> [410] (Dedekind zeta using same trichotomy) -> [413] (BSD central value). Primary sources: Hecke (1920) doi:10.1007/BF01453601; Cox (1989) ISBN 978-0-471-19079-0. 5 checks PASS; self-test ok",

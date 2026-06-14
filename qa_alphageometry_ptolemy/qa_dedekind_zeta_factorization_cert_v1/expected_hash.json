@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=hash ledger scaffold; mathematical content cited in mapping_protocol_ref.json: Neukirch (1999) doi:10.1007/978-3-662-03983-0, Hecke (1920) doi:10.1007/BF01453601 -->
+{
+  "expected_sha256": "d6dfe9558f9598287ad0f4b7b963735ee692aa075851c37da1c674588336e007",
+  "description": "SHA-256 of stdout (JSON) from qa_dedekind_zeta_factorization_cert_validate.py (4 checks PASS). ζ_{ℚ(√5)}(s)=ζ(s)·L(s,χ₅): Kronecker χ₅ classifies 22 split + 22 inert primes; local numerators [1,-2,1] and [1,0,-1]; norm product p²=p^[F:Q]. Langlands ladder zeta rung [410]."
+}

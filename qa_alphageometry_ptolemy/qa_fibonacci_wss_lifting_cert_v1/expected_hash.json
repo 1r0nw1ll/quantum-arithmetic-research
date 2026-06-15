@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash.json records validator SHA-256 for cert [429] reproducibility gate; not a primary mathematical source -->
+{
+  "validator": "qa_fibonacci_wss_lifting_cert_validate.py",
+  "sha256": "72e000851d14f9f536a44190c867fdd66ec5e088369dfe50f465070a4ba2ac12"
+}

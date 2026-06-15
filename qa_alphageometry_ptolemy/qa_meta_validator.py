@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_wss_lifting_cert_family(base_dir):
+    """Cert [429]: QA Fibonacci Wall-Sun-Sun Lifting to p^2 — alpha(p^2)=p*alpha(p); T(p^2)=p*T(p); no WSS prime ≤500."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_wss_lifting_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_wss_lifting_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_wss_lifting_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_wss_lifting_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_wss_lifting_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("all_checks_pass") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_wss_lifting_cert all_checks_pass=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_frobenius_wall_cert_family(base_dir):
     """Cert [428]: QA Fibonacci Frobenius Congruences & Wall Divisibility — F_p=(5/p); L_p=1; alpha(p)|p-(5/p)."""
     import subprocess
@@ -12339,6 +12367,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (429, "QA Fibonacci Wall-Sun-Sun Lifting to p^2 Cert family",
+     _validate_qa_fibonacci_wss_lifting_cert_family,
+     "QA Fibonacci Wall-Sun-Sun Lifting to p^2 Cert [429]. CLAIM: (C1) Non-WSS criterion: v_p(F_{alpha(p)})=1 for all primes p in [5,500]; F_{alpha(p)} = 0 mod p (from [428]) but != 0 mod p^2; 93/93 primes PASS; a counterexample is a Wall-Sun-Sun prime; none known < 9.7*10^14. (C2) LTE lifting: F_{p*alpha(p)} = 0 mod p^2 for all primes in [5,500]; proof: Lengyel (1995) LTE for Lucas sequences: v_p(F_{k*alpha})=v_p(F_alpha)+v_p(k) for odd prime p | F_alpha; k=p: v_p(F_{p*alpha})=1+1=2; 93/93 PASS. (C3) alpha lifting: alpha(p^2)=p*alpha(p) for all primes in [5,500]; proof: alpha(p)|alpha(p^2)|p*alpha(p) (Wall range theorem); p prime -> ratio in {1,p}; C1 excludes ratio 1; C2 confirms p*alpha is a zero mod p^2; 93/93 verified directly. (C4) Pisano lifting: T(p^2)=p*T(p) for all primes in [5,300]; two sub-checks: (a) (F_{p*T(p)},F_{p*T(p)+1})=(0,1) mod p^2 -> T(p^2)|p*T(p); (b) (F_{T(p)},F_{T(p)+1})!=(0,1) mod p^2 -> T(p^2)>T(p); Wall structure T(p^2)/T(p) in {1,p} + (b) excluding 1 -> T(p^2)=p*T(p); 60/60 PASS. P-ADIC TOWER: base case of alpha(p^n)=p^{n-1}*alpha(p), T(p^n)=p^{n-1}*T(p) for non-WSS p (all n>=1 by induction using LTE). THEOREM NT: all pure integer; fast doubling mod p^2 bounded by p^4 (fits Python int); linear walks; no float state. 4 checks PASS; self-test ok. Primary sources: Wall (1960) doi:10.2307/2309169; Sun & Sun (1992) doi:10.4064/aa-60-4-371-388; Lengyel (1995). Derived 2026-06-15.",
+     "429_qa_fibonacci_wss_lifting",
+     "qa_fibonacci_wss_lifting_cert_v1", True),
     (428, "QA Fibonacci Frobenius Congruences & Wall Divisibility Cert family",
      _validate_qa_fibonacci_frobenius_wall_cert_family,
      "QA Fibonacci Frobenius Congruences & Wall Divisibility Cert [428]. CLAIM: (C1) Fibonacci-Legendre congruence: F_p = (5/p) mod p for all primes p in [5,1000]; proved via Frobenius — split (p=+/-1 mod 5): phi^p=phi,psi^p=psi so F_p=(phi-psi)/(phi-psi)=+1; inert (p=+/-2 mod 5): phi^p=psi so F_p=(psi-phi)/(phi-psi)=-1; ramified p=5: F_5=5=0; 166/166 PASS. (C2) Lucas-Fermat congruence: L_p = 1 mod p for all primes p in [3,1000]; proved: L_p=phi^p+psi^p; split: phi^p=phi,psi^p=psi -> phi+psi=1 (sum of roots of x^2-x-1); inert: phi^p=psi,psi^p=phi -> psi+phi=1; both cases give 1; 167/167 PASS. (C3) Wall zero: F_{p-(5/p)} = 0 mod p for all primes p in [5,1000]; split: F_{p-1}=0 from M^{p-1}=I (FLT on eigenvalues in F_p); inert: F_{p+1}=0 from phi^{p+1}=phi*psi=-1=psi^{p+1} -> numerator (-1)-(-1)=0; 166/166 PASS. (C4) Wall divisibility: alpha(p) | p-(5/p) for all primes in [5,1000]; direct from C3: p-(5/p) is a zero of k|->F_k mod p; zeros form a subgroup (Wall 1960); alpha(p) is the generator; 166/166 PASS. GL2 INTERPRETATION: C1 gives off-diagonal of Frob_p as matrix in GL2(F_p) (F_p = bottom-right of M^p shifted by identity); C2 gives trace of Frob_p (L_p = tr(M^p)); C3+C4 bound alpha(p) from above. CONNECTS: [424] (split/inert via p mod 5) + [416] (alpha(p) exists) -> [428] (alpha(p) divides known p-(5/p)). Enables [429]: Wall-Sun-Sun lifting to p^2. THEOREM NT: all pure integer (Legendre via pow(5,(p-1)//2,p); fast doubling; linear walk for alpha); no float state. 4 checks PASS; self-test ok. Primary sources: Wall (1960) doi:10.2307/2309169; Lucas (1878) doi:10.2307/2369308; Legendre (1798). Derived 2026-06-15.",

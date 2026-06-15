@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_pisano_type_cert_family(base_dir):
+    """Cert [427]: QA Fibonacci Pisano Type Distribution — Type gate; Lucas bridge; equal thirds."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_pisano_type_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_pisano_type_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_pisano_type_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_pisano_type_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_pisano_type_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("all_checks_pass") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_pisano_type_cert all_checks_pass=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_gl2_scalar_cert_family(base_dir):
     """Cert [426]: QA Fibonacci GL2 Scalar Identity — M^alpha = epsilon*I; Pisano period T=alpha*ord(epsilon)."""
     import subprocess
@@ -12283,6 +12311,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (427, "QA Fibonacci Pisano Type Distribution Cert family",
+     _validate_qa_fibonacci_pisano_type_cert_family,
+     "QA Fibonacci Pisano Type Distribution Cert [427]. CLAIM: (C1) Type gate: ord(epsilon(p))=4 iff p≡1 mod 4 AND alpha(p) odd; proved from epsilon^2=(-1)^alpha and Euler criterion (-1 is QR mod p iff p≡1 mod 4); no Type 4 for p≡3 mod 4 in [7,500]; all 406 Type 4 primes in [7,10000] satisfy p≡1 mod 4 AND alpha odd. (C2) Lucas bridge: L_{alpha(p)}=2*epsilon(p) mod p for all primes [7,500]; proved F_{alpha+1}=F_{alpha-1}=epsilon mod p (since F_alpha=0), so L_alpha=F_{alpha+1}+F_{alpha-1}=2*epsilon; 92/92. (C3) Equal halves among p≡3 mod 4: chi^2=0.026 < 3.841 (df=1, alpha=0.05); n=618; counts={Type1:307, Type2:311}. (C4) Equal thirds over all primes: chi^2=0.046 < 5.991 (df=2, alpha=0.05); n=1226; counts={Type1:412, Type2:408, Type4:406}. EQUAL-THIRDS DECOMPOSITION: p≡3 mod 4 (density 1/2, Types 1+2 only, equal halves) contributes (1/4,1/4,0); p≡1 mod 4 (density 1/2, Type 4 at 2/3 of class, Types 1+2 each 1/6) contributes (1/12,1/12,1/3); combined (1/3,1/3,1/3). The 2/3 fraction of Type 4 within p≡1 mod 4 (alpha odd rate = 2/3 for these primes) is a Chebotarev-type statement. LUCAS BRIDGE: L_{alpha(p)}=2*epsilon(p) connects GL2 trace (Lucas, [426] C1) to GL2 scalar ([426] C3); three type signatures: L_alpha≡+2 (Type1), L_alpha≡-2 (Type2), L_alpha^2≡-4 (Type4). THEOREM NT: QA layer: all pure integer; observer: chi-squared tests (float, lawful). 4 checks PASS; self-test ok. Primary sources: Lucas (1878) doi:10.2307/2369308; Wall (1960) doi:10.2307/2309169; Euler (1750); Pearson (1900). Derived 2026-06-15.",
+     "427_qa_fibonacci_pisano_type",
+     "qa_fibonacci_pisano_type_cert_v1", True),
     (426, "QA Fibonacci GL2 Scalar Identity & Pisano Period Cert family",
      _validate_qa_fibonacci_gl2_scalar_cert_family,
      "QA Fibonacci GL2 Scalar Identity Cert [426]. CLAIM: The Fibonacci recurrence matrix M=[[1,1],[1,0]] in GL2(Z) satisfies: (A) tr(M^n)=L_n (Lucas numbers) for n=1..50; det(M^n)=(-1)^n for n=1..50; pure integer fast-doubling arithmetic (GL2 invariants). (B) M^{alpha(p)} = epsilon(p)*I_2 mod p for all primes 7<=p<=500 where epsilon(p)=F_{alpha(p)-1} mod p; off-diagonal F_{alpha(p)}=0 by definition; diagonal equality F_{alpha(p)+1}=F_{alpha(p)-1} follows from F_{alpha+1}=F_alpha+F_{alpha-1} and F_alpha=0; 92/92 primes pass; epsilon order distribution {ord=1:32, ord=2:29, ord=4:31}. (C) Pisano period T(p)=alpha(p)*ord_{(Z/pZ)x}(epsilon(p)) for all primes 7<=p<=300; derived from M^{alpha*k}=(epsilon^k)*I so M^T=I iff ord(epsilon)|T/alpha; formula verified against direct period walk; 59/59 primes pass. GL2 UPGRADE OF [423]: cert [423] says (phi/psi)^{alpha(p)}=1 in GL1(F_p) (eigenvalue ratio is 1); cert [426] says M^{alpha(p)}=epsilon*I in GL2(F_p) (eigenvalues are equal and the matrix is scalar); these are equivalent but [426] reveals the GL2 structure. EPSILON TYPE: epsilon(p)^2=(-1)^{alpha(p)} mod p so epsilon is a 4th root of unity in F_p×; ord(epsilon) in {1,2,4}; ord=1 (T=alpha), ord=2 (T=2*alpha), ord=4 (T=4*alpha). THEOREM NT: all 4 checks pure integer (no observer float layer). Primary sources: Lucas (1878) doi:10.2307/2369308 (L_n as trace of M^n); Wall (1960) doi:10.2307/2309169 (Pisano period T(p); Fibonacci mod p). 4 checks PASS; self-test ok. Derived 2026-06-15.",

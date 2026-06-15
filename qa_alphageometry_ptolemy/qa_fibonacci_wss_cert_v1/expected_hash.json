@@ -1,0 +1,7 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash ledger for cert [420]; primary sources cited in mapping_protocol_ref.json: Wall (1960) doi:10.2307/2309169, Sun-Sun (1992) Acta Arithmetica 61, McIntosh-Roettger (2007) doi:10.1090/S0025-5718-07-01955-2 -->
+{
+  "expected_hash": "22e4b697b36d5a3775c20035bfa2fed47055a280a808a5d9f423a4f63d560b65",
+  "validator": "qa_fibonacci_wss_cert_validate.py",
+  "cert_id": 420,
+  "description": "QA Wall-Sun-Sun Depth Zero: delta(p)=0 iff p^2|F_{alpha(p)} iff p^2|F_{p-(5/p)}; equivalence via LTE v_p(F_{k*alpha})=v_p(F_alpha)+v_p(k) with r=(p-(5/p))/alpha<p forcing v_p(r)=0; no WSS prime found up to 500000 (record: 9.7*10^14)"
+}

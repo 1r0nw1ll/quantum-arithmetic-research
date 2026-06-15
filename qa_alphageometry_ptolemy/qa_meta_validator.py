@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_wss_cert_family(base_dir):
+    """Cert [420]: QA Wall-Sun-Sun Depth Zero — delta(p)=0 iff WSS; LTE equivalence; no WSS<=500k."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_wss_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_wss_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_wss_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_wss_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_wss_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_wss_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_depth_cert_family(base_dir):
     """Cert [419]: QA Fibonacci Depth Decomposition — delta(p) by alpha parity; delta=1 census."""
     import subprocess
@@ -12087,6 +12115,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (420, "QA Wall-Sun-Sun Depth Zero Cert family",
+     _validate_qa_fibonacci_wss_cert_family,
+     "QA Wall-Sun-Sun Depth Zero Cert [420]. CLAIM: A prime p is Wall-Sun-Sun iff delta(p)=0 (cert [419] defines delta(p)=F_{alpha(p)}/p mod p). Equivalence with classical formulation p^2|F_{p-(5/p)} (Wall 1960) established via: (STEP 1 — LTE) v_p(F_{k*alpha})=v_p(F_alpha)+v_p(k) for p odd, p|F_alpha, p not-divides k (Sun-Sun 1992); (STEP 2 — r bound) r=(p-(5/p))/alpha(p) satisfies r<p: split (5/p)=+1: r=(p-1)/alpha<=p-1<p; inert (5/p)=-1: r=(p+1)/alpha<=(p+1)/2<p (since alpha>=2 for p>=3); (STEP 3) v_p(F_{p-(5/p)})=v_p(F_{r*alpha})=v_p(F_alpha)+v_p(r)=v_p(F_alpha) (since v_p(r)=0 by step 2); therefore p^2|F_{p-(5/p)} iff p^2|F_{alpha} iff delta=0. CHECKS: (C1) LTE IDENTITY: 59 cases verified across 10 primes {5,11,19,29,31,41,71,89,101,149}: for k not-divides p v_p unchanged; for k=p v_p increments by 1; all match v_p(F_alpha)+v_p(k); falsifiable: any (p,k) where v_p(F_{k*alpha}) != v_p(F_alpha)+v_p(k) refutes; (C2) CLASSICAL EQUIVALENCE: for 93 odd primes !=5 in [3,500]: (p^2|F_{p-(5/p)}) iff (p^2|F_{alpha(p)}) — both False for every prime (no WSS prime in [3,500]); falsifiable: any prime where conditions disagree refutes; (C3) NO WSS PRIME <=500000: direct fast-doubling (O(log p) per prime) over 41536 odd primes !=5 up to 500000; F_{p-(5/p)} mod p^2 != 0 for all; known record: no WSS prime < 9.7*10^14 (McIntosh-Roettger 2007); (C4) r COPRIME TO p: 93 odd primes !=5 in [3,500]: r=(p-(5/p))/alpha satisfies r<p (split r<=p-1; inert r<=(p+1)/2); confirms v_p(r)=0 in equivalence proof. HEURISTIC: delta(p) approx uniform on {0,...,p-1}; expected O(log log X) WSS primes up to X; ~3-4 expected below 9.7*10^14 record yet none found. CHAIN: [416]->[417]->[418]->[419]->[420] closes depth-invariant story: delta=1 characterized ([419]), delta=0 is open WSS conjecture ([420]), delta in {0,...,p-1} exhaustively. All integer arithmetic, Theorem NT. Primary sources: Wall (1960) doi:10.2307/2309169; Sun-Sun (1992) Acta Arithmetica 61; McIntosh-Roettger (2007) doi:10.1090/S0025-5718-07-01955-2. 4 checks PASS; self-test ok",
+     "420_qa_fibonacci_wss",
+     "qa_fibonacci_wss_cert_v1", True),
     (419, "QA Fibonacci Depth Decomposition Cert family",
      _validate_qa_fibonacci_depth_cert_family,
      "QA Fibonacci Depth Decomposition Cert [419]. CLAIM: The Fibonacci depth invariant delta(p)=F_{alpha(p)}/p mod p (cert [417]) decomposes by parity of alpha(p): (EVEN alpha) delta(p)=F_{alpha/2}*(L_{alpha/2}/p) mod p, where p ALWAYS divides L_{alpha/2} (corollary: F_{2n}=F_n*L_n with p|F_{alpha} and p notdivides F_{alpha/2} forces p|L_{alpha/2}, Lucas 1878); (ODD alpha) delta(p)=(F_k^2+F_{k-1}^2)/p mod p, k=(alpha+1)/2 (from F_{2k-1}=F_k^2+F_{k-1}^2, Lucas 1878). (C1) EVEN-ALPHA DECOMPOSITION: verified for all 62 even-alpha primes in [2,500]; Lucas divisibility p|L_{alpha/2} confirmed for all; decomposed delta matches direct delta for all 62; falsifiable: any prime with even alpha(p) where decomposed delta disagrees with direct delta refutes; (C2) ODD-ALPHA DECOMPOSITION: identity F_{2k-1}=F_k^2+F_{k-1}^2 mod p^2 confirmed; decomposed delta matches direct delta for all 33 odd-alpha primes in [2,500]; (C3) FIBONACCI PRIME SUBCLASS: for Fibonacci primes p=F_m in {2,3,5,13,89,233,1597} (all Fibonacci primes up to 2000): alpha(p)=m and F_{alpha(p)}=p exactly (F_m mod p^2=p since p=F_m<p^2); therefore delta(p)=p/p mod p=1; all 7 verified; (C4) FULL DELTA CENSUS: delta=1 primes up to 2000 are exactly {2,3,5,13,41,89,193,233,1597,1621} (verified for all 303 primes up to 2000); non-Fibonacci delta=1 primes are {41,193,1621}; each satisfies maximum-rank condition 2*alpha(p)=p-(5/p): p=41 alpha=20 2*20=40=41-1; p=193 alpha=97 2*97=194=193+1; p=1621 alpha=810 2*810=1620=1621-1; deeper characterization of non-Fibonacci delta=1 primes open (why does maximum rank yield delta=1 for p=41,1621 but not p=29,101,181?). CHAIN: [417] delta(p)=F_{alpha}/p mod p defined and nonzero -> [418] alpha(p) parity ↔ (-1) QR via Cassini -> [419] delta decomposition by parity, delta=1 census. All integer arithmetic, Theorem NT. Primary sources: Lucas (1878) American Journal of Mathematics 1(2) pp.184-240 (doubling F_{2n}=F_n*L_n, odd F_{2n-1}=F_n^2+F_{n-1}^2); Wall (1960) doi:10.2307/2309169; Lehmer (1930) doi:10.2307/1968235. 4 checks PASS; self-test ok",

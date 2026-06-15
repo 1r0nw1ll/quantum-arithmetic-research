@@ -1,0 +1,7 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash ledger for cert [421]; primary sources cited in mapping_protocol_ref.json: Hensel (1897) Jahresbericht DMV 6, Wall (1960) doi:10.2307/2309169, Sun-Sun (1992) Acta Arithmetica 61 -->
+{
+  "expected_hash": "612581329fb6e2319568bfdc18dd97b8cceda7c0350973d313a5946293e64db6",
+  "validator": "qa_fibonacci_phi_slope_cert_validate.py",
+  "cert_id": 421,
+  "description": "QA Fibonacci phi-Slope Formula: for split primes p, Binet's formula lifts to Z/p^2Z via Hensel; F_n=(phi_tilde^n-psi_tilde^n)/s_tilde mod p^2; delta(p)=(phi^alpha-psi^alpha)/s_tilde/p mod p; WSS iff phi^alpha==psi^alpha mod p^2; verified 225 Binet cases + 45 split primes to 500"
+}

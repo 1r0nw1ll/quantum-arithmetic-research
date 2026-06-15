@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_phi_slope_cert_family(base_dir):
+    """Cert [421]: QA Fibonacci phi-Slope Formula — Binet mod p^2 via Hensel; delta(p) as phi-slope."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_phi_slope_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_phi_slope_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_phi_slope_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_phi_slope_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_phi_slope_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_phi_slope_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_wss_cert_family(base_dir):
     """Cert [420]: QA Wall-Sun-Sun Depth Zero — delta(p)=0 iff WSS; LTE equivalence; no WSS<=500k."""
     import subprocess
@@ -12115,6 +12143,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (421, "QA Fibonacci phi-Slope Formula Cert family",
+     _validate_qa_fibonacci_phi_slope_cert_family,
+     "QA Fibonacci phi-Slope Formula Cert [421]. CLAIM: For split primes p (i.e. (5/p)=+1), Binet's formula lifts to Z/p^2 Z via Hensel's lemma: s_tilde = Hensel lift of sqrt(5) mod p (Newton step t=-(s5^2-5)/p*(2*s5)^{-1} mod p, s_tilde=s5+p*t); phi_tilde=(1+s_tilde)/2 and psi_tilde=(1-s_tilde)/2 in Z/p^2 Z satisfy phi_tilde^2=phi_tilde+1, psi_tilde^2=psi_tilde+1, phi_tilde*psi_tilde=-1, phi_tilde+psi_tilde=1 (all mod p^2) — algebraic identities from s_tilde^2=5; F_n=(phi_tilde^n-psi_tilde^n)*s_tilde^{-1} mod p^2 for all n>=0 (Binet mod p^2: follows from linearity and the char. poly.; non-trivial because the Z/p^2 Z recurrence and the Binet product are identical); PHI-SLOPE FORMULA: delta(p)=(phi_tilde^{alpha(p)}-psi_tilde^{alpha(p)})*s_tilde^{-1}/p mod p (the Fibonacci depth invariant cert [419] equals the normalised difference of the two Hensel-lifted golden-ratio branches at the first zero); WSS REFORMULATION: delta(p)=0 iff phi_tilde^{alpha(p)}=psi_tilde^{alpha(p)} mod p^2 (Wall-Sun-Sun prime iff the two Hensel lifts are indistinguishable at depth p^2, cert [420]). CHECKS: (C1) HENSEL CORRECTNESS: 20 split primes {11,...,199}: s_tilde^2=5 mod p^2, phi_tilde^2=phi_tilde+1, psi_tilde^2=psi_tilde+1, phi_tilde*psi_tilde=-1, phi_tilde+psi_tilde=1; all 20/20 PASS; (C2) BINET MOD p^2: 225 cases (n=1..15, 15 split primes in [7,150]): (phi_tilde^n-psi_tilde^n)/s_tilde mod p^2 = fib_fast(n, p^2); all 225/225 PASS; (C3) DELTA FROM BINET=FROM RECURRENCE: 45 split primes p<=500: delta_binet=(phi^alpha-psi^alpha)/s_tilde//p%p matches delta_rec=fib_fast(alpha,p^2)//p%p; all 45/45 PASS; (C4) WSS VIA PHI-SLOPE: 45 split primes p<=500: (phi^alpha==psi^alpha mod p^2) iff (F_alpha==0 mod p^2); both False for all (no WSS split prime <=500); LANGLANDS NOTE: phi_tilde is a p-adic unit in Z_p^x; delta(p) is its logarithmic derivative at the Frobenius fixed point; equidistribution of delta(p)/p follows from Hecke equidistribution for Q(sqrt 5). CHAIN: [420] delta=0 is WSS -> [421] delta(p) is phi-slope in Z/p^2 Z for split primes. All integer arithmetic, Theorem NT. Primary sources: Hensel (1897) Jahresbericht DMV 6; Wall (1960) doi:10.2307/2309169; Sun-Sun (1992) Acta Arithmetica 61. 4 checks PASS; self-test ok",
+     "421_qa_fibonacci_phi_slope",
+     "qa_fibonacci_phi_slope_cert_v1", True),
     (420, "QA Wall-Sun-Sun Depth Zero Cert family",
      _validate_qa_fibonacci_wss_cert_family,
      "QA Wall-Sun-Sun Depth Zero Cert [420]. CLAIM: A prime p is Wall-Sun-Sun iff delta(p)=0 (cert [419] defines delta(p)=F_{alpha(p)}/p mod p). Equivalence with classical formulation p^2|F_{p-(5/p)} (Wall 1960) established via: (STEP 1 — LTE) v_p(F_{k*alpha})=v_p(F_alpha)+v_p(k) for p odd, p|F_alpha, p not-divides k (Sun-Sun 1992); (STEP 2 — r bound) r=(p-(5/p))/alpha(p) satisfies r<p: split (5/p)=+1: r=(p-1)/alpha<=p-1<p; inert (5/p)=-1: r=(p+1)/alpha<=(p+1)/2<p (since alpha>=2 for p>=3); (STEP 3) v_p(F_{p-(5/p)})=v_p(F_{r*alpha})=v_p(F_alpha)+v_p(r)=v_p(F_alpha) (since v_p(r)=0 by step 2); therefore p^2|F_{p-(5/p)} iff p^2|F_{alpha} iff delta=0. CHECKS: (C1) LTE IDENTITY: 59 cases verified across 10 primes {5,11,19,29,31,41,71,89,101,149}: for k not-divides p v_p unchanged; for k=p v_p increments by 1; all match v_p(F_alpha)+v_p(k); falsifiable: any (p,k) where v_p(F_{k*alpha}) != v_p(F_alpha)+v_p(k) refutes; (C2) CLASSICAL EQUIVALENCE: for 93 odd primes !=5 in [3,500]: (p^2|F_{p-(5/p)}) iff (p^2|F_{alpha(p)}) — both False for every prime (no WSS prime in [3,500]); falsifiable: any prime where conditions disagree refutes; (C3) NO WSS PRIME <=500000: direct fast-doubling (O(log p) per prime) over 41536 odd primes !=5 up to 500000; F_{p-(5/p)} mod p^2 != 0 for all; known record: no WSS prime < 9.7*10^14 (McIntosh-Roettger 2007); (C4) r COPRIME TO p: 93 odd primes !=5 in [3,500]: r=(p-(5/p))/alpha satisfies r<p (split r<=p-1; inert r<=(p+1)/2); confirms v_p(r)=0 in equivalence proof. HEURISTIC: delta(p) approx uniform on {0,...,p-1}; expected O(log log X) WSS primes up to X; ~3-4 expected below 9.7*10^14 record yet none found. CHAIN: [416]->[417]->[418]->[419]->[420] closes depth-invariant story: delta=1 characterized ([419]), delta=0 is open WSS conjecture ([420]), delta in {0,...,p-1} exhaustively. All integer arithmetic, Theorem NT. Primary sources: Wall (1960) doi:10.2307/2309169; Sun-Sun (1992) Acta Arithmetica 61; McIntosh-Roettger (2007) doi:10.1090/S0025-5718-07-01955-2. 4 checks PASS; self-test ok",

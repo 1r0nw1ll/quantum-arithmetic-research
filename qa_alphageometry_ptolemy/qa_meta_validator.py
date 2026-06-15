@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_chebotarev_cert_family(base_dir):
+    """Cert [425]: QA Chebotarev Density — split/inert density=1/2; chi_5 multiplicative; L(1,chi_5)!=0."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_chebotarev_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_chebotarev_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_chebotarev_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_chebotarev_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_chebotarev_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_chebotarev_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_inert_frobenius_cert_family(base_dir):
     """Cert [424]: QA Fibonacci Inert Frobenius Conjugation — Frob_p swaps phi<->psi in F_{p^2}/F_p; alpha(p)|p+1; inert GL_1 order identity."""
     import subprocess
@@ -12227,6 +12255,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (425, "QA Chebotarev Density for Q(sqrt 5)/Q Cert family",
+     _validate_qa_fibonacci_chebotarev_cert_family,
+     "QA Chebotarev Density for Q(sqrt 5)/Q Cert [425]. CLAIM: (A) chi_5=(n/5) Legendre/Kronecker symbol mod 5 is completely multiplicative: chi_5(mn)=chi_5(m)*chi_5(n) for gcd(mn,5)=1; (B) among primes p in [7,10000] the four residue classes {1,2,3,4} mod 5 each contain ~1/4 of the primes; chi^2(df=3)=0.069 < 11.345 (alpha=0.01); (C) split fraction #{split p<=N}/#{p<=N,p>5} within 0.03 of 0.5 for N=1000,5000,10000; (D) sum_{n=1}^{10000} chi_5(n)/n = 0.430409 matches 2*log(phi)/sqrt(5)=0.430409 to 6dp; witnesses L(1,chi_5)!=0. GALOIS STRUCTURE: Gal(Q(sqrt5)/Q)=Z/2Z={id,sigma}; Frob_p=id (split, [423]) or sigma (inert, [424]); Chebotarev: density=|class|/|Z/2Z|=1/2 for each; split=inert=1/2. THEOREM NT: QA layer: chi_5(n) from n%5 (pure integer); prime residue counts (pure integer); observer layer: chi-squared test, split ratio, L-series partial sum (float, lawful). CLASS NUMBER FORMULA: L(1,chi_5)=2*log(phi)/sqrt(5); D=5, h=1, epsilon=phi=(1+sqrt5)/2; L(1,chi_5)!=0 since log(phi)!=0 (phi>1 transcendental). EMPIRICAL: chi2=0.069 (remarkably flat); split fracs {0.473,0.490,0.497}; partial L-sum matches theory to 6dp. 4 checks PASS; self-test ok. Primary sources: Dirichlet (1837); Chebotarev (1926) doi:10.1007/BF01453016; Wall (1960) doi:10.2307/2309169; Pearson (1900). GL_1/Q(sqrt5) Langlands picture complete through density theorem. Derived 2026-06-15.",
+     "425_qa_fibonacci_chebotarev",
+     "qa_fibonacci_chebotarev_cert_v1", True),
     (424, "QA Fibonacci Inert Frobenius Conjugation Cert family",
      _validate_qa_fibonacci_inert_frobenius_cert_family,
      "QA Fibonacci Inert Frobenius Conjugation Cert [424]. CLAIM: For inert primes p ((5/p)=-1, p%5 in {2,3}): (A) x^2-x-1 is irreducible over F_p; (B) the Frobenius automorphism Frob_p: x->x^p in F_{p^2}/F_p sends phi_tilde|->psi_tilde (swaps roots); (C) alpha(p)|p+1; (D) ord_{F_{p^2}×}(phi/psi)=alpha(p). F_{p^2} SETUP: F_{p^2}=(Z/pZ)[x]/(x^2-x-1); elements (a,b) for a+b*phi; multiplication (a,b)*(c,d)=(ac+bd,ad+bc+bd) mod p; Frobenius Frob(a+b*phi)=(a+b,-b) mod p [since phi^p=psi=1-phi=(1,-1) in F_{p^2}]; norm N(a+b*phi)=a^2+ab-b^2. FROBENIUS PROOF: phi^p = psi in F_{p^2} (Frobenius sends each root to the other; direct: phi=(0,1); fp2_pow(0,1,p,p)=(1,p-1)=psi verified for 12 inert primes <=100). ALPHA|P+1 PROOF: (phi/psi)^p = phi^p/psi^p = psi/phi = (phi/psi)^{-1}; therefore (phi/psi)^{p+1} = (phi/psi)^{-1}*(phi/psi)=1; so ord(phi/psi)|p+1; and alpha(p)=ord(phi/psi) by same argument as [423] but now in F_{p^2}×. UNIFIED FROBENIUS ORDER: [423]+[424] together: alpha(p)=ord_{GL_1(F_{p^{1+e_p}})}(phi/psi) where e_p=0 split, e_p=1 inert. This is the GL_1/Q(sqrt 5) Langlands statement for all non-5 primes. CHECKS: (C1) IRREDUCIBILITY: x^2-x-1 irreducible mod p for 47/47 inert primes <=500 (no roots in F_p; falsifiable: any root found refutes); (C2) FROBENIUS CONJUGATION: phi^p=(1,p-1)=psi in F_{p^2} for 12/12 inert primes <=100 (direct fp2_pow; falsifiable: any p where phi^p!=psi refutes); (C3) ALPHA DIVIDES P+1: alpha(p)|p+1 for 47/47 inert primes <=500 (falsifiable: any p with alpha(p) not dividing p+1 refutes); (C4) INERT ORDER IDENTITY: ord_{F_{p^2}×}(phi/psi)=alpha(p) for 47/47 inert primes <=500 (falsifiable: any inert prime where F_{p^2}× order != alpha(p) refutes). CHAIN: [416] alpha(p)|p-(5/p) -> [423] split Frobenius order -> [424] inert Frobenius conjugation; together complete GL_1 story for all non-5 primes. Primary sources: Wall (1960) doi:10.2307/2309169; Lagrange (1771); Chebotarev (1926) MA 95. 4 checks PASS; self-test ok",

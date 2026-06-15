@@ -10152,6 +10152,62 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_inert_frobenius_cert_family(base_dir):
+    """Cert [424]: QA Fibonacci Inert Frobenius Conjugation — Frob_p swaps phi<->psi in F_{p^2}/F_p; alpha(p)|p+1; inert GL_1 order identity."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_inert_frobenius_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_inert_frobenius_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_inert_frobenius_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_inert_frobenius_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_inert_frobenius_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_inert_frobenius_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
+def _validate_qa_fibonacci_frobenius_order_cert_family(base_dir):
+    """Cert [423]: QA Fibonacci Frobenius Order Identity — alpha(p)=ord_{GL_1(F_p)}(phi/psi) for split primes; Artin primitive fraction."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_frobenius_order_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_frobenius_order_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_frobenius_order_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_frobenius_order_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_frobenius_order_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_frobenius_order_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_equidist_cert_family(base_dir):
     """Cert [422]: QA Fibonacci Depth Equidistribution — delta(p)/p equidistributed in (0,1) over split primes; Hecke 1920."""
     import subprocess
@@ -12171,6 +12227,16 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (424, "QA Fibonacci Inert Frobenius Conjugation Cert family",
+     _validate_qa_fibonacci_inert_frobenius_cert_family,
+     "QA Fibonacci Inert Frobenius Conjugation Cert [424]. CLAIM: For inert primes p ((5/p)=-1, p%5 in {2,3}): (A) x^2-x-1 is irreducible over F_p; (B) the Frobenius automorphism Frob_p: x->x^p in F_{p^2}/F_p sends phi_tilde|->psi_tilde (swaps roots); (C) alpha(p)|p+1; (D) ord_{F_{p^2}×}(phi/psi)=alpha(p). F_{p^2} SETUP: F_{p^2}=(Z/pZ)[x]/(x^2-x-1); elements (a,b) for a+b*phi; multiplication (a,b)*(c,d)=(ac+bd,ad+bc+bd) mod p; Frobenius Frob(a+b*phi)=(a+b,-b) mod p [since phi^p=psi=1-phi=(1,-1) in F_{p^2}]; norm N(a+b*phi)=a^2+ab-b^2. FROBENIUS PROOF: phi^p = psi in F_{p^2} (Frobenius sends each root to the other; direct: phi=(0,1); fp2_pow(0,1,p,p)=(1,p-1)=psi verified for 12 inert primes <=100). ALPHA|P+1 PROOF: (phi/psi)^p = phi^p/psi^p = psi/phi = (phi/psi)^{-1}; therefore (phi/psi)^{p+1} = (phi/psi)^{-1}*(phi/psi)=1; so ord(phi/psi)|p+1; and alpha(p)=ord(phi/psi) by same argument as [423] but now in F_{p^2}×. UNIFIED FROBENIUS ORDER: [423]+[424] together: alpha(p)=ord_{GL_1(F_{p^{1+e_p}})}(phi/psi) where e_p=0 split, e_p=1 inert. This is the GL_1/Q(sqrt 5) Langlands statement for all non-5 primes. CHECKS: (C1) IRREDUCIBILITY: x^2-x-1 irreducible mod p for 47/47 inert primes <=500 (no roots in F_p; falsifiable: any root found refutes); (C2) FROBENIUS CONJUGATION: phi^p=(1,p-1)=psi in F_{p^2} for 12/12 inert primes <=100 (direct fp2_pow; falsifiable: any p where phi^p!=psi refutes); (C3) ALPHA DIVIDES P+1: alpha(p)|p+1 for 47/47 inert primes <=500 (falsifiable: any p with alpha(p) not dividing p+1 refutes); (C4) INERT ORDER IDENTITY: ord_{F_{p^2}×}(phi/psi)=alpha(p) for 47/47 inert primes <=500 (falsifiable: any inert prime where F_{p^2}× order != alpha(p) refutes). CHAIN: [416] alpha(p)|p-(5/p) -> [423] split Frobenius order -> [424] inert Frobenius conjugation; together complete GL_1 story for all non-5 primes. Primary sources: Wall (1960) doi:10.2307/2309169; Lagrange (1771); Chebotarev (1926) MA 95. 4 checks PASS; self-test ok",
+     "424_qa_fibonacci_inert_frobenius",
+     "qa_fibonacci_inert_frobenius_cert_v1", True),
+    (423, "QA Fibonacci Frobenius Order Identity Cert family",
+     _validate_qa_fibonacci_frobenius_order_cert_family,
+     "QA Fibonacci Frobenius Order Identity Cert [423]. CLAIM: For split primes p ((5/p)=+1), the rank of apparition alpha(p) equals the multiplicative order of the Frobenius eigenvalue ratio rho=phi_tilde/psi_tilde in (Z/pZ)×: alpha(p)=ord_{(Z/pZ)×}(phi_tilde/psi_tilde). ALGEBRAIC IDENTITIES: phi_tilde*psi_tilde=-1 mod p (Vieta product; psi_tilde=-phi_tilde^{-1}); phi_tilde/psi_tilde=-phi_tilde^2 mod p (since psi_tilde^{-1}=-phi_tilde so phi/psi=-phi^2=-(phi+1)). FROBENIUS ORDER PROOF: F_n=0 mod p iff (Binet mod p, [421]) phi^n=psi^n in F_p iff (phi/psi)^n=1 in (Z/pZ)× iff rho^n=1; therefore alpha(p)=ord_{(Z/pZ)×}(rho). GL_1 LANGLANDS INTERPRETATION: the Hecke eigenvalue at P (prime above p in Z[phi]) is phi_tilde; Frob_P=identity (p splits); rho=phi/psi measures eigenvalue separation; ord_{GL_1(F_p)}(rho)=alpha(p). ARTIN PREDICTION (C4): fraction of split primes <=10000 with alpha(p)=p-1 (rho primitive root) = 216/609 = 0.3547; consistent with Artin constant A~0.3739; broad tolerance (0.25,0.50) used since Artin convergence is O(1/log X) slow. CHECKS: (C1) phi*psi=-1 mod p for 45/45 split primes <=500; (C2) phi/psi=-phi^2 mod p for 45/45; (C3) ord_{(Z/pZ)×}(phi/psi)=alpha(p) for 45/45 split primes <=500; falsifiable: any split prime where order!=alpha(p) refutes; (C4) primitive fraction 0.3547 in (0.25,0.50); falsifiable: fraction outside (0.25,0.50) over 609 split primes would indicate a structural bias in phi/psi as a generator. CHAIN: [422] equidistribution of delta(p)/p -> [423] alpha(p)=ord_{GL_1(F_p)}(phi/psi) for split p -> [424] inert analogue. Primary sources: Wall (1960) doi:10.2307/2309169; Lagrange (1771); Hecke (1920) MZ 6. 4 checks PASS; self-test ok",
+     "423_qa_fibonacci_frobenius_order",
+     "qa_fibonacci_frobenius_order_cert_v1", True),
     (422, "QA Fibonacci Depth Equidistribution Cert family",
      _validate_qa_fibonacci_equidist_cert_family,
      "QA Fibonacci Depth Equidistribution Cert [422]. CLAIM: The Fibonacci depth invariant delta(p)=F_{alpha(p)}/p mod p (cert [419]) is equidistributed over {1,...,p-1} as p ranges over split primes (5/p)=+1. Equivalently, delta(p)/p equidistributes in (0,1). Theoretical basis: follows from non-vanishing of the Hecke L-function L(s,chi) for Q(sqrt 5) on Re(s)=1 (Hecke 1920); for any Dirichlet character chi mod q, sum_{p<=X split} chi(delta(p))=o(pi_split(X)) as X->inf; forces uniform distribution mod every modulus. THEOREM NT FACTORISATION: (QA layer, pure integer) rank_of_apparition(p) + fib_fast(alpha, p^2)//p%p for each split prime p; no float; (observer layer, float lawful) classical statistical tests applied to {delta(p)/p}. WSS HEURISTIC ENGINE: if delta(p) uniform on {0,...,p-1} then P(WSS)=1/p; E[#WSS<=X]~(1/4)log log X (Mertens). CHECKS: n=609 split primes in [7,10000]; (C1 MEAN) mean(delta/p)=0.48692 in (0.45,0.55) — 4-sigma, PASS; (C2 VARIANCE) var(delta/p)=0.07758 in (0.0633,0.1033) — 3-sigma, PASS; (C3 CHI-SQUARED) B=10 equal buckets; k=(10*delta)//p (pure integer bucket assignment); chi2=17.092 < 21.666 (df=9, alpha=0.01, Pearson 1900); alpha=0.01 appropriate since equidistribution is asymptotic and n~600 gives ~5% false-rejection rate at alpha=0.05; PASS; (C4 KOLMOGOROV-SMIRNOV) D_n=0.057869 < 0.065954=1.6276/sqrt(609) (alpha=0.01, Kolmogorov 1933); PASS. No WSS prime found in [7,10000] (consistent with no known WSS prime < 9.7*10^14). CHAIN: [416]->[417]->[418]->[419]->[420]->[421]->[422] closes the ℚ(√5) cert ladder: rank->depth->parity->census->WSS->phi-slope->equidistribution. Primary sources: Hecke (1920) MZ 6 pp.11-51; Chebotarev (1926) MA 95 pp.191-228; Wall (1960) doi:10.2307/2309169; Pearson (1900) Phil.Mag.50 pp.157-175; Kolmogorov (1933) Giorn.AIIA 4 pp.83-91. 4 checks PASS; self-test ok",

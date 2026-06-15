@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_gl2_scalar_cert_family(base_dir):
+    """Cert [426]: QA Fibonacci GL2 Scalar Identity — M^alpha = epsilon*I; Pisano period T=alpha*ord(epsilon)."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_gl2_scalar_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_gl2_scalar_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_gl2_scalar_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_gl2_scalar_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_gl2_scalar_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("all_checks_pass") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_gl2_scalar_cert all_checks_pass=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_chebotarev_cert_family(base_dir):
     """Cert [425]: QA Chebotarev Density — split/inert density=1/2; chi_5 multiplicative; L(1,chi_5)!=0."""
     import subprocess
@@ -12255,6 +12283,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (426, "QA Fibonacci GL2 Scalar Identity & Pisano Period Cert family",
+     _validate_qa_fibonacci_gl2_scalar_cert_family,
+     "QA Fibonacci GL2 Scalar Identity Cert [426]. CLAIM: The Fibonacci recurrence matrix M=[[1,1],[1,0]] in GL2(Z) satisfies: (A) tr(M^n)=L_n (Lucas numbers) for n=1..50; det(M^n)=(-1)^n for n=1..50; pure integer fast-doubling arithmetic (GL2 invariants). (B) M^{alpha(p)} = epsilon(p)*I_2 mod p for all primes 7<=p<=500 where epsilon(p)=F_{alpha(p)-1} mod p; off-diagonal F_{alpha(p)}=0 by definition; diagonal equality F_{alpha(p)+1}=F_{alpha(p)-1} follows from F_{alpha+1}=F_alpha+F_{alpha-1} and F_alpha=0; 92/92 primes pass; epsilon order distribution {ord=1:32, ord=2:29, ord=4:31}. (C) Pisano period T(p)=alpha(p)*ord_{(Z/pZ)x}(epsilon(p)) for all primes 7<=p<=300; derived from M^{alpha*k}=(epsilon^k)*I so M^T=I iff ord(epsilon)|T/alpha; formula verified against direct period walk; 59/59 primes pass. GL2 UPGRADE OF [423]: cert [423] says (phi/psi)^{alpha(p)}=1 in GL1(F_p) (eigenvalue ratio is 1); cert [426] says M^{alpha(p)}=epsilon*I in GL2(F_p) (eigenvalues are equal and the matrix is scalar); these are equivalent but [426] reveals the GL2 structure. EPSILON TYPE: epsilon(p)^2=(-1)^{alpha(p)} mod p so epsilon is a 4th root of unity in F_p×; ord(epsilon) in {1,2,4}; ord=1 (T=alpha), ord=2 (T=2*alpha), ord=4 (T=4*alpha). THEOREM NT: all 4 checks pure integer (no observer float layer). Primary sources: Lucas (1878) doi:10.2307/2369308 (L_n as trace of M^n); Wall (1960) doi:10.2307/2309169 (Pisano period T(p); Fibonacci mod p). 4 checks PASS; self-test ok. Derived 2026-06-15.",
+     "426_qa_fibonacci_gl2_scalar",
+     "qa_fibonacci_gl2_scalar_cert_v1", True),
     (425, "QA Chebotarev Density for Q(sqrt 5)/Q Cert family",
      _validate_qa_fibonacci_chebotarev_cert_family,
      "QA Chebotarev Density for Q(sqrt 5)/Q Cert [425]. CLAIM: (A) chi_5=(n/5) Legendre/Kronecker symbol mod 5 is completely multiplicative: chi_5(mn)=chi_5(m)*chi_5(n) for gcd(mn,5)=1; (B) among primes p in [7,10000] the four residue classes {1,2,3,4} mod 5 each contain ~1/4 of the primes; chi^2(df=3)=0.069 < 11.345 (alpha=0.01); (C) split fraction #{split p<=N}/#{p<=N,p>5} within 0.03 of 0.5 for N=1000,5000,10000; (D) sum_{n=1}^{10000} chi_5(n)/n = 0.430409 matches 2*log(phi)/sqrt(5)=0.430409 to 6dp; witnesses L(1,chi_5)!=0. GALOIS STRUCTURE: Gal(Q(sqrt5)/Q)=Z/2Z={id,sigma}; Frob_p=id (split, [423]) or sigma (inert, [424]); Chebotarev: density=|class|/|Z/2Z|=1/2 for each; split=inert=1/2. THEOREM NT: QA layer: chi_5(n) from n%5 (pure integer); prime residue counts (pure integer); observer layer: chi-squared test, split ratio, L-series partial sum (float, lawful). CLASS NUMBER FORMULA: L(1,chi_5)=2*log(phi)/sqrt(5); D=5, h=1, epsilon=phi=(1+sqrt5)/2; L(1,chi_5)!=0 since log(phi)!=0 (phi>1 transcendental). EMPIRICAL: chi2=0.069 (remarkably flat); split fracs {0.473,0.490,0.497}; partial L-sum matches theory to 6dp. 4 checks PASS; self-test ok. Primary sources: Dirichlet (1837); Chebotarev (1926) doi:10.1007/BF01453016; Wall (1960) doi:10.2307/2309169; Pearson (1900). GL_1/Q(sqrt5) Langlands picture complete through density theorem. Derived 2026-06-15.",

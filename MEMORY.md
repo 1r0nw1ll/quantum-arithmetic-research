@@ -105,6 +105,26 @@ Full report: `sota_scans/scan_2026-06-11.md`
 
 **Documentation backlog: ~101 families [284]–[384] all missing README/SPEC (unchanged from scan #10).**
 
+### Scan #12 — 2026-06-15 (window: June 11 – June 15, 2026)
+Full report: `sota_scans/scan_2026-06-15.md`
+
+**Key finds:**
+- arXiv:2606.12947 (Trace spectra of simplices / dynamical trace-spectrum theorem for group actions, June 2026) — **MEDIUM.** Björklund, Fish, Sanadhya. Sublattice realization from group-action dynamics on ℤ^d. Dynamical trace-spectrum theorem analogous to QA's orbit color tripartition (Cosmos/Satellite/Singularity). Third backbone paper for [261] orbit stratification human tract.
+- arXiv:2606.13159 (CA Rule 115 periodicity, June 11) — **LOW-MEDIUM.** Reversible elementary second-order cellular automaton proven periodic on finite configs. Second external proof-of-concept for "finite discrete DS → periodic orbits" principle.
+- arXiv:2606.08215 (Clifford groups over ℤ_{n₁}⊕···⊕ℤ_{nₖ}, June 6, slipped #11) — **LOW-MEDIUM.** Semidirect product structure for composite cyclic configuration spaces. Adjacent to QA symmetry group.
+
+**No HIGH finds — fourth consecutive quiet window.**
+
+**INTERNAL landmark: Cert sprint [403]–[418] (16 families) completed June 11–15.** Full Langlands ladder over ℚ(√5) ([403]–[412]) + BSD central value [413] + Fibonacci/Pisano/Cassini cluster [414]–[418]. Most architecturally significant sprint in project history: formally certifies QA's φ-based orbit classification as the concrete Langlands correspondence over ℚ(√5). Pisano period = prime splitting type in ℚ(√5)/ℚ.
+
+**Cert registry: [418].** 365 families total. [419] → `qa_steinmetz_whittaker_bridge_cert_v1`, [420] → `qa_whittaker_phase_packet_algebra_cert_v1` urgently needed (IDs [385]+[386] consumed again — fifth collision).
+
+**[261] orbit stratification: ELEVEN-TUPLE GAP (11th scan — all-time project record). Human tract now has three-paper backbone: arXiv:2506.05190 + arXiv:2606.10193 + arXiv:2606.12947.**
+
+**[384] docs/families gap RESOLVED.**
+
+**Documentation backlog: ~135 families [284]–[418] all missing README/SPEC.**
+
 **Search fix for scan #12:** Add NeurIPS/ICML/ICLR workshop proceedings sweep; add Tao blog + SAIR Foundation to standard sweep; add "Kari-Szabados" + "periodic decomposition" explicit search.
 
 ### Scan #10 — 2026-06-08 (window: June 4 – June 8, 2026)

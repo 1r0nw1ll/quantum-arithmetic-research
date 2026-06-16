@@ -105,7 +105,78 @@ def _vec_delta(before: Dict[str, int], after: Dict[str, int]) -> Dict[str, int]:
 
 
 def _validate_schema(obj: Dict[str, Any]) -> None:
-    import jsonschema
+    try:
+        import jsonschema
+    except ImportError:
+        def _check_exact_scalar_shape(scalar: Any, label: str) -> None:
+            if not isinstance(scalar, dict):
+                raise ValueError(f"{label} must be an object")
+            scalar_type = scalar.get("type")
+            scalar_value = scalar.get("value")
+            if scalar_type not in ("int", "rational"):
+                raise ValueError(f"{label} has invalid type")
+            if not isinstance(scalar_value, str) or not scalar_value.strip():
+                raise ValueError(f"{label} missing value")
+            if "." in scalar_value or "e" in scalar_value.lower():
+                raise ValueError(f"{label} forbids float/scientific notation")
+
+        if not isinstance(obj, dict):
+            raise ValueError("cert must be an object")
+        required_top = ("cert_type", "schema_version", "cert_id", "issued_utc", "navigation", "trace", "determinism_contract", "digests")
+        for field in required_top:
+            if field not in obj:
+                raise ValueError(f"missing required field: {field}")
+        nav = obj.get("navigation")
+        if not isinstance(nav, dict):
+            raise ValueError("navigation must be an object")
+        for field in ("state_space", "generators", "energy", "policy", "budgets"):
+            if field not in nav:
+                raise ValueError(f"navigation missing required field: {field}")
+        trace = obj.get("trace")
+        if not isinstance(trace, dict):
+            raise ValueError("trace must be an object")
+        if "steps" not in trace or "outcome" not in trace:
+            raise ValueError("trace missing required field")
+        steps = trace.get("steps")
+        if not isinstance(steps, list) or not steps:
+            raise ValueError("trace.steps must be a non-empty array")
+        for idx, step in enumerate(steps):
+            if not isinstance(step, dict):
+                raise ValueError(f"trace.steps[{idx}] must be an object")
+            for field in ("t", "state_before", "energy_before", "violations_before", "candidates", "chosen_idx", "result", "invariant_diff"):
+                if field not in step:
+                    raise ValueError(f"trace.steps[{idx}] missing required field: {field}")
+            _check_exact_scalar_shape(step.get("energy_before"), f"trace.steps[{idx}].energy_before")
+            if step.get("result") == "OK":
+                for field in ("state_after", "energy_after", "violations_after"):
+                    if field not in step:
+                        raise ValueError(f"trace.steps[{idx}] missing required field for OK step: {field}")
+                _check_exact_scalar_shape(step.get("energy_after"), f"trace.steps[{idx}].energy_after")
+            if step.get("result") == "FAIL" and "failure" not in step:
+                raise ValueError(f"trace.steps[{idx}] missing required field for FAIL step: failure")
+            inv = step.get("invariant_diff")
+            if isinstance(inv, dict) and "delta_energy" in inv:
+                _check_exact_scalar_shape(inv.get("delta_energy"), f"trace.steps[{idx}].invariant_diff.delta_energy")
+            candidates = step.get("candidates")
+            if isinstance(candidates, list):
+                for c_idx, candidate in enumerate(candidates):
+                    if not isinstance(candidate, dict):
+                        raise ValueError(f"trace.steps[{idx}].candidates[{c_idx}] must be an object")
+                    if candidate.get("legal") is True and "energy_after" in candidate:
+                        _check_exact_scalar_shape(candidate.get("energy_after"), f"trace.steps[{idx}].candidates[{c_idx}].energy_after")
+        outcome = trace.get("outcome")
+        if not isinstance(outcome, dict) or "status" not in outcome:
+            raise ValueError("trace.outcome must be an object with status")
+        if outcome.get("status") == "FAILED_TYPED" and "failure" not in outcome:
+            raise ValueError("trace.outcome missing failure for FAILED_TYPED")
+        if outcome.get("accepted_by_verifier") is True:
+            if outcome.get("status") != "REACHED_TARGET":
+                raise ValueError("accepted_by_verifier=true requires status=REACHED_TARGET")
+            if not isinstance(outcome.get("verifier_bridge_ref"), dict):
+                raise ValueError("accepted_by_verifier=true requires verifier_bridge_ref")
+            if not isinstance(outcome.get("target_ref"), dict):
+                raise ValueError("accepted_by_verifier=true requires target_ref")
+        return
 
     schema = _load_json(_schema_path())
     jsonschema.validate(instance=obj, schema=schema)

@@ -8,7 +8,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import jsonschema
+try:
+    import jsonschema  # type: ignore
+except ModuleNotFoundError:
+    jsonschema = None
 
 
 def canonical_json_bytes(obj: Any) -> bytes:
@@ -58,10 +61,133 @@ class Result:
 
 def gate_1_schema(cert: Dict[str, Any], schema: Dict[str, Any]) -> Optional[Result]:
     try:
-        jsonschema.Draft202012Validator(schema).validate(cert)
+        if jsonschema is None:
+            validate_schema_minimal(cert, schema)
+        else:
+            jsonschema.Draft202012Validator(schema).validate(cert)
         return None
-    except jsonschema.ValidationError as exc:
+    except Exception as exc:
         return Result(ok=False, fail_type=FAIL_SCHEMA, invariant_diff={}, details={"error": str(exc)})
+
+
+def expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def expect_type(value: Any, expected_type: type, path: str) -> None:
+    expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def expect_required(obj: Dict[str, Any], fields: list[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def expect_int(value: Any, path: str, min_value: Optional[int] = None,
+               max_value: Optional[int] = None) -> None:
+    expect(isinstance(value, int) and not isinstance(value, bool), f"{path} must be integer")
+    if min_value is not None:
+        expect(value >= min_value, f"{path} below minimum {min_value}")
+    if max_value is not None:
+        expect(value <= max_value, f"{path} above maximum {max_value}")
+
+
+def expect_hash64(value: Any, path: str) -> None:
+    expect(
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value),
+        f"{path} must be 64 lowercase hex chars",
+    )
+
+
+def validate_curve(curve: Dict[str, Any], path: str) -> None:
+    expect_type(curve, dict, path)
+    expect_required(curve, ["curve_id", "model"], path)
+    expect_type(curve["curve_id"], str, f"{path}.curve_id")
+    expect(len(curve["curve_id"]) >= 1, f"{path}.curve_id empty")
+    model = curve["model"]
+    expect_type(model, dict, f"{path}.model")
+    expect_required(model, ["type", "A", "B"], f"{path}.model")
+    expect(model["type"] == "short_weierstrass", f"{path}.model.type invalid")
+    expect_int(model["A"], f"{path}.model.A")
+    expect_int(model["B"], f"{path}.model.B")
+
+
+def validate_claimed(claimed: Dict[str, Any], path: str) -> None:
+    expect_type(claimed, dict, path)
+    expect_required(claimed, ["point_count_fp", "ap"], path)
+    expect_int(claimed["point_count_fp"], f"{path}.point_count_fp", 1)
+    expect_int(claimed["ap"], f"{path}.ap")
+    if "delta_mod_p" in claimed:
+        expect_int(claimed["delta_mod_p"], f"{path}.delta_mod_p")
+    if "is_good_reduction" in claimed:
+        expect_type(claimed["is_good_reduction"], bool, f"{path}.is_good_reduction")
+    if "ap_source" in claimed:
+        expect(claimed["ap_source"] in {"point_count", "table"}, f"{path}.ap_source invalid")
+    if "reduction_type" in claimed:
+        expect(
+            claimed["reduction_type"] in {
+                "GOOD",
+                "BAD_UNSPECIFIED",
+                "BAD_MULTIPLICATIVE_SPLIT",
+                "BAD_MULTIPLICATIVE_NONSPLIT",
+                "BAD_ADDITIVE",
+            },
+            f"{path}.reduction_type invalid",
+        )
+
+
+def validate_manifest(manifest: Dict[str, Any], path: str) -> None:
+    expect_type(manifest, dict, path)
+    expect_required(manifest, ["record_hashes", "batch_sha256"], path)
+    hashes = manifest["record_hashes"]
+    expect(isinstance(hashes, list) and len(hashes) >= 1, f"{path}.record_hashes must be nonempty")
+    for idx, entry in enumerate(hashes):
+        e_path = f"{path}.record_hashes[{idx}]"
+        expect_type(entry, dict, e_path)
+        expect_required(entry, ["prime", "sha256"], e_path)
+        expect_int(entry["prime"], f"{e_path}.prime", 2, 100000)
+        expect_hash64(entry["sha256"], f"{e_path}.sha256")
+    expect_hash64(manifest["batch_sha256"], f"{path}.batch_sha256")
+
+
+def validate_schema_minimal(cert: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for the concrete partial L-series proxy schema."""
+
+    expect_type(cert, dict, "$")
+    expect_required(cert, schema.get("required", []), "$")
+    expect(cert.get("schema_id") == "QA_BSD_PARTIAL_LSERIES_PROXY_CERT", "schema_id invalid")
+    expect(cert.get("schema_version") == "v1", "schema_version invalid")
+
+    source = cert.get("source_batch")
+    expect_type(source, dict, "source_batch")
+    expect_required(source, ["curve", "records", "claimed_manifest"], "source_batch")
+    validate_curve(source["curve"], "source_batch.curve")
+    records = source["records"]
+    expect(isinstance(records, list) and len(records) >= 1, "source_batch.records must be nonempty")
+    for idx, record in enumerate(records):
+        path = f"source_batch.records[{idx}]"
+        expect_type(record, dict, path)
+        expect_required(record, ["prime", "claimed"], path)
+        expect_int(record["prime"], f"{path}.prime", 2, 100000)
+        validate_claimed(record["claimed"], f"{path}.claimed")
+    validate_manifest(source["claimed_manifest"], "source_batch.claimed_manifest")
+
+    proxy = cert.get("claimed_proxy")
+    expect_type(proxy, dict, "claimed_proxy")
+    expect_required(proxy, ["numerator_factors", "denominator_factors", "numerator", "denominator"],
+                    "claimed_proxy")
+    for field in ("numerator_factors", "denominator_factors"):
+        values = proxy[field]
+        expect(isinstance(values, list) and len(values) >= 1, f"claimed_proxy.{field} must be nonempty")
+        for idx, value in enumerate(values):
+            expect_int(value, f"claimed_proxy.{field}[{idx}]", 1)
+    expect_int(proxy["numerator"], "claimed_proxy.numerator", 1)
+    expect_int(proxy["denominator"], "claimed_proxy.denominator", 1)
+    if "meta" in cert:
+        expect_type(cert["meta"], dict, "meta")
 
 
 def recompute_for_prime(a_coeff: int, b_coeff: int, prime: int) -> Dict[str, Any]:

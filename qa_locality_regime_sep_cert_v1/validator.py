@@ -71,9 +71,116 @@ def _sha256_hex(s: str) -> str:
 
 
 def _validate_schema(obj: Dict[str, Any]) -> None:
-    import jsonschema
     schema = _load_json(_schema_path())
+    try:
+        import jsonschema
+    except ModuleNotFoundError:
+        _validate_schema_minimal(obj, schema)
+        return
     jsonschema.validate(instance=obj, schema=schema)
+
+
+def _expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def _expect_type(value: Any, expected_type: type, path: str) -> None:
+    _expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def _expect_required(obj: Dict[str, Any], fields: List[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    _expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def _expect_number(value: Any, path: str) -> None:
+    _expect(isinstance(value, (int, float)) and not isinstance(value, bool), f"{path} must be number")
+
+
+def _expect_unit_number(value: Any, path: str) -> None:
+    _expect_number(value, path)
+    _expect(0.0 <= float(value) <= 1.0, f"{path} must be in [0,1]")
+
+
+def _expect_hash64(value: Any, path: str) -> None:
+    _expect(
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value),
+        f"{path} must be 64 lowercase hex chars",
+    )
+
+
+def _validate_schema_minimal(obj: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for this family's concrete schema."""
+
+    _expect_type(obj, dict, "$")
+    _expect_required(obj, schema.get("required", []), "$")
+    _expect(
+        obj.get("schema_version") in {
+            "QA_LOCALITY_REGIME_SEP_CERT.v1",
+            "QA_LOCALITY_REGIME_SEP_CERT.v1.1",
+            "QA_LOCALITY_REGIME_SEP_CERT.v1.2",
+        },
+        "schema_version invalid",
+    )
+    _expect_type(obj.get("dataset"), str, "dataset")
+    _expect(isinstance(obj.get("r_star"), int) and obj["r_star"] >= 1, "r_star invalid")
+    _expect_unit_number(obj.get("adj_rate_4"), "adj_rate_4")
+
+    delta = obj.get("delta_oa_by_radius")
+    _expect(isinstance(delta, dict) and len(delta) >= 1, "delta_oa_by_radius must be nonempty")
+    for key, value in delta.items():
+        _expect_type(key, str, f"delta_oa_by_radius key {key!r}")
+        _expect_number(value, f"delta_oa_by_radius.{key}")
+
+    _expect(obj.get("regime") in {"DOMINANT", "BOUNDARY"}, "regime invalid")
+
+    evidence = obj.get("regime_evidence")
+    _expect_type(evidence, dict, "regime_evidence")
+    _expect_required(evidence, ["all_deltas_nonpositive", "any_delta_positive", "regime_consistent"],
+                     "regime_evidence")
+    for field in ("all_deltas_nonpositive", "any_delta_positive", "regime_consistent"):
+        _expect_type(evidence[field], bool, f"regime_evidence.{field}")
+    if "max_delta_pp" in evidence:
+        _expect_number(evidence["max_delta_pp"], "regime_evidence.max_delta_pp")
+    if "min_delta_pp" in evidence:
+        _expect_number(evidence["min_delta_pp"], "regime_evidence.min_delta_pp")
+
+    if "adjacency_witness" in obj:
+        aw = obj["adjacency_witness"]
+        _expect_type(aw, dict, "adjacency_witness")
+        _expect_required(aw, ["adj_rate_4"], "adjacency_witness")
+        _expect_unit_number(aw["adj_rate_4"], "adjacency_witness.adj_rate_4")
+        if "gt_label_sha256" in aw:
+            _expect_hash64(aw["gt_label_sha256"], "adjacency_witness.gt_label_sha256")
+        if "gt_label_grid" in aw:
+            grid = aw["gt_label_grid"]
+            _expect_type(grid, list, "adjacency_witness.gt_label_grid")
+            for row_idx, row in enumerate(grid):
+                _expect_type(row, list, f"adjacency_witness.gt_label_grid[{row_idx}]")
+                _expect(all(isinstance(label, int) for label in row),
+                        f"adjacency_witness.gt_label_grid[{row_idx}] entries must be integers")
+        if "gt_mask_path" in aw:
+            _expect_type(aw["gt_mask_path"], str, "adjacency_witness.gt_mask_path")
+        if "gt_mask_sha256" in aw:
+            _expect_hash64(aw["gt_mask_sha256"], "adjacency_witness.gt_mask_sha256")
+
+    if "regime_predictor" in obj:
+        rp = obj["regime_predictor"]
+        _expect_type(rp, dict, "regime_predictor")
+        _expect_required(rp, ["adj_crit", "epsilon", "regime_pred", "rule"], "regime_predictor")
+        _expect_unit_number(rp["adj_crit"], "regime_predictor.adj_crit")
+        _expect_unit_number(rp["epsilon"], "regime_predictor.epsilon")
+        _expect(rp["regime_pred"] in {"DOMINANT", "BOUNDARY", "TRANSITION"},
+                "regime_predictor.regime_pred invalid")
+        _expect_type(rp["rule"], str, "regime_predictor.rule")
+
+    digests = obj.get("digests")
+    _expect_type(digests, dict, "digests")
+    _expect_required(digests, ["canonical_sha256"], "digests")
+    _expect_hash64(digests["canonical_sha256"], "digests.canonical_sha256")
 
 
 def _compute_canonical_sha256(obj: Dict[str, Any]) -> str:

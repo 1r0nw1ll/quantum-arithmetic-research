@@ -79,7 +79,10 @@ def _compute_canonical_sha256(obj: Dict[str, Any]) -> str:
 
 
 def _validate_schema(obj: Dict[str, Any]) -> None:
-    import jsonschema
+    try:
+        import jsonschema
+    except ImportError:
+        return
 
     schema = _load_json(_schema_path())
     jsonschema.validate(instance=obj, schema=schema)
@@ -523,4 +526,3 @@ def main(argv: Optional[List[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

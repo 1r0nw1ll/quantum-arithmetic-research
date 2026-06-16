@@ -64,7 +64,35 @@ def _sha256_hex(s: str) -> str:
 
 
 def _validate_schema(obj: Dict[str, Any]) -> None:
-    import jsonschema
+    try:
+        import jsonschema
+    except ImportError:
+        required_top = ("cert_type", "schema_version", "cert_id", "issued_utc", "subject", "verdict", "invariant_diff", "digests")
+        for field in required_top:
+            if field not in obj:
+                raise ValueError(f"missing required field: {field}")
+        subject = obj.get("subject")
+        if not isinstance(subject, dict):
+            raise ValueError("subject must be an object")
+        for field in ("state_after", "state_sha256", "target_ref"):
+            if field not in subject:
+                raise ValueError(f"subject missing required field: {field}")
+        verdict = obj.get("verdict")
+        if not isinstance(verdict, dict):
+            raise ValueError("verdict must be an object")
+        for field in ("passed", "fail_type", "witness"):
+            if field not in verdict:
+                raise ValueError(f"verdict missing required field: {field}")
+        invariant_diff = obj.get("invariant_diff")
+        if not isinstance(invariant_diff, dict):
+            raise ValueError("invariant_diff must be an object")
+        for field in ("witness", "state_sha256", "verdict_fail_type"):
+            if field not in invariant_diff:
+                raise ValueError(f"invariant_diff missing required field: {field}")
+        digests = obj.get("digests")
+        if not isinstance(digests, dict) or not isinstance(digests.get("canonical_sha256"), str):
+            raise ValueError("digests.canonical_sha256 missing/invalid")
+        return
 
     schema = _load_json(_schema_path())
     jsonschema.validate(instance=obj, schema=schema)
@@ -262,4 +290,3 @@ def main(argv: Optional[List[str]] = None) -> int:
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

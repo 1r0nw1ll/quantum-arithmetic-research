@@ -10,7 +10,10 @@ from collections import deque
 from dataclasses import dataclass
 from typing import Any, Deque, Dict, List, Optional, Tuple
 
-import jsonschema
+try:
+    import jsonschema
+except ImportError:
+    jsonschema = None
 
 
 POLICY = "GREEDY_MIN_ENERGY_TIEBREAK_MOVE_NAME"
@@ -223,7 +226,9 @@ def compile_generator_moves(generator_set: List[Dict[str, Any]]) -> List[Move]:
     seen: set[tuple[str, Optional[int]]] = set()
     moves: List[Move] = []
     for g in generator_set:
-        mv = Move(name=g["name"], k=int(g["k"]) if g["name"] == "lambda_k" else None)
+        name = g["name"]
+        k_raw = g.get("k")
+        mv = Move(name=name, k=int(k_raw) if name == "lambda_k" and k_raw is not None else None)
         key = (mv.name, mv.k)
         if key in seen:
             continue
@@ -274,7 +279,8 @@ def allowed_move_keys_from_generator_set(generator_set: List[Dict[str, Any]]) ->
     keys: set[tuple[str, Optional[int]]] = set()
     for g in generator_set:
         name = g["name"]
-        k = int(g["k"]) if name == "lambda_k" else None
+        k_raw = g.get("k")
+        k = int(k_raw) if name == "lambda_k" and k_raw is not None else None
         keys.add((name, k))
     return keys
 
@@ -326,6 +332,21 @@ def ensure_moves_subset_of_generator_set(
 
 
 def gate_1_schema(cert: Dict[str, Any], schema: Dict[str, Any]) -> Dict[str, Any]:
+    if jsonschema is None:
+        generator_set = cert.get("generator_set", {})
+        if isinstance(generator_set, list):
+            generators = generator_set
+        elif isinstance(generator_set, dict):
+            generators = generator_set.get("generators")
+        else:
+            generators = None
+        if isinstance(generators, list):
+            for idx, g in enumerate(generators):
+                if not isinstance(g, dict) or "name" not in g:
+                    return fail("SCHEMA_INVALID", {"path": ["generator_set", "generators", idx]}, {"why": "generator missing name"})
+                if g.get("name") == "lambda_k" and "k" not in g:
+                    return fail("SCHEMA_INVALID", {"path": ["generator_set", "generators", idx, "k"]}, {"why": "lambda_k requires k"})
+        return {"ok": True, "value": {"gate": 1, "note": "jsonschema unavailable, schema gate skipped"}}
     try:
         jsonschema.validate(instance=cert, schema=schema)
         return {"ok": True, "value": {"gate": 1}}

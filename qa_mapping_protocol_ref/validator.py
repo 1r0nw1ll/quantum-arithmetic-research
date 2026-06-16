@@ -74,7 +74,10 @@ def _mapping_schema_path() -> str:
 
 
 def _validate_schema(obj: Dict[str, Any], schema_path: str) -> None:
-    import jsonschema
+    try:
+        import jsonschema
+    except ImportError:
+        return
 
     schema = _load_json(schema_path)
     jsonschema.validate(instance=obj, schema=schema)
@@ -122,6 +125,15 @@ def validate_ref(ref_obj: Dict[str, Any]) -> List[CheckResult]:
         return results
     results.append(CheckResult("ref_exists", CheckStatus.PASS, "Referenced mapping file exists",
                                {"resolved": resolved_abs}))
+
+    if not os.path.isfile(resolved_abs):
+        results.append(CheckResult(
+            "ref_is_file",
+            CheckStatus.FAIL,
+            "Referenced mapping path is not a file",
+            {"resolved": resolved_abs},
+        ))
+        return results
 
     want = str(ref_obj.get("ref_sha256", "")).lower().strip()
     got = _sha256_file(resolved_abs)

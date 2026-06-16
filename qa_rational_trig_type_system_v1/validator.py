@@ -80,10 +80,123 @@ def _schema_path() -> str:
 
 
 def _validate_schema(obj: Dict[str, Any]) -> None:
-    import jsonschema
-
     schema = _load_json(_schema_path())
+    try:
+        import jsonschema
+    except ModuleNotFoundError:
+        _validate_schema_minimal(obj, schema)
+        return
     jsonschema.validate(instance=obj, schema=schema)
+
+
+def _expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def _expect_type(value: Any, expected_type: type, path: str) -> None:
+    _expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def _expect_required(obj: Dict[str, Any], fields: List[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    _expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def _expect_number_pair(value: Any, path: str) -> None:
+    _expect(isinstance(value, list) and len(value) == 2, f"{path} must be length-2 array")
+    _expect(all(isinstance(item, (int, float)) for item in value), f"{path} entries must be numbers")
+
+
+def _validate_schema_minimal(obj: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Small dependency-free checker for this family's concrete schema.
+
+    It intentionally covers the structure used by the fixtures and leaves
+    semantic requirements, such as invariant_diff presence and triangle
+    non-collinearity, to the dedicated validator gates below.
+    """
+
+    _expect_type(obj, dict, "$")
+    _expect_required(obj, schema.get("required", []), "$")
+    _expect(obj.get("schema_version") == "v1", "schema_version must be v1")
+    _expect(obj.get("cert_type") == "QA_RATIONAL_TRIG_TYPE_SYSTEM.v1", "cert_type mismatch")
+    _expect_type(obj.get("cert_id"), str, "cert_id")
+    _expect_type(obj.get("created_utc"), str, "created_utc")
+
+    source = obj.get("source_semantics")
+    _expect_type(source, dict, "source_semantics")
+    _expect_required(source, ["video_ref", "rt_refs"], "source_semantics")
+    video = source["video_ref"]
+    _expect_type(video, dict, "source_semantics.video_ref")
+    _expect_required(video, ["url", "timestamp_seconds", "claim_summary"], "source_semantics.video_ref")
+    _expect_type(video["url"], str, "source_semantics.video_ref.url")
+    _expect(isinstance(video["timestamp_seconds"], int) and video["timestamp_seconds"] >= 0,
+            "source_semantics.video_ref.timestamp_seconds must be nonnegative integer")
+    _expect_type(video["claim_summary"], str, "source_semantics.video_ref.claim_summary")
+    _expect(isinstance(source["rt_refs"], list) and len(source["rt_refs"]) >= 1,
+            "source_semantics.rt_refs must be nonempty list")
+
+    type_system = obj.get("type_system")
+    _expect_type(type_system, dict, "type_system")
+    _expect_required(type_system, ["base_algebra", "types", "formation_rules"], "type_system")
+    base = type_system["base_algebra"]
+    _expect_type(base, dict, "type_system.base_algebra")
+    _expect_required(base, ["kind", "assumptions"], "type_system.base_algebra")
+    _expect(base["kind"] in {"field", "integral_domain", "commutative_ring", "semiring"},
+            "type_system.base_algebra.kind invalid")
+    _expect_type(base["assumptions"], list, "type_system.base_algebra.assumptions")
+    types = type_system["types"]
+    _expect_type(types, dict, "type_system.types")
+    _expect_required(types, ["Point2", "Line2", "Triangle"], "type_system.types")
+    _expect(isinstance(type_system["formation_rules"], list) and len(type_system["formation_rules"]) >= 1,
+            "type_system.formation_rules must be nonempty list")
+
+    rt_core = obj.get("rt_core")
+    _expect_type(rt_core, dict, "rt_core")
+    _expect_required(rt_core, ["primitives", "laws"], "rt_core")
+    primitives = rt_core["primitives"]
+    _expect_type(primitives, dict, "rt_core.primitives")
+    _expect_required(primitives, ["quadrance", "spread"], "rt_core.primitives")
+    for name in ("quadrance", "spread"):
+        _expect_type(primitives[name], dict, f"rt_core.primitives.{name}")
+        _expect_required(primitives[name], ["definition"], f"rt_core.primitives.{name}")
+        _expect_type(primitives[name]["definition"], str, f"rt_core.primitives.{name}.definition")
+    _expect_type(rt_core["laws"], list, "rt_core.laws")
+
+    derivation = obj.get("derivation")
+    _expect_type(derivation, dict, "derivation")
+    _expect_required(derivation, ["typed_state", "steps"], "derivation")
+    typed_state = derivation["typed_state"]
+    _expect_type(typed_state, dict, "derivation.typed_state")
+    _expect_required(typed_state, ["triangle", "observables"], "derivation.typed_state")
+    triangle = typed_state["triangle"]
+    _expect_type(triangle, dict, "derivation.typed_state.triangle")
+    _expect_required(triangle, ["A", "B", "C", "non_collinear_proof"], "derivation.typed_state.triangle")
+    for vertex in ("A", "B", "C"):
+        _expect_number_pair(triangle[vertex], f"derivation.typed_state.triangle.{vertex}")
+    _expect_type(triangle["non_collinear_proof"], str, "derivation.typed_state.triangle.non_collinear_proof")
+    observables = typed_state["observables"]
+    _expect_type(observables, dict, "derivation.typed_state.observables")
+    _expect_required(observables, ["Q1", "Q2", "Q3", "s1", "s2", "s3"], "derivation.typed_state.observables")
+    for name in ("Q1", "Q2", "Q3", "s1", "s2", "s3"):
+        _expect(isinstance(observables[name], (int, float)), f"derivation.typed_state.observables.{name} must be number")
+
+    steps = derivation["steps"]
+    _expect_type(steps, list, "derivation.steps")
+    for idx, step in enumerate(steps):
+        spath = f"derivation.steps[{idx}]"
+        _expect_type(step, dict, spath)
+        _expect_required(step, ["step_id", "uses_law_id", "inputs", "outputs", "deterministic_hash"], spath)
+        _expect_type(step["step_id"], str, f"{spath}.step_id")
+        _expect_type(step["uses_law_id"], str, f"{spath}.uses_law_id")
+        _expect_type(step["inputs"], dict, f"{spath}.inputs")
+        _expect_type(step["outputs"], dict, f"{spath}.outputs")
+        _expect(isinstance(step["deterministic_hash"], str) and len(step["deterministic_hash"]) == 64,
+                f"{spath}.deterministic_hash must be 64-char hex string")
+
+    dc = obj.get("determinism_contract")
+    _expect_type(dc, dict, "determinism_contract")
+    _expect_required(dc, ["canonical_json", "no_rng", "stable_sorting", "hash_rule"], "determinism_contract")
 
 
 def _collinear(

@@ -99,9 +99,172 @@ def _schema_path() -> str:
 
 
 def _validate_schema(obj: Dict[str, Any]) -> None:
-    import jsonschema
     schema = _load_json(_schema_path())
+    try:
+        import jsonschema
+    except ModuleNotFoundError:
+        _validate_schema_minimal(obj, schema)
+        return
     jsonschema.validate(instance=obj, schema=schema)
+
+
+def _expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def _expect_type(value: Any, expected_type: type, path: str) -> None:
+    _expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def _expect_required(obj: Dict[str, Any], fields: List[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    _expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def _expect_nonempty_list(value: Any, path: str) -> None:
+    _expect(isinstance(value, list) and len(value) >= 1, f"{path} must be nonempty list")
+
+
+def _expect_state_obj(value: Any, path: str) -> None:
+    _expect(isinstance(value, dict) and len(value) >= 1, f"{path} must be nonempty object")
+
+
+def _expect_int(value: Any, path: str, min_value: Optional[int] = None,
+                max_value: Optional[int] = None) -> None:
+    _expect(isinstance(value, int) and not isinstance(value, bool), f"{path} must be integer")
+    if min_value is not None:
+        _expect(value >= min_value, f"{path} below minimum {min_value}")
+    if max_value is not None:
+        _expect(value <= max_value, f"{path} above maximum {max_value}")
+
+
+def _validate_schema_minimal(obj: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for this family's concrete schema."""
+
+    _expect_type(obj, dict, "$")
+    _expect_required(obj, schema.get("required", []), "$")
+    _expect(obj.get("schema_version") == "QA_ENERGY_CERT.v1.1", "schema_version invalid")
+    _expect_type(obj.get("cert_id"), str, "cert_id")
+    _expect(len(obj["cert_id"]) >= 8, "cert_id too short")
+    _expect_type(obj.get("created_utc"), str, "created_utc")
+    _expect(len(obj["created_utc"]) >= 10, "created_utc too short")
+    _expect(obj.get("domain") in SUPPORTED_DOMAINS, "domain invalid")
+    _expect_int(obj.get("N"), "N", 1, 1000)
+    if "interaction_horizon" in obj:
+        _expect_int(obj["interaction_horizon"], "interaction_horizon", 1, 10)
+    _expect_state_obj(obj.get("reference_state"), "reference_state")
+
+    _expect_nonempty_list(obj.get("generator_set"), "generator_set")
+    for idx, gen in enumerate(obj["generator_set"]):
+        path = f"generator_set[{idx}]"
+        _expect_type(gen, dict, path)
+        _expect_required(gen, ["name"], path)
+        _expect_type(gen["name"], str, f"{path}.name")
+        if "family_tag" in gen:
+            _expect(gen["family_tag"] in VALID_FAMILY_TAGS, f"{path}.family_tag invalid")
+        if "k" in gen:
+            _expect_int(gen["k"], f"{path}.k", 2, 1000)
+
+    _expect_nonempty_list(obj.get("energy_map"), "energy_map")
+    for idx, row in enumerate(obj["energy_map"]):
+        path = f"energy_map[{idx}]"
+        _expect_type(row, dict, path)
+        _expect_required(row, ["state", "energy"], path)
+        _expect_state_obj(row["state"], f"{path}.state")
+        _expect_int(row["energy"], f"{path}.energy", 0)
+
+    _expect_nonempty_list(obj.get("return_energy_map"), "return_energy_map")
+    for idx, row in enumerate(obj["return_energy_map"]):
+        path = f"return_energy_map[{idx}]"
+        _expect_type(row, dict, path)
+        _expect_required(row, ["state", "return_energy"], path)
+        _expect_state_obj(row["state"], f"{path}.state")
+        _expect_int(row["return_energy"], f"{path}.return_energy", 0)
+
+    _expect_nonempty_list(obj.get("return_in_k_tests"), "return_in_k_tests")
+    for idx, test in enumerate(obj["return_in_k_tests"]):
+        path = f"return_in_k_tests[{idx}]"
+        _expect_type(test, dict, path)
+        _expect_required(test, ["state", "k", "expect_can_return"], path)
+        _expect_state_obj(test["state"], f"{path}.state")
+        _expect_int(test["k"], f"{path}.k", 0, 1000000)
+        _expect_type(test["expect_can_return"], bool, f"{path}.expect_can_return")
+
+    if "episode_samples" in obj:
+        _expect_nonempty_list(obj["episode_samples"], "episode_samples")
+        for idx, ep in enumerate(obj["episode_samples"]):
+            path = f"episode_samples[{idx}]"
+            _expect_type(ep, dict, path)
+            _expect_required(ep, ["episode_id", "start_state", "steps", "states"], path)
+            _expect_type(ep["episode_id"], str, f"{path}.episode_id")
+            _expect_state_obj(ep["start_state"], f"{path}.start_state")
+            _expect_nonempty_list(ep["steps"], f"{path}.steps")
+            _expect(all(isinstance(step, str) for step in ep["steps"]), f"{path}.steps entries invalid")
+            _expect(isinstance(ep["states"], list) and len(ep["states"]) >= 2,
+                    f"{path}.states must contain at least two states")
+            for s_idx, state in enumerate(ep["states"]):
+                _expect_state_obj(state, f"{path}.states[{s_idx}]")
+            if "notes" in ep:
+                _expect_type(ep["notes"], str, f"{path}.notes")
+
+    if "power_tests" in obj:
+        _expect_type(obj["power_tests"], list, "power_tests")
+        for idx, pt in enumerate(obj["power_tests"]):
+            path = f"power_tests[{idx}]"
+            _expect_type(pt, dict, path)
+            _expect_required(pt, ["name", "delta_constraints"], path)
+            _expect_type(pt["name"], str, f"{path}.name")
+            dc = pt["delta_constraints"]
+            _expect_type(dc, dict, f"{path}.delta_constraints")
+            if "min_delta_gte" in dc:
+                _expect_int(dc["min_delta_gte"], f"{path}.delta_constraints.min_delta_gte")
+            if "max_delta_lte" in dc:
+                _expect_int(dc["max_delta_lte"], f"{path}.delta_constraints.max_delta_lte")
+            if "mean_sign" in dc:
+                _expect(dc["mean_sign"] in {"positive", "negative", "zero", "nonnegative", "nonpositive"},
+                        f"{path}.delta_constraints.mean_sign invalid")
+
+    exp = obj.get("expected_summary")
+    _expect_type(exp, dict, "expected_summary")
+    _expect_required(exp, ["reachable_count", "max_energy", "scc_count", "max_scc_size",
+                           "power_stats", "family_power_stats", "family_interaction_stats"],
+                     "expected_summary")
+    for field in ("reachable_count", "scc_count", "max_scc_size"):
+        _expect_int(exp[field], f"expected_summary.{field}", 1)
+    _expect_int(exp["max_energy"], "expected_summary.max_energy", 0)
+
+    for field in ("power_stats", "family_power_stats", "family_interaction_stats"):
+        _expect_type(exp[field], list, f"expected_summary.{field}")
+
+    for idx, row in enumerate(exp["power_stats"]):
+        path = f"expected_summary.power_stats[{idx}]"
+        _expect_type(row, dict, path)
+        _expect_required(row, ["name", "min_delta", "max_delta", "mean_delta_num", "mean_delta_den"], path)
+        _expect_type(row["name"], str, f"{path}.name")
+        for field in ("min_delta", "max_delta", "mean_delta_num"):
+            _expect_int(row[field], f"{path}.{field}")
+        _expect_int(row["mean_delta_den"], f"{path}.mean_delta_den", 1)
+
+    for idx, row in enumerate(exp["family_power_stats"]):
+        path = f"expected_summary.family_power_stats[{idx}]"
+        _expect_type(row, dict, path)
+        _expect_required(row, ["family_tag", "min_delta", "max_delta", "mean_delta_num", "mean_delta_den"], path)
+        _expect(row["family_tag"] in VALID_FAMILY_TAGS, f"{path}.family_tag invalid")
+        for field in ("min_delta", "max_delta", "mean_delta_num"):
+            _expect_int(row[field], f"{path}.{field}")
+        _expect_int(row["mean_delta_den"], f"{path}.mean_delta_den", 1)
+
+    for idx, row in enumerate(exp["family_interaction_stats"]):
+        path = f"expected_summary.family_interaction_stats[{idx}]"
+        _expect_type(row, dict, path)
+        _expect_required(row, ["from_family", "to_family", "min_delta", "max_delta",
+                               "mean_delta_num", "mean_delta_den"], path)
+        _expect(row["from_family"] in VALID_FAMILY_TAGS, f"{path}.from_family invalid")
+        _expect(row["to_family"] in VALID_FAMILY_TAGS, f"{path}.to_family invalid")
+        for field in ("min_delta", "max_delta", "mean_delta_num"):
+            _expect_int(row[field], f"{path}.{field}")
+        _expect_int(row["mean_delta_den"], f"{path}.mean_delta_den", 1)
 
 
 # ── state types ───────────────────────────────────────────────────────────────

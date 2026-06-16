@@ -7,7 +7,10 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Set, Tuple
 
-import jsonschema
+try:
+    import jsonschema  # type: ignore
+except ModuleNotFoundError:
+    jsonschema = None
 
 
 FAIL_SCHEMA = "SCHEMA_INVALID"
@@ -82,8 +85,11 @@ def _build_compose_map(cert: Dict[str, Any]) -> Tuple[Optional[Dict[Tuple[str, s
 
 def gate_1_schema_and_pins(cert: Dict[str, Any], schema: Dict[str, Any], repo_root: Path) -> Optional[Dict[str, Any]]:
     try:
-        jsonschema.Draft202012Validator(schema).validate(cert)
-    except jsonschema.ValidationError as exc:
+        if jsonschema is None:
+            validate_schema_minimal(cert, schema)
+        else:
+            jsonschema.Draft202012Validator(schema).validate(cert)
+    except Exception as exc:
         return {
             "ok": False,
             "fail_type": FAIL_SCHEMA,
@@ -160,6 +166,111 @@ def gate_1_schema_and_pins(cert: Dict[str, Any], schema: Dict[str, Any], repo_ro
         prev_rank = rank
 
     return None
+
+
+def expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def expect_type(value: Any, expected_type: type, path: str) -> None:
+    expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def expect_required(obj: Dict[str, Any], fields: list[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def expect_hash64(value: Any, path: str) -> None:
+    expect(
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value),
+        f"{path} must be 64 lowercase hex chars",
+    )
+
+
+def expect_str_list(value: Any, path: str, min_len: int, max_len: int,
+                    allowed: Optional[set[str]] = None) -> None:
+    expect(isinstance(value, list) and min_len <= len(value) <= max_len,
+           f"{path} length invalid")
+    expect(len(set(value)) == len(value), f"{path} must have unique items")
+    for idx, item in enumerate(value):
+        expect_type(item, str, f"{path}[{idx}]")
+        expect(len(item) >= 1, f"{path}[{idx}] empty")
+        if allowed is not None:
+            expect(item in allowed, f"{path}[{idx}] invalid")
+
+
+def validate_schema_minimal(cert: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for the concrete structure-classification schema."""
+
+    expect_type(cert, dict, "$")
+    expect_required(cert, schema.get("required", []), "$")
+    expect(cert.get("schema_id") == "QA_FAILURE_ALGEBRA_STRUCTURE_CLASSIFICATION_CERT",
+           "schema_id invalid")
+    expect(cert.get("schema_version") == "v1", "schema_version invalid")
+    expect_type(cert.get("cert_id"), str, "cert_id")
+    expect(len(cert["cert_id"]) >= 6, "cert_id too short")
+    expect_type(cert.get("created_utc"), str, "created_utc")
+    expect(len(cert["created_utc"]) >= 10, "created_utc too short")
+
+    ref = cert.get("family87_ref")
+    expect_type(ref, dict, "family87_ref")
+    expect_required(ref, ["path", "cert_sha256"], "family87_ref")
+    expect_type(ref["path"], str, "family87_ref.path")
+    expect(len(ref["path"]) >= 1, "family87_ref.path empty")
+    expect_hash64(ref["cert_sha256"], "family87_ref.cert_sha256")
+
+    forms_allowed = {"serial", "parallel", "feedback"}
+    expect_str_list(cert.get("carrier"), "carrier", 2, 32)
+    expect_str_list(cert.get("forms"), "forms", 1, 8, forms_allowed)
+
+    table = cert.get("compose_table")
+    expect(isinstance(table, list) and len(table) >= 1, "compose_table must be nonempty")
+    for idx, row in enumerate(table):
+        path = f"compose_table[{idx}]"
+        expect_type(row, dict, path)
+        expect_required(row, ["form", "a", "b", "comp"], path)
+        expect(row["form"] in forms_allowed, f"{path}.form invalid")
+        for field in ("a", "b", "comp"):
+            expect_type(row[field], str, f"{path}.{field}")
+            expect(len(row[field]) >= 1, f"{path}.{field} empty")
+
+    if "preorder" in cert:
+        preorder = cert["preorder"]
+        expect_type(preorder, dict, "preorder")
+        expect_required(preorder, ["leq"], "preorder")
+        leq = preorder["leq"]
+        expect(isinstance(leq, list) and len(leq) >= 1, "preorder.leq must be nonempty")
+        for idx, row in enumerate(leq):
+            path = f"preorder.leq[{idx}]"
+            expect_type(row, dict, path)
+            expect_required(row, ["a", "b"], path)
+            expect_type(row["a"], str, f"{path}.a")
+            expect_type(row["b"], str, f"{path}.b")
+
+    claimed = cert.get("claimed")
+    expect_type(claimed, dict, "claimed")
+    expect_required(claimed, ["closure_holds", "associativity_holds", "per_form_claims"], "claimed")
+    expect_type(claimed["closure_holds"], bool, "claimed.closure_holds")
+    expect_type(claimed["associativity_holds"], bool, "claimed.associativity_holds")
+    claims = claimed["per_form_claims"]
+    expect(isinstance(claims, list) and len(claims) >= 1, "claimed.per_form_claims must be nonempty")
+    for idx, row in enumerate(claims):
+        path = f"claimed.per_form_claims[{idx}]"
+        expect_type(row, dict, path)
+        expect_required(row, ["form", "identity", "absorber", "commutative", "monotone"], path)
+        expect(row["form"] in forms_allowed, f"{path}.form invalid")
+        for field in ("identity", "absorber"):
+            expect(row[field] is None or isinstance(row[field], str), f"{path}.{field} invalid")
+            if isinstance(row[field], str):
+                expect(len(row[field]) >= 1, f"{path}.{field} empty")
+        expect_type(row["commutative"], bool, f"{path}.commutative")
+        expect(row["monotone"] is None or isinstance(row["monotone"], bool), f"{path}.monotone invalid")
+    if "meta" in cert:
+        expect_type(cert["meta"], dict, "meta")
 
 
 def gate_2_closure_associativity(cert: Dict[str, Any], compose_map: Dict[Tuple[str, str, str], str]) -> Tuple[Optional[Dict[str, Any]], Dict[str, Any]]:

@@ -7,7 +7,10 @@ import json
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
-import jsonschema
+try:
+    import jsonschema  # type: ignore
+except ModuleNotFoundError:
+    jsonschema = None
 
 
 FAIL_SCHEMA = "SCHEMA_INVALID"
@@ -33,15 +36,79 @@ def load_json(path: Path) -> Dict[str, Any]:
 
 def gate_1_schema(cert: Dict[str, Any], schema: Dict[str, Any]) -> Optional[Dict[str, Any]]:
     try:
-        jsonschema.Draft202012Validator(schema).validate(cert)
+        if jsonschema is None:
+            validate_schema_minimal(cert, schema)
+        else:
+            jsonschema.Draft202012Validator(schema).validate(cert)
         return None
-    except jsonschema.ValidationError as exc:
+    except Exception as exc:
         return {
             "ok": False,
             "fail_type": FAIL_SCHEMA,
             "invariant_diff": {},
             "details": {"error": str(exc)},
         }
+
+
+def expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def expect_type(value: Any, expected_type: type, path: str) -> None:
+    expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def expect_required(obj: Dict[str, Any], fields: list[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def expect_str_list(value: Any, path: str, min_len: int, max_len: int,
+                    allowed: Optional[set[str]] = None) -> None:
+    expect(isinstance(value, list) and min_len <= len(value) <= max_len,
+           f"{path} length invalid")
+    expect(len(set(value)) == len(value), f"{path} must have unique items")
+    for idx, item in enumerate(value):
+        expect_type(item, str, f"{path}[{idx}]")
+        expect(len(item) >= 1, f"{path}[{idx}] empty")
+        if allowed is not None:
+            expect(item in allowed, f"{path}[{idx}] invalid")
+
+
+def validate_schema_minimal(cert: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for the concrete compose-operator schema."""
+
+    expect_type(cert, dict, "$")
+    expect_required(cert, schema.get("required", []), "$")
+    expect(cert.get("schema_id") == "QA_FAILURE_COMPOSE_OPERATOR_CERT", "schema_id invalid")
+    expect(cert.get("schema_version") == "v1", "schema_version invalid")
+    expect_type(cert.get("cert_id"), str, "cert_id")
+    expect(len(cert["cert_id"]) >= 6, "cert_id too short")
+    expect_type(cert.get("created_utc"), str, "created_utc")
+    expect(len(cert["created_utc"]) >= 10, "created_utc too short")
+    forms_allowed = {"serial", "parallel", "feedback"}
+    expect_str_list(cert.get("carrier"), "carrier", 2, 32)
+    expect_str_list(cert.get("forms"), "forms", 1, 8, forms_allowed)
+
+    table = cert.get("compose_table")
+    expect(isinstance(table, list) and len(table) >= 1, "compose_table must be nonempty")
+    for idx, row in enumerate(table):
+        path = f"compose_table[{idx}]"
+        expect_type(row, dict, path)
+        expect_required(row, ["form", "a", "b", "comp"], path)
+        expect(row["form"] in forms_allowed, f"{path}.form invalid")
+        for field in ("a", "b", "comp"):
+            expect_type(row[field], str, f"{path}.{field}")
+            expect(len(row[field]) >= 1, f"{path}.{field} empty")
+
+    claimed = cert.get("claimed")
+    expect_type(claimed, dict, "claimed")
+    expect_required(claimed, ["closure_holds", "associativity_holds"], "claimed")
+    expect_type(claimed["closure_holds"], bool, "claimed.closure_holds")
+    expect_type(claimed["associativity_holds"], bool, "claimed.associativity_holds")
+    if "meta" in cert:
+        expect_type(cert["meta"], dict, "meta")
 
 
 def _compose_rows_sorted(compose_map: Dict[Tuple[str, str, str], str]) -> List[Dict[str, str]]:

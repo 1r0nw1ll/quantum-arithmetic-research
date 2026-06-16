@@ -8,7 +8,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, Optional
 
-import jsonschema
+try:
+    import jsonschema  # type: ignore
+except ModuleNotFoundError:
+    jsonschema = None
 
 
 def canonical_json_bytes(obj: Any) -> bytes:
@@ -60,15 +63,91 @@ class Result:
 
 def gate_1_schema(cert: Dict[str, Any], schema: Dict[str, Any]) -> Optional[Result]:
     try:
-        jsonschema.Draft202012Validator(schema).validate(cert)
+        if jsonschema is None:
+            validate_schema_minimal(cert, schema)
+        else:
+            jsonschema.Draft202012Validator(schema).validate(cert)
         return None
-    except jsonschema.ValidationError as exc:
+    except Exception as exc:
         return Result(
             ok=False,
             fail_type=FAIL_SCHEMA,
             invariant_diff={},
             details={"error": str(exc)},
         )
+
+
+def expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def expect_type(value: Any, expected_type: type, path: str) -> None:
+    expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def expect_required(obj: Dict[str, Any], fields: list[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def expect_int(value: Any, path: str, min_value: Optional[int] = None,
+               max_value: Optional[int] = None) -> None:
+    expect(isinstance(value, int) and not isinstance(value, bool), f"{path} must be integer")
+    if min_value is not None:
+        expect(value >= min_value, f"{path} below minimum {min_value}")
+    if max_value is not None:
+        expect(value <= max_value, f"{path} above maximum {max_value}")
+
+
+def validate_schema_minimal(cert: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for the concrete BSD local Euler schema."""
+
+    expect_type(cert, dict, "$")
+    expect_required(cert, schema.get("required", []), "$")
+    expect(cert.get("schema_id") == "QA_BSD_LOCAL_EULER_CERT", "schema_id invalid")
+    expect(cert.get("schema_version") in {"v1", "v1.1"}, "schema_version invalid")
+
+    curve = cert.get("curve")
+    expect_type(curve, dict, "curve")
+    expect_required(curve, ["curve_id", "model"], "curve")
+    expect_type(curve["curve_id"], str, "curve.curve_id")
+    expect(len(curve["curve_id"]) >= 1, "curve.curve_id empty")
+    model = curve["model"]
+    expect_type(model, dict, "curve.model")
+    expect_required(model, ["type", "A", "B"], "curve.model")
+    expect(model["type"] == "short_weierstrass", "curve.model.type invalid")
+    expect_int(model["A"], "curve.model.A")
+    expect_int(model["B"], "curve.model.B")
+
+    expect_int(cert.get("prime"), "prime", 2, 100000)
+
+    claimed = cert.get("claimed")
+    expect_type(claimed, dict, "claimed")
+    expect_required(claimed, ["point_count_fp", "ap"], "claimed")
+    expect_int(claimed["point_count_fp"], "claimed.point_count_fp", 1)
+    expect_int(claimed["ap"], "claimed.ap")
+    if "delta_mod_p" in claimed:
+        expect_int(claimed["delta_mod_p"], "claimed.delta_mod_p")
+    if "is_good_reduction" in claimed:
+        expect_type(claimed["is_good_reduction"], bool, "claimed.is_good_reduction")
+    if "ap_source" in claimed:
+        expect(claimed["ap_source"] in {"point_count", "table"}, "claimed.ap_source invalid")
+    if "reduction_type" in claimed:
+        expect(
+            claimed["reduction_type"] in {
+                "GOOD",
+                "BAD_UNSPECIFIED",
+                "BAD_MULTIPLICATIVE_SPLIT",
+                "BAD_MULTIPLICATIVE_NONSPLIT",
+                "BAD_ADDITIVE",
+            },
+            "claimed.reduction_type invalid",
+        )
+    if "tamagawa_cp" in claimed:
+        expect_int(claimed["tamagawa_cp"], "claimed.tamagawa_cp", 1)
+    if "meta" in cert:
+        expect_type(cert["meta"], dict, "meta")
 
 
 def recompute(cert: Dict[str, Any]) -> Dict[str, Any]:

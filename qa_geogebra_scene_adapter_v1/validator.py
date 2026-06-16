@@ -214,12 +214,177 @@ def _load_json(path: str) -> Any:
 
 def _schema_validate(schema: Dict[str, Any], cert: Dict[str, Any]) -> Optional[str]:
     if jsonschema is None:
-        return "jsonschema not installed"
+        try:
+            _schema_validate_minimal(schema, cert)
+            return None
+        except Exception as e:
+            return str(e)
     try:
         jsonschema.validate(instance=cert, schema=schema)
         return None
     except Exception as e:
         return str(e)
+
+
+def _expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def _expect_type(value: Any, expected_type: type, path: str) -> None:
+    _expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def _expect_required(obj: Dict[str, Any], fields: List[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    _expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def _expect_hash64(value: Any, path: str) -> None:
+    _expect(
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value),
+        f"{path} must be 64 lowercase hex chars",
+    )
+
+
+def _expect_coord(value: Any, path: str) -> None:
+    _expect_type(value, dict, path)
+    kind = value.get("k")
+    if kind == "Z":
+        _expect_required(value, ["k", "v"], path)
+        _expect_type(value["v"], int, f"{path}.v")
+        return
+    if kind == "Q":
+        _expect_required(value, ["k", "n", "d"], path)
+        _expect_type(value["n"], int, f"{path}.n")
+        _expect_type(value["d"], int, f"{path}.d")
+        return
+    raise ValueError(f"{path}.k must be Z or Q")
+
+
+def _expect_pair(value: Any, path: str) -> None:
+    _expect_type(value, dict, path)
+    _expect_required(value, ["n", "d"], path)
+    _expect_type(value["n"], int, f"{path}.n")
+    _expect_type(value["d"], int, f"{path}.d")
+
+
+def _schema_validate_minimal(schema: Dict[str, Any], cert: Dict[str, Any]) -> None:
+    """Dependency-free checker for the concrete QA_GEOGEBRA schema."""
+
+    _expect_type(cert, dict, "$")
+    _expect_required(cert, schema.get("required", []), "$")
+    _expect(cert.get("schema_version") == "v1", "schema_version must be v1")
+    _expect(cert.get("cert_type") == "QA_GEOGEBRA_SCENE_ADAPTER.v1", "cert_type mismatch")
+    _expect_type(cert.get("cert_id"), str, "cert_id")
+    _expect_type(cert.get("created_utc"), str, "created_utc")
+    _expect(cert.get("compute_substrate") == "qa_rational_pair_noreduce",
+            "compute_substrate invalid")
+
+    source = cert.get("source_semantics")
+    _expect_type(source, dict, "source_semantics")
+    _expect_required(source, ["upstream", "export"], "source_semantics")
+    upstream = source["upstream"]
+    _expect_type(upstream, dict, "source_semantics.upstream")
+    _expect_required(upstream, ["name"], "source_semantics.upstream")
+    _expect_type(upstream["name"], str, "source_semantics.upstream.name")
+    export = source["export"]
+    _expect_type(export, dict, "source_semantics.export")
+    _expect_required(export, ["format"], "source_semantics.export")
+    _expect(export["format"] == "geogebra_scene_export_v1", "source_semantics.export.format invalid")
+
+    base = cert.get("base_algebra")
+    _expect_type(base, dict, "base_algebra")
+    _expect_required(base, ["name", "properties"], "base_algebra")
+    _expect_type(base["name"], str, "base_algebra.name")
+    props = base["properties"]
+    _expect_type(props, dict, "base_algebra.properties")
+    _expect_required(props, ["integral_domain", "field", "no_zero_divisors"],
+                     "base_algebra.properties")
+    for field in ("integral_domain", "field", "no_zero_divisors"):
+        _expect_type(props[field], bool, f"base_algebra.properties.{field}")
+
+    scene = cert.get("scene")
+    _expect_type(scene, dict, "scene")
+    _expect_required(scene, ["coordinate_system", "scene_raw", "scene_raw_sha256"], "scene")
+    _expect(scene["coordinate_system"] == "XYZ", "scene.coordinate_system invalid")
+    _expect_type(scene["scene_raw"], dict, "scene.scene_raw")
+    _expect_hash64(scene["scene_raw_sha256"], "scene.scene_raw_sha256")
+
+    derivation = cert.get("derivation")
+    _expect_type(derivation, dict, "derivation")
+    _expect_required(derivation, ["parsed_objects", "steps"], "derivation")
+    parsed = derivation["parsed_objects"]
+    _expect_type(parsed, list, "derivation.parsed_objects")
+    for obj_idx, parsed_obj in enumerate(parsed):
+        path = f"derivation.parsed_objects[{obj_idx}]"
+        _expect_type(parsed_obj, dict, path)
+        _expect_required(parsed_obj, ["object_id", "object_type", "label", "vertices", "faces"], path)
+        _expect_type(parsed_obj["object_id"], str, f"{path}.object_id")
+        _expect(parsed_obj["object_type"] == "TRIANGLE", f"{path}.object_type invalid")
+        _expect_type(parsed_obj["label"], str, f"{path}.label")
+        vertices = parsed_obj["vertices"]
+        _expect(isinstance(vertices, list) and len(vertices) == 3, f"{path}.vertices must have 3 items")
+        for v_idx, vertex in enumerate(vertices):
+            v_path = f"{path}.vertices[{v_idx}]"
+            _expect_type(vertex, dict, v_path)
+            _expect_required(vertex, ["id", "coord"], v_path)
+            _expect(vertex["id"] in {"A", "B", "C"}, f"{v_path}.id invalid")
+            coord = vertex["coord"]
+            _expect(isinstance(coord, list) and len(coord) == 3, f"{v_path}.coord must have 3 items")
+            for c_idx, c in enumerate(coord):
+                _expect_coord(c, f"{v_path}.coord[{c_idx}]")
+        faces = parsed_obj["faces"]
+        _expect(isinstance(faces, list) and len(faces) >= 1, f"{path}.faces must be nonempty")
+        for face_idx, face in enumerate(faces):
+            f_path = f"{path}.faces[{face_idx}]"
+            _expect(isinstance(face, list) and len(face) == 3, f"{f_path} must have 3 items")
+            _expect(all(item in {"A", "B", "C"} for item in face), f"{f_path} entries invalid")
+
+    steps = derivation["steps"]
+    _expect(isinstance(steps, list) and len(steps) >= 1, "derivation.steps must be nonempty")
+    for idx, step in enumerate(steps):
+        path = f"derivation.steps[{idx}]"
+        _expect_type(step, dict, path)
+        _expect_required(step, ["step_id", "move_id", "inputs", "outputs", "step_hash_sha256"], path)
+        _expect_type(step["step_id"], str, f"{path}.step_id")
+        _expect(step["move_id"] in {"GG_PARSE_SCENE", "RT_COMPUTE_TRIANGLE_INVARIANTS",
+                                    "RT_VALIDATE_LAW_EQUATION"},
+                f"{path}.move_id invalid")
+        _expect_type(step["inputs"], dict, f"{path}.inputs")
+        _expect_type(step["outputs"], dict, f"{path}.outputs")
+        _expect_hash64(step["step_hash_sha256"], f"{path}.step_hash_sha256")
+
+    result = cert.get("result")
+    _expect_type(result, dict, "result")
+    _expect_required(result, ["rt_invariants"], "result")
+    rt = result["rt_invariants"]
+    _expect_type(rt, dict, "result.rt_invariants")
+    _expect_required(rt, ["triangles"], "result.rt_invariants")
+    triangles = rt["triangles"]
+    _expect(isinstance(triangles, list) and len(triangles) >= 1,
+            "result.rt_invariants.triangles must be nonempty")
+    for idx, tri in enumerate(triangles):
+        path = f"result.rt_invariants.triangles[{idx}]"
+        _expect_type(tri, dict, path)
+        _expect_required(tri, ["triangle_object_id", "Q", "s"], path)
+        _expect_type(tri["triangle_object_id"], str, f"{path}.triangle_object_id")
+        _expect(isinstance(tri["Q"], list) and len(tri["Q"]) == 3, f"{path}.Q must have 3 items")
+        _expect(all(isinstance(q, int) for q in tri["Q"]), f"{path}.Q entries must be integers")
+        _expect(isinstance(tri["s"], list) and len(tri["s"]) == 3, f"{path}.s must have 3 items")
+        for s_idx, spread in enumerate(tri["s"]):
+            _expect_pair(spread, f"{path}.s[{s_idx}]")
+    if "invariant_diff" in result:
+        _expect_type(result["invariant_diff"], dict, "result.invariant_diff")
+
+    dc = cert.get("determinism_contract")
+    _expect_type(dc, dict, "determinism_contract")
+    _expect_required(dc, ["canonical_json", "stable_sorting", "no_rng", "invariant_diff_defined"],
+                     "determinism_contract")
+    for field in ("canonical_json", "stable_sorting", "no_rng", "invariant_diff_defined"):
+        _expect_type(dc[field], bool, f"determinism_contract.{field}")
 
 
 # ---------------------------------------------------------------------------

@@ -8,7 +8,10 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Any, Dict, List, Optional
 
-import jsonschema
+try:
+    import jsonschema  # type: ignore
+except ModuleNotFoundError:
+    jsonschema = None
 
 
 def canonical_json_bytes(obj: Any) -> bytes:
@@ -58,15 +61,120 @@ class Result:
 
 def gate_1_schema(cert: Dict[str, Any], schema: Dict[str, Any]) -> Optional[Result]:
     try:
-        jsonschema.Draft202012Validator(schema).validate(cert)
+        if jsonschema is None:
+            validate_schema_minimal(cert, schema)
+        else:
+            jsonschema.Draft202012Validator(schema).validate(cert)
         return None
-    except jsonschema.ValidationError as exc:
+    except Exception as exc:
         return Result(
             ok=False,
             fail_type=FAIL_SCHEMA,
             invariant_diff={},
             details={"error": str(exc)},
         )
+
+
+def expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def expect_type(value: Any, expected_type: type, path: str) -> None:
+    expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def expect_required(obj: Dict[str, Any], fields: list[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def expect_int(value: Any, path: str, min_value: Optional[int] = None,
+               max_value: Optional[int] = None) -> None:
+    expect(isinstance(value, int) and not isinstance(value, bool), f"{path} must be integer")
+    if min_value is not None:
+        expect(value >= min_value, f"{path} below minimum {min_value}")
+    if max_value is not None:
+        expect(value <= max_value, f"{path} above maximum {max_value}")
+
+
+def expect_hash64(value: Any, path: str) -> None:
+    expect(
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value),
+        f"{path} must be 64 lowercase hex chars",
+    )
+
+
+def validate_claimed(claimed: Dict[str, Any], path: str) -> None:
+    expect_type(claimed, dict, path)
+    expect_required(claimed, ["point_count_fp", "ap"], path)
+    expect_int(claimed["point_count_fp"], f"{path}.point_count_fp", 1)
+    expect_int(claimed["ap"], f"{path}.ap")
+    if "delta_mod_p" in claimed:
+        expect_int(claimed["delta_mod_p"], f"{path}.delta_mod_p")
+    if "is_good_reduction" in claimed:
+        expect_type(claimed["is_good_reduction"], bool, f"{path}.is_good_reduction")
+    if "ap_source" in claimed:
+        expect(claimed["ap_source"] in {"point_count", "table"}, f"{path}.ap_source invalid")
+    if "reduction_type" in claimed:
+        expect(
+            claimed["reduction_type"] in {
+                "GOOD",
+                "BAD_UNSPECIFIED",
+                "BAD_MULTIPLICATIVE_SPLIT",
+                "BAD_MULTIPLICATIVE_NONSPLIT",
+                "BAD_ADDITIVE",
+            },
+            f"{path}.reduction_type invalid",
+        )
+
+
+def validate_schema_minimal(cert: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for the concrete BSD local Euler batch schema."""
+
+    expect_type(cert, dict, "$")
+    expect_required(cert, schema.get("required", []), "$")
+    expect(cert.get("schema_id") == "QA_BSD_LOCAL_EULER_BATCH_CERT", "schema_id invalid")
+    expect(cert.get("schema_version") == "v1", "schema_version invalid")
+
+    curve = cert.get("curve")
+    expect_type(curve, dict, "curve")
+    expect_required(curve, ["curve_id", "model"], "curve")
+    expect_type(curve["curve_id"], str, "curve.curve_id")
+    expect(len(curve["curve_id"]) >= 1, "curve.curve_id empty")
+    model = curve["model"]
+    expect_type(model, dict, "curve.model")
+    expect_required(model, ["type", "A", "B"], "curve.model")
+    expect(model["type"] == "short_weierstrass", "curve.model.type invalid")
+    expect_int(model["A"], "curve.model.A")
+    expect_int(model["B"], "curve.model.B")
+
+    records = cert.get("records")
+    expect(isinstance(records, list) and len(records) >= 1, "records must be nonempty list")
+    for idx, record in enumerate(records):
+        path = f"records[{idx}]"
+        expect_type(record, dict, path)
+        expect_required(record, ["prime", "claimed"], path)
+        expect_int(record["prime"], f"{path}.prime", 2, 100000)
+        validate_claimed(record["claimed"], f"{path}.claimed")
+
+    manifest = cert.get("claimed_manifest")
+    expect_type(manifest, dict, "claimed_manifest")
+    expect_required(manifest, ["record_hashes", "batch_sha256"], "claimed_manifest")
+    hashes = manifest["record_hashes"]
+    expect(isinstance(hashes, list) and len(hashes) >= 1,
+           "claimed_manifest.record_hashes must be nonempty list")
+    for idx, entry in enumerate(hashes):
+        path = f"claimed_manifest.record_hashes[{idx}]"
+        expect_type(entry, dict, path)
+        expect_required(entry, ["prime", "sha256"], path)
+        expect_int(entry["prime"], f"{path}.prime", 2, 100000)
+        expect_hash64(entry["sha256"], f"{path}.sha256")
+    expect_hash64(manifest["batch_sha256"], "claimed_manifest.batch_sha256")
+    if "meta" in cert:
+        expect_type(cert["meta"], dict, "meta")
 
 
 def recompute_for_prime(a_coeff: int, b_coeff: int, prime: int) -> Dict[str, Any]:

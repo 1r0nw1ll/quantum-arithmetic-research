@@ -68,8 +68,13 @@ def load_json(path: str) -> Dict[str, Any]:
 
 def validate_schema(obj: Dict[str, Any], schema_path: str) -> None:
     """Validate obj against a JSON Schema (Draft-07). Raises on failure."""
-    import jsonschema
     schema = load_json(schema_path)
+    try:
+        import jsonschema
+    except ModuleNotFoundError:
+        from qa_jsonschema_compat import validate as jsonschema_validate
+        jsonschema_validate(instance=obj, schema=schema)
+        return
     jsonschema.validate(instance=obj, schema=schema)
 
 

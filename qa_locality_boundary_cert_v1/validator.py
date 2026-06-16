@@ -71,9 +71,141 @@ def _sha256_hex(s: str) -> str:
 
 
 def _validate_schema(obj: Dict[str, Any]) -> None:
-    import jsonschema
     schema = _load_json(_schema_path())
+    try:
+        import jsonschema
+    except ModuleNotFoundError:
+        _validate_schema_minimal(obj, schema)
+        return
     jsonschema.validate(instance=obj, schema=schema)
+
+
+def _expect(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def _expect_type(value: Any, expected_type: type, path: str) -> None:
+    _expect(isinstance(value, expected_type), f"{path} must be {expected_type.__name__}")
+
+
+def _expect_required(obj: Dict[str, Any], fields: List[str], path: str) -> None:
+    missing = [field for field in fields if field not in obj]
+    _expect(not missing, f"{path} missing required fields: {', '.join(missing)}")
+
+
+def _expect_number(value: Any, path: str) -> None:
+    _expect(isinstance(value, (int, float)) and not isinstance(value, bool), f"{path} must be number")
+
+
+def _expect_unit_number(value: Any, path: str) -> None:
+    _expect_number(value, path)
+    _expect(0.0 <= float(value) <= 1.0, f"{path} must be in [0,1]")
+
+
+def _expect_hash64(value: Any, path: str) -> None:
+    _expect(
+        isinstance(value, str)
+        and len(value) == 64
+        and all(ch in "0123456789abcdef" for ch in value),
+        f"{path} must be 64 lowercase hex chars",
+    )
+
+
+def _validate_schema_minimal(obj: Dict[str, Any], schema: Dict[str, Any]) -> None:
+    """Dependency-free checker for this family's concrete schema."""
+
+    _expect_type(obj, dict, "$")
+    _expect_required(obj, schema.get("required", []), "$")
+    _expect(
+        obj.get("schema_version") in {
+            "QA_LOCALITY_BOUNDARY_CERT.v1",
+            "QA_LOCALITY_BOUNDARY_CERT.v1.1",
+            "QA_LOCALITY_BOUNDARY_CERT.v1.2",
+        },
+        "schema_version invalid",
+    )
+    for field in ("dataset", "classifier", "split_protocol"):
+        _expect_type(obj.get(field), str, field)
+    _expect_type(obj.get("seed"), int, "seed")
+
+    generators = obj.get("generators")
+    _expect_type(generators, dict, "generators")
+    _expect_required(generators, ["spec", "patch"], "generators")
+    spec_gen = generators["spec"]
+    _expect_type(spec_gen, dict, "generators.spec")
+    _expect_required(spec_gen, ["type", "dim"], "generators.spec")
+    _expect_type(spec_gen["type"], str, "generators.spec.type")
+    _expect(isinstance(spec_gen["dim"], int) and spec_gen["dim"] >= 1, "generators.spec.dim invalid")
+    patch_gen = generators["patch"]
+    _expect_type(patch_gen, dict, "generators.patch")
+    _expect_required(patch_gen, ["type", "radius_values", "feature_dim"], "generators.patch")
+    _expect_type(patch_gen["type"], str, "generators.patch.type")
+    radii = patch_gen["radius_values"]
+    _expect(isinstance(radii, list) and len(radii) >= 1, "generators.patch.radius_values invalid")
+    _expect(all(isinstance(r, int) and r >= 1 for r in radii),
+            "generators.patch.radius_values entries invalid")
+    _expect(isinstance(patch_gen["feature_dim"], int) and patch_gen["feature_dim"] >= 1,
+            "generators.patch.feature_dim invalid")
+
+    failure_curve = obj.get("failure_curve")
+    _expect_type(failure_curve, dict, "failure_curve")
+    _expect_required(failure_curve, ["spec_oa", "patch_oa_by_radius", "all_deltas_nonpositive"],
+                     "failure_curve")
+    _expect_unit_number(failure_curve["spec_oa"], "failure_curve.spec_oa")
+    patch_oa = failure_curve["patch_oa_by_radius"]
+    _expect(isinstance(patch_oa, dict) and len(patch_oa) >= 1,
+            "failure_curve.patch_oa_by_radius must be nonempty object")
+    for key, value in patch_oa.items():
+        _expect_type(key, str, f"failure_curve.patch_oa_by_radius key {key!r}")
+        _expect_unit_number(value, f"failure_curve.patch_oa_by_radius.{key}")
+    _expect_type(failure_curve["all_deltas_nonpositive"], bool,
+                 "failure_curve.all_deltas_nonpositive")
+
+    boundary = obj.get("boundary_geometry")
+    _expect_type(boundary, dict, "boundary_geometry")
+    _expect_required(boundary, ["fragmentation_proxy", "thin_region_proxy",
+                                "fragmentation_scale_lt_r_star"], "boundary_geometry")
+    _expect_unit_number(boundary["fragmentation_proxy"], "boundary_geometry.fragmentation_proxy")
+    _expect_unit_number(boundary["thin_region_proxy"], "boundary_geometry.thin_region_proxy")
+    _expect_type(boundary["fragmentation_scale_lt_r_star"], bool,
+                 "boundary_geometry.fragmentation_scale_lt_r_star")
+    if "notes" in boundary:
+        _expect_type(boundary["notes"], str, "boundary_geometry.notes")
+
+    if "adjacency_witness" in obj:
+        aw = obj["adjacency_witness"]
+        _expect_type(aw, dict, "adjacency_witness")
+        _expect_required(aw, ["adj_rate_4"], "adjacency_witness")
+        _expect_unit_number(aw["adj_rate_4"], "adjacency_witness.adj_rate_4")
+        if "gt_label_sha256" in aw:
+            _expect_hash64(aw["gt_label_sha256"], "adjacency_witness.gt_label_sha256")
+        if "gt_label_grid" in aw:
+            grid = aw["gt_label_grid"]
+            _expect(isinstance(grid, list) and len(grid) >= 1,
+                    "adjacency_witness.gt_label_grid must be nonempty")
+            for row_idx, row in enumerate(grid):
+                _expect(isinstance(row, list) and len(row) >= 1,
+                        f"adjacency_witness.gt_label_grid[{row_idx}] must be nonempty")
+                _expect(all(isinstance(label, int) and label >= 0 for label in row),
+                        f"adjacency_witness.gt_label_grid[{row_idx}] entries invalid")
+        if "gt_mask_path" in aw:
+            _expect_type(aw["gt_mask_path"], str, "adjacency_witness.gt_mask_path")
+        if "gt_mask_sha256" in aw:
+            _expect_hash64(aw["gt_mask_sha256"], "adjacency_witness.gt_mask_sha256")
+        if "notes" in aw:
+            _expect_type(aw["notes"], str, "adjacency_witness.notes")
+
+    dominance = obj.get("dominance")
+    _expect_type(dominance, dict, "dominance")
+    _expect_required(dominance, ["patch_dominates_spec"], "dominance")
+    _expect(dominance["patch_dominates_spec"] is False,
+            "dominance.patch_dominates_spec must be false")
+
+    digests = obj.get("digests")
+    _expect_type(digests, dict, "digests")
+    _expect_required(digests, ["canonical_sha256"], "digests")
+    _expect_hash64(digests["canonical_sha256"], "digests.canonical_sha256")
 
 
 def _compute_canonical_sha256(obj: Dict[str, Any]) -> str:

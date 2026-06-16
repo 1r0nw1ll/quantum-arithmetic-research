@@ -10180,6 +10180,34 @@ def _validate_qa_witt_tower_scaling_isomorphism_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_recursive_refinement_cert_family(base_dir):
+    """Cert [433]: QA Witt Tower Recursive Refinement Law — generalizes [432]'s k=2 multiplicity formula and [389]'s single transition to every tower level."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_recursive_refinement_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_recursive_refinement_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_witt_tower_recursive_refinement_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_witt_tower_recursive_refinement_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_witt_tower_recursive_refinement_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_witt_tower_recursive_refinement_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fibonacci_inert_phi_slope_cert_family(base_dir):
     """Cert [431]: QA Fibonacci Inert phi-Slope Formula mod p^2 — Galois ring R_p lift of [424]; completes [421] split/inert pairing at depth p^2."""
     import subprocess
@@ -12456,6 +12484,11 @@ FAMILY_SWEEPS = [
      "QA Witt Tower Scaling Isomorphism Cert [432]. Closes two gaps cert [389] explicitly states it does not cover: (a) which level-p^2 orbits are old-part vs new-part (only that both classes exist), (b) tower beyond p^2; also removes [389]'s p!=5 restriction. CLAIM: iota(a,b)=(p*a mod p^k, p*b mod p^k) maps (Z/p^(k-1)Z)^2 into (Z/p^kZ)^2; because sigma_m(a,b)=(a+b mod m,a mod m) [389]'s map] is linear, p*((a+b) mod p^(k-1)) === p*a+p*b (mod p^k) identically, so sigma_{p^k}(iota(a,b))=iota(sigma_{p^(k-1)}(a,b)) ALWAYS -- no case split on prime class. (C1) SCALING_EMBEDDING_COMMUTES: exhaustive over all (a,b), p in {2,3,5,7,11,13,17,19,23,29,31,37,41} at k=2, p in {2,3,5,7} at k=3 PASS; p=5 included despite [389] excluding it. (C2) OLD_PART_IS_EXACT_IMAGE: iota injective, image = exactly sublattice {p|x and p|y}, same prime/k set PASS. (C3) ISOMORPHIC_ORBIT_STRUCTURE: old-part period+count decomposition at level p^k EXACTLY equals (same dict, not just same period set) full decomposition at level p^(k-1) -- the precise old/new identification [389] lacks; same prime/k set PASS. (C4) SPLIT_UNEQUAL_NEW_MULTIPLICITY: for split-unequal p in {11,19,29,31} with eigenvalue orders ord_min<ord_max (roots of x^2-x-1 mod p), new periods p*ord_min and p*ord_max have EXACT counts (p-1)/ord_min and (p-1)*(p^2+p-1)/ord_max respectively -- derived via eigen-coordinate stratification (c2=0-exactly substratum supplies the second equation total-count conservation alone cannot give); not previously stated by [389] (period set only, no counts) PASS. (C5) INERT_SPLIT_EQUAL_NEW_MULTIPLICITY: p in {7,13,17,41}, count_new(p*pi(p))=p*count_old(pi(p)) -- corollary of C1/C3, included for completeness PASS. RELATION TO [389]: not a duplicate -- [389] enumerates which periods occur per prime; this cert proves the unconditional linear mechanism, exact old/new split, exact split-unequal multiplicities, and extends to p=5/k=3 ([389]'s own validator and doc read in full before drafting). THEOREM NT: sigma/iota arithmetic pure integer mod p^k throughout, no float, no observer layer. 5 checks PASS; self-test ok. Primary sources: Wall (1960) doi:10.1080/00029890.1960.11989541; Serre (1979) doi:10.1007/978-1-4757-5673-9; Ireland & Rosen (1990) ISBN 978-0-387-97329-6. Derived 2026-06-16.",
      "432_qa_witt_tower_scaling_isomorphism",
      "qa_witt_tower_scaling_isomorphism_cert_v1", True),
+    (433, "QA Witt Tower Recursive Refinement Law Cert family",
+     _validate_qa_witt_tower_recursive_refinement_cert_family,
+     "QA Witt Tower Recursive Refinement Law Cert [433]. Closes the gap cert [432] explicitly states it does not cover: exact classification of new periods at level p^3 and beyond. CLAIM: for sigma_m(a,b)=(a+b mod m,a mod m) ([389]/[432]'s map). (C1) RECURSIVE_PERIOD_SET_LAW: Periods_nt(p^(k+1))=Periods_nt(p^k) union p*Periods_nt(p^k) holds at EVERY transition k->k+1 (not just k=1->2 as [389] states), old-part counts exactly frozen; p in {7,11,13,17,19} at (1,2) and (2,3) PASS. (C2) SPLIT_UNEQUAL_GENERAL_K_MULTIPLICITY: count_new(p^(k-1)*ord_min)=(p-1)/ord_min (CONSTANT in k) and count_new(p^(k-1)*ord_max)=(p-1)*(p^k+p^(k-1)-1)/ord_max (generalizes [432]'s k=2-only formula); p in {11,19} at k in {2,3}, p in {29,31} at k=2 PASS. (C3) INERT_SPLIT_EQUAL_GENERAL_K_MULTIPLICITY: count_new(p^(k-1)*pi(p))=p^(k-1)*(p^2-1)/pi(p) (explicit closed form generalizing [432]'s 'p*count_old' one-step corollary); p in {7,13,17,23} at k in {2,3}, p=7 at k=4 PASS. (C4) NONDEGENERACY_WIDE_SCAN: fast modular arithmetic (Hensel-lifted root order mod p^k for split primes; Galois-ring GR(p^k,2) order for inert primes) checking the non-degenerate assumption underlying C1-C3 holds with zero exceptions for 78 split primes <1000 at k=2..10 (702 checks) and 31 inert primes <300 at k=2..8 (217 checks) PASS. Additional evidence gathered during development (not re-run in automated self-test for runtime): p=11 split-unequal at k=4 (orbits 2,15971), p=29 split-unequal at k=3 (99s, orbits 4,50458), p=7 inert at k=5 (46.7s, orbits 7203), p=23 inert at k=3 (23.8s, orbits 5819) -- all exact matches, zero exceptions across ~1000 total checks. DERIVATION: generalizes [432]'s eigen-coordinate stratification inductively -- in the c2=0-exactly stratum every unit c1 shares the identical period p^(k-1)*ord_min regardless of value, so count=size/period=(p-1)/ord_min with the p^(k-1) factor cancelling exactly; complementary stratum size from total-count conservation gives the ord_max formula; inert/split-equal needs no stratification (single new period per level) so conservation alone suffices. RELATION TO [389]/[432]: not a duplicate ([389] gives period SET at k=1->2 only; [432] proves embedding mechanism for all k but multiplicity only at k=2; this cert is first to state/verify closed-form multiplicity at every k plus the recursive period-set law at every transition) -- both read in full before drafting. THEOREM NT: sigma/Hensel-lift/Galois-ring arithmetic pure integer mod p^k throughout; no float, no observer layer. 4 checks PASS; self-test ok (17.6s). Primary sources: Wall (1960) doi:10.1080/00029890.1960.11989541; Serre (1979) doi:10.1007/978-1-4757-5673-9; Ireland & Rosen (1990) ISBN 978-0-387-97329-6. Derived 2026-06-16.",
+     "433_qa_witt_tower_recursive_refinement",
+     "qa_witt_tower_recursive_refinement_cert_v1", True),
     (431, "QA Fibonacci Inert phi-Slope Formula mod p^2 Cert family",
      _validate_qa_fibonacci_inert_phi_slope_cert_family,
      "QA Fibonacci Inert phi-Slope Formula mod p^2 Cert [431]. Closes a gap explicitly deferred by cert [421] (Hensel-lifted Binet mod p^2 was built for split primes only). CLAIM: construction R_p=(Z/p^2Z)[phi]/(phi^2-phi-1), the mod-p^2 lift of cert [424]'s F_{p^2}=(Z/pZ)[phi]/(phi^2-phi-1), for inert primes p (5/p)=-1; elements are pairs (a,b) for a+b*phi with a,b in Z/p^2Z; psi=1-phi; s=phi-psi=2*phi-1 satisfies s^2=5 (a unit mod p^2 since p!=5 inert), giving s^{-1}=5^{-1}*s without a separate Hensel lift of sqrt(5) (unlike split case [421], R_p is a free rank-2 module by construction). (C1) ring correctness: phi^2=phi+1, psi^2=psi+1, phi*psi=-1, phi+psi=1, s^2=5, s invertible, all mod p^2 in R_p; 20/20 inert primes <=200 PASS. (C2) Binet mod p^2: F_n=(phi^n-psi^n)*s^{-1} (mod p^2) in R_p for n=1..15; 225/225 cases (15 inert primes <=150) PASS. (C3) delta(p) agreement: delta(p) via R_p-Binet equals delta(p) via direct integer recurrence (same delta as [429]/[430]); 47/47 inert primes <=500 PASS. (C4) WSS via Frobenius: delta(p)=0 iff phi^{alpha(p)}=psi^{alpha(p)} in R_p; 47/47 inert primes <=500 PASS, no WSS prime found. CONNECTS: completes the split/inert pairing pattern of [423]->[424] (Frobenius order, mod p) at depth p^2: [421] (split phi-slope mod p^2) + [431] (inert phi-slope mod p^2) give the full Galois/Frobenius interpretation of delta(p) for ALL primes, underlying [429]'s general WSS criterion. THEOREM NT: all pure integer; R_p pair arithmetic stays in Z/p^2Z throughout; no float, no observer layer. 4 checks PASS; self-test ok. Primary sources: Hensel (1897); Wall (1960) doi:10.2307/2309169; Sun & Sun (1992) doi:10.4064/aa-60-4-371-388. Derived 2026-06-15.",

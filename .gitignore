@@ -10,6 +10,10 @@
 *service_role*
 natebjones/
 
+# Personal correspondence, funding docs, PSI letters — never tracked.
+# private/upwork/ below predates this; superseded but left for clarity.
+private/
+
 # Python
 __pycache__/
 *.py[cod]
@@ -28,6 +32,8 @@ env/
 qa_venv/
 codex_on_QA/.venv/
 qa_lab/qa_venv/
+.micromamba/
+experiments/qa_ml/mol1_xtb_env/
 
 # Jupyter Notebook
 .ipynb_checkpoints
@@ -50,6 +56,9 @@ data/
 *.fdb_latexmk
 *.fls
 *.xdv
+
+# Nested Claude Code worktrees (own branch, own .git state — noise here)
+.claude/worktrees/
 
 # IDEs
 .vscode/

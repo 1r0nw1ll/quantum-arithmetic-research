@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash.json records validator SHA-256 for cert [430] reproducibility gate; not a primary mathematical source -->
+{
+  "validator": "qa_fermat_quotient_wieferich_cert_validate.py",
+  "sha256": "017ef85cf1a7ada5d85186502f345fe982e70aa4daffb55779b5b1f90d6dcaa0"
+}

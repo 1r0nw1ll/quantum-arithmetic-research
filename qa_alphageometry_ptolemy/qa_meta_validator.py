@@ -10152,6 +10152,34 @@ def _validate_qa_dedekind_zeta_factorization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_fibonacci_inert_phi_slope_cert_family(base_dir):
+    """Cert [431]: QA Fibonacci Inert phi-Slope Formula mod p^2 — Galois ring R_p lift of [424]; completes [421] split/inert pairing at depth p^2."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_fibonacci_inert_phi_slope_cert_v1")
+    validator = os.path.join(fam_dir, "qa_fibonacci_inert_phi_slope_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_fibonacci_inert_phi_slope_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_fibonacci_inert_phi_slope_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_fibonacci_inert_phi_slope_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_fibonacci_inert_phi_slope_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_fermat_quotient_wieferich_cert_family(base_dir):
     """Cert [430]: QA Fermat Quotient Parallel Structure — FLT baseline; Wieferich={1093,3511}; independent of WSS."""
     import subprocess
@@ -12395,6 +12423,11 @@ FAMILY_SWEEPS = [
      "QA Langlands Global Functional Equation Cert [412]. CLAIM: The completed L-function Λ(s,AI(f))=N^{s/2}·L_inf(s)·L(s,AI(f)) for f=2.2.5.1-125.1-a (GL_4/Q automorphic induction, parallel weight k=2 HMF over F=Q(sqrt5)) satisfies Λ(s)=ε·Λ(1−s) with integer/rational skeleton: (C1) conductor N=5^8=390625 — only p=5 is ramified (exponent a_5=8 from Artin formula 2·3+2·1=8 certified in [411]); all split/inert primes contribute conductor exponent 0; 5**8=390625 verified integer; (C2) degree d=[F:Q]×GL2_rank=2×2=4, motivic weight w=k−1=2−1=1, analytic center Fraction(1,2)=(w+1)/2−1/2 (all int/Fraction, no float); (C3) archimedean factor L_inf(s)=Gamma_R(s+1/2)^2·Gamma_R(s+3/2)^2: from r_1=2 real embeddings of F each contributing D_{k=2} discrete series with shifts (k-1)/2=Fraction(1,2) and (k+1)/2=Fraction(3,2); 4 Gamma_R factors (= degree d); all shifts are Fraction (not float, Theorem NT); 2×shift ∈{1,3} odd positive integers confirming weight-2 half-integer type; (C4) Gamma complementarity: shift multiset {1/2,1/2,3/2,3/2} closed under mu->w+1-mu=2-mu; each pair sums to w+1=2 (Fraction(2,1)); 4 pairs all verified by Fraction arithmetic; this is the archimedean self-duality signature of Λ(s)=ε·Λ(1−s). Float observer projections (NOT in QA layer): ε∈C with |ε|=1 (root number from CM Gauss sums), Gamma values, L(1/2). Closes Langlands ladder [403]→...→[412] for f=2.2.5.1-125.1-a. Primary sources: Godement-Jacquet (1972) doi:10.1007/BFb0070263; Cogdell (2004) ISBN 978-0-8218-3516-0. 4 checks PASS; self-test ok",
      "412_qa_functional_equation",
      "qa_functional_equation_cert_v1", True),
+    (431, "QA Fibonacci Inert phi-Slope Formula mod p^2 Cert family",
+     _validate_qa_fibonacci_inert_phi_slope_cert_family,
+     "QA Fibonacci Inert phi-Slope Formula mod p^2 Cert [431]. Closes a gap explicitly deferred by cert [421] (Hensel-lifted Binet mod p^2 was built for split primes only). CLAIM: construction R_p=(Z/p^2Z)[phi]/(phi^2-phi-1), the mod-p^2 lift of cert [424]'s F_{p^2}=(Z/pZ)[phi]/(phi^2-phi-1), for inert primes p (5/p)=-1; elements are pairs (a,b) for a+b*phi with a,b in Z/p^2Z; psi=1-phi; s=phi-psi=2*phi-1 satisfies s^2=5 (a unit mod p^2 since p!=5 inert), giving s^{-1}=5^{-1}*s without a separate Hensel lift of sqrt(5) (unlike split case [421], R_p is a free rank-2 module by construction). (C1) ring correctness: phi^2=phi+1, psi^2=psi+1, phi*psi=-1, phi+psi=1, s^2=5, s invertible, all mod p^2 in R_p; 20/20 inert primes <=200 PASS. (C2) Binet mod p^2: F_n=(phi^n-psi^n)*s^{-1} (mod p^2) in R_p for n=1..15; 225/225 cases (15 inert primes <=150) PASS. (C3) delta(p) agreement: delta(p) via R_p-Binet equals delta(p) via direct integer recurrence (same delta as [429]/[430]); 47/47 inert primes <=500 PASS. (C4) WSS via Frobenius: delta(p)=0 iff phi^{alpha(p)}=psi^{alpha(p)} in R_p; 47/47 inert primes <=500 PASS, no WSS prime found. CONNECTS: completes the split/inert pairing pattern of [423]->[424] (Frobenius order, mod p) at depth p^2: [421] (split phi-slope mod p^2) + [431] (inert phi-slope mod p^2) give the full Galois/Frobenius interpretation of delta(p) for ALL primes, underlying [429]'s general WSS criterion. THEOREM NT: all pure integer; R_p pair arithmetic stays in Z/p^2Z throughout; no float, no observer layer. 4 checks PASS; self-test ok. Primary sources: Hensel (1897); Wall (1960) doi:10.2307/2309169; Sun & Sun (1992) doi:10.4064/aa-60-4-371-388. Derived 2026-06-15.",
+     "431_qa_fibonacci_inert_phi_slope",
+     "qa_fibonacci_inert_phi_slope_cert_v1", True),
     (430, "QA Fermat Quotient Parallel Structure Cert family",
      _validate_qa_fermat_quotient_wieferich_cert_family,
      "QA Fermat Quotient Parallel Structure Cert [430]. CORRECTS imprecise closing note of [429] (no WSS->Wieferich implication exists in the literature). CLAIM: (C1) FLT baseline: 2^(p-1)=1 mod p for all odd primes p in [3,5000]; 668/668 PASS — depth-1 universal vanishing, analog of [428] C3's F_{p-(5/p)}=0 mod p. (C2) Fermat quotient q_p(2)=(2^(p-1)-1)/p mod p is well-defined integer in [0,p-1] for all odd primes in [3,5000]; computed via pow(2,p-1,p*p) (3-arg modpow) without materializing the full big integer 2^(p-1); (r-1) exactly divisible by p guaranteed by C1; 668/668 PASS. (C3) Wieferich primes (q_p(2)=0) in [3,5000] are exactly {1093,3511}, matching historical record (Meissner 1913; Beeger 1922); exact set match PASS. (C4) Independence check: 1093 and 3511 are NOT Wall-Sun-Sun — F_{alpha(p)} != 0 mod p^2 for both (alpha via rank_of_apparition, fib_fast as in [428]/[429]); 2/2 PASS; direct empirical evidence the p^2-layer Fibonacci vanishing and p^2-layer powers-of-2 vanishing are uncoupled. PARALLEL STRUCTURE TABLE: Fibonacci p-layer F_{p-(5/p)}=0 mod p [428] / p^2-layer F_{p-(5/p)}=0 mod p^2 (WSS, none known); Powers-of-2 p-layer 2^(p-1)=1 mod p (FLT) / p^2-layer 2^(p-1)=1 mod p^2 (Wieferich, {1093,3511}). Sun & Sun (1992): both p^2-layer conditions are independently NECESSARY (not equivalent, not implicative) preconditions for a hypothetical (now impossible, Wiles 1995) FLT first-case failure. THEOREM NT: all pure integer; pow(2,p-1,p*p) and fast doubling stay integer; no float, no observer layer at all. 4 checks PASS; self-test ok. Primary sources: Wieferich (1909) doi:10.1515/crll.1909.136.293; Eisenstein (1850); Sun & Sun (1992) doi:10.4064/aa-60-4-371-388; McIntosh & Roettger (2007) doi:10.1090/S0025-5718-07-01955-2. Derived 2026-06-15.",

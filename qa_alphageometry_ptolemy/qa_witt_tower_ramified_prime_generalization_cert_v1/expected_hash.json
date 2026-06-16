@@ -1,0 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=expected_hash.json records validator SHA-256 for cert [435] reproducibility gate; not a primary mathematical source -->
+{
+  "validator": "qa_witt_tower_ramified_prime_generalization_cert_validate.py",
+  "sha256": "7883dbc61b969bfe7876dfc58479cbae8755e0a9602088657adc0f7ebd500bdf"
+}

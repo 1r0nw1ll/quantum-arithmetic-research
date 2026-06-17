@@ -10264,6 +10264,34 @@ def _validate_qa_witt_tower_ramified_prime_generalization_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_dm1_general_vp_cert_family(base_dir):
+    """Cert [440]: QA Witt Tower det=-1 General v_p Period Law — twin of [439] for M=[[t,1],[1,0]]; count(1)=1 always; count(4)=(p^min(r,k)-1)/4 saturates; frozen=(p^2-1)/4*p^(L+r-2); r joint-birth layers with (p-1)/4*p^(k-1); ker(tI-2M)=p^min(r,k) mechanism; p≡1 mod 4 required."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_dm1_general_vp_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_dm1_general_vp_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_witt_tower_dm1_general_vp_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_witt_tower_dm1_general_vp_cert self-test failed:\n{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        payload = json.loads(proc.stdout)
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_witt_tower_dm1_general_vp_cert non-JSON: {exc}\n{(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_witt_tower_dm1_general_vp_cert ok=false:\n{json.dumps(payload, indent=2)}"
+        )
+    return None
+
+
 def _validate_qa_witt_tower_general_vp_period_law_cert_family(base_dir):
     """Cert [439]: QA Witt Tower General v_p Period Law — unifies [437] (r=1) and [438] (r=2) into a single law for all v_p(t-2)=r>=1; count(1)=p^min(r,k) saturation; frozen=(p^2-1)*p^(L+r-2); r joint-birth layers; ker(N)=p^min(r,k) mechanism."""
     import subprocess
@@ -12667,6 +12695,11 @@ FAMILY_SWEEPS = [
      "QA Witt Tower Ramified Prime Generalization Cert [435]. [434] derived the ramified-prime closed form for exactly ONE case -- p=5, the unique ramified prime of the Fibonacci recurrence x^2-x-1 (Q(sqrt5)). This cert tests whether that closed form generalizes, by re-deriving and checking it on a structurally different recurrence x^2-4x+1 (M=[[4,-1],[1,0]]), discriminant D=12=2^2*3, Q(sqrt3), with TWO ramified primes (2 and 3). CLAIM: for any odd ramified prime p of a unimodular companion matrix M (double root lambda0 of char poly mod p, e:=ord(lambda0 mod p)), [434]'s period-set and birth/jump/freeze laws generalize EXACTLY with e,p as free parameters -- but p=2 is a genuine structural exception, and the two ramified primes of one discriminant compose by ordinary CRT/lcm. (C1) PERIOD_SET_LAW_GENERALIZED: Periods(p^k)={1,e} union {e*p^L : L=1..k} verified on D12/p=3 (e=2,k=1..6) AND a fresh re-derivation of [434]'s own Fibonacci/p=5 case (e=4,k=1..5) via the SAME generic code path, ruling out overfitting to either recurrence PASS. (C2) BIRTH_JUMP_FREEZE_LAW_GENERALIZED: orbit count for P_L=e*p^L is 0 (k<L), p^(L-1) (k==L, birth), (p+1)*p^(L-1) (k>L, one delayed jump then frozen forever) -- generalizes [434]'s p=5-specific 5^(L-1)/6*5^(L-1) (6=p+1) to literal (p+1), verified both (M,p) pairs PASS. (C3) EIGENLINE_PERSISTENCE_GENERALIZED: periods 1,e each have orbit count exactly 1 at every level k, no birth/jump, confirming [432]'s embedding-isomorphism mechanism is prime/discriminant-agnostic PASS. (C4) P2_STALL_EXCEPTION (flagged exception): p=2 does NOT satisfy C1-C3 verbatim -- for D12, lambda0 mod2=1 so e=ord(1 mod2)=1 (eigenline periods collapse into one bucket); ord(M mod 2^k)=2^k for k=1,2 but =2^(k-1) for k>=3, a ONE-LEVEL STALL verified via fast modular matrix exponentiation k=1..30 (exactness+minimality both checked). Mechanism, checked as EXACT integer matrix identities: N=M-lambda0*I satisfies N^2=p*I exactly (scalar) at p=3, decoupling N from M (Z[N]=Z[sqrt3] exactly), enabling the one-step binomial collapse (lambda0*I+N)^n=lambda0^n*I+n*lambda0^(n-1)*N driving the odd-prime closed form; at p=2, N^2=2*M exactly instead -- a RECURSIVE identity coupling N back to M, breaking that collapse -- matches (Z/2^kZ)* cyclic for k<=2 but isomorphic to Z/2 x Z/2^(k-2) (non-cyclic) for k>=3 (Washington 1997 Ch.5) PASS. (C5) CRT_CROSS_PRIME_INDEPENDENCE: ord(M mod 2^j*3^k)=lcm(ord(M mod 2^j),ord(M mod 3^k)) for every (j,k), j=1..8,k=1..5 (40 pairs), fast modular matrix exponentiation, exactness+minimality both checked -- zero interaction terms despite p=2's anomalous internal law PASS. WHY D=12: two distinct ramified primes including p=2 (classically exceptional) AND generates Q(sqrt3), genuinely different field from Fibonacci's Q(sqrt5) (avoiding the D=20=2^2*5 relabeling risk). RELATION TO [434]: does not modify or duplicate [434]'s checks -- re-derives them generically via a parametrized (M,p) code path, confirms [434]'s own numbers (e.g. count=150 at p=5,k=4,L=3) fall out of the identical formula; uses [432]'s embedding-isomorphism mechanism (Claim 3); consistent with [433] throughout (disjoint prime classes). THEOREM NT: all matrix/order arithmetic pure integer mod p^k (or exact integer identities for the N^2 mechanism check) throughout; no float, no observer layer. 5 checks PASS; self-test ok (4.8s). Primary sources: Serre (1979) doi:10.1007/978-1-4757-5673-9; Wall (1960) doi:10.2307/2309169; Ireland & Rosen (1990) ISBN 978-0-387-97329-6; Washington (1997) doi:10.1007/978-1-4612-1934-7 Ch.5. Derived 2026-06-16.",
      "435_qa_witt_tower_ramified_prime_generalization",
      "qa_witt_tower_ramified_prime_generalization_cert_v1", True),
+    (440, "QA Witt Tower det=-1 General v_p Period Law Cert family",
+     _validate_qa_witt_tower_dm1_general_vp_cert_family,
+     "QA Witt Tower det=-1 General v_p Period Law Cert [440]. Twin of [439] for the det=-1 companion-matrix family M=[[t,1],[1,0]] (char poly x^2-tx-1). For p≡1 mod 4, v_p(t^2+4)=r: STRUCTURAL CONSTANT count(1)=1 always (only zero vector fixed; p not|t forced by p|t^2+4 for odd p). PERIOD SET={1,4,4*p^L:L=1..k}. count(4)=(p^min(r,k)-1)/4 (grows then saturates). [k<=r]: count(4*p^L)=(p-1)/4*p^(k-1) for L=1..k (k joint birth layers). [k>r]: count(4*p^L)=(p^2-1)/4*p^(L+r-2) for L=1..k-r (frozen); count(4*p^L)=(p-1)/4*p^(k-1) for L=k-r+1..k (r joint birth layers). ALL non-trivial counts are 1/4 of [439]'s det=+1 values -- the base 4-cycle (from eigenvalue order e=4, λ_0^2≡-1 mod p) dilutes every orbit multiplicity by factor 4. ALGEBRAIC MECHANISM: K=tI-2M=[[-t,-2],[-2,t]]; det(K)=-(t^2+4)=-p^r*c_r (exact integer identity); M^4*x=x reduces to K*x≡0 mod p^k; ker(K mod p^k)=p^min(r,k). NO p≡3 mod 4 STALL: for p≡3 mod 4, t^2+4≡0 mod p has NO solution (structurally impossible, not a stall). (C1) DM1_PERIOD_SET: PASS. (C2) DM1_COUNT4_SATURATION: PASS. (C3) DM1_UNIFIED_FORMULA: PASS. (C4) DM1_FIXED_ALWAYS_1: PASS. (C5) DM1_ALGEBRAIC_KER: PASS. (C6) DM1_NO_RAMIFIED_P3MOD4: PASS. 6 checks PASS; 7/7 fixtures PASS; self-test ok. Primary sources: Serre (1979) doi:10.1007/978-1-4757-5673-9; Ireland & Rosen (1990) ISBN 978-0-387-97329-6 Ch.5,7; Wall (1960) doi:10.1080/00029890.1960.11989541. Derived 2026-06-17.",
+     "440_qa_witt_tower_dm1_general_vp",
+     "qa_witt_tower_dm1_general_vp_cert_v1", True),
     (439, "QA Witt Tower General v_p Period Law Cert family",
      _validate_qa_witt_tower_general_vp_period_law_cert_family,
      "QA Witt Tower General v_p Period Law Cert [439]. Unifies [437] (v_p=1) and [438] (v_p=2) into a single law for ALL v_p(t-2)=r>=1. For M=[[t,-1],[1,0]] (det=+1 companion), p prime, v_p(t-2)=r exactly: [k<=r] count(1)=p^k; count(p^L)=(p-1)*p^(k-1) for L=1..k (all layers joint birth -- fixed-point count grows with k, not yet saturated). [k>r] count(1)=p^r (SATURATION -- caps at p^r); count(p^L)=(p^2-1)*p^(L+r-2) for L=1..k-r (frozen); count(p^L)=(p-1)*p^(k-1) for L=k-r+1..k (joint birth, r layers). ALGEBRAIC MECHANISM: ker(N mod p^k)={( a,a):a=0 mod p^max(k-r,0)}=p^min(r,k) elements. Each unit of ramification contributes one free lifting step; once k>r, lifting is constrained and fixed-point count saturates. Setting r=1 recovers [437] exactly; setting r=2 recovers [438] exactly. EXCEPTION: p=3 stall (r=1, c≡p-1 mod p) documented in [437]. (C1) GEN_PERIOD_SET: period set={p^L:L=0..k} r=3, k=1..5; PASS. (C2) GEN_FIXED_SATURATION: count(1)=p^min(r,k); p=3,5,7, r=1..4, k=1..5; PASS. (C3) GEN_UNIFIED_FORMULA: full law p=3/5/7, r=1..3, k=1..5 (excl. p=3 stall); PASS. (C4) ALGEBRAIC_KER: ker=p^min(r,k), t=3..200, p=3,5,7; PASS. (C5) RECOVERS_437: r=1 = [437] closed form; PASS. (C6) RECOVERS_438: r=2 = [438] closed form; PASS. THEOREM NT: all arithmetic exact integer mod p^k; no float. 6 checks PASS; 7/7 fixtures PASS; self-test ok. Primary sources: Serre (1979) doi:10.1007/978-1-4757-5673-9; Ireland & Rosen (1990) ISBN 978-0-387-97329-6; Wall (1960) doi:10.1080/00029890.1960.11989541. Derived 2026-06-17.",

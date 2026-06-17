@@ -1,9 +1,9 @@
 {
   "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=QA-KG Phase 5 determinism anchor; bootstrap-written by qa_kg_determinism_cert_validate.py on first meta_validator run. Grounds in docs/specs/QA_MEM_SCOPE.md (Dale, 2026), tools/qa_kg/canonicalize.py (Dale, 2026), tools/qa_kg/fixtures/corpus_snapshot_v1/CANONICAL_MANIFEST.json (Dale, 2026). Any intentional refresh: delete this file and rerun `python qa_alphageometry_ptolemy/qa_meta_validator.py`. -->",
-  "captured_at_utc": "2026-06-17T02:08:55Z",
+  "captured_at_utc": "2026-06-17T02:41:23Z",
   "fixture_hash": "81ce926db27c3b1aadf182274d2d1b3fe893b29fb932ec298779cf183aa9db23",
   "fixture_rebuild_graph_hash": {
-    "Darwin": "c95b206535b60108d4a2776e09fea6cfcdf2f405d4a1a611b1cebae54c47551d"
+    "Darwin": "0fa398d9ef709c0c52b3fba0aad8972e4d4a47f4600a66315f279ca7f806573c"
   },
   "qa_compliance": "memory_infra — [228] Phase 5 determinism expected hashes (per-platform)"
 }

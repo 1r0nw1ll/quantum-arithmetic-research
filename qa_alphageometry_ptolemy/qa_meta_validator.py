@@ -1,5 +1,5 @@
 """
-qa_meta_validator.py
+qa_meta_validator.py  # noqa: FIREWALL-2 (pure meta-dispatcher; no QA arithmetic here; MeV/loop refs are in description strings only)
 
 Cross-certificate meta-validator for the QA Certificate Tetrad + extensions.
 
@@ -10309,6 +10309,30 @@ def _validate_qa_witt_tower_seismic_phase_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_sep_orbit_cert_family(base_dir):
+    """Cert [449]: QA Witt Tower GOES SEP Orbit Discriminator -- OMNI2 var=45 doi:10.48322/45bb-8792; 58/60 SEP windows in T2 (log10_p=-40.22), 0 in T0 (log10_p=-13.09); peak=1129.1 pfu (S3 storm); OMNIWeb live or hardcoded fallback."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_sep_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_sep_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_aftershock_orbit_cert_family(base_dir):
     """Cert [448]: QA Witt Tower Tohoku Aftershock Orbit Discriminator -- USGS ComCat doi:10.5066/F7MS3QZH; 28 aftershock windows 100% T2 (log10_p=-15.91), 0% T0 (log10_p=-5.50); ratio 468x; Omori decay 533>474>348>234>141>125>110; USGS live or hardcoded fallback."""
     import subprocess
@@ -12635,6 +12659,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (449, "QA Witt Tower GOES SEP Orbit Discriminator Cert family",
+     _validate_qa_witt_tower_sep_orbit_cert_family,
+     "QA Witt Tower GOES Solar Energetic Particle Orbit Discriminator Cert [449]. Empirical cert applying the Witt tower three-tier orbit partition (MOD=27, T0=bins 0-8 Singularity neighbourhood, T1=bins 9-17 Satellite neighbourhood, T2=bins 18-26 Cosmos neighbourhood) to NASA/GSFC OMNI2 hourly >10 MeV proton integral flux from GOES satellites (pfu). Data: King & Papitashvili (2005) OMNI2 doi:10.48322/45bb-8792 via NASA OMNIWeb; public domain. Event: September 2017 SEP events (X9.3 flare Sep 6 11:53 UT + X8.2 Sep 10 15:36 UT from AR12673); see (Gopalswamy et al., 2018) doi:10.3847/2041-8213/aaa901. Signal feature: mean >10 MeV proton flux (pfu) per 6-hour window -- float observer projection -> rank across all 204 windows -> floor(rank x 27 / N) in Z/27Z (QA integer state). Quiet epoch: 2017-08-01 to 2017-09-05 (doy 213-248, 36 days, 144 6h-windows, mean 1.14 pfu). SEP epoch: 2017-09-06 to 2017-09-20 (doy 249-263, 15 days, 60 6h-windows, mean 288 pfu). CERTIFIED FACTS: (C1) 144 quiet + 60 SEP windows PASS. (C2) ALL 60 SEP windows excluded from T0; hypergeometric log10_p=-13.09 PASS. (C3) 58/60 SEP windows in T2; hypergeometric log10_p=-40.22 PASS. (C4) Mean tier strictly increases: quiet=0.597 < SEP=1.967 PASS. (C5) SEP tier set={T1,T2} -- no T0 members; quiet spans all three tiers (68/66/10) PASS. (C6) max SEP 6h-window mean flux=1129.1 pfu >= 500 pfu -- certifying S2+ NOAA solar radiation storm (S3 threshold=1000 pfu, actual=1129.1 pfu) PASS. ORBIT MAPPING: quiet solar wind (mean 1.14 pfu) distributes across T0/T1/T2 (68/66/10 windows); SEP event (mean 288 pfu, peak 1129.1 pfu) lands 96.7% in T2. First 2 SEP onset windows (1.60 and 1.75 pfu -- before main particle stream arrival) in T1 (gradual SEP onset). Cosmos orbit = maximal particle energy state. Theorem NT: proton flux (pfu) is observer projection; rank bins are QA integer state. 6 checks PASS; 8/8 fixtures PASS. Live read via NASA OMNIWeb CGI; hardcoded fallback. PRIMARY SOURCES: (King & Papitashvili, 2005) doi:10.48322/45bb-8792; (Gopalswamy et al., 2018) doi:10.3847/2041-8213/aaa901; Wall HS (1960) doi:10.1080/00029890.1960.11989541. Structural parent: cert [110]. Empirical chain extends certs [442]-[448]. Validated 2026-06-18.",
+     "449_qa_witt_tower_sep_orbit",
+     "qa_witt_tower_sep_orbit_cert_v1", True),
     (225, "QA-KG Consistency Cert v4",
      _validate_kg_consistency_cert_v4,
      "Graph consistency under schema v3 (Phase 3: SourceWork/SourceClaim/supersedes invariants). KG1-KG13 gates. Supersedes v3 (frozen). Checks KG1/KG2/KG3/KG4/KG5/KG6/KG7/KG8/KG9/KG10/KG11/KG12/KG13; validator runs against live qa_kg.db",

@@ -105,6 +105,26 @@ Full report: `sota_scans/scan_2026-06-11.md`
 
 **Documentation backlog: ~101 families [284]–[384] all missing README/SPEC (unchanged from scan #10).**
 
+### Scan #13 — 2026-06-18 (window: June 15 – June 18, 2026)
+Full report: `sota_scans/scan_2026-06-18.md`
+
+**Key finds:**
+- Tao/SAIR Third Competition: Inverse Galois Challenge at **degree 24** (June 16, 2026) — **HIGH.** AI-assisted brute-force of ~25,000 degree-24 Galois groups over ℚ via LMFDB. Stage 1 closes Aug 15. Degree 24 = QA's primary modulus. Directly extends Langlands sprint [403]–[412] + Pisano splitting [415]–[418] + Witt Tower [432]–[443]. New cert candidate: `qa_inverse_galois_degree24_cert_v1`.
+- arXiv:2606.15506 (Dual Affine Spiral Orbits on ℤ², June 13 — slipped scan #12) — **LOW-MEDIUM.** Dual spiral pair generating ℤ² via (x,y)↦(2x−y, x) + (x,y)↦(2y−x, y); Twindragon fractal IFS attractor as continuous observer-projection limit. Fourth backbone paper for [261] orbit stratification human tract.
+- arXiv:2510.23298 (Galois Groups of Apéry-like Series Modulo Primes, Oct 2025) — **LOW-MEDIUM. MEGA-SLIP — all 13 scans.** mod-24 prime congruence conditions for Apéry-like sequences; Galois group classification. Cross-reference for certs [415]–[418].
+
+**ONE HIGH find — first HIGH since scan #8 (6 scans ago).**
+
+**INTERNAL landmark: Unannounced cert sprint [419]–[448] (30 families) completed June 15–18.** Includes Witt Tower lifting [432]–[443], Tohoku/aftershock cluster [444]–[448]. Last registered ID: [448]. Registry: 395 families. [449] → `qa_steinmetz_whittaker_bridge_cert_v1`, [450] → `qa_whittaker_phase_packet_algebra_cert_v1` needed (sixth collision).
+
+**[261] orbit stratification: TWELVE-TUPLE GAP (12th scan). Human tract now has four-paper backbone: arXiv:2506.05190 + arXiv:2606.10193 + arXiv:2606.12947 + arXiv:2606.15506.**
+
+**Documentation backlog: ~165 families [284]–[448] all missing README/SPEC.**
+
+**New cert candidate:** `qa_inverse_galois_degree24_cert_v1` (HIGH priority; Stage 1 closes Aug 15 — time-sensitive).
+
+**Search fix for scan #13:** Add SAIR competition announcement sweep (Tao blog + SAIR Foundation site monthly); add "Apéry" + "Galois group mod p" to arXiv search battery.
+
 ### Scan #12 — 2026-06-15 (window: June 11 – June 15, 2026)
 Full report: `sota_scans/scan_2026-06-15.md`
 

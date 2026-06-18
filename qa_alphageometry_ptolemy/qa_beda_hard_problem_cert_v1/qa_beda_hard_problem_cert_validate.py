@@ -2,6 +2,15 @@
 #   key exchange security reductions); Boneh & Shoup (2023) https://toc.cryptobook.us
 #   (A Graduate Course in Applied Cryptography, DLP hardness and Shor reduction);
 #   Wall (1960) doi.org/10.1080/00029890.1960.11989541 (Fibonacci group order = pi(p)).
+
+QA_COMPLIANCE = (
+    "cert_validator -- pure integer arithmetic over QA orbits; "
+    "BEDA-toy: keyspace = Cosmos(24) x Satellite(8) = 192, discrete exhaustive; "
+    "BEDA-DLP: Fibonacci orbit order pi(p) in Z[phi]/p, Wall (1960); "
+    "BEDA-LWE: Module-LWE dimension bound; "
+    "Theorem NT: 'public key', 'encryption' are observer projections; no float QA state"
+)
+
 """
 Cert [393]: QA BEDA Hard Problem Analysis
 

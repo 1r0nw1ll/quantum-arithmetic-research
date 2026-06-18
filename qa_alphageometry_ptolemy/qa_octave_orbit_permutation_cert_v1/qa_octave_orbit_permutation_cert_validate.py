@@ -1,4 +1,12 @@
 # PRIMARY-SOURCE-EXEMPT: reason=pure-algebra cert validator; primary sources in mapping_protocol_ref.json: Iverson (1993) Pythagorean Arithmetic Vols I-III, Wall (1960) doi:10.1080/00029890.1960.11989541, Dale (2026) Five Families paper
+
+QA_COMPLIANCE = (
+    "cert_validator -- pure integer arithmetic on {1..9}^2; "
+    "sigma: (b,e) -> (dr(2e), b) is a permutation of {1..9}^2; "
+    "orbit classes Cosmos/Satellite/Singularity are closed under sigma; "
+    "Theorem NT: 'octave', 'digital root' are observer projections; no float QA state"
+)
+
 """
 Cert [402]: QA Octave Orbit Permutation
 The digital-root octave map σ: (b,e) → (dr(2e), b) is a permutation of {1..9}²

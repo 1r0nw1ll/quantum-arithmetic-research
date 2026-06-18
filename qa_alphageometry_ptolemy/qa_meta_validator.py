@@ -10309,6 +10309,29 @@ def _validate_qa_witt_tower_seismic_phase_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_enso_orbit_cert_family(base_dir):
+    """Cert [445]: QA Witt Tower ENSO Orbit Discriminator -- NOAA ONI 1950-2026, N=916; La Nina 252/252 in T0 log10_p=-172; El Nino 245/245 in T2 log10_p=-166; tiers disjoint; mean tier 0.000->1.014->2.000; v_3 all phases above null=0.481."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_enso_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_enso_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_witt_tower_enso_orbit_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=60, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        return f"validator exit {proc.returncode}: {proc.stderr[:300]}"
+    try:
+        import json as _json
+        result = _json.loads(proc.stdout)
+        if not result.get("ok"):
+            return f"validator ok=false: {proc.stdout[-400:]}"
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    return None
+
+
 def _validate_qa_witt_tower_safe_haven_null_cert_family(base_dir):
     """Cert [443]: QA Witt Tower Safe-Haven Null — certified null: Gold (GC=F) recession fixed-layer=0.0% (<=2%), permutation p=1.000 (null not rejected), GFC mean rank bin=14.2>12. Geometric C4: fixed-point locus of M mod 27 = {(0,0),(9,9),(18,18)} exactly. Positive control: cert [442] GSPC recession fixed-layer=9.7%."""
     import subprocess
@@ -12781,6 +12804,11 @@ FAMILY_SWEEPS = [
      "QA Witt Tower Seismic Phase Orbit Discriminator Cert [444]. Empirical cert applying the Witt tower three-tier orbit partition (MOD=27, bins 0-8=Singularity/T0, 9-17=Satellite/T1, 18-26=Cosmos/T2) to the 2011 Tohoku M9.1 earthquake waveform recorded at IU.ANMO LHZ (IRIS, 05:45-07:30 UTC). DC-detrended by pre-event quiet mean; 60-second RMS windows (N=85); rank-normalized to Z/27Z. CERTIFIED FACTS: (C1) 6300 samples, 85 windows PASS. (C2) All 12 quiet windows in T0 (Singularity neighborhood, bins 0-8); hypergeometric p=3.94e-7 PASS. (C3) 14/18 surf_peak windows in T2 (Cosmos neighborhood, bins 18-26); hypergeometric p=1.41e-5 PASS. (C4) Quiet and surf_peak use disjoint tier sets ({T0} vs {T1,T2}) PASS. (C5) Mean orbit tier increases monotonically: quiet=0.0, P_coda=0.091, S_coda=0.800, surf_peak=1.778 PASS. (C6) Witt v_3 valuation highest for quiet (mean=0.909 > null=0.481) PASS. ORBIT TRANSITION: quiet=100% T0->T0, P_coda=91% T0->T0, S_coda=33% T0 (transition), surf_peak=78% in T2 (0% T0). Consistent with structural cert [110] singularity->satellite->cosmos orbit-class prediction for seismic phase progression. Theorem NT: RMS amplitudes are observer projections; rank bins are QA integer state; quiet_mean DC removal is observer detrend. 6 checks PASS; 7/7 fixtures PASS. Primary sources: IRIS IU.ANMO LHZ public domain timeseries; Wall (1960) doi:10.1080/00029890.1960.11989541. Validated 2026-06-18.",
      "444_qa_witt_tower_seismic_phase",
      "qa_witt_tower_seismic_phase_cert_v1", True),
+    (445, "QA Witt Tower ENSO Orbit Discriminator Cert family",
+     _validate_qa_witt_tower_enso_orbit_cert_family,
+     "QA Witt Tower ENSO Orbit Discriminator Cert [445]. Empirical cert applying the Witt tower three-tier orbit partition (MOD=27, T0=bins 0-8 Singularity neighborhood, T1=bins 9-17 Satellite neighborhood, T2=bins 18-26 Cosmos neighborhood) to NOAA Oceanic Nino Index monthly anomaly data (1950-2026, N=916 records). Rank-normalized to Z/27Z; ENSO phases: La Nina (ONI <= -0.5), Neutral (-0.5 < ONI < 0.5), El Nino (ONI >= 0.5). Consecutive monthly pairs (bin[t], bin[t-1]) as QA state. CERTIFIED FACTS: (C1) 916 records, 252 La Nina, 245 El Nino months PASS. (C2) All 252/252 La Nina months in T0 (Singularity neighborhood); hypergeometric log10_p=-172 PASS. (C3) All 245/245 El Nino months in T2 (Cosmos neighborhood); hypergeometric log10_p=-166 PASS. (C4) La Nina uses only {T0}, El Nino uses only {T2}; tier sets fully disjoint PASS. (C5) Mean orbit tier monotonically increasing: La Nina=0.000 < Neutral=1.014 < El Nino=2.000 PASS. (C6) Witt v_3 valuation above uniform null (null=0.481) for all phases: La Nina=1.088, Neutral=0.794, El Nino=1.160 PASS. ORBIT TRANSITION: La Nina = 100% Singularity (T0), El Nino = 100% Cosmos (T2), Neutral spans all tiers. Consistent with teleconnection cert chain and structural cert [110] orbit-class prediction. Theorem NT: SST anomaly is observer projection; rank bins are QA integer state. 6 checks PASS; 8/8 fixtures PASS. Primary sources: NOAA CPC Oceanic Nino Index public domain data (www.cpc.ncep.noaa.gov); Wall (1960) doi:10.1080/00029890.1960.11989541 (Witt tower theory). Structural parent: cert [110]. Empirical chain extends certs [443] [444]. Validated 2026-06-18.",
+     "445_qa_witt_tower_enso_orbit",
+     "qa_witt_tower_enso_orbit_cert_v1", True),
     (443, "QA Witt Tower Safe-Haven Null Cert family",
      _validate_qa_witt_tower_safe_haven_null_cert_family,
      "QA Witt Tower Safe-Haven Null Cert [443]. Certified null: the Witt tower filter bank (cert [439]) produces zero fixed-layer elevation for safe-haven assets (Gold) during NBER recessions, contrasting with cert [442]'s positive result for GSPC. COMPANION: M=[[5,-1],[1,0]], p=3, r=1 (det=+1), k=3 (mod 27). GEOMETRIC C4: fixed-point locus of M mod 27 = {(0,0),(9,9),(18,18)} exactly (b≡e≡0 mod 9), verified exhaustively over all 729 states. DOMAIN Gold (GC=F) Monthly Log-Returns (Yahoo Finance live or hardcoded 2000-2024 fallback), rank-normalized to Z/27Z, state=(rank[t], rank[t-1]). NBER recessions (2001-03/11, 2007-12/2009-06, 2020-02/04). CERTIFIED FACTS: (C1) Gold birth fraction 68.6% in [55%,75%] PASS. (C2) Gold recession fixed_frac=0.0%<=2% PASS. (C3) Permutation null p=1.000>=0.15 PASS (strongest possible null: observed delta=0.4pp is minimum achievable; 100% of permutations match or exceed it). (C4) Fixed-point locus exact match PASS. (C5) GFC (2007-12 to 2009-06) mean rank bin=14.2>12 PASS (Gold crisis states in upper half of Z/27Z). CONTRAST: GSPC recession fixed_frac=9.7% delta=+8.8pp p=0.015 [442]; Gold recession fixed_frac=0.0% delta=0.4pp p=1.000 [443]. Mechanism: crisis sell-offs (GSPC) land at rank bins 0-3 (near fixed-point bin 0); safe-haven rallies (Gold) land at bins 13-26 (away from {0,9,18}). Theorem NT: log-returns->rank bins one-way observer projection; filter bank output never re-enters QA layer. 5 checks PASS. Primary sources: NBER www.nber.org/cycles; Wall (1960) doi:10.1080/00029890.1960.11989541. Validated 2026-06-18.",

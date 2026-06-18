@@ -10309,6 +10309,30 @@ def _validate_qa_witt_tower_seismic_phase_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_dst_storm_orbit_cert_family(base_dir):
+    """Cert [452]: QA Witt Tower Geomagnetic Storm Dst Orbit Discriminator -- NASA OMNI2 hourly Dst Aug-Sep 2017 (1464 windows); 17 G4 storm hours (Dst<-100 nT) ALL in T0 (log10_p=-8.19); quiet spans all tiers; orbital polarity symmetry with [449] (SEP->T2, storm->T0); 7th domain (geomagnetism)."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_dst_storm_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_dst_storm_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_speech_spectral_entropy_cert_family(base_dir):
     """Cert [451]: QA Witt Tower Acoustic Speech Spectral Entropy Orbit Discriminator -- source-filter synthesis (Fant 1960); voiced /a/ (F0~120 Hz harmonic stack, 1/n^2 rolloff) vs unvoiced /s/ (3-8 kHz Butterworth noise); 80 voiced windows ALL T0 (log10_p=-55.23); mean H_norm voiced=0.163 vs unvoiced=0.887 (81.6% reduction); 6th domain (acoustic speech); 5th feature type class (spectral entropy, reuses [450] formula)."""
     import subprocess
@@ -12707,6 +12731,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (452, "QA Witt Tower Geomagnetic Storm Dst Orbit Discriminator Cert family",
+     _validate_qa_witt_tower_dst_storm_orbit_cert_family,
+     "QA Witt Tower Geomagnetic Storm Dst Orbit Discriminator Cert [452]. Seventh domain in Witt tower empirical chain: geomagnetism / space weather. Feature: mean hourly Dst index (nT) per window (scalar index, same feature class as cert [449]). Data: NASA OMNI2 hourly Dst, August-September 2017 (1464 hourly windows); doi:10.48322/45bb-8792 (King & Papitashvili 2005). Event: G4 geomagnetic storm September 8-9 2017 (Dst minimum -148 nT), coincident with X9.3 solar flare and cert [449] SEP event. Storm class: 17 hours with Dst < -100 nT; background: 1447 quiet/moderate hours. QA mapping: scalar Dst rank-normalized ascending (most negative = rank 0 = lowest rank = T0); bin = floor(rank * 27 / 1464) in Z/27Z; T0=bins 0-8 (Singularity), T1=9-17 (Satellite), T2=18-26 (Cosmos). Theorem NT: Dst values (nT, float) are observer projections; rank bin in Z/27Z is QA integer state. CERTIFIED FACTS: (C1) n_storm=17, n_quiet=1447, n_total=1464 PASS. (C2) storm_mean=-117.4 nT < -100 AND quiet_mean=-19.4 nT > -30 PASS. (C3) ALL 17 storm hours in T0; K_t0=488, log10_p=-8.19 < -7.0 PASS. (C4) |storm_mean - quiet_mean|=98.0 nT > 90.0 PASS. (C5) storm tiers={T0}; quiet spans {T0,T1,T2} PASS. (C6) peak_storm_dst=-148 nT < -120 (G3+ minimum) PASS. 6 checks PASS. Orbital polarity symmetry: cert [449] SEP max-flux -> T2 (Cosmos); cert [452] storm min-Dst -> T0 (Singularity); antipodal in QA orbit space. PRIMARY SOURCES: King & Papitashvili (2005) doi:10.48322/45bb-8792 (OMNI2); Sugiura (1964) doi:10.1029/GM009p0001 (Dst definition). Structural parent: cert [110]. Empirical chain extends certs [442]-[451]. Validated 2026-06-18.",
+     "452_qa_witt_tower_dst_storm_orbit",
+     "qa_witt_tower_dst_storm_orbit_cert_v1", True),
     (451, "QA Witt Tower Acoustic Speech Spectral Entropy Orbit Discriminator Cert family",
      _validate_qa_witt_tower_speech_spectral_entropy_cert_family,
      "QA Witt Tower Acoustic Speech Spectral Entropy Orbit Discriminator Cert [451]. Sixth domain in Witt tower empirical chain: acoustic speech phoneme discrimination. Feature: spectral entropy H_norm = -sum(p_i log2 p_i)/log2(64); same formula as cert [450], applied to new domain. Data: source-filter model synthesis (Fant 1960); voiced /a/ = harmonic stack F0~120 Hz (jitter +/-3 Hz), amplitudes 1/n^2 glottal rolloff, random harmonic phases; 80 frames x 25 ms = 2 s synthesized vowel speech. Unvoiced /s/ = Gaussian noise bandlimited 3-8 kHz via 4th-order Butterworth; 200 frames x 25 ms = 5 s. numpy seed per frame, deterministic (seed=frame_index). Welch nperseg=128, noverlap=64, single channel, bins 1-64 (exclude DC). Theorem NT: synthesized acoustic waveform (float, Pa) is observer projection; PSD and H_norm are observer layer; rank bin in Z/27Z is QA integer state. CERTIFIED FACTS: (C1) 80 voiced + 200 unvoiced = 280 windows PASS. (C2) mean_voiced_H=0.163 < 0.75 x mean_unvoiced_H=0.887 (threshold 0.665) PASS. (C3) ALL 80 voiced in T0 (Singularity); hypergeometric log10_p=-55.23 PASS. (C4) mean_unvoiced=0.887 - mean_voiced=0.163 = 0.724 > 0.60 PASS. (C5) Voiced tier set={T0} only (80/0/0); unvoiced spans T0/T1/T2=14/93/93 PASS. (C6) Relative entropy reduction=81.6% >= 75% PASS. 6 checks PASS; 8/8 fixtures PASS. Physical interpretation: voiced speech = periodic harmonic structure, low spectral entropy = Singularity orbit (fixed-point, maximally ordered). Unvoiced = broadband turbulent noise, high entropy = spans all orbit tiers. Confirmed: same spectral entropy feature type, new physical domain. PRIMARY SOURCES: Fant G (1960) Acoustic Theory of Speech Production (source-filter model); Shannon CE (1948) doi:10.1002/j.1538-7305.1948.tb01338.x; Wall HS (1960) doi:10.1080/00029890.1960.11989541. Structural parent: cert [110]. Empirical chain extends certs [442]-[450]. Validated 2026-06-18.",

@@ -101,7 +101,11 @@ def _check_c2_fixed_count():
     Note: the p=3 stall only disrupts the p^2-level layer, not the
     fixed-point count. Fixed points satisfy N*x ≡ 0 mod p (not mod p^k),
     so their count = dim(ker N mod p) = p regardless of stall.
+
+    k_cap: state space = (p^k)^2. Capped per prime to stay under CI time
+    limit (p=7 k=4 → 5.76M states/call × 5 t-values; p=11 k=3 → 1.77M).
     """
+    k_cap = {3: 4, 5: 4, 7: 3, 11: 2}
     failures = []
     for p in [3, 5, 7, 11]:
         for mul in range(1, 6):
@@ -109,7 +113,7 @@ def _check_c2_fixed_count():
             if (t - 2) % (p * p) == 0:
                 continue  # doubly ramified: v_p(t-2) >= 2, out of scope
             M = [[t, -1], [1, 0]]
-            for k in range(1, 5):
+            for k in range(1, k_cap[p] + 1):
                 obs = _orbit_counts(M, p, k)
                 fp = obs.get(1, 0)
                 if fp != p:

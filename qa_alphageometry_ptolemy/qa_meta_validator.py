@@ -10309,6 +10309,30 @@ def _validate_qa_witt_tower_seismic_phase_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_speech_spectral_entropy_cert_family(base_dir):
+    """Cert [451]: QA Witt Tower Acoustic Speech Spectral Entropy Orbit Discriminator -- source-filter synthesis (Fant 1960); voiced /a/ (F0~120 Hz harmonic stack, 1/n^2 rolloff) vs unvoiced /s/ (3-8 kHz Butterworth noise); 80 voiced windows ALL T0 (log10_p=-55.23); mean H_norm voiced=0.163 vs unvoiced=0.887 (81.6% reduction); 6th domain (acoustic speech); 5th feature type class (spectral entropy, reuses [450] formula)."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_speech_spectral_entropy_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_speech_spectral_entropy_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_eeg_spectral_entropy_cert_family(base_dir):
     """Cert [450]: QA Witt Tower EEG Spectral Entropy Orbit Discriminator -- Siena Scalp EEG PN01 doi:10.13026/s9f6-9n95; 24 ictal windows (2 seizures) 100% T0 (log10_p=-12.65); ictal mean H_norm=0.417 vs inter=0.667 (37.5% reduction); seizure synchrony -> Singularity orbit; 4th feature type (spectral entropy); pyedflib + scipy.signal.welch or fallback."""
     import subprocess
@@ -12683,6 +12707,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (451, "QA Witt Tower Acoustic Speech Spectral Entropy Orbit Discriminator Cert family",
+     _validate_qa_witt_tower_speech_spectral_entropy_cert_family,
+     "QA Witt Tower Acoustic Speech Spectral Entropy Orbit Discriminator Cert [451]. Sixth domain in Witt tower empirical chain: acoustic speech phoneme discrimination. Feature: spectral entropy H_norm = -sum(p_i log2 p_i)/log2(64); same formula as cert [450], applied to new domain. Data: source-filter model synthesis (Fant 1960); voiced /a/ = harmonic stack F0~120 Hz (jitter +/-3 Hz), amplitudes 1/n^2 glottal rolloff, random harmonic phases; 80 frames x 25 ms = 2 s synthesized vowel speech. Unvoiced /s/ = Gaussian noise bandlimited 3-8 kHz via 4th-order Butterworth; 200 frames x 25 ms = 5 s. numpy seed per frame, deterministic (seed=frame_index). Welch nperseg=128, noverlap=64, single channel, bins 1-64 (exclude DC). Theorem NT: synthesized acoustic waveform (float, Pa) is observer projection; PSD and H_norm are observer layer; rank bin in Z/27Z is QA integer state. CERTIFIED FACTS: (C1) 80 voiced + 200 unvoiced = 280 windows PASS. (C2) mean_voiced_H=0.163 < 0.75 x mean_unvoiced_H=0.887 (threshold 0.665) PASS. (C3) ALL 80 voiced in T0 (Singularity); hypergeometric log10_p=-55.23 PASS. (C4) mean_unvoiced=0.887 - mean_voiced=0.163 = 0.724 > 0.60 PASS. (C5) Voiced tier set={T0} only (80/0/0); unvoiced spans T0/T1/T2=14/93/93 PASS. (C6) Relative entropy reduction=81.6% >= 75% PASS. 6 checks PASS; 8/8 fixtures PASS. Physical interpretation: voiced speech = periodic harmonic structure, low spectral entropy = Singularity orbit (fixed-point, maximally ordered). Unvoiced = broadband turbulent noise, high entropy = spans all orbit tiers. Confirmed: same spectral entropy feature type, new physical domain. PRIMARY SOURCES: Fant G (1960) Acoustic Theory of Speech Production (source-filter model); Shannon CE (1948) doi:10.1002/j.1538-7305.1948.tb01338.x; Wall HS (1960) doi:10.1080/00029890.1960.11989541. Structural parent: cert [110]. Empirical chain extends certs [442]-[450]. Validated 2026-06-18.",
+     "451_qa_witt_tower_speech_spectral_entropy",
+     "qa_witt_tower_speech_spectral_entropy_cert_v1", True),
     (450, "QA Witt Tower EEG Spectral Entropy Orbit Discriminator Cert family",
      _validate_qa_witt_tower_eeg_spectral_entropy_cert_family,
      "QA Witt Tower EEG Spectral Entropy Orbit Discriminator Cert [450]. Fourth feature type in Witt tower empirical chain: multi-channel spectral entropy H_norm = -sum(p_i log2 p_i)/log2(N_freq). Data: Siena Scalp EEG Database, patient PN01, PN01-1.edf; Detti P et al. (2020) PhysioNet doi:10.13026/s9f6-9n95 (CC-BY 4.0). Seizures: seizure 1 at 10218-10272s (54s, 10x5s windows); seizure 2 at 46353-46427s (74s, 14x5s windows); total ictal=24 windows. Interictal: 9218-10218s (200x5s windows). Feature: scipy.signal.welch (nperseg=256, noverlap=128) on 8 channels; PSD summed, normalized; H_norm = H/log2(128). Theorem NT: EEG voltage is observer projection; H_norm (float) is observer projection; rank bin in Z/27Z is QA integer state. This cert demonstrates feature-type independence: cert [446] energy RMS puts ictal in T2 (Cosmos = maximal amplitude); cert [450] spectral entropy puts ictal in T0 (Singularity = maximal synchrony, minimal spectral entropy). Same physical event, different observer projection, different orbit. CERTIFIED FACTS: (C1) 200 interictal + 24 ictal = 224 windows PASS. (C2) mean_ictal_H=0.417 < 0.75 x mean_inter_H=0.667 (threshold 0.500) PASS. (C3) ALL 24 ictal in T0 (Singularity); hypergeometric log10_p=-12.65 PASS. (C4) Mean H_norm: inter=0.667 > ictal=0.417; diff=0.250 > 0.20 PASS. (C5) Ictal tier set={T0} only (24/0/0); interictal spans T0/T1/T2=51/75/74 PASS. (C6) Relative entropy reduction=37.5% >= 30% PASS. 6 checks PASS; 8/8 fixtures PASS. Live read via pyedflib + scipy; hardcoded fallback arrays. PRIMARY SOURCES: Detti P et al. (2020) doi:10.13026/s9f6-9n95; Inouye T et al. (1991) doi:10.1016/0013-4694(91)90000-2; Wall HS (1960) doi:10.1080/00029890.1960.11989541. Structural parent: cert [110]. Empirical chain extends certs [442]-[449]. Validated 2026-06-18.",

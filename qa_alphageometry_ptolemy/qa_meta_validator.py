@@ -10309,6 +10309,30 @@ def _validate_qa_witt_tower_seismic_phase_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_aftershock_orbit_cert_family(base_dir):
+    """Cert [448]: QA Witt Tower Tohoku Aftershock Orbit Discriminator -- USGS ComCat doi:10.5066/F7MS3QZH; 28 aftershock windows 100% T2 (log10_p=-15.91), 0% T0 (log10_p=-5.50); ratio 468x; Omori decay 533>474>348>234>141>125>110; USGS live or hardcoded fallback."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_aftershock_orbit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_aftershock_orbit_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=120,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_ecg_vfl_cert_family(base_dir):
     """Cert [447]: QA Witt Tower ECG VFL Orbit Discriminator -- MIT-BIH record 207 (Moody & Mark 1983, doi:10.13026/C2F305); 19 VFL windows 100% T2 (log10_p=-10.1), 0% T0 (log10_p=-9.94); ZCR ratio 2.08x; wfdb live or hardcoded fallback."""
     import subprocess
@@ -12856,6 +12880,11 @@ FAMILY_SWEEPS = [
      "QA Witt Tower ENSO Orbit Discriminator Cert [445]. Empirical cert applying the Witt tower three-tier orbit partition (MOD=27, T0=bins 0-8 Singularity neighborhood, T1=bins 9-17 Satellite neighborhood, T2=bins 18-26 Cosmos neighborhood) to NOAA Oceanic Nino Index monthly anomaly data (1950-2026, N=916 records). Rank-normalized to Z/27Z; ENSO phases: La Nina (ONI <= -0.5), Neutral (-0.5 < ONI < 0.5), El Nino (ONI >= 0.5). Consecutive monthly pairs (bin[t], bin[t-1]) as QA state. CERTIFIED FACTS: (C1) 916 records, 252 La Nina, 245 El Nino months PASS. (C2) All 252/252 La Nina months in T0 (Singularity neighborhood); hypergeometric log10_p=-172 PASS. (C3) All 245/245 El Nino months in T2 (Cosmos neighborhood); hypergeometric log10_p=-166 PASS. (C4) La Nina uses only {T0}, El Nino uses only {T2}; tier sets fully disjoint PASS. (C5) Mean orbit tier monotonically increasing: La Nina=0.000 < Neutral=1.014 < El Nino=2.000 PASS. (C6) Witt v_3 valuation above uniform null (null=0.481) for all phases: La Nina=1.088, Neutral=0.794, El Nino=1.160 PASS. ORBIT TRANSITION: La Nina = 100% Singularity (T0), El Nino = 100% Cosmos (T2), Neutral spans all tiers. Consistent with teleconnection cert chain and structural cert [110] orbit-class prediction. Theorem NT: SST anomaly is observer projection; rank bins are QA integer state. 6 checks PASS; 8/8 fixtures PASS. Primary sources: NOAA CPC Oceanic Nino Index public domain data (www.cpc.ncep.noaa.gov); Wall (1960) doi:10.1080/00029890.1960.11989541 (Witt tower theory). Structural parent: cert [110]. Empirical chain extends certs [443] [444]. Validated 2026-06-18.",
      "445_qa_witt_tower_enso_orbit",
      "qa_witt_tower_enso_orbit_cert_v1", True),
+    (448, "QA Witt Tower Tohoku Aftershock Orbit Discriminator Cert family",
+     _validate_qa_witt_tower_aftershock_orbit_cert_family,
+     "QA Witt Tower Tohoku Aftershock Orbit Discriminator Cert [448]. Empirical cert applying the Witt tower three-tier orbit partition (MOD=27, T0=bins 0-8 Singularity neighbourhood, T1=bins 9-17 Satellite neighbourhood, T2=bins 18-26 Cosmos neighbourhood) to earthquake catalog data from the 2011-03-11 Tohoku M9.1 aftershock sequence. Data: USGS ComCat doi:10.5066/F7MS3QZH (public domain); M>=3.0 events within 35-42N 138-146E. Signal feature: M>=3.0 event count per 6-hour window (Poisson count -- natural integer). Background: 2011-02-01 to 2011-03-08 (140 windows, 21 total events, mean 0.15/window). Aftershock: 2011-03-11 to 2011-03-18 (28 windows, 1965 total events, mean 70.2/window). Rank-normalised to Z/27Z across 168 total windows. CERTIFIED FACTS: (C1) 140 background + 28 aftershock windows PASS. (C2) ALL 28 aftershock windows excluded from T0; log10_p=-5.50 PASS. (C3) ALL 28/28 aftershock windows in T2; log10_p=-15.91 PASS. (C4) Mean tier: background=0.800 < aftershock=2.000 PASS. (C5) Aftershock tier set = {T2} only; T0=0 T1=0; background spans T0/T1/T2 PASS. (C6) Omori-Utsu decay certified: 7 daily aftershock sums strictly decrease 533>474>348>234>141>125>110 PASS. ORBIT MAPPING: background (0.15 events/6h) distributes T0/T1/T2; aftershock (70.2 events/6h) 100% T2 (ratio=468x). First Poisson-count cert in empirical chain. Theorem NT: earthquake origin/magnitude are observer projections; event count is QA integer state. 6 checks PASS; 8/8 fixtures PASS. Live USGS FDSNWS API; hardcoded fallback. PRIMARY SOURCES: Utsu T (1961) Geophys. Mag. 30 521-605 (Omori-Utsu law); USGS ComCat doi:10.5066/F7MS3QZH; Wall HS (1960) doi:10.1080/00029890.1960.11989541. Structural parent: cert [110]. Empirical chain extends certs [442]-[447]. Validated 2026-06-18.",
+     "448_qa_witt_tower_aftershock_orbit",
+     "qa_witt_tower_aftershock_orbit_cert_v1", True),
     (447, "QA Witt Tower ECG VFL Orbit Discriminator Cert family",
      _validate_qa_witt_tower_ecg_vfl_cert_family,
      "QA Witt Tower ECG VFL Orbit Discriminator Cert [447]. Empirical cert applying the Witt tower three-tier orbit partition (MOD=27, T0=bins 0-8 Singularity neighbourhood, T1=bins 9-17 Satellite neighbourhood, T2=bins 18-26 Cosmos neighbourhood) to ECG recorded during ventricular flutter. Data: MIT-BIH Arrhythmia Database record 207 (Moody & Mark 1983, doi:10.13026/C2F305); MLII lead, 360 Hz. Signal feature: zero-crossing rate (ZCR) per 5-second window (integer count of sign changes). Normal epoch: 100000-400000 samples (277.8-1111.1 s, 166 windows). VFL epoch: 554740-590149 samples (1540.9-1639.3 s, 19 windows, annotated VFL in .atr file). Rank-normalised to Z/27Z across 185 total windows. CERTIFIED FACTS: (C1) 166 normal + 19 VFL windows PASS. (C2) ALL 19 VFL windows excluded from T0; hypergeometric log10_p=-9.94 PASS. (C3) ALL 19/19 VFL windows in T2; hypergeometric log10_p=-10.10 PASS. (C4) Mean tier strictly increases: normal=0.880 < VFL=2.000 PASS. (C5) VFL tier set = {T2} only; T0=0 T1=0; normal spans all three tiers PASS. (C6) ZCR ratio VFL/normal = 2.08x >= 1.5 (certifies flutter oscillation frequency as discriminating mechanism) PASS. ORBIT MAPPING: normal sinus spreads T0/T1/T2 (37%/37%/25%); VFL 100% T2 (continuous sinusoidal oscillations at ~3.8 Hz = 225 bpm = Cosmos orbit). Theorem NT: ECG voltage (mV) is observer projection; ZCR integer counts and rank bins are QA integer state. 6 checks PASS; 8/8 fixtures PASS. Live read via wfdb from PhysioNet mitdb; hardcoded fallback ZCR arrays. PRIMARY SOURCES: Moody GB, Mark RG (1983) MIT-BIH Arrhythmia Database, doi:10.13026/C2F305; Wall HS (1960) doi:10.1080/00029890.1960.11989541. Structural parent: cert [110]. Empirical chain extends certs [442]-[446]. Validated 2026-06-18.",

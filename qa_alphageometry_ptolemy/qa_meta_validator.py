@@ -10531,6 +10531,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_oos_holdout_cert_family(base_dir):
+    """Cert [473]: QA Witt Tower OOS Holdout -- a<=6 (n=330, +0.407%, p=0.0) and crash pair (n=35, +2.079%, p=0.0) both pass strict 2016-2026 holdout; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_oos_holdout_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_oos_holdout_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_crash_pair_exit_cert_family(base_dir):
     """Cert [472]: QA Witt Tower Crash Pair Exit Strategy -- A (day+1 close) Sharpe-dominant over B (day+3 hold); US 0.367 vs 0.316, INTL 0.449 vs 0.275; A_vs_B raw p=0.51 (noise); 6/6 PASS."""
     import subprocess
@@ -13357,6 +13371,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (473, "QA Witt Tower OOS Holdout Cert family",
+     _validate_qa_witt_tower_oos_holdout_cert_family,
+     "QA Witt Tower OOS Holdout Cert [473]. Claim: a<=6 daily signal (b+2e<=6 raw A2) and (0,0) crash pair bounce survive strict OOS holdout 2016-01-01+. US a<=6 OOS: n=330, mean=+0.407%, perm_p=0.0 (IS +0.349%); US crash OOS: n=35, mean=+2.079%, perm_p=0.0 (IS +1.241%); INTL a<=6 OOS: n=304, mean=+0.259%, perm_p=0.0018; INTL crash OOS: n=35, mean=+1.805%, perm_p=0.0. All four OOS means positive; crash pair OOS outperforms IS due to COVID-2020 bounce. CERTIFIED: C1 a6_US_OOS_sig PASS; C2 cp_US_OOS_sig PASS; C3 a6_US_positive PASS; C4 cp_US_GT_1pct PASS; C5 a6_INTL_OOS_sig PASS; C6 all_OOS_positive PASS. 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Lo&MacKinlay (1988) doi:10.1093/rfs/1.1.41; cert [461]; cert [463]. Validated 2026-06-19.",
+     "473_qa_witt_tower_oos_holdout",
+     "qa_witt_tower_oos_holdout_cert_v1", True),
     (472, "QA Witt Tower Crash Pair Exit Strategy Cert family",
      _validate_qa_witt_tower_crash_pair_exit_cert_family,
      "QA Witt Tower Crash Pair Exit Strategy Cert [472]. Claim: Strategy A (exit day+1 close) is Sharpe-dominant over B (hold day+3): US Sharpe 0.367 vs 0.316, INTL 0.449 vs 0.275. Raw A_vs_B return difference NOT significant (US p=0.506, INTL p=0.974): extra +0.42% from holding comes with +50% variance. Strategy C (re-enter day+2) dominated. Verdict: exit_day1_close. CERTIFIED: C1 A_US_sig PASS; C2 A_sharpe>B_sharpe US PASS; C3 A_sharpe>B_sharpe INTL PASS; C4 A_vs_B_not_sig PASS; C5 C_dominated PASS; C6 A_sharpe>0.30 PASS. 6/6 PASS. PRIMARY SOURCES: Fama (1970) doi:10.2307/2325486; cert [463]; cert [470]. Validated 2026-06-19.",

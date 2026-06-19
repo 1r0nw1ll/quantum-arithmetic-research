@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [473]: QA Witt Tower OOS Holdout. Claim: a<=6 daily signal (b+2e<=6 raw A2) and (0,0) crash pair bounce survive strict OOS holdout 2016-01-01+. US a<=6 OOS: n=330, mean=+0.407%, perm_p=0.0 (IS +0.349%). US crash OOS: n=35, mean=+2.079%, perm_p=0.0 (IS +1.241%). INTL a<=6 OOS: n=304, mean=+0.259%, perm_p=0.0018. INTL crash OOS: n=35, mean=+1.805%, perm_p=0.0. All four OOS means positive; crash pair OOS outperforms IS due to COVID-2020. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Lo AW, MacKinlay AC (1988) doi:10.1093/rfs/1.1.41. Parents: cert [461],[463],[469]. Validated 2026-06-19."
+}

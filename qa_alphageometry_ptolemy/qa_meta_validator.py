@@ -10479,6 +10479,27 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_mi_ceiling_theory_cert_family(base_dir):
+    """Cert [468]: QA Witt Tower MI Ceiling Theory -- closed-form MI_ratio(q,r) for T0/T1/T2 partition; explains binary monotone law + ~70% convergence; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_mi_ceiling_theory_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_mi_ceiling_theory_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    try:
+        r = subprocess.run(
+            [sys.executable, validator],
+            capture_output=True, text=True, timeout=60,
+            cwd=base_dir,
+        )
+        data = json.loads(r.stdout)
+        if not data.get("ok"):
+            return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e:
+        return f"error: {e}"
+
+
 def _validate_qa_witt_tower_mi_xdomain_cert_family(base_dir):
     """Cert [467]: QA Witt Tower Cross-Domain MI Survey -- I(orbit_tier;label) significant across 7 physical domains; 0/35000 null hits; ENSO/SEP converge at MI_ratio=70%; binary monotone with base rate; 6/6 PASS."""
     import subprocess
@@ -13228,6 +13249,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (468, "QA Witt Tower MI Ceiling Theory Cert family",
+     _validate_qa_witt_tower_mi_ceiling_theory_cert_family,
+     "QA Witt Tower MI Ceiling Theory Cert [468]. Claim: The closed-form formula MI_ratio(q,r)=MI(q,r)/H(binary,q) for the T0/T1/T2 equal-thirds rank partition predicts all 6 binary domain MI_ratios from cert [467] within 2% (max delta=1.1% for SEP at N=204). The formula derives from the rank-uniform partition assumption (Theorem NT). ANALYTIC RESULTS: (1) Binary monotone law: d/dq MI_ratio>0 for q in (0,1/3), verified 0 violations/320 pairs -- explains [467] empirical ordering of 6 domains by base rate. (2) Monotone in r (concentration): d/dr MI_ratio>0 for r in [1/3,1], 0 violations/264 pairs -- at r=1/3 MI=0 (independence), at r=1 MI is maximal. (3) ~70% convergence: at SEP empirical (q=0.2941,r=0.9667) formula gives 0.686, within 1.1% of observed SEP=0.697 and ENSO 3-class=0.699; both land in [0.68,0.72] zone of the MI_ratio surface. (4) Perfect info limit: as q->1/3, r=1, MI_ratio->1.0 (partition fully determines label). CERTIFIED: (C1) 6 binary domains within 2% PASS. (C2) binary monotone q-direction PASS. (C3) SEP+ENSO in [0.68,0.72] zone, delta<2% PASS. (C4) perfect info limit >0.999 PASS. (C5) monotone in r for r>=1/3 PASS. (C6) ranking preserved PASS. 6/6 PASS. PRIMARY SOURCES: Shannon CE (1948) doi:10.1002/j.1538-7305.1948.tb01338.x; Wall HS (1960) doi:10.1080/00029890.1960.11989541; cert [467] empirical inputs. Structural parents: cert [110], cert [467]. Validated 2026-06-19.",
+     "468_qa_witt_tower_mi_ceiling_theory",
+     "qa_witt_tower_mi_ceiling_theory_cert_v1", True),
     (467, "QA Witt Tower Cross-Domain MI Survey Cert family",
      _validate_qa_witt_tower_mi_xdomain_cert_family,
      "QA Witt Tower Cross-Domain MI Survey Cert [467]. Claim: I(orbit_tier;event_label) statistically significant (perm_p<0.001) across all 7 tested physical domains: ENSO (climate, 3-class), SEP solar (space weather), Seismic aftershock (seismology), EEG seizure energy (neuroscience, T2), EEG spectral entropy (neuroscience, T0), ECG VFL (cardiology), Geomagnetic storm (geomagnetism). KEY STRUCTURAL FINDING: MI_ratio=I/H(L) converges to ~70% for balanced event base rates (ENSO 69.9%, SEP 69.7%; delta=0.17%) -- a geometric ceiling of the Witt tower T0/T1/T2 partition, independent of physical mechanism. For 6 binary domains, MI_ratio is strictly monotone with event base rate (0 violations across 15 ordered pairs). Total null hits: 0/35000 (7 domains x 5000 shuffles). CERTIFIED: (C1) all 7 perm_p<0.001 PASS. (C2) all 7 MI_ratio>=0.15 PASS. (C3) ENSO/SEP both>=0.65, delta<0.05 PASS. (C4) 0 binary monotone violations PASS. (C5) ENSO MI=1.0745 bits>=1.0 PASS. (C6) 0/35000 null hits PASS. 6/6 PASS.",

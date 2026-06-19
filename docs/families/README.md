@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [468] | [QA Witt Tower MI Ceiling Theory](468_qa_witt_tower_mi_ceiling_theory.md) | Closed-form MI_ratio(q,r) for T0/T1/T2 partition; 6 binary domains within 1.1%; binary monotone + monotone-in-r proven; ~70% zone explained; 6/6 PASS | PASS |
 | [467] | [QA Witt Tower Cross-Domain MI Survey](467_qa_witt_tower_mi_xdomain.md) | Cross-domain MI: I(orbit_tier;label) sig (perm_p<0.001) across 7 physical domains; 0/35000 null hits; ENSO 69.9% SEP 69.7% converge (delta=0.17%); binary monotone law 0 violations; 6/6 PASS | PASS |
 | [466] | [QA Witt Tower S-Orbit Weekly Regime](466_qa_witt_tower_s_orbit_weekly_regime.md) | Regime analysis of [458]: IS null (p=0.12), OOS +1.53% p=0.0044; both weekly operators OOS-concentrated ([459]+[466]); daily operators IS+OOS; timescale regime boundary at 2015; DJI OOS sig p=0.022; RUT null both | PASS |
 | [465] | [QA Witt Tower MI ENSO](465_qa_witt_tower_mi_enso.md) | MI 5th feature type: I(orbit_tier;ENSO_phase)=1.07 bits; perm_p=0.0000 (0/5000); MI_ratio=70%; diagonal PMI T0/LN=+1.58, T1/N=+1.13, T2/EN=+1.59; 916 months 1950-2026 | PASS |

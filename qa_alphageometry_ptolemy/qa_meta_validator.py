@@ -10333,6 +10333,30 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_eisenstein_cert_family(base_dir):
+    """Cert [456]: QA Witt Tower Eisenstein Form Real-Data -- f(b,e)=b*b+b*e-e*e on ^GSPC 25y monthly bins (N=299); T-step identity verified; n_pos=207 (69.2%)/n_neg=89/n_zero=3; f<0 transience P=14.8%; PREDICTIVE NULL perm_p=0.752 (f sign does not predict next-month returns); S-orbit spans both Eisenstein signs."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_eisenstein_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_eisenstein_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_orbit_markov_cert_family(base_dir):
     """Cert [455]: QA Witt Tower Orbit Transition Markov Chain -- pre-registered IS matrix (^GSPC 2001-2012, n_IS=136, n_S_IS=5); OOS validated 2013-2026 (n_S_OOS=7 incl. 3-month COVID cluster); staircase (S->C=0, C->S=0) mathematically forced by shared-bin; P(C->C)_full=0.899>>P(Sat->Sat)=0.333; GSPC+QQQ pooled OOS staircase confirmed; 6 checks PASS."""
     import subprocess
@@ -12803,6 +12827,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (456, "QA Witt Tower Eisenstein Form Real-Data Cert family",
+     _validate_qa_witt_tower_eisenstein_cert_family,
+     "QA Witt Tower Eisenstein Form Real-Data Cert [456]. Tests f(b,e)=b*b+b*e-e*e (Z[phi] norm, cert [214] identity) on real ^GSPC monthly rank-bin state pairs (N=299, same QA mapping as certs [453]-[455]). T-step identity: f(e,b+e)=-f(b,e) verified for ALL 299 pairs (algebraic, trivially true on integers, confirmed on market bin data). Distribution: n_pos=207 (69.2%), n_neg=89 (29.8%), n_zero=3 (only at b=e=0 crash-cluster months). Sign-flip rate=50.7% (consistent with T-step alternation). f<0 transience: P(f_{t+1}<0|f_t<0)=14.8%<=30% -- f<0 is transient, mirrors S-orbit. KEY RESULT: PREDICTIVE NULL -- f sign does NOT predict next-month returns; perm_p(two-tail)=0.752 (honest failure reported). S-orbit Eisenstein values span both signs: {-81,0,81,324,405} -- orbit class and Eisenstein sign are orthogonal. CERTIFIED FACTS: (C1) T-step identity all 299 pairs PASS. (C2) n_pos/N=69.2% in [0.55,0.80], n_zero<=5 PASS. (C3) sign-flip rate=50.7% in [0.40,0.60] PASS. (C4) P(persist f<0)=14.8%<=0.30 PASS. (C5) perm_p=0.752>=0.10 (predictive null) PASS. (C6) S-orbit covers both Eisenstein signs PASS. 6 checks PASS. PRIMARY SOURCES: Wall HS (1960) doi:10.1080/00029890.1960.11989541; cert [214] algebraic identity. Structural parents: cert [110], cert [214], cert [453]. Validated 2026-06-18.",
+     "456_qa_witt_tower_eisenstein",
+     "qa_witt_tower_eisenstein_cert_v1", True),
     (455, "QA Witt Tower Orbit Transition Markov Chain Cert family",
      _validate_qa_witt_tower_orbit_markov_cert_family,
      "QA Witt Tower Orbit Transition Markov Chain Cert [455]. Pre-registered in-sample (IS) Markov matrix from ^GSPC 2001-2012 (n_IS=136 pairs, n_S_IS=5), validated against out-of-sample (OOS) 2013-2026 (n_OOS=163 pairs, n_S_OOS=7). Pre-registered IS matrix: P(S->S)=0.200, P(S->Sat)=0.800, P(S->C)=0.000; P(Sat->S)=0.167, P(Sat->Sat)=0.333, P(Sat->C)=0.500; P(C->S)=0.000, P(C->Sat)=0.113, P(C->C)=0.887. KEY STRUCTURAL INSIGHT: staircase (S->C=0, C->S=0) is mathematically forced by shared-bin overlap in consecutive state pairs — current state (b,e) and next state (e,b') share bin e; if e%9==0 (from S-state), next state must have e%9==0 -> it cannot be C (which requires both non-divisible-by-9). EMPIRICAL CLAIMS: (C4) P(C->C)_full=0.899>0.80>P(Sat->Sat)_full=0.333 — Cosmos persistence hierarchy. (C5) P(S->S)_OOS=0.500<P(C->C)_OOS=0.908 — Singularity more transient than Cosmos OOS. (C6) GSPC+QQQ pooled OOS staircase: 9 S-states, S->C=0, C->S=0 — multi-asset confirmation. GSPC OOS S-months: 2013-12, 2016-09, 2020-01/02/03 (3-month COVID cluster), 2022-05/06. QQQ OOS S-months: 2013-09, 2022-04 (isolated, P(S->S)_QQQ_OOS=0). CERTIFIED FACTS: (C1) n_IS=136>=80, n_S_IS=5>=3 PASS. (C2) IS S->C=0, C->S=0 (structural) PASS. (C3) OOS S->C=0, C->S=0 GSPC AND QQQ (structural) PASS. (C4) P(C->C)_full=0.899>0.80>P(Sat->Sat)_full=0.333 PASS. (C5) P(S->S)_OOS<P(C->C)_OOS PASS. (C6) GSPC+QQQ pooled OOS staircase PASS. 6 checks PASS. PRIMARY SOURCES: Wall HS (1960) doi:10.1080/00029890.1960.11989541; NBER www.nber.org/cycles. Structural parents: cert [110], cert [453], cert [454]. Finance prediction chain Markov structure cert. Validated 2026-06-18.",

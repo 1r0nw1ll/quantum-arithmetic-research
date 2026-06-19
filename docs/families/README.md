@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [472] | [QA Witt Tower Crash Pair Exit Strategy](472_qa_witt_tower_crash_pair_exit.md) | Exit day+1 close is Sharpe-dominant (US 0.367 vs 0.316, INTL 0.449 vs 0.275); A_vs_B raw diff NOT sig (p=0.51); +50% variance for +0.42% extra not worth it; C dominated; 6/6 PASS | PASS |
 | [471] | [QA Witt Tower Multi-Scale Alignment](471_qa_witt_tower_multiscale_alignment.md) | Daily a≤6 + weekly S-orbit co-activation: both +1.67% vs daily-only +0.31% (5.3× amplification); p=0.0026; n=38 pooled; two QA timescales compound; 6/6 PASS | PASS |
 | [470] | [QA Witt Tower Crash Pair Bounce Persistence](470_qa_witt_tower_crash_pair_persistence.md) | (0,0) crash pair 3-day profile: day+1 +1.47%, day+2 −0.41% (reversion, p=0.0002), day+3 +0.84% (recovery); cum3=+1.89% US, +1.88% INTL; all 3 days individually sig; 6/6 PASS | PASS |
 | [469] | [QA Witt Tower Vol-Normalized Returns](469_qa_witt_tower_vol_normalized.md) | a≤6 daily survives 21d vol normalization (vol-p=0.0004); structural finding: a≤6 is HIGH-vol signal (ratio=1.69), not low-vol anomaly; genuine alpha; 6/6 PASS | PASS |

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [472]: QA Witt Tower Crash Pair Exit Strategy. Claim: For (0,0) crash-pair signals (certs [463],[470]), Strategy A (exit day+1 close) is Sharpe-dominant over Strategy B (hold day+3): US A-Sharpe=0.367 vs B-Sharpe=0.316; INTL A-Sharpe=0.449 vs B-Sharpe=0.275. Raw return difference A vs B is NOT significant (US p=0.51, INTL p=0.97): extra +0.42% (US) comes with +50% more variance. Day-1-close is the risk-adjusted optimal exit. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; cert [463] (crash pair bounce); cert [470] (3-day profile). Structural parents: cert [110], cert [463], cert [470]. Validated 2026-06-19."
+}

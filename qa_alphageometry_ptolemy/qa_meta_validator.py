@@ -10333,6 +10333,27 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_mi_enso_cert_family(base_dir):
+    """Cert [465]: QA Witt Tower MI ENSO -- I(orbit_tier;ENSO_phase)=1.0745 bits; perm_p=0.0000 (0/5000); MI_ratio=0.699 (70% of H_label); diagonal PMI T0/LN=+1.582, T1/N=+1.128, T2/EN=+1.587; 5th QA feature type (MI); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_mi_enso_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_mi_enso_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    try:
+        r = subprocess.run(
+            [sys.executable, validator],
+            capture_output=True, text=True, timeout=120,
+            cwd=base_dir,
+        )
+        data = json.loads(r.stdout)
+        if not data.get("ok"):
+            return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e:
+        return f"error: {e}"
+
+
 def _validate_qa_witt_tower_s_exit_cert_family(base_dir):
     """Cert [464]: QA Witt Tower S-Orbit Exit -- prev=S, cur=C transition predicts negative next-day return; US pooled n=277 mean=-0.22% perm_p=0.0012; INTL pooled n=348 mean=-0.25% perm_p=0.0002; GSPC OOS n=26 mean=-0.93% perm_p=0.0000; DJI+EWG blue-chip exceptions; GSPC IS null (regime-concentrated post-2015); 6/6 PASS."""
     import subprocess
@@ -13019,6 +13040,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (465, "QA Witt Tower MI ENSO Cert family",
+     _validate_qa_witt_tower_mi_enso_cert_family,
+     "QA Witt Tower Mutual Information ENSO Cert [465]. Introduces empirical MI I(orbit_tier; ENSO_phase) as the 5th QA feature type for physical domain certs [442]-[452], alongside amplitude RMS, ZCR, Poisson count, and spectral entropy. Domain: NOAA ONI monthly, 1950-2026, N=916. Label: 3-class ENSO phase (La Nina ONI<=-0.5, Neutral, El Nino ONI>=0.5). Orbit feature: Witt tower tier T0/T1/T2=bins 0-8/9-17/18-26 in Z/27Z. MAPPING: ONI anomaly->observer projection; rank-bin->Z/27Z integer; bin//9->tier{0,1,2}; Theorem NT satisfied. RESULTS: MI_obs=1.0745 bits; H(ENSO_phase)=1.5373 bits; MI_ratio=0.699 (70% of label entropy captured by orbit-tier partition). Permutation null N_PERM=5000 seed=42: 0 of 5000 shuffles exceed obs MI (perm_p=0.0000). 3x3 contingency near-diagonal: (T0,La Nina)=252, (T1,Neutral)=305, (T2,El Nino)=245 dominant. Pointwise MI diagonal: T0/LN=+1.582, T1/N=+1.128, T2/EN=+1.587 (all positive; off-diagonal neutral leakage 53 in T0 and 60 in T2 suppresses total below theoretical max 1.537 bits). CERTIFIED: (C1) N=916>=900 all phases PASS. (C2) Tier balance T0=306/T1=305/T2=305 PASS. (C3) MI=1.07>0.8 bits PASS. (C4) perm_p=0.0000<0.001 PASS. (C5) MI_ratio=0.699>0.60 PASS. (C6) All diagonal PMI positive PASS. 6/6 PASS. Structural parents: cert [110] (Witt tower), cert [445] (ENSO hypergeometric). Primary source: NOAA CPC ONI public domain; Wall (1960) doi:10.1080/00029890.1960.11989541. Validated 2026-06-19.",
+     "465_qa_witt_tower_mi_enso",
+     "qa_witt_tower_mi_enso_cert_v1", True),
     (464, "QA Witt Tower S-Orbit Exit Cert family",
      _validate_qa_witt_tower_s_exit_cert_family,
      "QA Witt Tower S-Orbit Exit Cert [464]. Certifies that when a daily pair transitions from S-orbit (prev=S: both bins[t-2],bins[t-1] div-by-9) to C-orbit (cur=C: neither bin divisible by 3), the next day return is negative. GLOBALLY VALIDATED: US pooled n=277, mean=-0.22%, perm_p=0.0012; INTL pooled n=348, mean=-0.25%, perm_p=0.0002. US per-index: GSPC(n=56,p=0.0018), IXIC(n=55,p=0.025) significant; DJI(p=0.978) null+positive (blue-chip exception). INTL per-ETF: EWJ(p=0.018), EWU(p=0.015), EWA(p=0.017) significant; EWG(p=0.340) null+positive (blue-chip exception). IS/OOS: GSPC IS n=30 mean=-0.13% p=0.51 (null; regime-concentrated); GSPC OOS n=26 mean=-0.93% pos=30.8% p=0.0000 (post-2015 strongly significant). STRUCTURAL PAIR with [463]: [463] S-orbit entry via (0,0) -> +1.70% bounce; [464] S-orbit exit to C -> -0.22% to -0.25% resonance-loss sell. DJI+EWG EXCEPTION: both concentrated large-cap price-weighted blue-chip indices, consistent with divergence pattern across certs [459]-[462]. CERTIFIED: (C1) US perm_p<0.005 PASS. (C2) INTL perm_p<0.001 PASS. (C3) US mean<0 PASS. (C4) INTL mean<0 PASS. (C5) GSPC OOS perm_p<0.01 PASS. (C6) DJI+EWG exceptions documented PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110], cert [463] (S entry), cert [461] (daily a<=6). Validated 2026-06-19.",

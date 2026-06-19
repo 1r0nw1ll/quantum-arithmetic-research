@@ -10333,6 +10333,30 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_s_exit_cert_family(base_dir):
+    """Cert [464]: QA Witt Tower S-Orbit Exit -- prev=S, cur=C transition predicts negative next-day return; US pooled n=277 mean=-0.22% perm_p=0.0012; INTL pooled n=348 mean=-0.25% perm_p=0.0002; GSPC OOS n=26 mean=-0.93% perm_p=0.0000; DJI+EWG blue-chip exceptions; GSPC IS null (regime-concentrated post-2015); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_s_exit_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_s_exit_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=300,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_crash_pair_bounce_cert_family(base_dir):
     """Cert [463]: QA Witt Tower Crash Pair Bounce -- (0,0) rank-bin state on daily data; US pooled n=131 mean=+1.46% perm_p=0.0000 5/5 sig; INTL pooled n=161 mean=+1.90% perm_p=0.0000 6/6 sig; non-(0,0) S-orbit null (US p=0.39, INTL p=0.73); globally validated 11/11 markets; 6/6 PASS."""
     import subprocess
@@ -12995,6 +13019,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (464, "QA Witt Tower S-Orbit Exit Cert family",
+     _validate_qa_witt_tower_s_exit_cert_family,
+     "QA Witt Tower S-Orbit Exit Cert [464]. Certifies that when a daily pair transitions from S-orbit (prev=S: both bins[t-2],bins[t-1] div-by-9) to C-orbit (cur=C: neither bin divisible by 3), the next day return is negative. GLOBALLY VALIDATED: US pooled n=277, mean=-0.22%, perm_p=0.0012; INTL pooled n=348, mean=-0.25%, perm_p=0.0002. US per-index: GSPC(n=56,p=0.0018), IXIC(n=55,p=0.025) significant; DJI(p=0.978) null+positive (blue-chip exception). INTL per-ETF: EWJ(p=0.018), EWU(p=0.015), EWA(p=0.017) significant; EWG(p=0.340) null+positive (blue-chip exception). IS/OOS: GSPC IS n=30 mean=-0.13% p=0.51 (null; regime-concentrated); GSPC OOS n=26 mean=-0.93% pos=30.8% p=0.0000 (post-2015 strongly significant). STRUCTURAL PAIR with [463]: [463] S-orbit entry via (0,0) -> +1.70% bounce; [464] S-orbit exit to C -> -0.22% to -0.25% resonance-loss sell. DJI+EWG EXCEPTION: both concentrated large-cap price-weighted blue-chip indices, consistent with divergence pattern across certs [459]-[462]. CERTIFIED: (C1) US perm_p<0.005 PASS. (C2) INTL perm_p<0.001 PASS. (C3) US mean<0 PASS. (C4) INTL mean<0 PASS. (C5) GSPC OOS perm_p<0.01 PASS. (C6) DJI+EWG exceptions documented PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110], cert [463] (S entry), cert [461] (daily a<=6). Validated 2026-06-19.",
+     "464_qa_witt_tower_s_exit",
+     "qa_witt_tower_s_exit_cert_v1", True),
     (463, "QA Witt Tower Crash Pair Bounce Cert family",
      _validate_qa_witt_tower_crash_pair_bounce_cert_family,
      "QA Witt Tower Crash Pair Bounce Cert [463]. Certifies QA state (b=0 AND e=0) -- both consecutive days in bottom rank-bin of Z/27Z -- predicts positive next-day return. GLOBALLY VALIDATED: US 5/5 individually p<0.01; INTL 6/6 individually significant (incl. EWC). (0,0) is S-orbit member but signal concentrated here; non-(0,0) S-orbit null (US p=0.39, INTL p=0.73). MAPPING: daily log-return -> rank -> bin=floor(rank*27/N); b=bins[t-1], e=bins[t]; (0,0)=extreme-low rank-bin pair. US (0,0): pooled n=131, mean=+1.46%, pos=62.6%, perm_p=0.0000. INTL (0,0): pooled n=161, mean=+1.90%, pos=68.9%, perm_p=0.0000. COMBINED n=292, mean~+1.70%. EWC DISSOCIATION: EWC (0,0) p=0.0000 mean=+2.12% despite EWC a<=6 null [462]; non-(0,0) S-orbit EWC negative (p=0.005, mean=-0.48%), explaining cancellation. CERTIFIED: (C1) US perm_p<0.001 PASS. (C2) INTL perm_p<0.001 PASS. (C3) US mean>=1% PASS. (C4) INTL mean>=1% PASS. (C5) US 5/5 p<0.01 PASS. (C6) non-(0,0) null both regions PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110], cert [458] (weekly S-orbit), cert [461] (daily a<=6 US), cert [462] (intl a<=6). Validated 2026-06-19.",

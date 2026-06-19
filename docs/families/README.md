@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [459] | [QA Witt Tower A-Coordinate Weekly Direction](459_qa_witt_tower_a_coord_direction.md) | QA A2 coord a=b+2e≤6 → +0.99% next-week pooled (perm_p≈0.0002, n=213); 3/5 individually sig (GSPC/DJI/SPY); OOS post-2015: +2.52%, perm_p≈0.0002; IS pre-2015: NULL (regime-aware cert) | PASS |
 | [458] | [QA Witt Tower Orbit Weekly Direction](458_qa_witt_tower_orbit_weekly_direction.md) | Pooled 5 US weekly: S-orbit n_S=92 → +1.17% next-week (perm_p=0.0008); 3/5 individually sig (IXIC/DJI/QQQ); RUT null (small-cap); 48% non-extreme pairs; timescale inversion: weekly S>0 vs monthly S<0 | PASS |
 | [457] | [QA Witt Tower Orbit Price Volatility](457_qa_witt_tower_orbit_price.md) | S-orbit → 1.99x next-month price volatility GSPC (perm_p=0.0002); QQQ 1.62x; direction S=-1.30%/41.7%pos (perm_p=0.119 marginal); Sat=+1.34%>C=+0.62%; T-step dev=NULL (perm_p=0.944) | PASS |
 | [456] | [QA Witt Tower Eisenstein Form Real-Data](456_qa_witt_tower_eisenstein.md) | f=b*b+b*e-e*e on 299 GSPC pairs; T-step identity f(e,b+e)=-f(b,e) holds all N; n_pos=207(69.2%); sign-flip=49.7%; f<0 transience=14.8%; PREDICTIVE NULL perm_p=0.752 | PASS |

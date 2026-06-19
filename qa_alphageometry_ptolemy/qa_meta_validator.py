@@ -10333,6 +10333,30 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_a_coord_direction_cert_family(base_dir):
+    """Cert [459]: QA Witt Tower A-Coordinate Weekly Direction (Regime-Aware) -- QA A2 derived coord a=b+2e (raw, not mod-reduced) on consecutive weekly return rank-bins in Z/27Z; prediction group a<=6; pooled 5 US indices n=213 mean=+0.99% perm_p~0.0002; 3/5 individually sig (GSPC p=0.016, DJI p=0.012, SPY p=0.005); IXIC/QQQ null; OOS post-2015 GSPC n=19 mean=+2.52% perm_p~0.0002; IS pre-2015 NULL perm_p=0.797 (regime-concentration claim); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_a_coord_direction_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_a_coord_direction_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_orbit_weekly_direction_cert_family(base_dir):
     """Cert [458]: QA Witt Tower Orbit Weekly Direction -- pooled 5 US equity indices weekly; S-orbit n_S=92 predicts +1.17% next-week return (perm_p=0.0008); 3 of 5 individual significant (IXIC/DJI/QQQ); RUT null (small-cap exception); 48% non-extreme pairs; timescale contrast: weekly S>0 vs monthly S<0 (cert [457]); 6/6 PASS."""
     import subprocess
@@ -12875,6 +12899,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (459, "QA Witt Tower A-Coordinate Weekly Direction Cert family",
+     _validate_qa_witt_tower_a_coord_direction_cert_family,
+     "QA Witt Tower A-Coordinate Weekly Direction Cert [459]. Tests QA A2-derived coord a=b+2*e (raw, not mod-reduced) on consecutive weekly return rank-bins in Z/27Z predicting next-week price direction. PREDICTION GROUP: a<=6 (triangular low-A region). POOLED: 5 US indices (^GSPC,^IXIC,^DJI,QQQ,SPY), n=213, mean=+0.99% vs base=+0.17%, pos=60.1%, perm_p~0.0002 (0/5000 shuffles exceeded). PER-INDEX: GSPC(n=45,p=0.016), DJI(n=42,p=0.012), SPY(n=39,p=0.005) significant; IXIC(n=42,p=0.338), QQQ(n=45,p=0.120) null. REGIME STRUCTURE: OOS post-2015 GSPC n=19, mean=+2.52%, pos=78.9%, perm_p~0.0002. IS pre-2015 GSPC n=26, mean=-0.05%, pos=50.0%, perm_p=0.7968 (NULL -- regime-concentration is the claim). A-COORD GEOMETRY: b+2e<=6 defines triangular corner region in Z/27Z x Z/27Z; e doubly weighted per A2 axiom; distinct from S-orbit (mod-9 divisibility) and from both-low rectangle (b<=6 AND e<=6). CERTIFIED: (C1) pooled perm_p<0.01 PASS. (C2) mean=+0.99%>=0.5% PASS. (C3) pos=60.1%>57% PASS. (C4) 3/5 individually p<0.05 PASS. (C5) OOS perm_p<0.05 PASS. (C6) IS perm_p=0.797>0.30 (regime null expected) PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486; Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41. Structural parents: cert [110], cert [457], cert [458]. Validated 2026-06-18.",
+     "459_qa_witt_tower_a_coord_direction",
+     "qa_witt_tower_a_coord_direction_cert_v1", True),
     (458, "QA Witt Tower Orbit Weekly Direction Cert family",
      _validate_qa_witt_tower_orbit_weekly_direction_cert_family,
      "QA Witt Tower Orbit Weekly Direction Cert [458]. Tests QA orbit class → next-week PRICE DIRECTION on 5 pooled US equity indices (^GSPC, ^IXIC, ^RUT, ^DJI, QQQ), 25y weekly data. PRIMARY: Pooled S-orbit n_S=92, mean=+1.17% vs C_mean=+0.20%, pos_rate=60.9%, perm_p=0.0008. PER-INDEX: IXIC(p=0.015), DJI(p=0.002), QQQ(p=0.022) significant; GSPC(p=0.138) marginal; RUT(p=0.606) documented null exception (small-cap). NON-EXTREME PAIRS: 13/27 GSPC S-orbit weeks are (b!=0,e!=0) -- QA divisibility structure extends beyond extreme-crash filter. TIMESCALE CONTRAST: weekly S_mean>0 (bounce) vs monthly S_mean<0 cert [457] (continuation). MONTHLY DIRECTION NULL: US pooled monthly perm_p=0.93; global pooled perm_p=0.40 -- monthly bearish tendency is GSPC-specific. CERTIFIED: (C1) n_S=92>=80, perm_p=0.0008<0.01 PASS. (C2) diff=+0.0097>=0.005 PASS. (C3) pos_rate=60.9%>55% PASS. (C4) 3/5 individual significant PASS. (C5) weekly S_mean>0 PASS. (C6) non-extreme pairs=13>=10 PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110], cert [457]. Validated 2026-06-18.",

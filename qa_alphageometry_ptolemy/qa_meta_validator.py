@@ -10309,6 +10309,30 @@ def _validate_qa_witt_tower_seismic_phase_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
+    """Cert [453]: QA Witt Tower Orbit Recession Predictor -- S-orbit (b=e=0 mod 9) concentration in NBER recessions 33% vs 8.4% base (perm p=0.013); S->C=0, C->S=0 (orbit staircase); Jan 2020 S-orbit leads Feb 2020 recession by 1 month; neg_rate_S=58.3% vs 35.7%; first QA finance prediction cert."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_orbit_recession_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_orbit_recession_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_dst_storm_orbit_cert_family(base_dir):
     """Cert [452]: QA Witt Tower Geomagnetic Storm Dst Orbit Discriminator -- NASA OMNI2 hourly Dst Aug-Sep 2017 (1464 windows); 17 G4 storm hours (Dst<-100 nT) ALL in T0 (log10_p=-8.19); quiet spans all tiers; orbital polarity symmetry with [449] (SEP->T2, storm->T0); 7th domain (geomagnetism)."""
     import subprocess
@@ -12731,6 +12755,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (453, "QA Witt Tower Orbit Recession Predictor Cert family",
+     _validate_qa_witt_tower_orbit_recession_cert_family,
+     "QA Witt Tower Orbit Recession Predictor Cert [453]. First QA finance PREDICTION cert: extends cert [442] regime classification to forward-looking recession signal. Data: S&P 500 (^GSPC) monthly log-returns, Yahoo Finance 25-year window (N=299 monthly state pairs, 2001-2026). NBER recessions: 2001-03/11, 2007-12/2009-06, 2020-02/04 (K_rec=25, 8.4% base rate). QA mapping: log-return rank-normalized to Z/27Z (0-indexed); state pair (b_{t-1},b_t); S=both b,e divisible by 9 (Singularity, n_S=12); Sat=exactly one divisible by 9 (Satellite); C=neither (Cosmos). Theorem NT: log-returns (float) observer projections; rank bins and orbit class are QA integer state. CLAIM A: S-orbit months concentrate in NBER recession months 33.3% vs 8.4% base; hypergeometric log10_p=-1.92; permutation p=0.013 < 0.05. CLAIM B (orbit staircase): S->C=0, C->S=0 in 25 years; all transitions between extreme orbits must pass through Satellite. CLAIM C: mean_ret_after_S=-1.30% < 0 < mean_ret_after_C=+0.62%; neg_rate_S=58.3% vs neg_rate_C=35.7% (gap=22.6pp). CLAIM D (lead signal): Jan 2020 S-orbit state (b=18,e=9) directly preceded the Feb 2020 NBER recession onset -- 1-month lead on COVID crash. CERTIFIED FACTS: (C1) N=299, n_S=12, n_rec=25 PASS. (C2) S->C=0, C->S=0 PASS. (C3) k_S_rec=4, log10_p=-1.92 < -1.5 PASS. (C4) perm_p=0.013 < 0.05 PASS. (C5) mean_S_next=-0.013 < 0 < mean_C_next=+0.006 PASS. (C6) lead_months=['2020-01'] >= 1 PASS. 6 checks PASS. PRIMARY SOURCES: Wall HS (1960) doi:10.1080/00029890.1960.11989541; NBER www.nber.org/cycles. Structural parents: cert [110], cert [442]. First prediction cert in Witt tower finance chain. Validated 2026-06-18.",
+     "453_qa_witt_tower_orbit_recession",
+     "qa_witt_tower_orbit_recession_cert_v1", True),
     (452, "QA Witt Tower Geomagnetic Storm Dst Orbit Discriminator Cert family",
      _validate_qa_witt_tower_dst_storm_orbit_cert_family,
      "QA Witt Tower Geomagnetic Storm Dst Orbit Discriminator Cert [452]. Seventh domain in Witt tower empirical chain: geomagnetism / space weather. Feature: mean hourly Dst index (nT) per window (scalar index, same feature class as cert [449]). Data: NASA OMNI2 hourly Dst, August-September 2017 (1464 hourly windows); doi:10.48322/45bb-8792 (King & Papitashvili 2005). Event: G4 geomagnetic storm September 8-9 2017 (Dst minimum -148 nT), coincident with X9.3 solar flare and cert [449] SEP event. Storm class: 17 hours with Dst < -100 nT; background: 1447 quiet/moderate hours. QA mapping: scalar Dst rank-normalized ascending (most negative = rank 0 = lowest rank = T0); bin = floor(rank * 27 / 1464) in Z/27Z; T0=bins 0-8 (Singularity), T1=9-17 (Satellite), T2=18-26 (Cosmos). Theorem NT: Dst values (nT, float) are observer projections; rank bin in Z/27Z is QA integer state. CERTIFIED FACTS: (C1) n_storm=17, n_quiet=1447, n_total=1464 PASS. (C2) storm_mean=-117.4 nT < -100 AND quiet_mean=-19.4 nT > -30 PASS. (C3) ALL 17 storm hours in T0; K_t0=488, log10_p=-8.19 < -7.0 PASS. (C4) |storm_mean - quiet_mean|=98.0 nT > 90.0 PASS. (C5) storm tiers={T0}; quiet spans {T0,T1,T2} PASS. (C6) peak_storm_dst=-148 nT < -120 (G3+ minimum) PASS. 6 checks PASS. Orbital polarity symmetry: cert [449] SEP max-flux -> T2 (Cosmos); cert [452] storm min-Dst -> T0 (Singularity); antipodal in QA orbit space. PRIMARY SOURCES: King & Papitashvili (2005) doi:10.48322/45bb-8792 (OMNI2); Sugiura (1964) doi:10.1029/GM009p0001 (Dst definition). Structural parent: cert [110]. Empirical chain extends certs [442]-[451]. Validated 2026-06-18.",

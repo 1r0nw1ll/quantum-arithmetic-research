@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [461] | [QA Witt Tower A-Coordinate Daily Direction](461_qa_witt_tower_daily_a_coord.md) | Daily a=b+2e<=6: n=936, +0.37%, p~0.0002; IS pre-2015 p=0.0002 (regime-null resolved); crash-rec b<=2,e>=18: n=1460, -0.12%, p~0.0002; 4/5 sig; A2 dominates D1 coord | PASS |
 | [460] | [QA Witt Tower T-Step Contrarian](460_qa_witt_tower_tstep_contrarian.md) | T-step tp=(b+e)%27≥22 → -0.07% next-week (p=0.0006); tp≤4 → +0.33% (p=0.0042); spread=0.40%; DJI/SPY sig; QQQ null+positive (tech exception); bidirectional anti-persistence | PASS |
 | [459] | [QA Witt Tower A-Coordinate Weekly Direction](459_qa_witt_tower_a_coord_direction.md) | QA A2 coord a=b+2e≤6 → +0.99% next-week pooled (perm_p≈0.0002, n=213); 3/5 individually sig (GSPC/DJI/SPY); OOS post-2015: +2.52%, perm_p≈0.0002; IS pre-2015: NULL (regime-aware cert) | PASS |
 | [458] | [QA Witt Tower Orbit Weekly Direction](458_qa_witt_tower_orbit_weekly_direction.md) | Pooled 5 US weekly: S-orbit n_S=92 → +1.17% next-week (perm_p=0.0008); 3/5 individually sig (IXIC/DJI/QQQ); RUT null (small-cap); 48% non-extreme pairs; timescale inversion: weekly S>0 vs monthly S<0 | PASS |

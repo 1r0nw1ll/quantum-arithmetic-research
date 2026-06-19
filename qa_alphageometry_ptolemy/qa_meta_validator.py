@@ -10333,6 +10333,30 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_daily_a_coord_cert_family(base_dir):
+    """Cert [461]: QA Witt Tower A-Coordinate Daily Direction (Bidirectional, IS-Robust) -- a=b+2*e<=6 on daily rank-bins; pooled 5 US indices n=936 mean=+0.37% perm_p~0.0002; IS (GSPC pre-2015) n=111 perm_p=0.0002 SIGNIFICANT (resolves [459] IS-null); OOS n=71 perm_p=0.0108; crash-rec (b<=2,e>=18) n=1460 mean=-0.12% perm_p~0.0002; 4/5 individually sig (GSPC/DJI/SPY/QQQ; IXIC marginal); A2 dominates D1: a<=6 mean=+0.37% vs d<=6 mean=+0.26%; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_daily_a_coord_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_daily_a_coord_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=300,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_tstep_contrarian_cert_family(base_dir):
     """Cert [460]: QA Witt Tower T-Step Contrarian Weekly Direction -- tp=(b+e)%27 exhibits anti-persistence; tp>=22 pooled n=1289 mean=-0.07% perm_p=0.0006; tp<=4 pooled n=1575 mean=+0.33% perm_p=0.0042; spread=0.40%; DJI(p=0.020)/SPY(p=0.019) sig; GSPC(p=0.056) marginal; IXIC/QQQ null; QQQ tp>=22 mean=+0.15% (tech exception -- C6 PASS when QQQ positive); 6/6 PASS."""
     import subprocess
@@ -12923,6 +12947,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (461, "QA Witt Tower A-Coordinate Daily Direction Cert family",
+     _validate_qa_witt_tower_daily_a_coord_cert_family,
+     "QA Witt Tower A-Coordinate Daily Direction Cert [461]. Tests QA A2 derived coord a=b+2*e on DAILY return rank-bins in Z/27Z predicting next-day direction. DAILY SCALE: 31415 state pairs, 5 US indices (^GSPC,^IXIC,^DJI,QQQ,SPY), 25y. POSITIVE (a<=6): pooled n=936, mean=+0.37%, perm_p~0.0002 (0/5000 shuffles). IS GSPC pre-2015: n=111, mean=+0.46%, perm_p=0.0002 -- IS SIGNIFICANT (resolves cert [459] IS-null at weekly scale). OOS GSPC 2015+: n=71, mean=+0.40%, perm_p=0.0108. Per-index: GSPC(0/5000), DJI(0/5000), SPY(0/5000), QQQ(p=0.013) significant; IXIC(p=0.097) marginal (4/5 sig). NEGATIVE (crash-recovery b<=2,e>=18): pooled n=1460, mean=-0.12%, perm_p~0.0002. DJI(p=0.002)/GSPC(p=0.009)/IXIC(p=0.020) significant; QQQ null (tech exception). DISJOINT: a<=6 and b<=2,e>=18 are structurally disjoint (b<=2,e>=18 -> a>=36); A2 double-weighting of e separates bounce regime (a small) from crash-recovery-failure (a large). A2 DOMINATES D1: daily a<=6 mean=+0.37% vs d<=6 mean=+0.26% (A2 correctly excludes negative crash-recovery pairs like (0,5) that d<=6 includes). T-STEP DAILY NULL: tp>=22 p=0.035 marginal, tp<=4 p=0.41 NULL -- T-step contrarian disappears at daily scale (was weekly-scale effect [460]). CERTIFIED: (C1) a<=6 perm_p<0.001 PASS. (C2) IS perm_p=0.0002<0.01 PASS. (C3) OOS perm_p=0.0108<0.05 PASS. (C4) crash-rec perm_p<0.001 PASS. (C5) 4/5 sig PASS. (C6) bidirectional PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486; Jegadeesh N (1990) doi:10.2307/2328797. Structural parents: cert [110], cert [457], cert [458], cert [459]. Validated 2026-06-19.",
+     "461_qa_witt_tower_daily_a_coord",
+     "qa_witt_tower_daily_a_coord_cert_v1", True),
     (460, "QA Witt Tower T-Step Contrarian Weekly Direction Cert family",
      _validate_qa_witt_tower_tstep_contrarian_cert_family,
      "QA Witt Tower T-Step Contrarian Weekly Direction Cert [460]. Tests whether QA T-step projection tp=(b+e)%27 exhibits anti-persistence in weekly equity returns across 5 US indices (^GSPC,^IXIC,^DJI,QQQ,SPY), 25y weekly data. T-STEP: tp=(b+e)%27 -- the mod-27 projection of the next rank-bin under the T-operator. ANTI-PERSISTENCE: high tp (>=22, top 19%) -> below-average actual returns; low tp (<=4, bottom 19%) -> above-average. POOLED HI (tp>=22): n=1289, mean=-0.07%, perm_p=0.0006. POOLED LO (tp<=4): n=1575, mean=+0.33%, perm_p=0.0042. BIDIRECTIONAL SPREAD: lo-hi=+0.40%. PER-INDEX HI: DJI(n=245,p=0.020), SPY(n=272,p=0.019) significant; GSPC(n=257,p=0.056) marginal; IXIC(n=255,p=0.168) null; QQQ(n=260,mean=+0.15%,p=0.610) null+positive (tech exception). RELATION TO [459]: complementary -- a<=6 identifies positive bounce regime; tp>=22 identifies negative reversal regime; together triangulate QA anti-persistence structure. CERTIFIED: (C1) hi perm_p=0.0006<0.01 PASS. (C2) lo perm_p=0.0042<0.05 PASS. (C3) spread=0.40%>=0.30% PASS. (C4) hi mean=-0.07%<0 PASS. (C5) lo mean=+0.33%>0 PASS. (C6) QQQ mean=+0.15%>=0 (tech exception documented) PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486; Jegadeesh N (1990) doi:10.2307/2328797. Structural parents: cert [110], cert [457], cert [458], cert [459]. Validated 2026-06-19.",

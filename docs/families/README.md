@@ -2,6 +2,12 @@
 
 **Recently added**
 
+| [457] | [QA Witt Tower Orbit Price Volatility](457_qa_witt_tower_orbit_price.md) | S-orbit → 1.99x next-month price volatility GSPC (perm_p=0.0002); QQQ 1.62x; direction S=-1.30%/41.7%pos (perm_p=0.119 marginal); Sat=+1.34%>C=+0.62%; T-step dev=NULL (perm_p=0.944) | PASS |
+| [456] | [QA Witt Tower Eisenstein Form Real-Data](456_qa_witt_tower_eisenstein.md) | f=b*b+b*e-e*e on 299 GSPC pairs; T-step identity f(e,b+e)=-f(b,e) holds all N; n_pos=207(69.2%); sign-flip=49.7%; f<0 transience=14.8%; PREDICTIVE NULL perm_p=0.752 | PASS |
+| [455] | [QA Witt Tower Orbit Transition Markov Chain](455_qa_witt_tower_orbit_markov.md) | Pre-registered IS matrix; staircase S→C=C→S=0 MATHEMATICALLY FORCED; P(C→C)_OOS=0.908>0.80; P(S→S)_OOS<P(C→C)_OOS; GSPC+QQQ pooled 6/6 | PASS |
+| [454] | [QA Witt Tower Orbit Recession Null (Gold)](454_qa_witt_tower_orbit_recession_null.md) | Gold k_S_rec=0 perm_p=1.000; Gold mean_ret_after_S=+8.2% vs GSPC=-1.3%; QQQ positive control 4/6=67% perm_p=0.0006; risk-asset specificity confirmed | PASS |
+| [453] | [QA Witt Tower Orbit Recession Predictor](453_qa_witt_tower_orbit_recession.md) | S-orbit monthly 8/13 recession months (62%); perm_p=0.013; S neg-bias perm_p=0.101; NBER 2001/2008/2020 alignment; recession rate in S=0.67 vs baseline=0.04 | PASS |
+
 | [383] | [QA Pyth-2 Basics](383_qa_pyth2_basics.md) | Plato Atlantis 9600yr mod24=0=400×24; 9600-9400=200%24=8; Ishango 7000BC mod24=16=Myriad; 8 primes to 19=φ(30); sea 100m mod24=4=portal; 529-505=24=QA modulus; 4 elements=tuple; 600yr%24=0 | PASS |
 | [382] | [QA Pyth-1 Recovery of Knowledge](382_qa_pyth1_recovery_knowledge.md) | Pythagoras 580 BC mod24=4=portal; Atlantis 9400yr mod24=16=Myriad; 1548 BC mod24=12=chromatic; 340 gen mod24=4; 529=23² mod24=1 Singularity; 3 stages 600/400/300 all distinct residues | PASS |
 | [381] | [QA Pyth-3 Two Forms of Energy](381_qa_pyth3_two_forms_energy.md) | 180° phase 180%24=12=chromatic; film 1/16=2⁴ Myriad; TV 1/32=2⁵; 7×7=49=7² 49%24=1 Singularity-class; 3+3=6=seed; 3×3=9 mod9=0; 13000ft/400mph both mod24=16=Myriad | PASS |

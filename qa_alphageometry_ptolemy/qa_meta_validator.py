@@ -10333,6 +10333,30 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_orbit_price_cert_family(base_dir):
+    """Cert [457]: QA Witt Tower Orbit Price Volatility -- S-orbit predicts 1.99x next-month volatility on ^GSPC (perm_p=0.0002); QQQ 1.62x (perm_p=0.046); direction S=-1.30%/41.7%pos marginal; Sat=+1.34%>C=+0.62%; T-step deviation NULL (perm_p=0.944); vol ordering S>Sat>=C; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_orbit_price_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_orbit_price_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_eisenstein_cert_family(base_dir):
     """Cert [456]: QA Witt Tower Eisenstein Form Real-Data -- f(b,e)=b*b+b*e-e*e on ^GSPC 25y monthly bins (N=299); T-step identity verified; n_pos=207 (69.2%)/n_neg=89/n_zero=3; f<0 transience P=14.8%; PREDICTIVE NULL perm_p=0.752 (f sign does not predict next-month returns); S-orbit spans both Eisenstein signs."""
     import subprocess
@@ -12827,6 +12851,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (457, "QA Witt Tower Orbit Price Volatility Cert family",
+     _validate_qa_witt_tower_orbit_price_cert_family,
+     "QA Witt Tower Orbit Price Volatility Cert [457]. Tests whether QA orbit class (S/Sat/C on mod-27 monthly return rank bins) predicts NEXT-MONTH PRICE BEHAVIOR on ^GSPC (N=299 state pairs, 25y monthly) and QQQ. PRIMARY FINDING: S-orbit (b%9==0 AND e%9==0, n=12) predicts 1.99x higher next-month absolute return vs C-orbit (6.30% vs 3.17%, perm_p=0.0002 two-tail). QQQ confirms: S/C ratio=1.62x, perm_p=0.046. DIRECTION: S mean=-1.30%, pos=41.7% (perm_p=0.119, marginal, n_S=12); Sat mean=+1.34%>C=+0.62% (perm_p=0.276, not significant). HONEST NULL: T-step deviation predictive version perm_p=0.944 (look-ahead-corrected; prior spurious signal was artifact). VOL ORDERING: S=6.30%>Sat=3.53%>=C=3.17%. CERTIFIED: (C1) GSPC S vol perm_p=0.0002<0.01 PASS. (C2) GSPC S/C ratio=1.99x>1.5x PASS. (C3) QQQ ratio=1.62x>1.3x PASS. (C4) S mean_ret=-1.30%<0 PASS. (C5) Sat mean_ret=1.34%>C=0.62% PASS. (C6) vol ordering S>Sat>=C PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486 (efficiency baseline). Structural parents: cert [110], certs [453]-[456]. Validated 2026-06-18.",
+     "457_qa_witt_tower_orbit_price",
+     "qa_witt_tower_orbit_price_cert_v1", True),
     (456, "QA Witt Tower Eisenstein Form Real-Data Cert family",
      _validate_qa_witt_tower_eisenstein_cert_family,
      "QA Witt Tower Eisenstein Form Real-Data Cert [456]. Tests f(b,e)=b*b+b*e-e*e (Z[phi] norm, cert [214] identity) on real ^GSPC monthly rank-bin state pairs (N=299, same QA mapping as certs [453]-[455]). T-step identity: f(e,b+e)=-f(b,e) verified for ALL 299 pairs (algebraic, trivially true on integers, confirmed on market bin data). Distribution: n_pos=207 (69.2%), n_neg=89 (29.8%), n_zero=3 (only at b=e=0 crash-cluster months). Sign-flip rate=50.7% (consistent with T-step alternation). f<0 transience: P(f_{t+1}<0|f_t<0)=14.8%<=30% -- f<0 is transient, mirrors S-orbit. KEY RESULT: PREDICTIVE NULL -- f sign does NOT predict next-month returns; perm_p(two-tail)=0.752 (honest failure reported). S-orbit Eisenstein values span both signs: {-81,0,81,324,405} -- orbit class and Eisenstein sign are orthogonal. CERTIFIED FACTS: (C1) T-step identity all 299 pairs PASS. (C2) n_pos/N=69.2% in [0.55,0.80], n_zero<=5 PASS. (C3) sign-flip rate=50.7% in [0.40,0.60] PASS. (C4) P(persist f<0)=14.8%<=0.30 PASS. (C5) perm_p=0.752>=0.10 (predictive null) PASS. (C6) S-orbit covers both Eisenstein signs PASS. 6 checks PASS. PRIMARY SOURCES: Wall HS (1960) doi:10.1080/00029890.1960.11989541; cert [214] algebraic identity. Structural parents: cert [110], cert [214], cert [453]. Validated 2026-06-18.",

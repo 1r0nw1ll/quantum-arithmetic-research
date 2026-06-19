@@ -1,0 +1,1 @@
+Every value is equal to some value.

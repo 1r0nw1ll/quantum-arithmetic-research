@@ -23,7 +23,15 @@ from qa_math_compiler_validator import validate_corpus, validate_demo_pack_v1
 
 CORPUS_SCHEMA_ID = "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1"
 CORPUS_HASH_DOMAIN = "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1:entries"
-SPLIT_BY_INDEX = ("train", "train", "train", "validation", "test")
+def split_for_index(index: int, total: int) -> str:
+    """Deterministic 60/20/20 split with contiguous, reproducible partitions."""
+    train_end = (total * 3 + 4) // 5
+    validation_end = (total * 4 + 4) // 5
+    if index < train_end:
+        return "train"
+    if index < validation_end:
+        return "validation"
+    return "test"
 
 
 def canonical_json(obj: Any) -> str:
@@ -102,12 +110,6 @@ def build_manifest(pack_dir: Path) -> Dict[str, Any]:
     examples = index.get("examples")
     if not isinstance(examples, list):
         raise ValueError("index.examples must be a list")
-    if len(examples) != len(SPLIT_BY_INDEX):
-        raise ValueError(
-            f"demo_pack_v1 split policy requires {len(SPLIT_BY_INDEX)} examples; "
-            f"got {len(examples)}"
-        )
-
     entries: List[Dict[str, Any]] = []
     tasks: List[Dict[str, Any]] = []
     for idx, index_entry in enumerate(examples):
@@ -138,7 +140,7 @@ def build_manifest(pack_dir: Path) -> Dict[str, Any]:
         entries.append(
             {
                 "example_id": example_id,
-                "split": SPLIT_BY_INDEX[idx],
+                "split": split_for_index(idx, len(examples)),
                 "proof_assistant": "lean4",
                 "task_hash": canonical_hash(task),
                 "trace_hash": canonical_hash(trace),
@@ -168,7 +170,21 @@ def build_manifest(pack_dir: Path) -> Dict[str, Any]:
         "corpus_sha256": domain_hash(CORPUS_HASH_DOMAIN, entries),
         "invariant_diff": {
             "source_pack": pack_dir.name,
-            "split_policy": list(SPLIT_BY_INDEX),
+            "split_policy": {
+                "name": "contiguous_60_20_20",
+                "train_count": sum(
+                    split_for_index(idx, entry_count) == "train"
+                    for idx in range(entry_count)
+                ),
+                "validation_count": sum(
+                    split_for_index(idx, entry_count) == "validation"
+                    for idx in range(entry_count)
+                ),
+                "test_count": sum(
+                    split_for_index(idx, entry_count) == "test"
+                    for idx in range(entry_count)
+                ),
+            },
             "hash_policy": "sha256(canonical_json(artifact))",
             "corpus_hash_policy": "sha256(domain + NUL + canonical_json(entries))",
         },

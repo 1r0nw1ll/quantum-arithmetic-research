@@ -1,0 +1,1 @@
+Adding a successor equals the successor of the sum.

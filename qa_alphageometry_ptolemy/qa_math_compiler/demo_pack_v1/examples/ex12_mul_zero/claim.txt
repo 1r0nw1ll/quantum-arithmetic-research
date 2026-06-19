@@ -1,0 +1,1 @@
+Zero annihilates multiplication on the right.

@@ -1,0 +1,1 @@
+A constant function ignores its argument.

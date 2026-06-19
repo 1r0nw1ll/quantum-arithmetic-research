@@ -1,0 +1,1 @@
+The identity function returns its input.

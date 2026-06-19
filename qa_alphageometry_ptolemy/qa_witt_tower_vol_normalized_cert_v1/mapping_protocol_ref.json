@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [469]: QA Witt Tower Volatility-Normalized Returns. Claim: The a=b+2e<=6 daily signal from cert [461] (+0.37%, perm_p~0.0002) survives 21-day realized-vol normalization, demonstrating the signal is not a low-volatility anomaly artifact. Observer: daily log-return -> rank bin in Z/27Z. QA state: b=bins[t-1], e=bins[t]. A2 derived: a=b+2e (raw). Target: log_ret[t+1] / sigma_21d (vol-normalized). PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Shannon CE (1948) doi:10.1002/j.1538-7305.1948.tb01338.x; cert [461] (parent signal). Structural parents: cert [110], cert [461]. Validated 2026-06-19."
+}

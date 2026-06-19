@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [470]: QA Witt Tower Crash Pair Bounce Persistence. Claim: The (0,0) rank-bin crash-pair bounce from cert [463] (day+1 US +1.46%, INTL +1.90%) persists over 3 trading days; the 3-day cumulative return is positive and significant. Observer: daily log-return -> rank bin in Z/27Z. QA state: b=bins[t-1], e=bins[t]; (0,0) pair = b=0 AND e=0. Target: log_ret[t+k] for k=1,2,3. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; cert [463] (parent signal, US+INTL day+1 bounce). Structural parents: cert [110], cert [463]. Validated 2026-06-19."
+}

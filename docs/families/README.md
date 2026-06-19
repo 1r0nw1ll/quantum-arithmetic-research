@@ -2,6 +2,9 @@
 
 **Recently added**
 
+| [471] | [QA Witt Tower Multi-Scale Alignment](471_qa_witt_tower_multiscale_alignment.md) | Daily a≤6 + weekly S-orbit co-activation: both +1.67% vs daily-only +0.31% (5.3× amplification); p=0.0026; n=38 pooled; two QA timescales compound; 6/6 PASS | PASS |
+| [470] | [QA Witt Tower Crash Pair Bounce Persistence](470_qa_witt_tower_crash_pair_persistence.md) | (0,0) crash pair 3-day profile: day+1 +1.47%, day+2 −0.41% (reversion, p=0.0002), day+3 +0.84% (recovery); cum3=+1.89% US, +1.88% INTL; all 3 days individually sig; 6/6 PASS | PASS |
+| [469] | [QA Witt Tower Vol-Normalized Returns](469_qa_witt_tower_vol_normalized.md) | a≤6 daily survives 21d vol normalization (vol-p=0.0004); structural finding: a≤6 is HIGH-vol signal (ratio=1.69), not low-vol anomaly; genuine alpha; 6/6 PASS | PASS |
 | [468] | [QA Witt Tower MI Ceiling Theory](468_qa_witt_tower_mi_ceiling_theory.md) | Closed-form MI_ratio(q,r) for T0/T1/T2 partition; 6 binary domains within 1.1%; binary monotone + monotone-in-r proven; ~70% zone explained; 6/6 PASS | PASS |
 | [467] | [QA Witt Tower Cross-Domain MI Survey](467_qa_witt_tower_mi_xdomain.md) | Cross-domain MI: I(orbit_tier;label) sig (perm_p<0.001) across 7 physical domains; 0/35000 null hits; ENSO 69.9% SEP 69.7% converge (delta=0.17%); binary monotone law 0 violations; 6/6 PASS | PASS |
 | [466] | [QA Witt Tower S-Orbit Weekly Regime](466_qa_witt_tower_s_orbit_weekly_regime.md) | Regime analysis of [458]: IS null (p=0.12), OOS +1.53% p=0.0044; both weekly operators OOS-concentrated ([459]+[466]); daily operators IS+OOS; timescale regime boundary at 2015; DJI OOS sig p=0.022; RUT null both | PASS |

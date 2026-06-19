@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [471]: QA Witt Tower Multi-Scale Alignment. Claim: Daily trading days satisfying both the a=b+2e<=6 daily QA condition (cert [461]) AND falling in a weekly S-orbit predicted week (cert [466]) produce a next-day return amplified above the daily-only signal. Two independent QA timescales (daily rank bins + weekly rank bins) compound when co-active. Observer: daily log-return AND weekly log-return, both -> rank bins in Z/27Z. QA state: daily (b_d,e_d) with a_d=b_d+2e_d<=6; weekly S-orbit = b_w%9==0 AND e_w%9==0. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; cert [461] (daily signal parent); cert [466] (weekly regime parent). Structural parents: cert [110], cert [461], cert [466]. Validated 2026-06-19."
+}

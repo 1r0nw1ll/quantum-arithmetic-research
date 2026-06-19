@@ -1812,9 +1812,20 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_dir,
         "QA_MATH_COMPILER_LIVE_KERNEL_CERTIFICATE.v1.json",
     )
+    schema_kernel_trace_manifest = os.path.join(
+        schema_dir,
+        "QA_MATH_COMPILER_KERNEL_TRACE_MANIFEST.v1.json",
+    )
+    schema_kernel_trace_index = os.path.join(
+        schema_dir,
+        "QA_MATH_COMPILER_KERNEL_TRACE_INDEX.v1.json",
+    )
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
     corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
     live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
+    kernel_trace_compiler = os.path.join(mc_dir, "compile_kernel_traces.py")
+    kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
+    kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
     toolchain_manifest = os.path.join(mc_dir, "toolchains.json")
     live_kernel_report = os.path.join(
         mc_dir,
@@ -1843,14 +1854,33 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     assistants_neg = os.path.join(fixtures_dir, "assistants_invalid_nondeterministic.json")
     required_artifacts = [
         schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
-        schema_corpus, schema_assistants, schema_live_kernel, schema_demo_pack,
-        corpus_builder, live_kernel_verifier, toolchain_manifest,
-        live_kernel_report, demo_corpus,
+        schema_corpus, schema_assistants, schema_live_kernel,
+        schema_kernel_trace_manifest, schema_kernel_trace_index,
+        schema_demo_pack, corpus_builder, live_kernel_verifier,
+        kernel_trace_compiler, kernel_trace_manifest, kernel_trace_index,
+        toolchain_manifest, live_kernel_report, demo_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg, lemma_duplicate_neg,
         corpus_valid, corpus_neg, assistants_valid, assistants_neg,
     ]
+    if os.path.exists(kernel_trace_manifest):
+        with open(kernel_trace_manifest, "r", encoding="utf-8") as f:
+            kernel_manifest_data = json.load(f)
+        for case in kernel_manifest_data.get("cases", []):
+            if not isinstance(case, dict):
+                continue
+            source_rel = case.get("source")
+            artifact_rel = case.get("artifact_dir")
+            if isinstance(source_rel, str):
+                required_artifacts.append(os.path.join(mc_dir, source_rel))
+            if isinstance(artifact_rel, str):
+                required_artifacts.extend(
+                    [
+                        os.path.join(mc_dir, artifact_rel, "trace.json"),
+                        os.path.join(mc_dir, artifact_rel, "replay.json"),
+                    ]
+                )
     for fp in required_artifacts:
         if not os.path.exists(fp):
             return f"missing artifact: {os.path.basename(fp)}"
@@ -2125,6 +2155,28 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "demo_pack_v1 corpus rebuild returned ok=false: "
             f"{json.dumps(rebuild_result, sort_keys=True)}"
+        )
+
+    kernel_trace_command = [sys.executable, kernel_trace_compiler]
+    if os.environ.get("QA_MATH_COMPILER_CERTIFICATE_ONLY") == "1":
+        kernel_trace_command.append("--check-artifacts")
+    proc = subprocess.run(
+        kernel_trace_command,
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    try:
+        kernel_trace_result = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            f"kernel trace compiler returned non-JSON output: {exc}: "
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    if proc.returncode != 0 or kernel_trace_result.get("ok") is not True:
+        raise RuntimeError(
+            "Math compiler kernel-derived trace verification failed: "
+            f"{json.dumps(kernel_trace_result, sort_keys=True)}"
         )
 
     kernel_self_test = subprocess.run(
@@ -10479,6 +10531,48 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_multiscale_alignment_cert_family(base_dir):
+    """Cert [471]: QA Witt Tower Multi-Scale Alignment -- daily a<=6 AND weekly S-orbit co-activation amplifies next-day return; two QA timescales compound; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_multiscale_alignment_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_multiscale_alignment_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_witt_tower_crash_pair_persistence_cert_family(base_dir):
+    """Cert [470]: QA Witt Tower Crash Pair Bounce Persistence -- (0,0) 3-day profile: bounce +1.47%, give-back -0.41%, recovery +0.84%; cum3=+1.89%; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_crash_pair_persistence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_crash_pair_persistence_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_witt_tower_vol_normalized_cert_family(base_dir):
+    """Cert [469]: QA Witt Tower Vol-Normalized Returns -- a<=6 signal survives 21d vol normalization; high-vol signal (ratio=1.69); vol-perm_p=0.0004; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_vol_normalized_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_vol_normalized_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_mi_ceiling_theory_cert_family(base_dir):
     """Cert [468]: QA Witt Tower MI Ceiling Theory -- closed-form MI_ratio(q,r) for T0/T1/T2 partition; explains binary monotone law + ~70% convergence; 6/6 PASS."""
     import subprocess
@@ -13249,6 +13343,21 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (471, "QA Witt Tower Multi-Scale Alignment Cert family",
+     _validate_qa_witt_tower_multiscale_alignment_cert_family,
+     "QA Witt Tower Multi-Scale Alignment Cert [471]. Claim: Daily trading days satisfying both a=b+2e<=6 (daily QA, cert [461]) AND a predicted weekly S-orbit week (cert [466]) produce a next-day return amplified above the daily-only signal. Two independent QA timescales (daily rank bins + weekly rank bins) compound when co-active. CERTIFIED: (C1) daily-only perm_p<0.01 PASS. (C2) both-aligned perm_p<0.01 PASS. (C3) both mean > daily-only mean PASS. (C4) n_both>=30 PASS. (C5) both mean>0.5% PASS. (C6) both-vs-daily-only perm_p<0.10 PASS. 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; cert [461]; cert [466]. Validated 2026-06-19.",
+     "471_qa_witt_tower_multiscale_alignment",
+     "qa_witt_tower_multiscale_alignment_cert_v1", True),
+    (470, "QA Witt Tower Crash Pair Bounce Persistence Cert family",
+     _validate_qa_witt_tower_crash_pair_persistence_cert_family,
+     "QA Witt Tower Crash Pair Bounce Persistence Cert [470]. Claim: The (0,0) crash-pair bounce from cert [463] shows a 3-day bounce-giveback-recovery pattern: day+1 +1.47%, day+2 -0.41% (mean-reversion, significant p=0.0002), day+3 +0.84%. All three days individually significant. 3-day cumulative: US +1.89%, INTL +1.88%. CERTIFIED: (C1) day+1 US perm_p<0.001 PASS. (C2) day+2 reversion perm_p<0.01 PASS. (C3) day+3 recovery perm_p<0.001 PASS. (C4) cum3 US perm_p<0.001 PASS. (C5) day+1 INTL perm_p<0.001 PASS. (C6) cum3>1% PASS. 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; cert [463]. Validated 2026-06-19.",
+     "470_qa_witt_tower_crash_pair_persistence",
+     "qa_witt_tower_crash_pair_persistence_cert_v1", True),
+    (469, "QA Witt Tower Vol-Normalized Returns Cert family",
+     _validate_qa_witt_tower_vol_normalized_cert_family,
+     "QA Witt Tower Vol-Normalized Returns Cert [469]. Claim: The a=b+2e<=6 daily signal from cert [461] survives 21-day realized-vol normalization (vol-perm_p=0.0004). STRUCTURAL FINDING: a<=6 is a HIGH-volatility signal (vol_ratio=1.69 sig/ctrl) -- the opposite of the low-vol anomaly. Low-rank consecutive days cluster in volatile markets; the QA orbit structure captures genuine alpha despite (not because of) high vol. CERTIFIED: (C1) pooled vol-perm_p<0.01 PASS. (C2) raw+vol means both positive PASS. (C3) GSPC+DJI individually vol-sig PASS. (C4) vol_ratio>1.0 (HIGH-vol signal) PASS. (C5) raw perm_p<0.001 PASS. (C6) vol mean>0.05 PASS. 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; cert [461]. Validated 2026-06-19.",
+     "469_qa_witt_tower_vol_normalized",
+     "qa_witt_tower_vol_normalized_cert_v1", True),
     (468, "QA Witt Tower MI Ceiling Theory Cert family",
      _validate_qa_witt_tower_mi_ceiling_theory_cert_family,
      "QA Witt Tower MI Ceiling Theory Cert [468]. Claim: The closed-form formula MI_ratio(q,r)=MI(q,r)/H(binary,q) for the T0/T1/T2 equal-thirds rank partition predicts all 6 binary domain MI_ratios from cert [467] within 2% (max delta=1.1% for SEP at N=204). The formula derives from the rank-uniform partition assumption (Theorem NT). ANALYTIC RESULTS: (1) Binary monotone law: d/dq MI_ratio>0 for q in (0,1/3), verified 0 violations/320 pairs -- explains [467] empirical ordering of 6 domains by base rate. (2) Monotone in r (concentration): d/dr MI_ratio>0 for r in [1/3,1], 0 violations/264 pairs -- at r=1/3 MI=0 (independence), at r=1 MI is maximal. (3) ~70% convergence: at SEP empirical (q=0.2941,r=0.9667) formula gives 0.686, within 1.1% of observed SEP=0.697 and ENSO 3-class=0.699; both land in [0.68,0.72] zone of the MI_ratio surface. (4) Perfect info limit: as q->1/3, r=1, MI_ratio->1.0 (partition fully determines label). CERTIFIED: (C1) 6 binary domains within 2% PASS. (C2) binary monotone q-direction PASS. (C3) SEP+ENSO in [0.68,0.72] zone, delta<2% PASS. (C4) perfect info limit >0.999 PASS. (C5) monotone in r for r>=1/3 PASS. (C6) ranking preserved PASS. 6/6 PASS. PRIMARY SOURCES: Shannon CE (1948) doi:10.1002/j.1538-7305.1948.tb01338.x; Wall HS (1960) doi:10.1080/00029890.1960.11989541; cert [467] empirical inputs. Structural parents: cert [110], cert [467]. Validated 2026-06-19.",

@@ -1,7 +1,1 @@
-{
-  "example_id": "ex05_induction_add_zero",
-  "status": "PROVED",
-  "replay_rate": 1.0,
-  "compressed": false,
-  "introduced_lemmas": 0
-}
+{"compressed":false,"example_id":"ex05_induction_add_zero","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"8cae73558891916a34b8b292ae64c48a0bcf7baae3207ae4f2c1f1aa1a85fd4e"}

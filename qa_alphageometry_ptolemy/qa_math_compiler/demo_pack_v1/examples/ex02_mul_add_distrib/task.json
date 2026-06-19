@@ -4,9 +4,7 @@
   "created_utc": "2026-02-12T00:10:00Z",
   "nl_statement": "Multiplication distributes over addition on the right.",
   "formal_goal": "theorem ex02_add_mul (a b c : Nat) : (a + b) * c = a * c + b * c",
-  "imports": [
-    "Mathlib.Data.Nat.Basic"
-  ],
+  "imports": [],
   "context": [
     "open Nat"
   ],

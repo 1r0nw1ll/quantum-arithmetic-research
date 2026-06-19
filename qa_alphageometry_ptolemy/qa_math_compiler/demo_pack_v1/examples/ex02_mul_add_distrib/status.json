@@ -1,7 +1,1 @@
-{
-  "example_id": "ex02_mul_add_distrib",
-  "status": "PROVED",
-  "replay_rate": 1.0,
-  "compressed": false,
-  "introduced_lemmas": 0
-}
+{"compressed":false,"example_id":"ex02_mul_add_distrib","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"26189f8dfe0d76c6e9beff91b5345ae69073b29c3d3eb56377ff08a23fa80b07"}

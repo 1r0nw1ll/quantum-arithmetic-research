@@ -1,7 +1,1 @@
-{
-  "example_id": "ex04_inequality_add_right",
-  "status": "PROVED",
-  "replay_rate": 1.0,
-  "compressed": false,
-  "introduced_lemmas": 0
-}
+{"compressed":false,"example_id":"ex04_inequality_add_right","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"2f2fa1f2730f6fd3c7afff0b4f5447a80b14d1a6bc55f91094d65344ce88c590"}

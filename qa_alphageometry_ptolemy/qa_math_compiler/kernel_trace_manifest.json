@@ -1,0 +1,65 @@
+{
+  "schema_id": "QA_MATH_COMPILER_KERNEL_TRACE_MANIFEST.v1",
+  "toolchain_id": "lean4.31.0",
+  "cases": [
+    {
+      "case_id": "ex01_add_comm",
+      "source": "demo_pack_v1/examples/ex01_add_comm/proof.lean",
+      "expected_status": "SUCCESS",
+      "proof_method": "Nat.add_comm",
+      "artifact_dir": "demo_pack_v1/examples/ex01_add_comm"
+    },
+    {
+      "case_id": "ex02_mul_add_distrib",
+      "source": "demo_pack_v1/examples/ex02_mul_add_distrib/proof.lean",
+      "expected_status": "SUCCESS",
+      "proof_method": "Nat.add_mul",
+      "artifact_dir": "demo_pack_v1/examples/ex02_mul_add_distrib"
+    },
+    {
+      "case_id": "ex03_sum_first_n",
+      "source": "demo_pack_v1/examples/ex03_sum_first_n/proof.lean",
+      "expected_status": "SUCCESS",
+      "proof_method": "induction",
+      "artifact_dir": "demo_pack_v1/examples/ex03_sum_first_n"
+    },
+    {
+      "case_id": "ex04_inequality_add_right",
+      "source": "demo_pack_v1/examples/ex04_inequality_add_right/proof.lean",
+      "expected_status": "SUCCESS",
+      "proof_method": "Nat.le_add_right",
+      "artifact_dir": "demo_pack_v1/examples/ex04_inequality_add_right"
+    },
+    {
+      "case_id": "ex05_induction_add_zero",
+      "source": "demo_pack_v1/examples/ex05_induction_add_zero/proof.lean",
+      "expected_status": "SUCCESS",
+      "proof_method": "induction",
+      "artifact_dir": "demo_pack_v1/examples/ex05_induction_add_zero"
+    },
+    {
+      "case_id": "negative_parse_error",
+      "source": "kernel_cases/negative_parse_error.lean",
+      "expected_status": "FAIL",
+      "fail_type": "PARSE_AMBIGUITY",
+      "diagnostic_pattern": "unexpected end of input",
+      "artifact_dir": "kernel_traces/negative_parse_error"
+    },
+    {
+      "case_id": "negative_missing_dependency",
+      "source": "kernel_cases/negative_missing_dependency.lean",
+      "expected_status": "FAIL",
+      "fail_type": "MISSING_DEPENDENCY",
+      "diagnostic_pattern": "Unknown identifier",
+      "artifact_dir": "kernel_traces/negative_missing_dependency"
+    },
+    {
+      "case_id": "negative_type_mismatch",
+      "source": "kernel_cases/negative_type_mismatch.lean",
+      "expected_status": "FAIL",
+      "fail_type": "TYPE_MISMATCH",
+      "diagnostic_pattern": "Type mismatch",
+      "artifact_dir": "kernel_traces/negative_type_mismatch"
+    }
+  ]
+}

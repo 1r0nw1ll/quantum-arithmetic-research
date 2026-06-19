@@ -268,5 +268,8 @@ jobs:
           python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py --write-report
           git diff --exit-code -- qa_alphageometry_ptolemy/qa_math_compiler/artifacts/live_kernel_certificate.v1.json
 
+      - name: Replay kernel-derived proof traces
+        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py
+
       - name: Validate committed certificate
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py --check-report

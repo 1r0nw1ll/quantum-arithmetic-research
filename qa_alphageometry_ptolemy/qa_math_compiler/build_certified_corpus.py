@@ -183,8 +183,8 @@ def build_manifest(pack_dir: Path) -> Dict[str, Any]:
 
 
 def main() -> int:
-    if len(sys.argv) != 3 or sys.argv[1] not in {"build", "check"}:
-        print(f"Usage: {sys.argv[0]} build|check <demo_pack_dir>", file=sys.stderr)
+    if len(sys.argv) != 3 or sys.argv[1] not in {"build", "write", "check"}:
+        print(f"Usage: {sys.argv[0]} build|write|check <demo_pack_dir>", file=sys.stderr)
         return 2
     mode = sys.argv[1]
     pack_dir = Path(sys.argv[2]).resolve()
@@ -196,6 +196,21 @@ def main() -> int:
 
     if mode == "build":
         print(canonical_json(manifest))
+        return 0
+    if mode == "write":
+        corpus_path = pack_dir / "corpus.json"
+        corpus_path.write_text(canonical_json(manifest) + "\n", encoding="utf-8")
+        print(
+            canonical_json(
+                {
+                    "ok": True,
+                    "corpus_id": manifest["corpus_id"],
+                    "entry_count": manifest["metrics"]["entry_count"],
+                    "corpus_sha256": manifest["corpus_sha256"],
+                    "written": str(corpus_path),
+                }
+            )
+        )
         return 0
 
     corpus_path = pack_dir / "corpus.json"

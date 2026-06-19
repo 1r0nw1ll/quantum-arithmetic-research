@@ -3,10 +3,8 @@
   "task_id": "demo_pack_v1_ex04_inequality_add_right",
   "created_utc": "2026-02-12T00:30:00Z",
   "nl_statement": "For all naturals a b, a <= a + b.",
-  "formal_goal": "forall a b : Nat, a <= a + b",
-  "imports": [
-    "Mathlib.Data.Nat.Basic"
-  ],
+  "formal_goal": "theorem ex04_inequality_add_right (a b : Nat) : a ≤ a + b",
+  "imports": [],
   "context": [
     "open Nat"
   ],

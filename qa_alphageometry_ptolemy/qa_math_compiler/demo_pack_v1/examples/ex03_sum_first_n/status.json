@@ -1,7 +1,1 @@
-{
-  "example_id": "ex03_sum_first_n",
-  "status": "PROVED",
-  "replay_rate": 1.0,
-  "compressed": false,
-  "introduced_lemmas": 0
-}
+{"compressed":false,"example_id":"ex03_sum_first_n","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"cc21d3f00efecc7dd91d25ca9e54b594ffd08acd93c5a9a20241ba6efef237d3"}

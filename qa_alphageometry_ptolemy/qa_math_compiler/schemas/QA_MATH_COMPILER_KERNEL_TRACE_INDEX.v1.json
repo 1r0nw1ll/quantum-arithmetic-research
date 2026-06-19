@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_MATH_COMPILER_KERNEL_TRACE_INDEX.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "toolchain_id",
+    "toolchain_manifest_sha256",
+    "case_count",
+    "success_count",
+    "failure_count",
+    "cases",
+    "index_sha256"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_MATH_COMPILER_KERNEL_TRACE_INDEX.v1"
+    },
+    "toolchain_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "toolchain_manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "case_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "success_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failure_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "expected_status",
+          "source",
+          "source_sha256",
+          "artifact_dir",
+          "trace_id",
+          "execution_sha256",
+          "diagnostic_sha256",
+          "fail_type"
+        ],
+        "properties": {
+          "case_id": {"type": "string", "minLength": 1},
+          "expected_status": {"enum": ["SUCCESS", "FAIL"]},
+          "source": {"type": "string", "minLength": 1},
+          "source_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "artifact_dir": {"type": "string", "minLength": 1},
+          "trace_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "execution_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "diagnostic_sha256": {
+            "type": ["string", "null"],
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "fail_type": {
+            "type": ["string", "null"]
+          }
+        }
+      }
+    },
+    "index_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

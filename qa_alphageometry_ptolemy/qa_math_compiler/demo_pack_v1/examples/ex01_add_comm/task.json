@@ -4,9 +4,7 @@
   "created_utc": "2026-02-12T00:00:00Z",
   "nl_statement": "For naturals a and b, addition is commutative.",
   "formal_goal": "theorem ex01_add_comm (a b : Nat) : a + b = b + a",
-  "imports": [
-    "Mathlib.Data.Nat.Basic"
-  ],
+  "imports": [],
   "context": [
     "open Nat"
   ],

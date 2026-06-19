@@ -1,7 +1,1 @@
-{
-  "example_id": "ex01_add_comm",
-  "status": "PROVED",
-  "replay_rate": 1.0,
-  "compressed": false,
-  "introduced_lemmas": 0
-}
+{"compressed":false,"example_id":"ex01_add_comm","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"89747466a78ed8576d0a0ed659a0b824b148663b92e415c58397f6213301046b"}

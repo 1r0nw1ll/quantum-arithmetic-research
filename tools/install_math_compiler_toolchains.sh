@@ -26,3 +26,4 @@ coqc --version
 isabelle version
 
 python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py
+python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py

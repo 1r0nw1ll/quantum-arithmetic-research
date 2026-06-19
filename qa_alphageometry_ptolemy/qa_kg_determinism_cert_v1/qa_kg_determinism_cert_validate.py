@@ -306,24 +306,18 @@ def check_d3_subprocess_reproducible() -> tuple[str, str]:
             "FAIL",
             f"subprocess drift: run1={hashes[0][:12]}… run2={hashes[1][:12]}…"
         )
-    # Compare against D2's bootstrapped hash (expected_hash.json must
-    # exist by the time D3 runs because D2 is ordered before it; main()
-    # enforces the order).
-    expected = _load_expected_hash()
-    if expected is None:
-        return "FAIL", "expected_hash.json missing after D2 ran — ordering bug"
-    want = _expected_rebuild_hash_for_platform(expected)
-    if not want:
-        return (
-            "FAIL",
-            f"expected_hash.json has no {platform.system()} entry after D2 ran — "
-            f"D2 bootstrap ordering bug"
-        )
-    if hashes[0] != want:
+    # Compare directly with a fresh in-process rebuild. D2 separately
+    # checks the frozen expected hash; D3's responsibility is interpreter
+    # boundary parity, so using a stale expected hash here can falsely
+    # report interpreter-state sensitivity after an intentional pipeline
+    # change even when current in-process and subprocess outputs agree.
+    conn, in_process_hash = _build_in_memory_graph()
+    conn.close()
+    if hashes[0] != in_process_hash:
         return (
             "FAIL",
             f"subprocess hash != in-process hash on {platform.system()}: "
-            f"subprocess={hashes[0][:12]}… in-process={want[:12]}… — "
+            f"subprocess={hashes[0][:12]}… in-process={in_process_hash[:12]}… — "
             f"interpreter-state sensitivity"
         )
     return (

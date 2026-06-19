@@ -1,0 +1,45 @@
+{
+  "schema_id": "QA_PROOF_ASSISTANT_REGISTRY_SCHEMA.v1",
+  "registry_id": "ASSISTANTS-FIXTURE-0001",
+  "created_utc": "2026-06-19T12:00:00Z",
+  "adapters": [
+    {
+      "assistant_id": "lean4",
+      "version": "4.12.0",
+      "executable": "lake",
+      "kernel_check_command": ["lake", "env", "lean", "{source_file}"],
+      "environment_hash": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "lock_hash": "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb",
+      "deterministic": true,
+      "supported_artifacts": ["task", "trace", "replay", "pair"]
+    },
+    {
+      "assistant_id": "coq",
+      "version": "8.20.0",
+      "executable": "coqc",
+      "kernel_check_command": ["coqc", "{source_file}"],
+      "environment_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "lock_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "deterministic": true,
+      "supported_artifacts": ["task", "trace", "replay", "pair"]
+    },
+    {
+      "assistant_id": "isabelle",
+      "version": "2025",
+      "executable": "isabelle",
+      "kernel_check_command": ["isabelle", "build", "-D", "{session_dir}"],
+      "environment_hash": "eeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeeee",
+      "lock_hash": "ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff",
+      "deterministic": true,
+      "supported_artifacts": ["task", "trace", "replay", "pair"]
+    }
+  ],
+  "metrics": {
+    "adapter_count": 3,
+    "deterministic_count": 3
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "note": "interface contracts only; executable availability is not asserted"
+  }
+}

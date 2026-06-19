@@ -1,0 +1,32 @@
+{
+  "schema_id": "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1",
+  "corpus_id": "CORPUS-NEGFIX-0001",
+  "created_utc": "2026-06-19T12:00:00Z",
+  "entries": [
+    {
+      "example_id": "nat-add-comm-certified",
+      "split": "train",
+      "proof_assistant": "lean4",
+      "task_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "trace_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "replay_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "pair_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "status": "CERTIFIED",
+      "replay_status": "SUCCESS",
+      "failure_record": null
+    }
+  ],
+  "metrics": {
+    "entry_count": 1,
+    "certified_count": 1,
+    "failed_count": 0,
+    "replay_success_rate": 1.0
+  },
+  "corpus_sha256": "0000000000000000000000000000000000000000000000000000000000000000",
+  "invariant_diff": {
+    "fixture": true,
+    "expected_failure": {
+      "fail_type": "CORPUS_DIGEST_MISMATCH"
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "schema_id": "QA_PROOF_ASSISTANT_REGISTRY_SCHEMA.v1",
+  "registry_id": "ASSISTANTS-NEGFIX-0001",
+  "created_utc": "2026-06-19T12:00:00Z",
+  "adapters": [
+    {
+      "assistant_id": "coq",
+      "version": "8.20.0",
+      "executable": "coqc",
+      "kernel_check_command": ["coqc", "{source_file}"],
+      "environment_hash": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+      "lock_hash": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+      "deterministic": false,
+      "supported_artifacts": ["task", "trace", "replay", "pair"]
+    }
+  ],
+  "metrics": {
+    "adapter_count": 1,
+    "deterministic_count": 0
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "expected_failure": {
+      "fail_type": "ASSISTANT_NONDETERMINISTIC"
+    }
+  }
+}

@@ -9,6 +9,8 @@ Supported schemas:
   - QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1
   - QA_HUMAN_FORMAL_PAIR_CERT.v1
   - QA_LEMMA_MINING_SCHEMA.v1
+  - QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1
+  - QA_PROOF_ASSISTANT_REGISTRY_SCHEMA.v1
 
 Usage:
   python qa_math_compiler_validator.py trace   <trace.json> [--ci]
@@ -17,6 +19,8 @@ Usage:
   python qa_math_compiler_validator.py replay  <replay_bundle.json> [--ci]
   python qa_math_compiler_validator.py pair_v1 <pair_v1.json> [--ci]
   python qa_math_compiler_validator.py lemma   <lemma_pack.json> [--ci]
+  python qa_math_compiler_validator.py corpus  <corpus.json> [--ci]
+  python qa_math_compiler_validator.py assistants <registry.json> [--ci]
   python qa_math_compiler_validator.py demo_pack <demo_pack_dir> [--ci]
   python qa_math_compiler_validator.py --self-test
 
@@ -45,6 +49,8 @@ TASK_SCHEMA_ID = "QA_FORMAL_TASK_SCHEMA.v1"
 REPLAY_SCHEMA_ID = "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1"
 PAIR_V1_SCHEMA_ID = "QA_HUMAN_FORMAL_PAIR_CERT.v1"
 LEMMA_SCHEMA_ID = "QA_LEMMA_MINING_SCHEMA.v1"
+CORPUS_SCHEMA_ID = "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1"
+ASSISTANT_REGISTRY_SCHEMA_ID = "QA_PROOF_ASSISTANT_REGISTRY_SCHEMA.v1"
 DEMO_PACK_SCHEMA_ID = "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1"
 
 VALID_LAYERS = frozenset(["human", "formal"])
@@ -52,6 +58,9 @@ VALID_STATUSES = frozenset(["SUCCESS", "FAIL"])
 VALID_REPLAY_STATUSES = frozenset(["SUCCESS", "FAIL", "INFRA_FLAKE"])
 VALID_PAIR_STATUSES = frozenset(["PROVED", "UNPROVED", "AMBIGUOUS"])
 VALID_PROOF_STATUSES = frozenset(["FOUND", "NEEDS_PROOF"])
+VALID_CORPUS_STATUSES = frozenset(["CERTIFIED", "FAILED"])
+VALID_CORPUS_SPLITS = frozenset(["train", "validation", "test"])
+VALID_PROOF_ASSISTANTS = frozenset(["lean4", "coq", "isabelle"])
 
 VALID_TRACE_FAIL_TYPES = frozenset([
     "PARSE_AMBIGUITY", "MISSING_DEPENDENCY", "TYPE_MISMATCH",
@@ -76,6 +85,13 @@ PROVED_PAIR_REPLAY_MISMATCH = "PROVED_PAIR_REPLAY_MISMATCH"
 COMPRESSION_METRIC_MISMATCH = "COMPRESSION_METRIC_MISMATCH"
 COMPRESSION_BELOW_TARGET = "COMPRESSION_BELOW_TARGET"
 NEEDS_PROOF_UNACCOUNTED = "NEEDS_PROOF_UNACCOUNTED"
+LEMMA_ID_DUPLICATE = "LEMMA_ID_DUPLICATE"
+CORPUS_DIGEST_MISMATCH = "CORPUS_DIGEST_MISMATCH"
+CORPUS_COUNTS_MISMATCH = "CORPUS_COUNTS_MISMATCH"
+CORPUS_ENTRY_INVALID = "CORPUS_ENTRY_INVALID"
+ASSISTANT_DUPLICATE = "ASSISTANT_DUPLICATE"
+ASSISTANT_COUNTS_MISMATCH = "ASSISTANT_COUNTS_MISMATCH"
+ASSISTANT_NONDETERMINISTIC = "ASSISTANT_NONDETERMINISTIC"
 DEMO_PACK_MISSING_ARTIFACT = "DEMO_PACK_MISSING_ARTIFACT"
 DEMO_PACK_INDEX_MISMATCH = "DEMO_PACK_INDEX_MISMATCH"
 DEMO_PACK_EXAMPLE_INVALID = "DEMO_PACK_EXAMPLE_INVALID"
@@ -99,6 +115,11 @@ def _canonical(obj: Any) -> str:
 
 def _sha256(data: str) -> str:
     return hashlib.sha256(data.encode("utf-8")).hexdigest()
+
+
+def _domain_hash(domain: str, obj: Any) -> str:
+    payload = _canonical(obj).encode("utf-8")
+    return hashlib.sha256(domain.encode("utf-8") + b"\x00" + payload).hexdigest()
 
 
 
@@ -1056,6 +1077,14 @@ def _lemma_check_compression(pack: Dict[str, Any]) -> Optional[Tuple[str, Dict[s
 
 
 def _lemma_check_needs_proof(pack: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    lemma_ids = [candidate["lemma_id"] for candidate in pack["lemma_candidates"]]
+    if len(lemma_ids) != len(set(lemma_ids)):
+        duplicates = sorted({lemma_id for lemma_id in lemma_ids if lemma_ids.count(lemma_id) > 1})
+        return LEMMA_ID_DUPLICATE, {
+            "duplicate_lemma_ids": duplicates,
+            "reason": "lemma candidate identifiers must be unique",
+        }
+
     record_by_lemma = {record["lemma_id"]: record for record in pack["failure_records"]}
     for candidate in pack["lemma_candidates"]:
         if candidate["proof_status"] == "NEEDS_PROOF":
@@ -1078,6 +1107,331 @@ def validate_lemma_mining(pack: Dict[str, Any]) -> ValidationResult:
     obj_id = pack.get("mining_id", "<unknown>")
     for gate in [_lemma_check_invariant_diff, _lemma_check_schema, _lemma_check_compression, _lemma_check_needs_proof]:
         result = gate(pack)
+        if result is not None:
+            return ValidationResult(False, result[0], result[1], obj_id)
+    return ValidationResult(True, obj_id=obj_id)
+
+
+# ===================================================================
+# CERTIFIED PROOF CORPUS VALIDATION
+# ===================================================================
+
+
+def _corpus_check_invariant_diff(corpus: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    if "invariant_diff" not in corpus or not isinstance(corpus.get("invariant_diff"), dict):
+        return MISSING_INVARIANT_DIFF, {
+            "path": "$.invariant_diff",
+            "reason": "must be a JSON object",
+        }
+    return None
+
+
+def _corpus_check_schema(corpus: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    required = [
+        "schema_id",
+        "corpus_id",
+        "created_utc",
+        "entries",
+        "metrics",
+        "corpus_sha256",
+        "invariant_diff",
+    ]
+    for field in required:
+        if field not in corpus:
+            return SCHEMA_INVALID, {"missing_field": field, "path": f"$.{field}"}
+
+    if corpus["schema_id"] != CORPUS_SCHEMA_ID:
+        return SCHEMA_INVALID, {
+            "expected": CORPUS_SCHEMA_ID,
+            "got": corpus["schema_id"],
+            "path": "$.schema_id",
+        }
+    if not _is_nonempty_str(corpus["corpus_id"]):
+        return SCHEMA_INVALID, {"path": "$.corpus_id", "reason": "must be non-empty string"}
+    if not _is_utc_ts(corpus["created_utc"]):
+        return SCHEMA_INVALID, {"path": "$.created_utc", "reason": "bad UTC timestamp"}
+    if not _is_hex64(corpus["corpus_sha256"]):
+        return SCHEMA_INVALID, {"path": "$.corpus_sha256", "reason": "must be hex64"}
+
+    entries = corpus["entries"]
+    if not isinstance(entries, list) or len(entries) == 0:
+        return SCHEMA_INVALID, {"path": "$.entries", "reason": "must be non-empty array"}
+
+    seen_ids = set()
+    for idx, entry in enumerate(entries):
+        path = f"$.entries[{idx}]"
+        if not isinstance(entry, dict):
+            return SCHEMA_INVALID, {"path": path, "reason": "must be object"}
+        for field in [
+            "example_id",
+            "split",
+            "proof_assistant",
+            "task_hash",
+            "trace_hash",
+            "replay_hash",
+            "pair_hash",
+            "status",
+            "replay_status",
+            "failure_record",
+        ]:
+            if field not in entry:
+                return SCHEMA_INVALID, {"missing_field": field, "path": f"{path}.{field}"}
+        if not _is_nonempty_str(entry["example_id"]):
+            return SCHEMA_INVALID, {"path": f"{path}.example_id", "reason": "must be non-empty string"}
+        if entry["example_id"] in seen_ids:
+            return CORPUS_ENTRY_INVALID, {
+                "path": f"{path}.example_id",
+                "example_id": entry["example_id"],
+                "reason": "example_id must be unique",
+            }
+        seen_ids.add(entry["example_id"])
+        if entry["split"] not in VALID_CORPUS_SPLITS:
+            return SCHEMA_INVALID, {
+                "path": f"{path}.split",
+                "expected_one_of": sorted(VALID_CORPUS_SPLITS),
+                "got": entry["split"],
+            }
+        if entry["proof_assistant"] not in VALID_PROOF_ASSISTANTS:
+            return SCHEMA_INVALID, {
+                "path": f"{path}.proof_assistant",
+                "expected_one_of": sorted(VALID_PROOF_ASSISTANTS),
+                "got": entry["proof_assistant"],
+            }
+        for hash_field in ["task_hash", "trace_hash", "replay_hash", "pair_hash"]:
+            if not _is_hex64(entry[hash_field]):
+                return SCHEMA_INVALID, {
+                    "path": f"{path}.{hash_field}",
+                    "reason": "must be hex64",
+                }
+        if entry["status"] not in VALID_CORPUS_STATUSES:
+            return SCHEMA_INVALID, {
+                "path": f"{path}.status",
+                "expected_one_of": sorted(VALID_CORPUS_STATUSES),
+                "got": entry["status"],
+            }
+        if entry["replay_status"] not in VALID_REPLAY_STATUSES:
+            return SCHEMA_INVALID, {
+                "path": f"{path}.replay_status",
+                "expected_one_of": sorted(VALID_REPLAY_STATUSES),
+                "got": entry["replay_status"],
+            }
+        failure_record = entry["failure_record"]
+        if failure_record is not None:
+            if not isinstance(failure_record, dict):
+                return SCHEMA_INVALID, {
+                    "path": f"{path}.failure_record",
+                    "reason": "must be object or null",
+                }
+            if not _is_nonempty_str(failure_record.get("fail_type")):
+                return SCHEMA_INVALID, {
+                    "path": f"{path}.failure_record.fail_type",
+                    "reason": "must be non-empty string",
+                }
+            if not isinstance(failure_record.get("invariant_diff"), dict):
+                return SCHEMA_INVALID, {
+                    "path": f"{path}.failure_record.invariant_diff",
+                    "reason": "must be object",
+                }
+
+    metrics = corpus["metrics"]
+    if not isinstance(metrics, dict):
+        return SCHEMA_INVALID, {"path": "$.metrics", "reason": "must be object"}
+    for field in ["entry_count", "certified_count", "failed_count", "replay_success_rate"]:
+        if field not in metrics:
+            return SCHEMA_INVALID, {"missing_field": field, "path": f"$.metrics.{field}"}
+    for field in ["entry_count", "certified_count", "failed_count"]:
+        if not isinstance(metrics[field], int) or metrics[field] < 0:
+            return SCHEMA_INVALID, {
+                "path": f"$.metrics.{field}",
+                "reason": "must be non-negative integer",
+            }
+    if not isinstance(metrics["replay_success_rate"], (int, float)) or not (
+        0.0 <= metrics["replay_success_rate"] <= 1.0
+    ):
+        return SCHEMA_INVALID, {
+            "path": "$.metrics.replay_success_rate",
+            "reason": "must be number in [0,1]",
+        }
+    return None
+
+
+def _corpus_check_entries(corpus: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    for idx, entry in enumerate(corpus["entries"]):
+        if entry["status"] == "CERTIFIED":
+            if entry["replay_status"] != "SUCCESS" or entry["failure_record"] is not None:
+                return CORPUS_ENTRY_INVALID, {
+                    "path": f"$.entries[{idx}]",
+                    "example_id": entry["example_id"],
+                    "reason": "CERTIFIED entry requires replay SUCCESS and null failure_record",
+                }
+        elif entry["failure_record"] is None:
+            return CORPUS_ENTRY_INVALID, {
+                "path": f"$.entries[{idx}].failure_record",
+                "example_id": entry["example_id"],
+                "reason": "FAILED entry requires a typed failure_record",
+            }
+    return None
+
+
+def _corpus_check_metrics(corpus: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    entries = corpus["entries"]
+    observed = {
+        "entry_count": len(entries),
+        "certified_count": sum(entry["status"] == "CERTIFIED" for entry in entries),
+        "failed_count": sum(entry["status"] == "FAILED" for entry in entries),
+        "replay_success_rate": sum(entry["replay_status"] == "SUCCESS" for entry in entries) / len(entries),
+    }
+    declared = corpus["metrics"]
+    if (
+        declared["entry_count"] != observed["entry_count"]
+        or declared["certified_count"] != observed["certified_count"]
+        or declared["failed_count"] != observed["failed_count"]
+        or abs(float(declared["replay_success_rate"]) - observed["replay_success_rate"]) > 1e-12
+    ):
+        return CORPUS_COUNTS_MISMATCH, {"declared": declared, "observed": observed}
+    expected_digest = _domain_hash("QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1:entries", entries)
+    if corpus["corpus_sha256"] != expected_digest:
+        return CORPUS_DIGEST_MISMATCH, {
+            "expected": expected_digest,
+            "got": corpus["corpus_sha256"],
+        }
+    return None
+
+
+def validate_corpus(corpus: Dict[str, Any]) -> ValidationResult:
+    obj_id = corpus.get("corpus_id", "<unknown>")
+    for gate in [
+        _corpus_check_invariant_diff,
+        _corpus_check_schema,
+        _corpus_check_entries,
+        _corpus_check_metrics,
+    ]:
+        result = gate(corpus)
+        if result is not None:
+            return ValidationResult(False, result[0], result[1], obj_id)
+    return ValidationResult(True, obj_id=obj_id)
+
+
+# ===================================================================
+# PROOF ASSISTANT REGISTRY VALIDATION
+# ===================================================================
+
+
+def _assistants_check_invariant_diff(registry: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    if "invariant_diff" not in registry or not isinstance(registry.get("invariant_diff"), dict):
+        return MISSING_INVARIANT_DIFF, {
+            "path": "$.invariant_diff",
+            "reason": "must be a JSON object",
+        }
+    return None
+
+
+def _assistants_check_schema(registry: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    required = ["schema_id", "registry_id", "created_utc", "adapters", "metrics", "invariant_diff"]
+    for field in required:
+        if field not in registry:
+            return SCHEMA_INVALID, {"missing_field": field, "path": f"$.{field}"}
+    if registry["schema_id"] != ASSISTANT_REGISTRY_SCHEMA_ID:
+        return SCHEMA_INVALID, {
+            "expected": ASSISTANT_REGISTRY_SCHEMA_ID,
+            "got": registry["schema_id"],
+            "path": "$.schema_id",
+        }
+    if not _is_nonempty_str(registry["registry_id"]):
+        return SCHEMA_INVALID, {"path": "$.registry_id", "reason": "must be non-empty string"}
+    if not _is_utc_ts(registry["created_utc"]):
+        return SCHEMA_INVALID, {"path": "$.created_utc", "reason": "bad UTC timestamp"}
+    adapters = registry["adapters"]
+    if not isinstance(adapters, list) or len(adapters) == 0:
+        return SCHEMA_INVALID, {"path": "$.adapters", "reason": "must be non-empty array"}
+    seen_ids = set()
+    for idx, adapter in enumerate(adapters):
+        path = f"$.adapters[{idx}]"
+        if not isinstance(adapter, dict):
+            return SCHEMA_INVALID, {"path": path, "reason": "must be object"}
+        for field in [
+            "assistant_id",
+            "version",
+            "executable",
+            "kernel_check_command",
+            "environment_hash",
+            "lock_hash",
+            "deterministic",
+            "supported_artifacts",
+        ]:
+            if field not in adapter:
+                return SCHEMA_INVALID, {"missing_field": field, "path": f"{path}.{field}"}
+        if adapter["assistant_id"] not in VALID_PROOF_ASSISTANTS:
+            return SCHEMA_INVALID, {
+                "path": f"{path}.assistant_id",
+                "expected_one_of": sorted(VALID_PROOF_ASSISTANTS),
+                "got": adapter["assistant_id"],
+            }
+        if adapter["assistant_id"] in seen_ids:
+            return ASSISTANT_DUPLICATE, {
+                "assistant_id": adapter["assistant_id"],
+                "reason": "assistant identifiers must be unique",
+            }
+        seen_ids.add(adapter["assistant_id"])
+        for field in ["version", "executable"]:
+            if not _is_nonempty_str(adapter[field]):
+                return SCHEMA_INVALID, {"path": f"{path}.{field}", "reason": "must be non-empty string"}
+        if not _is_nonempty_str_list(adapter["kernel_check_command"]):
+            return SCHEMA_INVALID, {
+                "path": f"{path}.kernel_check_command",
+                "reason": "must be non-empty array of non-empty strings",
+            }
+        for field in ["environment_hash", "lock_hash"]:
+            if not _is_hex64(adapter[field]):
+                return SCHEMA_INVALID, {"path": f"{path}.{field}", "reason": "must be hex64"}
+        if not isinstance(adapter["deterministic"], bool):
+            return SCHEMA_INVALID, {"path": f"{path}.deterministic", "reason": "must be boolean"}
+        if not _is_nonempty_str_list(adapter["supported_artifacts"]):
+            return SCHEMA_INVALID, {
+                "path": f"{path}.supported_artifacts",
+                "reason": "must be non-empty array of non-empty strings",
+            }
+    metrics = registry["metrics"]
+    if not isinstance(metrics, dict):
+        return SCHEMA_INVALID, {"path": "$.metrics", "reason": "must be object"}
+    for field in ["adapter_count", "deterministic_count"]:
+        if not isinstance(metrics.get(field), int) or metrics[field] < 0:
+            return SCHEMA_INVALID, {
+                "path": f"$.metrics.{field}",
+                "reason": "must be non-negative integer",
+            }
+    return None
+
+
+def _assistants_check_determinism(registry: Dict[str, Any]) -> Optional[Tuple[str, Dict[str, Any]]]:
+    nondeterministic = [
+        adapter["assistant_id"] for adapter in registry["adapters"] if not adapter["deterministic"]
+    ]
+    if nondeterministic:
+        return ASSISTANT_NONDETERMINISTIC, {
+            "assistant_ids": nondeterministic,
+            "reason": "registered proof-assistant adapters must declare deterministic replay",
+        }
+    observed = {
+        "adapter_count": len(registry["adapters"]),
+        "deterministic_count": len(registry["adapters"]),
+    }
+    if registry["metrics"] != observed:
+        return ASSISTANT_COUNTS_MISMATCH, {
+            "declared": registry["metrics"],
+            "observed": observed,
+        }
+    return None
+
+
+def validate_assistant_registry(registry: Dict[str, Any]) -> ValidationResult:
+    obj_id = registry.get("registry_id", "<unknown>")
+    for gate in [
+        _assistants_check_invariant_diff,
+        _assistants_check_schema,
+        _assistants_check_determinism,
+    ]:
+        result = gate(registry)
         if result is not None:
             return ValidationResult(False, result[0], result[1], obj_id)
     return ValidationResult(True, obj_id=obj_id)
@@ -1876,6 +2230,127 @@ def _self_test() -> bool:
         print(f"  [FAIL] expected COMPRESSION_BELOW_TARGET, got ok={r.ok} ft={r.fail_type}")
         failed += 1
 
+    bad = copy.deepcopy(valid_lemma)
+    bad["lemma_candidates"][1]["lemma_id"] = bad["lemma_candidates"][0]["lemma_id"]
+    r = validate_lemma_mining(bad)
+    if not r.ok and r.fail_type == LEMMA_ID_DUPLICATE:
+        print("  [PASS] duplicate lemma id -> LEMMA_ID_DUPLICATE")
+        passed += 1
+    else:
+        print(f"  [FAIL] expected LEMMA_ID_DUPLICATE, got ok={r.ok} ft={r.fail_type}")
+        failed += 1
+
+    # -- Certified corpus tests --
+    corpus_entries = [
+        {
+            "example_id": "ex-certified",
+            "split": "train",
+            "proof_assistant": "lean4",
+            "task_hash": "1" * 64,
+            "trace_hash": "2" * 64,
+            "replay_hash": "3" * 64,
+            "pair_hash": "4" * 64,
+            "status": "CERTIFIED",
+            "replay_status": "SUCCESS",
+            "failure_record": None,
+        },
+        {
+            "example_id": "ex-failed",
+            "split": "test",
+            "proof_assistant": "coq",
+            "task_hash": "5" * 64,
+            "trace_hash": "6" * 64,
+            "replay_hash": "7" * 64,
+            "pair_hash": "8" * 64,
+            "status": "FAILED",
+            "replay_status": "FAIL",
+            "failure_record": {
+                "fail_type": "GOAL_STUCK",
+                "invariant_diff": {"remaining_goals": 1},
+            },
+        },
+    ]
+    valid_corpus = {
+        "schema_id": CORPUS_SCHEMA_ID,
+        "corpus_id": "CORPUS-SELFTEST-0001",
+        "created_utc": "2026-06-19T12:00:00Z",
+        "entries": corpus_entries,
+        "metrics": {
+            "entry_count": 2,
+            "certified_count": 1,
+            "failed_count": 1,
+            "replay_success_rate": 0.5,
+        },
+        "corpus_sha256": _domain_hash("QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1:entries", corpus_entries),
+        "invariant_diff": {"note": "corpus self-test"},
+    }
+    r = validate_corpus(valid_corpus)
+    if r.ok:
+        print("  [PASS] valid certified corpus accepted")
+        passed += 1
+    else:
+        print(f"  [FAIL] valid certified corpus rejected: {r.fail_type} {r.invariant_diff}")
+        failed += 1
+
+    bad = copy.deepcopy(valid_corpus)
+    bad["corpus_sha256"] = "0" * 64
+    r = validate_corpus(bad)
+    if not r.ok and r.fail_type == CORPUS_DIGEST_MISMATCH:
+        print("  [PASS] bad corpus digest -> CORPUS_DIGEST_MISMATCH")
+        passed += 1
+    else:
+        print(f"  [FAIL] expected CORPUS_DIGEST_MISMATCH, got ok={r.ok} ft={r.fail_type}")
+        failed += 1
+
+    # -- Proof assistant registry tests --
+    valid_registry = {
+        "schema_id": ASSISTANT_REGISTRY_SCHEMA_ID,
+        "registry_id": "ASSISTANTS-SELFTEST-0001",
+        "created_utc": "2026-06-19T12:00:00Z",
+        "adapters": [
+            {
+                "assistant_id": "lean4",
+                "version": "4.12.0",
+                "executable": "lake",
+                "kernel_check_command": ["lake", "env", "lean", "{source_file}"],
+                "environment_hash": "a" * 64,
+                "lock_hash": "b" * 64,
+                "deterministic": True,
+                "supported_artifacts": ["task", "trace", "replay", "pair"],
+            },
+            {
+                "assistant_id": "coq",
+                "version": "8.20.0",
+                "executable": "coqc",
+                "kernel_check_command": ["coqc", "{source_file}"],
+                "environment_hash": "c" * 64,
+                "lock_hash": "d" * 64,
+                "deterministic": True,
+                "supported_artifacts": ["task", "trace", "replay", "pair"],
+            },
+        ],
+        "metrics": {"adapter_count": 2, "deterministic_count": 2},
+        "invariant_diff": {"note": "assistant registry self-test"},
+    }
+    r = validate_assistant_registry(valid_registry)
+    if r.ok:
+        print("  [PASS] valid proof assistant registry accepted")
+        passed += 1
+    else:
+        print(f"  [FAIL] valid proof assistant registry rejected: {r.fail_type} {r.invariant_diff}")
+        failed += 1
+
+    bad = copy.deepcopy(valid_registry)
+    bad["adapters"][1]["deterministic"] = False
+    bad["metrics"]["deterministic_count"] = 1
+    r = validate_assistant_registry(bad)
+    if not r.ok and r.fail_type == ASSISTANT_NONDETERMINISTIC:
+        print("  [PASS] nondeterministic adapter -> ASSISTANT_NONDETERMINISTIC")
+        passed += 1
+    else:
+        print(f"  [FAIL] expected ASSISTANT_NONDETERMINISTIC, got ok={r.ok} ft={r.fail_type}")
+        failed += 1
+
     total = passed + failed
     print(f"\n  {passed}/{total} self-tests passed")
     return failed == 0
@@ -1899,6 +2374,10 @@ def _validate_mode(mode: str, data: Dict[str, Any]) -> ValidationResult:
         return validate_pair_v1(data)
     if mode == "lemma":
         return validate_lemma_mining(data)
+    if mode == "corpus":
+        return validate_corpus(data)
+    if mode == "assistants":
+        return validate_assistant_registry(data)
     raise ValueError(f"unsupported mode: {mode}")
 
 
@@ -1910,7 +2389,17 @@ def main() -> None:
         ok = _self_test()
         sys.exit(0 if ok else 1)
 
-    valid_modes = ("trace", "pair", "task", "replay", "pair_v1", "lemma", "demo_pack")
+    valid_modes = (
+        "trace",
+        "pair",
+        "task",
+        "replay",
+        "pair_v1",
+        "lemma",
+        "corpus",
+        "assistants",
+        "demo_pack",
+    )
     if len(args) < 2 or args[0] not in valid_modes:
         print(
             f"Usage: {sys.argv[0]} trace   <file.json> [--ci]", file=sys.stderr
@@ -1929,6 +2418,12 @@ def main() -> None:
         )
         print(
             f"       {sys.argv[0]} lemma   <file.json> [--ci]", file=sys.stderr
+        )
+        print(
+            f"       {sys.argv[0]} corpus  <file.json> [--ci]", file=sys.stderr
+        )
+        print(
+            f"       {sys.argv[0]} assistants <file.json> [--ci]", file=sys.stderr
         )
         print(
             f"       {sys.argv[0]} demo_pack <demo_pack_dir> [--ci]", file=sys.stderr

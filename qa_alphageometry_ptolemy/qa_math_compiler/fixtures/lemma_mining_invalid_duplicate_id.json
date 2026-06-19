@@ -1,0 +1,40 @@
+{
+  "schema_id": "QA_LEMMA_MINING_SCHEMA.v1",
+  "mining_id": "LEMMA-NEGFIX-0002",
+  "created_utc": "2026-06-19T12:00:00Z",
+  "source_traces": [
+    "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa"
+  ],
+  "baseline_trace_lengths": [100],
+  "compressed_trace_lengths": [75],
+  "target_median_reduction": 0.2,
+  "lemma_candidates": [
+    {
+      "lemma_id": "LEMMA_DUPLICATE",
+      "statement": "n + 0 = n",
+      "usage_count": 4,
+      "compression_gain_steps": 10,
+      "proof_status": "FOUND",
+      "dependency_imports": ["Mathlib.Data.Nat.Basic"]
+    },
+    {
+      "lemma_id": "LEMMA_DUPLICATE",
+      "statement": "0 + n = n",
+      "usage_count": 3,
+      "compression_gain_steps": 8,
+      "proof_status": "FOUND",
+      "dependency_imports": ["Mathlib.Data.Nat.Basic"]
+    }
+  ],
+  "failure_records": [],
+  "metrics": {
+    "median_reduction": 0.25,
+    "total_candidates": 2
+  },
+  "invariant_diff": {
+    "fixture": true,
+    "expected_failure": {
+      "fail_type": "LEMMA_ID_DUPLICATE"
+    }
+  }
+}

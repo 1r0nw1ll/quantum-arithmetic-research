@@ -1,0 +1,47 @@
+{
+  "schema_id": "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1",
+  "corpus_id": "CORPUS-FIXTURE-0001",
+  "created_utc": "2026-06-19T12:00:00Z",
+  "entries": [
+    {
+      "example_id": "nat-add-comm-certified",
+      "split": "train",
+      "proof_assistant": "lean4",
+      "task_hash": "1111111111111111111111111111111111111111111111111111111111111111",
+      "trace_hash": "2222222222222222222222222222222222222222222222222222222222222222",
+      "replay_hash": "3333333333333333333333333333333333333333333333333333333333333333",
+      "pair_hash": "4444444444444444444444444444444444444444444444444444444444444444",
+      "status": "CERTIFIED",
+      "replay_status": "SUCCESS",
+      "failure_record": null
+    },
+    {
+      "example_id": "ring-normalization-failed",
+      "split": "test",
+      "proof_assistant": "coq",
+      "task_hash": "5555555555555555555555555555555555555555555555555555555555555555",
+      "trace_hash": "6666666666666666666666666666666666666666666666666666666666666666",
+      "replay_hash": "7777777777777777777777777777777777777777777777777777777777777777",
+      "pair_hash": "8888888888888888888888888888888888888888888888888888888888888888",
+      "status": "FAILED",
+      "replay_status": "FAIL",
+      "failure_record": {
+        "fail_type": "GOAL_STUCK",
+        "invariant_diff": {
+          "remaining_goals": 1
+        }
+      }
+    }
+  ],
+  "metrics": {
+    "entry_count": 2,
+    "certified_count": 1,
+    "failed_count": 1,
+    "replay_success_rate": 0.5
+  },
+  "corpus_sha256": "80f2de325e13f8a7c1a92b7799e7d888591731fa539d688ac7f6e9181c73000c",
+  "invariant_diff": {
+    "fixture": true,
+    "layer": "certified_corpus"
+  }
+}

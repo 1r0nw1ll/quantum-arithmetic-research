@@ -1,0 +1,86 @@
+{
+  "schema_id": "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1",
+  "corpus_id": "demo_pack_v1-certified-corpus-v1",
+  "created_utc": "2026-02-12T00:40:00Z",
+  "entries": [
+    {
+      "example_id": "ex01_add_comm",
+      "split": "train",
+      "proof_assistant": "lean4",
+      "task_hash": "dcc2905d7977e34f58cf13dad75e013490b76ad6cbf1fa247c820a013c079cbf",
+      "trace_hash": "775b85f5cc484360aed17cde53e14ebea0b807a0d5ba8d5aaa24aa163331be7d",
+      "replay_hash": "35dc8cce45ecf5a7e38c2b130354a6e2bcdd4de0e8f3bdb2f7480be639b5defb",
+      "pair_hash": "84f2ab0c577139f6361a5047c1ed207a6964b3ec4b7f60a1a41e22f57cc452d7",
+      "status": "CERTIFIED",
+      "replay_status": "SUCCESS",
+      "failure_record": null
+    },
+    {
+      "example_id": "ex02_mul_add_distrib",
+      "split": "train",
+      "proof_assistant": "lean4",
+      "task_hash": "312c50e3ef28903369d9599641a6f0d8a0f5e3b5308885df2b2d0ec86fdabbe6",
+      "trace_hash": "b10d1aea04c92ce45ce7c0d67d39afd899506107f1eec256b92277ba6ae37bd7",
+      "replay_hash": "3e00ef87055ab89b73bd90e34ded1203e729ababa4b081fe0a2ef9b41c020398",
+      "pair_hash": "d079cc0439eb5c48f56d576a4ebbacfdb40b9d2db2b296f8243f9f2e01bb6a8c",
+      "status": "CERTIFIED",
+      "replay_status": "SUCCESS",
+      "failure_record": null
+    },
+    {
+      "example_id": "ex03_sum_first_n",
+      "split": "train",
+      "proof_assistant": "lean4",
+      "task_hash": "8ac0f12ec02dbe0117e033e5c9ea62c017bec39c5560d42e440385fee19fc7a7",
+      "trace_hash": "39e0234863de2582cde4bdd26b9af30ba8f528f36e141da29bcd72ab9db6e680",
+      "replay_hash": "29f390988c7666f9effb2910f2b4692a4e4396007f4b43cec7a67f912cf29a0d",
+      "pair_hash": "8d44094a01c76c54b1344e28b9c7bb24006bc408f1527466fbe61bac80f5b440",
+      "status": "CERTIFIED",
+      "replay_status": "SUCCESS",
+      "failure_record": null
+    },
+    {
+      "example_id": "ex04_inequality_add_right",
+      "split": "validation",
+      "proof_assistant": "lean4",
+      "task_hash": "d8aad540fe5bfe056840080126174361fd94d24d093d6c6a15ed06fedaa7e19b",
+      "trace_hash": "19a654dbfd09b6239dd2fa0b84f9d0969c3b4f0327bfdc97d1eac50eddb4fc02",
+      "replay_hash": "7798585e8b6ce3f1db9a70cf7cdfc7586cb9c5420fa1f59d57343266a448f065",
+      "pair_hash": "1a37b166b69b1e38c57aff944e14b1611a8a59e5646d2f72b12451ae98a88e53",
+      "status": "CERTIFIED",
+      "replay_status": "SUCCESS",
+      "failure_record": null
+    },
+    {
+      "example_id": "ex05_induction_add_zero",
+      "split": "test",
+      "proof_assistant": "lean4",
+      "task_hash": "f779501c09a3205fce50325fc768af586f639ccf844edd727480928f12876876",
+      "trace_hash": "4a8e5e9ef65f68719c999bc22bc12b1ac6376971c53919d8386dc6c50720800f",
+      "replay_hash": "571dbad3e089ca1b21a7404800d7db74cef965d0dc7292767c3010f71f7d3b3f",
+      "pair_hash": "3e8553a125e9e721b50940cf67890c477cc447980147bfa1e2a17f877de37a06",
+      "status": "CERTIFIED",
+      "replay_status": "SUCCESS",
+      "failure_record": null
+    }
+  ],
+  "metrics": {
+    "entry_count": 5,
+    "certified_count": 5,
+    "failed_count": 0,
+    "replay_success_rate": 1.0
+  },
+  "corpus_sha256": "65882b1cfa3cfc6b7734154c70a118866374f01bb1aa9089e4875fb11647d2a5",
+  "invariant_diff": {
+    "source_pack": "demo_pack_v1",
+    "split_policy": [
+      "train",
+      "train",
+      "train",
+      "validation",
+      "test"
+    ],
+    "hash_policy": "sha256(canonical_json(artifact))",
+    "corpus_hash_policy": "sha256(domain + NUL + canonical_json(entries))"
+  }
+}

@@ -1,0 +1,139 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1",
+  "title": "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1",
+  "description": "Hash-bound corpus manifest for replay-certified and typed-failure mathematical examples.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "corpus_id",
+    "created_utc",
+    "entries",
+    "metrics",
+    "corpus_sha256",
+    "invariant_diff"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1"
+    },
+    "corpus_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "entries": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "example_id",
+          "split",
+          "proof_assistant",
+          "task_hash",
+          "trace_hash",
+          "replay_hash",
+          "pair_hash",
+          "status",
+          "replay_status",
+          "failure_record"
+        ],
+        "properties": {
+          "example_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "split": {
+            "type": "string",
+            "enum": ["train", "validation", "test"]
+          },
+          "proof_assistant": {
+            "type": "string",
+            "enum": ["lean4", "coq", "isabelle"]
+          },
+          "task_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "trace_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "replay_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "pair_hash": {
+            "type": "string",
+            "pattern": "^[a-f0-9]{64}$"
+          },
+          "status": {
+            "type": "string",
+            "enum": ["CERTIFIED", "FAILED"]
+          },
+          "replay_status": {
+            "type": "string",
+            "enum": ["SUCCESS", "FAIL", "INFRA_FLAKE"]
+          },
+          "failure_record": {
+            "type": ["object", "null"],
+            "additionalProperties": false,
+            "required": ["fail_type", "invariant_diff"],
+            "properties": {
+              "fail_type": {
+                "type": "string",
+                "minLength": 1
+              },
+              "invariant_diff": {
+                "type": "object"
+              }
+            }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "entry_count",
+        "certified_count",
+        "failed_count",
+        "replay_success_rate"
+      ],
+      "properties": {
+        "entry_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "certified_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "failed_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "replay_success_rate": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        }
+      }
+    },
+    "corpus_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$",
+      "description": "sha256(domain || NUL || canonical(entries))"
+    },
+    "invariant_diff": {
+      "type": "object"
+    }
+  }
+}

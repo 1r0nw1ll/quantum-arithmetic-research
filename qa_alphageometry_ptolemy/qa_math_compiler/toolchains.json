@@ -1,0 +1,31 @@
+{
+  "schema_id": "QA_MATH_COMPILER_TOOLCHAIN_MANIFEST.v1",
+  "assistants": {
+    "lean4": {
+      "version": "4.31.0",
+      "version_pattern": "^Lean \\(version 4\\.31\\.0,"
+    },
+    "rocq": {
+      "version": "9.1.1",
+      "version_pattern": "^The Rocq Prover, version 9\\.1\\.1$"
+    },
+    "isabelle": {
+      "release": "Isabelle2025-2",
+      "version": "2025-2",
+      "version_pattern": "^Isabelle2025-2$"
+    }
+  },
+  "install": {
+    "darwin": {
+      "homebrew_formulae": [
+        "elan",
+        "coq"
+      ],
+      "homebrew_casks": [
+        "isabelle"
+      ],
+      "isabelle_archive_sha256": "8f187496e295f169952e944745af9e4ae00c9c1cd2ed4cadbcf7d898e444913e",
+      "lean_toolchain": "leanprover/lean4:v4.31.0"
+    }
+  }
+}

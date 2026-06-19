@@ -1,0 +1,73 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_MATH_COMPILER_LIVE_KERNEL_CERTIFICATE.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "manifest_sha256",
+    "results",
+    "status",
+    "certificate_sha256"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_MATH_COMPILER_LIVE_KERNEL_CERTIFICATE.v1"
+    },
+    "manifest_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "results": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "assistant_id",
+          "ok",
+          "version",
+          "version_pattern",
+          "version_match",
+          "source_sha256",
+          "returncode"
+        ],
+        "properties": {
+          "assistant_id": {
+            "enum": ["lean4", "rocq", "isabelle"]
+          },
+          "ok": {
+            "const": true
+          },
+          "version": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version_pattern": {
+            "type": "string",
+            "minLength": 1
+          },
+          "version_match": {
+            "const": true
+          },
+          "source_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "returncode": {
+            "const": 0
+          }
+        }
+      }
+    },
+    "status": {
+      "const": "PASS"
+    },
+    "certificate_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

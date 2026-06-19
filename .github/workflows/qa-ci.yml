@@ -67,6 +67,8 @@ jobs:
           PY
 
       - name: Run QA meta-validator in clean archive tree
+        env:
+          QA_MATH_COMPILER_CERTIFICATE_ONLY: "1"
         run: |
           tmp_dir="$(mktemp -d)"
           git archive HEAD | tar -x -C "$tmp_dir"
@@ -184,6 +186,8 @@ jobs:
           PY
 
       - name: Run QA meta-validator (tetrad + conjectures + FST)
+        env:
+          QA_MATH_COMPILER_CERTIFICATE_ONLY: "1"
         run: python qa_meta_validator.py
 
       - name: Run conjecture core checks
@@ -242,3 +246,27 @@ jobs:
           else
             echo "[SKIP] qa_generator_failure_unification_cert_v1/validator.py not present in this checkout"
           fi
+
+  qa-math-compiler-live-kernels:
+    runs-on: macos-14
+    timeout-minutes: 45
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned proof-assistant toolchains
+        run: tools/install_math_compiler_toolchains.sh
+
+      - name: Regenerate live-kernel certificate
+        run: |
+          python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py --write-report
+          git diff --exit-code -- qa_alphageometry_ptolemy/qa_math_compiler/artifacts/live_kernel_certificate.v1.json
+
+      - name: Validate committed certificate
+        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py --check-report

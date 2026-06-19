@@ -1808,9 +1808,19 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     schema_lemma = os.path.join(schema_dir, "QA_LEMMA_MINING_SCHEMA.v1.json")
     schema_corpus = os.path.join(schema_dir, "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1.json")
     schema_assistants = os.path.join(schema_dir, "QA_PROOF_ASSISTANT_REGISTRY_SCHEMA.v1.json")
+    schema_live_kernel = os.path.join(
+        schema_dir,
+        "QA_MATH_COMPILER_LIVE_KERNEL_CERTIFICATE.v1.json",
+    )
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
     corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
     live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
+    toolchain_manifest = os.path.join(mc_dir, "toolchains.json")
+    live_kernel_report = os.path.join(
+        mc_dir,
+        "artifacts",
+        "live_kernel_certificate.v1.json",
+    )
     demo_pack_dir = os.path.join(mc_dir, "demo_pack_v1")
     demo_corpus = os.path.join(demo_pack_dir, "corpus.json")
 
@@ -1833,8 +1843,9 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     assistants_neg = os.path.join(fixtures_dir, "assistants_invalid_nondeterministic.json")
     required_artifacts = [
         schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
-        schema_corpus, schema_assistants, schema_demo_pack, corpus_builder,
-        live_kernel_verifier, demo_corpus,
+        schema_corpus, schema_assistants, schema_live_kernel, schema_demo_pack,
+        corpus_builder, live_kernel_verifier, toolchain_manifest,
+        live_kernel_report, demo_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg, lemma_duplicate_neg,
@@ -2116,8 +2127,23 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
             f"{json.dumps(rebuild_result, sort_keys=True)}"
         )
 
+    kernel_self_test = subprocess.run(
+        [sys.executable, live_kernel_verifier, "--self-test"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    if kernel_self_test.returncode != 0:
+        raise RuntimeError(
+            "Math compiler kernel certificate self-test failed: "
+            f"{kernel_self_test.stdout}\n{kernel_self_test.stderr}"
+        )
+
+    kernel_command = [sys.executable, live_kernel_verifier]
+    if os.environ.get("QA_MATH_COMPILER_CERTIFICATE_ONLY") == "1":
+        kernel_command.append("--check-report")
     proc = subprocess.run(
-        [sys.executable, live_kernel_verifier],
+        kernel_command,
         capture_output=True,
         text=True,
         timeout=900,

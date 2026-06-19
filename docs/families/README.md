@@ -2,6 +2,8 @@
 
 **Recently added**
 
+| [463] | [QA Witt Tower Crash Pair Bounce](463_qa_witt_tower_crash_pair_bounce.md) | (0,0) pair daily: US n=131 +1.46% p=0.0000 5/5 sig; INTL n=161 +1.90% p=0.0000 6/6 sig; combined n=292 +1.70%; non-(0,0) S-orbit null both regions; EWC dissociation: (0,0) sig but a<=6 null | PASS |
+| [462] | [QA Witt Tower International A-Coordinate Generalization](462_qa_witt_tower_intl_a_coord.md) | INTL a<=6: n=1099 +0.42% p=0.0000; 5/6 individually sig (EWC null p=0.126); US baseline [461] +0.37%; combined US+INTL n=2035 9/11 markets significant | PASS |
 | [461] | [QA Witt Tower A-Coordinate Daily Direction](461_qa_witt_tower_daily_a_coord.md) | Daily a=b+2e<=6: n=936, +0.37%, p~0.0002; IS pre-2015 p=0.0002 (regime-null resolved); crash-rec b<=2,e>=18: n=1460, -0.12%, p~0.0002; 4/5 sig; A2 dominates D1 coord | PASS |
 | [460] | [QA Witt Tower T-Step Contrarian](460_qa_witt_tower_tstep_contrarian.md) | T-step tp=(b+e)%27≥22 → -0.07% next-week (p=0.0006); tp≤4 → +0.33% (p=0.0042); spread=0.40%; DJI/SPY sig; QQQ null+positive (tech exception); bidirectional anti-persistence | PASS |
 | [459] | [QA Witt Tower A-Coordinate Weekly Direction](459_qa_witt_tower_a_coord_direction.md) | QA A2 coord a=b+2e≤6 → +0.99% next-week pooled (perm_p≈0.0002, n=213); 3/5 individually sig (GSPC/DJI/SPY); OOS post-2015: +2.52%, perm_p≈0.0002; IS pre-2015: NULL (regime-aware cert) | PASS |

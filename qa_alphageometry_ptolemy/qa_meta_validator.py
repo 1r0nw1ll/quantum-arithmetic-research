@@ -10333,6 +10333,54 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_crash_pair_bounce_cert_family(base_dir):
+    """Cert [463]: QA Witt Tower Crash Pair Bounce -- (0,0) rank-bin state on daily data; US pooled n=131 mean=+1.46% perm_p=0.0000 5/5 sig; INTL pooled n=161 mean=+1.90% perm_p=0.0000 6/6 sig; non-(0,0) S-orbit null (US p=0.39, INTL p=0.73); globally validated 11/11 markets; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_crash_pair_bounce_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_crash_pair_bounce_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=300,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
+def _validate_qa_witt_tower_intl_a_coord_cert_family(base_dir):
+    """Cert [462]: QA Witt Tower International A-Coord Generalization -- a=b+2*e<=6 on 6 international ETFs (EWJ/EWG/EWL/EWU/EWA/EWC); INTL pooled n=1099 mean=+0.42% perm_p=0.0000; 5/6 significant (EWC null p=0.126); US baseline n=936 mean=+0.37%; EWC positive direction (+0.18%) despite null; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_intl_a_coord_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_intl_a_coord_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=300,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_daily_a_coord_cert_family(base_dir):
     """Cert [461]: QA Witt Tower A-Coordinate Daily Direction (Bidirectional, IS-Robust) -- a=b+2*e<=6 on daily rank-bins; pooled 5 US indices n=936 mean=+0.37% perm_p~0.0002; IS (GSPC pre-2015) n=111 perm_p=0.0002 SIGNIFICANT (resolves [459] IS-null); OOS n=71 perm_p=0.0108; crash-rec (b<=2,e>=18) n=1460 mean=-0.12% perm_p~0.0002; 4/5 individually sig (GSPC/DJI/SPY/QQQ; IXIC marginal); A2 dominates D1: a<=6 mean=+0.37% vs d<=6 mean=+0.26%; 6/6 PASS."""
     import subprocess
@@ -12947,6 +12995,16 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (463, "QA Witt Tower Crash Pair Bounce Cert family",
+     _validate_qa_witt_tower_crash_pair_bounce_cert_family,
+     "QA Witt Tower Crash Pair Bounce Cert [463]. Certifies QA state (b=0 AND e=0) -- both consecutive days in bottom rank-bin of Z/27Z -- predicts positive next-day return. GLOBALLY VALIDATED: US 5/5 individually p<0.01; INTL 6/6 individually significant (incl. EWC). (0,0) is S-orbit member but signal concentrated here; non-(0,0) S-orbit null (US p=0.39, INTL p=0.73). MAPPING: daily log-return -> rank -> bin=floor(rank*27/N); b=bins[t-1], e=bins[t]; (0,0)=extreme-low rank-bin pair. US (0,0): pooled n=131, mean=+1.46%, pos=62.6%, perm_p=0.0000. INTL (0,0): pooled n=161, mean=+1.90%, pos=68.9%, perm_p=0.0000. COMBINED n=292, mean~+1.70%. EWC DISSOCIATION: EWC (0,0) p=0.0000 mean=+2.12% despite EWC a<=6 null [462]; non-(0,0) S-orbit EWC negative (p=0.005, mean=-0.48%), explaining cancellation. CERTIFIED: (C1) US perm_p<0.001 PASS. (C2) INTL perm_p<0.001 PASS. (C3) US mean>=1% PASS. (C4) INTL mean>=1% PASS. (C5) US 5/5 p<0.01 PASS. (C6) non-(0,0) null both regions PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110], cert [458] (weekly S-orbit), cert [461] (daily a<=6 US), cert [462] (intl a<=6). Validated 2026-06-19.",
+     "463_qa_witt_tower_crash_pair_bounce",
+     "qa_witt_tower_crash_pair_bounce_cert_v1", True),
+    (462, "QA Witt Tower International A-Coordinate Generalization Cert family",
+     _validate_qa_witt_tower_intl_a_coord_cert_family,
+     "QA Witt Tower International A-Coordinate Generalization Cert [462]. Tests whether QA A2 coord a=b+2*e (raw) on daily return rank-bins in Z/27Z predicts next-day direction on 6 international equity ETFs (EWJ/EWG/EWL/EWU/EWA/EWC). OOD GENERALIZATION of cert [461] (US daily a<=6). INTL POOLED: n=1099, mean=+0.42%, pos=55.5%, perm_p=0.0000. PER-ETF: EWJ(p=0.0004), EWG(p=0.0048), EWL(p=0.0002), EWU(p=0.0000), EWA(p=0.0000) significant (5/6); EWC null (p=0.126, highly US-correlated). US BASELINE [461]: n=936, mean=+0.37%, perm_p=0.0002. EWC mean=+0.18%>0 (direction preserved). COMBINED US+INTL: n=2035 across 11 global equity markets; 9/11 individually significant (IXIC marginal + EWC null). CERTIFIED: (C1) INTL pooled perm_p<0.001 PASS. (C2) 5/6 sig PASS. (C3) INTL mean=+0.42%>=0.30% PASS. (C4) INTL pos=55.5%>52% PASS. (C5) EWC mean>0 PASS. (C6) magnitude comparable to US PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110] (Witt Tower), cert [461] (daily US a<=6). Validated 2026-06-19.",
+     "462_qa_witt_tower_intl_a_coord",
+     "qa_witt_tower_intl_a_coord_cert_v1", True),
     (461, "QA Witt Tower A-Coordinate Daily Direction Cert family",
      _validate_qa_witt_tower_daily_a_coord_cert_family,
      "QA Witt Tower A-Coordinate Daily Direction Cert [461]. Tests QA A2 derived coord a=b+2*e on DAILY return rank-bins in Z/27Z predicting next-day direction. DAILY SCALE: 31415 state pairs, 5 US indices (^GSPC,^IXIC,^DJI,QQQ,SPY), 25y. POSITIVE (a<=6): pooled n=936, mean=+0.37%, perm_p~0.0002 (0/5000 shuffles). IS GSPC pre-2015: n=111, mean=+0.46%, perm_p=0.0002 -- IS SIGNIFICANT (resolves cert [459] IS-null at weekly scale). OOS GSPC 2015+: n=71, mean=+0.40%, perm_p=0.0108. Per-index: GSPC(0/5000), DJI(0/5000), SPY(0/5000), QQQ(p=0.013) significant; IXIC(p=0.097) marginal (4/5 sig). NEGATIVE (crash-recovery b<=2,e>=18): pooled n=1460, mean=-0.12%, perm_p~0.0002. DJI(p=0.002)/GSPC(p=0.009)/IXIC(p=0.020) significant; QQQ null (tech exception). DISJOINT: a<=6 and b<=2,e>=18 are structurally disjoint (b<=2,e>=18 -> a>=36); A2 double-weighting of e separates bounce regime (a small) from crash-recovery-failure (a large). A2 DOMINATES D1: daily a<=6 mean=+0.37% vs d<=6 mean=+0.26% (A2 correctly excludes negative crash-recovery pairs like (0,5) that d<=6 includes). T-STEP DAILY NULL: tp>=22 p=0.035 marginal, tp<=4 p=0.41 NULL -- T-step contrarian disappears at daily scale (was weekly-scale effect [460]). CERTIFIED: (C1) a<=6 perm_p<0.001 PASS. (C2) IS perm_p=0.0002<0.01 PASS. (C3) OOS perm_p=0.0108<0.05 PASS. (C4) crash-rec perm_p<0.001 PASS. (C5) 4/5 sig PASS. (C6) bidirectional PASS. 6/6 PASS. PRIMARY SOURCE: Fama EF (1970) doi:10.2307/2325486; Jegadeesh N (1990) doi:10.2307/2328797. Structural parents: cert [110], cert [457], cert [458], cert [459]. Validated 2026-06-19.",

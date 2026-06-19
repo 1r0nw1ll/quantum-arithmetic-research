@@ -10333,6 +10333,30 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_orbit_markov_cert_family(base_dir):
+    """Cert [455]: QA Witt Tower Orbit Transition Markov Chain -- pre-registered IS matrix (^GSPC 2001-2012, n_IS=136, n_S_IS=5); OOS validated 2013-2026 (n_S_OOS=7 incl. 3-month COVID cluster); staircase (S->C=0, C->S=0) mathematically forced by shared-bin; P(C->C)_full=0.899>>P(Sat->Sat)=0.333; GSPC+QQQ pooled OOS staircase confirmed; 6 checks PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_orbit_markov_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_orbit_markov_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    proc = subprocess.run(
+        [sys.executable, validator],
+        capture_output=True, text=True, timeout=180,
+    )
+    if proc.returncode != 0:
+        return f"validator exited {proc.returncode}: {proc.stderr[:200]}"
+    try:
+        result = json.loads(proc.stdout)
+    except Exception:
+        return f"could not parse validator JSON: {proc.stdout[:200]}"
+    if not result.get("ok"):
+        checks = result.get("checks", {})
+        failed = [k for k, v in checks.items() if not v.get("ok")]
+        return f"cert FAIL — failed checks: {failed}"
+    return None
+
+
 def _validate_qa_witt_tower_orbit_recession_null_cert_family(base_dir):
     """Cert [454]: QA Witt Tower Orbit Recession Null (Gold) -- certified null for [453]: Gold (GC=F) S-orbit 0/2 in recession (perm p=1.000); QQQ positive control 4/6 = 67% (perm p=0.0006); orbit staircase (S->C=0, C->S=0) universal across all 4 assets; Gold mean_ret_after_S=+8.2% (inverts vs GSPC -1.3%); recession concentration is risk-asset specific."""
     import subprocess
@@ -12779,6 +12803,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (455, "QA Witt Tower Orbit Transition Markov Chain Cert family",
+     _validate_qa_witt_tower_orbit_markov_cert_family,
+     "QA Witt Tower Orbit Transition Markov Chain Cert [455]. Pre-registered in-sample (IS) Markov matrix from ^GSPC 2001-2012 (n_IS=136 pairs, n_S_IS=5), validated against out-of-sample (OOS) 2013-2026 (n_OOS=163 pairs, n_S_OOS=7). Pre-registered IS matrix: P(S->S)=0.200, P(S->Sat)=0.800, P(S->C)=0.000; P(Sat->S)=0.167, P(Sat->Sat)=0.333, P(Sat->C)=0.500; P(C->S)=0.000, P(C->Sat)=0.113, P(C->C)=0.887. KEY STRUCTURAL INSIGHT: staircase (S->C=0, C->S=0) is mathematically forced by shared-bin overlap in consecutive state pairs — current state (b,e) and next state (e,b') share bin e; if e%9==0 (from S-state), next state must have e%9==0 -> it cannot be C (which requires both non-divisible-by-9). EMPIRICAL CLAIMS: (C4) P(C->C)_full=0.899>0.80>P(Sat->Sat)_full=0.333 — Cosmos persistence hierarchy. (C5) P(S->S)_OOS=0.500<P(C->C)_OOS=0.908 — Singularity more transient than Cosmos OOS. (C6) GSPC+QQQ pooled OOS staircase: 9 S-states, S->C=0, C->S=0 — multi-asset confirmation. GSPC OOS S-months: 2013-12, 2016-09, 2020-01/02/03 (3-month COVID cluster), 2022-05/06. QQQ OOS S-months: 2013-09, 2022-04 (isolated, P(S->S)_QQQ_OOS=0). CERTIFIED FACTS: (C1) n_IS=136>=80, n_S_IS=5>=3 PASS. (C2) IS S->C=0, C->S=0 (structural) PASS. (C3) OOS S->C=0, C->S=0 GSPC AND QQQ (structural) PASS. (C4) P(C->C)_full=0.899>0.80>P(Sat->Sat)_full=0.333 PASS. (C5) P(S->S)_OOS<P(C->C)_OOS PASS. (C6) GSPC+QQQ pooled OOS staircase PASS. 6 checks PASS. PRIMARY SOURCES: Wall HS (1960) doi:10.1080/00029890.1960.11989541; NBER www.nber.org/cycles. Structural parents: cert [110], cert [453], cert [454]. Finance prediction chain Markov structure cert. Validated 2026-06-18.",
+     "455_qa_witt_tower_orbit_markov",
+     "qa_witt_tower_orbit_markov_cert_v1", True),
     (454, "QA Witt Tower Orbit Recession Null (Gold) Cert family",
      _validate_qa_witt_tower_orbit_recession_null_cert_family,
      "QA Witt Tower Orbit Recession Null (Gold) Cert [454]. Certified null for cert [453]: Gold futures (GC=F) S-orbit months do NOT concentrate in NBER recession months (k_S_rec=0/2, perm_p=1.000). Cross-asset pattern certified: GSPC perm_p=0.013 (signal), QQQ perm_p=0.0006 (positive control, 4/6=67%), Gold perm_p=1.000 (null), TLT perm_p=1.000 (null). Orbit staircase (S->C=0, C->S=0) holds universally across all 4 assets. Gold S-states fall POST-recession (Jun 2020, Apr 2021, after Apr 2020 NBER trough), mean_ret_after_S=+8.2% vs GSPC -1.3% (direction inverts). QA mapping: identical to cert [453]; Gold monthly log-returns rank-normalized to Z/27Z; state pair (b,e); S=both b,e divisible by 9. Theorem NT: log-returns (float) are observer projections; orbit class is QA integer state. CERTIFIED FACTS: (C1) Gold N=255 (>=200), n_rec=20 (>=15) PASS. (C2) Gold S->C=0, C->S=0 PASS. (C3) Gold k_S_rec=0, perm_p=1.000 >= 0.20 PASS. (C4) Gold perm_p=1.000 (null) vs GSPC perm_p=0.013 (signal) PASS. (C5) Gold mean_ret_after_S=+0.082 > 0 (opposite direction to GSPC -0.013) PASS. (C6) QQQ positive control: 4/6=67%, log10_p=-3.29, perm_p=0.0006 PASS. 6 checks PASS. PRIMARY SOURCES: Wall HS (1960) doi:10.1080/00029890.1960.11989541; NBER www.nber.org/cycles. Structural parents: cert [110], cert [443], cert [453]. Validated 2026-06-18.",

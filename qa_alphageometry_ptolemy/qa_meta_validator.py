@@ -1764,7 +1764,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     Run QA Math Compiler Stack validator against fixtures.
 
     Checks:
-      - Validator self-test (17 built-in checks)
+      - Validator self-test (22 built-in checks)
       - trace_valid.json must PASS
       - trace_invalid_missing_invariant_diff.json must FAIL with RESULT_INCOMPLETE
       - pair_valid.json must PASS
@@ -1777,7 +1777,14 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
       - pair_v1_invalid_unproved_replay.json must FAIL with PROVED_PAIR_REPLAY_MISMATCH
       - lemma_mining_valid.json must PASS
       - lemma_mining_invalid_low_compression.json must FAIL with COMPRESSION_BELOW_TARGET
-      - optional demo_pack_v1 (if present) must PASS demo_pack validator
+      - lemma_mining_invalid_duplicate_id.json must FAIL with LEMMA_ID_DUPLICATE
+      - corpus_valid.json must PASS
+      - corpus_invalid_digest.json must FAIL with CORPUS_DIGEST_MISMATCH
+      - assistants_valid.json must PASS
+      - assistants_invalid_nondeterministic.json must FAIL with ASSISTANT_NONDETERMINISTIC
+      - demo_pack_v1 must PASS demo_pack validator
+      - demo_pack_v1/corpus.json must deterministically rebuild byte-semantically
+      - Lean, Coq/Rocq, and Isabelle live kernel smoke proofs must PASS
 
     Returns:
         None on success,
@@ -1799,7 +1806,13 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     schema_replay = os.path.join(schema_dir, "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1.json")
     schema_pair_v1 = os.path.join(schema_dir, "QA_HUMAN_FORMAL_PAIR_CERT.v1.json")
     schema_lemma = os.path.join(schema_dir, "QA_LEMMA_MINING_SCHEMA.v1.json")
+    schema_corpus = os.path.join(schema_dir, "QA_CERTIFIED_PROOF_CORPUS_SCHEMA.v1.json")
+    schema_assistants = os.path.join(schema_dir, "QA_PROOF_ASSISTANT_REGISTRY_SCHEMA.v1.json")
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
+    corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
+    live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
+    demo_pack_dir = os.path.join(mc_dir, "demo_pack_v1")
+    demo_corpus = os.path.join(demo_pack_dir, "corpus.json")
 
     trace_valid = os.path.join(fixtures_dir, "trace_valid.json")
     trace_neg = os.path.join(fixtures_dir, "trace_invalid_missing_invariant_diff.json")
@@ -1813,11 +1826,19 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     pair_v1_neg = os.path.join(fixtures_dir, "pair_v1_invalid_unproved_replay.json")
     lemma_valid = os.path.join(fixtures_dir, "lemma_mining_valid.json")
     lemma_neg = os.path.join(fixtures_dir, "lemma_mining_invalid_low_compression.json")
+    lemma_duplicate_neg = os.path.join(fixtures_dir, "lemma_mining_invalid_duplicate_id.json")
+    corpus_valid = os.path.join(fixtures_dir, "corpus_valid.json")
+    corpus_neg = os.path.join(fixtures_dir, "corpus_invalid_digest.json")
+    assistants_valid = os.path.join(fixtures_dir, "assistants_valid.json")
+    assistants_neg = os.path.join(fixtures_dir, "assistants_invalid_nondeterministic.json")
     required_artifacts = [
-        schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma, schema_demo_pack,
+        schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
+        schema_corpus, schema_assistants, schema_demo_pack, corpus_builder,
+        live_kernel_verifier, demo_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
-        pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg,
+        pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg, lemma_duplicate_neg,
+        corpus_valid, corpus_neg, assistants_valid, assistants_neg,
     ]
     for fp in required_artifacts:
         if not os.path.exists(fp):
@@ -1846,7 +1867,8 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         sys.path.insert(0, base_dir)
     from qa_math_compiler.qa_math_compiler_validator import (
         validate_trace, validate_pair, validate_task, validate_replay_bundle,
-        validate_pair_v1, validate_lemma_mining, validate_demo_pack_v1, _self_test,
+        validate_pair_v1, validate_lemma_mining, validate_corpus,
+        validate_assistant_registry, validate_demo_pack_v1, _self_test,
     )
 
     # Self-test first
@@ -1985,35 +2007,133 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
             f"COMPRESSION_BELOW_TARGET, got {result.fail_type}"
         )
 
-    # Optional demo pack validation (if present in repo)
-    demo_pack_dir = os.path.join(mc_dir, "demo_pack_v1")
-    if os.path.isdir(demo_pack_dir):
-        # Enforce tracked artifacts for demo pack as well.
-        if os.path.exists(os.path.join(repo_root, ".git")):
-            import subprocess
+    # Negative lemma mining: duplicate lemma identifiers
+    with open(lemma_duplicate_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_lemma_mining(data)
+    if result.ok:
+        raise RuntimeError("lemma_mining_invalid_duplicate_id.json should FAIL but passed")
+    if result.fail_type != "LEMMA_ID_DUPLICATE":
+        raise RuntimeError(
+            f"lemma_mining_invalid_duplicate_id.json: expected "
+            f"LEMMA_ID_DUPLICATE, got {result.fail_type}"
+        )
 
-            demo_files = []
-            for root, _, files in os.walk(demo_pack_dir):
-                for name in files:
-                    demo_files.append(os.path.join(root, name))
-            for fp in sorted(demo_files):
-                rel = os.path.relpath(fp, repo_root)
-                proc = subprocess.run(
-                    ["git", "-C", repo_root, "ls-files", "--error-unmatch", rel],
-                    capture_output=True,
-                    text=True,
-                )
-                if proc.returncode != 0:
-                    raise RuntimeError(
-                        f"UNTRACKED_REQUIRED_ARTIFACT: {rel}"
-                    )
+    # Certified corpus fixtures
+    with open(corpus_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_corpus(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"corpus_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
 
-        result = validate_demo_pack_v1(demo_pack_dir)
-        if not result.ok:
-            raise RuntimeError(
-                f"demo_pack_v1 should PASS but got {result.fail_type}: "
-                f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+    with open(corpus_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_corpus(data)
+    if result.ok:
+        raise RuntimeError("corpus_invalid_digest.json should FAIL but passed")
+    if result.fail_type != "CORPUS_DIGEST_MISMATCH":
+        raise RuntimeError(
+            f"corpus_invalid_digest.json: expected "
+            f"CORPUS_DIGEST_MISMATCH, got {result.fail_type}"
+        )
+
+    # Proof-assistant registry fixtures
+    with open(assistants_valid, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_assistant_registry(data)
+    if not result.ok:
+        raise RuntimeError(
+            f"assistants_valid.json should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    with open(assistants_neg, "r", encoding="utf-8") as f:
+        data = json.load(f)
+    result = validate_assistant_registry(data)
+    if result.ok:
+        raise RuntimeError("assistants_invalid_nondeterministic.json should FAIL but passed")
+    if result.fail_type != "ASSISTANT_NONDETERMINISTIC":
+        raise RuntimeError(
+            f"assistants_invalid_nondeterministic.json: expected "
+            f"ASSISTANT_NONDETERMINISTIC, got {result.fail_type}"
+        )
+
+    # Demo pack validation and deterministic certified-corpus rebuild.
+    if not os.path.isdir(demo_pack_dir):
+        return "missing qa_math_compiler/demo_pack_v1 directory"
+
+    # Enforce tracked artifacts for demo pack as well.
+    if os.path.exists(os.path.join(repo_root, ".git")):
+        import subprocess
+
+        demo_files = []
+        for root, _, files in os.walk(demo_pack_dir):
+            for name in files:
+                demo_files.append(os.path.join(root, name))
+        for fp in sorted(demo_files):
+            rel = os.path.relpath(fp, repo_root)
+            proc = subprocess.run(
+                ["git", "-C", repo_root, "ls-files", "--error-unmatch", rel],
+                capture_output=True,
+                text=True,
             )
+            if proc.returncode != 0:
+                raise RuntimeError(
+                    f"UNTRACKED_REQUIRED_ARTIFACT: {rel}"
+                )
+
+    result = validate_demo_pack_v1(demo_pack_dir)
+    if not result.ok:
+        raise RuntimeError(
+            f"demo_pack_v1 should PASS but got {result.fail_type}: "
+            f"{json.dumps(result.invariant_diff, sort_keys=True)}"
+        )
+
+    import subprocess
+
+    proc = subprocess.run(
+        [sys.executable, corpus_builder, "check", demo_pack_dir],
+        capture_output=True,
+        text=True,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            "demo_pack_v1 certified corpus rebuild failed:\n"
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    try:
+        rebuild_result = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            f"demo_pack_v1 corpus rebuild returned non-JSON output: {exc}: {proc.stdout}"
+        )
+    if rebuild_result.get("ok") is not True:
+        raise RuntimeError(
+            "demo_pack_v1 corpus rebuild returned ok=false: "
+            f"{json.dumps(rebuild_result, sort_keys=True)}"
+        )
+
+    proc = subprocess.run(
+        [sys.executable, live_kernel_verifier],
+        capture_output=True,
+        text=True,
+        timeout=900,
+    )
+    try:
+        kernel_result = json.loads(proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            f"live kernel verifier returned non-JSON output: {exc}: "
+            f"{proc.stdout}\n{proc.stderr}"
+        )
+    if proc.returncode != 0 or kernel_result.get("ok") is not True:
+        raise RuntimeError(
+            "Math compiler live kernel verification failed: "
+            f"{json.dumps(kernel_result, sort_keys=True)}"
+        )
 
     return None
 
@@ -10333,6 +10453,27 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_s_orbit_weekly_regime_cert_family(base_dir):
+    """Cert [466]: QA Witt Tower S-Orbit Weekly Regime -- IS null (p=0.1214), OOS sig (p=0.0044, mean=+1.53%); weekly S-orbit OOS-concentrated matching [459]; timescale regime boundary; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_s_orbit_weekly_regime_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_s_orbit_weekly_regime_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    try:
+        r = subprocess.run(
+            [sys.executable, validator],
+            capture_output=True, text=True, timeout=180,
+            cwd=base_dir,
+        )
+        data = json.loads(r.stdout)
+        if not data.get("ok"):
+            return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e:
+        return f"error: {e}"
+
+
 def _validate_qa_witt_tower_mi_enso_cert_family(base_dir):
     """Cert [465]: QA Witt Tower MI ENSO -- I(orbit_tier;ENSO_phase)=1.0745 bits; perm_p=0.0000 (0/5000); MI_ratio=0.699 (70% of H_label); diagonal PMI T0/LN=+1.582, T1/N=+1.128, T2/EN=+1.587; 5th QA feature type (MI); 6/6 PASS."""
     import subprocess
@@ -12138,7 +12279,7 @@ FAMILY_SWEEPS = [
      "schema + validator + fixtures (1 valid, 3 negative)", "30_agent_trace_competency_cert", ".", False),
     (31, "QA Math Compiler Stack family",
      _validate_math_compiler_stack_if_present,
-     "validator + fixtures (6 valid, 6 negative) + optional demo_pack_v1", "31_math_compiler_stack", ".", False),
+     "validator + fixtures + demo corpus rebuild + Lean/Coq/Isabelle kernel smoke", "31_math_compiler_stack", ".", False),
     (32, "QA Conjecture-Prove Control Loop family",
      _validate_conjecture_prove_loop_if_present,
      "validator + fixtures (3 valid, 3 negative)", "32_conjecture_prove_loop", ".", False),
@@ -13040,6 +13181,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (466, "QA Witt Tower S-Orbit Weekly Regime Cert family",
+     _validate_qa_witt_tower_s_orbit_weekly_regime_cert_family,
+     "QA Witt Tower S-Orbit Weekly Regime Cert [466]. Regime analysis of S-orbit weekly signal (cert [458]: pooled +1.17% p=0.0008). IS (pre-2015): pooled n=69 mean=+0.67% perm_p=0.1214 NULL. OOS (2015+): pooled n=37 mean=+1.53% perm_p=0.0044 SIGNIFICANT. STRUCTURAL FINDING: Both weekly QA operators are OOS-concentrated -- a<=6 weekly [459] (IS null, OOS +2.52%) and S-orbit weekly [466] (IS null, OOS +1.53%) -- while both daily operators show IS+OOS signal ([461] a<=6, [464] S->C exit). Timescale-specific regime boundary at 2015: weekly=post-2015 only, daily=full-sample. PER-INDEX OOS: DJI n=8 mean=+2.18% perm_p=0.0222 (significant); GSPC n=10 mean=+1.34% perm_p=0.1162 (marginal); RUT null both periods (small-cap exception from [458]); QQQ IS-concentrated (IS p=0.025, OOS null). CERTIFIED: (C1) IS perm_p=0.1214>0.05 NULL PASS. (C2) OOS perm_p=0.0044<0.01 PASS. (C3) OOS mean=+1.53%>=1.0% PASS. (C4) OOS mean>IS mean PASS. (C5) DJI OOS p=0.0222<0.05 PASS. (C6) RUT null both PASS. 6/6 PASS. Primary source: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110], cert [458] (S-orbit weekly), cert [459] (a<=6 weekly regime). Validated 2026-06-19.",
+     "466_qa_witt_tower_s_orbit_weekly_regime",
+     "qa_witt_tower_s_orbit_weekly_regime_cert_v1", True),
     (465, "QA Witt Tower MI ENSO Cert family",
      _validate_qa_witt_tower_mi_enso_cert_family,
      "QA Witt Tower Mutual Information ENSO Cert [465]. Introduces empirical MI I(orbit_tier; ENSO_phase) as the 5th QA feature type for physical domain certs [442]-[452], alongside amplitude RMS, ZCR, Poisson count, and spectral entropy. Domain: NOAA ONI monthly, 1950-2026, N=916. Label: 3-class ENSO phase (La Nina ONI<=-0.5, Neutral, El Nino ONI>=0.5). Orbit feature: Witt tower tier T0/T1/T2=bins 0-8/9-17/18-26 in Z/27Z. MAPPING: ONI anomaly->observer projection; rank-bin->Z/27Z integer; bin//9->tier{0,1,2}; Theorem NT satisfied. RESULTS: MI_obs=1.0745 bits; H(ENSO_phase)=1.5373 bits; MI_ratio=0.699 (70% of label entropy captured by orbit-tier partition). Permutation null N_PERM=5000 seed=42: 0 of 5000 shuffles exceed obs MI (perm_p=0.0000). 3x3 contingency near-diagonal: (T0,La Nina)=252, (T1,Neutral)=305, (T2,El Nino)=245 dominant. Pointwise MI diagonal: T0/LN=+1.582, T1/N=+1.128, T2/EN=+1.587 (all positive; off-diagonal neutral leakage 53 in T0 and 60 in T2 suppresses total below theoretical max 1.537 bits). CERTIFIED: (C1) N=916>=900 all phases PASS. (C2) Tier balance T0=306/T1=305/T2=305 PASS. (C3) MI=1.07>0.8 bits PASS. (C4) perm_p=0.0000<0.001 PASS. (C5) MI_ratio=0.699>0.60 PASS. (C6) All diagonal PMI positive PASS. 6/6 PASS. Structural parents: cert [110] (Witt tower), cert [445] (ENSO hypergeometric). Primary source: NOAA CPC ONI public domain; Wall (1960) doi:10.1080/00029890.1960.11989541. Validated 2026-06-19.",

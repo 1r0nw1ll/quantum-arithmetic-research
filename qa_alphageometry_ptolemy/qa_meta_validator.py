@@ -10479,6 +10479,27 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_mi_xdomain_cert_family(base_dir):
+    """Cert [467]: QA Witt Tower Cross-Domain MI Survey -- I(orbit_tier;label) significant across 7 physical domains; 0/35000 null hits; ENSO/SEP converge at MI_ratio=70%; binary monotone with base rate; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_mi_xdomain_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_mi_xdomain_cert_validate.py")
+    if not os.path.exists(validator):
+        return f"missing validator: {validator}"
+    try:
+        r = subprocess.run(
+            [sys.executable, validator],
+            capture_output=True, text=True, timeout=300,
+            cwd=base_dir,
+        )
+        data = json.loads(r.stdout)
+        if not data.get("ok"):
+            return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e:
+        return f"error: {e}"
+
+
 def _validate_qa_witt_tower_s_orbit_weekly_regime_cert_family(base_dir):
     """Cert [466]: QA Witt Tower S-Orbit Weekly Regime -- IS null (p=0.1214), OOS sig (p=0.0044, mean=+1.53%); weekly S-orbit OOS-concentrated matching [459]; timescale regime boundary; 6/6 PASS."""
     import subprocess
@@ -13207,6 +13228,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (467, "QA Witt Tower Cross-Domain MI Survey Cert family",
+     _validate_qa_witt_tower_mi_xdomain_cert_family,
+     "QA Witt Tower Cross-Domain MI Survey Cert [467]. Claim: I(orbit_tier;event_label) statistically significant (perm_p<0.001) across all 7 tested physical domains: ENSO (climate, 3-class), SEP solar (space weather), Seismic aftershock (seismology), EEG seizure energy (neuroscience, T2), EEG spectral entropy (neuroscience, T0), ECG VFL (cardiology), Geomagnetic storm (geomagnetism). KEY STRUCTURAL FINDING: MI_ratio=I/H(L) converges to ~70% for balanced event base rates (ENSO 69.9%, SEP 69.7%; delta=0.17%) -- a geometric ceiling of the Witt tower T0/T1/T2 partition, independent of physical mechanism. For 6 binary domains, MI_ratio is strictly monotone with event base rate (0 violations across 15 ordered pairs). Total null hits: 0/35000 (7 domains x 5000 shuffles). CERTIFIED: (C1) all 7 perm_p<0.001 PASS. (C2) all 7 MI_ratio>=0.15 PASS. (C3) ENSO/SEP both>=0.65, delta<0.05 PASS. (C4) 0 binary monotone violations PASS. (C5) ENSO MI=1.0745 bits>=1.0 PASS. (C6) 0/35000 null hits PASS. 6/6 PASS.",
+     "467_qa_witt_tower_mi_xdomain",
+     "qa_witt_tower_mi_xdomain_cert_v1", True),
     (466, "QA Witt Tower S-Orbit Weekly Regime Cert family",
      _validate_qa_witt_tower_s_orbit_weekly_regime_cert_family,
      "QA Witt Tower S-Orbit Weekly Regime Cert [466]. Regime analysis of S-orbit weekly signal (cert [458]: pooled +1.17% p=0.0008). IS (pre-2015): pooled n=69 mean=+0.67% perm_p=0.1214 NULL. OOS (2015+): pooled n=37 mean=+1.53% perm_p=0.0044 SIGNIFICANT. STRUCTURAL FINDING: Both weekly QA operators are OOS-concentrated -- a<=6 weekly [459] (IS null, OOS +2.52%) and S-orbit weekly [466] (IS null, OOS +1.53%) -- while both daily operators show IS+OOS signal ([461] a<=6, [464] S->C exit). Timescale-specific regime boundary at 2015: weekly=post-2015 only, daily=full-sample. PER-INDEX OOS: DJI n=8 mean=+2.18% perm_p=0.0222 (significant); GSPC n=10 mean=+1.34% perm_p=0.1162 (marginal); RUT null both periods (small-cap exception from [458]); QQQ IS-concentrated (IS p=0.025, OOS null). CERTIFIED: (C1) IS perm_p=0.1214>0.05 NULL PASS. (C2) OOS perm_p=0.0044<0.01 PASS. (C3) OOS mean=+1.53%>=1.0% PASS. (C4) OOS mean>IS mean PASS. (C5) DJI OOS p=0.0222<0.05 PASS. (C6) RUT null both PASS. 6/6 PASS. Primary source: Fama EF (1970) doi:10.2307/2325486. Structural parents: cert [110], cert [458] (S-orbit weekly), cert [459] (a<=6 weekly regime). Validated 2026-06-19.",

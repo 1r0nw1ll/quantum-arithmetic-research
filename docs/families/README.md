@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [467] | [QA Witt Tower Cross-Domain MI Survey](467_qa_witt_tower_mi_xdomain.md) | Cross-domain MI: I(orbit_tier;label) sig (perm_p<0.001) across 7 physical domains; 0/35000 null hits; ENSO 69.9% SEP 69.7% converge (delta=0.17%); binary monotone law 0 violations; 6/6 PASS | PASS |
 | [466] | [QA Witt Tower S-Orbit Weekly Regime](466_qa_witt_tower_s_orbit_weekly_regime.md) | Regime analysis of [458]: IS null (p=0.12), OOS +1.53% p=0.0044; both weekly operators OOS-concentrated ([459]+[466]); daily operators IS+OOS; timescale regime boundary at 2015; DJI OOS sig p=0.022; RUT null both | PASS |
 | [465] | [QA Witt Tower MI ENSO](465_qa_witt_tower_mi_enso.md) | MI 5th feature type: I(orbit_tier;ENSO_phase)=1.07 bits; perm_p=0.0000 (0/5000); MI_ratio=70%; diagonal PMI T0/LN=+1.58, T1/N=+1.13, T2/EN=+1.59; 916 months 1950-2026 | PASS |
 | [464] | [QA Witt Tower S-Orbit Exit](464_qa_witt_tower_s_exit.md) | S→C transition daily: US n=277 -0.22% p=0.0012; INTL n=348 -0.25% p=0.0002; GSPC OOS -0.93% p=0.0000; DJI+EWG blue-chip exceptions; pairs with [463] (entry bounce ↔ exit loss) | PASS |

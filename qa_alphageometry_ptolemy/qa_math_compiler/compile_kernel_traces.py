@@ -62,6 +62,7 @@ def write_json(path: Path, value: object) -> None:
 def normalize_output(text: str) -> str:
     normalized = text.replace(str(ROOT.parent.parent.resolve()) + os.sep, "")
     normalized = normalized.replace(str(ROOT.resolve()) + os.sep, "qa_math_compiler/")
+    normalized = normalized.replace(str(Path.home().resolve()) + os.sep, "$HOME/")
     return "\n".join(line.rstrip() for line in normalized.splitlines()).strip()
 
 

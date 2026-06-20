@@ -10531,6 +10531,34 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_speech_real_cert_family(base_dir):
+    """Cert [478]: QA Witt Tower Real Recorded Speech -- P(T0|voiced)=0.5005 vs 0.333 uniform; voiced T0 excess=+16.7pp; perm_p=0.0; P(voiced|T0)=0.601; replicates cert [451] on real speech (not synthesis); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_speech_real_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_speech_real_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_witt_tower_mi_kclass_cert_family(base_dir):
+    """Cert [477]: QA Witt Tower Multi-Class MI Ceiling Theory -- k-class formula generalises cert [468] binary; k=1 max_diff=5.55e-17; k=3 ceiling=1.0; ENSO diff=0.0039 vs empirical 0.699; r_ElNino=r_LaNina=1.0 structural; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_mi_kclass_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_mi_kclass_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_enso_prediction_cert_family(base_dir):
     """Cert [476]: QA Witt Tower ENSO Prediction -- T2->T2=90.8% perm_p=0.0, lag-1 acc=87.5% vs 33% baseline, lag-3 acc=67.5%, T0->T2=0 (forbidden); 6/6 PASS."""
     import subprocess
@@ -13413,6 +13441,16 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (478, "QA Witt Tower Real Recorded Speech Cert family",
+     _validate_qa_witt_tower_speech_real_cert_family,
+     "QA Witt Tower Real Recorded Speech Cert [478]. Claim: Voiced phoneme frames in REAL recorded speech (Anthony Robbins Personal Training System, 44100Hz, 120s analysed) preferentially occupy T0 (low spectral entropy tier). P(T0|voiced)=0.5005 vs 0.333 uniform (+50% enrichment); P(T0|unvoiced)=0.222; P(voiced|T0)=0.601; P(T2|voiced)=0.121 (depleted in high-entropy tier); voiced T0 excess=+16.7pp above uniform; perm_p=0.0000 (0/5000 permutations >= observed). Analysis pipeline identical to cert [451] (Fant synthesis): 25ms Hanning-windowed frames, rfft power spectrum, normalised spectral entropy H_norm, rank-bins Z/27Z, tier=bin//9. This cert falsifies the synthetic-artifact hypothesis: real human speech shows the same T0 dominance as Fant synthesis. CERTIFIED: C1 T0_voiced>0.45 PASS (0.5005); C2 voiced_T0>1.4x_unvoiced PASS (0.5005/0.222=2.25); C3 perm_p<0.001 PASS (0.0); C4 voiced_T0>50pct PASS (0.601); C5 T2_voiced<20pct PASS (0.121); C6 T0_excess>10pp PASS (+16.7pp). 6/6 PASS. PRIMARY SOURCES: Fant G (1960) ISBN:9789027916006; Stevens KN (1998) ISBN:9780262692502. Parent: cert [451]. Validated 2026-06-19.",
+     "478_qa_witt_tower_speech_real",
+     "qa_witt_tower_speech_real_cert_v1", True),
+    (477, "QA Witt Tower Multi-Class MI Ceiling Theory Cert family",
+     _validate_qa_witt_tower_mi_kclass_cert_family,
+     "QA Witt Tower Multi-Class MI Ceiling Theory Cert [477]. Claim: The closed-form binary MI_ratio(q,r) formula from cert [468] generalises to k signal classes. For a rank-uniform 3-tier partition, the general formula builds the exact joint distribution P(tier,class) from (q_i,r_i,d_i) tuples plus rank-constrained background, giving MI exactly. k=1 reduction: max_diff=5.55e-17 (floating-point identity with cert [468] binary formula across all 6 binary domains). k=3 symmetric balanced ceiling: at r->1, MI_ratio->1.0 (lifts the ~57-70% binary ceiling to 100%). ENSO 3-class validation: formula with r_ElNino=1.0, r_LaNina=1.0, r_Neutral=0.7279 predicts MI_ratio=0.6950 vs empirical=0.6990 (diff=0.0039) and cert [465] reference=0.699. Structural zeros: r_ElNino=r_LaNina=1.0 exactly -- every El Nino season is in T2, every La Nina in T0 (rank-threshold theorem, not statistical tendency). k=3 ceiling at r=0.97 (0.858) > k=1 ceiling at same r with q=0.29 (0.683). CERTIFIED: C1 k1_reduction PASS (5.55e-17); C2 k3_ceil>0.99 PASS (1.000); C3 k3_monotone PASS; C4 ENSO_diff<5pct PASS (0.4%); C5 k3_lifts_k1 PASS; C6 structural_zeros PASS. 6/6 PASS. PRIMARY SOURCES: Shannon CE (1948) doi:10.1002/j.1538-7305.1948.tb01338.x; Trenberth KE (1997) doi:10.1175/1520-0477(1997)078<2771:TDOENO>2.0.CO;2. Parents: cert [468],[465],[476]. Validated 2026-06-19.",
+     "477_qa_witt_tower_mi_kclass",
+     "qa_witt_tower_mi_kclass_cert_v1", True),
     (476, "QA Witt Tower ENSO Prediction Cert family",
      _validate_qa_witt_tower_enso_prediction_cert_family,
      "QA Witt Tower ENSO Prediction Cert [476]. Claim: QA tier labels (T0=La Nina, T1=Neutral, T2=El Nino) from rank-binned NOAA ONI predict next-season ENSO tier with lag-1 accuracy=87.5% (baseline 33.3%) and lag-3 accuracy=67.5% (baseline 33.4%). Structural forbidden transition: T0->T2=0.000 and T2->T0=0.000 at lag 1 (never skip Neutral). T2->T2 perm_p=0.0 at lag 1 and 3. First QA forecast of a physical system outside finance. N=916 NOAA ONI seasons 1950-2026. CERTIFIED: C1 T2_persist_lag1 PASS (p=0.0); C2 T0_persist_lag1 PASS (p=0.0); C3 acc_lag1>80% PASS (87.5%); C4 T2_persist_lag3 PASS (p=0.0); C5 T0->T2 forbidden PASS (0.000); C6 acc_lag3>60% PASS (67.5%). 6/6 PASS. PRIMARY SOURCES: Trenberth KE (1997) doi:10.1175/1520-0477(1997)078<2771:TDOENO>2.0.CO;2; Philander SGH (1990) ISBN:9780125532358. Parents: cert [445],[465],[467]. Validated 2026-06-19.",

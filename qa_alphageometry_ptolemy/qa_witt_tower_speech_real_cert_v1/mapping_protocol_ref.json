@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [478]: QA Witt Tower Real Recorded Speech. Claim: voiced frames in REAL recorded speech (Anthony Robbins, 44100Hz, 120s) preferentially occupy T0 (low spectral entropy). P(T0|voiced)=0.5005 vs 0.333 uniform (+50% enrichment, +16.7pp excess); P(T0|unvoiced)=0.222; P(voiced|T0)=0.601; perm_p=0.0000; P(T2|voiced)=0.121. Analysis identical to cert [451] Fant synthesis. Falsifies synthetic-artifact hypothesis. 11998 frames, 4799 voiced. PRIMARY SOURCES: Fant G (1960) ISBN:9789027916006; Stevens KN (1998) ISBN:9780262692502. Parent: cert [451]. Validated 2026-06-19."
+}

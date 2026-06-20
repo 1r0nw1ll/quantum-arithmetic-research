@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [477]: QA Witt Tower Multi-Class MI Ceiling Theory. Claim: binary MI_ratio(q,r) formula from cert [468] generalises to k signal classes with rank-uniform 3-tier partition. k=1 reduction: max_diff=5.55e-17 (floating-point identity). k=3 symmetric ceiling->1.0 as r->1 (lifts binary ~70% ceiling). ENSO 3-class: r_ElNino=1.0, r_LaNina=1.0, r_Neutral=0.7279; formula MI_ratio=0.6950 vs empirical=0.6990 (diff=0.0039, cert [465] ref=0.699). Structural zeros: r_ElNino=r_LaNina=1.0 exactly (rank-threshold theorem). k=3 ceiling at r=0.97 (0.858) > k=1 (0.683). N=916 NOAA ONI seasons. PRIMARY SOURCES: Shannon CE (1948) doi:10.1002/j.1538-7305.1948.tb01338.x; Trenberth KE (1997) doi:10.1175/1520-0477(1997)078<2771:TDOENO>2.0.CO;2. Parents: cert [468],[465],[476]. Validated 2026-06-19."
+}

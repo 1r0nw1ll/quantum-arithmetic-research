@@ -2,6 +2,8 @@
 
 **Recently added**
 
+| [478] | [QA Witt Tower Real Recorded Speech](478_qa_witt_tower_speech_real.md) | Real speech replication of cert [451]: P(T0\|voiced)=0.500 vs 0.333 uniform (+16.7pp); perm_p=0.0; P(voiced\|T0)=0.601; P(T2\|voiced)=0.121 depleted; 11998 frames real recorded speech; falsifies synthetic-artifact hypothesis; 6/6 PASS | PASS |
+| [477] | [QA Witt Tower Multi-Class MI Ceiling Theory](477_qa_witt_tower_mi_kclass.md) | k-class generalisation of cert [468]: k=1 reduction 5.55e-17; k=3 ceiling=1.0 (lifts binary ~70%); ENSO 3-class formula diff=0.0039 vs empirical 0.699; r_ElNino=r_LaNina=1.0 structural zeros; 6/6 PASS | PASS |
 | [476] | [QA Witt Tower ENSO Prediction](476_qa_witt_tower_enso_prediction.md) | **First QA forecast of physical system.** T2→T2=90.8% p=0.0; lag-1 acc=87.5% vs 33% baseline; lag-3 acc=67.5%; T0↛T2 forbidden transition (0.000) — Neutral is mandatory gateway; N=916 NOAA ONI seasons; 6/6 PASS | PASS |
 | [475] | [QA Witt Tower Vol-Sizing](475_qa_witt_tower_vol_sizing.md) | Equal-weight Sharpe-optimal; vol-targeting degrades crash pair US 0.366→0.191 (ratio 1.92×, −48%); signal fires in high-vol regime so vol-targeting inverts information; verdict=equal_weight_optimal; 6/6 PASS | PASS |
 | [474] | [QA Witt Tower Cross-Asset Transfer](474_qa_witt_tower_cross_asset.md) | VNQ REIT: a≤6 +0.591% p=0.0, crash pair +2.954% p=0.0; DBA agri crash p=0.003; TLT bonds a≤6 p=0.01; GLD gold confirmed null p=0.496; equity-proximate transfer, safe-haven nulls; 6/6 PASS | PASS |

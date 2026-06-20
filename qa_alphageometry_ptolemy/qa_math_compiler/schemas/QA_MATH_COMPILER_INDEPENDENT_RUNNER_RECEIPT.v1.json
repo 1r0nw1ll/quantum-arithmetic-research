@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_MATH_COMPILER_INDEPENDENT_RUNNER_RECEIPT.v1",
+  "title": "QA Math Compiler Independent Runner Receipt",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "receipt_id",
+    "source_revision",
+    "toolchain",
+    "semantic_replay",
+    "kernel_index",
+    "certified_corpus_sha256",
+    "lemma_evaluation_sha256",
+    "portable_supply_root_sha256",
+    "elaboration_set",
+    "receipt_generation",
+    "verified_gates",
+    "invariant_diff",
+    "receipt_sha256"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_MATH_COMPILER_INDEPENDENT_RUNNER_RECEIPT.v1"
+    },
+    "receipt_id": {"type": "string", "minLength": 1},
+    "source_revision": {"type": "string", "pattern": "^[a-f0-9]{40}$"},
+    "toolchain": {
+      "type": "object",
+      "required": ["lean_version", "lean_git_commit"],
+      "properties": {
+        "lean_version": {"type": "string", "minLength": 1},
+        "lean_git_commit": {"type": "string", "pattern": "^[a-f0-9]{40}$"}
+      }
+    },
+    "semantic_replay": {
+      "type": "object",
+      "required": [
+        "certificate_sha256",
+        "case_count",
+        "success_count",
+        "failure_count"
+      ]
+    },
+    "kernel_index": {
+      "type": "object",
+      "required": ["index_sha256", "case_count"]
+    },
+    "certified_corpus_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "lemma_evaluation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "portable_supply_root_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
+    "elaboration_set": {
+      "type": "object",
+      "required": [
+        "artifact_count",
+        "proof_step_count",
+        "failure_count",
+        "artifacts",
+        "elaboration_set_sha256"
+      ],
+      "properties": {
+        "artifact_count": {"type": "integer", "minimum": 1},
+        "proof_step_count": {"type": "integer", "minimum": 0},
+        "failure_count": {"type": "integer", "minimum": 0},
+        "artifacts": {"type": "array", "minItems": 1},
+        "elaboration_set_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$"
+        }
+      }
+    },
+    "receipt_generation": {
+      "enum": ["live_replay", "stored_artifacts"]
+    },
+    "verified_gates": {"type": "array", "minItems": 1},
+    "invariant_diff": {"type": "object"},
+    "receipt_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

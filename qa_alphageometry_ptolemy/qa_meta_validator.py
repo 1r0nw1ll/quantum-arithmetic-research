@@ -1836,6 +1836,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_dir,
         "QA_MATH_COMPILER_SUPPLY_CHAIN_MANIFEST.v1.json",
     )
+    schema_runner_receipt = os.path.join(
+        schema_dir,
+        "QA_MATH_COMPILER_INDEPENDENT_RUNNER_RECEIPT.v1.json",
+    )
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
     corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
     live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
@@ -1844,6 +1848,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     supply_chain_builder = os.path.join(
         mc_dir,
         "build_supply_chain_manifest.py",
+    )
+    runner_receipt_builder = os.path.join(
+        mc_dir,
+        "build_runner_parity_receipt.py",
     )
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
@@ -1893,9 +1901,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_corpus, schema_assistants, schema_live_kernel,
         schema_kernel_trace_manifest, schema_kernel_trace_index,
         schema_semantic_replay, schema_elaboration_trace, schema_lemma_evaluation,
-        schema_supply_chain,
+        schema_supply_chain, schema_runner_receipt,
         schema_demo_pack, corpus_builder, live_kernel_verifier,
         kernel_trace_compiler, lemma_mining_evaluator, supply_chain_builder,
+        runner_receipt_builder,
         kernel_trace_manifest, kernel_trace_index,
         semantic_replay_certificate,
         mined_lemma_library, lemma_mining_evaluation, lemma_mining_pack,
@@ -2258,6 +2267,30 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "supply-chain verification returned ok=false: "
             f"{json.dumps(supply_chain_result, sort_keys=True)}"
+        )
+
+    runner_receipt_self_test = subprocess.run(
+        [sys.executable, runner_receipt_builder, "self-test"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    if runner_receipt_self_test.returncode != 0:
+        raise RuntimeError(
+            "independent runner receipt self-test failed:\n"
+            f"{runner_receipt_self_test.stdout}\n{runner_receipt_self_test.stderr}"
+        )
+    try:
+        runner_receipt_result = json.loads(runner_receipt_self_test.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "runner receipt self-test returned non-JSON output: "
+            f"{exc}: {runner_receipt_self_test.stdout}"
+        )
+    if runner_receipt_result.get("ok") is not True:
+        raise RuntimeError(
+            "runner receipt self-test returned ok=false: "
+            f"{json.dumps(runner_receipt_result, sort_keys=True)}"
         )
 
     kernel_trace_command = [sys.executable, kernel_trace_compiler]

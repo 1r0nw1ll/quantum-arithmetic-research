@@ -281,7 +281,13 @@ jobs:
 
   qa-math-compiler-linux-parity:
     runs-on: ubuntu-latest
-    timeout-minutes: 15
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        runner:
+          - runner-a
+          - runner-b
 
     steps:
       - name: Checkout
@@ -295,8 +301,52 @@ jobs:
       - name: Install pinned Lean toolchain
         run: tools/install_lean_toolchain.sh
 
-      - name: Verify semantic replay parity
-        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py --check-semantic-certificate
+      - name: Replay compressed lemma-mining proofs
+        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/evaluate_lemma_mining.py check
 
       - name: Verify portable supply-chain root
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/build_supply_chain_manifest.py check-portable
+
+      - name: Build independent runner receipt
+        run: |
+          python3 qa_alphageometry_ptolemy/qa_math_compiler/build_runner_parity_receipt.py \
+            build \
+            --live-replay \
+            --output "/tmp/math-compiler-parity-${{ matrix.runner }}.json"
+
+      - name: Upload independent runner receipt
+        uses: actions/upload-artifact@v4
+        with:
+          name: qa-math-compiler-parity-${{ matrix.runner }}
+          path: /tmp/math-compiler-parity-${{ matrix.runner }}.json
+          if-no-files-found: error
+          retention-days: 7
+
+  qa-math-compiler-two-runner-parity:
+    runs-on: ubuntu-latest
+    needs:
+      - qa-math-compiler-linux-parity
+    timeout-minutes: 10
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Download independent runner receipts
+        uses: actions/download-artifact@v4
+        with:
+          pattern: qa-math-compiler-parity-*
+          path: /tmp/math-compiler-parity
+          merge-multiple: true
+
+      - name: Require byte-identical independent receipts
+        run: |
+          python3 qa_alphageometry_ptolemy/qa_math_compiler/build_runner_parity_receipt.py \
+            compare \
+            /tmp/math-compiler-parity/math-compiler-parity-runner-a.json \
+            /tmp/math-compiler-parity/math-compiler-parity-runner-b.json

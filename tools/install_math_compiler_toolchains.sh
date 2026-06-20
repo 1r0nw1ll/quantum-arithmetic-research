@@ -1,6 +1,16 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+report_failure() {
+  local exit_code=$?
+  local line_number=$1
+  local command=$2
+  printf '::error file=%s,line=%s::Installer command failed (exit %s): %s\n' \
+    "${BASH_SOURCE[0]}" "$line_number" "$exit_code" "$command" >&2
+  exit "$exit_code"
+}
+trap 'report_failure "$LINENO" "$BASH_COMMAND"' ERR
+
 if [[ "$(uname -s)" != "Darwin" ]]; then
   echo "Pinned Math Compiler bootstrap currently supports macOS only." >&2
   exit 2

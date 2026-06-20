@@ -53,6 +53,3 @@ grep -Fx "$isabelle_version" <<<"$isabelle_version_output"
 printf '%s\n' "$lean_version"
 printf '%s\n' "$rocq_version_output"
 printf '%s\n' "$isabelle_version_output"
-
-python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py
-python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py

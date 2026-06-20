@@ -21,8 +21,6 @@ import json
 import sys
 from pathlib import Path
 
-import sympy as sp
-
 SCHEMA_VERSION = "QA_E8_EMBEDDING_ORBIT_CLASSIFIER_CERT.v1"
 FAMILY_NAME = "qa_e8_embedding_orbit_classifier_cert"
 
@@ -90,6 +88,33 @@ def Q_diag_closed_form(b, e):
     return 2 * (b * b + e * e + d * d + a * a) - 2 * (b * d + e * a + d * a)
 
 
+def det_int(matrix):
+    rows = [list(row) for row in matrix]
+    n = len(rows)
+    if n == 0:
+        return 1
+    if any(len(row) != n for row in rows):
+        raise ValueError("determinant requires a square matrix")
+    sign = 1
+    previous_pivot = 1
+    for k in range(n - 1):
+        pivot = rows[k][k]
+        if pivot == 0:
+            swap = next((idx for idx in range(k + 1, n) if rows[idx][k] != 0), None)
+            if swap is None:
+                return 0
+            rows[k], rows[swap] = rows[swap], rows[k]
+            sign = -sign
+            pivot = rows[k][k]
+        for i in range(k + 1, n):
+            for j in range(k + 1, n):
+                rows[i][j] = (rows[i][j] * pivot - rows[i][k] * rows[k][j]) // previous_pivot
+        previous_pivot = pivot
+        for i in range(k + 1, n):
+            rows[i][k] = 0
+    return sign * rows[n - 1][n - 1]
+
+
 def _profile(orbits, embedding, G):
     rows = []
     for orb in orbits:
@@ -121,18 +146,17 @@ def _expected_data():
 
 
 def _check_diag_formula():
-    # Symbolic identity Q(E_diag(b,e)) = 2(b^2+e^2+d^2+a^2) - 2(bd+ea+da)
-    # under raw d=b+e, a=b+2e (no mod). We verify the polynomial identity
-    # symbolically via SymPy expansion, then exhaustively numerically with mod.
+    # Identity Q(E_diag(b,e)) = 2(b*b+e*e+d*d+a*a) - 2*(b*d+e*a+d*a)
+    # under raw d=b+e, a=b+2*e, plus exhaustive numeric check at m=9.
     G = cartan_e8()
-    b, e = sp.symbols("b e", integer=True)
-    d = b + e
-    a = b + 2 * e
-    p = sp.Matrix([[b], [e], [d], [a], [0], [0], [0], [0]])
-    Q_sym = (p.T * sp.Matrix(G) * p)[0, 0]
-    expected = 2 * (b * b + e * e + d * d + a * a) - 2 * (b * d + e * a + d * a)
-    if sp.expand(Q_sym - expected) != 0:
-        return False
+    for b in range(-6, 7):
+        for e in range(-6, 7):
+            d = b + e
+            a = b + 2 * e
+            p = (b, e, d, a, 0, 0, 0, 0)
+            expected = 2 * (b * b + e * e + d * d + a * a) - 2 * (b * d + e * a + d * a)
+            if Q(p, G) != expected:
+                return False
     # Exhaustive numeric check at m=9 (uses A1 mod for d,a)
     for bb in range(1, M + 1):
         for ee in range(1, M + 1):
@@ -156,7 +180,7 @@ def _run_checks(fixture):
     checks["E8E_CARTAN_LOAD"] = (
         fixture_cartan == G
         and fixture.get("adjacency_edges") == [list(e) for e in E8_EDGES]
-        and sp.Matrix(G).det() == 1
+        and det_int(G) == 1
     )
 
     # T-orbit census: 5 orbits, sizes {1,8,24,24,24}, sum 81

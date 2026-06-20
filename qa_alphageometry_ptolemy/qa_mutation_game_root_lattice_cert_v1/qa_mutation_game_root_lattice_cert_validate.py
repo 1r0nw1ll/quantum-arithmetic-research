@@ -17,8 +17,6 @@ import sys
 from collections import deque
 from pathlib import Path
 
-import sympy as sp
-
 SCHEMA_VERSION = "QA_MUTATION_GAME_ROOT_LATTICE_CERT.v1"
 FAMILY_NAME = "qa_mutation_game_root_lattice_cert"
 
@@ -78,6 +76,33 @@ def quadratic_form(v, g):
     return total
 
 
+def det_int(matrix):
+    rows = [list(row) for row in matrix]
+    n = len(rows)
+    if n == 0:
+        return 1
+    if any(len(row) != n for row in rows):
+        raise ValueError("determinant requires a square matrix")
+    sign = 1
+    previous_pivot = 1
+    for k in range(n - 1):
+        pivot = rows[k][k]
+        if pivot == 0:
+            swap = next((idx for idx in range(k + 1, n) if rows[idx][k] != 0), None)
+            if swap is None:
+                return 0
+            rows[k], rows[swap] = rows[swap], rows[k]
+            sign = -sign
+            pivot = rows[k][k]
+        for i in range(k + 1, n):
+            for j in range(k + 1, n):
+                rows[i][j] = (rows[i][j] * pivot - rows[i][k] * rows[k][j]) // previous_pivot
+        previous_pivot = pivot
+        for i in range(k + 1, n):
+            rows[i][k] = 0
+    return sign * rows[n - 1][n - 1]
+
+
 def _expected_orbit_data():
     adj = adjacency_matrix()
     seed = tuple(1 if i == 0 else 0 for i in range(N_VERTICES))
@@ -118,7 +143,6 @@ def _run_checks(fixture):
     orbit = expected["orbit"]
     positive = expected["positive"]
     sample = expected["sample"]
-    g = sp.Matrix(cartan)
 
     checks["MGR_1"] = fixture.get("schema_version") == SCHEMA_VERSION
 
@@ -127,7 +151,7 @@ def _run_checks(fixture):
     checks["MGR_CARTAN"] = (
         fixture_cartan == cartan
         and fixture_edges == list(EDGE_LIST)
-        and g.det() == 1
+        and det_int(cartan) == 1
         and all(entry in (2, 0, -1) for row in cartan for entry in row)
     )
 

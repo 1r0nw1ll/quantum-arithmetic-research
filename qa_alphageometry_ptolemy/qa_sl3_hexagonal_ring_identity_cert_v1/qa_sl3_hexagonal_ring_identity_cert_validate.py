@@ -9,8 +9,6 @@ import json
 import sys
 from pathlib import Path
 
-import sympy as sp
-
 SCHEMA_VERSION = "QA_SL3_HEXAGONAL_RING_IDENTITY_CERT.v1"
 
 
@@ -60,10 +58,13 @@ def _expected_entries():
 
 
 def _symbolic_expansion_ok():
-    a, b = sp.symbols("a b", integer=True)
-    lhs_num = (a + 1) * (b + 1) * (a + b + 2) - a * b * (a + b)
-    rhs_num = (a + b + 1) * (a + b + 2) + 2 * a * b
-    return sp.expand(lhs_num - rhs_num) == 0
+    for a in range(-6, 7):
+        for b in range(-6, 7):
+            lhs_num = (a + 1) * (b + 1) * (a + b + 2) - a * b * (a + b)
+            rhs_num = (a + b + 1) * (a + b + 2) + 2 * a * b
+            if lhs_num != rhs_num:
+                return False
+    return True
 
 
 def _run_checks(fixture):

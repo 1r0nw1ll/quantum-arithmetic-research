@@ -23,8 +23,6 @@ import sys
 from collections import deque
 from pathlib import Path
 
-import sympy as sp
-
 SCHEMA_VERSION = "QA_ADE_MUTATION_GAME_CERT.v1"
 FAMILY_NAME = "qa_ade_mutation_game_cert"
 
@@ -83,13 +81,40 @@ def quad(v, G):
     return total
 
 
+def det_int(matrix):
+    rows = [list(row) for row in matrix]
+    n = len(rows)
+    if n == 0:
+        return 1
+    if any(len(row) != n for row in rows):
+        raise ValueError("determinant requires a square matrix")
+    sign = 1
+    previous_pivot = 1
+    for k in range(n - 1):
+        pivot = rows[k][k]
+        if pivot == 0:
+            swap = next((idx for idx in range(k + 1, n) if rows[idx][k] != 0), None)
+            if swap is None:
+                return 0
+            rows[k], rows[swap] = rows[swap], rows[k]
+            sign = -sign
+            pivot = rows[k][k]
+        for i in range(k + 1, n):
+            for j in range(k + 1, n):
+                rows[i][j] = (rows[i][j] * pivot - rows[i][k] * rows[k][j]) // previous_pivot
+        previous_pivot = pivot
+        for i in range(k + 1, n):
+            rows[i][k] = 0
+    return sign * rows[n - 1][n - 1]
+
+
 def _expected_data():
     out = {}
     for name, n, edges, expected_size, expected_det in ADE_TYPES:
         A = adjacency(n, edges)
         G = cartan(n, edges)
         orbit = bfs_orbit(n, A)
-        det = int(sp.Matrix(G).det())
+        det = det_int(G)
         positive = {v for v in orbit if all(c >= 0 for c in v) and any(c > 0 for c in v)}
         negative = {v for v in orbit if all(c <= 0 for c in v) and any(c < 0 for c in v)}
         out[name] = {

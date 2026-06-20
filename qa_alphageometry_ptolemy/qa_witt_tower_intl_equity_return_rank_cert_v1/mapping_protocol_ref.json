@@ -1,4 +1,6 @@
 {
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
   "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
   "scope_note": "Cert [489]: QA Witt Tower International Equity Return-Rank (Local Currency). Operator: return-rank bins b=floor(rank(rets[t])*27/N), e=floor(rank(rets[t+1])*27/N); signal a=b+2e<=6 (A2 derived, raw); target=rets[t+2]. Tests whether crash-reversion is a UNIVERSAL equity property. Tickers: ^N225 (JPY), ^FTSE (GBP), ^GDAXI (EUR), ^HSI (HKD). Results: N225 +0.452% p=0.001; FTSE +0.318% p=0.018; DAX +0.390% p=0.004; HSI +0.264% p=0.054 (directional). Pooled +0.356%/day p=0.0002; 3/4 individually significant (p<0.05). HSI positive confirms directional universality. Operator is not US-market-microstructure artifact. 6/6 PASS. Primary source: Fama EF (1970) doi:10.2307/2325486; Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41. Data: Yahoo Finance OHLCV. orbit_family on (b, e, m) for all pairs: Singularity-type."
 }

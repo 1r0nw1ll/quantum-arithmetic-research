@@ -11,8 +11,6 @@ import random
 import sys
 from pathlib import Path
 
-import sympy as sp
-
 SCHEMA_VERSION = "QA_CHROMOGEOMETRIC_TQF_SYMMETRY_CERT.v1"
 
 
@@ -87,48 +85,17 @@ def _sample_rows():
     return rows
 
 
-def _symbolic_tqfs():
-    x1, y1, x2, y2, x3, y3 = sp.symbols("x1 y1 x2 y2 x3 y3", integer=True)
-    p1 = (x1, y1)
-    p2 = (x2, y2)
-    p3 = (x3, y3)
-
-    def sq(v):
-        return v * v
-
-    def qb(p, q):
-        dx = q[0] - p[0]
-        dy = q[1] - p[1]
-        return sq(dx) + sq(dy)
-
-    def qr(p, q):
-        dx = q[0] - p[0]
-        dy = q[1] - p[1]
-        return sq(dx) - sq(dy)
-
-    def qg(p, q):
-        dx = q[0] - p[0]
-        dy = q[1] - p[1]
-        return 2 * dx * dy
-
-    def tq(q1, q2, q3):
-        s = q1 + q2 + q3
-        return s * s - 2 * (q1 * q1 + q2 * q2 + q3 * q3)
-
-    tb = tq(qb(p1, p2), qb(p1, p3), qb(p2, p3))
-    tr = tq(qr(p1, p2), qr(p1, p3), qr(p2, p3))
-    tg = tq(qg(p1, p2), qg(p1, p3), qg(p2, p3))
-    area_expr = x1 * (y2 - y3) - x2 * (y1 - y3) + x3 * (y1 - y2)
-    return tb, tr, tg, area_expr
-
-
 def _symbolic_ok():
-    tb, tr, tg, area_expr = _symbolic_tqfs()
-    return (
-        sp.simplify(tr + tb) == 0
-        and sp.simplify(tg + tb) == 0
-        and sp.factor(tb - 4 * area_expr * area_expr) == 0
-    )
+    points = [[x, y] for x in range(-2, 3) for y in range(-2, 3)]
+    for triple in itertools.combinations(points, 3):
+        tri = [list(p) for p in triple]
+        tb = tqf_for_points(tri, q_blue)
+        tr = tqf_for_points(tri, q_red)
+        tg = tqf_for_points(tri, q_green)
+        twice_area = area2(tri)
+        if tr + tb != 0 or tg + tb != 0 or tb != 4 * twice_area * twice_area:
+            return False
+    return True
 
 
 def _sample_ok(spec):

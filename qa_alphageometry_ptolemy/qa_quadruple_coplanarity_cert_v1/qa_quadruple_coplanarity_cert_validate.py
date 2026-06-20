@@ -9,8 +9,6 @@ import json
 import sys
 from pathlib import Path
 
-import sympy as sp
-
 SCHEMA_VERSION = "QA_QUADRUPLE_COPLANARITY_CERT.v1"
 
 
@@ -25,7 +23,31 @@ def plane_residual(point3):
 
 
 def det_int(matrix):
-    return int(sp.Matrix(matrix).det())
+    rows = [list(row) for row in matrix]
+    n = len(rows)
+    if n == 0:
+        return 1
+    if any(len(row) != n for row in rows):
+        raise ValueError("determinant requires a square matrix")
+
+    sign = 1
+    previous_pivot = 1
+    for k in range(n - 1):
+        pivot = rows[k][k]
+        if pivot == 0:
+            swap = next((idx for idx in range(k + 1, n) if rows[idx][k] != 0), None)
+            if swap is None:
+                return 0
+            rows[k], rows[swap] = rows[swap], rows[k]
+            sign = -sign
+            pivot = rows[k][k]
+        for i in range(k + 1, n):
+            for j in range(k + 1, n):
+                rows[i][j] = (rows[i][j] * pivot - rows[i][k] * rows[k][j]) // previous_pivot
+        previous_pivot = pivot
+        for i in range(k + 1, n):
+            rows[i][k] = 0
+    return sign * rows[n - 1][n - 1]
 
 
 def parallelepiped_det(points):

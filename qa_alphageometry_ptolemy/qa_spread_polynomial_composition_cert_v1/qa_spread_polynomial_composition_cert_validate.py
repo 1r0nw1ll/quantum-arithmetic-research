@@ -9,26 +9,61 @@ import json
 import sys
 from pathlib import Path
 
-import sympy as sp
-
 SCHEMA_VERSION = "QA_SPREAD_POLYNOMIAL_COMPOSITION_CERT.v1"
 
 
+def _clean(poly):
+    return {degree: coeff for degree, coeff in poly.items() if coeff != 0}
+
+
+def _add(left, right):
+    out = dict(left)
+    for degree, coeff in right.items():
+        out[degree] = out.get(degree, 0) + coeff
+    return _clean(out)
+
+
+def _scale(poly, factor):
+    return _clean({degree: coeff * factor for degree, coeff in poly.items()})
+
+
+def _mul(left, right):
+    out = {}
+    for left_degree, left_coeff in left.items():
+        for right_degree, right_coeff in right.items():
+            degree = left_degree + right_degree
+            out[degree] = out.get(degree, 0) + left_coeff * right_coeff
+    return _clean(out)
+
+
+def _pow(poly, exponent):
+    out = {0: 1}
+    for _ in range(exponent):
+        out = _mul(out, poly)
+    return out
+
+
+def _compose(outer, inner):
+    out = {}
+    for degree, coeff in outer.items():
+        out = _add(out, _scale(_pow(inner, degree), coeff))
+    return _clean(out)
+
+
 def _spread_polys(max_n):
-    s = sp.symbols("s")
-    polys = {0: sp.Integer(0), 1: s}
+    s = {1: 1}
+    one_minus_2s = {0: 1, 1: -2}
+    polys = {0: {}, 1: s}
     for n in range(1, max_n):
-        polys[n + 1] = sp.expand(2 * (1 - 2 * s) * polys[n] - polys[n - 1] + 2 * s)
-    return s, polys
+        polys[n + 1] = _add(
+            _add(_scale(_mul(one_minus_2s, polys[n]), 2), _scale(polys[n - 1], -1)),
+            _scale(s, 2),
+        )
+    return polys
 
 
-def _coeff_map(expr, s):
-    poly = sp.Poly(sp.expand(expr), s)
-    result = {}
-    for (degree,), coeff in sorted(poly.terms(), key=lambda item: item[0][0]):
-        if coeff != 0:
-            result[str(degree)] = int(coeff)
-    return result
+def _coeff_map(poly):
+    return {str(degree): coeff for degree, coeff in sorted(_clean(poly).items())}
 
 
 def _run_checks(fixture):
@@ -40,7 +75,7 @@ def _run_checks(fixture):
     for row in composition_rows:
         if isinstance(row.get("n"), int) and isinstance(row.get("m"), int):
             max_n = max(max_n, row["n"] * row["m"])
-    s, polys = _spread_polys(max_n)
+    polys = _spread_polys(max_n)
 
     composition_ok = isinstance(composition_rows, list) and len(composition_rows) == 6
     if composition_ok:
@@ -52,10 +87,10 @@ def _run_checks(fixture):
             if (n, m) not in expected_pairs:
                 composition_ok = False
                 break
-            lhs = sp.expand(polys[n].subs(s, polys[m]))
+            lhs = _compose(polys[n], polys[m])
             rhs = polys[n * m]
-            lhs_coeffs = _coeff_map(lhs, s)
-            rhs_coeffs = _coeff_map(rhs, s)
+            lhs_coeffs = _coeff_map(lhs)
+            rhs_coeffs = _coeff_map(rhs)
             if lhs_coeffs != rhs_coeffs:
                 composition_ok = False
                 break
@@ -71,12 +106,12 @@ def _run_checks(fixture):
         "S_2": {"1": 4, "2": -4},
         "S_3": {"1": 9, "2": -24, "3": 16},
         "S_4": {"1": 16, "2": -80, "3": 128, "4": -64},
-    } and all(_coeff_map(polys[n], s) == closed[f"S_{n}"] for n in (2, 3, 4))
+    } and all(_coeff_map(polys[n]) == closed[f"S_{n}"] for n in (2, 3, 4))
 
     checks["SPC_LOGISTIC"] = fixture.get("logistic_map") == {
         "S_2_factored": "4*s*(1-s)",
         "S_2_expanded_coeffs": {"1": 4, "2": -4},
-    } and _coeff_map(4 * s * (1 - s), s) == _coeff_map(polys[2], s)
+    } and _coeff_map({1: 4, 2: -4}) == _coeff_map(polys[2])
 
     trig_note = fixture.get("rational_trig_identity_note", "")
     checks["SPC_TRIG_NOTE"] = "skipped" in trig_note and "float" in trig_note

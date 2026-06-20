@@ -302,6 +302,41 @@ CASES = [
     ),
 ]
 
+NEGATIVE_CASES = [
+    {
+        "case_id": "negative_goal_stuck",
+        "source": "kernel_cases/negative_goal_stuck.lean",
+        "expected_status": "FAIL",
+        "fail_type": "GOAL_STUCK",
+        "diagnostic_pattern": "unsolved goals",
+        "artifact_dir": "kernel_traces/negative_goal_stuck",
+    },
+    {
+        "case_id": "negative_unsupported_idiom",
+        "source": "kernel_cases/negative_unsupported_idiom.lean",
+        "expected_status": "FAIL",
+        "fail_type": "UNSUPPORTED_IDIOM",
+        "diagnostic_pattern": "unknown tactic",
+        "artifact_dir": "kernel_traces/negative_unsupported_idiom",
+    },
+    {
+        "case_id": "negative_spec_drift",
+        "source": "kernel_cases/negative_spec_drift.lean",
+        "expected_status": "FAIL",
+        "fail_type": "SPEC_DRIFT",
+        "diagnostic_pattern": "has already been declared",
+        "artifact_dir": "kernel_traces/negative_spec_drift",
+    },
+    {
+        "case_id": "negative_library_gap",
+        "source": "kernel_cases/negative_library_gap.lean",
+        "expected_status": "FAIL",
+        "fail_type": "LIBRARY_GAP",
+        "diagnostic_pattern": "unknown module prefix",
+        "artifact_dir": "kernel_traces/negative_library_gap",
+    },
+]
+
 
 def canonical(value: object) -> str:
     return json.dumps(value, sort_keys=True, separators=(",", ":"), ensure_ascii=False)
@@ -325,7 +360,15 @@ def main() -> int:
     retained_cases = [
         case
         for case in manifest["cases"]
-        if not case["case_id"].startswith("ex") or int(case["case_id"][2:4]) <= 25
+        if (
+            case["case_id"].startswith("ex")
+            and int(case["case_id"][2:4]) <= 25
+        )
+        or case["case_id"] in {
+            "negative_parse_error",
+            "negative_missing_dependency",
+            "negative_type_mismatch",
+        }
     ]
 
     for number, (case_id, claim, formal, proof, lemmas, topic) in enumerate(
@@ -424,6 +467,7 @@ def main() -> int:
             }
         )
 
+    retained_cases.extend(NEGATIVE_CASES)
     index["example_count"] = len(retained_examples)
     index["examples"] = retained_examples
     manifest["cases"] = retained_cases

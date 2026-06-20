@@ -1,0 +1,1 @@
+Logical conjunction is associative.

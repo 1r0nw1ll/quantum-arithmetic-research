@@ -1,0 +1,1 @@
+Natural-number addition cancels on the left.

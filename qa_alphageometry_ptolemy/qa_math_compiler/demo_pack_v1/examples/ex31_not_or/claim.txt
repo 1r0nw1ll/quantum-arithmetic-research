@@ -1,0 +1,1 @@
+The negation of a disjunction is the conjunction of the negations.

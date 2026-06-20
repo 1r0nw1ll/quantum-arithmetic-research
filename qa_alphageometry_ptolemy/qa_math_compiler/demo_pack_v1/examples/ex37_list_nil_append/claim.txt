@@ -1,0 +1,1 @@
+Appending a list to the empty list returns the list.

@@ -1,0 +1,1 @@
+One is a right identity for natural-number multiplication.

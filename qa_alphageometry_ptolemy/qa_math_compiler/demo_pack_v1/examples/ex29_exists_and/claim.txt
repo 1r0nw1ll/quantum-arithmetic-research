@@ -1,0 +1,1 @@
+A fixed proposition can move across an existential quantifier.

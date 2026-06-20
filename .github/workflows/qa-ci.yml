@@ -75,7 +75,20 @@ jobs:
           mkdir -p "$tmp_dir/data/MNIST/raw"
           cp data/MNIST/raw/*.gz "$tmp_dir/data/MNIST/raw/"
           cd "$tmp_dir/qa_alphageometry_ptolemy"
-          python qa_meta_validator.py
+          output_file="$(mktemp)"
+          if python qa_meta_validator.py >"$output_file" 2>&1; then
+            cat "$output_file"
+          else
+            exit_code=$?
+            cat "$output_file"
+            tail_output="$(tail -n 80 "$output_file")"
+            tail_output="${tail_output//'%'/'%25'}"
+            tail_output="${tail_output//$'\r'/'%0D'}"
+            tail_output="${tail_output//$'\n'/'%0A'}"
+            printf '::error::QA meta-validator failed (exit %s). Final output:%s%s\n' \
+              "$exit_code" '%0A' "$tail_output"
+            exit "$exit_code"
+          fi
 
   qa-axiom-compliance:
     runs-on: ubuntu-latest

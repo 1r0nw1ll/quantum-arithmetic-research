@@ -2,6 +2,8 @@
 
 **Recently added**
 
+| [485] | [QA Witt Tower Z/27Z Orbit Stability Asymmetry](485_qa_witt_tower_orbit_stability_asymmetry.md) | Pure-math: Z/27Z Sing-type pairs (a≤6, N=6) escape_rate=0.833 after 1 step, k=27 mean_a=45.5; Cosm-type (a≥58, N=156) escape_rate=0.641, mean_a=42.4; Sing lands +3.1pp higher — bottom drives up more than top sustains; mathematical analog of certs [482]/[483] crash-rev>momentum; 6/6 PASS | PASS |
+| [484] | [QA Witt Tower EEG Pre-Ictal Orbit Class Early-Window Persistence](484_qa_witt_tower_eeg_early_window.md) | Cosmos orbit class is STATIC: early_T2=0.883 already at 300s before seizure (flat: late_T2=0.900); Quiet class early_T2=0.000; 88pp separation detectable 5 minutes out; n_cosmos_high_early=6/6; orbit class detectable from start of pre-ictal window; 6/6 PASS | PASS |
 | [483] | [QA Witt Tower Crypto Momentum Asymmetry](483_qa_witt_tower_crypto_momentum.md) | Return-rank a≥58 (Cosmos pairs): BTC momentum p=0.025 excess=+0.254% OOS+0.214%; ETH null p=0.209; crash-reversion 3.34×BTC / 11.3×ETH stronger than momentum; Singularity restoring force > Cosmos continuation; 6/6 PASS | PASS |
 | [482] | [QA Witt Tower Crypto Return-Rank Crash Reversion](482_qa_witt_tower_crypto_return_rank.md) | Return-rank a≤6 (Singularity pairs) on BTC/ETH: after 2 consecutive bottom-7%-return days, BTC +0.847%/day p=0.003 OOS+0.557%; ETH +1.771%/day p<0.001 OOS+1.434%; return-rank (not price-rank) needed for trending crypto assets; 6/6 PASS | PASS |
 | [481] | [QA Witt Tower EEG Pre-Ictal Three-Orbit Coverage](481_qa_witt_tower_eeg_three_orbit.md) | All three QA orbits in pre-ictal EEG: Cosmos(N=6,T2=0.897)+Satellite(N=4,T1=0.608,+27.5pp)+Singularity(N=3,T0=0.578)=13/17=76.5%; pure-math from cert [480] data; 6/6 PASS | PASS |

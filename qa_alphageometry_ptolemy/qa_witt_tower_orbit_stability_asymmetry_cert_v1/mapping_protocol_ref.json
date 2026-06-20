@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [485]: QA Witt Tower Z/27Z Orbit Stability Asymmetry. Primary source: Hardy GH & Wright EM (2008) doi:10.1093/oso/9780199219865.001.0001; Wildberger NJ (2005) ISBN 978-0-9757492-0-8. Pure-math exhaustive computation over all 729 pairs in Z/27Z (1-indexed {1,...,27}^2). QA step: b'=e, e'=((b+e-1)%27)+1 (A1 compliant); a=b+2e (A2 derived, raw). Singularity-type pairs (a<=6): N=6 (0.82%), escape_rate=0.833 after 1 step, k=27 mean_a=45.5. Cosmos-type pairs (a>=58): N=156 (21.4%), escape_rate=0.641, k=27 mean_a=42.4. Asymmetry: Sing-type trajectories converge +3.1pp higher than Cosm-type after 27 steps. orbit_family on (b,e,m=27): all 6 Sing-type pairs lie on period-72 orbit; Cosm-type includes fixed point (27,27). MOD=27. Parents: cert [110] (Witt Tower), cert [482] (crypto crash-reversion analog), cert [483] (crypto momentum analog)."
+}

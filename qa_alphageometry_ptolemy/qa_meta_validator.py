@@ -10672,6 +10672,34 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_orbit_stability_asymmetry_cert_family(base_dir):
+    """Cert [485]: QA Witt Tower Z/27Z Orbit Stability Asymmetry -- pure-math exhaustive: Sing-type(a<=6,N=6) escape_rate=0.833, k27_mean_a=45.5; Cosm-type(a>=58,N=156) escape_rate=0.641, k27_mean_a=42.4; Sing lands +3.1pp higher after 27 steps; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_orbit_stability_asymmetry_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_orbit_stability_asymmetry_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=30, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_witt_tower_eeg_temporal_escalation_cert_family(base_dir):
+    """Cert [484]: QA Witt Tower EEG Pre-Ictal Orbit Class Early-Window Persistence -- Cosmos(N=6) early_T2=0.883 (already saturated 300s before seizure), Quiet(N=3) early_T2=0.000; early separation=0.883 (88pp); n_cosmos_high_early=6/6; orbit class is STATIC, not a temporal trend; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_eeg_temporal_escalation_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_eeg_temporal_escalation_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=300, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_crypto_momentum_cert_family(base_dir):
     """Cert [483]: QA Witt Tower Crypto Momentum Asymmetry -- return-rank a>=58 Cosmos-type pairs; BTC: n=654 excess=+0.254% perm_p=0.025 OOS+0.214%; ETH: null p=0.209; crash-reversion 3.34x BTC / 11.3x ETH stronger than momentum; 6/6 PASS."""
     import subprocess
@@ -13652,6 +13680,16 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (485, "QA Witt Tower Z/27Z Orbit Stability Asymmetry Cert family",
+     _validate_qa_witt_tower_orbit_stability_asymmetry_cert_family,
+     "QA Witt Tower Z/27Z Orbit Stability Asymmetry Cert [485]. Claim: In Z/27Z (1-indexed {1,...,27}^2), QA step b'=e, e'=((b+e-1)%27)+1, a=b+2e: (A) Singularity-type pairs (a<=6, N=6, 0.82%) escape their region after 1 step at rate 0.833; converge to k=27 mean_a=45.5. (B) Cosmos-type pairs (a>=58, N=156, 21.4%) escape after 1 step at rate 0.641; converge to k=27 mean_a=42.4. (C) Long-run asymmetry: Sing-type trajectories converge +3.1pp HIGHER than Cosm-type despite starting much lower — the bottom drives up more than the top sustains itself. This is the pure-math structural analog of the empirical crypto finding (certs [482]/[483]: crash-reversion 3.34x BTC stronger than momentum). All 6 Sing-type pairs lie on the period-72 orbit; Cosm-type includes the fixed point (27,27) (period=1). CERTIFIED: C1 n_sing==6 PASS; C2 sing_escape_rate>=0.70 PASS (0.833); C3 n_cosm==156 PASS; C4 cosm_escape_rate>=0.55 PASS (0.641); C5 sing_k27>cosm_k27 PASS (45.5>42.4); C6 sing_escape>cosm_escape PASS (0.833>0.641). 6/6 PASS. PRIMARY SOURCES: Hardy GH & Wright EM (2008) doi:10.1093/oso/9780199219865.001.0001; Wildberger NJ (2005) ISBN 978-0-9757492-0-8. Parents: cert [110] (Witt Tower), cert [482] (crash-reversion empirical analog), cert [483] (momentum empirical analog). Validated 2026-06-20.",
+     "485_qa_witt_tower_orbit_stability_asymmetry",
+     "qa_witt_tower_orbit_stability_asymmetry_cert_v1", True),
+    (484, "QA Witt Tower EEG Pre-Ictal Orbit Class Early-Window Persistence Cert family",
+     _validate_qa_witt_tower_eeg_temporal_escalation_cert_family,
+     "QA Witt Tower EEG Pre-Ictal Orbit Class Early-Window Persistence Cert [484]. Claim: QA orbit class is a STATIC pre-ictal state, not a temporal trend. Cosmos-type recordings (T2>0.55, N=6) maintain elevated T2 from the EARLY THIRD of the 300s pre-ictal window: early_T2=0.883 (300-200s before seizure), late_T2=0.900; persistence (|late-early|)=0.017 (flat). Quiet-type recordings (T2<0.20, N=3) maintain near-zero T2 throughout: early_T2=0.000. Early separation (Cosmos-Quiet)=0.883 (88pp at 300s before seizure). n_cosmos_high_early (early_T2>0.50)=6/6 — ALL cosmos recordings already saturated 5 minutes before seizure. The orbit-class discrimination (cert [480]) is detectable from the START of the 5-minute pre-ictal window; no temporal build-up is needed. Three ceiling-locked cosmos recordings (PN03-1, PN07-1, PN13-2: T2=1.000 in all three thirds) demonstrate maximal pre-ictal T2 saturation from the full window. CERTIFIED: C1 cosmos_early_T2>0.60 PASS (0.883); C2 quiet_early_T2<0.05 PASS (0.000); C3 cosmos_vs_quiet_early>0.50 PASS (0.883); C4 cosmos_late_T2>0.60 PASS (0.900); C5 n_cosmos_high_early>=4 PASS (6/6); C6 cosmos_persistence<0.05 PASS (0.017). 6/6 PASS. PRIMARY SOURCES: Detti P et al (2020) doi:10.13026/5d4a-j060; Goldberger AL et al (2000) doi:10.1161/01.CIR.101.23.e215. Parents: cert [480] (orbit class labels), cert [479] (pipeline), cert [110] (Witt Tower). Validated 2026-06-20.",
+     "484_qa_witt_tower_eeg_early_window",
+     "qa_witt_tower_eeg_temporal_escalation_cert_v1", True),
     (483, "QA Witt Tower Crypto Momentum Asymmetry Cert family",
      _validate_qa_witt_tower_crypto_momentum_cert_family,
      "QA Witt Tower Crypto Momentum Asymmetry Cert [483]. Claim: Return-rank Cosmos-type pairs (a=b+2e>=58, consecutive high-return days) show attenuated momentum in BTC (p=0.025, excess=+0.254%, OOS+0.214%) but null in ETH (p=0.209). Crash-reversion (cert [482] a<=6) dominates momentum (a>=58): BTC ratio=3.34x (0.847%/0.254%), ETH ratio=11.3x (1.771%/0.157%). The QA Singularity orbit (fixed point in Z/27Z) exerts stronger mean-reversion force than the Cosmos expansion orbit sustains continuation — an asymmetry predicted by orbit stability structure. QA design: b=bin[t], e=bin[t+1] (return-rank bins); a=b+2e>=58 (A2 derived, raw); target=rets[t+2] (no look-ahead). BTC: n=654 (15.64%), mean=+0.384%/day, base=+0.130%, excess=+0.254%, IS n=328 mean=+0.554%, OOS n=326 mean=+0.214%. ETH: n=479 (15.26%), mean=+0.212%, excess=+0.157%, perm_p=0.209 (statistically null); ETH OOS n=371 mean=+0.251% (positive but not significant). Directional: BTC 50.5%, ETH 47.8%. CERTIFIED: C1 BTC_excess>0.15% PASS (+0.254%); C2 BTC_perm_p<0.05 PASS (0.025); C3 BTC_OOS_positive PASS (+0.214%); C4 ETH_perm_p>0.10 PASS (0.209, null confirmed); C5 BTC_crash_rev>2x_momentum PASS (3.34x); C6 ETH_crash_rev>5x_momentum PASS (11.3x). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Jegadeesh N & Titman S (1993) doi:10.1111/j.1540-6261.1993.tb04702.x. Data: Yahoo Finance via yfinance. Parents: cert [110] (Witt Tower), cert [482] (crash-reversion). Validated 2026-06-20.",

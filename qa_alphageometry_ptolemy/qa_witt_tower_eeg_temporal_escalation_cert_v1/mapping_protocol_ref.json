@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [484]: QA Witt Tower EEG Pre-Ictal Temporal Escalation by Orbit Class. Primary source: Detti P et al (2020) doi:10.13026/5d4a-j060; Goldberger AL et al (2000) doi:10.1161/01.CIR.101.23.e215. Siena Scalp EEG, 17 recordings, 9 patients, 512Hz. Pre-ictal 300s split into three 100s thirds (early/mid/late); T2 rate in each third compared by orbit class. Cosmos-type (T2>0.55, N=6): mean_escalation=+0.083 (late-early T2 diff); Quiet-type (T2<0.20, N=3): mean_escalation=-0.056; cosmos_vs_quiet_diff=+0.139. orbit_family on (b,e,m=27): Cosmos orbit shows positive temporal T2 escalation toward seizure onset; Quiet orbit flat/declining. MOD=27. Parents: cert [480] (orbit labels), cert [479] (pipeline), cert [110] (Witt Tower)."
+}

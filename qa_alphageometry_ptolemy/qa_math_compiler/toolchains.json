@@ -18,8 +18,8 @@
   "install": {
     "darwin": {
       "homebrew_formulae": [
-        "elan",
-        "coq"
+        "elan-init",
+        "rocq"
       ],
       "homebrew_casks": [
         "isabelle"

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [481]: QA Witt Tower EEG Pre-Ictal Three-Orbit Coverage. Primary source: Detti P et al (2020) Siena Scalp EEG Database doi:10.13026/5d4a-j060. Pure-math cert; derives from cert [480] per_recording T0/T1/T2 data; no new EDF reads. Satellite class (T1-dominant, T1>0.40 and T1>T0 and T1>T2): N=4 recordings (PN05-4 T1=0.517, PN06-1 T1=0.633, PN13-1 T1=0.450, PN14-1 T1=0.833); mean_T1=0.608 vs 0.333 interictal baseline (+27.5pp). Three-orbit coverage: Cosmos(N=6)+Satellite(N=4)+Singularity(N=3)=13/17=76.5%. orbit_family on (b,e,m=27) all three orbits: Cosmos/Satellite/Singularity. MOD=27. Parent: cert [480]."
+}

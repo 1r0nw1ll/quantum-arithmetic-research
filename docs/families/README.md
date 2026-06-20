@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [481] | [QA Witt Tower EEG Pre-Ictal Three-Orbit Coverage](481_qa_witt_tower_eeg_three_orbit.md) | All three QA orbits in pre-ictal EEG: Cosmos(N=6,T2=0.897)+Satellite(N=4,T1=0.608,+27.5pp)+Singularity(N=3,T0=0.578)=13/17=76.5%; pure-math from cert [480] data; 6/6 PASS | PASS |
 | [480] | [QA Witt Tower EEG Pre-Ictal Orbital Stratification](480_qa_witt_tower_eeg_orbital.md) | Pre-ictal T0/T1/T2 full distribution; Cosmos(T2=0.897,N=6)/Quiescent(T0=0.578,N=3)/Mixed(N=8); bimodal gap=0.842; Pearson r(T0,T2)=-0.727; PN03 within-patient dissociation (T2=1.0 vs T0=0.733 same patient); PN14-1 Satellite anomaly; 6/6 PASS | PASS |
 | [479] | [QA Witt Tower EEG Pre-Ictal Tier Elevation](479_qa_witt_tower_eeg_prerictal.md) | Pre-ictal EEG energy (5-min before onset) T2=0.499 vs 0.333 baseline (+16.6pp); perm_p=0.000; 10/17 recordings exceed; 9 patients 17 seizures Siena EEG; bimodal: PN03-1/PN07-1/PN13-2 T2=1.0; first QA seizure prediction cert; 6/6 PASS | PASS |
 | [478] | [QA Witt Tower Real Recorded Speech](478_qa_witt_tower_speech_real.md) | Real speech replication of cert [451]: P(T0\|voiced)=0.500 vs 0.333 uniform (+16.7pp); perm_p=0.0; P(voiced\|T0)=0.601; P(T2\|voiced)=0.121 depleted; 11998 frames real recorded speech; falsifies synthetic-artifact hypothesis; 6/6 PASS | PASS |

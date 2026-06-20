@@ -1832,11 +1832,19 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_dir,
         "QA_LEMMA_MINING_EVALUATION.v1.json",
     )
+    schema_supply_chain = os.path.join(
+        schema_dir,
+        "QA_MATH_COMPILER_SUPPLY_CHAIN_MANIFEST.v1.json",
+    )
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
     corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
     live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
     kernel_trace_compiler = os.path.join(mc_dir, "compile_kernel_traces.py")
     lemma_mining_evaluator = os.path.join(mc_dir, "evaluate_lemma_mining.py")
+    supply_chain_builder = os.path.join(
+        mc_dir,
+        "build_supply_chain_manifest.py",
+    )
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
     semantic_replay_certificate = os.path.join(
@@ -1850,6 +1858,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         "evaluation.v1.json",
     )
     lemma_mining_pack = os.path.join(lemma_mining_dir, "lemma_pack.v1.json")
+    supply_chain_manifest = os.path.join(
+        mc_dir,
+        "supply_chain_manifest.v1.json",
+    )
     toolchain_manifest = os.path.join(mc_dir, "toolchains.json")
     live_kernel_report = os.path.join(
         mc_dir,
@@ -1881,11 +1893,13 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_corpus, schema_assistants, schema_live_kernel,
         schema_kernel_trace_manifest, schema_kernel_trace_index,
         schema_semantic_replay, schema_elaboration_trace, schema_lemma_evaluation,
+        schema_supply_chain,
         schema_demo_pack, corpus_builder, live_kernel_verifier,
-        kernel_trace_compiler, lemma_mining_evaluator,
+        kernel_trace_compiler, lemma_mining_evaluator, supply_chain_builder,
         kernel_trace_manifest, kernel_trace_index,
         semantic_replay_certificate,
         mined_lemma_library, lemma_mining_evaluation, lemma_mining_pack,
+        supply_chain_manifest,
         toolchain_manifest, live_kernel_report, demo_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
@@ -2215,6 +2229,35 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "lemma mining evaluator returned ok=false: "
             f"{json.dumps(lemma_mining_result, sort_keys=True)}"
+        )
+
+    supply_chain_mode = (
+        "check-portable"
+        if os.environ.get("QA_MATH_COMPILER_CERTIFICATE_ONLY") == "1"
+        else "check"
+    )
+    supply_chain_proc = subprocess.run(
+        [sys.executable, supply_chain_builder, supply_chain_mode],
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    if supply_chain_proc.returncode != 0:
+        raise RuntimeError(
+            "Math compiler supply-chain verification failed:\n"
+            f"{supply_chain_proc.stdout}\n{supply_chain_proc.stderr}"
+        )
+    try:
+        supply_chain_result = json.loads(supply_chain_proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "supply-chain builder returned non-JSON output: "
+            f"{exc}: {supply_chain_proc.stdout}"
+        )
+    if supply_chain_result.get("ok") is not True:
+        raise RuntimeError(
+            "supply-chain verification returned ok=false: "
+            f"{json.dumps(supply_chain_result, sort_keys=True)}"
         )
 
     kernel_trace_command = [sys.executable, kernel_trace_compiler]

@@ -276,6 +276,9 @@ jobs:
       - name: Validate committed certificate
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py --check-report
 
+      - name: Verify Darwin supply-chain receipt
+        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/build_supply_chain_manifest.py check
+
   qa-math-compiler-linux-parity:
     runs-on: ubuntu-latest
     timeout-minutes: 15
@@ -294,3 +297,6 @@ jobs:
 
       - name: Verify semantic replay parity
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py --check-semantic-certificate
+
+      - name: Verify portable supply-chain root
+        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/build_supply_chain_manifest.py check-portable

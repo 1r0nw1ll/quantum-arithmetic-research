@@ -10672,6 +10672,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_streamflow_return_rank_cert_family(base_dir):
+    """Cert [490]: QA Witt Tower River Streamflow Return-Rank Autocorrelation (Persistence) -- hydrological PERSISTENCE not crash-reversion: Potomac -16.15 log-% pers_p=0.0, Hudson -12.50 pers_p=0.0, Missouri -3.59 pers_p=0.0, Eel -13.40 pers_p=0.0; 4/4 negative; pooled -11.95 log-%; n_signal 2-3x expected (clustering); operator discriminates mean-reverting (equity: positive excess) vs trend-persistent (hydrology: negative excess); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_streamflow_return_rank_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_streamflow_return_rank_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=300, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_intl_equity_return_rank_cert_family(base_dir):
     """Cert [489]: QA Witt Tower International Equity Return-Rank (Local Currency) -- crash-reversion is UNIVERSAL equity property: N225 +0.452% p=0.001, FTSE +0.318% p=0.018, DAX +0.390% p=0.004, HSI +0.264% p=0.054; 3/4 sig (p<0.05); pooled +0.356%/day p=0.0002; HSI positive (directional universality); operator not US-microstructure artifact; 6/6 PASS."""
     import subprocess
@@ -13736,6 +13750,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (490, "QA Witt Tower River Streamflow Return-Rank Autocorrelation Cert family",
+     _validate_qa_witt_tower_streamflow_return_rank_cert_family,
+     "QA Witt Tower River Streamflow Return-Rank Autocorrelation Cert [490]. Claim: Return-rank a=b+2e<=6 operator reveals POSITIVE AUTOCORRELATION (PERSISTENCE) in river hydrology -- the opposite of crash-reversion. After 2 consecutive fast-recession days (log-flow-change in bottom 7%), recession CONTINUES. Gauges 2000-2026: Potomac n=604 excess=-16.15 log-% pers_p=0.0; Hudson n=504 excess=-12.50 pers_p=0.0; Missouri n=454 excess=-3.59 pers_p=0.0; Eel n=675 excess=-13.40 pers_p=0.0. 4/4 negative; pooled=-11.95 log-%. n_signal 2-3x expected under independence (2.19%) -- CLUSTERING EVIDENCE: consecutive (b,e) pairs are correlated (not independent), producing excess low-bin co-occurrences. Mechanism: Maillet exponential recession Q=Q0*exp(-t/tau); log-return in fast-recession regime has positive autocorrelation because tau>>1 day. STRUCTURAL CONTRAST: equity/crypto signal_excess=+0.38 to +2.09%/day (crash-reversion); hydrology signal_excess=-3.59 to -16.15 log-%/day (persistence). Operator discriminates autocorrelation sign: negative (equity) vs positive (hydrology). CERTIFIED: C1 Potomac excess<-1.0 PASS (-16.15); C2 n_negative==4 PASS; C3 Missouri negative PASS (-3.59); C4 Eel pers_p<0.001 PASS (0.0); C5 pooled<-1.0 PASS (-11.95); C6 n_signal_elevated PASS (2-3x). 6/6 PASS. PRIMARY SOURCES: Maillet (1905) Paris:Hermann; Brutsaert & Nieber (1977) doi:10.1029/WR013i003p00637. Data: USGS NWIS param 00060. Parents: cert [482] (operator), cert [488] (equity contrast). Validated 2026-06-20.",
+     "490_qa_witt_tower_streamflow_return_rank",
+     "qa_witt_tower_streamflow_return_rank_cert_v1", True),
     (489, "QA Witt Tower International Equity Return-Rank Cert family",
      _validate_qa_witt_tower_intl_equity_return_rank_cert_family,
      "QA Witt Tower International Equity Return-Rank Cert [489]. Claim: Return-rank a=b+2e<=6 crash-reversion (cert [488]: US equity +0.385%/day) is a UNIVERSAL equity property, not a US-market-microstructure artifact. Tested on four local-currency international indices: ^N225 (Nikkei 225, JPY) n=175 +0.452%/day p=0.0012; ^FTSE (FTSE 100, GBP) n=168 +0.318%/day p=0.0176; ^GDAXI (DAX, EUR) n=182 +0.390%/day p=0.0040; ^HSI (Hang Seng, HKD) n=194 +0.264%/day p=0.0542. 3/4 individually significant (p<0.05); HSI directionally positive (p=0.054). Pooled +0.356%/day pooled_perm_p=0.0002. These are local-currency indices with independent monetary policy, exchange rates, and trading microstructure -- categorically different from US-listed ETFs (cert [462]: EWJ/EWG). HSI (China exposure, HKMA peg, state intervention) passes directional check: strongest falsification target. N225 and DAX individually significant. CERTIFIED: C1 N225 perm_p<0.05 PASS (0.0012); C2 FTSE perm_p<0.05 PASS (0.0176); C3 n_sig>=2 PASS (3/4); C4 pooled>0.10% PASS (+0.356%); C5 pooled<BTC PASS (0.356%<0.847%); C6 HSI_positive PASS (True). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41. Parents: cert [488] (US equity), cert [462] (intl ETFs), cert [482] (operator). Validated 2026-06-20.",

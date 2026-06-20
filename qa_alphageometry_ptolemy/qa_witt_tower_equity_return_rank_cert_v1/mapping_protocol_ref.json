@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [488]: QA Witt Tower Equity Return-Rank Crash Reversion Operator Scope. Primary sources: Fama EF (1970) doi:10.2307/2325486; Lo A & MacKinlay C (1988) doi:10.1093/rfs/1.1.41. Data: Yahoo Finance daily OHLCV via yfinance. Return-rank a=b+2e<=6 operator tested on SPY/QQQ/GSPC/IXIC/DJI. Compares to cert [461] PRICE-LEVEL a<=6 (+0.37% pooled p=0.0002). Prediction: return-rank NULL or weaker for equities because equity returns are already stationary (unlike trending crypto where price-level rank is non-stationary). orbit_family on (b,e,m=27): Singularity-type crash-reversion requires non-stationary price-level rank to motivate the return-rank operator. MOD=27. Parents: cert [461] (equity price-level a<=6 baseline), cert [482] (crypto return-rank), cert [486] (non-crypto null)."
+}

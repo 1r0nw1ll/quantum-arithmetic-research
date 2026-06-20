@@ -10672,6 +10672,34 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_equity_return_rank_cert_family(base_dir):
+    """Cert [488]: QA Witt Tower Equity Return-Rank Crash Reversion -- return-rank a<=6 ALSO works for equities: SPY +0.382% p=0.0000, QQQ +0.452% p=0.0002, GSPC +0.468% p=0.0000, IXIC +0.238% p=0.009; pooled +0.385%/day; parity with price-level cert [461] (+0.37%); equity weaker than BTC (0.847%); scope constraint is MAGNITUDE not asset class; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_equity_return_rank_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_equity_return_rank_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=300, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_qa_witt_tower_altcoin_return_rank_cert_family(base_dir):
+    """Cert [487]: QA Witt Tower Altcoin Return-Rank Crash Reversion Scope -- crypto CLASS confirmed: SOL +2.094% p=0.004, BNB +1.966% p=0.0002, ADA +1.344% p=0.023, DOGE +1.430% p=0.027; 4/4 sig; pooled +1.709%/day p=0.0; ALL altcoins exceed BTC (+0.847%); crash-rev inversely proportional to liquidity depth; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_altcoin_return_rank_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_altcoin_return_rank_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=300, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_cross_asset_return_rank_cert_family(base_dir):
     """Cert [486]: QA Witt Tower Cross-Asset Return-Rank Scope -- return-rank a<=6 operator is CRYPTO-SPECIFIC: GLD/EURUSD/GBPUSD/USO all NULL (4/4 perm_p>0.05); USO (vol=2.35%/day, highest non-crypto) shows NEGATIVE excess (-0.215%), falsifying vol-scaling; BTC excess 11.3x GLD; 6/6 PASS."""
     import subprocess
@@ -13694,6 +13722,16 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (488, "QA Witt Tower Equity Return-Rank Crash Reversion Cert family",
+     _validate_qa_witt_tower_equity_return_rank_cert_family,
+     "QA Witt Tower Equity Return-Rank Crash Reversion Cert [488]. Claim: Return-rank a=b+2e<=6 crash-reversion operator (cert [482]: crypto) ALSO works for US equity indices at lower magnitude. SPY: n=203, excess=+0.382%/day, perm_p=0.0000. QQQ: n=210, excess=+0.452%/day, perm_p=0.0002. GSPC: n=196, excess=+0.468%/day, perm_p=0.0000. IXIC: n=214, excess=+0.238%/day, perm_p=0.0088. 4/4 significant. Pooled +0.385%/day. KEY FINDING: Scope constraint is MAGNITUDE not equity/crypto class. Return-rank a<=6 works wherever mean-reverting microstructure exists at daily scale. Magnitude hierarchy: altcoins (1.34-2.09%) > BTC (0.847%) > equity (~0.38%) >> non-crypto (GLD +0.075%, USO -0.215%). Return-rank and price-level operators give equivalent results for equities (both ~+0.37-0.38%/day) because equity returns are already stationary; the difference only matters for trending assets (crypto). CERTIFIED: C1 SPY perm_p<0.01 PASS (0.000); C2 GSPC perm_p<0.01 PASS (0.000); C3 n_sig>=3 PASS (4/4); C4 pooled>0.20% PASS (+0.385%); C5 equity<BTC PASS (0.385%<0.847%); C6 parity_with_price_level<50% PASS (4% diff). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41. Parents: cert [461] (equity price-level baseline), cert [482] (crypto return-rank), cert [487] (altcoin scope). Validated 2026-06-20.",
+     "488_qa_witt_tower_equity_return_rank",
+     "qa_witt_tower_equity_return_rank_cert_v1", True),
+    (487, "QA Witt Tower Altcoin Return-Rank Crash Reversion Scope Cert family",
+     _validate_qa_witt_tower_altcoin_return_rank_cert_family,
+     "QA Witt Tower Altcoin Return-Rank Crash Reversion Scope Cert [487]. Claim: Return-rank a=b+2e<=6 crash-reversion operator (certified for BTC/ETH in cert [482]) extends to ALL tested altcoins: SOL +2.094%/day p=0.004; BNB +1.966%/day p=0.0002; ADA +1.344%/day p=0.023; DOGE +1.430%/day p=0.027. 4/4 positive, 4/4 significant (perm_p<0.05). Pooled excess +1.709%/day pooled_perm_p=0.0 (0/5000 null shuffles). ALL altcoin excesses exceed BTC certified (+0.847%), consistent with BTC having deepest institutional order books which dampen the mean-reversion bounce. Notably, DOGE (social/meme token) is also significant, confirming the gate is not 'institutional crypto' but daily-scale mean-reverting microstructure. Crypto class hierarchy: SOL>BNB>DOGE>ADA, all 1.34-2.09%/day. CERTIFIED: C1 n_positive>=3 PASS (4/4); C2 pooled>0.10% PASS (+1.709%); C3 n_sig>=3 PASS (4/4 p<0.05); C4 max_excess>0.50% PASS (SOL 2.094%); C5 min>max_non_crypto PASS (1.344%>0.075%); C6 pooled_perm_p<0.01 PASS (0.0). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Nakamoto S (2008) Bitcoin. Data: Yahoo Finance via yfinance. Parents: cert [482] (operator), cert [486] (non-crypto null). Validated 2026-06-20.",
+     "487_qa_witt_tower_altcoin_return_rank",
+     "qa_witt_tower_altcoin_return_rank_cert_v1", True),
     (486, "QA Witt Tower Cross-Asset Return-Rank Scope Cert family",
      _validate_qa_witt_tower_cross_asset_return_rank_cert_family,
      "QA Witt Tower Cross-Asset Return-Rank Scope Cert [486]. Claim: The return-rank a=b+2e<=6 crash-reversion operator (certified for BTC/ETH in cert [482]) is CRYPTO-SPECIFIC. Tested on GLD (vol=1.15%/day), EURUSD (0.69%), GBPUSD (0.59%), USO (2.35%) — ALL 4 non-crypto assets are NULL (perm_p>0.05). Key falsification: USO (highest non-crypto daily vol at 2.35%) shows NEGATIVE excess (-0.215%), directly falsifying the hypothesis that crash-reversion scales with volatility. BTC excess (+0.847%, cert [482]) is 11.3x the highest non-crypto excess (GLD +0.075%). The operator boundary is asset class (crypto), not volatility level. QA structural interpretation: crash-reversion under Singularity-type orbit (a<=6) requires mean-reverting microstructure (bid-ask bounce, panic-sell/buyer-of-last-resort dynamics at daily scale) — present in crypto, absent in commodities/forex/stores-of-value. CERTIFIED: C1 GLD perm_p>0.05 PASS (0.216); C2 EURUSD perm_p>0.05 PASS (0.148); C3 n_null==4 PASS (4/4 assets NULL); C4 max_non_crypto_excess<0.15 PASS (0.075%); C5 BTC_excess_ratio>5.0 PASS (11.3x); C6 USO_excess<GLD_excess PASS (-0.215%<+0.075%, vol-scaling falsified). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Nakamoto S (2008) Bitcoin. Data: Yahoo Finance via yfinance. Parents: cert [482] (operator), cert [474] (GLD null), cert [110] (Witt Tower). Validated 2026-06-20.",

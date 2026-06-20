@@ -1828,16 +1828,28 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_dir,
         "QA_MATH_COMPILER_LEAN_ELABORATION_TRACE.v1.json",
     )
+    schema_lemma_evaluation = os.path.join(
+        schema_dir,
+        "QA_LEMMA_MINING_EVALUATION.v1.json",
+    )
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
     corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
     live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
     kernel_trace_compiler = os.path.join(mc_dir, "compile_kernel_traces.py")
+    lemma_mining_evaluator = os.path.join(mc_dir, "evaluate_lemma_mining.py")
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
     semantic_replay_certificate = os.path.join(
         mc_dir,
         "semantic_replay_certificate.v1.json",
     )
+    lemma_mining_dir = os.path.join(mc_dir, "lemma_mining")
+    mined_lemma_library = os.path.join(lemma_mining_dir, "QAMinedLemmas.lean")
+    lemma_mining_evaluation = os.path.join(
+        lemma_mining_dir,
+        "evaluation.v1.json",
+    )
+    lemma_mining_pack = os.path.join(lemma_mining_dir, "lemma_pack.v1.json")
     toolchain_manifest = os.path.join(mc_dir, "toolchains.json")
     live_kernel_report = os.path.join(
         mc_dir,
@@ -1868,16 +1880,25 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
         schema_corpus, schema_assistants, schema_live_kernel,
         schema_kernel_trace_manifest, schema_kernel_trace_index,
-        schema_semantic_replay, schema_elaboration_trace,
+        schema_semantic_replay, schema_elaboration_trace, schema_lemma_evaluation,
         schema_demo_pack, corpus_builder, live_kernel_verifier,
-        kernel_trace_compiler, kernel_trace_manifest, kernel_trace_index,
+        kernel_trace_compiler, lemma_mining_evaluator,
+        kernel_trace_manifest, kernel_trace_index,
         semantic_replay_certificate,
+        mined_lemma_library, lemma_mining_evaluation, lemma_mining_pack,
         toolchain_manifest, live_kernel_report, demo_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg, lemma_duplicate_neg,
         corpus_valid, corpus_neg, assistants_valid, assistants_neg,
     ]
+    required_artifacts.extend(
+        sorted(
+            os.path.join(lemma_mining_dir, "compressed", name)
+            for name in os.listdir(os.path.join(lemma_mining_dir, "compressed"))
+            if name.endswith(".lean")
+        )
+    )
     if os.path.exists(kernel_trace_manifest):
         with open(kernel_trace_manifest, "r", encoding="utf-8") as f:
             kernel_manifest_data = json.load(f)
@@ -2170,6 +2191,30 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "demo_pack_v1 corpus rebuild returned ok=false: "
             f"{json.dumps(rebuild_result, sort_keys=True)}"
+        )
+
+    lemma_mining_proc = subprocess.run(
+        [sys.executable, lemma_mining_evaluator, "check"],
+        capture_output=True,
+        text=True,
+        timeout=300,
+    )
+    if lemma_mining_proc.returncode != 0:
+        raise RuntimeError(
+            "replay-backed lemma mining evaluation failed:\n"
+            f"{lemma_mining_proc.stdout}\n{lemma_mining_proc.stderr}"
+        )
+    try:
+        lemma_mining_result = json.loads(lemma_mining_proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "lemma mining evaluator returned non-JSON output: "
+            f"{exc}: {lemma_mining_proc.stdout}"
+        )
+    if lemma_mining_result.get("ok") is not True:
+        raise RuntimeError(
+            "lemma mining evaluator returned ok=false: "
+            f"{json.dumps(lemma_mining_result, sort_keys=True)}"
         )
 
     kernel_trace_command = [sys.executable, kernel_trace_compiler]

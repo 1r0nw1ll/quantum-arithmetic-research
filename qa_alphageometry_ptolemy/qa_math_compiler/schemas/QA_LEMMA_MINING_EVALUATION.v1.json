@@ -1,0 +1,82 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_LEMMA_MINING_EVALUATION.v1",
+  "title": "QA Replay-Backed Lemma Mining Evaluation",
+  "type": "object",
+  "required": [
+    "schema_id",
+    "evaluation_id",
+    "created_utc",
+    "toolchain_id",
+    "source_corpus_sha256",
+    "library_source",
+    "library_source_sha256",
+    "candidate_count",
+    "certified_candidate_count",
+    "candidates",
+    "benchmark_rows",
+    "failure_records",
+    "metrics",
+    "invariant_diff",
+    "evaluation_sha256"
+  ],
+  "properties": {
+    "schema_id": {"const": "QA_LEMMA_MINING_EVALUATION.v1"},
+    "evaluation_id": {"type": "string", "minLength": 1},
+    "created_utc": {"type": "string"},
+    "toolchain_id": {"type": "string", "minLength": 1},
+    "source_corpus_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "library_source": {"type": "string", "minLength": 1},
+    "library_source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "candidate_count": {"type": "integer", "minimum": 1},
+    "certified_candidate_count": {"type": "integer", "minimum": 0},
+    "candidates": {"type": "array", "minItems": 1},
+    "benchmark_rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "example_id",
+          "evaluation_split",
+          "lemma_id",
+          "baseline_elaboration_sha256",
+          "compressed_source",
+          "compressed_source_sha256",
+          "baseline_steps",
+          "compressed_steps",
+          "reduction",
+          "compressed_trace_sha256",
+          "deterministic_replays",
+          "kernel_status"
+        ],
+        "properties": {
+          "evaluation_split": {"enum": ["discovery", "held_out"]},
+          "baseline_steps": {"type": "integer", "minimum": 1},
+          "compressed_steps": {"type": "integer", "minimum": 1},
+          "reduction": {"type": "number", "minimum": 0, "maximum": 1},
+          "deterministic_replays": {"const": 2},
+          "kernel_status": {"const": "SUCCESS"}
+        }
+      }
+    },
+    "failure_records": {"type": "array"},
+    "metrics": {
+      "type": "object",
+      "required": [
+        "benchmark_count",
+        "held_out_count",
+        "replay_success_rate",
+        "held_out_replay_success_rate",
+        "median_reduction",
+        "held_out_median_reduction",
+        "total_baseline_steps",
+        "total_compressed_steps",
+        "total_saved_steps",
+        "useful_candidate_rate"
+      ]
+    },
+    "invariant_diff": {"type": "object"},
+    "evaluation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+  }
+}

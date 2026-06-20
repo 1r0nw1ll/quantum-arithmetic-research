@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [476] | [QA Witt Tower ENSO Prediction](476_qa_witt_tower_enso_prediction.md) | **First QA forecast of physical system.** T2→T2=90.8% p=0.0; lag-1 acc=87.5% vs 33% baseline; lag-3 acc=67.5%; T0↛T2 forbidden transition (0.000) — Neutral is mandatory gateway; N=916 NOAA ONI seasons; 6/6 PASS | PASS |
 | [475] | [QA Witt Tower Vol-Sizing](475_qa_witt_tower_vol_sizing.md) | Equal-weight Sharpe-optimal; vol-targeting degrades crash pair US 0.366→0.191 (ratio 1.92×, −48%); signal fires in high-vol regime so vol-targeting inverts information; verdict=equal_weight_optimal; 6/6 PASS | PASS |
 | [474] | [QA Witt Tower Cross-Asset Transfer](474_qa_witt_tower_cross_asset.md) | VNQ REIT: a≤6 +0.591% p=0.0, crash pair +2.954% p=0.0; DBA agri crash p=0.003; TLT bonds a≤6 p=0.01; GLD gold confirmed null p=0.496; equity-proximate transfer, safe-haven nulls; 6/6 PASS | PASS |
 | [473] | [QA Witt Tower OOS Holdout](473_qa_witt_tower_oos_holdout.md) | a≤6 (n=330, +0.407%, p=0.0) and crash pair (n=35, +2.079%, p=0.0) pass strict 2016-2026 holdout; OOS crash pair beats IS due to COVID-2020; all 4 OOS means positive; 6/6 PASS | PASS |

@@ -10531,6 +10531,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_enso_prediction_cert_family(base_dir):
+    """Cert [476]: QA Witt Tower ENSO Prediction -- T2->T2=90.8% perm_p=0.0, lag-1 acc=87.5% vs 33% baseline, lag-3 acc=67.5%, T0->T2=0 (forbidden); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_enso_prediction_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_enso_prediction_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_vol_sizing_cert_family(base_dir):
     """Cert [475]: QA Witt Tower Vol-Sizing — EW Sharpe dominates VT; crash pair US EW=0.366 vs VT=0.191 (ratio=1.92); vol-targeting contraindicated when signal fires in high-vol regime; 6/6 PASS."""
     import subprocess
@@ -13399,6 +13413,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (476, "QA Witt Tower ENSO Prediction Cert family",
+     _validate_qa_witt_tower_enso_prediction_cert_family,
+     "QA Witt Tower ENSO Prediction Cert [476]. Claim: QA tier labels (T0=La Nina, T1=Neutral, T2=El Nino) from rank-binned NOAA ONI predict next-season ENSO tier with lag-1 accuracy=87.5% (baseline 33.3%) and lag-3 accuracy=67.5% (baseline 33.4%). Structural forbidden transition: T0->T2=0.000 and T2->T0=0.000 at lag 1 (never skip Neutral). T2->T2 perm_p=0.0 at lag 1 and 3. First QA forecast of a physical system outside finance. N=916 NOAA ONI seasons 1950-2026. CERTIFIED: C1 T2_persist_lag1 PASS (p=0.0); C2 T0_persist_lag1 PASS (p=0.0); C3 acc_lag1>80% PASS (87.5%); C4 T2_persist_lag3 PASS (p=0.0); C5 T0->T2 forbidden PASS (0.000); C6 acc_lag3>60% PASS (67.5%). 6/6 PASS. PRIMARY SOURCES: Trenberth KE (1997) doi:10.1175/1520-0477(1997)078<2771:TDOENO>2.0.CO;2; Philander SGH (1990) ISBN:9780125532358. Parents: cert [445],[465],[467]. Validated 2026-06-19.",
+     "476_qa_witt_tower_enso_prediction",
+     "qa_witt_tower_enso_prediction_cert_v1", True),
     (475, "QA Witt Tower Vol-Sizing Cert family",
      _validate_qa_witt_tower_vol_sizing_cert_family,
      "QA Witt Tower Vol-Sizing Cert [475]. Claim: Vol-targeting (w=1/trailing_21d_vol) DEGRADES Sharpe for QA crash-bounce signals; equal-weight is Sharpe-optimal. Crash pair US: EW=0.3663 vs VT=0.1905 (ratio=1.92, 48% degradation). INTL: EW=0.4482 vs VT=0.3242. a<=6 US: EW=0.1429 vs VT=0.1244. Mechanism: signal fires in high-vol regimes (cert [469] vol_ratio=1.69); vol-targeting systematically reduces position on exactly the days generating alpha. VT signal remains positive but strictly dominated by EW. Verdict: equal_weight_optimal. CERTIFIED: C1 cp_EW_GT_VT_US PASS; C2 a6_EW_GT_VT_US PASS; C3 cp_EW_GT_VT_INTL PASS; C4 cp_EW_GT_30 PASS; C5 cp_VT_positive PASS; C6 cp_ratio_GT_1.5 PASS (1.92). 6/6 PASS. PRIMARY SOURCES: Moreira&Muir (2017) doi:10.1111/jofi.12513; Barroso&Santa-Clara (2015) doi:10.1016/j.jfineco.2014.11.003. Validated 2026-06-19.",

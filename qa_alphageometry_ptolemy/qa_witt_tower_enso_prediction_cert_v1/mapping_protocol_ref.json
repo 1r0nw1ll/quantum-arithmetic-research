@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [476]: QA Witt Tower ENSO Prediction. Claim: QA tiers (T0=La Nina, T1=Neutral, T2=El Nino) from rank-binned NOAA ONI anomalies predict next-season ENSO tier (lag-1 accuracy=87.5% vs 33% baseline; lag-3 accuracy=67.5%). Structural zero: T0->T2=0.0 and T2->T0=0.0 at lag 1 — El Nino/La Nina never switch directly; T1 is mandatory gateway. T2->T2 perm_p=0.0 (lag 1 and 3). First QA forecast of a physical system outside finance. N=916 seasons 1950-2026. PRIMARY SOURCES: Trenberth KE (1997) doi:10.1175/1520-0477(1997)078<2771:TDOENO>2.0.CO;2; Philander SGH (1990) ISBN:9780125532358. Parents: cert [445],[465],[467]. Validated 2026-06-19."
+}

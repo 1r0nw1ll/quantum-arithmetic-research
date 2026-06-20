@@ -10531,6 +10531,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_cross_asset_cert_family(base_dir):
+    """Cert [474]: QA Witt Tower Cross-Asset Transfer -- VNQ a6 +0.591% p=0.0, cp +2.954% p=0.0; DBA cp p=0.003; TLT a6 p=0.01; GLD cp p=0.496 (structural null); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_cross_asset_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_cross_asset_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_oos_holdout_cert_family(base_dir):
     """Cert [473]: QA Witt Tower OOS Holdout -- a<=6 (n=330, +0.407%, p=0.0) and crash pair (n=35, +2.079%, p=0.0) both pass strict 2016-2026 holdout; 6/6 PASS."""
     import subprocess
@@ -13371,6 +13385,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (474, "QA Witt Tower Cross-Asset Transfer Cert family",
+     _validate_qa_witt_tower_cross_asset_cert_family,
+     "QA Witt Tower Cross-Asset Transfer Cert [474]. Claim: a<=6 and (0,0) crash pair signals transfer to equity-proximate assets but are absent in pure stores of value. VNQ (REIT): a6 n=180 +0.591% p=0.0, cp n=22 +2.954% p=0.0. DBA (agri): cp n=22 +0.671% p=0.003. TLT (long bonds): a6 n=149 +0.205% p=0.01. GLD (gold): cp p=0.496 CONFIRMED NULL. Transfer is asset-class-specific: equity-correlated assets (REIT, agri) respond; safe-haven stores of value (gold, mid-term bonds) do not. CERTIFIED: C1 VNQ_a6_sig PASS; C2 VNQ_cp_sig PASS; C3 VNQ_cp_GT_1pct PASS; C4 DBA_cp_sig PASS; C5 TLT_a6_sig PASS; C6 GLD_cp_null PASS. 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Erb&Harvey (2006) doi:10.2469/faj.v62.n2.4083. Validated 2026-06-19.",
+     "474_qa_witt_tower_cross_asset",
+     "qa_witt_tower_cross_asset_cert_v1", True),
     (473, "QA Witt Tower OOS Holdout Cert family",
      _validate_qa_witt_tower_oos_holdout_cert_family,
      "QA Witt Tower OOS Holdout Cert [473]. Claim: a<=6 daily signal (b+2e<=6 raw A2) and (0,0) crash pair bounce survive strict OOS holdout 2016-01-01+. US a<=6 OOS: n=330, mean=+0.407%, perm_p=0.0 (IS +0.349%); US crash OOS: n=35, mean=+2.079%, perm_p=0.0 (IS +1.241%); INTL a<=6 OOS: n=304, mean=+0.259%, perm_p=0.0018; INTL crash OOS: n=35, mean=+1.805%, perm_p=0.0. All four OOS means positive; crash pair OOS outperforms IS due to COVID-2020 bounce. CERTIFIED: C1 a6_US_OOS_sig PASS; C2 cp_US_OOS_sig PASS; C3 a6_US_positive PASS; C4 cp_US_GT_1pct PASS; C5 a6_INTL_OOS_sig PASS; C6 all_OOS_positive PASS. 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Lo&MacKinlay (1988) doi:10.1093/rfs/1.1.41; cert [461]; cert [463]. Validated 2026-06-19.",

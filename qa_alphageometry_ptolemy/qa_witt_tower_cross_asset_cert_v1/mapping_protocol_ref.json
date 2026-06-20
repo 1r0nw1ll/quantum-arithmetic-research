@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [474]: QA Witt Tower Cross-Asset Transfer. Claim: a<=6 and crash pair signals transfer to equity-proximate assets; gold and crude are structural nulls. VNQ: a6 +0.591% p=0.0, cp +2.954% p=0.0. TLT: a6 +0.205% p=0.01. DBA: cp +0.671% p=0.003. GLD: cp p=0.496 (confirmed null). Asset-class-specific transfer: crash-bounce dynamics in equity-correlated assets (REIT, agri), absent in pure stores of value (gold, mid-term bonds). PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Erb CB, Harvey CR (2006) doi:10.2469/faj.v62.n2.4083. Parents: cert [461],[463],[473]. Validated 2026-06-19."
+}

@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [474] | [QA Witt Tower Cross-Asset Transfer](474_qa_witt_tower_cross_asset.md) | VNQ REIT: a≤6 +0.591% p=0.0, crash pair +2.954% p=0.0; DBA agri crash p=0.003; TLT bonds a≤6 p=0.01; GLD gold confirmed null p=0.496; equity-proximate transfer, safe-haven nulls; 6/6 PASS | PASS |
 | [473] | [QA Witt Tower OOS Holdout](473_qa_witt_tower_oos_holdout.md) | a≤6 (n=330, +0.407%, p=0.0) and crash pair (n=35, +2.079%, p=0.0) pass strict 2016-2026 holdout; OOS crash pair beats IS due to COVID-2020; all 4 OOS means positive; 6/6 PASS | PASS |
 | [472] | [QA Witt Tower Crash Pair Exit Strategy](472_qa_witt_tower_crash_pair_exit.md) | Exit day+1 close is Sharpe-dominant (US 0.367 vs 0.316, INTL 0.449 vs 0.275); A_vs_B raw diff NOT sig (p=0.51); +50% variance for +0.42% extra not worth it; C dominated; 6/6 PASS | PASS |
 | [471] | [QA Witt Tower Multi-Scale Alignment](471_qa_witt_tower_multiscale_alignment.md) | Daily a≤6 + weekly S-orbit co-activation: both +1.67% vs daily-only +0.31% (5.3× amplification); p=0.0026; n=38 pooled; two QA timescales compound; 6/6 PASS | PASS |

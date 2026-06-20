@@ -19,9 +19,12 @@ ROOT = Path(__file__).resolve().parent
 MANIFEST_PATH = ROOT / "kernel_trace_manifest.json"
 TOOLCHAINS_PATH = ROOT / "toolchains.json"
 INDEX_PATH = ROOT / "kernel_trace_index.json"
+SEMANTIC_CERTIFICATE_PATH = ROOT / "semantic_replay_certificate.v1.json"
 TRACE_DOMAIN = "qa.math_compiler.kernel_trace.v1"
 EXECUTION_DOMAIN = "qa.math_compiler.kernel_execution.v1"
 INDEX_DOMAIN = "qa.math_compiler.kernel_trace_index.v1"
+SEMANTIC_CASE_DOMAIN = "qa.math_compiler.semantic_replay_case.v1"
+SEMANTIC_CERTIFICATE_DOMAIN = "qa.math_compiler.semantic_replay_certificate.v1"
 
 
 def canonical_bytes(value: object) -> bytes:
@@ -356,6 +359,91 @@ def compile_all(write: bool) -> Dict[str, Any]:
     return {"generated": generated, "index": index_body}
 
 
+def semantic_certificate(index: Dict[str, Any]) -> Dict[str, Any]:
+    cases = []
+    for row in index["cases"]:
+        semantic_body = {
+            "case_id": row["case_id"],
+            "source_sha256": row["source_sha256"],
+            "toolchain_id": index["toolchain_id"],
+            "observed_status": row["expected_status"],
+            "fail_type": row["fail_type"],
+        }
+        cases.append(
+            {
+                **semantic_body,
+                "semantic_sha256": domain_hash(
+                    SEMANTIC_CASE_DOMAIN,
+                    semantic_body,
+                ),
+            }
+        )
+    body: Dict[str, Any] = {
+        "schema_id": "QA_MATH_COMPILER_SEMANTIC_REPLAY_CERTIFICATE.v1",
+        "toolchain_id": index["toolchain_id"],
+        "case_count": len(cases),
+        "success_count": sum(
+            case["observed_status"] == "SUCCESS" for case in cases
+        ),
+        "failure_count": sum(
+            case["observed_status"] == "FAIL" for case in cases
+        ),
+        "cases": cases,
+    }
+    body["certificate_sha256"] = domain_hash(
+        SEMANTIC_CERTIFICATE_DOMAIN,
+        body,
+    )
+    return body
+
+
+def validate_semantic_certificate(certificate: Dict[str, Any]) -> List[str]:
+    errors: List[str] = []
+    if (
+        certificate.get("schema_id")
+        != "QA_MATH_COMPILER_SEMANTIC_REPLAY_CERTIFICATE.v1"
+    ):
+        errors.append("SEMANTIC_SCHEMA_ID_MISMATCH")
+    cases = certificate.get("cases")
+    if not isinstance(cases, list):
+        return errors + ["SEMANTIC_CASES_INVALID"]
+    if certificate.get("case_count") != len(cases):
+        errors.append("SEMANTIC_CASE_COUNT_MISMATCH")
+    success_count = sum(
+        isinstance(case, dict) and case.get("observed_status") == "SUCCESS"
+        for case in cases
+    )
+    failure_count = sum(
+        isinstance(case, dict) and case.get("observed_status") == "FAIL"
+        for case in cases
+    )
+    if certificate.get("success_count") != success_count:
+        errors.append("SEMANTIC_SUCCESS_COUNT_MISMATCH")
+    if certificate.get("failure_count") != failure_count:
+        errors.append("SEMANTIC_FAILURE_COUNT_MISMATCH")
+    for case in cases:
+        if not isinstance(case, dict):
+            errors.append("SEMANTIC_CASE_INVALID")
+            continue
+        body = {
+            "case_id": case.get("case_id"),
+            "source_sha256": case.get("source_sha256"),
+            "toolchain_id": case.get("toolchain_id"),
+            "observed_status": case.get("observed_status"),
+            "fail_type": case.get("fail_type"),
+        }
+        if case.get("semantic_sha256") != domain_hash(
+            SEMANTIC_CASE_DOMAIN,
+            body,
+        ):
+            errors.append(f"SEMANTIC_CASE_HASH_MISMATCH:{case.get('case_id')}")
+    body = dict(certificate)
+    supplied_hash = body.pop("certificate_sha256", None)
+    if supplied_hash != domain_hash(SEMANTIC_CERTIFICATE_DOMAIN, body):
+        errors.append("SEMANTIC_CERTIFICATE_HASH_MISMATCH")
+    return errors
+
+
 def compare_live() -> List[str]:
     compiled = compile_all(write=False)
     errors: List[str] = []
@@ -365,6 +453,12 @@ def compare_live() -> List[str]:
             errors.append(f"ARTIFACT_MISMATCH:{path.relative_to(ROOT)}")
     if not INDEX_PATH.exists() or load_json(INDEX_PATH) != compiled["index"]:
         errors.append("INDEX_MISMATCH")
+    live_semantic = semantic_certificate(compiled["index"])
+    if (
+        not SEMANTIC_CERTIFICATE_PATH.exists()
+        or load_json(SEMANTIC_CERTIFICATE_PATH) != live_semantic
+    ):
+        errors.append("SEMANTIC_CERTIFICATE_MISMATCH")
     return errors
 
 
@@ -375,6 +469,14 @@ def check_artifacts() -> List[str]:
     manifest = load_json(MANIFEST_PATH)
     toolchains = load_json(TOOLCHAINS_PATH)
     index = load_json(INDEX_PATH)
+    if not SEMANTIC_CERTIFICATE_PATH.exists():
+        errors.append("SEMANTIC_CERTIFICATE_MISSING")
+    else:
+        stored_semantic = load_json(SEMANTIC_CERTIFICATE_PATH)
+        errors.extend(validate_semantic_certificate(stored_semantic))
+        expected_semantic = semantic_certificate(index)
+        if stored_semantic != expected_semantic:
+            errors.append("SEMANTIC_CERTIFICATE_INDEX_MISMATCH")
     body = dict(index)
     supplied_hash = body.pop("index_sha256", None)
     if supplied_hash != domain_hash(INDEX_DOMAIN, body):
@@ -448,15 +550,37 @@ def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser()
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--check-artifacts", action="store_true")
+    parser.add_argument("--write-semantic-certificate", action="store_true")
+    parser.add_argument("--check-semantic-certificate", action="store_true")
     return parser.parse_args()
 
 
 def main() -> int:
     args = parse_args()
-    if args.check_artifacts:
+    if args.write_semantic_certificate:
+        compiled = compile_all(write=False)
+        write_json(
+            SEMANTIC_CERTIFICATE_PATH,
+            semantic_certificate(compiled["index"]),
+        )
+        errors = validate_semantic_certificate(
+            load_json(SEMANTIC_CERTIFICATE_PATH)
+        )
+    elif args.check_semantic_certificate:
+        compiled = compile_all(write=False)
+        live = semantic_certificate(compiled["index"])
+        stored = load_json(SEMANTIC_CERTIFICATE_PATH)
+        errors = validate_semantic_certificate(stored)
+        if stored != live:
+            errors.append("SEMANTIC_REPLAY_PARITY_MISMATCH")
+    elif args.check_artifacts:
         errors = check_artifacts()
     elif args.write:
         compile_all(write=True)
+        write_json(
+            SEMANTIC_CERTIFICATE_PATH,
+            semantic_certificate(load_json(INDEX_PATH)),
+        )
         errors = check_artifacts()
     else:
         errors = compare_live()

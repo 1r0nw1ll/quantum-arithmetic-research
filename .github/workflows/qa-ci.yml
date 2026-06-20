@@ -269,7 +269,28 @@ jobs:
           git diff --exit-code -- qa_alphageometry_ptolemy/qa_math_compiler/artifacts/live_kernel_certificate.v1.json
 
       - name: Replay kernel-derived proof traces
-        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py
+        run: |
+          python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py
+          python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py --check-semantic-certificate
 
       - name: Validate committed certificate
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py --check-report
+
+  qa-math-compiler-linux-parity:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install pinned Lean toolchain
+        run: tools/install_lean_toolchain.sh
+
+      - name: Verify semantic replay parity
+        run: python3 qa_alphageometry_ptolemy/qa_math_compiler/compile_kernel_traces.py --check-semantic-certificate

@@ -1,0 +1,80 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_MATH_COMPILER_SEMANTIC_REPLAY_CERTIFICATE.v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "toolchain_id",
+    "case_count",
+    "success_count",
+    "failure_count",
+    "cases",
+    "certificate_sha256"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_MATH_COMPILER_SEMANTIC_REPLAY_CERTIFICATE.v1"
+    },
+    "toolchain_id": {
+      "type": "string",
+      "minLength": 1
+    },
+    "case_count": {
+      "type": "integer",
+      "minimum": 1
+    },
+    "success_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "failure_count": {
+      "type": "integer",
+      "minimum": 0
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "case_id",
+          "source_sha256",
+          "toolchain_id",
+          "observed_status",
+          "fail_type",
+          "semantic_sha256"
+        ],
+        "properties": {
+          "case_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "source_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "toolchain_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "observed_status": {
+            "enum": ["SUCCESS", "FAIL"]
+          },
+          "fail_type": {
+            "type": ["string", "null"]
+          },
+          "semantic_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          }
+        }
+      }
+    },
+    "certificate_sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    }
+  }
+}

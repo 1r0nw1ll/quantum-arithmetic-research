@@ -1820,12 +1820,20 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_dir,
         "QA_MATH_COMPILER_KERNEL_TRACE_INDEX.v1.json",
     )
+    schema_semantic_replay = os.path.join(
+        schema_dir,
+        "QA_MATH_COMPILER_SEMANTIC_REPLAY_CERTIFICATE.v1.json",
+    )
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
     corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
     live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
     kernel_trace_compiler = os.path.join(mc_dir, "compile_kernel_traces.py")
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
+    semantic_replay_certificate = os.path.join(
+        mc_dir,
+        "semantic_replay_certificate.v1.json",
+    )
     toolchain_manifest = os.path.join(mc_dir, "toolchains.json")
     live_kernel_report = os.path.join(
         mc_dir,
@@ -1856,8 +1864,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
         schema_corpus, schema_assistants, schema_live_kernel,
         schema_kernel_trace_manifest, schema_kernel_trace_index,
+        schema_semantic_replay,
         schema_demo_pack, corpus_builder, live_kernel_verifier,
         kernel_trace_compiler, kernel_trace_manifest, kernel_trace_index,
+        semantic_replay_certificate,
         toolchain_manifest, live_kernel_report, demo_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,

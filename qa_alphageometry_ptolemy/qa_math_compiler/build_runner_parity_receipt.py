@@ -208,6 +208,55 @@ def compare(left: Dict[str, Any], right: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
+def synthetic_receipt() -> Dict[str, Any]:
+    elaboration_body = {
+        "artifact_count": 1,
+        "proof_step_count": 1,
+        "failure_count": 0,
+        "artifacts": [
+            {
+                "path": "synthetic/elaboration.json",
+                "source_sha256": "1" * 64,
+                "elaboration_trace_sha256": "2" * 64,
+                "proof_step_count": 1,
+                "returncode": 0,
+            }
+        ],
+    }
+    elaboration_body["elaboration_set_sha256"] = domain_hash(
+        ELABORATION_SET_DOMAIN, elaboration_body
+    )
+    body: Dict[str, Any] = {
+        "schema_id": "QA_MATH_COMPILER_INDEPENDENT_RUNNER_RECEIPT.v1",
+        "receipt_id": "SYNTHETIC_SELF_TEST",
+        "source_revision": "3" * 40,
+        "toolchain": {
+            "lean_version": "Lean (version 4.31.0, synthetic)",
+            "lean_git_commit": "4" * 40,
+        },
+        "semantic_replay": {
+            "certificate_sha256": "5" * 64,
+            "case_count": 1,
+            "success_count": 1,
+            "failure_count": 0,
+        },
+        "kernel_index": {"index_sha256": "6" * 64, "case_count": 1},
+        "certified_corpus_sha256": "7" * 64,
+        "lemma_evaluation_sha256": "8" * 64,
+        "portable_supply_root_sha256": "9" * 64,
+        "elaboration_set": elaboration_body,
+        "receipt_generation": "stored_artifacts",
+        "verified_gates": ["synthetic"],
+        "invariant_diff": {
+            "runner_metadata_excluded": True,
+            "wall_clock_excluded": True,
+            "comparison_policy": "synthetic self-test",
+        },
+    }
+    body["receipt_sha256"] = domain_hash(RECEIPT_DOMAIN, body)
+    return body
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -233,8 +282,8 @@ def main() -> int:
     elif args.command == "compare":
         result = compare(load_json(Path(args.left)), load_json(Path(args.right)))
     else:
-        first = build_receipt()
-        second = build_receipt()
+        first = synthetic_receipt()
+        second = synthetic_receipt()
         result = compare(first, second)
         if result["ok"]:
             tampered = json.loads(json.dumps(second))

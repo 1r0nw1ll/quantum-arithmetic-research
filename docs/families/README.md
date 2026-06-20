@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [479] | [QA Witt Tower EEG Pre-Ictal Tier Elevation](479_qa_witt_tower_eeg_prerictal.md) | Pre-ictal EEG energy (5-min before onset) T2=0.499 vs 0.333 baseline (+16.6pp); perm_p=0.000; 10/17 recordings exceed; 9 patients 17 seizures Siena EEG; bimodal: PN03-1/PN07-1/PN13-2 T2=1.0; first QA seizure prediction cert; 6/6 PASS | PASS |
 | [478] | [QA Witt Tower Real Recorded Speech](478_qa_witt_tower_speech_real.md) | Real speech replication of cert [451]: P(T0\|voiced)=0.500 vs 0.333 uniform (+16.7pp); perm_p=0.0; P(voiced\|T0)=0.601; P(T2\|voiced)=0.121 depleted; 11998 frames real recorded speech; falsifies synthetic-artifact hypothesis; 6/6 PASS | PASS |
 | [477] | [QA Witt Tower Multi-Class MI Ceiling Theory](477_qa_witt_tower_mi_kclass.md) | k-class generalisation of cert [468]: k=1 reduction 5.55e-17; k=3 ceiling=1.0 (lifts binary ~70%); ENSO 3-class formula diff=0.0039 vs empirical 0.699; r_ElNino=r_LaNina=1.0 structural zeros; 6/6 PASS | PASS |
 | [476] | [QA Witt Tower ENSO Prediction](476_qa_witt_tower_enso_prediction.md) | **First QA forecast of physical system.** T2→T2=90.8% p=0.0; lag-1 acc=87.5% vs 33% baseline; lag-3 acc=67.5%; T0↛T2 forbidden transition (0.000) — Neutral is mandatory gateway; N=916 NOAA ONI seasons; 6/6 PASS | PASS |

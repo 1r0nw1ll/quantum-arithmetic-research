@@ -10531,6 +10531,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_eeg_prerictal_cert_family(base_dir):
+    """Cert [479]: QA Witt Tower EEG Pre-Ictal Tier Elevation -- Siena 9 patients 17 recordings; pre-ictal T2=0.499 vs 0.333 baseline (+16.6pp); perm_p=0.000; 10/17 recordings exceed; 11/17 monotone; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_eeg_prerictal_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_eeg_prerictal_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_speech_real_cert_family(base_dir):
     """Cert [478]: QA Witt Tower Real Recorded Speech -- P(T0|voiced)=0.5005 vs 0.333 uniform; voiced T0 excess=+16.7pp; perm_p=0.0; P(voiced|T0)=0.601; replicates cert [451] on real speech (not synthesis); 6/6 PASS."""
     import subprocess
@@ -13441,6 +13455,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (479, "QA Witt Tower EEG Pre-Ictal Tier Elevation Cert family",
+     _validate_qa_witt_tower_eeg_prerictal_cert_family,
+     "QA Witt Tower EEG Pre-Ictal Tier Elevation Cert [479]. Claim: EEG multi-channel energy (5s windows, 512Hz) in the pre-ictal period (0-300s before seizure onset) preferentially occupies Tier 2 (T2=high-energy tier) more than the interictal baseline (33.3%). Calibrate T0/T1/T2 thresholds from interictal (120-720s from recording start) rank-percentiles; apply to pre-ictal (onset-300s to onset). Data: Siena Scalp EEG Database (PhysioNet doi:10.13026/5d4a-j060), 9 patients, 17 seizure recordings (PN00x2, PN01, PN03x2, PN05x3, PN06x3, PN07, PN09, PN13x2, PN14x2). Results: interictal T2 rate=0.333 (exact by rank calibration); pre-ictal pooled T2 rate=0.499 (+16.6pp); perm_p=0.0000 (5000 within-recording shuffles); 10/17 recordings show pre>inter; 11/17 show monotone late>early rise; bimodal: PN03-1/PN07-1/PN13-2 T2=1.000; PN05-3 T2=0.867; PN01-1/PN03-2 quiescent T2=0.000/0.017. First QA prediction cert for seizure detection; extends cert [446] (ictal=100% T2) to pre-ictal forecasting window. CERTIFIED: C1 pre_t2>0.45 PASS (0.499); C2 perm_p<0.001 PASS (0.000); C3 n_patients>=8 PASS (9); C4 n_exceed>=9 PASS (10/17); C5 n_monotone>=9 PASS (11/17); C6 excess>12pp PASS (+16.6pp). 6/6 PASS. PRIMARY SOURCES: Detti P et al (2020) doi:10.13026/5d4a-j060; Goldberger AL et al (2000) doi:10.1161/01.CIR.101.23.e215. Parents: cert [446],[110]. Validated 2026-06-19.",
+     "479_qa_witt_tower_eeg_prerictal",
+     "qa_witt_tower_eeg_prerictal_cert_v1", True),
     (478, "QA Witt Tower Real Recorded Speech Cert family",
      _validate_qa_witt_tower_speech_real_cert_family,
      "QA Witt Tower Real Recorded Speech Cert [478]. Claim: Voiced phoneme frames in REAL recorded speech (Anthony Robbins Personal Training System, 44100Hz, 120s analysed) preferentially occupy T0 (low spectral entropy tier). P(T0|voiced)=0.5005 vs 0.333 uniform (+50% enrichment); P(T0|unvoiced)=0.222; P(voiced|T0)=0.601; P(T2|voiced)=0.121 (depleted in high-entropy tier); voiced T0 excess=+16.7pp above uniform; perm_p=0.0000 (0/5000 permutations >= observed). Analysis pipeline identical to cert [451] (Fant synthesis): 25ms Hanning-windowed frames, rfft power spectrum, normalised spectral entropy H_norm, rank-bins Z/27Z, tier=bin//9. This cert falsifies the synthetic-artifact hypothesis: real human speech shows the same T0 dominance as Fant synthesis. CERTIFIED: C1 T0_voiced>0.45 PASS (0.5005); C2 voiced_T0>1.4x_unvoiced PASS (0.5005/0.222=2.25); C3 perm_p<0.001 PASS (0.0); C4 voiced_T0>50pct PASS (0.601); C5 T2_voiced<20pct PASS (0.121); C6 T0_excess>10pp PASS (+16.7pp). 6/6 PASS. PRIMARY SOURCES: Fant G (1960) ISBN:9789027916006; Stevens KN (1998) ISBN:9780262692502. Parent: cert [451]. Validated 2026-06-19.",

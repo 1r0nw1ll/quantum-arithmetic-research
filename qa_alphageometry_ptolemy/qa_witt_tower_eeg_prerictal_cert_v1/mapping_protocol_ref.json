@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [479]: QA Witt Tower EEG Pre-Ictal Tier Elevation. Siena Scalp EEG Database (PhysioNet doi:10.13026/5d4a-j060), 9 patients, 17 seizure recordings. 5s multi-channel energy RMS windows; interictal rank-calibration (120-720s) sets T0/T1/T2 thresholds; pre-ictal (onset-300s to onset) pooled T2 rate=0.499 vs 0.333 baseline; t2_excess=+0.166; perm_p=0.000; 10/17 recordings exceed interictal T2; 11/17 monotone rise. orbit_family on (b,e,m=27) Cosmos. MOD=27, W=5s, SR=512Hz. Theorem NT: EEG amplitude is observer projection; tier is QA integer state."
+}

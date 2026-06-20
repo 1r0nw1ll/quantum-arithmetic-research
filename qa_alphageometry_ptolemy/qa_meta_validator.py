@@ -10667,6 +10667,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_crypto_momentum_cert_family(base_dir):
+    """Cert [483]: QA Witt Tower Crypto Momentum Asymmetry -- return-rank a>=58 Cosmos-type pairs; BTC: n=654 excess=+0.254% perm_p=0.025 OOS+0.214%; ETH: null p=0.209; crash-reversion 3.34x BTC / 11.3x ETH stronger than momentum; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_crypto_momentum_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_crypto_momentum_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_crypto_return_rank_cert_family(base_dir):
     """Cert [482]: QA Witt Tower Crypto Return-Rank Crash Reversion -- BTC: n=126 excess=+0.847% perm_p=0.003 OOS+0.557%; ETH: n=93 excess=+1.771% perm_p=0.0002 OOS+1.434%; return-rank a<=6 operator (Singularity pairs) predicts crypto mean reversion; 6/6 PASS."""
     import subprocess
@@ -13633,6 +13647,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (483, "QA Witt Tower Crypto Momentum Asymmetry Cert family",
+     _validate_qa_witt_tower_crypto_momentum_cert_family,
+     "QA Witt Tower Crypto Momentum Asymmetry Cert [483]. Claim: Return-rank Cosmos-type pairs (a=b+2e>=58, consecutive high-return days) show attenuated momentum in BTC (p=0.025, excess=+0.254%, OOS+0.214%) but null in ETH (p=0.209). Crash-reversion (cert [482] a<=6) dominates momentum (a>=58): BTC ratio=3.34x (0.847%/0.254%), ETH ratio=11.3x (1.771%/0.157%). The QA Singularity orbit (fixed point in Z/27Z) exerts stronger mean-reversion force than the Cosmos expansion orbit sustains continuation — an asymmetry predicted by orbit stability structure. QA design: b=bin[t], e=bin[t+1] (return-rank bins); a=b+2e>=58 (A2 derived, raw); target=rets[t+2] (no look-ahead). BTC: n=654 (15.64%), mean=+0.384%/day, base=+0.130%, excess=+0.254%, IS n=328 mean=+0.554%, OOS n=326 mean=+0.214%. ETH: n=479 (15.26%), mean=+0.212%, excess=+0.157%, perm_p=0.209 (statistically null); ETH OOS n=371 mean=+0.251% (positive but not significant). Directional: BTC 50.5%, ETH 47.8%. CERTIFIED: C1 BTC_excess>0.15% PASS (+0.254%); C2 BTC_perm_p<0.05 PASS (0.025); C3 BTC_OOS_positive PASS (+0.214%); C4 ETH_perm_p>0.10 PASS (0.209, null confirmed); C5 BTC_crash_rev>2x_momentum PASS (3.34x); C6 ETH_crash_rev>5x_momentum PASS (11.3x). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Jegadeesh N & Titman S (1993) doi:10.1111/j.1540-6261.1993.tb04702.x. Data: Yahoo Finance via yfinance. Parents: cert [110] (Witt Tower), cert [482] (crash-reversion). Validated 2026-06-20.",
+     "483_qa_witt_tower_crypto_momentum",
+     "qa_witt_tower_crypto_momentum_cert_v1", True),
     (482, "QA Witt Tower Crypto Return-Rank Crash Reversion Cert family",
      _validate_qa_witt_tower_crypto_return_rank_cert_family,
      "QA Witt Tower Crypto Return-Rank Crash Reversion Cert [482]. Claim: Full-sample return-rank bins (floor(rank*27/N)) on daily log-returns for BTC-USD and ETH-USD; consecutive pair (b=bin[t], e=bin[t+1]); a=b+2e (A2 derived, raw); signal a<=6 (Singularity-type pair: both returns in bottom ~7% of all daily returns); target=rets[t+2] (strictly out of the (b,e) window, no look-ahead). After two consecutive bottom-7%-return days QA predicts mean reversion: BTC: n=126 (3.01%), mean_signal=+0.977%/day vs base=+0.130%, excess=+0.847%, perm_p=0.003; OOS (2020+) n=62 mean=+0.557%. ETH: n=93 (2.96%), mean_signal=+1.827%/day vs base=+0.055%, excess=+1.771%, perm_p=0.0002; OOS n=62 mean=+1.434%. Directional: BTC 61.9% positive, ETH 70.97% positive after signal. Key distinction from cert [461] (equity price-level a<=6): return-rank is stationary for trending crypto assets where price-level ranks are not (BTC price-level a<=6 gives p=0.53, all IS signals, zero OOS). The return-rank operator is the correct QA extension to assets with secular price trends. QA orbital interpretation: Singularity-type pairs (low b, low e in return space) correspond to the fixed point (9,9,18,9) region of Z/27Z; QA dynamics near singularity predict orbit return (mean reversion). CERTIFIED: C1 BTC_excess>0.50% PASS (+0.847%); C2 BTC_perm_p<0.01 PASS (0.003); C3 ETH_excess>1.00% PASS (+1.771%); C4 ETH_perm_p<0.005 PASS (0.0002); C5 BTC_OOS>0 PASS (+0.557%); C6 ETH_OOS>0.50% PASS (+1.434%). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Nakamoto S (2008) Bitcoin. Data: Yahoo Finance via yfinance. Parents: cert [110] (Witt Tower), cert [461] (equity a<=6). Validated 2026-06-19.",

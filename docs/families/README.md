@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [483] | [QA Witt Tower Crypto Momentum Asymmetry](483_qa_witt_tower_crypto_momentum.md) | Return-rank a≥58 (Cosmos pairs): BTC momentum p=0.025 excess=+0.254% OOS+0.214%; ETH null p=0.209; crash-reversion 3.34×BTC / 11.3×ETH stronger than momentum; Singularity restoring force > Cosmos continuation; 6/6 PASS | PASS |
 | [482] | [QA Witt Tower Crypto Return-Rank Crash Reversion](482_qa_witt_tower_crypto_return_rank.md) | Return-rank a≤6 (Singularity pairs) on BTC/ETH: after 2 consecutive bottom-7%-return days, BTC +0.847%/day p=0.003 OOS+0.557%; ETH +1.771%/day p<0.001 OOS+1.434%; return-rank (not price-rank) needed for trending crypto assets; 6/6 PASS | PASS |
 | [481] | [QA Witt Tower EEG Pre-Ictal Three-Orbit Coverage](481_qa_witt_tower_eeg_three_orbit.md) | All three QA orbits in pre-ictal EEG: Cosmos(N=6,T2=0.897)+Satellite(N=4,T1=0.608,+27.5pp)+Singularity(N=3,T0=0.578)=13/17=76.5%; pure-math from cert [480] data; 6/6 PASS | PASS |
 | [480] | [QA Witt Tower EEG Pre-Ictal Orbital Stratification](480_qa_witt_tower_eeg_orbital.md) | Pre-ictal T0/T1/T2 full distribution; Cosmos(T2=0.897,N=6)/Quiescent(T0=0.578,N=3)/Mixed(N=8); bimodal gap=0.842; Pearson r(T0,T2)=-0.727; PN03 within-patient dissociation (T2=1.0 vs T0=0.733 same patient); PN14-1 Satellite anomaly; 6/6 PASS | PASS |

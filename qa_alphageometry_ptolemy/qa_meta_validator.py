@@ -10531,6 +10531,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_vol_sizing_cert_family(base_dir):
+    """Cert [475]: QA Witt Tower Vol-Sizing — EW Sharpe dominates VT; crash pair US EW=0.366 vs VT=0.191 (ratio=1.92); vol-targeting contraindicated when signal fires in high-vol regime; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_vol_sizing_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_vol_sizing_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=60, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_cross_asset_cert_family(base_dir):
     """Cert [474]: QA Witt Tower Cross-Asset Transfer -- VNQ a6 +0.591% p=0.0, cp +2.954% p=0.0; DBA cp p=0.003; TLT a6 p=0.01; GLD cp p=0.496 (structural null); 6/6 PASS."""
     import subprocess
@@ -13385,6 +13399,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (475, "QA Witt Tower Vol-Sizing Cert family",
+     _validate_qa_witt_tower_vol_sizing_cert_family,
+     "QA Witt Tower Vol-Sizing Cert [475]. Claim: Vol-targeting (w=1/trailing_21d_vol) DEGRADES Sharpe for QA crash-bounce signals; equal-weight is Sharpe-optimal. Crash pair US: EW=0.3663 vs VT=0.1905 (ratio=1.92, 48% degradation). INTL: EW=0.4482 vs VT=0.3242. a<=6 US: EW=0.1429 vs VT=0.1244. Mechanism: signal fires in high-vol regimes (cert [469] vol_ratio=1.69); vol-targeting systematically reduces position on exactly the days generating alpha. VT signal remains positive but strictly dominated by EW. Verdict: equal_weight_optimal. CERTIFIED: C1 cp_EW_GT_VT_US PASS; C2 a6_EW_GT_VT_US PASS; C3 cp_EW_GT_VT_INTL PASS; C4 cp_EW_GT_30 PASS; C5 cp_VT_positive PASS; C6 cp_ratio_GT_1.5 PASS (1.92). 6/6 PASS. PRIMARY SOURCES: Moreira&Muir (2017) doi:10.1111/jofi.12513; Barroso&Santa-Clara (2015) doi:10.1016/j.jfineco.2014.11.003. Validated 2026-06-19.",
+     "475_qa_witt_tower_vol_sizing",
+     "qa_witt_tower_vol_sizing_cert_v1", True),
     (474, "QA Witt Tower Cross-Asset Transfer Cert family",
      _validate_qa_witt_tower_cross_asset_cert_family,
      "QA Witt Tower Cross-Asset Transfer Cert [474]. Claim: a<=6 and (0,0) crash pair signals transfer to equity-proximate assets but are absent in pure stores of value. VNQ (REIT): a6 n=180 +0.591% p=0.0, cp n=22 +2.954% p=0.0. DBA (agri): cp n=22 +0.671% p=0.003. TLT (long bonds): a6 n=149 +0.205% p=0.01. GLD (gold): cp p=0.496 CONFIRMED NULL. Transfer is asset-class-specific: equity-correlated assets (REIT, agri) respond; safe-haven stores of value (gold, mid-term bonds) do not. CERTIFIED: C1 VNQ_a6_sig PASS; C2 VNQ_cp_sig PASS; C3 VNQ_cp_GT_1pct PASS; C4 DBA_cp_sig PASS; C5 TLT_a6_sig PASS; C6 GLD_cp_null PASS. 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Erb&Harvey (2006) doi:10.2469/faj.v62.n2.4083. Validated 2026-06-19.",

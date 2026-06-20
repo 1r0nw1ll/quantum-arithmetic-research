@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [475]: QA Witt Tower Vol-Sizing. Claim: vol-targeting (w=1/trailing_21d_vol) DEGRADES Sharpe for QA crash-bounce signals; equal-weight is optimal. Crash pair US: EW_Sharpe=0.3663 vs VT_Sharpe=0.1905 (ratio=1.92, VT 48% worse). INTL: EW=0.4482 vs VT=0.3242. Mechanism: signals fire in high-vol regimes (cert [469] ratio=1.69); vol-targeting inversely weights the very days generating alpha. VT signal still positive (>0) but strictly dominated by EW. Verdict: equal_weight_optimal. PRIMARY SOURCES: Moreira&Muir (2017) doi:10.1111/jofi.12513; Barroso&Santa-Clara (2015) doi:10.1016/j.jfineco.2014.11.003. Parents: cert [461],[463],[469],[472]. Validated 2026-06-19."
+}

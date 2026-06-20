@@ -164,16 +164,20 @@ def platform_receipt() -> Dict[str, Any]:
     return body
 
 
-def build(existing: Dict[str, Any] | None = None) -> Dict[str, Any]:
+def build_portable_body() -> Dict[str, Any]:
     artifacts = [
         file_record(path, ROOT)
         for path in sorted(portable_paths(), key=lambda item: item.relative_to(ROOT).as_posix())
     ]
-    portable_body = {
+    return {
         "file_count": len(artifacts),
         "total_size_bytes": sum(row["size_bytes"] for row in artifacts),
         "files": artifacts,
     }
+
+
+def build(existing: Dict[str, Any] | None = None) -> Dict[str, Any]:
+    portable_body = build_portable_body()
     receipt = platform_receipt()
     receipts = {}
     if existing is not None:
@@ -247,10 +251,11 @@ def main() -> int:
         if existing is None:
             raise RuntimeError("supply-chain manifest missing")
         errors = validate_hashes(existing)
-        current = build(existing)
-        if existing["portable_artifacts"] != current["portable_artifacts"]:
+        current_portable = build_portable_body()
+        if existing["portable_artifacts"] != current_portable:
             errors.append("PORTABLE_ARTIFACT_DRIFT")
         if args.mode == "check":
+            current = build(existing)
             key = f"{platform.system()}/{platform.machine()}"
             stored = {
                 f"{row['platform']}/{row['machine']}": row

@@ -297,10 +297,68 @@ def build() -> tuple[Dict[str, Any], Dict[str, Any]]:
     return evaluation, legacy
 
 
+def certificate_check() -> Dict[str, Any]:
+    evaluation = load_json(EVALUATION_PATH)
+    legacy = load_json(LEGACY_PACK_PATH)
+    errors = []
+    body = dict(evaluation)
+    supplied = body.pop("evaluation_sha256", None)
+    if supplied != domain_hash(EVALUATION_DOMAIN, body):
+        errors.append("EVALUATION_HASH_MISMATCH")
+    if evaluation.get("library_source_sha256") != sha256_bytes(LIBRARY.read_bytes()):
+        errors.append("LIBRARY_SOURCE_HASH_MISMATCH")
+    corpus = load_json(ROOT / "demo_pack_v1" / "corpus.json")
+    if evaluation.get("source_corpus_sha256") != corpus.get("corpus_sha256"):
+        errors.append("SOURCE_CORPUS_HASH_MISMATCH")
+    rows = evaluation.get("benchmark_rows", [])
+    reductions = []
+    for row in rows:
+        source = ROOT / row["compressed_source"]
+        if not source.is_file():
+            errors.append(f"COMPRESSED_SOURCE_MISSING:{row['example_id']}")
+            continue
+        if row.get("compressed_source_sha256") != sha256_bytes(source.read_bytes()):
+            errors.append(f"COMPRESSED_SOURCE_HASH_MISMATCH:{row['example_id']}")
+        baseline = row.get("baseline_steps")
+        compressed = row.get("compressed_steps")
+        if not isinstance(baseline, int) or not isinstance(compressed, int):
+            errors.append(f"STEP_COUNT_INVALID:{row['example_id']}")
+            continue
+        reduction = (baseline - compressed) / baseline
+        reductions.append(reduction)
+        if abs(float(row.get("reduction", -1)) - reduction) > 1e-12:
+            errors.append(f"REDUCTION_MISMATCH:{row['example_id']}")
+    metrics = evaluation.get("metrics", {})
+    if reductions and abs(
+        float(metrics.get("median_reduction", -1))
+        - float(statistics.median(reductions))
+    ) > 1e-12:
+        errors.append("MEDIAN_REDUCTION_MISMATCH")
+    if metrics.get("total_saved_steps") != sum(
+        row["baseline_steps"] - row["compressed_steps"] for row in rows
+    ):
+        errors.append("TOTAL_SAVED_STEPS_MISMATCH")
+    legacy_result = validate_lemma_mining(legacy)
+    if not legacy_result.ok:
+        errors.append(f"LEGACY_PACK_INVALID:{legacy_result.fail_type}")
+    if legacy.get("invariant_diff", {}).get("evaluation_ref") != supplied:
+        errors.append("LEGACY_EVALUATION_REF_MISMATCH")
+    return {
+        "ok": not errors,
+        "errors": errors,
+        "evaluation_sha256": supplied,
+        "benchmark_count": len(rows),
+    }
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("mode", choices=["write", "check"])
+    parser.add_argument("mode", choices=["write", "check", "certificate-check"])
     args = parser.parse_args()
+    if args.mode == "certificate-check":
+        result = certificate_check()
+        print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+        return 0 if result["ok"] else 1
     evaluation, legacy = build()
     if args.mode == "write":
         write_json(EVALUATION_PATH, evaluation)

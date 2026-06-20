@@ -2216,8 +2216,13 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
             f"{json.dumps(rebuild_result, sort_keys=True)}"
         )
 
+    lemma_mining_mode = (
+        "certificate-check"
+        if os.environ.get("QA_MATH_COMPILER_CERTIFICATE_ONLY") == "1"
+        else "check"
+    )
     lemma_mining_proc = subprocess.run(
-        [sys.executable, lemma_mining_evaluator, "check"],
+        [sys.executable, lemma_mining_evaluator, lemma_mining_mode],
         capture_output=True,
         text=True,
         timeout=300,

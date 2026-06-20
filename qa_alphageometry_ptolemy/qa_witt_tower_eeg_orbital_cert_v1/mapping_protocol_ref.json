@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [480]: QA Witt Tower EEG Pre-Ictal Orbital Stratification. Siena Scalp EEG Database (doi:10.13026/5d4a-j060), 9 patients, 17 seizure recordings. Full T0/T1/T2 pre-ictal tier distribution; Cosmos (T2>0.55, N=6): mean_T2=0.897, mean_T0=0.025; Quiescent (T2<0.20, N=3): mean_T0=0.578; bimodal_gap=0.842; Pearson r(T0,T2)=-0.727; PN03 within-patient dissociation: PN03-1 T2=1.0 (pure Cosmos) vs PN03-2 T0=0.733 (Singularity-type). orbit_family on (b,e,m=27) Cosmos/Satellite/Singularity. MOD=27. Parent: cert [479]."
+}

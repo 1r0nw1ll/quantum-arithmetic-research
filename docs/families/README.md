@@ -2,6 +2,7 @@
 
 **Recently added**
 
+| [486] | [QA Witt Tower Cross-Asset Return-Rank Scope](486_qa_witt_tower_cross_asset_return_rank.md) | Return-rank a≤6 operator is CRYPTO-SPECIFIC: GLD/EURUSD/GBPUSD/USO all NULL (4/4 perm_p>0.05); USO (vol=2.35%/day, highest non-crypto) shows NEGATIVE excess (−0.215%), falsifying vol-scaling hypothesis; BTC excess 11.3× max non-crypto (GLD +0.075%); operator boundary is asset class not volatility; 6/6 PASS | PASS |
 | [485] | [QA Witt Tower Z/27Z Orbit Stability Asymmetry](485_qa_witt_tower_orbit_stability_asymmetry.md) | Pure-math: Z/27Z Sing-type pairs (a≤6, N=6) escape_rate=0.833 after 1 step, k=27 mean_a=45.5; Cosm-type (a≥58, N=156) escape_rate=0.641, mean_a=42.4; Sing lands +3.1pp higher — bottom drives up more than top sustains; mathematical analog of certs [482]/[483] crash-rev>momentum; 6/6 PASS | PASS |
 | [484] | [QA Witt Tower EEG Pre-Ictal Orbit Class Early-Window Persistence](484_qa_witt_tower_eeg_early_window.md) | Cosmos orbit class is STATIC: early_T2=0.883 already at 300s before seizure (flat: late_T2=0.900); Quiet class early_T2=0.000; 88pp separation detectable 5 minutes out; n_cosmos_high_early=6/6; orbit class detectable from start of pre-ictal window; 6/6 PASS | PASS |
 | [483] | [QA Witt Tower Crypto Momentum Asymmetry](483_qa_witt_tower_crypto_momentum.md) | Return-rank a≥58 (Cosmos pairs): BTC momentum p=0.025 excess=+0.254% OOS+0.214%; ETH null p=0.209; crash-reversion 3.34×BTC / 11.3×ETH stronger than momentum; Singularity restoring force > Cosmos continuation; 6/6 PASS | PASS |

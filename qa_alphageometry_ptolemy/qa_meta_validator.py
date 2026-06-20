@@ -10672,6 +10672,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_cross_asset_return_rank_cert_family(base_dir):
+    """Cert [486]: QA Witt Tower Cross-Asset Return-Rank Scope -- return-rank a<=6 operator is CRYPTO-SPECIFIC: GLD/EURUSD/GBPUSD/USO all NULL (4/4 perm_p>0.05); USO (vol=2.35%/day, highest non-crypto) shows NEGATIVE excess (-0.215%), falsifying vol-scaling; BTC excess 11.3x GLD; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_cross_asset_return_rank_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_cross_asset_return_rank_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator], capture_output=True, text=True, timeout=300, cwd=base_dir)
+        data = json.loads(r.stdout)
+        if not data.get("ok"): return f"FAIL: {r.stdout[:300]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_orbit_stability_asymmetry_cert_family(base_dir):
     """Cert [485]: QA Witt Tower Z/27Z Orbit Stability Asymmetry -- pure-math exhaustive: Sing-type(a<=6,N=6) escape_rate=0.833, k27_mean_a=45.5; Cosm-type(a>=58,N=156) escape_rate=0.641, k27_mean_a=42.4; Sing lands +3.1pp higher after 27 steps; 6/6 PASS."""
     import subprocess
@@ -13680,6 +13694,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (486, "QA Witt Tower Cross-Asset Return-Rank Scope Cert family",
+     _validate_qa_witt_tower_cross_asset_return_rank_cert_family,
+     "QA Witt Tower Cross-Asset Return-Rank Scope Cert [486]. Claim: The return-rank a=b+2e<=6 crash-reversion operator (certified for BTC/ETH in cert [482]) is CRYPTO-SPECIFIC. Tested on GLD (vol=1.15%/day), EURUSD (0.69%), GBPUSD (0.59%), USO (2.35%) — ALL 4 non-crypto assets are NULL (perm_p>0.05). Key falsification: USO (highest non-crypto daily vol at 2.35%) shows NEGATIVE excess (-0.215%), directly falsifying the hypothesis that crash-reversion scales with volatility. BTC excess (+0.847%, cert [482]) is 11.3x the highest non-crypto excess (GLD +0.075%). The operator boundary is asset class (crypto), not volatility level. QA structural interpretation: crash-reversion under Singularity-type orbit (a<=6) requires mean-reverting microstructure (bid-ask bounce, panic-sell/buyer-of-last-resort dynamics at daily scale) — present in crypto, absent in commodities/forex/stores-of-value. CERTIFIED: C1 GLD perm_p>0.05 PASS (0.216); C2 EURUSD perm_p>0.05 PASS (0.148); C3 n_null==4 PASS (4/4 assets NULL); C4 max_non_crypto_excess<0.15 PASS (0.075%); C5 BTC_excess_ratio>5.0 PASS (11.3x); C6 USO_excess<GLD_excess PASS (-0.215%<+0.075%, vol-scaling falsified). 6/6 PASS. PRIMARY SOURCES: Fama EF (1970) doi:10.2307/2325486; Nakamoto S (2008) Bitcoin. Data: Yahoo Finance via yfinance. Parents: cert [482] (operator), cert [474] (GLD null), cert [110] (Witt Tower). Validated 2026-06-20.",
+     "486_qa_witt_tower_cross_asset_return_rank",
+     "qa_witt_tower_cross_asset_return_rank_cert_v1", True),
     (485, "QA Witt Tower Z/27Z Orbit Stability Asymmetry Cert family",
      _validate_qa_witt_tower_orbit_stability_asymmetry_cert_family,
      "QA Witt Tower Z/27Z Orbit Stability Asymmetry Cert [485]. Claim: In Z/27Z (1-indexed {1,...,27}^2), QA step b'=e, e'=((b+e-1)%27)+1, a=b+2e: (A) Singularity-type pairs (a<=6, N=6, 0.82%) escape their region after 1 step at rate 0.833; converge to k=27 mean_a=45.5. (B) Cosmos-type pairs (a>=58, N=156, 21.4%) escape after 1 step at rate 0.641; converge to k=27 mean_a=42.4. (C) Long-run asymmetry: Sing-type trajectories converge +3.1pp HIGHER than Cosm-type despite starting much lower — the bottom drives up more than the top sustains itself. This is the pure-math structural analog of the empirical crypto finding (certs [482]/[483]: crash-reversion 3.34x BTC stronger than momentum). All 6 Sing-type pairs lie on the period-72 orbit; Cosm-type includes the fixed point (27,27) (period=1). CERTIFIED: C1 n_sing==6 PASS; C2 sing_escape_rate>=0.70 PASS (0.833); C3 n_cosm==156 PASS; C4 cosm_escape_rate>=0.55 PASS (0.641); C5 sing_k27>cosm_k27 PASS (45.5>42.4); C6 sing_escape>cosm_escape PASS (0.833>0.641). 6/6 PASS. PRIMARY SOURCES: Hardy GH & Wright EM (2008) doi:10.1093/oso/9780199219865.001.0001; Wildberger NJ (2005) ISBN 978-0-9757492-0-8. Parents: cert [110] (Witt Tower), cert [482] (crash-reversion empirical analog), cert [483] (momentum empirical analog). Validated 2026-06-20.",

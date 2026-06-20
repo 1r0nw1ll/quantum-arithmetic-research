@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [486]: QA Witt Tower Cross-Asset Return-Rank Crash Reversion Scope. Primary source: Fama EF (1970) doi:10.2307/2325486. Data: Yahoo Finance daily OHLCV via yfinance. Return-rank a=b+2e<=6 operator (cert [482] definition) tested on GLD/EURUSD/GBPUSD/USO. Finding: ALL 4 non-crypto assets are NULL (perm_p>0.05). USO (oil, vol=2.35%/day, highest non-crypto vol) shows NEGATIVE excess (-0.215%), falsifying vol-scaling hypothesis. BTC excess (0.847%) is 11x max non-crypto excess (0.075% from GLD). orbit_family on (b,e,m=27): Singularity-type crash-reversion is CRYPTO-SPECIFIC, not a high-volatility universal signal. MOD=27. Parents: cert [482] (operator), cert [474] (GLD null), cert [110] (Witt Tower)."
+}

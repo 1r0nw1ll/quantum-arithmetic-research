@@ -81,12 +81,16 @@ jobs:
           else
             exit_code=$?
             cat "$output_file"
-            tail_output="$(tail -n 80 "$output_file")"
-            tail_output="${tail_output//'%'/'%25'}"
-            tail_output="${tail_output//$'\r'/'%0D'}"
-            tail_output="${tail_output//$'\n'/'%0A'}"
-            printf '::error::QA meta-validator failed (exit %s). Final output:%s%s\n' \
-              "$exit_code" '%0A' "$tail_output"
+            failure_output="$(
+              grep -E -B 3 -A 15 \
+                'family: FAIL|Gate 0 mapping protocol: FAIL|Traceback|ModuleNotFoundError|Exception|invariant_diff=' \
+                "$output_file" | tail -n 120
+            )"
+            failure_output="${failure_output//'%'/'%25'}"
+            failure_output="${failure_output//$'\r'/'%0D'}"
+            failure_output="${failure_output//$'\n'/'%0A'}"
+            printf '::error::QA meta-validator failed (exit %s). Failure context:%s%s\n' \
+              "$exit_code" '%0A' "$failure_output"
             exit "$exit_code"
           fi
 

@@ -25,6 +25,8 @@ EXECUTION_DOMAIN = "qa.math_compiler.kernel_execution.v1"
 INDEX_DOMAIN = "qa.math_compiler.kernel_trace_index.v1"
 SEMANTIC_CASE_DOMAIN = "qa.math_compiler.semantic_replay_case.v1"
 SEMANTIC_CERTIFICATE_DOMAIN = "qa.math_compiler.semantic_replay_certificate.v1"
+ELABORATION_TRACE_DOMAIN = "qa.math_compiler.lean_elaboration_trace.v1"
+PROOF_STEP_DOMAIN = "qa.math_compiler.lean_proof_step.v1"
 
 
 def canonical_bytes(value: object) -> bytes:
@@ -106,6 +108,183 @@ def run_lean(
     }
     receipt["execution_sha256"] = domain_hash(EXECUTION_DOMAIN, receipt)
     return receipt
+
+
+def source_fragment(
+    source: str,
+    start_line: int,
+    start_column: int,
+    end_line: int,
+    end_column: int,
+) -> str:
+    lines = source.splitlines()
+    if start_line < 1 or end_line < start_line or end_line > len(lines):
+        return ""
+    selected = lines[start_line - 1 : end_line]
+    if not selected:
+        return ""
+    first = selected[0][start_column:]
+    if len(selected) == 1:
+        return first[: max(0, end_column - start_column)]
+    selected[0] = first
+    selected[-1] = selected[-1][:end_column]
+    return "\n".join(selected).strip()
+
+
+def parse_tactic_steps(info_text: str, source: str) -> List[Dict[str, Any]]:
+    lines = info_text.splitlines()
+    header = re.compile(
+        r"^(?P<indent>\s*)• \[Tactic\] @ "
+        r"⟨(?P<sl>\d+), (?P<sc>\d+)⟩-⟨(?P<el>\d+), (?P<ec>\d+)⟩"
+        r"(?: @ (?P<elaborator>\S+))?"
+    )
+    nodes: List[Dict[str, Any]] = []
+    for line_index, line in enumerate(lines):
+        match = header.match(line)
+        if match is None:
+            continue
+        nodes.append(
+            {
+                "line_index": line_index,
+                "indent": len(match.group("indent")),
+                "start_line": int(match.group("sl")) - 1,
+                "start_column": int(match.group("sc")),
+                "end_line": int(match.group("el")) - 1,
+                "end_column": int(match.group("ec")),
+                "elaborator": match.group("elaborator") or "anonymous",
+            }
+        )
+    for index, node in enumerate(nodes):
+        boundary = len(lines)
+        has_child_tactic = False
+        for later in nodes[index + 1 :]:
+            if later["indent"] <= node["indent"]:
+                boundary = later["line_index"]
+                break
+            has_child_tactic = True
+        node["has_child_tactic"] = has_child_tactic
+        block = lines[node["line_index"] + 1 : boundary]
+        before_lines: List[str] = []
+        after_lines: List[str] = []
+        target = None
+        for line in block:
+            stripped = line.strip()
+            if stripped.startswith("• ["):
+                break
+            if stripped == "before" or stripped.startswith("before "):
+                target = before_lines
+                target.append(stripped[len("before") :].strip())
+            elif stripped == "after" or stripped.startswith("after "):
+                target = after_lines
+                target.append(stripped[len("after") :].strip())
+            elif target is not None:
+                target.append(stripped)
+        node["goals_before"] = "\n".join(before_lines).strip()
+        node["goals_after"] = "\n".join(after_lines).strip()
+
+    steps: List[Dict[str, Any]] = []
+    seen = set()
+    for node in nodes:
+        if node["has_child_tactic"]:
+            continue
+        key = (
+            node["start_line"],
+            node["start_column"],
+            node["end_line"],
+            node["end_column"],
+            node["elaborator"],
+            node["goals_before"],
+            node["goals_after"],
+        )
+        if key in seen:
+            continue
+        seen.add(key)
+        step_body = {
+            "source_range": {
+                "start_line": node["start_line"],
+                "start_column": node["start_column"],
+                "end_line": node["end_line"],
+                "end_column": node["end_column"],
+            },
+            "source_text": source_fragment(
+                source,
+                node["start_line"],
+                node["start_column"],
+                node["end_line"],
+                node["end_column"],
+            ),
+            "elaborator": node["elaborator"],
+            "goals_before": node["goals_before"],
+            "goals_after": node["goals_after"],
+        }
+        steps.append(
+            {
+                "step_index": len(steps),
+                **step_body,
+                "step_sha256": domain_hash(PROOF_STEP_DOMAIN, step_body),
+            }
+        )
+    return steps
+
+
+def run_elaboration_trace(
+    executable: str,
+    source_path: Path,
+    source_hash: str,
+    toolchain_id: str,
+) -> Dict[str, Any]:
+    source = source_path.read_text(encoding="utf-8")
+    instrumented = "set_option trace.Elab.info true\n" + source
+    proc = subprocess.run(
+        [executable, "--json", "--stdin"],
+        cwd=str(ROOT),
+        input=instrumented,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    messages = []
+    info_chunks = []
+    for raw_line in proc.stdout.splitlines():
+        if not raw_line.strip():
+            continue
+        message = json.loads(raw_line)
+        message["fileName"] = "<stdin>"
+        messages.append(message)
+        if message.get("kind") == "trace" and "[Elab.info]" in message.get("data", ""):
+            info_chunks.append(message["data"])
+    info_text = "\n".join(info_chunks)
+    node_counts = {
+        kind: len(re.findall(rf"\[{re.escape(kind)}(?:\]|\()", info_text))
+        for kind in [
+            "Command",
+            "Term",
+            "Tactic",
+            "MacroExpansion",
+            "Completion",
+            "Completion-Id",
+            "CustomInfo",
+        ]
+    }
+    steps = parse_tactic_steps(info_text, source)
+    body: Dict[str, Any] = {
+        "schema_id": "QA_MATH_COMPILER_LEAN_ELABORATION_TRACE.v1",
+        "source_sha256": source_hash,
+        "toolchain_id": toolchain_id,
+        "trace_channel": "trace.Elab.info",
+        "wrapper_line_offset": 1,
+        "returncode": proc.returncode,
+        "message_count": len(messages),
+        "node_counts": node_counts,
+        "proof_step_count": len(steps),
+        "proof_steps": steps,
+        "info_tree": info_text,
+        "info_tree_sha256": sha256_bytes(info_text.encode("utf-8")),
+        "messages_sha256": sha256_bytes(canonical_bytes(messages)),
+    }
+    body["elaboration_trace_sha256"] = domain_hash(ELABORATION_TRACE_DOMAIN, body)
+    return body
 
 
 def toolchain_hashes(
@@ -235,7 +414,7 @@ def compile_case(
     toolchain_id: str,
     manifest_hash: str,
     execution_toolchain_hash: str,
-) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
+) -> Tuple[Dict[str, Any], Dict[str, Any], Dict[str, Any], Dict[str, Any]]:
     source_path = ROOT / case["source"]
     source_hash = sha256_bytes(source_path.read_bytes())
     artifact_dir = ROOT / case["artifact_dir"]
@@ -247,6 +426,12 @@ def compile_case(
     )
     first = run_lean(executable, source_path, source_hash, toolchain_id)
     second = run_lean(executable, source_path, source_hash, toolchain_id)
+    elaboration_first = run_elaboration_trace(
+        executable, source_path, source_hash, toolchain_id
+    )
+    elaboration_second = run_elaboration_trace(
+        executable, source_path, source_hash, toolchain_id
+    )
     actual_status = "SUCCESS" if first["returncode"] == 0 else "FAIL"
     if actual_status != case["expected_status"]:
         raise RuntimeError(
@@ -259,6 +444,10 @@ def compile_case(
         )
     if first["execution_sha256"] != second["execution_sha256"]:
         raise RuntimeError(f"{case['case_id']}: nondeterministic Lean execution receipt")
+    if elaboration_first != elaboration_second:
+        raise RuntimeError(f"{case['case_id']}: nondeterministic Lean elaboration trace")
+    if elaboration_first["returncode"] != first["returncode"]:
+        raise RuntimeError(f"{case['case_id']}: elaboration/execution status mismatch")
     trace = trace_artifact(
         case,
         source_hash,
@@ -290,8 +479,14 @@ def compile_case(
             else None
         ),
         "fail_type": case.get("fail_type"),
+        "elaboration_trace_sha256": elaboration_first["elaboration_trace_sha256"],
+        "proof_step_count": elaboration_first["proof_step_count"],
     }
-    return trace, replay, index_row
+    trace["invariant_diff"]["elaboration_trace_sha256"] = elaboration_first[
+        "elaboration_trace_sha256"
+    ]
+    trace["invariant_diff"]["proof_step_count"] = elaboration_first["proof_step_count"]
+    return trace, replay, elaboration_first, index_row
 
 
 def update_linked_artifacts(artifact_dir: Path, trace: Dict[str, Any]) -> None:
@@ -328,7 +523,7 @@ def compile_all(write: bool) -> Dict[str, Any]:
     rows: List[Dict[str, Any]] = []
     generated: Dict[str, Dict[str, Any]] = {}
     for case in manifest["cases"]:
-        trace, replay, row = compile_case(
+        trace, replay, elaboration, row = compile_case(
             case,
             executable,
             str(lean_cfg["version"]),
@@ -339,10 +534,12 @@ def compile_all(write: bool) -> Dict[str, Any]:
         artifact_dir = ROOT / case["artifact_dir"]
         generated[str(artifact_dir / "trace.json")] = trace
         generated[str(artifact_dir / "replay.json")] = replay
+        generated[str(artifact_dir / "elaboration.json")] = elaboration
         rows.append(row)
         if write:
             write_json(artifact_dir / "trace.json", trace)
             write_json(artifact_dir / "replay.json", replay)
+            write_json(artifact_dir / "elaboration.json", elaboration)
             update_linked_artifacts(artifact_dir, trace)
     index_body: Dict[str, Any] = {
         "schema_id": "QA_MATH_COMPILER_KERNEL_TRACE_INDEX.v1",
@@ -508,11 +705,17 @@ def check_artifacts() -> List[str]:
         artifact_dir = ROOT / case["artifact_dir"]
         trace_path = artifact_dir / "trace.json"
         replay_path = artifact_dir / "replay.json"
-        if not trace_path.exists() or not replay_path.exists():
+        elaboration_path = artifact_dir / "elaboration.json"
+        if (
+            not trace_path.exists()
+            or not replay_path.exists()
+            or not elaboration_path.exists()
+        ):
             errors.append(f"MISSING_ARTIFACT:{case['case_id']}")
             continue
         trace = load_json(trace_path)
         replay = load_json(replay_path)
+        elaboration = load_json(elaboration_path)
         row = index_rows.get(case["case_id"])
         if row is None:
             errors.append(f"INDEX_ROW_MISSING:{case['case_id']}")
@@ -533,6 +736,33 @@ def check_artifacts() -> List[str]:
         replay_row = replay.get("traces", [{}])[0]
         if row.get("execution_sha256") != replay_row.get("trace_hash"):
             errors.append(f"INDEX_EXECUTION_HASH_MISMATCH:{case['case_id']}")
+        if (
+            row.get("elaboration_trace_sha256")
+            != elaboration.get("elaboration_trace_sha256")
+        ):
+            errors.append(f"INDEX_ELABORATION_HASH_MISMATCH:{case['case_id']}")
+        if row.get("proof_step_count") != elaboration.get("proof_step_count"):
+            errors.append(f"INDEX_PROOF_STEP_COUNT_MISMATCH:{case['case_id']}")
+        if elaboration.get("source_sha256") != source_hash:
+            errors.append(f"ELABORATION_SOURCE_HASH_MISMATCH:{case['case_id']}")
+        if elaboration.get("info_tree_sha256") != sha256_bytes(
+            elaboration.get("info_tree", "").encode("utf-8")
+        ):
+            errors.append(f"INFO_TREE_HASH_MISMATCH:{case['case_id']}")
+        elaboration_body = dict(elaboration)
+        elaboration_hash = elaboration_body.pop("elaboration_trace_sha256", None)
+        if elaboration_hash != domain_hash(
+            ELABORATION_TRACE_DOMAIN, elaboration_body
+        ):
+            errors.append(f"ELABORATION_HASH_MISMATCH:{case['case_id']}")
+        for step_index, step in enumerate(elaboration.get("proof_steps", [])):
+            step_body = dict(step)
+            step_hash = step_body.pop("step_sha256", None)
+            step_body.pop("step_index", None)
+            if step.get("step_index") != step_index:
+                errors.append(f"PROOF_STEP_ORDER_MISMATCH:{case['case_id']}")
+            if step_hash != domain_hash(PROOF_STEP_DOMAIN, step_body):
+                errors.append(f"PROOF_STEP_HASH_MISMATCH:{case['case_id']}")
         if case["expected_status"] == "FAIL":
             if trace["result"].get("fail_type") != case["fail_type"]:
                 errors.append(f"FAIL_TYPE_MISMATCH:{case['case_id']}")

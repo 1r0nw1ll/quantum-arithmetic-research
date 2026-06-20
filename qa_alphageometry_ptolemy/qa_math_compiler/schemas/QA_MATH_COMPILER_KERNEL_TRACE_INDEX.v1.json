@@ -51,6 +51,8 @@
           "artifact_dir",
           "trace_id",
           "execution_sha256",
+          "elaboration_trace_sha256",
+          "proof_step_count",
           "diagnostic_sha256",
           "fail_type"
         ],
@@ -62,6 +64,11 @@
           "artifact_dir": {"type": "string", "minLength": 1},
           "trace_id": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
           "execution_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "elaboration_trace_sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "proof_step_count": {"type": "integer", "minimum": 0},
           "diagnostic_sha256": {
             "type": ["string", "null"],
             "pattern": "^[0-9a-f]{64}$"

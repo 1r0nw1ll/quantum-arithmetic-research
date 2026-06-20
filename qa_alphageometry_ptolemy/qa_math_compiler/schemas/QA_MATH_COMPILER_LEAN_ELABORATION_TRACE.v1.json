@@ -1,0 +1,102 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "QA_MATH_COMPILER_LEAN_ELABORATION_TRACE.v1",
+  "title": "QA Math Compiler Lean Elaboration Trace",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "source_sha256",
+    "toolchain_id",
+    "trace_channel",
+    "wrapper_line_offset",
+    "returncode",
+    "message_count",
+    "node_counts",
+    "proof_step_count",
+    "proof_steps",
+    "info_tree",
+    "info_tree_sha256",
+    "messages_sha256",
+    "elaboration_trace_sha256"
+  ],
+  "properties": {
+    "schema_id": {"const": "QA_MATH_COMPILER_LEAN_ELABORATION_TRACE.v1"},
+    "source_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "toolchain_id": {"type": "string", "minLength": 1},
+    "trace_channel": {"const": "trace.Elab.info"},
+    "wrapper_line_offset": {"const": 1},
+    "returncode": {"type": "integer"},
+    "message_count": {"type": "integer", "minimum": 1},
+    "node_counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "Command",
+        "Term",
+        "Tactic",
+        "MacroExpansion",
+        "Completion",
+        "Completion-Id",
+        "CustomInfo"
+      ],
+      "properties": {
+        "Command": {"type": "integer", "minimum": 0},
+        "Term": {"type": "integer", "minimum": 0},
+        "Tactic": {"type": "integer", "minimum": 0},
+        "MacroExpansion": {"type": "integer", "minimum": 0},
+        "Completion": {"type": "integer", "minimum": 0},
+        "Completion-Id": {"type": "integer", "minimum": 0},
+        "CustomInfo": {"type": "integer", "minimum": 0}
+      }
+    },
+    "proof_step_count": {"type": "integer", "minimum": 0},
+    "proof_steps": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "step_index",
+          "source_range",
+          "source_text",
+          "elaborator",
+          "goals_before",
+          "goals_after",
+          "step_sha256"
+        ],
+        "properties": {
+          "step_index": {"type": "integer", "minimum": 0},
+          "source_range": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": [
+              "start_line",
+              "start_column",
+              "end_line",
+              "end_column"
+            ],
+            "properties": {
+              "start_line": {"type": "integer", "minimum": 1},
+              "start_column": {"type": "integer", "minimum": 0},
+              "end_line": {"type": "integer", "minimum": 1},
+              "end_column": {"type": "integer", "minimum": 0}
+            }
+          },
+          "source_text": {"type": "string"},
+          "elaborator": {"type": "string", "minLength": 1},
+          "goals_before": {"type": "string"},
+          "goals_after": {"type": "string"},
+          "step_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+        }
+      }
+    },
+    "info_tree": {"type": "string", "minLength": 1},
+    "info_tree_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "messages_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "elaboration_trace_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    }
+  }
+}

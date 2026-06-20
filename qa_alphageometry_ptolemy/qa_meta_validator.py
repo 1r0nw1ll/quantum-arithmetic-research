@@ -1824,6 +1824,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_dir,
         "QA_MATH_COMPILER_SEMANTIC_REPLAY_CERTIFICATE.v1.json",
     )
+    schema_elaboration_trace = os.path.join(
+        schema_dir,
+        "QA_MATH_COMPILER_LEAN_ELABORATION_TRACE.v1.json",
+    )
     schema_demo_pack = os.path.join(schema_dir, "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1.json")
     corpus_builder = os.path.join(mc_dir, "build_certified_corpus.py")
     live_kernel_verifier = os.path.join(mc_dir, "verify_live_kernels.py")
@@ -1864,7 +1868,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_trace, schema_pair, schema_task, schema_replay, schema_pair_v1, schema_lemma,
         schema_corpus, schema_assistants, schema_live_kernel,
         schema_kernel_trace_manifest, schema_kernel_trace_index,
-        schema_semantic_replay,
+        schema_semantic_replay, schema_elaboration_trace,
         schema_demo_pack, corpus_builder, live_kernel_verifier,
         kernel_trace_compiler, kernel_trace_manifest, kernel_trace_index,
         semantic_replay_certificate,
@@ -1889,6 +1893,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
                     [
                         os.path.join(mc_dir, artifact_rel, "trace.json"),
                         os.path.join(mc_dir, artifact_rel, "replay.json"),
+                        os.path.join(mc_dir, artifact_rel, "elaboration.json"),
                     ]
                 )
     for fp in required_artifacts:

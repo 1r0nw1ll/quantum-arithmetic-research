@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [494]: QA Witt Tower Daily Precipitation Return-Rank Persistence. Operator: log1p(precip) ANOMALY-LEVEL rank bins; anom[t]=log(1+precip[t])-monthly_mean_log[month(t)]; b=floor(rank(anom[t])*27/N), e_val=floor(rank(anom[t+1])*27/N); a=b+2*e_val (A2 derived, raw); signal a<=6; target anom[t+2]. FINDING: POSITIVE PERSISTENCE sitting between rivers [490] 2.69x and temperature [492] 3.40x: pooled n_sig=2443 (3.048x expected), 4/4 negative excess, all pers_p=0.0000. SURPRISE: Pearson autocorr only 0.20-0.44 yet n_signal_ratio 2.85-3.24x; log1p rank clustering for heavy-tailed distribution amplifies binary wet/dry spell persistence beyond Pearson prediction. Chicago 2.96x; Minneapolis 2.85x; Seattle 3.24x; Miami 3.14x. Data: Open-Meteo ERA5 precipitation_sum 2000-2024. orbit_family on (b, e_val, m) Singularity-type pairs. Primary sources: Trenberth (1999) doi:10.1175/1520-0477(1999)080<1205:TSTTOW>2.0.CO;2; Zolina (2013) doi:10.1175/JCLI-D-12-00552.1. Parents: cert [490] (rivers, 2.69x reference), cert [492] (temperature, 3.40x). 6/6 PASS."
+}

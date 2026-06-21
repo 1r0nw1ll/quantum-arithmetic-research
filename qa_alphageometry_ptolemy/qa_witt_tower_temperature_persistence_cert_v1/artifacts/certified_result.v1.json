@@ -1,0 +1,87 @@
+{
+  "aggregates": {
+    "all_autocorr_positive": true,
+    "n_negative": 4,
+    "pooled_excess_c": "-5.195",
+    "pooled_n_expected": "833.6",
+    "pooled_n_signal": 2834,
+    "pooled_n_signal_ratio": "3.400"
+  },
+  "artifact_id": "QA-WITT-TEMPERATURE-PERSISTENCE-2000-2025-V1",
+  "artifact_sha256": "9b5e45043b5b7c079eb70e268ac443d4e46f81b1d7a2a0161d4a3b254ec53988",
+  "captured_utc": "2026-06-20T00:00:00Z",
+  "method": {
+    "modulus": 27,
+    "monthly_deseasonalization": true,
+    "permutation_count": 5000,
+    "seed": 42,
+    "signal_rule": "b + 2*e <= 6",
+    "target_offset_days": 2
+  },
+  "results": {
+    "Chicago": {
+      "autocorr_lev": "0.704",
+      "n_days": 9497,
+      "n_expected": "208.4",
+      "n_signal": 674,
+      "persistence_p": "0.0000",
+      "signal_excess_c": "-6.498"
+    },
+    "Miami": {
+      "autocorr_lev": "0.691",
+      "n_days": 9497,
+      "n_expected": "208.4",
+      "n_signal": 690,
+      "persistence_p": "0.0000",
+      "signal_excess_c": "-2.462"
+    },
+    "Minneapolis": {
+      "autocorr_lev": "0.752",
+      "n_days": 9497,
+      "n_expected": "208.4",
+      "n_signal": 713,
+      "persistence_p": "0.0000",
+      "signal_excess_c": "-7.730"
+    },
+    "Seattle": {
+      "autocorr_lev": "0.766",
+      "n_days": 9497,
+      "n_expected": "208.4",
+      "n_signal": 757,
+      "persistence_p": "0.0000",
+      "signal_excess_c": "-4.138"
+    }
+  },
+  "schema_id": "QA_WITT_TOWER_TEMPERATURE_PERSISTENCE_RESULT.v1",
+  "source": {
+    "dataset": "ERA5 historical archive",
+    "end_date": "2025-12-31",
+    "endpoint": "https://archive-api.open-meteo.com/v1/archive",
+    "provider": "Open-Meteo",
+    "requests": [
+      {
+        "latitude": "41.85",
+        "longitude": "-87.65",
+        "station": "Chicago"
+      },
+      {
+        "latitude": "44.88",
+        "longitude": "-93.22",
+        "station": "Minneapolis"
+      },
+      {
+        "latitude": "47.61",
+        "longitude": "-122.33",
+        "station": "Seattle"
+      },
+      {
+        "latitude": "25.77",
+        "longitude": "-80.19",
+        "station": "Miami"
+      }
+    ],
+    "start_date": "2000-01-01",
+    "timezone": "UTC",
+    "variable": "temperature_2m_max"
+  }
+}

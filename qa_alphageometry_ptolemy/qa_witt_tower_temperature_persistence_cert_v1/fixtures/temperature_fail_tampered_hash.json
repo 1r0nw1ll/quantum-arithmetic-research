@@ -1,0 +1,8 @@
+{
+  "expected_fail_type": "ARTIFACT_HASH_MISMATCH",
+  "mutation": {
+    "path": "aggregates.pooled_n_signal",
+    "value": 1
+  },
+  "schema_id": "QA_WITT_TOWER_TEMPERATURE_PERSISTENCE_NEGATIVE_FIXTURE.v1"
+}

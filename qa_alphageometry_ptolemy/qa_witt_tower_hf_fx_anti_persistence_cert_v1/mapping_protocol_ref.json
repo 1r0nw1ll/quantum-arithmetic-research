@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "Cert [495]: QA Witt Tower 1-min FX Return-Rank Null Position on Discrimination Ladder. Operator: return-rank bins b=floor(rank(rets[t])*27/N), e=floor(rank(rets[t+1])*27/N); rets=log(close[t+1]/close[t]) 1-min bars; a=b+2*e (A2 derived, raw); signal a<=6; target rets[t+2]. FINDING: NULL position -- pooled n_sig_ratio=1.009x despite bid-ask bounce (autocorr -0.05 to -0.18 for all 4 pairs); 3/4 crash-reversion excess significant (crash_p<0.05). DISCRIMINATION LADDER: EEG [491] 0.72x anti-persistent < 1-min FX [495] 1.009x NULL < rivers [490] 2.69x < precipitation [494] 3.05x < temperature [492] 3.40x < SST [493] 4.43x. Demonstrates operator discriminates structural autocorr patterns beyond lag-1 sign. Data: Yahoo Finance 1-min, 4 major pairs (EURUSD, GBPUSD, USDJPY, CHFJPY), 7-day window ending 2026-06-20. orbit_family on (b, e, m) Singularity-type pairs. Primary sources: Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41; Glosten & Milgrom (1985) doi:10.1016/0304-405X(85)90044-3. Parents: cert [490] (rivers), cert [491] (EEG), cert [492] (temperature), cert [493] (SST), cert [494] (precipitation). 6/6 PASS."
+}

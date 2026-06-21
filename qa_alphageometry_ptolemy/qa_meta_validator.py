@@ -10672,6 +10672,21 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_hf_fx_anti_persistence_cert_family(base_dir):
+    """Cert [495]: QA Witt Tower 1-min FX Return-Rank Null Position -- 4 FX pairs (EURUSD/GBPUSD/USDJPY/CHFJPY) 1-min bars; pooled n_sig_ratio=1.009x (NULL, between EEG anti-pers [491] 0.72x and rivers [490] 2.69x); all 4 pairs autocorr<0 (bid-ask bounce -0.05 to -0.18); crash-reversion significant 3/4 pairs; CHFJPY 0.865x anti-pers leader; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_hf_fx_anti_persistence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_hf_fx_anti_persistence_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=60, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:200]} {r.stderr[:100]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+
 def _validate_qa_witt_tower_precipitation_return_rank_cert_family(base_dir):
     """Cert [494]: QA Witt Tower Daily Precipitation Return-Rank Persistence -- log1p anomaly rank bins; pooled 3.048x expected (between rivers [490] 2.69x and temperature [492] 3.40x); Pearson autocorr 0.20-0.44 yet rank clustering 2.85-3.24x (heavy-tail effect); 4/4 pers_p=0.0; 6/6 PASS."""
     import subprocess
@@ -13806,7 +13821,12 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
-    (494, "QA Witt Tower Daily Precipitation Return-Rank Persistence Cert family",
+    (495, "QA Witt Tower 1-min FX Return-Rank Null Position on Discrimination Ladder",
+     _validate_qa_witt_tower_hf_fx_anti_persistence_cert_family,
+     "QA Witt Tower 1-min FX Return-Rank [495]. Claim: 1-min FX (EURUSD/GBPUSD/USDJPY/CHFJPY) produce pooled n_sig_ratio=1.009x (NULL) in return-rank operator despite bid-ask bounce (autocorr -0.05 to -0.18). NULL sits between EEG anti-persistence [491] 0.72x and rivers [490] 2.69x. Operator discriminates structural autocorr patterns beyond lag-1 sign. 4/4 pairs autocorr<0; 3/4 significant crash excess (crash_p<0.05); CHFJPY 0.865x (anti-pers leader). Pooled: n_sig=872, n_exp=863.8, ratio=1.009x. CHECKS: C1 n_neg_autocorr==4 PASS; C2 ratio in [0.80,1.20] PASS (1.009); C3 ratio<river_ratio PASS (1.009<2.69); C4 n_crash>=3 PASS (3/4); C5 CHFJPY<1.0 PASS (0.865); C6 ratio>eeg_ratio PASS (1.009>0.72). 6/6 PASS. PRIMARY SOURCES: Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41; Glosten & Milgrom (1985) doi:10.1016/0304-405X(85)90044-3. Data: Yahoo Finance 1-min 7-day ending 2026-06-20. Parents: [491] EEG, [490] rivers, [492] temp, [493] SST, [494] precip. Validated 2026-06-20.",
+     "495_qa_witt_tower_hf_fx_anti_persistence",
+     "qa_witt_tower_hf_fx_anti_persistence_cert_v1", True),
+        (494, "QA Witt Tower Daily Precipitation Return-Rank Persistence Cert family",
      _validate_qa_witt_tower_precipitation_return_rank_cert_family,
      "QA Witt Tower Daily Precipitation Return-Rank Persistence Cert [494]. Claim: log1p(precip) anomaly-level rank bins reveal POSITIVE PERSISTENCE (wet/dry spells) with pooled n_sig_ratio=3.048x -- sitting between rivers [490] 2.69x and temperature [492] 3.40x in discrimination ladder. SURPRISE: Pearson autocorr only 0.20-0.44 yet rank clustering 2.85-3.24x; heavy-tailed distribution creates Spearman autocorr >> Pearson. 4 US cities (Open-Meteo ERA5 precip_sum 2000-2024): Chicago n_sig=594 ratio=2.96x autocorr=0.225 excess=-0.276 pers_p=0.0; Minneapolis n_sig=571 ratio=2.85x autocorr=0.200 excess=-0.246 pers_p=0.0; Seattle n_sig=649 ratio=3.24x autocorr=0.408 excess=-0.671 pers_p=0.0; Miami n_sig=629 ratio=3.14x autocorr=0.437 excess=-0.572 pers_p=0.0. Pooled: n_sig=2443 (3.048x), excess=-0.441 log-units. LADDER: EEG[491] 0.72x < rivers[490] 2.69x < PRECIP[494] 3.05x < temp[492] 3.40x < SST[493] 4.43x. CHECKS: C1 all_autocorr_positive PASS; C2 pooled_excess<0 PASS (-0.44); C3 n_negative==4 PASS; C4 all_pers_p<0.001 PASS (0.0); C5 ratio>2.5 PASS (3.05); C6 exceeds_rivers PASS (3.05>2.69). 6/6 PASS. PRIMARY SOURCES: Trenberth (1999) doi:10.1023/A:1005488920935; Zolina (2013) doi:10.1175/JCLI-D-12-00552.1. Parents: cert [490] (rivers), cert [492] (temperature), cert [493] (SST). Validated 2026-06-20.",
      "494_qa_witt_tower_precipitation_return_rank",

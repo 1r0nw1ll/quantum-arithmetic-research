@@ -1,4 +1,6 @@
 {
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
   "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
   "scope_note": "Cert [490]: QA Witt Tower River Streamflow Return-Rank Autocorrelation (Persistence). Operator: log-return bins b=floor(rank(log(Q[t+1]/Q[t]))*27/N), e=floor(rank(log(Q[t+2]/Q[t+1]))*27/N); signal a=b+2e<=6 (A2 derived, raw); target=log(Q[t+3]/Q[t+2]). FINDING: Hydrological PERSISTENCE not crash-reversion. After 2 consecutive fast-recession days (bottom 7% of log-flow-changes), recession CONTINUES: Potomac -16.15 log-% (pers_p=0.0), Hudson -12.50 (pers_p=0.0), Missouri -3.59 (pers_p=0.0), Eel -13.40 (pers_p=0.0). 4/4 negative. Pooled -11.95 log-%. n_signal 2-3x expected under independence (clustering evidence). Contrasts with equity/crypto crash-reversion (+0.38 to +2.09%). Operator discriminates autocorrelation sign. Primary sources: Maillet (1905); Brutsaert & Nieber (1977) doi:10.1029/WR013i003p00637. Data: USGS NWIS 00060 via waterservices.usgs.gov. orbit_family on (b, e, m) Singularity-type pairs. 6/6 PASS."
 }

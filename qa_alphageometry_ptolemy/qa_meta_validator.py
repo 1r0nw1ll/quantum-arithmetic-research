@@ -10672,6 +10672,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_eeg_energy_anti_persistence_cert_family(base_dir):
+    """Cert [491]: QA Witt Tower EEG Interictal Energy Return-Rank Anti-Persistence -- n_signal DEPLETED to 0.724x expected (rivers [490]: 2.69x ELEVATED); pooled excess +13.632 log-% (crash-reversion direction); crash_p=0.020; all 6 recordings autocorr_lag1 < 0; 5/6 n_signal below expected; n_signal_ratio discriminates persistence (>1) vs anti-persistence (<1); 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_eeg_energy_anti_persistence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_eeg_energy_anti_persistence_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=60, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:200]} {r.stderr[:100]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_streamflow_return_rank_cert_family(base_dir):
     """Cert [490]: QA Witt Tower River Streamflow Return-Rank Autocorrelation (Persistence) -- hydrological PERSISTENCE not crash-reversion: Potomac -16.15 log-% pers_p=0.0, Hudson -12.50 pers_p=0.0, Missouri -3.59 pers_p=0.0, Eel -13.40 pers_p=0.0; 4/4 negative; pooled -11.95 log-%; n_signal 2-3x expected (clustering); operator discriminates mean-reverting (equity: positive excess) vs trend-persistent (hydrology: negative excess); 6/6 PASS."""
     import subprocess
@@ -13750,6 +13764,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (491, "QA Witt Tower EEG Interictal Energy Return-Rank Anti-Persistence Cert family",
+     _validate_qa_witt_tower_eeg_energy_anti_persistence_cert_family,
+     "QA Witt Tower EEG Interictal Energy Return-Rank Anti-Persistence Cert [491]. Claim: Return-rank a=b+2e<=6 applied to sequential 5-sec EEG interictal energy log-changes reveals ANTI-PERSISTENT structure -- structural inverse of rivers [490]. n_signal_ratio DEPLETED to 0.724x expected (rivers: 2.69x ELEVATED). Crash-reversion direction: pooled excess +13.632 log-% (p=0.020). ALL 6 recordings have lag-1 autocorr < 0 (range -0.127 to -0.378). 5/6 recordings have n_signal below independence baseline. Mechanism: EEG amplitude envelope modulates at ~10-20 sec period; consecutive 5-sec windows are ~half-period apart -> systematic anti-correlation in log-energy-changes. n_signal_ratio discrimination: rivers=2.69x (persistent), EEG=0.724x (anti-persistent), forex~1.0x (null/i.i.d.). Data: Siena Scalp EEG Database (LaCie), 6 patients PN01/03/05/06/07/09, 1-hour interictal segments (1800-5400s), 4218 total log-change observations. CHECKS: C1 all_autocorr_negative PASS (6/6); C2 pooled n_sig<0.9*expected PASS (67<83.3); C3 n_depleted>=5 PASS (5/6); C4 pooled_excess>0 PASS (+13.632); C5 crash_p<0.05 PASS (0.020); C6 n_sig_ratio<1.0<river_ratio PASS (0.724<1.0<2.69). 6/6 PASS. PRIMARY SOURCES: Linkenkaer-Hansen (2001) doi:10.1523/JNEUROSCI.21-04-01370.2001; Stam (2005) doi:10.1016/j.clinph.2005.06.011. Parents: cert [490] (river contrast), cert [488] (equity contrast), cert [446] (Siena EEG). Validated 2026-06-20.",
+     "491_qa_witt_tower_eeg_energy_anti_persistence",
+     "qa_witt_tower_eeg_energy_anti_persistence_cert_v1", True),
     (490, "QA Witt Tower River Streamflow Return-Rank Autocorrelation Cert family",
      _validate_qa_witt_tower_streamflow_return_rank_cert_family,
      "QA Witt Tower River Streamflow Return-Rank Autocorrelation Cert [490]. Claim: Return-rank a=b+2e<=6 operator reveals POSITIVE AUTOCORRELATION (PERSISTENCE) in river hydrology -- the opposite of crash-reversion. After 2 consecutive fast-recession days (log-flow-change in bottom 7%), recession CONTINUES. Gauges 2000-2026: Potomac n=604 excess=-16.15 log-% pers_p=0.0; Hudson n=504 excess=-12.50 pers_p=0.0; Missouri n=454 excess=-3.59 pers_p=0.0; Eel n=675 excess=-13.40 pers_p=0.0. 4/4 negative; pooled=-11.95 log-%. n_signal 2-3x expected under independence (2.19%) -- CLUSTERING EVIDENCE: consecutive (b,e) pairs are correlated (not independent), producing excess low-bin co-occurrences. Mechanism: Maillet exponential recession Q=Q0*exp(-t/tau); log-return in fast-recession regime has positive autocorrelation because tau>>1 day. STRUCTURAL CONTRAST: equity/crypto signal_excess=+0.38 to +2.09%/day (crash-reversion); hydrology signal_excess=-3.59 to -16.15 log-%/day (persistence). Operator discriminates autocorrelation sign: negative (equity) vs positive (hydrology). CERTIFIED: C1 Potomac excess<-1.0 PASS (-16.15); C2 n_negative==4 PASS; C3 Missouri negative PASS (-3.59); C4 Eel pers_p<0.001 PASS (0.0); C5 pooled<-1.0 PASS (-11.95); C6 n_signal_elevated PASS (2-3x). 6/6 PASS. PRIMARY SOURCES: Maillet (1905) Paris:Hermann; Brutsaert & Nieber (1977) doi:10.1029/WR013i003p00637. Data: USGS NWIS param 00060. Parents: cert [482] (operator), cert [488] (equity contrast). Validated 2026-06-20.",

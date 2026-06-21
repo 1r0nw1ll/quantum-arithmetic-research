@@ -1858,6 +1858,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mathlib_ingest_dir,
         "validate_mathlib_ingest.py",
     )
+    mathlib_dependency_validator = os.path.join(
+        mathlib_ingest_dir,
+        "validate_dependency_replay.py",
+    )
     mathlib_ingest_registry = os.path.join(
         mathlib_ingest_dir,
         "upstream_registry.v1.json",
@@ -1945,6 +1949,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_demo_pack, corpus_builder, live_kernel_verifier,
         kernel_trace_compiler, lemma_mining_evaluator, supply_chain_builder,
         runner_receipt_builder, mathlib_ingest_validator,
+        mathlib_dependency_validator,
         mathlib_ingest_registry, mathlib_ingest_negative,
         mathlib_ingest_lean, mathlib_ingest_lakefile,
         mathlib_ingest_toolchain, mathlib_ingest_lock,
@@ -1964,6 +1969,13 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
             required_artifacts.extend(
                 os.path.join(root, name) for name in sorted(files)
             )
+    mathlib_fixture_dir = os.path.join(mathlib_ingest_dir, "fixtures")
+    if os.path.isdir(mathlib_fixture_dir):
+        required_artifacts.extend(
+            os.path.join(mathlib_fixture_dir, name)
+            for name in sorted(os.listdir(mathlib_fixture_dir))
+            if name.endswith(".json")
+        )
     required_artifacts.extend(
         sorted(
             os.path.join(lemma_mining_dir, "compressed", name)
@@ -2316,6 +2328,31 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "Mathlib upstream-proof registry returned ok=false: "
             f"{json.dumps(mathlib_ingest_result, sort_keys=True)}"
+        )
+
+    mathlib_dependency_proc = subprocess.run(
+        [sys.executable, mathlib_dependency_validator, "--self-test"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    if mathlib_dependency_proc.returncode != 0:
+        raise RuntimeError(
+            "Mathlib dependency replay self-test failed:\n"
+            f"{mathlib_dependency_proc.stdout}\n"
+            f"{mathlib_dependency_proc.stderr}"
+        )
+    try:
+        mathlib_dependency_result = json.loads(mathlib_dependency_proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "Mathlib dependency replay self-test returned non-JSON output: "
+            f"{exc}: {mathlib_dependency_proc.stdout}"
+        )
+    if mathlib_dependency_result.get("ok") is not True:
+        raise RuntimeError(
+            "Mathlib dependency replay self-test returned ok=false: "
+            f"{json.dumps(mathlib_dependency_result, sort_keys=True)}"
         )
 
     mathlib_pack_result = validate_demo_pack_v1(mathlib_pack_dir)

@@ -283,8 +283,16 @@ jobs:
       - name: Install pinned Mathlib proof dependencies
         working-directory: qa_alphageometry_ptolemy/qa_math_compiler/mathlib_ingest
         run: |
-          "$HOME/.elan/bin/lake" update
-          "$HOME/.elan/bin/lake" exe cache get
+          lake_bin="$(command -v lake || true)"
+          if [[ -z "$lake_bin" && -x "$HOME/.elan/bin/lake" ]]; then
+            lake_bin="$HOME/.elan/bin/lake"
+          fi
+          if [[ -z "$lake_bin" ]]; then
+            echo "::error::Lake executable not found after Lean installation"
+            exit 127
+          fi
+          "$lake_bin" update
+          "$lake_bin" exe cache get
 
       - name: Regenerate live-kernel certificate
         run: |
@@ -343,8 +351,16 @@ jobs:
       - name: Install pinned Mathlib proof dependencies
         working-directory: qa_alphageometry_ptolemy/qa_math_compiler/mathlib_ingest
         run: |
-          "$HOME/.elan/bin/lake" update
-          "$HOME/.elan/bin/lake" exe cache get
+          lake_bin="$(command -v lake || true)"
+          if [[ -z "$lake_bin" && -x "$HOME/.elan/bin/lake" ]]; then
+            lake_bin="$HOME/.elan/bin/lake"
+          fi
+          if [[ -z "$lake_bin" ]]; then
+            echo "::error::Lake executable not found after Lean installation"
+            exit 127
+          fi
+          "$lake_bin" update
+          "$lake_bin" exe cache get
 
       - name: Replay compressed lemma-mining proofs
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/evaluate_lemma_mining.py check

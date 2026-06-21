@@ -1,0 +1,10 @@
+{
+  "_primary_source_exempt": "PRIMARY-SOURCE-EXEMPT: reason=QA triple identity spot-check at Grant LRT (3,6); primary source Wildberger 2005 ISBN 978-0-9757492-0-8",
+  "kind": "pythagorean",
+  "description": "Grant LRT (3,6): d=9, e=6, C=108, F=45, G=117 -> 108^2+45^2=117^2 (12,5,13 scaled by 9)",
+  "state": [3, 6],
+  "expected_C": 108,
+  "expected_F": 45,
+  "expected_G": 117,
+  "expected": "PASS"
+}

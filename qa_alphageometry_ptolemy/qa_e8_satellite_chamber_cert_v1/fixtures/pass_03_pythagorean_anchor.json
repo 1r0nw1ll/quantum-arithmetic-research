@@ -1,0 +1,10 @@
+{
+  "_primary_source_exempt": "PRIMARY-SOURCE-EXEMPT: reason=QA triple identity C^2+F^2=G^2 spot-check at canonical anchor (6,3); primary source Wildberger 2005 ISBN 978-0-9757492-0-8",
+  "kind": "pythagorean",
+  "description": "Canonical anchor (6,3): d=9, e=3, C=54, F=72, G=90 -> 54^2+72^2=90^2",
+  "state": [6, 3],
+  "expected_C": 54,
+  "expected_F": 72,
+  "expected_G": 90,
+  "expected": "PASS"
+}

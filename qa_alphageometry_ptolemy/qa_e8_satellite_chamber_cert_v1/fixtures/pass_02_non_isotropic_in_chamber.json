@@ -1,0 +1,9 @@
+{
+  "_primary_source_exempt": "PRIMARY-SOURCE-EXEMPT: reason=fixture verifying alpha/beta=12/13≈0.923 inside (7/12,13/12) stays in G-chamber; primary source in mapping_protocol_ref.json",
+  "kind": "wall_constraint",
+  "description": "h = 12*d^2 + 13*e^2 (ratio≈0.923) is inside (7/12, 13/12), must be in G-chamber",
+  "alpha": 12,
+  "beta": 13,
+  "expected_in_chamber": true,
+  "expected": "PASS"
+}

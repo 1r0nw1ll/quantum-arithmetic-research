@@ -1,0 +1,7 @@
+{
+  "_primary_source_exempt": "PRIMARY-SOURCE-EXEMPT: reason=parity reduction b+e+d+a+C+F+G≡b(mod2) sample checks; primary source in mapping_protocol_ref.json",
+  "kind": "parity_sample",
+  "description": "Parity reduction checks at multiple Satellite steps",
+  "pairs": [[6, 3], [3, 9], [3, 6], [9, 3], [3, 3]],
+  "expected": "PASS"
+}

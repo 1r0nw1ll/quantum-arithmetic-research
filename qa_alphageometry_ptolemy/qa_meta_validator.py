@@ -10827,6 +10827,23 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_e8_satellite_chamber_cert_family(base_dir):
+    """Cert [496]: QA-E8 Satellite Chamber Theorem -- G=d^2+e^2 is unique among {b,e,d,a,C,F,G} placing (6,3) at E8 branch node; isotropic diagonal class requires 7/12 < alpha/beta < 13/12; G and G^2 same axis order but different Weyl chambers; C^2+F^2=G^2 for all 576 pairs; parity b+e+d+a+C+F+G≡b(mod2); 11/11 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_e8_satellite_chamber_cert_v1")
+    validator = os.path.join(fam_dir, "qa_e8_satellite_chamber_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_hf_fx_anti_persistence_cert_family(base_dir):
     """Cert [495]: QA Witt Tower 1-min FX Return-Rank Null Position -- 4 FX pairs (EURUSD/GBPUSD/USDJPY/CHFJPY) 1-min bars; pooled n_sig_ratio=1.009x (NULL, between EEG anti-pers [491] 0.72x and rivers [490] 2.69x); all 4 pairs autocorr<0 (bid-ask bounce -0.05 to -0.18); crash-reversion significant 3/4 pairs; CHFJPY 0.865x anti-pers leader; 6/6 PASS."""
     import subprocess
@@ -13976,6 +13993,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (496, "QA E8 Satellite Chamber Theorem Cert family",
+     _validate_qa_e8_satellite_chamber_cert_family,
+     "QA-E8 Satellite Chamber Theorem Cert [496]. Claim (narrow, falsifiable): For QA mod m=9 Satellite orbit (8 states, period 8), canonically anchored at (6,3), the height function h=alpha*d^2+beta*e^2 lies in the E8 Weyl chamber where (6,3) is the branch node and (3,6) [Grant LRT] is the long-arm terminal leaf (distance 4) if and only if 7/12 < alpha/beta < 13/12. The unique isotropic choice alpha=beta gives ratio=1 in (7/12, 13/12), selecting h=G=d^2+e^2 (Wildberger quadrance). Elementary uniqueness: G is the unique invariant in {b,e,d,a,C,F,G} satisfying strict axis ordering + E8 genericity + branch=(6,3). G and G^2 have identical Satellite axis ordering but lie in different Weyl chambers (3 Type-2 wall roots flip sign). Sub-claims: C^2+F^2=G^2 for all 576 QA pairs (Pythagorean triple); b+e+d+a+C+F+G≡b(mod2) (parity reduction); 240 E8 roots (112 Type-1 + 128 Type-2); Cartan matrix det=1. Wall bounds: WALL_LOWER A=108 B=-63 G-proj=+45 (bound 7/12); WALL_UPPER A=108 B=-117 G-proj=-9 (bound 13/12). Checks: ESC_PYTH/PARITY/ROOTS/GRAM/BRANCH/GRANT/WALL_LOWER/WALL_UPPER/ISO_INTERVAL/G2_EXITS/ELEM_UNIQUE; 11/11 PASS. Primary: Wildberger 2005 ISBN 978-0-9757492-0-8; Bourbaki 1968; Humphreys 1972 ISBN 978-0-387-90053-7. Derived 2026-06-21.",
+     "496_qa_e8_satellite_chamber",
+     "qa_e8_satellite_chamber_cert_v1", True),
     (495, "QA Witt Tower 1-min FX Return-Rank Null Position on Discrimination Ladder",
      _validate_qa_witt_tower_hf_fx_anti_persistence_cert_family,
      "QA Witt Tower 1-min FX Return-Rank [495]. Claim: 1-min FX (EURUSD/GBPUSD/USDJPY/CHFJPY) produce pooled n_sig_ratio=1.009x (NULL) in return-rank operator despite bid-ask bounce (autocorr -0.05 to -0.18). NULL sits between EEG anti-persistence [491] 0.72x and rivers [490] 2.69x. Operator discriminates structural autocorr patterns beyond lag-1 sign. 4/4 pairs autocorr<0; 3/4 significant crash excess (crash_p<0.05); CHFJPY 0.865x (anti-pers leader). Pooled: n_sig=872, n_exp=863.8, ratio=1.009x. CHECKS: C1 n_neg_autocorr==4 PASS; C2 ratio in [0.80,1.20] PASS (1.009); C3 ratio<river_ratio PASS (1.009<2.69); C4 n_crash>=3 PASS (3/4); C5 CHFJPY<1.0 PASS (0.865); C6 ratio>eeg_ratio PASS (1.009>0.72). 6/6 PASS. PRIMARY SOURCES: Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41; Glosten & Milgrom (1985) doi:10.1016/0304-405X(85)90044-3. Data: Yahoo Finance 1-min 7-day ending 2026-06-20. Parents: [491] EEG, [490] rivers, [492] temp, [493] SST, [494] precip. Validated 2026-06-20.",

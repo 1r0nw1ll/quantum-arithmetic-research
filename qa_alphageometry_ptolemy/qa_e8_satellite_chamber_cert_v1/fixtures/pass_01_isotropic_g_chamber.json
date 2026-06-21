@@ -1,0 +1,9 @@
+{
+  "_primary_source_exempt": "PRIMARY-SOURCE-EXEMPT: reason=fixture data derived from validator ESC_WALL_LOWER/UPPER checks; primary source in mapping_protocol_ref.json",
+  "kind": "wall_constraint",
+  "description": "h = G = d^2+e^2 (alpha=1, beta=1, ratio=1.0) lies inside the G-chamber",
+  "alpha": 1,
+  "beta": 1,
+  "expected_in_chamber": true,
+  "expected": "PASS"
+}

@@ -9,6 +9,10 @@ if ! command -v elan >/dev/null 2>&1; then
   export PATH="$HOME/.elan/bin:$PATH"
 fi
 
+if [[ -n "${GITHUB_PATH:-}" ]]; then
+  printf '%s\n' "$HOME/.elan/bin" >> "$GITHUB_PATH"
+fi
+
 elan toolchain install "$toolchain"
 elan default "$toolchain"
 lean --version

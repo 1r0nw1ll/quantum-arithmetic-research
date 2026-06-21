@@ -282,6 +282,9 @@ def generated_files() -> dict[Path, bytes]:
         for row in manifest["cases"]
         if not str(row.get("case_id", "")).startswith("mathlib")
     ]
+    for row in retained:
+        if row.get("case_id") == "negative_library_gap":
+            row["trace_before_imports"] = True
     retained.extend(
         {
             "case_id": case["id"],

@@ -283,8 +283,8 @@ jobs:
       - name: Install pinned Mathlib proof dependencies
         working-directory: qa_alphageometry_ptolemy/qa_math_compiler/mathlib_ingest
         run: |
-          lake update
-          lake exe cache get
+          "$HOME/.elan/bin/lake" update
+          "$HOME/.elan/bin/lake" exe cache get
 
       - name: Regenerate live-kernel certificate
         run: |
@@ -343,8 +343,8 @@ jobs:
       - name: Install pinned Mathlib proof dependencies
         working-directory: qa_alphageometry_ptolemy/qa_math_compiler/mathlib_ingest
         run: |
-          lake update
-          lake exe cache get
+          "$HOME/.elan/bin/lake" update
+          "$HOME/.elan/bin/lake" exe cache get
 
       - name: Replay compressed lemma-mining proofs
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/evaluate_lemma_mining.py check

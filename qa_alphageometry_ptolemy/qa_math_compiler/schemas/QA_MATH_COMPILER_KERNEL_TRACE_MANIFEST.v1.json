@@ -59,6 +59,9 @@
           "upstream_declaration": {
             "type": "string",
             "minLength": 1
+          },
+          "trace_before_imports": {
+            "type": "boolean"
           }
         }
       }

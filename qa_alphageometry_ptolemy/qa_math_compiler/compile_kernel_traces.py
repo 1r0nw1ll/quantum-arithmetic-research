@@ -271,16 +271,19 @@ def run_elaboration_trace(
     toolchain_id: str,
 ) -> Dict[str, Any]:
     source = source_path.read_text(encoding="utf-8")
-    source_lines = source.splitlines(keepends=True)
-    insert_at = 0
-    while insert_at < len(source_lines):
-        stripped = source_lines[insert_at].strip()
-        if stripped.startswith("import ") or (insert_at > 0 and not stripped):
-            insert_at += 1
-            continue
-        break
-    source_lines.insert(insert_at, "set_option trace.Elab.info true\n")
-    instrumented = "".join(source_lines)
+    if case.get("trace_before_imports") is True:
+        instrumented = "set_option trace.Elab.info true\n" + source
+    else:
+        source_lines = source.splitlines(keepends=True)
+        insert_at = 0
+        while insert_at < len(source_lines):
+            stripped = source_lines[insert_at].strip()
+            if stripped.startswith("import ") or (insert_at > 0 and not stripped):
+                insert_at += 1
+                continue
+            break
+        source_lines.insert(insert_at, "set_option trace.Elab.info true\n")
+        instrumented = "".join(source_lines)
     command, cwd, dependency_lock_sha256 = execution_command(
         case,
         executable,

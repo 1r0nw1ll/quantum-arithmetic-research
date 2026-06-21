@@ -87,6 +87,7 @@ def portable_paths() -> Iterable[Path]:
         if (
             path.suffix in {".lean", ".py"}
             or "schemas" in rel.parts
+            or "mathlib_ingest" in rel.parts
             or path.name in GENERATED_NAMES
             or path.name
             in {

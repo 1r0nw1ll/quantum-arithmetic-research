@@ -1853,6 +1853,32 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mc_dir,
         "build_runner_parity_receipt.py",
     )
+    mathlib_ingest_dir = os.path.join(mc_dir, "mathlib_ingest")
+    mathlib_ingest_validator = os.path.join(
+        mathlib_ingest_dir,
+        "validate_mathlib_ingest.py",
+    )
+    mathlib_ingest_registry = os.path.join(
+        mathlib_ingest_dir,
+        "upstream_registry.v1.json",
+    )
+    mathlib_ingest_negative = os.path.join(
+        mathlib_ingest_dir,
+        "fixtures",
+        "registry_invalid_digest.json",
+    )
+    mathlib_ingest_lean = os.path.join(
+        mathlib_ingest_dir,
+        "QAMathlibIngest.lean",
+    )
+    mathlib_ingest_lakefile = os.path.join(
+        mathlib_ingest_dir,
+        "lakefile.toml",
+    )
+    mathlib_ingest_toolchain = os.path.join(
+        mathlib_ingest_dir,
+        "lean-toolchain",
+    )
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
     semantic_replay_certificate = os.path.join(
@@ -1904,7 +1930,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_supply_chain, schema_runner_receipt,
         schema_demo_pack, corpus_builder, live_kernel_verifier,
         kernel_trace_compiler, lemma_mining_evaluator, supply_chain_builder,
-        runner_receipt_builder,
+        runner_receipt_builder, mathlib_ingest_validator,
+        mathlib_ingest_registry, mathlib_ingest_negative,
+        mathlib_ingest_lean, mathlib_ingest_lakefile,
+        mathlib_ingest_toolchain,
         kernel_trace_manifest, kernel_trace_index,
         semantic_replay_certificate,
         mined_lemma_library, lemma_mining_evaluation, lemma_mining_pack,
@@ -2243,6 +2272,30 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "lemma mining evaluator returned ok=false: "
             f"{json.dumps(lemma_mining_result, sort_keys=True)}"
+        )
+
+    mathlib_ingest_proc = subprocess.run(
+        [sys.executable, mathlib_ingest_validator, "--self-test"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    if mathlib_ingest_proc.returncode != 0:
+        raise RuntimeError(
+            "Mathlib upstream-proof registry self-test failed:\n"
+            f"{mathlib_ingest_proc.stdout}\n{mathlib_ingest_proc.stderr}"
+        )
+    try:
+        mathlib_ingest_result = json.loads(mathlib_ingest_proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "Mathlib upstream-proof registry returned non-JSON output: "
+            f"{exc}: {mathlib_ingest_proc.stdout}"
+        )
+    if mathlib_ingest_result.get("ok") is not True:
+        raise RuntimeError(
+            "Mathlib upstream-proof registry returned ok=false: "
+            f"{json.dumps(mathlib_ingest_result, sort_keys=True)}"
         )
 
     supply_chain_mode = (

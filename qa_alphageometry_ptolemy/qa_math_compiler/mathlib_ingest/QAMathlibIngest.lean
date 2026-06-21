@@ -1,0 +1,21 @@
+import Mathlib.Data.Finset.Card
+import Mathlib.Data.List.Cycle
+import Mathlib.Data.Nat.BitIndices
+import Mathlib.Data.Nat.Count
+import Mathlib.Data.Nat.Nth
+
+#check Nat.bitIndices_zero
+#check Nat.bitIndices_one
+#check Nat.bitIndices_two_mul_add_one
+#check Nat.bitIndices_two_mul
+#check Nat.bitIndices_nodup
+#check Nat.bitIndices_two_pow
+#check Nat.nth_true
+#check Nat.nth_false
+#check Nat.count_true
+#check Nat.count_false
+#check Cycle.mem_reverse_iff
+#check Cycle.reverse_reverse
+#check Finset.card_union_add_card_inter
+#check Finset.card_inter_add_card_union
+#check Finset.card_union_le

@@ -1,0 +1,8 @@
+{
+  "expected_fail_type": "REGISTRY_HASH_MISMATCH",
+  "mutation": {
+    "path": "entries.0.status",
+    "value": "CERTIFIED"
+  },
+  "schema_id": "QA_MATH_COMPILER_UPSTREAM_REGISTRY_NEGATIVE_FIXTURE.v1"
+}

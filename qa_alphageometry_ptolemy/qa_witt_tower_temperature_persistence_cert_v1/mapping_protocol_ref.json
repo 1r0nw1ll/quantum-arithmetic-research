@@ -1,4 +1,6 @@
 {
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
   "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
   "scope_note": "Cert [492]: QA Witt Tower Daily Temperature Anomaly Return-Rank Persistence. Operator: ANOMALY-LEVEL rank bins b=floor(rank(T_anom[t])*27/N), e_val=floor(rank(T_anom[t+1])*27/N); T_anom[t]=TMAX[t]-monthly_mean[month(t)]; signal a=b+2*e_val<=6 (A2 derived, raw); target=T_anom[t+2] (°C). FINDING: STRONG PERSISTENCE -- all 4 stations positive autocorr (0.691-0.766), n_signal 3.23-3.62x expected (EXCEEDS rivers [490] 2.69x), excess -2.46 to -7.74°C, pers_p=0.0000 all 4. Pooled: n_sig=2834(3.40x expected), excess=-5.195°C. Anomaly-level operator required: log-change operator gives autocorr~0 (persistence is in LEVEL not RATE). Climate zones: Chicago continental, Minneapolis cold continental, Seattle maritime, Miami subtropical. Period 2000-2025. Data: Open-Meteo ERA5 historical archive. orbit_family on (b, e_val, m) Singularity-type pairs. Primary sources: Namias (1952) doi:10.1175/1520-0477-33.7.279; Wallace & Gutzler (1981) doi:10.1175/1520-0493(1981)109<0784:TITGHF>2.0.CO;2. Parents: cert [490] (river persistence contrast), cert [491] (EEG anti-persistence contrast). 6/6 PASS."
 }

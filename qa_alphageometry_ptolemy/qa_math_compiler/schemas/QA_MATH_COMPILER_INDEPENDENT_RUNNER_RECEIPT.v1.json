@@ -12,6 +12,7 @@
     "semantic_replay",
     "kernel_index",
     "certified_corpus_sha256",
+    "mathlib_certified_corpus_sha256",
     "lemma_evaluation_sha256",
     "portable_supply_root_sha256",
     "elaboration_set",
@@ -48,6 +49,10 @@
       "required": ["index_sha256", "case_count"]
     },
     "certified_corpus_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
+    "mathlib_certified_corpus_sha256": {
+      "type": "string",
+      "pattern": "^[a-f0-9]{64}$"
+    },
     "lemma_evaluation_sha256": {"type": "string", "pattern": "^[a-f0-9]{64}$"},
     "portable_supply_root_sha256": {
       "type": "string",

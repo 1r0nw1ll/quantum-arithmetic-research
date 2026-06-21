@@ -51,6 +51,14 @@
           "artifact_dir": {
             "type": "string",
             "minLength": 1
+          },
+          "lake_project": {
+            "type": "string",
+            "minLength": 1
+          },
+          "upstream_declaration": {
+            "type": "string",
+            "minLength": 1
           }
         }
       }

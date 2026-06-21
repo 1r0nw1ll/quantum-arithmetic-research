@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib05_bit_indices_nodup","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"a8c3f8eaaccf4e44fde75360dc7f851279eaa4a5e34dc32ccb72e66fbfbc12d7","upstream_declaration":"Nat.bitIndices_nodup"}

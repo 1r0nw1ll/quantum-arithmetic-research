@@ -1879,6 +1879,20 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mathlib_ingest_dir,
         "lean-toolchain",
     )
+    mathlib_ingest_lock = os.path.join(
+        mathlib_ingest_dir,
+        "lake-manifest.json",
+    )
+    mathlib_pack_dir = os.path.join(mc_dir, "mathlib_pack_v1")
+    mathlib_corpus = os.path.join(mathlib_pack_dir, "corpus.json")
+    mathlib_scaffolder = os.path.join(
+        mc_dir,
+        "scaffold_mathlib_corpus.py",
+    )
+    mathlib_certifier = os.path.join(
+        mc_dir,
+        "certify_mathlib_registry.py",
+    )
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
     semantic_replay_certificate = os.path.join(
@@ -1933,7 +1947,8 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         runner_receipt_builder, mathlib_ingest_validator,
         mathlib_ingest_registry, mathlib_ingest_negative,
         mathlib_ingest_lean, mathlib_ingest_lakefile,
-        mathlib_ingest_toolchain,
+        mathlib_ingest_toolchain, mathlib_ingest_lock,
+        mathlib_scaffolder, mathlib_certifier, mathlib_corpus,
         kernel_trace_manifest, kernel_trace_index,
         semantic_replay_certificate,
         mined_lemma_library, lemma_mining_evaluation, lemma_mining_pack,
@@ -1944,6 +1959,11 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg, lemma_duplicate_neg,
         corpus_valid, corpus_neg, assistants_valid, assistants_neg,
     ]
+    if os.path.isdir(mathlib_pack_dir):
+        for root, _, files in os.walk(mathlib_pack_dir):
+            required_artifacts.extend(
+                os.path.join(root, name) for name in sorted(files)
+            )
     required_artifacts.extend(
         sorted(
             os.path.join(lemma_mining_dir, "compressed", name)
@@ -2297,6 +2317,51 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
             "Mathlib upstream-proof registry returned ok=false: "
             f"{json.dumps(mathlib_ingest_result, sort_keys=True)}"
         )
+
+    mathlib_pack_result = validate_demo_pack_v1(mathlib_pack_dir)
+    if not mathlib_pack_result.ok:
+        raise RuntimeError(
+            "mathlib_pack_v1 should PASS but got "
+            f"{mathlib_pack_result.fail_type}: "
+            f"{json.dumps(mathlib_pack_result.invariant_diff, sort_keys=True)}"
+        )
+    for label, command in [
+        (
+            "Mathlib corpus deterministic rebuild",
+            [sys.executable, corpus_builder, "check", mathlib_pack_dir],
+        ),
+        (
+            "Mathlib corpus deterministic scaffold",
+            [sys.executable, mathlib_scaffolder, "check"],
+        ),
+        (
+            "Mathlib registry certificate binding",
+            [sys.executable, mathlib_certifier, "check"],
+        ),
+    ]:
+        mathlib_proc = subprocess.run(
+            command,
+            capture_output=True,
+            text=True,
+            timeout=120,
+        )
+        if mathlib_proc.returncode != 0:
+            raise RuntimeError(
+                f"{label} failed:\n"
+                f"{mathlib_proc.stdout}\n{mathlib_proc.stderr}"
+            )
+        try:
+            mathlib_result = json.loads(mathlib_proc.stdout)
+        except json.JSONDecodeError as exc:
+            raise RuntimeError(
+                f"{label} returned non-JSON output: "
+                f"{exc}: {mathlib_proc.stdout}"
+            )
+        if mathlib_result.get("ok") is not True:
+            raise RuntimeError(
+                f"{label} returned ok=false: "
+                f"{json.dumps(mathlib_result, sort_keys=True)}"
+            )
 
     supply_chain_mode = (
         "check-portable"

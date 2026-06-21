@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib11_cycle_mem_reverse","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"53e73121568bc7b0d1bd25df655984fdb612e4348124384b4dc2873826ad7bd1","upstream_declaration":"Cycle.mem_reverse_iff"}

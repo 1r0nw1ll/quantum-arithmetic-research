@@ -1,0 +1,1 @@
+Reversing a cycle twice returns the original cycle.

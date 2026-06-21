@@ -128,6 +128,7 @@ def build_receipt(live_replay: bool = False) -> Dict[str, Any]:
         kernel_index = load_json(ROOT / "kernel_trace_index.json")
         elaborations = elaboration_set()
     corpus = load_json(ROOT / "demo_pack_v1" / "corpus.json")
+    mathlib_corpus = load_json(ROOT / "mathlib_pack_v1" / "corpus.json")
     lemma = load_json(ROOT / "lemma_mining" / "evaluation.v1.json")
     supply = load_json(ROOT / "supply_chain_manifest.v1.json")
     body: Dict[str, Any] = {
@@ -149,6 +150,7 @@ def build_receipt(live_replay: bool = False) -> Dict[str, Any]:
             "case_count": kernel_index["case_count"],
         },
         "certified_corpus_sha256": corpus["corpus_sha256"],
+        "mathlib_certified_corpus_sha256": mathlib_corpus["corpus_sha256"],
         "lemma_evaluation_sha256": lemma["evaluation_sha256"],
         "portable_supply_root_sha256": supply["portable_root_sha256"],
         "elaboration_set": elaborations,
@@ -242,6 +244,7 @@ def synthetic_receipt() -> Dict[str, Any]:
         },
         "kernel_index": {"index_sha256": "6" * 64, "case_count": 1},
         "certified_corpus_sha256": "7" * 64,
+        "mathlib_certified_corpus_sha256": "8" * 64,
         "lemma_evaluation_sha256": "8" * 64,
         "portable_supply_root_sha256": "9" * 64,
         "elaboration_set": elaboration_body,

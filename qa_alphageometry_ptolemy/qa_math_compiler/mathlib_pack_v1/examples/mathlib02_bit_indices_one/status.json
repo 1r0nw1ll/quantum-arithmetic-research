@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib02_bit_indices_one","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"d211905156b43040abee19866f76ed30f5d3d5fb152433601d0efd126697850c","upstream_declaration":"Nat.bitIndices_one"}

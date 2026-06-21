@@ -1,0 +1,1 @@
+An element belongs to a reversed cycle exactly when it belongs to the original cycle.

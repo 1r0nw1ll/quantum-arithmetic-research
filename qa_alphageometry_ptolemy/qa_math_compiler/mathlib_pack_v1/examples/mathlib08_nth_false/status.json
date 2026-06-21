@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib08_nth_false","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"f1924095072fe6374b80764ca59d62e01f8d0c5f9d4d6f5bd5515609fb06cbbc","upstream_declaration":"Nat.nth_false"}

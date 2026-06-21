@@ -1,0 +1,1 @@
+For finite sets, the cardinality of the union plus the cardinality of the intersection equals the sum of the two cardinalities.

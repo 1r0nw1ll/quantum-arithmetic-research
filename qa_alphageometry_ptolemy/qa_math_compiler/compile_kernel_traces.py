@@ -86,15 +86,48 @@ def lean_version(executable: str) -> str:
     return normalize_output(proc.stdout or proc.stderr).splitlines()[0]
 
 
+def execution_command(
+    case: Dict[str, Any],
+    executable: str,
+    *lean_args: str,
+) -> Tuple[List[str], Path, str | None]:
+    lake_project = case.get("lake_project")
+    if lake_project is None:
+        return [executable, *lean_args], ROOT, None
+    project_dir = ROOT / lake_project
+    lock_path = project_dir / "lake-manifest.json"
+    if not project_dir.is_dir():
+        raise RuntimeError(f"{case['case_id']}: Lake project missing: {lake_project}")
+    if not lock_path.is_file():
+        raise RuntimeError(
+            f"{case['case_id']}: Lake lockfile missing: "
+            f"{lock_path.relative_to(ROOT)}"
+        )
+    lake = shutil.which("lake")
+    if lake is None:
+        candidate = Path.home() / ".elan" / "bin" / "lake"
+        if not candidate.is_file():
+            raise RuntimeError("Lake executable not found")
+        lake = str(candidate)
+    lock_hash = sha256_bytes(lock_path.read_bytes())
+    return [lake, "env", "lean", *lean_args], project_dir, lock_hash
+
+
 def run_lean(
+    case: Dict[str, Any],
     executable: str,
     source_path: Path,
     source_hash: str,
     toolchain_id: str,
 ) -> Dict[str, Any]:
+    command, cwd, dependency_lock_sha256 = execution_command(
+        case,
+        executable,
+        str(source_path),
+    )
     proc = subprocess.run(
-        [executable, str(source_path)],
-        cwd=str(ROOT),
+        command,
+        cwd=str(cwd),
         capture_output=True,
         text=True,
         timeout=120,
@@ -107,6 +140,8 @@ def run_lean(
         "stdout": normalize_output(proc.stdout),
         "stderr": normalize_output(proc.stderr),
     }
+    if dependency_lock_sha256 is not None:
+        receipt["dependency_lock_sha256"] = dependency_lock_sha256
     receipt["execution_sha256"] = domain_hash(EXECUTION_DOMAIN, receipt)
     return receipt
 
@@ -229,16 +264,32 @@ def parse_tactic_steps(info_text: str, source: str) -> List[Dict[str, Any]]:
 
 
 def run_elaboration_trace(
+    case: Dict[str, Any],
     executable: str,
     source_path: Path,
     source_hash: str,
     toolchain_id: str,
 ) -> Dict[str, Any]:
     source = source_path.read_text(encoding="utf-8")
-    instrumented = "set_option trace.Elab.info true\n" + source
+    source_lines = source.splitlines(keepends=True)
+    insert_at = 0
+    while insert_at < len(source_lines):
+        stripped = source_lines[insert_at].strip()
+        if stripped.startswith("import ") or (insert_at > 0 and not stripped):
+            insert_at += 1
+            continue
+        break
+    source_lines.insert(insert_at, "set_option trace.Elab.info true\n")
+    instrumented = "".join(source_lines)
+    command, cwd, dependency_lock_sha256 = execution_command(
+        case,
+        executable,
+        "--json",
+        "--stdin",
+    )
     proc = subprocess.run(
-        [executable, "--json", "--stdin"],
-        cwd=str(ROOT),
+        command,
+        cwd=str(cwd),
         input=instrumented,
         capture_output=True,
         text=True,
@@ -284,6 +335,8 @@ def run_elaboration_trace(
         "info_tree_sha256": sha256_bytes(info_text.encode("utf-8")),
         "messages_sha256": sha256_bytes(canonical_bytes(messages)),
     }
+    if dependency_lock_sha256 is not None:
+        body["dependency_lock_sha256"] = dependency_lock_sha256
     body["elaboration_trace_sha256"] = domain_hash(ELABORATION_TRACE_DOMAIN, body)
     return body
 
@@ -354,6 +407,16 @@ def trace_artifact(
             "proof_method": case.get("proof_method"),
             "source_sha256": source_hash,
             "execution_sha256": first["execution_sha256"],
+            **(
+                {"upstream_declaration": case["upstream_declaration"]}
+                if "upstream_declaration" in case
+                else {}
+            ),
+            **(
+                {"dependency_lock_sha256": first["dependency_lock_sha256"]}
+                if "dependency_lock_sha256" in first
+                else {}
+            ),
         },
     }
 
@@ -376,7 +439,7 @@ def replay_artifact(
         "created_utc": "2026-06-19T00:00:01Z",
         "toolchain": {
             "lean_version": version,
-            "lake_lock_hash": manifest_hash,
+            "lake_lock_hash": first.get("dependency_lock_sha256", manifest_hash),
             "toolchain_hash": execution_toolchain_hash,
         },
         "benchmark": {
@@ -425,13 +488,13 @@ def compile_case(
         if task_path.exists()
         else source_hash
     )
-    first = run_lean(executable, source_path, source_hash, toolchain_id)
-    second = run_lean(executable, source_path, source_hash, toolchain_id)
+    first = run_lean(case, executable, source_path, source_hash, toolchain_id)
+    second = run_lean(case, executable, source_path, source_hash, toolchain_id)
     elaboration_first = run_elaboration_trace(
-        executable, source_path, source_hash, toolchain_id
+        case, executable, source_path, source_hash, toolchain_id
     )
     elaboration_second = run_elaboration_trace(
-        executable, source_path, source_hash, toolchain_id
+        case, executable, source_path, source_hash, toolchain_id
     )
     actual_status = "SUCCESS" if first["returncode"] == 0 else "FAIL"
     if actual_status != case["expected_status"]:
@@ -457,6 +520,15 @@ def compile_case(
         toolchain_id,
         manifest_hash,
     )
+    case_toolchain_hash = execution_toolchain_hash
+    if "dependency_lock_sha256" in first:
+        case_toolchain_hash = domain_hash(
+            "qa.math_compiler.lean_toolchain_with_dependencies.v1",
+            {
+                "base_toolchain_hash": execution_toolchain_hash,
+                "dependency_lock_sha256": first["dependency_lock_sha256"],
+            },
+        )
     replay = replay_artifact(
         case,
         trace,
@@ -464,7 +536,7 @@ def compile_case(
         second,
         pinned_version,
         manifest_hash,
-        execution_toolchain_hash,
+        case_toolchain_hash,
     )
     index_row = {
         "case_id": case["case_id"],

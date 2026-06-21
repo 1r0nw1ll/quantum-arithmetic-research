@@ -1,0 +1,1 @@
+The cardinality of the union of two finite sets is at most the sum of their cardinalities.

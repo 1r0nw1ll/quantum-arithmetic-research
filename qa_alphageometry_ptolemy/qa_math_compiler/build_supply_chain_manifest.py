@@ -80,7 +80,7 @@ def portable_paths() -> Iterable[Path]:
         if not path.is_file():
             continue
         rel = path.relative_to(ROOT)
-        if "__pycache__" in rel.parts or path.suffix == ".pyc":
+        if "__pycache__" in rel.parts or ".lake" in rel.parts or path.suffix == ".pyc":
             continue
         if path == MANIFEST_PATH:
             continue

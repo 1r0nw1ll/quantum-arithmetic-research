@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib04_bit_indices_even","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"bf17ccb5ac192a1c60987abca7b3df45b569e691680856fd20e3848630920a36","upstream_declaration":"Nat.bitIndices_two_mul"}

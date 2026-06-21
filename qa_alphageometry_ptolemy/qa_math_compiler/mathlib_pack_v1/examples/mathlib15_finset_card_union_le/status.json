@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib15_finset_card_union_le","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"8e212c63f42fe25e15eac0aeedb62761a83dc286fccf2417bdf26d9044782554","upstream_declaration":"Finset.card_union_le"}

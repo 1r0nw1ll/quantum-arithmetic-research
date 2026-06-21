@@ -17,6 +17,7 @@ ROOT = Path(__file__).resolve().parent
 DEFAULT_REGISTRY = ROOT / "upstream_registry.v1.json"
 NEGATIVE_FIXTURE = ROOT / "fixtures" / "registry_invalid_digest.json"
 REGISTRY_DOMAIN = "qa.math_compiler.upstream_proof_registry.v1"
+CERTIFICATE_DOMAIN = "qa.math_compiler.upstream_proof_certificate.v1"
 SCHEMA_ID = "QA_MATH_COMPILER_UPSTREAM_PROOF_REGISTRY.v1"
 PINNED_COMMIT = "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f"
 PINNED_RELEASE = "v4.31.0"
@@ -27,6 +28,13 @@ REQUIRED_CATEGORIES = {
     "finite-sets",
     "induction",
     "lists",
+}
+CERTIFICATE_FILES = {
+    "task_sha256": "task.json",
+    "trace_sha256": "trace.json",
+    "elaboration_sha256": "elaboration.json",
+    "replay_sha256": "replay.json",
+    "pair_sha256": "pair.json",
 }
 
 
@@ -111,6 +119,65 @@ def verify_source_checkout(
             errors.append(f"DECLARATION_HASH_MISMATCH:{entry['declaration']}")
 
 
+def verify_certificate(entry: dict[str, Any], errors: list[str]) -> None:
+    declaration = entry["declaration"]
+    certificate = entry.get("certificate")
+    if not isinstance(certificate, dict):
+        errors.append(f"CERTIFICATE_MISSING:{declaration}")
+        return
+    certificate_body = dict(certificate)
+    supplied_hash = certificate_body.pop("certificate_sha256", None)
+    if supplied_hash != domain_hash(CERTIFICATE_DOMAIN, certificate_body):
+        errors.append(f"CERTIFICATE_HASH_MISMATCH:{declaration}")
+    certificate_dir = certificate.get("certificate_dir")
+    if (
+        not isinstance(certificate_dir, str)
+        or certificate_dir.startswith("/")
+        or ".." in Path(certificate_dir).parts
+    ):
+        errors.append(f"CERTIFICATE_DIR_INVALID:{declaration}")
+        return
+    artifact_dir = ROOT.parent / certificate_dir
+    proof_path = artifact_dir / "proof.lean"
+    if (
+        not proof_path.is_file()
+        or sha256_bytes(proof_path.read_bytes()) != certificate.get("proof_sha256")
+    ):
+        errors.append(f"CERTIFICATE_ARTIFACT_MISMATCH:{declaration}:proof.lean")
+    loaded: dict[str, dict[str, Any]] = {}
+    for hash_field, filename in CERTIFICATE_FILES.items():
+        path = artifact_dir / filename
+        if not path.is_file():
+            errors.append(f"CERTIFICATE_ARTIFACT_MISSING:{declaration}:{filename}")
+            continue
+        artifact = load_json(path)
+        loaded[filename] = artifact
+        if sha256_bytes(canonical_bytes(artifact)) != certificate.get(hash_field):
+            errors.append(f"CERTIFICATE_ARTIFACT_MISMATCH:{declaration}:{filename}")
+    trace = loaded.get("trace.json")
+    replay = loaded.get("replay.json")
+    elaboration = loaded.get("elaboration.json")
+    if trace is not None and trace.get("trace_id") != certificate.get("trace_id"):
+        errors.append(f"CERTIFICATE_TRACE_ID_MISMATCH:{declaration}")
+    if elaboration is not None and (
+        elaboration.get("dependency_lock_sha256")
+        != certificate.get("dependency_lock_sha256")
+    ):
+        errors.append(f"CERTIFICATE_LOCK_MISMATCH:{declaration}")
+    if trace is not None and replay is not None:
+        rows = [
+            row
+            for row in replay.get("traces", [])
+            if isinstance(row, dict) and row.get("trace_id") == trace.get("trace_id")
+        ]
+        if (
+            len(rows) != 1
+            or rows[0].get("replay_status") != "SUCCESS"
+            or certificate.get("replay_status") != "SUCCESS"
+        ):
+            errors.append(f"CERTIFICATE_REPLAY_NOT_SUCCESS:{declaration}")
+
+
 def validate_registry(
     registry: dict[str, Any],
     source_root: Path | None = None,
@@ -166,8 +233,11 @@ def validate_registry(
             errors.append(f"MODULE_PATH_MISMATCH:{declaration}")
         if entry.get("split") != "upstream_eval":
             errors.append(f"SPLIT_POLICY_VIOLATION:{declaration}")
-        if entry.get("status") != "PROVENANCE_VERIFIED":
-            errors.append(f"PREMATURE_CERTIFICATION:{declaration}")
+        status = entry.get("status")
+        if status not in {"PROVENANCE_VERIFIED", "CERTIFIED"}:
+            errors.append(f"STATUS_INVALID:{declaration}")
+        elif status == "CERTIFIED":
+            verify_certificate(entry, errors)
         category = entry.get("category")
         if isinstance(category, str):
             categories.add(category)

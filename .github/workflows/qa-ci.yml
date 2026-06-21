@@ -280,6 +280,12 @@ jobs:
       - name: Install pinned proof-assistant toolchains
         run: tools/install_math_compiler_toolchains.sh
 
+      - name: Install pinned Mathlib proof dependencies
+        working-directory: qa_alphageometry_ptolemy/qa_math_compiler/mathlib_ingest
+        run: |
+          lake update
+          lake exe cache get
+
       - name: Regenerate live-kernel certificate
         run: |
           python3 qa_alphageometry_ptolemy/qa_math_compiler/verify_live_kernels.py --write-report
@@ -314,7 +320,7 @@ jobs:
 
   qa-math-compiler-linux-parity:
     runs-on: ubuntu-latest
-    timeout-minutes: 25
+    timeout-minutes: 45
     strategy:
       fail-fast: false
       matrix:
@@ -333,6 +339,12 @@ jobs:
 
       - name: Install pinned Lean toolchain
         run: tools/install_lean_toolchain.sh
+
+      - name: Install pinned Mathlib proof dependencies
+        working-directory: qa_alphageometry_ptolemy/qa_math_compiler/mathlib_ingest
+        run: |
+          lake update
+          lake exe cache get
 
       - name: Replay compressed lemma-mining proofs
         run: python3 qa_alphageometry_ptolemy/qa_math_compiler/evaluate_lemma_mining.py check

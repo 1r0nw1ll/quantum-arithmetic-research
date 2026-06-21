@@ -1,0 +1,1 @@
+For every natural n, the one-bit positions of 2n+1 are zero followed by the one-bit positions of n shifted by one.

@@ -1,0 +1,1 @@
+The nth natural satisfying the predicate that is always false is defined as zero.

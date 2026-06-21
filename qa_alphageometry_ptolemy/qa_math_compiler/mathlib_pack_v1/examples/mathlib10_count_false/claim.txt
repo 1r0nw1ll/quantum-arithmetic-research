@@ -1,0 +1,1 @@
+Among naturals below n, none satisfy the predicate that is always false.

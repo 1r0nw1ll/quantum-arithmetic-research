@@ -1,0 +1,1 @@
+Among naturals below n, exactly n satisfy the predicate that is always true.

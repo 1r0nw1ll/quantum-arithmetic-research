@@ -1,0 +1,1 @@
+The binary one-bit position list of 2^k contains only position k.

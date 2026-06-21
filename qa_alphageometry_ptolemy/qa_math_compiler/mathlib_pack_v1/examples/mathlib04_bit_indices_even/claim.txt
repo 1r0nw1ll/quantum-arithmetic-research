@@ -1,0 +1,1 @@
+For every natural n, the one-bit positions of 2n are the one-bit positions of n shifted by one.

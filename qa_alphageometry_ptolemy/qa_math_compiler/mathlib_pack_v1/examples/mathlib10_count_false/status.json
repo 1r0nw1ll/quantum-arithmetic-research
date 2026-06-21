@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib10_count_false","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"ecd18ed364f42a7fb46a5eeb47eac188e9b3eec0f2fae6f6f6c116babfeeae56","upstream_declaration":"Nat.count_false"}

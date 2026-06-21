@@ -10672,6 +10672,20 @@ def _validate_qa_witt_tower_orbit_recession_cert_family(base_dir):
     return None
 
 
+def _validate_qa_witt_tower_sst_anomaly_persistence_cert_family(base_dir):
+    """Cert [493]: QA Witt Tower Ocean SST Return-Rank Persistence (NDBC Buoys) -- STRONGEST persistence: pooled 4.432x expected (>temperature [492] 3.40x >rivers [490] 2.69x); all 4 buoys autocorr_lev 0.916-0.964; pooled_excess=-1.51degC; pers_p=0.0 all 4; 6/6 PASS."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_sst_anomaly_persistence_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_sst_anomaly_persistence_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=60, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:200]} {r.stderr[:100]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_temperature_persistence_cert_family(base_dir):
     """Cert [492]: QA Witt Tower Daily Temperature Anomaly Return-Rank Persistence -- anomaly-level operator reveals STRONG PERSISTENCE (climate): pooled n_sig=2834 (3.40x expected), EXCEEDS rivers [490] 2.69x; all 4 stations autocorr_lev 0.691-0.766; pooled excess=-5.195degC; pers_p=0.0 all 4; 6/6 PASS."""
     import subprocess
@@ -13778,6 +13792,11 @@ FAMILY_SWEEPS = [
      "First non-simply-laced Mutation Game cert, extending [244] and [250] to G_2 via directed edge counts A(0->1)=3, A(1->0)=1 encoding Cartan [[2,-1],[-3,2]]. BFS closes at 12 integer populations; sign split is 6 positive + 6 negative with R-=-R+; Humphreys §12.1 coordinate swap yields three short and three long positive roots under G_sr=[[2,-3],[-3,6]]; s0^2=s1^2=I; strict Coxeter order 6. Source: Wildberger 2020 + Humphreys 1972 §12.1 + theory docs/theory/QA_G2_MUTATION_GAME.md commit b86442f. Checks G2M_1/G2M_2/G2M_3/G2M_4/G2M_5/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "251_qa_g2_mutation_game_cert",
      "qa_g2_mutation_game_cert_v1", True),
+    (493, "QA Witt Tower Ocean SST Return-Rank Persistence Cert family",
+     _validate_qa_witt_tower_sst_anomaly_persistence_cert_family,
+     "QA Witt Tower Ocean SST Return-Rank Persistence Cert [493]. Claim: Return-rank a=b+2e<=6 applied to monthly-deseasonalised daily ocean SST (NDBC buoy WTMP) reveals STRONGEST PERSISTENCE in the discrimination ladder -- 4.432x expected (>temperature [492] 3.40x >rivers [490] 2.69x). Mechanism: ocean thermal inertia (tau_ocean~months >> tau_atm~3-7d >> tau_river~days); SST changes <<0.5C/day vs land 3-5C/day -> autocorr_lag1=0.92-0.96. 4 NDBC open-ocean buoys 2000-2024: 41001(NW Atlantic 34.8N 72.4W) n_sig=496 ratio=4.31x autocorr=0.916 excess=-1.78C pers_p=0.0; 46059(NE Pacific 38.1N 129.9W) n_sig=615 ratio=4.45x autocorr=0.964 excess=-1.91C pers_p=0.0; 51003(N Pacific 19.1N 160.6W) n_sig=730 ratio=4.51x autocorr=0.949 excess=-0.79C pers_p=0.0; 46066(N Pacific 52.8N 155.0W) n_sig=638 ratio=4.42x autocorr=0.938 excess=-1.56C pers_p=0.0. Pooled n_sig=2479 (4.432x expected 559.4), excess=-1.51C. DISCRIMINATION LADDER: EEG [491] anti-pers 0.72x; rivers [490] 2.69x; temperature [492] 3.40x; SST [493] 4.43x MOST. CHECKS: C1 all_autocorr>0.85 PASS (0.916-0.964); C2 pooled_excess<-0.5C PASS (-1.51); C3 n_negative==4 PASS; C4 all_pers_p<0.001 PASS (0.0); C5 pooled_ratio>4.0 PASS (4.43); C6 exceeds_temperature PASS (4.43>3.40). 6/6 PASS. PRIMARY SOURCES: Rayner (2003) doi:10.1029/2002JD002670; Deser (2003) doi:10.1175/1520-0442(2003)016<0057:SSTICO>2.0.CO;2. Parents: cert [490] (rivers), cert [492] (temperature). Validated 2026-06-20.",
+     "493_qa_witt_tower_sst_anomaly_persistence",
+     "qa_witt_tower_sst_anomaly_persistence_cert_v1", True),
     (492, "QA Witt Tower Daily Temperature Anomaly Return-Rank Persistence Cert family",
      _validate_qa_witt_tower_temperature_persistence_cert_family,
      "QA Witt Tower Daily Temperature Anomaly Return-Rank Persistence Cert [492]. Claim: Return-rank a=b+2e<=6 applied to monthly-deseasonalised daily temperature anomaly levels reveals STRONG PERSISTENCE (climate) -- stronger than rivers [490] (3.40x vs 2.69x). Operator: b=floor(rank(T_anom[t])*27/N), e_val=floor(rank(T_anom[t+1])*27/N); T_anom=TMAX-monthly_mean; a=b+2*e_val (A2 derived, raw); signal: a<=6 (both days cold anomaly). Key insight: temperature persistence is in ANOMALY LEVEL not log-change (log-change autocorr~0; anomaly-level autocorr 0.69-0.77). 4 US climate zones 2000-2025 (Open-Meteo ERA5): Chicago (continental) n_sig=674 n_exp=208.4 autocorr=0.704 excess=-6.498degC pers_p=0.0; Minneapolis (cold continental) n_sig=713 autocorr=0.752 excess=-7.730degC pers_p=0.0; Seattle (maritime) n_sig=757 autocorr=0.766 excess=-4.138degC pers_p=0.0; Miami (subtropical) n_sig=690 autocorr=0.691 excess=-2.462degC pers_p=0.0. Pooled: n_sig=2834 (3.40x expected 833.6), excess=-5.195degC. DISCRIMINATION LADDER: EEG [491] anti-persistent 0.724x; rivers [490] persistent 2.69x; ATMOSPHERE [492] MOST persistent 3.40x. Synoptic timescale tau~3-7 days >> 1 day -> stronger clustering than rivers (tau~days-weeks). CHECKS: C1 all_autocorr_positive PASS (all 0.69-0.77>0); C2 pooled_excess<-1.0degC PASS (-5.195); C3 n_negative==4 PASS (4/4); C4 all_pers_p<0.001 PASS (0.0 all); C5 pooled_ratio>3.0 PASS (3.40); C6 ratio_exceeds_river PASS (3.40>2.69). 6/6 PASS. PRIMARY SOURCES: Namias J (1952) doi:10.1175/1520-0477-33.7.279; Wallace & Gutzler (1981) doi:10.1175/1520-0493(1981)109<0784:TITGHF>2.0.CO;2. Data: Open-Meteo ERA5 historical archive. Parents: cert [490] (river persistence contrast), cert [491] (EEG anti-persistence contrast). Validated 2026-06-20.",

@@ -82,6 +82,31 @@ Last updated: 2026-03-29
 
 ## SOTA Scan Log
 
+### Scan #14 — 2026-06-22 (window: June 18 – June 22, 2026)
+Full report: `sota_scans/scan_2026-06-22.md`
+
+**Key finds:**
+- arXiv:2606.20439 (Four-digit Kaprekar dynamics in odd bases, June 18, 2026) — **MEDIUM-HIGH.** Chen/Ono/Schwartz/Thakur. In every odd base B>3: after ≤3 iterations, every nonconstant orbit enters a triangular region conjugate to projective doubling; complete cycle-length formula (max ≤ (B−1)/2, equality iff B prime). Lean/mathlib formalizations by AxiomProver. Structural analogy to QA orbit tripartition + projective direction structure (cert [266], SL(2,Z) cluster). New cert candidate: `qa_kaprekar_orbit_projective_cert_v1`.
+- arXiv:2512.05124 (Information funnels and multiscale gap-space dynamics in Kaprekar's routine, Nov 2025) — **MEDIUM. MEGA-SLIP — all 13 scans.** Dahl. Entropy-funnel structure + gap-space Markov approximation for Kaprekar dynamics D∈{3,4,5,6}. Information-theoretic dual to arXiv:2606.20439. Fix: add "Kaprekar" to arXiv search battery.
+
+**No HIGH finds — fifth consecutive quiet window (excluding ongoing SAIR degree-24 challenge from scan #13).**
+
+**SAIR Inverse Galois degree-24 challenge (scan #13 HIGH):** Stage 1 ongoing, closes Aug 15. No new developments this window.
+
+**New cert candidate:** `qa_kaprekar_orbit_projective_cert_v1` (MEDIUM priority).
+
+**New cross-domain connection:** Kaprekar projective cluster — arXiv:2606.20439 (projective doubling) + arXiv:2512.05124 (entropy funnels) = dual geometric + information-theoretic external validation of discrete orbit attractor theory. Companion to QA orbit tripartition theorem.
+
+**Internal landmark:** Witt Tower sprint [449]–[496] completed June 18–22 (48 families). New standalone [496] QA E8 Satellite Chamber Theorem. Registry: 496 families.
+
+**Cert registry: [496].** [497] → `qa_steinmetz_whittaker_bridge_cert_v1`, [498] → `qa_whittaker_phase_packet_algebra_cert_v1` urgently needed (SEVENTH consecutive miss).
+
+**[261] orbit stratification: THIRTEEN-TUPLE GAP (13th scan — longest-running unresolved gap in project history).**
+
+**Documentation backlog: ~213 families [284]–[496] all missing README/SPEC (up from ~165 in scan #13).**
+
+**Search fix for scan #15:** Add "Kaprekar" + "digit dynamics" to arXiv battery; add Tao blog + SAIR Foundation monthly sweep (Stage 1 closes Aug 15); add math.CO explicit sweep.
+
 ### Scan #11 — 2026-06-11 (window: June 8 – June 11, 2026)
 Full report: `sota_scans/scan_2026-06-11.md`
 

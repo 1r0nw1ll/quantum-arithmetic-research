@@ -1,0 +1,27 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_cosmos_orbit1_card : qa_cosmos_orbit1.card = 24",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "sub-orbit",
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[128] SP3"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The first Cosmos sub-orbit — the orbit of representative (1,0) under the QA T-step — has exactly 24 elements.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT14_COSMOS_ORBIT1_CARD_TASK"
+}

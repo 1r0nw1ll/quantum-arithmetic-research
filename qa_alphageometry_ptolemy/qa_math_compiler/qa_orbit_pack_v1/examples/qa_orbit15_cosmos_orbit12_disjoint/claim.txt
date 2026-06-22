@@ -1,0 +1,1 @@
+The two Cosmos sub-orbits with representatives (1,0) and (2,0) are disjoint: the Fibonacci matrix generates two genuinely distinct orbits from these starting states in ZMod 9.

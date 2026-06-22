@@ -1,5 +1,5 @@
 {
-  "example_count": 5,
+  "example_count": 18,
   "examples": [
     {
       "difficulty": "qa-native",
@@ -30,6 +30,84 @@
       "id": "qa_orbit05_t_period_divides_24",
       "status": "PROVED",
       "topic": "orbit-structure"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit06_cosmos_card",
+      "status": "PROVED",
+      "topic": "partition"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit07_orbit_partition",
+      "status": "PROVED",
+      "topic": "partition"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit08_cosmos_period_exact",
+      "status": "PROVED",
+      "topic": "exact-period"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit09_satellite_period_exact",
+      "status": "PROVED",
+      "topic": "exact-period"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit10_singularity_unique",
+      "status": "PROVED",
+      "topic": "singularity"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit11_pisano_9_exact",
+      "status": "PROVED",
+      "topic": "pisano-period"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit12_cosmos_invariant",
+      "status": "PROVED",
+      "topic": "invariance"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit13_satellite_invariant",
+      "status": "PROVED",
+      "topic": "invariance"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit14_cosmos_orbit1_card",
+      "status": "PROVED",
+      "topic": "sub-orbit"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit15_cosmos_orbit12_disjoint",
+      "status": "PROVED",
+      "topic": "sub-orbit"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit16_cosmos_suborbit_union",
+      "status": "PROVED",
+      "topic": "sub-orbit"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit17_cosmos_step_injective",
+      "status": "PROVED",
+      "topic": "bijection"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit18_cosmos_reps_distinct",
+      "status": "PROVED",
+      "topic": "sub-orbit"
     }
   ],
   "schema_id": "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1",

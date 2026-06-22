@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_cosmos_orbit12_disjoint :\n    Disjoint qa_cosmos_orbit1 qa_cosmos_orbit2",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "sub-orbit",
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The two Cosmos sub-orbits with representatives (1,0) and (2,0) are disjoint: the Fibonacci matrix generates two genuinely distinct orbits from these starting states in ZMod 9.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT15_COSMOS_ORBIT12_DISJOINT_TASK"
+}

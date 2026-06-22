@@ -1,0 +1,27 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_cosmos_suborbit_union :\n    qa_cosmos_orbit1 ∪ qa_cosmos_orbit2 ∪ qa_cosmos_orbit3 = qa_cosmos'",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "sub-orbit",
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The Cosmos is exactly the union of the three sub-orbits of representatives (1,0), (2,0), and (4,0): no other T-orbits exist within the Cosmos.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT16_COSMOS_SUBORBIT_UNION_TASK"
+}

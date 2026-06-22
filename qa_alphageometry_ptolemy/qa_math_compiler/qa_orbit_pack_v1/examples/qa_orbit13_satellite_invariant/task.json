@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_satellite_invariant :\n    ∀ s ∈ qa_satellite', qa_step' s ∈ qa_satellite'",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "invariance",
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The Satellite orbit is T-invariant: every state in the Satellite maps to another Satellite state under the QA T-step.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT13_SATELLITE_INVARIANT_TASK"
+}

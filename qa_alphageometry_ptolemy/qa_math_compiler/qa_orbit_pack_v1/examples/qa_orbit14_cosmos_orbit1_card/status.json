@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit14_cosmos_orbit1_card",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "d9e3451184beb9a62fef161cc7ccb74b2f36172e0a14007a57d5c1a4d517bd72"
+}

@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit17_cosmos_step_injective",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "4ba3ce7e650723845ab39f165b46adbccfe1664eaae48ef143cf5f36f07d02c5"
+}

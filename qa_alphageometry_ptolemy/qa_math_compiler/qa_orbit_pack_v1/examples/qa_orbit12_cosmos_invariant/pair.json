@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_cosmos_invariant",
+          "qa_step'",
+          "qa_cosmos'"
+        ],
+        "nl_span": "the Cosmos orbit is closed under the QA T-step"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_cosmos_invariant :\n    ∀ s ∈ qa_cosmos', qa_step' s ∈ qa_cosmos'",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Cosmos orbit is T-invariant: every state in the Cosmos maps to another Cosmos state under the QA T-step.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT12_COSMOS_INVARIANT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "3f148b99f8e7ed59953c5e70da53bb28206ec6807334f4e1d44bee201a7365d5"
+  }
+}

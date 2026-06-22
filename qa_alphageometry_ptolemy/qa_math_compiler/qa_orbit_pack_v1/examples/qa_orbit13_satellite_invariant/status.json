@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit13_satellite_invariant",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "735539e9404d354f3b0c1b848b6c750801de10b187cd1f8cc870c249e49e0611"
+}

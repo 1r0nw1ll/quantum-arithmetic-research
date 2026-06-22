@@ -1,0 +1,27 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_cosmos_reps_distinct :\n    ∀ k : ℕ, k < 24 → (qa_step'^[k]) (1, 0) ≠ (2, 0) ∧\n                        (qa_step'^[k]) (1, 0) ≠ (4, 0) ∧\n                        (qa_step'^[k]) (2, 0) ≠ (4, 0)",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "sub-orbit",
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The three Cosmos sub-orbit representatives (1,0), (2,0), (4,0) lie on genuinely distinct T-orbits: for every k in {0,...,23}, applying T^k to (1,0) never reaches (2,0) or (4,0), and (2,0) never reaches (4,0).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT18_COSMOS_REPS_DISTINCT_TASK"
+}

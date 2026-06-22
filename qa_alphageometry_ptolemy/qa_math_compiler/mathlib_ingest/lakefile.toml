@@ -8,6 +8,15 @@ name = "QAMathlibIngest"
 [[lean_lib]]
 name = "QAMathlibMinedLemmas"
 
+[[lean_lib]]
+name = "QAOrbits"
+
+[[lean_lib]]
+name = "QAOrbitPartition"
+
+[[lean_lib]]
+name = "QAOrbitInvariance"
+
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"

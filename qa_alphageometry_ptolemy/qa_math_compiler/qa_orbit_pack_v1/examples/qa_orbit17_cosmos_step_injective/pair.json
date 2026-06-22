@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_cosmos_step_injective",
+          "qa_step'",
+          "qa_cosmos'"
+        ],
+        "nl_span": "the T-step is injective on the Cosmos orbit"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_cosmos_step_injective :\n    ∀ s ∈ qa_cosmos', ∀ t ∈ qa_cosmos', qa_step' s = qa_step' t → s = t",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The QA T-step is injective on the Cosmos: if two Cosmos states have the same image under T, they are equal.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT17_COSMOS_STEP_INJECTIVE_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "4ba3ce7e650723845ab39f165b46adbccfe1664eaae48ef143cf5f36f07d02c5"
+  }
+}

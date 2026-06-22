@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_satellite_invariant",
+          "qa_step'",
+          "qa_satellite'"
+        ],
+        "nl_span": "the Satellite orbit is closed under the QA T-step"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_satellite_invariant :\n    ∀ s ∈ qa_satellite', qa_step' s ∈ qa_satellite'",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Satellite orbit is T-invariant: every state in the Satellite maps to another Satellite state under the QA T-step.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT13_SATELLITE_INVARIANT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "735539e9404d354f3b0c1b848b6c750801de10b187cd1f8cc870c249e49e0611"
+  }
+}

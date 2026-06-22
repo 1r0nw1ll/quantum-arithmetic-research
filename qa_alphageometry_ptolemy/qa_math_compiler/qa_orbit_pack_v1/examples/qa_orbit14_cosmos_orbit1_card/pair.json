@@ -1,0 +1,36 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_cosmos_orbit1_card",
+          "qa_step'",
+          "qa_cosmos_orbit1"
+        ],
+        "nl_span": "the T-orbit of (1,0) in ZMod 9 has exactly 24 elements"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_cosmos_orbit1_card : qa_cosmos_orbit1.card = 24",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[128] SP3"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The first Cosmos sub-orbit — the orbit of representative (1,0) under the QA T-step — has exactly 24 elements.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT14_COSMOS_ORBIT1_CARD_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "d9e3451184beb9a62fef161cc7ccb74b2f36172e0a14007a57d5c1a4d517bd72"
+  }
+}

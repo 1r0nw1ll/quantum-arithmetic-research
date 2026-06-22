@@ -1,0 +1,1 @@
+The Cosmos is exactly the union of the three sub-orbits of representatives (1,0), (2,0), and (4,0): no other T-orbits exist within the Cosmos.

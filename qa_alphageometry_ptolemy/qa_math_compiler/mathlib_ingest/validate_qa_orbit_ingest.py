@@ -20,15 +20,33 @@ ROOT = Path(__file__).resolve().parent
 PACK_DIR = ROOT.parent / "qa_orbit_pack_v1"
 REGISTRY_PATH = ROOT / "qa_orbit_registry.v1.json"
 QALEAN_PATH = ROOT / "QAOrbits.lean"
+QAPARTITION_PATH = ROOT / "QAOrbitPartition.lean"
+QAINVARIANCE_PATH = ROOT / "QAOrbitInvariance.lean"
 
 REGISTRY_SCHEMA_ID = "QA_ORBIT_REGISTRY.v1"
-EXPECTED_ENTRY_COUNT = 5
+EXPECTED_ENTRY_COUNT = 18
 EXPECTED_THEOREM_NAMES = {
+    # QAOrbits.lean (5)
     "qa_cfgpythag",
     "qa_singularity_fixed",
     "qa_satellite_period_8",
     "qa_cosmos_period_24",
     "qa_t_period_divides_24",
+    # QAOrbitPartition.lean (6)
+    "qa_cosmos_card",
+    "qa_orbit_partition",
+    "qa_cosmos_period_exact",
+    "qa_satellite_period_exact",
+    "qa_singularity_unique",
+    "qa_pisano_9_exact",
+    # QAOrbitInvariance.lean (7)
+    "qa_cosmos_invariant",
+    "qa_satellite_invariant",
+    "qa_cosmos_orbit1_card",
+    "qa_cosmos_orbit12_disjoint",
+    "qa_cosmos_suborbit_union",
+    "qa_cosmos_step_injective",
+    "qa_cosmos_reps_distinct",
 }
 
 
@@ -113,6 +131,7 @@ def validate_registry() -> List[Dict[str, Any]]:
 def validate_lean_source() -> List[Dict[str, Any]]:
     checks = []
 
+    # ── QAOrbits.lean ────────────────────────────────────────────────────────
     if not QALEAN_PATH.exists():
         return [_check("lean_source_exists", False, f"{QALEAN_PATH} not found")]
 
@@ -120,15 +139,66 @@ def validate_lean_source() -> List[Dict[str, Any]]:
 
     src = QALEAN_PATH.read_text(encoding="utf-8")
 
-    # imports must be first lines
     checks.append(_check("lean_imports_first",
                           src.startswith("import"),
                           "imports must be the first content in the file"))
 
-    for name in EXPECTED_THEOREM_NAMES:
+    orbits_names = {
+        "qa_cfgpythag", "qa_singularity_fixed", "qa_satellite_period_8",
+        "qa_cosmos_period_24", "qa_t_period_divides_24",
+    }
+    for name in orbits_names:
         checks.append(_check(f"lean_defines_{name}",
                               f"theorem {name}" in src,
                               f"theorem {name} not found in QAOrbits.lean"))
+
+    # ── QAOrbitPartition.lean ─────────────────────────────────────────────────
+    if not QAPARTITION_PATH.exists():
+        checks.append(_check("lean_partition_source_exists", False,
+                              f"{QAPARTITION_PATH} not found"))
+        return checks
+
+    checks.append(_check("lean_partition_source_exists", True))
+
+    psrc = QAPARTITION_PATH.read_text(encoding="utf-8")
+
+    checks.append(_check("lean_partition_imports_first",
+                          psrc.startswith("import"),
+                          "imports must be the first content in QAOrbitPartition.lean"))
+
+    partition_names = {
+        "qa_cosmos_card", "qa_orbit_partition", "qa_cosmos_period_exact",
+        "qa_satellite_period_exact", "qa_singularity_unique", "qa_pisano_9_exact",
+    }
+    for name in partition_names:
+        checks.append(_check(f"lean_partition_defines_{name}",
+                              f"theorem {name}" in psrc,
+                              f"theorem {name} not found in QAOrbitPartition.lean"))
+
+    # ── QAOrbitInvariance.lean ────────────────────────────────────────────────
+    if not QAINVARIANCE_PATH.exists():
+        checks.append(_check("lean_invariance_source_exists", False,
+                              f"{QAINVARIANCE_PATH} not found"))
+        return checks
+
+    checks.append(_check("lean_invariance_source_exists", True))
+
+    isrc = QAINVARIANCE_PATH.read_text(encoding="utf-8")
+
+    checks.append(_check("lean_invariance_imports_first",
+                          isrc.startswith("import"),
+                          "imports must be the first content in QAOrbitInvariance.lean"))
+
+    invariance_names = {
+        "qa_cosmos_invariant", "qa_satellite_invariant",
+        "qa_cosmos_orbit1_card", "qa_cosmos_orbit12_disjoint",
+        "qa_cosmos_suborbit_union", "qa_cosmos_step_injective",
+        "qa_cosmos_reps_distinct",
+    }
+    for name in invariance_names:
+        checks.append(_check(f"lean_invariance_defines_{name}",
+                              f"theorem {name}" in isrc,
+                              f"theorem {name} not found in QAOrbitInvariance.lean"))
 
     return checks
 

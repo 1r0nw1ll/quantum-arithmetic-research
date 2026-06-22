@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit12_cosmos_invariant",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "3f148b99f8e7ed59953c5e70da53bb28206ec6807334f4e1d44bee201a7365d5"
+}

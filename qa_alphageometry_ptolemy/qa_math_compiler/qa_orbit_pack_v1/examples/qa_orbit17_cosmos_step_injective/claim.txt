@@ -1,0 +1,1 @@
+The QA T-step is injective on the Cosmos: if two Cosmos states have the same image under T, they are equal.

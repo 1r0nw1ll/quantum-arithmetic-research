@@ -1,0 +1,11 @@
+# qa_orbit18_cosmos_reps_distinct
+
+**QA Orbit Pack v1** — machine-checked Lean 4 proof.
+
+**Theorem**: `theorem qa_cosmos_reps_distinct :`
+
+**Proof tactic**: `native_decide`
+
+**Cert refs**: [126] orbit-structure, [128] SP2
+
+**NL**: The three Cosmos sub-orbit representatives (1,0), (2,0), (4,0) lie on genuinely distinct T-orbits: for every k in {0,...,23}, applying T^k to (1,0) never reaches (2,0) or (4,0), and (2,0) never reaches (4,0).

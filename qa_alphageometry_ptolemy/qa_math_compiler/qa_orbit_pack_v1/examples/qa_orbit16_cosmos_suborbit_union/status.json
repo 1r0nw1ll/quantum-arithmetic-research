@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit16_cosmos_suborbit_union",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "944c8702e399dd21a27aa458b8d73634afb3a8ad9e4cbbd6490d7b6c0ca0044a"
+}

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # noqa: DECL-1 (infrastructure — corpus builder, not an empirical QA script)
 """
-Build the qa_orbit_pack_v1 demo corpus from the 5 QA-native Lean theorems
-in mathlib_ingest/QAOrbits.lean.
+Build the qa_orbit_pack_v1 demo corpus from the 18 QA-native Lean theorems:
+  QAOrbits.lean (5), QAOrbitPartition.lean (6), QAOrbitInvariance.lean (7).
 
 Usage:
   python build_qa_orbit_pack.py build   — create/overwrite qa_orbit_pack_v1/
@@ -164,6 +164,331 @@ THEOREMS = [
         "topic": "orbit-structure",
         "nl_span": "every state has orbit period dividing 24 under the QA T-step",
         "formal_identifiers": ["qa_t_period_divides_24", "qa_t_step9"],
+    },
+    # ── QAOrbitPartition.lean — partition & exact period theorems ──────────
+    {
+        "id": "qa_orbit06_cosmos_card",
+        "nl": "The Cosmos orbit in ZMod 9 × ZMod 9 contains exactly 72 states, comprising three sub-orbits of 24 elements each with representatives (1,0), (2,0), and (4,0).",
+        "formal_goal": "theorem qa_cosmos_card : qa_cosmos.card = 72",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Data.Fintype.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (1, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (2, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (4, 0))\n\n"
+            "theorem qa_cosmos_card : qa_cosmos.card = 72 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+        "topic": "partition",
+        "nl_span": "the Cosmos orbit contains exactly 72 states",
+        "formal_identifiers": ["qa_cosmos_card", "qa_step", "qa_cosmos"],
+    },
+    {
+        "id": "qa_orbit07_orbit_partition",
+        "nl": "The 81 states of ZMod 9 × ZMod 9 are partitioned exactly into Cosmos (72 states), Satellite (8 states), and Singularity (1 state): every QA mod-9 state belongs to exactly one orbit.",
+        "formal_goal": (
+            "theorem qa_orbit_partition :\n"
+            "    qa_cosmos ∪ qa_satellite ∪ qa_singularity = Finset.univ"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Data.Fintype.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (1, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (2, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (4, 0))\n\n"
+            "def qa_satellite : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 8).image (fun k => (qa_step^[k]) (6, 3))\n\n"
+            "def qa_singularity : Finset (ZMod 9 × ZMod 9) := {(0, 0)}\n\n"
+            "theorem qa_orbit_partition :\n"
+            "    qa_cosmos ∪ qa_satellite ∪ qa_singularity = Finset.univ := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+        "topic": "partition",
+        "nl_span": "all 81 states partitioned into Cosmos (72), Satellite (8), Singularity (1)",
+        "formal_identifiers": ["qa_orbit_partition", "qa_step", "qa_cosmos", "qa_satellite", "qa_singularity"],
+    },
+    {
+        "id": "qa_orbit08_cosmos_period_exact",
+        "nl": "The minimal period of the Cosmos representative (1,0) under the QA T-step is exactly 24: for every k in {1,...,23}, applying the T-step k times to (1,0) does not return (1,0).",
+        "formal_goal": (
+            "theorem qa_cosmos_period_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → (qa_step^[k.val]) (1, 0) ≠ (1, 0)"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "theorem qa_cosmos_period_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → (qa_step^[k.val]) (1, 0) ≠ (1, 0) := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[128] SP3"],
+        "topic": "exact-period",
+        "nl_span": "minimal period of the Cosmos representative (1,0) is exactly 24",
+        "formal_identifiers": ["qa_cosmos_period_exact", "qa_step"],
+    },
+    {
+        "id": "qa_orbit09_satellite_period_exact",
+        "nl": "The minimal period of the Satellite representative (6,3) under the QA T-step is exactly 8: for every k in {1,...,7}, applying the T-step k times to (6,3) does not return (6,3).",
+        "formal_goal": (
+            "theorem qa_satellite_period_exact :\n"
+            "    ∀ k : Fin 8, k.val ≠ 0 → (qa_step^[k.val]) (6, 3) ≠ (6, 3)"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "theorem qa_satellite_period_exact :\n"
+            "    ∀ k : Fin 8, k.val ≠ 0 → (qa_step^[k.val]) (6, 3) ≠ (6, 3) := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure"],
+        "topic": "exact-period",
+        "nl_span": "minimal period of the Satellite representative (6,3) is exactly 8",
+        "formal_identifiers": ["qa_satellite_period_exact", "qa_step"],
+    },
+    {
+        "id": "qa_orbit10_singularity_unique",
+        "nl": "The singularity (0,0) is the unique fixed point of the QA T-step in ZMod 9 × ZMod 9: a state s satisfies T(s) = s if and only if s = (0,0).",
+        "formal_goal": (
+            "theorem qa_singularity_unique :\n"
+            "    ∀ s : ZMod 9 × ZMod 9, qa_step s = s ↔ s = (0, 0)"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "theorem qa_singularity_unique :\n"
+            "    ∀ s : ZMod 9 × ZMod 9, qa_step s = s ↔ s = (0, 0) := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+        "topic": "singularity",
+        "nl_span": "the singularity (0,0) is the unique fixed point of the T-step",
+        "formal_identifiers": ["qa_singularity_unique", "qa_step"],
+    },
+    {
+        "id": "qa_orbit11_pisano_9_exact",
+        "nl": "The exact Pisano period π(9) = 24: for every k in {1,...,23}, the map T^k is not the identity on ZMod 9 × ZMod 9. Equivalently, the Fibonacci matrix F = [[1,1],[1,0]] has exact order 24 on ZMod 9².",
+        "formal_goal": (
+            "theorem qa_pisano_9_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 →\n"
+            "      ∃ s : ZMod 9 × ZMod 9, (qa_step^[k.val]) s ≠ s"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "theorem qa_pisano_9_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 →\n"
+            "      ∃ s : ZMod 9 × ZMod 9, (qa_step^[k.val]) s ≠ s := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "pisano-period",
+        "nl_span": "the exact Pisano period π(9) = 24 (Fibonacci matrix order 24 on ZMod 9²)",
+        "formal_identifiers": ["qa_pisano_9_exact", "qa_step"],
+    },
+    # ── QAOrbitInvariance.lean — invariance & sub-orbit decomposition ─────
+    {
+        "id": "qa_orbit12_cosmos_invariant",
+        "nl": "The Cosmos orbit is T-invariant: every state in the Cosmos maps to another Cosmos state under the QA T-step.",
+        "formal_goal": (
+            "theorem qa_cosmos_invariant :\n"
+            "    ∀ s ∈ qa_cosmos', qa_step' s ∈ qa_cosmos'"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Data.Fintype.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step' (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos' : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (1, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (2, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (4, 0))\n\n"
+            "theorem qa_cosmos_invariant :\n"
+            "    ∀ s ∈ qa_cosmos', qa_step' s ∈ qa_cosmos' := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure"],
+        "topic": "invariance",
+        "nl_span": "the Cosmos orbit is closed under the QA T-step",
+        "formal_identifiers": ["qa_cosmos_invariant", "qa_step'", "qa_cosmos'"],
+    },
+    {
+        "id": "qa_orbit13_satellite_invariant",
+        "nl": "The Satellite orbit is T-invariant: every state in the Satellite maps to another Satellite state under the QA T-step.",
+        "formal_goal": (
+            "theorem qa_satellite_invariant :\n"
+            "    ∀ s ∈ qa_satellite', qa_step' s ∈ qa_satellite'"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step' (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_satellite' : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 8).image (fun k => (qa_step'^[k]) (6, 3))\n\n"
+            "theorem qa_satellite_invariant :\n"
+            "    ∀ s ∈ qa_satellite', qa_step' s ∈ qa_satellite' := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure"],
+        "topic": "invariance",
+        "nl_span": "the Satellite orbit is closed under the QA T-step",
+        "formal_identifiers": ["qa_satellite_invariant", "qa_step'", "qa_satellite'"],
+    },
+    {
+        "id": "qa_orbit14_cosmos_orbit1_card",
+        "nl": "The first Cosmos sub-orbit — the orbit of representative (1,0) under the QA T-step — has exactly 24 elements.",
+        "formal_goal": "theorem qa_cosmos_orbit1_card : qa_cosmos_orbit1.card = 24",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step' (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos_orbit1 : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (1, 0))\n\n"
+            "theorem qa_cosmos_orbit1_card : qa_cosmos_orbit1.card = 24 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[128] SP3"],
+        "topic": "sub-orbit",
+        "nl_span": "the T-orbit of (1,0) in ZMod 9 has exactly 24 elements",
+        "formal_identifiers": ["qa_cosmos_orbit1_card", "qa_step'", "qa_cosmos_orbit1"],
+    },
+    {
+        "id": "qa_orbit15_cosmos_orbit12_disjoint",
+        "nl": "The two Cosmos sub-orbits with representatives (1,0) and (2,0) are disjoint: the Fibonacci matrix generates two genuinely distinct orbits from these starting states in ZMod 9.",
+        "formal_goal": (
+            "theorem qa_cosmos_orbit12_disjoint :\n"
+            "    Disjoint qa_cosmos_orbit1 qa_cosmos_orbit2"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step' (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos_orbit1 : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (1, 0))\n\n"
+            "def qa_cosmos_orbit2 : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (2, 0))\n\n"
+            "theorem qa_cosmos_orbit12_disjoint :\n"
+            "    Disjoint qa_cosmos_orbit1 qa_cosmos_orbit2 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure"],
+        "topic": "sub-orbit",
+        "nl_span": "Cosmos sub-orbits of (1,0) and (2,0) are disjoint",
+        "formal_identifiers": ["qa_cosmos_orbit12_disjoint", "qa_step'", "qa_cosmos_orbit1", "qa_cosmos_orbit2"],
+    },
+    {
+        "id": "qa_orbit16_cosmos_suborbit_union",
+        "nl": "The Cosmos is exactly the union of the three sub-orbits of representatives (1,0), (2,0), and (4,0): no other T-orbits exist within the Cosmos.",
+        "formal_goal": (
+            "theorem qa_cosmos_suborbit_union :\n"
+            "    qa_cosmos_orbit1 ∪ qa_cosmos_orbit2 ∪ qa_cosmos_orbit3 = qa_cosmos'"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Data.Fintype.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step' (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos' : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (1, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (2, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (4, 0))\n\n"
+            "def qa_cosmos_orbit1 : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (1, 0))\n\n"
+            "def qa_cosmos_orbit2 : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (2, 0))\n\n"
+            "def qa_cosmos_orbit3 : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (4, 0))\n\n"
+            "theorem qa_cosmos_suborbit_union :\n"
+            "    qa_cosmos_orbit1 ∪ qa_cosmos_orbit2 ∪ qa_cosmos_orbit3 = qa_cosmos' := by\n"
+            "  native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+        "topic": "sub-orbit",
+        "nl_span": "Cosmos = orbit(1,0) ∪ orbit(2,0) ∪ orbit(4,0), three disjoint 24-cycles",
+        "formal_identifiers": ["qa_cosmos_suborbit_union", "qa_step'", "qa_cosmos'"],
+    },
+    {
+        "id": "qa_orbit17_cosmos_step_injective",
+        "nl": "The QA T-step is injective on the Cosmos: if two Cosmos states have the same image under T, they are equal.",
+        "formal_goal": (
+            "theorem qa_cosmos_step_injective :\n"
+            "    ∀ s ∈ qa_cosmos', ∀ t ∈ qa_cosmos', qa_step' s = qa_step' t → s = t"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Data.Fintype.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step' (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos' : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (1, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (2, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step'^[k]) (4, 0))\n\n"
+            "theorem qa_cosmos_step_injective :\n"
+            "    ∀ s ∈ qa_cosmos', ∀ t ∈ qa_cosmos', qa_step' s = qa_step' t → s = t := by\n"
+            "  native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure"],
+        "topic": "bijection",
+        "nl_span": "the T-step is injective on the Cosmos orbit",
+        "formal_identifiers": ["qa_cosmos_step_injective", "qa_step'", "qa_cosmos'"],
+    },
+    {
+        "id": "qa_orbit18_cosmos_reps_distinct",
+        "nl": "The three Cosmos sub-orbit representatives (1,0), (2,0), (4,0) lie on genuinely distinct T-orbits: for every k in {0,...,23}, applying T^k to (1,0) never reaches (2,0) or (4,0), and (2,0) never reaches (4,0).",
+        "formal_goal": (
+            "theorem qa_cosmos_reps_distinct :\n"
+            "    ∀ k : ℕ, k < 24 → (qa_step'^[k]) (1, 0) ≠ (2, 0) ∧\n"
+            "                        (qa_step'^[k]) (1, 0) ≠ (4, 0) ∧\n"
+            "                        (qa_step'^[k]) (2, 0) ≠ (4, 0)"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step' (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "theorem qa_cosmos_reps_distinct :\n"
+            "    ∀ k : ℕ, k < 24 → (qa_step'^[k]) (1, 0) ≠ (2, 0) ∧\n"
+            "                        (qa_step'^[k]) (1, 0) ≠ (4, 0) ∧\n"
+            "                        (qa_step'^[k]) (2, 0) ≠ (4, 0) := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[128] SP2"],
+        "topic": "sub-orbit",
+        "nl_span": "the three Cosmos sub-orbit reps (1,0), (2,0), (4,0) are on distinct T-orbits",
+        "formal_identifiers": ["qa_cosmos_reps_distinct", "qa_step'"],
     },
 ]
 
@@ -366,17 +691,31 @@ def build_pack() -> None:
     readme = (
         "# qa_orbit_pack_v1\n\n"
         "Machine-checked Lean 4 proofs of core QA structural claims.\n\n"
-        "These are the first QA-native formal theorems: the QA Pythagorean identity,\n"
-        "singularity fixed-point, satellite orbit period 8, cosmos orbit period 24,\n"
-        "and the universal period-24 bound (Pisano period π(9) divides 24).\n\n"
-        "All proofs are in `QAOrbits.lean` in the mathlib_ingest project.\n"
-        "Each example here is a standalone extract with a single-theorem proof file.\n\n"
+        "QAOrbits.lean (5 theorems): QA Pythagorean identity, singularity fixed-point,\n"
+        "satellite period 8, cosmos period 24, universal period-24 bound.\n\n"
+        "QAOrbitPartition.lean (6 theorems): three-orbit partition (81 = 72+8+1),\n"
+        "cosmos cardinality 72, exact cosmos period 24, exact satellite period 8,\n"
+        "singularity uniqueness, exact Pisano period π(9) = 24.\n\n"
+        "Each example is a standalone extract with a single-theorem proof file.\n\n"
         "## Cert References\n\n"
         "- `qa_orbit01_cfgpythag` → cert [496] ESC_PYTH\n"
         "- `qa_orbit02_singularity_fixed` → cert [153] DOMINANT=SINGULARITY\n"
         "- `qa_orbit03_satellite_period_8` → cert [126] orbit-structure\n"
         "- `qa_orbit04_cosmos_period_24` → cert [128] SP3\n"
         "- `qa_orbit05_t_period_divides_24` → cert [128] SP2\n"
+        "- `qa_orbit06_cosmos_card` → cert [126] / [191]\n"
+        "- `qa_orbit07_orbit_partition` → cert [126] / [191] (three-orbit partition)\n"
+        "- `qa_orbit08_cosmos_period_exact` → cert [128] SP3 (exact period)\n"
+        "- `qa_orbit09_satellite_period_exact` → cert [126] (exact period)\n"
+        "- `qa_orbit10_singularity_unique` → cert [153] (unique fixed point)\n"
+        "- `qa_orbit11_pisano_9_exact` → cert [128] SP2 (π(9) = 24 exact)\n"
+        "- `qa_orbit12_cosmos_invariant` → cert [126] (Cosmos T-invariant)\n"
+        "- `qa_orbit13_satellite_invariant` → cert [126] (Satellite T-invariant)\n"
+        "- `qa_orbit14_cosmos_orbit1_card` → cert [126] / [128] (sub-orbit size 24)\n"
+        "- `qa_orbit15_cosmos_orbit12_disjoint` → cert [126] (sub-orbits disjoint)\n"
+        "- `qa_orbit16_cosmos_suborbit_union` → cert [126] / [191] (sub-orbit decomp)\n"
+        "- `qa_orbit17_cosmos_step_injective` → cert [126] (T bijective on Cosmos)\n"
+        "- `qa_orbit18_cosmos_reps_distinct` → cert [126] / [128] (three distinct orbits)\n"
     )
     (PACK_DIR / "README.md").write_text(readme, encoding="utf-8")
     print(f"Wrote {PACK_DIR}/index.json and README.md")

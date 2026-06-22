@@ -1,0 +1,1 @@
+The Cosmos orbit is T-invariant: every state in the Cosmos maps to another Cosmos state under the QA T-step.

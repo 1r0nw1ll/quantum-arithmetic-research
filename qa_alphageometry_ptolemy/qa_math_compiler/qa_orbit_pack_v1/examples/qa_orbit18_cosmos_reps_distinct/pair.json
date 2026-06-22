@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_cosmos_reps_distinct",
+          "qa_step'"
+        ],
+        "nl_span": "the three Cosmos sub-orbit reps (1,0), (2,0), (4,0) are on distinct T-orbits"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_cosmos_reps_distinct :\n    ∀ k : ℕ, k < 24 → (qa_step'^[k]) (1, 0) ≠ (2, 0) ∧\n                        (qa_step'^[k]) (1, 0) ≠ (4, 0) ∧\n                        (qa_step'^[k]) (2, 0) ≠ (4, 0)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The three Cosmos sub-orbit representatives (1,0), (2,0), (4,0) lie on genuinely distinct T-orbits: for every k in {0,...,23}, applying T^k to (1,0) never reaches (2,0) or (4,0), and (2,0) never reaches (4,0).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT18_COSMOS_REPS_DISTINCT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "598894837011bc1371a0d6a648cf08f7b493d2ebbc841432af88311907b37086"
+  }
+}

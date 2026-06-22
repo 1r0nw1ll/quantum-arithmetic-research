@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit15_cosmos_orbit12_disjoint",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "77e108f19b84d2e3ddb8da589055498549da2f84293720e31d392de1571a7c31"
+}

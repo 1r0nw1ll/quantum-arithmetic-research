@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit18_cosmos_reps_distinct",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "598894837011bc1371a0d6a648cf08f7b493d2ebbc841432af88311907b37086"
+}

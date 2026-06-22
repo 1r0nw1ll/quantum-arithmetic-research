@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit05_t_period_divides_24",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "ee4550362f130e5dc0462986736b576e9283ff864fbe803627d62db5ba0b751a"
+}

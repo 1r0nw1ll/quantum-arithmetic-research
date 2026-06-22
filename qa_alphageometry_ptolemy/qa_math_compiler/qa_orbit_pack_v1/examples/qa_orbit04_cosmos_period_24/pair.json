@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_cosmos_period_24",
+          "qa_t_step9"
+        ],
+        "nl_span": "cosmos representative (1, 0) returns to itself after 24 T-steps"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_cosmos_period_24 : (qa_t_step9^[24]) (1, 0) = (1, 0)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP3",
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The cosmos representative (1, 0) in ZMod 9 returns to itself after exactly 24 applications of the QA T-step.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT04_COSMOS_PERIOD_24_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "c64c289446c161dd1de81d65bb0dcca6521eaead5e160fd8f878b7094228079d"
+  }
+}

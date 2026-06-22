@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "rfl"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_singularity_fixed",
+          "qa_t_step9"
+        ],
+        "nl_span": "the QA singularity state (0, 0) is a fixed point of the T-step"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_singularity_fixed : qa_t_step9 (0, 0) = (0, 0)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[153] DOMINANT=SINGULARITY"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The QA singularity state (0, 0) in ZMod 9 — representing the pair (9, 9) in {1,...,9} — is a fixed point of the T-step.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT02_SINGULARITY_FIXED_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "09dc82a30ffa4a79ac1bf2bac16f794004349199effaff23e042bf68e0eedb5a"
+  }
+}

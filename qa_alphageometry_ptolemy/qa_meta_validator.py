@@ -1787,6 +1787,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
       - demo_pack_v1 must PASS demo_pack validator
       - demo_pack_v1/corpus.json must deterministically rebuild byte-semantically
       - Lean, Coq/Rocq, and Isabelle live kernel smoke proofs must PASS
+      - qa_orbit_pack_v1 (5 QA-native theorems: CFG-Pythag, singularity, satellite-8, cosmos-24, universal-24) must PASS
 
     Returns:
         None on success,
@@ -1907,6 +1908,20 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mc_dir,
         "build_proof_assistant_receipts.py",
     )
+    qa_orbit_validator = os.path.join(
+        mathlib_ingest_dir,
+        "validate_qa_orbit_ingest.py",
+    )
+    qa_orbit_registry = os.path.join(
+        mathlib_ingest_dir,
+        "qa_orbit_registry.v1.json",
+    )
+    qa_orbit_lean = os.path.join(
+        mathlib_ingest_dir,
+        "QAOrbits.lean",
+    )
+    qa_orbit_pack_dir = os.path.join(mc_dir, "qa_orbit_pack_v1")
+    qa_orbit_corpus = os.path.join(qa_orbit_pack_dir, "corpus.json")
     coq_dependency_receipt = os.path.join(
         mathlib_ingest_dir,
         "coq_dependency_receipt.json",
@@ -1994,6 +2009,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mined_lemma_library, lemma_mining_evaluation, lemma_mining_pack,
         supply_chain_manifest,
         toolchain_manifest, live_kernel_report, demo_corpus,
+        qa_orbit_validator, qa_orbit_registry, qa_orbit_lean, qa_orbit_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg, lemma_duplicate_neg,
@@ -2001,6 +2017,11 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
     ]
     if os.path.isdir(mathlib_pack_dir):
         for root, _, files in os.walk(mathlib_pack_dir):
+            required_artifacts.extend(
+                os.path.join(root, name) for name in sorted(files)
+            )
+    if os.path.isdir(qa_orbit_pack_dir):
+        for root, _, files in os.walk(qa_orbit_pack_dir):
             required_artifacts.extend(
                 os.path.join(root, name) for name in sorted(files)
             )
@@ -2595,6 +2616,30 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "Math compiler live kernel verification failed: "
             f"{json.dumps(kernel_result, sort_keys=True)}"
+        )
+
+    qa_orbit_proc = subprocess.run(
+        [sys.executable, qa_orbit_validator, "--ci"],
+        capture_output=True,
+        text=True,
+        timeout=60,
+    )
+    if qa_orbit_proc.returncode != 0:
+        raise RuntimeError(
+            "QA orbit pack validation failed:\n"
+            f"{qa_orbit_proc.stdout}\n{qa_orbit_proc.stderr}"
+        )
+    try:
+        qa_orbit_result = json.loads(qa_orbit_proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "QA orbit validator returned non-JSON output: "
+            f"{exc}: {qa_orbit_proc.stdout}"
+        )
+    if qa_orbit_result.get("ok") is not True:
+        raise RuntimeError(
+            "QA orbit pack validation returned ok=false: "
+            f"{json.dumps(qa_orbit_result, sort_keys=True)}"
         )
 
     return None

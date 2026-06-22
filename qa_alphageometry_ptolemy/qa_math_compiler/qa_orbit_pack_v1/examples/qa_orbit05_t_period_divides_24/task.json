@@ -1,0 +1,27 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_t_period_divides_24 : ∀ s : ZMod 9 × ZMod 9, (qa_t_step9^[24]) s = s",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "orbit-structure",
+    "cert_refs": [
+      "[128] SP2",
+      "[128] SP3"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "Every state in ZMod 9 × ZMod 9 has orbit period dividing 24 under the QA T-step; equivalently, the Fibonacci matrix F satisfies F^24 = I in GL₂(ZMod 9).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT05_T_PERIOD_DIVIDES_24_TASK"
+}

@@ -1,0 +1,1 @@
+Every state in ZMod 9 × ZMod 9 has orbit period dividing 24 under the QA T-step; equivalently, the Fibonacci matrix F satisfies F^24 = I in GL₂(ZMod 9).

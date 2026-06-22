@@ -1,0 +1,1 @@
+The satellite representative (6, 3) in ZMod 9 returns to itself after exactly 8 applications of the QA T-step.

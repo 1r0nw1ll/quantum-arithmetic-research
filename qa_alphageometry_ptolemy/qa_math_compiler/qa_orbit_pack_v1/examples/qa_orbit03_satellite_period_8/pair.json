@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_satellite_period_8",
+          "qa_t_step9"
+        ],
+        "nl_span": "satellite representative (6, 3) returns to itself after 8 T-steps"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_satellite_period_8 : (qa_t_step9^[8]) (6, 3) = (6, 3)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The satellite representative (6, 3) in ZMod 9 returns to itself after exactly 8 applications of the QA T-step.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT03_SATELLITE_PERIOD_8_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "fef933ab95628c492998e66493cc93dfefcef08f173f22c8f1e1f505d23f57e1"
+  }
+}

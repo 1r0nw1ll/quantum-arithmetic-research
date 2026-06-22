@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "ring"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_cfgpythag (b e : ℤ) :\n    let d := b + e\n    (2 * d * e) * (2 * d * e) +\n    (d * d - e * e) * (d * d - e * e) =\n    (d * d + e * e) * (d * d + e * e)",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "arithmetic",
+    "cert_refs": [
+      "[496] ESC_PYTH"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "For QA derived coordinate d = b+e, the triple (2de, d²−e², d²+e²) satisfies the Pythagorean identity: (2de)² + (d²−e²)² = (d²+e²)².",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT01_CFGPYTHAG_TASK"
+}

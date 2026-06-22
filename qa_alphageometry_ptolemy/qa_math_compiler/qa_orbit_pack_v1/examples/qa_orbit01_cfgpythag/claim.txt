@@ -1,0 +1,1 @@
+For QA derived coordinate d = b+e, the triple (2de, d²−e², d²+e²) satisfies the Pythagorean identity: (2de)² + (d²−e²)² = (d²+e²)².

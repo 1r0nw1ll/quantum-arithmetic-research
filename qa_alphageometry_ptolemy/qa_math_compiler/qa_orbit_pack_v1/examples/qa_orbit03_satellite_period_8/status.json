@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit03_satellite_period_8",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "fef933ab95628c492998e66493cc93dfefcef08f173f22c8f1e1f505d23f57e1"
+}

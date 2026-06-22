@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit04_cosmos_period_24",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "c64c289446c161dd1de81d65bb0dcca6521eaead5e160fd8f878b7094228079d"
+}

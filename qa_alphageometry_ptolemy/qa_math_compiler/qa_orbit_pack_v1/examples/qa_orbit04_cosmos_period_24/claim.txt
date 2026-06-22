@@ -1,0 +1,1 @@
+The cosmos representative (1, 0) in ZMod 9 returns to itself after exactly 24 applications of the QA T-step.

@@ -1,0 +1,37 @@
+{
+  "example_count": 5,
+  "examples": [
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit01_cfgpythag",
+      "status": "PROVED",
+      "topic": "arithmetic"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit02_singularity_fixed",
+      "status": "PROVED",
+      "topic": "orbit-structure"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit03_satellite_period_8",
+      "status": "PROVED",
+      "topic": "orbit-structure"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit04_cosmos_period_24",
+      "status": "PROVED",
+      "topic": "orbit-structure"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit05_t_period_divides_24",
+      "status": "PROVED",
+      "topic": "orbit-structure"
+    }
+  ],
+  "schema_id": "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1",
+  "version": "v1"
+}

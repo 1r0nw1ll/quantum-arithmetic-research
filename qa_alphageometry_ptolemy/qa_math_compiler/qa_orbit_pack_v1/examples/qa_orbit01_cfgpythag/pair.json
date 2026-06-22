@@ -1,0 +1,33 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "ring"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_cfgpythag"
+        ],
+        "nl_span": "the triple (2de, d²−e², d²+e²) satisfies the Pythagorean identity"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_cfgpythag (b e : ℤ) :\n    let d := b + e\n    (2 * d * e) * (2 * d * e) +\n    (d * d - e * e) * (d * d - e * e) =\n    (d * d + e * e) * (d * d + e * e)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[496] ESC_PYTH"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "For QA derived coordinate d = b+e, the triple (2de, d²−e², d²+e²) satisfies the Pythagorean identity: (2de)² + (d²−e²)² = (d²+e²)².",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT01_CFGPYTHAG_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "60654e6e23c4e460789ee028ee4f08353c3fb0f343733765ead81d6c81143ccb"
+  }
+}

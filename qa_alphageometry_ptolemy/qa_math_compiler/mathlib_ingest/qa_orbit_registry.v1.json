@@ -1,0 +1,63 @@
+{
+  "schema_id": "QA_ORBIT_REGISTRY.v1",
+  "registry_id": "qa_orbit_registry_v1",
+  "created_utc": "2026-06-22T00:00:00Z",
+  "source_module": "QAOrbits.lean",
+  "lean_toolchain": "leanprover/lean4:v4.31.0",
+  "mathlib_commit": "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f",
+  "description": "Registry of QA-native formal theorems in QAOrbits.lean — the first machine-checked proofs of core Quantum Arithmetic structural claims.",
+  "entries": [
+    {
+      "theorem_name": "qa_cfgpythag",
+      "example_id": "qa_orbit01_cfgpythag",
+      "tactic": "ring",
+      "cert_refs": ["[496] ESC_PYTH"],
+      "topic": "arithmetic",
+      "nl": "For QA derived coordinate d = b+e, the triple (2de, d^2-e^2, d^2+e^2) satisfies the Pythagorean identity.",
+      "formal_statement": "theorem qa_cfgpythag (b e : ℤ) : let d := b + e\n    (2 * d * e) * (2 * d * e) +\n    (d * d - e * e) * (d * d - e * e) =\n    (d * d + e * e) * (d * d + e * e)"
+    },
+    {
+      "theorem_name": "qa_singularity_fixed",
+      "example_id": "qa_orbit02_singularity_fixed",
+      "tactic": "rfl",
+      "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+      "topic": "orbit-structure",
+      "nl": "The QA singularity state (0, 0) in ZMod 9 is a fixed point of the T-step.",
+      "formal_statement": "theorem qa_singularity_fixed : qa_t_step9 (0, 0) = (0, 0)"
+    },
+    {
+      "theorem_name": "qa_satellite_period_8",
+      "example_id": "qa_orbit03_satellite_period_8",
+      "tactic": "decide",
+      "cert_refs": ["[126] orbit-structure"],
+      "topic": "orbit-structure",
+      "nl": "The satellite representative (6, 3) in ZMod 9 returns to itself after exactly 8 T-steps.",
+      "formal_statement": "theorem qa_satellite_period_8 : (qa_t_step9^[8]) (6, 3) = (6, 3)"
+    },
+    {
+      "theorem_name": "qa_cosmos_period_24",
+      "example_id": "qa_orbit04_cosmos_period_24",
+      "tactic": "decide",
+      "cert_refs": ["[128] SP3", "[126] orbit-structure"],
+      "topic": "orbit-structure",
+      "nl": "The cosmos representative (1, 0) in ZMod 9 returns to itself after 24 T-steps.",
+      "formal_statement": "theorem qa_cosmos_period_24 : (qa_t_step9^[24]) (1, 0) = (1, 0)"
+    },
+    {
+      "theorem_name": "qa_t_period_divides_24",
+      "example_id": "qa_orbit05_t_period_divides_24",
+      "tactic": "native_decide",
+      "cert_refs": ["[128] SP2", "[128] SP3"],
+      "topic": "orbit-structure",
+      "nl": "Every state in ZMod 9 x ZMod 9 has orbit period dividing 24 under the QA T-step.",
+      "formal_statement": "theorem qa_t_period_divides_24 : ∀ s : ZMod 9 × ZMod 9, (qa_t_step9^[24]) s = s"
+    }
+  ],
+  "metrics": {
+    "entry_count": 5,
+    "ring_count": 1,
+    "rfl_count": 1,
+    "decide_count": 2,
+    "native_decide_count": 1
+  }
+}

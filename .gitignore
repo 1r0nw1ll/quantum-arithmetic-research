@@ -202,6 +202,9 @@ multi_ai_workspace/dataset_generator.py
 !qa_alphageometry_ptolemy/qa_math_compiler/mathlib_pack_v1/**/*.json
 !qa_alphageometry_ptolemy/qa_math_compiler/mathlib_pack_v1/**/*.txt
 !qa_alphageometry_ptolemy/qa_math_compiler/mathlib_pack_v1/**/*.md
+!qa_alphageometry_ptolemy/qa_math_compiler/qa_orbit_pack_v1/**/*.json
+!qa_alphageometry_ptolemy/qa_math_compiler/qa_orbit_pack_v1/**/*.txt
+!qa_alphageometry_ptolemy/qa_math_compiler/qa_orbit_pack_v1/**/*.md
 !qa_alphageometry_ptolemy/qa_math_compiler/mathlib_ingest/*.json
 !qa_alphageometry_ptolemy/qa_math_compiler/*.json
 !qa_competency/**/*.json

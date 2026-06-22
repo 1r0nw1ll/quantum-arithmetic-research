@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit01_cfgpythag",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "60654e6e23c4e460789ee028ee4f08353c3fb0f343733765ead81d6c81143ccb"
+}

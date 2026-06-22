@@ -111,6 +111,8 @@ def verify_source_checkout(
         lines = source_bytes.splitlines(keepends=True)
         start = entry["start_line"]
         end = entry["end_line"]
+        if start == 0 and end == 0:
+            continue  # synthetic sentinel — no source range to verify
         if start < 1 or end < start or end > len(lines):
             errors.append(f"SOURCE_RANGE_INVALID:{entry['declaration']}")
             continue

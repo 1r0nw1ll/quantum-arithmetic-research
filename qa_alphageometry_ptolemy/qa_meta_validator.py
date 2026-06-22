@@ -1782,6 +1782,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
       - corpus_invalid_digest.json must FAIL with CORPUS_DIGEST_MISMATCH
       - assistants_valid.json must PASS
       - assistants_invalid_nondeterministic.json must FAIL with ASSISTANT_NONDETERMINISTIC
+      - Mathlib upgrade drift test (5 mutation checks: T0 clean, T1 byte-flip, T2 decl-mutate, T3 file-delete, T4 commit-mismatch) must PASS
       - demo_pack_v1 must PASS demo_pack validator
       - demo_pack_v1/corpus.json must deterministically rebuild byte-semantically
       - Lean, Coq/Rocq, and Isabelle live kernel smoke proofs must PASS
@@ -1897,6 +1898,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mc_dir,
         "certify_mathlib_registry.py",
     )
+    upgrade_drift_validator = os.path.join(
+        mc_dir,
+        "validate_upgrade_drift.py",
+    )
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
     semantic_replay_certificate = os.path.join(
@@ -1949,7 +1954,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         schema_demo_pack, corpus_builder, live_kernel_verifier,
         kernel_trace_compiler, lemma_mining_evaluator, supply_chain_builder,
         runner_receipt_builder, mathlib_ingest_validator,
-        mathlib_dependency_validator,
+        mathlib_dependency_validator, upgrade_drift_validator,
         mathlib_ingest_registry, mathlib_ingest_negative,
         mathlib_ingest_lean, mathlib_ingest_lakefile,
         mathlib_ingest_toolchain, mathlib_ingest_lock,
@@ -2353,6 +2358,30 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "Mathlib dependency replay self-test returned ok=false: "
             f"{json.dumps(mathlib_dependency_result, sort_keys=True)}"
+        )
+
+    upgrade_drift_proc = subprocess.run(
+        [sys.executable, upgrade_drift_validator, "--json-only"],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    if upgrade_drift_proc.returncode != 0:
+        raise RuntimeError(
+            "Mathlib upgrade drift self-test failed:\n"
+            f"{upgrade_drift_proc.stdout}\n{upgrade_drift_proc.stderr}"
+        )
+    try:
+        upgrade_drift_result = json.loads(upgrade_drift_proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "Mathlib upgrade drift test returned non-JSON output: "
+            f"{exc}: {upgrade_drift_proc.stdout}"
+        )
+    if upgrade_drift_result.get("ok") is not True:
+        raise RuntimeError(
+            "Mathlib upgrade drift test returned ok=false: "
+            f"{json.dumps(upgrade_drift_result, sort_keys=True)}"
         )
 
     mathlib_pack_result = validate_demo_pack_v1(mathlib_pack_dir)

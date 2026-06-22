@@ -1,0 +1,1 @@
+The inverse isomorphism sends F^k to Multiplicative.ofAdd (k mod 24) for any integer k.

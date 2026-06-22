@@ -1,0 +1,1 @@
+The isomorphism sends Multiplicative.ofAdd k to the k-th power F^k for any integer k.

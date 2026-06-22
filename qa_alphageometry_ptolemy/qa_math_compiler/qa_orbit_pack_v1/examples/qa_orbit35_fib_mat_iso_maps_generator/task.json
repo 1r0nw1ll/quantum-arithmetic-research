@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "exact"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem fib_mat_iso_maps_generator : fib_mat_iso_ZMod24 (Multiplicative.ofAdd 1) = fib_gen",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "cyclic-group",
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The isomorphism fib_mat_iso_ZMod24 sends Multiplicative.ofAdd 1 to the generator fib_gen = F.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT35_FIB_MAT_ISO_MAPS_GENERATOR_TASK"
+}

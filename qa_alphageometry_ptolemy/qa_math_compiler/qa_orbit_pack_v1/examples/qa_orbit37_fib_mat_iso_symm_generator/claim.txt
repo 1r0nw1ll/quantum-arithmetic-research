@@ -1,0 +1,1 @@
+The inverse isomorphism sends the generator fib_gen back to Multiplicative.ofAdd 1.

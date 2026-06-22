@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "exact"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem fib_mat_iso_zpow (k : ℤ) : fib_mat_iso_ZMod24 (Multiplicative.ofAdd k) = fib_gen ^ k",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "cyclic-group",
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The isomorphism sends Multiplicative.ofAdd k to the k-th power F^k for any integer k.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT36_FIB_MAT_ISO_ZPOW_TASK"
+}

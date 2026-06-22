@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "zmodMulEquivOfGenerator_symm_apply_zpow"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_iso_symm_zpow",
+          "zmodMulEquivOfGenerator_symm_apply_zpow"
+        ],
+        "nl_span": "inverse iso sends F^k → ofAdd(k mod 24)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_iso_symm_zpow (k : ℤ) : fib_mat_iso_ZMod24.symm (fib_gen ^ k) = Multiplicative.ofAdd (k : ZMod 24)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The inverse isomorphism sends F^k to Multiplicative.ofAdd (k mod 24) for any integer k.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT38_FIB_MAT_ISO_SYMM_ZPOW_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "8bb13fb44e586471269d7d7b4c152b79582e9cc086c2eebc23cc83c1e126db60"
+  }
+}

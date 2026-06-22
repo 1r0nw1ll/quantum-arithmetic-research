@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "zmodMulEquivOfGenerator_apply_ofAdd_one"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_iso_maps_generator",
+          "zmodMulEquivOfGenerator_apply_ofAdd_one"
+        ],
+        "nl_span": "iso sends ofAdd 1 → generator F"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_iso_maps_generator : fib_mat_iso_ZMod24 (Multiplicative.ofAdd 1) = fib_gen",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The isomorphism fib_mat_iso_ZMod24 sends Multiplicative.ofAdd 1 to the generator fib_gen = F.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT35_FIB_MAT_ISO_MAPS_GENERATOR_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "1f6a2adb49358a9ed04069907baa7f9b4745814d911cbb541dad73b5e5074566"
+  }
+}

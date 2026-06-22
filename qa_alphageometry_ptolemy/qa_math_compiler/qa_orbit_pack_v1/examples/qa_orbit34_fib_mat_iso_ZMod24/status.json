@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit34_fib_mat_iso_ZMod24",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "5a2c615833ba1d99ccfa02986960fbbcb55472155362122ab469c454f0c79365"
+}

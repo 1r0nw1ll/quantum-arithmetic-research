@@ -1,0 +1,37 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "zmodMulEquivOfGenerator"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_iso_ZMod24",
+          "zmodMulEquivOfGenerator",
+          "fib_gen_generates",
+          "fib_mat_zpowers_nat_card"
+        ],
+        "nl_span": "explicit iso ⟨F⟩ ≅ ℤ/24ℤ via zmodMulEquivOfGenerator"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "noncomputable def fib_mat_iso_ZMod24 : Multiplicative (ZMod 24) ≃* ↕(Subgroup.zpowers fib_mat_unit)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2",
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "There exists an explicit group isomorphism Multiplicative(ZMod 24) ≃* ⟨F⟩ built by zmodMulEquivOfGenerator, sending Multiplicative.ofAdd k to F^k. This is the full Pisano period statement in group-isomorphism form.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT34_FIB_MAT_ISO_ZMOD24_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "5a2c615833ba1d99ccfa02986960fbbcb55472155362122ab469c454f0c79365"
+  }
+}

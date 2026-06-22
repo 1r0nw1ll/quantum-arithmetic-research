@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "exact"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem fib_mat_iso_symm_generator : fib_mat_iso_ZMod24.symm fib_gen = Multiplicative.ofAdd 1",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "cyclic-group",
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The inverse isomorphism sends the generator fib_gen back to Multiplicative.ofAdd 1.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT37_FIB_MAT_ISO_SYMM_GENERATOR_TASK"
+}

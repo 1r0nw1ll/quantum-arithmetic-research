@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit35_fib_mat_iso_maps_generator",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "1f6a2adb49358a9ed04069907baa7f9b4745814d911cbb541dad73b5e5074566"
+}

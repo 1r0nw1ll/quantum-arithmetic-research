@@ -1,0 +1,1 @@
+The isomorphism fib_mat_iso_ZMod24 sends Multiplicative.ofAdd 1 to the generator fib_gen = F.

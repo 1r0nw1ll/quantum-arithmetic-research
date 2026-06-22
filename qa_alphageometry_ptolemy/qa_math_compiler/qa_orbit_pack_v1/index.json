@@ -1,5 +1,5 @@
 {
-  "example_count": 32,
+  "example_count": 38,
   "examples": [
     {
       "difficulty": "qa-native",
@@ -190,6 +190,42 @@
     {
       "difficulty": "qa-native",
       "id": "qa_orbit32_fib_mat_zpowers_isCyclic",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit33_fib_mat_zpowers_nat_card",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit34_fib_mat_iso_ZMod24",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit35_fib_mat_iso_maps_generator",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit36_fib_mat_iso_zpow",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit37_fib_mat_iso_symm_generator",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit38_fib_mat_iso_symm_zpow",
       "status": "PROVED",
       "topic": "cyclic-group"
     }

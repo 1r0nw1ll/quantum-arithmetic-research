@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit37_fib_mat_iso_symm_generator",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "b8e103e253138d94102b38211d86c36dd69a64ad54c066366c5cbe576a11e6d9"
+}

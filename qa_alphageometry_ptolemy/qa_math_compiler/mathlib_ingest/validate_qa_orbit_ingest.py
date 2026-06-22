@@ -24,9 +24,10 @@ QAPARTITION_PATH = ROOT / "QAOrbitPartition.lean"
 QAINVARIANCE_PATH = ROOT / "QAOrbitInvariance.lean"
 QAFIBMATRIX_PATH = ROOT / "QAFibMatrix.lean"
 QAFIBMATRIXGROUP_PATH = ROOT / "QAFibMatrixGroup.lean"
+QAFIBMATRIXGROUPISO_PATH = ROOT / "QAFibMatrixGroupIso.lean"
 
 REGISTRY_SCHEMA_ID = "QA_ORBIT_REGISTRY.v1"
-EXPECTED_ENTRY_COUNT = 32
+EXPECTED_ENTRY_COUNT = 38
 EXPECTED_THEOREM_NAMES = {
     # QAOrbits.lean (5)
     "qa_cfgpythag",
@@ -65,6 +66,13 @@ EXPECTED_THEOREM_NAMES = {
     "fib_mat_unit_orderOf",
     "fib_mat_zpowers_card",
     "fib_mat_zpowers_isCyclic",
+    # QAFibMatrixGroupIso.lean (6)
+    "fib_mat_zpowers_nat_card",
+    "fib_mat_iso_ZMod24",
+    "fib_mat_iso_maps_generator",
+    "fib_mat_iso_zpow",
+    "fib_mat_iso_symm_generator",
+    "fib_mat_iso_symm_zpow",
 }
 
 
@@ -268,6 +276,34 @@ def validate_lean_source() -> List[Dict[str, Any]]:
         checks.append(_check(f"lean_fibmatrixgroup_defines_{name}",
                               f"theorem {name}" in gsrc,
                               f"theorem {name} not found in QAFibMatrixGroup.lean"))
+
+    # ── QAFibMatrixGroupIso.lean ───────────────────────────────────────────────
+    if not QAFIBMATRIXGROUPISO_PATH.exists():
+        checks.append(_check("lean_fibmatrixgroupiso_source_exists", False,
+                              f"{QAFIBMATRIXGROUPISO_PATH} not found"))
+        return checks
+
+    checks.append(_check("lean_fibmatrixgroupiso_source_exists", True))
+
+    isosrc = QAFIBMATRIXGROUPISO_PATH.read_text(encoding="utf-8")
+
+    checks.append(_check("lean_fibmatrixgroupiso_imports_first",
+                          isosrc.startswith("import"),
+                          "imports must be the first content in QAFibMatrixGroupIso.lean"))
+
+    fibmatrixgroupiso_names = {
+        "fib_mat_zpowers_nat_card", "fib_mat_iso_maps_generator",
+        "fib_mat_iso_zpow", "fib_mat_iso_symm_generator",
+        "fib_mat_iso_symm_zpow",
+    }
+    for name in fibmatrixgroupiso_names:
+        checks.append(_check(f"lean_fibmatrixgroupiso_defines_{name}",
+                              f"theorem {name}" in isosrc,
+                              f"theorem {name} not found in QAFibMatrixGroupIso.lean"))
+
+    checks.append(_check("lean_fibmatrixgroupiso_defines_fib_mat_iso_ZMod24",
+                          "def fib_mat_iso_ZMod24" in isosrc,
+                          "def fib_mat_iso_ZMod24 not found in QAFibMatrixGroupIso.lean"))
 
     return checks
 

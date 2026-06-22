@@ -2,17 +2,25 @@
   "schema_id": "QA_ORBIT_REGISTRY.v1",
   "registry_id": "qa_orbit_registry_v1",
   "created_utc": "2026-06-22T00:00:00Z",
-  "source_modules": ["QAOrbits.lean", "QAOrbitPartition.lean", "QAOrbitInvariance.lean", "QAFibMatrix.lean", "QAFibMatrixGroup.lean"],
+  "source_modules": [
+    "QAOrbits.lean",
+    "QAOrbitPartition.lean",
+    "QAOrbitInvariance.lean",
+    "QAFibMatrix.lean",
+    "QAFibMatrixGroup.lean"
+  ],
   "lean_toolchain": "leanprover/lean4:v4.31.0",
   "mathlib_commit": "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f",
-  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (6) + QAOrbitInvariance.lean (7) + QAFibMatrix.lean (7) + QAFibMatrixGroup.lean (7). Machine-checked proofs through orderOf(F)=24 and the cyclic subgroup ⟨F⟩ of order 24 in GL₂(ZMod 9).",
+  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (6) + QAOrbitInvariance.lean (7) + QAFibMatrix.lean (7) + QAFibMatrixGroup.lean (7). Machine-checked proofs through orderOf(F)=24 and the cyclic subgroup \u27e8F\u27e9 of order 24 in GL\u2082(ZMod 9).",
   "entries": [
     {
       "theorem_name": "qa_cfgpythag",
       "example_id": "qa_orbit01_cfgpythag",
       "source_module": "QAOrbits.lean",
       "tactic": "ring",
-      "cert_refs": ["[496] ESC_PYTH"],
+      "cert_refs": [
+        "[496] ESC_PYTH"
+      ],
       "topic": "arithmetic"
     },
     {
@@ -20,7 +28,9 @@
       "example_id": "qa_orbit02_singularity_fixed",
       "source_module": "QAOrbits.lean",
       "tactic": "rfl",
-      "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+      "cert_refs": [
+        "[153] DOMINANT=SINGULARITY"
+      ],
       "topic": "orbit-structure"
     },
     {
@@ -28,7 +38,9 @@
       "example_id": "qa_orbit03_satellite_period_8",
       "source_module": "QAOrbits.lean",
       "tactic": "decide",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
       "topic": "orbit-structure"
     },
     {
@@ -36,7 +48,10 @@
       "example_id": "qa_orbit04_cosmos_period_24",
       "source_module": "QAOrbits.lean",
       "tactic": "decide",
-      "cert_refs": ["[128] SP3", "[126] orbit-structure"],
+      "cert_refs": [
+        "[128] SP3",
+        "[126] orbit-structure"
+      ],
       "topic": "orbit-structure"
     },
     {
@@ -44,7 +59,10 @@
       "example_id": "qa_orbit05_t_period_divides_24",
       "source_module": "QAOrbits.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[128] SP2", "[128] SP3"],
+      "cert_refs": [
+        "[128] SP2",
+        "[128] SP3"
+      ],
       "topic": "orbit-structure"
     },
     {
@@ -52,7 +70,10 @@
       "example_id": "qa_orbit06_cosmos_card",
       "source_module": "QAOrbitPartition.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[191] reachability-tier-counts"
+      ],
       "topic": "partition"
     },
     {
@@ -60,7 +81,10 @@
       "example_id": "qa_orbit07_orbit_partition",
       "source_module": "QAOrbitPartition.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[191] reachability-tier-counts"
+      ],
       "topic": "partition"
     },
     {
@@ -68,7 +92,9 @@
       "example_id": "qa_orbit08_cosmos_period_exact",
       "source_module": "QAOrbitPartition.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[128] SP3"],
+      "cert_refs": [
+        "[128] SP3"
+      ],
       "topic": "exact-period"
     },
     {
@@ -76,7 +102,9 @@
       "example_id": "qa_orbit09_satellite_period_exact",
       "source_module": "QAOrbitPartition.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
       "topic": "exact-period"
     },
     {
@@ -84,7 +112,9 @@
       "example_id": "qa_orbit10_singularity_unique",
       "source_module": "QAOrbitPartition.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+      "cert_refs": [
+        "[153] DOMINANT=SINGULARITY"
+      ],
       "topic": "singularity"
     },
     {
@@ -92,7 +122,9 @@
       "example_id": "qa_orbit11_pisano_9_exact",
       "source_module": "QAOrbitPartition.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "pisano-period"
     },
     {
@@ -100,7 +132,9 @@
       "example_id": "qa_orbit12_cosmos_invariant",
       "source_module": "QAOrbitInvariance.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
       "topic": "invariance"
     },
     {
@@ -108,7 +142,9 @@
       "example_id": "qa_orbit13_satellite_invariant",
       "source_module": "QAOrbitInvariance.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
       "topic": "invariance"
     },
     {
@@ -116,7 +152,10 @@
       "example_id": "qa_orbit14_cosmos_orbit1_card",
       "source_module": "QAOrbitInvariance.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure", "[128] SP3"],
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[128] SP3"
+      ],
       "topic": "sub-orbit"
     },
     {
@@ -124,7 +163,9 @@
       "example_id": "qa_orbit15_cosmos_orbit12_disjoint",
       "source_module": "QAOrbitInvariance.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
       "topic": "sub-orbit"
     },
     {
@@ -132,7 +173,10 @@
       "example_id": "qa_orbit16_cosmos_suborbit_union",
       "source_module": "QAOrbitInvariance.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[191] reachability-tier-counts"
+      ],
       "topic": "sub-orbit"
     },
     {
@@ -140,7 +184,9 @@
       "example_id": "qa_orbit17_cosmos_step_injective",
       "source_module": "QAOrbitInvariance.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
       "topic": "bijection"
     },
     {
@@ -148,7 +194,10 @@
       "example_id": "qa_orbit18_cosmos_reps_distinct",
       "source_module": "QAOrbitInvariance.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure", "[128] SP2"],
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[128] SP2"
+      ],
       "topic": "sub-orbit"
     },
     {
@@ -156,7 +205,9 @@
       "example_id": "qa_orbit19_fib_mat_pow_24",
       "source_module": "QAFibMatrix.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "fib-matrix"
     },
     {
@@ -164,7 +215,9 @@
       "example_id": "qa_orbit20_fib_mat_order_exact",
       "source_module": "QAFibMatrix.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "fib-matrix"
     },
     {
@@ -172,7 +225,9 @@
       "example_id": "qa_orbit21_fib_mat_det",
       "source_module": "QAFibMatrix.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+      "cert_refs": [
+        "[153] DOMINANT=SINGULARITY"
+      ],
       "topic": "fib-matrix"
     },
     {
@@ -180,7 +235,9 @@
       "example_id": "qa_orbit22_fib_mat_det_ne_zero",
       "source_module": "QAFibMatrix.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+      "cert_refs": [
+        "[153] DOMINANT=SINGULARITY"
+      ],
       "topic": "fib-matrix"
     },
     {
@@ -188,7 +245,9 @@
       "example_id": "qa_orbit23_fib_mat_action",
       "source_module": "QAFibMatrix.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
       "topic": "fib-matrix"
     },
     {
@@ -196,7 +255,10 @@
       "example_id": "qa_orbit24_fib_mat_iter",
       "source_module": "QAFibMatrix.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[126] orbit-structure", "[128] SP2"],
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[128] SP2"
+      ],
       "topic": "fib-matrix"
     },
     {
@@ -204,7 +266,9 @@
       "example_id": "qa_orbit25_fib_mat_pisano_9",
       "source_module": "QAFibMatrix.lean",
       "tactic": "native_decide",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "fib-matrix"
     },
     {
@@ -212,7 +276,9 @@
       "example_id": "qa_orbit26_fib_mat_unit_pow_24",
       "source_module": "QAFibMatrixGroup.lean",
       "tactic": "simp",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "cyclic-group"
     },
     {
@@ -220,7 +286,9 @@
       "example_id": "qa_orbit27_fib_mat_unit_order_exact",
       "source_module": "QAFibMatrixGroup.lean",
       "tactic": "simp",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "cyclic-group"
     },
     {
@@ -228,7 +296,9 @@
       "example_id": "qa_orbit28_fib_mat_unit_pow_12_ne_one",
       "source_module": "QAFibMatrixGroup.lean",
       "tactic": "simp",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "cyclic-group"
     },
     {
@@ -236,7 +306,9 @@
       "example_id": "qa_orbit29_fib_mat_unit_pow_8_ne_one",
       "source_module": "QAFibMatrixGroup.lean",
       "tactic": "simp",
-      "cert_refs": ["[128] SP2"],
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "cyclic-group"
     },
     {
@@ -244,7 +316,10 @@
       "example_id": "qa_orbit30_fib_mat_unit_orderOf",
       "source_module": "QAFibMatrixGroup.lean",
       "tactic": "rw",
-      "cert_refs": ["[128] SP2", "[126] orbit-structure"],
+      "cert_refs": [
+        "[128] SP2",
+        "[126] orbit-structure"
+      ],
       "topic": "cyclic-group"
     },
     {
@@ -252,7 +327,10 @@
       "example_id": "qa_orbit31_fib_mat_zpowers_card",
       "source_module": "QAFibMatrixGroup.lean",
       "tactic": "rw",
-      "cert_refs": ["[128] SP2", "[126] orbit-structure"],
+      "cert_refs": [
+        "[128] SP2",
+        "[126] orbit-structure"
+      ],
       "topic": "cyclic-group"
     },
     {
@@ -260,18 +338,82 @@
       "example_id": "qa_orbit32_fib_mat_zpowers_isCyclic",
       "source_module": "QAFibMatrixGroup.lean",
       "tactic": "exact",
-      "cert_refs": ["[126] orbit-structure"],
+      "cert_refs": [
+        "[126] orbit-structure"
+      ],
+      "topic": "cyclic-group"
+    },
+    {
+      "theorem_name": "fib_mat_zpowers_nat_card",
+      "example_id": "qa_orbit33_fib_mat_zpowers_nat_card",
+      "source_module": "QAFibMatrixGroupIso.lean",
+      "tactic": "rw",
+      "cert_refs": [
+        "[128] SP2",
+        "[126] orbit-structure"
+      ],
+      "topic": "cyclic-group"
+    },
+    {
+      "theorem_name": "fib_mat_iso_ZMod24",
+      "example_id": "qa_orbit34_fib_mat_iso_ZMod24",
+      "source_module": "QAFibMatrixGroupIso.lean",
+      "tactic": "exact",
+      "cert_refs": [
+        "[128] SP2",
+        "[126] orbit-structure"
+      ],
+      "topic": "cyclic-group"
+    },
+    {
+      "theorem_name": "fib_mat_iso_maps_generator",
+      "example_id": "qa_orbit35_fib_mat_iso_maps_generator",
+      "source_module": "QAFibMatrixGroupIso.lean",
+      "tactic": "exact",
+      "cert_refs": [
+        "[128] SP2"
+      ],
+      "topic": "cyclic-group"
+    },
+    {
+      "theorem_name": "fib_mat_iso_zpow",
+      "example_id": "qa_orbit36_fib_mat_iso_zpow",
+      "source_module": "QAFibMatrixGroupIso.lean",
+      "tactic": "exact",
+      "cert_refs": [
+        "[128] SP2"
+      ],
+      "topic": "cyclic-group"
+    },
+    {
+      "theorem_name": "fib_mat_iso_symm_generator",
+      "example_id": "qa_orbit37_fib_mat_iso_symm_generator",
+      "source_module": "QAFibMatrixGroupIso.lean",
+      "tactic": "exact",
+      "cert_refs": [
+        "[128] SP2"
+      ],
+      "topic": "cyclic-group"
+    },
+    {
+      "theorem_name": "fib_mat_iso_symm_zpow",
+      "example_id": "qa_orbit38_fib_mat_iso_symm_zpow",
+      "source_module": "QAFibMatrixGroupIso.lean",
+      "tactic": "exact",
+      "cert_refs": [
+        "[128] SP2"
+      ],
       "topic": "cyclic-group"
     }
   ],
   "metrics": {
-    "entry_count": 32,
+    "entry_count": 38,
     "ring_count": 1,
     "rfl_count": 1,
     "decide_count": 2,
     "native_decide_count": 21,
     "simp_count": 4,
-    "rw_count": 2,
-    "exact_count": 1
+    "rw_count": 3,
+    "exact_count": 6
   }
 }

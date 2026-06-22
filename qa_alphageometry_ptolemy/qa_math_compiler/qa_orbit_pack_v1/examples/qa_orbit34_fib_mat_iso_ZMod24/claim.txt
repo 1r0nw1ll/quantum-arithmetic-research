@@ -1,0 +1,1 @@
+There exists an explicit group isomorphism Multiplicative(ZMod 24) ≃* ⟨F⟩ built by zmodMulEquivOfGenerator, sending Multiplicative.ofAdd k to F^k. This is the full Pisano period statement in group-isomorphism form.

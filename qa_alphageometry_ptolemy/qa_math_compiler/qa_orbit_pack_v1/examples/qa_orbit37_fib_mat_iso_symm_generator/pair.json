@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "zmodMulEquivOfGenerator_symm_apply_generator"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_iso_symm_generator",
+          "zmodMulEquivOfGenerator_symm_apply_generator"
+        ],
+        "nl_span": "inverse iso sends F → ofAdd 1"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_iso_symm_generator : fib_mat_iso_ZMod24.symm fib_gen = Multiplicative.ofAdd 1",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The inverse isomorphism sends the generator fib_gen back to Multiplicative.ofAdd 1.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT37_FIB_MAT_ISO_SYMM_GENERATOR_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "b8e103e253138d94102b38211d86c36dd69a64ad54c066366c5cbe576a11e6d9"
+  }
+}

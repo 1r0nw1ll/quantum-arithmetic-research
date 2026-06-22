@@ -23,6 +23,9 @@ name = "QAFibMatrix"
 [[lean_lib]]
 name = "QAFibMatrixGroup"
 
+[[lean_lib]]
+name = "QAFibMatrixGroupIso"
+
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"

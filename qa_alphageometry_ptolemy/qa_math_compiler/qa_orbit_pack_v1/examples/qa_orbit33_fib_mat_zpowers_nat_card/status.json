@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit33_fib_mat_zpowers_nat_card",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "811474b11993d5fb0e47f30509ec643cc2c858ce584796cd8450257f97db712f"
+}

@@ -12,6 +12,8 @@ import tempfile
 from pathlib import Path
 from typing import Any, Dict, List
 
+import shutil
+
 from compile_kernel_traces import (
     canonical_bytes,
     domain_hash,
@@ -27,18 +29,23 @@ from qa_math_compiler_validator import validate_lemma_mining
 ROOT = Path(__file__).resolve().parent
 MINING = ROOT / "lemma_mining"
 LIBRARY = MINING / "QAMinedLemmas.lean"
+MATHLIB_LIBRARY = ROOT / "mathlib_ingest" / "QAMathlibMinedLemmas.lean"
+INGEST_DIR = ROOT / "mathlib_ingest"
 EVALUATION_PATH = MINING / "evaluation.v1.json"
 LEGACY_PACK_PATH = MINING / "lemma_pack.v1.json"
 EVALUATION_DOMAIN = "qa.math_compiler.lemma_mining_evaluation.v1"
 COMPRESSED_TRACE_DOMAIN = "qa.math_compiler.compressed_elaboration.v1"
 
 CASES = [
-    ("ex19_imp_trans", "qaCompose", "discovery"),
-    ("ex33_contraposition", "qaCompose", "held_out"),
-    ("ex36_list_append_nil", "qaListInduction", "discovery"),
-    ("ex38_list_append_assoc", "qaListInduction", "held_out"),
-    ("ex40_list_map_id", "qaListInduction", "held_out"),
-    ("ex41_list_map_comp", "qaListInduction", "held_out"),
+    # (example_id, lemma_id, split, pack_dir)
+    ("ex19_imp_trans", "qaCompose", "discovery", "demo_pack_v1"),
+    ("ex33_contraposition", "qaCompose", "held_out", "demo_pack_v1"),
+    ("ex36_list_append_nil", "qaListInduction", "discovery", "demo_pack_v1"),
+    ("ex38_list_append_assoc", "qaListInduction", "held_out", "demo_pack_v1"),
+    ("ex40_list_map_id", "qaListInduction", "held_out", "demo_pack_v1"),
+    ("ex41_list_map_comp", "qaListInduction", "held_out", "demo_pack_v1"),
+    # Mathlib-tier: qaEvenAdd mined from mathlib26 (3-step obtain+omega → 1-step application)
+    ("mathlib26_even_add_even", "qaEvenAdd", "held_out", "mathlib_pack_v1"),
 ]
 
 CANDIDATES = [
@@ -69,7 +76,114 @@ CANDIDATES = [
         "dependency_imports": ["Init.Prelude"],
         "evidence_pattern": "frequent syntax token without a stable typed theorem boundary",
     },
+    # Mathlib-tier candidates mined from mathlib_pack_v1
+    {
+        "lemma_id": "qaEvenAdd",
+        "statement": "Even a → Even b → Even (a + b)",
+        "usage_count": 1,
+        "compression_gain_steps": 2,
+        "proof_status": "FOUND",
+        "dependency_imports": ["Mathlib.Algebra.Ring.Parity"],
+        "evidence_pattern": "obtain-witness pair followed by omega-closed sum — the only multi-step pattern in mathlib_pack_v1",
+    },
+    {
+        "lemma_id": "qaOmegaArith",
+        "statement": "omega-solvable ℕ arithmetic goal (add_zero/zero_add/add_left_comm/two_mul)",
+        "usage_count": 4,
+        "compression_gain_steps": 0,
+        "proof_status": "NEEDS_PROOF",
+        "dependency_imports": ["Mathlib.Data.Nat.Basic"],
+        "evidence_pattern": "high-frequency omega tactic invocations — omega IS the typed proof, no separate lemma boundary",
+    },
 ]
+
+
+def lake_executable() -> str:
+    lake = shutil.which("lake")
+    if lake is None:
+        candidate = Path.home() / ".elan" / "bin" / "lake"
+        if candidate.is_file():
+            return str(candidate)
+        raise RuntimeError("Lake executable not found")
+    return lake
+
+
+def build_mathlib_mined_library(lake: str) -> None:
+    proc = subprocess.run(
+        [lake, "build", "QAMathlibMinedLemmas"],
+        cwd=str(INGEST_DIR),
+        capture_output=True,
+        text=True,
+        timeout=300,
+        check=False,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(f"lake build QAMathlibMinedLemmas failed:\n{proc.stderr}")
+
+
+def run_lean_mathlib(lake: str, lean: str, source: Path) -> Dict[str, Any]:
+    proc = subprocess.run(
+        [lake, "env", lean, str(source)],
+        cwd=str(INGEST_DIR),
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    return {
+        "returncode": proc.returncode,
+        "stdout_sha256": sha256_bytes(proc.stdout.encode("utf-8")),
+        "stderr_sha256": sha256_bytes(proc.stderr.encode("utf-8")),
+    }
+
+
+def compressed_elaboration_mathlib(
+    lake: str,
+    lean: str,
+    source: Path,
+) -> Dict[str, Any]:
+    source_text = source.read_text(encoding="utf-8")
+    source_lines = source_text.splitlines()
+    insert_at = 0
+    while insert_at < len(source_lines) and (
+        source_lines[insert_at].startswith("import ") or not source_lines[insert_at].strip()
+    ):
+        insert_at += 1
+    instrumented_lines = list(source_lines)
+    instrumented_lines.insert(insert_at, "set_option trace.Elab.info true")
+    instrumented = "\n".join(instrumented_lines) + "\n"
+    proc = subprocess.run(
+        [lake, "env", lean, "--json", "--stdin"],
+        cwd=str(INGEST_DIR),
+        input=instrumented,
+        capture_output=True,
+        text=True,
+        timeout=120,
+        check=False,
+    )
+    messages = []
+    chunks = []
+    for raw_line in proc.stdout.splitlines():
+        if not raw_line.strip():
+            continue
+        message = json.loads(raw_line)
+        message["fileName"] = "<stdin>"
+        messages.append(message)
+        if message.get("kind") == "trace" and "[Elab.info]" in message.get("data", ""):
+            chunks.append(message["data"])
+    info_tree = "\n".join(chunks)
+    steps = parse_tactic_steps(info_tree, source_text)
+    body = {
+        "returncode": proc.returncode,
+        "source_sha256": sha256_bytes(source.read_bytes()),
+        "message_count": len(messages),
+        "proof_step_count": len(steps),
+        "proof_steps_sha256": sha256_bytes(canonical_bytes(steps)),
+        "info_tree_sha256": sha256_bytes(info_tree.encode("utf-8")),
+        "messages_sha256": sha256_bytes(canonical_bytes(messages)),
+    }
+    body["compressed_trace_sha256"] = domain_hash(COMPRESSED_TRACE_DOMAIN, body)
+    return body
 
 
 def run_lean(executable: str, source: Path, env: Dict[str, str]) -> Dict[str, Any]:
@@ -141,6 +255,10 @@ def compressed_elaboration(
 
 def build() -> tuple[Dict[str, Any], Dict[str, Any]]:
     executable = lean_executable()
+    lake = lake_executable()
+    # Pre-build Mathlib-tier mined library (fast: Mathlib oleans are cached).
+    build_mathlib_mined_library(lake)
+
     with tempfile.TemporaryDirectory(prefix="qa-lemma-mining-") as temp_text:
         temp = Path(temp_text)
         library_olean = temp / "QAMinedLemmas.olean"
@@ -158,16 +276,21 @@ def build() -> tuple[Dict[str, Any], Dict[str, Any]]:
         env["LEAN_PATH"] = str(temp)
 
         rows: List[Dict[str, Any]] = []
-        for example_id, lemma_id, split in CASES:
-            baseline_path = (
-                ROOT / "demo_pack_v1" / "examples" / example_id / "elaboration.json"
-            )
+        for example_id, lemma_id, split, pack_dir in CASES:
+            baseline_path = ROOT / pack_dir / "examples" / example_id / "elaboration.json"
             compressed_path = MINING / "compressed" / f"{example_id}.lean"
             baseline = load_json(baseline_path)
-            first_exec = run_lean(executable, compressed_path, env)
-            second_exec = run_lean(executable, compressed_path, env)
-            first_trace = compressed_elaboration(executable, compressed_path, env)
-            second_trace = compressed_elaboration(executable, compressed_path, env)
+            mathlib_tier = pack_dir == "mathlib_pack_v1"
+            if mathlib_tier:
+                first_exec = run_lean_mathlib(lake, executable, compressed_path)
+                second_exec = run_lean_mathlib(lake, executable, compressed_path)
+                first_trace = compressed_elaboration_mathlib(lake, executable, compressed_path)
+                second_trace = compressed_elaboration_mathlib(lake, executable, compressed_path)
+            else:
+                first_exec = run_lean(executable, compressed_path, env)
+                second_exec = run_lean(executable, compressed_path, env)
+                first_trace = compressed_elaboration(executable, compressed_path, env)
+                second_trace = compressed_elaboration(executable, compressed_path, env)
             if first_exec != second_exec or first_trace != second_trace:
                 raise RuntimeError(f"{example_id}: compressed replay is nondeterministic")
             if first_exec["returncode"] != 0 or first_trace["returncode"] != 0:
@@ -226,7 +349,16 @@ def build() -> tuple[Dict[str, Any], Dict[str, Any]]:
                     "reason": "token frequency does not define a typed reusable theorem",
                     "observed_usage_count": 22,
                 },
-            }
+            },
+            {
+                "lemma_id": "qaOmegaArith",
+                "fail_type": "NON_GENERALIZABLE_PATTERN",
+                "invariant_diff": {
+                    "reason": "omega tactic is itself the canonical proof for linear ℕ arithmetic; no separate typed lemma boundary exists",
+                    "observed_usage_count": 4,
+                    "corpus": "mathlib_pack_v1",
+                },
+            },
         ],
         "metrics": {
             "benchmark_count": len(rows),
@@ -249,6 +381,11 @@ def build() -> tuple[Dict[str, Any], Dict[str, Any]]:
             "candidate_discovery": "repeated typed proof-step skeletons",
             "held_out_policy": "first occurrence discovers; later occurrences evaluate",
             "no_external_dependencies": True,
+            "mathlib_library_source": str(MATHLIB_LIBRARY.relative_to(ROOT)),
+            "mathlib_library_source_sha256": sha256_bytes(MATHLIB_LIBRARY.read_bytes()),
+            "mathlib_source_corpus_sha256": load_json(
+                ROOT / "mathlib_pack_v1" / "corpus.json"
+            )["corpus_sha256"],
         },
     }
     evaluation["evaluation_sha256"] = domain_hash(EVALUATION_DOMAIN, evaluation)

@@ -1,0 +1,38 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_orbit_partition",
+          "qa_step",
+          "qa_cosmos",
+          "qa_satellite",
+          "qa_singularity"
+        ],
+        "nl_span": "all 81 states partitioned into Cosmos (72), Satellite (8), Singularity (1)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_orbit_partition :\n    qa_cosmos ∪ qa_satellite ∪ qa_singularity = Finset.univ",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The 81 states of ZMod 9 × ZMod 9 are partitioned exactly into Cosmos (72 states), Satellite (8 states), and Singularity (1 state): every QA mod-9 state belongs to exactly one orbit.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT07_ORBIT_PARTITION_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "3720d90e321f471eec9764bd11ccd735cf23232d9394c2eadb33fae222b2ac9f"
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_singularity_unique :\n    ∀ s : ZMod 9 × ZMod 9, qa_step s = s ↔ s = (0, 0)",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "singularity",
+    "cert_refs": [
+      "[153] DOMINANT=SINGULARITY"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The singularity (0,0) is the unique fixed point of the QA T-step in ZMod 9 × ZMod 9: a state s satisfies T(s) = s if and only if s = (0,0).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT10_SINGULARITY_UNIQUE_TASK"
+}

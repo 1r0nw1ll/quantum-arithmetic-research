@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_satellite_period_exact :\n    ∀ k : Fin 8, k.val ≠ 0 → (qa_step^[k.val]) (6, 3) ≠ (6, 3)",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "exact-period",
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The minimal period of the Satellite representative (6,3) under the QA T-step is exactly 8: for every k in {1,...,7}, applying the T-step k times to (6,3) does not return (6,3).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT09_SATELLITE_PERIOD_EXACT_TASK"
+}

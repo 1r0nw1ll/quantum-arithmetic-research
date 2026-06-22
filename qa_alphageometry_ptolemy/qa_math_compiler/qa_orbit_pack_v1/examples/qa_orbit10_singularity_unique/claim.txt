@@ -1,0 +1,1 @@
+The singularity (0,0) is the unique fixed point of the QA T-step in ZMod 9 × ZMod 9: a state s satisfies T(s) = s if and only if s = (0,0).

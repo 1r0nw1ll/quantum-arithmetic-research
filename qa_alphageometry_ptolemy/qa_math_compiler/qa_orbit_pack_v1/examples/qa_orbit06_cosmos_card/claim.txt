@@ -1,0 +1,1 @@
+The Cosmos orbit in ZMod 9 × ZMod 9 contains exactly 72 states, comprising three sub-orbits of 24 elements each with representatives (1,0), (2,0), and (4,0).

@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_satellite_period_exact",
+          "qa_step"
+        ],
+        "nl_span": "minimal period of the Satellite representative (6,3) is exactly 8"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_satellite_period_exact :\n    ∀ k : Fin 8, k.val ≠ 0 → (qa_step^[k.val]) (6, 3) ≠ (6, 3)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The minimal period of the Satellite representative (6,3) under the QA T-step is exactly 8: for every k in {1,...,7}, applying the T-step k times to (6,3) does not return (6,3).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT09_SATELLITE_PERIOD_EXACT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "897f42340d2f5bb7af1ed8991846044e711b5094ff3182d5e017862e02aef0bb"
+  }
+}

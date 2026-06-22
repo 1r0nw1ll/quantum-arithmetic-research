@@ -1,0 +1,27 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_cosmos_card : qa_cosmos.card = 72",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "partition",
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The Cosmos orbit in ZMod 9 × ZMod 9 contains exactly 72 states, comprising three sub-orbits of 24 elements each with representatives (1,0), (2,0), and (4,0).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT06_COSMOS_CARD_TASK"
+}

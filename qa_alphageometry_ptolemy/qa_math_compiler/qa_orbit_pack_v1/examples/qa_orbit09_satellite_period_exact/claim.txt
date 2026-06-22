@@ -1,0 +1,1 @@
+The minimal period of the Satellite representative (6,3) under the QA T-step is exactly 8: for every k in {1,...,7}, applying the T-step k times to (6,3) does not return (6,3).

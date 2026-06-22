@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_pisano_9_exact",
+          "qa_step"
+        ],
+        "nl_span": "the exact Pisano period π(9) = 24 (Fibonacci matrix order 24 on ZMod 9²)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_pisano_9_exact :\n    ∀ k : Fin 24, k.val ≠ 0 →\n      ∃ s : ZMod 9 × ZMod 9, (qa_step^[k.val]) s ≠ s",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The exact Pisano period π(9) = 24: for every k in {1,...,23}, the map T^k is not the identity on ZMod 9 × ZMod 9. Equivalently, the Fibonacci matrix F = [[1,1],[1,0]] has exact order 24 on ZMod 9².",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT11_PISANO_9_EXACT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "5e86d70288f90d5711189f60467eb2d9c5f43b75b7fdcb3d3db6eeb64f889e9c"
+  }
+}

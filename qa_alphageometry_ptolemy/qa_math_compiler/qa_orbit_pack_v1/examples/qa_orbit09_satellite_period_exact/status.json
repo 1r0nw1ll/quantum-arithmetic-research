@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit09_satellite_period_exact",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "897f42340d2f5bb7af1ed8991846044e711b5094ff3182d5e017862e02aef0bb"
+}

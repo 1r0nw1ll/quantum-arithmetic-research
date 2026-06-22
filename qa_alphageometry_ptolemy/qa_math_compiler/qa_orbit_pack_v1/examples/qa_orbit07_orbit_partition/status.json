@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit07_orbit_partition",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "3720d90e321f471eec9764bd11ccd735cf23232d9394c2eadb33fae222b2ac9f"
+}

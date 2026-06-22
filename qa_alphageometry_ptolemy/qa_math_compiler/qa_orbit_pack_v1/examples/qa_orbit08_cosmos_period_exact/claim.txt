@@ -1,0 +1,1 @@
+The minimal period of the Cosmos representative (1,0) under the QA T-step is exactly 24: for every k in {1,...,23}, applying the T-step k times to (1,0) does not return (1,0).

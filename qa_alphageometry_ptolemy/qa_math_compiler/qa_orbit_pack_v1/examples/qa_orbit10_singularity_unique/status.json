@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit10_singularity_unique",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "c966c5f0595290d0765f6e25d4e633732b03bcc0aa2bf063178aa007ff3258d0"
+}

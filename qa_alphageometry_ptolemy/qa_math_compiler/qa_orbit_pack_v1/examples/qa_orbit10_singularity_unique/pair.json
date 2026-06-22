@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_singularity_unique",
+          "qa_step"
+        ],
+        "nl_span": "the singularity (0,0) is the unique fixed point of the T-step"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_singularity_unique :\n    ∀ s : ZMod 9 × ZMod 9, qa_step s = s ↔ s = (0, 0)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[153] DOMINANT=SINGULARITY"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The singularity (0,0) is the unique fixed point of the QA T-step in ZMod 9 × ZMod 9: a state s satisfies T(s) = s if and only if s = (0,0).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT10_SINGULARITY_UNIQUE_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "c966c5f0595290d0765f6e25d4e633732b03bcc0aa2bf063178aa007ff3258d0"
+  }
+}

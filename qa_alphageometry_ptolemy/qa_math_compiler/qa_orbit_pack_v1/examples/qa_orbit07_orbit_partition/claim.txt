@@ -1,0 +1,1 @@
+The 81 states of ZMod 9 × ZMod 9 are partitioned exactly into Cosmos (72 states), Satellite (8 states), and Singularity (1 state): every QA mod-9 state belongs to exactly one orbit.

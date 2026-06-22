@@ -1,0 +1,288 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_AGENT_TRACE_SCHEMA.v1",
+  "title": "QA_AGENT_TRACE_SCHEMA.v1",
+  "description": "Hash-chained agent trace container for QA competency certification. Records typed events from agent runs with deterministic ordering, privacy redaction policy, and cryptographic integrity chain.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "trace_id",
+    "created_utc",
+    "provenance",
+    "task",
+    "agent",
+    "environment",
+    "events",
+    "trace_hashes",
+    "summary"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_AGENT_TRACE_SCHEMA.v1"
+    },
+    "trace_id": {
+      "type": "string",
+      "pattern": "^TRACE-[A-Z0-9]{4,}$",
+      "description": "Unique trace identifier"
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "provenance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "collector",
+        "collection_method",
+        "source_dataset",
+        "source_url",
+        "license",
+        "raw_artifacts_policy",
+        "privacy_redactions"
+      ],
+      "properties": {
+        "collector": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Name of the collection tool/harness"
+        },
+        "collection_method": {
+          "type": "string",
+          "enum": ["live_run", "replay", "synthetic"],
+          "description": "How the trace was produced"
+        },
+        "source_dataset": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Upstream dataset identifier"
+        },
+        "source_url": {
+          "type": "string",
+          "format": "uri",
+          "description": "URL of upstream dataset"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1,
+          "description": "SPDX license identifier"
+        },
+        "raw_artifacts_policy": {
+          "type": "string",
+          "enum": ["hash_only", "redacted", "full"],
+          "description": "What raw content is included vs hashed"
+        },
+        "privacy_redactions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "description": "Categories of redacted content (api_keys, tokens, paths, etc.)"
+        }
+      }
+    },
+    "task": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_type", "instance_id", "repo", "base_commit", "problem_ref"],
+      "properties": {
+        "task_type": {
+          "type": "string",
+          "enum": ["swe_bench", "swe_bench_lite", "custom"],
+          "description": "Source benchmark type"
+        },
+        "instance_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Unique task instance identifier from upstream"
+        },
+        "repo": {
+          "type": "string",
+          "pattern": "^[a-zA-Z0-9_-]+/[a-zA-Z0-9_.-]+$",
+          "description": "GitHub-style owner/repo"
+        },
+        "base_commit": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{7,40}$",
+          "description": "Git commit hash for the task baseline"
+        },
+        "problem_ref": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["sha256", "length_bytes"],
+          "properties": {
+            "sha256": {
+              "type": "string",
+              "pattern": "^[a-f0-9]{64}$",
+              "description": "Hash of the problem statement (not included for licensing)"
+            },
+            "length_bytes": {
+              "type": "integer",
+              "minimum": 0,
+              "description": "Byte length of the problem statement"
+            }
+          }
+        }
+      }
+    },
+    "agent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "version", "model", "policy"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "minLength": 1
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "model": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Model identifier (local or remote)"
+        },
+        "policy": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["tooling", "guardrails"],
+          "properties": {
+            "tooling": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "description": "Available tool capabilities"
+            },
+            "guardrails": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "description": "Active guardrail identifiers"
+            }
+          }
+        }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["os", "python", "runner"],
+      "properties": {
+        "os": { "type": "string", "minLength": 1 },
+        "python": { "type": "string", "minLength": 1 },
+        "runner": {
+          "type": "string",
+          "enum": ["local", "docker", "ci", "cloud"],
+          "description": "Execution environment type"
+        }
+      }
+    },
+    "events": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/definitions/event" },
+      "description": "Ordered sequence of agent actions"
+    },
+    "trace_hashes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["events_sha256", "trace_sha256", "hash_chain"],
+      "properties": {
+        "events_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 of canonical JSON of events array"
+        },
+        "trace_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 of the full trace (with placeholder in this field)"
+        },
+        "hash_chain": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["event_index", "event_sha256", "prev_sha256"],
+            "properties": {
+              "event_index": { "type": "integer", "minimum": 0 },
+              "event_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              },
+              "prev_sha256": {
+                "type": "string",
+                "pattern": "^[a-f0-9]{64}$"
+              }
+            }
+          }
+        }
+      }
+    },
+    "summary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_count",
+        "tool_call_count",
+        "edit_count",
+        "test_run_count",
+        "outcome"
+      ],
+      "properties": {
+        "event_count": { "type": "integer", "minimum": 0 },
+        "tool_call_count": { "type": "integer", "minimum": 0 },
+        "edit_count": { "type": "integer", "minimum": 0 },
+        "test_run_count": { "type": "integer", "minimum": 0 },
+        "outcome": {
+          "type": "string",
+          "enum": ["resolved", "unresolved", "error", "timeout", "unknown"]
+        }
+      }
+    }
+  },
+  "definitions": {
+    "event": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event_index",
+        "ts_utc",
+        "event_type",
+        "payload",
+        "invariant_diff"
+      ],
+      "properties": {
+        "event_index": {
+          "type": "integer",
+          "minimum": 0,
+          "description": "Strictly increasing, gap-free index"
+        },
+        "ts_utc": {
+          "type": "string",
+          "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+        },
+        "event_type": {
+          "type": "string",
+          "enum": [
+            "read",
+            "search",
+            "plan",
+            "edit",
+            "run",
+            "test",
+            "error",
+            "final"
+          ]
+        },
+        "payload": {
+          "type": "object",
+          "description": "Event-specific data (hashed content only if raw_artifacts_policy=hash_only)"
+        },
+        "invariant_diff": {
+          "type": "object",
+          "description": "State delta or observation recorded at this event"
+        }
+      }
+    }
+  }
+}

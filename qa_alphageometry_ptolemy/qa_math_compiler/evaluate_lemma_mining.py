@@ -359,6 +359,18 @@ def main() -> int:
         result = certificate_check()
         print(json.dumps(result, sort_keys=True, separators=(",", ":")))
         return 0 if result["ok"] else 1
+    if args.mode == "check":
+        # Fall back to certificate-check when Lean is not installed so that
+        # environments without Lean (e.g. cloud health agents) can still verify
+        # committed artifact integrity. CI has dedicated qa-math-compiler-* jobs
+        # that run Lean directly.
+        try:
+            lean_executable()
+        except RuntimeError:
+            result = certificate_check()
+            result["lean_skipped"] = True
+            print(json.dumps(result, sort_keys=True, separators=(",", ":")))
+            return 0 if result["ok"] else 1
     evaluation, legacy = build()
     if args.mode == "write":
         write_json(EVALUATION_PATH, evaluation)

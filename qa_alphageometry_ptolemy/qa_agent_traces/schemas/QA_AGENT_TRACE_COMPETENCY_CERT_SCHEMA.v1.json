@@ -1,0 +1,253 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "QA_AGENT_TRACE_COMPETENCY_CERT_SCHEMA.v1",
+  "title": "QA_AGENT_TRACE_COMPETENCY_CERT_SCHEMA.v1",
+  "description": "Certificate binding an agent trace to a task reference and deterministic competency metric derivation, emitting dominance results and typed failures with invariant_diff.",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_id",
+    "cert_id",
+    "created_utc",
+    "trace_ref",
+    "task_ref",
+    "derivation",
+    "metrics",
+    "baselines",
+    "dominance",
+    "verdict",
+    "invariant_diff"
+  ],
+  "properties": {
+    "schema_id": {
+      "const": "QA_AGENT_TRACE_COMPETENCY_CERT_SCHEMA.v1"
+    },
+    "cert_id": {
+      "type": "string",
+      "minLength": 8,
+      "maxLength": 128
+    },
+    "created_utc": {
+      "type": "string",
+      "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}Z$"
+    },
+    "trace_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["trace_id", "trace_sha256", "trace_schema_id"],
+      "properties": {
+        "trace_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "trace_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 of the canonical JSON of the full trace container"
+        },
+        "trace_schema_id": {
+          "const": "QA_AGENT_TRACE_SCHEMA.v1"
+        }
+      }
+    },
+    "task_ref": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["task_id", "source_dataset", "dataset_slice_sha256", "license"],
+      "properties": {
+        "task_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source_dataset": {
+          "type": "string",
+          "minLength": 1
+        },
+        "dataset_slice_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 of the vendored task feature row"
+        },
+        "license": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "derivation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["derivation_id", "version", "inputs", "canonicalization"],
+      "properties": {
+        "derivation_id": {
+          "const": "QA_COMPETENCY_FROM_AGENT_TRACE.v1"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$"
+        },
+        "inputs": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["event_types_used", "action_vocab", "timebase"],
+          "properties": {
+            "event_types_used": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 1
+            },
+            "action_vocab": {
+              "type": "array",
+              "items": { "type": "string", "minLength": 1 },
+              "minItems": 1
+            },
+            "timebase": {
+              "type": "string",
+              "enum": ["trace_event_index", "trace_timestamp_ms"]
+            }
+          }
+        },
+        "canonicalization": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["json_sort_keys", "json_separators", "utf8"],
+          "properties": {
+            "json_sort_keys": { "const": true },
+            "json_separators": { "const": ",:" },
+            "utf8": { "const": true }
+          }
+        }
+      }
+    },
+    "metrics": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "agency_index",
+        "plasticity_index",
+        "goal_density",
+        "control_entropy"
+      ],
+      "properties": {
+        "agency_index": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "plasticity_index": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "goal_density": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+        "control_entropy": { "type": "number", "minimum": 0.0 }
+      }
+    },
+    "baselines": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["baseline_set_id", "baseline_bundle_sha256", "baselines_used"],
+      "properties": {
+        "baseline_set_id": {
+          "type": "string",
+          "minLength": 1,
+          "description": "Logical baseline set identifier"
+        },
+        "baseline_bundle_sha256": {
+          "type": "string",
+          "pattern": "^[a-f0-9]{64}$",
+          "description": "SHA-256 of the baseline bundle consumed by dominance evaluation"
+        },
+        "baselines_used": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "additionalProperties": false,
+            "required": ["baseline_id", "kind"],
+            "properties": {
+              "baseline_id": {
+                "type": "string",
+                "minLength": 1
+              },
+              "kind": {
+                "type": "string",
+                "enum": ["null", "random", "heuristic", "historical_agent"]
+              },
+              "metrics": {
+                "type": "object",
+                "description": "Baseline metric values for deterministic dominance recomputation. When present, the validator recomputes by_dimension wins and verifies consistency.",
+                "properties": {
+                  "agency_index": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "plasticity_index": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "goal_density": { "type": "number", "minimum": 0.0, "maximum": 1.0 },
+                  "control_entropy": { "type": "number", "minimum": 0.0 }
+                },
+                "required": ["agency_index", "plasticity_index", "goal_density", "control_entropy"],
+                "additionalProperties": false
+              }
+            }
+          }
+        }
+      }
+    },
+    "dominance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["rule", "min_margin", "wins"],
+      "properties": {
+        "rule": {
+          "type": "string",
+          "enum": [
+            "strong_dominance_4of4",
+            "weak_dominance_3of4",
+            "existential_1of4"
+          ]
+        },
+        "min_margin": {
+          "type": "number",
+          "minimum": 0.0
+        },
+        "wins": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["dimensions_won", "by_dimension"],
+          "properties": {
+            "dimensions_won": {
+              "type": "integer",
+              "minimum": 0,
+              "maximum": 4
+            },
+            "by_dimension": {
+              "type": "object",
+              "additionalProperties": false,
+              "required": ["agency", "plasticity", "goal_density", "entropy"],
+              "properties": {
+                "agency": { "type": "boolean" },
+                "plasticity": { "type": "boolean" },
+                "goal_density": { "type": "boolean" },
+                "entropy": { "type": "boolean" }
+              }
+            }
+          }
+        }
+      }
+    },
+    "verdict": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["passed", "fail_type"],
+      "properties": {
+        "passed": { "type": "boolean" },
+        "fail_type": {
+          "type": "string",
+          "enum": [
+            "OK",
+            "SCHEMA_INVALID",
+            "TRACE_REF_HASH_MISMATCH",
+            "MISSING_INVARIANT_DIFF",
+            "NONDETERMINISTIC_DERIVATION",
+            "DOMINANCE_FAILURE",
+            "METRIC_OUT_OF_BOUNDS"
+          ]
+        }
+      }
+    },
+    "invariant_diff": {
+      "type": "object",
+      "description": "Typed, deterministic explanation of pass/fail suitable for CI logs."
+    }
+  }
+}

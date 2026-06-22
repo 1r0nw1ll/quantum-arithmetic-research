@@ -1,0 +1,1 @@
+The determinant of the Fibonacci matrix F = [[1,1],[1,0]] over ZMod 9 equals 8 (= -1 mod 9). Since 8 ≠ 0, F is invertible: F ∈ GL₂(ZMod 9).

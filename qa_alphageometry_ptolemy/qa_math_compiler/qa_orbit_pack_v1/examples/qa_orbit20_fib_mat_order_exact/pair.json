@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_order_exact",
+          "fib_mat"
+        ],
+        "nl_span": "the Fibonacci matrix has exact order 24 in GL₂(ZMod 9)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_order_exact :\n    ∀ k : Fin 24, k.val ≠ 0 → fib_mat ^ k.val ≠ 1",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Fibonacci matrix F = [[1,1],[1,0]] has exact multiplicative order 24 in GL₂(ZMod 9): for every k ∈ {1,...,23}, F^k ≠ I in M₂(ZMod 9).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT20_FIB_MAT_ORDER_EXACT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "54e2e25556de89fd4c7346bbf88f3a265e773bf91252d27cfe63b8a0badd3a32"
+  }
+}

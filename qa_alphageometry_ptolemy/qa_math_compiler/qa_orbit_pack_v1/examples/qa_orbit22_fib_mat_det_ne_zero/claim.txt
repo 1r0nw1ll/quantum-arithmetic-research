@@ -1,0 +1,1 @@
+The determinant of the Fibonacci matrix F = [[1,1],[1,0]] is nonzero in ZMod 9, confirming F is invertible.

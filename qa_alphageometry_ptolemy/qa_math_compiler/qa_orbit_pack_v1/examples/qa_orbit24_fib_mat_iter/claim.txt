@@ -1,0 +1,1 @@
+Iterating the QA T-step k times equals applying the k-th matrix power F^k: for all k ∈ {0,...,23} and all (b,e) ∈ (ZMod 9)², the k-fold iterate of T on (b,e) equals F^k · [b,e]ᵀ.

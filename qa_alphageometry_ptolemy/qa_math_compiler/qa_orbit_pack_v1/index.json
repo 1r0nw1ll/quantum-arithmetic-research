@@ -1,5 +1,5 @@
 {
-  "example_count": 18,
+  "example_count": 25,
   "examples": [
     {
       "difficulty": "qa-native",
@@ -108,6 +108,48 @@
       "id": "qa_orbit18_cosmos_reps_distinct",
       "status": "PROVED",
       "topic": "sub-orbit"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit19_fib_mat_pow_24",
+      "status": "PROVED",
+      "topic": "fib-matrix"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit20_fib_mat_order_exact",
+      "status": "PROVED",
+      "topic": "fib-matrix"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit21_fib_mat_det",
+      "status": "PROVED",
+      "topic": "fib-matrix"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit22_fib_mat_det_ne_zero",
+      "status": "PROVED",
+      "topic": "fib-matrix"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit23_fib_mat_action",
+      "status": "PROVED",
+      "topic": "fib-matrix"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit24_fib_mat_iter",
+      "status": "PROVED",
+      "topic": "fib-matrix"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit25_fib_mat_pisano_9",
+      "status": "PROVED",
+      "topic": "fib-matrix"
     }
   ],
   "schema_id": "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1",

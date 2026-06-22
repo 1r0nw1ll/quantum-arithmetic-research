@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_pow_24",
+          "fib_mat"
+        ],
+        "nl_span": "the Fibonacci matrix F^24 = I in M₂(ZMod 9)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_pow_24 : fib_mat ^ 24 = 1",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Fibonacci matrix F = [[1,1],[1,0]] over ZMod 9 satisfies F^24 = I: the 24th power of F is the identity matrix in M₂(ZMod 9).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT19_FIB_MAT_POW_24_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "d8826d1070e7dd00b93525119d533b3311b0d6ffedb00a049f0d980c3752259b"
+  }
+}

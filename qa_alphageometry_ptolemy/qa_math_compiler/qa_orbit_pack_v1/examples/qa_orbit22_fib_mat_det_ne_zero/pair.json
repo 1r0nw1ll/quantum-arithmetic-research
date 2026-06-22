@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_det_ne_zero",
+          "fib_mat"
+        ],
+        "nl_span": "det(F) ≠ 0 in ZMod 9, so F ∈ GL₂(ZMod 9)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_det_ne_zero : Matrix.det fib_mat ≠ 0",
+  "invariant_diff": {
+    "cert_refs": [
+      "[153] DOMINANT=SINGULARITY"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The determinant of the Fibonacci matrix F = [[1,1],[1,0]] is nonzero in ZMod 9, confirming F is invertible.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT22_FIB_MAT_DET_NE_ZERO_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "93fcf7db49956cce348c9d22868c39826b9d3e8d7b9f2a1fbf2755b0de0b0a5e"
+  }
+}

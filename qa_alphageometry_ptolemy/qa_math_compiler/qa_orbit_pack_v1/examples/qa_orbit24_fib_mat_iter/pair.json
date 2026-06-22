@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_iter",
+          "fib_mat"
+        ],
+        "nl_span": "k-fold T-iterate equals F^k matrix power acting on column vectors"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_iter :\n    ∀ k : Fin 24, ∀ b e : ZMod 9,\n    let qa_step := fun (s : ZMod 9 × ZMod 9) => (s.1 + s.2, s.1)\n    let s := qa_step^[k.val] (b, e)\n    Matrix.mulVec (fib_mat ^ k.val) ![b, e] = ![s.1, s.2]",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "Iterating the QA T-step k times equals applying the k-th matrix power F^k: for all k ∈ {0,...,23} and all (b,e) ∈ (ZMod 9)², the k-fold iterate of T on (b,e) equals F^k · [b,e]ᵀ.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT24_FIB_MAT_ITER_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "618bb8a1e7f7144e49307f8a079ff9fd9c28abe86a08c0928aafa11910031c27"
+  }
+}

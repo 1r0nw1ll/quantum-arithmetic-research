@@ -1,0 +1,28 @@
+{
+  "agent_id": "qa-kernel-trace-compiler",
+  "created_utc": "2026-06-22T00:00:00Z",
+  "generator": "lean_kernel_execution",
+  "input_hash": "b8d846173734aaaca62509035601b73107955a45c74ef1017b6274c2da6e5d40",
+  "invariant_diff": {
+    "case_id": "qa_orbit21_fib_mat_det",
+    "dependency_lock_sha256": "57861ce4045ac552c23d7559ed62427b3b75fe1ff37bb7d79e2ca81a84642596",
+    "elaboration_trace_sha256": "b3e2eb8b2be061bd50d84e6a8e25e185acdf1366a4307f5063479d255e77147b",
+    "execution_sha256": "cd8c1a71b75925fb52be13bcb2b3d4337193117cbe2ac778b31b1ac530de1767",
+    "expected_status": "SUCCESS",
+    "kernel_derived": true,
+    "proof_method": "native_decide",
+    "proof_step_count": 1,
+    "source_sha256": "f0a4952cc5a1ba91b268ab0e7a001eb0b32245517f5b3b7d09a7c73c2e02ab83"
+  },
+  "merkle_parent": "51b81e97888b66383eaa4a8d444dfbf6c88cb1db8bb5945f54979ea040ba0281",
+  "output_hash": "f0a4952cc5a1ba91b268ab0e7a001eb0b32245517f5b3b7d09a7c73c2e02ab83",
+  "result": {
+    "status": "SUCCESS",
+    "witness_hash": "cd8c1a71b75925fb52be13bcb2b3d4337193117cbe2ac778b31b1ac530de1767"
+  },
+  "schema_id": "QA_MATH_COMPILER_TRACE_SCHEMA.v1",
+  "source_layer": "human",
+  "target_layer": "formal",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "823c392c05418691fff53a607c7d28197b447538f62a543da664e21c144a7c42"
+}

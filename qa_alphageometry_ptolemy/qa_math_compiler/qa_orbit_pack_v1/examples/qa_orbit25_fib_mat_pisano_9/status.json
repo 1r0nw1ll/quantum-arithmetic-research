@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit25_fib_mat_pisano_9",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "766e8e99b9e9811c5d61f5cbee2ed1415ebed7d8ad2c895d77d28b13abbf2e00"
+}

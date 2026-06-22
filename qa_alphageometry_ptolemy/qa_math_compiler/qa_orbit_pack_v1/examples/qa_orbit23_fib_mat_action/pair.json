@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_action",
+          "fib_mat"
+        ],
+        "nl_span": "the T-step is matrix-vector multiplication by the Fibonacci matrix"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_action :\n    ∀ b e : ZMod 9,\n    Matrix.mulVec fib_mat ![b, e] = ![b + e, b]",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The QA T-step is matrix-vector multiplication by the Fibonacci matrix: for all b, e ∈ ZMod 9, F · [b, e]ᵀ = [b+e, b]ᵀ.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT23_FIB_MAT_ACTION_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "e6f18559020161d8f522159b48811e0dcf26529db782238ab701abcb2814507c"
+  }
+}

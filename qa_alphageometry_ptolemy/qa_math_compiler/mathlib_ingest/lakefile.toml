@@ -17,6 +17,9 @@ name = "QAOrbitPartition"
 [[lean_lib]]
 name = "QAOrbitInvariance"
 
+[[lean_lib]]
+name = "QAFibMatrix"
+
 [[require]]
 name = "mathlib"
 git = "https://github.com/leanprover-community/mathlib4.git"

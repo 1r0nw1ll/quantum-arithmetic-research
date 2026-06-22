@@ -22,9 +22,10 @@ REGISTRY_PATH = ROOT / "qa_orbit_registry.v1.json"
 QALEAN_PATH = ROOT / "QAOrbits.lean"
 QAPARTITION_PATH = ROOT / "QAOrbitPartition.lean"
 QAINVARIANCE_PATH = ROOT / "QAOrbitInvariance.lean"
+QAFIBMATRIX_PATH = ROOT / "QAFibMatrix.lean"
 
 REGISTRY_SCHEMA_ID = "QA_ORBIT_REGISTRY.v1"
-EXPECTED_ENTRY_COUNT = 18
+EXPECTED_ENTRY_COUNT = 25
 EXPECTED_THEOREM_NAMES = {
     # QAOrbits.lean (5)
     "qa_cfgpythag",
@@ -47,6 +48,14 @@ EXPECTED_THEOREM_NAMES = {
     "qa_cosmos_suborbit_union",
     "qa_cosmos_step_injective",
     "qa_cosmos_reps_distinct",
+    # QAFibMatrix.lean (7)
+    "fib_mat_pow_24",
+    "fib_mat_order_exact",
+    "fib_mat_det",
+    "fib_mat_det_ne_zero",
+    "fib_mat_action",
+    "fib_mat_iter",
+    "fib_mat_pisano_9",
 }
 
 
@@ -199,6 +208,30 @@ def validate_lean_source() -> List[Dict[str, Any]]:
         checks.append(_check(f"lean_invariance_defines_{name}",
                               f"theorem {name}" in isrc,
                               f"theorem {name} not found in QAOrbitInvariance.lean"))
+
+    # ── QAFibMatrix.lean ───────────────────────────────────────────────────────
+    if not QAFIBMATRIX_PATH.exists():
+        checks.append(_check("lean_fibmatrix_source_exists", False,
+                              f"{QAFIBMATRIX_PATH} not found"))
+        return checks
+
+    checks.append(_check("lean_fibmatrix_source_exists", True))
+
+    fsrc = QAFIBMATRIX_PATH.read_text(encoding="utf-8")
+
+    checks.append(_check("lean_fibmatrix_imports_first",
+                          fsrc.startswith("import"),
+                          "imports must be the first content in QAFibMatrix.lean"))
+
+    fibmatrix_names = {
+        "fib_mat_pow_24", "fib_mat_order_exact", "fib_mat_det",
+        "fib_mat_det_ne_zero", "fib_mat_action", "fib_mat_iter",
+        "fib_mat_pisano_9",
+    }
+    for name in fibmatrix_names:
+        checks.append(_check(f"lean_fibmatrix_defines_{name}",
+                              f"theorem {name}" in fsrc,
+                              f"theorem {name} not found in QAFibMatrix.lean"))
 
     return checks
 

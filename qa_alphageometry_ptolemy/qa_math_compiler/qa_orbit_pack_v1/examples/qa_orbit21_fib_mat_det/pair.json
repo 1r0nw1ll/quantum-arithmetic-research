@@ -1,0 +1,34 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_det",
+          "fib_mat"
+        ],
+        "nl_span": "det(F) = 8 = -1 mod 9 in M₂(ZMod 9), so F ∈ GL₂(ZMod 9)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_det : Matrix.det fib_mat = 8",
+  "invariant_diff": {
+    "cert_refs": [
+      "[153] DOMINANT=SINGULARITY"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The determinant of the Fibonacci matrix F = [[1,1],[1,0]] over ZMod 9 equals 8 (= -1 mod 9). Since 8 ≠ 0, F is invertible: F ∈ GL₂(ZMod 9).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT21_FIB_MAT_DET_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "823c392c05418691fff53a607c7d28197b447538f62a543da664e21c144a7c42"
+  }
+}

@@ -1,8 +1,9 @@
 #!/usr/bin/env python3
 # noqa: DECL-1 (infrastructure — corpus builder, not an empirical QA script)
 """
-Build the qa_orbit_pack_v1 demo corpus from the 18 QA-native Lean theorems:
-  QAOrbits.lean (5), QAOrbitPartition.lean (6), QAOrbitInvariance.lean (7).
+Build the qa_orbit_pack_v1 demo corpus from the 25 QA-native Lean theorems:
+  QAOrbits.lean (5), QAOrbitPartition.lean (6), QAOrbitInvariance.lean (7),
+  QAFibMatrix.lean (7).
 
 Usage:
   python build_qa_orbit_pack.py build   — create/overwrite qa_orbit_pack_v1/
@@ -490,6 +491,164 @@ THEOREMS = [
         "nl_span": "the three Cosmos sub-orbit reps (1,0), (2,0), (4,0) are on distinct T-orbits",
         "formal_identifiers": ["qa_cosmos_reps_distinct", "qa_step'"],
     },
+    # ── QAFibMatrix.lean — Fibonacci matrix in GL₂(ZMod 9) ───────────────
+    {
+        "id": "qa_orbit19_fib_mat_pow_24",
+        "nl": "The Fibonacci matrix F = [[1,1],[1,0]] over ZMod 9 satisfies F^24 = I: the 24th power of F is the identity matrix in M₂(ZMod 9).",
+        "formal_goal": "theorem fib_mat_pow_24 : fib_mat ^ 24 = 1",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.LinearAlgebra.Matrix.Determinant.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n\n"
+            "theorem fib_mat_pow_24 : fib_mat ^ 24 = 1 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "fib-matrix",
+        "nl_span": "the Fibonacci matrix F^24 = I in M₂(ZMod 9)",
+        "formal_identifiers": ["fib_mat_pow_24", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit20_fib_mat_order_exact",
+        "nl": "The Fibonacci matrix F = [[1,1],[1,0]] has exact multiplicative order 24 in GL₂(ZMod 9): for every k ∈ {1,...,23}, F^k ≠ I in M₂(ZMod 9).",
+        "formal_goal": (
+            "theorem fib_mat_order_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → fib_mat ^ k.val ≠ 1"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n\n"
+            "theorem fib_mat_order_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → fib_mat ^ k.val ≠ 1 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "fib-matrix",
+        "nl_span": "the Fibonacci matrix has exact order 24 in GL₂(ZMod 9)",
+        "formal_identifiers": ["fib_mat_order_exact", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit21_fib_mat_det",
+        "nl": "The determinant of the Fibonacci matrix F = [[1,1],[1,0]] over ZMod 9 equals 8 (= -1 mod 9). Since 8 ≠ 0, F is invertible: F ∈ GL₂(ZMod 9).",
+        "formal_goal": "theorem fib_mat_det : Matrix.det fib_mat = 8",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.LinearAlgebra.Matrix.Determinant.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n\n"
+            "theorem fib_mat_det : Matrix.det fib_mat = 8 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+        "topic": "fib-matrix",
+        "nl_span": "det(F) = 8 = -1 mod 9 in M₂(ZMod 9), so F ∈ GL₂(ZMod 9)",
+        "formal_identifiers": ["fib_mat_det", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit22_fib_mat_det_ne_zero",
+        "nl": "The determinant of the Fibonacci matrix F = [[1,1],[1,0]] is nonzero in ZMod 9, confirming F is invertible.",
+        "formal_goal": "theorem fib_mat_det_ne_zero : Matrix.det fib_mat ≠ 0",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.LinearAlgebra.Matrix.Determinant.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n\n"
+            "theorem fib_mat_det_ne_zero : Matrix.det fib_mat ≠ 0 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+        "topic": "fib-matrix",
+        "nl_span": "det(F) ≠ 0 in ZMod 9, so F ∈ GL₂(ZMod 9)",
+        "formal_identifiers": ["fib_mat_det_ne_zero", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit23_fib_mat_action",
+        "nl": "The QA T-step is matrix-vector multiplication by the Fibonacci matrix: for all b, e ∈ ZMod 9, F · [b, e]ᵀ = [b+e, b]ᵀ.",
+        "formal_goal": (
+            "theorem fib_mat_action :\n"
+            "    ∀ b e : ZMod 9,\n"
+            "    Matrix.mulVec fib_mat ![b, e] = ![b + e, b]"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n\n"
+            "theorem fib_mat_action :\n"
+            "    ∀ b e : ZMod 9,\n"
+            "    Matrix.mulVec fib_mat ![b, e] = ![b + e, b] := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure"],
+        "topic": "fib-matrix",
+        "nl_span": "the T-step is matrix-vector multiplication by the Fibonacci matrix",
+        "formal_identifiers": ["fib_mat_action", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit24_fib_mat_iter",
+        "nl": "Iterating the QA T-step k times equals applying the k-th matrix power F^k: for all k ∈ {0,...,23} and all (b,e) ∈ (ZMod 9)², the k-fold iterate of T on (b,e) equals F^k · [b,e]ᵀ.",
+        "formal_goal": (
+            "theorem fib_mat_iter :\n"
+            "    ∀ k : Fin 24, ∀ b e : ZMod 9,\n"
+            "    let qa_step := fun (s : ZMod 9 × ZMod 9) => (s.1 + s.2, s.1)\n"
+            "    let s := qa_step^[k.val] (b, e)\n"
+            "    Matrix.mulVec (fib_mat ^ k.val) ![b, e] = ![s.1, s.2]"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n\n"
+            "theorem fib_mat_iter :\n"
+            "    ∀ k : Fin 24, ∀ b e : ZMod 9,\n"
+            "    let qa_step := fun (s : ZMod 9 × ZMod 9) => (s.1 + s.2, s.1)\n"
+            "    let s := qa_step^[k.val] (b, e)\n"
+            "    Matrix.mulVec (fib_mat ^ k.val) ![b, e] = ![s.1, s.2] := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[128] SP2"],
+        "topic": "fib-matrix",
+        "nl_span": "k-fold T-iterate equals F^k matrix power acting on column vectors",
+        "formal_identifiers": ["fib_mat_iter", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit25_fib_mat_pisano_9",
+        "nl": "The exact Pisano period π(9) = 24, stated algebraically: the smallest k > 0 with F^k = I in M₂(ZMod 9) is k = 24. This is the matrix-ring proof of the exact Pisano period.",
+        "formal_goal": (
+            "theorem fib_mat_pisano_9 :\n"
+            "    (∀ k : Fin 24, k.val ≠ 0 → fib_mat ^ k.val ≠ 1) ∧ fib_mat ^ 24 = 1"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n\n"
+            "theorem fib_mat_order_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → fib_mat ^ k.val ≠ 1 := by native_decide\n\n"
+            "theorem fib_mat_pow_24 : fib_mat ^ 24 = 1 := by native_decide\n\n"
+            "theorem fib_mat_pisano_9 :\n"
+            "    (∀ k : Fin 24, k.val ≠ 0 → fib_mat ^ k.val ≠ 1) ∧ fib_mat ^ 24 = 1 :=\n"
+            "  ⟨fib_mat_order_exact, fib_mat_pow_24⟩\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "fib-matrix",
+        "nl_span": "exact Pisano period π(9) = 24 as matrix order: F^k = I iff 24 | k",
+        "formal_identifiers": ["fib_mat_pisano_9", "fib_mat_order_exact", "fib_mat_pow_24", "fib_mat"],
+    },
 ]
 
 
@@ -716,6 +875,13 @@ def build_pack() -> None:
         "- `qa_orbit16_cosmos_suborbit_union` → cert [126] / [191] (sub-orbit decomp)\n"
         "- `qa_orbit17_cosmos_step_injective` → cert [126] (T bijective on Cosmos)\n"
         "- `qa_orbit18_cosmos_reps_distinct` → cert [126] / [128] (three distinct orbits)\n"
+        "- `qa_orbit19_fib_mat_pow_24` → cert [128] SP2 (F^24 = I in M₂(ZMod 9))\n"
+        "- `qa_orbit20_fib_mat_order_exact` → cert [128] SP2 (ord(F) = 24 in GL₂(ZMod 9))\n"
+        "- `qa_orbit21_fib_mat_det` → cert [153] (det(F) = 8 = -1 mod 9)\n"
+        "- `qa_orbit22_fib_mat_det_ne_zero` → cert [153] (F ∈ GL₂(ZMod 9))\n"
+        "- `qa_orbit23_fib_mat_action` → cert [126] (T-step = matrix action)\n"
+        "- `qa_orbit24_fib_mat_iter` → cert [126] / [128] (iterate = matrix power)\n"
+        "- `qa_orbit25_fib_mat_pisano_9` → cert [128] SP2 (π(9) = 24, matrix form)\n"
     )
     (PACK_DIR / "README.md").write_text(readme, encoding="utf-8")
     print(f"Wrote {PACK_DIR}/index.json and README.md")

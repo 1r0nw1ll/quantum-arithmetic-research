@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit23_fib_mat_action",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "e6f18559020161d8f522159b48811e0dcf26529db782238ab701abcb2814507c"
+}

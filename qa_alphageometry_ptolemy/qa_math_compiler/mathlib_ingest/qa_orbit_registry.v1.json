@@ -2,10 +2,10 @@
   "schema_id": "QA_ORBIT_REGISTRY.v1",
   "registry_id": "qa_orbit_registry_v1",
   "created_utc": "2026-06-22T00:00:00Z",
-  "source_modules": ["QAOrbits.lean", "QAOrbitPartition.lean", "QAOrbitInvariance.lean"],
+  "source_modules": ["QAOrbits.lean", "QAOrbitPartition.lean", "QAOrbitInvariance.lean", "QAFibMatrix.lean"],
   "lean_toolchain": "leanprover/lean4:v4.31.0",
   "mathlib_commit": "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f",
-  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (6) + QAOrbitInvariance.lean (7). Machine-checked proofs of the three-orbit partition, exact Pisano period π(9)=24, orbit invariance, sub-orbit decomposition, and cosmos rep distinctness.",
+  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (6) + QAOrbitInvariance.lean (7) + QAFibMatrix.lean (7). Machine-checked proofs through the Fibonacci matrix in GL₂(ZMod 9): F^24=I, exact order 24, det(F)≠0, T-step = matrix action, iteration = matrix power.",
   "entries": [
     {
       "theorem_name": "qa_cfgpythag",
@@ -150,13 +150,69 @@
       "tactic": "native_decide",
       "cert_refs": ["[126] orbit-structure", "[128] SP2"],
       "topic": "sub-orbit"
+    },
+    {
+      "theorem_name": "fib_mat_pow_24",
+      "example_id": "qa_orbit19_fib_mat_pow_24",
+      "source_module": "QAFibMatrix.lean",
+      "tactic": "native_decide",
+      "cert_refs": ["[128] SP2"],
+      "topic": "fib-matrix"
+    },
+    {
+      "theorem_name": "fib_mat_order_exact",
+      "example_id": "qa_orbit20_fib_mat_order_exact",
+      "source_module": "QAFibMatrix.lean",
+      "tactic": "native_decide",
+      "cert_refs": ["[128] SP2"],
+      "topic": "fib-matrix"
+    },
+    {
+      "theorem_name": "fib_mat_det",
+      "example_id": "qa_orbit21_fib_mat_det",
+      "source_module": "QAFibMatrix.lean",
+      "tactic": "native_decide",
+      "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+      "topic": "fib-matrix"
+    },
+    {
+      "theorem_name": "fib_mat_det_ne_zero",
+      "example_id": "qa_orbit22_fib_mat_det_ne_zero",
+      "source_module": "QAFibMatrix.lean",
+      "tactic": "native_decide",
+      "cert_refs": ["[153] DOMINANT=SINGULARITY"],
+      "topic": "fib-matrix"
+    },
+    {
+      "theorem_name": "fib_mat_action",
+      "example_id": "qa_orbit23_fib_mat_action",
+      "source_module": "QAFibMatrix.lean",
+      "tactic": "native_decide",
+      "cert_refs": ["[126] orbit-structure"],
+      "topic": "fib-matrix"
+    },
+    {
+      "theorem_name": "fib_mat_iter",
+      "example_id": "qa_orbit24_fib_mat_iter",
+      "source_module": "QAFibMatrix.lean",
+      "tactic": "native_decide",
+      "cert_refs": ["[126] orbit-structure", "[128] SP2"],
+      "topic": "fib-matrix"
+    },
+    {
+      "theorem_name": "fib_mat_pisano_9",
+      "example_id": "qa_orbit25_fib_mat_pisano_9",
+      "source_module": "QAFibMatrix.lean",
+      "tactic": "native_decide",
+      "cert_refs": ["[128] SP2"],
+      "topic": "fib-matrix"
     }
   ],
   "metrics": {
-    "entry_count": 18,
+    "entry_count": 25,
     "ring_count": 1,
     "rfl_count": 1,
     "decide_count": 2,
-    "native_decide_count": 14
+    "native_decide_count": 21
   }
 }

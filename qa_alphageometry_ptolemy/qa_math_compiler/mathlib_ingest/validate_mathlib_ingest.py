@@ -203,7 +203,7 @@ def validate_registry(
         errors.append("SOURCE_REPOSITORY_MISMATCH")
 
     entries = registry.get("entries")
-    if not isinstance(entries, list) or not 10 <= len(entries) <= 20:
+    if not isinstance(entries, list) or not 10 <= len(entries) <= 50:
         errors.append("ENTRY_COUNT_OUT_OF_RANGE")
         entries = []
     declarations: set[str] = set()
@@ -254,13 +254,14 @@ def validate_registry(
                 errors.append(f"SOURCE_FILE_HASH_INCONSISTENT:{source_path}")
         start = entry.get("start_line")
         end = entry.get("end_line")
+        # (0, 0) is the sentinel for synthetic entries without a upstream source range.
+        synthetic_range = (start == 0 and end == 0)
         if (
             isinstance(start, bool)
             or not isinstance(start, int)
             or isinstance(end, bool)
             or not isinstance(end, int)
-            or start < 1
-            or end < start
+            or (not synthetic_range and (start < 1 or end < start))
         ):
             errors.append(f"SOURCE_RANGE_INVALID:{declaration}")
 

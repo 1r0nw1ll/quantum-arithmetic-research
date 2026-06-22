@@ -1,0 +1,1 @@
+Mapping a function over a list preserves its length.

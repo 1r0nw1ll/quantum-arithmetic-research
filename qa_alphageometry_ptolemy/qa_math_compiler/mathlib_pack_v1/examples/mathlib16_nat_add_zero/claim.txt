@@ -1,0 +1,1 @@
+Adding zero to any natural number returns that number.

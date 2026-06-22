@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib24_factorial_pos","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"cbb618b267f53b4751bba53ba08d6603c6bac5e31d61652d225e3829ab586304","upstream_declaration":"Nat.factorial_pos"}

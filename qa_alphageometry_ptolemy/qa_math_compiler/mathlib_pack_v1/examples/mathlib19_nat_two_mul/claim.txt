@@ -1,0 +1,1 @@
+Two times any natural number equals that number added to itself.

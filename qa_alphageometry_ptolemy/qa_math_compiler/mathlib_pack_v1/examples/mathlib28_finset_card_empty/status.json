@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib28_finset_card_empty","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"eeb072315339a29ff915a2d2807f40ea7e6ecff4f49ac4296f9fa4d17c8c81ff","upstream_declaration":"Finset.card_empty"}

@@ -1,0 +1,1 @@
+Addition of natural numbers satisfies left commutativity: a + (b + c) = b + (a + c).

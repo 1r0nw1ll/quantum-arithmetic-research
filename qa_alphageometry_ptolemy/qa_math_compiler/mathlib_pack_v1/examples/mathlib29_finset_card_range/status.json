@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib29_finset_card_range","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"1dfc6caf3da46f9831e8edc97abb7ecac55d33905409d6cc8dadbee96bdbb277","upstream_declaration":"Finset.card_range"}

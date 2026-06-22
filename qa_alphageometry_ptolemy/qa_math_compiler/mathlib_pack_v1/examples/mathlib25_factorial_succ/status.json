@@ -1,0 +1,1 @@
+{"compressed":false,"example_id":"mathlib25_factorial_succ","introduced_lemmas":0,"kernel_derived":true,"replay_rate":1.0,"status":"PROVED","toolchain_id":"lean4.31.0","trace_id":"8837aebe4c47b2f65eca332d064a143e10379a0c2b3578b92d8e6448ed2b5ed3","upstream_declaration":"Nat.factorial_succ"}

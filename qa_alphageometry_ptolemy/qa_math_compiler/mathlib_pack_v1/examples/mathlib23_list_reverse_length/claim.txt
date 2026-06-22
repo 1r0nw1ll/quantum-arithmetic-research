@@ -1,0 +1,1 @@
+Reversing a list preserves its length.

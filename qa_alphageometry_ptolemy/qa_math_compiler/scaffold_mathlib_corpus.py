@@ -60,13 +60,17 @@ def generated_files() -> dict[Path, bytes]:
         example_id = _required(entry, "example_id")
         claim = _required(entry, "claim")
         formal = _required(entry, "formal")
-        proof_term = _required(entry, "proof_term")
         declaration = _required(entry, "declaration")
         module = _required(entry, "module")
 
         example_dir = EXAMPLES / example_id
         import_line = f"import {module}"
-        proof_source = f"{import_line}\n\n{formal} := by\n  exact {proof_term}\n"
+        proof_body = entry.get("proof_body")
+        if proof_body is not None:
+            proof_source = f"{import_line}\n\n{formal} := by\n{proof_body}\n"
+        else:
+            proof_term = _required(entry, "proof_term")
+            proof_source = f"{import_line}\n\n{formal} := by\n  exact {proof_term}\n"
 
         provenance = {
             "repository": registry["source"]["repository"],

@@ -1,0 +1,1 @@
+The sum of two even natural numbers is even.

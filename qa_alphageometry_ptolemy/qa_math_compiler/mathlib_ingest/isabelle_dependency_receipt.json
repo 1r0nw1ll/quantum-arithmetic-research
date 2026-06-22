@@ -1,0 +1,14 @@
+{
+  "cache_required": true,
+  "cache_status": "AVAILABLE",
+  "checkout_status": "SUCCESS",
+  "expected_lock_sha256": "eaf743a0eef7c51f1ea35be3e1599ef4d28395851e01493874b96898fe3497c7",
+  "lock_anchor": "/Applications/Isabelle2025-2.app/ANNOUNCE",
+  "lock_anchor_type": "release_announce_sha256",
+  "observed_lock_sha256": "eaf743a0eef7c51f1ea35be3e1599ef4d28395851e01493874b96898fe3497c7",
+  "replay_execution_sha256": "d3464ab24edece017d102c6224d7885b5d678d7a7c23b926dbfbbdf397558c6f",
+  "schema_id": "QA_MATH_COMPILER_DEPENDENCY_REPLAY_RECEIPT.v1",
+  "tool": "isabelle",
+  "tool_version": "2025-2",
+  "trace_execution_sha256": "d3464ab24edece017d102c6224d7885b5d678d7a7c23b926dbfbbdf397558c6f"
+}

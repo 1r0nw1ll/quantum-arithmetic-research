@@ -55,19 +55,41 @@ def validate_receipt(receipt: dict[str, Any]) -> dict[str, Any]:
     return {"ok": not errors, "errors": errors}
 
 
+LIVE_RECEIPTS = [
+    ROOT / "coq_dependency_receipt.json",
+    ROOT / "isabelle_dependency_receipt.json",
+]
+
+
 def self_test() -> dict[str, Any]:
     cases = [
+        # Lean/Mathlib cases
         ("dependency_replay_valid.json", None),
         ("dependency_fail_missing_cache.json", "DEPENDENCY_CACHE_MISSING"),
         ("dependency_fail_lock_drift.json", "DEPENDENCY_LOCK_DRIFT"),
         ("dependency_fail_checkout.json", "DEPENDENCY_CHECKOUT_FAILED"),
         ("dependency_fail_replay_mismatch.json", "DEPENDENCY_REPLAY_MISMATCH"),
+        # Coq/Rocq cases
+        ("coq_dependency_replay_valid.json", None),
+        ("coq_dependency_fail_lock_drift.json", "DEPENDENCY_LOCK_DRIFT"),
+        # Isabelle cases
+        ("isabelle_dependency_replay_valid.json", None),
+        ("isabelle_dependency_fail_lock_drift.json", "DEPENDENCY_LOCK_DRIFT"),
     ]
     checks = []
     for filename, expected in cases:
         result = validate_receipt(load_json(FIXTURES / filename))
         ok = result["ok"] if expected is None else expected in result["errors"]
         checks.append({"name": filename, "expected": expected or "PASS", "ok": ok})
+    # Also validate the live receipts against the schema
+    for path in LIVE_RECEIPTS:
+        result = validate_receipt(load_json(path))
+        checks.append({
+            "name": path.name,
+            "expected": "PASS",
+            "ok": result["ok"],
+            "errors": result.get("errors", []),
+        })
     return {"ok": all(check["ok"] for check in checks), "checks": checks}
 
 

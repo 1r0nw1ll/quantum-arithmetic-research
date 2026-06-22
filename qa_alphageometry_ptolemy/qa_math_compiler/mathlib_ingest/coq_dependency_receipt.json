@@ -1,0 +1,14 @@
+{
+  "cache_required": false,
+  "cache_status": "NOT_REQUIRED",
+  "checkout_status": "SUCCESS",
+  "expected_lock_sha256": "42b5a882b913ba3a2b93daf11be84371f2defb62d6735025d71ce876bba219d2",
+  "lock_anchor": "/opt/homebrew/bin/rocq",
+  "lock_anchor_type": "binary_sha256",
+  "observed_lock_sha256": "42b5a882b913ba3a2b93daf11be84371f2defb62d6735025d71ce876bba219d2",
+  "replay_execution_sha256": "3d3bc3d06f185da393e78bc15e715efd29d420d0d7f06c873ef812cfaee116b4",
+  "schema_id": "QA_MATH_COMPILER_DEPENDENCY_REPLAY_RECEIPT.v1",
+  "tool": "rocq",
+  "tool_version": "9.1.1",
+  "trace_execution_sha256": "3d3bc3d06f185da393e78bc15e715efd29d420d0d7f06c873ef812cfaee116b4"
+}

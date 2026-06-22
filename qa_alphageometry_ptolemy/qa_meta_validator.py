@@ -1783,6 +1783,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
       - assistants_valid.json must PASS
       - assistants_invalid_nondeterministic.json must FAIL with ASSISTANT_NONDETERMINISTIC
       - Mathlib upgrade drift test (5 mutation checks: T0 clean, T1 byte-flip, T2 decl-mutate, T3 file-delete, T4 commit-mismatch) must PASS
+      - Coq/Rocq and Isabelle dependency replay receipts must PASS schema validation (live check: binary/release-announce lock hash + execution replay determinism)
       - demo_pack_v1 must PASS demo_pack validator
       - demo_pack_v1/corpus.json must deterministically rebuild byte-semantically
       - Lean, Coq/Rocq, and Isabelle live kernel smoke proofs must PASS
@@ -1902,6 +1903,31 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mc_dir,
         "validate_upgrade_drift.py",
     )
+    proof_assistant_receipt_builder = os.path.join(
+        mc_dir,
+        "build_proof_assistant_receipts.py",
+    )
+    coq_dependency_receipt = os.path.join(
+        mathlib_ingest_dir,
+        "coq_dependency_receipt.json",
+    )
+    isabelle_dependency_receipt = os.path.join(
+        mathlib_ingest_dir,
+        "isabelle_dependency_receipt.json",
+    )
+    _pa_fixture_dir = os.path.join(mathlib_ingest_dir, "fixtures")
+    coq_dependency_fixture_valid = os.path.join(
+        _pa_fixture_dir, "coq_dependency_replay_valid.json",
+    )
+    isabelle_dependency_fixture_valid = os.path.join(
+        _pa_fixture_dir, "isabelle_dependency_replay_valid.json",
+    )
+    coq_dependency_fixture_drift = os.path.join(
+        _pa_fixture_dir, "coq_dependency_fail_lock_drift.json",
+    )
+    isabelle_dependency_fixture_drift = os.path.join(
+        _pa_fixture_dir, "isabelle_dependency_fail_lock_drift.json",
+    )
     kernel_trace_manifest = os.path.join(mc_dir, "kernel_trace_manifest.json")
     kernel_trace_index = os.path.join(mc_dir, "kernel_trace_index.json")
     semantic_replay_certificate = os.path.join(
@@ -1955,6 +1981,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         kernel_trace_compiler, lemma_mining_evaluator, supply_chain_builder,
         runner_receipt_builder, mathlib_ingest_validator,
         mathlib_dependency_validator, upgrade_drift_validator,
+        proof_assistant_receipt_builder,
+        coq_dependency_receipt, isabelle_dependency_receipt,
+        coq_dependency_fixture_valid, isabelle_dependency_fixture_valid,
+        coq_dependency_fixture_drift, isabelle_dependency_fixture_drift,
         mathlib_ingest_registry, mathlib_ingest_negative,
         mathlib_ingest_lean, mathlib_ingest_lakefile,
         mathlib_ingest_toolchain, mathlib_ingest_lock,
@@ -2382,6 +2412,35 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         raise RuntimeError(
             "Mathlib upgrade drift test returned ok=false: "
             f"{json.dumps(upgrade_drift_result, sort_keys=True)}"
+        )
+
+    pa_receipt_mode = (
+        "self-test"
+        if os.environ.get("QA_MATH_COMPILER_CERTIFICATE_ONLY") == "1"
+        else "check-artifacts"
+    )
+    pa_receipt_proc = subprocess.run(
+        [sys.executable, proof_assistant_receipt_builder, pa_receipt_mode],
+        capture_output=True,
+        text=True,
+        timeout=120,
+    )
+    if pa_receipt_proc.returncode != 0:
+        raise RuntimeError(
+            "Proof assistant dependency receipts failed:\n"
+            f"{pa_receipt_proc.stdout}\n{pa_receipt_proc.stderr}"
+        )
+    try:
+        pa_receipt_result = json.loads(pa_receipt_proc.stdout)
+    except json.JSONDecodeError as exc:
+        raise RuntimeError(
+            "Proof assistant receipt builder returned non-JSON output: "
+            f"{exc}: {pa_receipt_proc.stdout}"
+        )
+    if pa_receipt_result.get("ok") is not True:
+        raise RuntimeError(
+            "Proof assistant dependency receipts returned ok=false: "
+            f"{json.dumps(pa_receipt_result, sort_keys=True)}"
         )
 
     mathlib_pack_result = validate_demo_pack_v1(mathlib_pack_dir)

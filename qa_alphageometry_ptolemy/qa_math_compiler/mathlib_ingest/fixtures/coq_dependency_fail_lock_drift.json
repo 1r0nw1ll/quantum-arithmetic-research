@@ -1,0 +1,10 @@
+{
+  "cache_required": false,
+  "cache_status": "NOT_REQUIRED",
+  "checkout_status": "SUCCESS",
+  "expected_lock_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+  "observed_lock_sha256": "cccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccccc",
+  "replay_execution_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd",
+  "schema_id": "QA_MATH_COMPILER_DEPENDENCY_REPLAY_RECEIPT.v1",
+  "trace_execution_sha256": "dddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd"
+}

@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit32_fib_mat_zpowers_isCyclic",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "76ac83e34ff047948af35c5838b260c67c87a09560ff34359d5ff52af9a249cc"
+}

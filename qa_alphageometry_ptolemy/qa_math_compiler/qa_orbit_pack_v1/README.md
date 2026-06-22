@@ -9,6 +9,15 @@ QAOrbitPartition.lean (6 theorems): three-orbit partition (81 = 72+8+1),
 cosmos cardinality 72, exact cosmos period 24, exact satellite period 8,
 singularity uniqueness, exact Pisano period π(9) = 24.
 
+QAOrbitInvariance.lean (7 theorems): orbit T-invariance, sub-orbit decomposition,
+T injectivity on Cosmos, three sub-orbits pairwise disjoint.
+
+QAFibMatrix.lean (7 theorems): F^24=I and exact order 24 in M₂(ZMod 9),
+det(F)=8≠0, T-step = matrix action, iteration = matrix power.
+
+QAFibMatrixGroup.lean (7 theorems): F lifted to unit group GL₂(ZMod 9),
+orderOf(F)=24 via orderOf_eq_iff, |⟨F⟩|=24, ⟨F⟩ is cyclic.
+
 Each example is a standalone extract with a single-theorem proof file.
 
 ## Cert References
@@ -38,3 +47,10 @@ Each example is a standalone extract with a single-theorem proof file.
 - `qa_orbit23_fib_mat_action` → cert [126] (T-step = matrix action)
 - `qa_orbit24_fib_mat_iter` → cert [126] / [128] (iterate = matrix power)
 - `qa_orbit25_fib_mat_pisano_9` → cert [128] SP2 (π(9) = 24, matrix form)
+- `qa_orbit26_fib_mat_unit_pow_24` → cert [128] SP2 (F^24=1 in unit group)
+- `qa_orbit27_fib_mat_unit_order_exact` → cert [128] SP2 (exact order in unit group)
+- `qa_orbit28_fib_mat_unit_pow_12_ne_one` → cert [128] SP2 (F^12≠1, rules out p=2)
+- `qa_orbit29_fib_mat_unit_pow_8_ne_one` → cert [128] SP2 (F^8≠1, rules out p=3)
+- `qa_orbit30_fib_mat_unit_orderOf` → cert [128] SP2 (orderOf(F)=24 in GL₂)
+- `qa_orbit31_fib_mat_zpowers_card` → cert [128] / [126] (|⟨F⟩|=24)
+- `qa_orbit32_fib_mat_zpowers_isCyclic` → cert [126] (⟨F⟩ is cyclic)

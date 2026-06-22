@@ -1,0 +1,36 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Units.val_pow_eq_pow_val",
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_unit_pow_8_ne_one",
+          "fib_mat_unit",
+          "fib_mat"
+        ],
+        "nl_span": "F^8 ≠ 1: the order does not divide 8 (rules out p=3 factor)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_unit_pow_8_ne_one : fib_mat_unit ^ 8 ≠ 1",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "F^8 ≠ 1 in (M₂(ZMod 9))ˣ: the Fibonacci matrix unit does not have order dividing 8 (ruling out the prime factor p=3 of 24).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT29_FIB_MAT_UNIT_POW_8_NE_ONE_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "b8fd12845708703c5ba879f3de131c6a14d05d807d513ddee3d4a5203a1fcbd7"
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Units.val_pow_eq_pow_val",
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_unit_order_exact",
+          "fib_mat_unit",
+          "fib_mat"
+        ],
+        "nl_span": "F^k ≠ 1 in the unit group for all 1 ≤ k < 24"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_unit_order_exact :\n    ∀ k : Fin 24, k.val ≠ 0 → fib_mat_unit ^ k.val ≠ 1",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "For every k ∈ {1,...,23}, the Fibonacci matrix unit F satisfies F^k ≠ 1 in (M₂(ZMod 9))ˣ — the unit-group lift of the exact order statement.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT27_FIB_MAT_UNIT_ORDER_EXACT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "c3a5bf5d25489b7bd85676d0f9b5d3a5ed037c6f634eb4896ebe1fe7397e7fe9"
+  }
+}

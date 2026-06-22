@@ -1,0 +1,37 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Units.val_injective",
+      "Units.val_pow_eq_pow_val",
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_unit_pow_24",
+          "fib_mat_unit",
+          "fib_mat"
+        ],
+        "nl_span": "F^24 = 1 in the unit group (M₂(ZMod 9))ˣ"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_unit_pow_24 : fib_mat_unit ^ 24 = 1",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "Lifting to the unit group: F^24 = 1 in (M₂(ZMod 9))ˣ, so the Fibonacci matrix is a finite-order element of GL₂(ZMod 9).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT26_FIB_MAT_UNIT_POW_24_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "a677d6e5324ac27a83cb4ef8b066d1cb9305e698e95b4546106ef7fa308e9551"
+  }
+}

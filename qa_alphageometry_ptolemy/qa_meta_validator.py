@@ -1787,7 +1787,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
       - demo_pack_v1 must PASS demo_pack validator
       - demo_pack_v1/corpus.json must deterministically rebuild byte-semantically
       - Lean, Coq/Rocq, and Isabelle live kernel smoke proofs must PASS
-      - qa_orbit_pack_v1 (25 QA-native theorems: QAOrbits.lean×5, QAOrbitPartition.lean×6, QAOrbitInvariance.lean×7, QAFibMatrix.lean×7: partition, Pisano π(9)=24, invariance, GL₂(ZMod 9) matrix order) must PASS
+      - qa_orbit_pack_v1 (32 QA-native theorems: QAOrbits.lean×5, QAOrbitPartition.lean×6, QAOrbitInvariance.lean×7, QAFibMatrix.lean×7, QAFibMatrixGroup.lean×7: partition, Pisano π(9)=24, invariance, GL₂(ZMod 9) matrix order, orderOf(F)=24 cyclic subgroup ⟨F⟩) must PASS
 
     Returns:
         None on success,
@@ -1932,6 +1932,10 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         mathlib_ingest_dir,
         "QAFibMatrix.lean",
     )
+    qa_fib_matrix_group_lean = os.path.join(
+        mathlib_ingest_dir,
+        "QAFibMatrixGroup.lean",
+    )
     qa_orbit_pack_dir = os.path.join(mc_dir, "qa_orbit_pack_v1")
     qa_orbit_corpus = os.path.join(qa_orbit_pack_dir, "corpus.json")
     coq_dependency_receipt = os.path.join(
@@ -2022,7 +2026,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         supply_chain_manifest,
         toolchain_manifest, live_kernel_report, demo_corpus,
         qa_orbit_validator, qa_orbit_registry, qa_orbit_lean, qa_orbit_partition_lean,
-        qa_orbit_invariance_lean, qa_fib_matrix_lean, qa_orbit_corpus,
+        qa_orbit_invariance_lean, qa_fib_matrix_lean, qa_fib_matrix_group_lean, qa_orbit_corpus,
         trace_valid, trace_neg, pair_valid, pair_neg,
         task_valid, task_neg, replay_valid, replay_neg,
         pair_v1_valid, pair_v1_neg, lemma_valid, lemma_neg, lemma_duplicate_neg,

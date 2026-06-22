@@ -23,9 +23,10 @@ QALEAN_PATH = ROOT / "QAOrbits.lean"
 QAPARTITION_PATH = ROOT / "QAOrbitPartition.lean"
 QAINVARIANCE_PATH = ROOT / "QAOrbitInvariance.lean"
 QAFIBMATRIX_PATH = ROOT / "QAFibMatrix.lean"
+QAFIBMATRIXGROUP_PATH = ROOT / "QAFibMatrixGroup.lean"
 
 REGISTRY_SCHEMA_ID = "QA_ORBIT_REGISTRY.v1"
-EXPECTED_ENTRY_COUNT = 25
+EXPECTED_ENTRY_COUNT = 32
 EXPECTED_THEOREM_NAMES = {
     # QAOrbits.lean (5)
     "qa_cfgpythag",
@@ -56,6 +57,14 @@ EXPECTED_THEOREM_NAMES = {
     "fib_mat_action",
     "fib_mat_iter",
     "fib_mat_pisano_9",
+    # QAFibMatrixGroup.lean (7)
+    "fib_mat_unit_pow_24",
+    "fib_mat_unit_order_exact",
+    "fib_mat_unit_pow_12_ne_one",
+    "fib_mat_unit_pow_8_ne_one",
+    "fib_mat_unit_orderOf",
+    "fib_mat_zpowers_card",
+    "fib_mat_zpowers_isCyclic",
 }
 
 
@@ -125,7 +134,9 @@ def validate_registry() -> List[Dict[str, Any]]:
                           f"declared {declared}, expected {EXPECTED_ENTRY_COUNT}"))
 
     tactic_sum = (metrics.get("ring_count", 0) + metrics.get("rfl_count", 0)
-                  + metrics.get("decide_count", 0) + metrics.get("native_decide_count", 0))
+                  + metrics.get("decide_count", 0) + metrics.get("native_decide_count", 0)
+                  + metrics.get("simp_count", 0) + metrics.get("rw_count", 0)
+                  + metrics.get("exact_count", 0))
     checks.append(_check("registry_metrics_tactic_sum",
                           tactic_sum == EXPECTED_ENTRY_COUNT,
                           f"tactic counts sum to {tactic_sum}, expected {EXPECTED_ENTRY_COUNT}"))
@@ -232,6 +243,31 @@ def validate_lean_source() -> List[Dict[str, Any]]:
         checks.append(_check(f"lean_fibmatrix_defines_{name}",
                               f"theorem {name}" in fsrc,
                               f"theorem {name} not found in QAFibMatrix.lean"))
+
+    # ── QAFibMatrixGroup.lean ─────────────────────────────────────────────────
+    if not QAFIBMATRIXGROUP_PATH.exists():
+        checks.append(_check("lean_fibmatrixgroup_source_exists", False,
+                              f"{QAFIBMATRIXGROUP_PATH} not found"))
+        return checks
+
+    checks.append(_check("lean_fibmatrixgroup_source_exists", True))
+
+    gsrc = QAFIBMATRIXGROUP_PATH.read_text(encoding="utf-8")
+
+    checks.append(_check("lean_fibmatrixgroup_imports_first",
+                          gsrc.startswith("import"),
+                          "imports must be the first content in QAFibMatrixGroup.lean"))
+
+    fibmatrixgroup_names = {
+        "fib_mat_unit_pow_24", "fib_mat_unit_order_exact",
+        "fib_mat_unit_pow_12_ne_one", "fib_mat_unit_pow_8_ne_one",
+        "fib_mat_unit_orderOf", "fib_mat_zpowers_card",
+        "fib_mat_zpowers_isCyclic",
+    }
+    for name in fibmatrixgroup_names:
+        checks.append(_check(f"lean_fibmatrixgroup_defines_{name}",
+                              f"theorem {name}" in gsrc,
+                              f"theorem {name} not found in QAFibMatrixGroup.lean"))
 
     return checks
 

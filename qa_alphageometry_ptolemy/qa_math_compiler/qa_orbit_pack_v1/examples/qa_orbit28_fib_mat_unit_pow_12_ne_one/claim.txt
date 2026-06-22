@@ -1,0 +1,1 @@
+F^12 ≠ 1 in (M₂(ZMod 9))ˣ: the Fibonacci matrix unit does not have order dividing 12 (ruling out the prime factor p=2 of 24).

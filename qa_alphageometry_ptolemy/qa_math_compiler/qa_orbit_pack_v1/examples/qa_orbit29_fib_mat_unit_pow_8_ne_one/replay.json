@@ -1,0 +1,36 @@
+{
+  "benchmark": {
+    "min_replay_rate": 1.0,
+    "trace_count": 1
+  },
+  "bundle_id": "KERNEL_QA_ORBIT29_FIB_MAT_UNIT_POW_8_NE_ONE_REPLAY",
+  "created_utc": "2026-06-22T00:00:00Z",
+  "invariant_diff": {
+    "case_id": "qa_orbit29_fib_mat_unit_pow_8_ne_one",
+    "expected_status": "SUCCESS",
+    "kernel_derived": true
+  },
+  "metrics": {
+    "deterministic_replays": 1,
+    "infra_flake_count": 0,
+    "replay_rate": 1.0,
+    "replay_successes": 1,
+    "total_replays": 1
+  },
+  "schema_id": "QA_MATH_COMPILER_REPLAY_BUNDLE_SCHEMA.v1",
+  "toolchain": {
+    "lake_lock_hash": "57861ce4045ac552c23d7559ed62427b3b75fe1ff37bb7d79e2ca81a84642596",
+    "lean_version": "4.31.0",
+    "toolchain_hash": "e0a7032ab1976a37a3e1e823816b4f490d462c1e864b21e1999c33cdac76e263"
+  },
+  "traces": [
+    {
+      "replay_hash": "2a0c34635cce8f7ca3959a963971230f8096e865b0be88e83561a3f22dcf4d87",
+      "replay_status": "SUCCESS",
+      "result_status": "SUCCESS",
+      "seed": 0,
+      "trace_hash": "2a0c34635cce8f7ca3959a963971230f8096e865b0be88e83561a3f22dcf4d87",
+      "trace_id": "b8fd12845708703c5ba879f3de131c6a14d05d807d513ddee3d4a5203a1fcbd7"
+    }
+  ]
+}

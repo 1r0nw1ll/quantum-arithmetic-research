@@ -1,0 +1,1 @@
+For every k ∈ {1,...,23}, the Fibonacci matrix unit F satisfies F^k ≠ 1 in (M₂(ZMod 9))ˣ — the unit-group lift of the exact order statement.

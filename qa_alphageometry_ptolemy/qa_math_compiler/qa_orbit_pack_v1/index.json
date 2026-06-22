@@ -1,5 +1,5 @@
 {
-  "example_count": 25,
+  "example_count": 32,
   "examples": [
     {
       "difficulty": "qa-native",
@@ -150,6 +150,48 @@
       "id": "qa_orbit25_fib_mat_pisano_9",
       "status": "PROVED",
       "topic": "fib-matrix"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit26_fib_mat_unit_pow_24",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit27_fib_mat_unit_order_exact",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit28_fib_mat_unit_pow_12_ne_one",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit29_fib_mat_unit_pow_8_ne_one",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit30_fib_mat_unit_orderOf",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit31_fib_mat_zpowers_card",
+      "status": "PROVED",
+      "topic": "cyclic-group"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit32_fib_mat_zpowers_isCyclic",
+      "status": "PROVED",
+      "topic": "cyclic-group"
     }
   ],
   "schema_id": "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1",

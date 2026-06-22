@@ -1,0 +1,1 @@
+The multiplicative order of the Fibonacci matrix F in GL₂(ZMod 9) is exactly 24: orderOf(F) = 24. This is the Pisano period as a group-theoretic statement.

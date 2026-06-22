@@ -1,0 +1,40 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "orderOf_eq_iff",
+      "Units.val_pow_eq_pow_val",
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_unit_orderOf",
+          "fib_mat_unit_pow_24",
+          "fib_mat_unit_order_exact",
+          "fib_mat_unit",
+          "fib_mat"
+        ],
+        "nl_span": "the multiplicative order of F in GL₂(ZMod 9) is exactly 24"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_unit_orderOf : orderOf fib_mat_unit = 24",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] SP2",
+      "[126] orbit-structure"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The multiplicative order of the Fibonacci matrix F in GL₂(ZMod 9) is exactly 24: orderOf(F) = 24. This is the Pisano period as a group-theoretic statement.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT30_FIB_MAT_UNIT_ORDEROF_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "56db57105ae53c6e1a865d297f4459ba2f935058bba3766226855d844805a20c"
+  }
+}

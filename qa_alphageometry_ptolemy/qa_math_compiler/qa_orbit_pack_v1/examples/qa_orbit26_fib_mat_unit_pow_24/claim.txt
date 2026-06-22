@@ -1,0 +1,1 @@
+Lifting to the unit group: F^24 = 1 in (M₂(ZMod 9))ˣ, so the Fibonacci matrix is a finite-order element of GL₂(ZMod 9).

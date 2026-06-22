@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "simp"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem fib_mat_unit_pow_12_ne_one : fib_mat_unit ^ 12 ≠ 1",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "cyclic-group",
+    "cert_refs": [
+      "[128] SP2"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "F^12 ≠ 1 in (M₂(ZMod 9))ˣ: the Fibonacci matrix unit does not have order dividing 12 (ruling out the prime factor p=2 of 24).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT28_FIB_MAT_UNIT_POW_12_NE_ONE_TASK"
+}

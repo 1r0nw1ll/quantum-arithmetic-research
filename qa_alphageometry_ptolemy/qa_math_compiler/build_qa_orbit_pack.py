@@ -649,6 +649,241 @@ THEOREMS = [
         "nl_span": "exact Pisano period π(9) = 24 as matrix order: F^k = I iff 24 | k",
         "formal_identifiers": ["fib_mat_pisano_9", "fib_mat_order_exact", "fib_mat_pow_24", "fib_mat"],
     },
+    # ── QAFibMatrixGroup.lean — unit lift and cyclic subgroup ─────────────────
+    {
+        "id": "qa_orbit26_fib_mat_unit_pow_24",
+        "nl": "Lifting to the unit group: F^24 = 1 in (M₂(ZMod 9))ˣ, so the Fibonacci matrix is a finite-order element of GL₂(ZMod 9).",
+        "formal_goal": "theorem fib_mat_unit_pow_24 : fib_mat_unit ^ 24 = 1",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n"
+            "private def fib_mat_inv_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![0, 1; 1, 8]\n\n"
+            "def fib_mat_unit : (Matrix (Fin 2) (Fin 2) (ZMod 9))ˣ :=\n"
+            "  ⟨fib_mat, fib_mat_inv_mat, by native_decide, by native_decide⟩\n\n"
+            "theorem fib_mat_unit_pow_24 : fib_mat_unit ^ 24 = 1 := by\n"
+            "  apply Units.val_injective\n"
+            "  simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "             show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl]\n"
+            "  native_decide\n"
+        ),
+        "tactic": "simp",
+        "key_lemmas": ["Units.val_injective", "Units.val_pow_eq_pow_val", "native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "cyclic-group",
+        "nl_span": "F^24 = 1 in the unit group (M₂(ZMod 9))ˣ",
+        "formal_identifiers": ["fib_mat_unit_pow_24", "fib_mat_unit", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit27_fib_mat_unit_order_exact",
+        "nl": "For every k ∈ {1,...,23}, the Fibonacci matrix unit F satisfies F^k ≠ 1 in (M₂(ZMod 9))ˣ — the unit-group lift of the exact order statement.",
+        "formal_goal": (
+            "theorem fib_mat_unit_order_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → fib_mat_unit ^ k.val ≠ 1"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n"
+            "private def fib_mat_inv_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![0, 1; 1, 8]\n\n"
+            "def fib_mat_unit : (Matrix (Fin 2) (Fin 2) (ZMod 9))ˣ :=\n"
+            "  ⟨fib_mat, fib_mat_inv_mat, by native_decide, by native_decide⟩\n\n"
+            "theorem fib_mat_unit_order_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → fib_mat_unit ^ k.val ≠ 1 := by\n"
+            "  intro k hk heq\n"
+            "  have hmat : fib_mat ^ k.val = 1 := by\n"
+            "    have h := congr_arg Units.val heq\n"
+            "    simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "               show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl] at h\n"
+            "    exact h\n"
+            "  have key : ∀ j : Fin 24, j.val ≠ 0 → fib_mat ^ j.val ≠ 1 := by native_decide\n"
+            "  exact key k hk hmat\n"
+        ),
+        "tactic": "simp",
+        "key_lemmas": ["Units.val_pow_eq_pow_val", "native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "cyclic-group",
+        "nl_span": "F^k ≠ 1 in the unit group for all 1 ≤ k < 24",
+        "formal_identifiers": ["fib_mat_unit_order_exact", "fib_mat_unit", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit28_fib_mat_unit_pow_12_ne_one",
+        "nl": "F^12 ≠ 1 in (M₂(ZMod 9))ˣ: the Fibonacci matrix unit does not have order dividing 12 (ruling out the prime factor p=2 of 24).",
+        "formal_goal": "theorem fib_mat_unit_pow_12_ne_one : fib_mat_unit ^ 12 ≠ 1",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n"
+            "private def fib_mat_inv_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![0, 1; 1, 8]\n\n"
+            "def fib_mat_unit : (Matrix (Fin 2) (Fin 2) (ZMod 9))ˣ :=\n"
+            "  ⟨fib_mat, fib_mat_inv_mat, by native_decide, by native_decide⟩\n\n"
+            "theorem fib_mat_unit_pow_12_ne_one : fib_mat_unit ^ 12 ≠ 1 := by\n"
+            "  intro heq\n"
+            "  have hmat : fib_mat ^ 12 = 1 := by\n"
+            "    have h := congr_arg Units.val heq\n"
+            "    simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "               show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl] at h\n"
+            "    exact h\n"
+            "  exact absurd hmat (by native_decide)\n"
+        ),
+        "tactic": "simp",
+        "key_lemmas": ["Units.val_pow_eq_pow_val", "native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "cyclic-group",
+        "nl_span": "F^12 ≠ 1: the order does not divide 12 (rules out p=2 factor)",
+        "formal_identifiers": ["fib_mat_unit_pow_12_ne_one", "fib_mat_unit", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit29_fib_mat_unit_pow_8_ne_one",
+        "nl": "F^8 ≠ 1 in (M₂(ZMod 9))ˣ: the Fibonacci matrix unit does not have order dividing 8 (ruling out the prime factor p=3 of 24).",
+        "formal_goal": "theorem fib_mat_unit_pow_8_ne_one : fib_mat_unit ^ 8 ≠ 1",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n"
+            "private def fib_mat_inv_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![0, 1; 1, 8]\n\n"
+            "def fib_mat_unit : (Matrix (Fin 2) (Fin 2) (ZMod 9))ˣ :=\n"
+            "  ⟨fib_mat, fib_mat_inv_mat, by native_decide, by native_decide⟩\n\n"
+            "theorem fib_mat_unit_pow_8_ne_one : fib_mat_unit ^ 8 ≠ 1 := by\n"
+            "  intro heq\n"
+            "  have hmat : fib_mat ^ 8 = 1 := by\n"
+            "    have h := congr_arg Units.val heq\n"
+            "    simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "               show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl] at h\n"
+            "    exact h\n"
+            "  exact absurd hmat (by native_decide)\n"
+        ),
+        "tactic": "simp",
+        "key_lemmas": ["Units.val_pow_eq_pow_val", "native_decide"],
+        "cert_refs": ["[128] SP2"],
+        "topic": "cyclic-group",
+        "nl_span": "F^8 ≠ 1: the order does not divide 8 (rules out p=3 factor)",
+        "formal_identifiers": ["fib_mat_unit_pow_8_ne_one", "fib_mat_unit", "fib_mat"],
+    },
+    {
+        "id": "qa_orbit30_fib_mat_unit_orderOf",
+        "nl": "The multiplicative order of the Fibonacci matrix F in GL₂(ZMod 9) is exactly 24: orderOf(F) = 24. This is the Pisano period as a group-theoretic statement.",
+        "formal_goal": "theorem fib_mat_unit_orderOf : orderOf fib_mat_unit = 24",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.GroupTheory.OrderOfElement\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n"
+            "private def fib_mat_inv_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![0, 1; 1, 8]\n\n"
+            "def fib_mat_unit : (Matrix (Fin 2) (Fin 2) (ZMod 9))ˣ :=\n"
+            "  ⟨fib_mat, fib_mat_inv_mat, by native_decide, by native_decide⟩\n\n"
+            "theorem fib_mat_unit_pow_24 : fib_mat_unit ^ 24 = 1 := by\n"
+            "  apply Units.val_injective\n"
+            "  simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "             show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl]\n"
+            "  native_decide\n\n"
+            "theorem fib_mat_unit_order_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → fib_mat_unit ^ k.val ≠ 1 := by\n"
+            "  intro k hk heq\n"
+            "  have hmat : fib_mat ^ k.val = 1 := by\n"
+            "    have h := congr_arg Units.val heq\n"
+            "    simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "               show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl] at h\n"
+            "    exact h\n"
+            "  have key : ∀ j : Fin 24, j.val ≠ 0 → fib_mat ^ j.val ≠ 1 := by native_decide\n"
+            "  exact key k hk hmat\n\n"
+            "theorem fib_mat_unit_orderOf : orderOf fib_mat_unit = 24 := by\n"
+            "  rw [orderOf_eq_iff (by norm_num : 0 < 24)]\n"
+            "  refine ⟨fib_mat_unit_pow_24, fun m hm24 hm1 heq => ?_⟩\n"
+            "  exact fib_mat_unit_order_exact ⟨m, hm24⟩ (Nat.pos_iff_ne_zero.mp hm1) heq\n"
+        ),
+        "tactic": "rw",
+        "key_lemmas": ["orderOf_eq_iff", "Units.val_pow_eq_pow_val", "native_decide"],
+        "cert_refs": ["[128] SP2", "[126] orbit-structure"],
+        "topic": "cyclic-group",
+        "nl_span": "the multiplicative order of F in GL₂(ZMod 9) is exactly 24",
+        "formal_identifiers": [
+            "fib_mat_unit_orderOf", "fib_mat_unit_pow_24",
+            "fib_mat_unit_order_exact", "fib_mat_unit", "fib_mat",
+        ],
+    },
+    {
+        "id": "qa_orbit31_fib_mat_zpowers_card",
+        "nl": "The cyclic subgroup ⟨F⟩ generated by the Fibonacci matrix unit in GL₂(ZMod 9) has exactly 24 elements.",
+        "formal_goal": (
+            "theorem fib_mat_zpowers_card :\n"
+            "    Fintype.card ↥(Subgroup.zpowers fib_mat_unit) = 24"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.GroupTheory.OrderOfElement\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n"
+            "private def fib_mat_inv_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![0, 1; 1, 8]\n\n"
+            "def fib_mat_unit : (Matrix (Fin 2) (Fin 2) (ZMod 9))ˣ :=\n"
+            "  ⟨fib_mat, fib_mat_inv_mat, by native_decide, by native_decide⟩\n\n"
+            "theorem fib_mat_unit_pow_24 : fib_mat_unit ^ 24 = 1 := by\n"
+            "  apply Units.val_injective\n"
+            "  simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "             show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl]\n"
+            "  native_decide\n\n"
+            "theorem fib_mat_unit_order_exact :\n"
+            "    ∀ k : Fin 24, k.val ≠ 0 → fib_mat_unit ^ k.val ≠ 1 := by\n"
+            "  intro k hk heq\n"
+            "  have hmat : fib_mat ^ k.val = 1 := by\n"
+            "    have h := congr_arg Units.val heq\n"
+            "    simp only [Units.val_pow_eq_pow_val, Units.val_one,\n"
+            "               show (fib_mat_unit : Matrix (Fin 2) (Fin 2) (ZMod 9)) = fib_mat from rfl] at h\n"
+            "    exact h\n"
+            "  have key : ∀ j : Fin 24, j.val ≠ 0 → fib_mat ^ j.val ≠ 1 := by native_decide\n"
+            "  exact key k hk hmat\n\n"
+            "theorem fib_mat_unit_orderOf : orderOf fib_mat_unit = 24 := by\n"
+            "  rw [orderOf_eq_iff (by norm_num : 0 < 24)]\n"
+            "  refine ⟨fib_mat_unit_pow_24, fun m hm24 hm1 heq => ?_⟩\n"
+            "  exact fib_mat_unit_order_exact ⟨m, hm24⟩ (Nat.pos_iff_ne_zero.mp hm1) heq\n\n"
+            "theorem fib_mat_zpowers_card :\n"
+            "    Fintype.card ↥(Subgroup.zpowers fib_mat_unit) = 24 := by\n"
+            "  rw [Fintype.card_zpowers]\n"
+            "  exact fib_mat_unit_orderOf\n"
+        ),
+        "tactic": "rw",
+        "key_lemmas": ["Fintype.card_zpowers", "orderOf_eq_iff", "native_decide"],
+        "cert_refs": ["[128] SP2", "[126] orbit-structure"],
+        "topic": "cyclic-group",
+        "nl_span": "the cyclic subgroup ⟨F⟩ has exactly 24 elements",
+        "formal_identifiers": [
+            "fib_mat_zpowers_card", "fib_mat_unit_orderOf", "fib_mat_unit", "fib_mat",
+        ],
+    },
+    {
+        "id": "qa_orbit32_fib_mat_zpowers_isCyclic",
+        "nl": "The subgroup ⟨F⟩ generated by the Fibonacci matrix unit is a cyclic group — it satisfies the IsCyclic typeclass, with F as its generator.",
+        "formal_goal": (
+            "theorem fib_mat_zpowers_isCyclic : IsCyclic ↥(Subgroup.zpowers fib_mat_unit)"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Basic\n"
+            "import Mathlib.GroupTheory.SpecificGroups.Cyclic.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def fib_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![1, 1; 1, 0]\n"
+            "private def fib_mat_inv_mat : Matrix (Fin 2) (Fin 2) (ZMod 9) := !![0, 1; 1, 8]\n\n"
+            "def fib_mat_unit : (Matrix (Fin 2) (Fin 2) (ZMod 9))ˣ :=\n"
+            "  ⟨fib_mat, fib_mat_inv_mat, by native_decide, by native_decide⟩\n\n"
+            "theorem fib_mat_zpowers_isCyclic : IsCyclic ↥(Subgroup.zpowers fib_mat_unit) :=\n"
+            "  Subgroup.isCyclic_zpowers fib_mat_unit\n"
+        ),
+        "tactic": "exact",
+        "key_lemmas": ["Subgroup.isCyclic_zpowers"],
+        "cert_refs": ["[126] orbit-structure"],
+        "topic": "cyclic-group",
+        "nl_span": "⟨F⟩ is cyclic: generated by a single element F",
+        "formal_identifiers": [
+            "fib_mat_zpowers_isCyclic", "fib_mat_unit", "fib_mat",
+            "Subgroup.isCyclic_zpowers",
+        ],
+    },
 ]
 
 
@@ -855,6 +1090,12 @@ def build_pack() -> None:
         "QAOrbitPartition.lean (6 theorems): three-orbit partition (81 = 72+8+1),\n"
         "cosmos cardinality 72, exact cosmos period 24, exact satellite period 8,\n"
         "singularity uniqueness, exact Pisano period π(9) = 24.\n\n"
+        "QAOrbitInvariance.lean (7 theorems): orbit T-invariance, sub-orbit decomposition,\n"
+        "T injectivity on Cosmos, three sub-orbits pairwise disjoint.\n\n"
+        "QAFibMatrix.lean (7 theorems): F^24=I and exact order 24 in M₂(ZMod 9),\n"
+        "det(F)=8≠0, T-step = matrix action, iteration = matrix power.\n\n"
+        "QAFibMatrixGroup.lean (7 theorems): F lifted to unit group GL₂(ZMod 9),\n"
+        "orderOf(F)=24 via orderOf_eq_iff, |⟨F⟩|=24, ⟨F⟩ is cyclic.\n\n"
         "Each example is a standalone extract with a single-theorem proof file.\n\n"
         "## Cert References\n\n"
         "- `qa_orbit01_cfgpythag` → cert [496] ESC_PYTH\n"
@@ -882,6 +1123,13 @@ def build_pack() -> None:
         "- `qa_orbit23_fib_mat_action` → cert [126] (T-step = matrix action)\n"
         "- `qa_orbit24_fib_mat_iter` → cert [126] / [128] (iterate = matrix power)\n"
         "- `qa_orbit25_fib_mat_pisano_9` → cert [128] SP2 (π(9) = 24, matrix form)\n"
+        "- `qa_orbit26_fib_mat_unit_pow_24` → cert [128] SP2 (F^24=1 in unit group)\n"
+        "- `qa_orbit27_fib_mat_unit_order_exact` → cert [128] SP2 (exact order in unit group)\n"
+        "- `qa_orbit28_fib_mat_unit_pow_12_ne_one` → cert [128] SP2 (F^12≠1, rules out p=2)\n"
+        "- `qa_orbit29_fib_mat_unit_pow_8_ne_one` → cert [128] SP2 (F^8≠1, rules out p=3)\n"
+        "- `qa_orbit30_fib_mat_unit_orderOf` → cert [128] SP2 (orderOf(F)=24 in GL₂)\n"
+        "- `qa_orbit31_fib_mat_zpowers_card` → cert [128] / [126] (|⟨F⟩|=24)\n"
+        "- `qa_orbit32_fib_mat_zpowers_isCyclic` → cert [126] (⟨F⟩ is cyclic)\n"
     )
     (PACK_DIR / "README.md").write_text(readme, encoding="utf-8")
     print(f"Wrote {PACK_DIR}/index.json and README.md")

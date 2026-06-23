@@ -7955,6 +7955,37 @@ def _validate_orbit_dirac_bracket_cert_family(base_dir):
     return None
 
 
+def _validate_orbit_stratification_cert_family(base_dir):
+    """QA Orbit Stratification Cert family [261] — machine-checkable form of the two-layer QA Orbit Stratification Theorem (proven 2026-04-20). Part I: ⟨σ,μ⟩-orbits on (Z/mZ)² equal content-ideal classes L_j = {(b,e) : min(v_p(b),v_p(e)) = j} at each prime-power factor p^k of m, Cartesian-producted via CRT (composite m). Part II: σ-only orbits refine by how x²−x−1 factors mod p — three cases by Legendre symbol (5|p): Case A (inert, Legendre=-1) uniform orbit length π(p^n); Case B (split, Legendre=+1) eigenspace + generic orbits; Case C (ramified, p=5) Jordan filtration. Bridge: μ is the collapse operator from Part II's Frobenius/Jordan refinement to Part I's content-ideal classes. Primary sources: Nielsen (1924) generation of GL₂(ℤ) by elementary matrices T and Tᵀ; Lang (2002) Algebra ch. III local-ring module classification via elementary divisors; Wall (1960) Fibonacci Pisano periodicity π(p^k). Companion files: docs/theory/QA_ORBIT_STRATIFICATION_THEOREM.md (proofs), docs/theory/QA_ORBIT_THEOREM_SYNTHESIS.md, docs/theory/QA_GENERATOR_REACHABILITY.md. Will Dale + Claude 2026-04-20. Checks QOS_1+A/B_SZ/B_CC/C/II_A/II_B/II_C/F; 1 PASS + 1 FAIL; self-test ok"""
+    import subprocess
+    fam_dir   = os.path.join(base_dir, "qa_orbit_stratification_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_stratification_cert_validate.py")
+    if not os.path.exists(validator):
+        return "missing qa_orbit_stratification_cert_v1/qa_orbit_stratification_cert_validate.py"
+    proc = subprocess.run(
+        [sys.executable, validator, "--self-test"],
+        capture_output=True, text=True, timeout=120, cwd=fam_dir,
+    )
+    if proc.returncode != 0:
+        raise RuntimeError(
+            f"qa_orbit_stratification_cert self-test failed:\n"
+            f"{(proc.stdout or '').strip()}\n{(proc.stderr or '').strip()}"
+        )
+    try:
+        payload = json.loads((proc.stdout or "").strip() or "{}")
+    except Exception as exc:
+        raise RuntimeError(
+            f"qa_orbit_stratification_cert self-test returned non-JSON:\n"
+            f"error={exc}\nstdout={(proc.stdout or '').strip()}"
+        )
+    if payload.get("ok") is not True:
+        raise RuntimeError(
+            f"qa_orbit_stratification_cert self-test ok=false:\n"
+            f"{json.dumps(payload, indent=2, sort_keys=True)}"
+        )
+    return None
+
+
 def _validate_unequal_k_ccr_invariant_cert_family(base_dir):
     """QA Unequal-k CCR Invariant Cert family [262] — explicit QA-native unequal-k propagator as T-orbit trajectory indicator on S_9, delivering MC-1/MC-2 of docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.1. Companion to cert [260] QA Orbit-Dirac Bracket (MC-3/MC-4). Primary-source anchor: Mannheim (Phys. Rev. D 102 025020, 2020, arXiv:1909.03548) eqs (2.2) + (8.9)/(8.16) — unequal-time commutator as c-number invariant and Lehmann spectral representation. Construction: i_Delta_QA(Delta_k; (b,e), (b',e')) := 1 if T^|Delta_k|(b,e) = (b',e') else 0. Integer-valued, Theorem NT compliant. Equal-k limit recovers stipulated delta-function CCR (observer-side encoding, NOT derived from QA). Orbit decomposition, periodicity, and Lehmann trace formula Tr i_Delta_QA(Delta_k) = 72*1[24|Delta_k] + 8*1[8|Delta_k] + 1 verified exhaustively. Scope v1: m=9, T_F dynamics, 3 witnesses one per orbit class (Cosmos/Satellite/Singularity). m=24 + alternative step operators + interacting Lehmann spectral density deferred. Will Dale + Claude 2026-04-21. Checks UKC_1+EQ_LIMIT/ORBIT_DECOMP/PERIODICITY/LEHMANN/A1/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
@@ -14452,6 +14483,11 @@ FAMILY_SWEEPS = [
      "Explicit QA-native Dirac-bracket construction on S_9. Backfills the ETCR / Dirac-bracket cross-map thread (commit aa2053c, 2026-04-20), delivering MC-4 of docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.2. Constraint family {phi_1 = b^2 - b*e - e^2 - 1, phi_2 = b - 1} on pair space {1..9}^2. Base bracket = symplectic lift of tuple wedge {(b1,e1),(b2,e2)} = b1*e2 - b2*e1 (prior-art C3 recast, §QA_QFT_COMMUTATORS_PRIOR_ART.md). X_{ab} = [phi_a, phi_b] computed symbolically via Z[b,e] polynomial partial derivatives: X_12 = b + 2e, X_21 = -(b + 2e), diagonals 0; det X = (b + 2e)^2. Invertibility verified at every witness as coprime-to-m (unit mod 9); X^-1 via Python's built-in pow(x, -1, m). Orbit-Dirac bracket [F, G]_orbit := [F, G] - [F, phi_a] (X^-1)^{ab} [phi_b, G]. Instantiation for observable pair F=b, G=e: [b, e]_orbit = 0 mod 9 at every physical-subspace point. Strong-zero verification: [phi_a, F]_orbit = 0 mod 9 for a in {1,2}, F in {b, e}, at every witness (parallels Blaschke-Gieres eq 5.38). Primary sources: Blaschke & Gieres Nucl. Phys. B 965 (2021) arXiv:2004.14406 eqs (5.32)-(5.39) — Dirac-bracket canonical formulation; Mannheim Phys. Rev. D 102 025020 (2020) arXiv:1909.03548 — slice/path firewall framing. Substrate: [191] Tiered Reachability. Cross-map docs/theory/QA_QFT_ETCR_CROSSMAP.md §4.2; paper section papers/in-progress/qft-etcr-orbit-quotient/section.md §4.4; preliminary T-invariant docs/theory/empirical/etcr_t_invariant_check.py (Cassini-squared I = (b^2-be-e^2)^2 T-invariant under T_F(b,e) = (a1(b+e), b)). Scope v1: m=9 only, T_F dynamics, +1 Cassini branch of I=1 Cosmos orbit (witnesses (1,8), (1,9)). Deferred to v2: m=24 (needs mixed I-level + period-n family), cert-C unequal-k CCR invariant. Will Dale + Claude 2026-04-21. Checks ODB_1+PHI/WIT_A1/WIT_PHYSICAL/X_MATRIX/INV/DB_BE_ZERO/STRONG_ZERO/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "260_qa_orbit_dirac_bracket_cert",
      "qa_orbit_dirac_bracket_cert_v1", True),
+    (261, "QA Orbit Stratification Cert family",
+     _validate_orbit_stratification_cert_family,
+     "Machine-checkable two-layer QA Orbit Stratification Theorem (proven 2026-04-20). Part I: ⟨σ,μ⟩-orbits on (Z/mZ)² = content-ideal classes L_j = {(b,e) : min(v_p(b),v_p(e)) = j} at each prime-power factor p^k of m, size p^{2(k-j-1)}(p²-1) for j<k and 1 for j=k; CRT Cartesian-product for composite m. Part II: σ-only orbits refine by Legendre symbol (5|p) — Case A (inert, -1): uniform orbit length π(p^n); Case B (split, +1): eigenspace orbits of length ord(φ) and ord(ψ) plus generic orbits of length π(p); Case C (ramified, p=5, n≥2): 5^{n-1} orbits of length π(5^n) and 5^{n-1} orbits of length π(5^{n-1}). Bridge: μ is the collapse operator from Part II's Frobenius/Jordan refinement to Part I's content-ideal classes. QA axiom compliance: A1 witnesses in {1..m}; integer arithmetic throughout; no observer projections; pure-integer validator computes orbits + checks Props A/B/C against closed forms. Primary sources: Nielsen (1924) GL₂(ℤ) generation; Lang (2002) Algebra ch. III local-ring classification via elementary divisors; Wall (1960) Fibonacci Pisano periodicity. Companion: docs/theory/QA_ORBIT_STRATIFICATION_THEOREM.md (proofs), docs/theory/QA_ORBIT_THEOREM_SYNTHESIS.md, docs/theory/QA_GENERATOR_REACHABILITY.md. Will Dale + Claude 2026-04-20. Checks QOS_1+A/B_SZ/B_CC/C/II_A/II_B/II_C/F; 1 PASS + 1 FAIL; self-test ok",
+     "261_qa_orbit_stratification_cert",
+     "qa_orbit_stratification_cert_v1", True),
     (263, "QA Failure Density Enumeration Cert family",
      _validate_failure_density_enumeration_cert_family,
      "First sharp-claim cert derived from the Kochenderfer 2026 'Algorithms for Validation' bridge (Kochenderfer, 2026; docs/specs/QA_KOCHENDERFER_BRIDGE.md). Anchors cert [194] qa_cognition_space_morphospace_cert_v1 (Sole, 2026; arxiv:2601.12837 via Dale, 2026) ratios |reachable_set|/|S_9| in {1/81, 8/81, 72/81} and recasts them in Kochenderfer Ch. 7 vocabulary as exact failure-density enumeration: p_fail = E[1{tau not in psi}] = integral 1{tau not in psi} p(tau) d tau specializes to p_fail = |{s in S_m : s not in psi}| / |S_m| on the finite QA mod-9 orbit graph with variance identically zero. Adds head-to-head sampling-comparison gate against Kochenderfer Algorithm 7.1 direct sampling at N in {100, 1000, 10000} per orbit class with seed=42 (primary) and seeds 42/1337/2024 (variance-decay fixture), verifying the empirical estimator p_hat falls inside |error| <= 4 * sigma envelope per Kochenderfer eq. 7.3 sigma_hat = sqrt(p (1 - p) / N) and that QA enumeration error is identically zero. Utility factored to tools/qa_kg/orbit_failure_enumeration.py exposing enumerate_orbit_class_counts / exact_success_failure_probability / direct_sampling_estimate / theoretical_standard_error for reuse by [191], [193], [194]. Claim scope: this cert does not prove QA enumeration is novel as probability theory; it proves that an existing QA reachability cert ([194]) can be re-expressed in Kochenderfer's validation vocabulary and gains an exact finite-state estimator with zero sampling variance, while the corresponding direct estimator exhibits the expected Bernoulli sampling error. Scope v1: m=9 only (cert [194] is the canonical mod-9 anchor). m=24 deferred until a published mod-24 orbit-family classifier lands. Will Dale + Claude 2026-04-27. Checks FDE_1+RATIO/SAMPLING/STDERR/UTIL/SRC/WIT/F; 2 PASS + 1 FAIL; self-test ok",

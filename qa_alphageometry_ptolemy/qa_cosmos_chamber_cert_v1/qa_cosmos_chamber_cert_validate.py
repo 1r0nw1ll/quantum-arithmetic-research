@@ -1,4 +1,11 @@
 # Primary source: Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8; Pudelko M.T. (2025) arXiv:2510.24882
+QA_COMPLIANCE = (
+    "cert_validator -- pure integer arithmetic (Cosmos chamber: "
+    "G(b,e)=(b+e)*(b+e)+e*e with raw d=b+e (A2); sigma(b,e)=(e,((b+e-1)%m)+1) (A1); "
+    "G-sums 3429/3321/3213 arithmetic progression d=-12m; G-min at (k,1) G=(k+1)^2+1; "
+    "Fibonacci prefix F(5)..F(13) in O1 via integer recurrence); "
+    "Theorem NT: 'G-value' is an integer; no float state, no continuous observer in QA layer"
+)
 """QA Cosmos Chamber Cert [500] validator.
 
 CLAIM (narrow): The 72 Cosmos pairs of the QA mod-9 Fibonacci shift decompose into

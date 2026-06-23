@@ -1,4 +1,11 @@
 #!/usr/bin/env python3
+QA_COMPLIANCE = (
+    "cert_validator -- pure integer arithmetic (Pisano orbit partition: "
+    "sigma(b,e)=(e,((b+e-1)%m)+1); orbit periods are integer path counts; "
+    "counts: Cosmos=72 period-24, Satellite=8 period-8, Singularity=1 period-1, total=81=9^2; "
+    "swap symmetry: orbit family on (b,e) = orbit family on (e,b); negation parity: orbit family on (b,e) = orbit family on (neg(b),neg(e))); "
+    "Theorem NT: 'pi(9)=24' is an integer circuit count; no float state, no continuous observer in QA layer"
+)
 """QA Pisano All-Initializations Cert [499] validator.
 
 Cert claim: QA three-orbit partition of {1,...,9}^2 (Cosmos 72 + Satellite 8 +

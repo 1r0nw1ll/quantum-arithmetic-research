@@ -1,4 +1,12 @@
 # Primary source: Thornton M.A. (2026) arXiv:2604.03634; Thornton M.A. (2026) arXiv:2604.19983; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8
+QA_COMPLIANCE = (
+    "cert_validator -- pure integer arithmetic (Algebraic Diversity: "
+    "G(b,e)=(b+e)*(b+e)+e*e with raw d=b+e (A2); "
+    "G-injectivity (24 distinct integers per Cosmos orbit, 8 per Satellite); "
+    "no sub-period divisors; Satellite G-set {45,90,117,153,180,225,261,306} disjoint from Cosmos); "
+    "Theorem NT: 'G-value' is an integer observer projection — never a QA state; "
+    "no float state, no continuous observer in QA layer"
+)
 """QA Algebraic Diversity Observer Cert [501] validator.
 
 CLAIM (narrow): The G-function G(b,e)=(b+e)^2+e^2 over QA mod-9 orbits defines

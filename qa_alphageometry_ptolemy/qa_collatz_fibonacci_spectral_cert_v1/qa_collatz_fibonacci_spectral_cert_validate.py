@@ -1,4 +1,12 @@
 # Primary source: Reyes Jiménez A.E. (2025) arXiv:2606.02621; Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8
+QA_COMPLIANCE = (
+    "cert_validator -- pure integer arithmetic (Collatz-Fibonacci spectral: "
+    "sigma(b,e)=(e,((b+e-1)%m)+1); Singularity (9,9) period-1 fixed point; "
+    "non-Singularity period set {8,24}; F(k) mod 9 via integer recurrence; "
+    "Pisano witness: F(24)=0,F(25)=1 mod 9, pi(9)=24 minimal; decoy k=12 rejected); "
+    "Theorem NT: phi=lim F(n+1)/F(n) is a continuous observer projection — "
+    "phi never enters QA dynamics; no float state, no continuous observer in QA layer"
+)
 """
 QA Collatz-Fibonacci Spectral Cert [502]
 

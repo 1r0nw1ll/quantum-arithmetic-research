@@ -25,9 +25,10 @@ QAINVARIANCE_PATH = ROOT / "QAOrbitInvariance.lean"
 QAFIBMATRIX_PATH = ROOT / "QAFibMatrix.lean"
 QAFIBMATRIXGROUP_PATH = ROOT / "QAFibMatrixGroup.lean"
 QAFIBMATRIXGROUPISO_PATH = ROOT / "QAFibMatrixGroupIso.lean"
+QAFIBNATPERIODICITY_PATH = ROOT / "QAFibNatPeriodicity.lean"
 
 REGISTRY_SCHEMA_ID = "QA_ORBIT_REGISTRY.v1"
-EXPECTED_ENTRY_COUNT = 38
+EXPECTED_ENTRY_COUNT = 42
 EXPECTED_THEOREM_NAMES = {
     # QAOrbits.lean (5)
     "qa_cfgpythag",
@@ -73,6 +74,11 @@ EXPECTED_THEOREM_NAMES = {
     "fib_mat_iso_zpow",
     "fib_mat_iso_symm_generator",
     "fib_mat_iso_symm_zpow",
+    # QAFibNatPeriodicity.lean (4)
+    "fib_mat_mul_fib_vec",
+    "fib_mat_pow_fib_vec",
+    "fib_vec_periodic",
+    "fib_nat_mod9_periodic",
 }
 
 
@@ -304,6 +310,29 @@ def validate_lean_source() -> List[Dict[str, Any]]:
     checks.append(_check("lean_fibmatrixgroupiso_defines_fib_mat_iso_ZMod24",
                           "def fib_mat_iso_ZMod24" in isosrc,
                           "def fib_mat_iso_ZMod24 not found in QAFibMatrixGroupIso.lean"))
+
+    # ── QAFibNatPeriodicity.lean ───────────────────────────────────────────────
+    if not QAFIBNATPERIODICITY_PATH.exists():
+        checks.append(_check("lean_fibnatperiodicity_source_exists", False,
+                              f"{QAFIBNATPERIODICITY_PATH} not found"))
+        return checks
+
+    checks.append(_check("lean_fibnatperiodicity_source_exists", True))
+
+    psrc2 = QAFIBNATPERIODICITY_PATH.read_text(encoding="utf-8")
+
+    checks.append(_check("lean_fibnatperiodicity_imports_first",
+                          psrc2.startswith("import"),
+                          "imports must be the first content in QAFibNatPeriodicity.lean"))
+
+    fibnatperiodicity_names = {
+        "fib_mat_mul_fib_vec", "fib_mat_pow_fib_vec",
+        "fib_vec_periodic", "fib_nat_mod9_periodic",
+    }
+    for name in fibnatperiodicity_names:
+        checks.append(_check(f"lean_fibnatperiodicity_defines_{name}",
+                              f"theorem {name}" in psrc2,
+                              f"theorem {name} not found in QAFibNatPeriodicity.lean"))
 
     return checks
 

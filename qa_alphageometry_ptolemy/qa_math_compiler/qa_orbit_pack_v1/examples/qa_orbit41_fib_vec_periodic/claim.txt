@@ -1,0 +1,1 @@
+The Fibonacci column vector fib_vec is periodic with period 24 mod 9: fib_vec (n+24) = fib_vec n.

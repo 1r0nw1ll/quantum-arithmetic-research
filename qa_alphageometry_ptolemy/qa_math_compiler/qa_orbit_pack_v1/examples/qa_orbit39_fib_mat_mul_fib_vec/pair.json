@@ -1,0 +1,36 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "Fin.sum_univ_two",
+      "Nat.fib_add_two"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_mat_mul_fib_vec",
+          "fib_mat",
+          "fib_vec"
+        ],
+        "nl_span": "fib_mat *ᵥ fib_vec n = fib_vec (n+1)"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_mat_mul_fib_vec (n : ℕ) : fib_mat *ᵥ fib_vec n = fib_vec (n + 1)",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] Pisano period π(9)=24"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "Multiplying fib_mat by the Fibonacci column vector fib_vec n advances it by one step: fib_mat *ᵥ fib_vec n = fib_vec (n+1).",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT39_FIB_MAT_MUL_FIB_VEC_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "a42e455ed04c47735cc727d21f3f2e60c2659b427a180f6b3a1a099a4f58c3d7"
+  }
+}

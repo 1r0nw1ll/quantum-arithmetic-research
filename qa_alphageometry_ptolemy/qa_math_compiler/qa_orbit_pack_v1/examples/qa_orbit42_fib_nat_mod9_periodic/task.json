@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "simp"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem fib_nat_mod9_periodic (n : ℕ) : (Nat.fib (n + 24) : ZMod 9) = Nat.fib n",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "fibonacci-periodicity",
+    "cert_refs": [
+      "[128] Pisano period π(9)=24"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The Fibonacci sequence is periodic mod 9 with Pisano period 24: (Nat.fib (n+24) : ZMod 9) = Nat.fib n for all n.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT42_FIB_NAT_MOD9_PERIODIC_TASK"
+}

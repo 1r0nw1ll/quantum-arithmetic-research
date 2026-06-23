@@ -1040,6 +1040,116 @@ THEOREMS = [
             "fib_mat_iso_symm_zpow", "zmodMulEquivOfGenerator_symm_apply_zpow",
         ],
     },
+    # ── QAFibNatPeriodicity.lean (4) ────────────────────────────────────────
+    {
+        "id": "qa_orbit39_fib_mat_mul_fib_vec",
+        "nl": "Multiplying fib_mat by the Fibonacci column vector fib_vec n advances it by one step: fib_mat *ᵥ fib_vec n = fib_vec (n+1).",
+        "formal_goal": (
+            "theorem fib_mat_mul_fib_vec (n : ℕ) : fib_mat *ᵥ fib_vec n = fib_vec (n + 1)"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Mul\n"
+            "import Mathlib.Data.Nat.Fib.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "open scoped Matrix\n\n"
+            "-- (prerequisite defs in QAFibMatrix.lean and QAFibNatPeriodicity.lean)\n"
+            "theorem fib_mat_mul_fib_vec (n : ℕ) :\n"
+            "    fib_mat *ᵥ fib_vec n = fib_vec (n + 1) := by\n"
+            "  funext i\n"
+            "  fin_cases i\n"
+            "  · simp [fib_mat, fib_vec, Matrix.mulVec, dotProduct, Fin.sum_univ_two]\n"
+            "    push_cast [Nat.fib_add_two]; ring\n"
+            "  · simp [fib_mat, fib_vec, Matrix.mulVec, dotProduct, Fin.sum_univ_two]\n"
+        ),
+        "tactic": "simp",
+        "key_lemmas": ["Fin.sum_univ_two", "Nat.fib_add_two"],
+        "cert_refs": ["[128] Pisano period π(9)=24"],
+        "topic": "fibonacci-periodicity",
+        "nl_span": "fib_mat *ᵥ fib_vec n = fib_vec (n+1)",
+        "formal_identifiers": ["fib_mat_mul_fib_vec", "fib_mat", "fib_vec"],
+    },
+    {
+        "id": "qa_orbit40_fib_mat_pow_fib_vec",
+        "nl": "Applying fib_mat^n to fib_vec m yields fib_vec (n+m): iterated matrix action = shift by n in Fibonacci sequence.",
+        "formal_goal": (
+            "theorem fib_mat_pow_fib_vec (n m : ℕ) : (fib_mat ^ n) *ᵥ fib_vec m = fib_vec (n + m)"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Mul\n"
+            "import Mathlib.Data.Nat.Fib.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "open scoped Matrix\n\n"
+            "-- (prerequisite defs in QAFibMatrix.lean and QAFibNatPeriodicity.lean)\n"
+            "theorem fib_mat_pow_fib_vec (n m : ℕ) :\n"
+            "    (fib_mat ^ n) *ᵥ fib_vec m = fib_vec (n + m) := by\n"
+            "  induction n generalizing m with\n"
+            "  | zero => simp [fib_vec]\n"
+            "  | succ n ih =>\n"
+            "    rw [pow_succ', ← Matrix.mulVec_mulVec, ih, fib_mat_mul_fib_vec]\n"
+            "    congr 1; omega\n"
+        ),
+        "tactic": "simp",
+        "key_lemmas": ["Matrix.mulVec_mulVec", "fib_mat_mul_fib_vec"],
+        "cert_refs": ["[128] Pisano period π(9)=24"],
+        "topic": "fibonacci-periodicity",
+        "nl_span": "(fib_mat^n) *ᵥ fib_vec m = fib_vec (n+m)",
+        "formal_identifiers": ["fib_mat_pow_fib_vec", "Matrix.mulVec_mulVec"],
+    },
+    {
+        "id": "qa_orbit41_fib_vec_periodic",
+        "nl": "The Fibonacci column vector fib_vec is periodic with period 24 mod 9: fib_vec (n+24) = fib_vec n.",
+        "formal_goal": (
+            "theorem fib_vec_periodic (n : ℕ) : fib_vec (n + 24) = fib_vec n"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Mul\n"
+            "import Mathlib.Data.Nat.Fib.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "open scoped Matrix\n\n"
+            "-- (prerequisite defs in QAFibMatrix.lean and QAFibNatPeriodicity.lean)\n"
+            "theorem fib_vec_periodic (n : ℕ) : fib_vec (n + 24) = fib_vec n := by\n"
+            "  have key : fib_vec (24 + n) = fib_vec n :=\n"
+            "    calc fib_vec (24 + n)\n"
+            "        = (fib_mat ^ 24) *ᵥ fib_vec n := (fib_mat_pow_fib_vec 24 n).symm\n"
+            "      _ = (1 : Matrix (Fin 2) (Fin 2) (ZMod 9)) *ᵥ fib_vec n := by rw [fib_mat_pow_24]\n"
+            "      _ = fib_vec n := Matrix.one_mulVec _\n"
+            "  rwa [Nat.add_comm] at key\n"
+        ),
+        "tactic": "rw",
+        "key_lemmas": ["fib_mat_pow_24", "fib_mat_pow_fib_vec", "Matrix.one_mulVec"],
+        "cert_refs": ["[128] Pisano period π(9)=24"],
+        "topic": "fibonacci-periodicity",
+        "nl_span": "fib_vec (n+24) = fib_vec n",
+        "formal_identifiers": ["fib_vec_periodic", "fib_mat_pow_24", "fib_mat_pow_fib_vec"],
+    },
+    {
+        "id": "qa_orbit42_fib_nat_mod9_periodic",
+        "nl": "The Fibonacci sequence is periodic mod 9 with Pisano period 24: (Nat.fib (n+24) : ZMod 9) = Nat.fib n for all n.",
+        "formal_goal": (
+            "theorem fib_nat_mod9_periodic (n : ℕ) : (Nat.fib (n + 24) : ZMod 9) = Nat.fib n"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Mul\n"
+            "import Mathlib.Data.Nat.Fib.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "open scoped Matrix\n\n"
+            "-- (prerequisite defs in QAFibMatrix.lean and QAFibNatPeriodicity.lean)\n"
+            "theorem fib_nat_mod9_periodic (n : ℕ) :\n"
+            "    (Nat.fib (n + 24) : ZMod 9) = Nat.fib n := by\n"
+            "  have h := congr_fun (fib_vec_periodic n) 1\n"
+            "  simpa [fib_vec] using h\n"
+        ),
+        "tactic": "simp",
+        "key_lemmas": ["fib_vec_periodic", "fib_vec"],
+        "cert_refs": ["[128] Pisano period π(9)=24"],
+        "topic": "fibonacci-periodicity",
+        "nl_span": "(Nat.fib (n+24) : ZMod 9) = Nat.fib n — Pisano period π(9)=24",
+        "formal_identifiers": ["fib_nat_mod9_periodic", "fib_vec_periodic"],
+    },
 ]
 
 
@@ -1252,6 +1362,10 @@ def build_pack() -> None:
         "det(F)=8≠0, T-step = matrix action, iteration = matrix power.\n\n"
         "QAFibMatrixGroup.lean (7 theorems): F lifted to unit group GL₂(ZMod 9),\n"
         "orderOf(F)=24 via orderOf_eq_iff, |⟨F⟩|=24, ⟨F⟩ is cyclic.\n\n"
+        "QAFibMatrixGroupIso.lean (6 theorems): explicit isomorphism ⟨F⟩ ≅ ℤ/24ℤ via\n"
+        "zmodMulEquivOfGenerator, generator mapping, zpow mapping, inverse mappings.\n\n"
+        "QAFibNatPeriodicity.lean (4 theorems): Fibonacci sequence periodicity mod 9,\n"
+        "matrix recurrence, iterated action, fib_vec periodic, π(9) = 24 for Nat.fib.\n\n"
         "Each example is a standalone extract with a single-theorem proof file.\n\n"
         "## Cert References\n\n"
         "- `qa_orbit01_cfgpythag` → cert [496] ESC_PYTH\n"
@@ -1292,6 +1406,10 @@ def build_pack() -> None:
         "- `qa_orbit36_fib_mat_iso_zpow` → cert [128] SP2 (iso sends k → F^k)\n"
         "- `qa_orbit37_fib_mat_iso_symm_generator` → cert [128] SP2 (inverse sends F → 1)\n"
         "- `qa_orbit38_fib_mat_iso_symm_zpow` → cert [128] SP2 (inverse sends F^k → k mod 24)\n"
+        "- `qa_orbit39_fib_mat_mul_fib_vec` → cert [128] (fib_mat *ᵥ fib_vec n = fib_vec (n+1))\n"
+        "- `qa_orbit40_fib_mat_pow_fib_vec` → cert [128] (fib_mat^n *ᵥ fib_vec m = fib_vec (n+m))\n"
+        "- `qa_orbit41_fib_vec_periodic` → cert [128] (fib_vec (n+24) = fib_vec n)\n"
+        "- `qa_orbit42_fib_nat_mod9_periodic` → cert [128] (Fibonacci sequence periodic mod 9 with period 24)\n"
     )
     (PACK_DIR / "README.md").write_text(readme, encoding="utf-8")
     print(f"Wrote {PACK_DIR}/index.json and README.md")

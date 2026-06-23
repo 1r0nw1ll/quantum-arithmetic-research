@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "simp"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem fib_mat_mul_fib_vec (n : ℕ) : fib_mat *ᵥ fib_vec n = fib_vec (n + 1)",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "fibonacci-periodicity",
+    "cert_refs": [
+      "[128] Pisano period π(9)=24"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "Multiplying fib_mat by the Fibonacci column vector fib_vec n advances it by one step: fib_mat *ᵥ fib_vec n = fib_vec (n+1).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT39_FIB_MAT_MUL_FIB_VEC_TASK"
+}

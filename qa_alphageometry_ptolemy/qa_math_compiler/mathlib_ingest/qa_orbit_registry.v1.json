@@ -7,11 +7,13 @@
     "QAOrbitPartition.lean",
     "QAOrbitInvariance.lean",
     "QAFibMatrix.lean",
-    "QAFibMatrixGroup.lean"
+    "QAFibMatrixGroup.lean",
+    "QAFibMatrixGroupIso.lean",
+    "QAFibNatPeriodicity.lean"
   ],
   "lean_toolchain": "leanprover/lean4:v4.31.0",
   "mathlib_commit": "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f",
-  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (6) + QAOrbitInvariance.lean (7) + QAFibMatrix.lean (7) + QAFibMatrixGroup.lean (7). Machine-checked proofs through orderOf(F)=24 and the cyclic subgroup \u27e8F\u27e9 of order 24 in GL\u2082(ZMod 9).",
+  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (6) + QAOrbitInvariance.lean (7) + QAFibMatrix.lean (7) + QAFibMatrixGroup.lean (7) + QAFibMatrixGroupIso.lean (6) + QAFibNatPeriodicity.lean (4). Machine-checked proofs through orderOf(F)=24, the explicit isomorphism \u27e8F\u27e9 \u2245 \u2124/24\u2124, and Fibonacci sequence periodicity mod 9.",
   "entries": [
     {
       "theorem_name": "qa_cfgpythag",
@@ -404,16 +406,56 @@
         "[128] SP2"
       ],
       "topic": "cyclic-group"
+    },
+    {
+      "theorem_name": "fib_mat_mul_fib_vec",
+      "example_id": "qa_orbit39_fib_mat_mul_fib_vec",
+      "source_module": "QAFibNatPeriodicity.lean",
+      "tactic": "simp",
+      "cert_refs": [
+        "[128] Pisano period π(9)=24"
+      ],
+      "topic": "fibonacci-periodicity"
+    },
+    {
+      "theorem_name": "fib_mat_pow_fib_vec",
+      "example_id": "qa_orbit40_fib_mat_pow_fib_vec",
+      "source_module": "QAFibNatPeriodicity.lean",
+      "tactic": "simp",
+      "cert_refs": [
+        "[128] Pisano period π(9)=24"
+      ],
+      "topic": "fibonacci-periodicity"
+    },
+    {
+      "theorem_name": "fib_vec_periodic",
+      "example_id": "qa_orbit41_fib_vec_periodic",
+      "source_module": "QAFibNatPeriodicity.lean",
+      "tactic": "rw",
+      "cert_refs": [
+        "[128] Pisano period π(9)=24"
+      ],
+      "topic": "fibonacci-periodicity"
+    },
+    {
+      "theorem_name": "fib_nat_mod9_periodic",
+      "example_id": "qa_orbit42_fib_nat_mod9_periodic",
+      "source_module": "QAFibNatPeriodicity.lean",
+      "tactic": "simp",
+      "cert_refs": [
+        "[128] Pisano period π(9)=24"
+      ],
+      "topic": "fibonacci-periodicity"
     }
   ],
   "metrics": {
-    "entry_count": 38,
+    "entry_count": 42,
     "ring_count": 1,
     "rfl_count": 1,
     "decide_count": 2,
     "native_decide_count": 21,
-    "simp_count": 4,
-    "rw_count": 3,
+    "simp_count": 7,
+    "rw_count": 4,
     "exact_count": 6
   }
 }

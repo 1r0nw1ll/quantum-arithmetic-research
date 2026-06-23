@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "fib_vec_periodic",
+      "fib_vec"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_nat_mod9_periodic",
+          "fib_vec_periodic"
+        ],
+        "nl_span": "(Nat.fib (n+24) : ZMod 9) = Nat.fib n — Pisano period π(9)=24"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_nat_mod9_periodic (n : ℕ) : (Nat.fib (n + 24) : ZMod 9) = Nat.fib n",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] Pisano period π(9)=24"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Fibonacci sequence is periodic mod 9 with Pisano period 24: (Nat.fib (n+24) : ZMod 9) = Nat.fib n for all n.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT42_FIB_NAT_MOD9_PERIODIC_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "92883e75b91dcb3fb2a9cdb7eb0022ff075b6c4bee08367bc7d00ca17b10379d"
+  }
+}

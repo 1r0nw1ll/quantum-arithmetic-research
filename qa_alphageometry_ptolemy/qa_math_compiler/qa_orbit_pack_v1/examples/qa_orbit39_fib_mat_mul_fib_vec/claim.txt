@@ -1,0 +1,1 @@
+Multiplying fib_mat by the Fibonacci column vector fib_vec n advances it by one step: fib_mat *ᵥ fib_vec n = fib_vec (n+1).

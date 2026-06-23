@@ -18,6 +18,12 @@ det(F)=8≠0, T-step = matrix action, iteration = matrix power.
 QAFibMatrixGroup.lean (7 theorems): F lifted to unit group GL₂(ZMod 9),
 orderOf(F)=24 via orderOf_eq_iff, |⟨F⟩|=24, ⟨F⟩ is cyclic.
 
+QAFibMatrixGroupIso.lean (6 theorems): explicit isomorphism ⟨F⟩ ≅ ℤ/24ℤ via
+zmodMulEquivOfGenerator, generator mapping, zpow mapping, inverse mappings.
+
+QAFibNatPeriodicity.lean (4 theorems): Fibonacci sequence periodicity mod 9,
+matrix recurrence, iterated action, fib_vec periodic, π(9) = 24 for Nat.fib.
+
 Each example is a standalone extract with a single-theorem proof file.
 
 ## Cert References
@@ -60,3 +66,7 @@ Each example is a standalone extract with a single-theorem proof file.
 - `qa_orbit36_fib_mat_iso_zpow` → cert [128] SP2 (iso sends k → F^k)
 - `qa_orbit37_fib_mat_iso_symm_generator` → cert [128] SP2 (inverse sends F → 1)
 - `qa_orbit38_fib_mat_iso_symm_zpow` → cert [128] SP2 (inverse sends F^k → k mod 24)
+- `qa_orbit39_fib_mat_mul_fib_vec` → cert [128] (fib_mat *ᵥ fib_vec n = fib_vec (n+1))
+- `qa_orbit40_fib_mat_pow_fib_vec` → cert [128] (fib_mat^n *ᵥ fib_vec m = fib_vec (n+m))
+- `qa_orbit41_fib_vec_periodic` → cert [128] (fib_vec (n+24) = fib_vec n)
+- `qa_orbit42_fib_nat_mod9_periodic` → cert [128] (Fibonacci sequence periodic mod 9 with period 24)

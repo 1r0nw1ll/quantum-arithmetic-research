@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit42_fib_nat_mod9_periodic",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "92883e75b91dcb3fb2a9cdb7eb0022ff075b6c4bee08367bc7d00ca17b10379d"
+}

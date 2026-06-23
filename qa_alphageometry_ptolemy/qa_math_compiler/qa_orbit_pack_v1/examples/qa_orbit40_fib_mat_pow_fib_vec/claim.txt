@@ -1,0 +1,1 @@
+Applying fib_mat^n to fib_vec m yields fib_vec (n+m): iterated matrix action = shift by n in Fibonacci sequence.

@@ -1,0 +1,37 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "fib_mat_pow_24",
+      "fib_mat_pow_fib_vec",
+      "Matrix.one_mulVec"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_vec_periodic",
+          "fib_mat_pow_24",
+          "fib_mat_pow_fib_vec"
+        ],
+        "nl_span": "fib_vec (n+24) = fib_vec n"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_vec_periodic (n : ℕ) : fib_vec (n + 24) = fib_vec n",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] Pisano period π(9)=24"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Fibonacci column vector fib_vec is periodic with period 24 mod 9: fib_vec (n+24) = fib_vec n.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT41_FIB_VEC_PERIODIC_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "c632c706210b4b205ff13bc676af486ff8cd2ef6d6228b95a5c15f480c81305b"
+  }
+}

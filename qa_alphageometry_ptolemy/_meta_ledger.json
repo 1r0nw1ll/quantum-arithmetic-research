@@ -2256,5 +2256,13 @@
     "doc_slug": "500_qa_cosmos_chamber_cert",
     "ts": "2026-06-23T05:00:00+00:00",
     "summary": "3 Cosmos sub-orbits: per-orbit negation closure, G-sums arithmetic progression d=-108=-12m, G-min at (k,1), Fibonacci prefix F(5..13) in O1"
+  },
+  "501": {
+    "id": 501,
+    "label": "QA Algebraic Diversity Observer Cert",
+    "family_dir": "qa_algebraic_diversity_observer_cert_v1",
+    "doc_slug": "501_qa_algebraic_diversity_observer_cert",
+    "ts": "2026-06-23T05:30:00+00:00",
+    "summary": "G(b,e) defines algebraically diverse observer channels: G injective on Cosmos orbits (Z/24Z minimal matched group), G injective on Satellite (Z/8Z minimal), no sub-periods, Satellite G-set disjoint from all Cosmos G-sets"
   }
 }

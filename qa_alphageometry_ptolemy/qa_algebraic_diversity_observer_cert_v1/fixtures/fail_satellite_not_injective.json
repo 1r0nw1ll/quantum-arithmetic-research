@@ -1,0 +1,12 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_ALGEBRAIC_DIVERSITY_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_ALGEBRAIC_DIVERSITY_CERT.v1",
+  "modulus": 9,
+  "cosmos_g_injective_o1": true,
+  "cosmos_g_injective_o2": true,
+  "cosmos_g_injective_o3": true,
+  "satellite_g_injective": false,
+  "satellite_g_set": [45, 90, 117, 153, 180, 225, 261, 306],
+  "description": "FAIL: declares satellite_g_injective=false but computed value is true. AD_2 should reject.",
+  "fail_ledger": ["deliberate: satellite_g_injective set to false, contradicting computed true"]
+}

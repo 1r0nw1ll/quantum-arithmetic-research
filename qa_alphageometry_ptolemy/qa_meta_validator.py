@@ -11051,6 +11051,23 @@ def _validate_steinmetz_whittaker_bridge_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_collatz_fibonacci_spectral_cert_family(base_dir):
+    """Cert [502]: QA Collatz-Fibonacci Spectral -- QA mod-9 exhibits the three structural features enabling the Collatz-Fibonacci spectral result (Reyes Jiménez arXiv:2606.02621): (CF_1) Singularity (9,9) is unique period-1 fixed point, (CF_2) all 80 non-Singularity pairs have period in {8,24}, (CF_3) Pisano integer witness F(24)≡0,F(25)≡1 (mod 9) with decoy F(12)≡0 but F(13)≡8≠1 proving pi(9)=24 minimal; 1 PASS + 3 FAIL fixtures; self-test ok."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_collatz_fibonacci_spectral_cert_v1")
+    validator = os.path.join(fam_dir, "qa_collatz_fibonacci_spectral_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_algebraic_diversity_observer_cert_family(base_dir):
     """Cert [501]: QA Algebraic Diversity Observer -- G-function defines algebraically diverse observer channels: G injective on each Cosmos orbit (24 distinct, Z/24Z minimal matched group), G injective on Satellite (8 distinct, Z/8Z minimal), no sub-period divisors, Satellite G-set disjoint from all Cosmos G-sets; 1 PASS + 3 FAIL fixtures; self-test ok."""
     import subprocess
@@ -14283,6 +14300,11 @@ FAMILY_SWEEPS = [
      "QA Pisano All-Initializations Cert [499]. CLAIM: QA three-orbit partition of {1,...,9}^2 under sigma(b,e)=(e,((b+e-1)%9)+1) — Cosmos 72 pairs period 24=pi(9), Satellite 8 pairs period 8, Singularity 1 pair (9,9) period 1, total 72+8+1=81=9^2 — is structurally equivalent to Pudelko's (arXiv:2510.24882 v5 2026-04-09) complete Pisano period classification of ALL m^2=81 initial pairs in (Z/9Z)^2, finding exactly {1,8,24} as the only achievable periods with the same counts. Swap symmetry: orbit_family on (b,e,m) = orbit_family on (e,b,m) for all 81 pairs. Negation parity: orbit_family on (b,e,m) = orbit_family on (neg(b),neg(e),m) for all 81 pairs (Pudelko mirror). Period completeness: exactly 3 distinct periods. Content-ideal link: Cosmos=min(v_3(b),v_3(e))=0, Satellite=1, Singularity=2 (companion cert [261]). Checks QAP_1/QAP_2/QAP_3/QAP_4/QAP_5/SRC/F; 1 PASS + 3 FAIL fixtures; self-test ok. Primary: Pudelko M.T. (2025) arXiv:2510.24882; Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Companion: cert [128] pi(9)=24 Lean proof; cert [261] orbit stratification. Derived 2026-06-23.",
      "499_qa_pisano_all_initializations_cert",
      "qa_pisano_all_initializations_cert_v1", True),
+    (502, "QA Collatz-Fibonacci Spectral Cert family",
+     _validate_qa_collatz_fibonacci_spectral_cert_family,
+     "QA Collatz-Fibonacci Spectral Cert [502]. CLAIM: QA mod-9 exhibits the three structural features enabling the Collatz-Fibonacci spectral result (Reyes Jiménez arXiv:2606.02621). (CF_1) QA Singularity (9,9) is the unique period-1 fixed point under sigma — structural analog of Collatz vertex 4 mod 6 (absorbing fixed point removed to reveal Fibonacci dynamics); (CF_2) all 80 non-Singularity pairs have period in {8, 24} (the Pisano hierarchy for m=9), the Fibonacci-attractor orbits — analog of G'\\{4} having spectral radius phi; (CF_3) Pisano integer witness: F(24)≡0 (mod 9), F(25)≡1 (mod 9), the only k in {1,...,23} with F(k)≡0 (mod 9) is k=12 with F(13)≡8≠1, proving pi(9)=24 is minimal. Theorem NT compliance: phi is NOT a QA state; it is a continuous observer projection over discrete F(m+1) counts (spectral radius = observer measurement). All cert checks pure integer arithmetic. Companion: cert [128] Lean pi(9) proof; cert [499] full Pisano partition; cert [500] Cosmos G-arithmetic. Primary: Reyes Jiménez A.E. (2025) arXiv:2606.02621; Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Checks CF_1/CF_2/CF_3/SRC; 1 PASS + 3 FAIL fixtures; self-test ok. Derived 2026-06-23.",
+     "502_qa_collatz_fibonacci_spectral_cert",
+     "qa_collatz_fibonacci_spectral_cert_v1", True),
     (501, "QA Algebraic Diversity Observer Cert family",
      _validate_qa_algebraic_diversity_observer_cert_family,
      "QA Algebraic Diversity Observer Cert [501]. CLAIM (narrow): G-function G(b,e)=(b+e)^2+e^2 defines algebraically diverse observer channels (Thornton arXiv:2604.03634, arXiv:2604.19983). (AD_1) G injective on each Cosmos orbit: 24 pairwise-distinct G-values — integer form of Z/24Z minimal matched group (Replacement Theorem); (AD_2) G injective on Satellite: 8 pairwise-distinct G-values — Z/8Z minimal matched group; (AD_3) no proper divisor k|24 (k<24) yields G-period in any Cosmos orbit; no proper divisor k|8 in Satellite — Z/24Z and Z/8Z are the MINIMAL matched groups (blind group matching); (AD_4) Satellite G-set {45,90,117,153,180,225,261,306} disjoint from all Cosmos G-sets — Satellite and Cosmos are algebraically diverse non-overlapping observer channels (Theorem NT formalization). NOT CLAIMED: DFT computation, Lie algebra eigenvalue problem, continuous AD, or quantum AD. All integer arithmetic. Companion: cert [496] Satellite E8 chamber; cert [499] full Pisano partition; cert [500] Cosmos G-arithmetic. Primary: Thornton M.A. (2026) arXiv:2604.03634; Thornton M.A. (2026) arXiv:2604.19983; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Checks AD_1/AD_2/AD_3/AD_4/SRC/F; 1 PASS + 3 FAIL fixtures; self-test ok. Derived 2026-06-23.",

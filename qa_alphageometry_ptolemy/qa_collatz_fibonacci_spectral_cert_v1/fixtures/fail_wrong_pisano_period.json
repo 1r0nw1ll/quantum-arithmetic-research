@@ -1,0 +1,14 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_COLLATZ_FIBONACCI_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_COLLATZ_FIBONACCI_CERT.v1",
+  "modulus": 9,
+  "singularity_period": 1,
+  "non_singularity_period_set": [8, 24],
+  "f24_mod9": 0,
+  "f25_mod9": 1,
+  "pisano_period": 12,
+  "decoy_k": 12,
+  "decoy_next_mod9": 8,
+  "description": "FAIL: declares pisano_period=12 but F(13)≡8≠1 (mod 9), so 12 is not a valid Pisano period. CF_3c should reject.",
+  "fail_ledger": ["deliberate: pisano_period set to 12; computed Pisano period is 24"]
+}

@@ -2264,5 +2264,13 @@
     "doc_slug": "501_qa_algebraic_diversity_observer_cert",
     "ts": "2026-06-23T05:30:00+00:00",
     "summary": "G(b,e) defines algebraically diverse observer channels: G injective on Cosmos orbits (Z/24Z minimal matched group), G injective on Satellite (Z/8Z minimal), no sub-periods, Satellite G-set disjoint from all Cosmos G-sets"
+  },
+  "502": {
+    "id": 502,
+    "label": "QA Collatz-Fibonacci Spectral Cert",
+    "family_dir": "qa_collatz_fibonacci_spectral_cert_v1",
+    "doc_slug": "502_qa_collatz_fibonacci_spectral_cert",
+    "ts": "2026-06-23T06:00:00+00:00",
+    "summary": "QA mod-9 exhibits three structural features of Collatz-Fibonacci spectral result (Reyes Jimenez arXiv:2606.02621): (CF_1) Singularity (9,9) unique period-1 fixed point; (CF_2) all 80 non-Singularity pairs period in {8,24}; (CF_3) Pisano integer witness F(24)=0,F(25)=1 mod 9, pi(9)=24 minimal; phi is observer projection (Theorem NT)"
   }
 }

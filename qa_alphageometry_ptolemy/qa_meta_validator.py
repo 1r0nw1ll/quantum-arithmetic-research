@@ -11034,6 +11034,40 @@ def _validate_qa_e8_satellite_chamber_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_steinmetz_whittaker_bridge_cert_family(base_dir):
+    """Cert [497]: QA Steinmetz-Whittaker Bridge -- ∮ H dB ↔ ∬ F_QA ↔ Δ∫ dφ deterministic transform consistency; fixed QA tuple (b,e,d,a); invariants J/X/K/F/C/G verified; hysteresis loop area ≈ curvature proxy within tolerance; calibration constants unchanged; 2 PASS + 1 FAIL fixtures; self-test ok."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_steinmetz_whittaker_bridge_cert_v1")
+    validator = os.path.join(fam_dir, "validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
+def _validate_whittaker_phase_packet_algebra_cert_family(base_dir):
+    """Cert [498]: QA Whittaker Phase-Packet Algebra -- exact rational phase_arg = k*(omega·x − v*t) over registered [273] S2 directions; fractions.Fraction arithmetic only; packet families phase_arg/phase_pair/formal_cos_symbol/formal_sin_symbol; rejects trig evaluation/numerical approximation/EM overclaims; 3 PASS + 7 FAIL fixtures; self-test ok."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_whittaker_phase_packet_algebra_cert_v1")
+    validator = os.path.join(fam_dir, "qa_whittaker_phase_packet_algebra_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_witt_tower_hf_fx_anti_persistence_cert_family(base_dir):
     """Cert [495]: QA Witt Tower 1-min FX Return-Rank Null Position -- 4 FX pairs (EURUSD/GBPUSD/USDJPY/CHFJPY) 1-min bars; pooled n_sig_ratio=1.009x (NULL, between EEG anti-pers [491] 0.72x and rivers [490] 2.69x); all 4 pairs autocorr<0 (bid-ask bounce -0.05 to -0.18); crash-reversion significant 3/4 pairs; CHFJPY 0.865x anti-pers leader; 6/6 PASS."""
     import subprocess
@@ -14188,6 +14222,16 @@ FAMILY_SWEEPS = [
      "QA-E8 Satellite Chamber Theorem Cert [496]. Claim (narrow, falsifiable): For QA mod m=9 Satellite orbit (8 states, period 8), canonically anchored at (6,3), the height function h=alpha*d^2+beta*e^2 lies in the E8 Weyl chamber where (6,3) is the branch node and (3,6) [Grant LRT] is the long-arm terminal leaf (distance 4) if and only if 7/12 < alpha/beta < 13/12. The unique isotropic choice alpha=beta gives ratio=1 in (7/12, 13/12), selecting h=G=d^2+e^2 (Wildberger quadrance). Elementary uniqueness: G is the unique invariant in {b,e,d,a,C,F,G} satisfying strict axis ordering + E8 genericity + branch=(6,3). G and G^2 have identical Satellite axis ordering but lie in different Weyl chambers (3 Type-2 wall roots flip sign). Sub-claims: C^2+F^2=G^2 for all 576 QA pairs (Pythagorean triple); b+e+d+a+C+F+G≡b(mod2) (parity reduction); 240 E8 roots (112 Type-1 + 128 Type-2); Cartan matrix det=1. Wall bounds: WALL_LOWER A=108 B=-63 G-proj=+45 (bound 7/12); WALL_UPPER A=108 B=-117 G-proj=-9 (bound 13/12). Checks: ESC_PYTH/PARITY/ROOTS/GRAM/BRANCH/GRANT/WALL_LOWER/WALL_UPPER/ISO_INTERVAL/G2_EXITS/ELEM_UNIQUE; 11/11 PASS. Primary: Wildberger 2005 ISBN 978-0-9757492-0-8; Bourbaki 1968; Humphreys 1972 ISBN 978-0-387-90053-7. Derived 2026-06-21.",
      "496_qa_e8_satellite_chamber",
      "qa_e8_satellite_chamber_cert_v1", True),
+    (497, "QA Steinmetz-Whittaker Bridge Cert family",
+     _validate_steinmetz_whittaker_bridge_cert_family,
+     "QA Steinmetz-Whittaker Bridge Cert [497]. CLAIM (narrow): for a fixed QA tuple (b,e,d,a) with d=b+e/a=b+2e, fixed calibration constants alpha_X/alpha_J/alpha_K, and explicit fixture data H(t)/B(t)/theta(t), the hysteresis loop integral ∮ H dB equals QA curvature proxy ∮ Π dθ (Π=alpha_X*X+alpha_J*J+alpha_K*K) within declared tolerance. Bridge: ∮ H dB ↔ ∬ F_QA ↔ Δ∫ dφ. Invariants: J=b*d, X=d*e, K=d*a, F=b*a, C=2*e*d, G=e*e+d*d. Closed-loop trapezoid hysteresis integral; calibration constants unchanged between calibration and evaluation sections; optional sampled pi_series mode. GUARDRAIL: validates deterministic transform consistency only; does NOT prove universal physical identity between Steinmetz/Whittaker/Dollard/Bearden/QA. Checks: cert_family/tolerance/guardrail/declared_invariants/calibration_match/hysteresis_area/curvature_proxy/bridge_close; 2 PASS + 1 FAIL; self-test ok. Primary sources: Steinmetz C.P. (1892) AIEE Trans. 9:3-64; Whittaker E.T. (1903) Math. Annalen 57:333-355 DOI 10.1007/BF01444290; Wildberger N.J. (2005) Divine Proportions ISBN 978-0-9757492-0-8. Derived 2026-06-23.",
+     "497_qa_steinmetz_whittaker_bridge_cert",
+     "qa_steinmetz_whittaker_bridge_cert_v1", True),
+    (498, "QA Whittaker Phase-Packet Algebra Cert family",
+     _validate_whittaker_phase_packet_algebra_cert_family,
+     "QA Whittaker Phase-Packet Algebra Cert [498]. CLAIM (narrow): for declared finite symbolic phase packets, exact rational omega (from registered [273] S2 cert), x/t/k/v/weights as exact rationals, the validator recomputes omega dot x and phase_arg = k*(omega dot x - v*t) as fractions.Fraction values and checks declared witnesses. Allowed packet families: phase_arg, phase_pair, formal_cos_symbol, formal_sin_symbol (cos/sin are labels only, no trig evaluation). Hard dependency: registered [273] qa_whittaker_rational_direction_s2_cert_v1; lineage context: [274] qa_whittaker_scalar_angular_kernel_sampling_cert_v1. Gates: WPPA_1 (dependency provenance [273]/[274]), WPPA_2 (packet declarations), WPPA_3 (omega dot x + phase_arg recomputed exactly), WPPA_4 (rational weights), WPPA_5 (target composition references declared packets only), WPPA_6 (heldout packet identities and phase witnesses), WPPA_7 (rejects trig/numerical/fitted ops), WPPA_8 (rejects Maxwell/EM/scalar-potential/full-Whittaker overclaims). Non-claims: no numerical approximation, trig evaluation, spherical quadrature, full Whittaker theorem proof, Maxwell/EM derivation, scalar-potential physics, or physical field reconstruction. 3 PASS + 7 FAIL fixtures; self-test ok. Primary: Whittaker E.T. (1903) Math. Annalen 57:333-355 DOI 10.1007/BF01444290; registered [273] S2 cert. Derived 2026-06-23.",
+     "498_qa_whittaker_phase_packet_algebra_cert",
+     "qa_whittaker_phase_packet_algebra_cert_v1", True),
     (495, "QA Witt Tower 1-min FX Return-Rank Null Position on Discrimination Ladder",
      _validate_qa_witt_tower_hf_fx_anti_persistence_cert_family,
      "QA Witt Tower 1-min FX Return-Rank [495]. Claim: 1-min FX (EURUSD/GBPUSD/USDJPY/CHFJPY) produce pooled n_sig_ratio=1.009x (NULL) in return-rank operator despite bid-ask bounce (autocorr -0.05 to -0.18). NULL sits between EEG anti-persistence [491] 0.72x and rivers [490] 2.69x. Operator discriminates structural autocorr patterns beyond lag-1 sign. 4/4 pairs autocorr<0; 3/4 significant crash excess (crash_p<0.05); CHFJPY 0.865x (anti-pers leader). Pooled: n_sig=872, n_exp=863.8, ratio=1.009x. CHECKS: C1 n_neg_autocorr==4 PASS; C2 ratio in [0.80,1.20] PASS (1.009); C3 ratio<river_ratio PASS (1.009<2.69); C4 n_crash>=3 PASS (3/4); C5 CHFJPY<1.0 PASS (0.865); C6 ratio>eeg_ratio PASS (1.009>0.72). 6/6 PASS. PRIMARY SOURCES: Lo & MacKinlay (1988) doi:10.1093/rfs/1.1.41; Glosten & Milgrom (1985) doi:10.1016/0304-405X(85)90044-3. Data: Yahoo Finance 1-min 7-day ending 2026-06-20. Parents: [491] EEG, [490] rivers, [492] temp, [493] SST, [494] precip. Validated 2026-06-20.",

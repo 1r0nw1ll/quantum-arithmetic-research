@@ -11051,6 +11051,23 @@ def _validate_steinmetz_whittaker_bridge_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_witt_tower_tau_monotone_cert_family(base_dir):
+    """Cert [503]: QA Witt Tower tau-Monotone Discrimination Ladder -- 6 empirical certs [491][495][490][494][492][493] form Kendall-concordant ladder: EEG 0.72x < FX null 1.009x < rivers 2.69x < precip 3.05x < temp 3.40x < SST 4.43x; all 15 tau_rank/n_sig_milli pairs concordant; anti/null/structural split; span > 6.0; 1 PASS + 3 FAIL fixtures; self-test ok."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_witt_tower_tau_monotone_cert_v1")
+    validator = os.path.join(fam_dir, "qa_witt_tower_tau_monotone_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_collatz_fibonacci_spectral_cert_family(base_dir):
     """Cert [502]: QA Collatz-Fibonacci Spectral -- QA mod-9 exhibits the three structural features enabling the Collatz-Fibonacci spectral result (Reyes Jiménez arXiv:2606.02621): (CF_1) Singularity (9,9) is unique period-1 fixed point, (CF_2) all 80 non-Singularity pairs have period in {8,24}, (CF_3) Pisano integer witness F(24)≡0,F(25)≡1 (mod 9) with decoy F(12)≡0 but F(13)≡8≠1 proving pi(9)=24 minimal; 1 PASS + 3 FAIL fixtures; self-test ok."""
     import subprocess
@@ -14300,6 +14317,11 @@ FAMILY_SWEEPS = [
      "QA Pisano All-Initializations Cert [499]. CLAIM: QA three-orbit partition of {1,...,9}^2 under sigma(b,e)=(e,((b+e-1)%9)+1) — Cosmos 72 pairs period 24=pi(9), Satellite 8 pairs period 8, Singularity 1 pair (9,9) period 1, total 72+8+1=81=9^2 — is structurally equivalent to Pudelko's (arXiv:2510.24882 v5 2026-04-09) complete Pisano period classification of ALL m^2=81 initial pairs in (Z/9Z)^2, finding exactly {1,8,24} as the only achievable periods with the same counts. Swap symmetry: orbit_family on (b,e,m) = orbit_family on (e,b,m) for all 81 pairs. Negation parity: orbit_family on (b,e,m) = orbit_family on (neg(b),neg(e),m) for all 81 pairs (Pudelko mirror). Period completeness: exactly 3 distinct periods. Content-ideal link: Cosmos=min(v_3(b),v_3(e))=0, Satellite=1, Singularity=2 (companion cert [261]). Checks QAP_1/QAP_2/QAP_3/QAP_4/QAP_5/SRC/F; 1 PASS + 3 FAIL fixtures; self-test ok. Primary: Pudelko M.T. (2025) arXiv:2510.24882; Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Companion: cert [128] pi(9)=24 Lean proof; cert [261] orbit stratification. Derived 2026-06-23.",
      "499_qa_pisano_all_initializations_cert",
      "qa_pisano_all_initializations_cert_v1", True),
+    (503, "QA Witt Tower tau-Monotone Discrimination Ladder Cert family",
+     _validate_qa_witt_tower_tau_monotone_cert_family,
+     "QA Witt Tower tau-Monotone Discrimination Ladder Cert [503]. CLAIM: The 6 Witt Tower empirical certs [491][495][490][494][492][493] form a monotone concordant discrimination ladder: domain autocorrelation timescale tau (ordinal rank 1..6: EEG < FX < rivers < precip < temp < SST) and observed n_sig_ratio (n_signal/n_expected) are Kendall-concordant for all C(6,2)=15 pairs (Kendall tau = 1). (WTM_1) 6 domains with tau_rank 1..6 distinct, n_sig_milli=n_sig_ratio*1000 positive integer milliunits, cert_ids referencing [491][495][490][494][492][493]; (WTM_2) all 15 tau_rank/n_sig_milli pairs concordant: tau_rank_i < tau_rank_j implies n_sig_milli_i < n_sig_milli_j — pure integer comparison; (WTM_3) anti/null/structural split: EEG n_sig_milli=720 < 1000 (anti-persistent), FX n_sig_milli=1009 in [1000,2000) (null zone), rivers/precip/temp/SST n_sig_milli >= 2000 (structural persistence); (WTM_4) ladder span: 4430*1000 > 720*6000 (span ratio 6.15 > 6.0, integer check). Physical mechanism: tau ordering reflects autocorrelation timescales (Hasselmann 1976 ocean tau~months >> atmosphere tau~weeks >> rivers tau~days >> EEG tau<1s); return-rank operator discriminates persistence structure. Theorem NT: n_sig_ratio is count/count integer ratio; continuous autocorrelation is observer projection. All pure integer arithmetic. Primary: Wildberger N.J. (2005) ISBN 978-0-9757492-0-8; Hasselmann K. (1976) doi:10.1111/j.2153-3490.1976.tb00696.x. Checks WTM_1/WTM_2/WTM_3/WTM_4/SRC; 1 PASS + 3 FAIL fixtures; self-test ok. Derived 2026-06-23.",
+     "503_qa_witt_tower_tau_monotone_cert",
+     "qa_witt_tower_tau_monotone_cert_v1", True),
     (502, "QA Collatz-Fibonacci Spectral Cert family",
      _validate_qa_collatz_fibonacci_spectral_cert_family,
      "QA Collatz-Fibonacci Spectral Cert [502]. CLAIM: QA mod-9 exhibits the three structural features enabling the Collatz-Fibonacci spectral result (Reyes Jiménez arXiv:2606.02621). (CF_1) QA Singularity (9,9) is the unique period-1 fixed point under sigma — structural analog of Collatz vertex 4 mod 6 (absorbing fixed point removed to reveal Fibonacci dynamics); (CF_2) all 80 non-Singularity pairs have period in {8, 24} (the Pisano hierarchy for m=9), the Fibonacci-attractor orbits — analog of G'\\{4} having spectral radius phi; (CF_3) Pisano integer witness: F(24)≡0 (mod 9), F(25)≡1 (mod 9), the only k in {1,...,23} with F(k)≡0 (mod 9) is k=12 with F(13)≡8≠1, proving pi(9)=24 is minimal. Theorem NT compliance: phi is NOT a QA state; it is a continuous observer projection over discrete F(m+1) counts (spectral radius = observer measurement). All cert checks pure integer arithmetic. Companion: cert [128] Lean pi(9) proof; cert [499] full Pisano partition; cert [500] Cosmos G-arithmetic. Primary: Reyes Jiménez A.E. (2025) arXiv:2606.02621; Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Checks CF_1/CF_2/CF_3/SRC; 1 PASS + 3 FAIL fixtures; self-test ok. Derived 2026-06-23.",

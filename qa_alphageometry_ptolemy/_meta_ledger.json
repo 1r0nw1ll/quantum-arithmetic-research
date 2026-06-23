@@ -2272,5 +2272,13 @@
     "doc_slug": "502_qa_collatz_fibonacci_spectral_cert",
     "ts": "2026-06-23T06:00:00+00:00",
     "summary": "QA mod-9 exhibits three structural features of Collatz-Fibonacci spectral result (Reyes Jimenez arXiv:2606.02621): (CF_1) Singularity (9,9) unique period-1 fixed point; (CF_2) all 80 non-Singularity pairs period in {8,24}; (CF_3) Pisano integer witness F(24)=0,F(25)=1 mod 9, pi(9)=24 minimal; phi is observer projection (Theorem NT)"
+  },
+  "503": {
+    "id": 503,
+    "label": "QA Witt Tower tau-Monotone Discrimination Ladder Cert",
+    "family_dir": "qa_witt_tower_tau_monotone_cert_v1",
+    "doc_slug": "503_qa_witt_tower_tau_monotone_cert",
+    "ts": "2026-06-23T07:00:00+00:00",
+    "summary": "6 empirical certs [491][495][490][494][492][493] form Kendall-concordant ladder: tau_rank (EEG<FX<rivers<precip<temp<SST) concordant with n_sig_milli (720<1009<2690<3050<3400<4430) for all 15 pairs; anti/null/structural split; span 6.15>6.0"
   }
 }

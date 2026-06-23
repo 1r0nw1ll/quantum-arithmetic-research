@@ -1,0 +1,13 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_WITT_TOWER_TAU_MONOTONE_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_WITT_TOWER_TAU_MONOTONE_CERT.v1",
+  "domains": {
+    "EEG":    {"tau_rank": 1, "n_sig_milli": 720,  "cert_id": 491},
+    "FX":     {"tau_rank": 2, "n_sig_milli": 1009, "cert_id": 495},
+    "rivers": {"tau_rank": 3, "n_sig_milli": 2690, "cert_id": 490},
+    "precip": {"tau_rank": 4, "n_sig_milli": 3050, "cert_id": 494},
+    "temp":   {"tau_rank": 5, "n_sig_milli": 3400, "cert_id": 492},
+    "SST":    {"tau_rank": 6, "n_sig_milli": 4430, "cert_id": 493}
+  },
+  "description": "PASS: all WTM checks correct. 15/15 concordant pairs; EEG anti-persistent (720<1000); FX null zone (1009 in [1000,2000)); rivers..SST structural (>=2000); span 4430/720=6.15>6.0."
+}

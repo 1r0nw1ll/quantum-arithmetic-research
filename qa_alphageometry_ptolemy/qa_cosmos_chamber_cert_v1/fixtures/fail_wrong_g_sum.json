@@ -1,0 +1,10 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_COSMOS_CHAMBER_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_COSMOS_CHAMBER_CERT.v1",
+  "modulus": 9,
+  "g_sums": [3430, 3321, 3213],
+  "g_min_pairs": [[1, 1], [2, 1], [3, 1]],
+  "fib_prefix": [5, 13, 34, 89, 233],
+  "description": "FAIL: g_sums declares 3430 for O1 (off by 1). CCH_3 should reject because declared != computed.",
+  "fail_ledger": ["deliberate: g_sums[0] set to 3430 instead of correct 3429"]
+}

@@ -1,0 +1,10 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_COSMOS_CHAMBER_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_COSMOS_CHAMBER_CERT.v1",
+  "modulus": 9,
+  "g_sums": [3429, 3321, 3213],
+  "g_min_pairs": [[1, 1], [1, 3], [3, 1]],
+  "fib_prefix": [5, 13, 34, 89, 233],
+  "description": "FAIL: g_min_pairs declares (1,3) for O2 instead of canonical (2,1). CCH_4 should reject.",
+  "fail_ledger": ["deliberate: g_min_pairs[1] set to [1,3] instead of correct [2,1]"]
+}

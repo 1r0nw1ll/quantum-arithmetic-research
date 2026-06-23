@@ -2248,5 +2248,13 @@
     "git_head": "3667be22961f96ee8f23f8874dc8b067cada2a0d",
     "status": "PASS",
     "ts": "2026-06-23T04:38:04.912367+00:00"
+  },
+  "500": {
+    "id": 500,
+    "label": "QA Cosmos Chamber Cert",
+    "family_dir": "qa_cosmos_chamber_cert_v1",
+    "doc_slug": "500_qa_cosmos_chamber_cert",
+    "ts": "2026-06-23T05:00:00+00:00",
+    "summary": "3 Cosmos sub-orbits: per-orbit negation closure, G-sums arithmetic progression d=-108=-12m, G-min at (k,1), Fibonacci prefix F(5..13) in O1"
   }
 }

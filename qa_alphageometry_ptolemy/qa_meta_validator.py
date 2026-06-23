@@ -11051,6 +11051,23 @@ def _validate_steinmetz_whittaker_bridge_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_cosmos_chamber_cert_family(base_dir):
+    """Cert [500]: QA Cosmos Chamber -- 3 Cosmos sub-orbits of period 24 distinguished by G-arithmetic: per-orbit negation closure, G-sums 3429/3321/3213 arithmetic progression d=-108=-12m, G-min at (k,1) with G=(k+1)^2+1, Fibonacci prefix F(5..13) in O1; 1 PASS + 3 FAIL fixtures; self-test ok."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_cosmos_chamber_cert_v1")
+    validator = os.path.join(fam_dir, "qa_cosmos_chamber_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_pisano_all_initializations_cert_family(base_dir):
     """Cert [499]: QA Pisano All-Initializations -- three-orbit partition of {1,...,9}^2 (Cosmos 72 period 24, Satellite 8 period 8, Singularity 1 period 1, total 81=9^2) is structurally equivalent to Pudelko arXiv:2510.24882 complete period classification of all m^2=81 initial pairs; swap + negation symmetries verified; period_set={1,8,24} complete; 1 PASS + 3 FAIL fixtures; self-test ok."""
     import subprocess
@@ -14249,6 +14266,11 @@ FAMILY_SWEEPS = [
      "QA Pisano All-Initializations Cert [499]. CLAIM: QA three-orbit partition of {1,...,9}^2 under sigma(b,e)=(e,((b+e-1)%9)+1) — Cosmos 72 pairs period 24=pi(9), Satellite 8 pairs period 8, Singularity 1 pair (9,9) period 1, total 72+8+1=81=9^2 — is structurally equivalent to Pudelko's (arXiv:2510.24882 v5 2026-04-09) complete Pisano period classification of ALL m^2=81 initial pairs in (Z/9Z)^2, finding exactly {1,8,24} as the only achievable periods with the same counts. Swap symmetry: orbit_family on (b,e,m) = orbit_family on (e,b,m) for all 81 pairs. Negation parity: orbit_family on (b,e,m) = orbit_family on (neg(b),neg(e),m) for all 81 pairs (Pudelko mirror). Period completeness: exactly 3 distinct periods. Content-ideal link: Cosmos=min(v_3(b),v_3(e))=0, Satellite=1, Singularity=2 (companion cert [261]). Checks QAP_1/QAP_2/QAP_3/QAP_4/QAP_5/SRC/F; 1 PASS + 3 FAIL fixtures; self-test ok. Primary: Pudelko M.T. (2025) arXiv:2510.24882; Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Companion: cert [128] pi(9)=24 Lean proof; cert [261] orbit stratification. Derived 2026-06-23.",
      "499_qa_pisano_all_initializations_cert",
      "qa_pisano_all_initializations_cert_v1", True),
+    (500, "QA Cosmos Chamber Cert family",
+     _validate_qa_cosmos_chamber_cert_family,
+     "QA Cosmos Chamber Cert [500]. CLAIM (narrow): The 72 Cosmos pairs of the QA mod-9 Fibonacci shift decompose into exactly 3 sub-orbits of length 24 with G-arithmetic signature: (CCH_1) 3 disjoint orbits of 24; (CCH_2) each orbit individually self-closed under QA negation neg(b)=9-(b%9); (CCH_3) G-sums arithmetic progression d=-108=-12m: sum_G(O1)=3429, sum_G(O2)=3321, sum_G(O3)=3213 (descending G-sum order); (CCH_4) O_k has unique G-minimum at (k,1) with G(k,1)=(k+1)^2+1 for k=1,2,3; (CCH_5) first 5 G-values of O1 from (1,1) = F(5),F(7),F(9),F(11),F(13)=5,13,34,89,233 (odd-index Fibonacci before modular wraparound). G(b,e)=(b+e)^2+e^2 (raw A2-compliant). Companion: cert [496] Satellite E8 chamber, cert [499] full Pisano classification. Primary: Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8; Pudelko M.T. (2025) arXiv:2510.24882. Checks CCH_1/CCH_2/CCH_3/CCH_4/CCH_5/SRC/F; 1 PASS + 3 FAIL fixtures; self-test ok. Derived 2026-06-23.",
+     "500_qa_cosmos_chamber_cert",
+     "qa_cosmos_chamber_cert_v1", True),
     (498, "QA Whittaker Phase-Packet Algebra Cert family",
      _validate_whittaker_phase_packet_algebra_cert_family,
      "QA Whittaker Phase-Packet Algebra Cert [498]. CLAIM (narrow): for declared finite symbolic phase packets, exact rational omega (from registered [273] S2 cert), x/t/k/v/weights as exact rationals, the validator recomputes omega dot x and phase_arg = k*(omega dot x - v*t) as fractions.Fraction values and checks declared witnesses. Allowed packet families: phase_arg, phase_pair, formal_cos_symbol, formal_sin_symbol (cos/sin are labels only, no trig evaluation). Hard dependency: registered [273] qa_whittaker_rational_direction_s2_cert_v1; lineage context: [274] qa_whittaker_scalar_angular_kernel_sampling_cert_v1. Gates: WPPA_1 (dependency provenance [273]/[274]), WPPA_2 (packet declarations), WPPA_3 (omega dot x + phase_arg recomputed exactly), WPPA_4 (rational weights), WPPA_5 (target composition references declared packets only), WPPA_6 (heldout packet identities and phase witnesses), WPPA_7 (rejects trig/numerical/fitted ops), WPPA_8 (rejects Maxwell/EM/scalar-potential/full-Whittaker overclaims). Non-claims: no numerical approximation, trig evaluation, spherical quadrature, full Whittaker theorem proof, Maxwell/EM derivation, scalar-potential physics, or physical field reconstruction. 3 PASS + 7 FAIL fixtures; self-test ok. Primary: Whittaker E.T. (1903) Math. Annalen 57:333-355 DOI 10.1007/BF01444290; registered [273] S2 cert. Derived 2026-06-23.",

@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_PISANO_ALL_INIT_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_PISANO_ALL_INIT_CERT.v1",
+  "modulus": 9,
+  "cosmos_count": 72,
+  "satellite_count": 8,
+  "period_set": [1, 8, 24],
+  "period_witnesses": {
+    "cosmos": [
+      {"b": 1, "e": 1, "period": 8}
+    ]
+  },
+  "description": "FAIL: (1,1) has period 24 not 8. QAP_2 should reject.",
+  "fail_ledger": ["deliberate: (1,1) declared period=8 but actual=24"]
+}

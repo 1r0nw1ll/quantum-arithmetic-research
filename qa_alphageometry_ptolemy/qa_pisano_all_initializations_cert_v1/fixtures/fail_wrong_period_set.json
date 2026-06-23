@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_PISANO_ALL_INIT_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_PISANO_ALL_INIT_CERT.v1",
+  "modulus": 9,
+  "cosmos_count": 72,
+  "satellite_count": 8,
+  "period_set": [1, 8, 12, 24],
+  "period_witnesses": {},
+  "description": "FAIL: period_set declares 4 periods including spurious 12. QAP_4 should reject (computed set is {1,8,24} only).",
+  "fail_ledger": ["deliberate: period_set includes spurious period 12"]
+}

@@ -11051,6 +11051,23 @@ def _validate_steinmetz_whittaker_bridge_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_pisano_all_initializations_cert_family(base_dir):
+    """Cert [499]: QA Pisano All-Initializations -- three-orbit partition of {1,...,9}^2 (Cosmos 72 period 24, Satellite 8 period 8, Singularity 1 period 1, total 81=9^2) is structurally equivalent to Pudelko arXiv:2510.24882 complete period classification of all m^2=81 initial pairs; swap + negation symmetries verified; period_set={1,8,24} complete; 1 PASS + 3 FAIL fixtures; self-test ok."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_pisano_all_initializations_cert_v1")
+    validator = os.path.join(fam_dir, "qa_pisano_all_initializations_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_whittaker_phase_packet_algebra_cert_family(base_dir):
     """Cert [498]: QA Whittaker Phase-Packet Algebra -- exact rational phase_arg = k*(omega·x − v*t) over registered [273] S2 directions; fractions.Fraction arithmetic only; packet families phase_arg/phase_pair/formal_cos_symbol/formal_sin_symbol; rejects trig evaluation/numerical approximation/EM overclaims; 3 PASS + 7 FAIL fixtures; self-test ok."""
     import subprocess
@@ -14227,6 +14244,11 @@ FAMILY_SWEEPS = [
      "QA Steinmetz-Whittaker Bridge Cert [497]. CLAIM (narrow): for a fixed QA tuple (b,e,d,a) with d=b+e/a=b+2e, fixed calibration constants alpha_X/alpha_J/alpha_K, and explicit fixture data H(t)/B(t)/theta(t), the hysteresis loop integral ∮ H dB equals QA curvature proxy ∮ Π dθ (Π=alpha_X*X+alpha_J*J+alpha_K*K) within declared tolerance. Bridge: ∮ H dB ↔ ∬ F_QA ↔ Δ∫ dφ. Invariants: J=b*d, X=d*e, K=d*a, F=b*a, C=2*e*d, G=e*e+d*d. Closed-loop trapezoid hysteresis integral; calibration constants unchanged between calibration and evaluation sections; optional sampled pi_series mode. GUARDRAIL: validates deterministic transform consistency only; does NOT prove universal physical identity between Steinmetz/Whittaker/Dollard/Bearden/QA. Checks: cert_family/tolerance/guardrail/declared_invariants/calibration_match/hysteresis_area/curvature_proxy/bridge_close; 2 PASS + 1 FAIL; self-test ok. Primary sources: Steinmetz C.P. (1892) AIEE Trans. 9:3-64; Whittaker E.T. (1903) Math. Annalen 57:333-355 DOI 10.1007/BF01444290; Wildberger N.J. (2005) Divine Proportions ISBN 978-0-9757492-0-8. Derived 2026-06-23.",
      "497_qa_steinmetz_whittaker_bridge_cert",
      "qa_steinmetz_whittaker_bridge_cert_v1", True),
+    (499, "QA Pisano All-Initializations Cert family",
+     _validate_qa_pisano_all_initializations_cert_family,
+     "QA Pisano All-Initializations Cert [499]. CLAIM: QA three-orbit partition of {1,...,9}^2 under sigma(b,e)=(e,((b+e-1)%9)+1) — Cosmos 72 pairs period 24=pi(9), Satellite 8 pairs period 8, Singularity 1 pair (9,9) period 1, total 72+8+1=81=9^2 — is structurally equivalent to Pudelko's (arXiv:2510.24882 v5 2026-04-09) complete Pisano period classification of ALL m^2=81 initial pairs in (Z/9Z)^2, finding exactly {1,8,24} as the only achievable periods with the same counts. Swap symmetry: orbit_family on (b,e,m) = orbit_family on (e,b,m) for all 81 pairs. Negation parity: orbit_family on (b,e,m) = orbit_family on (neg(b),neg(e),m) for all 81 pairs (Pudelko mirror). Period completeness: exactly 3 distinct periods. Content-ideal link: Cosmos=min(v_3(b),v_3(e))=0, Satellite=1, Singularity=2 (companion cert [261]). Checks QAP_1/QAP_2/QAP_3/QAP_4/QAP_5/SRC/F; 1 PASS + 3 FAIL fixtures; self-test ok. Primary: Pudelko M.T. (2025) arXiv:2510.24882; Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Companion: cert [128] pi(9)=24 Lean proof; cert [261] orbit stratification. Derived 2026-06-23.",
+     "499_qa_pisano_all_initializations_cert",
+     "qa_pisano_all_initializations_cert_v1", True),
     (498, "QA Whittaker Phase-Packet Algebra Cert family",
      _validate_whittaker_phase_packet_algebra_cert_family,
      "QA Whittaker Phase-Packet Algebra Cert [498]. CLAIM (narrow): for declared finite symbolic phase packets, exact rational omega (from registered [273] S2 cert), x/t/k/v/weights as exact rationals, the validator recomputes omega dot x and phase_arg = k*(omega dot x - v*t) as fractions.Fraction values and checks declared witnesses. Allowed packet families: phase_arg, phase_pair, formal_cos_symbol, formal_sin_symbol (cos/sin are labels only, no trig evaluation). Hard dependency: registered [273] qa_whittaker_rational_direction_s2_cert_v1; lineage context: [274] qa_whittaker_scalar_angular_kernel_sampling_cert_v1. Gates: WPPA_1 (dependency provenance [273]/[274]), WPPA_2 (packet declarations), WPPA_3 (omega dot x + phase_arg recomputed exactly), WPPA_4 (rational weights), WPPA_5 (target composition references declared packets only), WPPA_6 (heldout packet identities and phase witnesses), WPPA_7 (rejects trig/numerical/fitted ops), WPPA_8 (rejects Maxwell/EM/scalar-potential/full-Whittaker overclaims). Non-claims: no numerical approximation, trig evaluation, spherical quadrature, full Whittaker theorem proof, Maxwell/EM derivation, scalar-potential physics, or physical field reconstruction. 3 PASS + 7 FAIL fixtures; self-test ok. Primary: Whittaker E.T. (1903) Math. Annalen 57:333-355 DOI 10.1007/BF01444290; registered [273] S2 cert. Derived 2026-06-23.",

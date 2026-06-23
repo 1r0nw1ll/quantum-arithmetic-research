@@ -1,0 +1,24 @@
+{
+  "schema_version": "QA_PISANO_ALL_INIT_CERT.v1",
+  "modulus": 9,
+  "cosmos_count": 72,
+  "satellite_count": 8,
+  "period_set": [1, 8, 24],
+  "period_witnesses": {
+    "cosmos": [
+      {"b": 1, "e": 1, "period": 24},
+      {"b": 1, "e": 2, "period": 24},
+      {"b": 2, "e": 5, "period": 24}
+    ],
+    "satellite": [
+      {"b": 6, "e": 3, "period": 8},
+      {"b": 3, "e": 3, "period": 8},
+      {"b": 9, "e": 6, "period": 8}
+    ],
+    "singularity": [
+      {"b": 9, "e": 9, "period": 1}
+    ]
+  },
+  "description": "Complete QA three-orbit partition of {1,...,9}^2 under qa_step. Cosmos 72 pairs period 24 = pi(9); Satellite 8 pairs period 8; Singularity 1 pair (9,9) period 1. Counts sum to 72+8+1=81=9^2. Matches Pudelko arXiv:2510.24882 complete period classification of all m^2=81 initial pairs in (Z/9Z)^2.",
+  "fail_ledger": []
+}

@@ -1,0 +1,11 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_PISANO_ALL_INIT_CERT.v1; source authority in validator file and mapping_protocol_ref.json -->",
+  "schema_version": "QA_PISANO_ALL_INIT_CERT.v1",
+  "modulus": 9,
+  "cosmos_count": 71,
+  "satellite_count": 8,
+  "period_set": [1, 8, 24],
+  "period_witnesses": {},
+  "description": "FAIL: cosmos_count=71 is wrong (correct is 72). QAP_1 should reject.",
+  "fail_ledger": ["deliberate: cosmos_count=71 not 72"]
+}

@@ -1,0 +1,1 @@
+fib_vec m = fib_vec 0 iff 24 | m: the Fibonacci column vector returns to its initial state exactly when 24 divides m.

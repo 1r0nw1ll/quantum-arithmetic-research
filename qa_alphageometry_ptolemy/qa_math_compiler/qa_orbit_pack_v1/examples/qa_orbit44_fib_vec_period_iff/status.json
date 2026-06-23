@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit44_fib_vec_period_iff",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "62d5403b386d1c774219fa44a61535ae555e94dc43b46a5c09535c399b31be6c"
+}

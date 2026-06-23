@@ -1,9 +1,10 @@
 #!/usr/bin/env python3
 # noqa: DECL-1 (infrastructure — corpus builder, not an empirical QA script)
 """
-Build the qa_orbit_pack_v1 demo corpus from the 25 QA-native Lean theorems:
+Build the qa_orbit_pack_v1 demo corpus from the 45 QA-native Lean theorems:
   QAOrbits.lean (5), QAOrbitPartition.lean (6), QAOrbitInvariance.lean (7),
-  QAFibMatrix.lean (7).
+  QAFibMatrix.lean (7), QAFibMatrixGroup.lean (4), QAFibMatrixGroupIso.lean (4),
+  QAFibNatPeriodicity.lean (4), QAFibNatMinimalPeriod.lean (3).
 
 Usage:
   python build_qa_orbit_pack.py build   — create/overwrite qa_orbit_pack_v1/
@@ -1149,6 +1150,120 @@ THEOREMS = [
         "topic": "fibonacci-periodicity",
         "nl_span": "(Nat.fib (n+24) : ZMod 9) = Nat.fib n — Pisano period π(9)=24",
         "formal_identifiers": ["fib_nat_mod9_periodic", "fib_vec_periodic"],
+    },
+    {
+        "id": "qa_orbit43_fib_mat_pow_eq_one_iff",
+        "nl": "fib_mat^m = 1 iff 24 | m: the Fibonacci matrix has exact multiplicative order 24 in M₂(ZMod 9).",
+        "formal_goal": (
+            "theorem fib_mat_pow_eq_one_iff (m : ℕ) : fib_mat ^ m = 1 ↔ 24 ∣ m"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Mul\n"
+            "import Mathlib.Data.Nat.Fib.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "open scoped Matrix\n\n"
+            "-- (prerequisite defs in QAFibMatrix.lean and QAFibNatPeriodicity.lean)\n"
+            "theorem fib_mat_pow_eq_one_iff (m : ℕ) : fib_mat ^ m = 1 ↔ 24 ∣ m := by\n"
+            "  constructor\n"
+            "  · intro h\n"
+            "    have hpow : fib_mat ^ (m % 24) = 1 := by\n"
+            "      have : fib_mat ^ m = fib_mat ^ (m % 24) := by\n"
+            "        conv_lhs => rw [show m = 24 * (m / 24) + m % 24 from by omega]\n"
+            "        rw [pow_add, pow_mul, fib_mat_pow_24, one_pow, one_mul]\n"
+            "      rw [← this]; exact h\n"
+            "    have hlt : m % 24 < 24 := Nat.mod_lt _ (by norm_num)\n"
+            "    rcases Nat.eq_zero_or_pos (m % 24) with h0 | hpos\n"
+            "    · exact Nat.dvd_of_mod_eq_zero h0\n"
+            "    · exact absurd hpow (fib_mat_order_exact ⟨m % 24, hlt⟩ (by omega))\n"
+            "  · rintro ⟨k, rfl⟩\n"
+            "    rw [pow_mul, fib_mat_pow_24, one_pow]\n"
+        ),
+        "tactic": "rcases",
+        "key_lemmas": ["fib_mat_order_exact", "fib_mat_pow_24", "Nat.dvd_of_mod_eq_zero"],
+        "cert_refs": ["[128] Pisano period π(9)=24 — minimality"],
+        "topic": "fibonacci-minimality",
+        "nl_span": "fib_mat ^ m = 1 ↔ 24 ∣ m",
+        "formal_identifiers": ["fib_mat_pow_eq_one_iff", "fib_mat_order_exact", "fib_mat_pow_24"],
+    },
+    {
+        "id": "qa_orbit44_fib_vec_period_iff",
+        "nl": "fib_vec m = fib_vec 0 iff 24 | m: the Fibonacci column vector returns to its initial state exactly when 24 divides m.",
+        "formal_goal": (
+            "theorem fib_vec_period_iff (m : ℕ) : fib_vec m = fib_vec 0 ↔ 24 ∣ m"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Mul\n"
+            "import Mathlib.Data.Nat.Fib.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "open scoped Matrix\n\n"
+            "-- (prerequisite defs in QAFibMatrix.lean, QAFibNatPeriodicity.lean,\n"
+            "--  and QAFibNatMinimalPeriod.lean private helpers)\n"
+            "theorem fib_vec_period_iff (m : ℕ) : fib_vec m = fib_vec 0 ↔ 24 ∣ m := by\n"
+            "  constructor\n"
+            "  · intro h\n"
+            "    -- reduce mod 24; fib_vec_ne_fib_vec_zero rules out 1..23\n"
+            "    have hmod : fib_vec (m % 24) = fib_vec 0 := by\n"
+            "      rwa [← fib_vec_mod24]\n"
+            "    have hlt : m % 24 < 24 := Nat.mod_lt _ (by norm_num)\n"
+            "    rcases Nat.eq_zero_or_pos (m % 24) with h0 | hpos\n"
+            "    · exact Nat.dvd_of_mod_eq_zero h0\n"
+            "    · exact absurd hmod (fib_vec_ne_fib_vec_zero ⟨m % 24, hlt⟩ (by omega))\n"
+            "  · rintro ⟨k, rfl⟩\n"
+            "    rw [fib_vec_mod24]\n"
+            "    norm_num [Nat.mul_mod_right]\n"
+        ),
+        "tactic": "rcases",
+        "key_lemmas": ["fib_vec_ne_fib_vec_zero", "fib_vec_mod24", "Nat.dvd_of_mod_eq_zero"],
+        "cert_refs": ["[128] Pisano period π(9)=24 — minimality"],
+        "topic": "fibonacci-minimality",
+        "nl_span": "fib_vec m = fib_vec 0 ↔ 24 ∣ m",
+        "formal_identifiers": ["fib_vec_period_iff", "fib_vec_ne_fib_vec_zero"],
+    },
+    {
+        "id": "qa_orbit45_pisano_period_9_exact",
+        "nl": "Exact Pisano period π(9)=24: (Nat.fib (n+m) : ZMod 9) = Nat.fib n for all n iff 24 | m. This fully characterises π(9)=24.",
+        "formal_goal": (
+            "theorem pisano_period_9_exact (m : ℕ) :\n"
+            "    (∀ n : ℕ, (Nat.fib (n + m) : ZMod 9) = Nat.fib n) ↔ 24 ∣ m"
+        ),
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Matrix.Mul\n"
+            "import Mathlib.Data.Nat.Fib.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "open scoped Matrix\n\n"
+            "-- (prerequisite defs in QAFibMatrix.lean, QAFibNatPeriodicity.lean,\n"
+            "--  and QAFibNatMinimalPeriod.lean)\n"
+            "theorem pisano_period_9_exact (m : ℕ) :\n"
+            "    (∀ n : ℕ, (Nat.fib (n + m) : ZMod 9) = Nat.fib n) ↔ 24 ∣ m := by\n"
+            "  rw [← fib_vec_period_iff]\n"
+            "  constructor\n"
+            "  · intro h\n"
+            "    have hm : (Nat.fib m : ZMod 9) = 0 := by\n"
+            "      have := h 0; simp only [Nat.zero_add] at this; simpa using this\n"
+            "    have hm1 : (Nat.fib (m + 1) : ZMod 9) = 1 := by\n"
+            "      have := h 1\n"
+            "      rwa [show 1 + m = m + 1 from by omega] at this\n"
+            "    ext i; fin_cases i\n"
+            "    · simp [fib_vec, hm1]\n"
+            "    · simp [fib_vec, hm]\n"
+            "  · intro heq n\n"
+            "    have key : fib_vec (n + m) = fib_vec n :=\n"
+            "      calc fib_vec (n + m)\n"
+            "          = (fib_mat ^ n) *ᵥ fib_vec m := (fib_mat_pow_fib_vec n m).symm\n"
+            "        _ = (fib_mat ^ n) *ᵥ fib_vec 0 := by rw [heq]\n"
+            "        _ = fib_vec (n + 0) := fib_mat_pow_fib_vec n 0\n"
+            "        _ = fib_vec n := by simp\n"
+            "    simpa [fib_vec] using congr_fun key 1\n"
+        ),
+        "tactic": "calc",
+        "key_lemmas": ["fib_vec_period_iff", "fib_mat_pow_fib_vec", "congr_fun"],
+        "cert_refs": ["[128] Pisano period π(9)=24 — exact characterization"],
+        "topic": "fibonacci-minimality",
+        "nl_span": "(∀ n, fib(n+m) ≡ fib(n) mod 9) ↔ 24 ∣ m — complete π(9)=24",
+        "formal_identifiers": ["pisano_period_9_exact", "fib_vec_period_iff", "fib_mat_pow_fib_vec"],
     },
 ]
 

@@ -1,0 +1,36 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "fib_vec_ne_fib_vec_zero",
+      "fib_vec_mod24",
+      "Nat.dvd_of_mod_eq_zero"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "fib_vec_period_iff",
+          "fib_vec_ne_fib_vec_zero"
+        ],
+        "nl_span": "fib_vec m = fib_vec 0 ↔ 24 ∣ m"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem fib_vec_period_iff (m : ℕ) : fib_vec m = fib_vec 0 ↔ 24 ∣ m",
+  "invariant_diff": {
+    "cert_refs": [
+      "[128] Pisano period π(9)=24 — minimality"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "fib_vec m = fib_vec 0 iff 24 | m: the Fibonacci column vector returns to its initial state exactly when 24 divides m.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT44_FIB_VEC_PERIOD_IFF_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "62d5403b386d1c774219fa44a61535ae555e94dc43b46a5c09535c399b31be6c"
+  }
+}

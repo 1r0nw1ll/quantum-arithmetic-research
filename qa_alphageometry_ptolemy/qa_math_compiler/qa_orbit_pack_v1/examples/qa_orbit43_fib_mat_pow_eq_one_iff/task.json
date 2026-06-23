@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "rcases"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem fib_mat_pow_eq_one_iff (m : ℕ) : fib_mat ^ m = 1 ↔ 24 ∣ m",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "fibonacci-minimality",
+    "cert_refs": [
+      "[128] Pisano period π(9)=24 — minimality"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "fib_mat^m = 1 iff 24 | m: the Fibonacci matrix has exact multiplicative order 24 in M₂(ZMod 9).",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT43_FIB_MAT_POW_EQ_ONE_IFF_TASK"
+}

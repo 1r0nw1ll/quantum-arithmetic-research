@@ -1,0 +1,1 @@
+Exact Pisano period π(9)=24: (Nat.fib (n+m) : ZMod 9) = Nat.fib n for all n iff 24 | m. This fully characterises π(9)=24.

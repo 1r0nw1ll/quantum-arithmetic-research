@@ -1,0 +1,26 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "calc"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem pisano_period_9_exact (m : ℕ) :\n    (∀ n : ℕ, (Nat.fib (n + m) : ZMod 9) = Nat.fib n) ↔ 24 ∣ m",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "fibonacci-minimality",
+    "cert_refs": [
+      "[128] Pisano period π(9)=24 — exact characterization"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "Exact Pisano period π(9)=24: (Nat.fib (n+m) : ZMod 9) = Nat.fib n for all n iff 24 | m. This fully characterises π(9)=24.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT45_PISANO_PERIOD_9_EXACT_TASK"
+}

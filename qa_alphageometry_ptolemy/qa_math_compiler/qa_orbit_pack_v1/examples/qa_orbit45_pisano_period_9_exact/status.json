@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit45_pisano_period_9_exact",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "c0d257f6c004d1b4a648c1e4650a3a81ac7ad4cc8b3c929219b17c9bc340aeb7"
+}

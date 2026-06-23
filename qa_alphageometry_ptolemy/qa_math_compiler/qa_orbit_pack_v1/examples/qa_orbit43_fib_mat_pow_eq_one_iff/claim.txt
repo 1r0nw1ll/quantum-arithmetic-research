@@ -1,0 +1,1 @@
+fib_mat^m = 1 iff 24 | m: the Fibonacci matrix has exact multiplicative order 24 in M₂(ZMod 9).

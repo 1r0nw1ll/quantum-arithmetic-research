@@ -26,9 +26,10 @@ QAFIBMATRIX_PATH = ROOT / "QAFibMatrix.lean"
 QAFIBMATRIXGROUP_PATH = ROOT / "QAFibMatrixGroup.lean"
 QAFIBMATRIXGROUPISO_PATH = ROOT / "QAFibMatrixGroupIso.lean"
 QAFIBNATPERIODICITY_PATH = ROOT / "QAFibNatPeriodicity.lean"
+QAFIBNATMINIMALPERIOD_PATH = ROOT / "QAFibNatMinimalPeriod.lean"
 
 REGISTRY_SCHEMA_ID = "QA_ORBIT_REGISTRY.v1"
-EXPECTED_ENTRY_COUNT = 42
+EXPECTED_ENTRY_COUNT = 45
 EXPECTED_THEOREM_NAMES = {
     # QAOrbits.lean (5)
     "qa_cfgpythag",
@@ -79,6 +80,10 @@ EXPECTED_THEOREM_NAMES = {
     "fib_mat_pow_fib_vec",
     "fib_vec_periodic",
     "fib_nat_mod9_periodic",
+    # QAFibNatMinimalPeriod.lean (3)
+    "fib_mat_pow_eq_one_iff",
+    "fib_vec_period_iff",
+    "pisano_period_9_exact",
 }
 
 
@@ -150,7 +155,8 @@ def validate_registry() -> List[Dict[str, Any]]:
     tactic_sum = (metrics.get("ring_count", 0) + metrics.get("rfl_count", 0)
                   + metrics.get("decide_count", 0) + metrics.get("native_decide_count", 0)
                   + metrics.get("simp_count", 0) + metrics.get("rw_count", 0)
-                  + metrics.get("exact_count", 0))
+                  + metrics.get("exact_count", 0) + metrics.get("rcases_count", 0)
+                  + metrics.get("calc_count", 0))
     checks.append(_check("registry_metrics_tactic_sum",
                           tactic_sum == EXPECTED_ENTRY_COUNT,
                           f"tactic counts sum to {tactic_sum}, expected {EXPECTED_ENTRY_COUNT}"))

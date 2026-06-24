@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+from __future__ import annotations
+
 QA_COMPLIANCE = (
     "cert_validator -- pure integer arithmetic (Pisano orbit partition: "
     "sigma(b,e)=(e,((b+e-1)%m)+1); orbit periods are integer path counts; "
@@ -48,8 +50,6 @@ Wall D.D. (1960). Fibonacci series modulo m. Amer. Math. Monthly
 67(6):525-532. doi:10.2307/2309169 (Pisano periods, prime-power structure).
 Companion cert: [261] qa_orbit_stratification_cert_v1 (content-ideal classification).
 """
-
-from __future__ import annotations
 
 import argparse
 import json

@@ -1,4 +1,5 @@
 # Primary source: Thornton M.A. (2026) arXiv:2604.03634; Thornton M.A. (2026) arXiv:2604.19983; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8
+from __future__ import annotations
 QA_COMPLIANCE = (
     "cert_validator -- pure integer arithmetic (Algebraic Diversity: "
     "G(b,e)=(b+e)*(b+e)+e*e with raw d=b+e (A2); "
@@ -33,7 +34,6 @@ Checks: AD_1/AD_2/AD_3/AD_4/SRC/F.
 Schema: QA_ALGEBRAIC_DIVERSITY_CERT.v1
 """
 
-from __future__ import annotations
 import json, os, sys
 
 _SCHEMA = "QA_ALGEBRAIC_DIVERSITY_CERT.v1"

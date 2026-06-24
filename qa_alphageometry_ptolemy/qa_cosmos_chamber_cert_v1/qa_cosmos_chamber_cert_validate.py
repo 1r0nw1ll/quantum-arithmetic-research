@@ -1,4 +1,5 @@
 # Primary source: Wall D.D. (1960) doi:10.2307/2309169; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8; Pudelko M.T. (2025) arXiv:2510.24882
+from __future__ import annotations
 QA_COMPLIANCE = (
     "cert_validator -- pure integer arithmetic (Cosmos chamber: "
     "G(b,e)=(b+e)*(b+e)+e*e with raw d=b+e (A2); sigma(b,e)=(e,((b+e-1)%m)+1) (A1); "
@@ -22,7 +23,6 @@ Checks: CCH_1/CCH_2/CCH_3/CCH_4/CCH_5/SRC/F.
 Schema: QA_COSMOS_CHAMBER_CERT.v1
 """
 
-from __future__ import annotations
 import json, os, sys
 
 _SCHEMA = "QA_COSMOS_CHAMBER_CERT.v1"

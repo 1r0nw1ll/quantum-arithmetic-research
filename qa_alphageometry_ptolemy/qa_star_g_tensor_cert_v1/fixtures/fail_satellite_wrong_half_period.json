@@ -1,0 +1,21 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_STAR_G_TENSOR_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_STAR_G_TENSOR_CERT.v1",
+  "modulus": 9,
+  "sgt1_orbit_type_violations": 0,
+  "sgt2_sigma8_cosmos_period": 3,
+  "sgt2_sigma3_cosmos_period": 8,
+  "sgt2_crt": {"cosmos_period": 24, "factor_a": 3, "factor_b": 8, "gcd_a_b": 1},
+  "sgt2_witness_pair": [1, 1],
+  "sgt2_sigma8_image": [7, 1],
+  "sgt2_sigma16_image": [4, 1],
+  "sgt2_sigma24_image": [1, 1],
+  "sgt3_sigma4_satellite_period": 4,
+  "sgt3_witness_pair": [3, 3],
+  "sgt3_sigma4_image": [6, 6],
+  "sgt3_sigma8_image": [3, 3],
+  "sgt4_sigma24_total_violations": 0,
+  "sgt4_lcm_cosmos_satellite": 24,
+  "description": "FAIL: declared sigma^4 satellite period = 4 (should be 2). SGT_3a must reject. The Z/8Z antipodal map has period 2, not 4.",
+  "fail_ledger": ["deliberate: sgt3_sigma4_satellite_period=4 (wrong, correct is 2); sigma^4 applied twice = sigma^8 = identity on Satellite"]
+}

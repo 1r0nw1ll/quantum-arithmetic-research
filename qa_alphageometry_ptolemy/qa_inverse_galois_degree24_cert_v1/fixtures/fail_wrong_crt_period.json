@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_INVERSE_GALOIS_DEGREE24_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_INVERSE_GALOIS_DEGREE24_CERT.v1",
+  "modulus": 9,
+  "cosmos_orbit_length": 24,
+  "cosmos_fixed_points_nonidentity": 0,
+  "num_cosmos_orbits": 3,
+  "total_cosmos_pairs": 72,
+  "coset_count": 3,
+  "sigma8_cosmos_period": 4,
+  "sigma3_cosmos_period": 8,
+  "crt_gcd_3_8": 1,
+  "description": "FAIL: declared sigma8_cosmos_period=4 (should be 3). Wrong CRT factorization. IG_4 must reject.",
+  "fail_ledger": ["deliberate: sigma8_cosmos_period=4 implies C4 x C8 factorization not C3 x C8; gcd(4,8)!=1 so CRT does not apply"]
+}

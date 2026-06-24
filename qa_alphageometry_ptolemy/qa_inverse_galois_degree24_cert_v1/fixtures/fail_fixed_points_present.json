@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_INVERSE_GALOIS_DEGREE24_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_INVERSE_GALOIS_DEGREE24_CERT.v1",
+  "modulus": 9,
+  "cosmos_orbit_length": 24,
+  "cosmos_fixed_points_nonidentity": 3,
+  "num_cosmos_orbits": 3,
+  "total_cosmos_pairs": 72,
+  "coset_count": 3,
+  "sigma8_cosmos_period": 3,
+  "sigma3_cosmos_period": 8,
+  "crt_gcd_3_8": 1,
+  "description": "FAIL: declared cosmos_fixed_points_nonidentity=3 (should be 0). Non-regular representation. IG_2 must reject.",
+  "fail_ledger": ["deliberate: fixed_points=3 implies sigma^k is not a full 24-cycle (non-regular representation), not C24"]
+}

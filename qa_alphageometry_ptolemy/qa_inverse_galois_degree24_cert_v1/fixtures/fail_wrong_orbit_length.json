@@ -1,0 +1,15 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_INVERSE_GALOIS_DEGREE24_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_INVERSE_GALOIS_DEGREE24_CERT.v1",
+  "modulus": 9,
+  "cosmos_orbit_length": 12,
+  "cosmos_fixed_points_nonidentity": 0,
+  "num_cosmos_orbits": 3,
+  "total_cosmos_pairs": 72,
+  "coset_count": 3,
+  "sigma8_cosmos_period": 3,
+  "sigma3_cosmos_period": 8,
+  "crt_gcd_3_8": 1,
+  "description": "FAIL: declared cosmos_orbit_length=12 (should be 24). C12 not C24. IG_1 must reject.",
+  "fail_ledger": ["deliberate: cosmos_orbit_length=12 not 24; C12 is degree-12 not degree-24"]
+}

@@ -1,0 +1,14 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_INVERSE_GALOIS_DEGREE24_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_INVERSE_GALOIS_DEGREE24_CERT.v1",
+  "modulus": 9,
+  "cosmos_orbit_length": 24,
+  "cosmos_fixed_points_nonidentity": 0,
+  "num_cosmos_orbits": 3,
+  "total_cosmos_pairs": 72,
+  "coset_count": 3,
+  "sigma8_cosmos_period": 3,
+  "sigma3_cosmos_period": 8,
+  "crt_gcd_3_8": 1,
+  "description": "PASS: C24 = C3 x C8 degree-24 transitive group realization. 3 Cosmos sub-orbits of length 24; 0 fixed points; sigma^8 period 3; sigma^3 period 8; gcd(3,8)=1."
+}

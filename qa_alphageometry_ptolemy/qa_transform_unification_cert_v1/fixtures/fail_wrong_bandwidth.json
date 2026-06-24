@@ -1,0 +1,16 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_TRANSFORM_UNIFICATION_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_TRANSFORM_UNIFICATION_CERT.v1",
+  "modulus": 9,
+  "total_channel_count": 32,
+  "cosmos_channel_count": 24,
+  "satellite_channel_count": 7,
+  "singularity_channel_count": 1,
+  "cosmos_sub_orbit_ac0": [744693, 658293, 574269],
+  "satellite_ac0": 292005,
+  "cosmos_g_total": 9963,
+  "satellite_g_total": 1377,
+  "singularity_g": 405,
+  "description": "FAIL: total_channel_count=32 (satellite_channel_count=7 not 8). TU_1 must reject.",
+  "fail_ledger": ["deliberate: total_channel_count=32 != 33; satellite_channel_count=7 != 8; Z/8Z has 8 irreps, not 7"]
+}

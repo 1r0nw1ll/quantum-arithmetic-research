@@ -1,0 +1,16 @@
+{
+  "_exempt": "<!-- PRIMARY-SOURCE-EXEMPT: reason=test fixture for QA_TRANSFORM_UNIFICATION_CERT.v1; source authority in validator and mapping_protocol_ref.json -->",
+  "schema_version": "QA_TRANSFORM_UNIFICATION_CERT.v1",
+  "modulus": 9,
+  "total_channel_count": 33,
+  "cosmos_channel_count": 24,
+  "satellite_channel_count": 8,
+  "singularity_channel_count": 1,
+  "cosmos_sub_orbit_ac0": [744693, 744693, 574269],
+  "satellite_ac0": 292005,
+  "cosmos_g_total": 9963,
+  "satellite_g_total": 1377,
+  "singularity_g": 405,
+  "description": "FAIL: two Cosmos A[0] values equal (744693,744693) — degenerate channels. TU_2b must reject.",
+  "fail_ledger": ["deliberate: cosmos_sub_orbit_ac0 has duplicate 744693; non-distinct means two Cosmos sub-orbits are identical channels (not independent)"]
+}

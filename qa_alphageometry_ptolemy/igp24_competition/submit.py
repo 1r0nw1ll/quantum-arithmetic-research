@@ -1,155 +1,99 @@
 """
 IGP24 Competition Submission Client
-SAIR Inverse Galois Problem, Stage 1 closes 2026-08-15.
-Platform: competition.sair.foundation/competitions/igp24/
+SAIR Inverse Galois Problem, deadline 2026-08-15.
 
-SETUP (one time):
-  1. Register at competition.sair.foundation
-  2. Go to your profile → API tokens → create token
-  3. export IGP24_TOKEN="your-token-here"
-     OR set TOKEN variable below
+API: POST https://api.sair.foundation/api/public/v1/competitions/igp24/submissions
+     Authorization: Bearer $SAIR_API_KEY
+     Body: {"payload": {"polynomials": ["a0,a1,...,a24", ...]}}
+
+Polynomial format: 25 comma-separated integers, ASCENDING powers (a0 first).
+Rate: 5 submissions/day initially (increases after 5 scoreable pairs credited).
+Max: 100 polynomial lines per submission, 100,000 bytes.
+
+SETUP:
+    export SAIR_API_KEY="sair_..."
+    python3 submit.py --dry-run   # preview what will be sent
+    python3 submit.py --submit    # actually submit
 """
 
 from __future__ import annotations
 
-import os
 import json
+import os
+import sys
 import urllib.request
 import urllib.error
-import time
-from polynomials import (
-    C24_T1_COEFFS, C12C2_T2_COEFFS, C2C2C6_T3_COEFFS,
-    to_magma_poly, C24_T1_DISC_FIELD
-)
+from pathlib import Path
 
-BASE_URL = "https://competition.sair.foundation/competitions/igp24"
-TOKEN    = os.environ.get("IGP24_TOKEN", "")   # set before calling submit()
-
-# T-number → (group name, coefficients, notes)
-SUBMISSIONS: dict[str, tuple[str, list[int], str]] = {
-    "24T1": ("C24",      C24_T1_COEFFS,    f"disc={C24_T1_DISC_FIELD} optimal CRT K3⊗K8"),
-    "24T2": ("C12xC2",   C12C2_T2_COEFFS,  "cyclotomic Phi_39, conductor 39"),
-    "24T3": ("C2^2xC6",  C2C2C6_T3_COEFFS, "cyclotomic Phi_56, conductor 56"),
-}
+API_URL   = "https://api.sair.foundation/api/public/v1/competitions/igp24/submissions"
+TOKEN_KEY = "SAIR_API_KEY"
+HERE      = Path(__file__).parent
 
 
-def _post(endpoint: str, payload: dict) -> dict:
-    url  = f"{BASE_URL}/{endpoint.lstrip('/')}"
-    data = json.dumps(payload).encode()
-    req  = urllib.request.Request(
-        url, data=data,
+def load_submission_txt(path: Path = HERE / "submission.txt") -> list[str]:
+    """Parse submission.txt → list of coefficient strings (comment lines stripped)."""
+    polys = []
+    for line in path.read_text().splitlines():
+        line = line.strip()
+        if line and not line.startswith("#"):
+            polys.append(line)
+    return polys
+
+
+def submit(polys: list[str], token: str) -> dict:
+    payload = json.dumps({"payload": {"polynomials": polys}}).encode()
+    req = urllib.request.Request(
+        API_URL,
+        data=payload,
         headers={
+            "Authorization": f"Bearer {token}",
             "Content-Type": "application/json",
-            "Authorization": f"Bearer {TOKEN}",
-            "User-Agent": "QA-IGP24-client/1.0",
+            "User-Agent": "QA-IGP24/1.0",
         },
         method="POST",
     )
     try:
-        with urllib.request.urlopen(req, timeout=30) as resp:
-            return json.loads(resp.read())
+        with urllib.request.urlopen(req, timeout=60) as resp:
+            body = resp.read()
+            return {"status": resp.status, "body": json.loads(body)}
     except urllib.error.HTTPError as e:
-        body = e.read().decode(errors="replace")
-        return {"error": e.code, "reason": e.reason, "body": body}
+        return {"status": e.code, "reason": e.reason, "body": e.read().decode(errors="replace")}
     except Exception as e:
         return {"error": str(e)}
 
 
-def verify_poly(t_number: str, coeffs: list[int]) -> dict:
-    """Call competition's Magma API to verify Gal(f/Q) == t_number group."""
-    return _post("api/verify", {
-        "t_number": t_number,
-        "polynomial": coeffs,          # high-to-low degree
-        "format": "coeffs_high_to_low",
-    })
+def main() -> None:
+    dry_run = "--submit" not in sys.argv
 
-
-def submit_poly(t_number: str, coeffs: list[int]) -> dict:
-    """Submit polynomial for scoring."""
-    return _post("api/submit", {
-        "t_number": t_number,
-        "polynomial": coeffs,
-        "format": "coeffs_high_to_low",
-    })
-
-
-def check_scoreboard() -> dict:
-    """Fetch current scoreboard / solved groups."""
-    req = urllib.request.Request(
-        f"{BASE_URL}/api/scoreboard",
-        headers={"Authorization": f"Bearer {TOKEN}", "User-Agent": "QA-IGP24-client/1.0"},
-    )
-    try:
-        with urllib.request.urlopen(req, timeout=15) as resp:
-            return json.loads(resp.read())
-    except Exception as e:
-        return {"error": str(e)}
-
-
-def run_campaign(dry_run: bool = True) -> None:
-    if not TOKEN and not dry_run:
-        raise RuntimeError(
-            "Set IGP24_TOKEN env var first.\n"
-            "Register at competition.sair.foundation, then:\n"
-            "  export IGP24_TOKEN='your-token'\n"
-        )
-
-    print(f"=== IGP24 Submission Campaign {'(DRY RUN)' if dry_run else ''} ===")
-    print(f"Platform: {BASE_URL}")
+    args = [a for a in sys.argv[1:] if not a.startswith("--")]
+    path = Path(args[0]) if args else HERE / "submission.txt"
+    polys = load_submission_txt(path)
+    print(f"submission.txt: {len(polys)} polynomial(s)")
+    for i, p in enumerate(polys):
+        coeffs = p.split(",")
+        print(f"  [{i}] deg {len(coeffs)-1}: {p[:60]}...")
     print()
 
-    for t_num, (name, coeffs, notes) in SUBMISSIONS.items():
-        print(f"── {t_num} ({name}): {notes}")
-        print(f"   Polynomial degree: {len(coeffs)-1}")
-        print(f"   Leading coeff: {coeffs[0]}, constant: {coeffs[-1]}")
-        print(f"   Magma: f := {to_magma_poly(coeffs)[:80]}...")
-
-        if dry_run:
-            print("   [DRY RUN — no API call]")
-        else:
-            # First verify, then submit if verified
-            print("   Verifying with competition API...")
-            result = verify_poly(t_num, coeffs)
-            print(f"   Verify response: {result}")
-
-            if result.get("galois_group") == t_num or result.get("verified"):
-                print(f"   ✓ Verified. Submitting...")
-                sub = submit_poly(t_num, coeffs)
-                print(f"   Submit response: {sub}")
-            else:
-                print(f"   ✗ Verification failed or unexpected response, skipping submit.")
-
-            time.sleep(2)   # respect rate limits
+    if dry_run:
+        print("[DRY RUN] — pass --submit to send")
         print()
+        print("Equivalent curl:")
+        body = json.dumps({"payload": {"polynomials": polys}}, indent=2)
+        print(f'curl -X POST "{API_URL}" \\')
+        print(f'  -H "Authorization: Bearer $SAIR_API_KEY" \\')
+        print(f'  -H "Content-Type: application/json" \\')
+        print(f"  -d '{body}'")
+        return
 
+    token = os.environ.get(TOKEN_KEY, "").strip()
+    if not token:
+        print(f"Error: set {TOKEN_KEY} env var first.", file=sys.stderr)
+        sys.exit(1)
 
-def magma_script() -> str:
-    """Generate self-contained Magma script for manual submission at competition portal."""
-    lines = [
-        "// IGP24 QA-derived polynomials — paste into competition Magma console",
-        "// QA source: qa_inverse_galois_degree24_cert_v1 [506]",
-        "",
-    ]
-    for t_num, (name, coeffs, notes) in SUBMISSIONS.items():
-        lines += [
-            f"// {t_num} ({name}): {notes}",
-            f"f{t_num.replace('24T','')} := {to_magma_poly(coeffs)};",
-            f"G{t_num.replace('24T','')} := GaloisGroup(NumberField(f{t_num.replace('24T','')}));",
-            f"print \"Gal = \", G{t_num.replace('24T','')};",
-            f"print \"disc = \", Discriminant(NumberField(f{t_num.replace('24T','')}));",
-            "",
-        ]
-    return "\n".join(lines)
+    print(f"Submitting {len(polys)} polynomial(s) to SAIR IGP24...")
+    result = submit(polys, token)
+    print(f"Response: {json.dumps(result, indent=2)}")
 
 
 if __name__ == "__main__":
-    import sys
-    if "--magma" in sys.argv:
-        print(magma_script())
-    elif "--submit" in sys.argv:
-        run_campaign(dry_run=False)
-    else:
-        run_campaign(dry_run=True)
-        print()
-        print("── Magma script for manual portal submission:")
-        print(magma_script())
+    main()

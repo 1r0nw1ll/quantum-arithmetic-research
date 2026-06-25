@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-03-29
+Last updated: 2026-06-25
 
 ## Current QA Direction
 
@@ -81,6 +81,53 @@ Last updated: 2026-03-29
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #16 — 2026-06-25 (window: June 23 – June 25, 2026)
+Full report: `sota_scans/scan_2026-06-25.md`
+
+**Key finds:**
+- arXiv:2604.01548 (Linear Finite Dynamical Systems over Galois Rings, April 1, 2026) — **HIGH. MEGA-SLIP — all 15 scans.** Kantic/Qureshi/Panario/Legl. QA's σ-operator on (Z/9Z)² is exactly a linear FDS over the Galois ring GR(3²,1). Paper gives explicit algorithms for cycle lengths and transient heights in functional graphs over Galois rings. QA's functional graph: zero transients, cycles {1,8,24} = Singularity/Satellite/Cosmos orbit partition. New cert candidate: `qa_linear_fd_galois_ring_cert_v1` [507].
+- arXiv:2606.23887 (Weyl orbit particles, J.Phys.A 2025 — posted arXiv June 2026) — **LOW-MEDIUM.** Luu. Particles = Weyl-group-element orbits in root set; mass spectrum from Cartan matrix eigenvalue. Adjacent to E8 cert cluster [496] + arXiv:2504.16513 but no modular arithmetic or discrete dynamics content. No cert candidate.
+- Directed torus series arXiv:2603.24708/2604.27140/2605.00660/2606.21583 (March–June 2026) — **LOW-MEDIUM. MEGA-SLIP — 4 papers.** Park. D_d(m) = (Z/mZ)^d decomposes into d Hamilton cycles for odd m; proof uses return-map + odometer technique. QA state space (Z/9Z)² = D_2(9) in scope, but result is about Cayley graph structure not σ-orbit dynamics. Methodology (return maps) useful for cert [261] human tract. No cert candidate.
+
+**ONE HIGH find (retrospective mega-slip from April 2026).**
+
+**SAIR IGP24:** No new progress. Stage 1 closes Aug 15. Next check: Aug 1. Cert [506] already scaffolded June 23.
+
+**Internal landmark:** 10 new cert families (497–506) registered June 23 in one sprint. [497]/[498] Steinmetz-Whittaker and Whittaker Phase-Packet FINALLY resolved (8-scan miss). Certs [499]–[506] also scaffolded. Registry: **[506]**.
+
+**New cert candidate:** `qa_linear_fd_galois_ring_cert_v1` [507] — HIGH priority.
+
+**New cross-domain connection:** Galois Ring LFDS chain — arXiv:2604.01548 + arXiv:2505.18266 (CRT cosets, scan #3) + cert [499] (all initializations) = QA T-operator is the canonical LFDS over GR(3²,1) whose functional graph IS QA's orbit partition.
+
+**[261] orbit stratification: FIFTEEN-TUPLE GAP (15th scan — longest-running unresolved gap).**
+
+**Documentation backlog: ~223 families [284]–[506] missing README/SPEC (up from ~213 in scan #15 — 10 new sprint families added, 0 cleared).**
+
+**Search fixes for scan #17:** Add "Galois ring" + "linear finite dynamical system" + "functional graph orbit"; add "directed torus" + "Cayley graph modular"; add "discrete cat map" + "Arnold cat map" Galois ring; SAIR Aug 1 pre-deadline check.
+
+---
+
+### Scan #15 — 2026-06-23 (window: June 22 – June 23, 2026)
+Full report: `sota_scans/scan_2026-06-23.md`
+
+**Key finds:**
+- arXiv:2606.02621 (A Fibonacci theorem for Collatz trajectories via modular graph structure, May 28, 2026) — **MEDIUM-HIGH.** Reyes Jiménez. Exactly F(m+1) odd integers in {1,...,2^m} avoid residue 4 (mod 6) during steps 2..m; proof via Collatz mod-6 graph absorbing SCC spectral gap (ρ=φ after fixed-point removal). Structural analog of QA Singularity blockade: remove fixed point → Fibonacci dynamics emerge. New cert candidate: `qa_collatz_fibonacci_spectral_cert_v1` → **scaffolded as [502]**.
+- arXiv:2510.24882 (Modular Periodicity of Random Initialized Recurrences, Oct 2025) — **MEDIUM-HIGH.** Pudelko. All m² initializations of Fibonacci in (Z/mZ)²; mirror symmetry + fractal prime→prime-power + cyclotomic period counting. QA's 81-pair orbit partition (72+8+1 for m=9) = complete period classification of all 81 = 9² initial pairs. New cert candidate: `qa_pisano_all_initializations_cert_v1` → **scaffolded as [499]**.
+
+**No HIGH finds. SAIR IGP24 launched June 16 (Stage 1 closes Aug 15, 165836 pairs, 622 pre-resolved).**
+
+**Internal landmark:** cert [128] π(9)=24 Lean proof committed (3 theorems: fib_mat_pow_eq_one_iff, fib_vec_period_iff, pisano_period_9_exact). Orbit pack 42→45. Cert [31] PASS confirmed.
+
+**Cert registry: [496].** [497]/[498] Steinmetz/Whittaker still open at time of scan. (Both scaffolded in subsequent sprint June 23.)
+
+**[261] orbit stratification: FOURTEEN-TUPLE GAP (14th scan).**
+
+**Documentation backlog: ~213 families [284]–[496] missing README/SPEC.**
+
+**Search fixes applied for scan #16:** Added "Pisano" + "Fibonacci modular periodicity" + "Collatz modular graph" + math.DS sweep.
+
+---
 
 ### Scan #14 — 2026-06-22 (window: June 18 – June 22, 2026)
 Full report: `sota_scans/scan_2026-06-22.md`

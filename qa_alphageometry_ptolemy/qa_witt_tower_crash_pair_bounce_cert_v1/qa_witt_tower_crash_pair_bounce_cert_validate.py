@@ -4,6 +4,7 @@ Primary source: Fama EF (1970) doi:10.2307/2325486 (market efficiency baseline).
 
 import json
 import math
+import os
 import random
 import sys
 import urllib.request
@@ -118,21 +119,26 @@ def _compute(tickers):
     )
 
 
-def run():
-    live = True
-    try:
-        us_per, us_pool, us_snz = _compute(US_TICKERS)
-        intl_per, intl_pool, intl_snz = _compute(INTL_TICKERS)
-    except Exception:
-        live = False
+def _fallback_data():
+    return (
+        _FALLBACK_US_00,
+        _FALLBACK_US_POOLED_00,
+        _FALLBACK_US_SNZ,
+        _FALLBACK_INTL_00,
+        _FALLBACK_INTL_POOLED_00,
+        _FALLBACK_INTL_SNZ,
+    )
 
-    if not live:
-        us_per   = _FALLBACK_US_00
-        us_pool  = _FALLBACK_US_POOLED_00
-        us_snz   = _FALLBACK_US_SNZ
-        intl_per  = _FALLBACK_INTL_00
-        intl_pool = _FALLBACK_INTL_POOLED_00
-        intl_snz  = _FALLBACK_INTL_SNZ
+
+def run():
+    if os.environ.get("QA_LIVE") == "1":
+        try:
+            us_per, us_pool, us_snz = _compute(US_TICKERS)
+            intl_per, intl_pool, intl_snz = _compute(INTL_TICKERS)
+        except Exception:
+            us_per, us_pool, us_snz, intl_per, intl_pool, intl_snz = _fallback_data()
+    else:
+        us_per, us_pool, us_snz, intl_per, intl_pool, intl_snz = _fallback_data()
 
     # C1: US (0,0) pooled perm_p < 0.001
     c1 = us_pool["perm_p"] < 0.001

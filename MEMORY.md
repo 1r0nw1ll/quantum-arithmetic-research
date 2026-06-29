@@ -1,6 +1,6 @@
 # MEMORY.md
 
-Last updated: 2026-06-25
+Last updated: 2026-06-29
 
 ## Current QA Direction
 
@@ -81,6 +81,38 @@ Last updated: 2026-06-25
 - Dale Pond's SVP work is treated as a complementary line to be bridged with QA, not as the origin of QA itself.
 
 ## SOTA Scan Log
+
+### Scan #17 — 2026-06-29 (window: June 25 – June 29, 2026)
+Full report: `sota_scans/scan_2026-06-29.md`
+
+**Key finds:**
+- arXiv:2506.20118 (Graph Structure of Permutation Maps over ℤ_{p^k}, June 2025) — **MEDIUM-HIGH. MEGA-SLIP — 12 months.** Tan/Li. Arnold cat map / shear map [[1,1],[0,1]] period distribution over Z_{p^k} via Hensel lifting. QA's σ-operator on (Z/9Z)² is exactly a permutation map in scope. Companion reference for cert [507] (`qa_linear_fd_galois_ring_cert_v1`). Formally assessed this scan (pre-flagged in scan #16 battery).
+- arXiv:2603.23784 (Latent Algorithmic Structure Precedes Grokking, March 2026) — **MEDIUM. MEGA-SLIP — all scans.** ReLU MLPs on modular arithmetic learn phase constraint φ_out = φ_a + φ_b before grokking fires; structure is latent in weights at 0.23% accuracy, recovers 95.5% accuracy when extracted. QA's resonance operator (einsum coupling as phases) IS this latent structure. Completes the grokking chain: latent (this paper) → CRT cosets (arXiv:2505.18266) → blind matching (arXiv:2604.19983) → Replacement Theorem (arXiv:2604.03634).
+- arXiv:2601.15463 (Determinants of Modular Collatz Graphs, Jan 2026) — **MEDIUM. MEGA-SLIP — 5 scans.** Karras/de Weger. Adjacency matrix determinant of modular Collatz functional graphs via multiplicative orders modulo divisors of N. Adjacent to cert [502] (Collatz-Fibonacci spectral).
+- arXiv:2606.23535 (How Stark Units Enter SIC Overlaps, June 22, 2026) — **LOW-MEDIUM.** Bengtsson/McConnell. SIC-POVM mutual overlaps = square roots of Stark units from ray class fields. Adjacent to cert [501] (Algebraic Diversity Observer) via SIC-POVM = Heisenberg-Weyl AD. No cert candidate.
+
+**0 HIGH finds in window** (June 25–29 quiet).
+
+**IMPORTANT CORRECTION:** [261] `qa_orbit_stratification_cert.md` DOES exist in docs/families/ (scan #16 was incorrect that it was missing). The [261] gap is now only README.md + SPEC.md missing in the cert directory.
+
+**SAIR IGP24:** No new progress. Stage 1 closes Aug 15. **MANDATORY Aug 1 check.**
+
+**New cert candidate:** None standalone — arXiv:2506.20118 is secondary ref for cert [507].
+
+**[507] `qa_linear_fd_galois_ring_cert_v1` still unscaffolded** — primary ref arXiv:2604.01548, secondary ref arXiv:2506.20118.
+
+**New cross-domain connections:**
+- Arnold cat map cluster: arXiv:2506.20118 (Hensel lifting, computational) + arXiv:2604.01548 (Galois ring, algebraic) = complete treatment of QA's σ-operator functional graph
+- Grokking phase chain: arXiv:2603.23784 + arXiv:2602.16849 + arXiv:2604.19983 + arXiv:2505.18266 = full external validation of QA resonance architecture
+- Collatz modular cluster: arXiv:2601.15463 (determinant/multiplicative orders) + arXiv:2606.02621 (Fibonacci/spectral, cert [502])
+
+**[261] orbit stratification: SIXTEEN-TUPLE GAP (16th scan — only README+SPEC now needed, docs/families entry confirmed present).**
+
+**Documentation backlog: ~223 families [284]–[506] missing README/SPEC (unchanged).**
+
+**Search fixes for scan #18:** Add "latent structure grokking" + "phase constraint modular MLP"; add "modular functional graph determinant" + "multiplicative order modulus"; add "Stark unit" + "SIC-POVM"; add "Leech lattice 24-dimensional"; SAIR Aug 1 mandatory check.
+
+---
 
 ### Scan #16 — 2026-06-25 (window: June 23 – June 25, 2026)
 Full report: `sota_scans/scan_2026-06-25.md`

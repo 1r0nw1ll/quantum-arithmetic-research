@@ -3,7 +3,7 @@ IGP24 polynomial batch generator.
 
 Usage:
   python3 gen_batch.py [--output submission.txt] [--max N]
-  
+
 Generates polynomials from the T87/T89 shift families, S4 nfsplitting,
 T114 family (x^8-p × cyclotomic), and other constructions.
 
@@ -47,38 +47,38 @@ def generate_shift_polys(max_count=100, skip_k=None):
     skip_k: set of (src, k) pairs already submitted.
     """
     skip_k = skip_k or set()
-    
+
     # Generate k values for each r-range
-    # T87r24 (r-values from shifts): 
+    # T87r24 (r-values from shifts):
     #   r=12: k=1..3; r=10: k=4..9; r=8: k=10..11; r=6: k=12..14
     #   r=4: k=15..36; r=2: k=37..54; r=0: k=55+
     all_shifts = []
-    
+
     # Large r=0 range (k=55 to 500) — most abundant
     for k in range(55, 500):
         if ('r24', k) not in skip_k:
             all_shifts.append(('r24', k, 0))
-    
+
     # r=2 range
     for k in range(37, 55):
         if ('r24', k) not in skip_k:
             all_shifts.append(('r24', k, 2))
-    
+
     # r=4 range
     for k in range(15, 37):
         if ('r24', k) not in skip_k:
             all_shifts.append(('r24', k, 4))
-    
+
     # T87r0 r=24 range (K=55 to 500)
     for k in range(55, 500):
         if ('r0', k) not in skip_k:
             all_shifts.append(('r0', k, 24))
-    
+
     # T87r0 r=22 range
     for k in range(37, 55):
         if ('r0', k) not in skip_k:
             all_shifts.append(('r0', k, 22))
-    
+
     # T87r0 r=20 range
     for k in range(15, 37):
         if ('r0', k) not in skip_k:
@@ -93,9 +93,9 @@ def generate_shift_polys(max_count=100, skip_k=None):
     for k in range(37, 500):
         if ('t89r0', k) not in skip_k:
             all_shifts.append(('t89r0', k, 24))
-    
+
     selected = all_shifts[:max_count]
-    
+
     cmds = [
         f"gr24(y)={T87_r24};",
         f"gr0(y)={T87_r0};",
@@ -111,9 +111,9 @@ def generate_shift_polys(max_count=100, skip_k=None):
             cmds.append(f"h=subst(g89r24(y),y,x^2+{k}); print(\"{src}|{k}|{exp_r}|\",Vecrev(h));")
         elif src == 't89r0':
             cmds.append(f"h=subst(g89r0(y),y,x^2-{k}); print(\"{src}|{k}|{exp_r}|\",Vecrev(h));")
-    
+
     out = gp_batch(cmds)
-    
+
     polys = []
     for line in out.split('\n'):
         parts = line.split('|')
@@ -125,7 +125,7 @@ def generate_shift_polys(max_count=100, skip_k=None):
                     'coeffs': v, 'src': src, 'k': int(k_str), 'exp_r': int(exp_r_str),
                     'label': f"{src}_k{k_str}_r{exp_r_str}"
                 })
-    
+
     return polys
 
 if __name__ == '__main__':
@@ -135,26 +135,26 @@ if __name__ == '__main__':
     p.add_argument('--skip-from', help='JSON file with already-submitted polys to skip')
     p.add_argument('--start-k', type=int, default=55)
     args = p.parse_args()
-    
+
     skip_k = set()
     if args.skip_from:
         with open(args.skip_from) as f:
             for item in json.load(f):
                 skip_k.add((item['src'], item['k']))
-    
+
     print(f"Generating up to {args.max} polys...")
     polys = generate_shift_polys(max_count=args.max, skip_k=skip_k)
     print(f"Generated {len(polys)} polys")
-    
+
     content = f"# IGP24 shift batch — {len(polys)} polys\n#\n"
     for d in polys[:args.max]:
         cs = ','.join(str(c) for c in d['coeffs'])
         content += f"# {d['label']}\n{cs}\n"
-    
+
     out_path = Path(args.output)
     out_path.write_text(content)
     print(f"Written {len(polys)} polys to {out_path}")
-    
+
     # Save metadata for skip tracking
     meta_path = out_path.with_suffix('.json')
     meta_path.write_text(json.dumps(polys))

@@ -1,8 +1,8 @@
 #!/usr/bin/env python3
 # noqa: DECL-1 (infrastructure — corpus builder, not an empirical QA script)
 """
-Build the qa_orbit_pack_v1 demo corpus from the 45 QA-native Lean theorems:
-  QAOrbits.lean (5), QAOrbitPartition.lean (6), QAOrbitInvariance.lean (7),
+Build the qa_orbit_pack_v1 demo corpus from the 47 QA-native Lean theorems:
+  QAOrbits.lean (5), QAOrbitPartition.lean (8), QAOrbitInvariance.lean (7),
   QAFibMatrix.lean (7), QAFibMatrixGroup.lean (4), QAFibMatrixGroupIso.lean (4),
   QAFibNatPeriodicity.lean (4), QAFibNatMinimalPeriod.lean (3).
 
@@ -1265,6 +1265,44 @@ THEOREMS = [
         "nl_span": "(∀ n, fib(n+m) ≡ fib(n) mod 9) ↔ 24 ∣ m — complete π(9)=24",
         "formal_identifiers": ["pisano_period_9_exact", "fib_vec_period_iff", "fib_mat_pow_fib_vec"],
     },
+    {
+        "id": "qa_orbit46_satellite_card",
+        "nl": "The Satellite orbit in ZMod 9 × ZMod 9 contains exactly 8 states: the orbit generated from representative (6,3) under the QA T-step has cardinality 8.",
+        "formal_goal": "theorem qa_satellite_card : qa_satellite.card = 8",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_satellite : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 8).image (fun k => (qa_step^[k]) (6, 3))\n\n"
+            "theorem qa_satellite_card : qa_satellite.card = 8 := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+        "topic": "partition",
+        "nl_span": "the Satellite orbit contains exactly 8 states",
+        "formal_identifiers": ["qa_satellite_card", "qa_step", "qa_satellite"],
+    },
+    {
+        "id": "qa_orbit47_singularity_card",
+        "nl": "The Singularity orbit in ZMod 9 × ZMod 9 contains exactly 1 state: the fixed point set {(0,0)} has cardinality 1.",
+        "formal_goal": "theorem qa_singularity_card : qa_singularity.card = 1",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_singularity : Finset (ZMod 9 × ZMod 9) := {(0, 0)}\n\n"
+            "theorem qa_singularity_card : qa_singularity.card = 1 := by decide\n"
+        ),
+        "tactic": "decide",
+        "key_lemmas": ["decide"],
+        "cert_refs": ["[153] DOMINANT=SINGULARITY", "[191] reachability-tier-counts"],
+        "topic": "partition",
+        "nl_span": "the Singularity orbit contains exactly 1 state",
+        "formal_identifiers": ["qa_singularity_card", "qa_singularity"],
+    },
 ]
 
 
@@ -1468,8 +1506,9 @@ def build_pack() -> None:
         "Machine-checked Lean 4 proofs of core QA structural claims.\n\n"
         "QAOrbits.lean (5 theorems): QA Pythagorean identity, singularity fixed-point,\n"
         "satellite period 8, cosmos period 24, universal period-24 bound.\n\n"
-        "QAOrbitPartition.lean (6 theorems): three-orbit partition (81 = 72+8+1),\n"
-        "cosmos cardinality 72, exact cosmos period 24, exact satellite period 8,\n"
+        "QAOrbitPartition.lean (8 theorems): three-orbit partition (81 = 72+8+1),\n"
+        "cosmos cardinality 72, satellite cardinality 8, singularity cardinality 1,\n"
+        "exact cosmos period 24, exact satellite period 8,\n"
         "singularity uniqueness, exact Pisano period π(9) = 24.\n\n"
         "QAOrbitInvariance.lean (7 theorems): orbit T-invariance, sub-orbit decomposition,\n"
         "T injectivity on Cosmos, three sub-orbits pairwise disjoint.\n\n"
@@ -1525,9 +1564,20 @@ def build_pack() -> None:
         "- `qa_orbit40_fib_mat_pow_fib_vec` → cert [128] (fib_mat^n *ᵥ fib_vec m = fib_vec (n+m))\n"
         "- `qa_orbit41_fib_vec_periodic` → cert [128] (fib_vec (n+24) = fib_vec n)\n"
         "- `qa_orbit42_fib_nat_mod9_periodic` → cert [128] (Fibonacci sequence periodic mod 9 with period 24)\n"
+        "- `qa_orbit43_fib_mat_pow_eq_one_iff` → cert [128] (matrix power equals identity iff 24 divides exponent)\n"
+        "- `qa_orbit44_fib_vec_period_iff` → cert [128] (fib_vec returns to initial state iff 24 divides exponent)\n"
+        "- `qa_orbit45_pisano_period_9_exact` → cert [128] (complete π(9)=24 characterization)\n"
+        "- `qa_orbit46_satellite_card` → cert [126] / [191] (Satellite orbit cardinality 8)\n"
+        "- `qa_orbit47_singularity_card` → cert [153] / [191] (Singularity orbit cardinality 1)\n"
     )
     (PACK_DIR / "README.md").write_text(readme, encoding="utf-8")
     print(f"Wrote {PACK_DIR}/index.json and README.md")
+
+    from build_certified_corpus import build_manifest
+
+    corpus = build_manifest(PACK_DIR)
+    (PACK_DIR / "corpus.json").write_text(canonical_json(corpus) + "\n", encoding="utf-8")
+    print(f"Wrote {PACK_DIR}/corpus.json")
 
 
 def check_pack() -> bool:

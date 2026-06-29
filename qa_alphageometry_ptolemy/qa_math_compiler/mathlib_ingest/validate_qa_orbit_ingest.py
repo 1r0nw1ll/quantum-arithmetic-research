@@ -29,7 +29,7 @@ QAFIBNATPERIODICITY_PATH = ROOT / "QAFibNatPeriodicity.lean"
 QAFIBNATMINIMALPERIOD_PATH = ROOT / "QAFibNatMinimalPeriod.lean"
 
 REGISTRY_SCHEMA_ID = "QA_ORBIT_REGISTRY.v1"
-EXPECTED_ENTRY_COUNT = 45
+EXPECTED_ENTRY_COUNT = 47
 EXPECTED_THEOREM_NAMES = {
     # QAOrbits.lean (5)
     "qa_cfgpythag",
@@ -37,8 +37,10 @@ EXPECTED_THEOREM_NAMES = {
     "qa_satellite_period_8",
     "qa_cosmos_period_24",
     "qa_t_period_divides_24",
-    # QAOrbitPartition.lean (6)
+    # QAOrbitPartition.lean (8)
     "qa_cosmos_card",
+    "qa_satellite_card",
+    "qa_singularity_card",
     "qa_orbit_partition",
     "qa_cosmos_period_exact",
     "qa_satellite_period_exact",
@@ -207,7 +209,7 @@ def validate_lean_source() -> List[Dict[str, Any]]:
                           "imports must be the first content in QAOrbitPartition.lean"))
 
     partition_names = {
-        "qa_cosmos_card", "qa_orbit_partition", "qa_cosmos_period_exact",
+        "qa_cosmos_card", "qa_satellite_card", "qa_singularity_card", "qa_orbit_partition", "qa_cosmos_period_exact",
         "qa_satellite_period_exact", "qa_singularity_unique", "qa_pisano_9_exact",
     }
     for name in partition_names:

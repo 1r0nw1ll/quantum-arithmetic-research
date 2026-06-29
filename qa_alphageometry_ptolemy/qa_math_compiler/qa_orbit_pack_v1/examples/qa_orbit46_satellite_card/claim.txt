@@ -1,0 +1,1 @@
+The Satellite orbit in ZMod 9 × ZMod 9 contains exactly 8 states: the orbit generated from representative (6,3) under the QA T-step has cardinality 8.

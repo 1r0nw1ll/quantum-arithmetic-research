@@ -1,0 +1,1 @@
+The Singularity orbit in ZMod 9 × ZMod 9 contains exactly 1 state: the fixed point set {(0,0)} has cardinality 1.

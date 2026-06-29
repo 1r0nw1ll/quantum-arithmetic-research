@@ -1,5 +1,5 @@
 {
-  "example_count": 45,
+  "example_count": 47,
   "examples": [
     {
       "difficulty": "qa-native",
@@ -270,6 +270,18 @@
       "id": "qa_orbit45_pisano_period_9_exact",
       "status": "PROVED",
       "topic": "fibonacci-minimality"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit46_satellite_card",
+      "status": "PROVED",
+      "topic": "partition"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit47_singularity_card",
+      "status": "PROVED",
+      "topic": "partition"
     }
   ],
   "schema_id": "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1",

@@ -1,0 +1,35 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_singularity_card",
+          "qa_singularity"
+        ],
+        "nl_span": "the Singularity orbit contains exactly 1 state"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_singularity_card : qa_singularity.card = 1",
+  "invariant_diff": {
+    "cert_refs": [
+      "[153] DOMINANT=SINGULARITY",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Singularity orbit in ZMod 9 × ZMod 9 contains exactly 1 state: the fixed point set {(0,0)} has cardinality 1.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT47_SINGULARITY_CARD_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "84027484bcad7dd202149a04f7acbb895997e596a9cb0432a9ea817f35d5d154"
+  }
+}

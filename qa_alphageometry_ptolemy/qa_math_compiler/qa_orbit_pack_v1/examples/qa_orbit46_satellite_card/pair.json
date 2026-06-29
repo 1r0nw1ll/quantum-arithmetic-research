@@ -1,0 +1,36 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_satellite_card",
+          "qa_step",
+          "qa_satellite"
+        ],
+        "nl_span": "the Satellite orbit contains exactly 8 states"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_satellite_card : qa_satellite.card = 8",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Satellite orbit in ZMod 9 × ZMod 9 contains exactly 8 states: the orbit generated from representative (6,3) under the QA T-step has cardinality 8.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT46_SATELLITE_CARD_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "24c3928b275db5167d0d883b54c5a78d1d81d61024ce7ef5050c1d8985f0602d"
+  }
+}

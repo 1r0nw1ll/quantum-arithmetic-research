@@ -5,8 +5,9 @@ Machine-checked Lean 4 proofs of core QA structural claims.
 QAOrbits.lean (5 theorems): QA Pythagorean identity, singularity fixed-point,
 satellite period 8, cosmos period 24, universal period-24 bound.
 
-QAOrbitPartition.lean (6 theorems): three-orbit partition (81 = 72+8+1),
-cosmos cardinality 72, exact cosmos period 24, exact satellite period 8,
+QAOrbitPartition.lean (8 theorems): three-orbit partition (81 = 72+8+1),
+cosmos cardinality 72, satellite cardinality 8, singularity cardinality 1,
+exact cosmos period 24, exact satellite period 8,
 singularity uniqueness, exact Pisano period π(9) = 24.
 
 QAOrbitInvariance.lean (7 theorems): orbit T-invariance, sub-orbit decomposition,
@@ -70,3 +71,8 @@ Each example is a standalone extract with a single-theorem proof file.
 - `qa_orbit40_fib_mat_pow_fib_vec` → cert [128] (fib_mat^n *ᵥ fib_vec m = fib_vec (n+m))
 - `qa_orbit41_fib_vec_periodic` → cert [128] (fib_vec (n+24) = fib_vec n)
 - `qa_orbit42_fib_nat_mod9_periodic` → cert [128] (Fibonacci sequence periodic mod 9 with period 24)
+- `qa_orbit43_fib_mat_pow_eq_one_iff` → cert [128] (matrix power equals identity iff 24 divides exponent)
+- `qa_orbit44_fib_vec_period_iff` → cert [128] (fib_vec returns to initial state iff 24 divides exponent)
+- `qa_orbit45_pisano_period_9_exact` → cert [128] (complete π(9)=24 characterization)
+- `qa_orbit46_satellite_card` → cert [126] / [191] (Satellite orbit cardinality 8)
+- `qa_orbit47_singularity_card` → cert [153] / [191] (Singularity orbit cardinality 1)

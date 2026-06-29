@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit46_satellite_card",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "24c3928b275db5167d0d883b54c5a78d1d81d61024ce7ef5050c1d8985f0602d"
+}

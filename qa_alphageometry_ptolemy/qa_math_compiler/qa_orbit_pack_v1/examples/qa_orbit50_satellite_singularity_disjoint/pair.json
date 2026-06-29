@@ -1,0 +1,37 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_satellite_singularity_disjoint",
+          "qa_satellite",
+          "qa_singularity"
+        ],
+        "nl_span": "Satellite and Singularity orbit finsets are disjoint"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_satellite_singularity_disjoint : Disjoint qa_satellite qa_singularity",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[153] DOMINANT=SINGULARITY",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Satellite and Singularity orbit finsets in ZMod 9 × ZMod 9 are disjoint: the fixed point (0,0) is not a Satellite state.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT50_SATELLITE_SINGULARITY_DISJOINT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "de034fe152770ece1bba1baabee7b82340524cebe3ef4c15191a9134c29b2f21"
+  }
+}

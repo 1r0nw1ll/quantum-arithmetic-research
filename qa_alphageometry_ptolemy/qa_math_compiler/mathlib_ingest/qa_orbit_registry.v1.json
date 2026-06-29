@@ -14,7 +14,7 @@
   ],
   "lean_toolchain": "leanprover/lean4:v4.31.0",
   "mathlib_commit": "fabf563a7c95a166b8d7b6efca11c8b4dc9d911f",
-  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (8) + QAOrbitInvariance.lean (7) + QAFibMatrix.lean (7) + QAFibMatrixGroup.lean (7) + QAFibMatrixGroupIso.lean (6) + QAFibNatPeriodicity.lean (4). Machine-checked proofs through exact orbit cardinalities 72/8/1, orderOf(F)=24, the explicit isomorphism \u27e8F\u27e9 \u2245 \u2124/24\u2124, and Fibonacci sequence periodicity mod 9.",
+  "description": "Registry of QA-native formal theorems: QAOrbits.lean (5) + QAOrbitPartition.lean (11) + QAOrbitInvariance.lean (7) + QAFibMatrix.lean (7) + QAFibMatrixGroup.lean (7) + QAFibMatrixGroupIso.lean (6) + QAFibNatPeriodicity.lean (4). Machine-checked proofs through exact orbit cardinalities 72/8/1, pairwise orbit disjointness, orderOf(F)=24, the explicit isomorphism \u27e8F\u27e9 \u2245 \u2124/24\u2124, and Fibonacci sequence periodicity mod 9.",
   "entries": [
     {
       "theorem_name": "qa_cfgpythag",
@@ -499,18 +499,53 @@
         "[191] reachability-tier-counts"
       ],
       "topic": "partition"
+    },
+    {
+      "theorem_name": "qa_cosmos_satellite_disjoint",
+      "example_id": "qa_orbit48_cosmos_satellite_disjoint",
+      "source_module": "QAOrbitPartition.lean",
+      "tactic": "native_decide",
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[191] reachability-tier-counts"
+      ],
+      "topic": "partition-disjointness"
+    },
+    {
+      "theorem_name": "qa_cosmos_singularity_disjoint",
+      "example_id": "qa_orbit49_cosmos_singularity_disjoint",
+      "source_module": "QAOrbitPartition.lean",
+      "tactic": "native_decide",
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[153] DOMINANT=SINGULARITY",
+        "[191] reachability-tier-counts"
+      ],
+      "topic": "partition-disjointness"
+    },
+    {
+      "theorem_name": "qa_satellite_singularity_disjoint",
+      "example_id": "qa_orbit50_satellite_singularity_disjoint",
+      "source_module": "QAOrbitPartition.lean",
+      "tactic": "native_decide",
+      "cert_refs": [
+        "[126] orbit-structure",
+        "[153] DOMINANT=SINGULARITY",
+        "[191] reachability-tier-counts"
+      ],
+      "topic": "partition-disjointness"
     }
   ],
   "metrics": {
-    "entry_count": 47,
+    "entry_count": 50,
     "ring_count": 1,
     "rfl_count": 1,
     "decide_count": 3,
-    "native_decide_count": 22,
+    "native_decide_count": 25,
     "simp_count": 7,
     "rw_count": 4,
     "exact_count": 6,
-    "total_theorems": 47,
+    "total_theorems": 50,
     "rcases_count": 2,
     "calc_count": 1
   }

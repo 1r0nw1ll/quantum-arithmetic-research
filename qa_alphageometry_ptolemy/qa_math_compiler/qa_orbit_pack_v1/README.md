@@ -5,9 +5,9 @@ Machine-checked Lean 4 proofs of core QA structural claims.
 QAOrbits.lean (5 theorems): QA Pythagorean identity, singularity fixed-point,
 satellite period 8, cosmos period 24, universal period-24 bound.
 
-QAOrbitPartition.lean (8 theorems): three-orbit partition (81 = 72+8+1),
+QAOrbitPartition.lean (11 theorems): three-orbit partition (81 = 72+8+1),
 cosmos cardinality 72, satellite cardinality 8, singularity cardinality 1,
-exact cosmos period 24, exact satellite period 8,
+pairwise disjointness, exact cosmos period 24, exact satellite period 8,
 singularity uniqueness, exact Pisano period π(9) = 24.
 
 QAOrbitInvariance.lean (7 theorems): orbit T-invariance, sub-orbit decomposition,
@@ -76,3 +76,6 @@ Each example is a standalone extract with a single-theorem proof file.
 - `qa_orbit45_pisano_period_9_exact` → cert [128] (complete π(9)=24 characterization)
 - `qa_orbit46_satellite_card` → cert [126] / [191] (Satellite orbit cardinality 8)
 - `qa_orbit47_singularity_card` → cert [153] / [191] (Singularity orbit cardinality 1)
+- `qa_orbit48_cosmos_satellite_disjoint` → cert [126] / [191] (Cosmos ∩ Satellite = ∅)
+- `qa_orbit49_cosmos_singularity_disjoint` → cert [126] / [153] / [191] (Cosmos ∩ Singularity = ∅)
+- `qa_orbit50_satellite_singularity_disjoint` → cert [126] / [153] / [191] (Satellite ∩ Singularity = ∅)

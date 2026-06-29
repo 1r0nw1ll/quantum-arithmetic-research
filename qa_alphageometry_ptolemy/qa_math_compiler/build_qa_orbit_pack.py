@@ -1,9 +1,9 @@
 #!/usr/bin/env python3
 # noqa: DECL-1 (infrastructure — corpus builder, not an empirical QA script)
 """
-Build the qa_orbit_pack_v1 demo corpus from the 47 QA-native Lean theorems:
-  QAOrbits.lean (5), QAOrbitPartition.lean (8), QAOrbitInvariance.lean (7),
-  QAFibMatrix.lean (7), QAFibMatrixGroup.lean (4), QAFibMatrixGroupIso.lean (4),
+Build the qa_orbit_pack_v1 demo corpus from the 50 QA-native Lean theorems:
+  QAOrbits.lean (5), QAOrbitPartition.lean (11), QAOrbitInvariance.lean (7),
+  QAFibMatrix.lean (7), QAFibMatrixGroup.lean (7), QAFibMatrixGroupIso.lean (6),
   QAFibNatPeriodicity.lean (4), QAFibNatMinimalPeriod.lean (3).
 
 Usage:
@@ -1303,6 +1303,76 @@ THEOREMS = [
         "nl_span": "the Singularity orbit contains exactly 1 state",
         "formal_identifiers": ["qa_singularity_card", "qa_singularity"],
     },
+    {
+        "id": "qa_orbit48_cosmos_satellite_disjoint",
+        "nl": "The Cosmos and Satellite orbit finsets in ZMod 9 × ZMod 9 are disjoint: no QA mod-9 state belongs to both orbit classes.",
+        "formal_goal": "theorem qa_cosmos_satellite_disjoint : Disjoint qa_cosmos qa_satellite",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Data.Fintype.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (1, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (2, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (4, 0))\n\n"
+            "def qa_satellite : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 8).image (fun k => (qa_step^[k]) (6, 3))\n\n"
+            "theorem qa_cosmos_satellite_disjoint : Disjoint qa_cosmos qa_satellite := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[191] reachability-tier-counts"],
+        "topic": "partition-disjointness",
+        "nl_span": "Cosmos and Satellite orbit finsets are disjoint",
+        "formal_identifiers": ["qa_cosmos_satellite_disjoint", "qa_cosmos", "qa_satellite"],
+    },
+    {
+        "id": "qa_orbit49_cosmos_singularity_disjoint",
+        "nl": "The Cosmos and Singularity orbit finsets in ZMod 9 × ZMod 9 are disjoint: the fixed point (0,0) is not a Cosmos state.",
+        "formal_goal": "theorem qa_cosmos_singularity_disjoint : Disjoint qa_cosmos qa_singularity",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Data.Fintype.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_cosmos : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (1, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (2, 0)) ∪\n"
+            "  (Finset.range 24).image (fun k => (qa_step^[k]) (4, 0))\n\n"
+            "def qa_singularity : Finset (ZMod 9 × ZMod 9) := {(0, 0)}\n\n"
+            "theorem qa_cosmos_singularity_disjoint : Disjoint qa_cosmos qa_singularity := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[153] DOMINANT=SINGULARITY", "[191] reachability-tier-counts"],
+        "topic": "partition-disjointness",
+        "nl_span": "Cosmos and Singularity orbit finsets are disjoint",
+        "formal_identifiers": ["qa_cosmos_singularity_disjoint", "qa_cosmos", "qa_singularity"],
+    },
+    {
+        "id": "qa_orbit50_satellite_singularity_disjoint",
+        "nl": "The Satellite and Singularity orbit finsets in ZMod 9 × ZMod 9 are disjoint: the fixed point (0,0) is not a Satellite state.",
+        "formal_goal": "theorem qa_satellite_singularity_disjoint : Disjoint qa_satellite qa_singularity",
+        "proof_lean": (
+            "import Mathlib.Data.ZMod.Basic\n"
+            "import Mathlib.Data.Finset.Basic\n"
+            "import Mathlib.Tactic\n\n"
+            "def qa_step (s : ZMod 9 × ZMod 9) : ZMod 9 × ZMod 9 := (s.1 + s.2, s.1)\n\n"
+            "def qa_satellite : Finset (ZMod 9 × ZMod 9) :=\n"
+            "  (Finset.range 8).image (fun k => (qa_step^[k]) (6, 3))\n\n"
+            "def qa_singularity : Finset (ZMod 9 × ZMod 9) := {(0, 0)}\n\n"
+            "theorem qa_satellite_singularity_disjoint : Disjoint qa_satellite qa_singularity := by native_decide\n"
+        ),
+        "tactic": "native_decide",
+        "key_lemmas": ["native_decide"],
+        "cert_refs": ["[126] orbit-structure", "[153] DOMINANT=SINGULARITY", "[191] reachability-tier-counts"],
+        "topic": "partition-disjointness",
+        "nl_span": "Satellite and Singularity orbit finsets are disjoint",
+        "formal_identifiers": ["qa_satellite_singularity_disjoint", "qa_satellite", "qa_singularity"],
+    },
 ]
 
 
@@ -1506,9 +1576,9 @@ def build_pack() -> None:
         "Machine-checked Lean 4 proofs of core QA structural claims.\n\n"
         "QAOrbits.lean (5 theorems): QA Pythagorean identity, singularity fixed-point,\n"
         "satellite period 8, cosmos period 24, universal period-24 bound.\n\n"
-        "QAOrbitPartition.lean (8 theorems): three-orbit partition (81 = 72+8+1),\n"
+        "QAOrbitPartition.lean (11 theorems): three-orbit partition (81 = 72+8+1),\n"
         "cosmos cardinality 72, satellite cardinality 8, singularity cardinality 1,\n"
-        "exact cosmos period 24, exact satellite period 8,\n"
+        "pairwise disjointness, exact cosmos period 24, exact satellite period 8,\n"
         "singularity uniqueness, exact Pisano period π(9) = 24.\n\n"
         "QAOrbitInvariance.lean (7 theorems): orbit T-invariance, sub-orbit decomposition,\n"
         "T injectivity on Cosmos, three sub-orbits pairwise disjoint.\n\n"
@@ -1569,6 +1639,9 @@ def build_pack() -> None:
         "- `qa_orbit45_pisano_period_9_exact` → cert [128] (complete π(9)=24 characterization)\n"
         "- `qa_orbit46_satellite_card` → cert [126] / [191] (Satellite orbit cardinality 8)\n"
         "- `qa_orbit47_singularity_card` → cert [153] / [191] (Singularity orbit cardinality 1)\n"
+        "- `qa_orbit48_cosmos_satellite_disjoint` → cert [126] / [191] (Cosmos ∩ Satellite = ∅)\n"
+        "- `qa_orbit49_cosmos_singularity_disjoint` → cert [126] / [153] / [191] (Cosmos ∩ Singularity = ∅)\n"
+        "- `qa_orbit50_satellite_singularity_disjoint` → cert [126] / [153] / [191] (Satellite ∩ Singularity = ∅)\n"
     )
     (PACK_DIR / "README.md").write_text(readme, encoding="utf-8")
     print(f"Wrote {PACK_DIR}/index.json and README.md")

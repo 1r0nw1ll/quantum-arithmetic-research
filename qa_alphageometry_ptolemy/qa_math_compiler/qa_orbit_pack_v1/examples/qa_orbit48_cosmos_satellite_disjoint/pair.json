@@ -1,0 +1,36 @@
+{
+  "alignment_evidence": {
+    "key_lemmas": [
+      "native_decide"
+    ],
+    "span_mappings": [
+      {
+        "formal_identifiers": [
+          "qa_cosmos_satellite_disjoint",
+          "qa_cosmos",
+          "qa_satellite"
+        ],
+        "nl_span": "Cosmos and Satellite orbit finsets are disjoint"
+      }
+    ]
+  },
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_statement": "theorem qa_cosmos_satellite_disjoint : Disjoint qa_cosmos qa_satellite",
+  "invariant_diff": {
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "natural_language_claim": "The Cosmos and Satellite orbit finsets in ZMod 9 × ZMod 9 are disjoint: no QA mod-9 state belongs to both orbit classes.",
+  "objections": [],
+  "pair_id": "QA_ORBIT_QA_ORBIT48_COSMOS_SATELLITE_DISJOINT_PAIR",
+  "schema_id": "QA_HUMAN_FORMAL_PAIR_CERT.v1",
+  "status": "PROVED",
+  "trace_ref": {
+    "replay_status": "SUCCESS",
+    "result_status": "SUCCESS",
+    "trace_id": "f1a517c5d55e495040c0cae22d4fa12f796840558c61fedf0e998886659e3983"
+  }
+}

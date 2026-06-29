@@ -1,5 +1,5 @@
 {
-  "example_count": 47,
+  "example_count": 50,
   "examples": [
     {
       "difficulty": "qa-native",
@@ -282,6 +282,24 @@
       "id": "qa_orbit47_singularity_card",
       "status": "PROVED",
       "topic": "partition"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit48_cosmos_satellite_disjoint",
+      "status": "PROVED",
+      "topic": "partition-disjointness"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit49_cosmos_singularity_disjoint",
+      "status": "PROVED",
+      "topic": "partition-disjointness"
+    },
+    {
+      "difficulty": "qa-native",
+      "id": "qa_orbit50_satellite_singularity_disjoint",
+      "status": "PROVED",
+      "topic": "partition-disjointness"
     }
   ],
   "schema_id": "QA_MATH_COMPILER_DEMO_PACK_SCHEMA.v1",

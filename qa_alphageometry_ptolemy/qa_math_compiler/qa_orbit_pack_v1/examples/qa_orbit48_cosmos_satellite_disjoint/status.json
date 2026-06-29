@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit48_cosmos_satellite_disjoint",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "f1a517c5d55e495040c0cae22d4fa12f796840558c61fedf0e998886659e3983"
+}

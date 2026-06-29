@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit49_cosmos_singularity_disjoint",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "611a6bd8e455933d8d685f506d519b71ccf67261186a511371204e6da7ee7bf9"
+}

@@ -1,0 +1,27 @@
+{
+  "constraints": {
+    "allowed_tactics": [
+      "native_decide"
+    ],
+    "max_memory_mb": 4096,
+    "max_seconds": 120
+  },
+  "context": [],
+  "created_utc": "2026-06-22T00:00:00Z",
+  "formal_goal": "theorem qa_cosmos_satellite_disjoint : Disjoint qa_cosmos qa_satellite",
+  "imports": [
+    "Mathlib.Data.ZMod.Basic",
+    "Mathlib.Tactic"
+  ],
+  "invariant_diff": {
+    "category": "partition-disjointness",
+    "cert_refs": [
+      "[126] orbit-structure",
+      "[191] reachability-tier-counts"
+    ],
+    "corpus": "qa_orbit_pack_v1"
+  },
+  "nl_statement": "The Cosmos and Satellite orbit finsets in ZMod 9 × ZMod 9 are disjoint: no QA mod-9 state belongs to both orbit classes.",
+  "schema_id": "QA_FORMAL_TASK_SCHEMA.v1",
+  "task_id": "QA_ORBIT_QA_ORBIT48_COSMOS_SATELLITE_DISJOINT_TASK"
+}

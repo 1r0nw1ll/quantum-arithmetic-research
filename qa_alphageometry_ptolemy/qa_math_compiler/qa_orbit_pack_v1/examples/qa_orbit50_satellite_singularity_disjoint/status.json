@@ -1,0 +1,10 @@
+{
+  "compressed": false,
+  "example_id": "qa_orbit50_satellite_singularity_disjoint",
+  "introduced_lemmas": 0,
+  "kernel_derived": true,
+  "replay_rate": 1.0,
+  "status": "PROVED",
+  "toolchain_id": "lean4.31.0",
+  "trace_id": "de034fe152770ece1bba1baabee7b82340524cebe3ef4c15191a9134c29b2f21"
+}

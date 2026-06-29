@@ -1,0 +1,1 @@
+The Cosmos and Singularity orbit finsets in ZMod 9 × ZMod 9 are disjoint: the fixed point (0,0) is not a Cosmos state.

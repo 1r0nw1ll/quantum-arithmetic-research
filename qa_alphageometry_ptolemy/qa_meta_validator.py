@@ -1787,7 +1787,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
       - demo_pack_v1 must PASS demo_pack validator
       - demo_pack_v1/corpus.json must deterministically rebuild byte-semantically
       - Lean, Coq/Rocq, and Isabelle live kernel smoke proofs must PASS
-      - qa_orbit_pack_v1 (47 QA-native theorems: QAOrbits.lean×5, QAOrbitPartition.lean×8, QAOrbitInvariance.lean×7, QAFibMatrix.lean×7, QAFibMatrixGroup.lean×7, QAFibMatrixGroupIso.lean×6, QAFibNatPeriodicity.lean×4, QAFibNatMinimalPeriod.lean×3: partition, Pisano π(9)=24, invariance, GL₂(ZMod 9) matrix order, orderOf(F)=24 cyclic subgroup ⟨F⟩, explicit iso ⟨F⟩ ≅ ℤ/24ℤ, Fibonacci sequence periodicity mod 9, minimality π(9)=24) must PASS
+      - qa_orbit_pack_v1 (50 QA-native theorems: QAOrbits.lean×5, QAOrbitPartition.lean×11, QAOrbitInvariance.lean×7, QAFibMatrix.lean×7, QAFibMatrixGroup.lean×7, QAFibMatrixGroupIso.lean×6, QAFibNatPeriodicity.lean×4, QAFibNatMinimalPeriod.lean×3: partition, Pisano π(9)=24, invariance, GL₂(ZMod 9) matrix order, orderOf(F)=24 cyclic subgroup ⟨F⟩, explicit iso ⟨F⟩ ≅ ℤ/24ℤ, Fibonacci sequence periodicity mod 9, minimality π(9)=24) must PASS
 
     Returns:
         None on success,

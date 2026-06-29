@@ -2589,7 +2589,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         )
 
     kernel_trace_command = [sys.executable, kernel_trace_compiler]
-    if os.environ.get("QA_MATH_COMPILER_CERTIFICATE_ONLY") == "1":
+    if os.environ.get("QA_MATH_COMPILER_LIVE_KERNELS") != "1":
         kernel_trace_command.append("--check-artifacts")
     proc = subprocess.run(
         kernel_trace_command,
@@ -2623,7 +2623,7 @@ def _validate_math_compiler_stack_if_present(base_dir: str) -> Optional[str]:
         )
 
     kernel_command = [sys.executable, live_kernel_verifier]
-    if os.environ.get("QA_MATH_COMPILER_CERTIFICATE_ONLY") == "1":
+    if os.environ.get("QA_MATH_COMPILER_LIVE_KERNELS") != "1":
         kernel_command.append("--check-report")
     proc = subprocess.run(
         kernel_command,

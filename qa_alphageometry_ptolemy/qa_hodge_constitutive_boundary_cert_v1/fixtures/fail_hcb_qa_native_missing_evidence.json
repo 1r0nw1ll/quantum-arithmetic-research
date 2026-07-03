@@ -1,0 +1,36 @@
+{
+  "schema_version": "QA_HODGE_CONSTITUTIVE_BOUNDARY_CERT.v1",
+  "candidate_family_id": 510,
+  "cert_slug": "qa_hodge_constitutive_boundary_cert_v1",
+  "expected_result": "FAIL",
+  "expected_error_code": "HCB_7",
+  "source_attribution": "Hatcher Algebraic Topology (2002) Ch. 2 ISBN 978-0-521-79540-1 for cochains; Bossavit Computational Electromagnetism (1998) ISBN 978-0-12-118710-1 for Hodge/constitutive metric-medium boundary.",
+  "dependencies": {"nilpotency_family_id": 508, "bianchi_family_id": 509},
+  "claim_policy": {
+    "claims_hodge_boundary_classification": true,
+    "claims_full_maxwell_derivation": false,
+    "claims_inhomogeneous_maxwell": false,
+    "claims_hodge_constructed": false,
+    "claims_electromagnetism": false,
+    "claims_physical_field": false,
+    "claims_observer_boundary_when_imported": true
+  },
+  "cell_basis": {"primal_faces": ["f12"], "dual_faces": ["df12"]},
+  "star_operator": {
+    "classification": "QA_NATIVE",
+    "matrix_entries": [{"row": "df12", "col": "f12", "value": {"num": 1, "den": 1}}],
+    "observer_imports": {},
+    "qa_native_evidence": {
+      "integer_cell_pairing": true,
+      "qa_invariant_metric_source": false,
+      "exact_orientation_witness": true,
+      "no_observer_imports": true
+    }
+  },
+  "expected_boundary_verdict": "QA_NATIVE",
+  "downstream_claim_policy": {
+    "allows_conditional_inhomogeneous_recovery": false,
+    "allows_full_maxwell_derivation": false,
+    "requires_m4_conditional_scope": false
+  }
+}

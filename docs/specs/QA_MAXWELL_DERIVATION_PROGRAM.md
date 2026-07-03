@@ -154,9 +154,11 @@ What is still not proved: inhomogeneous Maxwell, a Hodge star, constitutive
 laws, sources, charge/current generation, units, physical electromagnetism, or
 observer-side numeric fields.
 
-### M2: QA Hodge Boundary / Constitutive Gate
+### M2: [510] QA Hodge Boundary / Constitutive Gate
 
-Candidate slug: `qa_hodge_constitutive_boundary_cert_v1`
+Slug: `qa_hodge_constitutive_boundary_cert_v1`
+
+Status: built 2026-07-03.
 
 Claim: classify whether `star_QA` is QA-native or observer-side.
 
@@ -168,6 +170,14 @@ Allowed outcomes:
 
 This gate decides whether the later inhomogeneous claim can be called a QA
 derivation or only a conditional recovery.
+
+Implemented checks: `HCB_1` through `HCB_8`; 1 PASS + 5 FAIL fixtures.
+
+Built result: the v1 passing witness is `OBSERVER_BOUNDARY`. It uses exact
+rational matrix entries for `star_QA`, but metric signature, orientation, units,
+and medium parameters are declared observer imports. Therefore this branch does
+not license "QA derives full Maxwell"; it licenses only a future conditional
+inhomogeneous recovery if M3/M4 are built against the declared boundary.
 
 ### M3: QA Source Continuity
 
@@ -237,7 +247,7 @@ inside it, until the QA-native carrier/differential/Hodge/source pieces exist.
 | "QA has derived Maxwell" | Reject today |
 | "QA cannot derive Maxwell" | Not established |
 | "QA derives homogeneous Maxwell/Bianchi identities" | Built in `[509]` for exact finite field carriers only; not full Maxwell |
-| "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | Future M4 candidate, not full derivation |
+| "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | M2 boundary built in `[510]`; still future M4, and still not full derivation |
 | "QA derives all Maxwell equations from QA-native primitives" | Future M5 only if M2 is `QA_NATIVE` and M1-M4 pass |
 | "Whittaker `[507]` derives Maxwell" | Reject |
 | "Whittaker `[507]` supplies exact packet algebra compatible with a scalar-potential EM representation" | Already certified, narrow |

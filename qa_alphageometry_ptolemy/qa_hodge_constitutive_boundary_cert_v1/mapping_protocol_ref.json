@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Hodge Constitutive Boundary Cert [510]. M2 of docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md, building on [508] and [509]. Primary mathematical sources: Allen Hatcher, Algebraic Topology (2002), Ch. 2, ISBN 978-0-521-79540-1; Alain Bossavit, Computational Electromagnetism (1998), ISBN 978-0-12-118710-1. Claims only classification of star_QA as OBSERVER_BOUNDARY, QA_NATIVE, or INVALID. Does not derive full Maxwell, inhomogeneous Maxwell, source laws, physical fields, or electromagnetism."
+}

@@ -11136,6 +11136,23 @@ def _validate_qa_field_2form_bianchi_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_hodge_constitutive_boundary_cert_family(base_dir):
+    """Cert [510]: QA Hodge Constitutive Boundary -- M2 of the QA Maxwell derivation program. CLAIM (boundary gate): classify a declared Hodge/constitutive operator star_QA as OBSERVER_BOUNDARY, QA_NATIVE, or INVALID. The v1 PASS fixture certifies an honest OBSERVER_BOUNDARY case: exact rational matrix entries are declared over finite primal/dual face bases, but metric signature, orientation, units, and medium parameters are explicitly observer imports, so downstream inhomogeneous Maxwell can only be conditional recovery unless a future cert supplies QA-native Hodge evidence. This cert does NOT derive full Maxwell equations, does NOT prove inhomogeneous Maxwell, does NOT construct a Hodge star, does NOT derive source laws, does NOT prove electromagnetism, and does NOT claim physical fields. Checks HCB_1/HCB_2/HCB_3/HCB_4/HCB_5/HCB_6/HCB_7/HCB_8/SCHEMA; 1 PASS + 5 FAIL fixtures; self-test ok. Primary math sources: Hatcher A. (2002) Algebraic Topology Ch. 2 ISBN 978-0-521-79540-1; Bossavit A. (1998) Computational Electromagnetism ISBN 978-0-12-118710-1. Scoped by docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md. Derived 2026-07-03."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_hodge_constitutive_boundary_cert_v1")
+    validator = os.path.join(fam_dir, "qa_hodge_constitutive_boundary_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_transform_unification_cert_family(base_dir):
     """Cert [505]: QA Transform Unification -- QA G-function provides a complete matched-group channel bank (Mühlbach et al. arXiv:2605.11589): (TU_1) matched-group bandwidth = 33 = 24+8+1 (one DFT per orbit class), (TU_2) 3 independent Cosmos sub-orbit G-channels (A[0] values 744693/658293/574269 distinct; lag-0 dominant in each), (TU_3) cross-class energy isolation cosmos_g_total=9963 > satellite_g_total=1377 > singularity_g=405; 1 PASS + 3 FAIL fixtures; self-test ok."""
     import subprocess
@@ -14439,6 +14456,11 @@ FAMILY_SWEEPS = [
      "QA Field 2-Form Bianchi Cert [509]. M1 of the QA Maxwell derivation program. CLAIM (narrow): for a finite declared oriented QA cell complex with positive integer cell labels and an exact integer edge-potential 1-cochain A, the face field 2-cochain F=delta(A) is recomputed exactly and delta(F)=0 on every declared volume. This cert proves the homogeneous Maxwell/Bianchi identity only for the declared exact finite field carrier, as the coboundary-square-zero identity over the [508] chain/cochain substrate. It does NOT derive full Maxwell equations, inhomogeneous Maxwell, a Hodge star or constitutive law, source laws, electromagnetism, physical fields, or Whittaker operators. Checks BIA_1/BIA_2/BIA_3/BIA_4/BIA_5/BIA_6/BIA_7/BIA_8/SCHEMA; 1 PASS + 4 FAIL fixtures; self-test ok. Primary math source: Hatcher A. (2002) Algebraic Topology Ch. 2 ISBN 978-0-521-79540-1. Scoped by docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md. Derived 2026-07-03.",
      "509_qa_field_2form_bianchi_cert",
      "qa_field_2form_bianchi_cert_v1", True),
+    (510, "QA Hodge Constitutive Boundary Cert family",
+     _validate_qa_hodge_constitutive_boundary_cert_family,
+     "QA Hodge Constitutive Boundary Cert [510]. M2 of the QA Maxwell derivation program. CLAIM (boundary gate): classify a declared Hodge/constitutive operator star_QA as OBSERVER_BOUNDARY, QA_NATIVE, or INVALID. The v1 PASS fixture certifies an honest OBSERVER_BOUNDARY case: exact rational matrix entries are declared over finite primal/dual face bases, but metric signature, orientation, units, and medium parameters are explicitly observer imports. Therefore downstream inhomogeneous Maxwell can only be conditional recovery unless a future cert supplies QA-native Hodge evidence. This cert does NOT derive full Maxwell equations, inhomogeneous Maxwell, a Hodge star, source laws, electromagnetism, or physical fields. Checks HCB_1/HCB_2/HCB_3/HCB_4/HCB_5/HCB_6/HCB_7/HCB_8/SCHEMA; 1 PASS + 5 FAIL fixtures; self-test ok. Primary math sources: Hatcher A. (2002) Algebraic Topology Ch. 2 ISBN 978-0-521-79540-1; Bossavit A. (1998) Computational Electromagnetism ISBN 978-0-12-118710-1. Scoped by docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md. Derived 2026-07-03.",
+     "510_qa_hodge_constitutive_boundary_cert",
+     "qa_hodge_constitutive_boundary_cert_v1", True),
     (505, "QA Transform Unification Cert family",
      _validate_qa_transform_unification_cert_family,
      "QA Transform Unification Cert [505]. CLAIM: QA G-function G(b,e)=(b+e)*(b+e)+e*e provides a complete matched-group channel bank (Mühlbach et al. arXiv:2605.11589 Peter-Weyl/DFT unification). (TU_1) matched-group bandwidth = 33 = 24+8+1: Z/24Z (Cosmos) contributes 24 irreps, Z/8Z (Satellite) contributes 8 irreps, Z/1Z (Singularity) contributes 1 irrep; total independent frequency channels = 33; (TU_2) 3 independent Cosmos sub-orbit G-channels: A[0] autocorrelation values for starting pairs O1=(1,1), O2=(1,3), O3=(1,4) are 744693, 658293, 574269 — all distinct (three non-degenerate independent channel banks within the Cosmos class); lag-0 dominant in each sub-orbit and in the Satellite (A[0]=292005 > all A[k] k>0); (TU_3) cross-class energy isolation: Cosmos G-total (sum over all 72 pairs) = 9963, Satellite G-total (sum over all 8 pairs) = 1377, Singularity G(9,9) = 405; strict ordering 9963 > 1377 > 405 — three orbit classes at strictly disjoint energy levels (Cosmos high-band, Satellite mid-band, Singularity DC). arXiv:2605.11589 context: Mühlbach et al. prove that for any group G, every G-equivariant covariance matrix is diagonalized by the Peter-Weyl basis (irreps of G); for cyclic G=Z/n the Peter-Weyl basis = the DFT on Z/n (matched-group transform is provably optimal = KLT for G-stationary signals). For QA: G = Z/24Z (Cosmos) × Z/8Z (Satellite) × Z/1Z (Singularity); bandwidth = Σ|Gᵢ| per orbit class = 33. Theorem NT: DFT eigenvalues (24th/8th roots of unity) are observer projections; channel structure certified entirely by integer G-value sums and autocorrelations. All checks pure integer arithmetic. Primary: Mühlbach P. et al. (2026) arXiv:2605.11589; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Companion: [500][501][503][504]. Checks TU_1/TU_2/TU_3/SRC; 1 PASS + 3 FAIL fixtures; self-test ok. Derived 2026-06-23.",

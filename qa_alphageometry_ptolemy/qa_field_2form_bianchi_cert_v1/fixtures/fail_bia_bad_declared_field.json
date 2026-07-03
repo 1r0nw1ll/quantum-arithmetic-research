@@ -1,0 +1,43 @@
+{
+  "schema_version": "QA_FIELD_2FORM_BIANCHI_CERT.v1",
+  "candidate_family_id": 509,
+  "cert_slug": "qa_field_2form_bianchi_cert_v1",
+  "expected_result": "FAIL",
+  "expected_error_code": "BIA_7",
+  "source_attribution": "Hatcher, Algebraic Topology (2002), Ch. 2 boundary operator, ISBN 978-0-521-79540-1; QA_MAXWELL_DERIVATION_PROGRAM.md M1.",
+  "claim_policy": {
+    "claims_exact_field_2form_bianchi": true,
+    "claims_homogeneous_maxwell_bianchi": true,
+    "claims_full_maxwell_derivation": false,
+    "claims_inhomogeneous_maxwell": false,
+    "claims_constitutive_hodge": false,
+    "claims_source_law": false,
+    "claims_electromagnetism": false,
+    "claims_physical_field": false,
+    "claims_whittaker_operator": false,
+    "claims_observer_field_values": false,
+    "claims_scalar_wave_energy_physics": false
+  },
+  "cell_complex": {
+    "vertices": [1, 2, 3, 4],
+    "edges": [
+      {"id": 1, "tail": 1, "head": 2},
+      {"id": 2, "tail": 1, "head": 3},
+      {"id": 3, "tail": 1, "head": 4},
+      {"id": 4, "tail": 2, "head": 3},
+      {"id": 5, "tail": 2, "head": 4},
+      {"id": 6, "tail": 3, "head": 4}
+    ],
+    "faces": [
+      {"id": 1, "boundary": [{"edge": 1, "sign": 1}, {"edge": 4, "sign": 1}, {"edge": 2, "sign": -1}]},
+      {"id": 2, "boundary": [{"edge": 1, "sign": 1}, {"edge": 5, "sign": 1}, {"edge": 3, "sign": -1}]},
+      {"id": 3, "boundary": [{"edge": 2, "sign": 1}, {"edge": 6, "sign": 1}, {"edge": 3, "sign": -1}]},
+      {"id": 4, "boundary": [{"edge": 4, "sign": 1}, {"edge": 6, "sign": 1}, {"edge": 5, "sign": -1}]}
+    ],
+    "volumes": [
+      {"id": 1, "boundary": [{"face": 4, "sign": 1}, {"face": 3, "sign": -1}, {"face": 2, "sign": 1}, {"face": 1, "sign": -1}]}
+    ]
+  },
+  "edge_potential_A": {"values": {"1": 5, "2": -3, "3": 8, "4": 13, "5": -7, "6": 2}},
+  "declared_field_F": {"values": {"1": 21, "2": -10, "3": -9, "4": 23}}
+}

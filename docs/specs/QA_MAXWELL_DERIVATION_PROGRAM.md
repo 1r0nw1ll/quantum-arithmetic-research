@@ -128,9 +128,11 @@ Rejected: any mention that this already proves electromagnetism.
 
 Implemented checks: `DN_1` through `DN_7`; 1 PASS + 4 FAIL fixtures.
 
-### M1: QA Field 2-Form Bianchi
+### M1: [509] QA Field 2-Form Bianchi
 
-Candidate slug: `qa_field_2form_bianchi_cert_v1`
+Slug: `qa_field_2form_bianchi_cert_v1`
+
+Status: built 2026-07-03.
 
 Claim: if `A_QA` is a QA 1-carrier and `F_QA = delta_QA(A_QA)`, then
 `delta_QA(F_QA) = 0`; under a declared observer projection this matches the
@@ -140,6 +142,17 @@ Allowed: "QA derives the homogeneous Maxwell/Bianchi identities for exact
 field carriers."
 
 Rejected: "QA derives all Maxwell equations."
+
+Implemented checks: `BIA_1` through `BIA_8`; 1 PASS + 4 FAIL fixtures.
+
+What is actually proved: an exact finite integer edge-potential 1-cochain `A`
+induces a face-field 2-cochain `F = delta(A)`, and the signed sum `delta(F)`
+vanishes on every declared volume. This is the discrete exterior Bianchi
+identity / homogeneous Maxwell side for exact field carriers.
+
+What is still not proved: inhomogeneous Maxwell, a Hodge star, constitutive
+laws, sources, charge/current generation, units, physical electromagnetism, or
+observer-side numeric fields.
 
 ### M2: QA Hodge Boundary / Constitutive Gate
 
@@ -223,7 +236,7 @@ inside it, until the QA-native carrier/differential/Hodge/source pieces exist.
 | --- | --- |
 | "QA has derived Maxwell" | Reject today |
 | "QA cannot derive Maxwell" | Not established |
-| "QA derives homogeneous Maxwell/Bianchi identities" | Future M1 candidate, after M0 |
+| "QA derives homogeneous Maxwell/Bianchi identities" | Built in `[509]` for exact finite field carriers only; not full Maxwell |
 | "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | Future M4 candidate, not full derivation |
 | "QA derives all Maxwell equations from QA-native primitives" | Future M5 only if M2 is `QA_NATIVE` and M1-M4 pass |
 | "Whittaker `[507]` derives Maxwell" | Reject |

@@ -13,6 +13,7 @@ Primary source already used by `[507]`:
 - E. T. Whittaker (1904), "On an expression of the electromagnetic field due
   to electrons by means of two scalar potential functions," Proc. London Math.
   Soc. s2-1:367-372. DOI: `10.1112/plms/s2-1.1.367`.
+- Maxwell-derivation boundary: `docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md`.
 
 Mie-scattering source anchors:
 
@@ -46,7 +47,7 @@ Allowed claim:
 
 Rejected claims:
 
-- QA derives Maxwell equations.
+- QA has already derived Maxwell equations.
 - QA proves electromagnetism.
 - QA reconstructs arbitrary physical fields.
 - QA proves scalar-potential energy, longitudinal free energy, or any
@@ -193,9 +194,11 @@ Minimum fail cases:
 | "Whittaker operators give exact Fraction packet coefficients" | Already certified in `[507]` |
 | "Evaluate this finite packet at observer points" | Layer 5 observer boundary, allowed with two-crossing accounting |
 | "This approximates a smooth Whittaker angular integral" | Layer 5 only with explicit `C * L * K_max*K_max * Delta_m` bound |
-| "QA derives Maxwell" | Reject |
+| "QA has already derived Maxwell" | Reject |
+| "QA cannot derive Maxwell" | Not established |
+| "QA derives homogeneous Maxwell/Bianchi identities" | Separate Maxwell program candidate; see `QA_MAXWELL_DERIVATION_PROGRAM.md` |
+| "QA derives full Maxwell from QA-native primitives" | Future claim only after the Maxwell derivation program certifies QA-native field carrier, differential, Hodge/constitutive object, and source law |
 | "QA proves electromagnetism" | Reject |
 | "Mie modes are indexed by `(n,m)` up to cutoff `N`" | Layer 6 mode-lattice cert candidate |
 | "QA computes Mie scattering cross sections" | Reject inside cert; observer tool only |
 | "Scalar potentials contain structured free energy" | Reject |
-

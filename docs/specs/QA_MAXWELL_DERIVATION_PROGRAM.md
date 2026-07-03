@@ -297,7 +297,7 @@ Allowed:
 - media/constitutive longitudinal components;
 - gauge or observer-projection longitudinal terms.
 
-Rejected:
+Not certified by this cert:
 
 - extra source-free vacuum scalar radiation modes;
 - longitudinal/free-energy claims;
@@ -306,7 +306,13 @@ Rejected:
 - transverse-only Maxwell premise;
 - physical electromagnetism beyond `[513]`.
 
-Implemented checks: `LSE_1` through `LSE_7`; 1 PASS + 7 FAIL fixtures.
+Disproof boundary:
+
+```text
+This cert rejects unsupported scalar/longitudinal claims only as claims inside this cert; it does not globally disprove source-free scalar modes, free-energy claims, Bearden/Pond/SVP claims, or scalar-potential physics.
+```
+
+Implemented checks: `LSE_1` through `LSE_8`; 1 PASS + 8 FAIL fixtures.
 
 ## Relation To Whittaker Layers
 
@@ -334,7 +340,8 @@ inside it, until the QA-native carrier/differential/Hodge/source pieces exist.
 | "QA derives all Maxwell equations from QA-native primitives" | Built as `[513]` only within certified carrier/source/metric/unit/projection conventions |
 | "QA uses Heaviside/Hertz/Gibbs vector reduction as the foundation for scalar/longitudinal EM" | Reject; `[514]` explicitly forbids this premise |
 | "QA admits scalar/longitudinal EM terms" | Built in `[514]` only as certified carrier/source/boundary/media/gauge/projection structure |
-| "QA proves an extra source-free vacuum scalar EM radiation mode" | Reject |
+| "QA proves an extra source-free vacuum scalar EM radiation mode" | Not certified by `[514]`; requires a separate positive cert |
+| "`[514]` disproves source-free scalar modes, free energy, Bearden/Pond/SVP, or scalar-potential physics" | Reject; `[514]` is not a global disproof cert |
 | "Whittaker `[507]` derives Maxwell" | Reject |
 | "Whittaker `[507]` supplies exact packet algebra compatible with a scalar-potential EM representation" | Already certified, narrow |
 

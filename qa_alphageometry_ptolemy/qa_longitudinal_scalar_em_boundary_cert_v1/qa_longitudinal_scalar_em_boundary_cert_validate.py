@@ -13,8 +13,9 @@ Claim: after bounded Maxwell assembly [513], scalar/longitudinal EM language is
 admissible only as representation-bound structure: scalar potentials, gauge
 pieces, constrained/source/boundary/media components, or observer projections.
 The cert explicitly rejects treating Heaviside/Hertz/Gibbs vector reductions as
-premises for the scalar/longitudinal question, and also rejects an extra
-source-free vacuum scalar-radiation mode.
+premises for the scalar/longitudinal question. It rejects extra scalar/free
+energy assertions only as uncertified claims inside this cert; it does not
+globally disprove them.
 """
 
 from __future__ import annotations
@@ -33,6 +34,11 @@ REQUIRED_PHRASE = (
     "the longitudinal/scalar EM question; scalar and longitudinal terms are "
     "admitted only as certified carrier, source, boundary, media, gauge, or "
     "observer-projection structure."
+)
+REQUIRED_DISPROOF_PHRASE = (
+    "This cert rejects unsupported scalar/longitudinal claims only as claims "
+    "inside this cert; it does not globally disprove source-free scalar modes, "
+    "free-energy claims, Bearden/Pond/SVP claims, or scalar-potential physics."
 )
 
 
@@ -138,9 +144,26 @@ def _validate_claim_policy(payload: dict[str, Any]) -> None:
         _require(policy.get(key) is False, "LSE_5", f"forbidden claim must be false: {key}")
 
 
+def _validate_disproof_boundary(payload: dict[str, Any]) -> None:
+    boundary = payload.get("disproof_boundary")
+    _require(isinstance(boundary, dict), "LSE_6", "disproof_boundary must be present")
+    _require(boundary.get("statement") == REQUIRED_DISPROOF_PHRASE, "LSE_6", "disproof boundary statement must match required phrase exactly")
+    _require(boundary.get("rejects_meaning") == "unsupported_inside_this_cert_not_global_disproof", "LSE_6", "rejects_meaning must preserve scope")
+    _require(boundary.get("does_not_disprove_global_claims") is True, "LSE_6", "must explicitly avoid global-disproof claim")
+    _require(boundary.get("requires_separate_cert_for_positive_claims") is True, "LSE_6", "positive claims require separate cert")
+    forbidden = [
+        "claims_disproof_of_source_free_scalar_modes",
+        "claims_disproof_of_free_energy",
+        "claims_disproof_of_bearden_pond_svp",
+        "claims_disproof_of_scalar_potential_physics",
+    ]
+    for key in forbidden:
+        _require(boundary.get(key) is False, "LSE_6", f"disproof overclaim must be false: {key}")
+
+
 def _validate_negative_evidence(payload: dict[str, Any]) -> None:
     evidence = payload.get("negative_evidence")
-    _require(isinstance(evidence, dict), "LSE_6", "negative_evidence must be present")
+    _require(isinstance(evidence, dict), "LSE_7", "negative_evidence must be present")
     required_true = [
         "no_transverse_only_assumption",
         "no_heaviside_vector_premise",
@@ -151,11 +174,11 @@ def _validate_negative_evidence(payload: dict[str, Any]) -> None:
         "no_potential_field_equivalence",
     ]
     for key in required_true:
-        _require(evidence.get(key) is True, "LSE_6", f"negative evidence must be true: {key}")
+        _require(evidence.get(key) is True, "LSE_7", f"negative evidence must be true: {key}")
 
 
 def validate_payload(payload: dict[str, Any]) -> dict[str, Any]:
-    _reject_float(payload, "LSE_7")
+    _reject_float(payload, "LSE_8")
     _require(payload.get("schema_version") == SCHEMA_VERSION, "SCHEMA", "wrong schema_version")
     _require(payload.get("candidate_family_id") == FAMILY_ID, "SCHEMA", "wrong candidate_family_id")
     _require(payload.get("cert_slug") == CERT_SLUG, "SCHEMA", "wrong cert_slug")
@@ -164,13 +187,15 @@ def validate_payload(payload: dict[str, Any]) -> dict[str, Any]:
     _validate_boundary_statement(payload)
     _validate_longitudinal_policy(payload)
     _validate_claim_policy(payload)
+    _validate_disproof_boundary(payload)
     _validate_negative_evidence(payload)
     return {
         "ok": True,
         "candidate_family_id": FAMILY_ID,
         "cert_slug": CERT_SLUG,
         "representation_boundary_statement": REQUIRED_PHRASE,
-        "checks": ["LSE_1", "LSE_2", "LSE_3", "LSE_4", "LSE_5", "LSE_6", "LSE_7"],
+        "disproof_boundary_statement": REQUIRED_DISPROOF_PHRASE,
+        "checks": ["LSE_1", "LSE_2", "LSE_3", "LSE_4", "LSE_5", "LSE_6", "LSE_7", "LSE_8"],
     }
 
 

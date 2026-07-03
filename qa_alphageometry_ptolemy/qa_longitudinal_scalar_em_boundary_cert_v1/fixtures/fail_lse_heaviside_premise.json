@@ -52,5 +52,15 @@
     "no_hidden_physical_medium": true,
     "no_free_scalar_energy_channel": true,
     "no_potential_field_equivalence": true
+  },
+  "disproof_boundary": {
+    "statement": "This cert rejects unsupported scalar/longitudinal claims only as claims inside this cert; it does not globally disprove source-free scalar modes, free-energy claims, Bearden/Pond/SVP claims, or scalar-potential physics.",
+    "rejects_meaning": "unsupported_inside_this_cert_not_global_disproof",
+    "does_not_disprove_global_claims": true,
+    "requires_separate_cert_for_positive_claims": true,
+    "claims_disproof_of_source_free_scalar_modes": false,
+    "claims_disproof_of_free_energy": false,
+    "claims_disproof_of_bearden_pond_svp": false,
+    "claims_disproof_of_scalar_potential_physics": false
   }
 }

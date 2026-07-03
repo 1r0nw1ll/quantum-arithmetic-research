@@ -21,10 +21,16 @@ Allowed: scalar-potential carriers; longitudinal source components;
 boundary-constrained longitudinal components; media/constitutive longitudinal
 components; gauge or observer-projection longitudinal terms.
 
-Rejected: an extra source-free vacuum scalar radiation mode; longitudinal/free
-energy; Bearden/Pond/SVP scalar energy; scalar-potential equals physical-field
-collapse; transverse-only Maxwell premise; physical electromagnetism beyond
-`[513]`.
+Not certified by this cert: an extra source-free vacuum scalar radiation mode;
+longitudinal/free energy; Bearden/Pond/SVP scalar energy; scalar-potential
+equals physical-field collapse; transverse-only Maxwell premise; physical
+electromagnetism beyond `[513]`.
+
+This is a scope boundary, not a global disproof:
+
+```text
+This cert rejects unsupported scalar/longitudinal claims only as claims inside this cert; it does not globally disprove source-free scalar modes, free-energy claims, Bearden/Pond/SVP claims, or scalar-potential physics.
+```
 
 ## Source Anchor
 
@@ -42,10 +48,11 @@ collapse; transverse-only Maxwell premise; physical electromagnetism beyond
 | `LSE_1` | Depends on `[513]`, `[510]`, `[511]`, and `[507]` context, while preserving `[513]`'s exact bounded Maxwell phrase and rejecting Whittaker as derivation premise. |
 | `LSE_2` | Source lineage is Maxwell 1865 plus QA finite cochain exterior calculus; Heaviside/Hertz/Gibbs reductions must not be premises. |
 | `LSE_3` | Representation-boundary statement matches the required phrase exactly. |
-| `LSE_4` | Allows only constrained scalar/longitudinal roles and rejects free vacuum scalar-mode and energy overclaims. |
+| `LSE_4` | Allows only constrained scalar/longitudinal roles and treats free vacuum scalar-mode and energy assertions as uncertified inside this cert. |
 | `LSE_5` | Claim policy is representation-boundary only, with no new physical radiation mode or unbounded Maxwell claim. |
-| `LSE_6` | Negative evidence explicitly rejects transverse-only, Heaviside, Hertz, Gibbs, hidden medium, free scalar energy, and potential-field equivalence assumptions. |
-| `LSE_7` | Floats are rejected anywhere in the payload. |
+| `LSE_6` | Disproof boundary: unsupported claims are not certified here, but are not globally disproven by this cert. |
+| `LSE_7` | Negative evidence explicitly excludes transverse-only, Heaviside, Hertz, Gibbs, hidden medium, free scalar energy, and potential-field equivalence assumptions as premises. |
+| `LSE_8` | Floats are rejected anywhere in the payload. |
 
 ## Fixtures
 
@@ -55,10 +62,11 @@ collapse; transverse-only Maxwell premise; physical electromagnetism beyond
 | `fail_lse_wrong_bounded_statement.json` | FAIL `LSE_1` | Rejects drift from `[513]`'s bounded Maxwell phrase. |
 | `fail_lse_heaviside_premise.json` | FAIL `LSE_2` | Rejects Heaviside vector reduction as a premise. |
 | `fail_lse_missing_boundary_phrase.json` | FAIL `LSE_3` | Rejects vague scalar-longitudinal approval. |
-| `fail_lse_free_vacuum_scalar_mode.json` | FAIL `LSE_4` | Rejects extra source-free vacuum scalar mode. |
+| `fail_lse_free_vacuum_scalar_mode.json` | FAIL `LSE_4` | Rejects certifying an extra source-free vacuum scalar mode inside this cert. |
 | `fail_lse_physical_radiation_overclaim.json` | FAIL `LSE_5` | Rejects new physical radiation-mode overclaim. |
-| `fail_lse_missing_negative_evidence.json` | FAIL `LSE_6` | Rejects missing transverse-only guardrail. |
-| `fail_lse_float_leak.json` | FAIL `LSE_7` | Rejects observer numeric leakage. |
+| `fail_lse_global_disproof_overclaim.json` | FAIL `LSE_6` | Rejects claiming this cert globally disproves free-energy/scalar claims. |
+| `fail_lse_missing_negative_evidence.json` | FAIL `LSE_7` | Rejects missing transverse-only guardrail. |
+| `fail_lse_float_leak.json` | FAIL `LSE_8` | Rejects observer numeric leakage. |
 
 ## Family Relationships
 
@@ -77,5 +85,5 @@ python3 qa_alphageometry_ptolemy/qa_longitudinal_scalar_em_boundary_cert_v1/qa_l
 Expected summary:
 
 ```json
-{"ok":true,"n_pass":1,"n_fail":7}
+{"ok":true,"n_pass":1,"n_fail":8}
 ```

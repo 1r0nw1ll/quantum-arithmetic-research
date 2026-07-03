@@ -1,0 +1,137 @@
+{
+  "schema_version": "QA_WHITTAKER_TWO_SCALAR_POTENTIAL_BRIDGE_CERT.v1",
+  "candidate_family_id": 507,
+  "cert_slug": "qa_whittaker_two_scalar_potential_bridge_cert_v1",
+  "expected_result": "FAIL",
+  "source_attribution": "Whittaker 1904, On an expression of the electromagnetic field due to electrons by means of two scalar potential functions, Proc. London Math. Soc. s2-1:367-372, DOI: 10.1112/plms/s2-1.1.367; verbatim p.370 sec.3 operator; dependency [273] supplies the direction.",
+  "non_claims": [
+    "Does not perform trigonometric evaluation.",
+    "Does not perform numerical approximation.",
+    "Does not prove Maxwell equations.",
+    "Does not prove electromagnetism.",
+    "Does not reconstruct any physical field.",
+    "Does not claim Mie scattering.",
+    "Does not claim scalar wave energy physics."
+  ],
+  "dependency": {
+    "family_id": 273,
+    "slug": "qa_whittaker_rational_direction_s2_cert_v1",
+    "chart": "inverse_stereographic_excluding_south_pole",
+    "registered": true
+  },
+  "lineage_context": {
+    "family_id": 498,
+    "slug": "qa_whittaker_phase_packet_algebra_cert_v1",
+    "hard_dependency": false
+  },
+  "m": 3,
+  "coefficient_source": "declared",
+  "forbidden_operations": [],
+  "numerical_policy": {
+    "uses_trig_evaluation": false,
+    "uses_float_pass_fail": false,
+    "uses_numerical_approximation": false,
+    "uses_fitted_coefficients": false
+  },
+  "claim_policy": {
+    "claims_maxwell_derivation": true,
+    "claims_electromagnetism": false,
+    "claims_physical_field_reconstruction": false,
+    "claims_scalar_wave_energy_physics": false,
+    "claims_mie_scattering": false,
+    "claims_layer5_or_beyond": false
+  },
+  "packets": [
+    {
+      "packet_id": "P0",
+      "omega_packet": [
+        3,
+        4,
+        0,
+        5
+      ],
+      "k": {
+        "num": 1,
+        "den": 1
+      },
+      "v": {
+        "num": 1,
+        "den": 1
+      },
+      "c": {
+        "num": 2,
+        "den": 1
+      },
+      "wave_equation_satisfied": false,
+      "coefficients": {
+        "dx_phi": {
+          "num": 0,
+          "den": 1
+        },
+        "dx_psi": {
+          "num": 2,
+          "den": 5
+        },
+        "dy_phi": {
+          "num": 0,
+          "den": 1
+        },
+        "dy_psi": {
+          "num": -3,
+          "den": 10
+        },
+        "dz_phi": {
+          "num": 1,
+          "den": 4
+        },
+        "dz_psi": {
+          "num": 0,
+          "den": 1
+        },
+        "hx_phi": {
+          "num": 2,
+          "den": 5
+        },
+        "hx_psi": {
+          "num": 0,
+          "den": 1
+        },
+        "hy_phi": {
+          "num": -3,
+          "den": 10
+        },
+        "hy_psi": {
+          "num": 0,
+          "den": 1
+        },
+        "hz_phi": {
+          "num": 0,
+          "den": 1
+        },
+        "hz_psi": {
+          "num": -1,
+          "den": 1
+        }
+      },
+      "divergences": {
+        "div_d_phi": {
+          "num": 0,
+          "den": 1
+        },
+        "div_d_psi": {
+          "num": 0,
+          "den": 1
+        },
+        "div_h_phi": {
+          "num": 0,
+          "den": 1
+        },
+        "div_h_psi": {
+          "num": 0,
+          "den": 1
+        }
+      }
+    }
+  ],
+  "expected_error_code": "WSPB_8"
+}

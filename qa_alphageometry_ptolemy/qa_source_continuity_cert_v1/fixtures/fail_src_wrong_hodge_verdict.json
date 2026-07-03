@@ -3,7 +3,7 @@
   "candidate_family_id": 511,
   "cert_slug": "qa_source_continuity_cert_v1",
   "expected_result": "FAIL",
-  "expected_error_code": "SRC_2",
+  "expected_error_code": "SRC_1",
   "source_attribution": "Hatcher Algebraic Topology (2002) Ch. 2 ISBN 978-0-521-79540-1 for d(d)=0; Bossavit Computational Electromagnetism (1998) ISBN 978-0-12-118710-1 for Hodge/constitutive boundary context.",
   "dependencies": {"nilpotency_family_id": 508, "bianchi_family_id": 509, "hodge_boundary_family_id": 510, "hodge_boundary_verdict": "QA_NATIVE"},
   "claim_policy": {

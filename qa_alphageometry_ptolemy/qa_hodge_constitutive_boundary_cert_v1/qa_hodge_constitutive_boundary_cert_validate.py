@@ -184,6 +184,13 @@ def _validate_qa_native(payload: dict[str, Any]) -> None:
     _require(not missing, "HCB_7", f"QA-native evidence missing: {missing}")
     imports = star.get("observer_imports")
     _require(imports in ({}, None), "HCB_7", "QA_NATIVE star must not declare observer imports")
+    downstream = payload.get("downstream_claim_policy")
+    _require(isinstance(downstream, dict), "HCB_7", "downstream_claim_policy must be present")
+    _require(downstream.get("allows_conditional_inhomogeneous_recovery") is False, "HCB_7", "QA-native Hodge path must not be labeled conditional observer recovery")
+    _require(downstream.get("allows_qa_native_inhomogeneous_path") is True, "HCB_7", "QA-native Hodge path must be explicitly opened")
+    _require(downstream.get("requires_source_evidence") is True, "HCB_7", "QA-native Hodge still requires source evidence before inhomogeneous Maxwell")
+    _require(downstream.get("allows_full_maxwell_derivation") is False, "HCB_7", "full Maxwell remains blocked until source/M4/M5 evidence is present")
+    _require(downstream.get("requires_m4_conditional_scope") is False, "HCB_7", "QA-native Hodge path is not the observer-boundary M4 conditional branch")
 
 
 def _validate_invalid(payload: dict[str, Any]) -> None:

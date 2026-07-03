@@ -16,14 +16,18 @@ J = delta(starF)
 delta(J) = 0
 ```
 
-The v1 path consumes `[510]`'s `OBSERVER_BOUNDARY` Hodge verdict. Therefore
-`starF` is treated as a declared exact cochain after an observer-boundary Hodge
-step, not as a QA-native derived physical field.
+The cert now has two positive paths:
+
+- `OBSERVER_BOUNDARY`: consumes `[510]`'s observer-boundary Hodge verdict; this
+  remains conditional recovery scaffolding.
+- `QA_NATIVE`: consumes `[510]`'s QA-native Hodge verdict and requires explicit
+  QA source-carrier evidence (`J` is an exact cochain, no observer source
+  imports). This fixes the native source-carrier side of the blocker, while
+  still not claiming physical charge/current generation.
 
 This cert does not derive sources, does not prove inhomogeneous Maxwell, does
 not derive full Maxwell, does not prove electromagnetism, does not claim
-physical charge/current generation, does not claim physical fields, and does
-not claim a QA-native Hodge star.
+physical charge/current generation, and does not claim physical fields.
 
 ## Source Anchor
 
@@ -45,8 +49,8 @@ QA context:
 
 | Check | Meaning |
 | --- | --- |
-| `SRC_1` | Claim policy allows only source continuity and rejects source-generation, inhomogeneous-Maxwell, full-Maxwell, electromagnetism, physical-current, physical-field, and QA-native-Hodge overclaims. |
-| `SRC_2` | Dependencies cite `[508]`, `[509]`, `[510]`, and require `[510]`'s `OBSERVER_BOUNDARY` verdict. |
+| `SRC_1` | Claim policy allows only source continuity; rejects source-generation, inhomogeneous-Maxwell, full-Maxwell, electromagnetism, physical-current, and physical-field overclaims; permits `claims_qa_native_hodge` only on the `QA_NATIVE` dependency branch. |
+| `SRC_2` | Dependencies cite `[508]`, `[509]`, `[510]`; accept `[510]`'s `OBSERVER_BOUNDARY` or `QA_NATIVE` verdict; require source-carrier evidence on the native branch. |
 | `SRC_3` | Declared 3-cells are unique positive integer labels. |
 | `SRC_4` | Declared 4-cells have signed boundaries using declared 3-cells. |
 | `SRC_5` | Declared 5-cells have signed boundaries using declared 4-cells. |
@@ -59,8 +63,9 @@ QA context:
 | Fixture | Expected | Purpose |
 | --- | --- | --- |
 | `pass_src_square_boundary.json` | PASS | Closed 5-cell boundary; recomputed `J=delta(starF)` satisfies `delta(J)=0`. |
+| `pass_src_qa_native_carrier.json` | PASS | Native Hodge branch with exact QA source-carrier evidence; recomputed `J=delta(starF)` satisfies `delta(J)=0`. |
 | `fail_src_full_maxwell_overclaim.json` | FAIL `SRC_1` | Rejects claiming full Maxwell derivation at M3. |
-| `fail_src_wrong_hodge_verdict.json` | FAIL `SRC_2` | Rejects pretending the v1 path consumes a QA-native Hodge verdict. |
+| `fail_src_wrong_hodge_verdict.json` | FAIL `SRC_1` | Rejects a mismatch between a `QA_NATIVE` dependency and claim policy denying QA-native Hodge. |
 | `fail_src_bad_declared_j.json` | FAIL `SRC_7` | Rejects declared source current that does not match `delta(starF)`. |
 | `fail_src_missing_starf_assignment.json` | FAIL `SRC_6` | Rejects incomplete `starF` cochain assignment. |
 | `fail_src_nonzero_continuity.json` | FAIL `SRC_8` | Rejects nonzero `delta(J)` on a declared 5-cell. |
@@ -68,9 +73,10 @@ QA context:
 ## Family Relationships
 
 - Builds on `[508]`, `[509]`, and `[510]`.
-- Establishes continuity only after `[510]`'s observer-boundary Hodge gate.
-- Leaves inhomogeneous Maxwell recovery to M4, and only as conditional recovery
-  unless a future cert supplies QA-native Hodge/source generation evidence.
+- Establishes continuity after either `[510]`'s observer-boundary gate or its
+  QA-native Hodge seed.
+- Fixes the native source-carrier evidence side of the blocker. What remains is
+  M4/M5: inhomogeneous recovery/assembly with sign/unit/projection conventions.
 
 ## Verification
 
@@ -83,5 +89,5 @@ python3 qa_alphageometry_ptolemy/qa_source_continuity_cert_v1/qa_source_continui
 Expected summary:
 
 ```json
-{"ok":true,"n_pass":1,"n_fail":5}
+{"ok":true,"n_pass":2,"n_fail":5}
 ```

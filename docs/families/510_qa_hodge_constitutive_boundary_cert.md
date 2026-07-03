@@ -19,11 +19,15 @@ The cert classifies a declared `star_QA` as one of:
 - `INVALID`: hidden imports, missing provenance, unsupported native evidence,
   or overclaiming.
 
-The v1 PASS fixture is intentionally `OBSERVER_BOUNDARY`: it declares exact
-rational matrix entries over finite primal/dual face bases, but it also
-declares metric signature, orientation, units, and medium parameters as
-observer imports. That means a later inhomogeneous Maxwell cert may be a
-conditional recovery, not a QA-native full derivation.
+The cert now carries two positive branches:
+
+- `OBSERVER_BOUNDARY`: exact rational matrix entries are present, but metric
+  signature, orientation, units, and medium parameters are explicit observer
+  imports. This supports only conditional downstream recovery.
+- `QA_NATIVE`: exact rational matrix entries are present with native
+  integer-cell pairing, QA-invariant metric source evidence, exact orientation
+  witness, and no observer imports. This opens the QA-native inhomogeneous path
+  but still requires source evidence and M4/M5 before any full-Maxwell claim.
 
 This cert does not derive full Maxwell, does not prove inhomogeneous Maxwell,
 does not construct a Hodge star, does not derive source laws, does not prove
@@ -54,7 +58,7 @@ QA context:
 | `HCB_4` | `star_operator.matrix_entries` are exact rational entries from declared primal faces to declared dual faces. |
 | `HCB_5` | Classification is one of `OBSERVER_BOUNDARY`, `QA_NATIVE`, `INVALID` and matches the declared boundary verdict. |
 | `HCB_6` | `OBSERVER_BOUNDARY` requires explicit metric/orientation/units/medium imports and blocks full-Maxwell derivation downstream. |
-| `HCB_7` | `QA_NATIVE` requires exact native evidence and no observer imports. |
+| `HCB_7` | `QA_NATIVE` requires exact native evidence, no observer imports, and downstream policy that opens the native inhomogeneous path while still blocking full Maxwell until source/M4/M5 evidence exists. |
 | `HCB_8` | `INVALID` requires explicit invalid reasons. |
 
 ## Fixtures
@@ -62,6 +66,7 @@ QA context:
 | Fixture | Expected | Purpose |
 | --- | --- | --- |
 | `pass_hcb_observer_boundary.json` | PASS | Honest observer-boundary Hodge declaration with exact rational matrix entries and explicit imported metric/medium data. |
+| `pass_hcb_qa_native_seed.json` | PASS | QA-native Hodge seed with exact rational matrix entries, complete native evidence, no observer imports, and full-Maxwell still blocked pending source/M4/M5. |
 | `fail_hcb_full_maxwell_overclaim.json` | FAIL `HCB_1` | Rejects claiming full Maxwell derivation at M2. |
 | `fail_hcb_missing_observer_import.json` | FAIL `HCB_6` | Rejects an observer-boundary Hodge declaration missing medium parameters. |
 | `fail_hcb_bad_matrix_basis.json` | FAIL `HCB_4` | Rejects a star matrix entry referencing an undeclared dual face. |
@@ -71,10 +76,9 @@ QA context:
 ## Family Relationships
 
 - Builds on `[508]` and `[509]`.
-- Establishes that the current Hodge/constitutive object is observer-side in
-  the v1 passing witness.
-- Leaves full Maxwell blocked. The next valid step is M3/M4 conditional source
-  and inhomogeneous recovery under the declared observer-boundary Hodge data.
+- Establishes both observer-boundary and QA-native Hodge branches.
+- Fixes the Hodge-evidence side of the full-Maxwell blocker, but full Maxwell
+  still requires native source evidence plus M4/M5 recovery/assembly.
 
 ## Verification
 
@@ -87,5 +91,5 @@ python3 qa_alphageometry_ptolemy/qa_hodge_constitutive_boundary_cert_v1/qa_hodge
 Expected summary:
 
 ```json
-{"ok":true,"n_pass":1,"n_fail":5}
+{"ok":true,"n_pass":2,"n_fail":5}
 ```

@@ -65,6 +65,14 @@ def _fraction(raw: Any, code: str, name: str) -> Fraction:
     return Fraction(num, den)
 
 
+def _hodge_verdict(payload: dict[str, Any]) -> str | None:
+    deps = payload.get("dependencies")
+    if not isinstance(deps, dict):
+        return None
+    verdict = deps.get("hodge_boundary_verdict")
+    return verdict if isinstance(verdict, str) else None
+
+
 def _validate_claim_policy(payload: dict[str, Any]) -> None:
     policy = payload.get("claim_policy")
     _require(isinstance(policy, dict), "SRC_1", "claim_policy must be present")
@@ -76,10 +84,14 @@ def _validate_claim_policy(payload: dict[str, Any]) -> None:
         "claims_electromagnetism",
         "claims_physical_charge_current",
         "claims_physical_field",
-        "claims_qa_native_hodge",
     ]
     for key in forbidden:
         _require(policy.get(key) is False, "SRC_1", f"forbidden claim must be false: {key}")
+    verdict = _hodge_verdict(payload)
+    if verdict == "QA_NATIVE":
+        _require(policy.get("claims_qa_native_hodge") is True, "SRC_1", "QA_NATIVE branch must declare QA-native Hodge dependency")
+    else:
+        _require(policy.get("claims_qa_native_hodge") is False, "SRC_1", "non-native branch must not claim QA-native Hodge")
 
 
 def _validate_dependencies(payload: dict[str, Any]) -> None:
@@ -92,9 +104,26 @@ def _validate_dependencies(payload: dict[str, Any]) -> None:
     }
     for key, value in expected.items():
         _require(deps.get(key) == value, "SRC_2", f"{key} must be {value}")
-    _require(deps.get("hodge_boundary_verdict") == "OBSERVER_BOUNDARY", "SRC_2", "v1 source continuity must consume observer-boundary Hodge verdict")
+    _require(deps.get("hodge_boundary_verdict") in {"OBSERVER_BOUNDARY", "QA_NATIVE"}, "SRC_2", "source continuity must consume a recognized [510] Hodge verdict")
     source = payload.get("source_attribution")
     _require(isinstance(source, str) and "Hatcher" in source and "Bossavit" in source, "SRC_2", "source_attribution must cite Hatcher and Bossavit")
+
+
+def _validate_source_carrier_evidence(payload: dict[str, Any]) -> None:
+    verdict = _hodge_verdict(payload)
+    evidence = payload.get("source_carrier_evidence")
+    if verdict != "QA_NATIVE":
+        _require(evidence in ({}, None), "SRC_2", "observer-boundary branch must not claim QA-native source-carrier evidence")
+        return
+    _require(isinstance(evidence, dict), "SRC_2", "QA_NATIVE branch requires source_carrier_evidence")
+    required = [
+        "exact_qa_source_carrier",
+        "declared_current_is_cochain",
+        "no_observer_source_imports",
+        "continuity_not_physical_source_law",
+    ]
+    missing = [key for key in required if evidence.get(key) is not True]
+    _require(not missing, "SRC_2", f"QA-native source-carrier evidence missing: {missing}")
 
 
 def _parse_complex(payload: dict[str, Any]) -> tuple[set[int], dict[int, list[tuple[int, int]]], dict[int, list[tuple[int, int]]]]:
@@ -193,6 +222,7 @@ def validate_payload(payload: dict[str, Any]) -> dict[str, Any]:
     _require(payload.get("cert_slug") == CERT_SLUG, "SCHEMA", "wrong cert_slug")
     _validate_claim_policy(payload)
     _validate_dependencies(payload)
+    _validate_source_carrier_evidence(payload)
     three_cells, four_boundaries, five_boundaries = _parse_complex(payload)
     star_f = _parse_starf(payload, three_cells)
     source_j = _compute_delta(star_f, four_boundaries)

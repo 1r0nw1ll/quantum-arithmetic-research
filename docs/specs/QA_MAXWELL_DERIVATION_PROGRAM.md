@@ -171,13 +171,16 @@ Allowed outcomes:
 This gate decides whether the later inhomogeneous claim can be called a QA
 derivation or only a conditional recovery.
 
-Implemented checks: `HCB_1` through `HCB_8`; 1 PASS + 5 FAIL fixtures.
+Implemented checks: `HCB_1` through `HCB_8`; 2 PASS + 5 FAIL fixtures.
 
-Built result: the v1 passing witness is `OBSERVER_BOUNDARY`. It uses exact
-rational matrix entries for `star_QA`, but metric signature, orientation, units,
-and medium parameters are declared observer imports. Therefore this branch does
-not license "QA derives full Maxwell"; it licenses only a future conditional
-inhomogeneous recovery if M3/M4 are built against the declared boundary.
+Built result: [510] now has both an `OBSERVER_BOUNDARY` witness and a
+`QA_NATIVE` seed witness. The observer-boundary witness uses exact rational
+matrix entries for `star_QA`, but metric signature, orientation, units, and
+medium parameters are declared observer imports. The QA-native seed has exact
+rational matrix entries, native integer-cell pairing, QA-invariant metric
+source evidence, exact orientation witness, and no observer imports. This fixes
+the Hodge-evidence side of the blocker, but still does not license "QA derives
+full Maxwell"; source evidence and M4/M5 recovery/assembly remain required.
 
 ### M3: [511] QA Source Continuity
 
@@ -192,12 +195,14 @@ Allowed: current conservation / charge continuity as a structural consequence.
 
 Rejected: physical source law unless source generation is also derived.
 
-Implemented checks: `SRC_1` through `SRC_8`; 1 PASS + 5 FAIL fixtures.
+Implemented checks: `SRC_1` through `SRC_8`; 2 PASS + 5 FAIL fixtures.
 
-Built result: source continuity is certified only as a finite cochain
-nilpotency consequence after `[510]`'s `OBSERVER_BOUNDARY` Hodge gate. This is
-not source generation, not physical charge/current, and not inhomogeneous
-Maxwell yet.
+Built result: source continuity is certified as a finite cochain nilpotency
+consequence after either `[510]`'s `OBSERVER_BOUNDARY` gate or its `QA_NATIVE`
+Hodge seed. The native branch requires explicit QA source-carrier evidence:
+`J` is an exact cochain and no observer source imports are present. This fixes
+the native source-carrier evidence side of the blocker, but it is still not
+physical charge/current generation and not inhomogeneous Maxwell yet.
 
 ### M4: Conditional Inhomogeneous Maxwell Recovery
 
@@ -256,7 +261,8 @@ inside it, until the QA-native carrier/differential/Hodge/source pieces exist.
 | "QA has derived Maxwell" | Reject today |
 | "QA cannot derive Maxwell" | Not established |
 | "QA derives homogeneous Maxwell/Bianchi identities" | Built in `[509]` for exact finite field carriers only; not full Maxwell |
-| "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | M2 boundary built in `[510]`; still future M4, and still not full derivation |
+| "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | M2 observer-boundary branch built in `[510]`; still future M4, and still not full derivation |
+| "QA has native Hodge/source-carrier evidence" | Seed evidence built in `[510]` and `[511]`; still future M4/M5 before full Maxwell |
 | "QA derives all Maxwell equations from QA-native primitives" | Future M5 only if M2 is `QA_NATIVE` and M1-M4 pass |
 | "Whittaker `[507]` derives Maxwell" | Reject |
 | "Whittaker `[507]` supplies exact packet algebra compatible with a scalar-potential EM representation" | Already certified, narrow |

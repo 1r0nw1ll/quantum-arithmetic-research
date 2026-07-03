@@ -1,0 +1,57 @@
+{
+  "schema_version": "QA_SOURCE_CONTINUITY_CERT.v1",
+  "candidate_family_id": 511,
+  "cert_slug": "qa_source_continuity_cert_v1",
+  "expected_result": "PASS",
+  "source_attribution": "Hatcher Algebraic Topology (2002) Ch. 2 ISBN 978-0-521-79540-1 for d(d)=0; Bossavit Computational Electromagnetism (1998) ISBN 978-0-12-118710-1 for Hodge/constitutive boundary context.",
+  "dependencies": {
+    "nilpotency_family_id": 508,
+    "bianchi_family_id": 509,
+    "hodge_boundary_family_id": 510,
+    "hodge_boundary_verdict": "QA_NATIVE"
+  },
+  "claim_policy": {
+    "claims_source_continuity": true,
+    "claims_source_generation": false,
+    "claims_inhomogeneous_maxwell": false,
+    "claims_full_maxwell_derivation": false,
+    "claims_electromagnetism": false,
+    "claims_physical_charge_current": false,
+    "claims_physical_field": false,
+    "claims_qa_native_hodge": true
+  },
+  "source_carrier_evidence": {
+    "exact_qa_source_carrier": true,
+    "declared_current_is_cochain": true,
+    "no_observer_source_imports": true,
+    "continuity_not_physical_source_law": true
+  },
+  "cell_complex": {
+    "three_cells": [1, 2, 3, 4],
+    "four_cells": [
+      {"id": 10, "boundary": [{"three_cell": 1, "sign": 1}, {"three_cell": 2, "sign": -1}]},
+      {"id": 11, "boundary": [{"three_cell": 2, "sign": 1}, {"three_cell": 3, "sign": -1}]},
+      {"id": 12, "boundary": [{"three_cell": 3, "sign": 1}, {"three_cell": 4, "sign": -1}]},
+      {"id": 13, "boundary": [{"three_cell": 4, "sign": 1}, {"three_cell": 1, "sign": -1}]}
+    ],
+    "five_cells": [
+      {"id": 20, "boundary": [{"four_cell": 10, "sign": 1}, {"four_cell": 11, "sign": 1}, {"four_cell": 12, "sign": 1}, {"four_cell": 13, "sign": 1}]}
+    ]
+  },
+  "starF_3cochain": {
+    "values": {
+      "1": {"num": 2, "den": 1},
+      "2": {"num": 5, "den": 1},
+      "3": {"num": -1, "den": 1},
+      "4": {"num": 8, "den": 1}
+    }
+  },
+  "declared_source_J": {
+    "values": {
+      "10": {"num": -3, "den": 1},
+      "11": {"num": 6, "den": 1},
+      "12": {"num": -9, "den": 1},
+      "13": {"num": 6, "den": 1}
+    }
+  }
+}

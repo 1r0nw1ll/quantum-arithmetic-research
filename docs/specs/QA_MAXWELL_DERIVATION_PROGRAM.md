@@ -204,9 +204,11 @@ Hodge seed. The native branch requires explicit QA source-carrier evidence:
 the native source-carrier evidence side of the blocker, but it is still not
 physical charge/current generation and not inhomogeneous Maxwell yet.
 
-### M4: Conditional Inhomogeneous Maxwell Recovery
+### M4: [512] QA Inhomogeneous Maxwell Recovery
 
-Candidate slug: `qa_inhomogeneous_maxwell_recovery_cert_v1`
+Slug: `qa_inhomogeneous_maxwell_recovery_cert_v1`
+
+Status: built 2026-07-03.
 
 Claim: under a declared `star_QA` and source construction, the observer
 projection recovers `d star F = J` with explicit units/sign conventions.
@@ -214,8 +216,17 @@ projection recovers `d star F = J` with explicit units/sign conventions.
 Allowed if M2 is `OBSERVER_BOUNDARY`: "conditional recovery of inhomogeneous
 Maxwell under declared constitutive assumptions."
 
-Allowed if M2 is `QA_NATIVE` and source generation is QA-native: "QA derives
-the inhomogeneous Maxwell equations."
+Allowed if M2 is `QA_NATIVE` and source-carrier evidence is QA-native:
+"QA-native symbolic recovery of the inhomogeneous Maxwell equation."
+
+Implemented checks: `IMR_1` through `IMR_9`; 2 PASS + 5 FAIL fixtures.
+
+Built result: exact finite recovery/assembly is certified at M4:
+`starF = star_QA(F)` and `J = delta(starF)` are recomputed as exact rational
+cochains under declared sign/unit/projection conventions. M4 still rejects full
+Maxwell, physical electromagnetism, physical fields, and physical source
+generation. The remaining work is M5: assemble the already-built homogeneous
+and inhomogeneous halves into a bounded full-Maxwell claim.
 
 ### M5: Full Maxwell Derivation Claim
 
@@ -261,9 +272,9 @@ inside it, until the QA-native carrier/differential/Hodge/source pieces exist.
 | "QA has derived Maxwell" | Reject today |
 | "QA cannot derive Maxwell" | Not established |
 | "QA derives homogeneous Maxwell/Bianchi identities" | Built in `[509]` for exact finite field carriers only; not full Maxwell |
-| "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | M2 observer-boundary branch built in `[510]`; still future M4, and still not full derivation |
-| "QA has native Hodge/source-carrier evidence" | Seed evidence built in `[510]` and `[511]`; still future M4/M5 before full Maxwell |
-| "QA derives all Maxwell equations from QA-native primitives" | Future M5 only if M2 is `QA_NATIVE` and M1-M4 pass |
+| "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | Built in `[512]` for the observer-boundary branch; still not full derivation |
+| "QA has native Hodge/source-carrier evidence" | Seed evidence built in `[510]` and `[511]`; M4 native symbolic recovery built in `[512]` |
+| "QA derives all Maxwell equations from QA-native primitives" | Future M5 only if the claim is bounded to the certified carrier/source/metric/unit/projection conventions |
 | "Whittaker `[507]` derives Maxwell" | Reject |
 | "Whittaker `[507]` supplies exact packet algebra compatible with a scalar-potential EM representation" | Already certified, narrow |
 

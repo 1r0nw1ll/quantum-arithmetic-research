@@ -1,0 +1,36 @@
+{
+  "schema_version": "QA_DISCRETE_EXTERIOR_NILPOTENCY_CERT.v1",
+  "candidate_family_id": 508,
+  "cert_slug": "qa_discrete_exterior_nilpotency_cert_v1",
+  "expected_result": "PASS",
+  "source_attribution": "Hatcher, Algebraic Topology (2002), Ch. 2 boundary operator, ISBN 978-0-521-79540-1; QA_MAXWELL_DERIVATION_PROGRAM.md M0.",
+  "claim_policy": {
+    "claims_discrete_nilpotency_only": true,
+    "claims_maxwell_derivation": false,
+    "claims_full_maxwell": false,
+    "claims_electromagnetism": false,
+    "claims_physical_field": false,
+    "claims_whittaker_operator": false,
+    "claims_observer_boundary": false,
+    "claims_continuum_limit": false,
+    "claims_scalar_wave_energy_physics": false
+  },
+  "cell_complex": {
+    "vertices": [1, 2, 3, 4],
+    "edges": [
+      {"id": 1, "tail": 1, "head": 2},
+      {"id": 2, "tail": 2, "head": 3},
+      {"id": 3, "tail": 1, "head": 3},
+      {"id": 4, "tail": 3, "head": 4},
+      {"id": 5, "tail": 1, "head": 4}
+    ],
+    "faces": [
+      {"id": 1, "boundary": [{"edge": 1, "sign": 1}, {"edge": 2, "sign": 1}, {"edge": 3, "sign": -1}]},
+      {"id": 2, "boundary": [{"edge": 3, "sign": 1}, {"edge": 4, "sign": 1}, {"edge": 5, "sign": -1}]}
+    ]
+  },
+  "zero_cochain_witnesses": [
+    {"id": "linear", "values": {"1": 0, "2": 5, "3": 8, "4": 13}},
+    {"id": "mixed", "values": {"1": 7, "2": -2, "3": 11, "4": 4}}
+  ]
+}

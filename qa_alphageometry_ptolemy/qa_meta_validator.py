@@ -11102,6 +11102,23 @@ def _validate_whittaker_two_scalar_potential_bridge_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_discrete_exterior_nilpotency_cert_family(base_dir):
+    """Cert [508]: QA Discrete Exterior Nilpotency -- M0 of the QA Maxwell derivation program. CLAIM (narrow): for a finite declared oriented QA cell complex with positive integer vertex/edge/face labels, exact integer boundary-of-boundary cancellation holds on every declared face, and the dual coboundary applied twice to declared 0-cochain witnesses is exactly zero. This is the combinatorial chain-complex identity boundary(boundary)=0 / delta(delta)=0, anchored to Hatcher Algebraic Topology (2002) Ch. 2, ISBN 978-0-521-79540-1, and scoped by docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md. Does NOT derive Maxwell equations, does NOT prove electromagnetism, does NOT claim physical fields, does NOT import Whittaker operators, and does NOT cross the observer boundary. Checks DN_1/DN_2/DN_3/DN_4/DN_5/DN_6/DN_7/SCHEMA; 1 PASS + 4 FAIL fixtures; self-test ok."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_discrete_exterior_nilpotency_cert_v1")
+    validator = os.path.join(fam_dir, "qa_discrete_exterior_nilpotency_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_transform_unification_cert_family(base_dir):
     """Cert [505]: QA Transform Unification -- QA G-function provides a complete matched-group channel bank (Mühlbach et al. arXiv:2605.11589): (TU_1) matched-group bandwidth = 33 = 24+8+1 (one DFT per orbit class), (TU_2) 3 independent Cosmos sub-orbit G-channels (A[0] values 744693/658293/574269 distinct; lag-0 dominant in each), (TU_3) cross-class energy isolation cosmos_g_total=9963 > satellite_g_total=1377 > singularity_g=405; 1 PASS + 3 FAIL fixtures; self-test ok."""
     import subprocess
@@ -14395,6 +14412,11 @@ FAMILY_SWEEPS = [
      "QA Whittaker Two-Scalar-Potential Bridge Cert [507]. Layer 4 of the Whittaker -> QA development ladder. CLAIM (narrow): for a QA-rational plane-wave packet built from a registered [273] S2 direction omega and declared QA-rational k, v, c, the twelve raw differential-operator coefficients of Whittaker's 1904 verbatim six-component map (Phi,Psi) -> (dx,dy,dz,hx,hy,hz) -- Phi,Psi renamed from Whittaker's F,G to avoid colliding with QA-reserved F=a*b, G=d^2+e^2 -- are exact fractions.Fraction values. div(h) both channels and div(d) Psi-channel vanish exactly and unconditionally; div(d) Phi-channel vanishes exactly under dispersion v*v=c*c or under the degenerate direction case Kz=0, and for nonzero-Kz packets dispersion is necessary and sufficient. A pre-primary-source hand derivation of hz (guessed by false symmetry with dz) was caught and rejected during construction because it breaks div(h)=0; the primary source's actual hz=Gxx+Gyy is implemented and makes div(h)=0 unconditional. Does NOT prove Maxwell equations, electromagnetism, physical field reconstruction, Mie scattering, scalar-wave-energy physics, or Layer 5/6 results. Checks WSPB_1/WSPB_2/WSPB_3/WSPB_4/WSPB_5/WSPB_6/WSPB_7/WSPB_8/SCHEMA/F; 2 PASS + 7 FAIL fixtures; self-test ok. Primary: Whittaker E.T. (1904) Proc. London Math. Soc. s2-1:367-372 DOI 10.1112/plms/s2-1.1.367; registered [273] S2 cert. Derived 2026-07-02.",
      "507_qa_whittaker_two_scalar_potential_bridge_cert",
      "qa_whittaker_two_scalar_potential_bridge_cert_v1", True),
+    (508, "QA Discrete Exterior Nilpotency Cert family",
+     _validate_qa_discrete_exterior_nilpotency_cert_family,
+     "QA Discrete Exterior Nilpotency Cert [508]. M0 of the QA Maxwell derivation program. CLAIM (narrow): for a finite declared oriented QA cell complex with positive integer vertex/edge/face labels, exact integer boundary-of-boundary cancellation holds on every declared face, and the dual coboundary applied twice to declared 0-cochain witnesses is exactly zero. This cert proves only the chain-complex identity boundary(boundary)=0 / delta(delta)=0 over the declared finite combinatorial complex. Does NOT derive Maxwell equations, prove electromagnetism, claim physical fields, import Whittaker operators, or cross the observer boundary. Checks DN_1/DN_2/DN_3/DN_4/DN_5/DN_6/DN_7/SCHEMA; 1 PASS + 4 FAIL fixtures; self-test ok. Primary math source: Hatcher A. (2002) Algebraic Topology Ch. 2 ISBN 978-0-521-79540-1. Scoped by docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md. Derived 2026-07-03.",
+     "508_qa_discrete_exterior_nilpotency_cert",
+     "qa_discrete_exterior_nilpotency_cert_v1", True),
     (505, "QA Transform Unification Cert family",
      _validate_qa_transform_unification_cert_family,
      "QA Transform Unification Cert [505]. CLAIM: QA G-function G(b,e)=(b+e)*(b+e)+e*e provides a complete matched-group channel bank (Mühlbach et al. arXiv:2605.11589 Peter-Weyl/DFT unification). (TU_1) matched-group bandwidth = 33 = 24+8+1: Z/24Z (Cosmos) contributes 24 irreps, Z/8Z (Satellite) contributes 8 irreps, Z/1Z (Singularity) contributes 1 irrep; total independent frequency channels = 33; (TU_2) 3 independent Cosmos sub-orbit G-channels: A[0] autocorrelation values for starting pairs O1=(1,1), O2=(1,3), O3=(1,4) are 744693, 658293, 574269 — all distinct (three non-degenerate independent channel banks within the Cosmos class); lag-0 dominant in each sub-orbit and in the Satellite (A[0]=292005 > all A[k] k>0); (TU_3) cross-class energy isolation: Cosmos G-total (sum over all 72 pairs) = 9963, Satellite G-total (sum over all 8 pairs) = 1377, Singularity G(9,9) = 405; strict ordering 9963 > 1377 > 405 — three orbit classes at strictly disjoint energy levels (Cosmos high-band, Satellite mid-band, Singularity DC). arXiv:2605.11589 context: Mühlbach et al. prove that for any group G, every G-equivariant covariance matrix is diagonalized by the Peter-Weyl basis (irreps of G); for cyclic G=Z/n the Peter-Weyl basis = the DFT on Z/n (matched-group transform is provably optimal = KLT for G-stationary signals). For QA: G = Z/24Z (Cosmos) × Z/8Z (Satellite) × Z/1Z (Singularity); bandwidth = Σ|Gᵢ| per orbit class = 33. Theorem NT: DFT eigenvalues (24th/8th roots of unity) are observer projections; channel structure certified entirely by integer G-value sums and autocorrelations. All checks pure integer arithmetic. Primary: Mühlbach P. et al. (2026) arXiv:2605.11589; Wildberger N.J. (2005) ISBN 978-0-9757492-0-8. Companion: [500][501][503][504]. Checks TU_1/TU_2/TU_3/SRC; 1 PASS + 3 FAIL fixtures; self-test ok. Derived 2026-06-23.",

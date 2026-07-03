@@ -113,9 +113,11 @@ conditionally recovered it.
 
 ## Proposed Cert Ladder
 
-### M0: QA Discrete Exterior Nilpotency
+### M0: `[508]` QA Discrete Exterior Nilpotency
 
-Candidate slug: `qa_discrete_exterior_nilpotency_cert_v1`
+Slug: `qa_discrete_exterior_nilpotency_cert_v1`
+
+Status: built 2026-07-03.
 
 Claim: on a finite oriented QA cell complex, the QA coboundary applied twice is
 identically zero.
@@ -123,6 +125,8 @@ identically zero.
 Allowed: pure combinatorics, exact integers/Fractions, no physical fields.
 
 Rejected: any mention that this already proves electromagnetism.
+
+Implemented checks: `DN_1` through `DN_7`; 1 PASS + 4 FAIL fixtures.
 
 ### M1: QA Field 2-Form Bianchi
 

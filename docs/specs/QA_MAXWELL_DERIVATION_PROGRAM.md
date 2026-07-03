@@ -267,6 +267,47 @@ Negative fixtures reject:
 This is not a claim of physical electromagnetism, physical fields, physical
 source generation, or numeric field evaluation.
 
+### M6: [514] QA Longitudinal Scalar EM Boundary
+
+Slug: `qa_longitudinal_scalar_em_boundary_cert_v1`
+
+Status: built 2026-07-03.
+
+Claim: scalar/longitudinal EM language is admissible only as representation
+structure after `[513]`, and the scalar/longitudinal question must not be
+decided by importing Heaviside, Hertz, or Gibbs reductions as premises.
+
+Required exact phrase:
+
+```text
+QA does not use Heaviside-Hertz-Gibbs vector reduction as a premise for the longitudinal/scalar EM question; scalar and longitudinal terms are admitted only as certified carrier, source, boundary, media, gauge, or observer-projection structure.
+```
+
+This cert fixes an important representation hazard: vectorized
+Heaviside/Hertz/Gibbs-style presentations are allowed only as observer notation
+or comparison language. They are not the source foundation for QA's
+longitudinal/scalar boundary. The source target remains Maxwell 1865, while the
+QA proof substrate remains finite cochain exterior calculus.
+
+Allowed:
+
+- scalar-potential carriers;
+- longitudinal source components;
+- boundary-constrained longitudinal components;
+- media/constitutive longitudinal components;
+- gauge or observer-projection longitudinal terms.
+
+Rejected:
+
+- extra source-free vacuum scalar radiation modes;
+- longitudinal/free-energy claims;
+- Bearden/Pond/SVP scalar-energy claims;
+- scalar-potential equals physical-field collapse;
+- transverse-only Maxwell premise;
+- physical electromagnetism beyond `[513]`.
+
+Implemented checks: `LSE_1` through `LSE_7`; 1 PASS + 7 FAIL fixtures.
+
 ## Relation To Whittaker Layers
 
 The Whittaker ladder is evidence of compatibility, not derivation.
@@ -291,6 +332,9 @@ inside it, until the QA-native carrier/differential/Hodge/source pieces exist.
 | "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | Built in `[512]` for the observer-boundary branch; still not full derivation |
 | "QA has native Hodge/source-carrier evidence" | Seed evidence built in `[510]` and `[511]`; M4 native symbolic recovery built in `[512]` |
 | "QA derives all Maxwell equations from QA-native primitives" | Built as `[513]` only within certified carrier/source/metric/unit/projection conventions |
+| "QA uses Heaviside/Hertz/Gibbs vector reduction as the foundation for scalar/longitudinal EM" | Reject; `[514]` explicitly forbids this premise |
+| "QA admits scalar/longitudinal EM terms" | Built in `[514]` only as certified carrier/source/boundary/media/gauge/projection structure |
+| "QA proves an extra source-free vacuum scalar EM radiation mode" | Reject |
 | "Whittaker `[507]` derives Maxwell" | Reject |
 | "Whittaker `[507]` supplies exact packet algebra compatible with a scalar-potential EM representation" | Already certified, narrow |
 

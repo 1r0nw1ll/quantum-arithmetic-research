@@ -228,11 +228,14 @@ Maxwell, physical electromagnetism, physical fields, and physical source
 generation. The remaining work is M5: assemble the already-built homogeneous
 and inhomogeneous halves into a bounded full-Maxwell claim.
 
-### M5: Full Maxwell Derivation Claim
+### M5: [513] QA Maxwell Derivation
 
-Candidate slug: `qa_maxwell_derivation_cert_v1`
+Slug: `qa_maxwell_derivation_cert_v1`
 
-Claim allowed only if M1, M2, M3, and M4 pass and M2 is `QA_NATIVE`.
+Status: built 2026-07-03.
+
+Claim allowed only because M1, M2, M3, and M4 pass and M2/M4 are on the
+`QA_NATIVE` branch.
 
 Required exact phrase:
 
@@ -241,7 +244,17 @@ QA derives Maxwell only within the stated carrier, boundary, source, metric,
 unit, and observer-projection conventions certified here.
 ```
 
-This cert must include negative fixtures that reject:
+Implemented checks: `MXD_1` through `MXD_7`; 1 PASS + 6 FAIL fixtures.
+
+Built result: bounded full-Maxwell assembly is certified only in this exact
+sense:
+
+```text
+QA derives Maxwell only within the stated carrier, boundary, source, metric,
+unit, and observer-projection conventions certified here.
+```
+
+Negative fixtures reject:
 
 - importing Maxwell equations as assumptions;
 - using Whittaker's operator as a premise while claiming QA-native derivation;
@@ -250,6 +263,9 @@ This cert must include negative fixtures that reject:
 - claiming physical electromagnetism beyond the certified projection;
 - claiming scalar-wave-energy, free-energy, Bearden/Pond/SVP, or
   longitudinal-energy physics.
+
+This is not a claim of physical electromagnetism, physical fields, physical
+source generation, or numeric field evaluation.
 
 ## Relation To Whittaker Layers
 
@@ -269,12 +285,12 @@ inside it, until the QA-native carrier/differential/Hodge/source pieces exist.
 
 | Claim text | Disposition |
 | --- | --- |
-| "QA has derived Maxwell" | Reject today |
+| "QA has derived Maxwell" | Accept only as `[513]`'s bounded statement, never unbounded |
 | "QA cannot derive Maxwell" | Not established |
 | "QA derives homogeneous Maxwell/Bianchi identities" | Built in `[509]` for exact finite field carriers only; not full Maxwell |
 | "QA conditionally recovers inhomogeneous Maxwell under an imported Hodge star" | Built in `[512]` for the observer-boundary branch; still not full derivation |
 | "QA has native Hodge/source-carrier evidence" | Seed evidence built in `[510]` and `[511]`; M4 native symbolic recovery built in `[512]` |
-| "QA derives all Maxwell equations from QA-native primitives" | Future M5 only if the claim is bounded to the certified carrier/source/metric/unit/projection conventions |
+| "QA derives all Maxwell equations from QA-native primitives" | Built as `[513]` only within certified carrier/source/metric/unit/projection conventions |
 | "Whittaker `[507]` derives Maxwell" | Reject |
 | "Whittaker `[507]` supplies exact packet algebra compatible with a scalar-potential EM representation" | Already certified, narrow |
 

@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Maxwell Derivation Cert [513]. M5 of docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md, assembling [509] homogeneous/Bianchi and [512] inhomogeneous recovery under [510] QA_NATIVE Hodge and [511] source-continuity/source-carrier evidence. Primary mathematical sources: Allen Hatcher, Algebraic Topology (2002), Ch. 2, ISBN 978-0-521-79540-1; Alain Bossavit, Computational Electromagnetism (1998), ISBN 978-0-12-118710-1; James Clerk Maxwell (1865), A Dynamical Theory of the Electromagnetic Field, Phil. Trans. R. Soc. 155:459-512. Claim is bounded by certified carrier, boundary, source, metric, unit, and observer-projection conventions."
+}

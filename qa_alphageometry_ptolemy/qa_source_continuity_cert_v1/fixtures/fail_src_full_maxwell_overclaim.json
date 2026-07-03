@@ -1,0 +1,22 @@
+{
+  "schema_version": "QA_SOURCE_CONTINUITY_CERT.v1",
+  "candidate_family_id": 511,
+  "cert_slug": "qa_source_continuity_cert_v1",
+  "expected_result": "FAIL",
+  "expected_error_code": "SRC_1",
+  "source_attribution": "Hatcher Algebraic Topology (2002) Ch. 2 ISBN 978-0-521-79540-1 for d(d)=0; Bossavit Computational Electromagnetism (1998) ISBN 978-0-12-118710-1 for Hodge/constitutive boundary context.",
+  "dependencies": {"nilpotency_family_id": 508, "bianchi_family_id": 509, "hodge_boundary_family_id": 510, "hodge_boundary_verdict": "OBSERVER_BOUNDARY"},
+  "claim_policy": {
+    "claims_source_continuity": true,
+    "claims_source_generation": false,
+    "claims_inhomogeneous_maxwell": false,
+    "claims_full_maxwell_derivation": true,
+    "claims_electromagnetism": false,
+    "claims_physical_charge_current": false,
+    "claims_physical_field": false,
+    "claims_qa_native_hodge": false
+  },
+  "cell_complex": {"three_cells": [1], "four_cells": [{"id": 10, "boundary": [{"three_cell": 1, "sign": 1}]}], "five_cells": [{"id": 20, "boundary": [{"four_cell": 10, "sign": 1}]}]},
+  "starF_3cochain": {"values": {"1": {"num": 0, "den": 1}}},
+  "declared_source_J": {"values": {"10": {"num": 0, "den": 1}}}
+}

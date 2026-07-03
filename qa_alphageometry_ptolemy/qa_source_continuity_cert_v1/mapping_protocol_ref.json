@@ -1,0 +1,6 @@
+{
+  "protocol_version": "QA_MAPPING_PROTOCOL_REF.v1",
+  "ref_path": "qa_mapping_protocol/canonical_mapping_protocol.json",
+  "ref_sha256": "e0e586f537485cf530849493e05db1b64877e918140253f0e295953fe4dfe65d",
+  "scope_note": "QA Source Continuity Cert [511]. M3 of docs/specs/QA_MAXWELL_DERIVATION_PROGRAM.md, building on [508], [509], and [510]. Primary mathematical sources: Allen Hatcher, Algebraic Topology (2002), Ch. 2, ISBN 978-0-521-79540-1; Alain Bossavit, Computational Electromagnetism (1998), ISBN 978-0-12-118710-1. Claims only exact finite continuity delta(J)=0 when J=delta(starF). Does not derive sources, inhomogeneous Maxwell, full Maxwell, physical charge/current, physical fields, or electromagnetism."
+}

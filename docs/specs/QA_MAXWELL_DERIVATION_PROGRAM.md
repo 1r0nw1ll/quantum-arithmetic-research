@@ -179,9 +179,11 @@ and medium parameters are declared observer imports. Therefore this branch does
 not license "QA derives full Maxwell"; it licenses only a future conditional
 inhomogeneous recovery if M3/M4 are built against the declared boundary.
 
-### M3: QA Source Continuity
+### M3: [511] QA Source Continuity
 
-Candidate slug: `qa_source_continuity_cert_v1`
+Slug: `qa_source_continuity_cert_v1`
+
+Status: built 2026-07-03.
 
 Claim: if `J_QA = delta_QA(star_QA(F_QA))`, then
 `delta_QA(J_QA) = 0`.
@@ -189,6 +191,13 @@ Claim: if `J_QA = delta_QA(star_QA(F_QA))`, then
 Allowed: current conservation / charge continuity as a structural consequence.
 
 Rejected: physical source law unless source generation is also derived.
+
+Implemented checks: `SRC_1` through `SRC_8`; 1 PASS + 5 FAIL fixtures.
+
+Built result: source continuity is certified only as a finite cochain
+nilpotency consequence after `[510]`'s `OBSERVER_BOUNDARY` Hodge gate. This is
+not source generation, not physical charge/current, and not inhomogeneous
+Maxwell yet.
 
 ### M4: Conditional Inhomogeneous Maxwell Recovery
 

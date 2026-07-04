@@ -25,6 +25,7 @@ import random
 import re
 import shutil
 import subprocess
+import time
 from pathlib import Path
 from typing import Any
 
@@ -564,6 +565,17 @@ _VALID_D_RESIDUES: dict[int, frozenset[int]] = {
 }
 
 
+def difference_of_squares_possible(F: int) -> bool:
+    """F = d*d - e*e has an integer solution iff F is odd or F % 4 == 0.
+
+    Proof sketch: s=d-e, t=d+e satisfy s+t=2*d (even), so s,t share parity —
+    both odd (F=s*t odd) or both even (F=s*t divisible by 4). F % 4 == 2 is
+    therefore provably unsolvable, not just hard to find; every residue class
+    in _VALID_D_RESIDUES with f % 4 == 2 is empty for exactly this reason.
+    """
+    return F > 0 and F % 4 != 2
+
+
 def qa_fermat_factor(F: int, limit: int = 100000, use_pruning: bool = True) -> set[int]:
     """QA-Fermat: find factors of F = d²-e² by scanning d from ceil(sqrt(F)).
 
@@ -573,10 +585,15 @@ def qa_fermat_factor(F: int, limit: int = 100000, use_pruning: bool = True) -> s
     """
     if F <= 1:
         return set()
+    valid = _VALID_D_RESIDUES.get(F % 24, frozenset(range(24))) if use_pruning else frozenset(range(24))
+    if use_pruning and not valid:
+        # F % 4 == 2: no (d,e) can ever satisfy d*d-e*e==F (see
+        # difference_of_squares_possible) — every d is rejected forever, so
+        # the scan below would never advance `checked` and never terminate.
+        return set()
     d = math.isqrt(F)
     if d * d < F:
         d += 1
-    valid = _VALID_D_RESIDUES.get(F % 24, frozenset(range(24))) if use_pruning else frozenset(range(24))
     factors: set[int] = set()
     checked = 0
     while checked < limit:
@@ -2041,6 +2058,25 @@ def derive_from_f_qa_mpqs_auto(
     ecm_b1: int = 20000,
     ecm_max_curves: int = 50,
 ) -> dict[str, Any]:
+    # F % 4 == 2 makes d*d-e*e==F provably unsolvable for any integer d,e
+    # (see difference_of_squares_possible) — reject instantly rather than
+    # letting Pollard/ECM/MPQS all search a space that's certified empty.
+    if not difference_of_squares_possible(F):
+        return {
+            "F": F,
+            "candidate_count": 0,
+            "candidates": [],
+            "method": "qa_mpqs_auto",
+            "qa_engine": {
+                "factors_found": [],
+                "impossible_difference_of_squares": True,
+                "auto_attempts": [],
+                "auto_parameters": None,
+                "auto_success": True,
+            },
+            "primitive_only": primitive_only,
+        }
+
     # QA-Fermat fast path: for Pythagorean F = d²-e² with balanced factors
     # (d ≈ sqrt(F)), this finds the answer in O(e / orbit_pruning_factor) steps.
     # Limit 20000 keeps overhead < 4ms for unbalanced cases that fall through to Pollard.
@@ -2489,6 +2525,28 @@ def self_test() -> dict[str, Any]:
                 ),
             }
         )
+
+    # Regression guard: F % 4 == 2 has no integer (d,e) solution at all (see
+    # difference_of_squares_possible) — historically qa_fermat_factor hung
+    # forever on these (checked never advanced once the mod-24 residue class
+    # came back empty). Confirm the fast reject fires and stays instant.
+    impossible_checks = []
+    for F in (6, 10, 14, 22, 1000000000006):
+        t0 = time.time()
+        got = derive_from_f(F, method="qa-mpqs-auto", primitive_only=True)
+        elapsed = time.time() - t0
+        impossible_checks.append(
+            {
+                "F": F,
+                "candidate_count": got["candidate_count"],
+                "elapsed_s": elapsed,
+                "ok": got["candidate_count"] == 0 and elapsed < 1.0,
+            }
+        )
+    checks.append(
+        {"impossible_difference_of_squares": impossible_checks, "ok": all(c["ok"] for c in impossible_checks)}
+    )
+
     return {"ok": all(item["ok"] for item in checks), "checks": checks}
 
 

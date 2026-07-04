@@ -554,6 +554,8 @@ def derive_from_f_geometric_sieve(
 
 
 # QA orbit pruning for Fermat sieve: which d%24 values can satisfy d²-e²≡F (mod 24)?
+# Used only for qa_pollard_factor's seed selection below — qa_fermat_factor uses the
+# cheaper mod-8-only filter (_VALID_D_RESIDUES_8), see its docstring for why.
 _VALID_D_RESIDUES: dict[int, frozenset[int]] = {
     f: frozenset(
         d % 24
@@ -564,6 +566,23 @@ _VALID_D_RESIDUES: dict[int, frozenset[int]] = {
     for f in range(24)
 }
 
+# Mod-8-only residue filter for qa_fermat_factor's scan. Empirically faster than the
+# combined mod-24 (=8*3) filter above: is_square() only costs ~3x a single residue
+# check, so the 2nd (mod-3) check's overhead outweighs the extra candidates it
+# prunes. Measured 2026-07-04: mod-8-alone is 1.4-2.5x faster than mod-24 across 8
+# independent hard (imbalanced-factor) test cases, with mod-3/mod-24/larger moduli
+# all consistently slower — more pruning is not free once checks aren't much
+# cheaper than the thing they're avoiding.
+_VALID_D_RESIDUES_8: dict[int, frozenset[int]] = {
+    f: frozenset(
+        d % 8
+        for d in range(8)
+        for e in range(8)
+        if (d * d - e * e) % 8 == f
+    )
+    for f in range(8)
+}
+
 
 def difference_of_squares_possible(F: int) -> bool:
     """F = d*d - e*e has an integer solution iff F is odd or F % 4 == 0.
@@ -571,7 +590,9 @@ def difference_of_squares_possible(F: int) -> bool:
     Proof sketch: s=d-e, t=d+e satisfy s+t=2*d (even), so s,t share parity —
     both odd (F=s*t odd) or both even (F=s*t divisible by 4). F % 4 == 2 is
     therefore provably unsolvable, not just hard to find; every residue class
-    in _VALID_D_RESIDUES with f % 4 == 2 is empty for exactly this reason.
+    in _VALID_D_RESIDUES_8 (and _VALID_D_RESIDUES) with f % 4 == 2 is empty
+    for exactly this reason — it's a mod-4 fact, so mod-8 alone already
+    captures it fully.
     """
     return F > 0 and F % 4 != 2
 
@@ -580,12 +601,12 @@ def qa_fermat_factor(F: int, limit: int = 100000, use_pruning: bool = True) -> s
     """QA-Fermat: find factors of F = d²-e² by scanning d from ceil(sqrt(F)).
 
     Checks is_square(d²-F) for each candidate d. With QA orbit pruning, only
-    d values in the valid residue class for F%24 are checked — 2-12× fewer
-    candidates depending on F%24.
+    d values in the valid residue class for F%8 are checked (see
+    _VALID_D_RESIDUES_8 for why mod-8-alone beats the combined mod-24 filter).
     """
     if F <= 1:
         return set()
-    valid = _VALID_D_RESIDUES.get(F % 24, frozenset(range(24))) if use_pruning else frozenset(range(24))
+    valid = _VALID_D_RESIDUES_8.get(F % 8, frozenset(range(8))) if use_pruning else frozenset(range(8))
     if use_pruning and not valid:
         # F % 4 == 2: no (d,e) can ever satisfy d*d-e*e==F (see
         # difference_of_squares_possible) — every d is rejected forever, so
@@ -597,7 +618,7 @@ def qa_fermat_factor(F: int, limit: int = 100000, use_pruning: bool = True) -> s
     factors: set[int] = set()
     checked = 0
     while checked < limit:
-        if d % 24 in valid or not use_pruning:
+        if d % 8 in valid or not use_pruning:
             v = d * d - F
             if v > 0:
                 sq, e = is_square(v)

@@ -20,21 +20,30 @@ BSD connection: L(½,AI(f)) = L_rat · L_split · L_∞
   If L(½)≠0 → rank A_f(ℚ)=0 (Rohrlich; Coates-Wiles for CM).
   The integer/Fraction content is certifiable; L_split and L_∞ are observer projections.
 
-VERIFICATION NOTE (2026-07-04): Independently confirmed via the LMFDB API that
-f=2.2.5.1-125.1-a is a real object: a CM Hilbert modular form over Q(sqrt5),
-level norm 125, parallel weight 2, Hecke field dimension 2 (hmf_forms id 45).
-Its actual Hecke eigenvalues are elements of that degree-2 field, matching
-certs [403]/[404]'s Z[phi] eigenvalue table structurally. However: (1) LMFDB's
-lfunc_lfunctions table has NO entry for this object or its GL4/Q automorphic
-induction -- no independently computed analytic rank exists to check r_alg=0
-against; the prediction rests entirely on the general Rohrlich (1984)
-non-vanishing theorem for CM towers, not a specific verified computation for
-this f. (2) This cert's own EXTENDED_TABLE previously stored certs
-[403]/[404]'s raw Z[phi]-basis coordinates (u,v) of a_p mislabeled as "(T,N)"
--- fixed below to the actual Trace/Norm values. The mislabeling did not flip
-C3's gating conclusion (T=raw-u happened to be nonzero for all 22 entries
-either way), but the printed "rational_part"/"irrational coefficient" values
-were computed from the wrong numbers before this fix.
+VERIFICATION NOTE (2026-07-04): Independently confirmed via the LMFDB API and
+web page (lmfdb.org/ModularForm/GL2/TotallyReal/2.2.5.1/holomorphic/2.2.5.1-125.1-a)
+that f=2.2.5.1-125.1-a is a real object: a CM Hilbert modular form over
+Q(sqrt5), level norm 125, parallel weight 2, Hecke field dimension 2
+(hmf_forms id 45). Its actual Hecke eigenvalues are elements of that degree-2
+field, matching certs [403]/[404]'s Z[phi] eigenvalue table structurally.
+However: (1) LMFDB's own page for this object states "L-function not
+available" -- there is no computed L-function, root number, or analytic
+rank for it there (nor for its GL4/Q automorphic induction; the
+lfunc_lfunctions API table has no entry either). The r_alg=0 prediction is
+not a lookup against a verified external computation -- it is an
+application of Rohrlich's (1984) general non-vanishing theorem for CM towers
+to this specific f, which has NOT itself been independently confirmed (e.g.
+by directly evaluating L(1/2,AI(f)) from the real Hecke coefficients). That
+would require a correctly-normalized approximate functional equation
+(gamma factors, conductor, root number for a degree-4 automorphic L-function)
+-- a nontrivial follow-up project, not attempted here to avoid introducing
+an unverified numerical claim of its own. (2) This cert's own EXTENDED_TABLE
+previously stored certs [403]/[404]'s raw Z[phi]-basis coordinates (u,v) of
+a_p mislabeled as "(T,N)" -- fixed below to the actual Trace/Norm values.
+The mislabeling did not flip C3's gating conclusion (T=raw-u happened to be
+nonzero for all 22 entries either way), but the printed "rational_part"/
+"irrational coefficient" values were computed from the wrong numbers before
+this fix.
 """
 
 import json

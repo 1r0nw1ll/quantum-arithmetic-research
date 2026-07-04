@@ -106,14 +106,17 @@ Audited against LMFDB independently of this cert family:
   (hmf_forms id 45) over Q(√5), level norm 125, parallel weight 2, CM type,
   Hecke field dimension 2 — matching certs [403]/[404]'s Z[φ] eigenvalue
   structure.
-- **No independent rank check exists**: LMFDB's `lfunc_lfunctions` table has
-  no record for this object or its GL₄/ℚ automorphic induction. The r_alg=0
-  prediction is not checkable against a stored LMFDB rank — it rests entirely
-  on Rohrlich's general non-vanishing theorem for CM towers, not a
-  specifically verified computation for this f. This is a legitimate
-  citation, not a fabricated one, but the cert's own text ("The integer
-  prediction: r_alg=0") should be read as a conditional theorem application,
-  not an independently double-checked fact about this specific object.
+- **No independent rank check exists**: LMFDB's own page for this object
+  states **"L-function not available"** — its declared status, not merely
+  an empty query result. No root number, special value, or analytic rank is
+  computed there for this form or its GL₄/ℚ automorphic induction. The
+  r_alg=0 prediction is not checkable against a stored LMFDB rank — it rests
+  entirely on Rohrlich's general non-vanishing theorem for CM towers, applied
+  to (but not independently confirmed for) this specific f. This is a
+  legitimate citation, not a fabricated one, but the cert's own text ("The
+  integer prediction: r_alg=0") should be read as a conditional theorem
+  application, not an independently double-checked fact about this specific
+  object.
 - **Bug found and fixed**: the validator's `EXTENDED_TABLE` stored raw Z[φ]
   basis coordinates `(u,v)` of a_p — copied verbatim from certs [403]/[404] —
   mislabeled as `(T,N)`. E.g. for p=41 the table held `(7,-5)` (the raw

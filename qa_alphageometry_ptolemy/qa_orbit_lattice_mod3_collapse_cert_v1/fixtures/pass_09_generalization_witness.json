@@ -1,0 +1,22 @@
+{
+  "_primary_source": "fpylll development team (2024) https://github.com/fplll/fpylll; Lenstra, Lenstra, Lovasz (1982) DOI:10.1007/BF01457454",
+  "kind": "generalization_witness",
+  "description": "Regression guard: the recorded 8-modulus fpylll sweep (m=9,24,27,81 unsafe; m=80,35,25,49 safe) matches the module's internal EMPIRICAL_RECORD_GENERALIZATION, so this historical result can't silently drift from what was actually run on 2026-07-04 via reproduce_fpylll_generalization.py",
+  "record": {
+    "N": 83,
+    "q": 256,
+    "fpylll_version": "0.6.4",
+    "trials": 10,
+    "cases": {
+      "9": [5, 1.457],
+      "24": [7, 0.888],
+      "27": [7, 0.775],
+      "81": [8, 0.614],
+      "80": [1, 538.522],
+      "35": [0, 598.255],
+      "25": [0, 610.998],
+      "49": [0, 617.411]
+    }
+  },
+  "expected": "PASS"
+}

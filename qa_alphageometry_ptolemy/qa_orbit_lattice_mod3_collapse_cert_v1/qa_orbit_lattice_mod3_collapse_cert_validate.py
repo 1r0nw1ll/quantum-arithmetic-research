@@ -62,6 +62,41 @@ mapping_protocol_ref.json):
     gcd(80,3)=1, period=120: 1/12 broken avg 574). The gcd(m,3) mechanism
     below is the corrected, mathematically-proven explanation.
 
+GENERALIZATION (2026-07-04, see reproduce_fpylll_generalization.py): the
+CRT-collapse identity "(x mod m) === x (mod p)" holds for ANY prime p
+dividing m, not just p=3 -- this is basic modular arithmetic, not specific
+to 3. It only *matters* for THIS construction because the ternary
+NTRU-style coefficient map is fixed at mod 3 (poly_from_orbit uses
+`(v mod 3) - 1`); other prime factors of m (e.g. the 2 in m=24 or m=80) are
+irrelevant to that fixed coefficient map. So the only question that
+matters for THIS vulnerability is whether 3 | m -- confirmed empirically
+against 8 moduli (all with long-period seed pools, so the effect is
+attributable to the mod-3 collapse and not merely a short overall period):
+
+    m        3|m?   broken/10   avg(best/target)
+    9         yes      5           1.457
+    24        yes      7           0.888   <- QA's own "applied" modulus (CLAUDE.md)
+    27        yes      7           0.775
+    81        yes      8           0.614
+    80        no       1         538.522
+    35        no       0         598.255
+    25        no       0         610.998
+    49        no       0         617.411
+
+  CRITICAL FINDING: m=24 -- the modulus this project's own CLAUDE.md
+  documents as the "applied" QA modulus (alongside m=9 "theoretical") -- is
+  broken 7/10 by plain LLL, more decisively than the originally-tested m=9
+  (avg ratio 0.888 < 1: LLL finds a vector SHORTER than the real key, not
+  merely comparable to it). Both of QA's two standard moduli (9 and 24) are
+  divisible by 3 and are therefore both unsafe for this key-derivation
+  method; there is no "safe QA default" here -- safety requires actively
+  choosing gcd(m,3)=1, which no existing QA convention does.
+  Severity increases mildly with the power of 3 dividing m (9 -> 24 -> 27 ->
+  81 avg ratio decreases monotonically), plausibly because longer orbit
+  periods give the attack a larger structured search space, but the
+  qualitative safe/unsafe split is exactly gcd(m,3)=1 vs 3|m in all 8 cases
+  tested, with no exceptions.
+
 SUB-CLAIMS:
   (A) MOD-3 INTRINSIC PERIOD: the qa_step recursion taken directly mod 3
       (A1-compliant, states in {1,2,3}) has period exactly 8 starting from
@@ -102,6 +137,8 @@ CHECKS (OLC = Orbit-Lattice Collapse):
   OLC_LATTICE       NTRU lattice construction genuinely contains (f,g) for a worked example
   OLC_TERNARY_RANGE orbit-to-polynomial coefficients always in {-1,0,1}
   OLC_EMPIRICAL_WITNESS  the recorded fpylll LLL/BKZ numbers above match the fixture record
+  OLC_APPLIED_MODULUS_UNSAFE  m=24 (QA's own "applied" modulus) is CRT-collapsed same as m=9
+  OLC_GENERALIZATION_WITNESS  the 8-modulus generalization sweep record matches the fixture record
 
 Primary sources:
   Hoffstein, J., Pipher, J., Silverman, J.H. (1998). "NTRU: A Ring-Based
@@ -326,6 +363,57 @@ def check_empirical_witness(fixture_record: dict) -> bool:
     return True
 
 
+def check_applied_modulus_unsafe() -> Tuple[bool, dict]:
+    """OLC_APPLIED_MODULUS_UNSAFE: m=24 (this project's own "applied" QA
+    modulus per CLAUDE.md) is 3|m, so it must CRT-collapse to the direct
+    mod-3 orbit exactly like m=9 does -- checked directly, not inferred."""
+    seeds = [(4, 7), (1, 1), (2, 8), (5, 5), (11, 19), (23, 5)]
+    ok = True
+    details = []
+    for b0, e0 in seeds:
+        via_24 = [v % 3 for v in orbit_sequence(b0, e0, 24, 40)]
+        b0_3 = ((b0 - 1) % 3) + 1
+        e0_3 = ((e0 - 1) % 3) + 1
+        direct = [v % 3 for v in orbit_sequence(b0_3, e0_3, 3, 40)]
+        match = via_24 == direct
+        details.append({"seed": (b0, e0), "match": match})
+        if not match:
+            ok = False
+    return ok, details
+
+
+EMPIRICAL_RECORD_GENERALIZATION = {
+    "fpylll_version": "0.6.4",
+    "N": 83,
+    "q": 256,
+    "trials": 10,
+    "cases": {
+        # (broken_count, avg_ratio); m divisible by 3 -> broken, else safe
+        "9": [5, 1.457],
+        "24": [7, 0.888],
+        "27": [7, 0.775],
+        "81": [8, 0.614],
+        "80": [1, 538.522],
+        "35": [0, 598.255],
+        "25": [0, 610.998],
+        "49": [0, 617.411],
+    },
+}
+
+
+def check_generalization_witness(fixture_record: dict) -> bool:
+    """OLC_GENERALIZATION_WITNESS: the recorded 8-modulus sweep in a witness
+    fixture must match the numbers documented in this module (regression
+    guard against silently editing the historical record without re-running
+    reproduce_fpylll_generalization.py)."""
+    for key in ("N", "q", "fpylll_version", "trials"):
+        if fixture_record.get(key) != EMPIRICAL_RECORD_GENERALIZATION[key]:
+            return False
+    if fixture_record.get("cases") != EMPIRICAL_RECORD_GENERALIZATION["cases"]:
+        return False
+    return True
+
+
 # ---------------------------------------------------------------------------
 # Fixture validation
 # ---------------------------------------------------------------------------
@@ -357,6 +445,13 @@ def validate_fixture(fixture: dict) -> dict:
 
     if kind == "step_a1":
         return {"OLC_STEP": check_step_a1_compliant()}
+
+    if kind == "applied_modulus_unsafe":
+        ok, _ = check_applied_modulus_unsafe()
+        return {"OLC_APPLIED_MODULUS_UNSAFE": ok}
+
+    if kind == "generalization_witness":
+        return {"OLC_GENERALIZATION_WITNESS": check_generalization_witness(fixture.get("record", {}))}
 
     return {"OLC_UNKNOWN_KIND": False}
 
@@ -392,6 +487,13 @@ def self_test() -> bool:
 
     if not check_empirical_witness(EMPIRICAL_RECORD):
         failures.append("OLC_EMPIRICAL_WITNESS FAIL: internal record mismatch (should be impossible)")
+
+    ok, details = check_applied_modulus_unsafe()
+    if not ok:
+        failures.append(f"OLC_APPLIED_MODULUS_UNSAFE FAIL: {[d for d in details if not d['match']]}")
+
+    if not check_generalization_witness(EMPIRICAL_RECORD_GENERALIZATION):
+        failures.append("OLC_GENERALIZATION_WITNESS FAIL: internal record mismatch (should be impossible)")
 
     if failures:
         for f in failures[:15]:
@@ -481,6 +583,8 @@ if __name__ == "__main__":
                 "OLC_TERNARY_RANGE": check_ternary_range(),
                 "OLC_LATTICE": check_lattice_construction()[0],
                 "OLC_EMPIRICAL_WITNESS": check_empirical_witness(EMPIRICAL_RECORD),
+                "OLC_APPLIED_MODULUS_UNSAFE": check_applied_modulus_unsafe()[0],
+                "OLC_GENERALIZATION_WITNESS": check_generalization_witness(EMPIRICAL_RECORD_GENERALIZATION),
             },
         }
         print(json.dumps(payload, sort_keys=True, indent=2))

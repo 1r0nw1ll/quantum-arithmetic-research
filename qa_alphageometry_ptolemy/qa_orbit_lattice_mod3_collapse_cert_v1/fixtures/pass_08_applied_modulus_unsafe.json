@@ -1,0 +1,6 @@
+{
+  "_primary_source": "Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868 (NTRU)",
+  "kind": "applied_modulus_unsafe",
+  "description": "m=24 is this project's own 'applied' QA modulus (CLAUDE.md: mod 9 theoretical / mod 24 applied). Since 3|24, it must CRT-collapse to the direct mod-3 orbit exactly like m=9 -- checked directly across 6 seeds, not inferred from the m=9 result.",
+  "expected": "PASS"
+}

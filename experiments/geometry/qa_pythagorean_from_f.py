@@ -2038,6 +2038,8 @@ def derive_from_f_qa_mpqs_auto(
     F: int,
     primitive_only: bool = False,
     log_tolerance: float = 1.5,
+    ecm_b1: int = 20000,
+    ecm_max_curves: int = 50,
 ) -> dict[str, Any]:
     # QA-Fermat fast path: for Pythagorean F = d²-e² with balanced factors
     # (d ≈ sqrt(F)), this finds the answer in O(e / orbit_pruning_factor) steps.
@@ -2096,8 +2098,12 @@ def derive_from_f_qa_mpqs_auto(
 
     # ECM (Lenstra, stage 1): bridges Pollard's rho and MPQS for factors past
     # ~10^9-10^10 that are still B1-smooth — the gap noted after the 2026-05-30
-    # stress run (factors > 10^13 as individual primes had no bridge).
-    ecm_factors = qa_ecm_factor(F, b1=2000, max_curves=25)
+    # stress run (factors > 10^13 as individual primes had no bridge). Defaults
+    # tuned empirically (2026-07-04): b1=20000/curves=50 measured 92%/80%
+    # success against random 13/15-digit target factors, vs 25% for the
+    # original b1=2000/curves=25 — bounded worst case (genuinely hard F,
+    # no smooth factor) is ~6-19s before falling through to MPQS.
+    ecm_factors = qa_ecm_factor(F, b1=ecm_b1, max_curves=ecm_max_curves)
     if ecm_factors:
         all_primes: list[int] = []
         for p in ecm_factors:
@@ -2173,8 +2179,8 @@ def derive_from_f_qa_mpqs_auto(
 def derive_from_f_qa_ecm(
     F: int,
     primitive_only: bool = False,
-    b1: int = 2000,
-    max_curves: int = 25,
+    b1: int = 20000,
+    max_curves: int = 50,
 ) -> dict[str, Any]:
     ecm_factors = qa_ecm_factor(F, b1=b1, max_curves=max_curves)
     all_primes: list[int] = []
@@ -2212,6 +2218,8 @@ def derive_from_f(
     mpqs_half_width: int = 128,
     mpqs_polynomial_count: int = 12,
     mpqs_large_prime_bound: int = 0,
+    ecm_b1: int = 20000,
+    ecm_max_curves: int = 50,
 ) -> dict[str, Any]:
     if method == "tree":
         return derive_from_f_tree(F)
@@ -2255,9 +2263,13 @@ def derive_from_f(
             F,
             primitive_only=primitive_only,
             log_tolerance=qs_log_tolerance,
+            ecm_b1=ecm_b1,
+            ecm_max_curves=ecm_max_curves,
         )
     if method == "qa-ecm":
-        return derive_from_f_qa_ecm(F, primitive_only=primitive_only)
+        return derive_from_f_qa_ecm(
+            F, primitive_only=primitive_only, b1=ecm_b1, max_curves=ecm_max_curves
+        )
     if method == "external":
         return derive_from_f_external_backend(
             F,
@@ -2316,8 +2328,12 @@ def derive_from_f(
                 F,
                 primitive_only=primitive_only,
                 log_tolerance=qs_log_tolerance,
+                ecm_b1=ecm_b1,
+                ecm_max_curves=ecm_max_curves,
             ),
-            "qa_ecm": derive_from_f_qa_ecm(F, primitive_only=primitive_only),
+            "qa_ecm": derive_from_f_qa_ecm(
+                F, primitive_only=primitive_only, b1=ecm_b1, max_curves=ecm_max_curves
+            ),
             "external": derive_from_f_external_backend(
                 F,
                 primitive_only=primitive_only,
@@ -2408,10 +2424,16 @@ def self_test() -> dict[str, Any]:
         )
         got_qa_qs = derive_from_f(F, method="qa-qs", primitive_only=True)
         got_qa_mpqs = derive_from_f(F, method="qa-mpqs", primitive_only=True)
+        # ECM params here are deliberately tiny — self-test only needs
+        # correctness (ECM finding nothing on a prime still falls through to
+        # MPQS, which is guaranteed), not the production success-rate tuning
+        # applied to the qa-mpqs-auto/qa-ecm defaults for real use.
         got_qa_mpqs_auto = derive_from_f(
-            F, method="qa-mpqs-auto", primitive_only=True
+            F, method="qa-mpqs-auto", primitive_only=True, ecm_b1=200, ecm_max_curves=5
         )
-        got_qa_ecm = derive_from_f(F, method="qa-ecm", primitive_only=True)
+        got_qa_ecm = derive_from_f(
+            F, method="qa-ecm", primitive_only=True, ecm_b1=200, ecm_max_curves=5
+        )
         observed_factor = [(row["C"], row["F"], row["G"]) for row in got_factor["candidates"]]
         observed_tree = [(row["C"], row["F"], row["G"]) for row in got_tree["candidates"]]
         observed_tree_best = [
@@ -2644,6 +2666,18 @@ def parse_args() -> argparse.Namespace:
         help="single-large-prime residual bound for qa-mpqs; 0 disables it",
     )
     parser.add_argument(
+        "--ecm-b1",
+        type=int,
+        default=20000,
+        help="ECM stage-1 smoothness bound for qa-ecm / the qa-mpqs-auto bridge stage",
+    )
+    parser.add_argument(
+        "--ecm-max-curves",
+        type=int,
+        default=50,
+        help="number of random curves to try for qa-ecm / the qa-mpqs-auto bridge stage",
+    )
+    parser.add_argument(
         "--external-engine",
         choices=("auto", "msieve", "yafu", "cado-nfs"),
         default="auto",
@@ -2710,6 +2744,8 @@ def main() -> int:
             mpqs_half_width=args.mpqs_half_width,
             mpqs_polynomial_count=args.mpqs_polynomial_count,
             mpqs_large_prime_bound=args.mpqs_large_prime_bound,
+            ecm_b1=args.ecm_b1,
+            ecm_max_curves=args.ecm_max_curves,
         )
     else:
         sieve_moduli = parse_moduli(args.sieve_moduli)

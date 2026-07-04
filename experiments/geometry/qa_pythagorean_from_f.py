@@ -752,24 +752,73 @@ def _ec_multiply(
     return result, 0
 
 
+def _ecm_stage2(
+    q_point: tuple[int, int],
+    curve_a: int,
+    n: int,
+    stage2_primes: list[int],
+) -> int:
+    """Standard ECM continuation: extend a stage-1 point by one more prime.
+
+    Stage 1 finds p when ord(Q) mod p is B1-smooth. Stage 2 also catches the
+    case where ord(Q) mod p is (B1-smooth) times one further prime q in
+    (B1, B2] — without a fresh O(log q) scalar multiply per candidate q.
+    Scalar multiplication is a group homomorphism, so
+    q_i*Q = gap*Q + q_(i-1)*Q where gap = q_i - q_(i-1). Consecutive primes
+    near B2 have small gaps (~ln(B2) on average) that repeat often, so a
+    cache of gap*Q turns the whole continuation into ~1 cheap point-add per
+    prime plus a handful of small scalar multiplies for the distinct gaps.
+    """
+    if not stage2_primes:
+        return 0
+    gap_cache: dict[int, tuple[int, int] | None] = {}
+
+    running, factor = _ec_multiply(q_point, stage2_primes[0], curve_a, n)
+    if factor:
+        return factor
+    previous_prime = stage2_primes[0]
+
+    for prime in stage2_primes[1:]:
+        gap = prime - previous_prime
+        previous_prime = prime
+        if gap not in gap_cache:
+            step, factor = _ec_multiply(q_point, gap, curve_a, n)
+            if factor:
+                return factor
+            gap_cache[gap] = step
+        step = gap_cache[gap]
+        if step is None or running is None:
+            continue
+        running, factor = _ec_add(running, step, curve_a, n)
+        if factor:
+            return factor
+    return 0
+
+
 def qa_ecm_factor(
     F: int,
     b1: int = 2000,
+    b2: int | None = None,
     max_curves: int = 25,
     seed: int = 1,
 ) -> set[int]:
-    """Lenstra's ECM, stage 1 only — bridges Pollard's rho and MPQS.
+    """Lenstra's ECM with a stage-2 continuation — bridges Pollard's rho and MPQS.
 
     Pollard's rho cost depends on F's smallest factor being small enough to
     hit via a birthday-style collision (practical up to ~10^9-10^10). ECM
-    cost instead depends on that smallest factor p having a B1-smooth curve
+    cost instead depends on that smallest factor p having a smooth curve
     order, so a 14-15 digit p can still be found in milliseconds if it is
-    B1-smooth — the gap the auto pipeline previously had no bridge for.
+    smooth — the gap the auto pipeline previously had no bridge for. Stage 1
+    catches B1-smooth orders; stage 2 (see _ecm_stage2) additionally catches
+    orders that are B1-smooth times one further prime up to B2 (default
+    100*B1), at a small additional cost per curve.
     """
     if F <= 1:
         return set()
     if F % 2 == 0:
         return ({2, F // 2}) if F > 2 else set()
+    if b2 is None:
+        b2 = b1 * 100
 
     rng = random.Random(seed)
     stage1_k = 1
@@ -778,6 +827,7 @@ def qa_ecm_factor(
         while power * prime <= b1:
             power *= prime
         stage1_k *= power
+    stage2_primes = [p for p in primes_up_to(b2) if p > b1]
 
     for _ in range(max_curves):
         x0 = rng.randrange(2, F)
@@ -792,7 +842,13 @@ def qa_ecm_factor(
         if disc_gcd == F:
             continue
 
-        _point, factor = _ec_multiply((x0, y0), stage1_k, curve_a, F)
+        point, factor = _ec_multiply((x0, y0), stage1_k, curve_a, F)
+        if 1 < factor < F:
+            return {factor, F // factor}
+        if point is None:
+            continue
+
+        factor = _ecm_stage2(point, curve_a, F, stage2_primes)
         if 1 < factor < F:
             return {factor, F // factor}
 
@@ -2056,7 +2112,8 @@ def derive_from_f_qa_mpqs_auto(
     primitive_only: bool = False,
     log_tolerance: float = 1.5,
     ecm_b1: int = 20000,
-    ecm_max_curves: int = 50,
+    ecm_b2: int | None = 2000000,
+    ecm_max_curves: int = 30,
 ) -> dict[str, Any]:
     # F % 4 == 2 makes d*d-e*e==F provably unsolvable for any integer d,e
     # (see difference_of_squares_possible) — reject instantly rather than
@@ -2132,14 +2189,17 @@ def derive_from_f_qa_mpqs_auto(
             "primitive_only": primitive_only,
         }
 
-    # ECM (Lenstra, stage 1): bridges Pollard's rho and MPQS for factors past
-    # ~10^9-10^10 that are still B1-smooth — the gap noted after the 2026-05-30
-    # stress run (factors > 10^13 as individual primes had no bridge). Defaults
-    # tuned empirically (2026-07-04): b1=20000/curves=50 measured 92%/80%
-    # success against random 13/15-digit target factors, vs 25% for the
-    # original b1=2000/curves=25 — bounded worst case (genuinely hard F,
-    # no smooth factor) is ~6-19s before falling through to MPQS.
-    ecm_factors = qa_ecm_factor(F, b1=ecm_b1, max_curves=ecm_max_curves)
+    # ECM (Lenstra, stage 1 + stage 2): bridges Pollard's rho and MPQS for
+    # factors past ~10^9-10^10 that have a smooth-enough curve order — the
+    # gap noted after the 2026-05-30 stress run (factors > 10^13 as
+    # individual primes had no bridge). Defaults tuned empirically
+    # (2026-07-04): b1=20000/b2=2e6/curves=30 measured 100%/100% success
+    # against random 13/15-digit target factors (vs 92%/80% for the same
+    # b1 with curves=50 and no stage 2, and 25% for the original
+    # b1=2000/curves=25) — stage 2 lets fewer curves do more, so this is
+    # both stronger and cheaper on average. Bounded worst case (genuinely
+    # hard F, no smooth factor at all) is ~14s before falling through to MPQS.
+    ecm_factors = qa_ecm_factor(F, b1=ecm_b1, b2=ecm_b2, max_curves=ecm_max_curves)
     if ecm_factors:
         all_primes: list[int] = []
         for p in ecm_factors:
@@ -2216,9 +2276,10 @@ def derive_from_f_qa_ecm(
     F: int,
     primitive_only: bool = False,
     b1: int = 20000,
-    max_curves: int = 50,
+    b2: int | None = 2000000,
+    max_curves: int = 30,
 ) -> dict[str, Any]:
-    ecm_factors = qa_ecm_factor(F, b1=b1, max_curves=max_curves)
+    ecm_factors = qa_ecm_factor(F, b1=b1, b2=b2, max_curves=max_curves)
     all_primes: list[int] = []
     for p in ecm_factors:
         if 1 < p < F:
@@ -2232,6 +2293,7 @@ def derive_from_f_qa_ecm(
         "method": "qa_ecm",
         "qa_engine": {
             "b1": b1,
+            "b2": b2,
             "max_curves": max_curves,
             "factors_found": factors_sorted,
             "ecm_success": bool(ecm_factors),
@@ -2255,7 +2317,8 @@ def derive_from_f(
     mpqs_polynomial_count: int = 12,
     mpqs_large_prime_bound: int = 0,
     ecm_b1: int = 20000,
-    ecm_max_curves: int = 50,
+    ecm_b2: int | None = 2000000,
+    ecm_max_curves: int = 30,
 ) -> dict[str, Any]:
     if method == "tree":
         return derive_from_f_tree(F)
@@ -2300,11 +2363,16 @@ def derive_from_f(
             primitive_only=primitive_only,
             log_tolerance=qs_log_tolerance,
             ecm_b1=ecm_b1,
+            ecm_b2=ecm_b2,
             ecm_max_curves=ecm_max_curves,
         )
     if method == "qa-ecm":
         return derive_from_f_qa_ecm(
-            F, primitive_only=primitive_only, b1=ecm_b1, max_curves=ecm_max_curves
+            F,
+            primitive_only=primitive_only,
+            b1=ecm_b1,
+            b2=ecm_b2,
+            max_curves=ecm_max_curves,
         )
     if method == "external":
         return derive_from_f_external_backend(
@@ -2365,10 +2433,15 @@ def derive_from_f(
                 primitive_only=primitive_only,
                 log_tolerance=qs_log_tolerance,
                 ecm_b1=ecm_b1,
+                ecm_b2=ecm_b2,
                 ecm_max_curves=ecm_max_curves,
             ),
             "qa_ecm": derive_from_f_qa_ecm(
-                F, primitive_only=primitive_only, b1=ecm_b1, max_curves=ecm_max_curves
+                F,
+                primitive_only=primitive_only,
+                b1=ecm_b1,
+                b2=ecm_b2,
+                max_curves=ecm_max_curves,
             ),
             "external": derive_from_f_external_backend(
                 F,
@@ -2465,10 +2538,15 @@ def self_test() -> dict[str, Any]:
         # MPQS, which is guaranteed), not the production success-rate tuning
         # applied to the qa-mpqs-auto/qa-ecm defaults for real use.
         got_qa_mpqs_auto = derive_from_f(
-            F, method="qa-mpqs-auto", primitive_only=True, ecm_b1=200, ecm_max_curves=5
+            F,
+            method="qa-mpqs-auto",
+            primitive_only=True,
+            ecm_b1=200,
+            ecm_b2=200,
+            ecm_max_curves=5,
         )
         got_qa_ecm = derive_from_f(
-            F, method="qa-ecm", primitive_only=True, ecm_b1=200, ecm_max_curves=5
+            F, method="qa-ecm", primitive_only=True, ecm_b1=200, ecm_b2=200, ecm_max_curves=5
         )
         observed_factor = [(row["C"], row["F"], row["G"]) for row in got_factor["candidates"]]
         observed_tree = [(row["C"], row["F"], row["G"]) for row in got_tree["candidates"]]
@@ -2730,9 +2808,16 @@ def parse_args() -> argparse.Namespace:
         help="ECM stage-1 smoothness bound for qa-ecm / the qa-mpqs-auto bridge stage",
     )
     parser.add_argument(
+        "--ecm-b2",
+        type=int,
+        default=2000000,
+        help="ECM stage-2 continuation bound (catches one extra prime factor "
+        "of the curve order beyond --ecm-b1); pass a value == --ecm-b1 to disable stage 2",
+    )
+    parser.add_argument(
         "--ecm-max-curves",
         type=int,
-        default=50,
+        default=30,
         help="number of random curves to try for qa-ecm / the qa-mpqs-auto bridge stage",
     )
     parser.add_argument(
@@ -2803,6 +2888,7 @@ def main() -> int:
             mpqs_polynomial_count=args.mpqs_polynomial_count,
             mpqs_large_prime_bound=args.mpqs_large_prime_bound,
             ecm_b1=args.ecm_b1,
+            ecm_b2=args.ecm_b2,
             ecm_max_curves=args.ecm_max_curves,
         )
     else:

@@ -1,0 +1,26 @@
+{
+  "_primary_source": "fpylll development team (2024) https://github.com/fplll/fpylll; Lenstra, Lenstra, Lovasz (1982) DOI:10.1007/BF01457454",
+  "kind": "sizing_witness",
+  "description": "FAIL fixture: status string has been tampered to imply N=251 was tested when it wasn't -- must not match SIZING_RECORD",
+  "record": {
+    "fpylll_version": "0.6.4",
+    "float_type": "mpfr",
+    "precision_bits": 212,
+    "status": "COMPLETE -- all sizes N=83,167,251 tested",
+    "sizes": {
+      "83": {
+        "q": 256,
+        "LLL": {"random": [0, 5, 585.864], "qa_unsafe": [4, 5, 0.615], "qa_safe": [0, 5, 595.841]},
+        "BKZ-10": {"random": [3, 3, 1.000], "qa_unsafe": [3, 3, 0.091], "qa_safe": [3, 3, 1.000]},
+        "BKZ-20": {"random": [3, 3, 1.000], "qa_unsafe": [3, 3, 0.091], "qa_safe": [3, 3, 1.000]}
+      },
+      "167": {
+        "q": 512,
+        "LLL": {"random": [0, 5, 1172.970], "qa_unsafe": [1, 5, 1003.424], "qa_safe": [0, 5, 1221.036]},
+        "BKZ-10": "n/a -- did not complete within interactive compute budget"
+      },
+      "251": "n/a -- not reached"
+    }
+  },
+  "expected": "FAIL"
+}

@@ -97,6 +97,48 @@ attributable to the mod-3 collapse and not merely a short overall period):
   qualitative safe/unsafe split is exactly gcd(m,3)=1 vs 3|m in all 8 cases
   tested, with no exceptions.
 
+SIZING FOLLOW-UP (2026-07-04, PARTIAL -- see reproduce_fpylll_sizing_sweep.py):
+  Open question this addresses: does "gcd(m,3)=1 is safe" survive as N grows
+  toward where random keys actually start resisting BKZ, rather than just at
+  the single toy size N=83 where cert [515]'s original record showed BOTH
+  the safe construction and random keys break equally under BKZ (because
+  N=83 is too small for ANY NTRU instance to resist BKZ at all)?
+
+  Tested N in {83, 167, 251} (166/334/502-dim lattices), q scaled with N,
+  under LLL, BKZ-10, and BKZ-20 (mpfr precision=212 bits to avoid a known
+  fplll "infinite loop in babai" numerical failure at larger dimensions
+  with plain double precision):
+
+    N=83  (full: LLL + BKZ-10 + BKZ-20): qa_safe (m=80) tracks random
+      EXACTLY at every tier -- 0/5 broken under LLL (both), 3/3 broken
+      under BKZ-10 and BKZ-20 (both, ratio=1.000 both). No gap.
+    N=167 (LLL only completed): qa_safe again tracks random closely --
+      0/5 broken, avg ratio ~1173 (random) vs ~1221 (qa_safe), same order
+      of magnitude, no meaningful gap. BKZ-10 at this size, even with mpfr
+      precision, did not complete within the session's interactive compute
+      budget (a single BKZ-10 trial at N=83 took ~85-95s; at N=167 a single
+      trial had not finished after 15+ more minutes) -- stopped rather than
+      let it run indefinitely.
+    N=251: not reached.
+
+  LOOSE THREAD (not yet explained, not yet chased): qa_unsafe (m=24, the
+  raw mod-3 collapse construction) broke only 1/5 under plain LLL at
+  N=167, down from 4/5 at N=83 -- i.e. the collapse got HARDER to exploit
+  with LLL alone as N grew, even though the underlying period<=8 defect is
+  still structurally present. No BKZ data exists at N=167 to check whether
+  BKZ (which found the collapse near-instantly at N=83, 0.8-1.6s avg vs
+  70-95s for random/safe) still exposes it easily at this size.
+
+  WHAT THIS DOES NOT SHOW: real NTRU security parameters are N=677-821
+  (NIST PQC round 3: ntruhps2048677, ntruhrss701, ntruhps4096821). Running
+  BKZ at that scale to a meaningful block size is an industrial, multi-core,
+  multi-hour+ undertaking in real cryptanalysis work, not something this
+  session's interactive compute budget can produce honest numbers for.
+  STATUS: "no contrary evidence found at toy/moderate scale" is NOT the
+  same claim as "verified safe at real NTRU scale" -- the latter remains
+  explicitly untested and is flagged as dedicated future work, not
+  something this record should be read as having settled.
+
 SUB-CLAIMS:
   (A) MOD-3 INTRINSIC PERIOD: the qa_step recursion taken directly mod 3
       (A1-compliant, states in {1,2,3}) has period exactly 8 starting from
@@ -139,6 +181,7 @@ CHECKS (OLC = Orbit-Lattice Collapse):
   OLC_EMPIRICAL_WITNESS  the recorded fpylll LLL/BKZ numbers above match the fixture record
   OLC_APPLIED_MODULUS_UNSAFE  m=24 (QA's own "applied" modulus) is CRT-collapsed same as m=9
   OLC_GENERALIZATION_WITNESS  the 8-modulus generalization sweep record matches the fixture record
+  OLC_SIZING_WITNESS  the partial N=83/167 sizing-sweep record matches the fixture record (N=251+ explicitly deferred)
 
 Primary sources:
   Hoffstein, J., Pipher, J., Silverman, J.H. (1998). "NTRU: A Ring-Based
@@ -414,6 +457,43 @@ def check_generalization_witness(fixture_record: dict) -> bool:
     return True
 
 
+SIZING_RECORD = {
+    "fpylll_version": "0.6.4",
+    "float_type": "mpfr",
+    "precision_bits": 212,
+    "status": "PARTIAL -- N=251 and real NTRU scale (N=677-821) explicitly deferred",
+    # (N, q): {construction: [broken, trials, avg_ratio]}; "n/a" = not completed
+    # within this session's interactive compute budget.
+    "sizes": {
+        "83": {
+            "q": 256,
+            "LLL": {"random": [0, 5, 585.864], "qa_unsafe": [4, 5, 0.615], "qa_safe": [0, 5, 595.841]},
+            "BKZ-10": {"random": [3, 3, 1.000], "qa_unsafe": [3, 3, 0.091], "qa_safe": [3, 3, 1.000]},
+            "BKZ-20": {"random": [3, 3, 1.000], "qa_unsafe": [3, 3, 0.091], "qa_safe": [3, 3, 1.000]},
+        },
+        "167": {
+            "q": 512,
+            "LLL": {"random": [0, 5, 1172.970], "qa_unsafe": [1, 5, 1003.424], "qa_safe": [0, 5, 1221.036]},
+            "BKZ-10": "n/a -- did not complete within interactive compute budget",
+        },
+        "251": "n/a -- not reached",
+    },
+}
+
+
+def check_sizing_witness(fixture_record: dict) -> bool:
+    """OLC_SIZING_WITNESS: the recorded partial N=83/167 sizing-sweep record
+    (from reproduce_fpylll_sizing_sweep.py) matches the numbers documented in
+    this module (regression guard). N=251+/real-NTRU-scale are explicitly
+    marked as deferred, not silently implied to be tested."""
+    for key in ("fpylll_version", "float_type", "precision_bits", "status"):
+        if fixture_record.get(key) != SIZING_RECORD[key]:
+            return False
+    if fixture_record.get("sizes") != SIZING_RECORD["sizes"]:
+        return False
+    return True
+
+
 # ---------------------------------------------------------------------------
 # Fixture validation
 # ---------------------------------------------------------------------------
@@ -452,6 +532,9 @@ def validate_fixture(fixture: dict) -> dict:
 
     if kind == "generalization_witness":
         return {"OLC_GENERALIZATION_WITNESS": check_generalization_witness(fixture.get("record", {}))}
+
+    if kind == "sizing_witness":
+        return {"OLC_SIZING_WITNESS": check_sizing_witness(fixture.get("record", {}))}
 
     return {"OLC_UNKNOWN_KIND": False}
 
@@ -494,6 +577,9 @@ def self_test() -> bool:
 
     if not check_generalization_witness(EMPIRICAL_RECORD_GENERALIZATION):
         failures.append("OLC_GENERALIZATION_WITNESS FAIL: internal record mismatch (should be impossible)")
+
+    if not check_sizing_witness(SIZING_RECORD):
+        failures.append("OLC_SIZING_WITNESS FAIL: internal record mismatch (should be impossible)")
 
     if failures:
         for f in failures[:15]:
@@ -585,6 +671,7 @@ if __name__ == "__main__":
                 "OLC_EMPIRICAL_WITNESS": check_empirical_witness(EMPIRICAL_RECORD),
                 "OLC_APPLIED_MODULUS_UNSAFE": check_applied_modulus_unsafe()[0],
                 "OLC_GENERALIZATION_WITNESS": check_generalization_witness(EMPIRICAL_RECORD_GENERALIZATION),
+                "OLC_SIZING_WITNESS": check_sizing_witness(SIZING_RECORD),
             },
         }
         print(json.dumps(payload, sort_keys=True, indent=2))

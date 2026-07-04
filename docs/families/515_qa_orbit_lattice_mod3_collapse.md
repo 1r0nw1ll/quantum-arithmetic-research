@@ -106,6 +106,55 @@ higher powers of 3 (9→24→27→81 avg ratio decreases monotonically:
 attack's structured search space — but the qualitative safe/unsafe split is
 exactly `gcd(m,3)=1` vs `3|m` with zero exceptions across all 8 cases.
 
+## Sizing Follow-Up (2026-07-04, PARTIAL — real-scale testing deferred)
+
+**Open question**: does "gcd(m,3)=1 is safe" survive as `N` grows toward
+where random keys actually start resisting BKZ, rather than just at the
+single toy size `N=83` — where the original empirical record above shows
+random keys and `gcd(m,3)=1` QA keys break equally under BKZ *because*
+`N=83` is too small for any NTRU instance to resist BKZ at all?
+
+Tested `N∈{83,167,251}` (166/334/502-dimensional lattices), `q` scaled with
+`N`, under LLL, BKZ-10, and BKZ-20 (`mpfr` precision, 212 bits — needed to
+avoid a known `fplll` numerical failure, "infinite loop in babai", that
+plain double precision can hit at larger dimensions):
+
+| N | tier | random | qa_unsafe (m=24) | qa_safe (m=80) |
+|---|---|---|---|---|
+| 83 | LLL | 0/5, ~586 | 4/5, ~0.62 | 0/5, ~596 |
+| 83 | BKZ-10 | 3/3, 1.000 | 3/3, ~0.09 | 3/3, 1.000 |
+| 83 | BKZ-20 | 3/3, 1.000 | 3/3, ~0.09 | 3/3, 1.000 |
+| 167 | LLL | 0/5, ~1173 | 1/5, ~1003 | 0/5, ~1221 |
+| 167 | BKZ-10 | — | — | *did not complete* |
+| 251 | any | — | — | *not reached* |
+
+**Where data exists, `qa_safe` tracks `random` exactly — no gap opens at
+either `N=83` (full three-tier sweep) or `N=167` (LLL tier).** BKZ-10 at
+`N=167`, even with `mpfr` precision, did not finish a single trial within
+the session's interactive compute budget (a single BKZ-10 trial at `N=83`
+took ~85–95s; at `N=167` one trial had not finished after 15+ more
+minutes) — the run was stopped rather than left open-ended. `N=251` was
+never reached.
+
+**Loose thread, not yet explained or chased further**: `qa_unsafe` (m=24)
+broke only 1/5 under plain LLL at `N=167`, down from 4/5 at `N=83` — the
+raw mod-3 collapse got *harder* to exploit with LLL alone as `N` grew, even
+though the underlying period-≤8 defect is still structurally present. No
+BKZ data exists at `N=167` to check whether BKZ — which found the collapse
+near-instantly at `N=83` (0.8–1.6s avg vs 70–95s for random/safe) — still
+exposes it easily at this size.
+
+**What this does not show**: real NTRU security parameters are
+`N=677–821` (NIST PQC round 3: `ntruhps2048677`, `ntruhrss701`,
+`ntruhps4096821`). Running BKZ at that scale to a meaningful block size is
+an industrial, multi-core, multi-hour+ undertaking in real cryptanalysis
+work — not something achievable in an interactive session. **"No contrary
+evidence found at toy/moderate scale" is explicitly not the same claim as
+"verified safe at real NTRU scale."** Dedicated time is planned for actual
+testing at real scale (proper compute budget, likely off-session/batch);
+until then this record should be read as encouraging but incomplete, not
+as having settled the security question.
+
 ## Checks (OLC = Orbit-Lattice Collapse)
 
 | Check | Claim |
@@ -119,6 +168,7 @@ exactly `gcd(m,3)=1` vs `3|m` with zero exceptions across all 8 cases.
 | OLC_EMPIRICAL_WITNESS | recorded fpylll parameters match the historical run (regression guard) |
 | OLC_APPLIED_MODULUS_UNSAFE | m=24 CRT-collapses to the direct mod-3 orbit exactly like m=9 |
 | OLC_GENERALIZATION_WITNESS | recorded 8-modulus sweep matches the historical run (regression guard) |
+| OLC_SIZING_WITNESS | recorded partial N=83/167 sizing sweep matches the historical run; N=251+ explicitly marked deferred |
 
 The validator's gating checks are all stdlib-only and deterministic (the
 mod-3 collapse identity is a proof, reproducible instantly). The `fpylll`

@@ -1,71 +1,75 @@
 # [496] QA-E8 Satellite Chamber Theorem
 
-**Cert slug**: `qa_e8_satellite_chamber_cert_v1`  
-**Family ID**: 496  
+**Cert slug**: `qa_e8_satellite_chamber_cert_v1`
+**Family ID**: 496
 **Derived**: 2026-06-21
+**Downgraded**: 2026-07-04 (3 of 11 checks retracted — see below)
 
-## Theorem Statement
+## Retraction Note (2026-07-04)
 
-For QA mod m=9, the Satellite orbit has 8 states with period 8, canonically anchored at (6,3) — the unique step yielding the primitive (3,4,5) triple with C<F. Label the 8 axes e₁,...,e₈ in Satellite order starting from (6,3).
+`branch_and_distances()` returns an index into the *filtered list of simple
+roots* — the order depends on which of the 240 globally-enumerated E8 roots
+happen to be positive/simple for a given height vector, and where they fall
+in that fixed enumeration — **not** a Satellite-axis index. The original
+`ESC_BRANCH`, `ESC_GRANT`, and `ESC_ELEM_UNIQUE` checks all conflated
+"position 0 in that filtered list" with "Satellite axis 0 = (6,3)".
 
-For height function h = α·d² + β·e² (α,β > 0), h lies in the E₈ Weyl chamber where **(6,3) is the branch node** and **(3,6) [Grant LRT] is the terminal leaf of the long arm** (distance 4 from branch) **if and only if**:
+Verified directly: for `h=G`, the actual branch (degree-3) simple root is
+`(0,0,2,0,-2,0,0,0)` — a Type-1 root touching **axes 2 and 4** (`SAT[2]=(9,3)`,
+`SAT[4]=(3,6)`), not axis 0. This is not fixable by correcting the index:
+7 of the 8 simple roots in this chamber are Type-2 (nonzero at all 8
+coordinates simultaneously), so there is no well-defined sense in which a
+single Satellite axis "is" the branch node or sits "at distance k" from it.
+`ESC_BRANCH`, `ESC_GRANT`, and `ESC_ELEM_UNIQUE` are **retracted**, not
+corrected, because their premise doesn't hold.
+
+The chamber/wall-selection results below do **not** depend on this
+axis-to-branch mapping (they compare root-projection signs or full
+simple-root sets directly) and remain valid, independently re-verified
+2026-07-04.
+
+## Theorem Statement (narrowed)
+
+For QA mod m=9, the Satellite orbit has 8 states with period 8, canonically
+anchored at (6,3) — independently verified as the unique orbit member whose
+reduced triple is the fundamental (3,4,5) (not merely one of several
+satisfying C<F alone — three of the eight members do that).
+
+For height function h = α·d² + β·e² (α,β > 0), h lies in the **same E₈
+Weyl chamber as h=G** if and only if:
 
 > **7/12 < α/β < 13/12**
 
-The **unique isotropic** choice α = β gives α/β = 1 ∈ (7/12, 13/12).  
+The **unique isotropic** choice α = β gives α/β = 1 ∈ (7/12, 13/12).
 Normalizing α = β = 1: **h = G = d² + e²** (Wildberger quadrance).
 
 ## Sub-Claims
 
-| Check | Claim |
-|-------|-------|
-| ESC_PYTH | C² + F² = G² for all 576 QA pairs (b,e) ∈ {1..9}² |
-| ESC_PARITY | b+e+d+a+C+F+G ≡ b (mod 2) for all 576 pairs |
-| ESC_ROOTS | E₈ root system: 112 Type-1 (±2 entries) + 128 Type-2 (±1, even −) = 240 |
-| ESC_GRAM | G-chamber simple system Cartan matrix det = 1 |
-| ESC_BRANCH | h = G places (6,3) at E₈ branch node (degree-3 node) |
-| ESC_GRANT | (3,6) [Grant LRT] is at distance 4 from branch under h = G |
-| ESC_WALL_LOWER | WALL_LOWER·G = +45 > 0 → lower bound α/β > 7/12 |
-| ESC_WALL_UPPER | WALL_UPPER·G = −9 < 0 → upper bound α/β < 13/12 |
-| ESC_ISO_INTERVAL | α/β = 1 ∈ (7/12, 13/12) strictly |
-| ESC_G2_EXITS | G² has opposite sign on 3 Type-2 wall roots (G-chamber ≠ G²-chamber despite same axis ordering) |
-| ESC_ELEM_UNIQUE | G is unique in {b,e,d,a,C,F,G} with strict ordering + E₈ genericity + branch=(6,3) |
+| Check | Claim | Status |
+|-------|-------|--------|
+| ESC_PYTH | C² + F² = G² for all 576 QA pairs (b,e) ∈ {1..9}² | valid |
+| ESC_PARITY | b+e+d+a+C+F+G ≡ b (mod 2) for all 576 pairs | valid |
+| ESC_ROOTS | E₈ root system: 112 Type-1 (±2 entries) + 128 Type-2 (±1, even −) = 240 | valid |
+| ESC_GRAM | G-chamber simple system Cartan matrix det = 1 | valid |
+| ESC_WALL_LOWER | WALL_LOWER·G = +45 > 0 → lower bound α/β > 7/12 | valid |
+| ESC_WALL_UPPER | WALL_UPPER·G = −9 < 0 → upper bound α/β < 13/12 | valid |
+| ESC_ISO_INTERVAL | α/β = 1 ∈ (7/12, 13/12) strictly | valid |
+| ESC_G2_EXITS | G² has opposite sign on Type-2 wall roots (G-chamber ≠ G²-chamber despite same axis ordering) | valid |
+| ~~ESC_BRANCH~~ | ~~h = G places (6,3) at E₈ branch node~~ | **retracted** |
+| ~~ESC_GRANT~~ | ~~(3,6) [Grant LRT] is at distance 4 from branch~~ | **retracted** |
+| ~~ESC_ELEM_UNIQUE~~ | ~~G is unique in {b,e,d,a,C,F,G} with branch=(6,3)~~ | **retracted** |
 
 ## Wall Roots
 
-**Lower wall** (root `[-1,-1,+1,-1,+1,-1,+1,+1]`):  
+**Lower wall** (root `[-1,-1,+1,-1,+1,-1,+1,+1]`):
 A = 108·α − 63·β > 0 → α/β > 63/108 = **7/12**
 
-**Upper wall** (root `[+1,-1,+1,-1,−1,−1,+1,+1]`):  
+**Upper wall** (root `[+1,-1,+1,-1,−1,−1,+1,+1]`):
 A = 108·α − 117·β < 0 → α/β < 117/108 = **13/12**
 
-Both binding walls have the same A-coefficient (108), with B-values −63 (lower) and −117 (upper).  
-The center of the interval (in A-B space) is at −(−63−117)/(2·108) = 90/108 = 5/6 ≈ 0.833.  
+Both binding walls have the same A-coefficient (108), with B-values −63 (lower) and −117 (upper).
+The center of the interval (in A-B space) is at −(−63−117)/(2·108) = 90/108 = 5/6 ≈ 0.833.
 The isotropic point (ratio = 1) lies at 0.833 + 0.167, interior to the interval.
-
-## E₈ Dynkin Diagram Under h = G
-
-```
-(9,3)—(3,3)—(6,3)—(9,6)
-               |
-            (6,6)—(3,9)—(6,9)—(3,6)
-         [b=e diag]        [Grant LRT]
-```
-
-- **(6,3)** = branch node (degree 3), G = 90 (smallest on long arm)
-- **(3,6)** = Grant LRT, (12,5,13) triple, distance 4 from branch
-- Short arm: (6,3) → (9,6)
-- Medium arm: (6,3) → (3,3) → (9,3)
-- Long arm: (6,3) → (6,6) → (3,9) → (6,9) → (3,6)
-
-## Elementary Uniqueness Selection Chain
-
-```
-{b,e,d,a,C,F,G}
-  → {C,F,G}    (strict ordering: b,e,d,a have repeated values on Satellite)
-  → {F,G}      (genericity: C has zero-projection Type-2 root)
-  → {G}        (correct branch: F places branch at (9,6), G places it at (6,3))
-```
 
 ## G vs G² (Metric Sensitivity)
 
@@ -78,6 +82,15 @@ G = (90,225,153,45,117,306,261,180) and G² = (8100,50625,23409,2025,13689,93636
 | `[+1,+1,+1,+1,+1,-1,-1,+1]` | +243 | −31509 |
 
 This proves chamber selection depends on metric values, not axis order alone — making d²+e² (Wildberger quadrance) geometrically canonical.
+
+## What Is Retracted, and Why
+
+The following sections from the original 2026-06-21 derivation are **withdrawn** as of 2026-07-04, since they depend on the same axis-to-branch conflation described above:
+
+- The E₈ Dynkin diagram walk through named Satellite steps ("(6,3) = branch node", "(3,6) = Grant LRT, distance 4 from branch") — the diagram shape (240 roots, Cartan determinant 1, wall bounds) is real, but attaching individual axis labels to individual diagram positions is not well-defined here.
+- The "Elementary Uniqueness Selection Chain" ({b,e,d,a,C,F,G} → {C,F,G} → {F,G} → {G}) — the first two narrowing steps (strict ordering, genericity) are fine, but the final step ("correct branch") relied on the retracted branch computation.
+
+What remains genuinely established: `G=d²+e²` selects a *specific, non-arbitrary* E8 Weyl chamber (bounded by `7/12 < α/β < 13/12`), the isotropic choice `α=β` lands inside that interval, and `G` and `G²` — despite preserving the same axis ordering — land in different chambers. That's a real, verified fact about chamber selection; it just doesn't decompose into a story about individual Satellite axes sitting at individual Dynkin-diagram positions.
 
 ## Primary Sources
 

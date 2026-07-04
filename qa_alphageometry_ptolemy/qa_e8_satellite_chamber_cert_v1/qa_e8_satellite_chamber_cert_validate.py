@@ -8,26 +8,52 @@ QA_COMPLIANCE = (
 )
 """Cert [496]: QA-E8 Satellite Chamber Theorem.
 
-PRIMARY CLAIM:
-  For QA mod m=9, the Satellite orbit has 8 states anchored at (6,3)
-  (the unique step yielding the primitive (3,4,5) triple with C<F).
+DOWNGRADED 2026-07-04 -- see RETRACTION NOTE below. 8 of the original 11
+checks remain valid; 3 (ESC_BRANCH, ESC_GRANT, ESC_ELEM_UNIQUE) are
+retracted and no longer gate this cert's pass/fail status.
 
-  Let the 8 Satellite axes label e_1,...,e_8 in this canonical order.
+RETRACTION NOTE:
+  branch_and_distances() returns an index into the *filtered list of
+  simple roots* (order depends on which of the 240 globally-enumerated
+  roots happen to be positive/simple for a given height vector, and
+  where they fall in that fixed enumeration) -- NOT a coordinate-axis
+  index. check_branch()/check_grant_distance()/check_elementary_
+  uniqueness() all conflated "list position 0" with "Satellite axis 0
+  = (6,3)", which are different things.
+
+  Verified directly (2026-07-04): for h=G_VALS, the actual branch
+  (degree-3) simple root is (0,0,2,0,-2,0,0,0) -- a Type-1 root
+  touching axes 2 and 4, i.e. SAT[2]=(9,3) and SAT[4]=(3,6). It does
+  NOT touch axis 0 = (6,3) at all. "branch==0" was a coincidence
+  between two unrelated indices, not a geometric fact.
+
+  This is not fixable by correcting the index: 7 of the 8 simple roots
+  in this chamber are Type-2 (nonzero at all 8 coordinates
+  simultaneously), so there is no well-defined sense in which a single
+  Satellite axis "is" the branch node or sits "at distance k" from it --
+  the graph structure does not decompose per-axis the way the original
+  theorem assumed. ESC_BRANCH, ESC_GRANT, and ESC_ELEM_UNIQUE are
+  retracted, not corrected, because their premise is ill-posed.
+
+  The wall-bound / chamber-selection results (ESC_WALL_LOWER/UPPER,
+  ESC_ISO_INTERVAL, ESC_G2_EXITS) do NOT depend on this axis-to-branch
+  mapping (they compare root-projection signs or full simple-root SETS
+  directly) and remain valid, independently re-verified 2026-07-04.
+
+PRIMARY CLAIM (narrowed):
+  For QA mod m=9, the Satellite orbit has 8 states anchored at (6,3)
+  (the unique step whose reduced triple is the fundamental (3,4,5),
+  verified independently against all 8 orbit members -- not merely
+  the first one satisfying C<F, since 3 of the 8 satisfy that alone).
 
   For the height function h = alpha*d^2 + beta*e^2 (alpha, beta > 0),
   define positive roots as those with h-projection > 0, simple roots as
   the minimal positive roots under the partial order r > r-s (s positive).
 
-  THEOREM:
-  h lies in the E8 Weyl chamber where (6,3) is the branch node (degree-3
-  node of the E8 Dynkin diagram) and (3,6) [Grant LRT] is the terminal
-  leaf of the long arm (distance 4 from branch) if and only if:
-
-      7/12 < alpha/beta < 3/2.
-
-  The unique ISOTROPIC choice (alpha = beta) gives alpha/beta = 1, which
-  lies in the interior of (7/12, 3/2). Normalizing to alpha = beta = 1
-  gives h = G = d^2 + e^2.
+  THEOREM (still valid): h lies in the same E8 Weyl chamber as h=G if
+  and only if 7/12 < alpha/beta < 13/12. The unique ISOTROPIC choice
+  (alpha=beta) gives ratio 1, in the interior of that interval.
+  Normalizing alpha=beta=1 gives h = G = d^2+e^2.
 
 SUB-CLAIMS:
   (A) QA PYTHAGOREAN TRIPLE: C^2 + F^2 = G^2 for all (b,e) in {1..9}^2
@@ -44,32 +70,35 @@ SUB-CLAIMS:
   (D) WALL BOUNDS: The three non-trivial Type-2 wall roots separating
       the G-chamber from neighboring chambers are:
         W1 = [-1,-1,+1,-1,+1,-1,+1,+1]  G-proj = +45
-        W2 = [-1,-1,+1,+1,-1,+1,-1,+1]  G-proj = -9
+        W2 = [+1,-1,+1,-1,-1,-1,+1,+1]  G-proj = -9
         W3 = [+1,+1,+1,+1,+1,-1,-1,+1]  G-proj = +243
       For h = alpha*d^2 + beta*e^2: W1 forces alpha/beta > 7/12;
-      W2 forces alpha/beta < 3/2; W3 is auto-satisfied.
+      W2 forces alpha/beta < 13/12; W3 is auto-satisfied.
 
   (E) G^2 EXITS: G^2 = (d^2+e^2)^2 preserves Satellite axis ordering
       but crosses the W1 and W3 walls (projections change sign) --
       proving chamber selection depends on metric values, not axis order.
 
-  (F) ELEMENTARY UNIQUENESS: Among {b, e, d, a, C, F, G}, G is the
-      unique elementary QA invariant that (i) strictly orders the 8
-      Satellite axes, (ii) is generic on E8 (no zero projection), and
-      (iii) places (6,3) at the E8 branch node.
+  (F) ELEMENTARY UNIQUENESS -- RETRACTED 2026-07-04: this claimed G was
+      the unique invariant in {b,e,d,a,C,F,G} "placing (6,3) at the E8
+      branch node." See RETRACTION NOTE -- the underlying premise
+      (individual axes correspond to Dynkin-diagram positions) does not
+      hold, so this claim is retracted rather than corrected.
 
 CHECKS (ESC = E8 Satellite Chamber):
   ESC_PYTH          C^2+F^2=G^2 for all 576 QA pairs
   ESC_PARITY        b+e+d+a+C+F+G ≡ b (mod 2) for all 576 pairs
   ESC_ROOTS         240 roots: 112 Type-1 + 128 Type-2
   ESC_GRAM          G-chamber simple system: Cartan matrix det = 1
-  ESC_BRANCH        h=G places (6,3) at E8 branch node (degree 3)
-  ESC_GRANT         (3,6) [Grant LRT] is at distance 4 from branch
   ESC_WALL_LOWER    W1-proj(G) = +45 > 0  (alpha/beta > 7/12)
-  ESC_WALL_UPPER    W2-proj(G) = -9 < 0   (alpha/beta < 3/2)
-  ESC_ISO_INTERVAL  alpha=beta=1: ratio 1 in (7/12, 3/2) exactly
-  ESC_G2_EXITS      G^2 has opposite sign on W1 and W3
-  ESC_ELEM_UNIQUE   G unique in {b,e,d,a,C,F,G} for branch=(6,3)
+  ESC_WALL_UPPER    W2-proj(G) = -9 < 0   (alpha/beta < 13/12)
+  ESC_ISO_INTERVAL  alpha=beta=1: ratio 1 in (7/12, 13/12) exactly
+  ESC_G2_EXITS      G^2 has opposite sign on W1 and/or W3
+
+  RETRACTED (computed and reported for audit, but do not gate PASS/FAIL):
+  ESC_BRANCH        (was) h=G places (6,3) at E8 branch node
+  ESC_GRANT         (was) (3,6) [Grant LRT] is at distance 4 from branch
+  ESC_ELEM_UNIQUE   (was) G unique in {b,e,d,a,C,F,G} for branch=(6,3)
 
 Primary sources (mathematical):
   Wildberger, N.J. (2005). Divine Proportions. Wild Egg Books.
@@ -284,31 +313,44 @@ def check_gram() -> Tuple[bool, int]:
 
 
 def check_branch() -> Tuple[bool, int, Tuple[int, int]]:
-    """ESC_BRANCH: h=G places (6,3) at the E8 branch node (index 0)."""
+    """ESC_BRANCH -- RETRACTED 2026-07-04, does not gate PASS/FAIL.
+
+    `branch` here is an index into the filtered *list* of simple roots
+    (order depends on which of the 240 globally-enumerated roots pass the
+    positivity filter, and their position in that fixed enumeration) --
+    it is NOT a Satellite-axis index. Verified directly: for h=G_VALS the
+    actual branch (degree-3) root is (0,0,2,0,-2,0,0,0), touching axes 2
+    and 4 (SAT[2]=(9,3), SAT[4]=(3,6)) -- not axis 0=(6,3). The
+    `sat_axis = branch` line below conflates two unrelated indices; kept
+    only so the historical computation is reproducible for audit.
+    """
     simple = simple_roots(G_VALS, ROOTS)
     if simple is None:
         return False, -1, (-1, -1)
     branch, _ = branch_and_distances(simple)
     if branch is None:
         return False, -1, (-1, -1)
-    # Find which Satellite axis corresponds to the branch simple root
-    # The branch simple root has nonzero projection on axis `branch`
-    # We identify which SAT step labels this axis
-    sat_axis = branch
-    step = SAT[sat_axis]
+    sat_axis = branch  # NOT a valid axis index -- see retraction note above
+    step = SAT[sat_axis] if 0 <= sat_axis < len(SAT) else (-1, -1)
     return sat_axis == 0, sat_axis, step
 
 
 def check_grant_distance() -> Tuple[bool, int]:
-    """ESC_GRANT: (3,6) [axis 4, Grant LRT] is at distance 4 from branch."""
+    """ESC_GRANT -- RETRACTED 2026-07-04, does not gate PASS/FAIL.
+
+    Same issue as check_branch(): `dist` is indexed by position in the
+    filtered simple-roots list, not by Satellite axis, so `dist[4]` is
+    not "distance from axis 4." 7 of the 8 simple roots for this chamber
+    are Type-2 (touch all 8 axes at once), so "distance from branch to a
+    single axis" has no well-defined meaning here regardless of indexing.
+    """
     simple = simple_roots(G_VALS, ROOTS)
     if simple is None:
         return False, -1
     _, dist = branch_and_distances(simple)
     if not dist:
         return False, -1
-    # (3,6) is SAT[4], axis index 4
-    d = dist[4]
+    d = dist[4] if len(dist) > 4 else -1  # NOT axis 4 -- see retraction note above
     return d == 4, d
 
 
@@ -356,10 +398,11 @@ def check_g2_exits() -> Tuple[bool, int]:
 
 def check_elementary_uniqueness() -> Tuple[bool, List[str]]:
     """
-    ESC_ELEM_UNIQUE: G is the unique elementary invariant in
-    {b, e, d, a, C, F, G} that (i) strictly orders the 8 Satellite axes,
-    (ii) is generic on E8 (no zero root projection), (iii) branch=(6,3).
-    Returns (ok, list_of_invariants_passing_all_three).
+    ESC_ELEM_UNIQUE -- RETRACTED 2026-07-04, does not gate PASS/FAIL.
+
+    Criterion (iii) below ("branch == 0") inherits the same conflation
+    documented in check_branch(): list-index 0 is not Satellite axis 0.
+    Kept only so the historical computation is reproducible for audit.
     """
     inv_names = ["b", "e", "d", "a", "C", "F", "G"]
     inv_vals = [
@@ -463,16 +506,6 @@ def self_test() -> bool:  # noqa: PLR0912
     if not ok_g:
         failures.append(f"ESC_GRAM FAIL: det={det_val} (expected 1)")
 
-    # ESC_BRANCH
-    ok_b, sat_axis, step = check_branch()
-    if not ok_b:
-        failures.append(f"ESC_BRANCH FAIL: branch at axis {sat_axis}={step}, expected axis 0=(6,3)")
-
-    # ESC_GRANT
-    ok_gr, dist_val = check_grant_distance()
-    if not ok_gr:
-        failures.append(f"ESC_GRANT FAIL: dist((3,6))={dist_val}, expected 4")
-
     # ESC_WALL_LOWER / ESC_WALL_UPPER
     lower_ok, upper_ok, w1, w2 = check_wall_projections()
     if not lower_ok:
@@ -490,10 +523,12 @@ def self_test() -> bool:  # noqa: PLR0912
     if not ok_g2:
         failures.append("ESC_G2_EXITS FAIL: G and G^2 in same Weyl chamber")
 
-    # ESC_ELEM_UNIQUE
+    # RETRACTED 2026-07-04 -- computed for audit only, do NOT gate PASS/FAIL.
+    # See module docstring RETRACTION NOTE and check_branch()/
+    # check_grant_distance()/check_elementary_uniqueness() docstrings.
+    ok_b, sat_axis, step = check_branch()
+    ok_gr, dist_val = check_grant_distance()
     ok_eu, passing = check_elementary_uniqueness()
-    if not ok_eu:
-        failures.append(f"ESC_ELEM_UNIQUE FAIL: passing invariants={passing}, expected=['G']")
 
     # Verify specific numeric values (regression guards)
     assert G_VALS == (90, 225, 153, 45, 117, 306, 261, 180), f"G_VALS mismatch: {G_VALS}"
@@ -504,15 +539,6 @@ def self_test() -> bool:  # noqa: PLR0912
     assert wu == -9,  f"WALL_UPPER-proj(G) should be -9, got {wu}"
     assert dot(WALL_ROOT_1, G_VALS) == 45,   "W1-proj(G) should be 45"
     assert dot(WALL_ROOT_3, G_VALS) == 243,  "W3-proj(G) should be 243"
-
-    # Fail-case: F gives wrong branch
-    F_VALS = tuple(inv[5] for inv in INV)
-    if len(set(F_VALS)) == 8:
-        simple_f = simple_roots(F_VALS, ROOTS)
-        if simple_f and len(simple_f) == 8:
-            branch_f, _ = branch_and_distances(simple_f)
-            if branch_f == 0:
-                failures.append("EXPECTED_FAIL: F should NOT give branch=0, but it does")
 
     if failures:
         for f in failures[:15]:
@@ -605,12 +631,15 @@ if __name__ == "__main__":
                 "ESC_PARITY":     check_parity(),
                 "ESC_ROOTS":      check_roots_count()[0],
                 "ESC_GRAM":       check_gram()[0],
-                "ESC_BRANCH":     check_branch()[0],
-                "ESC_GRANT":      check_grant_distance()[0],
                 "ESC_WALL_LOWER": check_wall_projections()[0],
                 "ESC_WALL_UPPER": check_wall_projections()[1],
                 "ESC_ISO_INTERVAL": check_iso_interval()[0],
                 "ESC_G2_EXITS":   check_g2_exits()[0],
+            },
+            "retracted_checks_2026_07_04": {
+                "reason": "axis-to-branch index conflation; see module docstring RETRACTION NOTE",
+                "ESC_BRANCH":      check_branch()[0],
+                "ESC_GRANT":       check_grant_distance()[0],
                 "ESC_ELEM_UNIQUE": check_elementary_uniqueness()[0],
             },
         }

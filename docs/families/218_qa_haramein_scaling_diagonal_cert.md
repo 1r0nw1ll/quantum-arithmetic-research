@@ -38,6 +38,7 @@ Same algebraic family as `[219]`: `Q(√5) = ℤ[φ]`, here realized on integer 
 |-----------------|-------|
 | HSD_1           | schema_version matches |
 | HSD_TABLE       | 6 rows, integer (b,e), `R·ν` within factor 10 of c |
+| HSD_REFERENCE_MATCH | canonical six-scale fixtures match a hardcoded, independently-verified reference table exactly |
 | HSD_FIXED_D     | all 6 rows satisfy `b + e = const` within ±1 decade |
 | HSD_SEGMENTS    | declared segments reproduce `|Δb|² + |Δe|²` from table rows (exact int) |
 | HSD_PHI_RATIOS  | all 4 ratios within 7% of `{φ², 1/φ²}` in log-sense |
@@ -66,3 +67,33 @@ Same algebraic family as `[219]`: `Q(√5) = ℤ[φ]`, here realized on integer 
 
 - **v0 (2026-04-13, superseded):** initial null test interpreted "distance" as log-spacing along the line; got p ≈ 0.35 and provisionally rejected the φ claim. That was an unfounded assumption about Fig 2b's geometry.
 - **v1 (2026-04-13, current):** decoded Figure 2b directly; segments are 2D Euclidean lengths on the `(log R, log ν)` plot; four structural ratios verified against Table 1 integer exponents; null p < 5×10⁻⁶.
+
+## Verification Note (2026-07-04)
+
+Independently read the actual primary-source PDF (page 5, "Table 1") to
+check the fixture's transcription — the validator previously only checked
+the fixture's *own* internal arithmetic consistency, never against an
+independent ground truth. Found:
+
+- **All 6 `(b, e)` pairs match the scanned table exactly** (Big Bang
+  (-33,43), Atomic (-8,18), Stellar (6,5), G1 (8,2), G2 (12,-2), Universe
+  (28,-17)) — and all 6 mass exponents match exactly too.
+- **One inert-field transcription slip**: Big Bang's `velocity_exp_log10_cms`
+  was listed as `10`, but the real table shows `11`. This field is never
+  read by any check (only `b`, `e`, `name`, and — now — `mass_exp_log10_g`
+  are used), so it did not affect any pass/fail outcome. Fixed anyway for
+  transcription accuracy.
+- **The φ-ratio claim is a faithful echo of the paper's own text**: page 6
+  explicitly states the segment distances "yield a very close approximation
+  to the familiar Φ(phi) ratio... and its inverse," and all four
+  `paper_value` numbers cited in the fixture (1.612, 1.629, 0.639, 0.637)
+  appear directly in the paper's own Figure 2b. This is the paper making
+  the golden-ratio observation itself, not a QA-invented projection onto
+  unrelated data — consistent with this cert's own "what this does NOT
+  claim" scoping (no endorsement of Haramein's broader physical claims,
+  only the integer-quadratic-form structure of the 6 chosen points).
+
+Added `HSD_REFERENCE_MATCH`: a hardcoded, independently-verified reference
+table, checked exactly whenever a fixture's row names match the canonical
+six. Confirmed it both passes the real data and catches a deliberately
+corrupted entry.

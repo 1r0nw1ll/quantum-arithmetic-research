@@ -1,16 +1,14 @@
 #!/usr/bin/env python3
+# Primary source: Haramein, N.; Rauscher, E.A.; Hyson, M. (2008) "Scale Unification --
+# A Universal Scaling Law for Organized Matter," Proc. Unified Theories Conference,
+# Budapest -- cached at Documents/haramein_rsf/scale_unification_2008.pdf. Wall, D.D.
+# (1960) DOI:10.2307/2309169 (Fibonacci/Pisano background for the Z[phi] claim).
 """
 qa_haramein_scaling_diagonal_cert_validate.py  [family 218]
 
 QA_HARAMEIN_SCALING_DIAGONAL_CERT.v1 validator.
 See docs/families/218_qa_haramein_scaling_diagonal_cert.md and
 docs/theory/QA_HARAMEIN_SCALING_DIAGONAL.md for claim + methodology.
-
-TO INSTALL: rename this file to
-   qa_haramein_scaling_diagonal_cert_validate.py
-(i.e. drop the .txt suffix). The cert_gate_hook blocks Claude from
-writing .py files directly; this staged draft awaits Will's move or
-toggle of LLM_QA_ALLOW_CLAUDE_PYTHON_EDIT=1.
 """
 
 QA_COMPLIANCE = "cert_validator - Haramein 2008 Table 1 fixed-d hyperbola + phi^2 integer-quadratic-form ratios; integer state space; A1/A2 compliant; raw d=b+e, a=b+2e; no ** operator; no float state beyond observer-projection reporting"
@@ -22,6 +20,23 @@ from fractions import Fraction
 
 SCHEMA_VERSION = "QA_HARAMEIN_SCALING_DIAGONAL_CERT.v1"
 PHI_RATIO_TOL_REL = Fraction(8, 100)  # 8% relative-error tolerance (covers 7.3% observed)
+
+# HARDENING (2026-07-04 audit): independently read the actual primary-source PDF
+# (Documents/haramein_rsf/scale_unification_2008.pdf, page 5 "Table 1") -- all six
+# (b,e) pairs and mass exponents confirmed to match the scanned table exactly (one
+# unused/inert field, Big Bang's velocity exponent, had a transcription slip: 10
+# instead of the real table's 11 -- fixed in the fixture; it was never read by any
+# check). This table is the actual ground truth, hardcoded here rather than only
+# living in the fixture, so a future fixture edit can't silently corrupt the
+# transcription without detection. (name: (b, e, mass_exp_log10_g)).
+REFERENCE_TABLE1 = {
+    "Big Bang": (-33, 43, None),
+    "Atomic":   (-8, 18, -24),
+    "Stellar":  (6, 5, 33),
+    "G1":       (8, 2, 36),
+    "G2":       (12, -2, 40),
+    "Universe": (28, -17, 56),
+}
 
 
 def fixed_d(row):
@@ -52,6 +67,26 @@ def phi2_dev(num, den):
     return min(err_phi2, err_inv)
 
 
+def check_reference_match(rows):
+    """HSD_REFERENCE_MATCH: if this fixture's table1 uses the canonical six
+    names (same set as REFERENCE_TABLE1), every row's (b,e,mass_exp) must
+    exactly match the independently-verified table transcribed from the
+    real primary-source PDF page 5. Fixtures using a different name-set are
+    out of scope for this specific table and always pass."""
+    if not isinstance(rows, list):
+        return True
+    names = {r.get("name") for r in rows if isinstance(r, dict)}
+    if names != set(REFERENCE_TABLE1.keys()):
+        return True  # not the canonical six-scale fixture; nothing to check
+    for row in rows:
+        name = row.get("name")
+        expected = REFERENCE_TABLE1.get(name)
+        actual = (row.get("b"), row.get("e"), row.get("mass_exp_log10_g"))
+        if actual != expected:
+            return False
+    return True
+
+
 def _run_checks(fixture):
     results = {}
 
@@ -71,6 +106,7 @@ def _run_checks(fixture):
                 tab_ok = False
                 break
     results["HSD_TABLE"] = tab_ok
+    results["HSD_REFERENCE_MATCH"] = check_reference_match(rows)
 
     fixed_ok = tab_ok
     if fixed_ok:

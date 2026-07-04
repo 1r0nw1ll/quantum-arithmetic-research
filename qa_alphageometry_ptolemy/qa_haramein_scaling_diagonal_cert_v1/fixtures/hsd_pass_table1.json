@@ -1,4 +1,5 @@
 {
+  "_primary_source": "Haramein, N.; Rauscher, E.A.; Hyson, M. (2008) 'Scale Unification'; Wall, D.D. (1960) DOI:10.2307/2309169",
   "schema_version": "QA_HARAMEIN_SCALING_DIAGONAL_CERT.v1",
   "certificate_id": "qa.cert.haramein_scaling_diagonal.pass.table1.v1",
   "cert_type": "qa_haramein_scaling_diagonal_cert",
@@ -18,7 +19,7 @@
   },
 
   "table1": [
-    {"name": "Big Bang", "b": -33, "e":  43, "mass_exp_log10_g": null, "velocity_exp_log10_cms": 10},
+    {"name": "Big Bang", "b": -33, "e":  43, "mass_exp_log10_g": null, "velocity_exp_log10_cms": 11},
     {"name": "Atomic",   "b":  -8, "e":  18, "mass_exp_log10_g":  -24, "velocity_exp_log10_cms": 10},
     {"name": "Stellar",  "b":   6, "e":   5, "mass_exp_log10_g":   33, "velocity_exp_log10_cms": 11},
     {"name": "G1",       "b":   8, "e":   2, "mass_exp_log10_g":   36, "velocity_exp_log10_cms": 10},

@@ -19,6 +19,22 @@ continuous observer projections under Theorem NT.
 BSD connection: L(½,AI(f)) = L_rat · L_split · L_∞
   If L(½)≠0 → rank A_f(ℚ)=0 (Rohrlich; Coates-Wiles for CM).
   The integer/Fraction content is certifiable; L_split and L_∞ are observer projections.
+
+VERIFICATION NOTE (2026-07-04): Independently confirmed via the LMFDB API that
+f=2.2.5.1-125.1-a is a real object: a CM Hilbert modular form over Q(sqrt5),
+level norm 125, parallel weight 2, Hecke field dimension 2 (hmf_forms id 45).
+Its actual Hecke eigenvalues are elements of that degree-2 field, matching
+certs [403]/[404]'s Z[phi] eigenvalue table structurally. However: (1) LMFDB's
+lfunc_lfunctions table has NO entry for this object or its GL4/Q automorphic
+induction -- no independently computed analytic rank exists to check r_alg=0
+against; the prediction rests entirely on the general Rohrlich (1984)
+non-vanishing theorem for CM towers, not a specific verified computation for
+this f. (2) This cert's own EXTENDED_TABLE previously stored certs
+[403]/[404]'s raw Z[phi]-basis coordinates (u,v) of a_p mislabeled as "(T,N)"
+-- fixed below to the actual Trace/Norm values. The mislabeling did not flip
+C3's gating conclusion (T=raw-u happened to be nonzero for all 22 entries
+either way), but the printed "rational_part"/"irrational coefficient" values
+were computed from the wrong numbers before this fix.
 """
 
 import json
@@ -32,14 +48,25 @@ INERT_PRIMES = [
     173, 193,
 ]
 
-# Split primes p≡1,4 mod 5 with (T,N) eigenvalues (from certs [403]-[408])
+# Split primes p≡1,4 mod 5 with (T,N) = (Trace, Norm) of a_p over Q(sqrt5)/Q.
+#
+# BUG FIX (2026-07-04): this table previously stored the raw Z[phi]-basis
+# coordinates (u,v) of a_p = u + v*phi, copied verbatim from certs
+# [403]/[404]'s EXTENDED_TABLE, mislabeled as "(T,N)". T and N here must be
+# T = Tr(a_p) = 2u+v and N = Norm(a_p) = u^2+uv-v^2 (cert [404]'s own
+# zphi_tr/zphi_norm) -- the quantities C3's formula
+# P_p^split(p^-1/2) = Fraction(4p+N,p) - 2T/sqrt(p) actually requires.
+# E.g. the old (mislabeled) entry for p=41 was (7,-5) [the raw (u,v)
+# coordinates]; the correct (T,N) is (9,-11). Recomputed here from cert
+# [404]'s (u,v) table via T=2u+v, N=u^2+uv-v^2; cross-checked against
+# [404]'s own per-prime comments (all 22 match exactly).
 EXTENDED_TABLE = [
-    (11, (-3, 5)),  (31, (-8, 5)),  (41, (7, -5)),  (61, (2, -5)),
-    (71, (7, 5)),   (101, (12, 5)), (131, (-3, -5)), (151, (-8, 20)),
-    (181, (-8, 5)), (191, (-23, 5)),(211, (-13, 25)),(241, (-18, 20)),
-    (251, (-8, 20)),(271, (-18, 5)),(281, (-18, 25)),(311, (22, 5)),
-    (331, (-28, -5)),(401, (17, -5)),(421, (-3, 25)),(431, (-8, -20)),
-    (461, (-13, 25)),(491, (2, 5)),
+    (11, (-1, -31)), (31, (-11, -1)), (41, (9, -11)),   (61, (-1, -31)),
+    (71, (19, 59)),  (101, (29, 179)),(131, (-11, -1)), (151, (4, -496)),
+    (181, (-11, -1)),(191, (-41, 389)),(211, (-1, -781)),(241, (-16, -436)),
+    (251, (4, -496)),(271, (-31, 209)),(281, (-11, -751)),(311, (49, 569)),
+    (331, (-61, 899)),(401, (29, 179)),(421, (19, -691)),(431, (-36, -176)),
+    (461, (-1, -781)),(491, (9, -11)),
 ]
 
 

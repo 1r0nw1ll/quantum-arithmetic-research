@@ -97,3 +97,28 @@ zero. Theorem NT: the zero/non-zero decision lives in the continuous layer.
 - Builds directly on [404] (split Euler poly), [409] (inert Euler poly), [411] (ramified = 1)
 - The trichotomy at s=½ exactly mirrors [410] (Dedekind ζ_F split/inert/ramified)
 - BSD rank prediction r=0 is the integer output; all analytic evidence is observer projection
+
+## Verification Note (2026-07-04)
+
+Audited against LMFDB independently of this cert family:
+
+- **Object is real**: `2.2.5.1-125.1-a` is a genuine LMFDB Hilbert modular form
+  (hmf_forms id 45) over Q(√5), level norm 125, parallel weight 2, CM type,
+  Hecke field dimension 2 — matching certs [403]/[404]'s Z[φ] eigenvalue
+  structure.
+- **No independent rank check exists**: LMFDB's `lfunc_lfunctions` table has
+  no record for this object or its GL₄/ℚ automorphic induction. The r_alg=0
+  prediction is not checkable against a stored LMFDB rank — it rests entirely
+  on Rohrlich's general non-vanishing theorem for CM towers, not a
+  specifically verified computation for this f. This is a legitimate
+  citation, not a fabricated one, but the cert's own text ("The integer
+  prediction: r_alg=0") should be read as a conditional theorem application,
+  not an independently double-checked fact about this specific object.
+- **Bug found and fixed**: the validator's `EXTENDED_TABLE` stored raw Z[φ]
+  basis coordinates `(u,v)` of a_p — copied verbatim from certs [403]/[404] —
+  mislabeled as `(T,N)`. E.g. for p=41 the table held `(7,-5)` (the raw
+  `(u,v)`); the actual Trace/Norm is `(9,-11)`. Fixed 2026-07-04 by
+  recomputing T=2u+v, N=u²+uv-v² from the source `(u,v)` table. C3's gating
+  conclusion (T≠0 for all 22 split primes) is unchanged by the fix — no raw
+  `u`-coordinate happened to be zero either — but the printed rational/
+  irrational-part values were computed from the wrong numbers before the fix.

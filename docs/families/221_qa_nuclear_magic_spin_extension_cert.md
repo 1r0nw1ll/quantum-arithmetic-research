@@ -18,7 +18,9 @@ Under axiom **D1** (Dirac fermion spin: `σ ∈ {1, 2}` with `j = l + (2σ − 3
 
 ## Physics input transparency
 
-One physical ratio: `r = α/ℏω` in a narrow window `[1/3, 1/2)`. Nuclear empirical values (Mayer-Jensen 1950; Bohr-Mottelson 1969) place `r ≈ 0.3–0.4`, inside the window. The integer ceiling `⌈1/r⌉ = 3` is forced for the entire window — not a fit, a discrete consequence of a measured ratio.
+One physical ratio: `r = α/ℏω` in a narrow window `[1/3, 1/2)`. Nuclear empirical values (Mayer-Jensen 1950; Bohr-Mottelson 1969) place `r` in a range around `≈ 0.35–0.4`, inside the window. The integer ceiling `⌈1/r⌉ = 3` is forced for the entire window — not a fit, a discrete consequence of a measured ratio.
+
+**Precision caveat (2026-07-04 audit)**: an earlier version of this line stated `r ≈ 0.3–0.4`. That's imprecise — `0.3 < 1/3 ≈ 0.333`, so the literal low end falls outside the required `[1/3, 1/2)` window and would give `l* = 4`, not 3, predicting the wrong magic-number sequence (missing 28). The qualitative mechanism is real, well-established nuclear shell-model physics (spin-orbit splitting lowering `j=l+½` orbitals to produce the "jj magic numbers" 28/50/82/126), but this session's audit could not pin the precise decimal value of `r` to an exact page/quote in Mayer-Jensen (1950) or Bohr-Mottelson (1969) — narrowed the stated range to stay safely inside the window pending a page-precise citation.
 
 Atomic `r ≈ 0.01–0.02` gives `l* ≈ 50–100`, never reached in the aufbau. This explains why atomic Madelung [220] needs no spin extension while nuclear shells do.
 

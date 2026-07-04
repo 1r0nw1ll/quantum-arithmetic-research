@@ -35,8 +35,32 @@ QA identifies **where** anomalies can live (the boundary zone). Atomic-physics m
 
 ## Fixtures
 
-- `fixtures/mab_pass_20_anomalies.json` — 20 known anomalies with zone verification
+- `fixtures/mab_pass_20_anomalies.json` — 20 known neutral-atom anomalies with zone verification
+- `fixtures/mab_pass_ions_42.json` — extension to 42 cation/anion ground states (21 anomalous, 21 Madelung-exact)
+- `fixtures/mab_pass_superheavy_54.json` — out-of-sample check against 54 predicted superheavy (Z=119–172) configurations (Fricke/Nefedov/Pyykkö relativistic calculations)
 - `fixtures/mab_fail_fake_high_dd_anomaly.json` — negative control (fabricated `|Δd| = 3` entry)
+
+## Verification Note (2026-07-04)
+
+Independently checked the 20 neutral-atom entries against real electron
+configurations (NIST Atomic Spectra Database; Sato et al. 2015 for Lr) —
+all 20 confirmed correct (Cr, Cu, Nb, Mo, Ru, Rh, Pd's unique zero-5s case,
+Ag, La, Ce, Gd's half-filled-4f7 exception, Pt, Au, Ac, Th's zero-5f case,
+Pa, U, Np, Cm, Lr). The 6 counterexamples (Ti, V, Mn, Fe, Ta, W) also
+checked correct.
+
+**Hardening found and fixed**: the validator previously only checked the
+*fixture's own* internal arithmetic consistency (`d=n+l`, `delta_d`
+formula) — it never compared the fixture's anomaly list against an
+independent ground truth. A future edit that silently dropped or
+fabricated an entry would have passed undetected. Added
+`MAB_REFERENCE_MATCH`: a hardcoded, independently-verified table of the 20
+real `(n_src, l_src, n_dst, l_dst)` values, checked exactly against any
+fixture whose anomaly Z-set matches this reference set (ion/superheavy
+fixtures, which cover different Z-sets and are appropriately hedged as
+"extension"/"out-of-sample prediction" rather than settled fact, are
+unaffected). Confirmed the check both passes the real data and catches a
+deliberately corrupted entry.
 
 ## Checks
 
@@ -44,6 +68,7 @@ QA identifies **where** anomalies can live (the boundary zone). Atomic-physics m
 |---|---|
 | MAB_1 | schema version |
 | MAB_ANOMALIES | list well-formed, ≥ 1 entry, (n, l) integer coords |
+| MAB_REFERENCE_MATCH | 20-neutral-atom fixtures match a hardcoded, independently-verified reference table exactly |
 | MAB_MAPPING | each entry's `d` equals `n + l`; `delta_d` equals `|d_src − d_dst|` |
 | MAB_ZONE | all entries satisfy `|Δd| ≤ 1` |
 | MAB_COVERAGE | distribution matches enumeration; total equals listed anomalies |

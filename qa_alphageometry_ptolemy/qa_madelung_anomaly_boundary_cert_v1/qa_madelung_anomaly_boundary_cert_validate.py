@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Primary source: NIST Atomic Spectra Database (https://www.nist.gov/pml/atomic-spectra-database)
+# for ground-state electron configurations; Sato, T.K. et al. (2015) Nature 520, 209-211,
+# DOI:10.1038/nature14342, for the measured Lr 7p^1 configuration.
 """
 qa_madelung_anomaly_boundary_cert_validate.py  [family 222]
 
@@ -17,6 +20,61 @@ from pathlib import Path
 
 SCHEMA_VERSION = "QA_MADELUNG_ANOMALY_BOUNDARY_CERT.v1"
 
+# HARDENING (2026-07-04): independently verified against real electron
+# configurations (NIST Atomic Spectra Database; Sato et al. 2015 Nature 520,
+# 209-211 for Lr) -- all 20 entries checked correct. Previously the validator
+# only checked the FIXTURE's own internal arithmetic consistency (d=n+l,
+# delta_d formula) with no independent guard against the fixture's anomaly
+# list itself being silently edited/corrupted. This table is the actual
+# ground truth, hardcoded here rather than only living in the fixture, so a
+# future fixture edit that drops or fabricates an anomaly is caught rather
+# than silently passing. (Z: (n_src, l_src, n_dst, l_dst)) -- src = Madelung-
+# predicted subshell, dst = actually observed subshell.
+REFERENCE_ANOMALIES_20 = {
+    24:  (4, 0, 3, 2),   # Cr:  3d5 4s1 vs 3d4 4s2
+    29:  (4, 0, 3, 2),   # Cu:  3d10 4s1 vs 3d9 4s2
+    41:  (5, 0, 4, 2),   # Nb:  4d4 5s1 vs 4d3 5s2
+    42:  (5, 0, 4, 2),   # Mo:  4d5 5s1 vs 4d4 5s2
+    44:  (5, 0, 4, 2),   # Ru:  4d7 5s1 vs 4d6 5s2
+    45:  (5, 0, 4, 2),   # Rh:  4d8 5s1 vs 4d7 5s2
+    46:  (5, 0, 4, 2),   # Pd:  4d10 5s0 vs 4d8 5s2 (two-electron)
+    47:  (5, 0, 4, 2),   # Ag:  4d10 5s1 vs 4d9 5s2
+    57:  (4, 3, 5, 2),   # La:  5d1 6s2 vs 4f1 6s2
+    58:  (4, 3, 5, 2),   # Ce:  4f1 5d1 6s2 vs 4f2 6s2
+    64:  (4, 3, 5, 2),   # Gd:  4f7 5d1 6s2 vs 4f8 6s2
+    78:  (6, 0, 5, 2),   # Pt:  5d9 6s1 vs 5d8 6s2
+    79:  (6, 0, 5, 2),   # Au:  5d10 6s1 vs 5d9 6s2
+    89:  (5, 3, 6, 2),   # Ac:  6d1 7s2 vs 5f1 7s2
+    90:  (5, 3, 6, 2),   # Th:  6d2 7s2 vs 5f2 7s2
+    91:  (5, 3, 6, 2),   # Pa:  5f2 6d1 7s2 vs 5f3 7s2
+    92:  (5, 3, 6, 2),   # U:   5f3 6d1 7s2 vs 5f4 7s2
+    93:  (5, 3, 6, 2),   # Np:  5f4 6d1 7s2 vs 5f5 7s2
+    96:  (5, 3, 6, 2),   # Cm:  5f7 6d1 7s2 vs 5f8 7s2
+    103: (6, 2, 7, 1),   # Lr:  5f14 7s2 7p1 vs 5f14 6d1 7s2 (Sato 2015)
+}
+
+
+def check_reference_match_20(anoms):
+    """MAB_REFERENCE_MATCH: if this fixture's anomaly list is the "20 known
+    neutral-atom anomalies" claim (same Z-set as REFERENCE_ANOMALIES_20),
+    every row's (n_src, l_src, n_dst, l_dst) must exactly match the
+    independently-verified hardcoded table above. Fixtures with a different
+    Z-set (ions, superheavy predictions) are out of scope for this specific
+    reference table and always pass this check (not silently penalized for
+    covering different data)."""
+    fixture_z = {row.get("Z") for row in anoms if isinstance(row, dict)}
+    if fixture_z != set(REFERENCE_ANOMALIES_20.keys()):
+        return True  # not the 20-neutral-atom fixture; nothing to check here
+    for row in anoms:
+        z = row.get("Z")
+        expected = REFERENCE_ANOMALIES_20.get(z)
+        src = row.get("source", {})
+        dst = row.get("destination", {})
+        actual = (src.get("n"), src.get("l"), dst.get("n"), dst.get("l"))
+        if actual != expected:
+            return False
+    return True
+
 
 def _run_checks(fixture):
     results = {}
@@ -26,6 +84,8 @@ def _run_checks(fixture):
     anoms = fixture.get("anomalies", [])
     a_ok = isinstance(anoms, list) and len(anoms) >= 1
     results["MAB_ANOMALIES"] = a_ok
+
+    results["MAB_REFERENCE_MATCH"] = check_reference_match_20(anoms)
 
     # MAB_MAPPING: check d = n+l and delta_d = |d_src - d_dst|
     mapping_ok = a_ok

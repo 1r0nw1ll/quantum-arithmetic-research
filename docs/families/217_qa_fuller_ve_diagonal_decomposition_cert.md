@@ -54,3 +54,20 @@ The mod-3 selection is itself QA-natural — the triune residue partition on the
 - Do higher shells ($n > 9$) maintain the 2:1 density ratio asymptotically? (Trivially yes by counting, but the multi-divisor structure of off-diagonal shells grows with $n$.)
 - Which sibling diagonal $D_k$ is "canonical" for each off-diagonal shell when multiple odd divisors exist (e.g.\ $n=9$: $k \in \{3, 14, 101\}$)? The cert accepts any valid $(k, b)$ but does not yet pick one.
 - Do other cuboctahedral / jitterbug derivatives (icosahedron with 12 vertices, VE-edge count $24n$, VE-face count $8n^2$) sit on $D_1$ or reveal further diagonal structure?
+
+## Verification Note (2026-07-04)
+
+Independently re-derived $S_n=10n^2+2$ against the known "centered
+cuboctahedral numbers" sequence (OEIS A005902: 1, 13, 55, 147, 309, 561,
+923, 1415, 2057, 2869) by cumulative-summing $1+\sum_{k=1}^{n}(10k^2+2)$
+— matches exactly for $n=0..9$. This is the real, well-established Fuller
+VE / FCC close-packing shell-count formula, not a fabricated or
+misremembered one. Also independently re-verified the $n=9$ off-diagonal
+claim ($k\in\{3,14,101\}$ from the odd divisors $\{7,29,203\}$ of
+$S_9=812$) — exact match.
+
+Unlike several other certs audited in this session's cycle, this
+validator's `FVDD_COMPUTATIONAL` check already performs genuine
+independent recomputation from the hardcoded formula (not merely
+fixture-internal consistency), so no hardening was needed — this is a
+confirmed-accurate result, not a bug fix.

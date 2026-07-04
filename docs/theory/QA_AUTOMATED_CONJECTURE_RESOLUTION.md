@@ -1,7 +1,7 @@
 # QA ↔ Automated Conjecture Resolution (Ju et al. 2026) Mapping
 
 **Status:** structural mapping, draft 2026-04-15
-**Primary source:** Ju, Gao, Jiang, Wu, Sun, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026). *Automated Conjecture Resolution with Formal Verification*. arXiv:2604.03789, submitted 2026-04-04.
+**Primary source:** Ju, Gao, Jiang, Wu, Sun, Liu, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026). *Automated Conjecture Resolution with Formal Verification*. arXiv:2604.03789, submitted 2026-04-04. (Author list corrected 2026-07-04 audit: "Shurui Liu" had been omitted.)
 **Related:** `memory/feedback_map_best_to_qa.md` (methodology rule), cert families [223]/[224] (protocol certs), cert [122] (QA empirical observation verdict vocabulary), `docs/specs/QA_CODING_GUARDRAIL_ARCHITECTURE.md` (cert-submission boundary this mapping targets).
 
 ---

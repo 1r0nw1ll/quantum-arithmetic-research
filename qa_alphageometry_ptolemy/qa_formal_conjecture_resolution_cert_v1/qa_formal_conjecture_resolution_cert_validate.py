@@ -12,9 +12,12 @@ QA_COMPLIANCE: {
 
 Validates QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1 records per the design
 spec at docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md §6. Primary
-source: Ju, Gao, Jiang, Wu, Sun, Chen, Wang, Wang, Wang, He, Wu, Xiao,
-Liu, Dai, Dong (2026). "Automated Conjecture Resolution with Formal
+source: Ju, Gao, Jiang, Wu, Sun, Liu, Chen, Wang, Wang, Wang, He, Wu,
+Xiao, Liu, Dai, Dong (2026). "Automated Conjecture Resolution with Formal
 Verification." arXiv:2604.03789 (https://arxiv.org/abs/2604.03789).
+(2026-07-04 audit: fixed author-list citation, which had previously
+omitted "Shurui Liu" (position 6, right after Sun) -- verified against
+the real 16-author paper.)
 
 Seven gates FCR_1..FCR_7 enforce schema integrity, typed failure labels,
 generator-set declaration, NT compliance, verdict vocabulary, witness

@@ -3,7 +3,7 @@
 **Family:** `qa_formal_conjecture_resolution_cert`
 **Version:** `QA_FORMAL_CONJECTURE_RESOLUTION_CERT.v1`
 **Status:** PASS (2 PASS + 1 FAIL fixtures, self-test ok)
-**Primary source:** Ju, Gao, Jiang, Wu, Sun, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026). *Automated Conjecture Resolution with Formal Verification.* arXiv:2604.03789. Submitted 2026-04-04. https://arxiv.org/abs/2604.03789
+**Primary source:** Ju, Gao, Jiang, Wu, Sun, Liu, Chen, Wang, Wang, Wang, He, Wu, Xiao, Liu, Dai, Dong (2026). *Automated Conjecture Resolution with Formal Verification.* arXiv:2604.03789. Submitted 2026-04-04. https://arxiv.org/abs/2604.03789
 **Theory note:** `docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md`
 
 ## Purpose
@@ -88,6 +88,18 @@ Returns canonical JSON with `ok: true`, `pass_count: 2`, `fail_count: 1`.
 - Setting `nt_compliance: false` without naming the NT violation in `failure_mode` → FCR_4 rejects.
 - Declaring `formal_backend: lean4_stub` without populating `open_questions` → FCR_7 rejects.
 - Verdict outside the four-element vocabulary → FCR_5 rejects.
+
+## Verification Note (2026-07-04)
+
+Independently fetched the real arXiv:2604.03789 abstract page to confirm
+the paper exists and that the Rethlas (informal reasoning agent) + Archon
+(Lean 4 formal verification agent, using LeanSearch) pipeline description
+is accurate — confirmed. Found and fixed a citation error: the author
+list had omitted "Shurui Liu" (the real paper has 16 authors; this cert's
+citation had 15, skipping directly from Sun to Chen). Fixed across all 6
+locations where the citation appears (validator docstring, meta_validator.py
+registry x2, `fcr_pass_formal_gap.json`'s `source_claim` field, this doc,
+and `docs/theory/QA_AUTOMATED_CONJECTURE_RESOLUTION.md`).
 
 ## References
 

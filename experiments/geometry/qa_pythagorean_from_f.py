@@ -660,6 +660,128 @@ def qa_pollard_factor(F: int, limit: int = 200000) -> set[int]:
     return set()
 
 
+def _mod_inverse(a: int, n: int) -> tuple[int, int]:
+    """Extended-Euclid inverse of a mod n. Returns (gcd(a,n), inverse); inverse
+    is 0 when gcd>1 — the caller reads that gcd as an ECM factor discovery."""
+    a %= n
+    if a == 0:
+        return n, 0
+    old_r, r = a, n
+    old_s, s = 1, 0
+    while r != 0:
+        q = old_r // r
+        old_r, r = r, old_r - q * r
+        old_s, s = s, old_s - q * s
+    if old_r != 1:
+        return old_r, 0
+    return 1, old_s % n
+
+
+def _ec_add(
+    p1: tuple[int, int] | None,
+    p2: tuple[int, int] | None,
+    curve_a: int,
+    n: int,
+) -> tuple[tuple[int, int] | None, int]:
+    """Point addition mod n on y*y = x*x*x + curve_a*x + curve_b.
+
+    Returns (sum_point, factor). A nonzero factor means a modular inverse
+    failed mid-addition — for prime n that only happens at the point at
+    infinity (harmless), but for composite n it exposes a nontrivial divisor,
+    which is the entire ECM discovery mechanism (Lenstra 1987).
+    """
+    if p1 is None:
+        return p2, 0
+    if p2 is None:
+        return p1, 0
+    x1, y1 = p1
+    x2, y2 = p2
+    if x1 == x2:
+        if (y1 + y2) % n == 0:
+            return None, 0
+        num = (3 * x1 * x1 + curve_a) % n
+        den = (2 * y1) % n
+    else:
+        num = (y2 - y1) % n
+        den = (x2 - x1) % n
+    gcd_den, inv = _mod_inverse(den, n)
+    if gcd_den != 1:
+        return None, gcd_den
+    lam = (num * inv) % n
+    x3 = (lam * lam - x1 - x2) % n
+    y3 = (lam * (x1 - x3) - y1) % n
+    return (x3, y3), 0
+
+
+def _ec_multiply(
+    point: tuple[int, int],
+    k: int,
+    curve_a: int,
+    n: int,
+) -> tuple[tuple[int, int] | None, int]:
+    """Scalar-multiply point by k mod n via double-and-add. Returns (result,
+    factor); a nonzero factor short-circuits with the discovered divisor."""
+    result: tuple[int, int] | None = None
+    addend = point
+    while k > 0:
+        if k & 1:
+            result, factor = _ec_add(result, addend, curve_a, n)
+            if factor:
+                return None, factor
+        addend, factor = _ec_add(addend, addend, curve_a, n)
+        if factor:
+            return None, factor
+        k >>= 1
+    return result, 0
+
+
+def qa_ecm_factor(
+    F: int,
+    b1: int = 2000,
+    max_curves: int = 25,
+    seed: int = 1,
+) -> set[int]:
+    """Lenstra's ECM, stage 1 only — bridges Pollard's rho and MPQS.
+
+    Pollard's rho cost depends on F's smallest factor being small enough to
+    hit via a birthday-style collision (practical up to ~10^9-10^10). ECM
+    cost instead depends on that smallest factor p having a B1-smooth curve
+    order, so a 14-15 digit p can still be found in milliseconds if it is
+    B1-smooth — the gap the auto pipeline previously had no bridge for.
+    """
+    if F <= 1:
+        return set()
+    if F % 2 == 0:
+        return ({2, F // 2}) if F > 2 else set()
+
+    rng = random.Random(seed)
+    stage1_k = 1
+    for prime in primes_up_to(b1):
+        power = prime
+        while power * prime <= b1:
+            power *= prime
+        stage1_k *= power
+
+    for _ in range(max_curves):
+        x0 = rng.randrange(2, F)
+        y0 = rng.randrange(2, F)
+        curve_a = rng.randrange(1, F)
+        curve_b = (y0 * y0 - x0 * x0 * x0 - curve_a * x0) % F
+
+        discriminant = (4 * curve_a * curve_a * curve_a + 27 * curve_b * curve_b) % F
+        disc_gcd = math.gcd(discriminant, F)
+        if 1 < disc_gcd < F:
+            return {disc_gcd, F // disc_gcd}
+        if disc_gcd == F:
+            continue
+
+        _point, factor = _ec_multiply((x0, y0), stage1_k, curve_a, F)
+        if 1 < factor < F:
+            return {factor, F // factor}
+
+    return set()
+
+
 def factor_over_base(value: int, factor_base: list[int]) -> tuple[bool, list[int], int]:
     remaining = value
     exponents = []
@@ -971,6 +1093,70 @@ def prime_factors_trial(n: int) -> list[int]:
         d += 1
     if n > 1:
         primes.append(n)
+    return primes
+
+
+def _is_probable_prime(n: int, rounds: int = 20) -> bool:
+    """Miller-Rabin — used to size up a cofactor before deciding how to
+    finish factoring it, so callers never fall into unbounded trial division."""
+    if n < 2:
+        return False
+    for p in (2, 3, 5, 7, 11, 13, 17, 19, 23, 29, 31, 37):
+        if n % p == 0:
+            return n == p
+    d = n - 1
+    r = 0
+    while d % 2 == 0:
+        d //= 2
+        r += 1
+    rng = random.Random(n)
+    for _ in range(rounds):
+        a = rng.randrange(2, n - 1)
+        x = pow(a, d, n)
+        if x == 1 or x == n - 1:
+            continue
+        for _ in range(r - 1):
+            x = x * x % n
+            if x == n - 1:
+                break
+        else:
+            return False
+    return True
+
+
+def factor_large_component(n: int, trial_limit: int = 10**6) -> list[int]:
+    """Fully factor n without ever falling into unbounded trial division.
+
+    Pollard's rho and ECM can each surface a cofactor F/p up to F itself —
+    if that cofactor is a large prime, plain prime_factors_trial() would
+    trial-divide up to its square root and hang. Here small factors are
+    stripped up to trial_limit, then Miller-Rabin decides whether the
+    residual is prime; if not, one more round of rho/ECM is tried before
+    giving up and reporting the residual as a single unresolved component.
+    """
+    primes: list[int] = []
+    remaining = n
+    d = 2
+    while d <= trial_limit and d * d <= remaining:
+        while remaining % d == 0:
+            primes.append(d)
+            remaining //= d
+        d += 1
+    if remaining == 1:
+        return primes
+    if remaining <= trial_limit * trial_limit:
+        primes.extend(prime_factors_trial(remaining))
+        return primes
+    if _is_probable_prime(remaining):
+        primes.append(remaining)
+        return primes
+    for split in (qa_pollard_factor(remaining), qa_ecm_factor(remaining)):
+        for factor in split:
+            if 1 < factor < remaining:
+                primes.extend(factor_large_component(factor, trial_limit))
+                primes.extend(factor_large_component(remaining // factor, trial_limit))
+                return primes
+    primes.append(remaining)
     return primes
 
 
@@ -1861,7 +2047,7 @@ def derive_from_f_qa_mpqs_auto(
         all_primes: list[int] = []
         for p in fermat_factors:
             if 1 < p < F:
-                all_primes.extend(prime_factors_trial(p))
+                all_primes.extend(factor_large_component(p))
         factors_sorted = sorted(set(all_primes))
         candidates = triples_from_factorization(F, factors_sorted, primitive_only, "qa_mpqs_auto")
         return {
@@ -1872,6 +2058,8 @@ def derive_from_f_qa_mpqs_auto(
             "qa_engine": {
                 "factors_found": factors_sorted,
                 "fermat_fast_path": True,
+                "pollard_rho_fast_path": False,
+                "ecm_fast_path": False,
                 "auto_attempts": [],
                 "auto_parameters": None,
                 "auto_success": True,
@@ -1886,7 +2074,7 @@ def derive_from_f_qa_mpqs_auto(
         all_primes: list[int] = []
         for p in rho_factors:
             if 1 < p < F:
-                all_primes.extend(prime_factors_trial(p))
+                all_primes.extend(factor_large_component(p))
         factors_sorted = sorted(set(all_primes))
         candidates = triples_from_factorization(F, factors_sorted, primitive_only, "qa_mpqs_auto")
         return {
@@ -1897,6 +2085,35 @@ def derive_from_f_qa_mpqs_auto(
             "qa_engine": {
                 "factors_found": factors_sorted,
                 "pollard_rho_fast_path": True,
+                "fermat_fast_path": False,
+                "ecm_fast_path": False,
+                "auto_attempts": [],
+                "auto_parameters": None,
+                "auto_success": True,
+            },
+            "primitive_only": primitive_only,
+        }
+
+    # ECM (Lenstra, stage 1): bridges Pollard's rho and MPQS for factors past
+    # ~10^9-10^10 that are still B1-smooth — the gap noted after the 2026-05-30
+    # stress run (factors > 10^13 as individual primes had no bridge).
+    ecm_factors = qa_ecm_factor(F, b1=2000, max_curves=25)
+    if ecm_factors:
+        all_primes: list[int] = []
+        for p in ecm_factors:
+            if 1 < p < F:
+                all_primes.extend(factor_large_component(p))
+        factors_sorted = sorted(set(all_primes))
+        candidates = triples_from_factorization(F, factors_sorted, primitive_only, "qa_mpqs_auto")
+        return {
+            "F": F,
+            "candidate_count": len(candidates),
+            "candidates": candidates,
+            "method": "qa_mpqs_auto",
+            "qa_engine": {
+                "factors_found": factors_sorted,
+                "ecm_fast_path": True,
+                "pollard_rho_fast_path": False,
                 "fermat_fast_path": False,
                 "auto_attempts": [],
                 "auto_parameters": None,
@@ -1951,6 +2168,34 @@ def derive_from_f_qa_mpqs_auto(
     last_result["qa_engine"]["auto_attempts"] = attempts
     last_result["qa_engine"]["auto_success"] = False
     return last_result
+
+
+def derive_from_f_qa_ecm(
+    F: int,
+    primitive_only: bool = False,
+    b1: int = 2000,
+    max_curves: int = 25,
+) -> dict[str, Any]:
+    ecm_factors = qa_ecm_factor(F, b1=b1, max_curves=max_curves)
+    all_primes: list[int] = []
+    for p in ecm_factors:
+        if 1 < p < F:
+            all_primes.extend(factor_large_component(p))
+    factors_sorted = sorted(set(all_primes))
+    candidates = triples_from_factorization(F, factors_sorted, primitive_only, "qa_ecm")
+    return {
+        "F": F,
+        "candidate_count": len(candidates),
+        "candidates": candidates,
+        "method": "qa_ecm",
+        "qa_engine": {
+            "b1": b1,
+            "max_curves": max_curves,
+            "factors_found": factors_sorted,
+            "ecm_success": bool(ecm_factors),
+        },
+        "primitive_only": primitive_only,
+    }
 
 
 def derive_from_f(
@@ -2011,6 +2256,8 @@ def derive_from_f(
             primitive_only=primitive_only,
             log_tolerance=qs_log_tolerance,
         )
+    if method == "qa-ecm":
+        return derive_from_f_qa_ecm(F, primitive_only=primitive_only)
     if method == "external":
         return derive_from_f_external_backend(
             F,
@@ -2070,6 +2317,7 @@ def derive_from_f(
                 primitive_only=primitive_only,
                 log_tolerance=qs_log_tolerance,
             ),
+            "qa_ecm": derive_from_f_qa_ecm(F, primitive_only=primitive_only),
             "external": derive_from_f_external_backend(
                 F,
                 primitive_only=primitive_only,
@@ -2163,6 +2411,7 @@ def self_test() -> dict[str, Any]:
         got_qa_mpqs_auto = derive_from_f(
             F, method="qa-mpqs-auto", primitive_only=True
         )
+        got_qa_ecm = derive_from_f(F, method="qa-ecm", primitive_only=True)
         observed_factor = [(row["C"], row["F"], row["G"]) for row in got_factor["candidates"]]
         observed_tree = [(row["C"], row["F"], row["G"]) for row in got_tree["candidates"]]
         observed_tree_best = [
@@ -2187,6 +2436,7 @@ def self_test() -> dict[str, Any]:
         observed_qa_mpqs_auto = [
             (row["C"], row["F"], row["G"]) for row in got_qa_mpqs_auto["candidates"]
         ]
+        observed_qa_ecm = [(row["C"], row["F"], row["G"]) for row in got_qa_ecm["candidates"]]
         checks.append(
             {
                 "F": F,
@@ -2201,6 +2451,7 @@ def self_test() -> dict[str, Any]:
                 "observed_qa_qs": observed_qa_qs,
                 "observed_qa_mpqs": observed_qa_mpqs,
                 "observed_qa_mpqs_auto": observed_qa_mpqs_auto,
+                "observed_qa_ecm": observed_qa_ecm,
                 "ok": (
                     observed_factor == triples
                     and observed_tree == triples
@@ -2212,6 +2463,7 @@ def self_test() -> dict[str, Any]:
                     and observed_qa_qs == triples
                     and observed_qa_mpqs == triples
                     and observed_qa_mpqs_auto == triples
+                    and observed_qa_ecm == triples
                 ),
             }
         )
@@ -2335,6 +2587,7 @@ def parse_args() -> argparse.Namespace:
             "qa-qs",
             "qa-mpqs",
             "qa-mpqs-auto",
+            "qa-ecm",
             "external",
             "production",
             "factor",

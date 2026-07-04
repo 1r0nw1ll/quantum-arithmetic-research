@@ -1,0 +1,6 @@
+{
+  "_primary_source": "Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868",
+  "kind": "mod3_period",
+  "description": "The qa_step recursion taken directly mod 3 has intrinsic period 8 for all 8 non-fixed (b,e) pairs and period 1 at the fixed point (3,3)",
+  "expected": "PASS"
+}

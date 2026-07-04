@@ -1,0 +1,6 @@
+{
+  "_primary_source": "Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868; Lenstra, Lenstra, Lovasz (1982) DOI:10.1007/BF01457454",
+  "kind": "step_a1",
+  "description": "qa_step never produces a zero state (A1 no-zero axiom) across a spread of (b,e,m)",
+  "expected": "PASS"
+}

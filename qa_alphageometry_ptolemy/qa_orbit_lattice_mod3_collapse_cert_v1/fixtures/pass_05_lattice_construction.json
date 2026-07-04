@@ -1,0 +1,6 @@
+{
+  "_primary_source": "Lenstra, Lenstra, Lovasz (1982) DOI:10.1007/BF01457454; Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868",
+  "kind": "lattice_construction",
+  "description": "Worked N=7 q=16 example: the standard 2N-dim NTRU attack lattice [I_N|H; 0|q*I_N] genuinely contains the private key (f,g) as a lattice vector -- verified algebraically (f convolved with h equals g mod q), the structural precondition the empirical fpylll LLL/BKZ record depends on",
+  "expected": "PASS"
+}

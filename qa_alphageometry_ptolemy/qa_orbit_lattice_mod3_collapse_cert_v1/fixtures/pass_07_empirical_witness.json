@@ -1,0 +1,11 @@
+{
+  "_primary_source": "fpylll development team (2024) https://github.com/fplll/fpylll; Lenstra, Lenstra, Lovasz (1982) DOI:10.1007/BF01457454",
+  "kind": "empirical_witness",
+  "description": "Regression guard: the recorded fpylll experiment parameters (N=83, q=256, fpylll 0.6.4) match the module's internal EMPIRICAL_RECORD, so this historical result can't silently drift from what was actually run on 2026-07-04",
+  "record": {
+    "N": 83,
+    "q": 256,
+    "fpylll_version": "0.6.4"
+  },
+  "expected": "PASS"
+}

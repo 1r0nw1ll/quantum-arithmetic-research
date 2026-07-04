@@ -1,0 +1,11 @@
+{
+  "_primary_source": "Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868",
+  "kind": "empirical_witness",
+  "description": "Negative fixture: a record claiming a different N/q/fpylll_version than what was actually run must FAIL the witness check, guarding against silently editing the historical claim without re-running the experiment",
+  "record": {
+    "N": 700,
+    "q": 2048,
+    "fpylll_version": "0.6.4"
+  },
+  "expected": "FAIL"
+}

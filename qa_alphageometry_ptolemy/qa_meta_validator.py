@@ -11204,6 +11204,23 @@ def _validate_qa_maxwell_derivation_cert_family(base_dir):
     except Exception as e: return f"error: {e}"
 
 
+def _validate_qa_orbit_lattice_mod3_collapse_cert_family(base_dir):
+    """Cert [515]: QA Orbit-Lattice Mod-3 Collapse -- deriving NTRU-style small-coefficient key polynomials from QA orbit sequences via coefficient=(b mod 3)-1 is cryptographically unsafe whenever the QA modulus m is divisible by 3, and is not measurably weaker than a random key when gcd(m,3)=1. Root cause (proved): qa_step reduces b+e-1 mod m; whenever 3|m, (x mod m)===x (mod 3), so the mod-3 residue of the orbit evolves exactly as the direct mod-3 recursion, which has intrinsic period at most 8 regardless of m's own period -- any polynomial of degree N>8 built this way is periodic with period<=8. Verified exactly for m in {9,15,21,30,300}. Empirical record (2026-07-04, fpylll 0.6.4, real NTRU lattice N=83 q=256, real LLL/BKZ): random keys 0/10 broken by LLL (avg ratio ~594); QA keys m=9 (3|9) 6/10 broken (ratios as low as 0.01-0.24); QA keys m=80 (gcd=1) 0-1/12 broken, matching random; under BKZ both random and gcd(m,3)=1 QA keys break equally (8/8, avg ratio ~1.0) -- N=83 is too small for any NTRU instance to resist BKZ, confirming the safe construction fails the same way as random under a stronger attack too. Corrects a prior informal chat-derived 'QARSDC'/'QAFST' claim that QA harmonic-class filtering mitigates lattice attacks -- that material never specified an actual lattice basis and once reported fpylll unavailable; no real attack had been run before this cert. A confounded intermediate hypothesis (short period alone causes it) was tested, appeared confirmed by one comparison, then falsified by a proper 2x2 design (period x gcd(m,3)) before the corrected mechanism above. Checks OLC_STEP/MOD3_PERIOD/CRT_COLLAPSE/NO_COLLAPSE/LATTICE/TERNARY_RANGE/EMPIRICAL_WITNESS; 7 PASS + 2 FAIL fixtures; self-test ok. Primary: Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868; Lenstra, Lenstra, Lovasz (1982) DOI:10.1007/BF01457454; fpylll dev team (2024) v0.6.4. Derived 2026-07-04."""
+    import subprocess
+    fam_dir = os.path.join(base_dir, "qa_orbit_lattice_mod3_collapse_cert_v1")
+    validator = os.path.join(fam_dir, "qa_orbit_lattice_mod3_collapse_cert_validate.py")
+    if not os.path.exists(validator): return f"missing validator: {validator}"
+    try:
+        r = subprocess.run([sys.executable, validator, "--self-test"],
+                           capture_output=True, text=True, timeout=120, cwd=base_dir)
+        if r.returncode != 0: return f"FAIL: {r.stdout[:400]} {r.stderr[:100]}"
+        payload = json.loads((r.stdout or "").strip() or "{}")
+        if payload.get("ok") is not True:
+            return f"self-test ok=false: {json.dumps(payload, indent=2)[:400]}"
+        return None
+    except Exception as e: return f"error: {e}"
+
+
 def _validate_qa_longitudinal_scalar_em_boundary_cert_family(base_dir):
     """Cert [514]: QA Longitudinal Scalar EM Boundary -- representation-boundary follow-on to [513]. CLAIM (guarded): QA does not use Heaviside-Hertz-Gibbs vector reduction as a premise for the longitudinal/scalar EM question; scalar and longitudinal terms are admitted only as certified carrier, source, boundary, media, gauge, or observer-projection structure. This cert preserves Maxwell 1865 as the source target and finite cochain exterior calculus as the QA substrate, while explicitly excluding Heaviside vector reduction, Hertz transverse-only assumptions, and Gibbs vector formalism as foundational premises. Allows scalar-potential carriers and constrained longitudinal source/boundary/media/gauge/projection terms; treats extra source-free vacuum scalar radiation modes, longitudinal/free-energy claims, Bearden/Pond/SVP scalar energy, scalar-potential=physical-field collapse, unbounded Maxwell, and physical electromagnetism beyond [513] as uncertified inside this cert, not globally disproven. Checks LSE_1/LSE_2/LSE_3/LSE_4/LSE_5/LSE_6/LSE_7/LSE_8/SCHEMA; 1 PASS + 8 FAIL fixtures; self-test ok. Primary source: Maxwell J.C. (1865) Phil. Trans. R. Soc. 155:459-512; math anchors Hatcher A. (2002) Algebraic Topology Ch. 2 ISBN 978-0-521-79540-1; Bossavit A. (1998) Computational Electromagnetism ISBN 978-0-12-118710-1. Derived 2026-07-03."""
     import subprocess
@@ -13549,6 +13566,11 @@ def _validate_qa_orbit_prime_ideal_filtration_cert_family(base_dir):
 # - New families should set must_have_dedicated_root=True and use a dedicated directory root
 #   (i.e., do not use family_root_rel="." for new families).
 FAMILY_SWEEPS = [
+    (515, "QA Orbit-Lattice Mod-3 Collapse Cert family",
+     _validate_qa_orbit_lattice_mod3_collapse_cert_family,
+     "QA Orbit-Lattice Mod-3 Collapse Cert [515]. CLAIM (narrow, falsifiable): deriving NTRU-style small-coefficient key polynomials from QA orbit sequences via coefficient=(b mod 3)-1 is cryptographically unsafe whenever the QA modulus m is divisible by 3, and is not measurably weaker than a random key when gcd(m,3)=1. Root cause (proved): qa_step reduces b+e-1 mod m; whenever 3|m, (x mod m)===x (mod 3), so the mod-3 residue of the orbit evolves exactly as the direct mod-3 recursion, which has intrinsic period at most 8 regardless of m's own period -- any polynomial of degree N>8 built this way is periodic with period<=8. Verified exactly for m in {9,15,21,30,300}. Empirical record (2026-07-04, fpylll 0.6.4, real NTRU lattice N=83 q=256, real LLL/BKZ): random keys 0/10 broken by LLL (avg ratio ~594); QA keys m=9 (3|9) 6/10 broken (ratios as low as 0.01-0.24); QA keys m=80 (gcd=1) 0-1/12 broken, matching random; under BKZ both random and gcd(m,3)=1 QA keys break equally (8/8, avg ratio ~1.0) -- N=83 too small for any NTRU instance to resist BKZ, confirming the safe construction fails the same way as random under a stronger attack too. Corrects a prior informal chat-derived 'QARSDC'/'QAFST' claim that QA harmonic-class filtering mitigates lattice attacks -- that material never specified an actual lattice basis (literally 'L=span{...}', unfilled) and once reported fpylll unavailable; no real attack had been run before this cert. A confounded intermediate hypothesis (short period alone causes it) was tested, appeared confirmed by one comparison, then falsified by a proper 2x2 design (period x gcd(m,3)) before the corrected mechanism above. Checks OLC_STEP/MOD3_PERIOD/CRT_COLLAPSE/NO_COLLAPSE/LATTICE/TERNARY_RANGE/EMPIRICAL_WITNESS; 7 PASS + 2 FAIL fixtures; self-test ok. Primary: Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868; Lenstra, Lenstra, Lovasz (1982) DOI:10.1007/BF01457454; fpylll dev team (2024) v0.6.4 https://github.com/fplll/fpylll. Derived 2026-07-04.",
+     "515_qa_orbit_lattice_mod3_collapse",
+     "qa_orbit_lattice_mod3_collapse_cert_v1", True),
     (18, "QA Datastore family",
      _validate_datastore_family_if_present,
      "semantics + witness + counterexamples", "18_datastore", ".", False),

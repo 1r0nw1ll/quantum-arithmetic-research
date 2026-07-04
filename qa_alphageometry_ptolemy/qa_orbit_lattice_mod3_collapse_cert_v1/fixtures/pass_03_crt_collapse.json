@@ -1,0 +1,6 @@
+{
+  "_primary_source": "Hoffstein, Pipher, Silverman (1998) DOI:10.1007/BFb0054868",
+  "kind": "crt_collapse",
+  "description": "For any modulus m divisible by 3, the orbit's b-sequence reduced mod 3 is exactly the direct mod-3 recursion's sequence -- proved via (x mod m) === x (mod 3) whenever 3|m -- checked exactly for m in {9,15,21,30,300} across 4 seeds each",
+  "expected": "PASS"
+}

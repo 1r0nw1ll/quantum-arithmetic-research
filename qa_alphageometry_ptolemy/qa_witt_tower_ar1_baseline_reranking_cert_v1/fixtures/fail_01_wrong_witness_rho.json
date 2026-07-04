@@ -1,0 +1,9 @@
+{
+  "_primary_source": "Rayner et al. (2003) DOI:10.1029/2002JD002670",
+  "kind": "witness",
+  "description": "Negative fixture: a record claiming a different rho for rivers than what was actually live-fetched must FAIL the witness check",
+  "record": {
+    "Rivers_490": {"rho": 0.900}
+  },
+  "expected": "FAIL"
+}

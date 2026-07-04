@@ -1,0 +1,7 @@
+{
+  "_primary_source": "Rayner et al. (2003) DOI:10.1029/2002JD002670",
+  "kind": "excess",
+  "domain": "Rivers_490",
+  "description": "Rivers [490] (rho=0.310, live-fetched from USGS NWIS since cert [490] does not store autocorr; observed ratio=2.689): a plain AR(1) process at the same rho predicts only 1.88x, so excess_ratio=1.43 exceeds 1.3",
+  "expected": "PASS"
+}

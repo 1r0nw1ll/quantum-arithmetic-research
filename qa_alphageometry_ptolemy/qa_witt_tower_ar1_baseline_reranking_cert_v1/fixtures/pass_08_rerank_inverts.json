@@ -1,0 +1,6 @@
+{
+  "_primary_source": "Rayner et al. (2003) DOI:10.1029/2002JD002670",
+  "kind": "rerank",
+  "description": "Ordering the 6 domains by excess_ratio (EEG > Precip > Rivers > FX > SST > Temperature) is not the same ordering as by raw observed ratio (SST > Temp > Precip > Rivers > FX > EEG) -- nearly an exact inversion",
+  "expected": "PASS"
+}

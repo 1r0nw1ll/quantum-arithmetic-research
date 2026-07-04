@@ -1,0 +1,7 @@
+{
+  "_primary_source": "Namias (1952) synoptic blocking baseline; Rayner et al. (2003) DOI:10.1029/2002JD002670",
+  "kind": "near_null",
+  "domain": "Temperature_492",
+  "description": "Temperature [492] (rho=0.728, observed ratio=3.400): a plain AR(1) process at the same rho already predicts 3.36x, so excess_ratio=1.01 is within [0.9,1.15] -- essentially fully explained by known autocorrelation, despite being labeled STRONGEST PERSISTENCE alongside SST in the original ladder",
+  "expected": "PASS"
+}

@@ -1,0 +1,7 @@
+{
+  "_primary_source": "Rayner et al. (2003) DOI:10.1029/2002JD002670",
+  "kind": "excess",
+  "domain": "EEG_491",
+  "description": "EEG interictal [491] (rho=-0.262, observed ratio=0.725): a plain AR(1) process at the same rho predicts only 0.44x, so excess_ratio=1.64 exceeds 1.3 -- genuine excess structure beyond simple anti-correlation, the MOST novel result in the ladder despite being ranked lowest in the original raw-ratio framing",
+  "expected": "PASS"
+}

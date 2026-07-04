@@ -1,0 +1,14 @@
+{
+  "_primary_source": "Rayner et al. (2003) DOI:10.1029/2002JD002670",
+  "kind": "witness",
+  "description": "Regression guard: the recorded per-domain rho values match the module's internal DOMAIN_RECORD, so the historical rho inputs (including the live-fetched rivers value) can't silently drift",
+  "record": {
+    "SST_493": {"rho": 0.942},
+    "Temperature_492": {"rho": 0.728},
+    "Rivers_490": {"rho": 0.310},
+    "Precipitation_494": {"rho": 0.318},
+    "EEG_491": {"rho": -0.262},
+    "FX_495": {"rho": -0.127}
+  },
+  "expected": "PASS"
+}

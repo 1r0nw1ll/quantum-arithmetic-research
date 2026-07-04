@@ -1,0 +1,7 @@
+{
+  "_primary_source": "Rayner et al. (2003) DOI:10.1029/2002JD002670",
+  "kind": "excess",
+  "domain": "Precipitation_494",
+  "description": "Precipitation [494] (rho=0.318, observed ratio=3.048): a plain AR(1) process at the same rho predicts only 1.91x, so excess_ratio=1.60 exceeds 1.3 -- consistent with the heavy-tailed, non-Gaussian wet/dry-spell clustering already noted in cert [494]'s own documentation",
+  "expected": "PASS"
+}

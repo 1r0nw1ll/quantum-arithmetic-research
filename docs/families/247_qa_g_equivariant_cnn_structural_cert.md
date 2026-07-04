@@ -50,3 +50,30 @@ group-equivariant CNN rotation index.
 
 - This is a structural cert only. It does not train or benchmark a CNN.
 - C3 is intentionally n=9-specific; the `n=24` fixture skips it.
+
+## Verification Note (2026-07-04)
+
+Independently fetched and read the actual Cohen & Welling (2016) PDF
+(arXiv:1602.07576) to check the C4 equation-correspondence table against
+the real paper, rather than trusting the hardcoded `EXPECTED_C4_TABLE`
+untested. Confirmed:
+
+- **Eq. 10** (`[f⋆ψ](g) = Σ_y Σ_k f_k(y)ψ_k(g⁻¹y)`) is genuinely the
+  paper's first-layer correlation, §6.1 "G-Equivariant correlation" —
+  taking a function on the plane `Z²` and producing a function on the
+  group `G`. Matches the cert's "first-layer image → group-indexed
+  feature map" description.
+- **Eq. 11** (`[f⋆ψ](g) = Σ_h Σ_k f_k(h)ψ_k(g⁻¹h)`) is genuinely the
+  general-layer correlation for functions already on `G`. Matches.
+- **§6.3** is literally titled "Subgroup pooling and coset pooling" and
+  describes pooling over cosets `gH` of the group — an exact match to
+  the cert's "coset pooling" claim.
+
+**One precision nuance, not a fabrication**: the paper's own section
+title covering *both* Eq. 10 and Eq. 11 is "G-Equivariant correlation"
+(§6.1) — the word "lifting" does not appear in this 2016 paper as the
+name for Eq. 10 specifically. "Lifting (convolution)" became standard
+terminology for this exact operation in later G-CNN / steerable-CNN
+literature. The cert's C4 table is a faithful paraphrase of the paper's
+actual mathematical content, not a literal quote — worth knowing if this
+cert is ever cited as directly quoting Cohen & Welling's own words.

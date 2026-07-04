@@ -1678,6 +1678,58 @@ def derive_from_f_qa_mpqs(
     if F <= 1:
         raise ValueError("F must be an integer greater than 1")
 
+    # QA-Fermat fast path: d²-F = e² at d ≈ sqrt(F) solves balanced-factor
+    # cases in O(1)-ish steps. Without this, a balanced semiprime (e.g.
+    # 10007*10009) relies entirely on the MPQS sieve stumbling onto a usable
+    # relation/dependency by chance — which it isn't guaranteed to do even
+    # when the factorization is this easy (confirmed missing here 2026-07-04:
+    # this function was the only sibling of derive_from_f_qa_qs /
+    # derive_from_f_qa_mpqs_auto without this check, and was the cause of
+    # the qa_pythagorean_from_f.py --stress mismatches on
+    # semiprime_10007_10009 and semiprime_1000003_1000033).
+    fermat_factors = qa_fermat_factor(F, limit=20000)
+    if fermat_factors:
+        all_primes: list[int] = []
+        for p in fermat_factors:
+            if 1 < p < F:
+                all_primes.extend(factor_large_component(p))
+        factors_sorted = sorted(set(all_primes))
+        candidates = triples_from_factorization(F, factors_sorted, primitive_only, "qa_mpqs")
+        return {
+            "F": F,
+            "candidate_count": len(candidates),
+            "candidates": candidates,
+            "method": "qa_mpqs",
+            "qa_engine": {
+                "chart": "d=A*x+B",
+                "condition": "B*B == F mod A",
+                "relation": "(A*x+B)^2-F = A*q(x)",
+                "factor_base_bound": factor_base_bound,
+                "factor_base": [],
+                "direct_factors": factors_sorted,
+                "direct_prime_factors": factors_sorted,
+                "remaining_after_direct": 1,
+                "small_factor_frontier_complete": False,
+                "fermat_fast_path": True,
+                "half_width": half_width,
+                "polynomial_count": polynomial_count,
+                "large_prime_bound": large_prime_bound,
+                "large_prime_partials": 0,
+                "large_prime_pairs": 0,
+                "polynomials_used": 0,
+                "polynomial_summaries": [],
+                "log_tolerance": log_tolerance,
+                "skipped_by_log": 0,
+                "tested_after_sieve": 0,
+                "smooth_relations": 0,
+                "total_usable_relations": 0,
+                "dependencies_checked": 0,
+                "factors_found": factors_sorted,
+                "relation_sets": [],
+            },
+            "primitive_only": primitive_only,
+        }
+
     factor_base = []
     roots_by_prime = {}
     direct_factors = set()

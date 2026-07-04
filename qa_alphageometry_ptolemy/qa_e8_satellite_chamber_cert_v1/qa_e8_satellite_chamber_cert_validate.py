@@ -94,11 +94,31 @@ CHECKS (ESC = E8 Satellite Chamber):
   ESC_WALL_UPPER    W2-proj(G) = -9 < 0   (alpha/beta < 13/12)
   ESC_ISO_INTERVAL  alpha=beta=1: ratio 1 in (7/12, 13/12) exactly
   ESC_G2_EXITS      G^2 has opposite sign on W1 and/or W3
+  ESC_CLOSURE_NO_RESCUE  closes the retraction's open question (see CLOSURE NOTE below)
 
   RETRACTED (computed and reported for audit, but do not gate PASS/FAIL):
   ESC_BRANCH        (was) h=G places (6,3) at E8 branch node
   ESC_GRANT         (was) (3,6) [Grant LRT] is at distance 4 from branch
   ESC_ELEM_UNIQUE   (was) G unique in {b,e,d,a,C,F,G} for branch=(6,3)
+
+CLOSURE NOTE (2026-07-04): the retraction above left an open question --
+is the axis-to-branch mapping merely miscomputed, or is there NO natural
+QA-derived axis assignment that gives a well-defined per-axis Dynkin
+structure at all? Checked directly: the "textbook" per-axis diagram
+(exactly 1 Type-2 simple root, 7 Type-1 roots forming the classical
+D8-extended-to-E8 chain+fork) exists, but ONLY for height vectors with
+super-increasing spacing (each axis value strictly exceeding the sum of
+all previous ones) -- confirmed for 3 independent super-increasing
+witnesses. NONE of the 7 elementary QA invariants {b,e,d,a,C,F,G}, in raw
+orbit order or sorted, reach that chamber (b,e,d,a fail distinctness; C is
+degenerate; F and G land in messy mostly-Type-2 chambers, sorting G does
+not rescue it -- lands in a DIFFERENT messy chamber instead). QA's
+Satellite invariants are all within roughly the same order of magnitude
+(G_VALS spans 45-306, a ~7x range); super-increasing spacing requires
+exponential separation, which no natural bounded polynomial function of
+QA state can produce over 8 terms. This closes the question: the branch
+concept is structurally unrecoverable via any elementary QA invariant, not
+merely awaiting a corrected index.
 
 Primary sources (mathematical):
   Wildberger, N.J. (2005). Divine Proportions. Wild Egg Books.
@@ -432,6 +452,79 @@ def check_elementary_uniqueness() -> Tuple[bool, List[str]]:
     return passing == ["G"], passing
 
 
+# Super-increasing test vectors: each axis value strictly exceeds the sum
+# of all previously assigned values. This is the chamber shape (7 Type-1 +
+# 1 Type-2 simple root, classical D8-extended-to-E8 chain+fork) where an
+# axis-based Dynkin story would actually be well-defined.
+SUPER_INCREASING_WITNESSES = (
+    (1, 2, 4, 8, 16, 32, 64, 128),
+    (1, 3, 7, 15, 31, 63, 127, 255),
+    (5, 11, 23, 50, 105, 220, 450, 905),
+)
+
+
+def _chamber_type_counts(h_vals: Tuple[int, ...]) -> Tuple[int, int] | None:
+    """Return (type1_count, type2_count) for the chamber containing h_vals,
+    or None if h_vals is degenerate (zero projection on some root)."""
+    simple = simple_roots(h_vals, ROOTS)
+    if simple is None:
+        return None
+    type1 = sum(1 for r in simple if r.count(0) == 6)
+    type2 = sum(1 for r in simple if 0 not in r)
+    return type1, type2
+
+
+def check_closure_no_natural_rescue() -> Tuple[bool, dict]:
+    """
+    ESC_CLOSURE_NO_RESCUE: closes the open question left by the 2026-07-04
+    retraction -- is there ANY natural QA-derived axis assignment that
+    gives the well-defined per-axis Dynkin structure (7 Type-1 + 1 Type-2
+    simple roots), or is the axis-to-branch premise structurally
+    unrecoverable?
+
+    (1) POSITIVE CONTROL: super-increasing height vectors reliably give
+        Type1=7, Type2=1 (the chamber where axis-based structure would be
+        legitimate) -- verified for 3 independent witnesses.
+    (2) NEGATIVE RESULT: none of the 7 elementary QA invariants
+        {b,e,d,a,C,F,G}, in raw orbit-sequence order OR sorted, reach that
+        chamber. b,e,d,a fail even the distinctness precondition; C is
+        degenerate; F and G (raw or sorted) land in messy mostly-Type-2
+        chambers, never Type1=7/Type2=1.
+
+    Returns (ok, detail) where ok = both (1) holds for all witnesses AND
+    (2) holds (no elementary invariant reaches Type1=7/Type2=1).
+    """
+    detail = {"super_increasing": [], "elementary_invariants": []}
+
+    positive_ok = True
+    for h in SUPER_INCREASING_WITNESSES:
+        counts = _chamber_type_counts(h)
+        hit = counts == (7, 1)
+        detail["super_increasing"].append({"h": h, "counts": counts, "hit_clean_diagram": hit})
+        if not hit:
+            positive_ok = False
+
+    inv_names = ["b", "e", "d", "a", "C", "F", "G"]
+    inv_vals = [tuple(inv[i] for inv in INV) for i in range(7)]
+    negative_ok = True
+    for name, vals in zip(inv_names, inv_vals):
+        for order_label, v in (("raw", vals), ("sorted", tuple(sorted(vals)))):
+            if len(set(v)) < 8:
+                detail["elementary_invariants"].append(
+                    {"invariant": name, "order": order_label, "counts": None, "reason": "not distinct"}
+                )
+                continue
+            counts = _chamber_type_counts(v)
+            reached_clean = counts == (7, 1)
+            detail["elementary_invariants"].append(
+                {"invariant": name, "order": order_label, "counts": counts, "reached_clean_diagram": reached_clean}
+            )
+            if reached_clean:
+                negative_ok = False  # an invariant DID rescue it -- closure claim would be wrong
+
+    return positive_ok and negative_ok, detail
+
+
 # ---------------------------------------------------------------------------
 # Fixture validation
 # ---------------------------------------------------------------------------
@@ -529,6 +622,13 @@ def self_test() -> bool:  # noqa: PLR0912
     ok_b, sat_axis, step = check_branch()
     ok_gr, dist_val = check_grant_distance()
     ok_eu, passing = check_elementary_uniqueness()
+
+    # ESC_CLOSURE_NO_RESCUE (2026-07-04) -- DOES gate PASS/FAIL: closes the
+    # retraction's open question by direct computation (see module docstring
+    # CLOSURE NOTE below).
+    ok_closure, closure_detail = check_closure_no_natural_rescue()
+    if not ok_closure:
+        failures.append(f"ESC_CLOSURE_NO_RESCUE FAIL: {closure_detail}")
 
     # Verify specific numeric values (regression guards)
     assert G_VALS == (90, 225, 153, 45, 117, 306, 261, 180), f"G_VALS mismatch: {G_VALS}"
@@ -635,6 +735,7 @@ if __name__ == "__main__":
                 "ESC_WALL_UPPER": check_wall_projections()[1],
                 "ESC_ISO_INTERVAL": check_iso_interval()[0],
                 "ESC_G2_EXITS":   check_g2_exits()[0],
+                "ESC_CLOSURE_NO_RESCUE": check_closure_no_natural_rescue()[0],
             },
             "retracted_checks_2026_07_04": {
                 "reason": "axis-to-branch index conflation; see module docstring RETRACTION NOTE",

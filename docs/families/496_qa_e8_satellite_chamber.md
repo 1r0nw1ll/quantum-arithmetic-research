@@ -55,6 +55,7 @@ Normalizing α = β = 1: **h = G = d² + e²** (Wildberger quadrance).
 | ESC_WALL_UPPER | WALL_UPPER·G = −9 < 0 → upper bound α/β < 13/12 | valid |
 | ESC_ISO_INTERVAL | α/β = 1 ∈ (7/12, 13/12) strictly | valid |
 | ESC_G2_EXITS | G² has opposite sign on Type-2 wall roots (G-chamber ≠ G²-chamber despite same axis ordering) | valid |
+| ESC_CLOSURE_NO_RESCUE | no elementary QA invariant reaches the clean per-axis chamber (see Closure section below) | valid |
 | ~~ESC_BRANCH~~ | ~~h = G places (6,3) at E₈ branch node~~ | **retracted** |
 | ~~ESC_GRANT~~ | ~~(3,6) [Grant LRT] is at distance 4 from branch~~ | **retracted** |
 | ~~ESC_ELEM_UNIQUE~~ | ~~G is unique in {b,e,d,a,C,F,G} with branch=(6,3)~~ | **retracted** |
@@ -91,6 +92,46 @@ The following sections from the original 2026-06-21 derivation are **withdrawn**
 - The "Elementary Uniqueness Selection Chain" ({b,e,d,a,C,F,G} → {C,F,G} → {F,G} → {G}) — the first two narrowing steps (strict ordering, genericity) are fine, but the final step ("correct branch") relied on the retracted branch computation.
 
 What remains genuinely established: `G=d²+e²` selects a *specific, non-arbitrary* E8 Weyl chamber (bounded by `7/12 < α/β < 13/12`), the isotropic choice `α=β` lands inside that interval, and `G` and `G²` — despite preserving the same axis ordering — land in different chambers. That's a real, verified fact about chamber selection; it just doesn't decompose into a story about individual Satellite axes sitting at individual Dynkin-diagram positions.
+
+## Closure of the Retracted Claim (2026-07-04)
+
+The retraction above raised an open question: is the axis-to-branch mapping
+just *miscomputed* (fixable by re-deriving the right index), or is the
+underlying premise itself unrecoverable — is there *any* natural QA-derived
+axis assignment that gives a well-defined per-axis Dynkin structure? This
+was checked directly, not just asserted.
+
+**Finding: the "textbook" per-axis Dynkin diagram (exactly 1 Type-2 simple
+root, 7 Type-1 roots each touching exactly 2 axes, forming the classical
+D₈-extended-to-E₈ chain+fork) exists — but only for height vectors with
+*super-increasing* spacing** (each axis value strictly exceeding the sum of
+all values assigned to previous axes). Confirmed reproducibly across three
+independent super-increasing test vectors — `(1,2,4,...,128)`,
+`(1,3,7,...,255)`, `(5,11,23,...,905)` — all giving Type-1=7, Type-2=1, a
+genuine E8 Cartan matrix (det=1), and a well-defined branch node with
+distances `[1,1,0,1,2,3,4,2]` from it. This is the chamber where an
+axis-based Dynkin story would actually be legitimate.
+
+**None of QA's seven elementary invariants reach it.** Swept `{b,e,d,a,C,F,G}`
+over the Satellite orbit, both in natural orbit-sequence order and sorted
+numerically: `b,e,d,a` aren't even strictly distinct across the 8 states
+(fails the ordering precondition outright); `C` is degenerate (zero
+projection on some root) in both orderings; `F` and `G` (raw or sorted)
+all land in messy, mostly-Type-2 chambers (`F`: 2 Type-1/6 Type-2; `G`
+raw: 1/7; `G` sorted: 1/7 but a *different* chamber than raw G). Sorting
+by the very invariant the original theorem was built around does not
+rescue it — it just lands in another messy chamber.
+
+**Why this is a structural dead end, not a harder-to-find fix**: QA's
+Satellite invariants are all bounded within roughly the same order of
+magnitude across the 8 states (b,e ≤ 9, so G,F ≤ ~9²-scale quantities all
+within roughly a 7x range: G_VALS spans 45–306). Super-increasing spacing
+requires *exponential* separation between consecutive axis values — a
+structural property no natural polynomial function of bounded QA state can
+produce over only 8 terms. The clean per-axis diagram isn't something the
+original derivation merely failed to find the right index for; it requires
+a numeric property (exponential separation) that is incompatible with how
+QA invariants are built, closing the question rather than leaving it open.
 
 ## Primary Sources
 

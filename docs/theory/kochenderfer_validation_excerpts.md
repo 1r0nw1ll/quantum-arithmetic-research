@@ -94,6 +94,14 @@
 
 ## Chapter 11 — Explainability
 
+### #val-11-5-counterfactual-explanations (PDF p.325 / printed p.309, §11.5)
+
+> "A counterfactual is a hypothetical scenario that describes how an outcome would change if events had unfolded differently. Counterfactual explanations explain the behavior of a model by identifying the smallest change to the input that would result in a different outcome. We can frame the problem of generating a counterfactual explanation as a multiobjective optimization problem, in which our goal is to maximize the following four objectives: [...] Change in outcome: The counterfactual input should result in an outcome different from that obtained with the original input."
+
+Added 2026-07-05 (cert [265] `qa_counterfactual_descent_cert_v1` cites this section; verified against a
+fresh download of the publisher PDF, section title and page confirmed exact — anchor was previously
+missing from this file despite the cert's citation being accurate).
+
 ### #val-11-6-failure-mode-clustering (PDF p.331 / printed p.315, §11.6)
 
 > "Another way to explain the behavior of a system is to characterize its failure modes. We can use clustering algorithms to create groupings of failure trajectories that are similar to one another. Identifying the similarities and differences between failures helps us understand their underlying causes."
@@ -101,6 +109,17 @@
 ---
 
 ## Chapter 12 — Runtime Monitoring
+
+### #val-12-1-odd-monitoring-definition (PDF p.339 / printed p.323, §12.1)
+
+> "The operational design domain (ODD) of a system is the set of conditions under which it is designed to operate safely. [...] A good system model should cover the ODD so that the validation results from the previous chapters are valid within the ODD. If the system is operating outside the ODD, the validation results may no longer be valid, and we cannot provide any guarantees on the system's safety. Therefore, it is important for us to monitor at runtime whether a system is operating within its ODD."
+
+Added 2026-07-05 (cert [264] `qa_runtime_odd_monitor_cert_v1` cites this section; verified against a
+fresh download of the publisher PDF, section title and page confirmed exact — anchor was previously
+missing from this file despite the cert's citation being accurate). Note: the book defines the ODD via a
+nearest-neighbor distance-threshold set (§12.1.1), not literally the phrase "superlevel-set" that
+[264]'s docstring uses — that is [264]'s own reasonable mathematical restatement of the threshold-γ
+inclusion set as a superlevel set, not a verbatim term from the book.
 
 ### #val-12-2-aleatoric-vs-epistemic-uncertainty (PDF p.346 / printed p.330, §12.2)
 

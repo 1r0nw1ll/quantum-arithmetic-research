@@ -5,7 +5,7 @@
 The **third sharp-claim cert** derived from the Kochenderfer 2026 *Algorithms for Validation* bridge (see [bridge spec §5](../specs/QA_KOCHENDERFER_BRIDGE.md), counterfactual-explanation row). Anchored at Kochenderfer Validation §11.5 *Counterfactual Explanations* (open-candidate framing in the v1 ingestion).
 
 **Primary source**:
-- Kochenderfer, M. J., Wheeler, T. A., Katz, S., Corso, A., & Moss, R. J. (Kochenderfer, 2026). *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. Chapter 11 §11.5 'Counterfactual Explanations' — "smallest input change that flips the output". §11.5 was tagged not-mapped-here in the v1 Validation excerpts ingestion (continuous-domain) but is the canonical anchor for this cert.
+- Kochenderfer, M. J., Wheeler, T. A., Katz, S., Corso, A., & Moss, R. J. (Kochenderfer, 2026). *Algorithms for Validation*. MIT Press. CC-BY-NC-ND. Chapter 11 §11.5 'Counterfactual Explanations' (PDF p.325 / printed p.309) — "identifying the smallest change to the input that would result in a different outcome." Verbatim anchor at [`docs/theory/kochenderfer_validation_excerpts.md#val-11-5-counterfactual-explanations`](../theory/kochenderfer_validation_excerpts.md) (added 2026-07-05 audit — this section previously had no verbatim anchor despite being this cert's canonical citation; independently verified against a fresh download of the publisher PDF, section title/page/quote confirmed exact).
 
 ## Claim (narrow)
 

@@ -90,3 +90,16 @@ The utility module `tools/qa_kg/orbit_failure_enumeration.py` is now consumed by
 - ✅ [193] `qa_levin_cognitive_lightcone_cert_v1` — imports `qa_mod`, `qa_step`, `orbit_family_s9`. Levin-cone-specific `orbit_length` (cycle-length helper) preserved locally.
 
 Behavior-preserving refactor — all four certs ([191], [193], [194], [263]) still PASS their self-tests with bit-exact ratios; the existing `EXPECTED_FAMILY_SIZES` / `EXPECTED_TIER_COUNTS_S9` / `EXPECTED_CYCLE_LENGTHS` constants are unchanged. This makes [263]'s utility load-bearing rather than ornamental: a future change to the orbit-family classifier (e.g., a published mod-24 classifier) will propagate to all four certs through one source of truth.
+
+## Verification Note (2026-07-05)
+
+Independently downloaded the real *Algorithms for Validation* PDF (Kochenderfer, Katz, Corso & Moss,
+MIT Press, real book, ISBN 9780262056014, confirmed via web search) and cross-checked this cert's
+§7.1 citation directly (not just via the project's own excerpt file). Confirmed exact: the book's own
+text states "Algorithm 7.1 uses **direct sampling** to implement this estimator" (matching this cert's
+"Algorithm 7.1 direct sampling" phrasing verbatim, not just a paraphrase), and equation (7.3) is
+literally `Var[p̂_fail] = p_fail(1 − p_fail)/m`, matching the declared `σ̂ = sqrt(p(1−p)/N)` standard-error
+formula exactly (m/N naming difference only). The existing `docs/theory/kochenderfer_validation_excerpts.md#val-7-1-direct-estimation-pfail`
+anchor's transcription also matches the live PDF precisely. No bugs found in this cert. While
+re-verifying the wider Kochenderfer-bridge cluster, found (and fixed) missing verbatim anchors for
+[264]'s §12.1 and [265]'s §11.5 citations — see those docs' verification notes.

@@ -42,3 +42,43 @@ python qa_historical_nav_cert_validate.py --self-test
 - [134] QA_EGYPTIAN_FRACTION — Egyptian unit fractions = same arithmetic
 - [163] QA_DEAD_RECKONING — T-operator DR = modern version of ancient methods
 - [165] QA_CELESTIAL_NAV — sextant as spread instrument (evolution of kamal/sun stone)
+
+## Verification Note (2026-07-05)
+
+Independently checked the two most specific numeric/citation claims:
+
+- **Egyptian seked = 5.5 palms per cubit for the Great Pyramid**: confirmed
+  exactly. Scholarship on the Rhind Mathematical Papyrus (problems 56-60)
+  gives the Great Pyramid's seked as "5 palms, 2 digits" per cubit; since
+  1 palm = 4 digits, 2 digits = 0.5 palm, so 5 palms + 2 digits = 5.5
+  palms exactly — the cert's "5.5 palms (= 5½:7)" is a precise
+  decimal-form restatement of the traditional palms+digits notation, not
+  an approximation. `seked_to_spread()`'s formula (`den²/(den²+num²)`)
+  is dimensionally correct: `tan(slope)=rise/run`, `spread=sin²(slope)`.
+- **Ropars et al. (2012)**: confirmed real — "A depolarizer as a possible
+  precise sunstone for Viking navigation by polarized skylight,"
+  *Proceedings of the Royal Society A*, exact author/title/venue match.
+  The underlying optics (Iceland-spar calcite can depolarize skylight to
+  reveal sun position, verified within ~1% experimentally) is genuine,
+  peer-reviewed physics.
+
+**One honesty caveat worth adding** (same spirit as the Megalithic Yard
+audit): the paper itself is real science about what calcite *can* do
+optically — it does not, and cannot, establish that Vikings *actually*
+used this method for navigation. No Viking-era sunstone has been found
+in a clear navigational-use context (the closest physical evidence, a
+calcite crystal on the 16th-century English Alderney shipwreck, postdates
+the Viking era by centuries); the historical-use claim rests on saga
+references to an unidentified "sunstone" object, not direct archaeological
+proof. This cert's own framing ("Norse: Sun stones... measures sun
+position through clouds") already reads as a live technique description
+rather than an overclaimed historical certainty, but a one-line caveat
+distinguishing "the physics works" from "Vikings are confirmed to have
+used it this way" would strengthen the cert's honesty, consistent with
+this project's broader practice of flagging contested historical claims.
+
+Lewis (1972), Tibbetts (1971), and Gillings (1972) are all real,
+well-established works in their respective fields (Pacific navigation,
+Arab maritime history, Egyptian mathematics) — not independently
+re-verified page-by-page here, but no reason to doubt given how precisely
+the two most checkable numeric claims above hold up.

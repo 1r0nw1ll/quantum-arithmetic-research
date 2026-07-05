@@ -37,7 +37,9 @@ SOURCE: Thom, "The Megalithic Unit of Length" JRSS (1962);
 Checks
 ------
 MG_1         schema_version == 'QA_MEGALITHIC_CERT.v1'
-MG_MY        MY value and p-value documented
+MG_MY        MY value and p-value documented; MG_ZP_CONSISTENCY sub-check
+             cross-validates declared p_value against z_score via stdlib
+             normal CDF (added 2026-07-04 audit)
 MG_FATHOM    fathom preference (even MY count) verified
 MG_TRIANGLE  construction triangles are valid Pythagorean QN triples
 MG_HONEST    negative results documented
@@ -45,12 +47,28 @@ MG_W         at least 3 evidence categories
 MG_F         fail detection
 """
 
+# 2026-07-04 audit hardening: MG_ZP_CONSISTENCY cross-checks the declared
+# z_score/p_value pair via the standard normal CDF (stdlib erfc). Verified
+# against the real Thom (1962) and Thom (1967) data (thom_1962_diameters.csv,
+# thom_1967_table51_diameters.csv, repo root). Wall, D.D. (1960)
+# DOI:10.2307/2309169.
 import json
 import math
 import os
 import sys
 
 SCHEMA = "QA_MEGALITHIC_CERT.v1"
+
+
+def norm_cdf(z):
+    """Standard normal CDF via stdlib erfc (exact, no scipy dependency)."""
+    return 0.5 * math.erfc(-z / math.sqrt(2))
+
+
+def relative_close(actual, expected, rel_tol=0.10):
+    if expected == 0:
+        return actual == 0
+    return abs(actual - expected) / abs(expected) <= rel_tol
 
 
 def validate(cert, *, collect_errors=True):
@@ -75,6 +93,18 @@ def validate(cert, *, collect_errors=True):
             err("MG_MY", f"p_value={p_value} > 0.05, not significant")
         if n_circles is not None and n_circles < 20:
             warnings.append(f"MG_MY: only {n_circles} circles, low power")
+
+        # MG_ZP_CONSISTENCY (2026-07-04 audit): independently recompute the
+        # p-value implied by the declared z-score (one-sided normal CDF via
+        # stdlib erfc) and cross-check against the declared p_value. This
+        # closes a gap where z_score and p_value were both declared but
+        # never checked against each other.
+        z_score = my_data.get("z_score")
+        if z_score is not None and p_value is not None:
+            recomputed_p = norm_cdf(z_score) if z_score < 0 else 1 - norm_cdf(z_score)
+            if not relative_close(p_value, recomputed_p):
+                err("MG_MY", f"declared p_value={p_value:.3g} does not match recomputed "
+                              f"{recomputed_p:.3g} from z_score={z_score}")
     else:
         err("MG_MY", "missing megalithic_yard section")
 

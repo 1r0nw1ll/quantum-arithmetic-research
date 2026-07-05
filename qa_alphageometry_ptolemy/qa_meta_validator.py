@@ -4554,7 +4554,7 @@ def _validate_planetary_qn_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_megalithic_cert_family(base_dir: str) -> Optional[str]:
-    """QA Megalithic Cert family [178] — MY p=0.0096, Fathom p<0.0001, Fibonacci QN triangles. Tier 2+3. Checks MG_1+MY/FATHOM/TRIANGLE/HONEST/W/F; 1 PASS+1 FAIL; self-test ok"""
+    """QA Megalithic Cert family [178] — MY p=0.0096, Fathom p<0.0001, Fibonacci QN triangles. Tier 2+3. Checks MG_1+MY(incl. MG_ZP_CONSISTENCY)/FATHOM/TRIANGLE/HONEST/W/F; 1 PASS+1 FAIL; self-test ok. 2026-07-04 audit: n=84 reproduced exactly from real data, headline 202-combined figure independently reconstructed to same order of magnitude"""
     import subprocess
     d = os.path.join(base_dir, "qa_megalithic_cert_v1")
     v = os.path.join(d, "qa_megalithic_cert_validate.py")
@@ -14204,7 +14204,7 @@ FAMILY_SWEEPS = [
      "qa_planetary_qn_cert_v1", True),
     (178, "QA Megalithic Cert family",
      _validate_megalithic_cert_family,
-     "Megalithic Yard p=0.00022 z=-3.54 (Thom 1962+1967 combined 202 circles); Fathom p<10⁻⁸ (74% even of 202); 3:4:5→QN(1,1,2,3) 5:12:13→QN(1,2,3,5) Fibonacci; honest: Fib ratios ns, mod-9 uniform, mod-24 explained by fathom; Tier 2+3; checks MG_1+MY/FATHOM/TRIANGLE/HONEST/W/F; 1 PASS+1 FAIL; self-test ok",
+     "Megalithic Yard p=0.00022 z=-3.54 (Thom 1962+1967 combined 202 circles); Fathom p<10⁻⁸ (74% even of 202); 3:4:5→QN(1,1,2,3) 5:12:13→QN(1,2,3,5) Fibonacci; honest: Fib ratios ns, mod-9 uniform, mod-24 explained by fathom; Tier 2+3; checks MG_1+MY(incl. MG_ZP_CONSISTENCY z/p cross-check, 2026-07-04 audit)/FATHOM/TRIANGLE/HONEST/W/F; 1 PASS+1 FAIL; self-test ok. Audit: n=84 fathom (70/84=83.3%) and MY-quantum (z=-2.34,p=0.0096) reproduced exactly from real thom_1962_diameters.csv; headline 202-combined figure has no backing script in-repo, own reconstruction gives z≈-3.43/p≈0.00029 (confirms real effect, exact n=202 subset untraceable) — see docs/families/178_qa_megalithic_cert.md",
      "178_qa_megalithic_cert",
      "qa_megalithic_cert_v1", True),
     (179, "QA Paired Pisano Cert family",

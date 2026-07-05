@@ -106,3 +106,21 @@ Expected: `{"ok":true}`
 - Verify that the QA tuple relations and invariant definitions are internally consistent
 - Check that the hysteresis loop integral and curvature proxy agree within declared tolerance on the fixture data
 - Enforce that calibration constants cannot change between the calibration and evaluation phases
+
+## Verification Note (2026-07-05)
+
+Independently checked both primary-source citations. **Steinmetz, C.P.
+(1892) "On the Law of Hysteresis"** confirmed real — Transactions of the
+American Institute of Electrical Engineers, volume IX(2), pages 3-64,
+matching "AIEE Trans. 9:3-64" exactly. **Whittaker, E.T. (1903) "On the
+partial differential equations of mathematical physics"** confirmed
+real — *Mathematische Annalen* volume 57, pages 333-355, DOI
+10.1007/BF01444290, exact match (same real paper independently confirmed
+elsewhere in the project's Whittaker-ladder certs [266]/[273]/[274]).
+
+Validator (`validate.py`) already performs genuine numeric computation
+(`loop_integral_h_db` trapezoidal integration, `curvature_proxy`), not
+fixture-trusting. This cert's own "Guardrail"/"Scope boundary" sections
+are already an exemplary honesty pattern — explicitly disclaiming any
+physical-equivalence claim and stating it validates only internal
+transform consistency. No bugs found; nothing to change.

@@ -46,3 +46,30 @@ This is the QA counterpart of the Steinmetz polyphase formula Σ P_h,i = n·P_h,
 | QA (discrete) | S = Σ cs_k | exact Fraction |
 | Observer | P_h = k_h · f · S_observer | float (material constant) |
 | Steinmetz exponent | n ≈ 1.6 | empirical, observer only |
+
+## Verification Note (2026-07-05)
+
+**Independently recomputed the exact orbit sum from scratch** (not just
+read the validator code): reimplemented the mod-9 T-step and cross-spread
+formula in a fresh script, traversed the 24-state orbit starting at
+(1,1) — confirmed it returns to (1,1) after exactly 24 steps, and the
+summed Fraction matches the claimed `191484369324836748/23958756907457125`
+**exactly** (≈7.9922). Also independently confirmed the maximum-coupling
+claim: state (1,9) at step 22 gives cs=6400/6724=1600/1681=(40/41)²
+exactly, and the orbit trace shows T(1,9)=(9,1) as claimed. (Note: the
+computation genuinely requires mod-**9** arithmetic, not mod-24, despite
+the "24-step Cosmos orbit" framing — 24 is the orbit's *period* under
+mod-9 dynamics, not the modulus itself; using mod-24 arithmetic gives a
+different, wrong sum, which is an easy mistake to make from the doc's
+prose alone.)
+
+**Independently checked the historical Steinmetz citation**: confirmed
+real — Steinmetz's 1892 hysteresis-loss law `P=KB^q` with **q=1.6 for
+iron** is a well-documented historical fact (the exponent is known to
+range 1.5-2.5 across materials generally, but 1.6 specifically is
+Steinmetz's own original iron value), matching this cert's "n≈1.6"
+claim exactly.
+
+Validator already performs genuine Fraction computation from the mod-9
+step function (not fixture-trusting) — same negative-space pattern as
+[217]/[220]/[138], no hardening needed. No bugs found.

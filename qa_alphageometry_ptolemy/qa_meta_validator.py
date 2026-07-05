@@ -6270,7 +6270,7 @@ def _validate_era5_reanalysis_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_surrogate_methodology_cert_family(base_dir: str) -> Optional[str]:
-    """QA Surrogate Methodology Cert family [173] — certifies corrected surrogate null design: real targets fixed, surrogate QCI only. Circular null problem identified and resolved. 6/8 domains confirmed. Checks SRM_1+DESIGN/CIRCULAR/DOMAINS/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Surrogate Methodology Cert family [173] — certifies corrected surrogate null design: real targets fixed, surrogate QCI only. Circular null problem identified and resolved. 7 domains confirmed (fixed 2026-07-05: was missing EMG). Checks SRM_1+DESIGN/CIRCULAR/DOMAINS/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_surrogate_methodology_cert_v1")
     validator = os.path.join(fam_dir, "qa_surrogate_methodology_cert_validate.py")
@@ -6292,7 +6292,7 @@ def _validate_surrogate_methodology_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_phi_transformation_cert_family(base_dir: str) -> Optional[str]:
-    """QA Phi Transformation Cert family [174] — certifies Phi(D) transformation law: disorder-stress vs order-stress classification. 2/2 pre-registered (cardiac, EMG), 6/6 post-hoc consistent. Domain requirement: temporal multi-channel signals with non-trivial baselines. Checks PHI_1+CLASS/PREREG/POSTHOC/REQ/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Phi Transformation Cert family [174] — certifies Phi(D) transformation law: disorder-stress vs order-stress classification. 2/2 pre-registered (cardiac, EMG), 4/4 post-hoc consistent (fixed 2026-07-05: was stale '6/6'). Domain requirement: temporal multi-channel signals with non-trivial baselines. Checks PHI_1+CLASS/PREREG/POSTHOC/REQ/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_phi_transformation_cert_v1")
     validator = os.path.join(fam_dir, "qa_phi_transformation_cert_validate.py")
@@ -6314,7 +6314,7 @@ def _validate_phi_transformation_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_cross_domain_invariance_cert_family(base_dir: str) -> Optional[str]:
-    """QA Cross-Domain Invariance Cert family [175] — certifies 3 structural invariants (surrogate survival, independent information, domain-general architecture) across 6 Tier 3 domains. Checks CDI_1+INV1/INV2/INV3/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Cross-Domain Invariance Cert family [175] — certifies 3 structural invariants (surrogate survival, independent information, domain-general architecture) across 7 Tier 3 domains (fixed 2026-07-05: was missing ERA5). Checks CDI_1+INV1/INV2/INV3/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_cross_domain_invariance_cert_v1")
     validator = os.path.join(fam_dir, "qa_cross_domain_invariance_cert_validate.py")
@@ -14179,17 +14179,17 @@ FAMILY_SWEEPS = [
      "qa_era5_reanalysis_cert_v1", True),
     (173, "QA Surrogate Methodology Cert family",
      _validate_surrogate_methodology_cert_family,
-     "Corrected null design: real targets fixed, surrogate QCI only; circular null problem identified and resolved; 6/8 domains confirmed; checks SRM_1+DESIGN/CIRCULAR/DOMAINS/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Corrected null design: real targets fixed, surrogate QCI only; circular null problem identified and resolved; 7 domains confirmed. VERIFIED (2026-07-05 audit): fixed stale domain list missing EMG (present in sibling [175] but not here); checks SRM_1+DESIGN/CIRCULAR/DOMAINS/W/F; 1 PASS + 1 FAIL; self-test ok",
      "173_qa_surrogate_methodology_cert",
      "qa_surrogate_methodology_cert_v1", True),
     (174, "QA Phi Transformation Cert family",
      _validate_phi_transformation_cert_family,
-     "Phi(D) transformation law: disorder-stress vs order-stress; 2/2 pre-registered (cardiac, EMG); 6/6 post-hoc consistent; domain requirement: temporal multi-channel signals; checks PHI_1+CLASS/PREREG/POSTHOC/REQ/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "Phi(D) transformation law: disorder-stress vs order-stress; 2/2 pre-registered (cardiac, EMG); 4/4 post-hoc consistent; domain requirement: temporal multi-channel signals. VERIFIED (2026-07-05 audit): fixed stale '6/6' (fixture has 4 post_hoc_consistent entries); ERA5 remains unclassified (no Phi(D) basis exists in the project record, not a fixable gap); checks PHI_1+CLASS/PREREG/POSTHOC/REQ/W/F; 1 PASS + 1 FAIL; self-test ok",
      "174_qa_phi_transformation_cert",
      "qa_phi_transformation_cert_v1", True),
     (175, "QA Cross-Domain Invariance Cert family",
      _validate_cross_domain_invariance_cert_family,
-     "3 structural invariants: surrogate survival, independent information, domain-general architecture; 6 Tier 3 domains confirmed; checks CDI_1+INV1/INV2/INV3/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "3 structural invariants: surrogate survival, independent information, domain-general architecture; 7 Tier 3 domains confirmed. VERIFIED (2026-07-05 audit): fixed stale domain list missing ERA5 (present in sibling [173] but not here); confirmed ERA5's script uses the identical topographic/orbit/T-operator/QCI architecture; checks CDI_1+INV1/INV2/INV3/W/F; 1 PASS + 1 FAIL; self-test ok",
      "175_qa_cross_domain_invariance_cert",
      "qa_cross_domain_invariance_cert_v1", True),
     (176, "QA Inertial Nav Cert family",

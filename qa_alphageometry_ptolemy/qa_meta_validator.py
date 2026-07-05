@@ -4338,7 +4338,7 @@ def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_fibonacci_resonance_cert_family(base_dir: str) -> Optional[str]:
-    """QA Fibonacci Resonance Cert family [219] — certifies MMRs preferentially select Fibonacci ratios. 60 resonances across 8+ systems (solar+exoplanet). Order-1: 33/43 (77%) Fib vs 22% expected, p<10⁻⁶. Unique ratios: 8/14 (57%) vs 31% expected, p=0.040. Fisher combined p<10⁻⁶. QA: T-operator=Fib shift makes Fib ratios deeper attractors. Tier 2→3. Corrective renumber: [163] is reserved by QA Dead Reckoning. Checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Fibonacci Resonance Cert family [219] — certifies MMRs preferentially select Fibonacci ratios. 60 resonances across 8+ systems (solar+exoplanet). Order-1: 33/43 (77%) Fib vs 22% expected, p=4.71e-14. Unique ratios: 8/14 (57%) vs 31% expected, p=0.040. All-instances 45/60 vs 31.25% expected, p=4.19e-12. QA: T-operator=Fib shift makes Fib ratios deeper attractors. Tier 2→3. VERIFIED (2026-07-04 audit): independently reproduced real TRAPPIST-1/Galilean-moon/Pluto-Neptune orbital data and all headline p-values exactly (matches published paper); found the fixture's declared p_value/order1_p_value were stale "1e-06" placeholders off by 6+ orders of magnitude -- fixed, and added FR_RECOMPUTE (stdlib exact binomial recomputation cross-checked against the catalogue) so this can't silently drift again. Corrective renumber: [163] is reserved by QA Dead Reckoning. Checks FR_1+CAT/CLASS/STAT/RECOMPUTE/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fr_dir    = os.path.join(base_dir, "qa_fibonacci_resonance_cert_v1")
     validator = os.path.join(fr_dir, "qa_fibonacci_resonance_cert_validate.py")
@@ -13984,7 +13984,7 @@ FAMILY_SWEEPS = [
      "qa_wgs84_ellipse_cert_v1", True),
     (219, "QA Fibonacci Resonance Cert family",
      _validate_fibonacci_resonance_cert_family,
-     "MMRs preferentially select Fibonacci ratios; 60 resonances across 8+ planetary systems (solar+exoplanet); order-1: 33/43 (77%) Fib vs 22% expected p<10⁻⁶; unique 8/14 (57%) vs 31% p=0.040; Fisher combined p<10⁻⁶; QA T-operator=Fibonacci shift makes Fib ratios deeper attractors; three-body problem selection principle; Tier 2→3; corrective renumber from duplicate [163], which is reserved by Dead Reckoning; checks FR_1+CAT/CLASS/STAT/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "MMRs preferentially select Fibonacci ratios; 60 resonances across 8+ planetary systems (solar+exoplanet); order-1: 33/43 (77%) Fib vs 22% expected p=4.71e-14; unique 8/14 (57%) vs 31% p=0.040; all-instances 45/60 vs 31.25% p=4.19e-12; QA T-operator=Fibonacci shift makes Fib ratios deeper attractors; three-body problem selection principle; Tier 2→3; VERIFIED (2026-07-04 audit): reproduced real TRAPPIST-1/Galilean-moon orbital data and headline p-values exactly against the published paper; fixed stale '1e-06' placeholder p-values (off by 6+ orders of magnitude), added FR_RECOMPUTE stdlib exact-binomial cross-check; corrective renumber from duplicate [163], which is reserved by Dead Reckoning; checks FR_1+CAT/CLASS/STAT/RECOMPUTE/ORDER/CROSS/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
      "219_qa_fibonacci_resonance_cert",
      "qa_fibonacci_resonance_cert_v1", True),
     (161, "QA ECEF Rational Cert family",

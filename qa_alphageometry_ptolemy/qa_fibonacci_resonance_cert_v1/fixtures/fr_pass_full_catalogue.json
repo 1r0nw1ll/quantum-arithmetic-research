@@ -1,4 +1,5 @@
 {
+  "_primary_source": "Murray, C.D.; Dermott, S.F. (1999) Solar System Dynamics, Cambridge University Press, ISBN 978-0-521-57295-8; Wall, D.D. (1960) DOI:10.2307/2309169",
   "schema_version": "QA_FIBONACCI_RESONANCE_CERT.v1",
   "certificate_id": "qa.cert.fibonacci_resonance.pass.full_catalogue.v1",
   "cert_type": "qa_fibonacci_resonance_cert",
@@ -87,25 +88,26 @@
   ],
 
   "statistics": {
+    "_verification_note": "2026-07-04 audit: p_value/order1_p_value/fisher_combined_* were previously stale placeholders (all 1e-06, likely from an early draft before the paper's final precise computation); corrected to match exact recomputation from this fixture's own catalogue/order_analysis (verified reproducible via scipy.stats.binomtest and math.comb, matching the published paper's stated 4.2e-12/4.7e-14 to 2 significant figures). fisher_combined_chi2/df corrected from a stale 58.98/df=12 to the orders-1-5 methodology (excluding order 0, matching the paper's stated approach) -- recomputed chi2=74.3/df=10/p=6.5e-12, close to but not bit-exact with the paper's stated 75.5/3.9e-12 (paper's precise per-order combination method isn't independently reproducible from available info; this fixture uses the exactly-reproducible recomputation as its own ground truth).",
     "total_resonances": 60,
     "fibonacci_count": 45,
     "nonfibonacci_count": 15,
     "observed_fibonacci_rate": 0.750,
-    "expected_fibonacci_rate": 0.312,
-    "p_value": 0.000001,
+    "expected_fibonacci_rate": 0.3125,
+    "p_value": 4.19e-12,
     "test": "binomial one-tailed (all instances)",
     "unique_ratios": 14,
     "unique_fibonacci": 8,
     "unique_nonfibonacci": 6,
     "p_value_unique": 0.040,
-    "fisher_combined_chi2": 58.98,
-    "fisher_combined_df": 12,
-    "fisher_combined_p": 0.000001,
+    "fisher_combined_chi2": 74.3,
+    "fisher_combined_df": 10,
+    "fisher_combined_p": 6.5e-12,
     "order1_fibonacci": 33,
     "order1_total": 43,
     "order1_fibonacci_rate": 0.767,
-    "order1_expected_rate": 0.222,
-    "order1_p_value": 0.000001
+    "order1_expected_rate": 0.2222,
+    "order1_p_value": 4.71e-14
   },
 
   "order_analysis": [

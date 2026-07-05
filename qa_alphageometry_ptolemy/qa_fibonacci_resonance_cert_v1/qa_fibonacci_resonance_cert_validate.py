@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+# Primary source: Murray, C.D.; Dermott, S.F. (1999) Solar System Dynamics,
+# Cambridge University Press, ISBN 978-0-521-57295-8; Wall, D.D. (1960)
+# DOI:10.2307/2309169.
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=fibonacci_resonance_fixtures"
 """QA Fibonacci Resonance Cert family [219] — certifies that mean-motion
 resonances preferentially select Fibonacci ratios.
@@ -33,6 +36,14 @@ FR_1       schema_version == 'QA_FIBONACCI_RESONANCE_CERT.v1'
 FR_CAT     resonance catalogue with ≥20 entries from ≥3 systems
 FR_CLASS   each resonance classified as Fibonacci or non-Fibonacci
 FR_STAT    statistical test: observed Fib rate > expected (p<0.05)
+FR_RECOMPUTE  fib_count/nonfib_count and order-1 counts, and the declared
+              p_value/order1_p_value, independently recomputed (exact
+              stdlib binomial tail, math.comb) and cross-checked against
+              the catalogue and declared statistics -- added 2026-07-04
+              audit after finding the declared p_value/order1_p_value
+              were stale "1e-06" placeholders off by 6+ orders of
+              magnitude from the true values (verified against the
+              published paper: 4.2e-12 and 4.7e-14 respectively).
 FR_ORDER   order-stratified analysis present
 FR_CROSS   at least 2 independent datasets (solar + exoplanet)
 FR_HONEST  caveats section present (detection bias, catalogue completeness)
@@ -43,7 +54,7 @@ FR_F       fail detection
 import json
 import os
 import sys
-from math import gcd
+from math import comb, gcd
 
 SCHEMA = "QA_FIBONACCI_RESONANCE_CERT.v1"
 FIBS = {1, 2, 3, 5, 8, 13, 21, 34, 55, 89}
@@ -56,6 +67,17 @@ def is_fibonacci(n):
 def is_fibonacci_ratio(p, q):
     g = gcd(p, q)
     return is_fibonacci(p // g) and is_fibonacci(q // g)
+
+
+def binom_sf_exact(k, n, p):
+    """Exact P(X >= k) for X ~ Binomial(n, p), stdlib-only via math.comb."""
+    return sum(comb(n, i) * (p ** i) * ((1 - p) ** (n - i)) for i in range(k, n + 1))
+
+
+def relative_close(actual, expected, rel_tol=0.05):
+    if expected == 0:
+        return actual == 0
+    return abs(actual - expected) / abs(expected) <= rel_tol
 
 
 def validate(cert, *, collect_errors=True):
@@ -115,6 +137,52 @@ def validate(cert, *, collect_errors=True):
     if observed_rate is not None and expected_rate is not None:
         if observed_rate <= expected_rate:
             err("FR_STAT", f"observed rate {observed_rate} ≤ expected {expected_rate}")
+
+    # FR_RECOMPUTE — independently recompute counts and p-values from the
+    # catalogue itself, cross-check against declared statistics (2026-07-04
+    # audit: this closes a real gap where fib_count/nonfib_count were
+    # computed above but never actually compared to anything, so a fixture
+    # could declare an arbitrary p_value/rate with no cross-check against
+    # its own catalogue).
+    declared_fib_count = stats.get("fibonacci_count")
+    declared_nonfib_count = stats.get("nonfibonacci_count")
+    if declared_fib_count is not None and fib_count != declared_fib_count:
+        err("FR_RECOMPUTE", f"catalogue implies fibonacci_count={fib_count}, declared {declared_fib_count}")
+    if declared_nonfib_count is not None and nonfib_count != declared_nonfib_count:
+        err("FR_RECOMPUTE", f"catalogue implies nonfibonacci_count={nonfib_count}, declared {declared_nonfib_count}")
+
+    order1_entries = [
+        e for e in catalogue
+        if e.get("p", 0) > 0 and e.get("q", 0) > 0 and abs(e["p"] - e["q"]) == 1
+    ]
+    order1_fib = sum(1 for e in order1_entries if is_fibonacci_ratio(e["p"], e["q"]))
+    order1_total = len(order1_entries)
+    declared_order1_fib = stats.get("order1_fibonacci")
+    declared_order1_total = stats.get("order1_total")
+    if declared_order1_fib is not None and order1_fib != declared_order1_fib:
+        err("FR_RECOMPUTE", f"catalogue implies order1_fibonacci={order1_fib}, declared {declared_order1_fib}")
+    if declared_order1_total is not None and order1_total != declared_order1_total:
+        err("FR_RECOMPUTE", f"catalogue implies order1_total={order1_total}, declared {declared_order1_total}")
+
+    # Recompute the two headline p-values exactly (stdlib binomial tail) and
+    # cross-check against declared values within a 5% relative tolerance.
+    total_resonances = stats.get("total_resonances")
+    if (fib_count == declared_fib_count and total_resonances == fib_count + nonfib_count
+            and expected_rate is not None and p_value is not None):
+        recomputed_p = binom_sf_exact(fib_count, total_resonances, expected_rate)
+        if not relative_close(p_value, recomputed_p):
+            err("FR_RECOMPUTE", f"declared p_value={p_value:.3e} does not match recomputed {recomputed_p:.3e} "
+                                 f"from fibonacci_count={fib_count}/{total_resonances} at expected_rate={expected_rate}")
+
+    order1_expected_rate = stats.get("order1_expected_rate")
+    order1_p_value = stats.get("order1_p_value")
+    if (order1_fib == declared_order1_fib and order1_total == declared_order1_total
+            and order1_expected_rate is not None and order1_p_value is not None):
+        recomputed_order1_p = binom_sf_exact(order1_fib, order1_total, order1_expected_rate)
+        if not relative_close(order1_p_value, recomputed_order1_p):
+            err("FR_RECOMPUTE", f"declared order1_p_value={order1_p_value:.3e} does not match recomputed "
+                                 f"{recomputed_order1_p:.3e} from order1_fibonacci={order1_fib}/{order1_total} "
+                                 f"at order1_expected_rate={order1_expected_rate}")
 
     # FR_ORDER — order-stratified
     order_analysis = cert.get("order_analysis")

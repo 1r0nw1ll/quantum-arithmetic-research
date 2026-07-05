@@ -67,6 +67,7 @@ Professor Daniel Brinton derived three laws from Keely's Triune:
 - **Professor Daniel Brinton**: three Laws of Being (Assimilation, Individualization, Dominant)
 - **Ben Iverson**: QA three-orbit structure (singularity/satellite/cosmos)
 - **Dale Pond**: SVP consultant; confirmed "Signal = EFFECT; arithmetic relationships = CAUSE" (Vibes AI)
+- **Audit note (2026-07-04)**: "Vibes" is Dale Pond's own AI tool (confirmed by Will), not an independent human co-reviewer — see `private/keely_40_laws_classification.md` provenance note. The triune↔orbit mapping's underlying QA arithmetic (partition, periods, LCM) is independently checkable and holds; the interpretive confirmation from Vibes should not be weighted as external peer review.
 
 ## Connection to other families
 

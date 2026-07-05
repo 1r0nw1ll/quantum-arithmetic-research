@@ -203,6 +203,7 @@ In mod-12 pitch class (C=0): B-flat = 10, E-flat = 3.
 - **Ben Iverson**: QA orbit theory, f-value, Iota crystal geometry
 - **Wildberger**: chromogeometry (C^2 + F^2 = G^2) grounding structural ratios
 - **svpvril.com**: primary web source for manuscript text (svpwiki.com offline at time of research)
+- **Audit note (2026-07-04)**: "Vibes" (line 32, "confirmed... by Vibes") is Dale Pond's own AI tool (confirmed by Will), not an independent human co-reviewer — see `private/keely_40_laws_classification.md` provenance note. That specific confirmation should be read as AI-mediated synthesis of Dale Pond's framework, not independent physical verification.
 
 ## Connection to other families
 

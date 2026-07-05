@@ -1,3 +1,5 @@
+<!-- PRIMARY-SOURCE-EXEMPT: reason=2026-07-04 audit caveat addition to an existing internal synthesis doc (Dale Pond + Vibes letter, Open Brain a9307705-6ff0-4422-bd62-9889dcd0f1b2); no new physical claims introduced, only a provenance clarification. -->
+
 # QA Syntax, SVP Semantics — A Complementary Architecture
 
 **Status**: theorem-grade meta-frame, sourced from the Dale Pond + Vibes
@@ -6,6 +8,16 @@ letter of 2026-04-05 (verbatim capture: Open Brain `a9307705-6ff0-4422-bd62-9889
 (`QA_SYNTAX_SEMANTICS_COMPLEMENT_CERT` or similar).
 **Authors**: framed by Dale Pond + Vibes (SVP side), recorded + elaborated
 by Will Dale + Claude (QA side), 2026-04-05.
+
+**Provenance note (2026-07-04 audit)**: "Vibes" is Dale Pond's own AI tool
+(confirmed by Will), not an independent human co-reviewer. The letter is
+AI-mediated synthesis of Dale Pond's SVP framework, channeled through
+Will — a legitimate and valuable source for Dale's considered position,
+but not an independently peer-reviewed physical verification. The
+"theorem-grade" / "load-bearing" language below should be read in that
+light: strong confidence in the *framing* as representing Dale Pond's
+SVP view, not a claim that the physical content has been externally
+verified beyond his own tooling.
 
 ---
 

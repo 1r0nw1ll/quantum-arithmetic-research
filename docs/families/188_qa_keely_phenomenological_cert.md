@@ -60,6 +60,7 @@ These 17 laws confirm that Keely's experimental observations (sono-thermity, dis
 - **Ben Iverson**: discrete QA dynamics as the causal substrate
 - **Dale Pond / Vibes**: SVP consultant AI; Category 5 classification (2026-04-03)
 - **[155] Bearden Phase Conjugate**: "stress is a pumper" = continuous observable of discrete QCI
+- **Audit note (2026-07-04)**: Keely quotes spot-checked against live svpwiki.com (byte-match); underlying QA arithmetic is pre-existing invariant machinery. The category *classification judgment* itself rests on Vibes' (Dale Pond's AI tool) interpretation, not an independent falsifiable check — see `private/keely_40_laws_classification.md` provenance note.
 
 ## Connection to other families
 

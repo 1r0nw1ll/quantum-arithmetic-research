@@ -50,6 +50,7 @@ These laws all describe **static structural relationships** — ratios, proporti
 - **Ben Iverson**: QA orbit theory, f-value as norm in Q(√5)
 - **Wildberger**: chromogeometry theorem (C² + F² = G²)
 - **Dale Pond / Vibes**: SVP consultant AI; 5-category classification of Keely's 40 laws (2026-04-03)
+- **Audit note (2026-07-04)**: Keely quotes spot-checked against live svpwiki.com (byte-match); underlying QA arithmetic is pre-existing invariant machinery. The category *classification judgment* itself rests on Vibes' (Dale Pond's AI tool) interpretation, not an independent falsifiable check — see `private/keely_40_laws_classification.md` provenance note.
 
 ## Connection to other families
 

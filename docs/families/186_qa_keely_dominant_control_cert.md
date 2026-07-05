@@ -44,6 +44,7 @@ These three laws describe the **hierarchical control structure** — how the dom
 - **svpwiki.com/Law+of+Neutralization**: "the neutral center is the balancing point"
 - **Ben Iverson**: QA orbit hierarchy and singularity as fixed point
 - **Dale Pond / Vibes**: SVP consultant AI; Category 3 classification (2026-04-03)
+- **Audit note (2026-07-04)**: Keely quotes spot-checked against live svpwiki.com (byte-match); underlying QA arithmetic is pre-existing invariant machinery. The category *classification judgment* itself rests on Vibes' (Dale Pond's AI tool) interpretation, not an independent falsifiable check — see `private/keely_40_laws_classification.md` provenance note.
 
 ## Connection to other families
 

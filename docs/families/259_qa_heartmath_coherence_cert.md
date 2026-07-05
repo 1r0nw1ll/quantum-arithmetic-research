@@ -83,3 +83,43 @@ python qa_heartmath_coherence_cert_validate.py --self-test
 - Require every such dataset to cite at least two primary-source claim IDs registered in the QA-MEM source_claims fixture.
 
 This is the same discipline as [257] applied to GLM-5's token pipeline, rebased on cardiac-rhythm data instead of LLM tokens.
+
+## Verification Note (2026-07-04)
+
+Independently fetched the actual Oschman & Oschman (2015) paper via its
+DOI (not the local `Documents/heartmath_corpus/` PDF — that directory is
+outside the two `Documents/` exceptions in CLAUDE.md, so this audit used
+only the live publisher PDF, no local file touched). Confirmed real and
+all three witness claims match the paper word-for-word:
+
+- `oschman_2015_master_oscillator`: the paper states verbatim "the heart
+  acts as a master electrical oscillator capable of radiating coherent
+  frequencies which promote the health and vitality of the entire human
+  system" — exact match.
+- `oschman_2015_rein_coherence`: the paper describes two HeartMath/McCraty
+  studies demonstrating "(a) coherence in the electrocardiographic (ECG)
+  frequency spectra of individuals whose attention was focused in the
+  heart area while generating positive emotions... and (b) a correlation
+  between the ECG coherent patterns and those also occurring in the
+  brain" — exact match.
+- `oschman_2015_bidirectional_antenna`: the paper's own footnote states
+  "an antenna of a particular geometry will function for both
+  transmission and reception of electromagnetic waves" — exact match to
+  the title's bidirectional-antenna framing.
+
+**One publisher-side oddity found (not a citation error)**: the cert
+cites the venue as "J Vortex Sci Technol" (matching how the article is
+indexed under DOI prefix 2090-8369), but the actual live PDF at the
+publisher's own URL is branded "Fluid Mechanics: Open Access" (ISSN
+2476-2296) with the identical DOI/volume/page (2:121, 1000121). This is
+consistent with known journal-renaming churn at the OMICS/Hilaris
+publisher network, not an error introduced by this cert.
+
+**Scientific-credibility caveat** (in the spirit of the Keely/Bearden
+audits): OMICS/Hilaris journals are widely documented as low-editorial-
+standard, pay-to-publish venues (subject of a 2019 FTC settlement for
+deceptive practices). This doesn't change the fact that the cited claims
+are accurately transcribed — it reinforces why this cert's existing
+scope boundary ("does NOT validate the truth of any HeartMath empirical
+result... validates only the structural form") is the right framing, and
+should stay that way.

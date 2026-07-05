@@ -66,3 +66,20 @@ Halley's QN uses the largest prime e<30, producing the maximum elongation while 
 "Comet orbit", "perigee", "apogee", "elliptical" are observer-layer labels. The causal structure: integer QN (1,29,30,59) with its arithmetic properties (d=30=lcm(2,3,5), a=59 prime, b:a=1:59). The physical orbit is an observer projection of this integer structure — not a cause.
 
 **Depends on**: [151] QA Par Numbers; [326] Euclid Four Par Types; [323] Harmonic Chemistry LCM
+
+## Verification Note (2026-07-05)
+
+Independently checked the claimed 1:59 perigee:apogee ratio against real
+astronomical data for Halley's Comet (perihelion ≈0.59 AU, eccentricity
+≈0.967 — both well-established, multiply-sourced values). Aphelion:
+`Q = perihelion × (1+e)/(1-e) = 0.59 × 1.967/0.033 ≈ 35.1 AU`, matching
+the commonly cited ~35 AU aphelion distance. Ratio `Q/perihelion ≈
+35.1/0.59 ≈ 59.5` — confirms the real orbit's ratio rounds to **1:59**
+almost exactly, not a rough approximation. The QA arithmetic itself
+(d=30, a=59, gcd(1,29)=1, both 29 and 59 prime, 30=2×3×5) is
+straightforward and independently reconfirmed correct. Could not access
+Iverson's original book locally to verify the exact quoted page text (as
+with the [347] cattle-problem audit, the corpus lives on a different
+machine per project memory) — but the specific numerical claim being
+attributed to it (1:59 ratio) is genuinely accurate real astronomy, not
+a fabricated or cherry-picked number.

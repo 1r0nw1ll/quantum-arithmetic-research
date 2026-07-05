@@ -143,11 +143,18 @@ in this reframed "vacuum medium," bridged via Whittaker's 1903
 potential-theory decomposition — has any physical validity is genuinely
 unverified, not confirmed and not conclusively false. It doesn't map
 cleanly onto the disproven classical aether (so my first correction
-overreached), and I have found no evidence it maps onto any accepted
-or actively-studied physics framework either (mainstream QED vacuum
-treatment, stochastic electrodynamics, or hidden-variable/pilot-wave
-theories) — Dollard is not affiliated with, and as far as found here
-not endorsed by, any of those research communities. This is an open,
-unverified claim, not a settled one in either direction. The cert's own
-narrow claim (internal transform consistency on fixture data) is
-unaffected either way and remains valid as scoped.
+overreached).
+
+**What was and wasn't actually checked**: two targeted web searches
+(Dollard+Steinmetz+Whittaker+scalar-EM; Dollard's own aether definition).
+Neither surfaced a connection between Dollard's specific framework and
+mainstream QED vacuum treatment, stochastic electrodynamics, or hidden-
+variable/pilot-wave theories. That is a much weaker finding than "no
+evidence exists" — it means those two searches didn't happen to turn one
+up, not that a real literature search (e.g., checking whether any SED or
+foundations-of-QM researcher has engaged with Dollard's work at all) was
+done. No such search was performed. The honest position is: unverified
+and not investigated to the depth needed to rule the connection in or
+out — not "no evidence," which overstates how much was actually checked.
+The cert's own narrow claim (internal transform consistency on fixture
+data) is unaffected either way and remains valid as scoped.

@@ -34,3 +34,22 @@ QA_agency(b,e) = |{states reachable from (b,e) via QA dynamics}| / |S_m|
 ## Sources
 
 - Sole, Seoane, Pla-Mauri, Bennett, Hochberg & Levin, "Cognition spaces" (arXiv:2601.12837, 2026)
+
+## Verification Note (2026-07-04)
+
+Independently checked the citation. **Sole, Seoane, Pla-Mauri, Bennett,
+Hochberg & Levin, "Cognition spaces: natural, artificial, and hybrid"**
+(arXiv:2601.12837, Jan 2026) confirmed real — all six author names match.
+The paper's own abstract states it "introduces and examines three
+cognition spaces—basal aneural, neural, and human–AI hybrid—and shows
+that their occupation is highly uneven, with clusters of realized
+systems separated by gaps," matching this cert's three-cluster/voids
+claim almost verbatim (basal↔Singularity, neural↔Satellite, human-AI↔
+Cosmos).
+
+Validator already imports the shared QA primitives from
+`tools/qa_kg/orbit_failure_enumeration.py` (cert [263]'s canonical
+utility, also used by [193]) and performs genuine orbit-family
+recomputation, not fixture-trusting. Spot-checked `MISSING_DIVISORS =
+{2,3,4,6,12}`: correct — these are exactly the divisors of 24 excluding
+the three realized orbit lengths {1,8,24}. No bugs found.

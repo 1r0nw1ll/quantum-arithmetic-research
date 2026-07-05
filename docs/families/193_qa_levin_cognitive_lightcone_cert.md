@@ -31,3 +31,26 @@ Cancer = cells whose CLC drops from Cosmos (24-cycle, organism) to Satellite (8-
 
 - Levin & Resnik, "Mind Everywhere" (Biological Theory, 2026)
 - Lyons, Pio-Lopez & Levin, "From Cancer to AI Alignment" (Preprints, 2026)
+
+## Verification Note (2026-07-04)
+
+Independently checked both citations rather than trusting them at face
+value. **Levin & Resnik, "Mind Everywhere: A Framework for
+Conceptualizing Goal-Directedness in Biology and Other Domains"**
+(Biological Theory, two-part, published 2026-02-25) confirmed real —
+the "cognitive light cone" concept and its exact framing ("an effective
+explanation of what [agential systems] are doing must involve events in
+a larger cognitive light cone around them than the local here and now")
+appear in this exact paper. **Lyons, Pio-Lopez & Levin, "From Cancer to
+AI Alignment: Tackling Externalities Through Homeostatic Principles"**
+(Preprints.org, DOI 10.20944/preprints202604.0056.v1, 2026) confirmed
+real — its own stated thesis is "cancer is what happens when cells
+disconnect from the collective's cognitive light cone and revert to
+local optimization," matching this cert's "Cancer as CLC shrinkage"
+claim almost verbatim.
+
+Validator (`qa_levin_cognitive_lightcone_cert_validate.py`) imports the
+shared QA primitives from `tools/qa_kg/orbit_failure_enumeration.py`
+(cert [263]'s utility module) and performs genuine orbit-family
+recomputation, not fixture-trusting. No bugs found; both source papers
+are accurately represented.

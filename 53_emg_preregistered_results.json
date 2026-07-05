@@ -4,7 +4,7 @@
   "classification": "disorder-stress",
   "data": "PhysioNet EMG Database",
   "n_windows": 1183,
-  "n_normal": 197,
+  "n_normal": 177,
   "n_pathological": 1006,
   "real_result": {
     "r2_base": 0.3619237948771157,
@@ -15,15 +15,15 @@
   "surrogate_summary": {
     "permuted_segments": {
       "real": 0.6076603073729998,
-      "surr_mean": 0.0018974941631246334,
-      "surr_std": 0.0018592224309666912,
+      "surr_mean": 0.001897494163124634,
+      "surr_std": 0.0018592224309666894,
       "rank_p": 0.0,
       "beats": true
     },
     "random_fracs": {
       "real": 0.6076603073729998,
-      "surr_mean": 0.0019048040356001656,
-      "surr_std": 0.00200287647671515,
+      "surr_mean": 0.001904804035600175,
+      "surr_std": 0.0020028764767151476,
       "rank_p": 0.0,
       "beats": true
     }

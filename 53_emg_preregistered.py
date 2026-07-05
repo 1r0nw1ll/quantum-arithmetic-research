@@ -187,8 +187,10 @@ def main():
     y_aligned = y[window:][:len(sing_fracs)]
     rms_aligned = rms[window:][:len(sing_fracs)]
 
+    n_pathological_aligned = int(y_aligned.sum())
+    n_normal_aligned = int((1 - y_aligned).sum())
     print(f"Windowed: {len(y_aligned)} samples, "
-          f"{int(y_aligned.sum())} pathological, {int((1 - y_aligned).sum())} normal")
+          f"{n_pathological_aligned} pathological, {n_normal_aligned} normal")
 
     # ====================================================================
     # REAL NESTED MODEL
@@ -283,7 +285,7 @@ def main():
     output = {
         "domain": "emg_preregistered", "phi_preregistered": -1,
         "classification": "disorder-stress", "data": "PhysioNet EMG Database",
-        "n_windows": len(y_aligned), "n_normal": n_normal, "n_pathological": n_path,
+        "n_windows": len(y_aligned), "n_normal": n_normal_aligned, "n_pathological": n_pathological_aligned,
         "real_result": result, "surrogate_summary": summary,
         "n_surr_pass": n_pass, "phi_confirmed": all(checks.values()),
     }

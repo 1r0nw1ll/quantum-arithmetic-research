@@ -6226,7 +6226,7 @@ def _validate_cardiac_arrhythmia_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_emg_pathology_cert_family(base_dir: str) -> Optional[str]:
-    """QA EMG Pathology Cert family [171] — certifies QA orbit features as independent predictors of EMG pathology classification beyond RMS using PhysioNet EMG (3 records, 1203 windows). dR2=+0.608 p<10^-6; 2/2 surrogates beaten; Phi(D)=-1 pre-registered. Checks EMG_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA EMG Pathology Cert family [171] — certifies QA orbit features as independent predictors of EMG pathology classification beyond RMS using PhysioNet EMG (3 records, 1183 windows). dR2=+0.608 p=1.73e-132; 2/2 surrogates beaten; Phi(D)=-1 pre-registered. VERIFIED (2026-07-05 audit): fixed script bug saving pre-alignment window count (1203) instead of the actual 1183 windows the model was fit on, and a stale p_value placeholder (1e-7 -> real 1.73e-132); model results unchanged. Checks EMG_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_emg_pathology_cert_v1")
     validator = os.path.join(fam_dir, "qa_emg_pathology_cert_validate.py")
@@ -14169,7 +14169,7 @@ FAMILY_SWEEPS = [
      "qa_cardiac_arrhythmia_cert_v1", True),
     (171, "QA EMG Pathology Cert family",
      _validate_emg_pathology_cert_family,
-     "PhysioNet EMG 3 records 1203 windows (healthy/myopathy/neuropathy); dR2=+0.608 beyond RMS p<10^-6; 2/2 surrogates beaten; Phi(D)=-1 pre-registered; checks EMG_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "PhysioNet EMG 3 records 1183 windows (healthy/myopathy/neuropathy); dR2=+0.608 beyond RMS p=1.73e-132; 2/2 surrogates beaten; Phi(D)=-1 pre-registered; VERIFIED (2026-07-05 audit): fixed script bug -- was saving pre-alignment 1203-window count instead of the 1183 windows actually fit, plus a stale p_value placeholder; model results unchanged; checks EMG_1+DATA/DELTA/SURR/PHI/W/F; 1 PASS + 1 FAIL; self-test ok",
      "171_qa_emg_pathology_cert",
      "qa_emg_pathology_cert_v1", True),
     (172, "QA ERA5 Reanalysis Cert family",

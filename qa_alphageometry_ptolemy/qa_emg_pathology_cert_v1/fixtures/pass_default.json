@@ -8,14 +8,16 @@
   "data_source": {
     "database": "PhysioNet EMG Database",
     "n_records": 3,
-    "n_windows": 1203,
-    "conditions": ["healthy", "myopathy", "neuropathy"]
+    "n_windows": 1183,
+    "conditions": ["healthy", "myopathy", "neuropathy"],
+    "_note": "n_windows corrected 2026-07-05 audit: was 1203 (pre-alignment window count, before the rolling-QA-feature lookback truncation), should be 1183 (the actual number of windows the model was fit on, per 53_emg_preregistered_results.json). delta_r2/p_value/surrogates below were always computed on the correct 1183-window aligned data -- only this metadata field was stale."
   },
 
   "delta_r2": {
     "value": 0.608,
     "baseline": "RMS",
-    "p_value": 1e-7
+    "p_value": 1.73e-132,
+    "_note": "p_value corrected 2026-07-05 audit: was a stale 1e-7 placeholder, ~125 orders of magnitude off from the real script's computed p_qa_add=1.7270265495511064e-132 in 53_emg_preregistered_results.json. Validator only checks p_value<0.05 (a threshold, not exact match) so this never affected PASS/FAIL, but the declared number was wrong."
   },
 
   "surrogate_tests": {

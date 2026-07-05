@@ -90,3 +90,38 @@ Kymn et al. (Neural Computation 2025): hexagonal encoding with modulus m achieve
 - `fixtures/gcr_pass_core.json` — 9 claims with full witnesses and sources
 - `fixtures/gcr_pass_numerical.json` — ratio, LCM, totient, hex encoding verification
 - `fixtures/gcr_fail_wrong_ratio.json` — wrong modulus (24/7) exceeds 10% threshold
+
+## Verification Note (2026-07-04)
+
+Independently checked all four cited papers, not just the arithmetic:
+
+- **Wei, Prentice & Balasubramanian (2015)** *eLife* — confirmed real (authors,
+  venue, PMC4616244). The paper's actual prediction is √e ≈ 1.649 for the
+  **2D** adjacent-module scale ratio, matching this cert's own "For 2D:
+  optimal ratio = √e = 1.649" line exactly — the cert correctly
+  distinguishes this from the 1D economy-principle r=e result rather than
+  conflating them.
+- **Constantinescu, O'Reilly & Behrens (2016)** *Science* 352:1464 —
+  confirmed real; the actual study used bird stimuli varying in neck and
+  leg length as the 2D "conceptual space," exactly matching this cert's
+  ABS claim description.
+- **Kymn et al. (2025)** *Neural Computation* 37(1) "Computing With Residue
+  Numbers in High-Dimensional Representation" — confirmed real (fetched
+  and read the arXiv preprint, 2311.04872; real authors, Redwood Center/
+  Berkeley). §4.3 does construct a hexagonal residue encoding via a 2D→3D
+  projection with a self-cancellation constraint, consistent with this
+  cert's HEX27 framing, though the exact "3m²−3m+1 states / 3m codebook
+  vectors" formula wasn't found verbatim in the sections read — this is
+  the standard centered-hexagonal-number identity (independently correct
+  arithmetic regardless: 3×9²−3×9+1=217, 3×9=27), so treat the specific
+  phrasing as the cert's own derived consequence of the paper's scheme,
+  not a verbatim quote.
+- **Fiete et al. (2008)** *J. Neuroscience* 28(27):6858 — real, foundational
+  grid-cell-as-RNS paper (not independently re-fetched, but well-established
+  in the literature).
+
+**Validator already performs genuine recomputation** (gcd/lcm, Euler
+totient, ratio deviation, hex formula) from declared witness values, not
+fixture-trusting — same negative-space pattern as [217]/[220]/[138], no
+hardening needed. All arithmetic (24/9 vs e deviation ≈1.9%, φ² vs 24/9
+≈1.9%, LCM(9,24)=72, φ(9)=6) independently re-verified correct.

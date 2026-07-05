@@ -96,3 +96,22 @@ Classical navigation error has three sources: measurement, computation, accumula
 - [125] QA_CHROMOGEOMETRY_CERT.v1 — C, F, G = green, red, blue quadrances
 - [156] QA_WGS84_ELLIPSE_CERT.v1 — Earth = QA quantum ellipse
 - [164] QA_GNOMONIC_RT_CERT.v1 — gnomonic chart for DR waypoints
+
+## Verification Note (2026-07-05)
+
+No external citation to check (self-contained QA math: Pisano periods
+and the chromogeometry identity are already independently verified
+elsewhere this cycle). Instead scrutinized the one genuinely non-trivial
+mechanical claim: that `T^n` requires **augmented 3x3** matrix
+exponentiation rather than plain 2×2, because the A1 encoding introduces
+a real affine offset. Initially suspected this might be unnecessary
+complexity (a one-time ±1 coordinate shift should reduce most modular
+affine recurrences to a homogeneous linear one) — checked the actual
+recurrence and found the suspicion was wrong: substituting `b=B+1, e=E+1`
+into the A1 step gives `B'=E` (homogeneous) but `E'=(B+E+1) mod m`
+(genuinely affine, not just relabeled) — the "+1" doesn't cancel between
+the two coordinates, so the augmented-matrix approach is correct and
+necessary, not over-engineered. Independently re-implemented both the
+step-by-step iteration and the augmented-matrix formula from scratch and
+ran 200 randomized trials (moduli 5/7/9/24/100, step counts 0-500,
+random starting states) — zero mismatches. No bugs found.

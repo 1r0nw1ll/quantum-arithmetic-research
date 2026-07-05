@@ -123,20 +123,31 @@ Validator (`validate.py`) already performs genuine numeric computation
 fixture-trusting. No bugs found in the checked computation.
 
 **Investigated whether the underlying bridge is real, not just whether
-the cert hedges about it.** The guardrail's own line ("Steinmetz,
-Whittaker, Dollard, Bearden") points at a specific claim: Eric Dollard's
-reinterpretation of Steinmetz's hysteresis law as describing "hysteresis
-of the aether" — treating the luminiferous aether as a physical medium
-whose hysteresis governs electromagnetic propagation, with Whittaker's
-1903 potential-theory decomposition folded in as the mathematical
-machinery. This is not an open or unproven question sitting in a gap of
-current knowledge — the luminiferous aether was experimentally ruled
-out by Michelson-Morley (1887) and is not part of accepted physics. So
-the specific bridge this cert's inspiration points at rests on a
-physical premise that is actually false, not merely untested. That is a
-stronger and more useful conclusion than "the cert correctly hedges" —
-the guardrail is doing real work here, and it happens to land on the
-scientifically correct verdict for this specific claim rather than a
-generic disclaimer. This does not affect the cert's own narrow claim
-(internal transform consistency on fixture data), which remains valid
-as scoped.
+the cert hedges about it** — and then had to correct that investigation
+once more (both corrections happened in the same audit session; see
+`feedback_no_hedging_outcome_predictions.md` for the full trail). First
+pass: claimed Dollard's "hysteresis of the aether" reinterpretation
+rests on the classical luminiferous aether, which Michelson-Morley
+(1887) ruled out experimentally — treating the question as settled.
+That was too fast. Checking Dollard's own definition of "aether" more
+carefully: he explicitly frames it as "counterspace... the so-called
+vacuum or zero-point fulcrum of QED," described via permittivity and
+permeability — i.e., he's relabeling real, mainstream QED vacuum/zero-
+point concepts under nonstandard "aether" terminology, not directly
+reasserting the specific 19th-century mechanical medium (with a
+preferred rest frame and detectable "aether wind") that M-M falsified.
+
+**Honest current state, not resolved either way**: whether Dollard's
+specific claim — that Steinmetz's hysteresis law describes energy loss
+in this reframed "vacuum medium," bridged via Whittaker's 1903
+potential-theory decomposition — has any physical validity is genuinely
+unverified, not confirmed and not conclusively false. It doesn't map
+cleanly onto the disproven classical aether (so my first correction
+overreached), and I have found no evidence it maps onto any accepted
+or actively-studied physics framework either (mainstream QED vacuum
+treatment, stochastic electrodynamics, or hidden-variable/pilot-wave
+theories) — Dollard is not affiliated with, and as far as found here
+not endorsed by, any of those research communities. This is an open,
+unverified claim, not a settled one in either direction. The cert's own
+narrow claim (internal transform consistency on fixture data) is
+unaffected either way and remains valid as scoped.

@@ -2,21 +2,28 @@
 
 ## One-line summary
 
-Pezzulo & Levin's 7-stage "biological route from chemistry to cognition and creativity" mapped to QA architecture levels. Intelligence ratchet = Pisano fixed point π(9)=24 [192]. Five design principles (autonomy, self-assembly, rebuilding, constraints, signaling) map to QA axioms and operations.
+Pezzulo & Levin's "biological route from chemistry to cognition and creativity" mapped to QA architecture levels across 8 stages (matching the paper's own Figure 1 nested-problem-space hierarchy exactly, including "Physiological"). Intelligence ratchet = Pisano fixed point π(9)=24 [192]. Five design principles (autonomy, self-assembly, rebuilding, constraints, signaling) map to QA axioms and operations.
 
 ## Mathematical content
 
-### 7-stage pipeline ↔ QA levels
+### 8-stage pipeline ↔ QA levels
 
-| Stage | Pezzulo-Levin | QA Level |
-|-------|--------------|----------|
-| 1 | Chemistry/Physics | A1 (no-zero discrete arithmetic) |
-| 2 | Metabolic space | Single-step QA dynamics |
-| 3 | Transcriptional space | Orbit classification via v₃(f) |
-| 4 | Anatomical morphospace | Orbit structure + E8 alignment |
-| 5 | Behavioral space | Observer projection (Theorem NT) |
-| 6 | Abstract/cultural | Multi-modulus operation, L₂ |
-| 7 | Creativity | L₃ modulus change via π(9)=24 |
+Corrected 2026-07-04 (see Verification Note): matches the paper's own
+Figure 1 nested-problem-space hierarchy — Metabolic → Physiological →
+Transcriptional → Morphospace → 3D(Behavioral) → Linguistic — bracketed
+by "Chemistry/Physics" (precedes the figure, supported by the paper's
+own prose) and "Creativity" (the paper's title's endpoint).
+
+| Stage | Pezzulo-Levin | QA Level | Bateson Level |
+|-------|--------------|----------|---------------|
+| 1 | Chemistry/Physics | A1 (no-zero discrete arithmetic) | L₀ |
+| 2 | Metabolic | Single-step QA dynamics T(b,e) | L₀ |
+| 3 | Physiological | Orbit-attractor convergence (T1 path time) | L₀ to L₁ |
+| 4 | Transcriptional | Orbit classification via v₃(f) | L₁ |
+| 5 | Anatomical (morphospace) | Orbit structure + E8 alignment | L₁ to L₂ₐ |
+| 6 | Behavioral (3D) | Observer projection (Theorem NT) | L₂ₐ |
+| 7 | Abstract/cultural (linguistic) | Multi-modulus operation, L₂ | L₂ₐ and L₂ᵦ |
+| 8 | Creativity | L₃ modulus change via π(9)=24 | L₃ |
 
 ### Intelligence ratchet
 
@@ -56,23 +63,29 @@ self-organization and top-down control from goals" — matching this
 cert's Autonomy/Self-assembly/Continuous rebuilding/Embodied constraints/
 Pervasive signaling table in the same order.
 
-**7-stage pipeline table does NOT match the paper's own explicit
-hierarchy**: the paper's Figure 1 ("Living beings... navigate across
-nested problem spaces") names exactly six problem spaces, in order:
-**Metabolic → Physiological → Transcriptional → Morphospace → 3D
-(Behavioral) → Linguistic**. This cert's 7-stage table omits
-"Physiological" entirely and instead brackets the list with "Chemistry/
-Physics" (stage 1) and "Creativity" (stage 7) — neither of which is a
-named box in Figure 1 (though both are supported by surrounding prose:
-the paper does describe embryogenesis starting from "chemistry and
-physics," and frames the whole arc as leading toward "creativity" in its
-title). This isn't a fabrication, but the 7-stage table should be
-understood as **this cert's own QA-motivated compression of the paper's
-narrative**, not a literal citation of Figure 1's stage list — and it
-specifically drops "Physiological," a stage the paper does name
-explicitly. Not fixed in the validator (would require a QA-level design
-decision for the missing stage, outside this audit's scope) — flagged
-here so the doc doesn't overstate precision it doesn't have.
+**7-stage pipeline table did NOT match the paper's own explicit
+hierarchy, and this has been fixed**: the paper's Figure 1 ("Living
+beings... navigate across nested problem spaces") names exactly six
+problem spaces, in order: **Metabolic → Physiological → Transcriptional
+→ Morphospace → 3D (Behavioral) → Linguistic**. The cert's original
+7-stage table omitted "Physiological" entirely. Fixed by inserting it as
+stage 3, between Metabolic and Transcriptional, matching Figure 1
+exactly: "Physiological" (bioelectric/ion-channel homeostatic set-point
+maintenance) is mapped to **orbit-attractor convergence via the T1 path-
+time axiom** — a perturbed trajectory returning to its periodic orbit,
+which is a genuinely distinct QA concept from both "Metabolic" (a single
+T(b,e) step) and "Transcriptional" (full orbit-family classification via
+v₃(f)), and reuses the same T1 concept already present in this cert's own
+"Rebuilding/regeneration" design-principle mapping (biologically
+consistent: physiological homeostasis and morphological regeneration are
+both "return to attractor after perturbation"). All 8 stages, the
+validator (`EXPECTED_STAGE_COUNT=8`, extended `BATESON_ORDER` with
+`"L_0 to L_1": 0.5`), both fixtures, and this doc were updated together;
+self-test reruns clean. "Chemistry/Physics" (stage 1) and "Creativity"
+(stage 8) remain as bookends outside Figure 1's explicit boxes — both
+are directly supported by the paper's own prose (embryogenesis starting
+from "chemistry and physics"; the paper's title ending at "creativity")
+so are kept, clearly labeled as such.
 
 **Pisano fixed point independently reproduced**: π(9)=24 and π(24)=24
 computed directly (stdlib Fibonacci-mod-m), confirming the genuine

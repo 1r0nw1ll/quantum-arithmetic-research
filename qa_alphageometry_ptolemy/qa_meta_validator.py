@@ -6820,7 +6820,7 @@ def _validate_cognition_space_morphospace_cert_family(base_dir: str) -> Optional
 
 
 def _validate_pezzulo_levin_bootstrap_cert_family(base_dir: str) -> Optional[str]:
-    """QA Pezzulo Levin Bootstrap Cert family [195] — maps Pezzulo & Levin 'Bootstrapping Life-Inspired Machine Intelligence' (arXiv:2602.08079) 7-stage pipeline to QA architecture levels. Chemistry=A1, Metabolic=single-step T(b,e), Transcriptional=v_3(f) orbit classification, Anatomical=orbit+E8, Behavioral=observer projection (Theorem NT), Abstract=multi-modulus L_2, Creativity=L_3 pi(9)=24. Intelligence ratchet = Pisano FP [192]. 5 design principles map to QA axioms. Source: Pezzulo & Levin arXiv:2602.08079. Checks PLB_1+STAGES/RATCHET/PRINCIPLES/PIPELINE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Pezzulo Levin Bootstrap Cert family [195] — maps Pezzulo & Levin 'Bootstrapping Life-Inspired Machine Intelligence' (arXiv:2602.08079) 8-stage pipeline to QA architecture levels. Chemistry=A1, Metabolic=single-step T(b,e), Physiological=orbit-attractor convergence (T1 path time), Transcriptional=v_3(f) orbit classification, Anatomical=orbit+E8, Behavioral=observer projection (Theorem NT), Abstract=multi-modulus L_2, Creativity=L_3 pi(9)=24. Intelligence ratchet = Pisano FP [192]. 5 design principles map to QA axioms. Source: Pezzulo & Levin arXiv:2602.08079. VERIFIED (2026-07-04 audit): fetched the real paper -- its own Figure 1 names Metabolic/Physiological/Transcriptional/Morphospace/3D(Behavioral)/Linguistic explicitly; the cert's stage table previously omitted Physiological, fixed by inserting it as stage 3 (8 stages total, was 7). Checks PLB_1+STAGES/RATCHET/PRINCIPLES/PIPELINE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_pezzulo_levin_bootstrap_cert_v1")
     validator = os.path.join(fam_dir, "qa_pezzulo_levin_bootstrap_cert_validate.py")
@@ -14289,7 +14289,7 @@ FAMILY_SWEEPS = [
      "qa_cognition_space_morphospace_cert_v1", True),
     (195, "QA Pezzulo Levin Bootstrap Cert family",
      _validate_pezzulo_levin_bootstrap_cert_family,
-     "Pezzulo & Levin 7-stage bootstrapping pipeline mapped to QA architecture levels (Chemistry=A1 through Creativity=L_3 pi(9)=24); intelligence ratchet = Pisano FP [192]; 5 design principles map to QA axioms (autonomy=A1, self-assembly=orbit emergence, rebuilding=T1, constraints=S1+S2, signaling=resonance); source Pezzulo & Levin arXiv:2602.08079; checks PLB_1+STAGES/RATCHET/PRINCIPLES/PIPELINE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "Pezzulo & Levin 8-stage bootstrapping pipeline mapped to QA architecture levels (Chemistry=A1, Metabolic=T(b,e), Physiological=orbit-attractor convergence/T1, Transcriptional=v_3(f), Anatomical=orbit+E8, Behavioral=observer projection, Abstract=multi-modulus L_2, Creativity=L_3 pi(9)=24); intelligence ratchet = Pisano FP [192]; 5 design principles map to QA axioms (autonomy=A1, self-assembly=orbit emergence, rebuilding=T1, constraints=S1+S2, signaling=resonance); source Pezzulo & Levin arXiv:2602.08079; VERIFIED (2026-07-04 audit): fixed missing 'Physiological' stage found on the real paper's Figure 1 (was 7 stages, now 8); checks PLB_1+STAGES/RATCHET/PRINCIPLES/PIPELINE/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
      "195_qa_pezzulo_levin_bootstrap_cert",
      "qa_pezzulo_levin_bootstrap_cert_v1", True),
     (196, "QA See Capture Convergence Cert family",

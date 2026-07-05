@@ -5,16 +5,20 @@ qa_pezzulo_levin_bootstrap_cert_validate.py
 Validator for QA_PEZZULO_LEVIN_BOOTSTRAP_CERT.v1  [family 195]
 
 Certifies: Pezzulo & Levin "Bootstrapping Life-Inspired Machine Intelligence"
-(arXiv:2602.08079) 7-stage pipeline mapped to QA architecture levels.
+(arXiv:2602.08079) 8-stage pipeline mapped to QA architecture levels.
 
-Stage mapping:
+Stage mapping (2026-07-04 audit: corrected to match the paper's own
+Figure 1, which names Metabolic -> Physiological -> Transcriptional ->
+Morphospace -> 3D(Behavioral) -> Linguistic explicitly; "Physiological"
+was previously missing):
     1. Chemistry          -> A1 (No-Zero axiom)
     2. Metabolic networks -> Single-step dynamics T(b,e)
-    3. Transcriptional    -> Orbit classification via v_3(f)
-    4. Anatomical         -> Orbit structure + E8 alignment
-    5. Behavioral         -> Observer projection (Theorem NT)
-    6. Abstract reasoning -> Multi-modulus L_2
-    7. Creativity         -> L_3 modulus change pi(9)=24
+    3. Physiological      -> Orbit-attractor convergence (T1 Path Time)
+    4. Transcriptional    -> Orbit classification via v_3(f)
+    5. Anatomical         -> Orbit structure + E8 alignment
+    6. Behavioral         -> Observer projection (Theorem NT)
+    7. Abstract reasoning -> Multi-modulus L_2
+    8. Creativity         -> L_3 modulus change pi(9)=24
 
 Intelligence ratchet = Pisano fixed point [192]: pi(24)=24.
 5 design principles map to QA axioms/operations.
@@ -23,7 +27,7 @@ Source: Pezzulo & Levin arXiv:2602.08079
 
 Checks:
     PLB_1          — schema_version matches
-    PLB_STAGES     — stage_mapping well-formed (7 stages, monotone Bateson levels)
+    PLB_STAGES     — stage_mapping well-formed (8 stages, monotone Bateson levels)
     PLB_RATCHET    — intelligence_ratchet present with correct Pisano FP
     PLB_PRINCIPLES — design_principle_mapping well-formed (5 principles)
     PLB_PIPELINE   — stages ordered and covering L_0 through L_3
@@ -41,13 +45,14 @@ from pathlib import Path
 
 SCHEMA_VERSION = "QA_PEZZULO_LEVIN_BOOTSTRAP_CERT.v1"
 
-EXPECTED_STAGE_COUNT = 7
+EXPECTED_STAGE_COUNT = 8
 EXPECTED_PRINCIPLE_COUNT = 5
 
-# Bateson levels must be monotonically non-decreasing through the 7 stages
+# Bateson levels must be monotonically non-decreasing through the 8 stages
 # We encode the partial order: L_0 < L_1 < L_2a < L_2b < L_3
 BATESON_ORDER = {
     "L_0": 0,
+    "L_0 to L_1": 0.5,
     "L_1": 1,
     "L_1 to L_2a": 1.5,
     "L_2a": 2,
@@ -124,10 +129,10 @@ def validate(path):
     elif len(stages) != EXPECTED_STAGE_COUNT:
         errors.append(f"PLB_STAGES: need exactly {EXPECTED_STAGE_COUNT} stages, got {len(stages)}")
     else:
-        # Check stage numbering is 1..7
+        # Check stage numbering is 1..8
         stage_nums = [s.get("stage") for s in stages]
-        if stage_nums != list(range(1, 8)):
-            errors.append(f"PLB_STAGES: stages should be numbered 1-7, got {stage_nums}")
+        if stage_nums != list(range(1, 9)):
+            errors.append(f"PLB_STAGES: stages should be numbered 1-8, got {stage_nums}")
 
         # PLB_PIPELINE: Bateson levels monotonically non-decreasing
         prev_order = -1

@@ -40,3 +40,27 @@ SCAFFOLD — validator passes self-test, content needs Will review.
 ## Checks
 
 BPC_1 (schema), BPC_MODEL (source declared), BPC_MAP (pump→global, conjugate→local), BPC_SIGN (opposite signs), BPC_EMP (partial correlations), BPC_SVP (lineage), BPC_W (witness), BPC_F (fail detection).
+
+## Verification Note (2026-07-04)
+
+Audited the Bearden characterization independently (Primary source: Bearden,
+T.E. "Utilizing Scalar Electromagnetics To Tap Vacuum Energy" — archived at
+archive.org/download/energy-from-vaccum, rexresearch1.com/BeardenLibrary).
+**Confirmed real, not fabricated**: Bearden does describe treating the
+atomic nucleus as a "pumped phase conjugate mirror" and explicitly
+equates opposing bidirectional EM/mechanical stress forces with pump
+waves in nonlinear optics — "stress is a pumper" is a fair paraphrase of
+this actual claim, not an invented attribution. (Note: Bearden's broader
+"tapping vacuum energy"/over-unity claims are not endorsed or evaluated
+here — only the phase-conjugate-mirror metaphor being borrowed
+structurally is in scope, and the cert does not assert the free-energy
+physics is real.)
+
+**Not verifiable this session, and not attempted**: the empirical numbers
+(QCI partial-r values, 16/16 robustness, permutation p=0.0) trace to
+`~/Desktop/qa_finance/40-42`, which is off-limits per CLAUDE.md ("Do Not
+Touch" — private finance scripts, frozen hashes). This audit did not
+access that directory. The cert's own "SCAFFOLD — content needs Will
+review" status is accurate and should remain until Will independently
+re-derives or re-confirms those specific numbers from the frozen
+scripts.

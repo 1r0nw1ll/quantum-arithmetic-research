@@ -63,7 +63,7 @@ This is Wildberger Chromogeometry Theorem 6: Qb²=Qr²+Qg², i.e., G²=F²+C². 
 | ~1800 BCE | Babylonian scribes | Plimpton 322 — exact sexagesimal (cot,csc) table using regular (d,e) pairs |
 |-----------|-------------------|-----------------------------------------------------------------------------|
 | ~300 BCE | Euclid | Elements: parameterization of Pythagorean triples via (d,e) |
-| 1900 CE | Edgar Banks/G.A. Plimpton | Tablet discovered and purchased |
+| 1922 CE | Edgar Banks/G.A. Plimpton | Banks sold the tablet to Plimpton for $10; bequeathed to Columbia University 1936 |
 | 1945 | Neugebauer & Sachs | First mathematical analysis (saw triples, missed generating pairs) |
 | 2017 | Mansfield & Wildberger | Historia Mathematica 44:395-419 — identified regular generating pairs, argued it is a trigonometric table |
 | 2026 | QA | Formal certification: each row = QA chromogeometric triple; F=Qr, C=Qg, G=Qb |
@@ -83,3 +83,30 @@ This cert connects QA to Mansfield & Wildberger's peer-reviewed 2017 paper — t
 
 - `fixtures/p322_pass_fundamental.json` — Row 1: (12,5), triple (119,120,169), G/C=1;24,30
 - `fixtures/p322_pass_witnesses.json` — 5 rows (Rows 1,5,6,9,11) + non-row counterexample (7,3)
+
+## Verification Note (2026-07-04)
+
+Fetched and read Mansfield, D.F. & Wildberger, N.J. (2017) "Plimpton 322
+is Babylonian exact sexagesimal trigonometry," Historia Mathematica
+44:395-419 (the actual cited paper, not a secondary summary) directly.
+
+**All 5 example rows independently confirmed against the paper's own
+Table 9** (the fully agreed-correct reconstruction): Row 1 (d,e)=(12,5)
+→ (F,G)=(119,169) matches tablet's b₁=1.59(=119), d₁=2.49(=169) exactly.
+Row 5 (9,4)→(65,97) matches b₅=1.05(=65), d₅=1.37(=97). Row 6 (20,9)→
+(319,481) matches b₆=5.19(=319), d₆=8.01(=481). Row 9 (25,12)→(481,769)
+matches Table 9's b₉=8.01(=481), d₉=12.49(=769) — note Table 1's
+row-9 error-bracket shows a documented scribal-error variant (541,
+discussed by Buck 1980 as "prime" and noteworthy for that reason), but
+the paper's own Table 9 (the corrected/canonical reconstruction) is 481,
+matching the cert. Row 11 (2,1)→(45,75) matches b₁₁=45, d₁₁=1.15(=75).
+No fabricated data found — the validator's own arithmetic (`P322_2/3/4`
+etc.) already performs genuine independent recomputation from (d,e), not
+fixture-trusting, so no hardening needed (same negative-space pattern as
+[217]/[220]).
+
+**Found and fixed one real historical error**: the doc's "Historical
+chain" table dated the Banks→Plimpton sale to "1900 CE," but the
+documented date (Robson 2002; multiple independent secondary sources) is
+**1922** — Banks sold the tablet to Plimpton for $10, who bequeathed his
+collection to Columbia University in 1936. Corrected.

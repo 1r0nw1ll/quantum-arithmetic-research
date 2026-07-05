@@ -87,10 +87,13 @@ This is the same discipline as [257] applied to GLM-5's token pipeline, rebased 
 ## Verification Note (2026-07-04)
 
 Independently fetched the actual Oschman & Oschman (2015) paper via its
-DOI (not the local `Documents/heartmath_corpus/` PDF — that directory is
-outside the two `Documents/` exceptions in CLAUDE.md, so this audit used
-only the live publisher PDF, no local file touched). Confirmed real and
-all three witness claims match the paper word-for-word:
+DOI (the local `Documents/heartmath_corpus/` PDF would also have been
+fine to read directly — CLAUDE.md's "Do Not Touch" only restricts
+modifying/deleting/reorganizing `Documents/`, and the PDF-ingress
+exception for `wildberger_corpus/`/`haramein_rsf/` is about *adding or
+replacing* primary sources, not a restriction on reading what's already
+there; used the live web fetch here mainly for convenience). Confirmed
+real and all three witness claims match the paper word-for-word:
 
 - `oschman_2015_master_oscillator`: the paper states verbatim "the heart
   acts as a master electrical oscillator capable of radiating coherent

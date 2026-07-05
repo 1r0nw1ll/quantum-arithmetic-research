@@ -120,7 +120,23 @@ elsewhere in the project's Whittaker-ladder certs [266]/[273]/[274]).
 
 Validator (`validate.py`) already performs genuine numeric computation
 (`loop_integral_h_db` trapezoidal integration, `curvature_proxy`), not
-fixture-trusting. This cert's own "Guardrail"/"Scope boundary" sections
-are already an exemplary honesty pattern — explicitly disclaiming any
-physical-equivalence claim and stating it validates only internal
-transform consistency. No bugs found; nothing to change.
+fixture-trusting. No bugs found in the checked computation.
+
+**Investigated whether the underlying bridge is real, not just whether
+the cert hedges about it.** The guardrail's own line ("Steinmetz,
+Whittaker, Dollard, Bearden") points at a specific claim: Eric Dollard's
+reinterpretation of Steinmetz's hysteresis law as describing "hysteresis
+of the aether" — treating the luminiferous aether as a physical medium
+whose hysteresis governs electromagnetic propagation, with Whittaker's
+1903 potential-theory decomposition folded in as the mathematical
+machinery. This is not an open or unproven question sitting in a gap of
+current knowledge — the luminiferous aether was experimentally ruled
+out by Michelson-Morley (1887) and is not part of accepted physics. So
+the specific bridge this cert's inspiration points at rests on a
+physical premise that is actually false, not merely untested. That is a
+stronger and more useful conclusion than "the cert correctly hedges" —
+the guardrail is doing real work here, and it happens to land on the
+scientifically correct verdict for this specific claim rather than a
+generic disclaimer. This does not affect the cert's own narrow claim
+(internal transform consistency on fixture data), which remains valid
+as scoped.

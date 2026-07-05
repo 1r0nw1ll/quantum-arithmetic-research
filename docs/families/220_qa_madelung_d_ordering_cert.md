@@ -64,6 +64,18 @@ Crucially: **NOT a ℤ[φ] / Q(√5) structure.** No Fibonacci, no φ, no quadra
 - Syntax/semantics split: [`docs/theory/QA_SYNTAX_SVP_SEMANTICS.md`](../theory/QA_SYNTAX_SVP_SEMANTICS.md)
 - MEMORY: morning OB `11:31:43` entry (atomic 2n² is NOT D_k, open (b,e) selection rule) — RESOLVED by this cert
 
+## Verification Note (2026-07-04)
+
+Independently ran `qa_madelung_sort(36)` and confirmed the first 20
+entries match the standard textbook aufbau sequence exactly (1s, 2s, 2p,
+3s, 3p, 4s, 3d, 4p, 5s, 4d, 5p, 6s, 4f, 5d, 6p, 7s, 5f, 6d, 7p, 8s — the
+sequence every general chemistry course teaches), and confirmed the
+36th entry is exactly "11s" as claimed, with the g/h-orbital extension
+beyond 7p being the well-known Janet theoretical continuation (not yet
+physically realized in any known element). No bug found — like [217],
+`MAD_ORDER` already performs genuine independent recomputation from the
+sort rule (not fixture-only consistency), so no hardening was needed.
+
 ## References
 
 - Madelung, E. (1936). *Die mathematischen Hilfsmittel des Physikers*, Springer, 4th ed.

@@ -5124,7 +5124,7 @@ def _validate_cyclic_quad_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_egyptian_fraction_cert_family(base_dir: str) -> Optional[str]:
-    """QA Egyptian Fraction Cert family [134] — certifies greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ where kᵢ=⌈dᵢ/eᵢ⌉; denominators strictly increasing; all intermediate pairs coprime; terminates when eₙ=1; Koenig descent path (d₀,e₀)→...→(kₙ,1) = Egyptian fraction steps; Rhind Papyrus ~1600 BCE greedy algorithm = Koenig tree navigation; checks EF_1-8+EF_W/F; 2 PASS (fundamental (2,1) expansion=[2]; 6-witness general covering lengths 1/2/3); self-test ok"""
+    """QA Egyptian Fraction Cert family [134] — certifies greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ where kᵢ=⌈dᵢ/eᵢ⌉; denominators strictly increasing; all intermediate pairs coprime; terminates when eₙ=1; Koenig descent path (d₀,e₀)→...→(kₙ,1) = Egyptian fraction steps; Rhind Papyrus ~1600 BCE greedy algorithm = Koenig tree navigation. RE-VERIFIED 2026-07-06: all 7 witness expansions independently recomputed exact via Fraction arithmetic, no bugs in certified data; found+fixed a real factual error in the (7,3) witness's prose footnote, which claimed intermediate direction (21,2) gives "the 3-4-5 triple scaled" -- its actual triple (437,84,445) is genuinely primitive (gcd=1), not a scaled copy of anything; not checked by any validator (pure prose), no certification impact. Checks EF_1-8+EF_W/F; 2 PASS (fundamental (2,1) expansion=[2]; 6-witness general covering lengths 1/2/3); self-test ok"""
     import subprocess
     ef_dir    = os.path.join(base_dir, "qa_egyptian_fraction_cert_v1")
     validator = os.path.join(ef_dir, "qa_egyptian_fraction_cert_validate.py")
@@ -14104,7 +14104,7 @@ FAMILY_SWEEPS = [
      "qa_koenig_twisted_squares_cert_v1", True),
     (134, "QA Egyptian Fraction Cert family",
      _validate_egyptian_fraction_cert_family,
-     "greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ, kᵢ=⌈dᵢ/eᵢ⌉; strictly increasing denominators; all intermediate pairs coprime; terminates at eₙ=1 (unit-fraction direction); Koenig descent path = Egyptian fraction steps; Rhind Papyrus ~1600 BCE = Ben Iverson Koenig = H. Lee Price Fibonacci-box navigation; checks EF_1-8+EF_W/F; 2 PASS; self-test ok",
+     "greedy Egyptian fraction expansion of HAT₁=e/d: e/d=1/k₁+...+1/kₙ, kᵢ=⌈dᵢ/eᵢ⌉; strictly increasing denominators; all intermediate pairs coprime; terminates at eₙ=1 (unit-fraction direction); Koenig descent path = Egyptian fraction steps; Rhind Papyrus ~1600 BCE = Ben Iverson Koenig = H. Lee Price Fibonacci-box navigation (RE-VERIFIED 2026-07-06, fixed a real 'scaled 3-4-5' factual error in (7,3) witness prose, (437,84,445) is actually primitive); checks EF_1-8+EF_W/F; 2 PASS; self-test ok",
      "134_qa_egyptian_fraction",
      "qa_egyptian_fraction_cert_v1", True),
     (133, "QA Eisenstein Cert family",

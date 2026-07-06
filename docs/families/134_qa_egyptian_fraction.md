@@ -50,7 +50,7 @@ All four hold for every primitive `(d,e)` — verified exhaustively for `d,e ≤
 | (4,3) | 3/4 | [1/2, 1/4] | 2 | [(4,3),(4,1)] |
 | (8,3) | 3/8 | [1/3, 1/24] | 2 | [(8,3),(24,1)] |
 
-The (7,3) witness is the only depth-3 expansion in the table — it also shows a non-trivial intermediate direction (21,2) which is itself a valid QA direction giving the 3-4-5 triple scaled: (441−4, 84, 445).
+The (7,3) witness is the only depth-3 expansion in the table — it also shows a non-trivial intermediate direction (21,2) which is itself a valid QA direction. Corrected 2026-07-06: its triple is (F,C,G)=(437,84,445) (F²+C²=445²=198025 ✓), and this is its own **primitive** triple (gcd(437,84,445)=1) — NOT "the 3-4-5 triple scaled" as previously stated; no integer k scales (3,4,5) to (437,84,445), and the triple doesn't reduce to a smaller one.
 
 ## Checks
 
@@ -100,3 +100,24 @@ See `docs/QA_PRIOR_ART_CONVERGENCE.md`.
 - Ben Iverson, *Pythagoras and the Quantum World Vol. 1* — Koenig series + Egyptian fractions
 - H. Lee Price (2008), "The Pythagorean Tree: A New Species" — HAT=e/d, Fibonacci boxes
 - QA vault 2025-03: `Quantum Arithmetic Pythagorean Triples (1).md` — Egyptian fractions in Koenig context
+
+## Verification Note (2026-07-06)
+
+Independently recomputed the greedy Egyptian-fraction expansion (exact
+`Fraction` arithmetic) for all 7 witnesses — every denominator sequence
+and Koenig descent path matches exactly, including the depth-3 (7,3)
+case (expansion [3,11,231], path (7,3)→(21,2)→(231,1)). The validator
+(`qa_egyptian_fraction_cert_validate.py`) already genuinely recomputes
+the expansion, sum, greediness, coprimality, and termination from
+`(d,e)` live using exact `Fraction` arithmetic — no fixture-trusting
+gap, no bugs in any certified value.
+
+**Found and fixed a real factual error in the (7,3) witness's
+footnote**: it claimed the intermediate direction (21,2) "gives the
+3-4-5 triple scaled." Independently computed its actual triple:
+(F,C,G)=(437,84,445) — genuinely satisfies F²+C²=G² (198025=198025),
+but `gcd(437,84,445)=1`, meaning it's already a **primitive** triple,
+not a scaled copy of anything. No integer k satisfies
+`(3k,4k,5k)=(437,84,445)`. This footnote wasn't checked by any
+validator (pure prose), so it had no certification impact — fixed the
+doc to state the correct, independently-verified triple.

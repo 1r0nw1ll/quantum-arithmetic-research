@@ -38,3 +38,24 @@ python qa_loxodrome_cert_validate.py --self-test
 - [163] QA_DEAD_RECKONING — T-operator path mechanics
 - [164] QA_GNOMONIC_RT — gnomonic (great circle) vs Mercator (rhumb) duality
 - [128] QA_SPREAD_PERIOD — Pisano period = loxodrome cycle length
+
+## Verification Note (2026-07-06)
+
+Self-contained cartography/geodesy math (Mercator's 1569 projection is
+real, foundational, well-established history of cartography — not
+independently re-searched given very high baseline confidence, same
+treatment as other canonical references this cycle). Independently
+recomputed both central identities from scratch: the Mercator identity
+ψ=arctanh(sin φ) ⟹ tanh²(ψ)=sin²(φ)=s_φ confirmed exact at 5 test
+latitudes (10°-80°), and independently cross-checked that this arctanh
+form equals the textbook ln(tan(π/4+φ/2)) isometric-latitude formula
+(exact match, <10⁻¹⁰ diff) — this is genuine, standard cartographic
+math, not a QA-invented identity. Bearing-spread formula e²/G=sin²(θ)
+for direction (d,e) confirmed exact against atan2 for 4 test directions
+including two Pythagorean triples.
+
+Validator confirmed genuinely computing, not fixture-trusting:
+`t_operator`/`loxodrome_period`/`classify_orbit` simulate the actual QA
+path and Pisano period at runtime, and the Mercator/bearing checks use
+live `math.tanh`/`atan2`, not declared values. `--self-test` passes on
+both fixtures. No bugs found.

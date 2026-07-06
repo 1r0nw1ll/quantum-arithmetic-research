@@ -13,6 +13,14 @@ Given QA directions (d₁,e₁) and (d₂,e₂) with triples (F₁,C₁,G₁) an
 G₁·G₂ = D² + E²    where D = d₁d₂ − e₁e₂,  E = d₁e₂ + d₂e₁
 ```
 
+**BF conjugate** (checked by CQ_G3 alongside the product BF above, added
+to the doc 2026-07-06 — the validator already checks this, the formula
+just wasn't written out here): the same identity holds for the
+Gaussian-conjugate product Z₁·conj(Z₂):
+```
+G₁·G₂ = D'² + E'²   where D' = d₁d₂ + e₁e₂,  E' = |d₁e₂ − d₂e₁|
+```
+
 **PP (Ptolemy Product):**
 ```
 F₃ = |F₁F₂ − C₁C₂|,   C₃ = F₁C₂ + F₂C₁
@@ -96,3 +104,26 @@ Ptolemy's chord table formula chord(θ₁±θ₂) = f(chord(θ₁), chord(θ₂)
 
 - `fixtures/cq_pass_fundamental.json` — anchor: (2,1)×(3,2), G₃=65, two diagonals
 - `fixtures/cq_pass_witnesses.json` — 5 witness pairs + gcd edge case
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed the fundamental
+example (2,1)×(3,2) end to end: D=4,E=7,G₃=65 (BF); F₃=33,C₃=56,
+33²+56²=65² (PP); F₄=63,C₄=16,63²+16²=65² (PC) — all exact. Also
+independently verified the trigonometric identity `F/G=cos(2θ),
+C/G=sin(2θ)` for `θ=arctan(e/d)` algebraically (via
+`cos2θ=(1−tan²θ)/(1+tan²θ)`, `sin2θ=2tanθ/(1+tan²θ)`). Independently
+reconfirmed the gcd edge case: (2,1)×(4,3) genuinely gives product
+triple (75,100,125) = 25·(3,4,5) exactly (unlike a similar-sounding but
+false "scaled 3-4-5" claim found and fixed in sibling cert [134] this
+same cycle — this one is correct).
+
+**Found and closed a documentation-completeness gap** (not a bug): the
+validator (`qa_cyclic_quad_cert_validate.py`) genuinely checks a second,
+conjugate BF identity (`D'=d₁d₂+e₁e₂`, `E'=|d₁e₂−d₂e₁|`, via
+`Z₁·conj(Z₂)`) under check `CQ_G3`, but the doc's "Mathematical content"
+section never wrote out the D'/E' formula — only the checks table
+alluded to "conjugate G." Added the missing formula; independently
+verified it holds for the fundamental example (D'=8, E'=1,
+8²+1²=65=G₁G₂). The validator was already correct; only the doc was
+incomplete.

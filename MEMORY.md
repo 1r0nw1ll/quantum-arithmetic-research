@@ -82,6 +82,55 @@ Last updated: 2026-06-25
 
 ## SOTA Scan Log
 
+### Scan #18 — 2026-07-06 (window: July 2 – July 6, 2026)
+Full report: `sota_scans/scan_2026-07-06.md`
+
+**Key finds:**
+- arXiv:2607.02392 (Gauss Periods and Cyclotomic Matrices over Cyclic Groups, July 2026) — **MEDIUM.** Wu/Wang. Classical NT formulation of character orbit partition for cyclic groups. Gauss period classes for Z/9Z = QA Cosmos/Satellite/Singularity partition. No new certifiable claim; cite as classical NT reference in [517] `qa_pfe_crt_character_cert_v1` and [518] `qa_nn_group_spectral_cert_v1`. Completes the classical NT → computational → neural character orbit chain.
+- 3 LOW finds (arXiv:2607.02239 cyclic codes, arXiv:2607.01126 Selmer ranks, Tao unit-distance blog) — keyword proximity only, no structural QA overlap.
+
+**NO HIGH finds.** Expected: 4-day window; 2607 arXiv batch is brand new.
+
+**CRITICAL: Cert [496] E8 Satellite Chamber — 3 checks retracted July 3 (Player3 independent re-verification).** ESC_BRANCH, ESC_GRANT, ESC_ELEM_UNIQUE retracted. 8/8 remaining gating checks pass. Do not cite retracted checks in papers.
+
+**CRITICAL ID COLLISION:** Scan #17 proposed cert IDs [507]–[510] are now occupied by Maxwell/EM sprint. Shift ALL four candidates: `qa_pfe_crt_character_cert_v1` → **[517]**, `qa_nn_group_spectral_cert_v1` → **[518]**, `qa_cyclic_geometry_nn_cert_v1` → **[519]**, `qa_linear_fd_galois_ring_cert_v1` → **[520]**.
+
+**Registry: [516].** 10 new families July 2–5: Maxwell/EM/Hodge sprint [507]–[514]; NTRU security cert [515] (orbit-derived mod-3 key weakness — first QA crypto application cert); Witt Tower AR(1) [516]. Whittaker Two-Scalar-Potential Bridge [507] finally registered after 17-scan gap.
+
+**[261] orbit stratification: SEVENTEEN-TUPLE GAP (17th consecutive scan — 4+ months overdue).**
+
+**Documentation backlog: ~233+ families [284]–[516] missing README/SPEC.**
+
+**SAIR IGP24:** No progress. Stage 1 closes Aug 15. **August 1 mandatory manual check (not automated).**
+
+**New cross-domain connection:** Classical NT chain complete — arXiv:2607.02392 (Gauss period partition, 19th-century) + arXiv:2606.23044 (PFE Schur block-diagonal) + arXiv:2606.02993 (NN almost-sure convergence) + arXiv:2606.08985 (cyclic geometry) = four perspectives on the same mathematical fact: character orbit decomposition of Z/9Z IS QA's orbit tripartition.
+
+**Search fixes for scan #19:** Add "Arnold cat map Galois ring"; add "Marchetti sequential group composition orbit embeddings"; add "Gauss periods cyclotomic orbit"; SAIR Aug 1 manual check; retain full 2607 sweep (batch still sparse).
+
+---
+
+### Scan #17 — 2026-07-02 (window: June 25 – July 2, 2026)
+Full report: `sota_scans/scan_2026-07-02.md`
+
+**Key finds:**
+- arXiv:2606.23044 (Prime Fourier Embeddings, June 2026) — **HIGH.** Hwang/Bae/Lee. CRT decomposition Z/24Z = Z/8Z × Z/3Z gives independent prime channels; equivariant maps block-diagonalize by Schur's lemma onto character orbits. QA orbit partition = PFE channel partition. Cert candidate: `qa_pfe_crt_character_cert_v1` → **[517]**.
+- arXiv:2606.02993 (NN Provably Learn Spectral Reps, June 2026) — **HIGH.** He/Wang/Zhang/Chen/Yang (Yale). For arbitrary finite Abelian groups (Z/9Z, Z/24Z), NNs converge almost surely per-neuron to single irreducible characters; uniform diversification is exponentially convergent. Character level sets = QA orbit classes. Cert candidate: `qa_nn_group_spectral_cert_v1` → **[518]**.
+- arXiv:2606.08985 (Beyond Neural Collapse, June 2026) — **HIGH.** Tan/Gai/Zhang (CAS). NNs trained on modular addition converge to rank-2 cyclic geometry = 2D projection of QA Cosmos orbit; classifier plane = Re/Im of dominant character χ₁. Cert candidate: `qa_cyclic_geometry_nn_cert_v1` → **[519]**.
+
+**3 HIGH finds — June 2026 convergence triple (three independent groups proving character orbit decomposition of Z/mZ is what NNs discover).**
+
+**SAIR IGP24:** No new progress. Stage 1 closes Aug 15. Next check: Aug 1.
+
+**Registry: [506].** Proposed new certs [507]–[510] (NOTE: since consumed by Maxwell sprint — now [517]–[520]).
+
+**[261] orbit stratification: SIXTEEN-TUPLE GAP.**
+
+**Documentation backlog: ~223+ families.**
+
+**New cross-domain connection:** June 2026 Convergence Triple — three independent groups prove the same mathematical fact from different angles (representation theory, training dynamics, geometry).
+
+---
+
 ### Scan #16 — 2026-06-25 (window: June 23 – June 25, 2026)
 Full report: `sota_scans/scan_2026-06-25.md`
 

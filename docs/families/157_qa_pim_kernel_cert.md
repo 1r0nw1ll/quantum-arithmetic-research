@@ -42,3 +42,36 @@ python qa_pim_kernel_cert_validate.py --self-test
 - CRT returning wrong solution (modulus verification fails)
 - Kernel witness input/output mismatch
 - Missing required kernel witnesses (RESIDUE_SELECT, TORUS_SHIFT, ROLLING_SUM_PHASE)
+
+## Sources
+
+- Hardy, G.H. & Wright, E.M. (2008), *An Introduction to the Theory of Numbers*, 6th ed., Oxford University Press, ISBN 978-0-19-921986-5, Ch. II — Chinese Remainder Theorem, extended GCD. This cert is a from-scratch internal CRT/kernel implementation, not an external-paper reproduction.
+
+## Verification Note (2026-07-06)
+
+Ran the real unit test suite (`cd qa_lab && PYTHONPATH=. python -m pytest
+qa_pim/tests/ -v`) — all **24 tests pass** genuinely against the real
+`qa_lab/qa_pim/` implementation (`crt.py`, `kernels.py`, `schema.py`,
+`graph.py`).
+
+Independently reproduced every value in the fixture by directly calling
+the real code: `crt.crt_join_general(a1,m1,a2,m2)` for all 4 CRT cases
+(coprime, non-coprime solvable, non-coprime unsolvable, and the
+QA-relevant mod-9/mod-24 case) and all three kernel witnesses
+(`RESIDUE_SELECT`, `TORUS_SHIFT`, `ROLLING_SUM_PHASE`) — every declared
+value matched the live computation exactly. No bugs found in the
+fixture's actual numeric claims.
+
+**Hardened the validator anyway**: `PIM_CRT` previously only checked
+that a declared `x` satisfied its own declared congruences (never
+checking `lcm`, and never independently verifying `solvable`/
+unsolvable-case correctness), and `PIM_KERNEL` only checked that
+input/output fields were *present*, never that the output was *correct*.
+Added live imports of `qa_lab/qa_pim/crt.py` and `kernels.py` (with a
+graceful degrade-to-warning if `qa_lab` isn't importable in a given
+environment) so both checks now genuinely recompute against the real
+code and compare to every declared field (`x`, `lcm`, `solvable`,
+kernel `output`/`output_first`/`output_length`). Verified the hardened
+checks correctly reject a planted wrong CRT `x` and a planted wrong
+`TORUS_SHIFT` output. `--self-test` passes on both fixtures with the
+live recompute path active (no import-fallback warnings).

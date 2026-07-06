@@ -6138,7 +6138,7 @@ def test_spine_v1_compliance() -> bool:
 
 
 def _validate_pim_kernel_cert_family(base_dir: str) -> Optional[str]:
-    """QA PIM Kernel Cert family [157] — certifies PIM kernel correctness: CRT (coprime+non-coprime), RESIDUE_SELECT, TORUS_SHIFT, ROLLING_SUM_PHASE, A1 coordinate-layer documentation. Checks PIM_1+CRT/KERNEL/A1/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA PIM Kernel Cert family [157] — certifies PIM kernel correctness: CRT (coprime+non-coprime), RESIDUE_SELECT, TORUS_SHIFT, ROLLING_SUM_PHASE, A1 coordinate-layer documentation. RE-VERIFIED 2026-07-06: ran real 24-test qa_lab/qa_pim/tests/ suite (all pass), independently reproduced every fixture value via direct calls to crt.py/kernels.py -- no bugs found in the claims. Hardened validator anyway: PIM_CRT/PIM_KERNEL now genuinely live-recompute against the real qa_lab/qa_pim code (imports crt.py+kernels.py) instead of only checking declared-field self-consistency; verified it rejects planted wrong CRT x and wrong kernel output. Checks PIM_1+CRT(live)/KERNEL(live)/A1/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_pim_kernel_cert_v1")
     validator = os.path.join(fam_dir, "qa_pim_kernel_cert_validate.py")
@@ -13999,7 +13999,7 @@ FAMILY_SWEEPS = [
      "qa_bragg_rt_cert_v1", True),
     (157, "QA PIM Kernel Cert family",
      _validate_pim_kernel_cert_family,
-     "PIM kernel correctness: CRT coprime+non-coprime, RESIDUE_SELECT, TORUS_SHIFT, ROLLING_SUM_PHASE; A1 coordinate-layer note; checks PIM_1+CRT/KERNEL/A1/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "PIM kernel correctness: CRT coprime+non-coprime, RESIDUE_SELECT, TORUS_SHIFT, ROLLING_SUM_PHASE; A1 coordinate-layer note; RE-VERIFIED 2026-07-06 (24 real unit tests pass, every fixture value independently reproduced live, validator hardened to genuinely recompute instead of fixture-trust); checks PIM_1+CRT(live)/KERNEL(live)/A1/W/F; 1 PASS + 1 FAIL; self-test ok",
      "157_qa_pim_kernel_cert",
      "qa_pim_kernel_cert_v1", True),
     (158, "QA Graph Community Cert family",

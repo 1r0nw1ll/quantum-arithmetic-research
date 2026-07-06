@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 QA_COMPLIANCE = "observer=cert_validator, state_alphabet=planetary_qn_fixtures"
-"""QA Planetary QN Cert family [171] — catalogs quantum numbers for solar
+"""QA Planetary QN Cert family [177] — catalogs quantum numbers for solar
 system bodies and verifies harmonic connections.
 
 TIER 2 — STRUCTURAL CATALOG:
@@ -13,8 +13,10 @@ TIER 2 — STRUCTURAL CATALOG:
   HARMONIC CONNECTIONS (Law of Harmonics [149]):
     Bodies sharing prime factors in their QN products are harmonically linked.
 
-SOURCE: NASA planetary fact sheets; Iverson QA; cert [149] Law of Harmonics;
-        cert [156] WGS84 (Earth shape QN).
+SOURCE: NASA Planetary Fact Sheets (nssdc.gsfc.nasa.gov); Archinal et al.
+        (2018), Celestial Mechanics and Dynamical Astronomy 130:22, DOI:
+        10.1007/s10569-017-9805-5. Iverson QA; cert [149] Law of
+        Harmonics; cert [156] WGS84 (Earth shape QN).
 
 Checks
 ------
@@ -22,6 +24,12 @@ PQ_1         schema_version == 'QA_PLANETARY_QN_CERT.v1'
 PQ_TUPLE     d=b+e, a=b+2e for each body QN
 PQ_TRIPLE    C²+F²=G² for each body
 PQ_ECC       e/d approximates declared eccentricity within tolerance
+PQ_REAL      declared eccentricity matches independently hardcoded real
+             astronomical reference values (catches a declared value
+             that is self-consistent with its own QN but doesn't match
+             reality -- found 2026-07-06: Mars_shape's declared 0.06489
+             was just its own QN's e/d, not real Mars data, off by ~40x
+             its own tolerance from the true 0.10837)
 PQ_HARMONIC  declared harmonic connections verified (shared prime factors)
 PQ_W         at least 5 body witnesses
 PQ_F         fail detection
@@ -33,6 +41,25 @@ import os
 import sys
 
 SCHEMA = "QA_PLANETARY_QN_CERT.v1"
+
+# Independently-sourced real astronomical eccentricities, keyed by the
+# fixture's "name" field. Shape eccentricities computed from equatorial/
+# polar radii (NASA Planetary Fact Sheets); orbit eccentricities are the
+# standard mean values (NASA Planetary Fact Sheets / JPL). This exists so
+# PQ_REAL can catch a declared "eccentricity" that is merely self-
+# consistent with its own QN (e/d) rather than actually matching reality.
+REAL_ECCENTRICITY = {
+    "Earth_shape": 0.08181919084262149,
+    "Earth_orbit": 0.0167086,
+    "Mars_shape": 0.10836599942613576,
+    "Mars_orbit": 0.0934,
+    "Jupiter_shape": 0.35430478842375246,
+    "Jupiter_orbit": 0.04839266,
+    "Saturn_shape": 0.43165753827961145,
+    "Saturn_orbit": 0.0541506,
+    "Uranus_orbit": 0.04716771,
+    "Moon_orbit": 0.0549,
+}
 
 
 def gcd(a, b):
@@ -84,6 +111,15 @@ def validate(cert, *, collect_errors=True):
             computed_ecc = e / d
             if abs(computed_ecc - declared_ecc) > ecc_tol:
                 err("PQ_ECC", f"{name}: e/d={computed_ecc:.6f} != declared ε={declared_ecc:.6f}")
+
+        # PQ_REAL — declared eccentricity must match real astronomical data,
+        # not just be self-consistent with its own QN's e/d (see module
+        # docstring: this is what let the Mars_shape bug through before).
+        real_ecc = REAL_ECCENTRICITY.get(name)
+        if real_ecc is not None and declared_ecc is not None:
+            if abs(declared_ecc - real_ecc) > ecc_tol:
+                err("PQ_REAL", f"{name}: declared ε={declared_ecc:.6f} != real ε={real_ecc:.6f} "
+                    f"(tolerance {ecc_tol})")
 
     # PQ_HARMONIC — check declared harmonic connections
     harmonics = cert.get("harmonic_connections", [])

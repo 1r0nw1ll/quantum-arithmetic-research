@@ -4538,7 +4538,7 @@ def _validate_inertial_nav_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_planetary_qn_cert_family(base_dir: str) -> Optional[str]:
-    """QA Planetary QN Cert family [171] — solar system QN catalog. 10 bodies shape+orbital. Earth-Jupiter b=59, Earth-Uranus b=101 harmonics. Saturn prime AP. Tier 2. Checks PQ_1+TUPLE/TRIPLE/ECC/HARMONIC/W/F; 1 PASS+1 FAIL; self-test ok"""
+    """QA Planetary QN Cert family [177] — solar system QN catalog. 10 bodies shape+orbital. Earth-Jupiter b=59, Earth-Uranus b=101 harmonics. Saturn prime AP. Tier 2. Checks PQ_1+TUPLE/TRIPLE/ECC/REAL/HARMONIC/W/F; 1 PASS+1 FAIL; self-test ok. VERIFIED 2026-07-06: found+fixed a real bug -- Mars_shape's declared eccentricity (0.06489) was just its own QN's e/d, not real Mars data (true value 0.10837, off by ~40x tolerance); fixed QN to (181,22,203,225), hardened validator with independently-sourced real eccentricities (PQ_REAL) for all 10 bodies so this class of bug can't recur; all other 9 entries confirmed accurate against NASA/JPL data."""
     import subprocess
     d = os.path.join(base_dir, "qa_planetary_qn_cert_v1")
     v = os.path.join(d, "qa_planetary_qn_cert_validate.py")
@@ -14199,7 +14199,7 @@ FAMILY_SWEEPS = [
      "qa_inertial_nav_cert_v1", True),
     (177, "QA Planetary QN Cert family",
      _validate_planetary_qn_cert_family,
-     "Solar system QN catalog: 10 bodies shape+orbital; Earth-Jupiter b=59, Earth-Uranus b=101 harmonics; Saturn (79,139,199) prime AP; char latitudes via 2ε/(1+ε²); Earth Tropic match Tier 2 p≈0.013; Tier 2 structural; checks PQ_1+TUPLE/TRIPLE/ECC/HARMONIC/W/F; 1 PASS+1 FAIL; self-test ok",
+     "Solar system QN catalog: 10 bodies shape+orbital; Earth-Jupiter b=59, Earth-Uranus b=101 harmonics; Saturn (79,139,199) prime AP; char latitudes via 2ε/(1+ε²); Earth Tropic match Tier 2 p≈0.013; Tier 2 structural; checks PQ_1+TUPLE/TRIPLE/ECC/REAL/HARMONIC/W/F; 1 PASS+1 FAIL; self-test ok. VERIFIED 2026-07-06: fixed Mars_shape's wrong eccentricity/QN (was backfit from its own ratio, not real data), hardened validator with real reference eccentricities for all 10 bodies.",
      "177_qa_planetary_qn_cert",
      "qa_planetary_qn_cert_v1", True),
     (178, "QA Megalithic Cert family",

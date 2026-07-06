@@ -25,10 +25,10 @@
     },
     {
       "name": "Mars_shape", "body": "Mars", "type": "shape",
-      "eccentricity": 0.06489, "ecc_tolerance": 0.001,
-      "qn": {"b": 245, "e": 17, "d": 262, "a": 279},
-      "char_latitude_deg": 21.07,
-      "_note": "245=5×7², 17 prime, 262=2×131, 279=9×31."
+      "eccentricity": 0.10837, "ecc_tolerance": 0.001,
+      "qn": {"b": 181, "e": 22, "d": 203, "a": 225},
+      "char_latitude_deg": 27.57,
+      "_note": "Corrected 2026-07-06: the previous entry declared eccentricity=0.06489 with QN (245,17,262,279) -- but that 0.06489 was just 17/262 (the QN's own ratio) backfit as if it were real data. Mars's true shape eccentricity, computed from its equatorial/polar radii (3396.2/3376.2 km), is 0.10837 -- the old value was wrong by ~40x its own declared tolerance. New QN (181,22,203,225): 181 is prime, rel. error 7.7e-5 vs the true value."
     },
     {
       "name": "Mars_orbit", "body": "Mars", "type": "orbit",
@@ -107,7 +107,7 @@
   },
 
   "sources": [
-    "NASA Planetary Fact Sheets (nssdc.gsfc.nasa.gov)",
+    "NASA Planetary Fact Sheets (nssdc.gsfc.nasa.gov); Archinal et al. (2018), 'Report of the IAU Working Group on Cartographic Coordinates and Rotational Elements: 2015,' Celestial Mechanics and Dynamical Astronomy 130:22, DOI: 10.1007/s10569-017-9805-5",
     "Earth QN: cert [156] QA_WGS84_ELLIPSE_CERT.v1",
     "Law of Harmonics: cert [149] QA_LAW_OF_HARMONICS_CERT.v1",
     "Characteristic latitude: cert [168] QA_ELLIPSOID_GEODESIC_CERT.v1"

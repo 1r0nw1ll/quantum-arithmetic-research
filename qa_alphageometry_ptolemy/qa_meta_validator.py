@@ -6971,7 +6971,7 @@ def _validate_grokking_eigenvalue_transition_cert_family(base_dir: str) -> Optio
 
 
 def _validate_spherical_grokking_theorem_nt_cert_family(base_dir: str) -> Optional[str]:
-    """QA Spherical Grokking Theorem NT Cert family [200] — partial-verification cert preserving local 3x speedup and untested S5 scope boundary; self-test ok"""
+    """QA Spherical Grokking Theorem NT Cert family [200] — partial-verification cert preserving local 3x speedup and untested S5 scope boundary; self-test ok. VERIFIED 2026-07-06: fetched real Yildirim paper (arXiv:2603.05228), confirmed epoch counts/S5 failure rates/terminology verbatim; fixed a stale internal family-count claim in the doc that inherited the [198] qa_step bug (re-ran the fixed script, corrected 9->5 baseline and the collapse figures)."""
     return _validate_self_tested_family(
         base_dir,
         "qa_spherical_grokking_theorem_nt_cert_v1",
@@ -14314,7 +14314,7 @@ FAMILY_SWEEPS = [
      "qa_grokking_eigenvalue_transition_cert_v1", True),
     (200, "QA Spherical Grokking Theorem NT Cert family",
      _validate_spherical_grokking_theorem_nt_cert_family,
-     "Yildirim spherical grokking mapped to Theorem NT; partial-verification honesty gate preserves local m=97 3x speedup, residual norm bound, uniform-attention result, m=9 non-applicability, and untested S5 boundary; checks SGT_1+STATUS/SPEEDUP/NORM/UNIFORM/M9/HONEST/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "Yildirim spherical grokking mapped to Theorem NT; partial-verification honesty gate preserves local m=97 3x speedup, residual norm bound, uniform-attention result, m=9 non-applicability, and untested S5 boundary; checks SGT_1+STATUS/SPEEDUP/NORM/UNIFORM/M9/HONEST/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed real paper (arXiv:2603.05228) epoch/S5 figures verbatim; fixed a stale family-count claim inherited from the [198] qa_step bug.",
      "200_qa_spherical_grokking_theorem_nt_cert",
      "qa_spherical_grokking_theorem_nt_cert_v1", True),
     (201, "QA Snell Manuscript Cert family",

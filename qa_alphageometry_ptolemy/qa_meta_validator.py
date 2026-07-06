@@ -4917,7 +4917,7 @@ def _validate_path_shape_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_male_female_octave_cert_family(base_dir: str) -> Optional[str]:
-    """QA Male/Female Octave Cert family [144] — certifies Male→Female transform on QA Quantum Numbers (b,e,d,a): female=(2e,b,a,2d) [double e then swap b↔e]; female_product=4×male_product (algebraic proof: 2e×b×a×2d=4×b×e×d×a); 4×=2 octaves (musical interpretation); fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; transform chains: each step ×4 adds 2 octaves; 5 Fibonacci+arbitrary pair witnesses; source: Ben Iverson QA framework + Dale Pond SVP male/female vibration; checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok"""
+    """QA Male/Female Octave Cert family [144] — certifies Male→Female transform on QA Quantum Numbers (b,e,d,a): female=(2e,b,a,2d) [double e then swap b↔e]; female_product=4×male_product (algebraic proof: 2e×b×a×2d=4×b×e×d×a); 4×=2 octaves (musical interpretation); fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; transform chains: each step ×4 adds 2 octaves; 5 Fibonacci+arbitrary pair witnesses. RE-VERIFIED 2026-07-06: confirmed clean, all 8 witness pairs across both fixtures + the 3-step octave tower independently recomputed exact, validator already genuinely computes live. Source: Ben Iverson QA framework + Dale Pond SVP male/female vibration; checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok"""
     import subprocess
     mf_dir    = os.path.join(base_dir, "qa_male_female_octave_cert_v1")
     validator = os.path.join(mf_dir, "qa_male_female_octave_cert_validate.py")
@@ -14064,7 +14064,7 @@ FAMILY_SWEEPS = [
      "qa_path_shape_cert_v1", True),
     (144, "QA Male/Female Octave Cert family",
      _validate_male_female_octave_cert_family,
-     "Male→Female transform (double e, swap b↔e) gives female=(2e,b,a,2d); female_product=4×male_product; 4×=2 octaves; fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; chains indefinitely (+2 octaves per step); checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok",
+     "Male→Female transform (double e, swap b↔e) gives female=(2e,b,a,2d); female_product=4×male_product; 4×=2 octaves; fundamental (1,1,2,3)→(2,1,3,4): 6→24=4×6; chains indefinitely (+2 octaves per step) (RE-VERIFIED 2026-07-06, confirmed clean); checks MF_1-2+TRANS/PROD/OCT/W/F; 2 PASS; self-test ok",
      "144_qa_male_female_octave_cert",
      "qa_male_female_octave_cert_v1", True),
     (143, "QA Cube Sum Cert family",

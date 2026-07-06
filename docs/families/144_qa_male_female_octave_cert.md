@@ -105,3 +105,20 @@ Each application of the transform adds exactly 2 more octaves.
 
 - `fixtures/mf_pass_fundamental.json` — algebraic proof + 3 pairs (fundamental + 2 Fibonacci)
 - `fixtures/mf_pass_witnesses.json` — 5 pairs including chained transform demonstration
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed the male→female
+transform and 4× product identity for all 8 witness pairs across both
+fixtures (fundamental, the 3-step octave tower, and 4 additional
+Fibonacci-adjacent pairs) — every female QN, and every `female_product =
+4×male_product`, matches exactly, including the chained tower
+(1,1,2,3)→(2,1,3,4)→(2,2,4,6)→(4,2,6,8) with products 6→24→96→384. The
+algebraic proof itself is trivial and exact: `female_product = 2e·b·a·2d
+= 4·(b·e·d·a)` for any QN, no special-case dependence. The validator
+(`qa_male_female_octave_cert_validate.py`) already genuinely recomputes
+the transform and product from `(b,e,d,a)` live, no fixture-trusting
+gap. The Keely/Dale-Pond "2-octave separation" framing is attributed to
+this project's own internal source notes (`memory/qa_source_texts.md`),
+not an external primary source — treated as self-contained QA algebra
+per the same convention as [152]/[183], no external citation needed.

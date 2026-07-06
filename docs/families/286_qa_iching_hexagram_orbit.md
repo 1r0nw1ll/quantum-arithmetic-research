@@ -62,3 +62,18 @@ For every hexagram code in {0, …, 63}, `orbit_class(code)` computed by divisib
 - Does **not** claim divination interpretation or cosmological meaning.
 - Does **not** cover hexagram codes outside {0, …, 63}.
 - Encoding-convention stability: the claim is conditional on the Fuxi 3-bit encoding defined in cert [285]; alternative encoding conventions yield different integer codes and different orbit assignments.
+
+## Verification Note (2026-07-05)
+
+Both primary sources already independently confirmed in [285]'s audit
+(same two citations, unchanged here). Independently re-verified this
+cert's own new algebraic claim from scratch: wrote a fresh script
+computing `hexagram_code = lower + 8×upper` for all 64 (lower, upper)
+trigram-code pairs, checked `code mod 9 == (lower − upper) mod 9` for
+every one (0 mismatches — the identity holds exactly, as expected from
+8 ≡ −1 mod 9), and independently reproduced the exact orbit-class
+counts: 1 A1-excluded, 7 Singularity, 14 Satellite, 42 Cosmos, summing
+to 64. The 7 Singularity codes computed independently ({9, 18, 27, 36,
+45, 54, 63}) exactly match the claimed doubled-trigram set. Validator
+computes classification from divisibility rules at runtime, not
+fixture-trusting. No bugs found.

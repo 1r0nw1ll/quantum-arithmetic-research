@@ -83,3 +83,19 @@ This is **Theorem NT in pure geometry**: the observer sees a circle and conclude
 ## Source
 
 Will Dale, 2026-04-08/09. Corrected 2026-04-09: C >= 4 (not 2) — elements use raw d = b+e.
+
+## Verification Note (2026-07-06)
+
+This is a Tier-1 self-contained algebraic derivation (Will Dale's own
+QA construction), so no external citation was needed — verified the
+math directly instead. Independently recomputed C=2de, F=d²−e², and
+I=C−F from scratch for all three worked examples: (1,1)→(d=2,a=3,C=4,
+F=3,I=1); (2,1)→(d=3,a=4,C=6,F=8,I=−2); (9,9)→(d=18,a=27,C=324,F=243,
+I=81) — all match exactly. Exhaustively verified min(C)=4 over all of
+S_9 (81 states) and confirmed F>0 for every state — 0 counterexamples,
+matching the claimed theorem exactly.
+
+Validator confirmed genuine: `verify_all_C_ge_4()` exhaustively
+recomputes C for every (b,e) in {1..m}² at runtime via the real
+`qa_elements()` element computation, not fixture-trusting. `--self-test`
+passes on both fixtures. No bugs found.

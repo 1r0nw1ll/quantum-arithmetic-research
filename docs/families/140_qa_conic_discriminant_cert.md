@@ -86,3 +86,14 @@ I = Qg − Qr
 
 - `fixtures/cd_pass_fundamental.json` — 4 directions straddling the silver ratio; parabola impossibility proof
 - `fixtures/cd_pass_witnesses.json` — 4 hyperbola + 4 ellipse witnesses + convergent sequence to silver ratio
+
+## Note on I vs. Iverson's original definition (Will Dale, 2026-07-06)
+
+Iverson's original definition of I is **|C−F|** (absolute value). This
+project's convention uses the **signed** I=C−F specifically so its sign
+carries the conic-type classification (I>0 hyperbola, I<0 ellipse) —
+this is a deliberate extension of Iverson's concept, not a transcription
+error, but the divergence from the primary source should be noted
+explicitly here since [140] is the cert that makes the sign
+load-bearing. Any other cert that quotes a numeric "I" value inherits
+this signed convention unless stated otherwise (see [207]).

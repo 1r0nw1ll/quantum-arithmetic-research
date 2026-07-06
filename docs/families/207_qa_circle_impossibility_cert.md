@@ -99,3 +99,9 @@ Validator confirmed genuine: `verify_all_C_ge_4()` exhaustively
 recomputes C for every (b,e) in {1..m}² at runtime via the real
 `qa_elements()` element computation, not fixture-trusting. `--self-test`
 passes on both fixtures. No bugs found.
+
+**Correction (Will Dale, 2026-07-06)**: the I values in the Examples
+section above (1, −2, 81) use this project's signed I=C−F convention,
+not Iverson's original |C−F|. See [140]'s note for the full explanation
+— the sign is load-bearing for conic-type classification, so this cert
+inherits the signed convention rather than Iverson's absolute value.

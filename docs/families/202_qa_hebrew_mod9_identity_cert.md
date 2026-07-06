@@ -103,3 +103,69 @@ Base-3 minimizes radix economy (Knuth, TAOCP vol. 2). 9 = 3² is the human-scale
 - `fixtures/hm9_pass_core.json` — 8 claims with full witnesses
 - `fixtures/hm9_pass_numerical.json` — digital root formula verification, homomorphism tests, factorial digital roots
 - `fixtures/hm9_fail_zero_state.json` — A1 violation: state space {0,...,8} rejected
+
+## Verification Note (2026-07-05)
+
+All seven source citations independently checked.
+
+- **Izmirli (2014)**, *Advances in Pure Mathematics* 4:295-301 — exact
+  match (already confirmed in cert [203]'s audit).
+- **Psychoyos (2005)** — confirmed real: "The forgotten art of isopsephy
+  and the magic number KZ," *Semiotica* 154(1-4):157-224 (De Gruyter
+  DOI 10.1515/semi.2005.2005.154-1-4.157) — exact volume/issue/page
+  match. The paper's own argument (27 = 3 enneads of the Greek numeral
+  system, math prior to phonetics) matches the cert's ENNEAD claim.
+- **Kreinovich & Kosheleva (2018)**, UTEP-CS-18-31 — confirmed real and
+  fetched directly: "WAS THERE A PRE-BIBLICAL 9-ARY NUMBER SYSTEM?"
+  states exactly the cert's claim, 15 = 9+6 and 16 = 9+7 in Biblical
+  Hebrew instead of the expected 10+5/10+6 pattern.
+- **Glaz (2021)** — already independently confirmed in cert [203]'s
+  audit (same paper, full text read).
+- **Skinner (1875)** — confirmed real book (*Key to the Hebrew-Egyptian
+  Mystery in the Source of Measures*, digitized on Internet Archive).
+  Fetched the full OCR text and checked specific numeric claims:
+  6561 confirmed as the Parker quadrature square-area base value;
+  Woman = 135 confirmed verbatim ("woman as 135, and its reverse 531");
+  Adam's connection to 144 confirmed ("The Garden of Eden an Adam, or
+  144 form," Appendix I §86); Tet/Teth confirmed explicitly glossed as
+  "Snake" in Skinner's own Hebrew alphabet table; Garden-of-Eden
+  gematria = 24 confirmed verbatim ("Base of pyramid... 24 is 6 X 4...
+  This is the Garden of Eden form"). The **5184 = 72² solar-day claim
+  was not found** in the fetched excerpt — this is a negative result
+  from one non-exhaustive full-text fetch, not a confirmed absence from
+  the book; left unresolved rather than marked confirmed or wrong.
+- **Cardoso et al. (2021)**, arXiv:2110.03746 — confirmed real
+  ("Properties of the Digital Root and its Extension to Rational
+  Numbers — an Algebraic Approach"). Fetched the abstract page directly:
+  the paper has exactly **two** authors (Lucas T. Cardoso, Glauber
+  Quadros). "Cardoso et al." is an imprecise citation form for a
+  2-author paper (normally written "Cardoso & Quadros") but not
+  incorrect — Cardoso is the genuine first author. Minor
+  citation-precision note, not a bug.
+- **Goodfriend (2024)** — confirmed real: "Gematria in the Hebrew
+  Bible," *Jewish Bible Quarterly* 52(4), p. 211 — exact volume/issue
+  match.
+
+**Pure-math claims independently recomputed** (no external source
+needed): 9⁴ = 3⁸ = 81² = 6561 ✓; 72² = 5184 ✓; 4! = 24 ✓.
+
+**Digital root homomorphism properties (P1.2-P1.5) independently
+verified** with a fresh script, not by trusting Izmirli's paper: tested
+multiplicative (`dr(mn)=dr(dr(m)dr(n))`), additive
+(`dr(m+n)=dr(dr(m)+dr(n))`), power (`dr(mⁿ)=dr(dr(m)ⁿ)`), and
+subtractive (`dr(m-n)=dr(dr(m)-dr(n))`, using the proper mod-9-with-9-
+for-0 representative rather than raw subtraction) properties against
+5000+ randomized integer pairs — 0 mismatches on all four.
+
+**Validator design confirmed genuine, not fixture-trusting**: read
+`qa_hebrew_mod9_identity_cert_validate.py` in full — `digital_root()` is
+computed from `n % 9` at runtime and checked against every declared
+value in HM9_AIQ (all 9 chambers), HM9_SKIN (Adam/Woman roots, 6561 =
+9⁴, solar-day = 72²), and HM9_NUM (arbitrary homomorphism test cases,
+factorial digital roots) — not read off the fixture. Ran
+`--self-test`: all 3 fixtures pass as expected.
+
+No bugs found. One open item (5184/72² not located in the Skinner
+excerpt fetched) and one minor citation-precision flag (Cardoso "et
+al." for a 2-author paper) — both noted above, neither affects
+validator correctness.

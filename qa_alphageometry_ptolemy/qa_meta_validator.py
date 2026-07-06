@@ -4986,7 +4986,7 @@ def _validate_klein4_harmonics_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_pell_norm_cert_family(base_dir: str) -> Optional[str]:
-    """QA Pell Norm Cert family [141] — certifies I=C-F=-(x²-2y²) where x=d-e, y=e: the QA conic discriminant equals the negated Pell norm P(x,y)=x²-2y² for D=2; Pell boundary: P=-1→I=+1 (hyperbola boundary), P=+1→I=-1 (ellipse boundary); P=0 impossible for primitive integers (would require d/e=silver ratio); M_B Pythagorean tree move (cert [135]) M_B(d,e)=(2d+e,d) corresponds to (x,y)→(x+2y,x+y) in Pell variables, which maps P→-P (Pell-sign-flip); M_B chain from (2,1): 2/1→5/2→12/5→29/12→70/29→169/70 generates Pell solution sequence x²-2y²=±1 with alternating H/E; fundamental (2,1): P=-1, I=+1; Wildberger arXiv:0806.2490; checks PN_1-3+IDEN/MB/W/F; 2 PASS (chain 6 steps; 6 general witnesses at P=±1,±7,±17); self-test ok"""
+    """QA Pell Norm Cert family [141] — certifies I=C-F=-(x²-2y²) where x=d-e, y=e: the QA conic discriminant equals the negated Pell norm P(x,y)=x²-2y² for D=2; Pell boundary: P=-1→I=+1 (hyperbola boundary), P=+1→I=-1 (ellipse boundary); P=0 impossible for primitive integers (would require d/e=silver ratio); M_B Pythagorean tree move (cert [135]) M_B(d,e)=(2d+e,d) corresponds to (x,y)→(x+2y,x+y) in Pell variables, which maps P→-P (Pell-sign-flip); M_B chain from (2,1): 2/1→5/2→12/5→29/12→70/29→169/70 generates Pell solution sequence x²-2y²=±1 with alternating H/E; fundamental (2,1): P=-1, I=+1. RE-VERIFIED 2026-07-06: confirmed clean, identity + full 6-step chain + |P|=7/17 witnesses independently reconfirmed, correctly uses [140]/[207]'s signed I convention (not [125]'s exception), validator already genuinely computes live. Wildberger arXiv:0806.2490; checks PN_1-3+IDEN/MB/W/F; 2 PASS (chain 6 steps; 6 general witnesses at P=±1,±7,±17); self-test ok"""
     import subprocess
     pn_dir    = os.path.join(base_dir, "qa_pell_norm_cert_v1")
     validator = os.path.join(pn_dir, "qa_pell_norm_cert_validate.py")
@@ -14079,7 +14079,7 @@ FAMILY_SWEEPS = [
      "qa_klein4_harmonics_cert_v1", True),
     (141, "QA Pell Norm Cert family",
      _validate_pell_norm_cert_family,
-     "I=C-F=-(x²-2y²) where x=d-e, y=e: discriminant = negated Pell norm P(x,y)=x²-2y²; Pell boundary P=±1→|I|=1 (minimum nonzero); M_B(d,e)=(2d+e,d) = Pell-sign-flip in (x,y) space; M_B chain from (2,1) generates full Pell solution sequence alternating H/E; checks PN_1-3+IDEN/MB/W/F; 2 PASS; self-test ok",
+     "I=C-F=-(x²-2y²) where x=d-e, y=e: discriminant = negated Pell norm P(x,y)=x²-2y²; Pell boundary P=±1→|I|=1 (minimum nonzero); M_B(d,e)=(2d+e,d) = Pell-sign-flip in (x,y) space; M_B chain from (2,1) generates full Pell solution sequence alternating H/E (RE-VERIFIED 2026-07-06, confirmed clean); checks PN_1-3+IDEN/MB/W/F; 2 PASS; self-test ok",
      "141_qa_pell_norm_cert",
      "qa_pell_norm_cert_v1", True),
     (140, "QA Conic Discriminant Cert family",

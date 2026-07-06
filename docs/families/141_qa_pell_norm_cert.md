@@ -103,3 +103,19 @@ Wildberger arXiv:0806.2490 ("Pell's equation and the Pell group") establishes th
 
 - `fixtures/pn_pass_fundamental.json` — identity proof, M_B Pell chain 6 steps, algebraic proofs
 - `fixtures/pn_pass_witnesses.json` — 6 general witnesses at various Pell norm levels
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed `I=−(x²−2y²)` and
+the M_B Pell-sign-flip identity symbolically (both reduce exactly as
+derived). Independently reconfirmed the full 6-step M_B chain from
+(2,1): P alternates exactly −1,+1,−1,+1,−1,+1 with I alternating
++1,−1,+1,−1,+1,−1 (H/E/H/E/H/E) — matches the identical chain
+independently reproduced this cycle for [135]/[145]/[146]. Also
+reconfirmed all four `|P|=7` witnesses ((3,2) H, (4,1) E, (9,4) H, (8,3)
+E) and the `|P|=17` witness ((4,3) H, I=17, matching [148]'s own
+witness table). This cert correctly uses the **signed** `I=C−F`
+convention consistent with [140]/[207] (not [125]'s absolute-value
+exception — see that cross-cert audit earlier this cycle). The validator
+(`qa_pell_norm_cert_validate.py`) already genuinely recomputes x, y, P,
+I, and the M_B chain live, no fixture-trusting gap.

@@ -60,6 +60,7 @@ For primes p, the number of Fibonacci zeros mod p within one Pisano period relat
 - **Ben Iverson, QA-2 Ch 3**: par number system definition, gender classification, square rules
 - **Cert [148]** Sixteen Identities: C=4-par, G=5-par already proved there; this cert formalizes the par system itself
 - **Cert [147]** Synchronous Harmonics: 3-par LOW at 1/4, 5-par HIGH at 1/4 — uses par classification
+- **Wall, D.D. (1960)**, "Fibonacci Series Modulo m," *American Mathematical Monthly* 67(6):525-532, DOI:10.1080/00029890.1960.11989541 — rank of apparition / Pisano period theory (also cited by cert [291])
 
 ## Connection to other families
 
@@ -72,3 +73,37 @@ For primes p, the number of Fibonacci zeros mod p within one Pisano period relat
 
 - `fixtures/pn_pass_classification.json` — 8 par witnesses + 6 male squares + 6 directions + multiplication table
 - `fixtures/pn_pass_fib_hits.json` — 4 Fib_hits observations for par-classified integers
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed every claim from scratch: par classification for
+all 8 witnesses, all 6 male-square results (mod 4), all 6 QA direction
+witnesses (C=2de always 4-par, G=d²+e² always 5-par), the full 10-entry
+multiplication table (recomputed a×b mod 4 and remapped to par labels for
+every entry), and all 4 Fib_hits values (pi(9)=24/hits=2, pi(11)=10/hits=1,
+pi(19)=18/hits=1, pi(29)=14/hits=1) — all correct, no arithmetic bugs. The
+validator (`qa_par_number_cert_validate.py`) was already genuinely
+recomputing everything live (`par_class`, `pisano_period`, `fib_hits` all
+computed from scratch, not fixture-trusting) — no hardening needed, same
+as [150].
+
+**Found and fixed a real Legendre-symbol error**: the m=29 fib_witness's
+explanatory note claimed `(5/29)=-1` (5 is a non-residue mod 29) as the
+reason 29 breaks the naive "5-par → 2 hits" pattern. Independently
+verified via Euler's criterion (`5^14 mod 29 = 1`) and exhaustive
+quadratic-residue enumeration mod 29 (`11² = 121 ≡ 5 mod 29`) that
+**5 IS a quadratic residue mod 29** — `(5/29) = +1`, not `-1`. This
+doesn't affect the certified `fib_hits=1` value itself (independently
+reconfirmed correct), only the free-text explanation for it, which was
+factually backwards.
+
+Went further and checked whether a bare Legendre(5,p) value determines
+hits count at all: computed hits/Legendre for all primes 3–59 and found
+a counterexample already within reach — **p=41 has Legendre(5,41)=+1 but
+2 hits**, not 1. So even corrected, `(5/p)=+1 → 1 hit` is not a clean
+rule; the fixture's own "observed, not universal" framing was the right
+call, and the note now says so explicitly rather than implying a Legendre
+symbol alone determines the count. The true determinant is the rank of
+apparition α(p) (smallest k with p | F_k) relative to π(p) — a
+finer-grained invariant this cert doesn't attempt to characterize, per
+Wall (1960).

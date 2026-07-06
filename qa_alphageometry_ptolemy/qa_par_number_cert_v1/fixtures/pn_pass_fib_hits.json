@@ -7,6 +7,8 @@
 
   "_fixture_purpose": "Documents the relationship between par class and Fibonacci zero-count within Pisano periods. The pattern is nuanced: for primes p, Fib_hits depends on Legendre symbol (5/p). This fixture records observed values without enforcing a universal rule. The QA connection: par class predicts the quadratic character of 5 mod p, which governs Pisano period structure.",
 
+  "source_grounding": "Primary source: Wall, D.D. (1960), Fibonacci Series Modulo m, American Mathematical Monthly 67(6):525-532, DOI:10.1080/00029890.1960.11989541 -- rank of apparition and Pisano period theory (also cited by cert [291]).",
+
   "par_witnesses": [
     {"n": 11, "par": 3},
     {"n": 19, "par": 3},
@@ -27,7 +29,7 @@
     {"m": 9, "fib_hits": 2, "note": "5-par; pi(9)=24; 24/2=12; hits=2"},
     {"m": 11, "fib_hits": 1, "note": "3-par prime; pi(11)=10; hits=1"},
     {"m": 19, "fib_hits": 1, "note": "3-par prime; pi(19)=18; hits=1"},
-    {"m": 29, "fib_hits": 1, "note": "5-par prime; pi(29)=14; hits=1; (5/29)=-1"}
+    {"m": 29, "fib_hits": 1, "note": "5-par prime; pi(29)=14; hits=1. Corrected 2026-07-06: (5/29)=+1 (5 IS a quadratic residue mod 29, since 11^2=121=5 mod 29; independently verified via Euler's criterion 5^14 mod 29=1 and by exhaustive QR enumeration), not -1 as previously stated. A bare Legendre(5,p) value does not by itself determine hits count: p=41 has Legendre(5,41)=+1 but 2 hits, not 1 -- the true determinant is the rank of apparition alpha(p) (smallest k with p|F_k) relative to pi(p), a more refined invariant this fixture does not attempt to characterize."}
   ],
 
   "par_multiplication_table": null,

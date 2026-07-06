@@ -4756,7 +4756,7 @@ def _validate_equilateral_triangle_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_par_number_cert_family(base_dir: str) -> Optional[str]:
-    """QA Par Number Cert family [151] — certifies Iverson's Double Parity (par) system: 4-way mod-4 classification (2-par=4k+2, 3-par=4k+3, 4-par=4k, 5-par=4k+1); male²=5-par always; C=4-par, G=5-par for primitive directions; par multiplication table closed; Fib_hits observations; source: Iverson QA-2 Ch 3; checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS; self-test ok"""
+    """QA Par Number Cert family [151] — certifies Iverson's Double Parity (par) system: 4-way mod-4 classification (2-par=4k+2, 3-par=4k+3, 4-par=4k, 5-par=4k+1); male²=5-par always; C=4-par, G=5-par for primitive directions; par multiplication table closed; Fib_hits observations. RE-VERIFIED 2026-07-06: all classifications/squares/directions/mult-table/fib_hits independently recomputed, all correct; validator already genuinely live-computes (no hardening needed); found+fixed a real Legendre-symbol error in a fixture note ((5/29) declared -1, actually +1, confirmed via Euler's criterion + exhaustive QR enumeration), and found a genuine counterexample (p=41) showing bare Legendre(5,p) doesn't determine hits count alone. Source: Iverson QA-2 Ch 3 + Wall (1960) Pisano period theory; checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS; self-test ok"""
     import subprocess
     pn_dir    = os.path.join(base_dir, "qa_par_number_cert_v1")
     validator = os.path.join(pn_dir, "qa_par_number_cert_validate.py")
@@ -14029,7 +14029,7 @@ FAMILY_SWEEPS = [
      "qa_equilateral_triangle_cert_v1", True),
     (151, "QA Par Number Cert family",
      _validate_par_number_cert_family,
-     "Iverson Double Parity: 2/3/4/5-par mod-4 classification; male²=5-par; C=4-par, G=5-par; multiplication table; Fib_hits observations; checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS; self-test ok",
+     "Iverson Double Parity: 2/3/4/5-par mod-4 classification; male²=5-par; C=4-par, G=5-par; multiplication table; Fib_hits observations (RE-VERIFIED 2026-07-06, fixed real Legendre-symbol sign error in fib_witness note); checks PN_1+CLASS/SQ/QA/FIB/MULT/W/F; 2 PASS; self-test ok",
      "151_qa_par_number_cert",
      "qa_par_number_cert_v1", True),
     (150, "QA Septenary Cert family",

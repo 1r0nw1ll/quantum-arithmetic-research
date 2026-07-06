@@ -69,3 +69,46 @@ Chain: 29 -> 58 -> 59 -> 61 (Ben's Law of Harmonics).
 ## Validator
 
 `qa_alphageometry_ptolemy/qa_wgs84_ellipse_cert_v1/qa_wgs84_ellipse_cert_validate.py --self-test`
+
+## Verification Note (2026-07-06)
+
+Independently recomputed both WGS84 reference constants from the actual
+*defining* parameters (a=6378137.0 m, 1/f=298.257223563 — confirmed
+these are the real WGS84 primary constants via NIMA TR8350.2, 3rd
+edition, amendment 1, January 2000), not trusted from a possibly-stale
+decimal copy: e² = 2f−f², e = √e² = 0.08181919084262149, and
+b/a = (1−f) = 0.9966471893352525 — both match the doc's claimed values
+exactly to the digits shown. Independently recomputed the Earth-orbit
+eccentricity comparison against the standard J2000.0 value (0.0167086)
+— also matches.
+
+**All QA-side arithmetic independently reproduced**: shape QN
+(101,9,110,119) satisfies b+e=d, b+2e=a, gcd(b,e)=1; triple
+(C,F,G)=(1980,12019,12181) satisfies C²+F²=G² exactly; e/d=9/110 has
+relative error 1.233×10⁻⁵ vs WGS84 (matches doc's "0.001%"); axis ratio
+√(ab)/d has relative error 8.31×10⁻⁸ (matches doc's "7 significant
+figures"). Orbit QN (59,1,60,61): b+e=d, b+2e=a, gcd=1, triple
+(120,3599,3601) satisfies C²+F²=G², e/d=1/60 has relative error
+0.251% vs the real orbital eccentricity (matches doc's "0.25%"); 59 and
+61 independently confirmed prime (and twin primes). 0 mismatches
+anywhere.
+
+**Validator confirmed genuinely computing, not fixture-trusting**: read
+`qa_wgs84_ellipse_cert_validate.py` in full — `WGS84_ECC` and
+`WGS84_RATIO` are derived live from the same defining `a`/`f`
+constants (not a copied decimal), and both the QN-structure checks and
+the Pythagorean-triple check are recomputed from the fixture's raw
+`b,e,d,a` at runtime. This is one of the cleaner validator designs
+found this cycle — no hardening needed.
+
+Ben Iverson's *Pythagoras and the Quantum World* (already confirmed
+real in this session's audit of cert [160]) is cited for the "quantum
+ellipse" framework; the specific "Vol. 1" attribution and the "prime
+factor harmonic chain"/"Ben's Law of Harmonics" naming were not
+independently traced to a specific page (same caveat as [160]'s Vol. 4
+citation — plausible for a small self-published series, not confirmed
+either way). This doesn't affect the cert's actual certified claims,
+which are the QA arithmetic and the WGS84/orbital numeric matches, both
+independently confirmed above.
+
+No bugs found. `--self-test` passes on both fixtures.

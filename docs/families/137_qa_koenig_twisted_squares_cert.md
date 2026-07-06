@@ -33,8 +33,17 @@ H² − G² = (C+F)² − (C²+F²) = 2CF     [using C²+F² = G²]
 G² − I² = (C²+F²) − (C−F)² = 2CF     [same]
 L = CF/12 ∈ Z:
   • 8 | C = 2de  (d−e odd → exactly one of d,e even → 4|de → 8|2de)
-  • 3 | F = (d−e)(d+e)  (gcd(d,e)=1 → one of d−e, d+e divisible by 3)
-  → 24 | CF/1  (but CF = 12L so 2CF = 24L ✓)
+  • 3 | CF (corrected 2026-07-06, was incomplete): among {d, e, d−e, d+e}
+    at least one is divisible by 3. If 3|d or 3|e, C=2de already supplies
+    the factor of 3 -- e.g. (d,e)=(3,1): F=8 is NOT divisible by 3, but
+    C=6 is. Otherwise d,e are both nonzero mod 3: either equal (⟹ 3|d−e,
+    3|F) or different (⟹ 3|d+e, 3|F). The original text claimed "3|F"
+    unconditionally via only the last case, missing the first two, where
+    the factor of 3 lives in C instead. L=CF/12 is still always an
+    integer either way (independently reconfirmed exhaustively, 0
+    counterexamples for e<d≤40) -- only the "which factor supplies the 3"
+    attribution was incomplete.
+  → 24 | 2CF  (2CF = 24L)
 ```
 
 ### Fundamental example: (d,e)=(2,1), triple (3,4,5)
@@ -122,3 +131,28 @@ This generates all prime-producing triples. The chain structure means every trip
 
 - `fixtures/kts_pass_fundamental.json` — anchor: (2,1), 2CF=24, quadruple=(1,24,25,49)
 - `fixtures/kts_pass_witnesses.json` — 5 witnesses including both ellipse (I<0) and hyperbola (I>0) directions + Koenig chain example
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed the core theorem exhaustively: `L=CF/12` is a
+positive integer, and `2CF≡0 (mod 24)`, for every primitive direction
+with `2≤e<d≤40` — 0 counterexamples. Both arithmetic-progression
+identities (`H²−G²=2CF`, `G²−I²=2CF`) and the fundamental (2,1) example
+(H=7, I=1, quadruple 1,24,25,49) independently reconfirmed exact. The
+validator (`qa_koenig_twisted_squares_cert_validate.py`) already
+genuinely recomputes everything from the declared `(d,e)` live — no
+fixture-trusting gap.
+
+**Found the same class of incomplete proof-case bug as [130]** (this
+cert's own sibling — both certify `24|2CF`): the "3 | F" divisibility
+step claimed `F=(d−e)(d+e)` always carries the factor of 3 via "one of
+d−e, d+e divisible by 3," but this only covers the case where `d,e` are
+both nonzero mod 3 *and differ*. It misses two other cases: `3|d` or
+`3|e` (then `C=2de` carries the factor, not `F`) and `d≡e≢0 (mod 3)`
+(then `3|(d-e)`, still `F`, but via a different sub-case than the one
+named). Concretely, `(d,e)=(3,1)`: `F=8` is not divisible by 3 at all —
+`C=6` supplies the factor instead. `L=CF/12` is unaffected (still always
+an integer), only the specific "which element carries the 3" attribution
+in the proof sketch was incomplete. Fixed the doc to state the full
+3-case pigeonhole argument, cross-referencing the identical fix already
+made to [130].

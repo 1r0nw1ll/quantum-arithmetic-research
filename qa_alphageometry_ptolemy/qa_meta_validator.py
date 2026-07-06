@@ -5078,7 +5078,7 @@ def _validate_plimpton322_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_koenig_twisted_squares_cert_family(base_dir: str) -> Optional[str]:
-    """QA Koenig Twisted Squares Cert family [137] — certifies H²-G²=G²-I²=2CF=24L for any QA direction: H=C+F (outer Koenig square), I=C-F (inner; sign=conic type), L=CF/12 (always integer for primitive); (I²,2CF,G²,H²) is arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF, G²-I²=(C²+F²)-(C-F)²=2CF; div-24: 8|C=2de (one even), 3|F=(d-e)(d+e) (one div by 3); geometric: twisted-squares outer²-inner²=4×triangle_area=2CF; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 (I²,2CF,G²,H²) corollary; checks KTS_1-9+KTS_W/F; 2 PASS (fundamental (2,1) 2CF=24; 5-witness general); self-test ok"""
+    """QA Koenig Twisted Squares Cert family [137] — certifies H²-G²=G²-I²=2CF=24L for any QA direction: H=C+F (outer Koenig square), I=C-F (inner; sign=conic type), L=CF/12 (always integer for primitive); (I²,2CF,G²,H²) is arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF, G²-I²=(C²+F²)-(C-F)²=2CF; div-24: 8|C=2de (one even), 3|CF via 3-case pigeonhole on d,e mod 3 (RE-VERIFIED 2026-07-06: fixed the same incomplete-case bug found in sibling cert [130] -- doc claimed "3|F" unconditionally, but e.g. (3,1) has F=8 not div by 3, C=6 carries it instead; L still always integer, exhaustively reconfirmed e<d<=40); geometric: twisted-squares outer²-inner²=4×triangle_area=2CF; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 (I²,2CF,G²,H²) corollary; checks KTS_1-9+KTS_W/F; 2 PASS (fundamental (2,1) 2CF=24; 5-witness general); self-test ok"""
     import subprocess
     kts_dir   = os.path.join(base_dir, "qa_koenig_twisted_squares_cert_v1")
     validator = os.path.join(kts_dir, "qa_koenig_twisted_squares_cert_validate.py")
@@ -14099,7 +14099,7 @@ FAMILY_SWEEPS = [
      "qa_plimpton322_cert_v1", True),
     (137, "QA Koenig Twisted Squares Cert family",
      _validate_koenig_twisted_squares_cert_family,
-     "H²-G²=G²-I²=2CF=24L for all QA directions: H=C+F (outer Koenig square), I=C-F (inner; sign=conic), L=CF/12 integer; (I²,2CF,G²,H²) arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF using C²+F²=G²; divisibility: 8|C=2de (one of d,e even), 3|F=(d-e)(d+e); twisted-squares: outer²-inner²=4×area; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 quadruple corollary; connects to [130] origin of 24; checks KTS_1-9+KTS_W/F; 2 PASS; self-test ok",
+     "H²-G²=G²-I²=2CF=24L for all QA directions: H=C+F (outer Koenig square), I=C-F (inner; sign=conic), L=CF/12 integer; (I²,2CF,G²,H²) arithmetic progression step 2CF; proof: H²-G²=(C+F)²-(C²+F²)=2CF using C²+F²=G²; divisibility: 8|C=2de (one of d,e even), 3|CF via full 3-case pigeonhole (RE-VERIFIED 2026-07-06, fixed incomplete '3|F' claim -- same bug class as sibling [130]); twisted-squares: outer²-inner²=4×area; Iverson QA Law 15 / Mathologer 2024 / Will Dale 2026-03-30 quadruple corollary; connects to [130] origin of 24; checks KTS_1-9+KTS_W/F; 2 PASS; self-test ok",
      "137_qa_koenig_twisted_squares_cert",
      "qa_koenig_twisted_squares_cert_v1", True),
     (134, "QA Egyptian Fraction Cert family",

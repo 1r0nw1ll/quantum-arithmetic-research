@@ -28,7 +28,7 @@ Period = 6 = phi(9) = Euler totient of 9.
 
 ### Complement = singularity
 
-{0, 3, 6} = multiples of 3 mod 9 = non-units. In QA: the singularity fixed point (9,9) ≡ (0,0) mod 9 lives here. The {3,6,9} set is isolated from the doubling dynamic — 3 doubles to 6, 6 doubles to 3, 9 doubles to 9.
+**{3, 6, 9}** = multiples of 3 = non-units (A1 no-zero convention: standard Z/9Z residue notation would write this {0, 3, 6}, since (9,9) ≡ (0,0) mod 9, but this project's QA state alphabet is always {1,...,9} — corrected 2026-07-06, see Verification Note). This set is isolated from the doubling dynamic — 3 doubles to 6, 6 doubles to 3, 9 doubles to 9.
 
 ### Diagonal completion
 
@@ -78,3 +78,40 @@ Opposite pairs on the doubling circle sum to 9: (1,8), (2,7), (4,5). This is the
 
 - `fixtures/sp_pass_group_structure.json` — full group proof: cycle, complement, diagonals, parity
 - `fixtures/sp_pass_qa_connection.json` — QA orbit connection: singularity partition, Euler/Pisano ratio
+
+## Sources
+
+- Hardy, G.H. & Wright, E.M. (2008), *An Introduction to the Theory of Numbers*, 6th ed., Oxford University Press, ISBN 978-0-19-921986-5, Ch. VI — primitive roots, cyclic structure of (Z/nZ)*.
+- Grant/Ghannam, *Philomath*, Ch. 1 — doubling cycle, Yin-Yang diagonal completion (publication year not independently confirmed in this pass).
+
+## Verification Note (2026-07-06)
+
+Independently recomputed every claim from scratch: `(Z/9Z)* = {1,2,4,5,7,8}`
+(gcd check), doubling powers of 2 mod 9 give period exactly 6, diagonal
+pairs (1,8)/(2,7)/(4,5) all sum to 9, even-subset sum=14/digital-root=5,
+odd-subset sum=13/digital-root=4 — all confirmed exactly, no bugs in the
+underlying arithmetic. The validator (`qa_septenary_cert_validate.py`)
+was already genuinely recomputing everything live from the declared
+`(b,e)`-style data (units via `gcd`, doubling steps, parity sums) rather
+than fixture-trusting — no hardening needed there.
+
+**Found and fixed a real A1-consistency bug**: the doc and both fixtures
+declared the QA singularity complement as `{0, 3, 6}` (standard Z/9Z
+residue notation, where 0 ≡ 9), but this project's hard axiom A1
+requires the QA state alphabet to always be `{1,...,9}`, never
+`{0,...,8}` — every other cert in this project (e.g. [181]'s singularity
+fixed point `(M,M,M,M)`, never `(0,0)`) uses `9`, not `0`. The doc even
+self-contradicted within one section, first writing "{0, 3, 6}" then
+"{3,6,9} set is isolated" two sentences later without reconciling. More
+seriously, `sp_pass_qa_connection.json`'s `qa_connections.singularity_set`
+field explicitly declared `[0, 3, 6]` as *the QA-state-level* singularity
+set — a genuine A1-adjacent inconsistency, since a downstream script that
+trusted this field literally could introduce a zero-state into QA
+arithmetic. Changed `COMPLEMENT` in the validator and `complement_set`/
+`singularity_set` in both fixtures to `{3, 6, 9}` throughout, with an
+explicit note on the 0≡9 mod-9 equivalence for anyone expecting standard
+residue notation. `qa_axiom_linter.py` was already clean on this file
+before and after (it doesn't statically flag pure math constants), but
+the fixture-level data is now consistent with the rest of the project.
+`--self-test` passes on both fixtures; verified the hardened `SP_COMP`
+check still correctly rejects a reintroduced `[0,3,6]`.

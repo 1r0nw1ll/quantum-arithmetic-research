@@ -5,12 +5,14 @@
   "title": "Septenary PASS: (Z/9Z)* group structure + doubling cycle + diagonal completion",
   "created_utc": "2026-03-31T00:00:00Z",
 
-  "_fixture_purpose": "Certifies the septenary numbers {1,2,4,5,7,8} = (Z/9Z)* = units mod 9 = elements coprime to 9. The doubling map (×2 mod 9) generates a 6-cycle visiting all units. The complement {0,3,6} = non-units = multiples of 3 = QA singularity set. Diagonal pairs sum to 9 (Yin-Yang completion). Even elements D-sum to 5 (odd), odd elements D-sum to 4 (even) — parity cross-over.",
+  "_fixture_purpose": "Certifies the septenary numbers {1,2,4,5,7,8} = (Z/9Z)* = units mod 9 = elements coprime to 9. The doubling map (×2 mod 9) generates a 6-cycle visiting all units. The complement {3,6,9} = non-units = multiples of 3 = QA singularity set (A1 no-zero convention; standard Z/9Z notation would write {0,3,6}, corrected 2026-07-06). Diagonal pairs sum to 9 (Yin-Yang completion). Even elements D-sum to 5 (odd), odd elements D-sum to 4 (even) — parity cross-over.",
+
+  "source_grounding": "Primitive-root cyclic structure of (Z/9Z)* is standard number theory (Hardy and Wright, 2008), ISBN 978-0-19-921986-5. Doubling-cycle/Yin-Yang framing is Grant/Ghannam, Philomath Ch 1 (publication year not independently confirmed in this pass).",
 
   "septenary_set": [1, 2, 4, 5, 7, 8],
   "doubling_cycle": [1, 2, 4, 8, 7, 5],
   "cycle_period": 6,
-  "complement_set": [0, 3, 6],
+  "complement_set": [3, 6, 9],
 
   "diagonal_pairs": [[1, 8], [2, 7], [4, 5]],
 
@@ -34,7 +36,7 @@
     {"check_id": "SP_1",    "description": "schema_version correct", "passed": true},
     {"check_id": "SP_GROUP","description": "{1,2,4,5,7,8} = (Z/9Z)* verified", "passed": true},
     {"check_id": "SP_CYCLE","description": "doubling mod 9: period 6, closes at 5×2=10≡1", "passed": true},
-    {"check_id": "SP_COMP", "description": "{0,3,6} = complement (non-units, multiples of 3)", "passed": true},
+    {"check_id": "SP_COMP", "description": "{3,6,9} = complement (non-units, multiples of 3)", "passed": true},
     {"check_id": "SP_DIAG", "description": "3 diagonal pairs all sum to 9", "passed": true},
     {"check_id": "SP_PAR",  "description": "even sum=14, odd sum=13 (parity cross-over)", "passed": true},
     {"check_id": "SP_W",    "description": "all 6 elements witnessed in cycle", "passed": true},

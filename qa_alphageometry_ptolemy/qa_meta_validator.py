@@ -4779,7 +4779,7 @@ def _validate_par_number_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_septenary_cert_family(base_dir: str) -> Optional[str]:
-    """QA Septenary Cert family [150] — certifies {1,2,4,5,7,8}=(Z/9Z)* multiplicative group; doubling mod 9 period 6=phi(9); complement {0,3,6}=singularity; diagonal pairs sum to 9; parity cross-over; 2 is primitive root mod 9; source: Iverson QA mod-9 orbit + Grant/Ghannam Philomath Ch 1; checks SP_1+GROUP/CYCLE/COMP/DIAG/PAR/W/F; 2 PASS; self-test ok"""
+    """QA Septenary Cert family [150] — certifies {1,2,4,5,7,8}=(Z/9Z)* multiplicative group; doubling mod 9 period 6=phi(9); complement {3,6,9}=singularity (RE-VERIFIED 2026-07-06: fixed real A1-consistency bug, was declared {0,3,6} including qa_connections.singularity_set field, project convention never uses 0); diagonal pairs sum to 9; parity cross-over; 2 is primitive root mod 9; validator already genuinely recomputes all math live, no hardening needed; source: Iverson QA mod-9 orbit + Grant/Ghannam Philomath Ch 1 + Hardy/Wright primitive roots; checks SP_1+GROUP/CYCLE/COMP/DIAG/PAR/W/F; 2 PASS; self-test ok"""
     import subprocess
     sp_dir    = os.path.join(base_dir, "qa_septenary_cert_v1")
     validator = os.path.join(sp_dir, "qa_septenary_cert_validate.py")
@@ -14034,7 +14034,7 @@ FAMILY_SWEEPS = [
      "qa_par_number_cert_v1", True),
     (150, "QA Septenary Cert family",
      _validate_septenary_cert_family,
-     "{1,2,4,5,7,8}=(Z/9Z)* mod-9 unit group; doubling cycle period 6=phi(9); complement {0,3,6}=singularity; diagonal pairs sum to 9; parity cross-over; checks SP_1+GROUP/CYCLE/COMP/DIAG/PAR/W/F; 2 PASS; self-test ok",
+     "{1,2,4,5,7,8}=(Z/9Z)* mod-9 unit group; doubling cycle period 6=phi(9); complement {3,6,9}=singularity (RE-VERIFIED 2026-07-06, fixed A1 no-zero bug); diagonal pairs sum to 9; parity cross-over; checks SP_1+GROUP/CYCLE/COMP/DIAG/PAR/W/F; 2 PASS; self-test ok",
      "150_qa_septenary_cert",
      "qa_septenary_cert_v1", True),
     (149, "QA Law of Harmonics Cert family",

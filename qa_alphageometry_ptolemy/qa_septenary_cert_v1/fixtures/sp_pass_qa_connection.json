@@ -5,12 +5,14 @@
   "title": "Septenary PASS: QA orbit connection — septenary = cosmos/satellite residues, complement = singularity",
   "created_utc": "2026-03-31T00:00:00Z",
 
-  "_fixture_purpose": "The septenary partition {1,2,4,5,7,8} vs {0,3,6} is the QA singularity partition of mod-9: singularity fixed point (9,9)≡(0,0) mod 9 lives in the complement {0,3,6}; cosmos/satellite orbits live in {1,2,4,5,7,8}. The doubling cycle 1→2→4→8→7→5→1 is the orbit of the T² operator (Fibonacci shift squared) acting on (Z/9Z)*. Period 6 = Euler totient φ(9). Source: Iverson QA orbit structure + Grant Philomath Ch 1.",
+  "_fixture_purpose": "The septenary partition {1,2,4,5,7,8} vs {3,6,9} is the QA singularity partition of mod-9: singularity fixed point (9,9) lives in the complement {3,6,9} (A1 no-zero convention -- standard Z/9Z notation would write this {0,3,6} since (9,9)≡(0,0) mod 9, corrected 2026-07-06); cosmos/satellite orbits live in {1,2,4,5,7,8}. The doubling cycle 1→2→4→8→7→5→1 is the orbit of the T² operator (Fibonacci shift squared) acting on (Z/9Z)*. Period 6 = Euler totient φ(9). Source: Iverson QA orbit structure + Grant Philomath Ch 1.",
+
+  "source_grounding": "Primitive-root cyclic structure of (Z/9Z)* is standard number theory (Hardy and Wright, 2008), ISBN 978-0-19-921986-5.",
 
   "septenary_set": [1, 2, 4, 5, 7, 8],
   "doubling_cycle": [1, 2, 4, 8, 7, 5],
   "cycle_period": 6,
-  "complement_set": [0, 3, 6],
+  "complement_set": [3, 6, 9],
 
   "diagonal_pairs": [[1, 8], [2, 7], [4, 5]],
 
@@ -22,7 +24,7 @@
   },
 
   "qa_connections": {
-    "singularity_set": [0, 3, 6],
+    "singularity_set": [3, 6, 9],
     "euler_totient_9": 6,
     "pisano_period_9": 24,
     "orbit_note": "φ(9)=6 = septenary cycle period; π(9)=24 = cosmos orbit period; 24/6=4 = ratio of full orbit to unit cycle"
@@ -32,7 +34,7 @@
     {"check_id": "SP_1",    "description": "schema_version correct", "passed": true},
     {"check_id": "SP_GROUP","description": "(Z/9Z)* verified", "passed": true},
     {"check_id": "SP_CYCLE","description": "period 6 doubling cycle", "passed": true},
-    {"check_id": "SP_COMP", "description": "{0,3,6} complement", "passed": true},
+    {"check_id": "SP_COMP", "description": "{3,6,9} complement", "passed": true},
     {"check_id": "SP_DIAG", "description": "diagonal pairs sum to 9", "passed": true},
     {"check_id": "SP_PAR",  "description": "parity cross-sums", "passed": true},
     {"check_id": "SP_W",    "description": "6 elements witnessed", "passed": true},

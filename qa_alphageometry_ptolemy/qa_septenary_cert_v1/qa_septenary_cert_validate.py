@@ -10,7 +10,10 @@ repeated doubling mod 9: 1→2→4→8→7→5→1 (period 6).
 Key properties:
 1. GROUP: {1,2,4,5,7,8} = (Z/9Z)* = units mod 9 (elements coprime to 9)
 2. CYCLE: doubling mod 9 is a cyclic permutation of period 6
-3. COMPLEMENT: {3,6,9≡0} = non-units = multiples of 3 = QA singularity set
+3. COMPLEMENT: {3,6,9} = non-units = multiples of 3 = QA singularity set
+   (A1 no-zero convention -- standard Z/9Z residue notation would write
+   this {0,3,6}, but this project's QA state alphabet is {1,...,9}, so
+   0 is always represented as 9; corrected 2026-07-06, see fixtures)
 4. DIAGONAL: opposite pairs sum to 9: (1,8), (2,7), (4,5)
 5. PARITY: three even {2,4,8} D-sum to 5 (odd); three odd {1,5,7} D-sum to 4 (even)
 6. GENERATOR: 2 is a primitive root mod 9 (generates all units by powers)
@@ -18,8 +21,12 @@ Key properties:
 Source: Grant/Ghannam Philomath Ch 1 (doubling cycle, Yin-Yang completion);
 Iverson QA mod-9 orbit structure ({3,6,9} = singularity).
 
+Primary source: Hardy and Wright (2008), An Introduction to the Theory
+of Numbers, Oxford University Press, ISBN 978-0-19-921986-5, Ch. VI
+(primitive roots, cyclic structure of (Z/nZ)*).
+
 Checks: SP_1 (schema), SP_GROUP (all 6 elements coprime to 9),
-SP_CYCLE (doubling mod 9 has period 6), SP_COMP ({3,6,0} = complement),
+SP_CYCLE (doubling mod 9 has period 6), SP_COMP ({3,6,9} = complement),
 SP_DIAG (opposite pairs sum to 9), SP_PAR (even D-sum odd, odd D-sum even),
 SP_W (all 6 elements witnessed), SP_F (doubling from 1 present).
 """
@@ -32,7 +39,7 @@ from math import gcd
 
 SCHEMA = "QA_SEPTENARY_CERT.v1"
 SEPTENARY = frozenset({1, 2, 4, 5, 7, 8})
-COMPLEMENT = frozenset({0, 3, 6})  # mod 9: 0≡9
+COMPLEMENT = frozenset({3, 6, 9})  # A1 no-zero: mod-9 residue 0 is state 9
 
 
 def validate(cert, *, collect_errors=True):

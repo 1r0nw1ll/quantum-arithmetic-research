@@ -30,7 +30,7 @@
           {"phase": 3, "name": "Refinement", "qa_orbit": "descent", "description": "prunes redundant agents, diameter decreases, efficiency rises"},
           {"phase": 4, "name": "Optimization", "qa_orbit": "Satellite-like", "description": "compact chains, minimal nodes, high per-agent utility"}
         ],
-        "not_singularity": "System does NOT converge to single agent (Singularity). Direct baseline (single agent) beaten by 38.69%.",
+        "not_singularity": "System does NOT converge to single agent (Singularity). Corrected 2026-07-06: 38.69% is HERA's average improvement across ALL SOTA baselines (Direct/CoT, single-turn RAG, iterative RAG, agentic RAG combined), not specifically the single-agent Direct/CoT margin -- the paper separately states HERA 'achieves more than double the F1 scores of standard CoT baselines on several datasets,' an even larger margin than 38.69% for the single-agent comparison specifically (exact percentage not given in the paper).",
         "qa_interpretation": "System finds minimal orbit that solves the task — Satellite, not Singularity",
         "source": "Li & Ramakrishnan 2026 §5.3"
       }
@@ -75,7 +75,7 @@
       "witnesses": {
         "improvement": 38.69,
         "benchmarks": 6,
-        "over": "SOTA multi-agent RAG baselines",
+        "over": "all recent SOTA baselines (Direct/CoT inference, single-turn RAG, iterative RAG, and agentic RAG combined, not just multi-agent RAG)",
         "interpretation": "Adaptive topology (orbit-aware routing) >> fixed topology (static role assignment)",
         "qa_implication": "Static agent roles (current AGENTS.md) lose ~39% vs adaptive orbit-classified routing",
         "source": "Li & Ramakrishnan 2026 Table 2"
@@ -99,7 +99,7 @@
   "falsifiers": [
     {
       "id": "F1",
-      "description": "If HERA converged to a single agent (Singularity), the orbit descent analogy would fail. The paper shows single-agent baseline is beaten by 38.69%.",
+      "description": "If HERA converged to a single agent (Singularity), the orbit descent analogy would fail. The paper shows HERA beats single-agent Direct/CoT baselines by more than double F1 on several datasets (the 38.69% figure is the average across ALL baseline types, not this specific comparison).",
       "check": "optimal_topology_agent_count > 1"
     }
   ],

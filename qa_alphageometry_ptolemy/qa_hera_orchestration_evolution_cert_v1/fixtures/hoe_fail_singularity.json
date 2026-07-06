@@ -1,7 +1,7 @@
 {
   "schema_version": "QA_HERA_ORCHESTRATION_EVOLUTION_CERT.v1",
   "expect_fail": true,
-  "fail_reason": "If system converged to single agent (Singularity), orbit descent analogy fails. HERA beats single-agent by 38.69%.",
+  "fail_reason": "If system converged to single agent (Singularity), orbit descent analogy fails. HERA beats single-agent Direct/CoT baselines by more than double F1 on several datasets (38.69% is the average across all baseline types, not this specific comparison).",
   "claims": [
     {
       "id": "PHASE",
@@ -11,8 +11,9 @@
           {"phase": 1, "name": "Initial", "qa_orbit": "Satellite-like"},
           {"phase": 4, "name": "Final", "qa_orbit": "Singularity", "agent_count": 1}
         ],
-        "error": "Single-agent convergence = Singularity, but HERA outperforms single agent by 38.69%"
+        "error": "Single-agent convergence = Singularity, but HERA outperforms single agent"
       }
     }
-  ]
+  ],
+  "source": "Li & Ramakrishnan (2026), arXiv:2604.00901"
 }

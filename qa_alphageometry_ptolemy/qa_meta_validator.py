@@ -7047,7 +7047,7 @@ def _validate_grid_cell_rns_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_hera_orchestration_evolution_cert_family(base_dir: str) -> Optional[str]:
-    """QA HERA Orchestration Evolution Cert family [206] — certifies structural correspondence between HERA multi-agent orchestration evolution (Li & Ramakrishnan VT 2026, arXiv:2604.00901) and QA orbit dynamics: RoPE dual-axes = Bateson [191] L1/L2a, four-phase topology = orbit descent (Satellite->Cosmos->Satellite, NOT Singularity), entropy plateau = Satellite convergence, sparse exploration = orbit discovery, Theorem NT compliance. 38.69% improvement over SOTA. Checks HOE_1+ROPE/PHASE/ENT/PERF/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    """QA HERA Orchestration Evolution Cert family [206] — certifies structural correspondence between HERA multi-agent orchestration evolution (Li & Ramakrishnan VT 2026, arXiv:2604.00901) and QA orbit dynamics: RoPE dual-axes = Bateson [191] L1/L2a, four-phase topology = orbit descent (Satellite->Cosmos->Satellite, NOT Singularity), entropy plateau = Satellite convergence, sparse exploration = orbit discovery, Theorem NT compliance. 38.69% improvement over SOTA. Checks HOE_1+ROPE/PHASE/ENT/PERF/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: fetched the real paper, confirmed RoPE/phase/entropy quotes verbatim; fixed an overclaim -- 38.69% is the average improvement across ALL baseline types, not specifically the single-agent Direct/CoT margin (paper states that comparison is 'more than double' F1, a larger margin)."""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_hera_orchestration_evolution_cert_v1")
     validator = os.path.join(fam_dir, "qa_hera_orchestration_evolution_cert_validate.py")
@@ -14344,7 +14344,7 @@ FAMILY_SWEEPS = [
      "qa_grid_cell_rns_cert_v1", True),
     (206, "QA HERA Orchestration Evolution Cert family",
      _validate_hera_orchestration_evolution_cert_family,
-     "HERA multi-agent orchestration (Li & Ramakrishnan VT 2026) = QA orbit dynamics: RoPE = Bateson [191] L1/L2a filtration, 4-phase topology = orbit descent (never Singularity), entropy plateau = Satellite convergence, sparse exploration = orbit discovery, Theorem NT compliance. 38.69% over SOTA. Checks HOE_1+ROPE/PHASE/ENT/PERF/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "HERA multi-agent orchestration (Li & Ramakrishnan VT 2026) = QA orbit dynamics: RoPE = Bateson [191] L1/L2a filtration, 4-phase topology = orbit descent (never Singularity), entropy plateau = Satellite convergence, sparse exploration = orbit discovery, Theorem NT compliance. 38.69% over SOTA. Checks HOE_1+ROPE/PHASE/ENT/PERF/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: confirmed real paper quotes verbatim, fixed an overclaim conflating the overall-average 38.69% with the (larger) single-agent-specific margin.",
      "206_qa_hera_orchestration_evolution_cert",
      "qa_hera_orchestration_evolution_cert_v1", True),
     (207, "QA Circle Impossibility Cert family",

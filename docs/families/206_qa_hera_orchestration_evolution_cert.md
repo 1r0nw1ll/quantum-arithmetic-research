@@ -89,4 +89,40 @@ Frozen LLMs ensure the observer layer doesn't corrupt the generative layer. The 
 
 - `fixtures/hoe_pass_core.json` — 6 claims + 2 qualified + witnesses
 - `fixtures/hoe_pass_numerical.json` — performance improvement, phase count, entropy behavior
-- `fixtures/hoe_fail_singularity.json` — Singularity convergence rejected (beaten by 38.69%)
+- `fixtures/hoe_fail_singularity.json` — Singularity convergence rejected
+
+## Verification Note (2026-07-06)
+
+Fetched the actual paper (Li & Ramakrishnan, "Experience as a Compass:
+Multi-agent RAG with Evolving Orchestration and Agent Prompts," arXiv:
+2604.00901, real, Virginia Tech, April 2026) and confirmed almost every
+specific claim word-for-word: the ROPE dual-axes terminology
+(Δρ^op/Δρ^bp, "short-term corrective behaviors" / "long-term
+strategies"), the exact underperforming-agent credit-assignment
+definition, the four phase names (Initial, Exploration, Refinement,
+Optimization) and their descriptions, and — most strikingly — the
+entropy-plateau quote ("preventing premature convergence to suboptimal
+strategies while allowing the integration of novel cooperation
+pathways") matches verbatim. Six benchmarks (2WikiQA, HotpotQA, MusiQue,
+AmbigQA, Bamboogle, HoVer) and the 38.69% average-improvement figure
+both confirmed exact.
+
+**Found and fixed a real overclaim**: the cert stated "Direct baseline
+(single agent) beaten by 38.69%," treating that figure as the specific
+margin over the single-agent baseline. The paper's own abstract defines
+38.69% as the average improvement across *all* recent SOTA baselines
+combined (Direct/CoT inference, single-turn RAG, iterative RAG, and
+agentic RAG) — not specifically the single-agent comparison. Checking
+Appendix F.1 (Table 3, "Comparison HERA with Direct inference and CoT")
+found the paper's own text states HERA "achieves more than double the
+F1 scores of standard CoT baselines on several datasets" — i.e. the
+actual single-agent-specific margin is considerably *larger* than
+38.69%, not smaller or equal to it. Fixed all three fixtures and the
+falsifier to state this accurately (38.69% = overall average; the
+single-agent-specific margin is "more than double F1" per the paper,
+exact percentage not given) rather than conflating the two figures.
+
+Validator's `HOE_PERF` check only verifies `improvement > 0`, which
+remains true either way — no code hardening needed, this was purely a
+documentation/citation-precision issue. `--self-test` passes on all 3
+fixtures.

@@ -1,12 +1,14 @@
 {
   "schema_version": "QA_HERA_ORCHESTRATION_EVOLUTION_CERT.v1",
   "title": "Numerical verification of HERA-QA correspondence",
+  "source": "Li & Ramakrishnan (2026), arXiv:2604.00901",
   "numerical_checks": {
     "performance_improvement": {
       "hera_avg_improvement_pct": 38.69,
       "benchmarks": 6,
-      "over_baseline": "SOTA multi-agent RAG",
-      "single_agent_beaten": true
+      "over_baseline": "all recent SOTA baselines (Direct/CoT, single-turn RAG, iterative RAG, agentic RAG combined)",
+      "single_agent_beaten": true,
+      "single_agent_margin_note": "38.69% is the average across all baseline types, not the Direct/CoT-specific margin; the paper separately states HERA achieves more than double the F1 of standard CoT baselines on several datasets"
     },
     "phase_count": {
       "phases": 4,

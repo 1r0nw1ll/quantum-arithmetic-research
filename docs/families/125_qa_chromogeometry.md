@@ -102,3 +102,22 @@ is what the meta-validator checks.
 Previously noted in MEMORY.md as `QA_CHROMOGEOMETRY_CERT.v1` — no prior family directly
 certifies the mapping between QA invariants C, F, G and Wildberger's chromogeometric
 quadrances, or the conic discriminant I = |C−F|.
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed the core identities for all 3 fixtures:
+C=2de, F=d²−e²=ba, G=d²+e², and C²+F²=G² — all exact, including the
+deliberately-wrong FAIL fixture's correctly-flagged mismatch. No bugs.
+
+**Cross-cert convention check**: this cert's `I = |C−F|` (line 30) uses
+Iverson's *original* absolute-value discriminant, with conic type
+carried by a separate `conic_type` string field — confirmed by reading
+all 3 fixtures directly (I is always non-negative even for the ellipse
+case). This is a **different, deliberate convention** from cert [140]
+(and [207]), which use the **signed** `I=C−F` specifically so the sign
+itself carries the conic-type classification. Both are internally
+consistent and valid design choices — but a prior note added to [140]
+this cycle overclaimed that "other QA identity certs...follow this
+signed convention unless stated otherwise"; [125] is a real, existing
+counterexample, not just a hypothetical one. Corrected [140]'s note to
+name [125] as a known exception rather than imply universal adoption.

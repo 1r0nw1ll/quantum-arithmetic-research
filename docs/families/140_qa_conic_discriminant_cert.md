@@ -95,5 +95,14 @@ carries the conic-type classification (I>0 hyperbola, I<0 ellipse) —
 this is a deliberate extension of Iverson's concept, not a transcription
 error, but the divergence from the primary source should be noted
 explicitly here since [140] is the cert that makes the sign
-load-bearing. Any other cert that quotes a numeric "I" value inherits
-this signed convention unless stated otherwise (see [207]).
+load-bearing. [207] follows this signed convention (see its own note).
+
+**Correction (2026-07-06)**: [125] QA_CHROMOGEOMETRY_CERT.v1 is a known
+*exception*, not a follower of this convention — checked its fixtures
+directly and found `I` is always stored as the non-negative
+`|C−F|` (Iverson's original), with conic type ("hyperbola"/"ellipse")
+carried by a separate string field instead of the sign of I. Both
+conventions are internally consistent within their own cert, but a
+reader comparing a quoted "I" value across [125] and [140]/[207] should
+not assume the sign convention is universal — check which cert the
+value comes from.

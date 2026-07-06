@@ -5009,7 +5009,7 @@ def _validate_pell_norm_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_conic_discriminant_cert_family(base_dir: str) -> Optional[str]:
-    """QA Conic Discriminant Cert family [140] — certifies I=C-F=Qg-Qr as the conic discriminant: I>0→hyperbola (C>F, d/e<1+√2), I=0→parabola (impossible for integers: d/e=1+√2=silver ratio, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (F>C, d/e>1+√2); silver-ratio convergents [2;2,2,2,...]=2/1,5/2,12/5,29/12,70/29 alternate H/E with |I|=1; Plimpton Row 1 (12,5) has I=1 barely hyperbolic; chromogeometry: I=Qg-Qr=green minus red quadrance; checks CD_1-4+PARA/W/F; 2 PASS (4 directions straddling boundary; 4+4 type witnesses + convergent sequence); self-test ok"""
+    """QA Conic Discriminant Cert family [140] — certifies I=C-F=Qg-Qr as the conic discriminant: I>0→hyperbola (C>F, d/e<1+√2), I=0→parabola (impossible for integers: d/e=1+√2=silver ratio, irrational; disc(x²-2x-1)=8 non-square), I<0→ellipse (F>C, d/e>1+√2); silver-ratio convergents [2;2,2,2,...]=2/1,5/2,12/5,29/12,70/29 alternate H/E with |I|=1; Plimpton Row 1 (12,5) has I=1 barely hyperbolic; chromogeometry: I=Qg-Qr=green minus red quadrance. This project's SIGNED I convention ([140],[207]) is distinct from cert [125]'s use of Iverson's original |C-F| (corrected 2026-07-06: [140]'s doc previously overclaimed universal adoption, [125] is a real exception). Checks CD_1-4+PARA/W/F; 2 PASS (4 directions straddling boundary; 4+4 type witnesses + convergent sequence); self-test ok"""
     import subprocess
     cd_dir    = os.path.join(base_dir, "qa_conic_discriminant_cert_v1")
     validator = os.path.join(cd_dir, "qa_conic_discriminant_cert_validate.py")
@@ -5266,7 +5266,7 @@ def _validate_red_group_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_chromogeometry_cert_family(base_dir: str) -> Optional[str]:
-    """QA Chromogeometry Cert family [125] — certifies that the three QA invariants C, F, G of any generator (b,e) with d=b+e, a=b+2e are exactly the three chromogeometric quadrances of direction vector (d,e): C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² is Wildberger Chromogeometric Theorem 6; I=|C-F| conic discriminant: C>F→hyperbola, C=F→parabola, C<F→ellipse; checks CG1-CG7; 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED: claimed C=2 instead of 4); self-test ok"""
+    """QA Chromogeometry Cert family [125] — certifies that the three QA invariants C, F, G of any generator (b,e) with d=b+e, a=b+2e are exactly the three chromogeometric quadrances of direction vector (d,e): C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² is Wildberger Chromogeometric Theorem 6; I=|C-F| conic discriminant: C>F→hyperbola, C=F→parabola, C<F→ellipse; RE-VERIFIED 2026-07-06: all identities reconfirmed, validator genuinely computes I=abs(C-F) live; found+fixed the ellipse fixture's title/prose incorrectly using cert [140]'s signed I=-1 convention when this cert's own certified data and validator both use |C-F|=1 -- cross-referenced [140]'s note, which had overclaimed "other certs follow the signed convention," corrected to name [125] as a real exception; checks CG1-CG7; 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED: claimed C=2 instead of 4); self-test ok"""
     import subprocess
     cgc_dir   = os.path.join(base_dir, "qa_chromogeometry_cert_v1")
     validator = os.path.join(cgc_dir, "qa_chromogeometry_cert_validate.py")
@@ -13954,7 +13954,7 @@ FAMILY_SWEEPS = [
      "qa_red_group_cert_v1", True),
     (125, "QA Chromogeometry Cert family",
      _validate_chromogeometry_cert_family,
-     "Wildberger chromogeometric quadrances: C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² (Wildberger Thm 6); I=|C-F| conic discriminant; checks CG1-CG7 (schema, green/red/blue quadrance, Pythagoras, semi-latus, conic type); 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED); self-test ok",
+     "Wildberger chromogeometric quadrances: C=Q_green(d,e)=2de, F=Q_red(d,e)=d²-e²=ab, G=Q_blue(d,e)=d²+e²; C²+F²=G² (Wildberger Thm 6); I=|C-F| conic discriminant (RE-VERIFIED 2026-07-06, fixed ellipse fixture's prose which incorrectly mixed in [140]'s different signed I convention); checks CG1-CG7 (schema, green/red/blue quadrance, Pythagoras, semi-latus, conic type); 2 PASS (3-4-5 hyperbola b=1e=1, 20-21-29 ellipse b=3e=2) + 1 FAIL (GREEN_QUADRANCE_MISMATCH+PYTHAGORAS_VIOLATED); self-test ok",
      "125_qa_chromogeometry",
      "qa_chromogeometry_cert_v1", True),
     (132, "QA HAT Cert family",

@@ -48,7 +48,18 @@ Given a primitive direction (d,e) with d>e>0, gcd(d,e)=1, opposite parity, defin
 
 ### L integrality proof
 
-L = bade/6 = (d−e)(d+e)·d·e / 6 = F·C / 12. Among consecutive-like integers {b,e,d,a}, the product always contains factors of 2 and 3, so division by 6 is exact. Equivalently: C=2de is divisible by 4 (shown above), F=ba, so CF is divisible by 4·F, and CF/12 = (4k·F)/12 = kF/3, which is integer since among {b,d,a} one is divisible by 3.
+L = bade/6 = (d−e)(d+e)·d·e / 6 = F·C / 12. **÷2**: opposite parity of
+d,e means C=2de is divisible by 4, giving the factor of 2 with room to
+spare. **÷3** (corrected 2026-07-06, was incomplete — see Verification
+Note): among {b, e, d, a}, at least one is divisible by 3, by a 3-case
+pigeonhole on (b mod 3, e mod 3): if `3|b` or `3|e`, done directly;
+otherwise b,e are both nonzero mod 3, and either they're equal
+(⟹ `a=b+2e≡3b≡0 mod 3`) or they differ, i.e. one ≡1 and the other ≡2
+(⟹ `d=b+e≡0 mod 3`). The previous text narrowed this to "among {b,d,a}"
+(dropping e), which is false: e.g. (b,e)=(1,6) has d=7, a=13 — none of
+{b,d,a} divisible by 3, but e=6 is. L is unaffected (still always an
+integer via the full {b,e,d,a} set), only the narrowed final clause was
+wrong.
 
 ## Checks
 
@@ -118,3 +129,18 @@ specific claim about him isn't independently confirmed. Does not affect
 the cert's validity — `Y=A−D` is independently, exhaustively verified
 from the QA algebra itself (relation 9) regardless of any external
 secondary confirmation.
+
+**Follow-up (2026-07-06, found while auditing sibling certs [130]/[137])**:
+the same audit pass that fixed an incomplete "3|F" proof case in [130]
+and [137] turned up the identical bug class here too, missed on the
+first pass through this cert (which focused on the 16 identities/9
+relations, not the prose L-integrality derivation). The "L integrality
+proof" section claimed the factor of 3 comes from "among {b,d,a}"
+(excluding e), which is false — e.g. (b,e)=(1,6): d=7,a=13, neither
+divisible by 3, but e=6 is. Fixed with the correct full-{b,e,d,a}
+3-case pigeonhole. L itself was never wrong (still always integer,
+exhaustively reconfirmed); only this specific narrowed attribution was.
+Worth remembering: fixing one cert's proof gap doesn't guarantee a
+previously-"clean" sibling cert covering the same divisibility fact is
+actually clean — re-check adjacent proofs specifically for the same
+error pattern, not just the identities you originally set out to verify.

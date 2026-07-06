@@ -8,7 +8,7 @@ J. Ralston Skinner's 1875 "Source of Measures" contains a metrological system bu
 
 **J. Ralston Skinner** (1830s–1890s) published *Key to the Hebrew-Egyptian Mystery in the Source of Measures* in 1875. The book argues that Hebrew letter-values encode a metrological system connecting the Great Pyramid, the Temple of Solomon, and British imperial measures through a unified numerical framework built on Parker's Quadrature.
 
-**Parker's Quadrature**: A circle-squaring system using the ratio 6561:20612, where 6561 = 9⁴ = 3⁸ = 81². The ratio approximates π to ~1.23×10⁻⁶ error. Critically, Skinner derives this ratio from integer arithmetic, never using continuous π as an input — pi appears only as an output comparison.
+**Parker's Quadrature**: A circle-squaring system using the ratio 6561:20612, where 6561 = 9⁴ = 3⁸ = 81². The ratio approximates π to ~1.62×10⁻⁶ error. Critically, Skinner derives this ratio from integer arithmetic, never using continuous π as an input — pi appears only as an output comparison.
 
 ## Mathematical content (7 verified claims)
 
@@ -62,7 +62,7 @@ Digit reversal (144↔441, 135↔531) preserves digit sum in any positional base
 
 ### Q_PARKER_PI: Parker pi is mediocre
 
-20612/6561 ≈ 3.14159388 (error ~1.23×10⁻⁶). Metius 355/113 ≈ 3.14159292 (error ~2.67×10⁻⁷, about 5× better). The value of Parker's ratio is not its accuracy but that 6561 = 9⁴.
+20612/6561 ≈ 3.14159427 (error ~1.62×10⁻⁶). Metius 355/113 ≈ 3.14159292 (error ~2.67×10⁻⁷, about 6× better). The value of Parker's ratio is not its accuracy but that 6561 = 9⁴.
 
 ## Checks
 
@@ -98,3 +98,62 @@ Digit reversal (144↔441, 135↔531) preserves digit sum in any positional base
 - `fixtures/skm_pass_verified.json` — 7 verified claims + 3 qualified claims with full witnesses
 - `fixtures/skm_pass_numerical.json` — powers of 9, digital root tests, subtraction chain, factor 6 chain, El generator test
 - `fixtures/skm_fail_el_generator.json` — El=31 as full generator (fails: order 3, not 6)
+
+## Verification Note (2026-07-05)
+
+**Found and fixed a real numerical bug in the PARK/Q_PARKER_PI claims.**
+Independently recomputed 20612/6561: the correct value is 3.14159427
+(error 1.62×10⁻⁶ vs π), not the previously declared 3.14159388/1.23×10⁻⁶.
+The wrong values were never caught because the validator only checked
+`parker_pi_approx`/`pi_error` against `digital_root`/factorization
+consistency for other fields — it never actually recomputed the ratio
+itself (a fixture-trusting gap). Fixed the fixture
+(`skm_pass_verified.json`, both the PARK witness and the Q_PARKER_PI
+qualified-claim text, which also had a stale "5× better than Metius"
+that should be "6×"), fixed the doc's two prose mentions of the wrong
+value, and **hardened the validator**: `SKM_PARK` and `SKM_MET` now
+independently parse the ratio and recompute both the approximation and
+the π-error at runtime (tolerance 5e-9/5e-8), confirmed by a regression
+test that reintroduces the old wrong values and shows the hardened
+validator now catches them. `--self-test` passes with the corrected
+values.
+
+**Skinner (1875) primary text independently re-verified via direct raw
+full-text fetch** (not the summarizing WebFetch tool, which twice failed
+to surface the exact quote — fell back to `curl` + `grep` on the
+Archive.org OCR `.txt` directly, which succeeded immediately). Found and
+confirmed, word-for-word:
+- "the /"////values of the letters of the words garden Eden or gn-odn,
+  are g=3+n=50+o=70+d=4+n=50 = a total of 177" — exact match to the
+  cert's EDEN gematria values [3,50,70,4,50]=177 (OCR garbles some
+  characters but the numbers are unambiguous).
+- "we can read 5153, which is the area of the circle inscribed in the
+  square area 6561" — exact match to the PARK claim's
+  `inscribed_circle_area: 5153`.
+- "While A D M is 144, we can take this value as 1+4+4=9. The word A S
+  H, woman, or 135, can similarly be taken as 1+3+5=9. The serpent is
+  the letter teth... and the letter teth stands for the number 9. **So
+  Adam, and the woman, and the serpent, are one in the center of this
+  garden, as the number 9.**" — the cert's `skinner_quote` field is
+  confirmed **verbatim**, not paraphrased or invented.
+- "36²=1296, and 1296×4=5184" — an independent alternate derivation of
+  the SOLAR claim's 5184 that Skinner himself gives (36²×4, distinct
+  from but consistent with the cert's 72² framing, since 72=2×36).
+
+**Not found in the fetched text** (flagged, not asserted false): the
+specific Appendix section headers cited in the doc ("pp. 58-59",
+"Sections 30-31/47-54") were not independently cross-checked against
+the OCR's own page numbering — the quotes above were located by content
+search, not by verifying the cited page numbers match Skinner's
+physical pagination.
+
+**All pure arithmetic independently recomputed**, not just Skinner's
+claims: 6561=9⁴=3⁸=81²; 5184=72²=144×36=2⁶×3⁴; dr(144)=dr(135)=9;
+144−135=9; 355/113 error=2.677×10⁻⁷ (Metius, unaffected by the Parker
+fix); 31 mod 9=4, order of 4 in (Z/9Z)*=3 (subgroup {1,4,7}), orders of
+2 and 5 are both 6=φ(9) confirming Q_EL's claim that El is not a full
+generator. 0 mismatches on all of it.
+
+Meta-validator full suite re-run clean after the validator hardening
+(464 entries, only the pre-existing unrelated [450] EDF-reader
+traceback). Committed alongside this note.

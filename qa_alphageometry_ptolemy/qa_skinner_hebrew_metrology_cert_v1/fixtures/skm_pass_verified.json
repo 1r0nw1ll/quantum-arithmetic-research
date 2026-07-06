@@ -16,9 +16,9 @@
         "smooth_basis": [3],
         "inscribed_circle_area": 5153,
         "parker_ratio": "6561:20612",
-        "parker_pi_approx": 3.14159388,
+        "parker_pi_approx": 3.14159427,
         "actual_pi": 3.14159265,
-        "pi_error": 1.23e-6,
+        "pi_error": 1.62e-6,
         "note": "Parker pi derived from integer system, not from continuous pi",
         "source": "Skinner 1875, Parker Quadrature Props X-XII"
       }
@@ -136,7 +136,7 @@
       "id": "Q_PARKER_PI",
       "label": "Parker pi is mediocre compared to Metius",
       "status": "QUALIFIED",
-      "detail": "20612/6561 error ≈ 1.23e-6; Metius 355/113 error ≈ 2.67e-7 (about 5x better). The value of Parker's ratio is not its accuracy but that 6561 = 9^4."
+      "detail": "20612/6561 error ≈ 1.62e-6; Metius 355/113 error ≈ 2.67e-7 (about 6x better). The value of Parker's ratio is not its accuracy but that 6561 = 9^4."
     }
   ],
   "falsifiers": [

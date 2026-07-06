@@ -38,6 +38,7 @@ Checks:
 QA_COMPLIANCE = "cert_validator — validates Skinner metrological claims; no float state"
 
 import json
+import math
 import sys
 from pathlib import Path
 
@@ -100,6 +101,29 @@ def validate(path):
             if dr is not None and val is not None:
                 if digital_root(val) != dr:
                     errors.append(f"SKM_PARK: dr({val}) = {digital_root(val)}, declared {dr}")
+            # Genuinely recompute the Parker pi ratio (observer-projection output
+            # comparison only, per T2 — never fed back as a QA input).
+            ratio_str = w.get("parker_ratio")
+            approx = w.get("parker_pi_approx")
+            declared_error = w.get("pi_error")
+            if ratio_str and (approx is not None or declared_error is not None):
+                try:
+                    num_str, den_str = ratio_str.split(":")
+                    computed_ratio = float(den_str) / float(num_str)
+                except (ValueError, ZeroDivisionError):
+                    errors.append(f"SKM_PARK: malformed parker_ratio {ratio_str!r}")
+                else:
+                    if approx is not None and abs(computed_ratio - approx) > 5e-9:
+                        errors.append(
+                            f"SKM_PARK: {ratio_str} = {computed_ratio:.8f}, "
+                            f"declared parker_pi_approx {approx}"
+                        )
+                    computed_error = abs(computed_ratio - math.pi)
+                    if declared_error is not None and abs(computed_error - declared_error) > 5e-8:
+                        errors.append(
+                            f"SKM_PARK: |{ratio_str} - pi| = {computed_error:.3e}, "
+                            f"declared pi_error {declared_error}"
+                        )
 
         # SKM_EDEN: Garden-Eden = 24
         elif cid == "EDEN":
@@ -177,6 +201,20 @@ def validate(path):
             dr_num = w.get("dr_numerator")
             dr_den = w.get("dr_denominator")
             dr_sum = w.get("dr_sum")
+            ratio = w.get("ratio")
+            declared_error = w.get("pi_error")
+            if num is not None and den:
+                computed_ratio = num / den
+                if ratio is not None and abs(computed_ratio - ratio) > 5e-9:
+                    errors.append(
+                        f"SKM_MET: {num}/{den} = {computed_ratio:.8f}, declared ratio {ratio}"
+                    )
+                computed_error = abs(computed_ratio - math.pi)
+                if declared_error is not None and abs(computed_error - declared_error) > 5e-8:
+                    errors.append(
+                        f"SKM_MET: |{num}/{den} - pi| = {computed_error:.3e}, "
+                        f"declared pi_error {declared_error}"
+                    )
             if num is not None and dr_num is not None:
                 if digital_root(num) != dr_num:
                     errors.append(f"SKM_MET: dr({num}) = {digital_root(num)}, declared {dr_num}")

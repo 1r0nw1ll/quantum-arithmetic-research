@@ -7003,7 +7003,7 @@ def _validate_sefer_yetzirah_combinatorics_cert_family(base_dir: str) -> Optiona
 
 
 def _validate_skinner_hebrew_metrology_cert_family(base_dir: str) -> Optional[str]:
-    """QA Skinner Hebrew Metrology Cert family [204] — certifies 7 verified metrological claims from Skinner's 'Source of Measures' (1875): Parker kernel 6561=9^4, Garden-Eden=24 via digital roots, solar day 5184=72^2 (Cosmos pairs), Adam/Woman dr=9, factor 6 bridge mod-9->mod-24, Metius dr-closure dr(113)+dr(355)=9, T2 compliance (pi as observer output). 3 qualified: El=31 subgroup, palindrome trivial, Parker pi mediocre. Checks SKM_1+PARK/EDEN/SOLAR/ADAM/BRIDGE/MET/NUM/W/F; 2 PASS + 1 FAIL; self-test ok"""
+    """QA Skinner Hebrew Metrology Cert family [204] — certifies 7 verified metrological claims from Skinner's 'Source of Measures' (1875): Parker kernel 6561=9^4, Garden-Eden=24 via digital roots, solar day 5184=72^2 (Cosmos pairs), Adam/Woman dr=9, factor 6 bridge mod-9->mod-24, Metius dr-closure dr(113)+dr(355)=9, T2 compliance (pi as observer output). 3 qualified: El=31 subgroup, palindrome trivial, Parker pi mediocre. Checks SKM_1+PARK/EDEN/SOLAR/ADAM/BRIDGE/MET/NUM/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-05: fixed wrong Parker-pi value/error, hardened validator to genuinely recompute pi ratios."""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_skinner_hebrew_metrology_cert_v1")
     validator = os.path.join(fam_dir, "qa_skinner_hebrew_metrology_cert_validate.py")
@@ -14334,7 +14334,7 @@ FAMILY_SWEEPS = [
      "qa_sefer_yetzirah_combinatorics_cert_v1", True),
     (204, "QA Skinner Hebrew Metrology Cert family",
      _validate_skinner_hebrew_metrology_cert_family,
-     "Skinner 'Source of Measures' (1875) 7 verified metrological claims: Parker kernel 6561=9^4, Garden-Eden=24 (digital roots), solar day 5184=72^2 (Cosmos pairs), Adam/Woman dr=9, factor 6 bridge 9->24, Metius dr-closure dr(113)+dr(355)=9, T2 compliance. 3 qualified: El=31 subgroup, palindrome trivial, Parker pi mediocre. Checks SKM_1+PARK/EDEN/SOLAR/ADAM/BRIDGE/MET/NUM/W/F; 2 PASS + 1 FAIL; self-test ok",
+     "Skinner 'Source of Measures' (1875) 7 verified metrological claims: Parker kernel 6561=9^4, Garden-Eden=24 (digital roots), solar day 5184=72^2 (Cosmos pairs), Adam/Woman dr=9, factor 6 bridge 9->24, Metius dr-closure dr(113)+dr(355)=9, T2 compliance. 3 qualified: El=31 subgroup, palindrome trivial, Parker pi mediocre. Checks SKM_1+PARK/EDEN/SOLAR/ADAM/BRIDGE/MET/NUM/W/F; 2 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-05: fixed wrong Parker-pi value (was 3.14159388/err 1.23e-6, correct 20612/6561=3.14159427/err 1.62e-6) and hardened validator to genuinely recompute both PARK and MET pi ratios instead of trusting the fixture.",
      "204_qa_skinner_hebrew_metrology_cert",
      "qa_skinner_hebrew_metrology_cert_v1", True),
     (205, "QA Grid Cell RNS Cert family",

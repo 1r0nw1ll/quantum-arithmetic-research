@@ -5170,7 +5170,7 @@ def _validate_eisenstein_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_origin_of_24_cert_family(base_dir: str) -> Optional[str]:
-    """QA Origin of 24 Cert family [130] — certifies dual derivation of mod-24: H²-G²=G²-I²=2CF for direction (d,e), where C=2de (green quadrance) and F=d²-e² (red quadrance); minimum value 24 at fundamental direction (d,e)=(2,1) for 3-4-5 triangle; always divisible by 24 for all primitive Pythagorean directions; checks O24_1-O24_9 (schema, elements C/F/G/H/I, dual routes Pyth-1 and Crystal) + O24_G/W/F/D (general theorem); 2 PASS (anchor 3-4-5, general theorem 6 witnesses); self-test ok"""
+    """QA Origin of 24 Cert family [130] — certifies dual derivation of mod-24: H²-G²=G²-I²=2CF for direction (d,e), where C=2de (green quadrance) and F=d²-e² (red quadrance); minimum value 24 at fundamental direction (d,e)=(2,1) for 3-4-5 triangle; always divisible by 24 for all primitive Pythagorean directions. RE-VERIFIED 2026-07-06: theorem exhaustively reconfirmed (0 counterexamples, e<d<=30); found+fixed a real incompleteness in the doc's written mod-3 divisibility proof, which only covered the d+e≡0(mod3) case and silently omitted the d-e≡0(mod3) case -- the cert's own fixture witness (4,1) requires the omitted case. Validator already genuinely computes live, no hardening needed. Checks O24_1-O24_9 (schema, elements C/F/G/H/I, dual routes Pyth-1 and Crystal) + O24_G/W/F/D (general theorem); 2 PASS (anchor 3-4-5, general theorem 6 witnesses); self-test ok"""
     import subprocess
     o24_dir   = os.path.join(base_dir, "qa_origin_of_24_cert_v1")
     validator = os.path.join(o24_dir, "qa_origin_of_24_cert_validate.py")
@@ -14114,7 +14114,7 @@ FAMILY_SWEEPS = [
      "qa_eisenstein_cert_v1", True),
     (130, "QA Origin of 24 Cert family",
      _validate_origin_of_24_cert_family,
-     "dual derivation of mod-24: H²-G²=G²-I²=2CF for any direction (d,e) [C=2de=green quadrance, F=d²-e²=red quadrance]; C²+F²=G² (Pythagorean) → (C+F)²-G²=2CF; always ÷24 for primitive Pythagorean directions; minimum=24 at fundamental (d,e)=(2,1) for 3-4-5; 7²-5²=24 (Crystal route); checks O24_1-O24_9 + O24_G/W/F/D; 2 PASS (anchor 3-4-5, general theorem 6 witnesses d≤5); self-test ok",
+     "dual derivation of mod-24: H²-G²=G²-I²=2CF for any direction (d,e) [C=2de=green quadrance, F=d²-e²=red quadrance]; C²+F²=G² (Pythagorean) → (C+F)²-G²=2CF; always ÷24 for primitive Pythagorean directions (RE-VERIFIED 2026-07-06, fixed incomplete mod-3 proof case); minimum=24 at fundamental (d,e)=(2,1) for 3-4-5; 7²-5²=24 (Crystal route); checks O24_1-O24_9 + O24_G/W/F/D; 2 PASS (anchor 3-4-5, general theorem 6 witnesses d≤5); self-test ok",
      "130_qa_origin_of_24",
      "qa_origin_of_24_cert_v1", True),
     (131, "QA Prime Bounded Certificate Scaling Cert family",

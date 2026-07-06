@@ -41,7 +41,12 @@ G² - I² = G² - (C-F)² = G² - C² + 2CF - F²
 
 Divisibility by 24: 2CF = 4de(d-e)(d+e). For primitive triples:
 - **÷8**: d+e is odd → exactly one of d,e is even → de is even → 4·de = 8·(integer)
-- **÷3**: if neither d nor e is ≡0(mod 3), then d≡1,e≡2 or vice versa → d+e≡0(mod 3)
+- **÷3** (corrected 2026-07-06, was incomplete): among {d, e, d-e, d+e} at least one is
+  divisible by 3. If d≡0 or e≡0 (mod 3), de is already divisible by 3. Otherwise both d,e
+  are nonzero mod 3, and either (a) they're equal mod 3 (both ≡1 or both ≡2) → d-e≡0(mod 3),
+  e.g. (d,e)=(4,1): 4≡1≡1, so d-e=3; or (b) they differ (one ≡1, other ≡2) → d+e≡0(mod 3),
+  e.g. (d,e)=(2,1): 2≡2,1≡1, so d+e=3. The original text only covered case (b) — the (4,1)
+  direction (F=15, 2CF=240=24×10) requires case (a), which was missing from the proof.
 
 ## Checks
 
@@ -88,3 +93,24 @@ python qa_alphageometry_ptolemy/qa_origin_of_24_cert_v1/qa_origin_of_24_cert_val
 - **Family [128]** (Spread Period): The orbit period π(9)=24 is the same 24 derived here from geometry.
 - **Family [127]** (UHG Null): The triple (F,C,G) forms a null point in UHG; H²-G²=2CF is an identity of null quadrangles.
 - **Source**: Ben Iverson Pyth-1 (primary); QA-4 Iota crystal geometry.
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed the theorem exhaustively: `2CF ≡ 0 (mod 24)`
+for every primitive direction (gcd(d,e)=1, opposite parity) with
+`2 ≤ e < d ≤ 30` — 0 counterexamples across the full range, and the
+identity `H²-G² = G²-I² = 2CF` holds in every case. The validator
+already genuinely recomputes C, F, G, H, I from (d,e) live for both
+fixtures, no fixture-trusting gap.
+
+**Found and fixed a real incompleteness in the written proof sketch**:
+the "÷3" divisibility argument only covered the case where d,e have
+*different* nonzero residues mod 3 (⟹ d+e≡0 mod 3), but didn't address
+the case where d,e have the *same* nonzero residue mod 3 (⟹ d-e≡0 mod 3
+instead). The cert's own `origin24_pass_general.json` fixture includes
+exactly this uncovered case — (d,e)=(4,1), both ≡1 mod 3, where it's
+`d-e=3` that supplies the factor of 3, not `d+e=5` — yet the original
+proof text gave no argument that would explain why this witness's
+`2CF=240` is divisible by 24. The underlying theorem was never wrong
+(exhaustively reconfirmed above), only the written proof's case
+coverage was incomplete. Fixed the doc to state both cases.

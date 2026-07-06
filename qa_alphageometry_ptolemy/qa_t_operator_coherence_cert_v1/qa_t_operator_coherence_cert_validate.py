@@ -23,10 +23,18 @@ error signal carries forward-looking structural information.
 CROSS-DOMAIN: EEG (classification), Audio (structure), Finance (prediction).
 The topographic observer → QA → T-operator pipeline is domain-general.
 
+Primary source: internal replication docs docs/theory/
+QA_FINANCE_QCI_PUBLIC_REVALIDATION.md (Claude, 2026) and
+docs/theory/QA_FINANCE_EXISTING_ART_AUDIT.md (Claude, 2026) -- the
+finance "Tier A hardened" partial r=-0.2154 claim sign-flips on an
+independent public-data replication and is architecturally superseded
+by cert [209]; see TC_REPRO below and the family doc's Verification Note.
+
 Checks: TC_1 (schema), TC_OBS (observer pipeline declared), TC_QCI (QCI
 construction), TC_OOS (out-of-sample protocol), TC_PARTIAL (partial
 correlation beyond baseline), TC_ROBUST (robustness grid),
-TC_W (>=2 domain witnesses), TC_F (finance result present).
+TC_W (>=2 domain witnesses), TC_F (finance result present), TC_REPRO
+(any "hardened" witness must declare reproducibility_caveats).
 """
 
 import json
@@ -101,6 +109,18 @@ def validate(cert, *, collect_errors=True):
     domains = [w.get("domain") for w in witnesses]
     if "finance" not in domains:
         err("TC_F", "finance domain witness missing")
+
+    # TC_REPRO — any witness claiming "hardened" status must declare known
+    # reproducibility caveats. Added 2026-07-06 after finding this cert's
+    # finance "Tier A hardened" claim (partial r=-0.2154) sign-flips on an
+    # independent public-data replication with no caveat anywhere in the
+    # cert -- a stale-certification gap this check now prevents recurring.
+    for w in witnesses:
+        status = (w.get("status") or "").lower()
+        if "hardened" in status and not w.get("reproducibility_caveats"):
+            err("TC_REPRO",
+                f"{w.get('domain', '?')}: status={w.get('status')!r} claims hardened "
+                "but declares no reproducibility_caveats field")
 
     return {"ok": len(errors) == 0, "errors": errors, "warnings": warnings}
 

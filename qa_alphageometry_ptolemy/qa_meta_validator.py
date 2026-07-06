@@ -4687,7 +4687,7 @@ def _validate_bearden_phase_conjugate_cert_family(base_dir: str) -> Optional[str
 
 
 def _validate_t_operator_coherence_cert_family(base_dir: str) -> Optional[str]:
-    """QA T-Operator Coherence Cert family [154] — certifies QCI (QA Coherence Index) as domain-general structural indicator. Topographic observer → QA states → T-operator prediction → rolling accuracy = QCI. Finance Tier A: partial r=-0.22 beyond lagged RV, 84% robustness, permutation-validated. Cross-domain: EEG (dR²=+0.21), audio (r=+0.75). Frozen scripts 30-37. Checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F; 2 PASS; self-test ok"""
+    """QA T-Operator Coherence Cert family [154] — certifies QCI (QA Coherence Index) as domain-general structural indicator. Topographic observer → QA states → T-operator prediction → rolling accuracy = QCI. Finance Tier A: partial r=-0.22 beyond lagged RV, 84% robustness, permutation-validated. RE-VERIFIED 2026-07-06: found this cert (created 2026-04-01) never folded in two later internal audits -- docs/theory/QA_FINANCE_QCI_PUBLIC_REVALIDATION.md (2026-04-16) independently replicated this exact pipeline on public data and found the sign FLIPS (+0.4355/+0.2556 vs private -0.3175/-0.2154, though magnitude+null-beating survive); docs/theory/QA_FINANCE_EXISTING_ART_AUDIT.md (2026-05-24) notes QCI is architecturally superseded by cert [209]'s generator inference. Added reproducibility_caveats to both fixtures + new TC_REPRO validator check requiring any "hardened" witness to declare caveats. Cross-domain: EEG (dR²=+0.21), audio (r=+0.75). Frozen scripts 30-37. Checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F/REPRO; 2 PASS; self-test ok"""
     import subprocess
     tc_dir    = os.path.join(base_dir, "qa_t_operator_coherence_cert_v1")
     validator = os.path.join(tc_dir, "qa_t_operator_coherence_cert_validate.py")
@@ -14014,7 +14014,7 @@ FAMILY_SWEEPS = [
      "qa_observer_core_cert_v1", True),
     (154, "QA T-Operator Coherence Cert family",
      _validate_t_operator_coherence_cert_family,
-     "QCI = rolling T-operator prediction accuracy; finance partial r=-0.22 beyond RV (Tier A hardened); 84% robustness grid; cross-domain: EEG dR²=+0.21, audio r=+0.75; checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F; 2 PASS; self-test ok",
+     "QCI = rolling T-operator prediction accuracy; finance partial r=-0.22 beyond RV (Tier A hardened, RE-VERIFIED 2026-07-06: sign flips on independent public-data replication, superseded by [209] per most recent finance audit -- caveats now required via TC_REPRO); 84% robustness grid; cross-domain: EEG dR²=+0.21, audio r=+0.75; checks TC_1+OBS/QCI/OOS/PARTIAL/ROBUST/W/F/REPRO; 2 PASS; self-test ok",
      "154_qa_t_operator_coherence_cert",
      "qa_t_operator_coherence_cert_v1", True),
     (153, "QA Keely Triune Cert family",

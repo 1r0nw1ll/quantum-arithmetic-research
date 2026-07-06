@@ -7,6 +7,8 @@
 
   "_fixture_purpose": "Demonstrates the topographic observer → QA → T-operator pipeline works across three unrelated domains. The observer architecture is domain-general: multi-channel signal → clustering → microstate transitions → QA orbit classification. Each domain validates a different aspect: finance (forward prediction), EEG (contemporaneous classification), audio (structural detection).",
 
+  "source_grounding": "Primary source: internal replication docs docs/theory/QA_FINANCE_QCI_PUBLIC_REVALIDATION.md (Claude, 2026) found the finance pipeline's sign does not reproduce on public data; docs/theory/QA_FINANCE_EXISTING_ART_AUDIT.md (Claude, 2026) documents QCI's architectural supersession by cert [209].",
+
   "observer_pipeline": {
     "input_channels": ["domain_specific_multi_channel"],
     "channel_type": "local_state",
@@ -48,7 +50,8 @@
       "p_value": 0.000000,
       "mechanism": "QCI = rolling T-accuracy; low QCI → high future vol",
       "channels": 6,
-      "status": "Tier A hardened"
+      "status": "Tier A hardened",
+      "reproducibility_caveats": "Added 2026-07-06: an independent public-data replication of this claim (docs/theory/QA_FINANCE_QCI_PUBLIC_REVALIDATION.md, 2026-04-16) found the sign flips (public r=+0.4355/+0.2556 vs private -0.3175/-0.2154). Not a resolved reproduction; see docs/families/154_qa_t_operator_coherence_cert.md Verification Note."
     },
     {
       "domain": "eeg",

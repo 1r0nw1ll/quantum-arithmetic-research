@@ -7,6 +7,8 @@
 
   "_fixture_purpose": "Certifies the hardened finance QCI result: topographic observer (6-asset returns, K=6, mod-24) → T-operator coherence → rolling prediction accuracy anticorrelates with future volatility. OOS-validated, robustness-gridded, permutation-tested, partial-correlation-controlled. Scripts 30-37 frozen.",
 
+  "source_grounding": "Primary source: internal replication docs docs/theory/QA_FINANCE_QCI_PUBLIC_REVALIDATION.md (Claude, 2026) found this pipeline's sign does not reproduce on public data; docs/theory/QA_FINANCE_EXISTING_ART_AUDIT.md (Claude, 2026) documents QCI's architectural supersession by cert [209].",
+
   "observer_pipeline": {
     "input_channels": ["SPY_5d_ret", "QQQ_5d_ret", "IWM_5d_ret", "TLT_5d_ret", "GLD_5d_ret", "BTC-USD_5d_ret"],
     "channel_type": "local_state",
@@ -76,7 +78,8 @@
       "metric": "partial r(QCI, future_vol | lagged_RV) = -0.22",
       "p_value": 0.000000,
       "scripts": "~/Desktop/qa_finance/30-37",
-      "status": "Tier A hardened"
+      "status": "Tier A hardened",
+      "reproducibility_caveats": "Added 2026-07-06: an independent 2026-04-16 replication of this exact pipeline claim on public data (docs/theory/QA_FINANCE_QCI_PUBLIC_REVALIDATION.md) found the sign FLIPS (public r=+0.4355, partial r=+0.2556 vs private -0.3175/-0.2154) though magnitude and null-beating survive. The most recent internal audit (docs/theory/QA_FINANCE_EXISTING_ART_AUDIT.md, 2026-05-24) further notes QCI's K-means+hand-tuned-CLUSTER_MAP state assignment is architecturally superseded by cert [209]'s generator-inference approach. This is NOT a resolved reproduction -- 'Tier A hardened' predates and does not reflect either finding."
     },
     {
       "domain": "eeg",

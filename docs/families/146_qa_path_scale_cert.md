@@ -84,3 +84,23 @@ Therefore all forward paths have G strictly increasing.
 
 - `fixtures/sc_pass_scale_classes.json` — three 5-step paths (one per generator type) showing EXPONENTIAL vs POLYNOMIAL
 - `fixtures/sc_pass_pell_convergence.json` — 8-step Pell chain demonstrating rapid convergence to 3+2√2
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed the full G-value
+table for the 6-step UNIFORM_B (Pell) chain from (2,1) — G=5, 29, 169,
+985, 5741, 33461, with ratios 5.800, 5.828, 5.828, 5.828, 5.828,
+converging to `3+2√2=5.828427...` exactly as claimed (rapid convergence
+by step 2, within 0.001). Independently reconfirmed the 5-step
+polynomial contrast: UNIFORM_A gives G=85 (matches the closed form
+`2n²+6n+5` at n=5), UNIFORM_C gives G=145 — both far below UNIFORM_B's
+33461. Growth-monotonicity claims for all three generators (`G_new>G`)
+independently reconfirmed algebraically; the doc's shorthand
+justifications ("trivially, since 4de>0") technically omit an
+additional positive term (`4d²` for M_B, `4e²` for M_C) but the
+conclusion is unaffected — both terms are manifestly positive, so this
+is imprecise phrasing rather than an actual gap in the argument (unlike
+the [130]/[137]/[148] mod-3 proof-completeness bugs found earlier this
+cycle, where specific cases were genuinely left unjustified). The
+validator (`qa_path_scale_cert_validate.py`) already genuinely
+recomputes every G value and ratio live, no fixture-trusting gap.

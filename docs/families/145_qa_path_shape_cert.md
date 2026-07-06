@@ -73,3 +73,17 @@ A **path shape** is the generator sequence (g₁, g₂, ..., gₙ). Four classes
 
 - `fixtures/ps_pass_four_shapes.json` — one witness per shape class (3 steps each) from root (2,1)
 - `fixtures/ps_pass_invariants.json` — 5 paths: 5-step UNIFORM_B/C/A + two MIXED with different orderings
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed all three generator
+moves (M_A, M_B, M_C) from root (2,1) out to 6 steps each: UNIFORM_A
+gives (3,2)→(4,3)→(5,4)→(6,5)→(7,6)→(8,7), UNIFORM_B gives the exact
+Pell chain (5,2)→(12,5)→(29,12)→(70,29)→(169,70)→(408,169) with Pell
+norm alternating exactly 1,−1,1,−1,1,−1, UNIFORM_C gives
+(4,1)→(6,1)→(8,1)→(10,1)→(12,1)→(14,1) — all matching the doc exactly,
+with primitivity (gcd=1) preserved at every single step. The MIXED
+example (2,1)→M_B→(5,2)→M_A→(8,5)→M_C→(18,5) also independently
+reproduced exactly. The validator (`qa_path_shape_cert_validate.py`)
+already genuinely recomputes every move and invariant live from the
+declared path, no fixture-trusting gap.

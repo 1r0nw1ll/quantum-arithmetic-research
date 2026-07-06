@@ -4871,7 +4871,7 @@ def _validate_synchronous_harmonics_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_path_scale_cert_family(base_dir: str) -> Optional[str]:
-    """QA Path Scale Cert family [146] — certifies G=d^2+e^2 growth profiles along Pythagorean-tree generator paths. UNIFORM_B paths grow exponentially: G ratio converges to 3+2*sqrt(2)=5.828... (silver ratio squared, from M_B dominant eigenvalue 1+sqrt(2)). UNIFORM_A and UNIFORM_C paths grow polynomially (G ratio -> 1). All forward paths from (2,1) have G monotone increasing. 8-step Pell chain converges by step 4 (6 d.p.). Source: Pell equation theory, certs [135] Pythagorean Tree, [141] Pell Norm, [145] Path Shape; checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok"""
+    """QA Path Scale Cert family [146] — certifies G=d^2+e^2 growth profiles along Pythagorean-tree generator paths. UNIFORM_B paths grow exponentially: G ratio converges to 3+2*sqrt(2)=5.828... (silver ratio squared, from M_B dominant eigenvalue 1+sqrt(2)). UNIFORM_A and UNIFORM_C paths grow polynomially (G ratio -> 1). All forward paths from (2,1) have G monotone increasing. 8-step Pell chain converges by step 4 (6 d.p.). RE-VERIFIED 2026-07-06: confirmed clean, full 6-step G-table + polynomial contrast independently recomputed exact, validator already genuinely computes live; noted (not a bug) that the growth-monotonicity shorthand justifications omit a term but the conclusion holds regardless. Source: Pell equation theory, certs [135] Pythagorean Tree, [141] Pell Norm, [145] Path Shape; checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok"""
     import subprocess
     sc_dir    = os.path.join(base_dir, "qa_path_scale_cert_v1")
     validator = os.path.join(sc_dir, "qa_path_scale_cert_validate.py")
@@ -4894,7 +4894,7 @@ def _validate_path_scale_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_path_shape_cert_family(base_dir: str) -> Optional[str]:
-    """QA Path Shape Cert family [145] — classifies generator-sequence shapes in the Pythagorean tree into four classes: UNIFORM_A (only M_A, consecutive integers), UNIFORM_B (only M_B, Pell chain with alternating norm), UNIFORM_C (only M_C, constant e, arithmetic d), MIXED (two or more generators). Invariants: primitivity preserved at every step; UNIFORM_B: Pell norm alternates sign; UNIFORM_C: e constant. Source: Barning 1963/Hall 1970/Price 2008, certs [134] Egyptian Fraction, [135] Pythagorean Tree, [141] Pell Norm; checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS; self-test ok"""
+    """QA Path Shape Cert family [145] — classifies generator-sequence shapes in the Pythagorean tree into four classes: UNIFORM_A (only M_A, consecutive integers), UNIFORM_B (only M_B, Pell chain with alternating norm), UNIFORM_C (only M_C, constant e, arithmetic d), MIXED (two or more generators). Invariants: primitivity preserved at every step; UNIFORM_B: Pell norm alternates sign; UNIFORM_C: e constant. RE-VERIFIED 2026-07-06: confirmed clean, all 3 generators + MIXED example independently recomputed exact to 6 steps, primitivity/Pell-alternation confirmed throughout, validator already genuinely computes live. Source: Barning 1963/Hall 1970/Price 2008, certs [134] Egyptian Fraction, [135] Pythagorean Tree, [141] Pell Norm; checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS; self-test ok"""
     import subprocess
     ps_dir    = os.path.join(base_dir, "qa_path_shape_cert_v1")
     validator = os.path.join(ps_dir, "qa_path_shape_cert_validate.py")
@@ -14054,12 +14054,12 @@ FAMILY_SWEEPS = [
      "qa_synchronous_harmonics_cert_v1", True),
     (146, "QA Path Scale Cert family",
      _validate_path_scale_cert_family,
-     "G=d^2+e^2 growth profiles along Pythagorean-tree paths; UNIFORM_B exponential (ratio->3+2sqrt(2)=5.828), UNIFORM_A/C polynomial (ratio->1); all forward paths G monotone increasing; 8-step Pell convergence witness; checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok",
+     "G=d^2+e^2 growth profiles along Pythagorean-tree paths; UNIFORM_B exponential (ratio->3+2sqrt(2)=5.828), UNIFORM_A/C polynomial (ratio->1); all forward paths G monotone increasing; 8-step Pell convergence witness (RE-VERIFIED 2026-07-06, confirmed clean); checks SC_1/2+GROWTH/RATIO/CONV_B/W/F; 2 PASS; self-test ok",
      "146_qa_path_scale_cert",
      "qa_path_scale_cert_v1", True),
     (145, "QA Path Shape Cert family",
      _validate_path_shape_cert_family,
-     "four shape classes: UNIFORM_A (consecutive integers), UNIFORM_B (Pell chain, norm alternates), UNIFORM_C (constant e, arithmetic d), MIXED (2+ generators); primitivity preserved; checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS; self-test ok",
+     "four shape classes: UNIFORM_A (consecutive integers), UNIFORM_B (Pell chain, norm alternates), UNIFORM_C (constant e, arithmetic d), MIXED (2+ generators); primitivity preserved (RE-VERIFIED 2026-07-06, confirmed clean); checks PS_1/2+CLASS/INV_B/INV_C/W/F; 2 PASS; self-test ok",
      "145_qa_path_shape_cert",
      "qa_path_shape_cert_v1", True),
     (144, "QA Male/Female Octave Cert family",

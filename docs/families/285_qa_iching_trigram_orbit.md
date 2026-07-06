@@ -61,3 +61,33 @@ The result is independent of bit-ordering convention: swapping LSB/MSB exchanges
 ## Lineage
 
 Discovered 2026-05-30 during the Keely harmonics domain sweep. Prior OB note referenced keynote values (1580 Ken, 1050 Li, 2226 Chen) which could not be traced to any on-disk or publicly accessible source. Web search confirmed Iverson's svpweb39 article as the source for I Ching → QA keynotes connection, but Iverson's published Hz values (55–163 Hz range) are floats. The natural integer representation is the trigram binary codes (0–7), giving a clean exhaustive claim grounded in published sources.
+
+## Verification Note (2026-07-05)
+
+Independently re-verified both primary sources and the arithmetic.
+**Wilhelm/Baynes (1950)** confirmed real — exact ISBN match
+(0-691-09750-X), Bollingen Series XIX, Princeton University Press;
+described by the New York Times Book Review as "still regarded as the
+best and most authentic" translation. **Iverson's "Eight Keynotes"**
+(svpweb39.html) confirmed real and accessible — fetched directly and
+found it lists exactly the claimed 55.461–163.528 Hz range (8 values),
+and — critically — confirms this cert's own honest self-correction:
+the source text explicitly does **not** assign specific frequencies to
+named trigrams ("the author does not associate specific I Ching
+trigram names with particular frequencies"), exactly matching this
+cert's "Lineage" note and "Scope Boundaries" disclaimer. The project's
+own prior-session correction (dropping an untraceable frequency-to-
+trigram mapping in favor of the verifiable binary-code claim) holds up
+under independent re-checking.
+
+**Trigram line-composition arithmetic independently reconfirmed**: each
+trigram's actual line pattern (solid=1/broken=0, LSB=bottom) gives Kun
+☷=000=0, Zhen ☳=001=1, Kan ☵=010=2, Dui ☱=011=3, Gen ☶=100=4, Li
+☲=101=5, Xun ☴=110=6, Qian ☰=111=7 — matches the cert's table exactly.
+3 and 6 are the only multiples of 3 in {1,...,7} (7<9, so no multiple of
+9 is possible) — confirms KOA_2/KOA_3 trivially and correctly.
+
+Validator (`_orbit_class`) already computes classification from
+divisibility rules at runtime, not fixture-trusting. No bugs found;
+this cert's scope-boundary discipline and lineage transparency are
+already a strong example.

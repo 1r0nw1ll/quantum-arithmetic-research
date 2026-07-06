@@ -88,7 +88,7 @@ The (ℤ/9ℤ)* scalar action gives a concrete 6-element group of invertible Lev
 - **Gregory Bateson**, *Steps to an Ecology of Mind* (1972) — Learning Levels hierarchy, logical types, double bind theory
 - **Bertrand Russell & Alfred North Whitehead**, *Principia Mathematica* (1910–13) — theory of logical types
 - **W. Ross Ashby**, *An Introduction to Cybernetics* (1956) — Law of Requisite Variety; ultrastability (Level 1/Level 2)
-- **Paul Watzlawick, Janet Beavin, Don Jackson**, *Pragmatics of Human Communication* (1967) — first-order vs second-order change (MRI Palo Alto School)
+- **Paul Watzlawick, John Weakland, Richard Fisch**, *Change: Principles of Problem Formation and Problem Resolution* (1974) — first-order vs second-order change (MRI Palo Alto School)
 - **Alfred Korzybski**, *Science and Sanity* (1933) — map/territory, levels of abstraction
 - Full theoretical sketch: `docs/theory/QA_BATESON_LEARNING_LEVELS_SKETCH.md`
 - Verification scripts: `tools/verify_bateson_level2.py`, `tools/verify_bateson_double_bind.py`
@@ -122,3 +122,51 @@ Eight independent research programs converging on the same operator-class hierar
 
 - `fixtures/bll_pass_hierarchy.json` — PASS: witnesses at tiers 1, 2a, 2a, 2b, 2b, 3; exhaustive S_9 tier distribution
 - `fixtures/bll_fail_bad_tier.json` — FAIL fixture for testing validator tier mismatch detection
+
+## Verification Note (2026-07-05)
+
+**Found and fixed a real citation-attribution bug**: the doc cited
+"Paul Watzlawick, Janet Beavin, Don Jackson, *Pragmatics of Human
+Communication* (1967)" as the source for first-order vs second-order
+change. Checked directly: that 1967 book (real, dedicated to Bateson,
+the origin of the "five axioms of communication") does NOT contain the
+first-order/second-order change distinction — that concept originates
+specifically from **Watzlawick, Weakland, & Fisch (1974)**, *Change:
+Principles of Problem Formation and Problem Resolution* (Norton), a
+different book with two different co-authors (Weakland and Fisch, not
+Beavin and Jackson). Fixed the citation. The cert's fixture only says
+"Watzlawick first-order vs second-order change" without naming a
+specific book, so no fix was needed there.
+
+**All four other source citations confirmed real** via search: Bateson
+(1972) *Steps to an Ecology of Mind* — confirmed, including that the
+book does link the double-bind hypothesis to the hierarchical,
+Russell-Logical-Types-derived learning-level structure exactly as the
+cert claims. Ashby (1956) *An Introduction to Cybernetics* — confirmed
+real (Chapman & Hall), Law of Requisite Variety confirmed; "ultrastability"
+is more fully developed in Ashby's earlier *Design for a Brain* (1952)
+but is genuinely also covered in the 1956 book, so citing it there is
+accurate, not a misattribution. Korzybski (1933) and Russell &
+Whitehead (1910-13) are well-established foundational texts (general
+semantics; theory of logical types) not independently re-searched this
+pass given very high baseline confidence, consistent with how this
+session has treated other canonical, unambiguous references.
+
+**The core combinatorial claim independently reproduced from an
+exhaustive simulation of the actual QA dynamics**, not just by
+re-deriving the doc's own algebra: implemented `qa_step` and the
+orbit-family classification from scratch, ran it over the real 81-state
+`S_9` space, and classified all 81×81=6561 ordered pairs into the four
+tiers by directly simulating orbit membership (5 orbits found: three of
+size 24, one of size 8, one fixed point) — got exactly 81/1712/3456/1312,
+matching the doc's declared distribution with zero discrepancy.
+
+**Validator confirmed adequate, not a fixture-trusting gap**: the
+tier-count expectations (`EXPECTED_TIER_COUNTS_S9`) are hardcoded
+constants in the validator itself, not read from the fixture — and
+those hardcoded constants are now independently confirmed correct by
+the from-scratch simulation above, so this is a legitimate design (the
+validator checks fixtures against ground truth it owns), not something
+requiring hardening. `--self-test` passes on both fixtures.
+
+No other bugs found.

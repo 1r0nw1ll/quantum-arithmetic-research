@@ -4407,7 +4407,7 @@ def _validate_bragg_rt_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_human_needs_sdt_cert_family(base_dir: str) -> Optional[str]:
-    """QA Human Needs SDT Cert family [162] — certifies structural alignment between Ryan & Deci Self-Determination Theory (3 validated needs: Autonomy, Competence, Relatedness) and QA paired architecture (generators, state+derivative, reach+integral). Canonical mapping: Certainty=b, Variety=e, Significance=d, Connection=a, Growth=DeltaT, Contribution=SigmaT. 5/5 structural predictions confirmed against SDT literature (n=48550, 27 countries). Theorem NT compliant (observer projection). Source: Will Dale Apr/Oct 2025, Ryan & Deci 2022, Tony Robbins/Cloe Madanes. Checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS; self-test ok"""
+    """QA Human Needs SDT Cert family [162] — certifies structural alignment between Ryan & Deci Self-Determination Theory (3 validated needs: Autonomy, Competence, Relatedness) and QA paired architecture (generators, state+derivative, reach+integral). Canonical mapping: Certainty=b, Variety=e, Significance=d, Connection=a, Growth=DeltaT, Contribution=SigmaT. 5/5 structural predictions confirmed against SDT literature (n=48550, 27 countries). Theorem NT compliant (observer projection). Source: Will Dale Apr/Oct 2025, Martela et al. 2022 (DOI: 10.1177/19485506221113678), Tony Robbins/Cloe Madanes. Checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS; self-test ok. VERIFIED 2026-07-05: fixed mislabeled citation (was 'Ryan & Deci 2022' -- actual authors are Martela, Lehmus-Sun, Parker, Pessi & Ryan; Deci is not on this paper), independently recomputed all QA arithmetic (fundamental theorem, derivations) -- 0 mismatches."""
     import subprocess
     hn_dir    = os.path.join(base_dir, "qa_human_needs_sdt_cert_v1")
     validator = os.path.join(hn_dir, "qa_human_needs_sdt_cert_validate.py")
@@ -14124,7 +14124,7 @@ FAMILY_SWEEPS = [
      "../qa_prime_bounded_certificate_scaling_cert_v1", True),
     (162, "QA Human Needs SDT Cert family",
      _validate_human_needs_sdt_cert_family,
-     "SDT 3 basic needs (Autonomy/Competence/Relatedness) = QA 3 paired types: (b,e) generators, (d,DeltaT) state+derivative, (a,SigmaT) reach+integral; canonical mapping: certainty=b, variety=e, significance=d, connection=a, growth=DeltaT, contribution=SigmaT; 5/5 structural predictions confirmed (SDT n=48550); Theorem NT compliant (observer projection); checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS; self-test ok",
+     "SDT 3 basic needs (Autonomy/Competence/Relatedness) = QA 3 paired types: (b,e) generators, (d,DeltaT) state+derivative, (a,SigmaT) reach+integral; canonical mapping: certainty=b, variety=e, significance=d, connection=a, growth=DeltaT, contribution=SigmaT; 5/5 structural predictions confirmed (SDT n=48550); Theorem NT compliant (observer projection); checks HN_1+MAP/SDT/TYPE/PRED/NT/SRC/W/F/DERIV/DELTA/SIGMA/FT; 2 PASS; self-test ok. VERIFIED 2026-07-05: fixed mislabeled citation (Martela et al. 2022, not Ryan & Deci), 0 arithmetic mismatches.",
      "162_qa_human_needs_sdt_cert",
      "qa_human_needs_sdt_cert_v1", True),
     (163, "QA Dead Reckoning Cert family",

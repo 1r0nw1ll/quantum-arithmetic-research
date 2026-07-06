@@ -4,7 +4,7 @@
   "cert_type": "qa_human_needs_sdt_cert",
   "title": "Human Needs SDT PASS: structural alignment of SDT 3-need model with QA paired architecture",
   "created_utc": "2026-04-01T00:00:00Z",
-  "_fixture_purpose": "Core claim: Ryan & Deci SDT's 3 validated basic needs (Autonomy, Competence, Relatedness) each decompose into a Robbins pair, and each pair maps to a structurally distinct QA pair type (generators, state+derivative, reach+integral). 5 structural predictions confirmed against SDT literature. Source: Will Dale Apr/Oct 2025, Ryan & Deci 2022.",
+  "_fixture_purpose": "Core claim: Ryan & Deci SDT's 3 validated basic needs (Autonomy, Competence, Relatedness) each decompose into a Robbins pair, and each pair maps to a structurally distinct QA pair type (generators, state+derivative, reach+integral). 5 structural predictions confirmed against SDT literature. Source: Will Dale Apr/Oct 2025, Martela et al. 2022 (DOI: 10.1177/19485506221113678).",
 
   "canonical_mapping": {
     "certainty": {"qa_element": "b", "role": "generator_1", "sdt_need": "autonomy"},
@@ -95,7 +95,7 @@
   },
 
   "source_grounding": [
-    {"source": "Ryan & Deci 2022", "detail": "SDT validation across 27 European countries, n=48550, SEM with alignment invariance", "doi": "10.1177/19485506221113678"},
+    {"source": "Martela et al. 2022", "detail": "SDT validation across 27 European countries, n=48550, SEM with alignment invariance. DOI: 10.1177/19485506221113678. Authors: Martela, Lehmus-Sun, Parker, Pessi & Ryan -- Deci is not an author on this specific paper (cited elsewhere for the general SDT framework, e.g. Deci & Ryan 2000).", "doi": "10.1177/19485506221113678"},
     {"source": "Will Dale, Apr 2025", "detail": "First QA-Human Needs mapping: b=certainty, e=variety, d=significance, a=connection"},
     {"source": "Will Dale, Oct 2025", "detail": "Extended mapping with ΔT=growth, ΣT=contribution, toroidal geometry, psychophysiological coherence"},
     {"source": "Tony Robbins / Cloe Madanes", "detail": "Six Human Needs framework: certainty, variety, significance, connection, growth, contribution"},

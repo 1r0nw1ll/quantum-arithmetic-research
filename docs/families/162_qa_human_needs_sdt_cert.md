@@ -70,7 +70,7 @@ The mapping is an **observer-layer projection**, not a claim that psychological 
 
 ## Source grounding
 
-- **Ryan & Deci 2022**: "Needs and Well-Being Across Europe" — SDT validation, n=48,550 across 27 countries, SEM with alignment invariance. DOI: 10.1177/19485506221113678
+- **Martela, Lehmus-Sun, Parker, Pessi, & Ryan 2022**: "Needs and Well-Being Across Europe" — SDT validation, n=48,550 across 27 countries, SEM with alignment invariance. *Social Psychological and Personality Science*. DOI: 10.1177/19485506221113678
 - **Will Dale, April 2025**: First QA-Human Needs mapping (ChatGPT session). Established b=certainty, e=variety, d=significance, a=connection.
 - **Will Dale, October 2025**: Extended mapping with toroidal geometry, psychophysiological coherence, Maslow/Integral Theory comparisons. Explored DeltaT=growth, SigmaT=contribution.
 - **Tony Robbins / Cloe Madanes**: Six Human Needs framework via Strategic Intervention. Certainty, Variety, Significance, Connection/Love, Growth, Contribution. First four = "personality needs," last two = "needs of the spirit."
@@ -87,3 +87,42 @@ The mapping is an **observer-layer projection**, not a claim that psychological 
 
 - `fixtures/hn_pass_structural_alignment.json` — Core claim: 6-need → 3-SDT → 3-QA-type mapping with 5 structural predictions, Theorem NT compliance, source grounding
 - `fixtures/hn_pass_derivation_chain.json` — Algebraic verification: concrete QA tuples showing derivation, DeltaT, SigmaT all preserve QA structure; fundamental theorem witness Sigma(DeltaT) = T(n) - T(0)
+
+## Verification Note (2026-07-05)
+
+**Found and fixed a real citation-attribution bug**, not just a typo: the
+cert's only external empirical citation was labeled "Ryan & Deci 2022"
+throughout (this doc, `mapping_protocol_ref.json`, both fixtures, the
+validator docstring, and `qa_meta_validator.py`'s registry). Fetched the
+actual PDF (the paper is open-access on selfdeterminationtheory.org) and
+confirmed the real author list is **Frank Martela, Annika Lehmus-Sun,
+Philip D. Parker, Anne Birgitta Pessi, and Richard M. Ryan** — Deci is
+**not an author** on this specific paper (he's the co-originator of SDT
+as a general framework, cited correctly elsewhere for that, e.g. Deci &
+Ryan 2000, but not for this empirical study). Everything else checks out
+exactly: title ("Needs and Well-Being Across Europe..."), journal
+(*Social Psychological and Personality Science*), DOI
+(10.1177/19485506221113678), n=48,550, 27 European countries, and the
+core empirical claims (SEM with alignment invariance, needs predicting
+well-being/depression across and within countries). Fixed the
+attribution to "Martela et al. 2022" / full author list in all 6
+locations; added a note to the fixtures explaining the correction.
+
+**All QA-side arithmetic independently recomputed from scratch**: the
+canonical derivations d=b+e, a=b+2e for the three witness tuples
+T(0)=(1,1,2,3), T(1)=(1,2,3,5), T(2)=(2,3,5,8); DeltaT(0→1)=(0,1,1,2) and
+DeltaT(1→2)=(1,1,2,3); and the fundamental-theorem claim
+Sigma(DeltaT)=T(2)-T(0)=(1,2,3,5) — confirmed exactly, 0 mismatches.
+
+**Validator confirmed genuine, not fixture-trusting**: read
+`qa_human_needs_sdt_cert_validate.py` in full — HN_DERIV, HN_DELTA, and
+HN_SIGMA all recompute the expected values from the witness's own `b`/`e`
+fields at runtime and compare, rather than trusting declared results.
+`--self-test` passes on both fixtures after the citation fix.
+
+**Also fixed**: the validator's own docstring mislabeled this as "family
+[161]" (161 is actually a different, unrelated cert — QA ECEF Rational
+Cert); corrected to [162] to match the registry and this doc.
+
+No other bugs found. `qa_meta_validator.py`'s FAMILY_SWEEPS entry and
+function docstring updated with a VERIFIED note.

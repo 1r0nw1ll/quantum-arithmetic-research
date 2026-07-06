@@ -1,7 +1,11 @@
 #!/usr/bin/env python3
-"""QA Human Needs SDT Cert family [161] — certifies structural alignment
+"""QA Human Needs SDT Cert family [162] — certifies structural alignment
 between Ryan & Deci Self-Determination Theory (3 validated needs: Autonomy,
 Competence, Relatedness) and QA paired architecture.
+
+Primary source: Martela, Lehmus-Sun, Parker, Pessi, & Ryan (2022), "Needs
+and Well-Being Across Europe," Social Psychological and Personality
+Science. DOI: 10.1177/19485506221113678
 
 Core claim:
   SDT's 3 basic needs decompose into Robbins' 6 human needs, each pair

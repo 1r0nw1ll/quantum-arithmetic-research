@@ -7,7 +7,7 @@
 
   "_fixture_purpose": "Maps T.J.J. See's wave duality (longitudinal=gravity, transverse=light, same medium, orthogonal modes) to QA's generator/observer duality (T-operator=discrete causal, projection=continuous measurement, same tuple space, orthogonal access modes). Theorem NT is the special case: modes cannot mix.",
 
-  "source_attribution": "T.J.J. See, 'Electrodynamic Wave-Theory of Physical Forces' Vols I-II (1917); 'New Theory of the Aether', Astronomische Nachrichten 211-226 (1920-1926). Tesla noted support. QA mapping: Will Dale + Claude, 2026-04-07.",
+  "source_attribution": "T.J.J. See, 'Electrodynamic Wave-Theory of Physical Forces' Vols I-II (See, 1917); 'New Theory of the Aether', Astronomische Nachrichten 211-226, published 1920 through 1926 (See, 1920). Both confirmed real (Internet Archive, Smithsonian, library catalogs). NOTE (2026-07-06): 'Tesla noted support' is an unverified claim found only on fringe-sympathetic secondary sources (e.g. rexresearch.com); no primary Tesla correspondence or publication confirming this was located. QA mapping: Will Dale + Claude, 2026-04-07.",
 
   "see_wave_theory": {
     "statement": "The aether medium supports two orthogonal wave modes: longitudinal (compression) waves that produce gravity, magnetism, and electrostatic fields; and transverse (shear) waves that produce light, heat, and radio. Both propagate through the same medium (aether/aetherons) but cannot convert into each other.",
@@ -46,8 +46,8 @@
 
   "theorem_nt_link": {
     "statement": "Theorem NT (Observer Projection Firewall): Continuous functions are observer projections ONLY. They NEVER enter the QA discrete layer as causal inputs. QA dynamics are discrete; the boundary is crossed exactly twice (input -> observer layer, QA layer -> output).",
-    "see_grounding": "Theorem NT is the QA expression of mode orthogonality. See's insight that longitudinal and transverse waves in the same medium cannot mix provides the physical intuition: the 'firewall' is not an arbitrary rule but a consequence of eigenspace orthogonality. Mixing modes would create a wave that is neither compression nor shear — physically impossible in a linear medium.",
-    "implication": "This elevates Theorem NT from a design constraint to a structural theorem: in any system with discrete generators and continuous observers operating on the same state space, the two modes are necessarily orthogonal if the generator algebra is closed under composition."
+    "see_grounding": "Theorem NT is the QA expression of mode orthogonality AS AN ANALOGY, not physical proof. See's specific claim -- that gravity and light are literally longitudinal/transverse waves in a physical aether medium -- is documented by historians of science as part of his later, professionally-marginalizing, scientifically-rejected work (distinct from his earlier Capture Theory in [196], which at least received serious contemporary engagement from Poincare). The GENERIC mathematical fact that longitudinal/transverse are orthogonal eigenmodes of the linear elastic wave equation is real and mainstream (this is standard seismology, P-waves/S-waves); it is See's specific application of that fact to gravity/light/aether that is rejected physics, not the underlying elasticity mathematics.",
+    "implication": "CORRECTED 2026-07-06: the actual mathematical proof of Theorem NT (that generator dynamics and observer projections cannot compose) rests on QA's own axioms, not on See's aether theory. See's wave-duality is a pedagogical/mnemonic analogy for why such a firewall is a natural kind of structure (by analogy to real P-wave/S-wave orthogonality in elasticity) -- it does not independently prove or elevate Theorem NT to a 'structural theorem,' and should not be cited as physical grounding for it."
   },
 
   "keely_complementarity": {

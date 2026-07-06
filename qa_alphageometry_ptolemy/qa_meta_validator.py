@@ -6864,7 +6864,7 @@ def _validate_see_capture_convergence_cert_family(base_dir: str) -> Optional[str
 
 
 def _validate_see_longitudinal_transverse_cert_family(base_dir: str) -> Optional[str]:
-    """QA See Longitudinal Transverse Cert family [197] — maps T.J.J. See's wave duality (longitudinal/compression=gravity, transverse/shear=light; same medium, orthogonal modes) to QA generator/observer duality (T-operator=discrete causal, projection=continuous measurement). Theorem NT = mode orthogonality. Complementary to [153] Keely triune (3-fold within longitudinal) vs See (2-mode between generator/observer). Source: See, 'Electrodynamic Wave-Theory' (1917). Checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA See Longitudinal Transverse Cert family [197] — maps T.J.J. See's wave duality (longitudinal/compression=gravity, transverse/shear=light; same medium, orthogonal modes) to QA generator/observer duality (T-operator=discrete causal, projection=continuous measurement). Theorem NT = mode orthogonality (analogy, not physical proof -- see doc). Complementary to [153] Keely triune (3-fold within longitudinal) vs See (2-mode between generator/observer). Source: See, 'Electrodynamic Wave-Theory' (1917). Checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: sources confirmed real, but See's specific aether-wave theory documented by historians as part of his later, professionally-marginalizing, scientifically-rejected work -- fixed an overclaim treating it as physical proof of Theorem NT rather than a pedagogical analogy; also flagged an unverified 'Tesla support' claim."""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_see_longitudinal_transverse_cert_v1")
     validator = os.path.join(fam_dir, "qa_see_longitudinal_transverse_cert_validate.py")
@@ -14299,7 +14299,7 @@ FAMILY_SWEEPS = [
      "qa_see_capture_convergence_cert_v1", True),
     (197, "QA See Longitudinal Transverse Cert family",
      _validate_see_longitudinal_transverse_cert_family,
-     "T.J.J. See wave duality (1917) mapped to QA generator/observer duality; longitudinal=T-operator (discrete causal), transverse=observer projection (continuous measurement); Theorem NT = mode orthogonality; complementary to [153] Keely triune (3-fold within longitudinal); source See 'Electrodynamic Wave-Theory' 1917; checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "T.J.J. See wave duality (1917) mapped to QA generator/observer duality; longitudinal=T-operator (discrete causal), transverse=observer projection (continuous measurement); Theorem NT = mode orthogonality (analogy, not proof); complementary to [153] Keely triune (3-fold within longitudinal); source See 'Electrodynamic Wave-Theory' 1917; checks SLT_1+LONG/TRANS/ORTH/NT/KEELY/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-06: fixed overclaim treating See's historically-rejected aether theory as physical proof rather than analogy.",
      "197_qa_see_longitudinal_transverse_cert",
      "qa_see_longitudinal_transverse_cert_v1", True),
     (198, "QA Pudelko Modular Periodicity Cert family",

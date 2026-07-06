@@ -222,3 +222,76 @@ In mod-12 pitch class (C=0): B-flat = 10, E-flat = 3.
 - `fixtures/snm_pass_seven_claims.json` — all 7 structural claims with QA witnesses
 - `fixtures/snm_pass_numerical.json` — frequency table, chord of mass, rotation ratios
 - `fixtures/snm_fail_wrong_ratio.json` — incorrect frequency ratio (x5 instead of x3) rejected
+
+## Verification Note (2026-07-05)
+
+This cert had previously only been touched by the 2026-07-04 Keely/SVP
+"Vibes" provenance audit (see `project_keely_svp_vibes_provenance_audit`
+memory), which checked the 40-Laws quotes and the AI-tool-as-reviewer
+issue but did not independently verify this cert's own specific
+numerical/physical claims. Closed that gap here.
+
+**All QA-side modular arithmetic independently recomputed from scratch**
+(a fresh script, not trusting the doc): 7×3=21, 21 mod 9=3; the five
+frequencies' digital roots (1,3,9,9,9) and mod-24 residues
+(16,0,0,0,0); ratios 3,3,9,3 with total 243=3⁵; Ag/Au/Pt/Cu atomic
+numbers mod 9 (47→2, 79→7, 78→6, 29→2 — confirms Cu duplicates Ag's
+cosmos class exactly as claimed); Ag atomic weight 108=4×27 (mod9=0);
+Au-Ag atomic-number gap 79−47=32 (mod24=8) — note this "Au-Ag gap"
+uses atomic *number*, while "Ag weight 108" uses atomic *weight*; the
+doc doesn't label this distinction explicitly, a minor clarity gap, not
+a numerical error, since both figures are independently correct for
+what they actually are; polarity thresholds 2/3+1/3=1; rotation ratio
+360/120=3=24/8; chord of mass 42800 mod9=5, mod24=8; base frequency
+20000 mod9=2, mod24=8; B-flat/E-flat pitch classes and their 5/7
+semitone intervals. 0 mismatches anywhere.
+
+**Real-world physical constants independently confirmed** (not
+QA-derived, but load-bearing for the S3 Trexar argument): gold
+conductivity 44.7 MS/m confirmed exactly; platinum conductivity 9.43
+MS/m confirmed exactly; standard density/atomic-number values for
+Ag/Au/Pt/Cu match well-established reference data.
+
+**Primary-source Snell Manuscript quotes independently re-verified**
+via live fetch of svpwiki.com/svpvril.com (Dale Pond's compilation of
+Keely's material, same source family as the already-audited 40 Laws):
+- Seven subdivisions: svpwiki's own "Seven Subdivisions of Matter and
+  Energy" page confirms "seven distinct orders of triple subdivision,"
+  ending "compound interetheric... the Soul of matter" — matches the
+  cert's table and 7×3 framing closely (faithful paraphrase in the
+  cert, not a verbatim quote).
+- Trexar/Trexnonar: svpwiki confirms composition (Silver/Gold/Platinum,
+  1:1:1) and the Trexnonar's 9 nodes (3 Ag + 3 Au + 3 Pt) exactly as
+  the cert's table states.
+- S4 mass-as-difference: svpwiki's "Terrestrial" page confirms
+  "molecular weight consists in the difference between these forces"
+  (terrestrial/celestial) — matches the cert's quote almost verbatim.
+- S5 polarity thresholds: svpwiki's dedicated "REPULSION - Snell" page
+  gives the exact quote with the 66⅔/33⅓ numbers unchanged; the cert's
+  version is a shortened paraphrase (drops "contrary to accepted
+  scientific belief" and "regardless of their natural properties") but
+  preserves the substance and every number exactly.
+- "Range of molecular motion... one-third their diameters" confirmed
+  verbatim via svpwiki's molecular-motion material (S5's supporting
+  detail).
+- S7 rotation: svpvril.com's "Acoustic Levitation" page confirms,
+  essentially verbatim, "120 revolutions per minute" (thirds) and "360
+  revolutions per minute" (sixths) on Keely's airship propeller,
+  attributed to the 1934 Snell Manuscript.
+- Chord of mass 42,800: svpwiki has a page literally titled "42800"
+  confirming the figure in the context of a steel-disk/two-ton-strain
+  experiment, plus a dedicated "Chord of Mass" page defining the
+  concept — the number is real and documented, not invented.
+
+**Not independently re-verified against primary text** (time-bounded,
+not evidence of a problem): the exact wording of the S6 triple
+aqueous-disintegration passage and the "4/3 of circumference"
+dynasphere quote — both are consistent with the surrounding confirmed
+material and the general Keely corpus already verified in [153]/[184]-
+[188], but weren't separately pulled from source this pass.
+
+No bugs found. Validator (`qa_snell_manuscript_cert_validate.py`)
+confirmed to already genuinely recompute every check (digital roots,
+ratio products, f-value, fraction sums, ordering, mod arithmetic) at
+runtime rather than trust the fixture — a clean design, no hardening
+needed. `--self-test` passes on all 3 fixtures.

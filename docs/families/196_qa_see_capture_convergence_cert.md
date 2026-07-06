@@ -42,3 +42,34 @@ Distribution: cosmos=72 (88.9%), satellite=8 (9.9%), singularity=1 (1.2%).
 - T.J.J. See, "Researches on the Evolution of the Stellar Systems, Vol II: The Capture Theory of Cosmical Evolution" (1910)
 - T.J.J. See, "The Capture Theory of Satellites", PASP 21:127 (1909)
 - T.J.J. See, "Dynamical Theory of the Capture of Satellites and of the Division of Nebulae Under the Secular Action of a Resisting Medium"
+
+## Verification Note (2026-07-06)
+
+T.J.J. See (1866-1962) and his Capture Theory confirmed real: "Researches
+on the Evolution of the Stellar Systems, Vol. II: The Capture Theory of
+Cosmical Evolution" (1910) is a real book (Internet Archive holds a
+copy), and it was significant enough in its time to draw a published
+critique from Henri Poincaré ("The Capture Hypothesis of T. J. J. See,"
+*The Monist*, 1912) — i.e. a real, historically contested theory, not
+fabricated. "The Capture Theory of Satellites," *PASP* 21:127 (1909) is
+also confirmed real (published August 10, 1909); minor citation-format
+note: "127" in "PASP 21:127" is the issue number, and the article's
+actual pages are 167-173 — a reader trying to look up "page 127" would
+land in the wrong place, though the volume/issue identification itself
+is correct and this is a common (if ambiguous) citation convention, not
+an error.
+
+**All QA-side claims independently verified**: confirmed `qa_step` is a
+genuine bijection on S_9 (every one of the 81 images is distinct and
+covers the full state space) — this proves, not just asserts, that
+τ=0 is universal for every starting state in {1,...,9}², since a
+bijection on a finite set has no transient tails, only cycles.
+Independently recomputed the orbit-family distribution (cosmos=72,
+satellite=8, singularity=1 → 88.9%/9.9%/1.2%) exactly matching the
+claimed percentages.
+
+Validator confirmed genuine: `classify_s9()` recomputes the distribution
+live via simulation and checks it against both the hardcoded expected
+counts and the fixture's declared values; the module's own docstring
+already documents the bijection argument I independently re-derived.
+`--self-test` passes on both fixtures. No bugs found.

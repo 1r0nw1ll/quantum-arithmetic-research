@@ -110,3 +110,38 @@ Abraham Abulafia (13th century) systematized letter permutation (tzeruf) as a me
 - `fixtures/syc_pass_core.json` — 7 claims with full witnesses and sources
 - `fixtures/syc_pass_numerical.json` — numerical verification of gates, factorials, partition, paths
 - `fixtures/syc_fail_wrong_gates.json` — C(22,3)=1540 instead of C(22,2)=231 rejected
+
+## Verification Note (2026-07-05)
+
+Fetched and read the actual **Glaz (2021)** paper in full ("Mathematics
+in the Poetry of Sefer Yetzirah," *Bridges 2021 Conference Proceedings*,
+pp. 39-46, Sarah Glaz, University of Connecticut) — confirmed real, and
+every specific claim attributed to it checks out exactly: the SY 2:4
+quote ("231 Gates... The Circle oscillates back and forth"), the "231
+= (22×21)/2, complete graph on 22 vertices" framing (Glaz's own words:
+"anticipating Graph Theory"), and the SY 4:16 factorial passage.
+
+**The "6!=620 scribal error" claim is confirmed genuinely documented,
+not invented**: Glaz's own paper directly quotes SY 4:16 (from Kaplan's
+1997 translation) as "**Six stones build 620 houses**... Seven stones
+build 5040 houses," and her own prose states "6! = 620, 7! = 5040" —
+i.e., the real, published, peer-reviewed-venue source presents 620
+(not 720) as the manuscript's actual stated value, without correcting
+it. This is real, direct confirmation of a real manuscript
+transmission variant — not something invented for this cert.
+
+**The Gandz (1940s) attribution is only partially confirmed, flagged
+not fixed**: Solomon Gandz (1887-1954) is a real historian of ancient
+Hebrew/Oriental mathematics, and he did publish in *Proceedings of the
+American Academy for Jewish Research* in the right era (a piece from
+vol. XVII, 1948, was found). But the specific claim this cert attributes
+to him — that Sefer Yetzirah contains "the earliest known systematic use
+of factorial reasoning in Western intellectual history" — is, in
+mainstream references (Wikipedia's Factorial and Sefer Yetzirah articles,
+which track standard textbook attribution), credited to **Victor J.
+Katz (1994, *A History of Mathematics*)**, not Gandz. Could not access
+the specific 1948 Gandz AAJR piece (likely JSTOR-paywalled) to confirm
+whether he made this same observation independently and earlier, or
+whether this cert's attribution is simply incorrect. Left as an open,
+specifically-scoped citation-precision question rather than asserting
+either way without being able to check the primary source directly.

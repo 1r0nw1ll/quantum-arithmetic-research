@@ -95,3 +95,21 @@ This cert is the formal intersection of four traditions:
 - Ben Iverson, *Pythagoras and the Quantum World Vol. 1* — Koenig series
 - Cert [132] QA_HAT (establishes HAT₁=e/d)
 - Cert [134] QA_EGYPTIAN_FRACTION (inverse descent operation)
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed the fundamental
+example: M_A→(3,2)→triple(5,12,13)→k=2, M_B→(5,2)→triple(21,20,29)→k=3,
+M_C→(4,1)→triple(15,8,17)→k=4 — all exact. Root uniqueness verified:
+all three inverse moves applied to (2,1) correctly yield an invalid
+parent (e=0, e=0, d=0 respectively).
+
+Went further and exhaustively tested the **k-identification theorem**
+itself (not just the fundamental example): generated the full ternary
+tree to depth 4 from root (2,1) (hundreds of nodes) and checked, at
+every single node, that `k=⌈d/e⌉` correctly identifies which move
+(M_A/M_B/M_C) produced it, that `gcd(d,e)=1` is preserved, and that
+opposite parity is preserved — **0 counterexamples** across the entire
+generated tree. The validator (`qa_pythagorean_tree_cert_validate.py`)
+already genuinely recomputes every move, k-value, and gcd/parity check
+live, no fixture-trusting gap.

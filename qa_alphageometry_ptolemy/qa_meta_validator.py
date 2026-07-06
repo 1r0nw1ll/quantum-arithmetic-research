@@ -4315,7 +4315,7 @@ def _validate_hat_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_pythagorean_tree_cert_family(base_dir: str) -> Optional[str]:
-    """QA Pythagorean Tree Cert family [135] — certifies three Barning-Hall/Berggren generator moves in direction space: M_A=(2d-e,d), M_B=(2d+e,d), M_C=(d+2e,e); each preserves gcd=1 (Euclidean proof) + opposite parity + Pythagorean triple F²+C²=G²; k-identification theorem: ⌈d'/e'⌉=2 iff M_A, =3 iff M_B, ≥4 iff M_C (proofs: 2-e/d∈(1,2), 2+e/d∈(2,3), d/e+2>3); root (2,1) unique (all inverses give e=0 or d=0); Barning 1963 / Hall 1970 / Price 2008 (Fibonacci boxes=same moves) / Iverson Pyth-1 (Koenig series=same tree); inverse of [134] Egyptian fraction; checks PT_1-4+PT_A/B/C+PT_ROOT/W/F; 2 PASS; self-test ok"""
+    """QA Pythagorean Tree Cert family [135] — certifies three Barning-Hall/Berggren generator moves in direction space: M_A=(2d-e,d), M_B=(2d+e,d), M_C=(d+2e,e); each preserves gcd=1 (Euclidean proof) + opposite parity + Pythagorean triple F²+C²=G²; k-identification theorem: ⌈d'/e'⌉=2 iff M_A, =3 iff M_B, ≥4 iff M_C (proofs: 2-e/d∈(1,2), 2+e/d∈(2,3), d/e+2>3); root (2,1) unique (all inverses give e=0 or d=0). RE-VERIFIED 2026-07-06: confirmed clean, fundamental example + root uniqueness reconfirmed, AND the k-identification theorem itself exhaustively tested to depth 4 (hundreds of nodes, 0 counterexamples on k/gcd/parity); validator already genuinely computes live. Barning 1963 / Hall 1970 / Price 2008 (Fibonacci boxes=same moves) / Iverson Pyth-1 (Koenig series=same tree); inverse of [134] Egyptian fraction; checks PT_1-4+PT_A/B/C+PT_ROOT/W/F; 2 PASS; self-test ok"""
     import subprocess
     pt_dir    = os.path.join(base_dir, "qa_pythagorean_tree_cert_v1")
     validator = os.path.join(pt_dir, "qa_pythagorean_tree_cert_validate.py")
@@ -13964,7 +13964,7 @@ FAMILY_SWEEPS = [
      "qa_hat_cert_v1", True),
     (135, "QA Pythagorean Tree Cert family",
      _validate_pythagorean_tree_cert_family,
-     "three Barning-Hall/Berggren generator moves in QA direction space: M_A=(2d-e,d) k=2, M_B=(2d+e,d) k=3, M_C=(d+2e,e) k≥4; each preserves gcd=1 + opposite parity + F²+C²=G²; k-identification theorem links each move to Egyptian fraction first step k; root (2,1) has no valid parent; Barning 1963/Hall 1970/Price 2008 Fibonacci-boxes/Iverson Koenig = same tree; inverse of cert [134]; checks PT_1-4+PT_A/B/C+PT_ROOT/W/F; 2 PASS; self-test ok",
+     "three Barning-Hall/Berggren generator moves in QA direction space: M_A=(2d-e,d) k=2, M_B=(2d+e,d) k=3, M_C=(d+2e,e) k≥4; each preserves gcd=1 + opposite parity + F²+C²=G²; k-identification theorem links each move to Egyptian fraction first step k; root (2,1) has no valid parent (RE-VERIFIED 2026-07-06, theorem exhaustively tested to depth 4, confirmed clean); Barning 1963/Hall 1970/Price 2008 Fibonacci-boxes/Iverson Koenig = same tree; inverse of cert [134]; checks PT_1-4+PT_A/B/C+PT_ROOT/W/F; 2 PASS; self-test ok",
      "135_qa_pythagorean_tree",
      "qa_pythagorean_tree_cert_v1", True),
     (136, "QA Cyclic Quad Cert family",

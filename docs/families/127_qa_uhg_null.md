@@ -87,3 +87,14 @@ conic of UHG — QA is the arithmetic of points at infinity in the universal hyp
 - [125] proves C²+F²=G² (chromogeometric Pythagoras) — equivalent to the null condition
 - [126] proves the T-operator is a red isometry — the dynamics preserve the Minkowski structure
 - [127] (this family) names the geometric object: QA triples = UHG null points = absolute conic
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed the Gaussian-integer
+decomposition for both PASS fixtures: (d,e)=(2,1) → Z=2+i, Z²=3+4i, so
+(F,C,G)=(3,4,5); (d,e)=(3,2) → Z=3+2i, Z²=5+12i, so (F,C,G)=(5,12,13) —
+both exact matches, and F²+C²−G²=0 holds in both cases (trivially, since
+it's the same algebraic identity as [125]'s C²+F²=G²). The validator
+(`qa_uhg_null_cert_validate.py`) already genuinely recomputes
+Re(Z²)/Im(Z²)/|Z|² from (d,e) live; `--self-test` passes on all 3
+fixtures including the FAIL fixture's correctly-detected 3-way mismatch.

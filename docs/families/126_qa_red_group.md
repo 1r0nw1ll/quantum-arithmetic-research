@@ -111,3 +111,15 @@ exactly what this family establishes.
 
 `ok=True` means the certificate is internally consistent:
 detected failure types == declared `fail_ledger`, and `result` field is consistent.
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. Independently recomputed det(F)=−1, trace(F)=1,
+F^12 mod 9=−I=[[8,0],[0,8]], F^24 mod 9=I, F^4 mod 3=−I=[[2,0],[0,2]],
+F^8 mod 3=I — all exact matches via direct matrix-power computation.
+The validator (`qa_red_group_cert_validate.py`) already genuinely
+recomputes matrix products and powers mod m from scratch, not
+fixture-trusting; `--self-test` passes on all 3 fixtures including the
+FAIL fixture's correctly-detected `ORBIT_PERIOD_WRONG`. The
+`det([[u,5v],[v,u]])=u²−5v²` red-isometry embedding of Z[√5] is standard
+and checks out algebraically.

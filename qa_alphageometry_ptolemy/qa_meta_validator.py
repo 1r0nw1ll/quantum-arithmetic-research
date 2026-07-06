@@ -5202,7 +5202,7 @@ def _validate_origin_of_24_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_uhg_null_cert_family(base_dir: str) -> Optional[str]:
-    """QA UHG Null Cert family [127] — certifies that every QA triple (F,C,G)=(d²-e²,2de,d²+e²) is a null point [F:C:G] in Universal Hyperbolic Geometry satisfying F²+C²-G²=0; equivalent to Wildberger Chromogeometric Theorem 6; Gaussian integer interpretation: Z=d+ei, Z²=(d²-e²)+2dei, |Z|²=d²+e², so (F,C,G)=(Re(Z²),Im(Z²),|Z|²); checks UN1-UN7 (schema, green/red/blue quadrance, null condition, Gaussian decomp, null_quadrance field); 2 PASS (d=2e=1 → 3-4-5 null point, d=3e=2 → 5-12-13 null point) + 1 FAIL (BLUE_QUADRANCE_MISMATCH+NULL_CONDITION_VIOLATED+GAUSSIAN_DECOMP_MISMATCH: G claimed as 6 instead of 5); self-test ok"""
+    """QA UHG Null Cert family [127] — certifies that every QA triple (F,C,G)=(d²-e²,2de,d²+e²) is a null point [F:C:G] in Universal Hyperbolic Geometry satisfying F²+C²-G²=0; equivalent to Wildberger Chromogeometric Theorem 6; Gaussian integer interpretation: Z=d+ei, Z²=(d²-e²)+2dei, |Z|²=d²+e², so (F,C,G)=(Re(Z²),Im(Z²),|Z|²). RE-VERIFIED 2026-07-06: confirmed clean, both PASS fixtures' Gaussian decompositions independently recomputed exact, validator already genuinely computes live. Checks UN1-UN7 (schema, green/red/blue quadrance, null condition, Gaussian decomp, null_quadrance field); 2 PASS (d=2e=1 → 3-4-5 null point, d=3e=2 → 5-12-13 null point) + 1 FAIL (BLUE_QUADRANCE_MISMATCH+NULL_CONDITION_VIOLATED+GAUSSIAN_DECOMP_MISMATCH: G claimed as 6 instead of 5); self-test ok"""
     import subprocess
     unc_dir   = os.path.join(base_dir, "qa_uhg_null_cert_v1")
     validator = os.path.join(unc_dir, "qa_uhg_null_cert_validate.py")
@@ -5234,7 +5234,7 @@ def _validate_uhg_null_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_red_group_cert_family(base_dir: str) -> Optional[str]:
-    """QA Red Group Cert family [126] — certifies that the QA T-operator is the Fibonacci shift F=[[0,1],[1,1]], representing multiplication by φ in the split-complex ring Z[√5]/mZ[√5] (Wildberger red isometry group); det(F)=-1=N_red(φ) (red norm), trace(F)=1 (φ+ψ=1); orbit period = ord(F) in GL₂(Z/mZ); cosmos period=24 for m=9, cosmos period=8 for m=3; checks RG1-RG7 (schema, T_matrix, det, trace, F^P≡I, minimality, orbit_type); 2 PASS (m=9 cosmos period=24, m=3 cosmos period=8) + 1 FAIL (ORBIT_PERIOD_WRONG: claimed period=12 but F^12=-I≢I for m=9); self-test ok"""
+    """QA Red Group Cert family [126] — certifies that the QA T-operator is the Fibonacci shift F=[[0,1],[1,1]], representing multiplication by φ in the split-complex ring Z[√5]/mZ[√5] (Wildberger red isometry group); det(F)=-1=N_red(φ) (red norm), trace(F)=1 (φ+ψ=1); orbit period = ord(F) in GL₂(Z/mZ); cosmos period=24 for m=9, cosmos period=8 for m=3. RE-VERIFIED 2026-07-06: confirmed clean, det/trace/F^12/F^24/F^4/F^8 all independently recomputed exact, validator already genuinely computes matrix powers live. Checks RG1-RG7 (schema, T_matrix, det, trace, F^P≡I, minimality, orbit_type); 2 PASS (m=9 cosmos period=24, m=3 cosmos period=8) + 1 FAIL (ORBIT_PERIOD_WRONG: claimed period=12 but F^12=-I≢I for m=9); self-test ok"""
     import subprocess
     rgc_dir   = os.path.join(base_dir, "qa_red_group_cert_v1")
     validator = os.path.join(rgc_dir, "qa_red_group_cert_validate.py")
@@ -13944,12 +13944,12 @@ FAMILY_SWEEPS = [
      "qa_spread_period_cert_v1", True),
     (127, "QA UHG Null Cert family",
      _validate_uhg_null_cert_family,
-     "UHG null points: every QA triple (F,C,G)=(d²-e²,2de,d²+e²) satisfies F²+C²-G²=0 (null condition in UHG); Gaussian integer interpretation Z=d+ei, Z²=(d²-e²)+2dei; checks UN1-UN7 (schema, green/red/blue quadrance, null condition, Gaussian decomp, null_quadrance); 2 PASS (3-4-5, 5-12-13) + 1 FAIL (BLUE_QUADRANCE_MISMATCH+NULL_CONDITION_VIOLATED+GAUSSIAN_DECOMP_MISMATCH: G=6 instead of 5); self-test ok",
+     "UHG null points: every QA triple (F,C,G)=(d²-e²,2de,d²+e²) satisfies F²+C²-G²=0 (null condition in UHG); Gaussian integer interpretation Z=d+ei, Z²=(d²-e²)+2dei (RE-VERIFIED 2026-07-06, confirmed clean); checks UN1-UN7 (schema, green/red/blue quadrance, null condition, Gaussian decomp, null_quadrance); 2 PASS (3-4-5, 5-12-13) + 1 FAIL (BLUE_QUADRANCE_MISMATCH+NULL_CONDITION_VIOLATED+GAUSSIAN_DECOMP_MISMATCH: G=6 instead of 5); self-test ok",
      "127_qa_uhg_null",
      "qa_uhg_null_cert_v1", True),
     (126, "QA Red Group Cert family",
      _validate_red_group_cert_family,
-     "Wildberger red isometry group: QA T-operator = Fibonacci shift F=[[0,1],[1,1]] = red-rotation by φ in Z[√5]/mZ[√5]; det(F)=-1=N_red(φ), trace(F)=1; orbit period = ord(F) in GL₂(Z/mZ); checks RG1-RG7 (schema, T_matrix, det, trace, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=3 period=8) + 1 FAIL (ORBIT_PERIOD_WRONG: claimed period=12, F^12=-I≢I); self-test ok",
+     "Wildberger red isometry group: QA T-operator = Fibonacci shift F=[[0,1],[1,1]] = red-rotation by φ in Z[√5]/mZ[√5]; det(F)=-1=N_red(φ), trace(F)=1; orbit period = ord(F) in GL₂(Z/mZ) (RE-VERIFIED 2026-07-06, confirmed clean); checks RG1-RG7 (schema, T_matrix, det, trace, F^P≡I, minimality, orbit_type); 2 PASS (m=9 period=24, m=3 period=8) + 1 FAIL (ORBIT_PERIOD_WRONG: claimed period=12, F^12=-I≢I); self-test ok",
      "126_qa_red_group",
      "qa_red_group_cert_v1", True),
     (125, "QA Chromogeometry Cert family",

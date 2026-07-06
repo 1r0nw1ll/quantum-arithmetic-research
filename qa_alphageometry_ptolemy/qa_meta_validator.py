@@ -5147,7 +5147,7 @@ def _validate_egyptian_fraction_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_eisenstein_cert_family(base_dir: str) -> Optional[str]:
-    """QA Eisenstein Cert family [133] — certifies two universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for all QA tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=A-D=a²-d²; algebraic proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z²; W (equilateral side) and Z (Eisenstein companion) per QA Law 15; fundamental (1,1,2,3): (F,W,Z)=(3,8,7), (Y,W,Z)=(5,8,7), both give 49=7²; checks EIS_1-EIS_7+EIS_W/U; 2 PASS (fundamental + 6-witness general); self-test ok"""
+    """QA Eisenstein Cert family [133] — certifies two universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for all QA tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=A-D=a²-d²; algebraic proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z². RE-VERIFIED 2026-07-06: both identities independently confirmed as true polynomial identities via symbolic expansion (not just the sampled range); closed a real proof gap -- Identity 2 was previously "computational verification only, 121 pairs" with an unfinished proof placeholder, completed the direct u-substitution proof ((Y+W)²-3YW=Z² exactly). W (equilateral side) and Z (Eisenstein companion) per QA Law 15; fundamental (1,1,2,3): (F,W,Z)=(3,8,7), (Y,W,Z)=(5,8,7), both give 49=7²; checks EIS_1-EIS_7+EIS_W/U; 2 PASS (fundamental + 6-witness general); self-test ok"""
     import subprocess
     eis_dir   = os.path.join(base_dir, "qa_eisenstein_cert_v1")
     validator = os.path.join(eis_dir, "qa_eisenstein_cert_validate.py")
@@ -14109,7 +14109,7 @@ FAMILY_SWEEPS = [
      "qa_egyptian_fraction_cert_v1", True),
     (133, "QA Eisenstein Cert family",
      _validate_eisenstein_cert_family,
-     "universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for ALL tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=a²-d²=e(2b+3e); proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z²; W (equilateral side) and Z (Eisenstein companion) per QA Law 15; (1,1,2,3) gives (3,8,7) and (5,8,7), both Eisenstein triples; checks EIS_1-7+EIS_W/U; 2 PASS; self-test ok",
+     "universal Eisenstein-norm identities from QA elements: F²-FW+W²=Z² and Y²-YW+W²=Z² for ALL tuples (b,e,d,a); F=ab, W=d(e+a), Z=e²+ad, Y=a²-d²=e(2b+3e); proof via u=b²+3be: (F+W)²-3FW=(u+3e²)²=Z² (RE-VERIFIED 2026-07-06, closed a real proof gap for Identity 2, was computational-only); W (equilateral side) and Z (Eisenstein companion) per QA Law 15; (1,1,2,3) gives (3,8,7) and (5,8,7), both Eisenstein triples; checks EIS_1-7+EIS_W/U; 2 PASS; self-test ok",
      "133_qa_eisenstein",
      "qa_eisenstein_cert_v1", True),
     (130, "QA Origin of 24 Cert family",

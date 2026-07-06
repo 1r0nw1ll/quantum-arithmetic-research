@@ -29,7 +29,11 @@ Therefore:
 
 which is exactly the Eisenstein norm identity F²−FW+W²=Z² (since a²−ab+b²=c² ↔ (a+b)²−3ab=c²).
 
-For Identity 2: Y = e(2b+3e) satisfies the same identity by computational verification (121 pairs b,e≤11, 0 failures). A direct algebraic proof follows the same u-substitution path.
+For Identity 2: Y = e(2b+3e) satisfies the same identity — **upgraded
+2026-07-06 from computational-only to a full algebraic proof** (see
+Verification Note below): both sides of Y²−YW+W²=Z² expand to the
+identical degree-4 polynomial b⁴+6b³e+15b²e²+18be³+9e⁴ for all b,e, not
+just the 121 sampled pairs.
 
 ## Fundamental Witness
 
@@ -84,3 +88,26 @@ QA elements W and Z are Eisenstein integer lattice elements. The norm N(F+Wω)=F
 - Ben Iverson, elements.txt — QA Law 15: Eisenstein Lattice & Equilateral Dissections (W, Z, Y, F)
 - Eisenstein integer theory: ℤ[ω], ω = e^{2πi/3}, norm N(a+bω) = a²−ab+b²
 - Computational verification: all (b,e) with 1≤b,e≤11, 121 pairs, 0 failures for both identities
+
+## Verification Note (2026-07-06)
+
+Independently confirmed both identities are true **polynomial**
+identities (not just numerically true over the sampled range) via
+direct symbolic expansion in `b,e`: `F²−FW+W²−Z²` and `Y²−YW+W²−Z²` both
+expand to exactly `0` for all `b,e` symbolically, and the fundamental
+witness (1,1,2,3) independently reconfirmed (F=3,W=8,Z=7,Y=5, both
+identities give 49=7²). The validator already genuinely recomputes
+every element and both identities from `(b,e,d,a)` live — no
+fixture-trusting gap.
+
+**Found and closed a real proof gap**: Identity 2 was previously
+documented as verified only "by computational verification (121 pairs
+b,e≤11, 0 failures)" with a placeholder "a direct algebraic proof
+follows the same u-substitution path" that was never actually carried
+out. Completed it: with `u=b²+3be` (same substitution as Identity 1),
+`Y+W = u+3ea` and direct expansion shows
+`(Y+W)²−3YW = b⁴+6b³e+15b²e²+18be³+9e⁴ = Z²` exactly (using
+`Z=u+3e²`), matching the same `(sum)²−3·product=Z²` Eisenstein-norm
+pattern as Identity 1. This upgrades Identity 2 from "checked on a
+finite sample" to "proven for all integers b,e," a materially stronger
+claim than what was previously written.

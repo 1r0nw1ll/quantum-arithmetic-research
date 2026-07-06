@@ -6,6 +6,8 @@
   "created_utc": "2026-04-02T02:00:00Z",
   "_fixture_purpose": "Canonical PASS: qa_mod A1 verified for range -100..200, QCI deterministic, T2 clean",
 
+  "source_grounding": "qa_mod is standard modular residue-class arithmetic (Hardy and Wright, 2008), shifted to a no-zero alphabet per QA axiom A1 (Wildberger, 2005).",
+
   "a1_tests": {
     "modulus": 24,
     "formula": "((int(x) - 1) % m) + 1",
@@ -31,8 +33,9 @@
     "cmap": {"0": 8, "1": 16, "2": 24},
     "modulus": 24,
     "window": 3,
-    "known_match_rate": 0.333,
-    "note": "repeating [0,1,2] with cmap {0:8,1:16,2:24}: only triple (0,1,2) matches because qa_mod(8+16,24)=24=cmap[2]"
+    "known_match_rate": 0.3333,
+    "raw_match_rate": 0.4,
+    "note": "Corrected 2026-07-06: repeating [0,1,2] with cmap {0:8,1:16,2:24} produces a periodic raw match pattern [1,0,0,1,0,0,1,0,0,1] (4/10 triples match, not just one -- matches recur every 3rd triple since qa_mod(8+16,24)=24=cmap[2] realigns whenever the window starts back at label 0). known_match_rate=0.3333 is compute_qci's actual return value: a rolling-mean SERIES (window=3, min_periods=1), not a scalar -- its steady-state tail value converges to 1/3 (one match per 3-window) after two transient values (1.0, then 0.5)."
   },
 
   "t2_compliance": {
@@ -42,18 +45,15 @@
 
   "witnesses": [
     {"domain": "seismology", "script": "46_seismic_topographic_observer.py",
-     "observation": "qa_mod used at line 34, compute_qci at line 37 — identical to qa_observer.core"},
-    {"domain": "finance", "script": "scripts 30-33 in ~/Desktop/qa_finance/",
-     "observation": "same qa_mod/compute_qci pattern"},
-    {"domain": "EEG", "script": "eeg_chbmit_scale.py",
-     "observation": "same qa_mod/compute_qci pattern"},
-    {"domain": "audio", "script": "qa_audio_residual_control.py",
-     "observation": "same qa_mod/compute_qci pattern"},
+     "observation": "qa_mod used at line 34, compute_qci at line 37 — identical to qa_observer.core (independently confirmed 2026-07-06)"},
     {"domain": "climate", "script": "48_teleconnection_topographic_observer.py",
-     "observation": "same qa_mod/compute_qci pattern"},
+     "observation": "qa_mod at line 44, compute_qci at line 48 — same pattern (independently confirmed 2026-07-06)"},
     {"domain": "ERA5", "script": "49_forecast_coherence_observer.py",
-     "observation": "same qa_mod/compute_qci pattern"}
+     "observation": "qa_mod at line 65, compute_qci at line 69 — same pattern (independently confirmed 2026-07-06)"},
+    {"domain": "finance", "script": "scripts 30-33 in ~/Desktop/qa_finance/",
+     "observation": "claimed same qa_mod/compute_qci pattern -- NOT independently verified, this directory is off-limits per project rules (frozen private finance scripts)"}
   ],
+  "_witness_correction_2026_07_06": "Two of the originally-claimed '6 domain witnesses' were false: eeg_chbmit_scale.py and qa_audio_residual_control.py (plus their imported modules eeg_orbit_observer_comparison.py, eeg_orbit_classifier.py) contain NO qa_mod or compute_qci anywhere -- grepped both files and their imports directly, zero matches. Both scripts are real, substantive QA work, but use a DIFFERENT method: EEG uses per-window topographic k-means classification (classify_segment_topographic, compute_orbit_sequence), audio uses matched-AC partial-correlation on OFR. Removed the false EEG/audio witnesses; the cert now honestly covers 3 confirmed + 1 unverifiable-by-policy (finance) domains, not 6.",
 
   "validation_checks": [
     {"check_id": "OC_1", "description": "schema version", "passed": true},

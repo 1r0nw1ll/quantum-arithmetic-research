@@ -6,11 +6,19 @@ used across all 6 empirical domains (finance, EEG, audio, seismology,
 climate, ERA5 reanalysis).
 
 SOURCE: qa_lab/qa_observer/core.py, canonical from script 46 lines 34-45.
+This is a from-scratch internal implementation of modular arithmetic,
+not an external-paper reproduction.
+
+Primary source: Hardy, G.H. & Wright, E.M. (2008), An Introduction to
+the Theory of Numbers, 6th ed., Oxford University Press, ISBN
+978-0-19-921986-5, Ch. II (residue classes / congruences).
 
 Checks: OC_1 (schema), OC_A1 (qa_mod output always in {1,...,m} for all
-tested inputs including negatives and zero), OC_QCI (compute_qci determinism
-and known match rate), OC_T2 (no float->int feedback in qa_mod),
-OC_W (>=1 domain witness), OC_F (fail detection).
+tested inputs including negatives and zero -- genuinely recomputed live
+against qa_lab/qa_observer/core.py when importable), OC_QCI (compute_qci
+determinism, output length, and match rate -- genuinely recomputed live),
+OC_T2 (no float->int feedback in qa_mod), OC_W (>=1 domain witness),
+OC_F (fail detection).
 """
 
 import json
@@ -18,6 +26,18 @@ import os
 import sys
 
 SCHEMA = "QA_OBSERVER_CORE_CERT.v1"
+
+_REPO_ROOT = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+_QA_LAB = os.path.join(_REPO_ROOT, "qa_lab")
+if _QA_LAB not in sys.path:
+    sys.path.insert(0, _QA_LAB)
+
+try:
+    from qa_observer.core import qa_mod as _qa_mod, compute_qci as _compute_qci
+    _LIVE_IMPORT_ERROR = None
+except Exception as _exc:  # pragma: no cover - environment-dependent
+    _qa_mod = _compute_qci = None
+    _LIVE_IMPORT_ERROR = str(_exc)
 
 
 def validate(cert, *, collect_errors=True):
@@ -51,6 +71,14 @@ def validate(cert, *, collect_errors=True):
             if result is not None and m is not None:
                 if result < 1 or result > m:
                     err("OC_A1", f"qa_mod({x}, {m}) = {result} not in {{1,...,{m}}}")
+            # Genuine live recomputation against qa_lab/qa_observer/core.py,
+            # not just range-checking the fixture's own declared result.
+            if _qa_mod is not None and x is not None and m is not None:
+                live = _qa_mod(x, m)
+                if result is not None and live != result:
+                    err("OC_A1", f"qa_mod({x}, {m}): declared result={result}, live recompute={live}")
+            elif _LIVE_IMPORT_ERROR:
+                warnings.append(f"OC_A1: qa_lab/qa_observer not importable, skipping live recompute ({_LIVE_IMPORT_ERROR})")
 
         # Check formula declaration
         formula = a1.get("formula", "")
@@ -69,6 +97,24 @@ def validate(cert, *, collect_errors=True):
         if length is not None and input_length is not None:
             if length != input_length - 2:
                 err("OC_QCI", f"output_length must be input_length - 2: got {length} vs {input_length}")
+        # Genuine live recomputation against qa_lab/qa_observer/core.py,
+        # not just checking the declared output_length arithmetic.
+        labels, cmap_raw, m, window = (qci.get("labels"), qci.get("cmap"),
+                                        qci.get("modulus"), qci.get("window"))
+        if _compute_qci is not None and None not in (labels, cmap_raw, m, window):
+            cmap = {int(k): v for k, v in cmap_raw.items()}
+            live_out = list(_compute_qci(labels, cmap, m, window))
+            live_out2 = list(_compute_qci(labels, cmap, m, window))
+            if live_out != live_out2:
+                err("OC_QCI", "compute_qci is non-deterministic on repeated calls with identical input")
+            if length is not None and len(live_out) != length:
+                err("OC_QCI", f"declared output_length={length}, live recompute length={len(live_out)}")
+            declared_rate = qci.get("known_match_rate")
+            if declared_rate is not None and live_out and abs(live_out[-1] - declared_rate) > 1e-3:
+                err("OC_QCI",
+                    f"declared known_match_rate={declared_rate}, live recompute final rolling value={live_out[-1]}")
+        elif _LIVE_IMPORT_ERROR:
+            warnings.append(f"OC_QCI: qa_lab/qa_observer not importable, skipping live recompute ({_LIVE_IMPORT_ERROR})")
 
     # OC_T2 — no float->int feedback (T2 firewall)
     t2 = cert.get("t2_compliance", {})

@@ -6182,7 +6182,7 @@ def _validate_graph_community_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_observer_core_cert_family(base_dir: str) -> Optional[str]:
-    """QA Observer Core Cert family [159] — certifies qa_mod() A1 compliance (output in {1,...,m}, never 0) and compute_qci() determinism across all 6 empirical domains. T2 firewall: no float->int feedback. Checks OC_1+A1/QCI/T2/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA Observer Core Cert family [159] — certifies qa_mod() A1 compliance (output in {1,...,m}, never 0, RE-VERIFIED 2026-07-06 all 8 cases independently recomputed) and compute_qci() determinism. T2 firewall: no float->int feedback. RE-VERIFIED 2026-07-06: found+fixed a mischaracterized QCI example (fixture claimed "only 1 triple matches", real raw match pattern is 4/10; known_match_rate=0.333 is the steady-state tail of a rolling-mean SERIES, not a scalar match rate); found+fixed a false "6 domain witnesses" overclaim (EEG and audio scripts contain zero qa_mod/compute_qci, grepped directly -- only seismology/climate/ERA5 confirmed, finance unverifiable by policy); hardened OC_A1/OC_QCI to genuinely live-recompute against qa_lab/qa_observer/core.py. Checks OC_1+A1(live)/QCI(live)/T2/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_observer_core_cert_v1")
     validator = os.path.join(fam_dir, "qa_observer_core_cert_validate.py")
@@ -14009,7 +14009,7 @@ FAMILY_SWEEPS = [
      "qa_graph_community_cert_v1", True),
     (159, "QA Observer Core Cert family",
      _validate_observer_core_cert_family,
-     "qa_mod() A1 compliance (output in {1,...,m} never 0) + compute_qci() determinism; 6 domain witnesses; T2 no float->int feedback; checks OC_1+A1/QCI/T2/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "qa_mod() A1 compliance (output in {1,...,m} never 0, RE-VERIFIED) + compute_qci() determinism (RE-VERIFIED, fixed mischaracterized QCI example); 3 confirmed domain witnesses + 1 unverifiable finance (fixed false 6-domain claim, EEG/audio don't use this pattern); T2 no float->int feedback; checks OC_1+A1(live)/QCI(live)/T2/W/F; 1 PASS + 1 FAIL; self-test ok",
      "159_qa_observer_core_cert",
      "qa_observer_core_cert_v1", True),
     (154, "QA T-Operator Coherence Cert family",

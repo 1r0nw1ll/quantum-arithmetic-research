@@ -5032,7 +5032,7 @@ def _validate_conic_discriminant_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_48_64_cert_family(base_dir: str) -> Optional[str]:
-    """QA 48/64 Cert family [139] — certifies structural constants 48 and 64: ALGEBRAIC: 48L=H²-I²=4CF for all QA directions (proof: (C+F)²-(C-F)²=4CF=48L); min 48 at (2,1) L=1; ORBIT: 48=2×cosmos_period=2×24, 64=satellite_period²=8²; POLYNOMIAL: equilateral null triangle (P,R,T)=(4,4,4) satisfies PR+RT+PT=48, PRT=64 → polynomial (x-4)³=x³-12x²+48x-64; unique symmetric positive integer solution; 48/64=3/4=equilateral spread (Wildberger chromo §6.4); connects to [137] (H²-I²=4CF corollary), [128] (cosmos/satellite periods), [133] (Eisenstein equilateral); checks C4864_1-3+ALG/POLY/ORB/W/F; 2 PASS (fundamental (2,1) 48L=48; 6-witness incl. 5040=7! at (7,2)); self-test ok"""
+    """QA 48/64 Cert family [139] — certifies structural constants 48 and 64: ALGEBRAIC: 48L=H²-I²=4CF for all QA directions (proof: (C+F)²-(C-F)²=4CF=48L); min 48 at (2,1) L=1; ORBIT: 48=2×cosmos_period=2×24, 64=satellite_period²=8²; POLYNOMIAL: equilateral null triangle (P,R,T)=(4,4,4) satisfies PR+RT+PT=48, PRT=64 → polynomial (x-4)³=x³-12x²+48x-64; unique symmetric positive integer solution; 48/64=3/4=equilateral spread (Wildberger chromo §6.4). RE-VERIFIED 2026-07-06: confirmed clean, all 6 witnesses (incl. 5040=7! at (7,2)) + orbit constants + polynomial independently reconfirmed exact, validator already genuinely computes live. Connects to [137] (H²-I²=4CF corollary), [128] (cosmos/satellite periods), [133] (Eisenstein equilateral); checks C4864_1-3+ALG/POLY/ORB/W/F; 2 PASS (fundamental (2,1) 48L=48; 6-witness incl. 5040=7! at (7,2)); self-test ok"""
     import subprocess
     c4864_dir = os.path.join(base_dir, "qa_48_64_cert_v1")
     validator  = os.path.join(c4864_dir, "qa_48_64_cert_validate.py")
@@ -14089,7 +14089,7 @@ FAMILY_SWEEPS = [
      "qa_conic_discriminant_cert_v1", True),
     (139, "QA 48/64 Cert family",
      _validate_48_64_cert_family,
-     "structural constants 48 and 64: ALGEBRAIC 48L=H²-I²=4CF for all QA directions (proof: (C+F)²-(C-F)²=4CF=48L; min at (2,1) L=1→48); ORBIT 48=2×cosmos_period=2×24, 64=satellite_period²=8²; POLYNOMIAL equilateral (4,4,4): PR+RT+PT=48, PRT=64, polynomial (x-4)³=x³-12x²+48x-64, unique symmetric positive integer solution; 48/64=3/4=equilateral spread; 5040=7! at (7,2) L=105; connects to [137] Koenig (H²-I²=4CF corollary), [128] spread period (cosmos/satellite), [133] Eisenstein (equilateral); checks C4864_1-3+ALG/POLY/ORB/W/F; 2 PASS; self-test ok",
+     "structural constants 48 and 64: ALGEBRAIC 48L=H²-I²=4CF for all QA directions (proof: (C+F)²-(C-F)²=4CF=48L; min at (2,1) L=1→48); ORBIT 48=2×cosmos_period=2×24, 64=satellite_period²=8²; POLYNOMIAL equilateral (4,4,4): PR+RT+PT=48, PRT=64, polynomial (x-4)³=x³-12x²+48x-64, unique symmetric positive integer solution; 48/64=3/4=equilateral spread; 5040=7! at (7,2) L=105 (RE-VERIFIED 2026-07-06, confirmed clean); connects to [137] Koenig (H²-I²=4CF corollary), [128] spread period (cosmos/satellite), [133] Eisenstein (equilateral); checks C4864_1-3+ALG/POLY/ORB/W/F; 2 PASS; self-test ok",
      "139_qa_48_64_cert",
      "qa_48_64_cert_v1", True),
     (138, "QA Plimpton 322 Cert family",

@@ -99,3 +99,34 @@ QA's modulus choices sit at the two canonical positions in the minimal attractor
 
 - `fixtures/de_pass_extremality.json` — PASS: 7 witnesses (24, 9, 12, 8, 6, 120, 1) with verified Pisano and Carmichael values; full theorem statement; original-contribution annotation
 - `fixtures/de_fail_bad_pisano.json` — FAIL fixture for testing validator
+
+## Verification Note (2026-07-06)
+
+Independently reconfirmed every claim in this cert from scratch: `π(9)=24`,
+`π(24)=24`, `π(120)=120`; the non-trivial Pisano fixed-point set in
+`[2,200]` is exactly `{24, 120}` (min=24); the Carmichael `λ(m)=2` set on
+`[1,100]` is exactly `{3,4,6,8,12,24}` (max=24), independently proved via
+the structural argument (prime factors restricted to {2,3}, `v₂≤3`,
+`v₃≤1` ⟹ `m|24`); the basin `π⁻¹(24)∩[1,30]={6,9,12,16,18,24}`; the
+cannonball identity `Σk²(1..24)=4900=70²`; and the 24-theorem
+(`p²-1≡0 mod 24`) for all primes 5–37. All correct. The actual validator
+(`qa_dual_extremality_24_cert_validate.py`) already correctly excludes
+the trivial `m=1` case (`range(2,201)`) before computing the minimum —
+genuinely live-computed, no fixture-trusting gap, no hardening needed.
+
+**Found and fixed a real bug in the cited reference script**: the doc's
+"Source grounding" cites `tools/verify_dual_extremality_24.py` as the
+verification tool. Running it live showed it silently including the
+trivial fixed point `m=1` in its `min()` calculation
+(`pisano_fp = [m for m in range(1, 201) if pisano_period(m) == m]`
+includes `m=1` since `π(1)=1` trivially), printing **`24 = min Pisano
+fixed point: False`** for the cert's own headline joint-extremality
+claim — a direct, visible contradiction of the theorem this script
+exists to support, even though the underlying math and the real
+validator are correct. Also found its "Expected: [1, 2, 3, 4, 6, 8, 12,
+24]" line for the Carmichael λ=2 set was simply wrong (`λ(1)=λ(2)=1`,
+correctly excluded by the computation, but the hardcoded comparison
+target included them). Fixed both: filtered `m>1` before taking the
+Pisano-fixed-point minimum, and corrected the λ=2 "Expected" line to
+`[3, 4, 6, 8, 12, 24]`. Re-ran the script — every line now prints `True`
+/ matches its own stated expectation with no discrepancies.

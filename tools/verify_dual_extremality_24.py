@@ -100,9 +100,11 @@ def main():
     print()
 
     print("=== Pisano fixed points in [1, 200] ===")
-    pisano_fp = [m for m in range(1, 201) if pisano_period(m) == m]
-    print(f"  {pisano_fp}")
-    print(f"  minimum = {min(pisano_fp)} (expected 24)")
+    pisano_fp_all = [m for m in range(1, 201) if pisano_period(m) == m]
+    pisano_fp = [m for m in pisano_fp_all if m > 1]  # exclude trivial m=1 (Z/1Z is the zero ring)
+    print(f"  all (incl. trivial m=1): {pisano_fp_all}")
+    print(f"  non-trivial (m>1): {pisano_fp}")
+    print(f"  minimum non-trivial = {min(pisano_fp)} (expected 24)")
     # OEIS A235702: fixed points are 24 * 5^k for k >= 0
     print(f"  Match to OEIS A235702 (24 * 5^k): {[24 * 5**k for k in range(3) if 24 * 5**k <= 200]}")
     print()
@@ -110,14 +112,14 @@ def main():
     print("=== Carmichael lambda facts ===")
     lambda_two_set = [m for m in range(1, 101) if carmichael_lambda(m) == 2]
     print(f"  {{m in [1,100] : lambda(m) = 2}} = {lambda_two_set}")
-    print(f"  Expected: [1, 2, 3, 4, 6, 8, 12, 24]")
+    print(f"  Expected: [3, 4, 6, 8, 12, 24] (lambda(1)=lambda(2)=1, correctly excluded)")
     print(f"  maximum = {max(lambda_two_set)} (expected 24)")
     print()
 
     print("=== Joint extremality at 24 ===")
     print(f"  pi(24) = 24: {pisano_period(24) == 24}")
     print(f"  lambda(24) = 2: {carmichael_lambda(24) == 2}")
-    print(f"  24 = min Pisano fixed point: {min(pisano_fp) == 24}")
+    print(f"  24 = min NON-TRIVIAL Pisano fixed point: {min(pisano_fp) == 24}")
     print(f"  24 = max lambda=2 modulus (in [1,100]): {max(lambda_two_set) == 24}")
     print()
 

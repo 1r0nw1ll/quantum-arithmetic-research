@@ -6951,7 +6951,7 @@ def _validate_self_tested_family(base_dir: str, fam_root: str, validator_name: s
 
 
 def _validate_pudelko_modular_periodicity_cert_family(base_dir: str) -> Optional[str]:
-    """QA Pudelko Modular Periodicity Cert family [198] — partial-verification cert with explicit V2/V5 open-item honesty gates; self-test ok"""
+    """QA Pudelko Modular Periodicity Cert family [198] — partial-verification cert with explicit V2/V5 open-item honesty gates; self-test ok. VERIFIED 2026-07-05: found+fixed a real qa_step implementation bug shared across 3 experiment scripts (80/81 states diverged from the standard step); corrected orbit-family counts from buggy 3/9/27 to true 2/5/14 (closed form (3^k+1)/2, confirmed to k=4), matching cert [499]'s independent structure. Hardened the validator to genuinely simulate orbit counts instead of hardcoding them. Downgraded V4 weight-preservation to a trivial identity; V7/V8 flagged needing re-verification (scripts fixed, experiments not yet re-run)."""
     return _validate_self_tested_family(
         base_dir,
         "qa_pudelko_modular_periodicity_cert_v1",
@@ -14304,7 +14304,7 @@ FAMILY_SWEEPS = [
      "qa_see_longitudinal_transverse_cert_v1", True),
     (198, "QA Pudelko Modular Periodicity Cert family",
      _validate_pudelko_modular_periodicity_cert_family,
-     "Pudelko modular Fibonacci periodicity mapped to QA T-operator family counts; partial-verification honesty gate preserves V2 Legendre-bridge refinement and V5 mirror-symmetry open item; checks PUD_1+STATUS/ORBIT/SELF_SIM/WEIGHT/HONEST/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok",
+     "Pudelko modular Fibonacci periodicity mapped to QA T-operator family counts; partial-verification honesty gate preserves V2 Legendre-bridge refinement and V5 mirror-symmetry open item; checks PUD_1+STATUS/ORBIT/SELF_SIM/WEIGHT/HONEST/SRC/WITNESS/F; 1 PASS + 1 FAIL; self-test ok. VERIFIED 2026-07-05: fixed real qa_step bug (was 80/81 states diverging from standard step), corrected orbit counts 3/9/27->2/5/14 (closed form (3^k+1)/2), validator now genuinely simulates instead of hardcoding expected counts.",
      "198_qa_pudelko_modular_periodicity_cert",
      "qa_pudelko_modular_periodicity_cert_v1", True),
     (199, "QA Grokking Eigenvalue Transition Cert family",

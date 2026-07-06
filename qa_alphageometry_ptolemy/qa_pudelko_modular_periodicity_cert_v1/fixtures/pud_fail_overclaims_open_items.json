@@ -2,10 +2,11 @@
   "schema_version": "QA_PUDELKO_MODULAR_PERIODICITY_CERT.v1",
   "result": "FAIL",
   "status": "VERIFIED",
+  "_note": "Corrected 2026-07-05: deliberately-wrong m=9 count changed from 5 (which turned out to be the mathematically correct value once the qa_step bug was fixed -- see pud_pass_partial_verified.json) to 9 (the old, actually-wrong buggy value), so this fixture still tests genuine rejection of a bad orbit count.",
   "orbit_family_counts": [
-    {"modulus": 3, "families": 3},
-    {"modulus": 9, "families": 5},
-    {"modulus": 27, "families": 27}
+    {"modulus": 3, "families": 2},
+    {"modulus": 9, "families": 9},
+    {"modulus": 27, "families": 14}
   ],
   "fractal_self_similarity": {
     "pattern": "3^k families for mod-3^k",

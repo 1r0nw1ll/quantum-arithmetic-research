@@ -55,9 +55,17 @@ np.random.seed(42)
 # ─── QA Core (A1-compliant) ──────────────────────────────────────────
 
 def qa_step(bi, ei, m):
-    """A1-compliant QA step: states in {1,...,m}."""
-    b_new = ((bi + ei - 1) % m) + 1
-    e_new = ((ei + b_new - 1) % m) + 1
+    """A1-compliant QA step: states in {1,...,m}.
+
+    Fixed 2026-07-05: was computing e_new from the already-updated b_new
+    instead of the original (bi, ei), producing a different (and wrong)
+    dynamical system -- 80/81 states at m=9 disagreed with the standard
+    Fibonacci-pair-shift step used everywhere else in the project, and
+    with this file's own documented prediction above (2/5/14 orbit
+    families at m=3/9/27, not the buggy 3/9/27 the old code produced).
+    """
+    b_new = ei
+    e_new = ((bi + ei - 1) % m) + 1
     return b_new, e_new
 
 

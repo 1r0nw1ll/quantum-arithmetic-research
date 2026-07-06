@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Validator for QA_PUDELKO_MODULAR_PERIODICITY_CERT.v1 [family 198]."""
+"""Validator for QA_PUDELKO_MODULAR_PERIODICITY_CERT.v1 [family 198].
+
+Primary source: Pudelko, "Modular Periodicity of Random Initialized
+Recurrences," arxiv.org/abs/2510.24882.
+"""
 
 QA_COMPLIANCE = "cert_validator - Pudelko modular periodicity bridge; integer counts only; partial-verification honesty gate; no float state"
 
@@ -10,22 +14,43 @@ from pathlib import Path
 SCHEMA_VERSION = "QA_PUDELKO_MODULAR_PERIODICITY_CERT.v1"
 
 
+def qa_step(bi, ei, m):
+    """A1-compliant QA step (Fibonacci-pair shift): states in {1,...,m}."""
+    return ei, ((bi + ei - 1) % m) + 1
+
+
+def _orbit_family_count(m):
+    """Genuinely recompute the number of distinct T-orbits on {1,...,m}^2."""
+    visited = set()
+    count = 0
+    for b in range(1, m + 1):
+        for e in range(1, m + 1):
+            if (b, e) in visited:
+                continue
+            count += 1
+            cur = (b, e)
+            while cur not in visited:
+                visited.add(cur)
+                cur = qa_step(*cur, m)
+    return count
+
+
 def _run_checks(fixture):
     results = {}
     results["PUD_1"] = fixture.get("schema_version") == SCHEMA_VERSION
     results["PUD_STATUS"] = fixture.get("status") == "PARTIALLY_VERIFIED"
 
     counts = fixture.get("orbit_family_counts", [])
-    expected = {3: 3, 9: 9, 27: 27}
     actual = {}
     for row in counts:
         if isinstance(row, dict):
             actual[row.get("modulus")] = row.get("families")
+    expected = {m: _orbit_family_count(m) for m in actual}
     results["PUD_ORBIT"] = actual == expected
 
     sim = fixture.get("fractal_self_similarity", {})
     results["PUD_SELF_SIM"] = (
-        sim.get("pattern") == "3^k families for mod-3^k"
+        sim.get("pattern") == "cosmos orbit count scales 3x per level (0,3,9,27,... at m=3,9,27,81); satellite+singularity invariant"
         and sim.get("satellite_invariant") is True
         and sim.get("singularity_invariant") is True
         and sim.get("cosmos_scales") is True

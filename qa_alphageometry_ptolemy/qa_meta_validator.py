@@ -4733,7 +4733,7 @@ def _validate_keely_triune_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_equilateral_triangle_cert_family(base_dir: str) -> Optional[str]:
-    """QA Equilateral Triangle Cert family [152] — certifies W=d(e+a)=X+K, Y=A-D=C+E (dual definition bridging square and product layers), Z=E+K; two Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum rule F+Y=W; source: Iverson QA-2 Ch 7; checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok"""
+    """QA Equilateral Triangle Cert family [152] — certifies W=d(e+a)=X+K, Y=A-D=C+E (dual definition bridging square and product layers), Z=E+K; two Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum rule F+Y=W; RE-VERIFIED 2026-07-06: all 6+4 witness directions independently recomputed exact, no bugs found; validator already delegates to canonical qa_elements.qa_elements() module (no local reimplementation, no fixture-trusting); source: Iverson QA-2 Ch 7; checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok"""
     import subprocess
     et_dir    = os.path.join(base_dir, "qa_equilateral_triangle_cert_v1")
     validator = os.path.join(et_dir, "qa_equilateral_triangle_cert_validate.py")
@@ -14024,7 +14024,7 @@ FAMILY_SWEEPS = [
      "qa_keely_triune_cert_v1", True),
     (152, "QA Equilateral Triangle Cert family",
      _validate_equilateral_triangle_cert_family,
-     "W=d(e+a), Y=A-D=C+E (dual definition), Z=E+K; Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum F+Y=W; checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok",
+     "W=d(e+a), Y=A-D=C+E (dual definition), Z=E+K; Eisenstein norms F²-FW+W²=Z² and Y²-YW+W²=Z²; sum F+Y=W (RE-VERIFIED 2026-07-06, confirmed clean); checks ET_1+DEF/DUAL/EIS/SUM/W/F; 2 PASS; self-test ok",
      "152_qa_equilateral_triangle_cert",
      "qa_equilateral_triangle_cert_v1", True),
     (151, "QA Par Number Cert family",

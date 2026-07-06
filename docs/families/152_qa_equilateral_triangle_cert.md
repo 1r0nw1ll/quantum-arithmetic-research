@@ -63,3 +63,21 @@ Proof: F = d²-e² = (d-e)(d+e) = ba. Y = 2de+e². F+Y = d²-e²+2de+e² = d²+2
 
 - `fixtures/et_pass_eisenstein.json` — 6 directions: both Eisenstein norms + dual identity + F+Y=W
 - `fixtures/et_pass_dual_identity.json` — 4 UNIFORM_A chain directions showing Y=C+E=A-D pattern
+
+## Verification Note (2026-07-06)
+
+Confirmed clean — no bugs found. Independently recomputed every claim
+from scratch for all 6+4 witness directions: `W=d(e+a)`, `Y=a²-d²`,
+`Z=e²+ad`, `F=d²-e²` (with `a=d+e`, `b=d-e` per A2), both Eisenstein
+norms (`F²-FW+W²=Z²` and `Y²-YW+W²=Z²`), the dual identity
+(`Y=A-D=C+E`), and the sum rule (`F+Y=W`) — all exact matches, including
+the (4,1) direction explicitly flagged in the fixture as the elliptic
+(I<0) case, which still satisfies every identity.
+
+The validator (`qa_equilateral_triangle_cert_validate.py`) is a good
+example of shared-module discipline: rather than reimplementing element
+formulas locally (the pattern that caused cross-cert bugs elsewhere in
+this project, e.g. the [198] `qa_step` propagation), it recovers
+`b=d-e` and delegates entirely to the canonical `qa_elements.qa_elements()`
+module — genuinely computing every field live, not fixture-trusting.
+`--self-test` passes on both fixtures.

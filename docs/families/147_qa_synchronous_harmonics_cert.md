@@ -72,3 +72,24 @@ Among {b, e, d}, at least one must be even (since d=b+e, if both b,e are odd the
 
 - `fixtures/sh_pass_sync_and_par.json` — 7 sync pairs (5 coprime, 2 non-coprime) + 7 par pairs (4 support, 3 oppose)
 - `fixtures/sh_pass_qn_products.json` — 8 QN product witnesses (all ÷6) + 3 sync + 3 par pairs
+
+## Verification Note (2026-07-06)
+
+Confirmed clean, no bugs. The validator
+(`qa_synchronous_harmonics_cert_validate.py`) already genuinely
+recomputes everything live: `gcd`/`lcm` for every sync pair, `n mod 4`
+par classification and `par_sign` for every par pair, and `b*e*(b+e)*(b+2e)`
+for every QN witness — no fixture-trusting gap. Independently spot-checked
+all 7 sync pairs (gcd/lcm arithmetic) and all 7 par pairs
+(mod-4 classification and SUPPORT/OPPOSE logic) in both fixtures by hand
+— every value matches the validator's own recomputation.
+
+**Source-title check**: searched for independent corroboration of the
+"Synchronous Harmonics" attribution to Ben Iverson — confirmed this is a
+real, specific book title: "Quantum Arithmetic — Book 3 & 4 — New Wave
+Theory — Synchronous Harmonics," documented on svpwiki.com's Iverson
+page. This matches the cert's own title and its "QA-3 Ch 4" / "Pyth-2 Ch
+XIII" source citations closely enough to corroborate the attribution is
+real (not fabricated), though the specific page-level "3-par HIGH at
+3/4" wording wasn't independently confirmed via search snippet — would
+require access to the primary text itself.

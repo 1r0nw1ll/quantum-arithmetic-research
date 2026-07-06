@@ -4848,7 +4848,7 @@ def _validate_sixteen_identities_cert_family(base_dir: str) -> Optional[str]:
 
 
 def _validate_synchronous_harmonics_cert_family(base_dir: str) -> Optional[str]:
-    """QA Synchronous Harmonics Cert family [147] — certifies coprime synchronization (periods m,n coprime → sync at m×n; non-coprime → LCM<product), par-based interference (3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE), and QN product divisibility by 6 (among b,e,d at least one even and one div by 3). Source: Iverson Pyth-2 Ch XIII, QA-2 Ch 6, QA-3 Ch 4; checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok"""
+    """QA Synchronous Harmonics Cert family [147] — certifies coprime synchronization (periods m,n coprime → sync at m×n; non-coprime → LCM<product), par-based interference (3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE), and QN product divisibility by 6 (among b,e,d at least one even and one div by 3). RE-VERIFIED 2026-07-06: confirmed clean, validator already genuinely recomputes gcd/lcm/par/product live, no bugs; independently corroborated "Synchronous Harmonics" as a real Iverson book title (QA Books 3&4) via svpwiki.com search. Source: Iverson Pyth-2 Ch XIII, QA-2 Ch 6, QA-3 Ch 4; checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok"""
     import subprocess
     sh_dir    = os.path.join(base_dir, "qa_synchronous_harmonics_cert_v1")
     validator = os.path.join(sh_dir, "qa_synchronous_harmonics_cert_validate.py")
@@ -14049,7 +14049,7 @@ FAMILY_SWEEPS = [
      "qa_sixteen_identities_cert_v1", True),
     (147, "QA Synchronous Harmonics Cert family",
      _validate_synchronous_harmonics_cert_family,
-     "coprime periods sync at product; non-coprime at LCM<product; 3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE; QN products divisible by 6; checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok",
+     "coprime periods sync at product; non-coprime at LCM<product; 3-par LOW at 1/4, 5-par HIGH at 1/4; same-par SUPPORT, cross-par OPPOSE; QN products divisible by 6 (RE-VERIFIED 2026-07-06, confirmed clean); checks SH_1+SYNC/PAR/PROD6/W/F; 2 PASS; self-test ok",
      "147_qa_synchronous_harmonics_cert",
      "qa_synchronous_harmonics_cert_v1", True),
     (146, "QA Path Scale Cert family",

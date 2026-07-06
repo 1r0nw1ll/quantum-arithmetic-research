@@ -8,6 +8,8 @@
 
   "_fixture_purpose": "Certifies H-null modularity model on Les Miserables co-appearance network (77 nodes, 254 edges). H-null ARI=0.638 vs standard ARI=0.588 (+0.050). Hub-dominated topology where community-internal hubs benefit from asymmetric null. HONEST: wins on 1/10 benchmark graphs only.",
 
+  "source_grounding": "Standard null model k_i*k_j/(2m) is Newman-Girvan modularity (Newman & Girvan, 2004). Green/red/blue quadrance channels C/F/G are Wildberger chromogeometry (Wildberger, 2005).",
+
   "h_null_model": {
     "definition": "H(b,e) = C + F where C = 2*d*e (green quadrance), F = d*d - e*e (red quadrance)",
     "degree_mapping": "b = max(k_i, k_j), e = min(k_i, k_j), d = b + e = k_i + k_j",
@@ -30,13 +32,13 @@
     "nodes": 77,
     "edges": 254,
     "topology_class": "hub-dominated with community-internal hubs",
-    "h_null_ari": 0.638,
-    "standard_ari": 0.588,
-    "delta_ari": 0.050,
-    "h_null_nmi": 0.786,
-    "standard_nmi": 0.756,
-    "method": "louvain with H-null expected weight",
-    "direction": "H-null outperforms standard on hub-dominated networks"
+    "h_null_ari": 0.6377,
+    "standard_ari": 0.5877,
+    "delta_ari": 0.05,
+    "method": "spectral clustering on the modularity matrix B = A - null/norm (eigendecomposition + k-means), NOT Louvain -- corrected 2026-07-06, see qa_lab/qa_graph/h_null_model.py:modularity_spectral",
+    "direction": "H-null outperforms standard on hub-dominated networks",
+    "ground_truth": "greedy_modularity_communities (networkx) on the real les_miserables_graph -- independently reproduced 2026-07-06",
+    "_note": "h_null_nmi/standard_nmi removed 2026-07-06: no NMI computation exists anywhere in the backing code (h_null_model.py only computes ARI); those two fields were unbacked."
   },
 
   "secondary_results": [
@@ -45,22 +47,34 @@
       "nodes": 115,
       "edges": 613,
       "topology_class": "uniform degree",
-      "h_null_ari": 0.824,
-      "standard_ari": 0.824,
+      "h_null_ari": 0.8242,
+      "standard_ari": 0.8242,
       "delta_ari": 0.0,
       "note": "All QA null models tie — low degree variance means null model choice irrelevant"
+    },
+    {
+      "graph": "karate",
+      "nodes": 34,
+      "edges": 78,
+      "topology_class": "hub-dominated, single hub-hub bridge",
+      "h_null_ari": 0.4028,
+      "standard_ari": 0.8823,
+      "delta_ari": -0.4794,
+      "note": "H-null's biggest loss: karate's ground truth splits on a hub-hub edge that H's asymmetric penalty actively miscuts. Independently reproduced 2026-07-06 using the real karate_club_graph 'club' attribute as ground truth."
     }
   ],
 
   "honest_negatives": {
     "wins": 1,
-    "ties": 3,
-    "losses": 6,
+    "ties": 4,
+    "losses": 5,
     "total_graphs": 10,
-    "loses_on": ["powerlaw_cluster", "karate", "random_partition", "stochastic_block_model", "dolphins", "polbooks"],
-    "ties_on": ["football", "email_eu_core", "celegans"],
+    "loses_on": ["karate", "powerlaw_100", "powerlaw_200", "powerlaw_300", "windmill_5x4"],
+    "ties_on": ["caveman_6x8", "davis_women", "football", "relaxed_caveman"],
     "wins_on": ["les_miserables"],
-    "interpretation": "H-null is topology-specific, NOT a universal improvement. Effect requires hub-dominated networks with community-internal hubs where degree asymmetry between node pairs carries structural information."
+    "deg_cv_delta_correlation": -0.25,
+    "_correlation_note": "Pearson r between degree-CV and delta(H-X ARI) across all 10 real tested graphs = -0.25 (-0.30 excluding the karate outlier); independently recomputed 2026-07-06. This replaces a prior doc claim of an unbacked 'hub locality correlation r=-0.36' metric that had no corresponding computation anywhere in the codebase.",
+    "interpretation": "H-null is topology-specific, NOT a universal improvement. Effect requires hub-dominated networks with community-internal hubs where degree asymmetry between node pairs carries structural information. Corrected 2026-07-06: the original graph list (polbooks, dolphins, celegans, email_eu_core, random_partition, stochastic_block_model) had no backing computation anywhere in the repo; the real 10-graph sweep (qa_lab/qa_graph/h_null_extended_results.json) uses a different graph set and gives 1 win / 4 ties / 5 losses, not 1/3/6."
   },
 
   "axiom_compliance": {

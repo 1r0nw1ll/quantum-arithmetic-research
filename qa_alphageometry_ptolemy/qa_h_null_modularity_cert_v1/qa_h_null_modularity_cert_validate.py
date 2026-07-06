@@ -22,14 +22,24 @@ MATHEMATICAL IDENTITY:
   C*C + F*F = G*G (Theorem 6).
 
 HONEST NEGATIVES:
-  H wins on 1/10 benchmark graphs. Loses on powerlaw and karate.
+  H wins on 1/10 real benchmark graphs (les_miserables), ties on 4/10
+  (caveman_6x8, davis_women, football, relaxed_caveman), loses on 5/10
+  (karate, powerlaw_100/200/300, windmill_5x4) -- corrected 2026-07-06,
+  see docs/families/180_qa_h_null_modularity_cert.md Verification Note.
   Effect is topology-specific to hub-dominated networks with
   community-internal hubs.
 
+Primary sources:
+- Newman & Girvan (2004), "Finding and evaluating community structure
+  in networks," Phys. Rev. E 69, 026113. DOI:10.1103/PhysRevE.69.026113
+  (standard k_i*k_j/(2m) modularity null model being replaced here).
+- Wildberger (2005), Divine Proportions, Ch. 6 (green/red/blue
+  quadrance chromogeometry: C, F, G).
+
 Checks: HN_1 (schema), HN_MODEL (H-null definition complete),
 HN_CHROMO (C*C+F*F=G*G identity), HN_BENCH (ARI/NMI in range),
-HN_HONEST (honest negatives declared), HN_W (witness present),
-HN_F (fail detection).
+HN_HONEST (honest negatives declared + internally consistent),
+HN_W (witness present), HN_F (fail detection).
 """
 
 import json
@@ -108,8 +118,27 @@ def validate(cert, *, collect_errors=True):
     else:
         wins = honest.get("wins")
         total = honest.get("total_graphs")
+        ties = honest.get("ties")
+        losses = honest.get("losses")
         if wins is not None and total is not None and wins > total:
             err("HN_HONEST", f"wins={wins} > total_graphs={total}")
+        if None not in (wins, ties, losses, total) and wins + ties + losses != total:
+            err("HN_HONEST",
+                f"wins+ties+losses={wins+ties+losses} != total_graphs={total}")
+        # Composition check: named graph lists (if present) must match their
+        # declared counts -- catches mislabeled honest-negative breakdowns
+        # where totals still sum correctly but a graph was silently moved
+        # from one bucket to another (e.g. [180]'s 2026-07-06 fix, where
+        # "ties: 3, losses: 6" summed to 10 but one tie graph was missing).
+        for count_field, list_field in [
+            ("wins", "wins_on"), ("ties", "ties_on"), ("losses", "loses_on"),
+        ]:
+            count = honest.get(count_field)
+            names = honest.get(list_field)
+            if count is not None and names is not None and len(names) != count:
+                err("HN_HONEST",
+                    f"{list_field} has {len(names)} entries but "
+                    f"{count_field}={count}")
         if not honest.get("interpretation"):
             warnings.append("HN_HONEST: interpretation field recommended")
 

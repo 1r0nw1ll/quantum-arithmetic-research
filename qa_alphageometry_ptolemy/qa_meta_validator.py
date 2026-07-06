@@ -6336,7 +6336,7 @@ def _validate_cross_domain_invariance_cert_family(base_dir: str) -> Optional[str
 
 
 def _validate_h_null_modularity_cert_family(base_dir: str) -> Optional[str]:
-    """QA H-Null Modularity Cert family [180] — certifies H-null chromogeometric modularity model for graph community detection. H(b,e)=C+F where C=2de (green quadrance) and F=d*d-e*e (red quadrance). Les Miserables ARI=0.638 vs standard ARI=0.588 (+0.050). HONEST: wins on 1/10 graphs only — topology-specific to hub-dominated networks. Tier 2. Checks HN_1+MODEL/CHROMO/BENCH/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
+    """QA H-Null Modularity Cert family [180] — certifies H-null chromogeometric modularity model for graph community detection. H(b,e)=C+F where C=2de (green quadrance) and F=d*d-e*e (red quadrance). Les Miserables ARI=0.638 vs standard ARI=0.588 (+0.050), karate 0.403 vs 0.882 (-0.479) — both independently reproduced 2026-07-06 via real networkx datasets (karate_club_graph 'club' attr, les_miserables_graph+greedy_modularity_communities) against the real h_null_model.py functions. HONEST: RE-VERIFIED 2026-07-06 — wins on 1/10 real graphs (les_miserables), ties 4/10, losses 5/10 (not 1/3/6); the doc's original 10-graph benchmark list (polbooks/dolphins/celegans/email_eu_core/random_partition/stochastic_block_model) had zero backing computation anywhere in the repo and was replaced with the real graph set from h_null_extended_results.json; method field fixed from "louvain" to spectral (actual code); unbacked NMI fields and "hub locality r=-0.36" claim removed/replaced with honestly-computed deg_cv correlation r=-0.25; validator hardened with wins/ties/losses composition check. Tier 2. Checks HN_1+MODEL/CHROMO/BENCH/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok"""
     import subprocess
     fam_dir   = os.path.join(base_dir, "qa_h_null_modularity_cert_v1")
     validator = os.path.join(fam_dir, "qa_h_null_modularity_cert_validate.py")
@@ -14214,7 +14214,7 @@ FAMILY_SWEEPS = [
      "qa_paired_pisano_cert_v1", True),
     (180, "QA H-Null Modularity Cert family",
      _validate_h_null_modularity_cert_family,
-     "H-null chromogeometric modularity: H(b,e)=C+F where C=2de (green) F=d*d-e*e (red); Les Miserables ARI=0.638 vs standard 0.588 (+0.050); HONEST: 1/10 graphs improved, topology-specific to hub-dominated networks; H/X=b/e+4+2e/b linear in degree asymmetry; Tier 2; checks HN_1+MODEL/CHROMO/BENCH/HONEST/W/F; 1 PASS + 1 FAIL; self-test ok",
+     "H-null chromogeometric modularity: H(b,e)=C+F where C=2de (green) F=d*d-e*e (red); Les Miserables ARI=0.638 vs standard 0.588 (+0.050); RE-VERIFIED 2026-07-06: reproduced exactly via real networkx datasets; HONEST: 1/10 real graphs win, 4/10 tie, 5/10 lose (fixed from fabricated 1/3/6 graph list); topology-specific to hub-dominated networks; H/X=b/e+4+2e/b linear in degree asymmetry; Tier 2; checks HN_1+MODEL/CHROMO/BENCH/HONEST(hardened composition check)/W/F; 1 PASS + 1 FAIL; self-test ok",
      "180_qa_h_null_modularity_cert",
      "qa_h_null_modularity_cert_v1", True),
     (181, "QA Satellite Product Sum Cert family",
